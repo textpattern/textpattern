@@ -98,7 +98,7 @@
 			exit(atom());
 		}
 
-		if (!$s) $s = gps('s'); 
+		if (!$s) $s = gps('s');
 
 		$id = gps('id');
 		$id = (!$id && $url_mode) ? frompath() : $id;

@@ -25,7 +25,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
 	function txp_validate($user,$password) {
     	$safe_user = strtr(addslashes($user),array('_' => '\_', '%' => '\%'));
     	$r = safe_field("name", "txp_users", "name = '$safe_user'
-							and pass = password(lower('$password')) and privs > 0");
+							and pass = password(lower('".doSlash($password)."')) and privs > 0");
     	if ($r) {
 			// update the last access time
 			safe_update("txp_users", "last_access = now()", "name = '$safe_user'");
@@ -63,7 +63,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
 			endTable()
 		);
 		exit("</div></body></html>");
-	} // end doLoginForm()
+	} 
 	
 	
 // -------------------------------------------------------------
@@ -84,7 +84,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
 
 			$nonce = safe_field('nonce','txp_users',"name='$c_userid'");
 
-			if (md5($c_userid.$nonce) == $cookie_hash) {  // check secret word
+			if (md5($c_userid.$nonce) == $cookie_hash) {  // check nonce
 	
 				$GLOBALS['txp_user'] = $c_userid;	// cookie is good, create $txp_user
 				return '';
@@ -132,5 +132,5 @@ Use of this software indicates acceptance of the Textpattern license agreement
 			$GLOBALS['txp_user'] = '';
 			return gTxt('login_to_textpattern');
 		}	
-	} // end doTxpValidate() 
+	}
 ?>

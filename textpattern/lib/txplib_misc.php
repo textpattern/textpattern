@@ -96,13 +96,13 @@
 	{
 		if (isset($_GET[$thing])) {
 			if (get_magic_quotes_gpc()) {
-				return stripslashes(urldecode($_GET[$thing]));
+				return doStrip(urldecode($_GET[$thing]));
 			} else {
 				return urldecode($_GET[$thing]);
 			}
 		} elseif (isset($_POST[$thing])) {
 			if (get_magic_quotes_gpc()) {
-				return stripslashes($_POST[$thing]);
+				return doStrip($_POST[$thing]);
 			} else {
 				return $_POST[$thing];
 			}
@@ -188,11 +188,11 @@
 	{
 		if (isset($_COOKIE["txp_".$thing])) {
 			if (get_magic_quotes_gpc()) {
-				return stripslashes($_COOKIE["txp_".$thing]);
+				return doStrip($_COOKIE["txp_".$thing]);
 			} else return $_COOKIE["txp_".$thing];
 		} elseif (isset($_POST[$thing])) {
 			if (get_magic_quotes_gpc()) {
-				return stripslashes($_POST[$thing]);
+				return doStrip($_POST[$thing]);
 			} else return $_POST[$thing];
 		} 
 		return '';
@@ -203,7 +203,7 @@
 	{
 		if (isset($_COOKIE[$thing])) {
 			if (get_magic_quotes_gpc()) {
-				return stripslashes($_COOKIE[$thing]);
+				return doStrip($_COOKIE[$thing]);
 			} else return $_COOKIE[$thing];
 		}
 		return '';
