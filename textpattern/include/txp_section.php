@@ -10,7 +10,7 @@
 	Use of this software indicates acceptance ofthe Textpattern license agreement 
 */
 
-	check_privs(1,2,3,6);
+	require_privs('section');
 
 	if(!$step or !function_exists($step)){
 		section_list();

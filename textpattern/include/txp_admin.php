@@ -9,8 +9,8 @@
 
 	Use of this software indicates acceptance of the Textpattern license agreement 
 */
-	
-	check_privs(1,2,3,4,5,6);
+
+	require_privs('admin');
 
 	$myprivs = fetch('privs','txp_users','name',$txp_user);
 

@@ -11,6 +11,8 @@
 	the Textpattern license agreement 
 */
 
+	require_privs('log');
+
 	log_list();
 				
 //-------------------------------------------------------------

@@ -10,7 +10,7 @@
 	Use of this software indicates acceptance of the Textpattern license agreement 
 */
 
-	check_privs(1,2,3);
+	require_privs('link');
 
 	$vars = array('category', 'url', 'linkname', 'linksort', 'description', 'id');
 		

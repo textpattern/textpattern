@@ -135,4 +135,30 @@ $txpac = array(
 
 );
 
+// -------------------------------------------------------------
+$txp_permissions = array(
+	'admin'                       => '1,2,3,4,5,6',
+	'article.delete.self'         => '1,2,3,4',
+	'article.delete'              => '1,2',
+	'article.edit'                => '1,2,3',
+	'article.edit.published'      => '1,2,3',
+	'article.edit.self'           => '1,2,3,4,5,6',
+	'article.publish'             => '1,2,3,4',
+	'article'                     => '1,2,3,4,5,6',
+	'category'                    => '1,2,3',
+	'css'                         => '1,2,6',
+	'diag'                        => '1,2',
+	'discuss'                     => '1,2,3',
+	'file'                        => '1,2,3,4,6',
+	'form'                        => '1,2,3,6',
+	'image'                       => '1,2,3,4,6',
+	'import'                      => '1,2',
+	'link'                        => '1,2,3',
+	'log'                         => '1,2,3', // more?
+	'page'                        => '1,2,3,6',
+	'plugin'                      => '1,2',
+	'prefs'                       => '1,2',
+	'section'                     => '1,2,3,6',
+);
+
 ?>

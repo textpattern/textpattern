@@ -10,7 +10,7 @@
 	Use of this software indicates acceptance of the Textpattern license agreement 
 */
 
-    check_privs(1,2);
+	require_privs('plugin');
 
 	if(!$step or !function_exists($step)){
 		plugin_list();

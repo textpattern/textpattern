@@ -1,6 +1,6 @@
 <?php
 
-	check_privs(1,2,6);	
+	require_privs('css');
 	
 		switch ($step) {
 			case '': css_edit(); break;

@@ -10,7 +10,7 @@
 	Use of this software indicates acceptance of the Textpattern license agreement 
 */
 
-	check_privs(1,2,3,4,6);
+	require_privs('image');
 
 	$extensions = array(0,'.gif','.jpg','.png','.swf');
 

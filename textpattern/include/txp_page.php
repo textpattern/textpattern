@@ -8,7 +8,7 @@
 
 	Use of this software indicates acceptance of the Textpattern license agreement 
 */
-	check_privs(1,2,3,6);
+	require_privs('page');
 
 	if(!$step or !function_exists($step)){
 		page_edit();

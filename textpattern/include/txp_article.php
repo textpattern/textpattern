@@ -7,6 +7,8 @@
 	Use of this software indicates acceptance of the Textpattern license agreement 
 */
 
+	require_privs('article');
+
 	$vars = array(
 		'ID','Title','Title_html','Body','Body_html','Excerpt','textile_excerpt','Image',
 		'textile_body', 'Keywords','Status','Posted','Section','Category1','Category2',
@@ -80,8 +82,7 @@
 				$textile_body = (!$textile_body) ? 0 : 1;
 				$textile_excerpt = (!$textile_excerpt) ? 0 : 1;
 				
-				$myprivs = fetch('privs','txp_users','name',$txp_user);
-				if (($myprivs==5 or $myprivs==6) && $Status==4) $Status = 3;
+				if (!has_privs('article.publish') && $Status==4) $Status = 3;
 				if (empty($url_title)) $url_title = stripSpace($Title);  	
 				safe_insert(
 				   "textpattern",
@@ -176,8 +177,7 @@
 			$incoming['Excerpt'] = $textile->TextileThis($incoming['Excerpt'],1);
 		}
 
-		$myprivs = fetch('privs','txp_users','name',$txp_user);
-		if ($myprivs==5 && $Status==4) $Status = 3;
+		if (!has_privs('article.publish') && $Status==4) $Status = 3;
 							
 		extract(doSlash($incoming));
 		
@@ -256,8 +256,6 @@
 		pagetop("Textpattern",$message);
 		global $txpcfg,$txpac,$txp_user,$vars;
 
-		$myprivs = fetch('privs','txp_users','name',$txp_user);
-		
 		extract(get_prefs());
 		extract(gpsa(array('view','from_view','step')));
 		
@@ -595,7 +593,7 @@
 
 			if ($view == 'text') {
 				echo
-				($myprivs == 1 or $myprivs==2 or $myprivs==3) ?
+				(has_privs('article.publish')) ?
 				fInput('submit','publish',gTxt('publish'),"publish") :
 				fInput('submit','publish',gTxt('save'),"publish");
 			}
@@ -622,7 +620,7 @@
 
 			if ($view == 'text') {
 				echo
-				($myprivs == 1 or $myprivs==2 or $myprivs==3 or $AuthorID==$txp_user) 
+				(($AuthorID==$txp_user and has_privs('article.edit.own')) or has_privs('article.edit')) 
 				?   fInput('submit','save',gTxt('save'),"publish")
 				:	'';
 			}

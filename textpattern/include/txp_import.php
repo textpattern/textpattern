@@ -10,8 +10,8 @@
 	//Keep error display until we add an error handler for this
 	error_reporting(E_ALL);
   	ini_set("display_errors","1");
-	
- 	check_privs(1,2);
+
+	require_privs('import');	
  	
  	$vars = array('import_tool', 'Section','type','comments_invite','blog_id','importdb','importdblogin','importdbpass','importdbhost','wpdbprefix');
  	

@@ -9,6 +9,7 @@
 
 //	dmp($_POST);
 
+	require_privs('article');
 
 		$statuses = array(
 			1 => gTxt('draft'),
@@ -166,6 +167,18 @@
 // -------------------------------------------------------------
 	function list_multi_edit() 
 	{
+		global $txp_user;
+
+		if (ps('selected') and !has_privs('article.delete') and has_privs('article.delete.own')) {
+			$ids = array();
+			foreach (ps('selected') as $id) {
+				$author = safe_field('AuthorID', 'textpattern', "ID='".doSlash($id)."'");
+				if ($author == $txp_user)
+					$ids[] = $id;
+			}
+			$_POST['selected'] = $ids;
+		}
+
 		$deleted = event_multi_edit('textpattern','ID');
 		if(!empty($deleted)) return list_list(messenger('article',$deleted,'deleted'));
 		return list_list();

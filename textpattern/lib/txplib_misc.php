@@ -132,15 +132,10 @@ else
 // -------------------------------------------------------------
 	function has_privs($res)
 	{
-		global $txp_user;
-
-		$permissions = array(
-			'article.delete.self' => '1,2,3,4',
-			'article.delete' => '1,2',
-		);
+		global $txp_user, $txp_permissions;
 
 		$privs = safe_field("privs", "txp_users", "`name`='$txp_user'");
-		$req = explode(',', @$perms[$res]);
+		$req = explode(',', @$txp_permissions[$res]);
 		return in_array($privs, $req);
 	}
 

@@ -10,7 +10,7 @@
 	Use of this software indicates acceptance of the Textpattern license agreement 
 */
 
-	check_privs(1,2,3);
+	require_privs('discuss');
 
 	if(!$step or !function_exists($step)){
 		discuss_list();
