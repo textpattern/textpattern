@@ -361,7 +361,7 @@ EOD;
         $this->output($error->getXml());
     }
     function output($xml) {
-        $xml = '<?xml version="1.0"?>'."\n".$xml;
+        $xml = '<?xml version="1.0" encoding="utf-8" ?>'."\n".$xml;
         $length = strlen($xml);
         header('Connection: close');
         header('Content-Length: '.$length);
@@ -620,14 +620,14 @@ class IXR_Date {
     }
     function parseIso($iso) {
         $this->year = substr($iso, 0, 4);
-        $this->month = substr($iso, 5, 2); 
-        $this->day = substr($iso, 8, 2);
-        $this->hour = substr($iso, 11, 2);
-        $this->minute = substr($iso, 14, 2);
-        $this->second = substr($iso, 17, 2);
+        $this->month = substr($iso, 4, 2); 
+        $this->day = substr($iso, 6, 2);
+        $this->hour = substr($iso, 9, 2);
+        $this->minute = substr($iso, 12, 2);
+        $this->second = substr($iso, 15, 2);
     }
     function getIso() {
-        return $this->year.'-'.$this->month.'-'.$this->day.'T'.$this->hour.':'.$this->minute.':'.$this->second;
+        return $this->year.$this->month.$this->day.'T'.$this->hour.':'.$this->minute.':'.$this->second;
     }
     function getXml() {
         return '<dateTime.iso8601>'.$this->getIso().'</dateTime.iso8601>';
