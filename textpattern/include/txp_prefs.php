@@ -58,8 +58,11 @@
 // -------------------------------------------------------------
 	function prefs_list($message='') 
 	{
+		global $textarray;
+
 		extract(get_prefs());
 		$locale = setlocale(LC_ALL, $locale);
+		$textarray = load_lang($language);
 
 		echo 
 		pagetop(gTxt('edit_preferences'),$message),
