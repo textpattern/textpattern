@@ -150,7 +150,7 @@
 	{
 		global $vars;
 		extract(doSlash(gpsa($vars)));
-		if ($savenew or $oldname=='default' or oldname=='comments' or $oldname=='comments_form' or $oldname=='Links') {
+		if ($savenew) {
 			if (safe_insert("txp_form", "Form='$Form', type='$type', name='$name'")) {
 				form_edit(messenger('form',$name,'created'));
 			} else form_edit(messenger('form',$name,'already_exists'));

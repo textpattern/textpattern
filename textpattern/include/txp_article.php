@@ -429,7 +429,7 @@
 			<p><a href="#" onclick="toggleDisplay(\'recent\');">' . gTxt('recent_articles').'</a>'.'</p>'.
 			'<div id="recent" style="display:none;">';
 			
-			$recents = safe_rows("Title, ID",'textpattern',"1 order by Posted desc limit 10");
+			$recents = safe_rows("Title, ID",'textpattern',"1 order by LastMod desc limit 10");
 			
 			if ($recents) {
 				echo '<p>';
