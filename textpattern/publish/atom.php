@@ -80,7 +80,7 @@
 		
 					$e['issued'] = tag(gmdate("Y-m-d\TH:i:s\Z",$uPosted),'issued');
 					$e['modified'] = tag(gmdate("Y-m-d\TH:i:s\Z",$uLastMod),'modified');
-					$e['title'] = tag($Title.$count,'title');
+					$e['title'] = tag(htmlspecialchars($Title,ENT_NOQUOTES).$count,'title');
 
 					$uTitle = ($url_title) ? $url_title : stripSpace($Title);
 					$uTitle = htmlspecialchars($uTitle,ENT_NOQUOTES);
