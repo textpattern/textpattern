@@ -548,6 +548,13 @@ your_login_is => Ваш логин
 your_password_is => Ваш пароль 
 your_new_password => Ваш новый пароль 
 log_in_at => Войти 
+# comment emails
+comment_recorded => A comment on your post "%s" was recorded.
+comment_name => Name
+comment_email => Email
+comment_web => Web
+comment_comment => Comment
+comment_received => [%s] comment received: %s
 # admin page
 reset_author_password => Обновить пароль автора
 a_new_password_will_be_mailed => Новый пароль будет отослан по электронной почте

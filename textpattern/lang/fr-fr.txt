@@ -550,6 +550,13 @@ your_login_is => Votre nom de connexion (login) est
 your_password_is => Votre mot de passe est 
 your_new_password => Votre nouveau mot de passe 
 log_in_at => Pour se connecter, aller à
+# comment emails
+comment_recorded => A comment on your post "%s" was recorded.
+comment_name => Name
+comment_email => Email
+comment_web => Web
+comment_comment => Comment
+comment_received => [%s] comment received: %s
 # admin page
 reset_author_password => Remettre à zéro le mot de passe de l'auteur
 a_new_password_will_be_mailed => Un nouveau mot de passe sera envoyé par email

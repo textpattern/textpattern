@@ -400,10 +400,16 @@ eod;
 		$cname = preg_replace('/[\r\n]/', ' ', $cname);
 		$cemail = preg_replace('/[\r\n]/', ' ', $cemail);
 
+		$out = gTxt('greeting')." $RealName,\r\n\r\n";
+		$out .= sprintf(gTxt('comment_recorded')."\r\n\r\n", $Title);
+		$out .= gTxt('comment_name').": $cname\r\n";
+		$out .= gTxt('comment_email').": $cemail\r\n";
+		$out .= gTxt('comment_web').": $cweb\r\n";
+		$out .= gTxt('comment_comment').": $message";
 
-$out = "Dear $RealName,\r\n\r\nA comment on your post on your post \"$Title\" was recorded.\r\n\r\nName: $cname\r\nEmail: $cemail\r\nWeb: $cweb\r\nComment:\r\n$message";
+		$subject = sprintf(gTxt('comment_received'), $sitename, $Title);
 
-		mail($email, "[$sitename] comment received: $Title", $out,
+		mail($email, $subject, $out,
 		 "From: $RealName <$email>\r\n"
 		."Reply-To: $cname <$cemail>\r\n"
 		."X-Mailer: Textpattern\r\n"

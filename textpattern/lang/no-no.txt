@@ -554,6 +554,13 @@ your_login_is => Ditt login er
 your_password_is => Ditt passord er
 your_new_password => Ditt nye passord
 log_in_at => Login på
+# comment emails
+comment_recorded => A comment on your post "%s" was recorded.
+comment_name => Name
+comment_email => Email
+comment_web => Web
+comment_comment => Comment
+comment_received => [%s] comment received: %s
 # admin page
 reset_author_password => Reset forfatter passord
 a_new_password_will_be_mailed => Et nytt passord wil bli mailet

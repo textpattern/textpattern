@@ -551,6 +551,13 @@ your_login_is => Jméno uživatele je
 your_password_is => Heslo uživatele je
 your_new_password => Nové heslo je
 log_in_at => Přihlas se na
+# comment emails
+comment_recorded => A comment on your post "%s" was recorded.
+comment_name => Name
+comment_email => Email
+comment_web => Web
+comment_comment => Comment
+comment_received => [%s] comment received: %s
 # admin page
 reset_author_password => Nové heslo uživatele
 a_new_password_will_be_mailed => Nové heslo bude zasláno e-mailem

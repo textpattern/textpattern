@@ -558,6 +558,13 @@ your_login_is => Tu nombre de acceso es
 your_password_is => Tu contraseña es
 your_new_password => Tu nueva contraseña
 log_in_at => Accede en
+# comment emails
+comment_recorded => A comment on your post "%s" was recorded.
+comment_name => Name
+comment_email => Email
+comment_web => Web
+comment_comment => Comment
+comment_received => [%s] comment received: %s
 # admin page
 reset_author_password => Sobre escribir la contraseña del autor
 a_new_password_will_be_mailed => Una nueva contraseña será enviada por email

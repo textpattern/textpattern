@@ -564,6 +564,13 @@ your_login_is => Your login is
 your_password_is => Your password is
 your_new_password => Your new password
 log_in_at => Login at
+# comment emails
+comment_recorded => A comment on your post "%s" was recorded.
+comment_name => Name
+comment_email => Email
+comment_web => Web
+comment_comment => Comment
+comment_received => [%s] comment received: %s
 
 # admin page
 reset_author_password => Reset author password
