@@ -851,10 +851,10 @@
 				$dims = (!empty($imginfo[3])) ? ' '.$imginfo[3] : '';
 				if($permlink_mode == 'messy'){
 					$out[] = '<a href="'.hu.'?c='.urlencode($c).a.'s='.urlencode($s).a.'p='.$id.'">'.
-					'<img src="'.$impath.'"'.$dims.' alt="'.$alt.'" />'.'</a>';
+					'<img src="'.hu.$impath.'"'.$dims.' alt="'.$alt.'" />'.'</a>';
 				} else {
 					$out[] = '<a href="'.hu.$s.'/?c='.urlencode($c).a.'p='.$id.'">'.
-					'<img src="'.$impath.'"'.$dims.' alt="'.$alt.'" />'.'</a>';
+					'<img src="'.hu.$impath.'"'.$dims.' alt="'.$alt.'" />'.'</a>';
 				}
 
 			}
