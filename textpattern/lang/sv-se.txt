@@ -482,6 +482,7 @@ id_title => /id/titel
 year_month_day_title => /år/månad/dag/titel
 category_subcategory => /kategori/underkategori
 section_id_title => /avdelning/id/titel
+section_title => /avdelning/titel
 title_only => /titel
 permlink_mode => Permanentlänk-läge
 link_to_this_category => Länka till en lista med andra artiklar i denna kategori?

@@ -487,6 +487,7 @@ id_title => /id/název
 year_month_day_title => /rok/měsíc/den/název
 category_subcategory => /kategorie/pod-kategorie
 section_id_title => /rubrika/id/název
+section_title => /rubrika/název
 title_only => /název
 permlink_mode => Podoba stálých odkazů
 link_to_this_category => Odkaz na seznam ostatních článků v kategorii?

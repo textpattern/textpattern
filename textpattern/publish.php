@@ -244,6 +244,12 @@
 								}
 							break;
 
+							case 'section_title': 
+								$rs = lookupByTitleSection($u2,$u1);
+								$out['id'] = (!empty($rs['ID'])) ? $rs['ID'] : '';
+								$out['s'] = (!empty($rs['Section'])) ? $rs['Section'] : '';
+							break;
+							
 							case 'title_only': 
 								$rs = lookupByTitle($u1);
 								$out['id'] = (!empty($rs['ID'])) ? $rs['ID'] : '';
@@ -794,6 +800,11 @@
 	{
 		return safe_row("ID,Section",'textpattern',"url_title like '".doSlash($val)."' limit 1",$debug);
 	}
+// -------------------------------------------------------------
+	function lookupByTitleSection($val,$section,$debug='') 
+	{
+		return safe_row("ID,Section",'textpattern',"url_title like '".doSlash($val)."' AND Section='$section' limit 1",$debug);
+	}	
 
 // -------------------------------------------------------------
 	function lookupByID($id,$debug='') 

@@ -488,6 +488,7 @@ id_title => /id/titel
 year_month_day_title => /jahr/monat/tag/titel
 category_subcategory => /kategorie/unterkategorie
 section_id_title => /sektion/id/titel
+section_title => /sektion/titel
 title_only => /titel
 permlink_mode => Schema der URLs
 link_to_this_category => Link zur Liste weiterer Artikel in dieser Kategorie?

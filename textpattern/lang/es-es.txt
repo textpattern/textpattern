@@ -494,6 +494,7 @@ id_title => /id/título
 year_month_day_title => /año/mes/día/título
 category_subcategory => /categoría/subcategoría
 section_id_title => /sección/id/título
+section_title => /sección/título
 title_only => /título
 permlink_mode => Modo de enlace permanente
 link_to_this_category => ¿Enlazar a una lista de otros artículos en esta categoría?

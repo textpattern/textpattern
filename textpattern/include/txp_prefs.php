@@ -233,6 +233,7 @@
 			"id_title" => gTxt('id_title'),
 			"section_id_title" => gTxt("section_id_title"),
 			"year_month_day_title" => gTxt("year_month_day_title"),
+			"section_title"=>gTxt('section_title'),
 			"title_only" => gTxt("title_only"),
 #			"category_subcategory" => gTxt('category_subcategory')
 		);

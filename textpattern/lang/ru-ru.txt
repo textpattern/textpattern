@@ -485,6 +485,7 @@ id_title => /id/title
 year_month_day_title => /year/month/day/title
 category_subcategory => /category/subcategory
 section_id_title => /section/id/title
+section_title => /section/title
 title_only => /title
 permlink_mode => Режим постоянных ссылок
 link_to_this_category => Ссылаться на список других статей в этой категории?

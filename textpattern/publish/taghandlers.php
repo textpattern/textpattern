@@ -976,6 +976,8 @@
 				return hu."$y/$m/$d/$url_title";
 			case 'id_title':
 				return hu."$thisid/$url_title";	
+			case 'section_title':
+				return hu."$section/$url_title";
 			case 'title_only':
 				return hu."$url_title";	
 			case 'messy':

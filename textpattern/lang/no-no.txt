@@ -490,6 +490,7 @@ id_title => /id/tittel
 year_month_day_title => /år/måned/dag/tittel
 category_subcategory => /kategori/underkategori
 section_id_title => /seksjon/id/tittel
+section_title => /seksjon/tittel
 title_only => /tittel
 permlink_mode => Permanent link modus
 link_to_this_category => Link til en liste med andre artikler i denne kategori?

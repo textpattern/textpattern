@@ -486,6 +486,7 @@ id_title => /id/titre
 year_month_day_title => /année/mois/jour/titre
 category_subcategory => /catégorie/sous-catégorie
 section_id_title => /section/id/titre
+section_title => /section/titre
 title_only => /titre
 permlink_mode => Format des URL
 link_to_this_category => Lien vers une liste d'autres articles dans cette catégorie&#160;?

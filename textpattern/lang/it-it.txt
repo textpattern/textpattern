@@ -494,7 +494,7 @@ year_month_day_title => /anno/mese/giorno/titolo
 category_subcategory => /categoria/sottocategoria
 section_id_title => /sezione/id/titolo
 title_only => /titolo
-
+section_title => /sezione/titolo
 permlink_mode => Permanent link mode
 link_to_this_category => Link to a list of other articles in this category?
 link_to_this_section => Link to a list of other articles in this section?
