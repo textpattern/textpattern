@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-	<title>Textpattern: build a tag</title>
+	<title>Textpattern: <?php echo gTxt('build'); ?></title>
 <link rel="stylesheet" href="/textpattern/textpattern.css" type="text/css" />
 </head>
 <body style="padding:10px;background-color:#fff;border-top:solid #FFCC33 15px;">
@@ -42,7 +42,7 @@
 		$invars = gpsa(array('form','limit','listform'));
 		extract($invars);
 		$out = form(startTable('list').
-			tr(tdcs(hed('Article Output',3),2) ).
+			tr(tdcs(hed(gTxt('page_article_hed'),3),2) ).
 			tagRow('form', form_pop($form,'article','form')) .
 			tagRow('listform', form_pop($listform,'article','listform')) .
 			tagRow('limit', inputLimit($limit)) .
@@ -63,7 +63,7 @@
 		));
 		extract($invars);
 		$out = form(startTable('list').
-			tr(tdcs(hed('Custom Article Output',3),2) ) .
+			tr(tdcs(hed(gTxt('tag_article_custom'),3),2) ) .
 			tagRow('form'          , form_pop($form,'article','form')) .
 			tagRow('listform'      , form_pop($listform,'article','listform')) .
 			tagRow('limit'         , inputLimit($limit)) .
@@ -88,7 +88,7 @@
 		$invars = gpsa(array('email','linktext','title'));
 		extract($invars);
 		$out = form(startTable('list').
-			tr(tdcs(hed('Spam-proof Contact Link',3),2) ) .
+			tr(tdcs(hed(gTxt('tag_email'),3),2) ) .
 			tagRow('email_address', fInput('text','email',$email,'edit','','',20)).
 			tagRow('tooltip', fInput('text','title',$title,'edit','','',20)).
 			tagRow('link_text', fInput('text','linktext',$linktext,'edit','','',20)).
@@ -106,7 +106,7 @@
 		$invars = gpsa(array('separator'));
 		extract($invars);
 		$out = form(startTable('list').
-			tr(tdcs(hed('Page Title',3),2) ).
+			tr(tdcs(hed(gTxt('tag_page_title'),3),2) ).
 			tagRow('title_separator',fInput('text','separator',$separator,'edit','','',4)).
 			$endform
 		);
@@ -123,7 +123,7 @@
 				'date desc'=>'Date descending','date asc'=>'Date ascending', 'rand()'=>'Random');
 		extract($invars);
 		$out = form(startTable('list').
-			tr(tdcs(hed('Link List',3),2) ).
+			tr(tdcs(hed(gTxt('tag_linklist'),3),2) ).
 			tagRow('form', form_pop($form,'link','form')).
 			tagRow('category', link_category_pop($category)).
 			tagRow('limit', fInput('text','limit',$limit,'edit','','',2)).
@@ -143,7 +143,7 @@
 		$invars = gpsa(array('form','category','wraptag','break'));
 		extract($invars);
 		$out = form(startTable('list').
-			tr(tdcs(hed('Category List',3),2) ).
+			tr(tdcs(hed(gTxt('tag_category_list'),3),2) ).
 			tagRow('category', category_pop($category)).
 			tagRow('wraptag', fInput('text','wraptag',$wraptag,'edit','','',2)).
 			tagRow('break', fInput('text','break',$break,'edit','','',5)).
@@ -160,13 +160,13 @@
 		global $step,$endform,$name;
 		$invars = gpsa(array('label','limit','break','wraptag','category','sortby','sortdir'));
 		extract($invars);
-		$label = (!$label) ? 'Recently' : $label;
+		$label = (!$label) ? gTxt('recently') : $label;
 		$limit = (!$limit) ? '10' : $limit;
 		$break = (!$break) ? '<br />' : $break;
 		$category = (!$category) ? '' : $category;
 		$sortby = (!$sortby) ? '' : $sortby;
 		$out = form(startTable('list').
-			tr(tdcs(hed('List of Recent Articles',3),2) ) .
+			tr(tdcs(hed(gTxt('tag_recent_articles'),3),2) ) .
 			tagRow('label', fInput('text','label',$label,'edit','','',20)) .
 			tagRow('limit', fInput('text','limit',$limit,'edit','','',2)) .
 			tagRow('break', fInput('text','break',$break,'edit','','',5)) .
@@ -191,7 +191,7 @@
 		$break = (!$break) ? '<br />' : $break;
 		
 		$out = form(startTable('list').
-			tr(tdcs(hed('List of Related Articles',3),2) ).
+			tr(tdcs(hed(gTxt('tag_related_articles'),3),2) ).
 			tagRow('label', fInput('text','label',$label,'edit','','',20)).
 			tagRow('limit', fInput('text','limit',$limit,'edit','','',2)).
 			tagRow('break', fInput('text','break',$break,'edit','','',5)).
@@ -212,7 +212,7 @@
 		$limit = (!$limit) ? '10' : $limit;
 		$break = (!$break) ? '<br />' : $break;
 		$out = form(startTable('list').
-			tr(tdcs(hed('List of Recent Comments',3),2) ).
+			tr(tdcs(hed(gTxt('tag_recent_comments'),3),2) ).
 			tagRow('label', fInput('text','label',$label,'edit','','',20)).
 			tagRow('limit', fInput('text','limit',$limit,'edit','','',2)).
 			tagRow('break', fInput('text','break',$break,'edit','','',5)).
@@ -230,7 +230,7 @@
 		$invars = gpsa(array('form'));
 		extract($invars);
 		$out = form(startTable('list').
-			tr(tdcs(hed('Output a form',3),2) ).
+			tr(tdcs(hed(gTxt('tag_output_form'),3),2) ).
 			tagRow('form', form_pop($form,'','form')).
 			$endform
 		);
@@ -244,9 +244,9 @@
 		global $step,$endform,$name;
 		$invars = gpsa(array('label','type','wraptag'));
 		extract($invars);
-		$typearr = array('c'=>'Category','s'=>'Section');
+		$typearr = array('c'=>gTxt('Category'),'s'=>gTxt('Section'));
 		$out = form(startTable('list').
-			tr(tdcs(hed('Popup Category or Section List',3),2) ).
+			tr(tdcs(hed(gTxt('tag_popup'),3),2) ).
 			tagRow('label', fInput('text','label',$label,'edit','','',25)).
 			tagRow('type', selectInput('type',$typearr,$type)).
 			tagRow('wraptag', fInput('text','wraptag',$wraptag,'edit','','',2)).
@@ -263,7 +263,7 @@
 		$invars = gpsa(array('login','pass'));
 		extract($invars);
 		$out = form(startTable('list').
-			tr(tdcs(hed('Password Protection',3),2) ).
+			tr(tdcs(hed(gTxt('tag_password_protect'),3),2) ).
 			tagRow('login', fInput('text','login',$login,'edit','','',25)).
 			tagRow('password', fInput('password','pass',$pass,'','','',25)).
 			$endform
@@ -282,7 +282,7 @@
 		$size = (!$size) ? '15' : $size;
 		$label = (!$label) ? 'Search' : $label;
 		$out = form(startTable('list').
-			tr(tdcs(hed('Search Input Form',3),2) ).
+			tr(tdcs(hed(gTxt('tag_search_input'),3),2) ).
 			tagRow('label', fInput('text','label',$label,'edit','','',25)).
 			tagRow('button_text', fInput('text','button',$button,'edit','','',25)).
 			tagRow('input_size', fInput('text','size',$size,'edit','','',2)).
@@ -300,7 +300,7 @@
 		$invars = gpsa(array('link'));
 		extract($invars);
 		$out = form(startTable('list').
-			tr(tdcs(hed('Category 1',3),2) ).
+			tr(tdcs(hed(gTxt('tag_category1'),3),2) ).
 			tagRow('link_to_this_category', yesno_pop('link',$link)) .
 			$endform
 		);
@@ -315,7 +315,7 @@
 		$invars = gpsa(array('link'));
 		extract($invars);
 		$out = form(startTable('list').
-			tr(tdcs(hed('Category 2',3),2) ).
+			tr(tdcs(hed(gTxt('tag_category2'),3),2) ).
 			tagRow('link_to_this_category', yesno_pop('link',$link)) .
 			$endform
 		);
@@ -330,7 +330,7 @@
 		$invars = gpsa(array('link'));
 		extract($invars);
 		$out = form(startTable('list').
-			tr(tdcs(hed('Section',3),2) ).
+			tr(tdcs(hed(gTxt('Section'),3),2) ).
 			tagRow('link_to_this_section', yesno_pop('link',$link)) .
 			$endform
 		);
@@ -339,13 +339,13 @@
 	}
 
 // -------------------------------------------------------------
-	function author() 
+	function tag_author() 
 	{
 		global $step,$endform,$name;
-		$invars = gpsa(array('author'));
+		$invars = gpsa(array('author','link'));
 		extract($invars);
 		$out = form(startTable('list').
-			tr(tdcs(hed('Author',3),2) ).
+			tr(tdcs(hed(gTxt('tag_author'),3),2) ).
 			tagRow('link_to_this_author', yesno_pop('link',$link)) .
 			$endform
 		);
@@ -358,9 +358,9 @@
 	{
 		global $step,$endform,$name;
 		$label = gps('label');
-		$label = (!$label) ? 'Home' : $label;
+		$label = (!$label) ? gTxt('tag_home') : $label;
 		$out = form(startTable('list').
-			tr(tdcs(hed('Link to Home Page',3),2) ).
+			tr(tdcs(hed(gTxt('tag_link_to_home'),3),2) ).
 			tagRow('link_text', fInput('text','label',$label,'edit','','',25)).
 			$endform
 		);
@@ -375,7 +375,7 @@
 		$label = gps('label');
 		$label = (!$label) ? '<txp:prev_title />' : $label;
 		$out = form(startTable('list').
-			tr(tdcs(hed('Link to Previous Article',3),2) ).
+			tr(tdcs(hed(gTxt('tag_link_to_prev'),3),2) ).
 			tagRow('link_text', fInput('text','label',$label,'edit','','',25)).
 			$endform
 		);
@@ -390,7 +390,7 @@
 		$label = gps('label');
 		$label = (!$label) ? '<txp:next_title />' : $label;
 		$out = form(startTable('list').
-			tr(tdcs(hed('Link to Next Article',3),2) ).
+			tr(tdcs(hed(gTxt('tag_link_to_next'),3),2) ).
 			tagRow('link_text', fInput('text','label',$label,'edit','','',25) ).
 			$endform
 		);
@@ -408,7 +408,7 @@
 		$label = (!$label) ? 'XML' : $label;
 		$flavarr = array('rss'=>'rss','atom'=>'atom');
 		$out = form(startTable('list').
-			tr(tdcs(hed('Link to XML Feed',3),2) ) .
+			tr(tdcs(hed(gTxt('tag_feed_link'),3),2) ) .
 			tagRow('label', fInput('text','label',$label,'edit','','',25)) .
 			tagRow('limit', inputLimit($limit)) .
 			tagRow('wraptag', fInput('text','wraptag',$wraptag,'edit','','',2)).
@@ -429,7 +429,7 @@
 		extract($invars);
 		$label = (!$label) ? 'XML' : $label;
 		$out = form(startTable('list').
-			tr(tdcs(hed('Link to XML Feed of Links',3),2) ) .
+			tr(tdcs(hed(gTxt('tag_link_feed_link'),3),2) ) .
 			tagRow('label',fInput('text','label',$label,'edit','','',25)) .
 			tagRow('wraptag', fInput('text','wraptag',$wraptag,'edit','','',2)).
 			tagRow('category', link_category_pop($category)) .
@@ -443,13 +443,13 @@
 
 	// double tags eg: <txp:permlink> permanent link </txp:permlink>
 
-	function tag_permlink()  { return tdb(tbd('permlink','* text or tag here *')); }
+	function tag_permlink()  { return tdb(tbd('permlink',gTxt('text_or_tag'))); }
 
-	function tag_paging_link() { return tdb(tbd('paging_link','* text or tag here *')); }
+	function tag_paging_link() { return tdb(tbd('paging_link',gTxt('text_or_tag'))); }
 
-	function tag_newer()       { return tdb(tbd('newer','* text or tag here *')); }
+	function tag_newer()       { return tdb(tbd('newer',gTxt('text_or_tag'))); }
 
-	function tag_older()       { return tdb(tbd('older','* text or tag here *')); }
+	function tag_older()       { return tdb(tbd('older',gTxt('text_or_tag'))); }
 
 	// single tags eg: <txp:body /> 
 	
@@ -522,7 +522,7 @@
 		));
 		extract($invars);
 		$out = form(startTable('list').
-			tr(tdcs(hed('Breadcrumb',3),2) ) .
+			tr(tdcs(hed(gTxt('tag_breadcrumb'),3),2) ) .
 			tagRow('breadcrumb_separator',fInput('text','sep',$sep,'edit','','',4)).
 			tagRow('label',fInput('text','label',$label,'edit','','',25)) .
 			tagRow('wraptag', fInput('text','wraptag',$wraptag,'edit','','',2)). 
@@ -586,11 +586,11 @@
 	function sort_pop($sortby)
 	{
 		$arr = array(
-			'Posted' => 'Posted',
-			'AuthorID' => 'Author',
-			'LastMod' => 'Last Modification',
-			'Title' => 'Title',
-			'Section' => 'Section',
+			'Posted' => gTxt('tag_posted'),
+			'AuthorID' => gTxt('tag_author'),
+			'LastMod' => gTxt('last_modification'),
+			'Title' => gTxt('tag_title'),
+			'Section' => gTxt('Section'),
 		);
 		return ' '.selectInput("sortby",$arr,"$sortby");
 	}
@@ -599,8 +599,8 @@
 	function sortdir_pop($sortdir)
 	{
 		$arr = array(
-			'desc' => 'Descending',
-			'asc' => 'Ascending'
+			'desc' => gTxt('descending'),
+			'asc' => gTxt('ascending')
 		);
 		return ' '.selectInput("sortdir",$arr,"$sortdir");
  	}
@@ -701,7 +701,7 @@
 // -------------------------------------------------------------
 	function tdb($thing)
 	{
-		return hed('Tag:',3).text_area('tag','100','300',$thing);
+		return hed(gTxt('tag').':',3).text_area('tag','100','300',$thing);
 	}
 
 // -------------------------------------------------------------
@@ -761,7 +761,7 @@
 		$invars = gpsa(array('form','id'));
 		extract($invars);
 		$out = form(startTable('list').
-			tr(tdcs(hed('File Download Link',3),2) ).
+			tr(tdcs(hed(gTxt('tag_file_download'),3),2) ).
 			tagRow('form', form_pop($form,'file','form')) .
 			tagRow('id', fInput('text','id',$id,'edit','','',2)).
 			$endform
@@ -779,7 +779,7 @@
 				'downloads desc'=>'Download Count descending','downloads asc'=>'Download Count ascending', 'rand()'=>'Random');
 		extract($invars);
 		$out = form(startTable('list').
-			tr(tdcs(hed('File Download List',3),2) ).
+			tr(tdcs(hed(gTxt('tag_file_download_list'),3),2) ).
 			tagRow('form', form_pop($form,'file','form')).
 			tagRow('category', file_category_pop($category)).
 			tagRow('limit', fInput('text','limit',$limit,'edit','','',2)).
@@ -800,7 +800,7 @@
 		extract($invars);
 		$format = (!$format) ? '' : $format;
 		$out = form(startTable('list').
-			tr(tdcs(hed('File Creation Time<br />('.gTxt('archive_dateformat').' used if empty)' ,3),2) ).
+			tr(tdcs(hed(gTxt('tag_file_download_created').'<br />('.gTxt('archive_dateformat').' used if empty)' ,3),2) ).
 			tagRow('format', fInput('text','format',$format,'edit','','',15)).
 			$endform
 		);
@@ -816,7 +816,7 @@
 		extract($invars);
 		$format = (!$format) ? '' : $format;
 		$out = form(startTable('list').
-			tr(tdcs(hed('File Modified Time<br />('.gTxt('archive_dateformat').' used if empty)',3),2) ).
+			tr(tdcs(hed(gTxt('tag_file_download_modified').'<br />('.gTxt('archive_dateformat').' used if empty)',3),2) ).
 			tagRow('format', fInput('text','format',$format,'edit','','',15)).
 			$endform
 		);
@@ -833,7 +833,7 @@
 		extract($invars);
 		$decimals = (!$decimals) ? '2' : $decimals;
 		$out = form(startTable('list').
-			tr(tdcs(hed('File Size',3),2) ).
+			tr(tdcs(hed(gTxt('tag_file_download_size'),3),2) ).
 			tagRow('format', selectInput('format',$formats,$format,1)).
 			tagRow('decimals', fInput('text','decimals',$decimals,'edit','','',4)).
 			$endform
@@ -848,12 +848,12 @@
 		$invars = gpsa(array('filename','id'));
 		extract($invars);
 		$out = form(startTable('list').
-			tr(tdcs(hed('File Download Link',3),2) ).
+			tr(tdcs(hed(gTxt('tag_file_download_link'),3),2) ).
 			tagRow('id', fInput('text','id',$id,'edit','','',4)).
 			tagRow('filename', fInput('text','filename',$filename,'edit','','',15)).
 			$endform
 		);
-		$out .= tdb(tb('file_download_link',$invars,'* text or tag here *'));
+		$out .= tdb(tb('file_download_link',$invars,gTxt('text_or_tag')));
 		return $out;
 	}
 
