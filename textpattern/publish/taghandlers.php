@@ -680,7 +680,7 @@
 			$ccount = ($comments_count) ?  ' ['.$comments_count.']' : '';
 	
 			if (!$comments_mode) {
-				return '<a href="'.permlinkurl($thisarticle).'/#'.gTxt('comment').
+				return '<a href="'.permlinkurl($thisarticle).'#'.gTxt('comment').
 					'">'.$comments_invite.'</a>'. $ccount;
 			} else {
 				return "<a href=\"".hu."?parentid=$thisid\" onclick=\"window.open(this.href, 'popupwindow', 'width=500,height=500,scrollbars,resizable,status'); return false;\">".$comments_invite.'</a> '.$ccount;
