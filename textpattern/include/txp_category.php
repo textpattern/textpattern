@@ -104,7 +104,7 @@
 	{
 		pagetop(gTxt('categories'));
 
-		extract(gpsa(array('name','parent')));
+		extract(doSlash(gpsa(array('name','parent'))));
 		$row = safe_row("*", "txp_category", "name='$name' and type='article'");
 		if($row){
 			extract($row);
@@ -199,7 +199,7 @@
 	function link_edit()
 	{
 		pagetop(gTxt('categories'));
-		$name = gps('name');
+		$name = doSlash(gps('name'));
 		extract(safe_row("*", "txp_category", "name='$name' and type='link'"));
 		$out = 
 		tr( fLabelCell(gTxt('link_category_name').':').fInputCell('name',$name,1,20)).
@@ -280,7 +280,7 @@
 	function image_edit()
 	{
 		pagetop(gTxt('categories'));
-		$name = gps('name');
+		$name = doSlash(gps('name'));
 		extract(safe_row("*","txp_category", "name='$name' and type='image'"));
 		$out = 
 		tr(fLabelCell(gTxt('image_category_name').':').fInputCell('name',$name,1,20)).
