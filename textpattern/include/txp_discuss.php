@@ -257,7 +257,7 @@
 			if ($method == 'delete') {
 				foreach($things as $discussid) {
 					if (safe_delete('txp_discuss',"discussid='$discussid'")) {
-						$ids[] = $id;
+						$ids[] = $discussid;
 					}
 				}
 				discuss_list(messenger('comment',join(', ',$ids),'deleted'));

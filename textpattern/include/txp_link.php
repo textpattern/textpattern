@@ -147,9 +147,9 @@
 	}
 
 // -------------------------------------------------------------
-	function link_post($vars)
+	function link_post()
 	{
-		global $txpcfg,$txpac;
+		global $txpcfg,$txpac,$vars;
 		$varray = gpsa($vars);
 
 		if($txpac['textile_links']) {
@@ -179,9 +179,9 @@
 	}
 
 // -------------------------------------------------------------
-	function link_save($vars) 
+	function link_save() 
 	{
-		global $txpcfg,$txpac;
+		global $txpcfg,$txpac,$vars;
 		$varray = gpsa($vars);
 
 		if($txpac['textile_links']) {

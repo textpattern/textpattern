@@ -127,7 +127,7 @@
 	{
 		if (isset($_POST[$thing])) {
 			if (get_magic_quotes_gpc()==1) {
-				return stripslashes($_POST[$thing]);
+				return doStrip($_POST[$thing]);
 			} else {
 				return $_POST[$thing];
 			}
@@ -146,6 +146,15 @@
 
 // -------------------------------------------------------------
 	function psas($array) // same as above, but does strip_tags on post values
+	{
+		foreach($array as $a) {
+			$out[$a] = strip_tags(ps($a));
+		}
+		return $out;
+	}
+
+// -------------------------------------------------------------
+	function psm($array) // grabs a form array like selected[] from $_POST
 	{
 		foreach($array as $a) {
 			$out[$a] = strip_tags(ps($a));
