@@ -53,9 +53,6 @@
 		$textarray = load_lang(LANG);
 	
 		include txpath.'/include/txp_auth.php';
-		if ($txpac['admin_side_plugins'] and gps('event') != 'plugin')
-			load_plugins(1);
-		include txpath.'/lib/txplib_head.php';
 	
 		$event = (gps('event') ? gps('event') : 'article');
 		$step = gps('step');
@@ -66,6 +63,10 @@
 			$event = 'prefs';
 			$step = 'prefs';
 		}
+
+		if ($txpac['admin_side_plugins'] and gps('event') != 'plugin')
+			load_plugins(1);
+		include txpath.'/lib/txplib_head.php';
 
 		callback_event($event, $step, 1);
 

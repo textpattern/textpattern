@@ -3,9 +3,8 @@
 // -------------------------------------------------------------
 	function pagetop($pagetitle,$message="")
 	{
-		global $css_mode,$siteurl,$txp_user;
+		global $css_mode,$siteurl,$txp_user,$event;
 		$area = gps('area');
-		$event = gps('event');
 		$event = (!$event) ? 'article' : $event;
 		$bm = gps('bm');
 
