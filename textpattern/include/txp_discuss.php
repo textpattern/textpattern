@@ -28,7 +28,6 @@
 	function discuss_save()
 	{
 		extract(doSlash(gpsa(array('email','name','web','message','discussid','ip','visible'))));
-		$message = htmlentities($message, ENT_QUOTES, 'UTF-8');
 		safe_update("txp_discuss",
 			"email   = '$email',
 			 name    = '$name',
