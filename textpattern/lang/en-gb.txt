@@ -231,6 +231,7 @@ next_page_link => Next page link
 no => no
 none => None
 nopopup => nopopup
+norwegian => Norwegian
 no_comments_recorded => No comments recorded yet
 no_ips_banned => No IPs have been banned
 no_popup => current window

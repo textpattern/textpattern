@@ -266,6 +266,7 @@
 			'it-it' => gTxt('italian'),
 			'cs-cz' => gTxt('czech'),
 			'de-de' => gTxt('german'),
+			'no-no' => gTxt('norwegian'),
 //			'pt-pt' => gTxt('portuguese'),
 //			'fi-fi' => gTxt('finnish'),
 //			'ru-ru' => gTxt('russian'),
