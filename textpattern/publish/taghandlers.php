@@ -479,7 +479,8 @@
 			'wraptag' => 'p',
 			'size'    => '15',
 			'label'   => 'Search',
-			'button'  => ''
+			'button'  => '',
+			'section' => '',
 		),$atts));	
 
 		if ($form) {
@@ -493,8 +494,13 @@
 		$out = fInput('text','q',$q,'','','',$size);
 		$out = (!empty($label)) ? $label.br.$out.$sub : $out.$sub;
 		$out = ($wraptag) ? tag($out,$wraptag) : $out;
-		
-		return '<form action="'.hu.'" method="get">'.$out.'</form>';
+	
+		if (!$section)
+			return '<form action="'.hu.'" method="get">'.$out.'</form>';
+	
+		return $permlink_mode == 'messy' 
+			? '<form action="'.hu.'?section='.$section.'" method="get">'.$out.'</form>'
+			: '<form action="'.hu.$section.'/" method="get">'.$out.'</form>';
 	}
 
 // -------------------------------------------------------------
