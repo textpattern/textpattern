@@ -92,8 +92,16 @@
 //-------------------------------------------------------------
 	function section_create() 
 	{
+		global $txpcfg;
 		$name = ps('name');
-		$name = trim(doSlash($name));
+		
+		//Prevent non url chars on section names
+		include_once $txpcfg['txpath'].'/lib/classTextile.php';
+		$textile = new Textile();
+				
+		$name = dumbDown($textile->TextileThis(trim(doSlash($name)),1));
+		$name = preg_replace("/[^[:alnum:]\-]/", "", str_replace(" ","-",$name));
+		
 		$chk = fetch('name','txp_section','name',$name);
 		if (!$chk) {
 			if ($name) {
@@ -114,10 +122,17 @@
 //-------------------------------------------------------------
 	function section_save()
 	{
+		global $txpcfg;
 		$in = psa(array(
 			'name','page','css','is_default','on_frontpage','in_rss','searchable','old_name')
 		);
 		extract(doSlash($in));
+		
+		//Prevent non url chars on section names
+		include_once $txpcfg['txpath'].'/lib/classTextile.php';
+		$textile = new Textile();		
+		$name = dumbDown($textile->TextileThis($name, 1));
+		$name = preg_replace("/[^[:alnum:]\-]/", "", str_replace(" ","-",$name));
 		
 		if ($is_default) {
 			safe_update("txp_section", "is_default=0", "name!='$old_name'");
