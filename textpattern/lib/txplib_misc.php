@@ -553,7 +553,14 @@
 	{
 		global $path_to_site, $img_dir;
 
-		$guess = array('', '/tmp', txpath . '/tmp', $path_to_site.'/'.$img_dir);
+		if (is_windows()) {
+			$guess = array(getenv('TMP'), getenv('TEMP'), getenv('SystemRoot').'\Temp', 'C:\Temp', txpath . '\tmp', $path_to_site . '\\' . $img_dir);
+			foreach ($guess as $k=>$v)
+				if (empty($v)) unset($guess[$k]);
+		}
+		else
+			$guess = array('', '/tmp', txpath . '/tmp', $path_to_site.'/'.$img_dir);
+
 		foreach ($guess as $dir) {
 			$tf = realpath(@tempnam($dir, 'txp_'));
 			if ($tf and file_exists($tf)) {
@@ -581,6 +588,25 @@
 		# will overwrite it
 		if (move_uploaded_file($f, $newfile));
 			return $newfile;
+	}
+
+// -------------------------------------------------------------
+	function shift_uploaded_file($f, $dest)
+	{
+		// Rename might not work, but it's worth a try
+		if (@rename($f, $dest))
+			return true;
+
+		if (copy($f, $dest)) {
+			unlink($f);
+			return true;
+		}
+	}
+
+// -------------------------------------------------------------
+	function is_windows()
+	{
+		return (PHP_OS == 'WINNT' or PHP_OS == 'WIN32' or PHP_OS == 'Windows');
 	}
 
 ?>
