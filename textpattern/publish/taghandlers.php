@@ -975,7 +975,7 @@
 			case 'title_only':
 				return hu."$url_title";	
 			case 'messy':
-				return hu."?s=$section&amp;id=$thisid";	
+				return hu."?id=$thisid";	
 		}
 	}
 	

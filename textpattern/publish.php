@@ -189,6 +189,11 @@
 				$out['s'] = 'default';
 			}
 		}
+		else {
+			// Messy mode
+			if ($out['id'])
+				$out['s'] = safe_field('section', 'textpattern', "ID='".doSlash($out['id'])."'");
+		}
 		
 
 		$out['s'] = (empty($out['s'])) ? 'default' : $out['s'];
