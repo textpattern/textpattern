@@ -540,7 +540,7 @@
 		foreach($atts as $a=>$b) if ($b) $attsout[] = ' '.$a.'="'.$b.'"';
 		$atts_built = (is_array($attsout)) ? join('', $attsout) : '';
 
-		return ($double)?'<txp:'.$name.$atts_built.'>'.$double.'</txp:'.$name.'>':'<txp:'.$name.$atts_built.' />';
+		return (!empty($double))?'<txp:'.$name.$atts_built.'>'.$double.'</txp:'.$name.'>':'<txp:'.$name.$atts_built.' />';
 	}
 
 // -------------------------------------------------------------
@@ -622,7 +622,10 @@
 		$arr = array('');
 		$rs = safe_rows("name", "txp_css", "name!='default' order by name");
 		if ($rs) {
-			foreach ($rs as $a) $arr[$a[0]] = $a[0];
+			foreach ($rs as $a){
+				$v = array_shift($a);
+				$arr[$v] = $v;
+			}
 			return ' '.selectInput("n",$arr,$n);
 		}
 		return false;
@@ -634,7 +637,10 @@
 		$arr = array('');
 		$rs = safe_rows("name", "txp_section", "name!='default' order by name");
 		if ($rs) {
-			foreach ($rs as $a) $arr[$a[0]] = $a[0];
+			foreach ($rs as $a){
+				$v = array_shift($a);
+				$arr[$v] = $v;
+			}
 			return ' '.selectInput("section", $arr,$name);
 		}
 		return 'no sections created';
@@ -646,7 +652,10 @@
 		$arr = array('');
 		$rs = safe_rows("name", "txp_users", "1 order by name");
 		if ($rs) {
-			foreach ($rs as $a) $arr[$a[0]] = $a[0];
+			foreach ($rs as $a){
+				$v = array_shift($a);
+				$arr[$v] = $v;
+			}
 			return ' '.selectInput("author", $arr,$name);
 		}
 		return 'no authors created';
@@ -661,7 +670,10 @@
 		
 		$rs = safe_rows("name", "txp_form", "$typeq order by name");
 		if ($rs) {
-			foreach ($rs as $a) $arr[$a[0]] = $a[0];
+			foreach ($rs as $a){
+				$v = array_shift($a);
+				$arr[$v] = $v;
+			}
 			return ' '.selectInput($formname, $arr,$name);
 		}
 		return 'no forms available';
