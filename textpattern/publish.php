@@ -567,7 +567,7 @@
 	{
 		global $pretext;
 		extract($pretext);
-		extract($rs);		
+		extract($rs);
 		$com_count = safe_count('txp_discuss',"parentid=$ID and visible=1");
 
 		$author = (fetch('RealName','txp_users','name',$AuthorID));
@@ -579,7 +579,7 @@
 		$out['comments_invite'] = $AnnotateInvite;
 		$out['comments_count']  = $com_count;					  
 		$out['author']          = $author;
-		$out['excerpt']         = $Excerpt;
+		$out['excerpt']         = $Excerpt_html;
 		$out['title']           = $Title;
 		$out['url_title']       = $url_title;
 		$out['category1']       = $Category1;

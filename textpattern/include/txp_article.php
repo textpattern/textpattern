@@ -65,7 +65,9 @@
 		$incoming['Title'] = $textile->TextileThis($incoming['Title'],'',1);
 
 		if ($incoming['textile_excerpt']) {
-			$incoming['Excerpt'] = $textile->TextileThis($incoming['Excerpt'],1);
+			$incoming['Excerpt_html'] = $textile->TextileThis($incoming['Excerpt']);
+		}else{
+			$incoming['Excerpt_html'] = $textile->TextileThis($incoming['Excerpt'],1);
 		}
 
 			extract(doSlash($incoming));
@@ -90,6 +92,7 @@
 					Body            = '$Body',
 					Body_html       = '$Body_html',
 					Excerpt         = '$Excerpt',
+					Excerpt_html    = '$Excerpt_html',
 					Image           = '$Image',
 					Keywords        = '$Keywords',
 					Status          = '$Status',
@@ -174,7 +177,9 @@
 		}
 		
 		if ($incoming['textile_excerpt']) {
-			$incoming['Excerpt'] = $textile->TextileThis($incoming['Excerpt'],1);
+			$incoming['Excerpt_html'] = $textile->TextileThis($incoming['Excerpt']);
+		}else{
+			$incoming['Excerpt_html'] = $textile->TextileThis($incoming['Excerpt'],1);
 		}
 
 		if (!has_privs('article.publish') && $Status==4) $Status = 3;
@@ -197,6 +202,7 @@
 			Body            = '$Body',
 			Body_html       = '$Body_html',
 			Excerpt         = '$Excerpt',
+			Excerpt_html    = '$Excerpt_html',
 			Keywords        = '$Keywords',
 			Image           = '$Image',
 			Status          = '$Status',
