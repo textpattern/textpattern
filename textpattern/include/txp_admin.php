@@ -149,7 +149,7 @@
 		gTxt('your_login_is').': '.$_POST['name']."\r\n".
 		gTxt('your_password_is').': '.$pw."\r\n"."\r\n".
 	
-		gTxt('log_in_at').' '.hu.'textpattern/index.php';
+		gTxt('log_in_at').' '.hu.'/textpattern/index.php';
 	
 		mail($email, "[$sitename] ".gTxt('your_login_info'), $message,
 		 "From: $myName <$myEmail>\r\n"
