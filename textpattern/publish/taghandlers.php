@@ -929,11 +929,14 @@
 	}
 
 // -------------------------------------------------------------
-	function permlink($atts,$thing)
+	function permlink($atts,$thing=NULL)
 	{
 		global $thisarticle;
 		
 		$url = permlinkurl($thisarticle);
+
+		if ($thing === NULL)
+			return $url;
 		
 		return tag(parse($thing),'a',' href="'.$url.'" title="'.gTxt('permanent_link').'"');
 	}
