@@ -52,7 +52,7 @@
 
 	$textarray = load_lang('en-gb');
 
-	$s = (empty($s)) ? '' : $s;
+	$s = (empty($s)) ? 'default' : $s;
 
 	$pretext = pretext($s,$prefs);
 	extract($pretext);

@@ -43,7 +43,7 @@
 			foreach($rs as $a) {
 				extract($a);
 								
-				$result_date = date("j M Y",$uPosted);
+				$result_date = date($archive_dateformat,$uPosted);
 				$uTitle = ($url_title) ? $url_title : stripSpace($Title);
 				$hurl = ($url_mode)
 				?	$siteurl.$path_from_root.$Section.'/'.$ID.'/'.$uTitle
