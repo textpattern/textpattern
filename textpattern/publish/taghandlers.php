@@ -1243,7 +1243,7 @@
 		
 		$thing = ($permlink_mode == 'messy') ?
 					'<a href="'.hu.'index.php?s=file_download&id=<txp:file_download_id />">'.$thing.'</a>':
-					'<a href="'.hu.'download/<txp:file_download_id />">'.$thing.'</a>';		
+					'<a href="'.hu.gTxt('file_download').'/<txp:file_download_id />">'.$thing.'</a>';		
 		
 		
 		$out = fileDownloadTags($where, $thing);		
@@ -1270,7 +1270,7 @@
 		
 		$link = ($permlink_mode == 'messy') ?
 					'<a href="'.hu.'index.php?s=file_download&id='.$finfo['id'].'">':
-					'<a href="'.hu.'file_download/'.$finfo['id'].'">';
+					'<a href="'.hu.gTxt('file_download').'/'.$finfo['id'].'">';
 						
 		preg_match('/<txp:file_download_link>(.*)<\/txp:file_download_link>/s',$out, $matched);
 		if ($matched)

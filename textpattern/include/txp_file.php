@@ -533,7 +533,7 @@
 		if ($permlink_mode == 'messy') {
 			return '<a href="'.hu.'/index.php?s=file_download&id='.$id.'" title="download file '.$filename.'">'.$text.'</a>';
 		} else {
-			return '<a href="'.hu.'/download/'.$id.'" title="download file '.$filename.'">'.$text.'</a>';
+			return '<a href="'.hu.'/'.gTxt('file_download').'/'.$id.'" title="download file '.$filename.'">'.$text.'</a>';
 		}
 	}
 	
