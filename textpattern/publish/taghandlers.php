@@ -1060,15 +1060,17 @@
 		$category = empty($c)? '': $c;
 		$cattree = array();
 		if (!empty($category)){
-			while ($parent = safe_field('parent','txp_category',"name='$category' AND parent!='root'"))
-			{
+
+			do {
+				$parent = safe_field('parent','txp_category',"name='$category'");
 				//Use new /category/category_name scheme here too?
-				$cattree[] = ($linked)? 
-					tag(str_replace("& ","&#38; ", $category),'a',' href="'.hu.'?c='.urlencode($category).'"')
-					:$category;
-				$category = $parent;
-				unset($parent);
-			}
+					$cattree[] = ($linked)? 
+						tag(str_replace("& ","&#38; ", $category),'a',' href="'.hu.'?c='.urlencode($category).'"')
+							:$category;
+					$category = $parent;
+					unset($parent);
+			}		
+			while ($category!='root');
 		}
 		if (!empty($cattree))
 		{
