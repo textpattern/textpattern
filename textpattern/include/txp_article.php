@@ -6,7 +6,6 @@
 
 	Use of this software indicates acceptance of the Textpattern license agreement 
 */
-#	dmp($_POST);
 
 	$vars = array(
 		'ID','Title','Title_html','Body','Body_html','Excerpt','textile_excerpt','Image',
@@ -117,6 +116,8 @@
 					custom_10       = '$custom_10'"
 				);
 				
+			$GLOBALS['ID'] = mysql_insert_id();
+				
 			if ($Status==4) {
 	
 				safe_update("txp_prefs", "val = now()", "`name` = 'lastmod'");
@@ -140,6 +141,7 @@
 				else if ($Status==2) { $message = gTxt("article_saved_hidden");  } 
 				else if ($Status==1) { $message = gTxt("article_saved_draft");   }
 			}
+			
 				article_edit($message);
 		} else article_edit();
 	}
@@ -245,6 +247,7 @@
 			else if ($Status==2) { $message = gTxt("article_saved_hidden");	 } 
 			else if ($Status==1) { $message = gTxt("article_saved_draft");	 }	
 		}
+		
 		article_edit($message);
 	}
 
@@ -257,7 +260,15 @@
 		$myprivs = fetch('privs','txp_users','name',$txp_user);
 		
 		extract(get_prefs());
-		extract(gpsa(array('ID','view','from_view','step')));
+		extract(gpsa(array('view','from_view','step')));
+		
+		if(!empty($GLOBALS['ID'])) { // newly-saved article
+			$ID = $GLOBALS['ID'];
+			$step = 'edit';
+		} else {  
+			$ID = gps('ID');
+		}
+		
 		extract($txpac);
 
 		include_once $txpcfg['txpath'].'/lib/classTextile.php';
@@ -564,7 +575,7 @@
 
 	//-- timestamp ------------------- 
 
-		if ($step == "create") {
+		if ($step == "create" and empty($GLOBALS['ID'])) {
 			if ($view == 'text') {
 			echo
 			graf(checkbox('publish_now','1').gTxt('set_to_now')),
