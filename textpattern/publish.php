@@ -208,17 +208,9 @@
 			$idrs = safe_row("Posted, AuthorID, Keywords","textpattern","ID=$id");
 			extract($idrs);
 
-			$thenext            = getNeighbour($Posted,$s,'>');
-			$out['next_id']     = ($thenext) ? $thenext['ID'] : '';
-			$out['next_title']  = ($thenext) ? $thenext['Title'] : '';
-			$out['next_utitle'] = ($thenext) ? $thenext['url_title'] : '';
-			$out['next_posted'] = ($thenext) ? $thenext['uposted'] : '';
+			if ($np = getNextPrev($Posted, $s))
+				$out = array_merge($out, $np);
 
-			$theprev            = getNeighbour($Posted,$s,'<');
-			$out['prev_id']     = ($theprev) ? $theprev['ID'] : '';
-			$out['prev_title']  = ($theprev) ? $theprev['Title'] : '';
-			$out['prev_utitle'] = ($theprev) ? $theprev['url_title'] : '';
-			$out['prev_posted'] = ($theprev) ? $theprev['uposted'] : '';
 			$out['id_keywords'] = $Keywords; 
 			$out['id_author']   = fetch('RealName','txp_users','name',$AuthorID); 
 		}
@@ -515,6 +507,11 @@
 		$GLOBALS['thisarticle'] = $out;		
 		$GLOBALS['thisarticle']['body'] = parse($Body_html);
 
+		if(!is_numeric($GLOBALS['id'])) {
+			global $next_id, $next_title, $next_utitle, $next_posted;
+			global $prev_id, $prev_title, $prev_utitle, $prev_posted;
+			extract(getNextPrev($Posted, $GLOBALS['s']));
+		}
 	}
 
 // -------------------------------------------------------------
@@ -533,6 +530,23 @@
 		return (is_array($out)) ? $out : '';
 	}
 
+// -------------------------------------------------------------
+	function getNextPrev($Posted, $s)
+	{
+		$thenext            = getNeighbour($Posted,$s,'>');
+		$out['next_id']     = ($thenext) ? $thenext['ID'] : '';
+		$out['next_title']  = ($thenext) ? $thenext['Title'] : '';
+		$out['next_utitle'] = ($thenext) ? $thenext['url_title'] : '';
+		$out['next_posted'] = ($thenext) ? $thenext['uposted'] : '';
+
+		$theprev            = getNeighbour($Posted,$s,'<');
+		$out['prev_id']     = ($theprev) ? $theprev['ID'] : '';
+		$out['prev_title']  = ($theprev) ? $theprev['Title'] : '';
+		$out['prev_utitle'] = ($theprev) ? $theprev['url_title'] : '';
+		$out['prev_posted'] = ($theprev) ? $theprev['uposted'] : '';
+
+		return $out;
+	}
 
 // -------------------------------------------------------------
 	function since($stamp) 
