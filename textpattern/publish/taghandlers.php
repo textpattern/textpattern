@@ -28,10 +28,10 @@
 // -------------------------------------------------------------
 	function css($atts) 	// generates the css src in <head>
 	{
-		global $pfr,$s;
+		global $s;
 		if (is_array($atts)) extract($atts);
-		if (!empty($n)) return $pfr.'textpattern/css.php?n='.$n;
-		return $pfr.'textpattern/css.php?s='.$s;
+		if (!empty($n)) return hu.'textpattern/css.php?n='.$n;
+		return hu.'textpattern/css.php?s='.$s;
 	}
 
 // -------------------------------------------------------------
@@ -96,26 +96,30 @@
         }
     }
 
-
 // -------------------------------------------------------------
 	function output_form($atts) 
 	{
 		if (is_array($atts)) extract($atts);
 		if (empty($form)) return false;
-		return parse(fetch('form','txp_form','name',$form));
+		return parse(fetch('form','txp_form','name',doSlash($form)));
 	}
 
 // -------------------------------------------------------------
 	function feed_link($atts) // simple link to rss or atom feed
 	{
-		if (is_array($atts)) extract($atts);
-		$wraptag = (empty($wraptag)) ? '' : $wraptag;
-		$label = (empty($label)) ? 'XML' : $label;
-		$flavor = (empty($flavor)) ? 'rss' : $flavor;
-		$category = (empty($category)) ? '' : a.'category='.urlencode($category);
-		$section = (empty($section)) ? '' : a.'section='.urlencode($section);
-		global $pfr;
-		$out = '<a href="'.$pfr.'?'.$flavor.'=1'.
+		extract(lAtts(array(
+			'label'    => '',
+			'break'    => br,
+			'wraptag'  => '',
+			'category' => '',
+			'section'  => '', 
+			'flavor'   => ''
+		),$atts));
+		
+		$category = (!$category) ? '' : a.'category='.urlencode($category);
+		$section = (!$section) ? '' : a.'section='.urlencode($section);
+
+		$out = '<a href="'.hu.'?'.$flavor.'=1'.
 			$category.$section.'" title="XML feed">'.$label.'</a>';
 		return ($wraptag) ? tag($out,$wraptag) : $out;
 	}
@@ -123,39 +127,46 @@
 // -------------------------------------------------------------
 	function link_feed_link($atts) // rss or atom feed of links
 	{
-		if (is_array($atts)) extract($atts);
-		$label = (empty($label)) ? 'XML' : $label;
-		$flavor = (empty($flavor)) ? 'rss' : $flavor;
-		$category = (empty($category)) ? '' : a.'category='.urlencode($category);
-		global $pfr;		
-		return '<a href="'.$pfr.'?'.$flavor.'=1'.a.'area=link'.$category.
+		extract(lAtts(array(
+			'label'    => '',
+			'break'    => br,
+			'wraptag'  => '',
+			'category' => '',
+			'flavor'   => ''
+		),$atts));
+	
+		$category = (!$category) ? '' : a.'category='.urlencode($category);
+
+		return '<a href="'.hu.'?'.$flavor.'=1'.a.'area=link'.$category.
 			'" title="XML feed">'.$label.'</a>';
 	}
 
-
 // -------------------------------------------------------------
-	function linklist($atts) // possible atts: form, sort, category, limit, label
+	function linklist($atts) 
 	{
-		if(is_array($atts)) extract($atts);
-		if(!isset($form)) $form = 'plainlinks';
-		if(!isset($sort)) $sort = 'linksort';
+		extract(lAtts(array(
+			'form'     => 'plainlinks',
+			'sort'     => 'linksort',
+			'label'    => '',
+			'break'    => br,
+			'limit'    => '',
+			'wraptag'  => '',
+			'category' => ''
+		),$atts));
+	
 		$Form = fetch('Form','txp_form','name',$form);
-
-		$label    = (empty($label))    ? '' : $label;
-		$break    = (empty($break))    ? br : $break;
-		$wraptag  = (empty($wraptag))  ? '' : $wraptag;
 		
 		$qparts = array(
-			(!empty($category)) ? "category='$category'" : '1',
+			($category) ? "category='$category'" : '1',
 			"order by",
 			$sort,
-			(!empty($limit)) ? "limit $limit" : ''
+			($limit) ? "limit $limit" : ''
 		);
 		
 		$rs = safe_rows("*","txp_link",join(' ',$qparts));
 	
 		if ($rs) {
-			$outlist = (!empty($label)) ? $label : '';
+			$outlist = ($label) ? $label : '';
 		
 			foreach ($rs as $a) {
 				extract($a);
@@ -172,14 +183,13 @@
 			
 			if (!empty($outlist)) {
 				if ($wraptag == 'ul' or $wraptag == 'ol') {
-					return tag(tag(join('</li>'.n.'<li>',$outlist),'li'),$wraptag);
+					return doWrap($outlist, $wraptag, $break);
 				}	
 				
 				return ($wraptag) ? tag(join($break,$outlist),$wraptag) : join(n,$outlist);
 			}
 		}
 		return false;
-		
 	}
 
 // -------------------------------------------------------------
@@ -207,7 +217,7 @@
 
 // -------------------------------------------------------------
 	function eE($txt) // convert email address into unicode entities
-	{ 
+	{
 		 for ($i=0;$i<strlen($txt);$i++) { 
 			  $ent[] = "&#".ord(substr($txt,$i,1)).";"; 
 		 } 
@@ -217,13 +227,18 @@
 // -------------------------------------------------------------
 	function email($atts) // simple contact link
 	{
-		if (is_array($atts)) extract($atts);
-		if(!empty($email)) {
+		extract(lAtts(array(
+			'email'    => '',
+			'linktext' => gTxt('contact'),
+			'title'    => ''
+		),$atts));
+
+		if($email) {
 			$out  = array(
 				'<a href="'.eE('mailto:'.$email).'"',
-				(!empty($title)) ? ' title="'.$title.'"' : '',
+				($title) ? ' title="'.$title.'"' : '',
 				'>',
-				(empty($linktext)) ? gTxt('contact') : $linktext,
+				$linktext,
 				'</a>'
 			);
 			return join('',$out);
@@ -235,7 +250,12 @@
 	function password_protect($atts)
 	{
 		ob_start();
-		if (is_array($atts)) extract($atts);
+
+		extract(lAtts(array(
+			'login' => '',
+			'pass'  => ''
+		),$atts));
+
 		$au = serverSet('PHP_AUTH_USER');
 		$ap = serverSet('PHP_AUTH_PW');
 		if ($login && $pass) {
@@ -249,23 +269,19 @@
 
 // -------------------------------------------------------------
 	function recent_articles($atts)
-	{       
-		if (is_array($atts)) extract($atts);
-		global $pretext;
-		extract($pretext);
+	{
+		extract(lAtts(array(
+			'label'    => '',
+			'break'    => br,
+			'wraptag'  => '',
+			'limit'    => 10,
+			'category' => '',
+			'sortby'   => 'Posted',
+			'sortdir'  => 'desc'
+		),$atts));
 
-		$label    = (empty($label))    ? '' : $label;
-		$break    = (empty($break))    ? br : $break;
-		$wraptag  = (empty($wraptag))  ? '' : $wraptag;
-
-		$limit    = (empty($limit))    ? 10 : $limit;
-		$category = (empty($category)) ? '' : doSlash($category);
-		$sortby   = (empty($sortby))   ? '' : doSlash($sortby);
-		$sortdir  = (empty($sortdir))  ? '' : doSlash($sortdir);
-
-		$catq = ($category) ? "and (Category1='$category' or Category2='$category')" :'';
-		$sortq = ($sortby) ? "$sortby" : 'Posted';
-		$dirq = ($sortdir) ? "$sortdir" : 'desc';
+		$catq = ($category) ? "and (Category1='".doSlash($category)."' 
+			or Category2='".doSlash($category)."')" : '';
 
 		$rs = safe_rows(
 			"*", 
@@ -277,21 +293,10 @@
 			if ($label) $out[] = $label;
 			foreach ($rs as $a) {
 				extract($a);
-
-				$conTitle = ($url_title) ? $url_title : stripSpace($Title);
-				$out[] = ($url_mode)
-				?	tag($Title,'a',' href="'.$pfr.$Section.'/'.$ID.'/'.$conTitle.'"')
-				:	tag($Title,'a',' href="'.$pfr.'index.php?id='.$ID.'"');
+				$out[] = doArticleHref($ID,$Title,$url_title,$Section);
 			}
 			if (is_array($out)) {
-				if($break == 'li') {
-					return ($wraptag) 
-					?	tag("<li>".join("</li>\n<li>",$out)."</li>",$wraptag) 
-					: 	"<li>".join("</li>\n<li>",$out)."</li>";
-				}
-				return ($wraptag) 
-				?	tag(join($break.n,$out),$wraptag) 
-				: 	join($break.n,$out);
+				return doWrap($out, $wraptag, $break);
 			}
 		}
 		return '';
@@ -300,13 +305,12 @@
 // -------------------------------------------------------------
 	function recent_comments($atts)
 	{
-		if (is_array($atts)) extract($atts);
-		global $pretext;
-		extract($pretext);
-
-		$label = (empty($label)) ? '' : $label;
-		$limit = (empty($limit)) ? "10" : $limit;
-		$break = (empty($break)) ? br : $break;
+		extract(lAtts(array(
+			'label'    => '',
+			'break'    => br,
+			'wraptag'  => '',
+			'limit'    => 10,
+		),$atts));
 
 		$q = "select ".PFX."txp_discuss.*,".PFX."textpattern.* from ".PFX."txp_discuss
             left join ".PFX."textpattern on ".PFX."textpattern.ID = ".PFX."txp_discuss.parentid
@@ -318,21 +322,10 @@
 			if ($label) $out[] = $label;
         	foreach($rs as $a) {
 				extract($a);
-				$out[] = ($url_mode)
-				?	'<a href="'.$pfr.$Section.'/'.$ID.'/#c'.$discussid.'">'
-						.$name.' ('.$Title.')</a>'
-				:	'<a href="'.$pfr.'index.php?id='.$ID.'#c'.$discussid.'">'
-						.$name.' ('.$Title.')</a>';
+				$out[] = doArticleHref($ID, $Title, $url_title, $Section);
 			}
 			if (is_array($out)) {
-				if($break == 'li') {
-					return ($wraptag) 
-					?	tag("<li>".join("</li>\n<li>",$out)."</li>",$wraptag) 
-					: 	"<li>".join("</li>\n<li>",$out)."</li>";
-				}
-				return ($wraptag) 
-				?	tag(join($break.n,$out),$wraptag) 
-				:	join($break.n,$out);
+				return doWrap($out, $wraptag, $break);
 			}
 		}
 		return '';
@@ -341,18 +334,18 @@
 // -------------------------------------------------------------
 	function related_articles($atts)
 	{
-		if (is_array($atts)) extract($atts);
-		global $pretext,$thisid;
-		extract($pretext);
-
-		$label   = (empty($label))   ? "" : $label;
-		$limit   = (empty($limit))   ? 10 : $limit;
-		$break   = (empty($break))   ? br : $break;
-		$wraptag = (empty($wraptag)) ? "" : $wraptag;
+		extract(lAtts(array(
+			'label'    => '',
+			'break'    => br,
+			'wraptag'  => '',
+			'limit'    => 10,
+		),$atts));
+		
+		global $thisid;
 		
 		if($thisid) $id = $thisid;
 
-		$cats = safe_row("Category1,Category2","textpattern", "ID='$id' limit 1");  
+		$cats = doSlash(safe_row("Category1,Category2","textpattern", "ID='$id' limit 1"));
 
 		if (!empty($cats[0]) or !empty($cats[1])) {
 
@@ -360,26 +353,17 @@
 				(!empty($cats[0])) ? "and ((Category1='$cats[0]') or (Category2='$cats[0]'))" :'',
 				(!empty($cats[1])) ? "or ((Category1='$cats[1]') or (Category2='$cats[1]'))" :'',
 				"and Status=4 and Posted <= now() order by Posted desc limit 0,$limit");
+
 			$rs = getRows(join(' ',$q));
 	
 			if ($rs) {
 				if ($label) $out[] = $label;
 				foreach($rs as $a) {
 					extract($a);
-					$conTitle = ($url_title) ? $url_title : stripSpace($Title);	
-					$out[] = ($url_mode)
-					?	tag($Title,'a',' href="'.$pfr.$Section.'/'.$ID.'/'.$conTitle.'"')
-					:	tag($Title,'a',' href="'.$pfr.'index.php?id='.$ID.'"');
+					$out[] = doArticleHref($ID,$Title,$url_title,$Section);
 				}
 				if (is_array($out)) {
-					if($break == 'li') {
-						return ($wraptag) 
-						?	tag("<li>".join("</li>\n<li>",$out)."</li>",$wraptag) 
-						: 	"<li>".join("</li>\n<li>",$out)."</li>";
-					}
-					return ($wraptag) 
-					?	tag(join($break.n,$out),$wraptag) 
-					:	join($break.n,$out);
+					return doWrap($out, $wraptag, $break);
 				}
 			}
 		}
@@ -391,14 +375,16 @@
 	function popup($atts) // popup navigation. possible atts: type (c or s), label
 	{
 		global $pretext,$pfr;
-		if (is_array($atts)) extract($atts);
 		
 		$gc = $pretext['c'];
 		$gs = $pretext['s'];
 		
-		$wraptag = (empty($wraptag)) ? "" : $wraptag;
-		$label = (empty($label)) ? "" : $label;
-		
+		extract(lAtts(array(
+			'label'   => '',
+			'wraptag' => '',
+			'type'    => ''
+		),$atts));
+
 		$thetable = ($type=='s') ? 'section' : 'category';
 		$out ='<select name="'.$type.'" onchange="submit(this.form)">'.n.
 		t.'<option value=""></option>'.n;
@@ -427,15 +413,15 @@
 // -------------------------------------------------------------
 	function category_list($atts) // output href list of site categories
 	{
-		$out = array();
-		global $pfr;
-		if (is_array($atts)) extract($atts);
-		$wraptag = (empty($wraptag)) ? "" : $wraptag;
-		$label = (empty($label)) ? "" : $label;
-		$break = (empty($break)) ? br : $break;
-		$type = (!empty($type)) ? $type : 'article';
+		extract(lAtts(array(
+			'label'    => '',
+			'break'    => br,
+			'wraptag'  => '',
+			'parent'   => '',
+			'type'    => 'article'
+		),$atts));
 
-		if (!empty($parent)) {
+		if ($parent) {
 			$qs = safe_row("lft,rgt",'txp_category',"name='$parent'");
 			if($qs) {
 				extract($qs);
@@ -445,9 +431,7 @@
 					"name != 'default' and type='$type' and (lft between $lft and $rgt) order by lft asc"			
 				);
 			}
-
 		} else {
-
 			$rs = safe_column(
 				"name", 
 				"txp_category",
@@ -459,17 +443,10 @@
 			if ($label) $out[] = $label;
 			foreach ($rs as $a) {
 				if ($a=='root') continue;
-				if($a) $out[] = tag(str_replace("& ","&#38; ", $a),'a',' href="'.$pfr.'?c='.urlencode($a).'"');
+				if($a) $out[] = tag(str_replace("& ","&#38; ", $a),'a',' href="'.hu.'?c='.urlencode($a).'"');
 			}
 			if (is_array($out)) {
-				if($break == 'li') {
-					return ($wraptag) 
-					?	tag("<li>".join("</li>\n<li>",$out)."</li>",$wraptag) 
-					: 	"<li>".join("</li>\n<li>",$out)."</li>";
-				}
-				return ($wraptag) 
-				?	tag(join($break.n,$out),$wraptag) 
-				:	join($break.n,$out);
+				return doWrap($out, $wraptag, $break);
 			}
 		}
 		return '';
@@ -478,61 +455,43 @@
 // -------------------------------------------------------------
 	function section_list($atts) // output href list of site categories
 	{
-		global $pfr,$url_mode;
-		if (is_array($atts)) extract($atts);
-		$wraptag = (empty($wraptag)) ? "" : $wraptag;
-		$label = (empty($label)) ? "" : $label;
-		$break = (empty($break)) ? br : $break;
-
+		extract(lAtts(array(
+			'label'    => '',
+			'break'    => br,
+			'wraptag'  => ''
+		),$atts));
+		
 		$rs = safe_column("name","txp_section","name != 'default' order by name");
+		
 		if ($rs) {
 			if ($label) $out[] = $label;
 			foreach ($rs as $a) {
 				if($a) {
-					if($url_mode) {
-						$out[] = tag(htmlspecialchars($a),'a',' href="'.$pfr.urlencode($a).'/"');
+					if($GLOBALS['url_mode']) {
+						$out[] = tag(htmlspecialchars($a),'a',' href="'.hu.urlencode($a).'/"');
 					} else {
-						$out[] = tag(htmlspecialchars($a),'a',' href="'.$pfr.'?s='.urlencode($a).'"');
+						$out[] = tag(htmlspecialchars($a),'a',' href="'.hu.'?s='.urlencode($a).'"');
 					}
 				}
 			}
 			if (is_array($out)) {
-				if($break == 'li') {
-					return ($wraptag) 
-					?	tag("<li>".join("</li>\n<li>",$out)."</li>",$wraptag) 
-					: 	"<li>".join("</li>\n<li>",$out)."</li>";
-				}
-				return ($wraptag) 
-				?	tag(join($break.n,$out),$wraptag) 
-				:	join($break.n,$out);
+				return doWrap($out, $wraptag, $break);
 			}
 		}
 		return '';
 	}
 
-
 // -------------------------------------------------------------
 	function search_input($atts) // input form for search queries
 	{
-		global $pfr;
-		$q = gps('q');
-		if (is_array($atts)) extract($atts);
-		$wraptag = (empty($wraptag)) ? "" : $wraptag;
-		$form = (empty($form)) ? '' : $form;
+		extract(lAtts(array(
+			'form' => 'search_input'
+		),$atts));	
 
 		if ($form) {
-			$rs = fetch('form','txp_form','name',$form); 
+			$rs = fetch('form','txp_form','name',$form);
 			return ($rs) ? $rs : 'search form not found';
 		}
-		
-		$size = (!empty($size)) ? $size : '15'; 
-		$sub = (!empty($button)) ? '<input type="submit" value="'.$button.'" />' : '';
-
-		$out = fInput('text','q',$q,'','','',$size);
-		$out = (!empty($label)) ? $label.br.$out.$sub : $out.$sub;
-		$out = ($wraptag) ? tag($out,$wraptag) : $out;
-		
-		return '<form action="'.$pfr.'index.php" method="get">'.$out.'</form>';
 	}
 
 // -------------------------------------------------------------
@@ -588,7 +547,7 @@
 
 // -------------------------------------------------------------
 	function newer($atts, $thing, $match='') 
-	{	
+	{
 		global $thispage,$url_mode;
 				
 		if (is_array($atts)) extract($atts);
@@ -651,7 +610,6 @@
 		if(!empty($wraptag)) return tag($out,$wraptag);
 		return $out;	
 	}	
-	
 
 // -------------------------------------------------------------
 	function text($atts) 
@@ -679,46 +637,31 @@
 		if (is_array($atts)) extract($atts);
 
 		if(!empty($format)) {
-
 			if($format=='since') {
-			
 				$date_out = since($thisarticle['posted']);
-			
 			} else {
-			
 				$date_out = date($format,$date_offset);
-			
 			}
 
 		} else {
-
-			if ($pg or $id or $c) { 
-			
+		
+			if ($pg or $id or $c) { 	
 				$dateformat = $archive_dateformat; 
 			}
-			
+
 			if($dateformat == "since") { 
-				
 				$date_out = since($thisarticle['posted']); 
-				
 			} else { 
-				
 				$date_out = date($dateformat,$date_offset); 
 			}
 		}
 
 		if (!empty($lang)) {
-
 			if (empty($GLOBALS['date_lang'])) {
-			
 				$date_lang = load_lang($lang.'_dates');	
-			
 			} else global $date_lang;
-		
 			if ($date_lang) {
-			
 				foreach ($date_lang as $k => $v) {
-			
 					$date_out = str_replace($k,$v,$date_out);
 				}
 			}
@@ -928,9 +871,7 @@
 			return join('',$out);
 		}
 	}
-
 /*
-
 // -------------------------------------------------------------
 	function image_index($atts) 
 	{
@@ -994,135 +935,42 @@
 // -------------------------------------------------------------
 	function meta_keywords() 
 	{
-		global $thisarticle;
-		if(empty($thisarticle)) {
-			return '<txp:meta_keywords />';
-		} else {
-			return ($thisarticle['keywords'])
-			?	'<meta name="keywords" content="'.$thisarticle['keywords'].'" />'
-			:	'';
-		}
+		global $id_keywords;
+		return ($id_keywords)
+		?	'<meta name="keywords" content="'.$id_keywords.'" />'
+		:	'';
 	}
 
 // -------------------------------------------------------------
 	function meta_author() 
 	{
-		global $thisarticle;
-		if(empty($thisarticle)) {
-			return '<txp:meta_author />';
-		} else {
-			return ($thisarticle['author'])
-			?	'<meta name="author" content="'.$thisarticle['author'].'" />'
-			:	'';
+		global $id_author;
+		return ($id_author)
+		?	'<meta name="author" content="'.$id_author.'" />'
+		:	'';
+	}
+
+// -------------------------------------------------------------
+	function doWrap($list, $wraptag, $break)
+	{
+		if ($wraptag == 'ul' or $wraptag == 'ol') {
+			return tag(tag(join('</li>'.n.'<li>',$list),'li'),$wraptag);
 		}
+		return ($wraptag) 
+		?	tag(join($break.n,$list),$wraptag) 
+		:	join($break.n,$list);
+	}
+
+// -------------------------------------------------------------
+	function doArticleHref($ID,$Title,$url_title,$Section)
+	{
+		$conTitle = ($url_title) ? $url_title : stripSpace($Title);	
+		return ($GLOBALS['url_mode'])
+		?	tag($Title,'a',' href="'.hu.$Section.'/'.$ID.'/'.$conTitle.'"')
+		:	tag($Title,'a',' href="'.hu.'index.php?id='.$ID.'"');
 	}
 
 
-	function ppc_EvalElse($thing, $condition)
-	{
-         #party!
-         $chunks = array();
-         $f = '/(.*)(<txp:(\S+)\b.*?'.chr(62).'.+<txp:else\b\s*\/>.+<\/txp:\\3>)/sU';
-         $splited = preg_split($f, $thing, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
 
-         if(sizeof($splited) > 1){
-                $chunks = array();
-                $new_thing = '';
-                for($i=0;$i < sizeof($splited);$i++){
-                        $new_thing .= $splited[$i];
-                        if(!empty($splited[$i+2])){
-                                $key = trim($splited[$i+2]);
-                                $new_thing.="<txp_chunk:$key />";
-                                $chunks[$key] = $splited[$i+1];
-                        }
-                        $i+=2;
-                }
-         }
-         $thing = (!empty($new_thing)) ? $new_thing : $thing;
-         $cdtn = '/<txp:else\b\s*\/\s*>/s';
-         $match = preg_split($cdtn, $thing, -1, PREG_SPLIT_DELIM_CAPTURE);
-         $thing = $match[0];
-         $otherwise = (!empty($match[1]))?$match[1]:'';
-
-        $where = ($condition)? $thing : $otherwise;
-        if(!empty($new_thing)){
-                $g = '/<txp_chunk:(\S+)\b \/>/s';
-                $success = preg_match($g,$where, $matching);
-                if($success){
-                     $repl = $chunks[$matching[1]];
-                     $replaced = preg_replace($g, $repl, $where);
-                     return $replaced;
-                }
-        }
-        return $where;
-}
-
-
-//--------------------------------------------------------------------------
-// Applied to the image pics concretelly
-//--------------------------------------------------------------------------
-function if_image($atts, $thing)
-{
-         #global required variable
-         global $p;
-         # eval condition here. example for image pic var
-         $rs = safe_row("id","txp_image","id='$p'");
-         $condition = (!empty($rs))?true:false;
-         return parse(ppc_EvalElse($thing,$condition));
-}
-//------------------------------------------------------------------------
-// Applied to image categories
-//------------------------------------------------------------------------
-
-function if_image_category($atts, $thing)
-{
-         global $c;
-         # eval condition here. example for image categories
-         $c = urldecode($c);
-         if($c!='root'){
-                $rs = safe_row("name","txp_category","type='image' and name='$c'");
-         }
-         $condition = (!empty($rs))?true:false;
-         return parse(ppc_EvalElse($thing,$condition));
-}
-//------------------------------------------------------------------------
-// Excerpt plugin
-//------------------------------------------------------------------------
-function if_excerpt($atts, $thing)
-{
-        global $thisarticle;
-        $condition = (!empty($thisarticle['excerpt']))?true:false;
-        return parse(ppc_EvalElse($thing, $condition));
-}
-
-/*
-
-Paste this inside an article form:
-
-<txp:if_excerpt>
-<p><txp:excerpt /></p>
-<txp:else />
-<p>Posted on <txp:category1 /></p>
-</txp:if_excerpt>
-
-
-This is for image categories and two double tags nested:
-
-<txp:if_image_category>
-<div><txp:image_index /></div>
-<div>
-<!-- nested conditional -->
-        <txp:if_image>
-        <txp:image_display />
-        <txp:else />
-        <p>Ups!, click on the thumb to see the image</p>
-        </txp:if_image>
-<!-- eof nested conditional -->
-</div>
-<txp:else />
-<p>We are not on an image category so, no thumbs to show.</p>
-</txp:if_image_category>
-
-
-*/
+	
 ?>

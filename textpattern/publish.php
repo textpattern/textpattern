@@ -42,6 +42,7 @@
 
  		// add prefs to globals
 	extract($prefs);
+	define("hu",'http://'.$siteurl.$path_from_root);
 
 	if ($txpac['use_plugins']) {
 		// get plugins, write to a temp file, include, then destroy
@@ -56,7 +57,7 @@
 
 	$pretext = pretext($s,$prefs);
 	extract($pretext);
-
+	
 	if (gps('parentid') && gps('submit')) {
 		saveComment();
 	} elseif (gps('parentid') and $comments_mode==1) { // popup comments?
@@ -107,8 +108,7 @@
 		if(empty($id)) $GLOBALS['is_article_list'] = true;
 
 		$out['id'] = $id;
-
-
+		
 		// what section are we in?	
 		if ($s): $out['s'] = $s;
 		elseif ($id): $out['s'] = fetch('Section','textpattern','ID',$id);
@@ -131,16 +131,19 @@
 		$out['pg']             = gps('pg');    // paging?
 		$out['p']              = gps('p');     // image?
 
-		if($id) { 		// check for next or previous article in the same section
-			$Posted = fetch('Posted','textpattern','ID',$id);
-			$thenext           = getNeighbour($Posted,$s,'>');
-			$out['next_id']    = ($thenext) ? $thenext['ID'] : '';
-			$out['next_title'] = ($thenext) ? $thenext['Title'] : '';
-			$out['next_utitle']= ($thenext) ? $thenext['url_title'] : '';
-			$theprev           = getNeighbour($Posted,$s,'<');
-			$out['prev_id']    = ($theprev) ? $theprev['ID'] : '';
-			$out['prev_title'] = ($theprev) ? $theprev['Title'] : '';
-			$out['prev_utitle']= ($theprev) ? $theprev['url_title'] : '';
+		if(is_numeric($id)) { 		// check for anything useful to be used outside article presentation
+			$idrs = safe_row("Posted, AuthorID, Keywords","textpattern","ID=$id");
+			extract($idrs);
+			$thenext            = getNeighbour($Posted,$s,'>');
+			$out['next_id']     = ($thenext) ? $thenext['ID'] : '';
+			$out['next_title']  = ($thenext) ? $thenext['Title'] : '';
+			$out['next_utitle'] = ($thenext) ? $thenext['url_title'] : '';
+			$theprev            = getNeighbour($Posted,$s,'<');
+			$out['prev_id']     = ($theprev) ? $theprev['ID'] : '';
+			$out['prev_title']  = ($theprev) ? $theprev['Title'] : '';
+			$out['prev_utitle'] = ($theprev) ? $theprev['url_title'] : '';
+			$out['id_keywords'] = $Keywords; 
+			$out['id_author']   = fetch('RealName','txp_users','name',$AuthorID); 
 		}
 
 		$out['path_from_root'] = $path_from_root;
@@ -204,12 +207,12 @@
 		global $pretext, $prefs,$txpcfg;
 		extract($pretext);
 
-		$GLOBALS['theseatts'] = doSlash($atts);
+		extract(lAtts(array(
+			'form'     => 'default',
+			'limit'    => 10
+		),$atts));
 
-		$form = getAtt('form','default');
 		$form = getAtt('listform',$form);
-
-		$limit = getAtt('limit',10);
 
 		if($q) {
 			include_once txpath.'/publish/search.php';
@@ -270,23 +273,23 @@
 				$author = fetch('RealName','txp_users','name',$AuthorID);
 				$author = (!$author) ? $AuthorID : $author; 
 
-				$out['thisid']         = $ID;
-				$out['posted']         = $uPosted;
-				$out['if_comments']    = ($Annotate or $com_count) ? true : false;
-				$out['comments_invite']= ($Annotate or $com_count) ? formatCommentsInvite($AnnotateInvite,$Section,$ID) : '';
-				$out['comments_count'] = $com_count;					  
-				$out['mentions_link']  = formatMentionsLink($Section, $ID);
-				$out['author']         = $author;
-				$out['permlink']       = formatPermLink($ID,$Section);
-				$out['body']           = parse($Body_html);
-				$out['excerpt']        = $Excerpt;
-				$out['title']          = $Title;
-				$out['url_title']      = $url_title;
-				$out['category1']      = $Category1;
-				$out['category2']      = $Category2;
-				$out['section']        = $Section;
-				$out['keywords']       = $Keywords;
-				$out['article_image']  = $Image;
+				$out['thisid']          = $ID;
+				$out['posted']          = $uPosted;
+				$out['if_comments']     = ($Annotate or $com_count) ? true : false;
+				$out['comments_invite'] = ($Annotate or $com_count) ? formatCommentsInvite($AnnotateInvite,$Section,$ID) : '';
+				$out['comments_count']  = $com_count;					  
+				$out['mentions_link']   = formatMentionsLink($Section, $ID);
+				$out['author']          = $author;
+				$out['permlink']        = formatPermLink($ID,$Section);
+				$out['body']            = parse($Body_html);
+				$out['excerpt']         = $Excerpt;
+				$out['title']           = $Title;
+				$out['url_title']       = $url_title;
+				$out['category1']       = $Category1;
+				$out['category2']       = $Category2;
+				$out['section']         = $Section;
+				$out['keywords']        = $Keywords;
+				$out['article_image']   = $Image;
 
 				$GLOBALS['thisarticle'] = $out;
 
@@ -300,7 +303,6 @@
 				$articles[] = parse($article);
 
 				unset($GLOBALS['thisarticle']);
-				unset($GLOBALS['theseatts']);			
 			}
 
 			return join('',$articles);
@@ -326,12 +328,12 @@
 		extract($prefs);
 		extract($pretext);
 
-		$GLOBALS['theseatts'] = doSlash($atts);
-
 		$preview = ps('preview');
 		$parentid = ps('parentid');
 
-		$form = getAtt('form','default');
+		extract(lAtts(array(
+			'form' => 'default'
+		),$atts));
 
 		$Form = fetch('Form','txp_form','name',$form);
 
@@ -391,7 +393,6 @@
 			$article = parse($article);
 			
 			unset($GLOBALS['thisarticle']);	
-			unset($GLOBALS['theseatts']);			
 
 			return $article;
 		}
@@ -405,20 +406,20 @@
 		extract($pretext);
 
 		$GLOBALS['is_article_list'] = true;
-		$GLOBALS['theseatts'] = doSlash($atts);
 
-		$form      = getAtt('form','default');
-		$form      = getAtt('listform',$form);
-		$limit     = getAtt('limit', 10);
-		$category  = getAtt('category');
-		$section   = getAtt('section');
-		$excerpted = getAtt('excerpted');
-		$author    = getAtt('author');
-		$sortby    = getAtt('sortby','Posted');
-		$sortdir   = getAtt('sortdir','desc');
-		$month     = getAtt('month');
-		$keywords  = getAtt('keywords');
-		$frontpage = getAtt('frontpage');
+		extract(lAtts(array(
+			'form'      => 'default',
+			'limit'     => 10,
+			'category'  => '',
+			'section'   => '',
+			'excerpted' => '',
+			'author'    => '',
+			'sortby'    => 'Posted',
+			'sortdir'   => 'desc',
+			'month'     => '',
+			'keywords'  => '',
+			'frontpage' => ''
+		),$atts));
 
 		$frontpage = ($frontpage) ? filterFrontPage() : '';
 		
@@ -699,9 +700,9 @@
 				$ok = 0;
 				switch ($mode) {
 					case 0: // name
-						if (preg_match('/^([a-z]+)/i', $attr, $match)) {
+						if (preg_match('/^([a-z0-9]+)/i', $attr, $match)) {
 							$atnm = $match[1]; $ok = $mode = 1;
-							$attr = preg_replace('/^[a-z]+/i', '', $attr);
+							$attr = preg_replace('/^[a-z0-9]+/i', '', $attr);
 						}
 					break;
 
@@ -754,7 +755,6 @@
 
 		if ($pinfo) {
 			$frompath = explode('/',$pinfo);
-
 			return (!empty($frompath[1])) ? $frompath[1] : '';
 		}
 		return '';

@@ -230,4 +230,20 @@
 		global $theseatts;
 		return isset($theseatts[$name]) ? $theseatts[$name] : $default;
 	}
+	
+// -------------------------------------------------------------
+		function gAtt(&$atts, $name, $default=NULL) { // trying this out as well
+			return isset($atts[$name]) ? $atts[$name] : $default;
+		}
+
+// -------------------------------------------------------------
+		function lAtts($pairs, $atts) { // trying this out as well
+			foreach($pairs as $name => $default) {
+				$out[$name] = gAtt($atts,$name,$default);
+			}
+			return ($out) ? $out : false;
+		}
+
+
+
 ?>
