@@ -230,11 +230,17 @@
 								$out['id'] = (is_numeric($u2) && ckExID($u2)) ? $u2 : '';
 							break;
 			
-							case 'year_month_day_title': 
-								$when = date("Y-m-d",strtotime("$u1-$u2-$u3") + $timeoffset);
-								$rs = lookupByDateTitle($when,$u4);
-								$out['id'] = (!empty($rs['ID'])) ? $rs['ID'] : '';
-								$out['s'] = (!empty($rs['Section'])) ? $rs['Section'] : '';
+							case 'year_month_day_title':
+								if (empty($u4)){
+									$out['month'] = "$u1-$u2";
+									if (!empty($u3)) $out['month'].= "-$u3";
+									$out['s'] = 'default';
+								}else{
+									$when = date("Y-m-d",strtotime("$u1-$u2-$u3") + $timeoffset);
+									$rs = lookupByDateTitle($when,$u4);
+									$out['id'] = (!empty($rs['ID'])) ? $rs['ID'] : '';
+									$out['s'] = (!empty($rs['Section'])) ? $rs['Section'] : '';
+								}
 							break;
 
 							case 'title_only': 
@@ -426,7 +432,6 @@
 			}
 			$keywords = " and (" . join(' or ',$keyparts) . ")"; 
 		}
-		
 		$where = "1 and Status=4 and Posted < now() ".
 			$id . $category . $section . $excerpted . $month . $author . $keywords . $custom . $frontpage;
 
@@ -815,7 +820,11 @@
 // -------------------------------------------------------------
 	function chopUrl($req) 
 	{
-		$r = explode('/',strtolower(urldecode($req)));
+		$req = urldecode($req);
+		//strip off query_string, if present
+		$qs = strpos($req,'?');
+		if ($qs) $req = substr($req, 0, $qs);
+		$r = explode('/',strtolower($req));
 		$o['u0'] = (!empty($r[0])) ? $r[0] : '';
 		$o['u1'] = (!empty($r[1])) ? $r[1] : '';
 		$o['u2'] = (!empty($r[2])) ? $r[2] : '';
