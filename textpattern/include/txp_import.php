@@ -170,7 +170,7 @@ function showHideFields($sel)
 				}
 			break;
 			case 'b2':
-				$out = doImportWP($importdblogin, $importdb, $importdbpass, $importdbhost, $insert_into_section, $insert_with_status, $default_comment_invite);
+				$out = doImportB2($importdblogin, $importdb, $importdbpass, $importdbhost, $insert_into_section, $insert_with_status, $default_comment_invite);
 			break;
 			case 'wp':
 				$out = doImportWP($importdblogin, $importdb, $importdbpass, $importdbhost, $wpdbprefix, $insert_into_section, $insert_with_status, $default_comment_invite);

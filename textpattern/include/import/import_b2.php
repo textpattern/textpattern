@@ -15,20 +15,27 @@
 		}				
 		mysql_select_db($b2db,$b2link);
 		$results[]='connected to b2 database. Importing Data';
+
+        // Copy & Paste your table-definitions from b2config.php
+        $tableposts = 'b2posts';
+        $tableusers = 'b2users';
+        $tablecategories = 'b2categories';
+        $tablecomments = 'b2comments';
+
 		
 		$a = mysql_query("
 			select 
-			b2posts.ID as ID,
-			b2posts.post_date as Posted, 
-			b2posts.post_title as Title, 
-			b2posts.post_content as Body, 
-			b2categories.cat_name as Category1, 
-			b2users.user_login as AuthorID 
-			from b2posts 
-			left join b2categories on 
-				b2categories.cat_ID = b2posts.post_category 
-			left join b2users on 
-				b2users.ID = b2posts.post_author
+			".$tableposts.".ID as ID,
+			".$tableposts.".post_date as Posted, 
+			".$tableposts.".post_title as Title, 
+			".$tableposts.".post_content as Body, 
+			".$tablecategories.".cat_name as Category1, 
+			".$tableusers.".user_login as AuthorID 
+			from ".$tableposts." 
+			left join ".$tablecategories." on 
+				".$tablecategories.".cat_ID = ".$tableposts.".post_category 
+			left join ".$tableusers." on 
+				".$tableusers.".ID = ".$tableposts.".post_author
 		",$b2link) or $results[]= mysql_error();
 		
 		while($b=mysql_fetch_array($a)) {
@@ -37,15 +44,15 @@
 	
 		$a = mysql_query("
 			select
-			b2comments.comment_ID as discussid, 
-			b2comments.comment_post_ID as parentid, 
-			b2comments.comment_author_IP as ip, 
-			b2comments.comment_author as name, 
-			b2comments.comment_author_email as email, 
-			b2comments.comment_author_url as web, 
-			b2comments.comment_content as message, 
-			b2comments.comment_date as posted
-			from b2comments
+			".$tablecomments.".comment_ID as discussid, 
+			".$tablecomments.".comment_post_ID as parentid, 
+			".$tablecomments.".comment_author_IP as ip, 
+			".$tablecomments.".comment_author as name, 
+			".$tablecomments.".comment_author_email as email, 
+			".$tablecomments.".comment_author_url as web, 
+			".$tablecomments.".comment_content as message, 
+			".$tablecomments.".comment_date as posted
+			from ".$tablecomments."
 		",$b2link) or $results[]= mysql_error();
 	
 		
@@ -75,7 +82,10 @@
 		if (!empty($articles)) {
 			foreach($articles as $a){	
 				if (is_callable('utf8_encode'))
+                {
 					$a['Body'] = utf8_encode($a['Body']);
+					$a['Title'] = utf8_encode($a['Title']);
+                }
 				$a['Body_html'] = $textile->textileThis($a['Body']);
 				extract(array_slash($a));
 				$q = mysql_query("
