@@ -800,7 +800,7 @@
 					return join(' ',$out);
 				}
 			} else {
-				return '<img src="'.$theimage.'" />';
+				return '<img src="'.$theimage.'" alt="" />';
 			}
 		}
 	}
