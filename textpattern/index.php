@@ -11,7 +11,7 @@
 */
 	define("txpath", dirname(__FILE__));
 
-	$thisversion = '1.0';
+	$thisversion = '1.0rc3';
 
 	if (!@include './config.php') { 
 		include './setup.php';
