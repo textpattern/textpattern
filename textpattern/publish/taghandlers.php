@@ -830,7 +830,7 @@
 // -------------------------------------------------------------
 	function image_index($atts)
 	{
-		global $url_mode,$s,$c,$p,$txpcfg,$img_dir;
+		global $url_mode,$s,$c,$p,$txpcfg,$img_dir,$path_to_site;
 		if (is_array($atts)) extract($atts);
 		$c = doSlash($c);
 		
@@ -844,8 +844,8 @@
 		        }
 			foreach($rs as $a) {
 				extract($a);
-				$impath = hu.$img_dir.'/'.$id.'t'.$ext;
-				$imginfo = getimagesize($txpcfg['doc_root'].$impath);
+				$impath = $img_dir.'/'.$id.'t'.$ext;
+				$imginfo = getimagesize($path_to_site.'/'.$impath);
 				$dims = (!empty($imginfo[3])) ? ' '.$imginfo[3] : '';
 				if(!$url_mode){
 					$out[] = '<a href="'.hu.'?c='.urlencode($c).$s.a.'p='.$id.'">'.
