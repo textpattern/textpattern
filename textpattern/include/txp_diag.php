@@ -164,6 +164,8 @@
 
 		gTxt('magic_quotes').cs.get_magic_quotes_gpc().'/'.get_magic_quotes_runtime().n,
 
+		gTxt('locale').cs.$locale.n,
+
 		(isset($_SERVER['SERVER_SOFTWARE'])) ? gTxt('server').cs.$_SERVER['SERVER_SOFTWARE'].n : '',
 
 		(is_callable('apache_get_version')) ? gTxt('apache_version').cs.apache_get_version().n : '',
