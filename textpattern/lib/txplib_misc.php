@@ -555,10 +555,11 @@
 
 		$guess = array('', '/tmp', txpath . '/tmp', $path_to_site.'/'.$img_dir);
 		foreach ($guess as $dir) {
-			$tf = @tempnam($dir, 'txp_');
-			@unlink($tf);
-			if ($tf)
+			$tf = realpath(@tempnam($dir, 'txp_'));
+			if ($tf and file_exists($tf)) {
+				unlink($tf);
 				return dirname($tf);
+			}
 		}
 
 		return false;
@@ -572,7 +573,7 @@
 		if (!is_uploaded_file($f))
 			return false;
 
-		$newfile = tempnam($tempdir, 'txp_');
+		$newfile = @tempnam($tempdir, 'txp_');
 		if (!$newfile)
 			return false;
 

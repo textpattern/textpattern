@@ -22,6 +22,9 @@
 
 		$post = doSlash(stripPost());
 
+		if (empty($post['tempdir']))
+			$post['tempdir'] = find_temp_dir();
+
 		foreach($prefnames as $prefname) {
 			if (isset($post[$prefname])) {
  				if ($prefname == 'lastmod') {
@@ -67,7 +70,8 @@
 		pCell('send_lastmod',$send_lastmod,'radio'),
 		pCell('ping_weblogsdotcom',$ping_weblogsdotcom,'radio'),
 		pCell('logging',$logging,'logging'),
-		pCell('use_textile',$use_textile,'text');
+		pCell('use_textile',$use_textile,'text'),
+		pCell('tempdir',$tempdir,'input',20);
 
 
 			echo tr(tdcs(hed(gTxt('comments'),1),3)),

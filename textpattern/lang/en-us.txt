@@ -436,6 +436,7 @@ timeoffset => Time offset (hours)
 title => Title
 title_body => Title & Body
 title_separator => Sitename: Individual Article separator
+tmpdir => Temp folder
 tooltip => Link tooltip
 type => Type
 unban => Unban

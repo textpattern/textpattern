@@ -114,11 +114,15 @@
 		?	$txpcfg['txpath']."/_update.php ".gTxt('still_exists').pophelp('update_still_exists')
 		:	'',
 
-		(!@find_temp_dir())
+		(@file_exists($txpcfg['txpath'] . '/setup.php'))
+		?	$txpcfg['txpath']."/setup.php ".gTxt('still_exists').pophelp('setup_still_exists')
+		:	'',
+
+		(empty($tempdir))
 		? gTxt('no_temp_dir').pophelp('no_temp_dir')
 		: '',
 
-		(!@tempnam(@find_temp_dir(), 'txp_'))
+		(!@tempnam(@$tempdir, 'txp_'))
 		? gTxt('temp_dir_read_only').pophelp('temp_dir_read_only')
 		: '',
 
