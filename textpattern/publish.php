@@ -609,7 +609,7 @@
 		$q = array(
 			"select ID, Title, url_title, unix_timestamp(Posted) as uposted
 			from ".PFX."textpattern where Posted $type '$Posted'",
-			($s!='' && $s!='default') ? "and Section = '$s'" : '',
+			($s!='' && $s!='default') ? "and Section = '$s'" : filterFrontPage(),
 			'and Status=4 and Posted < now() order by Posted',
 			($type=='<') ? 'desc' : 'asc',
 			'limit 1'
