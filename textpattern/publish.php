@@ -500,12 +500,18 @@
 // -------------------------------------------------------------
 	function filterFrontPage() 
 	{
+        static $filterFrontPage;
+
+        if (isset($filterFrontPage)) return $filterFrontPage;
+
 		$rs = safe_column("name","txp_section", "on_frontpage != '1'");
 		if ($rs) {
 			foreach($rs as $name) $filters[] = "and Section != '$name'";	
-			return join(' ',$filters);
+			$filterFrontPage = join(' ',$filters);
+            return $filterFrontPage;
 		}
-		return false;
+        $filterFrontPage = false;
+		return $filterFrontPage;
 	}
 
 
