@@ -1187,6 +1187,24 @@
 
 		return parse(EvalElse($thing, (array_shift($cats) != '')));
 	}
+
+//--------------------------------------------------------------------------
+	function php($atts, $thing)
+	{
+		global $thisarticle, $txpac;
+
+		ob_start();
+		if (empty($thisarticle)) {
+			if (!empty($txpac['allow_page_php_scripting']))
+				eval($thing);
+		}
+		else {
+			if (!empty($txpac['allow_article_php_scripting'])
+				and has_privs('article.php', $thisarticle['author']))
+				eval($thing);
+		}
+		return ob_get_clean();
+	}
 	
 //--------------------------------------------------------------------------
 //File tags functions. 

@@ -764,7 +764,7 @@ function refs($m)
         else {
             $text = preg_split("/(<.*>)/U", $text, -1, PREG_SPLIT_DELIM_CAPTURE);
             foreach($text as $line) {
-                $offtags = ('code|pre|kbd|notextile');
+                $offtags = ('code|pre|kbd|notextile|txp:php');
 
                 /*  matches are off if we're between <code>, <pre> etc. */
                 if (preg_match('/<(' . $offtags . ')>/i', $line)) $codepre = true;

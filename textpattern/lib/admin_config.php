@@ -19,6 +19,11 @@ $txpac = array(
 	'allow_page_php_scripting'    => 1,
 
 // -------------------------------------------------------------
+// php scripts in article bodies will be parsed 
+
+	'allow_article_php_scripting' => 1,
+
+// -------------------------------------------------------------
 // use Textile on link titles and descriptions 
 
 	'textile_links'               => 0,
@@ -154,6 +159,7 @@ $txp_permissions = array(
 	'article.edit.published'      => '1,2,3',
 	'article.edit.self'           => '1,2,3,4,5,6',
 	'article.publish'             => '1,2,3,4',
+	'article.php'                 => '1,2',
 	'article'                     => '1,2,3,4,5,6',
 	'category'                    => '1,2,3',
 	'css'                         => '1,2,6',
