@@ -262,9 +262,10 @@
 			'en-us' => gTxt('english_us'),
 			'fr-fr' => gTxt('french'),
 			'es-es' => gTxt('spanish'),
-			'sv-sv' => gTxt('swedish'),
+			'sv-se' => gTxt('swedish'),
 			'it-it' => gTxt('italian'),
-//			'de-de' => gTxt('german'),
+			'cs-cz' => gTxt('czech'),
+			'de-de' => gTxt('german'),
 //			'pt-pt' => gTxt('portuguese'),
 //			'fi-fi' => gTxt('finnish'),
 //			'ru-ru' => gTxt('russian'),
@@ -272,7 +273,6 @@
 //			'da-da' => gTxt('danish'),
 //			'po-po' => gTxt('polish'),
 //			'tl-tl' => gTxt('tagalog'),
-//			'cs-cs' => gTxt('czech'),
 //			'gl-gl' => gTxt('scots')
 		);
 			asort($things);
