@@ -153,11 +153,11 @@ $txpac = array(
 // -------------------------------------------------------------
 $txp_permissions = array(
 	'admin'                       => '1,2,3,4,5,6',
-	'article.delete.self'         => '1,2,3,4',
+	'article.delete.own'          => '1,2,3,4',
 	'article.delete'              => '1,2',
 	'article.edit'                => '1,2,3',
 	'article.edit.published'      => '1,2,3',
-	'article.edit.self'           => '1,2,3,4,5,6',
+	'article.edit.own'            => '1,2,3,4,5,6',
 	'article.publish'             => '1,2,3,4',
 	'article.php'                 => '1,2',
 	'article'                     => '1,2,3,4,5,6',

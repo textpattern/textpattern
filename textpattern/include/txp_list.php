@@ -169,12 +169,14 @@
 	{
 		global $txp_user;
 
-		if (ps('selected') and !has_privs('article.delete') and has_privs('article.delete.own')) {
+		if (ps('selected') and !has_privs('article.delete')) {
 			$ids = array();
-			foreach (ps('selected') as $id) {
-				$author = safe_field('AuthorID', 'textpattern', "ID='".doSlash($id)."'");
-				if ($author == $txp_user)
-					$ids[] = $id;
+			if (has_privs('article.delete.own')) {
+				foreach (ps('selected') as $id) {
+					$author = safe_field('AuthorID', 'textpattern', "ID='".doSlash($id)."'");
+					if ($author == $txp_user)
+						$ids[] = $id;
+				}
 			}
 			$_POST['selected'] = $ids;
 		}
