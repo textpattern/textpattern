@@ -11,7 +11,7 @@
 // -------------------------------------------------------------
 	function discuss($ID)
 	{
-		global $comments_disabled_after,$comments_are_ol;
+		global $comments_are_ol;
 		$preview = ps('preview');
 		extract(	
 			safe_row(
@@ -36,18 +36,10 @@
 		
 			$wasAnnotated = (!$Annotate) ? getCount('txp_discuss',"parentid=$ID") : '';
 
-			if (!$Annotate) {
+			if (!checkCommentsAllowed($ID)) {
 				$out .= graf(gTxt("comments_closed"));
 			} else {
-				if($comments_disabled_after) {		
-					$lifespan = ( $comments_disabled_after * 86400 );
-					$timesince = ( time() - $uPosted );
-					if( $lifespan > $timesince ) {
-						$out .= commentForm( $ID );
-					} else $out .= graf( gTxt( "comments_closed" ) );
-				} else {
-					$out .= commentForm( $ID );
-				}
+				$out .= commentForm( $ID );
 			}
 		return $out;
 
@@ -277,6 +269,9 @@
 		
 		extract($in);
 
+		if (!checkCommentsAllowed($parentid))
+			exit ( graf(gTxt('comments_closed')));
+
 		if ($txpac['comments_require_name']) {
 			if (!trim($name)) {
 				exit ( graf(gTxt('comment_name_required')).
@@ -358,6 +353,33 @@
 	function checkBan($ip)
 	{
 		return (!fetch("ip", "txp_discuss_ipban", "ip", "$ip")) ? true : false;
+	}
+
+// -------------------------------------------------------------
+	function checkCommentsAllowed($id)
+	{
+		global $use_comments, $comments_disabled_after;
+
+		if (!$use_comments)
+			return false;
+
+		extract(	
+			safe_row(
+				"Annotate,AnnotateInvite,unix_timestamp(Posted) as uPosted",
+					"textpattern", "ID='$id'"
+			)
+		);
+
+		if (!$Annotate)
+			return false;
+
+		if($comments_disabled_after) {		
+			$lifespan = ( $comments_disabled_after * 86400 );
+			$timesince = ( time() - $uPosted );
+			return ( $lifespan > $timesince );
+		}
+
+		return true;
 	}
 
 // -------------------------------------------------------------
