@@ -285,7 +285,7 @@
 		$rs = safe_rows(
 			"*", 
 			"textpattern", 
-			"Status = 4 and Posted <= now() $catq order by $sortq $dirq limit 0,$limit"
+			"Status = 4 and Posted <= now() $catq order by $sortby $sortdir limit 0,$limit"
 		);
 		
 		if ($rs) {
