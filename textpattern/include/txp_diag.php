@@ -64,6 +64,10 @@
 	$mydomain = $urlparts['host'];
 	
 	$fail = array(
+
+		(!isset($path_to_site))
+		? gTxt('path_to_site_missing').pophelp('path_to_site_missing')
+		: '',
 	
 		(@gethostbyname($mydomain) == $mydomain)
 		?	gTxt('dns_lookup_fails').cs. $mydomain.pophelp('dns_lookup_fails')
