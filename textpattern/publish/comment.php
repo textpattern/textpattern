@@ -118,6 +118,7 @@
 			
 			$temp = preg_replace('/<(txp:comment_permlink)>(.*)<\/\\1>/U',
 				'<a href="'.$dlink.'">$2</a>',$temp);
+			$temp = parse($temp);
 
 			$out[] = ($comments_are_ol) 
 			?	n.t.'<li id="c'.$discussid.'" style="margin-top:2em">'.$temp.'</li>' 
