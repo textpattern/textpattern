@@ -333,7 +333,8 @@
 			
 			if ($customFields) {
 				foreach($customFields as $cField) {
-					$customPairs[$cField] = gAtt($atts, $cField);
+					if (isset($atts[$cField]))
+						$customPairs[$cField] = $atts[$cField];
 				}
 				if(!empty($customPairs)) {
 					$custom =  buildCustomSql($customFields,$customPairs);
