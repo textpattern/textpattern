@@ -28,7 +28,7 @@
 
 		pagetop(gTxt('image'),$message);
 
-		echo pageby_form('image',$article_list_pageby);
+		echo pageby_form('image',$image_list_pageby);
 
 		echo startTable('list'),
 		tr(
@@ -49,7 +49,7 @@
 		$page = gps('page');
 
 		$total = getCount('txp_image',"1");  
-		$limit = 15;
+		$limit = $image_list_pageby;
 		$numPages = ceil($total/$limit);  
 		$page = (!$page) ? 1 : $page;
 		$offset = ($page - 1) * $limit;
