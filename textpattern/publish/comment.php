@@ -24,7 +24,7 @@
 		?	fetchComments($ID)
 		:	array(psas(array('name','email','web','message','parentid','remember')));
 
-		$out = n.'<h3 style="margin-top:2em" id="comment">'.$AnnotateInvite.'</h3>'.n;
+		$out = n.'<h3 style="margin-top:2em" id="'.gTxt('comment').'">'.$AnnotateInvite.'</h3>'.n;
 
 
 
