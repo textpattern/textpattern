@@ -86,8 +86,8 @@
 				if (is_callable('utf8_encode'))
                 {
                     // Also fixing break-tags for users with b2s Auto-BR
-					$a['Body'] = utf8_encode(str_replace("<br />\n","\n",$a['Body']));
-					$a['Title'] = utf8_encode($a['Title']);
+					$a['Body'] = utf8_encode(str_replace("<br />\n","\n",stripslashes($a['Body'])));
+					$a['Title'] = utf8_encode(stripslashes($a['Title']));
             		$a['Title'] = $textile->TextileThis($a['Title'],'',1);
                 }
                 // b2 uses the magic word "<!--more-->" to generate excerpts
@@ -104,6 +104,7 @@
                     $a['Excerpt'] = '';
                     $a['Excerpt_html'] = '';
                 }
+                $a['url_title'] = stripSpace($a['Title']);
 				$a['Body_html'] = $textile->textileThis($a['Body']);
 				extract(array_slash($a));
 				$q = mysql_query("
