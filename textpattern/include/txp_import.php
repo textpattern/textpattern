@@ -158,6 +158,7 @@ function showHideFields($sel)
 		{
 			case 'mtdb':
 				$out = doImportMTDB($importdblogin, $importdb, $importdbpass, $importdbhost, $blog_id, $insert_into_section, $insert_with_status, $default_comment_invite);
+				rebuild_tree('root',1,'article');
 			break;
 			case 'mt':
 				$file = check_import_file();
