@@ -491,15 +491,6 @@
 	}
 
 // -------------------------------------------------------------
-// Fake iconv
-	function iso8859_to_utf8($str)
-	{
-		return preg_replace("/([\x80-\xFF])/e",
-			"chr(0xC0|ord('\\1')>>6).chr(0x80|ord('\\1')&0x3F)",
-			$str);
-	}
-
-// -------------------------------------------------------------
 // Format a time, respecting the locale and local time zone,
 // and make sure the output string is safe for UTF-8
 	function safe_strftime($format, $time='')
@@ -512,10 +503,14 @@
 		$str = strftime($format, $time + tz_offset());
 		@list($lang, $charset) = explode('.', $locale);
 		if (!empty($charset) and $charset != 'UTF-8') {
-			if (is_callable('iconv'))
-				$str = iconv($charset, 'UTF-8', $str);
-			else
-				$str = iso8859_to_utf8($str);
+			if (is_callable('iconv')) {
+				$new = @iconv($charset, 'UTF-8', $str);
+				if ($new != false)
+					$str = $new;
+			}
+			elseif (is_callable('utf8_encode')) {
+				$str = utf8_encode($str);
+			}
 		}
 
 		return $str;
