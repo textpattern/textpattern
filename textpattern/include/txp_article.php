@@ -481,8 +481,10 @@
 
 			if ($view=='text') {
 			
+				$Excerpt = str_replace("&amp;","&",htmlspecialchars($Excerpt));
+			
 				echo graf(gTxt('excerpt').popHelp('excerpt').br.
-				'<textarea style="width:400px;height:50px" rows="1" cols="1" name="Excerpt" tabindex="3">'.htmlspecialchars($Excerpt).'</textarea>');
+				'<textarea style="width:400px;height:50px" rows="1" cols="1" name="Excerpt" tabindex="3">'.$Excerpt.'</textarea>');
 		
 			} else {
 	
