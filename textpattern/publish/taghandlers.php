@@ -837,25 +837,20 @@
 // -------------------------------------------------------------
 	function image_index($atts)
 	{
-		global $url_mode,$s,$c,$p,$txpcfg,$img_dir,$path_to_site;
+		global $permlink_mode,$s,$c,$p,$txpcfg,$img_dir,$path_to_site;
 		if (is_array($atts)) extract($atts);
 		$c = doSlash($c);
 		
 		$rs = safe_rows("*", "txp_image","category='$c' and thumbnail=1 order by name");
 
 		if ($rs) {
-		        // pedro@kusor.net(09-06-2004): if you put this in the loop
-		        // section is re-encoded for each item
-		        if(!$url_mode){
-		                $s = (!empty($s)) ? a.'s='.urlencode($s) : '';
-		        }
 			foreach($rs as $a) {
 				extract($a);
 				$impath = $img_dir.'/'.$id.'t'.$ext;
 				$imginfo = getimagesize($path_to_site.'/'.$impath);
 				$dims = (!empty($imginfo[3])) ? ' '.$imginfo[3] : '';
-				if(!$url_mode){
-					$out[] = '<a href="'.hu.'?c='.urlencode($c).$s.a.'p='.$id.'">'.
+				if($permlink_mode == 'messy'){
+					$out[] = '<a href="'.hu.'?c='.urlencode($c).a.'s='.urlencode($s).a.'p='.$id.'">'.
 					'<img src="'.$impath.'"'.$dims.' alt="'.$alt.'" />'.'</a>';
 				} else {
 					$out[] = '<a href="'.hu.$s.'/?c='.urlencode($c).a.'p='.$id.'">'.
@@ -871,7 +866,7 @@
 	function image_display($atts) 
 	{
 		if (is_array($atts)) extract($atts);
-		global $url_mode,$s,$c,$p,$img_dir;
+		global $s,$c,$p,$img_dir;
 		if($p) {
 			$rs = safe_row("*", "txp_image", "id='$p' limit 1");
 			if ($rs) {
