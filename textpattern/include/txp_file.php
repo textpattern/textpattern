@@ -57,7 +57,7 @@
 		echo startTable('list'),
 		tr(
 			tda(
-				upload_form(gTxt('upload_file'),gTxt('upload'),'file_insert'),
+				upload_form(gTxt('upload_file'),'upload','file_insert'),
 					' colspan="4" style="border:0"'
 			)
 		),
@@ -217,7 +217,7 @@
 				$form =	tr(
 							tda(
 								hed(gTxt('file_relink'),3).
-								upload_form(gTxt('upload_file'),gTxt('upload'),'file_replace',$id).
+								upload_form(gTxt('upload_file'),'upload','file_replace',$id).
 								form(
 									graf(gTxt('existing_file').' '.
 									selectInput('filename',$existing_files,"",1).
