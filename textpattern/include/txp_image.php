@@ -204,12 +204,11 @@
 
 				$newpath = IMPATH.$id.$ext;
 
-				if(copy($file, $newpath) == false) {
+				if(shift_uploaded_file($file, $newpath) == false) {
 					safe_delete("txp_image","id='$id'");
 					safe_alter("txp_image", "auto_increment=$id");
 					image_list($newpath.sp.gTxt('upload_dir_perms'));
 				} else {
-					unlink($file);
 					chmod($newpath,0755);
 					image_edit(messenger('image',$name,'uploaded'),$id);
 				}
@@ -257,12 +256,11 @@
 
 				$newpath = IMPATH.$id.$ext;
 
-				if(copy($file, $newpath) == false) {
+				if(shift_uploaded_file($file, $newpath) == false) {
 					safe_delete("txp_image","id='$id'");
 					safe_alter("txp_image", "auto_increment=$id");
 					image_list($newpath.sp.gTxt('upload_dir_perms'));
 				} else {
-					unlink($file);
 					chmod($newpath,0755);
 					image_edit(messenger('image',$name,'uploaded'),$id);
 				}
@@ -291,10 +289,9 @@
 
 				$newpath = IMPATH.$id.'t'.$ext;
 			
-			if(copy($file, $newpath) == false) {
+			if(shift_uploaded_file($file, $newpath) == false) {
 				image_list($newpath.sp.gTxt('upload_dir_perms'));
 			} else {
-				unlink($file);
 				chmod($newpath,0755);
 				safe_update("txp_image", "thumbnail='1'", "id='$id'");
 				image_edit(messenger('image',$name,'uploaded'),$id);
