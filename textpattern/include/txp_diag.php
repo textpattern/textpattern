@@ -156,6 +156,16 @@
 		}
 	}
 
+	$missing = array();
+	foreach ($files as $f) {
+		if (!is_readable($txpcfg['txpath'] . $f))
+			$missing[] = $txpcfg['txpath'] . $f;
+	}
+
+	if ($missing)
+		$fail['missing_files'] = gTxt('missing_files').cs.join(', ', $missing);
+
+
 	foreach ($fail as $k=>$v)
 		if (empty($v)) unset($fail[$k]);
 
