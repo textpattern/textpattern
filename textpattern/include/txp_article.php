@@ -82,7 +82,7 @@
 				
 				$myprivs = fetch('privs','txp_users','name',$txp_user);
 				if (($myprivs==5 or $myprivs==6) && $Status==4) $Status = 3;
-	
+				if (empty($url_title)) $url_title = stripSpace($Title);  	
 				safe_insert(
 				   "textpattern",
 				   "Title           = '$Title',
@@ -191,7 +191,7 @@
 		
 		$textile_body = (!$textile_body) ? 0 : 1;
 		$textile_excerpt = (!$textile_excerpt) ? 0 : 1;
-
+		if (empty($url_title)) $url_title = stripSpace($Title);  
 		safe_update("textpattern", 
 		   "Title           = '$Title',
 			Body            = '$Body',
