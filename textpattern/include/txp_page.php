@@ -106,8 +106,8 @@
 //-------------------------------------------------------------
 	function page_list($current)
 	{
-		$rs = safe_rows("name", "txp_page", "name != '' order by name");			
-		foreach ($rs as $a) {
+		$rs = safe_rows_start("name", "txp_page", "name != '' order by name");			
+		while ($a = nextRow($rs)) {
 			extract($a);
 			$dlink = ($name!='default') ? dLink('page','page_delete','name',$name) :'';
 			$link =  '<a href="?event=page'.a.'name='.$name.'">'.$name.'</a>';

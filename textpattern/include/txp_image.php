@@ -63,10 +63,10 @@
 		$nav[] = ($page != $numPages) 
 		?	PrevNextLink("image",$page+1,gTxt('next'),'next') : '';
 		
-		$rs = safe_rows("*", "txp_image", "1 order by category,name limit $offset,$limit");
+		$rs = safe_rows_start("*", "txp_image", "1 order by category,name limit $offset,$limit");
 	
 		if($rs) {
-			foreach($rs as $a) {
+			while ($a = nextRow($rs)) {
 			
 				extract($a);
 				

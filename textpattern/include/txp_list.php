@@ -60,7 +60,7 @@
 		} else $criteria = 1;
 			
 
-		$rs = safe_rows(
+		$rs = safe_rows_start(
 			"*, unix_timestamp(Posted) as uPosted", 
 			"textpattern", 
 			"$criteria order by $sort $dir limit $offset,$limit"
@@ -82,7 +82,7 @@
 				td(),
 			'</tr>';
 	
-			foreach ($rs as $a) {
+			while ($a = nextRow($rs)) {
 				extract($a);
 						
 				$stat = (!empty($Status)) ? $statuses[$Status] : '';

@@ -56,7 +56,7 @@
 			$query[] = $sfilter;
 			$query[] = $cfilter;
 				
-			$rs = safe_rows(
+			$rs = safe_rows_start(
 				"*, 
 				ID as thisid, 
 				unix_timestamp(Posted) as uPosted,
@@ -67,7 +67,7 @@
 					"order by Posted desc limit $limit" 
 			);
 			if ($rs) {	
-				foreach ($rs as $a) {
+				while ($a = nextRow($rs)) {
 
 					extract($a);
 					populateArticleData($a);
@@ -117,10 +117,10 @@
 			$cfilter = ($category) ? "category='$category'" : '1';
 			$limit = ($limit) ? $limit : 15;
 		
-			$rs = safe_rows("*", "txp_link", "$cfilter order by date desc limit $limit");
+			$rs = safe_rows_start("*", "txp_link", "$cfilter order by date desc limit $limit");
 
 			if ($rs) {
-				foreach($rs as $a) {
+				while ($a = nextRow($rs)) {
 					extract($a);
  
 					$e['title'] = tag(doSpecial($linkname),'title');

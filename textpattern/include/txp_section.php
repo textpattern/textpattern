@@ -37,10 +37,10 @@
 		$pageslist = safe_column("name", "txp_page", "1");
 		$styleslist = safe_column("name", "txp_css", "1");
 
-		$rs = safe_rows("*", "txp_section", "name!='' order by name");
+		$rs = safe_rows_start("*", "txp_section", "name!='' order by name");
 
 		if($rs) {
-			foreach ($rs as $a) {
+			while ($a = nextRow($rs)) {
 				extract($a);
 				if($name=='default') continue;
 

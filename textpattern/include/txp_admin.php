@@ -214,10 +214,10 @@
 	function reset_author_pass_form() 
 	{
 		global $myprivs,$txp_user;
-		$them = safe_rows("*","txp_users","name != '".doSlash($txp_user)."'");
+		$them = safe_rows_start("*","txp_users","name != '".doSlash($txp_user)."'");
 		
 		if ($them) {
-			foreach($them as $a) {
+			while ($a = nextRow($them)) {
 				$names[$a['name']] = $a['RealName'].' ('.$a['name'].')';
 			}
 			return '<div align="center" style="margin-top:3em">'.
@@ -278,9 +278,9 @@
 		.	td()
 		.	td()
 		);
-		$rs = safe_rows("*", "txp_users", "1");
+		$rs = safe_rows_start("*", "txp_users", "1");
 		if ($rs) {
-			foreach($rs as $a) {
+			while ($a = nextRow($rs)) {
 				extract($a);
 				if ($name == $txp_user)
 					$deletelink = '';

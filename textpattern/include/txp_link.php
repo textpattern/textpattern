@@ -47,7 +47,7 @@
 		$nav[] = ($page != $numPages) 
 		?	PrevNextLink("link",$page+1,gTxt('next'),'next') : '';
 
-		$rs = safe_rows(
+		$rs = safe_rows_start(
 			"*", 
 			"txp_link", 
 			"1 order by $sort $dir limit $offset,$limit"
@@ -64,7 +64,7 @@
 				column_head('link_category','category','link',1,$dir).
 				td()
 				);
-			foreach ($rs as $a) {
+			while ($a = nextRow($rs)) {
 				extract($a);				
 				$elink = eLink('link','link_edit','id',$id,$linkname);
 				$cbox = fInput('checkbox','selected[]',$id);

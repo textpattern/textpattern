@@ -115,9 +115,9 @@
 
 	// 1.0rc: checking nonce in txp_users table
 
-	$txpusers = safe_rows('name, nonce','txp_users','1');
+	$txpusers = safe_rows_start('name, nonce','txp_users','1');
 	if ($txpusers) {
-		foreach($txpusers as $a) {
+		while ($a = nextRow($txpusers)) {
 			extract($a);
 			if (!$nonce){
 				$nonce = md5( uniqid( rand(), true ) );

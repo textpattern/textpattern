@@ -176,13 +176,13 @@
 			($limit) ? "limit $limit" : ''
 		);
 		
-		$rs = safe_rows("*","txp_link",join(' ',$qparts));
+		$rs = safe_rows_start("*","txp_link",join(' ',$qparts));
 	
 		if ($rs) {
 			if ($label)
 				$outlist[] = $label;
 		
-			foreach ($rs as $a) {
+			while ($a = nextRow($rs)) {
 				extract($a);
 				$linkname = str_replace("& ","&#38; ", $linkname);
 				$link = '<a href="'.doSpecial($url).'">'.$linkname.'</a>';
@@ -275,7 +275,7 @@
 		$catq = ($category) ? "and (Category1='".doSlash($category)."' 
 			or Category2='".doSlash($category)."')" : '';
 
-		$rs = safe_rows(
+		$rs = safe_rows_start(
 			"*, id as thisid, unix_timestamp(Posted) as posted", 
 			"textpattern", 
 			"Status = 4 and Posted <= now() $catq order by $sortby $sortdir limit 0,$limit"
@@ -283,7 +283,7 @@
 		
 		if ($rs) {
 			if ($label) $out[] = $label;
-			foreach ($rs as $a) {
+			while ($a = nextRow($rs)) {
 				extract($a);
 				$out[] = href($Title,permlinkurl($a));
 			}
@@ -304,11 +304,11 @@
 			'limit'    => 10
 		),$atts));
 
-		$rs = safe_rows("*",'txp_discuss',"visible=1 order by posted desc limit 0,$limit");
+		$rs = safe_rows_start("*",'txp_discuss',"visible=1 order by posted desc limit 0,$limit");
 
 		if ($rs) {
 			if ($label) $out[] = $label;
-        	foreach($rs as $a) {
+        	while ($a = nextRow($rs)) {
 				extract($a);
 				$Title = safe_field("Title",'textpattern',"ID=$parentid");
 				$out[] = href($name.' ('.$Title.')', permlinkurl_id($parentid).'#c'.$discussid);
@@ -841,10 +841,10 @@
 		if (is_array($atts)) extract($atts);
 		$c = doSlash($c);
 		
-		$rs = safe_rows("*", "txp_image","category='$c' and thumbnail=1 order by name");
+		$rs = safe_rows_start("*", "txp_image","category='$c' and thumbnail=1 order by name");
 
 		if ($rs) {
-			foreach($rs as $a) {
+			while ($a = nextRow($rs)) {
 				extract($a);
 				$impath = $img_dir.'/'.$id.'t'.$ext;
 				$imginfo = getimagesize($path_to_site.'/'.$impath);
@@ -1232,12 +1232,12 @@
 			($limit) ? "limit $limit" : ''
 		);
 		
-		$rs = safe_rows("*","txp_file",join(' ',$qparts));
+		$rs = safe_rows_start("*","txp_file",join(' ',$qparts));
 	
 		if ($rs) {
 			if ($label) $outlist[] = $label;
 		
-			foreach ($rs as $a) {
+			while ($a = nextRow($rs)) {
 				
 				$finfo = fileDownloadFetchInfo("id='$a[id]'");
 				$outlist[] = file_download(

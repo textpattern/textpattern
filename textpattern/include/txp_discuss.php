@@ -65,7 +65,7 @@
 
 		$criteria = ($crit) ? "message like '%$crit%'" : '1'; 
 
-		$rs = safe_rows(
+		$rs = safe_rows_start(
 			"*, unix_timestamp(posted) as uPosted", 
 			"txp_discuss",
 			"$criteria order by posted desc limit $offset,$limit"
@@ -80,7 +80,7 @@
 			startTable('list'),
 			assHead('date','name','message','parent','');
 	
-			foreach ($rs as $a) {
+			while ($a = nextRow($rs)) {
 				extract($a);
 				$dmessage = $message;
 				$name = (!$visible) ? '<span style="color:red">'.$name.'</span>' : $name;
@@ -197,7 +197,7 @@
 	function ipban_list($message='')
 	{
 		pageTop(gTxt('list_banned_ips'),$message);
-		$rs = safe_rows(
+		$rs = safe_rows_start(
 				"*", 
 				"txp_discuss_ipban", 
 				"1 order by date_banned desc"
@@ -212,7 +212,7 @@
 				td()
 			);
 
-			foreach($rs as $a) {
+			while ($a = nextRow($rs)) {
 				extract($a);
 				
 				$unbanlink = '<a href="?event=discuss'.a.'step=ipban_unban'.a.

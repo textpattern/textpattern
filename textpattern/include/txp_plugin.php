@@ -32,9 +32,9 @@
 		,' colspan="8" style="border:0;height:50px"')).
 		 assHead('plugin','author','version','description','active','','','');
 			
-		$rs = safe_rows("*","txp_plugin", "1 order by name");
+		$rs = safe_rows_start("*","txp_plugin", "1 order by name");
 		
-		foreach ($rs as $a) {
+		while ($a = nextRow($rs)) {
 		  extract($a);
 
 		$elink = eLink('plugin','plugin_edit','name',$name,gTxt('edit'));

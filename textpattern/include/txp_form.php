@@ -30,10 +30,10 @@
 		$methods = array('delete'=>gTxt('delete'));
 
 
-		$rs = safe_rows("*", "txp_form", "1 order by name");
+		$rs = safe_rows_start("*", "txp_form", "1 order by name");
 
 		if ($rs) {
-			foreach($rs as $a){
+			while ($a = nextRow($rs)){
 				extract($a);
 					$editlink = ($curname!=$name) 
 					?	eLink('form','form_edit','name',$name,$name)

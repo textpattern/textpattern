@@ -44,7 +44,7 @@
 		$nav[] = ($page != $numPages) 
 		?	PrevNextLink("log",$page+1,gTxt('next'),'next') : '';
 
-		$rs = safe_rows(
+		$rs = safe_rows_start(
 			"*, unix_timestamp(time) as stamp", 
 			"txp_log", 
 			"1 order by time desc limit $offset,$limit"
@@ -55,7 +55,7 @@
 			assHead('time','host','page','referrer');
 			$stamp ='';
 
-			foreach ($rs as $a) {
+			while ($a = nextRow($rs)) {
 				extract($a);
 				if ($refer) {
 					$referprint = preg_replace("/^www\./","",

@@ -95,10 +95,10 @@
 		$nav[] = ($page != $numPages) 
 		?	PrevNextLink("file",$page+1,gTxt('next'),'next') : '';
 		
-		$rs = safe_rows("*", "txp_file", "1 order by $sort $dir limit $offset,$limit");
+		$rs = safe_rows_start("*", "txp_file", "1 order by $sort $dir limit $offset,$limit");
 		
 		if($rs) {
-			foreach($rs as $a) {
+			while ($a = nextRow($rs)) {
 			
 				extract($a);
 				

@@ -433,11 +433,11 @@
 			<p><a href="#" onclick="toggleDisplay(\'recent\');">' . gTxt('recent_articles').'</a>'.'</p>'.
 			'<div id="recent" style="display:none;">';
 			
-			$recents = safe_rows("Title, ID",'textpattern',"1 order by LastMod desc limit 10");
+			$recents = safe_rows_start("Title, ID",'textpattern',"1 order by LastMod desc limit 10");
 			
 			if ($recents) {
 				echo '<p>';
-				foreach($recents as $recent) {
+				while($recent = nextRow($recents)) {
 					extract($recent);
 					if (!$Title) $Title = gTxt('untitled').sp.$ID;
 					echo '<a href="?event=article'.a.'step=edit'.a.'ID='.$ID.'">'.$Title.'</a>'.br.n;

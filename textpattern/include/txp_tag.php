@@ -620,9 +620,9 @@
 	function css_pop($n)
 	{
 		$arr = array('');
-		$rs = safe_rows("name", "txp_css", "name!='default' order by name");
+		$rs = safe_rows_start("name", "txp_css", "name!='default' order by name");
 		if ($rs) {
-			foreach ($rs as $a){
+			while ($a = nextRow($rs)){
 				$v = array_shift($a);
 				$arr[$v] = $v;
 			}
@@ -635,9 +635,9 @@
 	function section_pop($name) 
 	{
 		$arr = array('');
-		$rs = safe_rows("name", "txp_section", "name!='default' order by name");
+		$rs = safe_rows_start("name", "txp_section", "name!='default' order by name");
 		if ($rs) {
-			foreach ($rs as $a){
+			while ($a = nextRow($rs)){
 				$v = array_shift($a);
 				$arr[$v] = $v;
 			}
@@ -650,9 +650,9 @@
 	function author_pop($name) 
 	{
 		$arr = array('');
-		$rs = safe_rows("name", "txp_users", "1 order by name");
+		$rs = safe_rows_start("name", "txp_users", "1 order by name");
 		if ($rs) {
-			foreach ($rs as $a){
+			while ($a = nextRow($rs)){
 				$v = array_shift($a);
 				$arr[$v] = $v;
 			}
@@ -668,9 +668,9 @@
 		
 		$typeq = ($type) ? "type = '$type'" : '1';
 		
-		$rs = safe_rows("name", "txp_form", "$typeq order by name");
+		$rs = safe_rows_start("name", "txp_form", "$typeq order by name");
 		if ($rs) {
-			foreach ($rs as $a){
+			while ($a = nextRow($rs)){
 				$v = array_shift($a);
 				$arr[$v] = $v;
 			}

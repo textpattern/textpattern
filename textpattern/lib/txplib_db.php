@@ -247,13 +247,13 @@ $DB = new DB;
 
 		$right = array(); 
 
-	    $rs = safe_rows(
+	    $rs = safe_rows_start(
 	    	"name, lft, rgt, parent", 
 	    	"txp_category",
 	    	"lft between $l and $r and type = '$type' order by lft asc"
 		); 
 
-	    foreach ($rs as $row) {
+	    while ($row = nextRow($rs)) {
 	   		extract($row);
 			while (count($right) > 0 && $right[count($right)-1] < $rgt) { 
 				array_pop($right);
@@ -296,9 +296,9 @@ $DB = new DB;
 //-------------------------------------------------------------
 	function get_prefs()
 	{
-		$r = safe_rows('name, val', 'txp_prefs', 'prefs_id=1');
+		$r = safe_rows_start('name, val', 'txp_prefs', 'prefs_id=1');
 		if ($r) {
-			foreach ($r as $a) {
+			while ($a = nextRow($r)) {
 				$out[$a['name']] = $a['val']; 
 			}
 			return $out;

@@ -22,9 +22,9 @@
 	function css_list($name) 
 	{	
 		$out[] = startTable('list','left');	
-		$rs = safe_rows("name as cssname","txp_css","1");
+		$rs = safe_rows_start("name as cssname","txp_css","1");
 		if ($rs) {
-			foreach($rs as $a) {
+			while ($a = nextRow($rs)) {
 				extract($a);
 				$namelink = ($name!=$cssname)
 				?	eLink('css','','name',$cssname,$cssname)
