@@ -271,6 +271,7 @@
 			'de-de' => gTxt('german'),
 			'no-no' => gTxt('norwegian'),
 			'ru-ru' => gTxt('russian'),
+			'th-th' => gTxt('thai'),
 //			'pt-pt' => gTxt('portuguese'),
 //			'fi-fi' => gTxt('finnish'),
 //			'du-du' => gTxt('dutch'),

@@ -431,6 +431,7 @@ tag__inline => Inline at beginning
 textile_help => Textile Help
 text_conversion => Text conversion
 text_handling => Text handling
+thai => Thai
 thumbnail => Thumb
 time => Time
 timeoffset => Time offset (hours)
