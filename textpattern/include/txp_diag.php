@@ -58,6 +58,11 @@
 		'/css.php',
 	);
 
+	function apache_module($m) {
+		$modules = apache_get_modules();
+		return in_array($m, $modules);
+	}
+
 	$fail = array();
 
 	$urlparts = parse_url(hu);
@@ -96,6 +101,10 @@
 		($url_mode and !@is_readable($path_to_site.'/.htaccess'))
 		?	gTxt('htaccess_missing').pophelp('htaccess_missing')
 		:	'',
+
+		($url_mode and is_callable('apache_get_modules') and !apache_module('mod_rewrite'))
+		? gTxt('mod_rewrite_missing').pophelp('mod_rewrite_missing')
+		: '',
 
 		(!ini_get('file_uploads'))
 		?	gTxt('file_uploads_disabled').pophelp('file_uploads_disabled')
