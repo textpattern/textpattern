@@ -24,31 +24,36 @@
 		        from ".$wpdbprefix."posts
 		        left join ".$wpdbprefix."users on
 		            ".$wpdbprefix."users.ID = ".$wpdbprefix."posts.post_author
-		    ",$b2link) or $results= mysql_error();
+		    ",$b2link) or $results[]= mysql_error();
 		    
 		    
 		    while($b=mysql_fetch_array($a)) {
-		        $articles[] = $b;
+		    	//Clean ugly wp slashes before to continue
+		    	$b = undoSlash(undoSlash($b));
+		    	
+		    	//Trap comments for each article
+		    	$comments = array();
+				$q= "
+			        select
+			        ".$wpdbprefix."comments.comment_author_IP as ip,
+			        ".$wpdbprefix."comments.comment_author as name,
+			        ".$wpdbprefix."comments.comment_author_email as email,
+			        ".$wpdbprefix."comments.comment_author_url as web,
+			        ".$wpdbprefix."comments.comment_content as message,
+			        ".$wpdbprefix."comments.comment_date as posted
+			        from ".$wpdbprefix."comments where comment_post_ID='".$b['ID']."'
+			    ";				
+				$c = mysql_query($q,$b2link) or $results[]= mysql_error();
+							
+			    while($d=mysql_fetch_assoc($c)){
+			        $d = undoSlash(undoSlash($d));
+			    	$comments[] = $d;
+			    }
+			    $b['comments'] = $comments;
+			    unset($comments);
+			    $articles[] = $b;
 		    }
 		
-		    $a = mysql_query("
-		        select
-		        ".$wpdbprefix."comments.comment_ID as discussid,
-		        ".$wpdbprefix."comments.comment_post_ID as parentid,
-		        ".$wpdbprefix."comments.comment_author_IP as ip,
-		        ".$wpdbprefix."comments.comment_author as name,
-		        ".$wpdbprefix."comments.comment_author_email as email,
-		        ".$wpdbprefix."comments.comment_author_url as web,
-		        ".$wpdbprefix."comments.comment_content as message,
-		        ".$wpdbprefix."comments.comment_date as posted
-		        from ".$wpdbprefix."comments
-		    ",$b2link) or $results[]= mysql_error();
-		
-		    
-		
-		    while($b=mysql_fetch_assoc($a)){
-		        $comments[] = $b;
-		    }
 		    
 		    $a = mysql_query("
 		      select
@@ -77,7 +82,7 @@
 		    }
 	
 		mysql_close($b2link);	
-		
+				
 		//keep a handy copy of txpdb values, and do not alter Dean code
 		// for now! ;-)
 
@@ -96,45 +101,56 @@
 	
 		   if (!empty($articles)) {
 			        foreach($articles as $a){
-			          $a['Body'] = str_replace('<!--more-->','',$a['Body']);    
+			        	//Ugly, really ugly way to workaround the slashes WP gotcha
+			        	$a['Body'] = str_replace('<!--more-->','',$a['Body']);
 			            $a['Body_html'] = $textile->textileThis($a['Body']);
-			            extract(array_slash($a));
+			            extract($a);
+			            //can not use array slash due to way on which comments are selected
 			            $q = mysql_query("
 			                insert into ".PFX."textpattern set
-			                ID        = '$ID',
-			                Posted    = '$Posted',
-			                Title     = '$Title',
-			                Body      = '$Body',
-			                Body_html = '$Body_html',
-			                AuthorID  = '$AuthorID',
+			                Posted    = '".addslashes($Posted)."',
+			                Title     = '".addslashes($textile->TextileThis($Title,1))."',
+			                Body      = '".addslashes($Body)."',
+			                Body_html = '".addslashes($Body_html)."',
+			                AuthorID  = '".addslashes($AuthorID)."',
 			                Section   = '$insert_into_section',
 			                AnnotateInvite = '$default_comment_invite',
 			                Status    = '$insert_with_status'
 			            ",$txplink) or $results[]= mysql_error();
 			    
-			            if (mysql_insert_id() ) {    
+			            if ($insertID = mysql_insert_id() ) {    
 			                $results[]= 'inserted wp_ entry '.$Title.
-			                    ' into Textpattern as article '.$ID.'';
+			                    ' into Textpattern as article '.$insertID.'';
+			                    
+			                if (!empty($comments)) {
+						        foreach ($comments as $comment) {
+							            extract(array_slash($comment));
+							            //The ugly workaroud again
+							            $message = nl2br($message);
+							    
+							            $r = mysql_query("insert into ".PFX."txp_discuss set					
+							                parentid = '$insertID',
+							                name = '$name',
+							                email = '$email',
+							                web = '$web',
+							                ip = '$ip',
+							                posted = '$posted',
+							                message = '$message',
+							                visible = 1",$txplink) or $results[]= mysql_error();
+							    
+							            if($commentID = mysql_insert_id()) {
+							                $results[]='inserted wp_ comment <strong>'.$commentID
+							                    .'</strong> into txp_discuss';
+							            }
+						        }
+						    }
 			            }
+			            
+			            
 			        }
 			    }
 			
-			    if (!empty($comments)) {
-//			    $empty = mysql_query("truncate table txp_discuss");
-			        foreach ($comments as $comment) {
-			            extract(array_slash($comment));
-			            $message = nl2br($message);
 			    
-			            $q = mysql_query("insert into ".PFX."txp_discuss values
-			                ($discussid,$parentid,'$name','$email','$web','$ip','$posted','$message',1)",
-			            $txplink) or $results[]= mysql_error($q);
-			    
-			            if(mysql_insert_id()) {
-			                $results[]='inserted wp_ comment <strong>'.$parentid
-			                    .'</strong> into txp_discuss';
-			            }
-			        }
-			    }
 			    
 			    if (!empty($cats)) {
 			    $right = 2;
@@ -196,4 +212,9 @@
 		return join('<br />', $results);
 	}
 
+	
+	function undoSlash($in)
+	{ 
+			return doArray($in,'stripslashes');		
+	}
 ?>
