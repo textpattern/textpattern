@@ -282,7 +282,10 @@
 		if ($rs) {
 			foreach($rs as $a) {
 				extract($a);
-				$deletelink = dLink('admin','author_delete','user_id',$user_id);
+				if ($name == $txp_user)
+					$deletelink = '';
+				else
+					$deletelink = dLink('admin','author_delete','user_id',$user_id);
 				$savelink = fInput("submit",'save',gTxt('save'),'smallerbox');
 				$emailhref = '<a href="mailto:'.$email.'">'.$email.'</a>';
 				$RealNameInput = fInput('text','RealName',$RealName,'edit');
