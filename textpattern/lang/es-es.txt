@@ -431,6 +431,7 @@ tag__inline => Sin párrafos al principio
 textile_help => Ayuda Textile
 text_conversion => Conversión de texto
 text_handling => Manejar texto
+thai => Tailandés
 thumbnail => Miniatura
 time => Hora
 timeoffset => Diferencia horaria (horas)
