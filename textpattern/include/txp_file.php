@@ -548,7 +548,18 @@
 			return $dirlist;		
 		
 		if (chdir($file_base_path)) {
-			$g_array = glob("*.*");
+			if (function_exists('glob'))
+				$g_array = glob("*.*");
+			else {
+				$dh = opendir($file_base_path);
+				$g_array = array();
+				while (false !== ($filename = readdir($dh))) {
+					$g_array[] = $filename;
+				}
+				closedir($dh);
+				
+			}
+			
 			if ($g_array) {
 				foreach ($g_array as $filename) {
 					if (is_file($filename)) {
