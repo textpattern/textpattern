@@ -135,8 +135,6 @@
 		if (ps('txt_plugin')) {
 			include $_FILES['theplugin']['tmp_name'];
 			
-			print file_get_contents($_FILES['theplugin']['tmp_name']);
-			
 		} else {
 			$plugin = ps('plugin');	
 		}
