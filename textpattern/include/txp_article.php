@@ -85,7 +85,7 @@
 				$textile_excerpt = (!$textile_excerpt) ? 0 : 1;
 				
 				if (!has_privs('article.publish') && $Status==4) $Status = 3;
-				if (empty($url_title)) $url_title = stripSpace($Title);  	
+				if (empty($url_title)) $url_title = stripSpace($Title, 1);  	
 				safe_insert(
 				   "textpattern",
 				   "Title           = '$Title',
@@ -196,7 +196,7 @@
 		
 		$textile_body = (!$textile_body) ? 0 : 1;
 		$textile_excerpt = (!$textile_excerpt) ? 0 : 1;
-		if (empty($url_title)) $url_title = stripSpace($Title);  
+		if (empty($url_title)) $url_title = stripSpace($Title, 1);  
 		safe_update("textpattern", 
 		   "Title           = '$Title',
 			Body            = '$Body',

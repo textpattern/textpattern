@@ -375,10 +375,10 @@ else
 	}
 	
 // -------------------------------------------------------------
-	function stripSpace($text) 
+	function stripSpace($text, $force=0) 
 	{
 		global $txpac;
-		if ($txpac['attach_titles_to_permalinks']) {
+		if ($force or $txpac['attach_titles_to_permalinks']) {
 		
 			$text = dumbDown($text);
 			$text = preg_replace("/(^|&\S+;)|(<[^>]*>)/U","",$text);		
