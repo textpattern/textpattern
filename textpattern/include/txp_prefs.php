@@ -12,13 +12,13 @@
 
 //-------------------------------------------------------------
 
+	require_privs('prefs');
+
 	$step = gps('step');
 
 	if(!$step or !function_exists($step)){
 		prefs_list();
 	} else $step();
-
-	require_privs('prefs');
 
 
 // -------------------------------------------------------------
