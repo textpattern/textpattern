@@ -13,7 +13,7 @@
 		
 		$GLOBALS['privs'] = $privs;
 
-		$ctabs = array('article','image','link','discuss','category','list');
+		$ctabs = array('article','image','file','link','discuss','category','list');
 		$ptabs = array('section','page','css','form');
 		$atabs = array('diag','prefs','admin','plugin','log','import');
 	
@@ -151,6 +151,7 @@
 			gTxt('tab_write')    => 'article',
 			gTxt('tab_list')    =>  'list',
 			gTxt('tab_image')    => 'image',
+			gTxt('tab_file')	 => 'file',			
 			gTxt('tab_link')     => 'link',
 			gTxt('tab_comments') => 'discuss'
 		);

@@ -41,7 +41,8 @@
 					$modbox = ($name!='comments' 
 								&& $name!='comment_form' 
 								&& $name!='default' 
-								&& $name!='Links') 
+								&& $name!='Links'
+								&& $name!='files') 
 					?	'<input type="checkbox" name="selected_forms[]" value="'.$name.'" />'
 					:	sp;
 				$out[] = tr(td($editlink).td(small($type)).td($modbox));
@@ -121,7 +122,10 @@
 						popTagLinks('search_input')).
 					graf(gTxt('search_results_form').
 						sp.popHelp('form_place_search_results').br.
-						popTagLinks('search_result'))
+						popTagLinks('search_result')).
+					graf(
+						tag('<strong>'.gTxt('file_download_tags').'</strong>','a',' href="#" onclick="toggleDisplay(\'downloadtags\');"').sp.popHelp('form_file_download_tags')).
+						graf(popTagLinks('file_download'), ' style="display:none;" id="downloadtags"')
 				).
 				tdtl(
 					'<form action="index.php" method="post">'.
@@ -177,7 +181,7 @@
 // -------------------------------------------------------------
 	function formTypes($type) 
 	{
-	 	$types = array(''=>'','article'=>'article','comment'=>'comment','link'=>'link','misc'=>'misc'); 
+	 	$types = array(''=>'','article'=>'article','comment'=>'comment','link'=>'link','misc'=>'misc','file'=>'file'); 
 		return selectInput('type',$types,$type);
 	}
 

@@ -76,7 +76,7 @@ mysql_query("CREATE TABLE `".PFX."txp_category` (
 mysql_query("INSERT INTO `".PFX."txp_category` VALUES (1, 'root', 'link', '', 1, 2)");
 mysql_query("INSERT INTO `".PFX."txp_category` VALUES (2, 'root', 'article', '', 1, 2)");
 mysql_query("INSERT INTO `".PFX."txp_category` VALUES (3, 'root', 'image', '', 1, 2)");
-
+mysql_query("INSERT INTO `".PFX."txp_category` VALUES (3, 'root', 'file', '', 1, 2)");
 
 
 
@@ -181,6 +181,7 @@ mysql_query("INSERT INTO `".PFX."txp_form` VALUES ('comments', 'comment', '<txp:
 mysql_query("INSERT INTO `".PFX."txp_form` VALUES ('default', 'article', '<h3><txp:permlink><txp:title /></txp:permlink> &#183; <txp:posted /></h3>\r\n<txp:body />\r\n<p><txp:comments_invite /> </p> \r\n<p>* * *</p>')");
 mysql_query("INSERT INTO `".PFX."txp_form` VALUES ('comment_form', 'comment', '  <table cellpadding=\"4\" cellspacing=\"0\" border=\"0\">\r\n	<tr>\r\n	  <td align=\"right\" valign=\"top\">\r\n	   	<txp:text item=\"name\" />\r\n	  </td>\r\n   <td valign=\"top\">\r\n	  	<txp:comment_name_input />\r\n	  </td>\r\n	  <td valign=\"top\" align=\"left\">\r\n	  	<txp:comment_remember />\r\n	  </td> \r\n	</tr>\r\n	<tr>\r\n	  <td align=\"right\" valign=\"top\">\r\n	  	<txp:text item=\"email\" />\r\n	  </td>\r\n	  <td valign=\"top\" colspan=\"2\">\r\n	  	<txp:comment_email_input />\r\n	  </td>\r\n    </tr>\r\n	<tr> \r\n	  <td align=\"right\" valign=\"top\">\r\n	  	http://\r\n	  </td>\r\n	  <td valign=\"top\" colspan=\"2\">\r\n	  	<txp:comment_web_input />\r\n	  </td>\r\n	</tr>\r\n	<tr>\r\n	  <td valign=\"top\" align=\"right\">\r\n	  	<txp:text item=\"message\" />\r\n	  </td>\r\n	  <td valign=\"top\" colspan=\"2\">\r\n	  	<txp:comment_message_input />\r\n	  </td>\r\n	</tr>\r\n	<tr>\r\n	  <td align=\"right\" valign=\"top\">&nbsp;</td>\r\n	  <td valign=\"top\" align=\"left\">\r\n		<txp:comments_help />\r\n	  </td>\r\n	  <td align=\"right\" valign=\"top\">\r\n		<txp:comment_preview />\r\n		<txp:comment_submit />\r\n	  </td>\r\n	</tr>\r\n  </table>')");
 mysql_query("INSERT INTO `".PFX."txp_form` VALUES ('Noted', 'link', '<p> <txp:link />. <txp:link_description /></p>')");
+mysql_query("INSERT INTO `".PFX."txp_form` VALUES ('files', 'file', '<txp:text item=\"file\" />: \n<txp:file_download_link>\n<txp:file_download_name /> [<txp:file_download_size format=\"auto\" decimals=\"2\" />]\n</txp:file_download_link>\n<br />\n<txp:text item=\"category\" />: <txp:file_download_category /><br />\n<txp:text item=\"download\" />: <txp:file_download_downloads />'')");
 
 
 
@@ -370,7 +371,8 @@ mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'img_dir', 'images')");
 mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'record_mentions', '1')");
 mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'comments_disallow_images', '0')");
 mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'comments_sendmail', '0')");
-
+mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'file_max_upload_size', '2000000')");
+mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'file_list_pageby', '25')");
 
 
 
@@ -415,5 +417,18 @@ mysql_query("CREATE TABLE `".PFX."txp_users` (
   PRIMARY KEY  (`user_id`),
   UNIQUE KEY `name` (`name`)
 ) TYPE=MyISAM PACK_KEYS=1 AUTO_INCREMENT=2 ");
+
+
+
+mysql_query("CREATE TABLE `".PFX."txp_file` ( 
+		`id` int(11) NOT NULL auto_increment,
+		`filename` varchar( 255 ) NOT NULL default '',
+		`category` varchar( 255 ) NOT NULL default '',
+		`permissions` varchar( 32 ) NOT NULL DEFAULT '0',
+		`description` text NOT NULL default '',
+		`downloads` int(4) unsigned NOT NULL default '0',
+		PRIMARY KEY ( `id` ) ,
+		UNIQUE KEY `filename` ( `filename` ) 
+	)  TYPE=MyISAM PACK_KEYS=0 AUTO_INCREMENT=1 ");
 
 ?>

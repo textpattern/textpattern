@@ -78,7 +78,9 @@
 		pCell('ping_weblogsdotcom',$ping_weblogsdotcom,'radio'),
 		pCell('logging',$logging,'logging'),
 		pCell('use_textile',$use_textile,'text'),
-		pCell('tempdir',$tempdir,'input',20);
+		pCell('tempdir',$tempdir,'input',20),
+		@pCell('file_base_path',$file_base_path,'input',20),
+		@pCell('file_max_upload_size',$file_max_upload_size,'input',10);
 
 
 			echo tr(tdcs(hed(gTxt('comments'),1),3)),

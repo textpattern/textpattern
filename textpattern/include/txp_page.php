@@ -44,7 +44,9 @@
 					graf(gTxt('page_xml_hed').br.
 						small(taglinks('page_xml')),' class="column"').
 					graf(gTxt('page_misc_hed').br.
-						small(taglinks('page_misc')),' class="column"')
+						small(taglinks('page_misc')),' class="column"').
+					graf(gTxt('page_file_hed').br.
+						small(taglinks('page_file')),' class="column"')
 				).
 				tda(
 					page_edit_form($name),' class="column"'

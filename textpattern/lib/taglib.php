@@ -92,4 +92,20 @@ $page_nav_tags = array(
 	'search_input'
 );
 
+$page_file_tags = array(
+	'file_download',
+	'file_download_list'
+);
+
+$file_download_tags = array(
+	'file_download_link',
+	'file_download_name',
+	'file_download_id',
+	'file_download_category',
+	'file_download_downloads',
+	'file_download_size',
+	'file_download_created',
+	'file_download_modified'
+);
+
 ?>

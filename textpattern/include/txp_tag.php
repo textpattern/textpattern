@@ -538,8 +538,9 @@
 	{
 		$attsout = '';
 		foreach($atts as $a=>$b) if ($b) $attsout[] = ' '.$a.'="'.$b.'"';
-		$atts_built = (is_array($attsout)) ? join('', $attsout) : '';		
-		return '<txp:'.$name.$atts_built.' />';
+		$atts_built = (is_array($attsout)) ? join('', $attsout) : '';
+
+		return ($double)?'<txp:'.$name.$atts_built.'>'.$double.'</txp:'.$name.'>':'<txp:'.$name.$atts_built.' />';
 	}
 
 // -------------------------------------------------------------
@@ -553,6 +554,17 @@
 	{
 		$arr = array('');
 		$rs = getTree("root",'link');
+		if ($rs) {
+			return ' '.treeSelectInput("category",$rs,$name);
+		}
+		return 'no link categories created';
+	}
+
+//--------------------------------------------------------------
+	function file_category_pop($name)
+	{
+		$arr = array('');
+		$rs = getTree("root",'file');
 		if ($rs) {
 			return ' '.treeSelectInput("category",$rs,$name);
 		}
@@ -700,7 +712,148 @@
 		}
 		return tdb($thing);
 	}
+	
+// 	
 
+// -------------------------------------------------------------
+// Needed by file downloads
+// -------------------------------------------------------------
+
+// -------------------------------------------------------------
+	function tag_file() 
+	{
+		global $permlink_mode;
+		$invars = gpsa(array('id','description','filename','type'));
+		extract($invars);
+		$url = ($permlink_mode == 'messy')?
+			hu.'/index.php?s=file_download&amp;id='.$id:
+			hu.'/file_download/'.$id;
+		switch ($type) {
+			case 'textile': 
+				$description = ($description) ? ' ('.$description.')' : '';
+				$thing='"'.$filename.'":'.$url; 
+			break;
+
+			case 'textpattern': $thing = '<txp:file_download_link id="'.$id.'"><txp:file_download_name /></txp:file_download_link>'; break;
+
+			case 'xhtml': $thing = '<a href="'.$url.'" title="'.$filename.'">'.$filename.'</a>';
+		}
+		return tdb($thing);
+	}
+
+// -------------------------------------------------------------
+
+	function tag_file_download() 
+	{
+		global $step,$endform,$name;
+		$invars = gpsa(array('form','id'));
+		extract($invars);
+		$out = form(startTable('list').
+			tr(tdcs(hed('File Download Link',3),2) ).
+			tagRow('form', form_pop($form,'file','form')) .
+			tagRow('id', fInput('text','id',$id,'edit','','',2)).
+			$endform
+		);
+		$out .= ($step=='build') ? tdb(tb($name, $invars)) : '';
+		return $out;
+	}	
+
+// -------------------------------------------------------------
+	function tag_file_download_list() 
+	{
+		global $step,$endform,$name;
+		$invars = gpsa(array('form','category','limit','sort','wraptag','break'));
+		$sorts = array(''=>'','filename'=>'Name',
+				'downloads desc'=>'Download Count descending','downloads asc'=>'Download Count ascending', 'rand()'=>'Random');
+		extract($invars);
+		$out = form(startTable('list').
+			tr(tdcs(hed('File Download List',3),2) ).
+			tagRow('form', form_pop($form,'file','form')).
+			tagRow('category', file_category_pop($category)).
+			tagRow('limit', fInput('text','limit',$limit,'edit','','',2)).
+			tagRow('sort_by', selectInput("sort",$sorts,$sort)).
+			tagRow('wraptag', fInput('text','wraptag',$wraptag,'edit','','',2)).
+			tagRow('break', fInput('text','break',$break,'edit','','',5)).
+			$endform
+		);
+		$out .= ($step=='build') ? tdb(tb($name, $invars)) : '';
+		echo $out;	
+	}
+
+// -------------------------------------------------------------
+	function tag_file_download_created() 
+	{
+		global $step,$endform,$name;
+		$invars = gpsa(array('format'));
+		extract($invars);
+		$format = (!$format) ? '' : $format;
+		$out = form(startTable('list').
+			tr(tdcs(hed('File Creation Time<br />('.gTxt('archive_dateformat').' used if empty)' ,3),2) ).
+			tagRow('format', fInput('text','format',$format,'edit','','',15)).
+			$endform
+		);
+		$out .= ($step=='build') ? tdb(tb($name, $invars)) : '';
+		return $out;
+	}
+
+// -------------------------------------------------------------
+	function tag_file_download_modified() 
+	{
+		global $step,$endform,$name;
+		$invars = gpsa(array('format'));
+		extract($invars);
+		$format = (!$format) ? '' : $format;
+		$out = form(startTable('list').
+			tr(tdcs(hed('File Modified Time<br />('.gTxt('archive_dateformat').' used if empty)',3),2) ).
+			tagRow('format', fInput('text','format',$format,'edit','','',15)).
+			$endform
+		);
+		$out .= ($step=='build') ? tdb(tb($name, $invars)) : '';
+		return $out;
+	}
+
+// -------------------------------------------------------------
+	function tag_file_download_size() 
+	{
+		global $step,$endform,$name;
+		$invars = gpsa(array('format','decimals'));
+		$formats = array('b'=>'bytes','kb'=>'kilobytes','mb'=>'megabytes','gb'=>'gigabytes','tb'=>'terabytes','pb'=>'petabytes');
+		extract($invars);
+		$decimals = (!$decimals) ? '2' : $decimals;
+		$out = form(startTable('list').
+			tr(tdcs(hed('File Size',3),2) ).
+			tagRow('format', selectInput('format',$formats,$format,1)).
+			tagRow('decimals', fInput('text','decimals',$decimals,'edit','','',4)).
+			$endform
+		);
+		$out .= ($step=='build') ? tdb(tb($name, $invars)) : '';
+		return $out;
+	}
+
+	function tag_file_download_link()       
+	{ 
+		global $step,$endform,$name;
+		$invars = gpsa(array('filename','id'));
+		extract($invars);
+		$out = form(startTable('list').
+			tr(tdcs(hed('File Download Link',3),2) ).
+			tagRow('id', fInput('text','id',$id,'edit','','',4)).
+			tagRow('filename', fInput('text','filename',$filename,'edit','','',15)).
+			$endform
+		);
+		$out .= tdb(tb('file_download_link',$invars,'* text or tag here *'));
+		return $out;
+	}
+
+	function tag_file_download_id()  { return tdb(tb('file_download_id')); }
+
+	function tag_file_download_name()  { return tdb(tb('file_download_name')); }
+
+	function tag_file_download_downloads()  { return tdb(tb('file_download_downloads')); }
+	
+	function tag_file_download_category()  { return tdb(tb('file_download_category')); }
+		
+		
 
 ?>
 </body>

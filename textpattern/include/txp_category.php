@@ -25,6 +25,7 @@
 			tdtl(article_list(),' class="categories"'),
 			tdtl(link_list(),' class="categories"'),
 			tdtl(image_list(),' class="categories"'),
+			tdtl(file_list(),' class="categories"'),
 		'</tr>',
 		endTable());
 		echo join(n,$out);
@@ -260,5 +261,33 @@
 		}
 		category_list(messenger($evname.'_category',stripslashes($name),'saved'));
 	}
+
+	
+// --------------------------------------------------------------
+// Non image file upload. Have I mentioned how much I love this file refactoring?
+// -------------------------------------------------------------
+	function file_list() 
+	{
+		return event_category_list('file');
+	}
+
+//-------------------------------------------------------------
+	function file_create()
+	{
+		return event_category_create('file');
+	}
+
+//-------------------------------------------------------------
+	function file_edit()
+	{
+		return event_category_edit('file');
+	}
+
+//-------------------------------------------------------------
+	function file_save()
+	{
+		return event_category_save('file','txp_file');
+	}
+	
 	
 ?>

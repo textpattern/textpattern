@@ -84,6 +84,68 @@
 		exit(popComments(gps('parentid')));
 	}
 
+	// we are dealing with a download
+	if (@$s == 'file_download') {
+		if (!isset($file_error)) {
+		
+/*			define('no_login_prompt',"1");
+			include txpath . '/include/txp_auth.php';
+		
+			unset($txp_user);
+			doTxpValidate();
+		
+			$privs = (!$txp_user)? 0 : safe_field("privs", "txp_users", "`name`='$txp_user'"); 			
+
+*/			
+			// check perms
+//			$perms = split(',',$permissions);
+
+//			if (in_array($privs,$perms) OR in_array('0',$perms)) {
+//			if (in_array('0',$perms)) {
+				$fullpath = build_file_path($file_base_path,$filename);
+
+				if (is_file($fullpath)) {
+					// record download
+					if (isset($downloads)) {
+						safe_update("txp_file", "downloads=downloads+1", "id='$id'");
+					}
+					
+					// discard any error php messages
+					ob_clean();
+					
+					header('Content-Description: File Download');
+					header('Content-Type: application/octet-stream');
+					header('Content-Length: ' . filesize($fullpath));
+					header('Content-Disposition: attachment; filename="' . basename($filename)). '"';
+					readfile($fullpath); 
+				} else {
+					$file_error = 404;
+				}
+//			} else {
+//				$file_error = 403;
+//			}
+		}
+
+		// deal with error
+		if (isset($file_error)) {
+			switch($file_error) {
+			case 403:
+				header('HTTP/1.0 403 Forbidden');
+				break;
+			case 404:
+				header('HTTP/1.0 404 File Not Found');
+				break;
+			default:
+				header('HTTP/1.0 500 Internal Server Error');
+				break;
+			}
+		}
+		
+		// download done
+		exit(0);
+	}
+	
+
 	if(!isset($nolog)) {
 		if($logging == 'refer') { 
 			logit('refer'); 
@@ -152,6 +214,10 @@
 					case strtolower(gTxt('author')):
 						$out['author'] = (!empty($u2)) ? $u2 : ''; break;
 	
+					case strtolower(gTxt('file_download')):
+						$out['s'] = 'file_download';
+						$out['id'] = (!empty($u2)) ? $u2 : ''; break;
+					
 					case 'p':
 						$out['p'] = (is_numeric($u2)) ? $u2 : ''; break;
 					
@@ -193,6 +259,18 @@
 			// Messy mode
 			if ($out['id'])
 				$out['s'] = safe_field('section', 'textpattern', "ID='".doSlash($out['id'])."'");
+		}
+		
+		if ($out['s'] == 'file_download') {
+			// get id of potential filename
+			if (!is_numeric($out['id'])) {
+				$rs = safe_row("*", "txp_file", "filename='".$out['id']."'");
+			} else {
+				$rs = safe_row("*", "txp_file", "id='".$out['id']."'");
+			}
+
+			$out = ($rs)? array_merge($out, $rs) : array('s'=>'file_download','file_error'=> 404);
+			return $out;
 		}
 		
 

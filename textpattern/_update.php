@@ -305,6 +305,49 @@ eod;
 		$tempdir = addslashes(find_temp_dir());
 		safe_insert('txp_prefs',"prefs_id=1,name='tempdir',val='$tempdir'");
 	}
+	
+	//non image file upload tab:
+	if (!safe_field('val', 'txp_prefs',"name='file_list_pageby'")){
+		safe_insert('txp_prefs',"val=25,name='file_list_pageby',prefs_id=1");
+	}
+	
+	// 1.0: max file upload size
+	if (!safe_field('val', 'txp_prefs',"name='file_max_upload_size'")){	
+		safe_insert('txp_prefs',"prefs_id=1,name='file_max_upload_size',val=2000000");
+	}
+
+	// 1.0: txp_file root cat
+	if (!safe_field('parent', 'txp_category',"type='file' AND name='root'")){
+		safe_insert('txp_category',"name='root',type='file',lft=1,rgt=2");
+	}
+	
+	// 1.0: txp_file folder
+	if (!safe_field('val', 'txp_prefs',"name='file_base_path'")){
+		safe_insert('txp_prefs',"val='$tempdir',name='file_base_path',prefs_id=1");
+	}
+	
+	// 1.0: txp_file table
+	if (!safe_query("SELECT 1 FROM `".PFX."txp_file` LIMIT 0")) {
+		// do install
+		safe_query("CREATE TABLE `".PFX."txp_file` ( 
+				`id` int(11) NOT NULL auto_increment,
+				`filename` varchar( 255 ) NOT NULL default '',
+				`category` varchar( 255 ) NOT NULL default '',
+				`permissions` varchar( 32 ) NOT NULL DEFAULT '0',
+				`description` text NOT NULL default '',
+				`downloads` int(4) unsigned NOT NULL default '0',
+				PRIMARY KEY ( `id` ) ,
+				UNIQUE KEY `filename` ( `filename` ) 
+			)  TYPE=MyISAM PACK_KEYS=0 AUTO_INCREMENT=1 ");
+	}
+	
+	if (!safe_field('name', 'txp_form', "type='file'")){
+		safe_insert('txp_form',"
+			name='files',
+			type='file',
+			Form='<txp:text item=\"file\" />: \n<txp:file_download_link>\n<txp:file_download_name /> [<txp:file_download_size format=\"auto\" decimals=\"2\" />]\n</txp:file_download_link>\n<br />\n<txp:text item=\"category\" />: <txp:file_download_category /><br />\n<txp:text item=\"download\" />: <txp:file_download_downloads />'");
+	}
+	//eof: non image file upload tab
 
 // updated, baby.
 

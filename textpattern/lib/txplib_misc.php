@@ -639,4 +639,14 @@ else
 		return (PHP_OS == 'WINNT' or PHP_OS == 'WIN32' or PHP_OS == 'Windows');
 	}
 
+// --------------------------------------------------------------
+	function build_file_path($base,$path)
+	{
+		$base = rtrim($base,'/\\');
+		$path = ltrim($path,'/\\');		
+		
+		return $base.DIRECTORY_SEPARATOR.$path;
+	}	
+	
+
 ?>
