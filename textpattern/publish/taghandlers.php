@@ -140,7 +140,10 @@
 		if(!isset($form)) $form = 'plainlinks';
 		if(!isset($sort)) $sort = 'linksort';
 		$Form = fetch('Form','txp_form','name',$form);
-		$wraptag = (empty($wraptag)) ? '' : $wraptag;
+
+		$label    = (empty($label))    ? '' : $label;
+		$break    = (empty($break))    ? br : $break;
+		$wraptag  = (empty($wraptag))  ? '' : $wraptag;
 		
 		$qparts = array(
 			(!empty($category)) ? "category='$category'" : '1',
@@ -158,18 +161,25 @@
 				extract($a);
 				$linkname = str_replace("& ","&#38; ", $linkname);
 				$link = '<a href="'.$url.'">'.$linkname.'</a>';
-				$linkdesctitle = '<a href="'.$url.
-				    '" title="'.$description.'">'.$linkname.'</a>';
+				$linkdesctitle = '<a href="'.$url.'" title="'.$description.'">'.$linkname.'</a>';
 
 				$out = str_replace("<txp:link />", $link, $Form);
 				$out = str_replace("<txp:linkdesctitle />", $linkdesctitle, $out);
 				$out = str_replace("<txp:link_description />", $description, $out);
 			
-				$outlist .= $out;
+				$outlist[] = $out;
 			}
-		return ($wraptag) ? tag($outlist,$wraptag) : $outlist;
+			
+			if (!empty($outlist)) {
+				if ($wraptag == 'ul' or $wraptag == 'ol') {
+					return tag(tag(join('</li>'.n.'<li>',$outlist),'li'),$wraptag);
+				}	
+				
+				return ($wraptag) ? tag(join($break,$outlist),$wraptag) : join(n,$outlist);
+			}
 		}
 		return false;
+		
 	}
 
 // -------------------------------------------------------------

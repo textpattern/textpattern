@@ -126,6 +126,12 @@
 	
 	safe_alter('txp_users',"CHANGE `pass` `pass` VARCHAR( 128 ) NOT NULL");
 
+	safe_alter('textpattern',"CHANGE `Body` `Body` MEDIUMTEXT NOT NULL");
+
+	safe_alter('textpattern',"CHANGE `Body_html` `Body_html` MEDIUMTEXT NOT NULL");
+
+	safe_alter('textpattern',"CHANGE `Excerpt` `Excerpt` TEXT NOT NULL");
+
 	$popcom = fetch("*",'txp_form','name',"popup_comments");
 	
 	if (!$popcom) {

@@ -96,8 +96,6 @@ $DB = new DB;
 		return false;
 	}
 
-
-
 // -------------------------------------------------------------
 	function safe_field($thing, $table, $where, $debug='') 
 	{
