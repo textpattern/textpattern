@@ -253,6 +253,7 @@
 //--------------------------------------------------------------
 	function article_edit($message="")
 	{
+		
 		pagetop("Textpattern",$message);
 		global $txpcfg,$txpac,$txp_user,$vars;
 
@@ -564,7 +565,8 @@
 	//-- comments stuff --------------
 
 			if($step=="create") {
-				$AnnotateInvite = $comments_default_invite;
+				//Avoiding invite disappear when previewing
+				$AnnotateInvite = (!empty($store_out['AnnotateInvite']))? $store_out['AnnotateInvite'] : $comments_default_invite;
 				if ($comments_on_default==1) { $Annotate = 1; }
 			}
 			echo ($use_comments==1 && $view=='text')
@@ -578,14 +580,18 @@
 
 		if ($step == "create" and empty($GLOBALS['ID'])) {
 			if ($view == 'text') {
+				//Avoiding modified date to disappear
+				$persist_timestamp = (!empty($store_out['year']))? 
+					mktime($store_out['hour'],$store_out['minute'], '00', $store_out['month'], $store_out['day'], $store_out['year'])
+					: time();
 			echo
 			graf(tag(checkbox('publish_now','1').gTxt('set_to_now'),'label')),
-			'<p>',gTxt('or_publish_at'),popHelp("timestamp"),br,
-				tsi('year','Y',time()),
-				tsi('month','m',time()),
-				tsi('day','d',time()), sp,
-				tsi('hour','H',time()), ':',
-				tsi('minute','i',time()),
+			'<p>',gTxt('or_publish_at'),popHelp("timestamp"),br,				
+				tsi('year','Y',$persist_timestamp),
+				tsi('month','m',$persist_timestamp),
+				tsi('day','d',$persist_timestamp), sp,
+				tsi('hour','H',$persist_timestamp), ':',
+				tsi('minute','i',$persist_timestamp),
 			'</p>';
 			}
 
