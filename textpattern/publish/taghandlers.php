@@ -338,7 +338,7 @@
 
 		if (!empty($cats[0]) or !empty($cats[1])) {
 
-			$q = array("select * from ".PFX."textpattern where Status = 4 and ID!='$id'",
+			$q = array("select *, id as thisid, unix_timestamp(Posted) as posted from ".PFX."textpattern where Status = 4 and ID!='$id'",
 				(!empty($cats[0])) ? "and ((Category1='$cats[0]') or (Category2='$cats[0]'))" :'',
 				(!empty($cats[1])) ? "or ((Category1='$cats[1]') or (Category2='$cats[1]'))" :'',
 				"and Status=4 and Posted <= now() order by Posted desc limit 0,$limit");
