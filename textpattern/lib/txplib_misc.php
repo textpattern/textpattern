@@ -130,6 +130,29 @@ else
 	}
 
 // -------------------------------------------------------------
+	function has_privs($res)
+	{
+		global $txp_user;
+
+		$permissions = array(
+			'article.delete.self' => '1,2,3,4',
+			'article.delete' => '1,2',
+		);
+
+		$privs = safe_field("privs", "txp_users", "`name`='$txp_user'");
+		$req = explode(',', @$perms[$res]);
+		return in_array($privs, $req);
+	}
+
+// -------------------------------------------------------------
+	function require_privs($res)
+	{
+		if (!has_privs($res))
+			exit(pageTop('Restricted').'<p style="margin-top:3em;text-align:center">'.
+				gTxt('restricted_area').'</p>');
+	}
+
+// -------------------------------------------------------------
 	function sizeImage($name) 
 	{
 		$size = @getimagesize($name);
