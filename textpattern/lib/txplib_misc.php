@@ -586,7 +586,7 @@
 
 		# $newfile is created by tempnam(), but move_uploaded_file
 		# will overwrite it
-		if (move_uploaded_file($f, $newfile));
+		if (move_uploaded_file($f, $newfile))
 			return $newfile;
 	}
 
