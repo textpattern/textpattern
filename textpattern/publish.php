@@ -298,7 +298,7 @@
 			$idrs = safe_row("Posted, AuthorID, Keywords","textpattern","ID=$id");
 			extract($idrs);
 
-			if ($np = getNextPrev($Posted, $s))
+			if ($np = getNextPrev($id, $Posted, $s))
 				$out = array_merge($out, $np);
 
 			$out['id_keywords'] = $Keywords; 
@@ -614,7 +614,7 @@
 		if(!is_numeric(@$GLOBALS['id'])) {
 			global $next_id, $next_title, $next_utitle, $next_posted;
 			global $prev_id, $prev_title, $prev_utitle, $prev_posted;
-			extract(getNextPrev($Posted, @$GLOBALS['s']));
+			extract(getNextPrev($ID, $Posted, @$GLOBALS['s']));
 		}
 	}
 
@@ -635,9 +635,15 @@
 	}
 
 // -------------------------------------------------------------
-	function getNextPrev($Posted, $s)
+	function getNextPrev($id, $Posted, $s)
 	{
-		$thenext            = getNeighbour($Posted,$s,'>');
+		static $next, $cache;
+
+		if (@isset($cache[$next[$id]]))
+			$thenext = $cache[$next[$id]];
+		else
+			$thenext            = getNeighbour($Posted,$s,'>');
+
 		$out['next_id']     = ($thenext) ? $thenext['ID'] : '';
 		$out['next_title']  = ($thenext) ? $thenext['Title'] : '';
 		$out['next_utitle'] = ($thenext) ? $thenext['url_title'] : '';
@@ -648,6 +654,11 @@
 		$out['prev_title']  = ($theprev) ? $theprev['Title'] : '';
 		$out['prev_utitle'] = ($theprev) ? $theprev['url_title'] : '';
 		$out['prev_posted'] = ($theprev) ? $theprev['uposted'] : '';
+
+		if ($theprev) {
+			$cache[$theprev['ID']] = $theprev;
+			$next[$theprev['ID']] = $id;
+		}
 
 		return $out;
 	}
