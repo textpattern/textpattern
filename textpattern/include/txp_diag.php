@@ -119,12 +119,12 @@
 		:	'',
 
 		'update_still_exists' =>
-		(@file_exists($txpcfg['txpath'] . '/_update.php'))
+		(@is_readable($txpcfg['txpath'] . '/_update.php'))
 		?	$txpcfg['txpath']."/_update.php ".gTxt('still_exists')
 		:	'',
 
 		'setup_still_exists' =>
-		(@file_exists($txpcfg['txpath'] . '/setup.php'))
+		(@is_readable($txpcfg['txpath'] . '/setup.php'))
 		?	$txpcfg['txpath']."/setup.php ".gTxt('still_exists')
 		:	'',
 
