@@ -970,12 +970,22 @@
 		
 		switch($permlink_mode) {
 			case 'section_id_title':
-				return hu."$section/$thisid/$url_title";
+				if ($txpac['attach_titles_to_permalinks'])
+				{
+					return hu."$section/$thisid/$url_title";
+				}else{
+					return hu."$section/$thisid/";
+				}
 			case 'year_month_day_title':
 				list($y,$m,$d) = explode("-",date("Y-m-d",$posted));
 				return hu."$y/$m/$d/$url_title";
 			case 'id_title':
-				return hu."$thisid/$url_title";	
+				if ($txpac['attach_titles_to_permalinks'])
+				{
+					return hu."$thisid/$url_title";
+				}else{
+					return hu."$thisid/";
+				}
 			case 'section_title':
 				return hu."$section/$url_title";
 			case 'title_only':

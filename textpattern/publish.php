@@ -253,13 +253,21 @@
 							case 'title_only': 
 								$rs = lookupByTitle($u1);
 								$out['id'] = (!empty($rs['ID'])) ? $rs['ID'] : '';
-								$out['s'] = (!empty($rs['Section'])) ? $rs['Section'] : '';
+								$out['s'] = (!empty($rs['Section'])) ? $rs['Section'] : 
+										# We don't want to miss the /section/ pages	
+										ckEx('section',$u1)? $u1 : 'default';
 							break;
 
 							case 'id_title': 		
-								$rs = lookupByID($u1);
-								$out['id'] = (!empty($rs['ID'])) ? $rs['ID'] : '';
-								$out['s'] = (!empty($rs['Section'])) ? $rs['Section'] : '';
+								if (is_numeric($u1) && ckExID($u1))
+								{
+									$rs = lookupByID($u1);
+									$out['id'] = (!empty($rs['ID'])) ? $rs['ID'] : '';
+									$out['s'] = (!empty($rs['Section'])) ? $rs['Section'] : 'default';
+								}else{
+									# We don't want to miss the /section/ pages
+									$out['s']= ckEx('section',$u1)? $u1 : 'default';
+								}
 							break;
 			
 						}
