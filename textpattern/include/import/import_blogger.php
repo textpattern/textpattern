@@ -95,7 +95,7 @@ function import_blogger_item($item, $section, $status, $invite) {
 	$url_title = stripSpace(dumbDown($title));	
 
 	$body = $item['BODY'][0]['content'];
-	$body_html = $textile->textileThis($body, 1);
+	$body_html = $textile->textileThis($body);
 
 	$date = strtotime($item['DATE']);
 	$date = date('Y-m-d H:i:s', $date);
@@ -137,12 +137,12 @@ function import_blogger_item($item, $section, $status, $invite) {
 		if (!empty($item['COMMENT'])) {
 			foreach ($item['COMMENT'] as $comment) {
 				$comment_date = date('Y-m-d H:i:s', strtotime(@$comment['DATE']));
-				$comment_content = @$comment['content'];
+				$comment_content = $textile->TextileThis(nl2br(@$comment['content']),1);
 				if (!safe_field("discussid","txp_discuss","posted = '".doSlash($comment_date)."' AND message = '".doSlash($comment_content)."'")) {
 					safe_insert('txp_discuss', 
 						"parentid='".doSlash($parentid)."',".
 						//blogger places the link to user profile page as comment author
-						"name='".doSlash(strip_tags(@$item['AUTHOR']))."',".
+						"name='".doSlash(strip_tags(@$comment['AUTHOR']))."',".
 //						"email='".doSlash(@$item['EMAIL'])."',".
 //						"web='".doSlash(@$item['URL'])."',".
 //						"ip='".doSlash(@$item['IP'])."',".
