@@ -12,12 +12,18 @@
 
 //-------------------------------------------------------------
 
+	$step = gps('step');
+
+	if(!$step or !function_exists($step)){
+		prefs_list();
+	} else $step();
+
 	require_privs('prefs');
 
-	$step = ps('step');
 
-	if ($step=='save') {
-	
+// -------------------------------------------------------------
+	function prefs_save() 
+	{
 		$prefnames = safe_column("name", "txp_prefs", "prefs_id='1'");
 
 		$post = doSlash(stripPost());
@@ -37,19 +43,20 @@
 					safe_update(
 						"txp_prefs", 
 						"val = '".$post[$prefname]."'",
-						"name = '$prefname' and prefs_id ='1'"
+						"name = '$prefname' and prefs_id ='1'",1
 					);
 				}
 			}			
 		}
 		
-		$message = gTxt('preferences_saved');
+		prefs_list(gTxt('preferences_saved'));		
 	}
-	
+
+// -------------------------------------------------------------
+	function prefs_list($message='') 
+	{
 		extract(get_prefs());
 		$locale = setlocale(LC_ALL, $locale);
-		
-		$message = (isset($message)) ? $message : "";
 
 		echo 
 		pagetop(gTxt('edit_preferences'),$message),
@@ -96,11 +103,12 @@
 		tr(tda(fInput('submit','Submit',gTxt('save_button'),'publish'),
 			' colspan="3" class="noline"')),
 		endTable(),
-		sInput('save'),
+		sInput('prefs_save'),
 		eInput('prefs'),
 		hInput('prefs_id',"1"),
 		hInput('lastmod',"now()"),
-		'</form>';
+		'</form>';	
+	}
 
 
 //-------------------------------------------------------------
@@ -250,22 +258,22 @@
 	function languages($item,$var) 
 	{
 		$things = array(
-				'en-gb' => gTxt('english_gb'),
-				'en-us' => gTxt('english_us'),
-				'fr-fr' => gTxt('french'),
-				'es-es' => gTxt('spanish'),
-//	I			'de-de' => gTxt('german'),
-//	mean		'it-it' => gTxt('italian'),
-//	let's		'pt-pt' => gTxt('portuguese'),
-//	be			'fi-fi' => gTxt('finnish'),
-//	realistic	'sv-sv' => gTxt('swedish'),
-//	here		'ru-ru' => gTxt('russian'),
-//	- dca		'du-du' => gTxt('dutch'),
-//				'da-da' => gTxt('danish'),
-//				'po-po' => gTxt('polish'),
-//				'tl-tl' => gTxt('tagalog'),
-//				'cs-cs' => gTxt('czech'),
-//				'gl-gl' => gTxt('scots')
+			'en-gb' => gTxt('english_gb'),
+			'en-us' => gTxt('english_us'),
+			'fr-fr' => gTxt('french'),
+			'es-es' => gTxt('spanish'),
+			'sv-sv' => gTxt('swedish'),
+			'it-it' => gTxt('italian'),
+//			'de-de' => gTxt('german'),
+//			'pt-pt' => gTxt('portuguese'),
+//			'fi-fi' => gTxt('finnish'),
+//			'ru-ru' => gTxt('russian'),
+//			'du-du' => gTxt('dutch'),
+//			'da-da' => gTxt('danish'),
+//			'po-po' => gTxt('polish'),
+//			'tl-tl' => gTxt('tagalog'),
+//			'cs-cs' => gTxt('czech'),
+//			'gl-gl' => gTxt('scots')
 		);
 			asort($things);
 			reset($things);

@@ -259,6 +259,7 @@ password => password
 password_changed => Password changed
 password_sent_to => Password sent to
 path_from_root => Subdirectory (if any)
+path_to_site_missing = > $path_to_site is not set (update index.php)
 pending => Pending
 permanent_link => Permanent link to this article
 permlink => Permanent link
