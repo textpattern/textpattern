@@ -1,11 +1,22 @@
+# There are several ways of doing clean URLs
+# The idea is to either have an extentionless file execute as php
+## You can set the DefaultType in the Apache web server to what your php
+## is called, for example
+
+## DefaultType application/x-httpd-php
+
+# Or to a .php file be called up in the browser, give your sections file
+## the php extension and use content negiotiation. In Zeus, this on by
+## default (generally) and in Apache (if mod_negiotiation is on)
+
+## Options +Multiviews
+
+# Another way is to force extensionless files to be php (whatever the server)
+# may refer to it
+
+#	<FilesMatch "^([^\.]+)$">
+#       	 ForceType application/x-httpd-php
+#	</FilesMatch>
+
+## Adding this line can make it run as mod_php
 #AddType application/x-httpd-php .html .htm .php
-#DirectoryIndex index.html index.php
-
-#<Files about>
-#	ForceType application/x-httpd-php
-#</Files>
-
-#<Files article>
-#	ForceType application/x-httpd-php
-#</Files>
-
