@@ -16,19 +16,23 @@
 		$out['uri'] = $_SERVER['REQUEST_URI'];
 		$out['ref'] = clean_url(str_replace("http://","",serverset('HTTP_REFERER')));
 		$host = $ip = $_SERVER['REMOTE_ADDR'];
+
 		if (!empty($txpac['use_dns'])) {
-			// Double-check the rDNS
-			$host = @gethostbyaddr($_SERVER['REMOTE_ADDR']);
-			if ($host != $ip and @gethostbyname($host) != $ip)
-				$host = $ip;
-			// Confirm that the referrer domain exists
-			if (trim($out['ref'])) {
-				$p = parse_url(serverset('HTTP_REFERER'));
-				if (isset($p['host']) and $p['host'] != $mydomain and @gethostbyname($p['host']) == $p['host'])
-					$out['ref'] = '';
+			// A crude rDNS cache
+			if ($h = safe_field('host', 'txp_log', "ip='".doSlash($ip)."'")) {
+				$host = $h;
+			}
+			else {
+				// Double-check the rDNS
+				$host = @gethostbyaddr($_SERVER['REMOTE_ADDR']);
+				if ($host != $ip and @gethostbyname($host) != $ip)
+					$host = $ip;
 			}
 		}
-		$out['ip'] = $host;
+		$out['ip'] = $ip;
+		$out['host'] = $host;
+		$out['status'] = 200; // FIXME
+		$out['method'] = $_SERVER['REQUEST_METHOD'];
 		if (preg_match("/^[^\.]*\.?$mydomain/i", $out['ref'])) $out['ref'] = "";
 		
 		if ($r=='refer') {
@@ -42,7 +46,7 @@
 		global $DB;
 		$in = doSlash($in);
 		extract($in);
-		safe_insert("txp_log", "`time`=now(),page='$uri',host='$ip',refer='$ref'");
+		safe_insert("txp_log", "`time`=now(),page='$uri',ip='$ip',host='$host',refer='$ref',status='$status',method='$method'");
 	}
 
 ?>

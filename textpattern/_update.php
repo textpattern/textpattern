@@ -359,11 +359,20 @@ eod;
 	if (!in_array('secret', $txpnonce))
 		safe_alter('txp_discuss_nonce', "ADD `secret` varchar(255) NOT NULL default ''");
 
+	// 1.0: flag for admin-side plugins
 	$txpplugin = getThings('describe '.PFX.'txp_plugin');
 	if (!in_array('type', $txpplugin))
 		safe_alter('txp_plugin', "ADD `type` int(2) NOT NULL default '0'");
 
-	// 1.0: flag for admin-side plugins
+	// 1.0: log status & method
+	$txplog = getThings('describe '.PFX.'txp_log');
+	if (!in_array('status', $txplog))
+		safe_alter('txp_log', "ADD `status` int NOT NULL default '200'");
+	if (!in_array('method', $txplog))
+		safe_alter('txp_log', "ADD `method` varchar(16) NOT NULL default 'GET'");
+	if (!in_array('ip', $txplog))
+		safe_alter('txp_log', "ADD `ip` varchar(16) NOT NULL default ''");
+
 
 // updated, baby.
 
