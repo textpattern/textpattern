@@ -136,13 +136,13 @@
 	function gps($thing) // checks GET and POST for a named variable, or creates it blank
 	{
 		if (isset($_GET[$thing])) {
-			if (get_magic_quotes_runtime()) {
+			if (get_magic_quotes_gpc()) {
 				return doStrip(urldecode($_GET[$thing]));
 			} else {
 				return urldecode($_GET[$thing]);
 			}
 		} elseif (isset($_POST[$thing])) {
-			if (get_magic_quotes_runtime()) {
+			if (get_magic_quotes_gpc()) {
 				return doStrip($_POST[$thing]);
 			} else {
 				return $_POST[$thing];
