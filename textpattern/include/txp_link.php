@@ -170,7 +170,12 @@
 			description = '$description'"
 		);
 
-		if ($q) link_edit(messenger('link',$linkname,'created'));
+		if ($q) {
+			//update lastmod due to link feeds
+			safe_update("txp_prefs", "val = now()", "`name` = 'lastmod'");
+			
+			link_edit(messenger('link',$linkname,'created'));			
+		}
 	}
 
 // -------------------------------------------------------------
