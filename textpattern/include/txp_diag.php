@@ -63,67 +63,79 @@
 		return in_array($m, $modules);
 	}
 
-	$fail = array();
-
 	$urlparts = parse_url(hu);
 	$mydomain = $urlparts['host'];
 	
 	$fail = array(
 
+		'path_to_site_missing' =>
 		(!isset($path_to_site))
-		? gTxt('path_to_site_missing').pophelp('path_to_site_missing')
+		? gTxt('path_to_site_missing')
 		: '',
-	
+
+		'dns_lookup_fails' =>	
 		(@gethostbyname($mydomain) == $mydomain)
-		?	gTxt('dns_lookup_fails').cs. $mydomain.pophelp('dns_lookup_fails')
+		?	gTxt('dns_lookup_fails').cs. $mydomain
 		:	'',
 
+		'path_not_doc_root' =>
 		(0 !== strncmp(realpath($_SERVER['DOCUMENT_ROOT']), realpath($path_to_site), strlen($_SERVER['DOCUMENT_ROOT'])))
-		?	gTxt('path_not_doc_root').' [ '.$_SERVER['DOCUMENT_ROOT'].' ] '.pophelp('path_not_doc_root')
+		?	gTxt('path_not_doc_root').' [ '.$_SERVER['DOCUMENT_ROOT'].' ] '
 		:	'',
 
+		'path_to_site_inacc' =>
 		(!@is_dir($path_to_site))
-		?	gTxt('path_to_site_inacc').cs.$path_to_site.pophelp('path_to_site_inacc')
+		?	gTxt('path_to_site_inacc').cs.$path_to_site
 		: 	'',
 
+		'site_trailing_slash' =>
 		(rtrim($siteurl, '/') != $siteurl)
-		?	gTxt('site_trailing_slash').cs.$path_to_site.pophelp('site_trailing_slash')
+		?	gTxt('site_trailing_slash').cs.$path_to_site
 		:	'',
 
+		'index_inaccessible' =>
 		(!@is_file($path_to_site."/index.php") or !@is_readable($path_to_site."/index.php"))
-		?	"{$path_to_site}/index.php ".gTxt('is_inaccessible').pophelp('index_inaccessible')
+		?	"{$path_to_site}/index.php ".gTxt('is_inaccessible')
 		:	'',
 
+		'img_dir_read_only' =>
 		(!@is_writable($path_to_site.'/'.$img_dir))
-		?	gTxt('img_dir_read_only').": {$path_to_site}/{$img_dir}".pophelp('img_dir_read_only')
+		?	gTxt('img_dir_read_only').": {$path_to_site}/{$img_dir}"
 		:	'',
-	
+
+		'htaccess_missing' =>	
 		($url_mode and !@is_readable($path_to_site.'/.htaccess'))
-		?	gTxt('htaccess_missing').pophelp('htaccess_missing')
+		?	gTxt('htaccess_missing')
 		:	'',
 
+		'mod_rewrite_missing' =>
 		($url_mode and is_callable('apache_get_modules') and !apache_module('mod_rewrite'))
-		? gTxt('mod_rewrite_missing').pophelp('mod_rewrite_missing')
+		? gTxt('mod_rewrite_missing')
 		: '',
 
+		'file_uploads_disabled' =>
 		(!ini_get('file_uploads'))
-		?	gTxt('file_uploads_disabled').pophelp('file_uploads_disabled')
+		?	gTxt('file_uploads_disabled')
 		:	'',
 
+		'update_still_exists' =>
 		(@file_exists($txpcfg['txpath'] . '/_update.php'))
-		?	$txpcfg['txpath']."/_update.php ".gTxt('still_exists').pophelp('update_still_exists')
+		?	$txpcfg['txpath']."/_update.php ".gTxt('still_exists')
 		:	'',
 
+		'setup_still_exists' =>
 		(@file_exists($txpcfg['txpath'] . '/setup.php'))
-		?	$txpcfg['txpath']."/setup.php ".gTxt('still_exists').pophelp('setup_still_exists')
+		?	$txpcfg['txpath']."/setup.php ".gTxt('still_exists')
 		:	'',
 
+		'no_temp_dir' =>
 		(empty($tempdir))
-		? gTxt('no_temp_dir').pophelp('no_temp_dir')
+		? gTxt('no_temp_dir')
 		: '',
 
+		'temp_dir_read_only' =>
 		(!@tempnam(@$tempdir, 'txp_'))
-		? gTxt('temp_dir_read_only').pophelp('temp_dir_read_only')
+		? gTxt('temp_dir_read_only')
 		: '',
 
 	);
@@ -132,10 +144,12 @@
 		$rs = safe_column("name","txp_section", "1");
 		foreach ($rs as $name) {
 			if (@file_exists($path_to_site.'/'.$name))
-				$fail[] = gTxt('old_placeholder').": {$path_to_site}/{$name}".pophelp('old_placeholder_exists');
+				$fail['old_placeholder_exists'] = gTxt('old_placeholder').": {$path_to_site}/{$name}";
 		}
 	}
 
+	foreach ($fail as $k=>$v)
+		if (empty($v)) unset($fail[$k]);
 
 	echo 
 	pagetop(gTxt('tab_diagnostics'),$message),
@@ -144,8 +158,8 @@
 
 
 	if ($fail) {
-		foreach ($fail as $message)
-			echo tr(tda($message, ' style="color:red;"'));
+		foreach ($fail as $help => $message)
+			echo tr(tda($message . popHelp($help), ' style="color:red;"'));
 	}
 	else {
 		echo tr(td(gTxt('all_checks_passed')));
@@ -187,8 +201,12 @@
 
 		(is_callable('apache_get_version')) ? gTxt('apache_version').cs.apache_get_version().n : '',
 
+		$fail
+		? n.gTxt('preflight_check').cs.n.ln.join("\n", $fail).n.ln
+		: '',
+
 		(is_readable($path_to_site.'/.htaccess')) 
-		?	n.gTxt('htaccess_contents').cs.n.ln.join('',file($path_to_site.'/.htaccess')).ln 
+		?	n.gTxt('htaccess_contents').cs.n.ln.join('',file($path_to_site.'/.htaccess')).n.ln 
 		:	''
 	);
 
