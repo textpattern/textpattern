@@ -64,14 +64,14 @@
 		$forms = ps('selected_forms');
 
 		if (is_array($forms)) {
-			foreach($forms as $name) {
-				if ($method == 'delete') {
+			if ($method == 'delete') {
+				foreach($forms as $name) {
 					if (form_delete($name)) {
 						$deleted[] = $name;
 					}
 				}
-			}
 			form_edit(messenger('form',join(', ',$deleted),'deleted'));
+			}
 		} else form_edit('nothing to delete');
 	}
 
