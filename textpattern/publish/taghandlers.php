@@ -960,7 +960,7 @@
 		global $permlink_mode, $txpac;
 
 		if (isset($txpac['custom_url_func']) and is_callable($txpac['custom_url_func']))
-			return call_user_func($txpac['custom_url_func']);
+			return call_user_func($txpac['custom_url_func'], $article_array);
 
 		extract($article_array);
 		
@@ -981,7 +981,7 @@
 			case 'title_only':
 				return hu."$url_title";	
 			case 'messy':
-				return hu."?id=$thisid";	
+				return hu."index.php?id=$thisid";	
 		}
 	}
 	
