@@ -179,7 +179,8 @@
 		$rs = safe_rows("*","txp_link",join(' ',$qparts));
 	
 		if ($rs) {
-			$outlist[] = ($label) ? $label : '';
+			if ($label)
+				$outlist[] = $label;
 		
 			foreach ($rs as $a) {
 				extract($a);
