@@ -483,18 +483,23 @@
 // -------------------------------------------------------------
 	function search_input($atts) // input form for search queries
 	{
+		global $q,$pfr;
 		extract(lAtts(array(
-			'form' => 'search_input'
+			'form' => 'search_input',
+			'wraptag'  => 'p',
+			'size'  => '15',
+			'label'  => 'Search',
+			'button' => ''
 		),$atts));	
 
 		if ($form) {
 			$rs = fetch('form','txp_form','name',$form);
-			return ($rs) ? $rs : 'search form not found';
+			if ($rs) {
+				return $rs;
+			}
 		}
 
-		$size = (!empty($size)) ? $size : '15'; 
 		$sub = (!empty($button)) ? '<input type="submit" value="'.$button.'" />' : '';
-
 		$out = fInput('text','q',$q,'','','',$size);
 		$out = (!empty($label)) ? $label.br.$out.$sub : $out.$sub;
 		$out = ($wraptag) ? tag($out,$wraptag) : $out;
