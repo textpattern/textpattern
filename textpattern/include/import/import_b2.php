@@ -3,6 +3,7 @@
 	
 	function doImportB2($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $insert_into_section, $insert_with_status, $default_comment_invite)
 	{
+
 		global $txpcfg;
 		//Keep some response on some part
 		$results = array();	
@@ -36,6 +37,7 @@
 				".$tablecategories.".cat_ID = ".$tableposts.".post_category 
 			left join ".$tableusers." on 
 				".$tableusers.".ID = ".$tableposts.".post_author
+            ORDER BY post_date DESC
 		",$b2link) or $results[]= mysql_error();
 		
 		while($b=mysql_fetch_array($a)) {
@@ -83,8 +85,24 @@
 			foreach($articles as $a){	
 				if (is_callable('utf8_encode'))
                 {
-					$a['Body'] = utf8_encode($a['Body']);
+                    // Also fixing break-tags for users with b2s Auto-BR
+					$a['Body'] = utf8_encode(str_replace("<br />\n","\n",$a['Body']));
 					$a['Title'] = utf8_encode($a['Title']);
+            		$a['Title'] = $textile->TextileThis($a['Title'],'',1);
+                }
+                // b2 uses the magic word "<!--more-->" to generate excerpts
+                if (strpos($a['Body'],'<!--more-->')) 
+                {
+                    //Everything that is before "more" can be treated as the excerpt.
+                    $pos = strpos($a['Body'],'<!--more-->');
+                    $a['Excerpt'] = substr($a['Body'],0,$pos);
+                    $a['Excerpt_html'] = $textile->textileThis($a['Excerpt']);
+                    $a['Body'] = str_replace('<!--more-->','',$a['Body']);
+                }
+                else
+                {
+                    $a['Excerpt'] = '';
+                    $a['Excerpt_html'] = '';
                 }
 				$a['Body_html'] = $textile->textileThis($a['Body']);
 				extract(array_slash($a));
@@ -93,8 +111,11 @@
 					ID        = '$ID',
 					Posted    = '$Posted',
 					Title     = '$Title',
+                    url_title = '$url_title',
 					Body      = '$Body',
 					Body_html = '$Body_html',
+					Excerpt   = '$Excerpt',
+					Excerpt_html = '$Excerpt_html',
 					Category1 = '$Category1',
 					AuthorID  = '$AuthorID',
 					Section   = '$insert_into_section',
