@@ -81,7 +81,10 @@
 		
 					$e['issued'] = tag(gmdate("Y-m-d\TH:i:s\Z",$uPosted),'issued');
 					$e['modified'] = tag(gmdate("Y-m-d\TH:i:s\Z",$uLastMod),'modified');
-					$e['title'] = tag(htmlspecialchars($Title,ENT_NOQUOTES).$count,'title');
+					$escaped_title = preg_replace("/&(?![#a-z0-9]+;)/i",'&amp;', $Title);
+					$escaped_title = str_replace('<','&lt;',$escaped_title);
+					$escaped_title = str_replace('>','&gt;',$escaped_title);
+					$e['title'] = tag($escaped_title.$count,'title');
 
 					$uTitle = ($url_title) ? $url_title : stripSpace($Title);
 					$uTitle = htmlspecialchars($uTitle,ENT_NOQUOTES);
