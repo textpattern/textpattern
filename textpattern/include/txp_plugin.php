@@ -180,6 +180,7 @@
 				if(is_array($plugin)){
 	
 					extract(doSlash($plugin));
+					if (empty($type)) $type = 0;
 	
 					$exists = fetch('name','txp_plugin','name',$name);
 	
@@ -187,6 +188,7 @@
 						$rs = safe_update(
 						   "txp_plugin",
 							"status      = 0,
+							type         = '$type',
 							author       = '$author',
 							author_uri   = '$author_uri',
 							version      = '$version',
@@ -204,6 +206,7 @@
 						   "txp_plugin",
 						   "name         = '$name',
 							status       = 0,
+							type         = '$type',
 							author       = '$author',
 							author_uri   = '$author_uri',
 							version      = '$version',

@@ -359,6 +359,12 @@ eod;
 	if (!in_array('secret', $txpnonce))
 		safe_alter('txp_discuss_nonce', "ADD `secret` varchar(255) NOT NULL default ''");
 
+	$txpplugin = getThings('describe '.PFX.'txp_plugin');
+	if (!in_array('type', $txpplugin))
+		safe_alter('txp_plugin', "ADD `type` int(2) NOT NULL default '0'");
+
+	// 1.0: flag for admin-side plugins
+
 // updated, baby.
 
 ?>

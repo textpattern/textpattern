@@ -53,7 +53,7 @@
 	
 		include txpath.'/include/txp_auth.php';
 		if ($txpac['use_plugins'] and gps('event') != 'plugin')
-			load_plugins();
+			load_plugins(1);
 		include txpath.'/lib/txplib_head.php';
 	
 		$event = (gps('event') ? gps('event') : 'article');

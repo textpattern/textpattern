@@ -278,7 +278,7 @@ else
     }
 
 // -------------------------------------------------------------
-   function load_plugins()
+   function load_plugins($type=NULL)
    {
 		global $txpac;
 
@@ -291,7 +291,11 @@ else
 			}
 		}
 
-		$rs = safe_column("code", "txp_plugin", "status=1");
+		$where = "status='1'";
+		if ($type !== NULL)
+			$where .= (" and type='".doSlash($type)."'");
+
+		$rs = safe_column("code", "txp_plugin", $where);
 		if ($rs) {
 			foreach($rs as $a)
 				$plugins[] = $a;
