@@ -203,7 +203,7 @@
 
 		(ini_get('upload_tmp_dir')) ? 'upload_tmp_dir: '.ini_get('upload_tmp_dir').n : '',
 
-		gTxt('tmp_dir').cs.$tempdir.n,
+		gTxt('tempdir').cs.$tempdir.n,
 
 		gTxt('web_domain').cs.$siteurl.n,
 
