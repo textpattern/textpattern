@@ -11,7 +11,7 @@
 // -------------------------------------------------------------
 	function atom() 
 	{
-		global $txpac;
+		global $txpac, $thisarticle;
 		extract($GLOBALS['prefs']);
 		define("textplain",' type="text/plain"');
 		define("texthtml",' type="text/html"');
@@ -93,14 +93,11 @@
 					$e['subject'] = tag(htmlspecialchars($Category1),'dc:subject');
 					
 						// pull Body or Excerpt?
-					$Body = (!$txpac['syndicate_body_or_excerpt']) ? $Body_html : $Excerpt;
+					$Body = (!$txpac['syndicate_body_or_excerpt']) ? $thisarticle['body'] : $thisarticle['excerpt'];
 	
 						// if Excerpt is empty, switch back to Body_html
-					$Body = (!trim($Body)) ? $Body_html : $Body; 
+					$Body = (!trim($Body)) ? $thisarticle['body'] : $Body; 
 
-						// parse
-					$Body = parse($Body);
-					
 						// fix relative urls
 					$Body = str_replace('href="/','href="'.hu.'/',$Body);
 	

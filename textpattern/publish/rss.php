@@ -12,7 +12,7 @@
 // -------------------------------------------------------------
 	function rss()
 	{
-		global $prefs,$txpac;
+		global $prefs,$txpac,$thisarticle;
 		extract($prefs);
 		ob_start();
 
@@ -63,9 +63,8 @@
 
 					$a['posted'] = $uPosted;
 
-					$Body = (!$txpac['syndicate_body_or_excerpt']) ? $Body_html : $Excerpt;
-					$Body = (!trim($Body)) ? $Body_html : $Body;
-					$Body = parse($Body);
+					$Body = (!$txpac['syndicate_body_or_excerpt']) ? $thisarticle['body'] : $thisarticle['excerpt'];
+					$Body = (!trim($Body)) ? $thisarticle['body'] : $Body;
 					$Body = str_replace('href="/','href="http://'.$siteurl.'/',$Body);
 					$Body = preg_replace(array('/</','/>/',"/'/",'/"/'), array('&lt;','&gt;','&#039;','&quot;'),$Body);
 					
