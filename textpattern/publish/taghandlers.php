@@ -432,7 +432,7 @@
 				$rs = safe_column(
 					'name',
 					'txp_category',
-					"name != 'default' and type='article' and (lft between $lft and $rgt) order by lft asc"			
+					"name != 'default' and type='$type' and (lft between $lft and $rgt) order by lft asc"			
 				);
 			}
 
@@ -441,7 +441,7 @@
 			$rs = safe_column(
 				"name", 
 				"txp_category",
-				"name != 'default' and type='article' order by name"
+				"name != 'default' and type='$type' order by name"
 			);
 		}
 
