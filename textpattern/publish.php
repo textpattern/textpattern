@@ -585,6 +585,7 @@
 		$out['comments_invite'] = $AnnotateInvite;
 		$out['comments_count']  = $com_count;					  
 		$out['author']          = $author;
+		$out['authorid']        = $AuthorID;
 		$out['excerpt']         = $Excerpt_html;
 		$out['title']           = $Title;
 		$out['url_title']       = $url_title;

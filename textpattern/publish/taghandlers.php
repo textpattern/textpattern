@@ -1200,7 +1200,7 @@
 		}
 		else {
 			if (!empty($txpac['allow_article_php_scripting'])
-				and has_privs('article.php', $thisarticle['author']))
+				and has_privs('article.php', $thisarticle['authorid']))
 				eval($thing);
 		}
 		return ob_get_clean();
