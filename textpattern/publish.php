@@ -247,7 +247,7 @@
 							case 'section_title': 
 								$rs = lookupByTitleSection($u2,$u1);
 								$out['id'] = (!empty($rs['ID'])) ? $rs['ID'] : '';
-								$out['s'] = (!empty($rs['Section'])) ? $rs['Section'] : '';
+								$out['s'] = (ckEx('section',$u1)) ? $u1 : 'default';
 							break;
 							
 							case 'title_only': 
