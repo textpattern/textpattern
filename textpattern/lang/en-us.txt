@@ -531,6 +531,7 @@ php_extensions => PHP extensions
 register_globals => Register globals
 path_to_site_missing = > $path_to_site is not set (update index.php)
 mod_rewrite_missing => Apache module mod_rewrite is not installed
+missing_files => Missing files
 # detail view popup
 detail => Detail
 low => low
