@@ -318,8 +318,9 @@ eod;
 
 	// 1.0: txp_file root cat
 	if (!safe_field('name', 'txp_category',"type='file' AND name='root'")){
-		safe_insert('txp_category',"name='root',type='file',lft=1,rgt=2");
+		safe_insert('txp_category',"name='root',type='file',lft=1,rgt=0");
 	}
+	rebuild_tree('root',1,'file');
 	
 	// 1.0: txp_file folder
 	if (!safe_field('val', 'txp_prefs',"name='file_base_path'")){
