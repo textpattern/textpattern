@@ -1,5 +1,9 @@
 <?php
 
+if (defined('DIRECTORY_SEPARATOR'))
+	define('DS', DIRECTORY_SEPARATOR);
+else
+	define ('DS', (is_windows() ? '\\' : '/'));
 
 // -------------------------------------------------------------
 	function doArray($in,$function)
@@ -554,12 +558,12 @@
 		global $path_to_site, $img_dir;
 
 		if (is_windows()) {
-			$guess = array(getenv('TMP'), getenv('TEMP'), getenv('SystemRoot').'\Temp', 'C:\Temp', txpath . '\tmp', $path_to_site . '\\' . $img_dir);
+			$guess = array(txpath.DS.'tmp', getenv('TMP'), getenv('TEMP'), getenv('SystemRoot').DS.'Temp', 'C:'.DS.'Temp', $path_to_site.DS.$img_dir);
 			foreach ($guess as $k=>$v)
 				if (empty($v)) unset($guess[$k]);
 		}
 		else
-			$guess = array('', '/tmp', txpath . '/tmp', $path_to_site.'/'.$img_dir);
+			$guess = array(txpath.DS.'tmp', '', DS.'tmp', $path_to_site.DS.$img_dir);
 
 		foreach ($guess as $dir) {
 			$tf = realpath(@tempnam($dir, 'txp_'));
@@ -573,16 +577,21 @@
 	}
 
 // -------------------------------------------------------------
-	function get_uploaded_file($f)
+	function get_uploaded_file($f, $dest='')
 	{
 		global $tempdir;
 
 		if (!is_uploaded_file($f))
 			return false;
 
-		$newfile = @tempnam($tempdir, 'txp_');
-		if (!$newfile)
-			return false;
+		if ($dest) {
+			$newfile = $dest;
+		}
+		else {
+			$newfile = @tempnam($tempdir, 'txp_');
+			if (!$newfile)
+				return false;
+		}
 
 		# $newfile is created by tempnam(), but move_uploaded_file
 		# will overwrite it

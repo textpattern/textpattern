@@ -302,7 +302,7 @@ eod;
 
 	// 1.0: temp dir
 	if (!safe_field('val','txp_prefs',"name='tempdir'")) {
-		$tempdir = find_temp_dir();
+		$tempdir = addslashes(find_temp_dir());
 		safe_insert('txp_prefs',"prefs_id=1,name='tempdir',val='$tempdir'");
 	}
 
