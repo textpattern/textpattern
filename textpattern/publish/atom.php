@@ -32,7 +32,7 @@
 		$out[] = '<link'.relalt.texthtml.' href="http://'.$siteurl.$path_from_root.'" />';
 		$out[] = tag('tag:'.$siteurl.','.date("Y").':/','id');
 		$out[] = tag('Textpattern','generator',
-			' url="http://textpattern.com" version="g1.17"');
+			' url="http://textpattern.com" version="'.$version.'"');
 		$out[] = tag(date("Y-m-d\TH:i:s\Z",$last),'modified');
 
 		$pub = safe_row("RealName, email", "txp_users", "privs=1");
