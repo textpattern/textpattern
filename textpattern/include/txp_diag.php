@@ -86,7 +86,7 @@
 		:	'',
 
 		(!@is_writable($path_to_site.'/'.$img_dir))
-		?	gTxt('img_dir_read_only').": $path_to_site}/{$img_dir}".pophelp('img_dir_read_only')
+		?	gTxt('img_dir_read_only').": {$path_to_site}/{$img_dir}".pophelp('img_dir_read_only')
 		:	'',
 	
 		($url_mode and !@is_readable($path_to_site.'/.htaccess'))
