@@ -173,7 +173,7 @@
 		:	''
 	);
 
-	if ($step) {
+	if ($step == 'high') {
 		$extns = get_loaded_extensions();
 		$extv = array();
 		foreach ($extns as $e) {
