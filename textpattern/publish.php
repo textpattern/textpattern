@@ -440,8 +440,8 @@
 			// send paging info to txp:newer and txp:older
 			$pageout['pg']       = $pg;
 			$pageout['numPages'] = $numPages;
-			$pageout['s']        = $section;
-			$pageout['c']        = $category;
+			$pageout['s']        = $s;
+			$pageout['c']        = $c;
 	
 			$GLOBALS['thispage'] = $pageout;
 		}else{
