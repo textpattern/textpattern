@@ -373,6 +373,17 @@ eod;
 	if (!in_array('ip', $txplog))
 		safe_alter('txp_log', "ADD `ip` varchar(16) NOT NULL default ''");
 
+	// 1.0: need to get Excerpt_html values into the textpattern table,
+	// so, catch empty ones and populate them
+	$rs = mysql_query("select ID, Excerpt, textile_excerpt from ".PFX."textpattern where Excerpt_html like ''");
+	require_once txpath.'/lib/classTextile.php';
+	$textile = new Textile();
+	while ($a = mysql_fetch_assoc($rs)){		
+		extract($a);		
+		$lite = ($textile_excerpt)? '' : 1;
+		$Excerpt_html = $textile->TextileThis($Excerpt,$lite);
+		safe_update("textpattern","Excerpt_html = '$Excerpt_html'","ID=$ID");
+	}
 
 // updated, baby.
 
