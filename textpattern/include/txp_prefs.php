@@ -284,10 +284,10 @@
 			'no-no' => gTxt('norwegian'),
 			'ru-ru' => gTxt('russian'),
 			'th-th' => gTxt('thai'),
+			'da-dk' => gTxt('danish'),
+			'nl-nl' => gTxt('dutch'),
 //			'pt-pt' => gTxt('portuguese'),
 //			'fi-fi' => gTxt('finnish'),
-//			'du-du' => gTxt('dutch'),
-//			'da-da' => gTxt('danish'),
 //			'po-po' => gTxt('polish'),
 //			'tl-tl' => gTxt('tagalog'),
 //			'gl-gl' => gTxt('scots')
