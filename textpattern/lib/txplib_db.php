@@ -309,6 +309,8 @@ $DB = new DB;
 // -------------------------------------------------------------
 	function db_down() 
 	{
+		// 503 status might discourage search engines from indexing or caching the error message
+		header('Status: 503 Service Unavailable');
 		return <<<eod
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
