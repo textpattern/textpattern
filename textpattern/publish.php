@@ -457,7 +457,7 @@
 			"textpattern",
 			"1 and Status=4 and Posted < now() ".
 			$category . $section . $excerpted . $month . $author . $keywords . $custom . $frontpage .
-			' order by ' . $sortby . ' ' . $sortdir . ' limit ' . $limit, 1
+			' order by ' . $sortby . ' ' . $sortdir . ' limit ' . $limit
 		);
 
 		if ($rs) {
