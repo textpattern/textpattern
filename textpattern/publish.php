@@ -459,6 +459,7 @@
 
 		if ($rs) {
 			
+			$articles = array();
 			while($a = nextRow($rs)) {
 				extract($a);
 				populateArticleData($a);
