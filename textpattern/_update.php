@@ -354,6 +354,11 @@ eod;
 	safe_delete('txp_prefs',"name = 'dbupdatetime'");
 	safe_insert('txp_prefs', "prefs_id=1, name='dbupdatetime',val='".time()."'");
 
+	// 1.0: improved comment spam nonce
+	$txpnonce = getThings('describe '.PFX.'txp_discuss_nonce');
+	if (!in_array('secret', $txpnonce))
+		safe_alter('txp_discuss_nonce', "ADD `secret` varchar(255) NOT NULL default ''");
+
 // updated, baby.
 
 ?>

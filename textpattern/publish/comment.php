@@ -152,7 +152,8 @@
 			$email = ps( 'email' );
 			$web   = ps( 'web' );		
 			$nonce = md5( uniqid( rand(), true ) );
-			safe_insert("txp_discuss_nonce", "issue_time=now(), nonce='$nonce'");
+			$secret = md5( uniqid( rand(), true ) );
+			safe_insert("txp_discuss_nonce", "issue_time=now(), nonce='$nonce', secret='$secret'");
 
 			$namewarn = ($txpac['comments_require_name'])
 			?	(!trim($name)) 
