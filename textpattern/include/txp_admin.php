@@ -85,7 +85,7 @@
 			if ($rs) {
 				$message .= gTxt('password_changed');
 				if ($_POST['mailpassword']==1) {
-					send_new_password($NewPass,$themail,$nameauthor_change_pass);
+					send_new_password($NewPass,$themail,$txp_user);
 					$message .= sp.gTxt('and_mailed_to').sp.$themail;
 				}
 				$message .= ".";
