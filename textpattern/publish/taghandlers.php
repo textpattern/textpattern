@@ -276,7 +276,7 @@
 			or Category2='".doSlash($category)."')" : '';
 
 		$rs = safe_rows(
-			"*", 
+			"*, id as thisid, unix_timestamp(Posted) as posted", 
 			"textpattern", 
 			"Status = 4 and Posted <= now() $catq order by $sortby $sortdir limit 0,$limit"
 		);
