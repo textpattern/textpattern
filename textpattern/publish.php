@@ -375,7 +375,7 @@
 		//the listform
 		$form = gAtt($atts, 'listform', $form);		
 		// might be a form preview, otherwise grab it from the db
-		$Form = (isset($_POST['Form']))
+		$form = (isset($_POST['Form']))
 		?	gps('Form')
 		:	safe_field('Form','txp_form',"name='$form'");
 
@@ -387,7 +387,7 @@
 				// define the article form
 				$article = (!$iscustom and $override_form) 
 				?	fetch('Form','txp_form','name',$override_form)
-				:	$Form;
+				:	$form;
 
 				$articles[] = parse($article);
 				
