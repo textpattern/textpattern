@@ -242,7 +242,7 @@
 	function discuss_multiedit_form() 
 	{
 		$method = ps('method');
-		$methods = array('delete'=>'delete');
+		$methods = array('delete'=>gTxt('delete'));
 		return
 			gTxt('with_selected').sp.selectInput('method',$methods,$method,1).
 			eInput('discuss').sInput('discuss_multi_edit').fInput('submit','',gTxt('go'),'smallerbox');

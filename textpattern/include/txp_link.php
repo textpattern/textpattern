@@ -229,7 +229,7 @@
 	function link_multiedit_form() 
 	{
 		$method = ps('method');
-		$methods = array('delete'=>'delete');
+		$methods = array('delete'=>gTxt('delete'));
 		return
 			gTxt('with_selected').sp.selectInput('method',$methods,$method,1).
 			eInput('link').sInput('link_multi_edit').fInput('submit','',gTxt('go'),'smallerbox');

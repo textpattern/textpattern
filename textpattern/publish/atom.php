@@ -19,7 +19,7 @@
 		define('appxhtml',' type="application/xhtml+xml"');
 		define("divxhtml",'<div xmlns="http://www.w3.org/1999/xhtml">');
 		
-		$area = gps('area');
+		$area = doSlash(gps('area'));
 		extract(doSlash(gpsa(array('category','section','limit'))));
 		
 		$last = fetch('unix_timestamp(val)','txp_prefs','name','lastmod');

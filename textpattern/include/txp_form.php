@@ -27,7 +27,7 @@
 
 		$out[] = assHead('form','type','');
 		
-		$methods = array('delete'=>'delete');
+		$methods = array('delete'=>gTxt('delete'));
 
 
 		$rs = safe_rows("*", "txp_form", "1 order by name");

@@ -119,7 +119,7 @@
 //-------------------------------------------------------------
 	function page_delete()
 	{
-		$name = ps('name');
+		$name = doSlash(ps('name'));
 		safe_delete("txp_page","name='$name'");
 		page_edit(messenger('page',$name,'deleted'));
 	}
@@ -151,7 +151,7 @@
 // -------------------------------------------------------------
 	function extract_div() 
 	{
-		extract(gpsa(array('name','div')));
+		extract(doSlash(gpsa(array('name','div'))));
 		$name = (!$name) ? 'default' : $name;
 		$html = safe_field('user_html','txp_page',"name='$name'");
 		
@@ -197,7 +197,7 @@
 		
 		array_splice($html_array,$start_pos,($stop_pos - $start_pos)+1,$repl_array);
 		
-		$html = addslashes(join('',$html_array));
+		$html = doSlash(join('',$html_array));
 		
 		safe_update("txp_page","user_html='$html'", "name='$name'");
 

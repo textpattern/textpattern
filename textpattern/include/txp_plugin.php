@@ -17,6 +17,7 @@
       case "edit": edit_plugin(); break;
       case "switch_status": switch_status(); break;
       case "plugin_save": plugin_save(); break;
+		case "plugin_verify": plugin_verify(); break;
       case "plugin_install": plugin_install(); break;
       case "view_hilighted": view_hilighted(); break;
       case "view_help": view_help(); break;
@@ -92,7 +93,7 @@
 		$thing = ($code)
 		?	$code
 		:	'';
-		$textarea = '<textarea name="code" rows="30" cols="90">'.$thing.'</textarea>';
+		$textarea = '<textarea name="code" rows="30" cols="90">'.htmlentities($thing).'</textarea>';
 
 		return 
 		form(startTable('edit')
@@ -113,7 +114,7 @@
 // -------------------------------------------------------------
 	function plugin_delete()
 	{
-		$name = ps('name');
+		$name = doSlash(ps('name'));
 		safe_delete("txp_plugin","name='$name'");
 		list_plugins(messenger('plugin',$name,'deleted'));
 	}
@@ -129,15 +130,45 @@
 	}
 
 // -------------------------------------------------------------
-	function plugin_install() 
+	function plugin_verify() 
 	{	
 
 		if (ps('txt_plugin')) {
-			include $_FILES['theplugin']['tmp_name'];
-			
+			$plugin = join("\n", file($_FILES['theplugin']['tmp_name']));
 		} else {
 			$plugin = ps('plugin');	
 		}
+
+		$plugin64 = preg_replace('@.*\$plugin=\'([\w=+/]+)\'.*@s', '$1', $plugin);
+
+		if(isset($plugin64)) {
+
+			if ($plugin = unserialize(base64_decode($plugin64))) { 
+
+				if(is_array($plugin)){
+					extract(doSlash($plugin));
+					$source = highlight_string($plugin['code'], true);
+					$sub = fInput('submit','',gTxt('save'),'publish');
+		
+					pagetop(gTxt('edit_plugins'));
+					echo 
+					form(startTable('edit')
+					.	tr(td($source))
+					.	tr(td($sub))
+					.	endTable().sInput('plugin_install').eInput('plugin').hInput('plugin64', $plugin64));
+					return;
+				}
+			}
+		}
+		list_plugins(gTxt('bad_plugin_code'));
+
+	}
+	
+// -------------------------------------------------------------
+	function plugin_install() 
+	{	
+
+		$plugin = ps('plugin64');	
 
 		if(isset($plugin)) {
 
@@ -198,7 +229,7 @@
 		fInput('file','theplugin','','edit').
 		popHelp('install_plugin').sp.
 		fInput('submit','install_old','install','smallerbox').
-		eInput('plugin').sInput('plugin_install').hInput('txt_plugin',true).
+		eInput('plugin').sInput('plugin_verify').hInput('txt_plugin',true).
 		'</form>';
 	}
 
@@ -211,7 +242,7 @@
 		text_area('plugin',30,400,'').
 		popHelp('install_plugin').sp.
 		fInput('submit','install_new','install','smallerbox').
-		eInput('plugin').sInput('plugin_install').
+		eInput('plugin').sInput('plugin_verify').
 		'</form>';
 	}
 

@@ -309,7 +309,7 @@
 // -------------------------------------------------------------
 	function article_multiedit_form($area, $array) 
 	{
-		$methods = array('delete'=>'delete');
+		$methods = array('delete'=>gTxt('delete'));
 		if ($array) {
 		return 
 		form(
