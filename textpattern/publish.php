@@ -15,8 +15,8 @@
 
 	define("txpath",$txpcfg['txpath']);
 
-#	ERROR_REPORTING(E_ALL);
-#	ini_set("display_errors","1");	
+//	ERROR_REPORTING(E_ALL);
+//	ini_set("display_errors","1");	
 
 	include txpath.'/lib/txplib_db.php';
 	include txpath.'/lib/txplib_html.php';
@@ -49,7 +49,7 @@
 	}
 
 	define("LANG",$language);
-	
+
 	$textarray = load_lang('en-gb');
 
 	$s = (empty($s)) ? '' : $s;
@@ -74,7 +74,7 @@
 		$last = gmdate("D, d M Y H:i:s \G\M\T",$last);
 		ob_start();
 		header("Last-Modified: $last");
-	
+
 		$hims = serverset('HTTP_IF_MODIFIED_SINCE');
 		if ($hims == $last) {
 			ob_start();
@@ -87,12 +87,12 @@
 	function preText($s,$prefs) 
 	{
 		extract($prefs);
-		
+
 		if(gps('rss')) {
 			include txpath.'/publish/rss.php';
 			exit(rss());
 		}
-		
+
 		if(gps('atom')) {
 			include txpath.'/publish/atom.php';
 			exit(atom());
@@ -107,30 +107,30 @@
 		if(empty($id)) $GLOBALS['is_article_list'] = true;
 
 		$out['id'] = $id;
-		
-	
+
+
 		// what section are we in?	
 		if ($s): $out['s'] = $s;
 		elseif ($id): $out['s'] = fetch('Section','textpattern','ID',$id);
 		else: $out['s'] = "default";
 		endif;
-		
+
 		$s = $out['s'];
 
 		$rs = safe_row("*", "txp_section", "name = '$s' limit 1");
-			
-		if ($rs) { 				// useful stuff from the database
+
+		if ($rs) { 	// useful stuff from the database
 			extract($rs);	
 			$out['page']       = $page;		
 			$out['css']        = $css;		
 		}
-			
+
 		$out['c']              = gps('c');     // category?
 		$out['q']              = gps('q');     // search query?
 		$out['count']          = gps('count'); // pageby count? *deprecated*
 		$out['pg']             = gps('pg');    // paging?
 		$out['p']              = gps('p');     // image?
-				
+
 		if($id) { 		// check for next or previous article in the same section
 			$Posted = fetch('Posted','textpattern','ID',$id);
 			$thenext           = getNeighbour($Posted,$s,'>');
@@ -159,7 +159,7 @@
 		global $pretext,$microstart,$txpac;
 		$segment = gps('segment');
 		extract($pretext);
-				
+
 		$html = safe_field('user_html','txp_page',"name='$page'");
 		if (!$html) exit('no page template specified for section '.$s);
 		$html = parse($html);
@@ -169,11 +169,11 @@
 
 		header("Content-type: text/html; charset=utf-8");
 		echo $html;
-		
+
 		$microdiff = (getmicrotime() - $microstart);
 		echo n,comment('Runtime: '.substr($microdiff,0,6));
 	}
-	
+
 // -------------------------------------------------------------
 	function output_css($s='',$n='')
 	{
@@ -204,10 +204,10 @@
 		global $pretext, $prefs,$txpcfg;
 		extract($pretext);
 		if (is_array($atts)) extract($atts);
-		
+
 		$form = (empty($form)) ? 'default' : $form;
 		$form = (empty($listform)) ? $form : $listform;
-				
+
 		$limit = (empty($limit)) ? 10 : $limit;
 		$count = (!$count) ? 0 : $count;  // deprecated in g1.17
 
@@ -215,7 +215,7 @@
 			include_once txpath.'/publish/search.php';
 			return hed(gTxt('search_results'),2).search($q);
 		}
-		
+
 			// might be a form preview, otherwise grab it from the db
 		$Form = (isset($_POST['Form']))
 		?	gps('Form')
@@ -236,10 +236,10 @@
 			($c) 						// category browse?
 			?	"and ((Category1='".doSlash($c)."') or (Category2='".doSlash($c)."'))" : ''
 		);
-		
+
 		$q2b = " and Posted < now()";
 
-		
+
 		$total = getThing($q1b . join(' ',$query) . $q2b);
 		$numPages = ceil($total/$limit);  
 		$pg = (!$pg) ? 1 : $pg;
@@ -252,21 +252,21 @@
 		$pageout['numPages']  = $numPages;
 		$pageout['s']         = $s;
 		$pageout['c']         = $c;
-	
+
 
 		$GLOBALS['thispage'] = $pageout;
-		
+
 		$GLOBALS['is_article_list'] = true;
-		
+
 		$rs = getRows($q1a . join(' ',$query) . $q2a);
-		
+
 		if ($rs) {
 
 			foreach($rs as $a) {
 				extract($a);
 
 				$com_count = safe_count('txp_discuss',"parentid=$ID and visible=1");
-				
+
 				$author = fetch('RealName','txp_users','name',$AuthorID);
 				$author = (!$author) ? $AuthorID : $author; 
 
@@ -292,28 +292,28 @@
 				$out['article_image']  = $Image;
 
 				$GLOBALS['thisarticle'] = $out;
-	
+
 					// define the article form
 				$article = ($override_form) 
 				?	fetch('Form','txp_form','name',$override_form)
 				:	$Form;
-		
+
 					// quick check for things not pulled from the db
 				$article = doPermlink($article, $out['permlink'], $Title, $url_title);
 
 				$articles[] = parse($article);
-					
+
 					// sending these to paging_link(); *deprecated in g1.17*
 				$GLOBALS['uPosted'] = $uPosted;
 				$GLOBALS['limit'] = $limit;
-				
+
 				unset($GLOBALS['thisarticle']);
 			}
-		
+
 			return join('',$articles);
 		}
 	} 
-	
+
 // -------------------------------------------------------------
 	function filterFrontPage() 
 	{
@@ -372,12 +372,12 @@
 			$out['article_image']   = $Image;
 
 			$GLOBALS['thisarticle'] = $out;
-			
+
 				// define the article form
 			$article = ($override_form) 
 			?	fetch('Form','txp_form','name',$override_form)
 			:	$Form;
-		
+
 				// quick check for things not pulled from the db
 			$article = doPermlink($article, $out['permlink'], $Title, $url_title);
 
@@ -393,7 +393,7 @@
 					$article .= discuss($ID);
 				}
 			}
-			
+
 			return parse($article);
 		}
 		return '';
@@ -421,14 +421,14 @@
 		$month     = (empty($month))     ? ''        : $month;
 		$keywords  = (empty($keywords))  ? ''        : doSlash($keywords);
 		$frontpage = (empty($frontpage)) ? ''        : filterFrontPage();
-		
+
 		$category  = (!$category)  ? '' : " and ((Category1='".$category.
 											"') or (Category2='".$category."')) ";
 		$section   = (!$section)   ? '' : " and Section = '$section'";
 		$excerpted = ($excerpted=='y')  ? " and Excerpt !=''" : '';
 		$author    = (!$author)    ? '' : " and AuthorID = '$author'";	
 		$month     = (!$month)     ? '' : " and Posted like '{$month}%'";
-		
+
 		if ($keywords) {
 			$keys = split(',',$keywords);
 			foreach ($keys as $key) {
@@ -436,8 +436,8 @@
 			}
 			$keywords = " and (" . join(' or ',$keyparts) . ")"; 
 		}
-		
-		
+
+
 		$Form = fetch('Form','txp_form','name',$form);
 
 		$rs = safe_rows(
@@ -447,13 +447,13 @@
 			$category . $section . $excerpted . $month . $author . $keywords . $frontpage .
 			' order by ' . $sortby . ' ' . $sortdir . ' limit ' . $limit
 		);
-			
+
 		if ($rs) {
 			foreach($rs as $a) {
 				extract($a);
 
 				$com_count = safe_field('count(*)','txp_discuss',"parentid='$ID'");
-				
+
 				$author = fetch('RealName','txp_users',"name",$AuthorID);
 				$author = (!$author) ? $AuthorID : $author; 
 
@@ -480,12 +480,12 @@
 				$GLOBALS['thisarticle'] = $out;
 
 				$article = $Form;
-		
+
 					// quick check for things not pulled from the db
 				$article = doPermlink($article, $out['permlink'], $Title, $url_title);
 
 				$articles[] = parse($article);
-					
+
 					// sending these to paging_link();
 				$GLOBALS['uPosted'] = $uPosted;
 				$GLOBALS['limit'] = $limit;
@@ -495,7 +495,7 @@
 			return join('',$articles);
 		}
 	}
-	
+
 // -------------------------------------------------------------
 	function getNeighbour($Posted, $s, $type) 
 	{
@@ -526,14 +526,14 @@
 	function formatDate($uPosted,$pg='')
 	{
 		global $dateformat,$archive_dateformat,$timeoffset,$c,$id;
-		
+
 		if ($pg or $id or $c) { $dateformat = $archive_dateformat; }
-		
+
 			if($dateformat == "since") { $date = since($uPosted); } 
 			else { $date = date("$dateformat",($uPosted + $timeoffset)); }
 		return $date;
 	}
-	
+
 // -------------------------------------------------------------
 	function since($stamp) 
 	{
@@ -550,13 +550,13 @@
 		}
 		return $since." ago";
 	}
-	
+
 // -------------------------------------------------------------
 	function formatCommentsInvite($AnnotateInvite,$Section,$ID) 
 	{
 		global $comments_mode, $url_mode, $pfr;
 		$dc = safe_count('txp_discuss',"parentid='$ID' and visible=1");
-		
+
 		$ccount = ($dc) ?  '['.$dc.']' : '';
 
 		if (!$comments_mode) {
@@ -572,7 +572,7 @@
 		}
 		return $invite;
 	}
-	
+
 // -------------------------------------------------------------
 	function formatMentionsLink($Section, $ID) 
 	{
@@ -636,7 +636,6 @@
 		return join('',$o);
 	}
 
-
 // -------------------------------------------------------------
 	function get_atts($text)
 	{
@@ -657,7 +656,7 @@
 		return preg_replace_callback($f, 'processTags', $text);
 
 	}
-	
+
 // -------------------------------------------------------------
 	function processTags($matches)
 	{
@@ -666,7 +665,7 @@
 
 		$atts = (isset($matches[2])) ? splat($matches[2]) : '';
 		$thing = (isset($matches[4])) ? $matches[4] : '';
-		
+
 		if ($thing) {
 
 			if (function_exists($tag)) return $tag($atts,$thing,$matches[0]);
@@ -679,73 +678,72 @@
 		}
 
 	}
-		
-// -------------------------------------------------------------
-    function splat($attr)  // returns attributes as an array
-    {
-        $arr = array(); $atnm = ''; $mode = 0;
 
-        while (strlen($attr) != 0) {
-            $ok = 0;
-            switch ($mode) {
-                case 0: // name
-                    if (preg_match('/^([a-z]+)/i', $attr, $match)) {
-                        $atnm = $match[1]; $ok = $mode = 1;
-                        $attr = preg_replace('/^[a-z]+/i', '', $attr);
-                    }
-                break;
-    
-                case 1: // =
-                    if (preg_match('/^\s*=\s*/', $attr)) {
-                        $ok = 1; $mode = 2;
-                        $attr = preg_replace('/^\s*=\s*/', '', $attr);
-                    break;
-                    }
-                    if (preg_match('/^\s+/', $attr)) {
-                        $ok = 1; $mode = 0;
-                        $arr[$atnm] = $atnm;
-                        $attr = preg_replace('/^\s+/', '', $attr);
-                    }
-                break;
-    
-                case 2: // value
-                    if (preg_match('/^("[^"]*")(\s+|$)/', $attr, $match)) {
-                        $arr[$atnm] = str_replace('"','',$match[1]);
-                        $ok = 1; $mode = 0;
-                        $attr = preg_replace('/^"[^"]*"(\s+|$)/', '', $attr);
-                    break;
-                    }
-                    if (preg_match("/^('[^']*')(\s+|$)/", $attr, $match)) {
-                        $arr[$atnm] = str_replace("'",'',$match[1]);
-                        $ok = 1; $mode = 0;
-                        $attr = preg_replace("/^'[^']*'(\s+|$)/", '', $attr);
-                    break;
-                    }
-                    if (preg_match("/^(\w+)(\s+|$)/", $attr, $match)) {
-                        $arr[$atnm] = $match[1];
-                        $ok = 1; $mode = 0;
-                        $attr = preg_replace("/^\w+(\s+|$)/", '', $attr);
-                    }
-                break;
-            }
-            if ($ok == 0) {
-                $attr = preg_replace('/^\S*\s*/', '', $attr);
-                $mode = 0;
-            }
-        }
-        if ($mode == 1) $arr[$atnm] = $atnm;
-      
-        return $arr;
+// -------------------------------------------------------------
+	function splat($attr)  // returns attributes as an array
+	{
+		$arr = array(); $atnm = ''; $mode = 0;
+
+		while (strlen($attr) != 0) {
+				$ok = 0;
+				switch ($mode) {
+					case 0: // name
+						if (preg_match('/^([a-z]+)/i', $attr, $match)) {
+							$atnm = $match[1]; $ok = $mode = 1;
+							$attr = preg_replace('/^[a-z]+/i', '', $attr);
+						}
+					break;
+
+					case 1: // =
+						if (preg_match('/^\s*=\s*/', $attr)) {
+							$ok = 1; $mode = 2;
+							$attr = preg_replace('/^\s*=\s*/', '', $attr);
+							break;
+						}
+						if (preg_match('/^\s+/', $attr)) {
+							$ok = 1; $mode = 0;
+							$arr[$atnm] = $atnm;
+							$attr = preg_replace('/^\s+/', '', $attr);
+						}
+					break;
+
+					case 2: // value
+						if (preg_match('/^("[^"]*")(\s+|$)/', $attr, $match)) {
+							$arr[$atnm] = str_replace('"','',$match[1]);
+							$ok = 1; $mode = 0;
+							$attr = preg_replace('/^"[^"]*"(\s+|$)/', '', $attr);
+							break;
+						}
+						if (preg_match("/^('[^']*')(\s+|$)/", $attr, $match)) {
+							$arr[$atnm] = str_replace("'",'',$match[1]);
+							$ok = 1; $mode = 0;
+							$attr = preg_replace("/^'[^']*'(\s+|$)/", '', $attr);
+							break;
+						}
+						if (preg_match("/^(\w+)(\s+|$)/", $attr, $match)) {
+							$arr[$atnm] = $match[1];
+							$ok = 1; $mode = 0;
+							$attr = preg_replace("/^\w+(\s+|$)/", '', $attr);
+						}
+						break;
+				}
+				if ($ok == 0) {
+					$attr = preg_replace('/^\S*\s*/', '', $attr);
+					$mode = 0;
+				}
+		}
+		if ($mode == 1) $arr[$atnm] = $atnm;
+		return $arr;
     }
 
 // -------------------------------------------------------------
 	function frompath() // Divine what the current article id is, based on the URL 
 	{
 		$pinfo = serverSet('PATH_INFO');
-				
+
 		if ($pinfo) {
 			$frompath = explode('/',$pinfo);
-			
+
 			return (!empty($frompath[1])) ? $frompath[1] : '';
 		}
 		return '';
@@ -769,7 +767,7 @@
 			eval($out);
 		}
 	}
-   	
+
 // -------------------------------------------------------------
 	function bombShelter() // protection from those who'd bomb the site by GET
 	{
@@ -781,10 +779,10 @@
 	function segmentPage($text)
 	{
 		global $pfr,$page;
-		
+
 		$astyle = 'style="font-size:11px;color:white;background:red;font-family:verdana"';
 		$dstyle = 'style="border:1px solid red;"';
-		
+
 		return preg_replace("/(<div id=\")(?!container)(\w+)(\".*)(>)/U",
 			"$1$2$3 ".$dstyle."$4\n<p><a href=\"".$pfr.
 			"textpattern/?event=page&#38;step=div_edit&#38;name=".

@@ -25,7 +25,6 @@
 		$divline = ($step=="div_edit")
 		?	graf(gTxt('you_are_editing_div') . sp . strong($div))
 		:	'';
-		
 		echo 
 			startTable('edit').
 			tr(
@@ -95,7 +94,7 @@
 				$out[] = 
 					graf(
 						gTxt('copy_page_as').
-						fInput('text','newname','').
+						fInput('text','newname','','edit').
 						fInput('submit','copy',gTxt('copy'),'smallerbox')
 					); 
 			}
@@ -148,7 +147,6 @@
 	{
 		return popTagLinks($type);
 	}
-
 
 // -------------------------------------------------------------
 	function extract_div() 

@@ -37,7 +37,7 @@
 	
 	extract(get_prefs());
 
-#	define("LANG",$language);
+//	define("LANG",$language);
 	define("LANG","en-gb");
 	define('txp_version', $thisversion);
 

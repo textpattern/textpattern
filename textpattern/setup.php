@@ -169,10 +169,10 @@ eod;
 		
  		include './txpsql.php';
 
+ 		$nonce = md5( uniqid( rand(), true ) );
+
 		mysql_query("INSERT INTO ".PFX."txp_users VALUES
-			(1,'$name',password(lower('$pass')),'$RealName','$email',1,now(),'')");
-
-
+			(1,'$name',password(lower('$pass')),'$RealName','$email',1,now(),'$nonce')");
 
  		echo fbCreate();
 	}

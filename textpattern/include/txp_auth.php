@@ -104,9 +104,10 @@ Use of this software indicates acceptance of the Textpattern license agreement
 
 					$nonce = safe_field('nonce','txp_users',"name='$p_userid'");
 
-					if (!$nonce) exit(graf('Missing authentication information. 
-										Please run _update.php'));
-
+					if (!$nonce) {
+							include_once '_update.php';
+							exit(graf('Please reload'));
+					}
 
 					if ($stay) {	// persistent cookie required
 
