@@ -682,6 +682,28 @@
 		return hed('Tag:',3).text_area('tag','100','300',$thing);
 	}
 
+// -------------------------------------------------------------
+	function tag_image() 
+	{
+		global $path_from_root,$img_dir;
+		$invars = gpsa(array('id','type','h','w','ext','alt'));
+		$img_dir = (!$img_dir) ? 'images' : $img_dir;
+		extract($invars);
+		switch ($type) {
+			case 'textile': 
+				$alt = ($alt) ? ' ('.$alt.')' : '';
+				$thing='!'.$path_from_root.$img_dir.'/'.$id.$ext.$alt.'!'; 
+			break;
+
+			case 'textpattern': $thing = '<txp:image id="'.$id.$ext.'" />'; break;
+
+			case 'xhtml': $thing = '<img src="'.$path_from_root.$img_dir.'/'.
+				$id.$ext.'" style="height:'.$h.'px;width:'.$w.'px" />';
+		}
+		return tdb($thing);
+	}
+
+
 ?>
 </body>
 </html>
