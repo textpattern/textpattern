@@ -117,7 +117,7 @@
 			                insert into ".PFX."textpattern set
 			                Posted    = '".addslashes($Posted)."',
 			                Title     = '".addslashes($textile->TextileThis($Title,1))."',
-			                url_title = '".stripSpace($Title,1)."',
+			                url_title = '".stripSpace($Title)."',
 			                Body      = '".addslashes($Body)."',
 			                Body_html = '".addslashes($Body_html)."',
 			                AuthorID  = '".addslashes($AuthorID)."',
