@@ -2,7 +2,7 @@
 
 /*
 	This is Textpattern
-	Copyright 2004 by Dean Allen - all rights reserved.
+	Copyright 2005 by Dean Allen - all rights reserved.
 
 	Use of this software denotes acceptance of the Textpattern license agreement 
 	
@@ -24,7 +24,7 @@
 		$form = (!$form) ? legacy_form() : $form;
 
 		$rs = safe_rows(
-			"ID, Title, Body_html, Section, unix_timestamp(Posted) as uPosted, url_title,
+			"*, ID as thisid, unix_timestamp(Posted) as posted, Title as title,
 			match (Title,Body) against ('$q') as score",
 			"textpattern",
 			"(Title rlike '$q' or Body rlike '$q') $s_filter
@@ -43,18 +43,17 @@
 			foreach($rs as $a) {
 				extract($a);
 								
-				$result_date = date($archive_dateformat,$uPosted);
+				$result_date = safe_strftime($archive_dateformat,$posted);
 				$uTitle = ($url_title) ? $url_title : stripSpace($Title);
-				$hurl = ($url_mode)
-				?	$siteurl.$path_from_root.$Section.'/'.$ID.'/'.$uTitle
-				:	$siteurl.$path_from_root.'index.php?id='.$ID;
-				$result_url = '<a href="http://'.$hurl.'">'.$hurl.'</a>';
-				$result_title = '<a href="http://'.$hurl.'">'.$Title.'</a>';
+				$hurl = permlinkurl($a);
+				$result_url = '<a href="'.$hurl.'">'.$hurl.'</a>';
+				$result_title = '<a href="'.$hurl.'">'.$Title.'</a>';
 	
 				$result = preg_replace("/>\s*</","> <",$Body_html);
-				preg_match_all("/\s.{0,50}".$q.".{0,50}\s/i",$result,$concat);
-			
-					$concat = implode(" ... ",$concat[0]);
+				preg_match_all("/\s.{1,50}".$q.".{1,50}\s/i",$result,$concat);
+						
+					$concat = join(" ... ",$concat[0]);
+					
 					$concat = strip_tags($concat);
 					$concat = preg_replace('/^[^>]+>/U',"",$concat);
 					$concat = preg_replace("/($q)/i","<strong>$1</strong>",$concat);

@@ -3,7 +3,7 @@
 /*
 This is Textpattern
 
-Copyright 2004 by Dean Allen
+Copyright 2005 by Dean Allen
 www.textpattern.com
 All rights reserved
 

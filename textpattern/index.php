@@ -3,7 +3,7 @@
 /*
 	This is Textpattern
 
-	Copyright 2004 by Dean Allen
+	Copyright 2005 by Dean Allen
 	www.textpattern.com
 	All rights reserved
 
@@ -11,9 +11,12 @@
 */
 	define("txpath", dirname(__FILE__));
 
-	$thisversion = '1.0rc2';
+	$thisversion = '1.0';
 
-	require './config.php';
+	if (!@include './config.php') { 
+		include './setup.php';
+		exit();
+	}
 
 	if (isset($_POST['preview'])) {
 		include txpath.'/publish.php';
@@ -32,33 +35,43 @@
 
 	$microstart = getmicrotime();
 
-	$dbversion = safe_field('val','txp_prefs',"name = 'version'");
+	 if ($connected && safe_query("describe ".PFX."textpattern")) {
+
+		$dbversion = safe_field('val','txp_prefs',"name = 'version'");
+
+		extract(get_prefs());
 	
-	extract(get_prefs());
+		define("LANG",$language);
+		//i18n: define("LANG","en-gb");
+		define('txp_version', $thisversion);
+		define("hu",'http://'.$siteurl);
+	
+		if (!empty($locale)) setlocale(LC_ALL, $locale);
+		$textarray = load_lang(LANG);
+	
+		include txpath.'/include/txp_auth.php';
+		include txpath.'/lib/txplib_head.php';
+	
+		$event = gps('event');
+		$step = gps('step');
+		
+		if (!$dbversion or $dbversion != $thisversion) {
+			include './_update.php';
+			$event = 'prefs';
+			$step = 'prefs';
+		}
 
-//	define("LANG",$language);
-	define("LANG","en-gb");
-	define('txp_version', $thisversion);
+		include (!$event) 
+		?	txpath.'/include/txp_article.php'
+		:	txpath.'/include/txp_'.$event.'.php';
+	
+		$microdiff = (getmicrotime() - $microstart);
+		echo n.comment(gTxt('runtime').': '.substr($microdiff,0,6));
 
-	$textarray = load_lang(LANG);
+		end_page();
 
-	if (!$dbversion or $dbversion != $thisversion) {
-		include_once '_update.php';
+	} else {
+	 	include './setup.php';
+	 	exit();
 	}
-
-	include txpath.'/include/txp_auth.php';
-	include txpath.'/lib/txplib_head.php';
-
-	$event = gps('event');
-	$step = gps('step');
-
-	include (!$event) 
-	?	txpath.'/include/txp_article.php'
-	:	txpath.'/include/txp_'.$event.'.php';
-
-	$microdiff = (getmicrotime() - $microstart);
-	echo "\n<!-- Runtime: ",substr($microdiff,0,6),"-->";
-
-	end_page();
-	
 ?>

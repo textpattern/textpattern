@@ -2,17 +2,16 @@
 
 /*
 	This is Textpattern
-	Copyright 2004 by Dean Allen - all rights reserved.
+	Copyright 2005 by Dean Allen - all rights reserved.
 
 	Use of this software denotes acceptance of the Textpattern license agreement 
 
 */
 
-
 // -------------------------------------------------------------
 	function discuss($ID)
 	{
-		global $comments_disabled_after;
+		global $comments_disabled_after,$comments_are_ol;
 		$preview = ps('preview');
 		extract(	
 			safe_row(
@@ -30,9 +29,9 @@
 
 
 		if ($darr) {
-			$out.= '<ol>'.n;
+			$out.= ($comments_are_ol) ? '<ol>'.n : '';
 			$out.= formatComments($darr);
-			$out.= n.'</ol>';
+			$out.= ($comments_are_ol) ? n.'</ol>' : '';
 		}
 		
 			$wasAnnotated = (!$Annotate) ? getCount('txp_discuss',"parentid=$ID") : '';
@@ -73,7 +72,7 @@
 		$preview = gps('preview');
 		$id = gps('id');
 		$Form = fetch('Form','txp_form','name','comments');
-		$out = '';
+		$out = array();
 				
 		foreach($darr as $vars) {
 			extract($vars);
@@ -84,31 +83,26 @@
 				$discussid=0;
 				$textile = new Textile();
 				$im = (!empty($comments_disallow_images)) ? 1 : '';
-				$message = trim(nl2br($textile->TextileThis(strip_tags($message),1,'',$im)));
+				$message = trim(nl2br($textile->TextileThis(strip_tags(deEntBrackets(
+					$message
+				)),1,'',$im)));
 			} 
 			
 			if($comments_dateformat == "since") { 
-				$comment_time = since($time + $timeoffset); 
+				$comment_time = since($time + tz_offset()); 
 			} else {
-				$comment_time = date($comments_dateformat,($time + $timeoffset)); 
+				$comment_time = safe_strftime($comments_dateformat,$time); 
 			}
 							
 			$web = str_replace("http://", "", $web);
 	
 			if ($email && !$web && !$txpac['never_display_email'])
-				$name = '<a href="'.eE('mailto:'.$email).'">'.$name.'</a>';
+				$name = '<a href="'.eE('mailto:'.$email).'"  rel="nofollow">'.$name.'</a>';
 
 			if ($web)
-				$name = '<a href="http://'.$web.'" title="'.$web.'">'.$name.'</a>';
+				$name = '<a href="http://'.$web.'" title="'.$web.'" rel="nofollow">'.$name.'</a>';
 
-			$Section = fetch('Section','textpattern','ID',$parentid);
-
-				if($url_mode==1) {
-					$dlink = $path_from_root.
-						$Section.'/'.$parentid.'/#c'.$discussid;
-				} else if ($url_mode==0) {
-					$dlink = $path_from_root.'index.php?id='.$parentid.'#c'.$discussid;
-				}
+			$dlink = permlinkurl_id($parentid).'#c'.$discussid;
 		
 			$vals = array(
 				'comment_name'=>$name,
@@ -124,9 +118,11 @@
 			$temp = preg_replace('/<(txp:comment_permlink)>(.*)<\/\\1>/U',
 				'<a href="'.$dlink.'">$2</a>',$temp);
 
-			$out .= n.t.'<li id="c'.$discussid.'" style="margin-top:2em">'.$temp.'</li>';
+			$out[] = ($comments_are_ol) 
+			?	n.t.'<li id="c'.$discussid.'" style="margin-top:2em">'.$temp.'</li>' 
+			:	$temp;
 		}
-			return $out;
+			return join(n,$out);
 		}
 
 // -------------------------------------------------------------
@@ -139,7 +135,7 @@
 		$name= pcs('name');
 		$email= pcs('email');
 		$web= pcs('web');		
-		extract( psa( array(
+		extract( doStripTags( doDeEnt ( psa( array(
 			'remember',
 			'forget',
 			'parentid',
@@ -147,7 +143,7 @@
 			'message',
 			'submit',
 			'backpage'
-		) ) );
+		) ) ) ) );
 			
 		if ( $preview ) {
 			$name  = ps( 'name' );
@@ -265,7 +261,7 @@
 
 		$ref = serverset('HTTP_REFERRER');
 
-		extract( psa( array(
+		$in = psa( array(
 			'parentid',
 			'name',
 			'email',
@@ -274,7 +270,9 @@
 			'backpage',
 			'nonce',
 			'remember'
-		) ) );
+		) );
+		
+		extract($in);
 
 		if ($txpac['comments_require_name']) {
 			if (!trim($name)) {
@@ -295,42 +293,52 @@
 				graf('<a href="" onClick="history.go(-1)">'.gTxt('back').'</a>') );
 		}
 
-		$ip= @getHostByAddr(serverset('REMOTE_ADDR'));
-		$message = strip_tags(trim($message));
+		$ip = serverset('REMOTE_ADDR');
+		$message = trim($message);
+		$blacklisted = is_blacklisted($ip);
 		
-		$message2db = addslashes(nl2br($textile->textileThis($message,1,'',$im)));
+		$name = doSlash(strip_tags(deEntBrackets($name)));
+		$web = doSlash(clean_url(strip_tags(deEntBrackets($web))));
+		$email = doSlash(clean_url(strip_tags(deEntBrackets($email))));
+
+		$message2db = doSlash(trim(nl2br($textile->TextileThis(strip_tags(deEntBrackets(
+			$message
+		)),1,'',$im))));
+				
 		$isdup = safe_row("message,name", "txp_discuss", 
 			"name='$name' and message='$message2db' and ip='$ip'");
 
 		if (checkBan($ip)) {
-			if (!$isdup) {
-				if (checkNonce($nonce)) {
-					$visible = ($comments_moderate) ? 0 : 1;
-					$rs = safe_insert(
-						"txp_discuss",
-						"parentid  = '$parentid',
-						 name      = '$name',
-						 email     = '$email',
-						 web       = '$web',
-						 ip        = '$ip',
-						 message   = '$message2db',
-						 visible   = $visible,
-						 posted    = now()"
-					);
-				
-					 if ($rs) {
-						safe_update("txp_discuss_nonce", "used='1'", "nonce='$nonce'");
-						if ($txpac['comment_means_site_updated']) {
-							safe_update("txp_prefs", "val=now()", "name='lastmod'");
+			if($blacklisted == false) {
+				if (!$isdup) {
+					if (checkNonce($nonce)) {
+						$visible = ($comments_moderate) ? 0 : 1;
+						$rs = safe_insert(
+							"txp_discuss",
+							"parentid  = '$parentid',
+							 name      = '$name',
+							 email     = '$email',
+							 web       = '$web',
+							 ip        = '$ip',
+							 message   = '$message2db',
+							 visible   = $visible,
+							 posted    = now()"
+						);
+					
+						 if ($rs) {
+							safe_update("txp_discuss_nonce", "used='1'", "nonce='$nonce'");
+							if ($txpac['comment_means_site_updated']) {
+								safe_update("txp_prefs", "val=now()", "name='lastmod'");
+							}
+							if ($comments_sendmail) 
+								mail_comment($message,$name,$email,$web,$parentid);
+							ob_start();
+							header('location: '.$backpage);
 						}
-						if ($comments_sendmail) 
-							mail_comment($message,$name,$email,$web,$parentid);
-						ob_start();
-						header('location: '.$backpage);
-					}
-				} // end check nonce
-			} // end check dup
-		} else exit(gTxt('you_have_been_banned'));
+					}                                                        // end check nonce
+				}                                                            // end check dup
+			} else exit(gTxt('your_ip_is_blacklisted_by'.' '.$blacklisted)); // end check blacklist
+		} else exit(gTxt('you_have_been_banned'));                           // end check site ban
 	}
 
 // -------------------------------------------------------------
@@ -340,19 +348,13 @@
 			// delete expired nonces
 		safe_delete("txp_discuss_nonce", "issue_time < date_sub(now(),interval 10 minute)");
 			// check for nonce
-		$rs = safe_row("*", "txp_discuss_nonce", "nonce='$nonce' and used='0'");
-
-			// if it's good, 
-		if ($rs) return true;
-		return false;
+		return (safe_row("*", "txp_discuss_nonce", "nonce='$nonce' and used='0'")) ? true : false;
 	}
 
 // -------------------------------------------------------------
 	function checkBan($ip)
 	{
-		$rs = fetch("ip", "txp_discuss_ipban", "ip", '$ip');
-		if (!$rs) return true;
-		return false;
+		return (!fetch("ip", "txp_discuss_ipban", "ip", "$ip")) ? true : false;
 	}
 
 // -------------------------------------------------------------
@@ -366,10 +368,13 @@ eod;
 // -------------------------------------------------------------
 	function mail_comment($message, $cname, $cemail, $cweb, $parentid) 
 	{
-		global $siteurl,$path_from_root,$sitename,$txp_user;
+		global $sitename,$txp_user;
 		$myName = $txp_user;
 		extract(safe_row("AuthorID,Title", "textpattern", "ID = '$parentid'"));
 		extract(safe_row("RealName, email", "txp_users", "name = '$AuthorID'"));
+		$cname = preg_replace('/[\r\n]/', ' ', $cname);
+		$cemail = preg_replace('/[\r\n]/', ' ', $cemail);
+
 
 $out = "Dear $RealName,\r\n\r\nA comment on your post on your post \"$Title\" was recorded.\r\n\r\nName: $cname\r\nEmail: $cemail\r\nWeb: $cweb\r\nComment:\r\n$message";
 
@@ -381,4 +386,17 @@ $out = "Dear $RealName,\r\n\r\nA comment on your post on your post \"$Title\" wa
 		."Content-Type: text/plain; charset=\"UTF-8\"\r\n");
 	}
 
+// -------------------------------------------------------------
+	function input($type,$name,$val,$size='',$class='',$tab='',$chkd='') 
+	{
+		$o = array(
+			'<input type="'.$type.'" name="'.$name.'" value="'.$val.'"',
+			($size)  ? ' size="'.$size.'"'     : '',
+			($class) ? ' class="'.$class.'"'	: '',
+			($tab)	 ? ' tabindex="'.$tab.'"'	: '',
+			($chkd)  ? ' checked="checked"'	: '',
+			' />'.n
+		);
+		return join('',$o);
+	}
 ?>

@@ -1,5 +1,15 @@
 <?php
 
+/*
+	This is Textpattern
+
+	Copyright 2005 by Dean Allen
+	www.textpattern.com
+	All rights reserved
+
+	Use of this software indicates acceptance of the Textpattern license agreement 
+*/
+	
 	check_privs(1,2,3,4,5,6);
 
 	$myprivs = fetch('privs','txp_users','name',$txp_user);
@@ -29,6 +39,8 @@
 		echo change_email_form($themail);
 		echo author_list();
 		echo ($myprivs == 1) ? new_author_form() : '';
+		echo ($myprivs == 1) ? reset_author_pass_form() : '';
+		
 	}
 
 // -------------------------------------------------------------
@@ -73,7 +85,7 @@
 			if ($rs) {
 				$message .= gTxt('password_changed');
 				if ($_POST['mailpassword']==1) {
-					send_new_password($NewPass,$themail);
+					send_new_password($NewPass,$themail,$nameauthor_change_pass);
 					$message .= sp.gTxt('and_mailed_to').sp.$themail;
 				}
 				$message .= ".";
@@ -125,21 +137,21 @@
 
 // -------------------------------------------------------------
 	function send_password($pw,$email) {
-		global $siteurl,$path_from_root,$sitename,$txp_user;
+		global $sitename,$txp_user;
 		$myName = $txp_user;
 		extract(safe_row("RealName as myName, email as myEmail", 
 			"txp_users", "name = '$myName'"));
 
-		$message = 'Dear '.$_POST['RealName'].','."\r\n"."\r\n".
+		$message = gTxt('greeting').' '.$_POST['RealName'].','."\r\n"."\r\n".
 	
-		'You have been registered as a contributor to the site '.$sitename."\r\n".
+		gTxt('you_have_been_registered').' '.$sitename."\r\n".
 	
-		'Your login is '.$_POST['name']."\r\n".
-		'Your password is '.$pw."\r\n"."\r\n".
+		gTxt('your_login_is').': '.$_POST['name']."\r\n".
+		gTxt('your_password_is').': '.$pw."\r\n"."\r\n".
 	
-		'Log in at http://'.$siteurl.$path_from_root.'textpattern/index.php';
+		gTxt('log_in_at').' '.hu.'textpattern/index.php';
 	
-		mail($email, "Your $sitename login password", $message,
+		mail($email, "[$sitename] ".gTxt('your_login_info'), $message,
 		 "From: $myName <$myEmail>\r\n"
 		."Reply-To: $myEmail\r\n"
 		."Content-Transfer-Encoding: 8bit\r\n"
@@ -147,33 +159,39 @@
 	}
 
 // -------------------------------------------------------------
-	function send_new_password($NewPass,$themail) 
+	function send_new_password($NewPass,$themail,$name) 
 	{
 		global $txp_user,$sitename;
 
-		$message = 'Dear '.$txp_user.','."\r\n".
-		'Your new password for the site '.$sitename.' is:'."\r\n"."\r\n".	
-		$NewPass;
+		$myEmail = safe_field("email","txp_users","name = '$txp_user'");
+
+		$message = gTxt('greeting').' '.$name.','."\r\n".
+		gTxt('your_password_is').': '.$NewPass."\r\n"."\r\n".
+
+		gTxt('log_in_at').' '.hu.'/textpattern/index.php';
 	
-	mail($themail, "Your new $sitename password", $message,
-		 "From: $txp_user <$themail>\r\n"
+		if (mail($themail, "[$sitename] ".gTxt('your_new_password'), $message,
+		 "From: $txp_user <$myEmail>\r\n"
 		."Reply-To: $myEmail\r\n"
 		."Content-Transfer-Encoding: 8bit\r\n"
-		."Content-Type: text/plain; charset=\"UTF-8\"\r\n");
+		."Content-Type: text/plain; charset=\"UTF-8\"\r\n")) {
+			return true;
+		} return false;
 	}
 
-
 // -------------------------------------------------------------
-	function generate_password($length = 10) 
+	function generate_password($length=10)
 	{
-		$okchars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789";
-		$ps_len = strlen($okchars);
-		mt_srand((double)microtime()*1000000);
 		$pass = "";
-		for($i = 0; $i < $length; $i++) {
-			$pass .= $okchars[mt_rand(0,$ps_len-1)];
+		$chars = "023456789bcdfghjkmnpqrstvwxyz"; 
+		$i = 0; 
+		while ($i < $length) {
+			$char = substr($chars, mt_rand(0, strlen($chars)-1), 1);
+			if (!strstr($pass, $char)) {
+				$pass .= $char;
+				$i++;
+			}
 		}
-
 		return $pass;
 	}
 
@@ -190,6 +208,46 @@
 				eInput('admin').sInput('change_pass')
 			,' style="text-align:center"')
 		).'</div>';
+	}
+
+// -------------------------------------------------------------
+	function reset_author_pass_form() 
+	{
+		global $myprivs,$txp_user;
+		$them = safe_rows("*","txp_users","name != '".doSlash($txp_user)."'");
+		
+		if ($them) {
+			foreach($them as $a) {
+				$names[$a['name']] = $a['RealName'].' ('.$a['name'].')';
+			}
+			return '<div align="center" style="margin-top:3em">'.
+			form(
+				tag(gTxt('reset_author_password'),'h3').
+				graf(gTxt('a_new_password_will_be_mailed')).
+					graf(selectInput("name", $names, '',1).
+					fInput('submit','author_change_pass',gTxt('submit'),'smallerbox').
+					eInput('admin').sInput('author_change_pass')
+				,' style="text-align:center"')
+			).'</div>';
+		}
+	}
+
+// -------------------------------------------------------------
+	function author_change_pass() 
+	{
+		$name = ps('name');
+		$themail = safe_field("email","txp_users","name='".doSlash($name)."'");
+		$NewPass = generate_password(6);
+		
+		$rs = safe_update("txp_users","pass=password(lower('$NewPass'))",
+			"`name`='".doSlash($name)."'");
+		
+		if ($rs) { 
+			if (send_new_password($NewPass,$themail,$name)) {
+				admin(gTxt('password_sent_to').' '.$themail);
+			} else admin(gTxt('could_not_mail').' '.$themail);
+		} else admin(gTxt('could_not_update_author').' '.$name);
+		
 	}
 	
 // -------------------------------------------------------------
@@ -209,7 +267,7 @@
 // -------------------------------------------------------------
 	function author_list() 
 	{
-		global $myprivs;
+		global $myprivs,$txp_user;
 		$out[] = hed(gTxt('authors'),3,' align="center"');
 		$out[] = startTable('list');
 		$out[] = tr(
@@ -220,8 +278,7 @@
 		.	td()
 		.	td()
 		);
-
-		$rs = safe_rows("*", "txp_users", "name != 'textism'");
+		$rs = safe_rows("*", "txp_users", "1");
 		if ($rs) {
 			foreach($rs as $a) {
 				extract($a);
@@ -285,7 +342,8 @@
 	function new_author_form() 
 	{
 		$out = array(
-			hed(gTxt('add_new_author' ),3,' align="center"'),
+			hed(gTxt('add_new_author' ),3,' align="center" style="margin-top:2em"'),
+			graf(gTxt('a_message_will_be_sent_with_login'), ' align="center"'),
 			startTable('edit'),
 			tr( fLabelCell( 'real_name' ) . fInputCell('RealName') ),
 			tr( fLabelCell( 'login_name' ) . fInputCell('name') ),

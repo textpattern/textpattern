@@ -13,7 +13,9 @@ class DB {
          $this->user = $txpcfg['user'];
          $this->pass = $txpcfg['pass'];
          $this->link = mysql_connect($this->host, $this->user, $this->pass);
-         if (!$this->link) die;
+         if (!$this->link) {
+         	$GLOBALS['connected'] = false;
+         } else $GLOBALS['connected'] = true;
          mysql_select_db($this->db);
     }
 } 

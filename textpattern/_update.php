@@ -51,6 +51,10 @@
 		safe_alter("textpattern", "add `Excerpt` mediumtext not null after `Body_html`");
 	}
 
+		// Excerpt_html added in 1.0
+	if (!in_array('Excerpt_html',$txp)) {
+		safe_alter("textpattern", "add `Excerpt_html` mediumtext not null after `Excerpt` ");
+	}
 
 	// custom fields added for g1.19
 
@@ -196,6 +200,111 @@ eod;
 		safe_insert('txp_prefs',"prefs_id=1,name='comment_list_pageby',val=25");
 	}
 
+	if (!safe_field('val','txp_prefs',"name='permlink_mode'")) {
+		safe_insert('txp_prefs',"prefs_id=1,name='permlink_mode',val='section_id'");
+	}
+
+	if (!safe_field('val','txp_prefs',"name='comments_are_ol'")) {
+		safe_insert('txp_prefs',"prefs_id=1,name='comments_are_ol',val='1'");
+	}
+
+	if (!safe_field('val','txp_prefs',"name='path_to_site'")) {
+		safe_insert('txp_prefs',"prefs_id=1,name='path_to_site',val=''");
+	}
+/*
+	foreach($txpac as $k => $v) {
+		if (safe_count('txp_prefs',"`name`='$k'") == 0) {
+			safe_insert("txp_prefs","`prefs_id`=1,`name`='$k',`val`='$v'");
+		}
+	}
+*/
+	// 1.0: need to get non-manually set url-only titles into the textpattern table,
+	// so we can start using title as an url search option
+
+	$rs = mysql_query("select ID, Title from ".PFX."textpattern where url_title like ''");
+	
+		while ($a = mysql_fetch_array($rs)){
+			extract($a);
+			$url_title = addslashes(stripSpace($Title));
+			safe_update("textpattern","url_title = '$url_title'","ID=$ID");
+		}
+
+		
+	// 1.0: properly i18n
+	//Change current language names by language codes
+		$lang = fetch('val','txp_prefs','name','language');
+		switch($lang){
+	 	case 'czech':
+	  		$rs = safe_update("txp_prefs", "val= 'cs-cs'", "name='language' AND val= 'czech'");
+	 	break;
+		case 'danish':
+			$rs = safe_update("txp_prefs", "val= 'da-da'", "name='language' AND val= 'danish'");
+		break;
+		case 'dutch':
+			$rs = safe_update("txp_prefs", "val= 'nl-nl'", "name='language' AND val= 'dutch'");
+		break;
+		case 'finish':
+			$rs = safe_update("txp_prefs", "val= 'fi-fi'", "name='language' AND val= 'finish'");
+		break;
+		case 'french':
+			$rs = safe_update("txp_prefs", "val= 'fr-fr'", "name='language' AND val= 'french'");
+		break;
+		case 'german':
+			$rs = safe_update("txp_prefs", "val= 'de-de'", "name='language' AND val= 'german'");
+		break;
+		case 'italian':
+			$rs = safe_update("txp_prefs", "val= 'de-de'", "name='language' AND val= 'italian'");
+		break;
+		case 'polish':
+			$rs = safe_update("txp_prefs", "val= 'pl-pl'", "name='language' AND val= 'polish'");
+		break;
+		case 'portuguese':
+			$rs = safe_update("txp_prefs", "val= 'pt-pt'", "name='language' AND val= 'portuguese'");
+		break;
+		case 'russian':
+			$rs = safe_update("txp_prefs", "val= 'ru-ru'", "name='language' AND val= 'russian'");
+		break;
+		case 'scotts':
+			//I'm not sure of this one
+			$rs = safe_update("txp_prefs", "val= 'gl-gl'", "name='language' AND 'val' = 'scotts'");
+		break;
+		case 'spanish':
+			$rs = safe_update("txp_prefs", "val= 'es-es'", "name='language' AND val= 'spanish'");
+		break;
+		case 'swedish':
+			$rs = safe_update("txp_prefs", "val= 'sv-sv'", "name='language' AND val= 'swedish'");
+		break;
+		case 'tagalog':
+			$rs = safe_update("txp_prefs", "val= 'tl-tl'", 	"name='language' AND val= 'tagalog'");
+		break;
+	        case 'english':
+	        default:
+			$rs = safe_update("txp_prefs", "val= 'en-gb'", "name='language' AND val= 'english'");
+		break;
+	}
+
+	// 1.0: new time zone offset
+	if (!safe_field('val','txp_prefs',"name='is_dst'")) {
+		safe_insert('txp_prefs',"prefs_id=1,name='is_dst',val=0");
+	}
+
+	if (!safe_field('val','txp_prefs',"name='gmtoffset'")) {
+		$old_offset = safe_field('val', 'txp_prefs', "name='timeoffset'");
+		$serveroffset = gmmktime(0,0,0) - mktime(0,0,0);
+		$gmtoffset = sprintf("%+d", $serveroffset + $old_offset);
+		safe_insert('txp_prefs',"prefs_id=1,name='gmtoffset',val='$gmtoffset'");
+	}
+
+	// 1.0: locale support
+	if (!safe_field('val','txp_prefs',"name='locale'")) {
+		safe_insert('txp_prefs',"prefs_id=1,name='locale',val='en_GB'");
+	}
+
+	// 1.0: temp dir
+	if (!safe_field('val','txp_prefs',"name='tempdir'")) {
+		$tempdir = find_temp_dir();
+		safe_insert('txp_prefs',"prefs_id=1,name='tempdir',val='$tempdir'");
+	}
 
 // updated, baby.
 

@@ -39,11 +39,4 @@
 
 		$txpcfg['txpath'] = '/home/path/to/textpattern/dir';
 
-
-	/**
-	 *  full server path to server web root (no slash at end)
-	 */
-
-		$txpcfg['doc_root'] = '/home/path/to/web/root';
-
 ?>

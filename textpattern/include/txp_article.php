@@ -1,7 +1,7 @@
 <?php
 /*
 	This is Textpattern
-	Copyright 2004 by Dean Allen 
+	Copyright 2005 by Dean Allen 
  	All rights reserved.
 
 	Use of this software indicates acceptance of the Textpattern license agreement 
@@ -71,11 +71,11 @@
 			if ($publish_now==1) {
 				$when = 'now()';
 			} else {
-				$when = strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.":00")-$timeoffset;
+				$when = strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.":00")-tz_offset();
 				$when = "from_unixtime($when)";
 			}
 
-			if ($Title and $Body) {
+			if ($Title or $Body or $Excerpt) {
 
 				$textile_body = (!$textile_body) ? 0 : 1;
 				$textile_excerpt = (!$textile_excerpt) ? 0 : 1;
@@ -127,13 +127,12 @@
 				
 				if ($ping_textpattern_com) {
 					$tx_client = new IXR_Client('http://textpattern.com/xmlrpc/');
-					$tx_client->query('ping.Textpattern', $sitename, $siteurl.$path_from_root);
+					$tx_client->query('ping.Textpattern', $sitename, hu);
 				}
 	
 				if ($ping_weblogsdotcom==1) {
 					$wl_client = new IXR_Client('http://rpc.pingomatic.com/');
-					$wl_client->query('weblogUpdates.ping', 
-						$sitename, 'http://'.$siteurl.$path_from_root);
+					$wl_client->query('weblogUpdates.ping', $sitename, hu);
 				}		
 			
 			} else { 	
@@ -185,7 +184,7 @@
 		if($reset_time) {
 			$whenposted = "Posted=now()"; 
 		} else {
-			$when = strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.":00")-$timeoffset;
+			$when = strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.":00")-tz_offset();
 			$when = "from_unixtime($when)";
 			$whenposted = "Posted=$when";
 		}
@@ -386,11 +385,11 @@
 				
 				// textile toggles
 			graf(gTxt('use_textile').br.
-				checkbox2('textile_body',$textile_body).
-					strtolower(gTxt('article')).
+				tag(checkbox2('textile_body',$textile_body).
+					strtolower(gTxt('article')),'label').
 				br.
-				checkbox2('textile_excerpt',$textile_excerpt).
-					strtolower(gTxt('excerpt'))),
+				tag(checkbox2('textile_excerpt',$textile_excerpt).
+					strtolower(gTxt('excerpt')),'label')),
 
 				// form override
 			($txpac['allow_form_override'])
@@ -413,7 +412,7 @@
 
 				// keywords
 			graf(gTxt('keywords').popHelp('keywords').br.
-				'<textarea name="Keywords" style="width:100px;height:80px">'.
+				'<textarea name="Keywords" style="width:100px;height:80px" rows="1" cols="1">'.
 				$Keywords.'</textarea>'),
 
 				// article image
@@ -435,8 +434,10 @@
 				echo '<p>';
 				foreach($recents as $recent) {
 					extract($recent);
+					if (!$Title) $Title = gTxt('untitled').sp.$ID;
 					echo '<a href="?event=article'.a.'step=edit'.a.'ID='.$ID.'">'.$Title.'</a>'.br.n;
 				}
+				echo '</p>';
 			}
 			
 			echo '</div>';
@@ -470,7 +471,7 @@
 					array(br,sp.sp.sp.sp),htmlspecialchars($bod)),'code');
 		} else {
 
-			echo '<textarea style="width:400px;height:360px" rows="1" cols="1" name="Body" tabindex="2">',htmlspecialchars($Body),'</textarea>';
+			echo '<textarea style="width:400px;height:420px" rows="1" cols="1" name="Body" tabindex="2">',htmlspecialchars($Body),'</textarea>';
 
 		}
 
@@ -481,7 +482,7 @@
 			if ($view=='text') {
 			
 				echo graf(gTxt('excerpt').popHelp('excerpt').br.
-				'<textarea style="width:400px;height:70px" rows="1" cols="1" name="Excerpt" tabindex="3">'.$Excerpt.'</textarea>');
+				'<textarea style="width:400px;height:50px" rows="1" cols="1" name="Excerpt" tabindex="3">'.htmlspecialchars($Excerpt).'</textarea>');
 		
 			} else {
 	
@@ -501,9 +502,9 @@
 	//-- author --------------
 	
 		if ($view=="text" && $step != "create") {
-			echo "<p><small>".gTxt('posted_by')." $AuthorID: ",date("H:i, d M y",$sPosted + $timeoffset);
+			echo "<p><small>".gTxt('posted_by')." $AuthorID: ",date("H:i, d M y",$sPosted + tz_offset());
 			if($sPosted != $sLastMod) {
-				echo br.gTxt('modified_by')." $LastModID: ", date("H:i, d M y",$sLastMod + $timeoffset);
+				echo br.gTxt('modified_by')." $LastModID: ", date("H:i, d M y",$sLastMod + tz_offset());
 			}
 				echo '</small></p>';
 			}
@@ -555,7 +556,7 @@
 	//-- section select --------------
 
 			if(!$from_view && !$pull) $Section = getDefaultSection();
-			echo ($use_sections && $view=='text')
+			echo ($view=='text')
 			?	graf(gTxt('section').' ['.eLink('section','','','',gTxt('edit')).']'.br.
 				section_popup($Section))
 			:	'';
@@ -578,7 +579,7 @@
 		if ($step == "create" and empty($GLOBALS['ID'])) {
 			if ($view == 'text') {
 			echo
-			graf(checkbox('publish_now','1').gTxt('set_to_now')),
+			graf(tag(checkbox('publish_now','1').gTxt('set_to_now'),'label')),
 			'<p>',gTxt('or_publish_at'),popHelp("timestamp"),br,
 				tsi('year','Y',time()),
 				tsi('month','m',time()),
@@ -602,11 +603,11 @@
 			if ($view == 'text') {
 				echo
 				'<p>',gTxt('published_at'),popHelp("timestamp"),br,
-					tsi('year','Y',$sPosted),
-					tsi('month','m',$sPosted),
-					tsi('day','d',$sPosted), sp,
-					tsi('hour','H',$sPosted), ':',
-					tsi('minute','i',$sPosted),
+					tsi('year','Y',$sPosted,5),
+					tsi('month','m',$sPosted,6),
+					tsi('day','d',$sPosted,7), sp,
+					tsi('hour','H',$sPosted,8), ':',
+					tsi('minute','i',$sPosted,9),
 				'</p>',
 					hInput('sPosted',$sPosted),
 					hInput('sLastMod',$sLastMod),
@@ -647,14 +648,13 @@
 	}
 
 //--------------------------------------------------------------
-	function tsi($name,$datevar,$time)
+	function tsi($name,$datevar,$time,$tab='')
 	{
-		global $timeoffset;
 		$size = ($name=='year') ? 4 : 2;
 
 		return '<input type="text" name="'.$name.'" value="'.
-			date($datevar,$time+$timeoffset)
-		.'" size="'.$size.'" maxlength="'.$size.'" class="edit" />'."\n";
+			date($datevar,$time+tz_offset())
+		.'" size="'.$size.'" maxlength="'.$size.'" class="edit" tabindex="'.$tab.'" />'."\n";
 	}
 
 //--------------------------------------------------------------
@@ -718,9 +718,9 @@
 		global $statuses;
 		$Status = (!$Status) ? 4 : $Status;
 		foreach($statuses as $a=>$b) {
-			$out[] = radio('Status',$a,($Status==$a)?1:0).$b;	
+			$out[] = tag(radio('Status',$a,($Status==$a)?1:0).$b,'label');	
 		}
-		return join('<br />'.n,$out);
+		return join(br.n,$out);
 	}
 
 //--------------------------------------------------------------

@@ -3,7 +3,7 @@
 /*
 	This is Textpattern
 
-	Copyright 2004 by Dean Allen
+	Copyright 2005 by Dean Allen
 	www.textpattern.com
 	All rights reserved
 
@@ -21,7 +21,7 @@
 	{
 		pagetop(gTxt('sections'),$message);
 
-		global $url_mode,$txpac,$wlink;
+		global $txpac,$wlink;
 		$out[] = 
 			tr(
 				tdcs(strong(gTxt('section_head')).popHelp('section_category'),3)
@@ -43,11 +43,7 @@
 			foreach ($rs as $a) {
 				extract($a);
 				if($name=='default') continue;
-				if ($url_mode) {
-					$wlink = (!check_sections($name)) 
-					?	sp.wLink('section','missing_section_file','name',$name) 
-					:	'';
-				}
+
 				$deletelink = dLink('section','section_delete','name',
 					$name,'','type','section');
 
@@ -87,7 +83,7 @@
 				
 				$form = form($form);
 
-				$out[] = tr( td( $name.$wlink ) . td( $form ) . td( $deletelink ) );
+				$out[] = tr( td( $name ) . td( $form ) . td( $deletelink ) );
 			}
 		}
 		echo startTable('list').join('',$out).endTable();
@@ -147,68 +143,6 @@
 		$name = ps('name');
 		safe_delete("txp_section","name='$name'");
 		section_list(messenger('section',$name,'deleted'));
-	}
-
-
-//-------------------------------------------------------------
-	function htaccess_snip($section) 
-	{
-		return "<Files $section>\n\tForceType application/x-httpd-php\n</Files>\n\n";
-	}
-
-//-------------------------------------------------------------
-	function file_snip($s) 
-	{
-	return chr(60).'?php
-	include "./textpattern/config.php"; 
-	$s = "'.$s.'";
-	include $txpcfg["txpath"]."/publish.php";
-	textpattern();
-?'.chr(62);
-
-	}
-
-// -------------------------------------------------------------
-	function check_sections($section) 
-	{
-		global $txpcfg,$path_from_root;
-		$txproot = $txpcfg['doc_root'].$path_from_root;
-
-		if(is_dir($txproot)) {
-			$thedir = opendir($txproot);
-			while (false !== ($file = readdir($thedir))) {
-				if (is_file($txproot.$file)) {
-					$rootfiles[] = strtolower($file);
-				}
-			}
-		}
-		if (is_array($rootfiles)) {
-			if (!in_array(strtolower($section),$rootfiles)) {
-				return false;
-			}
-			return true;
-		}
-		return false;
-	}
-
-// -------------------------------------------------------------
-	function missing_section_file() 
-	{
-		global $txpcfg;
-		pageTop('missing section placeholder');
-		$name = gps('name');
-		$out = array(
-		startTable("edit"),
-		tr(
-			tda(
-				graf(gTxt('section_warning_part1').' '.strong($name).' '.gTxt('section_warning_part2').' '.$txpcfg['doc_root'].' '.gTxt('section_warning_part3').':').graf(
-			'<textarea cols="50" rows="7">'.file_snip($name).'</textarea>').
-			graf(gTxt('section_warning_part4').' <code>.htaccess</code> '.gTxt('section_warning_part5').' '.$txpcfg['doc_root'].' '.gTxt('section_warning_part6').':').
-	graf(
-			'<textarea cols="50" rows="4">'.htaccess_snip($name).'</textarea>'),' width="500px"')
-		),
-		endTable());
-		echo join('',$out);
 	}
 
 ?>

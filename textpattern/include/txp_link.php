@@ -3,7 +3,7 @@
 /*
 	This is Textpattern
 
-	Copyright 2004 by Dean Allen
+	Copyright 2005 by Dean Allen
 	www.textpattern.com
 	All rights reserved
 
@@ -55,7 +55,7 @@
 
 
 		if ($rs) {
-			echo '<form action="index.php" method="post" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">',
+			echo '<form action="index.php" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">',
 			startTable('list'),
 
 			tr(
@@ -78,7 +78,7 @@
 			}
 			echo 
 			tr(
-				tda(link_multiedit_form(), ' colspan="4" style="border:0px;text-align:right"')
+				tda(select_buttons().link_multiedit_form(), ' colspan="4" style="border:0px;text-align:right"')
 			);
 			echo endTable(),'</form>';
 			echo pageby_form('link',$link_list_pageby);
@@ -138,12 +138,7 @@
 //--------------------------------------------------------------
 	function linkcategory_popup($cat="") 
 	{
-		$arr = array('');
-		$rs = getTree("root","link");
-		if ($rs) {
-			return treeSelectInput("category", $rs, $cat);
-		}
-		return false;
+		return event_category_popup("link", $cat);		
 	}
 
 // -------------------------------------------------------------
@@ -220,38 +215,22 @@
 // -------------------------------------------------------------
 	function link_change_pageby() 
 	{
-		$qty = gps('qty');
-		safe_update('txp_prefs',"val=$qty","name='link_list_pageby'");
+		event_change_pageby('link');
 		link_edit();
 	}
 
 // -------------------------------------------------------------
 	function link_multiedit_form() 
 	{
-		$method = ps('method');
-		$methods = array('delete'=>gTxt('delete'));
-		return
-			gTxt('with_selected').sp.selectInput('method',$methods,$method,1).
-			eInput('link').sInput('link_multi_edit').fInput('submit','',gTxt('go'),'smallerbox');
+		return event_multiedit_form('link');
 	}
 
 // -------------------------------------------------------------
 	function link_multi_edit() 
 	{
-		$method = ps('method');
-		$things = ps('selected');
-		if ($things) {
-			if ($method == 'delete') {
-				foreach($things as $id) {
-					if (safe_delete('txp_link',"id='$id'")) {
-						$ids[] = $id;
-					}
-				}
-				link_edit(messenger('link',join(', ',$ids),'deleted'));
-			} else link_edit();
-		} else link_edit();
+		$deleted = event_multi_edit('txp_link','id');
+		if(!empty($deleted)) return link_edit(messenger('link',$deleted,'deleted'));
+		return link_edit();
 	}
-
-
 
 ?>

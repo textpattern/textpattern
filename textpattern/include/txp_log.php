@@ -3,7 +3,7 @@
 /*
 	This is Textpattern
 
-	Copyright 2004 by Dean Allen
+	Copyright 2005 by Dean Allen
 	www.textpattern.com
 	All rights reserved
 
@@ -56,17 +56,17 @@
 			foreach ($rs as $a) {
 				extract($a);
 				if ($refer) {
-					$referprint = str_replace("www.","",
+					$referprint = preg_replace("/^www\./","",
 						substr(htmlspecialchars($refer),0,50));
-					$referprint = '<a href="http://'.$refer.'">'.$referprint.'</a>';
+					$referprint = '<a href="http://'.htmlspecialchars($refer).'">'.$referprint.'</a>';
 				} else {
 					$referprint = '&#160;';
 				}
 				$pageprint = preg_replace('/\/$/','', htmlspecialchars(substr($page,1)));
 				$pageprint = ($pageprint=='') 
 				?	'' 
-				:	'<a href="'.$page.'" target="_blank">'.$pageprint.'</a>';
-				$fstamp = date("n/j g:i a",($stamp + $timeoffset));
+				:	'<a href="'.htmlspecialchars($page).'" target="_blank">'.substr($pageprint,0,50).'</a>';
+				$fstamp = date("n/j g:i a",($stamp + tz_offset()));
 				
 				echo tr(
 					td($fstamp).

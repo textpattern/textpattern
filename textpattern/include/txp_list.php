@@ -1,7 +1,7 @@
 <?php
 /*
 	This is Textpattern
-	Copyright 2004 by Dean Allen 
+	Copyright 2005 by Dean Allen 
  	All rights reserved.
 
 	Use of this software indicates acceptance of the Textpattern license agreement 
@@ -14,7 +14,7 @@
 			1 => gTxt('draft'),
 			2 => gTxt('hidden'),
 			3 => gTxt('pending'),
-			4 => strong(gTxt('live'))
+			4 => gTxt('live')
 		);
 
 		
@@ -31,6 +31,7 @@
 		$lvars = array("page","sort","dir","crit",'method');
 		extract(gpsa($lvars));
 		global $statuses,$step;
+		$sesutats = array_flip($statuses);
 		
 		pagetop("Textpattern",$message);
 
@@ -51,7 +52,7 @@
 				'author'     => "AuthorID rlike '$crit'",
 				'categories' => "Category1 rlike '$crit' or Category2 rlike '$crit'",
 				'section'    => "Section rlike '$crit'",
-				'status'     => "Status rlike '$crit'"
+				'status'     => "Status = '".ucfirst(@$sesutats[$crit])."'"
 			);
 			$criteria = $critsql[$method];
 			$limit = 500;
@@ -67,18 +68,14 @@
 		echo (!$crit) ? list_nav_form($page,$numPages,$sort,$dir) : '', list_searching_form($crit,$method);
 		
 		if ($rs) {
-			echo '<form action="index.php" method="post" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">',
+			echo '<form action="index.php" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">',
 			startTable('list'),
 			'<tr>',
 				column_head('posted', 'Posted', 'list', 1, $linkdir),
 				column_head('title', 'Title', 'list', 1, $linkdir),
-				($use_sections)
-				?	column_head('section', 'Section', 'list', 1, $linkdir)
-				:	'',
-				($use_categories)
-				?	column_head('category1', 'Category1', 'list', 1, $linkdir).
-					column_head('category2', 'Category2', 'list', 1, $linkdir)
-				:	'',
+				column_head('section', 'Section', 'list', 1, $linkdir),
+				column_head('category1', 'Category1', 'list', 1, $linkdir).
+				column_head('category2', 'Category2', 'list', 1, $linkdir),
 				hCell(gTxt('Author')),
 				column_head(gTxt('status'), 'Status', 'list', 1, $linkdir),
 				td(),
@@ -86,29 +83,27 @@
 	
 			foreach ($rs as $a) {
 				extract($a);
-				
-				if($use_categories==1) { $cat1 = $Category1; $cat2 = $Category2; }
-		
+						
 				$stat = (!empty($Status)) ? $statuses[$Status] : '';
-				if($use_sections==1) $sect = $Section;
-				$adate = date("d M y",$uPosted+$timeoffset);
+				$adate = date("d M y",$uPosted+tz_offset());
 		
 				$alink = eLink('article','edit','ID',$ID,$adate);
 				$tlink = eLink('article','edit','ID',$ID,$Title);
-				$modbox = fInput('checkbox','selected[]',$ID);
+				$modbox = fInput('checkbox','selected[]',$ID,'','','','','',$ID);
 				
 				echo "<tr>".n,
 					td($alink),
 					td($tlink,200),
-					($use_sections) ? td($sect,75) : '',
-					($use_categories) ? td($cat1,75).td($cat2,75) : '',
+					td($Section,75),
+					td($Category1,75).td($Category2,75),
 					td($AuthorID),
 					td($stat,45),
 					td($modbox),
 				'</tr>'.n;
 			}
 			
-			echo tr(tda(list_multiedit_form(),' colspan="8" style="text-align:right;border:0px"'));
+			echo tr(tda(select_buttons().
+			list_multiedit_form(),' colspan="8" style="text-align:right;border:0px"'));
 			
 			echo "</table></form>";
 			echo pageby_form('list',$article_list_pageby);
@@ -119,8 +114,7 @@
 // -------------------------------------------------------------
 	function list_change_pageby() 
 	{
-		$qty = gps('qty');
-		safe_update('txp_prefs',"val=$qty","name='article_list_pageby'");
+		event_change_pageby('article');
 		list_list();
 	}
 
@@ -162,31 +156,19 @@
 	
 	}
 
+
 // -------------------------------------------------------------
 	function list_multiedit_form() 
 	{
-		$method = ps('method');
-		$methods = array('delete'=>gTxt('delete'));
-		return
-			gTxt('with_selected').sp.selectInput('method',$methods,$method,1).
-			eInput('list').sInput('list_multi_edit').fInput('submit','',gTxt('go'),'smallerbox');
+		return event_multiedit_form('list');
 	}
 
 // -------------------------------------------------------------
 	function list_multi_edit() 
 	{
-		$method = ps('method');
-		$things = ps('selected');
-		if ($things) {
-			foreach($things as $ID) {
-				if ($method == 'delete') {
-					if (safe_delete('textpattern',"ID='$ID'")) {
-						$ids[] = $ID;
-					}
-				}
-			}
-			list_list(messenger('article',join(', ',$ids),'deleted'));
-		} else list_list();
+		$deleted = event_multi_edit('textpattern','ID');
+		if(!empty($deleted)) return list_list(messenger('article',$deleted,'deleted'));
+		return list_list();
 	}
 
 ?>

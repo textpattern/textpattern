@@ -7,6 +7,7 @@ $article_tags = array(
 	'excerpt',
 	'category1',
 	'category2',
+	'section',
 	'comments_invite',
 	'permlink',
 	'posted',
@@ -71,7 +72,9 @@ $page_misc_tags = array(
 	'linklist',
 	'css',
 	'sitename',
-	'page_title'
+	'page_title',
+	'lang',
+	'breadcrumb'
 );
 
 $page_xml_tags = array(

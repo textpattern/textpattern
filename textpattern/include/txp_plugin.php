@@ -3,7 +3,7 @@
 /*
 	This is Textpattern
 
-	Copyright 2004 by Dean Allen
+	Copyright 2005 by Dean Allen
 	www.textpattern.com
 	All rights reserved
 
@@ -12,21 +12,12 @@
 
     check_privs(1,2);
 
-    switch(strtolower($step)) {
-      case "list": list_plugins(); break;
-      case "edit": edit_plugin(); break;
-      case "switch_status": switch_status(); break;
-      case "plugin_save": plugin_save(); break;
-		case "plugin_verify": plugin_verify(); break;
-      case "plugin_install": plugin_install(); break;
-      case "view_hilighted": view_hilighted(); break;
-      case "view_help": view_help(); break;
-      case "delete": plugin_delete();break;
-      default: list_plugins();
-    }
-    
+	if(!$step or !function_exists($step)){
+		plugin_list();
+	} else $step();
+	
 // -------------------------------------------------------------
-	function list_plugins($message='')
+	function plugin_list($message='')
 	{	
 		pagetop(gTxt('edit_plugins'),$message);
 
@@ -38,27 +29,30 @@
 		// 1.0rc - deprecate this soon
 		plugin_form_old()
 		
-		,' colspan="5" style="border:0;height:50px"')).
-		 assHead('plugin','author','version','description','active','');
+		,' colspan="8" style="border:0;height:50px"')).
+		 assHead('plugin','author','version','description','active','','','');
 			
 		$rs = safe_rows("*","txp_plugin", "1 order by name");
-	
+		
 		foreach ($rs as $a) {
 		  extract($a);
 
-			// nice to have eval() do a syntax check on the plugin here
-
+		$elink = eLink('plugin','plugin_edit','name',$name,gTxt('edit'));
+		$hlink = '<a href="?event=plugin&#38;step=plugin_help&#38;name='.$name.'">'.
+					gTxt('help').'</a>';
 		  echo 
 		  tr(
-			td(eLink('plugin','edit','name',$name,$name),150).
-			td('<a href="'.$author_uri.'">'.$author.'</a>',100).
+			td($name).
+			td('<a href="'.$author_uri.'">'.$author.'</a>').
 			td($version,10).
 			td($description,260).
 			td(status_link($status,$name,yes_no($status)),30).
-			td(dLink('plugin','delete','name',$name),30)
+			td($elink).
+			td($hlink).
+			td(dLink('plugin','plugin_delete','name',$name),30)
 		  );
 		  unset($name,$page,$deletelink);
-		}    
+		}
 		echo endTable();	
 	}
 	
@@ -68,38 +62,46 @@
 		extract(gpsa(array('name','status')));
 		$change = ($status) ? 0 : 1;
 		safe_update("txp_plugin", "status=$change", "name='$name'");
-		list_plugins(messenger('plugin',$name,'updated'));
+		plugin_list(messenger('plugin',$name,'updated'));
 	}
 
 // -------------------------------------------------------------
-  function edit_plugin()
+  function plugin_edit()
   {
 		$name = gps('name');
 		pagetop(gTxt('edit_plugins'));
 		echo plugin_edit_form($name);
-//		echo graf('<a href="?event=plugin'.
-//				a.'step=view_hilighted'.
-//				a.'name='.urlencode($name).
-//				'">View highlighted</a>');
   }
 
   
+// -------------------------------------------------------------
+	function plugin_help() 
+	{
+		$name = gps('name');
+		pagetop(gTxt('plugin_help'));
+		$help = ($name) ? safe_field('help','txp_plugin',"name = '$name'") : '';
+		echo 
+		startTable('edit')
+		.	tr(tda($help,' width="600"'))
+		.	endTable();
+		
+	}
+
 // -------------------------------------------------------------
 	function plugin_edit_form($name='') 
 	{
 		$sub = fInput('submit','',gTxt('save'),'publish');
 		$code = ($name) ? fetch('code','txp_plugin','name',$name) : '';
-		$help = ($name) ? fetch('help','txp_plugin','name',$name) : '';
 		$thing = ($code)
 		?	$code
 		:	'';
-		$textarea = '<textarea name="code" rows="30" cols="90">'.htmlentities($thing).'</textarea>';
+		$textarea = '<textarea name="code" rows="30" cols="90">'.htmlentities(utf8_decode($thing)).'</textarea>';
 
 		return 
 		form(startTable('edit')
 		.	tr(td($textarea))
 		.	tr(td($sub))
-		.	tr(td($help))
+#		.	tr(td($help))
 		.	endTable().sInput('plugin_save').eInput('plugin').hInput('name',$name));
 	}
 
@@ -108,7 +110,7 @@
 	{
 		extract(doSlash(gpsa(array('name','code'))));
 		safe_update("txp_plugin","code='$code'", "name='$name'");
-		list_plugins(messenger('plugin',$name,'saved'));
+		plugin_list(messenger('plugin',$name,'saved'));
 	}
   
 // -------------------------------------------------------------
@@ -116,7 +118,7 @@
 	{
 		$name = doSlash(ps('name'));
 		safe_delete("txp_plugin","name='$name'");
-		list_plugins(messenger('plugin',$name,'deleted'));
+		plugin_list(messenger('plugin',$name,'deleted'));
 	}
 
 // -------------------------------------------------------------
@@ -148,11 +150,12 @@
 				if(is_array($plugin)){
 					extract(doSlash($plugin));
 					$source = highlight_string($plugin['code'], true);
-					$sub = fInput('submit','',gTxt('save'),'publish');
+					$sub = fInput('submit','',gTxt('install'),'publish');
 		
 					pagetop(gTxt('edit_plugins'));
 					echo 
 					form(startTable('edit')
+					.	tr(td(hed(gTxt('previewing_plugin'),3)))
 					.	tr(td($source))
 					.	tr(td($sub))
 					.	endTable().sInput('plugin_install').eInput('plugin').hInput('plugin64', $plugin64));
@@ -160,7 +163,7 @@
 				}
 			}
 		}
-		list_plugins(gTxt('bad_plugin_code'));
+		plugin_list(gTxt('bad_plugin_code'));
 
 	}
 	
@@ -212,10 +215,10 @@
 						);
 					}
 					if ($rs and $code) {
-						list_plugins(messenger('plugin',$name,'installed'));
-					} else list_plugins('plugin install failed');
+						plugin_list(messenger('plugin',$name,'installed'));
+					} else plugin_list('plugin install failed');
 				}
-			} else list_plugins(gTxt('bad_plugin_code'));
+			} else plugin_list(gTxt('bad_plugin_code'));
 		}
 	}
 	
@@ -228,7 +231,7 @@
 		gTxt('old_plugin').': '.
 		fInput('file','theplugin','','edit').
 		popHelp('install_plugin').sp.
-		fInput('submit','install_old','install','smallerbox').
+		fInput('submit','install_old',gTxt('upload'),'smallerbox').
 		eInput('plugin').sInput('plugin_verify').hInput('txt_plugin',true).
 		'</form>';
 	}
@@ -241,7 +244,7 @@
 		gTxt('install_plugin').': '.
 		text_area('plugin',30,400,'').
 		popHelp('install_plugin').sp.
-		fInput('submit','install_new','install','smallerbox').
+		fInput('submit','install_new',gTxt('upload'),'smallerbox').
 		eInput('plugin').sInput('plugin_verify').
 		'</form>';
 	}

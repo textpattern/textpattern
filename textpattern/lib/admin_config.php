@@ -128,6 +128,11 @@ $txpac = array(
 		
 	'ping_textpattern_com'        => 1,
 
+// -------------------------------------------------------------
+// use DNS lookups in referrer log
+		
+	'use_dns'        => 1,
+
 );
 
 ?>

@@ -12,7 +12,7 @@
 /*
 	This is Textpattern
 
-	Copyright 2004 by Dean Allen
+	Copyright 2005 by Dean Allen
 	www.textpattern.com
 	All rights reserved
 
@@ -294,6 +294,66 @@
 	}
 
 // -------------------------------------------------------------
+	function tag_category1() 
+	{
+		global $step,$endform,$name;
+		$invars = gpsa(array('link'));
+		extract($invars);
+		$out = form(startTable('list').
+			tr(tdcs(hed('Category 1',3),2) ).
+			tagRow('link_to_this_category', yesno_pop('link',$link)) .
+			$endform
+		);
+		$out .= ($step=='build') ? tdb(tb($name, $invars)) : '';
+		return $out;
+	}
+
+// -------------------------------------------------------------
+	function tag_category2() 
+	{
+		global $step,$endform,$name;
+		$invars = gpsa(array('link'));
+		extract($invars);
+		$out = form(startTable('list').
+			tr(tdcs(hed('Category 2',3),2) ).
+			tagRow('link_to_this_category', yesno_pop('link',$link)) .
+			$endform
+		);
+		$out .= ($step=='build') ? tdb(tb($name, $invars)) : '';
+		return $out;
+	}
+
+// -------------------------------------------------------------
+	function tag_section() 
+	{
+		global $step,$endform,$name;
+		$invars = gpsa(array('link'));
+		extract($invars);
+		$out = form(startTable('list').
+			tr(tdcs(hed('Section',3),2) ).
+			tagRow('link_to_this_section', yesno_pop('link',$link)) .
+			$endform
+		);
+		$out .= ($step=='build') ? tdb(tb($name, $invars)) : '';
+		return $out;
+	}
+
+// -------------------------------------------------------------
+	function author() 
+	{
+		global $step,$endform,$name;
+		$invars = gpsa(array('author'));
+		extract($invars);
+		$out = form(startTable('list').
+			tr(tdcs(hed('Author',3),2) ).
+			tagRow('link_to_this_author', yesno_pop('link',$link)) .
+			$endform
+		);
+		$out .= ($step=='build') ? tdb(tb($name, $invars)) : '';
+		return $out;
+	}
+
+// -------------------------------------------------------------
 	function tag_link_to_home() 
 	{
 		global $step,$endform,$name;
@@ -403,8 +463,6 @@
 
 	function tag_article_image()       { return tdb(tb('article_image')); }
 
-	function tag_author()              { return tdb(tb('author')); }
-
 	function tag_css()                 { return tdb(tb('css')); }
 
 	function tag_body()                { return tdb(tb('body')); }
@@ -420,12 +478,6 @@
 	function tag_link_description()    { return tdb(tb('link_description')); }
 
 	function tag_link_text()           { return tdb(tb('link_text')); }
-
-	function tag_category1()           { return tdb(tb('category1')); }
-	
-	function tag_category2()           { return tdb(tb('category2'));	}
-
-	function tag_section()             { return tdb(tb('section'));	}
 
 	function tag_posted()              { return tdb(tb('posted'));	}
 
@@ -460,6 +512,28 @@
 	function tag_search_result_url()   { return tdb(tb('search_result_url')); }
 
 	function tag_search_result_date()  { return tdb(tb('search_result_date')); }
+	
+	function tag_lang()             { return tdb(tb('lang')); }
+	function tag_breadcrumb()
+	{
+		global $step,$endform,$name;
+		$invars = gpsa(array(
+			'wraptag','label','sep','link'
+		));
+		extract($invars);
+		$out = form(startTable('list').
+			tr(tdcs(hed('Breadcrumb',3),2) ) .
+			tagRow('breadcrumb_separator',fInput('text','sep',$sep,'edit','','',4)).
+			tagRow('label',fInput('text','label',$label,'edit','','',25)) .
+			tagRow('wraptag', fInput('text','wraptag',$wraptag,'edit','','',2)). 
+			tagRow('breadcrumb_linked'   , yesno_pop('link',$link)) .
+			$endform
+		);
+		$out .= ($step=='build') ? tdb(tb($name, $invars)) : '';
+		return $out;
+		
+		" &#187; ";
+	}
 
 // -------------------------------------------------------------
 	function tb($name,$atts=array(),$double = '') 
@@ -606,29 +680,6 @@
 	function tdb($thing)
 	{
 		return hed('Tag:',3).text_area('tag','100','300',$thing);
-	}
-
-
-
-// -------------------------------------------------------------
-	function tag_image() 
-	{
-		global $path_from_root,$img_dir;
-		$invars = gpsa(array('id','type','h','w','ext','alt'));
-		$img_dir = (!$img_dir) ? 'images' : $img_dir;
-		extract($invars);
-		switch ($type) {
-			case 'textile': 
-				$alt = ($alt) ? ' ('.$alt.')' : '';
-				$thing='!'.$path_from_root.$img_dir.'/'.$id.$ext.$alt.'!'; 
-			break;
-
-			case 'textpattern': $thing = '<txp:image id="'.$id.$ext.'" />'; break;
-
-			case 'xhtml': $thing = '<img src="'.$path_from_root.$img_dir.'/'.
-				$id.$ext.'" style="height:'.$h.'px;width:'.$w.'px" />';
-		}
-		return tdb($thing);
 	}
 
 ?>

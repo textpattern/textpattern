@@ -2,7 +2,7 @@
 
 /*
 	This is Textpattern
-	Copyright 2004 by Dean Allen - all rights reserved.
+	Copyright 2005 by Dean Allen - all rights reserved.
 
 	Use of this software denotes acceptance of the Textpattern license agreement 
 
@@ -50,7 +50,7 @@
 			$query[] = $cfilter;
 			
 			$rs = safe_rows(
-				"*", 
+				"*, unix_timestamp(Posted) as uPosted, ID as thisid",
 				"textpattern", 
 				"Status = 4 ".join(' ',$query).
 				"and Posted < now() order by Posted desc limit $limit"
@@ -59,19 +59,18 @@
 			if($rs) {
 				foreach ($rs as $a) {
 					extract($a);
+
+					$a['posted'] = $uPosted;
+
 					$Body = (!$txpac['syndicate_body_or_excerpt']) ? $Body_html : $Excerpt;
 					$Body = (!trim($Body)) ? $Body_html : $Body;
 					$Body = str_replace('href="/','href="http://'.$siteurl.'/',$Body);
-					$Body = htmlspecialchars($Body,ENT_NOQUOTES);
+					$Body = preg_replace(array('/</','/>/',"/'/",'/"/'), array('&lt;','&gt;','&#039','&quot;'),$Body);
 					
 					$uTitle = ($url_title) ? $url_title : stripSpace($Title);
 					$uTitle = htmlspecialchars($uTitle,ENT_NOQUOTES);
 
-	
-					$link = ($url_mode==0)
-					?	'http://'.$siteurl.$path_from_root.'index.php?id='.$ID
-					:	'http://'.$siteurl.$path_from_root.$Section.'/'.$ID.'/'.$uTitle;
-		
+			
 					if ($txpac['show_comment_count_in_feed']) {
 						$dc = getCount('txp_discuss', "parentid=$ID and visible=1");
 						$count = ($dc > 0) ? ' ['.$dc.']' : '';
@@ -79,9 +78,11 @@
 
 					$Title = doSpecial($Title).$count;
 
+					$permlink = permlinkurl($a);
+
 					$item = tag(strip_tags($Title),'title').n.
 						tag($Body,'description').n.
-						tag($link,'link');
+						tag($permlink,'link');
 	
 					$out[] = tag($item,'item');
 				}

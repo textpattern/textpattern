@@ -3,7 +3,7 @@
 /*
 	This is Textpattern
 
-	Copyright 2004 by Dean Allen
+	Copyright 2005 by Dean Allen
 	www.textpattern.com
 	All rights reserved
 
@@ -28,6 +28,7 @@
 	function discuss_save()
 	{
 		extract(doSlash(gpsa(array('email','name','web','message','discussid','ip','visible'))));
+		$message = htmlentities($message, ENT_QUOTES, 'UTF-8');
 		safe_update("txp_discuss",
 			"email   = '$email',
 			 name    = '$name',
@@ -74,7 +75,7 @@
 
 		if($rs) {	
 
-			echo '<form action="index.php" method="post" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">',
+			echo '<form action="index.php" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">',
 
 			startTable('list'),
 			assHead('date','name','message','parent','');
@@ -83,7 +84,7 @@
 				extract($a);
 				$dmessage = $message;
 				$name = (!$visible) ? '<span style="color:red">'.$name.'</span>' : $name;
-				$date = "".date("M d, g:ia",($uPosted + $timeoffset))."";
+				$date = "".date("M d, g:ia",($uPosted + tz_offset()))."";
 				$editlink = eLink('discuss','discuss_edit','discussid',$discussid,$date);
 				$cbox = fInput('checkbox','selected[]',$discussid);
 	
@@ -99,16 +100,12 @@
 				));
 			}
 			
-			echo tr(tda(discuss_multiedit_form(),' colspan="5" style="text-align:right;border:0px"'));
+			echo tr(tda(select_buttons().discuss_multiedit_form(),' colspan="5" style="text-align:right;border:0px"'));
 			
 			echo endTable().'</form>';
 
 			echo startTable('edit'),
 				tr(
-					tda(
-					graf('<a href="index.php?event=discuss'.a.'step=ipban_list">'.
-						gTxt('list_banned_ips').'</a>'),' valign="middle"'
-					).
 					td(
 						form(
 							fInput('text','crit','','edit').
@@ -117,7 +114,13 @@
 							sInput("list")
 						)
 					).
-					tdcs(graf(join('',$nav)),2))
+					td(graf(join('',$nav)))).
+				tr(
+					tda(
+						graf('<a href="index.php?event=discuss'.a.'step=ipban_list">'.
+							gTxt('list_banned_ips').'</a>'),' colspan="2" align="center" valign="middle"'
+					)
+				)
 				,endTable();
 
 		} else echo graf(gTxt('no_comments_recorded'), ' align="center"');
@@ -129,7 +132,7 @@
 		$discussid=gps('discussid');
 		extract(safe_row("*", "txp_discuss", "discussid='$discussid'"));
 		$ta = '<textarea name="message" cols="60" rows="15">'.
-			htmlspecialchars($message).'</textarea>';
+			preg_replace(array('/</', '/>/'), array('&lt;', '&gt'), $message).'</textarea>';
 
 		if (fetch('ip','txp_discuss_ipban','ip',$ip)) {
 			$banstep = 'ipban_unban'; $bantext = gTxt('unban');
@@ -183,7 +186,7 @@
 // -------------------------------------------------------------
 	function ipban_unban() 
 	{
-		$ip = ps('ip');
+		$ip = gps('ip');
 		
 		$rs = safe_delete("txp_discuss_ipban","ip='$ip'");
 		
@@ -233,36 +236,22 @@
 // -------------------------------------------------------------
 	function discuss_change_pageby() 
 	{
-		$qty = gps('qty');
-		safe_update('txp_prefs',"val=$qty","name='comment_list_pageby'");
+		event_change_pageby('comment');
 		discuss_list();
 	}
 
 // -------------------------------------------------------------
 	function discuss_multiedit_form() 
 	{
-		$method = ps('method');
-		$methods = array('delete'=>gTxt('delete'));
-		return
-			gTxt('with_selected').sp.selectInput('method',$methods,$method,1).
-			eInput('discuss').sInput('discuss_multi_edit').fInput('submit','',gTxt('go'),'smallerbox');
+		return event_multiedit_form('discuss');
 	}
 
 // -------------------------------------------------------------
 	function discuss_multi_edit() 
 	{
-		$method = ps('method');
-		$things = ps('selected');
-		if ($things) {
-			if ($method == 'delete') {
-				foreach($things as $discussid) {
-					if (safe_delete('txp_discuss',"discussid='$discussid'")) {
-						$ids[] = $discussid;
-					}
-				}
-				discuss_list(messenger('comment',join(', ',$ids),'deleted'));
-			} else discuss_list();
-		} else discuss_list();
+		$deleted = event_multi_edit('txp_discuss','discussid');
+		if(!empty($deleted)) return discuss_list(messenger('comment',$deleted,'deleted'));
+		return discuss_list();
 	}
 
 

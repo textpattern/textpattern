@@ -2,7 +2,7 @@
 /*
 	This is Textpattern
 
-	Copyright 2004 by Dean Allen
+	Copyright 2005 by Dean Allen
 	www.textpattern.com
 	All rights reserved
 
@@ -42,7 +42,6 @@ eod;
 	function getDbInfo()
 	{
 		$temp_txpath = dirname(__file__);
-		$temp_doc_root = $_SERVER['DOCUMENT_ROOT'];
 	  echo '<form action="setup.php" method="post">',
 	  	'<table id="setup" cellpadding="0" cellspacing="0" border="0">',
 		tr(
@@ -69,18 +68,24 @@ eod;
 		tr(tdcs('&nbsp;',4)),
 		tr(
 			tdcs(
-				hed('Site Paths',3).
-				graf('Please confirm the following paths to your site root and to the Textpattern directory.'),4)
-		),
-		tr(
-			fLabelCell('Full path to server\'s web root').
-				tdcs(fInput('text','doc_root',$temp_doc_root,'edit','','',40).
-				popHelp('doc_root'),3)
+				hed('Site Path',3).
+				graf('Please confirm the following path.'),4)
 		),
 		tr(
 			fLabelCell('Full path to Textpattern').
 				tdcs(fInput('text','txpath',$temp_txpath,'edit','','',40).
 				popHelp('full_path'),3)
+		),
+		tr(tdcs('&nbsp;',4)),
+		tr(
+			tdcs(
+				hed('Site URL',3).
+				graf('Please enter the web-reachable address of your site.'),4)
+		),
+		tr(
+			fLabelCell('http://').
+				tdcs(fInput('text','siteurl','mysite.com','edit','','',40).
+				popHelp('site_url'),3)
 		);
 		echo
 			tr(
@@ -95,10 +100,9 @@ eod;
 	function printConfig()
 	{
 		$carry = enumPostItems('ddb','duser','dpass','dhost','dprefix','txprefix','txpath',
-			'doc_root','ftphost','ftplogin','ftpass','ftpath');
+			'siteurl','ftphost','ftplogin','ftpass','ftpath');
 
 		$carry['txpath']   = preg_replace("/^(.*)\/$/","$1",$carry['txpath']);
-		$carry['doc_root'] = preg_replace("/^(.*)\/$/","$1",$carry['doc_root']);
 		$carry['ftpath']   = preg_replace("/^(.*)\/$/","$1",$carry['ftpath']);
 		
 		extract($carry);
@@ -164,6 +168,9 @@ eod;
 		$carry = isPost('carry');
 		extract(postDecode($carry));
 		extract(gpsa(array('name','pass','RealName','email')));
+
+		$siteurl = str_replace("http://",'',$siteurl);
+		$siteurl = rtrim($siteurl,"/");
 		
 		define("PFX",trim($dprefix));
 		
@@ -173,6 +180,8 @@ eod;
 
 		mysql_query("INSERT INTO ".PFX."txp_users VALUES
 			(1,'$name',password(lower('$pass')),'$RealName','$email',1,now(),'$nonce')");
+
+		mysql_query("update ".PFX."txp_prefs set val = '$siteurl' where `name`='siteurl'");
 
  		echo fbCreate();
 	}
@@ -206,7 +215,6 @@ eod;
 		.o.'host'		  .m.$dhost.nl
 		.o.'table_prefix' .m.$dprefix.nl
 		.o.'txpath'		  .m.$txpath.nl
-		.o.'doc_root'	  .m.$doc_root.nl
 		.$close;
 	}
 

@@ -3,7 +3,7 @@
 /*
 	This is Textpattern
 
-	Copyright 2004 by Dean Allen
+	Copyright 2005 by Dean Allen
 	www.textpattern.com
 	All rights reserved
 
@@ -20,8 +20,7 @@
 	
 		$prefnames = safe_column("name", "txp_prefs", "prefs_id='1'");
 
-		$post = (get_magic_quotes_gpc()) ? doStrip($_POST) : $_POST;
-		$post = doSlash($post);
+		$post = doSlash(stripPost());
 
 		foreach($prefnames as $prefname) {
 			if (isset($post[$prefname])) {
@@ -30,6 +29,7 @@
 				} else {
 					if($prefname == 'siteurl') {
 						$post[$prefname] = str_replace("http://",'',$post[$prefname]);
+						$post[$prefname] = rtrim($post[$prefname],"/");
 					}
 					safe_update(
 						"txp_prefs", 
@@ -44,6 +44,7 @@
 	}
 	
 		extract(get_prefs());
+		$locale = setlocale(LC_ALL, $locale);
 		
 		$message = (isset($message)) ? $message : "";
 
@@ -55,20 +56,18 @@
 
 		pCell('sitename',$sitename,'input',20),
 		pCell('siteurl',$siteurl,'input',20),
-		pCell('path_from_root',$path_from_root,'input',20),
 		pCell('site_slogan',$site_slogan,'input',20),
 		pCell('language',$language,'languages'),
-		pCell('timeoffset',$timeoffset,'timeoffset'),
+		pCell('locale',$locale,'locales'),
+		pCell('gmtoffset',$gmtoffset,'gmtoffset'),
+		pCell('is_dst',$is_dst,'radio'),
 		pCell('dateformat',$dateformat,'dateformats'),
 		pCell('archive_dateformat',$archive_dateformat,'dateformats'),
-		pCell('url_mode',$url_mode,'urlmodes'),
+		pCell('permlink_mode',$permlink_mode,'permlinkmodes'),
 		pCell('send_lastmod',$send_lastmod,'radio'),
 		pCell('ping_weblogsdotcom',$ping_weblogsdotcom,'radio'),
 		pCell('logging',$logging,'logging'),
-		pCell('record_mentions',$record_mentions,'radio'),
-		pCell('use_textile',$use_textile,'text'),
-		pCell('use_categories',$use_categories,'radio'),
-		pCell('use_sections',$use_sections,'radio');
+		pCell('use_textile',$use_textile,'text');
 
 
 			echo tr(tdcs(hed(gTxt('comments'),1),3)),
@@ -82,6 +81,7 @@
 			pCell('comments_default_invite',$comments_default_invite,'input',15),
 			pCell('comments_dateformat',$comments_dateformat,'dateformats'),
 			pCell('comments_mode',$comments_mode,'commentmode'),
+			pCell('comments_are_ol',$comments_are_ol,'radio'),
 			pCell('comments_sendmail',$comments_sendmail,'radio'),
 			pCell('comments_disallow_images',$comments_disallow_images,'radio'),
 			pCell('comments_disabled_after',$comments_disabled_after,'weeks');
@@ -106,17 +106,19 @@
 		
 		$out = tda(gTxt($item), ' style="text-align:right;vertical-align:middle"');
 		switch($format) {
-			case "radio":       $in = yesnoradio($item,$var);        break;
-			case "input":       $in = text_input($item,$var,$size);  break;
-			case "timeoffset":  $in = timeoffset_select($item,$var); break;
-			case 'commentmode': $in = commentmode($item,$var);       break;
-			case 'cases':       $in = cases($item,$var);             break;
-			case 'dateformats': $in = dateformats($item,$var);       break;
-			case 'weeks':       $in = weeks($item,$var);             break;
-			case 'logging':     $in = logging($item,$var);           break;
-			case 'languages':   $in = languages($item,$var);         break;
-			case 'text':        $in = text($item,$var);              break;
-			case 'urlmodes':    $in = urlmodes($item,$var);
+			case "radio":         $in = yesnoradio($item,$var);        break;
+			case "input":         $in = text_input($item,$var,$size);  break;
+			case "gmtoffset":     $in = gmtoffset_select($item,$var);  break;
+			case 'commentmode':   $in = commentmode($item,$var);       break;
+			case 'cases':         $in = cases($item,$var);             break;
+			case 'locales':       $in = locale_select($item,$var);     break;
+			case 'dateformats':   $in = dateformats($item,$var);       break;
+			case 'weeks':         $in = weeks($item,$var);             break;
+			case 'logging':       $in = logging($item,$var);           break;
+			case 'languages':     $in = languages($item,$var);         break;
+			case 'text':          $in = text($item,$var);              break;
+			case 'permlinkmodes': $in = permlinkmodes($item,$var);     break;
+			case 'urlmodes':      $in = urlmodes($item,$var);
 		}
 		$out.= td($in);
 		$out.= ($nohelp!=1) ? tda(popHelp($item), ' style="vertical-align:middle"') : td();
@@ -130,57 +132,53 @@
 	}
 			
 //-------------------------------------------------------------
-	function timeoffset_select($item,$var) {		
-		$timevals = array(
-			"-82800" => "-23",
-			"-79200" => "-22",
-			"-75600" => "-21",
-			"-72000" => "-20",
-			"-68400" => "-19",
-			"-64800" => "-18",
-			"-61200" => "-17",
-			"-57600" => "-16",
-			"-54000" => "-15",
-			"-50400" => "-14",
-			"-46800" => "-13",
-			"-43200" => "-12",
-			"-39600" => "-11",
-			"-36000" => "-10",
-			"-32400" => "-9",
-			"-28800" => "-8",
-			"-25200" => "-7",
-			"-21600" => "-6",
-			"-18000" => "-5",
-			"-14400" => "-4",
-			"-10800" => "-3",
-			"-7200"  => "-2",
-			"-3600"  => "-1",
-			"0"      => "0",
-			"+3600"  => "+1",
-			"+7200"  => "+2",
-			"+10800" => "+3",
-			"+14400" => "+4",
-			"+18000" => "+5",
-			"+21600" => "+6",
-			"+25200" => "+7",
-			"+28800" => "+8",
-			"+32400" => "+9",
-			"+36000" => "+10",
-			"+39600" => "+11",
-			"+43200" => "+12",
-			"+46800" => "+13",
-			"+50400" => "+14",
-			"+54000" => "+15",
-			"+57600" => "+16",
-			"+61200" => "+17",
-			"+64800" => "+18",
-			"+68400" => "+19",
-			"+72000" => "+20",
-			"+75600" => "+21",
-			"+79200" => "+22",
-			"+82800" => "+23"
+	function gmtoffset_select($item,$var) {		
+		// Standard time zones as compiled by H.M. Nautical Almanac Office, June 2004
+		// http://aa.usno.navy.mil/faq/docs/world_tzones.html
+		$tz = array(
+			-12, -11, -10, -9.5, -9, -8.5, -8, -7, -6, -5, -4, -3.5, -3, -2, -1, 
+			0,
+			+1, +2, +3, +3.5, +4, +4.5, +5, +5.5, +6, +6.5, +7, +8, +9, +9.5, +10, +10.5, +11, +11.5, +12, +13, +14,
 		);
+
+		foreach ($tz as $z) {
+			$name = sprintf("GMT %+02d:%02d", $z, abs($z - (int)$z) * 60);
+			$timevals[sprintf("%+d", $z * 3600)] = $name;
+		}
+
 		return selectInput($item, $timevals, $var);
+	}
+
+//-------------------------------------------------------------
+	function locale_select($item, $var) {
+		global $locale;
+
+		if (empty($locale))
+			$locale = @setlocale(LC_TIME, '0');
+
+		$locales = array(''=>gTxt('default'));
+
+		// Locale identifiers vary from system to system.  The
+		// following code will attempt to discover which identifiers
+		// are available.  We'll need to expand these lists to 
+		// improve support.
+		$guesses = array(
+			'en-gb' => array('en_GB', 'en_UK', 'english-uk', 'en_GB.UTF-8', 'en_GB.ISO_8859-1'),
+			'en-us' => array('en_US', 'english-us', 'en_US.UTF-8', 'en_US.ISO_8859-1'),
+			'fr-fr' => array('fr_FR', 'fr', 'french', 'fr_FR.UTF-8', 'fr_FR.ISO_8859-1'),
+			'de-de' => array('de_DE', 'de', 'deu', 'german', 'de_DE.UTF-8', 'de_DE.ISO_8859-1'),
+			'es-es' => array('es_ES', 'es', 'esp', 'spanish', 'es_ES.UTF-8', 'es_ES.ISO_8859-1'),
+			'it-it' => array('it_IT', 'it', 'ita', 'italian', 'it_IT.UTF-8', 'it_IT.ISO_8859-1'),
+		);
+
+		foreach ($guesses as $name => $guess) {
+			$l = @setlocale(LC_TIME, $guess);
+			if ($l !== false)
+				$locales[$l] = gTxt($name);
+		}
+		@setlocale(LC_TIME, $locale);
+
+		return selectInput($item, $locales, $var);
 	}
 
 //-------------------------------------------------------------
@@ -200,6 +198,20 @@
 			"all"   => gTxt('all_hits'),
 			"refer" => gTxt('referrers_only'),
 			"none"  => gTxt('none'));
+		return selectInput($item, $things, $var);
+	}
+
+//-------------------------------------------------------------
+	function permlinkmodes($item,$var) 
+	{
+		$things = array(
+			"messy" => gTxt('messy'),
+			"id_title" => gTxt('id_title'),
+			"section_id_title" => gTxt("section_id_title"),
+			"year_month_day_title" => gTxt("year_month_day_title"),
+			"title_only" => gTxt("title_only"),
+#			"category_subcategory" => gTxt('category_subcategory')
+		);
 		return selectInput($item, $things, $var);
 	}
 
@@ -224,11 +236,11 @@
 		$things = array(
 			'0' => gTxt('never'),
 			7   => '1 '.gTxt('week'),
-			14  =>'2 '.$weeks,
-			21  =>'3 '.$weeks,
-			28  =>'4 '.$weeks,
-			35  =>'5 '.$weeks,
-			42  =>'6 '.$weeks);
+			14  => '2 '.$weeks,
+			21  => '3 '.$weeks,
+			28  => '4 '.$weeks,
+			35  => '5 '.$weeks,
+			42  => '6 '.$weeks);
 		return selectInput($item, $things, $var);
 	}
 
@@ -236,21 +248,22 @@
 	function languages($item,$var) 
 	{
 		$things = array(
-			'english'    => gTxt('english'),
-			'french'     => gTxt('french'),
-			'german'     => gTxt('german'),
-			'italian'    => gTxt('italian'),
-			'portuguese' => gTxt('portuguese'),
-			'spanish'    => gTxt('spanish'),
-			'finnish'    => gTxt('finnish'),
-			'swedish'    => gTxt('swedish'),
-			'russian'    => gTxt('russian'),
-			'dutch'      => gTxt('dutch'),
-			'danish'     => gTxt('danish'),
-			'polish'     => gTxt('polish'),
-			'tagalog'    => gTxt('tagalog'),
-			'czech'      => gTxt('czech'),
-			'scots'      => gTxt('scots')
+				'en-gb' => gTxt('english_gb'),
+				'en-us' => gTxt('english_us'),
+				'fr-fr' => gTxt('french'),
+				'es-es' => gTxt('spanish'),
+//	I			'de-de' => gTxt('german'),
+//	mean		'it-it' => gTxt('italian'),
+//	let's		'pt-pt' => gTxt('portuguese'),
+//	be			'fi-fi' => gTxt('finnish'),
+//	realistic	'sv-sv' => gTxt('swedish'),
+//	here		'ru-ru' => gTxt('russian'),
+//	- dca		'du-du' => gTxt('dutch'),
+//				'da-da' => gTxt('danish'),
+//				'po-po' => gTxt('polish'),
+//				'tl-tl' => gTxt('tagalog'),
+//				'cs-cs' => gTxt('czech'),
+//				'gl-gl' => gTxt('scots')
 		);
 			asort($things);
 			reset($things);
@@ -260,22 +273,25 @@
 
 // -------------------------------------------------------------
 	function dateformats($item,$var) {
-		global $timeoffset;
-		$time = time()+$timeoffset;
 		$dateformats = array(
-			'M j, g:ia'    => date("M j, g:ia",$time),
-			'j.m.y'        => date("j.m.y",$time),
-			'j F, g:ia'    => date("j F, g:ia",$time),
-			'y.m.d, g:ia'  => date("y.m.d, g:ia",$time),
-			'g:ia'         => date("g:ia",$time),
-			'D M jS, g:ia' => date("D M jS, g:ia",$time),
-			'l, F j, Y'    => date("l, F j, Y",$time),
-			'M jS'         => date("M jS",$time),
-			'j F y'        => date("j F y",$time),
-			'j m Y - H:i'  => date('j m Y - H:i',$time),
-			'Y-m-d'        => date('Y-m-d',$time),
-			'Y-d-m'        => date('Y-d-m',$time),
-			'since'        => "hrs/days ago");
+			'%b %e, %I:%M%p'    => safe_strftime('%b %e, %H:%M%p'),
+			'%e.%m.%y'          => safe_strftime('%e.%m.%y'),
+			'%e %B, %I:%M%p'    => safe_strftime('%e %B, %H:%M%p'),
+			'%y.%m.%d, %I:%M%p' => safe_strftime('%y.%m.%d, %H:%M%p'),
+			'%H:%M%p'           => safe_strftime('%H:%M%p'),
+			'%a %b %e, %I:%M%p' => safe_strftime('%a %b %e, %H:%M%p'),
+			'%A, %B %e, %Y'     => safe_strftime('%A, %B %e, %Y'),
+			'%b %e'             => safe_strftime('%b %e'),
+			'%e %B %y'          => safe_strftime('%e %B %y'),
+			'%e %m %Y - %H:%M'  => safe_strftime('%e %m %Y - %H:%M'),
+			'%Y-%m-%d'          => safe_strftime('%Y-%m-%d'),
+			'%Y-%d-%m'          => safe_strftime('%Y-%d-%m'),
+			'%x %X'             => safe_strftime('%x %X'),
+			'%x'                => safe_strftime('%x'),
+			'%X'                => safe_strftime('%X'),
+			'%x %r'             => safe_strftime('%x %r'),
+			'%r'                => safe_strftime('%r'),
+			'since'             => "hrs/days ago");
 		return selectInput($item, $dateformats, $var);
 	}
 

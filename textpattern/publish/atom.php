@@ -2,7 +2,7 @@
 
 /*
 	This is Textpattern
-	Copyright 2004 by Dean Allen - all rights reserved.
+	Copyright 2005 by Dean Allen - all rights reserved.
 
 	Use of this software denotes acceptance of the Textpattern license agreement 
 */
@@ -29,7 +29,7 @@
 
 		$out[] = tag($sitename,'title',textplain);
 		$out[] = tag($site_slogan,'tagline',textplain);
-		$out[] = '<link'.relalt.texthtml.' href="http://'.$siteurl.$path_from_root.'" />';
+		$out[] = '<link'.relalt.texthtml.' href="'.hu.'" />';
 		$out[] = tag('tag:'.$siteurl.','.date("Y").':/','id');
 		$out[] = tag('Textpattern','generator',
 			' url="http://textpattern.com" version="'.$version.'"');
@@ -39,7 +39,7 @@
 
 			$auth[] = tag($pub['RealName'],'name');
 			$auth[] = ($txpac['include_email_atom']) ? tag(eE($pub['email']),'email') : '';
-			$auth[] = tag('http://'.$siteurl.$path_from_root,'url');
+			$auth[] = tag(hu,'url');
 		
 		$out[] = tag(n.t.t.join(n.t.t,$auth).n,'author');
 
@@ -57,7 +57,10 @@
 			$query[] = $cfilter;
 				
 			$rs = safe_rows(
-				"*, unix_timestamp(Posted) as uPosted,unix_timestamp(LastMod) as uLastMod",
+				"*, 
+				ID as thisid, 
+				unix_timestamp(Posted) as uPosted,
+				unix_timestamp(LastMod) as uLastMod",
 				"textpattern", 
 				"Status=4 and Posted <= now() ".
 					join(' ',$query).
@@ -65,7 +68,10 @@
 			);
 			if ($rs) {	
 				foreach ($rs as $a) {
+
 					extract($a);
+					
+					$a['posted'] = $uPosted;
 	
 					if ($txpac['show_comment_count_in_feed']) {
 						$dc = getCount('txp_discuss', "parentid=$ID and visible=1");
@@ -79,10 +85,9 @@
 					$uTitle = ($url_title) ? $url_title : stripSpace($Title);
 					$uTitle = htmlspecialchars($uTitle,ENT_NOQUOTES);
 
-						$elink = ($url_mode == 0)
-						?	'http://'.$siteurl.$path_from_root.'index.php?id='.$ID
-						:	'http://'.$siteurl.$path_from_root.$Section.'/'.$ID.'/'.$uTitle;
-					$e['link'] = '<link'.relalt.texthtml.' href="'.$elink.'" />';
+					$permlink = permlinkurl($a);
+
+					$e['link'] = '<link'.relalt.texthtml.' href="'.$permlink.'" />';
 					$e['id'] = tag('tag:'.$siteurl.','.date("Y-m-d",$uPosted).':'.$ID,'id');
 					$e['subject'] = tag(htmlspecialchars($Category1),'dc:subject');
 					
@@ -93,11 +98,10 @@
 					$Body = (!trim($Body)) ? $Body_html : $Body; 
 					
 						// fix relative urls
-					$Body = str_replace('href="/','href="http://'.$siteurl.'/',$Body);
+					$Body = str_replace('href="/','href="'.hu.'/',$Body);
 	
 						// encode and entify
-					#$Body = utf8_encode(htmlspecialchars($Body));
-					$Body = htmlspecialchars($Body);
+					$Body = preg_replace(array('/</','/>/',"/'/",'/"/'), array('&lt;','&gt;','&#039','&quot;'), $Body);
 					$e['content'] = tag(n.$Body.n,'content',
 						' type="text/html" mode="escaped" xml:lang="en"');
 		

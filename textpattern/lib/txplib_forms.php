@@ -5,9 +5,9 @@
 	{
 		$vals = array("0"=>gTxt('no'),"1"=>gTxt('yes'));
 		foreach($vals as $a => $b) {
-			$out[] = '<input type="radio" name="'.$field.'" value="'.$a.'" class="radio"';
+			$out[] = '<label><input type="radio" name="'.$field.'" value="'.$a.'" class="radio"';
 			$out[] = ($a == $var) ? ' checked="checked"' : '';
-			$out[] = " />$b ";
+			$out[] = " />$b</label> ";
 		}
 		return join('',$out);
 	}
@@ -17,9 +17,9 @@
 	{
 		$vals = array("0"=>gTxt('off'),"1"=>gTxt('on'));
 		foreach($vals as $a => $b) {
-			$out[] = '<input type="radio" name="'.$field.'" value="'.$a.'" class="radio"';
+			$out[] = '<label><input type="radio" name="'.$field.'" value="'.$a.'" class="radio"';
 			$out[] = ($a == $var) ? ' checked="checked"' : '';
-			$out[] = " />$b ";
+			$out[] = " />$b</label>  ";
 		}
 		return join('',$out);
 	}
@@ -69,7 +69,8 @@
 					$title='',
 					$onClick='',
 					$size='',
-					$tab='') 
+					$tab='',
+					$id='') 
 	{
 		$o  = '<input type="'.$type.'" name="'.$name.'"'; 
 		$o .= ' value="'.cleanfInput($value).'"';
@@ -78,6 +79,7 @@
 		$o .= ($title)   ? ' title="'.$title.'"' : '';
 		$o .= ($onClick) ? ' onclick="'.$onClick.'"' : '';
 		$o .= ($tab)     ? ' tabindex="'.$tab.'"' : '';
+		$o .= ($id)      ? ' id="'.$id.'"' : '';
 		$o .= " />";
 		return $o;
 	}

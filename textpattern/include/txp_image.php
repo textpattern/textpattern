@@ -3,7 +3,7 @@
 /*
 	This is Textpattern
 
-	Copyright 2004 by Dean Allen
+	Copyright 2005 by Dean Allen
 	www.textpattern.com
 	All rights reserved
 
@@ -14,6 +14,8 @@
 
 	$extensions = array(0,'.gif','.jpg','.png','.swf');
 
+	define("IMPATH",$path_to_site.'/'.$img_dir.'/');
+
 	if(!$step or !function_exists($step)){
 		image_list();
 	} else $step();
@@ -21,8 +23,7 @@
 // -------------------------------------------------------------
 	function image_list($message='') 
 	{
-		global $txpcfg,$extensions,$path_from_root,$img_dir;
-		$pfr = $path_from_root;
+		global $txpcfg,$extensions,$img_dir;
 		extract($txpcfg);
 		extract(get_prefs());
 
@@ -70,7 +71,7 @@
 				extract($a);
 				
 				$thumbnail = ($thumbnail) 
-				?	'<img src="'.$pfr.$img_dir.'/'.$id.'t'.$ext.'" />' 
+				?	'<img src="'.hu.'/'.$img_dir.'/'.$id.'t'.$ext.'" />' 
 				:	gTxt('no');
 				
 				$elink = eLink('image','image_edit','id',$id,$name);
@@ -111,7 +112,7 @@
 	function image_edit($message='',$id='') 
 	{
 		if (!$id) $id = gps('id');
-		global $path_from_root,$txpcfg,$img_dir;
+		global $txpcfg,$img_dir;
 
 		pagetop('image',$message);
 
@@ -124,7 +125,7 @@
 			echo startTable('list'),
 			tr(
 				td(
-					'<img src="'.$path_from_root.$img_dir.
+					'<img src="'.hu.'/'.$img_dir.
 						'/'.$id.$ext.'" height="'.$h.'" width="'.$w.'" alt="" />'.
 						br.upload_form(gTxt('replace_image'),'replace_image_form',
 							'image_replace',$id)
@@ -135,7 +136,7 @@
 					join('',
 						array(
 							($thumbnail)
-							?	'<img src="'.$path_from_root.$img_dir.
+							?	'<img src="'.hu.'/'.$img_dir.
 								'/'.$id.'t'.$ext.'" alt="" />'.br
 							:	'',
 							upload_form(gTxt('upload_thumbnail'),'upload_thumbnail',
@@ -152,7 +153,7 @@
 						 		$categories,$category)) .
 						graf(gTxt('alt_text').br.fInput('text','alt',$alt,'edit','','',50)) .
 						graf(gTxt('caption').br.text_area('caption','100','400',$caption)) .
-						graf(fInput('submit','',gTxt('save'))) .
+						graf(fInput('submit','',gTxt('save'),'publish')) .
 						hInput('id',$id) .
 						eInput('image') .
 						sInput('image_save')
@@ -166,13 +167,15 @@
 // -------------------------------------------------------------
 	function image_insert() 
 	{	
-		global $txpcfg,$extensions,$txp_user,$img_dir,$path_from_root;
+		global $txpcfg,$extensions,$txp_user;
 		extract($txpcfg);
 		$category = doSlash(gps('category'));
 		
 		$file = $_FILES['thefile']['tmp_name'];
 		$name = $_FILES['thefile']['name'];
 
+		$file = get_uploaded_file($file);
+		
 		list($w,$h,$extension) = getimagesize($file);
 
 		if ($extensions[$extension]) {
@@ -199,14 +202,14 @@
 
 			} else {
 
-				$newpath = $doc_root.$path_from_root.$img_dir.'/'.$id.$ext;
-				$newpath = str_replace('//','/',$newpath);
+				$newpath = IMPATH.$id.$ext;
 
-				if(move_uploaded_file($file, $newpath) == false) {
+				if(copy($file, $newpath) == false) {
 					safe_delete("txp_image","id='$id'");
 					safe_alter("txp_image", "auto_increment=$id");
 					image_list($newpath.sp.gTxt('upload_dir_perms'));
 				} else {
+					unlink($file);
 					chmod($newpath,0755);
 					image_edit(messenger('image',$name,'uploaded'),$id);
 				}
@@ -219,13 +222,15 @@
 // -------------------------------------------------------------
 	function image_replace() 
 	{	
-		global $txpcfg,$extensions,$txp_user,$img_dir,$path_from_root;
+		global $txpcfg,$extensions,$txp_user,$img_dir,$path_to_site;
 		extract($txpcfg);
 		$id = gps('id');
 		
 		$file = $_FILES['thefile']['tmp_name'];
 		$name = $_FILES['thefile']['name'];
 
+		$file = get_uploaded_file($file);
+		
 		list($w,$h,$extension) = getimagesize($file);
 
 		if ($extensions[$extension]) {
@@ -250,14 +255,14 @@
 
 			} else {
 
-				$newpath = $doc_root.$path_from_root.$img_dir.'/'.$id.$ext;
-				$newpath = str_replace('//','/',$newpath);
+				$newpath = IMPATH.$id.$ext;
 
-				if(move_uploaded_file($file, $newpath) == false) {
+				if(copy($file, $newpath) == false) {
 					safe_delete("txp_image","id='$id'");
 					safe_alter("txp_image", "auto_increment=$id");
 					image_list($newpath.sp.gTxt('upload_dir_perms'));
 				} else {
+					unlink($file);
 					chmod($newpath,0755);
 					image_edit(messenger('image',$name,'uploaded'),$id);
 				}
@@ -270,23 +275,26 @@
 // -------------------------------------------------------------
 	function thumbnail_insert() 
 	{
-		global $txpcfg,$extensions,$txp_user,$img_dir,$path_from_root;
+		global $txpcfg,$extensions,$txp_user,$img_dir,$path_to_site;
 		extract($txpcfg);
 		$id = gps('id');
 		
 		$file = $_FILES['thefile']['tmp_name'];
 		$name = $_FILES['thefile']['name'];
 
+		$file = get_uploaded_file($file);
+		
 		list(,,$extension) = getimagesize($file);
 	
 		if ($extensions[$extension]) {
 			$ext = $extensions[$extension];
 
-			$newpath = $doc_root.$path_from_root.$img_dir.'/'.$id.'t'.$ext;
+				$newpath = IMPATH.$id.'t'.$ext;
 			
-			if(move_uploaded_file($file, $newpath) == false) {
+			if(copy($file, $newpath) == false) {
 				image_list($newpath.sp.gTxt('upload_dir_perms'));
 			} else {
+				unlink($file);
 				chmod($newpath,0755);
 				safe_update("txp_image", "thumbnail='1'", "id='$id'");
 				image_edit(messenger('image',$name,'uploaded'),$id);
@@ -314,7 +322,7 @@
 // -------------------------------------------------------------
 	function image_delete() 
 	{
-		global $txpcfg,$path_from_root,$img_dir;
+		global $txpcfg;
 		extract($txpcfg);
 		$id = ps('id');
 		
@@ -322,9 +330,9 @@
 		if ($rs) {
 			extract($rs);
 			$rsd = safe_delete("txp_image","id='$id'");
-			$ul = unlink($doc_root.$path_from_root.$img_dir.'/'.$id.$ext);
-			if(is_file($doc_root.$path_from_root.$img_dir.'/'.$id.'t'.$ext)){
-				$ult = unlink($doc_root.$path_from_root.$img_dir.'/'.$id.'t'.$ext);
+			$ul = unlink(IMPATH.$id.$ext) or exit(image_list());
+			if(is_file(IMPATH.$id.'t'.$ext)){
+				$ult = unlink(IMPATH.$id.'t'.$ext);
 			}
 
 			if ($rsd && $ul) image_list(messenger("image",$name,"deleted"));
@@ -348,10 +356,9 @@
 	}
 	
 // -------------------------------------------------------------
-	function image_change_pageby() 
+	function image_change_pageby()
 	{
-		$qty = gps('qty');
-		safe_update('txp_prefs',"val=$qty","name='image_list_pageby'");
+		event_change_pageby('image');
 		image_list();
 	}
 ?>

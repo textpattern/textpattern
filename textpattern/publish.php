@@ -1,20 +1,21 @@
 <?php
 /*
             _______________________________________
-   ________|                                       |________
+   ________|                                       |_________
+  \        |                                       |        /
    \       |              Textpattern              |       /
     \      |                                       |      /
     /      |_______________________________________|      \
    /___________)                               (___________\
 
-	Copyright 2004 by Dean Allen 
+	Copyright 2005 by Dean Allen 
 	All rights reserved.
 
 	Use of this software denotes acceptance of the Textpattern license agreement 
 */
 
 	define("txpath", dirname(__FILE__));
-	
+		
 //	ERROR_REPORTING(E_ALL);
 //	ini_set("display_errors","1");
 
@@ -28,6 +29,8 @@
 	include txpath.'/publish/log.php';
 	include txpath.'/publish/comment.php';
 
+//	set_error_handler('myErrorHandler');
+
 	ob_start();
 
     	// start the clock for runtime
@@ -38,25 +41,42 @@
 
 		// get all prefs as an array
  	$prefs = get_prefs();
- 	$prefs['path_from_root'] = (!$prefs['path_from_root']) ? '/' : $prefs['path_from_root'];
 
  		// add prefs to globals
 	extract($prefs);
-	define("hu",'http://'.$siteurl.$path_from_root);
+	
+		// v1.0: this should be the definitive http address of the site	
+	define("hu",'http://'.$siteurl.'/');
+	
+		// v1.0 experimental relative url global
+	define("rhu",preg_replace("/http:\/\/.+(\/.*)\/?$/U","$1",hu));
 
-	if ($txpac['use_plugins']) {
-		// get plugins, write to a temp file, include, then destroy
-		plugins();
-	}
+		// 1.0: a new $here variable in the top-level index.php 
+		// should let us know the server path to the live site
+		// let's save it to prefs
+	if (isset($here) and $path_to_site != $here) updateSitePath($here);
+
+		// 1.0 removed $doc_root variable from config, but we'll
+		// leave it here for a bit until plugins catch up
+	$txpcfg['doc_root'] = $_SERVER['DOCUMENT_ROOT'];
+
+		// here come the plugins
+	if ($txpac['use_plugins']) plugins();
 
 	define("LANG",$language);
+	if (!empty($locale)) setlocale(LC_ALL, $locale);
 
-	$textarray = load_lang('en-gb');
+	//i18n: $textarray = load_lang('en-gb');
+	$textarray = load_lang(LANG);
 
-	$s = (empty($s)) ? 'default' : $s;
+		// this step deprecated as of 1.0 : really only useful with old-style
+		// section placeholders, which passed $s='section_name'
+	$s = (empty($s)) ? '' : $s;
 
 	$pretext = pretext($s,$prefs);
 	extract($pretext);
+	
+//	dmp($pretext);
 	
 	if (gps('parentid') && gps('submit')) {
 		saveComment();
@@ -64,15 +84,16 @@
 		exit(popComments(gps('parentid')));
 	}
 
-		if(!isset($nolog)) {
-			if($logging=='all'): logit();
-			elseif ($logging=='refer'): logit('refer');
-			endif;
+	if(!isset($nolog)) {
+		if($logging == 'refer') { 
+			logit('refer'); 
+		} elseif ($logging == 'all') {
+			logit();
 		}
+	}
 /*
 	if($send_lastmod) {
-		$last = fetch("unix_timestamp(var)",'txp_prefs','name','lastmod');
-		$last = gmdate("D, d M Y H:i:s \G\M\T",$last);
+		$last = gmdate("D, d M Y H:i:s \G\M\T",$lastmod);
 		ob_start();
 		header("Last-Modified: $last");
 
@@ -98,59 +119,119 @@
 			include txpath.'/publish/atom.php';
 			exit(atom());
 		}
+			// set messy variables
+		$out =  makeOut('id','s','c','q','pg','p');
 
-		if (!$s) $s = gps('s');
+			// if messy vars exist, bypass url parsing
+		if (!$out['id'] && !$out['s']) {
 
-		$id = gps('id');
-		$id = (!$id && $url_mode) ? frompath() : $id;
+				// define the useable url, minus any subdirectories.
+				// this is pretty fugly, if anyone wants to have a go at it - dean
+			$subpath = preg_quote(preg_replace("/http:\/\/.*(\/.*)/Ui","$1",hu),"/");
+			$req = preg_replace("/^$subpath/i","/",serverSet('REQUEST_URI'));
+
+			extract(chopUrl($req));
+	
+				//first we sniff out some of the preset url schemes
+			if (!empty($u1)) {
+	
+				switch($u1) {
+	
+					case 'atom':
+						include txpath.'/publish/atom.php'; exit(atom());
+
+					case 'rss':
+						include txpath.'/publish/rss.php'; exit(rss());
+	
+					case strtolower(gTxt('section')):
+						$out['s'] = (ckEx('section',$u2)) ? $u2 : 'default'; break;
+	
+					case strtolower(gTxt('category')):
+						$out['c'] = (ckEx('category',$u2)) ? $u2 : ''; break;
+	
+					case strtolower(gTxt('author')):
+						$out['author'] = (!empty($u2)) ? $u2 : ''; break;
+	
+					case 'p':
+						$out['p'] = (is_numeric($u2)) ? $u2 : ''; break;
+					
+					default:
+						// then see if the prefs-defined permlink scheme is usable
+						switch ($permlink_mode) {
+			
+							case 'section_id_title': 
+								$out['s'] = (ckEx('section',$u1)) ? $u1 : 'default';
+								$out['id'] = (is_numeric($u2) && ckExID($u2)) ? $u2 : '';
+							break;
+			
+							case 'year_month_day_title': 
+								$when = date("Y-m-d",strtotime("$u1-$u2-$u3") + $timeoffset);
+								$rs = lookupByDateTitle($when,$u4);
+								$out['id'] = (!empty($rs['ID'])) ? $rs['ID'] : '';
+								$out['s'] = (!empty($rs['Section'])) ? $rs['Section'] : '';
+							break;
+
+							case 'title_only': 
+								$rs = lookupByTitle($u1);
+								$out['id'] = (!empty($rs['ID'])) ? $rs['ID'] : '';
+								$out['s'] = (!empty($rs['Section'])) ? $rs['Section'] : '';
+							break;
+
+							case 'id_title': 		
+								$rs = lookupByID($u1);
+								$out['id'] = (!empty($rs['ID'])) ? $rs['ID'] : '';
+								$out['s'] = (!empty($rs['Section'])) ? $rs['Section'] : '';
+							break;
+			
+						}
+				}
+			} else {
+				$out['s'] = 'default';
+			}
+		}
+		
+
+		$out['s'] = (empty($out['s'])) ? 'default' : $out['s'];
+		$s = $out['s'];
+		$id = $out['id'];
+
 
 		// hackish
 		if(empty($id)) $GLOBALS['is_article_list'] = true;
 
-		$out['id'] = $id;
-		
-		// what section are we in?	
-		if ($s): $out['s'] = $s;
-		elseif ($id): $out['s'] = fetch('Section','textpattern','ID',$id);
-		else: $out['s'] = "default";
-		endif;
-
-		$s = $out['s'];
-
+			// by this point we should know the section, so grab its page and css
 		$rs = safe_row("*", "txp_section", "name = '$s' limit 1");
+		$out['page'] = $rs['page'];		
+		$out['css']  = $rs['css'];		
 
-		if ($rs) { 	// useful stuff from the database
-			extract($rs);	
-			$out['page']       = $page;		
-			$out['css']        = $css;		
-		}
-
-		$out['c']              = gps('c');     // category?
-		$out['q']              = gps('q');     // search query?
-		$out['count']          = gps('count'); // pageby count? *deprecated*
-		$out['pg']             = gps('pg');    // paging?
-		$out['p']              = gps('p');     // image?
-
-		if(is_numeric($id)) { 		// check for anything useful to be used outside article presentation
+		if(is_numeric($id)) {
 			$idrs = safe_row("Posted, AuthorID, Keywords","textpattern","ID=$id");
 			extract($idrs);
+
 			$thenext            = getNeighbour($Posted,$s,'>');
 			$out['next_id']     = ($thenext) ? $thenext['ID'] : '';
 			$out['next_title']  = ($thenext) ? $thenext['Title'] : '';
 			$out['next_utitle'] = ($thenext) ? $thenext['url_title'] : '';
+			$out['next_posted'] = ($thenext) ? $thenext['uposted'] : '';
+
 			$theprev            = getNeighbour($Posted,$s,'<');
 			$out['prev_id']     = ($theprev) ? $theprev['ID'] : '';
 			$out['prev_title']  = ($theprev) ? $theprev['Title'] : '';
 			$out['prev_utitle'] = ($theprev) ? $theprev['url_title'] : '';
+			$out['prev_posted'] = ($theprev) ? $theprev['uposted'] : '';
 			$out['id_keywords'] = $Keywords; 
 			$out['id_author']   = fetch('RealName','txp_users','name',$AuthorID); 
 		}
 
-		$out['path_from_root'] = $path_from_root;
-		$out['pfr']            = $path_from_root;
-		$out['url_mode']       = $url_mode;
+		$out['path_from_root'] = $path_from_root; // these are deprecated as of 1.0
+		$out['pfr']            = $path_from_root; // leaving them here for plugin compat
+
+		$out['path_to_site']   = $path_to_site;
+		$out['permlink_mode']  = $permlink_mode;
 		$out['sitename']       = $sitename;
+
 		return $out; 
+
 	}
 
 //	textpattern() is the function that assembles a page, based on
@@ -166,7 +247,7 @@
 		$html = safe_field('user_html','txp_page',"name='$page'");
 		if (!$html) exit('no page template specified for section '.$s);
 		$html = parse($html);
-		$html = parse($html);
+		$html = parse($html); // the function so nice, he ran it twice
 		$html = (!$segment) ? $html : segmentPage($html);
 		$html = ($txpac['allow_page_php_scripting']) ? evalString($html) : $html;
 
@@ -196,118 +277,131 @@
 
 // -------------------------------------------------------------
 	function article($atts)
-	{
-		global $pretext;
-		return ($pretext['id']) ? doArticle($atts) : doArticles($atts);
+	{		
+		return parseArticles($atts);
 	}
 
 // -------------------------------------------------------------
-	function doArticles($atts)
+	function doArticles($atts, $iscustom)
 	{	
-		global $pretext, $prefs,$txpcfg;
+		global $pretext, $prefs, $txpcfg;
 		extract($pretext);
-
-		extract(lAtts(array(
-			'form'     => 'default',
-			'limit'    => 10
-		),$atts));
-
-		$form = getAtt('listform',$form);
-
-		if($q) {
+		extract($prefs);
+		//getting attributes
+		$theAtts = lAtts(array(
+			'form'      => 'default',
+			'limit'     => 10,
+			'category'  => '',
+			'section'   => '',
+			'excerpted' => '',
+			'author'    => '',
+			'sortby'    => 'Posted',
+			'sortdir'   => 'desc',
+			'month'     => '',
+			'keywords'  => '',
+			'frontpage' => '',
+		),$atts);		
+		//for the txp:article tag, some attributes are taken from globals;
+		//override them before extract
+		if (!$iscustom)
+		{
+			$theAtts['category'] = ($c)? $c : '';
+			$theAtts['section'] = ($s && $s!='default')? $s : '';
+			$theAtts['author'] = (!empty($author)? $author: '');
+			$theAtts['month'] = (!empty($month)? $month: '');
+			$theAtts['frontpage'] = ($s && $s=='default')? true: false;
+			$theAtts['excerpted'] = '';			
+		}
+		extract($theAtts);
+		//give control to search, if necesary
+		if($q && !$iscustom) {
 			include_once txpath.'/publish/search.php';
 			return hed(gTxt('search_results'),2).search($q);
+		}		
+		//Building query parts
+		$frontpage = ($frontpage) ? filterFrontPage() : '';		
+		$category  = (!$category)  ? '' : " and ((Category1='".$category."') or (Category2='".$category."')) ";
+		$section   = (!$section)   ? '' : " and Section = '$section'";
+		$excerpted = ($excerpted=='y')  ? " and Excerpt !=''" : '';
+		$author    = (!$author)    ? '' : " and AuthorID = '$author'";	
+		$month     = (!$month)     ? '' : " and Posted like '{$month}%'";
+		$custom = '';
+
+		if ($iscustom){
+			// trying custom fields here
+			$customFields = getCustomFields();
+			
+			if ($customFields) {
+				foreach($customFields as $cField) {
+					$customPairs[$cField] = gAtt($atts, $cField);
+				}
+				if(!empty($customPairs)) {
+					$custom =  buildCustomSql($customFields,$customPairs);
+				} else $custom = '';
+			}
+		}
+		//Allow keywords for no-custom articles. That tagging mode, you know
+		if ($keywords) {
+			$keys = split(',',$keywords);
+			foreach ($keys as $key) {
+				$keyparts[] = " Keywords like '%".trim($key)."%'";
+			}
+			$keywords = " and (" . join(' or ',$keyparts) . ")"; 
+		}
+		
+		$where = "1 and Status=4 and Posted < now() ".
+			$category . $section . $excerpted . $month . $author . $keywords . $custom . $frontpage;
+
+		//do not paginate if we are on a custom list
+		if (!$iscustom)
+		{
+			$total = safe_count('textpattern',$where);
+			$numPages = ceil($total/$limit);  
+			$pg = (!$pg) ? 1 : $pg;
+			$offset = ($pg - 1) * $limit.', ';	
+			// send paging info to txp:newer and txp:older
+			$pageout['pg']       = $pg;
+			$pageout['numPages'] = $numPages;
+			$pageout['s']        = $section;
+			$pageout['c']        = $category;
+	
+			$GLOBALS['thispage'] = $pageout;
+		}else{
+			$offset = '';
 		}
 
-			// might be a form preview, otherwise grab it from the db
+		$rs = safe_rows("*, unix_timestamp(Posted) as uPosted", 'textpattern', 
+		$where. ' order by ' . $sortby . ' ' . $sortdir . ' limit ' . $offset . $limit);
+		//the listform
+		$form = gAtt($atts, 'listform', $form);		
+		// might be a form preview, otherwise grab it from the db
 		$Form = (isset($_POST['Form']))
 		?	gps('Form')
 		:	safe_field('Form','txp_form',"name='$form'");
 
-		$q1a = "select *, unix_timestamp(Posted) as uPosted ";
-		$q1b = "select count(*) ";
-
-		$query = array(
-			"from ".PFX."textpattern where status = 4",
-
-			($s == 'default') 			// are we on the front page?
-			?	filterFrontPage() : '',
-
-			($s && $s!='default')		// section browse?
-			?	"and section = '".$s."'" : '',
-
-			($c) 						// category browse?
-			?	"and ((Category1='".$c."') or (Category2='".$c."'))" : ''
-		);
-
-		$q2b = " and Posted < now()";
-
-
-		$total = getThing($q1b . join(' ',$query) . $q2b);
-		$numPages = ceil($total/$limit);  
-		$pg = (!$pg) ? 1 : $pg;
-		$offset = ($pg - 1) * $limit;
-
-		$q2a = " and Posted < now() order by Posted desc limit $offset,$limit";
-
-			// send paging info to txp:newer and txp:older
-		$pageout['pg']        = $pg;
-		$pageout['numPages']  = $numPages;
-		$pageout['s']         = $s;
-		$pageout['c']         = $c;
-
-
-		$GLOBALS['thispage'] = $pageout;
-
-		$GLOBALS['is_article_list'] = true;
-
-		$rs = getRows($q1a . join(' ',$query) . $q2a);
-
 		if ($rs) {
-
+			
 			foreach($rs as $a) {
 				extract($a);
-
-				$com_count = safe_count('txp_discuss',"parentid=$ID and visible=1");
-
-				$author = fetch('RealName','txp_users','name',$AuthorID);
-				$author = (!$author) ? $AuthorID : $author; 
-
-				$out['thisid']          = $ID;
-				$out['posted']          = $uPosted;
-				$out['if_comments']     = ($Annotate or $com_count) ? true : false;
-				$out['comments_invite'] = ($Annotate or $com_count) ? formatCommentsInvite($AnnotateInvite,$Section,$ID) : '';
-				$out['comments_count']  = $com_count;					  
-				$out['mentions_link']   = formatMentionsLink($Section, $ID);
-				$out['author']          = $author;
-				$out['permlink']        = formatPermLink($ID,$Section);
-				$out['body']            = parse($Body_html);
-				$out['excerpt']         = $Excerpt;
-				$out['title']           = $Title;
-				$out['url_title']       = $url_title;
-				$out['category1']       = $Category1;
-				$out['category2']       = $Category2;
-				$out['section']         = $Section;
-				$out['keywords']        = $Keywords;
-				$out['article_image']   = $Image;
-
-				$GLOBALS['thisarticle'] = $out;
-
-					// define the article form
+				populateArticleData($a);
+				// define the article form
 				$article = ($override_form) 
 				?	fetch('Form','txp_form','name',$override_form)
 				:	$Form;
 
-				$article = doPermlink($article, $out['permlink'], $Title, $url_title);
-
 				$articles[] = parse($article);
+				
+				// sending these to paging_link(); Required?
+				$GLOBALS['uPosted'] = $uPosted;
+				$GLOBALS['limit'] = $limit;
 
 				unset($GLOBALS['thisarticle']);
+				unset($GLOBALS['theseatts']);//Required?				
 			}
-
+			
 			return join('',$articles);
 		}
-	} 
+	}
 
 // -------------------------------------------------------------
 	function filterFrontPage() 
@@ -333,52 +427,19 @@
 
 		extract(lAtts(array(
 			'form' => 'default'
-		),$atts));
-
-		$Form = fetch('Form','txp_form','name',$form);
+		),$atts));		
 
 		$rs = safe_row("*, unix_timestamp(Posted) as uPosted", 
 				"textpattern", "ID='$id' and Status='4' limit 1");
 
-		$GLOBALS['is_article_list'] = false;
+		$com_count = safe_count('txp_discuss',"parentid=$id and visible=1");
 
 		if ($rs) {
 			extract($rs);
+			populateArticleData($rs);			
 
-			$com_count = safe_count('txp_discuss',"parentid=$ID and visible=1");
-			$author = fetch('RealName','txp_users','name',$AuthorID);
-			$author = (!$author) ? $AuthorID : $author;
-
-			$out['thisid']          = $id;
-			$out['posted']          = $uPosted;
-			$out['comments_invite'] = '';
-			$out['mentions_link']   = '';
-			$out['if_comments']     = ($Annotate or $com_count) ? true : false;
-			$out['comments_count']  = $com_count;										  
-			$out['author']          = $author;
-			$out['permlink']        = formatPermLink($ID,$Section);
-			$out['body']            = parse($Body_html);
-			$out['excerpt']         = $Excerpt;
-			$out['title']           = $Title;
-			$out['url_title']       = $url_title;
-			$out['category1']       = $Category1;
-			$out['category2']       = $Category2;
-			$out['section']         = $Section;
-			$out['keywords']        = $Keywords;
-			$out['article_image']   = $Image;
-
-			$GLOBALS['thisarticle'] = $out;
-
-				// define the article form
-			$article = ($override_form) 
-			?	fetch('Form','txp_form','name',$override_form)
-			:	$Form;
-
-				// quick check for things not pulled from the db
-			$article = doPermlink($article, $out['permlink'], $Title, $url_title);
-
-#			include txpath.'/publish/mention.php';
-#			$article .= show_mentions();
+			// define the article form
+			$article = fetch('Form','txp_form','name', ($override_form) ? $override_form : $form);
 
 			if ($preview && $parentid) {
 				$article = discuss($parentid).$article;
@@ -396,123 +457,64 @@
 
 			return $article;
 		}
+}	
+
+// -------------------------------------------------------------
+	function article_custom($atts)
+	{
+		return parseArticles($atts, '1');
 	}
 
 // -------------------------------------------------------------
-	function article_custom($atts) 
+	function parseArticles($atts, $iscustom = '')
 	{
-		global $pretext,$prefs;
-		extract($prefs);
+		global $pretext;
+		$GLOBALS['is_article_list'] = ($pretext['id'] && !$iscustom)? false : true;
+		return ($GLOBALS['is_article_list'])? doArticles($atts, $iscustom) : doArticle($atts);
+	}
+
+// -------------------------------------------------------------
+/**
+ * Keep all the article tag-related values in one place,
+ * in order to do easy bugfix and easily the addition of
+ * new article tags.
+ * @param rs article data row from DB
+ */	
+	function populateArticleData($rs)
+	{
+		global $pretext;
 		extract($pretext);
+		extract($rs);		
+		$com_count = safe_count('txp_discuss',"parentid=$ID and visible=1");
 
-		$GLOBALS['is_article_list'] = true;
+		$author = (fetch('RealName','txp_users','name',$AuthorID));
+		$author = (!$author) ? $AuthorID : $author; 
 
-		extract(lAtts(array(
-			'form'      => 'default',
-			'limit'     => 10,
-			'category'  => '',
-			'section'   => '',
-			'excerpted' => '',
-			'author'    => '',
-			'sortby'    => 'Posted',
-			'sortdir'   => 'desc',
-			'month'     => '',
-			'keywords'  => '',
-			'frontpage' => ''
-		),$atts));
+		$out['thisid']          = $ID;
+		$out['posted']          = $uPosted;
+		$out['if_comments']     = ($Annotate or $com_count) ? true : false;
+		$out['comments_invite'] = $AnnotateInvite;
+		$out['comments_count']  = $com_count;					  
+		$out['author']          = $author;
+		$out['body']            = parse($Body_html);
+		$out['excerpt']         = $Excerpt;
+		$out['title']           = $Title;
+		$out['url_title']       = $url_title;
+		$out['category1']       = $Category1;
+		$out['category2']       = $Category2;
+		$out['section']         = $Section;
+		$out['keywords']        = $Keywords;
+		$out['article_image']   = $Image;
 
-		$frontpage = ($frontpage) ? filterFrontPage() : '';
-		
-		$category  = (!$category)  ? '' : " and ((Category1='".$category."') or (Category2='".$category."')) ";
-		$section   = (!$section)   ? '' : " and Section = '$section'";
-		$excerpted = ($excerpted=='y')  ? " and Excerpt !=''" : '';
-		$author    = (!$author)    ? '' : " and AuthorID = '$author'";	
-		$month     = (!$month)     ? '' : " and Posted like '{$month}%'";
+		$GLOBALS['thisarticle'] = $out;		
 
-		// trying custom fields here
-
-		$customFields = getCustomFields();
-		
-		if ($customFields) {
-			foreach($customFields as $cField) {
-				$customPairs[$cField] = gAtt($atts, $cField);
-			}
-			if(!empty($customPairs)) {
-				$custom =  buildCustomSql($customFields,$customPairs);
-			} else $custom = '';
-		}
-
-
-		if ($keywords) {
-			$keys = split(',',$keywords);
-			foreach ($keys as $key) {
-				$keyparts[] = " Keywords like '%".trim($key)."%'";
-			}
-			$keywords = " and (" . join(' or ',$keyparts) . ")"; 
-		}
-
-		$Form = fetch('Form','txp_form','name',$form);
-
-		$rs = safe_rows(
-			"*, unix_timestamp(Posted) as uPosted",
-			"textpattern",
-			"1 and Status=4 and Posted < now() ".
-			$category . $section . $excerpted . $month . $author . $keywords . $custom . $frontpage .
-			' order by ' . $sortby . ' ' . $sortdir . ' limit ' . $limit
-		);
-
-		if ($rs) {
-			foreach($rs as $a) {
-				extract($a);
-
-				$com_count = safe_field('count(*)','txp_discuss',"parentid='$ID'");
-
-				$author = fetch('RealName','txp_users',"name",$AuthorID);
-				$author = (!$author) ? $AuthorID : $author; 
-
-				$out['thisid']          = $ID;
-				$out['posted']          = $uPosted;
-				$out['if_comments']     = ($Annotate or $com_count) ? true : false;
-				$out['comments_invite'] = ($Annotate or $com_count)? formatCommentsInvite($AnnotateInvite,$Section,$ID) : '';
-				$out['comments_count']  = $com_count;										  
-				$out['author']          = $author;
-				$out['permlink']        = formatPermLink($ID,$Section);
-				$out['body']            = parse($Body_html);
-				$out['excerpt']         = $Excerpt;
-				$out['title']           = $Title;
-				$out['url_title']       = $url_title;
-				$out['category1']       = $Category1;
-				$out['category2']       = $Category2;
-				$out['section']         = $Section;
-				$out['keywords']        = $Keywords;
-				$out['article_image']   = $Image;
-
-				$GLOBALS['thisarticle'] = $out;
-
-				$article = $Form;
-
-					// quick check for things not pulled from the db
-				$article = doPermlink($article, $out['permlink'], $Title, $url_title);
-
-				$articles[] = parse($article);
-
-					// sending these to paging_link();
-				$GLOBALS['uPosted'] = $uPosted;
-				$GLOBALS['limit'] = $limit;
-
-				unset($GLOBALS['thisarticle']);	
-				unset($GLOBALS['theseatts']);			
-		
-			}
-			return join('',$articles);
-		}
 	}
 
 // -------------------------------------------------------------
 	function getNeighbour($Posted, $s, $type) 
 	{
 		$q = array(
-			"select ID, Title,url_title 
+			"select ID, Title, url_title, unix_timestamp(Posted) as uposted
 			from ".PFX."textpattern where Posted $type '$Posted'",
 			($s!='' && $s!='default') ? "and Section = '$s'" : '',
 			'and Status=4 and Posted < now() order by Posted',
@@ -520,31 +522,10 @@
 			'limit 1'
 		);
 
-		$out = getRow(join(' ',$q));		
+		$out = getRow(join(' ',$q));
 		return (is_array($out)) ? $out : '';
 	}
 
-// -------------------------------------------------------------
-	function doPermlink($text, $plink, $Title, $url_title) 
-	{
-		global $url_mode;
-		$Title = ($url_title) ? $url_title : stripSpace($Title);
-		$Title = ($url_mode) ? $Title : '';
-		return preg_replace("/<(txp:permlink)>(.*)<\/\\1>/sU",
-			"<a href=\"".$plink.$Title."\" title=\"".gTxt('permanent_link')."\">$2</a>",$text);
-	}
-
-// -------------------------------------------------------------
-	function formatDate($uPosted,$pg='')
-	{
-		global $dateformat,$archive_dateformat,$timeoffset,$c,$id;
-
-		if ($pg or $id or $c) { $dateformat = $archive_dateformat; }
-
-			if($dateformat == "since") { $date = since($uPosted); } 
-			else { $date = date("$dateformat",($uPosted + $timeoffset)); }
-		return $date;
-	}
 
 // -------------------------------------------------------------
 	function since($stamp) 
@@ -552,113 +533,26 @@
 		$diff = (time() - $stamp);
 		if ($diff <= 3600) {
 			$mins = round($diff / 60);
-			$since = ($mins<=1) ? ($mins==1) ? "1 minute":"a few seconds":"$mins minutes";
+			$since = ($mins <= 1) 
+			?	($mins==1)
+				?	'1 '.gTxt('minute')
+				:	gTxt('a_few_seconds')
+			:	"$mins ".gTxt('minutes');
 		} else if (($diff <= 86400) && ($diff > 3600)) {
 			$hours = round($diff / 3600);
-			$since = ($hours <= 1) ? "1 hour" : "$hours hours";
+			$since = ($hours <= 1) ? '1 '.gTxt('hour') : "$hours ".gTxt('hours');
 		} else if ($diff >= 86400) {
 			$days = round($diff / 86400);
-			$since = ($days <= 1) ? "1 day" : "$days days";
+			$since = ($days <= 1) ? "1 ".gTxt('day') : "$days ".gTxt('days');
 		}
-		return $since." ago";
-	}
-
-// -------------------------------------------------------------
-	function formatCommentsInvite($AnnotateInvite,$Section,$ID) 
-	{
-		global $comments_mode, $url_mode, $pfr;
-		$dc = safe_count('txp_discuss',"parentid='$ID' and visible=1");
-
-		$ccount = ($dc) ?  '['.$dc.']' : '';
-
-		if (!$comments_mode) {
-			if ($url_mode) {
-				$invite = '<a href="'.$pfr.$Section.'/'.$ID.'/#comment">'.
-				$AnnotateInvite.'</a> '.$ccount;
-			} else {
-				$invite = '<a href="'.$pfr.'index.php?id='.$ID.'#comment">'.
-				$AnnotateInvite.'</a> '.$ccount;
-			}
-		} else {
-			$invite = "<a href=\"".$pfr."?parentid=$ID\" onclick=\"window.open(this.href, 'popupwindow', 'width=500,height=500,scrollbars,resizable,status'); return false;\">".$AnnotateInvite.'</a> '.$ccount;
-		}
-		return $invite;
-	}
-
-// -------------------------------------------------------------
-	function formatMentionsLink($Section, $ID) 
-	{
-		global $comments_mode, $url_mode, $pfr;
-		$mc = safe_count('txp_log_mention',"article_id='$ID'");
-		if ($mc) {
-			if ($url_mode) {
-				return '<a href="'.$pfr.$Section.'/'.$ID.'/#mentions">'.
-				gTxt('mentions').'</a> ['.$mc.']';
-			} else {
-				return '<a href="'.$pfr.'index.php?id='.$ID.'#mentions">'.
-				gTxt('mentions').'</a> ['.$mc.']';
-			}
-		}
-		return false;
-	}
-
-// -------------------------------------------------------------
-	function formatPermLink($ID,$Section)
-	{
-		global $pfr,$url_mode;
-		return ($url_mode==1) ? $pfr.$Section.'/'.$ID.'/' : $pfr.'index.php?id='.$ID;
-	}
-
-// -------------------------------------------------------------
-	function rssPrep($text) 
-	{
-		return str_replace(array("&lt;","&gt;","\n"), array("<",">",""), $text);
+		return $since.' '.gTxt('ago'); // sorry, this needs to be hacked until a truly multilingual version is done
 	}
 
 // -------------------------------------------------------------
 	function lastMod() 
 	{
-		$last = safe_field("unix_timestamp(lastmod)", "txp_prefs", "1");
+		$last = safe_field("unix_timestamp(val)", "txp_prefs", "`name`='lastmod' and prefs_id=1");
 		return gmdate("D, d M Y H:i:s \G\M\T",$last);	
-	}
-
-// -------------------------------------------------------------
-	function formatHref($pfr,$Section,$ID,$Linktext,$Title,$class="")
-	{
-		global $url_mode;
-		$class = ($class) ? ' class="'.$class.'"' :'';
-		return ($url_mode==1)
-		?	'<a href="'.$pfr.$Section.'/'.$ID.'/'.stripSpace($Title).'"'.
-				$class.'>'.$Linktext.'</a>'
-		:	'<a href="'.$pfr.'index.php?id='.$ID.'"'.$class.'>'.$Linktext.'</a>';
-	}
-
-
-// -------------------------------------------------------------
-	function input($type,$name,$val,$size='',$class='',$tab='',$chkd='') 
-	{
-		$o = array(
-			'<input type="'.$type.'" name="'.$name.'" value="'.$val.'"',
-			($size)  ? ' size="'.$size.'"'     : '',
-			($class) ? ' class="'.$class.'"'	: '',
-			($tab)	 ? ' tabindex="'.$tab.'"'	: '',
-			($chkd)  ? ' checked="checked"'	: '',
-			' />'.n
-		);
-		return join('',$o);
-	}
-
-// -------------------------------------------------------------
-	function get_atts($text)
-	{
-		$pairs = explode('" ', $text);
-		foreach	($pairs as $pair) {
-			$pair =	explode("=",trim(str_replace('"', "", $pair)));
-			if (count($pair)==1)
-				$pair[1] = 1;
-				$attributes[strtolower($pair[0])] = $pair[1];
-		}
-		return $attributes;
 	}
 
 // -------------------------------------------------------------
@@ -666,7 +560,6 @@
 	{
 		$f = '/<txp:(\S+)\b(.*)(?:(?<!br )(\/))?'.chr(62).'(?(3)|(.+)<\/txp:\1>)/sU';
 		return preg_replace_callback($f, 'processTags', $text);
-
 	}
 
 // -------------------------------------------------------------
@@ -679,95 +572,30 @@
 		$thing = (isset($matches[4])) ? $matches[4] : '';
 
 		if ($thing) {
-
 			if (function_exists($tag)) return $tag($atts,$thing,$matches[0]);
 			if (isset($pretext[$tag])) return $pretext[$tag];
-
 		} else {
-
 			if (function_exists($tag)) return $tag($atts);
 			if (isset($pretext[$tag])) return $pretext[$tag];
 		}
 
 	}
 
-// -------------------------------------------------------------
-	function splat($attr)  // returns attributes as an array
-	{
-		$arr = array(); $atnm = ''; $mode = 0;
-
-		while (strlen($attr) != 0) {
-				$ok = 0;
-				switch ($mode) {
-					case 0: // name
-						if (preg_match('/^([a-z0-9]+)/i', $attr, $match)) {
-							$atnm = $match[1]; $ok = $mode = 1;
-							$attr = preg_replace('/^[a-z0-9]+/i', '', $attr);
-						}
-					break;
-
-					case 1: // =
-						if (preg_match('/^\s*=\s*/', $attr)) {
-							$ok = 1; $mode = 2;
-							$attr = preg_replace('/^\s*=\s*/', '', $attr);
-							break;
-						}
-						if (preg_match('/^\s+/', $attr)) {
-							$ok = 1; $mode = 0;
-							$arr[$atnm] = $atnm;
-							$attr = preg_replace('/^\s+/', '', $attr);
-						}
-					break;
-
-					case 2: // value
-						if (preg_match('/^("[^"]*")(\s+|$)/', $attr, $match)) {
-							$arr[$atnm] = str_replace('"','',$match[1]);
-							$ok = 1; $mode = 0;
-							$attr = preg_replace('/^"[^"]*"(\s+|$)/', '', $attr);
-							break;
-						}
-						if (preg_match("/^('[^']*')(\s+|$)/", $attr, $match)) {
-							$arr[$atnm] = str_replace("'",'',$match[1]);
-							$ok = 1; $mode = 0;
-							$attr = preg_replace("/^'[^']*'(\s+|$)/", '', $attr);
-							break;
-						}
-						if (preg_match("/^(\w+)(\s+|$)/", $attr, $match)) {
-							$arr[$atnm] = $match[1];
-							$ok = 1; $mode = 0;
-							$attr = preg_replace("/^\w+(\s+|$)/", '', $attr);
-						}
-						break;
-				}
-				if ($ok == 0) {
-					$attr = preg_replace('/^\S*\s*/', '', $attr);
-					$mode = 0;
-				}
-		}
-		if ($mode == 1) $arr[$atnm] = $atnm;
-		return $arr;
-    }
-
-// -------------------------------------------------------------
-	function frompath() // Divine what the current article id is, based on the URL 
-	{
-		$pinfo = serverSet('PATH_INFO');
-
-		if ($pinfo) {
-			$frompath = explode('/',$pinfo);
-			return (!empty($frompath[1])) ? $frompath[1] : '';
-		}
-		return '';
-	}
-
-// -------------------------------------------------------------
-//	Txp plugins are stored in the database. The idea is to minimize reliance
-//	on ftp to install and work with plugins, and to rise above the tower of 
-//	Babel that is file permissions.
 
 // -------------------------------------------------------------
 	function plugins() 
 	{
+		global $txpac;
+
+		if (isset($txpac['plugin_cache_dir'])) {
+			$dir = rtrim($txpac['plugin_cache_dir'], '/') . '/';
+			$dh = @opendir($dir);
+			while ($dh and false !== ($f = @readdir($dh))) {
+				if (is_file($dir . $f))
+					include($dir . $f);
+			}
+		}
+
 		$rs = safe_column("code", "txp_plugin", "status=1");
 		if ($rs) {
 			foreach($rs as $a) { 
@@ -789,13 +617,13 @@
 // -------------------------------------------------------------
 	function segmentPage($text)
 	{
-		global $pfr,$page;
+		global $page;
 
 		$astyle = 'style="font-size:11px;color:white;background:red;font-family:verdana"';
 		$dstyle = 'style="border:1px solid red;"';
 
 		return preg_replace("/(<div id=\")(?!container)(\w+)(\".*)(>)/U",
-			"$1$2$3 ".$dstyle."$4\n<p><a href=\"".$pfr.
+			"$1$2$3 ".$dstyle."$4\n<p><a href=\"".hu.
 			"textpattern/?event=page&#38;step=div_edit&#38;name=".
 			$page."&#38;div=$2\" ".$astyle.">&nbsp;edit&nbsp;</a></p>",$text);
 	}
@@ -837,5 +665,59 @@
 		}
 		return (!empty($out)) ? ' '.join(' ',$out).' ' : false; 
 	}
-			
+
+
+// -------------------------------------------------------------
+	function ckEx($table,$val,$debug='') 
+	{
+		return safe_field("name",'txp_'.$table,"`name` like '".doSlash($val)."' limit 1",$debug);
+	}
+
+// -------------------------------------------------------------
+	function ckExID($val,$debug='') 
+	{
+		return safe_field("ID",'textpattern',"ID = ".doSlash($val)." limit 1",$debug);
+	}
+
+// -------------------------------------------------------------
+	function lookupByTitle($val,$debug='') 
+	{
+		return safe_row("ID,Section",'textpattern',"url_title like '".doSlash($val)."' limit 1",$debug);
+	}
+
+// -------------------------------------------------------------
+	function lookupByID($id,$debug='') 
+	{
+		return safe_row("ID,Section",'textpattern',"ID = '".doSlash($id)."' limit 1",$debug);
+	}
+
+// -------------------------------------------------------------
+	function lookupByDateTitle($when,$title,$debug='') 
+	{
+		return safe_row("ID,Section","textpattern",
+		"posted like '".doSlash($when)."%' and url_title like '".doSlash($title)."' limit 1");
+	}
+
+// -------------------------------------------------------------
+	function makeOut() 
+	{
+		foreach(func_get_args() as $a) {
+			$array[$a] = gps($a);
+		}
+		return $array;
+	}
+
+// -------------------------------------------------------------
+	function chopUrl($req) 
+	{
+		$r = explode('/',strtolower(urldecode($req)));
+		$o['u0'] = (!empty($r[0])) ? $r[0] : '';
+		$o['u1'] = (!empty($r[1])) ? $r[1] : '';
+		$o['u2'] = (!empty($r[2])) ? $r[2] : '';
+		$o['u3'] = (!empty($r[3])) ? $r[3] : '';
+		$o['u4'] = (!empty($r[4])) ? $r[4] : '';
+
+		return $o;
+	}
+	
 ?>

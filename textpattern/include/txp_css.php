@@ -180,8 +180,8 @@
 			
 			$copy = 
 			graf(
-				gTxt('save_css_as').br.
-				fInput('text','newname','').br.
+				gTxt('copy_css_as').br.
+				fInput('text','newname','','edit').br.
 				fInput('submit','copy',gTxt('copy'),'smallerbox')
 			,' style="margin-top:3em;text-align:right"');		
 		} else {
@@ -202,8 +202,8 @@
 			td(
 				form(
 					graf($buttons).
-					text_area('css','400','500',$thecss).br.
-					fInput('submit','',gTxt('save'),'navbox').
+					text_area('css','600','500',$thecss).br.
+					fInput('submit','',gTxt('save'),'publish').
 					eInput('css').sInput('css_save').
 					hInput('name',$name)
 					.$copy

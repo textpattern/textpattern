@@ -3,7 +3,7 @@
 /*
 	This is Textpattern
 
-	Copyright 2004 by Dean Allen
+	Copyright 2005 by Dean Allen
 	www.textpattern.com
 	All rights reserved
 
@@ -92,14 +92,14 @@
 
 		if ($step=='form_create') {
 			$Form=''; $name=''; $type='';
-			$inputs = fInput('submit','savenew',gTxt('save_new'),'smallbox').
+			$inputs = fInput('submit','savenew',gTxt('save_new'),'publish').
 				eInput("form").sInput('form_save');
 		} else {
 			$name = (!$name or $step=='form_delete') ? 'default' : $name;
 			$rs = safe_row("*", "txp_form", "name='$name'");
 			if ($rs) {
 				extract($rs);
-				$inputs = fInput('submit','save',gTxt('save'),'smallbox').
+				$inputs = fInput('submit','save',gTxt('save'),'publish').
 					eInput("form").sInput('form_save').hInput('oldname',$name);
 			}
 		}

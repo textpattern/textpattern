@@ -3,7 +3,7 @@
 // -------------------------------------------------------------
 	function pagetop($pagetitle,$message="")
 	{
-		global $css_mode,$siteurl,$path_from_root,$txp_user;
+		global $css_mode,$siteurl,$txp_user;
 		$area = gps('area');
 		$event = gps('event');
 		$event = (!$event) ? 'article' : $event;
@@ -15,7 +15,7 @@
 
 		$ctabs = array('article','image','link','discuss','category','list');
 		$ptabs = array('section','page','css','form');
-		$atabs = array('prefs','admin','plugin','log');
+		$atabs = array('diag','prefs','admin','plugin','log','import');
 	
 		    if(in_array($event,$ctabs)) { $area = 'content'; }
 		elseif(in_array($event,$ptabs)) { $area = 'presentation'; }
@@ -39,10 +39,10 @@
 			document.cookie="" //erase dummy value
 		}
 		if(!cookieEnabled){
-			confirm(<?php echo "'".gTxt('cookies_must_be_enabled')."'"; ?>)
+			confirm(<?php echo "'".trim(gTxt('cookies_must_be_enabled'))."'"; ?>)
 		}
 
-		function toggleDisplay(obj_id){
+		function toggleDisplay(obj_id) {
 			if (document.getElementById){
 				var obj = document.getElementById(obj_id);
 				if (obj.style.display == '' || obj.style.display == 'none'){
@@ -54,7 +54,35 @@
 			}
 		}
 
-
+		function selectall() {
+			var cnt = 0;
+			var elem = window.document.longform.elements;
+			cnt = elem.length;
+			for (var i=0; i < cnt; i++) elem[i].checked = true;
+		}
+		
+		function deselectall() {
+			var cnt = 0;
+			var elem = window.document.longform.elements;
+			cnt = elem.length;
+			for (var i=0; i < cnt; i++) elem[i].checked = false;
+		}
+		
+		function selectrange() {
+			var inrange = false;
+			var cnt = 0;
+			var elem = window.document.longform.elements;
+			cnt = elem.length;
+			for (var i=0; i < cnt; i++) {
+				if (elem[i].type == 'checkbox') {
+					if (elem[i].checked == true) {
+						if (!inrange) inrange = true;
+						else inrange = false;
+					}
+					if (inrange) elem[i].checked = true;
+				}
+			}
+		}
 	-->
 	</script>
 	</head>
@@ -75,7 +103,7 @@
 			?	areatab(gTxt('tab_admin'), 'admin', 'prefs', $area)
 			:	'',
 
-			'<td class="tabdown"><a href="http://'.$siteurl.$path_from_root.'" class="plain" target="blank">'.gTxt('tab_view_site').'</a></td>',
+			'<td class="tabdown"><a href="'.hu.'" class="plain" target="blank">'.gTxt('tab_view_site').'</a></td>',
 		 '</tr></table>',
 		
 		'</td></tr><tr><td align="center" class="tabs">
@@ -135,10 +163,12 @@
 		);
 
 		$areas['admin'] = array(
+			gTxt('tab_diagnostics') => 'diag',
 			gTxt('tab_preferences') => 'prefs',
 			gTxt('tab_site_admin')  => 'admin',
 			gTxt('tab_logs')        => 'log',
-			gTxt('tab_plugins')     => 'plugin'
+			gTxt('tab_plugins')     => 'plugin',
+			gTxt('tab_import')      => 'import'
 		);	
 		return $areas;	
 	}

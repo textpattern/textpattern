@@ -1,35 +1,6 @@
-##		There are several ways of doing clean URLs in Textpattern.
-##		You can use "messy" URLs and apply some Rewrite rules
-##		Or
-## 	The idea is to have an extentionless file execute as php.
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^(.+) - [PT,L]
 
-## 	In Apache, you can set the DefaultType to whatever your php
-## 	is called, for example
-
-DefaultType application/x-httpd-php
-#DefaultType application/x-httpd-fastphp
-#DefaultType application/x-isapi-php
-
-
-##		You can also use content negiotiation. A feature in most web servers
-##		including Apache, Zeus and Windows.
-##		In this one,  you put the extension section file, content negotiation allows
-##		a file with an extension to be called up in a URL without the extension.
-##		http://yourdomain.com/about.php is accessible from http://yourdomain.com/about/
-
-## 	This is generally a default setting in Zeus, and with Apache you'll need
-##		mod_negiotiation enabled and use the following in http.conf or .htaccess
-
-Options +Multiviews
-
-##		Finally another way is to Force a file to be php.
-##		The following will Force extensionless files to be executed as php.
-##		Another way is to force extensionless files to be php (whatever the server calls it.)
-##		
-
-<FilesMatch "^([^\.]+)$">
-ForceType application/x-httpd-php
-</FilesMatch>
-
-## 	Adding this line can make it run as mod_php
-##		AddType application/x-httpd-php .html .htm .php
+RewriteRule ^(.*) index.php

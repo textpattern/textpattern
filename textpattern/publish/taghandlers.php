@@ -2,7 +2,7 @@
 
 /*
 	This is Textpattern
-	Copyright 2004 by Dean Allen - all rights reserved.
+	Copyright 2005 by Dean Allen - all rights reserved.
 
 	Use of this software denotes acceptance of the Textpattern license agreement 
 
@@ -12,15 +12,15 @@
 	function page_title($atts) 
 	{
 		global $sitename,$id,$c,$q,$parentid,$pg;
-		if (is_array($atts)) extract($atts);
-		$sep = (!empty($separator)) ? $separator : ': ';
+		extract(lAtts(array('separator' => ': '),$atts));
 		$s = $sitename;
-		if ($id)       return $s.$sep.fetch('Title','textpattern','ID',$id);
+		$sep = $separator;
+		if ($id)       return $s.$sep.safe_field('Title','textpattern',"ID = $id");
 		if ($c)        return $s.$sep.$c;
 		if ($q)        return $s.$sep.gTxt('search_results').$sep.' '.$q;
 		if ($pg)       return $s.$sep.gTxt('page').' '.$pg;
-		if ($parentid) return $s.$sep.'comments on '.
-			fetch('Title','textpattern','ID',$parentid);
+		if ($parentid) return $s.$sep.gTxt('comments_on').' '.
+			safe_field('Title','textpattern',"ID = '$parentid'");
 		return $sitename;
 	}
 
@@ -28,20 +28,26 @@
 	function css($atts) 	// generates the css src in <head>
 	{
 		global $s;
-		if (is_array($atts)) extract($atts);
-		if (!empty($n)) return hu.'textpattern/css.php?n='.$n;
+		extract(lAtts(array('n' => ''),$atts));
+		if ($n) return hu.'textpattern/css.php?n='.$n;
 		return hu.'textpattern/css.php?s='.$s;
 	}
 
 // -------------------------------------------------------------
 	function image($atts) 
 	{
-		global $pfr,$img_dir;
-		if (is_array($atts)) extract($atts);
-		if (!empty($name)) {
+		global $img_dir;
+		extract(lAtts(array(
+			'id'    => '',
+			'name'  => '',
+			'style' => '',
+			'align' => ''
+		),$atts));
+		
+		if ($name) {
 			$name = doSlash($name);
 			$rs = safe_row("*", "txp_image", "name='$name' limit 1");
-		} elseif (!empty($id)) {
+		} elseif ($id) {
 			$rs = safe_row("*", "txp_image", "id='$id' limit 1");
 		} else return;
 		
@@ -49,10 +55,10 @@
 			extract($rs);
 			$out = array(
 				'<img',
-				'src="'.$pfr.$img_dir.'/'.$id.$ext.'"',
-				'height="'.$h.'" width="'.$w.'" alt="'.$alt.'"',
-				(!empty($style)) ? 'style="'.$style.'"' : '',
-				(!empty($align)) ? 'align="'.$align.'"' : '',
+				'src="'.hu.$img_dir.'/'.$id.$ext.'"',
+				'height="'.$h.'" width="'.$w.'" alt="'.$alt.'"',				
+				($style) ? 'style="'.$style.'"' : '',
+				($align) ? 'align="'.$align.'"' : '',
 				'/>'
 			);
 			
@@ -64,9 +70,16 @@
 // -------------------------------------------------------------
     function thumbnail($atts) 
     {
-        global $pfr,$img_dir;
-        if (is_array($atts)) extract($atts);
-        
+        global $img_dir;
+		extract(lAtts(array(
+			'id'        => '',
+			'name'      => '',
+			'thumbnail' => '',
+			'poplink'   => '',
+			'style'     => '',
+			'align'     => ''
+		),$atts));
+		
         if (!empty($name)) {
             $name = doSlash($name);
             $rs = safe_row("*", "txp_image", "name='$name' limit 1");
@@ -76,19 +89,19 @@
 
         if ($rs) {
             extract($rs);
-            if(!empty($thumbnail)) {
+            if($thumbnail) {
                 $out = array(
-                    (!empty($poplink)) 
-                    ?   '<a href="'.$pfr.$img_dir.'/'.$id.$ext.
+                    ($poplink)
+                    ?   '<a href="'.hu.$img_dir.'/'.$id.$ext.
                             '" onclick="window.open(this.href, \'popupwindow\', \'width='.
                             $w.',height='.$h.',scrollbars,resizable\'); return false;">'
                     :   '',
-                    '<img src="'.$pfr.$img_dir.'/'.$id.'t'.$ext.'"',
+                    '<img src="'.hu.$img_dir.'/'.$id.'t'.$ext.'"',
                     ' alt="'.$alt.'"',
-                    (!empty($style)) ? 'style="'.$style.'"' : '',
-                    (!empty($align)) ? 'align="'.$align.'"' : '',
+                    ($style) ? 'style="'.$style.'"' : '',
+                    ($align) ? 'align="'.$align.'"' : '',
                     '/>',
-                    (!empty($poplink)) ? '</a>' : ''
+                    ($poplink) ? '</a>' : ''
                 );
                 return join(' ',$out);
             }
@@ -98,9 +111,8 @@
 // -------------------------------------------------------------
 	function output_form($atts) 
 	{
-		if (is_array($atts)) extract($atts);
-		if (empty($form)) return false;
-		return parse(fetch('form','txp_form','name',doSlash($form)));
+		extract(lAtts(array('form' => ''),$atts));
+		return ($form) ? parse(fetch('form','txp_form','name',doSlash($form))) : '';
 	}
 
 // -------------------------------------------------------------
@@ -112,7 +124,7 @@
 			'wraptag'  => '',
 			'category' => '',
 			'section'  => '', 
-			'flavor'   => ''
+			'flavor'   => 'rss'
 		),$atts));
 		
 		$category = (!$category) ? '' : a.'category='.urlencode($category);
@@ -131,13 +143,15 @@
 			'break'    => br,
 			'wraptag'  => '',
 			'category' => '',
-			'flavor'   => ''
+			'flavor'   => 'rss'
 		),$atts));
 	
 		$category = (!$category) ? '' : a.'category='.urlencode($category);
 
-		return '<a href="'.hu.'?'.$flavor.'=1'.a.'area=link'.$category.
+		$out = '<a href="'.hu.'?'.$flavor.'=1'.a.'area=link'.$category.
 			'" title="XML feed">'.$label.'</a>';
+		
+		return ($wraptag) ? tag($out,$wraptag) : $out;
 	}
 
 // -------------------------------------------------------------
@@ -165,7 +179,7 @@
 		$rs = safe_rows("*","txp_link",join(' ',$qparts));
 	
 		if ($rs) {
-			$outlist = ($label) ? $label : '';
+			$outlist[] = ($label) ? $label : '';
 		
 			foreach ($rs as $a) {
 				extract($a);
@@ -191,28 +205,6 @@
 		return false;
 	}
 
-// -------------------------------------------------------------
-	function stripSpace($text) 
-	{
-		global $txpac;
-		if ($txpac['attach_titles_to_permalinks']) {
-		
-			$text = preg_replace("/(^| &\S+;)|(<[^>]*>)/U","",$text);		
-
-			if ($txpac['permalink_title_format']) {
-				return 
-				strtolower(
-					preg_replace("/[^[:alnum:]\-]/","",
-						str_replace(" ","-",
-							$text
-						)
-					)
-				);			
-			} else {
-				return preg_replace("/[^[:alnum:]]/","",$text);
-			}
-		}
-	}
 
 // -------------------------------------------------------------
 	function eE($txt) // convert email address into unicode entities
@@ -292,7 +284,7 @@
 			if ($label) $out[] = $label;
 			foreach ($rs as $a) {
 				extract($a);
-				$out[] = doArticleHref($ID,$Title,$url_title,$Section);
+				$out[] = href($Title,permlinkurl($a));
 			}
 			if (is_array($out)) {
 				return doWrap($out, $wraptag, $break);
@@ -308,20 +300,17 @@
 			'label'    => '',
 			'break'    => br,
 			'wraptag'  => '',
-			'limit'    => 10,
+			'limit'    => 10
 		),$atts));
 
-		$q = "select ".PFX."txp_discuss.*,".PFX."textpattern.* from ".PFX."txp_discuss
-            left join ".PFX."textpattern on ".PFX."textpattern.ID = ".PFX."txp_discuss.parentid
-			order by ".PFX."txp_discuss.posted desc limit 0,$limit";
-
-		$rs = getRows($q);
+		$rs = safe_rows("*",'txp_discuss',"visible=1 order by posted desc limit 0,$limit");
 
 		if ($rs) {
 			if ($label) $out[] = $label;
         	foreach($rs as $a) {
 				extract($a);
-				$out[] = doArticleHref($ID, $Title, $url_title, $Section);
+				$Title = safe_field("Title",'textpattern',"ID=$parentid");
+				$out[] = href($name.' ('.$Title.')', permlinkurl_id($parentid).'#c'.$discussid);
 			}
 			if (is_array($out)) {
 				return doWrap($out, $wraptag, $break);
@@ -337,10 +326,10 @@
 			'label'    => '',
 			'break'    => br,
 			'wraptag'  => '',
-			'limit'    => 10,
+			'limit'    => 10
 		),$atts));
 		
-		global $thisid;
+		global $thisid,$thisarticle;
 		
 		if($thisid) $id = $thisid;
 
@@ -359,7 +348,7 @@
 				if ($label) $out[] = $label;
 				foreach($rs as $a) {
 					extract($a);
-					$out[] = doArticleHref($ID,$Title,$url_title,$Section);
+					$out[] = href($Title,permlinkurl($a));
 				}
 				if (is_array($out)) {
 					return doWrap($out, $wraptag, $break);
@@ -371,9 +360,9 @@
 	}
 
 // -------------------------------------------------------------
-	function popup($atts) // popup navigation. possible atts: type (c or s), label
+	function popup($atts)
 	{
-		global $pretext,$pfr;
+		global $pretext;
 		
 		$gc = $pretext['c'];
 		$gs = $pretext['s'];
@@ -405,7 +394,7 @@
 			$out = ($label) ? $label.br.$out : $out;
 			$out = ($wraptag) ? tag($out,$wraptag) : $out;
 			$out.= '<noscript><input type="submit" value="go" /></noscript>';
-			return '<form action="'.$pfr.'" method="get">'.n.$out.'</form>';
+			return '<form action="'.hu.'" method="get">'.n.$out.'</form>';
 		}
 	}
 
@@ -452,12 +441,12 @@
 	}
 
 // -------------------------------------------------------------
-	function section_list($atts) // output href list of site categories
+	function section_list($atts) // output href list of site sections
 	{
 		extract(lAtts(array(
-			'label'    => '',
-			'break'    => br,
-			'wraptag'  => ''
+			'label'   => '',
+			'break'   => br,
+			'wraptag' => ''
 		),$atts));
 		
 		$rs = safe_column("name","txp_section","name != 'default' order by name");
@@ -466,10 +455,10 @@
 			if ($label) $out[] = $label;
 			foreach ($rs as $a) {
 				if($a) {
-					if($GLOBALS['url_mode']) {
-						$out[] = tag(htmlspecialchars($a),'a',' href="'.hu.urlencode($a).'/"');
-					} else {
+					if($GLOBALS['permlink_mode'] == 'messy') {
 						$out[] = tag(htmlspecialchars($a),'a',' href="'.hu.'?s='.urlencode($a).'"');
+					} else {
+						$out[] = tag(htmlspecialchars($a),'a',' href="'.hu.urlencode($a).'/"');
 					}
 				}
 			}
@@ -483,13 +472,13 @@
 // -------------------------------------------------------------
 	function search_input($atts) // input form for search queries
 	{
-		global $q,$pfr;
+		global $q;
 		extract(lAtts(array(
-			'form' => 'search_input',
-			'wraptag'  => 'p',
-			'size'  => '15',
-			'label'  => 'Search',
-			'button' => ''
+			'form'    => 'search_input',
+			'wraptag' => 'p',
+			'size'    => '15',
+			'label'   => 'Search',
+			'button'  => ''
 		),$atts));	
 
 		if ($form) {
@@ -504,31 +493,21 @@
 		$out = (!empty($label)) ? $label.br.$out.$sub : $out.$sub;
 		$out = ($wraptag) ? tag($out,$wraptag) : $out;
 		
-		return '<form action="'.$pfr.'index.php" method="get">'.$out.'</form>';
+		return '<form action="'.hu.'" method="get">'.$out.'</form>';
 	}
 
 // -------------------------------------------------------------
 	function link_to_next($atts, $thing) // link to next article, if it exists
 	{
-		global $s,$pfr,$next_id,$next_title,$next_utitle;
-		$next_link = ($next_utitle) ? $next_utitle : $next_title;
-		$thing = (isset($thing)) ? parse($thing) : '';
-		if($next_id) {		
-			return formatHref($pfr,$s,$next_id,$thing,$next_link,'noline');
-		}
-		return '';
+		global $next_id;		
+		return ($next_id) ? href(parse($thing),permlinkurl_id($next_id)) : '';
 	}
 		
 // -------------------------------------------------------------
 	function link_to_prev($atts, $thing) // link to next article, if it exists
 	{
-		global $s,$pfr,$prev_id,$prev_title,$prev_utitle,$url_mode;
-		$prev_link = ($prev_utitle) ? $prev_utitle : $prev_title;
-		$thing = (isset($thing)) ? parse($thing) : '';
-		if ($prev_id) {
-			return formatHref($pfr,$s,$prev_id,$thing,$prev_link,'noline');
-		}
-		return '';
+		global $prev_id;		
+		return ($prev_id) ? href(parse($thing),permlinkurl_id($prev_id)) : '';
 	}
 
 // -------------------------------------------------------------
@@ -552,31 +531,38 @@
 // -------------------------------------------------------------
 	function link_to_home($atts, $thing) 
 	{
-		global $pfr;
 		if (!empty($thing)) {
-			return '<a href="'.$pfr.'" class="noline">'.parse($thing).'</a>';
+			return '<a href="'.hu.'" class="noline">'.parse($thing).'</a>';
 		}
 	}
 
 // -------------------------------------------------------------
 	function newer($atts, $thing, $match='') 
 	{
-		global $thispage,$url_mode;
+		global $thispage,$permlink_mode, $pretext;
+		extract($pretext);
 				
 		if (is_array($atts)) extract($atts);
 		if (is_array($thispage)) { 
 			extract($thispage);
 		} else { 
-			return $match; 
+			//Exclude search results
+			return (!$q)?$match:''; 
 		}
 
 		ob_start();
-
+		//Fix a problem when paging /author/author_name and simmilar url schemas
+		//chopUrl explodes by slashes
+		$req_uri = $_SERVER['REQUEST_URI'];
+		if (!empty($_SERVER['QUERY_STRING'])) 
+			$req_uri = str_replace('?'.$_SERVER['QUERY_STRING'], '', $req_uri);
+		if(strlen(strrchr($req_uri,'/')) != 1) $req_uri.='/';
+		
 		if ($pg > 1) {
 			$out = array(
-				'<a href="?pg='.($pg - 1),
+				'<a href="'.$req_uri.'?pg='.($pg - 1),
 				($c) ? a.'c='.urlencode($c) : '',
-				($s && !$url_mode) ? a.'s='.urlencode($s) : '',
+				($s && $permlink_mode=='messy') ? a.'s='.urlencode($s) : '',
 				'"',
 				(empty($title)) ? '' : ' title="'.$title.'"',
 				'>',
@@ -584,27 +570,34 @@
 				'</a>');
 			return join('',$out);
 		} else return;
-		
 	}
 
 // -------------------------------------------------------------
 	function older($atts, $thing, $match='') 
 	{
-		global $thispage,$url_mode;
+		global $thispage,$permlink_mode, $pretext;
+		extract($pretext);
 		if (is_array($atts)) extract($atts);
 		if (is_array($thispage)) {
 			extract($thispage); 
 		} else { 
-			return $match; 
+			//Exclude search results
+			return (!$q)?$match:''; 
 		}
 		
 		ob_start();
-
+		//Fix a problem when paging /author/author_name and simmilar url schemas
+		//chopUrl explodes by slashes
+		$req_uri = $_SERVER['REQUEST_URI'];
+		if (!empty($_SERVER['QUERY_STRING'])) 
+			$req_uri = str_replace('?'.$_SERVER['QUERY_STRING'], '', $req_uri);
+		if(strlen(strrchr($req_uri,'/')) != 1) $req_uri.='/';
+		
 		if ($pg != $numPages) {
 			$out = array(
-				'<a href="?pg='.($pg + 1),
+				'<a href="'.$req_uri.'?pg='.($pg + 1),
 				($c) ? a.'c='.urlencode($c) : '',
-				($s && !$url_mode) ? a.'s='.urlencode($s) : '',
+				($s && $permlink_mode == 'messy') ? a.'s='.urlencode($s) : '',
 				'"',
 				(empty($title)) ? '' : ' title="'.$title.'"',
 				'>',
@@ -614,28 +607,18 @@
 		} else return;
 	}
 
-// -------------------------------------------------------------
-	function mentions($atts) 
-	{
-		global $thisarticle;
-		$out = $thisarticle['mentions_link'];
-		if (is_array($atts)) extract($atts);
-		if(!empty($wraptag)) return tag($out,$wraptag);
-		return $out;	
-	}	
 
 // -------------------------------------------------------------
 	function text($atts) 
 	{
-		if (is_array($atts)) extract($atts);
-		if (!empty($item)) return gTxt($item);
+		extract(lAtts(array('item' => ''),$atts));
+		return ($item) ? gTxt($item) : '';
 	}
 
 // -------------------------------------------------------------
-	function article_id($atts) 
+	function article_id() 
 	{
 		global $thisarticle;
-		if (is_array($atts)) extract($atts);
 		return $thisarticle['thisid'];
 	}
 
@@ -645,15 +628,18 @@
 		global $dateformat,$archive_dateformat,$timeoffset,
 				$pg,$c,$thisarticle,$id,$txpcfg;
 
-		$date_offset = $thisarticle['posted'] + $timeoffset;
+		$date_offset = $thisarticle['posted'];
 
-		if (is_array($atts)) extract($atts);
+		extract(lAtts(array(
+			'format' => '',
+			'lang'   => ''
+		),$atts));	
 
-		if(!empty($format)) {
+		if($format) {
 			if($format=='since') {
 				$date_out = since($thisarticle['posted']);
 			} else {
-				$date_out = date($format,$date_offset);
+				$date_out = safe_strftime($format,$date_offset);
 			}
 
 		} else {
@@ -665,18 +651,7 @@
 			if($dateformat == "since") { 
 				$date_out = since($thisarticle['posted']); 
 			} else { 
-				$date_out = date($dateformat,$date_offset); 
-			}
-		}
-
-		if (!empty($lang)) {
-			if (empty($GLOBALS['date_lang'])) {
-				$date_lang = load_lang($lang.'_dates');	
-			} else global $date_lang;
-			if ($date_lang) {
-				foreach ($date_lang as $k => $v) {
-					$date_out = str_replace($k,$v,$date_out);
-				}
+				$date_out = safe_strftime($dateformat,$date_offset); 
 			}
 		}
 
@@ -689,42 +664,41 @@
 	function comments_count($atts) 
 	{
 		global $thisarticle;
-		if (is_array($atts)) extract($atts);
 		return ($thisarticle['comments_count'] > 0) ? $thisarticle['comments_count'] : '';
 	}
 
 // -------------------------------------------------------------
 	function comments_invite($atts) 
 	{
-		global $thisarticle;
-		$out = $thisarticle['comments_invite'];
-		if (is_array($atts)) extract($atts);
-		if(!empty($wraptag)) return tag($out,$wraptag);
-		return $out;	
+		global $thisarticle,$is_article_list;
+		extract($thisarticle);
+		global $comments_mode;
+
+		if ($if_comments  && $is_article_list) {
+
+			$ccount = ($comments_count) ?  ' ['.$comments_count.']' : '';
+	
+			if (!$comments_mode) {
+				return '<a href="'.permlinkurl($thisarticle).'/#'.gTxt('comment').
+					'">'.$comments_invite.'</a>'. $ccount;
+			} else {
+				return "<a href=\"".hu."?parentid=$thisid\" onclick=\"window.open(this.href, 'popupwindow', 'width=500,height=500,scrollbars,resizable,status'); return false;\">".$comments_invite.'</a> '.$ccount;
+	
+			}
+		}
 	}
 
 // -------------------------------------------------------------
 	function author($atts) 
 	{
 		global $thisarticle;
-		if (is_array($atts)) extract($atts);
 		return $thisarticle['author'];	
-	}
-
-// -------------------------------------------------------------
-	function permlink($atts) 
-	{
-		global $thisarticle;
-		if (is_array($atts)) extract($atts);
-		if(!empty($wraptag)) return tag($thisarticle['permlink'],$wraptag);
-		return $thisarticle['permlink'];
 	}
 	
 // -------------------------------------------------------------
 	function body($atts) 
 	{
 		global $thisarticle;
-		if (is_array($atts)) extract($atts);
 		return $thisarticle['body'];
 	}	
 	
@@ -732,7 +706,6 @@
 	function title($atts) 
 	{
 		global $thisarticle;
-		if (is_array($atts)) extract($atts);
 		return $thisarticle['title'];	
 	}
 
@@ -740,18 +713,18 @@
 	function excerpt($atts) 
 	{
 		global $thisarticle;
-		if (is_array($atts)) extract($atts);
 		return $thisarticle['excerpt'];	
 	}
 
 // -------------------------------------------------------------
 	function category1($atts) 
 	{
-		global $thisarticle, $pfr;
-		if (is_array($atts)) extract($atts);
+		global $thisarticle;
+		extract(lAtts(array('link' => ''),$atts));
 		if ($thisarticle['category1']) {
 			if (!empty($link)) 
-				return '<a href="'.$pfr.'?c='.$thisarticle['category1'].'">'.
+				return '<a href="'.hu.strtolower(gTxt('category')).'/'.
+					strtolower(urlencode($thisarticle['category1'])).'">'.
 					$thisarticle['category1'].'</a>';
 			return $thisarticle['category1'];
 		}
@@ -760,11 +733,12 @@
 // -------------------------------------------------------------
 	function category2($atts) 
 	{
-		global $thisarticle, $pfr;
-		if (is_array($atts)) extract($atts);
+		global $thisarticle;
+		extract(lAtts(array('link' => ''),$atts));
 		if ($thisarticle['category2']) {
 			if (!empty($link)) 
-				return '<a href="'.$pfr.'?c='.$thisarticle['category2'].'">'.
+				return '<a href="'.hu.strtolower(gTxt('category')).'/'.
+					strtolower(urlencode($thisarticle['category2'])).'">'.
 					$thisarticle['category2'].'</a>';
 			return $thisarticle['category2'];
 		}
@@ -773,11 +747,12 @@
 // -------------------------------------------------------------
 	function section($atts) 
 	{
-		global $thisarticle, $pfr;
-		if (is_array($atts)) extract($atts);
+		global $thisarticle;
+		extract(lAtts(array('link' => ''),$atts));
 		if ($thisarticle['section']) {
 			if (!empty($link)) 
-				return '<a href="'.$pfr.$thisarticle['section'].'/">'.
+				return '<a href="'.hu.strtolower(gTxt('section')).'/'.
+					strtolower(urlencode($thisarticle['section'])).'/">'.
 					$thisarticle['section'].'</a>';
 			return $thisarticle['section'];
 		}
@@ -787,14 +762,18 @@
 	function keywords($atts) 
 	{
 		global $thisarticle;
-		return ($thisarticle['keywords']) ? $thisarticle['section'] : '';
+		return ($thisarticle['keywords']) ? $thisarticle['keywords'] : '';
 	}
 
 // -------------------------------------------------------------
 	function article_image($atts) 
 	{
-		global $thisarticle,$pfr,$img_dir;
-		if (is_array($atts)) extract($atts);
+		global $thisarticle,$img_dir;
+		extract(lAtts(array(
+			'style' => '',
+			'align' => ''
+		),$atts));	
+
 		$theimage = ($thisarticle['article_image']) ? $thisarticle['article_image'] : '';
 		
 		if ($theimage) {
@@ -805,11 +784,11 @@
 					extract($rs);
 					$out = array(
 						'<img',
-						'src="'.$pfr.$img_dir.'/'.$id.$ext.'"',
+						'src="'.hu.$img_dir.'/'.$id.$ext.'"',
 						'height="'.$h.'" width="'.$w.'" alt="'.$alt.'"',
 						(!empty($style)) ? 'style="'.$style.'"' : '',
 						(!empty($align)) ? 'align="'.$align.'"' : '',
-						'/>'
+						' />'
 					);			
 					return join(' ',$out);
 				}
@@ -820,34 +799,30 @@
 	}
 
 // -------------------------------------------------------------
-	function search_result_title($atts) 
+	function search_result_title() 
 	{
 		global $this_result;
-		if (is_array($atts)) extract($atts);
 		return $this_result['search_result_title'];
 	}
 
 // -------------------------------------------------------------
-	function search_result_excerpt($atts) 
+	function search_result_excerpt() 
 	{
 		global $this_result;
-		if (is_array($atts)) extract($atts);
 		return $this_result['search_result_excerpt'];
 	}
 
 // -------------------------------------------------------------
-	function search_result_url($atts) 
+	function search_result_url() 
 	{
 		global $this_result;
-		if (is_array($atts)) extract($atts);
 		return $this_result['search_result_url'];
 	}
 
 // -------------------------------------------------------------
-	function search_result_date($atts) 
+	function search_result_date() 
 	{
 		global $this_result;
-		if (is_array($atts)) extract($atts);
 		return $this_result['search_result_date'];
 	}
 
@@ -855,7 +830,7 @@
 // -------------------------------------------------------------
 	function image_index($atts)
 	{
-		global $url_mode,$s,$c,$p,$pfr,$txpcfg,$img_dir;
+		global $url_mode,$s,$c,$p,$txpcfg,$img_dir;
 		if (is_array($atts)) extract($atts);
 		$c = doSlash($c);
 		
@@ -869,14 +844,14 @@
 		        }
 			foreach($rs as $a) {
 				extract($a);
-				$impath = $pfr.$img_dir.'/'.$id.'t'.$ext;
+				$impath = hu.$img_dir.'/'.$id.'t'.$ext;
 				$imginfo = getimagesize($txpcfg['doc_root'].$impath);
 				$dims = (!empty($imginfo[3])) ? ' '.$imginfo[3] : '';
 				if(!$url_mode){
-					$out[] = '<a href="'.$pfr.'?c='.urlencode($c).$s.a.'p='.$id.'">'.
+					$out[] = '<a href="'.hu.'?c='.urlencode($c).$s.a.'p='.$id.'">'.
 					'<img src="'.$impath.'"'.$dims.' alt="'.$alt.'" />'.'</a>';
-				}else{
-					$out[] = '<a href="'.$pfr.$s.'/?c='.urlencode($c).a.'p='.$id.'">'.
+				} else {
+					$out[] = '<a href="'.hu.$s.'/?c='.urlencode($c).a.'p='.$id.'">'.
 					'<img src="'.$impath.'"'.$dims.' alt="'.$alt.'" />'.'</a>';
 				}
 
@@ -884,40 +859,17 @@
 			return join('',$out);
 		}
 	}
-/*
-// -------------------------------------------------------------
-	function image_index($atts) 
-	{
-		global $url_mode,$s,$c,$p,$pfr,$txpcfg,$img_dir;
-		if (is_array($atts)) extract($atts);
-		$c = doSlash($c);
-		
-		$rs = safe_rows("*", "txp_image","category='$c' and thumbnail=1 order by name");
-		
-		if ($rs) {
-			foreach($rs as $a) {
-				extract($a);
-				$impath = $pfr.$img_dir.'/'.$id.'t'.$ext;
-				$imginfo = getimagesize($txpcfg['doc_root'].$impath);
-				$dims = (!empty($imginfo[3])) ? ' '.$imginfo[3] : '';
-				$out[] = '<a href="'.$pfr.$s.'/?c='.urlencode($c).a.'p='.$id.'">'.
-					'<img src="'.$impath.'"'.$dims.' alt="'.$alt.'" />'.
-					'</a>';
-			}
-			return join('',$out);
-		}
-	}
-*/
+
 // -------------------------------------------------------------
 	function image_display($atts) 
 	{
 		if (is_array($atts)) extract($atts);
-		global $url_mode,$s,$c,$p,$pfr,$img_dir;
+		global $url_mode,$s,$c,$p,$img_dir;
 		if($p) {
 			$rs = safe_row("*", "txp_image", "id='$p' limit 1");
 			if ($rs) {
 				extract($rs);
-				$impath = $pfr.$img_dir.'/'.$id.$ext;
+				$impath = hu.$img_dir.'/'.$id.$ext;
 				return '<img src="'.$impath.
 					'" style="height:'.$h.'px;width:'.$w.'px" alt="'.$alt.'" />';
 			}
@@ -975,6 +927,98 @@
 	}
 
 // -------------------------------------------------------------
+	function permlink($atts,$thing)
+	{
+		global $thisarticle;
+		
+		$url = permlinkurl($thisarticle);
+		
+		return tag(parse($thing),'a',' href="'.$url.'" title="'.gTxt('permanent_link').'"');
+	}
+
+// -------------------------------------------------------------
+	function permlinkurl_id($ID)
+	{
+		$article = safe_row(
+			"*,ID as thisid, unix_timestamp(Posted) as posted",
+			"textpattern",
+			"ID=$ID");
+		
+		return permlinkurl($article);
+	}
+
+// -------------------------------------------------------------
+	function permlinkurl($article_array) 
+	{
+		global $permlink_mode, $txpac;
+
+		if (isset($txpac['custom_url_func']) and is_callable($txpac['custom_url_func']))
+			return call_user_func($txpac['custom_url_func']);
+
+		extract($article_array);
+		
+		if (!isset($title)) $title = $Title;
+		if (empty($url_title)) $url_title = stripSpace($title);
+		if (empty($section)) $section = $Section; // lame, huh?
+		
+		switch($permlink_mode) {
+			case 'section_id_title':
+				return hu."$section/$thisid/$url_title";
+			case 'year_month_day_title':
+				list($y,$m,$d) = explode("-",date("Y-m-d",$posted));
+				return hu."$y/$m/$d/$url_title";
+			case 'id_title':
+				return hu."$thisid/$url_title";	
+			case 'title_only':
+				return hu."$url_title";	
+			case 'messy':
+				return hu."?id=$thisid";	
+		}
+	}
+	
+// -------------------------------------------------------------	
+	function lang($atts)
+	{
+		return LANG;
+	}
+
+// -------------------------------------------------------------
+	# DEPRECATED - provided only for backwards compatibility
+	function formatPermLink($ID,$Section)
+	{
+		return permlinkurl_id($ID);
+	}
+
+// -------------------------------------------------------------
+	# DEPRECATED - provided only for backwards compatibility
+	function formatCommentsInvite($AnnotateInvite,$Section,$ID)
+	{
+		global $comments_mode;
+
+		$dc = safe_count('txp_discuss',"parentid='$ID' and visible=1");
+
+		$ccount = ($dc) ?  '['.$dc.']' : '';
+		if (!$comments_mode) {
+			return '<a href="'.permlinkurl_id($ID).'/#'.gTxt('comment').
+				'">'.$AnnotateInvite.'</a>'. $ccount;
+		} else {
+			return "<a href=\"".hu."?parentid=$ID\" onclick=\"window.open(this.href, 'popupwindow', 'width=500,height=500,scrollbars,resizable,status'); return false;\">".$AnnotateInvite.'</a> '.$ccount;
+		}
+
+	}
+// -------------------------------------------------------------
+	# DEPRECATED - provided only for backwards compatibility
+   function doPermlink($text, $plink, $Title, $url_title)
+	{
+		global $url_mode;
+		$Title = ($url_title) ? $url_title : stripSpace($Title);
+		$Title = ($url_mode) ? $Title : '';
+		return preg_replace("/<(txp:permlink)>(.*)<\/\\1>/sU",
+			"<a href=\"".$plink.$Title."\" title=\"".gTxt('permanent_link')."\">$2</a>",$text);
+	}
+
+// -------------------------------------------------------------
+	# DEPRECATED - provided only for backwards compatibility
 	function doArticleHref($ID,$Title,$url_title,$Section)
 	{
 		$conTitle = ($url_title) ? $url_title : stripSpace($Title);	
@@ -983,7 +1027,121 @@
 		:	tag($Title,'a',' href="'.hu.'index.php?id='.$ID.'"');
 	}
 
+// -------------------------------------------------------------
+// Testing breadcrumbs
+	function breadcrumb($atts)
+	{
+		global $pretext,$thisarticle,$sitename;
+		
+		extract(lAtts(array(
+			'wraptag' => 'p',
+			'sep' => ' &#187; ',
+			'link' => 'y',
+			'label' => $sitename
+		),$atts));
+		$linked = ($link == 'y')? true: false; 		
+		if ($linked) $label = '<a href="'.hu.'" class="noline">'.$sitename.'</a>';
+		
+		$content = array();
+		
+		extract($pretext);
+		if(!empty($s) && $s!= 'default')
+		{ 
+			$content[] = ($linked)? (
+				($GLOBALS['permlink_mode'] == 'messy')?
+					tag(htmlspecialchars($s),'a',' href="'.hu.'?s='.urlencode($s).'"'):
+					tag(htmlspecialchars($s),'a',' href="'.hu.urlencode($s).'/"')
+				):$s;
+		}
+		
+		$category = empty($c)? '': $c;
+		$cattree = array();
+		if (!empty($category)){
+			while ($parent = safe_field('parent','txp_category',"name='$category' AND parent!='root'"))
+			{
+				//Use new /category/category_name scheme here too?
+				$cattree[] = ($linked)? 
+					tag(str_replace("& ","&#38; ", $category),'a',' href="'.hu.'?c='.urlencode($category).'"')
+					:$category;
+				$category = $parent;
+				unset($parent);
+			}
+		}
+		if (!empty($cattree))
+		{
+			$cattree = array_reverse($cattree);
+			$content = array_merge($content, $cattree);
+		}
+		//Add date month permlinks?
+//		$year = ''; 
+//		$month = '';
+//		$date = '';
+		//Add the label at the end, to prevent breadcrumb for home page
+		if (!empty($content)) $content = array_merge(array($label),$content);
+		//Add article title without link if we're on an individual archive page?
+		return doWrap($content, $wraptag, $sep);
+	}
 
+// -------------------------------------------------------------
+	//Doble Conditionals: if_search, if_excerpt	
+	function EvalElse($thing, $condition)
+	{
+	         #party!
+	         $chunks = array();
+	         $f = '/(.*)(<txp:(\S+)\b.*?>.+<txp:else\b\s*\/>.+<\/txp:\\3>)/sU';
+	         $splited = preg_split($f, $thing, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+	
+	         if(sizeof($splited)>1){
+	                $chunks = array();
+	                $new_thing = '';
+	                for($i=0;$i<sizeof($splited);$i++){
+	                        $new_thing .= $splited[$i];
+	                        if(!empty($splited[$i+2])){
+	                                $key = trim($splited[$i+2]);
+	                                $new_thing.="<txp_chunk:$key />";
+	                                $chunks[$key] = $splited[$i+1];
+	                        }
+	                        $i+=2;
+	                }
+	         }
+	         $thing = (!empty($new_thing))?$new_thing:$thing;
+	         $cdtn = '/<txp:else\b\s*\/\s*>/s';
+	         $match = preg_split($cdtn, $thing, -1, PREG_SPLIT_DELIM_CAPTURE);
+	         $thing = $match[0];
+	         $otherwise = (!empty($match[1]))?$match[1]:'';
+	
+	        $where = ($condition)? $thing : $otherwise;
+	        if(!empty($new_thing)){
+	                $g = '/<txp_chunk:(\S+)\b \/>/s';
+	                $success = preg_match($g,$where, $matching);
+	                if($success){
+	                     $repl = $chunks[$matching[1]];
+	                     $replaced = preg_replace($g, $repl, $where);
+	                     return $replaced;
+	                }
+	        }
+	        return $where;
+	}
+	
+//------------------------------------------------------------------------
 
+	function if_excerpt($atts, $thing)
+	{
+	        global $thisarticle;
+	        # eval condition here. example for article excerpt
+	        $condition = (!empty($thisarticle['excerpt']))? true : false;
+	        return parse(EvalElse($thing, $condition));
+	}
+
+//--------------------------------------------------------------------------
+// Searches use default page. This tag allows you to use different templates if searching
+//--------------------------------------------------------------------------
+
+	function if_search($atts, $thing)
+	{
+		$searching = gps('q');
+		$condition = (!empty($searching))? true : false;
+		return parse(EvalElse($thing, $condition));
+	}
 	
 ?>
