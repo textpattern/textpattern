@@ -106,8 +106,6 @@
 //-------------------------------------------------------------
 	function pCell($item,$var,$format,$size="",$nohelp="") {
 		
-		$var = stripslashes($var);
-		
 		$out = tda(gTxt($item), ' style="text-align:right;vertical-align:middle"');
 		switch($format) {
 			case "radio":         $in = yesnoradio($item,$var);        break;
