@@ -101,7 +101,7 @@
 					$Body = str_replace('href="/','href="'.hu.'/',$Body);
 	
 						// encode and entify
-					$Body = preg_replace(array('/</','/>/',"/'/",'/"/'), array('&lt;','&gt;','&#039','&quot;'), $Body);
+					$Body = preg_replace(array('/</','/>/',"/'/",'/"/'), array('&lt;','&gt;','&#039;','&quot;'), $Body);
 					$e['content'] = tag(n.$Body.n,'content',
 						' type="text/html" mode="escaped" xml:lang="en"');
 		

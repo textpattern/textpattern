@@ -65,7 +65,7 @@
 					$Body = (!$txpac['syndicate_body_or_excerpt']) ? $Body_html : $Excerpt;
 					$Body = (!trim($Body)) ? $Body_html : $Body;
 					$Body = str_replace('href="/','href="http://'.$siteurl.'/',$Body);
-					$Body = preg_replace(array('/</','/>/',"/'/",'/"/'), array('&lt;','&gt;','&#039','&quot;'),$Body);
+					$Body = preg_replace(array('/</','/>/',"/'/",'/"/'), array('&lt;','&gt;','&#039;','&quot;'),$Body);
 					
 					$uTitle = ($url_title) ? $url_title : stripSpace($Title);
 					$uTitle = htmlspecialchars($uTitle,ENT_NOQUOTES);
