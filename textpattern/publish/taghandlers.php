@@ -529,10 +529,10 @@
 	function link_to_next($atts, $thing) // link to next article, if it exists
 	{
 		global $s,$pfr,$next_id,$next_title,$next_utitle;
-		$next_title = ($next_utitle) ? $next_utitle : $next_title;
+		$next_link = ($next_utitle) ? $next_utitle : $next_title;
 		$thing = (isset($thing)) ? parse($thing) : '';
 		if($next_id) {		
-			return formatHref($pfr,$s,$next_id,$thing,$next_title,'noline');
+			return formatHref($pfr,$s,$next_id,$thing,$next_link,'noline');
 		}
 		return '';
 	}
@@ -541,10 +541,10 @@
 	function link_to_prev($atts, $thing) // link to next article, if it exists
 	{
 		global $s,$pfr,$prev_id,$prev_title,$prev_utitle,$url_mode;
-		$prev_title = ($prev_utitle) ? $prev_utitle : $prev_title;
+		$prev_link = ($prev_utitle) ? $prev_utitle : $prev_title;
 		$thing = (isset($thing)) ? parse($thing) : '';
 		if ($prev_id) {
-			return formatHref($pfr,$s,$prev_id,$thing,$prev_title,'noline');
+			return formatHref($pfr,$s,$prev_id,$thing,$prev_link,'noline');
 		}
 		return '';
 	}
