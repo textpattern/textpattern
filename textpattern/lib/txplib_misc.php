@@ -130,19 +130,23 @@ else
 	}
 
 // -------------------------------------------------------------
-	function has_privs($res)
+	function has_privs($res, $user='')
 	{
 		global $txp_user, $txp_permissions;
 
-		$privs = safe_field("privs", "txp_users", "`name`='$txp_user'");
+		// If no user name is supplied, assume the current login name
+		if (empty($user))
+			$user = $txp_user;
+
+		$privs = safe_field("privs", "txp_users", "`name`='".doSlash($user)."'");
 		$req = explode(',', @$txp_permissions[$res]);
 		return in_array($privs, $req);
 	}
 
 // -------------------------------------------------------------
-	function require_privs($res)
+	function require_privs($res, $user='')
 	{
-		if (!has_privs($res))
+		if (!has_privs($res, $user))
 			exit(pageTop('Restricted').'<p style="margin-top:3em;text-align:center">'.
 				gTxt('restricted_area').'</p>');
 	}
