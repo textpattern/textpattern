@@ -68,6 +68,8 @@
 				$pageprint = ($pageprint=='') 
 				?	'' 
 				:	'<a href="'.htmlspecialchars($page).'" target="_blank">'.substr($pageprint,0,50).'</a>';
+				if ($method == 'POST')
+					$pageprint = '<b>'.$pageprint.'</b>';
 				$fstamp = date("n/j g:i a",($stamp + tz_offset()));
 				
 				echo tr(
