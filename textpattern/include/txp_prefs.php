@@ -309,13 +309,8 @@
 		$monthnum = '%m';
 		$year = '%Y';
 		$yearshort = '%y';
-		$hour12 = '%I';
-		$hour24 = '%H';
-		$min = '%M';
-		$sec = '%S';
-		$ampm = '%p';
 		$time12 = '%I:%M %p';
-		$time = (strftime('%X') ? '%X' : '%H:%M:%S');
+		$time24 = '%H:%M';
 		$date = (strftime('%x') ? '%x' : '%Y-%m-%d');
 	
 		$formats = array(
@@ -323,20 +318,18 @@
 			"$daynum.$monthnum.$yearshort",
 			"$daynumord $monthname, $time12",
 			"$yearshort.$monthnum.$daynum, $time12",
-			"$time12",
 			"$dayshort $monthshort $daynumord, $time12",
 			"$dayname $monthname $daynumord, $year",
 			"$monthshort $daynumord",
 			"$daynumord $monthname $yearshort",
-			"$daynumord $monthnum $year - $hour24:$min",
+			"$daynumord $monthnum $year - $time24",
 			"$daynumord. $monthname $year",
-			"$daynumord. $monthname $year, $hour24:$min",
+			"$daynumord. $monthname $year, $time24",
 			"$year-$monthnum-$daynum",
 			"$year-$daynum-$monthnum",
-			"$date $time",
-			"$time $date",
 			"$date",
-			"$time",
+			"$time24",
+			"$time12",
 		);
 
 		$ts = time();
