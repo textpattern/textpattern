@@ -216,10 +216,10 @@
 		global $myprivs,$txp_user;
 		$them = safe_rows_start("*","txp_users","name != '".doSlash($txp_user)."'");
 		
-		if ($them) {
-			while ($a = nextRow($them)) {
-				$names[$a['name']] = $a['RealName'].' ('.$a['name'].')';
-			}
+		while ($a = nextRow($them)) {
+			$names[$a['name']] = $a['RealName'].' ('.$a['name'].')';
+		}
+		if (!empty($names)) {
 			return '<div align="center" style="margin-top:3em">'.
 			form(
 				tag(gTxt('reset_author_password'),'h3').
