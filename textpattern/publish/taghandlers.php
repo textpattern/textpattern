@@ -1038,7 +1038,7 @@
 		
 		extract(lAtts(array(
 			'wraptag' => 'p',
-			'sep' => ' &#187; ',
+			'sep' => '&#160;&#187;&#160;',
 			'link' => 'y',
 			'label' => $sitename
 		),$atts));
