@@ -147,6 +147,13 @@ $DB = new DB;
 		return array();
 	}
 
+// -------------------------------------------------------------
+	function safe_rows_start($things, $table, $where, $debug='') 
+	{
+		$q = "select $things from ".PFX."$table where $where";
+		return startRows($q,$debug);
+	}
+
 //-------------------------------------------------------------
 	function safe_count($table, $where, $debug='') 
 	{
@@ -184,6 +191,18 @@ $DB = new DB;
 			}
 		}
 		return false;
+	}
+
+//-------------------------------------------------------------
+	function startRows($query,$debug='')
+	{
+		return safe_query($query,$debug);
+	}
+
+//-------------------------------------------------------------
+	function nextRow($r)
+	{
+		return mysql_fetch_assoc($r);
 	}
 
 //-------------------------------------------------------------

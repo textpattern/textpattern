@@ -448,7 +448,7 @@
 			$offset = '';
 		}
 
-		$rs = safe_rows("*, unix_timestamp(Posted) as uPosted", 'textpattern', 
+		$rs = safe_rows_start("*, unix_timestamp(Posted) as uPosted", 'textpattern', 
 		$where. ' order by ' . $sortby . ' ' . $sortdir . ' limit ' . $offset . $limit);
 		//the listform
 		$form = gAtt($atts, 'listform', $form);		
@@ -459,7 +459,7 @@
 
 		if ($rs) {
 			
-			foreach($rs as $a) {
+			while($a = nextRow($rs)) {
 				extract($a);
 				populateArticleData($a);
 				// define the article form
