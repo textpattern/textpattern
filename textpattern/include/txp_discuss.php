@@ -132,7 +132,7 @@
 		$discussid=gps('discussid');
 		extract(safe_row("*", "txp_discuss", "discussid='$discussid'"));
 		$ta = '<textarea name="message" cols="60" rows="15">'.
-			preg_replace(array('/</', '/>/'), array('&lt;', '&gt'), $message).'</textarea>';
+			preg_replace(array('/</', '/>/'), array('&lt;', '&gt;'), $message).'</textarea>';
 
 		if (fetch('ip','txp_discuss_ipban','ip',$ip)) {
 			$banstep = 'ipban_unban'; $bantext = gTxt('unban');
