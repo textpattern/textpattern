@@ -469,9 +469,13 @@
 // -------------------------------------------------------------
 	function parseArticles($atts, $iscustom = '')
 	{
-		global $pretext;
-		$GLOBALS['is_article_list'] = ($pretext['id'] && !$iscustom)? false : true;
-		return ($GLOBALS['is_article_list'])? doArticles($atts, $iscustom) : doArticle($atts);
+		global $pretext, $is_article_list;
+		$old_ial = $is_article_list;
+		$is_article_list = ($pretext['id'] && !$iscustom)? false : true;
+		$r = ($is_article_list)? doArticles($atts, $iscustom) : doArticle($atts);
+		$is_article_list = $old_ial;
+
+		return $r;
 	}
 
 // -------------------------------------------------------------
