@@ -423,12 +423,27 @@
 		$wraptag = (empty($wraptag)) ? "" : $wraptag;
 		$label = (empty($label)) ? "" : $label;
 		$break = (empty($break)) ? br : $break;
+		$type = (!empty($type)) ? $type : 'article';
 
-		$rs = safe_column(
-			"name", 
-			"txp_category",
-			"name != 'default' and type='article' order by name"
-		);
+		if (!empty($parent)) {
+			$qs = safe_row("lft,rgt",'txp_category',"name='$parent'",1);
+			if($qs) {
+				extract($qs);
+				$rs = safe_column(
+					'name',
+					'txp_category',
+					"name != 'default' and type='article' and (lft between $lft and $rgt) order by lft asc"			
+				);
+			}
+
+		} else {
+
+			$rs = safe_column(
+				"name", 
+				"txp_category",
+				"name != 'default' and type='article' order by name"
+			);
+		}
 
 		if ($rs) {
 			if ($label) $out[] = $label;

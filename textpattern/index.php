@@ -9,6 +9,7 @@
 
 	Use of this software indicates acceptance of the Textpattern license agreement 
 */
+	header("Content-type: text/html; charset=utf-8");
 
 	$thisversion = '1.0rc1';
 

@@ -253,7 +253,6 @@
 					$name,htmlspecialchars($name));
 
 				$items[] = graf( $cbox . sp . str_repeat(sp,$level-1).$editimage);
-			
 			}
 		
 			if (!empty($items)) $o .= article_multiedit_form('image',$items);
@@ -321,7 +320,6 @@
 			,'margin-top:1em',"verify('".gTxt('are_you_sure')."')"
 		);
 		} return;
-	
 	}
 
 // -------------------------------------------------------------
