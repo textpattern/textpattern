@@ -8,6 +8,7 @@
 
 */
 
+dmp(get_defined_functions());
 
 // -------------------------------------------------------------
 	function page_title($atts) 
@@ -492,6 +493,15 @@
 			$rs = fetch('form','txp_form','name',$form);
 			return ($rs) ? $rs : 'search form not found';
 		}
+
+		$size = (!empty($size)) ? $size : '15'; 
+		$sub = (!empty($button)) ? '<input type="submit" value="'.$button.'" />' : '';
+
+		$out = fInput('text','q',$q,'','','',$size);
+		$out = (!empty($label)) ? $label.br.$out.$sub : $out.$sub;
+		$out = ($wraptag) ? tag($out,$wraptag) : $out;
+		
+		return '<form action="'.$pfr.'index.php" method="get">'.$out.'</form>';
 	}
 
 // -------------------------------------------------------------
