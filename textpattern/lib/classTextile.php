@@ -420,7 +420,7 @@ class Textile
 // -------------------------------------------------------------
     function block($text)
     {
-        $pre = false;
+        $pre = $php = false;
         $find = array('bq', 'h[1-6]', 'fn\d+', 'p');
 
         $text = preg_replace("/(.+)\n(?![#*\s|])/",
@@ -433,19 +433,26 @@ class Textile
             if (preg_match('/<pre>/i', $line)) {
                 $pre = true;
             }
+            elseif (preg_match('/<txp:php>/i', $line)) {
+                $php = true;
+            }
+
 
             foreach($find as $tag) {
-                $line = ($pre == false)
+                $line = ($pre == false and $php == false)
                 ? preg_replace_callback("/^($tag)($this->a$this->c)\.(?::(\S+))? (.*)$/",
                     array(&$this, "fBlock"), $line)
                 : $line;
             }
 
-            $line = preg_replace('/^(?!\t|<\/?pre|<\/?code|$| )(.*)/', "\t<p>$1</p>", $line);
+            $line = (!$php) ? preg_replace('/^(?!\t|<\/?pre|<\/?code|$| )(.*)/', "\t<p>$1</p>", $line) : $line;
 
-            $line = ($pre == true) ? str_replace("<br />", "\n", $line):$line;
+            $line = ($pre or $php) ? str_replace("<br />", "\n", $line):$line;
             if (preg_match('/<\/pre>/i', $line)) {
                 $pre = false;
+            }
+            elseif (preg_match('/<\/txp:php>/i', $line)) {
+		$php = false;
             }
 
             $out[] = $line;
