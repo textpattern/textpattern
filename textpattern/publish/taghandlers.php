@@ -426,7 +426,7 @@
 		$type = (!empty($type)) ? $type : 'article';
 
 		if (!empty($parent)) {
-			$qs = safe_row("lft,rgt",'txp_category',"name='$parent'",1);
+			$qs = safe_row("lft,rgt",'txp_category',"name='$parent'");
 			if($qs) {
 				extract($qs);
 				$rs = safe_column(
