@@ -63,10 +63,14 @@
 					$Body = (!trim($Body)) ? $Body_html : $Body;
 					$Body = str_replace('href="/','href="http://'.$siteurl.'/',$Body);
 					$Body = htmlspecialchars($Body,ENT_NOQUOTES);
+					
+					$Title = ($url_title) ? $url_title : stripSpace($Title);
+					$Title = htmlspecialchars($Title,ENT_NOQUOTES);
+
 	
 					$link = ($url_mode==0)
 					?	'http://'.$siteurl.$path_from_root.'index.php?id='.$ID
-					:	'http://'.$siteurl.$path_from_root.$Section.'/'.$ID.'/';
+					:	'http://'.$siteurl.$path_from_root.$Section.'/'.$ID.'/'.$Title;
 		
 					if ($txpac['show_comment_count_in_feed']) {
 						$dc = getCount('txp_discuss', "parentid=$ID and visible=1");
