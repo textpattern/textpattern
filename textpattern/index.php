@@ -9,7 +9,6 @@
 
 	Use of this software indicates acceptance of the Textpattern license agreement 
 */
-
 	define("txpath", dirname(__FILE__));
 
 	$thisversion = '1.0rc2';
@@ -61,4 +60,5 @@
 	echo "\n<!-- Runtime: ",substr($microdiff,0,6),"-->";
 
 	end_page();
+	
 ?>
