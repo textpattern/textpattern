@@ -78,7 +78,7 @@
 				$im = (!empty($comments_disallow_images)) ? 1 : '';
 				$message = trim(nl2br($textile->TextileThis(strip_tags(deEntBrackets(
 					$message
-				)),1,'',$im)));
+				)),1,'',$im,'',(@$txpac['comment_nofollow'] ? 'nofollow' : ''))));
 			} 
 			
 			if($comments_dateformat == "since") { 
@@ -90,10 +90,10 @@
 			$web = str_replace("http://", "", $web);
 	
 			if ($email && !$web && !$txpac['never_display_email'])
-				$name = '<a href="'.eE('mailto:'.$email).'"  rel="nofollow">'.$name.'</a>';
+				$name = '<a href="'.eE('mailto:'.$email).'"'.(@$txpac['comment_nofollow'] ? ' rel="nofollow"' : '').'>'.$name.'</a>';
 
 			if ($web)
-				$name = '<a href="http://'.$web.'" title="'.$web.'" rel="nofollow">'.$name.'</a>';
+				$name = '<a href="http://'.$web.'" title="'.$web.'"'.(@$txpac['comment_nofollow'] ? ' rel="nofollow"' : '').'>'.$name.'</a>';
 
 			$dlink = permlinkurl_id($parentid).'#c'.$discussid;
 		
@@ -301,7 +301,7 @@
 
 		$message2db = doSlash(trim(nl2br($textile->TextileThis(strip_tags(deEntBrackets(
 			$message
-		)),1,'',$im))));
+		)),1,'',$im,'',(@$txpac['comment_nofollow'] ? 'nofollow' : '')))));
 				
 		$isdup = safe_row("message,name", "txp_discuss", 
 			"name='$name' and message='$message2db' and ip='$ip'");

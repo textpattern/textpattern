@@ -193,6 +193,7 @@ class Textile
     var $s;
     var $c;
     var $pnct;
+    var $rel;
 
 // -------------------------------------------------------------
     function Textile()
@@ -212,10 +213,13 @@ class Textile
     }
 
 // -------------------------------------------------------------
-    function TextileThis($text, $lite='', $encode='', $noimage='', $strict='')
+    function TextileThis($text, $lite='', $encode='', $noimage='', $strict='', $rel='')
     {
         if (get_magic_quotes_gpc())
             $text = stripslashes($text);
+
+        if ($rel)
+           $this->rel = ' rel="'.$rel.'" ';
 
         $text = $this->incomingEntities($text);
         $text = $this->encodeEntities($text);
@@ -554,7 +558,7 @@ class Textile
 
         $atts = ($atts) ? $this->shelve($atts) : '';
 
-        $out = $pre . '<a href="' . $url . $slash . '"' . $atts . '>' . $text . '</a>' . $post;
+        $out = $pre . '<a href="' . $url . $slash . '"' . $atts . $this->rel . '>' . $text . '</a>' . $post;
 
 		// $this->dump($out);
 		return $out;
