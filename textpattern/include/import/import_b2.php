@@ -74,6 +74,8 @@
 	
 		if (!empty($articles)) {
 			foreach($articles as $a){	
+				if (is_callable('utf8_encode'))
+					$a['Body'] = utf8_encode($a['Body']);
 				$a['Body_html'] = $textile->textileThis($a['Body']);
 				extract(array_slash($a));
 				$q = mysql_query("
@@ -100,6 +102,8 @@
 		if (!empty($comments)) {
 			foreach ($comments as $comment) {
 				extract(array_slash($comment));
+				if (is_callable('utf8_encode'))
+					$message = utf8_encode($message);
 				$message = nl2br($message);
 		
 				$q = mysql_query("insert into ".PFX."txp_discuss values 
