@@ -571,8 +571,6 @@
  */	
 	function populateArticleData($rs)
 	{
-		global $pretext;
-		extract($pretext);
 		extract($rs);
 		$com_count = safe_count('txp_discuss',"parentid=$ID and visible=1");
 
@@ -598,10 +596,10 @@
 		$GLOBALS['thisarticle'] = $out;		
 		$GLOBALS['thisarticle']['body'] = parse($Body_html);
 
-		if(!is_numeric($GLOBALS['id'])) {
+		if(!is_numeric(@$GLOBALS['id'])) {
 			global $next_id, $next_title, $next_utitle, $next_posted;
 			global $prev_id, $prev_title, $prev_utitle, $prev_posted;
-			extract(getNextPrev($Posted, $GLOBALS['s']));
+			extract(getNextPrev($Posted, @$GLOBALS['s']));
 		}
 	}
 

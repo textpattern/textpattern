@@ -70,6 +70,7 @@
 				foreach ($rs as $a) {
 
 					extract($a);
+					populateArticleData($a);
 					
 					$a['posted'] = $uPosted;
 	
@@ -96,6 +97,9 @@
 	
 						// if Excerpt is empty, switch back to Body_html
 					$Body = (!trim($Body)) ? $Body_html : $Body; 
+
+						// parse
+					$Body = parse($Body);
 					
 						// fix relative urls
 					$Body = str_replace('href="/','href="'.hu.'/',$Body);

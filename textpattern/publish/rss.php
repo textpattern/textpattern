@@ -59,11 +59,13 @@
 			if($rs) {
 				foreach ($rs as $a) {
 					extract($a);
+					populateArticleData($a);
 
 					$a['posted'] = $uPosted;
 
 					$Body = (!$txpac['syndicate_body_or_excerpt']) ? $Body_html : $Excerpt;
 					$Body = (!trim($Body)) ? $Body_html : $Body;
+					$Body = parse($Body);
 					$Body = str_replace('href="/','href="http://'.$siteurl.'/',$Body);
 					$Body = preg_replace(array('/</','/>/',"/'/",'/"/'), array('&lt;','&gt;','&#039;','&quot;'),$Body);
 					
