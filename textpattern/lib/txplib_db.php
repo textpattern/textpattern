@@ -115,7 +115,10 @@ $DB = new DB;
 		$q = "select $thing from ".PFX."$table where $where";
 		$rs = getRows($q,$debug);
 		if ($rs) {
-			foreach($rs as $a) $out[$a[0]] = $a[0];
+			foreach($rs as $a) {
+				$v = array_shift($a);
+				$out[$v] = $v;
+			}
 			return $out;
 		}
 		return array();
@@ -166,7 +169,7 @@ $DB = new DB;
 	function getRow($query,$debug='') 
 	{
 		if ($r = safe_query($query,$debug)) {
-			return (mysql_num_rows($r) > 0) ? mysql_fetch_array($r) : false;
+			return (mysql_num_rows($r) > 0) ? mysql_fetch_assoc($r) : false;
 		}
 		return false;
 	}
@@ -176,7 +179,7 @@ $DB = new DB;
 	{
 		if ($r = safe_query($query,$debug)) {
 			if (mysql_num_rows($r) > 0) {
-				while ($a = mysql_fetch_array($r)) $out[] = $a; 
+				while ($a = mysql_fetch_assoc($r)) $out[] = $a; 
 				return $out;
 			}
 		}
@@ -198,7 +201,7 @@ $DB = new DB;
 	{
 		$rs = getRows($query,$debug);
 		if ($rs) {
-			foreach($rs as $a) $out[] = $a[0];
+			foreach($rs as $a) $out[] = array_shift($a);
 			return $out;
 		}
 		return array();
