@@ -16,7 +16,7 @@ class DB {
          if (!$this->link) {
          	$GLOBALS['connected'] = false;
          } else $GLOBALS['connected'] = true;
-         mysql_select_db($this->db);
+         mysql_select_db($this->db) or die(db_down());
     }
 } 
 
@@ -304,6 +304,24 @@ $DB = new DB;
 			return $out;
 		}
 		return false;
+	}
+
+// -------------------------------------------------------------
+	function db_down() 
+	{
+		return <<<eod
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<title>Untitled</title>
+</head>
+<body>
+<p align="center" style="margin-top:4em">Database unavailable.</p>
+</body>
+</html>
+eod;
 	}
 
 ?>
