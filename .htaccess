@@ -1,0 +1,11 @@
+AddType application/x-httpd-php .html .htm .php
+DirectoryIndex index.html index.php
+
+<Files about>
+	ForceType application/x-httpd-php
+</Files>
+
+<Files article>
+	ForceType application/x-httpd-php
+</Files>
+

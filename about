@@ -1,0 +1,6 @@
+<?php
+	include "./textpattern/config.php"; 
+	$s = "about";
+	include $txpcfg['txpath']."/publish.php";
+	textpattern();
+?>
