@@ -12,6 +12,7 @@
 	define("txpath", dirname(__FILE__));
 
 	$thisversion = '1.0rc3';
+	$txp_rc = 1; // should be 0 for a stable version
 
 	if (!@include './config.php') { 
 		include './setup.php';
@@ -55,7 +56,8 @@
 		$event = gps('event');
 		$step = gps('step');
 		
-		if (!$dbversion or $dbversion != $thisversion) {
+		if (!$dbversion or $dbversion != $thisversion or 
+				($txp_rc and @filemtime(txpath.'/_update.php') > $dbupdatetime)) {
 			include './_update.php';
 			$event = 'prefs';
 			$step = 'prefs';

@@ -349,6 +349,10 @@ eod;
 	}
 	//eof: non image file upload tab
 
+	// 1.0: keep track of updates for devel version
+	safe_delete('txp_prefs',"name = 'dbupdatetime'");
+	safe_insert('txp_prefs', "prefs_id=1, name='dbupdatetime',val='".time()."'");
+
 // updated, baby.
 
 ?>
