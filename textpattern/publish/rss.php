@@ -103,7 +103,7 @@
 					$item = 
 						tag(doSpecial($linkname),'title').n.
 						tag(doSpecial($description),'description').n.
-						tag($url,'link');
+						tag(doSpecial($url),'link');
 					$out[] = tag($item,'item');
 				}
 				header("Content-Type: text/xml"); 

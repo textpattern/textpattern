@@ -185,8 +185,8 @@
 			foreach ($rs as $a) {
 				extract($a);
 				$linkname = str_replace("& ","&#38; ", $linkname);
-				$link = '<a href="'.$url.'">'.$linkname.'</a>';
-				$linkdesctitle = '<a href="'.$url.'" title="'.$description.'">'.$linkname.'</a>';
+				$link = '<a href="'.doSpecial($url).'">'.$linkname.'</a>';
+				$linkdesctitle = '<a href="'.doSpecial($url).'" title="'.$description.'">'.$linkname.'</a>';
 
 				$out = str_replace("<txp:link />", $link, $Form);
 				$out = str_replace("<txp:linkdesctitle />", $linkdesctitle, $out);
