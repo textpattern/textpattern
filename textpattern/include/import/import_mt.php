@@ -96,10 +96,7 @@ function import_mt_item($item, $section, $status, $invite) {
 	$url_title = stripSpace(dumbDown($title));	
 
 	$body = $item['BODY'][0]['content'] . (isset($item['EXTENDED_BODY']) ? "\n<!--more-->\n" . $item['EXTENDED_BODY'][0]['content'] : '');
-	if (!empty($item['CONVERT BREAKS']))
-		$body_html = $textile->textileThis(nl2br($body), 1);
-	else
-		$body_html = $textile->textileThis($body, 1);
+	$body_html = $textile->textileThis($body);
 
 	$excerpt = @$item['EXCERPT'][0]['content'];
 	$excerpt_html = $textile->textileThis($excerpt);
@@ -149,14 +146,14 @@ function import_mt_item($item, $section, $status, $invite) {
 		if (!empty($item['COMMENT'])) {
 			foreach ($item['COMMENT'] as $comment) {
 				$comment_date = date('Y-m-d H:i:s', strtotime(@$comment['DATE']));
-				$comment_content = @$comment['content'];
+				$comment_content = $textile->TextileThis(nl2br(@$comment['content']),1);
 				if (!safe_field("discussid","txp_discuss","posted = '".doSlash($comment_date)."' AND message = '".doSlash($comment_content)."'")) {
 					safe_insert('txp_discuss', 
 						"parentid='".doSlash($parentid)."',".
-						"name='".doSlash(@$item['AUTHOR'])."',".
-						"email='".doSlash(@$item['EMAIL'])."',".
-						"web='".doSlash(@$item['URL'])."',".
-						"ip='".doSlash(@$item['IP'])."',".
+						"name='".doSlash(@$comment['AUTHOR'])."',".
+						"email='".doSlash(@$comment['EMAIL'])."',".
+						"web='".doSlash(@$comment['URL'])."',".
+						"ip='".doSlash(@$comment['IP'])."',".
 						"posted='".doSlash($comment_date)."',".
 						"message='".doSlash($comment_content)."',".
 						"visible='1'");
