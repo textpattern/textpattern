@@ -51,22 +51,28 @@
 			    }
 			    $b['comments'] = $comments;
 			    unset($comments);
+			    //Post categories now
+			    $q = "
+			      select
+			        ".$wpdbprefix."post2cat.category_id as catid,
+			        ".$wpdbprefix."categories.cat_name as catname
+			        from ".$wpdbprefix."post2cat
+			        left join ".$wpdbprefix."categories on
+			          ".$wpdbprefix."categories.cat_ID = ".$wpdbprefix."post2cat.category_id where ".$wpdbprefix."post2cat.post_id='".$b['ID']."' limit 2        
+			        ";
+			    			    
+			    $e = mysql_query($q ,$b2link) or $results[]= mysql_error();			    
+			    
+			    while($f=mysql_fetch_array($e)) {
+			      $categories[] = $f;
+			    }
+			    
+			    $b['Category1'] = (!empty($categories[0]))?$categories[0]['catname']:'';
+			    $b['Category2'] = (!empty($categories[1]))?$categories[1]['catname']:'';			    
+			    
+			    unset($categories);
+			    
 			    $articles[] = $b;
-		    }
-		
-		    
-		    $a = mysql_query("
-		      select
-		        ".$wpdbprefix."post2cat.post_id as post,
-		        ".$wpdbprefix."post2cat.category_id as catid,
-		        ".$wpdbprefix."categories.cat_name as catname
-		        from ".$wpdbprefix."post2cat
-		        left join ".$wpdbprefix."categories on
-		          ".$wpdbprefix."categories.cat_ID = ".$wpdbprefix."post2cat.category_id        
-		        ",$b2link) or $results[]= mysql_error();
-		    
-		    while($b=mysql_fetch_array($a)) {
-		      $categories[] = $b;
 		    }
 		    
 		    $a = mysql_query("
@@ -81,7 +87,8 @@
 		      $cats[] = $b;
 		    }
 	
-		mysql_close($b2link);	
+		mysql_close($b2link);
+		
 				
 		//keep a handy copy of txpdb values, and do not alter Dean code
 		// for now! ;-)
@@ -114,6 +121,8 @@
 			                Body      = '".addslashes($Body)."',
 			                Body_html = '".addslashes($Body_html)."',
 			                AuthorID  = '".addslashes($AuthorID)."',
+			                Category1 = '".addslashes($Category1)."',
+			                Category2 = '".addslashes($Category2)."',
 			                Section   = '$insert_into_section',
 			                AnnotateInvite = '$default_comment_invite',
 			                Status    = '$insert_with_status'
@@ -158,57 +167,27 @@
 			    $left = 1;
 			        foreach ($cats as $cat) {
 			            extract(array_slash($cat));
-			            
-			            $left++;
-			            $right++;
-			            
-			            $q = mysql_query("
-			            insert into ".PFX."txp_category set
-			             name = '$catname',
-			             type = 'article',
-			             parent = 'root',
-			             lft = '$left',
-			             rgt = '$right'",
-			            $txplink) or $results[]= mysql_error($q);
-			    
-			            if(mysql_insert_id()) {
-			                $results[]= 'inserted wp_ category <strong>'.$catname
-			                    .'</strong> into txp_category';
+			            //Prevent repeated categories
+			            $rs = safe_row('id', 'txp_category', "name='$catname'");			            			            
+			            if (!$rs){
+			            	$left++;
+			            	$right++;
+				            $q = mysql_query("
+				            insert into ".PFX."txp_category set
+				             name = '$catname',
+				             type = 'article',
+				             parent = 'root',
+				             lft = '$left',
+				             rgt = '$right'",
+				            $txplink) or $results[]= mysql_error($q);
+				    
+				            if(mysql_insert_id()) {
+				                $results[]= 'inserted wp_ category <strong>'.$catname
+				                    .'</strong> into txp_category';
+				            }
 			            }
 			        }
-			     $num = mysql_query("select * from ".PFX."txp_category");
-			     $num = mysql_num_rows($num)+1;
-			     $renum = mysql_query("update ".PFX."txp_category set rgt = '$num' where type = 'article' and name = 'root'",$txplink) or print mysql_error($num);
-			    }
-			    
-			    if (!empty($categories)) {
-			      foreach ($categories as $category) {
-			          extract(array_slash($category));
-			            
-			            $chk = mysql_query("select Category1, Category2 from ".PFX."textpattern where ID ='$post'");
-			            while ($row = mysql_fetch_array($chk)) {
-			              if (!$row['Category1']) {
-			                    $q = mysql_query("update ".PFX."textpattern set Category1 = '$catname' where ID = '$post'",$txplink) or print mysql_error($q);
-			                    
-			                    if(mysql_insert_id()) {
-			                $results[]= 'inserted wp_ category <strong>'.$catname
-			                    .'</strong> to post number <strong>'.$post.'</strong> into textpattern';
-			                    }
-			                }
-			                elseif ($row['Category1']  && !$row['Category2']) {
-			                  $q = mysql_query("update ".PFX."textpattern set Category2 = '$catname' where ID = '$post'",$txplink) or print mysql_error($q);
-			                    
-			                    if(mysql_insert_id()) {
-			                $results[]= 'inserted wp_ category <strong>'.$catname
-			                    .'</strong> to post number <strong>'.$post.'</strong> into textpattern';
-			                    }
-			                }
-			                else {
-			                  $results[]= "Only two categories are supported by Textpattern. $catname has not been added to this post.";
-			                }
-			            }
-			        }
-			    }
+			    }			    			    
 		
 		return join('<br />', $results);
 	}

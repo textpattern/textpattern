@@ -149,6 +149,11 @@ function showHideFields($sel)
 		$insert_with_status = $type;
 		$default_comment_invite = $comments_invite;
 		include_once txpath.'/include/import/import_'.$import_tool.'.php';
+		
+		$ini_time = ini_get('max_execution_time');
+		
+		@ini_set('max_execution_time', 300 + intval($ini_time) );
+		
 		switch ($import_tool)
 		{
 			case 'mtdb':
@@ -169,6 +174,7 @@ function showHideFields($sel)
 			break;
 			case 'wp':
 				$out = doImportWP($importdblogin, $importdb, $importdbpass, $importdbhost, $wpdbprefix, $insert_into_section, $insert_with_status, $default_comment_invite);
+				rebuild_tree('root',1,'article');
 			break;
 			case 'blogger':
 				$file = check_import_file();
@@ -178,7 +184,9 @@ function showHideFields($sel)
 					$out = gTxt('import_file_not_found');
 				}
 			break;
-		}		
+		}
+		
+		$out = tag('max_execution_time = '.ini_get('max_execution_time'),'p', ' style="color:red;"').$out;
 		pagetop(gTxt('txp_import'));
 		$content= startTable('list');
 		$content.= tr(tdcs(hed(gTxt('txp_import'),3),2));
