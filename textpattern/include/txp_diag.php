@@ -63,6 +63,14 @@
 		return in_array($m, $modules);
 	}
 
+	function test_tempdir($dir) {
+		$f = realpath(tempnam($dir, 'txp_'));
+		if (is_file($f)) {
+			@unlink($f);
+			return true;
+		}
+	}
+
 	$urlparts = parse_url(hu);
 	$mydomain = $urlparts['host'];
 	
@@ -134,7 +142,7 @@
 		: '',
 
 		'temp_dir_read_only' =>
-		(!@tempnam(@$tempdir, 'txp_'))
+		(!test_tempdir($tempdir))
 		? gTxt('temp_dir_read_only')
 		: '',
 
