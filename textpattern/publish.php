@@ -305,8 +305,8 @@
 
 			// by this point we should know the section, so grab its page and css
 		$rs = safe_row("*", "txp_section", "name = '$s' limit 1");
-		$out['page'] = $rs['page'];		
-		$out['css']  = $rs['css'];		
+		$out['page'] = @$rs['page'];		
+		$out['css']  = @$rs['css'];		
 
 		if(is_numeric($id)) {
 			$idrs = safe_row("Posted, AuthorID, Keywords","textpattern","ID=$id");
