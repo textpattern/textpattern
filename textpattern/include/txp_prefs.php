@@ -309,8 +309,8 @@
 		$monthnum = '%m';
 		$year = '%Y';
 		$yearshort = '%y';
-		$time12 = '%I:%M %p';
 		$time24 = '%H:%M';
+		$time12 = (strftime('%p') ? '%I:%M %p' : $time24);
 		$date = (strftime('%x') ? '%x' : '%Y-%m-%d');
 	
 		$formats = array(
@@ -327,6 +327,7 @@
 			"$daynumord. $monthname $year, $time24",
 			"$year-$monthnum-$daynum",
 			"$year-$daynum-$monthnum",
+			"$date $time12",
 			"$date",
 			"$time24",
 			"$time12",
