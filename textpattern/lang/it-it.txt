@@ -351,6 +351,7 @@ syndicate => Condividi
 tab_admin => amministrazione
 tab_comments => commenti
 tab_content => contenuti
+tab_extensions => extensions
 tab_forms => moduli
 tab_image => immagini
 tab_import => importa

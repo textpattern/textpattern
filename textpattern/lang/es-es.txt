@@ -348,6 +348,7 @@ syndicate => Sindicar
 tab_admin => admin
 tab_comments => comentarios
 tab_content => contenido
+tab_extensions => extensions
 tab_forms => formulario
 tab_image => imágenes
 tab_import => importar

@@ -342,6 +342,7 @@ syndicate => Публиковать в RSS
 tab_admin => настройки
 tab_comments => комментарии
 tab_content => содержание
+tab_extensions => extensions
 tab_forms => формы
 tab_image => картинки
 tab_import => импорт

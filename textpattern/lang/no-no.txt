@@ -347,6 +347,7 @@ syndicate => Syndikat
 tab_admin => administrator
 tab_comments => kommentarer
 tab_content => innhold
+tab_extensions => extensions
 tab_forms => skjemaer
 tab_image => bilder
 tab_import => importer

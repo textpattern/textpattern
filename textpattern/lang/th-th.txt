@@ -341,6 +341,7 @@ syndicate => อยู่ในข่ายข่าว
 tab_admin => ดูแล
 tab_comments => ความคิดเห็น
 tab_content => เนื้อหา
+tab_extensions => extensions
 tab_forms => ฟอร์ม
 tab_image => รูปภาพ
 tab_import => นำเข้า

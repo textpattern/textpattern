@@ -345,6 +345,7 @@ syndicate => In Newsfeeds aufnehmen
 tab_admin => Adminbereich
 tab_comments => Kommentare
 tab_content => Inhalt
+tab_extensions => extensions
 tab_forms => Bausteine
 tab_image => Bilder
 tab_import => Import

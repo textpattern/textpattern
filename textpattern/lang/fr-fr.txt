@@ -343,6 +343,7 @@ syndicate => Syndiquer (flux XML)&#160;
 tab_admin => administration
 tab_comments => commentaires
 tab_content => contenu
+tab_extensions => extensions
 tab_forms => modules
 tab_image => images
 tab_import => importations

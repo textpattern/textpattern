@@ -341,6 +341,7 @@ syndicate => Syndikera
 tab_admin => admin
 tab_comments => kommentarer
 tab_content => innehåll
+tab_extensions => extensions
 tab_forms => siddelar
 tab_image => bilder
 tab_import => importera

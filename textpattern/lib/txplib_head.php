@@ -13,7 +13,8 @@
 		
 		$GLOBALS['privs'] = $privs;
 
-		foreach (areas() as $k=>$v) {
+		$areas = areas();
+		foreach ($areas as $k=>$v) {
 			if (in_array($event, $v))
 				$area = $k;
 		}
@@ -92,12 +93,17 @@
 			echo '<table cellpadding="0" cellspacing="0" align="center"><tr>
   <td valign="middle" style="width:368px">&nbsp;'.$message.'</td>',
   			
-			areatab(gTxt('tab_content'), 'content', 'article', $area),
-			($privs == 1 or $privs==2 or $privs==3 or $privs==6)
+			has_privs('tab.content')
+			? areatab(gTxt('tab_content'), 'content', 'article', $area)
+			: '',
+			has_privs('tab.presentation')
 			?	areatab(gTxt('tab_presentation'), 'presentation', 'page', $area)
 			:	'',
-			($privs == 1 or $privs==2)
+			has_privs('tab.admin')
 			?	areatab(gTxt('tab_admin'), 'admin', 'prefs', $area)
+			:	'',
+			(has_privs('tab.extensions') and !empty($areas['extensions']))
+			?	areatab(gTxt('tab_extensions'), 'extensions', array_shift($areas['extensions']), $area)
 			:	'',
 
 			'<td class="tabdown"><a href="'.hu.'" class="plain" target="blank">'.gTxt('tab_view_site').'</a></td>',
@@ -168,6 +174,9 @@
 			gTxt('tab_plugins')     => 'plugin',
 			gTxt('tab_import')      => 'import'
 		);	
+
+		$areas['extensions'] = array(
+		);
 
 		if (is_array($plugin_areas))
 			$areas = array_merge_recursive($areas, $plugin_areas);

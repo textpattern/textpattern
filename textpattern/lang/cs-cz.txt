@@ -344,6 +344,7 @@ syndicate => Syndikace
 tab_admin => správa
 tab_comments => poznámky
 tab_content => obsah
+tab_extensions => extensions
 tab_forms => formy
 tab_image => obrázky
 tab_import => import
