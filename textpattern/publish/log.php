@@ -19,7 +19,7 @@
 
 		if (!empty($txpac['use_dns'])) {
 			// A crude rDNS cache
-			if ($h = safe_field('host', 'txp_log', "ip='".doSlash($ip)."'")) {
+			if ($h = safe_field('host', 'txp_log', "ip='".doSlash($ip)."' limit 1")) {
 				$host = $h;
 			}
 			else {
