@@ -282,3 +282,4 @@ $DB = new DB;
 		return false;
 	}
 
+?>
