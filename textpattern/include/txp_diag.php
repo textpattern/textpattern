@@ -104,12 +104,12 @@
 		:	'',
 
 		'htaccess_missing' =>	
-		($url_mode and !@is_readable($path_to_site.'/.htaccess'))
+		($permlink_mode != 'messy' and !@is_readable($path_to_site.'/.htaccess'))
 		?	gTxt('htaccess_missing')
 		:	'',
 
 		'mod_rewrite_missing' =>
-		($url_mode and is_callable('apache_get_modules') and !apache_module('mod_rewrite'))
+		($permlink_mode != 'messy' and is_callable('apache_get_modules') and !apache_module('mod_rewrite'))
 		? gTxt('mod_rewrite_missing')
 		: '',
 
@@ -178,6 +178,8 @@
 		'$path_to_site'.cs.$path_to_site.n,
 
 		gTxt('txp_path').cs.$txpcfg['txpath'].n,
+
+		gTxt('permlink_mode').cs.$permlink_mode.n,
 
 		(ini_get('open_basedir')) ? 'open_basedir: '.ini_get('open_basedir').n : '',
 
