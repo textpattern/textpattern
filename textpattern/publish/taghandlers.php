@@ -1259,6 +1259,7 @@
 		$out = str_replace("<txp:file_download_name />", $finfo['filename'], $out);
 		$out = str_replace("<txp:file_download_category />", $finfo['category'], $out);
 		$out = str_replace("<txp:file_download_downloads />", $finfo['downloads'], $out);
+		$out = str_replace("<txp:file_download_description />", $finfo['description'], $out);
 		$out = wrapedTag('file_download_size',$out, array('fsize'=>$finfo['size']));
 		$out = wrapedTag('file_download_created',$out, array('ftime'=>$finfo['created']));
 		$out = wrapedTag('file_download_modified',$out, array('ftime'=>$finfo['modified']));
