@@ -435,7 +435,7 @@
 		
 		if ($customFields) {
 			foreach($customFields as $cField) {
-				$customPairs[$cField] = getAtt($cField);
+				$customPairs[$cField] = gAtt($atts, $cField);
 			}
 			if(!empty($customPairs)) {
 				$custom =  buildCustomSql($customFields,$customPairs);
