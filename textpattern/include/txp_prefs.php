@@ -43,7 +43,7 @@
 					safe_update(
 						"txp_prefs", 
 						"val = '".$post[$prefname]."'",
-						"name = '$prefname' and prefs_id ='1'",1
+						"name = '$prefname' and prefs_id ='1'"
 					);
 				}
 			}			
