@@ -250,7 +250,7 @@
 		$parent = ($parent) ? $parent : 'root';
 		safe_update("txp_category", 
 					"name='$name',parent='$parent'", 
-					"name='$old_name' and type='article'"); 
+					"name='$old_name' and type='$evname'"); 
 		rebuild_tree('root', 1, $evname);
 		if ($evname=='article'){
 			safe_update("textpattern","Category1='$name'", "Category1 = '$old_name'"); 
