@@ -50,7 +50,7 @@
 			foreach($file as $line) {
 				if(strlen($line) < 4 or $line[0]=='#') continue; 
 				list($name,$val) = explode('=>',$line);
-				$out[trim($name)] = trim(utf8_encode($val));
+				$out[trim($name)] = trim($val);
 			}
 			return ($out) ? $out : '';
 		} 
