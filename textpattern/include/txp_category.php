@@ -335,12 +335,12 @@
 				$name = doSlash($name);
 				if ($method == 'delete') {
 					if (safe_delete('txp_category',"name='$name' and type='$type'")) {
-						category_list(messenger($type.'_category',$name,'deleted'));
+						$categories[] = $name;
 					}
 				}
 			}
+			category_list(messenger($type.'_category',join(', ',$categories),'deleted'));
 		}
-
 	}
 
 ?>
