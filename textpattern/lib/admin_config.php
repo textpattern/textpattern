@@ -148,6 +148,12 @@ $txpac = array(
 		
 	'comment_nofollow'        => 1,
 
+// -------------------------------------------------------------
+// maximum url length before it should be considered malicious
+		
+	'max_url_len'               => 200,
+
+
 );
 
 // -------------------------------------------------------------

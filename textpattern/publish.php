@@ -734,8 +734,9 @@
 // -------------------------------------------------------------
 	function bombShelter() // protection from those who'd bomb the site by GET
 	{
+		global $txpac;
 		$in = serverset('REQUEST_URI');
-		if (strlen($in) > 200) exit('Nice try.');
+		if (!empty($txpac['max_url_len']) and strlen($in) > $txpac['max_url_len']) exit('Nice try.');
 	}
 
 // -------------------------------------------------------------
