@@ -501,7 +501,6 @@
 		$out['comments_invite'] = $AnnotateInvite;
 		$out['comments_count']  = $com_count;					  
 		$out['author']          = $author;
-		$out['body']            = parse($Body_html);
 		$out['excerpt']         = $Excerpt;
 		$out['title']           = $Title;
 		$out['url_title']       = $url_title;
@@ -512,6 +511,7 @@
 		$out['article_image']   = $Image;
 
 		$GLOBALS['thisarticle'] = $out;		
+		$GLOBALS['thisarticle']['body'] = parse($Body_html);
 
 	}
 
