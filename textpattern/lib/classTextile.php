@@ -774,6 +774,7 @@ function refs($m)
                 if ($codepre == true) {
                     $line = htmlspecialchars($line, ENT_NOQUOTES, "UTF-8");
                     $line = preg_replace('/&lt;(\/?' . $offtags . ')&gt;/', "<$1>", $line);
+                    $line = str_replace("&amp;#","&#",$line);
                 }
 
                 $glyph_out[] = $line;
