@@ -245,7 +245,7 @@
 		extract($pretext);
 
 		$html = safe_field('user_html','txp_page',"name='$page'");
-		if (!$html) exit('no page template specified for section '.$s);
+		if (!$html) exit(gTxt('unknown_section').' '.$s);
 		$html = parse($html);
 		$html = parse($html); // the function so nice, he ran it twice
 		$html = (!$segment) ? $html : segmentPage($html);

@@ -441,6 +441,7 @@ tooltip => Link tooltip
 type => Type
 unban => Unban
 undefined => Undefined
+unknown_section => Unknown section
 updated => updated
 upload => Upload
 uploaded => uploaded
