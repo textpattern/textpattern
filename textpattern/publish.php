@@ -383,6 +383,7 @@
 			'keywords'  => '',
 			'frontpage' => '',
 			'id'        => '',
+			'time'      => 'past'
 		),$atts);		
 		//for the txp:article tag, some attributes are taken from globals;
 		//override them before extract
@@ -409,6 +410,14 @@
 		$author    = (!$author)    ? '' : " and AuthorID = '$author'";	
 		$month     = (!$month)     ? '' : " and Posted like '{$month}%'";
 		$id        = (!$id)        ? '' : " and ID = '$id'";
+		switch ($time) {
+			case 'any':
+				$time = ""; break;
+			case 'future':
+				$time = " and Posted > now()"; break;
+			default:
+				$time = " and Posted < now()";
+		}
 		$custom = '';
 
 		if ($iscustom){
@@ -433,7 +442,7 @@
 			}
 			$keywords = " and (" . join(' or ',$keyparts) . ")"; 
 		}
-		$where = "1 and Status=4 and Posted < now() ".
+		$where = "1 and Status=4". $time.
 			$id . $category . $section . $excerpted . $month . $author . $keywords . $custom . $frontpage;
 
 		//do not paginate if we are on a custom list

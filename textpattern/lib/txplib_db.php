@@ -103,7 +103,7 @@ $DB = new DB;
 	{
 		$q = "select $thing from ".PFX."$table where $where";
 		$r = safe_query($q,$debug);
-		if (mysql_num_rows($r) > 0) {
+		if (@mysql_num_rows($r) > 0) {
 			return mysql_result($r,0);
 		}
 		return false;
