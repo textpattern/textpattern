@@ -24,7 +24,7 @@
 		$form = (!$form) ? legacy_form() : $form;
 
 		$rs = safe_rows(
-			"ID, Title, Body_html, Section, unix_timestamp(Posted) as uPosted, 
+			"ID, Title, Body_html, Section, unix_timestamp(Posted) as uPosted, url_title,
 			match (Title,Body) against ('$q') as score",
 			"textpattern",
 			"Title rlike '$q' or Body rlike '$q' $s_filter
@@ -44,8 +44,9 @@
 				extract($a);
 								
 				$result_date = date("j M Y",$uPosted);
+				$uTitle = ($url_title) ? $url_title : stripSpace($Title);
 				$hurl = ($url_mode)
-				?	$siteurl.$path_from_root.$Section.'/'.$ID.'/'.stripSpace($Title)
+				?	$siteurl.$path_from_root.$Section.'/'.$ID.'/'.$uTitle
 				:	$siteurl.$path_from_root.'index.php?id='.$ID;
 				$result_url = '<a href="http://'.$hurl.'">'.$hurl.'</a>';
 				$result_title = '<a href="http://'.$hurl.'">'.$Title.'</a>';
