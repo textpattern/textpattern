@@ -180,7 +180,7 @@
 
 		$form = fetch('Form','txp_form','name','comment_form');
 					  
-	 	$textarea = '<textarea name="message" cols="1" rows="1" style="width:300px;height:250px" tabindex="4">'.htmlspecialchars($message).'</textarea>';
+	 	$textarea = '<textarea name="message" cols="30" rows="12" style="width:300px;height:250px" tabindex="4">'.htmlspecialchars($message).'</textarea>';
 
 		$comment_submit_button = ($preview)
 		?	fInput('submit','submit',gTxt('submit'),'button')
