@@ -1154,6 +1154,44 @@
 		$condition = (!empty($searching))? true : false;
 		return parse(EvalElse($thing, $condition));
 	}
+
+//--------------------------------------------------------------------------
+	function if_category($atts, $thing)
+	{
+		global $c;
+
+		extract(lAtts(array(
+			'name' => '',
+		),$atts));
+
+		if (trim($name)) {
+			return parse(EvalElse($thing, ($c == $name)));
+		}
+
+		return parse(EvalElse($thing, !empty($c)));
+	}
+
+//--------------------------------------------------------------------------
+	function if_article_category($atts, $thing)
+	{
+		global $thisarticle;
+
+		extract(lAtts(array(
+			'name' => '',
+			'number' => '',
+		),$atts));
+
+		if ($number)
+			$cats = array($thisarticle['category' . $number]);
+		else
+			$cats = array_unique(array($thisarticle['category1'], $thisarticle['category2']));
+
+		sort($cats);
+		if ($name)
+			return parse(EvalElse($thing, (in_array($name, $cats))));
+
+		return parse(EvalElse($thing, (array_shift($cats) != '')));
+	}
 	
 //--------------------------------------------------------------------------
 //File tags functions. 
