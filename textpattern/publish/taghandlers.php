@@ -8,8 +8,6 @@
 
 */
 
-dmp(get_defined_functions());
-
 // -------------------------------------------------------------
 	function page_title($atts) 
 	{
