@@ -75,6 +75,7 @@
 		$out = array();
 				
 		foreach($darr as $vars) {
+			$GLOBALS['thiscomment'] = $vars;
 			extract($vars);
 			
 			if($preview) {		
