@@ -29,7 +29,7 @@
 		$post = doSlash(stripPost());
 
 		if (empty($post['tempdir']))
-			$post['tempdir'] = find_temp_dir();
+			$post['tempdir'] = doSlash(find_temp_dir());
 
 		foreach($prefnames as $prefname) {
 			if (isset($post[$prefname])) {
