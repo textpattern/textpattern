@@ -152,8 +152,9 @@
 		);
 
 		foreach ($tz as $z) {
-			$name = sprintf("GMT %+02d:%02d", $z, abs($z - (int)$z) * 60);
-			$timevals[sprintf("%+d", $z * 3600)] = $name;
+			$sign = ($z >= 0 ? '+' : '');
+			$name = sprintf("GMT %s%02d:%02d", $sign, $z, abs($z - (int)$z) * 60);
+			$timevals[sprintf("%s%d", $sign, $z * 3600)] = $name;
 		}
 
 		return selectInput($item, $timevals, $var);
