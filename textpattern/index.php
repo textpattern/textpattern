@@ -52,7 +52,7 @@
 		$textarray = load_lang(LANG);
 	
 		include txpath.'/include/txp_auth.php';
-		if ($txpac['use_plugins'] and gps('event') != 'plugin')
+		if ($txpac['admin_side_plugins'] and gps('event') != 'plugin')
 			load_plugins(1);
 		include txpath.'/lib/txplib_head.php';
 	
