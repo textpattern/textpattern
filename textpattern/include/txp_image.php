@@ -100,10 +100,9 @@
 		}
 		echo endTable();
 
-		$imgdir = '../'.$img_dir;
-		if (!is_dir($imgdir) or !is_writeable($imgdir)) {
+		if (!is_dir(IMPATH) or !is_writeable(IMPATH)) {
 		
-			echo graf(str_replace("{imgdir}",$imgdir,gTxt('img_dir_not_writeable')),' style="text-align:center;color:red"');
+			echo graf(str_replace("{imgdir}",IMPATH,gTxt('img_dir_not_writeable')),' style="text-align:center;color:red"');
 
 		}
 	}
