@@ -16,7 +16,11 @@
 // -------------------------------------------------------------
 	function doSlash($in)
 	{ 
-		return doArray($in,'mysql_escape_string'); 
+		if(phpversion() >= "4.3.0") {
+			return doArray($in,'mysql_real_escape_string');
+		} else {
+			return doArray($in,'mysql_escape_string');
+		}
 	}
 
 // -------------------------------------------------------------
