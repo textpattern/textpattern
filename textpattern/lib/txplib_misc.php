@@ -503,14 +503,14 @@
 		$str = strftime($format, $time + tz_offset());
 		@list($lang, $charset) = explode('.', $locale);
 		if (!empty($charset) and $charset != 'UTF-8') {
-			if (is_callable('iconv')) {
+			$new = '';
+			if (is_callable('iconv')) 
 				$new = @iconv($charset, 'UTF-8', $str);
-				if ($new != false)
-					$str = $new;
-			}
-			elseif (is_callable('utf8_encode')) {
+
+			if ($new)
+				$str = $new;
+			elseif (is_callable('utf8_encode'))
 				$str = utf8_encode($str);
-			}
 		}
 
 		return $str;
