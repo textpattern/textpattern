@@ -64,13 +64,13 @@
 					$Body = str_replace('href="/','href="http://'.$siteurl.'/',$Body);
 					$Body = htmlspecialchars($Body,ENT_NOQUOTES);
 					
-					$Title = ($url_title) ? $url_title : stripSpace($Title);
-					$Title = htmlspecialchars($Title,ENT_NOQUOTES);
+					$uTitle = ($url_title) ? $url_title : stripSpace($Title);
+					$uTitle = htmlspecialchars($uTitle,ENT_NOQUOTES);
 
 	
 					$link = ($url_mode==0)
 					?	'http://'.$siteurl.$path_from_root.'index.php?id='.$ID
-					:	'http://'.$siteurl.$path_from_root.$Section.'/'.$ID.'/'.$Title;
+					:	'http://'.$siteurl.$path_from_root.$Section.'/'.$ID.'/'.$uTitle;
 		
 					if ($txpac['show_comment_count_in_feed']) {
 						$dc = getCount('txp_discuss', "parentid=$ID and visible=1");

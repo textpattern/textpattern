@@ -75,9 +75,13 @@
 					$e['issued'] = tag(date("Y-m-d\TH:i:s\Z",$uPosted),'issued');
 					$e['modified'] = tag(date("Y-m-d\TH:i:s\Z",$uLastMod),'modified');
 					$e['title'] = tag($Title.$count,'title');
+
+					$uTitle = ($url_title) ? $url_title : stripSpace($Title);
+					$uTitle = htmlspecialchars($uTitle,ENT_NOQUOTES);
+
 						$elink = ($url_mode == 0)
 						?	'http://'.$siteurl.$path_from_root.'index.php?id='.$ID
-						:	'http://'.$siteurl.$path_from_root.$Section.'/'.$ID.'/';
+						:	'http://'.$siteurl.$path_from_root.$Section.'/'.$ID.'/'.$uTitle;
 					$e['link'] = '<link'.relalt.texthtml.' href="'.$elink.'" />';
 					$e['id'] = tag('tag:'.$siteurl.','.date("Y-m-d",$uPosted).':'.$ID,'id');
 					$e['subject'] = tag(htmlspecialchars($Category1),'dc:subject');
