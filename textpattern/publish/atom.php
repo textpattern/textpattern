@@ -23,7 +23,7 @@
 		extract(doSlash(gpsa(array('category','section','limit'))));
 		
 		$last = fetch('unix_timestamp(val)','txp_prefs','name','lastmod');
-		
+				
 		$sitename .= ($section) ? ' - '.$section : '';
 		$sitename .= ($category) ? ' - '.$category : '';
 
@@ -72,8 +72,8 @@
 						$count = ($dc > 0) ? ' ['.$dc.']' : '';
 					} else $count = '';
 		
-					$e['issued'] = tag(date("Y-m-d\TH:i:s\Z",$uPosted),'issued');
-					$e['modified'] = tag(date("Y-m-d\TH:i:s\Z",$uLastMod),'modified');
+					$e['issued'] = tag(gmdate("Y-m-d\TH:i:s\Z",$uPosted),'issued');
+					$e['modified'] = tag(gmdate("Y-m-d\TH:i:s\Z",$uLastMod),'modified');
 					$e['title'] = tag($Title.$count,'title');
 
 					$uTitle = ($url_title) ? $url_title : stripSpace($Title);
@@ -96,8 +96,8 @@
 					$Body = str_replace('href="/','href="http://'.$siteurl.'/',$Body);
 	
 						// encode and entify
-					$Body = utf8_encode(htmlspecialchars($Body));
-	
+					#$Body = utf8_encode(htmlspecialchars($Body));
+					$Body = htmlspecialchars($Body);
 					$e['content'] = tag(n.$Body.n,'content',
 						' type="text/html" mode="escaped" xml:lang="en"');
 		
@@ -127,10 +127,29 @@
 		
 		}
 		if (!empty($out)) {
-			ob_start();
-			header('Content-type: text/xml');
-			return chr(60).'?xml version="1.0" encoding="UTF-8"?'.chr(62).n.
-			'<feed version="0.3" xmlns="http://purl.org/atom/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">'.join(n,$out).'</feed>';
+		  
+		  $last = fetch('unix_timestamp(val)','txp_prefs','name','lastmod');
+		  $last = gmdate("D, d M Y H:i:s \G\M\T",$last);
+		  header("Last-Modified: $last");
+		  $expires = gmdate('D, d M Y H:i:s \G\M\T', time()+(3600*6));
+		  header("Expires: $expires");
+		  $hims = serverset('HTTP_IF_MODIFIED_SINCE');
+		  
+		  if ($hims == $last) {
+		    header("HTTP/1.1 304 Not Modified"); exit;
+		  }
+		  $etag = md5(join(n,$out));
+		  $hinm = stripslashes(serverset('HTTP_IF_NONE_MATCH'));
+		  if (strstr($hinm, $etag)) {
+		    header("HTTP/1.1 304 Not Modified"); exit;
+		  }
+		  header('ETag: "'.$etag.'"');
+
+
+		  ob_start();
+		  header('Content-type: application/xml');
+		  return chr(60).'?xml version="1.0" encoding="UTF-8"?'.chr(62).n.
+		    '<feed version="0.3" xmlns="http://purl.org/atom/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">'.join(n,$out).'</feed>';
 		}
 	}
 
