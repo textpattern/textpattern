@@ -10,6 +10,7 @@
 	Use of this software indicates acceptance of the Textpattern license agreement 
 */
 	define("txpath", dirname(__FILE__));
+	define("txpinterface", "admin");
 
 	$thisversion = '1.0rc3';
 	$txp_rc = 1; // should be 0 for a stable version
@@ -51,9 +52,11 @@
 		$textarray = load_lang(LANG);
 	
 		include txpath.'/include/txp_auth.php';
+		if ($txpac['use_plugins'] and gps('event') != 'plugin')
+			load_plugins();
 		include txpath.'/lib/txplib_head.php';
 	
-		$event = gps('event');
+		$event = (gps('event') ? gps('event') : 'article');
 		$step = gps('step');
 		
 		if (!$dbversion or $dbversion != $thisversion or 
@@ -63,10 +66,14 @@
 			$step = 'prefs';
 		}
 
-		include (!$event) 
-		?	txpath.'/include/txp_article.php'
-		:	txpath.'/include/txp_'.$event.'.php';
+		callback_event($event, $step, 1);
+
+		$inc = txpath . '/include/txp_'.$event.'.php';
+		if (is_readable($inc))
+			include($inc);
 	
+		callback_event($event, $step, 0);
+
 		$microdiff = (getmicrotime() - $microstart);
 		echo n.comment(gTxt('runtime').': '.substr($microdiff,0,6));
 

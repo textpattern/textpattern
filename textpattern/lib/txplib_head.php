@@ -13,13 +13,10 @@
 		
 		$GLOBALS['privs'] = $privs;
 
-		$ctabs = array('article','image','file','link','discuss','category','list');
-		$ptabs = array('section','page','css','form');
-		$atabs = array('diag','prefs','admin','plugin','log','import');
-	
-		    if(in_array($event,$ctabs)) { $area = 'content'; }
-		elseif(in_array($event,$ptabs)) { $area = 'presentation'; }
-		elseif(in_array($event,$atabs)) { $area = 'admin'; }
+		foreach (areas() as $k=>$v) {
+			if (in_array($event, $v))
+				$area = $k;
+		}
 		
 	?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 			"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -144,7 +141,7 @@
 // -------------------------------------------------------------
 	function areas() 
 	{
-		global $privs;
+		global $privs, $plugin_areas;
 		
 		$areas['content'] = array(
 			gTxt('tab_organise') => 'category',
@@ -171,6 +168,10 @@
 			gTxt('tab_plugins')     => 'plugin',
 			gTxt('tab_import')      => 'import'
 		);	
+
+		if (is_array($plugin_areas))
+			$areas = array_merge_recursive($areas, $plugin_areas);
+
 		return $areas;	
 	}
 
@@ -179,5 +180,4 @@
 	{
 		return '<span style="margin-right:2em"><a href="?event='.$link.'" class="plain">'.$label.'</a></span>';
 	}
-
 ?>

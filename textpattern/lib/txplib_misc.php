@@ -278,6 +278,70 @@ else
     }
 
 // -------------------------------------------------------------
+   function load_plugins()
+   {
+		global $txpac;
+
+		if (isset($txpac['plugin_cache_dir'])) {
+			$dir = rtrim($txpac['plugin_cache_dir'], '/') . '/';
+			$dh = @opendir($dir);
+			while ($dh and false !== ($f = @readdir($dh))) {
+				if (is_file($dir . $f))
+					include($dir . $f);
+			}
+		}
+
+		$rs = safe_column("code", "txp_plugin", "status=1");
+		if ($rs) {
+			foreach($rs as $a)
+				$plugins[] = $a;
+
+			$out = join(n.n,$plugins);
+			eval($out);
+		}
+   }
+
+// -------------------------------------------------------------
+   function register_callback($func, $event, $step='', $pre=0)
+	{
+		global $plugin_callback;
+
+		$plugin_callback[] = array('function'=>$func, 'event'=>$event, 'step'=>$step, 'pre'=>$pre);
+	}
+
+// -------------------------------------------------------------
+   function register_page_extension($func, $event, $step='', $top=0)
+	{
+		# For now this just does the same as register_callback
+		register_callback($func, $event, $step, $top);
+	}
+
+// -------------------------------------------------------------
+   function callback_event($event, $step='', $pre=0)
+	{
+		global $plugin_callback;
+
+		if (!is_array($plugin_callback))
+			return;
+
+		foreach ($plugin_callback as $c) {
+			if ($c['event'] == $event and (empty($c['step']) or $c['step'] == $step) and $c['pre'] == $pre) {
+				if (is_callable($c['function'])) {
+					call_user_func($c['function'], $event, $step);
+				}
+			}
+		}
+	}
+
+// -------------------------------------------------------------
+	function register_tab($area, $event, $title) 
+	{
+		global $plugin_areas;
+		
+		$plugin_areas[$area][$title] = $event;
+	}
+
+// -------------------------------------------------------------
 	function getAtt($name, $default=NULL) { // thanks zem!
 		global $theseatts;
 		return isset($theseatts[$name]) ? $theseatts[$name] : $default;

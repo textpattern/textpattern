@@ -15,6 +15,7 @@
 */
 
 	define("txpath", dirname(__FILE__));
+	define("txpinterface", "public");
 		
 //	ERROR_REPORTING(E_ALL);
 //	ini_set("display_errors","1");
@@ -61,7 +62,7 @@
 	$txpcfg['doc_root'] = $_SERVER['DOCUMENT_ROOT'];
 
 		// here come the plugins
-	if ($txpac['use_plugins']) plugins();
+	if ($txpac['use_plugins']) load_plugins();
 
 	define("LANG",$language);
 	if (!empty($locale)) setlocale(LC_ALL, $locale);
@@ -689,32 +690,6 @@
 			if (isset($pretext[$tag])) return $pretext[$tag];
 		}
 
-	}
-
-
-// -------------------------------------------------------------
-	function plugins() 
-	{
-		global $txpac;
-
-		if (isset($txpac['plugin_cache_dir'])) {
-			$dir = rtrim($txpac['plugin_cache_dir'], '/') . '/';
-			$dh = @opendir($dir);
-			while ($dh and false !== ($f = @readdir($dh))) {
-				if (is_file($dir . $f))
-					include($dir . $f);
-			}
-		}
-
-		$rs = safe_column("code", "txp_plugin", "status=1");
-		if ($rs) {
-			foreach($rs as $a) { 
-				$plugins[] = $a; 
-			}
-
-			$out = join(n.n,$plugins);
-			eval($out);
-		}
 	}
 
 // -------------------------------------------------------------
