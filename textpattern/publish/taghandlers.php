@@ -960,6 +960,7 @@
 		if (!isset($title)) $title = $Title;
 		if (empty($url_title)) $url_title = stripSpace($title);
 		if (empty($section)) $section = $Section; // lame, huh?
+		if (empty($posted)) $posted = $Posted;
 		if (empty($thisid)) $thisid = $ID;
 		
 		switch($permlink_mode) {
