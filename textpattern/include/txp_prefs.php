@@ -31,6 +31,9 @@
 		if (empty($post['tempdir']))
 			$post['tempdir'] = doSlash(find_temp_dir());
 
+		if (!empty($post['language']))
+			$post['locale'] = doSlash(getlocale($post['language']));
+
 		foreach($prefnames as $prefname) {
 			if (isset($post[$prefname])) {
  				if ($prefname == 'lastmod') {
@@ -68,7 +71,6 @@
 		pCell('siteurl',$siteurl,'input',20),
 		pCell('site_slogan',$site_slogan,'input',20),
 		pCell('language',$language,'languages'),
-		pCell('locale',$locale,'locales'),
 		pCell('gmtoffset',$gmtoffset,'gmtoffset'),
 		pCell('is_dst',$is_dst,'radio'),
 		pCell('dateformat',$dateformat,'dateformats'),
@@ -163,35 +165,41 @@
 	}
 
 //-------------------------------------------------------------
-	function locale_select($item, $var) {
+	function getlocale($lang) {
 		global $locale;
 
 		if (empty($locale))
 			$locale = @setlocale(LC_TIME, '0');
 
-		$locales = array(''=>gTxt('default'));
-
 		// Locale identifiers vary from system to system.  The
 		// following code will attempt to discover which identifiers
 		// are available.  We'll need to expand these lists to 
 		// improve support.
+		// ISO identifiers: http://www.w3.org/WAI/ER/IG/ert/iso639.htm
+		// Windows: http://msdn.microsoft.com/library/default.asp?url=/library/en-us/vclib/html/_crt_language_strings.asp
 		$guesses = array(
-			'en-gb' => array('en_GB', 'en_UK', 'english-uk', 'en_GB.UTF-8', 'en_GB.ISO_8859-1'),
-			'en-us' => array('en_US', 'english-us', 'en_US.UTF-8', 'en_US.ISO_8859-1'),
-			'fr-fr' => array('fr_FR', 'fr', 'french', 'fr_FR.UTF-8', 'fr_FR.ISO_8859-1'),
-			'de-de' => array('de_DE', 'de', 'deu', 'german', 'de_DE.UTF-8', 'de_DE.ISO_8859-1'),
-			'es-es' => array('es_ES', 'es', 'esp', 'spanish', 'es_ES.UTF-8', 'es_ES.ISO_8859-1'),
-			'it-it' => array('it_IT', 'it', 'ita', 'italian', 'it_IT.UTF-8', 'it_IT.ISO_8859-1'),
+			'cs-cz' => array('cs_CZ.UTF-8', 'cs_CZ', 'ces', 'cze', 'cs', 'csy', 'czech', 'cs_CZ.cs_CZ.ISO_8859-2'),
+			'de-de' => array('de_DE.UTF-8', 'de_DE', 'de', 'deu', 'german', 'de_DE.ISO_8859-1'),
+			'en-gb' => array('en_GB.UTF-8', 'en_GB', 'en_UK', 'eng', 'en', 'english-uk', 'english', 'en_GB.ISO_8859-1'),
+			'en-us' => array('en_US.UTF-8', 'en_US', 'english-us', 'en_US.ISO_8859-1'),
+			'es-es' => array('es_ES.UTF-8', 'es_ES', 'es', 'esp', 'spanish', 'es_ES.ISO_8859-1'),
+			'fr-fr' => array('fr_FR.UTF-8', 'fr_FR', 'fra', 'fre', 'fr', 'french', 'fr_FR.ISO_8859-1'),
+			'it-it' => array('it_IT.UTF-8', 'it_IT', 'it', 'ita', 'italian', 'it_IT.ISO_8859-1'),
+			'no-no' => array('no_NO.UTF-8', 'no_NO', 'no', 'nor', 'norwegian', 'no_NO.ISO_8859-1'),
+			'ru-ru' => array('ru_RU.UTF-8', 'ru_RU', 'ru', 'rus', 'russian', 'ru_RU.ISO8859-5'),
+			'sv-se' => array('sv_SE.UTF-8', 'sv_SE', 'sv', 'swe', 'sve', 'swedish', 'sv_SE.ISO_8859-1'),
+			'th-th' => array('th_TH.UTF-8', 'th_TH', 'th', 'tha', 'thai', 'th_TH.ISO_8859-11'),
+
 		);
 
-		foreach ($guesses as $name => $guess) {
-			$l = @setlocale(LC_TIME, $guess);
+		if (!empty($guesses[$lang])) {
+			$l = @setlocale(LC_TIME, $guesses[$lang]);
 			if ($l !== false)
-				$locales[$l] = gTxt($name);
+				$locale = $l;
 		}
 		@setlocale(LC_TIME, $locale);
 
-		return selectInput($item, $locales, $var);
+		return $locale;
 	}
 
 //-------------------------------------------------------------
