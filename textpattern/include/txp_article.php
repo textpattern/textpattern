@@ -553,7 +553,7 @@
 
 	//-- category selects -----------
 
-			echo ($use_categories && $view=='text')
+			echo ($view=='text')
 			?	graf(gTxt('categorize').
 				' ['.eLink('category','','','',gTxt('edit')).']'.br.
 				category_popup('Category1',$Category1).
