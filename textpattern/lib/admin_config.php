@@ -109,10 +109,11 @@ $txpac = array(
 	'use_plugins'                 => 1,
 
 // -------------------------------------------------------------
-// use custom fields for articles - must be in 'quotes'
+// use custom fields for articles - must be in 'quotes', and 
+// must contain no spaces
 		
-	'custom_1_set'                => 'custom 1',
-	'custom_2_set'                => 'custom 2',
+	'custom_1_set'                => 'custom1',
+	'custom_2_set'                => 'custom2',
 	'custom_3_set'                => '',
 	'custom_4_set'                => '',
 	'custom_5_set'                => '',

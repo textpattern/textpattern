@@ -224,4 +224,10 @@
     	list($usec, $sec) = explode(" ",microtime()); 
     	return ((float)$usec + (float)$sec); 
     }
+
+// -------------------------------------------------------------
+	function getAtt($name, $default=NULL) { // thanks zem!
+		global $theseatts;
+		return isset($theseatts[$name]) ? $theseatts[$name] : $default;
+	}
 ?>

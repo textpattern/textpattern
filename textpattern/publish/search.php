@@ -27,7 +27,7 @@
 			"ID, Title, Body_html, Section, unix_timestamp(Posted) as uPosted, url_title,
 			match (Title,Body) against ('$q') as score",
 			"textpattern",
-			"Title rlike '$q' or Body rlike '$q' $s_filter
+			"(Title rlike '$q' or Body rlike '$q') $s_filter
 			and Status = 4 and Posted <=now() order by score desc limit 40");
 		
 		if($rs) {

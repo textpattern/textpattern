@@ -13,8 +13,8 @@
 	Use of this software denotes acceptance of the Textpattern license agreement 
 */
 
-	define("txpath",$txpcfg['txpath']);
-
+	define("txpath", dirname(__FILE__));
+	
 //	ERROR_REPORTING(E_ALL);
 //	ini_set("display_errors","1");	
 
@@ -203,13 +203,13 @@
 	{	
 		global $pretext, $prefs,$txpcfg;
 		extract($pretext);
-		if (is_array($atts)) extract($atts);
 
-		$form = (empty($form)) ? 'default' : $form;
-		$form = (empty($listform)) ? $form : $listform;
+		$GLOBALS['theseatts'] = doSlash($atts);
 
-		$limit = (empty($limit)) ? 10 : $limit;
-		$count = (!$count) ? 0 : $count;  // deprecated in g1.17
+		$form = getAtt('form','default');
+		$form = getAtt('listform',$form);
+
+		$limit = getAtt('limit',10);
 
 		if($q) {
 			include_once txpath.'/publish/search.php';
@@ -231,10 +231,10 @@
 			?	filterFrontPage() : '',
 
 			($s && $s!='default')		// section browse?
-			?	"and section = '".doSlash($s)."'" : '',
+			?	"and section = '".$s."'" : '',
 
 			($c) 						// category browse?
-			?	"and ((Category1='".doSlash($c)."') or (Category2='".doSlash($c)."'))" : ''
+			?	"and ((Category1='".$c."') or (Category2='".$c."'))" : ''
 		);
 
 		$q2b = " and Posted < now()";
@@ -273,11 +273,8 @@
 				$out['thisid']         = $ID;
 				$out['posted']         = $uPosted;
 				$out['if_comments']    = ($Annotate or $com_count) ? true : false;
-				$out['comments_invite']= ($Annotate or $com_count)
-										  ? formatCommentsInvite(
-												$AnnotateInvite,$Section,$ID)
-										  : '';
-				$out['comments_count'] = $com_count;										  
+				$out['comments_invite']= ($Annotate or $com_count) ? formatCommentsInvite($AnnotateInvite,$Section,$ID) : '';
+				$out['comments_count'] = $com_count;					  
 				$out['mentions_link']  = formatMentionsLink($Section, $ID);
 				$out['author']         = $author;
 				$out['permlink']       = formatPermLink($ID,$Section);
@@ -298,16 +295,12 @@
 				?	fetch('Form','txp_form','name',$override_form)
 				:	$Form;
 
-					// quick check for things not pulled from the db
 				$article = doPermlink($article, $out['permlink'], $Title, $url_title);
 
 				$articles[] = parse($article);
 
-					// sending these to paging_link(); *deprecated in g1.17*
-				$GLOBALS['uPosted'] = $uPosted;
-				$GLOBALS['limit'] = $limit;
-
 				unset($GLOBALS['thisarticle']);
+				unset($GLOBALS['theseatts']);			
 			}
 
 			return join('',$articles);
@@ -332,12 +325,13 @@
 		global $pretext,$prefs;
 		extract($prefs);
 		extract($pretext);
-		if (is_array($atts)) extract($atts);
+
+		$GLOBALS['theseatts'] = doSlash($atts);
 
 		$preview = ps('preview');
 		$parentid = ps('parentid');
 
-		if (empty($form)) $form = 'default';
+		$form = getAtt('form','default');
 
 		$Form = fetch('Form','txp_form','name',$form);
 
@@ -393,10 +387,14 @@
 					$article .= discuss($ID);
 				}
 			}
+			
+			$article = parse($article);
+			
+			unset($GLOBALS['thisarticle']);	
+			unset($GLOBALS['theseatts']);			
 
-			return parse($article);
+			return $article;
 		}
-		return '';
 	}
 
 // -------------------------------------------------------------
@@ -405,29 +403,44 @@
 		global $pretext,$prefs;
 		extract($prefs);
 		extract($pretext);
-		if (is_array($atts)) extract($atts);
 
 		$GLOBALS['is_article_list'] = true;
+		$GLOBALS['theseatts'] = doSlash($atts);
 
-		$form      = (empty($form))      ? 'default' : $form;
-		$form      = (empty($listform))  ? $form     : $listform;
-		$limit     = (empty($limit))     ? '10'      : $limit;
-		$category  = (empty($category))  ? ''        : doSlash($category);
-		$section   = (empty($section))   ? ''        : doSlash($section);
-		$excerpted = (empty($excerpted)) ? ''        : $excerpted;
-		$author    = (empty($author))    ? ''        : doSlash($author);
-		$sortby    = (empty($sortby))    ? 'Posted'  : $sortby;
-		$sortdir   = (empty($sortdir))   ? 'desc'    : $sortdir;
-		$month     = (empty($month))     ? ''        : $month;
-		$keywords  = (empty($keywords))  ? ''        : doSlash($keywords);
-		$frontpage = (empty($frontpage)) ? ''        : filterFrontPage();
+		$form      = getAtt('form','default');
+		$form      = getAtt('listform',$form);
+		$limit     = getAtt('limit', 10);
+		$category  = getAtt('category');
+		$section   = getAtt('section');
+		$excerpted = getAtt('excerpted');
+		$author    = getAtt('author');
+		$sortby    = getAtt('sortby','Posted');
+		$sortdir   = getAtt('sortdir','desc');
+		$month     = getAtt('month');
+		$keywords  = getAtt('keywords');
+		$frontpage = getAtt('frontpage');
 
-		$category  = (!$category)  ? '' : " and ((Category1='".$category.
-											"') or (Category2='".$category."')) ";
+		$frontpage = ($frontpage) ? filterFrontPage() : '';
+		
+		$category  = (!$category)  ? '' : " and ((Category1='".$category."') or (Category2='".$category."')) ";
 		$section   = (!$section)   ? '' : " and Section = '$section'";
 		$excerpted = ($excerpted=='y')  ? " and Excerpt !=''" : '';
 		$author    = (!$author)    ? '' : " and AuthorID = '$author'";	
 		$month     = (!$month)     ? '' : " and Posted like '{$month}%'";
+
+		// trying custom fields here
+
+		$customFields = getCustomFields();
+		
+		if ($customFields) {
+			foreach($customFields as $cField) {
+				$customPairs[$cField] = getAtt($cField);
+			}
+			if(!empty($customPairs)) {
+				$custom =  buildCustomSql($customFields,$customPairs);
+			} else $custom = '';
+		}
+
 
 		if ($keywords) {
 			$keys = split(',',$keywords);
@@ -437,15 +450,14 @@
 			$keywords = " and (" . join(' or ',$keyparts) . ")"; 
 		}
 
-
 		$Form = fetch('Form','txp_form','name',$form);
 
 		$rs = safe_rows(
 			"*, unix_timestamp(Posted) as uPosted",
 			"textpattern",
 			"1 and Status=4 and Posted < now() ".
-			$category . $section . $excerpted . $month . $author . $keywords . $frontpage .
-			' order by ' . $sortby . ' ' . $sortdir . ' limit ' . $limit
+			$category . $section . $excerpted . $month . $author . $keywords . $custom . $frontpage .
+			' order by ' . $sortby . ' ' . $sortdir . ' limit ' . $limit, 1
 		);
 
 		if ($rs) {
@@ -460,10 +472,7 @@
 				$out['thisid']          = $ID;
 				$out['posted']          = $uPosted;
 				$out['if_comments']     = ($Annotate or $com_count) ? true : false;
-				$out['comments_invite'] = ($Annotate or $com_count)
-										  ? formatCommentsInvite(
-												$AnnotateInvite,$Section,$ID)
-										  : '';
+				$out['comments_invite'] = ($Annotate or $com_count)? formatCommentsInvite($AnnotateInvite,$Section,$ID) : '';
 				$out['comments_count']  = $com_count;										  
 				$out['author']          = $author;
 				$out['permlink']        = formatPermLink($ID,$Section);
@@ -490,7 +499,9 @@
 				$GLOBALS['uPosted'] = $uPosted;
 				$GLOBALS['limit'] = $limit;
 
-				unset($GLOBALS['thisarticle']);			
+				unset($GLOBALS['thisarticle']);	
+				unset($GLOBALS['theseatts']);			
+		
 			}
 			return join('',$articles);
 		}
@@ -797,4 +808,34 @@
 		}
 		return $html;	
 	}
+
+// -------------------------------------------------------------
+	function getCustomFields()
+	{
+		global $txpac;
+		$i = 0;
+		while ($i < 10) {
+			$i++;
+			if (!empty($txpac['custom_'.$i.'_set'])) {
+				$out[$i] = $txpac['custom_'.$i.'_set'];
+			}
+		}
+		return (!empty($out)) ? $out : false;
+	}
+	
+// -------------------------------------------------------------
+	function buildCustomSql($custom,$pairs)
+	{
+		if ($pairs) {
+			$pairs = doSlash($pairs);
+			foreach($pairs as $k => $v) {
+				if(in_array($k,$custom)) {
+					$no = array_keys($custom,$k);
+					$out[] = "and custom_".$no[0]." = '$v'";
+				}
+			}
+		}
+		return (!empty($out)) ? ' '.join(' ',$out).' ' : false; 
+	}
+			
 ?>

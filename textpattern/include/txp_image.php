@@ -99,7 +99,7 @@
 		}
 		echo endTable();
 
-		$imgdir = $doc_root.$path_from_root.$img_dir;
+		$imgdir = '../'.$img_dir;
 		if (!is_dir($imgdir) or !is_writeable($imgdir)) {
 		
 			echo graf(str_replace("{imgdir}",$imgdir,gTxt('img_dir_not_writeable')),' style="text-align:center;color:red"');
@@ -147,10 +147,10 @@
 			tr(
 				td(
 					form(
-						graf(gTxt('image_name').br.fInput('text','name',$name)) .
+						graf(gTxt('image_name').br.fInput('text','name',$name,'edit')) .
 						 graf(gTxt('image_category').br.treeSelectInput('category',
 						 		$categories,$category)) .
-						graf(gTxt('alt_text').br.fInput('text','alt',$alt,'','','',50)) .
+						graf(gTxt('alt_text').br.fInput('text','alt',$alt,'edit','','',50)) .
 						graf(gTxt('caption').br.text_area('caption','100','400',$caption)) .
 						graf(fInput('submit','',gTxt('save'))) .
 						hInput('id',$id) .
