@@ -50,7 +50,7 @@
 				$result_title = '<a href="'.$hurl.'">'.$Title.'</a>';
 	
 				$result = preg_replace("/>\s*</","> <",$Body_html);
-				preg_match_all("/\s.{1,50}".$q.".{1,50}\s/i",$result,$concat);
+				preg_match_all("/\s.{1,50}".preg_quote($q).".{1,50}\s/i",$result,$concat);
 						
 					$concat = join(" ... ",$concat[0]);
 					
