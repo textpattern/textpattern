@@ -299,26 +299,54 @@
 
 // -------------------------------------------------------------
 	function dateformats($item,$var) {
-		$dateformats = array(
-			'%b %e, %I:%M%p'    => safe_strftime('%b %e, %H:%M%p'),
-			'%e.%m.%y'          => safe_strftime('%e.%m.%y'),
-			'%e %B, %I:%M%p'    => safe_strftime('%e %B, %H:%M%p'),
-			'%y.%m.%d, %I:%M%p' => safe_strftime('%y.%m.%d, %H:%M%p'),
-			'%H:%M%p'           => safe_strftime('%H:%M%p'),
-			'%a %b %e, %I:%M%p' => safe_strftime('%a %b %e, %H:%M%p'),
-			'%A, %B %e, %Y'     => safe_strftime('%A, %B %e, %Y'),
-			'%b %e'             => safe_strftime('%b %e'),
-			'%e %B %y'          => safe_strftime('%e %B %y'),
-			'%e %m %Y - %H:%M'  => safe_strftime('%e %m %Y - %H:%M'),
-			'%Y-%m-%d'          => safe_strftime('%Y-%m-%d'),
-			'%Y-%d-%m'          => safe_strftime('%Y-%d-%m'),
-			'%x %X'             => safe_strftime('%x %X'),
-			'%x'                => safe_strftime('%x'),
-			'%X'                => safe_strftime('%X'),
-			'%x %r'             => safe_strftime('%x %r'),
-			'%r'                => safe_strftime('%r'),
-			'since'             => "hrs/days ago");
-		return selectInput($item, $dateformats, $var);
+
+		$dayname = '%A';
+		$dayshort = '%a';
+		$daynum = (strftime('%e') ? '%e' : '%d');
+		$daynumord = (strftime('%Oe') ? '%Oe' : $daynum);
+		$monthname = '%B';
+		$monthshort = '%b';
+		$monthnum = '%m';
+		$year = '%Y';
+		$yearshort = '%y';
+		$hour12 = '%I';
+		$hour24 = '%H';
+		$min = '%M';
+		$sec = '%S';
+		$ampm = '%p';
+		$time12 = '%I:%M %p';
+		$time = (strftime('%X') ? '%X' : '%H:%M:%S');
+		$date = (strftime('%x') ? '%x' : '%Y-%m-%d');
+	
+		$formats = array(
+			"$monthshort $daynumord, $time12",
+			"$daynum.$monthnum.$yearshort",
+			"$daynumord $monthname, $time12",
+			"$yearshort.$monthnum.$daynum, $time12",
+			"$time12",
+			"$dayshort $monthshort $daynumord, $time12",
+			"$dayname $monthname $daynumord, $year",
+			"$monthshort $daynumord",
+			"$daynumord $monthname $yearshort",
+			"$daynumord $monthnum $year - $hour24:$min",
+			"$daynumord. $monthname $year",
+			"$daynumord. $monthname $year, $hour24:$min",
+			"$year-$monthnum-$daynum",
+			"$year-$daynum-$monthnum",
+			"$date $time",
+			"$time $date",
+			"$date",
+			"$time",
+		);
+
+		$ts = time();
+		foreach ($formats as $f)
+			if ($d = safe_strftime($f, $ts))
+				$dateformats[$f] = $d;
+
+		$dateformats['since'] = 'hrs/days ago';
+
+		return selectInput($item, array_unique($dateformats), $var);
 	}
 
 ?>
