@@ -132,15 +132,18 @@
 	function plugin_install() 
 	{	
 
-		if (ps('theplugin')) {
+		if (ps('txt_plugin')) {
 			include $_FILES['theplugin']['tmp_name'];
+			
+			print file_get_contents($_FILES['theplugin']['tmp_name']);
+			
 		} else {
 			$plugin = ps('plugin');	
 		}
 
 		if(isset($plugin)) {
 
-			if ($plugin = @unserialize(@base64_decode($plugin))) { 
+			if ($plugin = unserialize(base64_decode($plugin))) { 
 
 				if(is_array($plugin)){
 	
@@ -197,7 +200,7 @@
 		fInput('file','theplugin','','edit').
 		popHelp('install_plugin').sp.
 		fInput('submit','install_old','install','smallerbox').
-		eInput('plugin').sInput('plugin_install').
+		eInput('plugin').sInput('plugin_install').hInput('txt_plugin',true).
 		'</form>';
 	}
 
