@@ -317,7 +317,7 @@ eod;
 	}
 
 	// 1.0: txp_file root cat
-	if (!safe_field('parent', 'txp_category',"type='file' AND name='root'")){
+	if (!safe_field('name', 'txp_category',"type='file' AND name='root'")){
 		safe_insert('txp_category',"name='root',type='file',lft=1,rgt=2");
 	}
 	
