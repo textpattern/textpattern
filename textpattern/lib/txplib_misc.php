@@ -524,7 +524,10 @@ else
 
 		$str = strftime($format, $time + tz_offset());
 		@list($lang, $charset) = explode('.', $locale);
-		if (!empty($charset) and $charset != 'UTF-8') {
+		if (empty($charset))
+			$charset = 'ISO-8859-1';
+
+		if ($charset != 'UTF-8') {
 			$new = '';
 			if (is_callable('iconv')) 
 				$new = @iconv($charset, 'UTF-8', $str);
