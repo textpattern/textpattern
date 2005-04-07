@@ -622,6 +622,12 @@
 		$out['keywords']        = $Keywords;
 		$out['article_image']   = $Image;
 
+		$custom = getCustomFields();
+		if ($custom) {
+			foreach ($custom as $i => $name)
+				$out[$name] = $rs['custom_' . $i];
+		}
+			
 		$GLOBALS['thisarticle'] = $out;
 		$GLOBALS['is_article_body'] = 1;		
 		$GLOBALS['thisarticle']['body'] = parse($Body_html);
