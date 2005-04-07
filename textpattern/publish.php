@@ -622,8 +622,10 @@
 		$out['keywords']        = $Keywords;
 		$out['article_image']   = $Image;
 
-		$GLOBALS['thisarticle'] = $out;		
+		$GLOBALS['thisarticle'] = $out;
+		$GLOBALS['is_article_body'] = 1;		
 		$GLOBALS['thisarticle']['body'] = parse($Body_html);
+		$GLOBALS['is_article_body'] = 0;
 
 		if(!is_numeric(@$GLOBALS['id'])) {
 			global $next_id, $next_title, $next_utitle, $next_posted;

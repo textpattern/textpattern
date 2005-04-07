@@ -1206,10 +1206,10 @@
 //--------------------------------------------------------------------------
 	function php($atts, $thing)
 	{
-		global $thisarticle, $txpac;
+		global $is_article_body, $thisarticle, $txpac;
 
 		ob_start();
-		if (empty($thisarticle)) {
+		if (empty($is_article_body)) {
 			if (!empty($txpac['allow_page_php_scripting']))
 				eval($thing);
 		}
