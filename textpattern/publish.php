@@ -74,7 +74,8 @@
 		// section placeholders, which passed $s='section_name'
 	$s = (empty($s)) ? '' : $s;
 
-	$pretext = pretext($s,$prefs);
+	$pretext = !isset($pretext) ? array() : $pretext;
+	$pretext = array_merge($pretext, pretext($s,$prefs));
 	extract($pretext);
 	
 //	dmp($pretext);
