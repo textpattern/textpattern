@@ -208,7 +208,7 @@ eod;
 		safe_insert('txp_prefs',"prefs_id=1,name='comments_are_ol',val='1'");
 	}
 
-	if (!safe_field('val','txp_prefs',"name='path_to_site'")) {
+	if (!safe_field('name','txp_prefs',"name='path_to_site'")) {
 		safe_insert('txp_prefs',"prefs_id=1,name='path_to_site',val=''");
 	}
 /*
@@ -284,7 +284,8 @@ eod;
 	}
 
 	// 1.0: new time zone offset
-	if (!safe_field('val','txp_prefs',"name='is_dst'")) {
+	//If we check for a val, and the val is 0, this add another empty one
+	if (!safe_field('name','txp_prefs',"name='is_dst'")) {
 		safe_insert('txp_prefs',"prefs_id=1,name='is_dst',val=0");
 	}
 
@@ -383,6 +384,38 @@ eod;
 		$lite = ($textile_excerpt)? '' : 1;
 		$Excerpt_html = $textile->TextileThis($Excerpt,$lite);
 		safe_update("textpattern","Excerpt_html = '$Excerpt_html'","ID=$ID");
+	}
+	
+	//1.0 feed unique ids
+	//blog unique id
+	if (!safe_field('val','txp_prefs',"name='blog_uid'"))
+	{
+		safe_insert('txp_prefs',"name='blog_uid', val='".md5(uniqid(rand(),true))."', prefs_id='1'");
+	}
+	if (!safe_field('val','txp_prefs',"name='blog_mail_uid'"))
+	{
+		$mail = safe_field('email', 'txp_users', "privs='1' LIMIT 1");
+		safe_insert('txp_prefs',"name='blog_mail_uid', val='$mail', prefs_id='1'");
+	}	
+	if (!safe_field('val','txp_prefs',"name='blog_time_uid'"))
+	{
+		safe_insert('txp_prefs',"name='blog_time_uid', val='".date("Y")."', prefs_id='1'");
+	}
+	//Articles unique id
+	if (!in_array('uid',$txp))
+	{
+		safe_alter('textpattern',"add `uid` varchar(32) not null");
+		safe_alter('textpattern',"add `feed_time` DATE not null DEFAULT '0000-00-00'");
+		
+		$rs = safe_rows_start('ID,Posted','textpattern','1');
+		if ($rs)
+		{
+			while ($a = nextRow($rs))
+			{
+				$feed_time = substr($a['Posted'],0,10);
+				safe_update('textpattern',"uid='".md5(uniqid(rand(),true))."', feed_time='$feed_time'","ID={$a['ID']}");
+			}
+		}
 	}
 
 // updated, baby.

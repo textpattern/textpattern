@@ -117,7 +117,9 @@
 					custom_7        = '$custom_7',
 					custom_8        = '$custom_8',
 					custom_9        = '$custom_9',
-					custom_10       = '$custom_10'"
+					custom_10       = '$custom_10',
+					uid				= '".md5(uniqid(rand(),true))."',
+					feed_time		= curdate()"
 				);
 				
 			$GLOBALS['ID'] = mysql_insert_id();

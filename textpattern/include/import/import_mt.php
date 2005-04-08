@@ -138,6 +138,8 @@ function import_mt_item($item, $section, $status, $invite) {
 			"Status='".doSlash($post_status)."',".
 			"Section='".doSlash($section)."',".
 			"Keywords='".doSlash($keywords)."',".
+			"uid='".md5(uniqid(rand(),true))."',".
+			"feed_time='".substr($date,0,10)."',".
 			"url_title='".doSlash($url_title)."'");
 			
 

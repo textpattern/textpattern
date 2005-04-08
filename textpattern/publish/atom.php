@@ -30,7 +30,10 @@
 		$out[] = tag($sitename,'title',textplain);
 		$out[] = tag($site_slogan,'tagline',textplain);
 		$out[] = '<link'.relalt.texthtml.' href="'.hu.'" />';
-		$out[] = tag('tag:'.$siteurl.','.date("Y").':/','id');
+		//Atom feeds with mail or domain name
+		$dn = explode('/',$siteurl);
+		$mail_or_domain = ($txpac['use_mail_on_feeds_id'])? eE($blog_mail_uid):$dn[0];
+		$out[] = tag('tag:'.$mail_or_domain.','.$blog_time_uid.':'.$blog_uid.(($section)? '/'.$section:'').(($category)? '/'.$category:''),'id');
 		$out[] = tag('Textpattern','generator',
 			' url="http://textpattern.com" version="'.$version.'"');
 		$out[] = tag(date("Y-m-d\TH:i:s\Z",$last),'modified');
@@ -81,10 +84,9 @@
 		
 					$e['issued'] = tag(gmdate("Y-m-d\TH:i:s\Z",$uPosted),'issued');
 					$e['modified'] = tag(gmdate("Y-m-d\TH:i:s\Z",$uLastMod),'modified');
-					$escaped_title = preg_replace("/&(?![#a-z0-9]+;)/i",'&amp;', $Title);
-					$escaped_title = str_replace('<','&lt;',$escaped_title);
-					$escaped_title = str_replace('>','&gt;',$escaped_title);
-					$e['title'] = tag($escaped_title.$count,'title');
+					$escaped_title =  preg_replace(array('/</','/>/',"/'/",'/"/'), array('&#60;','&#62;','&#039;','&#34;'), $Title);
+					$escaped_title = preg_replace("/&(?![#0-9]+;)/i",'&amp;', $escaped_title);
+					$e['title'] = tag($escaped_title.$count,'title',' type="text/html" mode="escaped"');
 
 					$uTitle = ($url_title) ? $url_title : stripSpace($Title);
 					$uTitle = htmlspecialchars($uTitle,ENT_NOQUOTES);
@@ -92,7 +94,7 @@
 					$permlink = permlinkurl($a);
 
 					$e['link'] = '<link'.relalt.texthtml.' href="'.$permlink.'" />';
-					$e['id'] = tag('tag:'.$siteurl.','.date("Y-m-d",$uPosted).':'.$ID,'id');
+					$e['id'] = tag('tag:'.$mail_or_domain.','.$feed_time.':'.$blog_uid.'/'.$uid,'id');
 					$e['subject'] = tag(htmlspecialchars($Category1),'dc:subject');
 					
 						// pull Body or Excerpt?
@@ -105,9 +107,10 @@
 					$Body = str_replace('href="/','href="'.hu.'/',$Body);
 	
 						// encode and entify
-					$Body = preg_replace(array('/</','/>/',"/'/",'/"/'), array('&lt;','&gt;','&#039;','&quot;'), $Body);
+					$Body = preg_replace(array('/</','/>/',"/'/",'/"/'), array('&#60;','&#62;','&#039;','&#34;'), $Body);
+					$Body = preg_replace("/&(?![#0-9]+;)/i",'&amp;', $Body);
 					$e['content'] = tag(n.$Body.n,'content',
-						' type="text/html" mode="escaped" xml:lang="en"');
+						' type="text/html" mode="escaped"');
 		
 					$out[] = tag(n.t.t.join(n.t.t,$e).n,'entry');
 				}

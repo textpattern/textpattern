@@ -121,6 +121,8 @@
 					AuthorID  = '$AuthorID',
 					Section   = '$insert_into_section',
 					AnnotateInvite = '$default_comment_invite',
+					uid='".md5(uniqid(rand(),true))."',
+					feed_time='".substr($Posted,0,10)."',
 					Status    = '$insert_with_status'
 				",$txplink) or $results[]= mysql_error();
 		

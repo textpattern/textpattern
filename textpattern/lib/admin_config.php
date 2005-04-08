@@ -147,6 +147,12 @@ $txpac = array(
 // use rel="nofollow" on comment links
 		
 	'comment_nofollow'        => 1,
+	
+// -------------------------------------------------------------
+// use encoded email on atom feeds id, instead of domain name
+// (if you plan to move this install to another domain, you should use this)
+		
+	'use_mail_on_feeds_id'	   =>0,
 
 // -------------------------------------------------------------
 // maximum url length before it should be considered malicious

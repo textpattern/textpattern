@@ -123,13 +123,11 @@ function import_blogger_item($item, $section, $status, $invite) {
 			"Title='".doSlash($title)."',".
 			"Body='".doSlash($body)."',".
 			"Body_html='".doSlash($body_html)."',".
-//			"Excerpt='".doSlash($excerpt)."',".
-//			"Excerpt_html='".doSlash($excerpt_html)."',".
-//			"Category1='".doSlash($category1)."',".
 			"AnnotateInvite='".doSlash($invite)."',".
 			"Status='".doSlash($post_status)."',".
 			"Section='".doSlash($section)."',".
-//			"Keywords='".doSlash($keywords)."',".
+			"uid='".md5(uniqid(rand(),true))."',".
+			"feed_time='".substr($date,0,10)."',".
 			"url_title='".doSlash($url_title)."'");
 			
 

@@ -185,6 +185,8 @@
 					Category1      = '".doSlash($categories_map[$Category1])."',
 					AnnotateInvite = '$default_comment_invite',
 					Section        = '$insert_into_section',
+					uid='".md5(uniqid(rand(),true))."',
+					feed_time='".substr($Posted,0,10)."',
 					Status         = '$insert_with_status'
 				";
 				

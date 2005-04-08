@@ -124,6 +124,8 @@
 			                Category1 = '".addslashes($Category1)."',
 			                Category2 = '".addslashes($Category2)."',
 			                Section   = '$insert_into_section',
+			                uid='".md5(uniqid(rand(),true))."',
+							feed_time='".substr($Posted,0,10)."',
 			                AnnotateInvite = '$default_comment_invite',
 			                Status    = '$insert_with_status'
 			            ",$txplink) or $results[]= mysql_error();
