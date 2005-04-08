@@ -793,7 +793,8 @@
 			foreach($pairs as $k => $v) {
 				if(in_array($k,$custom)) {
 					$no = array_keys($custom,$k);
-					$out[] = "and custom_".$no[0]." = '$v'";
+					# nb - use 'like' here to allow substring matches
+					$out[] = "and custom_".$no[0]." like '$v'";
 				}
 			}
 		}
