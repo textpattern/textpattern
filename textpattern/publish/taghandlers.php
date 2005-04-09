@@ -1108,25 +1108,32 @@
 	function EvalElse($thing, $condition)
 	{
 	         #party!
-	         $chunks = array();
-	         $f = '/(.*)(<txp:(\S+)\b.*?>.+<txp:else\b\s*\/>.+<\/txp:\\3>)/sU';
-	         $splited = preg_split($f, $thing, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
-	
-	         if(sizeof($splited)>1){
-	                $chunks = array();
-	                $new_thing = '';
-	                for($i=0;$i<sizeof($splited);$i++){
-	                        $new_thing .= $splited[$i];
-	                        if(!empty($splited[$i+2])){
-	                                $key = trim($splited[$i+2]);
-	                                $new_thing.="<txp_chunk:$key />";
-	                                $chunks[$key] = $splited[$i+1];
-	                        }
-	                        $i+=2;
-	                }
-	         }
-	         $thing = (!empty($new_thing))?$new_thing:$thing;
 	         $cdtn = '/<txp:else\b\s*\/\s*>/s';
+	         preg_match_all($cdtn,$thing,$matches);
+	         
+	         # Nested conditional tags
+	         if (sizeof($matches)>1)
+	         {
+	         	 $chunks = array();
+		         $f = '/(.*?)(<txp:(\w+)\b>.+<txp:else\b\s*\/>.+<\/txp:\\3>)(.*)/sU';
+		         $splited = preg_split($f, $thing, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+	
+		         if(sizeof($splited)>1){
+		         		$chunks = array();
+		                $new_thing = '';
+		                for($i=0;$i<sizeof($splited);$i++){
+		                        $new_thing .= $splited[$i];
+		                        if(!empty($splited[$i+2])){
+		                                $key = trim($splited[$i+2]);
+		                                $new_thing.="<txp_chunk:$key />";
+		                                $chunks[$key] = $splited[$i+1];
+		                        }
+		                        $i+=2;
+		                }
+		         }		         
+	         }
+	         #No conditional tags nested. Simply explode them
+	         $thing = (!empty($new_thing))?$new_thing:$thing;
 	         $match = preg_split($cdtn, $thing, -1, PREG_SPLIT_DELIM_CAPTURE);
 	         $thing = $match[0];
 	         $otherwise = (!empty($match[1]))?$match[1]:'';
@@ -1150,7 +1157,8 @@
 	{
 	        global $thisarticle;
 	        # eval condition here. example for article excerpt
-	        $condition = (!empty($thisarticle['excerpt']))? true : false;
+	        $excerpt = trim($thisarticle['excerpt']);
+	        $condition = (!empty($excerpt))? true : false;
 	        return parse(EvalElse($thing, $condition));
 	}
 
