@@ -1108,16 +1108,14 @@
 	function EvalElse($thing, $condition)
 	{
 	         #party!
-	         $cdtn = '/<txp:else\b\s*\/\s*>/s';
-	         preg_match_all($cdtn,$thing,$matches);
-	         
+	         $cdtn = '/<txp:else\b\s*\/\s*>/sU';
+	         $counter = preg_match_all($cdtn,$thing,$matches);
 	         # Nested conditional tags
-	         if (sizeof($matches)>1)
+	         if ($counter>1)
 	         {
 	         	 $chunks = array();
-		         $f = '/(.*?)(<txp:(\w+)\b>.+<txp:else\b\s*\/>.+<\/txp:\\3>)(.*)/sU';
+		         $f = '/(.*?)(<txp:(\w+)\b>.+<txp:else\b\s*\/>.+<\/txp:\\3>)(.*?)/sU';
 		         $splited = preg_split($f, $thing, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
-	
 		         if(sizeof($splited)>1){
 		         		$chunks = array();
 		                $new_thing = '';
