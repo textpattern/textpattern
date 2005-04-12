@@ -28,7 +28,8 @@
 			1 => gTxt('draft'),
 			2 => gTxt('hidden'),
 			3 => gTxt('pending'),
-			4 => strong(gTxt('live'))
+			4 => strong(gTxt('live')),
+			5 => gTxt('sticky'),
 		);
 		
 	switch(strtolower($step)) {
@@ -84,7 +85,7 @@
 				$textile_body = (!$textile_body) ? 0 : 1;
 				$textile_excerpt = (!$textile_excerpt) ? 0 : 1;
 				
-				if (!has_privs('article.publish') && $Status==4) $Status = 3;
+				if (!has_privs('article.publish') && $Status>=4) $Status = 3;
 				if (empty($url_title)) $url_title = stripSpace($Title, 1);  	
 				safe_insert(
 				   "textpattern",
@@ -124,7 +125,7 @@
 				
 			$GLOBALS['ID'] = mysql_insert_id();
 				
-			if ($Status==4) {
+			if ($Status>=4) {
 	
 				safe_update("txp_prefs", "val = now()", "`name` = 'lastmod'");
 				$message = gTxt('article_posted');
@@ -184,7 +185,7 @@
 			$incoming['Excerpt_html'] = $textile->TextileThis($incoming['Excerpt'],1);
 		}
 
-		if (!has_privs('article.publish') && $Status==4) $Status = 3;
+		if (!has_privs('article.publish') && $Status>=4) $Status = 3;
 							
 		extract(doSlash($incoming));
 		
@@ -233,7 +234,7 @@
 			"ID='$ID'"
 		);
 
-		if($Status == 4) {
+		if($Status >= 4) {
 			if ($oldstatus < 4) {
 				include_once $txpcfg['txpath'].'/lib/IXRClass.php';
 				

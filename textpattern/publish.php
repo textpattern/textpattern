@@ -398,7 +398,8 @@
 			'keywords'  => '',
 			'frontpage' => '',
 			'id'        => '',
-			'time'      => 'past'
+			'time'      => 'past',
+			'status'    => '4',
 		),$atts);		
 		//for the txp:article tag, some attributes are taken from globals;
 		//override them before extract
@@ -433,6 +434,9 @@
 			default:
 				$time = " and Posted < now()";
 		}
+		if (!is_numeric($status))
+			$status = getStatusNum($status);
+			
 		$custom = '';
 
 		if ($iscustom){
@@ -457,7 +461,7 @@
 			}
 			$keywords = " and (" . join(' or ',$keyparts) . ")"; 
 		}
-		$where = "1 and Status=4". $time.
+		$where = "1 and Status='$status'". $time.
 			$id . $category . $section . $excerpted . $month . $author . $keywords . $custom . $frontpage;
 
 		//do not paginate if we are on a custom list
@@ -541,11 +545,15 @@
 		$parentid = ps('parentid');
 
 		extract(lAtts(array(
-			'form' => 'default'
+			'form' => 'default',
+			'status' => '4',
 		),$atts));		
 
+		if (!is_numeric($status))
+			$status = getStatusNum($status);
+
 		$rs = safe_row("*, unix_timestamp(Posted) as uPosted", 
-				"textpattern", "ID='$id' and Status='4' limit 1");
+				"textpattern", "ID='$id' and Status='$status' limit 1");
 
 		$com_count = safe_count('txp_discuss',"parentid=$id and visible=1");
 
@@ -801,7 +809,15 @@
 		return (!empty($out)) ? ' '.join(' ',$out).' ' : false; 
 	}
 
-
+// -------------------------------------------------------------
+	function getStatusNum($name) 
+	{
+		$labels = array('draft' => 1, 'hidden' => 2, 'pending' => 3, 'live' => 4, 'sticky' => 5);
+		$status = strtolower($name);
+		$num = empty($labels[$status]) ? 4 : $labels[$status];
+		return $num;
+	}
+	
 // -------------------------------------------------------------
 	function ckEx($table,$val,$debug='') 
 	{

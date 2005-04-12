@@ -336,6 +336,7 @@ spanish => Spanish
 staff_writer => Staff writer
 status => Status
 stay_logged_in => Remain logged in with this browser
+sticky => Sticky
 strong => strong
 structure => Structure
 style => Style

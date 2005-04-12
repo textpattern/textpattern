@@ -15,7 +15,8 @@
 			1 => gTxt('draft'),
 			2 => gTxt('hidden'),
 			3 => gTxt('pending'),
-			4 => gTxt('live')
+			4 => gTxt('live'),
+			5 => gTxt('sticky'),
 		);
 
 		
