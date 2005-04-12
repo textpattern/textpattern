@@ -64,7 +64,8 @@ $DB = new DB;
 		global $DB;
 		$q = "insert into ".PFX."$table set $set";
 		if ($r = safe_query($q,$debug)) {
-			return mysql_insert_id($DB->link);
+			$id = mysql_insert_id($DB->link);
+			return ($id === 0 ? true : $id);
 		}
 		return false;
 	}
