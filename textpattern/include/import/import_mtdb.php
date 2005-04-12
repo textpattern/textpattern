@@ -14,10 +14,12 @@
 		// let's go - Dean says ;-).		
 		$mtlink = mysql_connect($mt_dbhost,$mt_dblogin,$mt_dbpass,true);
 		if(!$mtlink){ 
-				return 'mt database values don&#8217;t work. Go back, replace them and try again';
+				return 'mt database values don&#8217;t work. Please replace them and try again';
 		}				
 		mysql_select_db($mt_db,$mtlink);
 		$results[]= 'connected to mt database. Importing Data';
+		
+		sleep(2);
 		
 		$a = mysql_query("
 			select
@@ -89,8 +91,7 @@
 			$articles[] = $b;
 		}		
 	
-		
-		
+
 		$a = mysql_query("
 			select category_id,category_label from mt_category where category_blog_id='{$blog_id}' 
 		",$mtlink);
@@ -100,18 +101,6 @@
 		}		
 	
 		mysql_close($mtlink);
-		
-		//keep a handy copy of txpdb values, and do not alter Dean code
-		// for now! ;-)
-
-		$txpdb      = $txpcfg['db'];
-		$txpdblogin = $txpcfg['user'];
-		$txpdbpass  = $txpcfg['pass'];
-		$txpdbhost  = $txpcfg['host'];		
-	
-		$txplink = mysql_connect($txpdbhost,$txpdblogin,$txpdbpass);
-
-		mysql_select_db($txpdb,$txplink);
 	
 		include txpath.'/lib/classTextile.php';
 		
@@ -119,7 +108,7 @@
 	
 		if (!empty($authors)) {
 			foreach($authors as $author) {
-				extract(array_slash($author));
+				extract($author);
 				$name = (empty($name)) ? $RealName : $name;
 				
 				$authors_map[$user_id] = $name;
@@ -127,17 +116,15 @@
 				$authorid = safe_field('user_id', 'txp_users', "name = '".doSlash($name)."'");
 				if (!$authorid){
 					//Add new authors		
-					$q = "insert into ".PFX."txp_users set
+					$q = safe_insert("txp_users","
 						name     = '".doSlash($RealName)."',
 						email    = '".doSlash($email)."',
 						pass     = '".doSlash($pass)."',
 						RealName = '".doSlash($RealName)."',
-						privs='1'
-					";
-					
-					mysql_query($q,$txplink);
+						privs='1'"
+					);
 			
-					if(mysql_insert_id()) {
+					if($q) {
 						$results[]= 'inserted '.$RealName.' into txp_users';
 					} else $results[]=mysql_error();
 				}
@@ -145,17 +132,15 @@
 		}
 
 		if (!empty($categories_map)) {
-			array_slash($categories_map);
+
 			foreach ($categories_map as $category) {
 				$category = doSlash($category);
 				$rs = safe_row('id', 'txp_category', "name='$category' and type='article'");
 				if (!$rs){
-					$q = "insert into ".PFX."txp_category 
-							set name='$category',type='article',parent='root'";					
-					
-					mysql_query($q);
-					if(mysql_insert_id()) {
-						$results[]= 'inserted '.$category.' into txp_category';
+					$q = safe_insert("txp_category","name='$category',type='article',parent='root'");					
+
+					if($q) {
+						$results[]= 'inserted '.stripslashes($category).' into txp_category';
 					} else $results[]=mysql_error();
 				}
 						
@@ -164,62 +149,66 @@
 	
 		if (!empty($articles)) {
 			foreach ($articles as $article) {
-				extract(array_slash($article));
+				extract($article);
 				$Body .= (trim($Body2)) ? "\n\n".$Body2 : '';
 			
 				$Body_html = $textile->textileThis($Body);
 				$Excerpt_html = $textile->textileThis($Excerpt);
 				$Title = $textile->textileThis($Title,1);
+
+				$Category1 = (!empty($Category1)) ? doSlash($Category1) : '';
 				
-				$q = "
-					insert into ".PFX."textpattern set 
+				$AuthorID = (!empty($authors_map[$AuthorID])) ? doSlash($authors_map[$AuthorID]) : '';
+				
+				$insertID = safe_insert("textpattern","
 					Posted         = '$Posted',
 					LastMod        = '$LastMod',
-					Title          = '$Title',
-					Body           = '$Body',
-					Excerpt		   = '$Excerpt',
-					Excerpt_html   = '$Excerpt_html',
-					Keywords	   = '$Keywords',
-					Body_html      = '$Body_html',
-					AuthorID       = '$authors_map[$AuthorID]',
-					Category1      = '".doSlash($categories_map[$Category1])."',
-					AnnotateInvite = '$default_comment_invite',
-					Section        = '$insert_into_section',
-					uid='".md5(uniqid(rand(),true))."',
-					feed_time='".substr($Posted,0,10)."',
+					Title          = '".doSlash($Title)."',
+					Body           = '".doSlash($Body)."',
+					Excerpt		   = '".doSlash($Excerpt)."',
+					Excerpt_html   = '".doSlash($Excerpt_html)."',
+					Keywords	   = '".doSlash($Keywords)."',
+					Body_html      = '".doSlash($Body_html)."',
+					AuthorID       = '$AuthorID',
+					Category1      = '$Category1',
+					AnnotateInvite = '".doSlash($default_comment_invite)."',
+					Section        = '".doSlash($insert_into_section)."',
+					uid            = '".md5(uniqid(rand(),true))."',
+					feed_time      = '".substr($Posted,0,10)."',
 					Status         = '$insert_with_status'
-				";
-				
-				if (!empty($Category2)) $q.= ", Category2 = '".$categories_map[$Category2]."'";				
-			
-				mysql_query($q,$txplink);
+				");
 		
-				if($insertID = mysql_insert_id()) {
-					$results[]='inserted MT entry '.stripslashes($Title).
-					' into Textpattern as article '.$insertID.'';
+				if($insertID) {
+					$results[] = 'inserted MT entry '.strong($Title).
+						' into Textpattern as article '.strong($insertID).'';
 					
 					//Do coment for article
 					if (!empty($comments) && is_array($comments)) {
 						foreach ($comments as $comment) {
-							extract(array_slash($comment));
+							extract($comment);
 							$message = nl2br($message);
 					
-							mysql_query("insert into ".PFX."txp_discuss values 
-								($discussid,$insertID,'$name','$email','$web','$ip','$posted','$message',1)",
-							$txplink);
+							$commentID = safe_insert("txp_discuss","
+								discussid = $discussid,
+								parentid  = $insertID,
+								name      = '".doSlash($name)."',
+								email     = '".doSlash($email)."',
+								web       = '".doSlash($web)."',
+								message   = '".doSlash($message)."',
+								ip        = '$ip',
+								posted    = '$posted',
+								visible   = 1"
+							);
 					
-							if(mysql_insert_id()) {
-								$results[]='<p>inserted MT comment for article '.$insertID.' into txp_discuss</p>';
+							if($commentID) {
+								$results[] = 'inserted MT comment '.$commentID.
+									' for article '.$insertID.' into txp_discuss';
 							} else $results[]=mysql_error();
 						}
 					}
-					
-				} else $results[]=mysql_error();
+				} else $results[] = mysql_error();
 			}
-		}
-		
-		
-		
+		}		
 		return join('<br />', $results);
 	}
 

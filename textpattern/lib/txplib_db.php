@@ -32,8 +32,8 @@ $DB = new DB;
 			dmp($q);
 			dmp(mysql_error());
 		}
-		$result = $method($q,$DB->link);
-		
+		$result = $method($q,$DB->link) or die('mysql error');
+
 		if(!$result) return false;
 		return $result;
 	}
@@ -61,9 +61,10 @@ $DB = new DB;
 // -------------------------------------------------------------
 	function safe_insert($table,$set,$debug='') 
 	{
+		global $DB;
 		$q = "insert into ".PFX."$table set $set";
 		if ($r = safe_query($q,$debug)) {
-			return true;
+			return mysql_insert_id($DB->link);
 		}
 		return false;
 	}
