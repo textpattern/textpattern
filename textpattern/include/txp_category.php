@@ -149,6 +149,7 @@
 					}
 				}
 			}
+			rebuild_tree('root', 1, $type);
 			category_list(messenger($type.'_category',join(', ',$categories),'deleted'));
 		}
 	}
