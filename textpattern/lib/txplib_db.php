@@ -32,7 +32,7 @@ $DB = new DB;
 			dmp($q);
 			dmp(mysql_error());
 		}
-		$result = $method($q,$DB->link) or die('mysql error');
+		$result = $method($q,$DB->link);
 
 		if(!$result) return false;
 		return $result;
