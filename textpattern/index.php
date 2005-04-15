@@ -42,7 +42,8 @@
 
 		$dbversion = safe_field('val','txp_prefs',"name = 'version'");
 
-		extract(get_prefs());
+		$prefs = get_prefs();
+		extract($prefs);
 	
 		define("LANG",$language);
 		//i18n: define("LANG","en-gb");
