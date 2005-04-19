@@ -87,15 +87,17 @@ else
 		?	$txpcfg['txpath'].'/lang/'.$lang.'.txt'
 		:	$txpcfg['txpath'].'/lang/en-gb.txt';
 		 
-		$file = @file($filename);
-		if(is_array($file)) {
-			foreach($file as $line) {
-				if($line[0]=='#') continue; 
-				@list($name,$val) = explode(' => ',trim($line));
-				$out[$name] = $val;
-			}
-			return ($out) ? $out : '';
-		} 
+		$file = @fopen($filename, "r");
+		if ($file) {
+			while (!feof($file)) {
+				$line = fgets($file, 4096);
+			if($line[0]=='#') continue; 
+			@list($name,$val) = explode(' => ',trim($line));
+			$out[$name] = $val;
+		 }
+			@fclose($filename);
+		}
+	  return ($out) ? $out : '';
 	}
 
 // -------------------------------------------------------------
