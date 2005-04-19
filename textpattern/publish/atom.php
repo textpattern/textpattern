@@ -116,7 +116,7 @@
 						// fix relative urls
 					$Body = str_replace('href="/','href="'.hu.'/',$Body);
 					$Body = preg_replace("/href=\\\"#(.*)\"/","href=\"".permlinkurl($a)."#\\1\"",$Body);
-					$Body = html_entity_decode($Body,ENT_QUOTES,"UTF-8");
+					$Body = html_entity_decode($Body,ENT_QUOTES);
 					$Body = preg_replace("/&((?U).*)=/","&amp;\\1=",$Body);
 						// encode and entify
 					$Body = preg_replace(array('/</','/>/',"/'/",'/"/'), array('&#60;','&#62;','&#039;','&#34;'), $Body);
