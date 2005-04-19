@@ -43,7 +43,6 @@
 		$out[] = tag(date("Y-m-d\TH:i:s\Z",$last),'modified');
 
 
-
 			$auth[] = tag($pub['RealName'],'name');
 			$auth[] = ($txpac['include_email_atom']) ? tag(eE($pub['email']),'email') : '';
 			$auth[] = tag(hu,'url');
@@ -89,7 +88,7 @@
 					$e['issued'] = tag(gmdate("Y-m-d\TH:i:s\Z",$uPosted),'issued');
 					$e['modified'] = tag(gmdate("Y-m-d\TH:i:s\Z",$uLastMod),'modified');
 
-					$escaped_title = html_entity_decode($Title,ENT_QUOTES);
+					$escaped_title = safe_hed($Title);
 					$escaped_title = preg_replace("/&(?![#a-z0-9]+;)/i",'&amp;', $escaped_title);
 					$escaped_title = str_replace('<','&lt;',$escaped_title);
 					$escaped_title = str_replace('>','&gt;',$escaped_title);
@@ -116,7 +115,7 @@
 						// fix relative urls
 					$Body = str_replace('href="/','href="'.hu.'/',$Body);
 					$Body = preg_replace("/href=\\\"#(.*)\"/","href=\"".permlinkurl($a)."#\\1\"",$Body);
-					$Body = html_entity_decode($Body,ENT_QUOTES);
+					$Body = safe_hed($Body);
 					$Body = preg_replace("/&((?U).*)=/","&amp;\\1=",$Body);
 						// encode and entify
 					$Body = preg_replace(array('/</','/>/',"/'/",'/"/'), array('&#60;','&#62;','&#039;','&#34;'), $Body);
@@ -146,7 +145,7 @@
  
 					$e['title'] = tag(doSpecial($linkname),'title');
 					$content = utf8_encode(htmlspecialchars($description));
-					$e['content'] = tag(n.$description.n,'content',' type="text/html" mode="escaped" xml:lang="en"');
+					$e['content'] = tag(n.$description.n,'content',' type="text/html" mode="escaped"');
 					
 					$url = (preg_replace("/^\/(.*)/","http://$siteurl/$1",$url));
 					$url = preg_replace("/&((?U).*)=/","&amp;\\1=",$url);
@@ -159,7 +158,7 @@
 					$articles[$id] = tag(n.t.t.join(n.t.t,$e).n,'entry');
 
 					$etags[$id] = strtoupper(dechex(crc32($articles[$id])));
-                                        $dates[$id] = $date;
+					$dates[$id] = $date;
 
 				}
 			}
@@ -186,26 +185,40 @@
 			$imsd = @strtotime($hims);
 
 			if (strpos($_SERVER['SERVER_SOFTWARE'], "Apache") !== false) {
-		        	$headers = apache_request_headers();
-				$canaim = strpos(@$headers["A-IM"], "feed");
+				$headers = apache_request_headers();
+				if (isset($headers["A-IM"])) {
+					$canaim = strpos($headers["A-IM"], "feed");
+				} else {
+					$canaim = false;
+				}
 		  	}
-                  
+		  
 			$hinm = stripslashes(serverset('HTTP_IF_NONE_MATCH'));
+
+			$cutarticles = false;
 		
 			if ($canaim !== false) {
 				foreach($articles as $id=>$thing) {
 					if (strpos($hinm, $etags[$id])) {
 						unset($articles[$id]);
 						$cutarticles = true;
-						header("Vary: If-None-Match");
+						$cut_etag = true;
 					}
 
 					if ($dates[$id] < $imsd) {
 						unset($articles[$id]);
-                	                        $cutarticles = true;
-						header("Vary: If-Modified-Since");
+						$cutarticles = true;
+						$cut_time = true;
 					}
 		  		}
+			}
+
+			if (isset($cut_etag) && isset($cut_time)) {
+				header("Vary: If-None-Match, If-Modified-Since");
+			} else if (isset($cut_etag)) {
+				header("Vary: If-None-Match");
+			} else if (isset($cut_time)) {
+				header("Vary: If-Modified-Since");
 			}
 
 			$etag = join("-",$etags);
@@ -216,7 +229,7 @@
 
 			header('ETag: "'.$etag.'"');
 
-			if (!empty($cutarticles)) {
+			if ($cutarticles) {
 				//header("HTTP/1.1 226 IM Used"); 
 				//This should be used as opposed to 200, but Apache doesn't like it.
 				//http://intertwingly.net/blog/2004/09/11/Vary-ETag/ says that the status code should be 200.
@@ -229,8 +242,24 @@
 			ob_start();
 			header('Content-type: application/atom+xml; charset=utf-8');
 			return chr(60).'?xml version="1.0" encoding="UTF-8"?'.chr(62).n.
-			'<feed version="0.3" xmlns="http://purl.org/atom/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">'.join(n,$out).'</feed>';
+			'<feed version="0.3" xml:lang="'.$language.'" xmlns="http://purl.org/atom/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">'.join(n,$out).'</feed>';
 		}
 	}
+
+
+	function safe_hed($toUnicode) {
+		
+		if (version_compare(phpversion(), "5.0.0", ">=")) {
+			$str =  html_entity_decode($toUnicode, ENT_QUOTES, "UTF-8");
+		} else {
+			$trans_tbl = get_html_translation_table(HTML_ENTITIES);
+			foreach($trans_tbl as $k => $v) {
+				$ttr[$v] = utf8_encode($k);
+			}
+			$str = strtr($toUnicode, $ttr);
+		}
+		return $str;
+	}
+
 
 ?>
