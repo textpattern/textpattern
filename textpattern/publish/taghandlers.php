@@ -557,7 +557,6 @@
 			return (!$q)?$match:''; 
 		}
 
-		ob_start();
 		//Fix a problem when paging /author/author_name and simmilar url schemas
 		//chopUrl explodes by slashes
 		$req_uri = $_SERVER['REQUEST_URI'];
@@ -592,7 +591,6 @@
 			return (!$q)?$match:''; 
 		}
 		
-		ob_start();
 		//Fix a problem when paging /author/author_name and simmilar url schemas
 		//chopUrl explodes by slashes
 		$req_uri = $_SERVER['REQUEST_URI'];
