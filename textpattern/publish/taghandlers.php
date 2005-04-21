@@ -1226,6 +1226,37 @@
 	}
 	
 //--------------------------------------------------------------------------
+	function custom_field($atts)
+	{
+		global $thisarticle, $txpac;
+		
+		extract(lAtts(array(
+			'name' => @$txpac['custom_1_set'],
+		),$atts));
+
+		if (isset($thisarticle[$name]))
+			return $thisarticle[$name];
+	}	
+	
+//--------------------------------------------------------------------------
+	function if_custom_field($atts, $thing)
+	{
+		global $thisarticle, $txpac;
+		
+		extract(lAtts(array(
+			'name' => @$txpac['custom_1_set'],
+			'val' => NULL,
+		),$atts));
+
+		if ($val !== NULL)
+			$cond = (@$thisarticle[$name] == $val);
+		else
+			$cond = !empty($thisarticle[$name]);
+
+		return parse(EvalElse($thing, $cond));
+	}	
+	
+//--------------------------------------------------------------------------
 //File tags functions. 
 //--------------------------------------------------------------------------
 
