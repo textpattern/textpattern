@@ -400,6 +400,7 @@
 			'id'        => '',
 			'time'      => 'past',
 			'status'    => '4',
+			'pgonly'    => 0,
 		),$atts);		
 		//for the txp:article tag, some attributes are taken from globals;
 		//override them before extract
@@ -461,7 +462,7 @@
 			}
 			$keywords = " and (" . join(' or ',$keyparts) . ")"; 
 		}
-		$where = "1 and Status='$status'". $time.
+		$where = "1" . ($id ? " Status >= '4'" : " and Status='$status'"). $time.
 			$id . $category . $section . $excerpted . $month . $author . $keywords . $custom . $frontpage;
 
 		//do not paginate if we are on a custom list
@@ -478,6 +479,8 @@
 			$pageout['c']        = $c;
 	
 			$GLOBALS['thispage'] = $pageout;
+			if ($pgonly)
+				return;
 		}else{
 			$offset = '';
 		}
