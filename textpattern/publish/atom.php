@@ -164,10 +164,10 @@
 			}
 		
 		}
-		if (!empty($out)) {
+		if (!empty($articles)) {
 
 			//turn on compression if we aren't using it already
-			if (ini_get("zlib.output_compression") == 0) {
+			if (extension_loaded('zlib') && ini_get("zlib.output_compression") == 0) {
 				ob_start("ob_gzhandler");
 			}
 		  
@@ -184,14 +184,16 @@
 
 			$imsd = @strtotime($hims);
 
-			if (strpos($_SERVER['SERVER_SOFTWARE'], "Apache") !== false) {
+			if (is_callable('apache_request_headers')) {
 				$headers = apache_request_headers();
 				if (isset($headers["A-IM"])) {
 					$canaim = strpos($headers["A-IM"], "feed");
 				} else {
 					$canaim = false;
 				}
-		  	}
+		  	} else {
+				$canaim = false;
+			}
 		  
 			$hinm = stripslashes(serverset('HTTP_IF_NONE_MATCH'));
 
