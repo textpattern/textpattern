@@ -462,7 +462,7 @@
 			}
 			$keywords = " and (" . join(' or ',$keyparts) . ")"; 
 		}
-		$where = "1" . ($id ? " Status >= '4'" : " and Status='$status'"). $time.
+		$where = "1" . ($id ? " and Status >= '4'" : " and Status='$status'"). $time.
 			$id . $category . $section . $excerpted . $month . $author . $keywords . $custom . $frontpage;
 
 		//do not paginate if we are on a custom list
