@@ -379,7 +379,7 @@ eod;
 	$rs = mysql_query("select ID, Excerpt, textile_excerpt from ".PFX."textpattern where Excerpt_html like ''");
 	require_once txpath.'/lib/classTextile.php';
 	$textile = new Textile();
-	while ($a = mysql_fetch_assoc($rs)){		
+	while ($a = @mysql_fetch_assoc($rs)){		
 		extract($a);		
 		$lite = ($textile_excerpt)? '' : 1;
 		$Excerpt_html = $textile->TextileThis($Excerpt,$lite);
