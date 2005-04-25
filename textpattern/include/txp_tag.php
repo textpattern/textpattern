@@ -865,6 +865,7 @@
 	
 	function tag_file_download_category()  { return tdb(tb('file_download_category')); }
 		
+	function tag_file_download_description()  { return tdb(tb('file_download_description')); }
 		
 
 ?>

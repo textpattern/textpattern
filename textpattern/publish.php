@@ -118,7 +118,7 @@
 					header('Content-Description: File Download');
 					header('Content-Type: application/octet-stream');
 					header('Content-Length: ' . filesize($fullpath));
-					header('Content-Disposition: attachment; filename="' . basename($filename)). '"';
+					header('Content-Disposition: attachment; filename="' . basename($filename) . '"');
 					readfile($fullpath); 
 				} else {
 					$file_error = 404;
