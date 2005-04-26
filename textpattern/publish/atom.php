@@ -223,13 +223,13 @@
 				header("Vary: If-Modified-Since");
 			}
 
-			$etag = join("-",$etags);
+			$etag = @join("-",$etags);
 
 			if (strstr($hinm, $etag)) {
 				header("HTTP/1.1 304 Not Modified"); exit;
 			}
 
-			header('ETag: "'.$etag.'"');
+			if ($etag) header('ETag: "'.$etag.'"');
 
 			if ($cutarticles) {
 				//header("HTTP/1.1 226 IM Used"); 

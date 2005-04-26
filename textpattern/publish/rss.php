@@ -169,7 +169,7 @@
 		}
 
 
-		$etag = join("-",$etags);
+		$etag = @join("-",$etags);
 
 		if (strstr($hinm, $etag)) {
 			header("HTTP/1.1 304 Not Modified"); exit;
@@ -188,7 +188,7 @@
 
 
 		header("Content-Type: application/rss+xml; charset=utf-8");
-		header('ETag: "'.$etag.'"');
+		if ($etag) header('ETag: "'.$etag.'"');
 		return '<rss version="0.92">'.tag(join(n,$out),'channel').'</rss>';
 	}
 
