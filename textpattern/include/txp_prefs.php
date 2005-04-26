@@ -305,7 +305,7 @@
 		$dayname = '%A';
 		$dayshort = '%a';
 		$daynum = (is_numeric(strftime('%e')) ? '%e' : '%d');
-		$daynumord = (is_numeric(substr(strftime('%Oe'), 0, 1)) ? '%Oe' : $daynum);
+		$daynumord = (is_numeric(substr(trim(strftime('%Oe')), 0, 1)) ? '%Oe' : $daynum);
 		$monthname = '%B';
 		$monthshort = '%b';
 		$monthnum = '%m';
