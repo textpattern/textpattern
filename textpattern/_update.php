@@ -417,6 +417,15 @@ eod;
 			}
 		}
 	}
+	
+	// 1.0: Human-friendly title for sections and categories, to solve i18n problems
+	if (!in_array('title',$txpsect)) {
+		safe_alter("txp_section", "add `title` varchar(255) not null default ''");
+	}
+	if (!in_array('title',$txpcat)) {
+		safe_alter("txp_category", "add `title` varchar(255) not null default ''");
+	}
+
 
 // updated, baby.
 
