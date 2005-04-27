@@ -280,16 +280,61 @@ else
     }
 
 // -------------------------------------------------------------
+	function load_plugin($name)
+	{
+		global $plugins, $txpac;
+
+		if (is_array($plugins) and in_array($name,$plugins)) {
+			return true;
+		}
+		
+		if (!empty($txpac['plugin_cache_dir'])) {
+			$dir = rtrim($txpac['plugin_cache_dir'], '/') . '/';
+			if (is_file($dir . $name . '.php')) {
+				include($dir . $name . '.php');
+				$plugins[] = $name;
+				return true;
+			}
+		}
+							
+		$rs = safe_row("name,code","txp_plugin","status='1' AND name='$name'");
+		if ($rs) {
+			$plugins[] = $rs['name'];
+			
+			eval($rs['code']);
+			
+			return true;	
+		}
+		
+		return false;
+	}
+
+// -------------------------------------------------------------
+	function require_plugin($name)
+	{
+		if (!load_plugin($name))
+			trigger_error("Unable to include required plugin \"{$name}\"",E_USER_ERROR);
+	}
+	
+// -------------------------------------------------------------
+	function include_plugin($name)
+	{
+		if (!load_plugin($name))
+			trigger_error("Unable to include plugin \"{$name}\"",E_USER_WARNING);
+	}
+
+// -------------------------------------------------------------
    function load_plugins($type=NULL)
    {
-		global $txpac;
-
-		if (isset($txpac['plugin_cache_dir'])) {
+		global $txpac,$plugins;
+		
+		if (!is_array($plugins)) $plugins = array();
+		
+		if (!empty($txpac['plugin_cache_dir'])) {
 			$dir = rtrim($txpac['plugin_cache_dir'], '/') . '/';
 			$dh = @opendir($dir);
 			while ($dh and false !== ($f = @readdir($dh))) {
-				if (is_file($dir . $f))
-					include($dir . $f);
+				load_plugin(basename($f, '.php'));
 			}
 		}
 
@@ -297,13 +342,15 @@ else
 		if ($type !== NULL)
 			$where .= (" and type='".doSlash($type)."'");
 
-		$rs = safe_column("code", "txp_plugin", $where);
+		$rs = safe_rows("name, code", "txp_plugin", $where);
 		if ($rs) {
-			foreach($rs as $a)
-				$plugins[] = $a;
-
-			$out = join(n.n,$plugins);
-			eval($out);
+			foreach($rs as $a) {
+				if (!in_array($a['name'],$plugins)) {
+					$plugins[] = $a['name'];
+				
+					eval($a['code']);
+				}
+			}
 		}
    }
 
