@@ -916,13 +916,14 @@
 	}
 
 // -------------------------------------------------------------
-	function doWrap($list, $wraptag, $break)
+	function doWrap($list, $wraptag, $break, $class='')
 	{
+		$atts = ($class ? ' class="'.$class.'"' : '');
 		if ($wraptag == 'ul' or $wraptag == 'ol') {
-			return tag(tag(join('</li>'.n.'<li>',$list),'li'),$wraptag);
+			return tag(tag(join('</li>'.n.'<li>',$list),'li'),$wraptag,$atts);
 		}
 		return ($wraptag) 
-		?	tag(join($break.n,$list),$wraptag) 
+		?	tag(join($break.n,$list),$wraptag,$atts) 
 		:	join($break.n,$list);
 	}
 
