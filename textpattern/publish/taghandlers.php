@@ -916,17 +916,38 @@
 	}
 
 // -------------------------------------------------------------
-	function doWrap($list, $wraptag, $break, $class='')
+	function doWrap($list, $wraptag, $break, $class='', $atts='')
 	{
-		$atts = ($class ? ' class="'.$class.'"' : '');
-		if ($wraptag == 'ul' or $wraptag == 'ol') {
-			return tag(tag(join('</li>'.n.'<li>',$list),'li'),$wraptag,$atts);
-		}
-		return ($wraptag) 
-		?	tag(join($break.n,$list),$wraptag,$atts) 
-		:	join($break.n,$list);
+		$atts = ($class ? $atts.' class="'.$class.'"' : $atts);
+
+		// non-enclosing breaks
+		if (preg_match('/<.*>/', $break) or $break == 'br' or $break == 'hr') {
+			if ($break == 'br' or $break == 'hr')
+				$break = "<$break />";
+			return ($wraptag) 
+			?	tag(join($break.n,$list),$wraptag,$atts) 
+			:	join($break.n,$list);
+		}	
+
+		// enclosing breaks should be specified by name only, no '<' or '>'
+		if (($wraptag == 'ul' or $wraptag == 'ol') and empty($break))
+			$break = 'li';
+			
+		return ($wraptag)
+		? tag(tag(join("</$break>".n."<$break>",$list),$break),$wraptag,$atts)
+		: tag(join("</$break>".n."<$break>",$list),$break);
 	}
 
+// -------------------------------------------------------------
+	function doTag($content, $tag, $class='', $atts='')
+	{
+		$atts = ($class ? $atts.' class="'.$class.'"' : $atts);
+
+		return ($content)
+		? tag($content, $tag, $atts)
+		: "<$tag $atts />";
+	}
+	
 // -------------------------------------------------------------
 	function permlink($atts,$thing=NULL)
 	{
