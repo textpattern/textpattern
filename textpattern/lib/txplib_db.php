@@ -1,5 +1,7 @@
 <?php
 
+define('TXP_DEBUG', 0);
+
 if (!empty($txpcfg['table_prefix'])) {
 	define ("PFX",$txpcfg['table_prefix']);
 } else define ("PFX",'');
@@ -28,7 +30,7 @@ $DB = new DB;
 		global $DB,$txpcfg;
 		$method = (!$unbuf) ? 'mysql_query' : 'mysql_unbuffered_query';
 		if (!$q) return false;
-		if ($debug) { 
+		if ($debug or TXP_DEBUG === 1) { 
 			dmp($q);
 			dmp(mysql_error());
 		}
