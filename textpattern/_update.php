@@ -426,6 +426,18 @@ eod;
 		safe_alter("txp_category", "add `title` varchar(255) not null default ''");
 	}
 
+	// 1.0: Unique key and 'type' field for the txp_prefs table
+	$has_prefs_idx = 0;
+	$rs = getRows('show index from '.PFX.'txp_prefs');
+	foreach ($rs as $row)
+		if ($row['Key_name'] == 'prefs_idx')
+			$has_prefs_idx = 1;
+	if (!$has_prefs_idx)
+		safe_query('alter ignore table '.PFX.'txp_prefs add unique prefs_idx(prefs_id,name)');
+		
+	$txpprefs = getThings('describe '.PFX.'txp_prefs');
+	if (!in_array('type', $txpprefs))
+		safe_alter('txp_prefs', "add `type` smallint unsigned not null default '0'");
 
 // updated, baby.
 
