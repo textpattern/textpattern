@@ -184,7 +184,7 @@
 			exit(atom());
 		}
 			// set messy variables
-		$out =  makeOut('id','s','c','q','pg','p');
+		$out =  makeOut('id','s','c','q','pg','p','month');
 
 			// if messy vars exist, bypass url parsing
 		if (!$out['id'] && !$out['s']) {
