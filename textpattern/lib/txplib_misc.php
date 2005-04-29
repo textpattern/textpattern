@@ -334,7 +334,8 @@ else
 			$dir = rtrim($txpac['plugin_cache_dir'], '/') . '/';
 			$dh = @opendir($dir);
 			while ($dh and false !== ($f = @readdir($dh))) {
-				load_plugin(basename($f, '.php'));
+				if ($f{0} != '.')
+					load_plugin(basename($f, '.php'));
 			}
 		}
 
