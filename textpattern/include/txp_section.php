@@ -100,7 +100,7 @@
 		$textile = new Textile();
 				
 		$name = dumbDown($textile->TextileThis(trim(doSlash($name)),1));
-		$name = preg_replace("/[^[:alnum:]\-]/", "", str_replace(" ","-",$name));
+		$name = preg_replace("/[^[:alnum:]\-_]/", "", str_replace(" ","-",$name));
 		
 		$chk = fetch('name','txp_section','name',$name);
 		if (!$chk) {
