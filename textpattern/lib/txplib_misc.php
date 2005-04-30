@@ -547,7 +547,7 @@ else
 	{
 		$here = doSlash($here);
 		$rs = safe_field ("val",'txp_prefs',"name = 'path_to_site'");
-		if ($rs == false) {
+		if ($rs === false) {
 			safe_insert("txp_prefs","prefs_id=1,name='path_to_site',val='$here'");
 		} else {
 			safe_update('txp_prefs',"val='$here'","name='path_to_site'");
