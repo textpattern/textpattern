@@ -287,7 +287,7 @@
 			'th-th' => gTxt('thai'),
 			'da-dk' => gTxt('danish'),
 			'nl-nl' => gTxt('dutch'),
-//			'pt-pt' => gTxt('portuguese'),
+			'pt-pt' => gTxt('portuguese'),
 //			'fi-fi' => gTxt('finnish'),
 //			'po-po' => gTxt('polish'),
 //			'tl-tl' => gTxt('tagalog'),
@@ -296,7 +296,7 @@
 			asort($things);
 			reset($things);
 
-		return selectInput($item, $things, $var);
+		return selectInput($item, $things, $var, 0);
 	}
 
 // -------------------------------------------------------------
