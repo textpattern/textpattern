@@ -1120,7 +1120,7 @@
 		//Add the label at the end, to prevent breadcrumb for home page
 		if (!empty($content)) $content = array_merge(array($label),$content);
 		//Add article title without link if we're on an individual archive page?
-		return doWrap($content, $wraptag, $sep);
+		return doTag(join($sep, $content), $wraptag);
 	}
 
 // -------------------------------------------------------------
