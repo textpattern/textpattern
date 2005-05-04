@@ -439,6 +439,16 @@ eod;
 	if (!in_array('type', $txpprefs))
 		safe_alter('txp_prefs', "add `type` smallint unsigned not null default '0'");
 
+	if (!fetch('form','txp_form','name','search_results')) {
+		$form = <<<EOF
+<h3><txp:permlink><txp:title /></txp:permlink></h3>
+<p><txp:search_result_excerpt /><br/>
+<small><txp:permlink><txp:permlink /></txp:permlink> &middot;
+<txp:posted /></small></p>
+EOF;
+		safe_insert('txp_form', "name='search_results', type='article', Form='$form'");
+	}	
+
 // updated, baby.
 
 ?>

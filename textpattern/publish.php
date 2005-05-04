@@ -401,6 +401,7 @@
 			'time'      => 'past',
 			'status'    => '4',
 			'pgonly'    => 0,
+			'searchall' => 1,
 		),$atts);		
 		//for the txp:article tag, some attributes are taken from globals;
 		//override them before extract
@@ -417,8 +418,18 @@
 		//give control to search, if necesary
 		if($q && !$iscustom) {
 			include_once txpath.'/publish/search.php';
-			return hed(gTxt('search_results'),2).search($q);
-		}		
+			$s_filter = ($searchall ? filterSearch() : '');
+			$q = doSlash($q);
+			$match = ", match (Title,Body) against ('$q') as score";
+			$search = " and (Title rlike '$q' or Body rlike '$q') $s_filter";
+			$sortby = 'score';
+
+			// searchall=0 can be used to show search results for the current section only
+			if ($searchall) $section = '';
+		}
+		else
+			$match = $search = '';
+
 		//Building query parts
 		$frontpage = ($frontpage) ? filterFrontPage() : '';		
 		$category  = (!$category)  ? '' : " and ((Category1='".$category."') or (Category2='".$category."')) ";
@@ -463,7 +474,7 @@
 			$keywords = " and (" . join(' or ',$keyparts) . ")"; 
 		}
 		$where = "1" . ($id ? " and Status >= '4'" : " and Status='$status'"). $time.
-			$id . $category . $section . $excerpted . $month . $author . $keywords . $custom . $frontpage;
+			$search . $id . $category . $section . $excerpted . $month . $author . $keywords . $custom . $frontpage;
 
 		//do not paginate if we are on a custom list
 		if (!$iscustom)
@@ -477,6 +488,7 @@
 			$pageout['numPages'] = $numPages;
 			$pageout['s']        = $s;
 			$pageout['c']        = $c;
+			$pageout['total']    = $total;
 	
 			$GLOBALS['thispage'] = $pageout;
 			if ($pgonly)
@@ -485,10 +497,13 @@
 			$offset = '';
 		}
 
-		$rs = safe_rows_start("*, unix_timestamp(Posted) as uPosted", 'textpattern', 
+		$rs = safe_rows_start("*, unix_timestamp(Posted) as uPosted".$match, 'textpattern', 
 		$where. ' order by ' . $sortby . ' ' . $sortdir . ' limit ' . $offset . $limit);
-		//the listform
-		$form = gAtt($atts, 'listform', $form);		
+		// alternative form override for search or list
+		if ($q and !$iscustom)
+			$form = gAtt($atts, 'searchform', 'search_results');
+		else
+			$form = gAtt($atts, 'listform', $form);         
 		// might be a form preview, otherwise grab it from the db
 		$form = (isset($_POST['Form']))
 		?	gps('Form')

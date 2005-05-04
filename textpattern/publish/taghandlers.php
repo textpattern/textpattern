@@ -804,33 +804,58 @@
 	}
 
 // -------------------------------------------------------------
-	function search_result_title() 
+	function search_result_title($atts) 
 	{
-		global $this_result;
-		return $this_result['search_result_title'];
+		return permlink($atts, '<txp:title />');
 	}
 
 // -------------------------------------------------------------
-	function search_result_excerpt() 
+	function search_result_excerpt($atts) 
 	{
-		global $this_result;
-		return $this_result['search_result_excerpt'];
+		global $thisarticle, $q;
+		extract(lAtts(array(
+			'hilight'     => 'strong',
+		),$atts));
+		
+		extract($thisarticle);
+		
+		$result = preg_replace("/>\s*</","> <",$body);
+		preg_match_all("/\s.{1,50}".preg_quote($q).".{1,50}\s/i",$result,$concat);
+
+		$concat = join(" ... ",$concat[0]);
+
+		$concat = strip_tags($concat);
+		$concat = preg_replace('/^[^>]+>/U',"",$concat);
+		$concat = preg_replace("/(".preg_quote($q).")/i","<$hilight>$1</$hilight>",$concat);
+		return ($concat) ? "... ".$concat." ..." : '';
 	}
 
 // -------------------------------------------------------------
-	function search_result_url() 
+	function search_result_url($atts) 
 	{
-		global $this_result;
-		return $this_result['search_result_url'];
+		global $thisarticle;
+		
+		$l = permlinkurl($thisarticle);
+		return permlink($atts, $l);
 	}
 
 // -------------------------------------------------------------
-	function search_result_date() 
+	function search_result_date($atts) 
 	{
-		global $this_result;
-		return $this_result['search_result_date'];
+		return posted($atts);
 	}
 
+// -------------------------------------------------------------
+	function search_result_count($atts)
+	{
+		global $thispage;
+		$t = @$thispage['total'];
+		extract(lAtts(array(
+			'text'     => ($t == 1 ? gTxt('article_found') : gTxt('articles_found')),
+		),$atts));
+		
+		return $t . ($text ? $text . ' ' : '');
+	}
 
 // -------------------------------------------------------------
 	function image_index($atts)
