@@ -203,16 +203,23 @@
 //-------------------------------------------------------------
 	function event_category_create($evname)
 	{
-		$name = gps('name');
-		$name = trim(doSlash($name));
+		global $txpcfg;
+		
+		//Prevent non url chars on category names
+		include_once $txpcfg['txpath'].'/lib/classTextile.php';
+		$textile = new Textile();
+		
+		$name = ps('name');		
+		$title = doSlash($name);				
+		$name = dumbDown($textile->TextileThis(trim(doSlash($name)),1));
+		$name = preg_replace("/[^[:alnum:]\-_]/", "", str_replace(" ","-",$name));
 
 		$check = safe_field("name", "txp_category", "name='$name' and type='$evname'");
 
 		if (!$check) {
-			if($name) {
-				
+			if($name) {				
 				$q = 
-				safe_insert("txp_category", "name='$name', type='$evname', parent='root'");
+				safe_insert("txp_category", "name='$name', title='$title', type='$evname', parent='root'");
 				
 				rebuild_tree('root', 1, $evname);
 				
@@ -237,6 +244,7 @@
 			$out = stackRows(
 				fLabelCell($evname.'_category_name') . fInputCell('name', $name, 1, 20),
 				fLabelCell('parent') . td(parent_pop($parent,$evname)),
+				fLabelCell($evname.'_category_title') . fInputCell('title', $title, 1, 30),
 				tdcs(fInput('submit', '', gTxt('save_button'),'smallerbox'), 2)
 			);
 		}
@@ -247,11 +255,23 @@
 //-------------------------------------------------------------
 	function event_category_save($evname,$table_name)
 	{
-		$in = gpsa(array('name','old_name','parent'));
+		
+		global $txpcfg;
+		
+		//Prevent non url chars on category names
+		include_once $txpcfg['txpath'].'/lib/classTextile.php';
+		$textile = new Textile();
+				
+		$in = psa(array('name','old_name','parent','title'));
 		extract(doSlash($in));
+		
+		$title = $textile->TextileThis($title,1);		
+		$name = dumbDown($textile->TextileThis($name,1));
+		$name = preg_replace("/[^[:alnum:]\-_]/", "", str_replace(" ","-",$name));
+		
 		$parent = ($parent) ? $parent : 'root';
 		safe_update("txp_category", 
-					"name='$name',parent='$parent'", 
+					"name='$name',parent='$parent',title='$title'", 
 					"name='$old_name' and type='$evname'"); 
 		rebuild_tree('root', 1, $evname);
 		if ($evname=='article'){
