@@ -315,6 +315,7 @@ search_results_form => Search results
 section => Section
 sections => Sections
 section_head => Site Sections
+section_longname => Section title
 section_name => Section name
 section_name_already_exists => Section name already exists
 select => select

@@ -424,7 +424,9 @@ eod;
 	}
 	if (!in_array('title',$txpcat)) {
 		safe_alter("txp_category", "add `title` varchar(255) not null default ''");
-	}
+	}	
+	if (safe_count('txp_section', "title=''") > 0)
+		safe_update('txp_section', 'title=name', "title=''");
 
 	// 1.0: Unique key and 'type' field for the txp_prefs table
 	$has_prefs_idx = 0;

@@ -52,6 +52,9 @@
 					fLabelCell(gTxt('section_name').':') . 
 						fInputCell('name',$name,1,20),
 		
+					fLabelCell(gTxt('section_longtitle').':') . 
+						fInputCell('title',$title,1,20),
+		
 					fLabelCell(gTxt('uses_page').':') . 
 						td(selectInput('page',$pageslist,$page).
 							popHelp('section_uses_page'),'','noline'),
@@ -98,7 +101,8 @@
 		//Prevent non url chars on section names
 		include_once $txpcfg['txpath'].'/lib/classTextile.php';
 		$textile = new Textile();
-				
+
+		$title = doSlash($name);				
 		$name = dumbDown($textile->TextileThis(trim(doSlash($name)),1));
 		$name = preg_replace("/[^[:alnum:]\-_]/", "", str_replace(" ","-",$name));
 		
@@ -108,6 +112,7 @@
 				$rs = safe_insert(
 				   "txp_section",
 				   "name         = '$name',
+					title        = '$title', 
 					page         = 'default',
 					css          = 'default',
 					is_default   = 0,
@@ -124,13 +129,17 @@
 	{
 		global $txpcfg;
 		$in = psa(array(
-			'name','page','css','is_default','on_frontpage','in_rss','searchable','old_name')
+			'name', 'title','page','css','is_default','on_frontpage','in_rss','searchable','old_name')
 		);
 		extract(doSlash($in));
 		
+		if (empty($title))
+			$title = $name;
+
 		//Prevent non url chars on section names
 		include_once $txpcfg['txpath'].'/lib/classTextile.php';
-		$textile = new Textile();		
+		$textile = new Textile();
+		$title = $textile->TextileThis($title,1);
 		$name = dumbDown($textile->TextileThis($name, 1));
 		$name = preg_replace("/[^[:alnum:]\-]/", "", str_replace(" ","-",$name));
 		
@@ -140,6 +149,7 @@
 
 		safe_update("txp_section",
 		   "name         = '$name',
+			title        = '$title',
 			page         = '$page',
 			css          = '$css',
 			is_default   = '$is_default',
