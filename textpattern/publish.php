@@ -431,7 +431,7 @@
 			$match = $search = '';
 
 		//Building query parts
-		$frontpage = ($frontpage) ? filterFrontPage() : '';		
+		$frontpage = ($frontpage and !$q) ? filterFrontPage() : '';		
 		$category  = (!$category)  ? '' : " and ((Category1='".$category."') or (Category2='".$category."')) ";
 		$section   = (!$section)   ? '' : " and Section = '$section'";
 		$excerpted = ($excerpted=='y')  ? " and Excerpt !=''" : '';
