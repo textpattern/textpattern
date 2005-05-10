@@ -28,7 +28,7 @@
 	function selectInput($name="", $array="", $value="", $blankfirst='',$onchange='')
 	{
 		$out = '<select name="'.$name.'" class="list"';
-		$out .= ($onchange) ? ' onchange="submit(this.form)"' : '';
+		$out .= ($onchange == 1) ? ' onchange="submit(this.form)"' : $onchange;
 		$out .= '>'.n;
 		$out .= ($blankfirst) ? '<option value=""></option>' : '';
 		foreach ($array as $avalue => $alabel) {
