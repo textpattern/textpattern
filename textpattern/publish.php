@@ -876,7 +876,7 @@
 	function makeOut() 
 	{
 		foreach(func_get_args() as $a) {
-			$array[$a] = gps($a);
+			$array[$a] = htmlspecialchars(gps($a));
 		}
 		return $array;
 	}
