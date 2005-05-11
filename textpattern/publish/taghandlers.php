@@ -332,7 +332,7 @@
 		
 		global $thisid,$thisarticle;
 		
-		if($thisid) $id = $thisid;
+		$id = @$thisid;
 
 		$cats = doSlash(safe_row("Category1,Category2","textpattern", "ID='$id' limit 1"));
 
