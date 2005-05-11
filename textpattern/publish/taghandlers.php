@@ -946,7 +946,7 @@
 		$atts = ($class ? $atts.' class="'.$class.'"' : $atts);
 
 		// non-enclosing breaks
-		if (preg_match('/<.*>/', $break) or $break == 'br' or $break == 'hr') {
+		if (!preg_match('/^\w+$/', $break) or $break == 'br' or $break == 'hr') {
 			if ($break == 'br' or $break == 'hr')
 				$break = "<$break />";
 			return ($wraptag) 
@@ -968,6 +968,9 @@
 	{
 		$atts = ($class ? $atts.' class="'.$class.'"' : $atts);
 
+		if (!$tag)
+			return $content;
+			
 		return ($content)
 		? tag($content, $tag, $atts)
 		: "<$tag $atts />";
