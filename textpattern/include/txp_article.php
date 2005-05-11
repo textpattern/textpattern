@@ -7,16 +7,28 @@
 	Use of this software indicates acceptance of the Textpattern license agreement 
 */
 
+global $vars, $statuses;
+
+$vars = array(
+	'ID','Title','Title_html','Body','Body_html','Excerpt','textile_excerpt','Image',
+	'textile_body', 'Keywords','Status','Posted','Section','Category1','Category2',
+	'Annotate','AnnotateInvite','publish_now','reset_time','AuthorID','sPosted',
+	'LastModID','sLastMod','override_form','from_view','year','month','day','hour',
+	'minute','url_title','custom_1','custom_2','custom_3','custom_4','custom_5',
+	'custom_6','custom_7','custom_8','custom_9','custom_10'
+);
+
+$statuses = array(
+		1 => gTxt('draft'),
+		2 => gTxt('hidden'),
+		3 => gTxt('pending'),
+		4 => strong(gTxt('live')),
+		5 => gTxt('sticky'),
+);
+
+if ($event == 'article') {
 	require_privs('article');
 
-	$vars = array(
-		'ID','Title','Title_html','Body','Body_html','Excerpt','textile_excerpt','Image',
-		'textile_body', 'Keywords','Status','Posted','Section','Category1','Category2',
-		'Annotate','AnnotateInvite','publish_now','reset_time','AuthorID','sPosted',
-		'LastModID','sLastMod','override_form','from_view','year','month','day','hour',
-		'minute','url_title','custom_1','custom_2','custom_3','custom_4','custom_5',
-		'custom_6','custom_7','custom_8','custom_9','custom_10'
-	);
 
 	$save = gps('save');
 	if ($save) $step = 'save';
@@ -24,13 +36,6 @@
 	$publish = gps('publish');
 	if ($publish) $step = 'publish';
 
-	$statuses = array(
-			1 => gTxt('draft'),
-			2 => gTxt('hidden'),
-			3 => gTxt('pending'),
-			4 => strong(gTxt('live')),
-			5 => gTxt('sticky'),
-		);
 		
 	switch(strtolower($step)) {
 		case "":         article_edit();    break;
@@ -41,7 +46,7 @@
 		case "save":     article_save();    break;
 		case "delete":   article_delete();
 	}
-
+}
 
 //--------------------------------------------------------------
 	function article_post()

@@ -8,11 +8,14 @@
 
 	Use of this software indicates acceptance of the Textpattern license agreement 
 */
-	require_privs('page');
 
-	if(!$step or !function_exists($step)){
-		page_edit();
-	} else $step();
+	if ($event == 'page') {
+		require_privs('page');
+
+		if(!$step or !function_exists($step)){
+			page_edit();
+		} else $step();
+	}
 	
 //-------------------------------------------------------------
 	function page_edit($message='')

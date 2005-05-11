@@ -10,11 +10,13 @@
 	Use of this software indicates acceptance of the Textpattern license agreement 
 */
 
-	require_privs('discuss');
+	if ($event == 'discuss') {
+		require_privs('discuss');
 
-	if(!$step or !function_exists($step)){
-		discuss_list();
-	} else $step();
+		if(!$step or !function_exists($step)){
+			discuss_list();
+		} else $step();
+	}
 
 //-------------------------------------------------------------
 	function discuss_delete()

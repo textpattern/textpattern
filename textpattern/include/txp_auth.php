@@ -10,8 +10,11 @@ All rights reserved
 Use of this software indicates acceptance of the Textpattern license agreement 
 
 */
-		
-	unset($txp_user);
+
+function doAuth() {
+	global $txp_user;
+			
+	$txp_user = NULL;
 	
 	$message = doTxpValidate();
 	
@@ -20,6 +23,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
 	}
 
 	ob_start();
+}
 
 // -------------------------------------------------------------
 	function txp_validate($user,$password) {

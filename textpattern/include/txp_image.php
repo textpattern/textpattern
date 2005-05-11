@@ -10,15 +10,17 @@
 	Use of this software indicates acceptance of the Textpattern license agreement 
 */
 
-	require_privs('image');
-
+	global $extensions;
 	$extensions = array(0,'.gif','.jpg','.png','.swf');
-
 	define("IMPATH",$path_to_site.'/'.$img_dir.'/');
 
-	if(!$step or !function_exists($step)){
-		image_list();
-	} else $step();
+	if ($event == 'image') {	
+		require_privs('image');
+
+		if(!$step or !function_exists($step)){
+			image_list();
+		} else $step();
+	}
 
 // -------------------------------------------------------------
 	function image_list($message='') 

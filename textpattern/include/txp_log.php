@@ -11,9 +11,11 @@
 	the Textpattern license agreement 
 */
 
-	require_privs('log');
+	if ($event == 'log') {
+		require_privs('log');
 
-	log_list();
+		log_list();
+	}
 				
 //-------------------------------------------------------------
 	function log_list() 

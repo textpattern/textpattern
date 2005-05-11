@@ -10,14 +10,17 @@
 	Use of this software indicates acceptance of the Textpattern license agreement 
 */
 
-	require_privs('form');
-
+	global $vars;
 	$vars = array('Form','type','name','savenew','oldname');
 
-	if(!$step or !function_exists($step)){
-		form_edit();
-	} else $step();
+	if ($event == 'form') {
+		require_privs('form');
 
+		if(!$step or !function_exists($step)){
+			form_edit();
+		} else $step();
+	}
+	
 // -------------------------------------------------------------
 	function form_list($curname)
 	{

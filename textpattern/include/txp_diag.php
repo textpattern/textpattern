@@ -12,13 +12,11 @@
 
 //-------------------------------------------------------------
 
-	require_privs('diag');
-
-	$step = gps('step');
-
 	define("cs",': ');
 	define("ln",str_repeat('-', 24).n);
 
+	global $files;
+	
 	$files = array(
 		'/include/txp_category.php',
 		'/include/txp_plugin.php',
@@ -58,6 +56,14 @@
 		'/css.php',
 	);
 
+	if ($event == 'diag') {
+		require_privs('diag');
+
+		$step = gps('step');
+		doDiagnostics();
+	}
+
+
 	function apache_module($m) {
 		$modules = apache_get_modules();
 		return in_array($m, $modules);
@@ -71,6 +77,11 @@
 		}
 	}
 
+	function doDiagnostics()
+	{
+		global $files, $txpcfg;
+		extract(get_prefs());
+		
 	$urlparts = parse_url(hu);
 	$mydomain = $urlparts['host'];
 	
@@ -263,5 +274,6 @@
 	echo tr(td(join('',$out))),
 
 	endTable();
-
+	}
+	
 ?>

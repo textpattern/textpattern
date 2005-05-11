@@ -10,23 +10,26 @@
 	Use of this software indicates acceptance of the Textpattern license agreement 
 */
 
+$levels = array(
+	1 => gTxt('publisher'),
+	2 => gTxt('managing_editor'),
+	3 => gTxt('copy_editor'),
+	4 => gTxt('staff_writer'),
+	5 => gTxt('freelancer'),
+	6 => gTxt('designer'),
+	0 => gTxt('none')
+);
+
+if ($event == 'admin') {
 	require_privs('admin');
 
 	$myprivs = fetch('privs','txp_users','name',$txp_user);
 
-	$levels = array(
-		1 => gTxt('publisher'),
-		2 => gTxt('managing_editor'),
-		3 => gTxt('copy_editor'),
-		4 => gTxt('staff_writer'),
-		5 => gTxt('freelancer'),
-		6 => gTxt('designer'),
-		0 => gTxt('none')
-	);
 
 	if(!$step or !function_exists($step)){
 		admin();
 	} else $step();
+}
 
 // -------------------------------------------------------------
 	function admin($message='') 

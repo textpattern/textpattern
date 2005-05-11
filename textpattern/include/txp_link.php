@@ -10,13 +10,16 @@
 	Use of this software indicates acceptance of the Textpattern license agreement 
 */
 
-	require_privs('link');
-
+	global $vars;
 	$vars = array('category', 'url', 'linkname', 'linksort', 'description', 'id');
+
+	if ($event == 'link') {	
+		require_privs('link');
 		
-	if(!$step or !function_exists($step)){
-		link_edit();
-	} else $step();
+		if(!$step or !function_exists($step)){
+			link_edit();
+		} else $step();
+	}
 
 // -------------------------------------------------------------
 	function link_list($message="") 

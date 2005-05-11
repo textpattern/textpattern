@@ -1,6 +1,7 @@
 <?php
 
-	require_privs('css');
+	if ($event == 'css') {
+		require_privs('css');
 	
 		switch ($step) {
 			case '': css_edit(); break;
@@ -17,6 +18,7 @@
 			case 'add_dec': css_edit();                break;
 			case 'add_sel': css_edit();
 		}
+	}
 
 //-------------------------------------------------------------
 	function css_list($name) 

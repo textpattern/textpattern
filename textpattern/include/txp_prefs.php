@@ -12,14 +12,15 @@
 
 //-------------------------------------------------------------
 
-	require_privs('prefs');
+	if ($event == 'prefs') {
+		require_privs('prefs');
 
-	$step = gps('step');
+		$step = gps('step');
 
-	if(!$step or !function_exists($step)){
-		prefs_list();
-	} else $step();
-
+		if(!$step or !function_exists($step)){
+			prefs_list();
+		} else $step();
+	}
 
 // -------------------------------------------------------------
 	function prefs_save() 

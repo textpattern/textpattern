@@ -54,6 +54,7 @@
 		$textarray = load_lang(LANG);
 	
 		include txpath.'/include/txp_auth.php';
+		doAuth();
 	
 		$event = (gps('event') ? gps('event') : 'article');
 		$step = gps('step');

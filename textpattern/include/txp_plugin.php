@@ -10,11 +10,13 @@
 	Use of this software indicates acceptance of the Textpattern license agreement 
 */
 
-	require_privs('plugin');
+	if ($event == 'plugin') {
+		require_privs('plugin');
 
-	if(!$step or !function_exists($step)){
-		plugin_list();
-	} else $step();
+		if(!$step or !function_exists($step)){
+			plugin_list();
+		} else $step();
+	}
 	
 // -------------------------------------------------------------
 	function plugin_list($message='')

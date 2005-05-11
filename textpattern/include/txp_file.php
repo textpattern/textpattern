@@ -20,12 +20,14 @@
 		0 => gTxt('public')
 	);
 
-	check_privs(1,2,3,4,6);
+	if ($event == 'file') {
+		check_privs(1,2,3,4,6);
 
 
-	if(!$step or !function_exists($step)){
-		file_list();
-	} else $step();
+		if(!$step or !function_exists($step)){
+			file_list();
+		} else $step();
+	}
 
 // -------------------------------------------------------------
 	function file_list($message='') 

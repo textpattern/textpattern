@@ -10,11 +10,13 @@
 	Use of this software indicates acceptance ofthe Textpattern license agreement 
 */
 
+if ($event == 'category') {
 	require_privs('category');
 
 	if(!$step or !function_exists($step)){
 		category_list();
 	} else $step();
+}
 
 //-------------------------------------------------------------
 	function category_list($message="")

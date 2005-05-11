@@ -9,21 +9,22 @@
 
 //	dmp($_POST);
 
-	require_privs('article');
+	global $statuses;
+	$statuses = array(
+		1 => gTxt('draft'),
+		2 => gTxt('hidden'),
+		3 => gTxt('pending'),
+		4 => gTxt('live'),
+		5 => gTxt('sticky'),
+	);
 
-		$statuses = array(
-			1 => gTxt('draft'),
-			2 => gTxt('hidden'),
-			3 => gTxt('pending'),
-			4 => gTxt('live'),
-			5 => gTxt('sticky'),
-		);
+	if ($event=='list') {
+		require_privs('article');
 
-		
-	if(!$step or !function_exists($step)){
-		list_list();
-	} else $step();
-
+		if(!$step or !function_exists($step)){
+			list_list();
+		} else $step();
+	}
 
 //--------------------------------------------------------------
 	function list_list($message="",$post='')

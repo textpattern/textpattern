@@ -10,11 +10,13 @@
 	Use of this software indicates acceptance ofthe Textpattern license agreement 
 */
 
-	require_privs('section');
+	if ($event == 'section') {
+		require_privs('section');
 
-	if(!$step or !function_exists($step)){
-		section_list();
-	} else $step();
+		if(!$step or !function_exists($step)){
+			section_list();
+		} else $step();
+	}
 
 // -------------------------------------------------------------
 	function section_list($message='') 
