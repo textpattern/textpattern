@@ -451,20 +451,19 @@
 			
 		$custom = '';
 
-		if ($iscustom){
-			// trying custom fields here
-			$customFields = getCustomFields();
-			
-			if ($customFields) {
-				foreach($customFields as $cField) {
-					if (isset($atts[$cField]))
-						$customPairs[$cField] = $atts[$cField];
-				}
-				if(!empty($customPairs)) {
-					$custom =  buildCustomSql($customFields,$customPairs);
-				} else $custom = '';
+		// trying custom fields here
+		$customFields = getCustomFields();
+		
+		if ($customFields) {
+			foreach($customFields as $cField) {
+				if (isset($atts[$cField]))
+					$customPairs[$cField] = $atts[$cField];
 			}
+			if(!empty($customPairs)) {
+				$custom =  buildCustomSql($customFields,$customPairs);
+			} else $custom = '';
 		}
+
 		//Allow keywords for no-custom articles. That tagging mode, you know
 		if ($keywords) {
 			$keys = split(',',$keywords);
