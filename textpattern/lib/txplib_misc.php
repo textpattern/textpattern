@@ -435,13 +435,9 @@ else
 
 			if ($txpac['permalink_title_format']) {
 				return 
-				strtolower(
-					preg_replace("/[^[:alnum:]\-]/","",
-						str_replace(" ","-",
-							$text
-						)
-					)
-				);			
+				urlencode(strtolower(
+					preg_replace('/[^\w\-]+/', '', preg_replace('/[\s\-]+/', '-', $text))
+				));
 			} else {
 				return preg_replace("/[^[:alnum:]]/","",$text);
 			}
