@@ -542,11 +542,12 @@ else
 // -------------------------------------------------------------
 	function is_blacklisted($ip) 
 	{
-		$checks = array('bl.spamcop.net','list.dsbl.org','sbl.spamhaus.org');
+		global $txpac;
+		$checks = explode(',', $txpac['spam_blacklists']);
 						
 		$rip = join('.',array_reverse(explode(".",$ip)));
 		foreach ($checks as $a) {
-			if(@gethostbyname("$rip.$a") == '127.0.0.2') {
+			if(@gethostbyname("$rip.".trim($a)) == '127.0.0.2') {
 				$listed[] = $a;
 			}
 		}

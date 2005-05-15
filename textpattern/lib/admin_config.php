@@ -159,6 +159,10 @@ $txpac = array(
 		
 	'max_url_len'               => 200,
 
+// -------------------------------------------------------------
+// Spam DNS RBLs
+
+	'spam_blacklists'          => 'bl.spamcop.net,list.dsbl.org,sbl.spamhaus.org',
 
 );
 
