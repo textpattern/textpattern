@@ -32,6 +32,7 @@
 		$out[] = tag($sitename,'title',textplain);
 		$out[] = tag($site_slogan,'tagline',textplain);
 		$out[] = '<link'.relalt.texthtml.' href="'.hu.'" />';
+		$articles = array();
 
 		//Atom feeds with mail or domain name
 		$dn = explode('/',$siteurl);

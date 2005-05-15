@@ -26,6 +26,7 @@
 		$out[] = tag(doSpecial($sitename),'title');
 		$out[] = tag('http://'.$siteurl.$path_from_root,'link');
 		$out[] = tag(doSpecial($site_slogan),'description');
+		$articles = array();
 
 		if (!$area or $area=='article') {
 					
