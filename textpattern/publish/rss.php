@@ -55,7 +55,7 @@
 
 					$Body = (!$txpac['syndicate_body_or_excerpt']) ? $thisarticle['body'] : $thisarticle['excerpt'];
 					$Body = (!trim($Body)) ? $thisarticle['body'] : $Body;
-					$Body = str_replace('href="/','href="http://'.$siteurl.'/',$Body);
+					$Body = str_replace('href="/','href="'.hu,$Body);
 					$Body = preg_replace("/href=\\\"#(.*)\"/","href=\"".permlinkurl($a)."#\\1\"",$Body);
 					$Body = safe_hed($Body);
 					$Body = preg_replace("/&((?U).*)=/","&amp;\\1=",$Body);

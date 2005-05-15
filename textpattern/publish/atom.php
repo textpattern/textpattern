@@ -113,7 +113,7 @@
 					$Body = (!trim($Body)) ? $thisarticle['body'] : $Body; 
 
 						// fix relative urls
-					$Body = str_replace('href="/','href="'.hu.'/',$Body);
+					$Body = str_replace('href="/','href="'.hu,$Body);
 					$Body = preg_replace("/href=\\\"#(.*)\"/","href=\"".permlinkurl($a)."#\\1\"",$Body);
 					$Body = safe_hed($Body);
 					$Body = preg_replace("/&((?U).*)=/","&amp;\\1=",$Body);
