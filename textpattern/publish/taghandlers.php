@@ -157,6 +157,7 @@
 // -------------------------------------------------------------
 	function linklist($atts) 
 	{
+		global $thislink;
 		extract(lAtts(array(
 			'form'     => 'plainlinks',
 			'sort'     => 'linksort',
@@ -187,12 +188,13 @@
 				$linkname = str_replace("& ","&#38; ", $linkname);
 				$link = '<a href="'.doSpecial($url).'">'.$linkname.'</a>';
 				$linkdesctitle = '<a href="'.doSpecial($url).'" title="'.$description.'">'.$linkname.'</a>';
+				$thislink = $a;
 
 				$out = str_replace("<txp:link />", $link, $Form);
 				$out = str_replace("<txp:linkdesctitle />", $linkdesctitle, $out);
 				$out = str_replace("<txp:link_description />", $description, $out);
 			
-				$outlist[] = $out;
+				$outlist[] = parse($out);
 			}
 			
 			if (!empty($outlist)) {
