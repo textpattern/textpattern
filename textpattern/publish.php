@@ -515,7 +515,7 @@
 				extract($a);
 				populateArticleData($a);
 				// define the article form
-				$article = (!$iscustom and $override_form) 
+				$article = (!$q and !$iscustom and $override_form) 
 				?	fetch('Form','txp_form','name',$override_form)
 				:	$form;
 
