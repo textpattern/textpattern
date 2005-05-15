@@ -44,6 +44,9 @@
 
 		$prefs = get_prefs();
 		extract($prefs);
+
+		if (empty($siteurl))
+			$siteurl = $_SERVER['HTTP_HOST'] . rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'])), '/');
 	
 		define("LANG",$language);
 		//i18n: define("LANG","en-gb");
