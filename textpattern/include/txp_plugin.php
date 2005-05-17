@@ -144,6 +144,7 @@
 		}
 
 		$plugin64 = preg_replace('@.*\$plugin=\'([\w=+/]+)\'.*@s', '$1', $plugin);
+		$plugin64 = preg_replace('/^#.*$/m', '', $plugin64);
 
 		if(isset($plugin64)) {
 
