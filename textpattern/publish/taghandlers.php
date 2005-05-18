@@ -332,18 +332,18 @@
 			'limit'    => 10
 		),$atts));
 		
-		global $thisid,$thisarticle;
+		global $id,$thisid,$thisarticle;
 		
-		$id = @$thisid;
+		$id = ($thisid) ? $thisid : $id;
 
 		$cats = doSlash(safe_row("Category1,Category2","textpattern", "ID='$id' limit 1"));
 
-		if (!empty($cats[0]) or !empty($cats[1])) {
-
-			$q = array("select *, id as thisid, unix_timestamp(Posted) as posted from ".PFX."textpattern where Status = 4 and ID!='$id'",
-				(!empty($cats[0])) ? "and ((Category1='$cats[0]') or (Category2='$cats[0]'))" :'',
-				(!empty($cats[1])) ? "or ((Category1='$cats[1]') or (Category2='$cats[1]'))" :'',
-				"and Status=4 and Posted <= now() order by Posted desc limit 0,$limit");
+		if (!empty($cats['Category1']) or !empty($cats['Category2'])) {
+			extract($cats);
+			$q = array("select *, id as thisid, unix_timestamp(Posted) as posted from ".PFX."textpattern where Status=4",
+				(!empty($Category1)) ? "and ((Category1='$Category1') or (Category2='$Category2'))" :'',
+				(!empty($Category2)) ? "or ((Category1='$Category1') or (Category2='$Category2'))" :'',
+				"and Posted <= now() order by Posted desc limit 0,$limit");
 
 			$rs = getRows(join(' ',$q));
 	
@@ -351,6 +351,7 @@
 				if ($label) $out[] = $label;
 				foreach($rs as $a) {
 					extract($a);
+					if ($thisid == $id) continue;
 					$out[] = href($Title,permlinkurl($a));
 				}
 				if (is_array($out)) {
@@ -359,7 +360,6 @@
 			}
 		}
 		return '';
-		unset($GLOBALS['thisid']);
 	}
 
 // -------------------------------------------------------------
