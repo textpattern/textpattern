@@ -677,6 +677,8 @@
 	function comments_invite($atts) 
 	{
 		global $thisarticle,$is_article_list;
+		if (empty($thisarticle)) return;
+		
 		extract($thisarticle);
 		global $comments_mode;
 
@@ -817,6 +819,8 @@
 		extract(lAtts(array(
 			'hilight'     => 'strong',
 		),$atts));
+		
+		if (empty($thisarticle)) return;
 		
 		extract($thisarticle);
 		
@@ -981,6 +985,7 @@
 	function permlink($atts,$thing=NULL)
 	{
 		global $thisarticle;
+		if (empty($thisarticle)) return;
 		
 		$url = permlinkurl($thisarticle);
 
@@ -1009,6 +1014,8 @@
 		if (isset($txpac['custom_url_func']) and is_callable($txpac['custom_url_func']))
 			return call_user_func($txpac['custom_url_func'], $article_array);
 
+		if (empty($article_array)) return;
+		
 		extract($article_array);
 		
 		if (!isset($title)) $title = $Title;
