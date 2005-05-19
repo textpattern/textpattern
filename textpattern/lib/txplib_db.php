@@ -252,7 +252,7 @@ $DB = new DB;
 		$right = array(); 
 
 	    $rs = safe_rows_start(
-	    	"name, lft, rgt, parent", 
+	    	"name, lft, rgt, parent, title", 
 	    	"txp_category",
 	    	"lft between $l and $r and type = '$type' order by lft asc"
 		); 
@@ -266,6 +266,7 @@ $DB = new DB;
         	$out[] = 
         		array(
         			'name' => $name,
+        			'title' => $title,
         			'level' => count($right), 
         			'children' => ($rgt - $lft - 1) / 2
         		);

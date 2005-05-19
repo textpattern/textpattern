@@ -427,6 +427,8 @@ eod;
 	}	
 	if (safe_count('txp_section', "title=''") > 0)
 		safe_update('txp_section', 'title=name', "title=''");
+	if (safe_count('txp_category', "title=''") > 0)
+		safe_update('txp_category', 'title=name', "title=''");
 
 	// 1.0: Unique key and 'type' field for the txp_prefs table
 	$has_prefs_idx = 0;

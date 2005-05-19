@@ -379,7 +379,7 @@
 		$thetable = ($type=='s') ? 'section' : 'category';
 		$out ='<select name="'.$type.'" onchange="submit(this.form)">'.n.
 		t.'<option value=""></option>'.n;
-		$q[] = "select name from ".PFX."txp_".$thetable." where name != 'default'";
+		$q[] = "select name,title from ".PFX."txp_".$thetable." where name != 'default'";
 		$q[] = ($thetable=='category') ? "and type='article'" : '';
 		$q[] = "order by name";
 
@@ -390,7 +390,7 @@
 				if ($name=='root') continue;
 				$sel = ($gc==$name or $gs==$name) ? 'selected="selected"' : '';
 				$out .= t.t.'<option value="'.urlencode($name).'"'.$sel.'>'.
-				htmlspecialchars($name).'</option>'.n;
+				$title.'</option>'.n;
 				unset($selected);
 			}
 			$out.= '</select>';
@@ -416,29 +416,29 @@
 			$qs = safe_row("lft,rgt",'txp_category',"name='$parent'");
 			if($qs) {
 				extract($qs);
-				$rs = safe_column(
-					'name',
-					'txp_category',
-					"name != 'default' and type='$type' and (lft between $lft and $rgt) order by lft asc"			
+				$rs = safe_rows_start(
+				  "name,title", 
+				  "txp_category","name != 'default' and type='$type' and (lft between $lft and $rgt) order by lft asc"
 				);
 			}
 		} else {
-			$rs = safe_column(
-				"name", 
-				"txp_category",
-				"name != 'default' and type='$type' order by name"
+			$rs = safe_rows_start(
+			  "name,title", 
+			  "txp_category",
+			  "name != 'default' and type='$type' order by name"
 			);
 		}
 
 		if ($rs) {
 			if ($label) $out[] = $label;
-			foreach ($rs as $a) {
-				if ($a=='root') continue;
-				if($a) $out[] = tag(str_replace("& ","&#38; ", $a),'a',' href="'.hu.'?c='.urlencode($a).'"');
+			while ($a = nextRow($rs)) {
+				extract($a);
+				if ($name=='root') continue;
+				if($name) $out[] = tag(str_replace("& ","&#38; ", $title),'a',' href="'.hu.'?c='.urlencode($name).'"');
 			}
 			if (is_array($out)) {
 				return doWrap($out, $wraptag, $break);
-			}
+			}			
 		}
 		return '';
 	}
@@ -452,17 +452,16 @@
 			'wraptag' => ''
 		),$atts));
 		
-		$rs = safe_column("name","txp_section","name != 'default' order by name");
+		$rs = safe_rows_start("name,title","txp_section","name != 'default' order by name");
 		
 		if ($rs) {
 			if ($label) $out[] = $label;
-			foreach ($rs as $a) {
-				if($a) {
-					if($GLOBALS['permlink_mode'] == 'messy') {
-						$out[] = tag(htmlspecialchars($a),'a',' href="'.hu.'?s='.urlencode($a).'"');
-					} else {
-						$out[] = tag(htmlspecialchars($a),'a',' href="'.hu.urlencode($a).'/"');
-					}
+			while ($a = nextRow($rs)) {
+				extract($a);
+				if($GLOBALS['permlink_mode'] == 'messy') {
+					$out[] = tag($title,'a',' href="'.hu.'?s='.urlencode($name).'"');
+				} else {
+					$out[] = tag($title,'a',' href="'.hu.urlencode($name).'/"');
 				}
 			}
 			if (is_array($out)) {

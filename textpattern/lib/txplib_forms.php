@@ -54,7 +54,7 @@
 			$selected = ($name == $value) ? ' selected="selected"' : '';
 			$name = htmlspecialchars($name);
 			$sp = ($level > 0) ? str_repeat(sp.sp,$level-1) : '';
-			$out[] = t.'<option value="'.$name.'"'.$selected.'>'.$sp.$name.'</option>'.n;
+			$out[] = t.'<option value="'.$name.'"'.$selected.'>'.$sp.$title.'</option>'.n;
 		}
 		$out[] = '</select>'.n;
 		return join('',$out);

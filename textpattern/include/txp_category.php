@@ -190,7 +190,7 @@ if ($event == 'category') {
 
 				$cbox = checkbox('selected[]',$name,0);
 				$editlink = eLink('category',$evname.'_edit','name',
-					$name,htmlspecialchars($name));
+					$name,$title);
 
 				$items[] = graf( $cbox . sp . str_repeat(sp,$level-1) . $editlink . $count);
 
