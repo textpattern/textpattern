@@ -59,10 +59,10 @@
 					$Body = str_replace('href="/','href="'.hu,$Body);
 					$Body = preg_replace("/href=\\\"#(.*)\"/","href=\"".permlinkurl($a)."#\\1\"",$Body);
 					$Body = safe_hed($Body);
-					$Body = preg_replace("/&((?U).*)=/","&amp;\\1=",$Body);
 
 					$Body = preg_replace(array('/</','/>/',"/'/",'/"/'), array('&lt;','&gt;','&#039;','&quot;'),$Body);
-
+						// encode bare ampersands
+					$Body = preg_replace("/&(?![#0-9]+;|\w+;)/i",'&amp;', $Body);
 
 					$uTitle = ($url_title) ? $url_title : stripSpace($Title);
 					$uTitle = htmlspecialchars($uTitle,ENT_NOQUOTES);

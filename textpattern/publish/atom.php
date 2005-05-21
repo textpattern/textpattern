@@ -117,11 +117,10 @@
 					$Body = str_replace('href="/','href="'.hu,$Body);
 					$Body = preg_replace("/href=\\\"#(.*)\"/","href=\"".permlinkurl($a)."#\\1\"",$Body);
 					$Body = safe_hed($Body);
-					$Body = preg_replace("/&((?U).*)=/","&amp;\\1=",$Body);
 						// encode and entify
 					$Body = preg_replace(array('/</','/>/',"/'/",'/"/'), array('&#60;','&#62;','&#039;','&#34;'), $Body);
-					$Body = preg_replace("/&(?![#0-9]+;)/i",'&amp;', $Body);
-
+						// encode bare ampersands
+					$Body = preg_replace("/&(?![#0-9]+;|\w+;)/i",'&amp;', $Body);
 
 
 					$e['content'] = tag(n.$Body.n,'content',
