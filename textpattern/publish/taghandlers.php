@@ -474,7 +474,7 @@
 // -------------------------------------------------------------
 	function search_input($atts) // input form for search queries
 	{
-		global $q;
+		global $q, $permlink_mode;
 		extract(lAtts(array(
 			'form'    => 'search_input',
 			'wraptag' => 'p',
