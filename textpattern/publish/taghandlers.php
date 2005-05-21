@@ -859,7 +859,7 @@
 			'text'     => ($t == 1 ? gTxt('article_found') : gTxt('articles_found')),
 		),$atts));
 		
-		return $t . ($text ? $text . ' ' : '');
+		return $t . ($text ? ' ' . $text : '');
 	}
 
 // -------------------------------------------------------------
