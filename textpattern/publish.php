@@ -48,7 +48,7 @@
 
 		// use the current URL path if $siteurl is unknown
 	if (empty($siteurl))
-		$siteurl = $_SERVER['HTTP_HOST'] . rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
+		$prefs['siteurl'] = $siteurl = $_SERVER['HTTP_HOST'] . rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
 	
 		// v1.0: this should be the definitive http address of the site	
 	define("hu",'http://'.$siteurl.'/');
