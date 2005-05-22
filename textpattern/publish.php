@@ -329,7 +329,7 @@
 
 		$out['path_to_site']   = $path_to_site;
 		$out['permlink_mode']  = $permlink_mode;
-		$out['sitename']       = $sitename;
+		$out['sitename']       = htmlspecialchars($sitename);
 
 		return $out; 
 
