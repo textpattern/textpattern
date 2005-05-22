@@ -193,6 +193,7 @@
 			'nl-nl' => array('nl_NL.UTF-8', 'nl_NL', 'dut', 'nla', 'nl', 'nld', 'dutch', 'nl_NL.ISO_8859-1'),
 			'pt-pt' => array('pt_PT.UTF-8', 'pt_PT', 'por', 'portuguese', 'pt_PT.ISO_8859-1'),
 			'ru-ru' => array('ru_RU.UTF-8', 'ru_RU', 'ru', 'rus', 'russian', 'ru_RU.ISO8859-5'),
+			'sk-sk' => array('sk_SK.UTF-8', 'sk_SK', 'sk', 'slo', 'slk', 'sky', 'slovak', 'sk_SK.ISO_8859-1'),
 			'sv-se' => array('sv_SE.UTF-8', 'sv_SE', 'sv', 'swe', 'sve', 'swedish', 'sv_SE.ISO_8859-1'),
 			'th-th' => array('th_TH.UTF-8', 'th_TH', 'th', 'tha', 'thai', 'th_TH.ISO_8859-11')
 		);
@@ -289,6 +290,7 @@
 			'da-dk' => gTxt('danish'),
 			'nl-nl' => gTxt('dutch'),
 			'pt-pt' => gTxt('portuguese'),
+			'sk-sk' => gTxt('slovak'),
 //			'fi-fi' => gTxt('finnish'),
 //			'po-po' => gTxt('polish'),
 //			'tl-tl' => gTxt('tagalog'),
