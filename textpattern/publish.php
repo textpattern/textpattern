@@ -516,17 +516,16 @@
 			
 			$articles = array();
 			while($a = nextRow($rs)) {
-				extract($a);
 				populateArticleData($a);
 				// define the article form
-				$article = (!$q and !$iscustom and $override_form) 
-				?	fetch('Form','txp_form','name',$override_form)
+				$article = (!$q and !$iscustom and $a['override_form']) 
+				?	fetch('Form','txp_form','name',$a['override_form'])
 				:	$form;
 
 				$articles[] = parse($article);
 				
 				// sending these to paging_link(); Required?
-				$GLOBALS['uPosted'] = $uPosted;
+				$GLOBALS['uPosted'] = $a['uPosted'];
 				$GLOBALS['limit'] = $limit;
 
 				unset($GLOBALS['thisarticle']);
