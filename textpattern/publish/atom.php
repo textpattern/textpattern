@@ -85,6 +85,9 @@
 						$dc = getCount('txp_discuss', "parentid=$ID and visible=1");
 						$count = ($dc > 0) ? ' ['.$dc.']' : '';
 					} else $count = '';
+
+					$thisauthor = safe_field("RealName","txp_users","name='$AuthorID'");
+					$e['thisauthor'] = tag(n.t.t.t.tag(htmlspecialchars($thisauthor),'name').n.t.t,'author');
 		
 					$e['issued'] = tag(gmdate("Y-m-d\TH:i:s\Z",$uPosted),'issued');
 					$e['modified'] = tag(gmdate("Y-m-d\TH:i:s\Z",$uLastMod),'modified');
