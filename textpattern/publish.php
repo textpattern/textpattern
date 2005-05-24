@@ -406,6 +406,7 @@
 			'status'    => '4',
 			'pgonly'    => 0,
 			'searchall' => 1,
+			'allowoverride' => (!$q and !$iscustom),
 		),$atts);		
 		//for the txp:article tag, some attributes are taken from globals;
 		//override them before extract
@@ -518,7 +519,7 @@
 			while($a = nextRow($rs)) {
 				populateArticleData($a);
 				// define the article form
-				$article = (!$q and !$iscustom and $a['override_form']) 
+				$article = ($allowoverride and $a['override_form']) 
 				?	fetch('Form','txp_form','name',$a['override_form'])
 				:	$form;
 
