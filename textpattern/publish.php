@@ -407,6 +407,7 @@
 			'pgonly'    => 0,
 			'searchall' => 1,
 			'allowoverride' => (!$q and !$iscustom),
+			'offset'    => 0,
 		),$atts);		
 		//for the txp:article tag, some attributes are taken from globals;
 		//override them before extract
@@ -483,10 +484,10 @@
 		//do not paginate if we are on a custom list
 		if (!$iscustom)
 		{
-			$total = safe_count('textpattern',$where);
+			$total = safe_count('textpattern',$where) - $offset;
 			$numPages = ceil($total/$limit);  
 			$pg = (!$pg) ? 1 : $pg;
-			$offset = ($pg - 1) * $limit.', ';	
+			$pgoffset = $offset + (($pg - 1) * $limit).', ';	
 			// send paging info to txp:newer and txp:older
 			$pageout['pg']       = $pg;
 			$pageout['numPages'] = $numPages;
@@ -498,11 +499,11 @@
 			if ($pgonly)
 				return;
 		}else{
-			$offset = '';
+			$pgoffset = $offset . ', ';
 		}
 
 		$rs = safe_rows_start("*, unix_timestamp(Posted) as uPosted".$match, 'textpattern', 
-		$where. ' order by ' . $sortby . ' ' . $sortdir . ' limit ' . $offset . $limit);
+		$where. ' order by ' . $sortby . ' ' . $sortdir . ' limit ' . $pgoffset . $limit);
 		// alternative form override for search or list
 		if ($q and !$iscustom)
 			$form = gAtt($atts, 'searchform', 'search_results');
