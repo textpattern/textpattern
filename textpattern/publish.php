@@ -409,6 +409,10 @@
 			'allowoverride' => (!$q and !$iscustom),
 			'offset'    => 0,
 		),$atts);		
+		
+		// if an article ID is specified, treat it as a custom list
+		$iscustom = !empty($theAtts['id']);
+		
 		//for the txp:article tag, some attributes are taken from globals;
 		//override them before extract
 		if (!$iscustom)
@@ -421,8 +425,14 @@
 			$theAtts['excerpted'] = '';			
 		}
 		extract($theAtts);
+		
+		// treat sticky articles differently wrt search filtering, etc
+		if (!is_numeric($status))
+			$status = getStatusNum($status);
+		$issticky = ($status == 5);
+			
 		//give control to search, if necesary
-		if($q && !$iscustom) {
+		if($q && !$iscustom && !$issticky) {
 			include_once txpath.'/publish/search.php';
 			$s_filter = ($searchall ? filterSearch() : '');
 			$q = doSlash($q);
@@ -481,7 +491,7 @@
 			$search . $id . $category . $section . $excerpted . $month . $author . $keywords . $custom . $frontpage;
 
 		//do not paginate if we are on a custom list
-		if (!$iscustom)
+		if (!$iscustom and !$issticky)
 		{
 			$total = safe_count('textpattern',$where) - $offset;
 			$numPages = ceil($total/$limit);  
@@ -504,7 +514,7 @@
 		$rs = safe_rows_start("*, unix_timestamp(Posted) as uPosted".$match, 'textpattern', 
 		$where. ' order by ' . $sortby . ' ' . $sortdir . ' limit ' . $pgoffset . $limit);
 		// alternative form override for search or list
-		if ($q and !$iscustom)
+		if ($q and !$iscustom and !$issticky)
 			$form = gAtt($atts, 'searchform', 'search_results');
 		else
 			$form = gAtt($atts, 'listform', $form);         
