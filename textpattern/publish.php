@@ -396,7 +396,7 @@
 			'section'   => '',
 			'excerpted' => '',
 			'author'    => '',
-			'sortby'    => 'Posted',
+			'sortby'    => ($q ? 'score' : 'Posted'),
 			'sortdir'   => 'desc',
 			'month'     => '',
 			'keywords'  => '',
@@ -428,7 +428,6 @@
 			$q = doSlash($q);
 			$match = ", match (Title,Body) against ('$q') as score";
 			$search = " and (Title rlike '$q' or Body rlike '$q') $s_filter";
-			$sortby = 'score';
 
 			// searchall=0 can be used to show search results for the current section only
 			if ($searchall) $section = '';
