@@ -1320,6 +1320,8 @@
 
 	function file_download_list($atts)
 	{
+		global $thisfile;
+		
 		extract(lAtts(array(
 			'form'     => 'files',
 			'sort'     => 'filename',
@@ -1342,12 +1344,10 @@
 		if ($rs) {
 			if ($label) $outlist[] = $label;
 		
-			while ($a = nextRow($rs)) {
-				
-				$finfo = fileDownloadFetchInfo("id='$a[id]'");
+			while ($a = nextRow($rs)) {				
+				$thisfile = fileDownloadFetchInfo("id='$a[id]'");
 				$outlist[] = file_download(
-					array('id'=>$a['id'],'filename'=>$a['filename'],'form'=>$form),
-					array('finfo'=>$finfo,'form'=>fetch('Form','txp_form','name',$form))
+					array('id'=>$a['id'],'filename'=>$a['filename'],'form'=>$form)
 				);
 			}
 			
@@ -1363,84 +1363,48 @@
 	}
 
 //--------------------------------------------------------------------------
-	function file_download($atts, $called = array())
+	function file_download($atts)
 	{
-		if (empty($called)){
-			extract(lAtts(array(
-				'form'=>'files',
-				'id'=>'',
-				'filename'=>'',
-			),$atts));
-			
-			$thing = fetch('Form','txp_form','name',$form);
-		}else{
-			//do not repeat db queries if we've got the data
-			extract($called['finfo']);
-			$thing = $called['form'];
-		}
-
+		global $thisfile;
+		
+		extract(lAtts(array(
+			'form'=>'files',
+			'id'=>'',
+			'filename'=>'',
+		),$atts));
+		
 		$where = (!empty($id) && $id != 0)? "id='$id'" : ((!empty($filename))? "filename='$filename'" : '');
-		if (!empty($where)){			
-			$out = fileDownloadTags($where, $thing, $called);
-			return parse($out);		
-		}
-		return '';
+		
+		if (empty($thisfile)) {
+			$thisfile = fileDownloadFetchInfo($where);
+		}				
+		
+		$thing = fetch('Form','txp_form','name',$form);
+
+		return parse($thing);		
 	}
 	
 //--------------------------------------------------------------------------
 	function file_download_link($atts,$thing)
 	{
-		global $permlink_mode;
+		global $permlink_mode, $thisfile;
 		extract(lAtts(array(
 			'id'=>'',
 			'filename'=>'',
 		),$atts));
 		
-		$out = '';
-		
 		$where = (!empty($id) && $id != 0)? "id='$id'" : ((!empty($filename))? "filename='$filename'" : '');
 		
-		$thing = ($permlink_mode == 'messy') ?
-					'<a href="'.hu.'index.php?s=file_download&id=<txp:file_download_id />">'.$thing.'</a>':
-					'<a href="'.hu.gTxt('file_download').'/<txp:file_download_id />">'.$thing.'</a>';		
+		if (empty($thisfile)) {
+			$thisfile = fileDownloadFetchInfo($where);
+		}
 		
-		
-		$out = fileDownloadTags($where, $thing);		
+		$out = ($permlink_mode == 'messy') ?
+					'<a href="'.hu.'index.php?s=file_download&id='.$thisfile['id'].'">'.parse($thing).'</a>':
+					'<a href="'.hu.gTxt('file_download').'/'.$thisfile['id'].'">'.parse($thing).'</a>';								
 		return $out;
 	}	
 //--------------------------------------------------------------------------
-	
-	function fileDownloadTags($where, $thing, $called = array())
-	{
-		$finfo = (!empty($called))? $called['finfo'] : fileDownloadFetchInfo($where);
-		
-		$out = str_replace("<txp:file_download_id />", $finfo['id'], $thing);
-		$out = str_replace("<txp:file_download_name />", $finfo['filename'], $out);
-		$out = str_replace("<txp:file_download_category />", $finfo['category'], $out);
-		$out = str_replace("<txp:file_download_downloads />", $finfo['downloads'], $out);
-		$out = str_replace("<txp:file_download_description />", $finfo['description'], $out);
-		$out = wrapedTag('file_download_size',$out, array('fsize'=>$finfo['size']));
-		$out = wrapedTag('file_download_created',$out, array('ftime'=>$finfo['created']));
-		$out = wrapedTag('file_download_modified',$out, array('ftime'=>$finfo['modified']));
-		
-		//If we're calling this tag from <txp:file_download /> do not call file_download_link
-		//This prevent another call to this function foreach file if we're listing
-		global $permlink_mode;
-		
-		$link = ($permlink_mode == 'messy') ?
-					'<a href="'.hu.'index.php?s=file_download&id='.$finfo['id'].'">':
-					'<a href="'.hu.gTxt('file_download').'/'.$finfo['id'].'">';
-						
-		preg_match('/<txp:file_download_link>(.*)<\/txp:file_download_link>/s',$out, $matched);
-		if ($matched)
-		{
-			$out = str_replace($matched[0], $link.$matched[1].'</a>',$out);
-		}		
-		
-		return $out;		
-	}
-//--------------------------------------------------------------------------
-	//This function code could be inside of fileDownloadTags
 	function fileDownloadFetchInfo($where)
 	{
 		global $file_base_path;		
@@ -1486,36 +1450,25 @@
 		}
 
 		return $result;
-	}
-	
+	}	
 //--------------------------------------------------------------------------
-	//Useful to be able to add attributes to tags which always are wraped
-	//inside another one, without any need to populate globals.
-	//Use only with single tags.
-	function wrapedTag($tagname, $thing, $add_atts = array())
+	function file_download_size($atts)
 	{
-		$rg = '/<txp:'.$tagname.'\b(.*)\/>/';
-		if(preg_match($rg, $thing, $matches)){
-			$tag_atts = splat(trim($matches[1]));
-			$atts = array_merge($tag_atts, $add_atts);
-			$func_res = call_user_func($tagname, $atts);
-			$thing = preg_replace($rg,$func_res,$thing);			
-		}
-		return $thing;
-	}
-//--------------------------------------------------------------------------
-	// Not properly a tag, but a wraped one
-	function file_download_size($params)
-	{
-		extract($params);
-		if (!isset($decimals) || $decimals < 0) $decimals = 2;
+		global $thisfile;		
+		
+		extract(lAtts(array(
+			'decimals' => 2,
+			'format' => ''			
+		), $atts));
+		
+		if (empty($decimals) || $decimals < 0) $decimals = 2;
 		if (is_numeric($decimals)) {
 			$decimals = intval($decimals);			
 		} else {
 			$decimals = 2;
 		}
-		$t = $fsize;
-		if (!empty($fsize) && !empty($format)) {
+		$t = $thisfile['size'];
+		if (!empty($thisfile['size']) && !empty($format)) {
 			switch(strtoupper(trim($format))) {
 				default:
 					$divs = 0;
@@ -1548,18 +1501,22 @@
 			return number_format($t,$decimals) . $format;
 		}
 		
-		return (!empty($fsize))? $fsize : '';
+		return (!empty($thisfile['size']))? $thisfile['size'] : '';
 	}
 
 //--------------------------------------------------------------------------
-	function file_download_created($params)
+	function file_download_created($atts)
 	{
-		return fileDownloadFormatTime($params);
+		global $thisfile;		
+		extract(lAtts(array('format'=>''),$atts));		
+		return fileDownloadFormatTime(array('ftime'=>$thisfile['created'], 'format' => $format));
 	}
 //--------------------------------------------------------------------------
-	function file_download_modified($params)
+	function file_download_modified($atts)
 	{
-		return fileDownloadFormatTime($params);
+		global $thisfile;		
+		extract(lAtts(array('format'=>''),$atts));		
+		return fileDownloadFormatTime(array('ftime'=>$thisfile['modified'], 'format' => $format));
 	}
 //-------------------------------------------------------------------------
 	//All the time related file_download tags in one
@@ -1569,10 +1526,35 @@
 		global $prefs;
 		extract($params);
 		if (!empty($ftime)) {
-			return  (isset($format))? safe_strftime($format,$ftime) : safe_strftime($prefs['archive_dateformat'],$ftime);
+			return  (!empty($format))? safe_strftime($format,$ftime) : safe_strftime($prefs['archive_dateformat'],$ftime);
 		}
 		return '';
 	}
 
+	function file_download_id($atts)
+	{
+		global $thisfile;		
+		return $thisfile['id'];
+	}
+	function file_download_name($atts)
+	{
+		global $thisfile;		
+		return $thisfile['filename'];
+	} 
+	function file_download_category($atts)
+	{
+		global $thisfile;		
+		return $thisfile['category'];
+	}
+	function file_download_downloads($atts)
+	{
+		global $thisfile;		
+		return $thisfile['downloads'];
+	}
+	function file_download_description($atts)
+	{
+		global $thisfile;		
+		return $thisfile['description'];
+	}	
 	
 ?>
