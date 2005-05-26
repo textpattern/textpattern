@@ -411,7 +411,7 @@
 		),$atts);		
 		
 		// if an article ID is specified, treat it as a custom list
-		$iscustom = (!empty($theAtts['id'])) ? false : true;
+		$iscustom = (!empty($theAtts['id'])) ? true : false;
 		
 		//for the txp:article tag, some attributes are taken from globals;
 		//override them before extract
