@@ -108,7 +108,9 @@ $DB = new DB;
 		$q = "select $thing from ".PFX."$table where $where";
 		$r = safe_query($q,$debug);
 		if (@mysql_num_rows($r) > 0) {
-			return mysql_result($r,0);
+			$f = mysql_result($r,0);
+			mysql_free_result($r);
+			return $f;
 		}
 		return false;
 	}
@@ -171,7 +173,9 @@ $DB = new DB;
 	{
 		$q = "select $col from ".PFX."$table where `$key` = '$val' limit 1";
 		if ($r = safe_query($q,$debug)) {
-			return (mysql_num_rows($r) > 0) ? mysql_result($r,0) : '';
+			$thing = (mysql_num_rows($r) > 0) ? mysql_result($r,0) : '';
+			mysql_free_result($r);
+			return $thing;
 		}
 		return false;
 	}
@@ -180,7 +184,9 @@ $DB = new DB;
 	function getRow($query,$debug='') 
 	{
 		if ($r = safe_query($query,$debug)) {
-			return (mysql_num_rows($r) > 0) ? mysql_fetch_assoc($r) : false;
+			$row = (mysql_num_rows($r) > 0) ? mysql_fetch_assoc($r) : false;
+			mysql_free_result($r);
+			return $row;
 		}
 		return false;
 	}
@@ -191,6 +197,7 @@ $DB = new DB;
 		if ($r = safe_query($query,$debug)) {
 			if (mysql_num_rows($r) > 0) {
 				while ($a = mysql_fetch_assoc($r)) $out[] = $a; 
+				mysql_free_result($r);
 				return $out;
 			}
 		}
@@ -206,14 +213,19 @@ $DB = new DB;
 //-------------------------------------------------------------
 	function nextRow($r)
 	{
-		return mysql_fetch_assoc($r);
+		$row = mysql_fetch_assoc($r);
+		if ($row === false)
+			mysql_free_result($r);
+		return $row;
 	}
 
 //-------------------------------------------------------------
 	function getThing($query,$debug='') 
 	{
 		if ($r = safe_query($query,$debug)) {
-			return (mysql_num_rows($r) != 0) ? mysql_result($r,0) : '';
+			$thing = (mysql_num_rows($r) != 0) ? mysql_result($r,0) : '';
+			mysql_free_result($r);
+			return $thing;
 		}
 		return false;
 	}
@@ -225,6 +237,7 @@ $DB = new DB;
 		$rs = getRows($query,$debug);
 		if ($rs) {
 			foreach($rs as $a) $out[] = array_shift($a);
+			mysql_free_result($rs);
 			return $out;
 		}
 		return array();
