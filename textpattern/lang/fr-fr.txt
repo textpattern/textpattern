@@ -337,7 +337,7 @@ sort_by => Trier par
 sort_direction => Ordre du tri
 sort_value => Valeur de tri
 spanish => Espagnol
-staff_writer => Rédacteur avancé
+staff_writer => Rédacteur autonome
 status => Statut
 stay_logged_in => Rester connecté avec ce navigateur
 sticky => Persistant
@@ -559,7 +559,7 @@ fr-fr => Français
 es-es => Espagnol
 # admin emails
 greeting => Cher
-you_have_been_registered => Vous avez été enregistré comme contributeur du site
+you_have_been_registered => Vous avez été enregistré comme auteur-contributeur du site
 your_login_info => Vos informations de connexion
 your_login_is => Votre nom de connexion (login) est 
 your_password_is => Votre mot de passe est 
@@ -640,4 +640,4 @@ tag_file_download_downloads => Nombre de téléchargements
 tag_file_download_list => Liste de fichiers
 public => Public
 private => Privé
-# Traduction depuis en-us.txt de la RC3, mise à jour confirmée jusqu'à la révision 344, par Jérémie Bouillon le 08-05-2005.
+# Traduction depuis en-us.txt de la RC3, mise à jour confirmée jusqu'à la révision 395, par Jérémie Bouillon le 01-06-2005.
