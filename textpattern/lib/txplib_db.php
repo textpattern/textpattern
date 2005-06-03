@@ -237,7 +237,6 @@ $DB = new DB;
 		$rs = getRows($query,$debug);
 		if ($rs) {
 			foreach($rs as $a) $out[] = array_shift($a);
-			mysql_free_result($rs);
 			return $out;
 		}
 		return array();
