@@ -18,6 +18,12 @@
 	}
 				
 //-------------------------------------------------------------
+	function chunk($str, $len, $break='&#133;<br />') 
+	{
+		return join($break, str_split($str, $len));
+	}
+
+//-------------------------------------------------------------
 	function log_list() 
 	{
 		pagetop(gTxt('visitor_logs'));
@@ -61,7 +67,7 @@
 				extract($a);
 				if ($refer) {
 					$referprint = preg_replace("/^www\./","",
-						substr(htmlspecialchars($refer),0,50));
+						chunk(htmlspecialchars($refer),50));
 					$referprint = '<a href="http://'.htmlspecialchars($refer).'">'.$referprint.'</a>';
 				} else {
 					$referprint = '&#160;';
@@ -69,14 +75,16 @@
 				$pageprint = preg_replace('/\/$/','', htmlspecialchars(substr($page,1)));
 				$pageprint = ($pageprint=='') 
 				?	'' 
-				:	'<a href="'.htmlspecialchars($page).'" target="_blank">'.substr($pageprint,0,50).'</a>';
+				:	'<a href="'.htmlspecialchars($page).'" target="_blank">'.chunk($pageprint,50).'</a>';
 				if ($method == 'POST')
 					$pageprint = '<b>'.$pageprint.'</b>';
 				$fstamp = date("n/j g:i a",($stamp + tz_offset()));
+
+				$hostprint = chunk($host, 40);
 				
 				echo tr(
 					td($fstamp).
-					td($host).
+					td($hostprint).
 					td($pageprint).
 					td($referprint));
 				unset($refer,$referprint,$page,$pageprint);
