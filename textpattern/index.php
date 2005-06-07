@@ -51,7 +51,7 @@
 		define("LANG",$language);
 		//i18n: define("LANG","en-gb");
 		define('txp_version', $thisversion);
-		define("hu",'http://'.$siteurl);
+		define("hu",'http://'.$siteurl.'/');
 	
 		if (!empty($locale)) setlocale(LC_ALL, $locale);
 		$textarray = load_lang(LANG);

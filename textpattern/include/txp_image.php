@@ -73,7 +73,7 @@
 				extract($a);
 				
 				$thumbnail = ($thumbnail) 
-				?	'<img src="'.hu.'/'.$img_dir.'/'.$id.'t'.$ext.'" />' 
+				?	'<img src="'.hu.$img_dir.'/'.$id.'t'.$ext.'" />' 
 				:	gTxt('no');
 				
 				$elink = eLink('image','image_edit','id',$id,$name);
@@ -126,7 +126,7 @@
 			echo startTable('list'),
 			tr(
 				td(
-					'<img src="'.hu.'/'.$img_dir.
+					'<img src="'.hu.$img_dir.
 						'/'.$id.$ext.'" height="'.$h.'" width="'.$w.'" alt="" />'.
 						br.upload_form(gTxt('replace_image'),'replace_image_form',
 							'image_replace',$id)
@@ -137,7 +137,7 @@
 					join('',
 						array(
 							($thumbnail)
-							?	'<img src="'.hu.'/'.$img_dir.
+							?	'<img src="'.hu.$img_dir.
 								'/'.$id.'t'.$ext.'" alt="" />'.br
 							:	'',
 							upload_form(gTxt('upload_thumbnail'),'upload_thumbnail',

@@ -738,8 +738,8 @@
 		$invars = gpsa(array('id','description','filename','type'));
 		extract($invars);
 		$url = ($permlink_mode == 'messy')?
-			hu.'/index.php?s=file_download&amp;id='.$id:
-			hu.'/file_download/'.$id;
+			hu.'index.php?s=file_download&amp;id='.$id:
+			hu.'file_download/'.$id;
 		switch ($type) {
 			case 'textile': 
 				$description = ($description) ? ' ('.$description.')' : '';
