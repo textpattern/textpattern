@@ -79,7 +79,7 @@
 
 	function doDiagnostics()
 	{
-		global $files, $txpcfg;
+		global $files, $txpcfg, $step;
 		extract(get_prefs());
 		
 	$urlparts = parse_url(hu);
@@ -181,7 +181,7 @@
 		if (empty($v)) unset($fail[$k]);
 
 	echo 
-	pagetop(gTxt('tab_diagnostics'),$message),
+	pagetop(gTxt('tab_diagnostics'),''),
 	startTable('list'),
 	tr(td(hed(gTxt('preflight_check'),1)));
 
