@@ -641,7 +641,6 @@
 	function populateArticleData($rs)
 	{
 		extract($rs);
-		$com_count = safe_count('txp_discuss',"parentid=$ID and visible=1");
 
 		$author = (fetch('RealName','txp_users','name',$AuthorID));
 		$author = (!$author) ? $AuthorID : $author; 
@@ -650,7 +649,6 @@
 		$out['posted']          = $uPosted;
 		$out['if_comments']     = ($Annotate or $com_count) ? true : false;
 		$out['comments_invite'] = $AnnotateInvite;
-		$out['comments_count']  = $com_count;					  
 		$out['author']          = $author;
 		$out['authorid']        = $AuthorID;
 		$out['excerpt']         = $Excerpt_html;

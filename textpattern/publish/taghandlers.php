@@ -684,7 +684,9 @@
 	function comments_count($atts) 
 	{
 		global $thisarticle;
-		return ($thisarticle['comments_count'] > 0) ? $thisarticle['comments_count'] : '';
+
+		$com_count = safe_count('txp_discuss',"parentid='".doSlash(@$thisarticle['thisid'])."' and visible=1");
+		return ($com_count > 0) ? $com_count : '';
 	}
 
 // -------------------------------------------------------------
@@ -698,6 +700,7 @@
 
 		if ($if_comments  && $is_article_list) {
 
+			$comments_count = safe_count('txp_discuss',"parentid='".doSlash($thisid)."' and visible=1");
 			$ccount = ($comments_count) ?  ' ['.$comments_count.']' : '';
 	
 			if (!$comments_mode) {
