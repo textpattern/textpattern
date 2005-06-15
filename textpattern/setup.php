@@ -25,9 +25,11 @@ print <<<eod
 	<div align="center">
 eod;
 
+
 	$step = isPost('step');
 	switch ($step) {	
-		case "": getDbInfo(); break;
+		case "": chooseLang(); break;
+		case "getDbInfo": getDbInfo(); break;
 		case "getTxpLogin": getTxpLogin(); break;
 		case "printConfig": printConfig(); break;
 		case "createTxp": createTxp();
@@ -38,49 +40,81 @@ eod;
 </html>
 <?php
 
+// dmp($_POST);
+
+// -------------------------------------------------------------
+	function chooseLang() 
+	{
+	  echo '<form action="setup.php" method="post">',
+	  	'<table id="setup" cellpadding="0" cellspacing="0" border="0">',
+		tr(
+			tda(
+				hed('Welcome to Textpattern',3).
+				graf('Please choose a language:').
+				langs().
+				graf(fInput('submit','Submit','Submit','publish')).
+				sInput('getDbInfo')
+			,' width="400" height="50" colspan="4" align="left"')
+		),
+		'</table></form>';
+	}
+
+
 // -------------------------------------------------------------
 	function getDbInfo()
 	{
+		$lang = isPost('lang');
+
+		
+
+		$GLOBALS['textarray'] = setup_load_lang($lang);
+	
+		@include './config.php';
+		
+		if (!empty($txpcfg['db'])) {
+			exit(graf(gTxt('already_installed')));
+		}
+		
+
 		$temp_txpath = dirname(__file__);
 	  echo '<form action="setup.php" method="post">',
 	  	'<table id="setup" cellpadding="0" cellspacing="0" border="0">',
 		tr(
 			tda(
-			  hed('Welcome to Textpattern',3). 
-			  graf('Inevitably, we need a few details.',' style="margin-bottom:3em"').
+			  hed(gTxt('welcome_to_textpattern'),3). 
+			  graf(gTxt('need_details'),' style="margin-bottom:3em"').
 			  hed('MySQL',3).
-			  graf('Note that the database you specify must exist; 
-			  		Textpattern won&#8217;t create it for you.')
-			,' width="400" height="50" colspan="4", align="left"')
+			  graf(gTxt('db_must_exist'))
+			,' width="400" height="50" colspan="4" align="left"')
 		),
 		tr(
-			fLabelCell('MySQL login').fInputCell('duser','',1).
-			fLabelCell('MySQL password').fInputCell('dpass','',2)
+			fLabelCell(gTxt('mysql_login')).fInputCell('duser','',1).
+			fLabelCell(gTxt('mysql_password')).fInputCell('dpass','',2)
 		),
 		tr(
-			fLabelCell('MySQL server').fInputCell('dhost','',3).
-			fLabelCell('MySQL database').fInputCell('ddb','',4)
+			fLabelCell(gTxt('mysql_server')).fInputCell('dhost','',3).
+			fLabelCell(gTxt('mysql_database')).fInputCell('ddb','',4)
 		),
 		tr(
-			fLabelCell('Table prefix').fInputCell('dprefix','',5).
-			tdcs(small('(Use ONLY for multiple installations in one database)'),2)
+			fLabelCell(gTxt('table_prefix')).fInputCell('dprefix','',5).
+			tdcs(small(gTxt('prefix_warning')),2)
 		),
 		tr(tdcs('&nbsp;',4)),
 		tr(
 			tdcs(
-				hed('Site Path',3).
-				graf('Please confirm the following path.'),4)
+				hed(gTxt('site_path'),3).
+				graf(gTxt('confirm_site_path')),4)
 		),
 		tr(
-			fLabelCell('Full path to Textpattern').
+			fLabelCell(gTxt('full_path_to_txp')).
 				tdcs(fInput('text','txpath',$temp_txpath,'edit','','',40).
 				popHelp('full_path'),3)
 		),
 		tr(tdcs('&nbsp;',4)),
 		tr(
 			tdcs(
-				hed('Site URL',3).
-				graf('Please enter the web-reachable address of your site.'),4)
+				hed(gTxt('site_url'),3).
+				graf(gTxt('please_enter_url')),4)
 		),
 		tr(
 			fLabelCell('http://').
@@ -89,9 +123,10 @@ eod;
 		);
 		echo
 			tr(
-				td().td(fInput('submit','Submit','Next','publish')).td().td()
+				td().td(fInput('submit','Submit',gTxt('next'),'publish')).td().td()
 			);
 		echo endTable(),
+		hInput('lang',$lang),
 		sInput('printConfig'),
 		'</form>';
 	}
@@ -100,23 +135,28 @@ eod;
 	function printConfig()
 	{
 		$carry = enumPostItems('ddb','duser','dpass','dhost','dprefix','txprefix','txpath',
-			'siteurl','ftphost','ftplogin','ftpass','ftpath');
+			'siteurl','ftphost','ftplogin','ftpass','ftpath','lang');
 
 		$carry['txpath']   = preg_replace("/^(.*)\/$/","$1",$carry['txpath']);
 		$carry['ftpath']   = preg_replace("/^(.*)\/$/","$1",$carry['ftpath']);
 		
 		extract($carry);
 
-		echo graf("Checking database connection...");
+		$GLOBALS['textarray'] = setup_load_lang($lang);
+
+		echo graf(gTxt("checking_database"));
 		if (!($mylink = mysql_connect($dhost,$duser,$dpass))){
-			exit(graf("Can't connect to the database with the values entered."));
+			exit(graf(gTxt('db_cant_connect')));
 		}
-		echo graf('Connected.');
+
+		echo graf(gTxt('db_connected'));
+
 		if (!$mydb = mysql_select_db($ddb)) {
-			exit(graf("Database ".strong($ddb)." doesn't exist. Please create it or choose another."));
+			exit(graf(str_replace("{dbname}",strong($ddb)),gTxt("db_doesnt_exist")));
 		}
-		echo graf("Using database ".strong($ddb)),
-		graf(strong('Before you proceed').', open <code>config.php</code> in the <code>/textpattern/</code> directory and replace its contents with the following:'),
+		echo graf(str_replace("{dbname}", strong($ddb), gTxt('using_db'))),
+				
+		graf(strong(gTxt('before_you_proceed')).', '. gTxt('create_config')),
 
 		'<textarea style="width:400px;height:200px" name="config" rows="1" cols="1">',
 		makeConfig($carry),
@@ -133,28 +173,30 @@ eod;
 		$carry = isPost('carry');
 		extract(postDecode($carry));
 
+		$GLOBALS['textarray'] = setup_load_lang($lang);
+
 		echo '<form action="setup.php" method="post">',
 	  	startTable('edit'),
 		tr(
 			tda(
-				graf('Thank you.').
-				graf('You are about to create and populate database tables.')
+				graf(gTxt('thanks')).
+				graf(gTxt('about_to_create'))
 			,' width="400" colspan="2" align="center"')
 		),
 		tr(
-			fLabelCell('Your full name').fInputCell('RealName')
+			fLabelCell(gTxt('your_full_name')).fInputCell('RealName')
 		),
 		tr(
-			fLabelCell('Choose a login name (basic characters and spaces only please)').fInputCell('name')
+			fLabelCell(gTxt('login_name')).fInputCell('name')
 		),
 		tr(
-			fLabelCell('Choose a password').fInputCell('pass')
+			fLabelCell(gTxt('choose_password')).fInputCell('pass')
 		),
 		tr(
-			fLabelCell('Your email address').fInputCell('email')
+			fLabelCell(gTxt('your_email')).fInputCell('email')
 		),
 		tr(
-			td().td(fInput('submit','Submit','Next','publish'))
+			td().td(fInput('submit','Submit',gTxt('next'),'publish'))
 		),
 		endTable(),
 		sInput('createTxp'),
@@ -169,6 +211,8 @@ eod;
 		extract(postDecode($carry));
 		extract(gpsa(array('name','pass','RealName','email')));
 
+		$GLOBALS['textarray'] = setup_load_lang($lang);
+
 		$siteurl = str_replace("http://",'',$siteurl);
 		$siteurl = rtrim($siteurl,"/");
 		
@@ -182,6 +226,7 @@ eod;
 			(1,'$name',password(lower('$pass')),'$RealName','$email',1,now(),'$nonce')");
 
 		mysql_query("update ".PFX."txp_prefs set val = '$siteurl' where `name`='siteurl'");
+		mysql_query("update ".PFX."txp_prefs set val = '$lang' where `name`='language'");
 
  		echo fbCreate();
 	}
@@ -221,16 +266,12 @@ eod;
 // -------------------------------------------------------------
 	function fbCreate() 
 	{
-		return <<<text
-		<div width="450" valign="top" style="margin-left:auto;margin-right:auto"> 
-		<p style="margin-top:3em">That went well. Tables were created and populated.</p>
-		<p>You should be able to access the <a href="index.php">main interface</a> with the login and password you chose.</p>
-		<h3>This is Important</h3>
-		<p>Delete this file, <code>/textpattern/setup.php</code>, from your server</p>
-		<p><strong>Do it now</strong>!</p>
-		<p>Thank you for your interest in Textpattern.</p>
-</div>
-text;
+		return 
+		'<div width="450" valign="top" style="margin-left:auto;margin-right:auto">'.
+		graf(gTxt('that_went_well'),' style="margin-top:3em"').
+		graf(gTxt('you_can_access')).
+		graf(gTxt('thanks_for_interest')).
+		'</div>';
 	}
 
 // -------------------------------------------------------------
@@ -250,6 +291,55 @@ text;
 	{
 		foreach(func_get_args() as $item) { $out[$item] = isPost($item); }
 		return $out; 
+	}
+
+//-------------------------------------------------------------
+	function langs() 
+	{
+		$things = array(
+			'en-gb' => 'English (GB)',
+			'en-us' => 'English (US)',
+			'fr-fr' => 'Fran&#231;ais',
+			'es-es' => 'Espa&#241;ol',
+			'sv-se' => 'Svenska',
+			'it-it' => 'Italiano',
+			'cs-cz' => '&#268;e&#353;tina',
+			'de-de' => 'Deutsch',
+			'no-no' => 'Norsk',
+			'ru-ru' => '&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081;',
+			'th-th' => '&#3652;&#3607;&#3618;',
+			'da-dk' => 'Dansk',
+			'nl-nl' => 'Nederlands'
+		);
+
+		$out = '<select name="lang">';
+
+		foreach ($things as $a=>$b) {
+			$out .= '<option value="'.$a.'">'.$b.'</option>'.n;
+		}		
+
+		$out .= '</select>';
+		return $out;
+	}
+	
+
+// -------------------------------------------------------------
+	function setup_load_lang($lang) 
+	{
+		global $txpcfg;
+		$filename = is_file('./lang/'.$lang.'.txt')
+		?	'./lang/'.$lang.'.txt'
+		:	'./lang/en-gb.txt';
+		 
+		$file = @file($filename);
+		if(is_array($file)) {
+			foreach($file as $line) {
+				if($line[0]=='#') continue; 
+				@list($name,$val) = explode(' => ',trim($line));
+				$out[$name] = $val;
+			}
+			return ($out) ? $out : '';
+		} 
 	}
 
 ?>
