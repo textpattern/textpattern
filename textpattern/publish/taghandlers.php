@@ -507,15 +507,27 @@
 // -------------------------------------------------------------
 	function link_to_next($atts, $thing) // link to next article, if it exists
 	{
-		global $next_id;		
-		return ($next_id) ? href(parse($thing),permlinkurl_id($next_id)) : '';
+		if(!is_numeric(@$GLOBALS['id'])) {
+			global $next_id, $next_title, $next_utitle, $next_posted;
+			global $prev_id, $prev_title, $prev_utitle, $prev_posted;
+			extract(getNextPrev($ID, $Posted, @$GLOBALS['s']));
+
+			return ($next_id) ? href(parse($thing),permlinkurl_id($next_id)) : '';
+		}
+
 	}
 		
 // -------------------------------------------------------------
 	function link_to_prev($atts, $thing) // link to next article, if it exists
 	{
-		global $prev_id;		
-		return ($prev_id) ? href(parse($thing),permlinkurl_id($prev_id)) : '';
+		if(!is_numeric(@$GLOBALS['id'])) {
+			global $next_id, $next_title, $next_utitle, $next_posted;
+			global $prev_id, $prev_title, $prev_utitle, $prev_posted;
+			extract(getNextPrev($ID, $Posted, @$GLOBALS['s']));
+
+			return ($prev_id) ? href(parse($thing),permlinkurl_id($prev_id)) : '';
+		}
+
 	}
 
 // -------------------------------------------------------------
