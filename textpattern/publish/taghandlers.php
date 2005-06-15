@@ -507,10 +507,11 @@
 // -------------------------------------------------------------
 	function link_to_next($atts, $thing) // link to next article, if it exists
 	{
-		if(!is_numeric(@$GLOBALS['id'])) {
+		global $thisarticle, $id;
+		if(!is_numeric(@$id)) {
 			global $next_id, $next_title, $next_utitle, $next_posted;
 			global $prev_id, $prev_title, $prev_utitle, $prev_posted;
-			extract(getNextPrev($ID, $Posted, @$GLOBALS['s']));
+			extract(getNextPrev(@$thisarticle['thisid'], $Posted, @$GLOBALS['s']));
 
 			return ($next_id) ? href(parse($thing),permlinkurl_id($next_id)) : '';
 		}
@@ -520,10 +521,11 @@
 // -------------------------------------------------------------
 	function link_to_prev($atts, $thing) // link to next article, if it exists
 	{
-		if(!is_numeric(@$GLOBALS['id'])) {
+		global $thisarticle, $id;
+		if(!is_numeric(@$id)) {
 			global $next_id, $next_title, $next_utitle, $next_posted;
 			global $prev_id, $prev_title, $prev_utitle, $prev_posted;
-			extract(getNextPrev($ID, $Posted, @$GLOBALS['s']));
+			extract(getNextPrev($thisarticle['thisid'], $Posted, @$GLOBALS['s']));
 
 			return ($prev_id) ? href(parse($thing),permlinkurl_id($prev_id)) : '';
 		}
