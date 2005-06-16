@@ -1,4 +1,4 @@
-# Textpattern: deutsche Sprachdatei (Rev. 353)
+# Textpattern: deutsche Sprachdatei (Rev. 419)
 # Übersetzung: Nils Hörrmann
 # Tipps und Tutorien: textpattern.kbbu.de
 
@@ -637,3 +637,35 @@ your_login_is => Dein Benutzername lautet
 your_new_password => Dein neues Passwort
 your_password_is => Das Passwort lautet
 yyyy-mm => mm-jjjj
+# setup page  
+welcome_to_textpattern => Willkommen bei Textpattern  
+need_details => Zuallererst brauchen wir ein paar Informationen  
+db_must_exist => Beachte, dass die gewählte Datenbank bereits existieren muss &ndash; Textpattern wird diese nicht für dich erstellen.
+mysql_login => MySQL-Benutzername  
+mysql_password => MySQL-Passwort  
+mysql_server => MySQL-Server  
+mysql_database => MySQL-Datenbank  
+table_prefix => Tabellenprefix  
+prefix_warning => (Benutze diese Option NUR, wenn Du Textpattern mehrfach in der selben Datenbank installieren möchtest.)  
+site_path => Pfad der Seite  
+site_url => URL der Seite
+confirm_site_path => Bitte überprüfe den nachfolgenden Pfad
+full_path_to_txp => Vollständiger Serverpfad zu Textpattern  
+please_enter_url => Bitte gibt die vollständige Webadresse deiner Seite an
+checking_database => Überprüfe die Datenbankverbindung...  
+db_cant_connect => Mit den eingegebenen Werten kann keine Verbindung zur Datenbank hergestellt werden.  
+db_connected => Verbunden!
+db_doesnt_exist => Die Datenbank {dbname} existiert nicht. Bitte lege sie neu an oder wähle eine andere aus.  
+using_db => Verwende die Datenbank {dbname}.
+before_you_proceed => Bevor du fortfährst
+create_config => erstelle eine Datei mit dem Namen <code>config.php</code> im Ordner <code>/textpattern/</code> und kopiere folgenden Inhalt hinein:  
+thanks => Vielen Dank :)  
+about_to_create => Du bist dabei, Datenbank-Tabellen anzulegen und mit erstem Inhalt zu füllen.
+your_full_name => Dein vollständiger Name 
+login_name => Wähle einen Benutzernamen (keine Sonderzeichen außer Leerzeichen bitte)
+choose_password => Wähle ein Passwort
+your_email => Deine Emailadresse
+that_went_well => Prima :) Die Tabellen wurden erfolgreich angelegt.
+you_can_access => Du kannst das <a href="index.php">Hauptmenü</a> nun mit dem von dir gewählten Benutzernamen und Passwort erreichen.
+thanks_for_interest => Vielen Dank für dein Interesse an Textpattern. 
+already_installed => Anscheinend ist Textpattern bereits installiert. Wenn Du eine Neuinstallation machen möchtest, lösche bitte die <code>config.php</code> in deinem <code>/textpattern/</code>-Ordner und versuche es erneut.
