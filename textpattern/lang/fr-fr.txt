@@ -640,4 +640,36 @@ tag_file_download_downloads => Nombre de téléchargements
 tag_file_download_list => Liste de fichiers
 public => Public
 private => Privé
-# Traduction depuis en-us.txt de la RC3, mise à jour confirmée jusqu'à la révision 395, par Jérémie Bouillon le 01-06-2005.
+# setup page
+welcome_to_textpattern => Bienvenue sur Textpattern
+need_details => Bien entendu, nous avons besoin de quelques détails
+db_must_exist => Veuillez noter que la base de données que vous indiquez doit exister&#160;; Textpattern ne la créera pas pour vous.
+mysql_login => Nom d'utilisateur (login) MySQL
+mysql_password => Mot de passe MySQL
+mysql_server => Serveur MySQL
+mysql_database => Base de données MySQL
+table_prefix => Préfixe des tables SQL
+prefix_warning => (À n'utiliser que si vous comptez utiliser plusieurs installations concurrentes de Textpattern dans la même base de données MySQL)
+site_path => Chemin du site
+site_url => URL du site
+confirm_site_path => Merci de confirmer le chemin suivant
+full_path_to_txp => Chemin complet d'accès aux fichiers Textpattern sur le serveur
+please_enter_url => Merci d'indiquer l'URL à laquelle votre site sera accessible
+checking_database => Vérification de la connexion à la base de données...
+db_cant_connect => Impossible de se connecter à la base de données avec les valeurs indiquées.
+db_connected => Connecté
+db_doesnt_exist => "La base de données <cite>{dbname}</cite> n'existe pas. Merci de la créer ou d'en choisir une autre.
+using_db => <cite>{dbname}</cite> en cours d'utilisation
+before_you_proceed => Avant de commencer
+create_config => créer un fichier nommé <code>config.php</code> dans le répertoire <code>/textpattern/</code>&#160;; et copiez dedans ce qui suit&#160;: 
+thanks => Merci.
+about_to_create => Vous êtes sur le point de créer et de remplir les tables de la base de données.
+your_full_name => Votre nom complet réel
+#login_name => Veuillez choisir un nom de connexion (login)&#160;; comprenant uniquement de vrais lettres et chiffres –&#160;espaces et caractères accentués autorisés&#160;– sensibles à la casse
+choose_password => Veuillez choisir un mot de passe –&#160;non-utilisé ailleurs et impossible à deviner
+your_email => Votre adresse email
+that_went_well => Tout s'est passé sans problèmes. Les tables SQL ont été crées et remplies.
+you_can_access => Vous devez normalement avoir désormais accès à <a href="index.php">l'interface de gestion</a> avec le nom de connexion (login) et le mot de passe choisis.
+thanks_for_interest => Merci de votre intérêt en Textpattern.
+already_installed => Il semblerait que Textpattern soit déjà installé. Si vous voulez refaire une installation propre, merci de supprimer <code>config.php</code> du répertoire <code>/textpattern/</code et réessayez.
+# Traduction depuis en-gb.txt de la RC3, mise à jour confirmée jusqu'à la révision 416, par Jérémie Bouillon le 16-06-2005 (petit bug sur 'login_name' pris en compte)
