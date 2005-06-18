@@ -787,6 +787,31 @@ else
 		
 		return $base.DIRECTORY_SEPARATOR.$path;
 	}	
+
+// --------------------------------------------------------------
+	function get_comments_count($id)
+	{
+		static $count = array();
+
+		if (isset($count[$id]))
+			return $count[$id];
+
+		$c = safe_count('txp_discuss',"parentid='".doSlash($id)."' and visible=1");
+		$count[$id] = $c;
+		return $c;
+	}
 	
+// --------------------------------------------------------------
+	function get_author_name($id)
+	{
+		static $authors = array();
+
+		if (isset($authors[$id]))
+			return $authors[$id];
+
+		$name = fetch('RealName','txp_users','name',doSlash($id));
+		$authors[$id] = $name;
+		return $name;
+	}
 
 ?>

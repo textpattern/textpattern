@@ -685,7 +685,7 @@
 	{
 		global $thisarticle;
 
-		$com_count = safe_count('txp_discuss',"parentid='".doSlash(@$thisarticle['thisid'])."' and visible=1");
+		$com_count = get_comments_count(@$thisarticle['thisid']);
 		return ($com_count > 0) ? $com_count : '';
 	}
 
@@ -698,9 +698,9 @@
 		extract($thisarticle);
 		global $comments_mode;
 
-		if ($if_comments  && $is_article_list) {
+		if (($annotate or get_comments_count($thisid)) && $is_article_list) {
 
-			$comments_count = safe_count('txp_discuss',"parentid='".doSlash($thisid)."' and visible=1");
+			$comments_count = get_comments_count($thisid);
 			$ccount = ($comments_count) ?  ' ['.$comments_count.']' : '';
 	
 			if (!$comments_mode) {
@@ -717,7 +717,7 @@
 	function author($atts) 
 	{
 		global $thisarticle;
-		return $thisarticle['author'];	
+		return get_author_name($thisarticle['authorid']);	
 	}
 	
 // -------------------------------------------------------------
@@ -927,7 +927,7 @@
 	function if_comments($atts, $thing)	
 	{
 		global $thisarticle;
-		return ($thisarticle['if_comments']) ? parse($thing) : '';
+		return (get_comments_count($thisarticle['thisid'])) ? parse($thing) : '';
 	}
 
 // -------------------------------------------------------------

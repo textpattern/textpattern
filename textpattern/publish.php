@@ -321,7 +321,7 @@
 				$out = array_merge($out, $np);
 
 			$out['id_keywords'] = $Keywords; 
-			$out['id_author']   = fetch('RealName','txp_users','name',$AuthorID); 
+			$out['id_author']   = get_author_name($AuthorID); 
 		}
 
 		$out['path_from_root'] = $path_from_root; // these are deprecated as of 1.0
@@ -599,7 +599,7 @@
 				$article = discuss($parentid).$article;
 			}
 
-			if (($Annotate or $com_count) && !$preview) {
+			if (($Annotate or get_comments_count($ID)) && !$preview) {
 				if($use_comments) {
 					$article .= discuss($ID);
 				}
@@ -642,14 +642,10 @@
 	{
 		extract($rs);
 
-		$author = (fetch('RealName','txp_users','name',$AuthorID));
-		$author = (!$author) ? $AuthorID : $author; 
-
 		$out['thisid']          = $ID;
 		$out['posted']          = $uPosted;
-		$out['if_comments']     = ($Annotate or $com_count) ? true : false;
+		$out['annotate']        = $Annotate;
 		$out['comments_invite'] = $AnnotateInvite;
-		$out['author']          = $author;
 		$out['authorid']        = $AuthorID;
 		$out['excerpt']         = $Excerpt_html;
 		$out['title']           = $Title;
