@@ -927,21 +927,21 @@
 	function if_comments($atts, $thing)	
 	{
 		global $thisarticle;
-		return (get_comments_count($thisarticle['thisid'])) ? parse($thing) : '';
+		return parse(EvalElse($thing, get_comments_count($thisarticle['thisid'])));
 	}
 
 // -------------------------------------------------------------
 	function if_individual_article($atts, $thing)	
 	{
 		global $is_article_list;
-		return ($is_article_list == false) ? parse($thing) : '';
+		return parse(EvalElse($thing, ($is_article_list == false)));
 	}
 
 // -------------------------------------------------------------
 	function if_article_list($atts, $thing)	
 	{
 		global $is_article_list;
-		return ($is_article_list == true) ? parse($thing) : '';
+		return parse(EvalElse($thing, ($is_article_list == true)));
 	}
 
 // -------------------------------------------------------------
