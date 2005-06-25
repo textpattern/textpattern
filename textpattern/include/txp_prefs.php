@@ -298,8 +298,17 @@
 		);
 			asort($things);
 			reset($things);
-
-		return selectInput($item, $things, $var, 0);
+			
+			$out = '<select name="'.$item.'" class="list">'.n;
+			foreach ($things as $avalue => $alabel) {
+				$selected = ($avalue == $var || $alabel == $var)
+				?	' selected="selected"'
+				:	'';
+				$out .= t.'<option value="'.htmlspecialchars($avalue).'"'.$selected.'>'.
+						$alabel.'</option>'.n;
+			}
+			$out .= '</select>'.n;
+			return $out;
 	}
 
 // -------------------------------------------------------------
