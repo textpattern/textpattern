@@ -187,7 +187,7 @@ eod;
 			fLabelCell(gTxt('your_full_name')).fInputCell('RealName')
 		),
 		tr(
-			fLabelCell(gTxt('login_name')).fInputCell('name')
+			fLabelCell(gTxt('setup_login')).fInputCell('name')
 		),
 		tr(
 			fLabelCell(gTxt('choose_password')).fInputCell('pass')
