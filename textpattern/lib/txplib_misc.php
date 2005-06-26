@@ -814,4 +814,41 @@ else
 		return $name;
 	}
 
+
+// --------------------------------------------------------------
+function EvalElse($thing, $condition) {
+	$f = '@(</?txp:\S+\b.*(?:(?<!br )/)?'.chr(62).')@sU';
+
+	$parsed = preg_split($f, $thing, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+
+	$tagpat = '@^<(/?)txp:(\w+).*?(/?)>$@';
+
+	$parts = array(0 => '', 1 => '');
+	$in = 0;
+	$level = 0;
+	foreach ($parsed as $chunk) {
+		if (preg_match($tagpat, $chunk, $m)) {
+			if ($m[2] == 'else' and $m[3] == '/' and $level == 0) {
+				$in = 1-$in;
+			}
+			elseif ($m[1] == '' and $m[3] == '') {
+				++$level;
+				$parts[$in] .= $chunk;
+			}
+			elseif ($m[1] == '/') {
+				--$level;
+				$parts[$in] .= $chunk;
+			}
+			else {
+				$parts[$in] .= $chunk;
+			}
+		}
+		else {
+			$parts[$in] .= $chunk;
+		}
+	}
+
+	return ($condition ? $parts[0] : $parts[1]);
+}
+
 ?>
