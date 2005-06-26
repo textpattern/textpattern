@@ -27,7 +27,7 @@ $DB = new DB;
 //-------------------------------------------------------------
 	function safe_query($q='',$debug='',$unbuf='')
 	{
-		global $DB,$txpcfg;
+		global $DB,$txpcfg, $qcount;
 		$method = (!$unbuf) ? 'mysql_query' : 'mysql_unbuffered_query';
 		if (!$q) return false;
 		if ($debug or TXP_DEBUG === 1) { 
@@ -35,6 +35,7 @@ $DB = new DB;
 			dmp(mysql_error());
 		}
 		$result = $method($q,$DB->link);
+		@$qcount++;
 
 		if(!$result) return false;
 		return $result;

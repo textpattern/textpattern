@@ -341,7 +341,7 @@
 // -------------------------------------------------------------
 	function textpattern() 
 	{
-		global $pretext,$microstart,$txpac;
+		global $pretext,$microstart,$txpac,$qcount;
 		$segment = gps('segment');
 		extract($pretext);
 
@@ -357,6 +357,9 @@
 
 		$microdiff = (getmicrotime() - $microstart);
 		echo n,comment('Runtime: '.substr($microdiff,0,6));
+		echo n,comment('Queries: '.$qcount);
+		if (is_callable('memory_get_usage'))
+			echo n,comment('Memory: '.ceil(memory_get_usage() / 1024).'Kb');
 	}
 
 // -------------------------------------------------------------
