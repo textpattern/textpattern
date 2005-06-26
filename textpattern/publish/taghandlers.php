@@ -510,11 +510,15 @@
 		global $thisarticle, $id;
 		global $next_id, $next_title, $next_utitle, $next_posted;
 		global $prev_id, $prev_title, $prev_utitle, $prev_posted;
+		extract(lAtts(array(
+			'showalways'   => 0,
+		),$atts));
+
 		if(!is_numeric(@$id)) {
-			extract(getNextPrev(@$thisarticle['thisid'], $Posted, @$GLOBALS['s']));
+			extract(getNextPrev(@$thisarticle['thisid'], @strftime('%Y-%m-%d %H:%M:%S', $thisarticle['posted']), @$GLOBALS['s']));
 		}
 
-		return ($next_id) ? href(parse($thing),permlinkurl_id($next_id)) : '';
+		return ($next_id) ? href(parse($thing),permlinkurl_id($next_id)) : ($showalways ? parse($thing) : '');
 	}
 		
 // -------------------------------------------------------------
@@ -523,11 +527,15 @@
 		global $thisarticle, $id;
 		global $next_id, $next_title, $next_utitle, $next_posted;
 		global $prev_id, $prev_title, $prev_utitle, $prev_posted;
+		extract(lAtts(array(
+			'showalways'   => 0,
+		),$atts));
+
 		if(!is_numeric(@$id)) {
-			extract(getNextPrev($thisarticle['thisid'], $Posted, @$GLOBALS['s']));
+			extract(getNextPrev($thisarticle['thisid'], @strftime('%Y-%m-%d %H:%M:%S', $thisarticle['posted']), @$GLOBALS['s']));
 		}
 
-		return ($prev_id) ? href(parse($thing),permlinkurl_id($prev_id)) : '';
+		return ($prev_id) ? href(parse($thing),permlinkurl_id($prev_id)) : ($showalways ? parse($thing) : '');
 	}
 
 // -------------------------------------------------------------
