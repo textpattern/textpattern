@@ -59,7 +59,7 @@
 // -------------------------------------------------------------
 	function formatComments($darr)
 	{
-		global $prefs,$txpcfg,$comments_disallow_images,$txpac;
+		global $prefs,$txpcfg,$comments_disallow_images;
 		extract($prefs);
 		$preview = gps('preview');
 		$id = gps('id');
@@ -78,7 +78,7 @@
 				$im = (!empty($comments_disallow_images)) ? 1 : '';
 				$message = trim(nl2br($textile->TextileThis(strip_tags(deEntBrackets(
 					$message
-				)),1,'',$im,'',(@$txpac['comment_nofollow'] ? 'nofollow' : ''))));
+				)),1,'',$im,'',(@$comment_nofollow ? 'nofollow' : ''))));
 			} 
 			
 			if($comments_dateformat == "since") { 
@@ -89,11 +89,11 @@
 							
 			$web = str_replace("http://", "", $web);
 	
-			if ($email && !$web && !$txpac['never_display_email'])
-				$name = '<a href="'.eE('mailto:'.$email).'"'.(@$txpac['comment_nofollow'] ? ' rel="nofollow"' : '').'>'.$name.'</a>';
+			if ($email && !$web && !$never_display_email)
+				$name = '<a href="'.eE('mailto:'.$email).'"'.(@$comment_nofollow ? ' rel="nofollow"' : '').'>'.$name.'</a>';
 
 			if ($web)
-				$name = '<a href="http://'.$web.'" title="'.$web.'"'.(@$txpac['comment_nofollow'] ? ' rel="nofollow"' : '').'>'.$name.'</a>';
+				$name = '<a href="http://'.$web.'" title="'.$web.'"'.(@$comment_nofollow ? ' rel="nofollow"' : '').'>'.$name.'</a>';
 
 			$dlink = permlinkurl_id($parentid).'#c'.$discussid;
 		
@@ -122,7 +122,7 @@
 // -------------------------------------------------------------
 	function commentForm($id) 
 	{
-		global $txpac;
+		global $prefs;
 		$namewarn = '';
 		$emailwarn = '';
 		$commentwarn = '';
@@ -147,13 +147,13 @@
 			$secret = md5( uniqid( rand(), true ) );
 			safe_insert("txp_discuss_nonce", "issue_time=now(), nonce='$nonce', secret='$secret'");
 
-			$namewarn = ($txpac['comments_require_name'])
+			$namewarn = ($comments_require_name)
 			?	(!trim($name)) 
 				?	gTxt('comment_name_required').br
 				:	''
 			:	'';
 
-			$emailwarn = ($txpac['comments_require_email'])
+			$emailwarn = ($comments_require_email)
 			?	(!trim($email)) 
 				?	gTxt('comment_email_required').br 
 				:	''
@@ -248,7 +248,7 @@
 	function saveComment() 
 	{
 		global $siteurl,$comments_moderate,$comments_sendmail,$txpcfg,
-			$comments_disallow_images,$txpac;
+			$comments_disallow_images,$prefs;
 		include_once $txpcfg['txpath'].'/lib/classTextile.php';
 		$im = (!empty($comments_disallow_images)) ? 1 : '';
 
@@ -272,14 +272,14 @@
 		if (!checkCommentsAllowed($parentid))
 			exit ( graf(gTxt('comments_closed')));
 
-		if ($txpac['comments_require_name']) {
+		if ($prefs['comments_require_name']) {
 			if (!trim($name)) {
 				exit ( graf(gTxt('comment_name_required')).
 					graf('<a href="" onClick="history.go(-1)">'.gTxt('back').'</a>') );
 			}
 		}
 
-		if ($txpac['comments_require_email']) {
+		if ($prefs['comments_require_email']) {
 			if (!trim($email)) {
 				exit ( graf(gTxt('comment_email_required')).
 					graf('<a href="" onClick="history.go(-1)">'.gTxt('back').'</a>') );
@@ -301,7 +301,7 @@
 
 		$message2db = doSlash(trim(nl2br($textile->TextileThis(strip_tags(deEntBrackets(
 			$message
-		)),1,'',$im,'',(@$txpac['comment_nofollow'] ? 'nofollow' : '')))));
+		)),1,'',$im,'',(@$prefs['comment_nofollow'] ? 'nofollow' : '')))));
 				
 		$isdup = safe_row("message,name", "txp_discuss", 
 			"name='$name' and message='$message2db' and ip='$ip'");
@@ -325,7 +325,7 @@
 					
 						 if ($rs) {
 							safe_update("txp_discuss_nonce", "used='1'", "nonce='$nonce'");
-							if ($txpac['comment_means_site_updated']) {
+							if ($prefs['comment_means_site_updated']) {
 								safe_update("txp_prefs", "val=now()", "name='lastmod'");
 							}
 							if ($comments_sendmail) 

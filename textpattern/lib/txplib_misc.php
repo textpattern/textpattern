@@ -83,21 +83,48 @@ else
 	function load_lang($lang) 
 	{
 		global $txpcfg;
-		$filename = is_file($txpcfg['txpath'].'/lang/'.$lang.'.txt')
-		?	$txpcfg['txpath'].'/lang/'.$lang.'.txt'
-		:	$txpcfg['txpath'].'/lang/en-gb.txt';
-		 
-		$file = @fopen($filename, "r");
-		if ($file) {
-			while (!feof($file)) {
-				$line = fgets($file, 4096);
-			if($line[0]=='#') continue; 
-			@list($name,$val) = explode(' => ',trim($line));
-			$out[$name] = $val;
-		 }
-			@fclose($filename);
+		
+		$event = (gps('event') ? gps('event') : 'article');
+		
+		if ($event == 'list') $event = 'article';
+		
+		$installed = safe_field('name', 'txp_lang',"lang='$lang'");
+		
+		$lang_code = ($installed)? $lang : 'en-gb';
+		
+		$and = "event='public' OR event='common' OR event='$event'";
+		
+		if ($event == 'page' || $event == 'form') $and.=" OR event='tag'";
+
+		$rs = safe_rows_start('name, data','txp_lang',"lang='$lang_code' AND ( $and )");
+		
+		$out = array();
+		
+		if ($rs && !empty($rs))
+		{
+			while ($a = nextRow($rs))
+			{
+				$out[$a['name']] = $a['data']; 
+			}
+		}else{
+			#backward compatibility stuff. Remove when necessary.
+			$filename = is_file($txpcfg['txpath'].'/lang/'.$lang.'.txt')
+			?	$txpcfg['txpath'].'/lang/'.$lang.'.txt'
+			:	$txpcfg['txpath'].'/lang/en-gb.txt';
+			 
+			$file = @fopen($filename, "r");
+			if ($file) {
+				while (!feof($file)) {
+					$line = fgets($file, 4096);
+				if($line[0]=='#') continue; 
+				@list($name,$val) = explode(' => ',trim($line));
+				$out[$name] = $val;
+			 }
+				@fclose($filename);
+			}
 		}
-	  return ($out) ? $out : '';
+		
+		return ($out) ? $out : '';
 	}
 
 // -------------------------------------------------------------
@@ -282,14 +309,14 @@ else
 // -------------------------------------------------------------
 	function load_plugin($name)
 	{
-		global $plugins, $txpac;
+		global $plugins, $prefs;
 
 		if (is_array($plugins) and in_array($name,$plugins)) {
 			return true;
 		}
 		
-		if (!empty($txpac['plugin_cache_dir'])) {
-			$dir = rtrim($txpac['plugin_cache_dir'], '/') . '/';
+		if (!empty($prefs['plugin_cache_dir'])) {
+			$dir = rtrim($prefs['plugin_cache_dir'], '/') . '/';
 			if (is_file($dir . $name . '.php')) {
 				include($dir . $name . '.php');
 				$plugins[] = $name;
@@ -326,12 +353,12 @@ else
 // -------------------------------------------------------------
    function load_plugins($type=NULL)
    {
-		global $txpac,$plugins;
+		global $prefs,$plugins;
 		
 		if (!is_array($plugins)) $plugins = array();
 		
-		if (!empty($txpac['plugin_cache_dir'])) {
-			$dir = rtrim($txpac['plugin_cache_dir'], '/') . '/';
+		if (!empty($prefs['plugin_cache_dir'])) {
+			$dir = rtrim($prefs['plugin_cache_dir'], '/') . '/';
 			$dh = @opendir($dir);
 			while ($dh and false !== ($f = @readdir($dh))) {
 				if ($f{0} != '.')
@@ -427,13 +454,13 @@ else
 // -------------------------------------------------------------
 	function stripSpace($text, $force=0) 
 	{
-		global $txpac;
-		if ($force or $txpac['attach_titles_to_permalinks']) {
+		global $prefs;
+		if ($force or $prefs['attach_titles_to_permalinks']) {
 		
 			$text = dumbDown($text);
 			$text = preg_replace("/(^|&\S+;)|(<[^>]*>)/U","",$text);		
 
-			if ($txpac['permalink_title_format']) {
+			if ($prefs['permalink_title_format']) {
 				return 
 				urlencode(strtolower(
 					preg_replace('/[^\w\-]+/', '', preg_replace('/[\s\-]+/', '-', $text))
@@ -538,8 +565,8 @@ else
 // -------------------------------------------------------------
 	function is_blacklisted($ip) 
 	{
-		global $txpac;
-		$checks = explode(',', $txpac['spam_blacklists']);
+		global $prefs;
+		$checks = explode(',', $prefs['spam_blacklists']);
 						
 		$rip = join('.',array_reverse(explode(".",$ip)));
 		foreach ($checks as $a) {

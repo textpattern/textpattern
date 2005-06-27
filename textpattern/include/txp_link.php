@@ -147,10 +147,10 @@
 // -------------------------------------------------------------
 	function link_post()
 	{
-		global $txpcfg,$txpac,$vars;
+		global $txpcfg,$prefs,$vars;
 		$varray = gpsa($vars);
 
-		if($txpac['textile_links']) {
+		if($prefs['textile_links']) {
 
 			include_once $txpcfg['txpath'].'/lib/classTextile.php';
 			$textile = new Textile();
@@ -184,10 +184,10 @@
 // -------------------------------------------------------------
 	function link_save() 
 	{
-		global $txpcfg,$txpac,$vars;
+		global $txpcfg,$prefs,$vars;
 		$varray = gpsa($vars);
 
-		if($txpac['textile_links']) {
+		if($prefs['textile_links']) {
 
 			include_once $txpcfg['txpath'].'/lib/classTextile.php';
 			$textile = new Textile();

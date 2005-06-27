@@ -28,10 +28,9 @@
 	{
 		pagetop(gTxt('visitor_logs'));
 		extract(get_prefs());
-		global $txpac;
 
 		safe_delete("txp_log", "`time` < date_sub(now(),interval ".
-						$txpac['expire_logs_after']." day)");
+						$expire_logs_after." day)");
 
 		safe_optimize("txp_log");
 		safe_repair("txp_log");

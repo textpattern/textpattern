@@ -431,4 +431,26 @@ mysql_query("CREATE TABLE `".PFX."txp_file` (
 		UNIQUE KEY `filename` ( `filename` ) 
 	)  TYPE=MyISAM PACK_KEYS=0 AUTO_INCREMENT=1 ");
 
+
+mysql_query("CREATE TABLE `".PFX."txp_lang` (
+			`id` INT( 9 ) NOT NULL AUTO_INCREMENT ,
+			`lang` VARCHAR(16),
+			`name` VARCHAR(64),
+			`event` VARCHAR( 64 ) ,
+			`data` TINYTEXT,
+			`lastmod` timestamp,
+			PRIMARY KEY ( `id` ),
+			UNIQUE INDEX (`lang`,`name`),
+			INDEX (`lang`, `event`)
+			)TYPE=MyISAM;");
+
+include_once 'en-gb.php';
+foreach ($en_gb_lang as $evt_name => $evt_strings)
+{
+	foreach ($evt_strings as $lang_key => $lang_val)
+	{
+		mysql_query("INSERT INTO `".PFX."txp_lang`  SET `lang`='en-gb',`name`='$lang_key',`event`='$evt_name',`data`='$lang_val',`lastmod`=now()");
+	}
+}
+
 ?>

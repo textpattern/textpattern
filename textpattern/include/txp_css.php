@@ -44,10 +44,10 @@
 	function css_edit($message='')
 	{
 		pagetop(gTxt("edit_css"),$message);
-		global $step,$txpac;
+		global $step,$prefs;
 		if (!$step or $step == 'css_save'){
 
-			if ($txpac['edit_raw_css_by_default']) {
+			if ($prefs['edit_raw_css_by_default']) {
 				css_edit_raw();
 			} else {
 				css_edit_form();

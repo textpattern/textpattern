@@ -11,13 +11,13 @@
 // -------------------------------------------------------------
 	function logit($r='')
 	{
-		global $siteurl, $txpac;
+		global $siteurl, $prefs;
 		$mydomain = str_replace('www.','',preg_quote($siteurl,"/"));
 		$out['uri'] = $_SERVER['REQUEST_URI'];
 		$out['ref'] = clean_url(str_replace("http://","",serverset('HTTP_REFERER')));
 		$host = $ip = $_SERVER['REMOTE_ADDR'];
 
-		if (!empty($txpac['use_dns'])) {
+		if (!empty($prefs['use_dns'])) {
 			// A crude rDNS cache
 			if ($h = safe_field('host', 'txp_log', "ip='".doSlash($ip)."' limit 1")) {
 				$host = $h;

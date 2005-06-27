@@ -25,7 +25,7 @@
 		textpattern();
 		exit;
 	}
-
+	
 	error_reporting(E_ALL);
 	ini_set("display_errors","1");
 
@@ -68,7 +68,7 @@
 			$step = 'prefs';
 		}
 
-		if ($txpac['admin_side_plugins'] and gps('event') != 'plugin')
+		if ($admin_side_plugins and gps('event') != 'plugin')
 			load_plugins(1);
 		include txpath.'/lib/txplib_head.php';
 

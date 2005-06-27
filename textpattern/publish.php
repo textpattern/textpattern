@@ -66,7 +66,7 @@
 	$txpcfg['doc_root'] = $_SERVER['DOCUMENT_ROOT'];
 
 		// here come the plugins
-	if ($txpac['use_plugins']) load_plugins();
+	if ($use_plugins) load_plugins();
 
 	define("LANG",$language);
 	if (!empty($locale)) setlocale(LC_ALL, $locale);
@@ -341,7 +341,7 @@
 // -------------------------------------------------------------
 	function textpattern() 
 	{
-		global $pretext,$microstart,$txpac,$qcount;
+		global $pretext,$microstart,$prefs,$qcount;
 		$segment = gps('segment');
 		extract($pretext);
 
@@ -350,7 +350,7 @@
 		$html = parse($html);
 		$html = parse($html); // the function so nice, he ran it twice
 		$html = (!$segment) ? $html : segmentPage($html);
-		$html = ($txpac['allow_page_php_scripting']) ? evalString($html) : $html;
+		$html = ($prefs['allow_page_php_scripting']) ? evalString($html) : $html;
 
 		header("Content-type: text/html; charset=utf-8");
 		echo $html;
@@ -774,9 +774,9 @@
 // -------------------------------------------------------------
 	function bombShelter() // protection from those who'd bomb the site by GET
 	{
-		global $txpac;
+		global $prefs;
 		$in = serverset('REQUEST_URI');
-		if (!empty($txpac['max_url_len']) and strlen($in) > $txpac['max_url_len']) exit('Nice try.');
+		if (!empty($prefs['max_url_len']) and strlen($in) > $prefs['max_url_len']) exit('Nice try.');
 	}
 
 // -------------------------------------------------------------
@@ -805,12 +805,12 @@
 // -------------------------------------------------------------
 	function getCustomFields()
 	{
-		global $txpac;
+		global $prefs;
 		$i = 0;
 		while ($i < 10) {
 			$i++;
-			if (!empty($txpac['custom_'.$i.'_set'])) {
-				$out[$i] = $txpac['custom_'.$i.'_set'];
+			if (!empty($prefs['custom_'.$i.'_set'])) {
+				$out[$i] = $prefs['custom_'.$i.'_set'];
 			}
 		}
 		return (!empty($out)) ? $out : false;

@@ -23,7 +23,7 @@
 	{
 		pagetop(gTxt('sections'),$message);
 
-		global $txpac,$wlink;
+		global $wlink;
 		$out[] = 
 			tr(
 				tdcs(strong(gTxt('section_head')).popHelp('section_category'),3)

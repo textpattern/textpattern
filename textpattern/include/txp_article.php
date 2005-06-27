@@ -51,9 +51,8 @@ if ($event == 'article') {
 //--------------------------------------------------------------
 	function article_post()
 	{
-		global $txp_user,$vars,$txpcfg,$txpac;		
+		global $txp_user,$vars,$txpcfg;		
 		extract(get_prefs());
-		extract($txpac);
 		$incoming = psa($vars);
 		$message='';
 		
@@ -160,9 +159,8 @@ if ($event == 'article') {
 //--------------------------------------------------------------
 	function article_save()
 	{
-		global $txp_user,$vars,$txpcfg,$txpac;
+		global $txp_user,$vars,$txpcfg;
 		extract(get_prefs());
-		extract($txpac);
 		$incoming = psa($vars);
 
 		$oldstatus = fetch('Status','textpattern','ID',$incoming['ID']);
@@ -269,7 +267,7 @@ if ($event == 'article') {
 	{
 		
 		pagetop("Textpattern",$message);
-		global $txpcfg,$txpac,$txp_user,$vars;
+		global $txpcfg,$txp_user,$vars;
 
 		extract(get_prefs());
 		extract(gpsa(array('view','from_view','step')));
@@ -281,7 +279,6 @@ if ($event == 'article') {
 			$ID = gps('ID');
 		}
 		
-		extract($txpac);
 
 		include_once $txpcfg['txpath'].'/lib/classTextile.php';
 		$textile = new Textile();
@@ -405,7 +402,7 @@ if ($event == 'article') {
 					strtolower(gTxt('excerpt')),'label')),
 
 				// form override
-			($txpac['allow_form_override'])
+			($allow_form_override)
 			?	graf(gTxt('override_default_form').br.
 					form_pop($override_form).popHelp('override_form'))
 			:	'',
@@ -490,7 +487,7 @@ if ($event == 'article') {
 
 	//-- excerpt --------------------
 
-		if ($txpac['articles_use_excerpts']) {
+		if ($articles_use_excerpts) {
 
 			if ($view=='text') {
 			

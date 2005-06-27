@@ -162,8 +162,8 @@ if ($event == 'category') {
 //-------------------------------------------------------------
 	function event_category_list($evname) 
 	{
-		global $txpac;
-		if($evname=='article') $headspan = ($txpac['show_article_category_count']) ? 3 : 2;		
+		global $prefs;
+		if($evname=='article') $headspan = ($prefs['show_article_category_count']) ? 3 : 2;		
 
 		$o = hed(gTxt($evname.'_head').popHelp($evname.'_category'),3);
 
@@ -182,7 +182,7 @@ if ($event == 'category') {
 				extract($a);
 				if ($name=='root') continue;
 				//Stuff for articles only
-				if ($evname=='article' && $txpac['show_article_category_count']) {
+				if ($evname=='article' && $prefs['show_article_category_count']) {
 					$sname = doSlash($name);
 					$count = sp . small(safe_count("textpattern",
 						"((Category1='$sname') or (Category2='$sname'))"));

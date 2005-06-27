@@ -211,13 +211,7 @@ eod;
 	if (!safe_field('name','txp_prefs',"name='path_to_site'")) {
 		safe_insert('txp_prefs',"prefs_id=1,name='path_to_site',val=''");
 	}
-/*
-	foreach($txpac as $k => $v) {
-		if (safe_count('txp_prefs',"`name`='$k'") == 0) {
-			safe_insert("txp_prefs","`prefs_id`=1,`name`='$k',`val`='$v'");
-		}
-	}
-*/
+
 	// 1.0: need to get non-manually set url-only titles into the textpattern table,
 	// so we can start using title as an url search option
 
@@ -442,7 +436,13 @@ eod;
 	$txpprefs = getThings('describe '.PFX.'txp_prefs');
 	if (!in_array('type', $txpprefs))
 		safe_alter('txp_prefs', "add `type` smallint unsigned not null default '0'");
-
+	if (!in_array('event', $txpprefs))
+		safe_alter('txp_prefs', "add `event` varchar(12) not null default 'publish'");
+	if (!in_array('html', $txpprefs))
+		safe_alter('txp_prefs', "add `html` varchar(64) not null default ''");
+	if (!in_array('position', $txpprefs))
+		safe_alter('txp_prefs', "add `position` smallint unsigned not null default '0'");
+		
 	if (!fetch('form','txp_form','name','search_results')) {
 		$form = <<<EOF
 <h3><txp:permlink><txp:title /></txp:permlink></h3>
@@ -451,7 +451,196 @@ eod;
 <txp:posted /></small></p>
 EOF;
 		safe_insert('txp_form', "name='search_results', type='article', Form='$form'");
-	}	
+	}
+	
+	# add new column values to prefs
+	$prefs_new_cols = array(
+		'sitename' => array('html' => 'text_input', 'event'=> 'publish', 'type' => '0', 'position' => '1'),
+		'siteurl' => array('html' => 'text_input', 'event'=> 'publish', 'type' => '0', 'position' => '2'),
+		'site_slogan'  => array('html' =>'text_input', 'event' => 'publish', 'type' => '0', 'position' => '3'),
+		'language' => array('html' => 'languages','event'=> 'publish', 'type' => '0', 'position' => '4'),
+		'gmtoffset' => array('html' => 'gmtoffset_select','event'=> 'publish', 'type' =>  '0', 'position' => '5'),
+		'is_dst' => array('html' => 'yesnoradio','event'=> 'publish', 'type' => '0', 'position' => '6'),
+		'dateformat' => array('html' => 'dateformats','event'=> 'publish', 'type' => '0', 'position' => '7'),
+		'archive_dateformat' => array('html' => 'dateformats','event'=> 'publish', 'type' => '0', 'position' => '8'),
+		'permlink_mode' => array('html' => 'permlinkmodes','event'=> 'publish', 'type' => '0', 'position' => '9'),
+		'send_lastmod' => array('html' => 'yesnoradio','event'=> 'admin', 'type' => '1', 'position' => '0'),
+		'ping_weblogsdotcom' => array('html' => 'yesnoradio','event'=> 'publish', 'type' => '1', 'position' => '0'),
+		'use_comments' => array('html' => 'yesnoradio','event'=> 'publish', 'type' => '0', 'position' => '12'),
+		'logging' => array('html' => 'logging','event'=> 'publish', 'type' => '0', 'position' => '10'),
+		'use_textile' => array('html' => 'text','event'=> 'publish', 'type' => '0', 'position' => '11'),
+		'tempdir' => array('html' => 'text_input','event'=> 'admin', 'type' => '1', 'position' => '0'),
+		'file_base_path' => array('html' => 'text_input','event'=> 'admin', 'type' => '1', 'position' => '0'),
+		'file_max_upload_size' => array('html' => 'text_input','event'=> 'admin', 'type' => '1', 'position' => '0'),		
+		'comments_moderate' => array('html' => 'yesnoradio','event'=> 'comments', 'type' => '0', 'position' => '13'),
+		'comments_on_default' => array('html' => 'yesnoradio','event'=> 'comments', 'type' => '0', 'position' => '14'),
+		'comments_are_ol' => array('html' => 'yesnoradio','event'=> 'comments', 'type' => '0', 'position' => '15'),
+		'comments_sendmail' => array('html' => 'yesnoradio','event'=> 'comments', 'type' => '0', 'position' => '16'),
+		'comments_disallow_images' => array('html' => 'yesnoradio','event'=> 'comments', 'type' => '0', 'position' => '17'),
+		'comments_default_invite' => array('html' => 'text_input','event'=> 'comments', 'type' => '0', 'position' => '18'),
+		'comments_dateformat' => array('html' => 'dateformats','event'=> 'comments', 'type' => '0', 'position' => '19'),
+		'comments_mode' => array('html' => 'commentmode','event'=> 'comments', 'type' => '0', 'position' => '20'),
+		'comments_disabled_after' => array('html' => 'weeks','event'=> 'comments', 'type' => '0', 'position' => '21'),
+		'img_dir' => array('html' => 'text_input','event'=> 'admin', 'type' => '1', 'position' => '0'),
+		'rss_how_many' => array('html' => 'text_input','event'=> 'admin', 'type' => '1', 'position' => '0'),
+		'logs_expire' => array('html' => 'text_input','event'=> 'admin', 'type' => '1', 'position' => '0'),
+	);
+	
+	foreach ($prefs_new_cols as $pref_key => $pref_val)
+	{
+		safe_update('txp_prefs', "html='$pref_val[html]',event='$pref_val[event]',type='$pref_val[type]', position='$pref_val[position]'", "name='$pref_key' AND prefs_id='1'");
+	}
+	
+	$prefs_hidden_rows = array('prefs_id','use_categories','use_sections','path_from_root','url_mode','record_mentions',
+	'locale','file_base_path','lastmod','version','path_to_site','dbupdatetime','timeoffset','article_list_pageby',
+	'blog_mail_uid','blog_time_uid','blog_uid','comment_list_pageby','file_list_pageby','image_list_pageby','link_list_pageby',
+	'log_list_pageby',);
+	
+	foreach ($prefs_hidden_rows as $hidden_pref)
+	{
+		safe_update('txp_prefs', "type='2'", "name='$hidden_pref' AND prefs_id='1'");
+	}
+	
+
+	#advanced prefs
+	foreach ($txpac as $key => $val)
+	{
+		if (!in_array($key, array_keys($prefs)))
+		{
+			switch ($key)
+			{
+				case'custom_1_set':
+				case'custom_2_set':
+				case'custom_3_set':
+				case'custom_4_set':
+				case'custom_5_set':
+				case'custom_6_set':
+				case'custom_7_set':
+				case'custom_8_set':
+				case'custom_9_set':
+				case'custom_10_set':
+					$evt = 'custom';
+					$html = 'text_input';
+				break;
+				
+				case 'edit_raw_css_by_default':
+					$evt = 'css';
+					$html = 'yesnoradio';
+				break;
+				case 'spam_blacklists':
+				case 'expire_logs_after':
+				case 'max_url_len':
+					$html = 'text_input';
+					$evt = 'publish';
+				break;
+				case 'textile_links':
+					$html = 'yesnoradio';	
+					$evt = 'link';
+				break;
+				case 'show_article_category_count':
+					$html = 'yesnoradio';	
+					$evt = 'category';				
+				break;
+				case 'comments_require_name':
+				case 'comments_require_email':
+					$html = 'yesnoradio';	
+					$evt = 'comments';				
+				break;
+				default:
+					$html = 'yesnoradio';
+					$evt = 'publish';
+				break;				
+			}
+			safe_insert('txp_prefs',"val = '$val', name = '$key' , prefs_id ='1', type='1', html='$html', event='$evt'");
+		}
+	}
+	
+	if (!safe_query("SELECT 1 FROM `".PFX."txp_lang` LIMIT 0")) {
+		// do install
+		safe_query("CREATE TABLE `".PFX."txp_lang` (
+			`id` INT( 9 ) NOT NULL AUTO_INCREMENT ,
+			`lang` VARCHAR(16),
+			`name` VARCHAR(64),
+			`event` VARCHAR( 64 ) ,
+			`data` TINYTEXT,
+			`lastmod` timestamp,
+			PRIMARY KEY ( `id` ),
+			UNIQUE INDEX (`lang`,`name`),
+			INDEX (`lang`, `event`)
+			)TYPE=MyISAM;");
+		
+		# try to install the current file on the languages table
+		$lang_file = dirname(__FILE__).'/lang/'.LANG.'.txt';
+		# first attempt with local file		
+		if (is_file($lang_file) && is_readable($lang_file))
+		{
+			$lang_file = $txpcfg['txpath'].'/lang/'.$lang.'.txt';
+			if (!is_file($lang_file) || !is_readable($lang_file)) return;
+			$file = @fopen($lang_file, "r");
+			if ($file) {
+				$lastmod = @filemtime($lang_file);
+				$lastmod = date('YmdHis',$lastmod);
+				$data = array();
+				$event = '';
+				
+				while (!feof($file)) {
+					$line = fgets($file, 4096);
+					# any line starting with #, not followed by @ is a simple comment
+					if($line[0]=='#' && $line[1]!='@' && $line[1]!='#') continue;
+					# each language section should be prefixed by #@
+					if($line[0]=='#' && $line[1]=='@')
+					{
+						if (!empty($data)){
+							foreach ($data as $name => $value)
+							{							
+								safe_insert('txp_lang',"lang='$lang', name='$name', lastmod='$lastmod', event='$event', data='$value'");
+							}
+						}
+						# reset
+						$data = array();
+						$event = substr($line,2, (strlen($line)-2));
+						$event = rtrim($event);
+						continue;
+					}
+					 
+					@list($name,$val) = explode(' => ',trim($line));
+					$data[$name] = $val;
+				}
+				# remember to add the last one
+				if (!empty($data)){
+					foreach ($data as $name => $value)
+					{
+						 safe_insert('txp_lang',"lang='$lang', name='$name', lastmod='$lastmod', event='$event', data='$value'");
+					}
+				}
+				@fclose($filename);
+				# clean empty values from table
+				safe_delete('txp_lang',"data=''");
+			}				
+		}else{
+			# new try using XML-RPC
+			
+			require_once dirname(__FILE__).'/lib/IXRClass.php';		
+	
+			$client = new IXR_Client('http://rpc.textpattern.com');
+			
+			if (!$client->query('tups.getLanguage',$prefs['blog_uid'],LANG))
+			{
+				echo 'There is a problem trying to install you language on DB. Please go to "Install languages" and try it again.';
+			}else {
+				$response = $client->getResponse();
+				$lang_struct = unserialize($response);
+				function install_lang_key($value, $key)
+				{
+					extract(gpsa(array('lang_code','updating')));				
+					$q = "name='$value[name]', event='$value[event]', data='$value[data]', lastmod='".strftime('%Y%m%d%H%M%S',$value['uLastmod'])."'";
+					
+					safe_insert('txp_lang',$q.", lang='$lang_code'");
+				}			
+				array_walk($lang_struct,'install_lang_key');
+			}
+		}
+	}
 
 // updated, baby.
 

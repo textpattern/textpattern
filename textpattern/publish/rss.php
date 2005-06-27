@@ -12,7 +12,7 @@
 // -------------------------------------------------------------
 	function rss()
 	{
-		global $prefs,$txpac,$thisarticle;
+		global $prefs,$thisarticle;
 		extract($prefs);
 		ob_start();
 
@@ -54,7 +54,7 @@
 
 					$a['posted'] = $uPosted;
 
-					$Body = (!$txpac['syndicate_body_or_excerpt']) ? $thisarticle['body'] : $thisarticle['excerpt'];
+					$Body = (!$syndicate_body_or_excerpt) ? $thisarticle['body'] : $thisarticle['excerpt'];
 					$Body = (!trim($Body)) ? $thisarticle['body'] : $Body;
 					$Body = str_replace('href="/','href="'.hu,$Body);
 					$Body = preg_replace("/href=\\\"#(.*)\"/","href=\"".permlinkurl($a)."#\\1\"",$Body);
@@ -68,7 +68,7 @@
 					$uTitle = htmlspecialchars($uTitle,ENT_NOQUOTES);
 
 
-					if ($txpac['show_comment_count_in_feed']) {
+					if ($show_comment_count_in_feed) {
 						$dc = getCount('txp_discuss', "parentid=$ID and visible=1");
 						$count = ($dc > 0) ? ' ['.$dc.']' : '';
 					} else $count = '';

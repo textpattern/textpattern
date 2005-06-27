@@ -1032,10 +1032,10 @@
 // -------------------------------------------------------------
 	function permlinkurl($article_array) 
 	{
-		global $permlink_mode, $txpac;
+		global $permlink_mode, $prefs;
 
-		if (isset($txpac['custom_url_func']) and is_callable($txpac['custom_url_func']))
-			return call_user_func($txpac['custom_url_func'], $article_array);
+		if (isset($prefs['custom_url_func']) and is_callable($prefs['custom_url_func']))
+			return call_user_func($prefs['custom_url_func'], $article_array);
 
 		if (empty($article_array)) return;
 		
@@ -1049,7 +1049,7 @@
 		
 		switch($permlink_mode) {
 			case 'section_id_title':
-				if ($txpac['attach_titles_to_permalinks'])
+				if ($prefs['attach_titles_to_permalinks'])
 				{
 					return hu."$section/$thisid/$url_title";
 				}else{
@@ -1059,7 +1059,7 @@
 				list($y,$m,$d) = explode("-",date("Y-m-d",$posted));
 				return hu."$y/$m/$d/$url_title";
 			case 'id_title':
-				if ($txpac['attach_titles_to_permalinks'])
+				if ($prefs['attach_titles_to_permalinks'])
 				{
 					return hu."$thisid/$url_title";
 				}else{
@@ -1246,15 +1246,15 @@
 //--------------------------------------------------------------------------
 	function php($atts, $thing)
 	{
-		global $is_article_body, $thisarticle, $txpac;
+		global $is_article_body, $thisarticle, $prefs;
 
 		ob_start();
 		if (empty($is_article_body)) {
-			if (!empty($txpac['allow_page_php_scripting']))
+			if (!empty($prefs['allow_page_php_scripting']))
 				eval($thing);
 		}
 		else {
-			if (!empty($txpac['allow_article_php_scripting'])
+			if (!empty($prefs['allow_article_php_scripting'])
 				and has_privs('article.php', $thisarticle['authorid']))
 				eval($thing);
 		}
@@ -1264,10 +1264,10 @@
 //--------------------------------------------------------------------------
 	function custom_field($atts)
 	{
-		global $thisarticle, $txpac;
+		global $thisarticle, $prefs;
 		
 		extract(lAtts(array(
-			'name' => @$txpac['custom_1_set'],
+			'name' => @$prefs['custom_1_set'],
 		),$atts));
 
 		if (isset($thisarticle[$name]))
@@ -1277,10 +1277,10 @@
 //--------------------------------------------------------------------------
 	function if_custom_field($atts, $thing)
 	{
-		global $thisarticle, $txpac;
+		global $thisarticle, $prefs;
 		
 		extract(lAtts(array(
-			'name' => @$txpac['custom_1_set'],
+			'name' => @$prefs['custom_1_set'],
 			'val' => NULL,
 		),$atts));
 

@@ -11,7 +11,7 @@
 // -------------------------------------------------------------
 	function atom() 
 	{
-		global $txpac, $thisarticle;
+		global $thisarticle;
 		extract($GLOBALS['prefs']);
 		define("textplain",' type="text/plain"');
 		define("texthtml",' type="text/html"');
@@ -36,7 +36,7 @@
 
 		//Atom feeds with mail or domain name
 		$dn = explode('/',$siteurl);
-		$mail_or_domain = ($txpac['use_mail_on_feeds_id'])? eE($blog_mail_uid):$dn[0];
+		$mail_or_domain = ($use_mail_on_feeds_id)? eE($blog_mail_uid):$dn[0];
 		$out[] = tag('tag:'.$mail_or_domain.','.$blog_time_uid.':'.$blog_uid.(($section)? '/'.$section:'').(($category)? '/'.$category:''),'id');
 
 		$out[] = tag('Textpattern','generator',
@@ -45,7 +45,7 @@
 
 
 			$auth[] = tag($pub['RealName'],'name');
-			$auth[] = ($txpac['include_email_atom']) ? tag(eE($pub['email']),'email') : '';
+			$auth[] = ($include_email_atom) ? tag(eE($pub['email']),'email') : '';
 			$auth[] = tag(hu,'url');
 		
 		$out[] = tag(n.t.t.join(n.t.t,$auth).n,'author');
@@ -81,7 +81,7 @@
 					
 					$a['posted'] = $uPosted;
 	
-					if ($txpac['show_comment_count_in_feed']) {
+					if ($show_comment_count_in_feed) {
 						$dc = getCount('txp_discuss', "parentid=$ID and visible=1");
 						$count = ($dc > 0) ? ' ['.$dc.']' : '';
 					} else $count = '';
@@ -111,7 +111,7 @@
 					$e['subject'] = tag(htmlspecialchars($Category1),'dc:subject');
 					
 						// pull Body or Excerpt?
-					$Body = (!$txpac['syndicate_body_or_excerpt']) ? $thisarticle['body'] : $thisarticle['excerpt'];
+					$Body = (!$syndicate_body_or_excerpt) ? $thisarticle['body'] : $thisarticle['excerpt'];
 	
 						// if Excerpt is empty, switch back to Body_html
 					$Body = (!trim($Body)) ? $thisarticle['body'] : $Body; 
