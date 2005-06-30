@@ -178,7 +178,7 @@ eod;
 	rebuild_tree('root',1,'image');
 
 	safe_delete('txp_prefs',"name = 'version'");
-	safe_insert('txp_prefs', "prefs_id=1, name='version',val='$thisversion'");
+	safe_insert('txp_prefs', "prefs_id=1, name='version',val='$thisversion', type='2'");
 	
 	if (!safe_field('val','txp_prefs',"name='article_list_pageby'")) {
 		safe_insert('txp_prefs',"prefs_id=1,name='article_list_pageby',val=25");
@@ -347,7 +347,7 @@ eod;
 
 	// 1.0: keep track of updates for devel version
 	safe_delete('txp_prefs',"name = 'dbupdatetime'");
-	safe_insert('txp_prefs', "prefs_id=1, name='dbupdatetime',val='".time()."'");
+	safe_insert('txp_prefs', "prefs_id=1, name='dbupdatetime',val='".time()."', type='2'");
 
 	// 1.0: improved comment spam nonce
 	$txpnonce = getThings('describe '.PFX.'txp_discuss_nonce');
@@ -441,7 +441,114 @@ eod;
 	if (!in_array('html', $txpprefs))
 		safe_alter('txp_prefs', "add `html` varchar(64) not null default ''");
 	if (!in_array('position', $txpprefs))
+	{
 		safe_alter('txp_prefs', "add `position` smallint unsigned not null default '0'");
+		
+		# add new column values to prefs
+			$prefs_new_cols = array(
+				'sitename' => array('html' => 'text_input', 'event'=> 'publish', 'type' => '0', 'position' => '1'),
+				'siteurl' => array('html' => 'text_input', 'event'=> 'publish', 'type' => '0', 'position' => '2'),
+				'site_slogan'  => array('html' =>'text_input', 'event' => 'publish', 'type' => '0', 'position' => '3'),
+				'language' => array('html' => 'languages','event'=> 'publish', 'type' => '0', 'position' => '4'),
+				'gmtoffset' => array('html' => 'gmtoffset_select','event'=> 'publish', 'type' =>  '0', 'position' => '5'),
+				'is_dst' => array('html' => 'yesnoradio','event'=> 'publish', 'type' => '0', 'position' => '6'),
+				'dateformat' => array('html' => 'dateformats','event'=> 'publish', 'type' => '0', 'position' => '7'),
+				'archive_dateformat' => array('html' => 'dateformats','event'=> 'publish', 'type' => '0', 'position' => '8'),
+				'permlink_mode' => array('html' => 'permlinkmodes','event'=> 'publish', 'type' => '0', 'position' => '9'),
+				'send_lastmod' => array('html' => 'yesnoradio','event'=> 'admin', 'type' => '1', 'position' => '0'),
+				'ping_weblogsdotcom' => array('html' => 'yesnoradio','event'=> 'publish', 'type' => '1', 'position' => '0'),
+				'use_comments' => array('html' => 'yesnoradio','event'=> 'publish', 'type' => '0', 'position' => '12'),
+				'logging' => array('html' => 'logging','event'=> 'publish', 'type' => '0', 'position' => '10'),
+				'use_textile' => array('html' => 'text','event'=> 'publish', 'type' => '0', 'position' => '11'),
+				'tempdir' => array('html' => 'text_input','event'=> 'admin', 'type' => '1', 'position' => '0'),
+				'file_base_path' => array('html' => 'text_input','event'=> 'admin', 'type' => '1', 'position' => '0'),
+				'file_max_upload_size' => array('html' => 'text_input','event'=> 'admin', 'type' => '1', 'position' => '0'),		
+				'comments_moderate' => array('html' => 'yesnoradio','event'=> 'comments', 'type' => '0', 'position' => '13'),
+				'comments_on_default' => array('html' => 'yesnoradio','event'=> 'comments', 'type' => '0', 'position' => '14'),
+				'comments_are_ol' => array('html' => 'yesnoradio','event'=> 'comments', 'type' => '0', 'position' => '15'),
+				'comments_sendmail' => array('html' => 'yesnoradio','event'=> 'comments', 'type' => '0', 'position' => '16'),
+				'comments_disallow_images' => array('html' => 'yesnoradio','event'=> 'comments', 'type' => '0', 'position' => '17'),
+				'comments_default_invite' => array('html' => 'text_input','event'=> 'comments', 'type' => '0', 'position' => '18'),
+				'comments_dateformat' => array('html' => 'dateformats','event'=> 'comments', 'type' => '0', 'position' => '19'),
+				'comments_mode' => array('html' => 'commentmode','event'=> 'comments', 'type' => '0', 'position' => '20'),
+				'comments_disabled_after' => array('html' => 'weeks','event'=> 'comments', 'type' => '0', 'position' => '21'),
+				'img_dir' => array('html' => 'text_input','event'=> 'admin', 'type' => '1', 'position' => '0'),
+				'rss_how_many' => array('html' => 'text_input','event'=> 'admin', 'type' => '1', 'position' => '0'),
+				'logs_expire' => array('html' => 'text_input','event'=> 'admin', 'type' => '1', 'position' => '0'),
+			);
+			
+			foreach ($prefs_new_cols as $pref_key => $pref_val)
+			{
+				safe_update('txp_prefs', "html='$pref_val[html]',event='$pref_val[event]',type='$pref_val[type]', position='$pref_val[position]'", "name='$pref_key' AND prefs_id='1'");
+			}
+			
+			$prefs_hidden_rows = array('prefs_id','use_categories','use_sections','path_from_root','url_mode','record_mentions',
+			'locale','file_base_path','lastmod','version','path_to_site','dbupdatetime','timeoffset','article_list_pageby',
+			'blog_mail_uid','blog_time_uid','blog_uid','comment_list_pageby','file_list_pageby','image_list_pageby','link_list_pageby',
+			'log_list_pageby',);
+			
+			foreach ($prefs_hidden_rows as $hidden_pref)
+			{
+				safe_update('txp_prefs', "type='2'", "name='$hidden_pref' AND prefs_id='1'");
+			}
+			
+		
+			#advanced prefs
+			foreach ($txpac as $key => $val)
+			{
+				if (!in_array($key, array_keys($prefs)))
+				{
+					switch ($key)
+					{
+						case'custom_1_set':
+						case'custom_2_set':
+						case'custom_3_set':
+						case'custom_4_set':
+						case'custom_5_set':
+						case'custom_6_set':
+						case'custom_7_set':
+						case'custom_8_set':
+						case'custom_9_set':
+						case'custom_10_set':
+							$evt = 'custom';
+							$html = 'text_input';
+						break;
+						
+						case 'edit_raw_css_by_default':
+							$evt = 'css';
+							$html = 'yesnoradio';
+						break;
+						case 'spam_blacklists':
+						case 'expire_logs_after':
+						case 'max_url_len':
+							$html = 'text_input';
+							$evt = 'publish';
+						break;
+						case 'textile_links':
+							$html = 'yesnoradio';	
+							$evt = 'link';
+						break;
+						case 'show_article_category_count':
+							$html = 'yesnoradio';	
+							$evt = 'category';				
+						break;
+						case 'comments_require_name':
+						case 'comments_require_email':
+							$html = 'yesnoradio';	
+							$evt = 'comments';				
+						break;
+						default:
+							$html = 'yesnoradio';
+							$evt = 'publish';
+						break;				
+					}
+					safe_insert('txp_prefs',"val = '$val', name = '$key' , prefs_id ='1', type='1', html='$html', event='$evt'");
+				}
+			}		
+	}
+	
+	safe_alter('txp_prefs',"CHANGE `html` `html` VARCHAR( 64 ) DEFAULT 'text_input' NOT NULL");
+	safe_update('txp_prefs',"html='text_input'","html=''");
 		
 	if (!fetch('form','txp_form','name','search_results')) {
 		$form = <<<EOF
@@ -453,107 +560,7 @@ EOF;
 		safe_insert('txp_form', "name='search_results', type='article', Form='$form'");
 	}
 	
-	# add new column values to prefs
-	$prefs_new_cols = array(
-		'sitename' => array('html' => 'text_input', 'event'=> 'publish', 'type' => '0', 'position' => '1'),
-		'siteurl' => array('html' => 'text_input', 'event'=> 'publish', 'type' => '0', 'position' => '2'),
-		'site_slogan'  => array('html' =>'text_input', 'event' => 'publish', 'type' => '0', 'position' => '3'),
-		'language' => array('html' => 'languages','event'=> 'publish', 'type' => '0', 'position' => '4'),
-		'gmtoffset' => array('html' => 'gmtoffset_select','event'=> 'publish', 'type' =>  '0', 'position' => '5'),
-		'is_dst' => array('html' => 'yesnoradio','event'=> 'publish', 'type' => '0', 'position' => '6'),
-		'dateformat' => array('html' => 'dateformats','event'=> 'publish', 'type' => '0', 'position' => '7'),
-		'archive_dateformat' => array('html' => 'dateformats','event'=> 'publish', 'type' => '0', 'position' => '8'),
-		'permlink_mode' => array('html' => 'permlinkmodes','event'=> 'publish', 'type' => '0', 'position' => '9'),
-		'send_lastmod' => array('html' => 'yesnoradio','event'=> 'admin', 'type' => '1', 'position' => '0'),
-		'ping_weblogsdotcom' => array('html' => 'yesnoradio','event'=> 'publish', 'type' => '1', 'position' => '0'),
-		'use_comments' => array('html' => 'yesnoradio','event'=> 'publish', 'type' => '0', 'position' => '12'),
-		'logging' => array('html' => 'logging','event'=> 'publish', 'type' => '0', 'position' => '10'),
-		'use_textile' => array('html' => 'text','event'=> 'publish', 'type' => '0', 'position' => '11'),
-		'tempdir' => array('html' => 'text_input','event'=> 'admin', 'type' => '1', 'position' => '0'),
-		'file_base_path' => array('html' => 'text_input','event'=> 'admin', 'type' => '1', 'position' => '0'),
-		'file_max_upload_size' => array('html' => 'text_input','event'=> 'admin', 'type' => '1', 'position' => '0'),		
-		'comments_moderate' => array('html' => 'yesnoradio','event'=> 'comments', 'type' => '0', 'position' => '13'),
-		'comments_on_default' => array('html' => 'yesnoradio','event'=> 'comments', 'type' => '0', 'position' => '14'),
-		'comments_are_ol' => array('html' => 'yesnoradio','event'=> 'comments', 'type' => '0', 'position' => '15'),
-		'comments_sendmail' => array('html' => 'yesnoradio','event'=> 'comments', 'type' => '0', 'position' => '16'),
-		'comments_disallow_images' => array('html' => 'yesnoradio','event'=> 'comments', 'type' => '0', 'position' => '17'),
-		'comments_default_invite' => array('html' => 'text_input','event'=> 'comments', 'type' => '0', 'position' => '18'),
-		'comments_dateformat' => array('html' => 'dateformats','event'=> 'comments', 'type' => '0', 'position' => '19'),
-		'comments_mode' => array('html' => 'commentmode','event'=> 'comments', 'type' => '0', 'position' => '20'),
-		'comments_disabled_after' => array('html' => 'weeks','event'=> 'comments', 'type' => '0', 'position' => '21'),
-		'img_dir' => array('html' => 'text_input','event'=> 'admin', 'type' => '1', 'position' => '0'),
-		'rss_how_many' => array('html' => 'text_input','event'=> 'admin', 'type' => '1', 'position' => '0'),
-		'logs_expire' => array('html' => 'text_input','event'=> 'admin', 'type' => '1', 'position' => '0'),
-	);
 	
-	foreach ($prefs_new_cols as $pref_key => $pref_val)
-	{
-		safe_update('txp_prefs', "html='$pref_val[html]',event='$pref_val[event]',type='$pref_val[type]', position='$pref_val[position]'", "name='$pref_key' AND prefs_id='1'");
-	}
-	
-	$prefs_hidden_rows = array('prefs_id','use_categories','use_sections','path_from_root','url_mode','record_mentions',
-	'locale','file_base_path','lastmod','version','path_to_site','dbupdatetime','timeoffset','article_list_pageby',
-	'blog_mail_uid','blog_time_uid','blog_uid','comment_list_pageby','file_list_pageby','image_list_pageby','link_list_pageby',
-	'log_list_pageby',);
-	
-	foreach ($prefs_hidden_rows as $hidden_pref)
-	{
-		safe_update('txp_prefs', "type='2'", "name='$hidden_pref' AND prefs_id='1'");
-	}
-	
-
-	#advanced prefs
-	foreach ($txpac as $key => $val)
-	{
-		if (!in_array($key, array_keys($prefs)))
-		{
-			switch ($key)
-			{
-				case'custom_1_set':
-				case'custom_2_set':
-				case'custom_3_set':
-				case'custom_4_set':
-				case'custom_5_set':
-				case'custom_6_set':
-				case'custom_7_set':
-				case'custom_8_set':
-				case'custom_9_set':
-				case'custom_10_set':
-					$evt = 'custom';
-					$html = 'text_input';
-				break;
-				
-				case 'edit_raw_css_by_default':
-					$evt = 'css';
-					$html = 'yesnoradio';
-				break;
-				case 'spam_blacklists':
-				case 'expire_logs_after':
-				case 'max_url_len':
-					$html = 'text_input';
-					$evt = 'publish';
-				break;
-				case 'textile_links':
-					$html = 'yesnoradio';	
-					$evt = 'link';
-				break;
-				case 'show_article_category_count':
-					$html = 'yesnoradio';	
-					$evt = 'category';				
-				break;
-				case 'comments_require_name':
-				case 'comments_require_email':
-					$html = 'yesnoradio';	
-					$evt = 'comments';				
-				break;
-				default:
-					$html = 'yesnoradio';
-					$evt = 'publish';
-				break;				
-			}
-			safe_insert('txp_prefs',"val = '$val', name = '$key' , prefs_id ='1', type='1', html='$html', event='$evt'");
-		}
-	}
 	
 	if (!safe_query("SELECT 1 FROM `".PFX."txp_lang` LIMIT 0")) {
 		// do install
