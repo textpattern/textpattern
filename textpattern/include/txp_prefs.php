@@ -85,6 +85,11 @@
 				echo tr(tdcs(hed(ucfirst(gTxt($a['event'])),1),3));
 			}
 			if ($cur_evt == 'comments' && !$use_comments) continue;
+
+			# Skip old settings that don't have an input type
+			if (!is_callable($a['html']))
+				continue;
+
 			$out = tda(gTxt($a['name']), ' style="text-align:right;vertical-align:middle"');
 			if ($a['html'] == 'text_input')
 			{
