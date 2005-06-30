@@ -17,9 +17,6 @@
 	define("txpath", dirname(__FILE__));
 	define("txpinterface", "public");
 		
-//	ERROR_REPORTING(E_ALL);
-//	ini_set("display_errors","1");
-
 	include txpath.'/lib/txplib_db.php';
 	include txpath.'/lib/txplib_html.php';
 	include txpath.'/lib/txplib_forms.php';
@@ -82,7 +79,8 @@
 	$pretext = array_merge($pretext, pretext($s,$prefs));
 	extract($pretext);
 	
-//	dmp($pretext);
+	// Now that everything is initialized, we can crank down error reporting
+	set_error_level($production_status);
 	
 	if (gps('parentid') && gps('submit')) {
 		saveComment();
@@ -341,7 +339,7 @@
 // -------------------------------------------------------------
 	function textpattern() 
 	{
-		global $pretext,$microstart,$prefs,$qcount;
+		global $pretext,$microstart,$prefs,$qcount,$production_status;
 		$segment = gps('segment');
 		extract($pretext);
 
@@ -355,11 +353,13 @@
 		header("Content-type: text/html; charset=utf-8");
 		echo $html;
 
-		$microdiff = (getmicrotime() - $microstart);
-		echo n,comment('Runtime: '.substr($microdiff,0,6));
-		echo n,comment('Queries: '.$qcount);
-		if (is_callable('memory_get_usage'))
-			echo n,comment('Memory: '.ceil(memory_get_usage() / 1024).'Kb');
+		if (in_array($production_status, array('debug', 'testing'))) {
+			$microdiff = (getmicrotime() - $microstart);
+			echo n,comment('Runtime: '.substr($microdiff,0,6));
+			echo n,comment('Queries: '.$qcount);
+			if (is_callable('memory_get_usage'))
+				echo n,comment('Memory: '.ceil(memory_get_usage() / 1024).'Kb');
+		}
 	}
 
 // -------------------------------------------------------------

@@ -787,6 +787,25 @@ else
 			return $newfile;
 	}
 
+// --------------------------------------------------------------
+	function set_error_level($level)
+	{
+
+		if ($level == 'debug') {
+			error_reporting(E_ALL);
+		}
+		elseif ($level == 'live') {
+			// don't show errors on screen
+			error_reporting(E_ALL ^ (E_WARNING | E_NOTICE));
+			ini_set("display_errors","1");
+		}
+		else {
+			// default is 'testing': display everything except notices
+			error_reporting(E_ALL ^ (E_NOTICE));
+		}
+	}
+
+	
 // -------------------------------------------------------------
 	function shift_uploaded_file($f, $dest)
 	{

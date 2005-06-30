@@ -570,6 +570,11 @@ spam_blacklists => Spam blacklists (comma separated)
 urls_to_ping => URLs to ping (comma separated)
 install_language => Install language
 update_languages => Update languages
+#production status
+production_status => Production Status
+production_debug => Debugging
+production_test => Testing
+production_live => Live
 #@log
 logs => Logs
 no_refers_recorded => No referrers recorded yet

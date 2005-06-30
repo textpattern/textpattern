@@ -130,6 +130,7 @@
 			case 'logging':       $in = logging($item,$var);           break;
 			case 'languages':     $in = languages($item,$var);         break;
 			case 'text':          $in = text($item,$var);              break;
+			case 'prod_levels':   $in = prod_levels($item,$var);       break;
 			case 'permlinkmodes': $in = permlinkmodes($item,$var);     break;
 			case 'urlmodes':      $in = urlmodes($item,$var);
 		}
@@ -340,6 +341,16 @@
 		$dateformats['since'] = 'hrs/days ago';
 
 		return selectInput($item, array_unique($dateformats), $var);
+	}
+//-------------------------------------------------------------
+	function prod_levels($item, $var) {
+		$levels = array(
+			'debug'   => gTxt('production_debug'),
+			'testing' => gTxt('production_test'),
+			'live'    => gTxt('production_live'),
+		);
+
+		return selectInput($item, $levels, $var);
 	}
 	
 	function advanced_prefs($message='')
