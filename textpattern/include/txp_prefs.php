@@ -15,9 +15,9 @@
 	if ($event == 'prefs') {
 		require_privs('prefs');
 
-		$step = gps('step');
+		$step = gps('step');		
 
-		if(!$step or !function_exists($step)){
+		if(!$step or !in_array($step, array('advanced_prefs','prefs_save','advanced_prefs_save','get_language','list_languages','prefs_list'))){
 			prefs_list();
 		} else $step();
 	}

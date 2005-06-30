@@ -11,9 +11,13 @@
 */
 
 if ($event == 'category') {
-	require_privs('category');
+	require_privs('category');	
 
-	if(!$step or !function_exists($step)){
+	if(!$step or !in_array($step, array(
+		'category_list','article_create','image_create','file_create','link_create',
+		'category_multiedit','article_save','image_save','file_save','link_save',
+		'article_edit','image_edit','file_edit','link_edit',		
+	))){
 		category_list();
 	} else $step();
 }

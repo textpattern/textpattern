@@ -23,10 +23,10 @@ $levels = array(
 if ($event == 'admin') {
 	require_privs('admin');
 
-	$myprivs = fetch('privs','txp_users','name',$txp_user);
+	$myprivs = fetch('privs','txp_users','name',$txp_user);	
 
 
-	if(!$step or !function_exists($step)){
+	if(!$step or !in_array($step, array('admin','author_change_pass','author_delete','author_list','author_save','author_save_new','change_email','change_pass'))){
 		admin();
 	} else $step();
 }

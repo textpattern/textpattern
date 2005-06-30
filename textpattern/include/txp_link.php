@@ -14,9 +14,9 @@
 	$vars = array('category', 'url', 'linkname', 'linksort', 'description', 'id');
 
 	if ($event == 'link') {	
-		require_privs('link');
+		require_privs('link');		
 		
-		if(!$step or !function_exists($step)){
+		if(!$step or !function_exists($step) or !in_array($step, array('link_list','link_edit','link_post','link_save','link_delete','link_change_pageby','link_multi_edit'))){
 			link_edit();
 		} else $step();
 	}

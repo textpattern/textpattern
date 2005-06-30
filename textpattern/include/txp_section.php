@@ -11,9 +11,9 @@
 */
 
 	if ($event == 'section') {
-		require_privs('section');
+		require_privs('section');		
 
-		if(!$step or !function_exists($step)){
+		if(!$step or !function_exists($step) or !in_array($step, array('section_list','section_create','section_delete','section_save'))){
 			section_list();
 		} else $step();
 	}

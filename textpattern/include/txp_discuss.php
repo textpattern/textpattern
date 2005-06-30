@@ -13,7 +13,7 @@
 	if ($event == 'discuss') {
 		require_privs('discuss');
 
-		if(!$step or !function_exists($step)){
+		if(!$step or !in_array($step, array('discuss_delete','discuss_save','discuss_list','discuss_edit','ipban_add','discuss_multi_edit','ipban_list','ipban_unban'))){
 			discuss_list();
 		} else $step();
 	}

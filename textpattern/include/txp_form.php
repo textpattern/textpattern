@@ -16,7 +16,7 @@
 	if ($event == 'form') {
 		require_privs('form');
 
-		if(!$step or !function_exists($step)){
+		if(!$step or !in_array($step, array('form_list','form_create','form_delete','form_edit','form_multi_edit','form_save'))){
 			form_edit();
 		} else $step();
 	}

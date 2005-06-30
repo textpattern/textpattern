@@ -27,10 +27,10 @@
 				'blogger'=>'Blogger',
 				'b2' => 'b2', 
 				'wp'=>'WordPress'
-			);
+			);			
  	
 
- 	if(!$step or !function_exists($step)){
+ 	if(!$step or !in_array($step, array('switch_tool','start_import'))){
 		switch_tool();
 	} else $step();
  

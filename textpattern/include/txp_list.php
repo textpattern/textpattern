@@ -21,7 +21,7 @@
 	if ($event=='list') {
 		require_privs('article');
 
-		if(!$step or !function_exists($step)){
+		if(!$step or !in_array($step, array('list_change_pageby','list_list','list_multi_edit','list_list'))){
 			list_list();
 		} else $step();
 	}

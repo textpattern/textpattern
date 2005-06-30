@@ -10,9 +10,9 @@
 */
 
 	if ($event == 'page') {
-		require_privs('page');
+		require_privs('page');		
 
-		if(!$step or !function_exists($step)){
+		if(!$step or !in_array($step, array('page_edit','page_save','page_delete','div_edit','div_save','page_list'))){
 			page_edit();
 		} else $step();
 	}

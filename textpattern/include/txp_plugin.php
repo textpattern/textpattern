@@ -11,9 +11,9 @@
 */
 
 	if ($event == 'plugin') {
-		require_privs('plugin');
+		require_privs('plugin');		
 
-		if(!$step or !function_exists($step)){
+		if(!$step or !in_array($step, array('plugin_delete','plugin_edit','plugin_help','plugin_list','plugin_install','plugin_save','plugin_verify','switch_status'))){
 			plugin_list();
 		} else $step();
 	}

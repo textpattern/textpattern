@@ -15,9 +15,9 @@
 	define("IMPATH",$path_to_site.'/'.$img_dir.'/');
 
 	if ($event == 'image') {	
-		require_privs('image');
+		require_privs('image');		
 
-		if(!$step or !function_exists($step)){
+		if(!$step or !in_array($step, array('image_list','image_edit','image_insert','image_delete','image_replace','image_save','thumbnail_insert','image_change_pageby'))){
 			image_list();
 		} else $step();
 	}

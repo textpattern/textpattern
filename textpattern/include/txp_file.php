@@ -21,10 +21,9 @@
 	);
 
 	if ($event == 'file') {
-		check_privs(1,2,3,4,6);
+		check_privs(1,2,3,4,6);		
 
-
-		if(!$step or !function_exists($step)){
+		if(!$step or !in_array($step, array('file_change_max_size','file_change_pageby','file_db_add','file_delete','file_edit','file_insert','file_list','file_replace','file_save','file_reset_count','file_create'))){
 			file_list();
 		} else $step();
 	}
