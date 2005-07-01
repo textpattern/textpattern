@@ -168,7 +168,7 @@
 			'category' => ''
 		),$atts));
 	
-		$Form = fetch('Form','txp_form','name',$form);
+		$Form = fetch_form($form);
 		
 		$qparts = array(
 			($category) ? "category='$category'" : '1',
@@ -1357,7 +1357,7 @@
 			$thisfile = fileDownloadFetchInfo($where);
 		}				
 		
-		$thing = fetch('Form','txp_form','name',$form);
+		$thing = fetch_form($form);
 
 		return parse($thing);		
 	}

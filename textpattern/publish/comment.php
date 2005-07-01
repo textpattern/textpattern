@@ -63,7 +63,7 @@
 		extract($prefs);
 		$preview = gps('preview');
 		$id = gps('id');
-		$Form = fetch('Form','txp_form','name','comments');
+		$Form = fetch_form('comments');
 		$out = array();
 				
 		foreach($darr as $vars) {
@@ -169,7 +169,7 @@
 
 		$out = '<form method="post" action="" style="margin-top:2em">';
 
-		$form = fetch('Form','txp_form','name','comment_form');
+		$form = fetch_form('comment_form');
 					  
 	 	$textarea = '<textarea name="message" cols="30" rows="12" style="width:300px;height:250px" tabindex="4">'.htmlspecialchars($message).'</textarea>';
 
@@ -216,7 +216,7 @@
 		$h3 = ($preview) ? hed(gTxt('message_preview'),3) : '';
 		$discuss = discuss($id);
 		ob_start('parse');
-		$out = fetch('Form','txp_form','name','popup_comments');
+		$out = fetch_form('popup_comments');
 		$out = str_replace("<txp:popup_comments />",discuss($id),$out);
 		return $out;
 

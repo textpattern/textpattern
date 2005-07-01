@@ -524,7 +524,7 @@
 		// might be a form preview, otherwise grab it from the db
 		$form = (isset($_POST['Form']))
 		?	gps('Form')
-		:	safe_field('Form','txp_form',"name='$form'");
+		:	fetch_form($form);
 
 		if ($rs) {
 			
@@ -533,7 +533,7 @@
 				populateArticleData($a);
 				// define the article form
 				$article = ($allowoverride and $a['override_form']) 
-				?	fetch('Form','txp_form','name',$a['override_form'])
+				?	fetch_form($a['override_form'])
 				:	$form;
 
 				$articles[] = parse($article);
@@ -596,7 +596,7 @@
 			populateArticleData($rs);			
 
 			// define the article form
-			$article = fetch('Form','txp_form','name', ($override_form) ? $override_form : $form);
+			$article = fetch_form(($override_form) ? $override_form : $form);
 
 			if ($preview && $parentid) {
 				$article = discuss($parentid).$article;

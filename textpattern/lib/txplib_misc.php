@@ -897,4 +897,16 @@ function EvalElse($thing, $condition) {
 	return ($condition ? $parts[0] : $parts[1]);
 }
 
+// --------------------------------------------------------------
+function fetch_form($name) {
+	static $forms = array();
+
+	if (isset($forms[$name]))
+		return $forms[$name];
+
+	$f = fetch('Form','txp_form','name',$name);
+	$forms[$name] = $f;
+	return $f;
+}
+
 ?>
