@@ -652,7 +652,7 @@ EOF;
 	// 1.0: production_status setting to control error reporting
 	if (!safe_field('val','txp_prefs',"name='production_status'"))
 	{
-		$maxpos = safe_fetch('max(position)', 'txp_prefs', '1');
+		$maxpos = safe_field('max(position)', 'txp_prefs', '1');
 		safe_insert('txp_prefs',"name='production_status', val='testing', prefs_id='1', type='0', position='".doSlash($maxpos)."', html='prod_levels'");
 	}
 // updated, baby.
