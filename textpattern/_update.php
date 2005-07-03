@@ -435,7 +435,9 @@ eod;
 		
 	$txpprefs = getThings('describe '.PFX.'txp_prefs');
 	if (!in_array('type', $txpprefs))
-		safe_alter('txp_prefs', "add `type` smallint unsigned not null default '0'");
+		safe_alter('txp_prefs', "add `type` smallint unsigned not null default '2'");
+	# update the updated with default hidden type for old plugins prefs	
+	safe_alter('txp_prefs',"change `type` `type` smallint unsigned not null default '2'");
 	if (!in_array('event', $txpprefs))
 		safe_alter('txp_prefs', "add `event` varchar(12) not null default 'publish'");
 	if (!in_array('html', $txpprefs))
