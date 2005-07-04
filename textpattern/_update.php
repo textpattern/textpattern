@@ -651,11 +651,17 @@ EOF;
 		}
 	}
 
+	$maxpos = safe_field('max(position)', 'txp_prefs', '1');
 	// 1.0: production_status setting to control error reporting
 	if (!safe_field('val','txp_prefs',"name='production_status'"))
-	{
-		$maxpos = safe_field('max(position)', 'txp_prefs', '1');
+	{		
 		safe_insert('txp_prefs',"name='production_status', val='testing', prefs_id='1', type='0', position='".doSlash($maxpos)."', html='prod_levels'");
+	}
+	
+	# multiply position on prefs to allow easy reordering
+	if(intval($maxpos) < 100)
+	{
+		safe_update('txp_prefs','position = position*10','1');
 	}
 // updated, baby.
 

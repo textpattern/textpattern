@@ -73,35 +73,39 @@
 		
 		tr(tdcs(sLink('prefs','advanced_prefs',gTxt('advanced_preferences')).sp.sLink('prefs','list_languages',gTxt('install_language')),'3'));
 		
+		$evt_list = safe_column('event','txp_prefs',"type='0' AND prefs_id='1' GROUP BY 'event' ORDER BY 'event' DESC");
 		
-		$rs = safe_rows_start('*','txp_prefs',"type='0' AND prefs_id='1' ORDER BY 'position','event'");
-		$cur_evt = '';
-		while ($a = nextRow($rs))
+		foreach ($evt_list as $event)
 		{			
-			if ($a['event']!= $cur_evt)
-			{
-				$cur_evt = $a['event'];
+			$rs = safe_rows_start('*','txp_prefs',"type='0' AND prefs_id='1' AND event='$event' ORDER BY 'position'");
+			$cur_evt = '';
+			while ($a = nextRow($rs))
+			{			
+				if ($a['event']!= $cur_evt)
+				{
+					$cur_evt = $a['event'];
+					if ($cur_evt == 'comments' && !$use_comments) continue;
+					echo tr(tdcs(hed(ucfirst(gTxt($a['event'])),1),3));
+				}
 				if ($cur_evt == 'comments' && !$use_comments) continue;
-				echo tr(tdcs(hed(ucfirst(gTxt($a['event'])),1),3));
-			}
-			if ($cur_evt == 'comments' && !$use_comments) continue;
-
-			# Skip old settings that don't have an input type
-			if (!is_callable($a['html']))
-				continue;
-
-			$out = tda(gTxt($a['name']), ' style="text-align:right;vertical-align:middle"');
-			if ($a['html'] == 'text_input')
-			{
-				$size = 20;
-				$out.= td(call_user_func('text_input', $a['name'], $a['val'], $size));
-			}else{
-				$out.= td(call_user_func($a['html'], $a['name'], $a['val']));
-			}
-			$out.= tda(popHelp($a['name']), ' style="vertical-align:middle"');
-			echo tr($out);
-		}
 	
+				# Skip old settings that don't have an input type
+				if (!is_callable($a['html']))
+					continue;
+	
+				$out = tda(gTxt($a['name']), ' style="text-align:right;vertical-align:middle"');
+				if ($a['html'] == 'text_input')
+				{
+					$size = 20;
+					$out.= td(call_user_func('text_input', $a['name'], $a['val'], $size));
+				}else{
+					$out.= td(call_user_func($a['html'], $a['name'], $a['val']));
+				}
+				$out.= tda(popHelp($a['name']), ' style="vertical-align:middle"');
+				echo tr($out);
+			}			
+		}		
+			
 		echo
 		tr(tda(fInput('submit','Submit',gTxt('save_button'),'publish'),
 			' colspan="3" class="noline"')),
@@ -112,32 +116,6 @@
 		hInput('lastmod',"now()"),
 		'</form>';	
 	}
-
-
-//-------------------------------------------------------------
-/*	function pCell($item,$var,$format,$size="",$nohelp="") {
-		
-		$out = tda(gTxt($item), ' style="text-align:right;vertical-align:middle"');
-		switch($format) {
-			case "radio":         $in = yesnoradio($item,$var);        break;
-			case "input":         $in = text_input($item,$var,$size);  break;
-			case "gmtoffset":     $in = gmtoffset_select($item,$var);  break;
-			case 'commentmode':   $in = commentmode($item,$var);       break;
-			case 'cases':         $in = cases($item,$var);             break;
-			case 'locales':       $in = locale_select($item,$var);     break;
-			case 'dateformats':   $in = dateformats($item,$var);       break;
-			case 'weeks':         $in = weeks($item,$var);             break;
-			case 'logging':       $in = logging($item,$var);           break;
-			case 'languages':     $in = languages($item,$var);         break;
-			case 'text':          $in = text($item,$var);              break;
-			case 'prod_levels':   $in = prod_levels($item,$var);       break;
-			case 'permlinkmodes': $in = permlinkmodes($item,$var);     break;
-			case 'urlmodes':      $in = urlmodes($item,$var);
-		}
-		$out.= td($in);
-		$out.= ($nohelp!=1) ? tda(popHelp($item), ' style="vertical-align:middle"') : td();
-		return tr($out);
-	}*/
 
 //-------------------------------------------------------------
 	function text_input($item,$var,$size="") 
