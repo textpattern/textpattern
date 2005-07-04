@@ -339,7 +339,7 @@
 // -------------------------------------------------------------
 	function textpattern() 
 	{
-		global $pretext,$microstart,$prefs,$qcount,$production_status;
+		global $pretext,$microstart,$prefs,$qcount,$production_status,$txptrace;
 		$segment = gps('segment');
 		extract($pretext);
 
@@ -359,6 +359,8 @@
 			echo n,comment('Queries: '.$qcount);
 			if (is_callable('memory_get_usage'))
 				echo n,comment('Memory: '.ceil(memory_get_usage() / 1024).'Kb');
+			if (!empty($txptrace) and is_array($txptrace))
+				echo n, comment('txp tag trace: '.n.join(n, $txptrace).n);
 		}
 	}
 
@@ -755,11 +757,14 @@
 // -------------------------------------------------------------
 	function processTags($matches)
 	{
-		global $pretext;
+		global $pretext, $production_status, $txptrace;
 		$tag = $matches[1];
 
 		$atts = (isset($matches[2])) ? splat($matches[2]) : '';
 		$thing = (isset($matches[4])) ? $matches[4] : '';
+
+		if ($production_status == 'debug')
+			@$txptrace[] = trim($matches[0]);
 
 		if ($thing) {
 			if (function_exists($tag)) return $tag($atts,$thing,$matches[0]);
