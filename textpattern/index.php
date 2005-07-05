@@ -51,6 +51,9 @@
 		//i18n: define("LANG","en-gb");
 		define('txp_version', $thisversion);
 		define("hu",'http://'.$siteurl.'/');
+		// v1.0 experimental relative url global
+		define("rhu",preg_replace("/http:\/\/.+(\/.*)\/?$/U","$1",hu));
+
 	
 		if (!empty($locale)) setlocale(LC_ALL, $locale);
 		$textarray = load_lang(LANG);
