@@ -582,14 +582,16 @@
 
 		extract(lAtts(array(
 			'form' => 'default',
-			'status' => '4',
+			'status' => '',
 		),$atts));		
 
-		if (!is_numeric($status))
+		if ($status and !is_numeric($status))
 			$status = getStatusNum($status);
 
+		$q_status = ($status ? "and Status='".doSlash($status)."'" : 'and Status in (4,5)');
+
 		$rs = safe_row("*, unix_timestamp(Posted) as uPosted", 
-				"textpattern", "ID='$id' and Status='$status' limit 1");
+				"textpattern", "ID='$id' $q_status limit 1");
 
 		$com_count = safe_count('txp_discuss',"parentid=$id and visible=1");
 
