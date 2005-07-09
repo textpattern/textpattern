@@ -64,7 +64,8 @@ function doAuth() {
 				tr(
 					fLabelCell('').td(fInput('submit','',gTxt('log_in_button'),'publish'))
 				).
-			endTable()
+			endTable().
+			(gps('event') ? eInput(gps('event')) : '')
 		);
 		exit("</div></body></html>");
 	} 
