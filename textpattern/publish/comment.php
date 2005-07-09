@@ -24,7 +24,7 @@
 		?	fetchComments($ID)
 		:	array(psas(array('name','email','web','message','parentid','remember')));
 
-		$out = n.'<h3 style="margin-top:2em" id="'.gTxt('comment').'">'.$AnnotateInvite.'</h3>'.n;
+		$out = n.'<h3 class="txpCommentInvite" id="'.gTxt('comment').'">'.$AnnotateInvite.'</h3>'.n;
 
 
 
@@ -113,7 +113,7 @@
 			$temp = parse($temp);
 
 			$out[] = ($comments_are_ol) 
-			?	n.t.'<li id="c'.$discussid.'" style="margin-top:2em">'.$temp.'</li>' 
+			?	n.t.'<li id="c'.$discussid.'" class="txpCommentMsg">'.$temp.'</li>' 
 			:	$temp;
 		}
 			return join(n,$out);
@@ -167,11 +167,11 @@
 		if ($remember==1) { setCookies($name,$email,$web); }
 		if ($forget==1) { destroyCookies(); }
 
-		$out = '<form method="post" action="" style="margin-top:2em">';
+		$out = '<form method="post" action="" id="txpCommentInputForm">';
 
 		$form = fetch_form('comment_form');
 					  
-	 	$textarea = '<textarea name="message" cols="30" rows="12" style="width:300px;height:250px" tabindex="4">'.htmlspecialchars($message).'</textarea>';
+	 	$textarea = '<textarea name="message" cols="30" rows="12" tabindex="1" id="txpCommentInputMessage">'.htmlspecialchars($message).'</textarea>';
 
 		$comment_submit_button = ($preview)
 		?	fInput('submit','submit',gTxt('submit'),'button')
@@ -182,9 +182,9 @@
 		:	checkbox('remember',1,1).gTxt('remember');
 
 		$vals = array(
-			'comment_name_input'    => $namewarn.input('text','name',  $name, "25",'',"1"),
-			'comment_email_input'   => $emailwarn.input('text','email', $email,"25",'',"2"),
-			'comment_web_input'     => input('text','web',   $web,  "25",'',"3"),
+			'comment_name_input'    => $namewarn.input('text','name',  $name, "25",'',"2"),
+			'comment_email_input'   => $emailwarn.input('text','email', $email,"25",'',"3"),
+			'comment_web_input'     => input('text','web',   $web,  "25",'',"4"),
 			'comment_message_input' => $commentwarn.$textarea,
 			'comment_remember'      => $checkbox,
 			'comment_preview'       => input('submit','preview',gTxt('preview'),'','button'),
@@ -385,9 +385,8 @@
 // -------------------------------------------------------------
    	function comments_help()
 	{
-		return <<<eod
-		&#60;<a target="_blank" href="http://www.textpattern.com/help/?item=textile_comments" onclick="window.open(this.href, 'popupwindow', 'width=300,height=400,scrollbars,resizable'); return false;" style="color:blue;text-decoration:none">?</a>&#62;
-eod;
+		return ("
+		<a href=\"http://www.textpattern.com/help/?item=textile_comments\" id=\"txpCommentHelpLink\" onclick=\"window.open(this.href, 'popupwindow', 'width=300,height=400,scrollbars,resizable'); return false;\" >".gTxt('textile_help')."</a>");
 	}
 
 // -------------------------------------------------------------
