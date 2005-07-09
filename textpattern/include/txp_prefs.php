@@ -281,6 +281,7 @@
 		$dayname = '%A';
 		$dayshort = '%a';
 		$daynum = (is_numeric(strftime('%e')) ? '%e' : '%d');
+		$daynumlead = '%d';
 		$daynumord = (is_numeric(substr(trim(strftime('%Oe')), 0, 1)) ? '%Oe' : $daynum);
 		$monthname = '%B';
 		$monthshort = '%b';
@@ -295,7 +296,7 @@
 			"$monthshort $daynumord, $time12",
 			"$daynum.$monthnum.$yearshort",
 			"$daynumord $monthname, $time12",
-			"$yearshort.$monthnum.$daynum, $time12",
+			"$yearshort.$monthnum.$daynumlead, $time12",
 			"$dayshort $monthshort $daynumord, $time12",
 			"$dayname $monthname $daynumord, $year",
 			"$monthshort $daynumord",
@@ -303,12 +304,13 @@
 			"$daynumord $monthnum $year - $time24",
 			"$daynumord. $monthname $year",
 			"$daynumord. $monthname $year, $time24",
-			"$year-$monthnum-$daynum",
-			"$year-$daynum-$monthnum",
+			"$year-$monthnum-$daynumlead",
+			"$year-$daynumlead-$monthnum",
 			"$date $time12",
 			"$date",
 			"$time24",
-			"$time12",
+			"$time12", 
+			"$year-$monthnum-$daynumlead $time24", 
 		);
 
 		$ts = time();
