@@ -165,7 +165,8 @@
 			'break'    => br,
 			'limit'    => '',
 			'wraptag'  => '',
-			'category' => ''
+			'category' => '',
+			'class'    => __FUNCTION__,
 		),$atts));
 	
 		$Form = fetch_form($form);
@@ -198,11 +199,7 @@
 			}
 			
 			if (!empty($outlist)) {
-				if ($wraptag == 'ul' or $wraptag == 'ol') {
-					return doWrap($outlist, $wraptag, $break);
-				}	
-				
-				return ($wraptag) ? tag(join($break,$outlist),$wraptag) : join(n,$outlist);
+				return doWrap($outlist, $wraptag, $break, $class);
 			}
 		}
 		return false;
