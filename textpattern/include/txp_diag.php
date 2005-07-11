@@ -137,11 +137,6 @@
 		?	gTxt('file_uploads_disabled')
 		:	'',
 
-		'update_still_exists' =>
-		(@is_readable($txpcfg['txpath'] . '/_update.php'))
-		?	$txpcfg['txpath']."/_update.php ".gTxt('still_exists')
-		:	'',
-
 		'setup_still_exists' =>
 		(@is_readable($txpcfg['txpath'] . '/setup.php'))
 		?	$txpcfg['txpath']."/setup.php ".gTxt('still_exists')

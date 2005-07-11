@@ -66,6 +66,7 @@
 		
 		if (!$dbversion or $dbversion != $thisversion or 
 				($txp_rc and @filemtime(txpath.'/_update.php') > $dbupdatetime)) {
+			define('TXP_UPDATE', 1);
 			include './_update.php';
 			$event = 'prefs';
 			$step = 'prefs';

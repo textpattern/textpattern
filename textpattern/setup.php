@@ -217,7 +217,8 @@ eod;
 		$siteurl = rtrim($siteurl,"/");
 		
 		define("PFX",trim($dprefix));
-		
+		define('TXP_INSTALL', 1);
+
  		include './txpsql.php';
 
  		$nonce = md5( uniqid( rand(), true ) );

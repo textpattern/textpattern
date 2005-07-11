@@ -1,5 +1,8 @@
  <?php
 
+	if (!defined('TXP_UPDATE'))
+		exit;
+
 	safe_delete("txp_category","name=''");
 	safe_delete("txp_category","name=' '");
 

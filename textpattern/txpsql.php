@@ -1,5 +1,8 @@
 <?php
 
+if (!defined('TXP_INSTALL'))
+	exit;
+
 mysql_connect($dhost,$duser,$dpass);
 mysql_select_db($ddb);
 
