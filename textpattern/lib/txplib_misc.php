@@ -957,4 +957,17 @@ function fetch_form($name) {
 	return $f;
 }
 
+
+// --------------------------------------------------------------
+function fetch_category_title($name) {
+	static $cattitles = array();
+
+	if (isset($cattitles[$name]))
+		return $cattitles[$name];
+
+	$f = fetch('title','txp_category','name',doSlash($name));
+	$cattitles[$name] = $f;
+	return $f;
+}
+
 ?>

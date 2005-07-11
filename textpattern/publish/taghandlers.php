@@ -750,11 +750,12 @@
 		global $thisarticle;
 		extract(lAtts(array('link' => ''),$atts));
 		if ($thisarticle['category1']) {
+			$cat_title = fetch_category_title($thisarticle['category1']);
 			if (!empty($link)) 
 				return '<a href="'.hu.strtolower(gTxt('category')).'/'.
 					strtolower(urlencode($thisarticle['category1'])).'">'.
-					$thisarticle['category1'].'</a>';
-			return $thisarticle['category1'];
+					$cat_title.'</a>';
+			return $cat_title;
 		}
 	}
 	
@@ -764,11 +765,12 @@
 		global $thisarticle;
 		extract(lAtts(array('link' => ''),$atts));
 		if ($thisarticle['category2']) {
+			$cat_title = fetch_category_title($thisarticle['category2']);
 			if (!empty($link)) 
 				return '<a href="'.hu.strtolower(gTxt('category')).'/'.
 					strtolower(urlencode($thisarticle['category2'])).'">'.
-					$thisarticle['category2'].'</a>';
-			return $thisarticle['category2'];
+					$cat_title.'</a>';
+			return $cat_title;
 		}
 	}
 
