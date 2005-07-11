@@ -451,6 +451,7 @@ eod;
 		
 		# add new column values to prefs
 			$prefs_new_cols = array(
+				'attach_titles_to_permalinks' => array('html' => 'yesnoradio', 'event'=> 'publish', 'type' => '1', 'position' => '1'),
 				'sitename' => array('html' => 'text_input', 'event'=> 'publish', 'type' => '0', 'position' => '1'),
 				'siteurl' => array('html' => 'text_input', 'event'=> 'publish', 'type' => '0', 'position' => '2'),
 				'site_slogan'  => array('html' =>'text_input', 'event' => 'publish', 'type' => '0', 'position' => '3'),
@@ -480,6 +481,7 @@ eod;
 				'img_dir' => array('html' => 'text_input','event'=> 'admin', 'type' => '1', 'position' => '0'),
 				'rss_how_many' => array('html' => 'text_input','event'=> 'admin', 'type' => '1', 'position' => '0'),
 				'logs_expire' => array('html' => 'text_input','event'=> 'admin', 'type' => '1', 'position' => '0'),
+
 			);
 			
 			foreach ($prefs_new_cols as $pref_key => $pref_val)
