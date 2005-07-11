@@ -418,7 +418,7 @@
 				foreach ($response as $language)
 				{
 					# I'm affraid we need a value here for the language itself, not for each one of the rows
-					$db_lastmod = safe_field('UNIX_TIMESTAMP(lastmod)','txp_lang',"lang='$language[language]'");
+					$db_lastmod = safe_field('UNIX_TIMESTAMP(lastmod)','txp_lang',"lang='$language[language]' ORDER BY lastmod DESC");
 					
 					$updating = ($db_lastmod)? 1 : 0;
 					
@@ -460,10 +460,11 @@
 			$lang_struct = unserialize($response);
 			function install_lang_key($value, $key)
 			{
-				extract(gpsa(array('lang_code','updating')));				
+				extract(gpsa(array('lang_code','updating')));
+				$exists = safe_field('name','txp_lang',"name='$value[name]' AND lang='$lang_code'");				
 				$q = "name='$value[name]', event='$value[event]', data='$value[data]', lastmod='".strftime('%Y%m%d%H%M%S',$value['uLastmod'])."'";
 
-				if ($updating)
+				if ($exists)
 				{
 					safe_update('txp_lang',$q,"lang='$lang_code' AND name='$value[name]'");
 				}else{
