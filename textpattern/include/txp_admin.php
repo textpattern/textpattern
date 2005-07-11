@@ -153,12 +153,8 @@ if ($event == 'admin') {
 		gTxt('your_password_is').': '.$pw."\r\n"."\r\n".
 	
 		gTxt('log_in_at').' '.hu.'textpattern/index.php';
-	
-		mail($email, "[$sitename] ".gTxt('your_login_info'), $message,
-		 "From: $myName <$myEmail>\r\n"
-		."Reply-To: $myEmail\r\n"
-		."Content-Transfer-Encoding: 8bit\r\n"
-		."Content-Type: text/plain; charset=\"UTF-8\"\r\n");
+
+		return txpMail($email, "[$sitename] ".gTxt('your_login_info'), $message);
 	}
 
 // -------------------------------------------------------------
@@ -166,20 +162,12 @@ if ($event == 'admin') {
 	{
 		global $txp_user,$sitename;
 
-		$myEmail = safe_field("email","txp_users","name = '$txp_user'");
-
 		$message = gTxt('greeting').' '.$name.','."\r\n".
 		gTxt('your_password_is').': '.$NewPass."\r\n"."\r\n".
 
 		gTxt('log_in_at').' '.hu.'textpattern/index.php';
-	
-		if (mail($themail, "[$sitename] ".gTxt('your_new_password'), $message,
-		 "From: $txp_user <$myEmail>\r\n"
-		."Reply-To: $myEmail\r\n"
-		."Content-Transfer-Encoding: 8bit\r\n"
-		."Content-Type: text/plain; charset=\"UTF-8\"\r\n")) {
-			return true;
-		} return false;
+
+		return txpMail($themail, "[$sitename] ".gTxt('your_new_password'), $message);
 	}
 
 // -------------------------------------------------------------

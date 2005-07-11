@@ -633,6 +633,28 @@ else
 	}
 
 // -------------------------------------------------------------
+	function txpMail($to_address, $subject, $body, $reply_to = null) 
+	{
+		global $txp_user;
+		if (isset($txp_user))
+		{	// Likely sending passwords
+			extract(safe_row("RealName, email", "txp_users", "name = '$txp_user'"));
+		} 
+		else
+		{	// Likely sending comments -> "to" equals "from"
+			extract(safe_row("RealName, email", "txp_users", "email = '$to_address'"));
+		}
+
+		return mail($to_address, $subject, $body,
+		 "From: $RealName <$email>\r\n"
+		."Reply-To: ". ((isset($reply_to)) ? $reply_to : "$RealName <$email>") . "\r\n"
+		."X-Mailer: Textpattern\r\n"
+		."Content-Transfer-Encoding: 8bit\r\n"
+		."Content-Type: text/plain; charset=\"UTF-8\"\r\n");		
+	}
+
+
+// -------------------------------------------------------------
 	function stripPHP($in) 
 	{
 		return preg_replace("/".chr(60)."\?(?:php)?|\?".chr(62)."/i",'',$in);

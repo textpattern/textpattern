@@ -392,8 +392,7 @@
 // -------------------------------------------------------------
 	function mail_comment($message, $cname, $cemail, $cweb, $parentid) 
 	{
-		global $sitename,$txp_user;
-		$myName = $txp_user;
+		global $sitename;
 		extract(safe_row("AuthorID,Title", "textpattern", "ID = '$parentid'"));
 		extract(safe_row("RealName, email", "txp_users", "name = '$AuthorID'"));
 		$cname = preg_replace('/[\r\n]/', ' ', $cname);
@@ -408,12 +407,7 @@
 
 		$subject = sprintf(gTxt('comment_received'), $sitename, $Title);
 
-		mail($email, $subject, $out,
-		 "From: $RealName <$email>\r\n"
-		."Reply-To: $cname <$cemail>\r\n"
-		."X-Mailer: Textpattern\r\n"
-		."Content-Transfer-Encoding: 8bit\r\n"
-		."Content-Type: text/plain; charset=\"UTF-8\"\r\n");
+		$success = txpMail($email, $subject, $out, "$cname <$cemail>");
 	}
 
 // -------------------------------------------------------------

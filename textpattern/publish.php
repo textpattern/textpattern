@@ -68,6 +68,9 @@
 	define("LANG",$language);
 	if (!empty($locale)) setlocale(LC_ALL, $locale);
 
+	//Initialize the current user
+	$txp_user = NULL;
+
 	//i18n: $textarray = load_lang('en-gb');
 	$textarray = load_lang(LANG);
 
