@@ -607,6 +607,32 @@ else
 	}
 
 // -------------------------------------------------------------
+	function maxMemUsage($message = 'none', $returnit = 0)
+	{
+		static $memory_top = 0;
+		static $memory_message;
+
+		if (is_callable('memory_get_usage'))
+		{
+			$memory_now = memory_get_usage();
+			if ($memory_now > $memory_top)
+			{
+				$memory_top = $memory_now;
+				$memory_message = $message;
+			}
+		}
+
+		if ($returnit != 0)
+		{
+			if (is_callable('memory_get_usage'))
+				return n.comment(sprintf('Memory: %sKb, %s',
+					ceil($memory_top/1024),$memory_message));
+			else
+				return n.comment('Memory: no info available');
+		}
+	}
+
+// -------------------------------------------------------------
 	function stripPHP($in) 
 	{
 		return preg_replace("/".chr(60)."\?(?:php)?|\?".chr(62)."/i",'',$in);

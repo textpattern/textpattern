@@ -357,8 +357,7 @@
 			$microdiff = (getmicrotime() - $microstart);
 			echo n,comment('Runtime: '.substr($microdiff,0,6));
 			echo n,comment('Queries: '.$qcount);
-			if (is_callable('memory_get_usage'))
-				echo n,comment('Memory: '.ceil(memory_get_usage() / 1024).'Kb');
+			echo maxMemUsage('end of textpattern()',1);
 			if (!empty($txptrace) and is_array($txptrace))
 				echo n, comment('txp tag trace: '.n.join(n, $txptrace).n);
 		}
@@ -766,7 +765,10 @@
 		$thing = (isset($matches[4])) ? $matches[4] : '';
 
 		if ($production_status == 'debug')
+		{
 			@$txptrace[] = trim($matches[0]);
+			maxMemUsage(trim($matches[0]));
+		}
 
 		if ($thing) {
 			if (function_exists($tag)) return $tag($atts,$thing,$matches[0]);
