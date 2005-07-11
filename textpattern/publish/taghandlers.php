@@ -752,7 +752,7 @@
 		if ($thisarticle['category1']) {
 			$cat_title = fetch_category_title($thisarticle['category1']);
 			if (!empty($link)) 
-				return '<a href="'.hu.strtolower(gTxt('category')).'/'.
+				return '<a href="'.hu.strtolower(urlencode(gTxt('category'))).'/'.
 					strtolower(urlencode($thisarticle['category1'])).'">'.
 					$cat_title.'</a>';
 			return $cat_title;
@@ -767,7 +767,7 @@
 		if ($thisarticle['category2']) {
 			$cat_title = fetch_category_title($thisarticle['category2']);
 			if (!empty($link)) 
-				return '<a href="'.hu.strtolower(gTxt('category')).'/'.
+				return '<a href="'.hu.strtolower(urlencode(gTxt('category'))).'/'.
 					strtolower(urlencode($thisarticle['category2'])).'">'.
 					$cat_title.'</a>';
 			return $cat_title;
