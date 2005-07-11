@@ -218,8 +218,9 @@
 					case strtolower(gTxt('category')):
 						$out['c'] = (ckEx('category',$u2)) ? $u2 : ''; break;
 	
-					case strtolower(gTxt('author')):
-						$out['author'] = (!empty($u2)) ? $u2 : ''; break;
+					case urlencode(strtolower(gTxt('author'))):										
+						$author_name = (!empty($u2)) ? urldecode($u2) : '';
+						$out['author'] = safe_field('name','txp_users',"RealName like '$author_name'"); break;			
 	
 					case strtolower(gTxt('file_download')):
 						$out['s'] = 'file_download';

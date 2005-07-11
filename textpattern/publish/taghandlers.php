@@ -719,8 +719,14 @@
 // -------------------------------------------------------------
 	function author($atts) 
 	{
-		global $thisarticle;
-		return get_author_name($thisarticle['authorid']);	
+		global $thisarticle;		
+		extract(lAtts(array('link' => ''),$atts));
+		$author_name = get_author_name($thisarticle['authorid']);
+		if (!empty($link)) 
+			return '<a href="'.hu.urlencode(strtolower(gTxt('author'))).'/'.
+				urlencode($author_name).'">'.
+				$author_name.'</a>';
+		return $author_name;		
 	}
 	
 // -------------------------------------------------------------
