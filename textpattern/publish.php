@@ -31,6 +31,9 @@
 
 	ob_start();
 
+		// useful for clean urls with error-handlers
+	header("Status: 200 OK");
+
     	// start the clock for runtime
 	$microstart = getmicrotime();
 
@@ -68,10 +71,10 @@
 	define("LANG",$language);
 	if (!empty($locale)) setlocale(LC_ALL, $locale);
 
-	//Initialize the current user
+		//Initialize the current user
 	$txp_user = NULL;
 
-	//i18n: $textarray = load_lang('en-gb');
+		//i18n: $textarray = load_lang('en-gb');
 	$textarray = load_lang(LANG);
 
 		// this step deprecated as of 1.0 : really only useful with old-style
