@@ -72,8 +72,9 @@
 			$step = 'prefs';
 		}
 
-		if ($admin_side_plugins and gps('event') != 'plugin')
+		if (!empty($admin_side_plugins) and gps('event') != 'plugin')
 			load_plugins(1);
+
 		include txpath.'/lib/txplib_head.php';
 
 		callback_event($event, $step, 1);
