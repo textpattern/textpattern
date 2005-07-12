@@ -407,7 +407,7 @@
 			'section'   => '',
 			'excerpted' => '',
 			'author'    => '',
-			'sortby'    => ($q ? 'score' : 'Posted'),
+			'sortby'    => '',
 			'sortdir'   => 'desc',
 			'month'     => '',
 			'keywords'  => '',
@@ -452,9 +452,12 @@
 
 			// searchall=0 can be used to show search results for the current section only
 			if ($searchall) $section = '';
+			if (!$sortby) $sortby='score';
 		}
-		else
+		else {
 			$match = $search = '';
+			if (!$sortby) $sortby='Posted';
+		}
 
 		//Building query parts
 		$frontpage = ($frontpage and !$q) ? filterFrontPage() : '';		
