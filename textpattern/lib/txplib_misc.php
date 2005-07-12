@@ -881,19 +881,6 @@ else
 		
 		return $base.DIRECTORY_SEPARATOR.$path;
 	}	
-
-// --------------------------------------------------------------
-	function get_comments_count($id)
-	{
-		static $count = array();
-
-		if (isset($count[$id]))
-			return $count[$id];
-
-		$c = safe_count('txp_discuss',"parentid='".doSlash($id)."' and visible=1");
-		$count[$id] = $c;
-		return $c;
-	}
 	
 // --------------------------------------------------------------
 	function get_author_name($id)
@@ -910,64 +897,86 @@ else
 
 
 // --------------------------------------------------------------
-function EvalElse($thing, $condition) {
-	$f = '@(</?txp:\S+\b.*(?:(?<!br )/)?'.chr(62).')@sU';
+	function EvalElse($thing, $condition) 
+	{
+		$f = '@(</?txp:\S+\b.*(?:(?<!br )/)?'.chr(62).')@sU';
 
-	$parsed = preg_split($f, $thing, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+		$parsed = preg_split($f, $thing, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
 
-	$tagpat = '@^<(/?)txp:(\w+).*?(/?)>$@';
+		$tagpat = '@^<(/?)txp:(\w+).*?(/?)>$@';
 
-	$parts = array(0 => '', 1 => '');
-	$in = 0;
-	$level = 0;
-	foreach ($parsed as $chunk) {
-		if (preg_match($tagpat, $chunk, $m)) {
-			if ($m[2] == 'else' and $m[3] == '/' and $level == 0) {
-				$in = 1-$in;
-			}
-			elseif ($m[1] == '' and $m[3] == '') {
-				++$level;
-				$parts[$in] .= $chunk;
-			}
-			elseif ($m[1] == '/') {
-				--$level;
-				$parts[$in] .= $chunk;
+		$parts = array(0 => '', 1 => '');
+		$in = 0;
+		$level = 0;
+		foreach ($parsed as $chunk) {
+			if (preg_match($tagpat, $chunk, $m)) {
+				if ($m[2] == 'else' and $m[3] == '/' and $level == 0) {
+					$in = 1-$in;
+				}
+				elseif ($m[1] == '' and $m[3] == '') {
+					++$level;
+					$parts[$in] .= $chunk;
+				}
+				elseif ($m[1] == '/') {
+					--$level;
+					$parts[$in] .= $chunk;
+				}
+				else {
+					$parts[$in] .= $chunk;
+				}
 			}
 			else {
 				$parts[$in] .= $chunk;
 			}
 		}
-		else {
-			$parts[$in] .= $chunk;
+
+		return ($condition ? $parts[0] : $parts[1]);
+	}
+
+// --------------------------------------------------------------
+	function fetch_form($name) 
+	{
+		static $forms = array();
+
+		if (isset($forms[$name]))
+			return $forms[$name];
+
+		$f = fetch('Form','txp_form','name',$name);
+		$forms[$name] = $f;
+		return $f;
+	}
+
+// --------------------------------------------------------------
+	function fetch_category_title($name) 
+	{
+		static $cattitles = array();
+
+		if (isset($cattitles[$name]))
+			return $cattitles[$name];
+
+		$f = fetch('title','txp_category','name',doSlash($name));
+		$cattitles[$name] = $f;
+		return $f;
+	}
+
+// -------------------------------------------------------------
+	function update_comments_count($id) 
+	{
+		$thecount = safe_field('count(*)','txp_discuss','parentid='.doSlash($id).' and visible=1');
+		$updated = safe_update("textpattern","comments_count=$thecount","ID=$id");
+		return ($updated) ? true : false;
+	}
+
+// -------------------------------------------------------------
+	function clean_comment_counts() 
+	{
+		$rs = safe_rows_start('parentid, count(*) as thecount','txp_discuss','visible=1 group by parentid');
+		if ($rs) {
+			while ($a = nextRow($rs)) {
+				safe_update('textpattern',"comments_count=".$a['thecount'],"ID=".$a['parentid']);
+			}
 		}
 	}
 
-	return ($condition ? $parts[0] : $parts[1]);
-}
-
-// --------------------------------------------------------------
-function fetch_form($name) {
-	static $forms = array();
-
-	if (isset($forms[$name]))
-		return $forms[$name];
-
-	$f = fetch('Form','txp_form','name',$name);
-	$forms[$name] = $f;
-	return $f;
-}
-
-
-// --------------------------------------------------------------
-function fetch_category_title($name) {
-	static $cattitles = array();
-
-	if (isset($cattitles[$name]))
-		return $cattitles[$name];
-
-	$f = fetch('title','txp_category','name',doSlash($name));
-	$cattitles[$name] = $f;
-	return $f;
-}
 
 ?>

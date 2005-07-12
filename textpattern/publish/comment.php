@@ -123,6 +123,7 @@
 	function commentForm($id) 
 	{
 		global $prefs;
+		extract($prefs);
 		$namewarn = '';
 		$emailwarn = '';
 		$commentwarn = '';
@@ -328,8 +329,12 @@
 							if ($prefs['comment_means_site_updated']) {
 								safe_update("txp_prefs", "val=now()", "name='lastmod'");
 							}
-							if ($comments_sendmail) 
+							if ($comments_sendmail) {
 								mail_comment($message,$name,$email,$web,$parentid);
+							}
+							
+							$updated = update_comments_count($parentid);
+
 							ob_start();
 							header('location: '.$backpage);
 						}

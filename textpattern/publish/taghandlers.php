@@ -688,7 +688,7 @@
 	{
 		global $thisarticle;
 
-		$com_count = get_comments_count(@$thisarticle['thisid']);
+		$com_count = $thisarticle['comments_count'];
 		return ($com_count > 0) ? $com_count : '';
 	}
 
@@ -701,9 +701,8 @@
 		extract($thisarticle);
 		global $comments_mode;
 
-		if (($annotate or get_comments_count($thisid)) && $is_article_list) {
+		if (($annotate or $comments_count) && $is_article_list) {
 
-			$comments_count = get_comments_count($thisid);
 			$ccount = ($comments_count) ?  ' ['.$comments_count.']' : '';
 	
 			if (!$comments_mode) {
@@ -938,7 +937,7 @@
 	function if_comments($atts, $thing)	
 	{
 		global $thisarticle;
-		return parse(EvalElse($thing, get_comments_count($thisarticle['thisid'])));
+		return parse(EvalElse($thing, $thisarticle['comments_count']));
 	}
 
 // -------------------------------------------------------------

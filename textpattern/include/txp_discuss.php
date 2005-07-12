@@ -22,14 +22,15 @@
 	function discuss_delete()
 	{
 		$discussid = ps('discussid');
-		safe_delete("txp_discuss","discussid = $discussid");	
+		safe_delete("txp_discuss","discussid = $discussid");
+		update_comments_count($discussid); 
 		discuss_list(messenger('message',$discussid,'deleted'));
 	}
 
 //-------------------------------------------------------------
 	function discuss_save()
 	{
-		extract(doSlash(gpsa(array('email','name','web','message','discussid','ip','visible'))));
+		extract(doSlash(gpsa(array('email','name','web','message','discussid','ip','visible','parentid'))));
 		safe_update("txp_discuss",
 			"email   = '$email',
 			 name    = '$name',
@@ -37,6 +38,7 @@
 			 message = '$message',
 			 visible = '$visible'",
 			"discussid = $discussid");
+		update_comments_count($parentid);
 		discuss_list(messenger('message',$discussid,'updated'));
 	}
 
@@ -156,7 +158,7 @@
 					fLabelCell('visible') . td(checkbox('visible', 1,$visible)),
 					fLabelCell('IP') . td($ip.sp.$banlink),
 					td() . td(fInput('submit','step',gTxt('save'),'publish')),
-				hInput("discussid", $discussid).hInput('ip',$ip).
+				hInput("discussid", $discussid).hInput('ip',$ip).hInput('parentid',$parentid).
 				eInput('discuss').sInput('discuss_save')
 			).
 			endTable()
@@ -250,8 +252,13 @@
 // -------------------------------------------------------------
 	function discuss_multi_edit() 
 	{
+		$parentid = safe_field("txp_discuss","parentid","parentid=".doSlash(ps('discussid')));
 		$deleted = event_multi_edit('txp_discuss','discussid');
-		if(!empty($deleted)) return discuss_list(messenger('comment',$deleted,'deleted'));
+		if(!empty($deleted)) {
+			// might as well clean up all comment counts while we're here.
+			clean_comment_counts();
+			return discuss_list(messenger('comment',$deleted,'deleted'));
+		}
 		return discuss_list();
 	}
 

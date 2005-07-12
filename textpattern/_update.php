@@ -59,6 +59,11 @@
 		safe_alter("textpattern", "add `Excerpt_html` mediumtext not null after `Excerpt` ");
 	}
 
+		// comments count cache field
+	if (!in_array('comments_count',$txp)) {
+		safe_alter("textpattern", "add `comments_count` int(8) not null after `AnnotateInvite` ");
+	}
+
 	// custom fields added for g1.19
 
 	if (!in_array('custom_1',$txp)) {
@@ -414,6 +419,17 @@ eod;
 			}
 		}
 	}
+
+	// 1.0: populate comments_count field
+
+		$rs = safe_rows_start('parentid, count(*) as thecount','txp_discuss','visible=1 group by parentid');
+		if ($rs) {
+			while ($a = nextRow($rs)) {
+				safe_update('textpattern',"comments_count=".$a['thecount'],"ID=".$a['parentid']);
+			}
+		}
+
+
 	
 	// 1.0: Human-friendly title for sections and categories, to solve i18n problems
 	if (!in_array('title',$txpsect)) {

@@ -602,8 +602,6 @@
 		$rs = safe_row("*, unix_timestamp(Posted) as uPosted", 
 				"textpattern", "ID='$id' $q_status limit 1");
 
-		$com_count = safe_count('txp_discuss',"parentid=$id and visible=1");
-
 		if ($rs) {
 			extract($rs);
 			populateArticleData($rs);			
@@ -615,7 +613,7 @@
 				$article = discuss($parentid).$article;
 			}
 
-			if (($Annotate or get_comments_count($ID)) && !$preview) {
+			if (($Annotate or $comments_count) && !$preview) {
 				if($use_comments) {
 					$article .= discuss($ID);
 				}
@@ -671,6 +669,8 @@
 		$out['section']         = $Section;
 		$out['keywords']        = $Keywords;
 		$out['article_image']   = $Image;
+		$out['comments_count']  = $comments_count;
+
 
 		$custom = getCustomFields();
 		if ($custom) {
