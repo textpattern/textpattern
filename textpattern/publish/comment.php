@@ -65,6 +65,8 @@
 		$id = gps('id');
 		$Form = fetch_form('comments');
 		$out = array();
+
+		$durl = permlinkurl_id($id).'#c';
 				
 		foreach($darr as $vars) {
 			$GLOBALS['thiscomment'] = $vars;
@@ -95,7 +97,7 @@
 			if ($web)
 				$name = '<a href="http://'.$web.'" title="'.$web.'"'.(@$comment_nofollow ? ' rel="nofollow"' : '').'>'.$name.'</a>';
 
-			$dlink = permlinkurl_id($parentid).'#c'.$discussid;
+			$dlink = $durl.$discussid;
 		
 			$vals = array(
 				'comment_name'=>$name,
