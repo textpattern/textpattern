@@ -496,8 +496,6 @@ eod;
 				'comments_disabled_after' => array('html' => 'weeks','event'=> 'comments', 'type' => '0', 'position' => '21'),
 				'img_dir' => array('html' => 'text_input','event'=> 'admin', 'type' => '1', 'position' => '0'),
 				'rss_how_many' => array('html' => 'text_input','event'=> 'admin', 'type' => '1', 'position' => '0'),
-				'logs_expire' => array('html' => 'text_input','event'=> 'admin', 'type' => '1', 'position' => '0'),
-
 			);
 			
 			foreach ($prefs_new_cols as $pref_key => $pref_val)
