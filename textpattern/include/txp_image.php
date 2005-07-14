@@ -179,7 +179,7 @@
 		
 		list($w,$h,$extension) = getimagesize($file);
 
-		if ($extensions[$extension]) {
+		if (($file !== false) && $extensions[$extension]) {
 			$ext = $extensions[$extension];
 			$name = substr($name,0,strrpos($name,'.'));
 			$name .= $ext;
@@ -215,7 +215,10 @@
 				}
 			}
 		} else {
-			image_list(gTxt('only_graphic_files_allowed'));
+			if ($file === false)
+				image_list(upload_get_errormsg($_FILES['thefile']['error']));
+			else
+				image_list(gTxt('only_graphic_files_allowed'));
 		}
 	}
 
@@ -233,7 +236,7 @@
 		
 		list($w,$h,$extension) = getimagesize($file);
 
-		if ($extensions[$extension]) {
+		if (($file !== false) && $extensions[$extension]) {
 			$ext = $extensions[$extension];
 			$name = substr($name,0,strrpos($name,'.'));
 			$name .= $ext;
@@ -267,7 +270,10 @@
 				}
 			}
 		} else {
-			image_list(gTxt('only_graphic_files_allowed'));
+			if ($file === false)
+				image_list(upload_get_errormsg($_FILES['thefile']['error']));
+			else
+				image_list(gTxt('only_graphic_files_allowed'));
 		}
 	}
 
@@ -285,7 +291,7 @@
 		
 		list(,,$extension) = getimagesize($file);
 	
-		if ($extensions[$extension]) {
+		if (($file !== false) && $extensions[$extension]) {
 			$ext = $extensions[$extension];
 
 				$newpath = IMPATH.$id.'t'.$ext;
@@ -297,7 +303,12 @@
 				safe_update("txp_image", "thumbnail='1'", "id='$id'");
 				image_edit(messenger('image',$name,'uploaded'),$id);
 			}
-		} else image_list(gTxt('only_graphic_files_allowed')); 	
+		} else {
+			if ($file === false)
+				image_list(upload_get_errormsg($_FILES['thefile']['error']));
+			else
+				image_list(gTxt('only_graphic_files_allowed'));
+		}
 	}
 
 
