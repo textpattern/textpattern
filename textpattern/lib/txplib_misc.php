@@ -941,7 +941,8 @@ else
 		if (isset($forms[$name]))
 			return $forms[$name];
 
-		$f = fetch('Form','txp_form','name',$name);
+		$f = fetch('Form','txp_form','name',doSlash($name));
+		if (!$f) return graf('form '.strong($name).' does not exist');
 		$forms[$name] = $f;
 		return $f;
 	}
