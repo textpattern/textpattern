@@ -422,7 +422,7 @@
 					
 					$updating = ($db_lastmod)? 1 : 0;
 					
-					$remote_mod = mktime($language['lastmodified']->hour,$language['lastmodified']->minute,$language['lastmodified']->second,$language['lastmodified']->month,$language['lastmodified']->day,$language['lastmodified']->year);
+					$remote_mod = gmmktime($language['lastmodified']->hour,$language['lastmodified']->minute,$language['lastmodified']->second,$language['lastmodified']->month,$language['lastmodified']->day,$language['lastmodified']->year);
 					
 					$updated = ($updating && ($db_lastmod >= $remote_mod))? 1 : 0;
 					
