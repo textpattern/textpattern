@@ -682,6 +682,11 @@ EOF;
 	{
 		safe_update('txp_prefs','position = position*10','1');
 	}
+	# remove, remove
+	if (safe_field('name','txp_prefs',"name='logs_expire'"))
+	{
+		safe_delete('txp_prefs',"name='logs_expire'");
+	}	
 // updated, baby.
 
 ?>
