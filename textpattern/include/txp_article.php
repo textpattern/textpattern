@@ -258,6 +258,14 @@ if ($event == 'article') {
 			else if ($Status==2) { $message = gTxt("article_saved_hidden");	 } 
 			else if ($Status==1) { $message = gTxt("article_saved_draft");	 }	
 		}
+		// Check for blank or previously used identical url-titles
+		If (strlen($url_title) === 0) {
+			$message .= ' '.gTxt("url_title_is_blank");
+		} else {
+			$url_title_count = safe_count("textpattern", "`url_title` = '".$url_title."'");
+			if ($url_title_count > 1)
+				$message .= sprintf(' '.gTxt("url_title_is_multiple"),$url_title_count);
+		}
 		
 		article_edit($message);
 	}
