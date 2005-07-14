@@ -451,11 +451,9 @@
 					# I'm affraid we need a value here for the language itself, not for each one of the rows
 					$db_lastmod = safe_field('UNIX_TIMESTAMP(lastmod)','txp_lang',"lang='$language[language]' ORDER BY lastmod DESC");
 					
-					$updating = ($db_lastmod)? 1 : 0;
+					$updating = ($db_lastmod)? 1 : 0;					
 					
 					$remote_mod = gmmktime($language['lastmodified']->hour,$language['lastmodified']->minute,$language['lastmodified']->second,$language['lastmodified']->month,$language['lastmodified']->day,$language['lastmodified']->year);
-					
-					$updated = ($updating && ($db_lastmod >= $remote_mod))? 1 : 0;
 					
 					if ($updated){
 						echo tr(tda(gTxt($language['language']).sp,' style="text-align:right;vertical-align:middle"').tda(gTxt('updated')));
@@ -493,7 +491,7 @@
 			{
 				extract(gpsa(array('lang_code','updating')));
 				$exists = safe_field('name','txp_lang',"name='$value[name]' AND lang='$lang_code'");				
-				$q = "name='$value[name]', event='$value[event]', data='$value[data]', lastmod='".strftime('%Y%m%d%H%M%S',$value['uLastmod'])."'";
+				$q = "name='".doSlash($value['name'])."', event='".doSlash($value['event'])."', data='".doSlash($value['data'])."', lastmod='".strftime('%Y%m%d%H%M%S',$value['uLastmod'])."'";
 
 				if ($exists)
 				{
