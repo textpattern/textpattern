@@ -414,7 +414,7 @@
 
 		$subject = sprintf(gTxt('comment_received'), $sitename, $Title);
 
-		$success = txpMail($email, $subject, $out, "$cname <$cemail>");
+		$success = txpMail($email, $subject, $out, $cemail);
 	}
 
 // -------------------------------------------------------------

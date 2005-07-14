@@ -687,6 +687,16 @@ EOF;
 	{
 		safe_delete('txp_prefs',"name='logs_expire'");
 	}	
+
+	// Let's make this visible in advanced prefs
+	safe_update('txp_prefs','type = 1',"where name = 'file_base_path'");
+
+	// 1.0: add option to override charset for emails (ISO-8559-1 instead of UTF-8)
+	if (!safe_field('val','txp_prefs',"name='override_emailcharset'"))
+	{		
+		safe_insert('txp_prefs',"name='override_emailcharset', val='0', prefs_id='1', type='1', event='admin', position='".doSlash($maxpos)."', html='yesnoradio'");
+	}
+
 // updated, baby.
 
 ?>
