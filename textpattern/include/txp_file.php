@@ -299,7 +299,7 @@
 
 		if ($file === false) {
 			// could not get uploaded file
-			file_list(gTxt('file_upload_failed') ." $name");
+			file_list(gTxt('file_upload_failed') ." $name - ".upload_get_errormsg($_FILES['file']['error']));
 			return;
 		}
 		
@@ -346,6 +346,12 @@
 		
 		$file = file_get_uploaded();
 		$name = file_get_uploaded_name();
+
+		if ($file === false) {
+			// could not get uploaded file
+			file_list(gTxt('file_upload_failed') ." $name ".upload_get_errormsg($_FILES['file']['error']));
+			return;
+		}
 
 		if (!$filename) {
 			file_list(gTxt('invalid_filename'));

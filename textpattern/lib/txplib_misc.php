@@ -866,6 +866,27 @@ else
 			return true;
 		}
 	}
+// -------------------------------------------------------------
+	function upload_get_errormsg($err_code) 
+	{
+		$msg = '';
+		switch ($err_code)
+		{
+				// Value: 0; There is no error, the file uploaded with success. 
+			case UPLOAD_ERR_OK         : $msg = '';break; 
+				// Value: 1; The uploaded file exceeds the upload_max_filesize directive in php.ini. 
+			case UPLOAD_ERR_INI_SIZE   : $msg = gTxt('upload_err_ini_size');break;
+				// Value: 2; The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form. 
+			case UPLOAD_ERR_FORM_SIZE  : $msg = gTxt('upload_err_form_size');break;
+				// Value: 3; The uploaded file was only partially uploaded. 
+			case UPLOAD_ERR_PARTIAL    : $msg = gTxt('upload_err_partial');break;
+				// Value: 4; No file was uploaded. 
+			case UPLOAD_ERR_NO_FILE    : $msg = gTxt('upload_err_no_file');break;
+     			// Value: 6; Missing a temporary folder. Introduced in PHP 4.3.10 and PHP 5.0.3. 
+			case UPLOAD_ERR_NO_TMP_DIR : $msg = gTxt('upload_err_tmp_dir');break;
+		}
+		return $msg;
+	}
 
 // -------------------------------------------------------------
 	function is_windows()

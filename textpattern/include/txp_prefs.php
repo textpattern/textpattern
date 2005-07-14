@@ -374,13 +374,44 @@
 		hInput('lastmod',"now()"),
 		'</form>';	
 	}
-	
+
+	function real_max_upload_size($user_max) 
+	{
+		// The minimum of the candidates, is the real max. possible size
+		$candidates = array($user_max,
+							ini_get('post_max_size'), 
+							ini_get('upload_max_filesize'),
+							ini_get('memory_limit'));
+		$real_max = null;
+		foreach ($candidates as $item)
+		{
+			$val = trim($item);
+			$modifier = strtolower( substr($val, -1) );
+			switch($modifier) {
+				// The 'G' modifier is available since PHP 5.1.0
+				case 'g': $val *= 1024;
+				case 'm': $val *= 1024;
+				case 'k': $val *= 1024;
+			}
+			if ($val > 1) {
+				if (is_null($real_max)) 
+					$real_max = $val;
+				elseif ($val < $real_max)
+					$real_max = $val;
+			}
+		}
+		return $real_max;
+	}
+
 	function advanced_prefs_save()
 	{
 		$prefnames = safe_column("name", "txp_prefs", "prefs_id='1' AND type='1'");
 		
 		$post = doSlash(stripPost());
-		
+
+		if (!empty($post['file_max_upload_size']))
+			$post['file_max_upload_size'] = real_max_upload_size($post['file_max_upload_size']);
+
 		foreach($prefnames as $prefname) {
 			if (isset($post[$prefname])) {
 					safe_update(
