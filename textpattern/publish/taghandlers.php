@@ -268,7 +268,8 @@
 			'limit'    => 10,
 			'category' => '',
 			'sortby'   => 'Posted',
-			'sortdir'  => 'desc'
+			'sortdir'  => 'desc',
+			'class'    => __FUNCTION__
 		),$atts));
 
 		$catq = ($category) ? "and (Category1='".doSlash($category)."' 
@@ -287,7 +288,7 @@
 				$out[] = href($Title,permlinkurl($a));
 			}
 			if (is_array($out)) {
-				return doWrap($out, $wraptag, $break);
+				return doWrap($out, $wraptag, $break, $class);
 			}
 		}
 		return '';
@@ -300,7 +301,8 @@
 			'label'    => '',
 			'break'    => br,
 			'wraptag'  => '',
-			'limit'    => 10
+			'limit'    => 10,
+			'class'    => __FUNCTION__
 		),$atts));
 
 		$rs = safe_rows_start("*",'txp_discuss',"visible=1 order by posted desc limit 0,$limit");
@@ -313,7 +315,7 @@
 				$out[] = href($name.' ('.$Title.')', permlinkurl_id($parentid).'#c'.$discussid);
 			}
 			if (is_array($out)) {
-				return doWrap($out, $wraptag, $break);
+				return doWrap($out, $wraptag, $break, $class);
 			}
 		}
 		return '';
@@ -326,7 +328,8 @@
 			'label'    => '',
 			'break'    => br,
 			'wraptag'  => '',
-			'limit'    => 10
+			'limit'    => 10,
+			'class'    => __FUNCTION__
 		),$atts));
 		
 		global $id,$thisid,$thisarticle;
@@ -352,7 +355,7 @@
 					$out[] = href($Title,permlinkurl($a));
 				}
 				if (is_array($out)) {
-					return doWrap($out, $wraptag, $break);
+					return doWrap($out, $wraptag, $break, $class);
 				}
 			}
 		}
@@ -406,7 +409,8 @@
 			'break'    => br,
 			'wraptag'  => '',
 			'parent'   => '',
-			'type'    => 'article'
+			'type'    => 'article',
+			'class'    => __FUNCTION__
 		),$atts));
 
 		if ($parent) {
@@ -434,7 +438,7 @@
 				if($name) $out[] = tag(str_replace("& ","&#38; ", $title),'a',' href="'.hu.'?c='.urlencode($name).'"');
 			}
 			if (is_array($out)) {
-				return doWrap($out, $wraptag, $break);
+				return doWrap($out, $wraptag, $break, $class);
 			}			
 		}
 		return '';
@@ -446,7 +450,8 @@
 		extract(lAtts(array(
 			'label'   => '',
 			'break'   => br,
-			'wraptag' => ''
+			'wraptag' => '',
+			'class'    => __FUNCTION__
 		),$atts));
 		
 		$rs = safe_rows_start("name,title","txp_section","name != 'default' order by name");
@@ -462,7 +467,7 @@
 				}
 			}
 			if (is_array($out)) {
-				return doWrap($out, $wraptag, $break);
+				return doWrap($out, $wraptag, $break, $class);
 			}
 		}
 		return '';
@@ -1311,7 +1316,8 @@
 			'break'    => br,
 			'limit'    => '10',
 			'wraptag'  => '',
-			'category' => ''
+			'category' => '',
+			'class'    => __FUNCTION__
 		),$atts));	
 		
 		$qparts = array(
@@ -1335,7 +1341,7 @@
 			
 			if (!empty($outlist)) {
 				if ($wraptag == 'ul' or $wraptag == 'ol') {
-					return doWrap($outlist, $wraptag, $break);
+					return doWrap($outlist, $wraptag, $break, $class);
 				}	
 				
 				return ($wraptag) ? tag(join($break,$outlist),$wraptag) : join(n,$outlist);
