@@ -255,7 +255,7 @@ eod;
 			$rs = safe_update("txp_prefs", "val= 'de-de'", "name='language' AND val= 'german'");
 		break;
 		case 'italian':
-			$rs = safe_update("txp_prefs", "val= 'de-de'", "name='language' AND val= 'italian'");
+			$rs = safe_update("txp_prefs", "val= 'it-it'", "name='language' AND val= 'italian'");
 		break;
 		case 'polish':
 			$rs = safe_update("txp_prefs", "val= 'pl-pl'", "name='language' AND val= 'polish'");
