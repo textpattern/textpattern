@@ -454,7 +454,9 @@
 					$updating = ($db_lastmod)? 1 : 0;					
 					
 					$remote_mod = gmmktime($language['lastmodified']->hour,$language['lastmodified']->minute,$language['lastmodified']->second,$language['lastmodified']->month,$language['lastmodified']->day,$language['lastmodified']->year);
-					
+
+					$updated = ($updating && ($db_lastmod >= $remote_mod))? 1 : 0;  
+
 					if ($updated){
 						echo tr(tda(gTxt($language['language']).sp,' style="text-align:right;vertical-align:middle"').tda(gTxt('updated')));
 					}else{
