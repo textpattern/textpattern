@@ -602,7 +602,7 @@ EOF;
 		# first attempt with local file		
 		if (is_file($lang_file) && is_readable($lang_file))
 		{
-			$lang_file = $txpcfg['txpath'].'/lang/'.$lang.'.txt';
+			$lang_file = $txpcfg['txpath'].'/lang/'.LANG.'.txt';
 			if (!is_file($lang_file) || !is_readable($lang_file)) return;
 			$file = @fopen($lang_file, "r");
 			if ($file) {
@@ -621,7 +621,7 @@ EOF;
 						if (!empty($data)){
 							foreach ($data as $name => $value)
 							{							
-								safe_insert('txp_lang',"lang='$lang', name='$name', lastmod='$lastmod', event='$event', data='$value'");
+								safe_insert('txp_lang',"lang='".LANG."', name='$name', lastmod='$lastmod', event='$event', data='$value'");
 							}
 						}
 						# reset
@@ -638,7 +638,7 @@ EOF;
 				if (!empty($data)){
 					foreach ($data as $name => $value)
 					{
-						 safe_insert('txp_lang',"lang='$lang', name='$name', lastmod='$lastmod', event='$event', data='$value'");
+						 safe_insert('txp_lang',"lang='".LANG."', name='$name', lastmod='$lastmod', event='$event', data='$value'");
 					}
 				}
 				@fclose($filename);
