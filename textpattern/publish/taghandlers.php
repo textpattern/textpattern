@@ -722,7 +722,7 @@
 // -------------------------------------------------------------
 	function comments_form($atts)
 	{
-		global $thisarticle, $comment_preview;
+		global $thisarticle, $comment_preview, $pretext;
 
 		extract(lAtts(array(
 			'id'		   => @$pretext['id'],
@@ -754,7 +754,7 @@
 // -------------------------------------------------------------
 	function comments_annotateinvite($atts,$thing=NULL)
 	{
-		global $thisarticle;
+		global $thisarticle, $pretext;
 
 		extract(lAtts(array(
 			'id'		   => @$pretext['id'],
