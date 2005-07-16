@@ -613,13 +613,13 @@
 				$article = discuss($parentid).$article;
 			}
 
-			if (($Annotate or $comments_count) && !$preview) {
-				if($use_comments) {
-					$article .= discuss($ID);
-				}
-			}
-			
 			$article = parse($article);
+
+			if ($use_comments and $comments_auto_append) {
+				$f = fetch_form('comments_display');
+				$article .= parse($f);
+			}
+
 			
 			unset($GLOBALS['thisarticle']);	
 

@@ -9,43 +9,6 @@
 */
 
 // -------------------------------------------------------------
-	function discuss($ID)
-	{
-		global $comments_are_ol;
-		$preview = ps('preview');
-		extract(	
-			safe_row(
-				"Annotate,AnnotateInvite,unix_timestamp(Posted) as uPosted",
-					"textpattern", "ID='$ID'"
-			)
-		);
-
-		$darr = (!$preview) 
-		?	fetchComments($ID)
-		:	array(psas(array('name','email','web','message','parentid','remember')));
-
-		$out = n.'<h3 class="txpCommentInvite" id="'.gTxt('comment').'">'.$AnnotateInvite.'</h3>'.n;
-
-
-
-		if ($darr) {
-			$out.= ($comments_are_ol) ? '<ol>'.n : '';
-			$out.= formatComments($darr);
-			$out.= ($comments_are_ol) ? n.'</ol>' : '';
-		}
-		
-			$wasAnnotated = (!$Annotate) ? getCount('txp_discuss',"parentid=$ID") : '';
-
-			if (!checkCommentsAllowed($ID)) {
-				$out .= graf(gTxt("comments_closed"));
-			} else {
-				$out .= commentForm( $ID );
-			}
-		return $out;
-
-	}
-
-// -------------------------------------------------------------
 	function fetchComments($id)
 	{
 		$rs = safe_rows(
@@ -57,75 +20,37 @@
 	}
 
 // -------------------------------------------------------------
-	function formatComments($darr)
+	function discuss($id)
 	{
-		global $prefs,$txpcfg,$comments_disallow_images;
-		extract($prefs);
-		$preview = gps('preview');
-		$id = gps('id');
-		$Form = fetch_form('comments');
-		$out = array();
+		$rs = safe_row('*, unix_timestamp(Posted) as uPosted', 'textpattern', "ID='".doSlash($id)."' and Status >= 4");
+		if ($rs) {
+			populateArticleData($rs);
+			if (ps('preview')) 
+				$GLOBALS['comment_preview'] = 1;
 
-		$durl = permlinkurl_id($id).'#c';
-				
-		foreach($darr as $vars) {
-			$GLOBALS['thiscomment'] = $vars;
-			extract($vars);
-			
-			if($preview) {		
-				include_once $txpcfg['txpath'].'/lib/classTextile.php';
-				$time=time();
-				$discussid=0;
-				$textile = new Textile();
-				$im = (!empty($comments_disallow_images)) ? 1 : '';
-				$message = trim(nl2br($textile->TextileThis(strip_tags(deEntBrackets(
-					$message
-				)),1,'',$im,'',(@$comment_nofollow ? 'nofollow' : ''))));
-			} 
-			
-			if($comments_dateformat == "since") { 
-				$comment_time = since($time + tz_offset()); 
-			} else {
-				$comment_time = safe_strftime($comments_dateformat,$time); 
-			}
-							
-			$web = str_replace("http://", "", $web);
-	
-			if ($email && !$web && !$never_display_email)
-				$name = '<a href="'.eE('mailto:'.$email).'"'.(@$comment_nofollow ? ' rel="nofollow"' : '').'>'.$name.'</a>';
-
-			if ($web)
-				$name = '<a href="http://'.$web.'" title="'.$web.'"'.(@$comment_nofollow ? ' rel="nofollow"' : '').'>'.$name.'</a>';
-
-			$dlink = $durl.$discussid;
-		
-			$vals = array(
-				'comment_name'=>$name,
-				'message'=>$message,
-				'comment_time'=>$comment_time
-			);
-		
-			$temp = $Form;
-			foreach($vals as $a=>$b) {
-				$temp = str_replace('<txp:'.$a.' />',$b,$temp);
-			}
-			
-			$temp = preg_replace('/<(txp:comment_permlink)>(.*)<\/\\1>/U',
-				'<a href="'.$dlink.'">$2</a>',$temp);
-			$temp = parse($temp);
-
-			$out[] = ($comments_are_ol) 
-			?	n.t.'<li id="c'.$discussid.'" class="txpCommentMsg">'.$temp.'</li>' 
-			:	$temp;
+			$result = parse(fetch_form('comments_display'));
+			unset($GLOBALS['comment_preview']);
+			return $result;
 		}
-			return join(n,$out);
-		}
+
+		return '';
+	}
+
 
 // -------------------------------------------------------------
-	function commentForm($id) 
+	function commentForm($id, $atts=NULL) 
 	{
 		global $prefs;
 		extract($prefs);
+
+		extract(lAtts(array(
+			'isize'	  => '25',
+			'msgrows'   => '5',
+			'msgcols'   => '25',
+			'msgstyle'  => '',
+			'form'   => 'comment_form',
+		),$atts));
+
 		$namewarn = '';
 		$emailwarn = '';
 		$commentwarn = '';
@@ -145,7 +70,7 @@
 		if ( $preview ) {
 			$name  = ps( 'name' );
 			$email = ps( 'email' );
-			$web   = ps( 'web' );		
+			$web	 = ps( 'web' );		
 			$nonce = md5( uniqid( rand(), true ) );
 			$secret = md5( uniqid( rand(), true ) );
 			safe_insert("txp_discuss_nonce", "issue_time=now(), nonce='$nonce', secret='$secret'");
@@ -172,9 +97,11 @@
 
 		$out = '<form method="post" action="" id="txpCommentInputForm">';
 
-		$form = fetch_form('comment_form');
-					  
-	 	$textarea = '<textarea name="message" cols="30" rows="12" tabindex="1" id="txpCommentInputMessage">'.htmlspecialchars($message).'</textarea>';
+		$Form = fetch('Form','txp_form','name',$form);
+		$msgstyle = ($msgstyle ? ' style="'.$msgstyle.'"' : '');
+		$msgrows = ($msgrows and is_numeric($msgrows)) ? ' rows="'.intval($msgrows).'"' : '';
+		$msgcols = ($msgcols and is_numeric($msgcols)) ? ' cols="'.intval($msgcols).'"' : '';
+		$textarea = '<textarea class="txpCommentInputMessage" name="message"'.$msgcols.$msgrows.$msgstyle.' tabindex="1">'.htmlspecialchars($message).'</textarea>';
 
 		$comment_submit_button = ($preview)
 		?	fInput('submit','submit',gTxt('submit'),'button')
@@ -185,20 +112,20 @@
 		:	checkbox('remember',1,1).gTxt('remember');
 
 		$vals = array(
-			'comment_name_input'    => $namewarn.input('text','name',  $name, "25",'',"2"),
-			'comment_email_input'   => $emailwarn.input('text','email', $email,"25",'',"3"),
-			'comment_web_input'     => input('text','web',   $web,  "25",'',"4"),
+			'comment_name_input'    => $namewarn.input('text','name',  $name, $isize,'comment_name_input',"2"),
+			'comment_email_input'   => $emailwarn.input('text','email', $email,$isize,'comment_email_input',"3"),
+			'comment_web_input'     => input('text','web',   $web, $isize,'comment_web_input',"4"),
 			'comment_message_input' => $commentwarn.$textarea,
 			'comment_remember'      => $checkbox,
-			'comment_preview'       => input('submit','preview',gTxt('preview'),'','button'),
+			'comment_preview'       => input('submit','preview',gTxt('preview'),'comment_preview','button'),
 			'comment_submit'        => $comment_submit_button
 		);
 
 		foreach ($vals as $a=>$b) {
-			$form = str_replace('<txp:'.$a.' />',$b,$form);
+			$Form = str_replace('<txp:'.$a.' />',$b,$Form);
 		}
 
-	  	$form = parse($form);
+		$form = parse($Form);
 
 		$out .= $form;
 		$out .= graf(fInput('hidden','parentid',$parentid));
@@ -214,13 +141,14 @@
 // -------------------------------------------------------------
 	function popComments($id)
 	{
-		global $sitename,$s;
+		global $sitename,$s,$thisarticle;
 		$preview = gps('preview');
 		$h3 = ($preview) ? hed(gTxt('message_preview'),3) : '';
 		$discuss = discuss($id);
 		ob_start('parse');
 		$out = fetch_form('popup_comments');
-		$out = str_replace("<txp:popup_comments />",discuss($id),$out);
+		$out = str_replace("<txp:popup_comments />",$discuss,$out);
+		
 		return $out;
 
 	}
@@ -232,7 +160,7 @@
 		ob_start();
 		setcookie("txp_name",  $name,  $cookietime, "/");
 		setcookie("txp_email", $email, $cookietime, "/");
-		setcookie("txp_web",   $web,   $cookietime, "/");
+		setcookie("txp_web",   $web,	 $cookietime, "/");
 		setcookie("txp_last",  date("H:i d/m/Y"),$cookietime,"/");
 	}
 
@@ -317,13 +245,13 @@
 						$rs = safe_insert(
 							"txp_discuss",
 							"parentid  = '$parentid',
-							 name      = '$name',
-							 email     = '$email',
-							 web       = '$web',
-							 ip        = '$ip',
+							 name		  = '$name',
+							 email	  = '$email',
+							 web		  = '$web',
+							 ip		  = '$ip',
 							 message   = '$message2db',
 							 visible   = $visible,
-							 posted    = now()"
+							 posted	  = now()"
 						);
 					
 						 if ($rs) {
@@ -340,10 +268,10 @@
 							ob_start();
 							header('location: '.$backpage);
 						}
-					}                                                        // end check nonce
-				}                                                            // end check dup
+					}																			// end check nonce
+				}																				 // end check dup
 			} else exit(gTxt('your_ip_is_blacklisted_by'.' '.$blacklisted)); // end check blacklist
-		} else exit(gTxt('you_have_been_banned'));                           // end check site ban
+		} else exit(gTxt('you_have_been_banned'));									// end check site ban
 	}
 
 // -------------------------------------------------------------
@@ -390,7 +318,7 @@
 	}
 
 // -------------------------------------------------------------
-   	function comments_help()
+		function comments_help()
 	{
 		return ("
 		<a href=\"http://www.textpattern.com/help/?item=textile_comments\" id=\"txpCommentHelpLink\" onclick=\"window.open(this.href, 'popupwindow', 'width=300,height=400,scrollbars,resizable'); return false;\" >".gTxt('textile_help')."</a>");
@@ -422,10 +350,10 @@
 	{
 		$o = array(
 			'<input type="'.$type.'" name="'.$name.'" value="'.$val.'"',
-			($size)  ? ' size="'.$size.'"'     : '',
+			($size)	? ' size="'.$size.'"'	  : '',
 			($class) ? ' class="'.$class.'"'	: '',
 			($tab)	 ? ' tabindex="'.$tab.'"'	: '',
-			($chkd)  ? ' checked="checked"'	: '',
+			($chkd)	? ' checked="checked"'	: '',
 			' />'.n
 		);
 		return join('',$o);

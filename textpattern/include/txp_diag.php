@@ -191,11 +191,15 @@
 
 	echo tr(td(hed(gTxt('diagnostic_info'),1)));
 
+
+	$fmt_date = '%Y-%m-%d %H:%M:%S';
 	
 	$out = array(
 		'<textarea style="width:500px;height:300px;" readonly="readonly">',
 
 		gTxt('txp_version').cs.txp_version.n,
+
+		gTxt('last_update').cs.gmstrftime($fmt_date, $dbupdatetime).'/'.gmstrftime($fmt_date, @filemtime(txpath.'/_update.php')).n,
 
 		gTxt('document_root').cs.$_SERVER['DOCUMENT_ROOT'].n,
 

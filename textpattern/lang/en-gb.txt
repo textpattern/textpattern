@@ -645,6 +645,7 @@ missing_files => Missing files
 detail => Detail
 low => low
 high => high
+last_update => Last Update
 #@import
 import_section => Section to import into
 import_status => Default article status

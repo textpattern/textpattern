@@ -353,10 +353,6 @@ eod;
 	}
 	//eof: non image file upload tab
 
-	// 1.0: keep track of updates for devel version
-	safe_delete('txp_prefs',"name = 'dbupdatetime'");
-	safe_insert('txp_prefs', "prefs_id=1, name='dbupdatetime',val='".time()."', type='2'");
-
 	// 1.0: improved comment spam nonce
 	$txpnonce = getThings('describe '.PFX.'txp_discuss_nonce');
 	if (!in_array('secret', $txpnonce))
@@ -696,6 +692,24 @@ EOF;
 	{		
 		safe_insert('txp_prefs',"name='override_emailcharset', val='0', prefs_id='1', type='1', event='admin', position='".doSlash($maxpos)."', html='yesnoradio'");
 	}
+
+
+	if (safe_field('val', 'txp_prefs', "name='comments_auto_append'") === false) {
+		safe_insert('txp_prefs',"val = '1', name = 'comments_auto_append' , prefs_id ='1', type='0', html='yesnoradio', event='comments', position='211'");
+
+		$form = <<<EOF
+<txp:comments />
+<txp:if_comments_allowed>
+<txp:comments_form />
+</txp:if_comments_allowed>
+EOF;
+		safe_insert('txp_form', "name='comments_display', type='article', Form='$form'");
+	}
+
+	// This should always come last:
+	// 1.0: keep track of updates for devel version
+	safe_delete('txp_prefs',"name = 'dbupdatetime'");
+	safe_insert('txp_prefs', "prefs_id=1, name='dbupdatetime',val='".time()."', type='2'");
 
 // updated, baby.
 

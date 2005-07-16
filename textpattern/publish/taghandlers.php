@@ -719,6 +719,195 @@
 			}
 		}
 	}
+// -------------------------------------------------------------
+	function comments_form($atts)
+	{
+		global $thisarticle, $comment_preview;
+
+		extract(lAtts(array(
+			'id'		=> gps('id'),
+			'class'		=> __FUNCTION__,
+			'form'		=> 'comment_form',
+			'wraptag'	=> ''
+		),$atts));
+
+		# don't display the comment form at the bottom, since it's
+		# already shown at the top
+		if (ps('preview') and empty($comment_preview))
+			return '';
+
+		if (is_array($thisarticle)) extract($thisarticle);
+
+		if ($thisid) $id = $thisid;
+
+		if ($id) {
+			if (!checkCommentsAllowed($id)) {
+				$out = graf(gTxt("comments_closed"));
+			} else {
+				$out = commentForm($id,$atts);
+			}
+
+			return (!$wraptag ? $out : doTag($out,$wraptag,$class) );
+		}
+	}
+
+// -------------------------------------------------------------
+	function comments_annotateinvite($atts,$thing=NULL)
+	{
+		global $thisarticle;
+
+		extract(lAtts(array(
+			'id'		=> gps('id'),
+			'class'		=> __FUNCTION__,
+			'wraptag'	=> 'h3',
+		),$atts));
+
+		if (is_array($thisarticle)) extract($thisarticle);
+
+		if ($thisid) $id = $thisid;
+
+		if ($id) {
+			extract(
+				safe_row(
+					"Annotate,AnnotateInvite,unix_timestamp(Posted) as uPosted",
+						"textpattern", "ID='{$id}'"
+				)
+			);
+
+			if (!$thing)
+				$thing = $AnnotateInvite;
+
+			return (!$Annotate) ? '' : doTag($thing,$wraptag,$class,' id="'.gTxt('comment').'"');
+		}
+	}
+
+// -------------------------------------------------------------
+	function comments($atts)
+	{
+		global $thisarticle, $prefs, $comment_preview;
+		extract($prefs);
+
+		extract(lAtts(array(
+			'id'		=> gps('id'),
+			'form'		=> 'comments',
+			'wraptag'	=> ($comments_are_ol ? 'ol' : ''),
+			'break'		=> ($comments_are_ol ? 'li' : 'div'),
+			'class'		=> __FUNCTION__,
+			'breakclass'=> '',
+		),$atts));	
+
+		if (is_array($thisarticle)) extract($thisarticle);
+
+		if ($thisid) $id = $thisid;
+		
+		$Form = fetch_form($form);
+
+		if (!empty($comment_preview)) {
+			$preview = psas(array('name','email','web','message','parentid','remember'));
+			$preview['time'] = time();
+			$preview['discussid'] = 0;
+			$GLOBALS['thiscomment'] = $preview;
+			$comments[] = parse($Form).n;
+			unset($GLOBALS['thiscomment']);
+			$out = doWrap($comments,$wraptag,$break,$class,$breakclass);
+		}
+		else {
+			$rs = safe_rows_start("*, unix_timestamp(posted) as time", "txp_discuss",
+				"parentid='$id' and visible='1' order by posted asc");
+							
+			$out = '';
+
+			if ($rs) {
+				$comments = array();
+
+				while($vars = nextRow($rs)) {
+					$GLOBALS['thiscomment'] = $vars;
+					$comments[] = parse($Form).n;
+					unset($GLOBALS['thiscomment']);
+				}
+
+				$out .= doWrap($comments,$wraptag,$break,$class,$breakclass);
+			}
+		}
+
+		return $out;
+	}
+	
+// -------------------------------------------------------------
+	function comment_permlink($atts,$thing) 
+	{
+		global $thisarticle, $thiscomment;
+		extract($thiscomment);
+		$dlink = permlinkurl($thisarticle).'#c'.$discussid;
+		
+		$thing = parse($thing);
+	
+		return tag($thing,'a',' href="'.$dlink.'"');
+	}
+
+// -------------------------------------------------------------
+	function comment_id($atts) 
+	{
+		global $thiscomment;
+		return $thiscomment['discussid'];
+	}
+
+// -------------------------------------------------------------
+	function comment_name($atts) 
+	{
+		global $thiscomment, $prefs;
+		extract($prefs);
+		extract($thiscomment);
+		$web = str_replace("http://", "", $web);
+
+		if ($email && !$web && !$never_display_email)
+			$name = '<a href="'.eE('mailto:'.$email).'"'.(@$txpac['comment_nofollow'] ? ' rel="nofollow"' : '').'>'.$name.'</a>';
+
+		if ($web)
+			$name = '<a href="http://'.$web.'" title="'.$web.'"'.(@$txpac['comment_nofollow'] ? ' rel="nofollow"' : '').'>'.$name.'</a>';
+
+		return $name;
+	}
+
+// -------------------------------------------------------------
+	function comment_email($atts) 
+	{
+		global $thiscomment;
+		return $thiscomment['email'];
+	}
+
+// -------------------------------------------------------------
+	function comment_web($atts) 
+	{
+		global $thiscomment;
+		return $thiscomment['web'];
+	}
+
+// -------------------------------------------------------------
+	function comment_time($atts) 
+	{
+		global $thiscomment,$comments_dateformat;
+		if($comments_dateformat == "since") { 
+			$comment_time = since($thiscomment['time'] + tz_offset()); 
+		} else {
+			$comment_time = safe_strftime($comments_dateformat,$thiscomment['time']); 
+		}
+		return $comment_time;
+	}
+
+// -------------------------------------------------------------
+	function comment_message($atts) 
+	{
+		global $thiscomment;
+		return $thiscomment['message'];
+	}
+
+// -------------------------------------------------------------
+// DEPRECATED: the old comment message body tag
+	function message($atts) 
+	{
+		return comment_message($atts);
+	}
 
 // -------------------------------------------------------------
 	function author($atts) 
@@ -946,6 +1135,26 @@
 	}
 
 // -------------------------------------------------------------
+	function if_comments_allowed($atts, $thing)
+	{
+		global $thisarticle;
+
+		$id = gAtt($atts,'id',gps('id'));
+		if ($thisarticle['thisid']) $id = $thisarticle['thisid'];
+		return (checkCommentsAllowed($id)) ? parse($thing) : '';
+	}
+
+// -------------------------------------------------------------
+	function if_comments_disallowed($atts, $thing)
+	{
+		global $thisarticle;
+
+		$id = gAtt($atts,'id',gps('id'));
+		if ($thisarticle['thisid']) $id = $thisarticle['thisid'];
+		return (!checkCommentsAllowed($id)) ? parse($thing) : '';
+	}
+
+// -------------------------------------------------------------
 	function if_individual_article($atts, $thing)	
 	{
 		global $is_article_list;
@@ -978,14 +1187,15 @@
 	}
 
 // -------------------------------------------------------------
-	function doWrap($list, $wraptag, $break, $class='', $atts='')
+	function doWrap($list, $wraptag, $break, $class='', $breakclass='', $atts='')
 	{
 		$atts = ($class ? $atts.' class="'.$class.'"' : $atts);
+		$breakatts = ($breakclass ? ' class="'.$breakclass.'"' : '');
 
 		// non-enclosing breaks
 		if (!preg_match('/^\w+$/', $break) or $break == 'br' or $break == 'hr') {
 			if ($break == 'br' or $break == 'hr')
-				$break = "<$break />";
+				$break = "<$break $breakatts/>";
 			return ($wraptag) 
 			?	tag(join($break.n,$list),$wraptag,$atts) 
 			:	join($break.n,$list);
@@ -996,8 +1206,8 @@
 			$break = 'li';
 			
 		return ($wraptag)
-		? tag(tag(join("</$break>".n."<$break>",$list),$break),$wraptag,$atts)
-		: tag(join("</$break>".n."<$break>",$list),$break);
+		? tag(tag(join("</$break>".n."<{$break}{$breakatts}>",$list),$break,$breakatts),$wraptag,$atts)
+		: tag(join("</$break>".n."<{$break}{$breakatts}>",$list),$break,$breakatts);
 	}
 
 // -------------------------------------------------------------
