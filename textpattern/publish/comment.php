@@ -305,7 +305,7 @@
 			)
 		);
 
-		if (!$Annotate)
+		if (empty($Annotate))
 			return false;
 
 		if($comments_disabled_after) {		

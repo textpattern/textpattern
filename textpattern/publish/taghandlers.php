@@ -725,7 +725,7 @@
 		global $thisarticle, $comment_preview;
 
 		extract(lAtts(array(
-			'id'		=> gps('id'),
+			'id'		   => @$pretext['id'],
 			'class'		=> __FUNCTION__,
 			'form'		=> 'comment_form',
 			'wraptag'	=> ''
@@ -738,7 +738,7 @@
 
 		if (is_array($thisarticle)) extract($thisarticle);
 
-		if ($thisid) $id = $thisid;
+		if (@$thisid) $id = $thisid;
 
 		if ($id) {
 			if (!checkCommentsAllowed($id)) {
@@ -757,14 +757,14 @@
 		global $thisarticle;
 
 		extract(lAtts(array(
-			'id'		=> gps('id'),
+			'id'		   => @$pretext['id'],
 			'class'		=> __FUNCTION__,
 			'wraptag'	=> 'h3',
 		),$atts));
 
 		if (is_array($thisarticle)) extract($thisarticle);
 
-		if ($thisid) $id = $thisid;
+		if (@$thisid) $id = $thisid;
 
 		if ($id) {
 			extract(
@@ -784,11 +784,11 @@
 // -------------------------------------------------------------
 	function comments($atts)
 	{
-		global $thisarticle, $prefs, $comment_preview;
+		global $thisarticle, $prefs, $comment_preview, $pretext;
 		extract($prefs);
 
 		extract(lAtts(array(
-			'id'		=> gps('id'),
+			'id'		   => @$pretext['id'],
 			'form'		=> 'comments',
 			'wraptag'	=> ($comments_are_ol ? 'ol' : ''),
 			'break'		=> ($comments_are_ol ? 'li' : 'div'),
@@ -798,8 +798,8 @@
 
 		if (is_array($thisarticle)) extract($thisarticle);
 
-		if ($thisid) $id = $thisid;
-		
+		if (@$thisid) $id = $thisid;
+
 		$Form = fetch_form($form);
 
 		if (!empty($comment_preview)) {
