@@ -606,13 +606,13 @@
 	{
 		global $thispage,$permlink_mode, $pretext;
 		extract($pretext);
+
+		if ($q) return;
+
 		if (is_array($atts)) extract($atts);
 		if (is_array($thispage)) {
 			extract($thispage); 
-		} else { 
-			//Exclude search results
-			return (!$q)?$match:''; 
-		}
+		} 			
 		
 		//Fix a problem when paging /author/author_name and simmilar url schemas
 		//chopUrl explodes by slashes
