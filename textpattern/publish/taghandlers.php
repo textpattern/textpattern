@@ -1137,20 +1137,22 @@
 // -------------------------------------------------------------
 	function if_comments_allowed($atts, $thing)
 	{
-		global $thisarticle;
+		global $thisarticle, $pretext;
 
 		$id = gAtt($atts,'id',gps('id'));
 		if ($thisarticle['thisid']) $id = $thisarticle['thisid'];
+		if (!$id && @$pretext['id']) $id = $pretext['id'];
 		return (checkCommentsAllowed($id)) ? parse($thing) : '';
 	}
 
 // -------------------------------------------------------------
 	function if_comments_disallowed($atts, $thing)
 	{
-		global $thisarticle;
+		global $thisarticle, $pretext;
 
 		$id = gAtt($atts,'id',gps('id'));
 		if ($thisarticle['thisid']) $id = $thisarticle['thisid'];
+		if (!$id && @$pretext['id']) $id = $pretext['id'];
 		return (!checkCommentsAllowed($id)) ? parse($thing) : '';
 	}
 
