@@ -113,7 +113,7 @@
 		}
 		
 		  //turn on compression if we aren't using it already
-		if (extension_loaded('zlib') && ini_get("zlib.output_compression") == 0 && ini_get('output_handler') != 'ob_gzhandler') {
+		if (extension_loaded('zlib') && ini_get("zlib.output_compression") == 0 && ini_get('output_handler') != 'ob_gzhandler' && !headers_sent()) {
 		  ob_start("ob_gzhandler");
 		}
 
