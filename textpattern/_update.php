@@ -578,7 +578,6 @@ EOF;
 	}
 	
 	
-	
 	if (!safe_query("SELECT 1 FROM `".PFX."txp_lang` LIMIT 0")) {
 		// do install
 		safe_query("CREATE TABLE `".PFX."txp_lang` (
@@ -592,78 +591,75 @@ EOF;
 			UNIQUE INDEX (`lang`,`name`),
 			INDEX (`lang`, `event`)
 			)TYPE=MyISAM;");
-		
-		# try to install the current file on the languages table
-		$lang_file = dirname(__FILE__).'/lang/'.LANG.'.txt';
-		# first attempt with local file		
-		if (is_file($lang_file) && is_readable($lang_file))
-		{
-			$lang_file = $txpcfg['txpath'].'/lang/'.LANG.'.txt';
-			if (!is_file($lang_file) || !is_readable($lang_file)) return;
-			$file = @fopen($lang_file, "r");
-			if ($file) {
-				$lastmod = @filemtime($lang_file);
-				$lastmod = date('YmdHis',$lastmod);
-				$data = array();
-				$event = '';
-				
-				while (!feof($file)) {
-					$line = fgets($file, 4096);
-					# any line starting with #, not followed by @ is a simple comment
-					if($line[0]=='#' && $line[1]!='@' && $line[1]!='#') continue;
-					# each language section should be prefixed by #@
-					if($line[0]=='#' && $line[1]=='@')
-					{
-						if (!empty($data)){
-							foreach ($data as $name => $value)
-							{							
-								safe_insert('txp_lang',"lang='".LANG."', name='$name', lastmod='$lastmod', event='$event', data='$value'");
-							}
-						}
-						# reset
-						$data = array();
-						$event = substr($line,2, (strlen($line)-2));
-						$event = rtrim($event);
-						continue;
-					}
-					 
-					@list($name,$val) = explode(' => ',trim($line));
-					$data[$name] = $val;
-				}
-				# remember to add the last one
-				if (!empty($data)){
-					foreach ($data as $name => $value)
-					{
-						 safe_insert('txp_lang',"lang='".LANG."', name='$name', lastmod='$lastmod', event='$event', data='$value'");
-					}
-				}
-				@fclose($filename);
-				# clean empty values from table
-				safe_delete('txp_lang',"data=''");
-			}				
-		}else{
-			# new try using XML-RPC
-			
+
 			require_once dirname(__FILE__).'/lib/IXRClass.php';		
 	
-			$client = new IXR_Client('http://rpc.textpattern.com');
+			$client = new IXR_Client('http://rpc.textpattern.com');	
 			
 			if (!$client->query('tups.getLanguage',$prefs['blog_uid'],LANG))
-			{
-				echo 'There is a problem trying to install you language on DB. Please go to "Install languages" and try it again.';
+			{				
+				# try to install the current file on the languages table
+				$lang_file = dirname(__FILE__).'/lang/'.LANG.'.txt';
+				# first attempt with local file		
+				if (is_file($lang_file) && is_readable($lang_file))
+				{
+					$lang_file = $txpcfg['txpath'].'/lang/'.LANG.'.txt';
+					if (!is_file($lang_file) || !is_readable($lang_file)) return;
+					$file = @fopen($lang_file, "r");
+					if ($file) {
+						$lastmod = @filemtime($lang_file);
+						$lastmod = date('YmdHis',$lastmod);
+						$data = array();
+						$event = '';
+						
+						while (!feof($file)) {
+							$line = fgets($file, 4096);
+							# any line starting with #, not followed by @ is a simple comment
+							if($line[0]=='#' && $line[1]!='@' && $line[1]!='#') continue;
+							# each language section should be prefixed by #@
+							if($line[0]=='#' && $line[1]=='@')
+							{
+								if (!empty($data)){
+									foreach ($data as $name => $value)
+									{							
+										safe_insert('txp_lang',"lang='".LANG."', name='$name', lastmod='$lastmod', event='$event', data='$value'");
+									}
+								}
+								# reset
+								$data = array();
+								$event = substr($line,2, (strlen($line)-2));
+								$event = rtrim($event);
+								continue;
+							}
+							 
+							@list($name,$val) = explode(' => ',trim($line));
+							$data[$name] = $val;
+						}
+						# remember to add the last one
+						if (!empty($data)){
+							foreach ($data as $name => $value)
+							{
+								 safe_insert('txp_lang',"lang='".LANG."', name='$name', lastmod='0000-00-00 00:00:00', event='$event', data='$value'");
+							}
+						}
+						@fclose($filename);
+						# clean empty values from table
+						safe_delete('txp_lang',"data=''");
+					}				
+				}else{
+					# Modify this
+					echo "Error trying to install language. Please, try again later from admin &gt; prefs &gt; Install Languages";
+				}
 			}else {
 				$response = $client->getResponse();
 				$lang_struct = unserialize($response);
 				function install_lang_key($value, $key)
-				{
-					extract(gpsa(array('lang_code','updating')));				
-					$q = "name='$value[name]', event='$value[event]', data='$value[data]', lastmod='".strftime('%Y%m%d%H%M%S',$value['uLastmod'])."'";
-					
-					safe_insert('txp_lang',$q.", lang='$lang_code'");
+				{			
+					$q = "name='$value[name]', event='$value[event]', data='$value[data]', lastmod='".strftime('%Y%m%d%H%M%S',$value['uLastmod'])."'";					
+					safe_insert('txp_lang',$q.", lang='".LANG."'");
 				}			
 				array_walk($lang_struct,'install_lang_key');
-			}
-		}
+			}		
 	}
 
 	$maxpos = safe_field('max(position)', 'txp_prefs', '1');
