@@ -180,10 +180,6 @@
 	{
 		global $siteurl,$comments_moderate,$comments_sendmail,$txpcfg,
 			$comments_disallow_images,$prefs;
-		include_once $txpcfg['txpath'].'/lib/classTextile.php';
-		$im = (!empty($comments_disallow_images)) ? 1 : '';
-
-		$textile = new Textile();
 
 		$ref = serverset('HTTP_REFERRER');
 
@@ -230,9 +226,7 @@
 		$web = doSlash(clean_url(strip_tags(deEntBrackets($web))));
 		$email = doSlash(clean_url(strip_tags(deEntBrackets($email))));
 
-		$message2db = doSlash(trim(nl2br($textile->TextileThis(strip_tags(deEntBrackets(
-			$message
-		)),1,'',$im,'',(@$prefs['comment_nofollow'] ? 'nofollow' : '')))));
+		$message2db = markup_comment($message);
 				
 		$isdup = safe_row("message,name", "txp_discuss", 
 			"name='$name' and message='$message2db' and ip='$ip'");

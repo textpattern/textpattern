@@ -1015,5 +1015,22 @@ else
 		}
 	}
 
+// -------------------------------------------------------------
+	function markup_comment($msg)
+	{
+		global $prefs, $txpcfg;
+
+		include_once $txpcfg['txpath'].'/lib/classTextile.php';
+		$textile = new Textile();
+		
+		extract($prefs);
+
+		$im = (!empty($comments_disallow_images)) ? 1 : '';
+		$msg = trim(nl2br($textile->TextileThis(strip_tags(deEntBrackets(
+			$msg
+		)),1,'',$im,'',(@$comment_nofollow ? 'nofollow' : ''))));
+
+		return $msg;
+	}
 
 ?>

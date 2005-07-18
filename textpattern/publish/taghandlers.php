@@ -806,6 +806,7 @@
 			$preview = psas(array('name','email','web','message','parentid','remember'));
 			$preview['time'] = time();
 			$preview['discussid'] = 0;
+			$preview['message'] = markup_comment($preview['message']);
 			$GLOBALS['thiscomment'] = $preview;
 			$comments[] = parse($Form).n;
 			unset($GLOBALS['thiscomment']);
