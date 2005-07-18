@@ -324,8 +324,6 @@
 		global $sitename;
 		extract(safe_row("AuthorID,Title", "textpattern", "ID = '$parentid'"));
 		extract(safe_row("RealName, email", "txp_users", "name = '$AuthorID'"));
-		$cname = preg_replace('/[\r\n]/', ' ', $cname);
-		$cemail = preg_replace('/[\r\n]/', ' ', $cemail);
 
 		$out = gTxt('greeting')." $RealName,\r\n\r\n";
 		$out .= sprintf(gTxt('comment_recorded')."\r\n\r\n", $Title);

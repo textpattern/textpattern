@@ -633,6 +633,12 @@ else
 	}
 
 // -------------------------------------------------------------
+	function strip_rn($str)
+	{
+      return preg_replace('/[\r\n]/', ' ', $str);
+	}
+
+// -------------------------------------------------------------
 	function txpMail($to_address, $subject, $body, $reply_to = null) 
 	{
 		global $txp_user, $prefs;
@@ -659,6 +665,11 @@ else
 		} else {
 			$charset = 'UTF-8';
 		}
+
+		$RealName = strip_rn($RealName);
+		$subject = strip_rn($subject);
+		$email = strip_rn($email);
+		if (!is_null($reply_to)) $reply_to = strip_rn($reply_to);
 
 		return mail($to_address, $subject, $body,
 		 "From: $RealName <$email>\r\n"
