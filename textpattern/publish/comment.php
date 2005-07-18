@@ -226,7 +226,7 @@
 		$web = doSlash(clean_url(strip_tags(deEntBrackets($web))));
 		$email = doSlash(clean_url(strip_tags(deEntBrackets($email))));
 
-		$message2db = markup_comment($message);
+		$message2db = doSlash(markup_comment($message));
 				
 		$isdup = safe_row("message,name", "txp_discuss", 
 			"name='$name' and message='$message2db' and ip='$ip'");
