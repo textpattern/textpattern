@@ -80,7 +80,7 @@
 	
 				$txtilelink = '<a target="_blank" href="?event=tag'.a.'name=image'.a.'id='.$id.a.'ext='.$ext.a.'alt='.$alt.a.'h='.$h.a.'w='.$w.a.'type=textile" onclick="window.open(this.href, \'popupwindow\', \'width=400,height=400,scrollbars,resizable\'); return false;">Textile</a>';
 				$txplink = '<a target="_blank" href="?event=tag'.a.'name=image'.a.'id='.$id.a.'type=textpattern" onclick="window.open(this.href, \'popupwindow\', \'width=400,height=400,scrollbars,resizable\'); return false;">Textpattern</a>';
-				$xhtmlink = '<a target="_blank" href="?event=tag'.a.'name=image'.a.'id='.$id.a.'ext='.$ext.a.'h='.$h.a.'w='.$w.a.'type=xhtml" onclick="window.open(this.href, \'popupwindow\', \'width=400,height=400,scrollbars,resizable\'); return false;">XHTML</a>';
+				$xhtmlink = '<a target="_blank" href="?event=tag'.a.'name=image'.a.'id='.$id.a.'ext='.$ext.a.'alt='.$alt.a.'h='.$h.a.'w='.$w.a.'type=xhtml" onclick="window.open(this.href, \'popupwindow\', \'width=400,height=400,scrollbars,resizable\'); return false;">XHTML</a>';
 				
 				$dlink = dLink('image','image_delete','id',$id);
 	
