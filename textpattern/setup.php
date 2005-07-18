@@ -332,10 +332,13 @@ eod;
 	function setup_load_lang($lang) 
 	{
 		global $txpcfg;
-		$filename = is_file('./lang/'.$lang.'.txt')
-		?	'./lang/'.$lang.'.txt'
-		:	'./lang/en-gb.txt';
-		 
+		if (is_file('./lang/'.$lang.'.txt'))
+			define('LANG', $lang);
+		else
+			define('LANG', 'en-gb');
+		$filename = './lang/'.LANG.'.txt';
+		
+
 		$file = @file($filename);
 		if(is_array($file)) {
 			foreach($file as $line) {
