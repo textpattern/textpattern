@@ -714,12 +714,12 @@
 		switch ($type) {
 			case 'textile': 
 				$alt = ($alt) ? ' ('.$alt.')' : '';
-				$thing='!'.rhu.$img_dir.'/'.$id.$ext.$alt.'!'; 
+				$thing='!'.rhu.'/'.$img_dir.'/'.$id.$ext.$alt.'!'; 
 			break;
 
 			case 'textpattern': $thing = '<txp:image id="'.$id.$ext.'" />'; break;
 
-			case 'xhtml': $thing = '<img src="'.rhu.$img_dir.'/'.
+			case 'xhtml': $thing = '<img src="'.rhu.'/'.$img_dir.'/'.
 				$id.$ext.'" style="height:'.$h.'px;width:'.$w.'px" />';
 		}
 		return tdb($thing);
