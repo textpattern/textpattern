@@ -28,12 +28,25 @@ function doAuth() {
 // -------------------------------------------------------------
 	function txp_validate($user,$password) {
     	$safe_user = strtr(addslashes($user),array('_' => '\_', '%' => '\%'));
-    	$r = safe_field("name", "txp_users", "name = '$safe_user'
-							and pass = password(lower('".doSlash($password)."')) and privs > 0");
+    	$r = safe_field("name", 
+    		"txp_users", "name = '$safe_user'
+			and pass = password(lower('".doSlash($password)."')) and privs > 0");
+
     	if ($r) {
+
 			// update the last access time
 			safe_update("txp_users", "last_access = now()", "name = '$safe_user'");
 			return true;
+
+    	} else { // try old_password mysql hash
+
+	       	$r_old = safe_field("name", 
+	    		"txp_users", "name = '$safe_user'
+				and pass = old_password(lower('".doSlash($password)."')) and privs > 0");
+			if ($r_old) {
+				safe_update("txp_users", "last_access = now()", "name = '$safe_user'");
+				return true;
+			}
     	}
 		return false;
 	}
