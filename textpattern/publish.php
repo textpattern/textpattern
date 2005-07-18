@@ -33,6 +33,7 @@
 
 		// useful for clean urls with error-handlers
 	header("Status: 200 OK");
+	header("HTTP/1.x 200 OK");
 
     	// start the clock for runtime
 	$microstart = getmicrotime();
