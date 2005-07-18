@@ -711,7 +711,6 @@
 		$invars = gpsa(array('id','type','h','w','ext','alt'));
 		$img_dir = (!$img_dir) ? 'images' : $img_dir;
 		extract($invars);
-		var_dump($invars);
 		switch ($type) {
 			case 'textile': 
 					$alt = ($alt) ? ' ('.$alt.')' : '';
