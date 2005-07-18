@@ -91,6 +91,15 @@
 		}
 
 		$parentid = (!$parentid) ? $id : $parentid;
+
+		//Form-input different from Cookie, let's update the Cookie.
+		if (pcs('name') || pcs('email') || pcs('web'))
+		{
+			if ( cs('name') != ps('name') 
+				OR cs('email')!= ps('email') 
+				OR cs('web') != ps('web'));
+				$remember = 1;
+		}
 		
 		if ($remember==1) { setCookies($name,$email,$web); }
 		if ($forget==1) { destroyCookies(); }
