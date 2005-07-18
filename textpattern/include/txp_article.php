@@ -165,6 +165,16 @@ if ($event == 'article') {
 
 		$oldstatus = fetch('Status','textpattern','ID',$incoming['ID']);
 
+		if (! (   ($oldstatus >= 4 and has_privs('article.edit.published'))
+		    	or ($oldstatus < 4 and has_privs('article.edit'))
+				or ($oldstatus < 4 and $AuthorID==$txp_user and has_privs('article.edit.own'))))
+		{
+				// Not allowed, you silly rabbit, you shouldn't even be here. 
+				// Show default editing screen.
+			article_edit();
+			return;
+		}
+
 		include_once $txpcfg['txpath'].'/lib/classTextile.php';
 		$textile = new Textile();
 
@@ -188,9 +198,9 @@ if ($event == 'article') {
 			$incoming['Excerpt_html'] = $textile->TextileThis($incoming['Excerpt'],1);
 		}
 
-		if (!has_privs('article.publish') && $Status>=4) $Status = 3;
-							
 		extract(doSlash($incoming));
+
+		if (!has_privs('article.publish') && $Status>=4) $Status = 3;
 		
 		if($reset_time) {
 			$whenposted = "Posted=now()"; 
@@ -281,7 +291,7 @@ if ($event == 'article') {
 		extract(gpsa(array('view','from_view','step')));
 		
 		if(!empty($GLOBALS['ID'])) { // newly-saved article
-			$ID = $GLOBALS['ID'];
+			$ID = intval($GLOBALS['ID']);
 			$step = 'edit';
 		} else {  
 			$ID = gps('ID');
@@ -644,10 +654,10 @@ if ($event == 'article') {
 	//-- save button --------------
 
 			if ($view == 'text') {
-				echo
-				(($AuthorID==$txp_user and has_privs('article.edit.own')) or has_privs('article.edit')) 
-				?   fInput('submit','save',gTxt('save'),"publish")
-				:	'';
+				if (   ($Status >= 4 and has_privs('article.edit.published'))
+				    or ($Status < 4 and has_privs('article.edit'))
+					or ($Status < 4 and $AuthorID==$txp_user and has_privs('article.edit.own')))
+					echo fInput('submit','save',gTxt('save'),"publish");
 			}
 		}
 
