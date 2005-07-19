@@ -51,6 +51,9 @@
 	if (empty($siteurl))
 		$prefs['siteurl'] = $siteurl = $_SERVER['HTTP_HOST'] . rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
 	
+	if (empty($path_to_site))
+		updateSitePath(dirname(dirname(__FILE__)));
+
 		// v1.0: this should be the definitive http address of the site	
 	define("hu",'http://'.$siteurl.'/');
 	
