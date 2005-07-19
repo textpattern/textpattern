@@ -77,6 +77,11 @@ eod;
 		
 
 		$temp_txpath = dirname(__file__);
+		if (@$_SERVER['REQUEST_URI'] && (@$_SERVER['SERVER_NAME'] || @$_SERVER['HTTP_HOST']))
+		{
+			$guess_siteurl = (@$_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : $_SERVER['HTTP_HOST'];
+			$guess_siteurl .= dirname(dirname($_SERVER['REQUEST_URI']));
+		} else $guess_siteurl = 'mysite.com';
 	  echo '<form action="setup.php" method="post">',
 	  	'<table id="setup" cellpadding="0" cellspacing="0" border="0">',
 		tr(
@@ -118,7 +123,7 @@ eod;
 		),
 		tr(
 			fLabelCell('http://').
-				tdcs(fInput('text','siteurl','mysite.com','edit','','',40).
+				tdcs(fInput('text','siteurl',$guess_siteurl,'edit','','',40).
 				popHelp('site_url'),3)
 		);
 		echo
