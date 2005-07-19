@@ -332,7 +332,9 @@ eod;
 	function setup_load_lang($lang) 
 	{
 		require_once './setup-langs.php';
-		return (isset($langs[$lang]) && !empty($langs[$lang]))? $langs[$lang] : $langs['en-gb'];
+		$lang = (isset($langs[$lang]) && !empty($langs[$lang]))? $lang : 'en-gb';
+		define('LANG', $lang);
+		return $langs[LANG];
 	}
 
 ?>
