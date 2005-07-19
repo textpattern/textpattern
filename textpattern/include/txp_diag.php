@@ -84,6 +84,9 @@
 		
 	$urlparts = parse_url(hu);
 	$mydomain = $urlparts['host'];
+	$server_software = (@$_SERVER['SERVER_SOFTWARE'] || @$_SERVER['HTTP_HOST']) 
+						? ( (@$_SERVER['SERVER_SOFTWARE']) ?  @$_SERVER['SERVER_SOFTWARE'] :  $_SERVER['HTTP_HOST'] )
+						: '';
 	
 	$fail = array(
 
@@ -121,6 +124,11 @@
 		(!@is_writable($path_to_site.'/'.$img_dir))
 		?	gTxt('img_dir_read_only').": {$path_to_site}/{$img_dir}"
 		:	'',
+
+		'cleanurl_only_apache' =>
+		($permlink_mode != 'messy' && $server_software && !stristr($server_software, 'Apache'))
+		? gTxt('cleanurl_only_apache')
+		: '',
 
 		'htaccess_missing' =>	
 		($permlink_mode != 'messy' and !@is_readable($path_to_site.'/.htaccess'))
