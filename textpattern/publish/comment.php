@@ -92,13 +92,17 @@
 
 		$parentid = (!$parentid) ? $id : $parentid;
 
-		//Form-input different from Cookie, let's update the Cookie.
 		if (pcs('name') || pcs('email') || pcs('web'))
 		{
+			// Form-input different from Cookie, let's update the Cookie.
 			if ( cs('name') != ps('name') 
 				OR cs('email')!= ps('email') 
 				OR cs('web') != ps('web'));
 				$remember = 1;
+
+			// If a Cookie is set and we display this form, this page 
+			// really should not be saved by a public cache. rfc2616/14.9.1
+			header('Cache-Control: private');
 		}
 		
 		if ($remember==1) { setCookies($name,$email,$web); }
