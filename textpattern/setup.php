@@ -331,23 +331,8 @@ eod;
 // -------------------------------------------------------------
 	function setup_load_lang($lang) 
 	{
-		global $txpcfg;
-		if (is_file('./lang/'.$lang.'.txt'))
-			define('LANG', $lang);
-		else
-			define('LANG', 'en-gb');
-		$filename = './lang/'.LANG.'.txt';
-		
-
-		$file = @file($filename);
-		if(is_array($file)) {
-			foreach($file as $line) {
-				if($line[0]=='#') continue; 
-				@list($name,$val) = explode(' => ',trim($line));
-				$out[$name] = $val;
-			}
-			return ($out) ? $out : '';
-		} 
+		require_once './setup-langs.php';
+		return (isset($langs[$lang]) && !empty($langs[$lang]))? $langs[$lang] : $langs['en-gb'];
 	}
 
 ?>
