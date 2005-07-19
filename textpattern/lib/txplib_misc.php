@@ -84,19 +84,15 @@ else
 	{
 		global $txpcfg;
 		
-		$event = (gps('event') ? gps('event') : 'article');
-		
-		if ($event == 'list') $event = 'article';
+		$event = gps('event');		
 		
 		$installed = safe_field('name', 'txp_lang',"lang='$lang'");
 		
 		$lang_code = ($installed)? $lang : 'en-gb';
-		
-		$and = "event='public' OR event='common' OR event='$event'";
-		
-		if ($event == 'page' || $event == 'form') $and.=" OR event='tag'";
-
-		$rs = safe_rows_start('name, data','txp_lang',"lang='$lang_code' AND ( $and )");
+				
+		$rs = (!empty($event)) ?
+				safe_rows_start('name, data','txp_lang',"lang='$lang_code'"):
+				safe_rows_start('name, data','txp_lang',"lang='$lang_code' AND ( event='public' OR event='common')");		
 		
 		$out = array();
 		
@@ -144,6 +140,30 @@ else
 			return $out;
 		} 
 		return false;
+	}
+// -------------------------------------------------------------
+
+	function load_lang_event($event)
+	{		
+		global $txpcfg;
+		$lang = LANG;
+				
+		$installed = safe_field('name', 'txp_lang',"lang='$lang'");
+		
+		$lang_code = ($installed)? $lang : 'en-gb';
+				
+		$rs = safe_rows_start('name, data','txp_lang',"lang='$lang_code' AND event='$event'");		
+		
+		$out = array();
+		
+		if ($rs && !empty($rs))
+		{
+			while ($a = nextRow($rs))
+			{
+				$out[$a['name']] = $a['data']; 
+			}
+		}		
+		return ($out) ? $out : '';
 	}
 
 // -------------------------------------------------------------
