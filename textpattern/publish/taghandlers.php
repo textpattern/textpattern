@@ -340,9 +340,13 @@
 
 		if (!empty($cats['Category1']) or !empty($cats['Category2'])) {
 			extract($cats);
+			$cat_condition = array();
+			if (!empty($Category1)) array_push($cat_condition, "(Category1='$Category1')","(Category2='$Category1')");
+			if (!empty($Category2)) array_push($cat_condition, "(Category1='$Category2')","(Category2='$Category2')");
+			$cat_condition = (count($cat_condition)) ? join(' or ',$cat_condition) : '';
+
 			$q = array("select *, id as thisid, unix_timestamp(Posted) as posted from ".PFX."textpattern where Status=4",
-				(!empty($Category1)) ? "and ((Category1='$Category1') or (Category2='$Category1'))" :'',
-				(!empty($Category2)) ? "or ((Category1='$Category2') or (Category2='$Category2'))" :'',
+				($cat_condition) ? "and (". $cat_condition. ")" :'',
 				"and Posted <= now() order by Posted desc limit 0,$limit");
 
 			$rs = getRows(join(' ',$q));
