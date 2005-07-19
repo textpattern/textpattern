@@ -788,7 +788,8 @@
 			if (function_exists($tag)) return $tag($atts);
 			if (isset($pretext[$tag])) return $pretext[$tag];
 		}
-
+		if ($production_status == 'debug') // return unknown Tag with removed attributes
+			return htmlspecialchars(preg_replace('#\"[^"]*\"#i','"***"',$matches[0]));
 	}
 
 // -------------------------------------------------------------
