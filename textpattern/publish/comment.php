@@ -269,6 +269,7 @@
 							$updated = update_comments_count($parentid);
 
 							ob_start();
+							$backpage .= ((strstr($backpage,'?')) ? '&' : '?') . 'commented=1';
 							header('location: '.$backpage);
 						}
 					}																			// end check nonce
