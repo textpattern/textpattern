@@ -351,6 +351,16 @@ else
 	}
 
 // -------------------------------------------------------------
+	function pluginErrorHandler($errno, $errstr, $errfile, $errline)
+	{
+		$error = array( E_WARNING => "Warning", E_NOTICE => "Notice", E_USER_ERROR => "User_Error", 
+						E_USER_WARNING => "User_Warning", E_USER_NOTICE => "User_Notice");
+
+		echo "<pre>".gTxt('plugin_load_error').' '.strong($GLOBALS['txp_current_plugin'])." -> ".strong($error[$errno])
+				.": ".strong($errstr)."</pre>";
+	}
+
+// -------------------------------------------------------------
    function load_plugins($type=NULL)
    {
 		global $prefs,$plugins;
@@ -372,13 +382,18 @@ else
 
 		$rs = safe_rows("name, code", "txp_plugin", $where);
 		if ($rs) {
+			$old_error_handler = set_error_handler("pluginErrorHandler");
 			foreach($rs as $a) {
 				if (!in_array($a['name'],$plugins)) {
 					$plugins[] = $a['name'];
-				
-					eval($a['code']);
+					$GLOBALS['txp_current_plugin'] = $a['name'];
+					$eval_ok = eval($a['code']);
+					if ($eval_ok === FALSE) 
+						echo gTxt('plugin_load_error_above').strong($a['name']).n.br;
+					unset($GLOBALS['txp_current_plugin']);
 				}
 			}
+			restore_error_handler();
 		}
    }
 

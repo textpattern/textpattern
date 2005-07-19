@@ -66,9 +66,6 @@
 		// leave it here for a bit until plugins catch up
 	$txpcfg['doc_root'] = $_SERVER['DOCUMENT_ROOT'];
 
-		// here come the plugins
-	if ($use_plugins) load_plugins();
-
 	define("LANG",$language);
 	if (!empty($locale)) setlocale(LC_ALL, $locale);
 
@@ -77,6 +74,9 @@
 
 		//i18n: $textarray = load_lang('en-gb');
 	$textarray = load_lang(LANG);
+
+		// here come the plugins
+	if ($use_plugins) load_plugins();
 
 		// this step deprecated as of 1.0 : really only useful with old-style
 		// section placeholders, which passed $s='section_name'
