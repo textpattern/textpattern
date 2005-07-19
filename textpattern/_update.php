@@ -647,8 +647,9 @@ EOF;
 						safe_delete('txp_lang',"data=''");
 					}				
 				}else{
-					# Modify this
-					echo "Error trying to install language. Please, try again later from admin &gt; prefs &gt; Install Languages";
+					echo '<p style="color:red">Error trying to install language. Please, try it again from admin &gt; prefs &gt; Install Languages.<br /> 
+					If problem connecting to the RPC server persists, you can go to <a href="http://rpc.textpattern.com/lang/">http://rpc.textpattern.com/lang/</a>, download the
+					desired language file and place it in the /lang/ directory of your textpattern install. Textpattern will try do the install using that file.</p>';
 				}
 			}else {
 				$response = $client->getResponse();
