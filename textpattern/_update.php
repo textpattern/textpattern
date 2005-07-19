@@ -703,6 +703,14 @@ EOF;
 		safe_insert('txp_form', "name='comments_display', type='article', Form='$form'");
 	}
 
+	// /tmp is bad for permanent storage of files, 
+	// if no files are uploaded yet, switch to the files directory in the top-txp dir.
+	if (!safe_count('txp_file',"1")){ 
+		$tempdir = find_temp_dir();
+		if ($tempdir == safe_field('val','txp_prefs',"name='file_base_path'"))
+			safe_update('txp_prefs',"val='".doSlash(dirname(dirname(__FILE__)).DS.'files')."',prefs_id=1","name='file_base_path'");
+	}
+
 	// This should always come last:
 	// 1.0: keep track of updates for devel version
 	safe_delete('txp_prefs',"name = 'dbupdatetime'");
