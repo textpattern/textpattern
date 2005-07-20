@@ -46,6 +46,8 @@
 
 		if (empty($siteurl))
 			$siteurl = $_SERVER['HTTP_HOST'] . rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'])), '/');
+		if (empty($path_to_site))
+			updateSitePath(dirname(dirname(__FILE__)));
 	
 		define("LANG",$language);
 		//i18n: define("LANG","en-gb");

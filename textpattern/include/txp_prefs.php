@@ -451,11 +451,11 @@
 						tda(eLink('prefs','get_language','lang_code',$code,$code).sp,
 						' style="text-align:right;vertical-align:middle"').tda(eLink('prefs','get_language','lang_code',$code,gTxt('install'))));
 				}
-			}else{
-				echo tr(tda(gTxt('error').sp.'Error trying to install language. Please, try it again later.<br /> 
-				If problem connecting to the RPC server persists, you can go to <a href="http://rpc.textpattern.com/lang/">http://rpc.textpattern.com/lang/</a>, download the
-				desired language file and place it in the /lang/ directory of your textpattern install. Textpattern will try do the install using that file.',' style="color:red;"'));
 			}
+			echo endTable();
+			echo tag(gTxt('error').': could not connect to RPC server to check for updated languages. Please, try it again later.<br /> 
+			If problem connecting to the RPC server persists, you can go to <a href="http://rpc.textpattern.com/lang/">http://rpc.textpattern.com/lang/</a>, download the
+			desired language file and place it in the /lang/ directory of your textpattern install. Textpattern will try do the install using that file.','p',' colspan="3" style="color:red;width:50%;margin: auto"');
 		}else{
 			$response = $client->getResponse();
 			if (is_array($response))
@@ -481,8 +481,8 @@
 					}									
 				}
 			}
+			echo endTable();
 		}
-		echo endTable();
 	}
 	
 	function get_language()
