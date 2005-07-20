@@ -214,7 +214,6 @@ eod;
 	{
 		$carry = isPost('carry');
 		extract(postDecode($carry));
-		extract(sDoSlash(gpsa(array('name','pass','RealName','email'))));
 
 		$GLOBALS['textarray'] = setup_load_lang($lang);
 
@@ -225,6 +224,9 @@ eod;
 		define('TXP_INSTALL', 1);
 
  		include './txpsql.php';
+
+		// This has to come after txpsql.php, because otherwise we can't call mysql_real_escape_string
+		extract(sDoSlash(gpsa(array('name','pass','RealName','email'))));
 
  		$nonce = md5( uniqid( rand(), true ) );
 
