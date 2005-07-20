@@ -150,8 +150,11 @@ if ($event == 'category') {
 			foreach($things as $name) {
 				$name = doSlash($name);
 				if ($method == 'delete') {
-					if (safe_delete('txp_category',"name='$name' and type='$type'")) {
-						$categories[] = $name;
+					$catid = safe_field("id","txp_category","name='$name'");
+					if ($catid) {
+						if (safe_delete('txp_category',"id=$catid")) {
+							$categories[] = $name;
+						}
 					}
 				}
 			}
