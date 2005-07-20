@@ -179,7 +179,7 @@
 		
 		list($w,$h,$extension) = getimagesize($file);
 
-		if (($file !== false) && $extensions[$extension]) {
+		if (($file !== false) && @$extensions[$extension]) {
 			$ext = $extensions[$extension];
 			$name = substr($name,0,strrpos($name,'.'));
 			$name .= $ext;

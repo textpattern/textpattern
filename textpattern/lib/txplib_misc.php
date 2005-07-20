@@ -924,7 +924,7 @@ else
 		if (@rename($f, $dest))
 			return true;
 
-		if (copy($f, $dest)) {
+		if (@copy($f, $dest)) {
 			unlink($f);
 			return true;
 		}

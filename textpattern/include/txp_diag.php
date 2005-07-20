@@ -120,10 +120,17 @@
 		?	"{$path_to_site}/index.php ".gTxt('is_inaccessible')
 		:	'',
 
-		'img_dir_read_only' =>
-		(!@is_writable($path_to_site.'/'.$img_dir))
-		?	gTxt('img_dir_read_only').": {$path_to_site}/{$img_dir}"
-		:	'',
+		'dir_not_writable' =>
+		trim(
+			((!@is_writable($path_to_site.'/'.$img_dir))
+			?	str_replace('{dirtype}', gTxt('img_dir'), gTxt('dir_not_writable')).": {$path_to_site}/{$img_dir}\r\n"
+			:	'').
+			((!@is_writable($file_base_path))
+			?	str_replace('{dirtype}', gTxt('file_base_path'), gTxt('dir_not_writable')).": {$file_base_path}\r\n"
+			:	'').
+			((!@is_writable($tempdir))
+			?	str_replace('{dirtype}', gTxt('tempdir'), gTxt('dir_not_writable')).": {$tempdir}\r\n"
+			:	'')),
 
 		'cleanurl_only_apache' =>
 		($permlink_mode != 'messy' && $server_software && !stristr($server_software, 'Apache'))
@@ -154,12 +161,6 @@
 		(empty($tempdir))
 		? gTxt('no_temp_dir')
 		: '',
-
-		'temp_dir_read_only' =>
-		(!test_tempdir($tempdir))
-		? gTxt('temp_dir_read_only')
-		: '',
-
 	);
 
 	if ($permlink_mode != 'messy') {
@@ -191,7 +192,7 @@
 
 	if ($fail) {
 		foreach ($fail as $help => $message)
-			echo tr(tda($message . popHelp($help), ' style="color:red;"'));
+			echo tr(tda(nl2br($message) . popHelp($help), ' style="color:red;"'));
 	}
 	else {
 		echo tr(td(gTxt('all_checks_passed')));
