@@ -27,7 +27,7 @@ function doAuth() {
 
 // -------------------------------------------------------------
 	function txp_validate($user,$password) {
-    	$safe_user = strtr(addslashes($user),array('_' => '\_', '%' => '\%'));
+    	$safe_user = addslashes($user);
     	$r = safe_field("name", 
     		"txp_users", "name = '$safe_user'
 			and pass = password(lower('".doSlash($password)."')) and privs > 0");
