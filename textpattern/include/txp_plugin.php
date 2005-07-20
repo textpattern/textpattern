@@ -152,7 +152,18 @@
 
 				if(is_array($plugin)){
 					extract(doSlash($plugin));
-					$source = highlight_string($plugin['code'], true);
+					$source = '';
+					if(version_compare(PHP_VERSION, "4.2.0", "<") === 1)
+					{
+						ob_start();
+						highlight_string('<?php'.$plugin['code'].'?>');
+						$source = ob_get_contents();
+						ob_end_clean();
+					}
+					else
+					{
+						$source.= highlight_string('<?php'.$plugin['code'].'?>', true);
+					}
 					$sub = fInput('submit','',gTxt('install'),'publish');
 		
 					pagetop(gTxt('edit_plugins'));
