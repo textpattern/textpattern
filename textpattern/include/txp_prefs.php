@@ -481,10 +481,64 @@
 		#$client->debug = true;
 		
 		if (!$client->query('tups.getLanguage',$prefs['blog_uid'],$lang_code))
-		{
+		{			
+			# try to install the current file on the languages table
+			$lang_file = txpath.'/lang/'.LANG.'.txt';
+			# first attempt with local file		
+			if (is_file($lang_file) && is_readable($lang_file))
+			{
+				$lang_file = txpath.'/lang/'.LANG.'.txt';
+				if (!is_file($lang_file) || !is_readable($lang_file)) return;
+				$file = @fopen($lang_file, "r");
+				if ($file) {
+					$lastmod = @filemtime($lang_file);
+					$lastmod = date('YmdHis',$lastmod);
+					$data = array();
+					$event = '';
+					
+					while (!feof($file)) {
+						$line = fgets($file, 4096);
+						# any line starting with #, not followed by @ is a simple comment
+						if($line[0]=='#' && $line[1]!='@' && $line[1]!='#') continue;
+						# each language section should be prefixed by #@
+						if($line[0]=='#' && $line[1]=='@')
+						{
+							if (!empty($data)){
+								foreach ($data as $name => $value)
+								{							
+									safe_insert('txp_lang',"lang='".LANG."', name='$name', lastmod='$lastmod', event='$event', data='$value'");
+								}
+							}
+							# reset
+							$data = array();
+							$event = substr($line,2, (strlen($line)-2));
+							$event = rtrim($event);
+							continue;
+						}
+						 
+						@list($name,$val) = explode(' => ',trim($line));
+						$data[$name] = $val;
+					}
+					# remember to add the last one
+					if (!empty($data)){
+						foreach ($data as $name => $value)
+						{
+							 safe_insert('txp_lang',"lang='".LANG."', name='$name', lastmod='0000-00-00 00:00:00', event='$event', data='$value'");
+						}
+					}
+					@fclose($filename);
+					# clean empty values from table
+					safe_delete('txp_lang',"data=''");
+					$msg = 'Language installed from file';
+				}				
+			}else{
+				$msg = 'Error trying to install language. Please, try it again later.<br /> 
+				If problem connecting to the RPC server persists, you can go to <a href="http://rpc.textpattern.com/lang/">http://rpc.textpattern.com/lang/</a>, download the
+				desired language file and place it in the /lang/ directory of your textpattern install. Textpattern will try do the install using that file.';
+			}			
 			pagetop(gTxt('installing_language'));
 			echo startTable('list'),
-			tr(tda(gTxt('error').sp.$client->getErrorCode().":".$client->getErrorMessage()),' style="color:red;"'),
+			tr(tda($msg),' style="color:red;"'),
 			endTable();
 		}else {
 			$response = $client->getResponse();
