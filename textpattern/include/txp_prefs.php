@@ -478,7 +478,7 @@
 		$lang_code = gps('lang_code');		
 
 		$client = new IXR_Client('http://rpc.textpattern.com');
-		#$client->debug = true;
+		$client->debug = true;
 		
 		if (!$client->query('tups.getLanguage',$prefs['blog_uid'],$lang_code))
 		{			
@@ -532,9 +532,9 @@
 					$msg = 'Language installed from file';
 				}				
 			}else{
-				$msg = 'Error trying to install language. Please, try it again later.<br /> 
-				If problem connecting to the RPC server persists, you can go to <a href="http://rpc.textpattern.com/lang/">http://rpc.textpattern.com/lang/</a>, download the
-				desired language file and place it in the /lang/ directory of your textpattern install. Textpattern will try do the install using that file.';
+				$msg = 'Error trying to install language. Please, try again later.<br /> 
+				If connections to the RPC server continue to fail, please visit <a href="http://rpc.textpattern.com/lang/">http://rpc.textpattern.com/lang/</a>, download the
+				desired language file and place it in the /lang/ directory of your textpattern install. Textpattern will attempt to install using that file.';
 			}			
 			pagetop(gTxt('installing_language'));
 			echo startTable('list'),
