@@ -33,6 +33,7 @@ $DB = new DB;
 		if ($debug or TXP_DEBUG === 1) { 
 			dmp($q);
 			dmp(mysql_error());
+//			dmp(debug_backtrace());
 		}
 		$result = $method($q,$DB->link);
 		@$qcount++;
@@ -267,7 +268,7 @@ $DB = new DB;
 		$right = array(); 
 
 	    $rs = safe_rows_start(
-	    	"name, lft, rgt, parent, title", 
+	    	"id, name, lft, rgt, parent, title", 
 	    	"txp_category",
 	    	"lft between $l and $r and type = '$type' order by lft asc"
 		); 
@@ -280,6 +281,7 @@ $DB = new DB;
 
         	$out[] = 
         		array(
+        			'id' => $id,
         			'name' => $name,
         			'title' => $title,
         			'level' => count($right), 
