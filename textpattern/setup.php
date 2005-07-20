@@ -214,7 +214,7 @@ eod;
 	{
 		$carry = isPost('carry');
 		extract(postDecode($carry));
-		extract(gpsa(array('name','pass','RealName','email')));
+		extract(sDoSlash(gpsa(array('name','pass','RealName','email'))));
 
 		$GLOBALS['textarray'] = setup_load_lang($lang);
 
@@ -341,5 +341,16 @@ eod;
 		define('LANG', $lang);
 		return $langs[LANG];
 	}
+
+// -------------------------------------------------------------
+	function sDoSlash($in)
+	{ 
+		if(phpversion() >= "4.3.0") {
+			return doArray($in,'mysql_real_escape_string');
+		} else {
+			return doArray($in,'mysql_escape_string');
+		}
+	}
+
 
 ?>
