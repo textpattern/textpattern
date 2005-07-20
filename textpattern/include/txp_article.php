@@ -151,8 +151,8 @@ if ($event == 'article') {
 				else if ($Status==2) { $message = gTxt("article_saved_hidden");  } 
 				else if ($Status==1) { $message = gTxt("article_saved_draft");   }
 			}
-			
-				article_edit($message);
+			$message .= check_url_title($url_title);
+			article_edit($message);
 		} else article_edit();
 	}
 
@@ -268,15 +268,7 @@ if ($event == 'article') {
 			else if ($Status==2) { $message = gTxt("article_saved_hidden");	 } 
 			else if ($Status==1) { $message = gTxt("article_saved_draft");	 }	
 		}
-		// Check for blank or previously used identical url-titles
-		If (strlen($url_title) === 0) {
-			$message .= ' '.gTxt("url_title_is_blank");
-		} else {
-			$url_title_count = safe_count("textpattern", "`url_title` = '".$url_title."'");
-			if ($url_title_count > 1)
-				$message .= str_replace('{count}',$url_title_count,' '.gTxt("url_title_is_multiple"));
-		}
-		
+		$message .= check_url_title($url_title);
 		article_edit($message);
 	}
 
@@ -804,4 +796,18 @@ if ($event == 'article') {
 			return selectInput('override_form',$rs,$form,1);
 		}
 	}
+// -------------------------------------------------------------
+	function check_url_title($url_title)
+	{
+		// Check for blank or previously used identical url-titles
+		If (strlen($url_title) === 0) {
+			return ' '.gTxt("url_title_is_blank");
+		} else {
+			$url_title_count = safe_count("textpattern", "`url_title` = '".$url_title."'");
+			if ($url_title_count > 1)
+				return str_replace('{count}',$url_title_count,' '.gTxt("url_title_is_multiple"));
+		}
+		return '';
+	}
+
 ?>
