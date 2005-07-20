@@ -434,18 +434,32 @@
 		
 		$client = new IXR_Client('http://rpc.textpattern.com');
 		#$client->debug = true;
+		
+		echo startTable('list'),				
+		tr(tdcs(hed(gTxt('update_languages'),1),3)),
+		tr(tdcs(sLink('prefs','prefs_list',gTxt('site_prefs')).sp.sLink('prefs','advanced_prefs',gTxt('advanced_preferences')),'3'));
+		
 		if (!$client->query('tups.listLanguages',$prefs['blog_uid']))
-		{
-			echo startTable('list'),
-			tr(tda(gTxt('error').sp.$client->getErrorCode().":".$client->getErrorMessage(),' style="color:red;"')),
-			endTable();
+		{			
+			$files = get_lang_files();
+			if (is_array($files) && !empty($files))
+			{
+				foreach ($files as $file)
+				{
+					$code = substr($file,0,5);
+					echo tr(
+						tda(eLink('prefs','get_language','lang_code',$code,$code).sp,
+						' style="text-align:right;vertical-align:middle"').tda(eLink('prefs','get_language','lang_code',$code,gTxt('install'))));
+				}
+			}else{
+				echo tr(tda(gTxt('error').sp.'Error trying to install language. Please, try it again later.<br /> 
+				If problem connecting to the RPC server persists, you can go to <a href="http://rpc.textpattern.com/lang/">http://rpc.textpattern.com/lang/</a>, download the
+				desired language file and place it in the /lang/ directory of your textpattern install. Textpattern will try do the install using that file.',' style="color:red;"'));
+			}
 		}else{
 			$response = $client->getResponse();
 			if (is_array($response))
 			{
-				echo startTable('list'),				
-				tr(tdcs(hed(gTxt('update_languages'),1),3)),
-				tr(tdcs(sLink('prefs','prefs_list',gTxt('site_prefs')).sp.sLink('prefs','advanced_prefs',gTxt('advanced_preferences')),'3'));
 				foreach ($response as $language)
 				{
 					# I'm affraid we need a value here for the language itself, not for each one of the rows
@@ -466,9 +480,9 @@
 								(($updating)? ' style="text-align:right;vertical-align:middle;color:red;"':' style="text-align:right;vertical-align:middle;"')).td(eLink('prefs','get_language','lang_code',$language['language'],(($updating)? gTxt('update') : gTxt('install')),'updating',"$updating")));
 					}									
 				}
-				echo endTable();
 			}
 		}
+		echo endTable();
 	}
 	
 	function get_language()
@@ -562,5 +576,42 @@
 		}		
 	}
 	
+// ----------------------------------------------------------------------
 
+function get_lang_files()
+{
+	global $txpcfg;
+	
+	$dirlist = array();
+	
+	$lang_dir = $txpcfg['txpath'].'/lang/';
+
+	if (!is_dir($lang_dir))
+		return $dirlist;		
+	
+	if (chdir($lang_dir)) {
+		if (function_exists('glob')){
+			$g_array = glob("*.txt");
+		}else {
+			# filter .txt only files here?
+			$dh = opendir($lang_dir);
+			$g_array = array();
+			while (false !== ($filename = readdir($dh))) {
+				$g_array[] = $filename;
+			}
+			closedir($dh);
+			
+		}
+		# build an array of lang-codes => filemtimes
+		if ($g_array) {
+			foreach ($g_array as $lang_name) {
+				if (is_file($lang_name)) {
+					$dirlist[substr($lang_name,0,5)] = @filemtime($lang_name);
+				}
+			}
+		}
+	}
+	return $g_array;
+}
+	
 ?>
