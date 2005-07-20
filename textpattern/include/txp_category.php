@@ -147,14 +147,10 @@ if ($event == 'category') {
 		$method = ps('method');
 		$things = ps('selected');
 		if ($things) {
-			foreach($things as $name) {
-				$name = doSlash($name);
+			foreach($things as $catid) {
 				if ($method == 'delete') {
-					$catid = safe_field("id","txp_category","name='$name'");
-					if ($catid) {
-						if (safe_delete('txp_category',"id=$catid")) {
-							$categories[] = $name;
-						}
+					if (safe_delete('txp_category',"id=$catid")) {
+						$categories[] = $catid;
 					}
 				}
 			}
@@ -195,7 +191,7 @@ if ($event == 'category') {
 						"((Category1='$sname') or (Category2='$sname'))"));
 				} else $count = '';
 
-				$cbox = checkbox('selected[]',$name,0);
+				$cbox = checkbox('selected[]',$id,0);
 				$editlink = eLink('category',$evname.'_edit','name',
 					$name,$title);
 
