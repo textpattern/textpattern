@@ -274,7 +274,7 @@ if ($event == 'article') {
 		} else {
 			$url_title_count = safe_count("textpattern", "`url_title` = '".$url_title."'");
 			if ($url_title_count > 1)
-				$message .= sprintf(' '.gTxt("url_title_is_multiple"),$url_title_count);
+				$message .= str_replace('{count}',$url_title_count,' '.gTxt("url_title_is_multiple"));
 		}
 		
 		article_edit($message);

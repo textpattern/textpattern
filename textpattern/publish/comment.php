@@ -340,13 +340,13 @@
 		extract(safe_row("RealName, email", "txp_users", "name = '$AuthorID'"));
 
 		$out = gTxt('greeting')." $RealName,\r\n\r\n";
-		$out .= sprintf(gTxt('comment_recorded')."\r\n\r\n", $Title);
+		$out .= str_replace('{title}',$Title,gTxt('comment_recorded')."\r\n\r\n");
 		$out .= gTxt('comment_name').": $cname\r\n";
 		$out .= gTxt('comment_email').": $cemail\r\n";
 		$out .= gTxt('comment_web').": $cweb\r\n";
 		$out .= gTxt('comment_comment').": $message";
 
-		$subject = sprintf(gTxt('comment_received'), $sitename, $Title);
+		$subject = strtr(gTxt('comment_received'),array('{site}' => $sitename, '{title}' => $Title));
 
 		$success = txpMail($email, $subject, $out, $cemail);
 	}
