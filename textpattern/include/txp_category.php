@@ -192,8 +192,8 @@ if ($event == 'category') {
 				} else $count = '';
 
 				$cbox = checkbox('selected[]',$id,0);
-				$editlink = eLink('category',$evname.'_edit','name',
-					$name,$title);
+				$editlink = eLink('category',$evname.'_edit','id',
+					$id,$title);
 
 				$items[] = graf( $cbox . sp . str_repeat(sp,$level-1) . $editlink . $count);
 
@@ -242,8 +242,8 @@ if ($event == 'category') {
 	{
 		pagetop(gTxt('categories'));
 
-		extract(gpsa(array('name','parent')));
-		$row = safe_row("*", "txp_category", "name='$name' and type='$evname'");
+		extract(doSlash(gpsa(array('id','parent'))));
+		$row = safe_row("*", "txp_category", "id=$id");
 		if($row){
 			extract($row);
 			$out = stackRows(
@@ -267,7 +267,7 @@ if ($event == 'category') {
 		include_once $txpcfg['txpath'].'/lib/classTextile.php';
 		$textile = new Textile();
 				
-		$in = psa(array('name','old_name','parent','title'));
+		$in = psa(array('id','name','old_name','parent','title'));
 		extract(doSlash($in));
 		
 		$title = $textile->TextileThis($title,1);		
@@ -277,7 +277,8 @@ if ($event == 'category') {
 		$parent = ($parent) ? $parent : 'root';
 		safe_update("txp_category", 
 					"name='$name',parent='$parent',title='$title'", 
-					"name='$old_name' and type='$evname'"); 
+					"id=$id");
+					
 		rebuild_tree('root', 1, $evname);
 		if ($evname=='article'){
 			safe_update("textpattern","Category1='$name'", "Category1 = '$old_name'"); 
