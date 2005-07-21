@@ -420,7 +420,7 @@ class Textile
 // -------------------------------------------------------------
     function block($text)
     {
-        $pre = $php = false;
+        $pre = $php = $txp = false;
         $find = array('bq', 'h[1-6]', 'fn\d+', 'p');
 
         $text = preg_replace("/(.+)\n(?![#*\s|])/",
@@ -436,16 +436,19 @@ class Textile
             elseif (preg_match('/<txp:php>/i', $line)) {
                 $php = true;
             }
+            elseif (preg_match('/^\s*<txp:/i', $line)) {
+                $txp = true;
+            }
 
 
             foreach($find as $tag) {
-                $line = ($pre == false and $php == false)
+                $line = ($pre == false and $php == false and $txp == false)
                 ? preg_replace_callback("/^($tag)($this->a$this->c)\.(?::(\S+))? (.*)$/",
                     array(&$this, "fBlock"), $line)
                 : $line;
             }
 
-            $line = (!$php) ? preg_replace('/^(?!\t|<\/?pre|<\/?code|$| )(.*)/', "\t<p>$1</p>", $line) : $line;
+            $line = (!$php and !$txp) ? preg_replace('/^(?!\t|<\/?pre|<\/?code|$| )(.*)/', "\t<p>$1</p>", $line) : $line;
 
             $line = ($pre or $php) ? str_replace("<br />", "\n", $line):$line;
             if (preg_match('/<\/pre>/i', $line)) {
@@ -454,7 +457,7 @@ class Textile
             elseif (preg_match('/<\/txp:php>/i', $line)) {
 		$php = false;
             }
-
+			if ($txp == true) $txp = false;
             $out[] = $line;
         }
         return join("\n", $out);
