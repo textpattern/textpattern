@@ -331,6 +331,7 @@
 		return selectInput($item, $levels, $var);
 	}
 	
+//-------------------------------------------------------------
 	function advanced_prefs($message='')
 	{
 		global $textarray;
@@ -342,7 +343,8 @@
 		tr(tdcs(hed(gTxt('advanced_preferences'),1),3)),
 		tr(tdcs(sLink('prefs','prefs_list',gTxt('site_prefs')).sp.sLink('prefs','list_languages',gTxt('install_language')),'3'));		
 				
-		$rs = safe_rows_start('*','txp_prefs',"type='1' AND prefs_id='1' ORDER BY 'event'");
+		$rs = safe_rows_start('*','txp_prefs',
+			"type='1' AND prefs_id='1' ORDER BY event,position");
 		$cur_evt = '';
 		while ($a = nextRow($rs))
 		{			
@@ -373,6 +375,7 @@
 		'</form>';	
 	}
 
+//-------------------------------------------------------------
 	function real_max_upload_size($user_max) 
 	{
 		// The minimum of the candidates, is the real max. possible size
@@ -401,6 +404,7 @@
 		return $real_max;
 	}
 
+//-------------------------------------------------------------
 	function advanced_prefs_save()
 	{
 		$prefnames = safe_column("name", "txp_prefs", "prefs_id='1' AND type='1'");
@@ -423,6 +427,7 @@
 		advanced_prefs(gTxt('preferences_saved'));	
 	}
 	
+//-------------------------------------------------------------
 	# RPC install/update languages
 	function list_languages($message='')
 	{
@@ -483,6 +488,7 @@
 		}
 	}
 	
+//-------------------------------------------------------------
 	function get_language()
 	{
 		global $prefs;

@@ -661,6 +661,11 @@ EOF;
 			safe_update('txp_prefs',"val='".doSlash(dirname(dirname(__FILE__)).DS.'files')."',prefs_id=1","name='file_base_path'");
 	}
 
+	// let's get the advanced fields in the right order
+	for ($i = 1; $i <= 10; $i++) {
+		safe_update("txp_prefs","position=$i","name='custom_${i}_set'",1);
+	}
+
 	// This should always come last:
 	// 1.0: keep track of updates for devel version
 	safe_delete('txp_prefs',"name = 'dbupdatetime'");
