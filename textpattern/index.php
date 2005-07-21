@@ -71,7 +71,7 @@
 			define('TXP_UPDATE', 1);
 			include './_update.php';
 			$event = 'prefs';
-			$step = 'prefs';
+			$step = 'list_languages';
 		}
 
 		if (!empty($admin_side_plugins) and gps('event') != 'plugin')
