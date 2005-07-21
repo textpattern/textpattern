@@ -187,7 +187,7 @@
 	function navPop() 
 	{
 		$areas = areas();
-		$o = '<form action="index.php" method="post" 
+		$o = '<form action="index.php" method="get" 
 				<select name="event" onchange="submit(this.form)">
 				<option>'.ucfirst(gTxt('go')).'...</option>';
 		foreach ($areas as $a => $b) {
