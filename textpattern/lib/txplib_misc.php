@@ -183,7 +183,7 @@ else
 	{
 		global $txp_permissions;
 		// Don't let them override privs that exist
-		if (!@$txp_permissions[$res])
+		if (!isset($txp_permissions[$res]))
 			$txp_permissions[$res] = $perm;
 	}
 
