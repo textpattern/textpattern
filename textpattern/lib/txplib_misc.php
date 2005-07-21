@@ -388,7 +388,9 @@ else
 		$error = array( E_WARNING => "Warning", E_NOTICE => "Notice", E_USER_ERROR => "User_Error", 
 						E_USER_WARNING => "User_Warning", E_USER_NOTICE => "User_Notice");
 
-		if ($GLOBALS['production_status'] == 'live' && @txpinterface == 'public') return;
+		// Act according to production status.
+		set_error_level($GLOBALS['production_status']);
+		if (!($errno & error_reporting())) return;
 
 		echo "<pre>".gTxt('plugin_load_error').' '.strong($GLOBALS['txp_current_plugin'])." -> ".strong($error[$errno])
 				.": ".strong($errstr)."</pre>";
