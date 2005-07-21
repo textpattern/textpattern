@@ -184,6 +184,26 @@
 	}
 
 // -------------------------------------------------------------
+	function navPop() 
+	{
+		$areas = areas();
+		$o = '<form action="index.php" method="post" 
+				<select name="event" onchange="submit(this.form)">
+				<option>'.ucfirst(gTxt('go')).'...</option>';
+		foreach ($areas as $a => $b) {
+			if (count($b) > 0) {
+				$o .= '<optgroup label="'.ucfirst($a).'">';
+				foreach ($b as $c => $d) {
+					$o .= '<option value="'.$d.'">'.ucfirst($c).'</option>';
+				}
+				$o .= '</optgroup>';
+			}
+		}
+		$o .= '</select></form>';
+		return $o;
+	}
+
+// -------------------------------------------------------------
 	function button($label,$link) 
 	{
 		return '<span style="margin-right:2em"><a href="?event='.$link.'" class="plain">'.$label.'</a></span>';

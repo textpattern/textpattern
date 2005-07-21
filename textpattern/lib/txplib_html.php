@@ -11,8 +11,9 @@
 	{
 		global $txp_user,$event;
 		if($event!='tag') {
-			echo '<div style="text-align:center;margin:4em">
-			<a href="http://www.textpattern.com"><img src="txp_img/carver.gif" width="60" height="48" border="0" alt="" /></a>';
+			echo '<div style="text-align:center;margin:4em">',
+			navPop(),
+			'<a href="http://www.textpattern.com"><img src="txp_img/carver.gif" width="60" height="48" border="0" alt="" /></a>';
 			echo graf('Textpattern &#183; '.txp_version);
 			echo($txp_user)
 			?	graf(gTxt('logged_in_as').' '.$txp_user.br.
