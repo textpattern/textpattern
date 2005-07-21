@@ -663,7 +663,7 @@ EOF;
 
 	// let's get the advanced fields in the right order
 	for ($i = 1; $i <= 10; $i++) {
-		safe_update("txp_prefs","position=$i","name='custom_${i}_set'",1);
+		safe_update("txp_prefs","position=$i","name='custom_${i}_set'");
 	}
 
 	// This should always come last:
