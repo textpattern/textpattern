@@ -71,7 +71,7 @@ function doAuth() {
 					td(fInput('password','p_password','','edit'))
 				).
 				tr(
-					td().td(graf(checkbox('stay',1,1).gTxt('stay_logged_in').
+					td().td(graf(checkbox('stay',1,0).gTxt('stay_logged_in').
 					popHelp('remember_login')))
 				).
 				tr(
