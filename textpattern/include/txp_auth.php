@@ -102,7 +102,7 @@ function doAuth() {
 
 			$nonce = safe_field('nonce','txp_users',"name='$c_userid'");
 
-			if (md5($c_userid.$nonce) == $cookie_hash) {  // check nonce
+			if ((md5($c_userid.$nonce) === $cookie_hash) && $nonce) {  // check nonce
 	
 				$GLOBALS['txp_user'] = $c_userid;	// cookie is good, create $txp_user
 				return '';

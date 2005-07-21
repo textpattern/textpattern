@@ -179,6 +179,15 @@ else
 	}
 
 // -------------------------------------------------------------
+	function add_privs($res, $perm = '1') // perm = '1,2,3'
+	{
+		global $txp_permissions;
+		// Don't let them override privs that exist
+		if (!@$txp_permissions[$res])
+			$txp_permissions[$res] = $perm;
+	}
+
+// -------------------------------------------------------------
 	function has_privs($res, $user='')
 	{
 		global $txp_user, $txp_permissions;
@@ -188,7 +197,10 @@ else
 			$user = $txp_user;
 
 		$privs = safe_field("privs", "txp_users", "`name`='".doSlash($user)."'");
-		$req = explode(',', @$txp_permissions[$res]);
+		if (@$txp_permissions[$res])
+			$req = explode(',', $txp_permissions[$res]);
+		else
+			$req = array('1'); // The Publisher gets prived for anything
 		return in_array($privs, $req);
 	}
 

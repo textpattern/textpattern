@@ -177,6 +177,7 @@ $txp_permissions = array(
 	'article.publish'             => '1,2,3,4',
 	'article.php'                 => '1,2',
 	'article'                     => '1,2,3,4,5,6',
+	'list'                        => '1,2,3,4,5,6', //likely the same as for article.
 	'category'                    => '1,2,3',
 	'css'                         => '1,2,6',
 	'diag'                        => '1,2',

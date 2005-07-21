@@ -62,7 +62,7 @@
 	
 		include txpath.'/include/txp_auth.php';
 		doAuth();
-	
+
 		$event = (gps('event') ? gps('event') : 'article');
 		$step = gps('step');
 		
@@ -78,6 +78,13 @@
 			load_plugins(1);
 
 		include txpath.'/lib/txplib_head.php';
+
+		// ugly hack, for the people that don't update their admin_config.php
+		// Get rid of this when we completely remove admin_config and move privs to db
+		if ($event == 'list') 		
+			require_privs('article'); 
+		else 
+			require_privs($event);
 
 		callback_event($event, $step, 1);
 
