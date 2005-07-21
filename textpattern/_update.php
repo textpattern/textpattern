@@ -1,5 +1,8 @@
  <?php
 
+	@ignore_user_abort(1);
+	@set_time_limit(0);
+
 	if (!defined('TXP_UPDATE'))
 		exit;
 
