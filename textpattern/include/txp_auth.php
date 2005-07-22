@@ -57,6 +57,7 @@ function doAuth() {
 		global $txpcfg;
 		include $txpcfg['txpath'].'/lib/txplib_head.php';
 		pagetop('log in');
+		$stay = (@$_COOKIE['txp_nostay'] == 1) ? 0 : 1;
 		echo
 		form(
 			startTable('edit').
@@ -71,7 +72,7 @@ function doAuth() {
 					td(fInput('password','p_password','','edit'))
 				).
 				tr(
-					td().td(graf(checkbox('stay',1,0).gTxt('stay_logged_in').
+					td().td(graf(checkbox('stay',1,$stay).gTxt('stay_logged_in').
 					popHelp('remember_login')))
 				).
 				tr(
@@ -136,6 +137,8 @@ function doAuth() {
 					} else {    // session-only cookie required
 	
 						setcookie('txp_login',$p_userid.','.md5($p_userid.$nonce));    			
+						setcookie('txp_nostay','1',
+							time()+3600*24*365);	// remember nostay for 1 year
 					}
 				
 					$GLOBALS['txp_user'] = $p_userid;	// login is good, create $txp_user
