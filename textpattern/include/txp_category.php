@@ -195,8 +195,7 @@ if ($event == 'category') {
 				$editlink = eLink('category',$evname.'_edit','id',
 					$id,$title);
 
-				$items[] = graf( $cbox . sp . str_repeat(sp,$level-1) . $editlink . $count);
-
+				$items[] = graf( $cbox . sp . str_repeat(sp,max(0,$level-1)*2) . $editlink . $count);
 			}
 
 			if (!empty($items)) $o .= article_multiedit_form($evname,$items);
@@ -250,6 +249,7 @@ if ($event == 'category') {
 				fLabelCell($evname.'_category_name') . fInputCell('name', $name, 1, 20),
 				fLabelCell('parent') . td(parent_pop($parent,$evname)),
 				fLabelCell($evname.'_category_title') . fInputCell('title', $title, 1, 30),
+				hInput('id',$id),
 				tdcs(fInput('submit', '', gTxt('save_button'),'smallerbox'), 2)
 			);
 		}
