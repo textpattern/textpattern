@@ -41,7 +41,8 @@
 			'id'    => '',
 			'name'  => '',
 			'style' => '',
-			'align' => ''
+			'align' => '',
+			'class' => ''
 		),$atts));
 		
 		if ($name) {
@@ -59,6 +60,7 @@
 				'height="'.$h.'" width="'.$w.'" alt="'.$alt.'"',				
 				($style) ? 'style="'.$style.'"' : '',
 				($align) ? 'align="'.$align.'"' : '',
+				($class) ? 'class="'.$class.'"' : '',
 				'/>'
 			);
 			
@@ -1528,7 +1530,6 @@
 	{
 		return hu;
 	}
-
 
 //--------------------------------------------------------------------------
 //File tags functions. 
