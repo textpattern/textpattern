@@ -449,10 +449,20 @@
 			{
 				foreach ($files as $file)
 				{
+					if ($fp = @fopen(txpath.'/lang/'.$file,'r'))
+					{
+						$firstline = fgets($fp, 4069);
+						fclose($fp);
+						if (strpos($firstline,'#@version') !== false) 
+						{	# Looks like: "#@version id;unixtimestamp"
+							@list($fversion,$ftime) = explode(';',trim(substr($firstline,strpos($firstline,' ',1))));
+							$note = "($fversion ". date("d. F Y",$ftime).")";
+						} else $note = "(outdated)";
+					} else $note = '';
 					$code = substr($file,0,5);
 					echo tr(
 						tda(eLink('prefs','get_language','lang_code',$code,$code).sp,
-						' style="text-align:right;vertical-align:middle"').tda(eLink('prefs','get_language','lang_code',$code,gTxt('install'))));
+						' style="text-align:right;vertical-align:middle"').tda(eLink('prefs','get_language','lang_code',$code,gTxt('install'))).tda($note));
 				}
 			}
 			echo endTable();
