@@ -212,7 +212,7 @@ eod;
 	}
 
 	if (!safe_field('val','txp_prefs',"name='permlink_mode'")) {
-		safe_insert('txp_prefs',"prefs_id=1,name='permlink_mode',val='section_id'");
+		safe_insert('txp_prefs',"prefs_id=1,name='permlink_mode',val='section_id_title'");
 	}
 
 	if (!safe_field('val','txp_prefs',"name='comments_are_ol'")) {
