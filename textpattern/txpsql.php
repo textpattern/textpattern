@@ -448,11 +448,13 @@ mysql_query("CREATE TABLE `".PFX."txp_lang` (
 			)TYPE=MyISAM;");
 
 include_once 'en-gb.php';
+if (!@$lastmod) $lastmod = '0000-00-00 00:00:00';
 foreach ($en_gb_lang as $evt_name => $evt_strings)
 {
 	foreach ($evt_strings as $lang_key => $lang_val)
 	{
-		mysql_query("INSERT INTO `".PFX."txp_lang`  SET `lang`='en-gb',`name`='$lang_key',`event`='$evt_name',`data`='$lang_val',`lastmod`='0000-00-00 00:00:00'");
+		if (@$lang_val)
+			mysql_query("INSERT DELAYED INTO `".PFX."txp_lang`  SET `lang`='en-gb',`name`='$lang_key',`event`='$evt_name',`data`='$lang_val',`lastmod`='$lastmod'");
 	}
 }
 
