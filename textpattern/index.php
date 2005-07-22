@@ -72,6 +72,9 @@
 			include './_update.php';
 			$event = 'prefs';
 			$step = 'list_languages';
+			// We updated, so let's get the fresh prefs
+			$prefs = get_prefs();
+			extract($prefs);
 		}
 
 		if (!empty($admin_side_plugins) and gps('event') != 'plugin')
