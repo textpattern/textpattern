@@ -988,7 +988,7 @@ else
 
 		$name = fetch('RealName','txp_users','name',doSlash($id));
 		$authors[$id] = $name;
-		return $name;
+		return ($name) ? $name : $id;
 	}
 
 
