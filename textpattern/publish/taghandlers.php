@@ -850,11 +850,17 @@
 	{
 		global $thisarticle, $thiscomment;
 		extract($thiscomment);
+		extract(lAtts(array(
+			'anchor' => empty($thiscomment['has_anchor_tag']),
+		),$atts));
+
 		$dlink = permlinkurl($thisarticle).'#c'.$discussid;
 		
 		$thing = parse($thing);
+
+		$name = ($anchor ? ' name="c'.$discussid.'"' : '');
 	
-		return tag($thing,'a',' href="'.$dlink.'"');
+		return tag($thing,'a',' href="'.$dlink.'"'.$name);
 	}
 
 // -------------------------------------------------------------
@@ -912,6 +918,14 @@
 	{
 		global $thiscomment;
 		return $thiscomment['message'];
+	}
+
+// -------------------------------------------------------------
+	function comment_anchor($atts) 
+	{
+		global $thiscomment;
+		$thiscomment['has_anchor_tag'] = 1;
+		return '<a name="c'.$thiscomment['discussid'].'" id="c'.$vars['discussid'].'" />';
 	}
 
 // -------------------------------------------------------------
