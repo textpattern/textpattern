@@ -27,7 +27,7 @@
 	}
 	
 	error_reporting(E_ALL);
-	ini_set("display_errors","1");
+	@ini_set("display_errors","1");
 
 	include txpath.'/lib/txplib_db.php';
 	include txpath.'/lib/txplib_forms.php';
