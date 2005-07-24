@@ -858,7 +858,7 @@
 		
 		$thing = parse($thing);
 
-		$name = ($anchor ? ' name="c'.$discussid.'"' : '');
+		$name = ($anchor ? ' id="c'.$discussid.'"' : '');
 	
 		return tag($thing,'a',' href="'.$dlink.'"'.$name);
 	}
@@ -925,7 +925,7 @@
 	{
 		global $thiscomment;
 		$thiscomment['has_anchor_tag'] = 1;
-		return '<a name="c'.$thiscomment['discussid'].'" id="c'.$vars['discussid'].'" />';
+		return '<a id="c'.$vars['discussid'].'" />';
 	}
 
 // -------------------------------------------------------------
