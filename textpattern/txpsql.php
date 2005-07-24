@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 if (!defined('TXP_INSTALL'))
 	exit;
