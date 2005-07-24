@@ -74,12 +74,12 @@
 			echo '<form action="index.php" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">',
 			startTable('list'),
 			'<tr>',
-				column_head('posted', 'Posted', 'list', 1, $linkdir),
-				column_head('title', 'Title', 'list', 1, $linkdir),
-				column_head('section', 'Section', 'list', 1, $linkdir),
-				column_head('category1', 'Category1', 'list', 1, $linkdir).
-				column_head('category2', 'Category2', 'list', 1, $linkdir),
-				hCell(gTxt('Author')),
+				column_head('posted', gTxt('posted'), 'list', 1, $linkdir),
+				column_head('title', gTxt('title'), 'list', 1, $linkdir),
+				column_head('section', gTxt('section'), 'list', 1, $linkdir),
+				column_head('category1', gTxt('category1'), 'list', 1, $linkdir).
+				column_head('category2', gTxt('category2'), 'list', 1, $linkdir),
+				hCell(gTxt('author')),
 				column_head(gTxt('status'), 'Status', 'list', 1, $linkdir),
 				td(),
 			'</tr>';
