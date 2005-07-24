@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 if (!defined('TXP_INSTALL'))
 	exit;
@@ -161,7 +161,7 @@ mysql_query("CREATE TABLE `".PFX."txp_image` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM  PACK_KEYS=0 AUTO_INCREMENT=2 ");
 
-mysql_query("INSERT INTO `".PFX."txp_image` VALUES (1, 'divider.gif', 'site-design', '.gif', 400, 1, '', '', '2005-07-22 16:37:11', 'dean', 0)");
+mysql_query("INSERT INTO `".PFX."txp_image` VALUES (1, 'divider.gif', 'site-design', '.gif', 400, 1, '', '', '2005-07-22 16:37:11', 'textpattern', 0)");
 
 mysql_query("CREATE TABLE `".PFX."txp_lang` (
   `id` int(9) NOT NULL auto_increment,
@@ -281,7 +281,7 @@ mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'comments_disallow_images
 mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'comments_sendmail', '0', 0, 'comments', 'yesnoradio', 160)");
 mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'file_max_upload_size', '2000000', 1, 'admin', 'text_input', 0)");
 mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'file_list_pageby', '25', 2, 'publish', 'text_input', 0)");
-mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'path_to_site', '/Users/dean/repos/comment', 2, 'publish', 'text_input', 0)");
+mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'path_to_site', '', 2, 'publish', 'text_input', 0)");
 mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'article_list_pageby', '25', 2, 'publish', 'text_input', 0)");
 mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'link_list_pageby', '25', 2, 'publish', 'text_input', 0)");
 mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'image_list_pageby', '25', 2, 'publish', 'text_input', 0)");
@@ -293,9 +293,9 @@ mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'is_dst', '0', 0, 'publis
 mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'gmtoffset', '+7200', 0, 'publish', 'gmtoffset_select', 50)");
 mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'locale', 'en_GB.UTF-8', 2, 'publish', 'text_input', 0)");
 mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'tempdir', '/private/var/tmp', 1, 'admin', 'text_input', 0)");
-mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'file_base_path', '/Users/dean/repos/comment/files', 1, 'admin', 'text_input', 0)");
+mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'file_base_path', '', 1, 'admin', 'text_input', 0)");
 mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'blog_uid', '59f5309f25fc7c1cf5cecb29e27a8462', 2, 'publish', 'text_input', 0)");
-mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'blog_mail_uid', 'dean@textdrive.com', 2, 'publish', 'text_input', 0)");
+mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'blog_mail_uid', '', 2, 'publish', 'text_input', 0)");
 mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'blog_time_uid', '2005', 2, 'publish', 'text_input', 0)");
 mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'edit_raw_css_by_default', '1', 1, 'css', 'yesnoradio', 0)");
 mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'allow_page_php_scripting', '1', 1, 'publish', 'yesnoradio', 0)");
@@ -379,5 +379,5 @@ foreach ($en_gb_lang as $evt_name => $evt_strings)
 	}
 }
 
-        
+
 ?>
