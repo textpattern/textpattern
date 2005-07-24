@@ -169,7 +169,7 @@ mysql_query("CREATE TABLE `".PFX."txp_lang` (
   `name` varchar(64) default NULL,
   `event` varchar(64) default NULL,
   `data` tinytext,
-  `lastmod` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `lastmod` timestamp,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `lang` (`lang`,`name`),
   KEY `lang_2` (`lang`,`event`)
@@ -292,9 +292,9 @@ mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'comments_are_ol', '1', 0
 mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'is_dst', '0', 0, 'publish', 'yesnoradio', 60)");
 mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'gmtoffset', '+7200', 0, 'publish', 'gmtoffset_select', 50)");
 mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'locale', 'en_GB.UTF-8', 2, 'publish', 'text_input', 0)");
-//mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'tempdir', '/private/var/tmp', 1, 'admin', 'text_input', 0)");
-//mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'file_base_path', '', 1, 'admin', 'text_input', 0)");
-//mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'blog_uid', '59f5309f25fc7c1cf5cecb29e27a8462', 2, 'publish', 'text_input', 0)");
+mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'tempdir', '".addslashes(find_temp_dir())."', 1, 'admin', 'text_input', 0)");
+mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'file_base_path', '".addslashes(dirname(dirname(__FILE__)).DS.'files')."', 1, 'admin', 'text_input', 0)");
+mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'blog_uid', '".md5(uniqid(rand(),true))."', 2, 'publish', 'text_input', 0)");
 mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'blog_mail_uid', '', 2, 'publish', 'text_input', 0)");
 mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'blog_time_uid', '2005', 2, 'publish', 'text_input', 0)");
 mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'edit_raw_css_by_default', '1', 1, 'css', 'yesnoradio', 0)");
@@ -335,7 +335,7 @@ mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'spam_blacklists', 'sbl.s
 mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'override_emailcharset', '0', 1, 'admin', 'yesnoradio', 21)");
 mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'production_status', 'debug', 0, 'publish', 'prod_levels', 210)");
 mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'comments_auto_append', '1', 0, 'comments', 'yesnoradio', 211)");
-mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'dbupdatetime', '1000000000', 2, 'publish', 'text_input', 0)");
+mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'dbupdatetime', '1122194504', 2, 'publish', 'text_input', 0)");
 mysql_query("INSERT INTO `".PFX."txp_prefs` VALUES (1, 'version', '1.0rc4', 2, 'publish', 'text_input', 0)");
 
 mysql_query("CREATE TABLE `".PFX."txp_section` (

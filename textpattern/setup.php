@@ -223,6 +223,7 @@ eod;
 		define("PFX",trim($dprefix));
 		define('TXP_INSTALL', 1);
 
+		define("txpath", $txpath);
  		include './txpsql.php';
 
 		// This has to come after txpsql.php, because otherwise we can't call mysql_real_escape_string
