@@ -133,7 +133,7 @@
 			:	'')),
 
 		'cleanurl_only_apache' =>
-		($permlink_mode != 'messy' && $server_software && !stristr($server_software, 'Apache'))
+		($permlink_mode != 'messy' && $server_software && stristr($server_software, 'Apache'))
 		? gTxt('cleanurl_only_apache')
 		: '',
 
@@ -161,6 +161,12 @@
 		(empty($tempdir))
 		? gTxt('no_temp_dir')
 		: '',
+
+		'warn_mail_unavailable' =>
+		(!is_callable('mail'))
+		? gTxt('warn_mail_unavailable')
+		: '',
+
 	);
 
 	if ($permlink_mode != 'messy') {

@@ -720,12 +720,21 @@ else
 		$email = strip_rn($email);
 		if (!is_null($reply_to)) $reply_to = strip_rn($reply_to);
 
-		return mail($to_address, $subject, $body,
-		 "From: $RealName <$email>\r\n"
-		."Reply-To: ". ((isset($reply_to)) ? $reply_to : "$RealName <$email>") . "\r\n"
-		."X-Mailer: Textpattern\r\n"
-		."Content-Transfer-Encoding: 8bit\r\n"
-		."Content-Type: text/plain; charset=\"$charset\"\r\n");		
+		if (is_callable('mail')) 
+		{
+			if (txpinterface == 'admin' && $GLOBALS['production_status'] != 'live') 
+				echo tag(gTxt('warn_mail_unavailable'),'p',' style="color:red;" ');
+			return false;
+		}
+		else
+		{
+			return mail($to_address, $subject, $body,
+			 "From: $RealName <$email>\r\n"
+			."Reply-To: ". ((isset($reply_to)) ? $reply_to : "$RealName <$email>") . "\r\n"
+			."X-Mailer: Textpattern\r\n"
+			."Content-Transfer-Encoding: 8bit\r\n"
+			."Content-Type: text/plain; charset=\"$charset\"\r\n");		
+		}
 	}
 
 

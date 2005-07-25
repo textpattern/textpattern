@@ -126,6 +126,12 @@ eod;
 				tdcs(fInput('text','siteurl',$guess_siteurl,'edit','','',40).
 				popHelp('site_url'),3)
 		);
+		if (is_callable('mail'))
+		{
+			echo 	tr(
+							tdcs(gTxt('warn_mail_unavailable'),3,null,'" style="color:red;text-align:center')
+					);
+		}
 		echo
 			tr(
 				td().td(fInput('submit','Submit',gTxt('next'),'publish')).td().td()

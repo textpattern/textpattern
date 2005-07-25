@@ -482,6 +482,7 @@ $en_gb_lang = array(
 		'en-us' => 'English (US)',
 		'english' => 'English',
 		'es-es' => 'Español',
+		'et-ee' => 'Eesti',
 		'excerpt' => 'Excerpt',
 		'extensions' => 'Extensions',
 		'forget' => 'Forget',
@@ -627,6 +628,7 @@ $en_gb_lang = array(
 		'create_config' => 'create a file called <code>config.php</code> in the <code>/textpattern/</code> directory and paste the following inside:',
 		'db_connected' => 'Connected',
 		'db_must_exist' => 'Note that the database you specify must exist; Textpattern won&#8217;t create it for you.',
+		'errors_during_install' => 'There were {num} errors during the installation. You can ask for help in the Textpattern forums.',
 		'full_path_to_txp' => 'Full server path to Textpattern',
 		'mysql_database' => 'MySQL database',
 		'mysql_login' => 'MySQL login',
@@ -643,6 +645,7 @@ $en_gb_lang = array(
 		'thanks_for_interest' => 'Thank you for your interest in Textpattern.',
 		'that_went_well' => 'That went well. Database tables were created and populated.',
 		'using_db' => 'Using {dbname}',
+		'warn_mail_unavailable' => 'Your php installation is missing the mail() function. Therefore no emails can be sent from textpattern, which limits certain functionality.',
 		'welcome_to_textpattern' => 'Welcome to Textpattern',
 		'your_email' => 'Your email address',
 		'your_full_name' => 'Your full name',
@@ -755,5 +758,5 @@ $en_gb_lang = array(
 		'wraptag' => 'Wraptag',
 	)
 );
-$lastmod = gmdate('Y-m-d H:m:s',1121861181);
+$lastmod = gmdate('Y-m-d H:m:s',1122328167);
 ?>
