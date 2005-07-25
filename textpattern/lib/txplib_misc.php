@@ -720,7 +720,7 @@ else
 		$email = strip_rn($email);
 		if (!is_null($reply_to)) $reply_to = strip_rn($reply_to);
 
-		if (is_callable('mail')) 
+		if (!is_callable('mail')) 
 		{
 			if (txpinterface == 'admin' && $GLOBALS['production_status'] != 'live') 
 				echo tag(gTxt('warn_mail_unavailable'),'p',' style="color:red;" ');
