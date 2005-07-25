@@ -275,12 +275,19 @@ eod;
 // -------------------------------------------------------------
 	function fbCreate() 
 	{
-		return 
-		'<div width="450" valign="top" style="margin-left:auto;margin-right:auto">'.
-		graf(gTxt('that_went_well'),' style="margin-top:3em"').
-		graf(gTxt('you_can_access')).
-		graf(gTxt('thanks_for_interest')).
-		'</div>';
+		if ($GLOBALS['txp_install_successful']===false)
+			return
+			'<div width="450" valign="top" style="margin-left:auto;margin-right:auto">'.
+			graf($GLOBALS['txp_err_count'].' '.gTxt('errors_during_install'),' style="margin-top:3em"').
+			'</div>';
+
+		else
+			return 
+			'<div width="450" valign="top" style="margin-left:auto;margin-right:auto">'.
+			graf(gTxt('that_went_well'),' style="margin-top:3em"').
+			graf(gTxt('you_can_access')).
+			graf(gTxt('thanks_for_interest')).
+			'</div>';
 	}
 
 // -------------------------------------------------------------
