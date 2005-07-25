@@ -90,7 +90,7 @@ else
 		
 		$lang_code = ($installed)? $lang : 'en-gb';
 				
-		$rs = (!empty($event)) ?
+		$rs = (txpinterface == 'admin') ?
 				safe_rows_start('name, data','txp_lang',"lang='$lang_code'"):
 				safe_rows_start('name, data','txp_lang',"lang='$lang_code' AND ( event='public' OR event='common')");		
 		
