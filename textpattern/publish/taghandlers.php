@@ -925,7 +925,7 @@
 	{
 		global $thiscomment;
 		$thiscomment['has_anchor_tag'] = 1;
-		return '<a id="c'.$thiscomment['discussid'].'" />';
+		return '<a id="c'.$thiscomment['discussid'].'"></a>';
 	}
 
 // -------------------------------------------------------------
