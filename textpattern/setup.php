@@ -157,7 +157,7 @@ eod;
 		echo graf(gTxt('db_connected'));
 
 		if (!$mydb = mysql_select_db($ddb)) {
-			exit(graf(str_replace("{dbname}",strong($ddb)),gTxt("db_doesnt_exist")));
+			exit(graf(str_replace("{dbname}",strong($ddb),gTxt("db_doesnt_exist"))));
 		}
 		echo graf(str_replace("{dbname}", strong($ddb), gTxt('using_db'))),
 				
