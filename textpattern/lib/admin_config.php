@@ -1,7 +1,7 @@
 <?php
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  
- *								D E P R E C A T E D
+                (M O S T L Y)  D E P R E C A T E D  AS  OF  1.0RC4
 
  *	IMPORTANT:  Most settings in this file  (all that is in  $txpac)  have moved 
 	into the  Database. This file remains here  mainly for  not breaking updates 
@@ -9,7 +9,8 @@
 	If you would like to change any of these settings, you can do so in Advanced 
  *	Preferences	of your Textpattern admin panel.
 	
- *	Only the Permission-Settings at the bottom this file are still avtively used.
+ *	Only the Permission-Settings at the bottom this file are still actively used,
+	and these will be moved to the db before the next release 
  
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
