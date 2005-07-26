@@ -385,16 +385,32 @@ foreach ($create_sql as $query)
 	}
 }
 
-include_once 'en-gb.php';
-if (!@$lastmod) $lastmod = '0000-00-00 00:00:00';
-foreach ($en_gb_lang as $evt_name => $evt_strings)
+require_once './lib/IXRClass.php';
+$client = new IXR_Client('http://rpc.textpattern.com');
+if (!$client->query('tups.getLanguage','',$lang))
 {
-	foreach ($evt_strings as $lang_key => $lang_val)
+	include_once './lib/txplib_update.php';
+	# If cannot install from lang file, setup the english lang
+	if (!install_language_from_file($lang))
 	{
-		if (@$lang_val)
-			mysql_query("INSERT DELAYED INTO `".PFX."txp_lang`  SET `lang`='en-gb',`name`='$lang_key',`event`='$evt_name',`data`='$lang_val',`lastmod`='$lastmod'");
+		include_once 'en-gb.php';
+		if (!@$lastmod) $lastmod = '0000-00-00 00:00:00';
+		foreach ($en_gb_lang as $evt_name => $evt_strings)
+		{
+			foreach ($evt_strings as $lang_key => $lang_val)
+			{
+				if (@$lang_val)
+					mysql_query("INSERT DELAYED INTO `".PFX."txp_lang`  SET `lang`='en-gb',`name`='$lang_key',`event`='$evt_name',`data`='$lang_val',`lastmod`='$lastmod'");
+			}
+		}
 	}
+}else {
+	$response = $client->getResponse();
+	$lang_struct = unserialize($response);
+	foreach ($lang_struct as $item)
+	{
+		mysql_query("INSERT DELAYED INTO `".PFX."txp_lang`  SET `lang`='$lang',`name`='$item[name]',`event`='$item[event]',`data`='$item[data]',`lastmod`='".strftime('%Y%m%d%H%M%S',$item['uLastmod'])."'");
+	}		
 }
-
 
 ?>
