@@ -87,6 +87,8 @@
 	$server_software = (@$_SERVER['SERVER_SOFTWARE'] || @$_SERVER['HTTP_HOST']) 
 						? ( (@$_SERVER['SERVER_SOFTWARE']) ?  @$_SERVER['SERVER_SOFTWARE'] :  $_SERVER['HTTP_HOST'] )
 						: '';
+	$is_apache = ($server_software and stristr($server_software, 'Apache')) 
+				   or (is_callable('apache_get_version'));
 	
 	$fail = array(
 
@@ -133,7 +135,7 @@
 			:	'')),
 
 		'cleanurl_only_apache' =>
-		($permlink_mode != 'messy' && $server_software && stristr($server_software, 'Apache'))
+		($permlink_mode != 'messy' and !$is_apache )
 		? gTxt('cleanurl_only_apache')
 		: '',
 
