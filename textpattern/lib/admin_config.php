@@ -1,12 +1,22 @@
 <?php
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ 
+ *								D E P R E C A T E D
+
+ *	IMPORTANT:  Most settings in this file  (all that is in  $txpac)  have moved 
+	into the  Database. This file remains here  mainly for  not breaking updates 
+ *	for people that are coming from older revisions (up to and including 1.0RC3)! 
+	If you would like to change any of these settings, you can do so in Advanced 
+ *	Preferences	of your Textpattern admin panel.
+	
+ *	Only the Permission-Settings at the bottom this file are still avtively used.
+ 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 
 // Textpattern admin options
 // unless stated otherwise, 0 = false, 1 = true
-
 $txpac = array(
-
-
 // -------------------------------------------------------------
 // bypass the Txp CSS editor entirely
 
