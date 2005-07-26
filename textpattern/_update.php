@@ -1,4 +1,9 @@
  <?php
+/*
+$HeadURL$
+$LastChangedRevision$
+*/
+
 
 	@ignore_user_abort(1);
 	@set_time_limit(0);

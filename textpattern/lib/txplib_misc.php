@@ -1,5 +1,10 @@
 <?php
 
+/*
+$HeadURL$
+$LastChangedRevision$
+*/
+
 if (defined('DIRECTORY_SEPARATOR'))
 	define('DS', DIRECTORY_SEPARATOR);
 else

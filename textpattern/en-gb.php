@@ -1,4 +1,9 @@
 <?php
+/*
+$HeadURL$
+$LastChangedRevision$
+*/
+
 # install en-gb without XML-RPC requirements
 $en_gb_lang = array(
 	'admin' => array(

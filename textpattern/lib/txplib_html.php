@@ -1,4 +1,9 @@
 <?php
+
+/*
+$HeadURL$
+$LastChangedRevision$
+*/
 	
 	define("t","\t");
 	define("n","\n");

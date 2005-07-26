@@ -13,6 +13,10 @@
 	"Mod File Upload" Copyright 2004 by Michael Manfre. All rights reserved.
 	Use of this mod denotes acceptance of the Textpattern license agreement
 
+$HeadURL$
+$LastChangedRevision$
+
+
 */
 
 	$levels = array(

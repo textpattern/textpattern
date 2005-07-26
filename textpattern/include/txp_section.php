@@ -8,6 +8,10 @@
 	All rights reserved
 
 	Use of this software indicates acceptance ofthe Textpattern license agreement 
+
+$HeadURL$
+$LastChangedRevision$
+
 */
 
 	if ($event == 'section') {

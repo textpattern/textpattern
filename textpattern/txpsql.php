@@ -1,5 +1,11 @@
 <?php
 
+/*
+$HeadURL$
+$LastChangedRevision$
+*/
+
+
 if (!defined('TXP_INSTALL'))
 	exit;
 

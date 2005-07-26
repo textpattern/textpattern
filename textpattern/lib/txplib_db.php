@@ -1,5 +1,10 @@
 <?php
 
+/*
+$HeadURL$
+$LastChangedRevision$
+*/
+
 define('TXP_DEBUG', 0);
 
 if (!empty($txpcfg['table_prefix'])) {

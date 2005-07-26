@@ -1,5 +1,10 @@
 <?php
 
+/*
+$HeadURL$
+$LastChangedRevision$
+*/
+
 //-------------------------------------------------------------	
 	function yesnoRadio($field,$var)
 	{

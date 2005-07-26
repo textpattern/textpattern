@@ -1,5 +1,10 @@
 <?php
 
+/*
+$HeadURL$
+$LastChangedRevision$
+*/
+
 	
 	// TO-DO:
 	// * Improve performance of file imports

@@ -1,4 +1,9 @@
 <?php
+/*
+$HeadURL$
+$LastChangedRevision$
+*/
+
 $langs = array(
 	'cs-cz' => array(
 		'about_to_create' => 'Nyní lze vytvořit a naplnit tabulky databáze.',

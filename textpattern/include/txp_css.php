@@ -1,5 +1,11 @@
 <?php
 
+/*
+$HeadURL$
+$LastChangedRevision$
+*/
+
+
 	if ($event == 'css') {
 		require_privs('css');
 	

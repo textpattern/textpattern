@@ -17,6 +17,10 @@
 	All rights reserved
 
 	Use of this software indicates acceptance of the Textpattern license agreement 
+
+$HeadURL$
+$LastChangedRevision$
+
 */
 	$name = gps('name');
 	$endform = tr(tdcs(fInput('submit','',gTxt('build'),'smallerbox'),2)).endTable().
