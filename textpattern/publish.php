@@ -18,7 +18,8 @@ $LastChangedRevision$
 
 */
 
-	@define("txpath", dirname(__FILE__));
+	if (!defined('txpath'))
+		define("txpath", dirname(__FILE__));
 	define("txpinterface", "public");
 		
 	include_once txpath.'/lib/txplib_db.php';
