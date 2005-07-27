@@ -33,7 +33,7 @@ class DB {
 
 		$version = $this->version;
 		// be backwardscompatible
-		if ( ($txpcfg['dbcharset']) && (intval($version[0]) >= 5 || preg_match('#^4\.[1-9]#',$version)) )
+		if ( isset($txpcfg['dbcharset']) && (intval($version[0]) >= 5 || preg_match('#^4\.[1-9]#',$version)) )
 			mysql_query("SET NAMES ". $txpcfg['dbcharset']);
     }
 }
