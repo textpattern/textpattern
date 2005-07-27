@@ -146,7 +146,7 @@ $LastChangedRevision$
 	{
 		if (!$p) $p = ($type=='edit') ? 3 : 0;
 		$align = (!$align) ? 'center' : $align;
-		$class = ($class) ? ' class='.$class.'"' : '';
+		$class = ($class) ? ' class="'.$class.'"' : '';
 		return
 		'<table cellpadding="'.$p.'" cellspacing="0" border="0" id="'.
 			$type.'" align="'.$align.'"'.$class.'>'.n;
