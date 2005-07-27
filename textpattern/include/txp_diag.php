@@ -196,6 +196,23 @@ $LastChangedRevision$
 	foreach ($fail as $k=>$v)
 		if (empty($v)) unset($fail[$k]);
 
+	# Find the highest revision number
+	$file_revs = array();
+	$rev = 0;
+	foreach ($files as $f) {
+		$lines = @file($txpcfg['txpath'] . $f);
+		if ($lines) {
+			foreach ($lines as $line) {
+				if (preg_match('/^\$LastChangedRevision: (\w+) \$/', $line, $match)) {
+					$file_revs[$f] = $match[1];
+					if ($match[1] > $rev)
+						$rev = $match[1];
+				}
+			}
+		}
+	}
+
+
 	echo 
 	pagetop(gTxt('tab_diagnostics'),''),
 	startTable('list'),
@@ -218,7 +235,7 @@ $LastChangedRevision$
 	$out = array(
 		'<textarea style="width:500px;height:300px;" readonly="readonly">',
 
-		gTxt('txp_version').cs.txp_version.n,
+		gTxt('txp_version').cs.txp_version.' ('.($rev ? 'r'.$rev : 'unknown revision').')'.n,
 
 		gTxt('last_update').cs.gmstrftime($fmt_date, $dbupdatetime).'/'.gmstrftime($fmt_date, @filemtime(txpath.'/_update.php')).n,
 
@@ -273,10 +290,18 @@ $LastChangedRevision$
 			$out[] = n.gTxt('apache_modules').cs.join(', ', apache_get_modules()).n.n;
 
 
-		if (is_callable('md5_file')) {
-			foreach ($files as $f) {
-				$out[] = "MD5 $f: ".md5_file($txpcfg['txpath'] . $f) . n;
+		foreach ($files as $f) {
+			$rev = 'unknown';
+			$checksum = 'unknown';
+
+			if (is_callable('md5_file')) {
+				$checksum = md5_file($txpcfg['txpath'] . $f);
 			}
+
+			if (isset($file_revs[$f]))
+				$rev = $file_revs[$f];
+
+			$out[] = "$f" .cs. "r".$rev.' ('.$checksum.')'.n;
 		}
 	}
 
