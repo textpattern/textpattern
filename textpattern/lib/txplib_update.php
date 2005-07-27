@@ -25,6 +25,12 @@ function install_language_from_file($lang)
 				$line = fgets($file, 4096);
 				# any line starting with #, not followed by @ is a simple comment
 				if($line[0]=='#' && $line[1]!='@' && $line[1]!='#') continue;
+				# if available use the lastmod time from the file
+				if (strpos($line,'#@version') === 0) 
+				{	# Looks like: "#@version id;unixtimestamp"
+					@list($fversion,$ftime) = explode(';',trim(substr($firstline,strpos($firstline,' ',1))));
+					$lastmod = date("YmdHis",($ftime < time()) ? $ftime : time());
+				}
 				# each language section should be prefixed by #@
 				if($line[0]=='#' && $line[1]=='@')
 				{
