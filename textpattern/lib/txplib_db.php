@@ -7,9 +7,11 @@ $LastChangedRevision$
 
 define('TXP_DEBUG', 0);
 
-if (!empty($txpcfg['table_prefix'])) {
-	define ("PFX",$txpcfg['table_prefix']);
-} else define ("PFX",'');
+if (!defined('PFX')) {
+	if (!empty($txpcfg['table_prefix'])) {
+		define ("PFX",$txpcfg['table_prefix']);
+	} else define ("PFX",'');
+}
 
 class DB {
 

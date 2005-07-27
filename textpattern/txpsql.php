@@ -391,6 +391,10 @@ foreach ($create_sql as $query)
 	}
 }
 
+# Skip the RPC language fetch when testing
+if (defined('TXP_TEST'))
+	return;
+
 require_once './lib/IXRClass.php';
 $client = new IXR_Client('http://rpc.textpattern.com');
 if (!$client->query('tups.getLanguage','',$lang))
