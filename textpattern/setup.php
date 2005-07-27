@@ -169,8 +169,20 @@ eod;
 		if (!$mydb = mysql_select_db($ddb)) {
 			exit(graf(str_replace("{dbname}",strong($ddb),gTxt("db_doesnt_exist"))));
 		}
-		echo graf(str_replace("{dbname}", strong($ddb), gTxt('using_db'))),
-				
+
+		// On 4.1 or greater use utf8-tables
+		$version = mysql_get_server_info();
+		if ( intval($version[0]) >= 5 || preg_match('#^4\.[1-9]#',$version)) 
+		{
+			if (mysql_query("SET NAMES utf8"))
+			{
+				$carry['dbcharset'] = "utf8";
+				$carry['dbcollate'] = "utf8_general_ci";
+			} else $carry['dbcharset'] = "latin1";
+		} else $carry['dbcharset'] = "latin1";
+
+		echo graf(str_replace("{dbname}", strong($ddb), gTxt('using_db')).' ('. $carry['dbcharset'] .')' ),
+		
 		graf(strong(gTxt('before_you_proceed')).', '. gTxt('create_config')),
 
 		'<textarea style="width:400px;height:200px" name="config" rows="1" cols="1">',
@@ -279,6 +291,7 @@ eod;
 		.o.'host'		  .m.$dhost.nl
 		.o.'table_prefix' .m.$dprefix.nl
 		.o.'txpath'		  .m.$txpath.nl
+		.o.'dbcharset'	  .m.$dbcharset.nl
 		.$close;
 	}
 

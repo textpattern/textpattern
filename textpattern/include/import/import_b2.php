@@ -73,7 +73,7 @@
 		$txpdbpass  = $txpcfg['pass'];
 		$txpdbhost  = $txpcfg['host'];		
 	
-		$txplink = mysql_connect($txpdbhost,$txpdblogin,$txpdbpass);
+		$txplink = $DB->link;
 
 		mysql_select_db($txpdb,$txplink);
 	

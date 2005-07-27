@@ -263,6 +263,8 @@ $LastChangedRevision$
 
 		gTxt('magic_quotes').cs.get_magic_quotes_gpc().'/'.get_magic_quotes_runtime().n,
 
+		'MySQL'.cs.mysql_get_server_info().n,
+
 		gTxt('locale').cs.$locale.n,
 
 		(isset($_SERVER['SERVER_SOFTWARE'])) ? gTxt('server').cs.$_SERVER['SERVER_SOFTWARE'].n : '',
@@ -279,6 +281,42 @@ $LastChangedRevision$
 	);
 
 	if ($step == 'high') {
+		$out[] = n.'Charset (default/config)'.cs.mysql_client_encoding().'/'.$txpcfg['dbcharset'].n;
+
+		$result = safe_query("SHOW variables like 'character_se%'");
+		while ($row = mysql_fetch_row($result))
+		{
+			$out[] = $row[0].cs.$row[1].n;
+			if ($row[0] == 'character_set_connection') $conn_char = $row[1];
+		}
+
+		$table_names = array(PFX.'textpattern');
+		$result = safe_query("SHOW TABLES LIKE '".PFX."txp\_%'");
+		while ($row = mysql_fetch_row($result))
+		{
+			$table_names[] = $row[0];
+		}
+		$table_msg = array();
+		foreach ($table_names as $table)
+		{
+			$ctr = safe_query("SHOW CREATE TABLE ". $table);
+			if (!$ctr) 
+			{
+				unset($table_names[$table]);
+				continue;
+			}
+			$ctcharset = preg_replace('#^CREATE TABLE.*SET=([^ ]+)[^)]*$#is','\\1',mysql_result($ctr,0,'Create Table'));
+			if (isset($conn_char) && ($txpcfg['dbcharset'] != $ctcharset))
+				$table_msg[] = "$table is $ctcharset";
+			$ctr = safe_query("CHECK TABLE ". $table);
+			$tcheck = mysql_result($ctr,0,'Msg_Text');
+			if ($tcheck != 'OK')
+				$table_msg[] .= $table .cs. $tcheck;
+		}
+		if ($table_msg == array()) 
+			$table_msg = (count($table_names) < 18) ?  array('-') : array('OK');
+		$out[] = count($table_names).' Tables'.cs. implode(', ',$table_msg).n;
+
 		$extns = get_loaded_extensions();
 		$extv = array();
 		foreach ($extns as $e) {
@@ -288,7 +326,6 @@ $LastChangedRevision$
 
 		if (is_callable('apache_get_modules'))
 			$out[] = n.gTxt('apache_modules').cs.join(', ', apache_get_modules()).n.n;
-
 
 		foreach ($files as $f) {
 			$rev = 'unknown';

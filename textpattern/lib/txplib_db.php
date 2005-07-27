@@ -14,21 +14,29 @@ if (!defined('PFX')) {
 }
 
 class DB {
+    function DB() 
+	{
+		global $txpcfg;
 
-    function DB() {
-         global $txpcfg;
-         $this->host = $txpcfg['host'];
-         $this->db   = $txpcfg['db'];
-         $this->user = $txpcfg['user'];
-         $this->pass = $txpcfg['pass'];
-         $this->link = mysql_connect($this->host, $this->user, $this->pass);
-         if (!$this->link) {
-         	$GLOBALS['connected'] = false;
-         } else $GLOBALS['connected'] = true;
-         mysql_select_db($this->db) or die(db_down());
+		$this->host = $txpcfg['host'];
+		$this->db   = $txpcfg['db'];
+		$this->user = $txpcfg['user'];
+		$this->pass = $txpcfg['pass'];
+
+		$this->link = mysql_connect($this->host, $this->user, $this->pass);
+		$this->version = mysql_get_server_info();;
+
+		if (!$this->link) {
+			$GLOBALS['connected'] = false;
+		} else $GLOBALS['connected'] = true;
+		mysql_select_db($this->db) or die(db_down());
+
+		$version = $this->version;
+		// be backwardscompatible
+		if ( ($txpcfg['dbcharset']) && (intval($version[0]) >= 5 || preg_match('#^4\.[1-9]#',$version)) )
+			mysql_query("SET NAMES ". $txpcfg['dbcharset']);
     }
-} 
-
+}
 $DB = new DB;
 
 //-------------------------------------------------------------
