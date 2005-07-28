@@ -306,7 +306,7 @@ $LastChangedRevision$
 				continue;
 			}
 			$ctcharset = preg_replace('#^CREATE TABLE.*SET=([^ ]+)[^)]*$#is','\\1',mysql_result($ctr,0,'Create Table'));
-			if (isset($conn_char) && ($txpcfg['dbcharset'] != $ctcharset))
+			if (isset($conn_char) && !stristr($ctcharset,'CREATE') && ($txpcfg['dbcharset'] != $ctcharset))
 				$table_msg[] = "$table is $ctcharset";
 			$ctr = safe_query("CHECK TABLE ". $table);
 			$tcheck = mysql_result($ctr,0,'Msg_Text');
