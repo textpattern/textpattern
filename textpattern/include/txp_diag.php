@@ -281,7 +281,7 @@ $LastChangedRevision$
 	);
 
 	if ($step == 'high') {
-		$out[] = n.'Charset (default/config)'.cs.mysql_client_encoding().'/'.$txpcfg['dbcharset'].n;
+		$out[] = n.'Charset (default/config)'.cs.mysql_client_encoding().'/'.@$txpcfg['dbcharset'].n;
 
 		$result = safe_query("SHOW variables like 'character_se%'");
 		while ($row = mysql_fetch_row($result))
@@ -306,7 +306,7 @@ $LastChangedRevision$
 				continue;
 			}
 			$ctcharset = preg_replace('#^CREATE TABLE.*SET=([^ ]+)[^)]*$#is','\\1',mysql_result($ctr,0,'Create Table'));
-			if (isset($conn_char) && !stristr($ctcharset,'CREATE') && ($txpcfg['dbcharset'] != $ctcharset))
+			if (isset($conn_char) && !stristr($ctcharset,'CREATE') && (@$txpcfg['dbcharset'] != $ctcharset))
 				$table_msg[] = "$table is $ctcharset";
 			$ctr = safe_query("CHECK TABLE ". $table);
 			$tcheck = mysql_result($ctr,0,'Msg_Text');
