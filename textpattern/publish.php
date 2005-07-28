@@ -52,6 +52,9 @@ $LastChangedRevision$
  		// add prefs to globals
 	extract($prefs);
 
+		// set a higher error level during initialization
+	set_error_level(@$production_status == 'live' ? 'testing' : @$production_status);
+
 		// use the current URL path if $siteurl is unknown
 	if (empty($siteurl))
 		$prefs['siteurl'] = $siteurl = $_SERVER['HTTP_HOST'] . rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
