@@ -319,7 +319,7 @@ $LastChangedRevision$
 				$Title = safe_field("Title",'textpattern',"ID=$parentid");
 				$out[] = href($name.' ('.$Title.')', permlinkurl_id($parentid).'#c'.$discussid);
 			}
-			if (is_array($out)) {
+			if (!empty($out)) {
 				return doWrap($out, $wraptag, $break, $class);
 			}
 		}
