@@ -30,7 +30,7 @@ $statuses = array(
 		5 => gTxt('sticky'),
 );
 
-if ($event == 'article') {
+if (!empty($event) and $event == 'article') {
 	require_privs('article');
 
 
