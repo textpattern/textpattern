@@ -713,20 +713,20 @@ $LastChangedRevision$
 	{
 		$img_dir = $GLOBALS['img_dir'];
 		$invars = gpsa(array('id','type','h','w','ext','alt'));
-		$img_dir .= (rhu == '/') ? '' : '/';
-		$img_dir .= (!$img_dir) ? 'images' : $img_dir;
+		$img_pfx = (rhu == '/') ? '' : '/';
+		$img_dir = (!$img_dir) ? $img_pfx.'images' : $img_pfx.$img_dir;
 		extract($invars);
 		switch ($type) {
 			case 'textile': 
 					$alt = ($alt) ? ' ('.$alt.')' : '';
-					$thing='!'.rhu.$img_dir.$id.$ext.$alt.'!'; 
+					$thing='!'.rhu.$img_dir.'/'.$id.$ext.$alt.'!'; 
 					break;
 			case 'textpattern': 
 					$thing = '<txp:image id="'.$id.$ext.'" />'; 
 					break;
 			case 'xhtml': 
 					$alt = ($alt) ? ' alt="'.$alt.'"' : '';
-					$thing = '<img src="'.rhu.$img_dir.
+					$thing = '<img src="'.rhu.$img_dir.'/'.
 							$id.$ext.'"'.$alt.' style="height:'.$h.'px;width:'.$w.'px" />';
 					break;
 		}
