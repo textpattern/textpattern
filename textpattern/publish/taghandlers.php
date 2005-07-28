@@ -1404,19 +1404,16 @@ $LastChangedRevision$
 		
 		$category = empty($c)? '': $c;
 		$cattree = array();
-		if (!empty($category)){
 
-			do {
-				$parent = safe_field('parent','txp_category',"name='$category'");
-				//Use new /category/category_name scheme here too?
-					$cattree[] = ($linked)? 
-						tag(str_replace("& ","&#38; ", $category),'a',' href="'.hu.'?c='.urlencode($category).'"')
-							:$category;
-					$category = $parent;
-					unset($parent);
-			}		
-			while ($category!='root');
-		}
+		while($category and $category != 'root' and $parent = safe_field('parent','txp_category',"name='$category'")) {
+			//Use new /category/category_name scheme here too?
+				$cattree[] = ($linked)? 
+					tag(str_replace("& ","&#38; ", $category),'a',' href="'.hu.'?c='.urlencode($category).'"')
+						:$category;
+				$category = $parent;
+				unset($parent);
+		}		
+
 		if (!empty($cattree))
 		{
 			$cattree = array_reverse($cattree);
