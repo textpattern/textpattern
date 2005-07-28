@@ -666,7 +666,7 @@ EOF;
 	if (!safe_count('txp_file',"1")){ 
 		$tempdir = find_temp_dir();
 		if ($tempdir == safe_field('val','txp_prefs',"name='file_base_path'"))
-			safe_update('txp_prefs',"val='".doSlash(dirname(__FILE__).DS.'files')."',prefs_id=1","name='file_base_path'");
+			safe_update('txp_prefs',"val='".doSlash(dirname(dirname(__FILE__)).DS.'files')."',prefs_id=1","name='file_base_path'");
 	}
 
 	// let's get the advanced fields in the right order
