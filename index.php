@@ -15,7 +15,8 @@ $LastChangedRevision$
 	ob_end_clean();
 
 	if (!isset($txpcfg['txpath']) )	{ 
-		header('Status: 503 Service Unavailable'); exit('Please check config.php'); 
+		header('Status: 503 Service Unavailable'); header('HTTP/1.0 503 Service Unavailable');
+		exit('Please check config.php'); 
 	}
 
 	include $txpcfg['txpath'].'/publish.php';
