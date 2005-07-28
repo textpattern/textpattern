@@ -328,8 +328,8 @@ $LastChangedRevision$
 			$out[] = n.gTxt('apache_modules').cs.join(', ', apache_get_modules()).n.n;
 
 		foreach ($files as $f) {
-			$rev = 'unknown';
-			$checksum = 'unknown';
+			$rev = '';
+			$checksum = '';
 
 			if (is_callable('md5_file')) {
 				$checksum = md5_file($txpcfg['txpath'] . $f);
@@ -338,7 +338,7 @@ $LastChangedRevision$
 			if (isset($file_revs[$f]))
 				$rev = $file_revs[$f];
 
-			$out[] = "$f" .cs. "r".$rev.' ('.$checksum.')'.n;
+			$out[] = "$f" .cs. ($rev ? "r".$rev : gTxt('unknown')).' ('.($checksum ? $checksum : gTxt('unknown')).')'.n;
 		}
 	}
 

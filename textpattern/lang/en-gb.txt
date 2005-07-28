@@ -183,6 +183,7 @@ site_trailing_slash => Site URL has a trailing slash
 still_exists => still exists
 txp_path => Textpattern path
 txp_version => Textpattern version
+unknown => Unknown
 web_domain => Site URL
 #@discuss
 ban => Ban
