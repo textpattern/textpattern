@@ -619,7 +619,7 @@ $LastChangedRevision$
 			$article = fetch_form(($override_form) ? $override_form : $form);
 
 			if ($preview && $parentid) {
-				$article = discuss($parentid).$article;
+				$article = '<a id="cpreview"></a>'.discuss($parentid).$article;
 			}
 
 			$article = parse($article);

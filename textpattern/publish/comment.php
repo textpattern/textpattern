@@ -112,7 +112,7 @@ $LastChangedRevision$
 		if ($remember==1) { setCookies($name,$email,$web); }
 		if ($forget==1) { destroyCookies(); }
 
-		$out = '<form method="post" action="" id="txpCommentInputForm">';
+		$out = '<form method="post" action="#cpreview" id="txpCommentInputForm">';
 
 		$Form = fetch('Form','txp_form','name',$form);
 		$msgstyle = ($msgstyle ? ' style="'.$msgstyle.'"' : '');
