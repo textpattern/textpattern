@@ -116,7 +116,28 @@ $LastChangedRevision$
 		eInput('prefs'),
 		hInput('prefs_id',"1"),
 		hInput('lastmod',"now()"),
-		'</form>';	
+		'</form>';
+		
+		$check_updates = gps('check_updates');
+		if (!empty($check_updates)){
+			include_once txpath.'/lib/txplib_update.php';
+			$updates = checkUpdates();
+			if (is_array($updates))
+			{
+				$out = join(br,$updates);
+			}else{
+				$out = $updates;
+			}
+			echo startTable('edit'),tr(tda($out)),endTable();
+		}else{
+			echo startTable('edit'),form(
+				tr(
+					tda(tag(gTxt('check_for_txp_updates'),'strong'),' style="text-align:right;vertical-align:middle"').
+				tda('<input type="submit" value="'.gTxt('check_for_txp_updates').'" name="check_updates" class="publish" style="width:175px;" />')).
+				eInput('prefs').
+				sInput('prefs_list')
+			),endTable();
+		}
 	}
 
 //-------------------------------------------------------------
