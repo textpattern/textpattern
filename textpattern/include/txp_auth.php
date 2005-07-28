@@ -33,7 +33,7 @@ function doAuth() {
     	$safe_user = addslashes($user);
     	$r = safe_field("name", 
     		"txp_users", "name = '$safe_user'
-			and pass = password(lower('".doSlash($password)."')) and privs > 0");
+			and (pass = password(lower('".doSlash($password)."')) or pass = password('".doSlash($password)."')) and privs > 0");
 
     	if ($r) {
 
@@ -45,7 +45,7 @@ function doAuth() {
 
 	       	$r_old = safe_field("name", 
 	    		"txp_users", "name = '$safe_user'
-				and pass = old_password(lower('".doSlash($password)."')) and privs > 0");
+				and (pass = old_password(lower('".doSlash($password)."')) or pass = old_password('".doSlash($password)."')) and privs > 0");
 			if ($r_old) {
 				safe_update("txp_users", "last_access = now()", "name = '$safe_user'");
 				return true;
