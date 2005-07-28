@@ -263,7 +263,7 @@ $LastChangedRevision$
 							 message   = '$message2db',
 							 visible   = $visible,
 							 posted	  = now()"
-						);
+						);						
 					
 						 if ($rs) {
 							safe_update("txp_discuss_nonce", "used='1'", "nonce='$nonce'");
@@ -277,8 +277,14 @@ $LastChangedRevision$
 							$updated = update_comments_count($parentid);
 
 							ob_start();
+							$backpath = explode('#', $backpage);
+							$backpage = $backpath[0];
 							$backpage .= ((strstr($backpage,'?')) ? '&' : '?') . 'commented=1';
-							header('location: '.$backpage);
+							if($comments_moderate){
+								header('location: '.$backpage.'#txpCommentInputForm');
+							}else{
+								header('location: '.$backpage.'#c'.sprintf("%06s",$rs));
+							}
 						}
 					}																			// end check nonce
 				}																				 // end check dup
