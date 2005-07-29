@@ -362,6 +362,12 @@ EOD;
     }
     function output($xml) {
         $xml = '<?xml version="1.0" encoding="utf-8" ?>'."\n".$xml;
+		if ( (@strpos($_SERVER["HTTP_ACCEPT_ENCODING"],'gzip') !== false) && extension_loaded('zlib') && 
+			ini_get("zlib.output_compression") == 0 && ini_get('output_handler') != 'ob_gzhandler' && !headers_sent()) 
+		{
+			$xml = gzencode($xml,7,FORCE_GZIP);
+			header("Content-Encoding: gzip");
+		}
         $length = strlen($xml);
         header('Connection: close');
         header('Content-Length: '.$length);
@@ -497,6 +503,9 @@ class IXR_Client {
         $request .= "Host: {$this->server}$r";
         $request .= "Content-Type: text/xml$r";
         $request .= "User-Agent: {$this->useragent}$r";
+		// Accept gzipped response if zlib and if php4.3+ (fgets turned binary safe)
+		if ( extension_loaded('zlib') && preg_match('#^(4\.[3-9])|([5-9])#',phpversion()) ) 
+			$request .= "Accept-Encoding: gzip$r";
         $request .= "Content-length: {$length}$r$r";
         $request .= $xml;
         // Now send the request
@@ -512,6 +521,7 @@ class IXR_Client {
         $contents = '';
         $gotFirstLine = false;
         $gettingHeaders = true;
+		$is_gzipped = false;
         while (!feof($fp)) {
             $line = fgets($fp, 4096);
             if (!$gotFirstLine) {
@@ -522,13 +532,25 @@ class IXR_Client {
                 }
                 $gotFirstLine = true;
             }
-            if (trim($line) == '') {
+            if ($gettingHeaders && trim($line) == '') {
                 $gettingHeaders = false;
+				continue;
             }
             if (!$gettingHeaders) {
-                $contents .= trim($line)."\n";
+		        // We do a binary comparison of the first two bytes, see
+		        // rfc1952, to check wether the content is gzipped.
+				if ( ($contents=='') && (strncmp($line,"\x1F\x8B",2)===0)) 
+					$is_gzipped = true;
+                $contents .= ($is_gzipped) ? $line : trim($line)."\n";
             }
         }
+		# if gzipped, strip the 10 byte header, and pass it to gzinflate (rfc1952)
+		if ($is_gzipped) 
+		{
+			$contents = gzinflate(substr($contents, 10));
+			//simulate trim() for each line; don't know why, but it won't work otherwise
+			$contents = preg_replace('#^[\x20\x09\x0A\x0D\x00\x0B]*(.*)[\x20\x09\x0A\x0D\x00\x0B]*$#m','\\1',$contents);
+		}
         if ($this->debug) {
             echo '<pre>'.htmlspecialchars($contents)."\n</pre>\n\n";
         }
