@@ -309,9 +309,8 @@ $LastChangedRevision$
 			if (isset($conn_char) && !stristr($ctcharset,'CREATE') && ($conn_char != $ctcharset))
 				$table_msg[] = "$table is $ctcharset";
 			$ctr = safe_query("CHECK TABLE ". $table);
-			$tcheck = mysql_result($ctr,0,'Msg_Text');
-			if ($tcheck != 'OK')
-				$table_msg[] .= $table .cs. $tcheck;
+			if (in_array(mysql_result($ctr,0,'Msg_type'), array('error','warning')) ) 
+				$table_msg[] = $table .cs. mysql_result($ctr,0,'Msg_Text');
 		}
 		if ($table_msg == array()) 
 			$table_msg = (count($table_names) < 18) ?  array('-') : array('OK');
