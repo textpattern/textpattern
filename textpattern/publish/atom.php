@@ -5,10 +5,6 @@
 	Copyright 2005 by Dean Allen - all rights reserved.
 
 	Use of this software denotes acceptance of the Textpattern license agreement 
-
-$HeadURL$
-$LastChangedRevision$
-
 */
 
 
@@ -17,11 +13,13 @@ $LastChangedRevision$
 	{
 		global $thisarticle;
 		extract($GLOBALS['prefs']);
-		define("textplain",' type="text/plain"');
-		define("texthtml",' type="text/html"');
-		define("relalt",' rel="alternate"');
-		define('appxhtml',' type="application/xhtml+xml"');
-		define("divxhtml",'<div xmlns="http://www.w3.org/1999/xhtml">');
+		define("t_texthtml",' type="text/html"');
+		define("t_text",' type="text"');
+		define("t_html",' type="html"');
+		define("t_xhtml",' type="xhtml"');
+		define('t_appxhtml',' type="xhtml"');
+		define("r_relalt",' rel="alternate"');
+		define("r_relself",' rel="self"');
 		
 		$area = doSlash(gps('area'));
 		extract(doSlash(gpsa(array('category','section','limit'))));
@@ -33,9 +31,10 @@ $LastChangedRevision$
 
 		$pub = safe_row("RealName, email", "txp_users", "privs=1");
 
-		$out[] = tag($sitename,'title',textplain);
-		$out[] = tag($site_slogan,'tagline',textplain);
-		$out[] = '<link'.relalt.texthtml.' href="'.hu.'" />';
+		$out[] = tag($sitename,'title',t_text);
+		$out[] = tag($site_slogan,'subtitle',t_text);
+		$out[] = '<link'.r_relself.' href="'.hu.'?atom=1" />';
+		$out[] = '<link'.r_relalt.t_texthtml.' href="'.hu.'" />';
 		$articles = array();
 
 		//Atom feeds with mail or domain name
@@ -44,13 +43,13 @@ $LastChangedRevision$
 		$out[] = tag('tag:'.$mail_or_domain.','.$blog_time_uid.':'.$blog_uid.(($section)? '/'.$section:'').(($category)? '/'.$category:''),'id');
 
 		$out[] = tag('Textpattern','generator',
-			' url="http://textpattern.com" version="'.$version.'"');
-		$out[] = tag(date("Y-m-d\TH:i:s\Z",$last),'modified');
+			' uri="http://textpattern.com/" version="'.$version.'"');
+		$out[] = tag(date("Y-m-d\TH:i:s\Z",$last),'updated');
 
 
-			$auth[] = tag($pub['RealName'],'name');
-			$auth[] = ($include_email_atom) ? tag(eE($pub['email']),'email') : '';
-			$auth[] = tag(hu,'url');
+		$auth[] = tag($pub['RealName'],'name');
+		$auth[] = ($include_email_atom) ? tag(eE($pub['email']),'email') : '';
+		$auth[] = tag(hu,'uri');
 		
 		$out[] = tag(n.t.t.join(n.t.t,$auth).n,'author');
 
@@ -93,8 +92,8 @@ $LastChangedRevision$
 					$thisauthor = safe_field("RealName","txp_users","name='$AuthorID'");
 					$e['thisauthor'] = tag(n.t.t.t.tag(htmlspecialchars($thisauthor),'name').n.t.t,'author');
 		
-					$e['issued'] = tag(gmdate("Y-m-d\TH:i:s\Z",$uPosted),'issued');
-					$e['modified'] = tag(gmdate("Y-m-d\TH:i:s\Z",$uLastMod),'modified');
+					$e['issued'] = tag(gmdate("Y-m-d\TH:i:s\Z",$uPosted),'published');
+					$e['modified'] = tag(gmdate("Y-m-d\TH:i:s\Z",$uLastMod),'updated');
 
 					$escaped_title = safe_hed($Title);
 					$escaped_title = preg_replace("/&(?![#a-z0-9]+;)/i",'&amp;', $escaped_title);
@@ -107,31 +106,28 @@ $LastChangedRevision$
 					$uTitle = htmlspecialchars($uTitle,ENT_NOQUOTES);
 
 					$permlink = permlinkurl($a);
-
-					$e['link'] = '<link'.relalt.texthtml.' href="'.$permlink.'" />';
+					$e['link'] = '<link'.r_relalt.t_texthtml.' href="'.$permlink.'" />';
 
 					$e['id'] = tag('tag:'.$mail_or_domain.','.$feed_time.':'.$blog_uid.'/'.$uid,'id');
 
-					$e['subject'] = tag(htmlspecialchars($Category1),'dc:subject');
-					
-						// pull Body or Excerpt?
-					$Body = (!$syndicate_body_or_excerpt) ? $thisarticle['body'] : $thisarticle['excerpt'];
-	
-						// if Excerpt is empty, switch back to Body_html
-					$Body = (!trim($Body)) ? $thisarticle['body'] : $Body; 
+					$e['category1'] = (trim($Category1) ? '<category term="'.htmlspecialchars($Category1).'" />' : '');
+					$e['category2'] = (trim($Category2) ? '<category term="'.htmlspecialchars($Category2).'" />' : '');
 
-						// fix relative urls
-					$Body = str_replace('href="/','href="'.hu,$Body);
-					$Body = preg_replace("/href=\\\"#(.*)\"/","href=\"".permlinkurl($a)."#\\1\"",$Body);
-					$Body = safe_hed($Body);
-						// encode and entify
-					$Body = preg_replace(array('/</','/>/',"/'/",'/"/'), array('&#60;','&#62;','&#039;','&#34;'), $Body);
-						// encode bare ampersands
-					$Body = preg_replace("/&(?![#0-9]+;|\w+;)/i",'&amp;', $Body);
+					$Excerpt = fixup_for_feed($thisarticle['excerpt'], permlinkurl($a));
+					if ($syndicate_body_or_excerpt == 0)
+						$Body = fixup_for_feed($thisarticle['body'], permlinkurl($a));
+					else {
+						$Body = '';
+						// If there's no excerpt, use body as content instead of body as summary
+						if (!trim($Excerpt))
+							$Body = fixup_for_feed($thisarticle['body'], permlinkurl($a));
+					}
 
+					if (trim($Body))
+						$e['content'] = tag(n.$Body.n,'content',t_html);
 
-					$e['content'] = tag(n.$Body.n,'content',
-						' type="text/html" mode="escaped"');
+					if (trim($Excerpt))
+						$e['summary'] = tag(n.$Excerpt.n,'summary',t_html);
 		
 					$articles[$ID] = tag(n.t.t.join(n.t.t,$e).n,'entry');
 
@@ -152,14 +148,14 @@ $LastChangedRevision$
  
 					$e['title'] = tag(doSpecial($linkname),'title');
 					$content = utf8_encode(htmlspecialchars($description));
-					$e['content'] = tag(n.$description.n,'content',' type="text/html" mode="escaped"');
+					$e['content'] = tag(n.$description.n,'content',t_texthtml);
 					
 					$url = (preg_replace("/^\/(.*)/","http://$siteurl/$1",$url));
 					$url = preg_replace("/&((?U).*)=/","&amp;\\1=",$url);
-					$e['link'] = '<link'.relalt.texthtml.' href="'.$url.'" />';
+					$e['link'] = '<link'.r_relalt.t_texthtml.' href="'.$url.'" />';
 
-					$e['issued'] = tag(gmdate("Y-m-d\TH:i:s\Z",$date),'issued');
-					$e['modified'] = tag(gmdate("Y-m-d\TH:i:s\Z",$date),'modified');
+					$e['issued'] = tag(gmdate("Y-m-d\TH:i:s\Z",$date),'published');
+					$e['modified'] = tag(gmdate("Y-m-d\TH:i:s\Z",$date),'updated');
 					$e['id'] = tag('tag:'.$mail_or_domain.','.$feed_time.':'.$id,'id');
 
 					$articles[$id] = tag(n.t.t.join(n.t.t,$e).n,'entry');
@@ -183,11 +179,11 @@ $LastChangedRevision$
 			header("Last-Modified: $last");
 			$expires = gmdate('D, d M Y H:i:s \G\M\T', time()+(3600*1));
 			header("Expires: $expires");
-		  	$hims = serverset('HTTP_IF_MODIFIED_SINCE');
+			$hims = serverset('HTTP_IF_MODIFIED_SINCE');
 		  
 			if ($hims == $last) {
-		  		header("HTTP/1.1 304 Not Modified"); exit;
-		  	}
+				header("HTTP/1.1 304 Not Modified"); exit;
+			}
 
 			$imsd = @strtotime($hims);
 
@@ -198,7 +194,7 @@ $LastChangedRevision$
 				} else {
 					$canaim = false;
 				}
-		  	} else {
+			} else {
 				$canaim = false;
 			}
 		  
@@ -219,7 +215,7 @@ $LastChangedRevision$
 						$cutarticles = true;
 						$cut_time = true;
 					}
-		  		}
+				}
 			}
 
 			if (isset($cut_etag) && isset($cut_time)) {
@@ -251,7 +247,7 @@ $LastChangedRevision$
 			ob_start();
 			header('Content-type: application/atom+xml; charset=utf-8');
 			return chr(60).'?xml version="1.0" encoding="UTF-8"?'.chr(62).n.
-			'<feed version="0.3" xml:lang="'.$language.'" xmlns="http://purl.org/atom/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">'.join(n,$out).'</feed>';
+			'<feed xml:lang="'.$language.'" xmlns="http://www.w3.org/2005/Atom">'.join(n,$out).'</feed>';
 		}
 	}
 
@@ -270,5 +266,21 @@ $LastChangedRevision$
 		return $str;
 	}
 
+  function fixup_for_feed($toFeed, $permalink) {
+
+	  // fix relative urls
+	  $txt = str_replace('href="/','href="'.hu.'/',$toFeed);
+	  $txt = preg_replace("/href=\\\"#(.*)\"/","href=\"".$permalink."#\\1\"",$txt);
+	 // This was removed as entities shouldn't be stripped in Atom feeds
+	 // when the content type is html. Leaving it commented out as a reminder.
+	  //$txt = safe_hed($txt);
+
+		$txt = preg_replace("/&((?U).*)=/","&amp;\\1=",$txt);
+		// encode and entify
+		$txt = preg_replace(array('/</','/>/',"/'/",'/"/'), array('&#60;','&#62;','&#039;','&#34;'), $txt);
+		$txt = preg_replace("/&(?![#0-9]+;)/i",'&amp;', $txt);
+	 return $txt;
+
+  }
 
 ?>
