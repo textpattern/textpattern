@@ -1107,4 +1107,26 @@ else
 		return $msg;
 	}
 
+
+// -------------------------------------------------------------
+	function set_pref($name, $val, $event,  $type, $html='text_input') 
+	{
+		extract(doSlash(func_get_args()));
+
+    	if (!safe_row("*", 'txp_prefs', "name = '$name'") ) {
+        	return safe_insert('txp_prefs', "
+				name  = '$name',
+				val   = '$val.',
+				event = '$event',
+				html  = '$html',
+				type  = '$type',
+				prefs_id = 1"
+			);
+    	} else {
+        	return safe_update('txp_prefs', "val = '$val'","name like '$name'");    	
+    	}
+    	return false;
+	}
+
+
 ?>
