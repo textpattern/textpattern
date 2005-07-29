@@ -227,7 +227,6 @@ class Textile
            $this->rel = ' rel="'.$rel.'" ';
 
         $text = $this->incomingEntities($text);
-        $text = $this->encodeEntities($text);
         
         if ($encode) {
 			$text = str_replace("x%x%", "&#38;", $text);
