@@ -536,7 +536,7 @@ $LastChangedRevision$
 		if (!$client->query('tups.getLanguage',$prefs['blog_uid'],$lang_code))
 		{
 			include_once txpath.'/lib/txplib_update.php';
-			if (install_language_from_file(LANG))
+			if (install_language_from_file($lang_code))
 			{
 				$msg = 'Language installed from file';			
 			}else{

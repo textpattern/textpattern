@@ -425,6 +425,7 @@ if (!$client->query('tups.getLanguage','',$lang))
 		{
 			foreach ($evt_strings as $lang_key => $lang_val)
 			{
+				$lang_val = addslashes($lang_val);
 				if (@$lang_val)
 					mysql_query("INSERT DELAYED INTO `".PFX."txp_lang`  SET `lang`='en-gb',`name`='$lang_key',`event`='$evt_name',`data`='$lang_val',`lastmod`='$lastmod'");
 			}
@@ -435,6 +436,8 @@ if (!$client->query('tups.getLanguage','',$lang))
 	$lang_struct = unserialize($response);
 	foreach ($lang_struct as $item)
 	{
+		foreach ($item as $name => $value) 
+			$item[$name] = addslashes($value);
 		mysql_query("INSERT DELAYED INTO `".PFX."txp_lang`  SET `lang`='$lang',`name`='$item[name]',`event`='$item[event]',`data`='$item[data]',`lastmod`='".strftime('%Y%m%d%H%M%S',$item['uLastmod'])."'");
 	}		
 }
