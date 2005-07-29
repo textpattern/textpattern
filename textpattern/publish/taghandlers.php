@@ -1491,6 +1491,36 @@ $LastChangedRevision$
 	}
 
 //--------------------------------------------------------------------------
+	function if_section($atts, $thing)
+	{
+		global $pretext;
+		extract($pretext);
+
+		extract(lAtts(array(
+			'name' => '',
+		),$atts));
+
+		$section = ($s == 'default' ? '' : $s);
+
+		return parse(EvalElse($thing, ($section == $name)));
+
+	}
+
+//--------------------------------------------------------------------------
+	function if_article_section($atts, $thing)
+	{
+		global $thisarticle;
+
+		extract(lAtts(array(
+			'name' => '',
+		),$atts));
+
+		$section = $thisarticle['section'];
+
+		return parse(EvalElse($thing, $section));
+	}
+
+//--------------------------------------------------------------------------
 	function php($atts, $thing)
 	{
 		global $is_article_body, $thisarticle, $prefs;
