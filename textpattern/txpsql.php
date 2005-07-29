@@ -27,6 +27,21 @@ if ( isset($dbcharset) && (intval($version[0]) >= 5 || preg_match('#^4\.[1-9]#',
 	mysql_query("SET NAMES ".$dbcharset);
 }
 
+// Default to messy URLs if we know they won't work
+$permlink_mode = 'section_id_title';
+if (is_callable('apache_get_modules')) {
+	$modules = apache_get_modules();
+	if (!in_array('mod_rewrite', $modules))
+		$permlink_mode = 'messy';
+}
+else {
+	$server_software = (@$_SERVER['SERVER_SOFTWARE'] || @$_SERVER['HTTP_HOST'])
+		? ( (@$_SERVER['SERVER_SOFTWARE']) ?  @$_SERVER['SERVER_SOFTWARE'] :  $_SERVER['HTTP_HOST'] )
+		: '';
+   if (!stristr($server_software, 'Apache'))
+		$permlink_mode = 'messy';
+}
+
 
 $create_sql = array();
 
@@ -311,7 +326,7 @@ $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'link_list_pageby', '
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'image_list_pageby', '25', 2, 'publish', 'text_input', 0)";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'log_list_pageby', '25', 2, 'publish', 'text_input', 0)";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'comment_list_pageby', '25', 2, 'publish', 'text_input', 0)";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'permlink_mode', 'section_id_title', 0, 'publish', 'permlinkmodes', 90)";
+$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'permlink_mode', '".addslashes($permlink_mode)."', 0, 'publish', 'permlinkmodes', 90)";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'comments_are_ol', '1', 0, 'comments', 'yesnoradio', 150)";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'is_dst', '0', 0, 'publish', 'yesnoradio', 60)";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'gmtoffset', '+7200', 0, 'publish', 'gmtoffset_select', 50)";
