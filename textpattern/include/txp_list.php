@@ -78,11 +78,11 @@ $LastChangedRevision$
 			echo '<form action="index.php" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">',
 			startTable('list'),
 			'<tr>',
-				column_head('posted', gTxt('posted'), 'list', 1, $linkdir),
-				column_head('title', gTxt('title'), 'list', 1, $linkdir),
-				column_head('section', gTxt('section'), 'list', 1, $linkdir),
-				column_head('category1', gTxt('category1'), 'list', 1, $linkdir).
-				column_head('category2', gTxt('category2'), 'list', 1, $linkdir),
+				column_head('posted', 'posted', 'list', 1, $linkdir),
+				column_head('title', 'title', 'list', 1, $linkdir),
+				column_head('section', 'section', 'list', 1, $linkdir),
+				column_head('category1', 'category1', 'list', 1, $linkdir).
+				column_head('category2', 'category2', 'list', 1, $linkdir),
 				hCell(gTxt('author')),
 				column_head(gTxt('status'), 'Status', 'list', 1, $linkdir),
 				td(),
