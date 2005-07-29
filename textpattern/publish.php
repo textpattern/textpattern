@@ -718,6 +718,18 @@ $LastChangedRevision$
 	{
 		static $next, $cache;
 
+		// If next/prev tags are placed before an article tag on a list page, we
+		// have to guess what the current article is
+		if (!$id) {
+			$current = safe_row('ID, Posted', 'textpattern', 
+				(($s!='' && $s!='default') ? "Section = '$s'" : filterFrontPage()).
+				'and Status=4 and Posted < now() order by Posted desc limit 1');
+			if ($current) {
+				$id = $current['ID'];
+				$Posted = $current['Posted'];
+			}
+		}
+
 		if (@isset($cache[$next[$id]]))
 			$thenext = $cache[$next[$id]];
 		else
