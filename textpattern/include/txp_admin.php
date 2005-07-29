@@ -120,7 +120,7 @@ if ($event == 'admin') {
 			);
 		}
 		
-		if ($rs) {
+		if ($name && $rs) {
 			send_password($pw,$email);
 			admin(gTxt('password_sent_to').sp.$email);
 		} else {
