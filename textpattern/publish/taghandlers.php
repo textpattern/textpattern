@@ -1160,7 +1160,7 @@ $LastChangedRevision$
 	function if_comments($atts, $thing)	
 	{
 		global $thisarticle;
-		return parse(EvalElse($thing, $thisarticle['comments_count']));
+		return parse(EvalElse($thing, $thisarticle['annotate']));
 	}
 
 // -------------------------------------------------------------
