@@ -1075,7 +1075,7 @@ $LastChangedRevision$
 		extract($thisarticle);
 		
 		$result = preg_replace("/>\s*</","> <",$body);
-		preg_match_all("/\s.{1,50}".preg_quote($q).".{1,50}\s/i",$result,$concat);
+		preg_match_all("/\s.{1,50}".preg_quote($q).".{1,50}\s/iu",$result,$concat);
 
 		$concat = join(" ... ",$concat[0]);
 
