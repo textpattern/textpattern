@@ -17,11 +17,13 @@ $LastChangedRevision$
 	global $extensions;
 	$extensions = array(0,'.gif','.jpg','.png','.swf');
 	define("IMPATH",$path_to_site.'/'.$img_dir.'/');
+	include txpath.'/lib/class.thumb.php';
 
 	if ($event == 'image') {	
 		require_privs('image');		
 
-		if(!$step or !in_array($step, array('image_list','image_edit','image_insert','image_delete','image_replace','image_save','thumbnail_insert','image_change_pageby'))){
+		if(!$step or !in_array($step, array('image_list','image_edit','image_insert','image_delete','image_replace','image_save','thumbnail_insert','image_change_pageby','thumbnail_create'
+		))){
 			image_list();
 		} else $step();
 	}
@@ -150,6 +152,11 @@ $LastChangedRevision$
 					)
 				)
 			),
+
+			(function_exists("imagecreatefromjpeg"))
+			?	thumb_ui( $id )
+			:	'',
+
 			tr(
 				td(
 					form(
@@ -374,4 +381,66 @@ $LastChangedRevision$
 		event_change_pageby('image');
 		image_list();
 	}
+
+// -------------------------------------------------------------
+	function thumb_ui($id)
+	{		
+		global $prefs;
+		extract($prefs);
+		return
+		tr(
+			td(
+				form(
+					graf(gTxt('create_thumbnail')) .
+					startTable('','left','',1) .
+						tr(
+							fLabelCell(gTxt('thumb_width').':') . 
+							fInputCell('width','',1,4).
+							
+							fLabelCell(gTxt('thumb_height').':') . 
+							fInputCell('height','',1,4).
+							
+							fLabelCell(gTxt('keep_square_pixels').':') . 
+							tda(checkbox2('crop', ''),' class="noline"').
+														
+							tda(fInput('submit','',gTxt('Create'),'smallerbox'),
+								' class="noline"')
+						) .
+						hInput('id',$id) .
+						eInput('image') .
+						sInput('thumbnail_create') .
+					endTable()
+				)
+			)
+		);
+	}
+
+// -------------------------------------------------------------
+	function thumbnail_create() 
+	{
+	
+		$id = gps('id');
+		$width = gps('width');
+		$height = gps('height');
+		if (!is_numeric ($width) && !is_numeric($height)) {
+			image_edit(messenger('invalid_width_or_height',"($width)/($height)", ''),$id);
+			return;
+		}
+		
+		$crop = gps('crop');
+		
+		$t = new txp_thumb( $id );
+		$t->crop = ($crop == '1');
+		$t->hint = '0';
+		if ( is_numeric ($width)) $t->width = $width;
+		if ( is_numeric ($height)) $t->height = $height;
+		
+		if ($t->write()) {			
+			image_edit(messenger('thumbnail',$id,'saved'),$id);
+		 }
+		else {
+			image_edit(messenger('thumbnail',$id,'not_saved'),$id);
+		}
+	}
+
 ?>
