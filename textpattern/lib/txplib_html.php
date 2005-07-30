@@ -296,7 +296,7 @@ $LastChangedRevision$
 	{
 		$the_lang = (LANG == 'cs-cz' || LANG == 'el-gr' || LANG == 'ja-jp') ? substr(LANG,3,2): substr(LANG,0,2);
 		return join('',array(
-			' <a target="_blank" href="http://www.textpattern.com/help/?item='.$helpvar.'&lang='.$the_lang.'"',
+			' <a target="_blank" href="http://rpc.textpattern.com/help/?item='.$helpvar.'&lang='.$the_lang.'"',
 			' onclick="',
 			"window.open(this.href, 'popupwindow', 'width=",
 			($winW) ? $winW : 400,
@@ -311,7 +311,7 @@ $LastChangedRevision$
 	{
 		$the_lang = (LANG == 'cs-cz' || LANG == 'el-gr' || LANG == 'ja-jp') ? substr(LANG,3,2): substr(LANG,0,2);
 		return join('',array(
-			' <a target="_blank" href="http://www.textpattern.com/help/?item='.$helpvar.'&lang='.$the_lang.'"',
+			' <a target="_blank" href="http://rpc.textpattern.com/help/?item='.$helpvar.'&lang='.$the_lang.'"',
 			' onclick="',
 			"window.open(this.href, 'popupwindow', 'width=",
 			($winW) ? $winW : 400,
