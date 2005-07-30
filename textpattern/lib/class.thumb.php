@@ -40,23 +40,23 @@ $verbose = false;
 
 
 class wet_thumb {
-    public $width;      // The width of your thumbnail. The height (if not set) will be automatically calculated.
-    public $height;	// The height of your thumbnail. The width (if not set) will be automatically calculated.
-    public $longside;	// Set the longest side of the image if width, height and shortside is not set.
-    public $shortside;	// Set the shortest side of the image if width, height and longside is not set.
-    public $extrapolate;  // Set to »false« if your source image is smaller than the calculated thumb and you do not want the image to get extrapolated.
-    public $crop;	// If set to »true«, image will be cropped in the center to destination width and height params, while keeping aspect ratio. Otherwise the image will get resized.
-    public $sharpen;	// Set to »false« if you don’t want to use the Unsharp-Mask. Thumbnail creation will be faster, but quality is reduced.
-    public $hint; 	// If set to »false« the image will not have a lens-icon.
-    public $addgreytohint; // Set to »false« to get no lightgrey bottombar.
-    public $quality;	// JPEG image quality (0...100, defaults to 80).
+    var $width;      // The width of your thumbnail. The height (if not set) will be automatically calculated.
+    var $height;	// The height of your thumbnail. The width (if not set) will be automatically calculated.
+    var $longside;	// Set the longest side of the image if width, height and shortside is not set.
+    var $shortside;	// Set the shortest side of the image if width, height and longside is not set.
+    var $extrapolate;  // Set to »false« if your source image is smaller than the calculated thumb and you do not want the image to get extrapolated.
+    var $crop;	// If set to »true«, image will be cropped in the center to destination width and height params, while keeping aspect ratio. Otherwise the image will get resized.
+    var $sharpen;	// Set to »false« if you don’t want to use the Unsharp-Mask. Thumbnail creation will be faster, but quality is reduced.
+    var $hint; 	// If set to »false« the image will not have a lens-icon.
+    var $addgreytohint; // Set to »false« to get no lightgrey bottombar.
+    var $quality;	// JPEG image quality (0...100, defaults to 80).
     // link related params
-    public $linkurl;    // Set to your target URL (a href="linkurl")
-    public $html;       // Will be inserted in the image-tag
+    var $linkurl;    // Set to your target URL (a href="linkurl")
+    var $html;       // Will be inserted in the image-tag
    
-    private $types = array('','.gif','.jpg','.png');
-    private $_SRC;
-    private $_DST;
+    var $types = array('','.gif','.jpg','.png');
+    var $_SRC;
+    var $_DST;
 
     /**
      * constructor
@@ -277,8 +277,8 @@ class wet_thumb {
  */ 
 class txp_thumb extends wet_thumb {
     
-    private $m_ext;
-    private $m_id;
+    var $m_ext;
+    var $m_id;
     
     /***
      * constructor
