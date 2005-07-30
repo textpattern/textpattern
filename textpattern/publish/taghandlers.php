@@ -1517,7 +1517,7 @@ $LastChangedRevision$
 
 		$section = $thisarticle['section'];
 
-		return parse(EvalElse($thing, $section));
+		return parse(EvalElse($thing, ($section == $name)));
 	}
 
 //--------------------------------------------------------------------------
