@@ -261,8 +261,8 @@ if (!empty($event) and $event == 'article') {
 				}
 
 				if ($ping_weblogsdotcom==1) {
-					$wl_client = new IXR_Client('http://rpc.weblogs.com/RPC2');
-					$wl_client->query('weblogUpdates.ping', $sitename, 'http://'.$siteurl);
+					$wl_client = new IXR_Client('http://rpc.pingomatic.com/');
+					$wl_client->query('weblogUpdates.ping', $sitename, hu);
 				}		
 			}
 			safe_update("txp_prefs", "val = now()", "`name` = 'lastmod'");
