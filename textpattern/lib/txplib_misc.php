@@ -1088,10 +1088,12 @@ else
 	function clean_comment_counts() 
 	{
 		$rs = safe_rows_start('parentid, count(*) as thecount','txp_discuss','visible=1 group by parentid');
-		if ($rs) {
+		if (mysql_num_rows($rs) > 0) {
 			while ($a = nextRow($rs)) {
-				safe_update('textpattern',"comments_count=".$a['thecount'],"ID=".$a['parentid']);
+				safe_update('textpattern',"comments_count=".$a['thecount'],"ID=".$a['parentid'],1);
 			}
+		} else {
+			safe_update('textpattern',"comments_count=0","Annotate = 1",1);
 		}
 	}
 
