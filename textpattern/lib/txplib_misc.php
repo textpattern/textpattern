@@ -528,7 +528,7 @@ else
 // -------------------------------------------------------------
 	function dumbDown($str) 
 	{
-		$array = array( // nasty, huh?. Order this another day ...
+		$array = array( // nasty, huh?. 
 			'&#192;'=>'A','&Agrave;'=>'A','&#193;'=>'A','&Aacute;'=>'A','&#194;'=>'A','&Acirc;'=>'A',
 			'&#195;'=>'A','&Atilde;'=>'A','&#196;'=>'Ae','&Auml;'=>'A','&#197;'=>'A','&Aring;'=>'A',
 			'&#198;'=>'Ae','&AElig;'=>'AE',			
@@ -606,6 +606,12 @@ else
 			'&thorn;'=>'t',
 			'&szlig;'=>'ss'
 		);
+
+
+		if (is_file(txpath.'/lib/i18n-ascii.txt')) {
+			$i18n = parse_ini_file(txpath.'/lib/i18n-ascii.txt');
+			$array = array_merge($array,$i18n);
+		}
 
 		return strtr($str, $array);
 	}
