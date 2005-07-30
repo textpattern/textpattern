@@ -28,6 +28,10 @@ $LastChangedRevision$
 		pagetop(gTxt('sections'),$message);
 
 		global $wlink;
+
+		$pageslist = safe_column("name", "txp_page", "1");
+		$styleslist = safe_column("name", "txp_css", "1");
+
 		$out[] = 
 			tr(
 				tdcs(strong(gTxt('section_head')).popHelp('section_category'),3)
@@ -39,9 +43,27 @@ $LastChangedRevision$
 				eInput('section').
 				sInput('section_create')
 			),3));
-	
-		$pageslist = safe_column("name", "txp_page", "1");
-		$styleslist = safe_column("name", "txp_css", "1");
+
+		$defrow = safe_row("page, css","txp_section","name like 'default'");
+		
+		$out[] =
+			form(
+				tr(td(gTxt('default')) . td(
+					startTable('edit','left','').
+
+						tr(fLabelCell(gTxt('uses_page').':') . 
+							td(selectInput('page',$pageslist,$defrow['page']).
+								popHelp('section_uses_page'),'','noline')).
+		
+						tr(fLabelCell(gTxt('uses_style').':') . 
+							td(selectInput('css',$styleslist,$defrow['css']).
+								popHelp('section_uses_css'),'','noline')).
+						tr(tda(fInput('submit', '', gTxt('save_button'),'smallerbox'),' colspan="2" style="border:0"')).
+
+					endTable()
+				). td()).
+				eInput('section').sInput('section_save').hInput('name','default')
+			);
 
 		$rs = safe_rows_start("*", "txp_section", "name!='' order by name");
 
@@ -95,7 +117,7 @@ $LastChangedRevision$
 				$out[] = tr( td( $name ) . td( $form ) . td( $deletelink ) );
 			}
 		}
-		echo startTable('list').join('',$out).endTable();
+		echo startTable('list') . join('',$out) . endTable();
 	}
 
 //-------------------------------------------------------------
@@ -148,23 +170,27 @@ $LastChangedRevision$
 		$title = $textile->TextileThis($title,1);
 		$name = dumbDown($textile->TextileThis($name, 1));
 		$name = preg_replace("/[^[:alnum:]\-]/", "", str_replace(" ","-",$name));
-		
-		if ($is_default) {
-			safe_update("txp_section", "is_default=0", "name!='$old_name'");
-		}
 
-		safe_update("txp_section",
-		   "name         = '$name',
-			title        = '$title',
-			page         = '$page',
-			css          = '$css',
-			is_default   = '$is_default',
-			on_frontpage = '$on_frontpage',
-			in_rss       = '$in_rss',
-			searchable   = '$searchable'",
-		   "name = '$old_name'"
-		);
-		safe_update("textpattern","Section='$name'", "Section='$old_name'");
+		if ($name == 'default') {
+				safe_update("txp_section", "page='$page',css='$css'", "name='default'");
+		} else {
+			if ($is_default) { // note this means 'selected by default' not 'default page'
+				safe_update("txp_section", "is_default=0", "name!='$old_name'");
+			}
+	
+			safe_update("txp_section",
+			   "name         = '$name',
+				title        = '$title',
+				page         = '$page',
+				css          = '$css',
+				is_default   = '$is_default',
+				on_frontpage = '$on_frontpage',
+				in_rss       = '$in_rss',
+				searchable   = '$searchable'",
+			   "name = '$old_name'"
+			);
+			safe_update("textpattern","Section='$name'", "Section='$old_name'");
+		}
 		section_list(messenger('section',$name,'updated'));
 	}
 
