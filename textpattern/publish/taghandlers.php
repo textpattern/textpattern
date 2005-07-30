@@ -167,7 +167,7 @@ $LastChangedRevision$
 			'form'     => 'plainlinks',
 			'sort'     => 'linksort',
 			'label'    => '',
-			'break'    => br,
+			'break'    => '',
 			'limit'    => '',
 			'wraptag'  => '',
 			'category' => '',
