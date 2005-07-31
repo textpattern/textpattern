@@ -124,13 +124,12 @@ $LastChangedRevision$
 	function section_create() 
 	{
 		global $txpcfg;
-		$name = ps('name');
+		$name = doSlash(ps('name'));
 		
 		//Prevent non url chars on section names
 		include_once $txpcfg['txpath'].'/lib/classTextile.php';
 		$textile = new Textile();
-
-		$title = doSlash($name);				
+		$title = $textile->TextileThis($name,1);
 		$name = dumbDown($textile->TextileThis(trim(doSlash($name)),1));
 		$name = preg_replace("/[^[:alnum:]\-_]/", "", str_replace(" ","-",$name));
 		
@@ -169,7 +168,7 @@ $LastChangedRevision$
 		$textile = new Textile();
 		$title = $textile->TextileThis($title,1);
 		$name = dumbDown($textile->TextileThis($name, 1));
-		$name = preg_replace("/[^[:alnum:]\-]/", "", str_replace(" ","-",$name));
+		$name = preg_replace("/[^[:alnum:]\-_]/", "", str_replace(" ","-",$name));
 
 		if ($name == 'default') {
 				safe_update("txp_section", "page='$page',css='$css'", "name='default'");
