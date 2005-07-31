@@ -102,6 +102,10 @@
 	
 		mysql_close($mtlink);
 	
+		//Yes, we have to make a new connection
+		//otherwise doArray complains
+		$DB = new DB; 
+
 		include txpath.'/lib/classTextile.php';
 		
 		$textile = new Textile;

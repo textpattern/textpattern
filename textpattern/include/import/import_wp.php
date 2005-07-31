@@ -98,7 +98,10 @@
 		$txpdbpass  = $txpcfg['pass'];
 		$txpdbhost  = $txpcfg['host'];		
 	
-		$txplink = $DB->link;
+		//Yes, we have to make a new connection
+		//otherwise doArray complains
+		$DB = new DB; 
+		$txplink = &$DB->link;
 
 		mysql_select_db($txpdb,$txplink);
 	
