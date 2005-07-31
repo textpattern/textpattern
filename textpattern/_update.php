@@ -677,8 +677,8 @@ EOF;
 
 	// RC4: adding privs table
 
-	if (!safe_query("SELECT * FROM `".PFX."txp_privs` LIMIT 1")) {
-		safe_query("CREATE TABLE `".PFX."txp_privs` (
+	if (!safe_query("DESCRIBE `".PFX."txp_priv`")) {
+		safe_query("CREATE TABLE `".PFX."txp_priv` (
 			`id` INT( 8 ) NOT NULL AUTO_INCREMENT ,
 			`priv` VARCHAR( 128 ) NOT NULL ,
 			`1` TINYINT( 1 ) NOT NULL ,
@@ -688,14 +688,14 @@ EOF;
 			`5` TINYINT( 1 ) NOT NULL ,
 			`6` TINYINT( 1 ) NOT NULL ,
 			PRIMARY KEY ( `id` )
-			)");
+		)");
 
 		include 'lib/admin_config.php';
 		
 		foreach($txp_permissions as $a => $b) {
 			$privs = explode(',',$b);
 			foreach ($privs as $c) $sets[] = "`$c` = 1";
-			safe_insert("txp_privs","priv='$a', ".join(', ',$sets));
+			safe_insert("txp_priv","priv='$a', ".join(', ',$sets));
 			unset($sets);
 		}
 	}
