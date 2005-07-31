@@ -674,6 +674,32 @@ EOF;
 		safe_update("txp_prefs","position=$i","name='custom_${i}_set'");
 	}
 
+
+	// RC4: adding privs table
+
+	if (!safe_query("SELECT * FROM `".PFX."txp_privs` LIMIT 1")) {
+		safe_query("CREATE TABLE `".PFX."txp_privs` (
+			`id` INT( 8 ) NOT NULL AUTO_INCREMENT ,
+			`priv` VARCHAR( 128 ) NOT NULL ,
+			`1` TINYINT( 1 ) NOT NULL ,
+			`2` TINYINT( 1 ) NOT NULL ,
+			`3` TINYINT( 1 ) NOT NULL ,
+			`4` TINYINT( 1 ) NOT NULL ,
+			`5` TINYINT( 1 ) NOT NULL ,
+			`6` TINYINT( 1 ) NOT NULL ,
+			PRIMARY KEY ( `id` )
+			)");
+
+		include 'lib/admin_config.php';
+		
+		foreach($txp_permissions as $a => $b) {
+			$privs = explode(',',$b);
+			foreach ($privs as $c) $sets[] = "`$c` = 1";
+			safe_insert("txp_privs","priv='$a', ".join(', ',$sets));
+			unset($sets);
+		}
+	}
+
 	// This should always come last:
 	// 1.0: keep track of updates for devel version
 	safe_delete('txp_prefs',"name = 'dbupdatetime'");
