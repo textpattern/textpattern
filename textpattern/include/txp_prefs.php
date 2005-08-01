@@ -572,7 +572,7 @@ define('RPC_SERVER', 'http://rpc.textpattern.com');
 		if (gps('force')=='file' || !$client->query('tups.getLanguage',$prefs['blog_uid'],$lang_code))
 		{
 			include_once txpath.'/lib/txplib_update.php';
-			if (install_language_from_file($lang_code))
+			if ( (gps('force')=='file' || gps('updating')!=='1') && install_language_from_file($lang_code) )
 			{
 				return list_languages(gTxt($lang_code).sp.gTxt('updated'));
 			}else{
@@ -580,9 +580,8 @@ define('RPC_SERVER', 'http://rpc.textpattern.com');
 				if ( $install_langfile == 'install_langfile')
 					$install_langfile = 'To install new languages from file you can download them from <b><a href="'.RPC_SERVER.'/lang/">'.RPC_SERVER.'/lang/</a></b> and place them inside your ./textpattern/lang/ directory.';
 				pagetop(gTxt('installing_language'));
-				echo startTable('list'),
-				tr(tda($install_langfile),' style="color:red;"'),
-				endTable();
+				echo tag( gTxt('rpc_connect_error') ,'p',' style="text-align:center;color:red;width:50%;margin: 2em auto"' );
+				echo tag( $install_langfile ,'p',' style="text-align:center;width:50%;margin: 2em auto"' );
 			}			
 		}else {
 			$response = $client->getResponse();
