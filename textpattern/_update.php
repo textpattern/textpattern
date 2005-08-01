@@ -700,6 +700,15 @@ EOF;
 		}
 	}
 
+	// index ip column in txp_log
+
+		$ipidxset = false;
+		$i = safe_show('index','txp_log');
+		foreach ($i as $a => $b) {
+			if ($b['Column_name'] == 'ip') $ipidxset = true;
+		}
+		if (!$ipidxset) safe_query("alter table ".PFX."txp_log ADD INDEX `ip` (`ip`)",1);
+
 	// This should always come last:
 	// 1.0: keep track of updates for devel version
 	safe_delete('txp_prefs',"name = 'dbupdatetime'");

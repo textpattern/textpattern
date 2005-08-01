@@ -185,6 +185,16 @@ $DB = new DB;
 		return getThing("select count(*) from ".PFX."$table where $where",$debug);
 	}
 
+// -------------------------------------------------------------
+	function safe_show($thing, $table, $debug='') 
+	{
+		$q = "show $thing from ".PFX."$table";
+		$rs = getRows($q,$debug);
+		if ($rs) {
+			return $rs;
+		}
+		return array();
+	}
 
 
 //-------------------------------------------------------------
