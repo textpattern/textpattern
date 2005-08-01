@@ -703,7 +703,7 @@ EOF;
 	// This should always come last:
 	// 1.0: keep track of updates for devel version
 	safe_delete('txp_prefs',"name = 'dbupdatetime'");
-	safe_insert('txp_prefs', "prefs_id=1, name='dbupdatetime',val='".time()."', type='2'");
+	safe_insert('txp_prefs', "prefs_id=1, name='dbupdatetime',val='".max(filemtime(__FILE__),time())."', type='2'");
 
 // updated, baby.
 
