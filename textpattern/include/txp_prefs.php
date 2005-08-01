@@ -136,7 +136,7 @@ define('RPC_SERVER', 'http://rpc.textpattern.com');
 			echo startTable('edit'),form(
 				tr(
 					tda(tag(gTxt('check_for_txp_updates'),'strong'),' style="text-align:right;vertical-align:middle"').
-				tda('<input type="submit" value="'.gTxt('check_for_txp_updates').'" name="check_updates" class="publish" style="width:175px;" />')).
+				tda('<input type="submit" value="'.gTxt('go').'" name="check_updates" class="publish" />')).
 				eInput('prefs').
 				sInput('prefs_list')
 			),endTable();
