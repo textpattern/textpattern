@@ -283,7 +283,9 @@ define('RPC_SERVER', 'http://rpc.textpattern.com');
 		
 		foreach ($installed_langs as $lang)
 		{
-			$things[$lang] = safe_field('data','txp_lang',"name='$lang' AND lang='$lang'");			
+			$things[$lang] = safe_field('data','txp_lang',"name='$lang' AND lang='$lang'");
+			if (trim($things[$lang]) == '')
+				$things[$lang] = $lang;
 		}
 					
 		asort($things);
