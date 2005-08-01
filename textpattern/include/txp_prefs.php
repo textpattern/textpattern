@@ -16,6 +16,8 @@ $LastChangedRevision$
 
 //-------------------------------------------------------------
 
+define('RPC_SERVER', 'http://rpc.textpattern.com');
+
 	if ($event == 'prefs') {
 		require_privs('prefs');
 
@@ -459,68 +461,102 @@ $LastChangedRevision$
 		global $prefs;
 		require_once txpath.'/lib/IXRClass.php';
 		pagetop(gTxt('update_languages'),$message);
-		
-		$client = new IXR_Client('http://rpc.textpattern.com');
+
+		$client = new IXR_Client(RPC_SERVER);
 		#$client->debug = true;
-		
+
+		$available_lang = array();
+
+		# Get items from RPC
+		if (gps('force')!='file' && $client->query('tups.listLanguages',$prefs['blog_uid']))
+		{
+			$response = $client->getResponse();
+			foreach ($response as $language)
+				$available_lang[$language['language']]['rpc_lastmod'] = gmmktime($language['lastmodified']->hour,$language['lastmodified']->minute,$language['lastmodified']->second,$language['lastmodified']->month,$language['lastmodified']->day,$language['lastmodified']->year);
+		} elseif (gps('force')!='file') $msg = gTxt('rpc_connect_error');
+
+		# Get items from Filesystem
+		$files = get_lang_files();
+		if (is_array($files) && !empty($files))
+		{
+			foreach ($files as $file)
+			{
+				if ($fp = @fopen(txpath.'/lang/'.$file,'r'))
+				{
+					$name = str_replace('.txt','',$file);
+					$firstline = fgets($fp, 4069);
+					fclose($fp);
+					if (strpos($firstline,'#@version') !== false) 
+						@list($fversion,$ftime) = explode(';',trim(substr($firstline,strpos($firstline,' ',1))));
+					$available_lang[$name]['file_note'] = ($fversion) ? $fversion : 0;
+					$available_lang[$name]['file_lastmod'] = ($ftime) ? $ftime : 0;
+				}
+			}
+		}
+		# Get installed items from the database
+		# I'm affraid we need a value here for the language itself, not for each one of the rows
+		$rows = safe_rows('lang, UNIX_TIMESTAMP(MAX(lastmod)) as lastmod','txp_lang',"1 GROUP BY lang ORDER BY lastmod DESC");
+		foreach ($rows as $language)
+		{
+			$available_lang[$language['lang']]['db_lastmod'] = $language['lastmod'];
+		}
+
+		$list = '';
+		# Show the language table 
+		foreach ($available_lang as $langname => $langdat)
+		{
+			$file_updated = ( isset($langdat['db_lastmod']) && @$langdat['file_lastmod'] > $langdat['db_lastmod']);
+			$rpc_updated = ( @$langdat['rpc_lastmod'] > @$langdat['db_lastmod']);
+			$rpc_install = tda( eLink('prefs','get_language','lang_code',$langname,(isset($langdat['db_lastmod'])) 
+										? strong(gTxt('update')) : strong(gTxt('install')),'updating',isset($langdat['db_lastmod']) ).
+								br.safe_strftime($prefs['archive_dateformat'],@$langdat['rpc_lastmod'])
+							,(isset($langdat['db_lastmod'])) 
+								? ' style="color:red;text-align:center;background-color:#FFFFCC;"'
+								: ' style="color:#667;vertical-align:middle;text-align:center"');
+			$list.= tr (
+				# Lang-Name & Date
+				tda(gTxt($langname).
+					 tag( ( isset($langdat['db_lastmod']) ) 
+							? br.'&nbsp;'.safe_strftime($prefs['archive_dateformat'],$langdat['db_lastmod'])
+							: ''
+						, 'span',' style="color:#aaa;font-style:italic"')
+					, (isset($langdat['db_lastmod']) && $rpc_updated) #tda attribute
+							? ' nowrap="nowrap" style="color:red;background-color:#FFFFCC;"' 
+							: ' nowrap="nowrap" style="vertical-align:middle"' ).n.
+				# RPC - Info
+				(  ($rpc_updated) 
+					? $rpc_install 
+					: tda( (isset($langdat['rpc_lastmod'])) ? gTxt('updated') : '-'
+						,' style="vertical-align:middle;text-align:center"')
+				).n.
+				# File - Info
+				tda( tag( ( isset($langdat['file_lastmod']) ) 
+							? eLink('prefs','get_language','lang_code',$langname,($file_updated) ? gTxt('update') : gTxt('install'),'force','file').
+									br.'&nbsp;'.safe_strftime($prefs['archive_dateformat'],$langdat['file_lastmod'])
+							: ' &nbsp; '  # No File available
+						, 'span', ($file_updated) ? ' style="color:#667;"' : ' style="color:#aaa;font-style:italic"' )
+					, ' class="langfile" style="text-align:center;vertical-align:middle"').n
+			).n.n;
+		}
+
+		// Output Table + Content
+
+		if (isset($msg) && $msg)
+			echo tag ($msg,'p',' style="text-align:center;color:red;width:50%;margin: 2em auto"' );
+
 		echo startTable('list'),				
 		tr(tdcs(hed(gTxt('update_languages'),1),3)),
-		tr(tdcs(sLink('prefs','prefs_list',gTxt('site_prefs')).sp.sLink('prefs','advanced_prefs',gTxt('advanced_preferences')),'3'));
-		
-		if (!$client->query('tups.listLanguages',$prefs['blog_uid']))
-		{			
-			$files = get_lang_files();
-			if (is_array($files) && !empty($files))
-			{
-				foreach ($files as $file)
-				{
-					if ($fp = @fopen(txpath.'/lang/'.$file,'r'))
-					{
-						$firstline = fgets($fp, 4069);
-						fclose($fp);
-						if (strpos($firstline,'#@version') !== false) 
-						{	# Looks like: "#@version id;unixtimestamp"
-							@list($fversion,$ftime) = explode(';',trim(substr($firstline,strpos($firstline,' ',1))));
-							$note = "($fversion ". date("d. F Y",$ftime).")";
-						} else $note = "(outdated)";
-					} else $note = '';
-					$code = substr($file,0,5);
-					echo tr(
-						tda(eLink('prefs','get_language','lang_code',$code,$code).sp,
-						' style="text-align:right;vertical-align:middle"').tda(eLink('prefs','get_language','lang_code',$code,gTxt('install'))).tda($note));
-				}
-			}
-			echo endTable();
-			echo tag(gTxt('error').': could not connect to RPC server to check for updated languages. Please, try it again later.<br /> 
-			If problem connecting to the RPC server persists, you can go to <a href="http://rpc.textpattern.com/lang/">http://rpc.textpattern.com/lang/</a>, download the
-			desired language file and place it in the /lang/ directory of your textpattern install. Textpattern will try do the install using that file.','p',' colspan="3" style="color:red;width:50%;margin: auto"');
-		}else{
-			$response = $client->getResponse();
-			if (is_array($response))
-			{
-				foreach ($response as $language)
-				{
-					# I'm affraid we need a value here for the language itself, not for each one of the rows
-					$db_lastmod = safe_field('UNIX_TIMESTAMP(lastmod)','txp_lang',"lang='$language[language]' ORDER BY lastmod DESC");
-					
-					$updating = ($db_lastmod)? 1 : 0;					
-					
-					$remote_mod = gmmktime($language['lastmodified']->hour,$language['lastmodified']->minute,$language['lastmodified']->second,$language['lastmodified']->month,$language['lastmodified']->day,$language['lastmodified']->year);
+		tr(tdcs(sLink('prefs','prefs_list',gTxt('site_prefs')).sp.sLink('prefs','advanced_prefs',gTxt('advanced_preferences')),'3')),
+		tr(tda('&nbsp;',' colspan="3" style="font-size:0.25em"')),
+		tr(tda(gTxt('language')).tda(gTxt('from_server')).tda(gTxt('from_file')) , ' style="font-weight:bold"');
+		echo $list;
+		echo endTable();
 
-					$updated = ($updating && ($db_lastmod >= $remote_mod))? 1 : 0;  
+		$install_langfile = str_replace( '{url}', strong('<a href="'.RPC_SERVER.'/lang/">'.RPC_SERVER.'/lang/</a>'), gTxt('install_langfile'));
+		if ( $install_langfile == 'install_langfile')
+			$install_langfile = 'To install new languages from file you can download them from <b><a href="'.RPC_SERVER.'/lang/">'.RPC_SERVER.'/lang/</a></b> and place them inside your ./textpattern/lang/ directory.';
+		echo tag( $install_langfile ,'p',' style="text-align:center;width:50%;margin: 2em auto"' );
 
-					if ($updated){
-						echo tr(tda(gTxt($language['language']).sp,' style="text-align:right;vertical-align:middle"').tda(gTxt('updated')));
-					}else{
-						echo tr(
-							tda(
-								gTxt($language['language']).sp,
-								(($updating)? ' style="text-align:right;vertical-align:middle;color:red;"':' style="text-align:right;vertical-align:middle;"')).td(eLink('prefs','get_language','lang_code',$language['language'],(($updating)? gTxt('update') : gTxt('install')),'updating',"$updating")));
-					}									
-				}
-			}
-			echo endTable();
-		}
 	}
 	
 //-------------------------------------------------------------
@@ -530,24 +566,24 @@ $LastChangedRevision$
 		require_once txpath.'/lib/IXRClass.php';
 		$lang_code = gps('lang_code');		
 
-		$client = new IXR_Client('http://rpc.textpattern.com');
+		$client = new IXR_Client(RPC_SERVER);
 //		$client->debug = true;
 		
-		if (!$client->query('tups.getLanguage',$prefs['blog_uid'],$lang_code))
+		if (gps('force')=='file' || !$client->query('tups.getLanguage',$prefs['blog_uid'],$lang_code))
 		{
 			include_once txpath.'/lib/txplib_update.php';
 			if (install_language_from_file($lang_code))
 			{
-				$msg = 'Language installed from file';			
+				return list_languages(gTxt($lang_code).sp.gTxt('updated'));
 			}else{
-				$msg = 'Error trying to install language. Please try again later.<br /> 
-				If connections to the RPC server continue to fail, please visit <a href="http://rpc.textpattern.com/lang/">http://rpc.textpattern.com/lang/</a>, download the
-				desired language file and place it in the /lang/ directory of your textpattern install. Textpattern will attempt to install using that file.';
+				$install_langfile = str_replace( '{url}', strong('<a href="'.RPC_SERVER.'/lang/">'.RPC_SERVER.'/lang/</a>'), gTxt('install_langfile'));
+				if ( $install_langfile == 'install_langfile')
+					$install_langfile = 'To install new languages from file you can download them from <b><a href="'.RPC_SERVER.'/lang/">'.RPC_SERVER.'/lang/</a></b> and place them inside your ./textpattern/lang/ directory.';
+				pagetop(gTxt('installing_language'));
+				echo startTable('list'),
+				tr(tda($install_langfile),' style="color:red;"'),
+				endTable();
 			}			
-			pagetop(gTxt('installing_language'));
-			echo startTable('list'),
-			tr(tda($msg),' style="color:red;"'),
-			endTable();
 		}else {
 			$response = $client->getResponse();
 			$lang_struct = unserialize($response);

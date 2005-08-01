@@ -28,8 +28,8 @@ function install_language_from_file($lang)
 				# if available use the lastmod time from the file
 				if (strpos($line,'#@version') === 0) 
 				{	# Looks like: "#@version id;unixtimestamp"
-					@list($fversion,$ftime) = explode(';',trim(substr($firstline,strpos($firstline,' ',1))));
-					$lastmod = date("YmdHis",($ftime < time()) ? $ftime : time());
+					@list($fversion,$ftime) = explode(';',trim(substr($line,strpos($line,' ',1))));
+					$lastmod = date("YmdHis",min($ftime, time()));
 				}
 				# each language section should be prefixed by #@
 				if($line[0]=='#' && $line[1]=='@')
@@ -37,7 +37,14 @@ function install_language_from_file($lang)
 					if (!empty($data)){
 						foreach ($data as $name => $value)
 						{
-							mysql_query("INSERT DELAYED INTO `".PFX."txp_lang`  SET	`lang`='".$lang."', `name`='$name', `lastmod`='$lastmod', `event`='$event', `data`='$value'");
+
+							$exists = mysql_query('SELECT name, lastmod FROM '.PFX."txp_lang WHERE name='$name' AND lang='$lang'");
+							if ($exists)
+							{
+								mysql_query("UPDATE `".PFX."txp_lang` SET `lastmod`='$lastmod', `data`='$value' WHERE `lang`='".$lang."' AND `name`='$name' AND `event`='$event'");
+								echo mysql_error();
+							} else
+								mysql_query("INSERT DELAYED INTO `".PFX."txp_lang`  SET	`lang`='".$lang."', `name`='$name', `lastmod`='$lastmod', `event`='$event', `data`='$value'");
 						}
 					}
 					# reset
@@ -57,6 +64,7 @@ function install_language_from_file($lang)
 					 mysql_query("INSERT DELAYED INTO `".PFX."txp_lang`  SET `lang`='".$lang."', `name`='$name', `lastmod`='$lastmod', `event`='$event', `data`='$value'");
 				}
 			}
+			mysql_query("DELETE FROM `".PFX."txp_lang`  WHERE `lang`='".$lang."' AND `lastmod`>$lastmod");
 			@fclose($filename);
 			#delete empty fields if any
 			mysql_query("DELETE FROM `".PFX."txp_lang` WHERE `data`=''");
