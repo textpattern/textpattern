@@ -568,7 +568,7 @@ class Textile
         $url = $this->checkRefs($url);
 
         $atts = $this->pba($atts);
-        $atts .= ($title != '') ? ' title="' . $title . '"' : '';
+        $atts .= ($title != '') ? 'title="' . $title . '"' : '';
 
         $atts = ($atts) ? $this->shelve($atts) : '';
 

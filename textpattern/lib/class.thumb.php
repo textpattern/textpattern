@@ -36,6 +36,11 @@
  * 2005-07-27	wet	extracted file based thumbs as wet_thumb class
  */
 
+/*
+$HeadURL$
+$LastChangedRevision$
+*/
+
 $verbose = false;
 
 
