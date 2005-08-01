@@ -53,9 +53,10 @@ $LastChangedRevision$
 	}
 	
 // -------------------------------------------------------------
-	function sLink($event,$step,$linktext)
+	function sLink($event,$step,$linktext,$class='')
 	{
-		return '<a href="?event='.$event.a.'step='.$step.'">'.$linktext.'</a>';
+		$c = ($class) ? ' class="'.$class.'"' : '';
+		return '<a href="?event='.$event.a.'step='.$step.'"'.$c.'>'.$linktext.'</a>';
 	}
 
 // -------------------------------------------------------------

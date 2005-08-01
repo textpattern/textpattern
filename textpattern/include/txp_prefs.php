@@ -75,7 +75,8 @@ define('RPC_SERVER', 'http://rpc.textpattern.com');
 		startTable('list'),		
 		tr(tdcs(hed(gTxt('site_prefs'),1),3)),
 		
-		tr(tdcs(sLink('prefs','advanced_prefs',gTxt('advanced_preferences')).sp.sLink('prefs','list_languages',gTxt('install_language')),'3'));
+		tr(tdcs(sLink('prefs','advanced_prefs',gTxt('advanced_preferences'),'navlink').sp.
+			sLink('prefs','list_languages',gTxt('install_language'),'navlink'),'3'));
 		
 		$evt_list = safe_column('event','txp_prefs',"type='0' AND prefs_id='1' GROUP BY 'event' ORDER BY 'event' DESC");
 		
@@ -368,7 +369,7 @@ define('RPC_SERVER', 'http://rpc.textpattern.com');
 		'<form action="index.php" method="post">',
 		startTable('list'),
 		tr(tdcs(hed(gTxt('advanced_preferences'),1),3)),
-		tr(tdcs(sLink('prefs','prefs_list',gTxt('site_prefs')).sp.sLink('prefs','list_languages',gTxt('install_language')),'3'));		
+		tr(tdcs(sLink('prefs','prefs_list',gTxt('site_prefs'),'navlink').sp.sLink('prefs','list_languages',gTxt('install_language'),'navlink'),'3'));		
 				
 		$rs = safe_rows_start('*','txp_prefs',
 			"type='1' AND prefs_id='1' ORDER BY event,position");
@@ -551,7 +552,7 @@ define('RPC_SERVER', 'http://rpc.textpattern.com');
 
 		echo startTable('list'),				
 		tr(tdcs(hed(gTxt('update_languages'),1),3)),
-		tr(tdcs(sLink('prefs','prefs_list',gTxt('site_prefs')).sp.sLink('prefs','advanced_prefs',gTxt('advanced_preferences')),'3')),
+		tr(tdcs(sLink('prefs','prefs_list',gTxt('site_prefs'),'navlink').sp.sLink('prefs','advanced_prefs',gTxt('advanced_preferences'),'navlink'),'3')),
 		tr(tda('&nbsp;',' colspan="3" style="font-size:0.25em"')),
 		tr(tda(gTxt('language')).tda(gTxt('from_server')).( ($show_files) ? tda(gTxt('from_file')) : '' ), ' style="font-weight:bold"');
 		echo $list;
