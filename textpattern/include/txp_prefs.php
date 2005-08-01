@@ -466,10 +466,12 @@ define('RPC_SERVER', 'http://rpc.textpattern.com');
 		#$client->debug = true;
 
 		$available_lang = array();
+		$rpc_connect = false;$show_files = false;
 
 		# Get items from RPC
 		if (gps('force')!='file' && $client->query('tups.listLanguages',$prefs['blog_uid']))
 		{
+			$rpc_connect = true;
 			$response = $client->getResponse();
 			foreach ($response as $language)
 				$available_lang[$language['language']]['rpc_lastmod'] = gmmktime($language['lastmodified']->hour,$language['lastmodified']->minute,$language['lastmodified']->second,$language['lastmodified']->month,$language['lastmodified']->day,$language['lastmodified']->year);
@@ -477,8 +479,9 @@ define('RPC_SERVER', 'http://rpc.textpattern.com');
 
 		# Get items from Filesystem
 		$files = get_lang_files();
-		if (is_array($files) && !empty($files))
+		if ( (gps('force')=='file' || !$rpc_connect) && is_array($files) && !empty($files))
 		{
+			$show_files = true;
 			foreach ($files as $file)
 			{
 				if ($fp = @fopen(txpath.'/lang/'.$file,'r'))
@@ -530,12 +533,14 @@ define('RPC_SERVER', 'http://rpc.textpattern.com');
 						,' style="vertical-align:middle;text-align:center"')
 				).n.
 				# File - Info
-				tda( tag( ( isset($langdat['file_lastmod']) ) 
-							? eLink('prefs','get_language','lang_code',$langname,($file_updated) ? gTxt('update') : gTxt('install'),'force','file').
-									br.'&nbsp;'.safe_strftime($prefs['archive_dateformat'],$langdat['file_lastmod'])
-							: ' &nbsp; '  # No File available
-						, 'span', ($file_updated) ? ' style="color:#667;"' : ' style="color:#aaa;font-style:italic"' )
-					, ' class="langfile" style="text-align:center;vertical-align:middle"').n
+				( ($show_files)
+					?	tda( tag( ( isset($langdat['file_lastmod']) ) 
+									? eLink('prefs','get_language','lang_code',$langname,($file_updated) ? gTxt('update') : gTxt('install'),'force','file').
+											br.'&nbsp;'.safe_strftime($prefs['archive_dateformat'],$langdat['file_lastmod'])
+									: ' &nbsp; '  # No File available
+								, 'span', ($file_updated) ? ' style="color:#667;"' : ' style="color:#aaa;font-style:italic"' )
+							, ' class="langfile" style="text-align:center;vertical-align:middle"').n
+					:   '')
 			).n.n;
 		}
 
@@ -548,8 +553,18 @@ define('RPC_SERVER', 'http://rpc.textpattern.com');
 		tr(tdcs(hed(gTxt('update_languages'),1),3)),
 		tr(tdcs(sLink('prefs','prefs_list',gTxt('site_prefs')).sp.sLink('prefs','advanced_prefs',gTxt('advanced_preferences')),'3')),
 		tr(tda('&nbsp;',' colspan="3" style="font-size:0.25em"')),
-		tr(tda(gTxt('language')).tda(gTxt('from_server')).tda(gTxt('from_file')) , ' style="font-weight:bold"');
+		tr(tda(gTxt('language')).tda(gTxt('from_server')).( ($show_files) ? tda(gTxt('from_file')) : '' ), ' style="font-weight:bold"');
 		echo $list;
+		if (!$show_files)
+		{
+			echo tr(tda('&nbsp;',' colspan="3" style="font-size:0.25em"')).
+				 tr(tda(eLink('prefs','list_languages','force','file',strong(gTxt('from_file'))),' colspan="3" style="text-align:center"') );
+		}
+		 elseif (gps('force')=='file')
+		{
+			echo tr(tda('&nbsp;',' colspan="3" style="font-size:0.25em"')).
+				 tr(tda(sLink('prefs','list_languages',strong(gTxt('from_server'))),' colspan="3" style="text-align:center"') );
+		}
 		echo endTable();
 
 		$install_langfile = str_replace( '{url}', strong('<a href="'.RPC_SERVER.'/lang/">'.RPC_SERVER.'/lang/</a>'), gTxt('install_langfile'));
