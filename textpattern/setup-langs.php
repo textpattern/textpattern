@@ -1,9 +1,4 @@
 <?php
-/*
-$HeadURL$
-$LastChangedRevision$
-*/
-
 $langs = array(
 	'cs-cz' => array(
 		'about_to_create' => 'Nyní lze vytvořit a naplnit tabulky databáze.',
@@ -83,15 +78,19 @@ $langs = array(
 		'create_config' => 'create a file called <code>config.php</code> in the <code>/textpattern/</code> directory and paste the following inside:',
 		'db_connected' => 'Connected',
 		'db_must_exist' => 'Note that the database you specify must exist; Textpattern won&#8217;t create it for you.',
+		'did_it' => 'I did it',
 		'errors_during_install' => 'There were {num} errors during the installation. You can ask for help in the Textpattern forums.',
 		'full_path_to_txp' => 'Full server path to Textpattern',
 		'mysql_database' => 'MySQL database',
 		'mysql_login' => 'MySQL login',
 		'mysql_password' => 'MySQL password',
 		'mysql_server' => 'MySQL server',
+		'my_site' => 'My Site',
+		'my_slogan' => 'My pithy slogan',
 		'need_details' => 'Inevitably, we need a few details',
 		'please_enter_url' => 'Please enter the web-reachable address of your site',
 		'prefix_warning' => '(Use ONLY if you require multiple installations in one database)',
+		'setup_comment_invite' => 'Comment',
 		'setup_login' => 'Choose a login name (basic characters and spaces only please)',
 		'site_path' => 'Site path',
 		'site_url' => 'Site URL',
@@ -309,7 +308,7 @@ $langs = array(
 ),
 	'ru-ru' => array(
 		'about_to_create' => 'Сейчас в базе данных будут созданы и заполнены таблицы.',
-		'already_installed' => 'Похоже, что Textpattern уже установлен. Если вы хотите совершить новую устаноку, уберите <code>config.php</code> из директории <code>/textpattern/</code> и попытайтесь ',
+		'already_installed' => 'Похоже, что Textpattern уже установлен. Если вы хотите совершить новую устаноку, уберите <code>config.php</code> из директории <code>/textpattern/</code> и попытайтесь',
 		'before_you_proceed' => 'До того как вы приступите',
 		'checking_database' => 'Проверяется связь с базой данных...',
 		'choose_password' => 'Выберите пароль',
@@ -319,6 +318,7 @@ $langs = array(
 		'db_connected' => 'Подсоединено',
 		'db_doesnt_exist' => '"База данных {dbname} не существует. Пожалуйста создайте ее или укажите другую.',
 		'db_must_exist' => 'Заметьте, что база данных, которую вы укажете, должна существовать; Textpattern не создаст ее для вас.',
+		'errors_during_install' => 'Произошло такое вот количество ошибок во время установки: {num}. Вы можете попросить помочь вам разобраться на форуме.',
 		'full_path_to_txp' => 'Полный путь к Textpattern на сервере',
 		'mysql_database' => 'MySQL база данных',
 		'mysql_login' => 'MySQL логин',
@@ -335,6 +335,7 @@ $langs = array(
 		'thanks_for_interest' => 'Спасибо за ваш интерес к Textpattern.',
 		'that_went_well' => 'Все прошло хорошо. Таблицы в базе данных были созданы и заполнены.',
 		'using_db' => 'Используется {dbname}',
+		'warn_mail_unavailable' => 'В установке вашего PHP отсутствует функция mail(). Из-за этого Textpattern не сможет отправлять письма, что, конечно, ограничивает функциональность',
 		'welcome_to_textpattern' => 'Добро пожаловать в Textpattern',
 		'your_email' => 'Ваш E-mail',
 		'your_full_name' => 'Ваше полное имя',
@@ -342,7 +343,7 @@ $langs = array(
 ),
 	'th-th' => array(
 		'about_to_create' => 'คุณกำลังจะสร้างและเติมข้อมูลลงในตารางฐานข้อมูล',
-		'already_installed' => 'ดูเหมือนกับว่า Textpattern ติดตั้งเรียบร้อยแล้ว  ถ้าคุณต้องการติดตั้งใหม่ ให้ลบแฟ้ม <code>config.php</code> จากไ�',
+		'already_installed' => 'ดูเหมือนกับว่า Textpattern ติดตั้งเรียบร้อยแล้ว  ถ้าคุณต้องการติดตั้งใหม่ ให้ลบแฟ้ม <code>config.php</code> จากไ�',
 		'before_you_proceed' => 'ก่อนที่คุณจะทำอะไรต่อ',
 		'checking_database' => 'กำลังตรวจสอบการติดต่อฐานข้อมูล',
 		'choose_password' => 'เลือกรหัสผ่าน',

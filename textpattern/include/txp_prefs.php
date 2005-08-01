@@ -480,9 +480,10 @@ define('RPC_SERVER', 'http://rpc.textpattern.com');
 
 		# Get items from Filesystem
 		$files = get_lang_files();
-		if ( (gps('force')=='file' || !$rpc_connect) && is_array($files) && !empty($files))
-		{
+		if (gps('force')=='file' || !$rpc_connect) 
 			$show_files = true;
+		if ( $show_files && is_array($files) && !empty($files) )
+		{
 			foreach ($files as $file)
 			{
 				if ($fp = @fopen(txpath.'/lang/'.$file,'r'))

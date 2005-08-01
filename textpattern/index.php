@@ -16,7 +16,7 @@ $LastChangedRevision$
 	define("txpath", dirname(__FILE__));
 	define("txpinterface", "admin");
 
-	$thisversion = '1.0rc4';
+	$thisversion = '1.0rc5';
 	$txp_rc = 1; // should be 0 for a stable version
 
 	if (!@include './config.php') { 

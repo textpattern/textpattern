@@ -189,7 +189,7 @@ eod;
 		makeConfig($carry),
 		'</textarea>',
 		'<form action="setup.php" method="post">',
-		fInput('submit','submit','I did it','smallbox'),
+		fInput('submit','submit',gTxt('did_it'),'smallbox'),
 		sInput('getTxpLogin'),hInput('carry',postEncode($carry)),
 		'</form>';
 	}
