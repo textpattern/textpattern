@@ -557,11 +557,10 @@ define('RPC_SERVER', 'http://rpc.textpattern.com');
 		echo $list;
 		if (!$show_files)
 		{
+			$linktext = strong( gTxt('from_file').' ('.gTxt('experts_only').')' );
 			echo tr(tda('&nbsp;',' colspan="3" style="font-size:0.25em"')).
-				 tr(tda(eLink('prefs','list_languages','force','file',strong(gTxt('from_file'))),' colspan="3" style="text-align:center"') );
-		}
-		 elseif (gps('force')=='file')
-		{
+				 tr(tda(eLink('prefs','list_languages','force','file',$linktext),' colspan="3" style="text-align:center"') );
+		} elseif (gps('force')=='file')	{
 			echo tr(tda('&nbsp;',' colspan="3" style="font-size:0.25em"')).
 				 tr(tda(sLink('prefs','list_languages',strong(gTxt('from_server'))),' colspan="3" style="text-align:center"') );
 		}
