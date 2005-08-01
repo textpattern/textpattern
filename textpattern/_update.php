@@ -707,7 +707,7 @@ EOF;
 		foreach ($i as $a => $b) {
 			if ($b['Column_name'] == 'ip') $ipidxset = true;
 		}
-		if (!$ipidxset) safe_query("alter table ".PFX."txp_log ADD INDEX `ip` (`ip`)",1);
+		if (!$ipidxset) safe_query("alter table ".PFX."txp_log ADD INDEX `ip` (`ip`)");
 
 	// This should always come last:
 	// 1.0: keep track of updates for devel version
