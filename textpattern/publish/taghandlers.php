@@ -40,6 +40,7 @@ $LastChangedRevision$
 	function image($atts) 
 	{
 		global $img_dir;
+		static $cache = array();
 		extract(lAtts(array(
 			'id'    => '',
 			'name'  => '',
@@ -49,10 +50,23 @@ $LastChangedRevision$
 		),$atts));
 		
 		if ($name) {
-			$name = doSlash($name);
-			$rs = safe_row("*", "txp_image", "name='$name' limit 1");
+			if (isset($cache['n'][$name]))
+			{
+				$rs = $cache['n'][$name];
+			} else {
+				$name = doSlash($name);
+				$rs = safe_row("*", "txp_image", "name='$name' limit 1");
+				$cache['n'][$name] = $rs;
+			}
 		} elseif ($id) {
-			$rs = safe_row("*", "txp_image", "id='$id' limit 1");
+			if (isset($cache['i'][$id]))
+			{
+				$rs = $cache['i'][$id];
+			} else {
+				$id = intval($id);
+				$rs = safe_row("*", "txp_image", "id='$id' limit 1");
+				$cache['i'][$id] = $rs;
+			}
 		} else return;
 		
 		if ($rs) {
