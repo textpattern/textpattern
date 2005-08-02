@@ -299,6 +299,8 @@ eod;
 		safe_insert('txp_prefs',"prefs_id=1,name='is_dst',val=0");
 	}
 
+	// FIXME: this presupposes 'gmtoffset' won't be set at clean install (RC4+ probably will)
+
 	if (!safe_field('val','txp_prefs',"name='gmtoffset'")) {
 		$old_offset = safe_field('val', 'txp_prefs', "name='timeoffset'");
 		$serveroffset = gmmktime(0,0,0) - mktime(0,0,0);
