@@ -488,15 +488,17 @@ define('RPC_SERVER', 'http://rpc.textpattern.com');
 		{
 			foreach ($files as $file)
 			{
-				if ($fp = @fopen(txpath.'/lang/'.$file,'r'))
+				if ($fp = @fopen(txpath.DS.'lang'.DS.$file,'r'))
 				{
 					$name = str_replace('.txt','',$file);
 					$firstline = fgets($fp, 4069);
 					fclose($fp);
 					if (strpos($firstline,'#@version') !== false) 
 						@list($fversion,$ftime) = explode(';',trim(substr($firstline,strpos($firstline,' ',1))));
-					$available_lang[$name]['file_note'] = ($fversion) ? $fversion : 0;
-					$available_lang[$name]['file_lastmod'] = ($ftime) ? $ftime : 0;
+					else 
+						$fversion = $ftime = NULL;
+					$available_lang[$name]['file_note'] = (isset($fversion)) ? $fversion : 0;
+					$available_lang[$name]['file_lastmod'] = (isset($ftime)) ? $ftime : 0;
 				}
 			}
 		}
@@ -631,10 +633,13 @@ function get_lang_files()
 	
 	$dirlist = array();
 	
-	$lang_dir = $txpcfg['txpath'].'/lang/';
+	$lang_dir = $txpcfg['txpath'].DS.'lang'.DS;
 
 	if (!is_dir($lang_dir))
-		return $dirlist;		
+	{
+		trigger_error('Lang directory is not a directory: '.$lang_dir, E_USER_WARNING);
+		return $dirlist;
+	}
 	
 	if (chdir($lang_dir)) {
 		if (function_exists('glob')){
@@ -644,7 +649,8 @@ function get_lang_files()
 			$dh = opendir($lang_dir);
 			$g_array = array();
 			while (false !== ($filename = readdir($dh))) {
-				$g_array[] = $filename;
+				if (strstr($filename, '.txt'))
+					$g_array[] = $filename;
 			}
 			closedir($dh);
 			
