@@ -20,7 +20,7 @@ $LastChangedRevision$
 	$txp_rc = 1; // should be 0 for a stable version
 
 	if (!@include './config.php') { 
-		include './setup.php';
+		include txpath.'/setup/index.php';
 		exit();
 	}
 
@@ -70,9 +70,9 @@ $LastChangedRevision$
 		$step = gps('step');
 		
 		if (!$dbversion or $dbversion != $thisversion or 
-				($txp_rc and @filemtime(txpath.'/_update.php') > $dbupdatetime)) {
+				($txp_rc and @filemtime(txpath.'/update/_update.php') > $dbupdatetime)) {
 			define('TXP_UPDATE', 1);
-			include './_update.php';
+			include txpath.'/update/_update.php';
 			$event = 'prefs';
 			$step = 'list_languages';
 			// We updated, so let's get the fresh prefs
@@ -106,7 +106,7 @@ $LastChangedRevision$
 		end_page();
 
 	} else {
-	 	include './setup.php';
-	 	exit();
+		include txpath.'/setup/index.php';
+		exit();
 	}
 ?>

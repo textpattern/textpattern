@@ -594,6 +594,8 @@ define('RPC_SERVER', 'http://rpc.textpattern.com');
 			include_once txpath.'/lib/txplib_update.php';
 			if ( (gps('force')=='file' || gps('updating')!=='1') && install_language_from_file($lang_code) )
 			{
+				if (defined('LANG')) 
+					$GLOBALS['$textarray'] = load_lang(LANG);
 				return list_languages(gTxt($lang_code).sp.gTxt('updated'));
 			}else{
 				$install_langfile = str_replace( '{url}', strong('<a href="'.RPC_SERVER.'/lang/">'.RPC_SERVER.'/lang/</a>'), gTxt('install_langfile'));
@@ -620,7 +622,8 @@ define('RPC_SERVER', 'http://rpc.textpattern.com');
 				}
 			}			
 			array_walk($lang_struct,'install_lang_key');
-			
+			if (defined('LANG')) 
+				$GLOBALS['$textarray'] = load_lang(LANG);
 			return list_languages(gTxt($lang_code).sp.gTxt('updated'));
 		}		
 	}

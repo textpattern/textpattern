@@ -1,13 +1,8 @@
  <?php
 /*
-$HeadURL$
-$LastChangedRevision$
+$HeadURL: http://svn.textpattern.com/current/textpattern/_update.php $
+$LastChangedRevision: 711 $
 */
-
-
-	@ignore_user_abort(1);
-	@set_time_limit(0);
-
 	if (!defined('TXP_UPDATE'))
 		exit;
 
@@ -193,9 +188,6 @@ eod;
 	safe_insert("txp_category", "name='root',parent='',type='image',lft=1,rgt=0");
 	rebuild_tree('root',1,'image');
 
-	safe_delete('txp_prefs',"name = 'version'");
-	safe_insert('txp_prefs', "prefs_id=1, name='version',val='$thisversion', type='2'");
-	
 	if (!safe_field('val','txp_prefs',"name='article_list_pageby'")) {
 		safe_insert('txp_prefs',"prefs_id=1,name='article_list_pageby',val=25");
 	}
@@ -398,7 +390,8 @@ eod;
 	//blog unique id
 	if (!safe_field('val','txp_prefs',"name='blog_uid'"))
 	{
-		safe_insert('txp_prefs',"name='blog_uid', val='".md5(uniqid(rand(),true))."', prefs_id='1'");
+		$prefs['blog_uid'] = md5(uniqid(rand(),true));
+		safe_insert('txp_prefs',"name='blog_uid', val='".$prefs['blog_uid']."', prefs_id='1'");
 	}
 	if (!safe_field('val','txp_prefs',"name='blog_mail_uid'"))
 	{
@@ -519,7 +512,7 @@ eod;
 				safe_update('txp_prefs', "type='2'", "name='$hidden_pref' AND prefs_id='1'");
 			}
 			
-		
+			global $txpac;
 			#advanced prefs
 			foreach ($txpac as $key => $val)
 			{
@@ -602,15 +595,15 @@ EOF;
 			INDEX (`lang`, `event`)
 			)TYPE=MyISAM;");
 
-			require_once dirname(__FILE__).'/lib/IXRClass.php';		
+			require_once txpath.'/lib/IXRClass.php';		
 	
 			$client = new IXR_Client('http://rpc.textpattern.com');	
 			
 			if (!$client->query('tups.getLanguage',$prefs['blog_uid'],LANG))
 			{				
-				echo '<p style="color:red">Error trying to install language. Please, try it again from admin &gt; prefs &gt; Install Languages.<br /> 
+				echo '<p style="color:red">Error trying to install language. Please, try it again again.<br /> 
 				If problem connecting to the RPC server persists, you can go to <a href="http://rpc.textpattern.com/lang/">http://rpc.textpattern.com/lang/</a>, download the
-				desired language file and place it in the /lang/ directory of your textpattern install. Textpattern will try do the install using that file.</p>';
+				desired language file and place it in the /lang/ directory of your textpattern install. You can then install the language from file.</p>';
 			}else {
 				$response = $client->getResponse();
 				$lang_struct = unserialize($response);
@@ -668,7 +661,7 @@ EOF;
 	if (!safe_count('txp_file',"1")){ 
 		$tempdir = find_temp_dir();
 		if ($tempdir == safe_field('val','txp_prefs',"name='file_base_path'"))
-			safe_update('txp_prefs',"val='".doSlash(dirname(dirname(__FILE__)).DS.'files')."',prefs_id=1","name='file_base_path'");
+			safe_update('txp_prefs',"val='".doSlash(dirname(txpath).DS.'files')."',prefs_id=1","name='file_base_path'");
 	}
 
 	// let's get the advanced fields in the right order
@@ -692,7 +685,7 @@ EOF;
 			PRIMARY KEY ( `id` )
 		)");
 
-		include 'lib/admin_config.php';
+		include txpath.'/lib/admin_config.php';
 		
 		foreach($txp_permissions as $a => $b) {
 			$privs = explode(',',$b);
@@ -715,6 +708,9 @@ EOF;
 	// 1.0: keep track of updates for devel version
 	safe_delete('txp_prefs',"name = 'dbupdatetime'");
 	safe_insert('txp_prefs', "prefs_id=1, name='dbupdatetime',val='".max(filemtime(__FILE__),time())."', type='2'");
+	global $thisversion;
+	safe_delete('txp_prefs',"name = 'version'");
+	safe_insert('txp_prefs', "prefs_id=1, name='version',val='$thisversion', type='2'");
 
 // updated, baby.
 

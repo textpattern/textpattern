@@ -332,7 +332,7 @@ $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'comments_are_ol', '1
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'is_dst', '0', 0, 'publish', 'yesnoradio', 60)";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'locale', 'en_GB.UTF-8', 2, 'publish', 'text_input', 0)";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'tempdir', '".addslashes(find_temp_dir())."', 1, 'admin', 'text_input', 0)";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'file_base_path', '".addslashes(dirname(dirname(__FILE__)).DS.'files')."', 1, 'admin', 'text_input', 0)";
+$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'file_base_path', '".addslashes(dirname(txpath).DS.'files')."', 1, 'admin', 'text_input', 0)";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'blog_uid', '".md5(uniqid(rand(),true))."', 2, 'publish', 'text_input', 0)";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'blog_mail_uid', '', 2, 'publish', 'text_input', 0)";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'blog_time_uid', '2005', 2, 'publish', 'text_input', 0)";
@@ -426,15 +426,15 @@ foreach ($create_sql as $query)
 if (defined('TXP_TEST'))
 	return;
 
-require_once './lib/IXRClass.php';
+require_once txpath.'/lib/IXRClass.php';
 $client = new IXR_Client('http://rpc.textpattern.com');
 if (!$client->query('tups.getLanguage','',$lang))
 {
-	include_once './lib/txplib_update.php';
+	include_once txpath.'/lib/txplib_update.php';
 	# If cannot install from lang file, setup the english lang
 	if (!install_language_from_file($lang))
 	{
-		include_once 'en-gb.php';
+		include_once txpath.'/setup/en-gb.php';
 		if (!@$lastmod) $lastmod = '0000-00-00 00:00:00';
 		foreach ($en_gb_lang as $evt_name => $evt_strings)
 		{

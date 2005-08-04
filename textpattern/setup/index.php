@@ -13,9 +13,16 @@ $LastChangedRevision$
 
 */
 
-include_once './lib/txplib_html.php';
-include_once './lib/txplib_forms.php';
-include_once './lib/txplib_misc.php';
+if (!defined('txpath'))
+{
+	define("txpath", dirname(dirname(__FILE__)));
+	define("txpinterface", "admin");
+}
+include_once txpath.'/lib/txplib_html.php';
+include_once txpath.'/lib/txplib_forms.php';
+include_once txpath.'/lib/txplib_misc.php';
+
+$rel_siteurl = preg_replace('#^(.*)/textpattern[/setuphindx.]*?$#i','\\1',$_SERVER['SCRIPT_NAME']);
 print <<<eod
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 			"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -23,7 +30,7 @@ print <<<eod
 	<head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<title>Textpattern &#8250; setup</title>
-	<link rel="Stylesheet" href="./textpattern.css" type="text/css" />
+	<link rel="Stylesheet" href="$rel_siteurl/textpattern/textpattern.css" type="text/css" />
 	</head>
 	<body style="border-top:15px solid #FC3">
 	<div align="center">
@@ -49,7 +56,7 @@ eod;
 // -------------------------------------------------------------
 	function chooseLang() 
 	{
-	  echo '<form action="setup.php" method="post">',
+	  echo '<form action="'.$GLOBALS['rel_siteurl'].'/textpattern/setup/index.php" method="post">',
 	  	'<table id="setup" cellpadding="0" cellspacing="0" border="0">',
 		tr(
 			tda(
@@ -73,20 +80,20 @@ eod;
 
 		$GLOBALS['textarray'] = setup_load_lang($lang);
 	
-		@include './config.php';
+		@include txpath.'/config.php';
 		
 		if (!empty($txpcfg['db'])) {
 			exit(graf(gTxt('already_installed')));
 		}
 		
 
-		$temp_txpath = dirname(__file__);
+		$temp_txpath = txpath;
 		if (@$_SERVER['SCRIPT_NAME'] && (@$_SERVER['SERVER_NAME'] || @$_SERVER['HTTP_HOST']))
 		{
 			$guess_siteurl = (@$_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : $_SERVER['HTTP_HOST'];
-			$guess_siteurl .= rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'])), '/');
+			$guess_siteurl .= $GLOBALS['rel_siteurl'];
 		} else $guess_siteurl = 'mysite.com';
-	  echo '<form action="setup.php" method="post">',
+	  echo '<form action="'.$GLOBALS['rel_siteurl'].'/textpattern/setup/index.php" method="post">',
 	  	'<table id="setup" cellpadding="0" cellspacing="0" border="0">',
 		tr(
 			tda(
@@ -188,7 +195,7 @@ eod;
 		'<textarea style="width:400px;height:200px" name="config" rows="1" cols="1">',
 		makeConfig($carry),
 		'</textarea>',
-		'<form action="setup.php" method="post">',
+		'<form action="'.$GLOBALS['rel_siteurl'].'/textpattern/setup/index.php" method="post">',
 		fInput('submit','submit',gTxt('did_it'),'smallbox'),
 		sInput('getTxpLogin'),hInput('carry',postEncode($carry)),
 		'</form>';
@@ -197,12 +204,27 @@ eod;
 // -------------------------------------------------------------
 	function getTxpLogin() 
 	{
-		$carry = isPost('carry');
-		extract(postDecode($carry));
+		$carry = postDecode(isPost('carry'));
+		extract($carry);
 
 		$GLOBALS['textarray'] = setup_load_lang($lang);
 
-		echo '<form action="setup.php" method="post">',
+		@include txpath.'/config.php';
+		if (!isset($txpcfg) || ($txpcfg['db'] != $carry['ddb']) || ($txpcfg['txpath'] != $carry['txpath']))
+		{
+			echo graf(strong(gTxt('before_you_proceed')).', '. gTxt('create_config')),
+	
+			'<textarea style="width:400px;height:200px" name="config" rows="1" cols="1">',
+			makeConfig($carry),
+			'</textarea>',
+			'<form action="'.$GLOBALS['rel_siteurl'].'/textpattern/setup/index.php" method="post">',
+			fInput('submit','submit',gTxt('did_it'),'smallbox'),
+			sInput('getTxpLogin'),hInput('carry',postEncode($carry)),
+			'</form>';
+			return;
+		}
+
+		echo '<form action="'.$GLOBALS['rel_siteurl'].'/textpattern/setup/index.php" method="post">',
 	  	startTable('edit'),
 		tr(
 			tda(
@@ -227,7 +249,7 @@ eod;
 		),
 		endTable(),
 		sInput('createTxp'),
-		hInput('carry',$carry),
+		hInput('carry',postEncode($carry)),
 		'</form>';
 	}
 
@@ -245,8 +267,7 @@ eod;
 		define("PFX",trim($dprefix));
 		define('TXP_INSTALL', 1);
 
-		define("txpath", $txpath);
- 		include './txpsql.php';
+ 		include txpath.'/setup/txpsql.php';
 
 		// This has to come after txpsql.php, because otherwise we can't call mysql_real_escape_string
 		extract(sDoSlash(gpsa(array('name','pass','RealName','email'))));
@@ -308,7 +329,7 @@ eod;
 			return 
 			'<div width="450" valign="top" style="margin-left:auto;margin-right:auto">'.
 			graf(gTxt('that_went_well'),' style="margin-top:3em"').
-			graf(gTxt('you_can_access')).
+			graf(str_replace('"index.php"','"'.$GLOBALS['rel_siteurl'].'/textpattern/index.php"',gTxt('you_can_access'))).
 			graf(gTxt('thanks_for_interest')).
 			'</div>';
 	}
@@ -369,7 +390,7 @@ eod;
 // -------------------------------------------------------------
 	function setup_load_lang($lang) 
 	{
-		require_once './setup-langs.php';
+		require_once txpath.'/setup/setup-langs.php';
 		$lang = (isset($langs[$lang]) && !empty($langs[$lang]))? $lang : 'en-gb';
 		define('LANG', $lang);
 		return $langs[LANG];

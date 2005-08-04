@@ -70,6 +70,8 @@ function install_language_from_file($lang)
 			@fclose($filename);
 			#delete empty fields if any
 			mysql_query("DELETE FROM `".PFX."txp_lang` WHERE `data`=''");
+			mysql_query("FLUSH TABLE `".PFX."txp_lang`");
+
 			return true;
 		}
 	}

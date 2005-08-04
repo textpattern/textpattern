@@ -127,7 +127,8 @@ function doAuth() {
 					$nonce = safe_field('nonce','txp_users',"name='$p_userid'");
 
 					if (!$nonce) {
-							include_once '_update.php';
+							define('TXP_UPDATE', 1);
+							include_once txpath.'/update/_update.php';
 							exit(graf('Please reload'));
 					}
 

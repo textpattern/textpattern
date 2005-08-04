@@ -237,7 +237,7 @@ $LastChangedRevision$
 
 		gTxt('txp_version').cs.txp_version.' ('.($rev ? 'r'.$rev : 'unknown revision').')'.n,
 
-		gTxt('last_update').cs.gmstrftime($fmt_date, $dbupdatetime).'/'.gmstrftime($fmt_date, @filemtime(txpath.'/_update.php')).n,
+		gTxt('last_update').cs.gmstrftime($fmt_date, $dbupdatetime).'/'.gmstrftime($fmt_date, @filemtime(txpath.'/update/_update.php')).n,
 
 		gTxt('document_root').cs.$_SERVER['DOCUMENT_ROOT'].n,
 
