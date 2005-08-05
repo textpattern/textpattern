@@ -332,6 +332,8 @@ define('RPC_SERVER', 'http://rpc.textpattern.com');
 			"$daynumord $monthnum $year - $time24",
 			"$daynumord $monthname $year",
 			"$daynumord $monthname $year, $time24",
+			"$daynumord. $monthname $year",
+			"$daynumord. $monthname $year, $time24",
 			"$year-$monthnum-$daynumlead",
 			"$year-$daynumlead-$monthnum",
 			"$date $time12",
