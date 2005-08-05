@@ -509,7 +509,7 @@ class Textile
                 ([[:punct:];]*)
                 $f
                 (?=[])}]|[[:punct:]]+|\s|$)
-            /xmUu", array(&$this, "fSpan"), $text);
+            /xmU", array(&$this, "fSpan"), $text);
         }
         return $text;
     }
