@@ -598,7 +598,7 @@ EOF;
 			require_once txpath.'/lib/IXRClass.php';		
 	
 			$client = new IXR_Client('http://rpc.textpattern.com');	
-			
+
 			if (!$client->query('tups.getLanguage',$prefs['blog_uid'],LANG))
 			{				
 				echo '<p style="color:red">Error trying to install language. Please, try it again again.<br /> 

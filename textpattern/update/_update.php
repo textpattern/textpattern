@@ -9,6 +9,7 @@ $LastChangedRevision$
 	if (!defined('TXP_UPDATE'))
 		exit;
 
+	global $thisversion;
 	if (( $thisversion == '' ) || 
 		( strpos($thisversion, 'g1'   )!==false) ||
 		( strpos($thisversion, '1.0rc')!==false) )
