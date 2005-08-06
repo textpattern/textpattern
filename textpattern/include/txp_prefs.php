@@ -76,7 +76,7 @@ define('RPC_SERVER', 'http://rpc.textpattern.com');
 		tr(tdcs(hed(gTxt('site_prefs'),1),3)),
 		
 		tr(tdcs(sLink('prefs','advanced_prefs',gTxt('advanced_preferences'),'navlink').sp.
-			sLink('prefs','list_languages',gTxt('install_language'),'navlink'),'3'));
+			sLink('prefs','list_languages',gTxt('manage_languages'),'navlink'),'3'));
 		
 		$evt_list = safe_column('event','txp_prefs',"type='0' AND prefs_id='1' GROUP BY 'event' ORDER BY 'event' DESC");
 		
@@ -373,7 +373,7 @@ define('RPC_SERVER', 'http://rpc.textpattern.com');
 		'<form action="index.php" method="post">',
 		startTable('list'),
 		tr(tdcs(hed(gTxt('advanced_preferences'),1),3)),
-		tr(tdcs(sLink('prefs','prefs_list',gTxt('site_prefs'),'navlink').sp.sLink('prefs','list_languages',gTxt('install_language'),'navlink'),'3'));		
+		tr(tdcs(sLink('prefs','prefs_list',gTxt('site_prefs'),'navlink').sp.sLink('prefs','list_languages',gTxt('manage_languages'),'navlink'),'3'));		
 				
 		$rs = safe_rows_start('*','txp_prefs',
 			"type='1' AND prefs_id='1' ORDER BY event,position");
@@ -465,7 +465,22 @@ define('RPC_SERVER', 'http://rpc.textpattern.com');
 	{
 		global $prefs;
 		require_once txpath.'/lib/IXRClass.php';
-		pagetop(gTxt('update_languages'),$message);
+
+		// Select and save active language
+		if (!$message && ps('step')=='list_languages' && ps('language'))
+		{
+				safe_update("txp_prefs","val='".doSlash(ps('language'))."'", "name='language'");
+				$GLOBALS['textarray'] = load_lang(doSlash(ps('language')));
+				$message = gTxt('preferences_saved');
+		}
+		$active_lang = safe_field('val','txp_prefs',"name='language'");
+		$lang_form = tda(  form(gTxt('active_language').'&nbsp;&nbsp;'.
+								languages('language',$active_lang).'&nbsp;&nbsp;'.
+								fInput('submit','Submit',gTxt('save_button'),'').
+								eInput('prefs').sInput('list_languages')
+							,'display:inline;')
+						,' style="text-align:center" colspan="3"');
+		
 
 		$client = new IXR_Client(RPC_SERVER);
 		#$client->debug = true;
@@ -552,14 +567,17 @@ define('RPC_SERVER', 'http://rpc.textpattern.com');
 			).n.n;
 		}
 
-		// Output Table + Content
 
+		// Output Table + Content
+		pagetop(gTxt('update_languages'),$message);
 		if (isset($msg) && $msg)
 			echo tag ($msg,'p',' style="text-align:center;color:red;width:50%;margin: 2em auto"' );
 
 		echo startTable('list'),				
-		tr(tdcs(hed(gTxt('update_languages'),1),3)),
+		tr(tdcs(hed(gTxt('manage_languages'),1),3)),
 		tr(tdcs(sLink('prefs','prefs_list',gTxt('site_prefs'),'navlink').sp.sLink('prefs','advanced_prefs',gTxt('advanced_preferences'),'navlink'),'3')),
+		tr(tda('&nbsp;',' colspan="3" style="font-size:0.25em"')),
+		tr( $lang_form ),
 		tr(tda('&nbsp;',' colspan="3" style="font-size:0.25em"')),
 		tr(tda(gTxt('language')).tda(gTxt('from_server')).( ($show_files) ? tda(gTxt('from_file')) : '' ), ' style="font-weight:bold"');
 		echo $list;
