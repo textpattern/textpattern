@@ -6,7 +6,7 @@ $LastChangedRevision$
 
 	// Make sure we display all errors that occur during initialization
 	error_reporting(E_ALL);
-	ini_set("display_errors","1");
+	@ini_set("display_errors","1");
 
 	// Use buffering to ensure bogus whitespace in config.php is ignored
 	ob_start(NULL, 1024);
