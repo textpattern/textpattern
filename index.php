@@ -9,7 +9,7 @@ $LastChangedRevision$
 	@ini_set("display_errors","1");
 
 	// Use buffering to ensure bogus whitespace in config.php is ignored
-	ob_start(NULL, 1024);
+	ob_start(NULL, 4096);
 	$here = dirname(__FILE__);
 	include './textpattern/config.php';
 	ob_end_clean();
