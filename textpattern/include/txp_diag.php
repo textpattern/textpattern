@@ -281,7 +281,8 @@ $LastChangedRevision$
 	);
 
 	if ($step == 'high') {
-		$out[] = n.'Charset (default/config)'.cs.mysql_client_encoding().'/'.@$txpcfg['dbcharset'].n;
+		$mysql_client_encoding = (is_callable('mysql_client_encoding')) ? mysql_client_encoding() : '-';
+		$out[] = n.'Charset (default/config)'.cs.$mysql_client_encoding.'/'.@$txpcfg['dbcharset'].n;
 
 		$result = safe_query("SHOW variables like 'character_se%'");
 		while ($row = mysql_fetch_row($result))
