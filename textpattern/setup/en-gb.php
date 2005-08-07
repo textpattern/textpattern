@@ -302,6 +302,7 @@ $en_gb_lang = array(
 		'plugin_help' => 'Plugin help',
 		'previewing_plugin' => 'Previewing plugin:',
 	),'prefs' => array(
+		'active_language' => 'Currently active language',
 		'admin_side_plugins' => 'Use admin side plugins?',
 		'advanced_preferences' => 'Advanced preferences',
 		'allow_article_php_scripting' => 'Allow PHP on articles?',
@@ -368,6 +369,7 @@ $en_gb_lang = array(
 		'locale' => 'Locale',
 		'logging' => 'Logging',
 		'logs_expire' => 'Expire logs after',
+		'manage_languages' => 'Manage languages',
 		'max_url_len' => 'Max URL length',
 		'mentions' => 'Mentions',
 		'messy' => '?=messy',
@@ -781,5 +783,5 @@ $en_gb_lang = array(
 		'wraptag' => 'Wraptag',
 	)
 );
-$lastmod = gmdate('Y-m-d H:m:s',1122887232);
+$lastmod = gmdate('Y-m-d H:m:s',1123351407);
 ?>

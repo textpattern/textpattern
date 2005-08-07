@@ -1,4 +1,4 @@
-#@version 1.0rc5;1122887232
+#@version 1.0rc5;1123351407
 #@admin
 add_new_author => Add new author
 and_mailed_to => and mailed to
@@ -300,6 +300,7 @@ plugins => Plugins
 plugin_help => Plugin help
 previewing_plugin => Previewing plugin:
 #@prefs
+active_language => Currently active language
 admin_side_plugins => Use admin side plugins?
 advanced_preferences => Advanced preferences
 allow_article_php_scripting => Allow PHP on articles?
@@ -366,6 +367,7 @@ leave_text_untouched => Leave text untouched
 locale => Locale
 logging => Logging
 logs_expire => Expire logs after
+manage_languages => Manage languages
 max_url_len => Max URL length
 mentions => Mentions
 messy => ?=messy

@@ -664,6 +664,8 @@ EOF;
 			safe_update('txp_prefs',"val='".doSlash(dirname(txpath).DS.'files')."',prefs_id=1","name='file_base_path'");
 	}
 
+	// After this point the changes after RC4
+
 	// let's get the advanced fields in the right order
 	for ($i = 1; $i <= 10; $i++) {
 		safe_update("txp_prefs","position=$i","name='custom_${i}_set'");
@@ -703,6 +705,9 @@ EOF;
 			if ($b['Column_name'] == 'ip') $ipidxset = true;
 		}
 		if (!$ipidxset) safe_query("alter table ".PFX."txp_log ADD INDEX `ip` (`ip`)");
+
+	// Language selection moves to Manage languages, Hide it from prefs.
+	safe_update("txp_prefs", "type=2", "name='language'");
 
 	// This should always come last:
 	// 1.0: keep track of updates for devel version
