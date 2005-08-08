@@ -710,7 +710,7 @@ EOF;
 	safe_update("txp_prefs", "type=2", "name='language'");
 
 	// Show gmt-selection in prefs
-	safe_update('txp_prefs',"type=0","name='gmtoffset'");
+	safe_update('txp_prefs',"type=0, html='gmtoffset_select', position=50","name='gmtoffset'");
 
 
 	// This should always come last:
