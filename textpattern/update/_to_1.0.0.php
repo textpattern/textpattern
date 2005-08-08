@@ -709,6 +709,10 @@ EOF;
 	// Language selection moves to Manage languages, Hide it from prefs.
 	safe_update("txp_prefs", "type=2", "name='language'");
 
+	// Show gmt-selection in prefs
+	safe_update('txp_prefs',"type=0","name='gmtoffset'");
+
+
 	// This should always come last:
 	// 1.0: keep track of updates for devel version
 	safe_delete('txp_prefs',"name = 'dbupdatetime'");

@@ -15,5 +15,5 @@ $LastChangedRevision$
 		( strpos($thisversion, '1.0rc')!==false) )
 	{
 		include txpath.DS.'update'.DS.'_to_1.0.0.php';
-	}
+	} 
 ?>
