@@ -206,13 +206,20 @@ $LastChangedRevision$
 			// set messy variables
 		$out =  makeOut('id','s','c','q','pg','p','month');
 
+			// some useful vars for taghandlers, plugins
+		$out['request_uri'] = serverSet('REQUEST_URI');
+		$out['qs'] = serverSet('QUERY_STRING');
+			// IIS - can someone confirm whether or not this works?
+		if (!$out['request_uri'] and $argv = serverSet('argv'))
+			$out['request_uri'] = @substr($argv[0], strpos($argv[0], ';' + 1));
+
+			// define the useable url, minus any subdirectories.
+			// this is pretty fugly, if anyone wants to have a go at it - dean
+		$out['subpath'] = $subpath = preg_quote(preg_replace("/http:\/\/.*(\/.*)/Ui","$1",hu),"/");
+		$out['req'] = $req = preg_replace("/^$subpath/i","/",serverSet('REQUEST_URI'));
+
 			// if messy vars exist, bypass url parsing
 		if (!$out['id'] && !$out['s']) {
-
-				// define the useable url, minus any subdirectories.
-				// this is pretty fugly, if anyone wants to have a go at it - dean
-			$subpath = preg_quote(preg_replace("/http:\/\/.*(\/.*)/Ui","$1",hu),"/");
-			$req = preg_replace("/^$subpath/i","/",serverSet('REQUEST_URI'));
 
 			extract(chopUrl($req));
 	
