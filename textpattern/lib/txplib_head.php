@@ -34,12 +34,14 @@ $LastChangedRevision$
 	<!--
 		function verify(msg) { return confirm(msg); }
 
-		var cookieEnabled=(navigator.cookieEnabled)? true : false
-		if (typeof navigator.cookieEnabled=="undefined" && !cookieEnabled) { 
-			document.cookie="testcookie"
-			cookieEnabled=(document.cookie=="testcookie")? true : false
-			document.cookie="" //erase dummy value
-		}
+		var date = new Date();
+		date.setTime(date.getTime()+(60*1000));
+		var expires = "; expires="+date.toGMTString();
+		document.cookie="testcookie=enabled"+expires+"; path=/";
+		cookieEnabled=(document.cookie.length>2)? true : false
+		date.setTime(date.getTime()-(60*1000));
+		var expires = "; expires="+date.toGMTString();
+		document.cookie="testcookie"+expires+"; path=/"; //erase dummy value
 		if(!cookieEnabled){
 			confirm(<?php echo "'".trim(gTxt('cookies_must_be_enabled'))."'"; ?>)
 		}
