@@ -36,9 +36,6 @@ define('RPC_SERVER', 'http://rpc.textpattern.com');
 		if (empty($post['tempdir']))
 			$post['tempdir'] = doSlash(find_temp_dir());
 
-		if (!empty($post['language']))
-			$post['locale'] = doSlash(getlocale($post['language']));
-
 		foreach($prefnames as $prefname) {
 			if (isset($post[$prefname])) {
  				if ($prefname == 'lastmod') {
@@ -463,14 +460,17 @@ define('RPC_SERVER', 'http://rpc.textpattern.com');
 	# RPC install/update languages
 	function list_languages($message='')
 	{
-		global $prefs;
+		global $prefs, $locale;
 		require_once txpath.'/lib/IXRClass.php';
 
 		// Select and save active language
 		if (!$message && ps('step')=='list_languages' && ps('language'))
 		{
+				$locale = doSlash(getlocale(ps('language')));
 				safe_update("txp_prefs","val='".doSlash(ps('language'))."'", "name='language'");
+				safe_update("txp_prefs","val='". $locale ."'", "name='locale'");
 				$GLOBALS['textarray'] = load_lang(doSlash(ps('language')));
+				$locale = setlocale(LC_ALL, $locale);
 				$message = gTxt('preferences_saved');
 		}
 		$active_lang = safe_field('val','txp_prefs',"name='language'");
