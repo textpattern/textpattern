@@ -93,6 +93,7 @@ $LastChangedRevision$
 						: '';
 	$is_apache = ($server_software and stristr($server_software, 'Apache')) 
 				   or (is_callable('apache_get_version'));
+	$real_doc_root = (isset($_SERVER['DOCUMENT_ROOT'])) ? realpath($_SERVER['DOCUMENT_ROOT']) : '';
 	
 	$fail = array(
 
@@ -107,8 +108,8 @@ $LastChangedRevision$
 		:	'',
 
 		'path_not_doc_root' =>
-		(0 !== strncmp(realpath($_SERVER['DOCUMENT_ROOT']), realpath($path_to_site), strlen($_SERVER['DOCUMENT_ROOT'])))
-		?	gTxt('path_not_doc_root').' [ '.$_SERVER['DOCUMENT_ROOT'].' ] '
+		(0 !== strncmp($real_doc_root, realpath($path_to_site), strlen($real_doc_root)))
+		?	gTxt('path_not_doc_root').' [ '.$real_doc_root.' ] '
 		:	'',
 
 		'path_to_site_inacc' =>
@@ -239,7 +240,7 @@ $LastChangedRevision$
 
 		gTxt('last_update').cs.gmstrftime($fmt_date, $dbupdatetime).'/'.gmstrftime($fmt_date, @filemtime(txpath.'/update/_update.php')).n,
 
-		gTxt('document_root').cs.$_SERVER['DOCUMENT_ROOT'].n,
+		gTxt('document_root').cs.$_SERVER['DOCUMENT_ROOT']. (($real_doc_root != $_SERVER['DOCUMENT_ROOT']) ? '('.$real_doc_root.')' : '') .n,
 
 		'$path_to_site'.cs.$path_to_site.n,
 
