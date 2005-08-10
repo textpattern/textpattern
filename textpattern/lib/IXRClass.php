@@ -512,7 +512,7 @@ class IXR_Client {
         if ($this->debug) {
             echo '<pre>'.htmlspecialchars($request)."\n</pre>\n\n";
         }
-        $fp = @fsockopen($this->server, $this->port);
+        $fp = (is_callable('fsockopen')) ? fsockopen($this->server, $this->port) : false;
         if (!$fp) {
             $this->error = new IXR_Error(-32300, 'transport error - could not open socket');
             return false;
