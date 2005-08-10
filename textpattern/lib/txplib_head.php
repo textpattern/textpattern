@@ -28,7 +28,7 @@ $LastChangedRevision$
 	<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 	<head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-	<title>Textpattern &#8250; <?php echo strtolower($pagetitle)?></title>
+	<title>Textpattern &#8250; <?php echo $pagetitle?></title>
 	<link href="textpattern.css" rel="Stylesheet" type="text/css" />
 	<script language="JavaScript" type="text/javascript">
 	<!--
@@ -196,12 +196,12 @@ $LastChangedRevision$
 		$areas = areas();
 		$o = '<form action="index.php" method="get">
 				<select name="event" onchange="submit(this.form)">
-				<option>'.ucfirst(gTxt('go')).'...</option>';
+				<option>'.gTxt('go').'...</option>';
 		foreach ($areas as $a => $b) {
 			if (count($b) > 0) {
-				$o .= '<optgroup label="'.ucfirst(gTxt('tab_'.$a)).'">';
+				$o .= '<optgroup label="'.gTxt('tab_'.$a).'">';
 				foreach ($b as $c => $d) {
-					$o .= '<option value="'.$d.'">'.ucfirst($c).'</option>';
+					$o .= '<option value="'.$d.'">'.$c.'</option>';
 				}
 				$o .= '</optgroup>';
 			}
