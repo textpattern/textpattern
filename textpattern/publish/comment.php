@@ -277,13 +277,13 @@ $LastChangedRevision$
 							$updated = update_comments_count($parentid);
 
 							ob_start();
-							$backpath = explode('#', $backpage);
-							$backpage = $backpath[0];
+							$backpage = substr($backpage, 0, $prefs['max_url_len']);
+							$backpage = preg_replace("/[\x0a\x0d#].*$/s",'',$backpage);
 							$backpage .= ((strstr($backpage,'?')) ? '&' : '?') . 'commented=1';
 							if($comments_moderate){
-								header('location: '.$backpage.'#txpCommentInputForm');
+								header('Location: '.$backpage.'#txpCommentInputForm');
 							}else{
-								header('location: '.$backpage.'#c'.sprintf("%06s",$rs));
+								header('Location: '.$backpage.'#c'.sprintf("%06s",$rs));
 							}
 						}
 					}																			// end check nonce
