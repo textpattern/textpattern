@@ -13,6 +13,10 @@ $HeadURL$
 $LastChangedRevision$
 
 */
+	if (@ini_get('register_gobals'))
+		foreach ( $_REQUEST as $name => $value )
+			unset($$name);
+
 	define("txpath", dirname(__FILE__));
 	define("txpinterface", "admin");
 

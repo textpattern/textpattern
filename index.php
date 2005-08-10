@@ -8,8 +8,13 @@ $LastChangedRevision$
 	error_reporting(E_ALL);
 	@ini_set("display_errors","1");
 
+	if (@ini_get('register_gobals'))
+		foreach ( $_REQUEST as $name => $value )
+			unset($$name);
+	define("txpinterface", "public");
+
 	// Use buffering to ensure bogus whitespace in config.php is ignored
-	ob_start(NULL, 4096);
+	ob_start(NULL, 2048);
 	$here = dirname(__FILE__);
 	include './textpattern/config.php';
 	ob_end_clean();

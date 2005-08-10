@@ -20,7 +20,9 @@ $LastChangedRevision$
 
 	if (!defined('txpath'))
 		define("txpath", dirname(__FILE__));
-	define("txpinterface", "public");
+	if (!defined("txpinterface"))
+		die('publish.php cannot be called directly. '.
+			'If you just updated and are calling index.php, make sure to update the files in the root dir.');
 		
 	include_once txpath.'/lib/txplib_db.php';
 	include_once txpath.'/lib/txplib_html.php';
