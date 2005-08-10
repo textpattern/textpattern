@@ -267,6 +267,7 @@ eod;
 		define("PFX",trim($dprefix));
 		define('TXP_INSTALL', 1);
 
+		include_once txpath.'/lib/txplib_update.php';
  		include txpath.'/setup/txpsql.php';
 
 		// This has to come after txpsql.php, because otherwise we can't call mysql_real_escape_string
@@ -279,6 +280,7 @@ eod;
 
 		mysql_query("update ".PFX."txp_prefs set val = '$siteurl' where `name`='siteurl'");
 		mysql_query("update ".PFX."txp_prefs set val = '$lang' where `name`='language'");
+		mysql_query("update ".PFX."txp_prefs set val = '".getlocale($lang)."' where `name`='locale'");
 
  		echo fbCreate();
 	}

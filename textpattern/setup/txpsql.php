@@ -294,7 +294,7 @@ $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'prefs_id', '1', 2, '
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'sitename', '".addslashes(gTxt('my_site'))."', 0, 'publish', 'text_input', 10)";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'siteurl', 'comment.local', 0, 'publish', 'text_input', 20)";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'site_slogan', '".addslashes(gTxt('my_slogan'))."', 0, 'publish', 'text_input', 30)";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'language', 'en-gb', 0, 'publish', 'languages', 40)";
+$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'language', 'en-gb', 2, 'publish', 'languages', 40)";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'url_mode', '1', 2, 'publish', 'text_input', 0)";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'timeoffset', '0', 2, 'publish', 'text_input', 0)";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'comments_on_default', '0', 0, 'comments', 'yesnoradio', 140)";
@@ -430,7 +430,6 @@ require_once txpath.'/lib/IXRClass.php';
 $client = new IXR_Client('http://rpc.textpattern.com');
 if (!$client->query('tups.getLanguage','',$lang))
 {
-	include_once txpath.'/lib/txplib_update.php';
 	# If cannot install from lang file, setup the english lang
 	if (!install_language_from_file($lang))
 	{
