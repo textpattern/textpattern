@@ -290,7 +290,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_prefs` (
   KEY `name` (`name`)
 ) $tabletype ";
 
-$prefs['blog_uid'] = md5(uniqid(rand(),true))
+$prefs['blog_uid'] = md5(uniqid(rand(),true));
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'prefs_id', '1', 2, 'publish', 'text_input', 0)";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'sitename', '".addslashes(gTxt('my_site'))."', 0, 'publish', 'text_input', 10)";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'siteurl', 'comment.local', 0, 'publish', 'text_input', 20)";
