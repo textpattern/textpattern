@@ -676,7 +676,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function posted($atts) 
 	{
-		global $dateformat,$archive_dateformat,$timeoffset,
+		global $dateformat,$archive_dateformat,
 				$pg,$c,$thisarticle,$id,$txpcfg;
 
 		$date_offset = $thisarticle['posted'];

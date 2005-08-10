@@ -49,7 +49,6 @@ $LastChangedRevision$
 //-------------------------------------------------------------
 	function discuss_list($message='') 
 	{
-		global $timeoffset;
 		pagetop(gTxt('list_discussions'),$message);
 
 		extract(doSlash(gpsa(array('page','crit'))));
