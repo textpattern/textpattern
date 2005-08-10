@@ -959,7 +959,7 @@ $LastChangedRevision$
 		extract(lAtts(array('link' => ''),$atts));
 		$author_name = get_author_name($thisarticle['authorid']);
 		if (!empty($link)) 
-			return '<a href="'.hu.urlencode(strtolower(gTxt('author'))).'/'.
+			return '<a href="'.hu.strtolower(urlencode(gTxt('author'))).'/'.
 				urlencode($author_name).'">'.
 				$author_name.'</a>';
 		return $author_name;		
@@ -1023,7 +1023,7 @@ $LastChangedRevision$
 		extract(lAtts(array('link' => ''),$atts));
 		if ($thisarticle['section']) {
 			if (!empty($link)) 
-				return '<a href="'.hu.strtolower(gTxt('section')).'/'.
+				return '<a href="'.hu.strtolower(urlencode(gTxt('section'))).'/'.
 					strtolower(urlencode($thisarticle['section'])).'/">'.
 					$thisarticle['section'].'</a>';
 			return $thisarticle['section'];

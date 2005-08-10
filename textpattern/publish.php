@@ -236,10 +236,10 @@ $LastChangedRevision$
 					case 'rss':
 						include txpath.'/publish/rss.php'; exit(rss());
 	
-					case strtolower(gTxt('section')):
+					case strtolower(urlencode(gTxt('section'))):
 						$out['s'] = (ckEx('section',$u2)) ? $u2 : 'default'; break;
 	
-					case strtolower(gTxt('category')):
+					case strtolower(urlencode(gTxt('category'))):
 						$out['c'] = (ckEx('category',$u2)) ? $u2 : ''; break;
 	
 					case urlencode(strtolower(gTxt('author'))):										
