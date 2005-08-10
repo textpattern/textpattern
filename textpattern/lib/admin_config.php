@@ -176,7 +176,7 @@ $txpac = array(
 // -------------------------------------------------------------
 // Spam DNS RBLs
 
-	'spam_blacklists'          => 'bl.spamcop.net,list.dsbl.org,sbl.spamhaus.org',
+	'spam_blacklists'          => 'sbl.spamhaus.org',
 
 );
 
