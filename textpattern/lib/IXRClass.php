@@ -6,8 +6,10 @@
    Site:   http://scripts.incutio.com/xmlrpc/
    Manual: http://scripts.incutio.com/xmlrpc/manual.php
    Made available under the Artistic License: http://www.opensource.org/licenses/artistic-license.php
-*/
 
+$HeadURL$
+$LastChangedRevision$
+*/
 
 class IXR_Value {
     var $data;

@@ -324,7 +324,7 @@ eod;
 		if ($GLOBALS['txp_install_successful']===false)
 			return
 			'<div width="450" valign="top" style="margin-left:auto;margin-right:auto">'.
-			graf($GLOBALS['txp_err_count'].' '.gTxt('errors_during_install'),' style="margin-top:3em"').
+			graf(str_replace('{num}',$GLOBALS['txp_err_count'],gTxt('errors_during_install')),' style="margin-top:3em"').
 			'</div>';
 
 		else
