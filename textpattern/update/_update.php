@@ -18,7 +18,7 @@ $LastChangedRevision$
 	// On 4.1 or greater use utf8-tables, if that is configures in config.php
 	if ( isset($txpcfg['dbcharset']) && (intval($dbversion[0]) >= 5 || preg_match('#^4\.[1-9]#',$dbversion))) 
 	{
-		$tabletype .= " CHARACTER SET = $dbcharset ";
+		$tabletype .= " CHARACTER SET = ". $txpcfg['dbcharset'] ." ";
 	}
 
 	if (( $thisversion == '' ) || 
