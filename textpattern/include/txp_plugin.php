@@ -30,10 +30,7 @@ $LastChangedRevision$
 		echo 
 
 		startTable('list').
-		tr(tda(plugin_form().
-
-		// 1.0rc - deprecate this soon
-		plugin_form_old()
+		tr(tda(plugin_form()
 		
 		,' colspan="8" style="border:0;height:50px"')).
 		 assHead('plugin','author','version','description','active','','','');
@@ -241,20 +238,6 @@ $LastChangedRevision$
 				}
 			} else plugin_list(gTxt('bad_plugin_code'));
 		}
-	}
-	
-// -------------------------------------------------------------
-	function plugin_form_old() // deprecated after 1.0 rc
-	{
-		return 
-		'<form enctype="multipart/form-data" action="index.php" method="post">'.
-		hInput('MAX_FILE_SIZE','100000').
-		gTxt('old_plugin').': '.
-		fInput('file','theplugin','','edit').
-		popHelp('install_plugin').sp.
-		fInput('submit','install_old',gTxt('upload'),'smallerbox').
-		eInput('plugin').sInput('plugin_verify').hInput('txt_plugin',true).
-		'</form>';
 	}
 
 // -------------------------------------------------------------
