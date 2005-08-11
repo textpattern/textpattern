@@ -410,10 +410,10 @@ if (!empty($event) and $event == 'article') {
 				// textile toggles
 			graf(gTxt('use_textile').br.
 				tag(checkbox2('textile_body',$textile_body).
-					strtolower(gTxt('article')),'label').
+					gTxt('article'),'label').
 				br.
 				tag(checkbox2('textile_excerpt',$textile_excerpt).
-					strtolower(gTxt('excerpt')),'label')),
+					gTxt('excerpt'),'label')),
 
 				// form override
 			($allow_form_override)
