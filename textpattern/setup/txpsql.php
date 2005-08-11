@@ -15,6 +15,10 @@ if (!defined('TXP_INSTALL'))
 mysql_connect($dhost,$duser,$dpass);
 mysql_select_db($ddb);
 
+$result = mysql_query("describe ".PFX."textpattern");
+if ($result) die("Textpattern database table already exist. Can't run setup.");
+
+
 $version = mysql_get_server_info();
 //Use "ENGINE" if version of MySQL > (4.0.18 or 4.1.2)
 $tabletype = ( intval($version[0]) >= 5 || preg_match('#^4\.(0\.[2-9]|(1[89]))|(1\.[2-9])#',$version)) 
@@ -30,7 +34,7 @@ if ( isset($dbcharset) && (intval($version[0]) >= 5 || preg_match('#^4\.[1-9]#',
 	mysql_query("SET NAMES ".$dbcharset);
 }
 
-// Default to messy URLs if we know they won't work
+// Default to messy URLs if we know clean ones won't work
 $permlink_mode = 'section_id_title';
 if (is_callable('apache_get_modules')) {
 	$modules = apache_get_modules();
@@ -338,7 +342,7 @@ $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'locale', 'en_GB.UTF-
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'tempdir', '".addslashes(find_temp_dir())."', 1, 'admin', 'text_input', 0)";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'file_base_path', '".addslashes(dirname(txpath).DS.'files')."', 1, 'admin', 'text_input', 0)";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'blog_uid', '". $prefs['blog_uid'] ."', 2, 'publish', 'text_input', 0)";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'blog_mail_uid', '".addslashes($email)."', 2, 'publish', 'text_input', 0)";
+$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'blog_mail_uid', '".addslashes($_POST['email'])."', 2, 'publish', 'text_input', 0)";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'blog_time_uid', '2005', 2, 'publish', 'text_input', 0)";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'edit_raw_css_by_default', '1', 1, 'css', 'yesnoradio', 0)";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'allow_page_php_scripting', '1', 1, 'publish', 'yesnoradio', 0)";

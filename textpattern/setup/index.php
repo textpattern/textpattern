@@ -111,7 +111,7 @@ eod;
 			fLabelCell(gTxt('mysql_password')).fInputCell('dpass','',2)
 		),
 		tr(
-			fLabelCell(gTxt('mysql_server')).fInputCell('dhost','',3).
+			fLabelCell(gTxt('mysql_server')).fInputCell('dhost','localhost',3).
 			fLabelCell(gTxt('mysql_database')).fInputCell('ddb','',4)
 		),
 		tr(
@@ -161,6 +161,12 @@ eod;
 	{
 		$carry = enumPostItems('ddb','duser','dpass','dhost','dprefix','txprefix','txpath',
 			'siteurl','ftphost','ftplogin','ftpass','ftpath','lang');
+
+		@include txpath.'/config.php';
+		
+		if (!empty($txpcfg['db'])) {
+			exit(graf(gTxt('already_installed')));
+		}
 
 		$carry['txpath']   = preg_replace("/^(.*)\/$/","$1",$carry['txpath']);
 		$carry['ftpath']   = preg_replace("/^(.*)\/$/","$1",$carry['ftpath']);
@@ -261,6 +267,12 @@ eod;
 	{
 		$carry = isPost('carry');
 		extract(postDecode($carry));
+		require txpath.'/config.php';
+		$dbb = $txpcfg['db'];
+		$duser = $txpcfg['user'];
+		$dpass = $txpcfg['pass'];
+		$dhost = $txpcfg['host'];
+		$dprefix = $txpcfg['table_prefix'];
 
 		$GLOBALS['textarray'] = setup_load_lang($lang);
 
