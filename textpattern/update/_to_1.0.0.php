@@ -344,7 +344,7 @@ eod;
 				`downloads` int(4) unsigned NOT NULL default '0',
 				PRIMARY KEY ( `id` ) ,
 				UNIQUE KEY `filename` ( `filename` ) 
-			)  TYPE=MyISAM PACK_KEYS=0 AUTO_INCREMENT=1 ");
+			) $tabletype PACK_KEYS=0 AUTO_INCREMENT=1 ");
 	}
 	
 	if (!safe_field('name', 'txp_form', "type='file'")){
@@ -593,7 +593,7 @@ EOF;
 			PRIMARY KEY ( `id` ),
 			UNIQUE INDEX (`lang`,`name`),
 			INDEX (`lang`, `event`)
-			)TYPE=MyISAM;");
+			) $tabletype;");
 
 			require_once txpath.'/lib/IXRClass.php';		
 	
@@ -685,7 +685,7 @@ EOF;
 			`5` TINYINT( 1 ) NOT NULL ,
 			`6` TINYINT( 1 ) NOT NULL ,
 			PRIMARY KEY ( `id` )
-		)");
+		) $tabletype");
 
 		include txpath.'/lib/admin_config.php';
 		
