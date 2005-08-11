@@ -450,6 +450,7 @@ $LastChangedRevision$
 		$rpc_connect = false;$show_files = false;
 
 		# Get items from RPC
+		@set_time_limit(90);
 		if (gps('force')!='file' && $client->query('tups.listLanguages',$prefs['blog_uid']))
 		{
 			$rpc_connect = true;
@@ -573,6 +574,7 @@ $LastChangedRevision$
 		$client = new IXR_Client(RPC_SERVER);
 //		$client->debug = true;
 		
+		@set_time_limit(90);
 		if (gps('force')=='file' || !$client->query('tups.getLanguage',$prefs['blog_uid'],$lang_code))
 		{
 			if ( (gps('force')=='file' || gps('updating')!=='1') && install_language_from_file($lang_code) )
