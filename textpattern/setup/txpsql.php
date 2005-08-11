@@ -250,15 +250,6 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_log` (
   KEY `time` (`time`)
 ) $tabletype AUTO_INCREMENT=77 ";
 
-$create_sql[] = "CREATE TABLE `".PFX."txp_log_mention` (
-  `article_id` int(11) NOT NULL default '0',
-  `refpage` varchar(255) NOT NULL default '',
-  `reftitle` varchar(255) NOT NULL default '',
-  `count` int(11) NOT NULL default '0',
-  `excerpt` mediumtext NOT NULL,
-  KEY `refpage` (`refpage`)
-) $tabletype ";
-
 $create_sql[] = "CREATE TABLE `".PFX."txp_page` (
   `name` varchar(128) NOT NULL default '',
   `user_html` text NOT NULL,
@@ -324,7 +315,6 @@ $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'dateformat', 'since'
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'archive_dateformat', '%b %Oe, %I:%M %p', 0, 'publish', 'dateformats', 80)";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'comments_moderate', '0', 0, 'comments', 'yesnoradio', 130)";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'img_dir', 'images', 1, 'admin', 'text_input', 0)";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'record_mentions', '1', 2, 'publish', 'text_input', 0)";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'comments_disallow_images', '0', 0, 'comments', 'yesnoradio', 170)";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'comments_sendmail', '0', 0, 'comments', 'yesnoradio', 160)";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'file_max_upload_size', '2000000', 1, 'admin', 'text_input', 0)";
