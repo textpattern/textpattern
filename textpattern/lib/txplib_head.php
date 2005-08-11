@@ -92,7 +92,7 @@ $LastChangedRevision$
 	</head>
 	<body>
   <table cellpadding="0" cellspacing="0" width="100%" style="margin-bottom:2em">
-  <tr><td align="left" style="background:#FFCC33"><img src="txp_img/textpattern.gif" height="15" width="368" alt="textpattern" /></td><td style="background:#FFCC33" align="right"><?php echo navPop(); ?></td></tr>
+  <tr><td align="left" style="background:#FFCC33"><img src="txp_img/textpattern.gif" height="15" width="368" alt="textpattern" /></td><td style="background:#FFCC33" align="right"><?php echo navPop(1); ?></td></tr>
   <tr><td align="center" class="tabs" colspan="2">
  		<?php
  		if (!$bm) {
@@ -191,10 +191,11 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function navPop() 
+	function navPop($inline='') 
 	{
 		$areas = areas();
-		$o = '<form action="index.php" method="get">
+		$st = ($inline) ? ' style="display:inline"': '';
+		$o = '<form action="index.php" method="get"'.$st.'>
 				<select name="event" onchange="submit(this.form)">
 				<option>'.gTxt('go').'...</option>';
 		foreach ($areas as $a => $b) {
