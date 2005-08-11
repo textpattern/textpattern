@@ -93,7 +93,7 @@ eod;
 		$temp_txpath = txpath;
 		if (@$_SERVER['SCRIPT_NAME'] && (@$_SERVER['SERVER_NAME'] || @$_SERVER['HTTP_HOST']))
 		{
-			$guess_siteurl = (@$_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : $_SERVER['HTTP_HOST'];
+			$guess_siteurl = (@$_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
 			$guess_siteurl .= $GLOBALS['rel_siteurl'];
 		} else $guess_siteurl = 'mysite.com';
 	  echo '<form action="'.$GLOBALS['rel_siteurl'].'/textpattern/setup/index.php" method="post">',
