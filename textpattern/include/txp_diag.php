@@ -160,8 +160,8 @@ $LastChangedRevision$
 		:	'',
 
 		'setup_still_exists' =>
-		(@is_readable($txpcfg['txpath'] . '/setup.php'))
-		?	$txpcfg['txpath']."/setup.php ".gTxt('still_exists')
+		(@is_dir($txpcfg['txpath'] . DS. 'setup'))
+		?	$txpcfg['txpath'].DS."setup".DS.' '.gTxt('still_exists')
 		:	'',
 
 		'no_temp_dir' =>
