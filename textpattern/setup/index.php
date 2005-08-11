@@ -18,6 +18,9 @@ if (!defined('txpath'))
 	define("txpath", dirname(dirname(__FILE__)));
 	define("txpinterface", "admin");
 }
+error_reporting(E_ALL);
+@ini_set("display_errors","1");
+
 include_once txpath.'/lib/txplib_html.php';
 include_once txpath.'/lib/txplib_forms.php';
 include_once txpath.'/lib/txplib_misc.php';

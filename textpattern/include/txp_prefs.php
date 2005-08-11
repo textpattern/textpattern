@@ -453,7 +453,10 @@ $LastChangedRevision$
 			$response = $client->getResponse();
 			foreach ($response as $language)
 				$available_lang[$language['language']]['rpc_lastmod'] = gmmktime($language['lastmodified']->hour,$language['lastmodified']->minute,$language['lastmodified']->second,$language['lastmodified']->month,$language['lastmodified']->day,$language['lastmodified']->year);
-		} elseif (gps('force')!='file') $msg = gTxt('rpc_connect_error');
+		} elseif (gps('force')!='file') 
+		{
+			$msg = gTxt('rpc_connect_error')."<!--".$client->getErrorCode().' '.$client->getErrorMessage()."-->";
+		}
 
 		# Get items from Filesystem
 		$files = get_lang_files();
@@ -579,7 +582,8 @@ $LastChangedRevision$
 				if ( $install_langfile == 'install_langfile')
 					$install_langfile = 'To install new languages from file you can download them from <b><a href="'.RPC_SERVER.'/lang/">'.RPC_SERVER.'/lang/</a></b> and place them inside your ./textpattern/lang/ directory.';
 				pagetop(gTxt('installing_language'));
-				echo tag( gTxt('rpc_connect_error') ,'p',' style="text-align:center;color:red;width:50%;margin: 2em auto"' );
+				echo tag( gTxt('rpc_connect_error')."<!--".$client->getErrorCode().' '.$client->getErrorMessage()."-->" 
+						 ,'p',' style="text-align:center;color:red;width:50%;margin: 2em auto"' );
 				echo tag( $install_langfile ,'p',' style="text-align:center;width:50%;margin: 2em auto"' );
 			}			
 		}else {

@@ -520,7 +520,7 @@ class IXR_Client {
         $fp = (is_callable('fsockopen')) ? fsockopen($this->server, $this->port, $errno, $errstr, 30) : false;
 		ob_end_clean();
         if (!$fp) {
-            $this->error = new IXR_Error(-32300, 'transport error - could not open socket');
+            $this->error = new IXR_Error(-32300, 'transport error - could not open socket ('.$errstr.')');
             return false;
         }
         fputs($fp, $request);
