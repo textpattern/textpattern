@@ -92,8 +92,8 @@ $LastChangedRevision$
 	</head>
 	<body>
   <table cellpadding="0" cellspacing="0" width="100%" style="margin-bottom:2em">
-  <tr><td align="left" style="background:#FFCC33"><img src="txp_img/textpattern.gif" height="15" width="368" alt="textpattern" /></td></tr>
-  <tr><td align="center" class="tabs">
+  <tr><td align="left" style="background:#FFCC33"><img src="txp_img/textpattern.gif" height="15" width="368" alt="textpattern" /></td><td style="background:#FFCC33" align="right"><?php echo navPop(); ?></td></tr>
+  <tr><td align="center" class="tabs" colspan="2">
  		<?php
  		if (!$bm) {
 			echo '<table cellpadding="0" cellspacing="0" align="center"><tr>
@@ -115,7 +115,7 @@ $LastChangedRevision$
 			'<td class="tabdown"><a href="'.hu.'" class="plain" target="blank">'.gTxt('tab_view_site').'</a></td>',
 		 '</tr></table>',
 		
-		'</td></tr><tr><td align="center" class="tabs">
+		'</td></tr><tr><td align="center" class="tabs" colspan="2">
 			<table cellpadding="0" cellspacing="0" align="center"><tr>',
 				tabsort($area,$event),
 			'</tr></table>';
