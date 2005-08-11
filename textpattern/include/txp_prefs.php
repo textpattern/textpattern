@@ -346,7 +346,10 @@ $LastChangedRevision$
 				$size = ($a['name'] == 'expire_logs_after' || $a['name'] == 'max_url_len' || $a['name'] == 'time_offset' || $a['name'] == 'rss_how_many' || $a['name'] == 'logs_expire')? 3 : 20;
 				$out.= td(call_user_func('text_input', $a['name'], $a['val'], $size));
 			}else{
-				$out.= td(call_user_func($a['html'], $a['name'], $a['val']));
+				if (is_callable($a['html']))
+					$out.= td(call_user_func($a['html'], $a['name'], $a['val']));
+				else
+					$out.= td($a['val']);
 			}
 			$out.= tda(popHelp($a['name']), ' style="vertical-align:middle"');
 			echo tr($out);
