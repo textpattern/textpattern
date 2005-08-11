@@ -514,7 +514,11 @@ class IXR_Client {
         if ($this->debug) {
             echo '<pre>'.htmlspecialchars($request)."\n</pre>\n\n";
         }
-        $fp = (is_callable('fsockopen')) ? fsockopen($this->server, $this->port) : false;
+		// This is to find out when the script unexpectedly dies due to fsockopen
+		ob_start(NULL, 2048);
+		echo "Trying to connect to an RPC Server...";
+        $fp = (is_callable('fsockopen')) ? fsockopen($this->server, $this->port, $errno, $errstr, 30) : false;
+		ob_end_clean();
         if (!$fp) {
             $this->error = new IXR_Error(-32300, 'transport error - could not open socket');
             return false;

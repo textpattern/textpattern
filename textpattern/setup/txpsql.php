@@ -9,6 +9,9 @@ $LastChangedRevision$
 if (!defined('TXP_INSTALL'))
 	exit;
 
+@ignore_user_abort(1);
+@set_time_limit(0);
+
 mysql_connect($dhost,$duser,$dpass);
 mysql_select_db($ddb);
 
