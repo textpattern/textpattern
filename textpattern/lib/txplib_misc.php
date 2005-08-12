@@ -1124,7 +1124,7 @@ else
     	if (!safe_row("*", 'txp_prefs', "name = '$name'") ) {
         	return safe_insert('txp_prefs', "
 				name  = '$name',
-				val   = '$val.',
+				val   = '$val',
 				event = '$event',
 				html  = '$html',
 				type  = '$type',
