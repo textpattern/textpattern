@@ -4,7 +4,7 @@ $HeadURL$
 $LastChangedRevision$
 */
 	if (!defined('TXP_UPDATE'))
-		exit;
+		exit("Nothing here. You can't access this file directly.");
 
 	@ignore_user_abort(1);
 	@set_time_limit(0);

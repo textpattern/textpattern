@@ -4,7 +4,7 @@ $HeadURL: http://svn.textpattern.com/current/textpattern/_update.php $
 $LastChangedRevision: 711 $
 */
 	if (!defined('TXP_UPDATE'))
-		exit;
+		exit("Nothing here. You can't access this file directly.");
 
 	safe_delete("txp_category","name=''");
 	safe_delete("txp_category","name=' '");
