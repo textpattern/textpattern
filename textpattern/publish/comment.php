@@ -346,7 +346,7 @@ $LastChangedRevision$
 	function mail_comment($message, $cname, $cemail, $cweb, $parentid) 
 	{
 		global $sitename;
-		extract(safe_row("AuthorID,Title", "textpattern", "ID = '$parentid'"));
+		extract(doSlash(safe_row("AuthorID,Title", "textpattern", "ID = '$parentid'")));
 		extract(safe_row("RealName, email", "txp_users", "name = '$AuthorID'"));
 
 		$out = gTxt('greeting')." $RealName,\r\n\r\n";
