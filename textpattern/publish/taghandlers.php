@@ -780,6 +780,9 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
+	# DEPRECATED - provided only for backwards compatibility
+	# this functionality will be merged into comments_invite
+	# no point in having two tags for one functionality
 	function comments_annotateinvite($atts,$thing=NULL)
 	{
 		global $thisarticle, $pretext;
