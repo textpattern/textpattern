@@ -605,9 +605,9 @@ $LastChangedRevision$
 
 		//Fix a problem when paging /author/author_name and simmilar url schemas
 		//chopUrl explodes by slashes
-		$req_uri = $_SERVER['REQUEST_URI'];
-		if (!empty($_SERVER['QUERY_STRING'])) 
-			$req_uri = str_replace('?'.$_SERVER['QUERY_STRING'], '', $req_uri);
+		$req_uri = @$request_uri;
+		if (!empty($qs)) 
+			$req_uri = str_replace('?'.$qs, '', $req_uri);
 		if(strlen(strrchr($req_uri,'/')) != 1) $req_uri.='/';
 		
 		if ($pg > 1) {
@@ -639,9 +639,9 @@ $LastChangedRevision$
 		
 		//Fix a problem when paging /author/author_name and simmilar url schemas
 		//chopUrl explodes by slashes
-		$req_uri = $_SERVER['REQUEST_URI'];
-		if (!empty($_SERVER['QUERY_STRING'])) 
-			$req_uri = str_replace('?'.$_SERVER['QUERY_STRING'], '', $req_uri);
+		$req_uri = @$request_uri;
+		if (!empty($qs)) 
+			$req_uri = str_replace('?'.$qs, '', $req_uri);
 		if(strlen(strrchr($req_uri,'/')) != 1) $req_uri.='/';
 		
 		if ($pg != $numPages) {
