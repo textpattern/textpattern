@@ -36,10 +36,11 @@ $LastChangedRevision$
 			$sfilter = ($section) ? "and Section = '".$section."'" : '';
 			$cfilter = ($category) 
 				? "and (Category1='".$category."' or Category2='".$category."')":'';
-			$limit = ($limit) ? $limit : '5';
-		
-				$frs = safe_column("name", "txp_section", "in_rss != '1'");
-				if ($frs) foreach($frs as $f) $query[] = "and Section != '".$f."'";
+			$limit = ($limit) ? $limit : $rss_how_many;
+			$limit = min($limit,100);
+
+			$frs = safe_column("name", "txp_section", "in_rss != '1'");
+			if ($frs) foreach($frs as $f) $query[] = "and Section != '".$f."'";
 			$query[] = $sfilter;
 			$query[] = $cfilter;
 			
