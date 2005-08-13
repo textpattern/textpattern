@@ -138,7 +138,7 @@ eod;
 		tr(
 			fLabelCell('http://').
 				tdcs(fInput('text','siteurl',$guess_siteurl,'edit','','',40).
-				popHelp('site_url'),3)
+				popHelp('siteurl'),3)
 		);
 		if (!is_callable('mail'))
 		{
