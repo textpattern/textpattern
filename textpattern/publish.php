@@ -651,12 +651,9 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-/**
- * Keep all the article tag-related values in one place,
- * in order to do easy bugfix and easily the addition of
- * new article tags.
- * @param rs article data row from DB
- */	
+// Keep all the article tag-related values in one place,
+// in order to do easy bugfix and easily the addition of
+// new article tags.
 	function populateArticleData($rs)
 	{
 		extract($rs);
