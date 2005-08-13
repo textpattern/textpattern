@@ -28,6 +28,7 @@ $LastChangedRevision$
 		exit();
 	}
 
+	header("Content-type: text/html; charset=utf-8");
 	if (isset($_POST['preview'])) {
 		include txpath.'/publish.php';
 		textpattern();
