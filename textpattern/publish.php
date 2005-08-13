@@ -113,20 +113,6 @@ $LastChangedRevision$
 	if (@$s == 'file_download') {
 		if (!isset($file_error)) {
 		
-/*			define('no_login_prompt',"1");
-			include txpath . '/include/txp_auth.php';
-		
-			unset($txp_user);
-			doTxpValidate();
-		
-			$privs = (!$txp_user)? 0 : safe_field("privs", "txp_users", "`name`='$txp_user'"); 			
-
-*/			
-			// check perms
-//			$perms = split(',',$permissions);
-
-//			if (in_array($privs,$perms) OR in_array('0',$perms)) {
-//			if (in_array('0',$perms)) {
 				$fullpath = build_file_path($file_base_path,$filename);
 
 				if (is_file($fullpath)) {
@@ -146,9 +132,6 @@ $LastChangedRevision$
 				} else {
 					$file_error = 404;
 				}
-//			} else {
-//				$file_error = 403;
-//			}
 		}
 
 		// deal with error
