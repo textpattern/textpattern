@@ -817,20 +817,6 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function segmentPage($text)
-	{
-		global $page;
-
-		$astyle = 'style="font-size:11px;color:white;background:red;font-family:verdana"';
-		$dstyle = 'style="border:1px solid red;"';
-
-		return preg_replace("/(<div id=\")(?!container)(\w+)(\".*)(>)/U",
-			"$1$2$3 ".$dstyle."$4\n<p><a href=\"".hu.
-			"textpattern/?event=page&#38;step=div_edit&#38;name=".
-			$page."&#38;div=$2\" ".$astyle.">&nbsp;edit&nbsp;</a></p>",$text);
-	}
-
-// -------------------------------------------------------------
 	function evalString($html) 
 	{
 		if (strpos($html, chr(60).'?php') !== false) {
