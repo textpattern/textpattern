@@ -63,7 +63,7 @@ $LastChangedRevision$
 			$cfilter = ($category) 
 				? "and (Category1='".$category."' or Category2='".$category."')":'';
 			$limit = ($limit) ? $limit : $rss_how_many;
-			$limit = min($limit,100);
+			$limit = min($limit,max(100,$rss_how_many));
 
 			$frs = safe_column("name", "txp_section", "in_rss != '1'");
 			
