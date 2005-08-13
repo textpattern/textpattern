@@ -237,13 +237,13 @@ $LastChangedRevision$
 					case 'rss':
 						include txpath.'/publish/rss.php'; exit(rss());
 	
-					case strtolower(urlencode(gTxt('section'))):
+					case strtolower(gTxt('section')):
 						$out['s'] = (ckEx('section',$u2)) ? $u2 : 'default'; break;
 	
-					case strtolower(urlencode(gTxt('category'))):
+					case strtolower(gTxt('category')):
 						$out['c'] = (ckEx('category',$u2)) ? $u2 : ''; break;
 	
-					case urlencode(strtolower(gTxt('author'))):										
+					case urlencode(gTxt('author')):
 						$author_name = (!empty($u2)) ? urldecode($u2) : '';
 						$out['author'] = safe_field('name','txp_users',"RealName like '$author_name'"); break;			
 	
@@ -947,6 +947,7 @@ $LastChangedRevision$
 		//strip off query_string, if present
 		$qs = strpos($req,'?');
 		if ($qs) $req = substr($req, 0, $qs);
+		$req = preg_replace('/index\.php$/', '', $req);
 		$r = explode('/',strtolower($req));
 		$o['u0'] = (!empty($r[0])) ? $r[0] : '';
 		$o['u1'] = (!empty($r[1])) ? $r[1] : '';
