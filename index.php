@@ -8,7 +8,7 @@ $LastChangedRevision$
 	error_reporting(E_ALL);
 	@ini_set("display_errors","1");
 
-	if (@ini_get('register_gobals'))
+	if (@ini_get('register_globals'))
 		foreach ( $_REQUEST as $name => $value )
 			unset($$name);
 	define("txpinterface", "public");
