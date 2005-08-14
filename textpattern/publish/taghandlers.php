@@ -19,7 +19,7 @@ $LastChangedRevision$
 		$s = $sitename;
 		$sep = $separator;
 		if ($id)       return $s.$sep.safe_field('Title','textpattern',"ID = $id");
-		if ($c)        return $s.$sep.$c;
+		if ($c)        return $s.$sep.fetch_category_title($c);
 		if ($q)        return $s.$sep.gTxt('search_results').$sep.' '.$q;
 		if ($pg)       return $s.$sep.gTxt('page').' '.$pg;
 		if ($parentid) return $s.$sep.gTxt('comments_on').' '.
