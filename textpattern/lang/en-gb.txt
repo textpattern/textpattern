@@ -1,4 +1,4 @@
-#@version 1.0rc5;1123351407
+#@version 1.0rc5;1123931708
 #@admin
 add_new_author => Add new author
 and_mailed_to => and mailed to
@@ -186,6 +186,7 @@ txp_version => Textpattern version
 web_domain => Site URL
 #@discuss
 ban => Ban
+cant_ban_blank_ip => Can't ban a blank IP address!
 confirm_comment_deletion => confirm comment deletion
 displayed_comments => Displayed comments
 edit_comment => edit comment
@@ -230,7 +231,6 @@ form_type => Form type (required)
 list_forms => list forms
 you_are_editing_form => You are editing form
 #@image
-add_magnify_icon => Add magnify icon
 cannot_write_directory => Cannot write to directory
 choose_either_width_height_or_both => Indicate width, height, or both
 create_thumbnail => Create thumbnail
@@ -353,7 +353,6 @@ finnish => Finnish
 french => Français
 from_file => Install from file
 from_server => Install from remote server
-german => Deutsch
 gmtoffset => Time Zone
 id_title => /id/title
 img_dir => Image directory
@@ -361,7 +360,6 @@ include_email_atom => Include email in atom feeds?
 install_langfile => To install new languages from file you can download them from {url} and place them inside your ./textpattern/lang/ directory.
 install_language => Install language
 is_dst => Daylight Savings
-italian => Italiano
 language => Language
 leave_text_untouched => Leave text untouched
 locale => Locale
@@ -418,12 +416,10 @@ updated_branch_version_available => There is an updated version of this Textpatt
 update_languages => Update languages
 urls_to_ping => URLs to ping (comma separated)
 url_mode => URL mode
-use_categories => Use categories
 use_comments => Accept comments
 use_dns => Use DNS?
 use_mail_on_feeds_id => Use mail on feeds id?
 use_plugins => Use plugins?
-use_sections => Use sections
 year_month_day_title => /year/month/day/title
 #@public
 active => Active
@@ -645,7 +641,9 @@ checking_database => Checking database connection...
 choose_password => Choose a password
 confirm_site_path => Please confirm the following path
 create_config => create a file called <code>config.php</code> in the <code>/textpattern/</code> directory and paste the following inside:
+db_cant_connect => Can't connect to database
 db_connected => Connected
+db_doesnt_exist => Database {dbname} doesn't exist
 db_must_exist => Note that the database you specify must exist; Textpattern won&#8217;t create it for you.
 did_it => I did it
 errors_during_install => There were {num} errors during the installation. You can ask for help in the Textpattern forums.
