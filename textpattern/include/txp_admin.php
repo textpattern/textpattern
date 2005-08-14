@@ -27,9 +27,6 @@ $levels = array(
 if ($event == 'admin') {
 	require_privs('admin');
 
-	$myprivs = fetch('privs','txp_users','name',$txp_user);	
-
-
 	if(!$step or !in_array($step, array('admin','author_change_pass','author_delete','author_list','author_save','author_save_new','change_email','change_pass'))){
 		admin();
 	} else $step();
@@ -38,15 +35,18 @@ if ($event == 'admin') {
 // -------------------------------------------------------------
 	function admin($message='') 
 	{
-		global $myprivs,$txp_user;
+		global $txp_user;
 		pagetop(gTxt('site_administration'),$message);
 		$themail = fetch('email','txp_users','name',$txp_user);
 
 		echo new_pass_form();
 		echo change_email_form($themail);
-		echo author_list();
-		echo ($myprivs == 1) ? new_author_form() : '';
-		echo ($myprivs == 1) ? reset_author_pass_form() : '';
+		if (has_privs('admin.list'))
+			echo author_list();
+		if (has_privs('admin.edit'))
+			echo new_author_form();
+		if (has_privs('admin.edit'))
+			echo reset_author_pass_form();
 		
 	}
 
@@ -54,6 +54,8 @@ if ($event == 'admin') {
 	function change_email() 
 	{
 		global $txp_user;
+		require_privs('admin.edit');
+
 		$new_email = gps('new_email');
 		$rs = safe_update("txp_users", 
 			"email  = '$new_email'", 
@@ -67,6 +69,8 @@ if ($event == 'admin') {
 // -------------------------------------------------------------
 	function author_save() 
 	{
+		require_privs('admin.edit');
+
 		extract(doSlash(psa(array('privs','user_id','RealName','email'))));
 		$rs = safe_update("txp_users", 
 			"privs = $privs, 
@@ -104,6 +108,8 @@ if ($event == 'admin') {
 // -------------------------------------------------------------
 	function author_save_new() 
 	{
+		require_privs('admin.edit');
+
 		extract(doSlash(psa(array('privs','name','email','RealName'))));
 		$pw = generate_password(6);
 		$nonce = md5( uniqid( rand(), true ) );
@@ -145,6 +151,9 @@ if ($event == 'admin') {
 // -------------------------------------------------------------
 	function send_password($pw,$email) {
 		global $sitename,$txp_user;
+
+		require_privs('admin.edit');
+
 		$myName = $txp_user;
 		extract(safe_row("RealName as myName, email as myEmail", 
 			"txp_users", "name = '$myName'"));
@@ -165,6 +174,8 @@ if ($event == 'admin') {
 	function send_new_password($NewPass,$themail,$name) 
 	{
 		global $txp_user,$sitename;
+
+		require_privs('admin.edit');
 
 		$message = gTxt('greeting').' '.$name.','."\r\n".
 		gTxt('your_password_is').': '.$NewPass."\r\n"."\r\n".
@@ -208,7 +219,8 @@ if ($event == 'admin') {
 // -------------------------------------------------------------
 	function reset_author_pass_form() 
 	{
-		global $myprivs,$txp_user;
+		global $txp_user;
+
 		$them = safe_rows_start("*","txp_users","name != '".doSlash($txp_user)."'");
 		
 		while ($a = nextRow($them)) {
@@ -230,6 +242,8 @@ if ($event == 'admin') {
 // -------------------------------------------------------------
 	function author_change_pass() 
 	{
+		require_privs('admin.edit');
+
 		$name = ps('name');
 		$themail = safe_field("email","txp_users","name='".doSlash($name)."'");
 		$NewPass = generate_password(6);
@@ -262,7 +276,7 @@ if ($event == 'admin') {
 // -------------------------------------------------------------
 	function author_list() 
 	{
-		global $myprivs,$txp_user;
+		global $txp_user;
 		$out[] = hed(gTxt('authors'),3,' align="center"');
 		$out[] = startTable('list');
 		$out[] = tr(
@@ -288,30 +302,30 @@ if ($event == 'admin') {
 				
 				$row[] = '<form action="index.php" method="post">';
 				
-				$row[] = ($myprivs == 1) 
+				$row[] = (has_privs('admin.edit')) 
 					?	td($RealNameInput)
 					:	td($RealName);
 					
 				$row[] = td($name);
 
-				$row[] = ($myprivs == 1) 
+				$row[] = (has_privs('admin.edit')) 
 					?	td($emailInput)
 					:	td($emailhref);
 				
-				$row[] = ($myprivs == 1) 
+				$row[] = (has_privs('admin.edit')) 
 					?	td(privs($privs).popHelp("about_privileges"))
 					:	td(get_priv_level($privs).popHelp("about_privileges"));
 
-				$row[] = ($myprivs == 1) ? td($savelink) : '';
+				$row[] = (has_privs('admin.edit')) ? td($savelink) : '';
 				
-				$row[] = ($myprivs == 1)
+				$row[] = (has_privs('admin.edit'))
 					?	hInput("user_id",$user_id). eInput("admin").sInput('author_save')
 					:	td();
 
 				$row[] = '</form>';
 
 
-				$row[] = ($myprivs == 1)
+				$row[] = (has_privs('admin.edit'))
 					?	td($deletelink,10)
 					:	td();
 
@@ -328,6 +342,8 @@ if ($event == 'admin') {
 // -------------------------------------------------------------
 	function author_delete() 
 	{
+		require_privs('admin.edit');
+
 		$user_id = ps('user_id');
 		$name = fetch('Realname','txp_users','user_id',$user_id);
 		if ($name) {
