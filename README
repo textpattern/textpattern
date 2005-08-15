@@ -1,4 +1,4 @@
-Textpattern 4.0 · 14 Aug 2005
+Textpattern 4.0 - 14 Aug 2005
 
 Released under the Gnu General Public License
 
@@ -8,13 +8,14 @@ Installation
   subdirectory). The top-level index.php should reside in this 
   directory, as should the /textpattern/ directory.
 * Create, or establish the existence of, a working mysql database,
-  load /textpattern/index.php in a browser, and follow the directions.
+  load /textpattern/index.php (or /subpath/textpattern/index.php )
+  in a browser, and follow the directions.
 
 Upgrading
 
-* Simply replace everything in your /textpattern/ directory (except 
-  config.php) and the two files in your main installation directory 
-  (index.php and .htaccess) with the corresponding files in this 
+* Simply replace the two files in your main installation directory 
+  (index.php and .htaccess) and everything in your /textpattern/ 
+  directory (except config.php) with the corresponding files in this
   distribution.
 * When you login to the admin-side, the relevant upgrade script is 
   run automatically. Please take a look into diagnostics to find out 
