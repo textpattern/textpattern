@@ -39,6 +39,8 @@ $LastChangedRevision$
 		$out['method'] = $_SERVER['REQUEST_METHOD'];
 		if (preg_match("/^[^\.]*\.?$mydomain/i", $out['ref'])) $out['ref'] = "";
 		
+		if($out['uri'] == 'favicon.ico') return;
+		
 		if ($r=='refer') {
 			if (trim($out['ref']) != "") { insert_logit($out); }
 		} else insert_logit($out);
