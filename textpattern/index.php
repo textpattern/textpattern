@@ -21,7 +21,6 @@ $LastChangedRevision$
 	define("txpinterface", "admin");
 
 	$thisversion = '4.0';
-	$txp_rc = 1; // should be 0 for a stable version
 
 	if (!@include './config.php') { 
 		include txpath.'/setup/index.php';
