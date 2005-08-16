@@ -1,6 +1,6 @@
-# DirectoryIndex index.php index.html
-# Options +FollowSymLinks
-# RewriteBase /relative/web/path/
+#DirectoryIndex index.php index.html
+#Options +FollowSymLinks
+#RewriteBase /relative/web/path/
 
 <IfModule mod_rewrite.c>
  RewriteEngine On
