@@ -21,7 +21,7 @@ $LastChangedRevision$
 
 	if (!isset($txpcfg['txpath']) )	{ 
 		header('Status: 503 Service Unavailable'); header('HTTP/1.0 503 Service Unavailable');
-		exit('Please check config.php'); 
+		exit('config.php is not ok or not found. If you would like to install, go to [/subdir]/textpattern/setup/'); 
 	}
 
 	include $txpcfg['txpath'].'/publish.php';

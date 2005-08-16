@@ -8,7 +8,7 @@ Installation
   subdirectory). The top-level index.php should reside in this 
   directory, as should the /textpattern/ directory.
 * Create, or establish the existence of, a working mysql database,
-  load /textpattern/index.php (or /subpath/textpattern/index.php )
+  load /textpattern/setup/ (or /subpath/textpattern/setup/ )
   in a browser, and follow the directions.
 
 Upgrading
