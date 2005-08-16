@@ -717,15 +717,7 @@ EOF;
 		safe_insert('txp_prefs',"name='plugin_cache_dir', val='', prefs_id='1', type='1', event='admin', position='".doSlash($maxpos)."', html='text_input'");
 	}
 
-
-	// This should always come last:
-	// 1.0: keep track of updates for devel version
-	safe_delete('txp_prefs',"name = 'dbupdatetime'");
-	safe_insert('txp_prefs', "prefs_id=1, name='dbupdatetime',val='".max(filemtime(__FILE__),time())."', type='2'");
-	global $thisversion;
+	// update version
 	safe_delete('txp_prefs',"name = 'version'");
-	safe_insert('txp_prefs', "prefs_id=1, name='version',val='$thisversion', type='2'");
-
-// updated, baby.
-
+	safe_insert('txp_prefs', "prefs_id=1, name='version',val='4.0', type='2'");
 ?>

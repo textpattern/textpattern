@@ -21,6 +21,7 @@ $LastChangedRevision$
 	define("txpinterface", "admin");
 
 	$thisversion = '4.0';
+	$txp_using_svn = true; // set false for releases
 
 	if (!@include './config.php') { 
 		include txpath.'/setup/index.php';
@@ -73,15 +74,10 @@ $LastChangedRevision$
 		$event = (gps('event') ? gps('event') : 'article');
 		$step = gps('step');
 		
-		if (!$dbversion or $dbversion != $thisversion or 
-				(@filemtime(txpath.'/update/_update.php') > $dbupdatetime)) {
+		if (!$dbversion or ($dbversion != $thisversion) or $txp_using_svn)
+		{
 			define('TXP_UPDATE', 1);
 			include txpath.'/update/_update.php';
-			$event = 'prefs';
-			$step = 'list_languages';
-			// We updated, so let's get the fresh prefs
-			$prefs = get_prefs();
-			extract($prefs);
 		}
 
 		if (!empty($admin_side_plugins) and gps('event') != 'plugin')
