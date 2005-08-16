@@ -74,7 +74,7 @@ $LastChangedRevision$
 		$step = gps('step');
 		
 		if (!$dbversion or $dbversion != $thisversion or 
-				($txp_rc and @filemtime(txpath.'/update/_update.php') > $dbupdatetime)) {
+				(@filemtime(txpath.'/update/_update.php') > $dbupdatetime)) {
 			define('TXP_UPDATE', 1);
 			include txpath.'/update/_update.php';
 			$event = 'prefs';
