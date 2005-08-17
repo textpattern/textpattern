@@ -27,7 +27,7 @@ include_once txpath.'/lib/txplib_misc.php';
 
 header("Content-type: text/html; charset=utf-8");
 
-$rel_siteurl = preg_replace('#^(.*)/textpattern[/setuphindx.]*?$#i','\\1',$_SERVER['SCRIPT_NAME']);
+$rel_siteurl = preg_replace('#^(.*)/textpattern[/setuphindx.]*?$#i','\\1',$_SERVER['PHP_SELF']);
 print <<<eod
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 			"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
