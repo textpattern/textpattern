@@ -134,7 +134,7 @@ $LastChangedRevision$
 			'comment_web_input'     => input('text','web',   $web, $isize,'comment_web_input',"4"),
 			'comment_message_input' => $commentwarn.$textarea,
 			'comment_remember'      => $checkbox,
-			'comment_preview'       => input('submit','preview',gTxt('preview'),'comment_preview','button'),
+			'comment_preview'       => input('submit','preview',gTxt('preview'),'','button'),
 			'comment_submit'        => $comment_submit_button
 		);
 
