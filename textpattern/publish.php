@@ -372,8 +372,8 @@ $LastChangedRevision$
 		$segment = gps('segment');
 		extract($pretext);
 
-		if ($pretext['status'] == '404')
-			exit(gTxt('unknown_section'));
+		#if ($pretext['status'] == '404')
+		#	exit(gTxt('unknown_section'));
 
 		$html = safe_field('user_html','txp_page',"name='$page'");
 		if (!$html) exit(gTxt('unknown_section').' '.$s);
