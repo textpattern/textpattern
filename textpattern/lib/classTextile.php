@@ -452,8 +452,7 @@ class Textile
                 : $line;
             }
 
-				if (trim($line))
-					$line = (!$php and !$txp) ? preg_replace('/^(?!\t|<\/?\w+|$)(.*)/', "\t<p>$1</p>", $line) : $line;
+            $line = (!$php and !$txp) ? preg_replace('/^(?!\t|<\/?pre|<\/?code|$| )(.*)/', "\t<p>$1</p>", $line) : $line;
 
             $line = ($pre or $php) ? str_replace("<br />", "\n", $line):$line;
             if (preg_match('/<\/pre>/i', $line)) {
