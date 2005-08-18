@@ -204,6 +204,8 @@ $LastChangedRevision$
 		$out['subpath'] = $subpath = preg_quote(preg_replace("/http:\/\/.*(\/.*)/Ui","$1",hu),"/");
 		$out['req'] = $req = preg_replace("/^$subpath/i","/",serverSet('REQUEST_URI'));
 
+		$is_404 = 0;
+
 			// if messy vars exist, bypass url parsing
 		if (!$out['id'] && !$out['s']) {
 
@@ -221,7 +223,7 @@ $LastChangedRevision$
 						include txpath.'/publish/rss.php'; exit(rss());
 	
 					case strtolower(gTxt('section')):
-						$out['s'] = (ckEx('section',$u2)) ? $u2 : 'default'; break;
+						$out['s'] = (ckEx('section',$u2)) ? $u2 : ''; break;
 	
 					case strtolower(gTxt('category')):
 						$out['c'] = (ckEx('category',$u2)) ? $u2 : ''; break;
@@ -242,27 +244,36 @@ $LastChangedRevision$
 						switch ($permlink_mode) {
 			
 							case 'section_id_title': 
-								$out['s'] = (ckEx('section',$u1)) ? $u1 : 'default';
+								$out['s'] = (ckEx('section',$u1)) ? $u1 : '';
 								$out['id'] = (is_numeric($u2) && ckExID($u2)) ? $u2 : '';
+								$is_404 = (empty($out['s']) or empty($out['id']));
 							break;
 			
 							case 'year_month_day_title':
 								if (empty($u4)){
-									$out['month'] = "$u1-$u2";
-									if (!empty($u3)) $out['month'].= "-$u3";
-									$out['s'] = 'default';
+									$month = "$u1-$u2";
+									if (!empty($u3)) $month.= "-$u3";
+									if (preg_match('/\d+-\d+(?:-\d+)?/', $month)) {
+										$out['month'] = $month;
+										$out['s'] = 'default';
+									}
+									else {
+										$is_404 = 1;
+									}
 								}else{
 									$when = "$u1-$u2-$u3";
 									$rs = lookupByDateTitle($when,$u4);
 									$out['id'] = (!empty($rs['ID'])) ? $rs['ID'] : '';
 									$out['s'] = (!empty($rs['Section'])) ? $rs['Section'] : '';
+									$is_404 = (empty($out['s']) or empty($out['id']));
 								}
 							break;
 
 							case 'section_title': 
 								$rs = lookupByTitleSection($u2,$u1);
 								$out['id'] = (!empty($rs['ID'])) ? $rs['ID'] : '';
-								$out['s'] = (ckEx('section',$u1)) ? $u1 : 'default';
+								$out['s'] = (ckEx('section',$u1)) ? $u1 : '';
+								$is_404 = (empty($out['s']) or empty($out['id']));
 							break;
 							
 							case 'title_only': 
@@ -270,7 +281,8 @@ $LastChangedRevision$
 								$out['id'] = (!empty($rs['ID'])) ? $rs['ID'] : '';
 								$out['s'] = (!empty($rs['Section'])) ? $rs['Section'] : 
 										# We don't want to miss the /section/ pages	
-										ckEx('section',$u1)? $u1 : 'default';
+										ckEx('section',$u1)? $u1 : '';
+								$is_404 = (empty($out['s']) or empty($out['id']));
 							break;
 
 							case 'id_title': 		
@@ -278,10 +290,12 @@ $LastChangedRevision$
 								{
 									$rs = lookupByID($u1);
 									$out['id'] = (!empty($rs['ID'])) ? $rs['ID'] : '';
-									$out['s'] = (!empty($rs['Section'])) ? $rs['Section'] : 'default';
+									$out['s'] = (!empty($rs['Section'])) ? $rs['Section'] : '';
+									$is_404 = (empty($out['s']) or empty($out['id']));
 								}else{
 									# We don't want to miss the /section/ pages
-									$out['s']= ckEx('section',$u1)? $u1 : 'default';
+									$out['s']= ckEx('section',$u1)? $u1 : '';
+									$is_404 = empty($out['s']);
 								}
 							break;
 			
@@ -296,6 +310,9 @@ $LastChangedRevision$
 			if ($out['id'] && !$out['s'])
 				$out['s'] = safe_field('section', 'textpattern', "ID='".doSlash($out['id'])."'");
 		}
+
+		// Stats: found or not
+		$out['status'] = ($is_404 ? '404' : '200');
 		
 		if ($out['s'] == 'file_download') {
 			// get id of potential filename
@@ -309,8 +326,8 @@ $LastChangedRevision$
 			return $out;
 		}
 		
-
-		$out['s'] = (empty($out['s'])) ? 'default' : $out['s'];
+		if (!$is_404)
+			$out['s'] = (empty($out['s'])) ? 'default' : $out['s'];
 		$s = $out['s'];
 		$id = $out['id'];
 
@@ -354,6 +371,9 @@ $LastChangedRevision$
 		global $pretext,$microstart,$prefs,$qcount,$production_status,$txptrace;
 		$segment = gps('segment');
 		extract($pretext);
+
+		if ($pretext['status'] == '404')
+			exit(gTxt('unknown_section'));
 
 		$html = safe_field('user_html','txp_page',"name='$page'");
 		if (!$html) exit(gTxt('unknown_section').' '.$s);
