@@ -252,7 +252,7 @@ $LastChangedRevision$
 									if (!empty($u3)) $out['month'].= "-$u3";
 									$out['s'] = 'default';
 								}else{
-									$when = safe_strftime('%Y-%m-%d', strtotime("$u1-$u2-$u3"));
+									$when = "$u1-$u2-$u3";
 									$rs = lookupByDateTitle($when,$u4);
 									$out['id'] = (!empty($rs['ID'])) ? $rs['ID'] : '';
 									$out['s'] = (!empty($rs['Section'])) ? $rs['Section'] : '';
