@@ -86,6 +86,7 @@ $LastChangedRevision$
 
 					extract($a);
 					populateArticleData($a);
+					$e = array();
 					
 					$a['posted'] = $uPosted;
 	
