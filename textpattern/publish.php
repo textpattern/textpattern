@@ -389,7 +389,7 @@ $LastChangedRevision$
 		extract($pretext);
 
 		if ($pretext['status'] == '404')
-			txp_die(gTxt('not_found'));
+			txp_die(gTxt('not_found'), '404 Not Found');
 
 		$html = safe_field('user_html','txp_page',"name='$page'");
 		if (!$html) exit(gTxt('unknown_section').' '.$s);
