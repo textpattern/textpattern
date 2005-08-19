@@ -392,7 +392,8 @@ eod;
 			'ru-ru' => '&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081;',
 			'sk-sk' => 'Sloven&#269;ina',
 			'th-th' => '&#3652;&#3607;&#3618;',
-			'nl-nl' => 'Nederlands'
+			'nl-nl' => 'Nederlands',
+			'is-is' => 'Íslenska(Icelandic)'
 		);
 
 		$out = '<select name="lang">';
