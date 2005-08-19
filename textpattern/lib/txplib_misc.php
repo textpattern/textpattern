@@ -1136,5 +1136,30 @@ else
     	return false;
 	}
 
+// -------------------------------------------------------------
+	function txp_die($msg, $status='503 Service Unavailable')
+	{
+		// 503 status might discourage search engines from indexing or caching the error message
+
+		if ($status) {
+			header("Status: $status");
+			header("HTTP/1.1 $status");
+		}
+		$out = <<<eod
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+   <title>Textpattern Error</title>
+</head>
+<body>
+<p align="center" style="margin-top:4em">$msg</p>
+</body>
+</html>
+eod;
+
+		die($out);
+	}
 
 ?>

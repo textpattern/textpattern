@@ -546,6 +546,7 @@ no => no
 no-no => Norsk
 none => None
 nopopup => nopopup
+not_found => The requested URL %s was not found
 numeric_list => Numeric list
 off => off
 older => older
