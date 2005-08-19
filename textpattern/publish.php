@@ -244,13 +244,24 @@ $LastChangedRevision$
 						switch ($permlink_mode) {
 			
 							case 'section_id_title': 
-								$out['s'] = (ckEx('section',$u1)) ? $u1 : '';
-								$out['id'] = (is_numeric($u2) && ckExID($u2)) ? $u2 : '';
-								$is_404 = (empty($out['s']) or empty($out['id']));
+								if (empty($u2)) {
+									$out['s'] = (ckEx('section',$u1)) ? $u1 : '';
+									$is_404 = empty($out['s']);
+								}
+								else {
+									$rs = ckExID($u2);
+									$out['s'] = @$rs['Section'];
+									$out['id'] = @$rs['ID'];
+									$is_404 = (empty($out['s']) or empty($out['id']));
+								}
 							break;
 			
 							case 'year_month_day_title':
-								if (empty($u4)){
+								if (empty($u2)) {
+									$out['s'] = (ckEx('section',$u1)) ? $u1 : '';
+									$is_404 = empty($out['s']);
+								}
+								elseif (empty($u4)){
 									$month = "$u1-$u2";
 									if (!empty($u3)) $month.= "-$u3";
 									if (preg_match('/\d+-\d+(?:-\d+)?/', $month)) {
@@ -270,19 +281,24 @@ $LastChangedRevision$
 							break;
 
 							case 'section_title': 
-								$rs = lookupByTitleSection($u2,$u1);
-								$out['id'] = (!empty($rs['ID'])) ? $rs['ID'] : '';
-								$out['s'] = (ckEx('section',$u1)) ? $u1 : '';
-								$is_404 = (empty($out['s']) or empty($out['id']));
+								if (empty($u2)) {
+									$out['s'] = (ckEx('section',$u1)) ? $u1 : '';
+									$is_404 = empty($out['s']);
+								}
+								else {
+									$rs = lookupByTitleSection($u2,$u1);
+									$out['id'] = @$rs['ID'];
+									$out['s'] = @$rs['Section'];
+									$is_404 = (empty($out['s']) or empty($out['id']));
+								}
 							break;
 							
 							case 'title_only': 
 								$rs = lookupByTitle($u1);
-								$out['id'] = (!empty($rs['ID'])) ? $rs['ID'] : '';
-								$out['s'] = (!empty($rs['Section'])) ? $rs['Section'] : 
-										# We don't want to miss the /section/ pages	
-										ckEx('section',$u1)? $u1 : '';
-								$is_404 = (empty($out['s']) or empty($out['id']));
+								$out['id'] = @$rs['ID'];
+								$out['s'] = (empty($rs['Section']) ? ckEx('section', $u1) : 
+										$rs['Section']);
+								$is_404 = empty($out['s']);
 							break;
 
 							case 'id_title': 		
@@ -890,7 +906,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function ckExID($val,$debug='') 
 	{
-		return safe_field("ID",'textpattern',"ID = ".doSlash($val)." limit 1",$debug);
+		return safe_row("ID,Section",'textpattern',"ID = ".doSlash($val)." limit 1",$debug);
 	}
 
 // -------------------------------------------------------------
