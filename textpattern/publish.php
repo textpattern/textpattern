@@ -190,7 +190,7 @@ $LastChangedRevision$
 			exit(atom());
 		}
 			// set messy variables
-		$out =  makeOut('id','s','c','q','pg','p','month');
+		$out =  makeOut('id','s','c','q','pg','p','month','author');
 
 			// some useful vars for taghandlers, plugins
 		$out['request_uri'] = serverSet('REQUEST_URI');
