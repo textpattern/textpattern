@@ -1064,15 +1064,15 @@ else
 	}
 
 // --------------------------------------------------------------
-	function fetch_category_title($name) 
+	function fetch_category_title($name, $type='article') 
 	{
 		static $cattitles = array();
 
-		if (isset($cattitles[$name]))
-			return $cattitles[$name];
+		if (isset($cattitles[$type][$name]))
+			return $cattitles[$type][$name];
 
-		$f = fetch('title','txp_category','name',doSlash($name));
-		$cattitles[$name] = $f;
+		$f = safe_fetch('title','txp_category',"name='".doSlash($name)."' and type='".doSlash($type)."'");
+		$cattitles[$type][$name] = $f;
 		return $f;
 	}
 
