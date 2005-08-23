@@ -171,7 +171,7 @@ if (!empty($event) and $event == 'article') {
 
 		if (! (   ($oldstatus >= 4 and has_privs('article.edit.published'))
 		    	or ($oldstatus < 4 and has_privs('article.edit'))
-				or ($oldstatus < 4 and $AuthorID==$txp_user and has_privs('article.edit.own'))))
+				or ($oldstatus < 4 and $incoming['AuthorID']==$txp_user and has_privs('article.edit.own'))))
 		{
 				// Not allowed, you silly rabbit, you shouldn't even be here. 
 				// Show default editing screen.
