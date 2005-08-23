@@ -1071,7 +1071,7 @@ else
 		if (isset($cattitles[$type][$name]))
 			return $cattitles[$type][$name];
 
-		$f = safe_fetch('title','txp_category',"name='".doSlash($name)."' and type='".doSlash($type)."'");
+		$f = safe_field('title','txp_category',"name='".doSlash($name)."' and type='".doSlash($type)."'");
 		$cattitles[$type][$name] = $f;
 		return $f;
 	}
