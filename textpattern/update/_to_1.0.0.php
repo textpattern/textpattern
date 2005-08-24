@@ -9,7 +9,7 @@ $LastChangedRevision: 711 $
 	safe_delete("txp_category","name=''");
 	safe_delete("txp_category","name=' '");
 
-	$txpcat = getThings('describe '.PFX.'txp_category');
+	$txpcat = getThings('describe `'.PFX.'txp_category`');
 
 	if (!in_array('id',$txpcat)) {
 		safe_alter('txp_category', 
@@ -33,7 +33,7 @@ $LastChangedRevision: 711 $
 	}
 
 
-	$txp = getThings('describe '.PFX.'textpattern');
+	$txp = getThings('describe `'.PFX.'textpattern`');
 
 	if (!in_array('Keywords',$txp)) {
 		safe_alter("textpattern", "add `Keywords` varchar(255) not null");
@@ -111,13 +111,13 @@ $LastChangedRevision: 711 $
 
 
 
-	$txpsect = getThings('describe '.PFX.'txp_section');
+	$txpsect = getThings('describe `'.PFX.'txp_section`');
 
 	if (!in_array('searchable',$txpsect)) {
 		safe_alter("txp_section", "add `searchable` int(2) not null default 1");
 	}
 
-	$txpuser = getThings('describe '.PFX.'txp_users');
+	$txpuser = getThings('describe `'.PFX.'txp_users`');
 
 	if (!in_array('nonce',$txpuser)) {
 		safe_alter("txp_users", "add `nonce` varchar(64) not null");		
@@ -223,7 +223,7 @@ eod;
 	// 1.0: need to get non-manually set url-only titles into the textpattern table,
 	// so we can start using title as an url search option
 
-	$rs = mysql_query("select ID, Title from ".PFX."textpattern where url_title like ''");
+	$rs = mysql_query("select ID, Title from `".PFX."textpattern` where url_title like ''");
 	
 		while ($a = mysql_fetch_array($rs)){
 			extract($a);
@@ -356,17 +356,17 @@ eod;
 	//eof: non image file upload tab
 
 	// 1.0: improved comment spam nonce
-	$txpnonce = getThings('describe '.PFX.'txp_discuss_nonce');
+	$txpnonce = getThings('describe `'.PFX.'txp_discuss_nonce`');
 	if (!in_array('secret', $txpnonce))
 		safe_alter('txp_discuss_nonce', "ADD `secret` varchar(255) NOT NULL default ''");
 
 	// 1.0: flag for admin-side plugins
-	$txpplugin = getThings('describe '.PFX.'txp_plugin');
+	$txpplugin = getThings('describe `'.PFX.'txp_plugin`');
 	if (!in_array('type', $txpplugin))
 		safe_alter('txp_plugin', "ADD `type` int(2) NOT NULL default '0'");
 
 	// 1.0: log status & method
-	$txplog = getThings('describe '.PFX.'txp_log');
+	$txplog = getThings('describe `'.PFX.'txp_log`');
 	if (!in_array('status', $txplog))
 		safe_alter('txp_log', "ADD `status` int NOT NULL default '200'");
 	if (!in_array('method', $txplog))
@@ -376,7 +376,7 @@ eod;
 
 	// 1.0: need to get Excerpt_html values into the textpattern table,
 	// so, catch empty ones and populate them
-	$rs = mysql_query("select ID, Excerpt, textile_excerpt from ".PFX."textpattern where Excerpt_html like ''");
+	$rs = mysql_query("select ID, Excerpt, textile_excerpt from `".PFX."textpattern` where Excerpt_html like ''");
 	require_once txpath.'/lib/classTextile.php';
 	$textile = new Textile();
 	while ($a = @mysql_fetch_assoc($rs)){		
@@ -444,14 +444,14 @@ eod;
 
 	// 1.0: Unique key and 'type' field for the txp_prefs table
 	$has_prefs_idx = 0;
-	$rs = getRows('show index from '.PFX.'txp_prefs');
+	$rs = getRows('show index from `'.PFX.'txp_prefs`');
 	foreach ($rs as $row)
 		if ($row['Key_name'] == 'prefs_idx')
 			$has_prefs_idx = 1;
 	if (!$has_prefs_idx)
-		safe_query('alter ignore table '.PFX.'txp_prefs add unique prefs_idx(prefs_id,name)');
+		safe_query('alter ignore table `'.PFX.'txp_prefs` add unique prefs_idx(prefs_id,name)');
 		
-	$txpprefs = getThings('describe '.PFX.'txp_prefs');
+	$txpprefs = getThings('describe `'.PFX.'txp_prefs`');
 	if (!in_array('type', $txpprefs))
 		safe_alter('txp_prefs', "add `type` smallint unsigned not null default '2'");
 	# update the updated with default hidden type for old plugins prefs	
@@ -704,7 +704,7 @@ EOF;
 		foreach ($i as $a => $b) {
 			if ($b['Column_name'] == 'ip') $ipidxset = true;
 		}
-		if (!$ipidxset) safe_query("alter table ".PFX."txp_log ADD INDEX `ip` (`ip`)");
+		if (!$ipidxset) safe_query("alter table `".PFX."txp_log` ADD INDEX `ip` (`ip`)");
 
 	// Language selection moves to Manage languages, Hide it from prefs.
 	safe_update("txp_prefs", "type=2", "name='language'");

@@ -46,7 +46,7 @@ $LastChangedRevision$
 
 	$microstart = getmicrotime();
 
-	 if ($connected && safe_query("describe ".PFX."textpattern")) {
+	 if ($connected && safe_query("describe `".PFX."textpattern`")) {
 
 		$dbversion = safe_field('val','txp_prefs',"name = 'version'");
 

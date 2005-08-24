@@ -292,12 +292,12 @@ eod;
 
  		$nonce = md5( uniqid( rand(), true ) );
 
-		mysql_query("INSERT INTO ".PFX."txp_users VALUES
+		mysql_query("INSERT INTO `".PFX."txp_users` VALUES
 			(1,'$name',password(lower('$pass')),'$RealName','$email',1,now(),'$nonce')");
 
-		mysql_query("update ".PFX."txp_prefs set val = '$siteurl' where `name`='siteurl'");
-		mysql_query("update ".PFX."txp_prefs set val = '$lang' where `name`='language'");
-		mysql_query("update ".PFX."txp_prefs set val = '".getlocale($lang)."' where `name`='locale'");
+		mysql_query("update `".PFX."txp_prefs` set val = '$siteurl' where `name`='siteurl'");
+		mysql_query("update `".PFX."txp_prefs` set val = '$lang' where `name`='language'");
+		mysql_query("update `".PFX."txp_prefs` set val = '".getlocale($lang)."' where `name`='locale'");
 
  		echo fbCreate();
 	}

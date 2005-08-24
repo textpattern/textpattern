@@ -62,7 +62,7 @@ $DB = new DB;
 // -------------------------------------------------------------
 	function safe_delete($table, $where, $debug='')
 	{
-		$q = "delete from ".PFX."$table where $where";
+		$q = "delete from `".PFX."$table` where $where";
 		if ($r = safe_query($q,$debug)) {
 			return true;
 		}
@@ -72,7 +72,7 @@ $DB = new DB;
 // -------------------------------------------------------------
 	function safe_update($table, $set, $where, $debug='') 
 	{
-		$q = "update ".PFX."$table set $set where $where";
+		$q = "update `".PFX."$table` set $set where $where";
 		if ($r = safe_query($q,$debug)) {
 			return true;
 		}
@@ -83,7 +83,7 @@ $DB = new DB;
 	function safe_insert($table,$set,$debug='') 
 	{
 		global $DB;
-		$q = "insert into ".PFX."$table set $set";
+		$q = "insert into `".PFX."$table` set $set";
 		if ($r = safe_query($q,$debug)) {
 			$id = mysql_insert_id($DB->link);
 			return ($id === 0 ? true : $id);
@@ -94,7 +94,7 @@ $DB = new DB;
 // -------------------------------------------------------------
 	function safe_alter($table, $alter, $debug='') 
 	{
-		$q = "alter table ".PFX."$table $alter";
+		$q = "alter table `".PFX."$table` $alter";
 		if ($r = safe_query($q,$debug)) {
 			return true;
 		}
@@ -104,7 +104,7 @@ $DB = new DB;
 // -------------------------------------------------------------
 	function safe_optimize($table, $debug='') 
 	{
-		$q = "optimize table ".PFX."$table";
+		$q = "optimize table `".PFX."$table`";
 		if ($r = safe_query($q,$debug)) {
 			return true;
 		}
@@ -114,7 +114,7 @@ $DB = new DB;
 // -------------------------------------------------------------
 	function safe_repair($table, $debug='') 
 	{
-		$q = "repair table ".PFX."$table";
+		$q = "repair table `".PFX."$table`";
 		if ($r = safe_query($q,$debug)) {
 			return true;
 		}
@@ -124,7 +124,7 @@ $DB = new DB;
 // -------------------------------------------------------------
 	function safe_field($thing, $table, $where, $debug='') 
 	{
-		$q = "select $thing from ".PFX."$table where $where";
+		$q = "select $thing from `".PFX."$table` where $where";
 		$r = safe_query($q,$debug);
 		if (@mysql_num_rows($r) > 0) {
 			$f = mysql_result($r,0);
@@ -137,7 +137,7 @@ $DB = new DB;
 // -------------------------------------------------------------
 	function safe_column($thing, $table, $where, $debug='') 
 	{
-		$q = "select $thing from ".PFX."$table where $where";
+		$q = "select $thing from `".PFX."$table` where $where";
 		$rs = getRows($q,$debug);
 		if ($rs) {
 			foreach($rs as $a) {
@@ -152,7 +152,7 @@ $DB = new DB;
 // -------------------------------------------------------------
 	function safe_row($things, $table, $where, $debug='') 
 	{
-		$q = "select $things from ".PFX."$table where $where";
+		$q = "select $things from `".PFX."$table` where $where";
 		$rs = getRow($q,$debug);
 		if ($rs) {
 			return $rs;
@@ -164,7 +164,7 @@ $DB = new DB;
 // -------------------------------------------------------------
 	function safe_rows($things, $table, $where, $debug='') 
 	{
-		$q = "select $things from ".PFX."$table where $where";
+		$q = "select $things from `".PFX."$table` where $where";
 		$rs = getRows($q,$debug);
 		if ($rs) {
 			return $rs;
@@ -175,20 +175,20 @@ $DB = new DB;
 // -------------------------------------------------------------
 	function safe_rows_start($things, $table, $where, $debug='') 
 	{
-		$q = "select $things from ".PFX."$table where $where";
+		$q = "select $things from `".PFX."$table` where $where";
 		return startRows($q,$debug);
 	}
 
 //-------------------------------------------------------------
 	function safe_count($table, $where, $debug='') 
 	{
-		return getThing("select count(*) from ".PFX."$table where $where",$debug);
+		return getThing("select count(*) from `".PFX."$table` where $where",$debug);
 	}
 
 // -------------------------------------------------------------
 	function safe_show($thing, $table, $debug='') 
 	{
-		$q = "show $thing from ".PFX."$table";
+		$q = "show $thing from `".PFX."$table`";
 		$rs = getRows($q,$debug);
 		if ($rs) {
 			return $rs;
@@ -200,7 +200,7 @@ $DB = new DB;
 //-------------------------------------------------------------
 	function fetch($col,$table,$key,$val,$debug='') 
 	{
-		$q = "select $col from ".PFX."$table where `$key` = '$val' limit 1";
+		$q = "select $col from `".PFX."$table` where `$key` = '$val' limit 1";
 		if ($r = safe_query($q,$debug)) {
 			$thing = (mysql_num_rows($r) > 0) ? mysql_result($r,0) : '';
 			mysql_free_result($r);
@@ -274,7 +274,7 @@ $DB = new DB;
 //-------------------------------------------------------------
 	function getCount($table,$where,$debug='') 
 	{
-		return getThing("select count(*) from ".PFX."$table where $where",$debug);
+		return getThing("select count(*) from `".PFX."$table` where $where",$debug);
 	}
 
 // -------------------------------------------------------------

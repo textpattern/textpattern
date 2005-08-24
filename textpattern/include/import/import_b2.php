@@ -111,7 +111,7 @@
 				$a['Body_html'] = $textile->textileThis($a['Body']);
 				extract(array_slash($a));
 				$q = mysql_query("
-					insert into ".PFX."textpattern set 
+					insert into `".PFX."textpattern` set 
 					ID        = '$ID',
 					Posted    = '$Posted',
 					Title     = '$Title',
@@ -143,7 +143,7 @@
 					$message = utf8_encode($message);
 				$message = nl2br($message);
 		
-				$q = mysql_query("insert into ".PFX."txp_discuss values 
+				$q = mysql_query("insert into `".PFX."txp_discuss` values 
 					($discussid,$parentid,'$name','$email','$web','$ip','$posted','$message',1)",
 				$txplink) or $results[]= mysql_error($q);
 		

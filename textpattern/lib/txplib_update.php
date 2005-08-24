@@ -38,7 +38,7 @@ function install_language_from_file($lang)
 						foreach ($data as $name => $value)
 						{
 							$value = addslashes($value);
-							$exists = mysql_query('SELECT name, lastmod FROM '.PFX."txp_lang WHERE `lang`='".$lang."' AND `name`='$name' AND `event`='$event'");
+							$exists = mysql_query('SELECT name, lastmod FROM `'.PFX."txp_lang` WHERE `lang`='".$lang."' AND `name`='$name' AND `event`='$event'");
 							if ($exists) $exists = mysql_fetch_row($exists);
 							if ($exists[1])
 							{

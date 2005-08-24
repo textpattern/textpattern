@@ -117,7 +117,7 @@
 			            extract($a);
 			            //can not use array slash due to way on which comments are selected
 			            $q = mysql_query("
-			                insert into ".PFX."textpattern set
+			                insert into `".PFX."textpattern` set
 			                Posted    = '".addslashes($Posted)."',
 			                Title     = '".addslashes($textile->TextileThis($Title,1))."',
 			                url_title = '".stripSpace($Title)."',
@@ -143,7 +143,7 @@
 							            //The ugly workaroud again
 							            $message = nl2br($message);
 							    
-							            $r = mysql_query("insert into ".PFX."txp_discuss set					
+							            $r = mysql_query("insert into `".PFX."txp_discuss` set					
 							                parentid = '$insertID',
 							                name = '$name',
 							                email = '$email',
@@ -178,7 +178,7 @@
 			            	$left++;
 			            	$right++;
 				            $q = mysql_query("
-				            insert into ".PFX."txp_category set
+				            insert into `".PFX."txp_category` set
 				             name = '$catname',
 				             type = 'article',
 				             parent = 'root',

@@ -293,7 +293,7 @@ $LastChangedRevision$
 		}
 
 		$table_names = array(PFX.'textpattern');
-		$result = safe_query("SHOW TABLES LIKE '".PFX."txp\_%'");
+		$result = safe_query("SHOW TABLES LIKE `".PFX."txp\_%`");
 		while ($row = mysql_fetch_row($result))
 		{
 			$table_names[] = $row[0];
@@ -301,7 +301,7 @@ $LastChangedRevision$
 		$table_msg = array();
 		foreach ($table_names as $table)
 		{
-			$ctr = safe_query("SHOW CREATE TABLE ". $table);
+			$ctr = safe_query("SHOW CREATE TABLE `". $table."`");
 			if (!$ctr) 
 			{
 				unset($table_names[$table]);

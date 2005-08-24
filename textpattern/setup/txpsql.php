@@ -15,7 +15,7 @@ if (!defined('TXP_INSTALL'))
 mysql_connect($dhost,$duser,$dpass);
 mysql_select_db($ddb);
 
-$result = mysql_query("describe ".PFX."textpattern");
+$result = mysql_query("describe `".PFX."textpattern`");
 if ($result) die("Textpattern database table already exist. Can't run setup.");
 
 
