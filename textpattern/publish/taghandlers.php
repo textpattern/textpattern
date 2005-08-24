@@ -584,8 +584,12 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function link_to_home($atts, $thing) 
 	{
+		extract(lAtts(array(
+			'class' => ''
+		),$atts));
+		$cl = ($class) ? ' class="'.$class.'"' : '';
 		if (!empty($thing)) {
-			return '<a href="'.hu.'" class="noline">'.parse($thing).'</a>';
+			return '<a href="'.hu.'"'.$cl.'>'.parse($thing).'</a>';
 		}
 	}
 
