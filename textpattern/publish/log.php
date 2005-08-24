@@ -15,11 +15,11 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function logit($r='')
 	{
-		global $siteurl, $prefs;
+		global $siteurl, $prefs, $pretext;
 		$mydomain = str_replace('www.','',preg_quote($siteurl,"/"));
-		$out['uri'] = $_SERVER['REQUEST_URI'];
-		$out['ref'] = clean_url(str_replace("http://","",serverset('HTTP_REFERER')));
-		$host = $ip = $_SERVER['REMOTE_ADDR'];
+		$out['uri'] = @$pretext['request_uri'];
+		$out['ref'] = clean_url(str_replace("http://","",serverSet('HTTP_REFERER')));
+		$host = $ip = serverSet('REMOTE_ADDR');
 
 		if (!empty($prefs['use_dns'])) {
 			// A crude rDNS cache
@@ -28,7 +28,7 @@ $LastChangedRevision$
 			}
 			else {
 				// Double-check the rDNS
-				$host = @gethostbyaddr($_SERVER['REMOTE_ADDR']);
+				$host = @gethostbyaddr(serverSet('REMOTE_ADDR'));
 				if ($host != $ip and @gethostbyname($host) != $ip)
 					$host = $ip;
 			}
@@ -36,7 +36,7 @@ $LastChangedRevision$
 		$out['ip'] = $ip;
 		$out['host'] = $host;
 		$out['status'] = 200; // FIXME
-		$out['method'] = $_SERVER['REQUEST_METHOD'];
+		$out['method'] = serverSet('REQUEST_METHOD');
 		if (preg_match("/^[^\.]*\.?$mydomain/i", $out['ref'])) $out['ref'] = "";
 		
 		if($out['uri'] == 'favicon.ico') return;
