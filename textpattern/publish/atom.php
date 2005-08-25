@@ -98,8 +98,8 @@ $LastChangedRevision$
 					$thisauthor = safe_field("RealName","txp_users","name='$AuthorID'");
 					$e['thisauthor'] = tag(n.t.t.t.tag(htmlspecialchars($thisauthor),'name').n.t.t,'author');
 		
-					$e['issued'] = tag(gmdate("Y-m-d\TH:i:s\Z",$uPosted),'published');
-					$e['modified'] = tag(gmdate("Y-m-d\TH:i:s\Z",$uLastMod),'updated');
+					$e['issued'] = tag(gmdate('Y-m-d\TH:i:s\Z',$uPosted),'published');
+					$e['modified'] = tag(gmdate('Y-m-d\TH:i:s\Z',$uLastMod),'updated');
 
 					$escaped_title = safe_hed($Title);
 					$escaped_title = preg_replace("/&(?![#a-z0-9]+;)/i",'&amp;', $escaped_title);
@@ -160,8 +160,8 @@ $LastChangedRevision$
 					$url = preg_replace("/&((?U).*)=/","&amp;\\1=",$url);
 					$e['link'] = '<link'.r_relalt.t_texthtml.' href="'.$url.'" />';
 
-					$e['issued'] = tag(gmdate("Y-m-d\TH:i:s\Z",$date),'published');
-					$e['modified'] = tag(gmdate("Y-m-d\TH:i:s\Z",$date),'updated');
+					$e['issued'] = tag(gmdate('Y-m-d\TH:i:s\Z',$date),'published');
+					$e['modified'] = tag(gmdate('Y-m-d\TH:i:s\Z',$date),'updated');
 					$e['id'] = tag('tag:'.$mail_or_domain.','.$feed_time.':'.$id,'id');
 
 					$articles[$id] = tag(n.t.t.join(n.t.t,$e).n,'entry');
