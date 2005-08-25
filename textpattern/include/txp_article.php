@@ -71,6 +71,8 @@ if (!empty($event) and $event == 'article') {
 			$incoming['Body_html'] = $textile->TextileThis($incoming['Body']);
 		}
 		
+		$incoming['Title_plain'] = $incoming['Title'];
+
 		$incoming['Title'] = $textile->TextileThis($incoming['Title'],'',1);
 
 		if ($incoming['textile_excerpt']) {
@@ -94,7 +96,8 @@ if (!empty($event) and $event == 'article') {
 				$textile_excerpt = (!$textile_excerpt) ? 0 : 1;
 				
 				if (!has_privs('article.publish') && $Status>=4) $Status = 3;
-				if (empty($url_title)) $url_title = stripSpace($Title, 1);  	
+				if (empty($url_title)) $url_title = stripSpace($Title_plain, 1);  	
+
 				safe_insert(
 				   "textpattern",
 				   "Title           = '$Title',
@@ -182,6 +185,8 @@ if (!empty($event) and $event == 'article') {
 		include_once $txpcfg['txpath'].'/lib/classTextile.php';
 		$textile = new Textile();
 
+		$incoming['Title_plain'] = $incoming['Title'];
+
 		if ($use_textile==0 or !$incoming['textile_body']) {
 
 			$incoming['Body_html'] = trim($incoming['Body']);
@@ -216,7 +221,7 @@ if (!empty($event) and $event == 'article') {
 		
 		$textile_body = (!$textile_body) ? 0 : 1;
 		$textile_excerpt = (!$textile_excerpt) ? 0 : 1;
-		if (empty($url_title)) $url_title = stripSpace($Title, 1);  
+		if (empty($url_title)) $url_title = stripSpace($Title_plain, 1);  
 		safe_update("textpattern", 
 		   "Title           = '$Title',
 			Body            = '$Body',
