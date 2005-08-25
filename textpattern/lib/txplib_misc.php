@@ -519,9 +519,9 @@ else
 				strtolower(
 					preg_replace('/[\s\-]+/', '-', trim(preg_replace('/[^\w\s\-]/', '', $text)))
 				);
-				return preg_replace("/[^[:alnum:]\-]/","",$text);
+				return preg_replace("/[^A-Za-z0-9\-]/","",$text);
 			} else {
-				return preg_replace("/[^[:alnum:]]/","",$text);
+				return preg_replace("/[^A-Za-z0-9]/","",$text);
 			}
 		}
 	}
