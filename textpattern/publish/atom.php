@@ -181,7 +181,7 @@ $LastChangedRevision$
 			}
 		  
 			$last = fetch('unix_timestamp(val)','txp_prefs','name','lastmod');
-			$last = gmdate("D, d M Y H:i:s \G\M\T",$last);
+			$last = gmdate('D, d M Y H:i:s \G\M\T',$last);
 			header("Last-Modified: $last");
 			$expires = gmdate('D, d M Y H:i:s \G\M\T', time()+(3600*1));
 			header("Expires: $expires");
