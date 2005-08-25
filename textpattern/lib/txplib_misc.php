@@ -515,10 +515,11 @@ else
 			$text = preg_replace("/(^|&\S+;)|(<[^>]*>)/U","",$text);		
 
 			if ($prefs['permalink_title_format']) {
-				return 
-				urlencode(strtolower(
-					preg_replace('/[^\w\-]+/', '', preg_replace('/[\s\-]+/', '-', $text))
-				));
+				$text =  
+				strtolower(
+					preg_replace('/[\s\-]+/', '-', trim(preg_replace('/[^\w\s\-]/', '', $text)))
+				);
+				return preg_replace("/[^[:alnum:]\-]/","",$text);
 			} else {
 				return preg_replace("/[^[:alnum:]]/","",$text);
 			}
