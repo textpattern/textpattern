@@ -561,4 +561,7 @@
 ; language-specific overrides
 [fi-fi]
 ä = "a"
-
+ä = "a"
+ö = "o"
+Ä = "A"
+Ö = "O"
