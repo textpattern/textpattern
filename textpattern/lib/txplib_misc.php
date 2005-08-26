@@ -610,7 +610,7 @@ else
 
 
 		if (is_file(txpath.'/lib/i18n-ascii.txt')) {
-			$i18n = parse_ini_file(txpath.'/lib/i18n-ascii.txt');
+			$i18n = parse_ini_file(txpath.'/lib/i18n-ascii.txt', true);
 			# load the global map
 			if (@is_array($i18n['default'])) {
 				$array = array_merge($array,$i18n['default']);
