@@ -527,7 +527,7 @@ else
 	}
 
 // -------------------------------------------------------------
-	function dumbDown($str) 
+	function dumbDown($str, $lang=NULL) 
 	{
 		$array = array( // nasty, huh?. 
 			'&#192;'=>'A','&Agrave;'=>'A','&#193;'=>'A','&Aacute;'=>'A','&#194;'=>'A','&Acirc;'=>'A',
@@ -611,7 +611,16 @@ else
 
 		if (is_file(txpath.'/lib/i18n-ascii.txt')) {
 			$i18n = parse_ini_file(txpath.'/lib/i18n-ascii.txt');
-			$array = array_merge($array,$i18n);
+			# load the global map
+			if (@is_array($i18n['default'])) {
+				$array = array_merge($array,$i18n['default']);
+				# language overrides
+				if (@is_array($i18n[LANG]))
+					$array = array_merge($array,$i18n[LANG]);
+			}
+			# load an old file (no sections) just in case
+			else
+				$array = array_merge($array,$i18n);
 		}
 
 		return strtr($str, $array);

@@ -1,3 +1,5 @@
+; global transliteration
+[default]
 À = "A"
 Á = "A"
 Â = "A"
@@ -555,3 +557,8 @@
 ъ = ""
 Ь = ""
 ь = ""
+
+; language-specific overrides
+[fi-fi]
+ä = "a"
+
