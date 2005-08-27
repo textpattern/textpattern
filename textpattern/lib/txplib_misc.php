@@ -615,8 +615,9 @@ else
 			if (@is_array($i18n['default'])) {
 				$array = array_merge($array,$i18n['default']);
 				# language overrides
-				if (@is_array($i18n[LANG]))
-					$array = array_merge($array,$i18n[LANG]);
+				$lang = empty($lang) ? LANG : $lang;
+				if (@is_array($i18n[$lang]))
+					$array = array_merge($array,$i18n[$lang]);
 			}
 			# load an old file (no sections) just in case
 			else
