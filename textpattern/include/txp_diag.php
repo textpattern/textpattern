@@ -2,7 +2,7 @@
 
 /*
 	This is Textpattern
-
+ 
 	Copyright 2005 by Dean Allen
 	www.textpattern.com
 	All rights reserved
