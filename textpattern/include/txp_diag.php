@@ -107,11 +107,6 @@ $LastChangedRevision$
 		?	gTxt('dns_lookup_fails').cs. $mydomain
 		:	'',
 
-		'path_not_doc_root' =>
-		(0 !== strncmp($real_doc_root, realpath($path_to_site), strlen($real_doc_root)))
-		?	gTxt('path_not_doc_root').' [ '.$real_doc_root.' ] '
-		:	'',
-
 		'path_to_site_inacc' =>
 		(!@is_dir($path_to_site))
 		?	gTxt('path_to_site_inacc').cs.$path_to_site
