@@ -235,7 +235,7 @@ $LastChangedRevision$
 
 		gTxt('last_update').cs.gmstrftime($fmt_date, $dbupdatetime).'/'.gmstrftime($fmt_date, @filemtime(txpath.'/update/_update.php')).n,
 
-		gTxt('document_root').cs.$_SERVER['DOCUMENT_ROOT']. (($real_doc_root != $_SERVER['DOCUMENT_ROOT']) ? ' ('.$real_doc_root.')' : '') .n,
+		gTxt('document_root').cs.@$_SERVER['DOCUMENT_ROOT']. (($real_doc_root != @$_SERVER['DOCUMENT_ROOT']) ? ' ('.$real_doc_root.')' : '') .n,
 
 		'$path_to_site'.cs.$path_to_site.n,
 
