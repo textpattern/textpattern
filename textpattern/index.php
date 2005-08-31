@@ -23,10 +23,12 @@ $LastChangedRevision$
 	$thisversion = '4.0';
 	$txp_using_svn = true; // set false for releases
 
+	ob_start(NULL, 2048);
 	if (!@include './config.php') { 
+		ob_end_clean();
 		include txpath.'/setup/index.php';
 		exit();
-	}
+	} else ob_end_clean();
 
 	header("Content-type: text/html; charset=utf-8");
 	if (isset($_POST['preview'])) {
