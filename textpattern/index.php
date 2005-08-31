@@ -106,7 +106,7 @@ $LastChangedRevision$
 		end_page();
 
 	} else {
-		include txpath.'/setup/index.php';
-		exit();
+		txp_die('DB-Connect was succesful, but the textpattern-table was not found.',
+				'503 Service Unavailable');
 	}
 ?>
