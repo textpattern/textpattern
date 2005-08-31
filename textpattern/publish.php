@@ -221,18 +221,20 @@ $LastChangedRevision$
 
 					case 'rss':
 						include txpath.'/publish/rss.php'; exit(rss());
-	
-					case gTxt('section'):
+
+					// urldecode(strtolower(urlencode())) looks ugly but is the only way to
+					// make it multibyte-safe without breaking backwards-compatibility
+					case urldecode(strtolower(urlencode(gTxt('section')))):
 						$out['s'] = (ckEx('section',$u2)) ? $u2 : ''; break;
 	
-					case gTxt('category'):
+					case urldecode(strtolower(urlencode(gTxt('category')))):
 						$out['c'] = (ckEx('category',$u2)) ? $u2 : ''; break;
 	
-					case urlencode(gTxt('author')):
+					case urldecode(strtolower(urlencode(gTxt('author')))):
 						$author_name = (!empty($u2)) ? urldecode($u2) : '';
 						$out['author'] = safe_field('name','txp_users',"RealName like '$author_name'"); break;			
 	
-					case gTxt('file_download'):
+					case urldecode(strtolower(urlencode(gTxt('file_download')))):
 						$out['s'] = 'file_download';
 						$out['id'] = (!empty($u2)) ? $u2 : ''; break;
 					
