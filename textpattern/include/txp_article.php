@@ -170,11 +170,11 @@ if (!empty($event) and $event == 'article') {
 		extract(get_prefs());
 		$incoming = psa($vars);
 
-		$oldstatus = fetch('Status','textpattern','ID',$incoming['ID']);
+		$oldArticle = safe_row('Status, url_title, Title','textpattern','ID = '.(int)$incoming['ID']);
 
-		if (! (   ($oldstatus >= 4 and has_privs('article.edit.published'))
-		    	or ($oldstatus < 4 and has_privs('article.edit'))
-				or ($oldstatus < 4 and $incoming['AuthorID']==$txp_user and has_privs('article.edit.own'))))
+		if (! (   ($oldArticle['Status'] >= 4 and has_privs('article.edit.published'))
+		    	or ($oldArticle['Status'] < 4 and has_privs('article.edit'))
+				or ($oldArticle['Status'] < 4 and $incoming['AuthorID']==$txp_user and has_privs('article.edit.own'))))
 		{
 				// Not allowed, you silly rabbit, you shouldn't even be here. 
 				// Show default editing screen.
@@ -221,7 +221,15 @@ if (!empty($event) and $event == 'article') {
 		
 		$textile_body = (!$textile_body) ? 0 : 1;
 		$textile_excerpt = (!$textile_excerpt) ? 0 : 1;
-		if (empty($url_title)) $url_title = stripSpace($Title_plain, 1);  
+		if (empty($url_title))
+		{
+			$url_title = stripSpace($Title_plain, 1);
+		}
+		elseif ( ($oldArticle['Status'] < 4) && ($oldArticle['url_title'] == stripSpace($oldArticle['Title'],1)) )
+		{
+			$url_title = stripSpace($Title_plain, 1);
+		}
+
 		safe_update("textpattern", 
 		   "Title           = '$Title',
 			Body            = '$Body',
@@ -257,7 +265,7 @@ if (!empty($event) and $event == 'article') {
 		);
 
 		if($Status >= 4) {
-			if ($oldstatus < 4) {
+			if ($oldArticle['Status'] < 4) {
 				include_once $txpcfg['txpath'].'/lib/IXRClass.php';
 				
 				if ($ping_textpattern_com) {
