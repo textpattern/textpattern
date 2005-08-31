@@ -176,6 +176,12 @@ eod;
 		extract($carry);
 
 		$GLOBALS['textarray'] = setup_load_lang($lang);
+		// FIXME, remove when all languages are updated with this string
+		if (!isset($GLOBALS['textarray']['prefix_bad_characters']))
+			$GLOBALS['textarray']['prefix_bad_characters'] = 
+				'The Table prefix {dbprefix} contains characters that are not allowed.<br />'.
+				'The first character must match one of <b>a-zA-Z_</b> and all following 
+				 characters must match one of <b>a-zA-Z0-9_</b>';
 
 		echo graf(gTxt("checking_database"));
 		if (!($mylink = mysql_connect($dhost,$duser,$dpass))){
@@ -183,6 +189,10 @@ eod;
 		}
 
 		echo graf(gTxt('db_connected'));
+
+		if (! ($dprefix == '' || preg_match('#^[a-zA-Z_][a-zA-Z0-9_]*$#',$dprefix)) ) {
+			exit(graf(str_replace("{dbprefix}",strong($dprefix),gTxt("prefix_bad_characters"))));
+		}
 
 		if (!$mydb = mysql_select_db($ddb)) {
 			exit(graf(str_replace("{dbname}",strong($ddb),gTxt("db_doesnt_exist"))));
