@@ -8,7 +8,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function pagetop($pagetitle,$message="")
 	{
-		global $css_mode,$siteurl,$txp_user,$event;
+		global $css_mode,$siteurl,$sitename,$txp_user,$event;
 		$area = gps('area');
 		$event = (!$event) ? 'article' : $event;
 		$bm = gps('bm');
@@ -28,7 +28,7 @@ $LastChangedRevision$
 	<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 	<head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-	<title>Textpattern &#8250; <?php echo $pagetitle?></title>
+	<title>Txp &#8250; <?php echo $sitename ?> &#8250; <?php echo $pagetitle?></title>
 	<link href="textpattern.css" rel="Stylesheet" type="text/css" />
 	<script language="JavaScript" type="text/javascript">
 	<!--

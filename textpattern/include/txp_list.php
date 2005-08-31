@@ -40,7 +40,7 @@ $LastChangedRevision$
 		global $statuses,$step;
 		$sesutats = array_flip($statuses);
 		
-		pagetop("Textpattern",$message);
+		pagetop(gTxt('tab_list'),$message);
 
 		$total = getCount('textpattern',"1"); 
 		$limit = ($article_list_pageby) ? $article_list_pageby : 25;

@@ -284,8 +284,6 @@ if (!empty($event) and $event == 'article') {
 //--------------------------------------------------------------
 	function article_edit($message="")
 	{
-		
-		pagetop("Textpattern",$message);
 		global $txpcfg,$txp_user,$vars;
 
 		extract(get_prefs());
@@ -364,6 +362,7 @@ if (!empty($event) and $event == 'article') {
 			$next_id = checkIfNeighbour('next',$sPosted);
 		}
 
+		pagetop($Title,$message);
 		echo '<form action="index.php" method="post" name="article">';
 
 		if (!empty($store_out)) echo hInput('store',base64_encode(serialize($store_out)));		
