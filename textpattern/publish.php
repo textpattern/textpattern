@@ -222,17 +222,17 @@ $LastChangedRevision$
 					case 'rss':
 						include txpath.'/publish/rss.php'; exit(rss());
 	
-					case strtolower(gTxt('section')):
+					case gTxt('section'):
 						$out['s'] = (ckEx('section',$u2)) ? $u2 : ''; break;
 	
-					case strtolower(gTxt('category')):
+					case gTxt('category'):
 						$out['c'] = (ckEx('category',$u2)) ? $u2 : ''; break;
 	
 					case urlencode(gTxt('author')):
 						$author_name = (!empty($u2)) ? urldecode($u2) : '';
 						$out['author'] = safe_field('name','txp_users',"RealName like '$author_name'"); break;			
 	
-					case strtolower(gTxt('file_download')):
+					case gTxt('file_download'):
 						$out['s'] = 'file_download';
 						$out['id'] = (!empty($u2)) ? $u2 : ''; break;
 					
