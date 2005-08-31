@@ -161,7 +161,7 @@ $LastChangedRevision$
 	{
 		global $vars;
 		extract(doSlash(gpsa($vars)));
-		if ($savenew) {
+		if ($savenew && $name) {
 			if (safe_insert("txp_form", "Form='$Form', type='$type', name='$name'")) {
 				form_edit(messenger('form',$name,'created'));
 			} else form_edit(messenger('form',$name,'already_exists'));
