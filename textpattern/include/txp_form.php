@@ -159,9 +159,12 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function form_save() 
 	{
-		global $vars;
+		global $vars, $step;
 		extract(doSlash(gpsa($vars)));
-		if ($savenew && $name) {
+		if (!$name) {
+			$step = 'form_create';
+			form_edit();
+		} elseif ($savenew) {
 			if (safe_insert("txp_form", "Form='$Form', type='$type', name='$name'")) {
 				form_edit(messenger('form',$name,'created'));
 			} else form_edit(messenger('form',$name,'already_exists'));
