@@ -112,23 +112,36 @@ $LastChangedRevision$
 	// we are dealing with a download
 	if (@$s == 'file_download') {
 		if (!isset($file_error)) {
-		
+
 				$fullpath = build_file_path($file_base_path,$filename);
 
 				if (is_file($fullpath)) {
-					// record download
-					if (isset($downloads)) {
-						safe_update("txp_file", "downloads=downloads+1", "id='$id'");
-					}
-					
+
 					// discard any error php messages
 					ob_clean();
-					
+					$filesize = filesize($fullpath); $sent = 0;
 					header('Content-Description: File Download');
 					header('Content-Type: application/octet-stream');
-					header('Content-Length: ' . filesize($fullpath));
+					header('Content-Length: ' . $filesize);
 					header('Content-Disposition: attachment; filename="' . basename($filename) . '"');
-					readfile($fullpath); 
+					@ini_set("zlib.output_compression", "Off");
+					@set_time_limit(0);
+					@ignore_user_abort(true);
+					if ($file = fopen($fullpath, 'rb')) {
+						while(!feof($file) and (connection_status()==0)) {
+							echo fread($file, 1024*64); $sent+=(1024*64);
+							ob_flush();
+							flush();
+						}
+						fclose($file);
+						// record download
+						if ((connection_status()==0) and !connection_aborted() ) {
+							safe_update("txp_file", "downloads=downloads+1", "id='$id'");
+						} else {
+							$pretext['request_uri'] .= "#aborted-at-".floor($sent*100/$filesize)."%";
+							logit();
+						}
+					}      				
 				} else {
 					$file_error = 404;
 				}
@@ -154,27 +167,25 @@ $LastChangedRevision$
 	}
 	
 
-	if(!isset($nolog)) {
+	if(!isset($nolog) && $status != '404') {
 		if($logging == 'refer') { 
 			logit('refer'); 
 		} elseif ($logging == 'all') {
 			logit();
 		}
 	}
-/*
+
 	if($send_lastmod) {
 		$last = gmdate("D, d M Y H:i:s \G\M\T",$lastmod);
-		ob_start();
 		header("Last-Modified: $last");
 
 		$hims = serverset('HTTP_IF_MODIFIED_SINCE');
 		if ($hims == $last) {
-			ob_start();
 			header("HTTP/1.1 304 Not Modified");
 			exit; 
 		}
 	}
-*/
+
 // -------------------------------------------------------------
 	function preText($s,$prefs) 
 	{
