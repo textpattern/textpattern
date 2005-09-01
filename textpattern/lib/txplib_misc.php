@@ -750,12 +750,16 @@ else
 		}
 		else
 		{
+			$sep = (!is_windows()) ? "\n" : "\r\n";
+	        $body = str_replace("\r\n", "\n", $body);
+	        $body = str_replace("\r", "\n", $body);
+	        $body = str_replace("\n", $sep, $body);
 			return mail($to_address, $subject, $body,
-			 "From: $RealName <$email>\r\n"
-			."Reply-To: ". ((isset($reply_to)) ? $reply_to : "$RealName <$email>") . "\r\n"
-			."X-Mailer: Textpattern\r\n"
-			."Content-Transfer-Encoding: 8bit\r\n"
-			."Content-Type: text/plain; charset=\"$charset\"\r\n");		
+			 "From: $RealName <$email>$sep"
+			."Reply-To: ". ((isset($reply_to)) ? $reply_to : "$RealName <$email>") . $sep
+			."X-Mailer: Textpattern$sep"
+			."Content-Transfer-Encoding: 8bit$sep"
+			."Content-Type: text/plain; charset=\"$charset\"$sep");		
 		}
 	}
 
