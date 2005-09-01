@@ -146,11 +146,9 @@ $LastChangedRevision$
 			'flavor'   => 'rss'
 		),$atts));
 		
-		$category = (!$category) ? '' : a.'category='.urlencode($category);
-		$section = (!$section) ? '' : a.'section='.urlencode($section);
+		$url = pagelinkurl(array('c'=>$category, 's'=>$section, $flavor=>'1'));
 
-		$out = '<a href="'.hu.'?'.$flavor.'=1'.
-			$category.$section.'" title="XML feed">'.$label.'</a>';
+		$out = '<a href="'.$url.'" title="XML feed">'.$label.'</a>';
 		return ($wraptag) ? tag($out,$wraptag) : $out;
 	}
 
@@ -165,10 +163,9 @@ $LastChangedRevision$
 			'flavor'   => 'rss'
 		),$atts));
 	
-		$category = (!$category) ? '' : a.'category='.urlencode($category);
+		$url = pagelinkurl(array('c'=>$category, $flavor=>'1', 'area'=>'link'));
 
-		$out = '<a href="'.hu.'?'.$flavor.'=1'.a.'area=link'.$category.
-			'" title="XML feed">'.$label.'</a>';
+		$out = '<a href="'.$url.'" title="XML feed">'.$label.'</a>';
 		
 		return ($wraptag) ? tag($out,$wraptag) : $out;
 	}
@@ -483,11 +480,8 @@ $LastChangedRevision$
 			if ($label) $out[] = $label;
 			while ($a = nextRow($rs)) {
 				extract($a);
-				if($GLOBALS['permlink_mode'] == 'messy') {
-					$out[] = tag($title,'a',' href="'.hu.'?s='.urlencode($name).'"');
-				} else {
-					$out[] = tag($title,'a',' href="'.hu.urlencode($name).'/"');
-				}
+				$url = pagelinkurl(array('s'=>$name));
+				$out[] = tag($title, 'a', ' href="'.$url.'"');
 			}
 			if (is_array($out)) {
 				return doWrap($out, $wraptag, $break, $class);
@@ -523,10 +517,9 @@ $LastChangedRevision$
 	
 		if (!$section)
 			return '<form action="'.hu.'" method="get">'.$out.'</form>';
-	
-		return $permlink_mode == 'messy' 
-			? '<form action="'.hu.'?section='.$section.'" method="get">'.$out.'</form>'
-			: '<form action="'.hu.$section.'/" method="get">'.$out.'</form>';
+
+		$url = pagelinkurl(array('s'=>$section));	
+		return '<form action="'.$url.'" method="get">'.$out.'</form>';
 	}
 
 // -------------------------------------------------------------
@@ -1148,13 +1141,9 @@ $LastChangedRevision$
 				$impath = $img_dir.'/'.$id.'t'.$ext;
 				$imginfo = getimagesize($path_to_site.'/'.$impath);
 				$dims = (!empty($imginfo[3])) ? ' '.$imginfo[3] : '';
-				if($permlink_mode == 'messy'){
-					$out[] = '<a href="'.hu.'?c='.urlencode($c).a.'s='.urlencode($s).a.'p='.$id.'">'.
-					'<img src="'.hu.$impath.'"'.$dims.' alt="'.$alt.'" />'.'</a>';
-				} else {
-					$out[] = '<a href="'.hu.$s.'/?c='.urlencode($c).a.'p='.$id.'">'.
-					'<img src="'.hu.$impath.'"'.$dims.' alt="'.$alt.'" />'.'</a>';
-				}
+				$url = pagelinkurl(array('c'=>$c, 's'=>$s, 'p'=>$id));
+				$out[] = '<a href="'.$url.'">'.
+               '<img src="'.hu.$impath.'"'.$dims.' alt="'.$alt.'" />'.'</a>';
 
 			}
 			return join('',$out);
@@ -1417,9 +1406,7 @@ $LastChangedRevision$
 		if(!empty($s) && $s!= 'default')
 		{ 
 			$content[] = ($linked)? (
-				($GLOBALS['permlink_mode'] == 'messy')?
-					tag(htmlspecialchars($s),'a',' href="'.hu.'?s='.urlencode($s).'"'):
-					tag(htmlspecialchars($s),'a',' href="'.hu.urlencode($s).'/"')
+					tag(htmlspecialchars($s),'a',' href="'.pagelinkurl(array('s'=>$s)).'/"')
 				):$s;
 		}
 		
@@ -1429,7 +1416,7 @@ $LastChangedRevision$
 		while($category and $category != 'root' and $parent = safe_field('parent','txp_category',"name='$category'")) {
 			//Use new /category/category_name scheme here too?
 				$cattree[] = ($linked)? 
-					tag(str_replace("& ","&#38; ", $category),'a',' href="'.hu.'?c='.urlencode($category).'"')
+					tag(str_replace("& ","&#38; ", $category),'a',' href="'.pagelinkurl(array('c'=>$category)).'"')
 						:$category;
 				$category = $parent;
 				unset($parent);
