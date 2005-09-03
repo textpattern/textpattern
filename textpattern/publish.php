@@ -175,6 +175,7 @@ $LastChangedRevision$
 		}
 	}
 
+/* FIXME: have to convert mysql-timestamps to unixtimestamps first. Are timezones ok?
 	if($send_lastmod) {
 		$last = gmdate("D, d M Y H:i:s \G\M\T",$lastmod);
 		header("Last-Modified: $last");
@@ -185,7 +186,7 @@ $LastChangedRevision$
 			exit; 
 		}
 	}
-
+*/
 // -------------------------------------------------------------
 	function preText($s,$prefs) 
 	{
