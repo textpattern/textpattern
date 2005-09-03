@@ -593,26 +593,14 @@ $LastChangedRevision$
 		extract($pretext);
 				
 		if (is_array($atts)) extract($atts);
-		if (is_array($thispage)) { 
+		if (is_array($thispage))
 			extract($thispage);
-		} else { 
-			//Exclude search results
-			return (!$q)?$match:''; 
-		}
 
-		//Fix a problem when paging /author/author_name and simmilar url schemas
-		//chopUrl explodes by slashes
-		$req_uri = @$request_uri;
-		if (!empty($qs)) 
-			$req_uri = str_replace('?'.$qs, '', $req_uri);
-		if(strlen(strrchr($req_uri,'/')) != 1) $req_uri.='/';
-		
 		if ($pg > 1) {
+			$nextpg = ($pg - 1 == 1) ? 0 : ($pg - 1);
+			$url = pagelinkurl(array('pg' => $nextpg, 's' => @$pretext['s'], 'c' => @$pretext['c'], 'q' => @$pretext['q'], 'a' => @$pretext['a']));
 			$out = array(
-				'<a href="'.$req_uri.'?pg='.($pg - 1),
-				($c) ? a.'c='.urlencode($c) : '',
-				($s && $permlink_mode=='messy') ? a.'s='.urlencode($s) : '',
-				'"',
+				'<a href="'.$url.'"',
 				(empty($title)) ? '' : ' title="'.$title.'"',
 				'>',
 				$thing,
@@ -627,26 +615,15 @@ $LastChangedRevision$
 		global $thispage,$permlink_mode, $pretext;
 		extract($pretext);
 
-		if ($q) return;
-
 		if (is_array($atts)) extract($atts);
-		if (is_array($thispage)) {
+		if (is_array($thispage))
 			extract($thispage); 
-		} 			
-		
-		//Fix a problem when paging /author/author_name and simmilar url schemas
-		//chopUrl explodes by slashes
-		$req_uri = @$request_uri;
-		if (!empty($qs)) 
-			$req_uri = str_replace('?'.$qs, '', $req_uri);
-		if(strlen(strrchr($req_uri,'/')) != 1) $req_uri.='/';
 		
 		if ($pg != $numPages) {
+			$nextpg = $pg + 1;
+			$url = pagelinkurl(array('pg' => $nextpg, 's' => @$pretext['s'], 'c' => @$pretext['c'], 'q' => @$pretext['q'], 'a' => @$pretext['a']));
 			$out = array(
-				'<a href="'.$req_uri.'?pg='.($pg + 1),
-				($c) ? a.'c='.urlencode($c) : '',
-				($s && $permlink_mode == 'messy') ? a.'s='.urlencode($s) : '',
-				'"',
+				'<a href="'.$url.'"',
 				(empty($title)) ? '' : ' title="'.$title.'"',
 				'>',
 				$thing,
