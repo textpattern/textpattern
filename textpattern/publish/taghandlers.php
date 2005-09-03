@@ -990,12 +990,14 @@ $LastChangedRevision$
 	function category1($atts) 
 	{
 		global $thisarticle;
-		extract(lAtts(array('link' => ''),$atts));
+		extract(lAtts(array(
+			'link' => 0,
+			'title' => 0,
+		),$atts));
 		if ($thisarticle['category1']) {
-			$cat_title = fetch_category_title($thisarticle['category1']);
+			$cat_title = ($title ? fetch_category_title($thisarticle['category1']) : $thisarticle['category1']);
 			if (!empty($link)) 
-				return '<a href="'.hu.strtolower(urlencode(gTxt('category'))).'/'.
-					strtolower(urlencode($thisarticle['category1'])).'">'.
+				return '<a href="'.pagelinkurl(array('c'=>$thisarticle['category1'])).'">'.
 					$cat_title.'</a>';
 			return $cat_title;
 		}
@@ -1005,28 +1007,33 @@ $LastChangedRevision$
 	function category2($atts) 
 	{
 		global $thisarticle;
-		extract(lAtts(array('link' => ''),$atts));
+		extract(lAtts(array(
+			'link' => 0,
+			'title' => 0,
+		),$atts));
 		if ($thisarticle['category2']) {
-			$cat_title = fetch_category_title($thisarticle['category2']);
+			$cat_title = ($title ? fetch_category_title($thisarticle['category2']) : $thisarticle['category2']);
 			if (!empty($link)) 
-				return '<a href="'.hu.strtolower(urlencode(gTxt('category'))).'/'.
-					strtolower(urlencode($thisarticle['category2'])).'">'.
+				return '<a href="'.pagelinkurl(array('c'=>$thisarticle['category2'])).'">'.
 					$cat_title.'</a>';
 			return $cat_title;
 		}
 	}
-
+	
 // -------------------------------------------------------------
 	function section($atts) 
 	{
 		global $thisarticle;
-		extract(lAtts(array('link' => ''),$atts));
+		extract(lAtts(array(
+			'link' => 0,
+			'title' => 0,
+		),$atts));
 		if ($thisarticle['section']) {
+			$sec_title = ($title ? fetch_section_title($thisarticle['section']) : $thisarticle['section']);
 			if (!empty($link)) 
-				return '<a href="'.hu.strtolower(urlencode(gTxt('section'))).'/'.
-					strtolower(urlencode($thisarticle['section'])).'/">'.
-					$thisarticle['section'].'</a>';
-			return $thisarticle['section'];
+				return '<a href="'.pagelinkurl(array('s'=>$thisarticle['section'])).'">'.
+					$sec_title.'</a>';
+			return $sec_title;
 		}
 	}
 

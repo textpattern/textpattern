@@ -1092,6 +1092,19 @@ else
 	}
 
 // -------------------------------------------------------------
+	function fetch_section_title($name)
+	{
+		static $sectitles = array();
+
+		if (isset($sectitles[$name]))
+			return $sectitles[$name];
+
+		$f = safe_field('title','txp_section',"name='".doSlash($name)."'");
+		$sectitles[$name] = $f;
+		return $f;
+	}
+
+// -------------------------------------------------------------
 	function update_comments_count($id) 
 	{
 		$thecount = safe_field('count(*)','txp_discuss','parentid='.doSlash($id).' and visible=1');
@@ -1202,7 +1215,7 @@ eod;
 		if (isset($keys['id']))
 			unset($keys['id']);
 
-		if ($keys['s'] == 'default')
+		if (@$keys['s'] == 'default')
 			unset($keys['s']);
 
 		if ($permlink_mode == 'messy') {
