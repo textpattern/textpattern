@@ -1649,9 +1649,7 @@ $LastChangedRevision$
 		
 		$where = (!empty($id) && $id != 0)? "id='$id'" : ((!empty($filename))? "filename='$filename'" : '');
 		
-		if (empty($thisfile)) {
-			$thisfile = fileDownloadFetchInfo($where);
-		}
+		$thisfile = fileDownloadFetchInfo($where);
 		
 		$out = ($permlink_mode == 'messy') ?
 					'<a href="'.hu.'index.php?s=file_download&id='.$thisfile['id'].'">'.parse($thing).'</a>':
