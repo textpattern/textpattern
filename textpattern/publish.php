@@ -192,6 +192,8 @@ $LastChangedRevision$
 	{
 		extract($prefs);
 
+		callback_event('pretext');
+
 		if(gps('rss')) {
 			include txpath.'/publish/rss.php';
 			exit(rss());
@@ -401,6 +403,8 @@ $LastChangedRevision$
 		global $pretext,$microstart,$prefs,$qcount,$production_status,$txptrace;
 		$segment = gps('segment');
 		extract($pretext);
+
+		callback_event('textpattern');
 
 		if ($pretext['status'] == '404')
 			txp_die(gTxt('not_found'), '404 Not Found');
