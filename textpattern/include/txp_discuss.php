@@ -255,12 +255,22 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function discuss_multi_edit() 
 	{
-		$parentid = safe_field("txp_discuss","parentid","parentid=".doSlash(ps('discussid')));
-		$deleted = event_multi_edit('txp_discuss','discussid');
-		if(!empty($deleted)) {
-			// might as well clean up all comment counts while we're here.
-			clean_comment_counts();
-			return discuss_list(messenger('comment',$deleted,'deleted'));
+		$selected = ps('selected');
+		if ($selected) {
+			// Get all articles for which we have to update the count
+			foreach($selected as $id)
+				$to_delete[] = intval($id);
+			$parentids = safe_rows("DISTINCT parentid","txp_discuss","discussid IN (".implode(',',$to_delete).")");
+			foreach ($parentids as $key => $value)
+				$parentids[$key] = $value['parentid'];
+
+			// Delete and if succesful update commnet count 
+			$deleted = event_multi_edit('txp_discuss','discussid');
+			if(!empty($deleted)) {
+				// might as well clean up all comment counts while we're here.
+				clean_comment_counts($parentids);
+				return discuss_list(messenger('comment',$deleted,'deleted'));
+			}
 		}
 		return discuss_list();
 	}

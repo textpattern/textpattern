@@ -815,6 +815,7 @@ else
 		if ($things) {
 			if ($method == 'delete') {
 				foreach($things as $id) {
+					$id = intval($id);
 					if (safe_delete($tablename,"$idkeyname='$id'")) {
 						$ids[] = $id;
 					}
@@ -1113,16 +1114,20 @@ else
 	}
 
 // -------------------------------------------------------------
-	function clean_comment_counts() 
+	function clean_comment_counts($parentids) 
 	{
-		$rs = safe_rows_start('parentid, count(*) as thecount','txp_discuss','visible=1 group by parentid');
-		if (mysql_num_rows($rs) > 0) {
-			while ($a = nextRow($rs)) {
-				safe_update('textpattern',"comments_count=".$a['thecount'],"ID=".$a['parentid']);
-			}
-		} else {
-			safe_update('textpattern',"comments_count=0","Annotate = 1");
+		$rs = safe_rows_start('parentid, count(*) as thecount','txp_discuss','parentid IN ('.implode(',',$parentids).') AND visible=1 group by parentid');
+		if (!$rs) return;
+
+		$updated = array();
+		while($a = nextRow($rs)) {
+			safe_update('textpattern',"comments_count=".$a['thecount'],"ID=".$a['parentid']);
+			$updated[] = $a['parentid'];
 		}
+		// We still need to update all those, that have zero comments left.
+		$leftover = array_diff($parentids, $updated);
+		if ($leftover)
+			safe_update('textpattern',"comments_count=0","ID IN (".implode(',',$leftover).")");
 	}
 
 // -------------------------------------------------------------
