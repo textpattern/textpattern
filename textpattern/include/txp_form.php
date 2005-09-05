@@ -16,6 +16,7 @@ $LastChangedRevision$
 
 	global $vars;
 	$vars = array('Form','type','name','savenew','oldname');
+	$essential_forms = array('comments','comments_display','comment_form','default','Links','files');
 
 	if ($event == 'form') {
 		require_privs('form');
@@ -28,7 +29,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function form_list($curname)
 	{
-		global $step;
+		global $step,$essential_forms;
 		$out[] = startTable('list');
 		$out[] = tr(tda(sLink('form','form_create',gTxt('create_new_form')),' colspan="3" style="height:30px"'));
 
@@ -45,11 +46,7 @@ $LastChangedRevision$
 					$editlink = ($curname!=$name) 
 					?	eLink('form','form_edit','name',$name,$name)
 					:	$name;
-					$modbox = ($name!='comments' 
-								&& $name!='comment_form' 
-								&& $name!='default' 
-								&& $name!='Links'
-								&& $name!='files') 
+					$modbox = (!in_array($name, $essential_forms))
 					?	'<input type="checkbox" name="selected_forms[]" value="'.$name.'" />'
 					:	sp;
 				$out[] = tr(td($editlink).td(small($type)).td($modbox));
@@ -68,13 +65,14 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function form_multi_edit() 
 	{
+		global $essential_forms;
 		$method = ps('method');
 		$forms = ps('selected_forms');
 
 		if (is_array($forms)) {
 			if ($method == 'delete') {
 				foreach($forms as $name) {
-					if (form_delete($name)) {
+					if (!in_array($name, $essential_forms) && form_delete($name)) {
 						$deleted[] = $name;
 					}
 				}
@@ -93,7 +91,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function form_edit($message='')
 	{
-		global $step;
+		global $step,$essential_forms;
 		pagetop(gTxt('edit_forms'),$message);
 
 		extract(gpsa(array('Form','name','type')));
@@ -111,6 +109,11 @@ $LastChangedRevision$
 					eInput("form").sInput('form_save').hInput('oldname',$name);
 			}
 		}
+
+		if (!in_array($name, $essential_forms))
+			$changename = graf(gTxt('form_name').br.fInput('text','name',$name,'edit','','',15));
+		else
+			$changename = graf(gTxt('form_name').br."<i>$name</i>");
 
 		$out = 
 			startTable('edit').
@@ -138,8 +141,8 @@ $LastChangedRevision$
 					'<form action="index.php" method="post">'.
 					input_textarea($Form).
 
-					graf(gTxt('form_name').br.
-						fInput('text','name',$name,'edit','','',15)).
+					$changename.
+
 					graf(gTxt('form_type').br.
 						formtypes($type)).
 					graf(gTxt('only_articles_can_be_previewed')).
@@ -159,7 +162,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function form_save() 
 	{
-		global $vars, $step;
+		global $vars, $step,$essential_forms;
 		extract(doSlash(gpsa($vars)));
 		if (!$name) {
 			$step = 'form_create';
@@ -171,7 +174,8 @@ $LastChangedRevision$
 		} else {
 			safe_update(
 				"txp_form", 
-				"Form='$Form',type='$type',name='$name'",
+				"Form='$Form',type='$type'". 
+					(!in_array($name, $essential_forms)) ? ",name='$name'" : '',
 				"name='$oldname'"
 			);
 			form_edit(messenger('form',$name,'updated'));		
@@ -181,6 +185,8 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function form_delete($name)
 	{
+		global $essential_forms;
+		if (in_array($name, $essential_forms)) return false;
 		$name = doSlash($name);
 		if (safe_delete("txp_form","name='$name'")) {
 			return true;
