@@ -1229,6 +1229,8 @@ eod;
 		else {
 			# all clean URL modes use the same schemes for list pages
 			$url = '';
+			foreach ($keys as $k => $v)
+				$keys[$k]=urlencode($v);
 			if (!empty($keys['rss'])) {
 				$url = hu.'rss'.'/';
 				unset($keys['rss']);
@@ -1245,12 +1247,12 @@ eod;
 				return $url . join_qs($keys);
 			}
 			elseif (!empty($keys['author'])) {
-				$url = hu.gTxt('author').'/'.$keys['author'].'/';
+				$url = hu.strtolower(urlencode(gTxt('author'))).'/'.$keys['author'].'/';
 				unset($keys['author']);
 				return $url . join_qs($keys);
 			}
 			elseif (!empty($keys['c'])) {
-				$url = hu.gTxt('category').'/'.$keys['c'].'/';
+				$url = hu.strtolower(urlencode(gTxt('category'))).'/'.$keys['c'].'/';
 				unset($keys['c']);
 				return $url . join_qs($keys);
 			}

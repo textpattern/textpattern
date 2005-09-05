@@ -455,7 +455,7 @@ $LastChangedRevision$
 			while ($a = nextRow($rs)) {
 				extract($a);
 				if ($name=='root') continue;
-				if($name) $out[] = tag(str_replace("& ","&#38; ", $title),'a',' href="'.hu.'?c='.urlencode($name).'"');
+				if($name) $out[] = tag(str_replace("& ","&#38; ", $title),'a',' href="'.pagelinkurl(array('c'=>$name)).'"');
 			}
 			if (is_array($out)) {
 				return doWrap($out, $wraptag, $break, $class);
@@ -935,11 +935,9 @@ $LastChangedRevision$
 		global $thisarticle;		
 		extract(lAtts(array('link' => ''),$atts));
 		$author_name = get_author_name($thisarticle['authorid']);
-		if (!empty($link)) 
-			return '<a href="'.hu.strtolower(urlencode(gTxt('author'))).'/'.
-				urlencode($author_name).'">'.
-				$author_name.'</a>';
-		return $author_name;		
+		return (empty($link))
+			? $author_name 
+			: tag($author_name, 'a', ' href="'.pagelinkurl(array('author'=>$author_name)).'"');
 	}
 	
 // -------------------------------------------------------------

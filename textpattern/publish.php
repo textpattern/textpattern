@@ -245,8 +245,8 @@ $LastChangedRevision$
 						$out['c'] = (ckEx('category',$u2)) ? $u2 : ''; break;
 	
 					case urldecode(strtolower(urlencode(gTxt('author')))):
-						$author_name = (!empty($u2)) ? urldecode($u2) : '';
-						$out['author'] = safe_field('name','txp_users',"RealName like '$author_name'"); break;			
+						$out['author'] = (!empty($u2)) ? urldecode($u2) : ''; break;
+						// AuthorID gets resolved from Name further down
 	
 					case urldecode(strtolower(urlencode(gTxt('file_download')))):
 						$out['s'] = 'file_download';
@@ -342,6 +342,9 @@ $LastChangedRevision$
 			if ($out['id'] && !$out['s'])
 				$out['s'] = safe_field('section', 'textpattern', "ID='".doSlash($out['id'])."'");
 		}
+
+		// Resolve AuthorID from Authorname
+		$out['author'] = safe_field('name','txp_users',"RealName like '{$out['author']}'");
 
 		// Stats: found or not
 		$out['status'] = ($is_404 ? '404' : '200');
