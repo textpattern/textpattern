@@ -164,7 +164,7 @@ input.preview,input.cancel,input.delete,input.publish
 	margin-right: 10px;
 	margin-top: 5px;
 	padding: 5px;
-	width: 60px;
+	width: auto;
 }
 
 input.publish
