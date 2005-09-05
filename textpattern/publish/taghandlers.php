@@ -596,7 +596,7 @@ $LastChangedRevision$
 		if (is_array($thispage))
 			extract($thispage);
 
-		if ($pg > 1) {
+		if ($numPages && $pg > 1) {
 			$nextpg = ($pg - 1 == 1) ? 0 : ($pg - 1);
 			$url = pagelinkurl(array('pg' => $nextpg, 's' => @$pretext['s'], 'c' => @$pretext['c'], 'q' => @$pretext['q'], 'a' => @$pretext['a']));
 			$out = array(
@@ -619,7 +619,7 @@ $LastChangedRevision$
 		if (is_array($thispage))
 			extract($thispage); 
 		
-		if ($pg != $numPages) {
+		if ($numPages && $pg != $numPages) {
 			$nextpg = $pg + 1;
 			$url = pagelinkurl(array('pg' => $nextpg, 's' => @$pretext['s'], 'c' => @$pretext['c'], 'q' => @$pretext['q'], 'a' => @$pretext['a']));
 			$out = array(
