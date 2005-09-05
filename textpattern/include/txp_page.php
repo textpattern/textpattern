@@ -128,6 +128,7 @@ $LastChangedRevision$
 //-------------------------------------------------------------
 	function page_delete()
 	{
+		if (ps('name')=='default') return page_edit();
 		$name = doSlash(ps('name'));
 		safe_delete("txp_page","name='$name'");
 		page_edit(messenger('page',$name,'deleted'));
