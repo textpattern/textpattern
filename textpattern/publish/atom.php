@@ -66,8 +66,9 @@ $LastChangedRevision$
 			$limit = min($limit,max(100,$rss_how_many));
 
 			$frs = safe_column("name", "txp_section", "in_rss != '1'");
-			
-			foreach($frs as $f) $query[] = "and Section != '".$f."'";
+
+			$query = array();
+			foreach($frs as $f) $query[] = "and Section != '".doSlash($f)."'";
 			$query[] = $sfilter;
 			$query[] = $cfilter;
 				
@@ -90,12 +91,11 @@ $LastChangedRevision$
 					
 					$a['posted'] = $uPosted;
 	
-					if ($show_comment_count_in_feed) {
-						$dc = getCount('txp_discuss', "parentid=$ID and visible=1");
-						$count = ($dc > 0) ? ' ['.$dc.']' : '';
-					} else $count = '';
+					if ($show_comment_count_in_feed)
+						$count = ($comments_count > 0) ? ' ['.$comments_count.']' : '';
+					else $count = '';
 
-					$thisauthor = safe_field("RealName","txp_users","name='$AuthorID'");
+					$thisauthor = get_author_name($AuthorID);
 					$e['thisauthor'] = tag(n.t.t.t.tag(htmlspecialchars($thisauthor),'name').n.t.t,'author');
 		
 					$e['issued'] = tag(gmdate('Y-m-d\TH:i:s\Z',$uPosted),'published');
@@ -143,8 +143,9 @@ $LastChangedRevision$
 			}
 		} elseif ($area=='link') {
 		
-			$cfilter = ($category) ? "category='$category'" : '1';
-			$limit = ($limit) ? $limit : 15;
+			$cfilter = ($category) ? "category='".$category."'" : '1';
+			$limit = ($limit) ? $limit : $rss_how_many;
+			$limit = min($limit,max(100,$rss_how_many));
 		
 			$rs = safe_rows_start("*", "txp_link", "$cfilter order by date desc limit $limit");
 

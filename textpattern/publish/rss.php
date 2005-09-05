@@ -40,7 +40,7 @@ $LastChangedRevision$
 			$limit = min($limit,max(100,$rss_how_many));
 
 			$frs = safe_column("name", "txp_section", "in_rss != '1'");
-			if ($frs) foreach($frs as $f) $query[] = "and Section != '".$f."'";
+			if ($frs) foreach($frs as $f) $query[] = "and Section != '".doSlash($f)."'";
 			$query[] = $sfilter;
 			$query[] = $cfilter;
 			
@@ -73,8 +73,7 @@ $LastChangedRevision$
 
 
 					if ($show_comment_count_in_feed) {
-						$dc = getCount('txp_discuss', "parentid=$ID and visible=1");
-						$count = ($dc > 0) ? ' ['.$dc.']' : '';
+						$count = ($comments_count > 0) ? ' ['.$comments_count.']' : '';
 					} else $count = '';
 
 					$Title = doSpecial($Title).$count;
@@ -96,7 +95,8 @@ $LastChangedRevision$
 		} elseif ($area=='link') {
 				
 			$cfilter = ($category) ? "category='$category'" : '1';
-			$limit = ($limit) ? $limit : 15;
+			$limit = ($limit) ? $limit : $rss_how_many;
+			$limit = min($limit,max(100,$rss_how_many));
 
 			$rs = safe_rows_start("*", "txp_link", "$cfilter order by date desc limit $limit");
 		
