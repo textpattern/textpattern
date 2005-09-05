@@ -172,7 +172,8 @@ if (!empty($event) and $event == 'article') {
 
 		$oldArticle = safe_row('Status, url_title, Title','textpattern','ID = '.(int)$incoming['ID']);
 
-		if (! (   ($oldArticle['Status'] >= 4 and has_privs('article.edit.published'))
+		if (! (    ($oldArticle['Status'] >= 4 and has_privs('article.edit.published'))
+				or ($oldArticle['Status'] >= 4 and $incoming['AuthorID']==$txp_user and has_privs('article.edit.own.published'))
 		    	or ($oldArticle['Status'] < 4 and has_privs('article.edit'))
 				or ($oldArticle['Status'] < 4 and $incoming['AuthorID']==$txp_user and has_privs('article.edit.own'))))
 		{
@@ -663,8 +664,9 @@ if (!empty($event) and $event == 'article') {
 
 			if ($view == 'text') {
 				if (   ($Status >= 4 and has_privs('article.edit.published'))
-				    or ($Status < 4 and has_privs('article.edit'))
-					or ($Status < 4 and $AuthorID==$txp_user and has_privs('article.edit.own')))
+					or ($Status >= 4 and $AuthorID==$txp_user and has_privs('article.edit.own.published'))
+				    or ($Status <  4 and has_privs('article.edit'))
+					or ($Status <  4 and $AuthorID==$txp_user and has_privs('article.edit.own')))
 					echo fInput('submit','save',gTxt('save'),"publish");
 			}
 		}

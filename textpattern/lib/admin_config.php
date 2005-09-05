@@ -190,6 +190,7 @@ $txp_permissions = array(
 	'article.edit'                => '1,2,3',
 	'article.edit.published'      => '1,2,3',
 	'article.edit.own'            => '1,2,3,4,5,6',
+	'article.edit.own.published'  => '1,2,3,4',
 	'article.publish'             => '1,2,3,4',
 	'article.php'                 => '1,2',
 	'article'                     => '1,2,3,4,5,6',
