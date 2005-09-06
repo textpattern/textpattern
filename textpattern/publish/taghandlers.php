@@ -1251,13 +1251,20 @@ $LastChangedRevision$
 	{
 		global $thisarticle;
 		if (empty($thisarticle)) return;
+		extract(lAtts(array(
+			'style' => '',
+			'class' => ''
+		),$atts));
 		
 		$url = permlinkurl($thisarticle);
 
 		if ($thing === NULL)
 			return $url;
 		
-		return tag(parse($thing),'a',' href="'.$url.'" title="'.gTxt('permanent_link').'"');
+		return tag(parse($thing),'a',' href="'.$url.'" title="'.gTxt('permanent_link').'"'. 
+							(($style) ? ' style="'.$style.'"' : '').
+							(($class) ? ' class="'.$class.'"' : '')
+ 			 );
 	}
 
 // -------------------------------------------------------------
