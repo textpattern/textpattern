@@ -136,7 +136,7 @@ $LastChangedRevision$
 						fclose($file);
 						// record download
 						if ((connection_status()==0) and !connection_aborted() ) {
-							safe_update("txp_file", "downloads=downloads+1", "id='$id'");
+							safe_update("txp_file", "downloads=downloads+1", "id='".intval($id)."'");
 						} else {
 							$pretext['request_uri'] .= "#aborted-at-".floor($sent*100/$filesize)."%";
 							logit();
@@ -245,7 +245,7 @@ $LastChangedRevision$
 						$out['c'] = (ckEx('category',$u2)) ? $u2 : ''; break;
 	
 					case urldecode(strtolower(urlencode(gTxt('author')))):
-						$out['author'] = (!empty($u2)) ? urldecode($u2) : ''; break;
+						$out['author'] = (!empty($u2)) ? $u2 : ''; break;
 						// AuthorID gets resolved from Name further down
 	
 					case urldecode(strtolower(urlencode(gTxt('file_download')))):
@@ -344,7 +344,8 @@ $LastChangedRevision$
 		}
 
 		// Resolve AuthorID from Authorname
-		$out['author'] = safe_field('name','txp_users',"RealName like '{$out['author']}'");
+		if ($out['author'])
+			$out['author'] = get_author_name($out['author']);
 
 		// Stats: found or not
 		$out['status'] = ($is_404 ? '404' : '200');
@@ -352,9 +353,9 @@ $LastChangedRevision$
 		if ($out['s'] == 'file_download') {
 			// get id of potential filename
 			if (!is_numeric($out['id'])) {
-				$rs = safe_row("*", "txp_file", "filename='".$out['id']."'");
+				$rs = safe_row("*", "txp_file", "filename='".doSlash($out['id'])."'");
 			} else {
-				$rs = safe_row("*", "txp_file", "id='".$out['id']."'");
+				$rs = safe_row("*", "txp_file", "id='".intval($out['id'])."'");
 			}
 
 			$out = ($rs)? array_merge($out, $rs) : array('s'=>'file_download','file_error'=> 404);
@@ -366,17 +367,17 @@ $LastChangedRevision$
 		$s = $out['s'];
 		$id = $out['id'];
 
-
 		// hackish
 		if(empty($id)) $GLOBALS['is_article_list'] = true;
 
 			// by this point we should know the section, so grab its page and css
-		$rs = safe_row("*", "txp_section", "name = '$s' limit 1");
+		$rs = safe_row("*", "txp_section", "name = '".doSlash($s)."' limit 1");
 		$out['page'] = @$rs['page'];		
-		$out['css']  = @$rs['css'];		
+// Remove the below line if nothing breaks
+// 		$out['css']  = @$rs['css'];
 
 		if(is_numeric($id)) {
-			$idrs = safe_row("Posted, AuthorID, Keywords","textpattern","ID=$id");
+			$idrs = safe_row("Posted, AuthorID, Keywords","textpattern","ID=".doSlash($id));
 			extract($idrs);
 
 			if ($np = getNextPrev($id, $Posted, $s))
@@ -403,17 +404,19 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function textpattern() 
 	{
-		global $pretext,$microstart,$prefs,$qcount,$production_status,$txptrace;
+		global $pretext,$microstart,$prefs,$qcount,$production_status,$txptrace,$siteurl;
 		$segment = gps('segment');
 		extract($pretext);
 
 		callback_event('textpattern');
 
 		if ($pretext['status'] == '404')
-			txp_die(gTxt('not_found'), '404 Not Found');
+			txp_die(gTxt('404_not_found').br.br.tag($siteurl,'a',' href="http://'.$siteurl.'"'), '404 Not Found');
 
-		$html = safe_field('user_html','txp_page',"name='$page'");
-		if (!$html) exit(gTxt('unknown_section').' '.$s);
+		$html = safe_field('user_html','txp_page',"name='".doSlash($page)."'");
+		if (!$html) 
+			txp_die(gTxt('unknown_section').' '.$s.br.br.tag($siteurl,'a',' href="http://'.$siteurl.'"'), '404 Not Found');
+
 		$html = parse($html);
 		$html = parse($html); // the function so nice, he ran it twice
 		$html = (!$segment) ? $html : segmentPage($html);
@@ -438,10 +441,10 @@ $LastChangedRevision$
 		if ($n) {
 			$cssname = $n;
 		} elseif ($s) {
-			$cssname = safe_field('css','txp_section',"name='$s'");
+			$cssname = safe_field('css','txp_section',"name='".doSlash($s)."'");
 		}
 
-		$css = safe_field('css','txp_css',"name='$cssname'");
+		$css = safe_field('css','txp_css',"name='".doSlash($cssname)."'");
 		if ($css) echo base64_decode($css);
 	}
 
@@ -523,12 +526,12 @@ $LastChangedRevision$
 
 		//Building query parts
 		$frontpage = ($frontpage and !$q) ? filterFrontPage() : '';		
-		$category  = (!$category)  ? '' : " and ((Category1='".$category."') or (Category2='".$category."')) ";
-		$section   = (!$section)   ? '' : " and Section = '$section'";
+		$category  = (!$category)  ? '' : " and ((Category1='".doslash($category)."') or (Category2='".doSlash($category)."')) ";
+		$section   = (!$section)   ? '' : " and Section = '".doslash($section)."'";
 		$excerpted = ($excerpted=='y')  ? " and Excerpt !=''" : '';
-		$author    = (!$author)    ? '' : " and AuthorID = '$author'";	
-		$month     = (!$month)     ? '' : " and Posted like '{$month}%'";
-		$id        = (!$id)        ? '' : " and ID = '$id'";
+		$author    = (!$author)    ? '' : " and AuthorID = '".doslash($author)."'";
+		$month     = (!$month)     ? '' : " and Posted like '".doSlash($month)."%'";
+		$id        = (!$id)        ? '' : " and ID = '".intval($id)."'";
 		switch ($time) {
 			case 'any':
 				$time = ""; break;
@@ -559,11 +562,11 @@ $LastChangedRevision$
 		if ($keywords) {
 			$keys = split(',',$keywords);
 			foreach ($keys as $key) {
-				$keyparts[] = " Keywords like '%".trim($key)."%'";
+				$keyparts[] = " Keywords like '%".doSlash(trim($key))."%'";
 			}
 			$keywords = " and (" . join(' or ',$keyparts) . ")"; 
 		}
-		$where = "1" . ($id ? " and Status >= '4'" : " and Status='$status'"). $time.
+		$where = "1" . ($id ? " and Status >= '4'" : " and Status='".doSlash($status)."'"). $time.
 			$search . $id . $category . $section . $excerpted . $month . $author . $keywords . $custom . $frontpage;
 
 		//do not paginate if we are on a custom list
@@ -588,7 +591,7 @@ $LastChangedRevision$
 		}
 
 		$rs = safe_rows_start("*, unix_timestamp(Posted) as uPosted".$match, 'textpattern', 
-		$where. ' order by ' . $sortby . ' ' . $sortdir . ' limit ' . $pgoffset . $limit);
+		$where. ' order by ' . doslash($sortby) . ' ' . doSlash($sortdir) . ' limit ' . doSlash($pgoffset.$limit));
 		// alternative form override for search or list
 		if ($q and !$iscustom and !$issticky)
 			$form = gAtt($atts, 'searchform', 'search_results');
@@ -632,7 +635,7 @@ $LastChangedRevision$
 
 		$rs = safe_column("name","txp_section", "on_frontpage != '1'");
 		if ($rs) {
-			foreach($rs as $name) $filters[] = "and Section != '$name'";	
+			foreach($rs as $name) $filters[] = "and Section != '".doSlash($name)."'";	
 			$filterFrontPage = join(' ',$filters);
             return $filterFrontPage;
 		}
@@ -662,7 +665,7 @@ $LastChangedRevision$
 		$q_status = ($status ? "and Status='".doSlash($status)."'" : 'and Status in (4,5)');
 
 		$rs = safe_row("*, unix_timestamp(Posted) as uPosted", 
-				"textpattern", "ID='$id' $q_status limit 1");
+				"textpattern", "ID='".intval($id)."' $q_status limit 1");
 
 		if ($rs) {
 			extract($rs);
@@ -747,10 +750,11 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function getNeighbour($Posted, $s, $type) 
 	{
+		$type = ($type == '>') ? '>' : '<';
 		$q = array(
 			"select ID, Title, url_title, unix_timestamp(Posted) as uposted
-			from ".PFX."textpattern where Posted $type '$Posted'",
-			($s!='' && $s!='default') ? "and Section = '$s'" : filterFrontPage(),
+			from ".PFX."textpattern where Posted $type '".doSlash($Posted)."'",
+			($s!='' && $s!='default') ? "and Section = '".doSlash($s)."'" : filterFrontPage(),
 			'and Status=4 and Posted < now() order by Posted',
 			($type=='<') ? 'desc' : 'asc',
 			'limit 1'
@@ -769,7 +773,7 @@ $LastChangedRevision$
 		// have to guess what the current article is
 		if (!$id) {
 			$current = safe_row('ID, Posted', 'textpattern', 
-				(($s!='' && $s!='default') ? "Section = '$s'" : filterFrontPage()).
+				(($s!='' && $s!='default') ? "Section = '".doSlash($s)."'" : filterFrontPage()).
 				'and Status=4 and Posted < now() order by Posted desc limit 1');
 			if ($current) {
 				$id = $current['ID'];

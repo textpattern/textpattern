@@ -82,7 +82,7 @@ $LastChangedRevision$
 	{
 		$rs = safe_column("name", "txp_section", "searchable != '1'");
 		if ($rs) {
-			foreach($rs as $name) $filters[] = "and Section != '$name'";	
+			foreach($rs as $name) $filters[] = "and Section != '".doSlash($name)."'";	
 			return join(' ',$filters);
 		}
 		return false;

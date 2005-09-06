@@ -290,7 +290,7 @@ class txp_thumb extends wet_thumb {
      * @param	$id	image id
      */
     function txp_thumb ($id) {
-        $rs = safe_row("*", "txp_image", "id='$id' limit 1");
+        $rs = safe_row("*", "txp_image", "id='".doSlash($id)."' limit 1");
         if ($rs) {
 	    // dmp ($rs);
             extract($rs);
@@ -308,7 +308,7 @@ class txp_thumb extends wet_thumb {
         if ( !isset($this->m_ext) ) return false;
         
         if ( parent::write ( IMPATH.$this->m_id.$this->m_ext, IMPATH.$this->m_id.'t'.$this->m_ext ) ) {
-	    safe_update("txp_image", "thumbnail='1'", "id='$this->m_id'");
+	    safe_update("txp_image", "thumbnail='1'", "id='".doSlash($this->m_id)."'");
 	    return true;
 	}
 	return false;

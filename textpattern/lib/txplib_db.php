@@ -282,6 +282,7 @@ $DB = new DB;
  	{ 
 
 		$root = doSlash($root);
+		$type = doSlash($type);
 
 	    extract(safe_row(
 	    	"lft as l, rgt as r", 

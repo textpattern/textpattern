@@ -91,13 +91,13 @@ else
 		
 		$event = gps('event');		
 		
-		$installed = safe_field('name', 'txp_lang',"lang='$lang'");
+		$installed = safe_field('name', 'txp_lang',"lang='".doSlash($lang)."'");
 		
 		$lang_code = ($installed)? $lang : 'en-gb';
 				
 		$rs = (txpinterface == 'admin') ?
-				safe_rows_start('name, data','txp_lang',"lang='$lang_code'"):
-				safe_rows_start('name, data','txp_lang',"lang='$lang_code' AND ( event='public' OR event='common')");		
+				safe_rows_start('name, data','txp_lang',"lang='".doSlash($lang_code)."'"):
+				safe_rows_start('name, data','txp_lang',"lang='".doSlash($lang_code)."' AND ( event='public' OR event='common')");		
 		
 		$out = array();
 		
@@ -153,11 +153,11 @@ else
 		global $txpcfg;
 		$lang = LANG;
 				
-		$installed = safe_field('name', 'txp_lang',"lang='$lang'");
+		$installed = safe_field('name', 'txp_lang',"lang='".doSlash($lang)."'");
 		
 		$lang_code = ($installed)? $lang : 'en-gb';
 				
-		$rs = safe_rows_start('name, data','txp_lang',"lang='$lang_code' AND event='$event'");		
+		$rs = safe_rows_start('name, data','txp_lang',"lang='".doSlash($lang_code)."' AND event='".doSlash($event)."'");		
 		
 		$out = array();
 		
@@ -175,7 +175,7 @@ else
 	function check_privs()
 	{
 		global $txp_user;
-		$privs = safe_field("privs", "txp_users", "`name`='$txp_user'");
+		$privs = safe_field("privs", "txp_users", "name='".doSlash($txp_user)."'");
 		$args = func_get_args();
 		if(!in_array($privs,$args)) {
 			exit(pageTop('Restricted').'<p style="margin-top:3em;text-align:center">'.
@@ -229,9 +229,9 @@ else
 	{
 		if (isset($_GET[$thing])) {
 			if (get_magic_quotes_gpc()) {
-				return doStrip(urldecode($_GET[$thing]));
+				return doStrip($_GET[$thing]);
 			} else {
-				return urldecode($_GET[$thing]);
+				return $_GET[$thing];
 			}
 		} elseif (isset($_POST[$thing])) {
 			if (get_magic_quotes_gpc()) {
@@ -361,7 +361,7 @@ else
 			}
 		}
 							
-		$rs = safe_row("name,code","txp_plugin","status='1' AND name='$name'");
+		$rs = safe_row("name,code","txp_plugin","status='1' AND name='".doSlash($name)."'");
 		if ($rs) {
 			$plugins[] = $rs['name'];
 			
@@ -715,11 +715,11 @@ else
 		global $txp_user, $prefs;
 		if (isset($txp_user))
 		{	// Likely sending passwords
-			extract(safe_row("RealName, email", "txp_users", "name = '$txp_user'"));
+			extract(safe_row("RealName, email", "txp_users", "name = '".doSlash($txp_user)."'"));
 		} 
 		else
 		{	// Likely sending comments -> "to" equals "from"
-			extract(safe_row("RealName, email", "txp_users", "email = '$to_address'"));
+			extract(safe_row("RealName, email", "txp_users", "email = '".doSlash($to_address)."'"));
 		}
 
 		if ($prefs['override_emailcharset'])
@@ -793,7 +793,7 @@ else
  	function event_change_pageby($name) 
 	{
 		$qty = gps('qty');
-		safe_update('txp_prefs',"val=$qty","name='".$name.'_list_pageby'."'");
+		safe_update('txp_prefs',"val='".doSlash($qty)."'","name='".doSlash($name).'_list_pageby'."'");
 		return;
 	}
 
@@ -1109,7 +1109,7 @@ else
 	function update_comments_count($id) 
 	{
 		$thecount = safe_field('count(*)','txp_discuss','parentid='.doSlash($id).' and visible=1');
-		$updated = safe_update("textpattern","comments_count=$thecount","ID=$id");
+		$updated = safe_update("textpattern","comments_count='".doSlash($thecount)."'","ID='".doSlash($id)."'");
 		return ($updated) ? true : false;
 	}
 
