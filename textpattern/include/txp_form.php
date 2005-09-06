@@ -113,7 +113,7 @@ $LastChangedRevision$
 		if (!in_array($name, $essential_forms))
 			$changename = graf(gTxt('form_name').br.fInput('text','name',$name,'edit','','',15));
 		else
-			$changename = graf(gTxt('form_name').br."<i>$name</i>");
+			$changename = graf(gTxt('form_name').br."<i>$name</i>".hInput('name',$name));
 
 		$out = 
 			startTable('edit').
@@ -175,7 +175,7 @@ $LastChangedRevision$
 			safe_update(
 				"txp_form", 
 				"Form='$Form',type='$type'". 
-					(!in_array($name, $essential_forms)) ? ",name='$name'" : '',
+					((!in_array($name, $essential_forms)) ? ",name='$name'" : ''),
 				"name='$oldname'"
 			);
 			form_edit(messenger('form',$name,'updated'));		
