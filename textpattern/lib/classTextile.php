@@ -392,20 +392,17 @@ class Textile
                 if (!isset($lists[$tl])) {
                     $lists[$tl] = true;
                     $atts = $this->pba($atts);
-                    $line = "\t<" . $this->lT($tl) . "l$atts>\n\t<li>" . $content;
+                    $line = "\t<" . $this->lT($tl) . "l$atts>\n\t\t<li>" . $content;
                 } else {
                     $line = "\t\t<li>" . $content;
                 }
 
-                if ($nl === $tl) {
-                    $line .= "</li>";
-				} elseif($nl=="*" or $nl=="#") {
-					$line .= "</li>\n\t</".$this->lT($tl)."l>\n\t</li>";
-					unset($lists[$tl]);
-				}
-                if (!$nl) {
-                    foreach($lists as $k => $v) {
-                        $line .= "</li>\n\t</" . $this->lT($k) . "l>";
+                if(strlen($nl) <= strlen($tl)) $line .= "</li>";
+                foreach(array_reverse($lists) as $k => $v) {
+                    if(strlen($k) > strlen($nl)) {
+                        $line .= "\n\t</" . $this->lT($k) . "l>";
+                        if(strlen($k) > 1) 
+                            $line .= "</li>";
                         unset($lists[$k]);
                     }
                 }
@@ -718,8 +715,33 @@ function refs($m)
 // -------------------------------------------------------------
     function noTextile($text)
     {
-        return preg_replace('/(^|\s)==(.*)==(\s|$)?/msU',
-            '$1<notextile>$2</notextile>$3', $text);
+        $text = preg_replace_callback('/(^|\s)<notextile>(.*)<\/notextile>(\s|$)?/msU', 
+            array(&$this, "fTextile"), $text);
+        return preg_replace_callback('/(^|\s)==(.*)==(\s|$)?/msU', 
+            array(&$this, "fTextile"), $text);
+    } 
+
+// -------------------------------------------------------------
+    function fTextile($m)
+    {
+        $modifiers = array(     
+            '"' => '&#34;',
+            '%' => '&#37;',
+            '*' => '&#42;',
+            '+' => '&#43;',
+            '-' => '&#45;',
+            '<' => '&#60;',
+            '=' => '&#61;',
+            '>' => '&#62;',
+            '?' => '&#63;',     
+            '^' => '&#94;',
+            '_' => '&#95;',
+            '~' => '&#126;',        
+            );
+        
+        @list(, $before, $notextile, $after) = $m;
+        $notextile = str_replace(array_keys($modifiers), array_values($modifiers), $notextile);
+        return $before . '<notextile>' . $notextile . '</notextile>' . $after;
     }
 
 // -------------------------------------------------------------
