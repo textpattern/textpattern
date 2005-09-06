@@ -220,9 +220,6 @@ class Textile
 // -------------------------------------------------------------
     function TextileThis($text, $lite='', $encode='', $noimage='', $strict='', $rel='')
     {
-        if (get_magic_quotes_gpc())
-            $text = stripslashes($text);
-
         if ($rel)
            $this->rel = ' rel="'.$rel.'" ';
 
