@@ -1,4 +1,4 @@
-#@version 1.0rc5;1123931708
+#@version 4.0;1125923601
 #@admin
 add_new_author => Add new author
 and_mailed_to => and mailed to
@@ -422,6 +422,7 @@ use_mail_on_feeds_id => Use mail on feeds id?
 use_plugins => Use plugins?
 year_month_day_title => /year/month/day/title
 #@public
+404_not_found => 404 - The requested page was not found.
 active => Active
 add => Add
 admin => Admin
@@ -499,6 +500,7 @@ et-ee => Eesti
 excerpt => Excerpt
 experts_only => experts only
 extensions => Extensions
+fi-fi => Suomi
 forget => Forget
 form => Form
 forms => Forms
@@ -515,6 +517,7 @@ hyperlink => hyperlink
 image => image
 imageurl => imageurl
 inserted_text => inserted text
+is-is => Íslenska(Icelandic)
 it-it => Italiano
 ja-jp => 日本語
 keywords => Keywords
@@ -546,7 +549,6 @@ no => no
 no-no => Norsk
 none => None
 nopopup => nopopup
-not_found => The requested URL was not found
 numeric_list => Numeric list
 off => off
 older => older
@@ -619,6 +621,8 @@ your_branch_is_updated => You have the most updated version of this Textpattern 
 your_ip_is_blacklisted_by => Your IP address has been blacklisted by
 you_have_been_banned => You have been banned from commenting.
 yyyy-mm => yyyy-mm
+zh-cn => 中文(简体)
+zh-tw => 中文(繁體)
 #@section
 delete_section_confirmation => confirm section deletion
 edit_sections => edit sections
@@ -645,7 +649,7 @@ create_config => create a file called <code>config.php</code> in the <code>/text
 db_cant_connect => Can't connect to database
 db_connected => Connected
 db_doesnt_exist => Database {dbname} doesn't exist
-db_must_exist => Note that the database you specify must exist; Textpattern won&#8217;t create it for you.
+db_must_exist => Note that the database you specify must exist; Textpattern won’t create it for you.
 did_it => I did it
 errors_during_install => There were {num} errors during the installation. You can ask for help in the Textpattern forums.
 full_path_to_txp => Full server path to Textpattern
@@ -657,6 +661,7 @@ my_site => My Site
 my_slogan => My pithy slogan
 need_details => Inevitably, we need a few details
 please_enter_url => Please enter the web-reachable address of your site
+prefix_bad_characters => The table prefix {dbprefix} contains characters that are not allowed.<br /> The first character must match one of <b>a-zA-Z_</b> and all following characters must match one of <b>a-zA-Z0-9_</b>
 prefix_warning => (Use ONLY if you require multiple installations in one database)
 setup_comment_invite => Comment
 setup_login => Choose a login name (basic characters and spaces only please)
