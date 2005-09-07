@@ -40,8 +40,7 @@ $LastChangedRevision$
 	ob_start();
 
 		// useful for clean urls with error-handlers
-	header("Status: 200 OK");
-	header("HTTP/1.1 200 OK");
+	txp_status_header('200 OK');
 
     	// start the clock for runtime
 	$microstart = getmicrotime();

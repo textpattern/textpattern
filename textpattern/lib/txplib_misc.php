@@ -1170,13 +1170,21 @@ else
 	}
 
 // -------------------------------------------------------------
+	function txp_status_header($status='200 OK')
+	{
+		if (substr(php_sapi_name(), 0, 3) == 'cgi')
+			header("Status: $status");
+		else
+			header("HTTP/1.1 $status");
+	}
+
+// -------------------------------------------------------------
 	function txp_die($msg, $status='503 Service Unavailable')
 	{
 		// 503 status might discourage search engines from indexing or caching the error message
 
 		if ($status) {
-			header("Status: $status");
-			header("HTTP/1.1 $status");
+			txp_status_header($status);
 		}
 		$out = <<<eod
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
