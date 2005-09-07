@@ -268,8 +268,7 @@ $LastChangedRevision$
 		if ($login && $pass) {
 			if (!$au || !$ap || $au!= $login || $ap!= $pass) {
 				header('WWW-Authenticate: Basic realm="Private"'); 
-				header('HTTP/1.0 401 Unauthorized');  
-				exit(gTxt('auth_required'));
+				txp_die(gTxt('auth_required'), '401 Unauthorized');
 			}
 		}
 	}
