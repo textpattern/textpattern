@@ -193,7 +193,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function saveComment() 
+	function saveComment()
 	{
 		global $siteurl,$comments_moderate,$comments_sendmail,$txpcfg,
 			$comments_disallow_images,$prefs;
@@ -244,7 +244,7 @@ $LastChangedRevision$
 		$email = doSlash(clean_url(strip_tags(deEntBrackets($email))));
 
 		$message2db = doSlash(markup_comment($message));
-				
+
 		$isdup = safe_row("message,name", "txp_discuss", 
 			"name='$name' and message='$message2db' and ip='$ip'");
 
@@ -264,8 +264,8 @@ $LastChangedRevision$
 							 visible   = $visible,
 							 posted	  = now()"
 						);						
-					
-						 if ($rs) {
+
+						if ($rs) {
 							safe_update("txp_discuss_nonce", "used='1'", "nonce='$nonce'");
 							if ($prefs['comment_means_site_updated']) {
 								safe_update("txp_prefs", "val=now()", "name='lastmod'");
@@ -273,13 +273,14 @@ $LastChangedRevision$
 							if ($comments_sendmail) {
 								mail_comment($message,$name,$email,$web,$parentid);
 							}
-							
+
 							$updated = update_comments_count($parentid);
 
 							ob_start();
 							$backpage = substr($backpage, 0, $prefs['max_url_len']);
 							$backpage = preg_replace("/[\x0a\x0d#].*$/s",'',$backpage);
 							$backpage .= ((strstr($backpage,'?')) ? '&' : '?') . 'commented=1';
+							txp_status_header('302 Found');
 							if($comments_moderate){
 								header('Location: '.$backpage.'#txpCommentInputForm');
 							}else{
