@@ -969,12 +969,12 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function chopUrl($req) 
 	{
-		$req = urldecode($req);
+		$req = urldecode(strtolower($req));
 		//strip off query_string, if present
 		$qs = strpos($req,'?');
 		if ($qs) $req = substr($req, 0, $qs);
 		$req = preg_replace('/index\.php$/', '', $req);
-		$r = explode('/',strtolower($req));
+		$r = explode('/',$req);
 		$o['u0'] = (!empty($r[0])) ? $r[0] : '';
 		$o['u1'] = (!empty($r[1])) ? $r[1] : '';
 		$o['u2'] = (!empty($r[2])) ? $r[2] : '';
