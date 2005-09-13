@@ -1394,7 +1394,7 @@ $LastChangedRevision$
 		if(!empty($s) && $s!= 'default')
 		{ 
 			$content[] = ($linked)? (
-					tag(htmlspecialchars($s),'a',' href="'.pagelinkurl(array('s'=>$s)).'/"')
+					tag(htmlspecialchars($s),'a',' href="'.pagelinkurl(array('s'=>$s)).'"')
 				):$s;
 		}
 		
