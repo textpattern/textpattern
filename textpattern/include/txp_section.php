@@ -17,13 +17,13 @@ $LastChangedRevision$
 	if ($event == 'section') {
 		require_privs('section');		
 
-		if(!$step or !function_exists($step) or !in_array($step, array('section_list','section_create','section_delete','section_save'))){
-			section_list();
+		if(!$step or !function_exists($step) or !in_array($step, array('sec_section_list','section_create','section_delete','section_save'))){
+			sec_section_list();
 		} else $step();
 	}
 
 // -------------------------------------------------------------
-	function section_list($message='') 
+	function sec_section_list($message='') 
 	{
 		pagetop(gTxt('sections'),$message);
 
@@ -146,9 +146,9 @@ $LastChangedRevision$
 					in_rss       = 1,
 					on_frontpage = 1"
 				);
-				if ($rs) section_list(messenger('section',$name,'created'));
-			} else section_list();
-		} else section_list(gTxt('section_name_already_exists'));
+				if ($rs) sec_section_list(messenger('section',$name,'created'));
+			} else sec_section_list();
+		} else sec_section_list(gTxt('section_name_already_exists'));
 	}
 
 //-------------------------------------------------------------
@@ -190,7 +190,7 @@ $LastChangedRevision$
 			);
 			safe_update("textpattern","Section='$name'", "Section='$old_name'");
 		}
-		section_list(messenger('section',$name,'updated'));
+		sec_section_list(messenger('section',$name,'updated'));
 	}
 
 // -------------------------------------------------------------
@@ -198,7 +198,7 @@ $LastChangedRevision$
 	{
 		$name = ps('name');
 		safe_delete("txp_section","name='$name'");
-		section_list(messenger('section',$name,'deleted'));
+		sec_section_list(messenger('section',$name,'deleted'));
 	}
 
 ?>

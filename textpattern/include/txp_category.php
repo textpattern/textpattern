@@ -18,24 +18,24 @@ if ($event == 'category') {
 	require_privs('category');	
 
 	if(!$step or !in_array($step, array(
-		'category_list','article_create','image_create','file_create','link_create',
-		'category_multiedit','article_save','image_save','file_save','link_save',
-		'article_edit','image_edit','file_edit','link_edit',		
+		'cat_category_list','cat_article_create','cat_image_create','cat_file_create','cat_link_create',
+		'cat_category_multiedit','cat_article_save','cat_image_save','cat_file_save','cat_link_save',
+		'cat_article_edit','cat_image_edit','cat_file_edit','cat_link_edit',		
 	))){
-		category_list();
+		cat_category_list();
 	} else $step();
 }
 
 //-------------------------------------------------------------
-	function category_list($message="")
+	function cat_category_list($message="")
 	{
 		pagetop(gTxt('categories'),$message);
 		$out = array('<table cellspacing="20" align="center">',
 		'<tr>',
-			tdtl(article_list(),' class="categories"'),
-			tdtl(link_list(),' class="categories"'),
-			tdtl(image_list(),' class="categories"'),
-			tdtl(file_list(),' class="categories"'),
+			tdtl(cat_article_list(),' class="categories"'),
+			tdtl(cat_link_list(),' class="categories"'),
+			tdtl(cat_image_list(),' class="categories"'),
+			tdtl(cat_file_list(),' class="categories"'),
 		'</tr>',
 		endTable());
 		echo join(n,$out);
@@ -43,31 +43,31 @@ if ($event == 'category') {
 
  
 //-------------------------------------------------------------
-	function article_list() 
+	function cat_article_list() 
 	{
-		return event_category_list('article');
+		return cat_event_category_list('article');
 	}
 
 //-------------------------------------------------------------
-	function article_create()
+	function cat_article_create()
 	{
-		return event_category_create('article');
+		return cat_event_category_create('article');
 	}
 
 //-------------------------------------------------------------
-	function article_edit()
+	function cat_article_edit()
 	{
-		return event_category_edit('article');
+		return cat_event_category_edit('article');
 	}
 
 //-------------------------------------------------------------
-	function article_save()
+	function cat_article_save()
 	{
-		return event_category_save('article', 'textpattern');
+		return cat_event_category_save('article', 'textpattern');
 	}
 
 //--------------------------------------------------------------
-	function parent_pop($name,$type)
+	function cat_parent_pop($name,$type)
 	{
 		$rs = getTree("root",$type);
 		if ($rs) {
@@ -80,63 +80,63 @@ if ($event == 'category') {
 
 
 // -------------------------------------------------------------
-	function link_list() 
+	function cat_link_list() 
 	{
-		return event_category_list('link');
+		return cat_event_category_list('link');
 	}
 
 //-------------------------------------------------------------
-	function link_create()
+	function cat_link_create()
 	{
-		return event_category_create('link');
+		return cat_event_category_create('link');
 	}
 
 //-------------------------------------------------------------
-	function link_edit()
+	function cat_link_edit()
 	{
-		return event_category_edit('link');
+		return cat_event_category_edit('link');
 	}
 
 //-------------------------------------------------------------
-	function link_save()
+	function cat_link_save()
 	{
-		return event_category_save('link', 'txp_link');
+		return cat_event_category_save('link', 'txp_link');
 	}
 
 // -------------------------------------------------------------
-	function image_list() 
+	function cat_image_list() 
 	{
-		return event_category_list('image');
+		return cat_event_category_list('image');
 	}
 
 //-------------------------------------------------------------
-	function image_create()
+	function cat_image_create()
 	{
-		return event_category_create('image');
+		return cat_event_category_create('image');
 	}
 
 //-------------------------------------------------------------
-	function image_edit()
+	function cat_image_edit()
 	{
-		return event_category_edit('image');
+		return cat_event_category_edit('image');
 	}
 
 //-------------------------------------------------------------
-	function image_save()
+	function cat_image_save()
 	{
-		return event_category_save('image', 'txp_image');
+		return cat_event_category_save('image', 'txp_image');
 	}
 
 
 // -------------------------------------------------------------
-	function article_multiedit_form($area, $array) 
+	function cat_article_multiedit_form($area, $array) 
 	{
 		$methods = array('delete'=>gTxt('delete'));
 		if ($array) {
 		return 
 		form(
 			join('',$array).
-			eInput('category').sInput('category_multiedit').hInput('type',$area).
+			eInput('category').sInput('cat_category_multiedit').hInput('type',$area).
 			small(gTxt('with_selected')).sp.selectInput('method',$methods,'',1).sp.
 			fInput('submit','',gTxt('go'),'smallerbox')
 			,'margin-top:1em',"verify('".gTxt('are_you_sure')."')"
@@ -145,7 +145,7 @@ if ($event == 'category') {
 	}
 
 // -------------------------------------------------------------
-	function category_multiedit() 
+	function cat_category_multiedit() 
 	{
 		$type = ps('type');
 		$method = ps('method');
@@ -159,7 +159,7 @@ if ($event == 'category') {
 				}
 			}
 			rebuild_tree('root', 1, $type);
-			category_list(messenger($type.'_category',join(', ',$categories),'deleted'));
+			cat_category_list(messenger($type.'_category',join(', ',$categories),'deleted'));
 		}
 	}
 
@@ -167,7 +167,7 @@ if ($event == 'category') {
 // so, merge them. Addition of new event categories is easiest now.
 
 //-------------------------------------------------------------
-	function event_category_list($evname) 
+	function cat_event_category_list($evname) 
 	{
 		global $prefs;
 		if($evname=='article') $headspan = ($prefs['show_article_category_count']) ? 3 : 2;		
@@ -179,7 +179,7 @@ if ($event == 'category') {
 				fInput('text','name','','edit','','',10).
 				fInput('submit','',gTxt('Create'),'smallerbox').
 				eInput('category').
-				sInput($evname.'_create')
+				sInput('cat_'.$evname.'_create')
 			);
 
 		$rs = getTree('root',$evname);
@@ -196,20 +196,20 @@ if ($event == 'category') {
 				} else $count = '';
 
 				$cbox = checkbox('selected[]',$id,0);
-				$editlink = eLink('category',$evname.'_edit','id',
+				$editlink = eLink('category','cat_'.$evname.'_edit','id',
 					$id,$title);
 
 				$items[] = graf( $cbox . sp . str_repeat(sp,max(0,$level-1)*2) . $editlink . $count);
 			}
 
-			if (!empty($items)) $o .= article_multiedit_form($evname,$items);
+			if (!empty($items)) $o .= cat_article_multiedit_form($evname,$items);
 
 		}
 			return $o;
 	}
 
 //-------------------------------------------------------------
-	function event_category_create($evname)
+	function cat_event_category_create($evname)
 	{
 		global $txpcfg;
 		
@@ -231,17 +231,17 @@ if ($event == 'category') {
 				
 				rebuild_tree('root', 1, $evname);
 				
-				if ($q) category_list(messenger($evname.'_category',$name,'created'));
+				if ($q) cat_category_list(messenger($evname.'_category',$name,'created'));
 			} else {
-				category_list();
+				cat_category_list();
 			}
 		} else {
-			category_list(messenger($evname.'_category',$name,'already_exists'));		
+			cat_category_list(messenger($evname.'_category',$name,'already_exists'));		
 		}
 	}
 
 //-------------------------------------------------------------
-	function event_category_edit($evname)
+	function cat_event_category_edit($evname)
 	{
 		pagetop(gTxt('categories'));
 
@@ -251,18 +251,18 @@ if ($event == 'category') {
 			extract($row);
 			$out = stackRows(
 				fLabelCell($evname.'_category_name') . fInputCell('name', $name, 1, 20),
-				fLabelCell('parent') . td(parent_pop($parent,$evname)),
+				fLabelCell('parent') . td(cat_parent_pop($parent,$evname)),
 				fLabelCell($evname.'_category_title') . fInputCell('title', $title, 1, 30),
 				hInput('id',$id),
 				tdcs(fInput('submit', '', gTxt('save_button'),'smallerbox'), 2)
 			);
 		}
-		$out.= eInput( 'category' ) . sInput( $evname.'_save' ) . hInput( 'old_name',$name );
+		$out.= eInput( 'category' ) . sInput( 'cat_'.$evname.'_save' ) . hInput( 'old_name',$name );
 		echo form( startTable( 'edit' ) . $out . endTable() );
 	}
 
 //-------------------------------------------------------------
-	function event_category_save($evname,$table_name)
+	function cat_event_category_save($evname,$table_name)
 	{
 		
 		global $txpcfg;
@@ -290,34 +290,34 @@ if ($event == 'category') {
 		}else {
 			safe_update($table_name, "category='$name'", "category='$old_name'");
 		}
-		category_list(messenger($evname.'_category',stripslashes($name),'saved'));
+		cat_category_list(messenger($evname.'_category',stripslashes($name),'saved'));
 	}
 
 	
 // --------------------------------------------------------------
 // Non image file upload. Have I mentioned how much I love this file refactoring?
 // -------------------------------------------------------------
-	function file_list() 
+	function cat_file_list() 
 	{
-		return event_category_list('file');
+		return cat_event_category_list('file');
 	}
 
 //-------------------------------------------------------------
-	function file_create()
+	function cat_file_create()
 	{
-		return event_category_create('file');
+		return cat_event_category_create('file');
 	}
 
 //-------------------------------------------------------------
-	function file_edit()
+	function cat_file_edit()
 	{
-		return event_category_edit('file');
+		return cat_event_category_edit('file');
 	}
 
 //-------------------------------------------------------------
-	function file_save()
+	function cat_file_save()
 	{
-		return event_category_save('file','txp_file');
+		return cat_event_category_save('file','txp_file');
 	}
 	
 	
