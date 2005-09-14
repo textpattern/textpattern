@@ -421,8 +421,8 @@ $LastChangedRevision$
 	# RPC install/update languages
 	function list_languages($message='')
 	{
-		global $prefs, $locale;
-		require_once txpath.'/lib/IXRClass.php';
+		global $prefs, $locale, $txpcfg;
+		require_once $txpcfg['txpath'].'/lib/IXRClass.php';
 
 		// Select and save active language
 		if (!$message && ps('step')=='list_languages' && ps('language'))
@@ -567,8 +567,8 @@ $LastChangedRevision$
 //-------------------------------------------------------------
 	function get_language()
 	{
-		global $prefs;
-		require_once txpath.'/lib/IXRClass.php';
+		global $prefs, $txpcfg;
+		require_once $txpcfg['txpath'].'/lib/IXRClass.php';
 		$lang_code = gps('lang_code');		
 
 		$client = new IXR_Client(RPC_SERVER);
