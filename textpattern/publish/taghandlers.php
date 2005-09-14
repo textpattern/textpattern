@@ -142,11 +142,12 @@ $LastChangedRevision$
 			'break'    => br,
 			'wraptag'  => '',
 			'category' => '',
-			'section'  => '', 
+			'section'  => '',
+			'limit'    => '',
 			'flavor'   => 'rss'
 		),$atts));
 		
-		$url = pagelinkurl(array('c'=>$category, 's'=>$section, $flavor=>'1'));
+		$url = pagelinkurl(array('category'=>$category, 'section'=>$section, 'limit'=>$limit ,$flavor=>'1'));
 
 		$out = '<a href="'.$url.'" title="XML feed">'.$label.'</a>';
 		return ($wraptag) ? tag($out,$wraptag) : $out;
