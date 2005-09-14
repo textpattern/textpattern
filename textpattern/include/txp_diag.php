@@ -296,7 +296,7 @@ $LastChangedRevision$
 		$table_msg = array();
 		foreach ($table_names as $table)
 		{
-			$ctr = safe_query("SHOW CREATE TABLE `". $table."`");
+			$ctr = safe_query("SHOW CREATE TABLE ". $table."");
 			if (!$ctr) 
 			{
 				unset($table_names[$table]);

@@ -33,7 +33,7 @@ $LastChangedRevision$
 		pagetop(gTxt('visitor_logs'));
 		extract(get_prefs());
 
-		safe_delete("txp_log", "`time` < date_sub(now(),interval ".
+		safe_delete("txp_log", "time < date_sub(now(),interval ".
 						$expire_logs_after." day)");
 
 		safe_optimize("txp_log");
@@ -58,7 +58,7 @@ $LastChangedRevision$
 		$rs = safe_rows_start(
 			"*, unix_timestamp(time) as stamp", 
 			"txp_log", 
-			"1 order by time desc limit $offset,$limit"
+			"1 order by time desc limit $limit offset $offset"
 		);
 
 		if ($rs) {

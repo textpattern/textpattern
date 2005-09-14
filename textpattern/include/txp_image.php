@@ -57,7 +57,7 @@ $LastChangedRevision$
 
 		$page = gps('page');
 
-		$total = getCount('txp_image',"1");  
+		$total = getCount('txp_image',"1=1");  
 		$limit = $image_list_pageby;
 		$numPages = ceil($total/$limit);  
 		$page = (!$page) ? 1 : $page;
@@ -71,7 +71,7 @@ $LastChangedRevision$
 		$nav[] = ($page != $numPages) 
 		?	PrevNextLink("image",$page+1,gTxt('next'),'next') : '';
 		
-		$rs = safe_rows_start("*", "txp_image", "1 order by category,name limit $offset,$limit");
+		$rs = safe_rows_start("*", "txp_image", "1=1 order by category,name limit $limit offset $offset");
 	
 		if($rs) {
 			while ($a = nextRow($rs)) {
@@ -201,8 +201,8 @@ $LastChangedRevision$
 				 h        = '$h',
 				 category = '$category',
 				 ext      = '$ext',
-				 `name`   = '$name2db',
-				 `date`   = now(),
+				 name     = '$name2db',
+				 date     = now(),
 				 author   = '$txp_user'
 			");
 			
@@ -257,8 +257,8 @@ $LastChangedRevision$
 				"w        = '$w',
 				 h        = '$h',
 				 ext      = '$ext',
-				 `name`   = '$name2db',
-				 `date`   = now(),
+				 name     = '$name2db',
+				 date     = now(),
 				 author   = '$txp_user'",
 				 "id = $id
 			");

@@ -249,7 +249,7 @@ if ($event == 'admin') {
 		$NewPass = generate_password(6);
 		
 		$rs = safe_update("txp_users","pass=password(lower('$NewPass'))",
-			"`name`='".doSlash($name)."'");
+			"name='".doSlash($name)."'");
 		
 		if ($rs) { 
 			if (send_new_password($NewPass,$themail,$name)) {

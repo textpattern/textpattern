@@ -55,7 +55,7 @@ $LastChangedRevision$
 
 		extract(get_prefs());
 
-		$total = safe_count('txp_discuss',"1");  
+		$total = safe_count('txp_discuss',"1=1");  
 		$limit = $comment_list_pageby;
 		$numPages = ceil($total/$limit);  
 		$page = (!$page) ? 1 : $page;
@@ -69,12 +69,12 @@ $LastChangedRevision$
 		$nav[] = ($page != $numPages) 
 		?	PrevNextLink("discuss",$page+1,gTxt('next'),'next') : '';
 
-		$criteria = ($crit) ? "message like '%$crit%'" : '1'; 
+		$criteria = ($crit) ? "message like '%$crit%'" : '1=1'; 
 
 		$rs = safe_rows_start(
 			"*, unix_timestamp(posted) as uPosted", 
 			"txp_discuss",
-			"$criteria order by posted desc limit $offset,$limit"
+			"$criteria order by posted desc limit $limit offset $offset"
 		);
 
 		echo pageby_form('discuss',$comment_list_pageby);
@@ -206,7 +206,7 @@ $LastChangedRevision$
 		$rs = safe_rows_start(
 				"*", 
 				"txp_discuss_ipban", 
-				"1 order by date_banned desc"
+				"1=1 order by date_banned desc"
 			);
 		if ($rs) {
 			echo startTable('list'),

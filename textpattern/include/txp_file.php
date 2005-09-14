@@ -44,7 +44,7 @@ $LastChangedRevision$
 
 		$page = gps('page');
 
-		$total = getCount('txp_file',"1");  
+		$total = getCount('txp_file',"1=1");  
 		$limit = $file_list_pageby;
 		$numPages = ceil($total/$limit);  
 		$page = (!$page) ? 1 : $page;
@@ -62,7 +62,7 @@ $LastChangedRevision$
 		echo startTable('list'),
 		tr(
 			tda(
-				upload_form(gTxt('upload_file'),'upload','file_insert'),
+				file_upload_form(gTxt('upload_file'),'upload','file_insert'),
 					' colspan="4" style="border:0"'
 			)
 		),
@@ -100,7 +100,7 @@ $LastChangedRevision$
 		$nav[] = ($page != $numPages) 
 		?	PrevNextLink("file",$page+1,gTxt('next'),'next') : '';
 		
-		$rs = safe_rows_start("*", "txp_file", "1 order by $sort $dir limit $offset,$limit");
+		$rs = safe_rows_start("*", "txp_file", "1=1 order by $sort $dir limit $limit offset $offset");
 		
 		if($rs) {
 			while ($a = nextRow($rs)) {
@@ -110,7 +110,7 @@ $LastChangedRevision$
 				// does the downloads column exist?
 				if (!isset($downloads)) {
 					// nope, add it
-					safe_alter("txp_file", "ADD `downloads` INT( 4 ) UNSIGNED DEFAULT '0' NOT NULL");
+					safe_alter("txp_file", "ADD downloads INT DEFAULT '0' NOT NULL");
 					$downloads = 0;
 				} else {
 					if (empty($downloads))
@@ -222,7 +222,7 @@ $LastChangedRevision$
 				$form =	tr(
 							tda(
 								hed(gTxt('file_relink'),3).
-								upload_form(gTxt('upload_file'),'upload','file_replace',$id).
+								file_upload_form(gTxt('upload_file'),'upload','file_replace',$id).
 								form(
 									graf(gTxt('existing_file').' '.
 									selectInput('filename',$existing_files,"",1).
@@ -503,7 +503,7 @@ $LastChangedRevision$
 	}	
 
 // -------------------------------------------------------------
-	function upload_form($label,$pophelp,$step,$id='')
+	function file_upload_form($label,$pophelp,$step,$id='')
 	{
 		global $file_max_upload_size;
 		
@@ -581,7 +581,7 @@ $LastChangedRevision$
 		}
 
 		$files = array();
-		$rs = safe_rows("filename", "txp_file", "1");
+		$rs = safe_rows("filename", "txp_file", "1=1");
 
 		if ($rs) {
 			foreach ($rs as $a) {

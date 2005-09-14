@@ -35,7 +35,7 @@ $LastChangedRevision$
 		,' colspan="8" style="border:0;height:50px"')).
 		 assHead('plugin','author','version','description','active','','','');
 			
-		$rs = safe_rows_start("*","txp_plugin", "1 order by name");
+		$rs = safe_rows_start("*","txp_plugin", "1=1 order by name");
 		
 		while ($a = nextRow($rs)) {
 		  extract($a);

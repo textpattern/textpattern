@@ -131,14 +131,14 @@ if (!empty($event) and $event == 'article') {
 					custom_9        = '$custom_9',
 					custom_10       = '$custom_10',
 					uid				= '".md5(uniqid(rand(),true))."',
-					feed_time		= curdate()"
+					feed_time		= now()"
 				);
 				
 			$GLOBALS['ID'] = mysql_insert_id();
 				
 			if ($Status>=4) {
 	
-				safe_update("txp_prefs", "val = now()", "`name` = 'lastmod'");
+				safe_update("txp_prefs", "val = now()", "name = 'lastmod'");
 				$message = gTxt('article_posted');
 	
 				include_once $txpcfg['txpath'].'/lib/IXRClass.php';
@@ -279,7 +279,7 @@ if (!empty($event) and $event == 'article') {
 					$wl_client->query('weblogUpdates.ping', $sitename, hu);
 				}		
 			}
-			safe_update("txp_prefs", "val = now()", "`name` = 'lastmod'");
+			safe_update("txp_prefs", "val = now()", "name = 'lastmod'");
 			$message = gTxt("article_saved");
 		} else { 
 			     if ($Status==3) { $message = gTxt("article_saved_pending"); } 
@@ -465,7 +465,7 @@ if (!empty($event) and $event == 'article') {
 			<p><a href="#" onclick="toggleDisplay(\'recent\');">' . gTxt('recent_articles').'</a>'.'</p>'.
 			'<div id="recent" style="display:none;">';
 			
-			$recents = safe_rows_start("Title, ID",'textpattern',"1 order by LastMod desc limit 10");
+			$recents = safe_rows_start("Title, ID",'textpattern',"1=1 order by LastMod desc limit 10");
 			
 			if ($recents) {
 				echo '<p>';
@@ -821,7 +821,7 @@ if (!empty($event) and $event == 'article') {
 		If (strlen($url_title) === 0) {
 			return ' '.gTxt("url_title_is_blank");
 		} else {
-			$url_title_count = safe_count("textpattern", "`url_title` = '".$url_title."'");
+			$url_title_count = safe_count("textpattern", "url_title = '".$url_title."'");
 			if ($url_title_count > 1)
 				return str_replace('{count}',$url_title_count,' '.gTxt("url_title_is_multiple"));
 		}

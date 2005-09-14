@@ -30,7 +30,7 @@ $LastChangedRevision$
 	function css_list($name) 
 	{	
 		$out[] = startTable('list','left');	
-		$rs = safe_rows_start("name as cssname","txp_css","1");
+		$rs = safe_rows_start("name as cssname","txp_css","1=1");
 		if ($rs) {
 			while ($a = nextRow($rs)) {
 				extract($a);

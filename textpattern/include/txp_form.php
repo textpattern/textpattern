@@ -38,7 +38,7 @@ $LastChangedRevision$
 		$methods = array('delete'=>gTxt('delete'));
 
 
-		$rs = safe_rows_start("*", "txp_form", "1 order by name");
+		$rs = safe_rows_start("*", "txp_form", "1=1 order by name");
 
 		if ($rs) {
 			while ($a = nextRow($rs)){

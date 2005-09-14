@@ -57,7 +57,7 @@ $LastChangedRevision$
 		$rs = safe_rows_start(
 			"*", 
 			"txp_link", 
-			"1 order by $sort $dir limit $offset,$limit"
+			"1 order by $sort $dir limit $limit offset $offset"
 		);
 
 
@@ -179,7 +179,7 @@ $LastChangedRevision$
 
 		if ($q) {
 			//update lastmod due to link feeds
-			safe_update("txp_prefs", "val = now()", "`name` = 'lastmod'");
+			safe_update("txp_prefs", "val = now()", "name = 'lastmod'");
 			
 			link_edit(messenger('link',$linkname,'created'));			
 		}

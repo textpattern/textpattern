@@ -79,7 +79,7 @@ function showHideFields($sel)
 		//Some data we collect
 		$content.= tr(
 			fLabelCell ('import_section','import_section').
-			td(section_popup(''))
+			td(import_section_popup(''))
 			);
 
 		$status_options = array(
@@ -233,7 +233,7 @@ function showHideFields($sel)
 //--------------------------------------------------------------
 // Display a popup of textpattern avaliable sections
 
-	function section_popup($Section)
+	function import_section_popup($Section)
 	{
 		$rs = safe_column("name", "txp_section", "name!='default'");
 		if ($rs) {

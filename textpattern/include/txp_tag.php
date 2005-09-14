@@ -654,7 +654,7 @@ $LastChangedRevision$
 	function author_pop($name) 
 	{
 		$arr = array('');
-		$rs = safe_rows_start("name", "txp_users", "1 order by name");
+		$rs = safe_rows_start("name", "txp_users", "1=1 order by name");
 		if ($rs) {
 			while ($a = nextRow($rs)){
 				$v = array_shift($a);
@@ -670,7 +670,7 @@ $LastChangedRevision$
 	{
 		$arr = array('');
 		
-		$typeq = ($type) ? "type = '$type'" : '1';
+		$typeq = ($type) ? "type = '$type'" : '1=1';
 		
 		$rs = safe_rows_start("name", "txp_form", "$typeq order by name");
 		if ($rs) {
