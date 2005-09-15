@@ -100,9 +100,9 @@ $LastChangedRevision$
 				if ($a['html'] == 'text_input')
 				{
 					$size = 20;
-					$out.= td(call_user_func('text_input', $a['name'], $a['val'], $size));
+					$out.= td(pref_func('text_input', $a['name'], $a['val'], $size));
 				}else{
-					$out.= td(call_user_func($a['html'], $a['name'], $a['val']));
+					$out.= td(pref_func($a['html'], $a['name'], $a['val']));
 				}
 				$out.= tda(popHelp($a['name']), ' style="vertical-align:middle"');
 				echo tr($out);
@@ -141,6 +141,13 @@ $LastChangedRevision$
 	}
 
 //-------------------------------------------------------------
+	function pref_func($func,$name,$val,$size="") 
+	{
+		$func = (is_callable('pref_'.$func) ? 'pref_'.$func : $func);
+		return call_user_func($func, $name, $val, $size);
+	}
+
+//-------------------------------------------------------------
 	function text_input($item,$var,$size="") 
 	{
 		return fInput("text",$item,$var,'edit','','',$size);
@@ -166,7 +173,7 @@ $LastChangedRevision$
 	}
 
 //-------------------------------------------------------------
-	function text($item,$var)
+	function pref_text($item,$var)
 	{
 		$things = array(
 			"2" => gTxt('use_textile'),
@@ -344,10 +351,10 @@ $LastChangedRevision$
 			if ($a['html'] == 'text_input')
 			{
 				$size = ($a['name'] == 'expire_logs_after' || $a['name'] == 'max_url_len' || $a['name'] == 'time_offset' || $a['name'] == 'rss_how_many' || $a['name'] == 'logs_expire')? 3 : 20;
-				$out.= td(call_user_func('text_input', $a['name'], $a['val'], $size));
+				$out.= td(pref_func('text_input', $a['name'], $a['val'], $size));
 			}else{
 				if (is_callable($a['html']))
-					$out.= td(call_user_func($a['html'], $a['name'], $a['val']));
+					$out.= td(pref_func($a['html'], $a['name'], $a['val']));
 				else
 					$out.= td($a['val']);
 			}
