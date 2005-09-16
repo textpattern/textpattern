@@ -105,6 +105,7 @@ $LastChangedRevision$
 	if (gps('parentid') && gps('submit')) {
 		saveComment();
 	} elseif (gps('parentid') and $comments_mode==1) { // popup comments?
+		header("Content-type: text/html; charset=utf-8");
 		exit(popComments(gps('parentid')));
 	}
 
