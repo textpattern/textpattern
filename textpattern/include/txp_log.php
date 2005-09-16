@@ -36,9 +36,6 @@ $LastChangedRevision$
 		safe_delete("txp_log", "time < date_sub(now(),interval ".
 						$expire_logs_after." day)");
 
-		safe_optimize("txp_log");
-		safe_repair("txp_log");
-
 		$page = gps('page');
 
 		$total = getCount('txp_log',"1");  
