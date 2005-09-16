@@ -29,8 +29,8 @@ $LastChangedRevision$
 
 		global $wlink;
 
-		$pageslist = safe_column("name", "txp_page", "1");
-		$styleslist = safe_column("name", "txp_css", "1");
+		$pageslist = safe_column("name", "txp_page", "1=1");
+		$styleslist = safe_column("name", "txp_css", "1=1");
 
 		$out[] = 
 			tr(

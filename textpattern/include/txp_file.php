@@ -100,7 +100,7 @@ $LastChangedRevision$
 		$nav[] = ($page != $numPages) 
 		?	PrevNextLink("file",$page+1,gTxt('next'),'next') : '';
 		
-		$rs = safe_rows_start("*", "txp_file", "1=1 order by $sort $dir limit $limit offset $offset");
+		$rs = safe_rows_start("*", "txp_file", "1=1 order by $sort $dir limit $offset, $limit");
 		
 		if($rs) {
 			while ($a = nextRow($rs)) {

@@ -57,7 +57,7 @@ $LastChangedRevision$
 		$rs = safe_rows_start(
 			"*", 
 			"txp_link", 
-			"1 order by $sort $dir limit $limit offset $offset"
+			"1 order by $sort $dir limit $offset, $limit"
 		);
 
 

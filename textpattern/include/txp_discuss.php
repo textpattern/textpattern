@@ -74,7 +74,7 @@ $LastChangedRevision$
 		$rs = safe_rows_start(
 			"*, unix_timestamp(posted) as uPosted", 
 			"txp_discuss",
-			"$criteria order by posted desc limit $limit offset $offset"
+			"$criteria order by posted desc limit $offset, $limit"
 		);
 
 		echo pageby_form('discuss',$comment_list_pageby);

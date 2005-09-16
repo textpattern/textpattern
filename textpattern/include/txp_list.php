@@ -69,7 +69,7 @@ $LastChangedRevision$
 		$rs = safe_rows_start(
 			"*, unix_timestamp(Posted) as uPosted", 
 			"textpattern", 
-			"$criteria order by $sort $dir limit $limit offset $offset"
+			"$criteria order by $sort $dir limit $offset, $limit"
 		);
 
 		echo (!$crit) ? list_nav_form($page,$numPages,$sort,$dir) : '', list_searching_form($crit,$method);

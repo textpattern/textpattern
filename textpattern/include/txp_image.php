@@ -71,7 +71,7 @@ $LastChangedRevision$
 		$nav[] = ($page != $numPages) 
 		?	PrevNextLink("image",$page+1,gTxt('next'),'next') : '';
 		
-		$rs = safe_rows_start("*", "txp_image", "1=1 order by category,name limit $limit offset $offset");
+		$rs = safe_rows_start("*", "txp_image", "1=1 order by category,name limit $offset, $limit");
 	
 		if($rs) {
 			while ($a = nextRow($rs)) {
