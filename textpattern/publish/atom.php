@@ -189,7 +189,7 @@ $LastChangedRevision$
 			$hims = serverset('HTTP_IF_MODIFIED_SINCE');
 		  
 			if ($hims == $last) {
-				header("HTTP/1.1 304 Not Modified"); exit;
+				txp_status_header("304 Not Modified"); exit;
 			}
 
 			$imsd = @strtotime($hims);
