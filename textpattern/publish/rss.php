@@ -122,17 +122,17 @@ $LastChangedRevision$
 		}
 
 		$last = fetch('unix_timestamp(val)','txp_prefs','name','lastmod');
-		$last = gmdate('D, d M Y H:i:s \G\M\T',$last);
-		header("Last-Modified: $last");
 		$expires = gmdate('D, d M Y H:i:s \G\M\T', time()+(3600*1));
 		header("Expires: $expires");
 		$hims = serverset('HTTP_IF_MODIFIED_SINCE');
+		$imsd = @strtotime($hims);
 
-		if ($hims == $last) {
+		if ($imsd >= $last) {
 				txp_status_header("304 Not Modified"); exit;
 		}
 
-		$imsd = @strtotime($hims);
+		header("Last-Modified: ".gmdate('D, d M Y H:i:s \G\M\T',$last));
+
 
 		if (is_callable('apache_request_headers')) {
 			$headers = apache_request_headers();
