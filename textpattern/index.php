@@ -21,7 +21,7 @@ $LastChangedRevision$
 	define("txpinterface", "admin");
 
 	$thisversion = '4.0.1';
-	$txp_using_svn = false; // set false for releases
+	$txp_using_svn = true; // set false for releases
 
 	ob_start(NULL, 2048);
 	if (!@include './config.php') { 

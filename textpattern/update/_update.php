@@ -45,9 +45,9 @@ $LastChangedRevision$
 			$dbversion = '4.0';
 	}  
 
-	if ( $dbversion !== '4.0.1' )
+	if ( $dbversion !== '4.0.2' )
 	{  
-		if ((include txpath.DS.'update'.DS.'_to_4.0.1.php') !== false)
+		if ((include txpath.DS.'update'.DS.'_to_4.0.2.php') !== false)
 			$dbversion = '4.0.1';
 	}
 
