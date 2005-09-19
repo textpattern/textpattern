@@ -355,8 +355,8 @@ else
 		if (!empty($prefs['plugin_cache_dir'])) {
 			$dir = rtrim($prefs['plugin_cache_dir'], '/') . '/';
 			if (is_file($dir . $name . '.php')) {
-				include($dir . $name . '.php');
 				$plugins[] = $name;
+				include($dir . $name . '.php');
 				return true;
 			}
 		}
