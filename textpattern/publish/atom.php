@@ -161,8 +161,8 @@ $LastChangedRevision$
 					$url = preg_replace("/&((?U).*)=/","&amp;\\1=",$url);
 					$e['link'] = '<link'.r_relalt.t_texthtml.' href="'.$url.'" />';
 
-					$e['issued'] = tag(gmdate('Y-m-d\TH:i:s\Z',$date),'published');
-					$e['modified'] = tag(gmdate('Y-m-d\TH:i:s\Z',$date),'updated');
+					$e['issued'] = tag(gmdate('Y-m-d\TH:i:s\Z',strtotime($date)),'published');
+					$e['modified'] = tag(gmdate('Y-m-d\TH:i:s\Z',strtotime($date)),'updated');
 					$e['id'] = tag('tag:'.$mail_or_domain.','.$feed_time.':'.$id,'id');
 
 					$articles[$id] = tag(n.t.t.join(n.t.t,$e).n,'entry');
