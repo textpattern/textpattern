@@ -61,7 +61,7 @@ $LastChangedRevision$
 
 		} else {
 
-			if ($step=='css_edit_raw' or $step=='pour') {
+			if ($step=='css_edit_raw' or $step=='pour' or ($step=='css_delete' && $prefs['edit_raw_css_by_default'])) {
 				css_edit_raw();
 			} else {
 				css_edit_form();
@@ -74,6 +74,7 @@ $LastChangedRevision$
 	{
 		global $step;
 		$name = (!gps('name') or $step=='css_delete') ? 'default' : gps('name');
+//		if (gps('newname')) $name = gps('newname');
 		$css = base64_decode(fetch("css",'txp_css','name',$name));
 		$css = parseCSS($css);
 		
@@ -161,7 +162,8 @@ $LastChangedRevision$
 	function css_edit_raw() 
 	{
 		global $step;
-		$name = (!gps('name')) ? 'default' : gps('name');
+		$name = (!gps('name') or $step=='css_delete') ? 'default' : gps('name');
+		if (gps('newname')) $name = gps('newname');
 
 		if ($step=='pour') 
 		{
@@ -295,7 +297,7 @@ $LastChangedRevision$
 
 		if ($savenew or $copy) {
 			safe_insert("txp_css", "name='$newname', css='$css'");
-			css_edit(messenger('css',$name,'created'));
+			css_edit(messenger('css',$newname,'created'));
 		} else {
 			safe_update("txp_css", "css='$css'", "name='$name'");	
 			css_edit(messenger('css',$name,'updated'));
