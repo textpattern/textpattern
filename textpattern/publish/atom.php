@@ -279,7 +279,6 @@ $LastChangedRevision$
 	 // when the content type is html. Leaving it commented out as a reminder.
 	  //$txt = safe_hed($txt);
 
-		$txt = preg_replace("/&((?U).*)=/","&amp;\\1=",$txt);
 		// encode and entify
 		$txt = preg_replace(array('/</','/>/',"/'/",'/"/'), array('&#60;','&#62;','&#039;','&#34;'), $txt);
 		$txt = preg_replace("/&(?![#0-9]+;)/i",'&amp;', $txt);
