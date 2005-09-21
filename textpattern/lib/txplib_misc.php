@@ -89,15 +89,13 @@ else
 	{
 		global $txpcfg;
 		
-		$event = gps('event');		
-		
-		$installed = safe_field('name', 'txp_lang',"lang='".doSlash($lang)."'");
+		$installed = safe_field('name', 'txp_lang',"lang='".doSlash($lang)."' limit 1");
 		
 		$lang_code = ($installed)? $lang : 'en-gb';
 				
-		$rs = (txpinterface == 'admin') ?
-				safe_rows_start('name, data','txp_lang',"lang='".doSlash($lang_code)."'"):
-				safe_rows_start('name, data','txp_lang',"lang='".doSlash($lang_code)."' AND ( event='public' OR event='common')");		
+		$rs = (txpinterface == 'admin') 
+				? safe_rows_start('name, data','txp_lang',"lang='".doSlash($lang_code)."'")
+				: safe_rows_start('name, data','txp_lang',"lang='".doSlash($lang_code)."' AND ( event='public' OR event='common')");
 		
 		$out = array();
 		
@@ -153,7 +151,7 @@ else
 		global $txpcfg;
 		$lang = LANG;
 				
-		$installed = safe_field('name', 'txp_lang',"lang='".doSlash($lang)."'");
+		$installed = safe_field('name', 'txp_lang',"lang='".doSlash($lang)."' limit 1");
 		
 		$lang_code = ($installed)? $lang : 'en-gb';
 				
