@@ -9,7 +9,11 @@ if (@ini_get('register_globals'))
 		unset($$name);
 
 header('Content-type: text/css');
+
+ob_start(NULL, 2048);
 include './config.php';
+ob_end_clean();
+
 $nolog = 1;
 define("txpinterface", "css");
 include $txpcfg['txpath'].'/publish.php';
