@@ -1572,6 +1572,32 @@ $LastChangedRevision$
 		return hu;
 	}
 
+// -------------------------------------------------------------
+	function img($atts) 
+	{
+		extract(lAtts(array(
+			'src' => '',
+		), $atts));
+
+		$img = rtrim(hu, '/').'/'.ltrim($src, '/');
+
+		$out = '<img src="'.$img.'" />';
+
+		return $out;
+	}
+
+// -------------------------------------------------------------
+	function error_message($atts) 
+	{
+		return $GLOBALS['txp_error_message'];
+	}
+
+// -------------------------------------------------------------
+	function error_status($atts) 
+	{
+		return $GLOBALS['txp_error_status'];
+	}
+
 //--------------------------------------------------------------------------
 //File tags functions. 
 //--------------------------------------------------------------------------

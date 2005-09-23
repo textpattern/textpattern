@@ -1184,21 +1184,35 @@ else
 		if ($status) {
 			txp_status_header($status);
 		}
-		$out = <<<eod
+
+		if ($GLOBALS['connected']) {
+			if ($status and $parts = @explode(' ', $status, 2)) {
+				$errno = @$parts[0];
+				$out = safe_field('user_html','txp_page',"name='error_".doSlash($errno)."'");
+			}
+			if (empty($out))
+				$out = safe_field('user_html','txp_page',"name='error_default'");
+		}
+
+		if (empty($out))
+			$out = <<<eod
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-   <title>Textpattern Error</title>
+   <title>Textpattern Error: <txp:error_status /></title>
 </head>
 <body>
-<p align="center" style="margin-top:4em">$msg</p>
+<p align="center" style="margin-top:4em"><txp:error_message /></p>
 </body>
 </html>
 eod;
 
-		die($out);
+		$GLOBALS['txp_error_message'] = $msg;
+		$GLOBALS['txp_error_status'] = $status;
+
+		die(parse($out));
 	}
 
 // -------------------------------------------------------------
