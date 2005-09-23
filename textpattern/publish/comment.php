@@ -312,17 +312,25 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function checkCommentsAllowed($id)
 	{
-		global $use_comments, $comments_disabled_after;
+		global $use_comments, $comments_disabled_after, $thisarticle;
 
-		if (!$use_comments)
+		if (!$use_comments || !$id)
 			return false;
 
-		extract(	
-			safe_row(
-				"Annotate,AnnotateInvite,unix_timestamp(Posted) as uPosted",
-					"textpattern", "ID='$id'"
-			)
-		);
+		if (isset($thisarticle['thisid']) && ($thisarticle['thisid'] == $id) && isset($thisarticle['annotate']))
+		{
+			$Annotate = $thisarticle['annotate'];
+			$uPosted  = $thisarticle['posted'];
+		} 
+		else
+		{
+			extract(	
+				safe_row(
+					"Annotate,unix_timestamp(Posted) as uPosted",
+						"textpattern", "ID='$id'"
+				)
+			);
+		}
 
 		if ($Annotate != 1)
 			return false;
