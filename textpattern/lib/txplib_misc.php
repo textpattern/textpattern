@@ -1205,11 +1205,13 @@ else
 			txp_status_header($status);
 		}
 
+		$code = '';
+		if ($status and $parts = @explode(' ', $status, 2)) {
+			$code = @$parts[0];
+		}
+
 		if ($GLOBALS['connected']) {
-			if ($status and $parts = @explode(' ', $status, 2)) {
-				$errno = @$parts[0];
-				$out = safe_field('user_html','txp_page',"name='error_".doSlash($errno)."'");
-			}
+			$out = safe_field('user_html','txp_page',"name='error_".doSlash($code)."'");
 			if (empty($out))
 				$out = safe_field('user_html','txp_page',"name='error_default'");
 		}
@@ -1231,6 +1233,7 @@ eod;
 
 		$GLOBALS['txp_error_message'] = $msg;
 		$GLOBALS['txp_error_status'] = $status;
+		$GLOBALS['txp_error_code'] = $code;
 
 		die(parse($out));
 	}

@@ -1589,13 +1589,41 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function error_message($atts) 
 	{
-		return $GLOBALS['txp_error_message'];
+		return @$GLOBALS['txp_error_message'];
 	}
 
 // -------------------------------------------------------------
 	function error_status($atts) 
 	{
-		return $GLOBALS['txp_error_status'];
+		return @$GLOBALS['txp_error_status'];
+	}
+
+// -------------------------------------------------------------
+	function if_status($atts, $thing='') 
+	{
+		global $pretext;
+
+		extract(lAtts(array(
+			'status' => '200',
+		), $atts));
+
+		$page_status = !empty($GLOBALS['txp_error_code']) 
+			? $GLOBALS['txp_error_code'] 
+			: $pretext['status'];
+
+		return parse(EvalElse($thing, $status == $page_status));
+	}
+
+// -------------------------------------------------------------
+	function page_url($atts) 
+	{
+		global $pretext;
+
+		extract(lAtts(array(
+			'type' => 'request_uri',
+		), $atts));
+
+		return @htmlspecialchars($pretext[$type]);	
 	}
 
 //--------------------------------------------------------------------------
