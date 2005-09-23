@@ -37,7 +37,7 @@ $LastChangedRevision$
 
 		$out[] = tag($sitename,'title',t_text);
 		$out[] = tag($site_slogan,'subtitle',t_text);
-		$out[] = '<link'.r_relself.' href="'.hu.'?atom=1" />';
+		$out[] = '<link'.r_relself.' href="'.pagelinkurl(array('atom'=>1)).'" />';
 		$out[] = '<link'.r_relalt.t_texthtml.' href="'.hu.'" />';
 		$articles = array();
 
@@ -101,12 +101,7 @@ $LastChangedRevision$
 					$e['issued'] = tag(gmdate('Y-m-d\TH:i:s\Z',$uPosted),'published');
 					$e['modified'] = tag(gmdate('Y-m-d\TH:i:s\Z',$uLastMod),'updated');
 
-					$escaped_title = safe_hed($Title);
-					$escaped_title = preg_replace("/&(?![#a-z0-9]+;)/i",'&amp;', $escaped_title);
-					$escaped_title = str_replace('<','&lt;',$escaped_title);
-					$escaped_title = str_replace('>','&gt;',$escaped_title);
-					$e['title'] = tag($escaped_title.$count,'title');
-
+					$e['title'] = tag(doSpecial($Title.$count),'title',t_html);
 
 					$uTitle = ($url_title) ? $url_title : stripSpace($Title);
 					$uTitle = htmlspecialchars($uTitle,ENT_NOQUOTES);
