@@ -98,9 +98,9 @@ function doAuth() {
 		$stay = ps('stay');
 		
 		if ($logout) {
-			setcookie('txp_login',' ',time()-3600);
+			setcookie('txp_login','',time()-3600);
 		}
-		if (isset($_COOKIE['txp_login']) and !$logout) {	// cookie exists
+		if (!empty($_COOKIE['txp_login']) and !$logout) {	// cookie exists
 	
 			@list($c_userid,$cookie_hash) = split(',',$_COOKIE['txp_login']);
 
