@@ -1152,7 +1152,7 @@ $LastChangedRevision$
 	function if_comments($atts, $thing)	
 	{
 		global $thisarticle;
-		return parse(EvalElse($thing, $thisarticle['annotate']));
+		return parse(EvalElse($thing, ($thisarticle['comments_count'] > 0)));
 	}
 
 // -------------------------------------------------------------
@@ -1163,7 +1163,7 @@ $LastChangedRevision$
 		$id = gAtt($atts,'id',gps('id'));
 		if ($thisarticle['thisid']) $id = $thisarticle['thisid'];
 		if (!$id && @$pretext['id']) $id = $pretext['id'];
-		return (checkCommentsAllowed($id)) ? parse($thing) : '';
+		return parse(EvalElse($thing, checkCommentsAllowed($id)));
 	}
 
 // -------------------------------------------------------------
@@ -1174,7 +1174,7 @@ $LastChangedRevision$
 		$id = gAtt($atts,'id',gps('id'));
 		if ($thisarticle['thisid']) $id = $thisarticle['thisid'];
 		if (!$id && @$pretext['id']) $id = $pretext['id'];
-		return (!checkCommentsAllowed($id)) ? parse($thing) : '';
+		return parse(EvalElse($thing, !checkCommentsAllowed($id)));
 	}
 
 // -------------------------------------------------------------

@@ -324,7 +324,7 @@ $LastChangedRevision$
 			)
 		);
 
-		if (empty($Annotate))
+		if ($Annotate != 1)
 			return false;
 
 		if($comments_disabled_after) {		
