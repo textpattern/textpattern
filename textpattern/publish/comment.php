@@ -353,7 +353,7 @@ $LastChangedRevision$
 
 		$out = gTxt('greeting')." $RealName,\r\n\r\n";
 		$out .= str_replace('{title}',$Title,gTxt('comment_recorded'))."\r\n";
-		$out .= permlinkurl($article)."\r\n\r\n";
+		$out .= permlinkurl_id($parentid)."\r\n\r\n";
 		$out .= gTxt('comment_name').": $cname\r\n";
 		$out .= gTxt('comment_email').": $cemail\r\n";
 		$out .= gTxt('comment_web').": $cweb\r\n";
