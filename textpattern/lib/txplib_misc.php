@@ -1177,11 +1177,31 @@ else
 	}
 
 // -------------------------------------------------------------
-	function txp_die($msg, $status='503 Service Unavailable')
+	function txp_die($msg, $status='503')
 	{
 		// 503 status might discourage search engines from indexing or caching the error message
 
+		// Intentionally incomplete - just the ones we're likely to use
+		$codes = array(
+			'200' => 'OK',
+			'301' => 'Moved Permanently',
+			'302' => 'Found',
+			'304' => 'Not Modified',
+			'307' => 'Temporary Redirect',
+			'401' => 'Unauthorized',
+			'403' => 'Forbidden',
+			'404' => 'Not Found',
+			'410' => 'Gone',
+			'414' => 'Request-URI Too Long',
+			'500' => 'Internal Server Error',
+			'501' => 'Not Implemented',
+			'503' => 'Service Unavailable',
+		);
+
 		if ($status) {
+			if (isset($codes[strval($status)]))
+				$status = strval($status) . ' ' . $codes[$status];
+
 			txp_status_header($status);
 		}
 

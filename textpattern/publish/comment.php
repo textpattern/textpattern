@@ -214,7 +214,7 @@ $LastChangedRevision$
 		extract($in);
 
 		if (!checkCommentsAllowed($parentid))
-			txp_die ( gTxt('comments_closed'), '403 Forbidden');
+			txp_die ( gTxt('comments_closed'), '403');
 
 		if ($prefs['comments_require_name']) {
 			if (!trim($name)) {
@@ -289,8 +289,8 @@ $LastChangedRevision$
 						}
 					}																			// end check nonce
 				}																				 // end check dup
-			} else txp_die(gTxt('your_ip_is_blacklisted_by'.' '.$blacklisted), '403 Forbidden'); // end check blacklist
-		} else txp_die(gTxt('you_have_been_banned'), '403 Forbidden');									// end check site ban
+			} else txp_die(gTxt('your_ip_is_blacklisted_by'.' '.$blacklisted), '403'); // end check blacklist
+		} else txp_die(gTxt('you_have_been_banned'), '403');									// end check site ban
 	}
 
 // -------------------------------------------------------------

@@ -411,11 +411,11 @@ $LastChangedRevision$
 		callback_event('textpattern');
 
 		if ($pretext['status'] == '404')
-			txp_die(gTxt('404_not_found').br.br.tag($siteurl,'a',' href="http://'.$siteurl.'"'), '404 Not Found');
+			txp_die(gTxt('404_not_found'), '404');
 
 		$html = safe_field('user_html','txp_page',"name='".doSlash($page)."'");
 		if (!$html) 
-			txp_die(gTxt('unknown_section').' '.$s.br.br.tag($siteurl,'a',' href="http://'.$siteurl.'"'), '404 Not Found');
+			txp_die(gTxt('unknown_section'), '404');
 
 		$html = parse($html);
 		$html = parse($html); // the function so nice, he ran it twice
