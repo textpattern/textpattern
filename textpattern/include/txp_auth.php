@@ -102,7 +102,7 @@ function doAuth() {
 		}
 		if (isset($_COOKIE['txp_login']) and !$logout) {	// cookie exists
 	
-			list($c_userid,$cookie_hash) = split(',',$_COOKIE['txp_login']);
+			@list($c_userid,$cookie_hash) = split(',',$_COOKIE['txp_login']);
 
 			$nonce = safe_field('nonce','txp_users',"name='$c_userid'");
 
