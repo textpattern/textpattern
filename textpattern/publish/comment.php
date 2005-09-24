@@ -118,15 +118,15 @@ $LastChangedRevision$
 		$msgstyle = ($msgstyle ? ' style="'.$msgstyle.'"' : '');
 		$msgrows = ($msgrows and is_numeric($msgrows)) ? ' rows="'.intval($msgrows).'"' : '';
 		$msgcols = ($msgcols and is_numeric($msgcols)) ? ' cols="'.intval($msgcols).'"' : '';
-		$textarea = '<textarea class="txpCommentInputMessage" name="message"'.$msgcols.$msgrows.$msgstyle.' tabindex="1">'.htmlspecialchars($message).'</textarea>';
+		$textarea = '<textarea class="txpCommentInputMessage" name="message" id="message" '.$msgcols.$msgrows.$msgstyle.' tabindex="1">'.htmlspecialchars($message).'</textarea>';
 
 		$comment_submit_button = ($preview)
 		?	fInput('submit','submit',gTxt('submit'),'button')
 		:	'';
 			
 		$checkbox = (!empty($_COOKIE['txp_name']))
-		?	checkbox('forget',1,0).gTxt('forget')
-		:	checkbox('remember',1,1).gTxt('remember');
+		?	checkbox('forget',1,0).tag(gTxt('forget'),'label',' for="forget"')
+		:	checkbox('remember',1,1).tag(gTxt('remember'),'label',' for="remember"');
 
 		$vals = array(
 			'comment_name_input'    => $namewarn.input('text','name',  $name, $isize,'comment_name_input',"2"),
@@ -376,7 +376,7 @@ $LastChangedRevision$
 	function input($type,$name,$val,$size='',$class='',$tab='',$chkd='') 
 	{
 		$o = array(
-			'<input type="'.$type.'" name="'.$name.'" value="'.$val.'"',
+			'<input type="'.$type.'" name="'.$name.'" id="'.$name.'" value="'.$val.'"',
 			($size)	? ' size="'.$size.'"'	  : '',
 			($class) ? ' class="'.$class.'"'	: '',
 			($tab)	 ? ' tabindex="'.$tab.'"'	: '',

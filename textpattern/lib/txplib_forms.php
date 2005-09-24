@@ -120,7 +120,7 @@ $LastChangedRevision$
 //-------------------------------------------------------------
 	function checkbox($name,$value,$checked='1')
 	{
-		$o[] = '<input type="checkbox" name="'.$name.'" value="'.$value.'"';
+		$o[] = '<input type="checkbox" name="'.$name.'" value="'.$value.'" id="'.$name.'"';
 		$o[] = ($checked=='1') ? ' checked="checked"' : '';
 		$o[] = ' />';
 		return join('',$o);
