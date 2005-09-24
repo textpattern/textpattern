@@ -410,13 +410,13 @@ if (!empty($event) and $event == 'article') {
 
 		($view=='text' && $use_textile==2) ?
 		
-		'<p><a href="#" onclick="toggleDisplay(\'textile_help\');">'.gTxt('textile_help').'</a></p>
+		'<p><a href="#" onclick="toggleDisplay(\'textile_help\');return false;">'.gTxt('textile_help').'</a></p>
 		<div id="textile_help" style="display:none;">'.sidehelp().'</div>' : sp;
 
 		if ($view=='text') {
 		
 			echo 
-			'<p><a href="#" onclick="toggleDisplay(\'advanced\');">'.
+			'<p><a href="#" onclick="toggleDisplay(\'advanced\'); return false;">'.
 				gTxt('advanced_options').'</a></p>',
 			'<div id="advanced" style="display:none;">',
 				
@@ -462,7 +462,7 @@ if (!empty($event) and $event == 'article') {
 		
 			'</div>
 			
-			<p><a href="#" onclick="toggleDisplay(\'recent\');">' . gTxt('recent_articles').'</a>'.'</p>'.
+			<p><a href="#" onclick="toggleDisplay(\'recent\'); return false;">' . gTxt('recent_articles').'</a>'.'</p>'.
 			'<div id="recent" style="display:none;">';
 			
 			$recents = safe_rows_start("Title, ID",'textpattern',"1=1 order by LastMod desc limit 10");

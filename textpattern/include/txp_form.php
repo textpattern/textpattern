@@ -134,7 +134,7 @@ $LastChangedRevision$
 						sp.popHelp('form_place_search_results').br.
 						popTagLinks('search_result')).
 					graf(
-						tag('<strong>'.gTxt('file_download_tags').'</strong>','a',' href="#" onclick="toggleDisplay(\'downloadtags\');"').sp.popHelp('form_file_download_tags')).
+						tag('<strong>'.gTxt('file_download_tags').'</strong>','a',' href="#" onclick="toggleDisplay(\'downloadtags\'); return false;"').sp.popHelp('form_file_download_tags')).
 						graf(popTagLinks('file_download'), ' style="display:none;" id="downloadtags"')
 				).
 				tdtl(
