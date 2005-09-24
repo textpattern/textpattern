@@ -101,7 +101,12 @@ $LastChangedRevision$
 					$e['issued'] = tag(gmdate('Y-m-d\TH:i:s\Z',$uPosted),'published');
 					$e['modified'] = tag(gmdate('Y-m-d\TH:i:s\Z',$uLastMod),'updated');
 
-					$e['title'] = tag(doSpecial($Title.$count),'title',t_html);
+					$escaped_title = safe_hed($Title);
+					$escaped_title = preg_replace("/&(?![#a-z0-9]+;)/i",'&amp;', $escaped_title);
+					$escaped_title = str_replace('<','&lt;',$escaped_title);
+					$escaped_title = str_replace('>','&gt;',$escaped_title);
+					$e['title'] = tag($escaped_title.$count,'title');
+
 
 					$uTitle = ($url_title) ? $url_title : stripSpace($Title);
 					$uTitle = htmlspecialchars($uTitle,ENT_NOQUOTES);
