@@ -674,6 +674,8 @@ $LastChangedRevision$
 		if ($rs) {
 			extract($rs);
 			populateArticleData($rs);			
+			$GLOBALS['thisarticle']['is_first'] = 1;
+			$GLOBALS['thisarticle']['is_last'] = 1;
 
 			// define the article form
 			$article = fetch_form(($override_form) ? $override_form : $form);
