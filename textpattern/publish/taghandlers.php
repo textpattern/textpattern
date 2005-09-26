@@ -996,19 +996,56 @@ $LastChangedRevision$
 	}
 	
 // -------------------------------------------------------------
-	function section($atts) 
+	function category($atts) 
 	{
-		global $thisarticle;
+		global $pretext;
 		extract(lAtts(array(
 			'link' => 0,
 			'title' => 0,
+			'name' => '',
+			'wraptag' => '',
+			'section' => @$pretext['s'],
 		),$atts));
-		if ($thisarticle['section']) {
-			$sec_title = ($title ? fetch_section_title($thisarticle['section']) : $thisarticle['section']);
+
+		if ($name) $cat = $name;
+		else $cat = @$pretext['c'];
+
+		if ($cat) {
+			$cat_title = ($title ? fetch_category_title($cat) : $cat);
+			if ($link) 
+				$out = '<a href="'.pagelinkurl(array('c'=>$cat, 's'=>$section)).'">'.
+					$cat_title.'</a>';
+			else
+				$out = $cat_title;
+
+			return doTag($out, $wraptag);
+		}
+	}
+
+// -------------------------------------------------------------
+	function section($atts) 
+	{
+		global $thisarticle, $pretext;
+		extract(lAtts(array(
+			'link' => 0,
+			'title' => 0,
+			'name' => '',
+			'wraptag' => '',
+		),$atts));
+
+		if ($name) $sec = $name;
+		elseif (!empty($thisarticle['section'])) $sec = $thisarticle['section'];
+		else $sec = @$pretext['s'];
+
+		if ($sec) {
+			$sec_title = ($title ? fetch_section_title($sec) : $sec);
 			if (!empty($link)) 
-				return '<a href="'.pagelinkurl(array('s'=>$thisarticle['section'])).'">'.
+				$out = '<a href="'.pagelinkurl(array('s'=>$sec)).'">'.
 					$sec_title.'</a>';
-			return $sec_title;
+			else
+				$out = $sec_title;
+
+			return doTag($out, $wraptag);
 		}
 	}
 
