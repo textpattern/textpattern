@@ -1,4 +1,4 @@
- <?php
+<?php
 /*
 $HeadURL: http://svn.textpattern.com/current/textpattern/_update.php $
 $LastChangedRevision: 711 $
