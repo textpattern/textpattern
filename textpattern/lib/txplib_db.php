@@ -249,6 +249,12 @@ $DB = new DB;
 	}
 
 //-------------------------------------------------------------
+	function numRows($r)
+	{
+		return mysql_num_rows($r);
+	}
+
+//-------------------------------------------------------------
 	function getThing($query,$debug='') 
 	{
 		if ($r = safe_query($query,$debug)) {

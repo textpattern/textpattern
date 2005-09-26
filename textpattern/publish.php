@@ -603,10 +603,14 @@ $LastChangedRevision$
 		:	fetch_form($form);
 
 		if ($rs) {
+			$count = 0;
 			
 			$articles = array();
 			while($a = nextRow($rs)) {
+				++$count;
 				populateArticleData($a);
+				$GLOBALS['thisarticle']['is_first'] = ($count == 1);
+				$GLOBALS['thisarticle']['is_last'] = ($count == numRows($rs));
 				// define the article form
 				$article = ($allowoverride and $a['override_form']) 
 				?	fetch_form($a['override_form'])
