@@ -1663,6 +1663,37 @@ $LastChangedRevision$
 		return @htmlspecialchars($pretext[$type]);	
 	}
 
+// -------------------------------------------------------------
+	function if_different($atts, $thing) 
+	{
+		static $last;
+
+		$key = md5($thing);
+
+		$cond = EvalElse($thing, 1);
+
+		$out = parse($cond);
+		if (empty($last[$key]) or $out != $last[$key]) {
+			return $last[$key] = $out;
+		}
+		else
+			return parse(EvalElse($thing, 0));
+	}
+
+// -------------------------------------------------------------
+	function if_first_article($atts, $thing) 
+	{
+		global $thisarticle;
+		return parse(EvalElse($thing, !empty($thisarticle['is_first'])));
+	}
+
+// -------------------------------------------------------------
+	function if_last_article($atts, $thing) 
+	{
+		global $thisarticle;
+		return parse(EvalElse($thing, !empty($thisarticle['is_last'])));
+	}
+
 //--------------------------------------------------------------------------
 //File tags functions. 
 //--------------------------------------------------------------------------
