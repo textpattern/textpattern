@@ -783,3 +783,4 @@ text_or_tag => * text or tag here *
 title_separator => Sitename: Individual Article separator
 useful_tags => Useful tags
 wraptag => Wraptag
+xml_feed_title => XML Feed

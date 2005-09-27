@@ -144,12 +144,13 @@ $LastChangedRevision$
 			'category' => '',
 			'section'  => '',
 			'limit'    => '',
-			'flavor'   => 'rss'
+			'flavor'   => 'rss',
+			'title'    => gTxt('xml_feed_title'),
 		),$atts));
 		
 		$url = pagelinkurl(array('category'=>$category, 'section'=>$section, 'limit'=>$limit ,$flavor=>'1'));
 
-		$out = '<a href="'.$url.'" title="XML feed">'.$label.'</a>';
+		$out = '<a href="'.$url.'" title="'.$title.'">'.$label.'</a>';
 		return ($wraptag) ? tag($out,$wraptag) : $out;
 	}
 
@@ -161,12 +162,13 @@ $LastChangedRevision$
 			'break'    => br,
 			'wraptag'  => '',
 			'category' => '',
-			'flavor'   => 'rss'
+			'flavor'   => 'rss',
+			'title'    => gTxt('xml_feed_title'),
 		),$atts));
 	
 		$url = pagelinkurl(array('c'=>$category, $flavor=>'1', 'area'=>'link'));
 
-		$out = '<a href="'.$url.'" title="XML feed">'.$label.'</a>';
+		$out = '<a href="'.$url.'" title="'.$title.'">'.$label.'</a>';
 		
 		return ($wraptag) ? tag($out,$wraptag) : $out;
 	}
