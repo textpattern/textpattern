@@ -13,6 +13,8 @@ if (!defined('PFX')) {
 	} else define ("PFX",'');
 }
 
+set_magic_quotes_runtime(0);
+
 class DB {
     function DB() 
 	{
