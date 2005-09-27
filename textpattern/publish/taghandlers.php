@@ -18,13 +18,15 @@ $LastChangedRevision$
 		extract(lAtts(array('separator' => ': '),$atts));
 		$s = $sitename;
 		$sep = $separator;
-		if ($id)       return $s.$sep.safe_field('Title','textpattern',"ID = $id");
-		if ($c)        return $s.$sep.fetch_category_title($c);
-		if ($q)        return $s.$sep.gTxt('search_results').$sep.' '.$q;
-		if ($pg)       return $s.$sep.gTxt('page').' '.$pg;
-		if ($parentid) return $s.$sep.gTxt('comments_on').' '.
+
+		$out = $sitename;
+		if ($id)       $out = $s.$sep.safe_field('Title','textpattern',"ID = $id");
+		if ($c)        $out = $s.$sep.fetch_category_title($c);
+		if ($q)        $out = $s.$sep.gTxt('search_results').$sep.' '.$q;
+		if ($pg)       $out = $s.$sep.gTxt('page').' '.$pg;
+		if ($parentid) $out = $s.$sep.gTxt('comments_on').' '.
 			safe_field('Title','textpattern',"ID = '$parentid'");
-		return $sitename;
+		return escape_title($out);
 	}
 
 // -------------------------------------------------------------
@@ -303,7 +305,7 @@ $LastChangedRevision$
 			if ($label) $out[] = $label;
 			while ($a = nextRow($rs)) {
 				extract($a);
-				$out[] = href($Title,permlinkurl($a));
+				$out[] = href(escape_title($Title),permlinkurl($a));
 			}
 			if (is_array($out)) {
 				return doWrap($out, $wraptag, $break, $class);
@@ -330,7 +332,7 @@ $LastChangedRevision$
         	while ($a = nextRow($rs)) {
 				extract($a);
 				$Title = safe_field("Title",'textpattern',"ID=$parentid");
-				$out[] = href($name.' ('.$Title.')', permlinkurl_id($parentid).'#c'.$discussid);
+				$out[] = href($name.' ('.escape_title($Title).')', permlinkurl_id($parentid).'#c'.$discussid);
 			}
 			if (!empty($out)) {
 				return doWrap($out, $wraptag, $break, $class);
@@ -374,7 +376,7 @@ $LastChangedRevision$
 				foreach($rs as $a) {
 					extract($a);
 					if ($thisid == $id) continue;
-					$out[] = href($Title,permlinkurl($a));
+					$out[] = href(escape_title($Title),permlinkurl($a));
 				}
 				if (is_array($out)) {
 					return doWrap($out, $wraptag, $break, $class);
