@@ -42,7 +42,7 @@ $LastChangedRevision$
 		echo startTable('list'),
 		tr(
 			tda(
-				upload_form(gTxt('upload_file'),gTxt('upload'),'image_insert'),
+				upload_form(gTxt('upload_file'),gTxt('upload'),'image_insert','image'),
 					' colspan="4" style="border:0"'
 			)
 		),
@@ -135,7 +135,7 @@ $LastChangedRevision$
 					'<img src="'.hu.$img_dir.
 						'/'.$id.$ext.'" height="'.$h.'" width="'.$w.'" alt="" />'.
 						br.upload_form(gTxt('replace_image'),'replace_image_form',
-							'image_replace',$id)
+							'image_replace','image',$id)
 				)
 			),
 			tr(
@@ -147,7 +147,7 @@ $LastChangedRevision$
 								'/'.$id.'t'.$ext.'" alt="" />'.br
 							:	'',
 							upload_form(gTxt('upload_thumbnail'),'upload_thumbnail',
-								'thumbnail_insert',$id)
+								'thumbnail_insert','image',$id)
 						)
 					)
 				)
@@ -183,108 +183,34 @@ $LastChangedRevision$
 		extract($txpcfg);
 		$category = doSlash(gps('category'));
 		
-		$file = $_FILES['thefile']['tmp_name'];
-		$name = $_FILES['thefile']['name'];
-
-		$file = get_uploaded_file($file);
+		$img_result = image_data($_FILES['thefile'], $category);
 		
-		list($w,$h,$extension) = getimagesize($file);
-
-		if (($file !== false) && @$extensions[$extension]) {
-			$ext = $extensions[$extension];
-			$name = substr($name,0,strrpos($name,'.'));
-			$name .= $ext;
-			$name2db = doSlash($name);
-
-			$rs = safe_insert("txp_image",
-				"w        = '$w',
-				 h        = '$h',
-				 category = '$category',
-				 ext      = '$ext',
-				 name     = '$name2db',
-				 date     = now(),
-				 author   = '$txp_user'
-			");
-			
-			$id = mysql_insert_id();
-			
-			if(!$rs){
-
-				image_list('there was a problem saving image data');
-
-			} else {
-
-				$newpath = IMPATH.$id.$ext;
-
-				if(shift_uploaded_file($file, $newpath) == false) {
-					safe_delete("txp_image","id='$id'");
-					safe_alter("txp_image", "auto_increment=$id");
-					image_list($newpath.sp.gTxt('upload_dir_perms'));
-				} else {
-					chmod($newpath,0755);
-					image_edit(messenger('image',$name,'uploaded'),$id);
-				}
-			}
-		} else {
-			if ($file === false)
-				image_list(upload_get_errormsg($_FILES['thefile']['error']));
-			else
-				image_list(gTxt('only_graphic_files_allowed'));
+		if(is_array($img_result))
+		{
+			list($message, $id) = $img_result;
+			return image_edit($message, $id);
+		}else{
+			return image_list($img_result);
 		}
+		
 	}
 
 // -------------------------------------------------------------
 	function image_replace() 
 	{	
-		global $txpcfg,$extensions,$txp_user,$img_dir,$path_to_site;
+		global $txpcfg,$extensions,$txp_user;
 		extract($txpcfg);
 		$id = gps('id');
 		
-		$file = $_FILES['thefile']['tmp_name'];
-		$name = $_FILES['thefile']['name'];
-
-		$file = get_uploaded_file($file);
+		$img_result = image_data($_FILES['thefile'], '', $id);
 		
-		list($w,$h,$extension) = getimagesize($file);
 
-		if (($file !== false) && $extensions[$extension]) {
-			$ext = $extensions[$extension];
-			$name = substr($name,0,strrpos($name,'.'));
-			$name .= $ext;
-			$name2db = doSlash($name);
-
-			$rs = safe_update("txp_image",
-				"w        = '$w',
-				 h        = '$h',
-				 ext      = '$ext',
-				 name     = '$name2db',
-				 date     = now(),
-				 author   = '$txp_user'",
-				 "id = $id
-			");
-			
-			if(!$rs){
-
-				image_list('there was a problem saving image data');
-
-			} else {
-
-				$newpath = IMPATH.$id.$ext;
-
-				if(shift_uploaded_file($file, $newpath) == false) {
-					safe_delete("txp_image","id='$id'");
-					safe_alter("txp_image", "auto_increment=$id");
-					image_list($newpath.sp.gTxt('upload_dir_perms'));
-				} else {
-					chmod($newpath,0755);
-					image_edit(messenger('image',$name,'uploaded'),$id);
-				}
-			}
-		} else {
-			if ($file === false)
-				image_list(upload_get_errormsg($_FILES['thefile']['error']));
-			else
-				image_list(gTxt('only_graphic_files_allowed'));
+		if(is_array($img_result))
+		{
+			list($message, $id) = $img_result;
+			return image_edit($message, $id);
+		}else{
+			return image_list($img_result);
 		}
 	}
 
@@ -359,21 +285,7 @@ $LastChangedRevision$
 		} else image_list();
 	}
 
-// -------------------------------------------------------------
-	function upload_form($label,$pophelp,$step,$id='')
-	{
-		return
-			'<form enctype="multipart/form-data" action="index.php" method="post">'.
-			hInput('MAX_FILE_SIZE','1000000').
-			graf($label.': '.
-			fInput('file','thefile','','edit').
-			popHelp($pophelp).
-			fInput('submit','',gTxt('upload'),'smallerbox')).
-			eInput('image').
-			sInput($step).
-			hInput('id',$id).
-			'</form>';
-	}
+
 	
 // -------------------------------------------------------------
 	function image_change_pageby()
@@ -440,6 +352,71 @@ $LastChangedRevision$
 		 }
 		else {
 			image_edit(messenger('thumbnail',$id,'not_saved'),$id);
+		}
+	}
+
+// -------------------------------------------------------------	
+// Refactoring attempt, allowing other - plugin - functions to
+// upload images without the need for writting duplicated code.
+// -------------------------------------------------------------	
+	function image_data($file , $category = '', $id = '', $uploaded = true)
+	{
+		global $txpcfg, $extensions, $txp_user;
+		extract($txpcfg); 
+		
+		$name = $file['name'];
+		$error = $file['error'];
+		$file = $file['tmp_name'];
+		
+		if($uploaded){
+			$file = get_uploaded_file($file);
+		}
+		
+		list($w,$h,$extension) = getimagesize($file);
+
+		if (($file !== false) && @$extensions[$extension]) {
+			$ext = $extensions[$extension];
+			$name = substr($name,0,strrpos($name,'.'));
+			$name .= $ext;
+			$name2db = doSlash($name);
+			
+			$q ="w        = '$w',
+				 h        = '$h',
+				 ext      = '$ext',
+				 `name`   = '$name2db',
+				 `date`   = now(),
+				 author   = '$txp_user'";
+			if (empty($id)) {
+				$q.= ", category = '$category'";
+				$rs = safe_insert("txp_image",$q);
+				$id = mysql_insert_id();
+			}else{
+				$id = doSlash($id);
+				$rs = safe_update('txp_image',$q, "id = $id");
+			}
+			
+			if(!$rs){
+				
+				return gTxt('image_save_error');
+
+			} else {
+
+				$newpath = IMPATH.$id.$ext;
+
+				if(shift_uploaded_file($file, $newpath) == false) {
+					safe_delete("txp_image","id='$id'");
+					safe_alter("txp_image", "auto_increment=$id");
+					return $newpath.sp.gTxt('upload_dir_perms');
+				} else {
+					chmod($newpath,0755);
+					return array(messenger('image',$name,'uploaded'),$id);
+				}
+			}
+		} else {
+			if ($file === false)
+				return upload_get_errormsg($error);
+			else
+				return gTxt('only_graphic_files_allowed');
 		}
 	}
 

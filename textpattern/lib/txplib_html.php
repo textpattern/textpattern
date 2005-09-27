@@ -368,7 +368,21 @@ $LastChangedRevision$
 			eInput($event).sInput($event.'_change_pageby')
 		,' align="center"'));
 	}
-
+// -------------------------------------------------------------
+	function upload_form($label, $pophelp, $step, $event, $id='', $max_file_size = '1000000')
+	{
+		return
+			'<form enctype="multipart/form-data" action="index.php" method="post">'.
+			((!empty($max_file_size))? hInput('MAX_FILE_SIZE',$max_file_size): '').
+			graf($label.': '.
+			fInput('file','thefile','','edit').
+			popHelp($pophelp).
+			fInput('submit','',gTxt('upload'),'smallerbox')).
+			eInput($event).
+			sInput($step).
+			hInput('id',$id).
+			'</form>';
+	}
 
 
 ?>

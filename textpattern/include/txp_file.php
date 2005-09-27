@@ -487,13 +487,13 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function file_get_uploaded_name()
 	{
-		return $_FILES['file']['name'];
+		return $_FILES['thefile']['name'];
 	}
 
 // -------------------------------------------------------------
 	function file_get_uploaded()
 	{
-		return get_uploaded_file($_FILES['file']['tmp_name']);		
+		return get_uploaded_file($_FILES['thefile']['tmp_name']);		
 	}
 	
 // -------------------------------------------------------------
@@ -508,17 +508,10 @@ $LastChangedRevision$
 		global $file_max_upload_size;
 		
 		if (!$file_max_upload_size || intval($file_max_upload_size)==0) $file_max_upload_size = 2*(1024*1024);
-		return
-			'<form enctype="multipart/form-data" action="index.php" method="post">'.
-			(intval($file_max_upload_size)==0?'':hInput('max_file_size',$file_max_upload_size)).
-			graf($label.': '.
-			popHelp($pophelp).sp.
-			eInput('file').
-			sInput($step).
-			hInput('id',$id).
-			fInput('file','file','','edit').sp.
-			fInput('submit','',gTxt('upload'),'smallerbox')).
-			'</form>';
+		
+		$max_file_size = (intval($file_max_upload_size)==0)? '': hInput('max_file_size',$file_max_upload_size);
+			
+		return upload_form($label, $pophelp, $step, 'file', $id, $max_file_size);
 	}
 	
 // -------------------------------------------------------------
