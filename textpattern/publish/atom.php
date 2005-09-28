@@ -184,7 +184,7 @@ $LastChangedRevision$
 			$expires = gmdate('D, d M Y H:i:s \G\M\T', time()+(3600*1));
 			header("Expires: $expires");
 			$hims = serverset('HTTP_IF_MODIFIED_SINCE');
-			$imsd = @strtotime($hims);
+			$imsd = ($hims) ? strtotime($hims) : 0;
 		  
 			if ($imsd >= $last) {
 				txp_status_header("304 Not Modified"); exit;
