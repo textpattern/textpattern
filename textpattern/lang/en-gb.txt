@@ -1,4 +1,4 @@
-#@version 4.0;1125923601
+#@version 4.0.1;1127915659
 #@admin
 add_new_author => Add new author
 and_mailed_to => and mailed to
@@ -235,6 +235,7 @@ cannot_write_directory => Cannot write to directory
 choose_either_width_height_or_both => Indicate width, height, or both
 create_thumbnail => Create thumbnail
 image_name => Image name
+image_save_error => there was a problem saving image data
 img_dir_not_writeable => Warning: cannot write to image directory<br /> {imgdir}. <br />Please change file permissions to 777.
 invalid_width_or_height => Invalid width or height
 keep_square_pixels => Crop
@@ -531,6 +532,7 @@ list_discussions => list comments
 list_links => list links
 live => Live
 lowercase => lowercase
+lv-lv => Latviešu
 manual => Manual
 message => Message
 message_deleted => Message deleted
@@ -783,4 +785,3 @@ text_or_tag => * text or tag here *
 title_separator => Sitename: Individual Article separator
 useful_tags => Useful tags
 wraptag => Wraptag
-xml_feed_title => XML Feed

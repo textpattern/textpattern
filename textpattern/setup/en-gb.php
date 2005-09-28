@@ -237,6 +237,7 @@ $en_gb_lang = array(
 		'choose_either_width_height_or_both' => 'Indicate width, height, or both',
 		'create_thumbnail' => 'Create thumbnail',
 		'image_name' => 'Image name',
+		'image_save_error' => 'there was a problem saving image data',
 		'img_dir_not_writeable' => 'Warning: cannot write to image directory<br /> {imgdir}. <br />Please change file permissions to 777.',
 		'invalid_width_or_height' => 'Invalid width or height',
 		'keep_square_pixels' => 'Crop',
@@ -533,6 +534,7 @@ $en_gb_lang = array(
 		'list_links' => 'list links',
 		'live' => 'Live',
 		'lowercase' => 'lowercase',
+		'lv-lv' => 'Latviešu',
 		'manual' => 'Manual',
 		'message' => 'Message',
 		'message_deleted' => 'Message deleted',
@@ -787,5 +789,5 @@ $en_gb_lang = array(
 		'wraptag' => 'Wraptag',
 	)
 );
-$lastmod = gmdate('Y-m-d H:m:s',1125923601);
+$lastmod = gmdate('Y-m-d H:m:s',1127915659);
 ?>
