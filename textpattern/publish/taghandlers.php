@@ -1425,29 +1425,33 @@ $LastChangedRevision$
 			'wraptag' => 'p',
 			'sep' => '&#160;&#187;&#160;',
 			'link' => 'y',
-			'label' => $sitename
+			'label' => $sitename,
+			'title' => '0'
 		),$atts));
 		$linked = ($link == 'y')? true: false; 		
 		if ($linked) $label = '<a href="'.hu.'" class="noline">'.$sitename.'</a>';
 		
 		$content = array();
-		
 		extract($pretext);
 		if(!empty($s) && $s!= 'default')
 		{ 
+			$section_title = ($title) ? fetch_section_title($s) : $s;
+			$section_title_html = preg_replace(array('/</', '/>/', "/'/", '/"/'), array('&lt;', '&gt;', '&#039', '&quot;'), $section_title);
 			$content[] = ($linked)? (
-					tag(htmlspecialchars($s),'a',' href="'.pagelinkurl(array('s'=>$s)).'"')
-				):$s;
+					tag($section_title_html,'a',' href="'.pagelinkurl(array('s'=>$s)).'"')
+				):$section_title_html;
 		}
 		
 		$category = empty($c)? '': $c;
+		$category_title = (($title) && ($c != '')) ? fetch_category_title($category) : $category;
+		$category_title_html = preg_replace(array('/</', '/>/', "/'/", '/"/'), array('&lt;', '&gt;', '&#039', '&quot;'), $category_title);
 		$cattree = array();
 
 		while($category and $category != 'root' and $parent = safe_field('parent','txp_category',"name='$category'")) {
 			//Use new /category/category_name scheme here too?
 				$cattree[] = ($linked)? 
-					tag(str_replace("& ","&#38; ", $category),'a',' href="'.pagelinkurl(array('c'=>$category)).'"')
-						:$category;
+					tag($category_title_html,'a',' href="'.pagelinkurl(array('c'=>$category)).'"')
+						:$category_title_html;
 				$category = $parent;
 				unset($parent);
 		}		
