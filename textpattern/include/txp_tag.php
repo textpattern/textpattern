@@ -122,7 +122,7 @@ $LastChangedRevision$
 	function tag_linklist() 
 	{
 		global $step,$endform,$name;
-		$invars = gpsa(array('form','category','limit','sort','wraptag','break'));
+		$invars = gpsa(array('form','category','limit','sort','wraptag','break','label','labeltag'));
 		$sorts = array(''=>'','linksort'=>'Name',
 				'date desc'=>'Date descending','date asc'=>'Date ascending', 'rand()'=>'Random');
 		extract($invars);
@@ -134,6 +134,8 @@ $LastChangedRevision$
 			tagRow('sort_by', selectInput("sort",$sorts,$sort)).
 			tagRow('wraptag', fInput('text','wraptag',$wraptag,'edit','','',2)).
 			tagRow('break', fInput('text','break',$break,'edit','','',5)).
+			tagRow('label', fInput('text','label',$label,'edit','','',20)).
+			tagRow('labeltag', fInput('text','labeltag',$labeltag,'edit','','',5)).
 			$endform
 		);
 		$out .= ($step=='build') ? tdb(tb($name, $invars)) : '';
@@ -144,13 +146,15 @@ $LastChangedRevision$
 	function tag_category_list() 
 	{
 		global $step,$endform,$name;
-		$invars = gpsa(array('form','category','wraptag','break'));
+		$invars = gpsa(array('form','category','wraptag','break','label','labeltag'));
 		extract($invars);
 		$out = form(startTable('list').
 			tr(tdcs(hed(gTxt('tag_category_list'),3),2) ).
 			tagRow('category', category_pop($category)).
 			tagRow('wraptag', fInput('text','wraptag',$wraptag,'edit','','',2)).
 			tagRow('break', fInput('text','break',$break,'edit','','',5)).
+			tagRow('label', fInput('text','label',$label,'edit','','',20)).
+			tagRow('labeltag', fInput('text','labeltag',$labeltag,'edit','','',5)).
 			$endform
 		);
 		$out .= ($step=='build') ? tdb(tb($name, $invars)) : '';
@@ -162,7 +166,7 @@ $LastChangedRevision$
 	function tag_recent_articles() 
 	{
 		global $step,$endform,$name;
-		$invars = gpsa(array('label','limit','break','wraptag','category','sortby','sortdir'));
+		$invars = gpsa(array('label','limit','break','wraptag','category','sortby','sortdir','labeltag'));
 		extract($invars);
 		$label = (!$label) ? gTxt('recently') : $label;
 		$limit = (!$limit) ? '10' : $limit;
@@ -171,7 +175,8 @@ $LastChangedRevision$
 		$sortby = (!$sortby) ? '' : $sortby;
 		$out = form(startTable('list').
 			tr(tdcs(hed(gTxt('tag_recent_articles'),3),2) ) .
-			tagRow('label', fInput('text','label',$label,'edit','','',20)) .
+			tagRow('label', fInput('text','label',$label,'edit','','',20)).
+			tagRow('labeltag', fInput('text','labeltag',$labeltag,'edit','','',5)).
 			tagRow('limit', fInput('text','limit',$limit,'edit','','',2)) .
 			tagRow('break', fInput('text','break',$break,'edit','','',5)) .
 			tagRow('wraptag', fInput('text','wraptag',$wraptag,'edit','','',2)) .
@@ -188,7 +193,7 @@ $LastChangedRevision$
 	function tag_related_articles() 
 	{
 		global $step,$endform,$name;
-		$invars = gpsa(array('label','limit','break','wraptag'));
+		$invars = gpsa(array('label','limit','break','wraptag','labeltag'));
 		extract($invars);
 		$label = (!$label) ? 'Related Articles' : $label;
 		$limit = (!$limit) ? '10' : $limit;
@@ -197,6 +202,7 @@ $LastChangedRevision$
 		$out = form(startTable('list').
 			tr(tdcs(hed(gTxt('tag_related_articles'),3),2) ).
 			tagRow('label', fInput('text','label',$label,'edit','','',20)).
+			tagRow('labeltag', fInput('text','labeltag',$labeltag,'edit','','',5)).
 			tagRow('limit', fInput('text','limit',$limit,'edit','','',2)).
 			tagRow('break', fInput('text','break',$break,'edit','','',5)).
 			tagRow('wraptag', fInput('text','wraptag',$wraptag,'edit','','',2)).
@@ -210,7 +216,7 @@ $LastChangedRevision$
 	function tag_recent_comments() 
 	{
 		global $step,$endform,$name;
-		$invars = gpsa(array('label','limit','break','wraptag'));
+		$invars = gpsa(array('label','limit','break','wraptag','labeltag'));
 		extract($invars);
 		$label = (!$label) ? 'Recent Comments' : $label;
 		$limit = (!$limit) ? '10' : $limit;
@@ -218,6 +224,7 @@ $LastChangedRevision$
 		$out = form(startTable('list').
 			tr(tdcs(hed(gTxt('tag_recent_comments'),3),2) ).
 			tagRow('label', fInput('text','label',$label,'edit','','',20)).
+			tagRow('labeltag', fInput('text','labeltag',$labeltag,'edit','','',5)).
 			tagRow('limit', fInput('text','limit',$limit,'edit','','',2)).
 			tagRow('break', fInput('text','break',$break,'edit','','',5)).
 			tagRow('wraptag', fInput('text','wraptag',$wraptag,'edit','','',2)).
@@ -782,7 +789,7 @@ $LastChangedRevision$
 	function tag_file_download_list() 
 	{
 		global $step,$endform,$name;
-		$invars = gpsa(array('form','category','limit','sort','wraptag','break'));
+		$invars = gpsa(array('form','category','limit','sort','wraptag','break','label','labeltag'));
 		$sorts = array(''=>'','filename'=>'Name',
 				'downloads desc'=>'Download Count descending','downloads asc'=>'Download Count ascending', 'rand()'=>'Random');
 		extract($invars);
@@ -794,6 +801,8 @@ $LastChangedRevision$
 			tagRow('sort_by', selectInput("sort",$sorts,$sort)).
 			tagRow('wraptag', fInput('text','wraptag',$wraptag,'edit','','',2)).
 			tagRow('break', fInput('text','break',$break,'edit','','',5)).
+			tagRow('label', fInput('text','label',$label,'edit','','',20)).
+			tagRow('labeltag', fInput('text','labeltag',$labeltag,'edit','','',5)).
 			$endform
 		);
 		$out .= ($step=='build') ? tdb(tb($name, $invars)) : '';
