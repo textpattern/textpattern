@@ -188,6 +188,7 @@ $LastChangedRevision$
 			'wraptag'  => '',
 			'category' => '',
 			'class'    => __FUNCTION__,
+			'labeltag' => '',
 		),$atts));
 	
 		$Form = fetch_form($form);
@@ -202,8 +203,6 @@ $LastChangedRevision$
 		$rs = safe_rows_start("*","txp_link",join(' ',$qparts));
 	
 		if ($rs) {
-			if ($label)
-				$outlist[] = $label;
 		
 			while ($a = nextRow($rs)) {
 				extract($a);
@@ -220,7 +219,7 @@ $LastChangedRevision$
 			}
 			
 			if (!empty($outlist)) {
-				return doWrap($outlist, $wraptag, $break, $class);
+				return doLabel($label, $labeltag).doWrap($outlist, $wraptag, $break, $class);
 			}
 		}
 		return false;
@@ -289,7 +288,8 @@ $LastChangedRevision$
 			'category' => '',
 			'sortby'   => 'Posted',
 			'sortdir'  => 'desc',
-			'class'    => __FUNCTION__
+			'class'    => __FUNCTION__,
+			'labeltag' => '',
 		),$atts));
 
 		$catq = ($category) ? "and (Category1='".doSlash($category)."' 
@@ -302,13 +302,12 @@ $LastChangedRevision$
 		);
 		
 		if ($rs) {
-			if ($label) $out[] = $label;
 			while ($a = nextRow($rs)) {
 				extract($a);
 				$out[] = href(escape_title($Title),permlinkurl($a));
 			}
 			if (is_array($out)) {
-				return doWrap($out, $wraptag, $break, $class);
+				return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
 			}
 		}
 		return '';
@@ -322,20 +321,20 @@ $LastChangedRevision$
 			'break'    => br,
 			'wraptag'  => '',
 			'limit'    => 10,
-			'class'    => __FUNCTION__
+			'class'    => __FUNCTION__,
+			'labeltag' => ''
 		),$atts));
 
 		$rs = safe_rows_start("*",'txp_discuss',"visible=1 order by posted desc limit 0,$limit");
 
 		if ($rs) {
-			if ($label) $out[] = $label;
         	while ($a = nextRow($rs)) {
 				extract($a);
 				$Title = safe_field("Title",'textpattern',"ID=$parentid");
 				$out[] = href($name.' ('.escape_title($Title).')', permlinkurl_id($parentid).'#c'.$discussid);
 			}
 			if (!empty($out)) {
-				return doWrap($out, $wraptag, $break, $class);
+				return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
 			}
 		}
 		return '';
@@ -349,7 +348,8 @@ $LastChangedRevision$
 			'break'    => br,
 			'wraptag'  => '',
 			'limit'    => 10,
-			'class'    => __FUNCTION__
+			'class'    => __FUNCTION__,
+			'labeltag' => '',
 		),$atts));
 		
 		global $id,$thisid,$thisarticle;
@@ -372,14 +372,13 @@ $LastChangedRevision$
 			$rs = getRows(join(' ',$q));
 	
 			if ($rs) {
-				if ($label) $out[] = $label;
 				foreach($rs as $a) {
 					extract($a);
 					if ($thisid == $id) continue;
 					$out[] = href(escape_title($Title),permlinkurl($a));
 				}
 				if (is_array($out)) {
-					return doWrap($out, $wraptag, $break, $class);
+					return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
 				}
 			}
 		}
@@ -434,7 +433,8 @@ $LastChangedRevision$
 			'wraptag'  => '',
 			'parent'   => '',
 			'type'    => 'article',
-			'class'    => __FUNCTION__
+			'class'    => __FUNCTION__,
+			'labeltag' => '',
 		),$atts));
 
 		if ($parent) {
@@ -455,14 +455,13 @@ $LastChangedRevision$
 		}
 
 		if ($rs) {
-			if ($label) $out[] = $label;
 			while ($a = nextRow($rs)) {
 				extract($a);
 				if ($name=='root') continue;
 				if($name) $out[] = tag(str_replace("& ","&#38; ", $title),'a',' href="'.pagelinkurl(array('c'=>$name)).'"');
 			}
 			if (is_array($out)) {
-				return doWrap($out, $wraptag, $break, $class);
+				return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
 			}			
 		}
 		return '';
@@ -475,20 +474,20 @@ $LastChangedRevision$
 			'label'   => '',
 			'break'   => br,
 			'wraptag' => '',
-			'class'    => __FUNCTION__
+			'class'    => __FUNCTION__,
+			'labeltag' => '',
 		),$atts));
 		
 		$rs = safe_rows_start("name,title","txp_section","name != 'default' order by name");
 		
 		if ($rs) {
-			if ($label) $out[] = $label;
 			while ($a = nextRow($rs)) {
 				extract($a);
 				$url = pagelinkurl(array('s'=>$name));
 				$out[] = tag($title, 'a', ' href="'.$url.'"');
 			}
 			if (is_array($out)) {
-				return doWrap($out, $wraptag, $break, $class);
+				return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
 			}
 		}
 		return '';
@@ -1286,6 +1285,16 @@ $LastChangedRevision$
 		? tag($content, $tag, $atts)
 		: "<$tag $atts />";
 	}
+
+
+// -------------------------------------------------------------
+	function doLabel($label='', $labeltag='')
+	{
+		if ($label) {
+			return (empty($labeltag)? $label.'<br />' : tag($label, $labeltag));
+		}
+		return '';
+	}
 	
 // -------------------------------------------------------------
 	function permlink($atts,$thing=NULL)
@@ -1718,7 +1727,8 @@ $LastChangedRevision$
 			'limit'    => '10',
 			'wraptag'  => '',
 			'category' => '',
-			'class'    => __FUNCTION__
+			'class'    => __FUNCTION__,
+			'labeltag' => '',
 		),$atts));	
 		
 		$qparts = array(
@@ -1731,7 +1741,6 @@ $LastChangedRevision$
 		$rs = safe_rows_start("*","txp_file",join(' ',$qparts));
 	
 		if ($rs) {
-			if ($label) $outlist[] = $label;
 		
 			while ($a = nextRow($rs)) {				
 				$thisfile = fileDownloadFetchInfo("id='$a[id]'");
@@ -1742,7 +1751,7 @@ $LastChangedRevision$
 			
 			if (!empty($outlist)) {
 				if ($wraptag == 'ul' or $wraptag == 'ol') {
-					return doWrap($outlist, $wraptag, $break, $class);
+					return doLabel($label, $labeltag).doWrap($outlist, $wraptag, $break, $class);
 				}	
 				
 				return ($wraptag) ? tag(join($break,$outlist),$wraptag) : join(n,$outlist);
@@ -1944,5 +1953,6 @@ $LastChangedRevision$
 		global $thisfile;		
 		return $thisfile['description'];
 	}	
-	
+
+
 ?>
