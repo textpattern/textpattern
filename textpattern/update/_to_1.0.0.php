@@ -480,7 +480,7 @@ eod;
 				'ping_weblogsdotcom' => array('html' => 'yesnoradio','event'=> 'publish', 'type' => '1', 'position' => '0'),
 				'use_comments' => array('html' => 'yesnoradio','event'=> 'publish', 'type' => '0', 'position' => '12'),
 				'logging' => array('html' => 'logging','event'=> 'publish', 'type' => '0', 'position' => '10'),
-				'use_textile' => array('html' => 'text','event'=> 'publish', 'type' => '0', 'position' => '11'),
+				'use_textile' => array('html' => 'pref_text','event'=> 'publish', 'type' => '0', 'position' => '11'),
 				'tempdir' => array('html' => 'text_input','event'=> 'admin', 'type' => '1', 'position' => '0'),
 				'file_base_path' => array('html' => 'text_input','event'=> 'admin', 'type' => '1', 'position' => '0'),
 				'file_max_upload_size' => array('html' => 'text_input','event'=> 'admin', 'type' => '1', 'position' => '0'),		

@@ -58,6 +58,8 @@ EOF;
          name='error_default',
          user_html='".doSlash($error_default)."'");
    }
+   //take back use_textile
+   safe_update('txp_prefs',"html='pref_text'","name='use_textile'");
 
 
 
