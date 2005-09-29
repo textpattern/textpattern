@@ -179,6 +179,7 @@ php_version => PHP version
 preflight_check => Pre-flight check
 register_globals => Register globals
 server => Server
+server_time => Server time
 site_trailing_slash => Site URL has a trailing slash
 still_exists => still exists
 txp_path => Textpattern path

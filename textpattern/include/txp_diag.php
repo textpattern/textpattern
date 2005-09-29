@@ -257,7 +257,7 @@ $LastChangedRevision$
 
 		(ini_get('register_globals')) ? gTxt('register_globals').cs.ini_get('register_globals').n : '',
 
-		gTxt('magic_quotes').cs.get_magic_quotes_gpc().'/'.get_magic_quotes_runtime().n,
+		gTxt('server_time').cs.strftime('%Y-%m-%d %H:%M:%S').n,
 
 		'MySQL'.cs.mysql_get_server_info().n,
 
