@@ -1436,7 +1436,7 @@ $LastChangedRevision$
 		if(!empty($s) && $s!= 'default')
 		{ 
 			$section_title = ($title) ? fetch_section_title($s) : $s;
-			$section_title_html = preg_replace(array('/</', '/>/', "/'/", '/"/'), array('&lt;', '&gt;', '&#039', '&quot;'), $section_title);
+			$section_title_html = escape_title($section_title);
 			$content[] = ($linked)? (
 					tag($section_title_html,'a',' href="'.pagelinkurl(array('s'=>$s)).'"')
 				):$section_title_html;
@@ -1444,7 +1444,7 @@ $LastChangedRevision$
 		
 		$category = empty($c)? '': $c;
 		$category_title = (($title) && ($c != '')) ? fetch_category_title($category) : $category;
-		$category_title_html = preg_replace(array('/</', '/>/', "/'/", '/"/'), array('&lt;', '&gt;', '&#039', '&quot;'), $category_title);
+		$category_title_html = escape_title($category_title);
 		$cattree = array();
 
 		while($category and $category != 'root' and $parent = safe_field('parent','txp_category',"name='$category'")) {
