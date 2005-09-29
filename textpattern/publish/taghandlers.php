@@ -1850,8 +1850,7 @@ $LastChangedRevision$
 			'format' => ''			
 		), $atts));
 		
-		if (empty($decimals) || $decimals < 0) $decimals = 2;
-		if (is_numeric($decimals)) {
+		if (is_numeric($decimals) and $decimals >= 0) {
 			$decimals = intval($decimals);			
 		} else {
 			$decimals = 2;
