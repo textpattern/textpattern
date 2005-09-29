@@ -411,7 +411,7 @@ $LastChangedRevision$
 			foreach ($rs as $a) {
 				extract($a);
 				if ($name=='root') continue;
-				$sel = ($gc==$name or $gs==$name) ? 'selected="selected"' : '';
+				$sel = ($gc==$name or $gs==$name) ? ' selected="selected"' : '';
 				$out .= t.t.'<option value="'.urlencode($name).'"'.$sel.'>'.
 				$title.'</option>'.n;
 				unset($selected);
