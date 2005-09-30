@@ -94,6 +94,18 @@ $DB = new DB;
 	}
 
 // -------------------------------------------------------------
+// insert or update
+	function safe_upsert($table,$set,$where,$debug='') 
+	{
+		// FIXME: lock the table so this is atomic?
+		$r = safe_update($table, $set, $where, $debug);
+		if ($r and mysql_affected_rows())
+			return $r;
+		else
+			return safe_insert($table, join(', ', array($where, $set)), $debug);
+	}
+
+// -------------------------------------------------------------
 	function safe_alter($table, $alter, $debug='') 
 	{
 		$q = "alter table `".PFX."$table` $alter";
