@@ -48,7 +48,7 @@ $LastChangedRevision$
 
 		$out[] = tag('Textpattern','generator',
 			' uri="http://textpattern.com/" version="'.$version.'"');
-		$out[] = tag(date("Y-m-d\TH:i:s\Z",$last),'updated');
+		$out[] = tag(gmdate("Y-m-d\TH:i:s\Z",$last),'updated');
 
 
 		$auth[] = tag($pub['RealName'],'name');
