@@ -1317,4 +1317,10 @@ eod;
 		}
 	}
 
+// -------------------------------------------------------------
+	function in_list($val, $list, $delim=',')
+	{
+		$args = explode($delim, $list);
+		return in_array($val, $args);
+	}
 ?>

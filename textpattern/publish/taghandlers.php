@@ -1513,7 +1513,7 @@ $LastChangedRevision$
 		),$atts));
 
 		if (trim($name)) {
-			return parse(EvalElse($thing, ($c == $name)));
+			return parse(EvalElse($thing, in_list($c, $name)));
 		}
 
 		return parse(EvalElse($thing, !empty($c)));
@@ -1553,7 +1553,7 @@ $LastChangedRevision$
 
 		$section = ($s == 'default' ? '' : $s);
 
-		return parse(EvalElse($thing, ($section == $name)));
+		return parse(EvalElse($thing, in_list($section, $name)));
 
 	}
 
