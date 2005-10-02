@@ -470,12 +470,15 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function section_list($atts) // output href list of site sections
 	{
+		global $sitename;
+		
 		extract(lAtts(array(
 			'label'   => '',
 			'break'   => br,
 			'wraptag' => '',
 			'class'    => __FUNCTION__,
 			'labeltag' => '',
+			'include_default' => '',
 		),$atts));
 		
 		$rs = safe_rows_start("name,title","txp_section","name != 'default' order by name");
@@ -487,6 +490,7 @@ $LastChangedRevision$
 				$out[] = tag($title, 'a', ' href="'.$url.'"');
 			}
 			if (is_array($out)) {
+				if ($include_default) $out = array_merge(array(tag($sitename,'a', ' href="'.hu.'"')),$out);
 				return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
 			}
 		}
