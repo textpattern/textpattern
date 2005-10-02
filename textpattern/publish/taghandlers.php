@@ -20,10 +20,10 @@ $LastChangedRevision$
 		$sep = $separator;
 
 		$out = $sitename;
-		if ($id)       $out = $s.$sep.safe_field('Title','textpattern',"ID = $id");
 		if ($c)        $out = $s.$sep.fetch_category_title($c);
 		if ($q)        $out = $s.$sep.gTxt('search_results').$sep.' '.$q;
 		if ($pg)       $out = $s.$sep.gTxt('page').' '.$pg;
+		if ($id)       $out = $s.$sep.safe_field('Title','textpattern',"ID = $id");
 		if ($parentid) $out = $s.$sep.gTxt('comments_on').' '.
 			safe_field('Title','textpattern',"ID = '$parentid'");
 		return escape_title($out);
@@ -954,7 +954,7 @@ $LastChangedRevision$
 	function title($atts) 
 	{
 		global $thisarticle;
-		return $thisarticle['title'];	
+		return escape_title($thisarticle['title']);
 	}
 
 // -------------------------------------------------------------
