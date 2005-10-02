@@ -419,6 +419,7 @@ else
 						E_USER_WARNING => "Textpattern Warning", E_USER_NOTICE => "Textpattern Notice");
 
 		if (!($errno & error_reporting())) return;
+		if ($production_status == 'live') return;
 
 		echo "<pre>".gTxt('tag_error').' '.strong(htmlspecialchars($GLOBALS['txp_current_tag']))." -> ".strong($error[$errno])
 				.": ".strong($errstr)."</pre>";
