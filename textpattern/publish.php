@@ -417,8 +417,10 @@ $LastChangedRevision$
 		if (!$html) 
 			txp_die(gTxt('unknown_section'), '404');
 
+		set_error_handler("tagErrorHandler");
 		$html = parse($html);
 		$html = parse($html); // the function so nice, he ran it twice
+		restore_error_handler();
 		$html = (!$segment) ? $html : segmentPage($html);
 		$html = ($prefs['allow_page_php_scripting']) ? evalString($html) : $html;
 
@@ -849,11 +851,17 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function processTags($matches)
 	{
-		global $pretext, $production_status, $txptrace;
+		global $pretext, $production_status, $txptrace, $txp_current_tag;
+
 		$tag = $matches[1];
 
 		$atts = (isset($matches[2])) ? splat($matches[2]) : '';
 		$thing = (isset($matches[4])) ? $matches[4] : '';
+
+		$old_tag = @$txp_current_tag;
+		$txp_current_tag = '<txp:'.$tag.
+			($atts ? ' '.$matches[2] : '').
+			($thing ? '>' : ' />');
 
 		if ($production_status == 'debug')
 		{
@@ -861,15 +869,20 @@ $LastChangedRevision$
 			maxMemUsage(trim($matches[0]));
 		}
 
+		$out = '';
+
 		if ($thing) {
-			if (function_exists($tag)) return $tag($atts,$thing,$matches[0]);
-			if (isset($pretext[$tag])) return $pretext[$tag];
+			if (function_exists($tag)) $out = $tag($atts,$thing,$matches[0]);
+			elseif (isset($pretext[$tag])) $out = $pretext[$tag];
+			else trigger_error(gTxt('unknown_tag'), E_USER_WARNING);
 		} else {
-			if (function_exists($tag)) return $tag($atts);
-			if (isset($pretext[$tag])) return $pretext[$tag];
+			if (function_exists($tag)) $out = $tag($atts);
+			elseif (isset($pretext[$tag])) $out = $pretext[$tag];
+			else trigger_error(gTxt('unknown_tag'), E_USER_WARNING);
 		}
-		if ($production_status == 'debug') // return unknown Tag with removed attributes
-			return htmlspecialchars(preg_replace('#\"[^"]*\"#i','"***"',$matches[0]));
+
+		$txp_current_tag = $old_tag;
+		return $out;
 	}
 
 // -------------------------------------------------------------

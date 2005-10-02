@@ -411,6 +411,20 @@ else
 	}
 
 // -------------------------------------------------------------
+	function tagErrorHandler($errno, $errstr, $errfile, $errline)
+	{
+		global $production_status;
+
+		$error = array( E_WARNING => "Warning", E_NOTICE => "Notice", E_USER_ERROR => "Textpattern Error", 
+						E_USER_WARNING => "Textpattern Warning", E_USER_NOTICE => "Textpattern Notice");
+
+		if (!($errno & error_reporting())) return;
+
+		echo "<pre>".gTxt('tag_error').' '.strong(htmlspecialchars($GLOBALS['txp_current_tag']))." -> ".strong($error[$errno])
+				.": ".strong($errstr)."</pre>";
+	}
+
+// -------------------------------------------------------------
    function load_plugins($type=NULL)
    {
 		global $prefs,$plugins;
