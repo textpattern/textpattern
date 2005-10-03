@@ -188,7 +188,10 @@ $LastChangedRevision$
 		}
 
 		$deleted = event_multi_edit('textpattern','ID');
-		if(!empty($deleted)) return list_list(messenger('article',$deleted,'deleted'));
+		if(!empty($deleted)){
+			$method = ps('method');
+			return list_list(messenger('article',$deleted,(($method == 'delete')?'deleted':'modified')));
+		}
 		return list_list();
 	}
 
