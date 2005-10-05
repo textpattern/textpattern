@@ -902,6 +902,30 @@ function refs($m)
 		foreach (func_get_args() as $a)
 			echo "\n<pre>",(is_array($a)) ? print_r($a) : $a, "</pre>\n";
 	}
+	
+// -------------------------------------------------------------
+	function blockLite($text)
+    {
+        $find = array('bq', 'p');
+
+        $text = preg_replace("/(.+)\n(?![#*\s|])/",
+            "$1<br />", $text);
+
+        $text = explode("\n", $text);
+        array_push($text, " ");
+
+        foreach($text as $line) {
+
+            foreach($find as $tag) {
+                $line = preg_replace_callback("/^($tag)($this->a$this->c)\.(?::(\S+))? (.*)$/",
+                    array(&$this, "fBlock"), $line);
+            }
+
+            $line = preg_replace('/^(?!\t|<\/?pre|<\/?code|$| )(.*)/', "\t<p>$1</p>", $line);
+            $out[] = $line;
+        }
+        return join("\n", $out);
+    }
 
 
 } // end class
