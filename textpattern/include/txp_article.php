@@ -59,107 +59,73 @@ if (!empty($event) and $event == 'article') {
 		extract(get_prefs());
 		$incoming = psa($vars);
 		$message='';
-		
-		include_once $txpcfg['txpath'].'/lib/classTextile.php';
-		$textile = new Textile();
-		
-		if ($use_textile==0 or !$incoming['textile_body']) {
-			$incoming['Body_html'] = trim($incoming['Body']);
-		} else if ($use_textile==1) {
-			$incoming['Body_html'] = nl2br(trim($incoming['Body']));
-		} else if ($use_textile==2 && $incoming['textile_body']) {
-			$incoming['Body_html'] = $textile->TextileThis($incoming['Body']);
-		}
-		
-		$incoming['Title_plain'] = $incoming['Title'];
 
-		$incoming['Title'] = $textile->TextileThis($incoming['Title'],'',1);
+		$incoming = textile_main_fields($incoming, $use_textile);
 
-		if ($incoming['textile_excerpt']) {
-			$incoming['Excerpt_html'] = $textile->TextileThis($incoming['Excerpt']);
-		}else{
-			$incoming['Excerpt_html'] = $textile->TextileThis($incoming['Excerpt'],1);
+		extract(doSlash($incoming));
+
+		if ($publish_now==1) {
+			$when = 'now()';
+		} else {
+			$when = strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.":00")-tz_offset();
+			$when = "from_unixtime($when)";
 		}
 
-			extract(doSlash($incoming));
+		if ($Title or $Body or $Excerpt) {
 
-			if ($publish_now==1) {
-				$when = 'now()';
-			} else {
-				$when = strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.":00")-tz_offset();
-				$when = "from_unixtime($when)";
-			}
+			$textile_body = (!$textile_body) ? 0 : 1;
+			$textile_excerpt = (!$textile_excerpt) ? 0 : 1;
+			
+			if (!has_privs('article.publish') && $Status>=4) $Status = 3;
+			if (empty($url_title)) $url_title = stripSpace($Title_plain, 1);  	
 
-			if ($Title or $Body or $Excerpt) {
-
-				$textile_body = (!$textile_body) ? 0 : 1;
-				$textile_excerpt = (!$textile_excerpt) ? 0 : 1;
-				
-				if (!has_privs('article.publish') && $Status>=4) $Status = 3;
-				if (empty($url_title)) $url_title = stripSpace($Title_plain, 1);  	
-
-				safe_insert(
-				   "textpattern",
-				   "Title           = '$Title',
-					Body            = '$Body',
-					Body_html       = '$Body_html',
-					Excerpt         = '$Excerpt',
-					Excerpt_html    = '$Excerpt_html',
-					Image           = '$Image',
-					Keywords        = '$Keywords',
-					Status          = '$Status',
-					Posted          = $when,
-					LastMod         = now(),
-					AuthorID        = '$txp_user',
-					Section         = '$Section',
-					Category1       = '$Category1',
-					Category2       = '$Category2',
-					textile_body    =  $textile_body,
-					textile_excerpt =  $textile_excerpt,
-					Annotate        = '$Annotate',
-					override_form   = '$override_form',
-					url_title       = '$url_title',
-					AnnotateInvite  = '$AnnotateInvite',
-					custom_1        = '$custom_1',
-					custom_2        = '$custom_2',
-					custom_3        = '$custom_3',
-					custom_4        = '$custom_4',
-					custom_5        = '$custom_5',
-					custom_6        = '$custom_6',
-					custom_7        = '$custom_7',
-					custom_8        = '$custom_8',
-					custom_9        = '$custom_9',
-					custom_10       = '$custom_10',
-					uid				= '".md5(uniqid(rand(),true))."',
-					feed_time		= now()"
-				);
-				
+			safe_insert(
+			   "textpattern",
+			   "Title           = '$Title',
+				Body            = '$Body',
+				Body_html       = '$Body_html',
+				Excerpt         = '$Excerpt',
+				Excerpt_html    = '$Excerpt_html',
+				Image           = '$Image',
+				Keywords        = '$Keywords',
+				Status          = '$Status',
+				Posted          = $when,
+				LastMod         = now(),
+				AuthorID        = '$txp_user',
+				Section         = '$Section',
+				Category1       = '$Category1',
+				Category2       = '$Category2',
+				textile_body    =  $textile_body,
+				textile_excerpt =  $textile_excerpt,
+				Annotate        = '$Annotate',
+				override_form   = '$override_form',
+				url_title       = '$url_title',
+				AnnotateInvite  = '$AnnotateInvite',
+				custom_1        = '$custom_1',
+				custom_2        = '$custom_2',
+				custom_3        = '$custom_3',
+				custom_4        = '$custom_4',
+				custom_5        = '$custom_5',
+				custom_6        = '$custom_6',
+				custom_7        = '$custom_7',
+				custom_8        = '$custom_8',
+				custom_9        = '$custom_9',
+				custom_10       = '$custom_10',
+				uid				= '".md5(uniqid(rand(),true))."',
+				feed_time		= now()"
+			);
+			
 			$GLOBALS['ID'] = mysql_insert_id();
 				
 			if ($Status>=4) {
-	
-				safe_update("txp_prefs", "val = now()", "name = 'lastmod'");
-				$message = gTxt('article_posted');
-	
-				include_once $txpcfg['txpath'].'/lib/IXRClass.php';
 				
-				if ($ping_textpattern_com) {
-					$tx_client = new IXR_Client('http://textpattern.com/xmlrpc/');
-					$tx_client->query('ping.Textpattern', $sitename, hu);
-				}
-	
-				if ($ping_weblogsdotcom==1) {
-					$wl_client = new IXR_Client('http://rpc.pingomatic.com/');
-					$wl_client->query('weblogUpdates.ping', $sitename, hu);
-				}		
-			
-			} else { 	
-					 if ($Status==3) { $message = gTxt("article_saved_pending"); } 
-				else if ($Status==2) { $message = gTxt("article_saved_hidden");  } 
-				else if ($Status==1) { $message = gTxt("article_saved_draft");   }
+				do_pings();
+				
+				safe_update("txp_prefs", "val = now()", "name = 'lastmod'");
 			}
-			$message .= check_url_title($url_title);
-			article_edit($message);
+			article_edit(
+				get_status_message($Status).check_url_title($url_title)
+			);
 		} else article_edit();
 	}
 
@@ -183,30 +149,7 @@ if (!empty($event) and $event == 'article') {
 			return;
 		}
 
-		include_once $txpcfg['txpath'].'/lib/classTextile.php';
-		$textile = new Textile();
-
-		$incoming['Title_plain'] = $incoming['Title'];
-
-		if ($use_textile==0 or !$incoming['textile_body']) {
-
-			$incoming['Body_html'] = trim($incoming['Body']);
-
-		} else if ($use_textile==1) {
-
-			$incoming['Body_html'] = nl2br(trim($incoming['Body']));
-
-		} else if ($use_textile==2 && $incoming['textile_body']) {
-
-			$incoming['Body_html'] = $textile->TextileThis($incoming['Body']);
-			$incoming['Title'] = $textile->TextileThis($incoming['Title'],'',1);
-		}
-		
-		if ($incoming['textile_excerpt']) {
-			$incoming['Excerpt_html'] = $textile->TextileThis($incoming['Excerpt']);
-		}else{
-			$incoming['Excerpt_html'] = $textile->TextileThis($incoming['Excerpt'],1);
-		}
+		$incoming = textile_main_fields($incoming, $use_textile);
 
 		extract(doSlash($incoming));
 
@@ -267,27 +210,15 @@ if (!empty($event) and $event == 'article') {
 
 		if($Status >= 4) {
 			if ($oldArticle['Status'] < 4) {
-				include_once $txpcfg['txpath'].'/lib/IXRClass.php';
-				
-				if ($ping_textpattern_com) {
-					$tx_client = new IXR_Client('http://textpattern.com/xmlrpc/');
-					$tx_client->query('ping.Textpattern', $sitename, $siteurl);
-				}
-
-				if ($ping_weblogsdotcom==1) {
-					$wl_client = new IXR_Client('http://rpc.pingomatic.com/');
-					$wl_client->query('weblogUpdates.ping', $sitename, hu);
-				}		
+				do_pings();	
 			}
 			safe_update("txp_prefs", "val = now()", "name = 'lastmod'");
-			$message = gTxt("article_saved");
-		} else { 
-			     if ($Status==3) { $message = gTxt("article_saved_pending"); } 
-			else if ($Status==2) { $message = gTxt("article_saved_hidden");	 } 
-			else if ($Status==1) { $message = gTxt("article_saved_draft");	 }	
 		}
-		$message .= check_url_title($url_title);
-		article_edit($message);
+		
+		article_edit(
+			get_status_message($Status).check_url_title($url_title)
+		);
+
 	}
 
 //--------------------------------------------------------------
@@ -827,5 +758,65 @@ if (!empty($event) and $event == 'article') {
 		}
 		return '';
 	}
+// -------------------------------------------------------------
+	function get_status_message($Status)
+	{
+		switch ($Status){
+			case 3: return gTxt("article_saved_pending");
+			case 2: return gTxt("article_saved_hidden");
+			case 1: return gTxt("article_saved_draft");
+			default: return gTxt('article_posted');
+		}
+	}
+// -------------------------------------------------------------
+	function textile_main_fields($incoming, $use_textile)
+	{
+		global $txpcfg;
+		
+		include_once $txpcfg['txpath'].'/lib/classTextile.php';
+		$textile = new Textile();
+		
+		$incoming['Title_plain'] = $incoming['Title'];
+		
+		if ($use_textile==0 or !$incoming['textile_body']) {
+			
+			$incoming['Body_html'] = trim($incoming['Body']);
+			
+		} else if ($use_textile==1) {
+			
+			$incoming['Body_html'] = nl2br(trim($incoming['Body']));
+			
+		} else if ($use_textile==2 && $incoming['textile_body']) {
+			
+			$incoming['Body_html'] = $textile->TextileThis($incoming['Body']);
+			$incoming['Title'] = $textile->TextileThis($incoming['Title'],'',1);
+		}
 
+		if ($incoming['textile_excerpt']) {
+			$incoming['Excerpt_html'] = $textile->TextileThis($incoming['Excerpt']);
+		}else{
+			$incoming['Excerpt_html'] = $textile->TextileThis($incoming['Excerpt'],1);
+		}
+		
+		return $incoming;
+	}
+// -------------------------------------------------------------
+	function do_pings()
+	{
+		global $txpcfg;
+		
+		$prefs = get_prefs();
+		
+		include_once $txpcfg['txpath'].'/lib/IXRClass.php';
+		
+		if ($prefs['ping_textpattern_com']) {
+			$tx_client = new IXR_Client('http://textpattern.com/xmlrpc/');
+			$tx_client->query('ping.Textpattern', $prefs['sitename'], hu);
+		}
+
+		if ($prefs['ping_weblogsdotcom']==1) {
+			$wl_client = new IXR_Client('http://rpc.pingomatic.com/');
+			$wl_client->query('weblogUpdates.ping', $prefs['sitename'], hu);
+		}
+	}
 ?>
