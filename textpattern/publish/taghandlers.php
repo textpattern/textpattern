@@ -1456,18 +1456,18 @@ $LastChangedRevision$
 		}
 		
 		$category = empty($c)? '': $c;
-		$category_title = (($title) && ($c != '')) ? fetch_category_title($category) : $category;
-		$category_title_html = escape_title($category_title);
 		$cattree = array();
 
 		while($category and $category != 'root' and $parent = safe_field('parent','txp_category',"name='$category'")) {
 			//Use new /category/category_name scheme here too?
-				$cattree[] = ($linked)? 
-					tag($category_title_html,'a',' href="'.pagelinkurl(array('c'=>$category)).'"')
-						:$category_title_html;
-				$category = $parent;
-				unset($parent);
-		}		
+			$category_title = (($title) && ($category != '')) ? fetch_category_title($category) : $category;
+			$category_title_html = escape_title($category_title);
+			$cattree[] = ($linked)? 
+				tag($category_title_html,'a',' href="'.pagelinkurl(array('c'=>$category)).'"')
+					:$category_title_html;
+			$category = $parent;
+			unset($parent);
+		}
 
 		if (!empty($cattree))
 		{
