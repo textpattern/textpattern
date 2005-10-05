@@ -834,7 +834,7 @@ else
 		}
 		return
 			gTxt('with_selected').sp.selectInput('method',$methods,$method,1,(
-				($name == 'list')? ' onchange="poweredit(this);return false;"':'')
+				($name == 'list')? ' onchange="poweredit(this);return false;" id="withselected"':'')
 			).
 			eInput($name).sInput($name.'_multi_edit').fInput('submit','',gTxt('go'),'smallerbox');
 	}

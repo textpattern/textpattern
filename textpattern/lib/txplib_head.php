@@ -114,7 +114,7 @@ $LastChangedRevision$
 				elm.parentNode.appendChild(br);
 				pjs = document.createElement('P');
 				pjs.setAttribute('id','js');
-				pjs.setAttribute('style','text-align:right; padding-right:25px; display: none;');
+				pjs.setAttribute('style','text-align:right; padding-right:30px; display: none;');
 				elm.parentNode.appendChild(pjs);
 			}
 			
@@ -122,15 +122,20 @@ $LastChangedRevision$
 			
 			if(something!='' && something == 'changesection'){
 				sects = '<?php echo $sections; ?>';
-				pjs.innerHTML = '<?php echo gTxt('section') ?>: '+sects;
+				pjs.innerHTML = '<span style="background-color: #ffc; padding: 10px;"><?php echo gTxt('section') ?>: '+sects+'</span>';
 			}else if(something!='' && something == 'changestatus'){
 				stats = '<?php echo $statuses; ?>';
-				pjs.innerHTML = '<?php echo gTxt('status') ?>: '+stats;
+				pjs.innerHTML = '<span style="background-color: #ffc; padding: 10px;"><?php echo gTxt('status') ?>: '+stats+'</span>';
 			}else{
 				pjs.style.display = 'none';
 			}
 			
 			return false;
+		}
+		
+		window.onload = function(){
+			withsel = document.getElementById('withselected');
+			if(withsel.options[withsel.selectedIndex].value != '') return (withsel.selectedIndex = 0);
 		}
 	-->
 	</script>
