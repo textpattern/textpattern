@@ -30,6 +30,10 @@ $statuses = array(
 		5 => gTxt('sticky'),
 );
 
+if (!defined('LEAVE_TEXT_UNTOUCHED')) define('LEAVE_TEXT_UNTOUCHED', 0);
+if (!defined('USE_TEXTILE')) define('USE_TEXTILE', 1);
+if (!defined('CONVERT_LINEBREAKS')) define('CONVERT_LINEBREAKS', 2);
+
 if (!empty($event) and $event == 'article') {
 	require_privs('article');
 
@@ -72,9 +76,6 @@ if (!empty($event) and $event == 'article') {
 		}
 
 		if ($Title or $Body or $Excerpt) {
-
-			$textile_body = (!$textile_body) ? 0 : 1;
-			$textile_excerpt = (!$textile_excerpt) ? 0 : 1;
 			
 			if (!has_privs('article.publish') && $Status>=4) $Status = 3;
 			if (empty($url_title)) $url_title = stripSpace($Title_plain, 1);  	
@@ -163,8 +164,6 @@ if (!empty($event) and $event == 'article') {
 			$whenposted = "Posted=$when";
 		}
 		
-		$textile_body = (!$textile_body) ? 0 : 1;
-		$textile_excerpt = (!$textile_excerpt) ? 0 : 1;
 		if (empty($url_title))
 		{
 			$url_title = stripSpace($Title_plain, 1);
@@ -289,8 +288,8 @@ if (!empty($event) and $event == 'article') {
 		$GLOBALS['step'] = $step;
 
 		if ($step=='create') {
-			$textile_body = 1;
-			$textile_excerpt = 1;
+			$textile_body = $use_textile;
+			$textile_excerpt = $use_textile;
 		}
 
 		if ($step!='create') {
@@ -339,7 +338,7 @@ if (!empty($event) and $event == 'article') {
 
 	//-- textile help --------------
 
-		($view=='text' && $use_textile==2) ?
+		($view=='text' && $textile_body == USE_TEXTILE) ?
 		
 		'<p><a href="#" onclick="toggleDisplay(\'textile_help\');return false;">'.gTxt('textile_help').'</a></p>
 		<div id="textile_help" style="display:none;">'.sidehelp().'</div>' : sp;
@@ -353,11 +352,11 @@ if (!empty($event) and $event == 'article') {
 				
 				// textile toggles
 			graf(gTxt('use_textile').br.
-				tag(checkbox2('textile_body',$textile_body).
-					gTxt('article'),'label').
+				tag(gTxt('article').br.pref_text('textile_body',$textile_body)
+					,'label').
 				br.
-				tag(checkbox2('textile_excerpt',$textile_excerpt).
-					gTxt('excerpt'),'label')),
+				tag(gTxt('excerpt').br.pref_text('textile_excerpt',$textile_excerpt)
+					,'label')),
 
 				// form override
 			($allow_form_override)
@@ -417,21 +416,21 @@ if (!empty($event) and $event == 'article') {
 
     	if ($view=="preview") { 
 
-			if ($use_textile==2) {
+			if ($textile_body == USE_TEXTILE) {
 				echo $textile->TextileThis($Body);
-			} else if ($use_textile==1) {
+			} else if ($textile_body == CONVERT_LINEBREAKS) {
 				echo nl2br($Body);
-			} else if ($use_textile==0) {
+			} else if ($textile_body == LEAVE_TEXT_UNTOUCHED) {
 				echo $Body;
 			}
 
     	} elseif($view=="html") {
 
-			if ($use_textile==2) {
+			if ($textile_body == USE_TEXTILE) {
 				$bod = $textile->TextileThis($Body);
-			} else if ($use_textile==1) {
+			} else if ($textile_body == CONVERT_LINEBREAKS) {
 				$bod = nl2br($Body);
-			} else if ($use_textile==0) {
+			} else if ($textile_body == LEAVE_TEXT_UNTOUCHED) {
 				$bod = $Body;
 			}
 
@@ -458,12 +457,12 @@ if (!empty($event) and $event == 'article') {
 	
 				echo '<hr width="50%" />';
 				
-				echo ($textile_excerpt)
+				echo ($textile_excerpt == USE_TEXTILE)
 				?	($view=='preview')
-					?	graf($textile->textileThis($Excerpt),1)
+					?	graf($textile->textileThis($Excerpt))
 					:	tag(str_replace(array(n,t),
 							array(br,sp.sp.sp.sp),htmlspecialchars(
-								$textile->TextileThis($Excerpt),1)),'code')
+								$textile->TextileThis($Excerpt))),'code')
 				:	graf($Excerpt);
 			}
 		}
@@ -485,7 +484,7 @@ if (!empty($event) and $event == 'article') {
 
   	//-- layer tabs -------------------
 
-		echo ($use_textile==2)
+		echo ($use_textile == USE_TEXTILE || $textile_body == USE_TEXTILE)
 		?	tab('text',$view).tab('html',$view).tab('preview',$view)
 		:	'&#160;';
 	echo '</td>';
@@ -644,10 +643,10 @@ if (!empty($event) and $event == 'article') {
 //--------------------------------------------------------------
 	function sidehelp()
 	{
-		global $use_textile;
+		global $use_textile, $textile_body;
 		$out='<p><small>';
 
-		if ($use_textile==2) {
+		if ($use_textile == USE_TEXTILE || $textile_body == USE_TEXTILE) {
 			$out .=
 			gTxt('header').': <strong>h<em>n</em>.</strong>'.
 				popHelpSubtle('header',400,400).br.
@@ -778,24 +777,31 @@ if (!empty($event) and $event == 'article') {
 		
 		$incoming['Title_plain'] = $incoming['Title'];
 		
-		if ($use_textile==0 or !$incoming['textile_body']) {
-			
+		if ($incoming['textile_body'] == LEAVE_TEXT_UNTOUCHED) {
+		
 			$incoming['Body_html'] = trim($incoming['Body']);
 			
-		} else if ($use_textile==1) {
-			
-			$incoming['Body_html'] = nl2br(trim($incoming['Body']));
-			
-		} else if ($use_textile==2 && $incoming['textile_body']) {
-			
+		}elseif ($incoming['textile_body'] == USE_TEXTILE){
+		
 			$incoming['Body_html'] = $textile->TextileThis($incoming['Body']);
 			$incoming['Title'] = $textile->TextileThis($incoming['Title'],'',1);
+			
+		}elseif ($incoming['textile_body'] == CONVERT_LINEBREAKS){
+			
+			$incoming['Body_html'] = nl2br(trim($incoming['Body']));
 		}
 
-		if ($incoming['textile_excerpt']) {
+		if ($incoming['textile_excerpt'] == LEAVE_TEXT_UNTOUCHED) {
+		
+			$incoming['Excerpt_html'] = trim($incoming['Excerpt']);
+			
+		}elseif ($incoming['textile_excerpt'] == USE_TEXTILE){
+		
 			$incoming['Excerpt_html'] = $textile->TextileThis($incoming['Excerpt']);
-		}else{
-			$incoming['Excerpt_html'] = $textile->TextileThis($incoming['Excerpt'],1);
+			
+		}elseif ($incoming['textile_excerpt'] == CONVERT_LINEBREAKS){
+			
+			$incoming['Excerpt_html'] = nl2br(trim($incoming['Excerpt']));
 		}
 		
 		return $incoming;

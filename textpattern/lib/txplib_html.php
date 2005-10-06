@@ -383,6 +383,16 @@ $LastChangedRevision$
 			hInput('id',$id).
 			'</form>';
 	}
+	
+//-------------------------------------------------------------
+	function pref_text($item,$var)
+	{
+		$things = array(
+			"2" => gTxt('convert_linebreaks'),
+			"1" => gTxt('use_textile'),
+			"0" => gTxt('leave_text_untouched'));
+		return selectInput($item, $things, $var);
+	}
 
 
 ?>

@@ -172,15 +172,6 @@ $LastChangedRevision$
 		return selectInput($item, $timevals, $var);
 	}
 
-//-------------------------------------------------------------
-	function pref_text($item,$var)
-	{
-		$things = array(
-			"2" => gTxt('use_textile'),
-			"1" => gTxt('convert_linebreaks'),
-			"0" => gTxt('leave_text_untouched'));
-		return selectInput($item, $things, $var);
-	}
 
 //-------------------------------------------------------------
 	function logging($item,$var) 

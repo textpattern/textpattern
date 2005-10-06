@@ -60,6 +60,19 @@ EOF;
    }
    //take back use_textile
    safe_update('txp_prefs',"html='pref_text'","name='use_textile'");
+   // ugly way to change somethign which could break BC:
+   // changed use_textile == 2 to convert breaks and 
+   // use_textile == 1 to use textile - the same than in 
+   // textile_body or textile_excerpt
+   if (!safe_field('value','txp_prefs',"name='textile_updated'")) {
+   		   $ut = safe_field('value','txp_prefs',"name='use_textile'");
+   		   if ($ut == 1) {
+   		   		safe_update('txp_prefs',"use_textile='2'","name='use_textile'");
+   		   }elseif ($ut == 2){
+   		   		safe_update('txp_prefs',"use_textile='1'","name='use_textile'");
+   		   }
+   		   safe_insert('txp_prefs', "prefs_id=1, name='textile_updated',val='1', type='2'");
+   }
 
 
 
