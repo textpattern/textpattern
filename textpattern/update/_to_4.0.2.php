@@ -64,12 +64,12 @@ EOF;
    // changed use_textile == 2 to convert breaks and 
    // use_textile == 1 to use textile - the same than in 
    // textile_body or textile_excerpt
-   if (!safe_field('value','txp_prefs',"name='textile_updated'")) {
-   		   $ut = safe_field('value','txp_prefs',"name='use_textile'");
+   if (safe_field('val','txp_prefs',"name='textile_updated'") === false) {
+   		   $ut = safe_field('val','txp_prefs',"name='use_textile'");
    		   if ($ut == 1) {
-   		   		safe_update('txp_prefs',"use_textile='2'","name='use_textile'");
+   		   		safe_update('txp_prefs',"val='2'","name='use_textile'");
    		   }elseif ($ut == 2){
-   		   		safe_update('txp_prefs',"use_textile='1'","name='use_textile'");
+   		   		safe_update('txp_prefs',"val='1'","name='use_textile'");
    		   }
    		   safe_insert('txp_prefs', "prefs_id=1, name='textile_updated',val='1', type='2'");
    }
