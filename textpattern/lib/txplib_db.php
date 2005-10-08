@@ -319,7 +319,7 @@ $DB = new DB;
 	    	"lft between $l and $r and type = '$type' order by lft asc"
 		); 
 
-	    while ($row = nextRow($rs)) {
+	    while ($rs and $row = nextRow($rs)) {
 	   		extract($row);
 			while (count($right) > 0 && $right[count($right)-1] < $rgt) { 
 				array_pop($right);
@@ -338,6 +338,44 @@ $DB = new DB;
 	    }
     	return($out);
  	}
+
+// -------------------------------------------------------------
+ 	function getTreePath($target, $type)
+ 	{ 
+
+	    extract(safe_row(
+	    	"lft as l, rgt as r", 
+	    	"txp_category", 
+			"name='".doSlash($target)."' and type = '".doSlash($type)."'"
+		));
+
+	    $rs = safe_rows_start(
+	    	"*", 
+	    	"txp_category",
+				"lft <= $l and rgt >= $r and type = '".doSlash($type)."' order by lft asc"
+		); 
+
+		$right = array(); 
+
+	    while ($rs and $row = nextRow($rs)) {
+	   		extract($row);
+			while (count($right) > 0 && $right[count($right)-1] < $rgt) { 
+				array_pop($right);
+			}
+
+        	$out[] = 
+        		array(
+        			'id' => $id,
+        			'name' => $name,
+        			'title' => $title,
+        			'level' => count($right), 
+        			'children' => ($rgt - $lft - 1) / 2
+        		);
+
+	        $right[] = $rgt; 
+	    }
+		return $out;
+	}
 
 // -------------------------------------------------------------
 	function rebuild_tree($parent, $left, $type) 
