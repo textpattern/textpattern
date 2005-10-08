@@ -1,0 +1,78 @@
+Changes since 4.0.1:
+
+* Fix a bug in 404 handling on some fastcgi servers
+* Fix a bug that prevented file_download_list from working properly
+* Fix a redirection bug in the comment form
+* Fix occasional category URL i18n problems
+* Remove extra trailing slash in some breadcrumb links
+* Make articles by author work properly
+* Make feed_link support section and category correctly
+* Add correct content-type to popup comments page
+* Fix an obscure feed caching bug
+* Fix a possible problem with circular dependencies when loading plugins
+* Fix timestamps in Atom feeds
+* Fix occasional Atom encoding issues
+* UI improvements when creating/copying/deleting styles
+* Improve performance of the language loader
+* Make date-based permlinks work properly in comment emails
+* Better handling of invalid login cookies
+* Use page templates for 404 (and other) error pages
+* Minor Atom validation improvements
+* Improved comment conditionals logic; txp:if_comments now means "if the current article has at least 1 comment"
+* Minor performance improvements
+* New txp:if_status and txp:page_url tags
+* Prevent config.php whitespace from breaking stylesheets
+* UI improvements to javascript toggles
+* Improved comment input form HTML markup
+* Improved txp:section and txp:category tags
+* New tags: txp:if_different, txp:if_first_article, txp:if_last_article
+* Localize the XML feed link title
+* Better encoding of article titles
+* Fix rare problems caused by magic_quotes_runtime
+* Improved file upload forms
+* New language: Latvian
+* Support section and category titles in txp:breadcrumb
+* Allow decimals=0 in txp:file_download_size tag
+* Minor diagnostic info changes
+* New labeltag attribute on most list tags
+* Restore use_textile preference
+* Minor HTML validation fixes
+* Developers: new safe_upsert() database function
+* Fall back to English if no language data is available
+* Support comma-separated names in txp:if_category and txp:if_section
+* Identify the offending tag when displaying error messages in templates and forms
+* Add include_default attribute to txp:section_list
+* Add support for changing status and section on multiple articles at once
+* Fix nested category titles in txp:breadcrumb
+* Improved comment message markup
+* Restore the comments_closed message
+* Better handling of per-article Use Textile selection
+
+Changes since 4.0:
+
+* fixed some serious security issues. Updates are strongly recommended.
+* fixed textile problems (missing block-elements in some cases; notextile; span-handling)
+* fixed updating of comment_count when deleting comments
+* fixed bug in atom feeds (multiple identical excerpts)
+* added new permission level (article.edit.own.published, allows you to edit own articles _after_ publishing)
+* added very basic 404 support (correct 404 Headers are sent)
+* added new languages (Íslenska, Suomi, ..(..), ..(..))
+* fixed bugs in articles by author (clean and messy urls)
+* fixed category_list to use clean urls when appropriate
+* fixed installation problems with certain db prefixes by limiting possible prefixes
+* fixed timezone issue with ymd permlinks
+* fixed GMT formatting of dates
+* fixed bugs with i18n-ascii.txt and added a few new items
+* added language overrides to dirifying url_titles
+* several improvements to url_titles (including not updating them until published)
+* several improvements to diagnostics
+* added style and class attributes to txp:permlink
+* fixed bugs with multibyte strings in some urls
+* added contextual information to page title on the admin side
+* fixed problems with larger file downloads
+* fixed file_download_link with multiple files
+* fixed logging of file downloads (only finished downloads are counted; aborts go to normal logs)
+* fixed problems with sending mail on some systems
+* improvements to older/newer tags
+* developers: added more consistent url generation via new pagelinkurl() function
+* developers: added callbacks to public side (for example to handle 404s)
