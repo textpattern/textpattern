@@ -693,11 +693,11 @@ else
 		if (preg_match_all('/(\w+)\s*=\s*"([^"]*)"(?:\s|$)|(\w+)\s*=\s*\'([^\']*)\'(?:\s|$)|(\w+)\s*=\s*([^\s\'"]+)(?:\s|$)/', $text, $match, PREG_SET_ORDER)) {
 			foreach ($match as $m) {
 				if (!empty($m[1]))
-					$atts[strtolower($m[1])] = $m[2];
+					$atts[strtolower($m[1])] = stripcslashes($m[2]);
 				elseif (!empty($m[3]))
-					$atts[strtolower($m[3])] = $m[4];
+					$atts[strtolower($m[3])] = stripcslashes($m[4]);
 				elseif (!empty($m[5]))
-					$atts[strtolower($m[5])] = $m[6];
+					$atts[strtolower($m[5])] = stripcslashes($m[6]);
 			}
 		}
 		return $atts;
