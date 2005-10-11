@@ -310,9 +310,9 @@ $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'use_sections', '1', 
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'send_lastmod', '0', 1, 'admin', 'yesnoradio', 0)";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'path_from_root', '/', 2, 'publish', 'text_input', 0)";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'lastmod', '2005-07-23 16:24:10', 2, 'publish', 'text_input', 0)";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'comments_dateformat', '%b %Oe, %I:%M %p', 0, 'comments', 'dateformats', 190)";
+$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'comments_dateformat', '%b %d, %I:%M %p', 0, 'comments', 'dateformats', 190)";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'dateformat', 'since', 0, 'publish', 'dateformats', 70)";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'archive_dateformat', '%b %Oe, %I:%M %p', 0, 'publish', 'dateformats', 80)";
+$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'archive_dateformat', '%b %d, %I:%M %p', 0, 'publish', 'dateformats', 80)";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'comments_moderate', '0', 0, 'comments', 'yesnoradio', 130)";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'img_dir', 'images', 1, 'admin', 'text_input', 0)";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'comments_disallow_images', '0', 0, 'comments', 'yesnoradio', 170)";
@@ -431,6 +431,7 @@ if (!$client->query('tups.getLanguage',$prefs['blog_uid'],$lang))
 	# If cannot install from lang file, setup the english lang
 	if (!install_language_from_file($lang))
 	{
+		$lang = 'en-gb';
 		include_once txpath.'/setup/en-gb.php';
 		if (!@$lastmod) $lastmod = '0000-00-00 00:00:00';
 		foreach ($en_gb_lang as $evt_name => $evt_strings)
