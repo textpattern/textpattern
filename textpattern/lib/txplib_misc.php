@@ -1287,6 +1287,7 @@ eod;
 		$GLOBALS['txp_error_status'] = $status;
 		$GLOBALS['txp_error_code'] = $code;
 
+		header("Content-type: text/html; charset=utf-8");
 		die(parse($out));
 	}
 
