@@ -59,7 +59,7 @@ $LastChangedRevision$
 				'author'     => "AuthorID rlike '$crit'",
 				'categories' => "Category1 rlike '$crit' or Category2 rlike '$crit'",
 				'section'    => "Section rlike '$crit'",
-				'status'     => "Status = '".ucfirst(@$sesutats[$crit])."'"
+				'status'     => "Status = '".(@$sesutats[$crit])."'"
 			);
 			$criteria = $critsql[$method];
 			$limit = 500;

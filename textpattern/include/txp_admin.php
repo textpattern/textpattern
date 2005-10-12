@@ -282,7 +282,7 @@ if ($event == 'admin') {
 		$out[] = tr(
 			hCell(gTxt('real_name'))
 		.	hCell(gTxt('login_name'))
-		.	hCell(ucfirst(gTxt('email')))
+		.	hCell(gTxt('email'))
 		.	hCell(gTxt('privileges'))
 		.	td()
 		.	td()

@@ -319,7 +319,7 @@ if (!empty($event) and $event == 'article') {
 	//-- title input -------------- 
 
 				($view=='preview')
-				?	hed(ucfirst(gTxt('preview')),2).graf($Title)
+				?	hed(gTxt('preview'),2).graf($Title)
 				:	'',
 				($view=='html')
 				?	hed('XHTML',2).graf($Title)

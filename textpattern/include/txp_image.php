@@ -47,7 +47,7 @@ $LastChangedRevision$
 			)
 		),
 		tr(
-			hCell(ucfirst(gTxt('name'))) . 
+			hCell(gTxt('name')) . 
 			hCell(gTxt('image_category')) . 
 			hCell(gTxt('tags')) . 
 			hCell(gTxt('author')) . 

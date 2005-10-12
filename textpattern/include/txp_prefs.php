@@ -88,7 +88,7 @@ $LastChangedRevision$
 				{
 					$cur_evt = $a['event'];
 					if ($cur_evt == 'comments' && !$use_comments) continue;
-					echo tr(tdcs(hed(ucfirst(gTxt($a['event'])),1),3));
+					echo tr(tdcs(hed(gTxt($a['event']),1),3));
 				}
 				if ($cur_evt == 'comments' && !$use_comments) continue;
 	
@@ -336,7 +336,7 @@ $LastChangedRevision$
 			if ($a['event']!= $cur_evt)
 			{
 				$cur_evt = $a['event'];
-				echo tr(tdcs(hed(ucfirst(gTxt($a['event'])),1),3));
+				echo tr(tdcs(hed(gTxt($a['event']),1),3));
 			}
 			$out = tda(gTxt($a['name']), ' style="text-align:right;vertical-align:middle"');
 			if ($a['html'] == 'text_input')
