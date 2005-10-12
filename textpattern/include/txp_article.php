@@ -163,12 +163,15 @@ if (!empty($event) and $event == 'article') {
 			$when = "from_unixtime($when)";
 			$whenposted = "Posted=$when";
 		}
-		
-		if (empty($url_title))
-		{
-			$url_title = stripSpace($Title_plain, 1);
-		}
-		elseif ( ($oldArticle['Status'] < 4) && ($oldArticle['url_title'] == stripSpace($oldArticle['Title'],1)) )
+
+		//Auto-Update custom-titles according to Title, as long as unpublished and NOT customized
+		if ( empty($url_title)
+			  || ( ($oldArticle['Status'] < 4) 
+					&& ($oldArticle['url_title'] == $url_title ) 
+					&& ($oldArticle['url_title'] == stripSpace($oldArticle['Title'],1))
+					&& ($oldArticle['Title'] != $Title)
+				 )
+		   )
 		{
 			$url_title = stripSpace($Title_plain, 1);
 		}
