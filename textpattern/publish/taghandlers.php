@@ -710,6 +710,9 @@ $LastChangedRevision$
 		extract($thisarticle);
 		global $comments_mode;
 
+		if (!$comments_invite)
+			$comments_invite = @$GLOBALS['prefs']['comments_default_invite'];
+
 		extract(lAtts(array(
 			'class'		=> __FUNCTION__,
 			'showcount'	=> true,
