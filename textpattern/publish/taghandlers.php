@@ -717,7 +717,7 @@ $LastChangedRevision$
 			'class'		=> __FUNCTION__,
 			'showcount'	=> true,
 			'textonly'	=> false,
-			'displayalways'	=> false  //FIXME in crockery. This is only for BC.
+			'showalways'	=> false  //FIXME in crockery. This is only for BC.
 		), $atts));
 
 		if (($annotate or $comments_count) && ($displayalways or $is_article_list) ) {

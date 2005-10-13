@@ -50,7 +50,7 @@ Changes since 4.0.1:
 * Add class attribute to comments_invite for css-classes 
 * Added 3 attributes to comments_invite: showcount, textonly (just the invite-text)
     and displayalways (also display on individual article-pages). Example:
-    <comments_invite showcount="0" textonly="1" displayalways="1" />
+    <comments_invite showcount="0" textonly="1" showalways="1" />
 
 
 Changes since 4.0:
