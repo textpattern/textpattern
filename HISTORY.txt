@@ -49,7 +49,7 @@ Changes since 4.0.1:
 * Better handling of per-article Use Textile selection
 * Add class attribute to comments_invite for css-classes 
 * Added 3 attributes to comments_invite: showcount, textonly (just the invite-text)
-    and displayalways (also display on individual article-pages). Example:
+    and showalways (also display on individual article-pages). Example:
     <comments_invite showcount="0" textonly="1" showalways="1" />
 
 
