@@ -17,7 +17,6 @@ $LastChangedRevision$
 	{
 		global $prefs,$thisarticle;
 		extract($prefs);
-		ob_start();
 
 		extract(doSlash(gpsa(array('category','section','limit','area'))));
 
