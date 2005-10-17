@@ -16,7 +16,7 @@ $LastChangedRevision$
 	{
 		$rs = safe_rows(
 			"*, unix_timestamp(posted) as time", 
-			"txp_discuss", "parentid='$id' and visible='1' order by posted asc"
+			"txp_discuss", "parentid='".doSlash($id)."' and visible='1' order by posted asc"
 		);
 
 		if ($rs) return $rs;
@@ -255,7 +255,7 @@ $LastChangedRevision$
 						$visible = ($comments_moderate) ? 0 : 1;
 						$rs = safe_insert(
 							"txp_discuss",
-							"parentid  = '$parentid',
+							"parentid  = '".doSlash($parentid)."',
 							 name		  = '$name',
 							 email	  = '$email',
 							 web		  = '$web',
@@ -266,7 +266,7 @@ $LastChangedRevision$
 						);						
 
 						if ($rs) {
-							safe_update("txp_discuss_nonce", "used='1'", "nonce='$nonce'");
+							safe_update("txp_discuss_nonce", "used='1'", "nonce='".doslash($nonce)."'");
 							if ($prefs['comment_means_site_updated']) {
 								safe_update("txp_prefs", "val=now()", "name='lastmod'");
 							}
@@ -276,7 +276,6 @@ $LastChangedRevision$
 
 							$updated = update_comments_count($parentid);
 
-							ob_start();
 							$backpage = substr($backpage, 0, $prefs['max_url_len']);
 							$backpage = preg_replace("/[\x0a\x0d#].*$/s",'',$backpage);
 							$backpage .= ((strstr($backpage,'?')) ? '&' : '?') . 'commented=1';
@@ -296,11 +295,12 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function checkNonce($nonce) 
 	{
-		if (!$nonce) return false;
+		if (!$nonce && !preg_match('#^[a-zA-Z0-9]*$#',$nonce)) 
+			return false;
 			// delete expired nonces
 		safe_delete("txp_discuss_nonce", "issue_time < date_sub(now(),interval 10 minute)");
 			// check for nonce
-		return (safe_row("*", "txp_discuss_nonce", "nonce='$nonce' and used='0'")) ? true : false;
+		return (safe_row("*", "txp_discuss_nonce", "nonce='".doslash($nonce)."' and used='0'")) ? true : false;
 	}
 
 // -------------------------------------------------------------
@@ -313,6 +313,8 @@ $LastChangedRevision$
 	function checkCommentsAllowed($id)
 	{
 		global $use_comments, $comments_disabled_after, $thisarticle;
+
+		$id = intval($id);
 
 		if (!$use_comments || !$id)
 			return false;

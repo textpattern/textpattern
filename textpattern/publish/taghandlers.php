@@ -720,7 +720,7 @@ $LastChangedRevision$
 			'showalways'	=> false  //FIXME in crockery. This is only for BC.
 		), $atts));
 
-		if (($annotate or $comments_count) && ($displayalways or $is_article_list) ) {
+		if (($annotate or $comments_count) && ($showalways or $is_article_list) ) {
 
 			$ccount = ($comments_count && $showcount) ?  ' ['.$comments_count.']' : '';
 
@@ -744,13 +744,14 @@ $LastChangedRevision$
 		extract(lAtts(array(
 			'id'		   => @$pretext['id'],
 			'class'		=> __FUNCTION__,
+			'preview'   => false,
 			'form'		=> 'comment_form',
 			'wraptag'	=> ''
 		),$atts));
 
 		# don't display the comment form at the bottom, since it's
 		# already shown at the top
-		if (ps('preview') and empty($comment_preview))
+		if (ps('preview') and empty($comment_preview) and !$preview)
 			return '';
 
 		if (is_array($thisarticle)) extract($thisarticle);
@@ -859,6 +860,59 @@ $LastChangedRevision$
 		return $out;
 	}
 	
+// -------------------------------------------------------------
+	function preview($atts, $thing='', $me='')
+	{
+		global $thisarticle;
+		if (!ps('preview'))
+			return;
+
+		
+		extract(lAtts(array(
+			'id'		   => @$pretext['id'],
+			'form'		=> 'comments',
+			'bc'		=> false,  // backwards-compatibility; only internally for old preview behaviour
+			'wraptag'	=> '',
+			'class'		=> __FUNCTION__,
+		),$atts));	
+
+		//FIXME for crockery. This emulates the old hardcoded preview behaviour.
+		if ($bc)
+		{
+			if (@$GLOBALS['pretext']['secondpass'] == false)
+				return $me;
+			if (@$GLOBALS['pretext']['preview_shown'])
+				return '';
+			else
+				return '<a id="cpreview"></a>'.discuss($id);
+		}
+		$GLOBALS['pretext']['preview_shown'] = true;
+
+		if (is_array($thisarticle)) extract($thisarticle);
+
+		if (@$thisid) $id = $thisid;
+
+		$Form = fetch_form($form);
+
+		$preview = psas(array('name','email','web','message','parentid','remember'));
+		$preview['time'] = time();
+		$preview['discussid'] = 0;
+		$preview['message'] = markup_comment($preview['message']);
+
+		$GLOBALS['thiscomment'] = $preview;
+		$comments = parse($Form).n;
+		unset($GLOBALS['thiscomment']);
+		$out = doTag($comments,$wraptag,$class);
+
+		return $out;
+	}
+	
+// -------------------------------------------------------------
+	function if_preview($atts, $thing)	
+	{
+		return parse(EvalElse($thing, ps('preview') && checkCommentsAllowed(gps('parentid')) ));
+	}
+
 // -------------------------------------------------------------
 	function comment_permlink($atts,$thing) 
 	{

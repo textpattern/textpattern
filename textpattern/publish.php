@@ -419,6 +419,8 @@ $LastChangedRevision$
 
 		set_error_handler("tagErrorHandler");
 		$html = parse($html);
+		$GLOBALS['pretext']['secondpass'] = true;
+		$GLOBALS['txptrace'][] = " secondpass \r\n";
 		$html = parse($html); // the function so nice, he ran it twice
 		restore_error_handler();
 		$html = (!$segment) ? $html : segmentPage($html);
@@ -683,7 +685,7 @@ $LastChangedRevision$
 			$article = fetch_form(($override_form) ? $override_form : $form);
 
 			if ($preview && $parentid) {
-				$article = '<a id="cpreview"></a>'.discuss($parentid).$article;
+				$article = '<txp:preview bc="1" id="'.$parentid.'" />'.$article;
 			}
 
 			$article = parse($article);
@@ -876,7 +878,7 @@ $LastChangedRevision$
 			elseif (isset($pretext[$tag])) $out = $pretext[$tag];
 			else trigger_error(gTxt('unknown_tag'), E_USER_WARNING);
 		} else {
-			if (function_exists($tag)) $out = $tag($atts);
+			if (function_exists($tag)) $out = $tag($atts,null,$matches[0]);
 			elseif (isset($pretext[$tag])) $out = $pretext[$tag];
 			else trigger_error(gTxt('unknown_tag'), E_USER_WARNING);
 		}
