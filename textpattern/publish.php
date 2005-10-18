@@ -786,6 +786,7 @@ $LastChangedRevision$
 		// have to guess what the current article is
 		if (!$id) {
 			$current = safe_row('ID, Posted', 'textpattern', 
+				'1=1 '.
 				(($s!='' && $s!='default') ? "Section = '".doSlash($s)."'" : filterFrontPage()).
 				'and Status=4 and Posted < now() order by Posted desc limit 1');
 			if ($current) {
