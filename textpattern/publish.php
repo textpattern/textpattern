@@ -472,6 +472,7 @@ $LastChangedRevision$
 		$theAtts = lAtts(array(
 			'form'      => 'default',
 			'limit'     => 10,
+			'pageby'    => '',
 			'category'  => '',
 			'section'   => '',
 			'excerpted' => '',
@@ -492,7 +493,7 @@ $LastChangedRevision$
 		
 		// if an article ID is specified, treat it as a custom list
 		$iscustom = (!empty($theAtts['id'])) ? true : $iscustom;
-		
+
 		//for the txp:article tag, some attributes are taken from globals;
 		//override them before extract
 		if (!$iscustom)
@@ -506,6 +507,8 @@ $LastChangedRevision$
 		}
 		extract($theAtts);
 		
+		$pageby = (empty($pageby) ? $limit : $pageby);
+
 		// treat sticky articles differently wrt search filtering, etc
 		if (!is_numeric($status))
 			$status = getStatusNum($status);
@@ -577,9 +580,9 @@ $LastChangedRevision$
 		if (!$iscustom and !$issticky)
 		{
 			$total = safe_count('textpattern',$where) - $offset;
-			$numPages = ceil($total/$limit);  
+			$numPages = ceil($total/$pageby);  
 			$pg = (!$pg) ? 1 : $pg;
-			$pgoffset = $offset + (($pg - 1) * $limit).', ';	
+			$pgoffset = $offset + (($pg - 1) * $pageby).', ';	
 			// send paging info to txp:newer and txp:older
 			$pageout['pg']       = $pg;
 			$pageout['numPages'] = $numPages;
