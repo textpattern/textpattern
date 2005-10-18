@@ -34,7 +34,7 @@ $LastChangedRevision$
 		
 		$page = gps('page');
 		$total = getCount('txp_link',"1");  
-		$limit = $link_list_pageby;
+		$limit = max(@$link_list_pageby, 25);
 		$numPages = ceil($total/$limit);  
 		$page = (!$page) ? 1 : $page;
 		$offset = ($page - 1) * $limit;
