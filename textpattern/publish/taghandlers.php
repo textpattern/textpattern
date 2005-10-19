@@ -1506,10 +1506,13 @@ $LastChangedRevision$
 			'sep' => '&#160;&#187;&#160;',
 			'link' => 'y',
 			'label' => $sitename,
-			'title' => '0'
+			'title' => '',
+			'class' => '',
+			'linkclass' => 'noline',
 		),$atts));
 		$linked = ($link == 'y')? true: false; 		
-		if ($linked) $label = '<a href="'.hu.'" class="noline">'.$sitename.'</a>';
+		if ($linked) $label = '<a href="'.hu.'" class="'.$linkclass.'">'.$sitename.'</a>';
+		if ($linked) $label = doTag($sitename,'a',$linkclass,' href="'.hu.'"');
 		
 		$content = array();
 		extract($pretext);
@@ -1518,37 +1521,25 @@ $LastChangedRevision$
 			$section_title = ($title) ? fetch_section_title($s) : $s;
 			$section_title_html = escape_title($section_title);
 			$content[] = ($linked)? (
-					tag($section_title_html,'a',' href="'.pagelinkurl(array('s'=>$s)).'"')
+					doTag($section_title_html,'a',$linkclass,' href="'.pagelinkurl(array('s'=>$s)).'"')
 				):$section_title_html;
 		}
 		
 		$category = empty($c)? '': $c;
-		$cattree = array();
 
-		while($category and $category != 'root' and $parent = safe_field('parent','txp_category',"name='$category'")) {
-			//Use new /category/category_name scheme here too?
-			$category_title = (($title) && ($category != '')) ? fetch_category_title($category) : $category;
-			$category_title_html = escape_title($category_title);
-			$cattree[] = ($linked)? 
-				tag($category_title_html,'a',' href="'.pagelinkurl(array('c'=>$category)).'"')
-					:$category_title_html;
-			$category = $parent;
-			unset($parent);
+		foreach (getTreePath($category, 'article') as $cat) {
+			if ($cat['name'] != 'root') {
+				$category_title_html = $title ? escape_title($cat['title']) : $cat['name'];
+				$content[] = ($linked)? 
+					doTag($category_title_html,'a',$linkclass,' href="'.pagelinkurl(array('c'=>$cat['name'])).'"')
+						:$category_title_html;
+			}
 		}
 
-		if (!empty($cattree))
-		{
-			$cattree = array_reverse($cattree);
-			$content = array_merge($content, $cattree);
-		}
-		//Add date month permlinks?
-//		$year = ''; 
-//		$month = '';
-//		$date = '';
 		//Add the label at the end, to prevent breadcrumb for home page
 		if (!empty($content)) $content = array_merge(array($label),$content);
 		//Add article title without link if we're on an individual archive page?
-		return doTag(join($sep, $content), $wraptag);
+		return doTag(join($sep, $content), $wraptag, $class);
 	}
 
 

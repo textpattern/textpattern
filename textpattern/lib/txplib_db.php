@@ -310,7 +310,7 @@ $DB = new DB;
 			"name='$root' and type = '$type'"
 		));
 
-
+		$out = array();
 		$right = array(); 
 
 	    $rs = safe_rows_start(
@@ -355,6 +355,7 @@ $DB = new DB;
 				"lft <= $l and rgt >= $r and type = '".doSlash($type)."' order by lft asc"
 		); 
 
+		$out = array();
 		$right = array(); 
 
 	    while ($rs and $row = nextRow($rs)) {
