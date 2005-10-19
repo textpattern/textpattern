@@ -51,6 +51,11 @@ Changes since 4.0.1:
 * Added 3 attributes to comments_invite: showcount, textonly (just the invite-text)
     and showalways (also display on individual article-pages). Example:
     <comments_invite showcount="0" textonly="1" showalways="1" />
+* Support c-style backslash sequences in tag attributes
+* Fix some rare bugs in feeds, admin list paging
+* Add a pageby attribute to txp:article, for multi-column lists
+* Fix txp:link_to_next/prev so they work at the top of a page
+* Minor speed improvements, new class and linkclass attributes for txp:breadcrumb tag
 
 
 Changes since 4.0:
