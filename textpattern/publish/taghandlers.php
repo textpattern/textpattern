@@ -1223,7 +1223,16 @@ $LastChangedRevision$
 	function image_index($atts)
 	{
 		global $permlink_mode,$s,$c,$p,$txpcfg,$img_dir,$path_to_site;
-		if (is_array($atts)) extract($atts);
+		extract(lAtts(array(
+			'label'    => '',
+			'break'    => br,
+			'wraptag'  => '',
+			'parent'   => '',
+			'type'    => 'article',
+			'class'    => __FUNCTION__,
+			'labeltag' => '',
+			'c' => doSlash($c) // Keep the option to override categories due to backward compatiblity
+		),$atts));
 		$c = doSlash($c);
 		
 		$rs = safe_rows_start("*", "txp_image","category='$c' and thumbnail=1 order by name");
@@ -1239,8 +1248,11 @@ $LastChangedRevision$
                '<img src="'.hu.$impath.'"'.$dims.' alt="'.$alt.'" />'.'</a>';
 
 			}
-			return join('',$out);
+			if (is_array($out)) {
+				return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
+			}	
 		}
+		return '';
 	}
 
 // -------------------------------------------------------------
