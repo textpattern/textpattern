@@ -341,7 +341,7 @@ if (!empty($event) and $event == 'article') {
 
 	//-- textile help --------------
 
-		($view=='text' && $textile_body == USE_TEXTILE) ?
+		($view=='text' && ($textile_body == USE_TEXTILE || $textile_excerpt == USE_TEXTILE)) ?
 		
 		'<p><a href="#" onclick="toggleDisplay(\'textile_help\');return false;">'.gTxt('textile_help').'</a></p>
 		<div id="textile_help" style="display:none;">'.sidehelp().'</div>' : sp;
