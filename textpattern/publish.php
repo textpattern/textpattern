@@ -77,7 +77,10 @@ $LastChangedRevision$
 
 		// 1.0 removed $doc_root variable from config, but we'll
 		// leave it here for a bit until plugins catch up
-	$txpcfg['doc_root'] = $_SERVER['DOCUMENT_ROOT'];
+	$txpcfg['doc_root'] = @$_SERVER['DOCUMENT_ROOT'];
+	// work around the IIS lobotomy
+	if (empty($txpcfg['doc_root']))
+		$txpcfg['doc_root'] = @$_SERVER['PATH_TRANSLATED'];
 
 	define("LANG",$language);
 	if (!empty($locale)) setlocale(LC_ALL, $locale);
