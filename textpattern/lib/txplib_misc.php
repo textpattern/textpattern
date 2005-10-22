@@ -1233,6 +1233,10 @@ else
 	{
 		// 503 status might discourage search engines from indexing or caching the error message
 
+		//Make it possible to call this function as a tag, e.g. in an article <txp:txp_die status="410" />
+		if (is_array($msg))
+			extract(lAtts(array('msg' => '', 'status' => '503'),$msg));
+
 		// Intentionally incomplete - just the ones we're likely to use
 		$codes = array(
 			'200' => 'OK',
