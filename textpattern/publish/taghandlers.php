@@ -861,7 +861,7 @@ $LastChangedRevision$
 	}
 	
 // -------------------------------------------------------------
-	function preview($atts, $thing='', $me='')
+	function comments_preview($atts, $thing='', $me='')
 	{
 		global $thisarticle;
 		if (!ps('preview'))
@@ -881,12 +881,12 @@ $LastChangedRevision$
 		{
 			if (@$GLOBALS['pretext']['secondpass'] == false)
 				return $me;
-			if (@$GLOBALS['pretext']['preview_shown'])
+			if (@$GLOBALS['pretext']['comments_preview_shown'])
 				return '';
 			else
 				return '<a id="cpreview"></a>'.discuss($id);
 		}
-		$GLOBALS['pretext']['preview_shown'] = true;
+		$GLOBALS['pretext']['comments_preview_shown'] = true;
 
 		if (is_array($thisarticle)) extract($thisarticle);
 
@@ -908,7 +908,7 @@ $LastChangedRevision$
 	}
 	
 // -------------------------------------------------------------
-	function if_preview($atts, $thing)	
+	function if_comments_preview($atts, $thing)	
 	{
 		return parse(EvalElse($thing, ps('preview') && checkCommentsAllowed(gps('parentid')) ));
 	}

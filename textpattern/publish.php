@@ -691,7 +691,7 @@ $LastChangedRevision$
 			$article = fetch_form(($override_form) ? $override_form : $form);
 
 			if ($preview && $parentid) {
-				$article = '<txp:preview bc="1" id="'.$parentid.'" />'.$article;
+				$article = '<txp:comments_preview bc="1" id="'.$parentid.'" />'.$article;
 			}
 
 			$article = parse($article);
