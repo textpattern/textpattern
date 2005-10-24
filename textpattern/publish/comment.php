@@ -112,7 +112,14 @@ $LastChangedRevision$
 		if ($remember==1) { setCookies($name,$email,$web); }
 		if ($forget==1) { destroyCookies(); }
 
-		$out = '<form method="post" action="#cpreview" id="txpCommentInputForm">';
+		$url = $GLOBALS['pretext']['request_uri'];
+
+		// Experimental clean urls with only 404-error-document on apache 
+		// possibly requires messy urls for POST requests.
+		if (defined('PARTLY_MESSY') and (PARTLY_MESSY)) 
+			$url = hu.'?id='.intval($parentid);
+
+		$out = '<form method="post" action="'.$url.'#cpreview" id="txpCommentInputForm">';
 
 		$Form = fetch('Form','txp_form','name',$form);
 		$msgstyle = ($msgstyle ? ' style="'.$msgstyle.'"' : '');
