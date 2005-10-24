@@ -87,7 +87,9 @@ $LastChangedRevision$
 				}
 			}
 		}
-		
+<?php
+	if ($event == 'list') {
+?>		
 		function poweredit(elm)
 		{
 			
@@ -137,6 +139,9 @@ $LastChangedRevision$
 			withsel = document.getElementById('withselected');
 			if(withsel.options[withsel.selectedIndex].value != '') return (withsel.selectedIndex = 0);
 		}
+<?php
+	}
+?>		
 	-->
 	</script>
 	</head>
