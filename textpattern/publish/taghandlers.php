@@ -330,8 +330,9 @@ $LastChangedRevision$
 		if ($rs) {
         	while ($a = nextRow($rs)) {
 				extract($a);
-				$Title = safe_field("Title",'textpattern',"ID=$parentid");
-				$out[] = href($name.' ('.escape_title($Title).')', permlinkurl_id($parentid).'#c'.$discussid);
+				extract(safe_row("Title, Status",'textpattern',"ID=$parentid"));
+				If ($Status >= 4)
+					$out[] = href($name.' ('.escape_title($Title).')', permlinkurl_id($parentid).'#c'.$discussid);
 			}
 			if (!empty($out)) {
 				return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
