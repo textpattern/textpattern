@@ -23,14 +23,7 @@ $LastChangedRevision$
 	}
 
 //-------------------------------------------------------------
-	function discuss_delete()
-	{
-		$discussid = ps('discussid');
-		safe_delete("txp_discuss","discussid = $discussid");
-		update_comments_count($discussid); 
-		discuss_list(messenger('message',$discussid,'deleted'));
-	}
-
+	// Removed (broken) function discuss_delete() since it was not used.
 //-------------------------------------------------------------
 	function discuss_save()
 	{
