@@ -56,6 +56,13 @@ Changes since 4.0.1:
 * Add a pageby attribute to txp:article, for multi-column lists
 * Fix txp:link_to_next/prev so they work at the top of a page
 * Minor speed improvements, new class and linkclass attributes for txp:breadcrumb tag
+* Added txp:comments_preview and txp:if_comments_preview tags. Example usage:
+	<txp:if_comments_preview>
+	 <div id="cpreview" style="background-color:#FF0"><b>Hello, the following is your preview</b>
+	   <txp:comments_preview /><txp:comments_form preview="1" />
+	 </div>
+	</txp:if_comments_preview>
+
 
 
 Changes since 4.0:
