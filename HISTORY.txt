@@ -48,9 +48,9 @@ Changes since 4.0.1:
 * Restore the comments_closed message
 * Better handling of per-article Use Textile selection
 * Add class attribute to comments_invite for css-classes 
-* Added 3 attributes to comments_invite: showcount, textonly (just the invite-text)
+* Added 4 attributes to comments_invite: showcount, wraptag, textonly (just the invite-text)
     and showalways (also display on individual article-pages). Example:
-    <comments_invite showcount="0" textonly="1" showalways="1" />
+    <comments_invite wraptag="p" showcount="0" textonly="1" showalways="1" />
 * Support c-style backslash sequences in tag attributes
 * Fix some rare bugs in feeds, admin list paging
 * Add a pageby attribute to txp:article, for multi-column lists
@@ -62,8 +62,7 @@ Changes since 4.0.1:
 	   <txp:comments_preview /><txp:comments_form preview="1" />
 	 </div>
 	</txp:if_comments_preview>
-
-
+* Fixed unparsed excerpts in Feeds.
 
 Changes since 4.0:
 

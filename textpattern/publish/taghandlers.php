@@ -718,24 +718,28 @@ $LastChangedRevision$
 			'class'		=> __FUNCTION__,
 			'showcount'	=> true,
 			'textonly'	=> false,
-			'showalways'	=> false  //FIXME in crockery. This is only for BC.
+			'showalways'=> false,  //FIXME in crockery. This is only for BC.
+			'wraptag'   => '',
 		), $atts));
 
+		$invite_return = '';
 		if (($annotate or $comments_count) && ($showalways or $is_article_list) ) {
 
 			$ccount = ($comments_count && $showcount) ?  ' ['.$comments_count.']' : '';
-
 			if ($textonly)
-				return $comments_invite.$ccount;
-
-			if (!$comments_mode) {
-				return '<a href="'.permlinkurl($thisarticle).'#'.gTxt('comment').
-					'"'.(($class) ? ' class="'.$class.'"' : '').'>'.$comments_invite.'</a>'. $ccount;
-			} else {
-				return "<a href=\"".hu."?parentid=$thisid\" onclick=\"window.open(this.href, 'popupwindow', 'width=500,height=500,scrollbars,resizable,status'); return false;\"".(($class) ? ' class="'.$class.'"' : '').'>'.$comments_invite.'</a> '.$ccount;
-	
+				$invite_return = $comments_invite.$ccount;
+			else
+			{
+				if (!$comments_mode) {
+					$invite_return = doTag($comments_invite, 'a', $class, ' href="'.permlinkurl($thisarticle).'#'.gTxt('comment').'" '). $ccount;
+				} else {
+					$invite_return = "<a href=\"".hu."?parentid=$thisid\" onclick=\"window.open(this.href, 'popupwindow', 'width=500,height=500,scrollbars,resizable,status'); return false;\"".(($class) ? ' class="'.$class.'"' : '').'>'.$comments_invite.'</a> '.$ccount;
+				}
 			}
 		}
+		if ($wraptag) $invite_return = doTag($invite_return, $wraptag, $class);
+
+		return $invite_return;
 	}
 // -------------------------------------------------------------
 	function comments_form($atts)
