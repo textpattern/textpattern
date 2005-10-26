@@ -1266,7 +1266,7 @@ else
 			$code = @$parts[0];
 		}
 
-		if ($GLOBALS['connected']) {
+		if (@$GLOBALS['connected']) {
 			$out = safe_field('user_html','txp_page',"name='error_".doSlash($code)."'");
 			if (empty($out))
 				$out = safe_field('user_html','txp_page',"name='error_default'");
