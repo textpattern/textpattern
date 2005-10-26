@@ -739,7 +739,6 @@ $LastChangedRevision$
 		$out['annotate']        = $Annotate;
 		$out['comments_invite'] = $AnnotateInvite;
 		$out['authorid']        = $AuthorID;
-		$out['excerpt']         = $Excerpt_html;
 		$out['title']           = $Title;
 		$out['url_title']       = $url_title;
 		$out['category1']       = $Category1;
@@ -759,6 +758,7 @@ $LastChangedRevision$
 		$GLOBALS['thisarticle'] = $out;
 		$GLOBALS['is_article_body'] = 1;		
 		$GLOBALS['thisarticle']['body'] = parse($Body_html);
+		$GLOBALS['thisarticle']['excerpt'] = parse($Excerpt_html);
 		$GLOBALS['is_article_body'] = 0;
 
 	}
