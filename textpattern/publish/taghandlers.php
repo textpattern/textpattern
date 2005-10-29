@@ -1877,7 +1877,7 @@ $LastChangedRevision$
 		}
 		
 		$out = ($permlink_mode == 'messy') ?
-					'<a href="'.hu.'index.php?s=file_download&id='.$thisfile['id'].'">'.parse($thing).'</a>':
+					'<a href="'.hu.'index.php?s=file_download&amp;id='.$thisfile['id'].'">'.parse($thing).'</a>':
 					'<a href="'.hu.gTxt('file_download').'/'.$thisfile['id'].'">'.parse($thing).'</a>';								
 		return $out;
 	}	
