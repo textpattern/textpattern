@@ -63,6 +63,7 @@ Changes since 4.0.1:
 	 </div>
 	</txp:if_comments_preview>
 * Fixed unparsed excerpts in Feeds.
+* Textile: smarter handling of relative link and image paths
 
 Changes since 4.0:
 

@@ -566,6 +566,10 @@ class Textile
 
         $atts = ($atts) ? $this->shelve($atts) : '';
 
+        $parts = parse_url($url);
+        if (empty($parts['host']) and preg_match('/^\w/', @$parts['path']))
+            $url = hu.$url;
+
         $out = $pre . '<a href="' . $url . $slash . '"' . $atts . $this->rel . '>' . $text . '</a>' . $post;
 
 		// $this->dump($out);
@@ -624,6 +628,10 @@ function refs($m)
 
         $href = (isset($m[5])) ? $this->checkRefs($m[5]) : '';
         $url = $this->checkRefs($url);
+
+        $parts = parse_url($url);
+        if (empty($parts['host']) and preg_match('/^\w/', @$parts['path']))
+            $url = hu.$url;
 
         $out = array(
             ($href) ? '<a href="' . $href . '">' : '',
