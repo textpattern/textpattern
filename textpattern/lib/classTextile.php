@@ -199,6 +199,7 @@ class Textile
     var $c;
     var $pnct;
     var $rel;
+    var $fn;
 
 // -------------------------------------------------------------
     function Textile()
@@ -471,7 +472,8 @@ class Textile
 
         if (preg_match("/fn(\d+)/", $tag, $fns)) {
             $tag = 'p';
-            $atts .= ' id="fn' . $fns[1] . '"';
+            $fnid = empty($this->fn[$fns[1]]) ? $fns[1] : $this->fn[$fns[1]];
+            $atts .= ' id="fn' . $fnid . '"';
             $content = '<sup>' . $fns[1] . '</sup> ' . $content;
         }
 
@@ -758,8 +760,17 @@ function refs($m)
 // -------------------------------------------------------------
     function footnoteRef($text)
     {
-        return preg_replace('/\b\[([0-9]+)\](\s)?/U',
-            '<sup><a href="#fn$1">$1</a></sup>$2', $text);
+        #return preg_replace_callback('/\b\[([0-9]+)\](\s)?/U',
+        #    array(&$this, 'footnodeid'), $text);
+        return preg_replace('/\b\[([0-9]+)\](\s)?/Ue',
+            '$this->footnoteID(\'\1\',\'\2\')', $text);
+    }
+
+// -------------------------------------------------------------
+    function footnoteID($id, $t)
+    {
+        $this->fn[$id] = $fnid = uniqid(rand());
+        return '<sup><a href="#fn'.$fnid.'">'.$id.'</a></sup>'.$t;
     }
 
 // -------------------------------------------------------------
