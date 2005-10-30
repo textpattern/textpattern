@@ -760,8 +760,6 @@ function refs($m)
 // -------------------------------------------------------------
     function footnoteRef($text)
     {
-        #return preg_replace_callback('/\b\[([0-9]+)\](\s)?/U',
-        #    array(&$this, 'footnodeid'), $text);
         return preg_replace('/\b\[([0-9]+)\](\s)?/Ue',
             '$this->footnoteID(\'\1\',\'\2\')', $text);
     }
@@ -769,7 +767,9 @@ function refs($m)
 // -------------------------------------------------------------
     function footnoteID($id, $t)
     {
-        $this->fn[$id] = $fnid = uniqid(rand());
+        if (empty($this->fn[$id]))
+            $this->fn[$id] = uniqid(rand());
+        $fnid = $this->fn[$id];
         return '<sup><a href="#fn'.$fnid.'">'.$id.'</a></sup>'.$t;
     }
 
