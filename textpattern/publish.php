@@ -408,25 +408,23 @@ $LastChangedRevision$
 	function textpattern() 
 	{
 		global $pretext,$microstart,$prefs,$qcount,$production_status,$txptrace,$siteurl;
-		$segment = gps('segment');
-		extract($pretext);
 
 		callback_event('textpattern');
 
 		if ($pretext['status'] == '404')
 			txp_die(gTxt('404_not_found'), '404');
 
-		$html = safe_field('user_html','txp_page',"name='".doSlash($page)."'");
+		$html = safe_field('user_html','txp_page',"name='".doSlash($pretext['page'])."'");
 		if (!$html) 
 			txp_die(gTxt('unknown_section'), '404');
 
 		set_error_handler("tagErrorHandler");
+		$GLOBALS['pretext']['secondpass'] = false;
 		$html = parse($html);
 		$GLOBALS['pretext']['secondpass'] = true;
 		$GLOBALS['txptrace'][] = " secondpass \r\n";
 		$html = parse($html); // the function so nice, he ran it twice
 		restore_error_handler();
-		$html = (!$segment) ? $html : segmentPage($html);
 		$html = ($prefs['allow_page_php_scripting']) ? evalString($html) : $html;
 
 		header("Content-type: text/html; charset=utf-8");
