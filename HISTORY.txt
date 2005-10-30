@@ -64,6 +64,7 @@ Changes since 4.0.1:
 	</txp:if_comments_preview>
 * Fixed unparsed excerpts in Feeds.
 * Textile: smarter handling of relative link and image paths
+* Textile: stop footnote links from clashing in article lists
 * Add fi_FI locale support
 
 Changes since 4.0:
