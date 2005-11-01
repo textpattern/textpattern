@@ -736,8 +736,8 @@ $LastChangedRevision$
 					$invite_return = "<a href=\"".hu."?parentid=$thisid\" onclick=\"window.open(this.href, 'popupwindow', 'width=500,height=500,scrollbars,resizable,status'); return false;\"".(($class) ? ' class="'.$class.'"' : '').'>'.$comments_invite.'</a> '.$ccount;
 				}
 			}
+			if ($wraptag) $invite_return = doTag($invite_return, $wraptag, $class);
 		}
-		if ($wraptag) $invite_return = doTag($invite_return, $wraptag, $class);
 
 		return $invite_return;
 	}
