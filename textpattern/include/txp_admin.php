@@ -95,7 +95,7 @@ if ($event == 'admin') {
 			);
 			if ($rs) {
 				$message .= gTxt('password_changed');
-				if ($_POST['mailpassword']==1) {
+				if (!empty($_POST['mailpassword'])) {
 					send_new_password($NewPass,$themail,$txp_user);
 					$message .= sp.gTxt('and_mailed_to').sp.$themail;
 				}
