@@ -10,3 +10,5 @@
  
  RewriteRule ^(.*) index.php
 </IfModule>
+
+#php_value register_globals 0

@@ -95,6 +95,9 @@ $LastChangedRevision$
 				   or (is_callable('apache_get_version'));
 	$real_doc_root = (isset($_SERVER['DOCUMENT_ROOT'])) ? realpath($_SERVER['DOCUMENT_ROOT']) : '';
 	
+	// ini_get() returns string values passed via php_value as a string, not boolean
+	$is_register_globals = ( (strcasecmp(ini_get('register_globals'),'on')===0) or (ini_get('register_globals')==='1'));
+
 	$fail = array(
 
 		'path_to_site_missing' =>
@@ -167,6 +170,14 @@ $LastChangedRevision$
 		'warn_mail_unavailable' =>
 		(!is_callable('mail'))
 		? gTxt('warn_mail_unavailable')
+		: '',
+
+		'warn_register_globals_or_update' =>
+		( $is_register_globals && 
+		  (    version_compare(phpversion(),'4.4.0','<=') 
+			or ( version_compare(phpversion(),'5.0.0','>=') and version_compare(phpversion(),'5.0.5','<=') )
+		))
+		? gTxt('warn_register_globals_or_update')
 		: '',
 
 	);
@@ -255,7 +266,7 @@ $LastChangedRevision$
 
 		gTxt('php_version').cs.phpversion().n,
 
-		(ini_get('register_globals')) ? gTxt('register_globals').cs.ini_get('register_globals').n : '',
+		($is_register_globals) ? gTxt('register_globals').cs.$is_register_globals.n : '',
 
 		gTxt('server_time').cs.strftime('%Y-%m-%d %H:%M:%S').n,
 
