@@ -418,7 +418,7 @@ $LastChangedRevision$
 			$permissions = implode(",",$permissions);
 		}
 
-		$perms = mysql_real_escape_string($permissions);
+		$perms = doSlash($permissions);
 		
 		$old_filename = fetch('filename','txp_file','id','$id');
 		
