@@ -55,7 +55,8 @@
 			    $q = "
 			      select
 			        ".$wpdbprefix."post2cat.category_id as catid,
-			        ".$wpdbprefix."categories.cat_name as catname
+			        ".$wpdbprefix."categories.cat_name as catname,
+					".$wpdbprefix."categories.category_nicename as catnicename
 			        from ".$wpdbprefix."post2cat
 			        left join ".$wpdbprefix."categories on
 			          ".$wpdbprefix."categories.cat_ID = ".$wpdbprefix."post2cat.category_id where ".$wpdbprefix."post2cat.post_id='".$b['ID']."' limit 2        
@@ -67,8 +68,8 @@
 			      $categories[] = $f;
 			    }
 			    
-			    $b['Category1'] = (!empty($categories[0]))?$categories[0]['catname']:'';
-			    $b['Category2'] = (!empty($categories[1]))?$categories[1]['catname']:'';			    
+			    $b['Category1'] = (!empty($categories[0]))?$categories[0]['catnicename']:'';
+			    $b['Category2'] = (!empty($categories[1]))?$categories[1]['catnicename']:'';			    
 			    
 			    unset($categories);
 			    
@@ -79,6 +80,7 @@
 		      select
 		        ".$wpdbprefix."categories.cat_ID as catid,
 		        ".$wpdbprefix."categories.cat_name as catname,
+		        ".$wpdbprefix."categories.category_nicename as catnicename,
 		        ".$wpdbprefix."categories.category_parent as catparent
 		        from ".$wpdbprefix."categories
 		        ",$b2link) or $results[]= mysql_error();
@@ -173,13 +175,14 @@
 			        foreach ($cats as $cat) {
 			            extract(array_slash($cat));
 			            //Prevent repeated categories
-			            $rs = safe_row('id', 'txp_category', "name='$catname'");			            			            
+			            $rs = safe_row('id', 'txp_category', "name='$catnicename'");			            			            
 			            if (!$rs){
 			            	$left++;
 			            	$right++;
 				            $q = mysql_query("
 				            insert into `".PFX."txp_category` set
-				             name = '$catname',
+				             name = '$catnicename',
+					         title = '$catname',
 				             type = 'article',
 				             parent = 'root',
 				             lft = '$left',
