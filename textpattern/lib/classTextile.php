@@ -549,7 +549,7 @@ class Textile
             \s?
             (?:\(([^)]+)\)(?="))?        # $title
             ":
-            (\S+\b)                      # $url
+            ([^:]\S*\b)                  # $url
             (\/)?                        # $slash
             ([^\w\/;]*)                  # $post
             (?=\s|$)
