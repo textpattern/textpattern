@@ -61,7 +61,7 @@ $LastChangedRevision$
 					$Body = (!trim($Body)) ? $thisarticle['body'] : $Body;
 					$Body = str_replace('href="/','href="'.hu,$Body);
 					$Body = preg_replace("/href=\\\"#(.*)\"/","href=\"".permlinkurl($a)."#\\1\"",$Body);
-					$Body = safe_hed($Body);
+					$Body = rss_safe_hed($Body);
 
 					$Body = preg_replace(array('/</','/>/',"/'/",'/"/'), array('&lt;','&gt;','&#039;','&quot;'),$Body);
 						// encode bare ampersands
@@ -197,7 +197,7 @@ $LastChangedRevision$
 	}
 
 
-	function safe_hed($toUnicode) {
+	function rss_safe_hed($toUnicode) {
 
 		if (version_compare(phpversion(), "5.0.0", ">=")) {
 			$str =  html_entity_decode($toUnicode, ENT_QUOTES, "UTF-8");
