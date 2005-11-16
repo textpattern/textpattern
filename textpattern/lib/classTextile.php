@@ -552,7 +552,7 @@ class Textile
             ([^:]\S*\b)                  # $url
             (\/)?                        # $slash
             ([^\w\/;]*)                  # $post
-            (?=\s|$)
+            (?=\s|$|[\]})])
         /Ux', array(&$this, "fLink"), $text);
     }
 
@@ -564,7 +564,7 @@ class Textile
         $url = $this->checkRefs($url);
 
         $atts = $this->pba($atts);
-        $atts .= ($title != '') ? 'title="' . $title . '"' : '';
+        $atts .= ($title != '') ? 'title="' . htmlspecialchars($title) . '"' : '';
 
         $atts = ($atts) ? $this->shelve($atts) : '';
 
@@ -613,7 +613,7 @@ function refs($m)
             (?:\(([^\)]+)\))?  # optional title
             \!                 # closing
             (?::(\S+))?        # optional href
-            (?=\s|$)           # lookahead: space or end of string
+            (?=\s|$|[\]})])   # lookahead: space or end of string
         /Ux", array(&$this, "fImage"), $text);
     }
 
