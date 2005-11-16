@@ -245,7 +245,6 @@ class Textile
 			}
 			$text = $this->code($text);
 			$text = $this->span($text);
-			$text = $this->superscript($text);
 			$text = $this->footnoteRef($text);
 			$text = $this->glyphs($text);
 			$text = $this->retrieve($text);
@@ -493,18 +492,20 @@ class Textile
 // -------------------------------------------------------------
     function span($text)
     {
-        $qtags = array('\*\*','\*','\?\?','-','__','_','%','\+','~');
+        $qtags = array('\*\*','\*','\?\?','-','__','_','%','\+','~','\^');
 
+                #(?<=^|\s|[[:punct:]]|[{([])
+                #(?=[])}]|[[:punct:]]+|\s|$)
         foreach($qtags as $f) {
             $text = preg_replace_callback("/
-                (?<=^|\s|[[:punct:]]|[{([])
+                (?<=^|\d|\s|[.,\"'?!;:>]|[{([])
                 ($f)
                 ($this->c)
                 (?::(\S+))?
-                ([^\s*?\-_%|~]+)
-                ([[:punct:];]*)
+                ([^\s$f]+|\S[^$f]*[^\s$f])
+                ([.,\"'?!;:]*)
                 $f
-                (?=[])}]|[[:punct:]]+|\s|$)
+                (?=[])}]|[.,\"'?!;:<]+|\s|$)
             /xmU", array(&$this, "fSpan"), $text);
         }
         return $text;
@@ -522,7 +523,8 @@ class Textile
             '-'  => 'del',
             '%'  => 'span',
             '+'  => 'ins',
-            '~'  => 'sub'
+            '~'  => 'sub',
+            '^'  => 'sup',
         );
 
         list(, $tag, $atts, $cite, $content, $end) = $m;
@@ -749,12 +751,6 @@ function refs($m)
         @list(, $before, $notextile, $after) = $m;
         $notextile = str_replace(array_keys($modifiers), array_values($modifiers), $notextile);
         return $before . '<notextile>' . $notextile . '</notextile>' . $after;
-    }
-
-// -------------------------------------------------------------
-    function superscript($text)
-    {
-        return preg_replace('/\^(.*)\^/mU', '<sup>$1</sup>', $text);
     }
 
 // -------------------------------------------------------------
