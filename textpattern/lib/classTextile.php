@@ -494,8 +494,6 @@ class Textile
     {
         $qtags = array('\*\*','\*','\?\?','-','__','_','%','\+','~','\^');
 
-                #(?<=^|\s|[[:punct:]]|[{([])
-                #(?=[])}]|[[:punct:]]+|\s|$)
         foreach($qtags as $f) {
             $text = preg_replace_callback("/
                 (?<=^|\d|\s|[.,\"'?!;:>]|[{([])
@@ -607,7 +605,7 @@ function refs($m)
     {
         return preg_replace_callback("/
             \!                 # opening !
-            (\<|\=|\>)?        # optional alignment atts
+            (\<|\=|\>)??       # optional alignment atts
             ($this->c)         # optional style,class atts
             (?:\. )?           # optional dot-space
             ([^\s(!]+)         # presume this is the src
