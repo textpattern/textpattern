@@ -347,7 +347,7 @@ class Textile
     function hasRawText($text)
     {
         // checks whether the text has text not already enclosed by a block tag
-        return '' != trim(preg_replace('@<(p|div|code|pre|h\d|form)\s[^>]*?[^/]>.*</\1>@s', '', $text));
+        return '' != trim(preg_replace('@<(p|blockquote|div|form|table|ul|ol|pre|code|h\d)[^>]*?>.*</\1>@s', '', $text));
     }
 
 // -------------------------------------------------------------
@@ -423,15 +423,24 @@ class Textile
     }
 
 // -------------------------------------------------------------
+    function doPBr($in)
+    {
+        return preg_replace_callback('@<(p)[^>]*?>.*</\1>@s', array(&$this, 'doBr'), $in);
+    }
+
+// -------------------------------------------------------------
+    function doBr($m)
+    {
+        return preg_replace("@(.+)(?<!<br>|<br />)\n(?![#*\s|])@", '$1<br />', $m[0]);
+    }
+
+// -------------------------------------------------------------
     function block($text)
     {
         $pre = $php = $txp = false;
         $find = array('bq', 'h[1-6]', 'fn\d+', 'p');
 
-        $text = preg_replace("/(.+)\n(?![#*\s|])/",
-            "$1<br />", $text);
-
-        $text = explode("\n", $text);
+        $text = explode("\n\n", $text);
         array_push($text, " ");
 
         foreach($text as $line) {
@@ -445,17 +454,20 @@ class Textile
                 $txp = true;
             }
 
-
             foreach($find as $tag) {
                 $line = ($pre == false and $php == false and $txp == false)
-                ? preg_replace_callback("/^($tag)($this->a$this->c)\.(?::(\S+))? (.*)$/",
+                ? preg_replace_callback("/^($tag)($this->a$this->c)\.(?::(\S+))? (.*)$/s",
                     array(&$this, "fBlock"), $line)
                 : $line;
             }
 
-            $line = (!$php and !$txp and $this->hasRawText($line)) ? preg_replace('/^(?!\t|<\/?pre|<\/?code|$| )(.*)/', "\t<p>$1</p>", $line) : $line;
+            $hasraw = $this->hasRawText($line);
+            if (!$php and !$txp and $hasraw)
+                $line = preg_replace('/^(?!\t|<\/?pre|<\/?code|$| )(.*)/s', "\t<p>$1</p>", $line);
 
-            $line = ($pre or $php) ? str_replace("<br />", "\n", $line):$line;
+				$line = $this->doPBr($line);
+            $line = preg_replace('/<br>/', '<br />', $line);
+
             if (preg_match('/<\/pre>/i', $line)) {
                 $pre = false;
             }
