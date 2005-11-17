@@ -344,6 +344,13 @@ class Textile
     }
 
 // -------------------------------------------------------------
+    function hasRawText($text)
+    {
+        // checks whether the text has text not already enclosed by a block tag
+        return '' != trim(preg_replace('@<(p|div|code|pre|h\d|form)\s[^>]*?[^/]>.*</\1>@s', '', $text));
+    }
+
+// -------------------------------------------------------------
     function fTable($matches)
     {
         $tatts = $this->pba($matches[1], 'table');
@@ -446,7 +453,7 @@ class Textile
                 : $line;
             }
 
-            $line = (!$php and !$txp) ? preg_replace('/^(?!\t|<\/?pre|<\/?code|$| )(.*)/', "\t<p>$1</p>", $line) : $line;
+            $line = (!$php and !$txp and $this->hasRawText($line)) ? preg_replace('/^(?!\t|<\/?pre|<\/?code|$| )(.*)/', "\t<p>$1</p>", $line) : $line;
 
             $line = ($pre or $php) ? str_replace("<br />", "\n", $line):$line;
             if (preg_match('/<\/pre>/i', $line)) {
