@@ -425,13 +425,14 @@ class Textile
 // -------------------------------------------------------------
     function doPBr($in)
     {
-        return preg_replace_callback('@<(p)[^>]*?>.*</\1>@s', array(&$this, 'doBr'), $in);
+        return preg_replace_callback('@<(p)([^>]*?)>(.*)(</\1>)@s', array(&$this, 'doBr'), $in);
     }
 
 // -------------------------------------------------------------
     function doBr($m)
     {
-        return preg_replace("@(.+)(?<!<br>|<br />)\n(?![#*\s|])@", '$1<br />', $m[0]);
+        $content = preg_replace("@(.+)(?<!<br>|<br />)\n(?![#*\s|])@", '$1<br />', $m[3]);
+        return '<'.$m[1].$m[2].'>'.$content.$m[4];
     }
 
 // -------------------------------------------------------------
@@ -587,9 +588,7 @@ class Textile
 
         $atts = ($atts) ? $this->shelve($atts) : '';
 
-        $parts = parse_url($url);
-        if (empty($parts['host']) and preg_match('/^\w/', @$parts['path']))
-            $url = hu.$url;
+        $url = $this->relURL($url);
 
         $out = $pre . '<a href="' . $url . $slash . '"' . $atts . $this->rel . '>' . $text . '</a>' . $post;
 
@@ -617,6 +616,17 @@ function refs($m)
     function checkRefs($text)
     {
         return (isset($this->urlrefs[$text])) ? $this->urlrefs[$text] : $text;
+    }
+
+// -------------------------------------------------------------
+    function relURL($url)
+    {
+        $parts = parse_url($url);
+        if ((empty($parts['scheme']) or @$parts['scheme'] == 'http') and 
+             empty($parts['host']) and 
+             preg_match('/^\w/', @$parts['path']))
+            $url = hu.$url;
+        return $url;
     }
 
 // -------------------------------------------------------------
@@ -650,9 +660,7 @@ function refs($m)
         $href = (isset($m[5])) ? $this->checkRefs($m[5]) : '';
         $url = $this->checkRefs($url);
 
-        $parts = parse_url($url);
-        if (empty($parts['host']) and preg_match('/^\w/', @$parts['path']))
-            $url = hu.$url;
+        $url = $this->relURL($url);
 
         $out = array(
             ($href) ? '<a href="' . $href . '">' : '',
