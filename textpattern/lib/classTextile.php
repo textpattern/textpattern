@@ -215,7 +215,7 @@ class Textile
         $this->s = "(?:{$this->cspn}?{$this->rspn}?|{$this->rspn}?{$this->cspn}?)";
         $this->c = "(?:{$this->clas}?{$this->styl}?{$this->lnge}?|{$this->styl}?{$this->lnge}?{$this->clas}?|{$this->lnge}?{$this->styl}?{$this->clas}?)";
         $this->pnct = '[\!"#\$%&\'()\*\+,\-\./:;<=>\?@\[\\\]\^_`{\|}\~]';
-
+        $this->urlch = '[\w"$\-_.+!*\'(),";\/?:@=&%#{}|\\^~\[\]`]';
     }
 
 // -------------------------------------------------------------
@@ -569,10 +569,10 @@ class Textile
             \s?
             (?:\(([^)]+)\)(?="))?        # $title
             ":
-            ([^:]\S*\b)                  # $url
+            ('.$this->urlch.'+)          # $url
             (\/)?                        # $slash
             ([^\w\/;]*)                  # $post
-            (?=\s|$|[\]})])
+            (?=\s|$)
         /Ux', array(&$this, "fLink"), $text);
     }
 
