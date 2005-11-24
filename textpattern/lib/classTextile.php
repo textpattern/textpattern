@@ -516,14 +516,14 @@ class Textile
 
         foreach($qtags as $f) {
             $text = preg_replace_callback("/
-                (?<=^|\d|\s|[.,\"'?!;:>]|[{([])
+                (?:^|(?<=[\s>\'\"[:punct:]])|([{[]))
                 ($f)
                 ($this->c)
                 (?::(\S+))?
                 ([^\s$f]+|\S[^$f]*[^\s$f])
                 ([.,\"'?!;:]*)
                 $f
-                (?=[])}]|[.,\"'?!;:<]+|\s|$)
+                (?:$|([\]}])|(?=[[:punct:]]{1,2}|\s))
             /xmU", array(&$this, "fSpan"), $text);
         }
         return $text;
@@ -545,7 +545,7 @@ class Textile
             '^'  => 'sup',
         );
 
-        list(, $tag, $atts, $cite, $content, $end) = $m;
+        list(,, $tag, $atts, $cite, $content, $end) = $m;
         $tag = $qtags[$tag];
         $atts = $this->pba($atts);
         $atts .= ($cite != '') ? 'cite="' . $cite . '"' : '';

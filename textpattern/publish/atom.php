@@ -101,7 +101,7 @@ $LastChangedRevision$
 					$e['issued'] = tag(gmdate('Y-m-d\TH:i:s\Z',$uPosted),'published');
 					$e['modified'] = tag(gmdate('Y-m-d\TH:i:s\Z',$uLastMod),'updated');
 
-					$escaped_title = safe_hed($Title);
+					$escaped_title = escape_title($Title);
 					$escaped_title = preg_replace("/&(?![#a-z0-9]+;)/i",'&amp;', $escaped_title);
 					$escaped_title = str_replace('<','&lt;',$escaped_title);
 					$escaped_title = str_replace('>','&gt;',$escaped_title);
