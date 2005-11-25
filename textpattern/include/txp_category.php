@@ -279,9 +279,11 @@ if ($event == 'category') {
 		$name = preg_replace("/[^[:alnum:]\-_]/", "", str_replace(" ","-",$name));
 		
 		$parent = ($parent) ? $parent : 'root';
-		safe_update("txp_category", 
+		if (safe_update("txp_category", 
 					"name='$name',parent='$parent',title='$title'", 
-					"id=$id");
+					"id=$id"))
+			safe_update('txp_category', "parent='$name'", "parent='$old_name'");
+		
 					
 		rebuild_tree('root', 1, $evname);
 		if ($evname=='article'){
