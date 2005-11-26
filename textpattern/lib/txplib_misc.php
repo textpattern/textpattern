@@ -408,7 +408,7 @@ else
 
 		global $txp_current_plugin;
 		printf ("<pre>".gTxt('plugin_load_error').' <b>%s</b> -> <b>%s: %s on line %s</b></pre>',
-				$txp_current_plugin, $error[$errno],$errstr,$errline);
+				$txp_current_plugin, $error[$errno], $errstr, $errline);
 	}
 
 // -------------------------------------------------------------
@@ -422,8 +422,10 @@ else
 		if (!($errno & error_reporting())) return;
 		if ($production_status == 'live') return;
 
-		echo "<pre>".gTxt('tag_error').' '.strong(htmlspecialchars($GLOBALS['txp_current_tag']))." -> ".strong($error[$errno])
-				.": ".strong($errstr)."</pre>";
+		global $txp_current_tag;
+		$errline = ($errstr === 'unknown_tag') ? '' : " on line $errline";
+		printf ("<pre>".gTxt('tag_error').' <b>%s</b> -> <b> %s: %s %s</b></pre>',
+				htmlspecialchars($txp_current_tag), $error[$errno], $errstr, $errline );
 	}
 
 // -------------------------------------------------------------
