@@ -406,8 +406,9 @@ else
 
 		if (!($errno & error_reporting())) return;
 
-		echo "<pre>".gTxt('plugin_load_error').' '.strong($GLOBALS['txp_current_plugin'])." -> ".strong($error[$errno])
-				.": ".strong($errstr)."</pre>";
+		global $txp_current_plugin;
+		printf ("<pre>".gTxt('plugin_load_error').' <b>%s</b> -> <b>%s: %s on line %s</b></pre>',
+				$txp_current_plugin, $error[$errno],$errstr,$errline);
 	}
 
 // -------------------------------------------------------------
