@@ -65,10 +65,12 @@ $LastChangedRevision$
 		updateSitePath(dirname(dirname(__FILE__)));
 
 		// v1.0: this should be the definitive http address of the site	
-	define("hu",'http://'.$siteurl.'/');
+	if (!defined('hu'))
+		define("hu",'http://'.$siteurl.'/');
 	
 		// v1.0 experimental relative url global
-	define("rhu",preg_replace("/http:\/\/.+(\/.*)\/?$/U","$1",hu));
+	if (!defined('rhu'))
+		define("rhu",preg_replace("/http:\/\/.+(\/.*)\/?$/U","$1",hu));
 
 		// 1.0: a new $here variable in the top-level index.php 
 		// should let us know the server path to the live site
@@ -82,7 +84,8 @@ $LastChangedRevision$
 	if (empty($txpcfg['doc_root']))
 		$txpcfg['doc_root'] = @$_SERVER['PATH_TRANSLATED'];
 
-	define("LANG",$language);
+	if (!defined('LANG'))
+		define("LANG",$language);
 	if (!empty($locale)) setlocale(LC_ALL, $locale);
 
 		//Initialize the current user
