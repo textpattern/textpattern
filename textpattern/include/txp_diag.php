@@ -278,6 +278,10 @@ $LastChangedRevision$
 
 		(is_callable('apache_get_version')) ? gTxt('apache_version').cs.apache_get_version().n : '',
 
+		gTxt('php_sapi_mode').cs.php_sapi_name().n,
+
+		gTxt('os_version').cs.php_uname('s').' '.php_uname('r').n,
+
 		$fail
 		? n.gTxt('preflight_check').cs.n.ln.join("\n", $fail).n.ln
 		: '',
