@@ -383,8 +383,9 @@ $LastChangedRevision$
 			$q ="w        = '$w',
 				 h        = '$h',
 				 ext      = '$ext',
-				 `name`   = '$name2db',
-				 `date`   = now(),
+				 name   = '$name2db',
+				 date   = now(),
+				 caption  = '',
 				 author   = '$txp_user'";
 			if (empty($id)) {
 				$q.= ", category = '$category'";
