@@ -374,7 +374,8 @@ $LastChangedRevision$
 		$id = $out['id'];
 
 		// hackish
-		if(empty($id)) $GLOBALS['is_article_list'] = true;
+		global $is_article_list;
+		if(empty($id)) $is_article_list = true;
 
 			// by this point we should know the section, so grab its page and css
 		$rs = safe_row("*", "txp_section", "name = '".doSlash($s)."' limit 1");
@@ -422,10 +423,10 @@ $LastChangedRevision$
 			txp_die(gTxt('unknown_section'), '404');
 
 		set_error_handler("tagErrorHandler");
-		$GLOBALS['pretext']['secondpass'] = false;
+		$pretext['secondpass'] = false;
 		$html = parse($html);
-		$GLOBALS['pretext']['secondpass'] = true;
-		$GLOBALS['txptrace'][] = " secondpass \r\n";
+		$pretext['secondpass'] = true;
+		$txptrace[] = " secondpass \r\n";
 		$html = parse($html); // the function so nice, he ran it twice
 		restore_error_handler();
 		$html = ($prefs['allow_page_php_scripting']) ? evalString($html) : $html;
@@ -602,8 +603,9 @@ $LastChangedRevision$
 			$pageout['s']        = $s;
 			$pageout['c']        = $c;
 			$pageout['total']    = $total;
-	
-			$GLOBALS['thispage'] = $pageout;
+
+			global $thispage;	
+			$thispage = $pageout;
 			if ($pgonly)
 				return;
 		}else{
@@ -629,8 +631,9 @@ $LastChangedRevision$
 			while($a = nextRow($rs)) {
 				++$count;
 				populateArticleData($a);
-				$GLOBALS['thisarticle']['is_first'] = ($count == 1);
-				$GLOBALS['thisarticle']['is_last'] = ($count == numRows($rs));
+				global $thisarticle, $uPosted, $limit;
+				$thisarticle['is_first'] = ($count == 1);
+				$thisarticle['is_last'] = ($count == numRows($rs));
 				// define the article form
 				$article = ($allowoverride and $a['override_form']) 
 				?	fetch_form($a['override_form'])
@@ -639,8 +642,8 @@ $LastChangedRevision$
 				$articles[] = parse($article);
 				
 				// sending these to paging_link(); Required?
-				$GLOBALS['uPosted'] = $a['uPosted'];
-				$GLOBALS['limit'] = $limit;
+				$uPosted = $a['uPosted'];
+				$limit = $limit;
 
 				unset($GLOBALS['thisarticle']);
 				unset($GLOBALS['theseatts']);//Required?				
@@ -693,9 +696,10 @@ $LastChangedRevision$
 
 		if ($rs) {
 			extract($rs);
-			populateArticleData($rs);			
-			$GLOBALS['thisarticle']['is_first'] = 1;
-			$GLOBALS['thisarticle']['is_last'] = 1;
+			populateArticleData($rs);
+			global $thisarticle;
+			$thisarticle['is_first'] = 1;
+			$thisarticle['is_last'] = 1;
 
 			// define the article form
 			$article = fetch_form(($override_form) ? $override_form : $form);
@@ -765,11 +769,12 @@ $LastChangedRevision$
 				$out[$name] = $rs['custom_' . $i];
 		}
 			
-		$GLOBALS['thisarticle'] = $out;
-		$GLOBALS['is_article_body'] = 1;		
-		$GLOBALS['thisarticle']['body'] = parse($Body_html);
-		$GLOBALS['thisarticle']['excerpt'] = parse($Excerpt_html);
-		$GLOBALS['is_article_body'] = 0;
+		global $thisarticle, $is_article_body;
+		$thisarticle = $out;
+		$is_article_body = 1;		
+		$thisarticle['body'] = parse($Body_html);
+		$thisarticle['excerpt'] = parse($Excerpt_html);
+		$is_article_body = 0;
 
 	}
 
