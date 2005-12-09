@@ -491,6 +491,7 @@ $LastChangedRevision$
 			'status'    => '4',
 			'pgonly'    => 0,
 			'searchall' => 1,
+			'searchsticky' => 0,
 			'allowoverride' => (!$q and !$iscustom),
 			'offset'    => 0,
 		),$atts);		
@@ -577,7 +578,15 @@ $LastChangedRevision$
 			}
 			$keywords = " and (" . join(' or ',$keyparts) . ")"; 
 		}
-		$where = "1" . ($id ? " and Status >= '4'" : " and Status='".doSlash($status)."'"). $time.
+
+		if ($q and $searchsticky)
+			$statusq = " and Status >= '4'";
+		elseif ($id)
+			$statusq = " and Status >= '4'";
+		else
+			$statusq = " and Status='".doSlash($status)."'";
+
+		$where = "1" . $statusq. $time.
 			$search . $id . $category . $section . $excerpted . $month . $author . $keywords . $custom . $frontpage;
 
 		//do not paginate if we are on a custom list
