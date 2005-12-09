@@ -91,7 +91,7 @@ function doAuth() {
 // -------------------------------------------------------------
 	function doTxpValidate() 
 	{
-		global $logout,$txpcfg;
+		global $logout,$txpcfg, $txp_user;
 		$p_userid = ps('p_userid');
 		$p_password = ps('p_password');
 		$logout = gps('logout');
@@ -108,12 +108,12 @@ function doAuth() {
 
 			if ((md5($c_userid.$nonce) === $cookie_hash) && $nonce) {  // check nonce
 	
-				$GLOBALS['txp_user'] = $c_userid;	// cookie is good, create $txp_user
+				$txp_user = $c_userid;	// cookie is good, create $txp_user
 				return '';
 	
 			} else {
 					// something's gone wrong
-				$GLOBALS['txp_user'] = '';
+				$txp_user = '';
 				setcookie('txp_login','',time()-3600);
 				return gTxt('bad_cookie');
 			}
@@ -145,16 +145,16 @@ function doAuth() {
 							time()+3600*24*365);	// remember nostay for 1 year
 					}
 				
-					$GLOBALS['txp_user'] = $p_userid;	// login is good, create $txp_user
+					$txp_user = $p_userid;	// login is good, create $txp_user
 					return '';
 
 				} else {
-					$GLOBALS['txp_user'] = '';
+					$txp_user = '';
 					return gTxt('could_not_log_in');
 				}
 	
 		} else {
-			$GLOBALS['txp_user'] = '';
+			$txp_user = '';
 			return gTxt('login_to_textpattern');
 		}	
 	}
