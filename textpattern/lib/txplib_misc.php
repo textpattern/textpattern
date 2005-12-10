@@ -1379,9 +1379,9 @@ eod;
 // -------------------------------------------------------------
 	function trace_add($msg)
 	{
-		global $production_status,$txptrace;
+		global $production_status,$txptrace,$txptracelevel;
 
 		if (in_array($production_status, array('debug', 'test')))
-			 @$txptrace[] = $msg;
+			 @$txptrace[] = str_repeat("\t", @$txptracelevel).$msg;
 	}
 ?>

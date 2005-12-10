@@ -877,7 +877,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function processTags($matches)
 	{
-		global $pretext, $production_status, $txptrace, $txp_current_tag;
+		global $pretext, $production_status, $txptrace, $txptracelevel, $txp_current_tag;
 
 		$tag = $matches[1];
 
@@ -890,6 +890,7 @@ $LastChangedRevision$
 			($thing ? '>' : '/>');
 
 		trace_add($txp_current_tag);
+		@++$txptracelevel;
 		if ($production_status == 'debug')
 			maxMemUsage(trim($matches[0]));
 
@@ -905,6 +906,7 @@ $LastChangedRevision$
 			else trigger_error(gTxt('unknown_tag'), E_USER_WARNING);
 		}
 
+		@--$txptracelevel;
 		if (isset($matches[4]))
 			trace_add('</txp:'.$tag.'>');
 
