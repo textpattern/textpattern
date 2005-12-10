@@ -419,7 +419,7 @@ $LastChangedRevision$
 	# RPC install/update languages
 	function list_languages($message='')
 	{
-		global $prefs, $locale, $txpcfg;
+		global $prefs, $locale, $txpcfg, $textarray;
 		require_once $txpcfg['txpath'].'/lib/IXRClass.php';
 
 		// Select and save active language
@@ -428,7 +428,7 @@ $LastChangedRevision$
 				$locale = doSlash(getlocale(ps('language')));
 				safe_update("txp_prefs","val='".doSlash(ps('language'))."'", "name='language'");
 				safe_update("txp_prefs","val='". $locale ."'", "name='locale'");
-				$GLOBALS['textarray'] = load_lang(doSlash(ps('language')));
+				$textarray = load_lang(doSlash(ps('language')));
 				$locale = setlocale(LC_ALL, $locale);
 				$message = gTxt('preferences_saved');
 		}
@@ -565,7 +565,7 @@ $LastChangedRevision$
 //-------------------------------------------------------------
 	function get_language()
 	{
-		global $prefs, $txpcfg;
+		global $prefs, $txpcfg, $textarray;
 		require_once $txpcfg['txpath'].'/lib/IXRClass.php';
 		$lang_code = gps('lang_code');		
 
@@ -578,7 +578,7 @@ $LastChangedRevision$
 			if ( (gps('force')=='file' || gps('updating')!=='1') && install_language_from_file($lang_code) )
 			{
 				if (defined('LANG')) 
-					$GLOBALS['$textarray'] = load_lang(LANG);
+					$textarray = load_lang(LANG);
 				return list_languages(gTxt($lang_code).sp.gTxt('updated'));
 			}else{
 				$install_langfile = str_replace( '{url}', strong('<a href="'.RPC_SERVER.'/lang/">'.RPC_SERVER.'/lang/</a>'), gTxt('install_langfile'));
@@ -607,7 +607,7 @@ $LastChangedRevision$
 			}			
 			array_walk($lang_struct,'install_lang_key');
 			if (defined('LANG')) 
-				$GLOBALS['$textarray'] = load_lang(LANG);
+				$textarray = load_lang(LANG);
 			return list_languages(gTxt($lang_code).sp.gTxt('updated'));
 		}		
 	}
