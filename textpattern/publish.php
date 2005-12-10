@@ -749,6 +749,7 @@ $LastChangedRevision$
 	{
 		extract($rs);
 
+		trace_add("[".gTxt('Article')." $ID]");
 		$out['thisid']          = $ID;
 		$out['posted']          = $uPosted;
 		$out['annotate']        = $Annotate;
