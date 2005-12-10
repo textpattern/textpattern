@@ -427,7 +427,7 @@ $LastChangedRevision$
 		$pretext['secondpass'] = false;
 		$html = parse($html);
 		$pretext['secondpass'] = true;
-		$txptrace[] = " secondpass \r\n";
+		trace_add('[ --- '.gTxt('secondpass').' --- ]');
 		$html = parse($html); // the function so nice, he ran it twice
 		restore_error_handler();
 		$html = ($prefs['allow_page_php_scripting']) ? evalString($html) : $html;
@@ -885,8 +885,8 @@ $LastChangedRevision$
 
 		$old_tag = @$txp_current_tag;
 		$txp_current_tag = '<txp:'.$tag.
-			($atts ? ' '.$matches[2] : '').
-			($thing ? '>' : ' />');
+			($atts ? $matches[2] : '').
+			($thing ? '>' : '/>');
 
 		trace_add($txp_current_tag);
 		if ($production_status == 'debug')
