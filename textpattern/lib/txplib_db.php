@@ -54,10 +54,14 @@ $DB = new DB;
 			dmp(mysql_error());
 //			dmp(debug_backtrace());
 		}
+		$start = getmicrotime();
 		$result = $method($q,$DB->link);
+		$time = sprintf('%02.6f', getmicrotime() - $start);
 		@$qcount++;
-		if ($result === false and (@$production_level == 'debug' or @$production_level == 'test'))
+		if ($result === false and (@$production_status == 'debug' or @$production_status == 'test'))
 			trigger_error(mysql_error() . n . $q, E_USER_ERROR);
+
+		trace_add("[SQL ($time): $q]");
 
 		if(!$result) return false;
 		return $result;

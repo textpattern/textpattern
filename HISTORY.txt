@@ -1,3 +1,9 @@
+Changes since 4.0.2:
+
+* Fix tag trace output for enclosing tags
+* Add extra info to the tag trace (SQL queries, conditional tag results, page template and form names)
+* Textile i18n improvements
+
 Changes since 4.0.1:
 
 * Fix a bug in 404 handling on some fastcgi servers

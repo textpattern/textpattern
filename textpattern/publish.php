@@ -422,6 +422,7 @@ $LastChangedRevision$
 		if (!$html) 
 			txp_die(gTxt('unknown_section'), '404');
 
+		trace_add('['.gTxt('page').': '.$pretext['page'].']');
 		set_error_handler("tagErrorHandler");
 		$pretext['secondpass'] = false;
 		$html = parse($html);
@@ -887,11 +888,9 @@ $LastChangedRevision$
 			($atts ? ' '.$matches[2] : '').
 			($thing ? '>' : ' />');
 
+		trace_add($txp_current_tag);
 		if ($production_status == 'debug')
-		{
-			@$txptrace[] = trim($matches[0]);
 			maxMemUsage(trim($matches[0]));
-		}
 
 		$out = '';
 
@@ -904,6 +903,9 @@ $LastChangedRevision$
 			elseif (isset($pretext[$tag])) $out = $pretext[$tag];
 			else trigger_error(gTxt('unknown_tag'), E_USER_WARNING);
 		}
+
+		if (isset($matches[4]))
+			trace_add('</txp:'.$tag.'>');
 
 		$txp_current_tag = $old_tag;
 		return $out;
