@@ -513,18 +513,19 @@ class Textile
     function span($text)
     {
         $qtags = array('\*\*','\*','\?\?','-','__','_','%','\+','~','\^');
+        $pnct = ".,\"'?!;:";
 
         foreach($qtags as $f) {
             $text = preg_replace_callback("/
-                (?:^|(?<=[\s>\'\"[:punct:]])|([{[]))
+                (?:^|(?<=[\s>$pnct])|([{[]))
                 ($f)
                 ($this->c)
                 (?::(\S+))?
                 ([^\s$f]+|\S[^$f]*[^\s$f])
-                ([.,\"'?!;:]*)
+                ([$pnct]*)
                 $f
                 (?:$|([\]}])|(?=[[:punct:]]{1,2}|\s))
-            /xmU", array(&$this, "fSpan"), $text);
+            /xU", array(&$this, "fSpan"), $text);
         }
         return $text;
     }
