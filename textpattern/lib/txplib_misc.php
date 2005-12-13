@@ -357,7 +357,7 @@ else
 // -------------------------------------------------------------
 	function load_plugin($name)
 	{
-		global $plugins, $prefs;
+		global $plugins, $prefs, $txp_current_plugin;
 
 		if (is_array($plugins) and in_array($name,$plugins)) {
 			return true;
@@ -368,6 +368,7 @@ else
 			if (is_file($dir . $name . '.php')) {
 				$plugins[] = $name;
 				set_error_handler("pluginErrorHandler");
+				$txp_current_plugin = $name;
 				include($dir . $name . '.php');
 				restore_error_handler();
 				return true;
@@ -379,6 +380,7 @@ else
 			$plugins[] = $rs['name'];
 			
 			set_error_handler("pluginErrorHandler");
+			$txp_current_plugin = $rs['name'];
 			eval($rs['code']);
 			restore_error_handler();
 			
