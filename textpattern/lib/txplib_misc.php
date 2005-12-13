@@ -367,7 +367,9 @@ else
 			$dir = rtrim($prefs['plugin_cache_dir'], '/') . '/';
 			if (is_file($dir . $name . '.php')) {
 				$plugins[] = $name;
+				set_error_handler("pluginErrorHandler");
 				include($dir . $name . '.php');
+				restore_error_handler();
 				return true;
 			}
 		}
@@ -376,7 +378,9 @@ else
 		if ($rs) {
 			$plugins[] = $rs['name'];
 			
+			set_error_handler("pluginErrorHandler");
 			eval($rs['code']);
+			restore_error_handler();
 			
 			return true;	
 		}
