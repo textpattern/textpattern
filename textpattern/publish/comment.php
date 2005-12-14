@@ -153,7 +153,8 @@ $LastChangedRevision$
 
 		$out .= $form;
 		$out .= graf(fInput('hidden','parentid',$parentid));
-		$out .= ($preview) ? hInput('nonce',$nonce) : '';
+		$split = rand(1, 31);
+		$out .= ($preview) ? hInput(substr($nonce, 0, $split),substr($nonce, $split)) : '';
 
 		$out .= (!$preview)
 		?	graf(fInput('hidden','backpage',serverset("REQUEST_URI")))
@@ -245,6 +246,11 @@ $LastChangedRevision$
 		$ip = serverset('REMOTE_ADDR');
 		$message = trim($message);
 		$blacklisted = is_blacklisted($ip);
+
+		$n = array();
+		foreach (stripPost() as $k=>$v)
+			if (strlen($k.$v) == 32) $n[] = "'".doSlash($k.$v)."'";
+		$nonce = safe_field('nonce', 'txp_discuss_nonce', "1=1 and nonce in (".join(',', $n).")");
 		
 		$name = doSlash(strip_tags(deEntBrackets($name)));
 		$web = doSlash(clean_url(strip_tags(deEntBrackets($web))));
