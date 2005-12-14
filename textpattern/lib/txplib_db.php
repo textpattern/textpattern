@@ -310,11 +310,14 @@ $DB = new DB;
 		$root = doSlash($root);
 		$type = doSlash($type);
 
-	    extract(safe_row(
+	   $rs = safe_row(
 	    	"lft as l, rgt as r", 
 	    	"txp_category", 
 			"name='$root' and type = '$type'"
-		));
+		);
+
+		if (!$rs) return array();
+		extract($rs);
 
 		$out = array();
 		$right = array(); 
@@ -349,11 +352,13 @@ $DB = new DB;
  	function getTreePath($target, $type)
  	{ 
 
-	    extract(safe_row(
+	  	$rs = safe_row(
 	    	"lft as l, rgt as r", 
 	    	"txp_category", 
 			"name='".doSlash($target)."' and type = '".doSlash($type)."'"
-		));
+		);
+		if (!$rs) return array();
+		extract($rs);
 
 	    $rs = safe_rows_start(
 	    	"*", 
