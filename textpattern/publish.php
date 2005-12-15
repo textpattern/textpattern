@@ -411,7 +411,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function textpattern() 
 	{
-		global $pretext,$microstart,$prefs,$qcount,$production_status,$txptrace,$siteurl;
+		global $pretext,$microstart,$prefs,$qcount,$qtime,$production_status,$txptrace,$siteurl;
 
 		callback_event('textpattern');
 
@@ -437,7 +437,8 @@ $LastChangedRevision$
 
 		if (in_array($production_status, array('debug', 'testing'))) {
 			$microdiff = (getmicrotime() - $microstart);
-			echo n,comment('Runtime: '.substr($microdiff,0,6));
+			echo n,comment('Runtime:    '.substr($microdiff,0,6));
+			echo n,comment('Query time: '.$qtime);
 			echo n,comment('Queries: '.$qcount);
 			echo maxMemUsage('end of textpattern()',1);
 			if (!empty($txptrace) and is_array($txptrace))

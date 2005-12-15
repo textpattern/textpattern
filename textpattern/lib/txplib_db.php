@@ -46,7 +46,7 @@ $DB = new DB;
 //-------------------------------------------------------------
 	function safe_query($q='',$debug='',$unbuf='')
 	{
-		global $DB,$txpcfg, $qcount, $production_status;
+		global $DB,$txpcfg, $qcount, $qtime, $production_status;
 		$method = (!$unbuf) ? 'mysql_query' : 'mysql_unbuffered_query';
 		if (!$q) return false;
 		if ($debug or TXP_DEBUG === 1) { 
@@ -57,6 +57,7 @@ $DB = new DB;
 		$start = getmicrotime();
 		$result = $method($q,$DB->link);
 		$time = sprintf('%02.6f', getmicrotime() - $start);
+		@$qtime += $time;
 		@$qcount++;
 		if ($result === false and (@$production_status == 'debug' or @$production_status == 'test'))
 			trigger_error(mysql_error() . n . $q, E_USER_ERROR);
