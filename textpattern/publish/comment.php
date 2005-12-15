@@ -206,6 +206,8 @@ $LastChangedRevision$
 		global $siteurl,$comments_moderate,$comments_sendmail,$txpcfg,
 			$comments_disallow_images,$prefs;
 
+		callback_event('savecomment');
+
 		$ref = serverset('HTTP_REFERRER');
 
 		$in = psa( array(
