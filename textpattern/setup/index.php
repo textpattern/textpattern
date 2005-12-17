@@ -88,7 +88,7 @@ eod;
 		@include txpath.'/config.php';
 		
 		if (!empty($txpcfg['db'])) {
-			exit(graf(gTxt('already_installed')));
+			exit(graf(str_replace('{txpath}', txpath, gTxt('already_installed'))));
 		}
 		
 
@@ -167,7 +167,7 @@ eod;
 		@include txpath.'/config.php';
 		
 		if (!empty($txpcfg['db'])) {
-			exit(graf(gTxt('already_installed')));
+			exit(graf(str_replace('{txpath}', txpath, gTxt('already_installed'))));
 		}
 
 		$carry['txpath']   = preg_replace("/^(.*)\/$/","$1",$carry['txpath']);
@@ -211,7 +211,7 @@ eod;
 
 		echo graf(str_replace("{dbname}", strong($ddb), gTxt('using_db')).' ('. $carry['dbcharset'] .')' ),
 		
-		graf(strong(gTxt('before_you_proceed')).', '. gTxt('create_config')),
+		graf(strong(gTxt('before_you_proceed')).', '. str_replace('{txpath}', txpath, gTxt('create_config'))),
 
 		'<textarea style="width:400px;height:200px" name="config" rows="1" cols="1">',
 		makeConfig($carry),
@@ -233,7 +233,7 @@ eod;
 		@include txpath.'/config.php';
 		if (!isset($txpcfg) || ($txpcfg['db'] != $carry['ddb']) || ($txpcfg['txpath'] != $carry['txpath']))
 		{
-			echo graf(strong(gTxt('before_you_proceed')).', '. gTxt('create_config')),
+			echo graf(strong(gTxt('before_you_proceed')).', '. str_replace('{txpath}', txpath, gTxt('create_config'))),
 	
 			'<textarea style="width:400px;height:200px" name="config" rows="1" cols="1">',
 			makeConfig($carry),
