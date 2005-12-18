@@ -245,13 +245,13 @@ $LastChangedRevision$
 	{
 		return 
 		'<form action="index.php" method="post">'.
-		gTxt('install_plugin').': '.
+		tag(gTxt('install_plugin').': ', 'span', ' style="vertical-align:top;"').
 		text_area('plugin',30,400,'').
-		popHelp('install_plugin').sp.
-		fInput('submit','install_new',gTxt('upload'),'smallerbox').
+		tag(
+			popHelp('install_plugin').sp.
+			fInput('submit','install_new',gTxt('upload'),'smallerbox')
+		    , 'span', ' style="vertical-align:100%;"').
 		eInput('plugin').sInput('plugin_verify').
 		'</form>';
 	}
-
-
 ?>
