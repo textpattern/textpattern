@@ -952,10 +952,10 @@ $LastChangedRevision$
 		$web = str_replace("http://", "", $web);
 
 		if ($email && !$web && !$never_display_email)
-			$name = '<a href="'.eE('mailto:'.$email).'"'.(@$txpac['comment_nofollow'] ? ' rel="nofollow"' : '').'>'.$name.'</a>';
+			$name = '<a href="'.eE('mailto:'.$email).'"'.(@$comment_nofollow ? ' rel="nofollow"' : '').'>'.$name.'</a>';
 
 		if ($web)
-			$name = '<a href="http://'.$web.'" title="'.$web.'"'.(@$txpac['comment_nofollow'] ? ' rel="nofollow"' : '').'>'.$name.'</a>';
+			$name = '<a href="http://'.$web.'" title="'.$web.'"'.(@$comment_nofollow ? ' rel="nofollow"' : '').'>'.$name.'</a>';
 
 		return $name;
 	}
