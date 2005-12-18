@@ -214,7 +214,7 @@ if ($event == 'category') {
 		global $txpcfg;
 		
 		//Prevent non url chars on category names
-		include_once $txpcfg['txpath'].'/lib/classTextile.php';
+		include_once txpath.'/lib/classTextile.php';
 		$textile = new Textile();
 		
 		$name = ps('name');		
@@ -268,7 +268,7 @@ if ($event == 'category') {
 		global $txpcfg;
 		
 		//Prevent non url chars on category names
-		include_once $txpcfg['txpath'].'/lib/classTextile.php';
+		include_once txpath.'/lib/classTextile.php';
 		$textile = new Textile();
 				
 		$in = psa(array('id','name','old_name','parent','title'));

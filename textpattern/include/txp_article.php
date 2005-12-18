@@ -239,7 +239,7 @@ if (!empty($event) and $event == 'article') {
 		}
 		
 
-		include_once $txpcfg['txpath'].'/lib/classTextile.php';
+		include_once txpath.'/lib/classTextile.php';
 		$textile = new Textile();
 
 		if (!$view) $view = "text";
@@ -775,7 +775,7 @@ if (!empty($event) and $event == 'article') {
 	{
 		global $txpcfg;
 		
-		include_once $txpcfg['txpath'].'/lib/classTextile.php';
+		include_once txpath.'/lib/classTextile.php';
 		$textile = new Textile();
 		
 		$incoming['Title_plain'] = $incoming['Title'];
@@ -816,7 +816,7 @@ if (!empty($event) and $event == 'article') {
 		
 		$prefs = get_prefs();
 		
-		include_once $txpcfg['txpath'].'/lib/IXRClass.php';
+		include_once txpath.'/lib/IXRClass.php';
 		
 		if ($prefs['ping_textpattern_com']) {
 			$tx_client = new IXR_Client('http://textpattern.com/xmlrpc/');

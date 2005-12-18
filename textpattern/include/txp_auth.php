@@ -58,7 +58,7 @@ function doAuth() {
 	function doLoginForm($message) 
 	{
 		global $txpcfg;
-		include $txpcfg['txpath'].'/lib/txplib_head.php';
+		include txpath.'/lib/txplib_head.php';
 		pagetop('log in');
 		$stay = (@$_COOKIE['txp_nostay'] == 1) ? 0 : 1;
 		echo

@@ -342,7 +342,7 @@ $LastChangedRevision$
 	function popTagLinks($type) 
 	{
 		global $txpcfg;
-		include $txpcfg['txpath'].'/lib/taglib.php';
+		include txpath.'/lib/taglib.php';
 		$arname = $type.'_tags';
 		asort($$arname);
 		foreach($$arname as $a) {

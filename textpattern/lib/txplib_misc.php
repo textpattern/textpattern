@@ -120,9 +120,9 @@ else
 			}
 		}else{
 			#backward compatibility stuff. Remove when necessary.
-			$filename = is_file($txpcfg['txpath'].'/lang/'.$lang.'.txt')
-			?	$txpcfg['txpath'].'/lang/'.$lang.'.txt'
-			:	$txpcfg['txpath'].'/lang/en-gb.txt';
+			$filename = is_file(txpath.'/lang/'.$lang.'.txt')
+			?	txpath.'/lang/'.$lang.'.txt'
+			:	txpath.'/lang/en-gb.txt';
 			 
 			$file = @fopen($filename, "r");
 			if ($file) {
@@ -143,10 +143,10 @@ else
 	function load_lang_dates($lang) 
 	{
 		global $txpcfg;
-		$filename = is_file($txpcfg['txpath'].'/lang/'.$lang.'_dates.txt')?
-			$txpcfg['txpath'].'/lang/'.$lang.'_dates.txt':
-			$txpcfg['txpath'].'/lang/en-gb_dates.txt';
-		$file = @file($txpcfg['txpath'].'/lang/'.$lang.'_dates.txt','r');
+		$filename = is_file(txpath.'/lang/'.$lang.'_dates.txt')?
+			txpath.'/lang/'.$lang.'_dates.txt':
+			txpath.'/lang/en-gb_dates.txt';
+		$file = @file(txpath.'/lang/'.$lang.'_dates.txt','r');
 		if(is_array($file)) {
 			foreach($file as $line) {
 				if($line[0]=='#' || strlen($line) < 2) continue;
@@ -1199,7 +1199,7 @@ else
 	{
 		global $prefs, $txpcfg;
 
-		include_once $txpcfg['txpath'].'/lib/classTextile.php';
+		include_once txpath.'/lib/classTextile.php';
 		$textile = new Textile();
 		
 		extract($prefs);

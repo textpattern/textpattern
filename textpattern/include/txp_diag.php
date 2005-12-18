@@ -158,8 +158,8 @@ $LastChangedRevision$
 		:	'',
 
 		'setup_still_exists' =>
-		(@is_dir($txpcfg['txpath'] . DS. 'setup'))
-		?	$txpcfg['txpath'].DS."setup".DS.' '.gTxt('still_exists')
+		(@is_dir(txpath . DS. 'setup'))
+		?	txpath.DS."setup".DS.' '.gTxt('still_exists')
 		:	'',
 
 		'no_temp_dir' =>
@@ -192,8 +192,8 @@ $LastChangedRevision$
 
 	$missing = array();
 	foreach ($files as $f) {
-		if (!is_readable($txpcfg['txpath'] . $f))
-			$missing[] = $txpcfg['txpath'] . $f;
+		if (!is_readable(txpath . $f))
+			$missing[] = txpath . $f;
 	}
 
 	if ($missing)
@@ -207,7 +207,7 @@ $LastChangedRevision$
 	$file_revs = array();
 	$rev = 0;
 	foreach ($files as $f) {
-		$lines = @file($txpcfg['txpath'] . $f);
+		$lines = @file(txpath . $f);
 		if ($lines) {
 			foreach ($lines as $line) {
 				if (preg_match('/^\$LastChangedRevision: (\w+) \$/', $line, $match)) {
@@ -250,7 +250,7 @@ $LastChangedRevision$
 
 		'$path_to_site'.cs.$path_to_site.n,
 
-		gTxt('txp_path').cs.$txpcfg['txpath'].n,
+		gTxt('txp_path').cs.txpath.n,
 
 		gTxt('permlink_mode').cs.$permlink_mode.n,
 
@@ -343,7 +343,7 @@ $LastChangedRevision$
 			$checksum = '';
 
 			if (is_callable('md5_file')) {
-				$checksum = md5_file($txpcfg['txpath'] . $f);
+				$checksum = md5_file(txpath . $f);
 			}
 
 			if (isset($file_revs[$f]))

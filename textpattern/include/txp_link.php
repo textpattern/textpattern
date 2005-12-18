@@ -156,7 +156,7 @@ $LastChangedRevision$
 
 		if($prefs['textile_links']) {
 
-			include_once $txpcfg['txpath'].'/lib/classTextile.php';
+			include_once txpath.'/lib/classTextile.php';
 			$textile = new Textile();
 		
 			$varray['linkname'] = $textile->TextileThis($varray['linkname'],'',1);
@@ -193,7 +193,7 @@ $LastChangedRevision$
 
 		if($prefs['textile_links']) {
 
-			include_once $txpcfg['txpath'].'/lib/classTextile.php';
+			include_once txpath.'/lib/classTextile.php';
 			$textile = new Textile();
 			
 			$varray['linkname'] = $textile->TextileThis($varray['linkname'],'',1);

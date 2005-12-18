@@ -420,7 +420,7 @@ $LastChangedRevision$
 	function list_languages($message='')
 	{
 		global $prefs, $locale, $txpcfg, $textarray;
-		require_once $txpcfg['txpath'].'/lib/IXRClass.php';
+		require_once txpath.'/lib/IXRClass.php';
 
 		// Select and save active language
 		if (!$message && ps('step')=='list_languages' && ps('language'))
@@ -566,7 +566,7 @@ $LastChangedRevision$
 	function get_language()
 	{
 		global $prefs, $txpcfg, $textarray;
-		require_once $txpcfg['txpath'].'/lib/IXRClass.php';
+		require_once txpath.'/lib/IXRClass.php';
 		$lang_code = gps('lang_code');		
 
 		$client = new IXR_Client(RPC_SERVER);
@@ -620,7 +620,7 @@ function get_lang_files()
 	
 	$dirlist = array();
 	
-	$lang_dir = $txpcfg['txpath'].DS.'lang'.DS;
+	$lang_dir = txpath.DS.'lang'.DS;
 
 	if (!is_dir($lang_dir))
 	{

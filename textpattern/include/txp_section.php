@@ -127,7 +127,7 @@ $LastChangedRevision$
 		$name = doSlash(ps('name'));
 		
 		//Prevent non url chars on section names
-		include_once $txpcfg['txpath'].'/lib/classTextile.php';
+		include_once txpath.'/lib/classTextile.php';
 		$textile = new Textile();
 		$title = $textile->TextileThis($name,1);
 		$name = dumbDown($textile->TextileThis(trim(doSlash($name)),1));
@@ -164,7 +164,7 @@ $LastChangedRevision$
 			$title = $name;
 
 		//Prevent non url chars on section names
-		include_once $txpcfg['txpath'].'/lib/classTextile.php';
+		include_once txpath.'/lib/classTextile.php';
 		$textile = new Textile();
 		$title = $textile->TextileThis($title,1);
 		$name = dumbDown($textile->TextileThis($name, 1));
