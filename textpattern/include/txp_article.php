@@ -290,7 +290,7 @@ if (!empty($event) and $event == 'article') {
 
 		$GLOBALS['step'] = $step;
 
-		if ($step=='create') {
+		if (empty($textile_body) && $textile_body !== '0' && $step=='create') {
 			$textile_body = $use_textile;
 			$textile_excerpt = $use_textile;
 		}
