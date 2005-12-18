@@ -30,9 +30,9 @@ $LastChangedRevision$
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<title>Txp &#8250; <?php echo $sitename ?> &#8250; <?php echo $pagetitle?></title>
 	<link href="textpattern.css" rel="Stylesheet" type="text/css" />
-	<script language="JavaScript" type="text/javascript">
+	<script type="text/javascript" src="textpattern.js"></script>
+	<script type="text/javascript">
 	<!--
-		function verify(msg) { return confirm(msg); }
 
 		var date = new Date();
 		date.setTime(date.getTime()+(60*1000));
@@ -44,49 +44,8 @@ $LastChangedRevision$
 		document.cookie="testcookie"+expires+"; path=/"; //erase dummy value
 		if(!cookieEnabled){
 			confirm(<?php echo "'".trim(gTxt('cookies_must_be_enabled'))."'"; ?>)
-		}
-
-		function toggleDisplay(obj_id) {
-			if (document.getElementById){
-				var obj = document.getElementById(obj_id);
-				if (obj.style.display == '' || obj.style.display == 'none'){
-					var state = 'block';
-				} else {
-					var state = 'none';
-				}
-				obj.style.display = state;
-			}
-		}
-
-		function selectall() {
-			var cnt = 0;
-			var elem = window.document.longform.elements;
-			cnt = elem.length;
-			for (var i=0; i < cnt; i++) elem[i].checked = true;
-		}
-		
-		function deselectall() {
-			var cnt = 0;
-			var elem = window.document.longform.elements;
-			cnt = elem.length;
-			for (var i=0; i < cnt; i++) elem[i].checked = false;
-		}
-		
-		function selectrange() {
-			var inrange = false;
-			var cnt = 0;
-			var elem = window.document.longform.elements;
-			cnt = elem.length;
-			for (var i=0; i < cnt; i++) {
-				if (elem[i].type == 'checkbox') {
-					if (elem[i].checked == true) {
-						if (!inrange) inrange = true;
-						else inrange = false;
-					}
-					if (inrange) elem[i].checked = true;
-				}
-			}
-		}
+		}	
+	
 <?php
 	if ($event == 'list') {
 ?>		
@@ -134,11 +93,9 @@ $LastChangedRevision$
 			
 			return false;
 		}
-		
-		window.onload = function(){
-			withsel = document.getElementById('withselected');
-			if(withsel.options[withsel.selectedIndex].value != '') return (withsel.selectedIndex = 0);
-		}
+
+		//allow multiple events to be loaded with the page
+		addEvent(window,'load',cleanSelects);
 <?php
 	}
 ?>		
