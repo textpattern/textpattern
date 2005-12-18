@@ -165,6 +165,7 @@
 				$AuthorID = (!empty($authors_map[$AuthorID])) ? doSlash($authors_map[$AuthorID]) : '';
 				
 				$insertID = safe_insert("textpattern","
+					ID        	   = '$ID',
 					Posted         = '$Posted',
 					LastMod        = '$LastMod',
 					Title          = '".doSlash($Title)."',
