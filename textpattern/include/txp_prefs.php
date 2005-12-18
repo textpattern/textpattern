@@ -592,7 +592,7 @@ $LastChangedRevision$
 		}else {
 			$response = $client->getResponse();
 			$lang_struct = unserialize($response);
-			function install_lang_key($value, $key)
+			function install_lang_key(&$value, $key)
 			{
 				extract(gpsa(array('lang_code','updating')));
 				$exists = safe_field('name','txp_lang',"name='$value[name]' AND lang='$lang_code'");				
@@ -600,15 +600,24 @@ $LastChangedRevision$
 
 				if ($exists)
 				{
-					safe_update('txp_lang',$q,"lang='$lang_code' AND name='$value[name]'");
+					$value['ok'] = safe_update('txp_lang',$q,"lang='$lang_code' AND name='$value[name]'");
 				}else{
-					safe_insert('txp_lang',$q.", lang='$lang_code'");
+					$value['ok'] = safe_insert('txp_lang',$q.", lang='$lang_code'");
 				}
 			}			
 			array_walk($lang_struct,'install_lang_key');
+			$size = count($lang_struct);
+			$errors = 0;
+			for($i=0; $i < $size ; $i++)
+			{
+				$errors += ( !$lang_struct[$i]['ok'] );
+			}
 			if (defined('LANG')) 
 				$textarray = load_lang(LANG);
-			return list_languages(gTxt($lang_code).sp.gTxt('updated'));
+			$msg = gTxt($lang_code).sp.gTxt('updated');
+			if ($errors > 0) 
+				$msg .= sprintf(" (%s errors, %s ok)",$errors, ($size-$errors));
+			return list_languages($msg);
 		}		
 	}
 	
