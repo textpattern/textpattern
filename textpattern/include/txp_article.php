@@ -79,6 +79,7 @@ if (!empty($event) and $event == 'article') {
 			
 			if (!has_privs('article.publish') && $Status>=4) $Status = 3;
 			if (empty($url_title)) $url_title = stripSpace($Title_plain, 1);  	
+			if (!$Annotate) $Annotate = 0;
 
 			safe_insert(
 			   "textpattern",
@@ -175,6 +176,7 @@ if (!empty($event) and $event == 'article') {
 		{
 			$url_title = stripSpace($Title_plain, 1);
 		}
+		if (!$Annotate) $Annotate = 0;
 
 		safe_update("textpattern", 
 		   "Title           = '$Title',
