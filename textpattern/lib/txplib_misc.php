@@ -833,10 +833,11 @@ else
 	}
 
 // -------------------------------------------------------------
-	function event_multiedit_form($name)
+	function event_multiedit_form($name, $methods = NULL)
 	{
 		$method = ps('method');
-		$methods = array('delete'=>gTxt('delete'));
+		if ($methods === NULL)
+			$methods = array('delete'=>gTxt('delete'));
 		if ($name == 'list') {
 			$methods['changesection'] = gTxt('changesection');
 			$methods['changestatus'] = gTxt('changestatus');

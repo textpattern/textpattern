@@ -3,6 +3,8 @@ Changes since 4.0.2:
 * Fix tag trace output for enclosing tags
 * Add extra info to the tag trace (SQL queries, conditional tag results, page template and form names)
 * Textile i18n improvements
+* Automatically hide comments when banning an IP
+* Add a bulk Ban function for comments
 
 Changes since 4.0.1:
 

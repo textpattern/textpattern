@@ -177,6 +177,12 @@ $LastChangedRevision$
 				 banned_on_message = '$discussid',
 				 date_banned = now()
 			");
+			// hide all messages from that IP also
+			if ($rs)
+				safe_update('txp_discuss',
+					"visible='0'",
+					"ip='".doSlash($ip)."'"
+				);
 			if ($rs) ipban_list(messenger('ip',$ip,'banned'));
 		} else ipban_list(messenger('ip',$ip,'already_banned'));
 		
@@ -242,27 +248,63 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function discuss_multiedit_form() 
 	{
-		return event_multiedit_form('discuss');
+		$methods = array(
+			'ban'=>gTxt('ban'),
+			'delete'=>gTxt('delete'),
+		);
+		return event_multiedit_form('discuss', $methods);
 	}
 
 // -------------------------------------------------------------
 	function discuss_multi_edit() 
 	{
 		$selected = ps('selected');
+		$method = ps('method');
+		$done = array();
 		if ($selected) {
 			// Get all articles for which we have to update the count
 			foreach($selected as $id)
-				$to_delete[] = intval($id);
-			$parentids = safe_rows("DISTINCT parentid","txp_discuss","discussid IN (".implode(',',$to_delete).")");
-			foreach ($parentids as $key => $value)
-				$parentids[$key] = $value['parentid'];
+				$ids[] = "'".intval($id)."'";
+			$parentids = safe_column("DISTINCT parentid","txp_discuss","discussid IN (".implode(',',$ids).")");
 
-			// Delete and if succesful update commnet count 
-			$deleted = event_multi_edit('txp_discuss','discussid');
-			if(!empty($deleted)) {
+			$rs = safe_rows_start('*', 'txp_discuss', "discussid IN (".implode(',',$ids).")");
+			while ($row = nextRow($rs)) {
+				extract($row);
+				$id = intval($discussid);
+				$parentids[] = $parentid;
+
+				if ($method == 'delete') {
+					// Delete and if succesful update commnet count 
+					if (safe_delete($tablename,"discussid='$id'"))
+						$done[] = $id;
+				}
+				elseif ($method == 'ban') {
+					// Ban the IP and hide all messages by that IP
+					if (!safe_field('ip', 'txp_discuss_ipban', "ip='".doSlash($ip)."'")) {
+						safe_insert("txp_discuss_ipban",
+							"ip = '".doSlash($ip)."',
+							name_used = '".doSlash($name)."',
+							banned_on_message = '".doSlash($discussid)."',
+							date_banned = now()
+						");
+						safe_update('txp_discuss',
+							"visible='0'",
+							"ip='".doSlash($ip)."'"
+						);
+					}
+					$done[] = $id;
+
+				}
+
+				
+			}
+
+			$done = join(', ', $done);
+
+			if(!empty($done)) {
 				// might as well clean up all comment counts while we're here.
 				clean_comment_counts($parentids);
-				return discuss_list(messenger('comment',$deleted,'deleted'));
+				return discuss_list(messenger('comment',$done,($method == 'delete' ? 'deleted' : 'banned')));
 			}
 		}
 		return discuss_list();
