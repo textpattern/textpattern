@@ -286,7 +286,7 @@ $LastChangedRevision$
 								safe_update("txp_prefs", "val=now()", "name='lastmod'");
 							}
 							if ($comments_sendmail) {
-								mail_comment($message,$name,$email,$web,$parentid);
+								mail_comment($message,$name,$email,$web,$parentid, $rs);
 							}
 
 							$updated = update_comments_count($parentid);
@@ -369,7 +369,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function mail_comment($message, $cname, $cemail, $cweb, $parentid) 
+	function mail_comment($message, $cname, $cemail, $cweb, $parentid, $discussid) 
 	{
 		global $sitename;
 		$article = safe_row("Section, Posted, ID, url_title, AuthorID, Title", "textpattern", "ID = '$parentid'");
@@ -378,7 +378,10 @@ $LastChangedRevision$
 
 		$out = gTxt('greeting')." $RealName,\r\n\r\n";
 		$out .= str_replace('{title}',$Title,gTxt('comment_recorded'))."\r\n";
-		$out .= permlinkurl_id($parentid)."\r\n\r\n";
+		$out .= permlinkurl_id($parentid)."\r\n";
+		if (has_privs('discuss', $AuthorID))
+			$out .= hu.'textpattern/?event=discuss&step=discuss_edit&discussid='.$discussid."\r\n";
+		$out .= "\r\n";
 		$out .= gTxt('comment_name').": $cname\r\n";
 		$out .= gTxt('comment_email').": $cemail\r\n";
 		$out .= gTxt('comment_web').": $cweb\r\n";
