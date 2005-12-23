@@ -275,7 +275,7 @@ $LastChangedRevision$
 
 				if ($method == 'delete') {
 					// Delete and if succesful update commnet count 
-					if (safe_delete($tablename,"discussid='$id'"))
+					if (safe_delete('txp_discuss', "discussid='$id'"))
 						$done[] = $id;
 				}
 				elseif ($method == 'ban') {
