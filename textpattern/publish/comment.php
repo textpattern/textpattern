@@ -218,7 +218,7 @@ $LastChangedRevision$
 		$n = array();
 		foreach (stripPost() as $k=>$v)
 			if (strlen($k.$v) == 32) $n[] = "'".doSlash($k.$v)."'";
-		$c['nonce'] = safe_field('nonce', 'txp_discuss_nonce', "1=1 and nonce in (".join(',', $n).")");
+		$c['nonce'] = (empty($n)) ? '' : safe_field('nonce', 'txp_discuss_nonce', "1=1 and nonce in (".join(',', $n).")");
 
 		return $c;
 	}
@@ -266,7 +266,7 @@ $LastChangedRevision$
 		$n = array();
 		foreach (stripPost() as $k=>$v)
 			if (strlen($k.$v) == 32) $n[] = "'".doSlash($k.$v)."'";
-		$nonce = safe_field('nonce', 'txp_discuss_nonce', "1=1 and nonce in (".join(',', $n).")");
+		$nonce = (empty($n)) ? '' : safe_field('nonce', 'txp_discuss_nonce', "1=1 and nonce in (".join(',', $n).")");
 		
 		$name = doSlash(strip_tags(deEntBrackets($name)));
 		$web = doSlash(clean_url(strip_tags(deEntBrackets($web))));
