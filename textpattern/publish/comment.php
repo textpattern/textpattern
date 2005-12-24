@@ -201,6 +201,29 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
+	function getComment()
+	{
+		// comment spam filter plugins: call this function to fetch comment contents
+		
+		$c = psa( array(
+			'parentid',
+			'name',
+			'email',
+			'web',
+			'message',
+			'backpage',
+			'remember'
+		) );
+
+		$n = array();
+		foreach (stripPost() as $k=>$v)
+			if (strlen($k.$v) == 32) $n[] = "'".doSlash($k.$v)."'";
+		$c['nonce'] = safe_field('nonce', 'txp_discuss_nonce', "1=1 and nonce in (".join(',', $n).")");
+
+		return $c;
+	}
+
+// -------------------------------------------------------------
 	function saveComment()
 	{
 		global $siteurl,$comments_moderate,$comments_sendmail,$txpcfg,
@@ -210,16 +233,7 @@ $LastChangedRevision$
 
 		$ref = serverset('HTTP_REFERRER');
 
-		$in = psa( array(
-			'parentid',
-			'name',
-			'email',
-			'web',
-			'message',
-			'backpage',
-			'nonce',
-			'remember'
-		) );
+		$in = getComment();
 		
 		extract($in);
 
