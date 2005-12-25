@@ -57,9 +57,9 @@ $LastChangedRevision$
 		$namewarn = '';
 		$emailwarn = '';
 		$commentwarn = '';
-		$name= pcs('name');
-		$email= pcs('email');
-		$web= pcs('web');		
+		$name  = pcs('name');
+		$email = clean_url(pcs('email'));
+		$web   = clean_url(pcs('web'));
 		extract( doStripTags( doDeEnt ( psa( array(
 			'remember',
 			'forget',
@@ -71,9 +71,9 @@ $LastChangedRevision$
 		) ) ) ) );
 			
 		if ( $preview ) {
-			$name  = ps( 'name' );
-			$email = ps( 'email' );
-			$web	 = ps( 'web' );		
+			$name  = ps('name');
+			$email = clean_url(ps('email'));
+			$web   = clean_url(ps('web'));
 			$nonce = md5( uniqid( rand(), true ) );
 			$secret = md5( uniqid( rand(), true ) );
 			safe_insert("txp_discuss_nonce", "issue_time=now(), nonce='$nonce', secret='$secret'");
@@ -136,10 +136,10 @@ $LastChangedRevision$
 		:	checkbox('remember',1,1).tag(gTxt('remember'),'label',' for="remember"');
 
 		$vals = array(
-			'comment_name_input'    => $namewarn.input('text','name',  $name, $isize,'comment_name_input',"2"),
-			'comment_email_input'   => $emailwarn.input('text','email', $email,$isize,'comment_email_input',"3"),
-			'comment_web_input'     => input('text','web',   $web, $isize,'comment_web_input',"4"),
-			'comment_message_input' => $commentwarn.$textarea,
+			'comment_name_input'    => $namewarn.input('text','name',  htmlspecialchars($name), $isize,'comment_name_input',"2"),
+			'comment_email_input'   => $emailwarn.input('text','email', htmlspecialchars($email),$isize,'comment_email_input',"3"),
+			'comment_web_input'     => input('text','web', htmlspecialchars($web), $isize,'comment_web_input',"4"),
+			'comment_message_input' => $commentwarn.$textarea.'<!-- plugin-place-holder -->',
 			'comment_remember'      => $checkbox,
 			'comment_preview'       => input('submit','preview',gTxt('preview'),'','button'),
 			'comment_submit'        => $comment_submit_button
@@ -152,13 +152,18 @@ $LastChangedRevision$
 		$form = parse($Form);
 
 		$out .= $form;
-		$out .= graf(fInput('hidden','parentid',$parentid));
+		$out .= fInput('hidden','parentid',$parentid);
 		$split = rand(1, 31);
 		$out .= ($preview) ? hInput(substr($nonce, 0, $split),substr($nonce, $split)) : '';
 
 		$out .= (!$preview)
-		?	graf(fInput('hidden','backpage',serverset("REQUEST_URI")))
-		:	graf(fInput('hidden','backpage',$backpage));
+		?	fInput('hidden','backpage',serverset("REQUEST_URI"))
+		:	fInput('hidden','backpage',$backpage);
+		$out = substr_replace( $out,
+				callback_event('comment.form'),
+				strpos($out, '<!-- plugin-place-holder -->'), 
+				strlen('<!-- plugin-place-holder -->')
+		);
 		$out .= '</form>'; 
 	  return $out;
 	}
@@ -229,7 +234,7 @@ $LastChangedRevision$
 		global $siteurl,$comments_moderate,$comments_sendmail,$txpcfg,
 			$comments_disallow_images,$prefs;
 
-		callback_event('savecomment');
+		callback_event('comment.save');
 
 		$ref = serverset('HTTP_REFERRER');
 
@@ -263,11 +268,6 @@ $LastChangedRevision$
 		$message = trim($message);
 		$blacklisted = is_blacklisted($ip);
 
-		$n = array();
-		foreach (stripPost() as $k=>$v)
-			if (strlen($k.$v) == 32) $n[] = "'".doSlash($k.$v)."'";
-		$nonce = (empty($n)) ? '' : safe_field('nonce', 'txp_discuss_nonce', "1=1 and nonce in (".join(',', $n).")");
-		
 		$name = doSlash(strip_tags(deEntBrackets($name)));
 		$web = doSlash(clean_url(strip_tags(deEntBrackets($web))));
 		$email = doSlash(clean_url(strip_tags(deEntBrackets($email))));
@@ -281,7 +281,8 @@ $LastChangedRevision$
 			if($blacklisted == false) {
 				if (!$isdup) {
 					if (checkNonce($nonce)) {
-						$visible = ($comments_moderate) ? 0 : 1;
+						$evaluator =& get_comment_evaluator();
+						$visible = $evaluator->get_result();
 						$rs = safe_insert(
 							"txp_discuss",
 							"parentid  = '".doSlash($parentid)."',
@@ -307,7 +308,7 @@ $LastChangedRevision$
 
 							$backpage = substr($backpage, 0, $prefs['max_url_len']);
 							$backpage = preg_replace("/[\x0a\x0d#].*$/s",'',$backpage);
-							$backpage .= ((strstr($backpage,'?')) ? '&' : '?') . 'commented=1';
+							$backpage .= ((strstr($backpage,'?')) ? '&' : '?') . 'commented='.(($visible==1) ? 1 : 0);
 							txp_status_header('302 Found');
 							if($comments_moderate){
 								header('Location: '.$backpage.'#txpCommentInputForm');
@@ -319,6 +320,52 @@ $LastChangedRevision$
 				}																				 // end check dup
 			} else txp_die(gTxt('your_ip_is_blacklisted_by'.' '.$blacklisted), '403'); // end check blacklist
 		} else txp_die(gTxt('you_have_been_banned'), '403');									// end check site ban
+	}
+
+// -------------------------------------------------------------
+	class comment_evaluation {
+		var $status;
+
+		function comment_evaluation() {
+			global $comments_moderate;
+			$this->status = array('visible' => array(),'moderate' => array(),'spam' => array());
+			if ($comments_moderate)
+				$this->status['moderate'][]=0.5;
+			else
+				$this->status['visible'][]=0.5;
+		}
+
+		function add_estimate($type = 'spam', $probability = 0.75) {
+			global $plugin_callback;
+
+			if (!array_key_exists($type, $this->status))
+				trigger_error(gTxt('unknown_spam_estimate'), E_USER_WARNING);
+			if (is_array($plugin_callback))
+				trace_add('Comment-Evaluator: '.key($plugin_callback)."(?), $type, [$probability] ".max(0,min(1,$probability)));
+
+			$this->status[$type][] = max(0,min(1,$probability));
+		}
+
+		// Returns 
+		function get_result() {
+			$result = array();
+			foreach ($this->status as $key => $value)
+				$result[$key] = array_sum($value)/max(1,count($value));
+			arsort($result, SORT_NUMERIC);
+			reset($result);
+			$constants = array('visible' => 1,'moderate' => 0,'spam' => -1);
+			return $constants[key($result)];
+		}
+	}
+
+	function &get_comment_evaluator() {
+	    static $instance; 
+	 
+	    // If the instance is not there, create one
+	    if(!isset($instance)) { 
+	        $instance = new comment_evaluation(); 
+	    } 
+	    return $instance; 
 	}
 
 // -------------------------------------------------------------

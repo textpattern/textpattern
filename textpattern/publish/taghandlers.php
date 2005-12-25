@@ -766,9 +766,9 @@ $LastChangedRevision$
 		if ($id) {
 			if (!checkCommentsAllowed($id)) {
 				$out = graf(gTxt("comments_closed"));
-			} elseif (gps('commented')) {
+			} elseif (gps('commented')!=='') {
 				$out = gTxt("comment_posted");
-				if (@$GLOBALS['prefs']['comments_moderate'])
+				if (gps('commented')==='0')
 					$out .= " ". gTxt("comment_moderated");
 				$out = graf($out, ' id="txpCommentInputForm"');
 			} else {

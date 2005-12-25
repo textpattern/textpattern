@@ -278,10 +278,10 @@ $LastChangedRevision$
 	}	
 
 // -------------------------------------------------------------
-	function assRow($array)
+	function assRow($array, $atts ='')
 	{
 		foreach($array as $a => $b) $o[] = tda($a,' width="'.$b.'"');
-		return tr(join(n.t,$o));
+		return tr(join(n.t,$o), $atts);
 	}
 	
 // -------------------------------------------------------------

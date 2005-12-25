@@ -82,7 +82,6 @@ $LastChangedRevision$
 			while ($a = nextRow($rs)) {
 				extract($a);
 				$dmessage = $message;
-				$name = (!$visible) ? '<span style="color:red">'.$name.'</span>' : $name;
 				$date = "".date("M d, g:ia",($uPosted + tz_offset()))."";
 				$editlink = eLink('discuss','discuss_edit','discussid',$discussid,$date);
 				$cbox = fInput('checkbox','selected[]',$discussid);
@@ -96,7 +95,7 @@ $LastChangedRevision$
 					$dmessage   => 250,
 					$parent     => 100,
 					$cbox       => 20
-				));
+				), ' class="'.(($visible == 1) ? 'visible' : (($visible == -1) ? 'spam' : 'moderate')).'"');
 			}
 			
 			echo tr(tda(select_buttons().discuss_multiedit_form(),' colspan="5" style="text-align:right;border:0px"'));
@@ -151,7 +150,7 @@ $LastChangedRevision$
 					fLabelCell('email') . fInputCell('email',$email),
 					fLabelCell('website') . fInputCell('web',$web),
 					td() . td($ta),
-					fLabelCell('visible') . td(checkbox('visible', 1,$visible)),
+					fLabelCell('visible') . td(selectInput('visible', array(1 => gTxt('visible'), -1 => gTxt('spam'),0 => gTxt('unmoderated')),$visible,false)),
 					fLabelCell('IP') . td($ip.sp.$banlink),
 					td() . td(fInput('submit','step',gTxt('save'),'publish')),
 				hInput("discussid", $discussid).hInput('ip',$ip).hInput('parentid',$parentid).
@@ -180,7 +179,7 @@ $LastChangedRevision$
 			// hide all messages from that IP also
 			if ($rs)
 				safe_update('txp_discuss',
-					"visible='0'",
+					"visible='-1'",
 					"ip='".doSlash($ip)."'"
 				);
 			if ($rs) ipban_list(messenger('ip',$ip,'banned'));
@@ -251,6 +250,9 @@ $LastChangedRevision$
 		$methods = array(
 			'ban'=>gTxt('ban'),
 			'delete'=>gTxt('delete'),
+			'spam'=>gTxt('spam'),
+			'unmoderated'=>gTxt('unmoderated'),
+			'visible'=>gTxt('visible'),
 		);
 		return event_multiedit_form('discuss', $methods);
 	}
@@ -258,6 +260,8 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function discuss_multi_edit() 
 	{
+		//FIXME, this method needs some refactoring
+		
 		$selected = ps('selected');
 		$method = ps('method');
 		$done = array();
@@ -288,14 +292,33 @@ $LastChangedRevision$
 							date_banned = now()
 						");
 						safe_update('txp_discuss',
-							"visible='0'",
+							"visible = -1",
 							"ip='".doSlash($ip)."'"
 						);
 					}
 					$done[] = $id;
-
 				}
-
+				elseif ($method == 'spam') {
+						if (safe_update('txp_discuss',
+							"visible = -1",
+							"discussid = $id"
+						))
+							$done[] = $id;
+				}
+				elseif ($method == 'unmoderated') {
+						if (safe_update('txp_discuss',
+							"visible = 0",
+							"discussid = $id"
+						))
+							$done[] = $id;
+				}
+				elseif ($method == 'visible') {
+						if (safe_update('txp_discuss',
+							"visible = 1",
+							"discussid = $id"
+						))
+							$done[] = $id;
+				}
 				
 			}
 
@@ -304,7 +327,14 @@ $LastChangedRevision$
 			if(!empty($done)) {
 				// might as well clean up all comment counts while we're here.
 				clean_comment_counts($parentids);
-				return discuss_list(messenger('comment',$done,($method == 'delete' ? 'deleted' : 'banned')));
+				$messages = array(
+					'delete'	=> messenger('comment',$done,'deleted'),
+					'ban'		=> messenger('comment',$done,'banned'),
+					'spam'		=>  gTxt('comment').' '.strong($done).' '. gTxt('marked_as').' '.gTxt('spam'),
+					'unmoderated'=> gTxt('comment').' '.strong($done).' '. gTxt('marked_as').' '.gTxt('unmoderated'),
+					'visible'	=>  gTxt('comment').' '.strong($done).' '. gTxt('marked_as').' '.gTxt('visible'),
+				);
+				return discuss_list($messages[$method]);
 			}
 		}
 		return discuss_list();

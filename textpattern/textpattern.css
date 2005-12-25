@@ -391,3 +391,16 @@ textarea
 	padding: 3px;
 	vertical-align: middle;
 }
+
+table tr.spam td 
+{
+  background-color:#eee; 
+  color : #999;
+  font: italic 11px arial;
+}
+table tr.moderate td
+{
+  background-color:#ffb; 
+  color : #c00;
+  font: normal 14px arial;
+}

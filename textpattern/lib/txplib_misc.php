@@ -493,14 +493,15 @@ else
 
 		if (!is_array($plugin_callback))
 			return;
-
+		$return_value = '';
 		foreach ($plugin_callback as $c) {
 			if ($c['event'] == $event and (empty($c['step']) or $c['step'] == $step) and $c['pre'] == $pre) {
 				if (is_callable($c['function'])) {
-					call_user_func($c['function'], $event, $step);
+					$return_value .= call_user_func($c['function'], $event, $step);
 				}
 			}
 		}
+		return $return_value;
 	}
 
 // -------------------------------------------------------------

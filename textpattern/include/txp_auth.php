@@ -60,7 +60,7 @@ function doAuth() {
 		global $txpcfg;
 		include txpath.'/lib/txplib_head.php';
 		pagetop('log in');
-		$stay = (@$_COOKIE['txp_nostay'] == 1) ? 0 : 1;
+		$stay = (cs('txp_nostay') == 1);
 		echo
 		form(
 			startTable('edit').
@@ -102,9 +102,9 @@ function doAuth() {
 		}
 		if (!empty($_COOKIE['txp_login']) and !$logout) {	// cookie exists
 	
-			@list($c_userid,$cookie_hash) = split(',',$_COOKIE['txp_login']);
+			@list($c_userid,$cookie_hash) = split(',',cs('txp_login'));
 
-			$nonce = safe_field('nonce','txp_users',"name='$c_userid'");
+			$nonce = safe_field('nonce','txp_users',"name='".doslash($c_userid)."'");
 
 			if ((md5($c_userid.$nonce) === $cookie_hash) && $nonce) {  // check nonce
 	
@@ -124,7 +124,7 @@ function doAuth() {
 	
 				if (txp_validate($p_userid,$p_password)) {
 
-					$nonce = safe_field('nonce','txp_users',"name='$p_userid'");
+					$nonce = safe_field('nonce','txp_users',"name='".doSlash($p_userid)."'");
 
 					if (!$nonce) {
 							define('TXP_UPDATE', 1);
@@ -137,6 +137,8 @@ function doAuth() {
 						setcookie('txp_login',
 							$p_userid.','.md5($p_userid.$nonce),
 							time()+3600*24*365);	// expires in 1 year
+						if (cs('txp_nostay')) setcookie('txp_nostay','',time()-3600);
+
 	
 					} else {    // session-only cookie required
 	
