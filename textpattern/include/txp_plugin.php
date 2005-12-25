@@ -148,8 +148,11 @@ $LastChangedRevision$
 		$plugin64 = preg_replace('/^#.*$/m', '', $plugin64);
 
 		if(isset($plugin64)) {
+			$plugin64 = base64_decode($plugin64);
+			if (strncmp($plugin64,"\x1F\x8B",2)===0)
+				$plugin64 = gzinflate(substr($plugin64, 10));
 
-			if ($plugin = unserialize(base64_decode($plugin64))) { 
+			if ($plugin = unserialize($plugin64)) { 
 
 				if(is_array($plugin)){
 					extract(doSlash($plugin));
@@ -173,7 +176,7 @@ $LastChangedRevision$
 					.	tr(td(hed(gTxt('previewing_plugin'),3)))
 					.	tr(td($source))
 					.	tr(td($sub))
-					.	endTable().sInput('plugin_install').eInput('plugin').hInput('plugin64', $plugin64));
+					.	endTable().sInput('plugin_install').eInput('plugin').hInput('plugin64', base64_encode($plugin64)));
 					return;
 				}
 			}

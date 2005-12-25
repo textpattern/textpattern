@@ -40,6 +40,18 @@ $LastChangedRevision$
 	}
 
 //-------------------------------------------------------------
+	function short_preview($message)
+	{
+		$message = strip_tags($message);
+		$offset = min(175,strlen($message));
+		if ( strpos($message,' ',$offset) !== false)
+		{
+			$maxpos = strpos($message,' ',$offset);
+			$message = substr($message,0,$maxpos).'...';
+		}
+		return $message;
+	}
+//-------------------------------------------------------------
 	function discuss_list($message='') 
 	{
 		pagetop(gTxt('list_discussions'),$message);
@@ -81,7 +93,7 @@ $LastChangedRevision$
 	
 			while ($a = nextRow($rs)) {
 				extract($a);
-				$dmessage = $message;
+				$dmessage = ($visible == -1) ? short_preview($message) : $message;
 				$date = "".date("M d, g:ia",($uPosted + tz_offset()))."";
 				$editlink = eLink('discuss','discuss_edit','discussid',$discussid,$date);
 				$cbox = fInput('checkbox','selected[]',$discussid);
