@@ -340,12 +340,14 @@ $LastChangedRevision$
 		}
 
 		function add_estimate($type = SPAM, $probability = 0.75, $msg='') {
-			global $plugin_callback;
+			global $production_status;
 
 			if (!array_key_exists($type, $this->status))
 				trigger_error(gTxt('unknown_spam_estimate'), E_USER_WARNING);
-			if (is_array($plugin_callback))
-				trace_add('Comment-Evaluator: '.key($plugin_callback)."(?), $type, [$probability] ".max(0,min(1,$probability)). $msg);
+
+			if ($production_status == 'debug')
+				trace_add("Comment-Evaluator: $type, [$probability] ".max(0,min(1,$probability)). $msg);
+			//FIXME trace is only viewable for RELOADS. Maybe add info to HTTP-Headers in debug-mode
 
 			$this->status[$type][] = max(0,min(1,$probability));
 			if (trim($msg)) $this->message[$type][] = $msg;
