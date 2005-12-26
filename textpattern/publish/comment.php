@@ -54,9 +54,9 @@ $LastChangedRevision$
 			'form'   => 'comment_form',
 		),$atts));
 
-		$namewarn = '';
-		$emailwarn = '';
-		$commentwarn = '';
+		$namewarn = false;
+		$emailwarn = false;
+		$commentwarn = false;
 		$name  = pcs('name');
 		$email = clean_url(pcs('email'));
 		$web   = clean_url(pcs('web'));
@@ -78,19 +78,15 @@ $LastChangedRevision$
 			$secret = md5( uniqid( rand(), true ) );
 			safe_insert("txp_discuss_nonce", "issue_time=now(), nonce='$nonce', secret='$secret'");
 
-			$namewarn = ($comments_require_name)
-			?	(!trim($name)) 
-				?	gTxt('comment_name_required').br
-				:	''
-			:	'';
+			$namewarn = ($comments_require_name && !trim($name));
+			$emailwarn = ($comments_require_email && !trim($email));
+			$commentwarn = (!trim($message));
 
-			$emailwarn = ($comments_require_email)
-			?	(!trim($email)) 
-				?	gTxt('comment_email_required').br 
-				:	''
-			:	'';
+			$evaluator =& get_comment_evaluator();
+			if ($namewarn) $evaluator -> add_estimate(RELOAD,1,gTxt('comment_name_required'));
+			if ($emailwarn) $evaluator -> add_estimate(RELOAD,1,gTxt('comment_email_required'));
+			if ($commentwarn) $evaluator -> add_estimate(RELOAD,1,gTxt('comment_required'));
 
-			$commentwarn = (!trim($message)) ? gTxt('comment_required').br : '';
 		} 
 		// If the form fields are filled (anything other than blank), pages
 		// really should not be saved by a public cache. rfc2616/14.9.1
@@ -136,10 +132,14 @@ $LastChangedRevision$
 		:	checkbox('remember',1,1).tag(gTxt('remember'),'label',' for="remember"');
 
 		$vals = array(
-			'comment_name_input'    => $namewarn.input('text','name',  htmlspecialchars($name), $isize,'comment_name_input',"2"),
-			'comment_email_input'   => $emailwarn.input('text','email', htmlspecialchars($email),$isize,'comment_email_input',"3"),
+			'comment_name_input'    => ($namewarn)	? doTag(input('text','name',  htmlspecialchars($name), $isize,'comment_name_input',"2"),'span','comments_error')
+													: input('text','name',  htmlspecialchars($name), $isize,'comment_name_input',"2"),
+			'comment_email_input'   => ($emailwarn)	? doTag(input('text','email', htmlspecialchars($email),$isize,'comment_email_input',"3"),'span','comments_error')
+													: input('text','email', htmlspecialchars($email),$isize,'comment_email_input',"3"),
 			'comment_web_input'     => input('text','web', htmlspecialchars($web), $isize,'comment_web_input',"4"),
-			'comment_message_input' => $commentwarn.$textarea.'<!-- plugin-place-holder -->',
+			'comment_message_input' => (($commentwarn)	? doTag($textarea,'span','comments_error')
+														: $textarea)
+									   .'<!-- plugin-place-holder -->',
 			'comment_remember'      => $checkbox,
 			'comment_preview'       => input('submit','preview',gTxt('preview'),'','button'),
 			'comment_submit'        => $comment_submit_button
@@ -235,104 +235,95 @@ $LastChangedRevision$
 			$comments_disallow_images,$prefs;
 
 		$ref = serverset('HTTP_REFERRER');
-
 		$in = getComment();
-		
+		$evaluator =& get_comment_evaluator();
+
 		extract($in);
 
 		if (!checkCommentsAllowed($parentid))
 			txp_die ( gTxt('comments_closed'), '403');
 
-		if ($prefs['comments_require_name']) {
-			if (!trim($name)) {
-				exit ( graf(gTxt('comment_name_required')).
-					graf('<a href="" onClick="history.go(-1)">'.gTxt('back').'</a>') );
-			}
-		}
-
-		if ($prefs['comments_require_email']) {
-			if (!trim($email)) {
-				exit ( graf(gTxt('comment_email_required')).
-					graf('<a href="" onClick="history.go(-1)">'.gTxt('back').'</a>') );
-			}
-		}
-
-		if (!trim($message)) {
-			exit ( graf(gTxt('comment_required')).
-				graf('<a href="" onClick="history.go(-1)">'.gTxt('back').'</a>') );
-		}
-
 		$ip = serverset('REMOTE_ADDR');
-		$message = trim($message);
+
+		if (!checkBan($ip)) 
+			txp_die(gTxt('you_have_been_banned'), '403');
+
 		$blacklisted = is_blacklisted($ip);
+		if ($blacklisted)
+			txp_die(gTxt('your_ip_is_blacklisted_by'.' '.$blacklisted), '403');
 
 		$name = doSlash(strip_tags(deEntBrackets($name)));
 		$web = doSlash(clean_url(strip_tags(deEntBrackets($web))));
 		$email = doSlash(clean_url(strip_tags(deEntBrackets($email))));
 
+		$message = trim($message);
 		$message2db = doSlash(markup_comment($message));
 
 		$isdup = safe_row("message,name", "txp_discuss", 
 			"name='$name' and message='$message2db' and ip='$ip'");
 
-		if (checkBan($ip)) {
-			if($blacklisted == false) {
-				if (!$isdup) {
-					if (checkNonce($nonce)) {
-						callback_event('comment.save');
-						$evaluator =& get_comment_evaluator();
-						$visible = $evaluator->get_result();
-						if ($visible != RELOAD) {
-							$rs = safe_insert(
-								"txp_discuss",
-								"parentid  = '".doSlash($parentid)."',
-								 name		  = '$name',
-								 email	  = '$email',
-								 web		  = '$web',
-								 ip		  = '$ip',
-								 message   = '$message2db',
-								 visible   = $visible,
-								 posted	  = now()"
-							);
-							if ($rs) {
-								safe_update("txp_discuss_nonce", "used='1'", "nonce='".doslash($nonce)."'");
-								if ($prefs['comment_means_site_updated']) {
-									safe_update("txp_prefs", "val=now()", "name='lastmod'");
-								}
-								if ($comments_sendmail) {
-									mail_comment($message,$name,$email,$web,$parentid, $rs);
-								}
-	
-								$updated = update_comments_count($parentid);
-	
-								$backpage = substr($backpage, 0, $prefs['max_url_len']);
-								$backpage = preg_replace("/[\x0a\x0d#].*$/s",'',$backpage);
-								$backpage .= ((strstr($backpage,'?')) ? '&' : '?') . 'commented='.(($visible==VISIBLE) ? '1' : '0');
-								txp_status_header('302 Found');
-								if($comments_moderate){
-									header('Location: '.$backpage.'#txpCommentInputForm');
-								}else{
-									header('Location: '.$backpage.'#c'.sprintf("%06s",$rs));
-								}
-								if($prefs['logging'] == 'refer') { 
-									logit('refer'); 
-								} elseif ($prefs['logging'] == 'all') {
-									logit();
-								}
-								exit;
-							}
-						}
-					}																	// end check nonce
-					// Either nonce invalid, or evaluator decided for Reload -> another Preview
-					$_POST['preview'] = RELOAD;
-				}																		// end check dup
-			} else txp_die(gTxt('your_ip_is_blacklisted_by'.' '.$blacklisted), '403');  // end check blacklist
-		} else txp_die(gTxt('you_have_been_banned'), '403');							// end check site ban
+		if (   ($prefs['comments_require_name'] && !trim($name))
+			|| ($prefs['comments_require_email'] and !trim($email))
+			|| (!trim($message)))
+		{ 
+			$evaluator -> add_estimate(RELOAD,1); // The error-messages are added in the preview-code
+		}
+
+		if (!$isdup) 
+			$evaluator -> add_estimate(RELOAD,1); // FIXME? Tell the user about dupe?
+
+		if ( !($evaluator->get_result() != RELOAD) && checkNonce($nonce) ) {
+			callback_event('comment.save');
+			$visible = $evaluator->get_result();
+			if ($visible != RELOAD) {
+				$rs = safe_insert(
+					"txp_discuss",
+					"parentid  = '".doSlash($parentid)."',
+					 name		  = '$name',
+					 email	  = '$email',
+					 web		  = '$web',
+					 ip		  = '$ip',
+					 message   = '$message2db',
+					 visible   = $visible,
+					 posted	  = now()"
+				);
+				if ($rs) {
+					safe_update("txp_discuss_nonce", "used='1'", "nonce='".doslash($nonce)."'");
+					if ($prefs['comment_means_site_updated']) {
+						safe_update("txp_prefs", "val=now()", "name='lastmod'");
+					}
+					if ($comments_sendmail) {
+						mail_comment($message,$name,$email,$web,$parentid, $rs);
+					}
+
+					$updated = update_comments_count($parentid);
+
+					$backpage = substr($backpage, 0, $prefs['max_url_len']);
+					$backpage = preg_replace("/[\x0a\x0d#].*$/s",'',$backpage);
+					$backpage .= ((strstr($backpage,'?')) ? '&' : '?') . 'commented='.(($visible==VISIBLE) ? '1' : '0');
+					txp_status_header('302 Found');
+					if($comments_moderate){
+						header('Location: '.$backpage.'#txpCommentInputForm');
+					}else{
+						header('Location: '.$backpage.'#c'.sprintf("%06s",$rs));
+					}
+					if($prefs['logging'] == 'refer') { 
+						logit('refer'); 
+					} elseif ($prefs['logging'] == 'all') {
+						logit();
+					}
+					exit;
+				}
+			}
+		}
+		// Force another Preview
+		$_POST['preview'] = RELOAD;
 	}
 
 // -------------------------------------------------------------
 	class comment_evaluation {
 		var $status;
+		var $message;
 
 		function comment_evaluation() {
 			global $comments_moderate;
@@ -341,24 +332,25 @@ $LastChangedRevision$
 								   VISIBLE  => array(),
 								   RELOAD  => array()
 								);
+			$this->message = $this->status;
 			if ($comments_moderate)
 				$this->status[MODERATE][]=0.5;
 			else
 				$this->status[VISIBLE][]=0.5;
 		}
 
-		function add_estimate($type = SPAM, $probability = 0.75) {
+		function add_estimate($type = SPAM, $probability = 0.75, $msg='') {
 			global $plugin_callback;
 
 			if (!array_key_exists($type, $this->status))
 				trigger_error(gTxt('unknown_spam_estimate'), E_USER_WARNING);
 			if (is_array($plugin_callback))
-				trace_add('Comment-Evaluator: '.key($plugin_callback)."(?), $type, [$probability] ".max(0,min(1,$probability)));
+				trace_add('Comment-Evaluator: '.key($plugin_callback)."(?), $type, [$probability] ".max(0,min(1,$probability)). $msg);
 
 			$this->status[$type][] = max(0,min(1,$probability));
+			if (trim($msg)) $this->message[$type][] = $msg;
 		}
 
-		// Returns 
 		function get_result() {
 			$result = array();
 			foreach ($this->status as $key => $value)
@@ -367,6 +359,10 @@ $LastChangedRevision$
 			reset($result);
 			return key($result);
 		}
+		function get_result_message() {
+			return $this->message[$this->get_result()];
+		}
+
 	}
 
 	function &get_comment_evaluator() {

@@ -814,6 +814,26 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
+	function comments_error($atts)
+	{
+		extract(lAtts(array(
+			'class'		=> __FUNCTION__,
+			'break'		=> 'br',
+			'wraptag'	=> 'div'
+		),$atts));
+
+		$evaluator =& get_comment_evaluator();
+		return doWrap($evaluator -> get_result_message(), $wraptag, $break, $class);
+	}
+
+// -------------------------------------------------------------
+	function if_comments_error()
+	{
+		$evaluator =& get_comment_evaluator();
+		return (count($evaluator -> get_result_message()) > 0);
+	}
+
+// -------------------------------------------------------------
 	# DEPRECATED - provided only for backwards compatibility
 	# this functionality will be merged into comments_invite
 	# no point in having two tags for one functionality
