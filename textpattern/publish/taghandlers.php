@@ -1015,7 +1015,7 @@ $LastChangedRevision$
 
 		extract(lAtts(array(
 			'format' => $comments_dateformat,
-		), $atts))
+		), $atts));
 
 		if ($format == 'since')
 		{ 
