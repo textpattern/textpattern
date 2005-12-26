@@ -649,10 +649,9 @@ if (!empty($event) and $event == 'article') {
 	function sidehelp()
 	{
 		global $use_textile, $textile_body;
-		$out='<p><small>';
 
 		if ($use_textile == USE_TEXTILE || $textile_body == USE_TEXTILE) {
-			$out .=
+			return '<p><small>'.
 			gTxt('header').': <strong>h<em>n</em>.</strong>'.
 				popHelpSubtle('header',400,400).br.
 			gTxt('blockquote').': <strong>bq.</strong>'.
@@ -689,7 +688,7 @@ if (!empty($event) and $event == 'article') {
 			'<a href="http://textism.com/tools/textile/" target="_blank">'.gTxt('More').'</a>';
 		}			
 	
-	   return $out;
+	   return '';
 	}
 
 //--------------------------------------------------------------

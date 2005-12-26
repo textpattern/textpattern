@@ -583,63 +583,97 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function link_to_home($atts, $thing) 
+	function link_to_home($atts, $thing = false) 
 	{
 		extract(lAtts(array(
-			'class' => ''
-		),$atts));
-		$cl = ($class) ? ' class="'.$class.'"' : '';
-		if (!empty($thing)) {
-			return '<a href="'.hu.'"'.$cl.'>'.parse($thing).'</a>';
+			'class' => false
+		), $atts));
+
+		if ($thing)
+		{
+			$class = ($class) ? ' class="'.$class.'"' : '';
+			return '<a href="'.hu.'"'.$class.'>'.parse($thing).'</a>';
 		}
+
+		return hu;
 	}
 
 // -------------------------------------------------------------
-	function newer($atts, $thing, $match='') 
+	function newer($atts, $thing = false, $match='') 
 	{
-		global $thispage,$permlink_mode, $pretext;
+		global $thispage, $permlink_mode, $pretext;
+
 		extract($pretext);
-				
-		if (is_array($atts)) extract($atts);
+
+		if (is_array($atts))
+		{
+			extract($atts);
+		}
+
 		if (is_array($thispage))
+		{
 			extract($thispage);
+		}
 
-		if ($numPages > 1 && $pg > 1) {
+		if ($numPages > 1 && $pg > 1)
+		{
 			$nextpg = ($pg - 1 == 1) ? 0 : ($pg - 1);
-			$url = pagelinkurl(array('pg' => $nextpg, 's' => @$pretext['s'], 'c' => @$pretext['c'], 'q' => @$pretext['q'], 'a' => @$pretext['a']));
-			$out = array(
-				'<a href="'.$url.'"',
-				(empty($title)) ? '' : ' title="'.$title.'"',
-				'>',
-				$thing,
-				'</a>');
-			return join('',$out);
-		} else return;
+
+			$url = pagelinkurl(array(
+				'pg' => $nextpg, 
+				's' => @$pretext['s'], 
+				'c' => @$pretext['c'], 
+				'q' => @$pretext['q'], 
+				'a' => @$pretext['a']
+			));
+
+			if ($thing)
+			{
+				return '<a href="'.$url.'"'.
+				(empty($title) ? '' : ' title="'.$title.'"').
+				'>'.$thing.'</a>';
+			}
+
+			return $url;
+		}
+
+		return;
 	}
 
 // -------------------------------------------------------------
-	function older($atts, $thing, $match='') 
+	function older($atts, $thing = false, $match = '') 
 	{
-		global $thispage,$permlink_mode, $pretext;
+		global $thispage, $permlink_mode, $pretext;
+
 		extract($pretext);
 
-		if (is_array($atts)) extract($atts);
+		if (is_array($atts))
+		{
+			extract($atts);
+		}
+
 		if (is_array($thispage))
-			extract($thispage); 
+		{
+			extract($thispage);
+		}
 		
-		if ($numPages > 1 && $pg != $numPages) {
+		if ($numPages > 1 && $pg != $numPages)
+		{
 			$nextpg = $pg + 1;
 			$url = pagelinkurl(array('pg' => $nextpg, 's' => @$pretext['s'], 'c' => @$pretext['c'], 'q' => @$pretext['q'], 'a' => @$pretext['a']));
-			$out = array(
-				'<a href="'.$url.'"',
-				(empty($title)) ? '' : ' title="'.$title.'"',
-				'>',
-				$thing,
-				'</a>');
-			return join('',$out);
-		} else return;
-	}
 
+			if ($thing)
+			{
+				return '<a href="'.$url.'"'.
+				(empty($title) ? '' : ' title="'.$title.'"').
+				'>'.$thing.'</a>';
+			}
+
+			return $url;
+		}
+
+		return;
+	}
 
 // -------------------------------------------------------------
 	function text($atts) 
@@ -977,11 +1011,17 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function comment_time($atts) 
 	{
-		global $thiscomment,$comments_dateformat;
-		if($comments_dateformat == "since") { 
+		global $thiscomment, $comments_dateformat;
+
+		extract(lAtts(array(
+			'format' => $comments_dateformat,
+		), $atts))
+
+		if ($format == 'since')
+		{ 
 			$comment_time = since($thiscomment['time'] + tz_offset()); 
 		} else {
-			$comment_time = safe_strftime($comments_dateformat,$thiscomment['time']); 
+			$comment_time = safe_strftime($format, $thiscomment['time']); 
 		}
 		return $comment_time;
 	}
@@ -1804,6 +1844,7 @@ $LastChangedRevision$
 			'label'    => '',
 			'break'    => br,
 			'limit'    => '10',
+			'offset'   => '0',
 			'wraptag'  => '',
 			'category' => '',
 			'class'    => __FUNCTION__,
@@ -1814,7 +1855,7 @@ $LastChangedRevision$
 			($category) ? "category='$category'" : '1',
 			"order by",
 			$sort,
-			($limit) ? "limit $limit" : ''
+			($limit) ? "limit $offset, $limit" : ''
 		);
 		
 		$rs = safe_rows_start("*","txp_file",join(' ',$qparts));

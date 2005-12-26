@@ -103,7 +103,7 @@ $LastChangedRevision$
 				tr(
 					tdcs(
 						graf(join('',$nav))
-					,4)
+					,6)
 				);
 		}
 		echo endTable();
