@@ -4,10 +4,9 @@ Changes since 4.0.2:
 * Add a bulk Ban function for comments
 * Automatically hide comments when banning an IP
 * Fix comments "page by"
-* fix mailto: links
-* fix double translated linebreaks in comments.
-* fix nofollow in comments
-* fix preview without textile in certain edge cases
+* Fix double translated linebreaks in comments.
+* Fix nofollow in comments
+* Fix preview without textile in certain edge cases
 * Seperate hidden comments into unmoderated and spam
 * Add bulk changing of comment status (visible, moderated, spam)
 * Better error-handling in comments-form when critical fields are missing
@@ -18,12 +17,14 @@ Changes since 4.0.2:
 * Plugin-Authors: Allow (optionally, transparently) for installing compressed plugins.
 * Plugin-Authors: Add window events using addEvent, to allow multiple events loading 
                   at window.onload, useful for admin side plugins.
-* improve mysql5-compatibility
-* add comment edit link to notification emails
-* make comment-time format customizable in tag (mary)
-* add offset-attribute to file_download_list (mary)
-* make older, newer and link_to_home work more consistantly with other nav-tags (mary)
+* Improve mysql5-compatibility
+* Add comment edit link to notification emails
+* Make comment-time format customizable in tag (mary)
+* Add offset-attribute to file_download_list (mary)
+* Make older, newer and link_to_home work more consistantly with other nav-tags (mary)
+* Fix mailto: links
 * Fix tag trace output for enclosing tags
+* Update comment_count after import
 * Add extra info to the tag trace (SQL queries, conditional tag results, page template and form names)
 
 Changes since 4.0.1:
