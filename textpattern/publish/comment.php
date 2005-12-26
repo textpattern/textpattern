@@ -263,13 +263,13 @@ $LastChangedRevision$
 			"name='$name' and message='$message2db' and ip='$ip'");
 
 		if (   ($prefs['comments_require_name'] && !trim($name))
-			|| ($prefs['comments_require_email'] and !trim($email))
+			|| ($prefs['comments_require_email'] && !trim($email))
 			|| (!trim($message)))
 		{ 
 			$evaluator -> add_estimate(RELOAD,1); // The error-messages are added in the preview-code
 		}
 
-		if (!$isdup) 
+		if ($isdup) 
 			$evaluator -> add_estimate(RELOAD,1); // FIXME? Tell the user about dupe?
 
 		if ( !($evaluator->get_result() != RELOAD) && checkNonce($nonce) ) {
