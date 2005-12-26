@@ -16,7 +16,7 @@ $LastChangedRevision$
 	{
 		$rs = safe_rows(
 			"*, unix_timestamp(posted) as time", 
-			"txp_discuss", "parentid='".doSlash($id)."' and visible='1' order by posted asc"
+			"txp_discuss", "parentid='".doSlash($id)."' and visible='.VISIBLE.' order by posted asc"
 		);
 
 		if ($rs) return $rs;
@@ -234,8 +234,6 @@ $LastChangedRevision$
 		global $siteurl,$comments_moderate,$comments_sendmail,$txpcfg,
 			$comments_disallow_images,$prefs;
 
-		callback_event('comment.save');
-
 		$ref = serverset('HTTP_REFERRER');
 
 		$in = getComment();
@@ -281,45 +279,55 @@ $LastChangedRevision$
 			if($blacklisted == false) {
 				if (!$isdup) {
 					if (checkNonce($nonce)) {
+						callback_event('comment.save');
 						$evaluator =& get_comment_evaluator();
 						$visible = $evaluator->get_result();
-						$rs = safe_insert(
-							"txp_discuss",
-							"parentid  = '".doSlash($parentid)."',
-							 name		  = '$name',
-							 email	  = '$email',
-							 web		  = '$web',
-							 ip		  = '$ip',
-							 message   = '$message2db',
-							 visible   = $visible,
-							 posted	  = now()"
-						);						
-
-						if ($rs) {
-							safe_update("txp_discuss_nonce", "used='1'", "nonce='".doslash($nonce)."'");
-							if ($prefs['comment_means_site_updated']) {
-								safe_update("txp_prefs", "val=now()", "name='lastmod'");
-							}
-							if ($comments_sendmail) {
-								mail_comment($message,$name,$email,$web,$parentid, $rs);
-							}
-
-							$updated = update_comments_count($parentid);
-
-							$backpage = substr($backpage, 0, $prefs['max_url_len']);
-							$backpage = preg_replace("/[\x0a\x0d#].*$/s",'',$backpage);
-							$backpage .= ((strstr($backpage,'?')) ? '&' : '?') . 'commented='.(($visible==1) ? 1 : 0);
-							txp_status_header('302 Found');
-							if($comments_moderate){
-								header('Location: '.$backpage.'#txpCommentInputForm');
-							}else{
-								header('Location: '.$backpage.'#c'.sprintf("%06s",$rs));
+						if ($visible != RELOAD) {
+							$rs = safe_insert(
+								"txp_discuss",
+								"parentid  = '".doSlash($parentid)."',
+								 name		  = '$name',
+								 email	  = '$email',
+								 web		  = '$web',
+								 ip		  = '$ip',
+								 message   = '$message2db',
+								 visible   = $visible,
+								 posted	  = now()"
+							);
+							if ($rs) {
+								safe_update("txp_discuss_nonce", "used='1'", "nonce='".doslash($nonce)."'");
+								if ($prefs['comment_means_site_updated']) {
+									safe_update("txp_prefs", "val=now()", "name='lastmod'");
+								}
+								if ($comments_sendmail) {
+									mail_comment($message,$name,$email,$web,$parentid, $rs);
+								}
+	
+								$updated = update_comments_count($parentid);
+	
+								$backpage = substr($backpage, 0, $prefs['max_url_len']);
+								$backpage = preg_replace("/[\x0a\x0d#].*$/s",'',$backpage);
+								$backpage .= ((strstr($backpage,'?')) ? '&' : '?') . 'commented='.(($visible==VISIBLE) ? '1' : '0');
+								txp_status_header('302 Found');
+								if($comments_moderate){
+									header('Location: '.$backpage.'#txpCommentInputForm');
+								}else{
+									header('Location: '.$backpage.'#c'.sprintf("%06s",$rs));
+								}
+								if($prefs['logging'] == 'refer') { 
+									logit('refer'); 
+								} elseif ($prefs['logging'] == 'all') {
+									logit();
+								}
+								exit;
 							}
 						}
-					}																			// end check nonce
-				}																				 // end check dup
-			} else txp_die(gTxt('your_ip_is_blacklisted_by'.' '.$blacklisted), '403'); // end check blacklist
-		} else txp_die(gTxt('you_have_been_banned'), '403');									// end check site ban
+					}																	// end check nonce
+					// Either nonce invalid, or evaluator decided for Reload -> another Preview
+					$_POST['preview'] = RELOAD;
+				}																		// end check dup
+			} else txp_die(gTxt('your_ip_is_blacklisted_by'.' '.$blacklisted), '403');  // end check blacklist
+		} else txp_die(gTxt('you_have_been_banned'), '403');							// end check site ban
 	}
 
 // -------------------------------------------------------------
@@ -328,14 +336,18 @@ $LastChangedRevision$
 
 		function comment_evaluation() {
 			global $comments_moderate;
-			$this->status = array('visible' => array(),'moderate' => array(),'spam' => array());
+			$this->status = array( VISIBLE  => array(),
+								   MODERATE => array(),
+								   VISIBLE  => array(),
+								   RELOAD  => array()
+								);
 			if ($comments_moderate)
-				$this->status['moderate'][]=0.5;
+				$this->status[MODERATE][]=0.5;
 			else
-				$this->status['visible'][]=0.5;
+				$this->status[VISIBLE][]=0.5;
 		}
 
-		function add_estimate($type = 'spam', $probability = 0.75) {
+		function add_estimate($type = SPAM, $probability = 0.75) {
 			global $plugin_callback;
 
 			if (!array_key_exists($type, $this->status))
@@ -353,8 +365,7 @@ $LastChangedRevision$
 				$result[$key] = array_sum($value)/max(1,count($value));
 			arsort($result, SORT_NUMERIC);
 			reset($result);
-			$constants = array('visible' => 1,'moderate' => 0,'spam' => -1);
-			return $constants[key($result)];
+			return key($result);
 		}
 	}
 

@@ -5,11 +5,6 @@ $HeadURL$
 $LastChangedRevision$
 */
 
-if (defined('DIRECTORY_SEPARATOR'))
-	define('DS', DIRECTORY_SEPARATOR);
-else
-	define ('DS', (is_windows() ? '\\' : '/'));
-
 // -------------------------------------------------------------
 	function doArray($in,$function)
 	{
@@ -1174,7 +1169,7 @@ else
 // -------------------------------------------------------------
 	function update_comments_count($id) 
 	{
-		$thecount = safe_field('count(*)','txp_discuss','parentid='.doSlash($id).' and visible=1');
+		$thecount = safe_field('count(*)','txp_discuss','parentid='.doSlash($id).' and visible='.VISIBLE);
 		$updated = safe_update("textpattern","comments_count='".doSlash($thecount)."'","ID='".doSlash($id)."'");
 		return ($updated) ? true : false;
 	}
@@ -1182,7 +1177,7 @@ else
 // -------------------------------------------------------------
 	function clean_comment_counts($parentids) 
 	{
-		$rs = safe_rows_start('parentid, count(*) as thecount','txp_discuss','parentid IN ('.implode(',',$parentids).') AND visible=1 group by parentid');
+		$rs = safe_rows_start('parentid, count(*) as thecount','txp_discuss','parentid IN ('.implode(',',$parentids).') AND visible='.VISIBLE.' group by parentid');
 		if (!$rs) return;
 
 		$updated = array();

@@ -325,7 +325,7 @@ $LastChangedRevision$
 			'labeltag' => ''
 		),$atts));
 
-		$rs = safe_rows_start("*",'txp_discuss',"visible=1 order by posted desc limit 0,$limit");
+		$rs = safe_rows_start("*",'txp_discuss',"visible=".VISIBLE." order by posted desc limit 0,$limit");
 
 		if ($rs) {
         	while ($a = nextRow($rs)) {
@@ -879,7 +879,7 @@ $LastChangedRevision$
 		}
 		else {
 			$rs = safe_rows_start("*, unix_timestamp(posted) as time", "txp_discuss",
-				"parentid='$id' and visible='1' order by posted asc");
+				"parentid='$id' and visible=".VISIBLE." order by posted asc");
 							
 			$out = '';
 
@@ -1520,7 +1520,7 @@ $LastChangedRevision$
 	{
 		global $comments_mode;
 
-		$dc = safe_count('txp_discuss',"parentid='$ID' and visible=1");
+		$dc = safe_count('txp_discuss',"parentid='$ID' and visible=".VISIBLE);
 
 		$ccount = ($dc) ?  '['.$dc.']' : '';
 		if (!$comments_mode) {

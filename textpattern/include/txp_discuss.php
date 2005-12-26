@@ -93,21 +93,21 @@ $LastChangedRevision$
 	
 			while ($a = nextRow($rs)) {
 				extract($a);
-				$dmessage = ($visible == -1) ? short_preview($message) : $message;
+				$dmessage = ($visible == SPAM) ? short_preview($message) : $message;
 				$date = "".date("M d, g:ia",($uPosted + tz_offset()))."";
 				$editlink = eLink('discuss','discuss_edit','discussid',$discussid,$date);
 				$cbox = fInput('checkbox','selected[]',$discussid);
 	
 				$tq = fetch('Title','textpattern','ID',$parentid);
 				$parent = (!$tq) ? gTxt('article_deleted') : $tq;
-									
+
 				echo assRow(array(
 					$editlink   => 100,
 					$name       => 100,
 					$dmessage   => 250,
 					$parent     => 100,
 					$cbox       => 20
-				), ' class="'.(($visible == 1) ? 'visible' : (($visible == -1) ? 'spam' : 'moderate')).'"');
+				), ' class="'.(($visible == VISIBLE) ? 'visible' : (($visible == SPAM) ? 'spam' : 'moderate')).'"');
 			}
 			
 			echo tr(tda(select_buttons().discuss_multiedit_form(),' colspan="5" style="text-align:right;border:0px"'));
@@ -162,7 +162,7 @@ $LastChangedRevision$
 					fLabelCell('email') . fInputCell('email',$email),
 					fLabelCell('website') . fInputCell('web',$web),
 					td() . td($ta),
-					fLabelCell('visible') . td(selectInput('visible', array(1 => gTxt('visible'), -1 => gTxt('spam'),0 => gTxt('unmoderated')),$visible,false)),
+					fLabelCell('visible') . td(selectInput('visible', array(VISIBLE => gTxt('visible'), SPAM => gTxt('spam'),MODERATE => gTxt('unmoderated')),$visible,false)),
 					fLabelCell('IP') . td($ip.sp.$banlink),
 					td() . td(fInput('submit','step',gTxt('save'),'publish')),
 				hInput("discussid", $discussid).hInput('ip',$ip).hInput('parentid',$parentid).
@@ -191,7 +191,7 @@ $LastChangedRevision$
 			// hide all messages from that IP also
 			if ($rs)
 				safe_update('txp_discuss',
-					"visible='-1'",
+					"visible=".SPAM,
 					"ip='".doSlash($ip)."'"
 				);
 			if ($rs) ipban_list(messenger('ip',$ip,'banned'));
@@ -304,7 +304,7 @@ $LastChangedRevision$
 							date_banned = now()
 						");
 						safe_update('txp_discuss',
-							"visible = -1",
+							"visible = ".SPAM,
 							"ip='".doSlash($ip)."'"
 						);
 					}
@@ -312,21 +312,21 @@ $LastChangedRevision$
 				}
 				elseif ($method == 'spam') {
 						if (safe_update('txp_discuss',
-							"visible = -1",
+							"visible = ".SPAM,
 							"discussid = $id"
 						))
 							$done[] = $id;
 				}
 				elseif ($method == 'unmoderated') {
 						if (safe_update('txp_discuss',
-							"visible = 0",
+							"visible = ".MODERATE,
 							"discussid = $id"
 						))
 							$done[] = $id;
 				}
 				elseif ($method == 'visible') {
 						if (safe_update('txp_discuss',
-							"visible = 1",
+							"visible = ".VISIBLE,
 							"discussid = $id"
 						))
 							$done[] = $id;

@@ -5,8 +5,6 @@ $HeadURL$
 $LastChangedRevision$
 */
 
-define('TXP_DEBUG', 0);
-
 if (!defined('PFX')) {
 	if (!empty($txpcfg['table_prefix'])) {
 		define ("PFX",$txpcfg['table_prefix']);

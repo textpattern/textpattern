@@ -30,10 +30,6 @@ $statuses = array(
 		5 => gTxt('sticky'),
 );
 
-if (!defined('LEAVE_TEXT_UNTOUCHED')) define('LEAVE_TEXT_UNTOUCHED', 0);
-if (!defined('USE_TEXTILE')) define('USE_TEXTILE', 1);
-if (!defined('CONVERT_LINEBREAKS')) define('CONVERT_LINEBREAKS', 2);
-
 if (!empty($event) and $event == 'article') {
 	require_privs('article');
 

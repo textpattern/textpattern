@@ -16,7 +16,6 @@ $LastChangedRevision$
 
 //-------------------------------------------------------------
 
-	define('RPC_SERVER', 'http://rpc.textpattern.com');
 	include_once txpath.'/lib/txplib_update.php';
 
 	if ($event == 'prefs') {
