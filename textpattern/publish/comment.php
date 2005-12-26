@@ -272,7 +272,7 @@ $LastChangedRevision$
 		if ($isdup) 
 			$evaluator -> add_estimate(RELOAD,1); // FIXME? Tell the user about dupe?
 
-		if ( !($evaluator->get_result() != RELOAD) && checkNonce($nonce) ) {
+		if ( ($evaluator->get_result() != RELOAD) && checkNonce($nonce) ) {
 			callback_event('comment.save');
 			$visible = $evaluator->get_result();
 			if ($visible != RELOAD) {
