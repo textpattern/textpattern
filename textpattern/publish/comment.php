@@ -327,7 +327,7 @@ $LastChangedRevision$
 
 		function comment_evaluation() {
 			global $comments_moderate;
-			$this->status = array( VISIBLE  => array(),
+			$this->status = array( SPAM  => array(),
 								   MODERATE => array(),
 								   VISIBLE  => array(),
 								   RELOAD  => array()
