@@ -1,29 +1,30 @@
 Changes since 4.0.2:
 
-* Fix tag trace output for enclosing tags
-* Add extra info to the tag trace (SQL queries, conditional tag results, page template and form names)
 * Textile i18n improvements
-* Automatically hide comments when banning an IP
 * Add a bulk Ban function for comments
+* Automatically hide comments when banning an IP
 * Fix comments "page by"
-* Seperate hidden comments into unmoderated and those marked as spam
-* Add bulk changing of comment status (visible, moderated, spam)
-* Updated visual presentation of different comment-status in list
-* Add callbacks for future spam-plugins [comment.save, comment.form]
-* Add getComment() and comment_evaluator for future spam-plugins
-* Allow (optionally, transparently) for installing compressed plugins.
 * fix mailto: links
 * fix double translated linebreaks in comments.
 * fix nofollow in comments
 * fix preview without textile in certain edge cases
-* Add window events using addEvent, to allow multiple events loading 
-  at window.onload, useful for admin side plugins.
+* Seperate hidden comments into unmoderated and spam
+* Add bulk changing of comment status (visible, moderated, spam)
+* Better error-handling in comments-form when critical fields are missing
+  New tag: <txp:comments_error /> (and conditional <txp:if_comments_error >)
+  Style-able error-message and form-elements via CSS (class=comments_warn).
+* Plugin-Authors: Add callbacks for future spam-plugins [comment.save, comment.form]
+* Plugin-Authors: Add getComment() and comment_evaluator for future spam-plugins
+* Plugin-Authors: Allow (optionally, transparently) for installing compressed plugins.
+* Plugin-Authors: Add window events using addEvent, to allow multiple events loading 
+                  at window.onload, useful for admin side plugins.
 * improve mysql5-compatibility
 * add comment edit link to notification emails
 * make comment-time format customizable in tag (mary)
 * add offset-attribute to file_download_list (mary)
 * make older, newer and link_to_home work more consistantly with other nav-tags (mary)
-
+* Fix tag trace output for enclosing tags
+* Add extra info to the tag trace (SQL queries, conditional tag results, page template and form names)
 
 Changes since 4.0.1:
 

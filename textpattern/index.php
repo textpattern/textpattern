@@ -20,7 +20,7 @@ $LastChangedRevision$
 	define("txpath", dirname(__FILE__));
 	define("txpinterface", "admin");
 
-	$thisversion = '4.0.2';
+	$thisversion = '4.0.3';
 	$txp_using_svn = false; // set false for releases
 
 	ob_start(NULL, 2048);
