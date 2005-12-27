@@ -121,7 +121,9 @@ $LastChangedRevision$
 		$msgstyle = ($msgstyle ? ' style="'.$msgstyle.'"' : '');
 		$msgrows = ($msgrows and is_numeric($msgrows)) ? ' rows="'.intval($msgrows).'"' : '';
 		$msgcols = ($msgcols and is_numeric($msgcols)) ? ' cols="'.intval($msgcols).'"' : '';
-		$textarea = '<textarea class="txpCommentInputMessage" name="message" id="message" '.$msgcols.$msgrows.$msgstyle.' tabindex="1">'.htmlspecialchars($message).'</textarea>';
+		$textarea = '<textarea class="txpCommentInputMessage"'.(($commentwarn) ? ' comments_error' : '')
+					.' name="message" id="message" '.$msgcols.$msgrows.$msgstyle.'>'
+					.htmlspecialchars($message).'</textarea>';
 
 		$comment_submit_button = ($preview)
 		?	fInput('submit','submit',gTxt('submit'),'button')
@@ -132,14 +134,10 @@ $LastChangedRevision$
 		:	checkbox('remember',1,1).tag(gTxt('remember'),'label',' for="remember"');
 
 		$vals = array(
-			'comment_name_input'    => ($namewarn)	? doTag(input('text','name',  htmlspecialchars($name), $isize,'comment_name_input',"2"),'span','comments_error')
-													: input('text','name',  htmlspecialchars($name), $isize,'comment_name_input',"2"),
-			'comment_email_input'   => ($emailwarn)	? doTag(input('text','email', htmlspecialchars($email),$isize,'comment_email_input',"3"),'span','comments_error')
-													: input('text','email', htmlspecialchars($email),$isize,'comment_email_input',"3"),
-			'comment_web_input'     => input('text','web', htmlspecialchars($web), $isize,'comment_web_input',"4"),
-			'comment_message_input' => (($commentwarn)	? doTag($textarea,'span','comments_error')
-														: $textarea)
-									   .'<!-- plugin-place-holder -->',
+			'comment_name_input'    => input('text','name' , htmlspecialchars($name) , $isize,'comment_name_input' .(($namewarn)    ? ' comments_error' : ''),""),
+			'comment_email_input'   => input('text','email', htmlspecialchars($email), $isize,'comment_email_input'.(($emailwarn)   ? ' comments_error' : ''),""),
+			'comment_web_input'     => input('text','web'  , htmlspecialchars($web)  , $isize,'comment_web_input',""),
+			'comment_message_input' => $textarea.'<!-- plugin-place-holder -->',
 			'comment_remember'      => $checkbox,
 			'comment_preview'       => input('submit','preview',gTxt('preview'),'','button'),
 			'comment_submit'        => $comment_submit_button
