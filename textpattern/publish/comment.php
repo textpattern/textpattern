@@ -396,7 +396,7 @@ $LastChangedRevision$
 					"This trace-file tracks saved comments. (created ".safe_strftime($prefs['archive_dateformat'],time()).")\n".
 					"Format is: Type; Probability; Message (Type can be -1 => spam, 0 => moderate, 1 => visible)\n\n");
 			} else {
-				$fp = fopen($file,'wb');
+				$fp = fopen($file,'ab');
 			}
 			if ($fp) {
 				fwrite($fp, implode("\n", $this->txpspamtrace ));
