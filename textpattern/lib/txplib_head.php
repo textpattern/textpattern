@@ -28,6 +28,7 @@ $LastChangedRevision$
 	<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 	<head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta name="robots" content="noindex, nofollow" />
 	<title>Txp &#8250; <?php echo $sitename ?> &#8250; <?php echo $pagetitle?></title>
 	<link href="textpattern.css" rel="Stylesheet" type="text/css" />
 	<script type="text/javascript" src="textpattern.js"></script>

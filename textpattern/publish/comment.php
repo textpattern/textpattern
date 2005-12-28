@@ -330,28 +330,33 @@ $LastChangedRevision$
 					} elseif ($prefs['logging'] == 'all') {
 						logit();
 					}
+					$evaluator->write_trace();
 					exit;
 				}
 			}
 		}
 		// Force another Preview
 		$_POST['preview'] = RELOAD;
+		//$evaluator->write_trace();
 	}
 
 // -------------------------------------------------------------
 	class comment_evaluation {
 		var $status;
 		var $message;
+		var $txpspamtrace = array();
 
 		function comment_evaluation() {
-			global $comments_moderate;
+			global $prefs;
+			extract(getComment());
 			$this->status = array( SPAM  => array(),
 								   MODERATE => array(),
 								   VISIBLE  => array(),
 								   RELOAD  => array()
 								);
 			$this->message = $this->status;
-			if ($comments_moderate)
+			$this -> txpspamtrace[] = "Comment on $parentid by $name (".safe_strftime($prefs['archive_dateformat'],time()).")";
+			if ($prefs['comments_moderate'])
 				$this->status[MODERATE][]=0.5;
 			else
 				$this->status[VISIBLE][]=0.5;
@@ -363,8 +368,7 @@ $LastChangedRevision$
 			if (!array_key_exists($type, $this->status))
 				trigger_error(gTxt('unknown_spam_estimate'), E_USER_WARNING);
 
-			if ($production_status == 'debug')
-				trace_add("Comment-Evaluator: $type, [$probability] ".max(0,min(1,$probability)). $msg);
+			$this -> txpspamtrace[] = "   $type; ".max(0,min(1,$probability))."; $msg";
 			//FIXME trace is only viewable for RELOADS. Maybe add info to HTTP-Headers in debug-mode
 
 			$this->status[$type][] = max(0,min(1,$probability));
@@ -382,7 +386,24 @@ $LastChangedRevision$
 		function get_result_message() {
 			return $this->message[$this->get_result()];
 		}
-
+		function write_trace() {
+			global $prefs;
+			$file = $prefs['tempdir'].DS.'evaluator_trace.php';
+			if (!file_exists($file)) {
+				$fp = fopen($file,'wb');
+				if ($fp) 
+					fwrite($fp,"<?php exit; ?>\n".
+					"This trace-file tracks saved comments. (created ".safe_strftime($prefs['archive_dateformat'],time()).")\n".
+					"Format is: Type; Probability; Message (Type can be -1 => spam, 0 => moderate, 1 => visible)\n\n");
+			} else {
+				$fp = fopen($file,'wb');
+			}
+			if ($fp) {
+				fwrite($fp, implode("\n", $this->txpspamtrace ));
+				fwrite($fp, "\n  RESULT: ".$this->get_result()."\n\n");
+				fclose($fp);
+			}
+		}
 	}
 
 	function &get_comment_evaluator() {
