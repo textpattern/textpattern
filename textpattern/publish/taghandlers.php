@@ -302,11 +302,12 @@ $LastChangedRevision$
 		);
 		
 		if ($rs) {
+			$out = array();
 			while ($a = nextRow($rs)) {
 				extract($a);
 				$out[] = href(escape_title($Title),permlinkurl($a));
 			}
-			if (is_array($out)) {
+			if (count($out)) {
 				return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
 			}
 		}
@@ -373,12 +374,13 @@ $LastChangedRevision$
 			$rs = getRows(join(' ',$q));
 	
 			if ($rs) {
+				$out = array();
 				foreach($rs as $a) {
 					extract($a);
 					if ($thisid == $id) continue;
 					$out[] = href(escape_title($Title),permlinkurl($a));
 				}
-				if (is_array($out)) {
+				if (count($out)) {
 					return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
 				}
 			}
@@ -456,12 +458,13 @@ $LastChangedRevision$
 		}
 
 		if ($rs) {
+			$out = array();
 			while ($a = nextRow($rs)) {
 				extract($a);
 				if ($name=='root') continue;
 				if($name) $out[] = tag(str_replace("& ","&#38; ", $title),'a',' href="'.pagelinkurl(array('c'=>$name)).'"');
 			}
-			if (is_array($out)) {
+			if (count($out)) {
 				return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
 			}			
 		}
@@ -485,12 +488,13 @@ $LastChangedRevision$
 		$rs = safe_rows_start("name,title","txp_section","name != 'default' order by name");
 		
 		if ($rs) {
+			$out = array();
 			while ($a = nextRow($rs)) {
 				extract($a);
 				$url = pagelinkurl(array('s'=>$name));
 				$out[] = tag($title, 'a', ' href="'.$url.'"');
 			}
-			if (is_array($out)) {
+			if (count($out)) {
 				if ($include_default) $out = array_merge(array(tag($sitename,'a', ' href="'.hu.'"')),$out);
 				return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
 			}
@@ -1303,6 +1307,7 @@ $LastChangedRevision$
 		$rs = safe_rows_start("*", "txp_image","category='$c' and thumbnail=1 order by name");
 
 		if ($rs) {
+			$out = array();
 			while ($a = nextRow($rs)) {
 				extract($a);
 				$impath = $img_dir.'/'.$id.'t'.$ext;
@@ -1313,7 +1318,7 @@ $LastChangedRevision$
                '<img src="'.hu.$impath.'"'.$dims.' alt="'.$alt.'" />'.'</a>';
 
 			}
-			if (is_array($out)) {
+			if (count($out)) {
 				return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
 			}	
 		}

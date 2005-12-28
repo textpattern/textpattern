@@ -41,6 +41,21 @@ $LastChangedRevision$
 
 
 // -------------------------------------------------------------
+	function getNextNonce($check_only = false)
+	{
+		static $nonce = '';
+		if (!$nonce && !$check_only)
+			$nonce = md5( uniqid( rand(), true ) );
+		return $nonce;
+	}
+	function getNextSecret($check_only = false)
+	{
+		static $secret = '';
+		if (!$secret && !$check_only)
+			$secret = md5( uniqid( rand(), true ) );
+		return $secret;
+	}
+
 	function commentForm($id, $atts=NULL) 
 	{
 		global $prefs;
@@ -74,8 +89,8 @@ $LastChangedRevision$
 			$name  = ps('name');
 			$email = clean_url(ps('email'));
 			$web   = clean_url(ps('web'));
-			$nonce = md5( uniqid( rand(), true ) );
-			$secret = md5( uniqid( rand(), true ) );
+			$nonce = getNextNonce();
+			$secret = getNextSecret();
 			safe_insert("txp_discuss_nonce", "issue_time=now(), nonce='$nonce', secret='$secret'");
 
 			$namewarn = ($comments_require_name && !trim($name));
@@ -221,8 +236,13 @@ $LastChangedRevision$
 		$n = array();
 		foreach (stripPost() as $k=>$v)
 			if (strlen($k.$v) == 32) $n[] = "'".doSlash($k.$v)."'";
-		$c['nonce'] = (empty($n)) ? '' : safe_field('nonce', 'txp_discuss_nonce', "1=1 and nonce in (".join(',', $n).")");
-
+		$c['nonce'] = '';
+		$c['secret'] = '';
+		if (!empty($n)) {
+			$rs = safe_row('nonce, secret', 'txp_discuss_nonce', "nonce in (".join(',', $n).")");
+			$c['nonce'] = $rs['nonce'];
+			$c['secret'] = $rs['secret'];
+		}
 		return $c;
 	}
 
