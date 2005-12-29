@@ -221,7 +221,7 @@ $LastChangedRevision$
 			$out['request_uri'] = @substr($argv[0], strpos($argv[0], ';' + 1));
 			// IIS again - given that the above doesn't always seem to help...
 		if (!$out['request_uri'] and serverSet('SCRIPT_NAME'))
-			$out['request_uri'] = serverSet('SCRIPT_NAME').( (serverSet('REQUEST_URI')) ? '?'.serverSet('REQUEST_URI') : '');
+			$out['request_uri'] = serverSet('SCRIPT_NAME').( (serverSet('QUERY_STRING')) ? '?'.serverSet('QUERY_STRING') : '');
 
 			// define the useable url, minus any subdirectories.
 			// this is pretty fugly, if anyone wants to have a go at it - dean
