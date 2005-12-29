@@ -831,10 +831,10 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function if_comments_error()
+	function if_comments_error($atts, $thing)
 	{
 		$evaluator =& get_comment_evaluator();
-		return (count($evaluator -> get_result_message()) > 0);
+		return parse(EvalElse($thing,(count($evaluator -> get_result_message()) > 0)));
 	}
 
 // -------------------------------------------------------------
