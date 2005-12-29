@@ -1,5 +1,7 @@
 Changes since 4.0.2:
 
+* fixed 2 potential security holes(detected in internal code review).
+  Updade is recommended. 
 * Textile i18n improvements
 * Add a bulk Ban function for comments
 * Automatically hide comments when banning an IP
