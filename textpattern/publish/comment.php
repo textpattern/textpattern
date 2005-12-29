@@ -136,7 +136,7 @@ $LastChangedRevision$
 		$msgstyle = ($msgstyle ? ' style="'.$msgstyle.'"' : '');
 		$msgrows = ($msgrows and is_numeric($msgrows)) ? ' rows="'.intval($msgrows).'"' : '';
 		$msgcols = ($msgcols and is_numeric($msgcols)) ? ' cols="'.intval($msgcols).'"' : '';
-		$textarea = '<textarea class="txpCommentInputMessage"'.(($commentwarn) ? ' comments_error' : '')
+		$textarea = '<textarea class="txpCommentInputMessage'.(($commentwarn) ? ' comments_error"' : '"')
 					.' name="message" id="message" '.$msgcols.$msgrows.$msgstyle.'>'
 					.htmlspecialchars($message).'</textarea>';
 
