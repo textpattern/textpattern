@@ -231,7 +231,7 @@ $LastChangedRevision$
 		$is_404 = 0;
 
 			// if messy vars exist, bypass url parsing
-		if (!$out['id'] && !$out['s']) {
+		if (!$out['id'] && !$out['s'] && !(txpinterface=='css')) {
 
 			extract(chopUrl($req));
 	
