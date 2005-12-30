@@ -130,7 +130,9 @@ $LastChangedRevision$
 		if (defined('PARTLY_MESSY') and (PARTLY_MESSY)) 
 			$url = hu.'?id='.intval($parentid);
 
-		$out = '<form method="post" action="'.$url.'#cpreview" id="txpCommentInputForm">';
+		$out = '<form method="post" action="'.$url.'#cpreview" id="txpCommentInputForm">'.
+		# Juts to prevent XHTML Strict validation gotchas
+		'<div class="comments-wrapper">';
 
 		$Form = fetch('Form','txp_form','name',$form);
 		$msgstyle = ($msgstyle ? ' style="'.$msgstyle.'"' : '');
@@ -177,7 +179,7 @@ $LastChangedRevision$
 				strpos($out, '<!-- plugin-place-holder -->'), 
 				strlen('<!-- plugin-place-holder -->')
 		);
-		$out .= '</form>'; 
+		$out .= '</div></form>'; 
 	  return $out;
 	}
 
