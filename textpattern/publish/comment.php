@@ -174,11 +174,7 @@ $LastChangedRevision$
 		$out .= (!$preview)
 		?	fInput('hidden','backpage',serverset("REQUEST_URI"))
 		:	fInput('hidden','backpage',$backpage);
-		$out = substr_replace( $out,
-				callback_event('comment.form'),
-				strpos($out, '<!-- plugin-place-holder -->'), 
-				strlen('<!-- plugin-place-holder -->')
-		);
+		$out = str_replace( '<!-- plugin-place-holder -->', callback_event('comment.form'), $out);
 		$out .= '</div></form>'; 
 	  return $out;
 	}
