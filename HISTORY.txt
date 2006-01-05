@@ -1,3 +1,7 @@
+Changes since 4.0.3:
+
+* Remember and automatically reuse thumbnail size settings
+
 Changes since 4.0.2:
 
 * fixed 2 potential security holes(detected in internal code review).

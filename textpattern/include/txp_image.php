@@ -307,13 +307,13 @@ $LastChangedRevision$
 					startTable('','left','',1) .
 						tr(
 							fLabelCell(gTxt('thumb_width').':') . 
-							fInputCell('width','',1,4).
+							fInputCell('width',@$thumb_w,1,4).
 							
 							fLabelCell(gTxt('thumb_height').':') . 
-							fInputCell('height','',1,4).
+							fInputCell('height',@$thumb_h,1,4).
 							
 							fLabelCell(gTxt('keep_square_pixels').':') . 
-							tda(checkbox2('crop', ''),' class="noline"').
+							tda(checkbox2('crop', @$thumb_crop),' class="noline"').
 														
 							tda(fInput('submit','',gTxt('Create'),'smallerbox'),
 								' class="noline"')
@@ -347,7 +347,14 @@ $LastChangedRevision$
 		if ( is_numeric ($width)) $t->width = $width;
 		if ( is_numeric ($height)) $t->height = $height;
 		
-		if ($t->write()) {			
+		if ($t->write()) {
+			global $prefs;
+			$prefs['thumb_w'] = $width;
+			$prefs['thumb_h'] = $height;
+			$prefs['thumb_crop'] = $crop;
+			set_pref('thumb_w', $width, 'image',  1);
+			set_pref('thumb_h', $height, 'image',  1);
+			set_pref('thumb_crop', $crop, 'image',  1);
 			image_edit(messenger('thumbnail',$id,'saved'),$id);
 		 }
 		else {
@@ -361,7 +368,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------	
 	function image_data($file , $category = '', $id = '', $uploaded = true)
 	{
-		global $txpcfg, $extensions, $txp_user;
+		global $txpcfg, $extensions, $txp_user, $prefs;
 		extract($txpcfg); 
 		
 		$name = $file['name'];
@@ -410,6 +417,15 @@ $LastChangedRevision$
 					return $newpath.sp.gTxt('upload_dir_perms');
 				} else {
 					chmod($newpath,0755);
+					// Auto-generate a thumbnail using the last settings
+					if (isset($prefs['thumb_w'], $prefs['thumb_h'], $prefs['thumb_crop'])) {
+						$t = new txp_thumb( $id );
+						$t->crop = ($prefs['thumb_crop'] == '1');
+						$t->hint = '0';
+						if ( is_numeric ($prefs['thumb_w'])) $t->width = $prefs['thumb_w'];
+						if ( is_numeric ($prefs['thumb_h'])) $t->height = $prefs['thumb_h'];
+						$t->write();
+					}
 					return array(messenger('image',$name,'uploaded'),$id);
 				}
 			}
