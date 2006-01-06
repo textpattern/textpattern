@@ -185,7 +185,7 @@ $LastChangedRevision$
 	if ($permlink_mode != 'messy') {
 		$rs = safe_column("name","txp_section", "1");
 		foreach ($rs as $name) {
-			if (@file_exists($path_to_site.'/'.$name))
+			if ($name and @file_exists($path_to_site.'/'.$name))
 				$fail['old_placeholder_exists'] = gTxt('old_placeholder').": {$path_to_site}/{$name}";
 		}
 	}
