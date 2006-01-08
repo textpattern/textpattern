@@ -1,6 +1,7 @@
 Changes since 4.0.3:
 
 * Remember and automatically reuse thumbnail size settings
+* Textile: fix inline class/style/lang
 
 Changes since 4.0.2:
 

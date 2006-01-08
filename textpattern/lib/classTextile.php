@@ -290,7 +290,7 @@ class Textile
             }
 
             if (preg_match("/\{([^}]*)\}/", $matched, $sty)) {
-                $style[] = $sty[1] . ';';
+                $style[] = rtrim($sty[1], ';') . ';';
                 $matched = str_replace($sty[0], '', $matched);
             }
 
@@ -525,7 +525,7 @@ class Textile
                 ([$pnct]*)
                 $f
                 (?:$|([\]}])|(?=[[:punct:]]{1,2}|\s))
-            /xU", array(&$this, "fSpan"), $text);
+            /x", array(&$this, "fSpan"), $text);
         }
         return $text;
     }
