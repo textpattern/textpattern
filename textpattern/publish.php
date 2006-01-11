@@ -222,7 +222,7 @@ $LastChangedRevision$
 			// another IIS fix
 		if (!$out['request_uri'] and serverSet('argv'))
 		{
-			$argv = serverSet('argv')
+			$argv = serverSet('argv');
 			$out['request_uri'] = @substr($argv[0], strpos($argv[0], ';' + 1));
 		}
 
