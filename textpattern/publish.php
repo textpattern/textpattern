@@ -216,12 +216,15 @@ $LastChangedRevision$
 			// some useful vars for taghandlers, plugins
 		$out['request_uri'] = serverSet('REQUEST_URI');
 		$out['qs'] = serverSet('QUERY_STRING');
-			// IIS - can someone confirm whether or not this works?
-		if (!$out['request_uri'] and $argv = serverSet('argv'))
-			$out['request_uri'] = @substr($argv[0], strpos($argv[0], ';' + 1));
-			// IIS again - given that the above doesn't always seem to help...
+			// IIS fix 
 		if (!$out['request_uri'] and serverSet('SCRIPT_NAME'))
 			$out['request_uri'] = serverSet('SCRIPT_NAME').( (serverSet('QUERY_STRING')) ? '?'.serverSet('QUERY_STRING') : '');
+			// another IIS fix
+		if (!$out['request_uri'] and serverSet('argv'))
+		{
+			$argv = serverSet('argv')
+			$out['request_uri'] = @substr($argv[0], strpos($argv[0], ';' + 1));
+		}
 
 			// define the useable url, minus any subdirectories.
 			// this is pretty fugly, if anyone wants to have a go at it - dean
