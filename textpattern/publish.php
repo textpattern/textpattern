@@ -602,7 +602,8 @@ $LastChangedRevision$
 		//do not paginate if we are on a custom list
 		if (!$iscustom and !$issticky)
 		{
-			$total = safe_count('textpattern',$where) - $offset;
+			$grand_total = safe_count('textpattern',$where);
+			$total = $grand_total - $offset;
 			$numPages = ceil($total/$pageby);  
 			$pg = (!$pg) ? 1 : $pg;
 			$pgoffset = $offset + (($pg - 1) * $pageby).', ';	
@@ -611,6 +612,7 @@ $LastChangedRevision$
 			$pageout['numPages'] = $numPages;
 			$pageout['s']        = $s;
 			$pageout['c']        = $c;
+			$pageout['grand_total'] = $grand_total;
 			$pageout['total']    = $total;
 
 			global $thispage;	

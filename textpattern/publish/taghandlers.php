@@ -1280,7 +1280,7 @@ $LastChangedRevision$
 	function search_result_count($atts)
 	{
 		global $thispage;
-		$t = @$thispage['total'];
+		$t = @$thispage['grand_total'];
 		extract(lAtts(array(
 			'text'     => ($t == 1 ? gTxt('article_found') : gTxt('articles_found')),
 		),$atts));
