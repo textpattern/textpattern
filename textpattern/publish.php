@@ -229,7 +229,7 @@ $LastChangedRevision$
 			// define the useable url, minus any subdirectories.
 			// this is pretty fugly, if anyone wants to have a go at it - dean
 		$out['subpath'] = $subpath = preg_quote(preg_replace("/http:\/\/.*(\/.*)/Ui","$1",hu),"/");
-		$out['req'] = $req = preg_replace("/^$subpath/i","/",serverSet('REQUEST_URI'));
+		$out['req'] = $req = preg_replace("/^$subpath/i","/",$out['request_uri']);
 
 		$is_404 = 0;
 
