@@ -1301,12 +1301,22 @@ $LastChangedRevision$
 </html>
 eod;
 
-		$GLOBALS['txp_error_message'] = $msg;
-		$GLOBALS['txp_error_status'] = $status;
-		$GLOBALS['txp_error_code'] = $code;
-
 		header("Content-type: text/html; charset=utf-8");
-		die(parse($out));
+
+		if (is_callable('parse')) {
+
+			$GLOBALS['txp_error_message'] = $msg;
+			$GLOBALS['txp_error_status'] = $status;
+			$GLOBALS['txp_error_code'] = $code;
+
+			die(parse($out));
+		}
+		else {
+			$out = preg_replace(array('@<txp:error_status[^>]*/>@', '@<txp:error_message[^>]*/>@'),
+				array($status, $message),
+				$out);
+			die($out);		
+		}
 	}
 
 // -------------------------------------------------------------
