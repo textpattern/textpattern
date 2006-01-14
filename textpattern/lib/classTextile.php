@@ -677,10 +677,10 @@ function refs($m)
     {
         return preg_replace_callback("/
             (?:^|(?<=[\s\(])|([[{]))        # before
-            (?:@|<code>)                               
+            @                               
             (?:\|(\w+)\|)?                  # lang
             (.+)                            # code
-            (?:@|<\/code>)                               
+            @                               
             (?:$|([\]}])|
             (?=[[:punct:]]{1,2}|
             \s|$))                           # after
