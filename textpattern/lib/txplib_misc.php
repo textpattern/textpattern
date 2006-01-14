@@ -1313,7 +1313,7 @@ eod;
 		}
 		else {
 			$out = preg_replace(array('@<txp:error_status[^>]*/>@', '@<txp:error_message[^>]*/>@'),
-				array($status, $message),
+				array($status, $msg),
 				$out);
 			die($out);		
 		}
