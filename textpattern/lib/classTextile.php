@@ -369,6 +369,8 @@ class Textile
                     $cell = $cmtch[2];
                 } else $catts = '';
 
+                $cell = $this->span($cell);
+
                 if (trim($cell) != '')
                     $cells[] = "\t\t\t<t$ctyp$catts>$cell</t$ctyp>";
             }
