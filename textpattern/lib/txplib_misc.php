@@ -1398,4 +1398,42 @@ eod;
 		if (in_array($production_status, array('debug', 'test')))
 			 @$txptrace[] = str_repeat("\t", @$txptracelevel).$msg;
 	}
+
+
+// -------------------------------------------------------------
+	function relative_path($path, $pfx=txpath)
+	{
+		return preg_replace('@^'.preg_quote($pfx, '@').'@', '', $path);
+	}
+
+// -------------------------------------------------------------
+	function get_caller($num=1)
+	{
+		$out = array();
+		if (!is_callable('debug_backtrace'))
+			return $out;
+
+		$bt = debug_backtrace();
+		for ($i=2; $i< $num+2; $i++) {
+			if (!empty($bt[$i])) {
+				$t = '';
+				if (!empty($bt[$i]['file']))
+					$t .= relative_path($bt[$i]['file']);
+				if (!empty($bt[$i]['line']))
+					$t .= ':'.$bt[$i]['line'];
+				if ($t)
+					$t .= ' ';
+				if (!empty($bt[$i]['class']))
+					$t .= $bt[$i]['class'];
+				if (!empty($bt[$i]['type']))
+					$t .= $bt[$i]['type'];
+				if (!empty($bt[$i]['function']))
+					$t .= $bt[$i]['function'].'()';
+
+				$out[] = $t;
+			}
+		}
+		return $out;
+	}
+
 ?>
