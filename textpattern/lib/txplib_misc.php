@@ -411,7 +411,7 @@ $LastChangedRevision$
 		printf ("<pre>".gTxt('plugin_load_error').' <b>%s</b> -> <b>%s: %s on line %s</b></pre>',
 				$txp_current_plugin, $error[$errno], $errstr, $errline);
 		if ($production_status == 'debug')
-			print "\n<pre><code>".join("\n", get_caller(5))."</code></pre>";
+			print "\n<pre style=\"padding-left: 2em;\" class=\"backtrace\"><code>".join("\n", get_caller(10))."</code></pre>";
 	}
 
 // -------------------------------------------------------------
@@ -430,7 +430,7 @@ $LastChangedRevision$
 		printf ("<pre>".gTxt('tag_error').' <b>%s</b> -> <b> %s: %s %s</b></pre>',
 				htmlspecialchars($txp_current_tag), $error[$errno], $errstr, $errline );
 		if ($production_status == 'debug')
-			print "\n<pre><code>".join("\n", get_caller(5))."</code></pre>";
+			print "\n<pre style=\"padding-left: 2em;\" class=\"backtrace\"><code>".join("\n", get_caller(10))."</code></pre>";
 	}
 
 // -------------------------------------------------------------
@@ -1431,8 +1431,15 @@ eod;
 					$t .= $bt[$i]['class'];
 				if (!empty($bt[$i]['type']))
 					$t .= $bt[$i]['type'];
-				if (!empty($bt[$i]['function']))
-					$t .= $bt[$i]['function'].'()';
+				if (!empty($bt[$i]['function'])) {
+					$t .= $bt[$i]['function'];
+
+					if (!empty($bt[$i]['args']))
+						$t .= '('.@join(', ', $bt[$i]['args']).')';
+					else 
+						$t .= '()';
+				}
+				
 
 				$out[] = $t;
 			}
