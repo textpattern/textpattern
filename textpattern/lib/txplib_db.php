@@ -66,8 +66,10 @@ $DB = new DB;
 		$time = sprintf('%02.6f', getmicrotime() - $start);
 		@$qtime += $time;
 		@$qcount++;
-		if ($result === false and (@$production_status == 'debug' or @$production_status == 'test'))
-			trigger_error(mysql_error() . n . $q . n . join("\n", get_caller()), E_USER_WARNING);
+		if ($result === false and (@$production_status == 'debug' or @$production_status == 'test')) {
+			$caller = ($production_status == 'test') ? n . join("\n", get_caller()) : '';
+			trigger_error(mysql_error() . n . $q . $caller, E_USER_WARNING);
+		}
 
 		trace_add("[SQL ($time): $q]");
 
