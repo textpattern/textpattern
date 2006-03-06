@@ -5,6 +5,7 @@ $HeadURL$
 $LastChangedRevision$
 */
 
+	if (!defined('txpinterface')) die('txpinterface is undefined.');
 
 	if ($event == 'css') {
 		require_privs('css');

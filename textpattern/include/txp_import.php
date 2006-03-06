@@ -5,7 +5,8 @@ $HeadURL$
 $LastChangedRevision$
 */
 
-	
+	if (!defined('txpinterface')) die('txpinterface is undefined.');
+
 	// TO-DO:
 	// * Improve performance of file imports
 	// * Test a php_ini format for blogger exports

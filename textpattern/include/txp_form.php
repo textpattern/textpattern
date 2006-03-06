@@ -14,6 +14,8 @@ $LastChangedRevision$
 
 */
 
+	if (!defined('txpinterface')) die('txpinterface is undefined.');
+
 	global $vars;
 	$vars = array('Form','type','name','savenew','oldname');
 	$essential_forms = array('comments','comments_display','comment_form','default','Links','files');

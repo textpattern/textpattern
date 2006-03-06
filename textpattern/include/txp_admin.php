@@ -14,6 +14,8 @@ $LastChangedRevision$
 
 */
 
+if (!defined('txpinterface')) die('txpinterface is undefined.');
+
 $levels = array(
 	1 => gTxt('publisher'),
 	2 => gTxt('managing_editor'),

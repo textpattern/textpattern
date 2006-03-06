@@ -14,6 +14,8 @@ $LastChangedRevision$
 
 */
 
+	if (!defined('txpinterface')) die('txpinterface is undefined.');
+
 	global $extensions;
 	$extensions = array(0,'.gif','.jpg','.png','.swf');
 	define("IMPATH",$path_to_site.'/'.$img_dir.'/');

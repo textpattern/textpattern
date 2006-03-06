@@ -14,6 +14,8 @@ $LastChangedRevision$
 
 */
 
+if (!defined('txpinterface')) die('txpinterface is undefined.');
+
 function doAuth() {
 	global $txp_user;
 			
@@ -60,7 +62,7 @@ function doAuth() {
 		global $txpcfg;
 		include txpath.'/lib/txplib_head.php';
 		pagetop('log in');
-		$stay = (cs('txp_nostay') == 1);
+		$stay = !(cs('txp_nostay') == 1);
 		echo
 		form(
 			startTable('edit').

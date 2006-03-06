@@ -14,6 +14,8 @@ $LastChangedRevision$
 
 */
 
+	if (!defined('txpinterface')) die('txpinterface is undefined.');
+
 	if ($event == 'plugin') {
 		require_privs('plugin');		
 

@@ -16,8 +16,9 @@
 $HeadURL$
 $LastChangedRevision$
 
-
 */
+
+	if (!defined('txpinterface')) die('txpinterface is undefined.');
 
 	$levels = array(
 		1 => gTxt('private'),

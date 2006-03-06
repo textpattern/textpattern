@@ -11,8 +11,9 @@
 
 $HeadURL$
 $LastChangedRevision$
-
 */
+
+if (!defined('txpinterface')) die('txpinterface is undefined.');
 
 if ($event == 'category') {
 	require_privs('category');	

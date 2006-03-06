@@ -11,7 +11,7 @@ $LastChangedRevision$
 
 */
 
-//	dmp($_POST);
+	if (!defined('txpinterface')) die('txpinterface is undefined.');
 
 	global $statuses;
 	$statuses = array(

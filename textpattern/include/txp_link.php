@@ -14,6 +14,8 @@ $LastChangedRevision$
 
 */
 
+	if (!defined('txpinterface')) die('txpinterface is undefined.');
+
 	global $vars;
 	$vars = array('category', 'url', 'linkname', 'linksort', 'description', 'id');
 

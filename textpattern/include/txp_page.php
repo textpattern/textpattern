@@ -12,6 +12,7 @@ $HeadURL$
 $LastChangedRevision$
 
 */
+	if (!defined('txpinterface')) die('txpinterface is undefined.');
 
 	if ($event == 'page') {
 		require_privs('page');		

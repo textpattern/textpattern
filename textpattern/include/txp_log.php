@@ -14,6 +14,7 @@ $HeadURL$
 $LastChangedRevision$
 
 */
+	if (!defined('txpinterface')) die('txpinterface is undefined.');
 
 	if ($event == 'log') {
 		require_privs('log');
