@@ -703,15 +703,13 @@ $LastChangedRevision$
 
 		extract(lAtts(array(
 			'format' => '',
-			'lang'   => ''
+			'lang'   => '',
+			'gmt'    => '',
 		),$atts));	
 
 		if($format) {
-			if($format=='since') {
-				$date_out = since($thisarticle['posted']);
-			} else {
-				$date_out = safe_strftime($format,$date_offset);
-			}
+
+			$date_out = safe_strftime($format,$date_offset,$gmt,$lang);
 
 		} else {
 		
@@ -719,11 +717,7 @@ $LastChangedRevision$
 				$dateformat = $archive_dateformat; 
 			}
 
-			if($dateformat == "since") { 
-				$date_out = since($thisarticle['posted']); 
-			} else { 
-				$date_out = safe_strftime($dateformat,$date_offset); 
-			}
+			$date_out = safe_strftime($dateformat,$date_offset); 
 		}
 
 		if(!empty($wraptag)) $date_out = tag($date_out,$wraptag);
@@ -1039,14 +1033,11 @@ $LastChangedRevision$
 
 		extract(lAtts(array(
 			'format' => $comments_dateformat,
+			'gmt'    => '',
+			'lang'   => '',
 		), $atts));
 
-		if ($format == 'since')
-		{ 
-			$comment_time = since($thiscomment['time'] + tz_offset()); 
-		} else {
-			$comment_time = safe_strftime($format, $thiscomment['time']); 
-		}
+		$comment_time = safe_strftime($format, $thiscomment['time'], $gmt, $lang);
 		return $comment_time;
 	}
 
