@@ -87,9 +87,13 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-    function dmp($in) 
+    function dmp() 
     {
-		echo "<pre>", n, (is_array($in)) ? print_r($in) : $in, n, "</pre>";
+		$a = func_get_args();
+		echo "<pre>".n;
+		foreach ($a as $thing)
+			echo (is_scalar($thing) ? strval($thing) : var_export($thing, true)), n;
+		echo "</pre>".n;
     }
 
 // -------------------------------------------------------------
