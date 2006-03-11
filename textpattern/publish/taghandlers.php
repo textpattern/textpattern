@@ -132,8 +132,15 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function output_form($atts) 
 	{
-		extract(lAtts(array('form' => ''),$atts));
-		return ($form) ? parse(fetch('form','txp_form','name',doSlash($form))) : '';
+		extract(lAtts(array(
+			'form' => '',
+		), $atts));
+
+		if (!$form)
+			trigger_error(gTxt('form_not_specified'));
+		else
+			return parse(fetch_form($form));
+
 	}
 
 // -------------------------------------------------------------
