@@ -850,27 +850,6 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function since($stamp) 
-	{
-		$diff = (time() - $stamp);
-		if ($diff <= 3600) {
-			$mins = round($diff / 60);
-			$since = ($mins <= 1) 
-			?	($mins==1)
-				?	'1 '.gTxt('minute')
-				:	gTxt('a_few_seconds')
-			:	"$mins ".gTxt('minutes');
-		} else if (($diff <= 86400) && ($diff > 3600)) {
-			$hours = round($diff / 3600);
-			$since = ($hours <= 1) ? '1 '.gTxt('hour') : "$hours ".gTxt('hours');
-		} else if ($diff >= 86400) {
-			$days = round($diff / 86400);
-			$since = ($days <= 1) ? "1 ".gTxt('day') : "$days ".gTxt('days');
-		}
-		return $since.' '.gTxt('ago'); // sorry, this needs to be hacked until a truly multilingual version is done
-	}
-
-// -------------------------------------------------------------
 	function lastMod() 
 	{
 		$last = safe_field("unix_timestamp(val)", "txp_prefs", "`name`='lastmod' and prefs_id=1");

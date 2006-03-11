@@ -886,6 +886,27 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
+	function since($stamp) 
+	{
+		$diff = (time() - $stamp);
+		if ($diff <= 3600) {
+			$mins = round($diff / 60);
+			$since = ($mins <= 1) 
+			?	($mins==1)
+				?	'1 '.gTxt('minute')
+				:	gTxt('a_few_seconds')
+			:	"$mins ".gTxt('minutes');
+		} else if (($diff <= 86400) && ($diff > 3600)) {
+			$hours = round($diff / 3600);
+			$since = ($hours <= 1) ? '1 '.gTxt('hour') : "$hours ".gTxt('hours');
+		} else if ($diff >= 86400) {
+			$days = round($diff / 86400);
+			$since = ($days <= 1) ? "1 ".gTxt('day') : "$days ".gTxt('days');
+		}
+		return $since.' '.gTxt('ago'); // sorry, this needs to be hacked until a truly multilingual version is done
+	}
+
+// -------------------------------------------------------------
 // Calculate the offset between the server local time and the
 // user's selected time zone
 	function tz_offset()
@@ -901,19 +922,39 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 // Format a time, respecting the locale and local time zone,
 // and make sure the output string is safe for UTF-8
-	function safe_strftime($format, $time='')
+	function safe_strftime($format, $time='', $gmt=0, $override_locale='')
 	{
 		global $locale;
 
 		if (!$time)
 			$time = time();
 
-		$str = strftime($format, $time + tz_offset());
+		# we could add some other formats here
+		if ($format == 'iso8601' or $format == 'w3cdtf') {
+			$format = '%Y-%m-%dT%TZ';
+			$gmt = 1;
+		}
+		elseif ($format == 'rfc822') {
+			$format = '%a, %d %b %Y %T GMT';
+			$gmt = 1;
+			$override_locale = 'en-gb';
+		}
+
+		if ($override_locale)
+			getlocale($override_locale);
+
+		if ($format == 'since')
+			$str = since($time);
+		elseif ($gmt)
+			$str = gmstrftime($format, $time);
+		else
+			$str = strftime($format, $time + tz_offset());
+
 		@list($lang, $charset) = explode('.', $locale);
 		if (empty($charset))
 			$charset = 'ISO-8859-1';
 
-		if ($charset != 'UTF-8') {
+		if ($charset != 'UTF-8' and $format != 'since') {
 			$new = '';
 			if (is_callable('iconv')) 
 				$new = @iconv($charset, 'UTF-8', $str);
@@ -923,6 +964,10 @@ $LastChangedRevision$
 			elseif (is_callable('utf8_encode'))
 				$str = utf8_encode($str);
 		}
+
+		# revert to the old locale
+		if ($override_locale)
+			setlocale(LC_ALL, $locale);
 
 		return $str;
 	}
@@ -1135,8 +1180,12 @@ $LastChangedRevision$
 		if (isset($forms[$name]))
 			$f = $forms[$name];
 		else {
-			$f = fetch('Form','txp_form','name',doSlash($name));
-			if (!$f) return graf('form '.strong($name).' does not exist');
+			$row = safe_row('Form', 'txp_form',"name='".doSlash($name)."'");
+			if (!$row) {
+				trigger_error(gTxt('form_not_found').': '.$name);
+				return;
+			}
+			$f = $row['Form'];
 			$forms[$name] = $f;
 		}
 
@@ -1445,6 +1494,52 @@ eod;
 			}
 		}
 		return $out;
+	}
+
+//-------------------------------------------------------------
+// function name is misleading but remains for legacy reasons
+// this actually sets the locale
+	function getlocale($lang) {
+		global $locale;
+
+		if (empty($locale))
+			$locale = @setlocale(LC_TIME, '0');
+
+		// Locale identifiers vary from system to system.  The
+		// following code will attempt to discover which identifiers
+		// are available.  We'll need to expand these lists to 
+		// improve support.
+		// ISO identifiers: http://www.w3.org/WAI/ER/IG/ert/iso639.htm
+		// Windows: http://msdn.microsoft.com/library/default.asp?url=/library/en-us/vclib/html/_crt_language_strings.asp
+		$guesses = array(
+			'cs-cz' => array('cs_CZ.UTF-8', 'cs_CZ', 'ces', 'cze', 'cs', 'csy', 'czech', 'cs_CZ.cs_CZ.ISO_8859-2'),
+			'de-de' => array('de_DE.UTF-8', 'de_DE', 'de', 'deu', 'german', 'de_DE.ISO_8859-1'),
+			'en-gb' => array('en_GB.UTF-8', 'en_GB', 'en_UK', 'eng', 'en', 'english-uk', 'english', 'en_GB.ISO_8859-1'),
+			'en-us' => array('en_US.UTF-8', 'en_US', 'english-us', 'en_US.ISO_8859-1'),
+			'es-es' => array('es_ES.UTF-8', 'es_ES', 'esp', 'spanish', 'es_ES.ISO_8859-1'),
+			'el-gr' => array('el_GR.UTF-8', 'el_GR', 'el', 'gre', 'greek', 'el_GR.ISO_8859-7'),
+			'fr-fr' => array('fr_FR.UTF-8', 'fr_FR', 'fra', 'fre', 'fr', 'french', 'fr_FR.ISO_8859-1'),
+			'fi-fi' => array('fi_FI.UTF-8', 'fi_FI', 'fin', 'fi', 'finnish', 'fi_FI.ISO_8859-1'),
+			'it-it' => array('it_IT.UTF-8', 'it_IT', 'it', 'ita', 'italian', 'it_IT.ISO_8859-1'),
+			'id-id' => array('id_ID.UTF-8', 'id_ID', 'id', 'ind', 'indonesian','id_ID.ISO_8859-1'),
+			'ja-jp' => array('ja_JP.UTF-8', 'ja_JP', 'ja', 'jpn', 'japanese', 'ja_JP.ISO_8859-1'),
+			'no-no' => array('no_NO.UTF-8', 'no_NO', 'no', 'nor', 'norwegian', 'no_NO.ISO_8859-1'),
+			'nl-nl' => array('nl_NL.UTF-8', 'nl_NL', 'dut', 'nla', 'nl', 'nld', 'dutch', 'nl_NL.ISO_8859-1'),
+			'pt-pt' => array('pt_PT.UTF-8', 'pt_PT', 'por', 'portuguese', 'pt_PT.ISO_8859-1'),
+			'ru-ru' => array('ru_RU.UTF-8', 'ru_RU', 'ru', 'rus', 'russian', 'ru_RU.ISO8859-5'),
+			'sk-sk' => array('sk_SK.UTF-8', 'sk_SK', 'sk', 'slo', 'slk', 'sky', 'slovak', 'sk_SK.ISO_8859-1'),
+			'sv-se' => array('sv_SE.UTF-8', 'sv_SE', 'sv', 'swe', 'sve', 'swedish', 'sv_SE.ISO_8859-1'),
+			'th-th' => array('th_TH.UTF-8', 'th_TH', 'th', 'tha', 'thai', 'th_TH.ISO_8859-11')
+		);
+
+		if (!empty($guesses[$lang])) {
+			$l = @setlocale(LC_TIME, $guesses[$lang]);
+			if ($l !== false)
+				$locale = $l;
+		}
+		@setlocale(LC_TIME, $locale);
+
+		return $locale;
 	}
 
 ?>
