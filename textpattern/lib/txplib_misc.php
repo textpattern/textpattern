@@ -92,7 +92,7 @@ $LastChangedRevision$
 		$a = func_get_args();
 		echo "<pre>".n;
 		foreach ($a as $thing)
-			echo (is_scalar($thing) ? strval($thing) : var_export($thing, true)), n;
+			echo htmlspecialchars(is_scalar($thing) ? strval($thing) : var_export($thing, true)), n;
 		echo "</pre>".n;
     }
 
