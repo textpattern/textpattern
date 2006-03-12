@@ -361,10 +361,8 @@ $LastChangedRevision$
 			'labeltag' => '',
 		),$atts));
 		
-		global $id,$thisid,$thisarticle;
+		global $id,$thisarticle;
 		
-		$id = ($thisid) ? $thisid : $id;
-
 		$cats = doSlash(safe_row("Category1,Category2","textpattern", "ID='$id' limit 1"));
 
 		if (!empty($cats['Category1']) or !empty($cats['Category2'])) {
