@@ -1546,4 +1546,20 @@ eod;
 		return $locale;
 	}
 
+//-------------------------------------------------------------
+	function assert_article() {
+		global $thisarticle;
+		if (empty($thisarticle))
+         trigger_error(gTxt('error_article_context'));
+	}
+
+//-------------------------------------------------------------
+	function assert_comment() {
+		global $thiscomment;
+		if (empty($thiscomment))
+         trigger_error(gTxt('error_comment_context'));
+	}
+
+
+
 ?>
