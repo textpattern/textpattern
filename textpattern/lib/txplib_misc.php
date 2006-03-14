@@ -356,7 +356,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function load_plugin($name)
 	{
-		global $plugins, $prefs, $txp_current_plugin;
+		global $plugins, $plugins_ver, $prefs, $txp_current_plugin;
 
 		if (is_array($plugins) and in_array($name,$plugins)) {
 			return true;
@@ -369,14 +369,16 @@ $LastChangedRevision$
 				set_error_handler("pluginErrorHandler");
 				$txp_current_plugin = $name;
 				include($dir . $name . '.php');
+				$plugins_ver[$name] = @$plugin['version'];
 				restore_error_handler();
 				return true;
 			}
 		}
 							
-		$rs = safe_row("name,code","txp_plugin","status='1' AND name='".doSlash($name)."'");
+		$rs = safe_row("name,code,version","txp_plugin","status='1' AND name='".doSlash($name)."'");
 		if ($rs) {
 			$plugins[] = $rs['name'];
+			$plugins_ver[$rs['name']] = $rs['version'];
 			
 			set_error_handler("pluginErrorHandler");
 			$txp_current_plugin = $rs['name'];
@@ -440,7 +442,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
    function load_plugins($type=NULL)
    {
-		global $prefs,$plugins;
+		global $prefs,$plugins, $plugins_ver;
 		
 		if (!is_array($plugins)) $plugins = array();
 		
@@ -457,12 +459,13 @@ $LastChangedRevision$
 		if ($type !== NULL)
 			$where .= (" and type='".doSlash($type)."'");
 
-		$rs = safe_rows("name, code", "txp_plugin", $where);
+		$rs = safe_rows("name, code, version", "txp_plugin", $where);
 		if ($rs) {
 			$old_error_handler = set_error_handler("pluginErrorHandler");
 			foreach($rs as $a) {
 				if (!in_array($a['name'],$plugins)) {
 					$plugins[] = $a['name'];
+					$plugins_ver[$a['name']] = $a['version'];
 					$GLOBALS['txp_current_plugin'] = $a['name'];
 					$eval_ok = eval($a['code']);
 					if ($eval_ok === FALSE) 

@@ -1917,6 +1917,18 @@ $LastChangedRevision$
 		return parse(EvalElse($thing, !empty($thisarticle['is_last'])));
 	}
 
+// -------------------------------------------------------------
+	function if_plugin($atts, $thing) 
+	{
+		global $plugins, $plugins_ver;
+		extract(lAtts(array(
+			'name'    => '',
+			'ver'     => '',
+		),$atts));	
+
+		return parse(EvalElse($thing, @in_array($name, $plugins) and (!$ver or version_compare($plugins_ver[$name], $ver) >= 0)));
+	}
+
 //--------------------------------------------------------------------------
 //File tags functions. 
 //--------------------------------------------------------------------------

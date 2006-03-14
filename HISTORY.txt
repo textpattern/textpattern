@@ -2,6 +2,8 @@ Changes since 4.0.3:
 
 * Remember and automatically reuse thumbnail size settings
 * Textile: fix inline class/style/lang
+* Warn when article and comment tags are used in the wrong place
+* New "if_plugin" conditional checks for an active plugin, with optional version number
 
 Changes since 4.0.2:
 
