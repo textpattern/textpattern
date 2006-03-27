@@ -77,7 +77,8 @@ $LastChangedRevision$
 				extract($a);				
 				$elink = eLink('link','link_edit','id',$id,$linkname);
 				$cbox = fInput('checkbox','selected[]',$id);
-					
+				$category = fetch_category_title($category, 'link');
+
 				echo tr(
 						td($elink).
 						td($description).

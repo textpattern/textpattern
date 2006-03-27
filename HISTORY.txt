@@ -13,7 +13,7 @@ Changes since 4.0.3:
 * fix label attribute breadcrumb function (richard)
 * add if_author, if_article_author (with attribute 'name') (mary)
 * allow multiple sections for if_article_section (like for if_section, if_category) (mary)
-
+* display link category's title, rather than name, in the links page. (mary)
 
 Changes since 4.0.2:
 
