@@ -9,9 +9,11 @@ Changes since 4.0.3:
 * Add backtrace list to error messages in Debug mode
 * Add limit attribute to search_result_excerpt tag
 * Add escape and default attributes to custom_field tag
-* fix image-upload for outdated gdlib-installations
-* fix label attribute breadcrumb function
-* add if_author, if_article_author (with attribute 'name')
+* fix image-upload for outdated gdlib-installations (wet)
+* fix label attribute breadcrumb function (richard)
+* add if_author, if_article_author (with attribute 'name') (mary)
+* allow multiple sections for if_article_section (like for if_section, if_category) (mary)
+
 
 Changes since 4.0.2:
 

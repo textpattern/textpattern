@@ -1813,7 +1813,7 @@ function body($atts)
 
 		$section = $thisarticle['section'];
 
-		return parse(EvalElse($thing, ($section == $name)));
+		return parse(EvalElse($thing, in_list($section, $name)));
 	}
 
 //--------------------------------------------------------------------------
