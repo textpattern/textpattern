@@ -920,7 +920,8 @@ $LastChangedRevision$
 	{	
 		global $gmtoffset, $is_dst;
 
-		$serveroffset = gmmktime(0,0,0) - mktime(0,0,0);
+		extract(getdate());
+		$serveroffset = gmmktime(0,0,0,$mon,$mday,$year) - mktime(0,0,0,$mon,$mday,$year);
 		$offset = $gmtoffset - $serveroffset;
 		
 		return $offset + ($is_dst ? 3600 : 0);
