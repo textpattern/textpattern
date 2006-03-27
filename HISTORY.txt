@@ -14,6 +14,7 @@ Changes since 4.0.3:
 * add if_author, if_article_author (with attribute 'name') (mary)
 * allow multiple sections for if_article_section (like for if_section, if_category) (mary)
 * display link category's title, rather than name, in the links page. (mary)
+* extend article_image tag to optionally display the article image thumbnail. (mary)
 
 Changes since 4.0.2:
 

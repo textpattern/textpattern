@@ -1288,38 +1288,67 @@ function body($atts)
 	}
 
 // -------------------------------------------------------------
-	function article_image($atts) 
+	function article_image($atts)
 	{
-		global $thisarticle,$img_dir;
+		global $thisarticle, $img_dir;
+
 		assert_article();
 
 		extract(lAtts(array(
-			'style' => '',
-			'align' => ''
+			'style' 	=> '',
+			'align' 	=> '',
+			'thumbnail' => 0
 		),$atts));	
 
-		$theimage = ($thisarticle['article_image']) ? $thisarticle['article_image'] : '';
-		
-		if ($theimage) {
-		
-			if (is_numeric($theimage)) {
-				$rs = safe_row("*",'txp_image',"id='$theimage'");
-				if ($rs) {
-					extract($rs);
-					$out = array(
-						'<img',
-						'src="'.hu.$img_dir.'/'.$id.$ext.'"',
-						'height="'.$h.'" width="'.$w.'" alt="'.$alt.'"',
-						(!empty($style)) ? 'style="'.$style.'"' : '',
-						(!empty($align)) ? 'align="'.$align.'"' : '',
-						' />'
-					);			
-					return join(' ',$out);
-				}
-			} else {
-				return '<img src="'.$theimage.'" alt="" />';
+		$image = ($thisarticle['article_image']) ? $thisarticle['article_image'] : '';
+
+		if ($image)
+		{
+			if (!is_numeric($image))
+			{
+				return '<img src="'.$image.'" alt="" />';
 			}
-		}
+			else			
+			{
+				$rs = safe_row('*', 'txp_image', "id = '$image'");
+
+				if ($rs)
+				{
+					if ($thumbnail)
+					{
+						if ($rs['thumbnail'])
+						{
+							extract($rs);
+
+							$out = array(
+								'<img src="'.hu.$img_dir.'/'.$id.'t'.$ext.'" alt="'.$alt.'"'.
+								(!empty($style) ? 'style="'.$style.'"' : '').
+								(!empty($align) ? 'align="'.$align.'"' : '').
+								' />'
+							);
+
+							return join(' ', $out);
+						}
+					}
+
+					else
+					{
+						extract($rs);
+
+						$out = array(
+							'<img src="'.hu.$img_dir.'/'.$id.$ext.'" width="'.$w.'" height="'.$h.'" alt="'.$alt.'"'.
+							(!empty($style) ? 'style="'.$style.'"' : '').
+							(!empty($align) ? 'align="'.$align.'"' : '').
+							' />'
+						);
+
+						return join(' ', $out);
+					}
+				} //if ($rs)
+			}
+		} //if ($image)
+
+		return '';
 	}
 
 // -------------------------------------------------------------
