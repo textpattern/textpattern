@@ -252,10 +252,10 @@ $LastChangedRevision$
 					// urldecode(strtolower(urlencode())) looks ugly but is the only way to
 					// make it multibyte-safe without breaking backwards-compatibility
 					case urldecode(strtolower(urlencode(gTxt('section')))):
-						$out['s'] = (ckEx('section',$u2)) ? $u2 : ''; break;
+						$out['s'] = (ckEx('section',$u2)) ? $u2 : ''; $is_404 = empty($out['s']); break;
 	
 					case urldecode(strtolower(urlencode(gTxt('category')))):
-						$out['c'] = (ckEx('category',$u2)) ? $u2 : ''; break;
+						$out['c'] = (ckEx('category',$u2)) ? $u2 : ''; $is_404 = empty($out['c']); break;
 	
 					case urldecode(strtolower(urlencode(gTxt('author')))):
 						$out['author'] = (!empty($u2)) ? $u2 : ''; break;
