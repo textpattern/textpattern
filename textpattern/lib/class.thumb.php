@@ -236,7 +236,13 @@ class wet_thumb {
 	
         if ($this->_DST['type'] == 1)	{
 	    imagetruecolortopalette($this->_DST['image'], false, 256);
-	    imagegif($this->_DST['image'], $this->_DST['file']);
+		if ( function_exists ('imagegif') ) {
+			imagegif($this->_DST['image'], $this->_DST['file']);
+		} else {
+			imagedestroy($this->_DST['image']);
+			imagedestroy($this->_SRC['image']);
+			return false;
+		}
 	}
 	elseif ($this->_DST['type'] == 2) {
 	    imagejpeg($this->_DST['image'], $this->_DST['file'], $this->quality);
