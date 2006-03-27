@@ -1804,10 +1804,16 @@ $LastChangedRevision$
 		
 		extract(lAtts(array(
 			'name' => @$prefs['custom_1_set'],
+			'escape' => '',
+			'default' => '',
 		),$atts));
 
-		if (isset($thisarticle[$name]))
-			return $thisarticle[$name];
+		if (!empty($thisarticle[$name]))
+			$out = $thisarticle[$name];
+		else
+			$out = $default;
+
+		return ($escape == 'html' ? escape_output($out) : $out);
 	}	
 	
 //--------------------------------------------------------------------------
