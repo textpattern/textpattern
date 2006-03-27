@@ -4,6 +4,11 @@ Changes since 4.0.3:
 * Textile: fix inline class/style/lang
 * Warn when article and comment tags are used in the wrong place
 * New "if_plugin" conditional checks for an active plugin, with optional version number
+* Fix an occasional time zone bug
+* Fix 404 errors on clean category URLs
+* Add backtrace list to error messages in Debug mode
+* Add limit attribute to search_result_excerpt tag
+* Add escape and default attributes to custom_field tag
 
 Changes since 4.0.2:
 
