@@ -1462,9 +1462,11 @@ eod;
 
 
 // -------------------------------------------------------------
-	function relative_path($path, $pfx=txpath)
+	function relative_path($path, $pfx=NULL)
 	{
-		return preg_replace('@^'.preg_quote($pfx, '@').'@', '', $path);
+		if ($pfx === NULL)
+			$pfx = dirname(txpath);
+		return preg_replace('@^/'.preg_quote(ltrim($pfx, '/'), '@').'/?@', '', $path);
 	}
 
 // -------------------------------------------------------------
