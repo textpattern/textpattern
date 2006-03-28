@@ -221,6 +221,37 @@ $LastChangedRevision$
 		}
 	}
 
+	# Check revs & md5 against stable release, if possible
+	$dev_files = $old_files = $modified_files = array();
+	if ($cs = @file(txpath.'/checksums.txt')) {
+		foreach ($cs as $c) {
+			if (preg_match('@^(\S+): r?(\S+) \((.*)\)$@', trim($c), $m)) {
+				list(,$file,$rev,$md5) = $m;
+				if (!empty($file_revs[$file]) and $rev and $file_revs[$file] < $rev) {
+					$old_files[] = $file;
+				}
+				elseif (!empty($file_revs[$file]) and $rev and $file_revs[$file] > $rev) {
+					$dev_files[] = $file;
+				}
+				elseif (@is_readable(txpath . $file) and ($sum=md5_file(txpath . $file)) != $md5) {
+					$modified_files[] = $file;
+				}
+			}
+		}
+	}
+
+	# files that haven't been updated
+	if ($old_files)
+		$fail['old_files'] = gTxt('old_files').cs.join(', '.n.t, $old_files);
+
+	# files that don't match their checksums
+	if ($modified_files)
+		$fail['modified_files'] = gTxt('modified_files').cs.join(', '.n.t, $modified_files);
+
+	# running development code in live mode is not recommended
+	if ($dev_files and $production_status == 'live')
+		$fail['dev_version_live'] = gTxt('dev_version_live').cs.join(', '.n.t, $dev_files);
+
 
 	echo 
 	pagetop(gTxt('tab_diagnostics'),''),
