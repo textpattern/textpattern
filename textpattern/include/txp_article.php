@@ -474,9 +474,9 @@ if (!empty($event) and $event == 'article') {
 	//-- author --------------
 	
 		if ($view=="text" && $step != "create") {
-			echo "<p><small>".gTxt('posted_by')." $AuthorID: ",date("H:i, d M y",$sPosted + tz_offset());
+			echo "<p><small>".gTxt('posted_by')." $AuthorID: ",safe_strftime('%H:%M %d %b %Y',$sPosted);
 			if($sPosted != $sLastMod) {
-				echo br.gTxt('modified_by')." $LastModID: ", date("H:i, d M y",$sLastMod + tz_offset());
+				echo br.gTxt('modified_by')." $LastModID: ", safe_strftime('%H:%M %d %b %Y',$sLastMod);
 			}
 				echo '</small></p>';
 			}

@@ -92,7 +92,7 @@ $LastChangedRevision$
 				extract($a);
 						
 				$stat = (!empty($Status)) ? $statuses[$Status] : '';
-				$adate = date("d M y",$uPosted+tz_offset());
+				$adate = safe_strftime('%d %b %Y', $uPosted);
 		
 				$alink = eLink('article','edit','ID',$ID,$adate);
 				$tlink = eLink('article','edit','ID',$ID,$Title);

@@ -79,7 +79,7 @@ $LastChangedRevision$
 				:	'<a href="'.htmlspecialchars($page).'" target="_blank">'.chunk($pageprint,60).'</a>';
 				if ($method == 'POST')
 					$pageprint = '<b>'.$pageprint.'</b>';
-				$fstamp = date("n/j g:i a",($stamp + tz_offset()));
+				$fstamp = safe_strftime('%b %e %I:%M %p', $stamp);
 
 				$hostprint = chunk($host, 50);
 				

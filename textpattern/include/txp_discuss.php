@@ -96,7 +96,7 @@ $LastChangedRevision$
 			while ($a = nextRow($rs)) {
 				extract($a);
 				$dmessage = ($visible == SPAM) ? short_preview($message) : $message;
-				$date = "".date("M d, g:ia",($uPosted + tz_offset()))."";
+				$date = "".safe_strftime('%b %e %I:%M %p',$uPosted)."";
 				$editlink = eLink('discuss','discuss_edit','discussid',$discussid,$date);
 				$cbox = fInput('checkbox','selected[]',$discussid);
 	
