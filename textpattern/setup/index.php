@@ -295,6 +295,8 @@ eod;
 		define("PFX",trim($dprefix));
 		define('TXP_INSTALL', 1);
 
+		$name = addslashes(gps('name'));
+
 		include_once txpath.'/lib/txplib_update.php';
  		include txpath.'/setup/txpsql.php';
 
