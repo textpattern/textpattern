@@ -76,12 +76,12 @@ $LastChangedRevision$
 				$pageprint = preg_replace('/\/$/','', htmlspecialchars(substr($page,1)));
 				$pageprint = ($pageprint=='') 
 				?	'' 
-				:	'<a href="'.htmlspecialchars($page).'" target="_blank">'.chunk($pageprint,50).'</a>';
+				:	'<a href="'.htmlspecialchars($page).'" target="_blank">'.chunk($pageprint,60).'</a>';
 				if ($method == 'POST')
 					$pageprint = '<b>'.$pageprint.'</b>';
 				$fstamp = date("n/j g:i a",($stamp + tz_offset()));
 
-				$hostprint = chunk($host, 40);
+				$hostprint = chunk($host, 50);
 				
 				echo tr(
 					td($fstamp).
