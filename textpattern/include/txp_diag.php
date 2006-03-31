@@ -123,6 +123,11 @@ $LastChangedRevision$
 
 	$fail = array(
 
+		'php_version_4_3_0_required' =>
+		(!is_callable('version_compare') or version_compare(PHP_VERSION, '4.3.0', '<'))
+		? gTxt('php_version_4_3_0_required')
+		: '',
+
 		'path_to_site_missing' =>
 		(!isset($path_to_site))
 		? gTxt('path_to_site_missing')
