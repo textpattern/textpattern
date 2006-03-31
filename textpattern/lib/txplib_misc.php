@@ -379,6 +379,9 @@ $LastChangedRevision$
 		
 		if (!empty($prefs['plugin_cache_dir'])) {
 			$dir = rtrim($prefs['plugin_cache_dir'], '/') . '/';
+			# in case it's a relative path
+			if (!is_dir($dir))
+				$dir = realpath(txpath.$dir);
 			if (is_file($dir . $name . '.php')) {
 				$plugins[] = $name;
 				set_error_handler("pluginErrorHandler");
@@ -463,6 +466,9 @@ $LastChangedRevision$
 		
 		if (!empty($prefs['plugin_cache_dir'])) {
 			$dir = rtrim($prefs['plugin_cache_dir'], '/') . '/';
+			# allow a relative path
+			if (!is_dir($dir))
+				$dir = realpath(txpath.$dir);
 			$dh = @opendir($dir);
 			while ($dh and false !== ($f = @readdir($dh))) {
 				if ($f{0} != '.')
