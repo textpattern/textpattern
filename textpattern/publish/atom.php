@@ -37,7 +37,7 @@ $LastChangedRevision$
 
 		$out[] = tag($sitename,'title',t_text);
 		$out[] = tag($site_slogan,'subtitle',t_text);
-		$out[] = '<link'.r_relself.' href="'.pagelinkurl(array('atom'=>1)).'" />';
+		$out[] = '<link'.r_relself.' href="'.pagelinkurl(array('atom'=>1,'area'=>$area,'section'=>$section,'category'=>$category,'limit'=>$limit)).'" />';
 		$out[] = '<link'.r_relalt.t_texthtml.' href="'.hu.'" />';
 		$articles = array();
 
@@ -48,7 +48,7 @@ $LastChangedRevision$
 
 		$out[] = tag('Textpattern','generator',
 			' uri="http://textpattern.com/" version="'.$version.'"');
-		$out[] = tag(gmdate("Y-m-d\TH:i:s\Z",$last),'updated');
+		$out[] = tag(safe_strftime("w3cdtf",$last),'updated');
 
 
 		$auth[] = tag($pub['RealName'],'name');
@@ -98,14 +98,11 @@ $LastChangedRevision$
 					$thisauthor = get_author_name($AuthorID);
 					$e['thisauthor'] = tag(n.t.t.t.tag(htmlspecialchars($thisauthor),'name').n.t.t,'author');
 		
-					$e['issued'] = tag(gmdate('Y-m-d\TH:i:s\Z',$uPosted),'published');
-					$e['modified'] = tag(gmdate('Y-m-d\TH:i:s\Z',$uLastMod),'updated');
+					$e['issued'] = tag(safe_strftime('w3cdtf',$uPosted),'published');
+					$e['modified'] = tag(safe_strftime('w3cdtf',$uLastMod),'updated');
 
-					$escaped_title = escape_title($Title);
-					$escaped_title = preg_replace("/&(?![#a-z0-9]+;)/i",'&amp;', $escaped_title);
-					$escaped_title = str_replace('<','&lt;',$escaped_title);
-					$escaped_title = str_replace('>','&gt;',$escaped_title);
-					$e['title'] = tag($escaped_title.$count,'title');
+					$escaped_title = escape_output($Title);
+					$e['title'] = tag($escaped_title.$count,'title',t_html);
 
 
 					$uTitle = ($url_title) ? $url_title : stripSpace($Title);
@@ -255,34 +252,11 @@ $LastChangedRevision$
 	}
 
 
-	function safe_hed($toUnicode) {
-		
-		if (version_compare(phpversion(), "5.0.0", ">=")) {
-			$str =  html_entity_decode($toUnicode, ENT_QUOTES, "UTF-8");
-		} else {
-			$trans_tbl = get_html_translation_table(HTML_ENTITIES);
-			foreach($trans_tbl as $k => $v) {
-				$ttr[$v] = utf8_encode($k);
-			}
-			$str = strtr($toUnicode, $ttr);
-		}
-		return $str;
+	function fixup_for_feed($txt, $permalink) {
+
+		$txt = replace_relative_urls($txt, $permalink);
+		$txt = escape_output($txt);
+		return $txt;
 	}
-
-  function fixup_for_feed($toFeed, $permalink) {
-
-	  // fix relative urls
-	  $txt = str_replace('href="/','href="'.hu.'/',$toFeed);
-	  $txt = preg_replace("/href=\\\"#(.*)\"/","href=\"".$permalink."#\\1\"",$txt);
-	 // This was removed as entities shouldn't be stripped in Atom feeds
-	 // when the content type is html. Leaving it commented out as a reminder.
-	  //$txt = safe_hed($txt);
-
-		// encode and entify
-		$txt = preg_replace(array('/</','/>/',"/'/",'/"/'), array('&#60;','&#62;','&#039;','&#34;'), $txt);
-		$txt = preg_replace("/&(?![#0-9]+;)/i",'&amp;', $txt);
-	 return $txt;
-
-  }
 
 ?>

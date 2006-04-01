@@ -1587,6 +1587,23 @@ eod;
          trigger_error(gTxt('error_comment_context'));
 	}
 
+//-------------------------------------------------------------
+	function replace_relative_urls($html, $permalink='') {
 
+		global $siteurl;
+
+		# urls like "/foo/bar" - relative to the domain
+		if (serverSet('HTTP_HOST')) {
+			$html = preg_replace('@(<a[^>]+href=")/@','$1http://'.serverSet('HTTP_HOST').'/',$html);
+			$html = preg_replace('@(<img[^>]+src=")/@','$1http://'.serverSet('HTTP_HOST').'/',$html);
+		}
+		# "foo/bar" - relative to the textpattern root
+		$html = preg_replace('@(<a[^>]+href=")(?!http://)@','$1http://'.$siteurl.'/$2',$html);
+		$html = preg_replace('@(<img[^>]+src=")(?!http://)@','$1http://'.$siteurl.'/$2',$html);
+
+		if ($permalink)
+			$html = preg_replace("/href=\\\"#(.*)\"/","href=\"".$permalink."#\\1\"",$html);
+		return ($html);
+	}
 
 ?>
