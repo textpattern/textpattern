@@ -960,7 +960,7 @@ $LastChangedRevision$
 
 		# we could add some other formats here
 		if ($format == 'iso8601' or $format == 'w3cdtf') {
-			$format = '%Y-%m-%dT%TZ';
+			$format = '%Y-%m-%dT%H:%M:%SZ';
 			$gmt = 1;
 		}
 		elseif ($format == 'rfc822') {
