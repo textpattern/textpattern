@@ -296,6 +296,16 @@ $LastChangedRevision$
 			$fail['mysql_table_errors'] = gTxt('mysql_table_errors').cs.join(', '.n.t, $table_errors);
 	}
 
+	$active_plugins = array();
+	if ($rows = safe_rows('name, version, code_md5, md5(code) as md5', 'txp_plugin', 'status > 0')) {
+		foreach ($rows as $row) {
+			$n = $row['name'].'-'.$row['version'];
+			if (strtolower($row['md5']) != strtolower($row['code_md5']))
+				$n .= 'm';
+			$active_plugins[] = $n;
+		}
+	}
+
 	echo 
 	pagetop(gTxt('tab_diagnostics'),''),
 	startTable('list'),
@@ -359,6 +369,8 @@ $LastChangedRevision$
 		gTxt('rfc2616_headers').cs.ini_get('cgi.rfc2616_headers').n,
 
 		gTxt('os_version').cs.php_uname('s').' '.php_uname('r').n,
+
+		($active_plugins ? gTxt('active_plugins').cs.join(', ', $active_plugins).n : ''),
 
 		$fail
 		? n.gTxt('preflight_check').cs.n.ln.join("\n", $fail).n.ln
