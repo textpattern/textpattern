@@ -55,10 +55,8 @@ a.pophelp
 	padding: 0 2px 0 2px;
 }
 
-a.pophelp:hover,a.dlink:hover
-{
-	border: 0;
-	text-decoration: none;
+a.pophelp:hover, a.dlink:hover {
+text-decoration: none;
 }
 
 body
