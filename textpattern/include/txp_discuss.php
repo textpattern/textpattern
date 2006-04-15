@@ -100,8 +100,10 @@ $LastChangedRevision$
 				$editlink = eLink('discuss','discuss_edit','discussid',$discussid,$date);
 				$cbox = fInput('checkbox','selected[]',$discussid);
 	
-				$tq = fetch('Title','textpattern','ID',$parentid);
-				$parent = (!$tq) ? gTxt('article_deleted') : $tq;
+				$tq = safe_row('Title, ID','textpattern',"ID = '".$parentid."'");
+				$parent = (empty($tq))
+							? tag(gTxt('article_deleted').' ('.$parentid.')','em')
+							: $tq['Title'] .' '. tag('('.$tq['ID'].')','em');
 
 				echo assRow(array(
 					$editlink   => 100,
