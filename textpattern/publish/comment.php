@@ -76,6 +76,7 @@ $LastChangedRevision$
 		$email = clean_url(pcs('email'));
 		$web   = clean_url(pcs('web'));
 		extract( doStripTags( doDeEnt ( psa( array(
+			'checkbox_type',
 			'remember',
 			'forget',
 			'parentid',
@@ -102,7 +103,21 @@ $LastChangedRevision$
 			if ($emailwarn) $evaluator -> add_estimate(RELOAD,1,gTxt('comment_email_required'));
 			if ($commentwarn) $evaluator -> add_estimate(RELOAD,1,gTxt('comment_required'));
 
-		} 
+		}
+		else
+		{
+			$rememberCookie = cs('txp_remember');
+			if($rememberCookie === '')
+			{
+				$checkbox_type = 'remember';
+				$remember = 1;
+			}
+			else if($rememberCookie == 1)
+				$checkbox_type = 'forget';
+			else
+				$checkbox_type = 'remember';
+		}
+
 		// If the form fields are filled (anything other than blank), pages
 		// really should not be saved by a public cache. rfc2616/14.9.1
 		if ($name || $email || $web) {
@@ -110,18 +125,6 @@ $LastChangedRevision$
 		}
 
 		$parentid = (!$parentid) ? $id : $parentid;
-
-		if (pcs('name') || pcs('email') || pcs('web'))
-		{
-			// Form-input different from Cookie, let's update the Cookie.
-			if ( cs('name') != ps('name') 
-				OR cs('email')!= ps('email') 
-				OR cs('web') != ps('web'));
-				$remember = 1;
-		}
-		
-		if ($remember==1) { setCookies($name,$email,$web); }
-		if ($forget==1) { destroyCookies(); }
 
 		$url = $GLOBALS['pretext']['request_uri'];
 
@@ -146,9 +149,19 @@ $LastChangedRevision$
 		?	fInput('submit','submit',gTxt('submit'),'button')
 		:	'';
 			
-		$checkbox = (!empty($_COOKIE['txp_name']))
-		?	checkbox('forget',1,0).tag(gTxt('forget'),'label',' for="forget"')
-		:	checkbox('remember',1,1).tag(gTxt('remember'),'label',' for="remember"');
+		if ($checkbox_type == 'forget')
+		{
+			if ($forget == 1)
+				destroyCookies(); // inhibit default remember
+			$checkbox = checkbox('forget',1,$forget).tag(gTxt('forget'),'label',' for="forget"');
+		}
+		else
+		{
+			if ($remember != 1)
+				destroyCookies(); // inhibit default remember
+			$checkbox = checkbox('remember',1,$remember).tag(gTxt('remember'),'label',' for="remember"');
+		}
+		$checkbox .= hInput('checkbox_type', $checkbox_type); 
 
 		$vals = array(
 			'comment_name_input'    => input('text','name' , htmlspecialchars($name) , $isize,'comment_name_input' .(($namewarn)    ? ' comments_error' : ''),""),
@@ -203,6 +216,7 @@ $LastChangedRevision$
 		setcookie("txp_email", $email, $cookietime, "/");
 		setcookie("txp_web",   $web,	 $cookietime, "/");
 		setcookie("txp_last",  date("H:i d/m/Y"),$cookietime,"/");
+		setcookie("txp_remember", '1', $cookietime, "/");
 	}
 
 // -------------------------------------------------------------
@@ -214,6 +228,7 @@ $LastChangedRevision$
 		setcookie("txp_email", '', $cookietime, "/");
 		setcookie("txp_web",   '', $cookietime, "/");
 		setcookie("txp_last",  '', $cookietime, "/");
+		setcookie("txp_remember", '0', $cookietime + (365*25*3600), "/");
 	}
 
 // -------------------------------------------------------------
@@ -268,9 +283,16 @@ $LastChangedRevision$
 		if ($blacklisted)
 			txp_die(gTxt('your_ip_is_blacklisted_by'.' '.$blacklisted), '403');
 
+		$web = clean_url($web);
+		$email = clean_url($email);
+		if ($remember == 1 || ps('checkbox_type') == 'forget' && ps('forget') != 1)
+			setCookies($name, $email, $web);
+		else
+			destroyCookies();
+
 		$name = doSlash(strip_tags(deEntBrackets($name)));
-		$web = doSlash(clean_url(strip_tags(deEntBrackets($web))));
-		$email = doSlash(clean_url(strip_tags(deEntBrackets($email))));
+		$web = doSlash(strip_tags(deEntBrackets($web)));
+		$email = doSlash(strip_tags(deEntBrackets($email)));
 
 		$message = trim($message);
 		$message2db = doSlash(markup_comment($message));
