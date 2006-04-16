@@ -9,7 +9,7 @@ body {
 margin: 0 0 20px 0;
 padding: 0;
 color: #000;
-background: #fff;
+background-color: #fff;
 }
 
 code {
@@ -55,12 +55,14 @@ font-size: 10px;
 
 select {
 font-size: 10px;
-background: #eee;
+color: inherit;
+background-color: #eee;
 }
 
 textarea {
 padding: 3px;
-background: #eee;
+color: inherit;
+background-color: #eee;
 }
 
 td, th {
@@ -76,6 +78,7 @@ border: none;
 
 a:link, a:visited {
 color: #963;
+background-color: transparent;
 text-decoration: none;
 }
 
@@ -90,7 +93,7 @@ border-bottom: 1px solid #999;
 
 a.alink {
 color: #00f;
-background: #eee;
+background-color: #eee;
 }
 
 a.dlink:hover, a.pophelp:hover {
@@ -99,14 +102,14 @@ text-decoration: none;
 
 a.dlink {
 color: #f00;
-background: #eee;
+background-color: #eee;
 }
 
 a.navlink, a.navlink:hover {
 padding: 3px;
 font-size: 10px;
 color: #000;
-background: #ffc;
+background-color: #ffc;
 border-right: 1px solid #ddd;
 border-bottom: 1px solid #ddd;
 }
@@ -114,13 +117,13 @@ border-bottom: 1px solid #ddd;
 a.plain, a.plain:hover {
 font-size: 10px;
 color: #000;
-border: 0;
+background-color: transparent;
 }
 
 a.pophelp {
 padding: 0 2px;
 color: #00f;
-background: #eee;
+background-color: #eee;
 }
 
 /* form element overrides
@@ -154,14 +157,16 @@ border-color: #999 #fff #fff #999;
 input.css {
 margin: 1px 0;
 padding: 1px;
-background: #eee;
+color: inherit;
+background-color: #eee;
 }
 
 input.edit {
 margin-top: 5px;
 padding: 1px;
 font-size: 11px;
-background: #eee;
+color: inherit;
+background-color: #eee;
 }
 
 input.interbox, input.interbox2,
@@ -182,34 +187,39 @@ margin-left: 100px;
 input.list {
 margin: 5px 5px auto auto;
 padding: 3px;
-background: #ddd;
+color: inherit;
+background-color: #ddd;
 }
 
 input.navbox {
 margin-right: 10px;
-background: #eee;
+color: inherit;
+background-color: #eee;
 }
 
 input.publish {
 color: #fff;
-background: #900;
+background-color: #900;
 }
 
 input.smallbox {
 margin-right: 10px;
 vertical-align: text-top;
-background: #ddd;
+color: inherit;
+background-color: #ddd;
 }
 
 input.smallerbox {
 padding: 2px;
-background: #ddd;
+color: inherit;
+background-color: #ddd;
 }
 
 input.smallerboxsp {
 margin-right: 10px;
 padding: 2px;
-background: #ddd;
+color: inherit;
+background-color: #ddd;
 }
 
 /* table element overrides
@@ -265,24 +275,28 @@ text-align: center;
 }
 
 td.tabdown {
-background: url(txp_img/down.gif);
+color: inherit;
+background: transparent url(txp_img/down.gif);
 cursor: pointer;
 }
 
 td.tabdown2 {
-background: url(txp_img/down2.gif);
+color: inherit;
+background: transparent url(txp_img/down2.gif);
 cursor: pointer;
 }
 
 td.tabdown a {
 color: #000;
+background-color: transparent;
 border: 0;
 }
 
 td.tabs {
 height: 25px;
 text-align: center;
-background: url(txp_img/tabshadow.gif) repeat-x;
+color: inherit;
+background: transparent url(txp_img/tabshadow.gif) repeat-x;
 }
 
 td.tabs td {
@@ -290,7 +304,8 @@ vertical-align: middle;
 }
 
 td.tabup, td.tabup2 {
-background: url(txp_img/up.gif);
+color: inherit;
+background: transparent url(txp_img/up.gif);
 }
 
 td.tabup a {
