@@ -328,16 +328,14 @@ if (!empty($event) and $event == 'article') {
 				?	hed('XHTML',2).graf($Title)
 				:	'',
 				($view=='text')
-				?	br.'<input type="text" name="Title" value="'.
-						cleanfInput($Title).
-						'" class="edit" size="40" tabindex="1" />'
+				?	br.'<input type="text" id="title" name="Title" value="'.cleanfInput($Title).'" class="edit" size="40" tabindex="1" />'
 				:	'',
 		'</td></tr>';
 
 	//-- article input --------------
 
-  		echo '<tr>
-  		<td valign="top">',
+  		echo '<tr>'.n.
+				'<td id="article-col-1">',
 
 	//-- textile help --------------
 
@@ -382,8 +380,7 @@ if (!empty($event) and $event == 'article') {
 
 				// keywords
 			graf(gTxt('keywords').popHelp('keywords').br.
-				'<textarea name="Keywords" style="width:100px;height:80px" rows="1" cols="1">'.
-				$Keywords.'</textarea>'),
+				'<textarea id="keywords" name="Keywords" cols="17" rows="5">'.$Keywords.'</textarea>'),
 
 				// article image
 			graf(gTxt('article_image').popHelp('article_image').br.
@@ -411,55 +408,74 @@ if (!empty($event) and $event == 'article') {
 			}
 			
 			echo '</div>';
-		
-		} else echo sp;
-		
-  		echo '</td>
-    	<td valign="top" style="width:400px">';
+		}
 
-    	if ($view=="preview") { 
+		else
+		{
+			echo sp;
+		}
 
-			if ($textile_body == USE_TEXTILE) {
+  	echo '</td>'.n.'<td id="article-main">';
+
+    if ($view == 'preview')
+    { 
+			if ($textile_body == USE_TEXTILE)
+			{
 				echo $textile->TextileThis($Body);
-			} else if ($textile_body == CONVERT_LINEBREAKS) {
-				echo nl2br($Body);
-			} else if ($textile_body == LEAVE_TEXT_UNTOUCHED) {
-				echo $Body;
 			}
 
-    	} elseif($view=="html") {
+			else if ($textile_body == CONVERT_LINEBREAKS)
+			{
+				echo nl2br($Body);
+			}
 
-			if ($textile_body == USE_TEXTILE) {
+			else if ($textile_body == LEAVE_TEXT_UNTOUCHED)
+			{
+				echo $Body;
+			}
+    }
+
+    elseif ($view == 'html')
+    {
+			if ($textile_body == USE_TEXTILE)
+			{
 				$bod = $textile->TextileThis($Body);
-			} else if ($textile_body == CONVERT_LINEBREAKS) {
+			}
+
+			else if ($textile_body == CONVERT_LINEBREAKS)
+			{
 				$bod = nl2br($Body);
-			} else if ($textile_body == LEAVE_TEXT_UNTOUCHED) {
+			}
+
+			else if ($textile_body == LEAVE_TEXT_UNTOUCHED)
+			{
 				$bod = $Body;
 			}
 
-			echo tag(str_replace(array(n,t),
-					array(br,sp.sp.sp.sp),htmlspecialchars($bod)),'code');
-		} else {
+			echo tag(str_replace(array(n,t), array(br,sp.sp.sp.sp), htmlspecialchars($bod)), 'code');
+		}
 
-			echo '<textarea style="width:400px;height:420px" rows="1" cols="1" name="Body" tabindex="2">',htmlspecialchars($Body),'</textarea>';
-
+		else
+		{
+			echo '<textarea id="body" name="Body" cols="55" rows="31" tabindex="2">'.htmlspecialchars($Body).'</textarea>';
 		}
 
 	//-- excerpt --------------------
 
-		if ($articles_use_excerpts) {
+		if ($articles_use_excerpts)
+		{
+			if ($view == 'text')
+			{
+				$Excerpt = str_replace('&amp;', '&', htmlspecialchars($Excerpt));
 
-			if ($view=='text') {
-			
-				$Excerpt = str_replace("&amp;","&",htmlspecialchars($Excerpt));
-			
 				echo graf(gTxt('excerpt').popHelp('excerpt').br.
-				'<textarea style="width:400px;height:50px" rows="1" cols="1" name="Excerpt" tabindex="3">'.$Excerpt.'</textarea>');
-		
-			} else {
-	
+					'<textarea id="excerpt" name="Excerpt" cols="55" rows="5" tabindex="3">'.$Excerpt.'</textarea>');
+			}
+
+			else
+			{
 				echo '<hr width="50%" />';
-				
+
 				echo ($textile_excerpt == USE_TEXTILE)
 				?	($view=='preview')
 					?	graf($textile->textileThis($Excerpt))
@@ -492,7 +508,7 @@ if (!empty($event) and $event == 'article') {
 		:	'&#160;';
 	echo '</td>';
 ?>	
-<td width="200" valign="top" style="padding-left:10px" align="left" id="articleside">
+<td id="article-col-2" align="left">
 <?php 
 	//-- prev/next article links -- 
 

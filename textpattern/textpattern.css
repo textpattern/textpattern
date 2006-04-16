@@ -222,6 +222,21 @@ color: inherit;
 background-color: #ddd;
 }
 
+textarea#body {
+width: 400px;
+height: 420px;
+}
+
+textarea#excerpt {
+width: 400px;
+height: 75px;
+}
+
+textarea#keywords {
+width: 125px;
+height: 80px;
+}
+
 /* table element overrides
 ----------------------------------------------- */
 
@@ -347,4 +362,17 @@ vertical-align: bottom;
 table#setup td {
 padding: 3px;
 vertical-align: middle;
+}
+
+td#article-col-1 {
+width: 165px;
+}
+
+td#article-main {
+width: 400px;
+}
+
+td#article-col-2 {
+padding-left: 10px;
+width: 200px;
 }
