@@ -33,7 +33,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function image_list($message='') 
 	{
-		global $txpcfg,$extensions,$img_dir;
+		global $txpcfg,$extensions,$img_dir,$file_max_upload_size;
 		extract($txpcfg);
 		extract(get_prefs());
 
@@ -44,7 +44,7 @@ $LastChangedRevision$
 		echo startTable('list'),
 		tr(
 			tda(
-				upload_form(gTxt('upload_file'),gTxt('upload'),'image_insert','image'),
+				upload_form(gTxt('upload_file'),gTxt('upload'),'image_insert','image','',$file_max_upload_size),
 					' colspan="4" style="border:0"'
 			)
 		),
@@ -121,7 +121,7 @@ $LastChangedRevision$
 	function image_edit($message='',$id='') 
 	{
 		if (!$id) $id = gps('id');
-		global $txpcfg,$img_dir;
+		global $txpcfg,$img_dir,$file_max_upload_size;
 
 		pagetop('image',$message);
 
@@ -137,7 +137,7 @@ $LastChangedRevision$
 					'<img src="'.hu.$img_dir.
 						'/'.$id.$ext.'" height="'.$h.'" width="'.$w.'" alt="" />'.
 						br.upload_form(gTxt('replace_image'),'replace_image_form',
-							'image_replace','image',$id)
+							'image_replace','image',$id,$file_max_upload_size)
 				)
 			),
 			tr(
@@ -149,7 +149,7 @@ $LastChangedRevision$
 								'/'.$id.'t'.$ext.'" alt="" />'.br
 							:	'',
 							upload_form(gTxt('upload_thumbnail'),'upload_thumbnail',
-								'thumbnail_insert','image',$id)
+								'thumbnail_insert','image',$id,$file_max_upload_size)
 						)
 					)
 				)
@@ -370,15 +370,19 @@ $LastChangedRevision$
 // -------------------------------------------------------------	
 	function image_data($file , $category = '', $id = '', $uploaded = true)
 	{
-		global $txpcfg, $extensions, $txp_user, $prefs;
+		global $txpcfg, $extensions, $txp_user, $prefs, $file_max_upload_size;
 		extract($txpcfg); 
 		
 		$name = $file['name'];
 		$error = $file['error'];
 		$file = $file['tmp_name'];
 		
-		if($uploaded){
+		if($uploaded) {
 			$file = get_uploaded_file($file);
+			if ($file_max_upload_size < filesize($file)) {
+				unlink($file);
+				return upload_get_errormsg(UPLOAD_ERR_FORM_SIZE);
+			}
 		}
 		
 		list($w,$h,$extension) = getimagesize($file);

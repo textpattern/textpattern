@@ -295,16 +295,22 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function file_insert() 
 	{	
-		global $txpcfg,$extensions,$txp_user,$file_base_path;
+		global $txpcfg,$extensions,$txp_user,$file_base_path,$file_max_upload_size;
 		extract($txpcfg);
 		extract(doSlash(gpsa(array('category','permissions','description'))));
-       		
+
 		$name = file_get_uploaded_name();
 		$file = file_get_uploaded();
 
 		if ($file === false) {
 			// could not get uploaded file
-			file_list(gTxt('file_upload_failed') ." $name - ".upload_get_errormsg($_FILES['file']['error']));
+			file_list(gTxt('file_upload_failed') ." $name - ".upload_get_errormsg(@$_FILES['file']['error']));
+			return;
+		}
+
+		if ($file_max_upload_size < filesize($file)) {
+			unlink($file);
+			file_list(gTxt('file_upload_failed') ." $name - ".upload_get_errormsg(UPLOAD_ERR_FORM_SIZE));
 			return;
 		}
 		
@@ -510,7 +516,7 @@ $LastChangedRevision$
 		
 		if (!$file_max_upload_size || intval($file_max_upload_size)==0) $file_max_upload_size = 2*(1024*1024);
 		
-		$max_file_size = (intval($file_max_upload_size)==0)? '': hInput('max_file_size',$file_max_upload_size);
+		$max_file_size = (intval($file_max_upload_size) == 0) ? '': intval($file_max_upload_size);
 			
 		return upload_form($label, $pophelp, $step, 'file', $id, $max_file_size);
 	}
@@ -525,8 +531,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function file_change_max_size() 
 	{
-		$qty = gps('qty');
-		safe_update('txp_prefs',"val=$qty","name='file_max_upload_size'");
+		// DEPRECATED function; removed old code
 		file_list();
 	}
 
