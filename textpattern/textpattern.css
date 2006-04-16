@@ -1,404 +1,335 @@
-a:link,a:visited
-{
-	color: #996633;
-	text-decoration: none;
+/* base
+----------------------------------------------- */
+
+body, input, select, textarea {
+font: 11px Verdana, Arial, sans-serif;
 }
 
-a.navlink,a.navlink:hover
-{
-	background: #ffffcc;
-	border-bottom: 1px solid #dddddd;
-	border-right: 1px solid #dddddd;
-	color: #000000;
-	font-size: 10px;
-	padding: 3px;
-	text-decoration: none;
+body {
+margin: 0 0 20px 0;
+padding: 0;
+color: #000;
+background: #fff;
 }
 
-a.plain,a.plain:hover
-{
-	border: 0;
-	color: #000000;
-	font-size: 10px;
-	text-decoration: none;
+code {
+font-family: Courier, Monaco, monospace;
 }
 
-a:hover { text-decoration: underline; }
-
-a.alink
-{
-	background: #eeeeee;
-	border-color: #ffffff #999999 #999999 #ffffff;
-	border-style: none solid solid none;
-	border-width: 0 1px 1px 0;
-	color: #0000ff;
-	text-decoration: none;
+small {
+font-size: 10px;
 }
 
-a.dlink
-{
-	background: #eeeeee;
-	border-color: #ffffff #999999 #999999 #ffffff;
-	border-style: none solid solid none;
-	border-width: 0 1px 1px 0;
-	color: #ff0000;
-	text-decoration: none;
+h1, h2, h3 {
+font-family: Georgia, Times, serif;
+font-weight: normal;
 }
 
-a.pophelp
-{
-	background: #eeeeee;
-	border-color: #ffffff #999999 #999999 #ffffff;
-	border-style: none solid solid none;
-	border-width: 0 1px 1px 0;
-	color: #0000ff;
-	padding: 0 2px 0 2px;
+h1 {
+font-size: 16px;
+text-align: left;
 }
 
-a.pophelp:hover, a.dlink:hover {
+h2 {
+margin: 16px auto 8px auto;
+font-size: 13px;
+}
+
+h3 {
+font-size: 14px;
+line-height: 18px;
+}
+
+p, textarea {
+line-height: 1.4em;
+}
+
+fieldset {
+padding: 1em;
+border: none;
+}
+
+input {
+font-size: 10px;
+}
+
+select {
+font-size: 10px;
+background: #eee;
+}
+
+textarea {
+padding: 3px;
+background: #eee;
+}
+
+td, th {
+vertical-align: top;
+}
+
+/* links
+----------------------------------------------- */
+
+a img {
+border: none;
+}
+
+a:link, a:visited {
+color: #963;
 text-decoration: none;
 }
 
-body
-{
-	background: #ffffff;
-	font: normal 11px Verdana,sans-serif;
-	margin: 0 0 20px;
-	padding: 0;
-	text-decoration: none;
+a:hover {
+text-decoration: underline;
 }
 
-code { font-family: Courier,Monaco,monospace; }
-
-fieldset
-{
-	border: 0;
-	padding: 1em;
+a.alink, a.dlink, a.pophelp {
+border-right: 1px solid #999;
+border-bottom: 1px solid #999;
 }
 
-h1
-{
-	font: normal 16px Georgia,Times,serif;
-	text-align: left;
+a.alink {
+color: #00f;
+background: #eee;
 }
 
-h2
-{
-	font: normal 13px Georgia,Time,Serif;
-	margin-bottom: 8px;
-	margin-top: 16px;
-	text-decoration: none;
+a.dlink:hover, a.pophelp:hover {
+text-decoration: none;
 }
 
-h3
-{
-	font: normal 14px/18px Georgia,Times,serif;
-	text-decoration: none;
+a.dlink {
+color: #f00;
+background: #eee;
 }
 
-input
-{
-	background: #dddddd;
-	font: 10px Verdana,sans-serif;
+a.navlink, a.navlink:hover {
+padding: 3px;
+font-size: 10px;
+color: #000;
+background: #ffc;
+border-right: 1px solid #ddd;
+border-bottom: 1px solid #ddd;
 }
 
-input.css
-{
-	background: #eeeeee;
-	border-color: #999999 #ffffff #ffffff #999999;
-	border-style: solid;
-	border-width: 1px;
-	margin: 1px 0 1px 0;
-	padding: 1px;
+a.plain, a.plain:hover {
+font-size: 10px;
+color: #000;
+border: 0;
 }
 
-input.edit
-{
-	background: #eeeeee;
-	border-color: #999999 #ffffff #ffffff #999999;
-	border-style: solid;
-	border-width: 1px;
-	font-size: 11px;
-	margin-top: 5px;
-	padding: 1px;
+a.pophelp {
+padding: 0 2px;
+color: #00f;
+background: #eee;
 }
 
-input.interbox
-{
-	padding-left: 4px;
-	padding-right: 4px;
+/* form element overrides
+----------------------------------------------- */
+
+input.cancel, input.delete,
+input.interbox, input.interbox2,
+input.navbox,
+input.publish, input.preview,
+input.smallbox, input.smallerbox, input.smallerboxsp,
+select {
+border-width: 1px;
+border-style: solid;
+border-color: #fff #999 #999 #fff;
 }
 
-input.interbox2
-{
-	margin-left: 100px;
-	padding-left: 4px;
-	padding-right: 4px;
+input.cancel, input.delete,
+input.publish, input.preview {
+margin: 5px 10px 5px auto;
+padding: 5px;
+width: auto;
 }
 
-input.list
-{
-	background: #dddddd;
-	border-color: #999999 #ffffff #ffffff #999999;
-	border-style: solid;
-	border-width: 1px;
-	margin-left: 5px;
-	margin-top: 5px;
-	padding: 3px;
+input.css, input.edit, input.list,
+textarea {
+border-width: 1px;
+border-style: solid;
+border-color: #999 #fff #fff #999;
 }
 
-input.navbox
-{
-	background: #eeeeee;
-	margin-right: 10px;
+input.css {
+margin: 1px 0;
+padding: 1px;
+background: #eee;
 }
 
-input.preview,input.cancel,input.delete,input.publish
-{
-	border-color: #ffffff #999999 #999999 #ffffff;
-	border-style: solid;
-	border-width: 1px;
-	margin-bottom: 5px;
-	margin-right: 10px;
-	margin-top: 5px;
-	padding: 5px;
-	width: auto;
+input.edit {
+margin-top: 5px;
+padding: 1px;
+font-size: 11px;
+background: #eee;
 }
 
-input.publish
-{
-	background: #990000;
-	color: #ffffff;
+input.interbox, input.interbox2,
+input.navbox,
+input.smallbox, input.smallerbox, input.smallerboxsp {
+padding: 3px 6px 4px 6px;
 }
 
-input.smallbox
-{
-	background: #dddddd;
-	margin-right: 10px;
-	vertical-align: text-top;
+input.interbox, input.interbox2	 {
+padding-right: 4px;
+padding-left: 4px;
 }
 
-input.smallbox,input.smallerbox,input.navbox,input.interbox,input.interbox2,input.smallerboxsp
-{
-	border-color: #ffffff #999999 #999999 #ffffff;
-	border-style: solid;
-	border-width: 1px;
-	padding: 3px 6px 4px;
+input.interbox2 {
+margin-left: 100px;
 }
 
-input.smallerbox
-{
-	background: #dddddd;
-	padding: 2px;
+input.list {
+margin: 5px 5px auto auto;
+padding: 3px;
+background: #ddd;
 }
 
-input.smallerboxsp
-{
-	background: #dddddd;
-	margin-right: 10px;
-	padding: 2px;
+input.navbox {
+margin-right: 10px;
+background: #eee;
 }
 
-p
-{
-	font: normal 11px/1.4 Verdana,sans-serif;
-	text-decoration: none;
+input.publish {
+color: #fff;
+background: #900;
 }
 
-select
-{
-	background: #eeeeee;
-	border-color: #ffffff #999999 #999999 #ffffff;
-	border-style: solid;
-	border-width: 1px;
-	font: 10px Verdana,sans-serif;
+input.smallbox {
+margin-right: 10px;
+vertical-align: text-top;
+background: #ddd;
 }
 
-small
-{
-	color: #000000;
-	font: 10px Verdana,sans-serif;
-	text-decoration: none;
+input.smallerbox {
+padding: 2px;
+background: #ddd;
 }
 
-table.edit-table { margin-top: 2em; }
-
-td
-{
-	color: #000000;
-	font-family: Verdana,sans-serif;
+input.smallerboxsp {
+margin-right: 10px;
+padding: 2px;
+background: #ddd;
 }
 
-td.button
-{
-	background: url(txp_img/button.gif) no-repeat left bottom;
-	color: #000000;
-	font: 10px Verdana,sans-serif;
-	height: 40px;
-	text-align: center;
-	vertical-align: middle;
-	width: 85px;
+/* table element overrides
+----------------------------------------------- */
+
+table.edit-table {
+margin-top: 2em;
 }
 
-td.categories p
-{
-	border-style: solid none none none;
-	border-top: #dddddd;
-	border-width: 1px 0 0 0;
-	line-height: 1.6em;
-	margin-bottom: 3px;
-	margin-top: 6px;
-	padding-top: 3px;
+td.button {
+width: 85px;
+height: 40px;
+font-size: 10px;
+text-align: center;
+vertical-align: middle;
+background: url(txp_img/button.gif) no-repeat left bottom;
 }
 
-td.column
-{
-	padding: 10px;
-	vertical-align: top;
+td.categories p {
+margin: 6px auto 3px auto;
+padding-top: 3px;
+line-height: 1.6em;
+border-top: 1px solid #ddd;
 }
 
-td.declaration
-{
-	font-size: 10px;
-	padding: 0 3px 0 3px;
-	text-align: left;
+td.column {
+padding: 10px;
 }
 
-td.selector
-{
-	border-color: #ffffff;
-	border-style: solid none none none;
-	border-width: 3px 0 0 0;
-	padding: 6px 3px 6px 3px;
-	text-align: left;
-	vertical-align: top;
+td.declaration {
+padding: 0 3px;
+font-size: 10px;
+text-align: left;
 }
 
-td.selector2
-{
-	border-color: #ffffff;
-	border-style: solid none none none;
-	border-width: 3px 0 0 0;
-	font-size: 10px;
-	padding: 6px 3px 6px 3px;
-	text-align: left;
-	vertical-align: top;
+td.selector, td.selector2 {
+padding: 6px 3px;
+text-align: left;
+border-top: 3px solid #fff;
 }
 
-td.tabdown
-{
-	background: url(txp_img/down.gif);
-	cursor: pointer;
+td.selector2 {
+font-size: 10px;
 }
 
-td.tabdown2
-{
-	background: url(txp_img/down2.gif);
-	cursor: pointer;
+td.tabup, td.tabdown,
+td.tabup2, td.tabdown2 {
+padding-top: 6px;
+width: 124px;
+height: 25px;
+font-size: 10px;
+text-align: center;
 }
 
-td.tabs
-{
-	background: url(txp_img/tabshadow.gif) repeat-x;
-	height: 25px;
-	text-align: center;
+td.tabdown {
+background: url(txp_img/down.gif);
+cursor: pointer;
 }
 
-td.tabup a { cursor: default; }
-td.tabup,td.tabup2 { background: url(txp_img/up.gif); }
-
-textarea
-{
-	background: #eeeeee;
-	border-color: #999999 #ffffff #ffffff #999999;
-	border-style: solid;
-	border-width: 1px;
-	font: 11px/1.4 Verdana,sans-serif;
-	padding: 3px;
+td.tabdown2 {
+background: url(txp_img/down2.gif);
+cursor: pointer;
 }
 
-.tabdown a
-{
-	border: 0;
-	color: #000000;
-	text-decoration: none;
+td.tabdown a {
+color: #000;
+border: 0;
 }
 
-.tabup
-{
-	border: 0;
-	color: #000000;
-	cursor: default;
-	text-decoration: none;
+td.tabs {
+height: 25px;
+text-align: center;
+background: url(txp_img/tabshadow.gif) repeat-x;
 }
 
-.tabup,.tabdown,.tabup2,.tabdown2
-{
-	font: 10px Verdana,sans-serif;
-	height: 25px;
-	padding-top: 6px;
-	text-align: center;
-	width: 124px;
+td.tabs td {
+vertical-align: middle;
 }
 
-#articleside p { line-height: 1.4; }
-
-#box h1
-{
-	margin-top: 18px;
-	text-align: right;
+td.tabup, td.tabup2 {
+background: url(txp_img/up.gif);
 }
 
-#box p
-{
-	font-size: 10px;
-	line-height: 16px;
-	margin-bottom: 0;
-	margin-top: 3px;
-	text-align: right;
+td.tabup a {
+cursor: default;
 }
 
-#edit td.noline
-{
-	border-width: 0;
-	vertical-align: middle;
+tr.spam td {
+font-style: italic;
+color : #999;
+background-color:#eee;
 }
 
-#list td,th
-{
-	border-bottom: #dddddd;
-	border-style: none none solid none;
-	border-width: 0 0 1px 0;
-	font-size: 11px;
-	padding: 3px 5px 3px 5px;
-	text-align: left;
-	vertical-align: top;
+tr.moderate td {
+font-size: 14px;
+color : #c00;
+background-color: #ffb;
 }
 
-#list td.noline
-{
-	border-width: 0;
-	height: 30px;
-	vertical-align: middle;
+table#edit td.noline,
+table#list td.noline	{
+vertical-align: middle;
+border: none;
 }
 
-#list th { vertical-align: bottom; }
-
-#setup td
-{
-	padding: 3px;
-	vertical-align: middle;
+table#list td, table#list th {
+padding: 3px 5px;
+text-align: left;
+border-bottom: 1px solid #ddd;
 }
 
-table tr.spam td 
-{
-  background-color:#eee; 
-  color : #999;
-  font: italic 11px arial;
+table#list td.noline {
+height: 30px;
 }
-table tr.moderate td
-{
-  background-color:#ffb; 
-  color : #c00;
-  font: normal 14px arial;
+
+table#list th {
+vertical-align: bottom;
+}
+
+table#setup td {
+padding: 3px;
+vertical-align: middle;
 }
