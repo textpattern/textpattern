@@ -185,7 +185,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function tdtl($content,$atts='')
 	{
-		return tag($content,'td',' style="vertical-align:top;text-align;left;padding:8px"'.$atts);
+		return tag($content,'td',' style="vertical-align:top;text-align:left;padding:8px"'.$atts);
 	}
 
 // -------------------------------------------------------------
