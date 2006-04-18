@@ -141,7 +141,7 @@ $LastChangedRevision$
 				).
 				tdtl(
 					'<form action="index.php" method="post">'.
-					input_textarea($Form).
+						'<textarea id="form" name="Form" cols="60" rows="20">'.htmlspecialchars($Form).'</textarea>'.
 
 					$changename.
 
@@ -203,10 +203,4 @@ $LastChangedRevision$
 		return selectInput('type',$types,$type);
 	}
 
-// -------------------------------------------------------------
-	function input_textarea($Form) 
-	{
-		return 
-		'<textarea name="Form" rows="20" cols="60">'.htmlspecialchars($Form).'</textarea>';
-	}
 ?>
