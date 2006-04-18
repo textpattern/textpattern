@@ -85,8 +85,8 @@ $LastChangedRevision$
 			$html = safe_field('user_html','txp_page',"name='$name'");
 			$outstep = 'page_save';
 		}
-		
-		$out[] = textarea('500','600',$html,'html').
+
+		$out[] = '<textarea id="html" name="html" cols="84" rows="36">'.htmlspecialchars($html).'</textarea>'.
 				graf(
 					fInput('submit','save',gTxt('save'),'publish').
 					eInput('page').
@@ -147,12 +147,6 @@ $LastChangedRevision$
 		}
 	}
 	
-//-------------------------------------------------------------
-	function textarea($h,$w,$content,$name)
-	{
-		return '<textarea name="'.$name.'" style="height:'.$h.'px;width:'.$w.'px;font-family:monaco,courier,courier new;font-size:10px;margin-top:6px" rows="1" cols="1">'.htmlspecialchars($content).'</textarea>';
-	}
-
 //-------------------------------------------------------------
 	function taglinks($type) 
 	{
@@ -216,4 +210,5 @@ $LastChangedRevision$
 
 #		print_r($html_array);
 	}
+
 ?>

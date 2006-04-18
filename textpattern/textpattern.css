@@ -13,7 +13,7 @@ background-color: #fff;
 }
 
 code {
-font-family: Courier, Monaco, monospace;
+font-family: Monaco, Courier, Courier New, monospace;
 }
 
 small {
@@ -378,6 +378,16 @@ tr.moderate td {
 font-size: 14px;
 color : #c00;
 background-color: #ffb;
+}
+
+/* pages
+----------------------------------------------- */
+
+textarea#html {
+margin-top: 6px;
+width: 600px;
+height: 500px;
+font: 10px Monaco, Courier, Courier New, monospace;
 }
 
 /* style
