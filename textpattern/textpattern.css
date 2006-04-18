@@ -1,7 +1,7 @@
 /* base
 ----------------------------------------------- */
 
-body, input, select, textarea {
+body, input, textarea, select {
 font: 11px Verdana, Arial, sans-serif;
 }
 
@@ -40,7 +40,7 @@ font-size: 14px;
 line-height: 18px;
 }
 
-p, textarea {
+p {
 line-height: 1.4em;
 }
 
@@ -53,19 +53,20 @@ input {
 font-size: 10px;
 }
 
+textarea {
+padding: 3px;
+line-height: 1.4em;
+color: inherit;
+background-color: #eee;
+}
+
 select {
 font-size: 10px;
 color: inherit;
 background-color: #eee;
 }
 
-textarea {
-padding: 3px;
-color: inherit;
-background-color: #eee;
-}
-
-td, th {
+table, tr, th, td {
 vertical-align: top;
 }
 
@@ -76,13 +77,13 @@ a img {
 border: none;
 }
 
-a:link, a:visited {
+a:link, a:visited, a:active {
 color: #963;
 background-color: transparent;
 text-decoration: none;
 }
 
-a:hover {
+a:hover, a:focus {
 text-decoration: underline;
 }
 
@@ -105,7 +106,7 @@ color: #f00;
 background-color: #eee;
 }
 
-a.navlink, a.navlink:hover {
+a.navlink {
 padding: 3px;
 font-size: 10px;
 color: #000;
@@ -114,7 +115,7 @@ border-right: 1px solid #ddd;
 border-bottom: 1px solid #ddd;
 }
 
-a.plain, a.plain:hover {
+a.plain {
 font-size: 10px;
 color: #000;
 background-color: transparent;
@@ -147,18 +148,11 @@ padding: 5px;
 width: auto;
 }
 
-input.css, input.edit, input.list,
+input.edit, input.list,
 textarea {
 border-width: 1px;
 border-style: solid;
 border-color: #999 #fff #fff #999;
-}
-
-input.css {
-margin: 1px 0;
-padding: 1px;
-color: inherit;
-background-color: #eee;
 }
 
 input.edit {
@@ -200,6 +194,9 @@ background-color: #eee;
 input.publish {
 color: #fff;
 background-color: #900;
+border-width: 2px 1px 1px 2px;
+border-style: solid;
+border-color: #b00 #600 #600 #b00;
 }
 
 input.smallbox {
@@ -222,42 +219,11 @@ color: inherit;
 background-color: #ddd;
 }
 
-textarea#body {
-width: 400px;
-height: 420px;
-}
-
-textarea#excerpt {
-width: 400px;
-height: 75px;
-}
-
-textarea#keywords {
-width: 125px;
-height: 80px;
-}
-
 /* table element overrides
 ----------------------------------------------- */
 
 table.edit-table {
 margin-top: 2em;
-}
-
-td.button {
-width: 85px;
-height: 40px;
-font-size: 10px;
-text-align: center;
-vertical-align: middle;
-background: url(txp_img/button.gif) no-repeat left bottom;
-}
-
-td.categories p {
-margin: 6px auto 3px auto;
-padding-top: 3px;
-line-height: 1.6em;
-border-top: 1px solid #ddd;
 }
 
 td.column {
@@ -280,65 +246,6 @@ td.selector2 {
 font-size: 10px;
 }
 
-td.tabup, td.tabdown,
-td.tabup2, td.tabdown2 {
-padding-top: 6px;
-width: 124px;
-height: 25px;
-font-size: 10px;
-text-align: center;
-}
-
-td.tabdown {
-color: inherit;
-background: transparent url(txp_img/down.gif);
-cursor: pointer;
-}
-
-td.tabdown2 {
-color: inherit;
-background: transparent url(txp_img/down2.gif);
-cursor: pointer;
-}
-
-td.tabdown a {
-color: #000;
-background-color: transparent;
-border: 0;
-}
-
-td.tabs {
-height: 25px;
-text-align: center;
-color: inherit;
-background: transparent url(txp_img/tabshadow.gif) repeat-x;
-}
-
-td.tabs td {
-vertical-align: middle;
-}
-
-td.tabup, td.tabup2 {
-color: inherit;
-background: transparent url(txp_img/up.gif);
-}
-
-td.tabup a {
-cursor: default;
-}
-
-tr.spam td {
-font-style: italic;
-color : #999;
-background-color:#eee;
-}
-
-tr.moderate td {
-font-size: 14px;
-color : #c00;
-background-color: #ffb;
-}
-
 table#edit td.noline,
 table#list td.noline	{
 vertical-align: middle;
@@ -359,10 +266,76 @@ table#list th {
 vertical-align: bottom;
 }
 
+/* global layout
+----------------------------------------------- */
+
+td.tabup, td.tabdown,
+td.tabup2, td.tabdown2 {
+padding-top: 6px;
+width: 124px;
+height: 25px;
+font-size: 10px;
+text-align: center;
+}
+
+td.tabdown {
+color: inherit;
+background: transparent url(txp_img/down.gif) no-repeat top left;
+cursor: pointer;
+}
+
+td.tabdown2 {
+color: inherit;
+background: transparent url(txp_img/down2.gif) no-repeat top left;
+cursor: pointer;
+}
+
+td.tabdown a {
+color: #000;
+background-color: transparent;
+border: 0;
+}
+
+td.tabs {
+height: 25px;
+text-align: center;
+color: inherit;
+background: transparent url(txp_img/tabshadow.gif) repeat-x top left;
+}
+
+td.tabs td {
+vertical-align: middle;
+}
+
+td.tabup, td.tabup2 {
+color: inherit;
+background: transparent url(txp_img/up.gif) no-repeat top left;
+}
+
+td.tabup a {
+cursor: default;
+}
+
+/* setup
+----------------------------------------------- */
+
 table#setup td {
 padding: 3px;
 vertical-align: middle;
 }
+
+/* organize
+----------------------------------------------- */
+
+td.categories p {
+margin: 6px auto 3px auto;
+padding-top: 3px;
+line-height: 1.6em;
+border-top: 1px solid #ddd;
+}
+
+/* write
+----------------------------------------------- */
 
 td#article-col-1 {
 width: 165px;
@@ -375,4 +348,47 @@ width: 400px;
 td#article-col-2 {
 padding-left: 10px;
 width: 200px;
+}
+
+textarea#body {
+width: 400px;
+height: 420px;
+}
+
+textarea#excerpt {
+width: 400px;
+height: 75px;
+}
+
+textarea#keywords {
+width: 125px;
+height: 80px;
+}
+
+/* comments
+----------------------------------------------- */
+
+tr.spam td {
+font-style: italic;
+color : #999;
+background-color:#eee;
+}
+
+tr.moderate td {
+font-size: 14px;
+color : #c00;
+background-color: #ffb;
+}
+
+/* style
+----------------------------------------------- */
+
+input.css {
+margin: 0;
+padding: 1px;
+color: inherit;
+background-color: #eee;
+border-width: 1px;
+border-style: solid;
+border-color: #999 #fff #fff #999;
 }
