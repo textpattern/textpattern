@@ -407,7 +407,11 @@ eod;
 			'th-th' => '&#3652;&#3607;&#3618;',
 			'nl-nl' => 'Nederlands',
 			'is-is' => 'Íslenska(Icelandic)',
-			'fi-fi' => 'Suomi'
+			'fi-fi' => 'Suomi',
+			'ca-es' => 'Català',
+			'he-il' => 'Hebrew',
+			'ro-ro' => 'Română',
+			'hu-hu' => 'Magyar'
 		);
 
 		$out = '<select name="lang">';
