@@ -235,6 +235,11 @@ $LastChangedRevision$
 
 			// if messy vars exist, bypass url parsing
 		if (!$out['id'] && !$out['s'] && !(txpinterface=='css')) {
+			
+			// return clean URL test results for diagnostics
+			if (gps('txpcleantest') and gps('txpcleantest') == @$prefs['clean_test_nonce']) {
+				exit(show_clean_test($out));
+			}
 
 			extract(chopUrl($req));
 	

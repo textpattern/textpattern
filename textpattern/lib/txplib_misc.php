@@ -1605,5 +1605,12 @@ eod;
 			$html = preg_replace("/href=\\\"#(.*)\"/","href=\"".$permalink."#\\1\"",$html);
 		return ($html);
 	}
+//-------------------------------------------------------------
+	function show_clean_test($pretext) {
+		global $prefs;
+		
+		echo @$prefs['clean_test_nonce']."\n";
+		echo serialize($pretext);
+	}
 
 ?>
