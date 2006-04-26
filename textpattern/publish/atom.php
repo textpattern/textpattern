@@ -116,14 +116,14 @@ $LastChangedRevision$
 					$e['category1'] = (trim($Category1) ? '<category term="'.htmlspecialchars($Category1).'" />' : '');
 					$e['category2'] = (trim($Category2) ? '<category term="'.htmlspecialchars($Category2).'" />' : '');
 
-					$Excerpt = fixup_for_feed($thisarticle['excerpt'], permlinkurl($a));
+					$Excerpt = fixup_for_feed(parse($thisarticle['excerpt']), permlinkurl($a));
 					if ($syndicate_body_or_excerpt == 0)
-						$Body = fixup_for_feed($thisarticle['body'], permlinkurl($a));
+						$Body = fixup_for_feed(parse($thisarticle['body']), permlinkurl($a));
 					else {
 						$Body = '';
 						// If there's no excerpt, use body as content instead of body as summary
 						if (!trim($Excerpt))
-							$Body = fixup_for_feed($thisarticle['body'], permlinkurl($a));
+							$Body = fixup_for_feed(parse($thisarticle['body']), permlinkurl($a));
 					}
 
 					if (trim($Body))
@@ -144,21 +144,22 @@ $LastChangedRevision$
 			$limit = ($limit) ? $limit : $rss_how_many;
 			$limit = min($limit,max(100,$rss_how_many));
 		
-			$rs = safe_rows_start("*", "txp_link", "$cfilter order by date desc limit $limit");
+			$rs = safe_rows_start("*", "txp_link", "$cfilter order by date desc, id desc limit $limit");
 
 			if ($rs) {
 				while ($a = nextRow($rs)) {
 					extract($a);
  
-					$e['title'] = tag(doSpecial($linkname),'title');
-					$content = utf8_encode(htmlspecialchars($description));
-					$e['content'] = tag(n.$description.n,'content',t_texthtml);
-					
+					$e['title'] = tag(htmlspecialchars($linkname),'title',t_html);
+					$e['content'] = tag(n.htmlspecialchars($description).n,'content',t_html);
+
 					$url = (preg_replace("/^\/(.*)/","http://$siteurl/$1",$url));
 					$url = preg_replace("/&((?U).*)=/","&amp;\\1=",$url);
 					$e['link'] = '<link'.r_relalt.t_texthtml.' href="'.$url.'" />';
 
-					$e['issued'] = tag(gmdate('Y-m-d\TH:i:s\Z',strtotime($date)),'published');
+					$e['thisauthor'] = tag(n.t.t.t.tag(htmlspecialchars($thisauthor),'name').n.t.t,'author');
+
+					$e['issued'] = tag(safe_strftime('w3cdtf', strtotime($date)),'published');
 					$e['modified'] = tag(gmdate('Y-m-d\TH:i:s\Z',strtotime($date)),'updated');
 					$e['id'] = tag('tag:'.$mail_or_domain.','.$feed_time.':'.$id,'id');
 

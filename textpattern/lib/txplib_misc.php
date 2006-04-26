@@ -1481,8 +1481,19 @@ eod;
 			 @$txptrace[] = str_repeat("\t", @$txptracelevel).$msg;
 	}
 
+//-------------------------------------------------------------
+	function article_push() {
+		global $thisarticle, $stack_article;
+		$stack_article[] = @$thisarticle;
+	}
 
+//-------------------------------------------------------------
+	function article_pop() {
+		global $thisarticle, $stack_article;
+		$thisarticle = array_pop($stack_article);
+	}
 // -------------------------------------------------------------
+
 	function relative_path($path, $pfx=NULL)
 	{
 		if ($pfx === NULL)

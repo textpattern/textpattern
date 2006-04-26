@@ -59,30 +59,23 @@ $LastChangedRevision$
 
 					$Body = (!$syndicate_body_or_excerpt) ? $thisarticle['body'] : $thisarticle['excerpt'];
 					$Body = (!trim($Body)) ? $thisarticle['body'] : $Body;
-					$Body = str_replace('href="/','href="'.hu,$Body);
-					$Body = preg_replace("/href=\\\"#(.*)\"/","href=\"".permlinkurl($a)."#\\1\"",$Body);
-					$Body = rss_safe_hed($Body);
-
-					$Body = preg_replace(array('/</','/>/',"/'/",'/"/'), array('&lt;','&gt;','&#039;','&quot;'),$Body);
-						// encode bare ampersands
-					$Body = preg_replace("/&(?![#0-9]+;|\w+;)/i",'&amp;', $Body);
+					$Body = escape_output(replace_relative_urls(parse($Body)));
 
 					$uTitle = ($url_title) ? $url_title : stripSpace($Title);
 					$uTitle = htmlspecialchars($uTitle,ENT_NOQUOTES);
-
 
 					if ($show_comment_count_in_feed) {
 						$count = ($comments_count > 0) ? ' ['.$comments_count.']' : '';
 					} else $count = '';
 
-					$Title = doSpecial($Title).$count;
+					$Title = escape_output(strip_tags($Title)).$count;
 
 					$permlink = permlinkurl($a);
 
-					$item = tag(strip_tags($Title),'title').n.
+					$item = tag($Title,'title').n.
 						tag($Body,'description').n.
 						tag($permlink,'link');
-	
+
 					$articles[$ID] = tag($item,'item');
 
 					$etags[$ID] = strtoupper(dechex(crc32($articles[$ID])));
@@ -92,13 +85,13 @@ $LastChangedRevision$
 
 			}
 		} elseif ($area=='link') {
-				
+
 			$cfilter = ($category) ? "category='$category'" : '1';
 			$limit = ($limit) ? $limit : $rss_how_many;
 			$limit = min($limit,max(100,$rss_how_many));
 
 			$rs = safe_rows_start("*", "txp_link", "$cfilter order by date desc limit $limit");
-		
+
 			if ($rs) {
 				while ($a = nextRow($rs)) {
 					extract($a);

@@ -1161,11 +1161,13 @@ $LastChangedRevision$
 
 function body($atts) 
 	{
-		global $thisarticle;
-
+		global $thisarticle, $is_article_body;
 		assert_article();
 		
-		return $thisarticle['body'];
+		$is_article_body = 1;		
+		$out = parse($thisarticle['body']);
+		$is_article_body = 0;
+		return $out;
 	}	
 	
 // -------------------------------------------------------------
@@ -1180,10 +1182,13 @@ function body($atts)
 // -------------------------------------------------------------
 	function excerpt($atts) 
 	{
-		global $thisarticle;
+		global $thisarticle, $is_article_body;
 		assert_article();
-
-		return $thisarticle['excerpt'];	
+		
+		$is_article_body = 1;		
+		$out = parse($thisarticle['excerpt']);
+		$is_article_body = 0;
+		return $out;
 	}
 
 // -------------------------------------------------------------
