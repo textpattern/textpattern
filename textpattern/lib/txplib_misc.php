@@ -1618,10 +1618,8 @@ eod;
 	}
 //-------------------------------------------------------------
 	function show_clean_test($pretext) {
-		global $prefs;
-		
-		echo @$prefs['clean_test_nonce']."\n";
-		echo serialize($pretext);
+		echo @$pretext['req'].n;
+		var_export($pretext);
 	}
 
 ?>

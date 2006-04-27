@@ -237,7 +237,7 @@ $LastChangedRevision$
 		if (!$out['id'] && !$out['s'] && !(txpinterface=='css')) {
 			
 			// return clean URL test results for diagnostics
-			if (gps('txpcleantest') and gps('txpcleantest') == @$prefs['clean_test_nonce']) {
+			if (gps('txpcleantest') and serverSet('SERVER_ADDR') == serverSet('REMOTE_ADDR')) {
 				exit(show_clean_test($out));
 			}
 
@@ -669,7 +669,7 @@ $LastChangedRevision$
 				unset($GLOBALS['thisarticle']);
 				unset($GLOBALS['theseatts']);//Required?				
 			}
-			
+
 			return join('',$articles);
 		}
 	}

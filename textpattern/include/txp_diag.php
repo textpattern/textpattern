@@ -292,19 +292,12 @@ $LastChangedRevision$
 		
 	# test clean URL server vars
 	if (hu) {
-		$s = md5(uniqid(rand(), true));
-		$clean_test_nonce = md5(uniqid(rand(), true));
-		set_pref('clean_test_nonce', $clean_test_nonce, 'admin', 2);
 		if (ini_get('allow_url_fopen')) {
-			$lines = @file(hu.$s.'/?txpcleantest='.$clean_test_nonce);
-			if (trim(@$lines[0]) == $clean_test_nonce) {
-				$test_pretext = @unserialize($lines[1]);
-				if (@$test_pretext['req'] !== '/'.$s.'/?txpcleantest='.$clean_test_nonce)
-					$fail['clean_url_data_failed'] = gTxt('clean_url_data_failed').cs.htmlspecialchars(@$test_pretext['req'], true);
-			}
-			else {
-				$fail['clean_url_test_failed'] = gTxt('clean_url_test_failed');
-			}
+			$s = md5(uniqid(rand(), true));
+			$pretext_data = file(hu.$s.'/?txpcleantest=1');
+			$pretext_req = trim(@$pretext_data[0]);
+			if ($pretext_req != '/'.$s.'/?txpcleantest=1')
+				$fail['clean_url_data_failed'] = gTxt('clean_url_data_failed').cs.htmlspecialchars($pretext_req);
 		}
 		else {
 			# unable to confirm whether or not clean URLs are working
@@ -452,8 +445,8 @@ $LastChangedRevision$
 		if (is_callable('apache_get_modules'))
 			$out[] = n.gTxt('apache_modules').cs.join(', ', apache_get_modules()).n.n;
 			
-		if (!empty($test_pretext)) {
-			$out[] = n.gTxt('pretext_data').cs.var_export($test_pretext, true).n.n;
+		if (@is_array($pretext_data)) {
+			$out[] = n.gTxt('pretext_data').cs.htmlspecialchars(join('', array_slice($pretext_data, 1, 20))).n.n;
 		}
 
 		foreach ($files as $f) {
