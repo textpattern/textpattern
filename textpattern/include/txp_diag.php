@@ -294,10 +294,14 @@ $LastChangedRevision$
 	if (hu) {
 		if (ini_get('allow_url_fopen')) {
 			$s = md5(uniqid(rand(), true));
-			$pretext_data = file(hu.$s.'/?txpcleantest=1');
-			$pretext_req = trim(@$pretext_data[0]);
-			if ($pretext_req != '/'.$s.'/?txpcleantest=1')
-				$fail['clean_url_data_failed'] = gTxt('clean_url_data_failed').cs.htmlspecialchars($pretext_req);
+			$pretext_data = @file(hu.$s.'/?txpcleantest=1');
+			if ($pretext_data) {
+				$pretext_req = trim(@$pretext_data[0]);
+				if ($pretext_req != '/'.$s.'/?txpcleantest=1')
+					$fail['clean_url_data_failed'] = gTxt('clean_url_data_failed').cs.htmlspecialchars($pretext_req);
+			}
+			else
+				$fail['clean_url_test_failed'] = gTxt('clean_url_test_failed');
 		}
 		else {
 			# unable to confirm whether or not clean URLs are working
