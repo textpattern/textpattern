@@ -398,8 +398,8 @@ $LastChangedRevision$
 		if(is_numeric($id)) {
 			$a = safe_row('*, unix_timestamp(Posted) as uPosted', 'textpattern', "ID='".doSlash($id)."' and Status in (4,5)");
 			$Posted             = @$a['Posted'];
-			$out['id_keywords'] = @$a['AuthorID'];
-			$out['id_author']   = @$a['Keywords'];
+			$out['id_keywords'] = @$a['Keywords'];
+			$out['id_author']   = @$a['AuthorID'];
 			populateArticleData($a);
 
 			if ($np = getNextPrev($id, $Posted, $s))
