@@ -926,12 +926,17 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function evalString($html) 
+	function evalString($html)
 	{
+		global $prefs;
 		if (strpos($html, chr(60).'?php') !== false) {
-			$html = eval(' ?'.chr(62).$html.chr(60).'?php ');
+			trigger_error(gTxt('raw_php_deprecated'), E_USER_WARNING);
+			if (!empty($prefs['allow_raw_php_scripting']))
+				$html = eval(' ?'.chr(62).$html.chr(60).'?php ');
+			else
+				trigger_error(gTxt('raw_php_disabled'), E_USER_WARNING);
 		}
-		return $html;	
+		return $html;
 	}
 
 // -------------------------------------------------------------

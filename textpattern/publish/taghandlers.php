@@ -1859,11 +1859,18 @@ function body($atts)
 		if (empty($is_article_body)) {
 			if (!empty($prefs['allow_page_php_scripting']))
 				eval($thing);
+			else
+				trigger_error(gTxt('php_code_disabled_page'));
 		}
 		else {
-			if (!empty($prefs['allow_article_php_scripting'])
-				and has_privs('article.php', $thisarticle['authorid']))
-				eval($thing);
+			if (!empty($prefs['allow_article_php_scripting'])) {
+				if (has_privs('article.php', $thisarticle['authorid']))
+					eval($thing);
+				else
+					trigger_error(gTxt('php_code_forbidden_user'));
+			}
+			else
+				trigger_error(gTxt('php_code_disabled_article'));
 		}
 		return ob_get_clean();
 	}
