@@ -13,7 +13,7 @@ background-color: #fff;
 }
 
 code {
-font-family: Monaco, Courier, Courier New, monospace;
+font-family: Monaco, Courier, "Courier New", monospace;
 }
 
 small {
@@ -387,7 +387,7 @@ textarea#html {
 margin-top: 6px;
 width: 600px;
 height: 500px;
-font: 10px Monaco, Courier, Courier New, monospace;
+font: 10px Monaco, Courier, "Courier New", monospace;
 }
 
 /* style
