@@ -46,7 +46,7 @@ $LastChangedRevision$
 		$page = gps('page');
 
 		$total = getCount('txp_file',"1=1");  
-		$limit = max(@$file_list_pageby, 25);
+		$limit = max(@$file_list_pageby, 15);
 		$numPages = ceil($total/$limit);  
 		$page = (!$page) ? 1 : $page;
 		$offset = ($page - 1) * $limit;

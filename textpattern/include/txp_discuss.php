@@ -63,7 +63,7 @@ $LastChangedRevision$
 		extract(get_prefs());
 
 		$total = safe_count('txp_discuss',"1=1");  
-		$limit = max(@$comment_list_pageby, 25);
+		$limit = max(@$comment_list_pageby, 15);
 		$numPages = ceil($total/$limit);  
 		$page = (!$page) ? 1 : $page;
 		$offset = ($page - 1) * $limit;

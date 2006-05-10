@@ -43,7 +43,7 @@ $LastChangedRevision$
 		pagetop(gTxt('tab_list'),$message);
 
 		$total = getCount('textpattern',"1"); 
-		$limit = max(@$article_list_pageby, 25);
+		$limit = max(@$article_list_pageby, 15);
 		$numPages = ceil($total/$limit);  
 		$page = (!$page) ? 1 : $page;
 

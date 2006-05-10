@@ -60,7 +60,7 @@ $LastChangedRevision$
 		$page = gps('page');
 
 		$total = getCount('txp_image',"1=1");  
-		$limit = max(@$image_list_pageby, 25);
+		$limit = max(@$image_list_pageby, 15);
 		$numPages = ceil($total/$limit);  
 		$page = (!$page) ? 1 : $page;
 		$offset = ($page - 1) * $limit;
