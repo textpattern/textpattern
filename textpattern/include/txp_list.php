@@ -78,35 +78,46 @@ $LastChangedRevision$
 			echo '<form action="index.php" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">',
 			startTable('list'),
 			'<tr>',
-				column_head('posted', 'posted', 'list', 1, $linkdir),
-				column_head('title', 'title', 'list', 1, $linkdir),
-				column_head('section', 'section', 'list', 1, $linkdir),
+				column_head('id', 'ID', 'list', 1, $linkdir).
+				column_head('posted', 'posted', 'list', 1, $linkdir).
+				column_head('title', 'title', 'list', 1, $linkdir).
+				column_head('section', 'section', 'list', 1, $linkdir).
 				column_head('category1', 'category1', 'list', 1, $linkdir).
-				column_head('category2', 'category2', 'list', 1, $linkdir),
+				column_head('category2', 'category2', 'list', 1, $linkdir).
 				hCell(gTxt('author')),
-				column_head(gTxt('status'), 'Status', 'list', 1, $linkdir),
+				column_head(gTxt('status'), 'Status', 'list', 1, $linkdir).
 				td(),
 			'</tr>';
 	
-			while ($a = nextRow($rs)) {
+			while ($a = nextRow($rs))
+			{
 				extract($a);
-						
-				$stat = (!empty($Status)) ? $statuses[$Status] : '';
-				$adate = safe_strftime('%d %b %Y', $uPosted);
-		
-				$alink = eLink('article','edit','ID',$ID,$adate);
-				$tlink = eLink('article','edit','ID',$ID,$Title);
-				$modbox = fInput('checkbox','selected[]',$ID,'','','','','',$ID);
-				
-				echo "<tr>".n,
-					td($alink),
-					td($tlink,200),
-					td($Section,75),
-					td($Category1,75).td($Category2,75),
-					td($AuthorID),
-					td($stat,45),
-					td($modbox),
-				'</tr>'.n;
+
+				$stat = !empty($Status) ? $statuses[$Status] : '';
+
+				echo n.n.tr(
+					n.td(
+						eLink('article', 'edit', 'ID', $ID, $ID)
+					).
+
+					td(
+						safe_strftime('%d %b %Y', $uPosted)
+					).
+
+					td(
+						eLink('article', 'edit', 'ID', $ID, $Title)
+					, 200).
+
+					td($Section, 75).
+					td($Category1, 75).
+					td($Category2, 75).
+					td($AuthorID).
+					td($stat, 45).
+
+					td(
+						fInput('checkbox', 'selected[]', $ID, '', '', '', '', '', $ID)
+					)
+				);
 			}
 			
 			echo tr(tda(select_buttons().
