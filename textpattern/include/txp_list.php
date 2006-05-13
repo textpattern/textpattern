@@ -78,7 +78,7 @@ $LastChangedRevision$
 			echo '<form action="index.php" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">',
 			startTable('list'),
 			'<tr>',
-				column_head('id', 'ID', 'list', 1, $linkdir).
+				column_head('ID', 'ID', 'list', 1, $linkdir).
 				column_head('posted', 'posted', 'list', 1, $linkdir).
 				column_head('title', 'title', 'list', 1, $linkdir).
 				column_head('section', 'section', 'list', 1, $linkdir).

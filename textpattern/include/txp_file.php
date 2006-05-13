@@ -81,7 +81,7 @@ $LastChangedRevision$
 				)
 			):''),
 		tr(
-			column_head('Id','id','file',1,$dir).
+			column_head('ID','id','file',1,$dir).
 			column_head('file_name','filename','file',1,$dir).
 			td(gTxt('status')).
 			td(gTxt('tags')).
