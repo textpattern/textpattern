@@ -31,11 +31,50 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function image_list($message='') 
+	function image_list($message = '') 
 	{
-		global $txpcfg,$extensions,$img_dir,$file_max_upload_size;
+		global $txpcfg, $extensions, $img_dir, $file_max_upload_size;
+
 		extract($txpcfg);
 		extract(get_prefs());
+
+		extract(gpsa(array('sort', 'dir', 'page')));
+
+		$dir = ($dir == 'desc') ? 'desc' : 'asc';
+
+		switch ($sort)
+		{
+			case 'id':
+				$sort_sql = '`id` '.$dir;
+			break;
+
+			case 'name':
+				$sort_sql = '`name` '.$dir;
+			break;
+
+			case 'thumbnail':
+				$sort_sql = '`thumbnail` '.$dir.', `id` asc';
+			break;
+
+			case 'category':
+				$sort_sql = '`category` '.$dir.', `id` asc';
+			break;
+
+			case 'date':
+				$sort_sql = '`date` '.$dir.', `id` asc';
+			break;
+
+			case 'author':
+				$sort_sql = '`author` '.$dir.', `id` asc';
+			break;
+
+			default:
+				$dir = 'desc';
+				$sort_sql = '`id` '.$dir;
+			break;
+		}
+
+		$switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
 		pagetop(gTxt('image'),$message);
 
@@ -49,15 +88,14 @@ $LastChangedRevision$
 			)
 		),
 		tr(
-			hCell(gTxt('name')) . 
-			hCell(gTxt('image_category')) . 
-			hCell(gTxt('tags')) . 
-			hCell(gTxt('author')) . 
-			hCell(gTxt('thumbnail')) . 
+			column_head('ID', 'id', 'image', true, $switch_dir).
+			column_head('name', 'name', 'image', true, $switch_dir).
+			column_head('thumbnail', 'thumbnail', 'image', true, $switch_dir).
+			hCell(gTxt('tags')).
+			column_head('image_category', 'category', 'image', true, $switch_dir).
+			column_head('author', 'author', 'image', true, $switch_dir).
 			hCell()
 		);
-
-		$page = gps('page');
 
 		$total = getCount('txp_image',"1=1");  
 		$limit = max(@$image_list_pageby, 15);
@@ -73,31 +111,36 @@ $LastChangedRevision$
 		$nav[] = ($page != $numPages) 
 		?	PrevNextLink("image",$page+1,gTxt('next'),'next') : '';
 		
-		$rs = safe_rows_start("*", "txp_image", "1=1 order by category,name limit $offset, $limit");
+		$rs = safe_rows_start("*", "txp_image", "1 order by $sort_sql limit $offset, $limit");
 	
-		if($rs) {
-			while ($a = nextRow($rs)) {
-			
+		if ($rs)
+		{
+			while ($a = nextRow($rs))
+			{
 				extract($a);
-				
-				$thumbnail = ($thumbnail) 
-				?	'<img src="'.hu.$img_dir.'/'.$id.'t'.$ext.'" />' 
-				:	gTxt('no');
-				
-				$elink = eLink('image','image_edit','id',$id,$name);
+
+				$thumbnail = ($thumbnail) ?	
+					'<img src="'.hu.$img_dir.'/'.$id.'t'.$ext.'" />' : 
+					gTxt('no');
 	
-				$txtilelink = '<a target="_blank" href="?event=tag'.a.'name=image'.a.'id='.$id.a.'ext='.$ext.a.'alt='.$alt.a.'h='.$h.a.'w='.$w.a.'type=textile" onclick="window.open(this.href, \'popupwindow\', \'width=400,height=400,scrollbars,resizable\'); return false;">Textile</a>';
-				$txplink = '<a target="_blank" href="?event=tag'.a.'name=image'.a.'id='.$id.a.'type=textpattern" onclick="window.open(this.href, \'popupwindow\', \'width=400,height=400,scrollbars,resizable\'); return false;">Textpattern</a>';
-				$xhtmlink = '<a target="_blank" href="?event=tag'.a.'name=image'.a.'id='.$id.a.'ext='.$ext.a.'alt='.$alt.a.'h='.$h.a.'w='.$w.a.'type=xhtml" onclick="window.open(this.href, \'popupwindow\', \'width=400,height=400,scrollbars,resizable\'); return false;">XHTML</a>';
-				
-				$dlink = dLink('image','image_delete','id',$id);
+				$textile = '<a target="_blank" href="?event=tag'.a.'name=image'.a.'id='.$id.a.'ext='.$ext.a.'alt='.$alt.a.'h='.$h.a.'w='.$w.a.'type=textile" onclick="window.open(this.href, \'popupwindow\', \'width=400,height=400,scrollbars,resizable\'); return false;">Textile</a>';
+				$txp = '<a target="_blank" href="?event=tag'.a.'name=image'.a.'id='.$id.a.'type=textpattern" onclick="window.open(this.href, \'popupwindow\', \'width=400,height=400,scrollbars,resizable\'); return false;">Textpattern</a>';
+				$xhtml = '<a target="_blank" href="?event=tag'.a.'name=image'.a.'id='.$id.a.'ext='.$ext.a.'alt='.$alt.a.'h='.$h.a.'w='.$w.a.'type=xhtml" onclick="window.open(this.href, \'popupwindow\', \'width=400,height=400,scrollbars,resizable\'); return false;">XHTML</a>';
 	
-				echo
-				tr(
-					td($elink).td($category).td($txtilelink.' / '.$txplink.' / '.$xhtmlink). 
-					td($author).
+				echo n.n.tr(
+					n.td(
+						eLink('image', 'image_edit', 'id', $id, $id)
+					).
+					td(
+						eLink('image', 'image_edit', 'id', $id, $name)
+					).
 					td($thumbnail).
-					td($dlink,10)
+					td($textile.' / '.$txp.' / '.$xhtml). 
+					td($category).
+					td($author).
+					td(
+						dLink('image', 'image_delete', 'id', $id)
+					, 10)
 				);
 			}
 
