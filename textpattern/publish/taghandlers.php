@@ -1582,25 +1582,29 @@ function body($atts)
 	}
 	
 // -------------------------------------------------------------
-	function permlink($atts,$thing=NULL)
+
+	function permlink($atts, $thing = NULL)
 	{
 		global $thisarticle;
+
 		assert_article();
 
 		extract(lAtts(array(
-			'style' => '',
-			'class' => ''
-		),$atts));
-		
+			'class' => '',
+			'style' => ''
+		), $atts));
+
 		$url = permlinkurl($thisarticle);
 
 		if ($thing === NULL)
+		{
 			return $url;
-		
-		return tag(parse($thing),'a',' href="'.$url.'" title="'.gTxt('permanent_link').'"'. 
-							(($style) ? ' style="'.$style.'"' : '').
-							(($class) ? ' class="'.$class.'"' : '')
- 			 );
+		}
+
+		return tag(parse($thing), 'a', ' rel="bookmark" href="'.$url.'" title="'.gTxt('permanent_link').'"'.
+			($style ? ' style="'.$style.'"' : '').
+			($class ? ' class="'.$class.'"' : '')
+		);
 	}
 
 // -------------------------------------------------------------
