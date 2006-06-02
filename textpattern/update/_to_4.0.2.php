@@ -7,56 +7,11 @@ $LastChangedRevision: 711 $
 		exit("Nothing here. You can't access this file directly.");
 
    if (!safe_field('name', 'txp_page', "name='error_default'")){
-		$error_default = <<<EOF
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-	<title><txp:sitename />: <txp:error_status /></title>
-<style type="text/css">
-<!--
-#content
-{
-	margin-left: 155px;
-	margin-right: 155px;
-	padding-top: 30px;
-        text-align: center;
-}
-h1,h2,h3,h4,h5,h6
-{
-	font-weight: normal;
-	font-family: Georgia, Times, Serif;
-}
-p
-{
-	font-family: Verdana, "Lucida Grande", Tahoma, Helvetica;
-	font-size: 0.9em;
-	line-height: 1.6em;
-}
-a img
-{
-        border: none;
-}
--->
-</style>
-</head>
-<body>
-
-<div id="content">
-        <h1><txp:sitename />: <txp:error_status /></h1>
-	<p><txp:error_message /></p>
-        <p><txp:link_to_home><txp:site_url /></txp:link_to_home></p>
-        <p><a href="http://textpattern.com/"><txp:img src="textpattern/txp_img/txp_slug105x45.gif" /></a></p>
-</div>
-
-</body>
-</html>
-
-EOF;
+		$error_default = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\r\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\r\n<head>\r\n\t<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\r\n\t<title><txp:sitename />: <txp:error_status /></title>\r\n\t<link rel=\"stylesheet\" type=\"text/css\" media=\"screen\" href=\"<txp:css n=\"default\" />\" />\r\n</head>\r\n<body>\r\n\r\n<!-- accessibility -->\r\n<div id=\"accessibility\">\r\n\t<ul>\r\n\t\t<li><a href=\"#content\">Go to content</a></li>\r\n\t\t<li><a href=\"#sidebar-1\">Go to navigation</a></li>\r\n\t\t<li><a href=\"#sidebar-2\">Go to search</a></li>\r\n\t</ul>\r\n</div>\r\n\r\n<div id=\"container\">\r\n\r\n<!-- head -->\r\n\t<div id=\"head\">\r\n\t\t<h1><txp:link_to_home><txp:sitename /></txp:link_to_home></h1>\r\n\t\t<h2><txp:site_slogan /></h2>\r\n\t</div>\r\n\r\n<!-- left -->\r\n\t<div id=\"sidebar-1\">\r\n\t<txp:linklist wraptag=\"p\" />\r\n\t</div>\r\n\r\n<!-- right -->\r\n\t<div id=\"sidebar-2\">\r\n\t\t<txp:search_input label=\"Search\" wraptag=\"p\" />\r\n\t\t<txp:popup type=\"c\" label=\"Browse\" wraptag=\"p\" />\r\n\t\t<p><txp:feed_link label=\"RSS\" /> / <txp:feed_link flavor=\"atom\" label=\"Atom\" /></p>\r\n\r\n\t\t<p><img src=\"<txp:site_url />textpattern/txp_img/txp_slug105x45.gif\" width=\"105\" height=\"45\" alt=\"Textpattern\" title=\"\" /></p>\r\n\t</div>\r\n\r\n<!-- center -->\r\n\t<div id=\"content\">\r\n\t\t<h3 style=\"font: 1.3em Georgia, Times, serif;\"><txp:error_status /></h3>\r\n\t\t<p><txp:error_message /></p>\r\n\t</div>\r\n\r\n<!-- footer -->\r\n\t<div id=\"foot\">&nbsp;</div>\r\n\r\n</div>\r\n\r\n</body>\r\n</html>";
 
       safe_insert('txp_page',"
          name='error_default',
-         user_html='".doSlash($error_default)."'");
+         user_html='".$error_default."'");
    }
    //take back use_textile
    safe_update('txp_prefs',"html='pref_text'","name='use_textile'");
