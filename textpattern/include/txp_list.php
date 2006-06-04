@@ -91,6 +91,7 @@ $LastChangedRevision$
 			{
 				extract($a);
 
+				$Title = empty($Title) ? tag(gTxt('edit'), 'em') : $Title;
 				$stat = !empty($Status) ? $statuses[$Status] : '';
 
 				echo n.n.tr(
