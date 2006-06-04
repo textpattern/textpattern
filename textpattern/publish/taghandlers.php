@@ -1311,6 +1311,7 @@ function body($atts)
 	}
 
 // -------------------------------------------------------------
+
 	function article_image($atts)
 	{
 		global $thisarticle, $img_dir;
@@ -1321,17 +1322,13 @@ function body($atts)
 			'style' 	=> '',
 			'align' 	=> '',
 			'thumbnail' => 0
-		),$atts));	
+		), $atts));
 
 		$image = ($thisarticle['article_image']) ? $thisarticle['article_image'] : '';
 
 		if ($image)
 		{
-			if (!is_numeric($image))
-			{
-				return '<img src="'.$image.'" alt="" />';
-			}
-			else			
+			if (is_numeric($image))
 			{
 				$rs = safe_row('*', 'txp_image', "id = '$image'");
 
@@ -1345,8 +1342,8 @@ function body($atts)
 
 							$out = array(
 								'<img src="'.hu.$img_dir.'/'.$id.'t'.$ext.'" alt="'.$alt.'"'.
-								(!empty($style) ? 'style="'.$style.'"' : '').
-								(!empty($align) ? 'align="'.$align.'"' : '').
+								($style ? 'style="'.$style.'"' : '').
+								($align ? 'align="'.$align.'"' : '').
 								' />'
 							);
 
@@ -1360,18 +1357,25 @@ function body($atts)
 
 						$out = array(
 							'<img src="'.hu.$img_dir.'/'.$id.$ext.'" width="'.$w.'" height="'.$h.'" alt="'.$alt.'"'.
-							(!empty($style) ? 'style="'.$style.'"' : '').
-							(!empty($align) ? 'align="'.$align.'"' : '').
+							($style ? 'style="'.$style.'"' : '').
+							($align ? 'align="'.$align.'"' : '').
 							' />'
 						);
 
 						return join(' ', $out);
 					}
-				} //if ($rs)
+				}
 			}
-		} //if ($image)
 
-		return '';
+			else
+			{
+				return '<img src="'.$image.'"'.
+					' alt=""'.
+					($style ? ' style="'.$style.'"' : '').
+					($align ? ' align="'.$align.'"' : '').
+					' />';
+			}
+		}
 	}
 
 // -------------------------------------------------------------
