@@ -1622,4 +1622,19 @@ eod;
 		var_export($pretext);
 	}
 
+//-------------------------------------------------------------
+
+	function pager($total, $limit, $page)
+	{
+		$num_pages = ceil($total / $limit);
+
+		$page = $page ? (int) $page : 1;
+
+		$page = min(max($page, 1), $num_pages);
+
+		$offset = max(($page - 1) * $limit, 0);
+
+		return array($page, $offset, $num_pages);
+	}
+
 ?>

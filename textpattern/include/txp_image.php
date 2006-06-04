@@ -99,9 +99,8 @@ $LastChangedRevision$
 
 		$total = getCount('txp_image',"1=1");  
 		$limit = max(@$image_list_pageby, 15);
-		$numPages = ceil($total/$limit);  
-		$page = (!$page) ? 1 : $page;
-		$offset = ($page - 1) * $limit;
+
+		list($page, $offset, $numPages) = pager($total, $limit, $page);
 
 		$nav[] = ($page > 1)
 		?	PrevNextLink("image",$page-1,gTxt('prev'),'prev') : '';

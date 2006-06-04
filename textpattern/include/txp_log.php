@@ -41,9 +41,8 @@ $LastChangedRevision$
 
 		$total = getCount('txp_log',"1");  
 		$limit = 50;
-		$numPages = ceil($total/$limit);  
-		$page = (!$page) ? 1 : $page;
-		$offset = ($page - 1) * $limit;
+
+		list($page, $offset, $numPages) = pager($total, $limit, $page);
 
 		$nav[] = ($page > 1)
 		?	PrevNextLink("log",$page-1,gTxt('prev'),'prev') : '';
