@@ -44,10 +44,8 @@ $LastChangedRevision$
 
 		$total = getCount('textpattern',"1"); 
 		$limit = max(@$article_list_pageby, 15);
-		$numPages = ceil($total/$limit);  
-		$page = (!$page) ? 1 : $page;
 
-		$offset = ($page - 1) * $limit;
+		list($page, $offset, $numPages) = pager($total, $limit, $page);
 
 		if (!$sort) $sort = "Posted";
 		if (!$dir) $dir = "desc";
