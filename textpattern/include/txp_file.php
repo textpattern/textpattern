@@ -47,8 +47,9 @@ $LastChangedRevision$
 
 		$total = getCount('txp_file',"1=1");  
 		$limit = max(@$file_list_pageby, 15);
-
-		list($page, $offset, $numPages) = pager($total, $limit, $page);
+		$numPages = ceil($total/$limit);  
+		$page = (!$page) ? 1 : $page;
+		$offset = ($page - 1) * $limit;
 
 		$sort = gps('sort');
 		$dir = gps('dir');

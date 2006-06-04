@@ -37,8 +37,9 @@ $LastChangedRevision$
 		$page = gps('page');
 		$total = getCount('txp_link',"1");  
 		$limit = max(@$link_list_pageby, 15);
-
-		list($page, $offset, $numPages) = pager($total, $limit, $page);
+		$numPages = ceil($total/$limit);  
+		$page = (!$page) ? 1 : $page;
+		$offset = ($page - 1) * $limit;
 
 		$sort = gps('sort');
 		$dir = gps('dir');

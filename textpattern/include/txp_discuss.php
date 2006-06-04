@@ -64,8 +64,9 @@ $LastChangedRevision$
 
 		$total = safe_count('txp_discuss',"1=1");  
 		$limit = max(@$comment_list_pageby, 15);
-
-		list($page, $offset, $numPages) = pager($total, $limit, $page);
+		$numPages = ceil($total/$limit);  
+		$page = (!$page) ? 1 : $page;
+		$offset = ($page - 1) * $limit;
 
 		$nav[] = ($page > 1)
 		?	PrevNextLink("discuss",$page-1,gTxt('prev'),'prev') : '';
