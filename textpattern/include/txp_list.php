@@ -95,11 +95,11 @@ $LastChangedRevision$
 			$crit_escaped = doSlash($crit);
 
 			$critsql = array(
-				'title_body' => "Title rlike '$crit' or Body rlike '$crit'",
-				'section'		 => "Section rlike '$crit'",
-				'categories' => "Category1 rlike '$crit' or Category2 rlike '$crit'",
-				'status'		 => "Status = '".(@$sesutats[$crit])."'",
-				'author'		 => "AuthorID rlike '$crit'",
+				'title_body' => "Title rlike '$crit_escaped' or Body rlike '$crit_escaped'",
+				'section'		 => "Section rlike '$crit_escaped'",
+				'categories' => "Category1 rlike '$crit_escaped' or Category2 rlike '$crit_escaped'",
+				'status'		 => "Status = '".(@$sesutats[$crit_escaped])."'",
+				'author'		 => "AuthorID rlike '$crit_escaped'",
 			);
 
 			if (array_key_exists($method, $critsql))
