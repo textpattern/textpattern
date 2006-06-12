@@ -29,22 +29,36 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function column_head($value, $sort='', $current_event='', $islink='', $dir='')
+
+	function column_head($value, $sort = '', $event = '', $is_link = '', $dir = '', $crit = '', $method = '')
 	{
-		$o = '<td class="small"><strong>';
-			if ($islink) {
-				$o.= '<a href="index.php';
-				$o.= ($sort) ? "?sort=$sort":'';
-				$o.= ($dir) ? a."dir=$dir":'';
-				$o.= ($current_event) ? a."event=$current_event":'';
-				$o.= a.'step=list">';
-			}
+		$o = '<th class="small">';
+
+		if ($is_link)
+		{
+			$o .= '<a href="index.php?step=list';
+
+			$o .= ($event) ? a."event=$event" : '';
+			$o .= ($sort) ? a."sort=$sort" : '';
+			$o .= ($dir) ? a."dir=$dir" : '';
+			$o .= ($crit) ? a."crit=$crit" : '';
+			$o .= ($method) ? a."method=$method" : '';
+
+			$o .= '">';
+		}
+
 		$o .= gTxt($value);
-			if ($islink) { $o .= "</a>"; }
-		$o .= '</strong></td>';
+
+		if ($is_link)
+		{
+			$o .= '</a>';
+		}
+
+		$o .= '</th>';
+
 		return $o;
 	}
-	
+
 // -------------------------------------------------------------
 	function hCell($text="",$caption="")
 	{

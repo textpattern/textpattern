@@ -368,16 +368,20 @@ height: 80px;
 /* comments
 ----------------------------------------------- */
 
-tr.spam td {
-font-style: italic;
-color : #999;
-background-color:#eee;
+tr.spam td, 
+tr.spam a {
+color: #666;
+background-color: #f1f1f1;
 }
 
-tr.moderate td {
-font-size: 14px;
-color : #c00;
-background-color: #ffb;
+tr.moderate td, 
+tr.moderate a {
+color: #900;
+background-color: #fff8f8;
+}
+
+tr.spam a, tr.moderate a {
+font-weight: bold;
 }
 
 /* pages

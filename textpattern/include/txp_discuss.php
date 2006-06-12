@@ -42,137 +42,362 @@ $LastChangedRevision$
 	}
 
 //-------------------------------------------------------------
+
 	function short_preview($message)
 	{
 		$message = strip_tags($message);
-		$offset = min(175,strlen($message));
-		if ( strpos($message,' ',$offset) !== false)
+		$offset = min(150, strlen($message));
+
+		if (strpos($message, ' ', $offset) !== false)
 		{
 			$maxpos = strpos($message,' ',$offset);
-			$message = substr($message,0,$maxpos).'...';
+			$message = substr($message, 0, $maxpos).'&#8230;';
 		}
+
 		return $message;
 	}
-//-------------------------------------------------------------
-	function discuss_list($message='') 
-	{
-		pagetop(gTxt('list_discussions'),$message);
 
-		extract(doSlash(gpsa(array('page','crit'))));
+//-------------------------------------------------------------
+
+	function discuss_list($message = '')
+	{
+		pagetop(gTxt('list_discussions'), $message);
+
+		echo graf(
+			'<a href="index.php?event=discuss'.a.'step=ipban_list">'.gTxt('list_banned_ips').'</a>'
+		, ' colspan="2" align="center" valign="middle"');
 
 		extract(get_prefs());
 
-		$total = safe_count('txp_discuss',"1=1");  
+		extract(gpsa(array('sort', 'dir', 'page', 'crit', 'method')));
+
+		$dir = ($dir == 'desc') ? 'desc' : 'asc';
+
+		switch ($sort)
+		{
+			case 'id':
+				$sort_sql = '`discussid` '.$dir;
+			break;
+
+			case 'date':
+				$sort_sql = '`posted` '.$dir;
+			break;
+
+			case 'ip':
+				$sort_sql = '`ip` '.$dir.', `posted` asc';
+			break;
+
+			case 'name':
+				$sort_sql = '`name` '.$dir.', `posted` asc';
+			break;
+
+			case 'email':
+				$sort_sql = '`email` '.$dir.', `posted` asc';
+			break;
+
+			case 'website':
+				$sort_sql = '`web` '.$dir.', `posted` asc';
+			break;
+
+			case 'message':
+				$sort_sql = '`message` '.$dir.', `posted` asc';
+			break;
+
+			case 'parent':
+				$sort_sql = '`parentid` '.$dir.', `posted` asc';
+			break;
+
+			default:
+				$dir = 'desc';
+				$sort_sql = '`posted` '.$dir;
+			break;
+		}
+
+		$switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
+
+		$total = safe_count('txp_discuss', '1=1');
+
+		if ($total < 1)
+		{
+			echo graf(gTxt('no_comments_recorded'), ' style="text-align: center;"');
+			return;
+		}
+
 		$limit = max(@$comment_list_pageby, 15);
 
 		list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-		$nav[] = ($page > 1)
-		?	PrevNextLink("discuss",$page-1,gTxt('prev'),'prev') : '';
+		$criteria = 1;
 
-		$nav[] = sp.small($page. '/'.$numPages).sp;
+		if ($crit or $method)
+		{
+			$crit_escaped = doSlash($crit);
 
-		$nav[] = ($page != $numPages) 
-		?	PrevNextLink("discuss",$page+1,gTxt('next'),'next') : '';
+			$critsql = array(
+				'id'			=> "discussid = '$crit_escaped'",
+				'name'		=> "name like '%$crit_escaped%'",
+				'email'		=> "email like '%$crit_escaped%'",
+				'website' => "web like '%$crit_escaped%'",
+				'ip'			=> "ip like %$crit_escaped%",
+				'message' => "message like '%$crit_escaped%'",
+			);
 
-		$criteria = ($crit) ? "message like '%$crit%'" : '1=1'; 
-
-		$rs = safe_rows_start(
-			"*, unix_timestamp(posted) as uPosted", 
-			"txp_discuss",
-			"$criteria order by posted desc limit $offset, $limit"
-		);
-
-		echo pageby_form('discuss',$comment_list_pageby);
-
-		if($rs) {	
-
-			echo '<form action="index.php" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">',
-
-			startTable('list'),
-			assHead('date','name','message','parent','');
-	
-			while ($a = nextRow($rs)) {
-				extract($a);
-				$dmessage = ($visible == SPAM) ? short_preview($message) : $message;
-				$date = "".safe_strftime('%b %e %I:%M %p',$uPosted)."";
-				$editlink = eLink('discuss','discuss_edit','discussid',$discussid,$date);
-				$cbox = fInput('checkbox','selected[]',$discussid);
-	
-				$tq = safe_row('Title, ID','textpattern',"ID = '".$parentid."'");
-				$parent = (empty($tq))
-							? tag(gTxt('article_deleted').' ('.$parentid.')','em')
-							: $tq['Title'] .' '. tag('('.$tq['ID'].')','em');
-
-				echo assRow(array(
-					$editlink   => 100,
-					$name       => 100,
-					$dmessage   => 250,
-					$parent     => 100,
-					$cbox       => 20
-				), ' class="'.(($visible == VISIBLE) ? 'visible' : (($visible == SPAM) ? 'spam' : 'moderate')).'"');
+			if (array_key_exists($method, $critsql))
+			{
+				$criteria = $critsql[$method];
+				$limit = 500;
 			}
-			
-			echo tr(tda(select_buttons().discuss_multiedit_form(),' colspan="5" style="text-align:right;border:0px"'));
-			
-			echo endTable().'</form>';
 
-			echo startTable('edit'),
-				tr(
+			else
+			{
+				$method = '';
+			}
+		}
+
+		echo discuss_search_form($crit, $method);
+
+		$rs = safe_rows_start('*, unix_timestamp(posted) as uPosted', 'txp_discuss', "
+			$criteria order by $sort_sql limit $offset, $limit
+		");
+
+		if ($rs and numRows($rs) > 0)
+		{
+			echo n.n.'<form name="longform" method="post" action="index.php" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
+
+				n.startTable('list').
+
+				column_head('ID', 'id', 'discuss', true, $switch_dir, $crit, $method).
+				column_head('date', 'date', 'discuss', true, $switch_dir, $crit, $method).
+				column_head('name', 'name', 'discuss', true, $switch_dir, $crit, $method).
+				column_head('email', 'email', 'discuss', true, $switch_dir, $crit, $method).
+				column_head('website', 'website', 'discuss', true, $switch_dir, $crit, $method).
+				column_head('IP', 'ip', 'discuss', true, $switch_dir, $crit, $method).
+				column_head('message', 'message', 'discuss', true, $switch_dir, $crit, $method).
+				column_head('parent', 'parent', 'discuss', true, $switch_dir, $crit, $method).
+				column_head('status', 'status', 'discuss', true, $switch_dir, $crit, $method).
+				hCell();
+
+			while ($a = nextRow($rs))
+			{
+				extract($a);
+
+				$dmessage = ($visible == SPAM) ? short_preview($message) : $message;
+
+				$tq = safe_row('Title, ID', 'textpattern', "ID = '".$parentid."'");
+
+				if (empty($tq))
+				{
+					$parent = gTxt('article_deleted').' ('.$parentid.')';
+				}
+
+				else
+				{
+					$parent_title = empty($tq['Title']) ? gTxt('untitled') : $tq['Title'];
+
+					$parent = '<a href="index.php?event=article&step=edit&ID='.$tq['ID'].'">'.$parent_title.'</a> ('.$tq['ID'].')';
+				}
+
+				switch($visible)
+				{
+					case VISIBLE:
+						$comment_status = gTxt('visible');
+						$row_class = 'visible';
+					break;
+
+					case SPAM:
+						$comment_status = gTxt('spam');
+						$row_class = 'spam';
+					break;
+
+					case MODERATE:
+						$comment_status = gTxt('unmoderated');
+						$row_class = 'moderate';
+					break;
+
+					default:
+					break;
+				}
+
+				echo n.n.tr(
+					n.td(
+						'<a href="?event=discuss'.
+							a.'step=discuss_edit'.
+							a.'discussid='.$discussid.
+							a.'sort='.$sort.
+							a.'dir='.$dir.
+							a.'page='.$page.
+							a.'crit='.doStrip($crit).
+							a.'method='.$method.
+							'">'.$discussid.'</a>'
+					, 50).
+
 					td(
-						form(
-							fInput('text','crit','','edit').
-							fInput('submit','search',gTxt('search'),'smallbox').
-							eInput("discuss").
-							sInput("list")
-						)
-					).
-					td(graf(join('',$nav)))).
-				tr(
-					tda(
-						graf('<a href="index.php?event=discuss'.a.'step=ipban_list">'.
-							gTxt('list_banned_ips').'</a>'),' colspan="2" align="center" valign="middle"'
-					)
-				)
-				,endTable();
+						safe_strftime('%d %b %Y %I:%M %p', $uPosted)
+					, 65).
 
-		} else echo graf(gTxt('no_comments_recorded'), ' align="center"');
+					td($name, 75).
+					td($email, 75).
+					td($web, 75).
+					td($ip, 75).
+
+					td(
+						short_preview($dmessage)
+					, 200).
+
+					td($parent, 100).
+
+					td($comment_status, 75).
+
+					td(
+						fInput('checkbox', 'selected[]', $discussid)
+					, 20)
+
+				, ' class="'.$row_class.'"');
+			}
+
+			$nav[] = ($page > 1) ? PrevNextLink('discuss', $page - 1, gTxt('prev'), 'prev') : '';
+			$nav[] = sp.small($page.'/'.$numPages).sp;
+			$nav[] = ($page != $numPages) ? PrevNextLink('discuss', $page + 1, gTxt('next'), 'next') : '';
+
+			echo tr(
+				tda(
+					select_buttons().discuss_multiedit_form()
+				,' colspan="9" style="text-align: right; border: none;"')
+			).
+
+			endTable().
+			'</form>'.
+
+			graf(join('', $nav), ' style="text-align: center;"').
+
+			pageby_form('discuss', $comment_list_pageby);
+		}
+
+		elseif ($criteria != 1)
+		{
+			echo n.graf(gTxt('no_results_found'), ' style="text-align: center;"');
+		}
 	}
 
 //-------------------------------------------------------------
+
+	function discuss_search_form($crit, $method)
+	{
+		$methods =	array(
+			'id'			=> gTxt('ID'),
+			'name'		=> gTxt('name'),
+			'email'		=> gTxt('email'),
+			'website' => gTxt('website'),
+			'ip'			=> gTxt('IP'),
+			'message' => gTxt('message')
+		);
+
+		return form(
+			graf(
+				gTxt('Search').sp.selectInput('method', $methods, $method).
+				fInput('text', 'crit', $crit, 'edit', '', '', '15').
+				eInput('discuss').
+				sInput('list').
+				fInput('submit', 'search', gTxt('go'), 'smallerbox')
+			, ' style="text-align: center;"')
+		);
+	}
+
+//-------------------------------------------------------------
+
 	function discuss_edit()
 	{
-		$discussid=gps('discussid');
-		extract(safe_row("*", "txp_discuss", "discussid='$discussid'"));
-		$ta = '<textarea name="message" cols="60" rows="15">'.
-			preg_replace(array('/</', '/>/'), array('&lt;', '&gt;'), $message).'</textarea>';
-
-		if (fetch('ip','txp_discuss_ipban','ip',$ip)) {
-			$banstep = 'ipban_unban'; $bantext = gTxt('unban');
-		} else {
-			$banstep = 'ipban_add'; $bantext = gTxt('ban');
-		}
-		
-		$banlink = '[<a href="?event=discuss'.a.'step='.$banstep.a.'ip='.$ip.a.
-			'name='.urlencode($name).a.'discussid='.$discussid.'">'.$bantext.'</a>]';
-	
 		pagetop(gTxt('edit_comment'));
-		echo 
-			form(
-			startTable('edit').
+
+		extract(gpsa(array('discussid', 'sort', 'dir', 'page', 'crit', 'method')));
+
+		$discussid = doSlash($discussid);
+
+		$rs = safe_row('*, unix_timestamp(posted) as uPosted', 'txp_discuss', "discussid = '$discussid'");
+
+		if ($rs)
+		{
+			extract($rs);
+
+			$message = preg_replace(
+				array('/</', '/>/'), 
+				array('&lt;', '&gt;')
+			, $message);
+
+			if (fetch('ip', 'txp_discuss_ipban', 'ip', $ip))
+			{
+				$ban_step = 'ipban_unban';
+				$ban_text = gTxt('unban');
+			}
+
+			else
+			{
+				$ban_step = 'ipban_add';
+				$ban_text = gTxt('ban');
+			}
+
+			$ban_link = '[<a href="?event=discuss'.a.'step='.$ban_step.a.'ip='.$ip.
+				a.'name='.urlencode($name).a.'discussid='.$discussid.'">'.$ban_text.'</a>]';
+
+			echo form(
+				startTable('edit').
 				stackRows(
-					fLabelCell('name') . fInputCell('name',$name),
-					fLabelCell('email') . fInputCell('email',$email),
-					fLabelCell('website') . fInputCell('web',$web),
-					td() . td($ta),
-					fLabelCell('visible') . td(selectInput('visible', array(VISIBLE => gTxt('visible'), SPAM => gTxt('spam'),MODERATE => gTxt('unmoderated')),$visible,false)),
-					fLabelCell('IP') . td($ip.sp.$banlink),
-					td() . td(fInput('submit','step',gTxt('save'),'publish')),
-				hInput("discussid", $discussid).hInput('ip',$ip).hInput('parentid',$parentid).
-				eInput('discuss').sInput('discuss_save')
-			).
-			endTable()
-		);
+
+					fLabelCell('name').
+					fInputCell('name', $name),
+
+					fLabelCell('IP').
+					td("$ip $ban_link"),
+
+					fLabelCell('email').
+					fInputCell('email', $email),
+
+					fLabelCell('website').
+					fInputCell('web', $web),
+
+					fLabelCell('date').
+					td(
+						safe_strftime('%d %b %Y %I:%M %p', $uPosted)
+					),
+
+					tda(gTxt('message')).
+					td(
+						'<textarea name="message" cols="60" rows="15">'.$message.'</textarea>'
+					),
+
+					fLabelCell('status').
+					td(
+						selectInput('visible', array(
+							VISIBLE	 => gTxt('visible'),
+							SPAM		 => gTxt('spam'),
+							MODERATE => gTxt('unmoderated')
+						), $visible, false)
+					),
+
+					td().td(fInput('submit', 'step', gTxt('save'), 'publish')),
+
+					hInput('sort', $sort).
+					hInput('dir', $dir).
+					hInput('page', $page).
+					hInput('crit', $crit).
+					hInput('method', $method).
+
+					hInput('discussid', $discussid).
+					hInput('parentid', $parentid).
+					hInput('ip', $ip).
+
+					eInput('discuss').
+					sInput('discuss_save')
+				).
+
+				endTable()
+			);
+		}
+
+		else
+		{
+			echo graf(gTxt('comment_not_found'),' style="text-align: center;"');
+		}
 	}
 
 // -------------------------------------------------------------
@@ -213,43 +438,60 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function ipban_list($message='')
-	{
-		pageTop(gTxt('list_banned_ips'),$message);
-		$rs = safe_rows_start(
-				"*", 
-				"txp_discuss_ipban", 
-				"1=1 order by date_banned desc"
-			);
-		if ($rs) {
-			echo startTable('list'),
-			tr(
-				hCell('Date banned') .
-				hCell('ip')          .
-				hCell('Name used')   .
-				hCell('Banned for')  .
-				td()
-			);
 
-			while ($a = nextRow($rs)) {
-				extract($a);
-				
-				$unbanlink = '<a href="?event=discuss'.a.'step=ipban_unban'.a.
-					'ip='.$ip.'">unban</a>';
-				$datebanned = date("Y-m-d",strtotime($date_banned));
-				$messagelink = '<a href="?event=discuss'.a.'step=discuss_edit'.a.'discussid='.$banned_on_message.'">'.$banned_on_message.'</a>';
-				echo
+	function ipban_list($message = '')
+	{
+		pageTop(gTxt('list_banned_ips'), $message);
+
+		$rs = safe_rows_start('*, unix_timestamp(date_banned) as uBanned', 'txp_discuss_ipban', 
+			"1 = 1 order by date_banned desc");
+
+		if ($rs and numRows($rs) > 0)
+		{
+			echo startTable('list').
 				tr(
-					td($datebanned)  .
-					td($ip)          .
-					td($name_used)   .
-					td($messagelink) .
-					td($unbanlink)
+					hCell(gTxt('date_banned')).
+					hCell(gTxt('IP')).
+					hCell(gTxt('name_used')).
+					hCell(gTxt('banned_for')).
+					td()
 				);
-				
+
+			while ($a = nextRow($rs))
+			{
+				extract($a);
+
+				echo tr(
+					td(
+						safe_strftime('%d %b %Y %I:%M %p', $uBanned)
+					, 100).
+
+					td(
+						$ip
+					, 100).
+
+					td(
+						$name_used
+					, 100).
+
+					td(
+						'<a href="?event=discuss'.a.'step=discuss_edit'.a.'discussid='.$banned_on_message.'">'.
+							$banned_on_message.'</a>'
+					, 100).
+
+					td(
+						'<a href="?event=discuss'.a.'step=ipban_unban'.a.'ip='.$ip.'">'.gTxt('unban').'</a>'
+					)
+				);
 			}
+
 			echo endTable();
-		} else echo graf(gTxt('no_ips_banned'),' align="center"');
+		}
+
+		else
+		{
+			echo graf(gTxt('no_ips_banned'),' style="text-align: center;"');
+		}
 	}
 
 // -------------------------------------------------------------
@@ -354,6 +596,5 @@ $LastChangedRevision$
 		}
 		return discuss_list();
 	}
-
 
 ?>
