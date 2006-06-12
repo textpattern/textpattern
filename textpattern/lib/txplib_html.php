@@ -330,7 +330,7 @@ $LastChangedRevision$
 			substr(LANG, 3, 2): substr(LANG, 0, 2);
 
 		return '<a target="_blank"'.
-			' href="http://rpc.textpattern.com/help/?item='.$helpvar.a.'lang='.$lang.'"'.
+			' href="http://rpc.textpattern.com/help/?item='.$help_var.a.'lang='.$lang.'"'.
 			' onclick="popWin(this.href'.
 			($width ? ', '.$width : '').
 			($height ? ', '.$height : '').

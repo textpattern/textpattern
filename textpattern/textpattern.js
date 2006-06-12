@@ -29,7 +29,7 @@ function verify(msg)
 
 function toggleDisplay(id)
 {
-	if (document.getElementById)
+	if (!document.getElementById)
 	{
 		return false;
 	}
