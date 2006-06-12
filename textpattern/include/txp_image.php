@@ -31,14 +31,30 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function image_list($message = '') 
+
+	function image_list($message = '')
 	{
 		global $txpcfg, $extensions, $img_dir, $file_max_upload_size;
+
+		pagetop(gTxt('image'), $message);
 
 		extract($txpcfg);
 		extract(get_prefs());
 
-		extract(gpsa(array('sort', 'dir', 'page')));
+		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'method')));
+
+		if (!is_dir(IMPATH) or !is_writeable(IMPATH))
+		{
+			echo graf(
+				str_replace('{imgdir}', IMPATH, gTxt('img_dir_not_writeable'))
+			,' id="warning"');
+		}
+
+		else
+		{
+			echo upload_form(gTxt('upload_image'), gTxt('upload'),
+				'image_insert', 'image', '', $file_max_upload_size);
+		}
 
 		$dir = ($dir == 'desc') ? 'desc' : 'asc';
 
@@ -76,87 +92,176 @@ $LastChangedRevision$
 
 		$switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
-		pagetop(gTxt('image'),$message);
+		$criteria = 1;
 
-		echo pageby_form('image',$image_list_pageby);
+		if ($crit or $method)
+		{
+			$crit_escaped = doSlash($crit);
 
-		echo startTable('list'),
-		tr(
-			tda(
-				upload_form(gTxt('upload_file'),gTxt('upload'),'image_insert','image','',$file_max_upload_size),
-					' colspan="4" style="border:0"'
-			)
-		),
-		tr(
-			column_head('ID', 'id', 'image', true, $switch_dir).
-			column_head('name', 'name', 'image', true, $switch_dir).
-			column_head('thumbnail', 'thumbnail', 'image', true, $switch_dir).
-			hCell(gTxt('tags')).
-			column_head('image_category', 'category', 'image', true, $switch_dir).
-			column_head('author', 'author', 'image', true, $switch_dir).
-			hCell()
-		);
+			$critsql = array(
+				'id'			 => "id = '$crit_escaped'",
+				'name'		 => "`name` like '%$crit_escaped%'",
+				'category' => "`category` like '%$crit_escaped%'",
+				'author'	 => "`author` like '%$crit_escaped%'"
+			);
 
-		$total = getCount('txp_image',"1=1");  
+			if (array_key_exists($method, $critsql))
+			{
+				$criteria = $critsql[$method];
+				$limit = 500;
+			}
+
+			else
+			{
+				$method = '';
+			}
+		}
+
+		$total = safe_count('txp_image', "$criteria");
+
+		if ($total < 1)
+		{
+			if ($criteria != 1)
+			{
+				echo n.image_search_form($crit, $method).
+					n.graf(gTxt('no_results_found'), ' style="text-align: center;"');
+			}
+
+			else
+			{
+				echo n.graf(gTxt('no_images'), ' style="text-align: center;"');
+			}
+
+			return;
+		}
+
 		$limit = max(@$image_list_pageby, 15);
 
 		list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-		$nav[] = ($page > 1)
-		?	PrevNextLink("image",$page-1,gTxt('prev'),'prev') : '';
+		echo image_search_form($crit, $method);
 
-		$nav[] = sp.small($page. '/'.$numPages).sp;
+		$rs = safe_rows_start('*, unix_timestamp(`date`) as uDate', 'txp_image',
+			"$criteria order by $sort_sql limit $offset, $limit
+		");
 
-		$nav[] = ($page != $numPages) 
-		?	PrevNextLink("image",$page+1,gTxt('next'),'next') : '';
-		
-		$rs = safe_rows_start("*", "txp_image", "1 order by $sort_sql limit $offset, $limit");
-	
 		if ($rs)
 		{
+			echo n.n.startTable('list').
+				n.tr(
+					column_head('ID', 'id', 'image', true, $switch_dir, $crit, $method).
+					column_head('date', 'date', 'image', true, $switch_dir, $crit, $method).
+					column_head('name', 'name', 'image', true, $switch_dir, $crit, $method).
+					column_head('thumbnail', 'thumbnail', 'image', true, $switch_dir, $crit, $method).
+					hCell(gTxt('tags')).
+					column_head('image_category', 'category', 'image', true, $switch_dir, $crit, $method).
+					column_head('author', 'author', 'image', true, $switch_dir, $crit, $method).
+					hCell()
+				);
+
 			while ($a = nextRow($rs))
 			{
 				extract($a);
 
-				$thumbnail = ($thumbnail) ?	
-					'<img src="'.hu.$img_dir.'/'.$id.'t'.$ext.'" />' : 
+				$name = empty($name) ? gTxt('unnamed') : $name;
+
+				$thumbnail = ($thumbnail) ?
+					'<img src="'.hu.$img_dir.'/'.$id.'t'.$ext.'" />' :
 					gTxt('no');
-	
-				$textile = '<a target="_blank" href="?event=tag'.a.'name=image'.a.'id='.$id.a.'ext='.$ext.a.'alt='.$alt.a.'h='.$h.a.'w='.$w.a.'type=textile" onclick="window.open(this.href, \'popupwindow\', \'width=400,height=400,scrollbars,resizable\'); return false;">Textile</a>';
-				$txp = '<a target="_blank" href="?event=tag'.a.'name=image'.a.'id='.$id.a.'type=textpattern" onclick="window.open(this.href, \'popupwindow\', \'width=400,height=400,scrollbars,resizable\'); return false;">Textpattern</a>';
-				$xhtml = '<a target="_blank" href="?event=tag'.a.'name=image'.a.'id='.$id.a.'ext='.$ext.a.'alt='.$alt.a.'h='.$h.a.'w='.$w.a.'type=xhtml" onclick="window.open(this.href, \'popupwindow\', \'width=400,height=400,scrollbars,resizable\'); return false;">XHTML</a>';
-	
+
+				$url = '?event=tag'.a.'name=image'.a.'id='.$id.a.'ext='.$ext.a.
+					'alt='.$alt.a.'h='.$h.a.'w='.$w.a;
+
 				echo n.n.tr(
 					n.td(
 						eLink('image', 'image_edit', 'id', $id, $id)
-					).
+					, 20).
+
+					td(
+						safe_strftime('%d %b %Y %I:%M %p', $uDate)
+					, 75).
+
 					td(
 						eLink('image', 'image_edit', 'id', $id, $name)
-					).
-					td($thumbnail).
-					td($textile.' / '.$txp.' / '.$xhtml). 
-					td($category).
-					td($author).
+					, 75).
+
+					td(
+						$thumbnail
+					, 75).
+
+					td(
+						'<ul class="no-bullets">'.
+						'<li><a target="_blank" href="'.$url.'type=textile" onclick="popWin(this.href, 400, 250); return false;">Textile</a></li>'.
+						'<li><a target="_blank" href="'.$url.'type=textpattern" onclick="popWin(this.href, 400, 250); return false;">Textpattern</a></li>'.
+						'<li><a target="_blank" href="'.$url.'type=xhtml" onclick="popWin(this.href, 400, 250); return false;">XHTML</a></li>'.
+						'</ul>'
+					, 85).
+
+					td(
+						$category
+					, 75).
+
+					td(
+						$author
+					, 75).
+
 					td(
 						dLink('image', 'image_delete', 'id', $id)
 					, 10)
 				);
 			}
 
-			echo 
-				tr(
-					tdcs(
-						graf(join('',$nav))
-					,6)
-				);
-		}
-		echo endTable();
+			echo endTable().
 
-		if (!is_dir(IMPATH) or !is_writeable(IMPATH)) {
-		
-			echo graf(str_replace("{imgdir}",IMPATH,gTxt('img_dir_not_writeable')),' style="text-align:center;color:red"');
+			image_nav_form($page, $numPages, $sort, $dir, $crit, $method).
 
+			pageby_form('list', $article_list_pageby);
 		}
+	}
+
+// -------------------------------------------------------------
+
+	function image_search_form($crit, $method)
+	{
+		$methods =	array(
+			'id'       => gTxt('ID'),
+			'name'     => gTxt('name'),
+			'category' => gTxt('image_category'),
+			'author'	 => gTxt('author')
+		);
+
+		return n.n.form(
+			graf(
+
+				gTxt('Search').sp.selectInput('method', $methods, $method).
+				fInput('text', 'crit', $crit, 'edit', '', '', '15').
+				eInput('image').
+				sInput('image_list').
+				fInput('submit', 'search', gTxt('go'), 'smallerbox')
+
+			,' style="text-align: center;"')
+		);
+	}
+
+// -------------------------------------------------------------
+
+	function image_nav_form($page, $numPages, $sort, $dir, $crit, $method)
+	{
+		$nav = array();
+
+		if ($page > 1)
+		{
+			$nav[] = PrevNextLink('image', $page - 1, gTxt('prev'), 'prev', $sort, $dir, $crit, $method).sp;
+		}
+
+		$nav[] = small($page.'/'.$numPages);
+
+		if ($page != $numPages)
+		{
+			$nav[] = sp.PrevNextLink('image', $page + 1, gTxt('next'), 'next', $sort, $dir, $crit, $method);
+		}
+
+		return graf(join('', $nav),' style="text-align: center;"');
 	}
 
 // -------------------------------------------------------------

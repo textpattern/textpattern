@@ -130,6 +130,10 @@ background-color: #eee;
 /* form element overrides
 ----------------------------------------------- */
 
+form.upload-form {
+text-align: center;
+}
+
 input.cancel, input.delete,
 input.interbox, input.interbox2,
 input.navbox,
@@ -264,6 +268,31 @@ height: 30px;
 
 table#list th {
 vertical-align: bottom;
+}
+
+/* other element overrides
+----------------------------------------------- */
+
+ul.no-bullets {
+margin: 0;
+padding: 0;
+list-style-type: none;
+}
+
+ul.no-bullets li {
+margin: 0 0 2px 0;
+padding: 0;
+}
+
+#warning {
+margin: 0 auto 15px auto;
+padding: 10px;
+width: 30em;
+font-size: 1.1em;
+text-align: center;
+color: inherit;
+background-color: #fff4f4;
+border: 2px solid #fdd;
 }
 
 /* global layout
