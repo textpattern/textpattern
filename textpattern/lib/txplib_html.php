@@ -137,16 +137,17 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function PrevNextLink($event,$topage,$label,$type,$sort='',$dir='')
+
+	function PrevNextLink($event, $page, $label, $type, $sort = '', $dir = '', $crit = '', $method = '')
 	{
-		return join('',array(
-			'<a href="?event='.$event.a.'step=list'.a.'page='.$topage,
-			($sort) ? a.'sort='.$sort : '',
-			($dir) ? a.'dir='.$dir : '',
-			'" class="navlink">',
-			($type=="prev") ? '&#8249;'.sp.$label : $label.sp.'&#8250;',
-			'</a>'
-		));
+		return '<a href="?event='.$event.a.'step=list'.a.'page='.$page.
+			($sort ? a.'sort='.$sort : '').
+			($dir ? a.'dir='.$dir : '').
+			($crit ? a.'crit='.$crit : '').
+			($method ? a.'method='.$method : '').
+			'" class="navlink">'.
+			($type == 'prev' ? '&#8249;'.sp.$label : $label.sp.'&#8250;').
+			'</a>';
 	}
 
 // -------------------------------------------------------------

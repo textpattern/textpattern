@@ -31,99 +31,192 @@ $LastChangedRevision$
 	}
 
 //--------------------------------------------------------------
-	function list_list($message="",$post='')
-	{		
+
+	function list_list($message = '', $post = '')
+	{
+		global $statuses, $step;
+
+		pagetop(gTxt('tab_list'), $message);
 
 		extract(get_prefs());
-		$lvars = array("page","sort","dir","crit",'method');
-		extract(gpsa($lvars));
-		global $statuses,$step;
-		$sesutats = array_flip($statuses);
-		
-		pagetop(gTxt('tab_list'),$message);
 
-		$total = getCount('textpattern',"1"); 
+		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'method')));
+
+		$sesutats = array_flip($statuses);
+
+		$dir = ($dir == 'desc') ? 'desc' : 'asc';
+
+		switch ($sort)
+		{
+			case 'id':
+				$sort_sql = '`ID` '.$dir;
+			break;
+
+			case 'posted':
+				$sort_sql = '`Posted` '.$dir;
+			break;
+
+			case 'title':
+				$sort_sql = '`Title` '.$dir.', `Posted` desc';
+			break;
+
+			case 'section':
+				$sort_sql = '`Section` '.$dir.', `Posted` desc';
+			break;
+
+			case 'category1':
+				$sort_sql = '`Category1` '.$dir.', `Posted` desc';
+			break;
+
+			case 'category2':
+				$sort_sql = '`Category2` '.$dir.', `Posted` desc';
+			break;
+
+			case 'status':
+				$sort_sql = '`Status` '.$dir.', `Posted` desc';
+			break;
+
+			case 'author':
+				$sort_sql = '`AuthorID` '.$dir.', `Posted` desc';
+			break;
+
+			default:
+				$dir = 'desc';
+				$sort_sql = '`Posted` '.$dir;
+			break;
+		}
+
+		$switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
+
+		$criteria = 1;
+
+		if ($crit or $method)
+		{
+			$crit_escaped = doSlash($crit);
+
+			$critsql = array(
+				'title_body' => "Title rlike '$crit' or Body rlike '$crit'",
+				'section'		 => "Section rlike '$crit'",
+				'categories' => "Category1 rlike '$crit' or Category2 rlike '$crit'",
+				'status'		 => "Status = '".(@$sesutats[$crit])."'",
+				'author'		 => "AuthorID rlike '$crit'",
+			);
+
+			if (array_key_exists($method, $critsql))
+			{
+				$criteria = $critsql[$method];
+				$limit = 500;
+			}
+
+			else
+			{
+				$method = '';
+			}
+		}
+
+		$total = safe_count('textpattern', "$criteria");
+
+		if ($total < 1)
+		{
+			if ($criteria != 1)
+			{
+				echo n.graf(gTxt('no_results_found'), ' style="text-align: center;"');
+			}
+
+			else
+			{
+				echo graf(gTxt('no_articles_recorded'), ' style="text-align: center;"');
+			}
+
+			return;
+		}
+
 		$limit = max(@$article_list_pageby, 15);
 
 		list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-		if (!$sort) $sort = "Posted";
-		if (!$dir) $dir = "desc";
-		if ($dir == "desc") { $linkdir = "asc"; } else { $linkdir = "desc"; }
+		echo list_searching_form($crit, $method);
 
-		if ($crit) {	
-			$critsql = array(
-				'title_body' => "Title rlike '$crit' or Body rlike '$crit'",
-				'author'     => "AuthorID rlike '$crit'",
-				'categories' => "Category1 rlike '$crit' or Category2 rlike '$crit'",
-				'section'    => "Section rlike '$crit'",
-				'status'     => "Status = '".(@$sesutats[$crit])."'"
-			);
-			$criteria = $critsql[$method];
-			$limit = 500;
-		} else $criteria = 1;
-			
-
-		$rs = safe_rows_start(
-			"*, unix_timestamp(Posted) as uPosted", 
-			"textpattern", 
-			"$criteria order by $sort $dir limit $offset, $limit"
+		$rs = safe_rows_start('*, unix_timestamp(Posted) as uPosted', 'textpattern',
+			"$criteria order by $sort_sql limit $offset, $limit"
 		);
 
-		echo (!$crit) ? list_nav_form($page,$numPages,$sort,$dir) : '', list_searching_form($crit,$method);
-		
-		if ($rs) {
-			echo '<form action="index.php" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">',
-			startTable('list'),
-			'<tr>',
-				column_head('ID', 'ID', 'list', 1, $linkdir).
-				column_head('posted', 'posted', 'list', 1, $linkdir).
-				column_head('title', 'title', 'list', 1, $linkdir).
-				column_head('section', 'section', 'list', 1, $linkdir).
-				column_head('category1', 'category1', 'list', 1, $linkdir).
-				column_head('category2', 'category2', 'list', 1, $linkdir).
-				hCell(gTxt('author')),
-				column_head(gTxt('status'), 'Status', 'list', 1, $linkdir).
-				td(),
-			'</tr>';
-	
+		if ($rs)
+		{
+			echo n.n.'<form name="longform" method="post" action="index.php" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
+
+				n.startTable('list').
+				n.tr(
+					n.column_head('ID', 'id', 'list', true, $switch_dir, $crit, $method).
+					column_head('posted', 'posted', 'list', true, $switch_dir, $crit, $method).
+					column_head('title', 'title', 'list', true, $switch_dir, $crit, $method).
+					column_head('section', 'section', 'list', true, $switch_dir, $crit, $method).
+					column_head('category1', 'category1', 'list', true, $switch_dir, $crit, $method).
+					column_head('category2', 'category2', 'list', true, $switch_dir, $crit, $method).
+					column_head('status', 'status', 'list', true, $switch_dir, $crit, $method).
+					column_head('author', 'author', 'list', true, $switch_dir, $crit, $method).
+					td()
+				);
+
 			while ($a = nextRow($rs))
 			{
 				extract($a);
 
-				$Title = empty($Title) ? tag(gTxt('edit'), 'em') : $Title;
+				$Title = empty($Title) ? gTxt('untitled') : $Title;
 				$stat = !empty($Status) ? $statuses[$Status] : '';
 
 				echo n.n.tr(
 					n.td(
 						eLink('article', 'edit', 'ID', $ID, $ID)
-					).
+					, 50).
 
 					td(
-						safe_strftime('%d %b %Y', $uPosted)
-					).
+						safe_strftime('%d %b %Y %I:%M %p', $uPosted)
+					, 75).
 
 					td(
 						eLink('article', 'edit', 'ID', $ID, $Title)
 					, 200).
 
-					td($Section, 75).
-					td($Category1, 75).
-					td($Category2, 75).
-					td($AuthorID).
-					td($stat, 45).
+					td(
+						$Section
+					, 75).
+
+					td(
+						$Category1
+					, 75).
+
+					td(
+						$Category2
+					, 75).
+
+					td(
+						$stat
+					, 50).
+
+					td(
+						$AuthorID
+					, 75).
 
 					td(
 						fInput('checkbox', 'selected[]', $ID, '', '', '', '', '', $ID)
 					)
 				);
 			}
-			
-			echo tr(tda(select_buttons().
-			list_multiedit_form(),' colspan="8" style="text-align:right;border:0px"'));
-			
-			echo "</table></form>";
-			echo pageby_form('list',$article_list_pageby);
+
+			echo tr(
+				tda(
+					select_buttons().list_multiedit_form()
+				,' colspan="9" style="text-align: right; border: none;"')
+			).
+
+			endTable().
+			'</form>'.
+
+			list_nav_form($page, $numPages, $sort, $dir, $crit, $method).
+
+			pageby_form('list', $article_list_pageby);
+
 			unset($sort);
 		}
 	}
@@ -136,43 +229,50 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function list_searching_form($crit,$method) 
+
+	function list_searching_form($crit, $method)
 	{
-		$methods = 	array(
+		$methods =	array(
 			'title_body' => gTxt('title_body'),
-			'author' => gTxt('author'),
-			'section' => gTxt('section'),
+			'section'		 => gTxt('section'),
 			'categories' => gTxt('categories'),
-			'status' => gTxt('status')
-		);
-	
-		return
-		form(
-			graf(gTxt('Search').sp.selectInput('method',$methods,$method).
-				fInput('text','crit',$crit,'edit','','','15').
-				eInput("list").sInput('list').
-				fInput("submit","search",gTxt('go'),"smallerbox"),' align="center"')
+			'status'		 => gTxt('status'),
+			'author'		 => gTxt('author')
 		);
 
+		return n.n.form(
+			graf(
+
+				gTxt('Search').sp.selectInput('method', $methods, $method).
+				fInput('text', 'crit', $crit, 'edit', '', '', '15').
+				eInput("list").
+				sInput('list').
+				fInput('submit', 'search', gTxt('go'), 'smallerbox')
+
+			,' style="text-align: center;"')
+		);
 	}
 
 // -------------------------------------------------------------
-	function list_nav_form($page, $numPages, $sort, $dir) 
+
+	function list_nav_form($page, $numPages, $sort, $dir, $crit, $method)
 	{
-		$nav[] = ($page > 1) 
-		?	PrevNextLink("list",$page-1,gTxt('prev'),'prev',$sort, $dir)
-		:	'';
+		$nav = array();
 
-		$nav[] = sp.small($page. '/'.$numPages).sp;
+		if ($page > 1)
+		{
+			$nav[] = PrevNextLink('list', $page - 1, gTxt('prev'), 'prev', $sort, $dir, $crit, $method).sp;
+		}
 
-		$nav[] = ($page != $numPages) 
-		?	PrevNextLink("list",$page+1,gTxt('next'),'next',$sort, $dir)
-		:	'';
+		$nav[] = small($page.'/'.$numPages);
 
-		if ($nav) return graf(join('',$nav),' align="center"');
-	
+		if ($page != $numPages)
+		{
+			$nav[] = sp.PrevNextLink('list', $page + 1, gTxt('next'), 'next', $sort, $dir, $crit, $method);
+		}
+
+		return graf(join('', $nav),' style="text-align: center;"');
 	}
-
 
 // -------------------------------------------------------------
 	function list_multiedit_form() 
