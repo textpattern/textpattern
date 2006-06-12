@@ -308,49 +308,45 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function popHelp($helpvar,$winW='',$winH='') 
+
+	function popHelp($help_var, $width = '', $height = '') 
 	{
-		$the_lang = (LANG == 'cs-cz' || LANG == 'el-gr' || LANG == 'ja-jp') ? substr(LANG,3,2): substr(LANG,0,2);
-		return join('',array(
-			' <a target="_blank" href="http://rpc.textpattern.com/help/?item='.$helpvar.'&#38;lang='.$the_lang.'"',
-			' onclick="',
-			"window.open(this.href, 'popupwindow', 'width=",
-			($winW) ? $winW : 400,
-			',height=',
-			($winH) ? $winH : 400,
-			',scrollbars,resizable\'); return false;" class="pophelp">?</a>'
-		));
+		$lang = (LANG == 'cs-cz' || LANG == 'el-gr' || LANG == 'ja-jp') ? 
+			substr(LANG, 3, 2): substr(LANG, 0, 2);
+
+		return '<a target="_blank"'.
+			' href="http://rpc.textpattern.com/help/?item='.$help_var.a.'lang='.$lang.'"'.
+			' onclick="popWin(this.href'.
+			($width ? ', '.$width : '').
+			($height ? ', '.$height : '').
+			'); return false;" class="pophelp">?</a>';
 	}
 
 // -------------------------------------------------------------
-	function popHelpSubtle($helpvar,$winW='',$winH='') 
+
+	function popHelpSubtle($help_var, $width = '', $height = '') 
 	{
-		$the_lang = (LANG == 'cs-cz' || LANG == 'el-gr' || LANG == 'ja-jp') ? substr(LANG,3,2): substr(LANG,0,2);
-		return join('',array(
-			' <a target="_blank" href="http://rpc.textpattern.com/help/?item='.$helpvar.'&lang='.$the_lang.'"',
-			' onclick="',
-			"window.open(this.href, 'popupwindow', 'width=",
-			($winW) ? $winW : 400,
-			',height=',
-			($winH) ? $winH : 400,
-			',scrollbars,resizable\'); return false;">?</a>'
-		));
+		$lang = (LANG == 'cs-cz' || LANG == 'el-gr' || LANG == 'ja-jp') ? 
+			substr(LANG, 3, 2): substr(LANG, 0, 2);
+
+		return '<a target="_blank"'.
+			' href="http://rpc.textpattern.com/help/?item='.$helpvar.a.'lang='.$lang.'"'.
+			' onclick="popWin(this.href'.
+			($width ? ', '.$width : '').
+			($height ? ', '.$height : '').
+			'); return false;">?</a>';
 	}
 
-
 // -------------------------------------------------------------
-	function popTag($var,$text,$winW='',$winH='') 
+
+	function popTag($var, $text, $width = '', $height = '') 
 	{
-		return join('',array(
-			' <a target="_blank" href="?event=tag'.a.'name='.$var.'"',
-			' onclick="',
-			"window.open(this.href, 'popupwindow', 'width=",
-			($winW) ? $winW : 400,
-			',height=',
-			($winH) ? $winH : 400,
-			',scrollbars,resizable\'); return false;">',
-			$text,'</a>'
-		));
+		return '<a target="_blank"'.
+			' href="?event=tag'.a.'name='.$var.'"'.
+			' onclick="popWin(this.href'.
+			($width ? ', '.$width : '').
+			($height ? ', '.$height : '').
+			'); return false;">'.$text.'</a>';
 	}
 	
 // -------------------------------------------------------------
