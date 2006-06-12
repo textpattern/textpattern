@@ -115,18 +115,6 @@ $LastChangedRevision$
 
 		$switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
-		$total = safe_count('txp_discuss', '1=1');
-
-		if ($total < 1)
-		{
-			echo graf(gTxt('no_comments_recorded'), ' style="text-align: center;"');
-			return;
-		}
-
-		$limit = max(@$comment_list_pageby, 15);
-
-		list($page, $offset, $numPages) = pager($total, $limit, $page);
-
 		$criteria = 1;
 
 		if ($crit or $method)
@@ -154,13 +142,34 @@ $LastChangedRevision$
 			}
 		}
 
+		$total = safe_count('txp_discuss', "$criteria");
+
+		if ($total < 1)
+		{
+			if ($criteria != 1)
+			{
+				echo n.graf(gTxt('no_results_found'), ' style="text-align: center;"');
+			}
+
+			else
+			{
+				echo graf(gTxt('no_comments_recorded'), ' style="text-align: center;"');
+			}
+
+			return;
+		}
+
+		$limit = max(@$comment_list_pageby, 15);
+
+		list($page, $offset, $numPages) = pager($total, $limit, $page);
+
 		echo discuss_search_form($crit, $method);
 
 		$rs = safe_rows_start('*, unix_timestamp(posted) as uPosted', 'txp_discuss', "
 			$criteria order by $sort_sql limit $offset, $limit
 		");
 
-		if ($rs and numRows($rs) > 0)
+		if ($rs)
 		{
 			echo n.n.'<form name="longform" method="post" action="index.php" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
 
@@ -255,10 +264,6 @@ $LastChangedRevision$
 				, ' class="'.$row_class.'"');
 			}
 
-			$nav[] = ($page > 1) ? PrevNextLink('discuss', $page - 1, gTxt('prev'), 'prev') : '';
-			$nav[] = sp.small($page.'/'.$numPages).sp;
-			$nav[] = ($page != $numPages) ? PrevNextLink('discuss', $page + 1, gTxt('next'), 'next') : '';
-
 			echo tr(
 				tda(
 					select_buttons().discuss_multiedit_form()
@@ -268,14 +273,9 @@ $LastChangedRevision$
 			endTable().
 			'</form>'.
 
-			graf(join('', $nav), ' style="text-align: center;"').
+			discuss_nav_form($page, $numPages, $sort, $dir, $crit, $method).
 
 			pageby_form('discuss', $comment_list_pageby);
-		}
-
-		elseif ($criteria != 1)
-		{
-			echo n.graf(gTxt('no_results_found'), ' style="text-align: center;"');
 		}
 	}
 
@@ -301,6 +301,27 @@ $LastChangedRevision$
 				fInput('submit', 'search', gTxt('go'), 'smallerbox')
 			, ' style="text-align: center;"')
 		);
+	}
+
+//-------------------------------------------------------------
+
+	function discuss_nav_form($page, $numPages, $sort, $dir, $crit, $method)
+	{
+		$nav = array();
+
+		if ($page > 1)
+		{
+			$nav[] = PrevNextLink('discuss', $page - 1, gTxt('prev'), 'prev', $sort, $dir, $crit, $method).sp;
+		}
+
+		$nav[] = small($page.'/'.$numPages);
+
+		if ($page != $numPages)
+		{
+			$nav[] = sp.PrevNextLink('discuss', $page + 1, gTxt('next'), 'next', $sort, $dir, $crit, $method);
+		}
+
+		return graf(join('', $nav),' style="text-align: center;"');
 	}
 
 //-------------------------------------------------------------
