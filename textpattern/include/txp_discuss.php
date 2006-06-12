@@ -148,7 +148,8 @@ $LastChangedRevision$
 		{
 			if ($criteria != 1)
 			{
-				echo n.graf(gTxt('no_results_found'), ' style="text-align: center;"');
+				echo n.discuss_search_form($crit, $method).
+					n.graf(gTxt('no_results_found'), ' style="text-align: center;"');
 			}
 
 			else

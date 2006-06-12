@@ -120,7 +120,8 @@ $LastChangedRevision$
 		{
 			if ($criteria != 1)
 			{
-				echo n.graf(gTxt('no_results_found'), ' style="text-align: center;"');
+				echo n.list_searching_form($crit, $method).
+					n.graf(gTxt('no_results_found'), ' style="text-align: center;"');
 			}
 
 			else
@@ -135,7 +136,7 @@ $LastChangedRevision$
 
 		list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-		echo list_searching_form($crit, $method);
+		echo n.list_searching_form($crit, $method);
 
 		$rs = safe_rows_start('*, unix_timestamp(Posted) as uPosted', 'textpattern',
 			"$criteria order by $sort_sql limit $offset, $limit"
@@ -245,7 +246,7 @@ $LastChangedRevision$
 
 				gTxt('Search').sp.selectInput('method', $methods, $method).
 				fInput('text', 'crit', $crit, 'edit', '', '', '15').
-				eInput("list").
+				eInput('list').
 				sInput('list').
 				fInput('submit', 'search', gTxt('go'), 'smallerbox')
 
