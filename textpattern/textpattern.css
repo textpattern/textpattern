@@ -289,6 +289,17 @@ vertical-align: bottom;
 /* other element overrides
 ----------------------------------------------- */
 
+p#js {
+margin-top: 10px;
+padding-right: 30px;
+display: none;
+}
+
+p#js span {
+padding: 10px;
+background-color: #ffc;
+}
+
 ul.tag-links {
 margin-bottom: 10px;
 font-size: 0.9em;

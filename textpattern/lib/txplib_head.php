@@ -76,7 +76,6 @@ $LastChangedRevision$
 				elm.parentNode.appendChild(br);
 				pjs = document.createElement('P');
 				pjs.setAttribute('id','js');
-				pjs.setAttribute('style','text-align:right; padding-right:30px; display: none;');
 				elm.parentNode.appendChild(pjs);
 			}
 			
@@ -84,10 +83,10 @@ $LastChangedRevision$
 			
 			if(something!='' && something == 'changesection'){
 				sects = '<?php echo $sections; ?>';
-				pjs.innerHTML = '<span style="background-color: #ffc; padding: 10px;"><?php echo gTxt('section') ?>: '+sects+'</span>';
+				pjs.innerHTML = '<span><?php echo gTxt('section') ?>: '+sects+'</span>';
 			}else if(something!='' && something == 'changestatus'){
 				stats = '<?php echo $statuses; ?>';
-				pjs.innerHTML = '<span style="background-color: #ffc; padding: 10px;"><?php echo gTxt('status') ?>: '+stats+'</span>';
+				pjs.innerHTML = '<span><?php echo gTxt('status') ?>: '+stats+'</span>';
 			}else{
 				pjs.style.display = 'none';
 			}
