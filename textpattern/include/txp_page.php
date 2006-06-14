@@ -44,18 +44,30 @@ $LastChangedRevision$
 			).
 			tr(
 				tda(
-					hed(gTxt('useful_tags'),2).
-					graf(gTxt('page_article_hed').br.small(taglinks('page_article')),' class="column"').
-					graf(gTxt('page_article_nav_hed').br.small(taglinks('page_article_nav')),' class="column"').
-					graf(gTxt('page_nav_hed').br.
-						small(taglinks('page_nav')),' class="column"').
-					graf(gTxt('page_xml_hed').br.
-						small(taglinks('page_xml')),' class="column"').
-					graf(gTxt('page_misc_hed').br.
-						small(taglinks('page_misc')),' class="column"').
-					graf(gTxt('page_file_hed').br.
-						small(taglinks('page_file')),' class="column"')
+
+					n.hed(
+						gTxt('useful_tags')
+					, 2).
+
+					n.n.hed(gTxt('page_article_hed'), 3).
+						n.taglinks('page_article').
+
+					n.n.hed(gTxt('page_article_nav_hed'), 3).
+						n.taglinks('page_article_nav').
+
+					n.n.hed(gTxt('page_nav_hed'), 3).
+						n.taglinks('page_nav').
+
+					n.n.hed(gTxt('page_xml_hed'), 3).
+						n.taglinks('page_xml').
+
+					n.n.hed(gTxt('page_misc_hed'), 3).
+						n.taglinks('page_misc').
+
+					n.n.hed(gTxt('page_file_hed'), 3).
+						n.taglinks('page_file')
 				).
+
 				tda(
 					page_edit_form($name),' class="column"'
 				).

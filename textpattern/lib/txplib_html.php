@@ -350,16 +350,28 @@ $LastChangedRevision$
 	}
 	
 // -------------------------------------------------------------
+
 	function popTagLinks($type) 
 	{
 		global $txpcfg;
+
 		include txpath.'/lib/taglib.php';
+
 		$arname = $type.'_tags';
 		asort($$arname);
-		foreach($$arname as $a) {
-			$out[] = popTag($a,gTxt('tag_'.$a));
+
+		$out = array();
+
+		$out[] = n.'<ul class="tag-links">';
+
+		foreach ($$arname as $a)
+		{
+			$out[] = n.t.tag(popTag($a,gTxt('tag_'.$a)), 'li');
 		}
-		return join(br,$out);
+
+		$out[] = n.'</ul>';
+
+		return join('', $out);
 	}
 
 //-------------------------------------------------------------

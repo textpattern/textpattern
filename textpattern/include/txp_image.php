@@ -190,7 +190,7 @@ $LastChangedRevision$
 					, 75).
 
 					td(
-						'<ul class="no-bullets">'.
+						'<ul>'.
 						'<li><a target="_blank" href="'.$url.'type=textile" onclick="popWin(this.href, 400, 250); return false;">Textile</a></li>'.
 						'<li><a target="_blank" href="'.$url.'type=textpattern" onclick="popWin(this.href, 400, 250); return false;">Textpattern</a></li>'.
 						'<li><a target="_blank" href="'.$url.'type=xhtml" onclick="popWin(this.href, 400, 250); return false;">XHTML</a></li>'.

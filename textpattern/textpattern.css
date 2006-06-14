@@ -20,6 +20,11 @@ small {
 font-size: 10px;
 }
 
+h1, h2, h3, p, ul {
+margin: 0 0 10px 0;
+padding: 0;
+}
+
 h1, h2, h3 {
 font-family: Georgia, Times, serif;
 font-weight: normal;
@@ -27,21 +32,27 @@ font-weight: normal;
 
 h1 {
 font-size: 16px;
-text-align: left;
 }
 
 h2 {
-margin: 16px auto 8px auto;
-font-size: 13px;
+font-size: 15px;
 }
 
 h3 {
 font-size: 14px;
-line-height: 18px;
 }
 
 p {
 line-height: 1.4em;
+}
+
+ul {
+list-style-type: none;
+}
+
+li {
+margin: 0 0 2px 0;
+padding: 0;
 }
 
 fieldset {
@@ -72,6 +83,10 @@ vertical-align: top;
 
 /* links
 ----------------------------------------------- */
+
+h3 a {
+font-weight: bold;
+}
 
 a img {
 border: none;
@@ -123,6 +138,7 @@ background-color: transparent;
 
 a.pophelp {
 padding: 0 2px;
+font-weight: normal;
 color: #00f;
 background-color: #eee;
 }
@@ -273,15 +289,9 @@ vertical-align: bottom;
 /* other element overrides
 ----------------------------------------------- */
 
-ul.no-bullets {
-margin: 0;
-padding: 0;
-list-style-type: none;
-}
-
-ul.no-bullets li {
-margin: 0 0 2px 0;
-padding: 0;
+ul.tag-links {
+margin-bottom: 10px;
+font-size: 0.9em;
 }
 
 #warning {
