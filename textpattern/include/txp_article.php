@@ -304,37 +304,55 @@ if (!empty($event) and $event == 'article') {
 			$next_id = checkIfNeighbour('next',$sPosted);
 		}
 
-		pagetop($Title,$message);
-		echo '<form action="index.php" method="post" name="article">';
+		pagetop($Title, $message);
 
-		if (!empty($store_out)) echo hInput('store',base64_encode(serialize($store_out)));		
-		echo
-		hInput('ID',$ID),
-		eInput('article'),
-		sInput($step);
+		echo n.n.'<form name="article" method="post" action="index.php">';
 
-		echo
-		'<input type="hidden" name="view" />',
-		startTable('edit');
+		if (!empty($store_out))
+		{
+			echo hInput('store', base64_encode(serialize($store_out)));
+		}
 
-		echo '<tr><td>&nbsp;</td><td colspan="3">',
+		echo hInput('ID', $ID).
+			eInput('article').
+			sInput($step).
+			'<input type="hidden" name="view" />'.
+
+			startTable('edit').
+
+			'<tr><td>&nbsp;</td><td colspan="3">';
 
 	//-- title input -------------- 
 
-				($view=='preview')
-				?	hed(gTxt('preview'),2).graf($Title)
-				:	'',
-				($view=='html')
-				?	hed('XHTML',2).graf($Title)
-				:	'',
-				($view=='text')
-				?	br.'<input type="text" id="title" name="Title" value="'.cleanfInput($Title).'" class="edit" size="40" tabindex="1" />'
-				:	'',
-		'</td></tr>';
+		if ($view == 'preview')
+		{
+			echo hed(gTxt('preview'), 2).graf($Title);
+		}
+
+		if ($view == 'html')
+		{
+			echo hed('XHTML',2).graf($Title);
+		}
+
+		if ($view == 'text')
+		{
+			echo br.'<input type="text" id="title" name="Title" value="'.cleanfInput($Title).'" class="edit" size="40" tabindex="1" />';
+
+			if ($Status == 4 or $Status == 5)
+			{
+				include_once txpath.'/publish/taghandlers.php';
+
+				$article_array = ($pull) ? $rs : gpsa($vars);
+
+				echo sp.sp.'<a href="'.permlinkurl($article_array).'">'.gTxt('view').'</a>';
+			}
+		}
+
+		echo '</td></tr>'.
 
 	//-- article input --------------
 
-  		echo '<tr>'.n.
+  		'<tr>'.n.
 				'<td id="article-col-1">',
 
 	//-- textile help --------------
