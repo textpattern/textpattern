@@ -80,6 +80,10 @@ $LastChangedRevision$
 				$sort_sql = '`AuthorID` '.$dir.', `Posted` desc';
 			break;
 
+			case 'comments':
+				$sort_sql = '`comments_count` '.$dir.', `Posted` desc';
+			break;
+
 			default:
 				$dir = 'desc';
 				$sort_sql = '`Posted` '.$dir;
@@ -95,6 +99,7 @@ $LastChangedRevision$
 			$crit_escaped = doSlash($crit);
 
 			$critsql = array(
+				'id'         => "ID = '$crit_escaped'",
 				'title_body' => "Title rlike '$crit_escaped' or Body rlike '$crit_escaped'",
 				'section'		 => "Section rlike '$crit_escaped'",
 				'categories' => "Category1 rlike '$crit_escaped' or Category2 rlike '$crit_escaped'",
@@ -149,6 +154,7 @@ $LastChangedRevision$
 				n.startTable('list').
 				n.tr(
 					n.column_head('ID', 'id', 'list', true, $switch_dir, $crit, $method).
+					hCell().
 					column_head('posted', 'posted', 'list', true, $switch_dir, $crit, $method).
 					column_head('title', 'title', 'list', true, $switch_dir, $crit, $method).
 					column_head('section', 'section', 'list', true, $switch_dir, $crit, $method).
@@ -156,48 +162,49 @@ $LastChangedRevision$
 					column_head('category2', 'category2', 'list', true, $switch_dir, $crit, $method).
 					column_head('status', 'status', 'list', true, $switch_dir, $crit, $method).
 					column_head('author', 'author', 'list', true, $switch_dir, $crit, $method).
-					td()
+					column_head('comments', 'comments', 'list', true, $switch_dir, $crit, $method).
+					hCell()
 				);
+
+			include_once txpath.'/publish/taghandlers.php';
 
 			while ($a = nextRow($rs))
 			{
 				extract($a);
 
-				$Title = empty($Title) ? gTxt('untitled') : $Title;
-				$stat = !empty($Status) ? $statuses[$Status] : '';
+				$Title = empty($Title) ? '<em>'.gTxt('untitled').'</em>' : $Title;
+
+				$manage = n.'<ul>'.
+						n.'<li>'.eLink('article', 'edit', 'ID', $ID, gTxt('edit')).'</li>'.
+						( ($Status == 4 or $Status == 5) ? n.'<li><a href="'.permlinkurl($a).'">'.gTxt('view').'</a></li>' : '' ).
+						n.'</ul>';
+
+				$Status = !empty($Status) ? $statuses[$Status] : '';
+
+				$comments = gTxt('none');
+
+				if ($comments_count > 0)
+				{
+					$comments = href(gTxt('manage'), 'index.php?event=discuss'.a.'step=list'.a.'method=parent'.a.'crit='.$ID).
+						' ('.$comments_count.')';
+				}
 
 				echo n.n.tr(
-					n.td(
-						eLink('article', 'edit', 'ID', $ID, $ID)
-					, 50).
+
+					n.td($ID, 35).
+					td($manage, 35).
 
 					td(
 						safe_strftime('%d %b %Y %I:%M %p', $uPosted)
 					, 75).
 
-					td(
-						eLink('article', 'edit', 'ID', $ID, $Title)
-					, 200).
-
-					td(
-						$Section
-					, 75).
-
-					td(
-						$Category1
-					, 75).
-
-					td(
-						$Category2
-					, 75).
-
-					td(
-						$stat
-					, 50).
-
-					td(
-						$AuthorID
-					, 75).
+					td($Title, 175).
+					td($Section, 75).
+					td($Category1, 100).
+					td($Category2, 100).
+					td($Status, 50).
+					td($AuthorID, 75).
+					td($comments).
 
 					td(
 						fInput('checkbox', 'selected[]', $ID, '', '', '', '', '', $ID)
@@ -205,18 +212,19 @@ $LastChangedRevision$
 				);
 			}
 
-			echo tr(
+			echo n.n.tr(
 				tda(
-					select_buttons().list_multiedit_form()
-				,' colspan="9" style="text-align: right; border: none;"')
+					select_buttons().
+					list_multiedit_form()
+				,' colspan="11" style="text-align: right; border: none;"')
 			).
 
-			endTable().
-			'</form>'.
+			n.endTable().
+			n.'</form>'.
 
-			list_nav_form($page, $numPages, $sort, $dir, $crit, $method).
+			n.list_nav_form($page, $numPages, $sort, $dir, $crit, $method).
 
-			pageby_form('list', $article_list_pageby);
+			n.pageby_form('list', $article_list_pageby);
 
 			unset($sort);
 		}
@@ -234,6 +242,7 @@ $LastChangedRevision$
 	function list_searching_form($crit, $method)
 	{
 		$methods =	array(
+			'id'         => gTxt('ID'),
 			'title_body' => gTxt('title_body'),
 			'section'		 => gTxt('section'),
 			'categories' => gTxt('categories'),

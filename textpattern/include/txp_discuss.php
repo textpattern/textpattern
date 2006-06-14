@@ -123,11 +123,12 @@ $LastChangedRevision$
 
 			$critsql = array(
 				'id'			=> "discussid = '$crit_escaped'",
+				'parent'  => "parentid = '$crit_escaped'",
 				'name'		=> "name like '%$crit_escaped%'",
+				'message' => "message like '%$crit_escaped%'",
 				'email'		=> "email like '%$crit_escaped%'",
 				'website' => "web like '%$crit_escaped%'",
 				'ip'			=> "ip like %$crit_escaped%",
-				'message' => "message like '%$crit_escaped%'",
 			);
 
 			if (array_key_exists($method, $critsql))
@@ -177,37 +178,31 @@ $LastChangedRevision$
 				n.startTable('list').
 
 				column_head('ID', 'id', 'discuss', true, $switch_dir, $crit, $method).
+				hCell().
 				column_head('date', 'date', 'discuss', true, $switch_dir, $crit, $method).
 				column_head('name', 'name', 'discuss', true, $switch_dir, $crit, $method).
+				column_head('message', 'message', 'discuss', true, $switch_dir, $crit, $method).
 				column_head('email', 'email', 'discuss', true, $switch_dir, $crit, $method).
 				column_head('website', 'website', 'discuss', true, $switch_dir, $crit, $method).
 				column_head('IP', 'ip', 'discuss', true, $switch_dir, $crit, $method).
-				column_head('message', 'message', 'discuss', true, $switch_dir, $crit, $method).
-				column_head('parent', 'parent', 'discuss', true, $switch_dir, $crit, $method).
 				column_head('status', 'status', 'discuss', true, $switch_dir, $crit, $method).
+				column_head('parent', 'parent', 'discuss', true, $switch_dir, $crit, $method).
 				hCell();
+
+			include_once txpath.'/publish/taghandlers.php';
 
 			while ($a = nextRow($rs))
 			{
 				extract($a);
 
+				$tq = safe_row('*, `ID` as thisid, unix_timestamp(`Posted`) as posted', 'textpattern', "ID = '".$parentid."'");
+
+				$edit_url = '?event=discuss'.a.'step=discuss_edit'.a.'discussid='.$discussid.a.'sort='.$sort.
+					a.'dir='.$dir.a.'page='.$page.a.'crit='.doStrip($crit).a.'method='.$method;
+
 				$dmessage = ($visible == SPAM) ? short_preview($message) : $message;
 
-				$tq = safe_row('Title, ID', 'textpattern', "ID = '".$parentid."'");
-
-				if (empty($tq))
-				{
-					$parent = gTxt('article_deleted').' ('.$parentid.')';
-				}
-
-				else
-				{
-					$parent_title = empty($tq['Title']) ? gTxt('untitled') : $tq['Title'];
-
-					$parent = '<a href="index.php?event=article&step=edit&ID='.$tq['ID'].'">'.$parent_title.'</a> ('.$tq['ID'].')';
-				}
-
-				switch($visible)
+				switch ($visible)
 				{
 					case VISIBLE:
 						$comment_status = gTxt('visible');
@@ -228,35 +223,49 @@ $LastChangedRevision$
 					break;
 				}
 
+				if (empty($tq))
+				{
+					$parent = gTxt('article_deleted').' ('.$parentid.')';
+					$view = '';
+				}
+
+				else
+				{
+					$parent_title = empty($tq['Title']) ? '<em>'.gTxt('untitled').'</em>' : $tq['Title'];
+
+					$parent = href($parent_title, '?event=list'.a.'step=list'.a.'method='.$method.a.'crit='.$tq['ID']);
+
+					$view = ($tq['Status'] == 4 or $tq['Status'] == 5) ? 
+						n.'<li><a href="'.permlinkurl($tq).'#c'.$discussid.'">'.gTxt('view').'</a></li>' : 
+						'';
+				}
+
 				echo n.n.tr(
-					n.td(
-						'<a href="?event=discuss'.
-							a.'step=discuss_edit'.
-							a.'discussid='.$discussid.
-							a.'sort='.$sort.
-							a.'dir='.$dir.
-							a.'page='.$page.
-							a.'crit='.doStrip($crit).
-							a.'method='.$method.
-							'">'.$discussid.'</a>'
-					, 50).
+
+					n.td($discussid, 50).
+
+					td(
+						n.'<ul>'.
+						n.'<li><a href="'.$edit_url.'">'.gTxt('edit').'</a></li>'.
+						$view.
+						n.'</ul>'
+					, 35).
 
 					td(
 						safe_strftime('%d %b %Y %I:%M %p', $uPosted)
-					, 65).
+					, 75).
 
 					td($name, 75).
-					td($email, 75).
-					td($web, 75).
-					td($ip, 75).
 
 					td(
 						short_preview($dmessage)
 					, 200).
 
-					td($parent, 100).
-
+					td($email, 75).
+					td($web, 75).
+					td($ip, 75).
 					td($comment_status, 75).
+					td($parent, 100).
 
 					td(
 						fInput('checkbox', 'selected[]', $discussid)
@@ -268,7 +277,7 @@ $LastChangedRevision$
 			echo tr(
 				tda(
 					select_buttons().discuss_multiedit_form()
-				,' colspan="9" style="text-align: right; border: none;"')
+				,' colspan="11" style="text-align: right; border: none;"')
 			).
 
 			endTable().
@@ -286,11 +295,12 @@ $LastChangedRevision$
 	{
 		$methods =	array(
 			'id'			=> gTxt('ID'),
+			'parent'  => gTxt('parent'),
 			'name'		=> gTxt('name'),
+			'message' => gTxt('message'),
 			'email'		=> gTxt('email'),
 			'website' => gTxt('website'),
-			'ip'			=> gTxt('IP'),
-			'message' => gTxt('message')
+			'ip'			=> gTxt('IP')
 		);
 
 		return form(
@@ -379,7 +389,7 @@ $LastChangedRevision$
 
 					fLabelCell('date').
 					td(
-						safe_strftime('%d %b %Y %I:%M %p', $uPosted)
+						safe_strftime('%d %b %Y %I:%M:%S %p', $uPosted)
 					),
 
 					tda(gTxt('message')).
