@@ -34,162 +34,301 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function file_list($message='') 
+
+	function file_list($message = '') 
 	{
-		global $txpcfg,$extensions,$file_base_path;
+		global $txpcfg, $extensions, $file_base_path;
+
+		pagetop(gTxt('file'), $message);
 
 		extract($txpcfg);
 		extract(get_prefs());
 
-		pagetop(gTxt('file'),$message);
+		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'method')));
 
-		$page = gps('page');
+		if (!is_dir($file_base_path) or !is_writeable($file_base_path))
+		{
+			echo graf(
+				str_replace('{filedir}', $file_base_path, gTxt('file_dir_not_writeable'))
+			, ' id="warning"');
+		}
 
-		$total = getCount('txp_file',"1=1");  
+		else
+		{
+			$existing_files = get_filenames();
+
+			if (count($existing_files) > 0)
+			{
+				echo form(
+					eInput('file').
+					sInput('file_create').
+
+					graf(gTxt('existing_file').sp.selectInput('filename', $existing_files, '', 1).sp.
+						fInput('submit', '', gTxt('Create'), 'smallerbox'))
+
+				, 'text-align: center;');
+			}
+
+			echo file_upload_form(gTxt('upload_file'), 'upload', 'file_insert');
+		}
+
+		$dir = ($dir == 'desc') ? 'desc' : 'asc';
+
+		switch ($sort)
+		{
+			case 'id':
+				$sort_sql = '`id` '.$dir;
+			break;
+
+			case 'filename':
+				$sort_sql = '`filename` '.$dir;
+			break;
+
+			case 'description':
+				$sort_sql = '`description` '.$dir.', `filename` desc';
+			break;
+
+			case 'category':
+				$sort_sql = '`category` '.$dir.', `filename` desc';
+			break;
+
+			case 'downloads':
+				$sort_sql = '`downloads` '.$dir.', `filename` desc';
+			break;
+
+			default:
+				$dir = 'desc';
+				$sort_sql = '`filename` '.$dir;
+			break;
+		}
+
+		$switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
+
+		$criteria = 1;
+
+		if ($crit or $method)
+		{
+			$crit_escaped = doSlash($crit);
+
+			$critsql = array(
+				'id'			    => "`id` = '$crit_escaped'",
+				'filename'    => "`filename` like '%$crit_escaped%'",
+				'description' => "`description` like '%$crit_escaped%'",
+				'category'    => "`category` like '%$crit_escaped%'"
+			);
+
+			if (array_key_exists($method, $critsql))
+			{
+				$criteria = $critsql[$method];
+				$limit = 500;
+			}
+
+			else
+			{
+				$method = '';
+			}
+		}
+
+		$total = safe_count('txp_file', "$criteria");
+
+		if ($total < 1)
+		{
+			if ($criteria != 1)
+			{
+				echo n.file_search_form($crit, $method).
+					n.graf(gTxt('no_results_found'), ' style="text-align: center;"');
+			}
+
+			else
+			{
+				echo n.graf(gTxt('no_files'), ' style="text-align: center;"');
+			}
+
+			return;
+		}
+
 		$limit = max(@$file_list_pageby, 15);
 
 		list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-		$sort = gps('sort');
-		$dir = gps('dir');
+		echo file_search_form($crit, $method);
 
-		$sort = ($sort) ? $sort : 'filename';
-		$dir = ($dir) ? $dir : 'desc';
-		if ($dir == "desc") { $dir = "asc"; } else { $dir = "desc"; }
+		$rs = safe_rows_start('*', 'txp_file', "$criteria order by $sort_sql limit $offset, $limit");
 
-		$existing_files = get_filenames();
+		if ($rs)
+		{
+			echo startTable('list').
 
-		echo startTable('list'),
-		tr(
-			tda(
-				file_upload_form(gTxt('upload_file'),'upload','file_insert'),
-					' colspan="4" style="border:0"'
-			)
-		),
-		(count($existing_files)>0?
-			tr(
-				tda(
-					form(
-						graf(gTxt('existing_file').sp.
-						selectInput('filename',$existing_files,"",1).sp.
-						fInput('submit','',gTxt('Create'),'smallerbox').sp.
-						eInput('file').
-						sInput('file_create'))
-					),
-					' colspan="4" style="border:0"'
-				)
-			):''),
-		tr(
-			column_head('ID','id','file',1,$dir).
-			column_head('file_name','filename','file',1,$dir).
-			td(gTxt('status')).
-			td(gTxt('tags')).
-			column_head('file_category','category','file',1,$dir).
-//			column_head('permissions','permissions','file',1,$dir).
-			column_head('description','description','file',1,$dir).
-			column_head('downloads','downloads','file',1,$dir).
-			td()
-		);
-
-
-		$nav[] = ($page > 1)
-		?	PrevNextLink("file",$page-1,gTxt('prev'),'prev') : '';
-
-		$nav[] = sp.small($page. '/'.$numPages).sp;
-
-		$nav[] = ($page != $numPages) 
-		?	PrevNextLink("file",$page+1,gTxt('next'),'next') : '';
-		
-		$rs = safe_rows_start("*", "txp_file", "1=1 order by $sort $dir limit $offset, $limit");
-		
-		if($rs) {
-			while ($a = nextRow($rs)) {
-			
-				extract($a);
-				
-				// does the downloads column exist?
-				if (!isset($downloads)) {
-					// nope, add it
-					safe_alter("txp_file", "ADD downloads INT DEFAULT '0' NOT NULL");
-					$downloads = 0;
-				} else {
-					if (empty($downloads))
-						$downloads = '0';
-				}
-				
-				$elink = eLink('file','file_edit','id',$id,$filename);
-				$dlink = dLink('file','file_delete','id',$id);
-				//Add tags helper
-				$txtilelink = '<a target="_blank" href="?event=tag'.a.'name=file'.a.'id='.$id.a.'description='.urlencode($description).a.'filename='.urlencode($filename).a.'type=textile" onclick="window.open(this.href, \'popupwindow\', \'width=400,height=400,scrollbars,resizable\'); return false;">Textile</a>';
-				$txplink = '<a target="_blank" href="?event=tag'.a.'name=file'.a.'id='.$id.a.'description='.urlencode($description).a.'filename='.urlencode($filename).a.'type=textpattern" onclick="window.open(this.href, \'popupwindow\', \'width=400,height=400,scrollbars,resizable\'); return false;">Textpattern</a>';
-				$xhtmlink = '<a target="_blank" href="?event=tag'.a.'name=file'.a.'id='.$id.a.'description='.urlencode($description).a.'filename='.urlencode($filename).a.'type=xhtml" onclick="window.open(this.href, \'popupwindow\', \'width=400,height=400,scrollbars,resizable\'); return false;">XHTML</a>';
-				
-				$file_exists = file_exists(build_file_path($file_base_path,$filename));
-				$missing = '<span class="';
-				$missing .= ($file_exists) ? 'ok' : 'not-ok';
-				$missing .= '">';
-				$missing .= ($file_exists)?gTxt('file_status_ok'):gTxt('file_status_missing');
-				$missing .= '</span>';
-
-				$downloadlink = ($file_exists)?make_download_link($id,$filename,$id):$id;
-
-				echo
 				tr(
-					td($downloadlink).
-					td($elink).
-					td($missing).
-					td($txtilelink.' / '.$txplink.' / '.$xhtmlink).
-					td($category,90).
-//					td(($permissions=='1')?gTxt('private'):gTxt('public'),80).
-					td($description,150).
-					td(($downloads=='0')?" 0":$downloads,20).
-					td($dlink,10)
-					
+					column_head('ID', 'id', 'file', true, $switch_dir, $crit, $method).
+					td().
+					column_head('file_name', 'filename', 'file', true, $switch_dir, $crit, $method).
+					column_head('description', 'description', 'file', true, $switch_dir, $crit, $method).
+					column_head('file_category', 'category', 'file', true, $switch_dir, $crit, $method).
+					// column_head('permissions', 'permissions', 'file', true, $switch_dir, $crit, $method).
+					hCell(gTxt('tags')).
+					hCell(gTxt('status')).
+					column_head('downloads', 'downloads', 'file', true, $switch_dir, $crit, $method).
+					hCell()
+				);
+
+			while ($a = nextRow($rs))
+			{
+				extract($a);
+
+				$edit_url = '?event=file'.a.'step=file_edit'.a.'id='.$id.a.'sort='.$sort.
+					a.'dir='.$dir.a.'page='.$page.a.'method='.$method.a.'crit='.$crit;
+
+				$file_exists = file_exists(build_file_path($file_base_path, $filename));
+
+				$download_link = ($file_exists) ? '<li>'.make_download_link($id, $filename, $id).'</li>' : $id;
+
+				$category = ($category) ? fetch_category_title($category, 'file') : '';
+
+				$tag_url = '?event=tag'.a.'name=file'.a.'id='.$id.a.'description='.urlencode($description).
+					a.'filename='.urlencode($filename);
+
+				$status = '<span class="';
+				$status .= ($file_exists) ? 'ok' : 'not-ok';
+				$status .= '">';
+				$status .= ($file_exists) ? gTxt('file_status_ok') : gTxt('file_status_missing');
+				$status .= '</span>';
+
+				// does the downloads column exist?
+				if (!isset($downloads))
+				{
+					// nope, add it
+					safe_alter('txp_file', "ADD downloads INT DEFAULT '0' NOT NULL");
+					$downloads = 0;
+				}
+
+				elseif (empty($downloads))
+				{
+					$downloads = '0';
+				}
+
+				echo tr(
+
+					n.td($id).
+
+					td(
+						'<ul>'.
+						'<li>'.href(gTxt('edit'), $edit_url).'</li>'.
+						$download_link.
+						'</ul>'
+					, 65).
+
+					td($filename, 125).
+					td($description, 150).
+					td($category, 90).
+
+					/*
+					td(
+						($permissions == '1') ? gTxt('private') : gTxt('public')
+					,80).
+					*/
+
+					td(
+						n.'<ul>'.
+						n.t.'<li><a target="_blank" href="'.$tag_url.a.'type=textile" onclick="popWin(this.href, 400, 250); return false;">Textile</a></li>'.
+						n.t.'<li><a target="_blank" href="'.$tag_url.a.'type=textpattern" onclick="popWin(this.href, 400, 250); return false;">Textpattern</a></li>'.
+						n.t.'<li><a target="_blank" href="'.$tag_url.a.'type=xhtml" onclick="popWin(this.href, 400, 250); return false;">XHTML</a></li>'.
+						n.'</ul>'
+					, 75).
+
+					td($status, 45).
+
+					td(
+						($downloads == '0' ? gTxt('none') : $downloads)
+					, 25).
+
+					td(
+						dLink('file', 'file_delete', 'id', $id)
+					, 10)
 				);
 			}
 
-			echo 
-				tr(
-					tdcs(
-						graf(join('',$nav))
-					,8)
-				);
+			echo endTable().
+
+			file_nav_form($page, $numPages, $sort, $dir, $crit, $method).
+
+			pageby_form('file', $file_list_pageby);
 		}
-		echo endTable();
+	}
+	
+// -------------------------------------------------------------
 
-		echo pageby_form('file',$file_list_pageby);
+	function file_search_form($crit, $method)
+	{
+		$methods =	array(
+			'id'          => gTxt('ID'),
+			'filename'    => gTxt('file_name'),
+			'description' => gTxt('description'),
+			'category'    => gTxt('file_category')
+		);
 
-		if (!is_dir($file_base_path) or !is_writeable($file_base_path)) {
-		
-			echo graf(str_replace("{filedir}",$file_base_path,gTxt('file_dir_not_writeable')),' style="text-align:center;color:red"');
+		return n.n.form(
+			graf(
 
-		}
+				gTxt('Search').sp.selectInput('method', $methods, $method).
+				fInput('text', 'crit', $crit, 'edit', '', '', '15').
+				eInput('file').
+				sInput('file_list').
+				fInput('submit', 'search', gTxt('go'), 'smallerbox')
+
+			,' style="text-align: center;"')
+		);
 	}
 
 // -------------------------------------------------------------
-	function file_edit($message='',$id='') 
+
+	function file_nav_form($page, $numPages, $sort, $dir, $crit, $method)
 	{
-		global $txpcfg,$file_base_path,$levels,$path_from_root;
+		$nav = array();
 
-		extract(doSlash(gpsa(array('name','category','permissions','description'))));
-		
-		if (!$id) $id = gps('id');
+		if ($page > 1)
+		{
+			$nav[] = PrevNextLink('file', $page - 1, gTxt('prev'), 'prev', $sort, $dir, $crit, $method).sp;
+		}
 
-		pagetop('file',$message);
+		$nav[] = small($page.'/'.$numPages);
 
-		$categories = getTree("root", "file");
-		
-		$rs = safe_row("*", "txp_file", "id='$id'");
-		
-		if ($rs) {
+		if ($page != $numPages)
+		{
+			$nav[] = sp.PrevNextLink('file', $page + 1, gTxt('next'), 'next', $sort, $dir, $crit, $method);
+		}
+
+		return graf(join('', $nav),' style="text-align: center;"');
+	}
+
+// -------------------------------------------------------------
+
+	function file_edit($message = '', $id = '') 
+	{
+		global $txpcfg, $file_base_path, $levels, $path_from_root;
+
+		pagetop('file', $message);
+
+		extract(gpsa(array('name', 'category', 'permissions', 'description', 'sort', 'dir', 'page', 'crit', 'method')));
+
+		if (!$id)
+		{
+			$id = gps('id');
+		}
+
+		$categories = getTree('root', 'file');
+
+		$rs = safe_row('*', 'txp_file', "id = '$id'");
+
+		if ($rs)
+		{
 			extract($rs);
-			
+
 			if ($permissions=='') $permissions='-1';
 
 			$file_exists = file_exists(build_file_path($file_base_path,$filename));
 			
 			$existing_files = get_filenames();
-
 
 			$status = '<span class="';
 			$status .= ($file_exists) ? 'ok' : 'not-ok';
@@ -210,10 +349,18 @@ $LastChangedRevision$
 //									graf(gTxt('permissions').br.selectInput('perms',$levels,$permissions)).
 									graf(gTxt('description').br.text_area('description','100','400',$description)) .
 									graf(fInput('submit','',gTxt('save'))) .
-									hInput('filename',$filename).
-									hInput('id',$id) .
+
 									eInput('file') .
-									sInput('file_save')
+									sInput('file_save').
+
+									hInput('filename', $filename).
+									hInput('id', $id) .
+
+									hInput('sort', $sort).
+									hInput('dir', $dir).
+									hInput('page', $page).
+									hInput('crit', $crit).
+									hInput('method', $method)
 								)
 							)
 						);
@@ -227,12 +374,21 @@ $LastChangedRevision$
 									graf(gTxt('existing_file').' '.
 									selectInput('filename',$existing_files,"",1).
 									fInput('submit','',gTxt('Save'),'smallerbox').
+
 									eInput('file').
+									sInput('file_save').
+
 									hInput('id',$id).
 									hInput('category',$category).
 									hInput('perms',($permissions=='-1')?'':$permissions).
 									hInput('description',$description).
-									sInput('file_save')
+
+									hInput('sort', $sort).
+									hInput('dir', $dir).
+									hInput('page', $page).
+									hInput('crit', $crit).
+									hInput('method', $method)
+
 									)
 								),
 								' colspan="4" style="border:0"'
@@ -535,15 +691,16 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function make_download_link($id, $filename, $text)
+
+	function make_download_link($id)
 	{
 		global $permlink_mode;
-		
-		if ($permlink_mode == 'messy') {
-			return '<a href="'.hu.'index.php?s=file_download&id='.$id.'" title="download file '.$filename.'">'.$text.'</a>';
-		} else {
-			return '<a href="'.hu.''.gTxt('file_download').'/'.$id.'" title="download file '.$filename.'">'.$text.'</a>';
-		}
+
+		$url = ($permlink_mode == 'messy') ? 
+			hu.'index.php?s=file_download'.a.'id='.$id : 
+			hu.''.gTxt('file_download').'/'.$id;
+
+		return '<a href="'.$url.'">'.gTxt('download').'</a>';
 	}
 	
 // -------------------------------------------------------------
