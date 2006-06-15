@@ -125,8 +125,8 @@ $LastChangedRevision$
 				$xhtmlink = '<a target="_blank" href="?event=tag'.a.'name=file'.a.'id='.$id.a.'description='.urlencode($description).a.'filename='.urlencode($filename).a.'type=xhtml" onclick="window.open(this.href, \'popupwindow\', \'width=400,height=400,scrollbars,resizable\'); return false;">XHTML</a>';
 				
 				$file_exists = file_exists(build_file_path($file_base_path,$filename));
-				$missing = '<span style="color:';
-				$missing .= ($file_exists) ? 'green' : 'red';
+				$missing = '<span class="';
+				$missing .= ($file_exists) ? 'ok' : 'not-ok';
 				$missing .= '">';
 				$missing .= ($file_exists)?gTxt('file_status_ok'):gTxt('file_status_missing');
 				$missing .= '</span>';
@@ -191,8 +191,8 @@ $LastChangedRevision$
 			$existing_files = get_filenames();
 
 
-			$status = '<span style="color:';
-			$status .= ($file_exists) ? 'green' : 'red';
+			$status = '<span class="';
+			$status .= ($file_exists) ? 'ok' : 'not-ok';
 			$status .= '">';
 			$status .= ($file_exists)?gTxt('file_status_ok'):gTxt('file_status_missing');
 			$status .= '</span>';

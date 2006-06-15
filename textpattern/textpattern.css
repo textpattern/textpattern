@@ -289,6 +289,14 @@ vertical-align: bottom;
 /* other element overrides
 ----------------------------------------------- */
 
+.ok {
+color: #008000;
+}
+
+.not-ok {
+color: #C40000;
+}
+
 p#js {
 margin-top: 10px;
 padding-right: 30px;
