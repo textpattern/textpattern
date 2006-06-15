@@ -183,7 +183,7 @@ $LastChangedRevision$
 
 				$download_link = ($file_exists) ? '<li>'.make_download_link($id, $filename, $id).'</li>' : $id;
 
-				$category = ($category) ? fetch_category_title($category, 'file') : '';
+				$category = ($category) ? '<span title="'.fetch_category_title($category, 'file').'">'.$category.'</span>' : '';
 
 				$tag_url = '?event=tag'.a.'name=file'.a.'id='.$id.a.'description='.urlencode($description).
 					a.'filename='.urlencode($filename);

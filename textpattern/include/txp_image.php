@@ -175,19 +175,18 @@ $LastChangedRevision$
 				$tag_url = '?event=tag'.a.'name=image'.a.'id='.$id.a.'ext='.$ext.a.
 					'alt='.$alt.a.'h='.$h.a.'w='.$w;
 
-				$category = ($category) ? fetch_category_title($category, 'image') : '';
-
-				$author = get_author_name($author);
+				$category = ($category) ? '<span title="'.fetch_category_title($category, 'image').'">'.$category.'</span>' : '';
 
 				echo n.n.tr(
+
 					n.td($id, 20).
 
 					td(
 						n.'<ul>'.
-						n.'<li>'.href(gTxt('edit'), $edit_url).'</li>'.
-						n.'<li><a href="'.hu.$img_dir.'/'.$id.$ext.'">'.gTxt('view').'</a></li>'.
+						n.t.'<li>'.href(gTxt('edit'), $edit_url).'</li>'.
+						n.t.'<li><a href="'.hu.$img_dir.'/'.$id.$ext.'">'.gTxt('view').'</a></li>'.
 						n.'</ul>'
-					).
+					, 35).
 
 					td(
 						safe_strftime('%d %b %Y %I:%M %p', $uDate)
@@ -197,9 +196,7 @@ $LastChangedRevision$
 						href($name, $edit_url)
 					, 75).
 
-					td(
-						$thumbnail
-					, 75).
+					td($thumbnail, 75).
 
 					td(
 						'<ul>'.
@@ -209,12 +206,10 @@ $LastChangedRevision$
 						'</ul>'
 					, 85).
 
-					td(
-						$category
-					, 75).
+					td($category, 75).
 
 					td(
-						$author
+						'<span title="'.get_author_name($author).'">'.$author.'</span>'
 					, 75).
 
 					td(

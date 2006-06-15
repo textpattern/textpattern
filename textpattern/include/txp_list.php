@@ -174,12 +174,8 @@ $LastChangedRevision$
 
 				$Title = empty($Title) ? '<em>'.gTxt('untitled').'</em>' : $Title;
 
-				$Section = fetch_section_title($Section);
-
-				$Category1 = ($Category1) ? fetch_category_title($Category1) : '';
-				$Category2 = ($Category2) ? fetch_category_title($Category2) : '';
-
-				$Author = get_author_name($AuthorID);
+				$Category1 = ($Category1) ? '<span title="'.fetch_category_title($Category1).'">'.$Category1.'</span>' : '';
+				$Category2 = ($Category2) ? '<span title="'.fetch_category_title($Category2).'">'.$Category2.'</span>' : '';
 
 				$manage = n.'<ul>'.
 						n.'<li>'.eLink('article', 'edit', 'ID', $ID, gTxt('edit')).'</li>'.
@@ -209,11 +205,18 @@ $LastChangedRevision$
 						eLink('article', 'edit', 'ID', $ID, $Title)
 					, 175).
 
-					td($Section, 75).
+					td(
+						'<span title="'.fetch_section_title($Section).'">'.$Section.'</span>'
+					, 75).
+
 					td($Category1, 100).
 					td($Category2, 100).
 					td($Status, 50).
-					td($Author, 75).
+
+					td(
+						'<span title="'.get_author_name($AuthorID).'">'.$AuthorID.'</span>'
+					, 75).
+
 					td($comments).
 
 					td(
