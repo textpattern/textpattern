@@ -174,6 +174,13 @@ $LastChangedRevision$
 
 				$Title = empty($Title) ? '<em>'.gTxt('untitled').'</em>' : $Title;
 
+				$Section = fetch_section_title($Section);
+
+				$Category1 = ($Category1) ? fetch_category_title($Category1) : '';
+				$Category2 = ($Category2) ? fetch_category_title($Category2) : '';
+
+				$Author = get_author_name($AuthorID);
+
 				$manage = n.'<ul>'.
 						n.'<li>'.eLink('article', 'edit', 'ID', $ID, gTxt('edit')).'</li>'.
 						( ($Status == 4 or $Status == 5) ? n.'<li><a href="'.permlinkurl($a).'">'.gTxt('view').'</a></li>' : '' ).
@@ -203,7 +210,7 @@ $LastChangedRevision$
 					td($Category1, 100).
 					td($Category2, 100).
 					td($Status, 50).
-					td($AuthorID, 75).
+					td($Author, 75).
 					td($comments).
 
 					td(

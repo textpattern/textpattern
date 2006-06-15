@@ -172,6 +172,10 @@ $LastChangedRevision$
 				$url = '?event=tag'.a.'name=image'.a.'id='.$id.a.'ext='.$ext.a.
 					'alt='.$alt.a.'h='.$h.a.'w='.$w.a;
 
+				$category = ($category) ? fetch_category_title($category, 'image') : '';
+
+				$author = get_author_name($author);
+
 				echo n.n.tr(
 					n.td(
 						eLink('image', 'image_edit', 'id', $id, $id)
