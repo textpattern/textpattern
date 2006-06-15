@@ -230,18 +230,23 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function fLabelCell ($text,$help='') 
+
+	function fLabelCell($text, $help = '') 
 	{
 		$help = ($help) ? popHelp($help) : '';
-		return tda(gTxt($text).$help,' style="vertical-align:middle;text-align:right;border:0px"');
+
+		return tda(gTxt($text).' '.$help,' style="text-align: right; vertical-align: middle;"');
 	}
 
 // -------------------------------------------------------------
-	function fInputCell ($name,$var='',$tabindex='',$size='',$help="") 
+
+	function fInputCell ($name, $var = '', $tabindex = '', $size = '', $help = '') 
 	{
 		$pop = ($help) ? popHelp($name) : '';
-		return tda(fInput('text',$name,$var,'edit','','',$size,$tabindex).$pop
-		,' style="vertical-align:top;text-align:left;border:0px"');
+
+		return tda(
+			fInput('text', $name, $var, 'edit', '', '', $size, $tabindex).' '.$pop
+		,' style="vertical-align: top; border: none;"');
 	}
 
 // -------------------------------------------------------------

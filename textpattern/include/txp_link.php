@@ -14,133 +14,324 @@ $LastChangedRevision$
 
 */
 
-	if (!defined('txpinterface')) die('txpinterface is undefined.');
+	if (!defined('txpinterface'))
+	{
+		die('txpinterface is undefined.');
+	}
 
 	global $vars;
-	$vars = array('category', 'url', 'linkname', 'linksort', 'description', 'id');
 
-	if ($event == 'link') {	
+	if ($event == 'link')
+	{	
 		require_privs('link');		
-		
-		if(!$step or !function_exists($step) or !in_array($step, array('link_list','link_edit','link_post','link_save','link_delete','link_change_pageby','link_multi_edit'))){
+
+		$vars = array('category', 'url', 'linkname', 'linksort', 'description', 'id');
+
+		$available_steps = array(
+			'link_list', 
+			'link_edit', 
+			'link_post', 
+			'link_save', 
+			'link_delete', 
+			'link_change_pageby', 
+			'link_multi_edit'
+		);
+
+		if (!$step or !function_exists($step) or !in_array($step, $available_steps))
+		{
 			link_edit();
-		} else $step();
+		}
+
+		else
+		{
+			$step();
+		}
 	}
 
 // -------------------------------------------------------------
-	function link_list($message="") 
+
+	function link_list($message = '') 
 	{
-		global $step,$link_list_pageby;
-		
+		global $step, $link_list_pageby;
+
 		extract(get_prefs());
-		
-		$page = gps('page');
-		$total = getCount('txp_link',"1");  
+
+		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'method')));
+
+		$dir = ($dir == 'desc') ? 'desc' : 'asc';
+
+		switch ($sort)
+		{
+			case 'id':
+				$sort_sql = '`id` '.$dir;
+			break;
+
+			case 'name':
+				$sort_sql = '`linksort` '.$dir.', `id` asc';
+			break;
+
+			case 'description':
+				$sort_sql = '`description` '.$dir.', `id` asc';
+			break;
+
+			case 'category':
+				$sort_sql = '`category` '.$dir.', `id` asc';
+			break;
+
+			case 'date':
+				$sort_sql = '`date` '.$dir.', `id` asc';
+
+			default:
+				$dir = 'asc';
+				$sort_sql = '`linksort` asc';
+			break;
+		}
+
+		$switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
+
+		$criteria = 1;
+
+		if ($crit or $method)
+		{
+			$crit_escaped = doSlash($crit);
+
+			$critsql = array(
+				'id'			     => "id = '$crit_escaped'",
+				'name'		     => "`linkname` like '%$crit_escaped%'",
+				'description'	 => "`description` like '%$crit_escaped%'",
+				'category'     => "`category` like '%$crit_escaped%'"
+			);
+
+			if (array_key_exists($method, $critsql))
+			{
+				$criteria = $critsql[$method];
+				$limit = 500;
+			}
+
+			else
+			{
+				$method = '';
+			}
+		}
+
+		$total = getCount('txp_link', "$criteria");  
+
+		if ($total < 1)
+		{
+			if ($criteria != 1)
+			{
+				echo n.link_search_form($crit, $method).
+					n.graf(gTxt('no_results_found'), ' style="text-align: center;"');
+			}
+
+			else
+			{
+				echo n.graf(gTxt('no_links'), ' style="text-align: center;"');
+			}
+
+			return;
+		}
+
 		$limit = max(@$link_list_pageby, 15);
 
 		list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-		$sort = gps('sort');
-		$dir = gps('dir');
+		echo link_search_form($crit, $method);
 
-		$sort = ($sort) ? $sort : 'linksort';
-		$dir = ($dir) ? $dir : 'asc';
-		if ($dir == "desc") { $dir = "asc"; } else { $dir = "desc"; }
+		$rs = safe_rows_start('*, unix_timestamp(`date`) as uDate', 'txp_link', "$criteria order by $sort_sql limit $offset, $limit");
 
-		$nav[] = ($page > 1)
-		?	PrevNextLink("link",$page-1,gTxt('prev'),'prev') : '';
+		if ($rs)
+		{
+			echo n.n.'<form action="index.php" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">',
 
-		$nav[] = sp.small($page. '/'.$numPages).sp;
+				startTable('list').
 
-		$nav[] = ($page != $numPages) 
-		?	PrevNextLink("link",$page+1,gTxt('next'),'next') : '';
-
-		$rs = safe_rows_start(
-			"*", 
-			"txp_link", 
-			"1 order by $sort $dir limit $offset, $limit"
-		);
-
-
-		if ($rs) {
-			echo '<form action="index.php" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">',
-			startTable('list'),
-
-			tr(
-				column_head('link_name','linksort','link',1,$dir).
-				column_head('description','description','link',1,$dir).
-				column_head('link_category','category','link',1,$dir).
-				td()
+				n.tr(
+					column_head('ID', 'id', 'link', true, $switch_dir, $crit, $method).
+					hCell().
+					column_head('link_name', 'name', 'link', true, $switch_dir, $crit, $method).
+					column_head('description', 'description', 'link', true, $switch_dir, $crit, $method).
+					column_head('link_category', 'category', 'link', true, $switch_dir, $crit, $method).
+					column_head('date', 'date', 'link', true, $switch_dir, $crit, $method).
+					hCell()
 				);
-			while ($a = nextRow($rs)) {
-				extract($a);				
-				$elink = eLink('link','link_edit','id',$id,$linkname);
-				$cbox = fInput('checkbox','selected[]',$id);
-				$category = fetch_category_title($category, 'link');
 
-				echo tr(
-						td($elink).
-						td($description).
-						td($category).
-						td($cbox)
+				while ($a = nextRow($rs))
+				{
+					extract($a);				
+
+					$edit_url = '?event=link'.a.'step=link_edit'.a.'id='.$id.a.'sort='.$sort.
+						a.'dir='.$dir.a.'page='.$page.a.'method='.$method.a.'crit='.$crit;
+
+					echo tr(
+
+						n.td($id, 20).
+
+						td(
+							n.'<ul>'.
+							n.t.'<li>'.href(gTxt('edit'), $edit_url).'</li>'.
+							n.t.'<li>'.href(gTxt('view'), $url).'</a></li>'.
+							n.'</ul>'
+						, 35).
+
+						td(
+							href($linkname, $edit_url)
+						, 125).
+
+						td(
+							$description
+						, 150).
+
+						td(
+							'<span title="'.fetch_category_title($category, 'link').'">'.$category.'</span>'
+						, 125).
+
+						td(
+							safe_strftime('%d %b %Y %I:%M %p', $uDate)
+						, 75).
+
+						td(
+							fInput('checkbox', 'selected[]', $id)
+						)
 					);
-			}
-			echo 
-			tr(
-				tda(select_buttons().link_multiedit_form(), ' colspan="4" style="border:0px;text-align:right"')
-			);
-			echo endTable(),'</form>';
-			echo pageby_form('link',$link_list_pageby);
-			echo graf(join('',$nav),' align="center"');
+				}
+
+			echo n.n.tr(
+				tda(
+					select_buttons().
+					link_multiedit_form()
+				, ' colspan="7" style="text-align: right; border: none;"')
+			).
+
+			endTable().
+			'</form>'.
+
+			n.link_nav_form($page, $numPages, $sort, $dir, $crit, $method).
+
+			pageby_form('link', $link_list_pageby);
 		}
 	}
 
 // -------------------------------------------------------------
-	function link_edit($message="")
+
+	function link_search_form($crit, $method)
 	{
-		global $vars,$step;
+		$methods =	array(
+			'id'          => gTxt('ID'),
+			'name'        => gTxt('link_name'),
+			'description' => gTxt('description'),
+			'category'    => gTxt('link_category')
+		);
+
+		return n.n.form(
+			graf(
+
+				gTxt('Search').sp.selectInput('method', $methods, $method).
+				fInput('text', 'crit', $crit, 'edit', '', '', '15').
+				eInput('link').
+				sInput('link_edit').
+				fInput('submit', 'search', gTxt('go'), 'smallerbox')
+
+			,' style="text-align: center;"')
+		);
+	}
+
+// -------------------------------------------------------------
+
+	function link_nav_form($page, $numPages, $sort, $dir, $crit, $method)
+	{
+		$nav = array();
+
+		if ($page > 1)
+		{
+			$nav[] = PrevNextLink('link', $page - 1, gTxt('prev'), 'prev', $sort, $dir, $crit, $method).sp;
+		}
+
+		$nav[] = small($page.'/'.$numPages);
+
+		if ($page != $numPages)
+		{
+			$nav[] = sp.PrevNextLink('link', $page + 1, gTxt('next'), 'next', $sort, $dir, $crit, $method);
+		}
+
+		return graf(join('', $nav),' style="text-align: center;"');
+	}
+
+// -------------------------------------------------------------
+
+	function link_edit($message = '')
+	{
+		global $vars, $step;
+
+		pagetop(gTxt('edit_links', $message));
+
 		extract(gpsa($vars));
 
-		pagetop(gTxt('edit_links',$message));
-
-
-		$id = gps('id');
-		if($id && $step=='link_edit') {
-			extract(safe_row("*", "txp_link", "id = $id"));
+		if ($id && $step == 'link_edit')
+		{
+			extract(safe_row('*', 'txp_link', "id = $id"));
 		}
 		
-		if ($step=='link_save' or $step=='link_post'){
-			foreach($vars as $var) {
+		if ($step == 'link_save' or $step == 'link_post')
+		{
+			foreach ($vars as $var)
+			{
 				$$var = '';
 			}
 		}
 
-		$textarea = '<textarea name="description" cols="40" rows="7" tabindex="4">'.
-			$description.'</textarea>';
-		$selects = linkcategory_popup($category);
-		$editlink = ' ['.eLink('category','list','','',gTxt('edit')).']';
+		echo form(
 
-		$out = 
-			startTable( 'edit' ) .
-			
-				tr( fLabelCell( 'title' ) . fInputCell( 'linkname', $linkname, 1, 30 )) .
-					
-				tr( fLabelCell( 'sort_value') .fInputCell( 'linksort', $linksort, 2, 15 )) .
-					
-				tr( fLabelCell( 'url','link_url') . fInputCell( 'url', $url, 3, 30) ) .
-					
-				tr( fLabelCell( 'link_category', 'link_category' ) . td( $selects . $editlink ) ) .
-					
-				tr( fLabelCell( 'description', 'link_description' ) . tda( $textarea, ' valign="top"' ) ) .
-					
-				tr( td() . td( fInput( "submit", '', gTxt( 'save' ), "publish" ) ) ) .
-				
-			endTable() .
-			
-			eInput( 'link' ) . sInput( ( $step=='link_edit' ) ? 'link_save' : 'link_post' ) .
-			hInput( 'id', $id );
+			startTable('edit') .
 
-		echo form( $out );
+			tr(
+				fLabelCell('title').
+				fInputCell('linkname', $linkname, 1, 30)
+			).
+
+			tr(
+				fLabelCell('sort_value').
+				fInputCell('linksort', $linksort, 2, 15 )
+			).
+
+			tr(
+				fLabelCell('url','link_url').
+				fInputCell('url', $url, 3, 30)
+			).
+
+			tr(
+				fLabelCell('link_category', 'link_category').
+
+				td(
+					linkcategory_popup($category).
+					' ['.eLink('category', 'list', '', '', gTxt('edit')).']'
+				)
+			) .
+
+			tr(
+				tda(
+					gTxt('description').' '.popHelp('link_description')
+				,' style="text-align: right; vertical-align: top;"').
+
+				td(
+					'<textarea name="description" cols="40" rows="7" tabindex="4">'.$description.'</textarea>'
+				)
+			).
+
+			tr(
+				td().
+				td(
+					fInput('submit', '', gTxt('save'), 'publish')
+				)
+			).
+
+			endTable().
+
+			eInput('link').
+			sInput( ($step == 'link_edit' ? 'link_save' : 'link_post') ).
+			hInput('id', $id)
+		, 'margin-bottom: 25px;');
+
 		echo link_list();
 	}
 
