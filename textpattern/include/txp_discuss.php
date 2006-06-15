@@ -198,7 +198,7 @@ $LastChangedRevision$
 				$tq = safe_row('*, `ID` as thisid, unix_timestamp(`Posted`) as posted', 'textpattern', "ID = '".$parentid."'");
 
 				$edit_url = '?event=discuss'.a.'step=discuss_edit'.a.'discussid='.$discussid.a.'sort='.$sort.
-					a.'dir='.$dir.a.'page='.$page.a.'crit='.doStrip($crit).a.'method='.$method;
+					a.'dir='.$dir.a.'page='.$page.a.'method='.$method.a.'crit='.$crit;
 
 				$dmessage = ($visible == SPAM) ? short_preview($message) : $message;
 

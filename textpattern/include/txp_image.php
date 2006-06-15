@@ -52,8 +52,7 @@ $LastChangedRevision$
 
 		else
 		{
-			echo upload_form(gTxt('upload_image'), gTxt('upload'),
-				'image_insert', 'image', '', $file_max_upload_size);
+			echo upload_form(gTxt('upload_image'), gTxt('upload'), 'image_insert', 'image', '', $file_max_upload_size);
 		}
 
 		$dir = ($dir == 'desc') ? 'desc' : 'asc';
@@ -150,6 +149,7 @@ $LastChangedRevision$
 			echo n.n.startTable('list').
 				n.tr(
 					column_head('ID', 'id', 'image', true, $switch_dir, $crit, $method).
+					hCell().
 					column_head('date', 'date', 'image', true, $switch_dir, $crit, $method).
 					column_head('name', 'name', 'image', true, $switch_dir, $crit, $method).
 					column_head('thumbnail', 'thumbnail', 'image', true, $switch_dir, $crit, $method).
@@ -163,30 +163,38 @@ $LastChangedRevision$
 			{
 				extract($a);
 
+				$edit_url = '?event=image'.a.'step=image_edit'.a.'id='.$id.a.'sort='.$sort.
+					a.'dir='.$dir.a.'page='.$page.a.'method='.$method.a.'crit='.$crit;
+
 				$name = empty($name) ? gTxt('unnamed') : $name;
 
 				$thumbnail = ($thumbnail) ?
 					'<img src="'.hu.$img_dir.'/'.$id.'t'.$ext.'" />' :
 					gTxt('no');
 
-				$url = '?event=tag'.a.'name=image'.a.'id='.$id.a.'ext='.$ext.a.
-					'alt='.$alt.a.'h='.$h.a.'w='.$w.a;
+				$tag_url = '?event=tag'.a.'name=image'.a.'id='.$id.a.'ext='.$ext.a.
+					'alt='.$alt.a.'h='.$h.a.'w='.$w;
 
 				$category = ($category) ? fetch_category_title($category, 'image') : '';
 
 				$author = get_author_name($author);
 
 				echo n.n.tr(
-					n.td(
-						eLink('image', 'image_edit', 'id', $id, $id)
-					, 20).
+					n.td($id, 20).
+
+					td(
+						n.'<ul>'.
+						n.'<li>'.href(gTxt('edit'), $edit_url).'</li>'.
+						n.'<li><a href="'.hu.$img_dir.'/'.$id.$ext.'">'.gTxt('view').'</a></li>'.
+						n.'</ul>'
+					).
 
 					td(
 						safe_strftime('%d %b %Y %I:%M %p', $uDate)
 					, 75).
 
 					td(
-						eLink('image', 'image_edit', 'id', $id, $name)
+						href($name, $edit_url)
 					, 75).
 
 					td(
@@ -195,9 +203,9 @@ $LastChangedRevision$
 
 					td(
 						'<ul>'.
-						'<li><a target="_blank" href="'.$url.'type=textile" onclick="popWin(this.href, 400, 250); return false;">Textile</a></li>'.
-						'<li><a target="_blank" href="'.$url.'type=textpattern" onclick="popWin(this.href, 400, 250); return false;">Textpattern</a></li>'.
-						'<li><a target="_blank" href="'.$url.'type=xhtml" onclick="popWin(this.href, 400, 250); return false;">XHTML</a></li>'.
+						'<li><a target="_blank" href="'.$tag_url.a.'type=textile" onclick="popWin(this.href, 400, 250); return false;">Textile</a></li>'.
+						'<li><a target="_blank" href="'.$tag_url.a.'type=textpattern" onclick="popWin(this.href, 400, 250); return false;">Textpattern</a></li>'.
+						'<li><a target="_blank" href="'.$tag_url.a.'type=xhtml" onclick="popWin(this.href, 400, 250); return false;">XHTML</a></li>'.
 						'</ul>'
 					, 85).
 

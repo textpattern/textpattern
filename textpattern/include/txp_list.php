@@ -205,7 +205,10 @@ $LastChangedRevision$
 						safe_strftime('%d %b %Y %I:%M %p', $uPosted)
 					, 75).
 
-					td($Title, 175).
+					td(
+						eLink('article', 'edit', 'ID', $ID, $Title)
+					, 175).
+
 					td($Section, 75).
 					td($Category1, 100).
 					td($Category2, 100).

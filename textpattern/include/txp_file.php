@@ -218,7 +218,10 @@ $LastChangedRevision$
 						'</ul>'
 					, 65).
 
-					td($filename, 125).
+					td(
+						href($filename, $edit_url)
+					, 125).
+
 					td($description, 150).
 					td($category, 90).
 
