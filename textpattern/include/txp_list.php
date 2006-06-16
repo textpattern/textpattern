@@ -99,12 +99,12 @@ $LastChangedRevision$
 			$crit_escaped = doSlash($crit);
 
 			$critsql = array(
-				'id'         => "ID = '$crit_escaped'",
-				'title_body' => "Title rlike '$crit_escaped' or Body rlike '$crit_escaped'",
-				'section'		 => "Section rlike '$crit_escaped'",
-				'categories' => "Category1 rlike '$crit_escaped' or Category2 rlike '$crit_escaped'",
-				'status'		 => "Status = '".(@$sesutats[$crit_escaped])."'",
-				'author'		 => "AuthorID rlike '$crit_escaped'",
+				'id'         => "`ID` = '$crit_escaped'",
+				'title_body' => "`Title` rlike '$crit_escaped' or `Body` rlike '$crit_escaped'",
+				'section'		 => "`Section` rlike '$crit_escaped'",
+				'categories' => "`Category1` rlike '$crit_escaped' or `Category2` rlike '$crit_escaped'",
+				'status'		 => "`Status` = '".(@$sesutats[$crit_escaped])."'",
+				'author'		 => "`AuthorID` rlike '$crit_escaped'",
 			);
 
 			if (array_key_exists($method, $critsql))
@@ -125,7 +125,7 @@ $LastChangedRevision$
 		{
 			if ($criteria != 1)
 			{
-				echo n.list_searching_form($crit, $method).
+				echo n.list_search_form($crit, $method).
 					n.graf(gTxt('no_results_found'), ' style="text-align: center;"');
 			}
 
@@ -141,7 +141,7 @@ $LastChangedRevision$
 
 		list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-		echo n.list_searching_form($crit, $method);
+		echo n.list_search_form($crit, $method);
 
 		$rs = safe_rows_start('*, unix_timestamp(Posted) as uPosted', 'textpattern',
 			"$criteria order by $sort_sql limit $offset, $limit"
@@ -238,8 +238,6 @@ $LastChangedRevision$
 			n.list_nav_form($page, $numPages, $sort, $dir, $crit, $method).
 
 			n.pageby_form('list', $article_list_pageby);
-
-			unset($sort);
 		}
 	}
 
@@ -252,7 +250,7 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function list_searching_form($crit, $method)
+	function list_search_form($crit, $method)
 	{
 		$methods =	array(
 			'id'         => gTxt('ID'),
