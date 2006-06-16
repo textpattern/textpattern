@@ -46,7 +46,7 @@ p {
 line-height: 1.4em;
 }
 
-ul {
+table#list ul {
 list-style-type: none;
 }
 
@@ -311,6 +311,7 @@ background-color: #ffc;
 ul.tag-links {
 margin-bottom: 10px;
 font-size: 0.9em;
+list-style-type: none;
 }
 
 #warning {
