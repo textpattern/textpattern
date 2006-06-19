@@ -20,7 +20,7 @@ small {
 font-size: 10px;
 }
 
-h1, h2, h3, p, ul {
+h1, h2, h3, p, ul, ol {
 margin: 0 0 10px 0;
 padding: 0;
 }
@@ -46,12 +46,12 @@ p {
 line-height: 1.4em;
 }
 
-table#list ul {
-list-style-type: none;
+ul {
+list-style-type: circle;
 }
 
 li {
-margin: 0 0 2px 0;
+margin: 0 0 5px 35px;
 padding: 0;
 }
 
@@ -286,6 +286,15 @@ table#list th {
 vertical-align: bottom;
 }
 
+table#list ul {
+margin-bottom: 0;
+list-style-type: none;
+}
+
+table#list li {
+margin: 0 0 2px 0;
+}
+
 /* other element overrides
 ----------------------------------------------- */
 
@@ -309,9 +318,12 @@ background-color: #ffc;
 }
 
 ul.tag-links {
-margin-bottom: 10px;
 font-size: 0.9em;
 list-style-type: none;
+}
+
+ul.tag-links li {
+margin: 0 0 2px 0;
 }
 
 #warning {
