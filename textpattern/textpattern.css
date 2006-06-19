@@ -272,9 +272,8 @@ vertical-align: middle;
 border: none;
 }
 
-table#list td, table#list th {
+table#list th, table#list td {
 padding: 3px 5px;
-text-align: left;
 border-bottom: 1px solid #ddd;
 }
 

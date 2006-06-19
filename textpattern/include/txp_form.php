@@ -40,7 +40,7 @@ $LastChangedRevision$
 		$methods = array('delete'=>gTxt('delete'));
 
 
-		$rs = safe_rows_start("*", "txp_form", "1=1 order by name");
+		$rs = safe_rows_start("*", "txp_form", "1 order by type asc, name asc");
 
 		if ($rs) {
 			while ($a = nextRow($rs)){
@@ -115,29 +115,37 @@ $LastChangedRevision$
 		if (!in_array($name, $essential_forms))
 			$changename = graf(gTxt('form_name').br.fInput('text','name',$name,'edit','','',15));
 		else
-			$changename = graf(gTxt('form_name').br."<i>$name</i>".hInput('name',$name));
+			$changename = graf(gTxt('form_name').br.tag($name, 'em').hInput('name',$name));
 
 		$out = 
 			startTable('edit').
 			tr(
 				tdtl(
-					hed(gTxt('useful_tags'),2).
-					graf(gTxt('articles').sp.popHelp('form_place_article').br.
-						popTagLinks('article')).
-					graf(gTxt('links').sp.popHelp('form_place_link').br.
-						popTagLinks('link')).
-					graf(gTxt('displayed_comments').sp.popHelp('form_place_comment').br.
-						popTagLinks('comment')).
-					graf(gTxt('comment_form').sp.popHelp('form_place_input').br.
-						popTagLinks('comment_form')).
-					graf(gTxt('search_input_form').sp.popHelp('form_place_search_input').br.
-						popTagLinks('search_input')).
-					graf(gTxt('search_results_form').
-						sp.popHelp('form_place_search_results').br.
-						popTagLinks('search_result')).
-					graf(
-						tag('<strong>'.gTxt('file_download_tags').'</strong>','a',' href="#" onclick="toggleDisplay(\'downloadtags\'); return false;"').sp.popHelp('form_file_download_tags')).
-						graf(popTagLinks('file_download'), ' style="display:none;" id="downloadtags"')
+					hed(gTxt('useful_tags'), 2).
+
+					hed(gTxt('articles').sp.popHelp('form_place_article'), 3).
+						popTagLinks('article').
+
+					hed(gTxt('links').sp.popHelp('form_place_link'), 3).
+						popTagLinks('link').
+
+					hed(gTxt('displayed_comments').sp.popHelp('form_place_comment'), 3).
+						popTagLinks('comment').
+
+					hed(gTxt('comment_form').sp.popHelp('form_place_input'), 3).
+						popTagLinks('comment_form').
+
+					hed(gTxt('search_input_form').sp.popHelp('form_place_search_input'), 3).
+						popTagLinks('search_input').
+
+					hed(gTxt('search_results_form').sp.popHelp('form_place_search_results'), 3).
+						popTagLinks('search_result').
+
+					hed(
+						'<a href="#" onclick="toggleDisplay(\'download-tags\'); return false;">'.gTxt('file_download_tags').'</a> '.
+						popHelp('form_file_download_tags')
+					, 3).
+						tag(popTagLinks('file_download'), 'div', ' id="download-tags" style="display: none;"')
 				).
 				tdtl(
 					'<form action="index.php" method="post">'.
