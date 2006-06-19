@@ -126,7 +126,7 @@ $LastChangedRevision$
 
 			else
 			{
-				echo n.graf(gTxt('no_links'), ' style="text-align: center;"');
+				echo n.graf(gTxt('no_links_recorded'), ' style="text-align: center;"');
 			}
 
 			return;

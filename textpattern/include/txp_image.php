@@ -128,7 +128,7 @@ $LastChangedRevision$
 
 			else
 			{
-				echo n.graf(gTxt('no_images'), ' style="text-align: center;"');
+				echo n.graf(gTxt('no_images_recorded'), ' style="text-align: center;"');
 			}
 
 			return;
