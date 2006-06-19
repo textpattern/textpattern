@@ -103,7 +103,7 @@ $LastChangedRevision$
 				'title_body' => "`Title` rlike '$crit_escaped' or `Body` rlike '$crit_escaped'",
 				'section'		 => "`Section` rlike '$crit_escaped'",
 				'categories' => "`Category1` rlike '$crit_escaped' or `Category2` rlike '$crit_escaped'",
-				'status'		 => "`Status` = '".(@$sesutats[$crit_escaped])."'",
+				'status'		 => "`Status` = '".(@$sesutats[gTxt($crit_escaped)])."'",
 				'author'		 => "`AuthorID` rlike '$crit_escaped'",
 			);
 
