@@ -61,7 +61,7 @@ function doAuth() {
 	{
 		global $txpcfg;
 		include txpath.'/lib/txplib_head.php';
-		pagetop('log in');
+		pagetop(gTxt('login'));
 		$stay = !(cs('txp_nostay') == 1);
 		echo
 		form(
