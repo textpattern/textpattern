@@ -541,58 +541,82 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function link_to_next($atts, $thing) // link to next article, if it exists
+// link to next article, if it exists
+
+	function link_to_next($atts, $thing)
 	{
 		global $thisarticle, $id;
 		global $next_id, $next_title, $next_utitle, $next_posted;
 		global $prev_id, $prev_title, $prev_utitle, $prev_posted;
+
 		extract(lAtts(array(
 			'showalways'   => 0,
-		),$atts));
+		), $atts));
 
-		if(!is_numeric(@$id)) {
-			extract(getNextPrev(@$thisarticle['thisid'], @strftime('%Y-%m-%d %H:%M:%S', $thisarticle['posted']), @$GLOBALS['s']));
+		if (!is_numeric(@$id))
+		{
+			extract(getNextPrev(
+				@$thisarticle['thisid'], 
+				@strftime('%Y-%m-%d %H:%M:%S', 
+				$thisarticle['posted']
+			), @$GLOBALS['s']));
 		}
 
-		return ($next_id) ? href(parse($thing),permlinkurl_id($next_id)) : ($showalways ? parse($thing) : '');
+		return ($next_id) ? 
+			tag(parse($thing), 'a', ' rel="next" href="'.permlinkurl_id($next_id).'"') : 
+			($showalways ? parse($thing) : '');
 	}
 		
 // -------------------------------------------------------------
-	function link_to_prev($atts, $thing) // link to next article, if it exists
+// link to next article, if it exists
+
+	function link_to_prev($atts, $thing) 
 	{
 		global $thisarticle, $id;
 		global $next_id, $next_title, $next_utitle, $next_posted;
 		global $prev_id, $prev_title, $prev_utitle, $prev_posted;
+
 		extract(lAtts(array(
 			'showalways'   => 0,
-		),$atts));
+		), $atts));
 
-		if(!is_numeric(@$id)) {
-			extract(getNextPrev($thisarticle['thisid'], @strftime('%Y-%m-%d %H:%M:%S', $thisarticle['posted']), @$GLOBALS['s']));
+		if (!is_numeric(@$id))
+		{
+			extract(getNextPrev(
+				$thisarticle['thisid'], 
+				@strftime('%Y-%m-%d %H:%M:%S', 
+				$thisarticle['posted']
+			), @$GLOBALS['s']));
 		}
 
-		return ($prev_id) ? href(parse($thing),permlinkurl_id($prev_id)) : ($showalways ? parse($thing) : '');
+		return ($prev_id) ? 
+			tag(parse($thing), 'a', ' rel="prev" href="'.permlinkurl_id($prev_id).'"') : 
+			($showalways ? parse($thing) : '');
 	}
 
 // -------------------------------------------------------------
+
 	function next_title()
 	{
 		return $GLOBALS['next_title'];
 	}
 
 // -------------------------------------------------------------
+
 	function prev_title()
 	{
 		return $GLOBALS['prev_title'];
 	}
 
 // -------------------------------------------------------------
+
 	function site_slogan()
 	{
 		return $GLOBALS['site_slogan'];
 	}
 
 // -------------------------------------------------------------
+	
 	function link_to_home($atts, $thing = false) 
 	{
 		extract(lAtts(array(
@@ -602,14 +626,15 @@ $LastChangedRevision$
 		if ($thing)
 		{
 			$class = ($class) ? ' class="'.$class.'"' : '';
-			return '<a href="'.hu.'"'.$class.'>'.parse($thing).'</a>';
+			return '<a rel="home" href="'.hu.'"'.$class.'>'.parse($thing).'</a>';
 		}
 
 		return hu;
 	}
 
 // -------------------------------------------------------------
-	function newer($atts, $thing = false, $match='') 
+
+	function newer($atts, $thing = false, $match = '') 
 	{
 		global $thispage, $permlink_mode, $pretext;
 
@@ -651,6 +676,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
+
 	function older($atts, $thing = false, $match = '') 
 	{
 		global $thispage, $permlink_mode, $pretext;
@@ -670,7 +696,14 @@ $LastChangedRevision$
 		if ($numPages > 1 && $pg != $numPages)
 		{
 			$nextpg = $pg + 1;
-			$url = pagelinkurl(array('pg' => $nextpg, 's' => @$pretext['s'], 'c' => @$pretext['c'], 'q' => @$pretext['q'], 'a' => @$pretext['a']));
+
+			$url = pagelinkurl(array(
+				'pg' => $nextpg, 
+				's' => @$pretext['s'], 
+				'c' => @$pretext['c'], 
+				'q' => @$pretext['q'], 
+				'a' => @$pretext['a']
+			));
 
 			if ($thing)
 			{
