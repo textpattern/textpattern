@@ -263,12 +263,16 @@ $LastChangedRevision$
 
 	function file_search_form($crit, $method)
 	{
+		$default_method = 'filename';
+
 		$methods =	array(
-			'id'          => gTxt('ID'),
-			'filename'    => gTxt('file_name'),
+			'id'					=> gTxt('ID'),
+			'filename'		=> gTxt('file_name'),
 			'description' => gTxt('description'),
-			'category'    => gTxt('file_category')
+			'category'		=> gTxt('file_category')
 		);
+
+		$method = ($method) ? $method : $default_method;
 
 		return n.n.form(
 			graf(

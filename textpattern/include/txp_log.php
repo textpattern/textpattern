@@ -213,6 +213,8 @@ $LastChangedRevision$
 
 	function log_search_form($crit, $method)
 	{
+		$default_method = 'page';
+
 		$methods =	array(
 			'ip'     => gTxt('IP'),
 			'host'	 => gTxt('host'),
@@ -221,6 +223,8 @@ $LastChangedRevision$
 			'method' => gTxt('method'),
 			'status' => gTxt('status')
 		);
+
+		$method = ($method) ? $method : $default_method;
 
 		return n.n.form(
 			graf(

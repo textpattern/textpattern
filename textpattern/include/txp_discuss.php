@@ -293,6 +293,8 @@ $LastChangedRevision$
 
 	function discuss_search_form($crit, $method)
 	{
+		$default_method = 'message';	
+	
 		$methods =	array(
 			'id'			=> gTxt('ID'),
 			'parent'  => gTxt('parent'),
@@ -302,6 +304,8 @@ $LastChangedRevision$
 			'website' => gTxt('website'),
 			'ip'			=> gTxt('IP')
 		);
+
+		$method = ($method) ? $method : $default_method;
 
 		return form(
 			graf(

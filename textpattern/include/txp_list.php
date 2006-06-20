@@ -252,14 +252,18 @@ $LastChangedRevision$
 
 	function list_search_form($crit, $method)
 	{
+		$default_method = 'title_body';
+
 		$methods =	array(
-			'id'         => gTxt('ID'),
+			'id'				 => gTxt('ID'),
 			'title_body' => gTxt('title_body'),
 			'section'		 => gTxt('section'),
 			'categories' => gTxt('categories'),
 			'status'		 => gTxt('status'),
 			'author'		 => gTxt('author')
 		);
+
+		$method = ($method) ? $method : $default_method;
 
 		return n.n.form(
 			graf(

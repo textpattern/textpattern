@@ -216,12 +216,16 @@ $LastChangedRevision$
 
 	function link_search_form($crit, $method)
 	{
+		$default_method = 'name';
+
 		$methods =	array(
-			'id'          => gTxt('ID'),
-			'name'        => gTxt('link_name'),
+			'id'					=> gTxt('ID'),
+			'name'				=> gTxt('link_name'),
 			'description' => gTxt('description'),
-			'category'    => gTxt('link_category')
+			'category'		=> gTxt('link_category')
 		);
+
+		$method = ($method) ? $method : $default_method;
 
 		return n.n.form(
 			graf(
