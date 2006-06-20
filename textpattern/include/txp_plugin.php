@@ -25,40 +25,63 @@ $LastChangedRevision$
 	}
 	
 // -------------------------------------------------------------
-	function plugin_list($message='')
+
+	function plugin_list($message = '')
 	{	
-		pagetop(gTxt('edit_plugins'),$message);
+		pagetop(gTxt('edit_plugins'), $message);
 
-		echo 
+		echo n.n.startTable('list').
+			tr(
+				tda(
+					plugin_form()
+				,' colspan="8" style="height: 30px; border: none;"')
+			);
 
-		startTable('list').
-		tr(tda(plugin_form()
-		
-		,' colspan="8" style="border:0;height:50px"')).
-		 assHead('plugin','author','version','description','active','','','');
-			
-		$rs = safe_rows_start("*","txp_plugin", "1=1 order by name");
-		
-		while ($a = nextRow($rs)) {
-		  extract($a);
+		$rs = safe_rows_start('*', 'txp_plugin', "1 order by name");
 
-		$elink = eLink('plugin','plugin_edit','name',$name,gTxt('edit'));
-		$hlink = '<a href="?event=plugin&#38;step=plugin_help&#38;name='.$name.'">'.
-					gTxt('help').'</a>';
-		  echo 
-		  tr(
-			td($name).
-			td('<a href="'.$author_uri.'">'.$author.'</a>').
-			td($version,10).
-			td($description,260).
-			td(status_link($status,$name,yes_no($status)),30).
-			td($elink).
-			td($hlink).
-			td(dLink('plugin','plugin_delete','name',$name),30)
-		  );
-		  unset($name,$page,$deletelink);
+		if ($rs and numRows($rs) > 0)
+		{
+			echo assHead('plugin', 'author', 'version', 'description', 'active', 'help', '', '');
+
+			while ($a = nextRow($rs))
+			{
+				extract($a);
+
+				$help = !empty($help) ? 
+					'<a href="?event=plugin'.a.'step=plugin_help'.a.'name='.$name.'">'.gTxt('view').'</a>' : 
+					gTxt('none');
+
+				echo tr(
+
+					n.td($name).
+
+					td(
+						href($author_uri, $author)
+					).
+
+					td($version, 10).
+					td($description, 260).
+
+					td(
+						status_link($status, $name, yes_no($status))
+					,30).
+
+					td($help).
+
+					td(
+						eLink('plugin', 'plugin_edit', 'name', $name, gTxt('edit'))
+					).
+
+					td(
+						dLink('plugin', 'plugin_delete', 'name', $name)
+					,30)
+				);
+
+				unset($name, $page, $deletelink);
+			}
 		}
-		echo endTable();	
+
+		echo endTable();
 	}
 	
 // -------------------------------------------------------------
@@ -176,9 +199,10 @@ $LastChangedRevision$
 					echo 
 					form(startTable('edit')
 					.	tr(td(hed(gTxt('previewing_plugin'),3)))
-					.	tr(td($source))
+					.	tr(td(tag($source, 'div', ' id="preview-plugin"')))
 					.	tr(td($sub))
-					.	endTable().sInput('plugin_install').eInput('plugin').hInput('plugin64', base64_encode($plugin64)));
+					.	endTable().sInput('plugin_install').eInput('plugin').hInput('plugin64', base64_encode($plugin64))
+					, 'margin: 0 auto; width: 75%;');
 					return;
 				}
 			}
@@ -246,17 +270,24 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
+
 	function plugin_form() 
 	{
-		return 
-		'<form action="index.php" method="post">'.
-		tag(gTxt('install_plugin').': ', 'span', ' style="vertical-align:top;"').
-		text_area('plugin',30,400,'').
-		tag(
-			popHelp('install_plugin').sp.
-			fInput('submit','install_new',gTxt('upload'),'smallerbox')
-		    , 'span', ' style="vertical-align:100%;"').
-		eInput('plugin').sInput('plugin_verify').
-		'</form>';
+		return n.n.form(
+			graf(
+			tag(gTxt('install_plugin'), 'span', ' style="vertical-align: top;"').sp.
+
+			text_area('plugin', 30, 400, '').sp.
+
+			tag(
+				popHelp('install_plugin').sp.
+				fInput('submit', 'install_new', gTxt('upload'), 'smallerbox')
+		   , 'span', ' style="vertical-align: 6px;"').
+
+				eInput('plugin').
+				sInput('plugin_verify')
+			)
+		, 'text-align: center;');
 	}
+
 ?>

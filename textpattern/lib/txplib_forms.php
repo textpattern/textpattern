@@ -161,10 +161,10 @@ $LastChangedRevision$
 	}
 
 //-------------------------------------------------------------
-	function text_area($name,$h,$w,$thing='')
+
+	function text_area($name, $h, $w, $thing = '')
 	{
-		return
-		'<textarea name="'.$name.'" cols="1" rows="1" style="height:'.$h.'px;width:'.$w.'px;margin-bottom:1em;">'.$thing.'</textarea>';
+		return '<textarea name="'.$name.'" cols="40" rows="5" style="width:'.$w.'px; height:'.$h.'px;">'.$thing.'</textarea>';
 	}
 
 //-------------------------------------------------------------

@@ -481,3 +481,12 @@ textarea#css {
 width: 500px;
 height: 515px;
 }
+
+/* plugins
+----------------------------------------------- */
+
+div#preview-plugin {
+margin: 0 auto;
+height: 300px;
+overflow: auto;
+}
