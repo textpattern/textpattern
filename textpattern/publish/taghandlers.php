@@ -659,7 +659,7 @@ $LastChangedRevision$
 				's' => @$pretext['s'], 
 				'c' => @$pretext['c'], 
 				'q' => @$pretext['q'], 
-				'a' => @$pretext['a']
+				'author' => @$pretext['author']
 			));
 
 			if ($thing)
@@ -702,7 +702,7 @@ $LastChangedRevision$
 				's' => @$pretext['s'], 
 				'c' => @$pretext['c'], 
 				'q' => @$pretext['q'], 
-				'a' => @$pretext['a']
+				'author' => @$pretext['author']
 			));
 
 			if ($thing)
