@@ -52,7 +52,7 @@ $LastChangedRevision$
 
 		else
 		{
-			echo upload_form(gTxt('upload_image'), gTxt('upload'), 'image_insert', 'image', '', $file_max_upload_size);
+			echo upload_form(gTxt('upload_image'), 'upload', 'image_insert', 'image', '', $file_max_upload_size);
 		}
 
 		$dir = ($dir == 'desc') ? 'desc' : 'asc';
