@@ -36,7 +36,7 @@ $LastChangedRevision$
 
 //-------------------------------------------------------------
 
-	function chunk($str, $len, $break = '&#133;<br />') 
+	function chunk($str, $len, $break = '&#8230;<br />') 
 	{
 		return join($break, preg_split('/(.{1,'.$len.'})/', $str, -1, PREG_SPLIT_DELIM_CAPTURE|PREG_SPLIT_NO_EMPTY));
 	}
@@ -63,10 +63,6 @@ $LastChangedRevision$
 
 			case 'ip':
 				$sort_sql = '`ip` '.$dir;
-			break;
-
-			case 'host':
-				$sort_sql = '`host` '.$dir;
 			break;
 
 			case 'page':
@@ -101,7 +97,6 @@ $LastChangedRevision$
 
 			$critsql = array(
 				'ip'     => "`ip` like '%$crit_escaped%'",
-				'host'   => "`host` like '%$crit_escaped%'",
 				'page'   => "`page` like '%$crit_escaped%'",
 				'refer'  => "`refer` like '%$crit_escaped%'",
 				'method' => "`method` like '%$crit_escaped%'",
@@ -153,7 +148,6 @@ $LastChangedRevision$
 
 			column_head('time', 'time', 'log', true, $switch_dir, $crit, $method).
 			column_head('IP', 'ip', 'log', true, $switch_dir, $crit, $method).
-			column_head('host', 'host', 'log', true, $switch_dir, $crit, $method).
 			column_head('page', 'page', 'log', true, $switch_dir, $crit, $method).
 			column_head('referrer', 'refer', 'log', true, $switch_dir, $crit, $method).
 			column_head('method', 'method', 'log', true, $switch_dir, $crit, $method).
@@ -165,16 +159,16 @@ $LastChangedRevision$
 
 				if ($log_refer)
 				{
-					$log_refer = htmlspecialchars($log_refer);
+					$log_refer = htmlspecialchars('http://'.$log_refer);
 
-					$log_refer = href(preg_replace("/^www\./", '', chunk($log_refer, 50)), 'http://'.$log_refer);
+					$log_refer = '<a href="'.$log_refer.'" target="_blank">'.chunk($log_refer, 50).'</a>';
 				}
 
 				if ($log_page)
 				{
-					$log_page = preg_replace('/\/$/','', htmlspecialchars(substr($log_page, 1)));
+					$log_page = htmlspecialchars('http://'.$log_host.$log_page);
 
-					$log_page = '<a href="'.htmlspecialchars($log_page).'" target="_blank">'.chunk($log_page, 60).'</a>';
+					$log_page = '<a href="'.$log_page.'" target="_blank">'.chunk($log_page, 50).'</a>';
 
 					if ($log_method == 'POST')
 					{
@@ -189,11 +183,6 @@ $LastChangedRevision$
 					, 85).
 
 					td($log_ip, 75).
-
-					td(
-						chunk($log_host, 75)
-					, 100).
-
 					td($log_page, 200).
 					td($log_refer, 200).
 					td($log_method, 50).
@@ -217,7 +206,6 @@ $LastChangedRevision$
 
 		$methods =	array(
 			'ip'     => gTxt('IP'),
-			'host'	 => gTxt('host'),
 			'page'   => gTxt('page'),
 			'refer'	 => gTxt('referrer'),
 			'method' => gTxt('method'),
