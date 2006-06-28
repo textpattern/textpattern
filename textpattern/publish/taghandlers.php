@@ -452,77 +452,120 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function category_list($atts) // output href list of site categories
-	{
-		extract(lAtts(array(
-			'label'    => '',
-			'break'    => br,
-			'wraptag'  => '',
-			'parent'   => '',
-			'type'    => 'article',
-			'class'    => __FUNCTION__,
-			'labeltag' => '',
-		),$atts));
+// output href list of site categories
 
-		if ($parent) {
-			$qs = safe_row("lft,rgt",'txp_category',"name='$parent'");
-			if($qs) {
+	function category_list($atts)
+	{
+		global $c;
+
+		extract(lAtts(array(
+			'active_class' => '',
+			'break'        => br,
+			'class'        => __FUNCTION__,
+			'label'        => '',
+			'labeltag'     => '',
+			'parent'       => '',
+			'type'         => 'article',
+			'wraptag'      => ''
+		), $atts));
+
+		if ($parent)
+		{
+			$qs = safe_row('lft, rgt', 'txp_category', "name = '$parent'");
+
+			if ($qs)
+			{
 				extract($qs);
-				$rs = safe_rows_start(
-				  "name,title", 
-				  "txp_category","name != 'default' and type='$type' and (lft between $lft and $rgt) order by lft asc"
-				);
+
+				$rs = safe_rows_start('name, title', 'txp_category', 
+					"name != 'default' and type = '$type' and (lft between $lft and $rgt) order by lft asc");
 			}
-		} else {
-			$rs = safe_rows_start(
-			  "name,title", 
-			  "txp_category",
-			  "name != 'default' and type='$type' order by name"
-			);
 		}
 
-		if ($rs) {
+		else
+		{
+			$rs = safe_rows_start('name, title', 'txp_category', 
+				"name not in('default','root') and type = '$type' order by name");
+		}
+
+		if ($rs)
+		{
 			$out = array();
-			while ($a = nextRow($rs)) {
+
+			while ($a = nextRow($rs))
+			{
 				extract($a);
-				if ($name=='root') continue;
-				if($name) $out[] = tag(str_replace("& ","&#38; ", $title),'a',' href="'.pagelinkurl(array('c'=>$name)).'"');
+
+				if ($name)
+				{
+					$out[] = tag(str_replace('& ', '&#38; ', $title), 'a', 
+						( ($active_class and ($c == $name)) ? ' class="'.$active_class.'"' : '' ).
+						' href="'.pagelinkurl(array('c' => $name)).'"'
+					);
+				}
 			}
-			if (count($out)) {
+
+			if ($out)
+			{
 				return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
 			}			
 		}
+
 		return '';
 	}
 
 // -------------------------------------------------------------
-	function section_list($atts) // output href list of site sections
+// output href list of site sections
+
+	function section_list($atts) 
 	{
-		global $sitename;
-		
+		global $sitename, $s;
+
 		extract(lAtts(array(
-			'label'   => '',
-			'break'   => br,
-			'wraptag' => '',
-			'class'    => __FUNCTION__,
-			'labeltag' => '',
+			'active_class'    => '',
+			'break'           => br,
+			'class'           => __FUNCTION__,
+			'default_title'   => $sitename,
 			'include_default' => '',
-		),$atts));
-		
-		$rs = safe_rows_start("name,title","txp_section","name != 'default' order by name");
-		
-		if ($rs) {
+			'label'           => '',
+			'labeltag'        => '',
+			'wraptag'         => ''
+		), $atts));
+
+		$rs = safe_rows_start('name, title', 'txp_section', "name != 'default' order by name");
+
+		if ($rs)
+		{
 			$out = array();
-			while ($a = nextRow($rs)) {
+
+			while ($a = nextRow($rs))
+			{
 				extract($a);
-				$url = pagelinkurl(array('s'=>$name));
-				$out[] = tag($title, 'a', ' href="'.$url.'"');
+
+				$url = pagelinkurl(array('s' => $name));
+
+				$out[] = tag($title, 'a', 
+					( ($active_class and ($s == $name)) ? ' class="'.$active_class.'"' : '' ).
+					' href="'.$url.'"'
+				);
 			}
-			if (count($out)) {
-				if ($include_default) $out = array_merge(array(tag($sitename,'a', ' href="'.hu.'"')),$out);
+
+			if ($out)
+			{
+				if ($include_default)
+				{
+					$out = array_merge(array(
+						tag($default_title,'a', 
+							( ($active_class and ($s == 'default')) ? ' class="'.$active_class.'"' : '' ).
+							' href="'.hu.'"'
+						)
+					), $out);
+				}
+
 				return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
 			}
 		}
+
 		return '';
 	}
 
