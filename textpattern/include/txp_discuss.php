@@ -235,9 +235,12 @@ $LastChangedRevision$
 
 					$parent = href($parent_title, '?event=list'.a.'step=list'.a.'method='.$method.a.'crit='.$tq['ID']);
 
-					$view = ($tq['Status'] == 4 or $tq['Status'] == 5) ? 
-						n.'<li><a href="'.permlinkurl($tq).'#c'.$discussid.'">'.gTxt('view').'</a></li>' : 
-						'';
+					$view = '';
+
+					if ($visible == VISIBLE and in_array($tq['Status'], array(4,5)))
+					{
+						$view = n.t.'<li><a href="'.permlinkurl($tq).'#c'.$discussid.'">'.gTxt('view').'</a></li>';
+					}
 				}
 
 				echo n.n.tr(
@@ -246,7 +249,7 @@ $LastChangedRevision$
 
 					td(
 						n.'<ul>'.
-						n.'<li><a href="'.$edit_url.'">'.gTxt('edit').'</a></li>'.
+						n.t.'<li><a href="'.$edit_url.'">'.gTxt('edit').'</a></li>'.
 						$view.
 						n.'</ul>'
 					, 35).
