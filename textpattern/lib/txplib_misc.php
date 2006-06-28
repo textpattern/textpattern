@@ -773,59 +773,80 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function txpMail($to_address, $subject, $body, $reply_to = null) 
+
+	function txpMail($to_address, $subject, $body, $reply_to = null)
 	{
 		global $txp_user, $prefs;
+
+		// Likely sending passwords
 		if (isset($txp_user))
-		{	// Likely sending passwords
-			extract(safe_row("RealName, email", "txp_users", "name = '".doSlash($txp_user)."'"));
-		} 
+		{
+			extract(safe_row('RealName, email', 'txp_users', "name = '".doSlash($txp_user)."'"));
+		}
+
+		// Likely sending comments -> "to" equals "from"
 		else
-		{	// Likely sending comments -> "to" equals "from"
-			extract(safe_row("RealName, email", "txp_users", "email = '".doSlash($to_address)."'"));
+		{
+			extract(safe_row('RealName, email', 'txp_users', "email = '".doSlash($to_address)."'"));
 		}
 
 		if ($prefs['override_emailcharset'])
 		{
 			$charset = 'ISO-8599-1';
+
 			if (is_callable('utf8_decode'))
 			{
-				$RealName = utf8_decode($RealName);
-				$subject  = utf8_decode($subject);
-				$body     = utf8_decode($body);
+				$RealName		= utf8_decode($RealName);
+				$subject		= utf8_decode($subject);
+				$body				= utf8_decode($body);
 				$to_address = utf8_decode($to_address);
-				if (!is_null($reply_to)) $reply_to = utf8_decode($reply_to);
+
+				if (!is_null($reply_to))
+				{
+					$reply_to = utf8_decode($reply_to);
+				}
 			}
-		} else {
+		}
+
+		else
+		{
 			$charset = 'UTF-8';
 		}
 
 		$RealName = strip_rn($RealName);
 		$subject = strip_rn($subject);
 		$email = strip_rn($email);
-		if (!is_null($reply_to)) $reply_to = strip_rn($reply_to);
 
-		if (!is_callable('mail')) 
+		if (!is_null($reply_to))
 		{
-			if (txpinterface == 'admin' && $GLOBALS['production_status'] != 'live') 
-				echo tag(gTxt('warn_mail_unavailable'),'p',' style="color:red;" ');
+			$reply_to = strip_rn($reply_to);
+		}
+
+		if (!is_callable('mail'))
+		{
 			return false;
 		}
+
 		else
 		{
-			$sep = (!is_windows()) ? "\n" : "\r\n";
-	        $body = str_replace("\r\n", "\n", $body);
-	        $body = str_replace("\r", "\n", $body);
-	        $body = str_replace("\n", $sep, $body);
+			// make sure we take care of different platforms
+			$body = str_replace("\r\n", "\n", $body);
+			$body = str_replace("\r", "\n", $body);
+
+			// use RFC 2822 compliant linefeeds
+			$body = str_replace("\n", "\r\n", $body);
+
 			return mail($to_address, $subject, $body,
-			 "From: $RealName <$email>$sep"
-			."Reply-To: ". ((isset($reply_to)) ? $reply_to : "$RealName <$email>") . $sep
-			."X-Mailer: Textpattern$sep"
-			."Content-Transfer-Encoding: 8bit$sep"
-			."Content-Type: text/plain; charset=\"$charset\"$sep");		
+
+				"From: $RealName <$email>".
+				"\r\n".'Reply-To: '.( isset($reply_to) ? $reply_to : "$RealName <$email>" ).
+				"\r\n".'X-Mailer: Textpattern'.
+				"\r\n".'Content-Transfer-Encoding: 8bit'.
+				"\r\n".'Content-Type: text/plain; charset="'.$charset.'"'.
+				"\r\n"
+			);
 		}
 	}
-
 
 // -------------------------------------------------------------
 	function stripPHP($in) 
