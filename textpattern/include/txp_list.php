@@ -178,8 +178,8 @@ $LastChangedRevision$
 				$Category2 = ($Category2) ? '<span title="'.fetch_category_title($Category2).'">'.$Category2.'</span>' : '';
 
 				$manage = n.'<ul>'.
-						n.'<li>'.eLink('article', 'edit', 'ID', $ID, gTxt('edit')).'</li>'.
-						( ($Status == 4 or $Status == 5) ? n.'<li><a href="'.permlinkurl($a).'">'.gTxt('view').'</a></li>' : '' ).
+						n.t.'<li>'.eLink('article', 'edit', 'ID', $ID, gTxt('edit')).'</li>'.
+						( ($Status == 4 or $Status == 5) ? n.t.'<li><a href="'.permlinkurl($a).'">'.gTxt('view').'</a></li>' : '' ).
 						n.'</ul>';
 
 				$Status = !empty($Status) ? $statuses[$Status] : '';
@@ -191,6 +191,11 @@ $LastChangedRevision$
 					$comments = href(gTxt('manage'), 'index.php?event=discuss'.a.'step=list'.a.'method=parent'.a.'crit='.$ID).
 						' ('.$comments_count.')';
 				}
+
+				$comments = n.'<ul>'.
+					n.t.'<li>'.( $Annotate ? gTxt('on') : gTxt('off') ).'</li>'.
+					n.t.'<li>'.$comments.'</li>'.
+					n.'</ul>';
 
 				echo n.n.tr(
 

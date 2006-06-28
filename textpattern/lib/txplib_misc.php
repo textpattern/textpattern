@@ -882,56 +882,123 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
+
 	function event_multiedit_form($name, $methods = NULL)
 	{
 		$method = ps('method');
+
 		if ($methods === NULL)
-			$methods = array('delete'=>gTxt('delete'));
-		if ($name == 'list') {
-			$methods['changesection'] = gTxt('changesection');
-			$methods['changestatus'] = gTxt('changestatus');
+		{
+			$methods = array(
+				'delete' => gTxt('delete')
+			);
 		}
-		return
-			gTxt('with_selected').sp.selectInput('method',$methods,$method,1,(
-				($name == 'list')? ' onchange="poweredit(this);return false;" id="withselected"':'')
+
+		if ($name == 'list')
+		{
+			$methods = array(
+				'delete'         => gTxt('delete'),
+				'changesection'  => gTxt('changesection'),
+				'changestatus'   => gTxt('changestatus'),
+				'changecomments' => gTxt('changecomments')
+			);
+		}
+
+		return gTxt('with_selected').sp.
+			selectInput('method', $methods, $method, 1, 
+				( ($name == 'list') ? ' id="withselected" onchange="poweredit(this); return false;"' : '' )
 			).
-			eInput($name).sInput($name.'_multi_edit').fInput('submit','',gTxt('go'),'smallerbox');
+			eInput($name).
+			sInput($name.'_multi_edit').
+			fInput('submit', '', gTxt('go'), 'smallerbox');
 	}
 
 // -------------------------------------------------------------
+
 	function event_multi_edit($tablename, $idkeyname)
 	{
 		$method = ps('method');
 		$things = ps('selected');
-		if ($things) {
-			if ($method == 'delete') {
-				foreach($things as $id) {
-					$id = intval($id);
-					if (safe_delete($tablename,"$idkeyname='$id'")) {
-						$ids[] = $id;
+
+		if ($things)
+		{
+			switch ($method)
+			{
+				// delete
+				case 'delete':
+
+					foreach ($things as $id)
+					{
+						$id = intval($id);
+
+						if (safe_delete($tablename, "$idkeyname = '$id'"))
+						{
+							$ids[] = $id;
+						}
 					}
-				}
-				return join(', ',$ids);
-			}elseif ($method == 'changesection'){
-				$section = ps('Section');
-				foreach($things as $id) {
-					$id = intval($id);
-					if (safe_update($tablename,"Section='$section'","$idkeyname='$id'")) {
-						$ids[] = $id;
+
+					return join(', ', $ids);
+
+				break;
+
+			// change section
+				case 'changesection':
+
+					$section = ps('Section');
+
+					foreach($things as $id)
+					{
+						$id = intval($id);
+
+						if (safe_update($tablename, "Section = '$section'", "$idkeyname = '$id'"))
+						{
+							$ids[] = $id;
+						}
 					}
-				}
-				return join(', ',$ids);
-			}elseif ($method == 'changestatus'){
-				$status = ps('Status');
-				foreach($things as $id) {
-					$id = intval($id);
-					if (safe_update($tablename,"Status='$status'","$idkeyname='$id'")) {
-						$ids[] = $id;
+
+					return join(', ', $ids);
+
+				break;
+
+			// change status
+				case 'changestatus':
+
+					$status = ps('Status');
+
+					foreach ($things as $id)
+					{
+						$id = intval($id);
+
+						if (safe_update($tablename, "Status = '$status'", "$idkeyname = '$id'"))
+						{
+							$ids[] = $id;
+						}
 					}
-				}
-				return join(', ',$ids);
-			}else return '';
-		} else return '';
+
+					return join(', ', $ids);
+
+				break;
+
+			// change comments
+				case 'changecomments':
+
+					$annotate = ps('Annotate');
+
+					foreach ($things as $id)
+					{
+						$id = intval($id);
+
+						if (safe_update($tablename, "Annotate = '$annotate'", "$idkeyname = '$id'"))
+						{
+							$ids[] = $id;
+						}
+					}
+
+					return join(', ', $ids);
+			}
+		}
+
+		return '';
 	}
 
 // -------------------------------------------------------------
