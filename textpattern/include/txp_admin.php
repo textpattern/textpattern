@@ -35,21 +35,33 @@ if ($event == 'admin') {
 }
 
 // -------------------------------------------------------------
-	function admin($message='') 
+
+	function admin($message = '')
 	{
 		global $txp_user;
-		pagetop(gTxt('site_administration'),$message);
-		$themail = fetch('email','txp_users','name',$txp_user);
 
-		echo new_pass_form();
-		echo change_email_form($themail);
+		pagetop(gTxt('site_administration'), $message);
+
+		if (!is_callable('mail'))
+		{
+			echo tag(gTxt('warn_mail_unavailable'), 'p',' id="warning" ');
+		}
+
+		$email = fetch('email', 'txp_users', 'name', $txp_user);
+
+		echo new_pass_form().
+			change_email_form($email);
+
 		if (has_privs('admin.list'))
+		{
 			echo author_list();
+		}
+
 		if (has_privs('admin.edit'))
-			echo new_author_form();
-		if (has_privs('admin.edit'))
-			echo reset_author_pass_form();
-		
+		{
+			echo new_author_form().
+				reset_author_pass_form();
+		}
 	}
 
 // -------------------------------------------------------------
