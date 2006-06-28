@@ -133,7 +133,7 @@ $LastChangedRevision$
 		if (defined('PARTLY_MESSY') and (PARTLY_MESSY)) 
 			$url = hu.'?id='.intval($parentid);
 
-		$out = '<form method="post" action="'.$url.'#cpreview" id="txpCommentInputForm">'.
+		$out = '<form method="post" action="'.htmlspecialchars($url).'#cpreview" id="txpCommentInputForm">'.
 		# Juts to prevent XHTML Strict validation gotchas
 		'<div class="comments-wrapper">';
 
@@ -185,8 +185,8 @@ $LastChangedRevision$
 		$out .= ($preview) ? hInput(substr($nonce, 0, $split),substr($nonce, $split)) : '';
 
 		$out .= (!$preview)
-		?	fInput('hidden','backpage',serverset("REQUEST_URI"))
-		:	fInput('hidden','backpage',$backpage);
+		?	fInput('hidden','backpage',htmlspecialchars(serverset('REQUEST_URI')))
+		:	fInput('hidden','backpage',htmlspecialchars($backpage));
 		$out = str_replace( '<!-- plugin-place-holder -->', callback_event('comment.form'), $out);
 		$out .= '</div></form>'; 
 	  return $out;
