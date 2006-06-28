@@ -830,14 +830,14 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
+
 	function comments_count($atts) 
 	{
 		global $thisarticle;
 
 		assert_article();
-		
-		$com_count = $thisarticle['comments_count'];
-		return ($com_count > 0) ? $com_count : '';
+
+		return $thisarticle['comments_count'];
 	}
 
 // -------------------------------------------------------------
