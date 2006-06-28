@@ -20,7 +20,7 @@ $vars = array(
 	'textile_body', 'Keywords','Status','Posted','Section','Category1','Category2',
 	'Annotate','AnnotateInvite','publish_now','reset_time','AuthorID','sPosted',
 	'LastModID','sLastMod','override_form','from_view','year','month','day','hour',
-	'minute','url_title','custom_1','custom_2','custom_3','custom_4','custom_5',
+	'minute','second','url_title','custom_1','custom_2','custom_3','custom_4','custom_5',
 	'custom_6','custom_7','custom_8','custom_9','custom_10'
 );
 
@@ -69,7 +69,7 @@ if (!empty($event) and $event == 'article') {
 		if ($publish_now==1) {
 			$when = 'now()';
 		} else {
-			$when = strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.":00")-tz_offset();
+			$when = strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second)-tz_offset();
 			$when = "from_unixtime($when)";
 		}
 
@@ -158,7 +158,7 @@ if (!empty($event) and $event == 'article') {
 		if($reset_time) {
 			$whenposted = "Posted=now()"; 
 		} else {
-			$when = strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.":00")-tz_offset();
+			$when = strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second)-tz_offset();
 			$when = "from_unixtime($when)";
 			$whenposted = "Posted=$when";
 		}
@@ -587,7 +587,7 @@ if (!empty($event) and $event == 'article') {
 			if ($view == 'text') {
 				//Avoiding modified date to disappear
 				$persist_timestamp = (!empty($store_out['year']))? 
-					mktime($store_out['hour'],$store_out['minute'], '00', $store_out['month'], $store_out['day'], $store_out['year'])
+					mktime($store_out['hour'],$store_out['minute'], $store_out['second'], $store_out['month'], $store_out['day'], $store_out['year'])
 					: time();
 			echo
 			graf(tag(checkbox('publish_now','1').gTxt('set_to_now'),'label')),
@@ -596,7 +596,8 @@ if (!empty($event) and $event == 'article') {
 				tsi('month','m',$persist_timestamp),
 				tsi('day','d',$persist_timestamp), sp,
 				tsi('hour','H',$persist_timestamp), ':',
-				tsi('minute','i',$persist_timestamp),
+				tsi('minute','i',$persist_timestamp), ':',
+				tsi('second', 's', $persist_timestamp),
 			'</p>';
 			}
 
@@ -618,7 +619,8 @@ if (!empty($event) and $event == 'article') {
 					tsi('month','m',$sPosted,6),
 					tsi('day','d',$sPosted,7), sp,
 					tsi('hour','H',$sPosted,8), ':',
-					tsi('minute','i',$sPosted,9),
+					tsi('minute','i',$sPosted,9), ':',
+					tsi('second', 's', $sPosted, 10),
 				'</p>',
 					hInput('sPosted',$sPosted),
 					hInput('sLastMod',$sLastMod),
