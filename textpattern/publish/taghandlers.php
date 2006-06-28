@@ -30,12 +30,30 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function css($atts) 	// generates the css src in <head>
+// generates the css src in <head>
+
+	function css($atts)
 	{
 		global $s;
-		extract(lAtts(array('n' => ''),$atts));
-		if ($n) return hu.'textpattern/css.php?n='.$n;
-		return hu.'textpattern/css.php?s='.$s;
+
+		extract(lAtts(array(
+			'n' => ''
+		), $atts));
+
+		if ($n)
+		{
+			return hu.'textpattern/css.php?n='.$n;
+		}
+
+		elseif ($s)
+		{
+			return hu.'textpattern/css.php?s='.$s;
+		}
+
+		else
+		{
+			return hu.'textpattern/css.php?n=default';
+		}
 	}
 
 // -------------------------------------------------------------
