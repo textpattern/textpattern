@@ -1287,111 +1287,201 @@ function body($atts)
 
 // -------------------------------------------------------------
 
-	function category1($atts)
+	function category1($atts, $thing = '')
 	{
 		global $thisarticle, $permlink_mode;
 
 		assert_article();
 
 		extract(lAtts(array(
-			'link'	=> 0,
-			'title' => 0,
+			'class'   => '',
+			'link'		=> 0,
+			'title'		=> 0,
+			'wraptag' => ''
 		), $atts));
 
 		if ($thisarticle['category1'])
 		{
-			$cat_title = ($title) ? fetch_category_title($thisarticle['category1']) : $thisarticle['category1'];
+			$cat = $thisarticle['category1'];
 
-			if (!empty($link))
+			$label = ($title) ? fetch_category_title($cat) : $cat;
+
+			if ($thing)
 			{
-				return '<a'.
+				$out = '<a'.
 					($permlink_mode != 'messy' ? ' rel="tag"' : '').
-					' href="'.pagelinkurl(array('c' => $thisarticle['category1'])).'">'.$cat_title.'</a>';
+					' href="'.pagelinkurl(array('c' => $cat)).'"'.
+					($title ? ' title="'.$label.'"' : '').
+					'>'.$thing.'</a>';
 			}
 
-			return $cat_title;
+			elseif ($link)
+			{
+				$out = '<a'.
+					($permlink_mode != 'messy' ? ' rel="tag"' : '').
+					' href="'.pagelinkurl(array('c' => $cat)).'">'.$label.'</a>';
+			}
+
+			else
+			{
+				$out = $label;
+			}
+
+			return doTag($out, $wraptag, $class);
 		}
 	}
 
 // -------------------------------------------------------------
 
-	function category2($atts)
+	function category2($atts, $thing = '')
 	{
 		global $thisarticle, $permlink_mode;
 
 		assert_article();
 
 		extract(lAtts(array(
-			'link'	=> 0,
-			'title' => 0,
+			'class'   => '',
+			'link'		=> 0,
+			'title'		=> 0,
+			'wraptag' => ''
 		), $atts));
 
 		if ($thisarticle['category2'])
 		{
-			$cat_title = ($title) ? fetch_category_title($thisarticle['category2']) : $thisarticle['category2'];
+			$cat = $thisarticle['category2'];
 
-			if (!empty($link))
+			$label = ($title) ? fetch_category_title($cat) : $cat;
+
+			if ($thing)
 			{
-				return '<a'.
+				$out = '<a'.
 					($permlink_mode != 'messy' ? ' rel="tag"' : '').
-					' href="'.pagelinkurl(array('c' => $thisarticle['category2'])).'">'.$cat_title.'</a>';
+					' href="'.pagelinkurl(array('c' => $cat)).'"'.
+					($title ? ' title="'.$label.'"' : '').
+					'>'.$thing.'</a>';
 			}
 
-			return $cat_title;
+			elseif ($link)
+			{
+				$out = '<a'.
+					($permlink_mode != 'messy' ? ' rel="tag"' : '').
+					' href="'.pagelinkurl(array('c' => $cat)).'">'.$label.'</a>';
+			}
+
+			else
+			{
+				$out = $label;
+			}
+
+			return doTag($out, $wraptag, $class);
 		}
 	}
 
 // -------------------------------------------------------------
-	function category($atts) 
+
+	function category($atts, $thing = '')
 	{
-		global $pretext;
+		global $s, $c;
+
 		extract(lAtts(array(
-			'link' => 0,
-			'title' => 0,
-			'name' => '',
+			'class'   => '',
+			'link'		=> 0,
+			'name'		=> '',
+			'section' => $s,
+			'title'		=> 0,
 			'wraptag' => '',
-			'section' => @$pretext['s'],
-		),$atts));
+		), $atts));
 
-		if ($name) $cat = $name;
-		else $cat = @$pretext['c'];
+		if ($name)
+		{
+			$cat = $name;
+		}
 
-		if ($cat) {
-			$cat_title = ($title ? fetch_category_title($cat) : $cat);
-			if ($link) 
-				$out = '<a href="'.pagelinkurl(array('c'=>$cat, 's'=>$section)).'">'.
-					$cat_title.'</a>';
+		else
+		{
+			$cat = $c;
+		}
+
+		if ($cat)
+		{
+			$label = ($title) ? fetch_category_title($cat) : $cat;
+
+			if ($thing)
+			{
+				$out = '<a href="'.pagelinkurl(array('c' => $cat, 's' => $section)).'"'.
+					($title ? ' title="'.$label.'"' : '').
+					'>'.$thing.'</a>';
+			}
+
+			elseif ($link)
+			{
+				$out = href($label,
+					pagelinkurl(array('c' => $cat, 's' => $section))
+				);
+			}
+
 			else
-				$out = $cat_title;
+			{
+				$out = $label;
+			}
 
-			return doTag($out, $wraptag);
+			return doTag($out, $wraptag, $class);
 		}
 	}
 
 // -------------------------------------------------------------
-	function section($atts) 
+
+	function section($atts, $thing = '')
 	{
-		global $thisarticle, $pretext;
+		global $thisarticle, $s;
+
 		extract(lAtts(array(
-			'link' => 0,
-			'title' => 0,
-			'name' => '',
+			'class'   => '',
+			'link'		=> 0,
+			'name'		=> '',
+			'title'		=> 0,
 			'wraptag' => '',
-		),$atts));
+		), $atts));
 
-		if ($name) $sec = $name;
-		elseif (!empty($thisarticle['section'])) $sec = $thisarticle['section'];
-		else $sec = @$pretext['s'];
+		if ($name)
+		{
+			$sec = $name;
+		}
 
-		if ($sec) {
-			$sec_title = ($title ? fetch_section_title($sec) : $sec);
-			if (!empty($link)) 
-				$out = '<a href="'.pagelinkurl(array('s'=>$sec)).'">'.
-					$sec_title.'</a>';
-			else
-				$out = $sec_title;
+		elseif (!empty($thisarticle['section']))
+		{
+			$sec = $thisarticle['section'];
+		}
 
-			return doTag($out, $wraptag);
+		else
+		{
+			$sec = $s;
+		}
+
+		if ($sec)
+		{
+			$label = ($title) ? fetch_section_title($sec) : $sec;
+
+			if ($thing)
+			{
+				$out = '<a href="'.pagelinkurl(array('s' => $sec)).'"'.
+					($title ? ' title="'.$label.'"' : '').
+					'>'.$thing.'</a>';
+			}
+
+			elseif ($link)
+			{
+				$out = href($label,
+					pagelinkurl(array('s' => $sec))
+				);
+			}
+
+			elseif ($title)
+			{
+				$out = $label;
+			}
+
+			return doTag($out, $wraptag, $class);
 		}
 	}
 
