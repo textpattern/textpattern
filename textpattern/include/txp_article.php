@@ -575,8 +575,8 @@ if (!empty($event) and $event == 'article') {
 				if ($comments_on_default==1) { $Annotate = 1; }
 			}
 			echo ($use_comments==1 && $view=='text')
-			?	graf(gTxt('comments').onoffRadio("Annotate",$Annotate).'<br />'.
-				gTxt('comment_invitation').'<br />'.
+			?	graf(gTxt('comments').br.onoffRadio("Annotate",$Annotate).br.
+				gTxt('comment_invitation').br.
 				fInput('text','AnnotateInvite',$AnnotateInvite,'edit'))
 			:	'';
 			
