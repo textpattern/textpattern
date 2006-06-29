@@ -439,7 +439,7 @@ $LastChangedRevision$
 		$pretext['secondpass'] = false;
 		$html = parse($html);
 		$pretext['secondpass'] = true;
-		trace_add('[ --- '.gTxt('secondpass').' --- ]');
+		trace_add('[ ~~~ '.gTxt('secondpass').' ~~~ ]');
 		$html = parse($html); // the function so nice, he ran it twice
 		restore_error_handler();
 		$html = ($prefs['allow_page_php_scripting']) ? evalString($html) : $html;
