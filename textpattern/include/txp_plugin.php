@@ -56,7 +56,7 @@ $LastChangedRevision$
 					n.td($name).
 
 					td(
-						href($author_uri, $author)
+						href($author, $author_uri)
 					).
 
 					td($version, 10).
