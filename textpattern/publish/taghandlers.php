@@ -57,95 +57,142 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function image($atts) 
+
+	function image($atts)
 	{
 		global $img_dir;
+
 		static $cache = array();
+
 		extract(lAtts(array(
-			'id'    => '',
-			'name'  => '',
-			'style' => '',
-			'align' => '',
-			'class' => ''
-		),$atts));
-		
-		if ($name) {
+			'align'   => '',
+			'class'   => '',
+			'html_id' => '',
+			'id'		  => '',
+			'name'	  => '',
+			'style'   => '',
+		), $atts));
+
+		if ($name)
+		{
 			if (isset($cache['n'][$name]))
 			{
 				$rs = $cache['n'][$name];
-			} else {
+			}
+
+			else
+			{
 				$name = doSlash($name);
-				$rs = safe_row("*", "txp_image", "name='$name' limit 1");
+
+				$rs = safe_row('*', 'txp_image', "name = '$name' limit 1");
+
 				$cache['n'][$name] = $rs;
 			}
-		} elseif ($id) {
+		}
+
+		elseif ($id)
+		{
 			if (isset($cache['i'][$id]))
 			{
 				$rs = $cache['i'][$id];
-			} else {
+			}
+
+			else
+			{
 				$id = intval($id);
-				$rs = safe_row("*", "txp_image", "id='$id' limit 1");
+
+				$rs = safe_row('*', 'txp_image', "id = '$id' limit 1");
+
 				$cache['i'][$id] = $rs;
 			}
-		} else return;
-		
-		if ($rs) {
-			extract($rs);
-			$out = array(
-				'<img',
-				'src="'.hu.$img_dir.'/'.$id.$ext.'"',
-				'height="'.$h.'" width="'.$w.'" alt="'.$alt.'"',				
-				($style) ? 'style="'.$style.'"' : '',
-				($align) ? 'align="'.$align.'"' : '',
-				($class) ? 'class="'.$class.'"' : '',
-				'/>'
-			);
-			
-			return join(' ',$out);
 		}
+
+		else
+		{
+			return;
+		}
+
+		if ($rs)
+		{
+			extract($rs);
+
+			$out = array(
+				'<img src="'.hu.$img_dir.'/'.$id.$ext.'" width="'.$w.'" height="'.$h.'" alt="'.$alt.'"',
+				($html_id) ? ' id="'.$html_id.'"' : '',
+				($class) ? ' class="'.$class.'"' : '',
+				($style) ? ' style="'.$style.'"' : '',
+				($align) ? ' align="'.$align.'"' : '',
+				' />'
+			);
+
+			return join('', $out);
+		}
+
 		return '<txp:notice message="malformed image tag" />';
 	}
 
 // -------------------------------------------------------------
-    function thumbnail($atts) 
-    {
-        global $img_dir;
-		extract(lAtts(array(
-			'id'        => '',
-			'name'      => '',
-			'thumbnail' => '',
-			'poplink'   => '',
-			'style'     => '',
-			'align'     => ''
-		),$atts));
-		
-        if (!empty($name)) {
-            $name = doSlash($name);
-            $rs = safe_row("*", "txp_image", "name='$name' limit 1");
-        } elseif (!empty($id)) {
-            $rs = safe_row("*", "txp_image", "id='$id' limit 1");
-        } else return;
 
-        if ($rs) {
-            extract($rs);
-            if($thumbnail) {
-                $out = array(
-                    ($poplink)
-                    ?   '<a href="'.hu.$img_dir.'/'.$id.$ext.
-                            '" onclick="window.open(this.href, \'popupwindow\', \'width='.
-                            $w.',height='.$h.',scrollbars,resizable\'); return false;">'
-                    :   '',
-                    '<img src="'.hu.$img_dir.'/'.$id.'t'.$ext.'"',
-                    ' alt="'.$alt.'"',
-                    ($style) ? 'style="'.$style.'"' : '',
-                    ($align) ? 'align="'.$align.'"' : '',
-                    '/>',
-                    ($poplink) ? '</a>' : ''
-                );
-                return join(' ',$out);
-            }
-        }
-    }
+	function thumbnail($atts)
+	{
+		global $img_dir;
+
+		extract(lAtts(array(
+			'align'			=> '',
+			'class'			=> '',
+			'html_id'   => '',
+			'id'				=> '',
+			'name'			=> '',
+			'poplink'		=> '',
+			'style'			=> '',
+			'thumbnail' => '',
+		), $atts));
+
+		if (!empty($name))
+		{
+			$name = doSlash($name);
+
+			$rs = safe_row('*', 'txp_image', "name = '$name' limit 1");
+		}
+
+		elseif (!empty($id))
+		{
+			$rs = safe_row('*', 'txp_image', "id = '$id' limit 1", 1);
+		}
+
+		else
+		{
+			return;
+		}
+
+		if ($rs)
+		{
+			extract($rs);
+
+			if ($thumbnail)
+			{
+				$out = array(
+					'<img src="'.hu.$img_dir.'/'.$id.'t'.$ext.'" alt="'.$alt.'"',
+						($html_id) ? ' id="'.$html_id.'"' : '',
+						($class) ? ' class="'.$class.'"' : '',
+						($style) ? ' style="'.$style.'"' : '',
+						($align) ? ' align="'.$align.'"' : '',
+						' />'
+				);
+
+				$out = join('', $out);
+
+				if ($poplink)
+				{
+					$out = '<a href="'.hu.$img_dir.'/'.$id.$ext.'"'.
+						' onclick="window.open(this.href, \'popupwindow\', '.
+						'\'width='.$w.', height='.$h.', scrollbars, resizable\'); return false;">'.$out.'</a>';
+				}
+
+				return $out;
+			}
+		}
+	}
 
 // -------------------------------------------------------------
 	function output_form($atts) 
