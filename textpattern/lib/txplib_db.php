@@ -26,7 +26,7 @@ class DB {
 		$this->link = @mysql_connect($this->host, $this->user, $this->pass);
 		if (!$this->link) die(db_down());
 
-		$this->version = mysql_get_server_info();;
+		$this->version = mysql_get_server_info();
 
 		if (!$this->link) {
 			$GLOBALS['connected'] = false;
