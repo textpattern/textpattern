@@ -1476,7 +1476,7 @@ function body($atts)
 				);
 			}
 
-			elseif ($title)
+			else
 			{
 				$out = $label;
 			}
