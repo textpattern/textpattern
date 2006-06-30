@@ -350,39 +350,43 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
+
 	function recent_articles($atts)
 	{
 		extract(lAtts(array(
-			'label'    => '',
 			'break'    => br,
-			'wraptag'  => '',
-			'limit'    => 10,
 			'category' => '',
+			'class'    => __FUNCTION__,
+			'label'    => '',
+			'labeltag' => '',
+			'limit'    => 10,
+			'section'  => '',
 			'sortby'   => 'Posted',
 			'sortdir'  => 'desc',
-			'class'    => __FUNCTION__,
-			'labeltag' => '',
-		),$atts));
+			'wraptag'  => '',
+		), $atts));
 
-		$catq = ($category) ? "and (Category1='".doSlash($category)."' 
-			or Category2='".doSlash($category)."')" : '';
+		$categories = ($category) ? "and (Category1 = '".doSlash($category)."' or Category2 = '".doSlash($category)."')" : '';
+		$section = ($section) ? " and Section = '".doSlash($section)."'" : '';
 
-		$rs = safe_rows_start(
-			"*, id as thisid, unix_timestamp(Posted) as posted", 
-			"textpattern", 
-			"Status = 4 and Posted <= now() $catq order by $sortby $sortdir limit 0,$limit"
-		);
-		
-		if ($rs) {
+		$rs = safe_rows_start('*, id as thisid, unix_timestamp(Posted) as posted', 'textpattern', 
+			"Status = 4 $section $categories and Posted <= now() order by $sortby $sortdir limit 0,$limit");
+
+		if ($rs)
+		{
 			$out = array();
-			while ($a = nextRow($rs)) {
-				extract($a);
-				$out[] = href(escape_title($Title),permlinkurl($a));
+
+			while ($a = nextRow($rs))
+			{
+				$out[] = href(escape_title($a['Title']), permlinkurl($a));
 			}
-			if (count($out)) {
+
+			if ($out)
+			{
 				return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
 			}
 		}
+
 		return '';
 	}
 
@@ -415,47 +419,82 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
+
 	function related_articles($atts)
 	{
-		extract(lAtts(array(
-			'label'    => '',
-			'break'    => br,
-			'wraptag'  => '',
-			'limit'    => 10,
-			'class'    => __FUNCTION__,
-			'labeltag' => '',
-		),$atts));
-		
-		global $id,$thisarticle;
+		global $thisarticle;
+
 		assert_article();
-		
-		$cats = doSlash(safe_row("Category1,Category2","textpattern", "ID='$id' limit 1"));
 
-		if (!empty($cats['Category1']) or !empty($cats['Category2'])) {
-			extract($cats);
-			$cat_condition = array();
-			if (!empty($Category1)) array_push($cat_condition, "(Category1='$Category1')","(Category2='$Category1')");
-			if (!empty($Category2)) array_push($cat_condition, "(Category1='$Category2')","(Category2='$Category2')");
-			$cat_condition = (count($cat_condition)) ? join(' or ',$cat_condition) : '';
+		extract(lAtts(array(
+			'break'    => br,
+			'class'    => __FUNCTION__,
+			'label'    => '',
+			'labeltag' => '',
+			'limit'    => 10,
+			'match'    => 'Category1,Category2',
+			'section'  => '',
+			'wraptag'  => '',
+		), $atts));
 
-			$q = array("select *, id as thisid, unix_timestamp(Posted) as posted from `".PFX."textpattern` where Status=4",
-				($cat_condition) ? "and (". $cat_condition. ")" :'',
-				"and Posted <= now() order by Posted desc limit 0,$limit");
+		if (empty($thisarticle['category1']) and empty($thisarticle['category2']))
+		{
+			return;
+		}
 
-			$rs = getRows(join(' ',$q));
+		$cats = array();
+		$categories = array();
+		$match = explode(',', $match);
+
+		if ($thisarticle['category1'])
+		{
+			$cats[] = doSlash($thisarticle['category1']);
+		}
+
+		if ($thisarticle['category2'])
+		{
+			$cats[] = doSlash($thisarticle['category2']);
+		}
+
+		$cats = join(chr(39).','.chr(39), $cats);
+
+		if (in_array('Category1', $match))
+		{
+			$categories[] = "Category1 in('$cats')";
+		}
+
+		if (in_array('Category2', $match))
+		{
+			$categories[] = "Category2 in('$cats')";
+		}
+
+		if ($categories)
+		{
+			$categories = 'and ('.join(' or ', $categories).')';
+		}
+
+		$section = ($section) ? " and Section = '".doSlash($section)."'" : '';
+
+		$id = $thisarticle['thisid'];
+
+		$rs = safe_rows_start('*, unix_timestamp(Posted) as posted', 'textpattern', 
+			"ID != ".$id." and Status = 4 and Posted <= now() $categories $section order by Posted desc limit 0,$limit");
 	
-			if ($rs) {
-				$out = array();
-				foreach($rs as $a) {
-					extract($a);
-					if ($thisid == $id) continue;
-					$out[] = href(escape_title($Title),permlinkurl($a));
-				}
-				if (count($out)) {
-					return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
-				}
+		if ($rs)
+		{
+			$out = array();
+
+			while ($a = nextRow($rs))
+			{
+				$out[] = href(escape_title($a['Title']), permlinkurl($a));
+			}
+
+			if ($out)
+			{
+				return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
 			}
 		}
+
 		return '';
 	}
 
