@@ -181,7 +181,7 @@ $LastChangedRevision$
 
 				$file_exists = file_exists(build_file_path($file_base_path, $filename));
 
-				$download_link = ($file_exists) ? '<li>'.make_download_link($id, $filename, $id).'</li>' : $id;
+				$download_link = ($file_exists) ? '<li>'.make_download_link($id).'</li>' : $id;
 
 				$category = ($category) ? '<span title="'.fetch_category_title($category, 'file').'">'.$category.'</span>' : '';
 
@@ -343,7 +343,7 @@ $LastChangedRevision$
 			$status .= ($file_exists)?gTxt('file_status_ok'):gTxt('file_status_missing');
 			$status .= '</span>';
 
-			$downloadlink = ($file_exists)?make_download_link($id,$filename,$filename):$filename;
+			$downloadlink = ($file_exists)?make_download_link($id, $filename):$filename;
 			
 			$form = '';
 			
@@ -699,15 +699,17 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function make_download_link($id)
+	function make_download_link($id, $label = '')
 	{
 		global $permlink_mode;
+
+		$label = ($label) ? $label : gTxt('download');
 
 		$url = ($permlink_mode == 'messy') ? 
 			hu.'index.php?s=file_download'.a.'id='.$id : 
 			hu.''.gTxt('file_download').'/'.$id;
 
-		return '<a href="'.$url.'">'.gTxt('download').'</a>';
+		return '<a href="'.$url.'">'.$label.'</a>';
 	}
 	
 // -------------------------------------------------------------
