@@ -306,6 +306,11 @@ color: #008000;
 color: #C40000;
 }
 
+p.prev-next {
+margin-top: 10px;
+text-align: center;
+}
+
 p#js {
 margin-top: 10px;
 padding-right: 30px;

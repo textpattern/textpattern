@@ -261,7 +261,7 @@ $LastChangedRevision$
 			$nav[] = sp.PrevNextLink('log', $page + 1, gTxt('next'), 'next', $sort, $dir, $crit, $method);
 		}
 
-		return graf(join('', $nav),' style="text-align: center;"');
+		return graf(join('', $nav),' class="prev-next"');
 	}
 
 //-------------------------------------------------------------
