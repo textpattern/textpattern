@@ -543,7 +543,7 @@ $LastChangedRevision$
 		if($q && !$iscustom && !$issticky) {
 			include_once txpath.'/publish/search.php';
 			$s_filter = ($searchall ? filterSearch() : '');
-			$q = doSlash($q);
+			$q = doSlash(urldecode($q));
 			$match = ", match (Title,Body) against ('$q') as score";
 			$search = " and (Title rlike '$q' or Body rlike '$q') $s_filter";
 

@@ -1502,54 +1502,72 @@ eod;
 	}
 
 // -------------------------------------------------------------
-	function pagelinkurl($parts, $inherit=array())
+
+	function pagelinkurl($parts, $inherit = array())
 	{
 		global $permlink_mode;
 
-		# $inherit can be used to add parameters to an existing url, e.g:
-		# $url = pagelinkurl(array('pg'=>2), $pretext);
+		// $inherit can be used to add parameters to an existing url, e.g:
+		// $url = pagelinkurl(array('pg'=>2), $pretext);
 		$keys = array_merge($inherit, $parts);
 
-		# can't use this to link to an article
+		// can't use this to link to an article
 		if (isset($keys['id']))
+		{
 			unset($keys['id']);
+		}
 
 		if (@$keys['s'] == 'default')
+		{
 			unset($keys['s']);
+		}
 
-		if ($permlink_mode == 'messy') {
+		if ($permlink_mode == 'messy')
+		{
 			return hu.'index.php'.join_qs($keys);
 		}
-		else {
-			# all clean URL modes use the same schemes for list pages
+
+		else
+		{
+			// all clean URL modes use the same schemes for list pages
 			$url = '';
-			if (!empty($keys['rss'])) {
-				$url = hu.'rss'.'/';
+
+			if (!empty($keys['rss']))
+			{
+				$url = hu.'rss';
 				unset($keys['rss']);
-				return $url . join_qs($keys);
-			}
-			elseif (!empty($keys['atom'])) {
-				$url = hu.'atom'.'/';
-				unset($keys['atom']);
-				return $url . join_qs($keys);
-			}
-			elseif (!empty($keys['s'])) {
-				$url = hu.urlencode($keys['s']).'/';
-				unset($keys['s']);
-				return $url . join_qs($keys);
-			}
-			elseif (!empty($keys['author'])) {
-				$url = hu.strtolower(urlencode(gTxt('author'))).'/'.urlencode($keys['author']).'/';
-				unset($keys['author']);
-				return $url . join_qs($keys);
-			}
-			elseif (!empty($keys['c'])) {
-				$url = hu.strtolower(urlencode(gTxt('category'))).'/'.urlencode($keys['c']).'/';
-				unset($keys['c']);
-				return $url . join_qs($keys);
+				return $url.join_qs($keys);
 			}
 
-			return hu . join_qs($keys);
+			elseif (!empty($keys['atom']))
+			{
+				$url = hu.'atom';
+				unset($keys['atom']);
+				return $url.join_qs($keys);
+			}
+
+			elseif (!empty($keys['s']))
+			{
+				$url = hu.urlencode($keys['s']);
+				unset($keys['s']);
+				return $url.join_qs($keys);
+			}
+
+			elseif (!empty($keys['author']))
+			{
+				$url = hu.strtolower(urlencode(gTxt('author'))).'/'.urlencode($keys['author']);
+				unset($keys['author']);
+				return $url.join_qs($keys);
+			}
+
+			elseif (!empty($keys['c']))
+			{
+				$url = hu.strtolower(urlencode(gTxt('category'))).'/'.urlencode($keys['c']);
+				unset($keys['c']);
+				return $url.join_qs($keys);
+			}
+
+			return hu.join_qs($keys);
 		}
 	}
 
