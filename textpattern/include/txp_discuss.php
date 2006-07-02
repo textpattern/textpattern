@@ -541,15 +541,17 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
+
 	function discuss_multiedit_form() 
 	{
 		$methods = array(
-			'ban'=>gTxt('ban'),
-			'delete'=>gTxt('delete'),
-			'spam'=>gTxt('spam'),
-			'unmoderated'=>gTxt('unmoderated'),
-			'visible'=>gTxt('visible'),
+			'ban'         => gTxt('ban_author'),
+			'delete'      => gTxt('delete'),
+			'spam'        => gTxt('hide_spam'),
+			'unmoderated' => gTxt('hide_unmoderated'),
+			'visible'     => gTxt('show'),
 		);
+
 		return event_multiedit_form('discuss', $methods);
 	}
 
