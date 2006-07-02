@@ -499,41 +499,80 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
+
 	function popup($atts)
 	{
-		global $pretext;
-		
-		$gc = $pretext['c'];
-		$gs = $pretext['s'];
-		
+		global $s, $c;
+
 		extract(lAtts(array(
-			'label'   => '',
-			'wraptag' => '',
-			'type'    => ''
-		),$atts));
+			'label'        => '',
+			'wraptag'      => '',
+			'section'      => '',
+			'this_section' => 0,
+			'type'         => 'c'
+		), $atts));
 
-		$thetable = ($type=='s') ? 'section' : 'category';
-		$out ='<select name="'.$type.'" onchange="submit(this.form)">'.n.
-		t.'<option value=""></option>'.n;
-		$q[] = "select name,title from `".PFX."txp_".$thetable."` where name != 'default'";
-		$q[] = ($thetable=='category') ? "and type='article'" : '';
-		$q[] = "order by name";
+		if ($type == 's')
+		{
+			$rs = safe_rows_start('name, title', 'txp_section', "name != 'default' order by name");
+		}
 
-		$rs = getRows(join(' ',$q));
-		if ($rs) {
-			foreach ($rs as $a) {
+		else
+		{
+			$rs = safe_rows_start('name, title', 'txp_category', "type = 'article' and name != 'root' order by name");
+		}
+
+		if ($rs)
+		{
+			$out = array();
+
+			$current = ($type == 's') ? $s : $c;
+
+			$sel = '';
+			$selected = false;
+
+			while ($a = nextRow($rs))
+			{
 				extract($a);
-				if ($name=='root') continue;
-				$sel = ($gc==$name or $gs==$name) ? ' selected="selected"' : '';
-				$out .= t.t.'<option value="'.urlencode($name).'"'.$sel.'>'.
-				$title.'</option>'.n;
-				unset($selected);
+
+				if ($name == $current)
+				{
+					$sel = ' selected="selected"';
+					$selected = true;
+				}
+
+				$out[] = '<option value="'.urlencode($name).'"'.$sel.'>'.$title.'</option>';
+
+				$sel = '';
 			}
-			$out.= '</select>';
-			$out = ($label) ? $label.br.$out : $out;
-			$out = ($wraptag) ? tag($out,$wraptag) : $out;
-			$out.= '<noscript><input type="submit" value="go" /></noscript>';
-			return '<form action="'.hu.'" method="get">'.n.$out.'</form>';
+
+			if ($out)
+			{
+				$section = ($this_section) ? ( $s == 'default' ? '' : $s) : $section;
+
+				$out = n.'<select name="'.$type.'" onchange="submit(this.form);">'.
+					n.t.'<option value=""'.($selected ? '' : ' selected="selected"').'></option>'.
+					n.t.join(n.t, $out).
+					n.'</select>';
+
+				if ($label)
+				{
+					$out = $label.br.$out;
+				}
+
+				if ($wraptag)
+				{
+					$out = tag($out, $wraptag);
+				}
+
+				return '<form method="get" action="'.hu.'">'.
+					'<div>'.
+					( ($section and $s) ? n.hInput('s', $section) : '').
+					n.$out.
+					n.'<noscript><div><input type="submit" value="'.gTxt('go').'" /></div></noscript>'.
+					n.'</div>'.
+					n.'</form>';
+			}
 		}
 	}
 
@@ -542,7 +581,7 @@ $LastChangedRevision$
 
 	function category_list($atts)
 	{
-		global $c;
+		global $s, $c;
 
 		extract(lAtts(array(
 			'active_class' => '',
@@ -551,6 +590,8 @@ $LastChangedRevision$
 			'label'        => '',
 			'labeltag'     => '',
 			'parent'       => '',
+			'section'      => '',
+			'this_section' => 0,
 			'type'         => 'article',
 			'wraptag'      => ''
 		), $atts));
@@ -584,9 +625,11 @@ $LastChangedRevision$
 
 				if ($name)
 				{
+					$section = ($this_section) ? $s : $section;
+
 					$out[] = tag(str_replace('& ', '&#38; ', $title), 'a', 
 						( ($active_class and ($c == $name)) ? ' class="'.$active_class.'"' : '' ).
-						' href="'.pagelinkurl(array('c' => $name)).'"'
+						' href="'.pagelinkurl(array('s' => $section, 'c' => $name)).'"'
 					);
 				}
 			}
@@ -1379,19 +1422,22 @@ function body($atts)
 
 	function category1($atts, $thing = '')
 	{
-		global $thisarticle, $permlink_mode;
+		global $thisarticle, $s, $permlink_mode;
 
 		assert_article();
 
 		extract(lAtts(array(
-			'class'   => '',
-			'link'		=> 0,
-			'title'		=> 0,
-			'wraptag' => ''
+			'class'        => '',
+			'link'		     => 0,
+			'title'		     => 0,
+			'section'      => '',
+			'this_section' => 0,
+			'wraptag'      => ''
 		), $atts));
 
 		if ($thisarticle['category1'])
 		{
+			$section = ($this_section) ? $s : $section;
 			$cat = $thisarticle['category1'];
 
 			$label = ($title) ? fetch_category_title($cat) : $cat;
@@ -1400,7 +1446,7 @@ function body($atts)
 			{
 				$out = '<a'.
 					($permlink_mode != 'messy' ? ' rel="tag"' : '').
-					' href="'.pagelinkurl(array('c' => $cat)).'"'.
+					' href="'.pagelinkurl(array('s' => $section, 'c' => $cat)).'"'.
 					($title ? ' title="'.$label.'"' : '').
 					'>'.$thing.'</a>';
 			}
@@ -1409,7 +1455,7 @@ function body($atts)
 			{
 				$out = '<a'.
 					($permlink_mode != 'messy' ? ' rel="tag"' : '').
-					' href="'.pagelinkurl(array('c' => $cat)).'">'.$label.'</a>';
+					' href="'.pagelinkurl(array('s' => $section, 'c' => $cat)).'">'.$label.'</a>';
 			}
 
 			else
@@ -1425,19 +1471,22 @@ function body($atts)
 
 	function category2($atts, $thing = '')
 	{
-		global $thisarticle, $permlink_mode;
+		global $thisarticle, $s, $permlink_mode;
 
 		assert_article();
 
 		extract(lAtts(array(
-			'class'   => '',
-			'link'		=> 0,
-			'title'		=> 0,
-			'wraptag' => ''
+			'class'        => '',
+			'link'		     => 0,
+			'title'		     => 0,
+			'section'      => '',
+			'this_section' => 0,
+			'wraptag'      => ''
 		), $atts));
 
 		if ($thisarticle['category2'])
 		{
+			$section = ($this_section) ? $s : $section;
 			$cat = $thisarticle['category2'];
 
 			$label = ($title) ? fetch_category_title($cat) : $cat;
@@ -1446,7 +1495,7 @@ function body($atts)
 			{
 				$out = '<a'.
 					($permlink_mode != 'messy' ? ' rel="tag"' : '').
-					' href="'.pagelinkurl(array('c' => $cat)).'"'.
+					' href="'.pagelinkurl(array('s' => $section, 'c' => $cat)).'"'.
 					($title ? ' title="'.$label.'"' : '').
 					'>'.$thing.'</a>';
 			}
@@ -1455,7 +1504,7 @@ function body($atts)
 			{
 				$out = '<a'.
 					($permlink_mode != 'messy' ? ' rel="tag"' : '').
-					' href="'.pagelinkurl(array('c' => $cat)).'">'.$label.'</a>';
+					' href="'.pagelinkurl(array('s' => $section, 'c' => $cat)).'">'.$label.'</a>';
 			}
 
 			else
