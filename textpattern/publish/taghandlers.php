@@ -157,7 +157,7 @@ $LastChangedRevision$
 
 		elseif (!empty($id))
 		{
-			$rs = safe_row('*', 'txp_image', "id = '$id' limit 1", 1);
+			$rs = safe_row('*', 'txp_image', "id = '$id' limit 1");
 		}
 
 		else
