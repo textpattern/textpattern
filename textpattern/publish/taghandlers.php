@@ -1355,19 +1355,28 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function author($atts) 
+
+	function author($atts)
 	{
-		global $thisarticle;		
+		global $thisarticle, $s;
 
 		assert_article();
-		
-		extract(lAtts(array('link' => ''),$atts));
+
+		extract(lAtts(array(
+			'link'				 => '',
+			'section'			 => '',
+			'this_section' => 0
+		), $atts));
+
 		$author_name = get_author_name($thisarticle['authorid']);
-		return (empty($link))
-			? $author_name 
-			: tag($author_name, 'a', ' href="'.pagelinkurl(array('author'=>$author_name)).'"');
+
+		$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
+
+		return ($link) ?
+			href($author_name, pagelinkurl(array('s' => $section, 'author' => $author_name))) :
+			$author_name;
 	}
-	
+
 // -------------------------------------------------------------
 
 	function if_author($atts, $thing)
