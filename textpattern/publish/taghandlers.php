@@ -434,6 +434,7 @@ $LastChangedRevision$
 			'limit'    => 10,
 			'match'    => 'Category1,Category2',
 			'section'  => '',
+			'sort'     => 'Posted desc',
 			'wraptag'  => '',
 		), $atts));
 
@@ -441,6 +442,8 @@ $LastChangedRevision$
 		{
 			return;
 		}
+
+		$id = $thisarticle['thisid'];
 
 		$cats = array();
 		$categories = array();
@@ -475,10 +478,8 @@ $LastChangedRevision$
 
 		$section = ($section) ? " and Section = '".doSlash($section)."'" : '';
 
-		$id = $thisarticle['thisid'];
-
 		$rs = safe_rows_start('*, unix_timestamp(Posted) as posted', 'textpattern', 
-			"ID != ".$id." and Status = 4 and Posted <= now() $categories $section order by Posted desc limit 0,$limit");
+			"ID != ".$id." and Status = 4 and Posted <= now() $categories $section order by $sort limit 0,$limit",1);
 	
 		if ($rs)
 		{
