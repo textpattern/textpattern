@@ -23,7 +23,12 @@ $LastChangedRevision$
 	{
 		require_privs('log');
 
-		if (!$step or !in_array($step, array('log_change_pageby')))
+		$available_steps = array(
+			'log_change_pageby',
+			'log_multi_edit'
+		);
+
+		if (!$step or !in_array($step, $available_steps))
 		{
 			log_list();
 		}
@@ -149,15 +154,19 @@ $LastChangedRevision$
 
 		if ($rs)
 		{
-			echo startTable('list').
+			echo n.n.'<form action="index.php" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
 
-			column_head('time', 'time', 'log', true, $switch_dir, $crit, $method).
-			column_head('IP', 'ip', 'log', true, $switch_dir, $crit, $method).
-			column_head('host', 'host', 'log', true, $switch_dir, $crit, $method).
-			column_head('page', 'page', 'log', true, $switch_dir, $crit, $method).
-			column_head('referrer', 'refer', 'log', true, $switch_dir, $crit, $method).
-			column_head('method', 'method', 'log', true, $switch_dir, $crit, $method).
-			column_head('status', 'status', 'log', true, $switch_dir, $crit, $method);
+				startTable('list').
+
+				n.tr(
+					n.column_head('time', 'time', 'log', true, $switch_dir, $crit, $method).
+					column_head('IP', 'ip', 'log', true, $switch_dir, $crit, $method).
+					column_head('host', 'host', 'log', true, $switch_dir, $crit, $method).
+					column_head('page', 'page', 'log', true, $switch_dir, $crit, $method).
+					column_head('referrer', 'refer', 'log', true, $switch_dir, $crit, $method).
+					column_head('method', 'method', 'log', true, $switch_dir, $crit, $method).
+					column_head('status', 'status', 'log', true, $switch_dir, $crit, $method)
+				);
 
 			while ($a = nextRow($rs))
 			{
@@ -201,11 +210,24 @@ $LastChangedRevision$
 					td($log_page, 200).
 					td($log_refer, 200).
 					td($log_method, 50).
-					td($log_status, 50)
+					td($log_status, 50).
+
+					td(
+						fInput('checkbox', 'selected[]', $log_id)
+					)
+
 				);
 			}
 
-			echo n.endTable().
+			echo n.n.tr(
+				tda(
+					select_buttons().
+					log_multiedit_form()
+				, ' colspan="8" style="text-align: right; border: none;"')
+			).
+
+			n.endTable().
+			'</form>'.
 
 			n.log_nav_form($page, $numPages, $sort, $dir, $crit, $method).
 
@@ -272,4 +294,25 @@ $LastChangedRevision$
 		log_list();
 	}
 
+// -------------------------------------------------------------
+
+	function log_multiedit_form() 
+	{
+		return event_multiedit_form('log');
+	}
+
+// -------------------------------------------------------------
+
+	function log_multi_edit() 
+	{
+		$deleted = event_multi_edit('txp_log', 'id');
+
+		if (!empty($deleted))
+		{
+			return log_list(messenger('log', $deleted, 'deleted'));
+		}
+
+		return log_list();
+	}
+	
 ?>
