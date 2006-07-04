@@ -248,55 +248,170 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function linklist($atts) 
+
+	function linklist($atts)
 	{
 		global $thislink;
+
 		extract(lAtts(array(
-			'form'     => 'plainlinks',
-			'sort'     => 'linksort',
-			'label'    => '',
-			'break'    => '',
-			'limit'    => '',
-			'wraptag'  => '',
+			'break'		 => '',
 			'category' => '',
-			'class'    => __FUNCTION__,
+			'class'		 => __FUNCTION__,
+			'form'		 => 'plainlinks',
+			'label'		 => '',
 			'labeltag' => '',
-		),$atts));
-	
-		$Form = fetch_form($form);
-		
+			'limit'		 => '',
+			'sort'		 => 'linksort asc',
+			'wraptag'	 => '',
+		), $atts));
+
+		$form = fetch_form($form);
+
 		$qparts = array(
-			($category) ? "category='$category'" : '1',
-			"order by",
-			$sort,
+			($category) ? "category = '$category'" : '1',
+			"order by $sort",
 			($limit) ? "limit $limit" : ''
 		);
-		
-		$rs = safe_rows_start("*","txp_link",join(' ',$qparts));
-	
-		if ($rs) {
-		
-			while ($a = nextRow($rs)) {
-				extract($a);
-				$linkname = str_replace("& ","&#38; ", $linkname);
-				$link = '<a href="'.doSpecial($url).'">'.$linkname.'</a>';
-				$linkdesctitle = '<a href="'.doSpecial($url).'" title="'.$description.'">'.$linkname.'</a>';
-				$thislink = $a;
 
-				$out = str_replace("<txp:link />", $link, $Form);
-				$out = str_replace("<txp:linkdesctitle />", $linkdesctitle, $out);
-				$out = str_replace("<txp:link_description />", $description, $out);
-			
-				$outlist[] = parse($out);
+		$rs = safe_rows_start('*, unix_timestamp(date) as uDate', 'txp_link', join(' ', $qparts));
+
+		if ($rs)
+		{
+			$out = array();
+
+			while ($a = nextRow($rs))
+			{
+				extract($a);
+
+				$thislink = array(
+					'linkname'    => $linkname,
+					'url'         => $url,
+					'description' => $description,
+					'date'        => $uDate,
+					'category'    => $category,
+				);
+
+				$out[] = parse($form);
 			}
-			
-			if (!empty($outlist)) {
-				return doLabel($label, $labeltag).doWrap($outlist, $wraptag, $break, $class);
+
+			if ($out)
+			{
+				return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
 			}
 		}
+
 		return false;
 	}
 
+// -------------------------------------------------------------
+
+	function link($atts)
+	{
+		global $thislink;
+
+		extract(lAtts(array(
+			'rel' => '',
+		), $atts));
+
+		return tag(
+			escape_output($thislink['linkname']), 'a',
+			($rel ? ' rel="'.$rel.'"' : '').
+			' href="'.doSpecial($thislink['url']).'"'
+		);
+	}
+
+// -------------------------------------------------------------
+
+	function linkdesctitle($atts)
+	{
+		global $thislink;
+
+		extract(lAtts(array(
+			'rel' => '',
+		), $atts));
+
+		$description = ($thislink['description']) ? 
+			' title="'.escape_output($thislink['description']).'"' : 
+			'';
+
+		return tag(
+			escape_output($thislink['linkname']), 'a',
+			($rel ? ' rel="'.$rel.'"' : '').
+			' href="'.doSpecial($thislink['url']).'"'.$description
+		);
+	}
+
+// -------------------------------------------------------------
+
+	function link_url($atts)
+	{
+		global $thislink;
+
+		return $thislink['url'];
+	}
+
+// -------------------------------------------------------------
+
+	function link_description($atts)
+	{
+		global $thislink;
+
+		extract(lAtts(array(
+			'class'		 => '',
+			'escape'	 => '',
+			'label'		 => '',
+			'labeltag' => '',
+			'wraptag'	 => '',
+		), $atts));
+
+		if ($thislink['description'])
+		{
+			$description = ($escape == 'html') ?
+				escape_output($thislink['description']) :
+				$thislink['description'];
+
+			return doLabel($label, $labeltag).doTag($description, $wraptag, $class);
+		}
+	}
+
+// -------------------------------------------------------------
+
+	function link_date($atts)
+	{
+		global $thislink, $dateformat;
+
+		extract(lAtts(array(
+			'format' => $dateformat,
+			'gmt'		 => '',
+			'lang'	 => '',
+		), $atts));
+
+		return safe_strftime($format, $thislink['date'], $gmt, $lang);
+	}
+
+// -------------------------------------------------------------
+
+	function link_category($atts)
+	{
+		global $thislink;
+
+		extract(lAtts(array(
+			'class'		 => '',
+			'label'		 => '',
+			'labeltag' => '',
+			'title'		 => 0,
+			'wraptag'	 => '',
+		), $atts));
+
+		if ($thislink['category'])
+		{
+			$category = ($title) ?
+				fetch_category_title($thislink['category'], 'link') :
+				$thislink['category'];
+
+			return doLabel($label, $labeltag).doTag($category, $wraptag, $class);
+		}
+	}
 
 // -------------------------------------------------------------
 	function eE($txt) // convert email address into unicode entities
@@ -1346,20 +1461,20 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function comment_time($atts) 
+
+	function comment_time($atts)
 	{
 		global $thiscomment, $comments_dateformat;
 
+		assert_comment();
+
 		extract(lAtts(array(
 			'format' => $comments_dateformat,
-			'gmt'    => '',
-			'lang'   => '',
+			'gmt'		 => '',
+			'lang'	 => '',
 		), $atts));
 
-		assert_comment();
-		
-		$comment_time = safe_strftime($format, $thiscomment['time'], $gmt, $lang);
-		return $comment_time;
+		return safe_strftime($format, $thiscomment['time'], $gmt, $lang);
 	}
 
 // -------------------------------------------------------------
