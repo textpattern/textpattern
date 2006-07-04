@@ -942,12 +942,32 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function article_id() 
+
+	function article_id()
 	{
 		global $thisarticle;
+
 		assert_article();
 
 		return $thisarticle['thisid'];
+	}
+
+// -------------------------------------------------------------
+
+	function if_article_id($atts, $thing)
+	{
+		global $thisarticle;
+
+		assert_article();
+
+		extract(lAtts(array(
+			'id' => ''
+		), $atts));
+
+		if ($id)
+		{
+			return parse(EvalElse($thing, in_list($thisarticle['thisid'], $id)));
+		}
 	}
 
 // -------------------------------------------------------------
