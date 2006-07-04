@@ -1998,24 +1998,38 @@ function body($atts)
 	{
 		global $thisarticle;
 
-		assert_article();
-
 		extract(lAtts(array(
 			'class' => '',
-			'style' => ''
+			'id'		=> '',
+			'style' => '',
+			'title' => ''
 		), $atts));
 
-		$url = permlinkurl($thisarticle);
-
-		if ($thing === NULL)
+		if (!$id)
 		{
-			return $url;
+			assert_article();
 		}
 
-		return tag(parse($thing), 'a', ' rel="bookmark" href="'.$url.'" title="'.gTxt('permanent_link').'"'.
-			($style ? ' style="'.$style.'"' : '').
-			($class ? ' class="'.$class.'"' : '')
-		);
+		$url = ($id) ? permlinkurl_id($id) : permlinkurl($thisarticle);
+
+		if ($url)
+		{
+			if ($thing === NULL)
+			{
+				return $url;
+			}
+
+			if ($title == false and ($id == false or $id == $thisarticle['thisid']))
+			{
+				$title = gTxt('permanent_link');
+			}
+
+			return tag(parse($thing), 'a', ' rel="bookmark" href="'.$url.'"'.
+				($title ? ' title="'.$title.'"' : '').
+				($style ? ' style="'.$style.'"' : '').
+				($class ? ' class="'.$class.'"' : '')
+			);
+		}
 	}
 
 // -------------------------------------------------------------
