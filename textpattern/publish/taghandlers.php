@@ -625,7 +625,7 @@ $LastChangedRevision$
 
 				if ($name)
 				{
-					$section = ($this_section) ? $s : $section;
+					$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
 
 					$out[] = tag(str_replace('& ', '&#38; ', $title), 'a', 
 						( ($active_class and ($c == $name)) ? ' class="'.$active_class.'"' : '' ).
@@ -1459,7 +1459,7 @@ function body($atts)
 
 		if ($thisarticle['category1'])
 		{
-			$section = ($this_section) ? $s : $section;
+			$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
 			$cat = $thisarticle['category1'];
 
 			$label = ($title) ? fetch_category_title($cat) : $cat;
@@ -1508,7 +1508,7 @@ function body($atts)
 
 		if ($thisarticle['category2'])
 		{
-			$section = ($this_section) ? $s : $section;
+			$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
 			$cat = $thisarticle['category2'];
 
 			$label = ($title) ? fetch_category_title($cat) : $cat;
