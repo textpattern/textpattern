@@ -1573,6 +1573,7 @@ function body($atts)
 			'name'		=> '',
 			'section' => $s,
 			'title'		=> 0,
+			'type'    => 'article',
 			'wraptag' => '',
 		), $atts));
 
@@ -1588,7 +1589,7 @@ function body($atts)
 
 		if ($cat)
 		{
-			$label = ($title) ? fetch_category_title($cat) : $cat;
+			$label = ($title) ? fetch_category_title($cat, $type) : $cat;
 
 			if ($thing)
 			{
