@@ -1272,21 +1272,35 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function comment_name($atts) 
+
+	function comment_name($atts)
 	{
 		global $thiscomment, $prefs;
 
 		assert_comment();
-		
+
 		extract($prefs);
 		extract($thiscomment);
-		$web = str_replace("http://", "", $web);
 
-		if ($email && !$web && !$never_display_email)
-			$name = '<a href="'.eE('mailto:'.$email).'"'.(@$comment_nofollow ? ' rel="nofollow"' : '').'>'.$name.'</a>';
+		extract(lAtts(array(
+			'link' => 1,
+		), $atts));
 
-		if ($web)
-			$name = '<a href="http://'.$web.'" title="'.$web.'"'.(@$comment_nofollow ? ' rel="nofollow"' : '').'>'.$name.'</a>';
+		if ($link)
+		{
+			$web = str_replace('http://', '', $web);
+			$nofollow = (@$comment_nofollow ? ' rel="nofollow"' : '');
+
+			if ($web)
+			{
+				return '<a href="http://'.$web.'"'.$nofollow.'>'.$name.'</a>';
+			}
+
+			if ($email && !$never_display_email)
+			{
+				return '<a href="'.eE('mailto:'.$email).'"'.$nofollow.'>'.$name.'</a>';
+			}
+		}
 
 		return $name;
 	}
