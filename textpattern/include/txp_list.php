@@ -154,7 +154,7 @@ $LastChangedRevision$
 			// fetch true comment count, not the public comment count
 			// maybe we should have another row in the db?
 			$rs2 = safe_rows_start('parentid, count(*) as num', 'txp_discuss',
-				"$criteria group by parentid order by $sort_sql limit $offset, $limit");
+				"1 group by parentid order by $sort_sql");
 
 			if ($rs2)
 			{
