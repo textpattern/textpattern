@@ -680,49 +680,56 @@ if (!empty($event) and $event == 'article') {
 	}
 
 //--------------------------------------------------------------
+
 	function sidehelp()
 	{
 		global $use_textile, $textile_body;
 
-		if ($use_textile == USE_TEXTILE || $textile_body == USE_TEXTILE) {
-			return '<p><small>'.
-			gTxt('header').': <strong>h<em>n</em>.</strong>'.
-				popHelpSubtle('header',400,400).br.
-			gTxt('blockquote').': <strong>bq.</strong>'.
-				popHelpSubtle('blockquote',400,400).sp.br.
-			gTxt('numeric_list').': <strong>#</strong>'.
-				popHelpSubtle('numeric',400,400).sp.br.
-			gTxt('bulleted_list').': <strong>*</strong>'.
-				popHelpSubtle('bulleted',400,400).
-		
-			'</small></p><p><small>'.
-	
-			'_<em>'.gTxt('emphasis').'</em>_'.
-				popHelpSubtle('italic',400,400).sp.br.
-			'*<strong>'.gTxt('strong').'</strong>*'.
-				popHelpSubtle('bold',400,400).sp.br.
-			'??<cite>'.gTxt('citation').'</cite>??'.
-				popHelpSubtle('cite',500,300).sp.br.
-			'-'.gTxt('deleted_text').'-'.
-				popHelpSubtle('delete',400,300).sp.br.
-			'+'.gTxt('inserted_text').'+'.
-				popHelpSubtle('insert',400,300).sp.br.
-			'^'.gTxt('superscript').'^'.
-				popHelpSubtle('super',400,300).sp.br.
-			'~'.gTxt('subscript').'~'.
-				popHelpSubtle('subscript',400,400).
-	
-			'</small></p><p><small>'.
-				'"'.gTxt('linktext').'":url'.
-					popHelpSubtle('link',400,500).sp.br.
-			'</small></p><p><small>'.
-				'!'.gTxt('imageurl').'!'.
-					popHelpSubtle('image',500,500).		
-			'</small></p>'.
-			'<a href="http://textism.com/tools/textile/" target="_blank">'.gTxt('More').'</a>';
-		}			
-	
-	   return '';
+		if ($use_textile == USE_TEXTILE || $textile_body == USE_TEXTILE)
+		{
+			return
+
+				'<ul class="textile-help">'.
+					'<li>'.gTxt('header').': <strong>h<em>n</em>.</strong>'.sp.
+						popHelpSubtle('header', 400, 400).'</li>'.
+					'<li>'.gTxt('blockquote').': <strong>bq.</strong>'.sp.
+						popHelpSubtle('blockquote',400,400).'</li>'.
+					'<li>'.gTxt('numeric_list').': <strong>#</strong>'.sp.
+						popHelpSubtle('numeric', 400, 400).'</li>'.
+					'<li>'.gTxt('bulleted_list').': <strong>*</strong>'.sp.
+						popHelpSubtle('bulleted', 400, 400).'</li>'.
+				'</ul>'.
+
+				'<ul class="textile-help">'.
+					'<li>'.'_<em>'.gTxt('emphasis').'</em>_'.sp.
+						popHelpSubtle('italic', 400, 400).'</li>'.
+					'<li>'.'*<strong>'.gTxt('strong').'</strong>*'.sp.
+						popHelpSubtle('bold', 400, 400).'</li>'.
+					'<li>'.'??<cite>'.gTxt('citation').'</cite>??'.sp.
+						popHelpSubtle('cite', 500, 300).'</li>'.
+					'<li>'.'-'.gTxt('deleted_text').'-'.sp.
+						popHelpSubtle('delete', 400, 300).'</li>'.
+					'<li>'.'+'.gTxt('inserted_text').'+'.sp.
+						popHelpSubtle('insert', 400, 300).'</li>'.
+					'<li>'.'^'.gTxt('superscript').'^'.sp.
+						popHelpSubtle('super', 400, 300).'</li>'.
+					'<li>'.'~'.gTxt('subscript').'~'.sp.
+						popHelpSubtle('subscript', 400, 400).'</li>'.
+				'</ul>'.
+
+				graf(
+					'"'.gTxt('linktext').'":url'.sp.popHelpSubtle('link', 400, 500)
+				, ' class="textile-help"').
+
+				graf(
+					'!'.gTxt('imageurl').'!'.sp.popHelpSubtle('image', 500, 500)
+				, ' class="textile-help"').
+
+				graf(
+					'<a href="http://textism.com/tools/textile/" target="_blank">'.gTxt('More').'</a>');
+		}
+
+		return '';
 	}
 
 //--------------------------------------------------------------

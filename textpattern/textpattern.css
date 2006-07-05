@@ -322,13 +322,19 @@ padding: 10px;
 background-color: #ffc;
 }
 
+ul.textile-help, 
 ul.tag-links {
-font-size: 0.9em;
 list-style-type: none;
 }
 
+ul.textile-help li, 
 ul.tag-links li {
 margin: 0 0 2px 0;
+}
+
+.textile-help, 
+ul.tag-links {
+font-size: 0.9em;
 }
 
 #warning {
