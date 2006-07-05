@@ -343,6 +343,21 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
+	function link_name($atts)
+	{
+		global $thislink;
+
+		extract(lAtts(array(
+			'escape'	 => ''
+		), $atts));
+
+		return ($escape == 'html') ? 
+			escape_output($thislink['linkname']) : 
+			$thislink['linkname'];
+	}
+
+// -------------------------------------------------------------
+
 	function link_url($atts)
 	{
 		global $thislink;
