@@ -305,7 +305,7 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function link($atts)
+	function tpt_link($atts)
 	{
 		global $thislink;
 

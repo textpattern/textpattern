@@ -878,42 +878,65 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
+
 	function processTags($matches)
 	{
 		global $pretext, $production_status, $txptrace, $txptracelevel, $txp_current_tag;
 
 		$tag = $matches[1];
 
-		$atts = (isset($matches[2])) ? splat($matches[2]) : '';
-		$thing = (isset($matches[4])) ? $matches[4] : '';
+		$trouble_makers = array(
+			'link'
+		);
+
+		if (in_array($tag, $trouble_makers))
+		{
+			$tag = 'tpt_'.$tag;
+		}
+
+		$atts = isset($matches[2]) ? splat($matches[2]) : '';
+		$thing = isset($matches[4]) ? $matches[4] : null;
 
 		$old_tag = @$txp_current_tag;
+
 		$txp_current_tag = '<txp:'.$tag.
 			($atts ? $matches[2] : '').
 			($thing ? '>' : '/>');
 
 		trace_add($txp_current_tag);
 		@++$txptracelevel;
+
 		if ($production_status == 'debug')
+		{
 			maxMemUsage(trim($matches[0]));
+		}
 
 		$out = '';
 
-		if ($thing) {
-			if (function_exists($tag)) $out = $tag($atts,$thing,$matches[0]);
-			elseif (isset($pretext[$tag])) $out = $pretext[$tag];
-			else trigger_error(gTxt('unknown_tag'), E_USER_WARNING);
-		} else {
-			if (function_exists($tag)) $out = $tag($atts,null,$matches[0]);
-			elseif (isset($pretext[$tag])) $out = $pretext[$tag];
-			else trigger_error(gTxt('unknown_tag'), E_USER_WARNING);
+		if (function_exists($tag))
+		{
+			$out = $tag($atts, $thing, $matches[0]);
+		}
+
+		elseif (isset($pretext[$tag]))
+		{
+			$out = $pretext[$tag];
+		}
+
+		else
+		{
+			trigger_error(gTxt('unknown_tag'), E_USER_WARNING);
 		}
 
 		@--$txptracelevel;
+
 		if (isset($matches[4]))
+		{
 			trace_add('</txp:'.$tag.'>');
+		}
 
 		$txp_current_tag = $old_tag;
+
 		return $out;
 	}
 
