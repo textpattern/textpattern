@@ -168,45 +168,127 @@ if ($event == 'category') {
 // so, merge them. Addition of new event categories is easiest now.
 
 //-------------------------------------------------------------
+
 	function cat_event_category_list($evname) 
 	{
-		global $prefs;
-		if($evname=='article') $headspan = ($prefs['show_article_category_count']) ? 3 : 2;		
+		$o = hed(gTxt($evname.'_head').sp.popHelp($evname.'_category'), 3);
 
-		$o = hed(gTxt($evname.'_head').popHelp($evname.'_category'),3);
+		$o .= form(
+			fInput('text', 'name', '', 'edit', '', '', 20).
+			fInput('submit', '', gTxt('Create'), 'smallerbox').
+			eInput('category').
+			sInput('cat_'.$evname.'_create')
+		);
 
-		$o .= 
-			form(
-				fInput('text','name','','edit','','',10).
-				fInput('submit','',gTxt('Create'),'smallerbox').
-				eInput('category').
-				sInput('cat_'.$evname.'_create')
-			);
+		$rs = getTree('root', $evname);
 
-		$rs = getTree('root',$evname);
-			
-		if($rs) {
-			foreach ($rs as $a) {
-				extract($a);
-				if ($name=='root') continue;
-				//Stuff for articles only
-				if ($evname=='article' && $prefs['show_article_category_count']) {
-					$sname = doSlash($name);
-					$count = sp . small(safe_count("textpattern",
-						"((Category1='$sname') or (Category2='$sname'))"));
-				} else $count = '';
+		if ($rs)
+		{
+			$total_count = array();
 
-				$cbox = checkbox('selected[]',$id,0);
-				$editlink = eLink('category','cat_'.$evname.'_edit','id',
-					$id,$title);
+			// fetch count
+			switch ($evname)
+			{
+				case 'article':
+					$rs2 = safe_rows_start('Category1, count(*) as num', 'textpattern', "1 group by Category1");
+					$rs3 = safe_rows_start('Category2, count(*) as num', 'textpattern', "1 group by Category2");
 
-				$items[] = graf( $cbox . sp . str_repeat(sp,max(0,$level-1)*2) . $editlink . $count);
+					while ($a = nextRow($rs2))
+					{
+						$name = ($a['Category1']) ? $a['Category1'] : $a['Category2'];
+						$num = $a['num'];
+
+						$total_count[$name] = $num;
+					}
+
+					while ($a = nextRow($rs3))
+					{
+						$name = $a['Category2'];
+						$num = $a['num'];
+
+						if (isset($total_count[$name]))
+						{
+							$total_count[$name] += $num;
+						}
+
+						else
+						{
+							$total_count[$name] = $num;
+						}
+					}
+
+				break;
+
+				case 'link':
+					$rs2 = safe_rows_start('category, count(*) as num', 'txp_link', "1 group by category");
+				break;
+
+				case 'image':
+					$rs2 = safe_rows_start('category, count(*) as num', 'txp_image', "1 group by category");
+				break;
+
+				case 'file':
+					$rs2 = safe_rows_start('category, count(*) as num', 'txp_file', "1 group by category");
+				break;
 			}
 
-			if (!empty($items)) $o .= cat_article_multiedit_form($evname,$items);
+			if ($rs2 and $evname != 'article')
+			{
+				while ($a = nextRow($rs2))
+				{
+					$name = $a['category'];
+					$num = $a['num'];
 
+					$total_count[$name] = $num;
+				}
+			}
+
+			$items = array();
+
+			foreach ($rs as $a)
+			{
+				extract($a);
+
+				if ($name == 'root')
+				{
+					continue;
+				}
+
+				$cbox = checkbox('selected[]', $id, 0);
+				$editlink = eLink('category', 'cat_'.$evname.'_edit', 'id', $id, $title);
+
+				// format count
+				switch ($evname)
+				{
+					case 'article':
+						$url = 'index.php?event=list'.a.'method=categories'.a.'crit='.$name;
+					break;
+	
+					case 'link':
+						$url = 'index.php?event=link'.a.'method=category'.a.'crit='.$name;
+					break;
+	
+					case 'image':
+						$url = 'index.php?event=image'.a.'method=category'.a.'crit='.$name;
+					break;
+	
+					case 'file':
+						$url = 'index.php?event=file'.a.'method=category'.a.'crit='.$name;
+					break;
+				}
+
+				$count = isset($total_count[$name]) ? '('.href($total_count[$name], $url).')' : '(0)';
+
+				$items[] = graf($cbox.sp.str_repeat(sp.sp, max(0, $level - 1) * 2) .$editlink.sp.small($count));
+			}
+
+			if ($items)
+			{
+				$o .= cat_article_multiedit_form($evname, $items);
+			}
 		}
-			return $o;
+
+		return $o;
 	}
 
 //-------------------------------------------------------------
