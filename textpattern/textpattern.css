@@ -13,11 +13,11 @@ background-color: #fff;
 }
 
 code {
-font-family: Monaco, Courier, "Courier New", monospace;
+font-family: Monaco, "Courier New", Courier, monospace;
 }
 
 small {
-font-size: 10px;
+font-size: 0.9em;
 }
 
 h1, h2, h3, p, ul, ol {
@@ -31,15 +31,15 @@ font-weight: normal;
 }
 
 h1 {
-font-size: 16px;
+font-size: 1.6em;
 }
 
 h2 {
-font-size: 15px;
+font-size: 1.4em;
 }
 
 h3 {
-font-size: 14px;
+font-size: 1.2em;
 }
 
 p {
@@ -61,7 +61,7 @@ border: none;
 }
 
 input {
-font-size: 10px;
+font-size: 0.9em;
 }
 
 textarea {
@@ -72,7 +72,7 @@ background-color: #eee;
 }
 
 select {
-font-size: 10px;
+font-size: 0.9em;
 color: inherit;
 background-color: #eee;
 }
@@ -123,7 +123,7 @@ background-color: #eee;
 
 a.navlink {
 padding: 3px;
-font-size: 10px;
+font-size: 0.9em;
 color: #000;
 background-color: #ffc;
 border-right: 1px solid #ddd;
@@ -131,7 +131,7 @@ border-bottom: 1px solid #ddd;
 }
 
 a.plain {
-font-size: 10px;
+font-size: 0.9em;
 color: #000;
 background-color: transparent;
 }
@@ -178,7 +178,7 @@ border-color: #999 #fff #fff #999;
 input.edit {
 margin-top: 5px;
 padding: 1px;
-font-size: 11px;
+font-size: 1.1em;
 color: inherit;
 background-color: #eee;
 }
@@ -252,7 +252,7 @@ padding: 10px;
 
 td.declaration {
 padding: 0 3px;
-font-size: 10px;
+font-size: 0.9em;
 text-align: left;
 }
 
@@ -263,7 +263,7 @@ border-top: 3px solid #fff;
 }
 
 td.selector2 {
-font-size: 10px;
+font-size: 0.9em;
 }
 
 table#edit td.noline,
@@ -356,7 +356,7 @@ td.tabup2, td.tabdown2 {
 padding-top: 6px;
 width: 124px;
 height: 25px;
-font-size: 10px;
+font-size: 0.9em;
 text-align: center;
 }
 
@@ -473,7 +473,7 @@ textarea#html {
 margin-top: 6px;
 width: 600px;
 height: 500px;
-font: 10px Monaco, Courier, "Courier New", monospace;
+font-family: Monaco, "Courier New", Courier, monospace;
 }
 
 /* style
