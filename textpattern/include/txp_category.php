@@ -195,7 +195,7 @@ if ($event == 'category') {
 
 					while ($a = nextRow($rs2))
 					{
-						$name = ($a['Category1']) ? $a['Category1'] : $a['Category2'];
+						$name = $a['Category1'];
 						$num = $a['num'];
 
 						$total_count[$name] = $num;
