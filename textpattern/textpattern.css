@@ -466,17 +466,7 @@ tr.spam a, tr.moderate a {
 font-weight: bold;
 }
 
-/* pages
------------------------------------------------ */
-
-textarea#html {
-margin-top: 6px;
-width: 600px;
-height: 500px;
-font-family: Monaco, "Courier New", Courier, monospace;
-}
-
-/* style
+/* pages, forms and style
 ----------------------------------------------- */
 
 input.css {
@@ -487,6 +477,16 @@ background-color: #eee;
 border-width: 1px;
 border-style: solid;
 border-color: #999 #fff #fff #999;
+}
+
+textarea#html, textarea#form, textarea#css {
+font-family: Monaco, "Courier New", Courier, monospace;
+}
+
+textarea#html {
+margin-top: 6px;
+width: 600px;
+height: 500px;
 }
 
 textarea#css {
