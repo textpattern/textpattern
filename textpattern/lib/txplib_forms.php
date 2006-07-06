@@ -118,31 +118,36 @@ $LastChangedRevision$
 	}
 	
 //-------------------------------------------------------------
-	function checkbox($name,$value,$checked='1')
+
+	function checkbox($name, $value, $checked = '1')
 	{
-		$o[] = '<input type="checkbox" name="'.$name.'" value="'.$value.'" id="'.$name.'"';
-		$o[] = ($checked=='1') ? ' checked="checked"' : '';
-		$o[] = ' />';
-		return join('',$o);
+		$o[] = '<input type="checkbox" id="'.$name.'" name="'.$name.'" value="'.$value.'"';
+		$o[] = ($checked == '1') ? ' checked="checked"' : '';
+		$o[] = ' class="checkbox" />';
+
+		return join('', $o);
 	}
 
 //-------------------------------------------------------------
-	function checkbox2($name,$value)
+
+	function checkbox2($name, $value)
 	{
 		$o[] = '<input type="checkbox" name="'.$name.'" value="1"';
-		$o[] = ($value=='1')?' checked="checked"':'';
-		$o[] = ' />';
-		return join('',$o);
+		$o[] = ($value == '1') ? ' checked="checked"' : '';
+		$o[] = ' class="checkbox" />';
+
+		return join('', $o);
 	}
 
-
 //-------------------------------------------------------------
-	function radio($name,$value,$checked='1')
+
+	function radio($name, $value, $checked = '1')
 	{
 		$o[] = '<input type="radio" name="'.$name.'" value="'.$value.'"';
-		$o[] = ($checked=='1')?' checked="checked"':'';
-		$o[] = ' />';
-		return join('',$o);
+		$o[] = ($checked == '1') ? ' checked="checked"' : '';
+		$o[] = ' class="radio" />';
+
+		return join('', $o);
 	}
 
 //-------------------------------------------------------------
