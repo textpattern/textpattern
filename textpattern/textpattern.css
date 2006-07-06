@@ -55,32 +55,6 @@ margin: 0 0 5px 35px;
 padding: 0;
 }
 
-fieldset {
-padding: 1em;
-border: none;
-}
-
-input {
-font-size: 0.9em;
-}
-
-textarea {
-padding: 3px;
-line-height: 1.4em;
-color: inherit;
-background-color: #eee;
-}
-
-select {
-font-size: 0.9em;
-color: inherit;
-background-color: #eee;
-}
-
-table, tr, th, td {
-vertical-align: top;
-}
-
 /* links
 ----------------------------------------------- */
 
@@ -142,8 +116,30 @@ color: #00f;
 background-color: #eee;
 }
 
-/* form element overrides
+/* form elements
 ----------------------------------------------- */
+
+fieldset {
+padding: 1em;
+border: none;
+}
+
+input {
+font-size: 0.9em;
+}
+
+textarea {
+padding: 3px;
+line-height: 1.4em;
+color: inherit;
+background-color: #eee;
+}
+
+select {
+font-size: 0.9em;
+color: inherit;
+background-color: #eee;
+}
 
 form.upload-form {
 text-align: center;
@@ -238,8 +234,12 @@ color: inherit;
 background-color: #ddd;
 }
 
-/* table element overrides
+/* table elements
 ----------------------------------------------- */
+
+table, tr, th, td {
+vertical-align: top;
+}
 
 table.edit-table {
 margin-top: 2em;
