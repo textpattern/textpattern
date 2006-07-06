@@ -123,7 +123,7 @@ $LastChangedRevision$
 		$thing = ($code)
 		?	$code
 		:	'';
-		$textarea = '<textarea name="code" rows="30" cols="90">'.htmlentities(utf8_decode($thing)).'</textarea>';
+		$textarea = '<textarea id="plugin-code" name="code" rows="28" cols="90">'.htmlentities(utf8_decode($thing)).'</textarea>';
 
 		return 
 		form(startTable('edit')
@@ -277,7 +277,7 @@ $LastChangedRevision$
 			graf(
 			tag(gTxt('install_plugin'), 'span', ' style="vertical-align: top;"').sp.
 
-			text_area('plugin', 30, 400, '').sp.
+			'<textarea id="plugin-install" name="plugin" cols="62" rows="1"></textarea>'.sp.
 
 			tag(
 				popHelp('install_plugin').sp.
