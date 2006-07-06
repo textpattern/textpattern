@@ -13,7 +13,7 @@ background-color: #fff;
 }
 
 code {
-font-family: Monaco, "Courier New", Courier, monospace;
+font-family: Monaco, "Courier New", monospace;
 }
 
 small {
@@ -131,7 +131,6 @@ border-bottom: 1px solid #ddd;
 }
 
 a.plain {
-font-size: 0.9em;
 color: #000;
 background-color: transparent;
 }
@@ -178,7 +177,7 @@ border-color: #999 #fff #fff #999;
 input.edit {
 margin-top: 5px;
 padding: 1px;
-font-size: 1.1em;
+font-size: 1em;
 color: inherit;
 background-color: #eee;
 }
@@ -341,7 +340,6 @@ font-size: 0.9em;
 margin: 0 auto 15px auto;
 padding: 10px;
 width: 30em;
-font-size: 1.1em;
 text-align: center;
 color: inherit;
 background-color: #fff4f4;
@@ -466,8 +464,15 @@ tr.spam a, tr.moderate a {
 font-weight: bold;
 }
 
-/* pages, forms and style
+/* pages, forms, style, plugins
 ----------------------------------------------- */
+
+textarea#html, textarea#form, 
+textarea#css, 
+div#preview-plugin, 
+textarea#plugin-code, textarea#plugin-install {
+font: 1.1em Monaco, "Courier New", Courier, monospace;
+}
 
 input.css {
 margin: 0;
@@ -477,10 +482,6 @@ background-color: #eee;
 border-width: 1px;
 border-style: solid;
 border-color: #999 #fff #fff #999;
-}
-
-textarea#html, textarea#form, textarea#css {
-font-family: Monaco, "Courier New", Courier, monospace;
 }
 
 textarea#html {
@@ -494,11 +495,13 @@ width: 500px;
 height: 515px;
 }
 
-/* plugins
------------------------------------------------ */
-
 div#preview-plugin {
 margin: 0 auto;
 height: 300px;
 overflow: auto;
+}
+
+textarea#plugin-install {
+width: 400px;
+height: 30px;
 }
