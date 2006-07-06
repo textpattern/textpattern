@@ -12,11 +12,11 @@ color: #000;
 background-color: #fff;
 }
 
-code {
-font-family: Monaco, "Courier New", monospace;
+code, .code {
+font: 1.1em Monaco, "Courier New", monospace;
 }
 
-small {
+small, .small {
 font-size: 0.9em;
 }
 
@@ -321,19 +321,12 @@ padding: 10px;
 background-color: #ffc;
 }
 
-ul.textile-help, 
-ul.tag-links {
+ul.plain-list {
 list-style-type: none;
 }
 
-ul.textile-help li, 
-ul.tag-links li {
+ul.plain-list li {
 margin: 0 0 2px 0;
-}
-
-.textile-help, 
-ul.tag-links {
-font-size: 0.9em;
 }
 
 #warning {
@@ -466,13 +459,6 @@ font-weight: bold;
 
 /* pages, forms, style, plugins
 ----------------------------------------------- */
-
-textarea#html, textarea#form, 
-textarea#css, 
-div#preview-plugin, 
-textarea#plugin-code, textarea#plugin-install {
-font: 1.1em Monaco, "Courier New", Courier, monospace;
-}
 
 input.css {
 margin: 0;

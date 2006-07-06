@@ -689,7 +689,7 @@ if (!empty($event) and $event == 'article') {
 		{
 			return
 
-				'<ul class="textile-help">'.
+				'<ul class="plain-list small">'.
 					'<li>'.gTxt('header').': <strong>h<em>n</em>.</strong>'.sp.
 						popHelpSubtle('header', 400, 400).'</li>'.
 					'<li>'.gTxt('blockquote').': <strong>bq.</strong>'.sp.
@@ -700,7 +700,7 @@ if (!empty($event) and $event == 'article') {
 						popHelpSubtle('bulleted', 400, 400).'</li>'.
 				'</ul>'.
 
-				'<ul class="textile-help">'.
+				'<ul class="plain-list small">'.
 					'<li>'.'_<em>'.gTxt('emphasis').'</em>_'.sp.
 						popHelpSubtle('italic', 400, 400).'</li>'.
 					'<li>'.'*<strong>'.gTxt('strong').'</strong>*'.sp.
@@ -719,11 +719,11 @@ if (!empty($event) and $event == 'article') {
 
 				graf(
 					'"'.gTxt('linktext').'":url'.sp.popHelpSubtle('link', 400, 500)
-				, ' class="textile-help"').
+				, ' class="small"').
 
 				graf(
 					'!'.gTxt('imageurl').'!'.sp.popHelpSubtle('image', 500, 500)
-				, ' class="textile-help"').
+				, ' class="small"').
 
 				graf(
 					'<a href="http://textism.com/tools/textile/" target="_blank">'.gTxt('More').'</a>');

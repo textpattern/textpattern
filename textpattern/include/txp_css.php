@@ -213,7 +213,7 @@ $LastChangedRevision$
 			td(
 				form(
 					graf($buttons).
-					'<textarea id="css" name="css" cols="78" rows="32">'.$thecss.'</textarea>'.br.
+					'<textarea id="css" class="code" name="css" cols="78" rows="32">'.$thecss.'</textarea>'.br.
 					fInput('submit','',gTxt('save'),'publish').
 					eInput('css').sInput('css_save').
 					hInput('name',$name)

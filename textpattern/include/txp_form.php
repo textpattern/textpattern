@@ -149,7 +149,7 @@ $LastChangedRevision$
 				).
 				tdtl(
 					'<form action="index.php" method="post">'.
-						'<textarea id="form" name="Form" cols="60" rows="20">'.htmlspecialchars($Form).'</textarea>'.
+						'<textarea id="form" class="code" name="Form" cols="60" rows="20">'.htmlspecialchars($Form).'</textarea>'.
 
 					$changename.
 

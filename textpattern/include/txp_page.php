@@ -98,7 +98,7 @@ $LastChangedRevision$
 			$outstep = 'page_save';
 		}
 
-		$out[] = '<textarea id="html" name="html" cols="84" rows="36">'.htmlspecialchars($html).'</textarea>'.
+		$out[] = '<textarea id="html" class="code" name="html" cols="84" rows="36">'.htmlspecialchars($html).'</textarea>'.
 				graf(
 					fInput('submit','save',gTxt('save'),'publish').
 					eInput('page').

@@ -123,7 +123,7 @@ $LastChangedRevision$
 		$thing = ($code)
 		?	$code
 		:	'';
-		$textarea = '<textarea id="plugin-code" name="code" rows="28" cols="90">'.htmlentities(utf8_decode($thing)).'</textarea>';
+		$textarea = '<textarea id="plugin-code" class="code" name="code" rows="28" cols="90">'.htmlentities(utf8_decode($thing)).'</textarea>';
 
 		return 
 		form(startTable('edit')
@@ -199,7 +199,7 @@ $LastChangedRevision$
 					echo 
 					form(startTable('edit')
 					.	tr(td(hed(gTxt('previewing_plugin'),3)))
-					.	tr(td(tag($source, 'div', ' id="preview-plugin"')))
+					.	tr(td(tag($source, 'div', ' id="preview-plugin" class="code"')))
 					.	tr(td($sub))
 					.	endTable().sInput('plugin_install').eInput('plugin').hInput('plugin64', base64_encode($plugin64))
 					, 'margin: 0 auto; width: 75%;');
@@ -277,7 +277,7 @@ $LastChangedRevision$
 			graf(
 			tag(gTxt('install_plugin'), 'span', ' style="vertical-align: top;"').sp.
 
-			'<textarea id="plugin-install" name="plugin" cols="62" rows="1"></textarea>'.sp.
+			'<textarea id="plugin-install" class="code" name="plugin" cols="62" rows="1"></textarea>'.sp.
 
 			tag(
 				popHelp('install_plugin').sp.
