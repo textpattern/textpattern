@@ -2687,12 +2687,12 @@ function body($atts)
 		{
 			if ($id)
 			{
-				$the_id = safe_row('id', 'txp_file', 'id', intval($id));
+				$the_id = safe_row('id', 'txp_file', 'id = '.intval($id));
 			}
 
 			elseif ($filename)
 			{
-				$the_id = safe_field('id', 'txp_file', 'filename', doSlash($filename));
+				$the_id = safe_field('id', 'txp_file', "filename = '".doSlash($filename)."'");
 			}
 		}
 
@@ -2702,7 +2702,15 @@ function body($atts)
 				hu.'index.php?s=file_download'.a.'id='.$the_id :
 				hu.gTxt('file_download').'/'.$the_id;
 
-			return href(parse($thing), $url);
+			if ($thing)
+			{
+				return href(parse($thing), $url);
+			}
+
+			else
+			{
+				return $url;
+			}
 		}
 
 		return '';
