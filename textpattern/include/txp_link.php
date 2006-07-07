@@ -207,7 +207,7 @@ $LastChangedRevision$
 			endTable().
 			'</form>'.
 
-			n.link_nav_form($page, $numPages, $sort, $dir, $crit, $search_method).
+			n.nav_form('link', $page, $numPages, $sort, $dir, $crit, $search_method).
 
 			pageby_form('link', $link_list_pageby);
 		}
@@ -239,27 +239,6 @@ $LastChangedRevision$
 
 			,' style="text-align: center;"')
 		);
-	}
-
-// -------------------------------------------------------------
-
-	function link_nav_form($page, $numPages, $sort, $dir, $crit, $method)
-	{
-		$nav = array();
-
-		if ($page > 1)
-		{
-			$nav[] = PrevNextLink('link', $page - 1, gTxt('prev'), 'prev', $sort, $dir, $crit, $method).sp;
-		}
-
-		$nav[] = small($page.'/'.$numPages);
-
-		if ($page != $numPages)
-		{
-			$nav[] = sp.PrevNextLink('link', $page + 1, gTxt('next'), 'next', $sort, $dir, $crit, $method);
-		}
-
-		return graf(join('', $nav),' class="prev-next"');
 	}
 
 // -------------------------------------------------------------

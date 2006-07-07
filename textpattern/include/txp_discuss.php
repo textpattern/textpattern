@@ -286,7 +286,7 @@ $LastChangedRevision$
 			endTable().
 			'</form>'.
 
-			discuss_nav_form($page, $numPages, $sort, $dir, $crit, $search_method).
+			nav_form('discuss', $page, $numPages, $sort, $dir, $crit, $search_method).
 
 			pageby_form('discuss', $comment_list_pageby);
 		}
@@ -319,27 +319,6 @@ $LastChangedRevision$
 				fInput('submit', 'search', gTxt('go'), 'smallerbox')
 			, ' style="text-align: center;"')
 		);
-	}
-
-//-------------------------------------------------------------
-
-	function discuss_nav_form($page, $numPages, $sort, $dir, $crit, $method)
-	{
-		$nav = array();
-
-		if ($page > 1)
-		{
-			$nav[] = PrevNextLink('discuss', $page - 1, gTxt('prev'), 'prev', $sort, $dir, $crit, $method).sp;
-		}
-
-		$nav[] = small($page.'/'.$numPages);
-
-		if ($page != $numPages)
-		{
-			$nav[] = sp.PrevNextLink('discuss', $page + 1, gTxt('next'), 'next', $sort, $dir, $crit, $method);
-		}
-
-		return graf(join('', $nav),' class="prev-next"');
 	}
 
 //-------------------------------------------------------------

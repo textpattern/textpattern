@@ -97,7 +97,6 @@ background-color: #eee;
 
 a.navlink {
 padding: 3px;
-font-size: 0.9em;
 color: #000;
 background-color: #ffc;
 border-right: 1px solid #ddd;
@@ -305,9 +304,18 @@ color: #008000;
 color: #C40000;
 }
 
-p.prev-next {
-margin-top: 10px;
+.prev-next {
+margin: 15px 0;
+font-size: 0.9em;
 text-align: center;
+}
+
+span.navlink-disabled {
+padding: 3px;
+color: #999;
+background-color: #eee;
+border-right: 1px solid #ddd;
+border-bottom: 1px solid #ddd;
 }
 
 p#js {

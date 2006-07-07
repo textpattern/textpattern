@@ -220,7 +220,7 @@ $LastChangedRevision$
 
 			echo endTable().
 
-			image_nav_form($page, $numPages, $sort, $dir, $crit, $search_method).
+			nav_form('image', $page, $numPages, $sort, $dir, $crit, $search_method).
 
 			pageby_form('list', $article_list_pageby);
 		}
@@ -252,27 +252,6 @@ $LastChangedRevision$
 
 			,' style="text-align: center;"')
 		);
-	}
-
-// -------------------------------------------------------------
-
-	function image_nav_form($page, $numPages, $sort, $dir, $crit, $method)
-	{
-		$nav = array();
-
-		if ($page > 1)
-		{
-			$nav[] = PrevNextLink('image', $page - 1, gTxt('prev'), 'prev', $sort, $dir, $crit, $method).sp;
-		}
-
-		$nav[] = small($page.'/'.$numPages);
-
-		if ($page != $numPages)
-		{
-			$nav[] = sp.PrevNextLink('image', $page + 1, gTxt('next'), 'next', $sort, $dir, $crit, $method);
-		}
-
-		return graf(join('', $nav),' class="prev-next"');
 	}
 
 // -------------------------------------------------------------

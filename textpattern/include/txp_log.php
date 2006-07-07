@@ -229,7 +229,7 @@ $LastChangedRevision$
 			n.endTable().
 			'</form>'.
 
-			n.log_nav_form($page, $numPages, $sort, $dir, $crit, $search_method).
+			n.nav_form('log', $page, $numPages, $sort, $dir, $crit, $search_method).
 
 			n.pageby_form('log', $log_list_pageby);
 		} 
@@ -263,27 +263,6 @@ $LastChangedRevision$
 
 			,' style="text-align: center;"')
 		);
-	}
-
-//-------------------------------------------------------------
-
-	function log_nav_form($page, $numPages, $sort, $dir, $crit, $method)
-	{
-		$nav = array();
-
-		if ($page > 1)
-		{
-			$nav[] = PrevNextLink('log', $page - 1, gTxt('prev'), 'prev', $sort, $dir, $crit, $method).sp;
-		}
-
-		$nav[] = small($page.'/'.$numPages);
-
-		if ($page != $numPages)
-		{
-			$nav[] = sp.PrevNextLink('log', $page + 1, gTxt('next'), 'next', $sort, $dir, $crit, $method);
-		}
-
-		return graf(join('', $nav),' class="prev-next"');
 	}
 
 //-------------------------------------------------------------
