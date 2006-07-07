@@ -2584,19 +2584,19 @@ function body($atts)
 	function file_download_list($atts)
 	{
 		global $thisfile;
-		
+
 		extract(lAtts(array(
-			'break'    => br,
+			'break'		 => br,
 			'category' => '',
-			'class'    => __FUNCTION__,
-			'form'     => 'files',
-			'label'    => '',
+			'class'		 => __FUNCTION__,
+			'form'		 => 'files',
+			'label'		 => '',
 			'labeltag' => '',
-			'limit'    => '10',
-			'offset'   => '0',
-			'sort'     => 'filename',
-			'wraptag'  => '',
-		), $atts));	
+			'limit'		 => '10',
+			'offset'	 => '0',
+			'sort'		 => 'filename',
+			'wraptag'	 => '',
+		), $atts));
 
 		$qparts = array(
 			($category) ? "category = '".doSlash($category)."'" : '1',
@@ -2604,17 +2604,21 @@ function body($atts)
 			($limit) ? "limit $offset, $limit" : ''
 		);
 
-		$rs = safe_rows_start('*', 'txp_file', join(' ', $qparts));
-	
+		$rs = safe_rows_start('id, filename, category, description, downloads', 'txp_file', join(' ', $qparts));
+
 		if ($rs)
 		{
+			$form = fetch_form($form);
+
 			$out = array();
 
 			while ($a = nextRow($rs))
-			{				
-				$thisfile = $a;
+			{
+				$thisfile = file_download_format_info($a);
 
-				$out[] = file_download(array('form' => $form));
+				$out[] = parse($form);
+
+				unset($thisfile);
 			}
 
 			if ($out)
@@ -2622,11 +2626,11 @@ function body($atts)
 				if ($wraptag == 'ul' or $wraptag == 'ol')
 				{
 					return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
-				}	
+				}
 
 				return ($wraptag) ? tag(join($break, $out), $wraptag) : join(n, $out);
 			}
-		}				
+		}
 		return '';
 	}
 
@@ -2635,19 +2639,18 @@ function body($atts)
 	function file_download($atts)
 	{
 		global $thisfile;
-		
+
 		extract(lAtts(array(
 			'filename' => '',
-			'form'     => 'files',
-			'id'       => '',
+			'form'		 => 'files',
+			'id'			 => '',
 		), $atts));
 
-		// this isn't being called from a download list, so we have to fetch data
 		if (empty($thisfile))
 		{
 			if ($id)
 			{
-				$thisfile = fileDownloadFetchInfo("id = '".intval($id)."'");
+				$thisfile = fileDownloadFetchInfo('id = '.intval($id));
 			}
 
 			elseif ($filename)
@@ -2658,63 +2661,62 @@ function body($atts)
 
 		if ($thisfile)
 		{
-			$thisfile = file_download_format_info($thisfile);
+			$form = fetch_form($form);
 
-			$thing = fetch_form($form);
+			$out = parse($form);
 
-			return parse($thing);
+			unset($thisfile);
+
+			return $out;
 		}
 	}
-	
+
 //--------------------------------------------------------------------------
 
 	function file_download_link($atts, $thing)
 	{
-		global $permlink_mode, $thisfile;
+		global $thisfile, $permlink_mode;
 
 		extract(lAtts(array(
 			'filename' => '',
-			'id'       => '',
+			'id'			 => '',
 		), $atts));
 
-		// this is being called from a form, no need to fetch from the db
-		if ($thisfile['id'])
-		{
-			$the_id = $thisfile['id'];
-		}
+		$from_form = true;
 
-		else
+		if (empty($thisfile))
 		{
+			$from_form = false;
+
 			if ($id)
 			{
-				$the_id = safe_row('id', 'txp_file', 'id = '.intval($id));
+				$thisfile = fileDownloadFetchInfo('id = '.intval($id));
 			}
 
 			elseif ($filename)
 			{
-				$the_id = safe_field('id', 'txp_file', "filename = '".doSlash($filename)."'");
+				$thisfile = fileDownloadFetchInfo("filename = '".doSlash($filename)."'");
 			}
 		}
 
-		if ($the_id)
+		if ($thisfile)
 		{
 			$url = ($permlink_mode == 'messy') ?
-				hu.'index.php?s=file_download'.a.'id='.$the_id :
-				hu.gTxt('file_download').'/'.$the_id;
+				hu.'index.php?s=file_download'.a.'id='.$thisfile['id'] :
+				hu.gTxt('file_download').'/'.$thisfile['id'];
 
-			if ($thing)
+			$out = ($thing) ? href(parse($thing), $url) : $url;
+
+			// cleanup: this wasn't called from a form,
+			// so we don't want this value remaining
+			if ($from_form == false)
 			{
-				return href(parse($thing), $url);
+				unset($thisfile);
 			}
 
-			else
-			{
-				return $url;
-			}
+			return $out;
 		}
-
-		return '';
-	}	
+	}
 
 //--------------------------------------------------------------------------
 
@@ -2770,16 +2772,16 @@ function body($atts)
 
 	function file_download_size($atts)
 	{
-		global $thisfile;		
+		global $thisfile;
 
 		extract(lAtts(array(
 			'decimals' => 2,
-			'format'   => ''			
+			'format'	 => ''
 		), $atts));
 
 		if (is_numeric($decimals) and $decimals >= 0)
 		{
-			$decimals = intval($decimals);			
+			$decimals = intval($decimals);
 		}
 
 		else
@@ -2865,14 +2867,14 @@ function body($atts)
 
 	function file_download_created($atts)
 	{
-		global $thisfile;		
+		global $thisfile;
 
 		extract(lAtts(array(
 			'format' => ''
-		), $atts));		
+		), $atts));
 
 		return fileDownloadFormatTime(array(
-			'ftime'  => $thisfile['created'], 
+			'ftime'	 => $thisfile['created'],
 			'format' => $format
 		));
 	}
@@ -2881,14 +2883,14 @@ function body($atts)
 
 	function file_download_modified($atts)
 	{
-		global $thisfile;		
+		global $thisfile;
 
 		extract(lAtts(array(
 			'format' => ''
-		), $atts));		
-	
+		), $atts));
+
 		return fileDownloadFormatTime(array(
-			'ftime'  => $thisfile['modified'], 
+			'ftime'	 => $thisfile['modified'],
 			'format' => $format
 		));
 	}
@@ -2905,7 +2907,7 @@ function body($atts)
 
 		if (!empty($ftime))
 		{
-			return !empty($format) ? 
+			return !empty($format) ?
 				safe_strftime($format, $ftime) : safe_strftime($prefs['archive_dateformat'], $ftime);
 		}
 		return '';
@@ -2915,7 +2917,7 @@ function body($atts)
 
 	function file_download_id($atts)
 	{
-		global $thisfile;		
+		global $thisfile;
 		return $thisfile['id'];
 	}
 
@@ -2923,15 +2925,15 @@ function body($atts)
 
 	function file_download_name($atts)
 	{
-		global $thisfile;		
+		global $thisfile;
 		return $thisfile['filename'];
-	} 
+	}
 
 //--------------------------------------------------------------------------
 
 	function file_download_category($atts)
 	{
-		global $thisfile;		
+		global $thisfile;
 		return $thisfile['category'];
 	}
 
@@ -2939,7 +2941,7 @@ function body($atts)
 
 	function file_download_downloads($atts)
 	{
-		global $thisfile;		
+		global $thisfile;
 		return $thisfile['downloads'];
 	}
 
@@ -2947,14 +2949,14 @@ function body($atts)
 
 	function file_download_description($atts)
 	{
-		global $thisfile;	
+		global $thisfile;
 
 		extract(lAtts(array(
 			'escape' => '',
-		), $atts));	
+		), $atts));
 
-		return ($escape == 'html') ? 
+		return ($escape == 'html') ?
 			escape_output($thisfile['description']) : $thisfile['description'];
-	}	
+	}
 
 ?>
