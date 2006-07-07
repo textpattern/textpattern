@@ -44,7 +44,7 @@ $LastChangedRevision$
 		extract($txpcfg);
 		extract(get_prefs());
 
-		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'method')));
+		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
 
 		if (!is_dir($file_base_path) or !is_writeable($file_base_path))
 		{
@@ -106,7 +106,7 @@ $LastChangedRevision$
 
 		$criteria = 1;
 
-		if ($crit or $method)
+		if ($crit or $search_method)
 		{
 			$crit_escaped = doSlash($crit);
 
@@ -117,15 +117,15 @@ $LastChangedRevision$
 				'category'    => "`category` like '%$crit_escaped%'"
 			);
 
-			if (array_key_exists($method, $critsql))
+			if (array_key_exists($search_method, $critsql))
 			{
-				$criteria = $critsql[$method];
+				$criteria = $critsql[$search_method];
 				$limit = 500;
 			}
 
 			else
 			{
-				$method = '';
+				$search_method = '';
 			}
 		}
 
@@ -135,7 +135,7 @@ $LastChangedRevision$
 		{
 			if ($criteria != 1)
 			{
-				echo n.file_search_form($crit, $method).
+				echo n.file_search_form($crit, $search_method).
 					n.graf(gTxt('no_results_found'), ' style="text-align: center;"');
 			}
 
@@ -151,7 +151,7 @@ $LastChangedRevision$
 
 		list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-		echo file_search_form($crit, $method);
+		echo file_search_form($crit, $search_method);
 
 		$rs = safe_rows_start('*', 'txp_file', "$criteria order by $sort_sql limit $offset, $limit");
 
@@ -160,15 +160,15 @@ $LastChangedRevision$
 			echo startTable('list').
 
 				tr(
-					column_head('ID', 'id', 'file', true, $switch_dir, $crit, $method).
+					column_head('ID', 'id', 'file', true, $switch_dir, $crit, $search_method).
 					td().
-					column_head('file_name', 'filename', 'file', true, $switch_dir, $crit, $method).
-					column_head('description', 'description', 'file', true, $switch_dir, $crit, $method).
-					column_head('file_category', 'category', 'file', true, $switch_dir, $crit, $method).
-					// column_head('permissions', 'permissions', 'file', true, $switch_dir, $crit, $method).
+					column_head('file_name', 'filename', 'file', true, $switch_dir, $crit, $search_method).
+					column_head('description', 'description', 'file', true, $switch_dir, $crit, $search_method).
+					column_head('file_category', 'category', 'file', true, $switch_dir, $crit, $search_method).
+					// column_head('permissions', 'permissions', 'file', true, $switch_dir, $crit, $search_method).
 					hCell(gTxt('tags')).
 					hCell(gTxt('status')).
-					column_head('downloads', 'downloads', 'file', true, $switch_dir, $crit, $method).
+					column_head('downloads', 'downloads', 'file', true, $switch_dir, $crit, $search_method).
 					hCell()
 				);
 
@@ -177,7 +177,7 @@ $LastChangedRevision$
 				extract($a);
 
 				$edit_url = '?event=file'.a.'step=file_edit'.a.'id='.$id.a.'sort='.$sort.
-					a.'dir='.$dir.a.'page='.$page.a.'method='.$method.a.'crit='.$crit;
+					a.'dir='.$dir.a.'page='.$page.a.'search_method='.$search_method.a.'crit='.$crit;
 
 				$file_exists = file_exists(build_file_path($file_base_path, $filename));
 
@@ -253,7 +253,7 @@ $LastChangedRevision$
 
 			echo endTable().
 
-			file_nav_form($page, $numPages, $sort, $dir, $crit, $method).
+			file_nav_form($page, $numPages, $sort, $dir, $crit, $search_method).
 
 			pageby_form('file', $file_list_pageby);
 		}

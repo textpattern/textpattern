@@ -829,21 +829,20 @@ $LastChangedRevision$
 
 		else
 		{
-			// make sure we take care of different platforms
+			$sep = !is_windows() ? "\n" : "\r\n";
+
 			$body = str_replace("\r\n", "\n", $body);
 			$body = str_replace("\r", "\n", $body);
-
-			// use RFC 2822 compliant linefeeds
-			$body = str_replace("\n", "\r\n", $body);
+			$body = str_replace("\n", $sep, $body);
 
 			return mail($to_address, $subject, $body,
 
 				"From: $RealName <$email>".
-				"\r\n".'Reply-To: '.( isset($reply_to) ? $reply_to : "$RealName <$email>" ).
-				"\r\n".'X-Mailer: Textpattern'.
-				"\r\n".'Content-Transfer-Encoding: 8bit'.
-				"\r\n".'Content-Type: text/plain; charset="'.$charset.'"'.
-				"\r\n"
+				$sep.'Reply-To: '.( isset($reply_to) ? $reply_to : "$RealName <$email>" ).
+				$sep.'X-Mailer: Textpattern'.
+				$sep.'Content-Transfer-Encoding: 8bit'.
+				$sep.'Content-Type: text/plain; charset="'.$charset.'"'.
+				$sep
 			);
 		}
 	}
@@ -883,9 +882,9 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function event_multiedit_form($name, $methods = NULL)
+	function event_multiedit_form($name, $methods = null, $page, $sort, $dir, $crit, $search_method)
 	{
-		$method = ps('method');
+		$method = ps('edit_method');
 
 		if ($methods === NULL)
 		{
@@ -894,30 +893,23 @@ $LastChangedRevision$
 			);
 		}
 
-		if ($name == 'list')
-		{
-			$methods = array(
-				'delete'         => gTxt('delete'),
-				'changesection'  => gTxt('changesection'),
-				'changestatus'   => gTxt('changestatus'),
-				'changecomments' => gTxt('changecomments')
-			);
-		}
-
-		return gTxt('with_selected').sp.
-			selectInput('method', $methods, $method, 1, 
-				( ($name == 'list') ? ' id="withselected" onchange="poweredit(this); return false;"' : '' )
+		return '<label for="withselected">'.gTxt('with_selected').'</label>'.sp.
+			selectInput('edit_method', $methods, $method, 1, 
+				( ($name == 'list') ? ' id="withselected" onchange="poweredit(this); return false;"' : ' id="withselected"' )
 			).
-			eInput($name).
-			sInput($name.'_multi_edit').
-			fInput('submit', '', gTxt('go'), 'smallerbox');
+			n.eInput($name).
+			n.sInput($name.'_multi_edit').
+			n.hInput('page', $page).
+			( $sort ? n.hInput('sort', $sort).n.hInput('dir', $dir) : '' ).
+			( $crit ? n.hInput('crit', $crit).n.hInput('search_method', $search_method) : '' ).
+			n.fInput('submit', '', gTxt('go'), 'smallerbox');
 	}
 
 // -------------------------------------------------------------
 
 	function event_multi_edit($tablename, $idkeyname)
 	{
-		$method = ps('method');
+		$method = ps('edit_method');
 		$things = ps('selected');
 
 		if ($things)

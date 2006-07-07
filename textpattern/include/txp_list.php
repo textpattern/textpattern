@@ -40,7 +40,7 @@ $LastChangedRevision$
 
 		extract(get_prefs());
 
-		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'method')));
+		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
 
 		$sesutats = array_flip($statuses);
 
@@ -49,44 +49,44 @@ $LastChangedRevision$
 		switch ($sort)
 		{
 			case 'id':
-				$sort_sql = '`ID` '.$dir;
+				$sort_sql = 'ID '.$dir;
 			break;
 
 			case 'posted':
-				$sort_sql = '`Posted` '.$dir;
+				$sort_sql = 'Posted '.$dir;
 			break;
 
 			case 'title':
-				$sort_sql = '`Title` '.$dir.', `Posted` desc';
+				$sort_sql = 'Title '.$dir.', Posted desc';
 			break;
 
 			case 'section':
-				$sort_sql = '`Section` '.$dir.', `Posted` desc';
+				$sort_sql = 'Section '.$dir.', Posted desc';
 			break;
 
 			case 'category1':
-				$sort_sql = '`Category1` '.$dir.', `Posted` desc';
+				$sort_sql = 'Category1 '.$dir.', Posted desc';
 			break;
 
 			case 'category2':
-				$sort_sql = '`Category2` '.$dir.', `Posted` desc';
+				$sort_sql = 'Category2 '.$dir.', Posted desc';
 			break;
 
 			case 'status':
-				$sort_sql = '`Status` '.$dir.', `Posted` desc';
+				$sort_sql = 'Status '.$dir.', Posted desc';
 			break;
 
 			case 'author':
-				$sort_sql = '`AuthorID` '.$dir.', `Posted` desc';
+				$sort_sql = 'AuthorID '.$dir.', Posted desc';
 			break;
 
 			case 'comments':
-				$sort_sql = '`comments_count` '.$dir.', `Posted` desc';
+				$sort_sql = 'comments_count '.$dir.', Posted desc';
 			break;
 
 			default:
 				$dir = 'desc';
-				$sort_sql = '`Posted` '.$dir;
+				$sort_sql = 'Posted '.$dir;
 			break;
 		}
 
@@ -94,28 +94,28 @@ $LastChangedRevision$
 
 		$criteria = 1;
 
-		if ($crit or $method)
+		if ($crit or $search_method)
 		{
 			$crit_escaped = doSlash($crit);
 
 			$critsql = array(
-				'id'         => "`ID` = '$crit_escaped'",
-				'title_body' => "`Title` rlike '$crit_escaped' or `Body` rlike '$crit_escaped'",
-				'section'		 => "`Section` rlike '$crit_escaped'",
-				'categories' => "`Category1` rlike '$crit_escaped' or `Category2` rlike '$crit_escaped'",
-				'status'		 => "`Status` = '".(@$sesutats[gTxt($crit_escaped)])."'",
-				'author'		 => "`AuthorID` rlike '$crit_escaped'",
+				'id'         => "ID = '$crit_escaped'",
+				'title_body' => "Title rlike '$crit_escaped' or Body rlike '$crit_escaped'",
+				'section'		 => "Section rlike '$crit_escaped'",
+				'categories' => "Category1 rlike '$crit_escaped' or Category2 rlike '$crit_escaped'",
+				'status'		 => "Status = '".(@$sesutats[gTxt($crit_escaped)])."'",
+				'author'		 => "AuthorID rlike '$crit_escaped'",
 			);
 
-			if (array_key_exists($method, $critsql))
+			if (array_key_exists($search_method, $critsql))
 			{
-				$criteria = $critsql[$method];
+				$criteria = $critsql[$search_method];
 				$limit = 500;
 			}
 
 			else
 			{
-				$method = '';
+				$search_method = '';
 			}
 		}
 
@@ -125,7 +125,7 @@ $LastChangedRevision$
 		{
 			if ($criteria != 1)
 			{
-				echo n.list_search_form($crit, $method).
+				echo n.list_search_form($crit, $search_method).
 					n.graf(gTxt('no_results_found'), ' style="text-align: center;"');
 			}
 
@@ -141,7 +141,7 @@ $LastChangedRevision$
 
 		list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-		echo n.list_search_form($crit, $method);
+		echo n.list_search_form($crit, $search_method);
 
 		$rs = safe_rows_start('*, unix_timestamp(Posted) as uPosted', 'textpattern',
 			"$criteria order by $sort_sql limit $offset, $limit"
@@ -171,16 +171,16 @@ $LastChangedRevision$
 
 				n.startTable('list').
 				n.tr(
-					n.column_head('ID', 'id', 'list', true, $switch_dir, $crit, $method).
+					n.column_head('ID', 'id', 'list', true, $switch_dir, $crit, $search_method).
 					hCell().
-					column_head('posted', 'posted', 'list', true, $switch_dir, $crit, $method).
-					column_head('title', 'title', 'list', true, $switch_dir, $crit, $method).
-					column_head('section', 'section', 'list', true, $switch_dir, $crit, $method).
-					column_head('category1', 'category1', 'list', true, $switch_dir, $crit, $method).
-					column_head('category2', 'category2', 'list', true, $switch_dir, $crit, $method).
-					column_head('status', 'status', 'list', true, $switch_dir, $crit, $method).
-					column_head('author', 'author', 'list', true, $switch_dir, $crit, $method).
-					column_head('comments', 'comments', 'list', true, $switch_dir, $crit, $method).
+					column_head('posted', 'posted', 'list', true, $switch_dir, $crit, $search_method).
+					column_head('title', 'title', 'list', true, $switch_dir, $crit, $search_method).
+					column_head('section', 'section', 'list', true, $switch_dir, $crit, $search_method).
+					column_head('category1', 'category1', 'list', true, $switch_dir, $crit, $search_method).
+					column_head('category2', 'category2', 'list', true, $switch_dir, $crit, $search_method).
+					column_head('status', 'status', 'list', true, $switch_dir, $crit, $search_method).
+					column_head('author', 'author', 'list', true, $switch_dir, $crit, $search_method).
+					column_head('comments', 'comments', 'list', true, $switch_dir, $crit, $search_method).
 					hCell()
 				);
 
@@ -251,14 +251,14 @@ $LastChangedRevision$
 			echo n.n.tr(
 				tda(
 					select_buttons().
-					list_multiedit_form()
+					list_multiedit_form($page, $sort, $dir, $crit, $search_method)
 				,' colspan="11" style="text-align: right; border: none;"')
 			).
 
 			n.endTable().
 			n.'</form>'.
 
-			n.list_nav_form($page, $numPages, $sort, $dir, $crit, $method).
+			n.list_nav_form($page, $numPages, $sort, $dir, $crit, $search_method).
 
 			n.pageby_form('list', $article_list_pageby);
 		}
@@ -323,9 +323,17 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function list_multiedit_form() 
+
+	function list_multiedit_form($page, $sort, $dir, $crit, $search_method)
 	{
-		return event_multiedit_form('list');
+		$methods = array(
+			'delete'         => gTxt('delete'),
+			'changesection'  => gTxt('changesection'),
+			'changestatus'   => gTxt('changestatus'),
+			'changecomments' => gTxt('changecomments')
+		);
+
+		return event_multiedit_form('list', $methods, $page, $sort, $dir, $crit, $search_method);
 	}
 
 // -------------------------------------------------------------

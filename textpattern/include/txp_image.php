@@ -41,7 +41,7 @@ $LastChangedRevision$
 		extract($txpcfg);
 		extract(get_prefs());
 
-		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'method')));
+		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
 
 		if (!is_dir(IMPATH) or !is_writeable(IMPATH))
 		{
@@ -93,7 +93,7 @@ $LastChangedRevision$
 
 		$criteria = 1;
 
-		if ($crit or $method)
+		if ($crit or $search_method)
 		{
 			$crit_escaped = doSlash($crit);
 
@@ -104,9 +104,9 @@ $LastChangedRevision$
 				'author'	 => "`author` like '%$crit_escaped%'"
 			);
 
-			if (array_key_exists($method, $critsql))
+			if (array_key_exists($search_method, $critsql))
 			{
-				$criteria = $critsql[$method];
+				$criteria = $critsql[$search_method];
 				$limit = 500;
 			}
 
@@ -122,7 +122,7 @@ $LastChangedRevision$
 		{
 			if ($criteria != 1)
 			{
-				echo n.image_search_form($crit, $method).
+				echo n.image_search_form($crit, $search_method).
 					n.graf(gTxt('no_results_found'), ' style="text-align: center;"');
 			}
 
@@ -138,7 +138,7 @@ $LastChangedRevision$
 
 		list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-		echo image_search_form($crit, $method);
+		echo image_search_form($crit, $search_method);
 
 		$rs = safe_rows_start('*, unix_timestamp(`date`) as uDate', 'txp_image',
 			"$criteria order by $sort_sql limit $offset, $limit
@@ -148,14 +148,14 @@ $LastChangedRevision$
 		{
 			echo n.n.startTable('list').
 				n.tr(
-					column_head('ID', 'id', 'image', true, $switch_dir, $crit, $method).
+					column_head('ID', 'id', 'image', true, $switch_dir, $crit, $search_method).
 					hCell().
-					column_head('date', 'date', 'image', true, $switch_dir, $crit, $method).
-					column_head('name', 'name', 'image', true, $switch_dir, $crit, $method).
-					column_head('thumbnail', 'thumbnail', 'image', true, $switch_dir, $crit, $method).
+					column_head('date', 'date', 'image', true, $switch_dir, $crit, $search_method).
+					column_head('name', 'name', 'image', true, $switch_dir, $crit, $search_method).
+					column_head('thumbnail', 'thumbnail', 'image', true, $switch_dir, $crit, $search_method).
 					hCell(gTxt('tags')).
-					column_head('image_category', 'category', 'image', true, $switch_dir, $crit, $method).
-					column_head('author', 'author', 'image', true, $switch_dir, $crit, $method).
+					column_head('image_category', 'category', 'image', true, $switch_dir, $crit, $search_method).
+					column_head('author', 'author', 'image', true, $switch_dir, $crit, $search_method).
 					hCell()
 				);
 
@@ -164,7 +164,7 @@ $LastChangedRevision$
 				extract($a);
 
 				$edit_url = '?event=image'.a.'step=image_edit'.a.'id='.$id.a.'sort='.$sort.
-					a.'dir='.$dir.a.'page='.$page.a.'method='.$method.a.'crit='.$crit;
+					a.'dir='.$dir.a.'page='.$page.a.'search_method='.$search_method.a.'crit='.$crit;
 
 				$name = empty($name) ? gTxt('unnamed') : $name;
 
@@ -220,7 +220,7 @@ $LastChangedRevision$
 
 			echo endTable().
 
-			image_nav_form($page, $numPages, $sort, $dir, $crit, $method).
+			image_nav_form($page, $numPages, $sort, $dir, $crit, $search_method).
 
 			pageby_form('list', $article_list_pageby);
 		}

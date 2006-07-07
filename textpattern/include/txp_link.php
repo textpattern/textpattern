@@ -56,34 +56,35 @@ $LastChangedRevision$
 
 		extract(get_prefs());
 
-		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'method')));
+		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
 
 		$dir = ($dir == 'desc') ? 'desc' : 'asc';
 
 		switch ($sort)
 		{
 			case 'id':
-				$sort_sql = '`id` '.$dir;
+				$sort_sql = 'id '.$dir;
 			break;
 
 			case 'name':
-				$sort_sql = '`linksort` '.$dir.', `id` asc';
+				$sort_sql = 'linksort '.$dir.', id asc';
 			break;
 
 			case 'description':
-				$sort_sql = '`description` '.$dir.', `id` asc';
+				$sort_sql = 'description '.$dir.', id asc';
 			break;
 
 			case 'category':
-				$sort_sql = '`category` '.$dir.', `id` asc';
+				$sort_sql = 'category '.$dir.', id asc';
 			break;
 
 			case 'date':
-				$sort_sql = '`date` '.$dir.', `id` asc';
+				$sort_sql = 'date '.$dir.', id asc';
+			break;
 
 			default:
 				$dir = 'asc';
-				$sort_sql = '`linksort` asc';
+				$sort_sql = 'linksort asc';
 			break;
 		}
 
@@ -91,26 +92,26 @@ $LastChangedRevision$
 
 		$criteria = 1;
 
-		if ($crit or $method)
+		if ($crit or $search_method)
 		{
 			$crit_escaped = doSlash($crit);
 
 			$critsql = array(
 				'id'			     => "id = '$crit_escaped'",
-				'name'		     => "`linkname` like '%$crit_escaped%'",
-				'description'	 => "`description` like '%$crit_escaped%'",
-				'category'     => "`category` like '%$crit_escaped%'"
+				'name'		     => "linkname like '%$crit_escaped%'",
+				'description'	 => "description like '%$crit_escaped%'",
+				'category'     => "category like '%$crit_escaped%'"
 			);
 
-			if (array_key_exists($method, $critsql))
+			if (array_key_exists($search_method, $critsql))
 			{
-				$criteria = $critsql[$method];
+				$criteria = $critsql[$search_method];
 				$limit = 500;
 			}
 
 			else
 			{
-				$method = '';
+				$search_method = '';
 			}
 		}
 
@@ -120,7 +121,7 @@ $LastChangedRevision$
 		{
 			if ($criteria != 1)
 			{
-				echo n.link_search_form($crit, $method).
+				echo n.link_search_form($crit, $search_method).
 					n.graf(gTxt('no_results_found'), ' style="text-align: center;"');
 			}
 
@@ -136,9 +137,9 @@ $LastChangedRevision$
 
 		list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-		echo link_search_form($crit, $method);
+		echo link_search_form($crit, $search_method);
 
-		$rs = safe_rows_start('*, unix_timestamp(`date`) as uDate', 'txp_link', "$criteria order by $sort_sql limit $offset, $limit");
+		$rs = safe_rows_start('*, unix_timestamp(date) as uDate', 'txp_link', "$criteria order by $sort_sql limit $offset, $limit");
 
 		if ($rs)
 		{
@@ -147,12 +148,12 @@ $LastChangedRevision$
 				startTable('list').
 
 				n.tr(
-					column_head('ID', 'id', 'link', true, $switch_dir, $crit, $method).
+					column_head('ID', 'id', 'link', true, $switch_dir, $crit, $search_method).
 					hCell().
-					column_head('link_name', 'name', 'link', true, $switch_dir, $crit, $method).
-					column_head('description', 'description', 'link', true, $switch_dir, $crit, $method).
-					column_head('link_category', 'category', 'link', true, $switch_dir, $crit, $method).
-					column_head('date', 'date', 'link', true, $switch_dir, $crit, $method).
+					column_head('link_name', 'name', 'link', true, $switch_dir, $crit, $search_method).
+					column_head('description', 'description', 'link', true, $switch_dir, $crit, $search_method).
+					column_head('link_category', 'category', 'link', true, $switch_dir, $crit, $search_method).
+					column_head('date', 'date', 'link', true, $switch_dir, $crit, $search_method).
 					hCell()
 				);
 
@@ -161,7 +162,7 @@ $LastChangedRevision$
 					extract($a);				
 
 					$edit_url = '?event=link'.a.'step=link_edit'.a.'id='.$id.a.'sort='.$sort.
-						a.'dir='.$dir.a.'page='.$page.a.'method='.$method.a.'crit='.$crit;
+						a.'dir='.$dir.a.'page='.$page.a.'search_method='.$search_method.a.'crit='.$crit;
 
 					echo tr(
 
@@ -199,14 +200,14 @@ $LastChangedRevision$
 			echo n.n.tr(
 				tda(
 					select_buttons().
-					link_multiedit_form()
+					link_multiedit_form($page, $sort, $dir, $crit, $search_method)
 				, ' colspan="7" style="text-align: right; border: none;"')
 			).
 
 			endTable().
 			'</form>'.
 
-			n.link_nav_form($page, $numPages, $sort, $dir, $crit, $method).
+			n.link_nav_form($page, $numPages, $sort, $dir, $crit, $search_method).
 
 			pageby_form('link', $link_list_pageby);
 		}
@@ -429,9 +430,14 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function link_multiedit_form() 
+
+	function link_multiedit_form($page, $sort, $dir, $crit, $search_method) 
 	{
-		return event_multiedit_form('link');
+		$methods = array(
+			'delete' => gTxt('delete')
+		);
+
+		return event_multiedit_form('link', $methods, $page, $sort, $dir, $crit, $search_method);
 	}
 
 // -------------------------------------------------------------

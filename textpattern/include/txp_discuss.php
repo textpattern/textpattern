@@ -69,47 +69,47 @@ $LastChangedRevision$
 
 		extract(get_prefs());
 
-		extract(gpsa(array('sort', 'dir', 'page', 'crit', 'method')));
+		extract(gpsa(array('sort', 'dir', 'page', 'crit', 'search_method')));
 
 		$dir = ($dir == 'desc') ? 'desc' : 'asc';
 
 		switch ($sort)
 		{
 			case 'id':
-				$sort_sql = '`discussid` '.$dir;
+				$sort_sql = 'discussid '.$dir;
 			break;
 
 			case 'date':
-				$sort_sql = '`posted` '.$dir;
+				$sort_sql = 'posted '.$dir;
 			break;
 
 			case 'ip':
-				$sort_sql = '`ip` '.$dir.', `posted` asc';
+				$sort_sql = 'ip '.$dir.', posted asc';
 			break;
 
 			case 'name':
-				$sort_sql = '`name` '.$dir.', `posted` asc';
+				$sort_sql = 'name '.$dir.', posted asc';
 			break;
 
 			case 'email':
-				$sort_sql = '`email` '.$dir.', `posted` asc';
+				$sort_sql = 'email '.$dir.', posted asc';
 			break;
 
 			case 'website':
-				$sort_sql = '`web` '.$dir.', `posted` asc';
+				$sort_sql = 'web '.$dir.', posted asc';
 			break;
 
 			case 'message':
-				$sort_sql = '`message` '.$dir.', `posted` asc';
+				$sort_sql = 'message '.$dir.', posted asc';
 			break;
 
 			case 'parent':
-				$sort_sql = '`parentid` '.$dir.', `posted` asc';
+				$sort_sql = 'parentid '.$dir.', posted asc';
 			break;
 
 			default:
 				$dir = 'desc';
-				$sort_sql = '`posted` '.$dir;
+				$sort_sql = 'posted '.$dir;
 			break;
 		}
 
@@ -117,7 +117,7 @@ $LastChangedRevision$
 
 		$criteria = 1;
 
-		if ($crit or $method)
+		if ($crit or $search_method)
 		{
 			$crit_escaped = doSlash($crit);
 
@@ -131,15 +131,15 @@ $LastChangedRevision$
 				'ip'			=> "ip like %$crit_escaped%",
 			);
 
-			if (array_key_exists($method, $critsql))
+			if (array_key_exists($search_method, $critsql))
 			{
-				$criteria = $critsql[$method];
+				$criteria = $critsql[$search_method];
 				$limit = 500;
 			}
 
 			else
 			{
-				$method = '';
+				$search_method = '';
 			}
 		}
 
@@ -149,7 +149,7 @@ $LastChangedRevision$
 		{
 			if ($criteria != 1)
 			{
-				echo n.discuss_search_form($crit, $method).
+				echo n.discuss_search_form($crit, $search_method).
 					n.graf(gTxt('no_results_found'), ' style="text-align: center;"');
 			}
 
@@ -165,11 +165,10 @@ $LastChangedRevision$
 
 		list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-		echo discuss_search_form($crit, $method);
+		echo discuss_search_form($crit, $search_method);
 
-		$rs = safe_rows_start('*, unix_timestamp(posted) as uPosted', 'txp_discuss', "
-			$criteria order by $sort_sql limit $offset, $limit
-		");
+		$rs = safe_rows_start('*, unix_timestamp(posted) as uPosted', 'txp_discuss', 
+			"$criteria order by $sort_sql limit $offset, $limit");
 
 		if ($rs)
 		{
@@ -177,16 +176,16 @@ $LastChangedRevision$
 
 				n.startTable('list').
 
-				column_head('ID', 'id', 'discuss', true, $switch_dir, $crit, $method).
+				column_head('ID', 'id', 'discuss', true, $switch_dir, $crit, $search_method).
 				hCell().
-				column_head('date', 'date', 'discuss', true, $switch_dir, $crit, $method).
-				column_head('name', 'name', 'discuss', true, $switch_dir, $crit, $method).
-				column_head('message', 'message', 'discuss', true, $switch_dir, $crit, $method).
-				column_head('email', 'email', 'discuss', true, $switch_dir, $crit, $method).
-				column_head('website', 'website', 'discuss', true, $switch_dir, $crit, $method).
-				column_head('IP', 'ip', 'discuss', true, $switch_dir, $crit, $method).
-				column_head('status', 'status', 'discuss', true, $switch_dir, $crit, $method).
-				column_head('parent', 'parent', 'discuss', true, $switch_dir, $crit, $method).
+				column_head('date', 'date', 'discuss', true, $switch_dir, $crit, $search_method).
+				column_head('name', 'name', 'discuss', true, $switch_dir, $crit, $search_method).
+				column_head('message', 'message', 'discuss', true, $switch_dir, $crit, $search_method).
+				column_head('email', 'email', 'discuss', true, $switch_dir, $crit, $search_method).
+				column_head('website', 'website', 'discuss', true, $switch_dir, $crit, $search_method).
+				column_head('IP', 'ip', 'discuss', true, $switch_dir, $crit, $search_method).
+				column_head('status', 'status', 'discuss', true, $switch_dir, $crit, $search_method).
+				column_head('parent', 'parent', 'discuss', true, $switch_dir, $crit, $search_method).
 				hCell();
 
 			include_once txpath.'/publish/taghandlers.php';
@@ -195,10 +194,10 @@ $LastChangedRevision$
 			{
 				extract($a);
 
-				$tq = safe_row('*, `ID` as thisid, unix_timestamp(`Posted`) as posted', 'textpattern', "ID = '".$parentid."'");
+				$tq = safe_row('*, ID as thisid, unix_timestamp(Posted) as posted', 'textpattern', "ID = '".$parentid."'");
 
 				$edit_url = '?event=discuss'.a.'step=discuss_edit'.a.'discussid='.$discussid.a.'sort='.$sort.
-					a.'dir='.$dir.a.'page='.$page.a.'method='.$method.a.'crit='.$crit;
+					a.'dir='.$dir.a.'page='.$page.a.'search_method='.$search_method.a.'crit='.$crit;
 
 				$dmessage = ($visible == SPAM) ? short_preview($message) : $message;
 
@@ -233,7 +232,7 @@ $LastChangedRevision$
 				{
 					$parent_title = empty($tq['Title']) ? '<em>'.gTxt('untitled').'</em>' : $tq['Title'];
 
-					$parent = href($parent_title, '?event=list'.a.'step=list'.a.'method='.$method.a.'crit='.$tq['ID']);
+					$parent = href($parent_title, '?event=list'.a.'step=list'.a.'search_method='.$search_method.a.'crit='.$tq['ID']);
 
 					$view = '';
 
@@ -279,14 +278,15 @@ $LastChangedRevision$
 
 			echo tr(
 				tda(
-					select_buttons().discuss_multiedit_form()
+					select_buttons().
+					discuss_multiedit_form($page, $sort, $dir, $crit, $search_method)
 				,' colspan="11" style="text-align: right; border: none;"')
 			).
 
 			endTable().
 			'</form>'.
 
-			discuss_nav_form($page, $numPages, $sort, $dir, $crit, $method).
+			discuss_nav_form($page, $numPages, $sort, $dir, $crit, $search_method).
 
 			pageby_form('discuss', $comment_list_pageby);
 		}
@@ -542,7 +542,7 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function discuss_multiedit_form() 
+	function discuss_multiedit_form($page, $sort, $dir, $crit, $search_method) 
 	{
 		$methods = array(
 			'ban'         => gTxt('ban_author'),
@@ -552,7 +552,7 @@ $LastChangedRevision$
 			'visible'     => gTxt('show'),
 		);
 
-		return event_multiedit_form('discuss', $methods);
+		return event_multiedit_form('discuss', $methods, $page, $sort, $dir, $crit, $search_method);
 	}
 
 // -------------------------------------------------------------

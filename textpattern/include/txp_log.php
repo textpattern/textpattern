@@ -54,7 +54,7 @@ $LastChangedRevision$
 
 		extract(get_prefs());
 
-		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'method')));
+		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
 
 		safe_delete('txp_log', "time < date_sub(now(), interval ".$expire_logs_after." day)");
 
@@ -63,36 +63,36 @@ $LastChangedRevision$
 		switch ($sort)
 		{
 			case 'time':
-				$sort_sql = '`time` '.$dir;
+				$sort_sql = 'time '.$dir;
 			break;
 
 			case 'ip':
-				$sort_sql = '`ip` '.$dir;
+				$sort_sql = 'ip '.$dir;
 			break;
 
 			case 'host':
-				$sort_sql = '`host` '.$dir;
+				$sort_sql = 'host '.$dir;
 			break;
 
 			case 'page':
-				$sort_sql = '`page` '.$dir;
+				$sort_sql = 'page '.$dir;
 			break;
 
 			case 'refer':
-				$sort_sql = '`refer` '.$dir;
+				$sort_sql = 'refer '.$dir;
 			break;
 
 			case 'method':
-				$sort_sql = '`method` '.$dir;
+				$sort_sql = 'method '.$dir;
 			break;
 
 			case 'status':
-				$sort_sql = '`status` '.$dir;
+				$sort_sql = 'status '.$dir;
 			break;
 
 			default:
 				$dir = 'desc';
-				$sort_sql = '`time` '.$dir;
+				$sort_sql = 'time '.$dir;
 			break;
 		}
 
@@ -100,28 +100,28 @@ $LastChangedRevision$
 
 		$criteria = 1;
 
-		if ($crit or $method)
+		if ($crit or $search_method)
 		{
 			$crit_escaped = doSlash($crit);
 
 			$critsql = array(
-				'ip'     => "`ip` like '%$crit_escaped%'",
-				'host'   => "`host` like '%$crit_escaped%'",
-				'page'   => "`page` like '%$crit_escaped%'",
-				'refer'  => "`refer` like '%$crit_escaped%'",
-				'method' => "`method` like '%$crit_escaped%'",
-				'status' => "`status` like '%$crit_escaped%'"
+				'ip'     => "ip like '%$crit_escaped%'",
+				'host'   => "host like '%$crit_escaped%'",
+				'page'   => "page like '%$crit_escaped%'",
+				'refer'  => "refer like '%$crit_escaped%'",
+				'method' => "method like '%$crit_escaped%'",
+				'status' => "status like '%$crit_escaped%'"
 			);
 
-			if (array_key_exists($method, $critsql))
+			if (array_key_exists($search_method, $critsql))
 			{
-				$criteria = $critsql[$method];
+				$criteria = $critsql[$search_method];
 				$limit = 500;
 			}
 
 			else
 			{
-				$method = '';
+				$search_method = '';
 			}
 		}
 
@@ -131,7 +131,7 @@ $LastChangedRevision$
 		{
 			if ($criteria != 1)
 			{
-				echo n.log_search_form($crit, $method).
+				echo n.log_search_form($crit, $search_method).
 					n.graf(gTxt('no_results_found'), ' style="text-align: center;"');
 			}
 
@@ -147,9 +147,9 @@ $LastChangedRevision$
 
 		list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-		echo n.log_search_form($crit, $method);
+		echo n.log_search_form($crit, $search_method);
 
-		$rs = safe_rows_start('*, unix_timestamp(`time`) as uTime', 'txp_log', 
+		$rs = safe_rows_start('*, unix_timestamp(time) as uTime', 'txp_log', 
 			"$criteria order by $sort_sql limit $offset, $limit");
 
 		if ($rs)
@@ -159,13 +159,13 @@ $LastChangedRevision$
 				startTable('list').
 
 				n.tr(
-					n.column_head('time', 'time', 'log', true, $switch_dir, $crit, $method).
-					column_head('IP', 'ip', 'log', true, $switch_dir, $crit, $method).
-					column_head('host', 'host', 'log', true, $switch_dir, $crit, $method).
-					column_head('page', 'page', 'log', true, $switch_dir, $crit, $method).
-					column_head('referrer', 'refer', 'log', true, $switch_dir, $crit, $method).
-					column_head('method', 'method', 'log', true, $switch_dir, $crit, $method).
-					column_head('status', 'status', 'log', true, $switch_dir, $crit, $method)
+					n.column_head('time', 'time', 'log', true, $switch_dir, $crit, $search_method).
+					column_head('IP', 'ip', 'log', true, $switch_dir, $crit, $search_method).
+					column_head('host', 'host', 'log', true, $switch_dir, $crit, $search_method).
+					column_head('page', 'page', 'log', true, $switch_dir, $crit, $search_method).
+					column_head('referrer', 'refer', 'log', true, $switch_dir, $crit, $search_method).
+					column_head('method', 'method', 'log', true, $switch_dir, $crit, $search_method).
+					column_head('status', 'status', 'log', true, $switch_dir, $crit, $search_method)
 				);
 
 			while ($a = nextRow($rs))
@@ -222,14 +222,14 @@ $LastChangedRevision$
 			echo n.n.tr(
 				tda(
 					select_buttons().
-					log_multiedit_form()
+					log_multiedit_form($page, $sort, $dir, $crit, $search_method)
 				, ' colspan="8" style="text-align: right; border: none;"')
 			).
 
 			n.endTable().
 			'</form>'.
 
-			n.log_nav_form($page, $numPages, $sort, $dir, $crit, $method).
+			n.log_nav_form($page, $numPages, $sort, $dir, $crit, $search_method).
 
 			n.pageby_form('log', $log_list_pageby);
 		} 
@@ -255,7 +255,7 @@ $LastChangedRevision$
 		return n.n.form(
 			graf(
 
-				gTxt('Search').sp.selectInput('method', $methods, $method).
+				gTxt('Search').sp.selectInput('search_method', $methods, $method).
 				fInput('text', 'crit', $crit, 'edit', '', '', '15').
 				eInput('log').
 				sInput('log_list').
@@ -296,9 +296,13 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function log_multiedit_form() 
+	function log_multiedit_form($page, $sort, $dir, $crit, $search_method) 
 	{
-		return event_multiedit_form('log');
+		$methods = array(
+			'delete' => gTxt('delete')
+		);
+
+		return event_multiedit_form('log', $methods, $page, $sort, $dir, $crit, $search_method);
 	}
 
 // -------------------------------------------------------------
