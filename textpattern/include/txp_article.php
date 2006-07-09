@@ -290,7 +290,8 @@ if (!empty($event) and $event == 'article') {
 
 		$GLOBALS['step'] = $step;
 
-		if (empty($textile_body) && $textile_body !== '0' && $step=='create') {
+		if ($step == 'create')
+		{
 			$textile_body = $use_textile;
 			$textile_excerpt = $use_textile;
 		}
@@ -320,7 +321,89 @@ if (!empty($event) and $event == 'article') {
 
 			startTable('edit').
 
-			'<tr><td>&nbsp;</td><td colspan="3">';
+  		'<tr>'.n.
+				'<td id="article-col-1">';
+
+		if ($view == 'text')
+		{
+
+		//-- markup help --------------
+
+			echo side_help($textile_body, $textile_excerpt).
+
+			'<h3><a href="#" onclick="toggleDisplay(\'advanced\'); return false;">'.gTxt('advanced_options').'</a></h3>',
+			'<div id="advanced" style="display:none;">',
+
+			// markup selection
+				n.graf('<label for="markup-body">'.gTxt('article_markup').'</label>'.br.
+					pref_text('textile_body', $textile_body, 'markup-body')),
+
+				n.graf('<label for="markup-excerpt">'.gTxt('excerpt_markup').'</label>'.br.
+					pref_text('textile_excerpt', $textile_excerpt, 'markup-excerpt')),
+
+				// form override
+			($allow_form_override)
+			?	graf('<label for="override-form">'.gTxt('override_default_form').'</label>'.br.
+					form_pop($override_form, 'override-form').sp.popHelp('override_form'))
+			:	'',
+			
+				// custom fields, believe it or not
+			($custom_1_set)  ? custField(  1, $custom_1_set,  $custom_1 )    : '',
+			($custom_2_set)  ? custField(  2, $custom_2_set,  $custom_2 )    : '',
+			($custom_3_set)  ? custField(  3, $custom_3_set,  $custom_3 )    : '',
+			($custom_4_set)  ? custField(  4, $custom_4_set,  $custom_4 )    : '',
+			($custom_5_set)  ? custField(  5, $custom_5_set,  $custom_5 )    : '',
+			($custom_6_set)  ? custField(  6, $custom_6_set,  $custom_6 )    : '',
+			($custom_7_set)  ? custField(  7, $custom_7_set,  $custom_7 )    : '',
+			($custom_8_set)  ? custField(  8, $custom_8_set,  $custom_8 )    : '',
+			($custom_9_set)  ? custField(  9, $custom_9_set,  $custom_9 )    : '',
+			($custom_10_set) ? custField( 10, $custom_10_set, $custom_10 )   : '',
+
+			// keywords
+				n.graf('<label for="keywords">'.gTxt('keywords').'</label>'.sp.popHelp('keywords').br.
+					n.'<textarea id="keywords" name="Keywords" cols="18" rows="5">'.$Keywords.'</textarea>'),
+
+			// article image
+				n.graf('<label for="article-image">'.gTxt('article_image').'</label>'.sp.popHelp('article_image').br.
+					fInput('text', 'Image', $Image, 'edit', '', '', 22, '', 'article-image')),
+
+			// url title
+				n.graf('<label for="url-title">'.gTxt('url_title').'</label>'.sp.popHelp('url_title').br.
+					fInput('text', 'url_title', $url_title, 'edit', '', '', 22, '', 'url-title')),
+		
+			'</div>
+			
+			<h3><a href="#" onclick="toggleDisplay(\'recent\'); return false;">'.gTxt('recent_articles').'</a>'.'</h3>'.
+			'<div id="recent" style="display:none;">';
+			
+			$recents = safe_rows_start("Title, ID",'textpattern',"1=1 order by LastMod desc limit 10");
+			
+			if ($recents)
+			{
+				echo '<ul class="plain-list">';
+
+				while($recent = nextRow($recents))
+				{
+					if (!$recent['Title'])
+					{
+						$recent['Title'] = gTxt('untitled').sp.$recent['ID'];
+					}
+
+					echo n.t.'<li><a href="?event=article'.a.'step=edit'.a.'ID='.$recent['ID'].'">'.$recent['Title'].'</a></li>';
+				}
+
+				echo '</ul>';
+			}
+			
+			echo '</div>';
+		}
+
+		else
+		{
+			echo sp;
+		}
+
+  	echo '</td>'.n.'<td id="article-main">';
 
 	//-- title input -------------- 
 
@@ -336,7 +419,7 @@ if (!empty($event) and $event == 'article') {
 
 		if ($view == 'text')
 		{
-			echo br.'<input type="text" id="title" name="Title" value="'.cleanfInput($Title).'" class="edit" size="40" tabindex="1" />';
+			echo '<p><input type="text" id="title" name="Title" value="'.cleanfInput($Title).'" class="edit" size="40" tabindex="1" />';
 
 			if ($Status == 4 or $Status == 5)
 			{
@@ -346,94 +429,9 @@ if (!empty($event) and $event == 'article') {
 
 				echo sp.sp.'<a href="'.permlinkurl($article_array).'">'.gTxt('view').'</a>';
 			}
+
+			echo '</p>';
 		}
-
-		echo '</td></tr>'.
-
-	//-- article input --------------
-
-  		'<tr>'.n.
-				'<td id="article-col-1">',
-
-	//-- textile help --------------
-
-		($view=='text' && ($textile_body == USE_TEXTILE || $textile_excerpt == USE_TEXTILE)) ?
-		
-		'<p><a href="#" onclick="toggleDisplay(\'textile_help\');return false;">'.gTxt('textile_help').'</a></p>
-		<div id="textile_help" style="display:none;">'.sidehelp().'</div>' : sp;
-
-		if ($view=='text') {
-		
-			echo 
-			'<p><a href="#" onclick="toggleDisplay(\'advanced\'); return false;">'.
-				gTxt('advanced_options').'</a></p>',
-			'<div id="advanced" style="display:none;">',
-				
-				// textile toggles
-			graf(gTxt('use_textile').br.
-				tag(gTxt('article').br.pref_text('textile_body',$textile_body)
-					,'label').
-				br.
-				tag(gTxt('excerpt').br.pref_text('textile_excerpt',$textile_excerpt)
-					,'label')),
-
-				// form override
-			($allow_form_override)
-			?	graf(gTxt('override_default_form').br.
-					form_pop($override_form).popHelp('override_form'))
-			:	'',
-			
-				// custom fields, believe it or not
-			($custom_1_set)  ? custField(  1, $custom_1_set,  $custom_1 )    : '',
-			($custom_2_set)  ? custField(  2, $custom_2_set,  $custom_2 )    : '',
-			($custom_3_set)  ? custField(  3, $custom_3_set,  $custom_3 )    : '',
-			($custom_4_set)  ? custField(  4, $custom_4_set,  $custom_4 )    : '',
-			($custom_5_set)  ? custField(  5, $custom_5_set,  $custom_5 )    : '',
-			($custom_6_set)  ? custField(  6, $custom_6_set,  $custom_6 )    : '',
-			($custom_7_set)  ? custField(  7, $custom_7_set,  $custom_7 )    : '',
-			($custom_8_set)  ? custField(  8, $custom_8_set,  $custom_8 )    : '',
-			($custom_9_set)  ? custField(  9, $custom_9_set,  $custom_9 )    : '',
-			($custom_10_set) ? custField( 10, $custom_10_set, $custom_10 )   : '',
-
-
-				// keywords
-			graf(gTxt('keywords').popHelp('keywords').br.
-				'<textarea id="keywords" name="Keywords" cols="17" rows="5">'.$Keywords.'</textarea>'),
-
-				// article image
-			graf(gTxt('article_image').popHelp('article_image').br.
-				fInput('text','Image',$Image,'edit')),
-
-				// url title
-			graf(gTxt('url_title').popHelp('url_title').br.
-				fInput('text','url_title',$url_title,'edit')).
-		
-			'</div>
-			
-			<p><a href="#" onclick="toggleDisplay(\'recent\'); return false;">' . gTxt('recent_articles').'</a>'.'</p>'.
-			'<div id="recent" style="display:none;">';
-			
-			$recents = safe_rows_start("Title, ID",'textpattern',"1=1 order by LastMod desc limit 10");
-			
-			if ($recents) {
-				echo '<p>';
-				while($recent = nextRow($recents)) {
-					extract($recent);
-					if (!$Title) $Title = gTxt('untitled').sp.$ID;
-					echo '<a href="?event=article'.a.'step=edit'.a.'ID='.$ID.'">'.$Title.'</a>'.br.n;
-				}
-				echo '</p>';
-			}
-			
-			echo '</div>';
-		}
-
-		else
-		{
-			echo sp;
-		}
-
-  	echo '</td>'.n.'<td id="article-main">';
 
     if ($view == 'preview')
     { 
@@ -475,7 +473,7 @@ if (!empty($event) and $event == 'article') {
 
 		else
 		{
-			echo '<textarea id="body" name="Body" cols="55" rows="31" tabindex="2">'.htmlspecialchars($Body).'</textarea>';
+			echo n.graf('<textarea id="body" name="Body" cols="55" rows="31" tabindex="2">'.htmlspecialchars($Body).'</textarea>');
 		}
 
 	//-- excerpt --------------------
@@ -486,13 +484,13 @@ if (!empty($event) and $event == 'article') {
 			{
 				$Excerpt = str_replace('&amp;', '&', htmlspecialchars($Excerpt));
 
-				echo graf(gTxt('excerpt').popHelp('excerpt').br.
+				echo n.graf('<label for="excerpt">'.gTxt('excerpt').'</label>'.sp.popHelp('excerpt').br.
 					'<textarea id="excerpt" name="Excerpt" cols="55" rows="5" tabindex="3">'.$Excerpt.'</textarea>');
 			}
 
 			else
 			{
-				echo '<hr width="50%" />';
+				echo n.'<hr width="50%" />';
 
 				echo ($textile_excerpt == USE_TEXTILE)
 				?	($view=='preview')
@@ -508,29 +506,32 @@ if (!empty($event) and $event == 'article') {
 	//-- author --------------
 	
 		if ($view=="text" && $step != "create") {
-			echo "<p><small>".gTxt('posted_by')." $AuthorID: ",safe_strftime('%H:%M %d %b %Y',$sPosted);
+			echo '<p class="small">'.gTxt('posted_by').": $AuthorID &#183; ".safe_strftime('%d %b %Y &#183; %I:%M:%S %p',$sPosted);
 			if($sPosted != $sLastMod) {
-				echo br.gTxt('modified_by')." $LastModID: ", safe_strftime('%H:%M %d %b %Y',$sLastMod);
+				echo br.gTxt('modified_by').": $LastModID &#183; ".safe_strftime('%d %b %Y &#183; %I:%M:%S %p',$sLastMod);
 			}
-				echo '</small></p>';
+				echo '</p>';
 			}
 
 	echo hInput('from_view',$view),
 	'</td>';
-	echo '<td valign="top" align="left" width="20">';
+	echo '<td id="article-tabs">';
 
   	//-- layer tabs -------------------
 
 		echo ($use_textile == USE_TEXTILE || $textile_body == USE_TEXTILE)
-		?	tab('text',$view).tab('html',$view).tab('preview',$view)
+		?	graf(tab('text',$view).br.tab('html',$view).br.tab('preview',$view))
 		:	'&#160;';
 	echo '</td>';
 ?>	
-<td id="article-col-2" align="left">
+<td id="article-col-2">
 <?php 
-	//-- prev/next article links -- 
 
-		if ($view=='text') {
+		if ($view == 'text')
+		{
+
+		//-- prev/next article links -- 
+
 			if ($step!='create' and ($prev_id or $next_id)) {
 				echo '<p>',
 				($prev_id)
@@ -543,112 +544,147 @@ if (!empty($event) and $event == 'article') {
 				:	'',
 				'</p>';
 			}
-		}
-			
-	//-- status radios --------------
-	 	
-			echo ($view == 'text') ? n.graf(status_radio($Status)).n : '';
 
+		//-- status radios --------------
 
-	//-- category selects -----------
+			echo n.n.'<fieldset>'.
+				n.'<legend>'.gTxt('status').'</legend>'.
+				n.status_radio($Status).
+				n.'</fieldset>';
 
-			echo ($view=='text')
-			?	graf(gTxt('categorize').
-				' ['.eLink('category','','','',gTxt('edit')).']'.br.
-				category_popup('Category1',$Category1).
-				category_popup('Category2',$Category2))
-			:	'';
+		//-- category selects -----------
 
-	//-- section select --------------
+			echo n.n.'<fieldset>'.
+				n.'<legend>'.gTxt('sort_display').'</legend>'.
+
+				n.graf('<label for="category-1">'.gTxt('category1').'</label> '.
+					'<span class="small">['.eLink('category', '', '', '', gTxt('edit')).']</span>'.br.
+					n.category_popup('Category1', $Category1, 'category-1')).
+
+				n.graf('<label for="category-2">'.gTxt('category2').'</label>'.br.
+					n.category_popup('Category2', $Category2, 'category-2'));
+
+		//-- section select --------------
 
 			if(!$from_view && !$pull) $Section = getDefaultSection();
-			echo ($view=='text')
-			?	graf(gTxt('section').' ['.eLink('section','','','',gTxt('edit')).']'.br.
-				section_popup($Section))
-			:	'';
 
-	//-- comments stuff --------------
+			echo n.graf('<label for="section">'.gTxt('section').'</label> '.
+				'<span class="small">['.eLink('section', '', '', '', gTxt('edit')).']</span>'.br.
+				section_popup($Section, 'section')).
+
+				n.'</fieldset>';
+
+		//-- comments stuff --------------
 
 			if($step=="create") {
 				//Avoiding invite disappear when previewing
 				$AnnotateInvite = (!empty($store_out['AnnotateInvite']))? $store_out['AnnotateInvite'] : $comments_default_invite;
 				if ($comments_on_default==1) { $Annotate = 1; }
 			}
-			echo ($use_comments==1 && $view=='text')
-			?	graf(gTxt('comments').br.onoffRadio("Annotate",$Annotate).br.
-				gTxt('comment_invitation').br.
-				fInput('text','AnnotateInvite',$AnnotateInvite,'edit'))
-			:	'';
-			
 
-	//-- timestamp ------------------- 
+			if ($use_comments == 1)
+			{
+				echo n.n.'<fieldset id="write-comments">'.
+					n.'<legend>'.gTxt('comments').'</legend>'.
+					n.n.graf(
+						onoffRadio('Annotate', $Annotate)
+					).
 
-		if ($step == "create" and empty($GLOBALS['ID'])) {
-			if ($view == 'text') {
+					n.n.graf(
+						'<label for="comment-invite">'.gTxt('comment_invitation').'</label>'.br.
+						fInput('text', 'AnnotateInvite', $AnnotateInvite, 'edit', '', '', '', '', 'comment-invite')
+					).
+
+				n.n.'</fieldset>';
+			}
+
+		//-- timestamp ------------------- 
+
+			if ($step == "create" and empty($GLOBALS['ID']))
+			{
 				//Avoiding modified date to disappear
 				$persist_timestamp = (!empty($store_out['year']))? 
 					mktime($store_out['hour'],$store_out['minute'], $store_out['second'], $store_out['month'], $store_out['day'], $store_out['year'])
 					: time();
-			echo
-			graf(tag(checkbox('publish_now','1').gTxt('set_to_now'),'label')),
-			'<p>',gTxt('or_publish_at'),popHelp("timestamp"),br,				
-				tsi('year','Y',$persist_timestamp),
-				tsi('month','m',$persist_timestamp),
-				tsi('day','d',$persist_timestamp), sp,
-				tsi('hour','H',$persist_timestamp), ':',
-				tsi('minute','i',$persist_timestamp), ':',
-				tsi('second', 's', $persist_timestamp),
-			'</p>';
-			}
 
-	//-- publish button --------------
+				echo n.n.'<fieldset>'.
+					n.'<legend>'.gTxt('timestamp').'</legend>'.
 
-			if ($view == 'text') {
+					n.graf(checkbox('publish_now', '1').'<label for="publish_now">'.gTxt('set_to_now').'</label>').
+
+					n.graf(gTxt('or_publish_at').sp.popHelp('timestamp')).
+
+					n.graf(gtxt('date').sp.
+						tsi('year', 'Y', $persist_timestamp).' / '.
+						tsi('month', 'm', $persist_timestamp).' / '.
+						tsi('day', 'd', $persist_timestamp)
+					).
+
+					n.graf(gTxt('time').sp.
+						tsi('hour', 'H', $persist_timestamp).' : '.
+						tsi('minute', 'i', $persist_timestamp).' : '.
+						tsi('second', 's', $persist_timestamp)
+					).
+
+				n.'</fieldset>';
+
+		//-- publish button --------------
+
 				echo
 				(has_privs('article.publish')) ?
-				fInput('submit','publish',gTxt('publish'),"publish") :
-				fInput('submit','publish',gTxt('save'),"publish");
+				fInput('submit','publish',gTxt('publish'),"publish", '', '', '', 4) :
+				fInput('submit','publish',gTxt('save'),"publish", '', '', '', 4);
 			}
 
-		} else {
-			
-			if ($view == 'text') {
-				echo
-				'<p>',gTxt('published_at'),popHelp("timestamp"),br,
-					tsi('year','Y',$sPosted,5),
-					tsi('month','m',$sPosted,6),
-					tsi('day','d',$sPosted,7), sp,
-					tsi('hour','H',$sPosted,8), ':',
-					tsi('minute','i',$sPosted,9), ':',
-					tsi('second', 's', $sPosted, 10),
-				'</p>',
-					hInput('sPosted',$sPosted),
-					hInput('sLastMod',$sLastMod),
-					hInput('AuthorID',$AuthorID),
-					hInput('LastModID',$LastModID),
-					graf(checkbox('reset_time','1',0).gTxt('reset_time'));
-			}
+			else
+			{
+				echo n.n.'<fieldset>'.
+					n.'<legend>'.gTxt('timestamp').'</legend>'.
 
-	//-- save button --------------
+					n.graf(checkbox('reset_time', '1', 0).'<label for="reset_time">'.gTxt('reset_time').'</label>').
 
-			if ($view == 'text') {
+					n.graf(gTxt('published_at').sp.popHelp('timestamp')).
+
+					n.graf(gtxt('date').sp.
+						tsi('year', 'Y', $sPosted).' / '.
+						tsi('month', 'm', $sPosted).' / '.
+						tsi('day', 'd', $sPosted)
+					).
+
+					n.graf(gTxt('time').sp.
+						tsi('hour', 'H', $sPosted).' : ' .
+						tsi('minute', 'i', $sPosted).' : '.
+						tsi('second', 's', $sPosted)
+					).
+
+					n.hInput('sPosted', $sPosted),
+					n.hInput('sLastMod', $sLastMod),
+					n.hInput('AuthorID', $AuthorID),
+					n.hInput('LastModID', $LastModID),
+
+				n.'</fieldset>';
+
+		//-- save button --------------
+
 				if (   ($Status >= 4 and has_privs('article.edit.published'))
 					or ($Status >= 4 and $AuthorID==$txp_user and has_privs('article.edit.own.published'))
 				    or ($Status <  4 and has_privs('article.edit'))
 					or ($Status <  4 and $AuthorID==$txp_user and has_privs('article.edit.own')))
-					echo fInput('submit','save',gTxt('save'),"publish");
+					echo fInput('submit','save',gTxt('save'),"publish", '', '', '', 4);
+
 			}
 		}
 
-    	echo '</td></tr></table></form>';
+    echo '</td></tr></table></form>';
 	
 	}
 
-
 // -------------------------------------------------------------
-	function custField($num,$field,$content) 
+
+	function custField($num, $field, $content)
 	{
-		return graf($field . br .  fInput('text', 'custom_'.$num, $content,'edit'));
+		return n.n.graf('<label for="custom-'.$num.'">'.$field.'</label>'.br.
+			n.fInput('text', 'custom_'.$num, $content, 'edit', '', '', 22, '', 'custom-'.$num));
 	}
 
 // -------------------------------------------------------------
@@ -666,9 +702,9 @@ if (!empty($event) and $event == 'article') {
 	{
 		$size = ($name=='year') ? 4 : 2;
 
-		return '<input type="text" name="'.$name.'" value="'.
+		return n.'<input type="text" name="'.$name.'" value="'.
 			date($datevar,$time+tz_offset())
-		.'" size="'.$size.'" maxlength="'.$size.'" class="edit" tabindex="'.$tab.'" />'."\n";
+		.'" size="'.$size.'" maxlength="'.$size.'" class="edit" tabindex="'.$tab.'" title="'.gTxt('article_'.$name).'" />';
 	}
 
 //--------------------------------------------------------------
@@ -680,86 +716,102 @@ if (!empty($event) and $event == 'article') {
 	}
 
 //--------------------------------------------------------------
+// remember to show markup help for both body and excerpt 
+// if they are different
 
-	function sidehelp()
+	function side_help($textile_body, $textile_excerpt)
 	{
-		global $use_textile, $textile_body;
-
-		if ($use_textile == USE_TEXTILE || $textile_body == USE_TEXTILE)
+		if ($textile_body == USE_TEXTILE or $textile_excerpt == USE_TEXTILE)
 		{
-			return
+			return n.hed('<a href="#" onclick="toggleDisplay(\'textile_help\'); return false;">'.gTxt('textile_help').'</a>', 3).
 
-				'<ul class="plain-list small">'.
-					'<li>'.gTxt('header').': <strong>h<em>n</em>.</strong>'.sp.
+				n.'<div id="textile_help" style="display: none;">'.
+
+				n.'<ul class="plain-list small">'.
+					n.t.'<li>'.gTxt('header').': <strong>h<em>n</em>.</strong>'.sp.
 						popHelpSubtle('header', 400, 400).'</li>'.
-					'<li>'.gTxt('blockquote').': <strong>bq.</strong>'.sp.
+					n.t.'<li>'.gTxt('blockquote').': <strong>bq.</strong>'.sp.
 						popHelpSubtle('blockquote',400,400).'</li>'.
-					'<li>'.gTxt('numeric_list').': <strong>#</strong>'.sp.
+					n.t.'<li>'.gTxt('numeric_list').': <strong>#</strong>'.sp.
 						popHelpSubtle('numeric', 400, 400).'</li>'.
-					'<li>'.gTxt('bulleted_list').': <strong>*</strong>'.sp.
+					n.t.'<li>'.gTxt('bulleted_list').': <strong>*</strong>'.sp.
 						popHelpSubtle('bulleted', 400, 400).'</li>'.
-				'</ul>'.
+				n.'</ul>'.
 
-				'<ul class="plain-list small">'.
-					'<li>'.'_<em>'.gTxt('emphasis').'</em>_'.sp.
+				n.'<ul class="plain-list small">'.
+					n.t.'<li>'.'_<em>'.gTxt('emphasis').'</em>_'.sp.
 						popHelpSubtle('italic', 400, 400).'</li>'.
-					'<li>'.'*<strong>'.gTxt('strong').'</strong>*'.sp.
+					n.t.'<li>'.'*<strong>'.gTxt('strong').'</strong>*'.sp.
 						popHelpSubtle('bold', 400, 400).'</li>'.
-					'<li>'.'??<cite>'.gTxt('citation').'</cite>??'.sp.
+					n.t.'<li>'.'??<cite>'.gTxt('citation').'</cite>??'.sp.
 						popHelpSubtle('cite', 500, 300).'</li>'.
-					'<li>'.'-'.gTxt('deleted_text').'-'.sp.
+					n.t.'<li>'.'-'.gTxt('deleted_text').'-'.sp.
 						popHelpSubtle('delete', 400, 300).'</li>'.
-					'<li>'.'+'.gTxt('inserted_text').'+'.sp.
+					n.t.'<li>'.'+'.gTxt('inserted_text').'+'.sp.
 						popHelpSubtle('insert', 400, 300).'</li>'.
-					'<li>'.'^'.gTxt('superscript').'^'.sp.
+					n.t.'<li>'.'^'.gTxt('superscript').'^'.sp.
 						popHelpSubtle('super', 400, 300).'</li>'.
-					'<li>'.'~'.gTxt('subscript').'~'.sp.
+					n.t.'<li>'.'~'.gTxt('subscript').'~'.sp.
 						popHelpSubtle('subscript', 400, 400).'</li>'.
-				'</ul>'.
+				n.'</ul>'.
 
-				graf(
+				n.graf(
 					'"'.gTxt('linktext').'":url'.sp.popHelpSubtle('link', 400, 500)
 				, ' class="small"').
 
-				graf(
+				n.graf(
 					'!'.gTxt('imageurl').'!'.sp.popHelpSubtle('image', 500, 500)
 				, ' class="small"').
 
-				graf(
-					'<a href="http://textism.com/tools/textile/" target="_blank">'.gTxt('More').'</a>');
-		}
+				n.graf(
+					'<a href="http://textism.com/tools/textile/" target="_blank">'.gTxt('More').'</a>').
 
-		return '';
+				n.'</div>';
+		}
 	}
 
 //--------------------------------------------------------------
-	function status_radio($Status) 
+
+	function status_radio($Status)
 	{
 		global $statuses;
+
 		$Status = (!$Status) ? 4 : $Status;
-		foreach($statuses as $a=>$b) {
-			$out[] = tag(radio('Status',$a,($Status==$a)?1:0).$b,'label');	
+
+		foreach ($statuses as $a => $b)
+		{
+			$out[] = n.t.'<li>'.radio('Status', $a, ($Status == $a) ? 1 : 0, 'status-'.$a).
+				'<label for="status-'.$a.'">'.$b.'</label></li>';
 		}
-		return join(br.n,$out);
+
+		return '<ul class="plain-list">'.join('', $out).n.'</ul>';
 	}
 
 //--------------------------------------------------------------
-	function category_popup($name,$val) 
+
+	function category_popup($name, $val, $id)
 	{
-		$rs = getTree("root",'article');
-		if ($rs) {
-			return treeSelectInput($name,$rs,$val);
+		$rs = getTree('root', 'article');
+
+		if ($rs)
+		{
+			return treeSelectInput($name,$rs,$val, $id);
 		}
+
 		return false;
 	}
 
 //--------------------------------------------------------------
-	function section_popup($Section) 
+
+	function section_popup($Section, $id)
 	{
-		$rs = safe_column("name", "txp_section", "name!='default'");
-		if ($rs) {	
-			return selectInput("Section", $rs, $Section);
+		$rs = safe_column('name', 'txp_section', "name != 'default'");
+
+		if ($rs)
+		{
+			return selectInput('Section', $rs, $Section, true, '', $id);
 		}
+
 		return false;
 	}
 
@@ -781,14 +833,19 @@ if (!empty($event) and $event == 'article') {
 	}
 
 // -------------------------------------------------------------
-	function form_pop($form)
+
+	function form_pop($form, $id)
 	{
 		$arr = array(' ');
-		$rs = safe_column("name", "txp_form", "type='article' and name!='default'");
-		if($rs) {
-			return selectInput('override_form',$rs,$form,1);
+
+		$rs = safe_column('name', 'txp_form', "type = 'article' and name != 'default'");
+
+		if ($rs)
+		{
+			return selectInput('override_form', $rs, $form, true, '', $id);
 		}
 	}
+
 // -------------------------------------------------------------
 	function check_url_title($url_title)
 	{

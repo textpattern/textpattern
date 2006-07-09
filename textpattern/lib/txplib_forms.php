@@ -5,66 +5,110 @@ $HeadURL$
 $LastChangedRevision$
 */
 
-//-------------------------------------------------------------	
-	function yesnoRadio($field,$var)
-	{
-		$vals = array("0"=>gTxt('no'),"1"=>gTxt('yes'));
-		foreach($vals as $a => $b) {
-			$out[] = '<label><input type="radio" name="'.$field.'" value="'.$a.'" class="radio"';
-			$out[] = ($a == $var) ? ' checked="checked"' : '';
-			$out[] = " />$b</label> ";
-		}
-		return join('',$out);
-	}
+//-------------------------------------------------------------
 
-//-------------------------------------------------------------	
-	function onoffRadio($field,$var)
+	function yesnoRadio($field, $var)
 	{
-		$vals = array("0"=>gTxt('off'),"1"=>gTxt('on'));
-		foreach($vals as $a => $b) {
-			$out[] = '<label><input type="radio" name="'.$field.'" value="'.$a.'" class="radio"';
+		$vals = array(
+			'0' => gTxt('no'),
+			'1' => gTxt('yes')
+		);
+
+		foreach ($vals as $a => $b)
+		{
+			$out[] = '<input type="radio" id="'.$field.'-'.$a.'" name="'.$field.'" value="'.$a.'" class="radio"';
 			$out[] = ($a == $var) ? ' checked="checked"' : '';
-			$out[] = " />$b</label>  ";
+			$out[] = ' /><label for="'.$field.'-'.$a.'">'.$b.'</label> ';
 		}
-		return join('',$out);
+
+		return join('', $out);
 	}
 
 //-------------------------------------------------------------
-	function selectInput($name="", $array="", $value="", $blankfirst='',$onchange='')
+
+	function onoffRadio($field, $var)
 	{
-		$out = '<select name="'.$name.'" class="list"';
-		$out .= ($onchange == 1) ? ' onchange="submit(this.form)"' : $onchange;
-		$out .= '>'.n;
-		$out .= ($blankfirst) ? '<option value=""></option>' : '';
-		foreach ($array as $avalue => $alabel) {
-			$selected = ($avalue == $value || $alabel == $value)
-			?	' selected="selected"'
-			:	'';
-			$alabel = htmlspecialchars($alabel);
-			$out .= t.'<option value="'.htmlspecialchars($avalue).'"'.$selected.'>'.
-					$alabel.'</option>'.n;
+		$vals = array(
+			'0' => gTxt('off'),
+			'1' => gTxt('on')
+		);
+
+		foreach ($vals as $a => $b)
+		{
+			$out[] = '<input type="radio" id="'.$field.'-'.$a.'" name="'.$field.'" value="'.$a.'" class="radio"';
+			$out[] = ($a == $var) ? ' checked="checked"' : '';
+			$out[] = ' /><label for="'.$field.'-'.$a.'">'.$b.'</label> ';
 		}
-		$out .= '</select>'.n;
-		return $out;
+
+		return join('', $out);
 	}
 
 //-------------------------------------------------------------
-	function treeSelectInput($selectname="", $array="", $value="")
+
+	function selectInput($name = '', $array = '', $value = '', $blank_first = '', $onchange = '', $select_id = '')
 	{
-		$out[] = '<select name="'.$selectname.'" class="list">'.n;
-		$out[] = '<option value=""></option>'.n;
-		foreach ($array as $a) {
+		$selected = false;
+
+		foreach ($array as $avalue => $alabel)
+		{
+			if ($avalue == $value || $alabel == $value)
+			{
+				$sel = ' selected="selected"';
+				$selected = true;
+			}
+
+			else
+			{
+				$sel = '';
+			}
+
+			$out[] = n.t.'<option value="'.htmlspecialchars($avalue).'"'.$sel.'>'.htmlspecialchars($alabel).'</option>';
+		}
+
+		return '<select'.( $select_id ? ' id="'.$select_id.'"' : '' ).' name="'.$name.'" class="list"'.
+			($onchange == 1 ? ' onchange="submit(this.form);"' : $onchange).
+			'>'.
+			join('', $out).
+			($blank_first ? n.t.'<option value=""'.($selected == false ? ' selected="selected"' : '').'></option>' : '').
+			n.'</select>';
+	}
+
+//-------------------------------------------------------------
+
+	function treeSelectInput($select_name = '', $array = '', $value = '', $select_id = '')
+	{
+		$selected = false;
+
+		foreach ($array as $a)
+		{
+			if ($a['name'] == 'root')
+			{
+				continue;
+			}
+
 			extract($a);
-			if ($name=='root') continue;
-			$selected = ($name == $value) ? ' selected="selected"' : '';
-			$name = htmlspecialchars($name);
-			$sp = ($level > 0) ? str_repeat(sp.sp,$level-1) : '';
-			$out[] = t.'<option value="'.$name.'"'.$selected.'>'.$sp.$title.'</option>'.n;
-		}
-		$out[] = '</select>'.n;
-		return join('',$out);
-	}
 
+			if ($name == $value)
+			{
+				$selected = ' selected="selected"';
+				$selected = true;
+			}
+
+			else
+			{
+				$sel = '';
+			}
+
+			$sp = ($level > 0) ? str_repeat(sp.sp, $level - 1) : '';
+
+			$out[] = n.t.'<option value="'.htmlspecialchars($name).'"'.$sel.'>'.$sp.$title.'</option>';
+		}
+
+		return n.'<select'.( $select_id ? ' id="'.$select_id.'" ' : '' ).' name="'.$select_name.'" class="list">'.
+			n.t.'<option value=""'.($selected == false ? ' selected="selected"' : '').'></option>'.
+			join('', $out).
+			n.'</select>';
+	}
 
 //-------------------------------------------------------------
 	function fInput($type, 		          // generic form input
@@ -141,9 +185,10 @@ $LastChangedRevision$
 
 //-------------------------------------------------------------
 
-	function radio($name, $value, $checked = '1')
+	function radio($name, $value, $checked = '1', $id = '')
 	{
 		$o[] = '<input type="radio" name="'.$name.'" value="'.$value.'"';
+		$o[] = ($id) ? ' id="'.$id.'"' : '';
 		$o[] = ($checked == '1') ? ' checked="checked"' : '';
 		$o[] = ' class="radio" />';
 

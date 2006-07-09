@@ -103,7 +103,7 @@ border-right: 1px solid #ddd;
 border-bottom: 1px solid #ddd;
 }
 
-a.plain {
+a.plain, a.plain:visited, a.plain:active {
 color: #000;
 background-color: transparent;
 }
@@ -119,8 +119,13 @@ background-color: #eee;
 ----------------------------------------------- */
 
 fieldset {
-padding: 1em;
-border: none;
+margin: 0 0 10px 0;
+padding: 5px;
+border: 1px solid #ddd;;
+}
+
+label {
+cursor: pointer;
 }
 
 input {
@@ -423,12 +428,22 @@ width: 165px;
 }
 
 td#article-main {
+padding-left: 20px;
 width: 400px;
+}
+
+td#article-tabs {
+padding-top: 35px;
+width: 20px;
 }
 
 td#article-col-2 {
 padding-left: 10px;
 width: 200px;
+}
+
+td#article-col-1 h3 {
+font-size: 1em;
 }
 
 textarea#body {
@@ -442,7 +457,7 @@ height: 75px;
 }
 
 textarea#keywords {
-width: 125px;
+width: 140px;
 height: 80px;
 }
 

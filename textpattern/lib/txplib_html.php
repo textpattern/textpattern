@@ -469,14 +469,16 @@ $LastChangedRevision$
 	}
 
 //-------------------------------------------------------------
-	function pref_text($item,$var)
+
+	function pref_text($item, $var, $id)
 	{
 		$things = array(
 			"2" => gTxt('convert_linebreaks'),
 			"1" => gTxt('use_textile'),
-			"0" => gTxt('leave_text_untouched'));
-		return selectInput($item, $things, $var);
-	}
+			"0" => gTxt('leave_text_untouched')
+		);
 
+		return selectInput($item, $things, $var, '', '', $id);
+	}
 
 ?>
