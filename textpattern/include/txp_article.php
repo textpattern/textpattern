@@ -547,14 +547,14 @@ if (!empty($event) and $event == 'article') {
 
 		//-- status radios --------------
 
-			echo n.n.'<fieldset>'.
+			echo n.n.'<fieldset id="write-status">'.
 				n.'<legend>'.gTxt('status').'</legend>'.
 				n.status_radio($Status).
 				n.'</fieldset>';
 
 		//-- category selects -----------
 
-			echo n.n.'<fieldset>'.
+			echo n.n.'<fieldset id="write-sort">'.
 				n.'<legend>'.gTxt('sort_display').'</legend>'.
 
 				n.graf('<label for="category-1">'.gTxt('category1').'</label> '.
@@ -607,7 +607,7 @@ if (!empty($event) and $event == 'article') {
 					mktime($store_out['hour'],$store_out['minute'], $store_out['second'], $store_out['month'], $store_out['day'], $store_out['year'])
 					: time();
 
-				echo n.n.'<fieldset>'.
+				echo n.n.'<fieldset id="write-timestamp">'.
 					n.'<legend>'.gTxt('timestamp').'</legend>'.
 
 					n.graf(checkbox('publish_now', '1').'<label for="publish_now">'.gTxt('set_to_now').'</label>').
@@ -638,7 +638,7 @@ if (!empty($event) and $event == 'article') {
 
 			else
 			{
-				echo n.n.'<fieldset>'.
+				echo n.n.'<fieldset id="write-timestamp">'.
 					n.'<legend>'.gTxt('timestamp').'</legend>'.
 
 					n.graf(checkbox('reset_time', '1', 0).'<label for="reset_time">'.gTxt('reset_time').'</label>').
