@@ -222,7 +222,7 @@ $LastChangedRevision$
 
 			nav_form('image', $page, $numPages, $sort, $dir, $crit, $search_method).
 
-			pageby_form('list', $article_list_pageby);
+			pageby_form('image', $image_list_pageby);
 		}
 	}
 
