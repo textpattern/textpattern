@@ -47,6 +47,8 @@ $LastChangedRevision$
 
 	function selectInput($name = '', $array = '', $value = '', $blank_first = '', $onchange = '', $select_id = '')
 	{
+		$out = array();
+
 		$selected = false;
 
 		foreach ($array as $avalue => $alabel)
@@ -68,8 +70,8 @@ $LastChangedRevision$
 		return '<select'.( $select_id ? ' id="'.$select_id.'"' : '' ).' name="'.$name.'" class="list"'.
 			($onchange == 1 ? ' onchange="submit(this.form);"' : $onchange).
 			'>'.
-			join('', $out).
 			($blank_first ? n.t.'<option value=""'.($selected == false ? ' selected="selected"' : '').'></option>' : '').
+			( $out ? join('', $out) : '').
 			n.'</select>';
 	}
 
@@ -77,6 +79,8 @@ $LastChangedRevision$
 
 	function treeSelectInput($select_name = '', $array = '', $value = '', $select_id = '')
 	{
+		$out = array();
+
 		$selected = false;
 
 		foreach ($array as $a)
@@ -106,7 +110,7 @@ $LastChangedRevision$
 
 		return n.'<select'.( $select_id ? ' id="'.$select_id.'" ' : '' ).' name="'.$select_name.'" class="list">'.
 			n.t.'<option value=""'.($selected == false ? ' selected="selected"' : '').'></option>'.
-			join('', $out).
+			( $out ? join('', $out) : '').
 			n.'</select>';
 	}
 
