@@ -281,22 +281,29 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function fLabelCell($text, $help = '') 
+	function fLabelCell($text, $help = '', $label_id = '') 
 	{
 		$help = ($help) ? popHelp($help) : '';
 
-		return tda(gTxt($text).' '.$help,' style="text-align: right; vertical-align: middle;"');
+		$cell = gTxt($text).' '.$help;
+
+		if ($label_id)
+		{
+			$cell = '<label for="'.$label_id.'">'.$cell.'</label>';
+		}
+
+		return tda($cell,' class="noline" style="text-align: right; vertical-align: middle;"');
 	}
 
 // -------------------------------------------------------------
 
-	function fInputCell ($name, $var = '', $tabindex = '', $size = '', $help = '') 
+	function fInputCell ($name, $var = '', $tabindex = '', $size = '', $help = '', $id = '') 
 	{
 		$pop = ($help) ? popHelp($name) : '';
 
 		return tda(
-			fInput('text', $name, $var, 'edit', '', '', $size, $tabindex).' '.$pop
-		,' style="vertical-align: top; border: none;"');
+			fInput('text', $name, $var, 'edit', '', '', $size, $tabindex, $id).' '.$pop
+		,' class="noline"');
 	}
 
 // -------------------------------------------------------------
@@ -448,9 +455,13 @@ $LastChangedRevision$
 	}
 // -------------------------------------------------------------
 
-	function upload_form($label, $pophelp, $step, $event, $id='', $max_file_size = '1000000')
+	function upload_form($label, $pophelp, $step, $event, $id = '', $max_file_size = '1000000', $label_id = '', $class = 'upload-form')
 	{
-		return n.n.'<form class="upload-form" method="post" enctype="multipart/form-data" action="index.php">'.
+		$class = ($class) ? ' class="'.$class.'"' : '';
+
+		$label_id = ($label_id) ? $label_id : $event.'-upload';
+
+		return n.n.'<form'.$class.' method="post" enctype="multipart/form-data" action="index.php">'.
 			n.'<div>'.
 
 			(!empty($max_file_size)? n.hInput('MAX_FILE_SIZE', $max_file_size): '').
@@ -459,13 +470,40 @@ $LastChangedRevision$
 			n.hInput('id', $id).
 
 			n.graf(
-				'<label for="'.$event.'-upload">'.$label.'</label>'.sp.popHelp($pophelp).sp.
-					fInput('file', 'thefile', '', 'edit', '', '', '', '', $event.'-upload').
+				'<label for="'.$label_id.'">'.$label.'</label>'.sp.popHelp($pophelp).sp.
+					fInput('file', 'thefile', '', 'edit', '', '', '', '', $label_id).sp.
 					fInput('submit', '', gTxt('upload'), 'smallerbox')
 			).
 
 			n.'</div>'.
 			n.'</form>';
+	}
+
+//-------------------------------------------------------------
+
+	function search_form($event, $step, $crit, $methods, $method, $default_method)
+	{
+		$default_method = 'name';
+
+		$methods =	array(
+			'id'			 => gTxt('ID'),
+			'name'		 => gTxt('name'),
+			'category' => gTxt('image_category'),
+			'author'	 => gTxt('author')
+		);
+
+		$method = ($method) ? $method : $default_method;
+
+		return n.n.form(
+			graf(
+				'<label for="'.$event.'-search">'.gTxt('search').'</label>'.sp.
+				selectInput('method', $methods, $method, '', '', $event.'-search').sp.
+				fInput('text', 'crit', $crit, 'edit', '', '', '15').
+				eInput($event).
+				sInput($step).
+				fInput('submit', 'search', gTxt('go'), 'smallerbox')
+			,' style="text-align: center;"')
+		);
 	}
 
 //-------------------------------------------------------------

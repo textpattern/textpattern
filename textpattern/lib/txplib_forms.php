@@ -216,9 +216,10 @@ $LastChangedRevision$
 
 //-------------------------------------------------------------
 
-	function text_area($name, $h, $w, $thing = '')
+	function text_area($name, $h, $w, $thing = '', $id = '')
 	{
-		return '<textarea name="'.$name.'" cols="40" rows="5" style="width:'.$w.'px; height:'.$h.'px;">'.$thing.'</textarea>';
+		$id = ($id) ? ' id="'.$id.'"' : '';
+		return '<textarea'.$id.' name="'.$name.'" cols="40" rows="5" style="width:'.$w.'px; height:'.$h.'px;">'.$thing.'</textarea>';
 	}
 
 //-------------------------------------------------------------

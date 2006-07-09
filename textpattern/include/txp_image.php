@@ -239,19 +239,7 @@ $LastChangedRevision$
 			'author'	 => gTxt('author')
 		);
 
-		$method = ($method) ? $method : $default_method;
-
-		return n.n.form(
-			graf(
-
-				gTxt('Search').sp.selectInput('method', $methods, $method).
-				fInput('text', 'crit', $crit, 'edit', '', '', '15').
-				eInput('image').
-				sInput('image_list').
-				fInput('submit', 'search', gTxt('go'), 'smallerbox')
-
-			,' style="text-align: center;"')
-		);
+		return search_form('image', 'image_list', $crit, $methods, $method, 'name');
 	}
 
 // -------------------------------------------------------------
@@ -274,7 +262,7 @@ $LastChangedRevision$
 					'<img src="'.hu.$img_dir.
 						'/'.$id.$ext.'" height="'.$h.'" width="'.$w.'" alt="" />'.
 						br.upload_form(gTxt('replace_image'),'replace_image_form',
-							'image_replace','image',$id,$file_max_upload_size)
+							'image_replace','image',$id,$file_max_upload_size, 'image-replace', '')
 				)
 			),
 			tr(
@@ -286,7 +274,7 @@ $LastChangedRevision$
 								'/'.$id.'t'.$ext.'" alt="" />'.br
 							:	'',
 							upload_form(gTxt('upload_thumbnail'),'upload_thumbnail',
-								'thumbnail_insert','image',$id,$file_max_upload_size)
+								'thumbnail_insert','image',$id,$file_max_upload_size, 'upload-thumbnail', '')
 						)
 					)
 				)
@@ -299,14 +287,21 @@ $LastChangedRevision$
 			tr(
 				td(
 					form(
-						graf(gTxt('image_name').br.fInput('text','name',$name,'edit')) .
-						 graf(gTxt('image_category').br.treeSelectInput('category',
-						 		$categories,$category)) .
-						graf(gTxt('alt_text').br.fInput('text','alt',$alt,'edit','','',50)) .
-						graf(gTxt('caption').br.text_area('caption','100','400',$caption)) .
-						graf(fInput('submit','',gTxt('save'),'publish')) .
-						hInput('id',$id) .
-						eInput('image') .
+						graf('<label for="image-name">'.gTxt('image_name').'</label>'.br.
+							fInput('text', 'name', $name, 'edit', '', '', '', '', 'image-name')).
+
+						graf('<label for="image-category">'.gTxt('image_category').'</label>'.br.
+							treeSelectInput('category', $categories, $category, 'image-category')).
+
+						graf('<label for="alt-text">'.gTxt('alt_text').'</label>'.br.
+							fInput('text', 'alt', $alt, 'edit', '', '', 50, '', 'alt-text')).
+
+						graf('<label for="caption">'.gTxt('caption').'</label>'.br.
+							text_area('caption', '100', '400', $caption, 'caption')).
+
+						graf(fInput('submit', '', gTxt('save'), 'publish')).
+						hInput('id', $id).
+						eInput('image').
 						sInput('image_save')
 					)
 				)
@@ -445,21 +440,23 @@ $LastChangedRevision$
 					graf(gTxt('create_thumbnail')) .
 					startTable('','left','',1) .
 						tr(
-							fLabelCell(gTxt('thumb_width').':') . 
-							fInputCell('width',@$thumb_w,1,4).
-							
-							fLabelCell(gTxt('thumb_height').':') . 
-							fInputCell('height',@$thumb_h,1,4).
-							
-							fLabelCell(gTxt('keep_square_pixels').':') . 
-							tda(checkbox2('crop', @$thumb_crop),' class="noline"').
-														
-							tda(fInput('submit','',gTxt('Create'),'smallerbox'),
-								' class="noline"')
-						) .
-						hInput('id',$id) .
-						eInput('image') .
-						sInput('thumbnail_create') .
+							fLabelCell(gTxt('thumb_width'), '', 'width') . 
+							fInputCell('width', @$thumb_w, 1, 4, '', 'width').
+
+							fLabelCell(gTxt('thumb_height'), '', 'height') . 
+							fInputCell('height', @$thumb_h, 1, 4, '', 'height').
+
+							fLabelCell(gTxt('keep_square_pixels'), '', 'crop') . 
+							tda(checkbox('crop', 1, @$thumb_crop), ' class="noline"').
+
+							tda(
+								fInput('submit', '', gTxt('Create'), 'smallerbox')
+							, ' class="noline"')
+						).
+
+						hInput('id', $id).
+						eInput('image').
+						sInput('thumbnail_create').
 					endTable()
 				)
 			)
