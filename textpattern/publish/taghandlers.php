@@ -717,7 +717,9 @@ $LastChangedRevision$
 		extract(lAtts(array(
 			'active_class' => '',
 			'break'        => br,
+			'categories'   => '',
 			'class'        => __FUNCTION__,
+			'exclude'      => '',
 			'label'        => '',
 			'labeltag'     => '',
 			'parent'       => '',
@@ -727,23 +729,63 @@ $LastChangedRevision$
 			'wraptag'      => ''
 		), $atts));
 
-		if ($parent)
+		if ($categories)
 		{
-			$qs = safe_row('lft, rgt', 'txp_category', "name = '$parent'");
+			$categories = explode(',', $categories);
 
-			if ($qs)
+			foreach ($categories as $key => $value)
 			{
-				extract($qs);
+				$categories[$key] = doSlash(trim($value));
 
-				$rs = safe_rows_start('name, title', 'txp_category', 
-					"name != 'default' and type = '$type' and (lft between $lft and $rgt) order by lft asc");
+				if (empty($categories[$key]))
+				{
+					unset($categories[$key]);
+				}
 			}
+
+			$categories = join(chr(39).','.chr(39), $categories);
+
+			$rs = safe_rows_start('name, title', 'txp_category', 
+				"type = '$type' and name in ('$categories') order by field(name, '$categories')");
 		}
 
 		else
 		{
-			$rs = safe_rows_start('name, title', 'txp_category', 
-				"name not in('default','root') and type = '$type' order by name");
+			if ($exclude)
+			{
+				$exclude = explode(',', $exclude);
+
+				foreach ($exclude as $key => $value)
+				{
+					$exclude[$key] = doSlash(trim($value));
+
+					if (empty($exclude[$key]))
+					{
+						unset($exclude[$key]);
+					}
+				}
+
+				$exclude = " and name not in('".join(chr(39).','.chr(39), $exclude)."')";
+			}
+
+			if ($parent)
+			{
+				$qs = safe_row('lft, rgt', 'txp_category', "name = '$parent'");
+
+				if ($qs)
+				{
+					extract($qs);
+
+					$rs = safe_rows_start('name, title', 'txp_category', 
+						"(lft between $lft and $rgt) and type = '$type' and name != 'default' $exclude order by lft asc");
+				}
+			}
+
+			else
+			{
+				$rs = safe_rows_start('name, title', 'txp_category', 
+					"type = '$type' and name not in('default','root') $exclude order by name");
+			}
 		}
 
 		if ($rs)
@@ -786,13 +828,54 @@ $LastChangedRevision$
 			'break'           => br,
 			'class'           => __FUNCTION__,
 			'default_title'   => $sitename,
+			'exclude'         => '',
 			'include_default' => '',
 			'label'           => '',
 			'labeltag'        => '',
+			'sections'        => '',
 			'wraptag'         => ''
 		), $atts));
 
-		$rs = safe_rows_start('name, title', 'txp_section', "name != 'default' order by name");
+		if ($sections)
+		{
+			$sections = explode(',', $sections);
+
+			foreach ($sections as $key => $value)
+			{
+				$sections[$key] = doSlash(trim($value));
+
+				if (empty($sections[$key]))
+				{
+					unset($sections[$key]);
+				}
+			}
+
+			$sections = join(chr(39).','.chr(39), $sections);
+
+			$rs = safe_rows_start('name, title', 'txp_section', "name in ('$sections') order by field(name, '$sections')");
+		}
+
+		else
+		{
+			if ($exclude)
+			{
+				$exclude = explode(',', $exclude);
+
+				foreach ($exclude as $key => $value)
+				{
+					$exclude[$key] = doSlash(trim($value));
+
+					if (empty($exclude[$key]))
+					{
+						unset($exclude[$key]);
+					}
+				}
+
+				$exclude = " and name not in('".join(chr(39).','.chr(39), $exclude)."')";
+			}
+
+			$rs = safe_rows_start('name, title', 'txp_section', "name != 'default' $exclude order by name");
+		}
 
 		if ($rs)
 		{
