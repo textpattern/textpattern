@@ -699,12 +699,12 @@ $LastChangedRevision$
 		extract($prefs);
 		extract($pretext);
 
-		$preview = ps('preview');
-		$parentid = ps('parentid');
+		extract(gpsa(array('parentid', 'preview')));
 
 		extract(lAtts(array(
-			'form' => 'default',
-			'status' => '',
+			'allowoverride' => '1',
+			'form'          => 'default',
+			'status'        => '',
 		),$atts));		
 
 		if ($status or empty($thisarticle) or $thisarticle['thisid'] != $id) {
@@ -727,8 +727,10 @@ $LastChangedRevision$
 			$thisarticle['is_first'] = 1;
 			$thisarticle['is_last'] = 1;
 
+			$form = ($allowoverride and $override_form) ? $override_form : $form;
+
 			// define the article form
-			$article = fetch_form(($override_form) ? $override_form : $form);
+			$article = fetch_form($form);
 
 			if ($preview && $parentid) {
 				$article = '<txp:comments_preview bc="1" id="'.$parentid.'" />'.$article;
