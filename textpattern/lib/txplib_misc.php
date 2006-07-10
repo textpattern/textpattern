@@ -551,9 +551,14 @@ $LastChangedRevision$
 		}
 
 // -------------------------------------------------------------
-		function lAtts($pairs, $atts) {
+		function lAtts($pairs, $atts, $warn=1) {
+			global $production_status;
 			foreach($pairs as $name => $default) {
 				$out[$name] = gAtt($atts,$name,$default);
+			}
+			if ($warn and ($production_status == 'debug' or $production_status == 'testing')) {
+				foreach (array_diff(array_keys($atts), array_keys($pairs)) as $a)
+					trigger_error(gTxt('unknown_attribute').': '.$a);
 			}
 			return ($out) ? $out : false;
 		}
