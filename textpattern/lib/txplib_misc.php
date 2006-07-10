@@ -562,7 +562,7 @@ $LastChangedRevision$
 			}
 			if ($warn and ($production_status == 'debug' or $production_status == 'testing')) {
 				foreach (array_diff(array_keys($atts), array_keys($pairs)) as $a)
-					trigger_error(gTxt('unknown_attribute').': '.$a);
+					trigger_error(gTxt('unknown_attribute', array('{att}' => $a)));
 			}
 			return ($out) ? $out : false;
 		}
