@@ -30,30 +30,43 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-// generates the css src in <head>
 
 	function css($atts)
 	{
 		global $s;
 
 		extract(lAtts(array(
-			'n' => ''
+			'format' => 'url',
+			'media'  => 'screen',
+			'n'      => '',
+			'rel'    => 'stylesheet',
+			'title'  => '',
 		), $atts));
 
 		if ($n)
 		{
-			return hu.'textpattern/css.php?n='.$n;
+			$url = hu.'textpattern/css.php?n='.$n;
 		}
 
 		elseif ($s)
 		{
-			return hu.'textpattern/css.php?s='.$s;
+			$url = hu.'textpattern/css.php?s='.$s;
 		}
 
 		else
 		{
-			return hu.'textpattern/css.php?n=default';
+			$url = hu.'textpattern/css.php?n=default';
 		}
+
+		if ($format == 'link')
+		{
+			return '<link rel="'.$rel.'" type="text/css"'.
+				($media ? ' media="'.$media.'"' : '').
+				($title ? ' title="'.$title.'"' : '').
+				' href="'.$url.'" />';
+		}
+
+		return $url;
 	}
 
 // -------------------------------------------------------------
@@ -209,42 +222,88 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function feed_link($atts) // simple link to rss or atom feed
+
+	function feed_link($atts)
 	{
+		global $s, $c;
+
 		extract(lAtts(array(
-			'label'    => '',
 			'break'    => br,
-			'wraptag'  => '',
-			'category' => '',
-			'section'  => '',
-			'limit'    => '',
+			'category' => $c,
 			'flavor'   => 'rss',
-			'title'    => gTxt('xml_feed_title'),
-		),$atts));
-		
-		$url = pagelinkurl(array('category'=>$category, 'section'=>$section, 'limit'=>$limit ,$flavor=>'1'));
+			'format'   => 'a',
+			'label'    => '',
+			'limit'    => '',
+			'section'  => ( $s == 'default' ? '' : $s),
+			'title'    => gTxt('rss_feed_title'),
+			'wraptag'  => '',
+		), $atts));
+
+		$url = pagelinkurl(array(
+			$flavor    => '1',
+			'section'  => $section,
+			'category' => $category, 
+			'limit'    => $limit 
+		));
+
+		if ($flavor == 'atom')
+		{
+			$title = ($title == gTxt('rss_feed_title')) ? gTxt('atom_feed_title') : $title;
+		}
+
+		$title = escape_output($title);
+
+		if ($format == 'link')
+		{
+			$type = ($flavor == 'atom') ? 'application/atom+xml' : 'application/rss+xml';
+
+			return '<link rel="alternate" type="'.$type.'" title="'.$title.'" href="'.$url.'" />';
+		}
 
 		$out = '<a href="'.$url.'" title="'.$title.'">'.$label.'</a>';
-		return ($wraptag) ? tag($out,$wraptag) : $out;
+
+		return ($wraptag) ? tag($out, $wraptag) : $out;
 	}
 
 // -------------------------------------------------------------
-	function link_feed_link($atts) // rss or atom feed of links
+
+	function link_feed_link($atts)
 	{
+		global $c;
+
 		extract(lAtts(array(
-			'label'    => '',
 			'break'    => br,
-			'wraptag'  => '',
-			'category' => '',
+			'category' => $c,
 			'flavor'   => 'rss',
-			'title'    => gTxt('xml_feed_title'),
-		),$atts));
+			'format'   => 'a',
+			'label'    => '',
+			'title'    => gTxt('rss_feed_title'),
+			'wraptag'  => '',
+		), $atts));
 	
-		$url = pagelinkurl(array('c'=>$category, $flavor=>'1', 'area'=>'link'));
+		$url = pagelinkurl(array(
+			$flavor => '1',
+			'area'  =>'link',
+			'c'     => $category
+		));
+
+		if ($flavor == 'atom')
+		{
+			$title = ($title == gTxt('rss_feed_title')) ? gTxt('atom_feed_title') : $title;
+		}
+
+		$title = escape_output($title);
+
+		if ($format == '')
+		{
+			$type = ($flavor == 'atom') ? 'application/atom+xml' : 'application/rss+xml';
+
+			return '<link rel="alternate" type="'.$type.'" title="'.$title.'" href="'.$url.'" />';
+		}
 
 		$out = '<a href="'.$url.'" title="'.$title.'">'.$label.'</a>';
-		
-		return ($wraptag) ? tag($out,$wraptag) : $out;
+
+		return ($wraptag) ? tag($out, $wraptag) : $out;
 	}
 
 // -------------------------------------------------------------
