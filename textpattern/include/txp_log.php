@@ -239,8 +239,6 @@ $LastChangedRevision$
 
 	function log_search_form($crit, $method)
 	{
-		$default_method = 'page';
-
 		$methods =	array(
 			'ip'     => gTxt('IP'),
 			'host'	 => gTxt('host'),
@@ -250,19 +248,7 @@ $LastChangedRevision$
 			'status' => gTxt('status')
 		);
 
-		$method = ($method) ? $method : $default_method;
-
-		return n.n.form(
-			graf(
-
-				gTxt('Search').sp.selectInput('search_method', $methods, $method).
-				fInput('text', 'crit', $crit, 'edit', '', '', '15').
-				eInput('log').
-				sInput('log_list').
-				fInput('submit', 'search', gTxt('go'), 'smallerbox')
-
-			,' style="text-align: center;"')
-		);
+		return search_form('log', 'log_list', $crit, $methods, $method, 'page');
 	}
 
 //-------------------------------------------------------------

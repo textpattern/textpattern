@@ -275,8 +275,6 @@ $LastChangedRevision$
 
 	function list_search_form($crit, $method)
 	{
-		$default_method = 'title_body';
-
 		$methods =	array(
 			'id'				 => gTxt('ID'),
 			'title_body' => gTxt('title_body'),
@@ -286,19 +284,7 @@ $LastChangedRevision$
 			'author'		 => gTxt('author')
 		);
 
-		$method = ($method) ? $method : $default_method;
-
-		return n.n.form(
-			graf(
-
-				gTxt('Search').sp.selectInput('method', $methods, $method).
-				fInput('text', 'crit', $crit, 'edit', '', '', '15').
-				eInput('list').
-				sInput('list').
-				fInput('submit', 'search', gTxt('go'), 'smallerbox')
-
-			,' style="text-align: center;"')
-		);
+		return search_form('list', 'list', $crit, $methods, $method, 'title_body');
 	}
 
 // -------------------------------------------------------------

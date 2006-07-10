@@ -483,21 +483,12 @@ $LastChangedRevision$
 
 	function search_form($event, $step, $crit, $methods, $method, $default_method)
 	{
-		$default_method = 'name';
-
-		$methods =	array(
-			'id'			 => gTxt('ID'),
-			'name'		 => gTxt('name'),
-			'category' => gTxt('image_category'),
-			'author'	 => gTxt('author')
-		);
-
 		$method = ($method) ? $method : $default_method;
 
 		return n.n.form(
 			graf(
 				'<label for="'.$event.'-search">'.gTxt('search').'</label>'.sp.
-				selectInput('method', $methods, $method, '', '', $event.'-search').sp.
+				selectInput('search_method', $methods, $method, '', '', $event.'-search').sp.
 				fInput('text', 'crit', $crit, 'edit', '', '', '15').
 				eInput($event).
 				sInput($step).

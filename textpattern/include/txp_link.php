@@ -217,8 +217,6 @@ $LastChangedRevision$
 
 	function link_search_form($crit, $method)
 	{
-		$default_method = 'name';
-
 		$methods =	array(
 			'id'					=> gTxt('ID'),
 			'name'				=> gTxt('link_name'),
@@ -226,19 +224,7 @@ $LastChangedRevision$
 			'category'		=> gTxt('link_category')
 		);
 
-		$method = ($method) ? $method : $default_method;
-
-		return n.n.form(
-			graf(
-
-				gTxt('Search').sp.selectInput('method', $methods, $method).
-				fInput('text', 'crit', $crit, 'edit', '', '', '15').
-				eInput('link').
-				sInput('link_edit').
-				fInput('submit', 'search', gTxt('go'), 'smallerbox')
-
-			,' style="text-align: center;"')
-		);
+		return search_form('link', 'link_edit', $crit, $methods, $method, 'name');
 	}
 
 // -------------------------------------------------------------

@@ -296,8 +296,6 @@ $LastChangedRevision$
 
 	function discuss_search_form($crit, $method)
 	{
-		$default_method = 'message';	
-	
 		$methods =	array(
 			'id'			=> gTxt('ID'),
 			'parent'  => gTxt('parent'),
@@ -308,17 +306,7 @@ $LastChangedRevision$
 			'ip'			=> gTxt('IP')
 		);
 
-		$method = ($method) ? $method : $default_method;
-
-		return form(
-			graf(
-				gTxt('Search').sp.selectInput('method', $methods, $method).
-				fInput('text', 'crit', $crit, 'edit', '', '', '15').
-				eInput('discuss').
-				sInput('list').
-				fInput('submit', 'search', gTxt('go'), 'smallerbox')
-			, ' style="text-align: center;"')
-		);
+		return search_form('discuss', 'list', $crit, $methods, $method, 'message');
 	}
 
 //-------------------------------------------------------------

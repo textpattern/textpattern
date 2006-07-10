@@ -230,8 +230,6 @@ $LastChangedRevision$
 
 	function image_search_form($crit, $method)
 	{
-		$default_method = 'name';
-
 		$methods =	array(
 			'id'       => gTxt('ID'),
 			'name'     => gTxt('name'),

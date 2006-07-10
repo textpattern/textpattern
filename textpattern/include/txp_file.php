@@ -263,8 +263,6 @@ $LastChangedRevision$
 
 	function file_search_form($crit, $method)
 	{
-		$default_method = 'filename';
-
 		$methods =	array(
 			'id'					=> gTxt('ID'),
 			'filename'		=> gTxt('file_name'),
@@ -272,19 +270,7 @@ $LastChangedRevision$
 			'category'		=> gTxt('file_category')
 		);
 
-		$method = ($method) ? $method : $default_method;
-
-		return n.n.form(
-			graf(
-
-				gTxt('Search').sp.selectInput('method', $methods, $method).
-				fInput('text', 'crit', $crit, 'edit', '', '', '15').
-				eInput('file').
-				sInput('file_list').
-				fInput('submit', 'search', gTxt('go'), 'smallerbox')
-
-			,' style="text-align: center;"')
-		);
+		return search_form('file', 'file_list', $crit, $methods, $method, 'filename');
 	}
 
 // -------------------------------------------------------------
