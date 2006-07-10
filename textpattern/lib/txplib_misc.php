@@ -92,12 +92,16 @@ $LastChangedRevision$
 	}
 
 //-------------------------------------------------------------
-	function gTxt($var)
+	function gTxt($var, $atts=array())
 	{
 		global $textarray;
 		if(isset($textarray[strtolower($var)])) {
-			return $textarray[strtolower($var)];
+			$out = $textarray[strtolower($var)];
+			return strtr($out, $atts);
 		}
+
+		if ($atts)
+			return $var.': '.join(', ', $atts);
 		return $var;
 	}
 
