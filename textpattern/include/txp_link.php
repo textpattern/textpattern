@@ -233,7 +233,7 @@ $LastChangedRevision$
 	{
 		global $vars, $step;
 
-		pagetop(gTxt('edit_links', $message));
+		pagetop(gTxt('edit_links'), $message);
 
 		extract(gpsa($vars));
 
