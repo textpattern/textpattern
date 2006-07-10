@@ -283,7 +283,7 @@ $LastChangedRevision$
 									$is_404 = empty($out['s']);
 								}
 								else {
-									$rs = ckExID($u2);
+									$rs = lookupByTitleIDSection($u3, $u2, $u1);
 									$out['s'] = @$rs['Section'];
 									$out['id'] = @$rs['ID'];
 									$is_404 = (empty($out['s']) or empty($out['id']));
@@ -1024,6 +1024,14 @@ $LastChangedRevision$
 	function lookupByTitleSection($val,$section,$debug='') 
 	{
 		return safe_row("ID,Section",'textpattern',"url_title like '".doSlash($val)."' AND Section='$section' limit 1",$debug);
+	}	
+
+// -------------------------------------------------------------
+
+	function lookupByTitleIDSection($title, $id, $section, $debug = '') 
+	{
+		return safe_row('ID, Section', 'textpattern', 
+			"ID = ".intval($id)." and url_title like '".doSlash($title)."' and Section = '".doSlash($section)."' limit 1", $debug);
 	}	
 
 // -------------------------------------------------------------
