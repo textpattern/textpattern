@@ -67,7 +67,7 @@ $LastChangedRevision$
 			'msgcols'   => '25',
 			'msgstyle'  => '',
 			'form'   => 'comment_form',
-		),$atts), 0);
+		),$atts, 0));
 
 		$namewarn = false;
 		$emailwarn = false;
