@@ -51,7 +51,7 @@ $LastChangedRevision$
 		$out[] =
 			form(
 				tr(td(gTxt('default')) . td(
-					startTable('edit','left','').
+					'<table align="left" cellspacing="0" border="0" cellspacing="0">'.
 
 						tr(fLabelCell(gTxt('uses_page').':') . 
 							td(selectInput('page',$pageslist,$defrow['page']).
@@ -77,7 +77,7 @@ $LastChangedRevision$
 				$deletelink = dLink('section','section_delete','name',
 					$name,'','type','section');
 
-				$form = startTable('edit') .
+				$form = '<table align="left" cellspacing="0" border="0" cellspacing="0">'.
 				stackRows(
 					fLabelCell(gTxt('section_name').':') . 
 						fInputCell('name',$name,1,20),
