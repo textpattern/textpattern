@@ -598,30 +598,46 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
+
 	function recent_comments($atts)
 	{
 		extract(lAtts(array(
-			'label'    => '',
-			'break'    => br,
-			'wraptag'  => '',
-			'limit'    => 10,
-			'class'    => __FUNCTION__,
-			'labeltag' => ''
-		),$atts));
+			'break'		 => br,
+			'class'		 => __FUNCTION__,
+			'label'		 => '',
+			'labeltag' => '',
+			'limit'		 => 10,
+			'sort'     => 'posted desc',
+			'wraptag'	 => ''
+		), $atts));
 
-		$rs = safe_rows_start("*",'txp_discuss',"visible=".VISIBLE." order by posted desc limit 0,$limit");
+		$rs = safe_rows_start('parentid, name, discussid', 'txp_discuss', 
+			"visible = ".VISIBLE." order by $sort limit 0,$limit");
 
-		if ($rs) {
-        	while ($a = nextRow($rs)) {
-				extract($a);
-				extract(safe_row("Title, Status",'textpattern',"ID=$parentid"));
-				If ($Status >= 4)
-					$out[] = href($name.' ('.escape_title($Title).')', permlinkurl_id($parentid).'#c'.$discussid);
+		if ($rs)
+		{
+			$out = array();
+
+			while ($c = nextRow($rs))
+			{
+				$a = safe_row('*, ID as thisid, unix_timestamp(Posted) as posted', 
+					'textpattern', 'ID = '.$c['parentid']);
+
+				If ($a['Status'] >= 4)
+				{
+					$out[] = href(
+						$c['name'].' ('.escape_title($a['Title']).')', 
+						permlinkurl($a).'#c'.$c['discussid']
+					);
+				}
 			}
-			if (!empty($out)) {
+
+			if ($out)
+			{
 				return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
 			}
 		}
+
 		return '';
 	}
 
