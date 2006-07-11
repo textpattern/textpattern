@@ -443,7 +443,7 @@ width: 200px;
 }
 
 td#article-col-1 h3 {
-font-size: 1em;
+font: 1em Verdana, Arial, sans-serif;
 }
 
 textarea#body {
