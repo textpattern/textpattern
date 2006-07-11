@@ -501,8 +501,9 @@ $LastChangedRevision$
 			'section'   => '',
 			'excerpted' => '',
 			'author'    => '',
+			'sort'      => '',
 			'sortby'    => '',
-			'sortdir'   => 'desc',
+			'sortdir'   => '',
 			'month'     => '',
 			'keywords'  => '',
 			'frontpage' => '',
@@ -515,7 +516,7 @@ $LastChangedRevision$
 			'allowoverride' => (!$q and !$iscustom),
 			'offset'    => 0,
 		),$atts);		
-		
+
 		// if an article ID is specified, treat it as a custom list
 		$iscustom = (!empty($theAtts['id'])) ? true : $iscustom;
 
@@ -549,11 +550,28 @@ $LastChangedRevision$
 
 			// searchall=0 can be used to show search results for the current section only
 			if ($searchall) $section = '';
-			if (!$sortby) $sortby='score';
+			if (!$sort) $sort='score desc';
 		}
 		else {
 			$match = $search = '';
-			if (!$sortby) $sortby='Posted';
+			if (!$sort) $sort='Posted desc';
+		}
+
+		// for backwards compatibility
+		// sortby and sortdir are deprecated
+		if ($sortby)
+		{
+			if (!$sortdir)
+			{
+				$sortdir = 'desc';
+			}
+
+			$sort = "$sortby $sortdir";
+		}
+
+		elseif ($sortdir)
+		{
+			$sort = "Posted $sortdir";
 		}
 
 		//Building query parts
@@ -634,7 +652,7 @@ $LastChangedRevision$
 		}
 
 		$rs = safe_rows_start("*, unix_timestamp(Posted) as uPosted".$match, 'textpattern', 
-		$where. ' order by ' . doslash($sortby) . ' ' . doSlash($sortdir) . ' limit ' . doSlash($pgoffset.$limit));
+		$where. ' order by '.doslash($sort).' limit ' . doSlash($pgoffset.$limit));
 		// alternative form override for search or list
 		if ($q and !$iscustom and !$issticky)
 			$form = gAtt($atts, 'searchform', 'search_results');

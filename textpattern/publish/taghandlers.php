@@ -550,16 +550,34 @@ $LastChangedRevision$
 			'labeltag' => '',
 			'limit'    => 10,
 			'section'  => '',
-			'sortby'   => 'Posted',
-			'sortdir'  => 'desc',
+			'sort'     => 'Posted desc',
+			'sortby'   => '',
+			'sortdir'  => '',
 			'wraptag'  => '',
 		), $atts));
+
+		// for backwards compatibility
+		// sortby and sortdir are deprecated
+		if ($sortby)
+		{
+			if (!$sortdir)
+			{
+				$sortdir = 'desc';
+			}
+
+			$sort = "$sortby $sortdir";
+		}
+
+		elseif ($sortdir)
+		{
+			$sort = "Posted $sortdir";
+		}
 
 		$categories = ($category) ? "and (Category1 = '".doSlash($category)."' or Category2 = '".doSlash($category)."')" : '';
 		$section = ($section) ? " and Section = '".doSlash($section)."'" : '';
 
 		$rs = safe_rows_start('*, id as thisid, unix_timestamp(Posted) as posted', 'textpattern', 
-			"Status = 4 $section $categories and Posted <= now() order by $sortby $sortdir limit 0,$limit");
+			"Status = 4 $section $categories and Posted <= now() order by $sort limit 0,$limit");
 
 		if ($rs)
 		{
@@ -2736,7 +2754,7 @@ function body($atts)
 			'labeltag' => '',
 			'limit'		 => '10',
 			'offset'	 => '0',
-			'sort'		 => 'filename',
+			'sort'		 => 'filename asc',
 			'wraptag'	 => '',
 		), $atts));
 
