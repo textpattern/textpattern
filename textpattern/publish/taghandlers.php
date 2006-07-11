@@ -650,11 +650,16 @@ $LastChangedRevision$
 			return;
 		}
 
+		$match = do_list($match);
+
+		if (!in_array('Category1', $match) and !in_array('Category2', $match))
+		{
+			return;
+		}
+
 		$id = $thisarticle['thisid'];
 
 		$cats = array();
-		$categories = array();
-		$match = explode(',', $match);
 
 		if ($thisarticle['category1'])
 		{
@@ -668,6 +673,8 @@ $LastChangedRevision$
 
 		$cats = join(chr(39).','.chr(39), $cats);
 
+		$categories = array();
+
 		if (in_array('Category1', $match))
 		{
 			$categories[] = "Category1 in('$cats')";
@@ -678,10 +685,7 @@ $LastChangedRevision$
 			$categories[] = "Category2 in('$cats')";
 		}
 
-		if ($categories)
-		{
-			$categories = 'and ('.join(' or ', $categories).')';
-		}
+		$categories = 'and ('.join(' or ', $categories).')';
 
 		$section = ($section) ? " and Section = '".doSlash($section)."'" : '';
 
@@ -808,17 +812,7 @@ $LastChangedRevision$
 
 		if ($categories)
 		{
-			$categories = explode(',', $categories);
-
-			foreach ($categories as $key => $value)
-			{
-				$categories[$key] = doSlash(trim($value));
-
-				if (empty($categories[$key]))
-				{
-					unset($categories[$key]);
-				}
-			}
+			$categories = do_list($categories);
 
 			$categories = join(chr(39).','.chr(39), $categories);
 
@@ -830,19 +824,11 @@ $LastChangedRevision$
 		{
 			if ($exclude)
 			{
-				$exclude = explode(',', $exclude);
+				$exclude = do_list($exclude);
 
-				foreach ($exclude as $key => $value)
-				{
-					$exclude[$key] = doSlash(trim($value));
+				$exclude = join(chr(39).','.chr(39), $exclude);
 
-					if (empty($exclude[$key]))
-					{
-						unset($exclude[$key]);
-					}
-				}
-
-				$exclude = " and name not in('".join(chr(39).','.chr(39), $exclude)."')";
+				$exclude = "and name not in('$exclude')";
 			}
 
 			if ($parent)
@@ -915,17 +901,7 @@ $LastChangedRevision$
 
 		if ($sections)
 		{
-			$sections = explode(',', $sections);
-
-			foreach ($sections as $key => $value)
-			{
-				$sections[$key] = doSlash(trim($value));
-
-				if (empty($sections[$key]))
-				{
-					unset($sections[$key]);
-				}
-			}
+			$sections = do_list($sections);
 
 			$sections = join(chr(39).','.chr(39), $sections);
 
@@ -936,19 +912,11 @@ $LastChangedRevision$
 		{
 			if ($exclude)
 			{
-				$exclude = explode(',', $exclude);
+				$exclude = do_list($exclude);
 
-				foreach ($exclude as $key => $value)
-				{
-					$exclude[$key] = doSlash(trim($value));
-
-					if (empty($exclude[$key]))
-					{
-						unset($exclude[$key]);
-					}
-				}
-
-				$exclude = " and name not in('".join(chr(39).','.chr(39), $exclude)."')";
+				$exclude = join(chr(39).','.chr(39), $exclude);
+				
+				$exclude = "and name not in('$exclude')";
 			}
 
 			$rs = safe_rows_start('name, title', 'txp_section', "name != 'default' $exclude order by name");

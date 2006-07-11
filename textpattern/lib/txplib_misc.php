@@ -1580,10 +1580,32 @@ eod;
 	}
 
 // -------------------------------------------------------------
-	function in_list($val, $list, $delim=',')
+
+	function in_list($val, $list, $delim = ',')
 	{
-		$args = explode($delim, $list);
+		$args = do_list($list, $delim);
+
 		return in_array($val, $args);
+	}
+
+// -------------------------------------------------------------
+
+	function do_list($list, $delim = ',')
+	{
+		$list = explode($delim, $list);
+
+		foreach ($list as $key => $value)
+		{
+			if (empty($list[$key]))
+			{
+				unset($list[$key]);
+				continue;
+			}
+
+			$list[$key] = doSlash(trim($value));
+		}
+
+		return $list;
 	}
 
 // -------------------------------------------------------------
