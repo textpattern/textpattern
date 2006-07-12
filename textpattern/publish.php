@@ -723,7 +723,7 @@ $LastChangedRevision$
 			'allowoverride' => '1',
 			'form'          => 'default',
 			'status'        => '',
-		),$atts));		
+		),$atts, 0));		
 
 		if ($status or empty($thisarticle) or $thisarticle['thisid'] != $id) {
 			if ($status and !is_numeric($status))
