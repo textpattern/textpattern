@@ -529,7 +529,10 @@ if (!empty($event) and $event == 'article') {
 
 		if ($view == 'text')
 		{
-			echo n.graf(href(gtxt('create_new'), 'index.php?event=article'));
+			if ($step != 'create')
+			{
+				echo n.graf(href(gtxt('create_new'), 'index.php?event=article'));
+			}
 
 		//-- prev/next article links -- 
 
