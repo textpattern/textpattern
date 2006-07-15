@@ -245,7 +245,7 @@ $LastChangedRevision$
 	
 				//first we sniff out some of the preset url schemes
 			if (!empty($u1)) {
-	
+
 				switch($u1) {
 	
 					case 'atom':
@@ -357,8 +357,12 @@ $LastChangedRevision$
 		}
 		else {
 			// Messy mode, but prevent to get the id for file_downloads
-			if ($out['id'] && !$out['s'])
-				$out['s'] = safe_field('section', 'textpattern', "ID='".doSlash($out['id'])."'");
+			if ($out['id'] && !$out['s']) {
+				$rs = lookupByID($out['id']);
+				$out['id'] = (!empty($rs['ID'])) ? $rs['ID'] : '';
+				$out['s'] = (!empty($rs['Section'])) ? $rs['Section'] : '';
+				$is_404 = (empty($out['s']) or empty($out['id']));
+			}
 		}
 
 		// Resolve AuthorID from Authorname
@@ -1030,18 +1034,18 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function ckExID($val,$debug='') 
 	{
-		return safe_row("ID,Section",'textpattern',"ID = ".doSlash($val)." limit 1",$debug);
+		return safe_row("ID,Section",'textpattern',"ID = ".doSlash($val)." and Status >= '4' limit 1",$debug);
 	}
 
 // -------------------------------------------------------------
 	function lookupByTitle($val,$debug='') 
 	{
-		return safe_row("ID,Section",'textpattern',"url_title like '".doSlash($val)."' limit 1",$debug);
+		return safe_row("ID,Section",'textpattern',"url_title like '".doSlash($val)."' and Status >= '4' limit 1",$debug);
 	}
 // -------------------------------------------------------------
 	function lookupByTitleSection($val,$section,$debug='') 
 	{
-		return safe_row("ID,Section",'textpattern',"url_title like '".doSlash($val)."' AND Section='$section' limit 1",$debug);
+		return safe_row("ID,Section",'textpattern',"url_title like '".doSlash($val)."' AND Section='$section' and Status >= '4' limit 1",$debug);
 	}	
 
 // -------------------------------------------------------------
@@ -1049,20 +1053,20 @@ $LastChangedRevision$
 	function lookupByIDSection($id, $section, $debug = '') 
 	{
 		return safe_row('ID, Section', 'textpattern', 
-			"ID = ".intval($id)." and Section = '".doSlash($section)."' limit 1", $debug);
+			"ID = ".intval($id)." and Section = '".doSlash($section)."' and Status >= '4' limit 1", $debug);
 	}	
 
 // -------------------------------------------------------------
 	function lookupByID($id,$debug='') 
 	{
-		return safe_row("ID,Section",'textpattern',"ID = '".doSlash($id)."' limit 1",$debug);
+		return safe_row("ID,Section",'textpattern',"ID = '".doSlash($id)."' and Status >= '4' limit 1",$debug);
 	}
 
 // -------------------------------------------------------------
 	function lookupByDateTitle($when,$title,$debug='') 
 	{
 		return safe_row("ID,Section","textpattern",
-		"posted like '".doSlash($when)."%' and url_title like '".doSlash($title)."' limit 1");
+		"posted like '".doSlash($when)."%' and url_title like '".doSlash($title)."' and Status >= '4' limit 1");
 	}
 
 // -------------------------------------------------------------
