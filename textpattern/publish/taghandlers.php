@@ -228,7 +228,6 @@ $LastChangedRevision$
 		global $s, $c;
 
 		extract(lAtts(array(
-			'break'    => br,
 			'category' => $c,
 			'flavor'   => 'rss',
 			'format'   => 'a',
@@ -272,7 +271,6 @@ $LastChangedRevision$
 		global $c;
 
 		extract(lAtts(array(
-			'break'    => br,
 			'category' => $c,
 			'flavor'   => 'rss',
 			'format'   => 'a',
