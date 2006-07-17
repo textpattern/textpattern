@@ -121,31 +121,35 @@ $LastChangedRevision$
 			startTable('edit').
 			tr(
 				tdtl(
-					hed(gTxt('useful_tags'), 2).
+					hed(gTxt('tagbuilder'), 2).
 
-					hed(gTxt('articles').sp.popHelp('form_place_article'), 3).
-						popTagLinks('article').
+					hed('<a href="#" onclick="toggleDisplay(\'article-tags\'); return false;">'.gTxt('articles').'</a>'.
+						sp.popHelp('form_articles'), 3, ' class="plain"').
+						'<div id="article-tags">'.popTagLinks('article').'</div>'.
 
-					hed(gTxt('links').sp.popHelp('form_place_link'), 3).
-						popTagLinks('link').
+					hed('<a href="#" onclick="toggleDisplay(\'link-tags\'); return false;">'.gTxt('links').
+						sp.popHelp('form_place_link'), 3, ' class="plain"').
+						'<div id="link-tags" style="display: none;">'.popTagLinks('link').'</div>'.
 
-					hed(gTxt('displayed_comments').sp.popHelp('form_place_comment'), 3).
-						popTagLinks('comment').
+					hed('<a href="#" onclick="toggleDisplay(\'comment-tags\'); return false;">'.gTxt('comments').'</a>'.
+						sp.popHelp('form_comments'), 3, ' class="plain"').
+						'<div id="comment-tags" style="display: none;">'.popTagLinks('comment').'</div>'.
 
-					hed(gTxt('comment_form').sp.popHelp('form_place_input'), 3).
-						popTagLinks('comment_form').
+					hed('<a href="#" onclick="toggleDisplay(\'comment-detail-tags\'); return false;">'.gTxt('comment_details').'</a>'.
+						sp.popHelp('form_comment_details'), 3, ' class="plain"').
+						'<div id="comment-detail-tags" style="display: none;">'.popTagLinks('comment_details').'</div>'.
 
-					hed(gTxt('search_input_form').sp.popHelp('form_place_search_input'), 3).
-						popTagLinks('search_input').
+					hed('<a href="#" onclick="toggleDisplay(\'comment-form-tags\'); return false;">'.gTxt('comment_form').'</a>'.
+						sp.popHelp('form_comment_form'), 3, ' class="plain"').
+						'<div id="comment-form-tags" style="display: none;">'.popTagLinks('comment_form').'</div>'.
 
-					hed(gTxt('search_results_form').sp.popHelp('form_place_search_results'), 3).
-						popTagLinks('search_result').
+					hed('<a href="#" onclick="toggleDisplay(\'search-result-tags\'); return false;">'.gTxt('search_results_form').'</a>'.
+						sp.popHelp('form_search_results'), 3, ' class="plain"').
+						'<div id="search-result-tags" style="display: none;">'.popTagLinks('search_result').'</div>'.
 
-					hed(
-						'<a href="#" onclick="toggleDisplay(\'download-tags\'); return false;">'.gTxt('file_download_tags').'</a> '.
-						popHelp('form_file_download_tags')
-					, 3).
-						tag(popTagLinks('file_download'), 'div', ' id="download-tags" style="display: none;"')
+					hed('<a href="#" onclick="toggleDisplay(\'file-tags\'); return false;">'.gTxt('file_download_tags').'</a>'.
+						sp.popHelp('form_file_download_tags'), 3, ' class="plain"').
+						'<div id="file-tags" style="display: none;">'.popTagLinks('file_download').'</div>'
 				).
 				tdtl(
 					'<form action="index.php" method="post">'.

@@ -42,6 +42,10 @@ h3 {
 font-size: 1.2em;
 }
 
+h3.plain {
+font: 1em Verdana, Arial, sans-serif;
+}
+
 p {
 line-height: 1.4em;
 }
@@ -442,10 +446,6 @@ padding-left: 10px;
 width: 200px;
 }
 
-td#article-col-1 h3 {
-font: 1em Verdana, Arial, sans-serif;
-}
-
 textarea#body {
 width: 400px;
 height: 420px;
@@ -513,4 +513,21 @@ overflow: auto;
 textarea#plugin-install {
 width: 400px;
 height: 30px;
+}
+
+/* tagbuilder
+----------------------------------------------- */
+
+body#tag-event {
+padding: 10px;
+border-top: 15px solid #fc3;
+}
+
+table#tagbuilder td {
+padding: 2px 5px;
+}
+
+p#tagbuilder-output {
+margin-top: 10px;
+text-align: center;
 }

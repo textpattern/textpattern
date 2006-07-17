@@ -46,26 +46,33 @@ $LastChangedRevision$
 				tda(
 
 					n.hed(
-						gTxt('useful_tags')
+						gTxt('tagbuilder')
 					, 2).
 
-					n.n.hed(gTxt('page_article_hed'), 3).
-						n.taglinks('page_article').
+					n.n.hed(
+						'<a href="#" onclick="toggleDisplay(\'article-tags\'); return false;">'.gTxt('page_article_hed').'</a>'
+					, 3, ' class="plain"').
+						n.'<div id="article-tags">'.taglinks('page_article').'</div>'.
 
-					n.n.hed(gTxt('page_article_nav_hed'), 3).
-						n.taglinks('page_article_nav').
+					n.n.hed('<a href="#" onclick="toggleDisplay(\'article-nav-tags\'); return false;">'.gTxt('page_article_nav_hed').'</a>'
+					, 3, ' class="plain"').
+						n.'<div id="article-nav-tags" style="display: none;">'.taglinks('page_article_nav').'</div>'.
 
-					n.n.hed(gTxt('page_nav_hed'), 3).
-						n.taglinks('page_nav').
+					n.n.hed('<a href="#" onclick="toggleDisplay(\'nav-tags\'); return false;">'.gTxt('page_nav_hed').'</a>'
+					, 3, ' class="plain"').
+						n.'<div id="nav-tags" style="display: none;">'.taglinks('page_nav').'</div>'.
 
-					n.n.hed(gTxt('page_xml_hed'), 3).
-						n.taglinks('page_xml').
+					n.n.hed('<a href="#" onclick="toggleDisplay(\'xml-tags\'); return false;">'.gTxt('page_xml_hed').'</a>'
+					, 3, ' class="plain"').
+						n.'<div id="xml-tags" style="display: none;">'.taglinks('page_xml').'</div>'.
 
-					n.n.hed(gTxt('page_misc_hed'), 3).
-						n.taglinks('page_misc').
+					n.n.hed('<a href="#" onclick="toggleDisplay(\'misc-tags\'); return false;">'.gTxt('page_misc_hed').'</a>'
+					, 3, ' class="plain"').
+						n.'<div id="misc-tags" style="display: none;">'.taglinks('page_misc').'</div>'.
 
-					n.n.hed(gTxt('page_file_hed'), 3).
-						n.taglinks('page_file')
+					n.n.hed('<a href="#" onclick="toggleDisplay(\'file-tags\'); return false;">'.gTxt('page_file_hed').'</a>'
+					, 3, ' class="plain"').
+						n.'<div id="file-tags" style="display: none;">'.taglinks('page_file').'</div>'
 				).
 
 				tda(

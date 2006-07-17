@@ -342,13 +342,15 @@ $DB = new DB;
 		if (!$rs) return array();
 		extract($rs);
 
+		$inc_root = ($root == 'root') ? " and name != 'root'" : '';
+
 		$out = array();
 		$right = array(); 
 
 	    $rs = safe_rows_start(
 	    	"id, name, lft, rgt, parent, title", 
 	    	"txp_category",
-	    	"lft between $l and $r and type = '$type' order by lft asc"
+	    	"lft between $l and $r and type = '$type' $inc_root order by lft asc"
 		); 
 
 	    while ($rs and $row = nextRow($rs)) {

@@ -404,7 +404,7 @@ $LastChangedRevision$
 	function popTag($var, $text, $width = '', $height = '') 
 	{
 		return '<a target="_blank"'.
-			' href="?event=tag'.a.'name='.$var.'"'.
+			' href="?event=tag'.a.'tag_name='.$var.'"'.
 			' onclick="popWin(this.href'.
 			($width ? ', '.$width : '').
 			($height ? ', '.$height : '').
@@ -420,7 +420,6 @@ $LastChangedRevision$
 		include txpath.'/lib/taglib.php';
 
 		$arname = $type.'_tags';
-		asort($$arname);
 
 		$out = array();
 

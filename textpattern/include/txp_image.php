@@ -172,7 +172,7 @@ $LastChangedRevision$
 					'<img src="'.hu.$img_dir.'/'.$id.'t'.$ext.'" />' :
 					gTxt('no');
 
-				$tag_url = '?event=tag'.a.'name=image'.a.'id='.$id.a.'ext='.$ext.a.
+				$tag_url = '?event=tag'.a.'tag_name=image'.a.'id='.$id.a.'ext='.$ext.a.
 					'alt='.$alt.a.'h='.$h.a.'w='.$w;
 
 				$category = ($category) ? '<span title="'.fetch_category_title($category, 'image').'">'.$category.'</span>' : '';
@@ -200,9 +200,9 @@ $LastChangedRevision$
 
 					td(
 						'<ul>'.
-						'<li><a target="_blank" href="'.$tag_url.a.'type=textile" onclick="popWin(this.href, 400, 250); return false;">Textile</a></li>'.
-						'<li><a target="_blank" href="'.$tag_url.a.'type=textpattern" onclick="popWin(this.href, 400, 250); return false;">Textpattern</a></li>'.
-						'<li><a target="_blank" href="'.$tag_url.a.'type=xhtml" onclick="popWin(this.href, 400, 250); return false;">XHTML</a></li>'.
+						'<li><a target="_blank" href="'.$tag_url.a.'type=textile" onclick="popWin(this.href); return false;">Textile</a></li>'.
+						'<li><a target="_blank" href="'.$tag_url.a.'type=textpattern" onclick="popWin(this.href); return false;">Textpattern</a></li>'.
+						'<li><a target="_blank" href="'.$tag_url.a.'type=xhtml" onclick="popWin(this.href); return false;">XHTML</a></li>'.
 						'</ul>'
 					, 85).
 

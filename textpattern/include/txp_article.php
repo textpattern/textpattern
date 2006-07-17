@@ -331,7 +331,7 @@ if (!empty($event) and $event == 'article') {
 
 			echo side_help($textile_body, $textile_excerpt).
 
-			'<h3><a href="#" onclick="toggleDisplay(\'advanced\'); return false;">'.gTxt('advanced_options').'</a></h3>',
+			'<h3 class="plain"><a href="#" onclick="toggleDisplay(\'advanced\'); return false;">'.gTxt('advanced_options').'</a></h3>',
 			'<div id="advanced" style="display:none;">',
 
 			// markup selection
@@ -373,7 +373,7 @@ if (!empty($event) and $event == 'article') {
 		
 			'</div>
 			
-			<h3><a href="#" onclick="toggleDisplay(\'recent\'); return false;">'.gTxt('recent_articles').'</a>'.'</h3>'.
+			<h3 class="plain"><a href="#" onclick="toggleDisplay(\'recent\'); return false;">'.gTxt('recent_articles').'</a>'.'</h3>'.
 			'<div id="recent" style="display:none;">';
 			
 			$recents = safe_rows_start("Title, ID",'textpattern',"1=1 order by LastMod desc limit 10");
@@ -727,7 +727,9 @@ if (!empty($event) and $event == 'article') {
 	{
 		if ($textile_body == USE_TEXTILE or $textile_excerpt == USE_TEXTILE)
 		{
-			return n.hed('<a href="#" onclick="toggleDisplay(\'textile_help\'); return false;">'.gTxt('textile_help').'</a>', 3).
+			return n.hed(
+				'<a href="#" onclick="toggleDisplay(\'textile_help\'); return false;">'.gTxt('textile_help').'</a>'
+			, 3, ' class="plain"').
 
 				n.'<div id="textile_help" style="display: none;">'.
 

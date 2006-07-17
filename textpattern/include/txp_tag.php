@@ -1,15 +1,4 @@
 <?php
-	if (!defined('txpinterface')) die('txpinterface is undefined.');
-?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-	<title>Textpattern: <?php echo gTxt('build'); ?></title>
-<link rel="stylesheet" href="/textpattern/textpattern.css" type="text/css" />
-</head>
-<body style="padding:10px;background-color:#fff;border-top:solid #FFCC33 15px;">
-<?php
 
 /*
 	This is Textpattern
@@ -18,876 +7,3650 @@
 	www.textpattern.com
 	All rights reserved
 
-	Use of this software indicates acceptance of the Textpattern license agreement 
+	Use of this software indicates acceptance of the Textpattern license agreement
 
 $HeadURL$
 $LastChangedRevision$
 
 */
-	$name = gps('name');
-	$endform = tr(tdcs(fInput('submit','',gTxt('build'),'smallerbox'),2)).endTable().
-		eInput('tag').sInput('build').hInput('name',$name);
 
-	$functname = 'tag_'.$name;
-
-	if(function_exists($functname)) {
-		echo $functname($name);
-	}
-
+if (!defined('txpinterface'))
+{
+	die('txpinterface is undefined.');
+}
 
 // -------------------------------------------------------------
-	function tagRow($label, $thing) 
+
+?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Txp &#8250; <?php echo gTxt('build'); ?></title>
+	<link rel="stylesheet" type="text/css" href="textpattern.css" />
+</head>
+<body id="tag-event">
+<?php
+
+	$tag_name = gps('tag_name');
+
+	$functname = 'tag_'.$tag_name;
+
+	if (function_exists($functname))
 	{
-		return tr(fLabelCell($label) . td($thing));
+		$endform = n.tr(
+			td().
+			td(
+				fInput('submit', '', gTxt('build'), 'smallerbox')
+			)
+		).
+		n.endTable().
+		n.eInput('tag').
+		n.sInput('build').
+		n.hInput('tag_name', $tag_name);
+
+		echo $functname($tag_name);
 	}
 
+?>
+
+</body>
+</html>
+<?php
+
+/*
+
+begin generic functions
+
+*/
+
 // -------------------------------------------------------------
-	function tag_article() 
+
+	function tagRow($label, $thing)
 	{
-		global $step,$endform,$name;
-		$invars = gpsa(array('form','limit','listform'));
-		extract($invars);
-		$out = form(startTable('list').
-			tr(tdcs(hed(gTxt('page_article_hed'),3),2) ).
-			tagRow('form', form_pop($form,'article','form')) .
-			tagRow('listform', form_pop($listform,'article','listform')) .
-			tagRow('limit', inputLimit($limit)) .
-			$endform
+		return n.n.tr(
+			n.fLabelCell($label).
+			n.td($thing)
 		);
-		$out .= ($step=='build') ? tdb(tb($name, $invars)) : '';
-		return $out;
-	}
-
-
-// -------------------------------------------------------------
-	function tag_article_custom()
-	{
-		global $step,$endform,$name;
-		$invars = gpsa(array(
-			'form','limit','category','section','sortby','sortdir',
-			'excerpted','author','month','keywords','listform'
-		));
-		extract($invars);
-		$out = form(startTable('list').
-			tr(tdcs(hed(gTxt('tag_article_custom'),3),2) ) .
-			tagRow('form'          , form_pop($form,'article','form')) .
-			tagRow('listform'      , form_pop($listform,'article','listform')) .
-			tagRow('limit'         , inputLimit($limit)) .
-			tagRow('category'      , category_pop($category)) .
-			tagRow('section'       , section_pop($section)) .	
-			tagRow('keywords'      , key_input('keywords',$keywords)) .	
-			tagRow('author'        , author_pop($author)) .	
-			tagRow('sort_by'       , sort_pop($sortby)) . 
-			tagRow('sort_direction', sortdir_pop($sortdir)) .
-			tagRow('month'         , inputMonth($month). ' ('.gTxt('yyyy-mm').')') .
-			tagRow('has_excerpt'   , yesno_pop('excerpted',$excerpted)) .
-			$endform
-		);
-		$out .= ($step=='build') ? tdb(tb($name, $invars)) : '';
-		return $out;
 	}
 
 // -------------------------------------------------------------
-	function tag_email() 
+
+	function tb($tag, $atts_list = array(), $thing = '')
 	{
-		global $step,$endform,$name;
-		$invars = gpsa(array('email','linktext','title'));
-		extract($invars);
-		$out = form(startTable('list').
-			tr(tdcs(hed(gTxt('tag_email'),3),2) ) .
-			tagRow('email_address', fInput('text','email',$email,'edit','','',20)).
-			tagRow('tooltip', fInput('text','title',$title,'edit','','',20)).
-			tagRow('link_text', fInput('text','linktext',$linktext,'edit','','',20)).
-			$endform
-		);
-		
-		$out .= ($step=='build') ? tdb(tb($name, $invars)) : '';
-		return $out;
-	}
+		$atts = array();
 
-// -------------------------------------------------------------
-	function tag_page_title() 
-	{
-		global $step,$endform,$name;
-		$invars = gpsa(array('separator'));
-		extract($invars);
-		$out = form(startTable('list').
-			tr(tdcs(hed(gTxt('tag_page_title'),3),2) ).
-			tagRow('title_separator',fInput('text','separator',$separator,'edit','','',4)).
-			$endform
-		);
-		$out .= ($step=='build') ? tdb(tb($name, $invars)) : '';
-		return $out;
-	}
-
-// -------------------------------------------------------------
-	function tag_linklist() 
-	{
-		global $step,$endform,$name;
-		$invars = gpsa(array('form','category','limit','sort','wraptag','break','label','labeltag'));
-		$sorts = array(''=>'','linksort'=>'Name',
-				'date desc'=>'Date descending','date asc'=>'Date ascending', 'rand()'=>'Random');
-		extract($invars);
-		$out = form(startTable('list').
-			tr(tdcs(hed(gTxt('tag_linklist'),3),2) ).
-			tagRow('form', form_pop($form,'link','form')).
-			tagRow('category', link_category_pop($category)).
-			tagRow('limit', fInput('text','limit',$limit,'edit','','',2)).
-			tagRow('sort_by', selectInput("sort",$sorts,$sort)).
-			tagRow('wraptag', fInput('text','wraptag',$wraptag,'edit','','',2)).
-			tagRow('break', fInput('text','break',$break,'edit','','',5)).
-			tagRow('label', fInput('text','label',$label,'edit','','',20)).
-			tagRow('labeltag', fInput('text','labeltag',$labeltag,'edit','','',5)).
-			$endform
-		);
-		$out .= ($step=='build') ? tdb(tb($name, $invars)) : '';
-		echo $out;	
-	}
-
-// -------------------------------------------------------------
-	function tag_category_list() 
-	{
-		global $step,$endform,$name;
-		$invars = gpsa(array('form','category','wraptag','break','label','labeltag'));
-		extract($invars);
-		$out = form(startTable('list').
-			tr(tdcs(hed(gTxt('tag_category_list'),3),2) ).
-			tagRow('category', category_pop($category)).
-			tagRow('wraptag', fInput('text','wraptag',$wraptag,'edit','','',2)).
-			tagRow('break', fInput('text','break',$break,'edit','','',5)).
-			tagRow('label', fInput('text','label',$label,'edit','','',20)).
-			tagRow('labeltag', fInput('text','labeltag',$labeltag,'edit','','',5)).
-			$endform
-		);
-		$out .= ($step=='build') ? tdb(tb($name, $invars)) : '';
-		echo $out;	
-	}
-
-
-// -------------------------------------------------------------
-	function tag_recent_articles() 
-	{
-		global $step,$endform,$name;
-		$invars = gpsa(array('label','limit','break','wraptag','category','sortby','sortdir','labeltag'));
-		extract($invars);
-		$label = (!$label) ? gTxt('recently') : $label;
-		$limit = (!$limit) ? '10' : $limit;
-		$break = (!$break) ? '<br />' : $break;
-		$category = (!$category) ? '' : $category;
-		$sortby = (!$sortby) ? '' : $sortby;
-		$out = form(startTable('list').
-			tr(tdcs(hed(gTxt('tag_recent_articles'),3),2) ) .
-			tagRow('label', fInput('text','label',$label,'edit','','',20)).
-			tagRow('labeltag', fInput('text','labeltag',$labeltag,'edit','','',5)).
-			tagRow('limit', fInput('text','limit',$limit,'edit','','',2)) .
-			tagRow('break', fInput('text','break',$break,'edit','','',5)) .
-			tagRow('wraptag', fInput('text','wraptag',$wraptag,'edit','','',2)) .
-			tagRow('category', category_pop($category)) .
-			tagRow('sort_by', sort_pop($sortby)) .
-			tagRow('sort_direction', sortdir_pop($sortdir)) .
-			$endform
-		);
-		$out .= ($step=='build') ? tdb(tb($name, $invars)) : '';
-		return $out;	
-	}
-
-// -------------------------------------------------------------
-	function tag_related_articles() 
-	{
-		global $step,$endform,$name;
-		$invars = gpsa(array('label','limit','break','wraptag','labeltag'));
-		extract($invars);
-		$label = (!$label) ? 'Related Articles' : $label;
-		$limit = (!$limit) ? '10' : $limit;
-		$break = (!$break) ? '<br />' : $break;
-		
-		$out = form(startTable('list').
-			tr(tdcs(hed(gTxt('tag_related_articles'),3),2) ).
-			tagRow('label', fInput('text','label',$label,'edit','','',20)).
-			tagRow('labeltag', fInput('text','labeltag',$labeltag,'edit','','',5)).
-			tagRow('limit', fInput('text','limit',$limit,'edit','','',2)).
-			tagRow('break', fInput('text','break',$break,'edit','','',5)).
-			tagRow('wraptag', fInput('text','wraptag',$wraptag,'edit','','',2)).
-			$endform
-		);
-		$out .= ($step=='build') ? tdb(tb($name, $invars)) : '';
-		return $out;	
-	}
-
-// -------------------------------------------------------------
-	function tag_recent_comments() 
-	{
-		global $step,$endform,$name;
-		$invars = gpsa(array('label','limit','break','wraptag','labeltag'));
-		extract($invars);
-		$label = (!$label) ? 'Recent Comments' : $label;
-		$limit = (!$limit) ? '10' : $limit;
-		$break = (!$break) ? '<br />' : $break;
-		$out = form(startTable('list').
-			tr(tdcs(hed(gTxt('tag_recent_comments'),3),2) ).
-			tagRow('label', fInput('text','label',$label,'edit','','',20)).
-			tagRow('labeltag', fInput('text','labeltag',$labeltag,'edit','','',5)).
-			tagRow('limit', fInput('text','limit',$limit,'edit','','',2)).
-			tagRow('break', fInput('text','break',$break,'edit','','',5)).
-			tagRow('wraptag', fInput('text','wraptag',$wraptag,'edit','','',2)).
-			$endform
-		);
-		$out .= ($step=='build') ? tdb(tb($name, $invars)) : '';
-		return $out;	
-	}
-
-// -------------------------------------------------------------
-	function tag_output_form() 
-	{
-		global $step,$endform,$name;
-		$invars = gpsa(array('form'));
-		extract($invars);
-		$out = form(startTable('list').
-			tr(tdcs(hed(gTxt('tag_output_form'),3),2) ).
-			tagRow('form', form_pop($form,'','form')).
-			$endform
-		);
-		$out .= ($step=='build') ? tdb(tb($name, $invars)) : '';
-		return $out;	
-	}
-
-// -------------------------------------------------------------
-	function tag_popup() 
-	{
-		global $step,$endform,$name;
-		$invars = gpsa(array('label','type','wraptag'));
-		extract($invars);
-		$typearr = array('c'=>gTxt('Category'),'s'=>gTxt('Section'));
-		$out = form(startTable('list').
-			tr(tdcs(hed(gTxt('tag_popup'),3),2) ).
-			tagRow('label', fInput('text','label',$label,'edit','','',25)).
-			tagRow('type', selectInput('type',$typearr,$type)).
-			tagRow('wraptag', fInput('text','wraptag',$wraptag,'edit','','',2)).
-			$endform
-		);
-		$out .= ($step=='build') ? tdb(tb($name, $invars)) : '';
-		return $out;	
-	}
-
-// -------------------------------------------------------------
-	function tag_password_protect() 
-	{
-		global $step,$endform,$name;
-		$invars = gpsa(array('login','pass'));
-		extract($invars);
-		$out = form(startTable('list').
-			tr(tdcs(hed(gTxt('tag_password_protect'),3),2) ).
-			tagRow('login', fInput('text','login',$login,'edit','','',25)).
-			tagRow('password', fInput('password','pass',$pass,'','','',25)).
-			$endform
-		);
-		$out .= ($step=='build') ? tdb(tb($name, $invars)) : '';
-		return $out;	
-	}
-
-// -------------------------------------------------------------
-	function tag_search_input() 
-	{
-		global $step,$endform,$name;
-		$invars = gpsa(array('label','button','size','wraptag'));
-		extract($invars);
-		$button = (!$button) ? 'Search' : $button;
-		$size = (!$size) ? '15' : $size;
-		$label = (!$label) ? 'Search' : $label;
-		$out = form(startTable('list').
-			tr(tdcs(hed(gTxt('tag_search_input'),3),2) ).
-			tagRow('label', fInput('text','label',$label,'edit','','',25)).
-			tagRow('button_text', fInput('text','button',$button,'edit','','',25)).
-			tagRow('input_size', fInput('text','size',$size,'edit','','',2)).
-			tagRow('wraptag', fInput('text','wraptag',$wraptag,'edit','','',2)).
-			$endform
-		);
-		$out .= ($step=='build') ? tdb(tb($name, $invars)) : '';
-		return $out;
-	}
-
-// -------------------------------------------------------------
-	function tag_category1() 
-	{
-		global $step,$endform,$name;
-		$invars = gpsa(array('link'));
-		extract($invars);
-		$out = form(startTable('list').
-			tr(tdcs(hed(gTxt('tag_category1'),3),2) ).
-			tagRow('link_to_this_category', yesno_pop('link',$link)) .
-			$endform
-		);
-		$out .= ($step=='build') ? tdb(tb($name, $invars)) : '';
-		return $out;
-	}
-
-// -------------------------------------------------------------
-	function tag_category2() 
-	{
-		global $step,$endform,$name;
-		$invars = gpsa(array('link'));
-		extract($invars);
-		$out = form(startTable('list').
-			tr(tdcs(hed(gTxt('tag_category2'),3),2) ).
-			tagRow('link_to_this_category', yesno_pop('link',$link)) .
-			$endform
-		);
-		$out .= ($step=='build') ? tdb(tb($name, $invars)) : '';
-		return $out;
-	}
-
-// -------------------------------------------------------------
-	function tag_section() 
-	{
-		global $step,$endform,$name;
-		$invars = gpsa(array('link'));
-		extract($invars);
-		$out = form(startTable('list').
-			tr(tdcs(hed(gTxt('Section'),3),2) ).
-			tagRow('link_to_this_section', yesno_pop('link',$link)) .
-			$endform
-		);
-		$out .= ($step=='build') ? tdb(tb($name, $invars)) : '';
-		return $out;
-	}
-
-// -------------------------------------------------------------
-	function tag_author() 
-	{
-		global $step,$endform,$name;
-		$invars = gpsa(array('author','link'));
-		extract($invars);
-		$out = form(startTable('list').
-			tr(tdcs(hed(gTxt('tag_author'),3),2) ).
-			tagRow('link_to_this_author', yesno_pop('link',$link)) .
-			$endform
-		);
-		$out .= ($step=='build') ? tdb(tb($name, $invars)) : '';
-		return $out;
-	}
-
-// -------------------------------------------------------------
-	function tag_link_to_home() 
-	{
-		global $step,$endform,$name;
-		$label = gps('label');
-		$label = (!$label) ? gTxt('tag_home') : $label;
-		$out = form(startTable('list').
-			tr(tdcs(hed(gTxt('tag_link_to_home'),3),2) ).
-			tagRow('link_text', fInput('text','label',$label,'edit','','',25)).
-			$endform
-		);
-		$out .= ($step=='build') ? tdb(tbd($name, $label)) : '';
-		return $out;
-	}
-
-// -------------------------------------------------------------
-	function tag_link_to_prev() 
-	{
-		global $step,$endform,$name;
-		$label = gps('label');
-		$label = (!$label) ? '<txp:prev_title />' : $label;
-		$out = form(startTable('list').
-			tr(tdcs(hed(gTxt('tag_link_to_prev'),3),2) ).
-			tagRow('link_text', fInput('text','label',$label,'edit','','',25)).
-			$endform
-		);
-		$out .= ($step=='build') ? tdb(tbd($name, $label)) : '';
-		return $out;
-	}
-
-// -------------------------------------------------------------
-	function tag_link_to_next() 
-	{
-		global $step,$endform,$name;
-		$label = gps('label');
-		$label = (!$label) ? '<txp:next_title />' : $label;
-		$out = form(startTable('list').
-			tr(tdcs(hed(gTxt('tag_link_to_next'),3),2) ).
-			tagRow('link_text', fInput('text','label',$label,'edit','','',25) ).
-			$endform
-		);
-		$out .= ($step=='build') ? tdb(tbd($name, $label)) : '';
-		return $out;
-	}
-
-// -------------------------------------------------------------
-	function tag_feed_link() 
-	{
-		global $step,$endform,$name;
-		$invars = gpsa(array('label','category','section','flavor','wraptag','limit'));
-		extract($invars);
-
-		$label = (!$label) ? 'XML' : $label;
-		$flavarr = array('rss'=>'rss','atom'=>'atom');
-		$out = form(startTable('list').
-			tr(tdcs(hed(gTxt('tag_feed_link'),3),2) ) .
-			tagRow('label', fInput('text','label',$label,'edit','','',25)) .
-			tagRow('limit', inputLimit($limit)) .
-			tagRow('wraptag', fInput('text','wraptag',$wraptag,'edit','','',2)).
-			tagRow('flavour', selectInput('flavor',$flavarr,$flavor)) .
-			tagRow('section', section_pop($section)) .
-			tagRow('category', category_pop($section)) .
-			$endform
-		);
-		$out .= ($step=='build') ? tdb(tb($name, $invars)) : '';
-		return $out;
-	}
-
-// -------------------------------------------------------------
-	function tag_link_feed_link() 
-	{
-		global $step,$endform,$name;
-		$invars = gpsa(array('label','category','limit','wraptag'));
-		extract($invars);
-		$label = (!$label) ? 'XML' : $label;
-		$out = form(startTable('list').
-			tr(tdcs(hed(gTxt('tag_link_feed_link'),3),2) ) .
-			tagRow('label',fInput('text','label',$label,'edit','','',25)) .
-			tagRow('wraptag', fInput('text','wraptag',$wraptag,'edit','','',2)).
-			tagRow('category', link_category_pop($category)) .
-			tagRow('limit', fInput('text','limit',$limit,'edit','','',2)).
-			$endform
-		);
-		$out .= ($step=='build') ? tdb(tb($name, $invars)) : '';
-		return $out;
-	}
-
-
-	// double tags eg: <txp:permlink> permanent link </txp:permlink>
-
-	function tag_permlink()  { return tdb(tbd('permlink',gTxt('text_or_tag'))); }
-
-	function tag_paging_link() { return tdb(tbd('paging_link',gTxt('text_or_tag'))); }
-
-	function tag_newer()       { return tdb(tbd('newer',gTxt('text_or_tag'))); }
-
-	function tag_older()       { return tdb(tbd('older',gTxt('text_or_tag'))); }
-
-	// single tags eg: <txp:body /> 
-	
-	function tag_next_title()          { return tdb(tb('next_title')); }
-
-	function tag_sitename()            { return tdb(tb('sitename')); }
-
-	function tag_site_slogan()         { return tdb(tb('site_slogan')); }
-
-	function tag_prev_title()          { return tdb(tb('prev_title')); }
-
-	function tag_article_image()       { return tdb(tb('article_image')); }
-
-	function tag_css()                 { return tdb(tb('css')); }
-
-	function tag_body()                { return tdb(tb('body')); }
-
-	function tag_excerpt()             { return tdb(tb('excerpt')); }
-
-	function tag_title()               { return tdb(tb('title')); }
-
-	function tag_link()                { return tdb(tb('link')); }
-
-	function tag_linkdesctitle()       { return tdb(tb('linkdesctitle')); }
-
-	function tag_link_description()    { return tdb(tb('link_description')); }
-
-	function tag_link_text()           { return tdb(tb('link_text')); }
-
-	function tag_posted()              { return tdb(tb('posted'));	}
-
-	function tag_comments_invite()     { return tdb(tb('comments_invite')); }
-
-	function tag_comment_permlink()    { return tdb(tbd('comment_permlink','#')); }
-
-	function tag_comment_time()        { return tdb(tb('comment_time')); }
-
-	function tag_message()             { return tdb(tb('message')); }
-
-	function tag_comment_name()        { return tdb(tb('comment_name')); }
-
-	function tag_comment_email_input() { return tdb(tb('comment_email_input')); }
-
-	function tag_comment_message_input() { return tdb(tb('comment_message_input')); }
-
-	function tag_comment_name_input()  { return tdb(tb('comment_name_input')); }
-
-	function tag_comment_preview()     { return tdb(tb('comment_preview')); }
-
-	function tag_comment_remember()    { return tdb(tb('comment_remember')); }
-
-	function tag_comment_submit()      { return tdb(tb('comment_submit')); }
-
-	function tag_comment_web_input()   { return tdb(tb('comment_web_input')); }
-
-	function tag_search_result_title() { return tdb(tb('search_result_title')); }
-
-	function tag_search_result_excerpt() { return tdb(tb('search_result_excerpt')); }
-
-	function tag_search_result_url()   { return tdb(tb('search_result_url')); }
-
-	function tag_search_result_date()  { return tdb(tb('search_result_date')); }
-	
-	function tag_lang()             { return tdb(tb('lang')); }
-	function tag_breadcrumb()
-	{
-		global $step,$endform,$name;
-		$invars = gpsa(array(
-			'wraptag','label','sep','link'
-		));
-		extract($invars);
-		$out = form(startTable('list').
-			tr(tdcs(hed(gTxt('tag_breadcrumb'),3),2) ) .
-			tagRow('breadcrumb_separator',fInput('text','sep',$sep,'edit','','',4)).
-			tagRow('label',fInput('text','label',$label,'edit','','',25)) .
-			tagRow('wraptag', fInput('text','wraptag',$wraptag,'edit','','',2)). 
-			tagRow('breadcrumb_linked'   , yesno_pop('link',$link)) .
-			$endform
-		);
-		$out .= ($step=='build') ? tdb(tb($name, $invars)) : '';
-		return $out;		
-	}
-
-// -------------------------------------------------------------
-	function tb($name,$atts=array(),$double = '') 
-	{
-		$attsout = '';
-		foreach($atts as $a=>$b) if ($b) $attsout[] = ' '.$a.'="'.$b.'"';
-		$atts_built = (is_array($attsout)) ? join('', $attsout) : '';
-
-		return (!empty($double))?'<txp:'.$name.$atts_built.'>'.$double.'</txp:'.$name.'>':'<txp:'.$name.$atts_built.' />';
-	}
-
-// -------------------------------------------------------------
-	function tbd($name,$contents) 
-	{
-		return '<txp:'.$name.'>'.$contents.'</txp:'.$name.'>';
-	}
-
-//--------------------------------------------------------------
-	function link_category_pop($name)
-	{
-		$arr = array('');
-		$rs = getTree("root",'link');
-		if ($rs) {
-			return ' '.treeSelectInput("category",$rs,$name);
+		foreach ($atts_list as $att => $val)
+		{
+			if ($val or $val === '0')
+			{
+				$atts[] = ' '.$att.'="'.$val.'"';
+			}
 		}
-		return 'no link categories created';
+
+		$atts = ($atts) ? join('', $atts) : '';
+
+		return !empty($thing) ?
+			'<txp:'.$tag.$atts.'>'.$thing.'</txp:'.$tag.'>' :
+			'<txp:'.$tag.$atts.' />';
+	}
+
+// -------------------------------------------------------------
+
+	function tbd($tag, $thing)
+	{
+		return '<txp:'.$tag.'>'.$thing.'</txp:'.$tag.'>';
+	}
+
+// -------------------------------------------------------------
+
+	function tdb($thing)
+	{
+		return n.graf(text_area('tag', '100', '300', $thing), ' id="tagbuilder-output"');
 	}
 
 //--------------------------------------------------------------
-	function file_category_pop($name)
+
+	function key_input($name, $var)
 	{
-		$arr = array('');
-		$rs = getTree("root",'file');
-		if ($rs) {
-			return ' '.treeSelectInput("category",$rs,$name);
-		}
-		return 'no link categories created';
+		return '<textarea name="'.$name.'" style="width: 120px; height: 50px;">'.$var.'</textarea>';
 	}
 
 //--------------------------------------------------------------
-	function category_pop($name)
+
+	function input_id($id)
 	{
-		$arr = array('');
-		$rs = getTree('root','article');
-		if ($rs) {
-			return ' '.treeSelectInput("category",$rs,$name);
-		}
-		return 'no categories created';
+		return fInput('text', 'id', $id, 'edit', '', '', 6);
 	}
 
 //--------------------------------------------------------------
-	function sort_pop($sortby)
+
+	function input_time($time)
 	{
-		$arr = array(
-			'Posted' => gTxt('tag_posted'),
-			'AuthorID' => gTxt('tag_author'),
-			'LastMod' => gTxt('last_modification'),
-			'Title' => gTxt('tag_title'),
-			'Section' => gTxt('Section'),
-		);
-		return ' '.selectInput("sortby",$arr,"$sortby");
+		return fInput('text', 'time', $time, 'edit', '', '', 6);
 	}
-	
-//--------------------------------------------------------------
-	function sortdir_pop($sortdir)
-	{
-		$arr = array(
-			'desc' => gTxt('descending'),
-			'asc' => gTxt('ascending')
-		);
-		return ' '.selectInput("sortdir",$arr,"$sortdir");
- 	}
 
 //--------------------------------------------------------------
-	function yesno_pop($name,$val)
+
+	function input_limit($limit)
 	{
-		$arr = array(
-			'' => '',
+		return fInput('text', 'limit', $limit, 'edit', '', '', 2);
+	}
+
+//--------------------------------------------------------------
+
+	function input_offset($offset)
+	{
+		return fInput('text', 'offset', $offset, 'edit', '', '', 2);
+	}
+
+//--------------------------------------------------------------
+
+	function input_tag($name, $val)
+	{
+		return fInput('text', $name, $val, 'edit', '', '', 6);
+	}
+
+//--------------------------------------------------------------
+
+	function yesno_pop($select_name, $val)
+	{
+		$vals = array(
 			'y' => gTxt('yes'),
 			'n' => gTxt('no')
 		);
-		return ' '.selectInput($name,$arr,$val);
- 	}
+
+		return ' '.selectInput($select_name, $vals, $val, true);
+	}
 
 //--------------------------------------------------------------
-	function css_pop($n)
+
+	function yesno2_pop($select_name, $val)
 	{
-		$arr = array('');
-		$rs = safe_rows_start("name", "txp_css", "name!='default' order by name");
-		if ($rs) {
-			while ($a = nextRow($rs)){
-				$v = array_shift($a);
-				$arr[$v] = $v;
+		$vals = array(
+			1 => gTxt('yes'),
+			0 => gTxt('no'),
+		);
+
+		return ' '.selectInput($select_name, $vals, $val, true);
+	}
+
+//--------------------------------------------------------------
+
+	function status_pop($val)
+	{
+		$vals = array(
+			4 => gTxt('live'),
+			5 => gTxt('sticky'),
+			3 => gTxt('pending'),
+			1 => gTxt('draft'),
+			2 => gTxt('hidden'),
+		);
+
+		return ' '.selectInput('status', $vals, $val, true);
+	}
+
+//--------------------------------------------------------------
+
+	function section_pop($select_name, $val)
+	{
+		$vals = array();
+
+		$rs = safe_rows_start('name, title', 'txp_section', "name != 'default' order by name");
+
+		if ($rs and numRows($rs) > 0)
+		{
+			while ($a = nextRow($rs))
+			{
+				extract($a);
+
+				$vals[$name] = $title;
 			}
-			return ' '.selectInput("n",$arr,$n);
+
+			return ' '.selectInput($select_name, $vals, $val, true);
 		}
+
+		return gTxt('no_sections_found');
+	}
+
+//--------------------------------------------------------------
+
+	function type_pop($val)
+	{
+		$vals = array(
+			'article' => gTxt('article'),
+			'link'		=> gTxt('link'),
+			'image'		=> gTxt('image'),
+			'file'		=> gTxt('file'),
+		);
+
+		return ' '.selectInput('type', $vals, $val, true);
+	}
+
+//--------------------------------------------------------------
+
+	function feed_flavor_pop($val)
+	{
+		$vals = array(
+			'atom' => 'Atom 1.0',
+			'rss'	 => 'RSS 0.92'
+		);
+
+		return ' '.selectInput('flavor', $vals, $val, true);
+	}
+
+//--------------------------------------------------------------
+
+	function feed_format_pop($val)
+	{
+		$vals = array(
+			'a'		 => '<a href...',
+			'link' => '<link rel...',
+		);
+
+		return ' '.selectInput('format', $vals, $val, true);
+	}
+
+//--------------------------------------------------------------
+
+	function article_category_pop($val)
+	{
+		$vals = getTree('root','article');
+
+		if ($vals)
+		{
+			return ' '.treeSelectInput('category', $vals, $val);
+		}
+
+		return gTxt('no_article_cats_found');
+	}
+
+//--------------------------------------------------------------
+
+	function link_category_pop($val)
+	{
+		$vals = getTree('root','link');
+
+		if ($vals)
+		{
+			return ' '.treeSelectInput('parent', $vals, $val);
+		}
+
+		return gTxt('no_link_cats_found');
+	}
+
+//--------------------------------------------------------------
+
+	function file_category_pop($val)
+	{
+		$vals = getTree('root','file');
+
+		if ($vals)
+		{
+			return ' '.treeSelectInput('category', $vals, $val);
+		}
+
+		return gTxt('no_file_cats_found');
+	}
+
+//--------------------------------------------------------------
+
+	function match_pop($val)
+	{
+		$vals = array(
+			'Category1,Category2'	=> gTxt('category1').' '.gTxt('and').' '.gTxt('category2'),
+			'Category1'						=> gTxt('category1'),
+			'Category2'						=> gTxt('category2')
+		);
+
+		return ' '.selectInput('match', $vals, $val, true);
+	}
+
+//--------------------------------------------------------------
+
+	function author_pop($val)
+	{
+		$vals = array();
+
+		$rs = safe_rows_start('name', 'txp_users', '1 = 1 order by name');
+
+		if ($rs)
+		{
+			while ($a = nextRow($rs))
+			{
+				extract($a);
+
+				$vals[$name] = $name;
+			}
+
+			return ' '.selectInput('author', $vals, $val, true);
+		}
+	}
+
+//--------------------------------------------------------------
+
+	function sort_pop($val)
+	{
+		$asc = ' ('.gTxt('ascending').')';
+		$desc = ' ('.gTxt('descending').')';
+
+		$vals = array(
+			'Title asc'			 => gTxt('tag_title').$asc,
+			'Title desc'		 => gTxt('tag_title').$desc,
+			'Posted asc'		 => gTxt('tag_posted').$asc,
+			'Posted desc'		 => gTxt('tag_posted').$desc,
+			'LastMod asc'		 => gTxt('last_modification').$asc,
+			'LastMod desc'	 => gTxt('last_modification').$desc,
+			'Section asc'		 => gTxt('section').$asc,
+			'Section desc'	 => gTxt('section').$desc,
+			'Category1 asc'	 => gTxt('category1').$asc,
+			'Category1 desc' => gTxt('category1').$desc,
+			'Category2 asc'	 => gTxt('category2').$asc,
+			'Category2 desc' => gTxt('category2').$desc,
+			'rand()'				 => gTxt('random')
+		);
+
+		return ' '.selectInput('sort', $vals, $val, true);
+	}
+
+//--------------------------------------------------------------
+
+	function discuss_sort_pop($val)
+	{
+		$asc = ' ('.gTxt('ascending').')';
+		$desc = ' ('.gTxt('descending').')';
+
+		$vals = array(
+			'posted asc'	=> gTxt('posted').$asc,
+			'posted desc'	=> gTxt('posted').$desc,
+		);
+
+		return ' '.selectInput('sort', $vals, $val, true);
+	}
+
+//--------------------------------------------------------------
+
+	function pgonly_pop($val)
+	{
+		$vals = array(
+			'1' => gTxt('yes'),
+			'0' => gTxt('no')
+		);
+
+		return ' '.selectInput('pgonly', $vals, $val, true);
+	}
+
+//--------------------------------------------------------------
+
+	function form_pop($select_name, $type = '', $val)
+	{
+		$vals = array();
+
+		$type = ($type) ? "type = '$type'" : '1 = 1';
+
+		$rs = safe_rows_start('name', 'txp_form', "$type order by name");
+
+		if ($rs and numRows($rs) > 0)
+		{
+			while ($a = nextRow($rs))
+			{
+				extract($a);
+
+				$vals[$name] = $name;
+			}
+
+			return ' '.selectInput($select_name, $vals, $val, true);
+		}
+
+		return gTxt('no_forms_available');
+	}
+
+//--------------------------------------------------------------
+
+	function css_pop($val)
+	{
+		$vals = array();
+
+		$rs = safe_rows_start('name', 'txp_css', "1 = 1 order by name");
+
+		if ($rs)
+		{
+			while ($a = nextRow($rs))
+			{
+				extract($a);
+
+				$vals[$name] = $name;
+			}
+
+			return ' '.selectInput('n', $vals, $val, true);
+		}
+
 		return false;
 	}
 
 //--------------------------------------------------------------
-	function section_pop($name) 
+
+	function css_format_pop($val)
 	{
-		$arr = array('');
-		$rs = safe_rows_start("name", "txp_section", "name!='default' order by name");
-		if ($rs) {
-			while ($a = nextRow($rs)){
-				$v = array_shift($a);
-				$arr[$v] = $v;
-			}
-			return ' '.selectInput("section", $arr,$name);
-		}
-		return 'no sections created';
+		$vals = array(
+			'link' => '<link rel...',
+			'url'	 => 'css.php?...'
+		);
+
+		return ' '.selectInput('format', $vals, $val, true);
 	}
 
 //--------------------------------------------------------------
-	function author_pop($name) 
+
+	function escape_pop($val)
 	{
-		$arr = array('');
-		$rs = safe_rows_start("name", "txp_users", "1=1 order by name");
-		if ($rs) {
-			while ($a = nextRow($rs)){
-				$v = array_shift($a);
-				$arr[$v] = $v;
-			}
-			return ' '.selectInput("author", $arr,$name);
-		}
-		return 'no authors created';
+		$vals = array(
+			'html' => 'html',
+		);
+
+		return ' '.selectInput('escape', $vals, $val, true);
 	}
 
 //--------------------------------------------------------------
-	function form_pop($name,$type='',$formname) 
+
+/*
+
+begin tag builder functions
+
+*/
+
+// -------------------------------------------------------------
+
+	function tag_article()
 	{
-		$arr = array('');
-		
-		$typeq = ($type) ? "type = '$type'" : '1=1';
-		
-		$rs = safe_rows_start("name", "txp_form", "$typeq order by name");
-		if ($rs) {
-			while ($a = nextRow($rs)){
-				$v = array_shift($a);
-				$arr[$v] = $v;
-			}
-			return ' '.selectInput($formname, $arr,$name);
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'allowoverride',
+			'form',
+			'limit',
+			'listform',
+			'offset',
+			'pageby',
+			'pgonly',
+			'searchall',
+			'searchsticky',
+			'sort',
+			'status',
+			'time'
+		));
+
+		extract($atts);
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('status',
+				status_pop($status)).
+
+			tagRow('time',
+				input_time($time)).
+
+			tagRow('searchall',
+				yesno2_pop('searchall', $searchall)).
+
+			tagRow('searchsticky',
+				yesno2_pop('searchsticky', $searchsticky)).
+
+			tagRow('limit',
+				input_limit($limit)).
+
+			tagRow('offset',
+				input_offset($offset)).
+
+			tagRow('pageby',
+				fInput('text', 'pageby', $pageby, 'edit', '', '', 2)).
+
+			tagRow('sort',
+				sort_pop($sort)).
+
+			tagRow('pgonly',
+				pgonly_pop($pgonly)).
+
+			tagRow('allowoverride',
+				yesno2_pop('allowoverride', $allowoverride)).
+
+			tagRow('form',
+				form_pop('form', 'article', $form)).
+
+			tagRow('listform',
+				form_pop('listform', 'article', $listform)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
 		}
-		return 'no forms available';
+
+		return $out;
 	}
 
 // -------------------------------------------------------------
-	function key_input($name,$var) 
+
+	function tag_article_custom()
 	{
-		return '<textarea name="'.$name.
-			'" style="width:120px;height:50px">'.$var.'</textarea>';
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'allowoverride',
+			'author',
+			'category',
+			'excerpted',
+			'form',
+			'id',
+			'keywords',
+			'limit',
+			'listform',
+			'month',
+			'offset',
+			'pgonly',
+			'section',
+			'sort',
+			'status',
+			'time'
+		));
+
+		extract($atts);
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('id',
+				input_id($id)).
+
+			tagRow('status',
+				status_pop($status)).
+
+			tagRow('section',
+				section_pop('section', $section)).
+
+			tagRow('category',
+				article_category_pop($category)).
+
+			tagRow('time',
+				input_time($time)).
+
+			tagRow('month',
+				fInput('text', 'month', $month, 'edit', '', '', 7). ' ('.gTxt('yyyy-mm').')') .
+
+			tagRow('keywords',
+				key_input('keywords', $keywords)).
+
+			tagRow('has_excerpt',
+				yesno_pop('excerpted', $excerpted)).
+
+			tagRow('author',
+				author_pop($author)).
+
+			tagRow('sort',
+				sort_pop($sort)).
+
+			tagRow('limit',
+				input_limit($limit)).
+
+			tagRow('offset',
+				input_offset($offset)).
+
+			tagRow('pgonly',
+				pgonly_pop($pgonly)).
+
+			tagRow('allowoverride',
+				yesno2_pop('allowoverride', $allowoverride)).
+
+			tagRow('form',
+				form_pop('form', 'article', $form)).
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
+		return $out;
 	}
 
 // -------------------------------------------------------------
-	function inputLimit($limit) 
-	{
-		return fInput('text','limit',$limit,'edit','','',2);
-	}	
 
-// -------------------------------------------------------------
-	function inputMonth($month) 
+	function tag_email()
 	{
-		return fInput('text','month',$month,'edit','','',7);
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'email',
+			'linktext',
+			'title'
+		));
+
+		extract($atts);
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('email_address',
+				fInput('text', 'email', $email, 'edit', '', '', 20)).
+
+			tagRow('tooltip',
+				fInput('text', 'title', $title, 'edit', '', '', 20)).
+
+			tagRow('link_text',
+				fInput('text', 'linktext', $linktext, 'edit', '', '', 20)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
+		return $out;
 	}
 
 // -------------------------------------------------------------
-	function tdb($thing)
+
+	function tag_page_title()
 	{
-		return hed(gTxt('tag').':',3).text_area('tag','100','300',$thing);
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array('separator'));
+
+		extract($atts);
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('title_separator',
+				fInput('text', 'separator', $separator, 'edit', '', '', 4)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
+		return $out;
 	}
 
 // -------------------------------------------------------------
-	function tag_image() 
-	{
-		global $img_dir;
 
-		$invars = gpsa(array('id','type','h','w','ext','alt'));
-		$i_pfx = (rhu == '/') ? '' : '/';
-		$i_dir = (!$img_dir) ? $i_pfx.'images' : $i_pfx.$img_dir;
-		extract($invars);
-		switch ($type) {
-			case 'textile': 
+	function tag_linklist()
+	{
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'break',
+			'category',
+			'form',
+			'label',
+			'labeltag',
+			'limit',
+			'sort',
+			'wraptag',
+		));
+
+		$asc = ' ('.gTxt('ascending').')';
+		$desc = ' ('.gTxt('descending').')';
+
+		$sorts = array(
+			'linksort asc'	=> gTxt('name').$asc,
+			'linksort desc' => gTxt('name').$desc,
+			'category asc'	=> gTxt('category').$asc,
+			'category desc' => gTxt('category').$desc,
+			'date asc'			=> gTxt('date').$asc,
+			'date desc'			=> gTxt('date').$desc,
+			'rand()'				=> gTxt('random')
+		);
+
+		extract($atts);
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('category',
+				link_category_pop($category)).
+
+			tagRow('limit',
+				input_limit($limit)).
+
+			tagRow('sort',
+				' '.selectInput('sort', $sorts, $sort)).
+
+			tagRow('label',
+				fInput('text', 'label', $label, 'edit', '', '', 20)).
+
+			tagRow('labeltag',
+				input_tag('labeltag', $labeltag)).
+
+			tagRow('form',
+				form_pop('form', 'link', $form)).
+
+			tagRow('wraptag',
+				input_tag('wraptag', $wraptag)).
+
+			tagRow('break',
+				input_tag('break', $break)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
+		echo $out;
+	}
+
+// -------------------------------------------------------------
+
+	function tag_section_list()
+	{
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'active_class',
+			'break',
+			'class',
+			'default_title',
+			'exclude',
+			'include_default',
+			'label',
+			'labeltag',
+			'sections',
+			'wraptag'
+		));
+
+		extract($atts);
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('include_default',
+				yesno2_pop('include_default', $include_default)).
+
+			tagRow('default_title',
+				fInput('text', 'default_title', $default_title, 'edit', '', '', 20)).
+
+			tagRow('sections',
+				fInput('text', 'sections', $sections, 'edit', '', '', 20)).
+
+			tagRow('exclude',
+				fInput('text', 'exclude', $exclude, 'edit', '', '', 20)).
+
+			tagRow('label',
+				fInput('text', 'label', $label, 'edit', '', '', 20)).
+
+			tagRow('labeltag',
+				input_tag('labeltag', $labeltag)).
+
+			tagRow('wraptag',
+				input_tag('wraptag', $wraptag)).
+
+			tagRow('class',
+				fInput('text', 'class', $class, 'edit', '', '', 14)).
+
+			tagRow('active_class',
+				fInput('text', 'active_class', $active_class, 'edit', '', '', 14)).
+
+			tagRow('break',
+				input_tag('break', $break)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
+		echo $out;
+
+	}
+
+// -------------------------------------------------------------
+
+	function tag_category_list()
+	{
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'active_class',
+			'break',
+			'categories',
+			'class',
+			'exclude',
+			'label',
+			'labeltag',
+			'parent',
+			'section',
+			'this_section',
+			'type',
+			'wraptag',
+		));
+
+		extract($atts);
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('type',
+				type_pop($type)).
+
+			tagRow('parent',
+				fInput('text', 'parent', $parent, 'edit', '', '', 20)).
+
+			tagRow('categories',
+				fInput('text', 'categories', $categories, 'edit', '', '', 20)).
+
+			tagRow('exclude',
+				fInput('text', 'exclude', $exclude, 'edit', '', '', 20)).
+
+			tagRow('section',
+				section_pop('section', $section)).
+
+			tagRow('this_section',
+				yesno2_pop('this_section', $this_section)).
+
+			tagRow('label',
+				fInput('text', 'label', ($label ? $label : gTxt('categories')), 'edit', '', '', 20)).
+
+			tagRow('labeltag',
+				input_tag('labeltag', $labeltag)).
+
+			tagRow('wraptag',
+				input_tag('wraptag', $wraptag)).
+
+			tagRow('class',
+				fInput('text', 'class', $class, 'edit', '', '', 14)).
+
+			tagRow('active_class',
+				fInput('text', 'active_class', $active_class, 'edit', '', '', 14)).
+
+			tagRow('break',
+				input_tag('break', $break)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
+		echo $out;
+	}
+
+// -------------------------------------------------------------
+
+	function tag_recent_articles()
+	{
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'break',
+			'category',
+			'label',
+			'labeltag',
+			'limit',
+			'section',
+			'sort',
+			'wraptag',
+		));
+
+		extract($atts);
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('section',
+				section_pop('section', $section)).
+
+			tagRow('category',
+				article_category_pop($category)).
+
+			tagRow('sort',
+				sort_pop($sort)).
+
+			tagRow('limit',
+				fInput('text', 'limit', $limit, 'edit', '', '', 2)).
+
+			tagRow('label',
+				fInput('text', 'label', ($label ? $label : gTxt('recently')), 'edit', '', '', 20)).
+
+			tagRow('labeltag',
+				input_tag('labeltag', $labeltag)).
+
+			tagRow('wraptag',
+				input_tag('wraptag', $wraptag)).
+
+			tagRow('break',
+				input_tag('break', $break)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
+		return $out;
+	}
+
+// -------------------------------------------------------------
+
+	function tag_related_articles()
+	{
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'break',
+			'class',
+			'label',
+			'labeltag',
+			'limit',
+			'match',
+			'section',
+			'sort',
+			'wraptag',
+		));
+
+		extract($atts);
+
+		$label = (!$label) ? 'Related Articles' : $label;
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('section',
+				section_pop('section', $section)).
+
+			tagRow('match',
+				match_pop($match)).
+
+			tagRow('sort',
+				sort_pop($sort)).
+
+			tagRow('limit',
+				fInput('text', 'limit', $limit, 'edit', '', '', 2)).
+
+			tagRow('label',
+				fInput('text', 'label', $label, 'edit', '', '', 20)).
+
+			tagRow('labeltag',
+				input_tag('labeltag', $labeltag)).
+
+			tagRow('wraptag',
+				input_tag('wraptag', $wraptag)).
+
+			tagRow('class',
+				fInput('text', 'class', $class, 'edit', '', '', 20)).
+
+			tagRow('break',
+				input_tag('break', $break)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
+		return $out;
+	}
+
+// -------------------------------------------------------------
+
+	function tag_recent_comments()
+	{
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'break',
+			'class',
+			'label',
+			'labeltag',
+			'limit',
+			'sort',
+			'wraptag',
+		));
+
+		extract($atts);
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('sort',
+				discuss_sort_pop($sort)).
+
+			tagRow('limit',
+				fInput('text', 'limit', $limit, 'edit', '', '', 2)).
+
+			tagRow('label',
+				fInput('text', 'label', ($label ? $label : gTxt('recent_comments')), 'edit', '', '', 20)).
+
+			tagRow('labeltag',
+				input_tag('labeltag', $labeltag)).
+
+			tagRow('wraptag',
+				input_tag('wraptag', $wraptag)).
+
+			tagRow('class',
+				fInput('text', 'class', $class, 'edit', '', '', 5)).
+
+			tagRow('break',
+				input_tag('break', $break)).
+
+		$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
+		return $out;
+	}
+
+// -------------------------------------------------------------
+
+	function tag_output_form()
+	{
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'form'
+		));
+
+		extract($atts);
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('form',
+				form_pop('form', 'misc', $form)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
+		return $out;
+	}
+
+// -------------------------------------------------------------
+
+	function tag_popup()
+	{
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'label',
+			'section',
+			'this_section',
+			'type',
+			'wraptag'
+		));
+
+		extract($atts);
+
+		$types = array(
+			'c' => gTxt('Category'),
+			's' => gTxt('Section')
+		);
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('type',
+				' '.selectInput('type', $types, $type, true)).
+
+			tagRow('section',
+				section_pop('section', $section)).
+
+			tagRow('this_section',
+				yesno2_pop('this_section', $this_section)).
+
+			tagRow('label',
+				fInput('text', 'label', $label, 'edit', '', '', 25)).
+
+			tagRow('wraptag',
+				input_tag('wraptag', $wraptag)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
+		return $out;
+	}
+
+// -------------------------------------------------------------
+
+	function tag_password_protect()
+	{
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'login',
+			'pass'
+		));
+
+		extract($atts);
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('login',
+				fInput('text', 'login', $login, 'edit', '', '', 25)).
+
+			tagRow('password',
+				fInput('text', 'pass', $pass, 'edit', '', '', 25)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
+		return $out;
+	}
+
+// -------------------------------------------------------------
+
+	function tag_search_input()
+	{
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'button',
+			'class',
+			'form',
+			'label',
+			'section',
+			'size',
+			'wraptag'
+		));
+
+		extract($atts);
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('section',
+				section_pop('section', $section)).
+
+			tagRow('button_text',
+				fInput('text', 'button', $button, 'edit', '', '', 25)).
+
+			tagRow('input_size',
+				fInput('text', 'size', $size, 'edit', '', '', 2)).
+
+			tagRow('label',
+				fInput('text', 'label', ($label ? $label : gTxt('search')), 'edit', '', '', 25)).
+
+			tagRow('wraptag',
+				input_tag('wraptag', $wraptag)).
+
+			tagRow('class',
+				fInput('text', 'class', $class, 'edit', '', '', 25)).
+
+			tagRow('form',
+				form_pop('form', 'misc', $form)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
+		return $out;
+	}
+
+// -------------------------------------------------------------
+
+	function tag_category1()
+	{
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'class',
+			'link',
+			'title',
+			'section',
+			'this_section',
+			'wraptag'
+		));
+
+		extract($atts);
+
+		$out = form(
+			startTable('tagbuilder').
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('title',
+				yesno2_pop('title', $title)).
+
+			tagRow('link_to_this_category',
+				yesno_pop('link', $link)).
+
+			tagRow('section',
+				section_pop('section', $section)).
+
+			tagRow('this_section',
+				yesno2_pop('this_section', $this_section)).
+
+			tagRow('wraptag',
+				input_tag('wraptag', $wraptag)).
+
+			tagRow('class',
+				fInput('text', 'class', $class, 'edit', '', '', 25)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
+		return $out;
+	}
+
+// -------------------------------------------------------------
+
+	function tag_category2()
+	{
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'class',
+			'link',
+			'title',
+			'section',
+			'this_section',
+			'wraptag'
+		));
+
+		extract($atts);
+
+		$out = form(
+			startTable('tagbuilder').
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('title',
+				yesno2_pop('title', $title)).
+
+			tagRow('link_to_this_category',
+				yesno_pop('link', $link)).
+
+			tagRow('section',
+				section_pop('section', $section)).
+
+			tagRow('this_section',
+				yesno2_pop('this_section', $this_section)).
+
+			tagRow('wraptag',
+				input_tag('wraptag', $wraptag)).
+
+			tagRow('class',
+				fInput('text', 'class', $class, 'edit', '', '', 25)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
+		return $out;
+	}
+
+
+// -------------------------------------------------------------
+
+	function tag_section()
+	{
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'class',
+			'link',
+			'name',
+			'title',
+			'wraptag'
+		));
+
+		extract($atts);
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('name',
+				section_pop('name', $tag_name)).
+
+			tagRow('link_to_this_section',
+				yesno_pop('link', $link)).
+
+			tagRow('wraptag',
+				input_tag('wraptag', $wraptag)).
+
+			tagRow('class',
+				fInput('text', 'class', $class, 'edit', '', '', 25)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
+		return $out;
+	}
+
+// -------------------------------------------------------------
+
+	function tag_author()
+	{
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'link',
+			'section',
+			'this_section'
+		));
+
+		extract($atts);
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('link_to_this_author',
+				yesno_pop('link', $link)).
+
+			tagRow('section',
+				section_pop('section', $section)).
+
+			tagRow('this_section',
+				yesno2_pop('this_section', $this_section)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
+		return $out;
+	}
+
+// -------------------------------------------------------------
+
+	function tag_link_to_home()
+	{
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'class',
+		));
+
+		extract($atts);
+
+		$thing = gps('thing');
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('link_text',
+				fInput('text', 'thing', ($thing ? $thing : gTxt('tag_home')), 'edit', '', '', 25)).
+
+			tagRow('class',
+				fInput('text', 'class', $class, 'edit', '', '', 25)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
+		return $out;
+	}
+
+// -------------------------------------------------------------
+
+	function tag_link_to_prev()
+	{
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'showalways',
+		));
+
+		extract($atts);
+
+		$thing = gps('thing');
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('link_text',
+				fInput('text', 'thing', ($thing ? $thing : '<txp:prev_title />'), 'edit', '', '', 25)).
+
+			tagRow('showalways',
+				yesno_pop('showalways', $showalways)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
+		return $out;
+	}
+
+// -------------------------------------------------------------
+
+	function tag_link_to_next()
+	{
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'showalways',
+		));
+
+		extract($atts);
+
+		$thing = gps('thing');
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('link_text',
+				fInput('text', 'thing', ($thing ? $thing : '<txp:next_title />'), 'edit', '', '', 25)).
+
+			tagRow('showalways',
+				yesno_pop('showalways', $showalways)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
+		return $out;
+	}
+
+// -------------------------------------------------------------
+
+	function tag_feed_link()
+	{
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'category',
+			'flavor',
+			'format',
+			'label',
+			'limit',
+			'section',
+			'title',
+			'wraptag',
+		));
+
+		extract($atts);
+
+		$label = $label ? $label : 'XML';
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('flavor',
+				feed_flavor_pop($flavor)).
+
+			tagRow('format',
+				feed_format_pop($format)).
+
+			tagRow('section',
+				section_pop('section', $section)).
+
+			tagRow('category',
+				article_category_pop($section)).
+
+			tagRow('limit',
+				input_limit($limit)).
+
+			tagRow('label',
+				fInput('text', 'label', $label, 'edit', '', '', 25)).
+
+			tagRow('title',
+				fInput('text', 'title', $title, 'edit', '', '', 25)).
+
+			tagRow('wraptag',
+				input_tag('wraptag', $wraptag)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
+		return $out;
+	}
+
+// -------------------------------------------------------------
+
+	function tag_link_feed_link()
+	{
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'category',
+			'flavor',
+			'format',
+			'label',
+			'limit',
+			'title',
+			'wraptag'
+		));
+
+		extract($atts);
+
+		$label = (!$label) ? 'XML' : $label;
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('flavor',
+				feed_flavor_pop($flavor)).
+
+			tagRow('format',
+				feed_format_pop($format)).
+
+			tagRow('category',
+				link_category_pop($category)).
+
+			tagRow('limit',
+				fInput('text', 'limit', $limit, 'edit', '', '', 2)).
+
+			tagRow('label',
+				fInput('text', 'label', $label, 'edit', '', '', 25)).
+
+			tagRow('title',
+				fInput('text', 'title', $title, 'edit', '', '', 25)).
+
+			tagRow('wraptag',
+				input_tag('wraptag', $wraptag)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
+		return $out;
+	}
+
+// -------------------------------------------------------------
+
+	function tag_permlink()
+	{
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'class',
+			'id',
+			'style',
+			'title'
+		));
+
+		extract($atts);
+
+		$thing = gps('thing');
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('id',
+				input_id($id)).
+
+			tagRow('link_text',
+				fInput('text', 'thing', ($thing ? $thing : '<txp:title />'), 'edit', '', '', 25)).
+
+			tagRow('title',
+				fInput('text', 'title', $title, 'edit', '', '', 25)).
+
+			tagRow('class',
+				fInput('text', 'class', $class, 'edit', '', '', 25)).
+
+			tagRow('style',
+				fInput('text', 'style', $style, 'edit', '', '', 25)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
+		return $out;
+	}
+
+// -------------------------------------------------------------
+
+	function tag_newer()
+	{
+		global $step, $endform, $tag_name;
+
+		$thing = gps('thing');
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('link_text',
+				fInput('text', 'thing', ($thing ? $thing : '<txp:text item="newer" />'), 'edit', '', '', 25)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, array(), $thing));
+		}
+
+		return $out;
+	}
+
+// -------------------------------------------------------------
+
+	function tag_older()
+	{
+		global $step, $endform, $tag_name;
+
+		$thing = gps('thing');
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('link_text',
+				fInput('text', 'thing', ($thing ? $thing : '<txp:text item="older" />'), 'edit', '', '', 25)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, array(), $thing));
+		}
+
+		return $out;
+	}
+
+// -------------------------------------------------------------
+
+	function tag_next_title()
+	{
+		global $step, $endform, $tag_name;
+
+		return form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			n.endTable()
+		).
+
+		tdb(tb($tag_name));
+	}
+
+// -------------------------------------------------------------
+
+	function tag_sitename()
+	{
+		global $step, $endform, $tag_name;
+
+		return form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			n.endTable()
+		).
+
+		tdb(tb($tag_name));
+	}
+
+// -------------------------------------------------------------
+
+	function tag_site_slogan()
+	{
+		global $step, $endform, $tag_name;
+
+		return form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			n.endTable()
+		).
+
+		tdb(tb($tag_name));
+	}
+
+// -------------------------------------------------------------
+
+	function tag_prev_title()
+	{
+		global $step, $endform, $tag_name;
+
+		return form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			n.endTable()
+		).
+
+		tdb(tb($tag_name));
+	}
+
+// -------------------------------------------------------------
+
+	function tag_article_image()
+	{
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'align',
+			'style',
+			'thumbnail'
+		));
+
+		extract($atts);
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('thumbnail',
+				yesno2_pop('thumbnail', $thumbnail)).
+
+			tagRow('style',
+				fInput('text', 'style', $style, 'edit', '', '', 25)).
+
+			tagRow('align',
+				fInput('text', 'style', $style, 'edit', '', '', 25)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
+		return $out;
+	}
+
+// -------------------------------------------------------------
+
+	function tag_css()
+	{
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'format',
+			'media',
+			'n',
+			'rel',
+			'title'
+		));
+
+		extract($atts);
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('n',
+				css_pop($n)).
+
+			tagRow('format',
+				css_format_pop($format)).
+
+			tagRow('media',
+				fInput('text', 'media', $media, 'edit', '', '', 25)).
+
+			tagRow('rel',
+				fInput('text', 'rel', $rel, 'edit', '', '', 25)).
+
+			tagRow('title',
+				fInput('text', 'title', $title, 'edit', '', '', 25)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
+		return $out;
+	}
+
+// -------------------------------------------------------------
+
+	function tag_body()
+	{
+		global $step, $endform, $tag_name;
+
+		return form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			n.endTable()
+		).
+
+		tdb(tb($tag_name));
+	}
+
+// -------------------------------------------------------------
+
+	function tag_excerpt()
+	{
+		global $step, $endform, $tag_name;
+
+		return form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			n.endTable()
+		).
+
+		tdb(tb($tag_name));
+	}
+
+// -------------------------------------------------------------
+
+	function tag_title()
+	{
+		global $step, $endform, $tag_name;
+
+		return form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			n.endTable()
+		).
+
+		tdb(tb($tag_name));
+	}
+
+// -------------------------------------------------------------
+
+	function tag_link()
+	{
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'rel'
+		));
+
+		extract($atts);
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('rel',
+				fInput('text', 'rel', $rel, 'edit', '', '', 25)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
+		return $out;
+	}
+
+// -------------------------------------------------------------
+
+	function tag_linkdesctitle()
+	{
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'rel'
+		));
+
+		extract($atts);
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('rel',
+				fInput('text', 'rel', $rel, 'edit', '', '', 25)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
+		return $out;
+	}
+
+// -------------------------------------------------------------
+
+	function tag_link_description()
+	{
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'class',
+			'escape',
+			'label',
+			'labeltag',
+			'wraptag'
+		));
+
+		extract($atts);
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('escape',
+				escape_pop($escape)).
+
+			tagRow('label',
+				fInput('text', 'label', $label, 'edit', '', '', 25)).
+
+			tagRow('labeltag',
+				input_tag('labeltag', $labeltag)).
+
+			tagRow('wraptag',
+				input_tag('wraptag', $wraptag)).
+
+			tagRow('class',
+				fInput('text', 'class', $class, 'edit', '', '', 25)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
+		return $out;
+	}
+
+// -------------------------------------------------------------
+
+	function tag_link_name()
+	{
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'escape',
+		));
+
+		extract($atts);
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('escape',
+				escape_pop($escape)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
+		return $out;
+	}
+
+// -------------------------------------------------------------
+
+	function tag_link_category()
+	{
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'class',
+			'label',
+			'labeltag',
+			'title',
+			'wraptag'
+		));
+
+		extract($atts);
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('title',
+				yesno2_pop('title', $title)).
+
+			tagRow('label',
+				fInput('text', 'label', $label, 'edit', '', '', 25)).
+
+			tagRow('labeltag',
+				input_tag('labeltag', $labeltag)).
+
+			tagRow('wraptag',
+				input_tag('wraptag', $wraptag)).
+
+			tagRow('class',
+				fInput('text', 'class', $class, 'edit', '', '', 25)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
+		return $out;
+	}
+
+// -------------------------------------------------------------
+
+	function tag_link_date()
+	{
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'format',
+			'gmt',
+			'lang'
+		));
+
+		extract($atts);
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('time_format',
+				fInput('text', 'format', $format, 'edit', '', '', 25)).
+
+			tagRow('gmt',
+				yesno2_pop('gmt', $gmt)).
+
+			tagRow('lang',
+				fInput('text', 'lang', $lang, 'edit', '', '', 25)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
+		return $out;
+	}
+
+// -------------------------------------------------------------
+
+	function tag_posted()
+	{
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'format',
+			'gmt',
+			'lang'
+		));
+
+		extract($atts);
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('time_format',
+				fInput('text', 'format', $format, 'edit', '', '', 25)).
+
+			tagRow('gmt',
+				yesno2_pop('gmt', $gmt)).
+
+			tagRow('lang',
+				fInput('text', 'lang', $lang, 'edit', '', '', 25)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
+		return $out;
+	}
+
+// -------------------------------------------------------------
+
+	function tag_comments_invite()
+	{
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'class',
+			'showcount',
+			'textonly',
+			'wraptag'
+		));
+
+		extract($atts);
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('textonly',
+				yesno2_pop('textonly', $textonly)).
+
+			tagRow('showcount',
+				yesno2_pop('showcount', $showcount)).
+
+			tagRow('wraptag',
+				input_tag('wraptag', $wraptag)).
+
+			tagRow('class',
+				fInput('text', 'class', $class, 'edit', '', '', 25)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
+		return $out;
+	}
+
+// -------------------------------------------------------------
+
+	function tag_comment_permlink()
+	{
+		global $step, $endform, $tag_name;
+
+		return form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			n.endTable()
+		).
+
+		tdb(tb($tag_name));
+	}
+
+// -------------------------------------------------------------
+
+	function tag_comment_time()
+	{
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'format',
+			'gmt',
+			'lang'
+		));
+
+		extract($atts);
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('time_format',
+				fInput('text', 'format', $format, 'edit', '', '', 25)).
+
+			tagRow('gmt',
+				yesno2_pop('gmt', $gmt)).
+
+			tagRow('lang',
+				fInput('text', 'lang', $lang, 'edit', '', '', 25)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
+		return $out;
+	}
+
+// -------------------------------------------------------------
+
+	function tag_comment_name()
+	{
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'link'
+		));
+
+		extract($atts);
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('link',
+				yesno2_pop('link', $link)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
+		return $out;
+	}
+
+// -------------------------------------------------------------
+
+	function tag_comment_email()
+	{
+		global $step, $endform, $tag_name;
+
+		return form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			n.endTable()
+		).
+
+		tdb(tb($tag_name));
+	}
+
+// -------------------------------------------------------------
+
+	function tag_comment_web()
+	{
+		global $step, $endform, $tag_name;
+
+		return form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			n.endTable()
+		).
+
+		tdb(tb($tag_name));
+	}
+
+// -------------------------------------------------------------
+
+	function tag_comment_message()
+	{
+		global $step, $endform, $tag_name;
+
+		return form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			n.endTable()
+		).
+
+		tdb(tb($tag_name));
+	}
+
+// -------------------------------------------------------------
+
+	function tag_comment_email_input()
+	{
+		global $step, $endform, $tag_name;
+
+		return form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			n.endTable()
+		).
+
+		tdb(tb($tag_name));
+	}
+
+// -------------------------------------------------------------
+
+	function tag_comment_message_input()
+	{
+		global $step, $endform, $tag_name;
+
+		return form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			n.endTable()
+		).
+
+		tdb(tb($tag_name));
+	}
+
+// -------------------------------------------------------------
+
+	function tag_comment_name_input()
+	{
+		global $step, $endform, $tag_name;
+
+		return form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			n.endTable()
+		).
+
+		tdb(tb($tag_name));
+	}
+
+// -------------------------------------------------------------
+
+	function tag_comment_preview()
+	{
+		global $step, $endform, $tag_name;
+
+		return form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			n.endTable()
+		).
+
+		tdb(tb($tag_name));
+	}
+
+// -------------------------------------------------------------
+
+	function tag_comment_remember()
+	{
+		global $step, $endform, $tag_name;
+
+		return form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			n.endTable()
+		).
+
+		tdb(tb($tag_name));
+	}
+
+// -------------------------------------------------------------
+
+	function tag_comment_submit()
+	{
+		global $step, $endform, $tag_name;
+
+		return form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			n.endTable()
+		).
+
+		tdb(tb($tag_name));
+	}
+
+// -------------------------------------------------------------
+
+	function tag_comment_web_input()
+	{
+		global $step, $endform, $tag_name;
+
+		return form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			n.endTable()
+		).
+
+		tdb(tb($tag_name));
+	}
+
+// -------------------------------------------------------------
+
+	function tag_comments()
+	{
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'break',
+			'breakclass',
+			'class',
+			'id',
+			'form',
+			'wraptag'
+		));
+
+		extract($atts);
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('id',
+				input_id($id)).
+
+			tagRow('form',
+				form_pop('form', 'comment', $form)).
+
+			tagRow('wraptag',
+				input_tag('wraptag', $wraptag)).
+
+			tagRow('class',
+				fInput('text', 'class', $class, 'edit', '', '', 25)).
+
+			tagRow('break',
+				input_tag('break', $break)).
+
+			tagRow('breakclass',
+				fInput('text', 'breakclass', $breakclass, 'edit', '', '', 25)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
+		return $out;
+	}
+
+// -------------------------------------------------------------
+
+	function tag_comments_form()
+	{
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'class',
+			'id',
+			'isize',
+			'form',
+			'msgcols',
+			'msgrows',
+			'wraptag'
+		));
+
+		extract($atts);
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('id',
+				input_id($id)).
+
+			tagRow('isize',
+				fInput('text', 'isize', $isize, 'edit', '', '', 2)).
+
+			tagRow('msgcols',
+				fInput('text', 'msgcols', $msgcols, 'edit', '', '', 2)).
+
+			tagRow('msgrows',
+				fInput('text', 'msgrows', $msgrows, 'edit', '', '', 2)).
+
+			tagRow('form',
+				form_pop('form', 'comment', $form)).
+
+			tagRow('wraptag',
+				input_tag('wraptag', $wraptag)).
+
+			tagRow('class',
+				fInput('text', 'class', $class, 'edit', '', '', 25)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
+		return $out;
+	}
+
+// -------------------------------------------------------------
+
+	function tag_comments_preview()
+	{
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'class',
+			'id',
+			'form',
+			'wraptag'
+		));
+
+		extract($atts);
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('id',
+				input_id($id)).
+
+			tagRow('form',
+				form_pop('form', 'comment', $form)).
+
+			tagRow('wraptag',
+				input_tag('wraptag', $wraptag)).
+
+			tagRow('class',
+				fInput('text', 'class', $class, 'edit', '', '', 25)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
+		return $out;
+	}
+
+// -------------------------------------------------------------
+
+	function tag_search_result_title()
+	{
+		global $step, $endform, $tag_name;
+
+		return form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			n.endTable()
+		).
+
+		tdb(tb($tag_name));
+	}
+
+// -------------------------------------------------------------
+
+	function tag_search_result_excerpt()
+	{
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'hilight',
+			'limit'
+		));
+
+		extract($atts);
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('hilight',
+				input_tag('hilight', $hilight)).
+
+			tagRow('limit',
+				input_limit($limit)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
+		return $out;
+	}
+
+// -------------------------------------------------------------
+
+	function tag_search_result_url()
+	{
+		global $step, $endform, $tag_name;
+
+		return form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			n.endTable()
+		).
+
+		tdb(tb($tag_name));
+	}
+
+// -------------------------------------------------------------
+
+	function tag_search_result_date()
+	{
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'format',
+			'gmt',
+			'lang'
+		));
+
+		extract($atts);
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('time_format',
+				fInput('text', 'format', $format, 'edit', '', '', 25)).
+
+			tagRow('gmt',
+				yesno2_pop('gmt', $gmt)).
+
+			tagRow('lang',
+				fInput('text', 'lang', $lang, 'edit', '', '', 25)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
+		return $out;
+	}
+
+// -------------------------------------------------------------
+
+	function tag_lang()
+	{
+		global $step, $endform, $tag_name;
+
+		return form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			n.endTable()
+		).
+
+		tdb(tb($tag_name));
+	}
+
+// -------------------------------------------------------------
+
+	function tag_breadcrumb()
+	{
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'class',
+			'label',
+			'link',
+			'linkclass',
+			'sep',
+			'title',
+			'wraptag'
+		));
+
+		extract($atts);
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('breadcrumb_separator',
+				fInput('text', 'sep', $sep, 'edit', '', '', 4)).
+
+			tagRow('breadcrumb_linked',
+				yesno_pop('link', $link)).
+
+			tagRow('linkclass',
+				fInput('text', 'linkclass', $linkclass, 'edit', '', '', 25)).
+
+			tagRow('label',
+				fInput('text', 'label', $label, 'edit', '', '', 25)).
+
+			tagRow('title',
+				fInput('text', 'title', $title, 'edit', '', '', 25)).
+
+			tagRow('wraptag',
+				input_tag('wraptag', $wraptag)).
+
+			tagRow('class',
+				fInput('text', 'class', $class, 'edit', '', '', 25)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
+		return $out;
+	}
+
+// -------------------------------------------------------------
+
+	function tag_image()
+	{
+		global $step, $endform, $tag_name, $img_dir;
+
+		$atts = gpsa(array(
+			'class',
+			'html_id',
+			'style',
+
+			'alt',
+			'h',
+			'id',
+			'w',
+		));
+
+		extract($atts);
+
+		$ext = gps('ext');
+		$type = gps('type');
+
+		$types = array(
+			'textile'			=> 'Textile',
+			'textpattern' => 'Textpattern',
+			'xhtml'				=> 'XHTML'
+		);
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('type',
+				''.selectInput('type', $types, ($type ? $type : 'textpattern'), true)).
+
+			tagRow('html_id',
+				fInput('text', 'html_id', $html_id, 'edit', '', '', 25)).
+
+			tagRow('class',
+				fInput('text', 'class', $class, 'edit', '', '', 25)).
+
+			tagRow('style',
+				fInput('text', 'style', $style, 'edit', '', '', 25)).
+
+			hInput('w', $w).
+			hInput('h', $h).
+			hInput('ext', $ext).
+			hInput('id', $id).
+			hInput('alt', $alt).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$url = hu.$img_dir.'/'.$id.$ext;
+
+			switch ($type)
+			{
+				case 'textile':
 					$alt = ($alt) ? ' ('.$alt.')' : '';
-					$thing='!'.rhu.$i_dir.'/'.$id.$ext.$alt.'!'; 
-					break;
-			case 'textpattern': 
-					$thing = '<txp:image id="'.$id.$ext.'" />'; 
-					break;
-			case 'xhtml': 
+
+					$out .= tdb('!'.$url.$alt.'!');
+				break;
+
+				case 'xhtml':
 					$alt = ($alt) ? ' alt="'.$alt.'"' : '';
-					$thing = '<img src="'.rhu.$i_dir.'/'.
-							$id.$ext.'"'.$alt.' style="height:'.$h.'px;width:'.$w.'px" />';
-					break;
+					$class = ($class) ? ' class="'.$class.'"' : '';
+					$html_id = ($html_id) ? ' id="'.$html_id.'"' : '';
+					$style = ($style) ? ' style="'.$style.'"' : '';
+
+					$out .= tdb('<img src="'.$url.'" width="'.$w.'" height="'.$h.'"'.$alt.$html_id.$class.$style.' />');
+				break;
+
+				case 'textpattern':
+				default:
+					$atts = array('class' => $class, 'html_id' => $html_id, 'id' => $id, 'style' => $style);
+
+					$out .= tdb(tb($tag_name, $atts));
+				break;
+			}
 		}
-		return tdb($thing);
+
+		return $out;
 	}
-	
-// 	
 
 // -------------------------------------------------------------
-// Needed by file downloads
-// -------------------------------------------------------------
 
-// -------------------------------------------------------------
-	function tag_file() 
+	function tag_file_download()
 	{
-		global $permlink_mode;
-		$invars = gpsa(array('id','description','filename','type'));
-		extract($invars);
-		$url = ($permlink_mode == 'messy')?
-			hu.'index.php?s=file_download&amp;id='.$id:
-			hu.'file_download/'.$id;
-		switch ($type) {
-			case 'textile': 
-				$description = ($description) ? ' ('.$description.')' : '';
-				$thing='"'.$filename.'":'.$url; 
-			break;
+		global $step, $endform, $tag_name;
 
-			case 'textpattern': $thing = '<txp:file_download_link id="'.$id.'"><txp:file_download_name /></txp:file_download_link>'; break;
+		$atts = gpsa(array(
+			'form',
+			'id'
+		));
 
-			case 'xhtml': $thing = '<a href="'.$url.'" title="'.$filename.'">'.$filename.'</a>';
+		extract($atts);
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('id',
+				input_id($id)).
+
+			tagRow('form',
+				form_pop('form', 'file', $form)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
 		}
-		return tdb($thing);
-	}
 
-// -------------------------------------------------------------
-
-	function tag_file_download() 
-	{
-		global $step,$endform,$name;
-		$invars = gpsa(array('form','id'));
-		extract($invars);
-		$out = form(startTable('list').
-			tr(tdcs(hed(gTxt('tag_file_download'),3),2) ).
-			tagRow('form', form_pop($form,'file','form')) .
-			tagRow('id', fInput('text','id',$id,'edit','','',2)).
-			$endform
-		);
-		$out .= ($step=='build') ? tdb(tb($name, $invars)) : '';
-		return $out;
-	}	
-
-// -------------------------------------------------------------
-	function tag_file_download_list() 
-	{
-		global $step,$endform,$name;
-		$invars = gpsa(array('form','category','limit','sort','wraptag','break','label','labeltag'));
-		$sorts = array(''=>'','filename'=>'Name',
-				'downloads desc'=>'Download Count descending','downloads asc'=>'Download Count ascending', 'rand()'=>'Random');
-		extract($invars);
-		$out = form(startTable('list').
-			tr(tdcs(hed(gTxt('tag_file_download_list'),3),2) ).
-			tagRow('form', form_pop($form,'file','form')).
-			tagRow('category', file_category_pop($category)).
-			tagRow('limit', fInput('text','limit',$limit,'edit','','',2)).
-			tagRow('sort_by', selectInput("sort",$sorts,$sort)).
-			tagRow('wraptag', fInput('text','wraptag',$wraptag,'edit','','',2)).
-			tagRow('break', fInput('text','break',$break,'edit','','',5)).
-			tagRow('label', fInput('text','label',$label,'edit','','',20)).
-			tagRow('labeltag', fInput('text','labeltag',$labeltag,'edit','','',5)).
-			$endform
-		);
-		$out .= ($step=='build') ? tdb(tb($name, $invars)) : '';
-		echo $out;	
-	}
-
-// -------------------------------------------------------------
-	function tag_file_download_created() 
-	{
-		global $step,$endform,$name;
-		$invars = gpsa(array('format'));
-		extract($invars);
-		$format = (!$format) ? '' : $format;
-		$out = form(startTable('list').
-			tr(tdcs(hed(gTxt('tag_file_download_created').'<br />('.gTxt('archive_dateformat').' used if empty)' ,3),2) ).
-			tagRow('format', fInput('text','format',$format,'edit','','',15)).
-			$endform
-		);
-		$out .= ($step=='build') ? tdb(tb($name, $invars)) : '';
 		return $out;
 	}
 
 // -------------------------------------------------------------
-	function tag_file_download_modified() 
+
+	function tag_file_download_list()
 	{
-		global $step,$endform,$name;
-		$invars = gpsa(array('format'));
-		extract($invars);
-		$format = (!$format) ? '' : $format;
-		$out = form(startTable('list').
-			tr(tdcs(hed(gTxt('tag_file_download_modified').'<br />('.gTxt('archive_dateformat').' used if empty)',3),2) ).
-			tagRow('format', fInput('text','format',$format,'edit','','',15)).
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'break',
+			'category',
+			'form',
+			'label',
+			'labeltag',
+			'limit',
+			'sort',
+			'wraptag',
+		));
+
+		$asc = ' ('.gTxt('ascending').')';
+		$desc = ' ('.gTxt('descending').')';
+
+		$sorts = array(
+			'filename asc'	 => gTxt('name').$asc,
+			'filename desc'	 => gTxt('name').$desc,
+			'downloads asc'	 => gTxt('download_count').$asc,
+			'downloads desc' => gTxt('download_count').$desc,
+			'rand()'				 => 'Random'
+		);
+
+		extract($atts);
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(tdcs(hed(gTxt('tag_'.$tag_name),3),2) ).
+
+			tagRow('category',
+				file_category_pop($category)).
+
+			tagRow('sort',
+				' '.selectInput('sort', $sorts, $sort, true)).
+
+			tagRow('limit',
+				input_limit($limit)).
+
+			tagRow('label',
+				fInput('text', 'label', $label, 'edit', '', '', 25)).
+
+			tagRow('labeltag',
+				input_tag('labeltag', $labeltag)).
+
+			tagRow('wraptag',
+				input_tag('wraptag',$wraptag)).
+
+			tagRow('break',
+				input_tag('break',$break)).
+
+			tagRow('form',
+				form_pop('form','file',$form)).
+
 			$endform
 		);
-		$out .= ($step=='build') ? tdb(tb($name, $invars)) : '';
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
+		echo $out;
+	}
+
+// -------------------------------------------------------------
+
+	function tag_file_download_created()
+	{
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'format'
+		));
+
+		extract($atts);
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('format',
+				fInput('text', 'format', $format, 'edit', '', '', 15)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
 		return $out;
 	}
 
 // -------------------------------------------------------------
-	function tag_file_download_size() 
+
+	function tag_file_download_modified()
 	{
-		global $step,$endform,$name;
-		$invars = gpsa(array('format','decimals'));
-		$formats = array('b'=>'bytes','kb'=>'kilobytes','mb'=>'megabytes','gb'=>'gigabytes','tb'=>'terabytes','pb'=>'petabytes');
-		extract($invars);
-		$decimals = (!$decimals) ? '2' : $decimals;
-		$out = form(startTable('list').
-			tr(tdcs(hed(gTxt('tag_file_download_size'),3),2) ).
-			tagRow('format', selectInput('format',$formats,$format,1)).
-			tagRow('decimals', fInput('text','decimals',$decimals,'edit','','',4)).
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'format'
+		));
+
+		extract($atts);
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('format',
+				fInput('text', 'format', $format, 'edit', '', '', 15)).
+
 			$endform
 		);
-		$out .= ($step=='build') ? tdb(tb($name, $invars)) : '';
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
 		return $out;
 	}
 
-	function tag_file_download_link()       
-	{ 
-		global $step,$endform,$name;
-		$invars = gpsa(array('filename','id'));
-		extract($invars);
-		$out = form(startTable('list').
-			tr(tdcs(hed(gTxt('tag_file_download_link'),3),2) ).
-			tagRow('id', fInput('text','id',$id,'edit','','',4)).
-			tagRow('filename', fInput('text','filename',$filename,'edit','','',15)).
+// -------------------------------------------------------------
+
+	function tag_file_download_size()
+	{
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'decimals',
+			'format'
+		));
+
+		$formats = array(
+			'b'	 => 'Bytes',
+			'kb' => 'Kilobytes',
+			'mb' => 'Megabytes',
+			'gb' => 'Gigabytes',
+			'tb' => 'Terabytes',
+			'pb' => 'Petabytes'
+		);
+
+		extract($atts);
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(hed(gTxt('tag_'.$tag_name), 3)
+			, 2)
+			).
+
+			tagRow('format',
+				' '.selectInput('format', $formats, $format, true)).
+
+			tagRow('decimals',
+				fInput('text', 'decimals', $decimals, 'edit', '', '', 4)).
+
 			$endform
 		);
-		$out .= tdb(tb('file_download_link',$invars,gTxt('text_or_tag')));
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
 		return $out;
 	}
 
-	function tag_file_download_id()  { return tdb(tb('file_download_id')); }
+// -------------------------------------------------------------
 
-	function tag_file_download_name()  { return tdb(tb('file_download_name')); }
+	function tag_file_download_link()
+	{
+		global $step, $endform, $tag_name, $permlink_mode;
 
-	function tag_file_download_downloads()  { return tdb(tb('file_download_downloads')); }
-	
-	function tag_file_download_category()  { return tdb(tb('file_download_category')); }
-		
-	function tag_file_download_description()  { return tdb(tb('file_download_description')); }
-		
+		$atts = gpsa(array(
+			'filename',
+			'id'
+		));
+
+		extract($atts);
+
+		$thing = gps('thing');
+
+		$type = gps('type');
+		$description = gps('description');
+
+		$types = array(
+			'textile'			=> 'Textile',
+			'textpattern' => 'Textpattern',
+			'xhtml'				=> 'XHTML'
+		);
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('type',
+				''.selectInput('type', $types, ($type ? $type : 'textpattern'), true)).
+
+			tagRow('link_text',
+				fInput('text', 'thing', ($thing ? $thing : $filename), 'edit', '', '', 25)).
+
+			tagRow('id',
+				input_id($id)).
+
+			tagRow('filename',
+				fInput('text', 'filename', $filename, 'edit', '', '', 25)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$url = ($permlink_mode == 'messy') ?
+				hu.'index.php?s=file_download'.a.'id='.$id:
+				hu.'file_download/'.$id;
+
+			switch ($type)
+			{
+				case 'textile':
+					$thing = ($thing) ? $thing : $filename;
+					$description = ($description) ? ' ('.$description.')' : '';
+
+					$out .= tdb('"'.$thing.$description.'":'.$url);
+				break;
+
+				case 'xhtml':
+					$thing = ($thing) ? $thing : $filename;
+
+					$out .= tdb('<a href="'.$url.'">'.$thing.'</a>');
+				break;
+
+				case 'textpattern':
+				default:
+					$atts = array('id' => $id);
+					$thing = ($thing) ? $thing : '<txp:file_download_name />';
+
+					$out .= tdb(tb($tag_name, $atts, $thing));
+				break;
+			}
+		}
+
+		return $out;
+	}
+
+// -------------------------------------------------------------
+
+	function tag_file_download_name()
+	{
+		global $step, $endform, $tag_name;
+
+		return form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			n.endTable()
+		).
+
+		tdb(tb($tag_name));
+	}
+
+// -------------------------------------------------------------
+
+	function tag_file_download_downloads()
+	{
+		global $step, $endform, $tag_name;
+
+		return form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			n.endTable()
+		).
+
+		tdb(tb($tag_name));
+	}
+
+// -------------------------------------------------------------
+
+	function tag_file_download_category()
+	{
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'class',
+			'escape',
+			'wraptag'
+		));
+
+		extract($atts);
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('escape',
+				escape_pop($escape)).
+
+			tagRow('wraptag',
+				input_tag('wraptag', $wraptag)).
+
+			tagRow('class',
+				fInput('text', 'class', $class, 'edit', '', '', 25)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
+		return $out;
+	}
+
+// -------------------------------------------------------------
+
+	function tag_file_download_description()
+	{
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'class',
+			'escape',
+			'wraptag'
+		));
+
+		extract($atts);
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('escape',
+				escape_pop($escape)).
+
+			tagRow('wraptag',
+				input_tag('wraptag', $wraptag)).
+
+			tagRow('class',
+				fInput('text', 'class', $class, 'edit', '', '', 25)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
+		return $out;
+	}
 
 ?>
-</body>
-</html>
