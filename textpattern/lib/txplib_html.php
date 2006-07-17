@@ -501,8 +501,8 @@ $LastChangedRevision$
 	function pref_text($item, $var, $id)
 	{
 		$things = array(
-			CONVERT_LINEBREAKS   => gTxt('convert_linebreaks'),
 			USE_TEXTILE          => gTxt('use_textile'),
+			CONVERT_LINEBREAKS   => gTxt('convert_linebreaks'),
 			LEAVE_TEXT_UNTOUCHED => gTxt('leave_text_untouched')
 		);
 

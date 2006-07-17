@@ -53,7 +53,7 @@ $LastChangedRevision$
 
 		foreach ($array as $avalue => $alabel)
 		{
-			if ($avalue === $value || $alabel === $value)
+			if ($avalue == $value || $alabel == $value)
 			{
 				$sel = ' selected="selected"';
 				$selected = true;
@@ -92,7 +92,7 @@ $LastChangedRevision$
 
 			extract($a);
 
-			if ($name === $value)
+			if ($name == $value)
 			{
 				$sel = ' selected="selected"';
 				$selected = true;
