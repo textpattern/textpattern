@@ -30,18 +30,8 @@ $LastChangedRevision$
 		extract(gpsa(array('name','div')));
 		$name = (!$name or $step=='page_delete') ? 'default' : $name;
 
-		$divline = ($step=="div_edit")
-		?	graf(gTxt('you_are_editing_div') . sp . strong($div))
-		:	'';
 		echo 
 			startTable('edit').
-			tr(
-				td().
-				td(
-					graf(gTxt('you_are_editing_page') . sp . strong($name)).$divline
-				).
-				td()
-			).
 			tr(
 				tda(
 
@@ -73,16 +63,19 @@ $LastChangedRevision$
 					n.n.hed('<a href="#" onclick="toggleDisplay(\'file-tags\'); return false;">'.gTxt('page_file_hed').'</a>'
 					, 3, ' class="plain"').
 						n.'<div id="file-tags" style="display: none;">'.taglinks('page_file').'</div>'
-				).
+
+				,' class="column"').
 
 				tda(
-					page_edit_form($name),' class="column"'
-				).
+					page_edit_form($name)
+				, ' class="column"').
+
 				tda(
-					hed(gTxt('all_pages'),2).
-					page_list($name),' class="column"'
-				)
+					hed(gTxt('all_pages'), 2).
+					page_list($name)
+				, ' class="column"')
 			).
+
 			endTable();
 	}
 
@@ -105,27 +98,26 @@ $LastChangedRevision$
 			$outstep = 'page_save';
 		}
 
-		$out[] = '<textarea id="html" class="code" name="html" cols="84" rows="36">'.htmlspecialchars($html).'</textarea>'.
-				graf(
-					fInput('submit','save',gTxt('save'),'publish').
-					eInput('page').
-					sInput($outstep).
-					hInput('name',$name)
-				);
+		$divline = ($step == 'div_edit') ? graf(gTxt('you_are_editing_div').sp.strong($div)) : '';
+
+		$out[] = '<p>'.gTxt('you_are_editing_page').sp.strong($name).$divline.br.
+					'<textarea id="html" class="code" name="html" cols="84" rows="36">'.htmlspecialchars($html).'</textarea>'.br.
+					n.fInput('submit','save',gTxt('save'),'publish').
+					n.eInput('page').
+					n.sInput($outstep).
+					n.hInput('name',$name);
 				
 			if($step=='div_edit') {
 				$out[] = 
-					hInput('html_array',$html_array).
-				  	hInput('start_pos',$start_pos).
-				  	hInput('stop_pos',$stop_pos).
-				  	hInput('name',$name);
+					n.hInput('html_array',$html_array).
+				  	n.hInput('start_pos',$start_pos).
+				  	n.hInput('stop_pos',$stop_pos).
+				  	n.hInput('name',$name);
 			} else {
 				$out[] = 
-					graf(
-						gTxt('copy_page_as').
-						fInput('text','newname','','edit').
-						fInput('submit','copy',gTxt('copy'),'smallerbox')
-					); 
+						n.'<label for="copy-page">'.gTxt('copy_page_as').'</label>'.sp.
+						n.fInput('text', 'newname', '', 'edit', '', '', '', '', 'copy-page').
+						n.fInput('submit','copy',gTxt('copy'),'smallerbox').'</p>'; 
 			}
 		return form(join('',$out));
 	}
