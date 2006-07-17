@@ -209,7 +209,7 @@ begin generic functions
 			return ' '.selectInput($select_name, $vals, $val, true);
 		}
 
-		return gTxt('no_sections_found');
+		return gTxt('no_sections_available');
 	}
 
 //--------------------------------------------------------------
@@ -261,7 +261,7 @@ begin generic functions
 			return ' '.treeSelectInput('category', $vals, $val);
 		}
 
-		return gTxt('no_article_cats_found');
+		return gTxt('no_categories_available');
 	}
 
 //--------------------------------------------------------------
@@ -275,7 +275,7 @@ begin generic functions
 			return ' '.treeSelectInput('parent', $vals, $val);
 		}
 
-		return gTxt('no_link_cats_found');
+		return gTxt('no_categories_available');
 	}
 
 //--------------------------------------------------------------
@@ -289,7 +289,7 @@ begin generic functions
 			return ' '.treeSelectInput('category', $vals, $val);
 		}
 
-		return gTxt('no_file_cats_found');
+		return gTxt('no_categories_available');
 	}
 
 //--------------------------------------------------------------
