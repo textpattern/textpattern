@@ -464,13 +464,13 @@ height: 80px;
 /* comments
 ----------------------------------------------- */
 
-tr.spam td, 
+tr.spam td,
 tr.spam a {
 color: #666;
 background-color: #f1f1f1;
 }
 
-tr.moderate td, 
+tr.moderate td,
 tr.moderate a {
 color: #900;
 background-color: #fff8f8;
