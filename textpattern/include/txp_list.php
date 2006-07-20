@@ -320,7 +320,7 @@ $LastChangedRevision$
 
 		$deleted = event_multi_edit('textpattern','ID');
 		if(!empty($deleted)){
-			$method = ps('method');
+			$method = ps('edit_method');
 			return list_list(messenger('article',$deleted,(($method == 'delete')?'deleted':'modified')));
 		}
 		return list_list();

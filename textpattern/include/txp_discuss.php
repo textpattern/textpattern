@@ -528,7 +528,7 @@ $LastChangedRevision$
 		//FIXME, this method needs some refactoring
 		
 		$selected = ps('selected');
-		$method = ps('method');
+		$method = ps('edit_method');
 		$done = array();
 		if ($selected) {
 			// Get all articles for which we have to update the count
