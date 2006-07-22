@@ -326,7 +326,7 @@ if ($event == 'admin') {
 					?	td($emailInput)
 					:	td($emailhref);
 				
-				$row[] = (has_privs('admin.edit')) 
+				$row[] = (has_privs('admin.edit') and $name != $txp_user) 
 					?	td(privs($privs).popHelp("about_privileges"))
 					:	td(get_priv_level($privs).popHelp("about_privileges"));
 
