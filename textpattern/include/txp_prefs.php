@@ -496,8 +496,8 @@ $LastChangedRevision$
 		{
 			$file_updated = ( isset($langdat['db_lastmod']) && @$langdat['file_lastmod'] > $langdat['db_lastmod']);
 			$rpc_updated = ( @$langdat['rpc_lastmod'] > @$langdat['db_lastmod']);
-			$rpc_install = tda( eLink('prefs','get_language','lang_code',$langname,(isset($langdat['db_lastmod'])) 
-										? strong(gTxt('update')) : strong(gTxt('install')),'updating',isset($langdat['db_lastmod']) ).
+			$rpc_install = tda( strong(eLink('prefs','get_language','lang_code',$langname,(isset($langdat['db_lastmod'])) 
+										? gTxt('update') : gTxt('install'),'updating',isset($langdat['db_lastmod']) )).
 								br.safe_strftime($prefs['archive_dateformat'],@$langdat['rpc_lastmod'])
 							,(isset($langdat['db_lastmod'])) 
 								? ' style="color:red;text-align:center;background-color:#FFFFCC;"'
@@ -546,9 +546,9 @@ $LastChangedRevision$
 		echo $list;
 		if (!$show_files)
 		{
-			$linktext = strong( gTxt('from_file').' ('.gTxt('experts_only').')' );
+			$linktext =  gTxt('from_file').' ('.gTxt('experts_only').')';
 			echo tr(tda('&nbsp;',' colspan="3" style="font-size:0.25em"')).
-				 tr(tda(eLink('prefs','list_languages','force','file',$linktext),' colspan="3" style="text-align:center"') );
+				 tr(tda(strong(eLink('prefs','list_languages','force','file',$linktext)),' colspan="3" style="text-align:center"') );
 		} elseif (gps('force')=='file')	{
 			echo tr(tda('&nbsp;',' colspan="3" style="font-size:0.25em"')).
 				 tr(tda(sLink('prefs','list_languages',strong(gTxt('from_server'))),' colspan="3" style="text-align:center"') );
