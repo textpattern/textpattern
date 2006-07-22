@@ -81,7 +81,7 @@ $LastChangedRevision$
 			($step) ? a.'step='.$step : '',
 			($thing) ? a.''.$thing.'='.urlencode($value) : '',
 			($thing2) ? a.''.$thing2.'='.urlencode($val2) : '',
-			'">'.$linktext.'</a>'
+			'">'.escape_title($linktext).'</a>'
 		));
 	}
 
