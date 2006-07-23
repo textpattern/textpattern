@@ -510,7 +510,7 @@ $LastChangedRevision$
 	}
 
 //-------------------------------------------------------------
-	function dom_attach($id, $content, $wraptag)
+	function dom_attach($id, $content, $wraptag='p')
 	{
 
 		$c = addcslashes($content, "\r\n\"\'");
