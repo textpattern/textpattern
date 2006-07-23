@@ -509,4 +509,35 @@ $LastChangedRevision$
 		return selectInput($item, $things, $var, '', '', $id);
 	}
 
+//-------------------------------------------------------------
+	function dom_attach($id, $content, $wraptag)
+	{
+
+		$c = addcslashes($content, "\r\n\"\'");
+		$js = <<<EOF
+var e = document.getElementById('{$id}');
+var n = document.createElement('{$wraptag}')
+n.innerHTML = '{$c}'
+e.appendChild(n)
+EOF;
+
+		return script_js($js, $content);
+	}
+
+//-------------------------------------------------------------
+	function script_js($js, $noscript='')
+	{
+		$out = '<script type="text/javascript">'.n.
+			'<!--'.n.
+			trim($js).n.
+			'// -->'.n.
+			'</script>'.n;
+		if ($noscript)
+			$out .= '<noscript>'.n.
+				trim($noscript).n.
+				'</noscript>'.n;
+		return $out;
+	}
+
+
 ?>
