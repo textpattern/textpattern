@@ -320,7 +320,7 @@ eod;
 	function isPost($val)
 	{
 		if(isset($_POST[$val])) {
-			return (get_magic_quotes_gpc()) 
+			return (MAGIC_QUOTES_GPC) 
 			?	stripslashes($_POST[$val])
 			:	$_POST[$val];						
 		} 

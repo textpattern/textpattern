@@ -253,7 +253,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function parsePostedCSS() //turn css info delivered by editor form into an array
 	{
-		$post = (get_magic_quotes_gpc()) ? doStrip($_POST) : $_POST;
+		$post = (MAGIC_QUOTES_GPC) ? doStrip($_POST) : $_POST;
 		foreach($post as $a=>$b){
 			if (preg_match("/^\d+$/",$a)) {
 				$selector = $b;
