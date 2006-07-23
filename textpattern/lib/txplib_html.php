@@ -510,7 +510,7 @@ $LastChangedRevision$
 	}
 
 //-------------------------------------------------------------
-	function dom_attach($id, $content, $wraptag='p')
+	function dom_attach($id, $content, $noscript='', $wraptag='div')
 	{
 
 		$c = addcslashes($content, "\r\n\"\'");
@@ -521,7 +521,7 @@ n.innerHTML = '{$c}'
 e.appendChild(n)
 EOF;
 
-		return script_js($js, $content);
+		return script_js($js, $content, $noscript);
 	}
 
 //-------------------------------------------------------------
