@@ -654,8 +654,9 @@ $LastChangedRevision$
 			$pageout['grand_total'] = $grand_total;
 			$pageout['total']    = $total;
 
-			global $thispage;	
-			$thispage = $pageout;
+			global $thispage;
+			if (empty($thispage))
+				$thispage = $pageout;
 			if ($pgonly)
 				return;
 		}else{
