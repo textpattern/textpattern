@@ -292,37 +292,142 @@ $LastChangedRevision$
 	function list_multiedit_form($page, $sort, $dir, $crit, $search_method)
 	{
 		$methods = array(
-			'delete'         => gTxt('delete'),
-			'changesection'  => gTxt('changesection'),
-			'changestatus'   => gTxt('changestatus'),
-			'changecomments' => gTxt('changecomments')
+			'changesection'   => gTxt('changesection'),
+			'changecategory1' => gTxt('changecategory1'),
+			'changecategory2' => gTxt('changecategory2'),
+			'changestatus'    => gTxt('changestatus'),
+			'changecomments'  => gTxt('changecomments'),
+			'changeauthor'    => gTxt('changeauthor'),
+			'delete'          => gTxt('delete'),
 		);
 
 		return event_multiedit_form('list', $methods, $page, $sort, $dir, $crit, $search_method);
 	}
 
 // -------------------------------------------------------------
-	function list_multi_edit() 
+
+	function list_multi_edit()
 	{
 		global $txp_user;
 
-		if (ps('selected') and !has_privs('article.delete')) {
-			$ids = array();
-			if (has_privs('article.delete.own')) {
-				foreach (ps('selected') as $id) {
-					$author = safe_field('AuthorID', 'textpattern', "ID='".doSlash($id)."'");
-					if ($author == $txp_user)
-						$ids[] = $id;
-				}
-			}
-			$_POST['selected'] = $ids;
+		$selected = ps('selected');
+
+		if (!$selected)
+		{
+			return list_list();
 		}
 
-		$deleted = event_multi_edit('textpattern','ID');
-		if(!empty($deleted)){
-			$method = ps('edit_method');
-			return list_list(messenger('article',$deleted,(($method == 'delete')?'deleted':'modified')));
+		$method = ps('edit_method');
+		$changed = false;
+
+		if ($method == 'delete')
+		{
+			if (!has_privs('article.delete'))
+			{
+				$allowed = array();
+
+				if (has_privs('article.delete.own'))
+				{
+					foreach ($selected as $id)
+					{
+						$id = intval($id);
+						$author = safe_field('AuthorID', 'textpattern', "ID = '$id'");
+
+						if ($author == $txp_user)
+						{
+							$allowed[] = $id;
+						}
+					}
+				}
+
+				$selected = $allowed;
+			}
+
+			foreach ($selected as $id)
+			{
+				$id = intval($id);
+
+				if (safe_delete('textpattern', "ID = '".$id."'"))
+				{
+					$ids[] = $id;
+				}
+			}
+
+			$changed = join(', ', $ids);
 		}
+
+		else
+		{
+			switch ($method)
+			{
+				// change section
+				case 'changesection':
+					$key = 'Section';
+					$val = ps('Section');
+				break;
+
+			// change category1
+				case 'changecategory1':
+					$key = 'Category1';
+					$val = ps('Category1');
+				break;
+
+			// change category2
+				case 'changecategory2':
+					$key = 'Category2';
+					$val = ps('Category2');
+				break;
+
+			// change status
+				case 'changestatus':
+					$key = 'Status';
+					$val = ps('Status');
+				break;
+
+			// change comments
+				case 'changecomments':
+					$key = 'Annotate';
+					$val = ps('Annotate');
+				break;
+
+			// change author
+				case 'changeauthor':
+					if (has_privs('article.edit'))
+					{
+						$key = 'AuthorID';
+						$val = ps('AuthorID');
+					}
+
+					else
+					{
+						$selected = array();
+					}
+				break;
+			}
+
+			if ($selected)
+			{
+				foreach ($selected as $id)
+				{
+					$id = intval($id);
+
+					if (safe_update('textpattern', "$key = '".doSlash($val)."'", "ID = '$id'"))
+					{
+						$ids[] = $id;
+					}
+				}
+
+				$changed = join(', ', $ids);
+			}
+		}
+
+		if ($changed)
+		{
+			return list_list(
+				messenger('article', $changed, (($method == 'delete') ? 'deleted' : 'modified' ))
+			);
+		}
+
 		return list_list();
 	}
 

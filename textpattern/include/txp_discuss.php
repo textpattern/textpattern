@@ -512,11 +512,11 @@ $LastChangedRevision$
 	function discuss_multiedit_form($page, $sort, $dir, $crit, $search_method) 
 	{
 		$methods = array(
+			'visible'     => gTxt('show'),
+			'unmoderated' => gTxt('hide_unmoderated'),
+			'spam'        => gTxt('hide_spam'),
 			'ban'         => gTxt('ban_author'),
 			'delete'      => gTxt('delete'),
-			'spam'        => gTxt('hide_spam'),
-			'unmoderated' => gTxt('hide_unmoderated'),
-			'visible'     => gTxt('show'),
 		);
 
 		return event_multiedit_form('discuss', $methods, $page, $sort, $dir, $crit, $search_method);

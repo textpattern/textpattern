@@ -916,86 +916,26 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function event_multi_edit($tablename, $idkeyname)
+	function event_multi_edit($table, $id_key)
 	{
 		$method = ps('edit_method');
-		$things = ps('selected');
+		$selected = ps('selected');
 
-		if ($things)
+		if ($selected)
 		{
-			switch ($method)
+			if ($method == 'delete')
 			{
-				// delete
-				case 'delete':
+				foreach ($selected as $id)
+				{
+					$id = intval($id);
 
-					foreach ($things as $id)
+					if (safe_delete($table, "$id_key = '$id'"))
 					{
-						$id = intval($id);
-
-						if (safe_delete($tablename, "$idkeyname = '$id'"))
-						{
-							$ids[] = $id;
-						}
+						$ids[] = $id;
 					}
+				}
 
-					return join(', ', $ids);
-
-				break;
-
-			// change section
-				case 'changesection':
-
-					$section = ps('Section');
-
-					foreach($things as $id)
-					{
-						$id = intval($id);
-
-						if (safe_update($tablename, "Section = '$section'", "$idkeyname = '$id'"))
-						{
-							$ids[] = $id;
-						}
-					}
-
-					return join(', ', $ids);
-
-				break;
-
-			// change status
-				case 'changestatus':
-
-					$status = ps('Status');
-
-					foreach ($things as $id)
-					{
-						$id = intval($id);
-
-						if (safe_update($tablename, "Status = '$status'", "$idkeyname = '$id'"))
-						{
-							$ids[] = $id;
-						}
-					}
-
-					return join(', ', $ids);
-
-				break;
-
-			// change comments
-				case 'changecomments':
-
-					$annotate = ps('Annotate');
-
-					foreach ($things as $id)
-					{
-						$id = intval($id);
-
-						if (safe_update($tablename, "Annotate = '$annotate'", "$idkeyname = '$id'"))
-						{
-							$ids[] = $id;
-						}
-					}
-
-					return join(', ', $ids);
+				return join(', ', $ids);
 			}
 		}
 
