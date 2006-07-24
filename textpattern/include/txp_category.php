@@ -138,7 +138,7 @@ if ($event == 'category') {
 		form(
 			join('',$array).
 			eInput('category').sInput('cat_category_multiedit').hInput('type',$area).
-			small(gTxt('with_selected')).sp.selectInput('method',$methods,'',1).sp.
+			small(gTxt('with_selected')).sp.selectInput('edit_method',$methods,'',1).sp.
 			fInput('submit','',gTxt('go'),'smallerbox')
 			,'margin-top:1em',"verify('".gTxt('are_you_sure')."')"
 		);
@@ -149,7 +149,7 @@ if ($event == 'category') {
 	function cat_category_multiedit() 
 	{
 		$type = ps('type');
-		$method = ps('method');
+		$method = ps('edit_method');
 		$things = ps('selected');
 		if ($things) {
 			foreach($things as $catid) {
@@ -261,19 +261,19 @@ if ($event == 'category') {
 				switch ($evname)
 				{
 					case 'article':
-						$url = 'index.php?event=list'.a.'method=categories'.a.'crit='.$name;
+						$url = 'index.php?event=list'.a.'search_method=categories'.a.'crit='.$name;
 					break;
 	
 					case 'link':
-						$url = 'index.php?event=link'.a.'method=category'.a.'crit='.$name;
+						$url = 'index.php?event=link'.a.'search_method=category'.a.'crit='.$name;
 					break;
 	
 					case 'image':
-						$url = 'index.php?event=image'.a.'method=category'.a.'crit='.$name;
+						$url = 'index.php?event=image'.a.'search_method=category'.a.'crit='.$name;
 					break;
 	
 					case 'file':
-						$url = 'index.php?event=file'.a.'method=category'.a.'crit='.$name;
+						$url = 'index.php?event=file'.a.'search_method=category'.a.'crit='.$name;
 					break;
 				}
 

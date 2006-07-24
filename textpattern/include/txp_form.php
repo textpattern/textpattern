@@ -56,7 +56,7 @@ $LastChangedRevision$
 
 			$out[] = endTable();
 			$out[] = eInput('form').sInput('form_multi_edit');
-			$out[] = graf(selectInput('method',$methods,'',1).sp.gTxt('selected').sp.
+			$out[] = graf(selectInput('edit_method',$methods,'',1).sp.gTxt('selected').sp.
 				fInput('submit','form_multi_edit',gTxt('go'),'smallerbox')
 				, ' align="right"');
 
@@ -68,7 +68,7 @@ $LastChangedRevision$
 	function form_multi_edit() 
 	{
 		global $essential_forms;
-		$method = ps('method');
+		$method = ps('edit_method');
 		$forms = ps('selected_forms');
 
 		if (is_array($forms)) {

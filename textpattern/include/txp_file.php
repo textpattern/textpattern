@@ -106,7 +106,7 @@ $LastChangedRevision$
 
 		$criteria = 1;
 
-		if ($crit or $search_method)
+		if ($search_method and $crit)
 		{
 			$crit_escaped = doSlash($crit);
 
@@ -126,7 +126,14 @@ $LastChangedRevision$
 			else
 			{
 				$search_method = '';
+				$crit = '';
 			}
+		}
+
+		else
+		{
+			$search_method = '';
+			$crit = '';
 		}
 
 		$total = safe_count('txp_file', "$criteria");
@@ -281,7 +288,7 @@ $LastChangedRevision$
 
 		pagetop('file', $message);
 
-		extract(gpsa(array('name', 'category', 'permissions', 'description', 'sort', 'dir', 'page', 'crit', 'method')));
+		extract(gpsa(array('name', 'category', 'permissions', 'description', 'sort', 'dir', 'page', 'crit', 'search_method')));
 
 		if (!$id)
 		{
@@ -332,7 +339,7 @@ $LastChangedRevision$
 									hInput('dir', $dir).
 									hInput('page', $page).
 									hInput('crit', $crit).
-									hInput('method', $method)
+									hInput('search_method', $method)
 								)
 							)
 						);
@@ -359,7 +366,7 @@ $LastChangedRevision$
 									hInput('dir', $dir).
 									hInput('page', $page).
 									hInput('crit', $crit).
-									hInput('method', $method)
+									hInput('search_method', $method)
 
 									)
 								),

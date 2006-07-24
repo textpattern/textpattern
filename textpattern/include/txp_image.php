@@ -60,32 +60,32 @@ $LastChangedRevision$
 		switch ($sort)
 		{
 			case 'id':
-				$sort_sql = '`id` '.$dir;
+				$sort_sql = 'id '.$dir;
 			break;
 
 			case 'name':
-				$sort_sql = '`name` '.$dir;
+				$sort_sql = 'name '.$dir;
 			break;
 
 			case 'thumbnail':
-				$sort_sql = '`thumbnail` '.$dir.', `id` asc';
+				$sort_sql = 'thumbnail '.$dir.', id asc';
 			break;
 
 			case 'category':
-				$sort_sql = '`category` '.$dir.', `id` asc';
+				$sort_sql = 'category '.$dir.', id asc';
 			break;
 
 			case 'date':
-				$sort_sql = '`date` '.$dir.', `id` asc';
+				$sort_sql = 'date '.$dir.', id asc';
 			break;
 
 			case 'author':
-				$sort_sql = '`author` '.$dir.', `id` asc';
+				$sort_sql = 'author '.$dir.', id asc';
 			break;
 
 			default:
 				$dir = 'desc';
-				$sort_sql = '`id` '.$dir;
+				$sort_sql = 'id '.$dir;
 			break;
 		}
 
@@ -93,15 +93,15 @@ $LastChangedRevision$
 
 		$criteria = 1;
 
-		if ($crit or $search_method)
+		if ($search_method and $crit)
 		{
 			$crit_escaped = doSlash($crit);
 
 			$critsql = array(
 				'id'			 => "id = '$crit_escaped'",
-				'name'		 => "`name` like '%$crit_escaped%'",
-				'category' => "`category` like '%$crit_escaped%'",
-				'author'	 => "`author` like '%$crit_escaped%'"
+				'name'		 => "name like '%$crit_escaped%'",
+				'category' => "category like '%$crit_escaped%'",
+				'author'	 => "author like '%$crit_escaped%'"
 			);
 
 			if (array_key_exists($search_method, $critsql))
@@ -112,10 +112,16 @@ $LastChangedRevision$
 
 			else
 			{
-				$method = '';
+				$search_method = '';
+				$crit = '';
 			}
 		}
 
+		else
+		{
+			$search_method = '';
+			$crit = '';
+		}
 		$total = safe_count('txp_image', "$criteria");
 
 		if ($total < 1)
@@ -140,7 +146,7 @@ $LastChangedRevision$
 
 		echo image_search_form($crit, $search_method);
 
-		$rs = safe_rows_start('*, unix_timestamp(`date`) as uDate', 'txp_image',
+		$rs = safe_rows_start('*, unix_timestamp(date) as uDate', 'txp_image',
 			"$criteria order by $sort_sql limit $offset, $limit
 		");
 

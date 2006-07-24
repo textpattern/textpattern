@@ -92,7 +92,7 @@ $LastChangedRevision$
 
 		$criteria = 1;
 
-		if ($crit or $search_method)
+		if ($search_method and $crit)
 		{
 			$crit_escaped = doSlash($crit);
 
@@ -112,7 +112,14 @@ $LastChangedRevision$
 			else
 			{
 				$search_method = '';
+				$crit = '';
 			}
+		}
+
+		else
+		{
+			$search_method = '';
+			$crit = '';
 		}
 
 		$total = getCount('txp_link', "$criteria");  
@@ -299,7 +306,9 @@ $LastChangedRevision$
 
 			eInput('link').
 			sInput( ($step == 'link_edit' ? 'link_save' : 'link_post') ).
-			hInput('id', $id)
+			hInput('id', $id).
+			hInput('search_method', gps('search_method')).
+			hInput('crit', gps('crit'))
 		, 'margin-bottom: 25px;');
 
 		echo link_list();

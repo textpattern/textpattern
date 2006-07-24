@@ -94,7 +94,7 @@ $LastChangedRevision$
 
 		$criteria = 1;
 
-		if ($crit or $search_method)
+		if ($search_method and $crit)
 		{
 			$crit_escaped = doSlash($crit);
 
@@ -116,7 +116,14 @@ $LastChangedRevision$
 			else
 			{
 				$search_method = '';
+				$crit = '';
 			}
+		}
+
+		else
+		{
+			$search_method = '';
+			$crit = '';
 		}
 
 		$total = safe_count('textpattern', "$criteria");
