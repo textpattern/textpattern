@@ -35,16 +35,11 @@ $LastChangedRevision$
 	<script type="text/javascript">
 	<!--
 
-		var date = new Date();
-		date.setTime(date.getTime()+(60*1000));
-		var expires = "; expires="+date.toGMTString();
-		document.cookie="testcookie=enabled"+expires+"; path=/";
-		cookieEnabled=(document.cookie.length>2)? true : false
-		date.setTime(date.getTime()-(60*1000));
-		var expires = "; expires="+date.toGMTString();
-		document.cookie="testcookie"+expires+"; path=/"; //erase dummy value
-		if(!cookieEnabled){
-			confirm(<?php echo "'".trim(gTxt('cookies_must_be_enabled'))."'"; ?>)
+		var cookieEnabled = checkCookies();
+
+		if (!cookieEnabled)
+		{
+			confirm('<?php echo trim(gTxt('cookies_must_be_enabled')); ?>');
 		}	
 	
 <?php

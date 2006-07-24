@@ -1,6 +1,25 @@
 
 // -------------------------------------------------------------
 
+function checkCookies()
+{
+	var date = new Date();
+
+	date.setTime(date.getTime() + (60 * 1000));
+
+	document.cookie = 'testcookie=enabled; expired='+date.toGMTString()+'; path=/';
+
+	cookieEnabled = (document.cookie.length > 2) ? true : false;
+
+	date.setTime(date.getTime() - (60 * 1000));
+
+	document.cookie = 'testcookie; expires='+date.toGMTString()+'; path=/';
+
+	return cookieEnabled;
+}
+
+// -------------------------------------------------------------
+
 function popWin(url, width, height, options)
 {
 	var w = (width) ? width : 400;
