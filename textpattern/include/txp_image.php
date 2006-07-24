@@ -254,6 +254,8 @@ $LastChangedRevision$
 
 		pagetop('image',$message);
 
+		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
+
 		$categories = getTree("root", "image");
 		
 		$rs = safe_row("*", "txp_image", "id='$id'");
@@ -303,10 +305,16 @@ $LastChangedRevision$
 						graf('<label for="caption">'.gTxt('caption').'</label>'.br.
 							text_area('caption', '100', '400', $caption, 'caption')).
 
-						graf(fInput('submit', '', gTxt('save'), 'publish')).
-						hInput('id', $id).
-						eInput('image').
-						sInput('image_save')
+						n.graf(fInput('submit', '', gTxt('save'), 'publish')).
+						n.hInput('id', $id).
+						n.eInput('image').
+						n.sInput('image_save').
+
+						n.hInput('sort', $sort).
+						n.hInput('dir', $dir).
+						n.hInput('page', $page).
+						n.hInput('search_method', $search_method).
+						n.hInput('crit', $crit)
 					)
 				)
 			),
@@ -435,7 +443,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function thumb_ui($id)
 	{		
-		global $prefs;
+		global $prefs, $sort, $dir, $page, $search_method, $crit;
 		extract($prefs);
 		return
 		tr(
@@ -458,9 +466,16 @@ $LastChangedRevision$
 							, ' class="noline"')
 						).
 
-						hInput('id', $id).
-						eInput('image').
-						sInput('thumbnail_create').
+						n.hInput('id', $id).
+						n.eInput('image').
+						n.sInput('thumbnail_create').
+
+						n.hInput('sort', $sort).
+						n.hInput('dir', $dir).
+						n.hInput('page', $page).
+						n.hInput('search_method', $search_method).
+						n.hInput('crit', $crit).
+
 					endTable()
 				)
 			)

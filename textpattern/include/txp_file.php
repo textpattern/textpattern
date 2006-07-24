@@ -339,7 +339,7 @@ $LastChangedRevision$
 									hInput('dir', $dir).
 									hInput('page', $page).
 									hInput('crit', $crit).
-									hInput('search_method', $method)
+									hInput('search_method', $search_method)
 								)
 							)
 						);
@@ -366,7 +366,7 @@ $LastChangedRevision$
 									hInput('dir', $dir).
 									hInput('page', $page).
 									hInput('crit', $crit).
-									hInput('search_method', $method)
+									hInput('search_method', $search_method)
 
 									)
 								),

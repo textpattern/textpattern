@@ -456,6 +456,8 @@ $LastChangedRevision$
 
 	function upload_form($label, $pophelp, $step, $event, $id = '', $max_file_size = '1000000', $label_id = '', $class = 'upload-form')
 	{
+		global $sort, $dir, $page, $search_method, $crit;
+
 		$class = ($class) ? ' class="'.$class.'"' : '';
 
 		$label_id = ($label_id) ? $label_id : $event.'-upload';
@@ -467,6 +469,12 @@ $LastChangedRevision$
 			n.eInput($event).
 			n.sInput($step).
 			n.hInput('id', $id).
+
+			n.hInput('sort', $sort).
+			n.hInput('dir', $dir).
+			n.hInput('page', $page).
+			n.hInput('search_method', $search_method).
+			n.hInput('crit', $crit).
 
 			n.graf(
 				'<label for="'.$label_id.'">'.$label.'</label>'.sp.popHelp($pophelp).sp.
