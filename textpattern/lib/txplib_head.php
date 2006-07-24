@@ -43,52 +43,52 @@ $LastChangedRevision$
 		}	
 	
 <?php
+
 	if ($event == 'list')
 	{
+		$sections = '';
+
+		$rs = safe_column('name', 'txp_section', "name != 'default'");
+
+		if ($rs)
+		{
+			$sections = str_replace("\n", '', stripslashes(selectInput('Section', $rs, '', true)));
+		}
+
+		$category1 = '';
+		$category2 = '';
+
+		$rs = getTree('root', 'article');
+
+		if ($rs)
+		{
+			$category1 = str_replace("\n", '', treeSelectInput('Category1', $rs, ''));
+			$category2 = str_replace("\n", '', treeSelectInput('Category2', $rs, ''));
+		}
+
+		$statuses = str_replace("\n", '', stripslashes(selectInput('Status', array(
+			1 => gTxt('draft'),
+			2 => gTxt('hidden'),
+			3 => gTxt('pending'),
+			4 => gTxt('live'),
+			5 => gTxt('sticky'),
+		), '', true)));
+
+		$comments_annotate = onoffRadio('Annotate', safe_field('val', 'txp_prefs', "name = 'comments_on_default'"));
+
+		$authors = '';
+
+		$rs = safe_column('name', 'txp_users', "privs not in(0,6)");
+
+		if ($rs)
+		{
+			$authors = str_replace("\n", '', stripslashes(selectInput('AuthorID', $rs, '', true)));
+		}
+
+		// output JavaScript
 ?>
 		function poweredit(elm)
 		{
-<?php
-			$sections = '';
-
-			$rs = safe_column('name', 'txp_section', "name != 'default'");
-
-			if ($rs)
-			{
-				$sections = str_replace("\n", '', stripslashes(selectInput('Section', $rs, '', true)));
-			}
-
-			$category1 = '';
-			$category2 = '';
-
-			$rs = getTree('root', 'article');
-
-			if ($rs)
-			{
-				$category1 = str_replace("\n", '', treeSelectInput('Category1', $rs, ''));
-				$category2 = str_replace("\n", '', treeSelectInput('Category2', $rs, ''));
-			}
-
-			$statuses = str_replace("\n", '', stripslashes(selectInput('Status', array(
-				1 => gTxt('draft'),
-				2 => gTxt('hidden'),
-				3 => gTxt('pending'),
-				4 => gTxt('live'),
-				5 => gTxt('sticky'),
-			), '', true)));
-
-			$comments_annotate = onoffRadio('Annotate', safe_field('val', 'txp_prefs', "name = 'comments_on_default'"));
-
-			$authors = '';
-
-			$rs = safe_column('name', 'txp_users', "privs not in(0,6)");
-
-			if ($rs)
-			{
-				$authors = str_replace("\n", '', stripslashes(selectInput('AuthorID', $rs, '', true)));
-			}
-
-?>
 			var something = elm.options[elm.selectedIndex].value;
 
 			// Add another chunk of HTML
@@ -152,7 +152,6 @@ $LastChangedRevision$
 			return false;
 		}
 
-		//allow multiple events to be loaded with the page
 		addEvent(window, 'load', cleanSelects);
 <?php
 	}
