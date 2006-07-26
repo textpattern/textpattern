@@ -844,7 +844,7 @@ if (!empty($event) and $event == 'article') {
 	{
 		$arr = array(' ');
 
-		$rs = safe_column('name', 'txp_form', "type = 'article' and name != 'default'");
+		$rs = safe_column('name', 'txp_form', "type = 'article' and name != 'default' order by name");
 
 		if ($rs)
 		{
