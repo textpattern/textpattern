@@ -1534,14 +1534,7 @@ eod;
 	{
 		$list = explode($delim, $list);
 
-		foreach ($list as $key => $value)
-		{
-			if (empty($list[$key]))
-			{
-				unset($list[$key]);
-				continue;
-			}
-
+		foreach ($list as $key => $value) {
 			$list[$key] = doSlash(trim($value));
 		}
 
