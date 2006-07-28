@@ -1008,75 +1008,81 @@ $LastChangedRevision$
 
 	function link_to_next($atts, $thing)
 	{
-		global $thisarticle, $id;
-		global $next_id, $next_title, $next_utitle, $next_posted;
+		global $id, $next_id, $next_title;
 
 		extract(lAtts(array(
 			'showalways' => 0,
 		), $atts));
 
-		if (!is_numeric(@$id))
+		if (intval($id) == 0)
 		{
+			global $thisarticle, $s;
+
 			extract(getNextPrev(
-				@$thisarticle['thisid'], 
-				@strftime('%Y-%m-%d %H:%M:%S', 
-				$thisarticle['posted']
-			), @$GLOBALS['s']));
+				@$thisarticle['thisid'],
+				@strftime('%Y-%m-%d %H:%M:%S', $thisarticle['posted']),
+				@$s
+			));
 		}
 
-		if ($thing)
+		if ($next_id)
 		{
-			return ($next_id) ? 
-				tag(
-					parse($thing), 'a', 
-						' rel="next" href="'.permlinkurl_id($next_id).'"'.
-						( ($next_title and $next_title != $thing) ? ' title="'.$next_title.'"' : '' )
-				) : 
-				($showalways ? parse($thing) : '');
+			$url = permlinkurl_id($next_id);
+
+			if ($thing)
+			{
+				$thing = parse($thing);
+
+				return '<a rel="next" href="'.$url.'"'.
+					($next_title != $thing ? ' title="'.$next_title.'"' : '').
+					'>'.parse($thing).'</a>';
+			}
+
+			return $url;
 		}
 
-		else
-		{
-			return ($next_id) ? permlinkurl_id($next_id) : '';
-		}
+		return ($showalways) ? parse($thing) : '';
 	}
-		
+
 // -------------------------------------------------------------
 // link to next article, if it exists
 
 	function link_to_prev($atts, $thing) 
 	{
-		global $thisarticle, $id;
-		global $prev_id, $prev_title, $prev_utitle, $prev_posted;
+		global $id, $prev_id, $prev_title;
 
 		extract(lAtts(array(
 			'showalways' => 0,
 		), $atts));
 
-		if (!is_numeric(@$id))
+		if (intval($id) == 0)
 		{
+			global $thisarticle, $s;
+
 			extract(getNextPrev(
-				$thisarticle['thisid'], 
-				@strftime('%Y-%m-%d %H:%M:%S', 
-				$thisarticle['posted']
-			), @$GLOBALS['s']));
+				$thisarticle['thisid'],
+				@strftime('%Y-%m-%d %H:%M:%S', $thisarticle['posted']), 
+				@$s
+			));
 		}
 
-		if ($thing)
+		if ($prev_id)
 		{
-			return ($prev_id) ? 
-				tag(
-					parse($thing), 'a', 
-						' rel="prev" href="'.permlinkurl_id($prev_id).'"'.
-						( ($prev_title and $prev_title != $thing) ? ' title="'.$prev_title.'"' : '' )
-				) : 
-				($showalways ? parse($thing) : '');
+			$url = permlinkurl_id($prev_id);
+
+			if ($thing)
+			{
+				$thing = parse($thing);
+
+				return '<a rel="prev" href="'.$url.'"'.
+					($prev_title != $thing ? ' title="'.$prev_title.'"' : '').
+					'>'.$thing.'</a>';
+			}
+
+			return $url;
 		}
 
-		else
-		{
-			return ($prev_id) ? permlinkurl_id($prev_id) : '';
-		}
+		return ($showalways) ? parse($thing) : '';
 	}
 
 // -------------------------------------------------------------
