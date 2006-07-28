@@ -2533,7 +2533,10 @@ function body($atts)
 
 		$section = ($s == 'default' ? '' : $s);
 
-		return parse(EvalElse($thing, in_list($section, $name)));
+		if ($section)
+			return parse(EvalElse($thing, in_list($section, $name)));
+		else
+			return parse(EvalElse($thing, in_list('', $name) or in_list('default', $name)));
 
 	}
 
