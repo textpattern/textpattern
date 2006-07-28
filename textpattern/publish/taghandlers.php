@@ -1125,92 +1125,78 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function newer($atts, $thing = false, $match = '') 
+	function newer($atts, $thing = false, $match = '')
 	{
-		global $thispage, $permlink_mode, $pretext;
+		global $thispage, $pretext, $permlink_mode;
 
-		extract($pretext);
+		extract(lAtts(array(
+			'showalways' => 0,
+		), $atts));
 
-		if (is_array($atts))
-		{
-			extract($atts);
-		}
+		$numPages = $thispage['numPages'];
+		$pg				= $thispage['pg'];
 
-		if (is_array($thispage))
-		{
-			extract($thispage);
-		}
-
-		if ($numPages > 1 && $pg > 1)
+		if ($numPages > 1 and $pg > 1)
 		{
 			$nextpg = ($pg - 1 == 1) ? 0 : ($pg - 1);
 
-			$url = pagelinkurl(array(
-				'pg'     => $nextpg, 
-				's'      => @$pretext['s'], 
-				'c'      => @$pretext['c'], 
-				'q'      => @$pretext['q'], 
+			$url = urldecode(pagelinkurl(array(
+				'pg'		 => $nextpg,
+				's'			 => @$pretext['s'],
+				'c'			 => @$pretext['c'],
+				'q'			 => @$pretext['q'],
 				'author' => @$pretext['author']
-			));
-
-			$url = urldecode($url);
+			)));
 
 			if ($thing)
 			{
 				return '<a href="'.$url.'"'.
-				(empty($title) ? '' : ' title="'.$title.'"').
-				'>'.$thing.'</a>';
+					(empty($title) ? '' : ' title="'.$title.'"').
+					'>'.parse($thing).'</a>';
 			}
 
 			return $url;
 		}
 
-		return;
+		return ($showalways) ? parse($thing) : '';
 	}
 
 // -------------------------------------------------------------
 
-	function older($atts, $thing = false, $match = '') 
+	function older($atts, $thing = false, $match = '')
 	{
-		global $thispage, $permlink_mode, $pretext;
+		global $thispage, $pretext, $permlink_mode;
 
-		extract($pretext);
+		extract(lAtts(array(
+			'showalways' => 0,
+		), $atts));
 
-		if (is_array($atts))
-		{
-			extract($atts);
-		}
+		$numPages = $thispage['numPages'];
+		$pg				= $thispage['pg'];
 
-		if (is_array($thispage))
-		{
-			extract($thispage);
-		}
-		
-		if ($numPages > 1 && $pg != $numPages)
+		if ($numPages > 1 and $pg != $numPages)
 		{
 			$nextpg = $pg + 1;
 
-			$url = pagelinkurl(array(
-				'pg'     => $nextpg, 
-				's'      => @$pretext['s'], 
-				'c'      => @$pretext['c'], 
-				'q'      => @$pretext['q'], 
+			$url = urldecode(pagelinkurl(array(
+				'pg'		 => $nextpg,
+				's'			 => @$pretext['s'],
+				'c'			 => @$pretext['c'],
+				'q'			 => @$pretext['q'],
 				'author' => @$pretext['author']
-			));
-
-			$url = urldecode($url);
+			)));
 
 			if ($thing)
 			{
 				return '<a href="'.$url.'"'.
-				(empty($title) ? '' : ' title="'.$title.'"').
-				'>'.$thing.'</a>';
+					(empty($title) ? '' : ' title="'.$title.'"').
+					'>'.parse($thing).'</a>';
 			}
 
 			return $url;
 		}
 
-		return;
+		return ($showalways) ? parse($thing) : '';
 	}
 
 // -------------------------------------------------------------
