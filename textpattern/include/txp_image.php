@@ -178,8 +178,8 @@ $LastChangedRevision$
 					'<img src="'.hu.$img_dir.'/'.$id.'t'.$ext.'" />' :
 					gTxt('no');
 
-				$tag_url = '?event=tag'.a.'tag_name=image'.a.'id='.$id.a.'ext='.$ext.a.
-					'alt='.$alt.a.'h='.$h.a.'w='.$w;
+				$tag_url = '?event=tag'.a.'tag_name=image'.a.'id='.$id.a.'ext='.$ext.
+					a.'w='.$w.a.'h='.$h.a.'alt='.urlencode($alt).a.'caption='.urlencode($caption);
 
 				$category = ($category) ? '<span title="'.fetch_category_title($category, 'image').'">'.$category.'</span>' : '';
 
