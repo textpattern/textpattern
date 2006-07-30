@@ -1963,6 +1963,7 @@ begin tag builder functions
 
 		$atts = gpsa(array(
 			'align',
+			'escape',
 			'style',
 			'thumbnail'
 		));
@@ -1980,6 +1981,9 @@ begin tag builder functions
 
 			tagRow('thumbnail',
 				yesno2_pop('thumbnail', $thumbnail)).
+
+			tagRow('escape',
+				escape_pop($escape)).
 
 			tagRow('style',
 				fInput('text', 'style', $style, 'edit', '', '', 25)).
@@ -3134,10 +3138,12 @@ begin tag builder functions
 
 		$atts = gpsa(array(
 			'class',
+			'escape',
 			'html_id',
 			'style',
 
 			'alt',
+			'caption',
 			'h',
 			'id',
 			'w',
@@ -3166,6 +3172,9 @@ begin tag builder functions
 			tagRow('type',
 				''.selectInput('type', $types, ($type ? $type : 'textpattern'), true)).
 
+			tagRow('escape',
+				escape_pop($escape)).
+
 			tagRow('html_id',
 				fInput('text', 'html_id', $html_id, 'edit', '', '', 25)).
 
@@ -3175,17 +3184,24 @@ begin tag builder functions
 			tagRow('style',
 				fInput('text', 'style', $style, 'edit', '', '', 25)).
 
+			hInput('id', $id).
+			hInput('ext', $ext).
 			hInput('w', $w).
 			hInput('h', $h).
-			hInput('ext', $ext).
-			hInput('id', $id).
 			hInput('alt', $alt).
+			hInput('caption', $caption).
 
 			$endform
 		);
 
 		if ($step == 'build')
 		{
+			if ($escape == 'html')
+			{
+				$alt = str_replace('&', '&#38;', escape_output($alt));
+				$caption = str_replace('&', '&#38;', escape_output($caption));
+			}
+
 			$url = hu.$img_dir.'/'.$id.$ext;
 
 			switch ($type)
@@ -3197,12 +3213,13 @@ begin tag builder functions
 				break;
 
 				case 'xhtml':
-					$alt = ($alt) ? ' alt="'.$alt.'"' : '';
-					$class = ($class) ? ' class="'.$class.'"' : '';
+					$alt     = ($alt)     ? ' alt="'.$alt.'"' : '';
+					$caption = ($caption) ? ' title="'.$caption.'"' : '';
+					$class   = ($class)   ? ' class="'.$class.'"' : '';
 					$html_id = ($html_id) ? ' id="'.$html_id.'"' : '';
-					$style = ($style) ? ' style="'.$style.'"' : '';
+					$style   = ($style)   ? ' style="'.$style.'"' : '';
 
-					$out .= tdb('<img src="'.$url.'" width="'.$w.'" height="'.$h.'"'.$alt.$html_id.$class.$style.' />');
+					$out .= tdb('<img src="'.$url.'" width="'.$w.'" height="'.$h.'"'.$alt.$caption.$html_id.$class.$style.' />');
 				break;
 
 				case 'textpattern':
@@ -3479,20 +3496,25 @@ begin tag builder functions
 			tagRow('type',
 				''.selectInput('type', $types, ($type ? $type : 'textpattern'), true)).
 
-			tagRow('link_text',
-				fInput('text', 'thing', ($thing ? $thing : $filename), 'edit', '', '', 25)).
-
 			tagRow('id',
 				input_id($id)).
 
 			tagRow('filename',
 				fInput('text', 'filename', $filename, 'edit', '', '', 25)).
 
+			tagRow('link_text',
+				fInput('text', 'thing', ($thing ? $thing : $filename), 'edit', '', '', 25)).
+
+			tagRow('description',
+				'<textarea name="description" cols="22" rows="3">'.$description.'</textarea>').
+
 			$endform
 		);
 
 		if ($step == 'build')
 		{
+			$description = str_replace('&', '&#38;', escape_output($description));
+
 			$url = ($permlink_mode == 'messy') ?
 				hu.'index.php?s=file_download'.a.'id='.$id:
 				hu.'file_download/'.$id;
@@ -3508,8 +3530,9 @@ begin tag builder functions
 
 				case 'xhtml':
 					$thing = ($thing) ? $thing : $filename;
+					$description = ($description) ? ' title="'.$description.'"' : '';
 
-					$out .= tdb('<a href="'.$url.'">'.$thing.'</a>');
+					$out .= tdb('<a href="'.$url.'"'.$description.'>'.$thing.'</a>');
 				break;
 
 				case 'textpattern':
