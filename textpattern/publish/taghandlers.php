@@ -80,6 +80,7 @@ $LastChangedRevision$
 		extract(lAtts(array(
 			'align'   => '',
 			'class'   => '',
+			'escape'  => '',
 			'html_id' => '',
 			'id'		  => '',
 			'name'	  => '',
@@ -129,16 +130,19 @@ $LastChangedRevision$
 		{
 			extract($rs);
 
-			$out = array(
-				'<img src="'.hu.$img_dir.'/'.$id.$ext.'" width="'.$w.'" height="'.$h.'" alt="'.$alt.'"',
-				($html_id) ? ' id="'.$html_id.'"' : '',
-				($class) ? ' class="'.$class.'"' : '',
-				($style) ? ' style="'.$style.'"' : '',
-				($align) ? ' align="'.$align.'"' : '',
-				' />'
-			);
+			if ($escape == 'html')
+			{
+				$alt = escape_output($alt);
+				$caption = escape_output($caption);
+			}
 
-			return join('', $out);
+			return '<img src="'.hu.$img_dir.'/'.$id.$ext.'" width="'.$w.'" height="'.$h.'" alt="'.$alt.'"'.
+				($caption ? ' title="'.$caption.'"' : '').
+				($html_id ? ' id="'.$html_id.'"' : '').
+				($class ? ' class="'.$class.'"' : '').
+				($style ? ' style="'.$style.'"' : '').
+				($align ? ' align="'.$align.'"' : '').
+				' />';
 		}
 
 		return '<txp:notice message="malformed image tag" />';
@@ -153,6 +157,7 @@ $LastChangedRevision$
 		extract(lAtts(array(
 			'align'			=> '',
 			'class'			=> '',
+			'escape'    => '',
 			'html_id'   => '',
 			'id'				=> '',
 			'name'			=> '',
@@ -184,16 +189,19 @@ $LastChangedRevision$
 
 			if ($thumbnail)
 			{
-				$out = array(
-					'<img src="'.hu.$img_dir.'/'.$id.'t'.$ext.'" alt="'.$alt.'"',
-						($html_id) ? ' id="'.$html_id.'"' : '',
-						($class) ? ' class="'.$class.'"' : '',
-						($style) ? ' style="'.$style.'"' : '',
-						($align) ? ' align="'.$align.'"' : '',
-						' />'
-				);
+				if ($escape == 'html')
+				{
+					$alt = escape_output($alt);
+					$caption = escape_output($caption);
+				}
 
-				$out = join('', $out);
+				$out = '<img src="'.hu.$img_dir.'/'.$id.'t'.$ext.'" alt="'.$alt.'"'.
+					($caption ? ' title="'.$caption.'"' : '').
+					($html_id ? ' id="'.$html_id.'"' : '').
+					($class ? ' class="'.$class.'"' : '').
+					($style ? ' style="'.$style.'"' : '').
+					($align ? ' align="'.$align.'"' : '').
+					' />';
 
 				if ($poplink)
 				{
@@ -1967,8 +1975,9 @@ function body($atts)
 		assert_article();
 
 		extract(lAtts(array(
-			'style' 	=> '',
-			'align' 	=> '',
+			'align' 	  => '',
+			'escape'    => '',
+			'style' 	  => '',
 			'thumbnail' => 0
 		), $atts));
 
@@ -1988,14 +1997,17 @@ function body($atts)
 						{
 							extract($rs);
 
-							$out = array(
-								'<img src="'.hu.$img_dir.'/'.$id.'t'.$ext.'" alt="'.$alt.'"'.
-								($style ? 'style="'.$style.'"' : '').
-								($align ? 'align="'.$align.'"' : '').
-								' />'
-							);
+							if ($escape == 'html')
+							{
+								$alt = escape_output($alt);
+								$caption = escape_output($caption);
+							}
 
-							return join(' ', $out);
+							return '<img src="'.hu.$img_dir.'/'.$id.'t'.$ext.'" alt="'.$alt.'"'.
+								($caption ? ' title="'.$caption.'"' : '').
+								($style ? ' style="'.$style.'"' : '').
+								($align ? ' align="'.$align.'"' : '').
+								' />';
 						}
 					}
 
@@ -2003,22 +2015,24 @@ function body($atts)
 					{
 						extract($rs);
 
-						$out = array(
-							'<img src="'.hu.$img_dir.'/'.$id.$ext.'" width="'.$w.'" height="'.$h.'" alt="'.$alt.'"'.
-							($style ? 'style="'.$style.'"' : '').
-							($align ? 'align="'.$align.'"' : '').
-							' />'
-						);
+						if ($escape == 'html')
+						{
+							$alt = escape_output($alt);
+							$caption = escape_output($caption);
+						}
 
-						return join(' ', $out);
+						return '<img src="'.hu.$img_dir.'/'.$id.$ext.'" width="'.$w.'" height="'.$h.'" alt="'.$alt.'"'.
+							($caption ? ' title="'.$caption.'"' : '').
+							($style ? ' style="'.$style.'"' : '').
+							($align ? ' align="'.$align.'"' : '').
+							' />';
 					}
 				}
 			}
 
 			else
 			{
-				return '<img src="'.$image.'"'.
-					' alt=""'.
+				return '<img src="'.$image.'" alt=""'.
 					($style ? ' style="'.$style.'"' : '').
 					($align ? ' align="'.$align.'"' : '').
 					' />';
