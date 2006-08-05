@@ -506,6 +506,8 @@ $LastChangedRevision$
 		//getting attributes
 		$theAtts = lAtts(array(
 			'form'      => 'default',
+			'listform'  => '',
+			'searchform'=> '',
 			'limit'     => 10,
 			'pageby'    => '',
 			'category'  => '',
@@ -599,7 +601,7 @@ $LastChangedRevision$
 			case 'future':
 				$time = " and Posted > now()"; break;
 			default:
-				$time = " and Posted < now()";
+				$time = " and Posted <= now()";
 		}
 		if (!is_numeric($status))
 			$status = getStatusNum($status);
@@ -665,15 +667,17 @@ $LastChangedRevision$
 
 		$rs = safe_rows_start("*, unix_timestamp(Posted) as uPosted".$match, 'textpattern', 
 		$where. ' order by '.doslash($sort).' limit ' . doSlash($pgoffset.$limit));
-		// alternative form override for search or list
+		// get the form name
 		if ($q and !$iscustom and !$issticky)
-			$form = gAtt($atts, 'searchform', 'search_results');
+			$fname = ($searchform ? $searchform : 'search_results');
 		else
-			$form = gAtt($atts, 'listform', $form);         
-		// might be a form preview, otherwise grab it from the db
-		$form = (isset($_POST['Form']))
-		?	gps('Form')
-		:	fetch_form($form);
+			$fname = ($listform ? $listform : $form);
+
+		// fetch the form
+		if (gps('Form') and @constant('txpinterface') === 'admin')
+			$form = gps('Form');
+		else
+			$form = fetch_form($fname);
 
 		if ($rs) {
 			$count = 0;
