@@ -1330,9 +1330,36 @@ $LastChangedRevision$
 		return $msg;
 	}
 
+//-------------------------------------------------------------
+	function handle_lastmod($unix_ts=NULL) {
+		global $prefs;
+		extract($prefs);
 
-// -------------------------------------------------------------
-	function set_pref($name, $val, $event,  $type, $html='text_input') 
+		if($send_lastmod) {
+			if ($unix_ts === NULL)
+				$unix_ts = strtotime($lastmod);
+
+			# sanity check: make sure the lastmod date is in the last 24 hours
+			$now = time();
+			if ($unix_ts > $now or $unix_ts < ($now - 24*60*60))
+				return;
+
+			$last = safe_strftime('rfc822', $unix_ts, 1);
+			header("Last-Modified: $last");
+			if ($production_status == 'live') {
+				$hims = serverset('HTTP_IF_MODIFIED_SINCE');
+				if ($hims >= $last) {
+					txp_status_header('304 Not Modified');
+					# discard all output
+					while (@ob_end_clean());
+					exit;
+				}
+			}
+		}
+	}
+
+//-------------------------------------------------------------
+	function set_pref($name, $val, $event,  $type, $html='text_input')
 	{
 		extract(doSlash(func_get_args()));
 
@@ -1346,7 +1373,7 @@ $LastChangedRevision$
 				prefs_id = 1"
 			);
     	} else {
-        	return safe_update('txp_prefs', "val = '$val'","name like '$name'");    	
+        	return safe_update('txp_prefs', "val = '$val'","name like '$name'");
     	}
     	return false;
 	}

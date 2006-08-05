@@ -40,9 +40,6 @@ $LastChangedRevision$
 
 	ob_start();
 
-		// useful for clean urls with error-handlers
-	txp_status_header('200 OK');
-
     	// start the clock for runtime
 	$microstart = getmicrotime();
 
@@ -182,18 +179,10 @@ $LastChangedRevision$
 		}
 	}
 
-/* FIXME: have to convert mysql-timestamps to unixtimestamps first. Are timezones ok?
-	if($send_lastmod) {
-		$last = gmdate("D, d M Y H:i:s \G\M\T",$lastmod);
-		header("Last-Modified: $last");
+	// send 304 Not Modified if appropriate
+	handle_lastmod();
 
-		$hims = serverset('HTTP_IF_MODIFIED_SINCE');
-		if ($hims == $last) {
-			header("HTTP/1.1 304 Not Modified");
-			exit; 
-		}
-	}
-*/
+
 // -------------------------------------------------------------
 	function preText($s,$prefs) 
 	{
@@ -441,6 +430,9 @@ $LastChangedRevision$
 		$html = safe_field('user_html','txp_page',"name='".doSlash($pretext['page'])."'");
 		if (!$html) 
 			txp_die(gTxt('unknown_section'), '404');
+
+		// useful for clean urls with error-handlers
+		txp_status_header('200 OK');
 
 		trace_add('['.gTxt('page').': '.$pretext['page'].']');
 		set_error_handler("tagErrorHandler");
