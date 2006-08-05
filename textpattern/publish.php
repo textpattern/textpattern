@@ -400,14 +400,16 @@ $LastChangedRevision$
 // 		$out['css']  = @$rs['css'];
 
 		if(is_numeric($id)) {
-			$a = safe_row('*, unix_timestamp(Posted) as uPosted', 'textpattern', "ID='".doSlash($id)."' and Status in (4,5)");
-			$Posted             = @$a['Posted'];
-			$out['id_keywords'] = @$a['Keywords'];
-			$out['id_author']   = @$a['AuthorID'];
-			populateArticleData($a);
+			$a = safe_row('*, unix_timestamp(Posted) as uPosted', 'textpattern', "ID='".doSlash($id)."' and Status = '4'");
+			if ($a) {
+				$Posted             = @$a['Posted'];
+				$out['id_keywords'] = @$a['Keywords'];
+				$out['id_author']   = @$a['AuthorID'];
+				populateArticleData($a);
 
-			if ($np = getNextPrev($id, $Posted, $s))
-				$out = array_merge($out, $np);
+				if ($np = getNextPrev($id, $Posted, $s))
+					$out = array_merge($out, $np);
+			}
 		}
 
 		$out['path_from_root'] = $path_from_root; // these are deprecated as of 1.0
@@ -738,10 +740,11 @@ $LastChangedRevision$
 		extract(lAtts(array(
 			'allowoverride' => '1',
 			'form'          => 'default',
-			'status'        => '',
+			'status'        => '4',
 		),$atts, 0));		
 
 		if ($status or empty($thisarticle) or $thisarticle['thisid'] != $id) {
+			$thisarticle = NULL;
 			if ($status and !is_numeric($status))
 				$status = getStatusNum($status);
 
