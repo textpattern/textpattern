@@ -1356,6 +1356,7 @@ $LastChangedRevision$
 
 			$last = safe_strftime('rfc822', $unix_ts, 1);
 			header("Last-Modified: $last");
+			header('Cache-Control: no-cache');
 			if ($production_status == 'live') {
 				$hims = serverset('HTTP_IF_MODIFIED_SINCE');
 				if ($hims >= $last) {
