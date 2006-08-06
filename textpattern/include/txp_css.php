@@ -298,9 +298,11 @@ $LastChangedRevision$
 
 		if ($savenew or $copy) {
 			safe_insert("txp_css", "name='$newname', css='$css'");
+			update_lastmod();
 			css_edit(messenger('css',$newname,'created'));
 		} else {
 			safe_update("txp_css", "css='$css'", "name='$name'");	
+			update_lastmod();
 			css_edit(messenger('css',$name,'updated'));
 		}
 	}

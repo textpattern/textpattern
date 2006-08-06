@@ -1331,6 +1331,11 @@ $LastChangedRevision$
 	}
 
 //-------------------------------------------------------------
+	function update_lastmod() {
+		safe_update("txp_prefs", "val = now()", "name = 'lastmod'");
+	}
+
+//-------------------------------------------------------------
 	function handle_lastmod($unix_ts=NULL) {
 		global $prefs;
 		extract($prefs);

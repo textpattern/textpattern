@@ -351,7 +351,7 @@ $LastChangedRevision$
 
 		if ($q) {
 			//update lastmod due to link feeds
-			safe_update("txp_prefs", "val = now()", "name = 'lastmod'");
+			update_lastmod();
 			
 			link_edit(messenger('link',$linkname,'created'));			
 		}
@@ -385,7 +385,10 @@ $LastChangedRevision$
 			description = '$description'",
 		   "id = '$id'"
 		);
-		if ($rs) link_edit( messenger( 'link', doStrip($linkname), 'saved' ) );
+		if ($rs)  {
+			update_lastmod();
+			link_edit( messenger( 'link', doStrip($linkname), 'saved' ) );
+		}
 	}
 
 // -------------------------------------------------------------

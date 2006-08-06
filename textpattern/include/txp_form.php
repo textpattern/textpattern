@@ -183,6 +183,7 @@ $LastChangedRevision$
 			form_edit();
 		} elseif ($savenew) {
 			if (safe_insert("txp_form", "Form='$Form', type='$type', name='$name'")) {
+				update_lastmod();
 				form_edit(messenger('form',$name,'created'));
 			} else form_edit(messenger('form',$name,'already_exists'));
 		} else {
@@ -192,6 +193,7 @@ $LastChangedRevision$
 					((!in_array($name, $essential_forms)) ? ",name='$name'" : ''),
 				"name='$oldname'"
 			);
+			update_lastmod();
 			form_edit(messenger('form',$name,'updated'));		
 		}
 	}

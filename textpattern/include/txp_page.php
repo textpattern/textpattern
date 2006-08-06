@@ -151,8 +151,10 @@ $LastChangedRevision$
 		extract(doSlash(gpsa(array('name','html','newname','copy'))));
 		if($newname && $copy) {
 			safe_insert("txp_page", "name='$newname', user_html='$html'");
+			update_lastmod();
 			page_edit(messenger('page',$newname,'created'));
 		} else {
+			update_lastmod();
 			safe_update("txp_page","user_html='$html'", "name='$name'");
 			page_edit(messenger('page',$name,'updated'));
 		}

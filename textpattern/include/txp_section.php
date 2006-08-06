@@ -148,7 +148,10 @@ $LastChangedRevision$
 					in_rss       = 1,
 					on_frontpage = 1"
 				);
-				if ($rs) sec_section_list(messenger('section',$name,'created'));
+				if ($rs) {
+					update_lastmod();
+					sec_section_list(messenger('section',$name,'created'));
+				}
 			} else sec_section_list();
 		} else sec_section_list(gTxt('section_name_already_exists'));
 	}
@@ -173,7 +176,8 @@ $LastChangedRevision$
 		$name = preg_replace("/[^[:alnum:]\-_]/", "", str_replace(" ","-",$name));
 
 		if ($name == 'default') {
-				safe_update("txp_section", "page='$page',css='$css'", "name='default'");
+			safe_update("txp_section", "page='$page',css='$css'", "name='default'");
+			update_lastmod();
 		} else {
 			if ($is_default) { // note this means 'selected by default' not 'default page'
 				safe_update("txp_section", "is_default=0", "name!='$old_name'");
@@ -191,6 +195,7 @@ $LastChangedRevision$
 			   "name = '$old_name'"
 			);
 			safe_update("textpattern","Section='$name'", "Section='$old_name'");
+			update_lastmod();
 		}
 		sec_section_list(messenger('section',$name,'updated'));
 	}

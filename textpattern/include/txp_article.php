@@ -121,7 +121,7 @@ if (!empty($event) and $event == 'article') {
 				
 				do_pings();
 				
-				safe_update("txp_prefs", "val = now()", "name = 'lastmod'");
+				update_lastmod();
 			}
 			article_edit(
 				get_status_message($Status).check_url_title($url_title)
@@ -214,7 +214,7 @@ if (!empty($event) and $event == 'article') {
 			if ($oldArticle['Status'] < 4) {
 				do_pings();	
 			}
-			safe_update("txp_prefs", "val = now()", "name = 'lastmod'");
+			update_lastmod();
 		}
 		
 		article_edit(
