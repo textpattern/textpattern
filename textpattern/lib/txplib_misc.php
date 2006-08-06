@@ -783,6 +783,13 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
+	function is_valid_email($address)
+	{
+		return preg_match('/^[\w._-]+@([\w-]+\.)+[\w-]+$/', $address);
+	}
+
+// -------------------------------------------------------------
+
 	function txpMail($to_address, $subject, $body, $reply_to = null)
 	{
 		global $txp_user, $prefs;

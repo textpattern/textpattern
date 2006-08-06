@@ -7,32 +7,53 @@
 	www.textpattern.com
 	All rights reserved
 
-	Use of this software indicates acceptance of the Textpattern license agreement 
+	Use of this software indicates acceptance of the Textpattern license agreement
 
 $HeadURL$
 $LastChangedRevision$
 
 */
 
-if (!defined('txpinterface')) die('txpinterface is undefined.');
+	if (!defined('txpinterface'))
+	{
+		die('txpinterface is undefined.');
+	}
 
-$levels = array(
-	1 => gTxt('publisher'),
-	2 => gTxt('managing_editor'),
-	3 => gTxt('copy_editor'),
-	4 => gTxt('staff_writer'),
-	5 => gTxt('freelancer'),
-	6 => gTxt('designer'),
-	0 => gTxt('none')
-);
+	$levels = array(
+		1 => gTxt('publisher'),
+		2 => gTxt('managing_editor'),
+		3 => gTxt('copy_editor'),
+		4 => gTxt('staff_writer'),
+		5 => gTxt('freelancer'),
+		6 => gTxt('designer'),
+		0 => gTxt('none')
+	);
 
-if ($event == 'admin') {
-	require_privs('admin');
+	if ($event == 'admin')
+	{
+		require_privs('admin');
 
-	if(!$step or !in_array($step, array('admin','author_change_pass','author_delete','author_list','author_save','author_save_new','change_email','change_pass'))){
-		admin();
-	} else $step();
-}
+		$available_steps = array(
+			'admin',
+			'author_change_pass',
+			'author_delete',
+			'author_list',
+			'author_save',
+			'author_save_new',
+			'change_email',
+			'change_pass'
+		);
+
+		if (!$step or !in_array($step, $available_steps))
+		{
+			admin();
+		}
+
+		else
+		{
+			$step();
+		}
+	}
 
 // -------------------------------------------------------------
 
@@ -65,323 +86,482 @@ if ($event == 'admin') {
 	}
 
 // -------------------------------------------------------------
-	function change_email() 
+
+	function change_email()
 	{
 		global $txp_user;
+
 		require_privs('admin.edit');
 
 		$new_email = gps('new_email');
-		$rs = safe_update("txp_users", 
-			"email  = '$new_email'", 
-			"name = '$txp_user'"
-		);	
-		if ($rs) {
-			admin('email address changed to '.$new_email);
+
+		if (!is_valid_email($new_email))
+		{
+			admin(gTxt('email_required'));
+			return;
+		}
+
+		$rs = safe_update('txp_users', "email	 = '$new_email'", "name = '$txp_user'");
+
+		if ($rs)
+		{
+			admin(
+				str_replace('{email}', $new_email, gTxt('email_changed'))
+			);
 		}
 	}
-	
+
 // -------------------------------------------------------------
-	function author_save() 
+
+	function author_save()
 	{
 		require_privs('admin.edit');
 
-		extract(doSlash(psa(array('privs','user_id','RealName','email'))));
-		$rs = safe_update("txp_users", 
-			"privs = $privs, 
+		extract(doSlash(psa(array('privs', 'user_id', 'RealName', 'email'))));
+
+		if (!is_valid_email($email))
+		{
+			admin(gTxt('email_required'));
+			return;
+		}
+
+		$rs = safe_update('txp_users', "
+			privs		 = $privs,
 			RealName = '$RealName',
-			email = '$email'",
-			"user_id='$user_id'");
-		if ($rs) admin(messenger('author',$RealName,'updated'));
+			email		 = '$email'",
+			"user_id = '$user_id'
+		");
+
+		if ($rs)
+		{
+			admin(
+				str_replace('{author}', $RealName, gTxt('author_updated'))
+			);
+		}
 	}
 
 // -------------------------------------------------------------
-	function change_pass() 
+
+	function change_pass()
 	{
 		global $txp_user;
-		$message = '';
-		$themail = fetch('email','txp_users','name',$txp_user);
-		if (!empty($_POST["new_pass"])) {
-			$NewPass = $_POST["new_pass"];
-			$rs = safe_update(
-				"txp_users", 
-				"pass = password(lower('$NewPass'))",
-				"name='$txp_user'"
-			);
-			if ($rs) {
-				$message .= gTxt('password_changed');
-				if (!empty($_POST['mailpassword'])) {
-					send_new_password($NewPass,$themail,$txp_user);
-					$message .= sp.gTxt('and_mailed_to').sp.$themail;
-				}
-				$message .= ".";
-			} else echo comment(mysql_error());
+
+		extract(doSlash(psa(array('new_pass', 'mail_password'))));
+
+		if (empty($new_pass))
+		{
+			admin(gTxt('password_required'));
+			return;
+		}
+
+		$rs = safe_update('txp_users', "pass = password(lower('$new_pass'))", "name = '$txp_user'");
+
+		if ($rs)
+		{
+			$message = gTxt('password_changed');
+
+			if ($mail_password)
+			{
+				$email = fetch('email', 'txp_users', 'name', $txp_user);
+
+				send_new_password($new_pass, $email, $txp_user);
+
+				$message .= str_replace('{email}', $email, gTxt('and_mailed_to'));
+			}
+
+			else
+			{
+				echo comment(mysql_error());
+			}
+
+			$message .= '.';
+
 			admin($message);
 		}
 	}
 
 // -------------------------------------------------------------
-	function author_save_new() 
+
+	function author_save_new()
 	{
 		require_privs('admin.edit');
 
-		extract(doSlash(psa(array('privs','name','email','RealName'))));
-		$pw = generate_password(6);
-		$nonce = md5( uniqid( rand(), true ) );
+		extract(doSlash(psa(array('privs', 'name', 'email', 'RealName'))));
 
-		if ($name) {
-			$rs = safe_insert(
-				"txp_users", 
-				"privs    = $privs,
-				 name     = '$name',
-				 email    = '$email',
-				 RealName = '$RealName',
-				 pass     =  password(lower('$pw')),
-				 nonce    = '$nonce'"
-			);
+		if ($name && is_valid_email($email))
+		{
+			$password = generate_password(6);
+			$nonce = md5(uniqid(rand(), true));
+
+			$rs = safe_insert('txp_users', "
+				privs		 = $privs,
+				name		 = '$name',
+				email		 = '$email',
+				RealName = '$RealName',
+				pass		 =	password(lower('$password')),
+				nonce		 = '$nonce'
+			");
+
+			if ($rs)
+			{
+				send_password($RealName, $name, $email, $password);
+
+				admin(
+					str_replace('{email}', $email, gTxt('password_sent_to'))
+				);
+
+				return;
+			}
 		}
-		
-		if ($name && $rs) {
-			send_password($pw,$email);
-			admin(gTxt('password_sent_to').sp.$email);
-		} else {
-			admin(gTxt('error_adding_new_author'));
-		}
+
+		admin(gTxt('error_adding_new_author'));
 	}
 
 // -------------------------------------------------------------
-	function privs($priv='') 
+
+	function privs($priv = '')
 	{
 		global $levels;
-		return selectInput("privs", $levels, $priv);
+		return selectInput('privs', $levels, $priv);
 	}
 
 // -------------------------------------------------------------
-	function get_priv_level($priv) 
+
+	function get_priv_level($priv)
 	{
 		global $levels;
 		return $levels[$priv];
 	}
 
 // -------------------------------------------------------------
-	function send_password($pw,$email) {
-		global $sitename,$txp_user;
+
+	function send_password($RealName, $name, $email, $password)
+	{
+		global $sitename;
 
 		require_privs('admin.edit');
 
-		$myName = $txp_user;
-		extract(safe_row("RealName as myName, email as myEmail", 
-			"txp_users", "name = '$myName'"));
+		$message = gTxt('greeting').' '.$RealName.','.
 
-		$message = gTxt('greeting').' '.$_POST['RealName'].','."\r\n"."\r\n".
-	
-		gTxt('you_have_been_registered').' '.$sitename."\r\n".
-	
-		gTxt('your_login_is').': '.$_POST['name']."\r\n".
-		gTxt('your_password_is').': '.$pw."\r\n"."\r\n".
-	
-		gTxt('log_in_at').' '.hu.'textpattern/index.php';
+		"\r\n"."\r\n".str_replace('{sitename}', $sitename, gTxt('you_have_been_registered')).
+
+		"\r\n"."\r\n".gTxt('your_login_is').' '.$name.
+		"\r\n".gTxt('your_password_is').' '.$password.
+
+		"\r\n"."\r\n".gTxt('log_in_at').' '.hu.'textpattern/index.php';
 
 		return txpMail($email, "[$sitename] ".gTxt('your_login_info'), $message);
 	}
 
 // -------------------------------------------------------------
-	function send_new_password($NewPass,$themail,$name) 
+
+	function send_new_password($password, $email, $name)
 	{
-		global $txp_user,$sitename;
+		global $txp_user, $sitename;
 
 		require_privs('admin.edit');
 
-		$message = gTxt('greeting').' '.$name.','."\r\n".
-		gTxt('your_password_is').': '.$NewPass."\r\n"."\r\n".
+		$message = gTxt('greeting').' '.$name.','.
 
-		gTxt('log_in_at').' '.hu.'textpattern/index.php';
+		"\r\n"."\r\n".gTxt('your_password_is').' '.$password.
 
-		return txpMail($themail, "[$sitename] ".gTxt('your_new_password'), $message);
+		"\r\n"."\r\n".gTxt('log_in_at').' '.hu.'textpattern/index.php';
+
+		return txpMail($email, "[$sitename] ".gTxt('your_new_password'), $message);
 	}
 
 // -------------------------------------------------------------
-	function generate_password($length=10)
+
+	function generate_password($length = 10)
 	{
-		$pass = "";
-		$chars = "023456789bcdfghjkmnpqrstvwxyz"; 
-		$i = 0; 
-		while ($i < $length) {
+		$pass = '';
+		$chars = '023456789bcdfghjkmnpqrstvwxyz';
+		$i = 0;
+
+		while ($i < $length)
+		{
 			$char = substr($chars, mt_rand(0, strlen($chars)-1), 1);
-			if (!strstr($pass, $char)) {
+
+			if (!strstr($pass, $char))
+			{
 				$pass .= $char;
 				$i++;
 			}
 		}
+
 		return $pass;
 	}
 
 // -------------------------------------------------------------
-	function new_pass_form() 
+
+	function new_pass_form()
 	{
-		return '<div align="center" style="margin-top:3em">'.
+		return '<div style="margin-top: 3em auto auto auto; text-align: center;">'.
 		form(
-			tag(gTxt('change_password'),'h3').
-			graf(gTxt('new_password').' '.
-				fInput('password','new_pass','','edit','','','20','1').
-				checkbox('mailpassword','1',1).gTxt('mail_it').' '.
-				fInput('submit','change_pass',gTxt('submit'),'smallerbox').
-				eInput('admin').sInput('change_pass')
-			,' style="text-align:center"')
+			tag(gTxt('change_password'), 'h3').
+
+			graf('<label for="new_pass">'.gTxt('new_password').'</label> '.
+				fInput('password', 'new_pass', '', 'edit', '', '', '20', '1', 'new_pass').
+				checkbox('mail_password', '1', 1).gTxt('mail_it').' '.
+				fInput('submit', 'change_pass', gTxt('submit'), 'smallerbox').
+				eInput('admin').
+				sInput('change_pass')
+			,' style="text-align: center;"')
 		).'</div>';
 	}
 
 // -------------------------------------------------------------
-	function reset_author_pass_form() 
+
+	function reset_author_pass_form()
 	{
 		global $txp_user;
 
-		$them = safe_rows_start("*","txp_users","name != '".doSlash($txp_user)."'");
-		
-		while ($a = nextRow($them)) {
-			$names[$a['name']] = $a['RealName'].' ('.$a['name'].')';
+		$names = array();
+
+		$them = safe_rows_start('*', 'txp_users', "name != '".doSlash($txp_user)."'");
+
+		while ($a = nextRow($them))
+		{
+			extract($a);
+
+			$names[$name] = $RealName.' ('.$name.')';
 		}
-		if (!empty($names)) {
-			return '<div align="center" style="margin-top:3em">'.
+
+		if ($names)
+		{
+			return '<div style="margin: 3em auto auto auto; text-align: center;">'.
 			form(
-				tag(gTxt('reset_author_password'),'h3').
+				tag(gTxt('reset_author_password'), 'h3').
 				graf(gTxt('a_new_password_will_be_mailed')).
-					graf(selectInput("name", $names, '',1).
-					fInput('submit','author_change_pass',gTxt('submit'),'smallerbox').
-					eInput('admin').sInput('author_change_pass')
-				,' style="text-align:center"')
+					graf(selectInput('name', $names, '', 1).
+					fInput('submit', 'author_change_pass', gTxt('submit'), 'smallerbox').
+					eInput('admin').
+					sInput('author_change_pass')
+				,' style="text-align: center;"')
 			).'</div>';
 		}
 	}
 
 // -------------------------------------------------------------
-	function author_change_pass() 
+
+	function author_change_pass()
 	{
 		require_privs('admin.edit');
 
 		$name = ps('name');
-		$themail = safe_field("email","txp_users","name='".doSlash($name)."'");
-		$NewPass = generate_password(6);
-		
-		$rs = safe_update("txp_users","pass=password(lower('$NewPass'))",
-			"name='".doSlash($name)."'");
-		
-		if ($rs) { 
-			if (send_new_password($NewPass,$themail,$name)) {
-				admin(gTxt('password_sent_to').' '.$themail);
-			} else admin(gTxt('could_not_mail').' '.$themail);
-		} else admin(gTxt('could_not_update_author').' '.$name);
-		
+
+		$email = safe_field('email', 'txp_users', "name = '".doSlash($name)."'");
+		$new_pass = generate_password(6);
+
+		$rs = safe_update('txp_users', "pass = password(lower('$new_pass'))", "name = '".doSlash($name)."'");
+
+		if ($rs)
+		{
+			if (send_new_password($new_pass, $email, $name))
+			{
+				admin(gTxt('password_sent_to').' '.$email);
+			}
+
+			else
+			{
+				admin(gTxt('could_not_mail').' '.$email);
+			}
+		}
+
+		else
+		{
+			admin(gTxt('could_not_update_author').' '.$name);
+		}
 	}
-	
+
 // -------------------------------------------------------------
-	function change_email_form($themail) 
+
+	function change_email_form($email)
 	{
-		return '<div align="center" style="margin-top:3em">'.
+		return '<div style="margin-top: 3em auto auto auto; text-align: center;">'.
 		form(
-			tag(gTxt('change_email_address'),'h3').
-			graf(gTxt('new_email').' '.
-				fInput('text','new_email',$themail,'edit','','','20','2').
-				fInput('submit','change_email',gTxt('submit'),'smallerbox').
-				eInput('admin').sInput('change_email')
-			,' style="text-align:center"')
+			tag(gTxt('change_email_address'), 'h3').
+			graf('<label for="new_email">'.gTxt('new_email').'</label> '.
+				fInput('text', 'new_email', $email, 'edit', '', '', '20', '2', 'new_email').
+				fInput('submit', 'change_email', gTxt('submit'), 'smallerbox').
+				eInput('admin').
+				sInput('change_email')
+			,' style="text-align: center;"')
 		).'</div>';
 	}
 
 // -------------------------------------------------------------
-	function author_list() 
+
+	function author_list()
 	{
 		global $txp_user;
-		$out[] = hed(gTxt('authors'),3,' align="center"');
-		$out[] = startTable('list');
-		$out[] = tr(
-			hCell(gTxt('real_name'))
-		.	hCell(gTxt('login_name'))
-		.	hCell(gTxt('email'))
-		.	hCell(gTxt('privileges'))
-		.	td()
-		.	td()
-		);
-		$rs = safe_rows_start("*", "txp_users", "1");
-		if ($rs) {
-			while ($a = nextRow($rs)) {
-				extract($a);
-				if ($name == $txp_user)
-					$deletelink = '';
-				else
-					$deletelink = dLink('admin','author_delete','user_id',$user_id);
-				$savelink = fInput("submit",'save',gTxt('save'),'smallerbox');
-				$emailhref = '<a href="mailto:'.$email.'">'.$email.'</a>';
-				$RealNameInput = fInput('text','RealName',$RealName,'edit');
-				$emailInput = fInput('text','email',$email,'edit');
-				
-				$row[] = '<form action="index.php" method="post">';
-				
-				$row[] = (has_privs('admin.edit')) 
-					?	td($RealNameInput)
-					:	td($RealName);
-					
-				$row[] = td($name);
 
-				$row[] = (has_privs('admin.edit')) 
-					?	td($emailInput)
-					:	td($emailhref);
-				
-				$row[] = (has_privs('admin.edit') and $name != $txp_user) 
-					?	td(privs($privs).sp.popHelp("about_privileges"))
-					:	td(get_priv_level($privs).sp.popHelp("about_privileges").hInput('privs', $privs));
+		echo n.n.hed(gTxt('authors'), 3,' style="text-align: center;"').
 
-				$row[] = (has_privs('admin.edit')) ? td($savelink) : '';
-				
-				$row[] = (has_privs('admin.edit'))
-					?	hInput("user_id",$user_id). eInput("admin").sInput('author_save')
-					:	td();
+			n.n.startTable('list').
 
-				$row[] = '</form>';
+			n.tr(
+				n.hCell(gTxt('real_name')).
+				n.hCell(gTxt('login_name')).
+				n.hCell(gTxt('email')).
+				n.hCell(gTxt('privileges')).
+				n.hCell().
+				n.hCell()
+			);
 
+		$rs = safe_rows_start('*', 'txp_users', '1 = 1');
 
-				$row[] = (has_privs('admin.edit'))
-					?	td($deletelink,10)
-					:	td();
+		if ($rs)
+		{
+			if (has_privs('admin.edit'))
+			{
+				while ($a = nextRow($rs))
+				{
+					extract($a);
 
-				$out[] = 
-					tr(join('',$row));
-				unset($row);
+					echo n.n.'<tr>'.
+
+						n.'<form method="post" action="index.php">'.
+
+						n.td(
+							fInput('text', 'RealName', $RealName, 'edit')
+						).
+
+						td($name).
+						td(
+							fInput('text', 'email', $email, 'edit')
+						);
+
+					if ($name != $txp_user)
+					{
+						echo td(
+							privs($privs).sp.popHelp('about_privileges')
+						);
+					}
+
+					else
+					{
+						echo td(
+							get_priv_level($privs).sp.popHelp('about_privileges').
+							hInput('privs', $privs)
+						);
+					}
+
+					echo td(
+						fInput('submit', 'save', gTxt('save'), 'smallerbox')
+					).
+
+					n.hInput('user_id', $user_id).
+					n.eInput('admin').
+					n.sInput('author_save').
+					n.'</form>';
+
+					if ($name != $txp_user)
+					{
+						echo td(
+							dLink('admin', 'author_delete', 'user_id', $user_id)
+						);
+					}
+
+					else
+					{
+						echo td();
+					}
+
+					echo n.'</tr>';
+				}
 			}
-		
-			$out[] = endTable();
-			return join('',$out);
+
+			else
+			{
+				while ($a = nextRow($rs))
+				{
+					extract($a);
+
+					echo tr(
+						td($RealName).
+						td($name).
+						td('<a href="mailto:'.$email.'">'.$email.'</a>').
+						td(
+							get_priv_level($privs).sp.popHelp('about_privileges').
+							hInput('privs', $privs)
+						).
+						td().
+						td()
+					);
+				}
+			}
+
+			echo n.endTable();
 		}
 	}
 
 // -------------------------------------------------------------
-	function author_delete() 
+
+	function author_delete()
 	{
 		require_privs('admin.edit');
 
 		$user_id = ps('user_id');
-		$name = fetch('Realname','txp_users','user_id',$user_id);
-		if ($name) {
-			$rs = safe_delete("txp_users","user_id = '$user_id'");
-			if ($rs) admin(messenger('author',$name,'deleted'));
+
+		$name = fetch('Realname', 'txp_users', 'user_id', $user_id);
+
+		if ($name)
+		{
+			$rs = safe_delete('txp_users', "user_id = '$user_id'");
+
+			if ($rs)
+			{
+				admin(
+					str_replace('{author}', $name, gTxt('author_deleted'))
+				);
+			}
 		}
 	}
 
 // -------------------------------------------------------------
-	function new_author_form() 
-	{
-		$out = array(
-			hed(gTxt('add_new_author' ),3,' align="center" style="margin-top:2em"'),
-			graf(gTxt('a_message_will_be_sent_with_login'), ' align="center"'),
-			startTable('edit'),
-			tr( fLabelCell( 'real_name' ) . fInputCell('RealName') ),
-			tr( fLabelCell( 'login_name' ) . fInputCell('name') ),
-			tr( fLabelCell( 'email' ) . fInputCell('email') ),
-			tr( fLabelCell( 'privileges' ) . td(privs().sp.popHelp('about_privileges')) ),
-			tr( td() . td( fInput( 'submit','',gTxt('save'),'publish').
-				popHelp('add_new_author')) ),
-			endTable(),
-			eInput('admin').sInput('author_save_new'));
 
-		return form(join('',$out));
+	function new_author_form()
+	{
+		return form(
+			hed(gTxt('add_new_author'), 3,' style="margin-top: 2em; text-align: center;"').
+			graf(gTxt('a_message_will_be_sent_with_login'), ' style="text-align: center;"').
+
+			startTable('edit').
+			tr(
+				fLabelCell('real_name').
+				fInputCell('RealName')
+			).
+
+			tr(
+				fLabelCell('login_name').
+				fInputCell('name')
+			).
+
+			tr(
+				fLabelCell('email').
+				fInputCell('email')
+			).
+
+			tr(
+				fLabelCell('privileges').
+				td(
+					privs().sp.popHelp('about_privileges')
+				)
+			).
+
+			tr(
+				td().
+				td(
+					fInput('submit', '', gTxt('save'), 'publish').sp.popHelp('add_new_author')
+				)
+			).
+
+			endTable().
+
+			eInput('admin').
+			sInput('author_save_new')
+		);
 	}
+
 ?>
