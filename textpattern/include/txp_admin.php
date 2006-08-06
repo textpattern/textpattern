@@ -131,7 +131,7 @@ if ($event == 'admin') {
 		if ($name) {
 			$rs = safe_insert(
 				"txp_users", 
-				"privs    = '$privs',
+				"privs    = $privs,
 				 name     = '$name',
 				 email    = '$email',
 				 RealName = '$RealName',
@@ -327,8 +327,8 @@ if ($event == 'admin') {
 					:	td($emailhref);
 				
 				$row[] = (has_privs('admin.edit') and $name != $txp_user) 
-					?	td(privs($privs).popHelp("about_privileges"))
-					:	td(get_priv_level($privs).popHelp("about_privileges"));
+					?	td(privs($privs).sp.popHelp("about_privileges"))
+					:	td(get_priv_level($privs).sp.popHelp("about_privileges").hInput('privs', $privs));
 
 				$row[] = (has_privs('admin.edit')) ? td($savelink) : '';
 				
@@ -376,7 +376,7 @@ if ($event == 'admin') {
 			tr( fLabelCell( 'real_name' ) . fInputCell('RealName') ),
 			tr( fLabelCell( 'login_name' ) . fInputCell('name') ),
 			tr( fLabelCell( 'email' ) . fInputCell('email') ),
-			tr( fLabelCell( 'privileges' ) . td(privs().popHelp('about_privileges')) ),
+			tr( fLabelCell( 'privileges' ) . td(privs().sp.popHelp('about_privileges')) ),
 			tr( td() . td( fInput( 'submit','',gTxt('save'),'publish').
 				popHelp('add_new_author')) ),
 			endTable(),
