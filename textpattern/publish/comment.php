@@ -75,6 +75,7 @@ $LastChangedRevision$
 		$name  = pcs('name');
 		$email = clean_url(pcs('email'));
 		$web   = clean_url(pcs('web'));
+		$n_message = 'message';
 		extract( doStripTags( doDeEnt ( psa( array(
 			'checkbox_type',
 			'remember',
@@ -85,7 +86,7 @@ $LastChangedRevision$
 			'submit',
 			'backpage'
 		) ) ) ) );
-			
+
 		if ( $preview ) {
 			$name  = ps('name');
 			$email = clean_url(ps('email'));
@@ -93,6 +94,7 @@ $LastChangedRevision$
 			$nonce = getNextNonce();
 			$secret = getNextSecret();
 			safe_insert("txp_discuss_nonce", "issue_time=now(), nonce='$nonce', secret='$secret'");
+			$n_message = md5('message'.$secret);
 
 			$namewarn = ($comments_require_name && !trim($name));
 			$emailwarn = ($comments_require_email && !trim($email));
@@ -128,9 +130,9 @@ $LastChangedRevision$
 
 		$url = $GLOBALS['pretext']['request_uri'];
 
-		// Experimental clean urls with only 404-error-document on apache 
+		// Experimental clean urls with only 404-error-document on apache
 		// possibly requires messy urls for POST requests.
-		if (defined('PARTLY_MESSY') and (PARTLY_MESSY)) 
+		if (defined('PARTLY_MESSY') and (PARTLY_MESSY))
 			$url = hu.'?id='.intval($parentid);
 
 		$out = '<form method="post" action="'.htmlspecialchars($url).'#cpreview" id="txpCommentInputForm">'.
@@ -142,7 +144,7 @@ $LastChangedRevision$
 		$msgrows = ($msgrows and is_numeric($msgrows)) ? ' rows="'.intval($msgrows).'"' : '';
 		$msgcols = ($msgcols and is_numeric($msgcols)) ? ' cols="'.intval($msgcols).'"' : '';
 		$textarea = '<textarea class="txpCommentInputMessage'.(($commentwarn) ? ' comments_error"' : '"')
-					.' name="message" id="message" '.$msgcols.$msgrows.$msgstyle.'>'
+					.' name="'.$n_message.'" id="message" '.$msgcols.$msgrows.$msgstyle.'>'
 					.htmlspecialchars($message).'</textarea>';
 
 		$comment_submit_button = ($preview)
@@ -256,6 +258,7 @@ $LastChangedRevision$
 			$c['nonce'] = $rs['nonce'];
 			$c['secret'] = $rs['secret'];
 		}
+		$c['message'] = ps(md5('message'.$c['secret']));
 		return $c;
 	}
 
@@ -437,7 +440,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function checkNonce($nonce) 
+	function checkNonce($nonce)
 	{
 		if (!$nonce && !preg_match('#^[a-zA-Z0-9]*$#',$nonce)) 
 			return false;
