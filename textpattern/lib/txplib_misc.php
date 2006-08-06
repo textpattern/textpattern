@@ -1339,10 +1339,8 @@ $LastChangedRevision$
 			if ($unix_ts === NULL)
 				$unix_ts = strtotime($lastmod);
 
-			# sanity check: make sure the lastmod date is in the last 24 hours
-			$now = time();
-			if ($unix_ts > $now or $unix_ts < ($now - 24*60*60))
-				return;
+			# make sure lastmod isn't in the future
+			$unix_ts = min($unix_ts, time());
 
 			$last = safe_strftime('rfc822', $unix_ts, 1);
 			header("Last-Modified: $last");
@@ -1350,6 +1348,7 @@ $LastChangedRevision$
 				$hims = serverset('HTTP_IF_MODIFIED_SINCE');
 				if ($hims >= $last) {
 					txp_status_header('304 Not Modified');
+					header('Connection: close');
 					# discard all output
 					while (@ob_end_clean());
 					exit;
