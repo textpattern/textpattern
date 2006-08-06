@@ -24,16 +24,22 @@ $LastChangedRevision$
 
 		$sitename .= ($section) ? ' - '.$section : '';
 		$sitename .= ($category) ? ' - '.$category : '';
+		$dn = explode('/',$siteurl);
+		$mail_or_domain = ($use_mail_on_feeds_id)? eE($blog_mail_uid):$dn[0];
 
+		$out[] = tag('http://textpattern.com/?v='.$version, 'generator');
 		$out[] = tag(doSpecial($sitename),'title');
 		$out[] = tag(hu,'link');
 		$out[] = tag(doSpecial($site_slogan),'description');
+		$last = fetch('unix_timestamp(val)','txp_prefs','name','lastmod');
+		$out[] = tag(safe_strftime('rfc822',$last),'pubDate');
+
 		$articles = array();
 
 		if (!$area or $area=='article') {
-					
+
 			$sfilter = ($section) ? "and Section = '".$section."'" : '';
-			$cfilter = ($category) 
+			$cfilter = ($category)
 				? "and (Category1='".$category."' or Category2='".$category."')":'';
 			$limit = ($limit) ? $limit : $rss_how_many;
 			$limit = min($limit,max(100,$rss_how_many));
@@ -42,7 +48,7 @@ $LastChangedRevision$
 			if ($frs) foreach($frs as $f) $query[] = "and Section != '".doSlash($f)."'";
 			$query[] = $sfilter;
 			$query[] = $cfilter;
-			
+
 			$rs = safe_rows_start(
 				"*, unix_timestamp(Posted) as uPosted, ID as thisid",
 				"textpattern", 
@@ -71,10 +77,16 @@ $LastChangedRevision$
 					$Title = escape_output(strip_tags($Title)).$count;
 
 					$permlink = permlinkurl($a);
+					$thisauthor = get_author_name($AuthorID);
 
 					$item = tag($Title,'title').n.
 						tag($Body,'description').n.
-						tag($permlink,'link');
+						tag($permlink,'link').n.
+						tag(safe_strftime('rfc822',$a['posted']),'pubDate').n.
+						tag(htmlspecialchars($thisauthor),'dc:creator').n.
+						tag('tag:'.$mail_or_domain.','.$feed_time.':'.$blog_uid.'/'.$uid,'guid', ' isPermaLink="false"');
+
+
 
 					$articles[$ID] = tag($item,'item');
 
@@ -90,7 +102,7 @@ $LastChangedRevision$
 			$limit = ($limit) ? $limit : $rss_how_many;
 			$limit = min($limit,max(100,$rss_how_many));
 
-			$rs = safe_rows_start("*", "txp_link", "$cfilter order by date desc limit $limit");
+			$rs = safe_rows_start("*, unix_timestamp(date) as uDate", "txp_link", "$cfilter order by date desc limit $limit");
 
 			if ($rs) {
 				while ($a = nextRow($rs)) {
@@ -98,7 +110,8 @@ $LastChangedRevision$
 					$item = 
 						tag(doSpecial($linkname),'title').n.
 						tag(doSpecial($description),'description').n.
-						tag(doSpecial($url),'link');
+						tag(doSpecial($url),'link').n.
+						tag(safe_strftime('rfc822',$uDate),'pubDate');
 					$articles[$id] = tag($item,'item');
 
 					$etags[$id] = strtoupper(dechex(crc32($articles[$id])));
@@ -174,19 +187,23 @@ $LastChangedRevision$
 
 
 		if ($cutarticles) {
-			//header("HTTP/1.1 226 IM Used"); 
+			//header("HTTP/1.1 226 IM Used");
 			//This should be used as opposed to 200, but Apache doesn't like it.
 			//http://intertwingly.net/blog/2004/09/11/Vary-ETag/ says that the status code should be 200.
 			header("Cache-Control: no-store, im");
 			header("IM: feed");
 		}
-		
+
 		$out = array_merge($out, $articles);
 
 
 		header("Content-Type: application/rss+xml; charset=utf-8");
 		if ($etag) header('ETag: "'.$etag.'"');
-		return '<rss version="0.92">'.tag(join(n,$out),'channel').'</rss>';
+		return
+			'<?xml version="1.0" encoding="utf-8"?>'.n.
+			'<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/">'.n.
+			tag(join(n,$out),'channel').n.
+			'</rss>';
 	}
 
 
