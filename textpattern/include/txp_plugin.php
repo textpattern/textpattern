@@ -45,7 +45,15 @@ $LastChangedRevision$
 
 			while ($a = nextRow($rs))
 			{
-				extract($a);
+				foreach ($a as $key => $value) {
+					$$key = htmlspecialchars($value);
+				}
+				// Fix up the description for clean cases
+				$description = preg_replace(array('#&lt;br /&gt;#',
+												  '#&lt;(/?(a|b|i|em|strong))&gt;#',
+												  '#&lt;a href=&quot;(https?|\.|\/|ftp)([A-Za-z0-9:/?.=_]+?)&quot;&gt;#'),
+											array('<br />','<$1>','<a href="$1$2">'),
+											$description);
 
 				$help = !empty($help) ? 
 					'<a href="?event=plugin'.a.'step=plugin_help'.a.'name='.$name.'">'.gTxt('view').'</a>' : 
@@ -169,15 +177,16 @@ $LastChangedRevision$
 			$plugin = ps('plugin');	
 		}
 
-		$plugin64 = preg_replace('@.*\$plugin=\'([\w=+/]+)\'.*@s', '$1', $plugin);
-		$plugin64 = preg_replace('/^#.*$/m', '', $plugin64);
+		$plugin = preg_replace('@.*\$plugin=\'([\w=+/]+)\'.*@s', '$1', $plugin);
+		$plugin = preg_replace('/^#.*$/m', '', $plugin);
 
-		if(isset($plugin64)) {
-			$plugin64 = base64_decode($plugin64);
-			if (strncmp($plugin64,"\x1F\x8B",2)===0)
-				$plugin64 = gzinflate(substr($plugin64, 10));
+		if(isset($plugin)) {
+			$plugin_encoded = $plugin;
+			$plugin = base64_decode($plugin);
+			if (strncmp($plugin,"\x1F\x8B",2)===0)
+				$plugin = gzinflate(substr($plugin, 10));
 
-			if ($plugin = unserialize($plugin64)) { 
+			if ($plugin = unserialize($plugin)) { 
 
 				if(is_array($plugin)){
 					extract(doSlash($plugin));
@@ -188,10 +197,12 @@ $LastChangedRevision$
 						highlight_string('<?php'.$plugin['code'].'?>');
 						$source = ob_get_contents();
 						ob_end_clean();
+						$help_source= '<pre>'.htmlspecialchars($plugin['help']).'</pre>';
 					}
 					else
 					{
 						$source.= highlight_string('<?php'.$plugin['code'].'?>', true);
+						$help_source= highlight_string($plugin['help'], true);
 					}
 					$sub = fInput('submit','',gTxt('install'),'publish');
 		
@@ -200,8 +211,10 @@ $LastChangedRevision$
 					form(startTable('edit')
 					.	tr(td(hed(gTxt('previewing_plugin'),3)))
 					.	tr(td(tag($source, 'div', ' id="preview-plugin" class="code"')))
+					.	tr(td(hed(gTxt('plugin_help').':',3)))
+					.	tr(td(tag($help_source, 'div', ' id="preview-help" class="code"')))
 					.	tr(td($sub))
-					.	endTable().sInput('plugin_install').eInput('plugin').hInput('plugin64', base64_encode($plugin64))
+					.	endTable().sInput('plugin_install').eInput('plugin').hInput('plugin64', $plugin_encoded)
 					, 'margin: 0 auto; width: 75%;');
 					return;
 				}
@@ -219,7 +232,11 @@ $LastChangedRevision$
 
 		if(isset($plugin)) {
 
-			if ($plugin = unserialize(base64_decode($plugin))) { 
+			$plugin = base64_decode($plugin);
+			if (strncmp($plugin,"\x1F\x8B",2)===0)
+				$plugin = gzinflate(substr($plugin, 10));
+
+			if ($plugin = unserialize($plugin)) { 
 
 				if(is_array($plugin)){
 	
@@ -227,7 +244,13 @@ $LastChangedRevision$
 					if (empty($type)) $type = 0;
 	
 					$exists = fetch('name','txp_plugin','name',$name);
-	
+
+					if (isset($plugin['help_type']) && $plugin['help_type'] == 1) {
+						include_once txpath.'/lib/classTextile.php';
+						$textile = new Textile();
+						$help = $textile->TextileThis(strip_tags($help));
+					}
+
 					if ($exists) {
 						$rs = safe_update(
 						   "txp_plugin",
