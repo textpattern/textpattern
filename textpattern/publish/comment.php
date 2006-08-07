@@ -348,11 +348,7 @@ $LastChangedRevision$
 					}else{
 						header('Location: '.$backpage.'#c'.sprintf("%06s",$rs));
 					}
-					if($prefs['logging'] == 'refer') { 
-						logit('refer'); 
-					} elseif ($prefs['logging'] == 'all') {
-						logit();
-					}
+					log_hit('302');
 					$evaluator->write_trace();
 					exit;
 				}

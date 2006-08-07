@@ -1360,6 +1360,7 @@ $LastChangedRevision$
 			if ($production_status == 'live') {
 				$hims = serverset('HTTP_IF_MODIFIED_SINCE');
 				if ($hims >= $last) {
+					log_hit('304');
 					txp_status_header('304 Not Modified');
 					header('Connection: close');
 					# discard all output

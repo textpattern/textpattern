@@ -13,7 +13,20 @@ $LastChangedRevision$
 
 
 // -------------------------------------------------------------
-	function logit($r='')
+	function log_hit($status)
+	{
+		global $nolog, $logging;
+		if(!isset($nolog) && $status != '404') {
+			if($logging == 'refer') {
+				logit('refer', $status);
+			} elseif ($logging == 'all') {
+				logit('', $status);
+			}
+		}
+	}
+
+// -------------------------------------------------------------
+	function logit($r='', $status='200')
 	{
 		global $siteurl, $prefs, $pretext;
 		$mydomain = str_replace('www.','',preg_quote($siteurl,"/"));
@@ -35,7 +48,7 @@ $LastChangedRevision$
 		}
 		$out['ip'] = $ip;
 		$out['host'] = $host;
-		$out['status'] = 200; // FIXME
+		$out['status'] = $status;
 		$out['method'] = serverSet('REQUEST_METHOD');
 		if (preg_match("/^[^\.]*\.?$mydomain/i", $out['ref'])) $out['ref'] = "";
 		

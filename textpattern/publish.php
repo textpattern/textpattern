@@ -143,9 +143,9 @@ $LastChangedRevision$
 							safe_update("txp_file", "downloads=downloads+1", "id='".intval($id)."'");
 						} else {
 							$pretext['request_uri'] .= "#aborted-at-".floor($sent*100/$filesize)."%";
-							logit();
+							log_hit('200');
 						}
-					}      				
+					}
 				} else {
 					$file_error = 404;
 				}
@@ -165,26 +165,21 @@ $LastChangedRevision$
 				break;
 			}
 		}
-		
+
 		// download done
 		exit(0);
 	}
-	
 
-	if(!isset($nolog) && $status != '404') {
-		if($logging == 'refer') { 
-			logit('refer'); 
-		} elseif ($logging == 'all') {
-			logit();
-		}
-	}
 
 	// send 304 Not Modified if appropriate
 	handle_lastmod();
 
+	// log the page view
+	log_hit($status);
+
 
 // -------------------------------------------------------------
-	function preText($s,$prefs) 
+	function preText($s,$prefs)
 	{
 		extract($prefs);
 
