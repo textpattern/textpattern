@@ -59,8 +59,8 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 	function doSpecial($in)
-	{ 
-		return doArray($in,'htmlspecialchars'); 
+	{
+		return doArray($in,'htmlspecialchars');
 	}
 
 // -------------------------------------------------------------
@@ -89,6 +89,12 @@ $LastChangedRevision$
 				'"' => '&#34;',
 			)
 		);
+	}
+
+// -------------------------------------------------------------
+	function escape_cdata($str)
+	{
+		return '<![CDATA['.str_replace(']]>', ']]]><![CDATA[]>', $str).']]>';
 	}
 
 //-------------------------------------------------------------
@@ -1725,6 +1731,7 @@ eod;
 			$html = preg_replace("/href=\\\"#(.*)\"/","href=\"".$permalink."#\\1\"",$html);
 		return ($html);
 	}
+
 //-------------------------------------------------------------
 	function show_clean_test($pretext) {
 		echo @$pretext['req'].n;

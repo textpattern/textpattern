@@ -4,7 +4,7 @@
 	This is Textpattern
 	Copyright 2005 by Dean Allen - all rights reserved.
 
-	Use of this software denotes acceptance of the Textpattern license agreement 
+	Use of this software denotes acceptance of the Textpattern license agreement
 
 $HeadURL$
 $LastChangedRevision$
@@ -51,11 +51,11 @@ $LastChangedRevision$
 
 			$rs = safe_rows_start(
 				"*, unix_timestamp(Posted) as uPosted, ID as thisid",
-				"textpattern", 
+				"textpattern",
 				"Status = 4 ".join(' ',$query).
 				"and Posted < now() order by Posted desc limit $limit"
 			);
-				
+
 			if($rs) {
 				while ($a = nextRow($rs)) {
 					extract($a);
@@ -63,12 +63,16 @@ $LastChangedRevision$
 
 					$a['posted'] = $uPosted;
 
-					$Body = (!$syndicate_body_or_excerpt) ? $thisarticle['body'] : $thisarticle['excerpt'];
-					$Body = (!trim($Body)) ? $thisarticle['body'] : $Body;
-					$Body = escape_output(replace_relative_urls(parse($Body)));
+					$permlink = permlinkurl($a);
+					$summary = trim(replace_relative_urls(parse($thisarticle['excerpt']), $permlink));
+					$content = trim(replace_relative_urls(parse($thisarticle['body']), $permlink));
 
-					$uTitle = ($url_title) ? $url_title : stripSpace($Title);
-					$uTitle = htmlspecialchars($uTitle,ENT_NOQUOTES);
+					if ($syndicate_body_or_excerpt) {
+						# short feed: use body as summary if there's no excerpt
+						if (!trim($summary))
+							$summary = $content;
+						$content = '';
+					}
 
 					if ($show_comment_count_in_feed) {
 						$count = ($comments_count > 0) ? ' ['.$comments_count.']' : '';
@@ -76,11 +80,11 @@ $LastChangedRevision$
 
 					$Title = escape_output(strip_tags($Title)).$count;
 
-					$permlink = permlinkurl($a);
 					$thisauthor = get_author_name($AuthorID);
 
 					$item = tag($Title,'title').n.
-						tag($Body,'description').n.
+						(trim($summary) ? tag(n.escape_cdata($summary).n,'description').n : '').
+						(trim($content) ? tag(n.escape_cdata($content).n,'content:encoded').n : '').
 						tag($permlink,'link').n.
 						tag(safe_strftime('rfc822',$a['posted']),'pubDate').n.
 						tag(htmlspecialchars($thisauthor),'dc:creator').n.
@@ -207,18 +211,5 @@ $LastChangedRevision$
 	}
 
 
-	function rss_safe_hed($toUnicode) {
-
-		if (version_compare(phpversion(), "5.0.0", ">=")) {
-			$str =  html_entity_decode($toUnicode, ENT_QUOTES, "UTF-8");
-		} else {
-			$trans_tbl = get_html_translation_table(HTML_ENTITIES);
-			foreach($trans_tbl as $k => $v) {
-				$ttr[$v] = utf8_encode($k);
-			}
-			$str = strtr($toUnicode, $ttr);
-		}
-		return $str;
-	}
 
 ?>

@@ -104,10 +104,6 @@ $LastChangedRevision$
 					$escaped_title = escape_output($Title);
 					$e['title'] = tag($escaped_title.$count,'title',t_html);
 
-
-					$uTitle = ($url_title) ? $url_title : stripSpace($Title);
-					$uTitle = htmlspecialchars($uTitle,ENT_NOQUOTES);
-
 					$permlink = permlinkurl($a);
 					$e['link'] = '<link'.r_relalt.t_texthtml.' href="'.$permlink.'" />';
 
@@ -116,22 +112,22 @@ $LastChangedRevision$
 					$e['category1'] = (trim($Category1) ? '<category term="'.htmlspecialchars($Category1).'" />' : '');
 					$e['category2'] = (trim($Category2) ? '<category term="'.htmlspecialchars($Category2).'" />' : '');
 
-					$Excerpt = fixup_for_feed(parse($thisarticle['excerpt']), permlinkurl($a));
-					if ($syndicate_body_or_excerpt == 0)
-						$Body = fixup_for_feed(parse($thisarticle['body']), permlinkurl($a));
-					else {
-						$Body = '';
-						// If there's no excerpt, use body as content instead of body as summary
-						if (!trim($Excerpt))
-							$Body = fixup_for_feed(parse($thisarticle['body']), permlinkurl($a));
+					$summary = trim(replace_relative_urls(parse($thisarticle['excerpt']), $permlink));
+					$content = trim(replace_relative_urls(parse($thisarticle['body']), $permlink));
+
+					if ($syndicate_body_or_excerpt) {
+						# short feed: use body as summary if there's no excerpt
+						if (!trim($summary))
+							$summary = $content;
+						$content = '';
 					}
 
-					if (trim($Body))
-						$e['content'] = tag(n.$Body.n,'content',t_html);
+					if (trim($content))
+						$e['content'] = tag(n.escape_cdata($content).n,'content',t_html);
 
-					if (trim($Excerpt))
-						$e['summary'] = tag(n.$Excerpt.n,'summary',t_html);
-		
+					if (trim($summary))
+						$e['summary'] = tag(n.escape_cdata($summary).n,'summary',t_html);
+
 					$articles[$ID] = tag(n.t.t.join(n.t.t,$e).n,'entry');
 
 					$etags[$ID] = strtoupper(dechex(crc32($articles[$ID])));
@@ -253,11 +249,5 @@ $LastChangedRevision$
 	}
 
 
-	function fixup_for_feed($txt, $permalink) {
-
-		$txt = replace_relative_urls($txt, $permalink);
-		$txt = escape_output($txt);
-		return $txt;
-	}
 
 ?>
