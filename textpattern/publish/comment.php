@@ -76,6 +76,7 @@ $LastChangedRevision$
 		$email = clean_url(pcs('email'));
 		$web   = clean_url(pcs('web'));
 		$n_message = 'message';
+
 		extract( doStripTags( doDeEnt ( psa( array(
 			'checkbox_type',
 			'remember',
@@ -86,6 +87,8 @@ $LastChangedRevision$
 			'submit',
 			'backpage'
 		) ) ) ) );
+		$in = getComment();
+		$message = doStripTags(doDeEnt($in['message']));
 
 		if ( $preview ) {
 			$name  = ps('name');
@@ -250,7 +253,7 @@ $LastChangedRevision$
 
 		$n = array();
 		foreach (stripPost() as $k=>$v)
-			if (strlen($k.$v) == 32) $n[] = "'".doSlash($k.$v)."'";
+			if (preg_match('#^[A-Fa-f0-9]{32}$#',$k.$v)) $n[] = "'".doSlash($k.$v)."'";
 		$c['nonce'] = '';
 		$c['secret'] = '';
 		if (!empty($n)) {
@@ -342,6 +345,7 @@ $LastChangedRevision$
 					$backpage = substr($backpage, 0, $prefs['max_url_len']);
 					$backpage = preg_replace("/[\x0a\x0d#].*$/s",'',$backpage);
 					$backpage .= ((strstr($backpage,'?')) ? '&' : '?') . 'commented='.(($visible==VISIBLE) ? '1' : '0');
+					$backpage = preg_replace("#(https?://[^/]+)/.*$#","$1",hu).$backpage;
 					txp_status_header('302 Found');
 					if($comments_moderate){
 						header('Location: '.$backpage.'#txpCommentInputForm');
