@@ -87,9 +87,11 @@ $LastChangedRevision$
 			'submit',
 			'backpage'
 		) ) ) ) );
-		$in = getComment();
-		$message = doStripTags(doDeEnt($in['message']));
-
+		if ($message = '')
+		{	//Second or later preview will have randomized message-field name
+			$in = getComment();
+			$message = doStripTags(doDeEnt($in['message']));
+		}
 		if ( $preview ) {
 			$name  = ps('name');
 			$email = clean_url(ps('email'));
