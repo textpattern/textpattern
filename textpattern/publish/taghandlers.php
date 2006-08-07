@@ -1450,6 +1450,11 @@ $LastChangedRevision$
 			$preview = psas(array('name','email','web','message','parentid','remember'));
 			$preview['time'] = time();
 			$preview['discussid'] = 0;
+			if ($preview['message']=='')
+			{
+				$in = getComment();
+				$preview['message'] = $in['message'];
+			}
 			$preview['message'] = markup_comment($preview['message']);
 			$GLOBALS['thiscomment'] = $preview;
 			$comments[] = parse($Form).n;
@@ -1517,6 +1522,12 @@ $LastChangedRevision$
 		$preview = psas(array('name','email','web','message','parentid','remember'));
 		$preview['time'] = time();
 		$preview['discussid'] = 0;
+		if ($preview['message'] == '')
+		{
+			$in = getComment();
+			$preview['message'] = $in['message'];
+
+		}
 		$preview['message'] = markup_comment($preview['message']);
 
 		$GLOBALS['thiscomment'] = $preview;
