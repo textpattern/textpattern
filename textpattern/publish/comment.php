@@ -87,7 +87,7 @@ $LastChangedRevision$
 			'submit',
 			'backpage'
 		) ) ) ) );
-		if ($message = '')
+		if ($message == '')
 		{	//Second or later preview will have randomized message-field name
 			$in = getComment();
 			$message = doStripTags(doDeEnt($in['message']));
