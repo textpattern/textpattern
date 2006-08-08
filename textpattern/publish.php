@@ -756,10 +756,6 @@ $LastChangedRevision$
 			// define the article form
 			$article = fetch_form($form);
 
-			if ($preview && $parentid) {
-				$article = '<txp:comments_preview bc="1" id="'.$parentid.'" />'.$article;
-			}
-
 			$article = parse($article);
 
 			if ($use_comments and $comments_auto_append) {

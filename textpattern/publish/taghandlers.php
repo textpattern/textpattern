@@ -1331,27 +1331,23 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function comments_form($atts)
 	{
-		global $thisarticle, $comment_preview, $pretext;
+		global $thisarticle, $has_comments_preview, $pretext;
 
 		extract(lAtts(array(
 			'id'		   => @$pretext['id'],
 			'class'		=> __FUNCTION__,
-			'preview'   => false,
+			'show_preview'   => empty($has_comments_preview),
 			'form'		=> 'comment_form',
 			'wraptag'	=> ''
 		),$atts));
 
-		# don't display the comment form at the bottom, since it's
-		# already shown at the top
-		if (ps('preview') and empty($comment_preview) and !$preview)
-			return '';
-
 		assert_article();
-		
+
 		if (is_array($thisarticle)) extract($thisarticle);
 
 		if (@$thisid) $id = $thisid;
 
+		$out = '';
 		if ($id) {
 			if (!checkCommentsAllowed($id)) {
 				$out = graf(gTxt("comments_closed"));
@@ -1361,7 +1357,10 @@ $LastChangedRevision$
 					$out .= " ". gTxt("comment_moderated");
 				$out = graf($out, ' id="txpCommentInputForm"');
 			} else {
-				$out = commentForm($id,$atts);
+				# display a comment preview if required
+				if (ps('preview') and $show_preview)
+					$out = comments_preview(array());
+				$out .= commentForm($id,$atts);
 			}
 
 			return (!$wraptag ? $out : doTag($out,$wraptag,$class) );
@@ -1426,7 +1425,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function comments($atts)
 	{
-		global $thisarticle, $prefs, $comment_preview, $pretext;
+		global $thisarticle, $prefs, $pretext;
 		extract($prefs);
 
 		extract(lAtts(array(
@@ -1446,38 +1445,21 @@ $LastChangedRevision$
 
 		$Form = fetch_form($form);
 
-		if (!empty($comment_preview)) {
-			$preview = psas(array('name','email','web','message','parentid','remember'));
-			$preview['time'] = time();
-			$preview['discussid'] = 0;
-			if ($preview['message']=='')
-			{
-				$in = getComment();
-				$preview['message'] = $in['message'];
+		$rs = safe_rows_start("*, unix_timestamp(posted) as time", "txp_discuss",
+			"parentid='$id' and visible=".VISIBLE." order by posted asc");
+
+		$out = '';
+
+		if ($rs) {
+			$comments = array();
+
+			while($vars = nextRow($rs)) {
+				$GLOBALS['thiscomment'] = $vars;
+				$comments[] = parse($Form).n;
+				unset($GLOBALS['thiscomment']);
 			}
-			$preview['message'] = markup_comment($preview['message']);
-			$GLOBALS['thiscomment'] = $preview;
-			$comments[] = parse($Form).n;
-			unset($GLOBALS['thiscomment']);
-			$out = doWrap($comments,$wraptag,$break,$class,$breakclass);
-		}
-		else {
-			$rs = safe_rows_start("*, unix_timestamp(posted) as time", "txp_discuss",
-				"parentid='$id' and visible=".VISIBLE." order by posted asc");
-							
-			$out = '';
 
-			if ($rs) {
-				$comments = array();
-
-				while($vars = nextRow($rs)) {
-					$GLOBALS['thiscomment'] = $vars;
-					$comments[] = parse($Form).n;
-					unset($GLOBALS['thiscomment']);
-				}
-
-				$out .= doWrap($comments,$wraptag,$break,$class,$breakclass);
-			}
+			$out .= doWrap($comments,$wraptag,$break,$class,$breakclass);
 		}
 
 		return $out;
@@ -1486,30 +1468,18 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function comments_preview($atts, $thing='', $me='')
 	{
-		global $thisarticle;
+		global $thisarticle, $has_comments_preview;
 		if (!ps('preview'))
 			return;
 
-		
+
 		extract(lAtts(array(
 			'id'		   => @$pretext['id'],
 			'form'		=> 'comments',
-			'bc'		=> false,  // backwards-compatibility; only internally for old preview behaviour
 			'wraptag'	=> '',
 			'class'		=> __FUNCTION__,
-		),$atts));	
+		),$atts));
 
-		//FIXME for crockery. This emulates the old hardcoded preview behaviour.
-		if ($bc)
-		{
-			if (@$GLOBALS['pretext']['secondpass'] == false)
-				return $me;
-			if (@$GLOBALS['pretext']['comments_preview_shown'])
-				return '';
-			else
-				return '<a id="cpreview"></a>'.discuss($id);
-		}
-		$GLOBALS['pretext']['comments_preview_shown'] = true;
 
 		assert_article();
 		
@@ -1534,6 +1504,9 @@ $LastChangedRevision$
 		$comments = parse($Form).n;
 		unset($GLOBALS['thiscomment']);
 		$out = doTag($comments,$wraptag,$class);
+		
+		# set a flag, to tell the comments_form tag that it doesn't have to show a preview
+		$has_comments_preview = true;
 
 		return $out;
 	}

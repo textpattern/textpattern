@@ -28,11 +28,7 @@ $LastChangedRevision$
 		$rs = safe_row('*, unix_timestamp(Posted) as uPosted', 'textpattern', "ID='".doSlash($id)."' and Status >= 4");
 		if ($rs) {
 			populateArticleData($rs);
-			if (ps('preview')) 
-				$GLOBALS['comment_preview'] = 1;
-
 			$result = parse(fetch_form('comments_display'));
-			unset($GLOBALS['comment_preview']);
 			return $result;
 		}
 
