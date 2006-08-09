@@ -224,9 +224,10 @@ if (!empty($event) and $event == 'article') {
 	}
 
 //--------------------------------------------------------------
-	function article_edit($message="")
+
+	function article_edit($message = '')
 	{
-		global $txpcfg,$txp_user,$vars;
+		global $vars, $txp_user, $comments_disabled_after, $txpcfg;
 
 		extract(get_prefs());
 		extract(gpsa(array('view','from_view','step')));
@@ -589,17 +590,39 @@ if (!empty($event) and $event == 'article') {
 			if ($use_comments == 1)
 			{
 				echo n.n.'<fieldset id="write-comments">'.
-					n.'<legend>'.gTxt('comments').'</legend>'.
-					n.n.graf(
+					n.'<legend>'.gTxt('comments').'</legend>';
+
+				$comments_expired = false;
+
+				if ($step != 'create' && $comments_disabled_after)
+				{
+					$lifespan = $comments_disabled_after * 86400;
+					$time_since = time() - $sPosted;
+
+					if ($time_since > $lifespan)
+					{
+						$comments_expired = true;
+					}
+				}
+
+				if ($comments_expired)
+				{
+					echo n.n.graf(gTxt('expired'));
+				}
+
+				else
+				{
+					echo n.n.graf(
 						onoffRadio('Annotate', $Annotate)
 					).
 
 					n.n.graf(
 						'<label for="comment-invite">'.gTxt('comment_invitation').'</label>'.br.
 						fInput('text', 'AnnotateInvite', $AnnotateInvite, 'edit', '', '', '', '', 'comment-invite')
-					).
+					);
+				}
 
-				n.n.'</fieldset>';
+				echo n.n.'</fieldset>';
 			}
 
 		//-- timestamp ------------------- 

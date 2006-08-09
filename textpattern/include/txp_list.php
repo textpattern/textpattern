@@ -34,7 +34,7 @@ $LastChangedRevision$
 
 	function list_list($message = '', $post = '')
 	{
-		global $statuses, $step;
+		global $statuses, $comments_disabled_after, $step;
 
 		pagetop(gTxt('tab_list'), $message);
 
@@ -217,8 +217,21 @@ $LastChangedRevision$
 						' ('.$total_comments[$ID].')';
 				}
 
+				$comment_status = ($Annotate) ? gTxt('on') : gTxt('off');
+
+				if ($comments_disabled_after)
+				{
+					$lifespan = $comments_disabled_after * 86400;
+					$time_since = time() - $uPosted;
+
+					if ($time_since > $lifespan)
+					{
+						$comment_status = gTxt('expired');
+					}
+				}
+
 				$comments = n.'<ul>'.
-					n.t.'<li>'.( $Annotate ? gTxt('on') : gTxt('off') ).'</li>'.
+					n.t.'<li>'.$comment_status.'</li>'.
 					n.t.'<li>'.$comments.'</li>'.
 					n.'</ul>';
 
