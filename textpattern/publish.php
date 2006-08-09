@@ -351,7 +351,22 @@ $LastChangedRevision$
 
 		// Resolve AuthorID from Authorname
 		if ($out['author'])
-			$out['author'] = safe_field('name','txp_users',"RealName like '".doSlash($out['author'])."'");
+		{
+			$name = urldecode(strtolower(urlencode($out['author'])));
+		
+			$name = safe_field('name', 'txp_users', "RealName like '".doSlash($out['author'])."'");
+
+			if ($name)
+			{
+				$out['author'] = $name;
+			}
+
+			else
+			{
+				$out['author'] = '';
+				$is_404 = true;
+			}
+		}
 
 		// Stats: found or not
 		$out['status'] = ($is_404 ? '404' : '200');
