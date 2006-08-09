@@ -962,7 +962,7 @@ $LastChangedRevision$
 
 		else
 		{
-			trigger_error(gTxt('unknown_tag'), E_USER_WARNING);
+			trigger_error(gTxt('unknown_tag', array('{tag}' => $tag)), E_USER_WARNING);
 		}
 
 		@--$txptracelevel;
