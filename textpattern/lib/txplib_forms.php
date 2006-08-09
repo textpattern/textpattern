@@ -169,7 +169,7 @@ $LastChangedRevision$
 	
 //-------------------------------------------------------------
 
-	function checkbox($name, $value, $checked = '1', , $tabindex = '')
+	function checkbox($name, $value, $checked = '1', $tabindex = '')
 	{
 		$o[] = '<input type="checkbox" id="'.$name.'" name="'.$name.'" value="'.$value.'"';
 		$o[] = ($checked == '1') ? ' checked="checked"' : '';
