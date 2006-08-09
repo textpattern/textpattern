@@ -136,8 +136,11 @@ $LastChangedRevision$
 		$name = preg_replace("/[^[:alnum:]\-_]/", "", str_replace(" ","-",$name));
 		
 		$chk = fetch('name','txp_section','name',$name);
-		if (!$chk) {
-			if ($name) {
+
+		if (!$chk)
+		{
+			if ($name)
+			{
 				$rs = safe_insert(
 				   "txp_section",
 				   "name         = '$name',
@@ -148,64 +151,114 @@ $LastChangedRevision$
 					in_rss       = 1,
 					on_frontpage = 1"
 				);
-				if ($rs) {
+
+				if ($rs)
+				{
 					update_lastmod();
-					sec_section_list(messenger('section',$name,'created'));
+
+					$message = str_replace('{section}', $name, gTxt('section_created'));
+
+					sec_section_list($message);
 				}
-			} else sec_section_list();
-		} else sec_section_list(gTxt('section_name_already_exists'));
+			}
+
+			else
+			{
+				sec_section_list();
+			}
+		}
+
+		else
+		{
+			$message = str_replace('{section}', $name, gTxt('section_name_already_exists'));
+
+			sec_section_list($message);
+		}
 	}
 
 //-------------------------------------------------------------
+
 	function section_save()
 	{
 		global $txpcfg;
+
 		$in = psa(array(
 			'name', 'title','page','css','is_default','on_frontpage','in_rss','searchable','old_name')
 		);
-		extract(doSlash($in));
-		
-		if (empty($title))
-			$title = $name;
 
-		//Prevent non url chars on section names
+		extract(doSlash($in));
+
+		if (empty($title))
+		{
+			$title = $name;
+		}
+
+		// Prevent non url chars on section names
 		include_once txpath.'/lib/classTextile.php';
+
 		$textile = new Textile();
 		$title = $textile->TextileThis($title,1);
 		$name = dumbDown($textile->TextileThis($name, 1));
-		$name = preg_replace("/[^[:alnum:]\-_]/", "", str_replace(" ","-",$name));
+		$name = preg_replace("/[^[:alnum:]\-_]/", '', str_replace(' ', '-', $name));
 
-		if ($name == 'default') {
-			safe_update("txp_section", "page='$page',css='$css'", "name='default'");
+		if ($name != $old_name)
+		{
+			if (safe_field('name', 'txp_section', "name='".doSlash($name)."'"))
+			{
+				$message = str_replace('{section}', $name, gTxt('section_name_already_exists'));
+
+				sec_section_list($message);
+				return;
+			}
+		}
+
+		if ($name == 'default')
+		{
+			safe_update('txp_section', "page = '$page', css = '$css'", "name = 'default'");
+
 			update_lastmod();
-		} else {
-			if ($is_default) { // note this means 'selected by default' not 'default page'
-				safe_update("txp_section", "is_default=0", "name!='$old_name'");
+		}
+
+		else
+		{
+			// note this means 'selected by default' not 'default page'
+			if ($is_default)
+			{
+				safe_update("txp_section", "is_default = 0", "name != '$old_name'");
 			}
 	
-			safe_update("txp_section",
-			   "name         = '$name',
+			safe_update('txp_section', "
+				name         = '$name',
 				title        = '$title',
 				page         = '$page',
 				css          = '$css',
 				is_default   = '$is_default',
 				on_frontpage = '$on_frontpage',
 				in_rss       = '$in_rss',
-				searchable   = '$searchable'",
-			   "name = '$old_name'"
-			);
-			safe_update("textpattern","Section='$name'", "Section='$old_name'");
+				searchable   = '$searchable'
+			", "name = '$old_name'");
+
+			safe_update('textpattern', "Section = '$name'", "Section = '$old_name'");
+
 			update_lastmod();
 		}
-		sec_section_list(messenger('section',$name,'updated'));
+
+		$message = str_replace('{section}', $name, gTxt('section_updated'));
+
+		sec_section_list($message);
 	}
 
 // -------------------------------------------------------------
+
 	function section_delete() 
 	{
 		$name = ps('name');
-		safe_delete("txp_section","name='$name'");
-		sec_section_list(messenger('section',$name,'deleted'));
+
+		safe_delete('txp_section', "name = '$name'");
+
+		$message = str_replace('{section}', $name, gTxt('section_deleted'));
+
+		sec_section_list($message);
 	}
 
 ?>
