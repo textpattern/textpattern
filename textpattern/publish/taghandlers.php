@@ -15,7 +15,9 @@ $LastChangedRevision$
 	function page_title($atts) 
 	{
 		global $sitename,$id,$c,$q,$parentid,$pg;
-		extract(lAtts(array('separator' => ': '),$atts));
+		extract(lAtts(array(
+			'separator' => ': ',
+		),$atts));
 		$s = $sitename;
 		$sep = $separator;
 
@@ -249,8 +251,8 @@ $LastChangedRevision$
 		$url = pagelinkurl(array(
 			$flavor    => '1',
 			'section'  => $section,
-			'category' => $category, 
-			'limit'    => $limit 
+			'category' => $category,
+			'limit'    => $limit
 		));
 
 		if ($flavor == 'atom')
@@ -286,7 +288,7 @@ $LastChangedRevision$
 			'title'    => gTxt('rss_feed_title'),
 			'wraptag'  => '',
 		), $atts));
-	
+
 		$url = pagelinkurl(array(
 			$flavor => '1',
 			'area'  =>'link',
@@ -413,7 +415,7 @@ $LastChangedRevision$
 		global $thislink;
 
 		extract(lAtts(array(
-			'escape'	 => ''
+			'escape'	 => '',
 		), $atts));
 
 		return ($escape == 'html') ? 
@@ -508,7 +510,7 @@ $LastChangedRevision$
 		extract(lAtts(array(
 			'email'    => '',
 			'linktext' => gTxt('contact'),
-			'title'    => ''
+			'title'    => '',
 		),$atts));
 
 		if($email) {
@@ -531,7 +533,7 @@ $LastChangedRevision$
 
 		extract(lAtts(array(
 			'login' => '',
-			'pass'  => ''
+			'pass'  => '',
 		),$atts));
 
 		$au = serverSet('PHP_AUTH_USER');
@@ -614,7 +616,7 @@ $LastChangedRevision$
 			'labeltag' => '',
 			'limit'		 => 10,
 			'sort'     => 'posted desc',
-			'wraptag'	 => ''
+			'wraptag'	 => '',
 		), $atts));
 
 		$rs = safe_rows_start('parentid, name, discussid', 'txp_discuss', 
@@ -743,7 +745,7 @@ $LastChangedRevision$
 			'wraptag'      => '',
 			'section'      => '',
 			'this_section' => 0,
-			'type'         => 'c'
+			'type'         => 'c',
 		), $atts));
 
 		if ($type == 's')
@@ -829,7 +831,7 @@ $LastChangedRevision$
 			'section'      => '',
 			'this_section' => 0,
 			'type'         => 'article',
-			'wraptag'      => ''
+			'wraptag'      => '',
 		), $atts));
 
 		if ($categories)
@@ -918,7 +920,7 @@ $LastChangedRevision$
 			'label'           => '',
 			'labeltag'        => '',
 			'sections'        => '',
-			'wraptag'         => ''
+			'wraptag'         => '',
 		), $atts));
 
 		if ($sections)
@@ -1119,7 +1121,7 @@ $LastChangedRevision$
 	function link_to_home($atts, $thing = false) 
 	{
 		extract(lAtts(array(
-			'class' => false
+			'class' => false,
 		), $atts));
 
 		if ($thing)
@@ -1210,7 +1212,9 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function text($atts) 
 	{
-		extract(lAtts(array('item' => ''),$atts));
+		extract(lAtts(array(
+			'item' => '',
+		),$atts));
 		return ($item) ? gTxt($item) : '';
 	}
 
@@ -1234,7 +1238,7 @@ $LastChangedRevision$
 		assert_article();
 
 		extract(lAtts(array(
-			'id' => ''
+			'id' => '',
 		), $atts));
 
 		if ($id)
@@ -1338,7 +1342,7 @@ $LastChangedRevision$
 			'class'		=> __FUNCTION__,
 			'show_preview'   => empty($has_comments_preview),
 			'form'		=> 'comment_form',
-			'wraptag'	=> ''
+			'wraptag'	=> '',
 		),$atts));
 
 		assert_article();
@@ -1373,7 +1377,7 @@ $LastChangedRevision$
 		extract(lAtts(array(
 			'class'		=> __FUNCTION__,
 			'break'		=> 'br',
-			'wraptag'	=> 'div'
+			'wraptag'	=> 'div',
 		),$atts));
 
 		$evaluator =& get_comment_evaluator();
@@ -1656,7 +1660,7 @@ $LastChangedRevision$
 		extract(lAtts(array(
 			'link'				 => '',
 			'section'			 => '',
-			'this_section' => 0
+			'this_section' => 0,
 		), $atts));
 
 		$author_name = get_author_name($thisarticle['authorid']);
@@ -1675,7 +1679,7 @@ $LastChangedRevision$
 		global $author;		
 
 		extract(lAtts(array(
-			'name' => ''
+			'name' => '',
 		), $atts));
 
 		if ($name)
@@ -1693,7 +1697,7 @@ $LastChangedRevision$
 		global $thisarticle;
 
 		extract(lAtts(array(
-			'name' => ''
+			'name' => '',
 		), $atts));
 
 		$author = $thisarticle['authorid'];
@@ -1754,7 +1758,7 @@ function body($atts)
 			'title'				 => 0,
 			'section'			 => '',
 			'this_section' => 0,
-			'wraptag'			 => ''
+			'wraptag'			 => '',
 		), $atts));
 
 		if ($thisarticle['category1'])
@@ -1803,7 +1807,7 @@ function body($atts)
 			'title'				 => 0,
 			'section'			 => '',
 			'this_section' => 0,
-			'wraptag'			 => ''
+			'wraptag'			 => '',
 		), $atts));
 
 		if ($thisarticle['category2'])
@@ -1962,7 +1966,7 @@ function body($atts)
 			'align' 	  => '',
 			'escape'    => '',
 			'style' 	  => '',
-			'thumbnail' => 0
+			'thumbnail' => 0,
 		), $atts));
 
 		$image = ($thisarticle['article_image']) ? $thisarticle['article_image'] : '';
@@ -2082,7 +2086,7 @@ function body($atts)
 		extract(lAtts(array(
 			'text'     => ($t == 1 ? gTxt('article_found') : gTxt('articles_found')),
 		),$atts));
-		
+
 		return $t . ($text ? ' ' . $text : '');
 	}
 
@@ -2098,7 +2102,7 @@ function body($atts)
 			'type'    => 'article',
 			'class'    => __FUNCTION__,
 			'labeltag' => '',
-			'c' => doSlash($c) // Keep the option to override categories due to backward compatiblity
+			'c' => doSlash($c), // Keep the option to override categories due to backward compatiblity
 		),$atts));
 		$c = doSlash($c);
 		
@@ -2259,7 +2263,7 @@ function body($atts)
 			'class' => '',
 			'id'		=> '',
 			'style' => '',
-			'title' => ''
+			'title' => '',
 		), $atts));
 
 		if (!$id)
@@ -2905,7 +2909,7 @@ function body($atts)
 
 		extract(lAtts(array(
 			'decimals' => 2,
-			'format'	 => ''
+			'format'	 => '',
 		), $atts));
 
 		if (is_numeric($decimals) and $decimals >= 0)
@@ -2999,7 +3003,7 @@ function body($atts)
 		global $thisfile;
 
 		extract(lAtts(array(
-			'format' => ''
+			'format' => '',
 		), $atts));
 
 		return fileDownloadFormatTime(array(
@@ -3015,7 +3019,7 @@ function body($atts)
 		global $thisfile;
 
 		extract(lAtts(array(
-			'format' => ''
+			'format' => '',
 		), $atts));
 
 		return fileDownloadFormatTime(array(
@@ -3067,7 +3071,7 @@ function body($atts)
 		extract(lAtts(array(
 			'class'   => '',
 			'escape'  => '',
-			'wraptag' => ''
+			'wraptag' => '',
 		), $atts));
 
 		if ($thisfile['category'])
@@ -3096,7 +3100,7 @@ function body($atts)
 		extract(lAtts(array(
 			'class'   => '',
 			'escape'  => '',
-			'wraptag' => ''
+			'wraptag' => '',
 		), $atts));
 
 		if ($thisfile['description'])
