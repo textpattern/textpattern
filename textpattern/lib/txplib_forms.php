@@ -7,7 +7,7 @@ $LastChangedRevision$
 
 //-------------------------------------------------------------
 
-	function yesnoRadio($field, $var)
+	function yesnoRadio($field, $var, $tabindex = '')
 	{
 		$vals = array(
 			'0' => gTxt('no'),
@@ -18,6 +18,7 @@ $LastChangedRevision$
 		{
 			$out[] = '<input type="radio" id="'.$field.'-'.$a.'" name="'.$field.'" value="'.$a.'" class="radio"';
 			$out[] = ($a == $var) ? ' checked="checked"' : '';
+			$out[] = ($tabindex) ? ' tabindex="'.$tabindex.'"' : '';
 			$out[] = ' /><label for="'.$field.'-'.$a.'">'.$b.'</label> ';
 		}
 
@@ -26,7 +27,7 @@ $LastChangedRevision$
 
 //-------------------------------------------------------------
 
-	function onoffRadio($field, $var)
+	function onoffRadio($field, $var, $tabindex = '')
 	{
 		$vals = array(
 			'0' => gTxt('off'),
@@ -37,6 +38,7 @@ $LastChangedRevision$
 		{
 			$out[] = '<input type="radio" id="'.$field.'-'.$a.'" name="'.$field.'" value="'.$a.'" class="radio"';
 			$out[] = ($a == $var) ? ' checked="checked"' : '';
+			$out[] = ($tabindex) ? ' tabindex="'.$tabindex.'"' : '';
 			$out[] = ' /><label for="'.$field.'-'.$a.'">'.$b.'</label> ';
 		}
 
@@ -167,10 +169,11 @@ $LastChangedRevision$
 	
 //-------------------------------------------------------------
 
-	function checkbox($name, $value, $checked = '1')
+	function checkbox($name, $value, $checked = '1', , $tabindex = '')
 	{
 		$o[] = '<input type="checkbox" id="'.$name.'" name="'.$name.'" value="'.$value.'"';
 		$o[] = ($checked == '1') ? ' checked="checked"' : '';
+		$o[] = ($tabindex) ? ' tabindex="'.$tabindex.'"' : '';
 		$o[] = ' class="checkbox" />';
 
 		return join('', $o);
@@ -178,10 +181,11 @@ $LastChangedRevision$
 
 //-------------------------------------------------------------
 
-	function checkbox2($name, $value)
+	function checkbox2($name, $value, $tabindex = '')
 	{
 		$o[] = '<input type="checkbox" name="'.$name.'" value="1"';
 		$o[] = ($value == '1') ? ' checked="checked"' : '';
+		$o[] = ($tabindex) ? ' tabindex="'.$tabindex.'"' : '';
 		$o[] = ' class="checkbox" />';
 
 		return join('', $o);
@@ -189,11 +193,12 @@ $LastChangedRevision$
 
 //-------------------------------------------------------------
 
-	function radio($name, $value, $checked = '1', $id = '')
+	function radio($name, $value, $checked = '1', $id = '', $tabindex = '')
 	{
 		$o[] = '<input type="radio" name="'.$name.'" value="'.$value.'"';
 		$o[] = ($id) ? ' id="'.$id.'"' : '';
 		$o[] = ($checked == '1') ? ' checked="checked"' : '';
+		$o[] = ($tabindex) ? ' tabindex="'.$tabindex.'"' : '';
 		$o[] = ' class="radio" />';
 
 		return join('', $o);
