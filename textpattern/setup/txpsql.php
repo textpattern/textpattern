@@ -148,14 +148,16 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_discuss_ipban` (
   `ip` varchar(255) NOT NULL default '',
   `name_used` varchar(255) NOT NULL default '',
   `date_banned` datetime NOT NULL default '0000-00-00 00:00:00',
-  `banned_on_message` int(8) NOT NULL default '0'
+  `banned_on_message` int(8) NOT NULL default '0',
+  PRIMARY KEY (`ip`)
 ) $tabletype ";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_discuss_nonce` (
   `issue_time` datetime NOT NULL default '0000-00-00 00:00:00',
   `nonce` varchar(255) NOT NULL default '',
   `used` tinyint(4) NOT NULL default '0',
-  `secret` varchar(255) NOT NULL default ''
+  `secret` varchar(255) NOT NULL default '',
+  PRIMARY KEY (`nonce`)
 ) $tabletype ";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_file` (
@@ -173,8 +175,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_form` (
   `name` varchar(64) NOT NULL default '',
   `type` varchar(28) NOT NULL default '',
   `Form` text NOT NULL,
-  PRIMARY KEY  (`name`),
-  KEY `name` (`name`)
+  UNIQUE KEY `name` (`name`)
 ) $tabletype PACK_KEYS=1";
 
 
@@ -219,8 +220,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_lang` (
   `data` tinytext,
   `lastmod` timestamp,
   PRIMARY KEY  (`id`),
-  UNIQUE KEY `lang` (`lang`,`name`),
-  KEY `lang_2` (`lang`,`event`)
+  UNIQUE KEY `lang` (`lang`,`name`)
 ) $tabletype DELAY_KEY_WRITE=1 AUTO_INCREMENT=1 ";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_link` (
@@ -254,7 +254,6 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_log` (
 $create_sql[] = "CREATE TABLE `".PFX."txp_page` (
   `name` varchar(128) NOT NULL default '',
   `user_html` text NOT NULL,
-  PRIMARY KEY  (`name`),
   UNIQUE KEY `name` (`name`)
 ) $tabletype PACK_KEYS=1";
 
@@ -273,8 +272,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_plugin` (
   `code_restore` text NOT NULL,
   `code_md5` varchar(32) NOT NULL default '',
   `type` int(2) NOT NULL default '0',
-  UNIQUE KEY `name` (`name`),
-  KEY `name_2` (`name`)
+  UNIQUE KEY `name` (`name`)
 ) $tabletype ";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_prefs` (
@@ -386,7 +384,6 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_section` (
   `on_frontpage` int(2) NOT NULL default '1',
   `searchable` int(2) NOT NULL default '1',
   `title` varchar(255) NOT NULL default '',
-  PRIMARY KEY  (`name`),
   UNIQUE KEY `name` (`name`)
 ) $tabletype PACK_KEYS=1";
 
