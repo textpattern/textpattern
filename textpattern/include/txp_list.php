@@ -197,7 +197,15 @@ $LastChangedRevision$
 			{
 				extract($a);
 
-				$Title = empty($Title) ? '<em>'.gTxt('untitled').'</em>' : $Title;
+				if (empty($Title))
+				{
+					$Title = '<em>'.eLink('article', 'edit', 'ID', $ID, gTxt('untitled')).'</em>';
+				}
+
+				else
+				{
+					$Title = eLink('article', 'edit', 'ID', $ID, $Title);
+				}
 
 				$Category1 = ($Category1) ? '<span title="'.fetch_category_title($Category1).'">'.$Category1.'</span>' : '';
 				$Category2 = ($Category2) ? '<span title="'.fetch_category_title($Category2).'">'.$Category2.'</span>' : '';
@@ -244,9 +252,7 @@ $LastChangedRevision$
 						safe_strftime('%d %b %Y %I:%M %p', $uPosted)
 					, 75).
 
-					td(
-						eLink('article', 'edit', 'ID', $ID, $Title)
-					, 175).
+					td($Title, 175).
 
 					td(
 						'<span title="'.fetch_section_title($Section).'">'.$Section.'</span>'
