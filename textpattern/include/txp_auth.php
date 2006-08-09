@@ -57,39 +57,61 @@ function doAuth() {
 	}
 	
 // -------------------------------------------------------------
-	function doLoginForm($message) 
+
+	function doLoginForm($message)
 	{
 		global $txpcfg;
+
 		include txpath.'/lib/txplib_head.php';
+
 		pagetop(gTxt('login'));
+
 		$stay = !(cs('txp_nostay') == 1);
-		echo
-		form(
+
+		echo form(
 			startTable('edit').
-				tr(
-					td().td(graf($message))
+				n.n.tr(
+					n.td().
+					td(graf($message))
 				).
-				tr(
-					fLabelCell('name').fInputCell('p_userid')
+
+				n.n.tr(
+					n.fLabelCell('name', '', 'name').
+					n.fInputCell('p_userid', '', 1, '', '', 'name')
 				).
-				tr(
-					fLabelCell('password').
-					td(fInput('password','p_password','','edit'))
+
+				n.n.tr(
+					n.fLabelCell('password', '', 'password').
+					n.td(
+						fInput('password', 'p_password', '', 'edit', '', '', '', 2, 'password')
+					)
 				).
-				tr(
-					td().td(graf(checkbox('stay',1,$stay).gTxt('stay_logged_in').
-					popHelp('remember_login')))
+
+				n.n.tr(
+					n.td().
+					td(
+						graf(checkbox('stay', 1, $stay, 3).'<label for="stay">'.gTxt('stay_logged_in').'</label>'.
+							sp.popHelp('remember_login'))
+					)
 				).
-				tr(
-					fLabelCell('').td(fInput('submit','',gTxt('log_in_button'),'publish'))
+
+				n.n.tr(
+					n.td().
+					td(
+						fInput('submit', '', gTxt('log_in_button'), 'publish', '', '', '', 4)
+					)
 				).
+
 			endTable().
+
 			(gps('event') ? eInput(gps('event')) : '')
-		);
-		exit("</div></body></html>");
-	} 
-	
-	
+			).
+
+		n.'</div>'.n.n.'</body>'.n.'</html>';
+
+		exit(0);
+	}
+
 // -------------------------------------------------------------
 	function doTxpValidate() 
 	{
