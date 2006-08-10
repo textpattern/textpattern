@@ -279,7 +279,7 @@ if ($event == 'category') {
 
 				$count = isset($total_count[$name]) ? '('.href($total_count[$name], $url).')' : '(0)';
 
-				$items[] = graf($cbox.sp.str_repeat(sp.sp, max(0, $level - 1) * 2) .$editlink.sp.small($count));
+				$items[] = graf($cbox.sp.str_repeat(sp.sp, $level * 2) .$editlink.sp.small($count));
 			}
 
 			if ($items)
