@@ -452,10 +452,14 @@ $LastChangedRevision$
 			100 => 100
 		);
 
+		$select_page = selectInput('qty', $vals, $val,'', 1);
+
+		// proper localisation
+		$page = str_replace('{page}', $select_page, gTxt('view_per_page'));
+
 		return form(
 			graf(
-				gTxt('view').sp.selectInput('qty', $vals, $val,'', 1).sp.
-				gTxt('per_page').
+				$page.
 				eInput($event).
 				sInput($event.'_change_pageby').
 				'<noscript> <input type="submit" value="'.gTxt('go').'" class="smallerbox" /></noscript>'
