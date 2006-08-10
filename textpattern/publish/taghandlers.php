@@ -12,22 +12,50 @@ $LastChangedRevision$
 */
 
 // -------------------------------------------------------------
-	function page_title($atts) 
+
+	function page_title($atts)
 	{
-		global $sitename,$id,$c,$q,$parentid,$pg;
+		global $sitename, $s, $c, $q, $pg, $id, $parentid;
+
 		extract(lAtts(array(
 			'separator' => ': ',
-		),$atts));
-		$s = $sitename;
-		$sep = $separator;
+		), $atts));
 
 		$out = $sitename;
-		if ($c)        $out = $s.$sep.fetch_category_title($c);
-		if ($q)        $out = $s.$sep.gTxt('search_results').$sep.' '.$q;
-		if ($pg)       $out = $s.$sep.gTxt('page').' '.$pg;
-		if ($id)       $out = $s.$sep.safe_field('Title','textpattern',"ID = $id");
-		if ($parentid) $out = $s.$sep.gTxt('comments_on').' '.
-			safe_field('Title','textpattern',"ID = '$parentid'");
+
+		if ($pg)
+		{
+			$out = $sitename.$separator.gTxt('page').' '.$pg;
+		}
+
+		if ($s and $s != 'default')
+		{
+			$out = $sitename.$separator.fetch_section_title($s);
+		}
+
+		if ($c)
+		{
+			$out = $sitename.$separator.fetch_category_title($c);
+		}
+
+		if ($q)
+		{
+			$out = $sitename.$separator.gTxt('search_results').
+				$separator.' '.$q;
+		}
+
+		if ($id)
+		{
+			$out = $sitename.$separator.
+				safe_field('Title', 'textpattern', "ID = $id");
+		}
+
+		if ($parentid)
+		{
+			$out = $sitename.$separator.gTxt('comments_on').' '.
+				safe_field('Title', 'textpattern', "ID = $parentid");
+		}
+
 		return escape_title($out);
 	}
 
