@@ -528,7 +528,7 @@ $LastChangedRevision$
 	}
 
 //-------------------------------------------------------------
-	function dom_attach($id, $content, $noscript='', $wraptag='div')
+	function dom_attach($id, $content, $noscript='', $wraptag='div', $wraptagid='')
 	{
 
 		$c = addcslashes($content, "\r\n\"\'");
@@ -536,6 +536,7 @@ $LastChangedRevision$
 var e = document.getElementById('{$id}');
 var n = document.createElement('{$wraptag}')
 n.innerHTML = '{$c}'
+n.setAttribute('id','{$wraptagid}');
 e.appendChild(n)
 EOF;
 
