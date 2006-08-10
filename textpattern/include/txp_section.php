@@ -201,7 +201,7 @@ $LastChangedRevision$
 		$name = dumbDown($textile->TextileThis($name, 1));
 		$name = preg_replace("/[^[:alnum:]\-_]/", '', str_replace(' ', '-', $name));
 
-		if ($name != $old_name)
+		if ($old_name && ($name != $old_name))
 		{
 			if (safe_field('name', 'txp_section', "name='".doSlash($name)."'"))
 			{
