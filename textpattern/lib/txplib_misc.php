@@ -996,6 +996,7 @@ $LastChangedRevision$
 	function safe_strftime($format, $time='', $gmt=0, $override_locale='')
 	{
 		global $locale;
+		$old_locale = $locale;
 
 		if (!$time)
 			$time = time();
@@ -1038,7 +1039,7 @@ $LastChangedRevision$
 
 		# revert to the old locale
 		if ($override_locale)
-			setlocale(LC_ALL, $locale);
+			$locale = setlocale(LC_ALL, $old_locale);
 
 		return $str;
 	}
