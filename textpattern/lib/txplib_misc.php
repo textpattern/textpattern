@@ -597,9 +597,9 @@ $LastChangedRevision$
 				strtolower(
 					preg_replace('/[\s\-]+/', '-', trim(preg_replace('/[^\w\s\-]/', '', $text)))
 				);
-				return preg_replace("/[^A-Za-z0-9\-]/","",$text);
+				return preg_replace("/[^A-Za-z0-9\-_]/","",$text);
 			} else {
-				return preg_replace("/[^A-Za-z0-9]/","",$text);
+				return preg_replace("/[^A-Za-z0-9_]/","",$text);
 			}
 		}
 	}
