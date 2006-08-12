@@ -68,9 +68,16 @@ if ($event == 'category') {
 	}
 
 //--------------------------------------------------------------
-	function cat_parent_pop($name,$type)
+	function cat_parent_pop($name,$type,$id)
 	{
-		$rs = getTree("root",$type);
+		if ($id) {
+			list($lft,$rgt) = array_values(safe_row('lft,rgt', 'txp_category', "id='".doSlash($id)."'"));
+			$rs = getTree("root",$type,"lft not between $lft and $rgt");
+		}
+		else {
+			$rs = getTree("root",$type);
+		}
+
 		if ($rs) {
 			return ' '.treeSelectInput('parent', $rs, $name);
 		}
@@ -332,7 +339,7 @@ if ($event == 'category') {
 			extract($row);
 			$out = stackRows(
 				fLabelCell($evname.'_category_name') . fInputCell('name', $name, 1, 20),
-				fLabelCell('parent') . td(cat_parent_pop($parent,$evname)),
+				fLabelCell('parent') . td(cat_parent_pop($parent,$evname,$id)),
 				fLabelCell($evname.'_category_title') . fInputCell('title', $title, 1, 30),
 				hInput('id',$id),
 				tdcs(fInput('submit', '', gTxt('save_button'),'smallerbox'), 2)
