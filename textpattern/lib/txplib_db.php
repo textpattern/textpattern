@@ -14,12 +14,12 @@ if (!defined('PFX')) {
 set_magic_quotes_runtime(0);
 
 class DB {
-    function DB() 
+	function DB()
 	{
 		global $txpcfg;
 
 		$this->host = $txpcfg['host'];
-		$this->db   = $txpcfg['db'];
+		$this->db	= $txpcfg['db'];
 		$this->user = $txpcfg['user'];
 		$this->pass = $txpcfg['pass'];
 
@@ -37,7 +37,7 @@ class DB {
 		// be backwardscompatible
 		if ( isset($txpcfg['dbcharset']) && (intval($version[0]) >= 5 || preg_match('#^4\.[1-9]#',$version)) )
 			mysql_query("SET NAMES ". $txpcfg['dbcharset']);
-    }
+	}
 }
 $DB = new DB;
 
@@ -327,15 +327,15 @@ $DB = new DB;
 	}
 
 // -------------------------------------------------------------
- 	function getTree($root, $type)
- 	{ 
+	function getTree($root, $type)
+	{
 
 		$root = doSlash($root);
 		$type = doSlash($type);
 
-	   $rs = safe_row(
-	    	"lft as l, rgt as r", 
-	    	"txp_category", 
+		$rs = safe_row(
+			"lft as l, rgt as r",
+			"txp_category",
 			"name='$root' and type = '$type'"
 		);
 
@@ -347,94 +347,94 @@ $DB = new DB;
 		$out = array();
 		$right = array(); 
 
-	    $rs = safe_rows_start(
-	    	"id, name, lft, rgt, parent, title", 
-	    	"txp_category",
-	    	"lft between $l and $r and type = '$type' $inc_root order by lft asc"
+		$rs = safe_rows_start(
+			"id, name, lft, rgt, parent, title",
+			"txp_category",
+			"lft between $l and $r and type = '$type' $inc_root order by lft asc"
 		); 
 
-	    while ($rs and $row = nextRow($rs)) {
-	   		extract($row);
-			while (count($right) > 0 && $right[count($right)-1] < $rgt) { 
+		while ($rs and $row = nextRow($rs)) {
+			extract($row);
+			while (count($right) > 0 && $right[count($right)-1] < $rgt) {
 				array_pop($right);
 			}
 
-        	$out[] = 
-        		array(
-        			'id' => $id,
-        			'name' => $name,
-        			'title' => $title,
-        			'level' => count($right), 
-        			'children' => ($rgt - $lft - 1) / 2
-        		);
+			$out[] =
+				array(
+					'id' => $id,
+					'name' => $name,
+					'title' => $title,
+					'level' => count($right),
+					'children' => ($rgt - $lft - 1) / 2
+				);
 
-	        $right[] = $rgt; 
-	    }
-    	return($out);
- 	}
+			$right[] = $rgt;
+		}
+		return($out);
+	}
 
 // -------------------------------------------------------------
- 	function getTreePath($target, $type)
- 	{ 
+	function getTreePath($target, $type)
+	{
 
-	  	$rs = safe_row(
-	    	"lft as l, rgt as r", 
-	    	"txp_category", 
+		$rs = safe_row(
+			"lft as l, rgt as r",
+			"txp_category",
 			"name='".doSlash($target)."' and type = '".doSlash($type)."'"
 		);
 		if (!$rs) return array();
 		extract($rs);
 
-	    $rs = safe_rows_start(
-	    	"*", 
-	    	"txp_category",
+		$rs = safe_rows_start(
+			"*",
+			"txp_category",
 				"lft <= $l and rgt >= $r and type = '".doSlash($type)."' order by lft asc"
-		); 
+		);
 
 		$out = array();
-		$right = array(); 
+		$right = array();
 
-	    while ($rs and $row = nextRow($rs)) {
-	   		extract($row);
-			while (count($right) > 0 && $right[count($right)-1] < $rgt) { 
+		while ($rs and $row = nextRow($rs)) {
+			extract($row);
+			while (count($right) > 0 && $right[count($right)-1] < $rgt) {
 				array_pop($right);
 			}
 
-        	$out[] = 
-        		array(
-        			'id' => $id,
-        			'name' => $name,
-        			'title' => $title,
-        			'level' => count($right), 
-        			'children' => ($rgt - $lft - 1) / 2
-        		);
+			$out[] =
+				array(
+					'id' => $id,
+					'name' => $name,
+					'title' => $title,
+					'level' => count($right),
+					'children' => ($rgt - $lft - 1) / 2
+				);
 
-	        $right[] = $rgt; 
-	    }
+			$right[] = $rgt;
+		}
 		return $out;
 	}
 
 // -------------------------------------------------------------
-	function rebuild_tree($parent, $left, $type) 
-	{ 
+	function rebuild_tree($parent, $left, $type)
+	{
 		$right = $left+1;
 
 		$parent = doSlash($parent);
 
-		$result = safe_column("name", "txp_category", 
+		$result = safe_column("name", "txp_category",
 			"parent='$parent' and type='$type' order by name");
-	
-		foreach($result as $row) { 
-    	    $right = rebuild_tree($row, $right, $type); 
-	    } 
 
-	    safe_update(
-	    	"txp_category", 
-	    	"lft=$left, rgt=$right",
-	    	"name='$parent' and type='$type'"
-	    );
-    	return $right+1; 
- 	} 
+		foreach($result as $row) {
+			$right = rebuild_tree($row, $right, $type);
+		}
+
+		safe_update(
+			"txp_category",
+			"lft=$left, rgt=$right",
+			"name='$parent' and type='$type'"
+		);
+		return $right+1;
+	}
 
 //-------------------------------------------------------------
 	function get_prefs()
@@ -442,7 +442,7 @@ $DB = new DB;
 		$r = safe_rows_start('name, val', 'txp_prefs', 'prefs_id=1');
 		if ($r) {
 			while ($a = nextRow($r)) {
-				$out[$a['name']] = $a['val']; 
+				$out[$a['name']] = $a['val'];
 			}
 			return $out;
 		}
@@ -450,7 +450,7 @@ $DB = new DB;
 	}
 
 // -------------------------------------------------------------
-	function db_down() 
+	function db_down()
 	{
 		// 503 status might discourage search engines from indexing or caching the error message
 		header('Status: 503 Service Unavailable');
