@@ -49,7 +49,7 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 	function doSlash($in)
-	{ 
+	{
 		if(phpversion() >= "4.3.0") {
 			return doArray($in,'mysql_real_escape_string');
 		} else {
@@ -1582,10 +1582,23 @@ eod;
 		$list = explode($delim, $list);
 
 		foreach ($list as $key => $value) {
-			$list[$key] = doSlash(trim($value));
+			$list[$key] = trim($value);
 		}
 
 		return $list;
+	}
+
+// -------------------------------------------------------------
+	function doQuote($val)
+	{
+		return "'$val'";
+	}
+
+// -------------------------------------------------------------
+	function quote_list($in)
+	{
+		$out = doSlash($in);
+		return doArray($out, 'doQuote');
 	}
 
 // -------------------------------------------------------------
