@@ -105,7 +105,7 @@ $LastChangedRevision$
 				$sel = '';
 			}
 
-			$sp = ($level > 0) ? str_repeat(sp.sp, $level - 1) : '';
+			$sp = str_repeat(sp.sp, $level);
 
 			$out[] = n.t.'<option value="'.htmlspecialchars($name).'"'.$sel.'>'.$sp.$title.'</option>';
 		}
