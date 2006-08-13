@@ -728,7 +728,7 @@ $LastChangedRevision$
 			$cats[] = doSlash($thisarticle['category2']);
 		}
 
-		$cats = join(chr(39).','.chr(39), $cats);
+		$cats = join("','", $cats);
 
 		$categories = array();
 
@@ -869,9 +869,8 @@ $LastChangedRevision$
 
 		if ($categories)
 		{
-			$categories = do_list($categories);
-
-			$categories = join(chr(39).','.chr(39), $categories);
+			$categories = do_list($categories)
+			$categories = join("','", doSlash($categories));
 
 			$rs = safe_rows_start('name, title', 'txp_category', 
 				"type = '$type' and name in ('$categories') order by field(name, '$categories')");
@@ -883,7 +882,7 @@ $LastChangedRevision$
 			{
 				$exclude = do_list($exclude);
 
-				$exclude = join(chr(39).','.chr(39), $exclude);
+				$exclude = join("','", doSlash($exclude));
 
 				$exclude = "and name not in('$exclude')";
 			}
@@ -960,7 +959,7 @@ $LastChangedRevision$
 		{
 			$sections = do_list($sections);
 
-			$sections = join(chr(39).','.chr(39), $sections);
+			$sections = join("','", doSlash($sections));
 
 			$rs = safe_rows_start('name, title', 'txp_section', "name in ('$sections') order by field(name, '$sections')");
 		}
@@ -971,7 +970,7 @@ $LastChangedRevision$
 			{
 				$exclude = do_list($exclude);
 
-				$exclude = join(chr(39).','.chr(39), $exclude);
+				$exclude = join("','", doSlash($exclude));
 				
 				$exclude = "and name not in('$exclude')";
 			}
