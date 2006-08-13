@@ -97,13 +97,13 @@ $LastChangedRevision$
 		return $table_names;
 	}
 
-	function check_tables($tables, $type='FAST QUICK') {
+	function check_tables($tables, $type='FAST QUICK', $warnings=0) {
 		$msgs = array();
 		foreach ($tables as $table) {
 			$rs = getRows("CHECK TABLE $table $type");
 			if ($rs) {
 				foreach ($rs as $r)
-					if ($r['Msg_type'] != 'status')
+					if ($r['Msg_type'] != 'status' and ($warnings or $r['Msg_type'] != 'warning'))
 						$msgs[] = $table.cs.$r['Msg_type'].cs.$r['Msg_text'];
 			}
 		}
