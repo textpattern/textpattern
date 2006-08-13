@@ -869,7 +869,7 @@ $LastChangedRevision$
 
 		if ($categories)
 		{
-			$categories = do_list($categories)
+			$categories = do_list($categories);
 			$categories = join("','", doSlash($categories));
 
 			$rs = safe_rows_start('name, title', 'txp_category', 
