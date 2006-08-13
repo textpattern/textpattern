@@ -1366,17 +1366,22 @@ $LastChangedRevision$
 		return $invite_return;
 	}
 // -------------------------------------------------------------
+
 	function comments_form($atts)
 	{
 		global $thisarticle, $has_comments_preview, $pretext;
 
 		extract(lAtts(array(
-			'id'		   => @$pretext['id'],
-			'class'		=> __FUNCTION__,
-			'show_preview'   => empty($has_comments_preview),
-			'form'		=> 'comment_form',
-			'wraptag'	=> '',
-		),$atts));
+			'class'        => __FUNCTION__,
+			'form'         => 'comment_form',
+			'id'           => @$pretext['id'],
+			'isize'        => '25',
+			'msgcols'      => '25',
+			'msgrows'      => '5',
+			'msgstyle'     => '',
+			'show_preview' => empty($has_comments_preview),
+			'wraptag'      => '',
+		), $atts));
 
 		assert_article();
 
