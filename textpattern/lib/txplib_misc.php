@@ -1606,7 +1606,7 @@ eod;
 	{
 		global $production_status,$txptrace,$txptracelevel;
 
-		if (in_array($production_status, array('debug', 'test')))
+		if (in_array($production_status, array('debug')))
 			 @$txptrace[] = str_repeat("\t", @$txptracelevel).$msg;
 	}
 
