@@ -290,7 +290,7 @@ $LastChangedRevision$
 
 		safe_update('txp_css', "css = '$css'", "name = '$name'");
 
-		$message = str_replace('{style}', $name, gTxt('css_updated'));
+		$message = gTxt('css_updated', array('{style}' => $name));
 
 		css_edit($message);
 	}
@@ -308,7 +308,7 @@ $LastChangedRevision$
 			{
 				safe_insert('txp_css', "name = '$newname', css = '$css'");
 
-				$message = str_replace('{style}', $newname, gTxt('css_created'));
+				$message = gTxt('css_created', array('{style}' => $newname));
 			}
 
 			else
@@ -323,7 +323,7 @@ $LastChangedRevision$
 		{
 			safe_update('txp_css', "css = '$css'", "name = '$name'");
 
-			$message = str_replace('{style}', $name, gTxt('css_updated'));
+			$message = gTxt('css_updated', array('{style}' => $name));
 
 			css_edit($message);
 		}

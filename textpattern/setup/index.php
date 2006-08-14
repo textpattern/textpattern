@@ -78,20 +78,21 @@ eod;
 
 
 // -------------------------------------------------------------
+
 	function getDbInfo()
 	{
 		$lang = isPost('lang');
 
-		
-
 		$GLOBALS['textarray'] = setup_load_lang($lang);
-	
+
 		@include txpath.'/config.php';
-		
-		if (!empty($txpcfg['db'])) {
-			exit(graf(str_replace('{txpath}', txpath, gTxt('already_installed'))));
+
+		if (!empty($txpcfg['db']))
+		{
+			exit(graf(
+				gTxt('already_installed', array('{txpath}' => txpath))
+			));
 		}
-		
 
 		$temp_txpath = txpath;
 		if (@$_SERVER['SCRIPT_NAME'] && (@$_SERVER['SERVER_NAME'] || @$_SERVER['HTTP_HOST']))
@@ -160,15 +161,21 @@ eod;
 	}
 
 // -------------------------------------------------------------
+
 	function printConfig()
 	{
 		$carry = enumPostItems('ddb','duser','dpass','dhost','dprefix','txprefix','txpath',
 			'siteurl','ftphost','ftplogin','ftpass','ftpath','lang');
 
 		@include txpath.'/config.php';
-		
-		if (!empty($txpcfg['db'])) {
-			exit(graf(str_replace('{txpath}', txpath, gTxt('already_installed'))));
+
+		if (!empty($txpcfg['db']))
+		{
+			exit(graf(
+				gTxt('already_installed', array(
+					'{txpath}' => txpath
+				))
+			));
 		}
 
 		$carry['txpath']   = preg_replace("/^(.*)\/$/","$1",$carry['txpath']);
@@ -191,12 +198,22 @@ eod;
 
 		echo graf(gTxt('db_connected'));
 
-		if (! ($dprefix == '' || preg_match('#^[a-zA-Z_][a-zA-Z0-9_]*$#',$dprefix)) ) {
-			exit(graf(str_replace("{dbprefix}",strong($dprefix),gTxt("prefix_bad_characters"))));
+		if (! ($dprefix == '' || preg_match('#^[a-zA-Z_][a-zA-Z0-9_]*$#', $dprefix)) )
+		{
+			exit(graf(
+				gTxt('prefix_bad_characters', array(
+					'{dbprefix}' => strong($dprefix)
+				))
+			));
 		}
 
-		if (!$mydb = mysql_select_db($ddb)) {
-			exit(graf(str_replace("{dbname}",strong($ddb),gTxt("db_doesnt_exist"))));
+		if (!$mydb = mysql_select_db($ddb))
+		{
+			exit(graf(
+				gTxt('db_doesnt_exist', array(
+					'{dbname}' => strong($ddb)
+				))
+			));
 		}
 
 		// On 4.1 or greater use utf8-tables
@@ -210,11 +227,15 @@ eod;
 			} else $carry['dbcharset'] = "latin1";
 		} else $carry['dbcharset'] = "latin1";
 
-		echo graf(str_replace("{dbname}", strong($ddb), gTxt('using_db')).' ('. $carry['dbcharset'] .')' ),
+		echo graf(
+			gTxt('using_db', array('{dbname}' => strong($ddb)))
+		).' ('. $carry['dbcharset'] .')' ),
 		
-		graf(strong(gTxt('before_you_proceed')).', '. str_replace('{txpath}', txpath, gTxt('create_config'))),
+		graf(
+			strong(gTxt('before_you_proceed')).', '.gTxt('create_config', array('{txpath}' => txpath))
+		),
 
-		'<textarea style="width:400px;height:200px" name="config" rows="1" cols="1">',
+		'<textarea name="config" cols="40" rows="5" style="width: 400px; height: 200px">',
 		makeConfig($carry),
 		'</textarea>',
 		'<form action="'.$GLOBALS['rel_siteurl'].'/textpattern/setup/index.php" method="post">',
@@ -232,9 +253,15 @@ eod;
 		$GLOBALS['textarray'] = setup_load_lang($lang);
 
 		@include txpath.'/config.php';
+
 		if (!isset($txpcfg) || ($txpcfg['db'] != $carry['ddb']) || ($txpcfg['txpath'] != $carry['txpath']))
 		{
-			echo graf(strong(gTxt('before_you_proceed')).', '. str_replace('{txpath}', txpath, gTxt('create_config'))),
+			echo graf(
+				strong(gTxt('before_you_proceed')).', '.
+				gTxt('create_config', array(
+					'{txpath}' => txpath
+				))
+			),
 	
 			'<textarea style="width:400px;height:200px" name="config" rows="1" cols="1">',
 			makeConfig($carry),
@@ -359,21 +386,38 @@ eod;
 	}
 
 // -------------------------------------------------------------
+
 	function fbCreate() 
 	{
-		if ($GLOBALS['txp_install_successful']===false)
-			return
-			'<div width="450" valign="top" style="margin-left:auto;margin-right:auto">'.
-			graf(str_replace('{num}',$GLOBALS['txp_err_count'],gTxt('errors_during_install')),' style="margin-top:3em"').
-			'</div>';
+		if ($GLOBALS['txp_install_successful'] === false)
+		{
+			return '<div width="450" valign="top" style="margin-right: auto; margin-left: auto;">'.
+				graf(
+					gTxt('errors_during_install', array(
+						'{num}' => $GLOBALS['txp_err_count']
+					))
+				,' style="margin-top: 3em;"').
+				'</div>';
+		}
 
 		else
-			return 
-			'<div width="450" valign="top" style="margin-left:auto;margin-right:auto">'.
-			graf(gTxt('that_went_well'),' style="margin-top:3em"').
-			graf(str_replace('"index.php"','"'.$GLOBALS['rel_siteurl'].'/textpattern/index.php"',gTxt('you_can_access'))).
+		{
+			return '<div width="450" valign="top" style="margin-right: auto; margin-left: auto;">'.
+
+			graf(
+				gTxt('that_went_well')
+			,' style="margin-top:3em"').
+
+			graf(
+				gTxt('you_can_access', array(
+					'index.php' => $GLOBALS['rel_siteurl'].'/textpattern/index.php',
+				))
+			).
+
 			graf(gTxt('thanks_for_interest')).
+
 			'</div>';
+		}
 	}
 
 // -------------------------------------------------------------

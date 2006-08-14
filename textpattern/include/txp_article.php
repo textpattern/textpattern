@@ -876,16 +876,25 @@ if (!empty($event) and $event == 'article') {
 	}
 
 // -------------------------------------------------------------
+
 	function check_url_title($url_title)
 	{
 		// Check for blank or previously used identical url-titles
-		If (strlen($url_title) === 0) {
-			return ' '.gTxt("url_title_is_blank");
-		} else {
-			$url_title_count = safe_count("textpattern", "url_title = '".$url_title."'");
-			if ($url_title_count > 1)
-				return str_replace('{count}',$url_title_count,' '.gTxt("url_title_is_multiple"));
+		if (strlen($url_title) === 0)
+		{
+			return gTxt('url_title_is_blank');
 		}
+
+		else
+		{
+			$url_title_count = safe_count('textpattern', "url_title = '$url_title'");
+
+			if ($url_title_count > 1)
+			{
+				return gTxt('url_title_is_multiple', array('{count}' => $url_title_count));
+			}
+		}
+
 		return '';
 	}
 // -------------------------------------------------------------

@@ -49,7 +49,7 @@ $LastChangedRevision$
 		if (!is_dir($file_base_path) or !is_writeable($file_base_path))
 		{
 			echo graf(
-				str_replace('{filedir}', $file_base_path, gTxt('file_dir_not_writeable'))
+				gTxt('file_dir_not_writeable', array('{filedir}' => $file_base_path))
 			, ' id="warning"');
 		}
 

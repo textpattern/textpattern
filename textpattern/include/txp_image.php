@@ -46,7 +46,7 @@ $LastChangedRevision$
 		if (!is_dir(IMPATH) or !is_writeable(IMPATH))
 		{
 			echo graf(
-				str_replace('{imgdir}', IMPATH, gTxt('img_dir_not_writeable'))
+				gTxt('img_dir_not_writeable', array('{imgdir}' => IMPATH))
 			,' id="warning"');
 		}
 

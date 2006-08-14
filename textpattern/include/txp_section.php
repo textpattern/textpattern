@@ -36,7 +36,7 @@ $LastChangedRevision$
 
 		$out[] = 
 			tr(
-				tdcs(strong(gTxt('section_head')).popHelp('section_category'),3)
+				tdcs(strong(gTxt('section_head')).sp.popHelp('section_category'),3)
 			);
 		$out[] = 
 			tr(tdcs(form(
@@ -55,11 +55,11 @@ $LastChangedRevision$
 
 						tr(fLabelCell(gTxt('uses_page').':') . 
 							td(selectInput('page',$pageslist,$defrow['page']).
-								popHelp('section_uses_page'),'','noline')).
+								sp.popHelp('section_uses_page'),'','noline')).
 		
 						tr(fLabelCell(gTxt('uses_style').':') . 
 							td(selectInput('css',$styleslist,$defrow['css']).
-								popHelp('section_uses_css'),'','noline')).
+								sp.popHelp('section_uses_css'),'','noline')).
 						tr(tda(fInput('submit', '', gTxt('save_button'),'smallerbox'),' colspan="2" style="border:0"')).
 
 					endTable()
@@ -87,27 +87,27 @@ $LastChangedRevision$
 		
 					fLabelCell(gTxt('uses_page').':') . 
 						td(selectInput('page',$pageslist,$page).
-							popHelp('section_uses_page'),'','noline'),
+							sp.popHelp('section_uses_page'),'','noline'),
 		
 					fLabelCell(gTxt('uses_style').':') . 
 						td(selectInput('css',$styleslist,$css).
-							popHelp('section_uses_css'),'','noline'),
+							sp.popHelp('section_uses_css'),'','noline'),
 		
 					fLabelCell(gTxt('selected_by_default').'?') . 
 						td(yesnoradio('is_default',$is_default).
-							popHelp('section_is_default'),'','noline'),
+							sp.popHelp('section_is_default'),'','noline'),
 		
 					fLabelCell(gTxt('on_front_page').'?') . 
 						td(yesnoradio('on_frontpage',$on_frontpage).
-							popHelp('section_on_frontpage'),'','noline'),
+							sp.popHelp('section_on_frontpage'),'','noline'),
 		
 					fLabelCell(gTxt('syndicate').'?') . 
 						td(yesnoradio('in_rss',$in_rss).
-							popHelp('section_syndicate'),'','noline'),
+							sp.popHelp('section_syndicate'),'','noline'),
 		
 					fLabelCell(gTxt('include_in_search').'?') . 
 						td(yesnoradio('searchable',$searchable).
-							popHelp('section_searchable'),'','noline'),
+							sp.popHelp('section_searchable'),'','noline'),
 						
 					tda(fInput('submit', '', gTxt('save_button'),'smallerbox'),' colspan="2" style="border:0"')
 				).
@@ -156,7 +156,7 @@ $LastChangedRevision$
 				{
 					update_lastmod();
 
-					$message = str_replace('{section}', $name, gTxt('section_created'));
+					$message = gTxt('section_created', array('{section}' => $name));
 
 					sec_section_list($message);
 				}
@@ -170,7 +170,7 @@ $LastChangedRevision$
 
 		else
 		{
-			$message = str_replace('{section}', $name, gTxt('section_name_already_exists'));
+			$message = gTxt('section_name_already_exists', array('{section}' => $name));
 
 			sec_section_list($message);
 		}
@@ -205,7 +205,7 @@ $LastChangedRevision$
 		{
 			if (safe_field('name', 'txp_section', "name='".doSlash($name)."'"))
 			{
-				$message = str_replace('{section}', $name, gTxt('section_name_already_exists'));
+				$message = gTxt('section_name_already_exists', array('{section}' => $name));
 
 				sec_section_list($message);
 				return;
@@ -243,7 +243,7 @@ $LastChangedRevision$
 			update_lastmod();
 		}
 
-		$message = str_replace('{section}', $name, gTxt('section_updated'));
+		$message = gTxt('section_updated', array('{section}' => $name));
 
 		sec_section_list($message);
 	}
@@ -256,7 +256,7 @@ $LastChangedRevision$
 
 		safe_delete('txp_section', "name = '$name'");
 
-		$message = str_replace('{section}', $name, gTxt('section_deleted'));
+		$message = gTxt('section_deleted', array('{section}' => $name));
 
 		sec_section_list($message);
 	}

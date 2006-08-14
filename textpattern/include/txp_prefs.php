@@ -555,7 +555,10 @@ $LastChangedRevision$
 		}
 		echo endTable();
 
-		$install_langfile = str_replace( '{url}', strong('<a href="'.RPC_SERVER.'/lang/">'.RPC_SERVER.'/lang/</a>'), gTxt('install_langfile'));
+		$install_langfile = gTxt('install_langfile', array(
+			'{url}' => strong('<a href="'.RPC_SERVER.'/lang/">'.RPC_SERVER.'/lang/</a>')
+		));
+
 		if ( $install_langfile == 'install_langfile')
 			$install_langfile = 'To install new languages from file you can download them from <b><a href="'.RPC_SERVER.'/lang/">'.RPC_SERVER.'/lang/</a></b> and place them inside your ./textpattern/lang/ directory.';
 		echo tag( $install_langfile ,'p',' style="text-align:center;width:50%;margin: 2em auto"' );
@@ -581,7 +584,11 @@ $LastChangedRevision$
 					$textarray = load_lang(LANG);
 				return list_languages(gTxt($lang_code).sp.gTxt('updated'));
 			}else{
-				$install_langfile = str_replace( '{url}', strong('<a href="'.RPC_SERVER.'/lang/">'.RPC_SERVER.'/lang/</a>'), gTxt('install_langfile'));
+
+				$install_langfile = gTxt('install_langfile', array(
+					'{url}' => strong('<a href="'.RPC_SERVER.'/lang/">'.RPC_SERVER.'/lang/</a>')
+				));
+
 				if ( $install_langfile == 'install_langfile')
 					$install_langfile = 'To install new languages from file you can download them from <b><a href="'.RPC_SERVER.'/lang/">'.RPC_SERVER.'/lang/</a></b> and place them inside your ./textpattern/lang/ directory.';
 				pagetop(gTxt('installing_language'));
