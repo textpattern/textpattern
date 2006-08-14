@@ -220,7 +220,8 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_lang` (
   `data` tinytext,
   `lastmod` timestamp,
   PRIMARY KEY  (`id`),
-  UNIQUE KEY `lang` (`lang`,`name`)
+  UNIQUE KEY `lang` (`lang`,`name`),
+  KEY `lang_2` (`lang`,`event`)
 ) $tabletype DELAY_KEY_WRITE=1 AUTO_INCREMENT=1 ";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_link` (
