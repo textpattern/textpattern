@@ -20,6 +20,7 @@ $LastChangedRevision: 711 $
 		safe_insert('txp_prefs', "prefs_id = 1, name = 'log_list_pageby', val = '25', type = 2, event = 'publish'");
 	}
 
+	// turn on lastmod handling, and reset the lastmod date
 	safe_update('txp_prefs', "val='1'", "name='send_lastmod' and prefs_id='1'");
-
+	update_lastmod();
 ?>
