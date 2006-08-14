@@ -38,6 +38,7 @@ $LastChangedRevision$
 			 visible = '$visible'",
 			"discussid = $discussid");
 		update_comments_count($parentid);
+		update_lastmod();
 		discuss_list(messenger('message',$discussid,'updated'));
 	}
 
@@ -606,6 +607,7 @@ $LastChangedRevision$
 					'unmoderated'=> gTxt('comment').' '.strong($done).' '. gTxt('marked_as').' '.gTxt('unmoderated'),
 					'visible'	=>  gTxt('comment').' '.strong($done).' '. gTxt('marked_as').' '.gTxt('visible'),
 				);
+				update_lastmod();
 				return discuss_list($messages[$method]);
 			}
 		}
