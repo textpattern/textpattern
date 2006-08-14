@@ -106,7 +106,7 @@ $LastChangedRevision$
 		if ($rs)
 		{
 			admin(
-				str_replace('{email}', $new_email, gTxt('email_changed'))
+				gTxt('email_changed', array('{email}' => $new_email))
 			);
 		}
 	}
@@ -135,7 +135,7 @@ $LastChangedRevision$
 		if ($rs)
 		{
 			admin(
-				str_replace('{author}', $RealName, gTxt('author_updated'))
+				gTxt('author_updated', array('{author}' => $RealName))
 			);
 		}
 	}
@@ -166,7 +166,7 @@ $LastChangedRevision$
 
 				send_new_password($new_pass, $email, $txp_user);
 
-				$message .= str_replace('{email}', $email, gTxt('and_mailed_to'));
+				$message .= sp.gTxt('and_mailed_to').sp.$email;
 			}
 
 			else
@@ -207,7 +207,7 @@ $LastChangedRevision$
 				send_password($RealName, $name, $email, $password);
 
 				admin(
-					str_replace('{email}', $email, gTxt('password_sent_to'))
+					gTxt('password_sent_to').sp.$email
 				);
 
 				return;
@@ -243,12 +243,12 @@ $LastChangedRevision$
 
 		$message = gTxt('greeting').' '.$RealName.','.
 
-		"\r\n"."\r\n".str_replace('{sitename}', $sitename, gTxt('you_have_been_registered')).
+			"\r\n"."\r\n".gTxt('you_have_been_registered').' '.$sitename.
 
-		"\r\n"."\r\n".gTxt('your_login_is').' '.$name.
-		"\r\n".gTxt('your_password_is').' '.$password.
+			"\r\n"."\r\n".gTxt('your_login_is').': '.$name.
+			"\r\n".gTxt('your_password_is').': '.$password.
 
-		"\r\n"."\r\n".gTxt('log_in_at').' '.hu.'textpattern/index.php';
+			"\r\n"."\r\n".gTxt('log_in_at').': '.hu.'textpattern/index.php';
 
 		return txpMail($email, "[$sitename] ".gTxt('your_login_info'), $message);
 	}
@@ -263,9 +263,9 @@ $LastChangedRevision$
 
 		$message = gTxt('greeting').' '.$name.','.
 
-		"\r\n"."\r\n".gTxt('your_password_is').' '.$password.
+			"\r\n"."\r\n".gTxt('your_password_is').': '.$password.
 
-		"\r\n"."\r\n".gTxt('log_in_at').' '.hu.'textpattern/index.php';
+			"\r\n"."\r\n".gTxt('log_in_at').': '.hu.'textpattern/index.php';
 
 		return txpMail($email, "[$sitename] ".gTxt('your_new_password'), $message);
 	}
@@ -513,7 +513,7 @@ $LastChangedRevision$
 			if ($rs)
 			{
 				admin(
-					str_replace('{author}', $name, gTxt('author_deleted'))
+					gTxt('author_deleted', array('{author}' => $name))
 				);
 			}
 		}

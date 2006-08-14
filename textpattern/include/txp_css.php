@@ -272,14 +272,20 @@ $LastChangedRevision$
 	}
 	
 // -------------------------------------------------------------
-	function css_copy() 
+
+	function css_copy()
 	{
-		extract(doSlash(gpsa(array('oldname','newname'))));
-		$css = fetch('css','txp_css','name',$oldname);
-		$rs = safe_insert("txp_css", "css='$css',name='$newname'");
-		css_edit(messenger('css',$newname,'created'));
+		extract(doSlash(gpsa(array('oldname', 'newname'))));
+
+		$css = fetch('css', 'txp_css', 'name', $oldname);
+
+		$rs = safe_insert('txp_css', "css = '$css', name = '$newname'");
+
+		css_edit(
+			gTxt('css_created', array('{name}' => $newname))
+		);
 	}
-		
+
 // -------------------------------------------------------------
 
 	function css_save_posted() 
@@ -290,7 +296,7 @@ $LastChangedRevision$
 
 		safe_update('txp_css', "css = '$css'", "name = '$name'");
 
-		$message = gTxt('css_updated', array('{style}' => $name));
+		$message = gTxt('css_updated', array('{name}' => $name));
 
 		css_edit($message);
 	}
@@ -308,7 +314,7 @@ $LastChangedRevision$
 			{
 				safe_insert('txp_css', "name = '$newname', css = '$css'");
 
-				$message = gTxt('css_created', array('{style}' => $newname));
+				$message = gTxt('css_created', array('{name}' => $newname));
 			}
 
 			else
@@ -323,7 +329,7 @@ $LastChangedRevision$
 		{
 			safe_update('txp_css', "css = '$css'", "name = '$name'");
 
-			$message = gTxt('css_updated', array('{style}' => $name));
+			$message = gTxt('css_updated', array('{name}' => $name));
 
 			css_edit($message);
 		}
@@ -383,9 +389,20 @@ $LastChangedRevision$
 	function css_delete()
 	{
 		$name = ps('name');
-		if ($name!='default') {
-			safe_delete("txp_css","name = '$name'");
-			css_edit(messenger('css',$name,'deleted'));
-		} else echo gTxt('cannot_delete_default_css').'.';
+
+		if ($name != 'default')
+		{
+			safe_delete('txp_css', "name = '$name'");
+
+			css_edit(
+				gTxt('css_deleted', array('{name}' => $name))
+			);
+		}
+
+		else
+		{
+			echo gTxt('cannot_delete_default_css').'.';
+		}
 	}
+
 ?>
