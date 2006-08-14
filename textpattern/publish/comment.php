@@ -332,7 +332,7 @@ $LastChangedRevision$
 				if ($rs) {
 					safe_update("txp_discuss_nonce", "used='1'", "nonce='".doslash($nonce)."'");
 					if ($prefs['comment_means_site_updated']) {
-						safe_update("txp_prefs", "val=now()", "name='lastmod'");
+						update_lastmod();
 					}
 					if ($comments_sendmail) {
 						mail_comment($message,$name,$email,$web,$parentid, $rs);
