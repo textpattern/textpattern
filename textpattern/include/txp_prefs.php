@@ -34,9 +34,6 @@ $LastChangedRevision$
 
 		$post = doSlash(stripPost());
 
-		if (empty($post['tempdir']))
-			$post['tempdir'] = doSlash(find_temp_dir());
-
 		foreach($prefnames as $prefname) {
 			if (isset($post[$prefname])) {
  				if ($prefname == 'lastmod') {
@@ -398,6 +395,9 @@ $LastChangedRevision$
 		$prefnames = safe_column("name", "txp_prefs", "prefs_id='1' AND type='1'");
 		
 		$post = doSlash(stripPost());
+
+		if (empty($post['tempdir']))
+			$post['tempdir'] = doSlash(find_temp_dir());
 
 		if (!empty($post['file_max_upload_size']))
 			$post['file_max_upload_size'] = real_max_upload_size($post['file_max_upload_size']);
