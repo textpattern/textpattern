@@ -23,4 +23,14 @@ $LastChangedRevision: 711 $
 	// turn on lastmod handling, and reset the lastmod date
 	safe_update('txp_prefs', "val='1'", "name='send_lastmod' and prefs_id='1'");
 	update_lastmod();
+
+	// speed up article queries
+   $has_ss_idx = 0;
+   $rs = getRows('show index from `'.PFX.'textpattern`');
+   foreach ($rs as $row)
+      if ($row['Key_name'] == 'section_status_idx')
+         $has_ss_idx = 1;
+   if (!$has_ss_idx)
+      safe_query('alter ignore table `'.PFX.'textpattern` add index section_status_idx (Section,Status)');
+
 ?>
