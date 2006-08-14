@@ -229,7 +229,7 @@ eod;
 
 		echo graf(
 			gTxt('using_db', array('{dbname}' => strong($ddb)))
-		).' ('. $carry['dbcharset'] .')' ),
+		.' ('. $carry['dbcharset'] .')' ),
 		
 		graf(
 			strong(gTxt('before_you_proceed')).', '.gTxt('create_config', array('{txpath}' => txpath))
