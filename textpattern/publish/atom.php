@@ -249,5 +249,39 @@ $LastChangedRevision$
 	}
 
 
+// DEPRECATED FUNCTIONS
+// these are included only for backwards compatibility with older plugins
+// see the above code for more appropriate ways of handling feed content
+
+	function safe_hed($toUnicode) {
+		
+		if (version_compare(phpversion(), "5.0.0", ">=")) {
+			$str =  html_entity_decode($toUnicode, ENT_QUOTES, "UTF-8");
+		} else {
+			$trans_tbl = get_html_translation_table(HTML_ENTITIES);
+			foreach($trans_tbl as $k => $v) {
+				$ttr[$v] = utf8_encode($k);
+			}
+			$str = strtr($toUnicode, $ttr);
+		}
+		return $str;
+	}
+
+  function fixup_for_feed($toFeed, $permalink) {
+
+	  // fix relative urls
+	  $txt = str_replace('href="/','href="'.hu.'/',$toFeed);
+	  $txt = preg_replace("/href=\\\"#(.*)\"/","href=\"".$permalink."#\\1\"",$txt);
+	 // This was removed as entities shouldn't be stripped in Atom feeds
+	 // when the content type is html. Leaving it commented out as a reminder.
+	  //$txt = safe_hed($txt);
+
+		// encode and entify
+		$txt = preg_replace(array('/</','/>/',"/'/",'/"/'), array('&#60;','&#62;','&#039;','&#34;'), $txt);
+		$txt = preg_replace("/&(?![#0-9]+;)/i",'&amp;', $txt);
+	 return $txt;
+
+  }
+
 
 ?>
