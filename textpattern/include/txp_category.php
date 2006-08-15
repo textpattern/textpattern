@@ -137,11 +137,11 @@ if ($event == 'category') {
 
 
 // -------------------------------------------------------------
-	function cat_article_multiedit_form($area, $array) 
+	function cat_article_multiedit_form($area, $array)
 	{
 		$methods = array('delete'=>gTxt('delete'));
 		if ($array) {
-		return 
+		return
 		form(
 			join('',$array).
 			eInput('category').sInput('cat_category_multiedit').hInput('type',$area).
@@ -153,7 +153,7 @@ if ($event == 'category') {
 	}
 
 // -------------------------------------------------------------
-	function cat_category_multiedit() 
+	function cat_category_multiedit()
 	{
 		$type = ps('type');
 		$method = ps('edit_method');
@@ -161,7 +161,10 @@ if ($event == 'category') {
 		if ($things) {
 			foreach($things as $catid) {
 				if ($method == 'delete') {
+					$catname = safe_field('name', 'txp_category', "id='$catid'");
 					if (safe_delete('txp_category',"id=$catid")) {
+						if ($catname)
+							safe_update('txp_category', "parent='root'", "type='".doSlash($type)."' and parent='".doSlash($catname)."'");
 						$categories[] = $catid;
 					}
 				}
