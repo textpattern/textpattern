@@ -45,12 +45,10 @@ if (!empty($event) and $event == 'article') {
 		
 	switch(strtolower($step)) {
 		case "":         article_edit();    break;
-		case "list":     article_list();    break;
 		case "create":   article_edit();    break;
 		case "publish":  article_post();    break;
 		case "edit":     article_edit();    break;
 		case "save":     article_save();    break;
-		case "delete":   article_delete();
 	}
 }
 
@@ -734,14 +732,6 @@ if (!empty($event) and $event == 'article') {
 		return n.'<input type="text" name="'.$name.'" value="'.
 			date($datevar,$time+tz_offset())
 		.'" size="'.$size.'" maxlength="'.$size.'" class="edit" tabindex="'.$tab.'" title="'.gTxt('article_'.$name).'" />';
-	}
-
-//--------------------------------------------------------------
-	function article_delete()
-	{
-		$dID = ps('dID');
-		$rs = safe_delete("textpattern","ID=$dID");
-		if ($rs) article_list(messenger('article',$dID,'deleted'),1);
 	}
 
 //--------------------------------------------------------------
