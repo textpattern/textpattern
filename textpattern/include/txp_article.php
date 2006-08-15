@@ -306,7 +306,9 @@ if (!empty($event) and $event == 'article') {
 			$next_id = checkIfNeighbour('next',$sPosted);
 		}
 
-		pagetop($Title, $message);
+		$page_title = ($Title) ? $Title : gTxt('write');
+
+		pagetop($page_title, $message);
 
 		echo n.n.'<form name="article" method="post" action="index.php">';
 
