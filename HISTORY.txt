@@ -1,5 +1,30 @@
 Changes since 4.0.3:
 
+* RSS 2.0 support
+* RSS and Atom feed fixes and improvements
+* Many improvements to admin interface XHTML markup and CSS
+* Many subtle improvements to the admin UI
+* Better indexing for faster article list queries
+* New translations: Indonesian, Hebrew, Hungarian, Romanian
+* Improved handling of comma-separated values in tag attributes
+* article, article_custom tags: new 'sort' attribute
+* author, category, category1, category2 tags: can link to any section by name
+* Improved xhtml attributes on many tags (class, rel)
+* time and date tags: new attributes for overriding language, GMT
+* css, feed_link tags: easier generation of xhtml 'link' tags
+* New link tags: link_category, link_date, link_name, link_url
+* Navigation tag improvements (new attributes, improved xhtml output)
+* Warn if article or comment tags are used in the wrong context
+* Improved error checking and reporting
+* Stricter 404 checking (missing category, author, messy article ID)
+* Simplify and improve comment preview and input form tags
+* Improved article load/parse logic on individual article pages
+* Fix some IIS clean URL issues
+* Improved multi-edit support on admin pages
+* Deprecate old-style PHP tags
+* Don't lose your place in admin lists when returning from an edit
+* Extra diagnostic info and pre-flight tests
+* Better time zone handling
 * Remember and automatically reuse thumbnail size settings
 * Textile: fix inline class/style/lang
 * Warn when article and comment tags are used in the wrong place
@@ -15,6 +40,7 @@ Changes since 4.0.3:
 * allow multiple sections for if_article_section (like for if_section, if_category) (mary)
 * display link category's title, rather than name, in the links page. (mary)
 * extend article_image tag to optionally display the article image thumbnail. (mary)
+* Many minor bugfixes
 
 Changes since 4.0.2:
 
