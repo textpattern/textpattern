@@ -520,15 +520,17 @@ $LastChangedRevision$
 
 //-------------------------------------------------------------
 
-	function pref_text($item, $var, $id)
+	function pref_text($name, $val, $id = '')
 	{
-		$things = array(
+		$id = ($id) ? $id : $name;
+
+		$vals = array(
 			USE_TEXTILE          => gTxt('use_textile'),
 			CONVERT_LINEBREAKS   => gTxt('convert_linebreaks'),
 			LEAVE_TEXT_UNTOUCHED => gTxt('leave_text_untouched')
 		);
 
-		return selectInput($item, $things, $var, '', '', $id);
+		return selectInput($name, $vals, $val, '', '', $id);
 	}
 
 //-------------------------------------------------------------
