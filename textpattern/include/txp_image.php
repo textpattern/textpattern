@@ -459,7 +459,7 @@ $LastChangedRevision$
 							fInputCell('height', @$thumb_h, 1, 4, '', 'height').
 
 							fLabelCell(gTxt('keep_square_pixels'), '', 'crop') . 
-							tda(checkbox('crop', 1, @$thumb_crop), ' class="noline"').
+							tda(checkbox('crop', 1, @$thumb_crop, '', 'crop'), ' class="noline"').
 
 							tda(
 								fInput('submit', '', gTxt('Create'), 'smallerbox')

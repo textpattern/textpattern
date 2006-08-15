@@ -90,7 +90,7 @@ function doAuth() {
 				n.n.tr(
 					n.td().
 					td(
-						graf(checkbox('stay', 1, $stay, 3).'<label for="stay">'.gTxt('stay_logged_in').'</label>'.
+						graf(checkbox('stay', 1, $stay, 3, 'stay').'<label for="stay">'.gTxt('stay_logged_in').'</label>'.
 							sp.popHelp('remember_login'))
 					)
 				).

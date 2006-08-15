@@ -156,13 +156,13 @@ $LastChangedRevision$
 		{
 			if ($forget == 1)
 				destroyCookies(); // inhibit default remember
-			$checkbox = checkbox('forget',1,$forget).tag(gTxt('forget'),'label',' for="forget"');
+			$checkbox = checkbox('forget', 1, $forget, '', 'forget').tag(gTxt('forget'), 'label', ' for="forget"');
 		}
 		else
 		{
 			if ($remember != 1)
 				destroyCookies(); // inhibit default remember
-			$checkbox = checkbox('remember',1,$remember).tag(gTxt('remember'),'label',' for="remember"');
+			$checkbox = checkbox('remember', 1, $remember, '', 'remember').tag(gTxt('remember'), 'label', ' for="remember"');
 		}
 		$checkbox .= hInput('checkbox_type', $checkbox_type); 
 

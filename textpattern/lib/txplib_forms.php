@@ -169,9 +169,10 @@ $LastChangedRevision$
 	
 //-------------------------------------------------------------
 
-	function checkbox($name, $value, $checked = '1', $tabindex = '')
+	function checkbox($name, $value, $checked = '1', $tabindex = '', $id = '')
 	{
-		$o[] = '<input type="checkbox" id="'.$name.'" name="'.$name.'" value="'.$value.'"';
+		$o[] = '<input type="checkbox" name="'.$name.'" value="'.$value.'"';
+		$o[] = ($id) ? ' id="'.$id.'"' : '';
 		$o[] = ($checked == '1') ? ' checked="checked"' : '';
 		$o[] = ($tabindex) ? ' tabindex="'.$tabindex.'"' : '';
 		$o[] = ' class="checkbox" />';
@@ -181,9 +182,10 @@ $LastChangedRevision$
 
 //-------------------------------------------------------------
 
-	function checkbox2($name, $value, $tabindex = '')
+	function checkbox2($name, $value, $tabindex = '', $id = '')
 	{
 		$o[] = '<input type="checkbox" name="'.$name.'" value="1"';
+		$o[] = ($id) ? ' id="'.$id.'"' : '';
 		$o[] = ($value == '1') ? ' checked="checked"' : '';
 		$o[] = ($tabindex) ? ' tabindex="'.$tabindex.'"' : '';
 		$o[] = ' class="checkbox" />';
