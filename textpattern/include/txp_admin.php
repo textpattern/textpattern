@@ -135,7 +135,7 @@ $LastChangedRevision$
 		if ($rs)
 		{
 			admin(
-				gTxt('author_updated', array('{author}' => $RealName))
+				gTxt('author_updated', array('{name}' => $RealName))
 			);
 		}
 	}
@@ -513,7 +513,7 @@ $LastChangedRevision$
 			if ($rs)
 			{
 				admin(
-					gTxt('author_deleted', array('{author}' => $name))
+					gTxt('author_deleted', array('{name}' => $name))
 				);
 			}
 		}

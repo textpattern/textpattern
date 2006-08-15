@@ -156,7 +156,7 @@ $LastChangedRevision$
 				{
 					update_lastmod();
 
-					$message = gTxt('section_created', array('{section}' => $name));
+					$message = gTxt('section_created', array('{name}' => $name));
 
 					sec_section_list($message);
 				}
@@ -170,7 +170,7 @@ $LastChangedRevision$
 
 		else
 		{
-			$message = gTxt('section_name_already_exists', array('{section}' => $name));
+			$message = gTxt('section_name_already_exists', array('{name}' => $name));
 
 			sec_section_list($message);
 		}
@@ -205,7 +205,7 @@ $LastChangedRevision$
 		{
 			if (safe_field('name', 'txp_section', "name='".doSlash($name)."'"))
 			{
-				$message = gTxt('section_name_already_exists', array('{section}' => $name));
+				$message = gTxt('section_name_already_exists', array('{name}' => $name));
 
 				sec_section_list($message);
 				return;
@@ -243,7 +243,7 @@ $LastChangedRevision$
 			update_lastmod();
 		}
 
-		$message = gTxt('section_updated', array('{section}' => $name));
+		$message = gTxt('section_updated', array('{name}' => $name));
 
 		sec_section_list($message);
 	}
@@ -256,7 +256,7 @@ $LastChangedRevision$
 
 		safe_delete('txp_section', "name = '$name'");
 
-		$message = gTxt('section_deleted', array('{section}' => $name));
+		$message = gTxt('section_deleted', array('{name}' => $name));
 
 		sec_section_list($message);
 	}
