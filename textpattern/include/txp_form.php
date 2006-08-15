@@ -65,24 +65,37 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function form_multi_edit() 
+
+	function form_multi_edit()
 	{
 		global $essential_forms;
+
 		$method = ps('edit_method');
 		$forms = ps('selected_forms');
 
-		if (is_array($forms)) {
-			if ($method == 'delete') {
-				foreach($forms as $name) {
-					if (!in_array($name, $essential_forms) && form_delete($name)) {
+		if (is_array($forms))
+		{
+			if ($method == 'delete')
+			{
+				foreach ($forms as $name)
+				{
+					if (!in_array($name, $essential_forms) && form_delete($name))
+					{
 						$deleted[] = $name;
 					}
 				}
-			form_edit(messenger('form',join(', ',$deleted),'deleted'));
-			}
-		} else form_edit('nothing to delete');
-	}
 
+				$message = gTxt('forms_deleted', array('{list}' => join(', ', $deleted)));
+
+				form_edit($message);
+			}
+		}
+
+		else
+		{
+			form_edit();
+		}
+	}
 
 // -------------------------------------------------------------
 	function form_create() 
@@ -174,28 +187,47 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function form_save() 
+
+	function form_save()
 	{
-		global $vars, $step,$essential_forms;
+		global $vars, $step, $essential_forms;
+
 		extract(doSlash(gpsa($vars)));
-		if (!$name) {
+
+		if (!$name)
+		{
 			$step = 'form_create';
-			form_edit();
-		} elseif ($savenew) {
-			if (safe_insert("txp_form", "Form='$Form', type='$type', name='$name'")) {
-				update_lastmod();
-				form_edit(messenger('form',$name,'created'));
-			} else form_edit(messenger('form',$name,'already_exists'));
-		} else {
-			safe_update(
-				"txp_form", 
-				"Form='$Form',type='$type'". 
-					((!in_array($name, $essential_forms)) ? ",name='$name'" : ''),
-				"name='$oldname'"
-			);
-			update_lastmod();
-			form_edit(messenger('form',$name,'updated'));		
+
+			return form_edit();
 		}
+
+		if ($savenew)
+		{
+			$exists = safe_field('name', 'txp_form', "name = '$name'");
+
+			if ($exists)
+			{
+				$message = gTxt('form_already_exists', array('{name}' => $name));
+
+				return form_edit($message);
+			}
+
+			safe_insert('txp_form', "Form = '$Form', type = '$type', name = '$name'");
+
+			update_lastmod();
+
+			$message = gTxt('form_created', array('{name}' => $name));
+
+			return form_edit($message);
+		}
+
+		safe_update('txp_form', "Form = '$Form', type = '$type', name = '$name'", "name = '$oldname'");
+
+		update_lastmod();
+
+		$message = gTxt('form_updated', array('{name}' => $name));
+
+		form_edit($message);
 	}
 
 // -------------------------------------------------------------

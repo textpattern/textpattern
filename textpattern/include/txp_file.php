@@ -465,11 +465,19 @@ $LastChangedRevision$
 					// clean up file
 				} else {
 					file_set_perm($newpath);
-					file_edit(messenger('file',$name,'uploaded'),$id);
+
+					$message = gTxt('file_uploaded', array('{name}' => $name));
+
+					file_edit($message, $id);
 				}
 			}
-		} else {
-			file_list(messenger(gTxt('file'),$name,gTxt('already_exists')));
+		}
+
+		else
+		{
+			$message = gTxt('file_already_exists', array('{name}' => $name));
+
+			file_list($message);
 		}
 	}
 
@@ -518,7 +526,10 @@ $LastChangedRevision$
 				unlink($file);				
 			} else {
 				file_set_perm($newpath);
-				file_edit(messenger('file',$name,'uploaded'),$id);
+
+				$message = gTxt('file_uploaded', array('{name}' => $name));
+
+				file_edit($message, $id);
 				// clean up old
 				if (is_file($newpath.'.tmp'))
 					unlink($newpath.'.tmp');
@@ -543,11 +554,15 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
+
 	function file_save() 
 	{
 		global $file_base_path;
-		extract(doSlash(gpsa(array('id','filename','category','description'))));
-		
+
+		extract(doSlash(gpsa(array('id', 'filename', 'category', 'description'))));
+
+		$id = intval($id);
+
 		$permissions = "";
 		if (isset($_GET['perms'])) {
 			$permissions =  urldecode($_GET['perms']);
@@ -563,66 +578,97 @@ $LastChangedRevision$
 		
 		$old_filename = fetch('filename','txp_file','id','$id');
 		
-		if ($old_filename != false && strcmp($old_filename,$filename)!=0) {
+		if ($old_filename != false && strcmp($old_filename, $filename) != 0)
+		{
 			$old_path = build_file_path($file_base_path,$old_filename);
 			$new_path = build_file_path($file_base_path,$filename);
-			
-			if (file_exists($old_path) && shift_uploaded_file($old_path,$new_path) === false) {
-				file_list(messenger("file",$filename,"could not be renamed"));
-				return;
-			} else {
+
+			if (file_exists($old_path) && shift_uploaded_file($old_path, $new_path) === false)
+			{
+				$message = gTxt('file_cannot_rename', array('{name}' => $filename));
+
+				return file_list($message);
+			}
+
+			else
+			{
 				file_set_perm($new_path);
 			}
 		}
-		
-		$rs = safe_update(
-			"txp_file",
-			"filename = '$filename',
+
+		$rs = safe_update('txp_file', "
+			filename = '$filename',
 			category = '$category',
 			permissions = '$perms',
-			description = '$description'",
-			"id = '$id'"
-		);
-		
-		if (!$rs) {
+			description = '$description'
+		", "id = $id");
+
+		if (!$rs)
+		{
 			// update failed, rollback name
-			if (shift_uploaded_file($new_path,$old_path) === false) {
-				file_list(messenger("file",$filename,"has become unsyned with database. Manually fix file name."));
-				return;
-			} else {
-				file_list(messenger(gTxt('file'),$filename,"was not updated"));
-				return;
+			if (shift_uploaded_file($new_path, $old_path) === false)
+			{
+				$message = gTxt('file_unsynchronized', array('{name}' => $filename));
+
+				return file_list($message);
+			}
+
+			else
+			{
+				$message = gTxt('file_not_updated', array('{name}' => $filename));
+
+				return file_list($message);
 			}
 		}
-		
-		file_list(messenger(gTxt('file'),$filename,"updated"));
+
+		$message = gTxt('file_updated', array('{name}' => $filename));
+
+		file_list($message);
 	}
 
 // -------------------------------------------------------------
-	function file_delete() 
+
+	function file_delete()
 	{
-		global $txpcfg,$file_base_path;
+		global $txpcfg, $file_base_path;
+
 		extract($txpcfg);
-		$id = ps('id');
-		
-		$rs = safe_row("*", "txp_file", "id='$id'");
-		if ($rs) {
+
+		$id = intval(ps('id'));
+
+		$rs = safe_row('*', 'txp_file', "id = $id");
+
+		if ($rs)
+		{
 			extract($rs);
-			
-			$filepath = build_file_path($file_base_path,$filename);
-			
-			$rsd = safe_delete("txp_file","id='$id'");
+
+			$filepath = build_file_path($file_base_path, $filename);
+
+			$rsd = safe_delete('txp_file', "id = $id");
 			$ul = false;
+
 			if ($rsd && is_file($filepath))
+			{
 				$ul = unlink($filepath);
-			if ($rsd && $ul) {
-				file_list(messenger(gTxt('file'),$filename,gTxt('deleted')));
-				return;
-			} else {
-				file_list(messenger(gTxt('file_delete_failed'),$filename,''));
 			}
-		} else 
-			file_list(messenger(gTxt('file_not_found'),$filename,''));
+
+			if ($rsd && $ul)
+			{
+				$message = gTxt('file_deleted', array('{name}' => $filename));
+
+				return file_list($message);
+			}
+
+			else
+			{
+				file_list(messenger(gTxt('file_delete_failed'), $filename, ''));
+			}
+		}
+
+		else
+		{
+			file_list(messenger(gTxt('file_not_found'), $filename, ''));
+		}
 	}
 
 // -------------------------------------------------------------

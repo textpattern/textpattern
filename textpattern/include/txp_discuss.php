@@ -39,7 +39,10 @@ $LastChangedRevision$
 			"discussid = $discussid");
 		update_comments_count($parentid);
 		update_lastmod();
-		discuss_list(messenger('message',$discussid,'updated'));
+
+		$message = gTxt('comment_updated', array('{id}' => $discussid));
+
+		discuss_list($message);
 	}
 
 //-------------------------------------------------------------
@@ -417,40 +420,59 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
+
 	function ipban_add() 
 	{
-		extract(doSlash(gpsa(array('ip','name','discussid'))));
-		
-		if (!$ip) exit(ipban_list(gTxt("cant_ban_blank_ip")));
-		
-		$chk = fetch('ip','txp_discuss_ipban','ip',$ip);
-		
-		if (!$chk) {
-			$rs = safe_insert("txp_discuss_ipban",
-				"ip = '$ip',
-				 name_used = '$name',
-				 banned_on_message = '$discussid',
-				 date_banned = now()
-			");
-			// hide all messages from that IP also
-			if ($rs)
-				safe_update('txp_discuss',
-					"visible=".SPAM,
-					"ip='".doSlash($ip)."'"
-				);
-			if ($rs) ipban_list(messenger('ip',$ip,'banned'));
-		} else ipban_list(messenger('ip',$ip,'already_banned'));
-		
+		extract(doSlash(gpsa(array('ip', 'name', 'discussid'))));
+
+		if (!$ip)
+		{
+			return ipban_list(gTxt('cant_ban_blank_ip'));
+		}
+
+		$ban_exists = fetch('ip', 'txp_discuss_ipban', 'ip', $ip);
+
+		if ($ban_exists)
+		{
+			$message = gTxt('ip_already_banned', array('{ip}' => $ip));
+
+			return ipban_list($message);
+		}
+
+		$rs = safe_insert('txp_discuss_ipban', "
+			ip = '$ip', 
+			name_used = '$name', 
+			banned_on_message = '$discussid', 
+			date_banned = now()
+		");
+
+		// hide all messages from that IP also
+		if ($rs)
+		{
+			safe_update('txp_discuss', "visible = ".SPAM, "ip = '$ip'");
+
+			$message = gTxt('ip_banned', array('{ip}' => $ip));
+
+			return ipban_list($message);
+		}
+
+		ipban_list();
 	}
 
 // -------------------------------------------------------------
-	function ipban_unban() 
+
+	function ipban_unban()
 	{
-		$ip = gps('ip');
-		
-		$rs = safe_delete("txp_discuss_ipban","ip='$ip'");
-		
-		if($rs) ipban_list(messenger('ip',$ip,'unbanned'));
+		$ip = doSlash(gps('ip'));
+
+		$rs = safe_delete('txp_discuss_ipban', "ip = '$ip'");
+
+		if ($rs)
+		{
+			$message = gTxt('ip_ban_removed', array('{ip}' => $ip));
+
+			ipban_list($message);
+		}
 	}
 
 // -------------------------------------------------------------
@@ -599,20 +621,25 @@ $LastChangedRevision$
 
 			$done = join(', ', $done);
 
-			if(!empty($done)) {
+			if ($done)
+			{
 				// might as well clean up all comment counts while we're here.
 				clean_comment_counts($parentids);
+
 				$messages = array(
-					'delete'	=> messenger('comment',$done,'deleted'),
-					'ban'		=> messenger('comment',$done,'banned'),
-					'spam'		=>  gTxt('comment').' '.strong($done).' '. gTxt('marked_as').' '.gTxt('spam'),
-					'unmoderated'=> gTxt('comment').' '.strong($done).' '. gTxt('marked_as').' '.gTxt('unmoderated'),
-					'visible'	=>  gTxt('comment').' '.strong($done).' '. gTxt('marked_as').' '.gTxt('visible'),
+					'delete'			=> gTxt('comments_deleted', array('{list}' => $done)),
+					'ban'					=> gTxt('ips_banned', array('{list}' => $done)),
+					'spam'				=> gTxt('comments_marked_spam', array('{list}' => $done)),
+					'unmoderated' => gTxt('comments_marked_unmoderated', array('{list}' => $done)),
+					'visible'			=> gTxt('comments_marked_visible', array('{list}' => $done))
 				);
+
 				update_lastmod();
+
 				return discuss_list($messages[$method]);
 			}
 		}
+
 		return discuss_list();
 	}
 

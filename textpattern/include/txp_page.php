@@ -138,28 +138,52 @@ $LastChangedRevision$
 	}
 	
 //-------------------------------------------------------------
+
 	function page_delete()
 	{
-		if (ps('name')=='default') return page_edit();
 		$name = doSlash(ps('name'));
-		safe_delete("txp_page","name='$name'");
-		page_edit(messenger('page',$name,'deleted'));
+
+		if ($name == 'default')
+		{
+			return page_edit();
+		}
+
+		safe_delete('txp_page', "name = '$name'");
+
+		$message = gTxt('page_deleted', array('{name}' => $name));
+
+		page_edit($message);
 	}
 
 // -------------------------------------------------------------
-	function page_save() {
-		extract(doSlash(gpsa(array('name','html','newname','copy'))));
-		if($newname && $copy) {
-			safe_insert("txp_page", "name='$newname', user_html='$html'");
+
+	function page_save()
+	{
+		extract(doSlash(gpsa(array('name', 'html', 'newname', 'copy'))));
+
+		if ($newname && $copy)
+		{
+			safe_insert('txp_page', "name = '$newname', user_html = '$html'");
+
 			update_lastmod();
-			page_edit(messenger('page',$newname,'created'));
-		} else {
+
+			$message = gTxt('page_created', array('{name}' => $newname));
+
+			page_edit($message);
+		}
+
+		else
+		{
+			safe_update('txp_page', "user_html = '$html'", "name = '$name'");
+
 			update_lastmod();
-			safe_update("txp_page","user_html='$html'", "name='$name'");
-			page_edit(messenger('page',$name,'updated'));
+
+			$message = gTxt('page_updated', array('{name}' => $name));
+
+			page_edit($message);
 		}
 	}
-	
+
 //-------------------------------------------------------------
 	function taglinks($type) 
 	{
@@ -205,23 +229,26 @@ $LastChangedRevision$
 	}
 	
 // -------------------------------------------------------------
-	function div_save() 
+
+	function div_save()
 	{
-		extract(gpsa(array('html_array','html','start_pos','stop_pos','name')));
-		
+		extract(gpsa(array('html_array', 'html', 'start_pos', 'stop_pos', 'name')));
+
 		$html_array = unserialize($html_array);
-		
-		$repl_array = preg_split("/(<.*>)/U",$html,-1,PREG_SPLIT_DELIM_CAPTURE);
-		
-		array_splice($html_array,$start_pos,($stop_pos - $start_pos)+1,$repl_array);
-		
-		$html = doSlash(join('',$html_array));
-		
-		safe_update("txp_page","user_html='$html'", "name='$name'");
 
-		page_edit(messenger('page',$name,'updated'));
+		$repl_array = preg_split("/(<.*>)/U", $html, -1, PREG_SPLIT_DELIM_CAPTURE);
 
-#		print_r($html_array);
+		array_splice($html_array, $start_pos, ($stop_pos - $start_pos) + 1, $repl_array);
+
+		$html = doSlash(join('', $html_array));
+
+		safe_update('txp_page', "user_html = '$html'", "name = '$name'");
+
+		$message = gTxt('page_updated', array('{name}' => $name));
+
+		page_edit($message);
+
+		// print_r($html_array);
 	}
 
 ?>

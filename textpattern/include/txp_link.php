@@ -349,11 +349,14 @@ $LastChangedRevision$
 			description = '$description'"
 		);
 
-		if ($q) {
+		if ($q)
+		{
 			//update lastmod due to link feeds
 			update_lastmod();
-			
-			link_edit(messenger('link',$linkname,'created'));			
+
+			$message = gTxt('link_created', array('{name}' => $linkname));
+
+			link_edit($message);			
 		}
 	}
 
@@ -385,18 +388,15 @@ $LastChangedRevision$
 			description = '$description'",
 		   "id = '$id'"
 		);
-		if ($rs)  {
-			update_lastmod();
-			link_edit( messenger( 'link', doStrip($linkname), 'saved' ) );
-		}
-	}
 
-// -------------------------------------------------------------
-	function link_delete() 
-	{
-		$id = ps('id');
-		$rs = safe_delete("txp_link", "id=$id");
-		if ($rs) link_edit(messenger('link', '', 'deleted'));
+		if ($rs)
+		{
+			update_lastmod();
+
+			$message = gTxt('link_updated', array('{name}' => doStrip($linkname)));
+
+			link_edit($message);
+		}
 	}
 
 // -------------------------------------------------------------
@@ -418,10 +418,18 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
+
 	function link_multi_edit() 
 	{
-		$deleted = event_multi_edit('txp_link','id');
-		if(!empty($deleted)) return link_edit(messenger('link',$deleted,'deleted'));
+		$deleted = event_multi_edit('txp_link', 'id');
+
+		if ($deleted)
+		{
+			$message = gTxt('links_deleted', array('{list}' => $deleted));
+
+			return link_edit($message);
+		}
+
 		return link_edit();
 	}
 

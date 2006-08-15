@@ -93,12 +93,18 @@ $LastChangedRevision$
 	}
 	
 // -------------------------------------------------------------
+
 	function switch_status()
 	{
-		extract(gpsa(array('name','status')));
+		extract(gpsa(array('name', 'status')));
+
 		$change = ($status) ? 0 : 1;
-		safe_update("txp_plugin", "status=$change", "name='$name'");
-		plugin_list(messenger('plugin',$name,'updated'));
+
+		safe_update('txp_plugin', "status = $change", "name = '$name'");
+
+		$message = gTxt('plugin_updated', array('{name}' => $name));
+
+		plugin_list($message);
 	}
 
 // -------------------------------------------------------------
@@ -142,19 +148,29 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------  
+
 	function plugin_save()
 	{
-		extract(doSlash(gpsa(array('name','code'))));
-		safe_update("txp_plugin","code='$code'", "name='$name'");
-		plugin_list(messenger('plugin',$name,'saved'));
+		extract(doSlash(gpsa(array('name', 'code'))));
+
+		safe_update('txp_plugin', "code = '$code'", "name = '$name'");
+
+		$message = gTxt('plugin_saved', array('{name}' => $name));
+
+		plugin_list($message);
 	}
-  
+
 // -------------------------------------------------------------
+
 	function plugin_delete()
 	{
 		$name = doSlash(ps('name'));
-		safe_delete("txp_plugin","name='$name'");
-		plugin_list(messenger('plugin',$name,'deleted'));
+
+		safe_delete('txp_plugin', "name = '$name'");
+
+		$message = gTxt('plugin_deleted', array('{name}' => $name));
+
+		plugin_list($message);
 	}
 
 // -------------------------------------------------------------
@@ -186,8 +202,8 @@ $LastChangedRevision$
 			if (strncmp($plugin,"\x1F\x8B",2)===0)
 				$plugin = gzinflate(substr($plugin, 10));
 
-			if ($plugin = unserialize($plugin)) { 
-
+			if ($plugin = @unserialize($plugin))
+			{ 
 				if(is_array($plugin)){
 					extract(doSlash($plugin));
 					$source = '';
@@ -284,11 +300,27 @@ $LastChangedRevision$
 							code_md5     = '$md5'"
 						);
 					}
-					if ($rs and $code) {
-						plugin_list(messenger('plugin',$name,'installed'));
-					} else plugin_list('plugin install failed');
+
+					if ($rs and $code)
+					{
+						$message = gTxt('plugin_installed', array('{name}' => $name));
+
+						plugin_list($message);
+					}
+
+					else
+					{
+						$message = gTxt('plugin_install_failed', array('{name}' => $name));
+
+						plugin_list($message);
+					}
 				}
-			} else plugin_list(gTxt('bad_plugin_code'));
+			}
+
+			else
+			{
+				plugin_list(gTxt('bad_plugin_code'));
+			}
 		}
 	}
 

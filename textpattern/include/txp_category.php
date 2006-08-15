@@ -68,24 +68,28 @@ if ($event == 'category') {
 	}
 
 //--------------------------------------------------------------
-	function cat_parent_pop($name,$type,$id)
+
+	function cat_parent_pop($name, $type, $id)
 	{
-		if ($id) {
-			list($lft,$rgt) = array_values(safe_row('lft,rgt', 'txp_category', "id='".doSlash($id)."'"));
-			$rs = getTree("root",$type,"lft not between $lft and $rgt");
-		}
-		else {
-			$rs = getTree("root",$type);
+		if ($id)
+		{
+			list($lft, $rgt) = array_values(safe_row('lft, rgt', 'txp_category', "id = '".doSlash($id)."'"));
+
+			$rs = getTree('root', $type, "lft not between $lft and $rgt");
 		}
 
-		if ($rs) {
-			return ' '.treeSelectInput('parent', $rs, $name);
+		else
+		{
+			$rs = getTree('root', $type);
 		}
-		return 'no categories created';
+
+		if ($rs)
+		{
+			return treeSelectInput('parent', $rs, $name);
+		}
+
+		return gTxt('no_other_categories_exist');
 	}
-
-
-
 
 // -------------------------------------------------------------
 	function cat_link_list() 
@@ -170,7 +174,10 @@ if ($event == 'category') {
 				}
 			}
 			rebuild_tree('root', 1, $type);
-			cat_category_list(messenger($type.'_category',join(', ',$categories),'deleted'));
+
+			$message = gTxt($type.'_categories_deleted', array('{list}' => join(', ',$categories)));
+
+			cat_category_list($message);
 		}
 	}
 
@@ -293,36 +300,49 @@ if ($event == 'category') {
 			}
 		}
 
+		else
+		{
+			$out .= graf(gTxt('no_categories_exist'));
+		}
+
 		return $out;
 	}
 
 //-------------------------------------------------------------
-	function cat_event_category_create($evname)
+
+	function cat_event_category_create($event)
 	{
 		global $txpcfg;
 
-		$name = ps('name');
+		$name = stripSpace(ps('name'), 1);
+
+		if (!$name)
+		{
+			$message = gTxt($event.'_category_invalid', array('{name}' => $name));
+
+			return cat_category_list($message);
+		}
+
 		$title = doSlash($name);
-		$name = stripSpace($name, 1);
 
-		if (!trim($name))
-			return cat_category_list(messenger($evname.'_category',gps('name'),'invalid'));
+		$exists = safe_field('name', 'txp_category', "name = '$name' and type = '$event'");
 
-		$check = safe_field("name", "txp_category", "name='$name' and type='$evname'");
+		if ($exists)
+		{
+			$message = gTxt($event.'_category_already_exists', array('{name}' => $name));
 
-		if (!$check) {
-			if($name) {
-				$q =
-				safe_insert("txp_category", "name='$name', title='$title', type='$evname', parent='root'");
+			return cat_category_list($message);
+		}
 
-				rebuild_tree('root', 1, $evname);
+		$q = safe_insert('txp_category', "name = '$name', title = '$title', type = '$event', parent = 'root'");
 
-				if ($q) cat_category_list(messenger($evname.'_category',$name,'created'));
-			} else {
-				cat_category_list();
-			}
-		} else {
-			cat_category_list(messenger($evname.'_category',$name,'already_exists'));
+		if ($q)
+		{
+			rebuild_tree('root', 1, $event);
+
+			$message = gTxt($event.'_category_created', array('{name}' => $name));
+
+			cat_category_list($message);
 		}
 	}
 
@@ -348,42 +368,57 @@ if ($event == 'category') {
 	}
 
 //-------------------------------------------------------------
-	function cat_event_category_save($evname,$table_name)
-	{
 
+	function cat_event_category_save($event, $table_name)
+	{
 		global $txpcfg;
 
-		$in = psa(array('id','name','old_name','parent','title'));
-		extract(doSlash($in));
+		extract(doSlash(psa(array('id', 'name', 'old_name', 'parent', 'title'))));
 
-		$name = stripSpace($name,1);
-		
+		$name = stripSpace($name, 1);
+
 		// make sure the name is valid
-		if (!trim($name))
-			return cat_category_list(messenger($evname.'_category',gps('name'),'invalid'));
+		if (!$name)
+		{
+			$message = gTxt($event.'_category_invalid', array('{name}' => $name));
+
+			return cat_category_list($message);
+		}
 
 		// don't allow rename to clobber an existing category
-		$existing_id = safe_field('id', 'txp_category', "name='$name' and type='$evname'");
+		$existing_id = safe_field('id', 'txp_category', "name = '$name' and type = '$event'");
+
 		if ($existing_id and $existing_id != $id)
-			return cat_category_list(messenger($evname.'_category',$name,'already_exists'));
+		{
+			$message = gTxt($event.'_category_already_exists', array('{name}' => $name));
+
+			return cat_category_list($message);
+		}
 
 		$parent = ($parent) ? $parent : 'root';
-		if (safe_update("txp_category",
-					"name='$name',parent='$parent',title='$title'",
-					"id=$id"))
-			safe_update('txp_category', "parent='$name'", "parent='$old_name'");
 
-
-		rebuild_tree('root', 1, $evname);
-		if ($evname=='article'){
-			safe_update("textpattern","Category1='$name'", "Category1 = '$old_name'");
-			safe_update("textpattern","Category2='$name'", "Category2 = '$old_name'");
-		}else {
-			safe_update($table_name, "category='$name'", "category='$old_name'");
+		if (safe_update('txp_category', "name = '$name', parent = '$parent', title = '$title'", "id = $id"))
+		{
+			safe_update('txp_category', "parent = '$name'", "parent = '$old_name'");
 		}
-		cat_category_list(messenger($evname.'_category',stripslashes($name),'saved'));
-	}
 
+		rebuild_tree('root', 1, $event);
+
+		if ($event == 'article')
+		{
+			safe_update('textpattern', "Category1 = '$name'", "Category1 = '$old_name'");
+			safe_update('textpattern', "Category2 = '$name'", "Category2 = '$old_name'");
+		}
+
+		else
+		{
+			safe_update($table_name, "category = '$name'", "category = '$old_name'");
+		}
+
+		$message = gTxt($event.'_category_updated', array('{name}' => doStrip($name)));
+
+		cat_category_list($message);
+	}
 
 // --------------------------------------------------------------
 // Non image file upload. Have I mentioned how much I love this file refactoring?

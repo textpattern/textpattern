@@ -48,15 +48,15 @@ $LastChangedRevision$
 
 //-------------------------------------------------------------
 
-	function log_list() 
+	function log_list($message = '') 
 	{
-		pagetop(gTxt('visitor_logs'));
+		pagetop(gTxt('visitor_logs'), $message);
 
 		extract(get_prefs());
 
 		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
 
-		safe_delete('txp_log', "time < date_sub(now(), interval ".$expire_logs_after." day)");
+		safe_delete('txp_log', "time < date_sub(now(), interval $expire_logs_after day)");
 
 		$dir = ($dir == 'desc') ? 'desc' : 'asc';
 
@@ -283,9 +283,11 @@ $LastChangedRevision$
 	{
 		$deleted = event_multi_edit('txp_log', 'id');
 
-		if (!empty($deleted))
+		if ($deleted)
 		{
-			return log_list(messenger('log', $deleted, 'deleted'));
+			$message = gTxt('logs_deleted', array('{list}' => $deleted));
+
+			return log_list($message);
 		}
 
 		return log_list();
