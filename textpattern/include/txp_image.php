@@ -36,7 +36,7 @@ $LastChangedRevision$
 	{
 		global $txpcfg, $extensions, $img_dir, $file_max_upload_size;
 
-		pagetop(gTxt('image'), $message);
+		pagetop(gTxt('images'), $message);
 
 		extract($txpcfg);
 		extract(get_prefs());
@@ -252,7 +252,7 @@ $LastChangedRevision$
 		if (!$id) $id = gps('id');
 		global $txpcfg,$img_dir,$file_max_upload_size;
 
-		pagetop('image',$message);
+		pagetop(gTxt('edit_image'),$message);
 
 		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
 
@@ -384,7 +384,10 @@ $LastChangedRevision$
 			} else {
 				chmod($newpath,0755);
 				safe_update("txp_image", "thumbnail='1'", "id='$id'");
-				image_edit(messenger('image',$name,'uploaded'),$id);
+
+				$message = gTxt('image_uploaded', array('{name}' => $name));
+
+				image_edit($message, $id);
 			}
 		} else {
 			if ($file === false)
@@ -408,7 +411,10 @@ $LastChangedRevision$
 			caption  = '$caption'",
 			"id = '$id'"
 		);
-		image_list(messenger("image",$name,"updated"));
+
+		$message = gTxt('image_updated', array('{name}' => $name));
+
+		image_list($message);
 	}
 
 // -------------------------------------------------------------
@@ -427,7 +433,12 @@ $LastChangedRevision$
 				$ult = unlink(IMPATH.$id.'t'.$ext);
 			}
 
-			if ($rsd && $ul) image_list(messenger("image",$name,"deleted"));
+			if ($rsd && $ul)
+			{
+				$message = gTxt('image_deleted', array('{name}' => $name));
+
+				image_list($message);
+			}
 		} else image_list();
 	}
 
@@ -593,7 +604,10 @@ $LastChangedRevision$
 						if ( is_numeric ($prefs['thumb_h'])) $t->height = $prefs['thumb_h'];
 						$t->write();
 					}
-					return array(messenger('image',$name,'uploaded'),$id);
+
+					$message = gTxt('image_uploaded', array('{name}' => $name));
+
+					return array($message, $id);
 				}
 			}
 		} else {
