@@ -179,71 +179,71 @@ if ($event == 'category') {
 
 //-------------------------------------------------------------
 
-	function cat_event_category_list($evname) 
+	function cat_event_category_list($event) 
 	{
-		$o = hed(gTxt($evname.'_head').sp.popHelp($evname.'_category'), 3);
+		$out = n.n.hed(gTxt($event.'_head').sp.popHelp($event.'_category'), 3).
 
-		$o .= form(
-			fInput('text', 'name', '', 'edit', '', '', 20).
-			fInput('submit', '', gTxt('Create'), 'smallerbox').
-			eInput('category').
-			sInput('cat_'.$evname.'_create')
-		);
+			form(
+				fInput('text', 'name', '', 'edit', '', '', 20).
+				fInput('submit', '', gTxt('Create'), 'smallerbox').
+				eInput('category').
+				sInput('cat_'.$event.'_create')
+			);
 
-		$rs = getTree('root', $evname);
+		$rs = getTree('root', $event);
 
 		if ($rs)
 		{
 			$total_count = array();
 
-			// fetch count
-			switch ($evname)
+			if ($event == 'article')
 			{
-				case 'article':
-					$rs2 = safe_rows_start('Category1, count(*) as num', 'textpattern', "1 group by Category1");
-					$rs3 = safe_rows_start('Category2, count(*) as num', 'textpattern', "1 group by Category2");
+				$rs2 = safe_rows_start('Category1, count(*) as num', 'textpattern', "1 = 1 group by Category1");
 
-					while ($a = nextRow($rs2))
+				while ($a = nextRow($rs2))
+				{
+					$name = $a['Category1'];
+					$num = $a['num'];
+
+					$total_count[$name] = $num;
+				}
+
+				$rs2 = safe_rows_start('Category2, count(*) as num', 'textpattern', "1 = 1 group by Category2");
+
+				while ($a = nextRow($rs2))
+				{
+					$name = $a['Category2'];
+					$num = $a['num'];
+
+					if (isset($total_count[$name]))
 					{
-						$name = $a['Category1'];
-						$num = $a['num'];
+						$total_count[$name] += $num;
+					}
 
+					else
+					{
 						$total_count[$name] = $num;
 					}
-
-					while ($a = nextRow($rs3))
-					{
-						$name = $a['Category2'];
-						$num = $a['num'];
-
-						if (isset($total_count[$name]))
-						{
-							$total_count[$name] += $num;
-						}
-
-						else
-						{
-							$total_count[$name] = $num;
-						}
-					}
-
-				break;
-
-				case 'link':
-					$rs2 = safe_rows_start('category, count(*) as num', 'txp_link', "1 group by category");
-				break;
-
-				case 'image':
-					$rs2 = safe_rows_start('category, count(*) as num', 'txp_image', "1 group by category");
-				break;
-
-				case 'file':
-					$rs2 = safe_rows_start('category, count(*) as num', 'txp_file', "1 group by category");
-				break;
+				}
 			}
 
-			if ($rs2 and $evname != 'article')
+			else
 			{
+				switch ($event)
+				{
+					case 'link':
+						$rs2 = safe_rows_start('category, count(*) as num', 'txp_link', "1 group by category");
+					break;
+
+					case 'image':
+						$rs2 = safe_rows_start('category, count(*) as num', 'txp_image', "1 group by category");
+					break;
+
+					case 'file':
+						$rs2 = safe_rows_start('category, count(*) as num', 'txp_file', "1 group by category");
+					break;
+				}
+
 				while ($a = nextRow($rs2))
 				{
 					$name = $a['category'];
@@ -259,16 +259,8 @@ if ($event == 'category') {
 			{
 				extract($a);
 
-				if ($name == 'root')
-				{
-					continue;
-				}
-
-				$cbox = checkbox('selected[]', $id, 0);
-				$editlink = eLink('category', 'cat_'.$evname.'_edit', 'id', $id, $title);
-
 				// format count
-				switch ($evname)
+				switch ($event)
 				{
 					case 'article':
 						$url = 'index.php?event=list'.a.'search_method=categories'.a.'crit='.$name;
@@ -289,16 +281,19 @@ if ($event == 'category') {
 
 				$count = isset($total_count[$name]) ? '('.href($total_count[$name], $url).')' : '(0)';
 
-				$items[] = graf($cbox.sp.str_repeat(sp.sp, $level * 2) .$editlink.sp.small($count));
+				$items[] = graf(
+					checkbox('selected[]', $id, 0).sp.str_repeat(sp.sp, $level * 2).
+					eLink('category', 'cat_'.$event.'_edit', 'id', $id, $title).sp.small($count)
+				);
 			}
 
 			if ($items)
 			{
-				$o .= cat_article_multiedit_form($evname, $items);
+				$out .= cat_article_multiedit_form($event, $items);
 			}
 		}
 
-		return $o;
+		return $out;
 	}
 
 //-------------------------------------------------------------
