@@ -341,10 +341,10 @@ $LastChangedRevision$
 
 	if ($fail) {
 		foreach ($fail as $help => $message)
-			echo tr(tda(nl2br($message) . popHelp($help), ' style="color:red;"'));
+			echo tr(tda(nl2br($message) . popHelp($help), ' class="not-ok"'));
 	}
 	else {
-		echo tr(td(gTxt('all_checks_passed')));
+		echo tr(tda(gTxt('all_checks_passed'), ' class="ok"'));
 	}
 
 	echo tr(td(hed(gTxt('diagnostic_info'),1)));
