@@ -127,7 +127,7 @@ $LastChangedRevision$
 						sp.popHelp('form_articles'), 3, ' class="plain"').
 						'<div id="article-tags">'.popTagLinks('article').'</div>'.
 
-					hed('<a href="#" onclick="toggleDisplay(\'link-tags\'); return false;">'.gTxt('links').
+					hed('<a href="#" onclick="toggleDisplay(\'link-tags\'); return false;">'.gTxt('links').'</a>'.
 						sp.popHelp('form_place_link'), 3, ' class="plain"').
 						'<div id="link-tags" style="display: none;">'.popTagLinks('link').'</div>'.
 

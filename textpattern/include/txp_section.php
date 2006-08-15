@@ -25,101 +25,158 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function sec_section_list($message='') 
-	{
-		pagetop(gTxt('sections'),$message);
 
+	function sec_section_list($message = '')
+	{
 		global $wlink;
 
-		$pageslist = safe_column("name", "txp_page", "1=1");
-		$styleslist = safe_column("name", "txp_css", "1=1");
+		pagetop(gTxt('sections'), $message);
 
-		$out[] = 
-			tr(
-				tdcs(strong(gTxt('section_head')).sp.popHelp('section_category'),3)
-			);
-		$out[] = 
-			tr(tdcs(form(
-				fInput('text','name','','edit','','',10).
-				fInput('submit','',gTxt('Create'),'smallerbox').
-				eInput('section').
-				sInput('section_create')
-			),3));
+		$default = safe_row('page, css', 'txp_section', "name = 'default'");
 
-		$defrow = safe_row("page, css","txp_section","name like 'default'");
-		
-		$out[] =
-			form(
-				tr(td(gTxt('default')) . td(
-					'<table align="left" cellspacing="0" border="0" cellspacing="0">'.
+		$pages = safe_column('name', 'txp_page', "1 = 1");
+		$styles = safe_column('name', 'txp_css', "1 = 1");
 
-						tr(fLabelCell(gTxt('uses_page').':') . 
-							td(selectInput('page',$pageslist,$defrow['page']).
-								sp.popHelp('section_uses_page'),'','noline')).
-		
-						tr(fLabelCell(gTxt('uses_style').':') . 
-							td(selectInput('css',$styleslist,$defrow['css']).
-								sp.popHelp('section_uses_css'),'','noline')).
-						tr(tda(fInput('submit', '', gTxt('save_button'),'smallerbox'),' colspan="2" style="border:0"')).
+		echo n.n.startTable('list').
 
-					endTable()
-				). td()).
-				eInput('section').sInput('section_save').hInput('name','default')
-			);
+			n.n.tr(
+				tda(
+					n.n.hed(gTxt('section_head').sp.popHelp('section_category'), 1).
 
-		$rs = safe_rows_start("*", "txp_section", "name!='' order by name");
+					n.n.form(
+						fInput('text', 'name', '', 'edit', '', '', 10).
+						fInput('submit', '', gTxt('create'), 'smallerbox').
+						eInput('section').
+						sInput('section_create')
+					)
+				, ' colspan="3"')
+			).
 
-		if($rs) {
-			while ($a = nextRow($rs)) {
-				extract($a);
-				if($name=='default') continue;
+			n.n.tr(
+				td(gTxt('default')).
 
-				$deletelink = dLink('section','section_delete','name',
-					$name,'','type','section');
+				td(
+					form(
+						'<table>'.
 
-				$form = '<table align="left" cellspacing="0" border="0" cellspacing="0">'.
-				stackRows(
-					fLabelCell(gTxt('section_name').':') . 
-						fInputCell('name',$name,1,20),
-		
-					fLabelCell(gTxt('section_longtitle').':') . 
-						fInputCell('title',$title,1,20),
-		
-					fLabelCell(gTxt('uses_page').':') . 
-						td(selectInput('page',$pageslist,$page).
-							sp.popHelp('section_uses_page'),'','noline'),
-		
-					fLabelCell(gTxt('uses_style').':') . 
-						td(selectInput('css',$styleslist,$css).
-							sp.popHelp('section_uses_css'),'','noline'),
-		
-					fLabelCell(gTxt('selected_by_default').'?') . 
-						td(yesnoradio('is_default',$is_default).
-							sp.popHelp('section_is_default'),'','noline'),
-		
-					fLabelCell(gTxt('on_front_page').'?') . 
-						td(yesnoradio('on_frontpage',$on_frontpage).
-							sp.popHelp('section_on_frontpage'),'','noline'),
-		
-					fLabelCell(gTxt('syndicate').'?') . 
-						td(yesnoradio('in_rss',$in_rss).
-							sp.popHelp('section_syndicate'),'','noline'),
-		
-					fLabelCell(gTxt('include_in_search').'?') . 
-						td(yesnoradio('searchable',$searchable).
-							sp.popHelp('section_searchable'),'','noline'),
-						
-					tda(fInput('submit', '', gTxt('save_button'),'smallerbox'),' colspan="2" style="border:0"')
+						tr(
+							fLabelCell(gTxt('uses_page').':').
+							td(
+								selectInput('page', $pages, $default['page']).sp.popHelp('section_uses_page')
+							, '', 'noline')
+						).
+
+						tr(
+							fLabelCell(gTxt('uses_style').':') .
+							td(
+								selectInput('css', $styles, $default['css']).sp.popHelp('section_uses_css')
+							, '', 'noline')
+						).
+
+						tr(
+							tda(
+								fInput('submit', '', gTxt('save_button'), 'smallerbox').
+								eInput('section').
+								sInput('section_save').
+								hInput('name','default')
+							, ' colspan="2" class="noline"')
+						).
+
+						endTable()
+					)
 				).
-				endTable().
-				eInput('section').sInput('section_save').hInput('old_name',$name);
-				
-				$form = form($form);
 
-				$out[] = tr( td( $name ) . td( $form ) . td( $deletelink ) );
+				td()
+			);
+
+		$rs = safe_rows_start('*', 'txp_section', "name != 'default' order by name");
+
+		if ($rs)
+		{
+			while ($a = nextRow($rs))
+			{
+				extract($a);
+
+				echo n.n.tr(
+					n.td($name).
+
+					n.td(
+						form(
+							'<table>'.
+
+							n.n.tr(
+								fLabelCell(gTxt('section_name').':').
+								fInputCell('name', $name, 1, 20)
+							).
+
+							n.n.tr(
+								fLabelCell(gTxt('section_longtitle').':').
+								fInputCell('title', $title, 1, 20)
+							).
+
+							n.n.tr(
+								fLabelCell(gTxt('uses_page').':').
+								td(
+									selectInput('page', $pages, $page).sp.popHelp('section_uses_page')
+								, '', 'noline')
+							).
+
+							n.n.tr(
+								fLabelCell(gTxt('uses_style').':').
+								td(
+									selectInput('css', $styles, $css).sp.popHelp('section_uses_css')
+								, '', 'noline')
+							).
+
+							n.n.tr(
+								fLabelCell(gTxt('selected_by_default').'?').
+								td(
+									yesnoradio('is_default', $is_default, '', $name).sp.popHelp('section_is_default')
+								, '', 'noline')
+							).
+
+							n.n.tr(
+								fLabelCell(gTxt('on_front_page').'?').
+								td(
+									yesnoradio('on_frontpage', $on_frontpage, '', $name).sp.popHelp('section_on_frontpage')
+								, '', 'noline')
+							).
+
+							n.n.tr(
+								fLabelCell(gTxt('syndicate').'?') .
+								td(
+									yesnoradio('in_rss', $in_rss, '', $name).sp.popHelp('section_syndicate')
+								, '', 'noline')
+							).
+
+							n.n.tr(
+								fLabelCell(gTxt('include_in_search').'?').
+								td(
+									yesnoradio('searchable', $searchable, '', $name).sp.popHelp('section_searchable')
+								, '', 'noline')
+							).
+
+							n.n.tr(
+								tda(
+									fInput('submit', '', gTxt('save_button'), 'smallerbox').
+									eInput('section').
+									sInput('section_save').
+									hInput('old_name', $name)
+								, ' colspan="2" class="noline"')
+							).
+
+							endTable()
+						)
+					).
+
+					td(
+						dLink('section', 'section_delete', 'name', $name, '', 'type', 'section')
+					)
+				);
 			}
 		}
-		echo startTable('list') . join('',$out) . endTable();
+
+		echo n.n.endTable();
 	}
 
 //-------------------------------------------------------------

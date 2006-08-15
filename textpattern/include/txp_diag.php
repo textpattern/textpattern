@@ -353,7 +353,7 @@ $LastChangedRevision$
 	$fmt_date = '%Y-%m-%d %H:%M:%S';
 	
 	$out = array(
-		'<textarea style="width:500px;height:300px;" readonly="readonly">',
+		'<textarea cols="78" rows="18" readonly="readonly" style="width: 500px; height: 300px;">',
 
 		gTxt('txp_version').cs.txp_version.' ('.($rev ? 'r'.$rev : 'unknown revision').')'.n,
 
@@ -404,7 +404,7 @@ $LastChangedRevision$
 		: '',
 
 		(is_readable($path_to_site.'/.htaccess'))
-		?	n.gTxt('htaccess_contents').cs.n.ln.join('',file($path_to_site.'/.htaccess')).n.ln
+		?	n.gTxt('htaccess_contents').cs.n.ln.htmlspecialchars(join('',file($path_to_site.'/.htaccess'))).n.ln
 		:	''
 	);
 
