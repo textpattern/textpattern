@@ -269,7 +269,7 @@ $LastChangedRevision$
 					td($comments).
 
 					td(
-						fInput('checkbox', 'selected[]', $ID, '', '', '', '', '', $ID)
+						fInput('checkbox', 'selected[]', $ID)
 					)
 				);
 			}

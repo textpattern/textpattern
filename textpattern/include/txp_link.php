@@ -178,7 +178,7 @@ $LastChangedRevision$
 						td(
 							n.'<ul>'.
 							n.t.'<li>'.href(gTxt('edit'), $edit_url).'</li>'.
-							n.t.'<li>'.href(gTxt('view'), $url).'</a></li>'.
+							n.t.'<li>'.href(gTxt('view'), $url).'</li>'.
 							n.'</ul>'
 						, 35).
 

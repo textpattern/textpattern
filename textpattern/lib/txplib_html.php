@@ -458,13 +458,13 @@ $LastChangedRevision$
 		$page = str_replace('{page}', $select_page, gTxt('view_per_page'));
 
 		return form(
-			graf(
+			'<div style="margin: auto; text-align: center;">'.
 				$page.
 				eInput($event).
 				sInput($event.'_change_pageby').
-				'<noscript> <input type="submit" value="'.gTxt('go').'" class="smallerbox" /></noscript>'
-			)
-		, 'margin: auto; text-align: center;');
+				'<noscript> <input type="submit" value="'.gTxt('go').'" class="smallerbox" /></noscript>'.
+			'</div>'
+		);
 	}
 // -------------------------------------------------------------
 

@@ -66,7 +66,7 @@ $LastChangedRevision$
 
 		echo graf(
 			'<a href="index.php?event=discuss'.a.'step=ipban_list">'.gTxt('list_banned_ips').'</a>'
-		, ' colspan="2" align="center" valign="middle"');
+		, ' style="text-align: center;"');
 
 		extract(get_prefs());
 
@@ -184,17 +184,19 @@ $LastChangedRevision$
 
 				n.startTable('list').
 
-				column_head('ID', 'id', 'discuss', true, $switch_dir, $crit, $search_method).
-				hCell().
-				column_head('date', 'date', 'discuss', true, $switch_dir, $crit, $search_method).
-				column_head('name', 'name', 'discuss', true, $switch_dir, $crit, $search_method).
-				column_head('message', 'message', 'discuss', true, $switch_dir, $crit, $search_method).
-				column_head('email', 'email', 'discuss', true, $switch_dir, $crit, $search_method).
-				column_head('website', 'website', 'discuss', true, $switch_dir, $crit, $search_method).
-				column_head('IP', 'ip', 'discuss', true, $switch_dir, $crit, $search_method).
-				column_head('status', 'status', 'discuss', true, $switch_dir, $crit, $search_method).
-				column_head('parent', 'parent', 'discuss', true, $switch_dir, $crit, $search_method).
-				hCell();
+				n.n.tr(
+					column_head('ID', 'id', 'discuss', true, $switch_dir, $crit, $search_method).
+					hCell().
+					column_head('date', 'date', 'discuss', true, $switch_dir, $crit, $search_method).
+					column_head('name', 'name', 'discuss', true, $switch_dir, $crit, $search_method).
+					column_head('message', 'message', 'discuss', true, $switch_dir, $crit, $search_method).
+					column_head('email', 'email', 'discuss', true, $switch_dir, $crit, $search_method).
+					column_head('website', 'website', 'discuss', true, $switch_dir, $crit, $search_method).
+					column_head('IP', 'ip', 'discuss', true, $switch_dir, $crit, $search_method).
+					column_head('status', 'status', 'discuss', true, $switch_dir, $crit, $search_method).
+					column_head('parent', 'parent', 'discuss', true, $switch_dir, $crit, $search_method).
+					hCell()
+				);
 
 			include_once txpath.'/publish/taghandlers.php';
 
@@ -288,7 +290,7 @@ $LastChangedRevision$
 				tda(
 					select_buttons().
 					discuss_multiedit_form($page, $sort, $dir, $crit, $search_method)
-				,' colspan="11" style="text-align: right; border: none;"')
+				, ' colspan="11" style="text-align: right; border: none;"')
 			).
 
 			endTable().
