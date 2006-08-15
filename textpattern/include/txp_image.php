@@ -502,7 +502,8 @@ $LastChangedRevision$
 		if ( is_numeric ($width)) $t->width = $width;
 		if ( is_numeric ($height)) $t->height = $height;
 		
-		if ($t->write()) {
+		if ($t->write())
+		{
 			global $prefs;
 			$prefs['thumb_w'] = $width;
 			$prefs['thumb_h'] = $height;
@@ -510,10 +511,17 @@ $LastChangedRevision$
 			set_pref('thumb_w', $width, 'image',  1);
 			set_pref('thumb_h', $height, 'image',  1);
 			set_pref('thumb_crop', $crop, 'image',  1);
-			image_edit(messenger('thumbnail',$id,'saved'),$id);
+
+			$message = gTxt('thumbnail_saved', array('{id}' => $id));
+
+			image_edit($message, $id);
 		 }
-		else {
-			image_edit(messenger('thumbnail',$id,'not_saved'),$id);
+
+		else
+		{
+			$message = gTxt('thumbnail_not_saved', array('{id}' => $id));
+
+			image_edit($message, $id);
 		}
 	}
 
