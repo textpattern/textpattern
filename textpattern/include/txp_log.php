@@ -41,7 +41,7 @@ $LastChangedRevision$
 
 //-------------------------------------------------------------
 
-	function chunk($str, $len, $break = '&#133;<br />') 
+	function chunk($str, $len, $break = '<br />') 
 	{
 		return join($break, preg_split('/(.{1,'.$len.'})/', $str, -1, PREG_SPLIT_DELIM_CAPTURE|PREG_SPLIT_NO_EMPTY));
 	}
@@ -183,7 +183,7 @@ $LastChangedRevision$
 				{
 					$log_refer = htmlspecialchars('http://'.$log_refer);
 
-					$log_refer = '<a href="'.$log_refer.'" target="_blank">'.chunk($log_refer, 45).'</a>';
+					$log_refer = '<a href="'.$log_refer.'" target="_blank">'.chunk($log_refer, 30).'</a>';
 				}
 
 				if ($log_page)
@@ -193,7 +193,7 @@ $LastChangedRevision$
 					$log_page = '<a href="'.$log_page.'" target="_blank">'.
 						chunk(
 							preg_replace('/\/$/','', substr($log_page, 1))
-						, 45).
+						, 30).
 						'</a>';
 
 					if ($log_method == 'POST')
@@ -208,14 +208,14 @@ $LastChangedRevision$
 						safe_strftime('%d %b %Y %I:%M:%S %p', $log_uTime)
 					, 85).
 
-					td($log_ip, 75).
+					td($log_ip, 20).
 
 					td(
-						chunk($log_host, 75)
-					, 100).
+						chunk($log_host, 20)
+					, 75).
 
-					td($log_page, 200).
-					td($log_refer, 200).
+					td($log_page, 125).
+					td($log_refer, 125).
 					td($log_method, 50).
 					td($log_status, 50).
 
