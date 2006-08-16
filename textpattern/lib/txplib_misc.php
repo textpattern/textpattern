@@ -92,6 +92,17 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
+	function escape_tags($str)
+	{
+		return strtr($str,
+			array(
+				'<' => '&#60;',
+				'>' => '&#62;',
+			)
+		);
+	}
+
+// -------------------------------------------------------------
 	function escape_cdata($str)
 	{
 		return '<![CDATA['.str_replace(']]>', ']]]><![CDATA[]>', $str).']]>';

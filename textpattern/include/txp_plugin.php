@@ -267,7 +267,7 @@ $LastChangedRevision$
 					if (isset($plugin['help_type']) && $plugin['help_type'] == 1) {
 						include_once txpath.'/lib/classTextile.php';
 						$textile = new Textile();
-						$help = $textile->TextileThis(escape_title($help));
+						$help = $textile->TextileThis(escape_tags($help));
 					}
 
 					if ($exists) {
