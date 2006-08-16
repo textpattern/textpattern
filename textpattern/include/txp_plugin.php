@@ -246,71 +246,74 @@ $LastChangedRevision$
 
 		$plugin = ps('plugin64');	
 
-		if(isset($plugin)) {
+		$plugin = preg_replace('@.*\$plugin=\'([\w=+/]+)\'.*@s', '$1', $plugin);
+		$plugin = preg_replace('/^#.*$/m', '', $plugin);
+
+		if(trim($plugin)) {
 
 			$plugin = base64_decode($plugin);
 			if (strncmp($plugin,"\x1F\x8B",2)===0)
 				$plugin = gzinflate(substr($plugin, 10));
 
-			if ($plugin = unserialize($plugin)) { 
+			if ($plugin = unserialize($plugin)) {
 
 				if(is_array($plugin)){
-	
-					extract(doSlash($plugin));
+
+					extract($plugin);
 					if (empty($type)) $type = 0;
-	
-					$exists = fetch('name','txp_plugin','name',$name);
+
+					$exists = fetch('name','txp_plugin','name',doSlash($name));
 
 					if (isset($plugin['help_type']) && $plugin['help_type'] == 1) {
 						include_once txpath.'/lib/classTextile.php';
 						$textile = new Textile();
-						$help = $textile->TextileThis(strip_tags($help));
+						$help = $textile->TextileThis(escape_title($help));
 					}
 
 					if ($exists) {
 						$rs = safe_update(
 						   "txp_plugin",
 							"status      = 0,
-							type         = '$type',
-							author       = '$author',
-							author_uri   = '$author_uri',
-							version      = '$version',
-							description  = '$description',
-							help         = '$help',
-							code         = '$code',
-							code_restore = '$code',
-							code_md5     = '$md5'",
-							"name        = '$name'"
+							type         = '".doSlash($type)."',
+							author       = '".doSlash($author)."',
+							author_uri   = '".doSlash($author_uri)."',
+							version      = '".doSlash($version)."',
+							description  = '".doSlash($description)."',
+							help         = '".doSlash($help)."',
+							code         = '".doSlash($code)."',
+							code_restore = '".doSlash($code)."',
+							code_md5     = '".doSlash($md5)."'",
+							"name        = '".doSlash($name)."'"
 						);
-	
+
 					} else {
-					
+
 						$rs = safe_insert(
 						   "txp_plugin",
-						   "name         = '$name',
+						   "name         = '".doSlash($name)."',
 							status       = 0,
-							type         = '$type',
-							author       = '$author',
-							author_uri   = '$author_uri',
-							version      = '$version',
-							description  = '$description',
-							help         = '$help',
-							code         = '$code',
-							code_restore = '$code',
-							code_md5     = '$md5'"
+							type         = '".doSlash($type)."',
+							author       = '".doSlash($author)."',
+							author_uri   = '".doSlash($author_uri)."',
+							version      = '".doSlash($version)."',
+							description  = '".doSlash($description)."',
+							help         = '".doSlash($help)."',
+							code         = '".doSlash($code)."',
+							code_restore = '".doSlash($code)."',
+							code_md5     = '".doSlash($md5)."'"
 						);
 					}
 
 					if ($rs and $code)
 					{
-						$message = gTxt('plugin_installed', array('{name}' => $name));
+						$message = gTxt('plugin_installed', array('{name}' => escape_output($name)));
 
 						plugin_list($message);
 					}
 
 					else
 					{
-						$message = gTxt('plugin_install_failed', array('{name}' => $name));
+						$message = gTxt('plugin_install_failed', array('{name}' => escape_output($name)));
 
 						plugin_list($message);
 					}
