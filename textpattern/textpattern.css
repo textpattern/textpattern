@@ -504,12 +504,12 @@ width: 500px;
 height: 515px;
 }
 
-div#preview-plugin,div#preview-help {
-margin: 0 auto;
+div#preview-plugin, div#preview-help {
+margin: 0 auto 10px auto;
+padding: 3px;
 height: 300px;
 overflow: auto;
-background-color : #efefef;
-padding : 3px;
+background-color: #efefef;
 }
 
 textarea#plugin-install {
