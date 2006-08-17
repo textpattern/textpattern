@@ -1371,6 +1371,8 @@ $LastChangedRevision$
 
 			# make sure lastmod isn't in the future
 			$unix_ts = min($unix_ts, time());
+			# or too far in the past (7 days)
+			$unix_ts = max($unix_ts, time() - 3600*24*7);
 
 			$last = safe_strftime('rfc822', $unix_ts, 1);
 			header("Last-Modified: $last");
