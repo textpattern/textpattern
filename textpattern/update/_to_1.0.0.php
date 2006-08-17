@@ -638,7 +638,7 @@ EOF;
 	safe_update('txp_prefs',"type = '1'","name = 'file_base_path'");
 
 	// 1.0: add option to override charset for emails (ISO-8559-1 instead of UTF-8)
-	if (!safe_field('val','txp_prefs',"name='override_emailcharset'"))
+	if (!safe_field('name','txp_prefs',"name='override_emailcharset'"))
 	{		
 		safe_insert('txp_prefs',"name='override_emailcharset', val='0', prefs_id='1', type='1', event='admin', position='".doSlash($maxpos)."', html='yesnoradio'");
 	}
