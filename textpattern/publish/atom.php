@@ -174,12 +174,11 @@ $LastChangedRevision$
 			if (extension_loaded('zlib') && ini_get("zlib.output_compression") == 0 && ini_get('output_handler') != 'ob_gzhandler' && !headers_sent()) {
 				@ob_start("ob_gzhandler");
 			}
-		  
-			$expires = gmdate('D, d M Y H:i:s \G\M\T', time()+(3600*1));
-			header("Expires: $expires");
+
+			handle_lastmod();		  
 			$hims = serverset('HTTP_IF_MODIFIED_SINCE');
 			$imsd = ($hims) ? strtotime($hims) : 0;
-		  
+
 			if ($imsd >= $last) {
 				txp_status_header("304 Not Modified"); exit;
 			}

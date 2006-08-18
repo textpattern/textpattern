@@ -130,18 +130,9 @@ $LastChangedRevision$
 		  @ob_start("ob_gzhandler");
 		}
 
-		$last = fetch('unix_timestamp(val)','txp_prefs','name','lastmod');
-		$expires = gmdate('D, d M Y H:i:s \G\M\T', time()+(3600*1));
-		header("Expires: $expires");
+		handle_lastmod();
 		$hims = serverset('HTTP_IF_MODIFIED_SINCE');
 		$imsd = ($hims) ? strtotime($hims) : 0;
-
-		if ($imsd >= $last) {
-				txp_status_header("304 Not Modified"); exit;
-		}
-
-		header("Last-Modified: ".gmdate('D, d M Y H:i:s \G\M\T',$last));
-
 
 		if (is_callable('apache_request_headers')) {
 			$headers = apache_request_headers();
