@@ -1361,13 +1361,27 @@ $LastChangedRevision$
 	}
 
 //-------------------------------------------------------------
+	function get_lastmod($unix_ts=NULL) {
+		global $prefs;
+
+		if ($unix_ts === NULL)
+			$unix_ts = @strtotime($prefs['lastmod']);
+
+		# check for future articles that are now visible
+		if ($max_article = safe_field('unix_timestamp(Posted)', 'textpattern', "Posted <= now() and Status >= '4' order by Posted desc limit 1")) {
+			$unix_ts = max($unix_ts, $max_article);
+		}
+
+		return $unix_ts;
+	}
+
+//-------------------------------------------------------------
 	function handle_lastmod($unix_ts=NULL, $exit=1) {
 		global $prefs;
 		extract($prefs);
 
 		if($send_lastmod) {
-			if ($unix_ts === NULL)
-				$unix_ts = strtotime($lastmod);
+			$unix_ts = get_lastmod($unix_ts);
 
 			# make sure lastmod isn't in the future
 			$unix_ts = min($unix_ts, time());
