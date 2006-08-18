@@ -671,32 +671,6 @@ EOF;
 		safe_update("txp_prefs","position=$i","name='custom_${i}_set'");
 	}
 
-
-	// RC4: adding privs table
-
-	if (!safe_query("DESCRIBE `".PFX."txp_priv`")) {
-		safe_query("CREATE TABLE `".PFX."txp_priv` (
-			`id` INT( 8 ) NOT NULL AUTO_INCREMENT ,
-			`priv` VARCHAR( 128 ) NOT NULL ,
-			`1` TINYINT( 1 ) NOT NULL ,
-			`2` TINYINT( 1 ) NOT NULL ,
-			`3` TINYINT( 1 ) NOT NULL ,
-			`4` TINYINT( 1 ) NOT NULL ,
-			`5` TINYINT( 1 ) NOT NULL ,
-			`6` TINYINT( 1 ) NOT NULL ,
-			PRIMARY KEY ( `id` )
-		) $tabletype");
-
-		include txpath.'/lib/admin_config.php';
-		
-		foreach($txp_permissions as $a => $b) {
-			$privs = explode(',',$b);
-			foreach ($privs as $c) $sets[] = "`$c` = 1";
-			safe_insert("txp_priv","priv='$a', ".join(', ',$sets));
-			unset($sets);
-		}
-	}
-
 	// index ip column in txp_log
 
 		$ipidxset = false;
