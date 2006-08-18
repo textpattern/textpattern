@@ -1361,7 +1361,7 @@ $LastChangedRevision$
 	}
 
 //-------------------------------------------------------------
-	function handle_lastmod($unix_ts=NULL) {
+	function handle_lastmod($unix_ts=NULL, $exit=1) {
 		global $prefs;
 		extract($prefs);
 
@@ -1381,6 +1381,8 @@ $LastChangedRevision$
 				$hims = serverset('HTTP_IF_MODIFIED_SINCE');
 				if ($hims >= $last) {
 					log_hit('304');
+					if (!$exit)
+						return array('304', $last);
 					txp_status_header('304 Not Modified');
 					header('Connection: close');
 					# discard all output
@@ -1388,6 +1390,8 @@ $LastChangedRevision$
 					exit;
 				}
 			}
+			if (!$exit)
+				return array('200', $last);
 		}
 	}
 
