@@ -87,21 +87,9 @@ $LastChangedRevision$
 		hed(gTxt('all_stylesheets'),2).
 		css_list($name);
 
-
-		$left =
-		graf(gTxt('you_are_editing_css').br.strong($name), ' style="margin-top:3em"').
-		graf(eLink('css','css_edit_raw','name',$name,gTxt('edit_raw_css'))
-			,' style="margin-top:3em"').
-		graf(sLink('css','pour',gTxt('bulkload_existing_css')), ' style="margin-top:3em"').
-
-		form(
-			graf(
-				gTxt('copy_css_as').br.
-				fInput('text','newname','','edit').br.
-				fInput('submit','copy',gTxt('copy'),'smallerbox').
-				eInput('css').sInput('css_copy').hInput('oldname',$name).hInput('name',$name)
-			)
-		); 
+		$left = graf(gTxt('you_are_editing_css').br.strong($name)).
+			graf(eLink('css', 'css_edit_raw', 'name', $name, gTxt('edit_raw_css'))).
+			graf(sLink('css', 'pour', gTxt('bulkload_existing_css'))); 
 
 		$out[] = startTable('edit');
 		
@@ -149,7 +137,18 @@ $LastChangedRevision$
 						eInput('css') . sInput('add_sel') . hInput('name',$name)
 					)
 				).
-				form(join('',$out))
+				form(join('',$out)).
+
+				form(
+					graf(
+						gTxt('copy_css_as').sp.fInput('text', 'newname', '', 'edit').sp.
+						fInput('submit', 'copy', gTxt('copy'), 'smallerbox').
+						eInput('css').
+						sInput('css_copy').
+						hInput('oldname', $name).
+						hInput('name', $name)
+					)
+				)
 			).
 			tdtl(
 				$right
@@ -181,20 +180,12 @@ $LastChangedRevision$
 	
 		if ($step!='pour') {
 
-			$left = join('',array(
-			graf(gTxt('you_are_editing_css').br.strong($name), ' style="margin-top:3em"'),
-			graf(eLink('css','css_edit_form','name',$name,gTxt('edit_css_in_form'))
-				,' style="margin-top:3em"'),
-			graf(sLink('css','pour',gTxt('bulkload_existing_css')),
-					' style="margin-top:3em"')
-			));
+			$left = graf(gTxt('you_are_editing_css').br.strong($name)).
+				graf(eLink('css', 'css_edit_form', 'name', $name, gTxt('edit_css_in_form'))).
+				graf(sLink('css', 'pour', gTxt('bulkload_existing_css')));
 			
-			$copy = 
-			graf(
-				gTxt('copy_css_as').br.
-				fInput('text','newname','','edit').br.
-				fInput('submit','copy',gTxt('copy'),'smallerbox')
-			,' style="margin-top:3em;text-align:right"');		
+			$copy = gTxt('copy_css_as').sp.fInput('text', 'newname', '', 'edit').sp.
+				fInput('submit', 'copy', gTxt('copy'), 'smallerbox');		
 		} else {
 			$left = '&nbsp;';
 			$copy = '';
