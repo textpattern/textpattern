@@ -262,36 +262,35 @@ $LastChangedRevision$
 			startTable('edit') .
 
 			tr(
-				fLabelCell('title').
-				fInputCell('linkname', $linkname, 1, 30)
+				fLabelCell('title', '', 'link-title').
+				fInputCell('linkname', $linkname, 1, 30, '', 'link-title')
 			).
 
 			tr(
-				fLabelCell('sort_value').
-				fInputCell('linksort', $linksort, 2, 15 )
+				fLabelCell('sort_value', '', 'link-sort').
+				fInputCell('linksort', $linksort, 2, 15, '', 'link-sort')
 			).
 
 			tr(
-				fLabelCell('url','link_url').
-				fInputCell('url', $url, 3, 30)
+				fLabelCell('url', 'link_url', 'link-url').
+				fInputCell('url', $url, 3, 30, '', 'link-url')
 			).
 
 			tr(
-				fLabelCell('link_category', 'link_category').
+				fLabelCell('link_category', 'link_category', 'link-category').
 
 				td(
-					linkcategory_popup($category).
-					' ['.eLink('category', 'list', '', '', gTxt('edit')).']'
+					linkcategory_popup($category).' ['.eLink('category', 'list', '', '', gTxt('edit')).']'
 				)
 			) .
 
 			tr(
 				tda(
-					gTxt('description').' '.popHelp('link_description')
+					'<label for="link-description">'.gTxt('description').'</label>'.sp.popHelp('link_description')
 				,' style="text-align: right; vertical-align: top;"').
 
 				td(
-					'<textarea name="description" cols="40" rows="7" tabindex="4">'.$description.'</textarea>'
+					'<textarea id="link-description" name="description" cols="40" rows="7" tabindex="4">'.$description.'</textarea>'
 				)
 			).
 
@@ -315,9 +314,10 @@ $LastChangedRevision$
 	}
 
 //--------------------------------------------------------------
-	function linkcategory_popup($cat="") 
+
+	function linkcategory_popup($cat = '') 
 	{
-		return event_category_popup("link", $cat);		
+		return event_category_popup('link', $cat, 'link-category');		
 	}
 
 // -------------------------------------------------------------

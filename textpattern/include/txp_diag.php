@@ -341,7 +341,7 @@ $LastChangedRevision$
 
 	if ($fail) {
 		foreach ($fail as $help => $message)
-			echo tr(tda(nl2br($message) . popHelp($help), ' class="not-ok"'));
+			echo tr(tda(nl2br($message).sp.popHelp($help), ' class="not-ok"'));
 	}
 	else {
 		echo tr(tda(gTxt('all_checks_passed'), ' class="ok"'));

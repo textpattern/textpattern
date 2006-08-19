@@ -896,15 +896,19 @@ $LastChangedRevision$
  * events to multiedit forms.
  */
 
- 	function event_category_popup($name, $cat="")
+ 	function event_category_popup($name, $cat = '', $id = '')
 	{
 		$arr = array('');
-		$rs = getTree("root",$name);
-		if ($rs) {
-			return treeSelectInput("category", $rs, $cat);
+		$rs = getTree('root', $name);
+
+		if ($rs)
+		{
+			return treeSelectInput('category', $rs, $cat, $id);
 		}
+
 		return false;
 	}
+
 // ------------------------------------------------------------- 	
  	function event_change_pageby($name) 
 	{
