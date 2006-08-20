@@ -314,6 +314,8 @@ if ($event == 'category') {
 	{
 		global $txpcfg;
 
+		$title = doSlash($name);
+
 		$name = stripSpace(ps('name'), 1);
 
 		if (!$name)
@@ -322,8 +324,6 @@ if ($event == 'category') {
 
 			return cat_category_list($message);
 		}
-
-		$title = doSlash($name);
 
 		$exists = safe_field('name', 'txp_category', "name = '$name' and type = '$event'");
 
