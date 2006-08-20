@@ -686,7 +686,7 @@ EOF;
 	// Show gmt-selection in prefs
 	safe_update('txp_prefs',"type=0, html='gmtoffset_select', position=50","name='gmtoffset'");
 
-	if (!safe_field('name', 'txp_prefs', "prefs_id=1, name='plugin_cache_dir'")) {
+	if (!safe_field('name', 'txp_prefs', "prefs_id=1 and name='plugin_cache_dir'")) {
 		$maxpos = safe_field('max(position)', 'txp_prefs', '1');
 		safe_insert('txp_prefs',"name='plugin_cache_dir', val='', prefs_id='1', type='1', event='admin', position='".doSlash($maxpos)."', html='text_input'");
 	}
