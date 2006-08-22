@@ -1409,16 +1409,23 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
+
 	function comments_error($atts)
 	{
 		extract(lAtts(array(
-			'class'		=> __FUNCTION__,
 			'break'		=> 'br',
+			'class'		=> __FUNCTION__,
 			'wraptag'	=> 'div',
-		),$atts));
+		), $atts));
 
 		$evaluator =& get_comment_evaluator();
-		return doWrap($evaluator -> get_result_message(), $wraptag, $break, $class);
+
+		$errors = $evaluator->get_result_message();
+
+		if ($errors)
+		{
+			return doWrap($errors, $wraptag, $break, $class);
+		}
 	}
 
 // -------------------------------------------------------------
@@ -2244,42 +2251,47 @@ function body($atts)
 	}
 
 // -------------------------------------------------------------
-	function doWrap($list, $wraptag, $break, $class='', $breakclass='', $atts='')
+
+	function doWrap($list, $wraptag, $break, $class = '', $breakclass = '', $atts = '')
 	{
-		$atts = ($class ? $atts.' class="'.$class.'"' : $atts);
-		$breakatts = ($breakclass ? ' class="'.$breakclass.'"' : '');
+		$atts = ($class) ? $atts.' class="'.$class.'"' : $atts;
+		$breakatts = ($breakclass) ? ' class="'.$breakclass.'"' : '';
 
 		// non-enclosing breaks
-		if (!preg_match('/^\w+$/', $break) or $break == 'br' or $break == 'hr') {
+		if (!preg_match('/^\w+$/', $break) or $break == 'br' or $break == 'hr')
+		{
 			if ($break == 'br' or $break == 'hr')
+			{
 				$break = "<$break $breakatts/>";
-			return ($wraptag) 
-			?	tag(join($break.n,$list),$wraptag,$atts) 
-			:	join($break.n,$list);
-		}	
+			}
+
+			return ($wraptag) ?	tag(join($break.n, $list), $wraptag, $atts) :	join(n.$break, $list);
+		}
 
 		// enclosing breaks should be specified by name only, no '<' or '>'
 		if (($wraptag == 'ul' or $wraptag == 'ol') and empty($break))
+		{
 			$break = 'li';
-			
-		return ($wraptag)
-		? tag(tag(join("</$break>".n."<{$break}{$breakatts}>",$list),$break,$breakatts),$wraptag,$atts)
-		: tag(join("</$break>".n."<{$break}{$breakatts}>",$list),$break,$breakatts);
+		}
+
+		return ($wraptag) ?
+			tag(n.t.tag(join("</$break>".n.t."<{$break}{$breakatts}>", $list), $break, $breakatts).n, $wraptag, $atts) :
+			tag(n.join("</$break>".n."<{$break}{$breakatts}>".n, $list).n, $break, $breakatts);
 	}
 
 // -------------------------------------------------------------
-	function doTag($content, $tag, $class='', $atts='')
+
+	function doTag($content, $tag, $class = '', $atts = '')
 	{
-		$atts = ($class ? $atts.' class="'.$class.'"' : $atts);
+		$atts = ($class) ? $atts.' class="'.$class.'"' : $atts;
 
 		if (!$tag)
+		{
 			return $content;
-			
-		return ($content)
-		? tag($content, $tag, $atts)
-		: "<$tag $atts />";
-	}
+		}
 
+		return ($content) ? tag($content, $tag, $atts) : "<$tag $atts />";
+	}
 
 // -------------------------------------------------------------
 	function doLabel($label='', $labeltag='')

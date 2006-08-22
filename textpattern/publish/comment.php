@@ -134,65 +134,84 @@ $LastChangedRevision$
 		// Experimental clean urls with only 404-error-document on apache
 		// possibly requires messy urls for POST requests.
 		if (defined('PARTLY_MESSY') and (PARTLY_MESSY))
+		{
 			$url = hu.'?id='.intval($parentid);
+		}
 
-		$out = '<form method="post" action="'.htmlspecialchars($url).'#cpreview" id="txpCommentInputForm">'.
-		# Juts to prevent XHTML Strict validation gotchas
-		'<div class="comments-wrapper">';
+		$out = '<form id="txpCommentInputForm" method="post" action="'.htmlspecialchars($url).'#cpreview">'.
 
-		$Form = fetch('Form','txp_form','name',$form);
+			# prevent XHTML Strict validation gotchas
+			n.'<div class="comments-wrapper">'.n.n;
+
+		$Form = fetch('Form', 'txp_form', 'name', $form);
+
 		$msgstyle = ($msgstyle ? ' style="'.$msgstyle.'"' : '');
 		$msgrows = ($msgrows and is_numeric($msgrows)) ? ' rows="'.intval($msgrows).'"' : '';
 		$msgcols = ($msgcols and is_numeric($msgcols)) ? ' cols="'.intval($msgcols).'"' : '';
-		$textarea = '<textarea class="txpCommentInputMessage'.(($commentwarn) ? ' comments_error"' : '"')
-					.' name="'.$n_message.'" id="message" '.$msgcols.$msgrows.$msgstyle.'>'
-					.htmlspecialchars($message).'</textarea>';
 
-		$comment_submit_button = ($preview)
-		?	fInput('submit','submit',gTxt('submit'),'button')
-		:	'';
-			
+		$textarea = '<textarea id="message" name="'.$n_message.'"'.$msgcols.$msgrows.$msgstyle.
+			' class="txpCommentInputMessage'.(($commentwarn) ? ' comments_error"' : '"').
+			'>'.htmlspecialchars($message).'</textarea>';
+
+		$comment_submit_button = ($preview) ?	fInput('submit', 'submit', gTxt('submit'), 'button') :	'';
+
 		if ($checkbox_type == 'forget')
 		{
+			// inhibit default remember
 			if ($forget == 1)
-				destroyCookies(); // inhibit default remember
-			$checkbox = checkbox('forget', 1, $forget, '', 'forget').sp.tag(gTxt('forget'), 'label', ' for="forget"');
+			{
+				destroyCookies();
+			}
+
+			$checkbox = checkbox('forget', 1, $forget, '', 'forget').' '.tag(gTxt('forget'), 'label', ' for="forget"');
 		}
+
 		else
 		{
+			// inhibit default remember
 			if ($remember != 1)
-				destroyCookies(); // inhibit default remember
-			$checkbox = checkbox('remember', 1, $remember, '', 'remember').sp.tag(gTxt('remember'), 'label', ' for="remember"');
+			{
+				destroyCookies();
+			}
+
+			$checkbox = checkbox('remember', 1, $remember, '', 'remember').' '.tag(gTxt('remember'), 'label', ' for="remember"');
 		}
-		$checkbox .= hInput('checkbox_type', $checkbox_type); 
+
+		$checkbox .= ' '.hInput('checkbox_type', $checkbox_type);
 
 		$vals = array(
-			'comment_name_input'    => input('text','name' , htmlspecialchars($name) , $isize,'comment_name_input' .(($namewarn)    ? ' comments_error' : ''),""),
-			'comment_email_input'   => input('text','email', htmlspecialchars($email), $isize,'comment_email_input'.(($emailwarn)   ? ' comments_error' : ''),""),
-			'comment_web_input'     => input('text','web'  , htmlspecialchars($web)  , $isize,'comment_web_input',""),
+			'comment_name_input'		=> fInput('text', 'name', htmlspecialchars($name), 'comment_name_input'.($namewarn ? ' comments_error' : ''), '', '', $isize),
+			'comment_email_input'		=> fInput('text', 'email', htmlspecialchars($email), ' comment_email_input'.($emailwarn ? ' comments_error' : ''), '', '', $isize),
+			'comment_web_input'			=> fInput('text', 'web', htmlspecialchars($web)	, 'comment_web_input', '', '', $isize),
 			'comment_message_input' => $textarea.'<!-- plugin-place-holder -->',
-			'comment_remember'      => $checkbox,
-			'comment_preview'       => input('submit','preview',gTxt('preview'),'','button'),
-			'comment_submit'        => $comment_submit_button
+			'comment_remember'			=> $checkbox,
+			'comment_preview'				=> fInput('submit', 'preview', gTxt('preview'), 'button'),
+			'comment_submit'				=> $comment_submit_button
 		);
 
-		foreach ($vals as $a=>$b) {
-			$Form = str_replace('<txp:'.$a.' />',$b,$Form);
+		foreach ($vals as $a => $b)
+		{
+			$Form = str_replace('<txp:'.$a.' />', $b, $Form);
 		}
 
 		$form = parse($Form);
 
-		$out .= $form;
-		$out .= fInput('hidden','parentid',$parentid);
-		$split = rand(1, 31);
-		$out .= ($preview) ? hInput(substr($nonce, 0, $split),substr($nonce, $split)) : '';
+		$out .= $form.
+			n.hInput('parentid', $parentid);
 
-		$out .= (!$preview)
-		?	fInput('hidden','backpage',htmlspecialchars($url))
-		:	fInput('hidden','backpage',htmlspecialchars($backpage));
+		$split = rand(1, 31);
+
+		$out .= ($preview) ? n.hInput(substr($nonce, 0, $split), substr($nonce, $split)) : '';
+
+		$out .= (!$preview) ?
+			n.hInput('backpage', htmlspecialchars($url)) :
+			n.hInput('backpage', htmlspecialchars($backpage));
+
 		$out = str_replace( '<!-- plugin-place-holder -->', callback_event('comment.form'), $out);
-		$out .= '</div></form>'; 
-	  return $out;
+
+		$out .= n.n.'</div>'.n.'</form>';
+
+		return $out;
 	}
 
 // -------------------------------------------------------------
@@ -494,8 +513,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 		function comments_help()
 	{
-		return ("
-		<a href=\"http://www.textpattern.com/help/?item=textile_comments\" id=\"txpCommentHelpLink\" onclick=\"window.open(this.href, 'popupwindow', 'width=300,height=400,scrollbars,resizable'); return false;\" >".gTxt('textile_help')."</a>");
+		return ('<a id="txpCommentHelpLink" href="http://www.textpattern.com/help/?item=textile_comments" onclick="window.open(this.href, \'popupwindow\', \'width=300,height=400,scrollbars,resizable\'); return false;">'.gTxt('textile_help').'</a>');
 	}
 
 // -------------------------------------------------------------
@@ -522,17 +540,4 @@ $LastChangedRevision$
 		$success = txpMail($email, $subject, $out, $cemail);
 	}
 
-// -------------------------------------------------------------
-	function input($type,$name,$val,$size='',$class='',$tab='',$chkd='') 
-	{
-		$o = array(
-			'<input type="'.$type.'" name="'.$name.'" id="'.$name.'" value="'.$val.'"',
-			($size)	? ' size="'.$size.'"'	  : '',
-			($class) ? ' class="'.$class.'"'	: '',
-			($tab)	 ? ' tabindex="'.$tab.'"'	: '',
-			($chkd)	? ' checked="checked"'	: '',
-			' />'.n
-		);
-		return join('',$o);
-	}
 ?>
