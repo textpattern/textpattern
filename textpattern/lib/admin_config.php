@@ -181,6 +181,7 @@ $txpac = array(
 );
 
 // -------------------------------------------------------------
+
 $txp_permissions = array(
 	'admin'                       => '1,2,3,4,5,6',
 	'admin.edit'                => '1',
@@ -209,7 +210,7 @@ $txp_permissions = array(
 	'plugin'                      => '1,2',
 	'prefs'                       => '1,2',
 	'section'                     => '1,2,3,6',
-	'tab.admin'                   => '1,2',
+	'tab.admin'                   => '1,2,3,4,5,6',
 	'tab.content'                 => '1,2,3,4,5,6',
 	'tab.extensions'              => '1,2',
 	'tab.presentation'            => '1,2,3,6',
