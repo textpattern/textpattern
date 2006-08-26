@@ -13,6 +13,8 @@ $LastChangedRevision$
 
 
 // -------------------------------------------------------------
+// DEPRECATED
+// this is now performed by doArticles()
 	function search($q)
 	{
 		global $prefs;
@@ -89,6 +91,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
+// DEPRECATED
 	function legacy_form() 
 	{	// lose this eventually
 		return '<h2><txp:search_result_title /></h2>
