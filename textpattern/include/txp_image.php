@@ -594,7 +594,7 @@ $LastChangedRevision$
 					safe_alter("txp_image", "auto_increment=$id");
 					return $newpath.sp.gTxt('upload_dir_perms');
 				} else {
-					chmod($newpath,0755);
+					@chmod($newpath,0644);
 					// Auto-generate a thumbnail using the last settings
 					if (isset($prefs['thumb_w'], $prefs['thumb_h'], $prefs['thumb_crop'])) {
 						$t = new txp_thumb( $id );
