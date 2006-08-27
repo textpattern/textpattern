@@ -141,7 +141,7 @@ $LastChangedRevision$
 		$thing = ($code)
 		?	$code
 		:	'';
-		$textarea = '<textarea id="plugin-code" class="code" name="code" rows="28" cols="90">'.htmlentities($thing).'</textarea>';
+		$textarea = '<textarea id="plugin-code" class="code" name="code" rows="28" cols="90">'.htmlspecialchars($thing).'</textarea>';
 
 		return 
 		form(startTable('edit')
