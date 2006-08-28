@@ -60,6 +60,8 @@ $LastChangedRevision$
 				while ($a = nextRow($rs)) {
 					extract($a);
 					populateArticleData($a);
+					
+					$cb = callback_event('rss_entry');
 
 					$a['posted'] = $uPosted;
 
@@ -88,7 +90,8 @@ $LastChangedRevision$
 						tag($permlink,'link').n.
 						tag(safe_strftime('rfc822',$a['posted']),'pubDate').n.
 						tag(htmlspecialchars($thisauthor),'dc:creator').n.
-						tag('tag:'.$mail_or_domain.','.$feed_time.':'.$blog_uid.'/'.$uid,'guid', ' isPermaLink="false"');
+						tag('tag:'.$mail_or_domain.','.$feed_time.':'.$blog_uid.'/'.$uid,'guid', ' isPermaLink="false"').n.
+						$cb;
 
 
 

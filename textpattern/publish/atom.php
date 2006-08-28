@@ -87,17 +87,19 @@ $LastChangedRevision$
 
 					extract($a);
 					populateArticleData($a);
+					$cb = callback_event('atom_entry');
 					$e = array();
-					
+
 					$a['posted'] = $uPosted;
-	
+
 					if ($show_comment_count_in_feed)
 						$count = ($comments_count > 0) ? ' ['.$comments_count.']' : '';
 					else $count = '';
 
 					$thisauthor = get_author_name($AuthorID);
+
 					$e['thisauthor'] = tag(n.t.t.t.tag(htmlspecialchars($thisauthor),'name').n.t.t,'author');
-		
+
 					$e['issued'] = tag(safe_strftime('w3cdtf',$uPosted),'published');
 					$e['modified'] = tag(safe_strftime('w3cdtf',$uLastMod),'updated');
 
@@ -128,7 +130,7 @@ $LastChangedRevision$
 					if (trim($summary))
 						$e['summary'] = tag(n.escape_cdata($summary).n,'summary',t_html);
 
-					$articles[$ID] = tag(n.t.t.join(n.t.t,$e).n,'entry');
+					$articles[$ID] = tag(n.t.t.join(n.t.t,$e).n.$cb,'entry');
 
 					$etags[$ID] = strtoupper(dechex(crc32($articles[$ID])));
 					$dates[$ID] = $uLastMod;
