@@ -2254,6 +2254,11 @@ function body($atts)
 
 	function doWrap($list, $wraptag, $break, $class = '', $breakclass = '', $atts = '')
 	{
+		if (!$list)
+		{
+			return '';
+		}
+	
 		$atts = ($class) ? $atts.' class="'.$class.'"' : $atts;
 		$breakatts = ($breakclass) ? ' class="'.$breakclass.'"' : '';
 
