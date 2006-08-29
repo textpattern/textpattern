@@ -209,21 +209,16 @@ $LastChangedRevision$
 			if ($plugin = @unserialize($plugin))
 			{ 
 				if(is_array($plugin)){
-					extract(doSlash($plugin));
+					extract($plugin);
 					$source = '';
-					if(version_compare(PHP_VERSION, "4.2.0", "<") === 1)
-					{
-						ob_start();
-						highlight_string('<?php'.$plugin['code'].'?>');
-						$source = ob_get_contents();
-						ob_end_clean();
-						$help_source= '<pre>'.htmlspecialchars($plugin['help']).'</pre>';
+					if (isset($help_raw)) {
+						include_once txpath.'/lib/classTextile.php';
+						$textile = new Textile();
+						$help_source = $textile->TextileThis(escape_tags($help_raw));
+					} else {
+						$help_source= highlight_string($help, true);
 					}
-					else
-					{
-						$source.= highlight_string('<?php'.$plugin['code'].'?>', true);
-						$help_source= highlight_string($plugin['help'], true);
-					}
+					$source.= highlight_string('<?php'.$plugin['code'].'?>', true);
 					$sub = fInput('submit','',gTxt('install'),'publish');
 		
 					pagetop(gTxt('edit_plugins'));
@@ -270,10 +265,10 @@ $LastChangedRevision$
 
 					$exists = fetch('name','txp_plugin','name',doSlash($name));
 
-					if (isset($plugin['help_type']) && $plugin['help_type'] == 1) {
+					if (isset($help_raw)) {
 						include_once txpath.'/lib/classTextile.php';
 						$textile = new Textile();
-						$help = $textile->TextileThis(escape_tags($help));
+						$help = $textile->TextileThis(escape_tags($help_raw));
 					}
 
 					if ($exists) {
