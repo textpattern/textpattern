@@ -175,7 +175,7 @@ $LastChangedRevision$
 			?	areatab(gTxt('tab_presentation'), 'presentation', 'page', $area)
 			:	'',
 			has_privs('tab.admin')
-			?	areatab(gTxt('tab_admin'), 'admin', 'prefs', $area)
+			?	areatab(gTxt('tab_admin'), 'admin', 'admin', $area)
 			:	'',
 			(has_privs('tab.extensions') and !empty($areas['extensions']))
 			?	areatab(gTxt('tab_extensions'), 'extensions', array_shift($areas['extensions']), $area)
@@ -214,9 +214,11 @@ $LastChangedRevision$
 	{
 		$areas = areas();
 		foreach($areas[$area] as $a=>$b) {
-			$out[] = tabber($a,$b,$event,2);
+			if ($area == 'extensions' or has_privs($b)) {
+				$out[] = tabber($a,$b,$event,2);
+			}
 		}
-		return join('',$out);
+		return (empty($out) ? '' : join('',$out));
 	}
 
 // -------------------------------------------------------------
