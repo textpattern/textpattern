@@ -317,6 +317,7 @@ if ($event == 'category') {
 		$title = ps('title');
 
 		$name = preg_replace("/(^|&\S+;)|(<[^>]*>)/U","",dumbDown($title));
+		$name = preg_replace("/[^A-Za-z0-9\-_]/","",$name);
 
 		if (!$name)
 		{
@@ -376,6 +377,7 @@ if ($event == 'category') {
 		extract(doSlash(psa(array('id', 'name', 'old_name', 'parent', 'title'))));
 
 		$name = preg_replace("/(^|&\S+;)|(<[^>]*>)/U","",dumbDown($name));
+		$name = preg_replace("/[^A-Za-z0-9\-_]/","",$name);
 
 		// make sure the name is valid
 		if (!$name)
