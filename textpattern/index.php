@@ -31,7 +31,7 @@ $LastChangedRevision$
 	} else ob_end_clean();
 
 	header("Content-type: text/html; charset=utf-8");
-	if (isset($_POST['preview'])) {
+	if (isset($_POST['form_preview'])) {
 		include txpath.'/publish.php';
 		textpattern();
 		exit;

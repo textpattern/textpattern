@@ -218,7 +218,7 @@ $LastChangedRevision$
 		$is_404 = 0;
 
 			// if messy vars exist, bypass url parsing
-		if (!$out['id'] && !$out['s'] && !(txpinterface=='css')) {
+		if (!$out['id'] && !$out['s'] && !(txpinterface=='css') &&! ( txpinterface=='admin') ) {
 			
 			// return clean URL test results for diagnostics
 			if (gps('txpcleantest') and serverSet('SERVER_ADDR') == serverSet('REMOTE_ADDR')) {
