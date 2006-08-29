@@ -172,8 +172,9 @@ $LastChangedRevision$
 
 					graf(gTxt('form_type').br.
 						formtypes($type)).
-					graf(gTxt('only_articles_can_be_previewed')).
-					fInput('submit','preview',gTxt('preview'),'smallbox').
+#					When did preview of article-forms work? Not in 4.0+, not in RC1, RC4, RC5
+#					graf(gTxt('only_articles_can_be_previewed')).
+#					fInput('submit','preview',gTxt('preview'),'smallbox').
 					graf($inputs).
 					'</form>'
 
