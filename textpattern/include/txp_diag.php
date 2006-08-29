@@ -292,7 +292,7 @@ $LastChangedRevision$
 	#if (strncmp(php_sapi_name(), 'cgi', 3) == 0 and ini_get('cgi.rfc2616_headers'))
 	#	$fail['cgi_header_config'] = gTxt('cgi_header_config');
 
-	$guess_site_url = $_SERVER['HTTP_HOST'] . preg_replace('#[/\\\\]$#','','tata'.dirname(dirname($_SERVER['SCRIPT_NAME'])));
+	$guess_site_url = $_SERVER['HTTP_HOST'] . preg_replace('#[/\\\\]$#','',dirname(dirname($_SERVER['SCRIPT_NAME'])));
 	if ($siteurl and $siteurl != $guess_site_url)
 		$fail['site_url_mismatch'] = gTxt('site_url_mismatch').cs.$guess_site_url;
 		
