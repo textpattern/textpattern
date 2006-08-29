@@ -198,7 +198,6 @@ $LastChangedRevision$
 			'name'			=> '',
 			'poplink'		=> '',
 			'style'			=> '',
-			'thumbnail' => '',
 		), $atts));
 
 		if (!empty($name))
