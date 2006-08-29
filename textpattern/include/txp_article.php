@@ -53,10 +53,13 @@ if (!empty($event) and $event == 'article') {
 }
 
 //--------------------------------------------------------------
+
 	function article_post()
 	{
-		global $txp_user,$vars,$txpcfg;		
-		extract(get_prefs());
+		global $txp_user, $vars, $txpcfg, $prefs;		
+
+		extract($prefs);
+
 		$incoming = psa($vars);
 		$message='';
 
@@ -128,10 +131,13 @@ if (!empty($event) and $event == 'article') {
 	}
 
 //--------------------------------------------------------------
+
 	function article_save()
 	{
-		global $txp_user,$vars,$txpcfg;
-		extract(get_prefs());
+		global $txp_user, $vars, $txpcfg, $prefs;
+
+		extract($prefs);
+
 		$incoming = psa($vars);
 
 		$oldArticle = safe_row('Status, url_title, Title','textpattern','ID = '.(int)$incoming['ID']);
@@ -225,9 +231,10 @@ if (!empty($event) and $event == 'article') {
 
 	function article_edit($message = '')
 	{
-		global $vars, $txp_user, $comments_disabled_after, $txpcfg;
+		global $vars, $txp_user, $comments_disabled_after, $txpcfg, $prefs;
 
-		extract(get_prefs());
+		extract($prefs);
+
 		extract(gpsa(array('view','from_view','step')));
 		
 		if(!empty($GLOBALS['ID'])) { // newly-saved article
@@ -937,12 +944,11 @@ if (!empty($event) and $event == 'article') {
 		return $incoming;
 	}
 // -------------------------------------------------------------
+
 	function do_pings()
 	{
-		global $txpcfg;
-		
-		$prefs = get_prefs();
-		
+		global $txpcfg, $prefs;
+
 		include_once txpath.'/lib/IXRClass.php';
 		
 		if ($prefs['ping_textpattern_com']) {
@@ -955,4 +961,5 @@ if (!empty($event) and $event == 'article') {
 			$wl_client->query('weblogUpdates.ping', $prefs['sitename'], hu);
 		}
 	}
+
 ?>
