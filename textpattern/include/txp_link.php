@@ -349,6 +349,8 @@ $LastChangedRevision$
 			description = '$description'"
 		);
 
+		$GLOBALS['ID'] = mysql_insert_id( );
+
 		if ($q)
 		{
 			//update lastmod due to link feeds

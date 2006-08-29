@@ -575,7 +575,7 @@ $LastChangedRevision$
 			if (empty($id)) {
 				$q.= ", category = '$category'";
 				$rs = safe_insert("txp_image",$q);
-				$id = mysql_insert_id();
+				$id = $GLOBALS['ID'] = mysql_insert_id();	
 			}else{
 				$id = doSlash($id);
 				$rs = safe_update('txp_image',$q, "id = $id");
@@ -592,6 +592,7 @@ $LastChangedRevision$
 				if(shift_uploaded_file($file, $newpath) == false) {
 					safe_delete("txp_image","id='$id'");
 					safe_alter("txp_image", "auto_increment=$id");
+					if ( isset( $GLOBALS['ID'])) unset( $GLOBALS['ID']);
 					return $newpath.sp.gTxt('upload_dir_perms');
 				} else {
 					@chmod($newpath,0644);

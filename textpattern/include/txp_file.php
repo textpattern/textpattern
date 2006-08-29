@@ -397,8 +397,10 @@ $LastChangedRevision$
 			 description = '$description'
 		");
 		
-		if ($rs)
-			return mysql_insert_id();
+		if ($rs) {
+			$GLOBALS['ID'] = mysql_insert_id( );
+			return $GLOBALS['ID'];
+		}
 			
 		return false;
 	}	
@@ -461,6 +463,7 @@ $LastChangedRevision$
 				if(!shift_uploaded_file($file, $newpath)) {
 					safe_delete("txp_file","id='$id'");
 					safe_alter("txp_file", "auto_increment=$id");
+					if ( isset( $GLOBALS['ID'])) unset( $GLOBALS['ID']);
 					file_list($newpath.' '.gTxt('upload_dir_perms'));
 					// clean up file
 				} else {
