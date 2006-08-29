@@ -635,7 +635,7 @@ if (!empty($event) and $event == 'article') {
 				echo n.n.'<fieldset id="write-timestamp">'.
 					n.'<legend>'.gTxt('timestamp').'</legend>'.
 
-					n.graf(checkbox('publish_now', '1', '', '', 'publish_now').'<label for="publish_now">'.gTxt('set_to_now').'</label>').
+					n.graf(checkbox('publish_now', '1', ($Status < 4), '', 'publish_now').'<label for="publish_now">'.gTxt('set_to_now').'</label>').
 
 					n.graf(gTxt('or_publish_at').sp.popHelp('timestamp')).
 
@@ -666,7 +666,7 @@ if (!empty($event) and $event == 'article') {
 				echo n.n.'<fieldset id="write-timestamp">'.
 					n.'<legend>'.gTxt('timestamp').'</legend>'.
 
-					n.graf(checkbox('reset_time', '1', 0, '', 'reset_time').'<label for="reset_time">'.gTxt('reset_time').'</label>').
+					n.graf(checkbox('reset_time', '1', ($Status < 4), '', 'reset_time').'<label for="reset_time">'.gTxt('reset_time').'</label>').
 
 					n.graf(gTxt('published_at').sp.popHelp('timestamp')).
 
