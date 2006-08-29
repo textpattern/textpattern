@@ -259,8 +259,8 @@ $LastChangedRevision$
 	{
 		global $txp_user, $sitename;
 
-		require_privs('admin.edit');
-
+		if ( empty( $name)) $name = $txp_user;
+			
 		$message = gTxt('greeting').' '.$name.','.
 
 			"\r\n"."\r\n".gTxt('your_password_is').': '.$password.
