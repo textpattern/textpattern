@@ -395,8 +395,6 @@ $LastChangedRevision$
 			// by this point we should know the section, so grab its page and css
 		$rs = safe_row("*", "txp_section", "name = '".doSlash($s)."' limit 1");
 		$out['page'] = @$rs['page'];		
-// Remove the below line if nothing breaks
-// 		$out['css']  = @$rs['css'];
 
 		if(is_numeric($id)) {
 			$a = safe_row('*, unix_timestamp(Posted) as uPosted', 'textpattern', "ID='".doSlash($id)."' and Status = '4'");
