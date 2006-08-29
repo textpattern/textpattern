@@ -151,7 +151,7 @@ $LastChangedRevision$
 					$e['title'] = tag(htmlspecialchars($linkname),'title',t_html);
 					$e['content'] = tag(n.htmlspecialchars($description).n,'content',t_html);
 
-					$url = (preg_replace("/^\/(.*)/","http://$siteurl/$1",$url));
+					$url = (preg_replace("/^\/(.*)/","https?://$siteurl/$1",$url));
 					$url = preg_replace("/&((?U).*)=/","&amp;\\1=",$url);
 					$e['link'] = '<link'.r_relalt.t_texthtml.' href="'.$url.'" />';
 

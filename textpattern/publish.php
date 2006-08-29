@@ -62,13 +62,16 @@ $LastChangedRevision$
 	if (empty($path_to_site))
 		updateSitePath(dirname(dirname(__FILE__)));
 
+	if (!defined( 'PROTOCOL'))
+		define( 'PROTOCOL', 'http://')
+		
 		// v1.0: this should be the definitive http address of the site	
 	if (!defined('hu'))
-		define("hu",'http://'.$siteurl.'/');
+		define("hu",PROTOCOL.$siteurl.'/');
 	
 		// v1.0 experimental relative url global
 	if (!defined('rhu'))
-		define("rhu",preg_replace("/http:\/\/.+(\/.*)\/?$/U","$1",hu));
+		define("rhu",preg_replace("/https?:\/\/.+(\/.*)\/?$/U","$1",hu));
 
 		// 1.0: a new $here variable in the top-level index.php 
 		// should let us know the server path to the live site
@@ -212,7 +215,7 @@ $LastChangedRevision$
 
 			// define the useable url, minus any subdirectories.
 			// this is pretty fugly, if anyone wants to have a go at it - dean
-		$out['subpath'] = $subpath = preg_quote(preg_replace("/http:\/\/.*(\/.*)/Ui","$1",hu),"/");
+		$out['subpath'] = $subpath = preg_quote(preg_replace("/https?:\/\/.*(\/.*)/Ui","$1",hu),"/");
 		$out['req'] = $req = preg_replace("/^$subpath/i","/",$out['request_uri']);
 
 		$is_404 = 0;
