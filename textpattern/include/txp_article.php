@@ -422,13 +422,11 @@ if (!empty($event) and $event == 'article') {
 		{
 			echo '<p><input type="text" id="title" name="Title" value="'.cleanfInput($Title).'" class="edit" size="40" tabindex="1" />';
 
-			if ($Status == 4 or $Status == 5)
+			if ( ($Status == 4 or $Status == 5) and $step != 'create')
 			{
 				include_once txpath.'/publish/taghandlers.php';
 
-				$article_array = ($pull) ? $rs : gpsa($vars);
-
-				echo sp.sp.'<a href="'.permlinkurl($article_array).'">'.gTxt('view').'</a>';
+				echo sp.sp.'<a href="'.permlinkurl_id($ID).'">'.gTxt('view').'</a>';
 			}
 
 			echo '</p>';
