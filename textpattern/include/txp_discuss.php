@@ -189,13 +189,17 @@ $LastChangedRevision$
 
 				n.n.tr(
 					column_head('ID', 'id', 'discuss', true, $switch_dir, $crit, $search_method).
-					hCell().
 					column_head('date', 'date', 'discuss', true, $switch_dir, $crit, $search_method).
 					column_head('name', 'name', 'discuss', true, $switch_dir, $crit, $search_method).
 					column_head('message', 'message', 'discuss', true, $switch_dir, $crit, $search_method).
-					column_head('email', 'email', 'discuss', true, $switch_dir, $crit, $search_method).
-					column_head('website', 'website', 'discuss', true, $switch_dir, $crit, $search_method).
-					column_head('IP', 'ip', 'discuss', true, $switch_dir, $crit, $search_method).
+					column_multi_head( array(
+						array ('value' => 'email', 'sort' => 'email', 'event' => 'discuss','is_link' => true,
+							    'dir' => $switch_dir, 'crit' => $crit, 'method' => $search_method),
+						array ('value' => 'website', 'sort' => 'website', 'event' => 'discuss','is_link' => true,
+							    'dir' => $switch_dir, 'crit' => $crit, 'method' => $search_method),
+						array ('value' => 'IP', 'sort' => 'ip', 'event' => 'discuss','is_link' => true,
+							    'dir' => $switch_dir, 'crit' => $crit, 'method' => $search_method)
+					)).
 					column_head('status', 'status', 'discuss', true, $switch_dir, $crit, $search_method).
 					column_head('parent', 'parent', 'discuss', true, $switch_dir, $crit, $search_method).
 					hCell()
@@ -257,14 +261,12 @@ $LastChangedRevision$
 
 				echo n.n.tr(
 
-					n.td($discussid, 50).
-
-					td(
+					n.td($discussid.
 						n.'<ul>'.
 						n.t.'<li><a href="'.$edit_url.'">'.gTxt('edit').'</a></li>'.
 						$view.
 						n.'</ul>'
-					, 35).
+					, 50).
 
 					td(
 						safe_strftime('%d %b %Y %I:%M %p', $uPosted)
@@ -276,9 +278,7 @@ $LastChangedRevision$
 						short_preview($dmessage)
 					, 200).
 
-					td($email, 75).
-					td($web, 75).
-					td($ip, 75).
+					td("<ul><li>$email</li><li>$web</li><li>$ip</li></ul>", 80).
 					td($comment_status, 75).
 					td($parent, 100).
 

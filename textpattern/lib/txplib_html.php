@@ -32,28 +32,53 @@ $LastChangedRevision$
 
 	function column_head($value, $sort = '', $event = '', $is_link = '', $dir = '', $crit = '', $method = '')
 	{
+		return column_multi_head( array(
+					array ('value' => $value, 'sort' => $sort, 'event' => $event, 'is_link' => $is_link,
+						   'dir' => $dir, 'crit' => $crit, 'method' => $method)
+				));
+	}
+
+// -------------------------------------------------------------
+
+	function column_multi_head($head_items)
+	{
 		$o = n.t.'<th>';
-
-		if ($is_link)
+		$first_item = true;
+		foreach ($head_items as $item)
 		{
-			$o .= '<a href="index.php?step=list';
+			if (empty($item)) continue;
+			extract(lAtts(array(
+				'value'		=> '',
+				'sort'		=> '',
+				'event'		=> '',
+				'is_link'	=> '',
+				'dir'		=> '',
+				'crit'		=> '',
+				'method'	=> '',
+			),$item));	
 
-			$o .= ($event) ? a."event=$event" : '';
-			$o .= ($sort) ? a."sort=$sort" : '';
-			$o .= ($dir) ? a."dir=$dir" : '';
-			$o .= ($crit) ? a."crit=$crit" : '';
-			$o .= ($method) ? a."method=$method" : '';
+			$o .= ($first_item) ? '' : ', '; $first_item = false;
 
-			$o .= '">';
+			if ($is_link)
+			{
+				$o .= '<a href="index.php?step=list';
+
+				$o .= ($event) ? a."event=$event" : '';
+				$o .= ($sort) ? a."sort=$sort" : '';
+				$o .= ($dir) ? a."dir=$dir" : '';
+				$o .= ($crit) ? a."crit=$crit" : '';
+				$o .= ($method) ? a."method=$method" : '';
+
+				$o .= '">';
+			}
+
+			$o .= gTxt($value);
+
+			if ($is_link)
+			{
+				$o .= '</a>';
+			}
 		}
-
-		$o .= gTxt($value);
-
-		if ($is_link)
-		{
-			$o .= '</a>';
-		}
-
 		$o .= '</th>';
 
 		return $o;
