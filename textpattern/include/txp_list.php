@@ -178,7 +178,6 @@ $LastChangedRevision$
 				n.startTable('list').
 				n.tr(
 					n.column_head('ID', 'id', 'list', true, $switch_dir, $crit, $search_method).
-					hCell().
 					column_head('posted', 'posted', 'list', true, $switch_dir, $crit, $search_method).
 					column_head('title', 'title', 'list', true, $switch_dir, $crit, $search_method).
 					column_head('section', 'section', 'list', true, $switch_dir, $crit, $search_method).
@@ -220,7 +219,7 @@ $LastChangedRevision$
 
 				if (isset($total_comments[$ID]) and $total_comments[$ID] > 0)
 				{
-					$comments = href(gTxt('manage'), 'index.php?event=discuss'.a.'step=list'.a.'method=parent'.a.'crit='.$ID).
+					$comments = href(gTxt('manage'), 'index.php?event=discuss'.a.'step=list'.a.'search_method=parent'.a.'crit='.$ID).
 						' ('.$total_comments[$ID].')';
 				}
 
@@ -244,8 +243,7 @@ $LastChangedRevision$
 
 				echo n.n.tr(
 
-					n.td($ID, 35).
-					td($manage, 35).
+					n.td($ID.$manage, 40).
 
 					td(
 						safe_strftime('%d %b %Y %I:%M %p', $posted)
