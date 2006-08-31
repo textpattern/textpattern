@@ -600,19 +600,25 @@ $LastChangedRevision$
 		global $prefs;
 		if ($force or !empty($prefs['attach_titles_to_permalinks'])) {
 		
-			$text = dumbDown($text);
-			$text = preg_replace("/(^|&\S+;)|(<[^>]*>)/U","",$text);		
-
+			$text = sanitizeForUrl($text);
 			if ($prefs['permalink_title_format']) {
-				$text =  
-				strtolower(
-					preg_replace('/[\s\-]+/', '-', trim(preg_replace('/[^\w\s\-]/', '', $text)))
-				);
-				return preg_replace("/[^A-Za-z0-9\-_]/","",$text);
+				return strtolower($text);
 			} else {
-				return preg_replace("/[^A-Za-z0-9_]/","",$text);
+				return str_replace('-','',$text);
 			}
 		}
+	}
+
+// -------------------------------------------------------------
+	function sanitizeForUrl($text) 
+	{
+		// Remove names entities and tags
+		$text = preg_replace("/(^|&\S+;)|(<[^>]*>)/U","",dumbDown($text));
+		// Collapse spaces, minuses and non-words
+		$text = preg_replace('/[\s\-]+/', '-', trim(preg_replace('/[^\w\s\-]/', '', $text)));
+		// Remove all non-whitelisted characters
+		$text = preg_replace("/[^A-Za-z0-9\-_]/","",$text);
+		return $text;
 	}
 
 // -------------------------------------------------------------
