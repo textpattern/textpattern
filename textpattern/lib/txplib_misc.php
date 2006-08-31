@@ -723,6 +723,13 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
+	function noWidow($str)
+	{
+		// replace the last space with a nbsp
+		return preg_replace('@[ ]+(\w+[[:punct:]]?)$@', '&nbsp;$1', $str);
+	}
+
+// -------------------------------------------------------------
 	function is_blacklisted($ip) 
 	{
 		global $prefs;

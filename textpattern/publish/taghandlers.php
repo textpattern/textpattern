@@ -1771,8 +1771,14 @@ function body($atts)
 	{
 		global $thisarticle;
 		assert_article();
+		extract(lAtts(array(
+			'no_widow' => '0',
+		), $atts));
 		
-		return escape_title($thisarticle['title']);
+		$t = escape_title($thisarticle['title']);
+		if ($no_widow)
+			$t = noWidow($t);
+		return $t;
 	}
 
 // -------------------------------------------------------------
