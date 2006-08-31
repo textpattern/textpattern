@@ -630,10 +630,19 @@ if (!empty($event) and $event == 'article') {
 				echo n.n.'</fieldset>';
 			}
 
-		//-- timestamp ------------------- 
 
 			if ($step == "create" and empty($GLOBALS['ID']))
 			{
+
+		//-- publish button --------------
+
+				echo
+				(has_privs('article.publish')) ?
+				fInput('submit','publish',gTxt('publish'),"publish", '', '', '', 4) :
+				fInput('submit','publish',gTxt('save'),"publish", '', '', '', 4);
+
+		//-- timestamp ------------------- 
+
 				//Avoiding modified date to disappear
 				$persist_timestamp = (!empty($store_out['year']))? 
 					mktime($store_out['hour'],$store_out['minute'], $store_out['second'], $store_out['month'], $store_out['day'], $store_out['year'])
@@ -660,16 +669,21 @@ if (!empty($event) and $event == 'article') {
 
 				n.'</fieldset>';
 
-		//-- publish button --------------
-
-				echo
-				(has_privs('article.publish')) ?
-				fInput('submit','publish',gTxt('publish'),"publish", '', '', '', 4) :
-				fInput('submit','publish',gTxt('save'),"publish", '', '', '', 4);
 			}
 
 			else
 			{
+
+		//-- save button --------------
+
+				if (   ($Status >= 4 and has_privs('article.edit.published'))
+					or ($Status >= 4 and $AuthorID==$txp_user and has_privs('article.edit.own.published'))
+				    or ($Status <  4 and has_privs('article.edit'))
+					or ($Status <  4 and $AuthorID==$txp_user and has_privs('article.edit.own')))
+					echo fInput('submit','save',gTxt('save'),"publish", '', '', '', 4);
+
+		//-- timestamp ------------------- 
+
 				echo n.n.'<fieldset id="write-timestamp">'.
 					n.'<legend>'.gTxt('timestamp').'</legend>'.
 
@@ -696,13 +710,6 @@ if (!empty($event) and $event == 'article') {
 
 				n.'</fieldset>';
 
-		//-- save button --------------
-
-				if (   ($Status >= 4 and has_privs('article.edit.published'))
-					or ($Status >= 4 and $AuthorID==$txp_user and has_privs('article.edit.own.published'))
-				    or ($Status <  4 and has_privs('article.edit'))
-					or ($Status <  4 and $AuthorID==$txp_user and has_privs('article.edit.own')))
-					echo fInput('submit','save',gTxt('save'),"publish", '', '', '', 4);
 
 			}
 		}
