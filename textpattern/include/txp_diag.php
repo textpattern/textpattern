@@ -259,7 +259,6 @@ $LastChangedRevision$
 		foreach ($cs as $c) {
 			if (preg_match('@^(\S+): r?(\S+) \((.*)\)$@', trim($c), $m)) {
 				list(,$file,$r,$md5) = $m;
-				echo "<br>$file,$r,$md5<br>";
 				if (!empty($file_revs[$file]) and $r and $file_revs[$file] < $r) {
 					$old_files[] = $file;
 				}
