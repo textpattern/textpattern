@@ -7,7 +7,7 @@ $LastChangedRevision: 711 $
 		exit("Nothing here. You can't access this file directly.");
 
 	safe_delete("txp_category","name=''");
-	safe_delete("txp_category","name=' '");ur
+	safe_delete("txp_category","name=' '");
 
 	$txpcat = getThings('describe `'.PFX.'txp_category`');
 
