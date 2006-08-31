@@ -107,7 +107,7 @@
                     $a['Excerpt'] = '';
                     $a['Excerpt_html'] = '';
                 }
-                $a['url_title'] = stripSpace($a['Title']);
+                $a['url_title'] = stripSpace($a['Title'],1);
 				$a['Body_html'] = $textile->textileThis($a['Body']);
 				extract(array_slash($a));
 				$q = mysql_query("

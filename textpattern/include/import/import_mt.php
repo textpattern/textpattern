@@ -93,7 +93,7 @@ function import_mt_item($item, $section, $status, $invite) {
 
 	$title = $textile->TextileThis($item['TITLE'], 1);
 	//nice non-english permlinks	
-	$url_title = stripSpace(dumbDown($title));	
+	$url_title = stripSpace($title,1);
 
 	$body = $item['BODY'][0]['content'] . (isset($item['EXTENDED_BODY']) ? "\n<!--more-->\n" . $item['EXTENDED_BODY'][0]['content'] : '');
 	$body_html = $textile->textileThis($body);

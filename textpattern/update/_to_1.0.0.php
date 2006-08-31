@@ -7,7 +7,7 @@ $LastChangedRevision: 711 $
 		exit("Nothing here. You can't access this file directly.");
 
 	safe_delete("txp_category","name=''");
-	safe_delete("txp_category","name=' '");
+	safe_delete("txp_category","name=' '");ur
 
 	$txpcat = getThings('describe `'.PFX.'txp_category`');
 
@@ -227,7 +227,7 @@ eod;
 	
 		while ($a = mysql_fetch_array($rs)){
 			extract($a);
-			$url_title = addslashes(stripSpace($Title));
+			$url_title = addslashes(stripSpace($Title,1));
 			safe_update("textpattern","url_title = '$url_title'","ID=$ID");
 		}
 

@@ -93,7 +93,7 @@ function import_blogger_item($item, $section, $status, $invite) {
 	$textile = new Textile();
 	
 	$title = $textile->TextileThis($item['TITLE'], 1);	
-	$url_title = stripSpace(dumbDown($title));	
+	$url_title = stripSpace($title,1);
 
 	$body = $item['BODY'][0]['content'];
 	$body_html = $textile->textileThis($body, 1);
@@ -111,7 +111,7 @@ function import_blogger_item($item, $section, $status, $invite) {
 	if (!$authorid)
 //		$authorid = safe_field('user_id', 'txp_users', 'order by user_id asc limit 1');
 		//Add new authors
-		safe_insert('txp_users', "name='".doSlash(stripSpace(dumbDown($textile->TextileThis($item['AUTHOR'],1))))."', RealName='".doSlash($item['AUTHOR'])."'");
+		safe_insert('txp_users', "name='".doSlash(stripSpace($textile->TextileThis($item['AUTHOR'],1)))."', RealName='".doSlash($item['AUTHOR'])."'");
 
 		
 	if (!safe_field("ID", "textpattern", "Title = '".doSlash($title)."' AND Posted = '".doSlash($date)."'")) {
