@@ -1444,7 +1444,8 @@ $LastChangedRevision$
 				if (!$exit)
 					return array('304', $last);
 				txp_status_header('304 Not Modified');
-				header('Connection: close');
+#				header('Connection: close');
+				header('Content-Length: 0');
 				# discard all output
 				while (@ob_end_clean());
 				exit;
