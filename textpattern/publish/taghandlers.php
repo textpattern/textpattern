@@ -2806,11 +2806,11 @@ function body($atts)
 
 			while ($a = nextRow($rs))
 			{
-				$thisfile = file_download_format_info($a);
+				$GLOBALS['thisfile'] = file_download_format_info($a);
 
 				$out[] = parse($form);
 
-				unset($thisfile);
+				$GLOBALS['thisfile'] = '';
 			}
 
 			if ($out)
