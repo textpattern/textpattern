@@ -278,7 +278,7 @@ $LastChangedRevision$
 						short_preview($dmessage)
 					, 200).
 
-					td("<ul><li>$email</li><li>$web</li><li>$ip</li></ul>", 80).
+					td("<ul><li>$email</li><li>$web</li><li>$ip</li></ul>", 130).
 					td($comment_status, 75).
 					td($parent, 100).
 
