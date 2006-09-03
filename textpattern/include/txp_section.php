@@ -189,8 +189,7 @@ $LastChangedRevision$
 		include_once txpath.'/lib/classTextile.php';
 		$textile = new Textile();
 		$title = $textile->TextileThis($name,1);
-		$name = dumbDown($textile->TextileThis(trim(doSlash($name)),1));
-		$name = preg_replace("/[^[:alnum:]\-_]/", "", str_replace(" ","-",$name));
+		$name =  sanitizeForUrl($name);
 		
 		$chk = fetch('name','txp_section','name',$name);
 
@@ -255,10 +254,9 @@ $LastChangedRevision$
 
 		$textile = new Textile();
 		$title = $textile->TextileThis($title,1);
-		$name = dumbDown($textile->TextileThis($name, 1));
-		$name = preg_replace("/[^[:alnum:]\-_]/", '', str_replace(' ', '-', $name));
+		$name =  sanitizeForUrl($name);
 
-		if ($old_name && ($name != $old_name))
+		if ($old_name && (strtolower($name) != strtolower($old_name)))
 		{
 			if (safe_field('name', 'txp_section', "name='".doSlash($name)."'"))
 			{
