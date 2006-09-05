@@ -561,18 +561,7 @@
 þ = "th"
 Þ = "TH"
 
-; language-specific overrides
-[fi-fi]
-ä = "a"
-ö = "o"
-ü = "u"
-Ä = "A"
-Ö = "O"
-
-[is-is]
-Æ = "AE"
-
-[ka-ge]
+; Georgian
 ა = "a"
 ბ = "b"
 გ = "g"
@@ -606,3 +595,15 @@
 ხ = "kh"
 ჯ = "j"
 ჰ = "h"
+
+; language-specific overrides
+[fi-fi]
+ä = "a"
+ö = "o"
+ü = "u"
+Ä = "A"
+Ö = "O"
+
+[is-is]
+Æ = "AE"
+
