@@ -562,7 +562,7 @@ $LastChangedRevision$
 		if($q && !$iscustom && !$issticky) {
 			include_once txpath.'/publish/search.php';
 			$s_filter = ($searchall ? filterSearch() : '');
-			$q = doSlash(urldecode($q));
+			$q = doSlash($q);
 			$match = ", match (Title,Body) against ('$q') as score";
 			$search = " and (Title rlike '$q' or Body rlike '$q') $s_filter";
 
@@ -1095,12 +1095,12 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function chopUrl($req) 
 	{
-		$req = urldecode(strtolower($req));
+		$req = strtolower($req);
 		//strip off query_string, if present
 		$qs = strpos($req,'?');
 		if ($qs) $req = substr($req, 0, $qs);
 		$req = preg_replace('/index\.php$/', '', $req);
-		$r = explode('/',$req);
+		$r = array_map('urldecode', explode('/',$req));
 		$o['u0'] = (!empty($r[0])) ? $r[0] : '';
 		$o['u1'] = (!empty($r[1])) ? $r[1] : '';
 		$o['u2'] = (!empty($r[2])) ? $r[2] : '';

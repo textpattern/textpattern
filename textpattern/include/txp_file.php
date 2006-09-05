@@ -566,12 +566,7 @@ $LastChangedRevision$
 
 		$id = intval($id);
 
-		$permissions = "";
-		if (isset($_GET['perms'])) {
-			$permissions =  urldecode($_GET['perms']);
-		} elseif (isset($_POST['perms'])) {
-			$permissions = $_POST['perms'];
-		}
+		$permissions = gps('perms');
 		if (is_array($permissions)) {
 			asort($permissions);
 			$permissions = implode(",",$permissions);

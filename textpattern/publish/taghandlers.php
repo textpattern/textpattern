@@ -809,7 +809,7 @@ $LastChangedRevision$
 					$selected = true;
 				}
 
-				$out[] = '<option value="'.urlencode($name).'"'.$sel.'>'.$title.'</option>';
+				$out[] = '<option value="'.$name.'"'.$sel.'>'.htmlspecialchars($title).'</option>';
 
 				$sel = '';
 			}
@@ -1181,13 +1181,13 @@ $LastChangedRevision$
 		{
 			$nextpg = ($pg - 1 == 1) ? 0 : ($pg - 1);
 
-			$url = urldecode(pagelinkurl(array(
+			$url = pagelinkurl(array(
 				'pg'		 => $nextpg,
 				's'			 => @$pretext['s'],
 				'c'			 => @$pretext['c'],
 				'q'			 => @$pretext['q'],
 				'author' => @$pretext['author']
-			)));
+			));
 
 			if ($thing)
 			{
@@ -1219,13 +1219,13 @@ $LastChangedRevision$
 		{
 			$nextpg = $pg + 1;
 
-			$url = urldecode(pagelinkurl(array(
+			$url = pagelinkurl(array(
 				'pg'		 => $nextpg,
 				's'			 => @$pretext['s'],
 				'c'			 => @$pretext['c'],
 				'q'			 => @$pretext['q'],
 				'author' => @$pretext['author']
-			)));
+			));
 
 			if ($thing)
 			{
@@ -2380,6 +2380,9 @@ function body($atts)
 		if (empty($section)) $section = $Section; // lame, huh?
 		if (empty($posted)) $posted = $Posted;
 		if (empty($thisid)) $thisid = $ID;
+
+		$section = urlencode($section);
+		$url_title = urlencode($url_title);
 		
 		switch($permlink_mode) {
 			case 'section_id_title':
