@@ -262,26 +262,47 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function navPop($inline='') 
+
+	function navPop($inline = '')
 	{
 		$areas = areas();
-		$st = ($inline) ? ' style="display:inline"': '';
-		$o = '<form action="index.php" method="get"'.$st.'>
-				<select name="event" onchange="submit(this.form)">
-				<option>'.gTxt('go').'...</option>';
-		foreach ($areas as $a => $b) {
-			if ( !has_privs( 'tab.'.$a)) continue;
-			if (count($b) > 0) {
-				$o .= '<optgroup label="'.gTxt('tab_'.$a).'">';
-				foreach ($b as $c => $d) {
-					if (has_privs($d)) 
-						$o .= '<option value="'.$d.'">'.$c.'</option>';
+
+		$out = array();
+
+		foreach ($areas as $a => $b)
+		{
+			if (!has_privs( 'tab.'.$a))
+			{
+				continue;
+			}
+
+			if (count($b) > 0)
+			{
+				$out[] = n.t.'<optgroup label="'.gTxt('tab_'.$a).'">';
+
+				foreach ($b as $c => $d)
+				{
+					if (has_privs($d))
+					{
+						$out[] = n.t.t.'<option value="'.$d.'">'.$c.'</option>';
+					}
 				}
-				$o .= '</optgroup>';
+
+				$out[] = n.t.'</optgroup>';
 			}
 		}
-		$o .= '</select></form>';
-		return $o;
+
+		if ($out)
+		{
+			$style = ($inline) ? ' style="display: inline;"': '';
+
+			return '<form method="get" action="index.php"'.$style.'>'.
+				n.'<select name="event" onchange="submit(this.form);">'.
+				n.t.'<option>'.gTxt('go').'&#8230;</option>'.
+				join('', $out).
+				n.'</select>'.
+				n.'</form>';
+		}
 	}
 
 // -------------------------------------------------------------
