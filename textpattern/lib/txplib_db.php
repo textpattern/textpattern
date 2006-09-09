@@ -79,7 +79,7 @@ $DB = new DB;
 		$time = sprintf('%02.6f', getmicrotime() - $start);
 		@$qtime += $time;
 		@$qcount++;
-		if ($result === false and (@$production_status == 'debug' or @$production_status == 'testing')) {
+		if ($result === false and (txpinterface === 'admin' or @$production_status == 'debug' or @$production_status == 'testing')) {
 			$caller = ($production_status == 'debug') ? n . join("\n", get_caller()) : '';
 			trigger_error(mysql_error() . n . $q . $caller, E_USER_WARNING);
 		}
