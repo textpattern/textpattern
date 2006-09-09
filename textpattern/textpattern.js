@@ -163,3 +163,62 @@ function addEvent(elm, evType, fn, useCapture)
 }
 
 // -------------------------------------------------------------
+function setCookie(name,value,days) {
+	if (days) {
+		var date = new Date();
+		date.setTime(date.getTime()+(days*24*60*60*1000));
+		var expires = "; expires="+date.toGMTString();
+	}
+	else var expires = "";
+	document.cookie = name+"="+value+expires+"; path=/";
+}
+
+function getCookie(name) {
+	var nameEQ = name + "=";
+	var ca = document.cookie.split(';');
+	for(var i=0;i < ca.length;i++) {
+		var c = ca[i];
+		while (c.charAt(0)==' ') c = c.substring(1,c.length);
+		if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+	}
+	return null;
+}
+
+function deleteCookie(name) {
+	setCookie(name,"",-1);
+}
+
+function getElementsByClass (className) {
+	var all = document.all ? document.all :
+		document.getElementsByTagName('*');
+	var elements = new Array();
+	for (var e = 0; e < all.length; e++)
+		if (all[e].className == className)
+			elements[elements.length] = all[e];
+	return elements;
+}
+
+function setClassDisplay(className, value) {
+	elements = getElementsByClass(className);
+	var is_ie = (navigator.appName == 'Microsoft Internet Explorer');
+	for (var i=0; i < elements.length; i++) {
+		var tagname = elements[i].nodeName.toLowerCase();
+		var type = 'block';
+		if (tagname == 'td' || tagname == 'th')
+			type = (is_ie ? 'inline' : 'table-cell');
+
+		elements[i].style.display = (value  == 1 ? type : 'none');
+	}
+}
+
+function toggleClassRemember(className) {
+	v = getCookie('toggle_'+className);
+	v = (v == 1 ? 0 : 1);
+	setCookie('toggle_'+className, v, 365);
+	setClassDisplay(className, v);
+}
+
+function setClassRemember(className) {
+	v = getCookie('toggle_'+className);
+	setClassDisplay(className, v);
+}

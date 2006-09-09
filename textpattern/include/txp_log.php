@@ -39,12 +39,6 @@ $LastChangedRevision$
 		}
 	}
 
-//-------------------------------------------------------------
-
-	function chunk($str, $len, $break = '<br />') 
-	{
-		return join($break, preg_split('/(.{1,'.$len.'})/', $str, -1, PREG_SPLIT_DELIM_CAPTURE|PREG_SPLIT_NO_EMPTY));
-	}
 
 //-------------------------------------------------------------
 
@@ -156,23 +150,23 @@ $LastChangedRevision$
 
 		echo n.log_search_form($crit, $search_method);
 
-		$rs = safe_rows_start('*, unix_timestamp(time) as uTime', 'txp_log', 
+		$rs = safe_rows_start('*, unix_timestamp(time) as uTime', 'txp_log',
 			"$criteria order by $sort_sql limit $offset, $limit");
 
 		if ($rs)
 		{
 			echo n.n.'<form action="index.php" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
 
-				startTable('list').
+				startTable('list','','','','90%').
 
 				n.tr(
 					n.column_head('time', 'time', 'log', true, $switch_dir, $crit, $search_method).
-					column_head('IP', 'ip', 'log', true, $switch_dir, $crit, $search_method).
+					column_head('IP', 'ip', 'log', true, $switch_dir, $crit, $search_method, 'log_detail').
 					column_head('host', 'host', 'log', true, $switch_dir, $crit, $search_method).
 					column_head('page', 'page', 'log', true, $switch_dir, $crit, $search_method).
 					column_head('referrer', 'refer', 'log', true, $switch_dir, $crit, $search_method).
-					column_head('method', 'method', 'log', true, $switch_dir, $crit, $search_method).
-					column_head('status', 'status', 'log', true, $switch_dir, $crit, $search_method)
+					column_head('method', 'method', 'log', true, $switch_dir, $crit, $search_method, 'log_detail').
+					column_head('status', 'status', 'log', true, $switch_dir, $crit, $search_method, 'log_detail')
 				);
 
 			while ($a = nextRow($rs))
@@ -183,7 +177,7 @@ $LastChangedRevision$
 				{
 					$log_refer = htmlspecialchars('http://'.$log_refer);
 
-					$log_refer = '<a href="'.$log_refer.'" target="_blank">'.chunk($log_refer, 30).'</a>';
+					$log_refer = '<a href="'.$log_refer.'" target="_blank">'.soft_wrap($log_refer, 30).'</a>';
 				}
 
 				if ($log_page)
@@ -191,7 +185,7 @@ $LastChangedRevision$
 					$log_page = htmlspecialchars($log_page);
 
 					$log_page = '<a href="'.$log_page.'" target="_blank">'.
-						chunk(
+						soft_wrap(
 							preg_replace('/\/$/','', substr($log_page, 1))
 						, 30).
 						'</a>';
@@ -208,16 +202,14 @@ $LastChangedRevision$
 						safe_strftime('%d %b %Y %I:%M:%S %p', $log_uTime)
 					, 85).
 
-					td($log_ip, 20).
+					td($log_ip, 20, 'log_detail').
 
-					td(
-						chunk($log_host, 20)
-					, 75).
+					td(soft_wrap($log_host, 30)).
 
-					td($log_page, 125).
-					td($log_refer, 125).
-					td($log_method, 50).
-					td($log_status, 50).
+					td($log_page).
+					td($log_refer).
+					td($log_method, 50, 'log_detail').
+					td($log_status, 50, 'log_detail').
 
 					td(
 						fInput('checkbox', 'selected[]', $log_id)
@@ -228,9 +220,13 @@ $LastChangedRevision$
 
 			echo n.n.tr(
 				tda(
+					toggle_box('log_detail'),
+					' colspan="1" style="text-align: left; border: none;"'
+				).
+				tda(
 					select_buttons().
 					log_multiedit_form($page, $sort, $dir, $crit, $search_method)
-				, ' colspan="8" style="text-align: right; border: none;"')
+				, ' colspan="7" style="text-align: right; border: none;"')
 			).
 
 			n.endTable().

@@ -175,17 +175,17 @@ $LastChangedRevision$
 
 			echo n.n.'<form name="longform" method="post" action="index.php" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
 
-				n.startTable('list').
+				n.startTable('list','','','','90%').
 				n.tr(
 					n.column_head('ID', 'id', 'list', true, $switch_dir, $crit, $search_method).
 					column_head('posted', 'posted', 'list', true, $switch_dir, $crit, $search_method).
 					column_head('title', 'title', 'list', true, $switch_dir, $crit, $search_method).
 					column_head('section', 'section', 'list', true, $switch_dir, $crit, $search_method).
-					column_head('category1', 'category1', 'list', true, $switch_dir, $crit, $search_method).
-					column_head('category2', 'category2', 'list', true, $switch_dir, $crit, $search_method).
+					column_head('category1', 'category1', 'list', true, $switch_dir, $crit, $search_method, 'articles_detail').
+					column_head('category2', 'category2', 'list', true, $switch_dir, $crit, $search_method, 'articles_detail').
 					column_head('status', 'status', 'list', true, $switch_dir, $crit, $search_method).
 					column_head('author', 'author', 'list', true, $switch_dir, $crit, $search_method).
-					column_head('comments', 'comments', 'list', true, $switch_dir, $crit, $search_method).
+					column_head('comments', 'comments', 'list', true, $switch_dir, $crit, $search_method, 'articles_detail').
 					hCell()
 				);
 
@@ -208,7 +208,7 @@ $LastChangedRevision$
 				$Category1 = ($Category1) ? '<span title="'.fetch_category_title($Category1).'">'.$Category1.'</span>' : '';
 				$Category2 = ($Category2) ? '<span title="'.fetch_category_title($Category2).'">'.$Category2.'</span>' : '';
 
-				$manage = n.'<ul>'.
+				$manage = n.'<ul class="articles_detail">'.
 						n.t.'<li>'.eLink('article', 'edit', 'ID', $ID, gTxt('edit')).'</li>'.
 						( ($Status == 4 or $Status == 5) ? n.t.'<li><a href="'.permlinkurl($a).'">'.gTxt('view').'</a></li>' : '' ).
 						n.'</ul>';
@@ -243,27 +243,27 @@ $LastChangedRevision$
 
 				echo n.n.tr(
 
-					n.td($ID.$manage, 40).
+					n.td(eLink('article', 'edit', 'ID', $ID, $ID).$manage).
 
 					td(
 						safe_strftime('%d %b %Y %I:%M %p', $posted)
-					, 75).
+					).
 
-					td($Title, 175).
+					td($Title).
 
 					td(
 						'<span title="'.fetch_section_title($Section).'">'.$Section.'</span>'
 					, 75).
 
-					td($Category1, 100).
-					td($Category2, 100).
-					td($Status, 50).
+					td($Category1, 100, "articles_detail").
+					td($Category2, 100, "articles_detail").
+					td(($a['Status'] < 4 ? $Status : '<a href="'.permlinkurl($a).'">'.$Status.'</a>'), 50).
 
 					td(
 						'<span title="'.get_author_name($AuthorID).'">'.$AuthorID.'</span>'
-					, 75).
+					).
 
-					td($comments).
+					td($comments, 50, "articles_detail").
 
 					td(
 						fInput('checkbox', 'selected[]', $ID)
@@ -273,9 +273,14 @@ $LastChangedRevision$
 
 			echo n.n.tr(
 				tda(
+					toggle_box('articles_detail'),
+					' colspan="2" style="text-align: left; border: none;"'
+				).
+
+				tda(
 					select_buttons().
 					list_multiedit_form($page, $sort, $dir, $crit, $search_method)
-				,' colspan="11" style="text-align: right; border: none;"')
+				,' colspan="9" style="text-align: right; border: none;"')
 			).
 
 			n.endTable().

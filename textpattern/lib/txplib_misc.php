@@ -1848,4 +1848,11 @@ eod;
 		return array($page, $offset, $num_pages);
 	}
 
+//-------------------------------------------------------------
+// word-wrap a string using a zero width space
+	function soft_wrap($text, $width, $break='&#8203;')
+	{
+		return chunk_split($text, $width, $break);
+	}
+
 ?>

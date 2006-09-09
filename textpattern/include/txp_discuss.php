@@ -185,7 +185,7 @@ $LastChangedRevision$
 		{
 			echo n.n.'<form name="longform" method="post" action="index.php" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
 
-				n.startTable('list').
+				n.startTable('list','','','','90%').
 
 				n.n.tr(
 					column_head('ID', 'id', 'discuss', true, $switch_dir, $crit, $search_method).
@@ -199,8 +199,8 @@ $LastChangedRevision$
 							    'dir' => $switch_dir, 'crit' => $crit, 'method' => $search_method),
 						array ('value' => 'IP', 'sort' => 'ip', 'event' => 'discuss','is_link' => true,
 							    'dir' => $switch_dir, 'crit' => $crit, 'method' => $search_method)
-					)).
-					column_head('status', 'status', 'discuss', true, $switch_dir, $crit, $search_method).
+					), 'discuss_detail').
+					column_head('status', 'status', 'discuss', true, $switch_dir, $crit, $search_method, 'discuss_detail').
 					column_head('parent', 'parent', 'discuss', true, $switch_dir, $crit, $search_method).
 					hCell()
 				);
@@ -261,26 +261,26 @@ $LastChangedRevision$
 
 				echo n.n.tr(
 
-					n.td($discussid.
-						n.'<ul>'.
+					n.td('<a href="'.$edit_url.'">'.$discussid.'</a>'.
+						n.'<ul class="discuss_detail">'.
 						n.t.'<li><a href="'.$edit_url.'">'.gTxt('edit').'</a></li>'.
 						$view.
 						n.'</ul>'
 					, 50).
 
 					td(
-						safe_strftime('%d %b %Y %I:%M %p', $uPosted)
-					, 75).
+						safe_strftime('%d %b %Y %I:%M %p', $uPosted), 140
+					).
 
 					td($name, 75).
 
 					td(
-						short_preview($dmessage)
-					, 200).
+						soft_wrap(short_preview($dmessage), 40)
+					).
 
-					td("<ul><li>$email</li><li>$web</li><li>$ip</li></ul>", 130).
-					td($comment_status, 75).
-					td($parent, 100).
+					td("<ul><li>".soft_wrap($email, 30)."</li><li>".soft_wrap($web, 30)."</li><li>$ip</li></ul>", 100, 'discuss_detail').
+					td($comment_status, 75, 'discuss_detail').
+					td($parent, 75).
 
 					td(
 						fInput('checkbox', 'selected[]', $discussid)
@@ -291,9 +291,13 @@ $LastChangedRevision$
 
 			echo tr(
 				tda(
+					toggle_box('discuss_detail'),
+					' colspan="2" style="text-align: left; border: none;"'
+				).
+				tda(
 					select_buttons().
 					discuss_multiedit_form($page, $sort, $dir, $crit, $search_method)
-				, ' colspan="11" style="text-align: right; border: none;"')
+				, ' colspan="9" style="text-align: right; border: none;"')
 			).
 
 			endTable().

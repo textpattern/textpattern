@@ -30,19 +30,19 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function column_head($value, $sort = '', $event = '', $is_link = '', $dir = '', $crit = '', $method = '')
+	function column_head($value, $sort = '', $event = '', $is_link = '', $dir = '', $crit = '', $method = '', $class = '')
 	{
 		return column_multi_head( array(
 					array ('value' => $value, 'sort' => $sort, 'event' => $event, 'is_link' => $is_link,
 						   'dir' => $dir, 'crit' => $crit, 'method' => $method)
-				));
+				), $class);
 	}
 
 // -------------------------------------------------------------
 
-	function column_multi_head($head_items)
+	function column_multi_head($head_items, $class='')
 	{
-		$o = n.t.'<th>';
+		$o = n.t.'<th'.($class ? ' class="'.$class.'"' : '').'>';
 		$first_item = true;
 		foreach ($head_items as $item)
 		{
@@ -233,14 +233,14 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function startTable($type,$align='',$class='',$p='')
+	function startTable($type,$align='',$class='',$p='',$w='')
 	{
 		if (!$p) $p = ($type=='edit') ? 3 : 0;
 		$align = (!$align) ? 'center' : $align;
 		$class = ($class) ? ' class="'.$class.'"' : '';
-		return
-		'<table cellpadding="'.$p.'" cellspacing="0" border="0" id="'.
-			$type.'" align="'.$align.'"'.$class.'>'.n;
+		$width = ($w) ? ' width="'.$w.'"' : '';
+		return '<table cellpadding="'.$p.'" cellspacing="0" border="0" id="'.
+			$type.'" align="'.$align.'"'.$class.$width.'>'.n;
 	}
 	
 // -------------------------------------------------------------
@@ -589,5 +589,20 @@ EOF;
 		return $out;
 	}
 
+//-------------------------------------------------------------
+	function toggle_box($classname, $form=0) {
+
+		$name = 'cb_toggle_'.$classname;
+		$i = 
+			'<input type="checkbox" name="'.$name.'" id="'.$name.'" value="1" '.
+			(cs('toggle_'.$classname) ? 'checked="checked" ' : '').
+			'class="checkbox" onclick="toggleClassRemember(\''.$classname.'\');" />'.
+			' <label for="'.$name.'">'.gTxt('detail').'</label> '.
+			script_js("setClassRemember('".$classname."');addEvent(window, 'load', function(){setClassRemember('".$classname."');});");
+		if ($form)
+			return n.form($i);
+		else
+			return n.$i;
+	}
 
 ?>
