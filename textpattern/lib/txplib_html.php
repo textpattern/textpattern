@@ -597,7 +597,7 @@ EOF;
 			'<input type="checkbox" name="'.$name.'" id="'.$name.'" value="1" '.
 			(cs('toggle_'.$classname) ? 'checked="checked" ' : '').
 			'class="checkbox" onclick="toggleClassRemember(\''.$classname.'\');" />'.
-			' <label for="'.$name.'">'.gTxt('detail').'</label> '.
+			' <label for="'.$name.'">'.gTxt('detail_toggle').'</label> '.
 			script_js("setClassRemember('".$classname."');addEvent(window, 'load', function(){setClassRemember('".$classname."');});");
 		if ($form)
 			return n.form($i);
