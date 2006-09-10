@@ -736,15 +736,23 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function is_blacklisted($ip) 
+	function is_blacklisted($ip, $checks = '') 
 	{
 		global $prefs;
-		$checks = explode(',', $prefs['spam_blacklists']);
-						
+		if (!$checks) $checks = explode(',', $prefs['spam_blacklists']);
+
 		$rip = join('.',array_reverse(explode(".",$ip)));
 		foreach ($checks as $a) {
-			if(@gethostbyname("$rip.".trim($a)) == '127.0.0.2') {
-				$listed[] = $a;
+			$parts = explode(':', trim($a), 2);
+			$rbl   = $parts[0];
+			if (isset($parts[1])) {
+				foreach (explode(':', $parts[1]) as $code) {
+					$codes[] = strpos($code, '.') ? $code : '127.0.0.'.$code;
+				}
+			}
+			$hosts = @gethostbynamel($rip.'.'.$rbl);
+			if ($hosts and (!isset($codes) or array_intersect($hosts, $codes))) {
+				$listed[] = $rbl;
 			}
 		}
 		return (!empty($listed)) ? join(', ',$listed) : false;
