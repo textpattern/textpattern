@@ -440,44 +440,113 @@ eod;
 	}
 
 //-------------------------------------------------------------
-	function langs() 
+
+	function langs()
 	{
-		$things = array(
+		$langs = array(
+
+			// Catalan
+			'ca-es' => 'Catal&#224;',
+
+			// Czech
+			'cs-cz' => '&#268;e&#353;tina',
+
+			// Danish
+			'da-dk' => 'Dansk',
+
+			// German
+			'de-de' => 'Deutsch',
+
 			'en-gb' => 'English (GB)',
 			'en-us' => 'English (US)',
-			'fr-fr' => 'Fran&#231;ais',
+
+			// Spanish
 			'es-es' => 'Espa&#241;ol',
-			'da-dk' => 'Dansk',
+
+			// Greek
 			'el-gr' => '&#917;&#955;&#955;&#951;&#957;&#953;&#954;&#940;',
-			'sv-se' => 'Svenska',
+
+			// French
+			'fr-fr' => 'Fran&#231;ais',
+
+			// Italian
 			'it-it' => 'Italiano',
-			'cs-cz' => '&#268;e&#353;tina',
+
+			// Indonesian
+			// NEEDED
+			// 'id-id' => 'Bahasa Indonesia',
+
+			// Icelandic
+			'is-is' => '&#205;slenska',
+
+			// Hebrew
+			'he-il' => '&#1506;&#1489;&#1512;&#1497;&#1514;',
+
+			// Japanese
 			'ja-jp' => '&#26085;&#26412;&#35486;',
-			'de-de' => 'Deutsch',
-			'no-no' => 'Norsk',
-			'pt-pt' => 'Portugu&#234;s',
-			'ru-ru' => '&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081;',
-			'sk-sk' => 'Sloven&#269;ina',
-			'th-th' => '&#3652;&#3607;&#3618;',
+
+			// Latvian
+			// NEEDED
+			// 'lv-lv' => 'Latvie&#353;u',
+
+			// Hungarian
+			'hu-hu' => 'Magyar',
+
+			// Dutch
 			'nl-nl' => 'Nederlands',
-			'is-is' => 'Íslenska(Icelandic)',
+
+			// Norwegian
+			'no-no' => 'Norsk',
+
+			// Portuguese
+			'pt-pt' => 'Portugu&#234;s',
+
+			// Polish
+			// NEEDED
+			// 'pl-pl' => 'Polski',
+
+			// Romanian
+			'ro-ro' => 'Rom&#226;n&#259;',
+
+			// Russian
+			'ru-ru' => '&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081;',
+
+			// Slovak
+			'sk-sk' => 'Sloven&#269;ina',
+
+			// Finnish
 			'fi-fi' => 'Suomi',
-			'ca-es' => 'Català',
-			'he-il' => 'Hebrew',
-			'ro-ro' => 'Română',
-			'hu-hu' => 'Magyar'
+
+			// Swedish
+			'sv-se' => 'Svenska',
+
+			// Thai
+			'th-th' => '&#3652;&#3607;&#3618;',
+
+			// Chinese (Simplified)
+			// NEEDED
+			// 'zh-cn' => '&#20013;&#25991;(&#31616;&#20307;)',
+
+			// Chinese (Traditional)
+			// NEEDED
+			// 'zh-tw' => '&#20013;&#25991;(&#32321;&#39636;)'
 		);
 
-		$out = '<select name="lang">';
+		$default	= 'en-gb';
 
-		foreach ($things as $a=>$b) {
-			$out .= '<option value="'.$a.'">'.$b.'</option>'.n;
-		}		
+		$out = n.'<select name="lang">';
 
-		$out .= '</select>';
+		foreach ($langs as $a => $b)
+		{
+			$out .= n.t.'<option value="'.$a.'"'.
+				( ($a == $default) ? ' selected="selected"' : '').
+				'>'.$b.'</option>';
+		}
+
+		$out .= n.'</select>';
+
 		return $out;
 	}
-	
 
 // -------------------------------------------------------------
 	function setup_load_lang($lang) 
