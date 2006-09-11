@@ -221,12 +221,12 @@ $LastChangedRevision$
 			echo n.n.tr(
 				tda(
 					toggle_box('log_detail'),
-					' colspan="1" style="text-align: left; border: none;"'
+					' colspan="2" style="text-align: left; border: none;"'
 				).
 				tda(
 					select_buttons().
 					log_multiedit_form($page, $sort, $dir, $crit, $search_method)
-				, ' colspan="7" style="text-align: right; border: none;"')
+				, ' colspan="6" style="text-align: right; border: none;"')
 			).
 
 			n.endTable().
