@@ -958,7 +958,7 @@ $LastChangedRevision$
 
 		elseif (isset($pretext[$tag]))
 		{
-			$out = $pretext[$tag];
+			$out = escape_output($pretext[$tag]);
 		}
 
 		else
