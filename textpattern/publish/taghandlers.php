@@ -819,7 +819,7 @@ $LastChangedRevision$
 				$section = ($this_section) ? ( $s == 'default' ? '' : $s) : $section;
 
 				$out = n.'<select name="'.$type.'" onchange="submit(this.form);">'.
-					n.t.'<option value=""'.($selected ? '' : ' selected="selected"').'></option>'.
+					n.t.'<option value=""'.($selected ? '' : ' selected="selected"').'>&nbsp;</option>'.
 					n.t.join(n.t, $out).
 					n.'</select>';
 
