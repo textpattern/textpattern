@@ -249,7 +249,7 @@ $LastChangedRevision$
 				{
 					$parent_title = empty($tq['Title']) ? '<em>'.gTxt('untitled').'</em>' : $tq['Title'];
 
-					$parent = href($parent_title, '?event=list'.a.'step=list'.a.'search_method='.$search_method.a.'crit='.$tq['ID']);
+					$parent = href($parent_title, '?event=list'.a.'step=list'.a.'search_method=id'.a.'crit='.$tq['ID']);
 
 					$view = '';
 
