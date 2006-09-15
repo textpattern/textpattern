@@ -361,6 +361,7 @@ class Textile
                 $row = $rmtch[2];
             } else $ratts = '';
 
+				$cells = array();
             foreach(explode("|", $row) as $cell) {
                 $ctyp = "d";
                 if (preg_match("/^_/", $cell)) $ctyp = "h";
@@ -480,7 +481,7 @@ class Textile
 			if ($txp == true) $txp = false;
             $out[] = $line;
         }
-        return join("\n", $out);
+        return join("\n\n", $out);
     }
 
 // -------------------------------------------------------------
