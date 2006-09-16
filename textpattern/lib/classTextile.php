@@ -238,7 +238,7 @@ class Textile
 			}
 	
 			$text = $this->getRefs($text);
-	
+
 			$text = $this->noTextile($text);
 			$text = $this->links($text);
 			if (!$noimage) {
@@ -525,7 +525,7 @@ class Textile
                 ($f)
                 ({$this->c})
                 (?::(\S+))?
-                ([^\s$f]+|\S[^$f]*[^\s$f])
+                ([^\s$f]+|\S[^$f\n]*[^\s$f\n])
                 ([$pnct]*)
                 $f
                 (?:$|([\]}])|(?=[[:punct:]]{1,2}|\s))
