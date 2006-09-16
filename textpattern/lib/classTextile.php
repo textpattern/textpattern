@@ -204,16 +204,17 @@ class Textile
 // -------------------------------------------------------------
     function Textile()
     {
-        $this->hlgn = "(?:\<(?!>)|(?<!<)\>|\<\>|\=|[()]+)";
+        $this->hlgn = "(?:\<(?!>)|(?<!<)\>|\<\>|\=|[()]+(?! ))";
         $this->vlgn = "[\-^~]";
         $this->clas = "(?:\([^)]+\))";
         $this->lnge = "(?:\[[^]]+\])";
         $this->styl = "(?:\{[^}]+\})";
         $this->cspn = "(?:\\\\\d+)";
         $this->rspn = "(?:\/\d+)";
-        $this->a = "(?:{$this->hlgn}?{$this->vlgn}?|{$this->vlgn}?{$this->hlgn}?)";
-        $this->s = "(?:{$this->cspn}?{$this->rspn}?|{$this->rspn}?{$this->cspn}?)";
-        $this->c = "(?:{$this->clas}?{$this->styl}?{$this->lnge}?|{$this->styl}?{$this->lnge}?{$this->clas}?|{$this->lnge}?{$this->styl}?{$this->clas}?)";
+        $this->a = "(?:{$this->hlgn}|{$this->vlgn})*";
+        $this->s = "(?:{$this->cspn}|{$this->rspn})*";
+        $this->c = "(?:{$this->clas}|{$this->styl}|{$this->lnge}|{$this->hlgn})*";
+
         $this->pnct = '[\!"#\$%&\'()\*\+,\-\./:;<=>\?@\[\\\]\^_`{\|}\~]';
         $this->urlch = '[\w"$\-_.+!*\'(),";\/?:@=&%#{}|\\^~\[\]`]';
     }
@@ -225,12 +226,12 @@ class Textile
            $this->rel = ' rel="'.$rel.'" ';
 
         $text = $this->incomingEntities($text);
-        
+
         if ($encode) {
 			$text = str_replace("x%x%", "&#38;", $text);
         	return $text;
         } else {
-        
+
 	    	if(!$strict) {
 				$text = $this->fixEntities($text);
 				$text = $this->cleanWhiteSpace($text);
@@ -294,7 +295,7 @@ class Textile
                 $matched = str_replace($sty[0], '', $matched);
             }
 
-            if (preg_match("/\[([^)]+)\]/U", $matched, $lng)) {
+            if (preg_match("/\[([^]]+)\]/U", $matched, $lng)) {
                 $lang = $lng[1];
                 $matched = str_replace($lng[0], '', $matched);
             }
@@ -522,7 +523,7 @@ class Textile
             $text = preg_replace_callback("/
                 (?:^|(?<=[\s>$pnct])|([{[]))
                 ($f)
-                ($this->c)
+                ({$this->c})
                 (?::(\S+))?
                 ([^\s$f]+|\S[^$f]*[^\s$f])
                 ([$pnct]*)
@@ -559,7 +560,7 @@ class Textile
 //		$this->dump($out);
 
         return $out;
-    
+
     }
 
 // -------------------------------------------------------------
