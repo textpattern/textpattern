@@ -1090,6 +1090,9 @@ $LastChangedRevision$
 		@list($lang, $charset) = explode('.', $locale);
 		if (empty($charset))
 			$charset = 'ISO-8859-1';
+		elseif (is_windows() and is_numeric($charset))
+			// Score -1 for consistent naming conventions
+			$charset = 'Windows-'.$charset;
 
 		if ($charset != 'UTF-8' and $format != 'since') {
 			$new = '';
