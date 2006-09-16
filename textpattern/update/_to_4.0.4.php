@@ -35,4 +35,8 @@ $LastChangedRevision: 711 $
    if (!$has_ss_idx)
       safe_query('alter ignore table `'.PFX.'textpattern` add index section_status_idx (Section,Status)');
 
+
+	if (!safe_field('name', 'txp_prefs', "name = 'title_no_widow'"))
+		safe_insert('txp_prefs', "prefs_id = 1, name = 'title_no_widow', val = '1', type = '1', html='yesnoradio'");
+
 ?>
