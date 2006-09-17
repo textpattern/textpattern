@@ -20,13 +20,15 @@ T E X T I L E
 
 A Humane Web Text Generator
 
-Version 2.0 beta
+Version 1.5 beta
 
 Copyright (c) 2003-2004, Dean Allen <dean@textism.com>
 All rights reserved.
 
-Thanks to Carlo Zottmann <carlo@g-blog.net> for refactoring 
+Thanks to Carlo Zottmann <carlo@g-blog.net> for refactoring
 Textile's procedural code into a class framework
+
+Additions and fixes Copyright (c) 2006 Alex Shiels http://thresholdstate.com/
 
 _____________
 L I C E N S E
@@ -627,7 +629,7 @@ function refs($m)
     function relURL($url)
     {
         $parts = parse_url($url);
-        if ((empty($parts['scheme']) or @$parts['scheme'] == 'http') and 
+        if ((empty($parts['scheme']) or @$parts['scheme'] == 'http') and
              empty($parts['host']) and 
              preg_match('/^\w/', @$parts['path']))
             $url = hu.$url;
@@ -638,6 +640,7 @@ function refs($m)
     function image($text)
     {
         return preg_replace_callback("/
+            (?:[[{])?          # pre
             \!                 # opening !
             (\<|\=|\>)??       # optional alignment atts
             ($this->c)         # optional style,class atts
@@ -647,7 +650,7 @@ function refs($m)
             (?:\(([^\)]+)\))?  # optional title
             \!                 # closing
             (?::(\S+))?        # optional href
-            (?=\s|$|[\]})])   # lookahead: space or end of string
+            (?:[\]}]|(?=\s|$)) # lookahead: space or end of string
         /Ux", array(&$this, "fImage"), $text);
     }
 
