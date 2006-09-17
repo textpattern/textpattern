@@ -286,6 +286,38 @@ class Textile
     }
 
 // -------------------------------------------------------------
+    function TextileRestricted($text, $lite=1, $noimage=1, $rel='nofollow')
+    {
+        if ($rel)
+           $this->rel = ' rel="'.$rel.'" ';
+
+			// escape any raw html
+			$text = $this->encode_html($text, 0);
+
+			$text = $this->links($text);
+			if (!$noimage)
+				$text = $this->image($text);
+			$text = $this->span($text);
+			$text = $this->footnoteRef($text);
+			$text = $this->glyphs($text);
+			$text = $this->retrieve($text);
+
+			if ($lite) {
+				$text = $this->blockLite($text);
+			}
+			else {
+				$text = $this->lists($text);
+				$text = $this->table($text);
+				$text = $this->block($text);
+			}
+
+				// just to be tidy
+			$text = str_replace("<br />", "<br />\n", $text);
+			
+			return $text;
+    }
+
+// -------------------------------------------------------------
     function pba($in, $element = "") // "parse block attributes"
     {
         $style = '';
@@ -939,18 +971,21 @@ function refs($m)
     }
 
 // -------------------------------------------------------------
-    function encode_html($str)
+    function encode_html($str, $quotes=1)
     {
-		return strtr($str,
-			array(
-				'&' => '&#38;',
-				'<' => '&#60;',
-				'>' => '&#62;',
-				"'" => '&#39;',
-				'"' => '&#34;',
-			)
+		$a = array(
+			'&' => '&#38;',
+			'<' => '&#60;',
+			'>' => '&#62;',
 		);
+		if ($quotes) $a = $a + array(
+			"'" => '&#39;',
+			'"' => '&#34;',
+		);
+
+		return strtr($str, $a);
     }
+
 // -------------------------------------------------------------
     function textile_popup_help($name, $helpvar, $windowW, $windowH)
     {
