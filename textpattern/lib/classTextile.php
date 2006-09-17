@@ -187,6 +187,19 @@ Applying Attributes:
 
 */
 
+// define these before including this file to override the standard glyphs
+@define('txt_quote_single_open',  '&#8216;');
+@define('txt_quote_single_close', '&#8217;');
+@define('txt_quote_double_open',  '&#8220;');
+@define('txt_quote_double_close', '&#8221;');
+@define('txt_ellipsis',           '&#8230;');
+@define('txt_emdash',             '&#8212;');
+@define('txt_endash',             '&#8211;');
+@define('txt_dimension',          '&#215;');
+@define('txt_trademark',          '&#8482;');
+@define('txt_registered',         '&#174;');
+@define('txt_copyright',          '&#169;');
+
 class Textile
 {
     var $hlgn;
@@ -219,6 +232,7 @@ class Textile
 
         $this->pnct = '[\!"#\$%&\'()\*\+,\-\./:;<=>\?@\[\\\]\^_`{\|}\~]';
         $this->urlch = '[\w"$\-_.+!*\'(),";\/?:@=&%#{}|\\^~\[\]`]';
+
     }
 
 // -------------------------------------------------------------
@@ -830,19 +844,19 @@ function refs($m)
          );
 
         $glyph_replace = array(
-            '$1&#8217;$2',                      //  single closing
-            '&#8216;',                          //  single opening
-            '$1&#8221;',                        //  double closing
-            '&#8220;',                          //  double opening
+            '$1'.txt_quote_single_close.'$2',   //  single closing
+            txt_quote_single_open,              //  single opening
+            '$1'.txt_quote_double_close,        //  double closing
+            txt_quote_double_open,              //  double opening
             '<acronym title="$2">$1</acronym>', //  3+ uppercase acronym
             '<span class="caps">$1</span>',     //  3+ uppercase
-            '$1&#8230;',                        //  ellipsis
-            '$1&#8212;$2',                      //  em dash
-            ' &#8211; ',                        //  en dash
-            '$1&#215;$2',                       //  dimension sign
-            '&#8482;',                          //  trademark
-            '&#174;',                           //  registered
-            '&#169;',                           //  copyright
+            '$1'.txt_ellipsis,                  //  ellipsis
+            '$1'.txt_emdash.'$2',               //  em dash
+            ' '.txt_endash.' ',                 //  en dash
+            '$1'.txt_dimension.'$2',            //  dimension sign
+            txt_trademark,                      //  trademark
+            txt_registered,                     //  registered
+            txt_copyright,                      //  copyright
          );
 
         $codepre = false;
