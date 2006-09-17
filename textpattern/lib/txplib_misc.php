@@ -133,37 +133,37 @@ $LastChangedRevision$
     }
 
 // -------------------------------------------------------------
-	function load_lang($lang) 
+	function load_lang($lang)
 	{
 		global $txpcfg;
-		
+
 		$installed = safe_field('name', 'txp_lang',"lang='".doSlash($lang)."' limit 1");
-		
+
 		$lang_code = ($installed)? $lang : 'en-gb';
-				
-		$rs = (txpinterface == 'admin') 
+
+		$rs = (txpinterface == 'admin')
 				? safe_rows_start('name, data','txp_lang',"lang='".doSlash($lang_code)."'")
 				: safe_rows_start('name, data','txp_lang',"lang='".doSlash($lang_code)."' AND ( event='public' OR event='common')");
-		
+
 		$out = array();
-		
+
 		if ($rs && mysql_num_rows($rs) > 0)
 		{
 			while ($a = nextRow($rs))
 			{
-				$out[$a['name']] = $a['data']; 
+				$out[$a['name']] = $a['data'];
 			}
 		}else{
 			#backward compatibility stuff. Remove when necessary.
 			$filename = is_file(txpath.'/lang/'.$lang.'.txt')
 			?	txpath.'/lang/'.$lang.'.txt'
 			:	txpath.'/lang/en-gb.txt';
-			 
+
 			$file = @fopen($filename, "r");
 			if ($file) {
 				while (!feof($file)) {
 					$line = fgets($file, 4096);
-				if($line[0]=='#') continue; 
+				if($line[0]=='#') continue;
 				@list($name,$val) = explode(' => ',trim($line));
 				$out[$name] = $val;
 			 }
@@ -175,7 +175,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function load_lang_dates($lang) 
+	function load_lang_dates($lang)
 	{
 		global $txpcfg;
 		$filename = is_file(txpath.'/lang/'.$lang.'_dates.txt')?
@@ -215,6 +215,21 @@ $LastChangedRevision$
 			}
 		}		
 		return ($out) ? $out : '';
+	}
+
+// -------------------------------------------------------------
+	function set_textile_glyphs()
+	{
+		$glyphs = array(
+			'txt_quote_single_open',
+			'txt_quote_single_close',
+			'txt_quote_double_open',
+			'txt_quote_double_close',
+		);
+		global $textarray;
+		foreach ($glyphs as $g)
+			if (!empty($textarray[$g]))
+				@define($g, $textarray[$g]);
 	}
 
 // -------------------------------------------------------------

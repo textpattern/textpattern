@@ -72,6 +72,7 @@ $LastChangedRevision$
 
 		if (!empty($locale)) setlocale(LC_ALL, $locale);
 		$textarray = load_lang(LANG);
+		set_textile_glyphs();
 	
 		include txpath.'/include/txp_auth.php';
 		doAuth();
