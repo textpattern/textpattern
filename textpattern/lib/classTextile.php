@@ -816,27 +816,32 @@ function refs($m)
             '/\'/',                                              //  single opening
             '/([^\s[{(>_*])?"(?(1)|(?=\s|'.$pnc.'))/',           //  double closing
             '/"/',                                               //  double opening
-            '/\b( )?\.{3}/',                                     //  ellipsis
             '/\b([A-Z][A-Z0-9]{2,})\b(?:[(]([^)]*)[)])/',        //  3+ uppercase acronym
+            '/\b([A-Z][A-Z\'\-]+[A-Z])(?=[\s.,\)])/',            //  3+ uppercase
+            '/\b( )?\.{3}/',                                     //  ellipsis
             '/(\s?)--(\s?)/',                                    //  em dash
             '/\s-\s/',                                           //  en dash
             '/(\d+) ?x ?(\d+)/',                                 //  dimension sign
             '/\b ?[([]TM[])]/i',                                 //  trademark
             '/\b ?[([]R[])]/i',                                  //  registered
-            '/\b ?[([]C[])]/i');                                 //  copyright
+            '/\b ?[([]C[])]/i',                                  //  copyright
+         );
 
-        $glyph_replace = array('$1&#8217;$2',   //  single closing
+        $glyph_replace = array(
+            '$1&#8217;$2',                      //  single closing
             '&#8216;',                          //  single opening
             '$1&#8221;',                        //  double closing
             '&#8220;',                          //  double opening
-            '$1&#8230;',                        //  ellipsis
             '<acronym title="$2">$1</acronym>', //  3+ uppercase acronym
+            '<span class="caps">$1</span>',     //  3+ uppercase
+            '$1&#8230;',                        //  ellipsis
             '$1&#8212;$2',                      //  em dash
             ' &#8211; ',                        //  en dash
             '$1&#215;$2',                       //  dimension sign
             '&#8482;',                          //  trademark
             '&#174;',                           //  registered
-            '&#169;');                          //  copyright
+            '&#169;',                           //  copyright
+         );
 
         $codepre = false;
         /*  if no html, do a simple search and replace... */
