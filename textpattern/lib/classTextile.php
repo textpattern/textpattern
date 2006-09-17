@@ -499,6 +499,8 @@ class Textile
             $tag = 'p';
             $fnid = empty($this->fn[$fns[1]]) ? $fns[1] : $this->fn[$fns[1]];
             $atts .= ' id="fn' . $fnid . '"';
+            if (strpos($atts, 'class=') === false)
+            	$atts .= ' class="footnote"';
             $content = '<sup>' . $fns[1] . '</sup> ' . $content;
         }
 
@@ -801,7 +803,7 @@ function refs($m)
         if (empty($this->fn[$id]))
             $this->fn[$id] = uniqid(rand());
         $fnid = $this->fn[$id];
-        return '<sup><a href="#fn'.$fnid.'">'.$id.'</a></sup>'.$t;
+        return '<sup class="footnote"><a href="#fn'.$fnid.'">'.$id.'</a></sup>'.$t;
     }
 
 // -------------------------------------------------------------
