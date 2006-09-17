@@ -215,6 +215,8 @@ class Textile
     var $pnct;
     var $rel;
     var $fn;
+    
+    var $shelf = array();
 
 // -------------------------------------------------------------
     function Textile()
