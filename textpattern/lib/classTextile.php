@@ -283,7 +283,9 @@ class Textile
             if ($element == 'td') {
                 if (preg_match("/\\\\(\d+)/", $matched, $csp)) $colspan = $csp[1];
                 if (preg_match("/\/(\d+)/", $matched, $rsp)) $rowspan = $rsp[1];
+            }
 
+            if ($element == 'td' or $element == 'tr') {
                 if (preg_match("/($this->vlgn)/", $matched, $vert))
                     $style[] = "vertical-align:" . $this->vAlign($vert[1]) . ";";
             }
@@ -355,7 +357,7 @@ class Textile
         $tatts = $this->pba($matches[1], 'table');
 
         foreach(preg_split("/\|$/m", $matches[2], -1, PREG_SPLIT_NO_EMPTY) as $row) {
-            if (preg_match("/^($this->a$this->c\. )(.*)/m", $row, $rmtch)) {
+            if (preg_match("/^($this->a$this->c\. )(.*)/m", ltrim($row), $rmtch)) {
                 $ratts = $this->pba($rmtch[1], 'tr');
                 $row = $rmtch[2];
             } else $ratts = '';
