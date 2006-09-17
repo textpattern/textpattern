@@ -520,7 +520,7 @@ class Textile
         foreach($qtags as $f) {
             $text = preg_replace_callback("/
                 (?:^|(?<=[\s>$pnct])|([{[]))
-                ($f)
+                ($f)(?!$f)
                 ({$this->c})
                 (?::(\S+))?
                 ([^\s$f]+|\S[^$f\n]*[^\s$f\n])
@@ -813,7 +813,7 @@ function refs($m)
             '/"/',                                               //  double opening
             '/\b( )?\.{3}/',                                     //  ellipsis
             '/\b([A-Z][A-Z0-9]{2,})\b(?:[(]([^)]*)[)])/',        //  3+ uppercase acronym
-            '/\s?--\s?/',                                        //  em dash
+            '/(\s?)--(\s?)/',                                    //  em dash
             '/\s-\s/',                                           //  en dash
             '/(\d+) ?x ?(\d+)/',                                 //  dimension sign
             '/\b ?[([]TM[])]/i',                                 //  trademark
@@ -826,7 +826,7 @@ function refs($m)
             '&#8220;',                          //  double opening
             '$1&#8230;',                        //  ellipsis
             '<acronym title="$2">$1</acronym>', //  3+ uppercase acronym
-            '&#8212;',                          //  em dash
+            '$1&#8212;$2',                      //  em dash
             ' &#8211; ',                        //  en dash
             '$1&#215;$2',                       //  dimension sign
             '&#8482;',                          //  trademark
