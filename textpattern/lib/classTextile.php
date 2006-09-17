@@ -225,18 +225,16 @@ class Textile
         if ($rel)
            $this->rel = ' rel="'.$rel.'" ';
 
-        $text = $this->incomingEntities($text);
-
         if ($encode) {
+         $text = $this->incomingEntities($text);
 			$text = str_replace("x%x%", "&#38;", $text);
         	return $text;
         } else {
 
 	    	if(!$strict) {
-				$text = $this->fixEntities($text);
 				$text = $this->cleanWhiteSpace($text);
 			}
-	
+
 			$text = $this->getRefs($text);
 
 			$text = $this->noTextile($text);
@@ -249,7 +247,7 @@ class Textile
 			$text = $this->footnoteRef($text);
 			$text = $this->glyphs($text);
 			$text = $this->retrieve($text);
-	
+
 			if (!$lite) {
 				$text = $this->lists($text);
 				$text = $this->table($text);
@@ -258,13 +256,13 @@ class Textile
 
 				// clean up <notextile>
 			$text = preg_replace('/<\/?notextile>/', "", $text);
-	
+
 				// turn the temp char back to an ampersand entity
 			$text = str_replace("x%x%", "&#38;", $text);
-	
+
 				// just to be tidy
 			$text = str_replace("<br />", "<br />\n", $text);
-	
+
 			return $text;
       	}
     }
@@ -567,7 +565,7 @@ class Textile
     function links($text)
     {
         return preg_replace_callback('/
-            ([\s[{(]|[[:punct:]])?       # $pre
+            (?:^|(?<=[\s>.$pnct\(])|([{[])) # $pre
             "                            # start
             (' . $this->c . ')           # $atts
             ([^"]+)                      # $text
@@ -577,7 +575,7 @@ class Textile
             ('.$this->urlch.'+)          # $url
             (\/)?                        # $slash
             ([^\w\/;]*)                  # $post
-            (?=\s|$)
+            (?:([\]}])|(?=\s|$|\)))
         /Ux', array(&$this, "fLink"), $text);
     }
 
@@ -589,13 +587,13 @@ class Textile
         $url = $this->checkRefs($url);
 
         $atts = $this->pba($atts);
-        $atts .= ($title != '') ? 'title="' . htmlspecialchars($title) . '"' : '';
+        $atts .= ($title != '') ? ' title="' . $this->encode_html($title) . '"' : '';
 
         $atts = ($atts) ? $this->shelve($atts) : '';
 
         $url = $this->relURL($url);
 
-        $out = $pre . '<a href="' . $url . $slash . '"' . $atts . $this->rel . '>' . $text . '</a>' . $post;
+        $out = '<a href="' . $this->encode_html($url . $slash) . '"' . $atts . $this->rel . '>' . $text . '</a>' . $post;
 
 		// $this->dump($out);
 		return $out;
@@ -679,43 +677,30 @@ function refs($m)
 // -------------------------------------------------------------
     function code($text)
     {
-        return preg_replace_callback("/
-            (?:^|(?<=[\s\(])|([[{]))        # before
-            @                               
-            (?:\|(\w+)\|)?                  # lang
-            (.+)                            # code
-            @                               
-            (?:$|([\]}])|
-            (?=[[:punct:]]{1,2}|
-            \s|$))                           # after
-        /Ux", array(&$this, "fCode"), $text);
+        $text = $this->doSpecial($text, '<code>', '</code>', 'fCode');
+        return $this->doSpecial($text, '@', '@', 'fCode');
     }
 
 // -------------------------------------------------------------
     function fCode($m)
     {
-        @list(, $before, $lang, $code, $after) = $m;
-        $lang = ($lang) ? ' language="' . $lang . '"' : '';
-        return $before . '<code' . $lang . '>' . $code . '</code>' . $after;
+      @list(, $before, $text, $after) = $m;
+		return $before.'<code>'.$this->shelve($this->encode_html($text)).'</code>'.$after;
     }
 
 // -------------------------------------------------------------
     function shelve($val)
     {
-        $this->shelf[] = $val;
-        return ' <' . count($this->shelf) . '>';
+        $i = '{'.uniqid(rand()).'}';
+        $this->shelf[$i] = $val;
+        return $i;
     }
 
 // -------------------------------------------------------------
     function retrieve($text)
     {
-        $i = 0;
-        if (isset($this->shelf) && is_array($this->shelf)) {
-            foreach($this->shelf as $r) {
-                $i++;
-                $text = str_replace("<$i>", $r, $text);
-            }
-        }
+        if (is_array($this->shelf))
+	        return strtr($text, $this->shelf);
         return $text;
     }
 
@@ -752,18 +737,32 @@ function refs($m)
     }
 
 // -------------------------------------------------------------
+    function doSpecial($text, $start, $end, $method='fSpecial')
+    {
+      return preg_replace_callback('/(^|\s)'.preg_quote($start, '/').'(.*)'.preg_quote($end, '/').'(\s|$)?/msU',
+			array(&$this, $method), $text);
+    }
+
+// -------------------------------------------------------------
+    function fSpecial($m)
+    {
+    	// A special block like notextile or code
+      @list(, $before, $text, $after) = $m;
+		return $before.$this->shelve($this->encode_html($text)).$after;
+    }
+
+// -------------------------------------------------------------
     function noTextile($text)
     {
-        $text = preg_replace_callback('/(^|\s)<notextile>(.*)<\/notextile>(\s|$)?/msU', 
-            array(&$this, "fTextile"), $text);
-        return preg_replace_callback('/(^|\s)==(.*)==(\s|$)?/msU', 
-            array(&$this, "fTextile"), $text);
-    } 
+         $text = $this->doSpecial($text, '<notextile>', '</notextile>', 'fTextile');
+         return $this->doSpecial($text, '==', '==', 'fTextile');
+
+    }
 
 // -------------------------------------------------------------
     function fTextile($m)
     {
-        $modifiers = array(     
+        $modifiers = array(
             '"' => '&#34;',
             '%' => '&#37;',
             '*' => '&#42;',
@@ -772,15 +771,16 @@ function refs($m)
             '<' => '&#60;',
             '=' => '&#61;',
             '>' => '&#62;',
-            '?' => '&#63;',     
+            '?' => '&#63;',
             '^' => '&#94;',
             '_' => '&#95;',
-            '~' => '&#126;',        
+            '~' => '&#126;',
             );
-        
+
         @list(, $before, $notextile, $after) = $m;
         $notextile = str_replace(array_keys($modifiers), array_values($modifiers), $notextile);
-        return $before . '<notextile>' . $notextile . '</notextile>' . $after;
+        #return $before . '<notextile>' . $notextile . '</notextile>' . $after;
+        return $before.$this->shelve(nl2br($notextile)).$after;
     }
 
 // -------------------------------------------------------------
@@ -852,13 +852,6 @@ function refs($m)
                     $line = preg_replace($glyph_search, $glyph_replace, $line);
                 }
 
-                /* do htmlspecial if between <code> */
-                if ($codepre == true) {
-                    $line = htmlspecialchars($line, ENT_NOQUOTES, "UTF-8");
-                    $line = preg_replace('/&lt;(\/?' . $offtags . ')&gt;/', "<$1>", $line);
-                    $line = str_replace("&amp;#","&#",$line);
-                }
-
                 $glyph_out[] = $line;
             }
             return join('', $glyph_out);
@@ -918,6 +911,19 @@ function refs($m)
     }
 
 // -------------------------------------------------------------
+    function encode_html($str)
+    {
+		return strtr($str,
+			array(
+				'&' => '&#38;',
+				'<' => '&#60;',
+				'>' => '&#62;',
+				"'" => '&#39;',
+				'"' => '&#34;',
+			)
+		);
+    }
+// -------------------------------------------------------------
     function textile_popup_help($name, $helpvar, $windowW, $windowH)
     {
         return ' <a target="_blank" href="http://www.textpattern.com/help/?item=' . $helpvar . '" onclick="window.open(this.href, \'popupwindow\', \'width=' . $windowW . ',height=' . $windowH . ',scrollbars,resizable\'); return false;">' . $name . '</a><br />';
@@ -940,7 +946,7 @@ function refs($m)
             return '';
         }
     }
-    
+
 // -------------------------------------------------------------
     function dump()
     {
