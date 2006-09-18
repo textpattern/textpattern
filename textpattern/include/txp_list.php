@@ -416,16 +416,8 @@ $LastChangedRevision$
 
 				// change comments
 				case 'changecomments':
-
 					$key = 'Annotate';
-					$val = ps('Annotate');
-
-					// do not allow to be set to an empty value
-					if (!$val)
-					{
-						$selected = array();
-					}
-
+					$val = (int) ps('Annotate');
 				break;
 
 				// change section
