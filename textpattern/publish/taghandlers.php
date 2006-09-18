@@ -198,6 +198,7 @@ $LastChangedRevision$
 			'name'			=> '',
 			'poplink'		=> '',
 			'style'			=> '',
+			'wraptag'   => ''
 		), $atts));
 
 		if (!empty($name))
@@ -244,7 +245,7 @@ $LastChangedRevision$
 						'\'width='.$w.', height='.$h.', scrollbars, resizable\'); return false;">'.$out.'</a>';
 				}
 
-				return $out;
+				return ($wraptag) ? doWrap($out, $wraptag, '', $class) : $out;
 			}
 		}
 	}
@@ -2013,15 +2014,19 @@ function body($atts)
 
 		extract(lAtts(array(
 			'align' 	  => '',
+			'class'     => '',
 			'escape'    => '',
 			'style' 	  => '',
 			'thumbnail' => 0,
+			'wraptag'   => '',
 		), $atts));
 
 		$image = ($thisarticle['article_image']) ? $thisarticle['article_image'] : '';
 
 		if ($image)
 		{
+			$out = '';
+
 			if (is_numeric($image))
 			{
 				$rs = safe_row('*', 'txp_image', "id = '$image'");
@@ -2040,7 +2045,7 @@ function body($atts)
 								$caption = escape_output($caption);
 							}
 
-							return '<img src="'.hu.$img_dir.'/'.$id.'t'.$ext.'" alt="'.$alt.'"'.
+							$out = '<img src="'.hu.$img_dir.'/'.$id.'t'.$ext.'" alt="'.$alt.'"'.
 								($caption ? ' title="'.$caption.'"' : '').
 								($style ? ' style="'.$style.'"' : '').
 								($align ? ' align="'.$align.'"' : '').
@@ -2058,7 +2063,7 @@ function body($atts)
 							$caption = escape_output($caption);
 						}
 
-						return '<img src="'.hu.$img_dir.'/'.$id.$ext.'" width="'.$w.'" height="'.$h.'" alt="'.$alt.'"'.
+						$out = '<img src="'.hu.$img_dir.'/'.$id.$ext.'" width="'.$w.'" height="'.$h.'" alt="'.$alt.'"'.
 							($caption ? ' title="'.$caption.'"' : '').
 							($style ? ' style="'.$style.'"' : '').
 							($align ? ' align="'.$align.'"' : '').
@@ -2069,10 +2074,15 @@ function body($atts)
 
 			else
 			{
-				return '<img src="'.$image.'" alt=""'.
+				$out = '<img src="'.$image.'" alt=""'.
 					($style ? ' style="'.$style.'"' : '').
 					($align ? ' align="'.$align.'"' : '').
 					' />';
+			}
+
+			if ($out)
+			{
+				return ($wraptag) ? doWrap($out, $wraptag, '', $class) : $out;
 			}
 		}
 	}
