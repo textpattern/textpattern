@@ -388,52 +388,81 @@ $LastChangedRevision$
 		{
 			switch ($method)
 			{
-				// change section
-				case 'changesection':
-					$key = 'Section';
-					$val = ps('Section');
+				// change author
+				case 'changeauthor':
+
+					$key = 'AuthorID';
+					$val = has_privs('article.edit') ? ps('AuthorID') : '';
+
+					// do not allow to be set to an empty value
+					if (!$val)
+					{
+						$selected = array();
+					}
+
 				break;
 
-			// change category1
+				// change category1
 				case 'changecategory1':
 					$key = 'Category1';
 					$val = ps('Category1');
 				break;
 
-			// change category2
+				// change category2
 				case 'changecategory2':
 					$key = 'Category2';
 					$val = ps('Category2');
 				break;
 
-			// change status
-				case 'changestatus':
-					$key = 'Status';
-					$val = ps('Status');
-				break;
-
-			// change comments
+				// change comments
 				case 'changecomments':
+
 					$key = 'Annotate';
 					$val = ps('Annotate');
-				break;
 
-			// change author
-				case 'changeauthor':
-					if (has_privs('article.edit'))
-					{
-						$key = 'AuthorID';
-						$val = ps('AuthorID');
-					}
-
-					else
+					// do not allow to be set to an empty value
+					if (!$val)
 					{
 						$selected = array();
 					}
+
+				break;
+
+				// change section
+				case 'changesection':
+
+					$key = 'Section';
+					$val = ps('Section');
+
+					// do not allow to be set to an empty value
+					if (!$val)
+					{
+						$selected = array();
+					}
+
+				break;
+
+				// change status
+				case 'changestatus':
+
+					$key = 'Status';
+					$val = ps('Status');
+
+					// do not allow to be set to an empty value
+					if (!$val)
+					{
+						$selected = array();
+					}
+
+				break;
+
+				default:
+					$key = '';
+					$val = '';
 				break;
 			}
 
-			if ($selected)
+			if ($selected and $key)
 			{
 				foreach ($selected as $id)
 				{
