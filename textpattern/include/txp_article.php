@@ -842,7 +842,7 @@ if (!empty($event) and $event == 'article') {
 
 		if ($rs)
 		{
-			return selectInput('Section', $rs, $Section, true, '', $id);
+			return selectInput('Section', $rs, $Section, false, '', $id);
 		}
 
 		return false;
