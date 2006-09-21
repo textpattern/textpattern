@@ -217,6 +217,8 @@ class Textile
     var $fn;
     
     var $shelf = array();
+    var $restricted = false;
+    var $url_schemes = array();
 
 // -------------------------------------------------------------
     function Textile()
@@ -235,6 +237,7 @@ class Textile
         $this->pnct = '[\!"#\$%&\'()\*\+,\-\./:;<=>\?@\[\\\]\^_`{\|}\~]';
         $this->urlch = '[\w"$\-_.+!*\'(),";\/?:@=&%#{}|\\^~\[\]`]';
 
+        $this->url_schemes = array('http','https','ftp','mailto');
     }
 
 // -------------------------------------------------------------
@@ -264,7 +267,6 @@ class Textile
 			$text = $this->span($text);
 			$text = $this->footnoteRef($text);
 			$text = $this->glyphs($text);
-			$text = $this->retrieve($text);
 
 			if (!$lite) {
 				$text = $this->lists($text);
@@ -272,11 +274,7 @@ class Textile
 				$text = $this->block($text);
 			}
 
-				// clean up <notextile>
-			$text = preg_replace('/<\/?notextile>/', "", $text);
-
-				// turn the temp char back to an ampersand entity
-			$text = str_replace("x%x%", "&#38;", $text);
+			$text = $this->retrieve($text);
 
 				// just to be tidy
 			$text = str_replace("<br />", "<br />\n", $text);
@@ -288,19 +286,24 @@ class Textile
 // -------------------------------------------------------------
     function TextileRestricted($text, $lite=1, $noimage=1, $rel='nofollow')
     {
+        $this->restricted = true;
         if ($rel)
            $this->rel = ' rel="'.$rel.'" ';
 
 			// escape any raw html
 			$text = $this->encode_html($text, 0);
 
+			$text = $this->cleanWhiteSpace($text);
+			$text = $this->getRefs($text);
+
+			if (!$lite)
+				$text = $this->noTextile($text);
 			$text = $this->links($text);
 			if (!$noimage)
 				$text = $this->image($text);
 			$text = $this->span($text);
 			$text = $this->footnoteRef($text);
 			$text = $this->glyphs($text);
-			$text = $this->retrieve($text);
 
 			if ($lite) {
 				$text = $this->blockLite($text);
@@ -311,9 +314,11 @@ class Textile
 				$text = $this->block($text);
 			}
 
+			$text = $this->retrieve($text);
+
 				// just to be tidy
 			$text = str_replace("<br />", "<br />\n", $text);
-			
+
 			return $text;
     }
 
@@ -373,6 +378,9 @@ class Textile
                 $id = $ids[2];
                 $class = $ids[1];
             }
+            
+            if ($this->restricted)
+            	return ($lang)    ? ' lang="'    . $lang            .'"':'';
 
             return join('',array(
                 ($style)   ? ' style="'   . join("", $style) .'"':'',
@@ -390,7 +398,7 @@ class Textile
     function table($text)
     {
         $text = $text . "\n\n";
-        return preg_replace_callback("/^(?:table(_?{$this->s}{$this->a}{$this->c})\. ?\n)?^({$this->a}{$this->c}\.? ?\|.*\|)\n\n/smU", 
+        return preg_replace_callback("/^(?:table(_?{$this->s}{$this->a}{$this->c})\. ?\n)?^({$this->a}{$this->c}\.? ?\|.*\|)\n\n/smU",
            array(&$this, "fTable"), $text);
     }
 
@@ -680,9 +688,12 @@ function refs($m)
     {
         $parts = parse_url($url);
         if ((empty($parts['scheme']) or @$parts['scheme'] == 'http') and
-             empty($parts['host']) and 
+             empty($parts['host']) and
              preg_match('/^\w/', @$parts['path']))
             $url = hu.$url;
+        if ($this->restricted and !empty($parts['scheme']) and
+		      !in_array($parts['scheme'], $this->url_schemes))
+            return '#';
         return $url;
     }
 
@@ -732,6 +743,7 @@ function refs($m)
 // -------------------------------------------------------------
     function code($text)
     {
+        $in = $text;
         $text = $this->doSpecial($text, '<code>', '</code>', 'fCode');
         return $this->doSpecial($text, '@', '@', 'fCode');
     }
@@ -740,8 +752,9 @@ function refs($m)
     function fCode($m)
     {
       @list(, $before, $text, $after) = $m;
-		return $before.'<code>'.$this->shelve($this->encode_html($text)).'</code>'.$after;
+		return $before.$this->shelve('<code>'.$this->encode_html($text).'</code>').$after;
     }
+
 
 // -------------------------------------------------------------
     function shelve($val)
@@ -794,7 +807,7 @@ function refs($m)
 // -------------------------------------------------------------
     function doSpecial($text, $start, $end, $method='fSpecial')
     {
-      return preg_replace_callback('/(^|\s|[[({])'.preg_quote($start, '/').'(.*)'.preg_quote($end, '/').'(\s|$|[\])}])?/msU',
+      return preg_replace_callback('/(^|\s|[[({])'.preg_quote($start, '/').'(.*?)'.preg_quote($end, '/').'(\s|$|[\])}])?/ms',
 			array(&$this, $method), $text);
     }
 
@@ -1022,20 +1035,19 @@ function refs($m)
     {
         $find = array('bq', 'p');
 
-        $text = preg_replace("/(.+)\n(?![#*\s|])/",
-            "$1<br />", $text);
-
-        $text = explode("\n", $text);
+        $text = explode("\n\n", $text."\n\n");
         array_push($text, " ");
 
         foreach($text as $line) {
 
             foreach($find as $tag) {
-                $line = preg_replace_callback("/^($tag)($this->a$this->c)\.(?::(\S+))? (.*)$/",
+                $line = preg_replace_callback("/^($tag)($this->a$this->c)\.(?::(\S+))? (.*)$/s",
                     array(&$this, "fBlock"), $line);
             }
 
-            $line = preg_replace('/^(?!\t|<\/?pre|<\/?code|$| )(.*)/', "\t<p>$1</p>", $line);
+				if ($this->hasRawText($line))
+	            $line = preg_replace('/^(?!\t|<\/?pre|<\/?code|$| )(.*)/s', "\t<p>$1</p>", rtrim($line));
+            $line = $this->doPBr($line);
             $out[] = $line;
         }
         return join("\n", $out);
