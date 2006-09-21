@@ -301,6 +301,8 @@ class Textile
 			$text = $this->links($text);
 			if (!$noimage)
 				$text = $this->image($text);
+			if (!$lite)
+				$text = $this->code($text);
 			$text = $this->span($text);
 			$text = $this->footnoteRef($text);
 			$text = $this->glyphs($text);
@@ -743,7 +745,6 @@ function refs($m)
 // -------------------------------------------------------------
     function code($text)
     {
-        $in = $text;
         $text = $this->doSpecial($text, '<code>', '</code>', 'fCode');
         return $this->doSpecial($text, '@', '@', 'fCode');
     }
@@ -752,9 +753,12 @@ function refs($m)
     function fCode($m)
     {
       @list(, $before, $text, $after) = $m;
-		return $before.$this->shelve('<code>'.$this->encode_html($text).'</code>').$after;
+      if ($this->restricted)
+          // $text is already escaped
+		    return $before.$this->shelve('<code>'.$text.'</code>').$after;
+      else
+		    return $before.$this->shelve('<code>'.$this->encode_html($text).'</code>').$after;
     }
-
 
 // -------------------------------------------------------------
     function shelve($val)
@@ -847,7 +851,6 @@ function refs($m)
 
         @list(, $before, $notextile, $after) = $m;
         $notextile = str_replace(array_keys($modifiers), array_values($modifiers), $notextile);
-        #return $before . '<notextile>' . $notextile . '</notextile>' . $after;
         return $before.$this->shelve(nl2br($notextile)).$after;
     }
 
