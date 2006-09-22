@@ -1770,10 +1770,10 @@ function body($atts)
 // -------------------------------------------------------------
 	function title($atts) 
 	{
-		global $thisarticle;
+		global $thisarticle, $prefs;
 		assert_article();
 		extract(lAtts(array(
-			'no_widow' => '0',
+			'no_widow' => @$prefs['title_no_widow'],
 		), $atts));
 		
 		$t = escape_title($thisarticle['title']);
