@@ -244,7 +244,7 @@ $LastChangedRevision$
 		$lines = @file(txpath . $f);
 		if ($lines) {
 			foreach ($lines as $line) {
-				if (preg_match('/^\$LastChangedRevision: (\w+) \$/', $line, $match)) {
+				if (preg_match('/^\$'.'LastChangedRevision: (\w+) \$/', $line, $match)) {
 					$file_revs[$f] = $match[1];
 					if (intval($match[1]) > $rev)
 						$rev = intval($match[1]);
