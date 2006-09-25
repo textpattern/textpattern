@@ -529,7 +529,7 @@ class Textile
             else {
             	// anonymous block
             	if ($line and $this->hasRawText($line)) {
-            	   if (!preg_match('/^ /', $line)) {
+            	   if ($ext or !preg_match('/^ /', $line)) {
 							list($o1, $o2, $content, $c2, $c1) = $this->fBlock(array(0,$tag,$atts,$ext,$cite,$line));
 							// skip $o1/$c1 because this is part of a continuing extended block
 							$line = $o2.$content.$c2;
