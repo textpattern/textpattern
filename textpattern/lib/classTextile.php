@@ -238,6 +238,9 @@ class Textile
         $this->urlch = '[\w"$\-_.+!*\'(),";\/?:@=&%#{}|\\^~\[\]`]';
 
         $this->url_schemes = array('http','https','ftp','mailto');
+
+        $this->btag = array('bq', 'bc', 'notextile', 'h[1-6]', 'fn\d+', 'p');
+        
     }
 
 // -------------------------------------------------------------
@@ -265,8 +268,6 @@ class Textile
 			}
 			$text = $this->code($text);
 			$text = $this->span($text);
-			$text = $this->footnoteRef($text);
-			$text = $this->glyphs($text);
 
 			if (!$lite) {
 				$text = $this->lists($text);
@@ -431,12 +432,12 @@ class Textile
                     $cell = $cmtch[2];
                 } else $catts = '';
 
-                $cell = $this->span($cell);
+                $cell = $this->graf($this->span($cell));
 
                 if (trim($cell) != '')
                     $cells[] = "\t\t\t<t$ctyp$catts>$cell</t$ctyp>";
             }
-            $rows[] = "\t\t<tr$ratts>\n" . join("\n", $cells) . "\n\t\t</tr>";
+            $rows[] = "\t\t<tr$ratts>\n" . join("\n", $cells) . ($cells ? "\n" : "") . "\t\t</tr>";
             unset($cells, $catts);
         }
         return "\t<table$tatts>\n" . join("\n", $rows) . "\n\t</table>\n\n";
@@ -460,9 +461,9 @@ class Textile
                 if (!isset($lists[$tl])) {
                     $lists[$tl] = true;
                     $atts = $this->pba($atts);
-                    $line = "\t<" . $this->lT($tl) . "l$atts>\n\t\t<li>" . $content;
+                    $line = "\t<" . $this->lT($tl) . "l$atts>\n\t\t<li>" . $this->graf($content);
                 } else {
-                    $line = "\t\t<li>" . $content;
+                    $line = "\t\t<li>" . $this->graf($content);
                 }
 
                 if(strlen($nl) <= strlen($tl)) $line .= "</li>";
@@ -502,56 +503,71 @@ class Textile
 // -------------------------------------------------------------
     function block($text)
     {
-        $pre = $php = $txp = false;
-        $find = array('bq', 'h[1-6]', 'fn\d+', 'p');
+        $find = $this->btag;
+        $tre = join('|', $find);
 
         $text = explode("\n\n", $text);
-        array_push($text, " ");
+
+        $tag = 'p';
+        $atts = $cite = $graf = $ext  = '';
 
         foreach($text as $line) {
-            if (preg_match('/<pre>/i', $line)) {
-                $pre = true;
-            }
-            elseif (preg_match('/<txp:php>/i', $line)) {
-                $php = true;
-            }
-            elseif (preg_match('/^\s*<txp:/i', $line)) {
-                $txp = true;
-            }
+            if (preg_match("/^($tre)($this->a$this->c)\.(\.?)(?::(\S+))? (.*)$/s", $line, $m)) {
+            	// last block was extended, so close it
+            	if ($ext)
+            		$out[count($out)] .= $c1;
+            	// new block
+            	list(,$tag,$atts,$ext,$cite,$graf) = $m;
+					list($o1, $o2, $content, $c2, $c1) = $this->fBlock(array(0,$tag,$atts,$ext,$cite,$graf));
 
-            foreach($find as $tag) {
-                $line = ($pre == false and $php == false and $txp == false)
-                ? preg_replace_callback("/^($tag)($this->a$this->c)\.(?::(\S+))? (.*)$/s",
-                    array(&$this, "fBlock"), $line)
-                : $line;
+					// leave off c1 if this block is extended, we'll close it at the start of the next block
+					if ($ext)
+						$line = $o1.$o2.$content.$c2;
+					else
+						$line = $o1.$o2.$content.$c2.$c1;
             }
+            else {
+            	// anonymous block
+            	if ($line and $this->hasRawText($line)) {
+            	   if (!preg_match('/^ /', $line)) {
+							list($o1, $o2, $content, $c2, $c1) = $this->fBlock(array(0,$tag,$atts,$ext,$cite,$line));
+							// skip $o1/$c1 because this is part of a continuing extended block
+							$line = $o2.$content.$c2;
+						}
+						else {
+						   $line = $this->graf($line);
+						}
 
-            $hasraw = $this->hasRawText($line);
-            if (!$php and !$txp and $hasraw)
-                $line = preg_replace('/^(?!\t|<\/?pre|<\/?code|$| )(.*)/s', "\t<p>$1</p>", $line);
+					}
+            }
 
 				$line = $this->doPBr($line);
             $line = preg_replace('/<br>/', '<br />', $line);
 
-            if (preg_match('/<\/pre>/i', $line)) {
-                $pre = false;
-            }
-            elseif (preg_match('/<\/txp:php>/i', $line)) {
-		$php = false;
-            }
-			if ($txp == true) $txp = false;
             $out[] = $line;
+
+            if (!$ext) {
+                $tag = 'p';
+                $atts = '';
+                $cite = '';
+                $graf = '';
+            }
         }
+        if ($ext) $out[count($out)] .= $c1;
         return join("\n\n", $out);
     }
+
+
 
 // -------------------------------------------------------------
     function fBlock($m)
     {
         // $this->dump($m);
-        list(, $tag, $atts, $cite, $content) = $m;
+        list(, $tag, $atts, $ext, $cite, $content) = $m;
 
         $atts = $this->pba($atts);
+        
+        $o1 = $o2 = $contnt = $c2 = $c1 = '';
 
         if (preg_match("/fn(\d+)/", $tag, $fns)) {
             $tag = 'p';
@@ -562,17 +578,43 @@ class Textile
             $content = '<sup>' . $fns[1] . '</sup> ' . $content;
         }
 
-        $start = "\t<$tag";
-        $end = "</$tag>";
-
         if ($tag == "bq") {
             $cite = $this->checkRefs($cite);
             $cite = ($cite != '') ? ' cite="' . $cite . '"' : '';
-            $start = "\t<blockquote$cite>\n\t\t<p";
-            $end = "</p>\n\t</blockquote>";
+            $o1 = "\t<blockquote$cite$atts>\n";
+            $o2 = "\t\t<p$atts>";
+            $c2 = "</p>";
+            $c1 = "\n\t</blockquote>";
         }
+        elseif ($tag == 'bc') {
+            $o1 = "\t<pre$atts>\n";
+            $o2 = "\t\t<code$atts>";
+            $c2 = "</code>";
+            $c1 = "\n\t</pre>";
+            $content = $this->shelve($this->encode_html($content));
+        }
+        elseif ($tag == 'notextile') {
+            $content = $this->shelve($content);
+            $o1 = $o2 = '';
+            $c1 = $c2 = '';
+        }
+        else {
+	        $o2 = "\t<$tag$atts>";
+	        $c2 = "</$tag>";
+	      }
 
-        return "$start$atts>$content$end";
+        $content = $this->graf($content);
+
+        return array($o1, $o2, $content, $c2, $c1);
+    }
+    
+// -------------------------------------------------------------
+    function graf($text)
+    {
+        // handle normal paragraph text
+        $text = $this->footnoteRef($text);
+        $text = $this->glyphs($text);
+        return $text;
     }
 
 // -------------------------------------------------------------
@@ -834,24 +876,9 @@ function refs($m)
 // -------------------------------------------------------------
     function fTextile($m)
     {
-        $modifiers = array(
-            '"' => '&#34;',
-            '%' => '&#37;',
-            '*' => '&#42;',
-            '+' => '&#43;',
-            '-' => '&#45;',
-            '<' => '&#60;',
-            '=' => '&#61;',
-            '>' => '&#62;',
-            '?' => '&#63;',
-            '^' => '&#94;',
-            '_' => '&#95;',
-            '~' => '&#126;',
-            );
-
         @list(, $before, $notextile, $after) = $m;
-        $notextile = str_replace(array_keys($modifiers), array_values($modifiers), $notextile);
-        return $before.$this->shelve(nl2br($notextile)).$after;
+        #$notextile = str_replace(array_keys($modifiers), array_values($modifiers), $notextile);
+        return $before.$this->shelve($notextile).$after;
     }
 
 // -------------------------------------------------------------
@@ -883,10 +910,10 @@ function refs($m)
             '/([^\s[{(>_*])?"(?(1)|(?=\s|'.$pnc.'))/',           //  double closing
             '/"/',                                               //  double opening
             '/\b([A-Z][A-Z0-9]{2,})\b(?:[(]([^)]*)[)])/',        //  3+ uppercase acronym
-            '/\b([A-Z][A-Z\'\-]+[A-Z])(?=[\s.,\)])/',            //  3+ uppercase
+            '/\b([A-Z][A-Z\'\-]+[A-Z])(?=[\s.,\)>])/',           //  3+ uppercase
             '/\b( )?\.{3}/',                                     //  ellipsis
             '/(\s?)--(\s?)/',                                    //  em dash
-            '/\s-\s/',                                           //  en dash
+            '/\s-(?:\s|$)/',                                     //  en dash
             '/(\d+) ?x ?(\d+)/',                                 //  dimension sign
             '/\b ?[([]TM[])]/i',                                 //  trademark
             '/\b ?[([]R[])]/i',                                  //  registered
@@ -1034,26 +1061,11 @@ function refs($m)
 	}
 	
 // -------------------------------------------------------------
+
 	function blockLite($text)
     {
-        $find = array('bq', 'p');
-
-        $text = explode("\n\n", $text."\n\n");
-        array_push($text, " ");
-
-        foreach($text as $line) {
-
-            foreach($find as $tag) {
-                $line = preg_replace_callback("/^($tag)($this->a$this->c)\.(?::(\S+))? (.*)$/s",
-                    array(&$this, "fBlock"), $line);
-            }
-
-				if ($this->hasRawText($line))
-	            $line = preg_replace('/^(?!\t|<\/?pre|<\/?code|$| )(.*)/s', "\t<p>$1</p>", rtrim($line));
-            $line = $this->doPBr($line);
-            $out[] = $line;
-        }
-        return join("\n", $out);
+        $this->btag = array('bq', 'p');
+        return $this->block($text."\n\n");
     }
 
 
