@@ -914,7 +914,7 @@ function refs($m)
             '/\b( )?\.{3}/',                                     //  ellipsis
             '/(\s?)--(\s?)/',                                    //  em dash
             '/\s-(?:\s|$)/',                                     //  en dash
-            '/(\d+) ?x ?(\d+)/',                                 //  dimension sign
+            '/(\d+)( ?)x( ?)(?=\d+)/',                           //  dimension sign
             '/\b ?[([]TM[])]/i',                                 //  trademark
             '/\b ?[([]R[])]/i',                                  //  registered
             '/\b ?[([]C[])]/i',                                  //  copyright
@@ -930,7 +930,7 @@ function refs($m)
             '$1'.txt_ellipsis,                  //  ellipsis
             '$1'.txt_emdash.'$2',               //  em dash
             ' '.txt_endash.' ',                 //  en dash
-            '$1'.txt_dimension.'$2',            //  dimension sign
+            '$1$2'.txt_dimension.'$3',          //  dimension sign
             txt_trademark,                      //  trademark
             txt_registered,                     //  registered
             txt_copyright,                      //  copyright
