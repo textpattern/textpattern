@@ -515,7 +515,7 @@ class Textile
             if (preg_match("/^($tre)($this->a$this->c)\.(\.?)(?::(\S+))? (.*)$/s", $line, $m)) {
             	// last block was extended, so close it
             	if ($ext)
-            		$out[count($out)] .= $c1;
+            		$out[count($out)-1] .= $c1;
             	// new block
             	list(,$tag,$atts,$ext,$cite,$graf) = $m;
 					list($o1, $o2, $content, $c2, $c1) = $this->fBlock(array(0,$tag,$atts,$ext,$cite,$graf));
@@ -553,7 +553,7 @@ class Textile
                 $graf = '';
             }
         }
-        if ($ext) $out[count($out)] .= $c1;
+        if ($ext) $out[count($out)-1] .= $c1;
         return join("\n\n", $out);
     }
 
@@ -587,10 +587,10 @@ class Textile
             $c1 = "\n\t</blockquote>";
         }
         elseif ($tag == 'bc') {
-            $o1 = "\t<pre$atts>\n";
-            $o2 = "\t\t<code$atts>";
+            $o1 = "<pre$atts>";
+            $o2 = "<code$atts>";
             $c2 = "</code>";
-            $c1 = "\n\t</pre>";
+            $c1 = "</pre>";
             $content = $this->shelve($this->encode_html($content));
         }
         elseif ($tag == 'notextile') {
