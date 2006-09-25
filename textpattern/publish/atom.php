@@ -4,7 +4,7 @@
 	This is Textpattern
 	Copyright 2005 by Dean Allen - all rights reserved.
 
-	Use of this software denotes acceptance of the Textpattern license agreement 
+	Use of this software denotes acceptance of the Textpattern license agreement
 
 $HeadURL$
 $LastChangedRevision$
@@ -13,7 +13,7 @@ $LastChangedRevision$
 
 
 // -------------------------------------------------------------
-	function atom() 
+	function atom()
 	{
 		global $thisarticle;
 		extract($GLOBALS['prefs']);
@@ -24,19 +24,19 @@ $LastChangedRevision$
 		define('t_appxhtml',' type="xhtml"');
 		define("r_relalt",' rel="alternate"');
 		define("r_relself",' rel="self"');
-		
+
 		$area = doSlash(gps('area'));
 		extract(doSlash(gpsa(array('category','section','limit'))));
-		
+
 		$last = fetch('unix_timestamp(val)','txp_prefs','name','lastmod');
-				
+
 		$sitename .= ($section) ? ' - '.$section : '';
 		$sitename .= ($category) ? ' - '.$category : '';
 
 		$pub = safe_row("RealName, email", "txp_users", "privs=1");
 
-		$out[] = tag($sitename,'title',t_text);
-		$out[] = tag($site_slogan,'subtitle',t_text);
+		$out[] = tag(escape_output($sitename),'title',t_text);
+		$out[] = tag(escape_output($site_slogan),'subtitle',t_text);
 		$out[] = '<link'.r_relself.' href="'.pagelinkurl(array('atom'=>1,'area'=>$area,'section'=>$section,'category'=>$category,'limit'=>$limit)).'" />';
 		$out[] = '<link'.r_relalt.t_texthtml.' href="'.hu.'" />';
 		$articles = array();
@@ -154,8 +154,6 @@ $LastChangedRevision$
 					$url = (preg_replace("/^\/(.*)/","https?://$siteurl/$1",$url));
 					$url = preg_replace("/&((?U).*)=/","&amp;\\1=",$url);
 					$e['link'] = '<link'.r_relalt.t_texthtml.' href="'.$url.'" />';
-
-					$e['thisauthor'] = tag(n.t.t.t.tag(htmlspecialchars($thisauthor),'name').n.t.t,'author');
 
 					$e['issued'] = tag(safe_strftime('w3cdtf', strtotime($date)),'published');
 					$e['modified'] = tag(gmdate('Y-m-d\TH:i:s\Z',strtotime($date)),'updated');
