@@ -1280,37 +1280,40 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function posted($atts) 
+
+	function posted($atts)
 	{
-		global $dateformat,$archive_dateformat,
-				$pg,$c,$thisarticle,$id,$txpcfg;
+		global $thisarticle, $id, $c, $pg, $dateformat, $archive_dateformat;
 
 		assert_article();
-		
-		$date_offset = $thisarticle['posted'];
 
 		extract(lAtts(array(
-			'format' => '',
-			'lang'   => '',
-			'gmt'    => '',
-		),$atts));	
+			'class'   => '',
+			'format'  => '',
+			'gmt'     => '',
+			'lang'    => '',
+			'wraptag' => '',
+		), $atts));
 
-		if($format) {
-
-			$date_out = safe_strftime($format,$date_offset,$gmt,$lang);
-
-		} else {
-		
-			if ($pg or $id or $c) { 	
-				$dateformat = $archive_dateformat; 
-			}
-
-			$date_out = safe_strftime($dateformat,$date_offset); 
+		if ($format)
+		{
+			$out = safe_strftime($format, $thisarticle['posted'], $gmt, $lang);
 		}
 
-		if(!empty($wraptag)) $date_out = tag($date_out,$wraptag);
+		else
+		{
+			if ($id or $c or $pg)
+			{
+				$out = safe_strftime($archive_dateformat, $thisarticle['posted']);
+			}
 
-		return $date_out;
+			else
+			{
+				$out = safe_strftime($dateformat, $thisarticle['posted']);
+			}
+		}
+
+		return ($wraptag) ? doWrap($out, $wraptag, '', $class) : $out;
 	}
 
 // -------------------------------------------------------------
