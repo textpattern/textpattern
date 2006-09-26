@@ -566,8 +566,8 @@ class Textile
         list(, $tag, $atts, $ext, $cite, $content) = $m;
 
         $atts = $this->pba($atts);
-        
-        $o1 = $o2 = $contnt = $c2 = $c1 = '';
+
+        $o1 = $o2 = $c2 = $c1 = '';
 
         if (preg_match("/fn(\d+)/", $tag, $fns)) {
             $tag = 'p';
@@ -843,7 +843,7 @@ function refs($m)
 // -------------------------------------------------------------
     function cleanWhiteSpace($text)
     {
-        $out = str_replace(array("\r\n", "\t"), array("\n", ''), $text);
+        $out = str_replace("\r\n", "\n", $text);
         $out = preg_replace("/\n{3,}/", "\n\n", $out);
         $out = preg_replace("/\n *\n/", "\n\n", $out);
         $out = preg_replace('/"$/', "\" ", $out);
