@@ -1,5 +1,6 @@
 
 // -------------------------------------------------------------
+// admin-side "cookies required" warning
 
 function checkCookies()
 {
@@ -19,6 +20,7 @@ function checkCookies()
 }
 
 // -------------------------------------------------------------
+// auto-centering popup windows
 
 function popWin(url, width, height, options)
 {
@@ -26,18 +28,20 @@ function popWin(url, width, height, options)
 	var h = (height) ? height : 400;
 
 	var t = (screen.height) ? (screen.height - h) / 2 : 0;
-	var l =  (screen.width) ? (screen.width - w) / 2 : 0;
+	var l =	 (screen.width) ? (screen.width - w) / 2 : 0;
 
 	var opt = (options) ? options : 'toolbar = no, location = no, directories = no, '+
 		'status = yes, menubar = no, scrollbars = yes, copyhistory = no, resizable = yes';
 
-	var popped = window.open(url, 'popupwindow', 
+	var popped = window.open(url, 'popupwindow',
 		'top = '+t+', left = '+l+', width = '+w+', height = '+h+',' + opt);
 
 	popped.focus();
 }
 
 // -------------------------------------------------------------
+// basic confirmation for potentially powerful choice 
+// (like deletion, for example)
 
 function verify(msg)
 {
@@ -45,28 +49,7 @@ function verify(msg)
 }
 
 // -------------------------------------------------------------
-
-function toggleDisplay(id)
-{
-	if (!document.getElementById)
-	{
-		return false;
-	}
-
-	var obj = document.getElementById(id);
-
-	if (obj.style.display == 'none')
-	{
-		obj.style.display = 'block';
-	}
-
-	else
-	{
-		obj.style.display = 'none';
-	}
-}
-
-// -------------------------------------------------------------
+// checkbox utils
 
 function selectall()
 {
@@ -80,7 +63,7 @@ function selectall()
 		elem[i].checked = true;
 	}
 }
-	
+
 function deselectall()
 {
 	var cnt = 0;
@@ -128,6 +111,7 @@ function selectrange()
 }
 
 // -------------------------------------------------------------
+// ?
 
 function cleanSelects()
 {
@@ -140,6 +124,7 @@ function cleanSelects()
 }
 
 // -------------------------------------------------------------
+// event handling
 // By S.Andrew -- http://www.scottandrew.com/
 
 function addEvent(elm, evType, fn, useCapture)
@@ -163,62 +148,138 @@ function addEvent(elm, evType, fn, useCapture)
 }
 
 // -------------------------------------------------------------
-function setCookie(name,value,days) {
-	if (days) {
+// cookie handling
+
+function setCookie(name, value, days)
+{
+	if (days)
+	{
 		var date = new Date();
-		date.setTime(date.getTime()+(days*24*60*60*1000));
-		var expires = "; expires="+date.toGMTString();
+
+		date.setTime(date.getTime() + (days*24*60*60*1000));
+
+		var expires = '; expires=' + date.toGMTString();
 	}
-	else var expires = "";
-	document.cookie = name+"="+value+expires+"; path=/";
+
+	else
+	{
+		var expires = '';
+	}
+
+	document.cookie = name + '=' + value + expires + '; path=/';
 }
 
-function getCookie(name) {
-	var nameEQ = name + "=";
+function getCookie(name)
+{
+	var nameEQ = name + '=';
+
 	var ca = document.cookie.split(';');
-	for(var i=0;i < ca.length;i++) {
+
+	for (var i = 0; i < ca.length; i++)
+	{
 		var c = ca[i];
-		while (c.charAt(0)==' ') c = c.substring(1,c.length);
-		if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+
+		while (c.charAt(0)==' ')
+		{
+			c = c.substring(1, c.length);
+		}
+
+		if (c.indexOf(nameEQ) == 0)
+		{
+			return c.substring(nameEQ.length, c.length);
+		}
 	}
+
 	return null;
 }
 
-function deleteCookie(name) {
-	setCookie(name,"",-1);
+function deleteCookie(name)
+{
+	setCookie(name, '', -1);
 }
 
-function getElementsByClass (className) {
-	var all = document.all ? document.all :
-		document.getElementsByTagName('*');
+// -------------------------------------------------------------
+
+function getElementsByClass (className)
+{
+	var all = document.all ? document.all : document.getElementsByTagName('*');
 	var elements = new Array();
+
 	for (var e = 0; e < all.length; e++)
+	{
 		if (all[e].className == className)
+		{
 			elements[elements.length] = all[e];
+		}
+	}
+
 	return elements;
 }
 
-function setClassDisplay(className, value) {
-	elements = getElementsByClass(className);
-	var is_ie = (navigator.appName == 'Microsoft Internet Explorer');
-	for (var i=0; i < elements.length; i++) {
-		var tagname = elements[i].nodeName.toLowerCase();
-		var type = 'block';
-		if (tagname == 'td' || tagname == 'th')
-			type = (is_ie ? 'inline' : 'table-cell');
+// -------------------------------------------------------------
+// direct show/hide
 
-		elements[i].style.display = (value  == 1 ? type : 'none');
+function toggleDisplay(id)
+{
+	if (!document.getElementById)
+	{
+		return false;
+	}
+
+	var obj = document.getElementById(id);
+
+	if (obj.style.display == 'none')
+	{
+		obj.style.display = 'block';
+	}
+
+	else
+	{
+		obj.style.display = 'none';
 	}
 }
 
-function toggleClassRemember(className) {
-	v = getCookie('toggle_'+className);
+// -------------------------------------------------------------
+// show/hide matching elements
+
+function setClassDisplay(className, value)
+{
+	var elements = getElementsByClass(className);
+	var is_ie = (navigator.appName == 'Microsoft Internet Explorer');
+
+	for (var i = 0; i < elements.length; i++)
+	{
+		var tagname = elements[i].nodeName.toLowerCase();
+		var type = 'block';
+
+		if (tagname == 'td' || tagname == 'th')
+		{
+			type = (is_ie ? 'inline' : 'table-cell');
+		}
+
+		elements[i].style.display = (value== 1 ? type : 'none');
+	}
+}
+
+// -------------------------------------------------------------
+// toggle show/hide matching elements, and set a cookie to remember
+
+function toggleClassRemember(className)
+{
+	var v = getCookie('toggle_' + className);
 	v = (v == 1 ? 0 : 1);
-	setCookie('toggle_'+className, v, 365);
+
+	setCookie('toggle_' + className, v, 365);
+
 	setClassDisplay(className, v);
 }
 
-function setClassRemember(className) {
-	v = getCookie('toggle_'+className);
+// -------------------------------------------------------------
+// show/hide matching elements based on cookie value
+
+function setClassRemember(className)
+{
+	var v = getCookie('toggle_' + className);
+
 	setClassDisplay(className, v);
 }
