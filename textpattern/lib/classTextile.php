@@ -512,6 +512,7 @@ class Textile
         $atts = $cite = $graf = $ext  = '';
 
         foreach($text as $line) {
+            $anon = 0;
             if (preg_match("/^($tre)($this->a$this->c)\.(\.?)(?::(\S+))? (.*)$/s", $line, $m)) {
             	// last block was extended, so close it
             	if ($ext)
@@ -529,6 +530,7 @@ class Textile
             else {
             	// anonymous block
             	if ($line and $this->hasRawText($line)) {
+            	   $anon = 1;
             	   if ($ext or !preg_match('/^ /', $line)) {
 							list($o1, $o2, $content, $c2, $c1) = $this->fBlock(array(0,$tag,$atts,$ext,$cite,$line));
 							// skip $o1/$c1 because this is part of a continuing extended block
@@ -544,7 +546,10 @@ class Textile
 				$line = $this->doPBr($line);
             $line = preg_replace('/<br>/', '<br />', $line);
 
-            $out[] = $line;
+            if ($ext and $anon)
+                $out[count($out)-1] .= "\n".$line;
+            else
+                $out[] = $line;
 
             if (!$ext) {
                 $tag = 'p';
