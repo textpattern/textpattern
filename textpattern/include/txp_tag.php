@@ -232,7 +232,7 @@ begin generic functions
 	{
 		$vals = array(
 			'atom' => 'Atom 1.0',
-			'rss'	 => 'RSS 0.92'
+			'rss'	 => 'RSS 2.0'
 		);
 
 		return ' '.selectInput('flavor', $vals, $val, true);
