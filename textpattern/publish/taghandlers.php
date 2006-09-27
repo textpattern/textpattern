@@ -2270,14 +2270,23 @@ function body($atts)
 
 // -------------------------------------------------------------
 
-	function doWrap($list, $wraptag, $break, $class = '', $breakclass = '', $atts = '')
+	function doWrap($list, $wraptag, $break, $class = '', $breakclass = '', $atts = '', $breakatts = '', $id = '')
 	{
 		if (!$list)
 		{
 			return '';
 		}
-	
-		$atts = ($class) ? $atts.' class="'.$class.'"' : $atts;
+
+		if ($id)
+		{
+			$atts .= ' id="'.$id.'"';
+		}
+
+		if ($class)
+		{
+			$atts .= ' class="'.$class.'"';
+		}
+
 		$breakatts = ($breakclass) ? ' class="'.$breakclass.'"' : '';
 
 		// non-enclosing breaks
