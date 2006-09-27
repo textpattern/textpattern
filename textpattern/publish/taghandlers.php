@@ -113,13 +113,14 @@ $LastChangedRevision$
 		static $cache = array();
 
 		extract(lAtts(array(
-			'align'   => '',
-			'class'   => '',
-			'escape'  => '',
+			'align'		=> '', // remove in crockery
+			'class'		=> '',
+			'escape'	=> '',
 			'html_id' => '',
-			'id'		  => '',
-			'name'	  => '',
-			'style'   => '',
+			'id'			=> '',
+			'name'		=> '',
+			'style'		=> '', // remove in crockery?
+			'wraptag' => '',
 		), $atts));
 
 		if ($name)
@@ -158,7 +159,7 @@ $LastChangedRevision$
 
 		else
 		{
-			return;
+			return trigger_error(gTxt('unknown_image'));
 		}
 
 		if ($rs)
@@ -171,16 +172,16 @@ $LastChangedRevision$
 				$caption = escape_output($caption);
 			}
 
-			return '<img src="'.hu.$img_dir.'/'.$id.$ext.'" width="'.$w.'" height="'.$h.'" alt="'.$alt.'"'.
+			$out = '<img src="'.hu.$img_dir.'/'.$id.$ext.'" width="'.$w.'" height="'.$h.'" alt="'.$alt.'"'.
 				($caption ? ' title="'.$caption.'"' : '').
-				($html_id ? ' id="'.$html_id.'"' : '').
-				($class ? ' class="'.$class.'"' : '').
 				($style ? ' style="'.$style.'"' : '').
 				($align ? ' align="'.$align.'"' : '').
 				' />';
+
+			return ($wraptag) ? doWrap($out, $wraptag, '', $class, '', '', '', $html_id) : $out;
 		}
 
-		return '<txp:notice message="malformed image tag" />';
+		return trigger_error(gTxt('unknown_image'));
 	}
 
 // -------------------------------------------------------------
@@ -190,32 +191,34 @@ $LastChangedRevision$
 		global $img_dir;
 
 		extract(lAtts(array(
-			'align'			=> '',
+			'align'			=> '', // remove in crockery
 			'class'			=> '',
-			'escape'    => '',
-			'html_id'   => '',
+			'escape'		=> '',
+			'html_id'		=> '',
 			'id'				=> '',
 			'name'			=> '',
 			'poplink'		=> '',
-			'style'			=> '',
-			'wraptag'   => ''
+			'style'			=> '', // remove in crockery?
+			'wraptag'		=> ''
 		), $atts));
 
-		if (!empty($name))
+		if ($name)
 		{
 			$name = doSlash($name);
 
 			$rs = safe_row('*', 'txp_image', "name = '$name' limit 1");
 		}
 
-		elseif (!empty($id))
+		elseif ($id)
 		{
+			$id = intval($id);
+
 			$rs = safe_row('*', 'txp_image', "id = '$id' limit 1");
 		}
 
 		else
 		{
-			return;
+			return trigger_error(gTxt('unknown_image'));
 		}
 
 		if ($rs)
@@ -232,8 +235,6 @@ $LastChangedRevision$
 
 				$out = '<img src="'.hu.$img_dir.'/'.$id.'t'.$ext.'" alt="'.$alt.'"'.
 					($caption ? ' title="'.$caption.'"' : '').
-					($html_id ? ' id="'.$html_id.'"' : '').
-					($class ? ' class="'.$class.'"' : '').
 					($style ? ' style="'.$style.'"' : '').
 					($align ? ' align="'.$align.'"' : '').
 					' />';
@@ -245,9 +246,13 @@ $LastChangedRevision$
 						'\'width='.$w.', height='.$h.', scrollbars, resizable\'); return false;">'.$out.'</a>';
 				}
 
-				return ($wraptag) ? doWrap($out, $wraptag, '', $class) : $out;
+				return ($wraptag) ? doWrap($out, $wraptag, '', $class, '', '', '', $html_id) : $out;
 			}
+
+			return trigger_error(gTxt('unknown_image'));
 		}
+
+		return trigger_error(gTxt('unknown_image'));
 	}
 
 // -------------------------------------------------------------
@@ -2016,47 +2021,34 @@ function body($atts)
 		assert_article();
 
 		extract(lAtts(array(
-			'align' 	  => '',
+			'align' 	  => '', // remove in crockery
 			'class'     => '',
 			'escape'    => '',
-			'style' 	  => '',
+			'html_id'   => '',
+			'style' 	  => '', // remove in crockery?
 			'thumbnail' => 0,
 			'wraptag'   => '',
 		), $atts));
 
-		$image = ($thisarticle['article_image']) ? $thisarticle['article_image'] : '';
-
-		if ($image)
+		if (isset($thisarticle['article_image']))
 		{
-			$out = '';
+			$image = $thisarticle['article_image'];
+		}
 
-			if (is_numeric($image))
+		else
+		{
+			return;
+		}
+
+		if (is_numeric($image))
+		{
+			$rs = safe_row('*', 'txp_image', "id = '$image'");
+
+			if ($rs)
 			{
-				$rs = safe_row('*', 'txp_image', "id = '$image'");
-
-				if ($rs)
+				if ($thumbnail)
 				{
-					if ($thumbnail)
-					{
-						if ($rs['thumbnail'])
-						{
-							extract($rs);
-
-							if ($escape == 'html')
-							{
-								$alt = escape_output($alt);
-								$caption = escape_output($caption);
-							}
-
-							$out = '<img src="'.hu.$img_dir.'/'.$id.'t'.$ext.'" alt="'.$alt.'"'.
-								($caption ? ' title="'.$caption.'"' : '').
-								($style ? ' style="'.$style.'"' : '').
-								($align ? ' align="'.$align.'"' : '').
-								' />';
-						}
-					}
-
-					else
+					if ($rs['thumbnail'])
 					{
 						extract($rs);
 
@@ -2066,28 +2058,52 @@ function body($atts)
 							$caption = escape_output($caption);
 						}
 
-						$out = '<img src="'.hu.$img_dir.'/'.$id.$ext.'" width="'.$w.'" height="'.$h.'" alt="'.$alt.'"'.
+						$out = '<img src="'.hu.$img_dir.'/'.$id.'t'.$ext.'" alt="'.$alt.'"'.
 							($caption ? ' title="'.$caption.'"' : '').
 							($style ? ' style="'.$style.'"' : '').
 							($align ? ' align="'.$align.'"' : '').
 							' />';
 					}
+
+					else
+					{
+						return '';
+					}
+				}
+
+				else
+				{
+					extract($rs);
+
+					if ($escape == 'html')
+					{
+						$alt = escape_output($alt);
+						$caption = escape_output($caption);
+					}
+
+					$out = '<img src="'.hu.$img_dir.'/'.$id.$ext.'" width="'.$w.'" height="'.$h.'" alt="'.$alt.'"'.
+						($caption ? ' title="'.$caption.'"' : '').
+						($style ? ' style="'.$style.'"' : '').
+						($align ? ' align="'.$align.'"' : '').
+						' />';
 				}
 			}
 
 			else
 			{
-				$out = '<img src="'.$image.'" alt=""'.
-					($style ? ' style="'.$style.'"' : '').
-					($align ? ' align="'.$align.'"' : '').
-					' />';
-			}
-
-			if ($out)
-			{
-				return ($wraptag) ? doWrap($out, $wraptag, '', $class) : $out;
+				return trigger_error(gTxt('unknown_image'));
 			}
 		}
+
+		else
+		{
+			$out = '<img src="'.$image.'" alt=""'.
+				($style ? ' style="'.$style.'"' : '').
+				($align ? ' align="'.$align.'"' : '').
+				' />';
+		}
+
+		return ($wraptag) ? doWrap($out, $wraptag, '', $class, '', '', '', $html_id) : $out;
 	}
 
 // -------------------------------------------------------------
