@@ -178,7 +178,7 @@ $LastChangedRevision$
 				($align ? ' align="'.$align.'"' : '').
 				' />';
 
-			return ($wraptag) ? doWrap($out, $wraptag, '', $class, '', '', '', $html_id) : $out;
+			return ($wraptag) ? doTag($out, $wraptag, $class, '', $html_id) : $out;
 		}
 
 		return trigger_error(gTxt('unknown_image'));
@@ -246,7 +246,7 @@ $LastChangedRevision$
 						'\'width='.$w.', height='.$h.', scrollbars, resizable\'); return false;">'.$out.'</a>';
 				}
 
-				return ($wraptag) ? doWrap($out, $wraptag, '', $class, '', '', '', $html_id) : $out;
+				return ($wraptag) ? doTag($out, $wraptag, $class, '', $html_id) : $out;
 			}
 
 			return trigger_error(gTxt('unknown_image'));
@@ -2103,7 +2103,7 @@ function body($atts)
 				' />';
 		}
 
-		return ($wraptag) ? doWrap($out, $wraptag, '', $class, '', '', '', $html_id) : $out;
+		return ($wraptag) ? doTag($out, $wraptag, $class, '', $html_id) : $out;
 	}
 
 // -------------------------------------------------------------
