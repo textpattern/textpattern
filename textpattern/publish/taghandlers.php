@@ -2329,9 +2329,17 @@ function body($atts)
 
 // -------------------------------------------------------------
 
-	function doTag($content, $tag, $class = '', $atts = '')
+	function doTag($content, $tag, $class = '', $atts = '', $id = '')
 	{
-		$atts = ($class) ? $atts.' class="'.$class.'"' : $atts;
+		if ($id)
+		{
+			$atts .= ' id="'.$id.'"';
+		}
+
+		if ($class)
+		{
+			$atts .= ' class="'.$class.'"';
+		}
 
 		if (!$tag)
 		{
