@@ -218,6 +218,7 @@ class Textile
     
     var $shelf = array();
     var $restricted = false;
+    var $lite = false;
     var $url_schemes = array();
 
 // -------------------------------------------------------------
@@ -248,6 +249,7 @@ class Textile
     {
         if ($rel)
            $this->rel = ' rel="'.$rel.'" ';
+        $this->lite = $lite;
 
         if ($encode) {
          $text = $this->incomingEntities($text);
@@ -261,13 +263,10 @@ class Textile
 
 			$text = $this->getRefs($text);
 
-			$text = $this->noTextile($text);
 			$text = $this->links($text);
 			if (!$noimage) {
 				$text = $this->image($text);
 			}
-			$text = $this->code($text);
-			$text = $this->span($text);
 
 			if (!$lite) {
 				$text = $this->lists($text);
@@ -288,6 +287,7 @@ class Textile
     function TextileRestricted($text, $lite=1, $noimage=1, $rel='nofollow')
     {
         $this->restricted = true;
+        $this->lite = $lite;
         if ($rel)
            $this->rel = ' rel="'.$rel.'" ';
 
@@ -297,16 +297,9 @@ class Textile
 			$text = $this->cleanWhiteSpace($text);
 			$text = $this->getRefs($text);
 
-			if (!$lite)
-				$text = $this->noTextile($text);
 			$text = $this->links($text);
 			if (!$noimage)
 				$text = $this->image($text);
-			if (!$lite)
-				$text = $this->code($text);
-			$text = $this->span($text);
-			$text = $this->footnoteRef($text);
-			$text = $this->glyphs($text);
 
 			if ($lite) {
 				$text = $this->blockLite($text);
@@ -409,7 +402,7 @@ class Textile
     function hasRawText($text)
     {
         // checks whether the text has text not already enclosed by a block tag
-        return '' != trim(preg_replace('@<(p|blockquote|div|form|table|ul|ol|pre|code|h\d)[^>]*?>.*</\1>@s', '', $text));
+        return '' != trim(preg_replace('@<(p|blockquote|div|form|table|ul|ol|pre|h\d)[^>]*?>.*</\1>@s', '', $text));
     }
 
 // -------------------------------------------------------------
@@ -541,6 +534,9 @@ class Textile
 						}
 
 					}
+					else {
+						$line = $this->graf($line);
+					}
             }
 
 				$line = $this->doPBr($line);
@@ -612,11 +608,17 @@ class Textile
 
         return array($o1, $o2, $content, $c2, $c1);
     }
-    
+
 // -------------------------------------------------------------
     function graf($text)
     {
         // handle normal paragraph text
+        if (!$this->lite) {
+            $text = $this->noTextile($text);
+            $text = $this->code($text);
+        }
+
+        $text = $this->span($text);
         $text = $this->footnoteRef($text);
         $text = $this->glyphs($text);
         return $text;
@@ -819,7 +821,11 @@ function refs($m)
     function retrieve($text)
     {
         if (is_array($this->shelf))
-	        return strtr($text, $this->shelf);
+            do {
+                $old = $text;
+                $text = strtr($text, $this->shelf);
+	         } while ($text != $old);
+
         return $text;
     }
 
