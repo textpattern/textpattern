@@ -240,7 +240,7 @@ class Textile
 
         $this->url_schemes = array('http','https','ftp','mailto');
 
-        $this->btag = array('bq', 'bc', 'notextile', 'h[1-6]', 'fn\d+', 'p');
+        $this->btag = array('bq', 'bc', 'notextile', 'pre', 'h[1-6]', 'fn\d+', 'p');
 
     }
 
@@ -595,6 +595,12 @@ class Textile
             $o1 = $o2 = '';
             $c1 = $c2 = '';
         }
+        elseif ($tag == 'pre') {
+            $content = $this->shelve($this->encode_html($content));
+            $o1 = "<pre$atts>";
+            $o2 = $c2 = '';
+            $c1 = "</pre>";
+        }
         else {
             $o2 = "\t<$tag$atts>";
             $c2 = "</$tag>";
@@ -793,7 +799,9 @@ function refs($m)
     function code($text)
     {
         $text = $this->doSpecial($text, '<code>', '</code>', 'fCode');
-        return $this->doSpecial($text, '@', '@', 'fCode');
+        $text = $this->doSpecial($text, '@', '@', 'fCode');
+        $text = $this->doSpecial($text, '<pre>', '</pre>', 'fPre');
+        return $text;
     }
 
 // -------------------------------------------------------------
@@ -807,6 +815,16 @@ function refs($m)
             return $before.$this->shelve('<code>'.$this->encode_html($text).'</code>').$after;
     }
 
+// -------------------------------------------------------------
+    function fPre($m)
+    {
+      @list(, $before, $text, $after) = $m;
+      if ($this->restricted)
+          // $text is already escaped
+            return $before.'<pre>'.$this->shelve($text).'</pre>'.$after;
+      else
+            return $before.'<pre>'.$this->shelve($this->encode_html($text)).'</pre>'.$after;
+    }
 // -------------------------------------------------------------
     function shelve($val)
     {
@@ -862,7 +880,7 @@ function refs($m)
 // -------------------------------------------------------------
     function doSpecial($text, $start, $end, $method='fSpecial')
     {
-      return preg_replace_callback('/(^|\s|[[({])'.preg_quote($start, '/').'(.*?)'.preg_quote($end, '/').'(\s|$|[\])}])?/ms',
+      return preg_replace_callback('/(^|\s|[[({>])'.preg_quote($start, '/').'(.*?)'.preg_quote($end, '/').'(\s|$|[\])}])?/ms',
             array(&$this, $method), $text);
     }
 
