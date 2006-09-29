@@ -1963,9 +1963,12 @@ begin tag builder functions
 
 		$atts = gpsa(array(
 			'align',
+			'class',
 			'escape',
+			'html_id',
 			'style',
-			'thumbnail'
+			'thumbnail',
+			'wraptag',
 		));
 
 		extract($atts);
@@ -1985,11 +1988,20 @@ begin tag builder functions
 			tagRow('escape',
 				escape_pop($escape)).
 
+			tagRow('html_id',
+				fInput('text', 'html_id', $html_id, 'edit', '', '', 25)).
+
+			tagRow('class',
+				fInput('text', 'class', $class, 'edit', '', '', 25)).
+
 			tagRow('style',
 				fInput('text', 'style', $style, 'edit', '', '', 25)).
 
 			tagRow('align',
-				fInput('text', 'style', $style, 'edit', '', '', 25)).
+				fInput('text', 'align', $align, 'edit', '', '', 25)).
+
+			tagRow('wraptag',
+				fInput('text', 'wraptag', $wraptag, 'edit', '', '', 25)).
 
 			$endform
 		);
@@ -3141,6 +3153,7 @@ begin tag builder functions
 			'escape',
 			'html_id',
 			'style',
+			'wraptag',
 
 			'alt',
 			'caption',
@@ -3184,6 +3197,9 @@ begin tag builder functions
 			tagRow('style',
 				fInput('text', 'style', $style, 'edit', '', '', 25)).
 
+			tagRow('wraptag',
+				fInput('text', 'wraptag', $wraptag, 'edit', '', '', 25)).
+
 			hInput('id', $id).
 			hInput('ext', $ext).
 			hInput('w', $w).
@@ -3219,12 +3235,23 @@ begin tag builder functions
 					$html_id = ($html_id) ? ' id="'.$html_id.'"' : '';
 					$style   = ($style)   ? ' style="'.$style.'"' : '';
 
-					$out .= tdb('<img src="'.$url.'" width="'.$w.'" height="'.$h.'"'.$alt.$caption.$html_id.$class.$style.' />');
+					$out .= tdb(
+						($wraptag ? "<$wraptag>" : '').
+						'<img src="'.$url.'" width="'.$w.'" height="'.$h.'"'.$alt.$caption.$html_id.$class.$style.' />'.
+						($wraptag ? "</$wraptag>" : '')
+					);
 				break;
 
 				case 'textpattern':
 				default:
-					$atts = array('class' => $class, 'html_id' => $html_id, 'id' => $id, 'style' => $style);
+
+					$atts = array(
+						'class'   => $class, 
+						'html_id' => $html_id, 
+						'id'      => $id, 
+						'style'   => $style,
+						'wraptag' => $wraptag
+					);
 
 					$out .= tdb(tb($tag_name, $atts));
 				break;
