@@ -143,7 +143,7 @@ $LastChangedRevision$
 						fclose($file);
 						// record download
 						if ((connection_status()==0) and !connection_aborted() ) {
-							safe_update("txp_file", "downloads=downloads+1", "id='".intval($id)."'");
+							safe_update("txp_file", "downloads=downloads+1", 'id='.intval($id));
 						} else {
 							$pretext['request_uri'] .= "#aborted-at-".floor($sent*100/$filesize)."%";
 							log_hit('200');
@@ -379,7 +379,7 @@ $LastChangedRevision$
 			if (!is_numeric($out['id'])) {
 				$rs = safe_row("*", "txp_file", "filename='".doSlash($out['id'])."'");
 			} else {
-				$rs = safe_row("*", "txp_file", "id='".intval($out['id'])."'");
+				$rs = safe_row("*", "txp_file", 'id='.intval($out['id']));
 			}
 
 			$out = ($rs)? array_merge($out, $rs) : array('s'=>'file_download','file_error'=> 404);
@@ -400,7 +400,7 @@ $LastChangedRevision$
 		$out['page'] = @$rs['page'];		
 
 		if(is_numeric($id)) {
-			$a = safe_row('*, unix_timestamp(Posted) as uPosted', 'textpattern', "ID='".doSlash($id)."' and Status = '4'");
+			$a = safe_row('*, unix_timestamp(Posted) as uPosted', 'textpattern', 'ID='.intval($id).' and Status = 4');
 			if ($a) {
 				$Posted             = @$a['Posted'];
 				$out['id_keywords'] = @$a['Keywords'];
@@ -636,11 +636,11 @@ $LastChangedRevision$
 		}
 
 		if ($q and $searchsticky)
-			$statusq = " and Status >= '4'";
+			$statusq = ' and Status >= 4';
 		elseif ($id)
-			$statusq = " and Status >= '4'";
+			$statusq = ' and Status >= 4';
 		else
-			$statusq = " and Status='".doSlash($status)."'";
+			$statusq = ' and Status = '.intval($status);
 
 		$where = "1" . $statusq. $time.
 			$search . $id . $category . $section . $excerpted . $month . $author . $keywords . $custom . $frontpage;
@@ -652,7 +652,7 @@ $LastChangedRevision$
 			$total = $grand_total - $offset;
 			$numPages = ceil($total/$pageby);  
 			$pg = (!$pg) ? 1 : $pg;
-			$pgoffset = $offset + (($pg - 1) * $pageby).', ';	
+			$pgoffset = $offset + (($pg - 1) * $pageby);	
 			// send paging info to txp:newer and txp:older
 			$pageout['pg']       = $pg;
 			$pageout['numPages'] = $numPages;
@@ -667,11 +667,11 @@ $LastChangedRevision$
 			if ($pgonly)
 				return;
 		}else{
-			$pgoffset = $offset . ', ';
+			$pgoffset = $offset;
 		}
 
 		$rs = safe_rows_start("*, unix_timestamp(Posted) as uPosted".$match, 'textpattern', 
-		$where. ' order by '.doslash($sort).' limit ' . doSlash($pgoffset.$limit));
+		$where.' order by '.doslash($sort).' limit '.intval($pgoffset).', '.intval($limit));
 		// get the form name
 		if ($q and !$iscustom and !$issticky)
 			$fname = ($searchform ? $searchform : 'search_results');
@@ -751,10 +751,10 @@ $LastChangedRevision$
 			if ($status and !is_numeric($status))
 				$status = getStatusNum($status);
 
-			$q_status = ($status ? "and Status='".doSlash($status)."'" : 'and Status in (4,5)');
+			$q_status = ($status ? 'and Status = '.intval($status) : 'and Status in (4,5)');
 
 			$rs = safe_row("*, unix_timestamp(Posted) as uPosted", 
-					"textpattern", "ID='".intval($id)."' $q_status limit 1");
+					"textpattern", 'ID = '.intval($id)." $q_status limit 1");
 
 			if ($rs) {
 				extract($rs);
@@ -1048,18 +1048,18 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function ckExID($val,$debug='') 
 	{
-		return safe_row("ID,Section",'textpattern',"ID = ".doSlash($val)." and Status >= '4' limit 1",$debug);
+		return safe_row("ID,Section",'textpattern','ID = '.intval($val).' and Status >= 4 limit 1',$debug);
 	}
 
 // -------------------------------------------------------------
 	function lookupByTitle($val,$debug='') 
 	{
-		return safe_row("ID,Section",'textpattern',"url_title like '".doSlash($val)."' and Status >= '4' limit 1",$debug);
+		return safe_row("ID,Section",'textpattern',"url_title like '".doSlash($val)."' and Status >= 4 limit 1",$debug);
 	}
 // -------------------------------------------------------------
 	function lookupByTitleSection($val,$section,$debug='') 
 	{
-		return safe_row("ID,Section",'textpattern',"url_title like '".doSlash($val)."' AND Section='$section' and Status >= '4' limit 1",$debug);
+		return safe_row("ID,Section",'textpattern',"url_title like '".doSlash($val)."' AND Section='".doSlash($section)."' and Status >= 4 limit 1",$debug);
 	}	
 
 // -------------------------------------------------------------
@@ -1067,20 +1067,20 @@ $LastChangedRevision$
 	function lookupByIDSection($id, $section, $debug = '') 
 	{
 		return safe_row('ID, Section', 'textpattern', 
-			"ID = ".intval($id)." and Section = '".doSlash($section)."' and Status >= '4' limit 1", $debug);
+			'ID = '.intval($id)." and Section = '".doSlash($section)."' and Status >= 4 limit 1", $debug);
 	}	
 
 // -------------------------------------------------------------
 	function lookupByID($id,$debug='') 
 	{
-		return safe_row("ID,Section",'textpattern',"ID = '".doSlash($id)."' and Status >= '4' limit 1",$debug);
+		return safe_row("ID,Section",'textpattern','ID = '.intval($id).' and Status >= 4 limit 1',$debug);
 	}
 
 // -------------------------------------------------------------
 	function lookupByDateTitle($when,$title,$debug='') 
 	{
 		return safe_row("ID,Section","textpattern",
-		"posted like '".doSlash($when)."%' and url_title like '".doSlash($title)."' and Status >= '4' limit 1");
+		"posted like '".doSlash($when)."%' and url_title like '".doSlash($title)."' and Status >= 4 limit 1");
 	}
 
 // -------------------------------------------------------------

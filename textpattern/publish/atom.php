@@ -63,7 +63,7 @@ $LastChangedRevision$
 			$cfilter = ($category) 
 				? "and (Category1='".$category."' or Category2='".$category."')":'';
 			$limit = ($limit) ? $limit : $rss_how_many;
-			$limit = min($limit,max(100,$rss_how_many));
+			$limit = intval(min($limit,max(100,$rss_how_many)));
 
 			$frs = safe_column("name", "txp_section", "in_rss != '1'");
 
@@ -140,7 +140,7 @@ $LastChangedRevision$
 		
 			$cfilter = ($category) ? "category='".$category."'" : '1';
 			$limit = ($limit) ? $limit : $rss_how_many;
-			$limit = min($limit,max(100,$rss_how_many));
+			$limit = intval(min($limit,max(100,$rss_how_many)));
 		
 			$rs = safe_rows_start("*", "txp_link", "$cfilter order by date desc, id desc limit $limit");
 

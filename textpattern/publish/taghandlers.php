@@ -46,12 +46,16 @@ $LastChangedRevision$
 
 		if ($id)
 		{
+			$id = (int) $id;
+
 			$out = $sitename.$separator.
 				safe_field('Title', 'textpattern', "ID = $id");
 		}
 
 		if ($parentid)
 		{
+			$parent_id = (int) $parent_id;
+
 			$out = $sitename.$separator.gTxt('comments_on').' '.
 				safe_field('Title', 'textpattern', "ID = $parentid");
 		}
@@ -149,9 +153,9 @@ $LastChangedRevision$
 
 			else
 			{
-				$id = intval($id);
+				$id = (int) $id;
 
-				$rs = safe_row('*', 'txp_image', "id = '$id' limit 1");
+				$rs = safe_row('*', 'txp_image', "id = $id limit 1");
 
 				$cache['i'][$id] = $rs;
 			}
@@ -213,9 +217,9 @@ $LastChangedRevision$
 
 		elseif ($id)
 		{
-			$id = intval($id);
+			$id = (int) $id;
 
-			$rs = safe_row('*', 'txp_image', "id = '$id' limit 1");
+			$rs = safe_row('*', 'txp_image', "id = $id limit 1");
 		}
 
 		else
@@ -377,9 +381,9 @@ $LastChangedRevision$
 		$form = fetch_form($form);
 
 		$qparts = array(
-			($category) ? "category = '$category'" : '1',
-			"order by $sort",
-			($limit) ? "limit $limit" : ''
+			($category) ? "category = '".doSlash($category)."'" : '1',
+			'order by '.doSlash($sort),
+			($limit) ? 'limit '.intval($limit) : ''
 		);
 
 		$rs = safe_rows_start('*, unix_timestamp(date) as uDate', 'txp_link', join(' ', $qparts));
@@ -627,7 +631,7 @@ $LastChangedRevision$
 		$section = ($section) ? " and Section = '".doSlash($section)."'" : '';
 
 		$rs = safe_rows_start('*, id as thisid, unix_timestamp(Posted) as posted', 'textpattern', 
-			"Status = 4 $section $categories and Posted <= now() order by $sort limit 0,$limit");
+			"Status = 4 $section $categories and Posted <= now() order by ".doSlash($sort).' limit 0,'.intval($limit));
 
 		if ($rs)
 		{
@@ -662,7 +666,7 @@ $LastChangedRevision$
 		), $atts));
 
 		$rs = safe_rows_start('parentid, name, discussid', 'txp_discuss', 
-			"visible = ".VISIBLE." order by $sort limit 0,$limit");
+			'visible = '.VISIBLE.' order by '.doSlash($sort).' limit 0,'.intval($limit));
 
 		if ($rs)
 		{
@@ -671,7 +675,7 @@ $LastChangedRevision$
 			while ($c = nextRow($rs))
 			{
 				$a = safe_row('*, ID as thisid, unix_timestamp(Posted) as posted', 
-					'textpattern', 'ID = '.$c['parentid']);
+					'textpattern', 'ID = '.intval($c['parentid']));
 
 				If ($a['Status'] >= 4)
 				{
@@ -756,7 +760,7 @@ $LastChangedRevision$
 		$section = ($section) ? " and Section = '".doSlash($section)."'" : '';
 
 		$rs = safe_rows_start('*, unix_timestamp(Posted) as posted', 'textpattern', 
-			"ID != ".$id." and Status = 4 and Posted <= now() $categories $section order by $sort limit 0,$limit");
+			'ID != '.intval($id)." and Status = 4 and Posted <= now() $categories $section order by ".doSlash($sort).' limit 0,'.intval($limit));
 	
 		if ($rs)
 		{
@@ -882,7 +886,7 @@ $LastChangedRevision$
 			$categories = join("','", doSlash($categories));
 
 			$rs = safe_rows_start('name, title', 'txp_category', 
-				"type = '$type' and name in ('$categories') order by field(name, '$categories')");
+				"type = '".doSlash($type)."' and name in ('$categories') order by field(name, '$categories')");
 		}
 
 		else
@@ -898,14 +902,14 @@ $LastChangedRevision$
 
 			if ($parent)
 			{
-				$qs = safe_row('lft, rgt', 'txp_category', "name = '$parent'");
+				$qs = safe_row('lft, rgt', 'txp_category', "name = '".doSlash($parent)."'");
 
 				if ($qs)
 				{
 					extract($qs);
 
 					$rs = safe_rows_start('name, title', 'txp_category', 
-						"(lft between $lft and $rgt) and type = '$type' and name != 'default' $exclude order by lft asc");
+						"(lft between $lft and $rgt) and type = '".doSlash($type)."' and name != 'default' $exclude order by lft asc");
 				}
 			}
 
@@ -1036,7 +1040,7 @@ $LastChangedRevision$
 		),$atts));	
 
 		if ($form) {
-			$rs = fetch('form','txp_form','name',$form);
+			$rs = fetch('form','txp_form','name',doSlash($form));
 			if ($rs) {
 				return $rs;
 			}
@@ -1471,7 +1475,7 @@ $LastChangedRevision$
 			extract(
 				safe_row(
 					"Annotate,AnnotateInvite,unix_timestamp(Posted) as uPosted",
-						"textpattern", "ID='{$id}'"
+						"textpattern", 'ID = '.intval($id)
 				)
 			);
 
@@ -1506,7 +1510,7 @@ $LastChangedRevision$
 		$Form = fetch_form($form);
 
 		$rs = safe_rows_start("*, unix_timestamp(posted) as time", "txp_discuss",
-			"parentid='$id' and visible=".VISIBLE." order by posted asc");
+			'parentid='.intval($id).' and visible='.VISIBLE.' order by posted asc');
 
 		$out = '';
 
@@ -2046,7 +2050,7 @@ function body($atts)
 
 		if (is_numeric($image))
 		{
-			$rs = safe_row('*', 'txp_image', "id = '$image'");
+			$rs = safe_row('*', 'txp_image', 'id = '.intval($image));
 
 			if ($rs)
 			{
@@ -2221,7 +2225,7 @@ function body($atts)
 		if (is_array($atts)) extract($atts);
 		global $s,$c,$p,$img_dir;
 		if($p) {
-			$rs = safe_row("*", "txp_image", "id='$p' limit 1");
+			$rs = safe_row("*", "txp_image", 'id='.intval($p).' limit 1');
 			if ($rs) {
 				extract($rs);
 				$impath = hu.$img_dir.'/'.$id.$ext;
@@ -2414,7 +2418,7 @@ function body($atts)
 		$article = safe_row(
 			"*,ID as thisid, unix_timestamp(Posted) as posted",
 			"textpattern",
-			"ID=$ID");
+			'ID='.intval($ID));
 		
 		return permlinkurl($article);
 	}
@@ -2486,7 +2490,7 @@ function body($atts)
 	{
 		global $comments_mode;
 
-		$dc = safe_count('txp_discuss',"parentid='$ID' and visible=".VISIBLE);
+		$dc = safe_count('txp_discuss','parentid='.intval($ID).' and visible='.VISIBLE);
 
 		$ccount = ($dc) ?  '['.$dc.']' : '';
 		if (!$comments_mode) {
@@ -2851,8 +2855,8 @@ function body($atts)
 
 		$qparts = array(
 			($category) ? "category = '".doSlash($category)."'" : '1',
-			"order by $sort",
-			($limit) ? "limit $offset, $limit" : ''
+			'order by '.doSlash($sort),
+			($limit) ? 'limit '.intval($offset).', '.intval($limit) : ''
 		);
 
 		$rs = safe_rows_start('id, filename, category, description, downloads', 'txp_file', join(' ', $qparts));
