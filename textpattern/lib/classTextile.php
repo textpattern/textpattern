@@ -192,6 +192,9 @@ Applying Attributes:
 @define('txt_quote_single_close', '&#8217;');
 @define('txt_quote_double_open',  '&#8220;');
 @define('txt_quote_double_close', '&#8221;');
+@define('txt_apostrophe',         '&#8217;');
+@define('txt_prime',              '&#8242;');
+@define('txt_prime_double',       '&#8243;');
 @define('txt_ellipsis',           '&#8230;');
 @define('txt_emdash',             '&#8212;');
 @define('txt_endash',             '&#8211;');
@@ -220,6 +223,7 @@ class Textile
     var $restricted = false;
     var $lite = false;
     var $url_schemes = array();
+    var $glyph = array();
 
 // -------------------------------------------------------------
     function Textile()
@@ -241,6 +245,24 @@ class Textile
         $this->url_schemes = array('http','https','ftp','mailto');
 
         $this->btag = array('bq', 'bc', 'notextile', 'pre', 'h[1-6]', 'fn\d+', 'p');
+        
+        $this->glyph = array(
+           'quote_single_open'  => txt_quote_single_open,
+           'quote_single_close' => txt_quote_single_close,
+           'quote_double_open'  => txt_quote_double_open,
+           'quote_double_close' => txt_quote_double_close,
+           'apostrophe'         => txt_apostrophe,
+           'prime'              => txt_prime,
+           'prime_double'       => txt_prime_double,
+           'ellipsis'           => txt_ellipsis,
+           'emdash'             => txt_emdash,
+           'endash'             => txt_endash,
+           'dimension'          => txt_dimension,
+           'trademark'          => txt_trademark,
+           'registered'         => txt_registered,
+           'copyright'          => txt_copyright,
+        );
+
 
     }
 
@@ -932,10 +954,12 @@ function refs($m)
         $pnc = '[[:punct:]]';
 
         $glyph_search = array(
-            '/([^\s[{(>_*])?\'(?(1)|(?=\s|s\b|'.$pnc.'))/',      //  single closing
-            '/\'/',                                              //  single opening
-            '/([^\s[{(>_*])?"(?(1)|(?=\s|'.$pnc.'))/',           //  double closing
-            '/"/',                                               //  double opening
+            '/(^|\s|[^\w[{>_*])\'(.*?)\'(?=\s|'.$pnc.'|$)/',     //  single quotes
+            '/(^|\s|[^\w[{>_*])"(.*?)"(?=\s|'.$pnc.'|$)/',       //  double quotes
+            '/(\d+)\'(?=\d|\s|$)/',                              // 5' (feet)
+            '/(\w+)\'/',                                         // apostrophe's
+            '/(\s)\'(\w)/',                                      // the '80s
+            '/(\d+)\"/',                                         // 3" (inch)
             '/\b([A-Z][A-Z0-9]{2,})\b(?:[(]([^)]*)[)])/',        //  3+ uppercase acronym
             '/\b([A-Z][A-Z\'\-]+[A-Z])(?=[\s.,\)>])/',           //  3+ uppercase
             '/\b( )?\.{3}/',                                     //  ellipsis
@@ -947,20 +971,24 @@ function refs($m)
             '/\b ?[([]C[])]/i',                                  //  copyright
          );
 
+        extract($this->glyph, EXTR_PREFIX_ALL, 'txt');
+
         $glyph_replace = array(
-            '$1'.txt_quote_single_close.'$2',   //  single closing
-            txt_quote_single_open,              //  single opening
-            '$1'.txt_quote_double_close,        //  double closing
-            txt_quote_double_open,              //  double opening
-            '<acronym title="$2">$1</acronym>', //  3+ uppercase acronym
-            '<span class="caps">$1</span>',     //  3+ uppercase
-            '$1'.txt_ellipsis,                  //  ellipsis
-            '$1'.txt_emdash.'$2',               //  em dash
-            ' '.txt_endash.' ',                 //  en dash
-            '$1$2'.txt_dimension.'$3',          //  dimension sign
-            txt_trademark,                      //  trademark
-            txt_registered,                     //  registered
-            txt_copyright,                      //  copyright
+            '$1'.$txt_quote_single_open.'$2'.$txt_quote_single_close, // single quotes
+            '$1'.$txt_quote_double_open.'$2'.$txt_quote_double_close, // double quotes
+            '$1'.$txt_prime,                     // 5' (feet)
+            '$1'.$txt_apostrophe,                // apostrophe's
+            '$1'.$txt_apostrophe.'$2',           // the '80s
+            '$1'.$txt_prime_double,              // 3" (inch)
+            '<acronym title="$2">$1</acronym>',  //  3+ uppercase acronym
+            '<span class="caps">$1</span>',      //  3+ uppercase
+            '$1'.$txt_ellipsis,                  //  ellipsis
+            '$1'.$txt_emdash.'$2',               //  em dash
+            ' '.$txt_endash.' ',                 //  en dash
+            '$1$2'.$txt_dimension.'$3',          //  dimension sign
+            $txt_trademark,                      //  trademark
+            $txt_registered,                     //  registered
+            $txt_copyright,                      //  copyright
          );
 
         $codepre = false;
