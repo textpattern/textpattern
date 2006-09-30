@@ -1413,16 +1413,11 @@ $LastChangedRevision$
 
 		include_once txpath.'/lib/classTextile.php';
 		$textile = new Textile();
-		
+
 		extract($prefs);
 
 		$im = (!empty($comments_disallow_images)) ? 1 : '';
-		$msg = trim(
-			$textile->blockLite(
-				$textile->TextileThis(
-					strip_tags(deEntBrackets($msg)),1
-				),'',$im,'',(@$comment_nofollow ? 'nofollow' : ''))
-		);
+		$msg = $textile->TextileRestricted($msg, 1, $im);
 
 		return $msg;
 	}
