@@ -174,6 +174,8 @@ $LastChangedRevision$
 
 			$out = '<img src="'.hu.$img_dir.'/'.$id.$ext.'" width="'.$w.'" height="'.$h.'" alt="'.$alt.'"'.
 				($caption ? ' title="'.$caption.'"' : '').
+				( ($html_id and !$wraptag) ? ' id="'.$html_id.'"' : '' ).
+				( ($class and !$wraptag) ? ' class="'.$class.'"' : '' ).
 				($style ? ' style="'.$style.'"' : '').
 				($align ? ' align="'.$align.'"' : '').
 				' />';
@@ -235,6 +237,8 @@ $LastChangedRevision$
 
 				$out = '<img src="'.hu.$img_dir.'/'.$id.'t'.$ext.'" alt="'.$alt.'"'.
 					($caption ? ' title="'.$caption.'"' : '').
+					( ($html_id and !$wraptag) ? ' id="'.$html_id.'"' : '' ).
+					( ($class and !$wraptag) ? ' class="'.$class.'"' : '' ).
 					($style ? ' style="'.$style.'"' : '').
 					($align ? ' align="'.$align.'"' : '').
 					' />';
@@ -2060,6 +2064,8 @@ function body($atts)
 
 						$out = '<img src="'.hu.$img_dir.'/'.$id.'t'.$ext.'" alt="'.$alt.'"'.
 							($caption ? ' title="'.$caption.'"' : '').
+							( ($html_id and !$wraptag) ? ' id="'.$html_id.'"' : '' ).
+							( ($class and !$wraptag) ? ' class="'.$class.'"' : '' ).
 							($style ? ' style="'.$style.'"' : '').
 							($align ? ' align="'.$align.'"' : '').
 							' />';
@@ -2083,6 +2089,8 @@ function body($atts)
 
 					$out = '<img src="'.hu.$img_dir.'/'.$id.$ext.'" width="'.$w.'" height="'.$h.'" alt="'.$alt.'"'.
 						($caption ? ' title="'.$caption.'"' : '').
+						( ($html_id and !$wraptag) ? ' id="'.$html_id.'"' : '' ).
+						( ($class and !$wraptag) ? ' class="'.$class.'"' : '' ).
 						($style ? ' style="'.$style.'"' : '').
 						($align ? ' align="'.$align.'"' : '').
 						' />';
@@ -2098,6 +2106,8 @@ function body($atts)
 		else
 		{
 			$out = '<img src="'.$image.'" alt=""'.
+				( ($html_id and !$wraptag) ? ' id="'.$html_id.'"' : '' ).
+				( ($class and !$wraptag) ? ' class="'.$class.'"' : '' ).
 				($style ? ' style="'.$style.'"' : '').
 				($align ? ' align="'.$align.'"' : '').
 				' />';
