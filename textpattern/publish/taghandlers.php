@@ -2030,7 +2030,7 @@ function body($atts)
 			'wraptag'   => '',
 		), $atts));
 
-		if (isset($thisarticle['article_image']))
+		if ($thisarticle['article_image'])
 		{
 			$image = $thisarticle['article_image'];
 		}
