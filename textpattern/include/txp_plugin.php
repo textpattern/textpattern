@@ -265,11 +265,10 @@ $LastChangedRevision$
 
 					$exists = fetch('name','txp_plugin','name',doSlash($name));
 
-					if (isset($help_raw)) {
+					if (isset($help_raw) && !(@$plugin['allow_html_help'] == 1)) {
 						include_once txpath.'/lib/classTextile.php';
 						$textile = new Textile();
-						if (!(@$plugin['allow_html_help'] == 1))
-							$help_raw = escape_tags($help_raw);
+						$help_raw = escape_tags($help_raw);
 						$help = $textile->TextileThis($help_raw);
 					}
 
