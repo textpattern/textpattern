@@ -269,8 +269,15 @@ $LastChangedRevision$
 		) );
 
 		$n = array();
-		foreach (stripPost() as $k=>$v)
-			if (preg_match('#^[A-Fa-f0-9]{32}$#',$k.$v)) $n[] = "'".doSlash($k.$v)."'";
+
+		foreach (stripPost() as $k => $v)
+		{
+			if (preg_match('#^[A-Fa-f0-9]{32}$#', $k.$v))
+			{
+				$n[] = doSlash($k.$v);
+			}
+		}
+
 		$c['nonce'] = '';
 		$c['secret'] = '';
 		if (!empty($n)) {
