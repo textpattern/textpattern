@@ -563,7 +563,7 @@ $LastChangedRevision$
 	{
 
 		$c = addcslashes($content, "\r\n\"\'");
-		$c = preg_replace('@<(/?)script@', '<$1scr\'+\'ipt', $c);
+		$c = preg_replace('@<(/?)script@', '\\x3c$1script', $c);
 		$js = <<<EOF
 var e = document.getElementById('{$id}');
 var n = document.createElement('{$wraptag}')
