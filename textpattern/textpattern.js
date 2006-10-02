@@ -49,57 +49,49 @@ function verify(msg)
 }
 
 // -------------------------------------------------------------
-// checkbox utils
+// multi-edit checkbox utils
 
 function selectall()
 {
-	var cnt = 0;
 	var elem = window.document.longform.elements;
-
-	cnt = elem.length;
+	var cnt = elem.length;
 
 	for (var i = 0; i < cnt; i++)
 	{
-		elem[i].checked = true;
+		if (elem[i].name == 'selected[]')
+		{
+			elem[i].checked = true;
+		}
 	}
 }
 
 function deselectall()
 {
-	var cnt = 0;
 	var elem = window.document.longform.elements;
-
-	cnt = elem.length;
+	var cnt = elem.length;
 
 	for (var i = 0; i < cnt; i++)
 	{
-		elem[i].checked = false;
+		if (elem[i].name == 'selected[]')
+		{
+			elem[i].checked = false;
+		}
 	}
 }
 
 function selectrange()
 {
 	var inrange = false;
-	var cnt = 0;
 	var elem = window.document.longform.elements;
-
-	cnt = elem.length;
-
-	for (var i=0; i < cnt; i++)
+	var cnt = elem.length;
+	
+	for (var i = 0; i < cnt; i++)
 	{
-		if (elem[i].type == 'checkbox')
+		if (elem[i].name == 'selected[]')
 		{
 			if (elem[i].checked == true)
 			{
-				if (!inrange)
-				{
-					inrange = true;
-				}
-
-				else
-				{
-					inrange = false;
-				}
+				inrange = (!inrange) ? true : false;
 			}
 
 			if (inrange)
