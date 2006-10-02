@@ -265,11 +265,16 @@ $LastChangedRevision$
 
 					$exists = fetch('name','txp_plugin','name',doSlash($name));
 
-					if (isset($help_raw) && !(@$plugin['allow_html_help'] == 1)) {
-						include_once txpath.'/lib/classTextile.php';
-						$textile = new Textile();
-						$help_raw = escape_tags($help_raw);
-						$help = $textile->TextileThis($help_raw);
+					if (isset($help_raw)) {
+						if (empty($plugin['allow_html_help'])) {
+							// default: help is in Textile format
+							include_once txpath.'/lib/classTextile.php';
+							$textile = new Textile();
+							$help = $textile->TextileRestricted($help_raw, 0, 0);
+						}
+						else {
+							$help = $help_raw;
+						}
 					}
 
 					if ($exists) {
