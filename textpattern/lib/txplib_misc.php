@@ -218,21 +218,6 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function set_textile_glyphs()
-	{
-		$glyphs = array(
-			'txt_quote_single_open',
-			'txt_quote_single_close',
-			'txt_quote_double_open',
-			'txt_quote_double_close',
-		);
-		global $textarray;
-		foreach ($glyphs as $g)
-			if (!empty($textarray[$g]))
-				@define($g, $textarray[$g]);
-	}
-
-// -------------------------------------------------------------
 	function check_privs()
 	{
 		global $txp_user;
