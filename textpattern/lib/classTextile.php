@@ -954,8 +954,10 @@ function refs($m)
         $pnc = '[[:punct:]]';
 
         $glyph_search = array(
-            '/(^|\s|[^\w[{>_*])\'(.*?)\'(?=\s|'.$pnc.'|$)/',     //  single quotes
-            '/(^|\s|[^\w[{>_*])"(.*?)"(?=\s|'.$pnc.'|$)/',       //  double quotes
+            '/([^\s[{(>_*])?\'(?(1)|(?=\s|s\b|'.$pnc.'))/',      //  single closing
+            '/\'/',                                              //  single opening
+            '/([^\s[{(>_*])?"(?(1)|(?=\s|'.$pnc.'))/',           //  double closing
+            '/"/',                                               //  double opening
             '/(\d+)\'(?=\d|\s|$)/',                              // 5' (feet)
             '/(\w+)\'/',                                         // apostrophe's
             '/(\s)\'(\w)/',                                      // the '80s
@@ -974,8 +976,10 @@ function refs($m)
         extract($this->glyph, EXTR_PREFIX_ALL, 'txt');
 
         $glyph_replace = array(
-            '$1'.$txt_quote_single_open.'$2'.$txt_quote_single_close, // single quotes
-            '$1'.$txt_quote_double_open.'$2'.$txt_quote_double_close, // double quotes
+            '$1'.$txt_quote_single_close.'$2',   //  single closing
+            $txt_quote_single_open,              //  single opening
+            '$1'.$txt_quote_double_close,        //  double closing
+            $txt_quote_double_open,              //  double opening
             '$1'.$txt_prime,                     // 5' (feet)
             '$1'.$txt_apostrophe,                // apostrophe's
             '$1'.$txt_apostrophe.'$2',           // the '80s
