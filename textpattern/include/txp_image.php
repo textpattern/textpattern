@@ -572,7 +572,6 @@ $LastChangedRevision$
 				 ext      = '$ext',
 				 name   = '$name2db',
 				 date   = now(),
-				 caption  = '',
 				 author   = '$txp_user'";
 			if (empty($id)) {
 				$q.= ", category = '$category'";
