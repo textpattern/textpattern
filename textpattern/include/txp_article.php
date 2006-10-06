@@ -66,6 +66,7 @@ if (!empty($event) and $event == 'article') {
 		$incoming = textile_main_fields($incoming, $use_textile);
 
 		extract(doSlash($incoming));
+		extract(array_map('assert_int', psa(array('Annotate', 'Status', 'textile_body', 'textile_excerpt'))));
 
 		if ($publish_now==1) {
 			$when = 'now()';
@@ -89,16 +90,16 @@ if (!empty($event) and $event == 'article') {
 				Excerpt_html    = '$Excerpt_html',
 				Image           = '$Image',
 				Keywords        = '$Keywords',
-				Status          = '$Status',
-				Posted          = $when,
-				LastMod         = now(),
+				Status          =  $Status,
+				Posted          =  $when,
+				LastMod         =  now(),
 				AuthorID        = '$txp_user',
 				Section         = '$Section',
 				Category1       = '$Category1',
 				Category2       = '$Category2',
 				textile_body    =  $textile_body,
 				textile_excerpt =  $textile_excerpt,
-				Annotate        = '$Annotate',
+				Annotate        =  $Annotate,
 				override_form   = '$override_form',
 				url_title       = '$url_title',
 				AnnotateInvite  = '$AnnotateInvite',
@@ -156,6 +157,7 @@ if (!empty($event) and $event == 'article') {
 		$incoming = textile_main_fields($incoming, $use_textile);
 
 		extract(doSlash($incoming));
+		extract(array_map('assert_int', psa(array('ID', 'Annotate', 'Status', 'textile_body', 'textile_excerpt'))));
 
 		if (!has_privs('article.publish') && $Status>=4) $Status = 3;
 		
@@ -188,13 +190,13 @@ if (!empty($event) and $event == 'article') {
 			Excerpt_html    = '$Excerpt_html',
 			Keywords        = '$Keywords',
 			Image           = '$Image',
-			Status          = '$Status',
+			Status          =  $Status,
 			LastMod         =  now(),
 			LastModID       = '$txp_user',
 			Section         = '$Section',
 			Category1       = '$Category1',
 			Category2       = '$Category2',
-			Annotate        = '$Annotate',
+			Annotate        =  $Annotate,
 			textile_body    =  $textile_body,
 			textile_excerpt =  $textile_excerpt,
 			override_form   = '$override_form',
@@ -211,7 +213,7 @@ if (!empty($event) and $event == 'article') {
 			custom_9        = '$custom_9',
 			custom_10       = '$custom_10',
 			$whenposted",
-			"ID='$ID'"
+			"ID = $ID"
 		);
 
 		if($Status >= 4) {
@@ -238,7 +240,7 @@ if (!empty($event) and $event == 'article') {
 		extract(gpsa(array('view','from_view','step')));
 		
 		if(!empty($GLOBALS['ID'])) { // newly-saved article
-			$ID = intval($GLOBALS['ID']);
+			$ID = $GLOBALS['ID'];
 			$step = 'edit';
 		} else {  
 			$ID = gps('ID');
@@ -258,6 +260,7 @@ if (!empty($event) and $event == 'article') {
 			&& $from_view != 'html') {
 
 			$pull = true;          //-- it's an existing article - off we go to the db
+			$ID = assert_int($ID);
 
 			$rs = safe_row(
 				"*, unix_timestamp(Posted) as sPosted,
@@ -734,6 +737,7 @@ if (!empty($event) and $event == 'article') {
 // -------------------------------------------------------------
 	function checkIfNeighbour($whichway,$sPosted)
 	{
+		$sPosted = assert_int($sPosted);
 		$dir = ($whichway == 'prev') ? '<' : '>'; 
 		$ord = ($whichway == 'prev') ? 'desc' : 'asc'; 
 

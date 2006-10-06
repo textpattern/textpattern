@@ -1040,7 +1040,7 @@ $LastChangedRevision$
 		),$atts));	
 
 		if ($form) {
-			$rs = fetch('form','txp_form','name',doSlash($form));
+			$rs = fetch('form','txp_form','name',$form);
 			if ($rs) {
 				return $rs;
 			}

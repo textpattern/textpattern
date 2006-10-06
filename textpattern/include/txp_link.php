@@ -122,7 +122,7 @@ $LastChangedRevision$
 			$crit = '';
 		}
 
-		$total = getCount('txp_link', "$criteria");  
+		$total = getCount('txp_link', $criteria);  
 
 		if ($total < 1)
 		{
@@ -246,6 +246,7 @@ $LastChangedRevision$
 
 		if ($id && $step == 'link_edit')
 		{
+			$id = assert_int($id);
 			extract(safe_row('*', 'txp_link', "id = $id"));
 		}
 		
@@ -381,6 +382,7 @@ $LastChangedRevision$
 		extract(doSlash($varray));
 		
 		if (!$linksort) $linksort = $linkname;
+		$id = assert_int($id);
 
 		$rs = safe_update("txp_link",
 		   "category    = '$category',
@@ -388,7 +390,7 @@ $LastChangedRevision$
 			linkname    = '$linkname',
 			linksort    = '$linksort',
 			description = '$description'",
-		   "id = '$id'"
+		   "id = $id"
 		);
 
 		if ($rs)

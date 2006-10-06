@@ -32,7 +32,7 @@ function doAuth() {
 
 // -------------------------------------------------------------
 	function txp_validate($user,$password) {
-    	$safe_user = addslashes($user);
+    	$safe_user = doSlash($user);
     	$r = safe_field("name", 
     		"txp_users", "name = '$safe_user'
 			and (pass = password(lower('".doSlash($password)."')) or pass = password('".doSlash($password)."')) and privs > 0");
@@ -128,7 +128,7 @@ function doAuth() {
 	
 			@list($c_userid,$cookie_hash) = split(',',cs('txp_login'));
 
-			$nonce = safe_field('nonce','txp_users',"name='".doslash($c_userid)."'");
+			$nonce = safe_field('nonce','txp_users',"name='".doSlash($c_userid)."'");
 
 			if ((md5($c_userid.$nonce) === $cookie_hash) && $nonce) {  // check nonce
 	

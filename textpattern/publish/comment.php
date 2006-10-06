@@ -143,7 +143,7 @@ $LastChangedRevision$
 			# prevent XHTML Strict validation gotchas
 			n.'<div class="comments-wrapper">'.n.n;
 
-		$Form = fetch('Form', 'txp_form', 'name', doSlash($form));
+		$Form = fetch('Form', 'txp_form', 'name', $form);
 
 		$msgstyle = ($msgstyle ? ' style="'.$msgstyle.'"' : '');
 		$msgrows = ($msgrows and is_numeric($msgrows)) ? ' rows="'.intval($msgrows).'"' : '';
@@ -344,9 +344,10 @@ $LastChangedRevision$
 			callback_event('comment.save');
 			$visible = $evaluator->get_result();
 			if ($visible != RELOAD) {
+				$parentid = assert_int($parentid);
 				$rs = safe_insert(
 					"txp_discuss",
-					"parentid  = '".intval($parentid)."',
+					"parentid  = $parentid,
 					 name		  = '$name',
 					 email	  = '$email',
 					 web		  = '$web',
@@ -356,7 +357,7 @@ $LastChangedRevision$
 					 posted	  = now()"
 				);
 				if ($rs) {
-					safe_update("txp_discuss_nonce", "used='1'", "nonce='".doslash($nonce)."'");
+					safe_update("txp_discuss_nonce", "used = 1", "nonce='".doSlash($nonce)."'");
 					if ($prefs['comment_means_site_updated']) {
 						update_lastmod();
 					}
@@ -471,13 +472,13 @@ $LastChangedRevision$
 			// delete expired nonces
 		safe_delete("txp_discuss_nonce", "issue_time < date_sub(now(),interval 10 minute)");
 			// check for nonce
-		return (safe_row("*", "txp_discuss_nonce", "nonce='".doslash($nonce)."' and used='0'")) ? true : false;
+		return (safe_row("*", "txp_discuss_nonce", "nonce='".doSlash($nonce)."' and used = 0")) ? true : false;
 	}
 
 // -------------------------------------------------------------
 	function checkBan($ip)
 	{
-		return (!fetch("ip", "txp_discuss_ipban", "ip", doslash($ip))) ? true : false;
+		return (!fetch("ip", "txp_discuss_ipban", "ip", $ip)) ? true : false;
 	}
 
 // -------------------------------------------------------------
@@ -527,7 +528,9 @@ $LastChangedRevision$
 	function mail_comment($message, $cname, $cemail, $cweb, $parentid, $discussid) 
 	{
 		global $sitename;
-		$article = safe_row("Section, Posted, ID, url_title, AuthorID, Title", "textpattern", 'ID = '.intval($parentid));
+		$parentid = assert_int($parentid);
+		$discussid = assert_int($discussid);
+		$article = safe_row("Section, Posted, ID, url_title, AuthorID, Title", "textpattern", "ID = $parentid");
 		extract($article);
 		extract(safe_row("RealName, email", "txp_users", "name = '".doSlash($AuthorID)."'"));
 

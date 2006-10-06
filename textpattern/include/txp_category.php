@@ -73,7 +73,8 @@ if ($event == 'category') {
 	{
 		if ($id)
 		{
-			list($lft, $rgt) = array_values(safe_row('lft, rgt', 'txp_category', "id = '".doSlash($id)."'"));
+			$id = assert_int($id);
+			list($lft, $rgt) = array_values(safe_row('lft, rgt', 'txp_category', 'id = '.$id));
 
 			$rs = getTree('root', $type, "lft not between $lft and $rgt");
 		}
@@ -164,8 +165,9 @@ if ($event == 'category') {
 		$things = ps('selected');
 		if ($things) {
 			foreach($things as $catid) {
+				$catid = assert_int($catid);
 				if ($method == 'delete') {
-					$catname = safe_field('name', 'txp_category', "id='$catid'");
+					$catname = safe_field('name', 'txp_category', "id=$catid");
 					if (safe_delete('txp_category',"id=$catid")) {
 						if ($catname)
 							safe_update('txp_category', "parent='root'", "type='".doSlash($type)."' and parent='".doSlash($catname)."'");
@@ -325,7 +327,7 @@ if ($event == 'category') {
 			return cat_category_list($message);
 		}
 
-		$exists = safe_field('name', 'txp_category', "name = '".doSlash($name)."' and type = '$event'");
+		$exists = safe_field('name', 'txp_category', "name = '".doSlash($name)."' and type = '".doSlash($event)."'");
 
 		if ($exists)
 		{
@@ -334,7 +336,7 @@ if ($event == 'category') {
 			return cat_category_list($message);
 		}
 
-		$q = safe_insert('txp_category', "name = '".doSlash($name)."', title = '".doSlash($title)."', type = '$event', parent = 'root'");
+		$q = safe_insert('txp_category', "name = '".doSlash($name)."', title = '".doSlash($title)."', type = '".doSlash($event)."', parent = 'root'");
 
 		if ($q)
 		{
@@ -351,7 +353,9 @@ if ($event == 'category') {
 	{
 		pagetop(gTxt('categories'));
 
-		extract(doSlash(gpsa(array('id','parent'))));
+		$id     = assert_int(gps('id'));
+		$parent = doSlash(gps('parent'));
+
 		$row = safe_row("*", "txp_category", "id=$id");
 		if($row){
 			extract($row);
@@ -374,6 +378,7 @@ if ($event == 'category') {
 		global $txpcfg;
 
 		extract(doSlash(psa(array('id', 'name', 'old_name', 'parent', 'title'))));
+		$id = assert_int($id);
 
 		$name = sanitizeForUrl($name);
 

@@ -117,7 +117,7 @@ $LastChangedRevision$
 				eInput("form").sInput('form_save');
 		} else {
 			$name = (!$name or $step=='form_delete') ? 'default' : $name;
-			$rs = safe_row("*", "txp_form", "name='$name'");
+			$rs = safe_row("*", "txp_form", "name='".doSlash($name)."'");
 			if ($rs) {
 				extract($rs);
 				$inputs = fInput('submit','save',gTxt('save'),'publish').

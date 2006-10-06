@@ -101,7 +101,7 @@ $LastChangedRevision$
 			return;
 		}
 
-		$rs = safe_update('txp_users', "email	 = '$new_email'", "name = '$txp_user'");
+		$rs = safe_update('txp_users', "email = '".doSlash($new_email)."'", "name = '".doSlash($txp_user)."'");
 
 		if ($rs)
 		{
@@ -118,6 +118,8 @@ $LastChangedRevision$
 		require_privs('admin.edit');
 
 		extract(doSlash(psa(array('privs', 'user_id', 'RealName', 'email'))));
+		$privs   = assert_int($privs);
+		$user_id = assert_int($user_id);
 
 		if (!is_valid_email($email))
 		{
@@ -129,8 +131,8 @@ $LastChangedRevision$
 			privs		 = $privs,
 			RealName = '$RealName',
 			email		 = '$email'",
-			"user_id = '$user_id'
-		");
+			"user_id = $user_id"
+		);
 
 		if ($rs)
 		{
@@ -154,7 +156,7 @@ $LastChangedRevision$
 			return;
 		}
 
-		$rs = safe_update('txp_users', "pass = password(lower('$new_pass'))", "name = '$txp_user'");
+		$rs = safe_update('txp_users', "pass = password(lower('$new_pass'))", "name = '".doSlash($txp_user)."'");
 
 		if ($rs)
 		{
@@ -187,11 +189,12 @@ $LastChangedRevision$
 		require_privs('admin.edit');
 
 		extract(doSlash(psa(array('privs', 'name', 'email', 'RealName'))));
+		$privs = assert_int($privs);
 
 		if ($name && is_valid_email($email))
 		{
-			$password = generate_password(6);
-			$nonce = md5(uniqid(rand(), true));
+			$password = doSlash(generate_password(6));
+			$nonce = doSlash(md5(uniqid(rand(), true)));
 
 			$rs = safe_insert('txp_users', "
 				privs		 = $privs,
@@ -351,7 +354,7 @@ $LastChangedRevision$
 		$name = ps('name');
 
 		$email = safe_field('email', 'txp_users', "name = '".doSlash($name)."'");
-		$new_pass = generate_password(6);
+		$new_pass = doSlash(generate_password(6));
 
 		$rs = safe_update('txp_users', "pass = password(lower('$new_pass'))", "name = '".doSlash($name)."'");
 
@@ -502,13 +505,13 @@ $LastChangedRevision$
 	{
 		require_privs('admin.edit');
 
-		$user_id = ps('user_id');
+		$user_id = assert_int(ps('user_id'));
 
 		$name = fetch('Realname', 'txp_users', 'user_id', $user_id);
 
 		if ($name)
 		{
-			$rs = safe_delete('txp_users', "user_id = '$user_id'");
+			$rs = safe_delete('txp_users', "user_id = $user_id");
 
 			if ($rs)
 			{

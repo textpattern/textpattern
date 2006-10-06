@@ -94,7 +94,7 @@ $LastChangedRevision$
 			$html_array = serialize($html_array);
 			$outstep = 'div_save';
 		} else {
-			$html = safe_field('user_html','txp_page',"name='$name'");
+			$html = safe_field('user_html','txp_page',"name='".doSlash($name)."'");
 			$outstep = 'page_save';
 		}
 
@@ -242,7 +242,7 @@ $LastChangedRevision$
 
 		$html = doSlash(join('', $html_array));
 
-		safe_update('txp_page', "user_html = '$html'", "name = '$name'");
+		safe_update('txp_page', "user_html = '$html'", "name = '".doSlash($name)."'");
 
 		$message = gTxt('page_updated', array('{name}' => $name));
 

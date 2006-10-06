@@ -183,13 +183,13 @@ $LastChangedRevision$
 	function section_create() 
 	{
 		global $txpcfg;
-		$name = doSlash(ps('name'));
+		$name = ps('name');
 		
 		//Prevent non url chars on section names
 		include_once txpath.'/lib/classTextile.php';
 		$textile = new Textile();
 		$title = $textile->TextileThis($name,1);
-		$name =  sanitizeForUrl($name);
+		$name = sanitizeForUrl($name);
 		
 		$chk = fetch('name','txp_section','name',$name);
 
@@ -199,8 +199,8 @@ $LastChangedRevision$
 			{
 				$rs = safe_insert(
 				   "txp_section",
-				   "name         = '$name',
-					title        = '$title', 
+				   "name         = '".doSlash($name) ."',
+					title        = '".doSlash($title)."', 
 					page         = 'default',
 					css          = 'default',
 					is_default   = 0,
@@ -238,11 +238,9 @@ $LastChangedRevision$
 	{
 		global $txpcfg;
 
-		$in = psa(array(
-			'name', 'title','page','css','is_default','on_frontpage','in_rss','searchable','old_name')
-		);
-
-		extract(doSlash($in));
+		extract(doSlash(psa(array('page','css','old_name'))));
+		extract(array_map('assert_int',psa(array('is_default','on_frontpage','in_rss','searchable'))));
+		extract(psa(array('name', 'title')));
 
 		if (empty($title))
 		{
@@ -253,12 +251,12 @@ $LastChangedRevision$
 		include_once txpath.'/lib/classTextile.php';
 
 		$textile = new Textile();
-		$title = $textile->TextileThis($title,1);
-		$name =  sanitizeForUrl($name);
+		$title = doSlash($textile->TextileThis($title,1));
+		$name  = doSlash(sanitizeForUrl($name));
 
 		if ($old_name && (strtolower($name) != strtolower($old_name)))
 		{
-			if (safe_field('name', 'txp_section', "name='".doSlash($name)."'"))
+			if (safe_field('name', 'txp_section', "name='$name'"))
 			{
 				$message = gTxt('section_name_already_exists', array('{name}' => $name));
 
@@ -287,10 +285,10 @@ $LastChangedRevision$
 				title        = '$title',
 				page         = '$page',
 				css          = '$css',
-				is_default   = '$is_default',
-				on_frontpage = '$on_frontpage',
-				in_rss       = '$in_rss',
-				searchable   = '$searchable'
+				is_default   = $is_default,
+				on_frontpage = $on_frontpage,
+				in_rss       = $in_rss,
+				searchable   = $searchable
 			", "name = '$old_name'");
 
 			safe_update('textpattern', "Section = '$name'", "Section = '$old_name'");
@@ -309,7 +307,7 @@ $LastChangedRevision$
 	{
 		$name = ps('name');
 
-		safe_delete('txp_section', "name = '$name'");
+		safe_delete('txp_section', "name = '".doSlash($name)."'");
 
 		$message = gTxt('section_deleted', array('{name}' => $name));
 

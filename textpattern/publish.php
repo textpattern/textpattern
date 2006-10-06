@@ -594,10 +594,10 @@ $LastChangedRevision$
 
 		//Building query parts
 		$frontpage = ($frontpage and !$q) ? filterFrontPage() : '';		
-		$category  = (!$category)  ? '' : " and ((Category1='".doslash($category)."') or (Category2='".doSlash($category)."')) ";
-		$section   = (!$section)   ? '' : " and Section = '".doslash($section)."'";
+		$category  = (!$category)  ? '' : " and ((Category1='".doSlash($category)."') or (Category2='".doSlash($category)."')) ";
+		$section   = (!$section)   ? '' : " and Section = '".doSlash($section)."'";
 		$excerpted = ($excerpted=='y')  ? " and Excerpt !=''" : '';
-		$author    = (!$author)    ? '' : " and AuthorID = '".doslash($author)."'";
+		$author    = (!$author)    ? '' : " and AuthorID = '".doSlash($author)."'";
 		$month     = (!$month)     ? '' : " and Posted like '".doSlash($month)."%'";
 		$id        = (!$id)        ? '' : " and ID = '".intval($id)."'";
 		switch ($time) {
@@ -671,7 +671,7 @@ $LastChangedRevision$
 		}
 
 		$rs = safe_rows_start("*, unix_timestamp(Posted) as uPosted".$match, 'textpattern', 
-		$where.' order by '.doslash($sort).' limit '.intval($pgoffset).', '.intval($limit));
+		$where.' order by '.doSlash($sort).' limit '.intval($pgoffset).', '.intval($limit));
 		// get the form name
 		if ($q and !$iscustom and !$issticky)
 			$fname = ($searchform ? $searchform : 'search_results');

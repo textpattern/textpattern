@@ -50,6 +50,8 @@ $LastChangedRevision$
 
 		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
 
+		$expire_logs_after = assert_int($expire_logs_after);
+
 		safe_delete('txp_log', "time < date_sub(now(), interval $expire_logs_after day)");
 
 		$dir = ($dir == 'desc') ? 'desc' : 'asc';

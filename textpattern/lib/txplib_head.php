@@ -13,7 +13,7 @@ $LastChangedRevision$
 		$event = (!$event) ? 'article' : $event;
 		$bm = gps('bm');
 
-		$privs = safe_field("privs", "txp_users", "`name`='$txp_user'");
+		$privs = safe_field("privs", "txp_users", "name = '".doSlash($txp_user)."'");
 		
 		$GLOBALS['privs'] = $privs;
 

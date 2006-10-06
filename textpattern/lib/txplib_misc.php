@@ -247,7 +247,7 @@ $LastChangedRevision$
 		if (empty($user))
 			$user = $txp_user;
 
-		$privs = safe_field("privs", "txp_users", "`name`='".doSlash($user)."'");
+		$privs = safe_field("privs", "txp_users", "name='".doSlash($user)."'");
 		if (@$txp_permissions[$res])
 			$req = explode(',', $txp_permissions[$res]);
 		else
@@ -414,7 +414,7 @@ $LastChangedRevision$
 			}
 		}
 							
-		$rs = safe_row("name,code,version","txp_plugin","status='1' AND name='".doSlash($name)."'");
+		$rs = safe_row("name,code,version","txp_plugin","status = 1 AND name='".doSlash($name)."'");
 		if ($rs) {
 			$plugins[] = $rs['name'];
 			$plugins_ver[$rs['name']] = $rs['version'];
@@ -497,7 +497,7 @@ $LastChangedRevision$
 			}
 		}
 
-		$where = "status='1'";
+		$where = 'status = 1';
 		if ($type !== NULL)
 			$where .= (" and type='".doSlash($type)."'");
 
@@ -1005,9 +1005,9 @@ $LastChangedRevision$
 			{
 				foreach ($selected as $id)
 				{
-					$id = intval($id);
+					$id = assert_int($id);
 
-					if (safe_delete($table, "$id_key = '$id'"))
+					if (safe_delete($table, "$id_key = $id"))
 					{
 						$ids[] = $id;
 					}
@@ -1267,16 +1267,16 @@ $LastChangedRevision$
 	}	
 	
 // --------------------------------------------------------------
-	function get_author_name($id)
+	function get_author_name($name)
 	{
 		static $authors = array();
 
-		if (isset($authors[$id]))
-			return $authors[$id];
+		if (isset($authors[$name]))
+			return $authors[$name];
 
-		$name = fetch('RealName','txp_users','name',doSlash($id));
-		$authors[$id] = $name;
-		return ($name) ? $name : $id;
+		$realname = fetch('RealName','txp_users','name',doSlash($name));
+		$authors[$name] = $realname;
+		return ($realname) ? $realname : $name;
 	}
 
 
@@ -1369,14 +1369,17 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function update_comments_count($id) 
 	{
-		$thecount = safe_field('count(*)','txp_discuss','parentid='.doSlash($id).' and visible='.VISIBLE);
-		$updated = safe_update("textpattern","comments_count='".doSlash($thecount)."'","ID='".doSlash($id)."'");
+		$id = assert_int($id);
+		$thecount = safe_field('count(*)','txp_discuss','parentid='.$id.' and visible='.VISIBLE);
+		$thecount = assert_int($thecount);
+		$updated = safe_update('textpattern','comments_count='.$thecount,'ID='.$id);
 		return ($updated) ? true : false;
 	}
 
 // -------------------------------------------------------------
 	function clean_comment_counts($parentids) 
 	{
+		$parentids = array_map('assert_int',$parentids);
 		$rs = safe_rows_start('parentid, count(*) as thecount','txp_discuss','parentid IN ('.implode(',',$parentids).') AND visible='.VISIBLE.' group by parentid');
 		if (!$rs) return;
 
@@ -1420,7 +1423,7 @@ $LastChangedRevision$
 			$unix_ts = @strtotime($prefs['lastmod']);
 
 		# check for future articles that are now visible
-		if ($max_article = safe_field('unix_timestamp(Posted)', 'textpattern', "Posted <= now() and Status >= '4' order by Posted desc limit 1")) {
+		if ($max_article = safe_field('unix_timestamp(Posted)', 'textpattern', "Posted <= now() and Status >= 4 order by Posted desc limit 1")) {
 			$unix_ts = max($unix_ts, $max_article);
 		}
 
@@ -1715,14 +1718,14 @@ eod;
 	}
 
 // -------------------------------------------------------------
-	function get_caller($num=1)
+	function get_caller($num=1,$start=2)
 	{
 		$out = array();
 		if (!is_callable('debug_backtrace'))
 			return $out;
 
 		$bt = debug_backtrace();
-		for ($i=2; $i< $num+2; $i++) {
+		for ($i=$start; $i< $num+$start; $i++) {
 			if (!empty($bt[$i])) {
 				$t = '';
 				if (!empty($bt[$i]['file']))
@@ -1822,6 +1825,22 @@ eod;
 		global $thiscomment;
 		if (empty($thiscomment))
          trigger_error(gTxt('error_comment_context'));
+	}
+
+//-------------------------------------------------------------
+	function assert_int($myvar) {
+		global $production_status;
+
+		if (is_numeric($myvar) and $myvar == intval($myvar)) {
+			return (int) $myvar;
+		}
+
+		if ($production_status == 'debug') {
+			trigger_error("<pre>Error: '".htmlspecialchars($myvar)."' is not an integer</pre>".
+						  "\n".'<pre style="padding-left: 2em;" class="backtrace"><code>'.
+						  escape_output(join("\n", get_caller(5,1))).'</code></pre>', E_USER_ERROR);
+		} else trigger_error("'".htmlspecialchars($myvar)."' is not an integer.", E_USER_WARNING);
+		return false;
 	}
 
 //-------------------------------------------------------------

@@ -104,7 +104,7 @@ $LastChangedRevision$
 
 		$change = ($status) ? 0 : 1;
 
-		safe_update('txp_plugin', "status = $change", "name = '$name'");
+		safe_update('txp_plugin', "status = $change", "name = '".doSlash($name)."'");
 
 		$message = gTxt('plugin_updated', array('{name}' => $name));
 
@@ -125,7 +125,7 @@ $LastChangedRevision$
 	{
 		$name = gps('name');
 		pagetop(gTxt('plugin_help'));
-		$help = ($name) ? safe_field('help','txp_plugin',"name = '$name'") : '';
+		$help = ($name) ? safe_field('help','txp_plugin',"name = '".doSlash($name)."'") : '';
 		echo 
 		startTable('edit')
 		.	tr(tda($help,' width="600"'))
@@ -262,8 +262,9 @@ $LastChangedRevision$
 
 					extract($plugin);
 					if (empty($type)) $type = 0;
+					$type = assert_int($type);
 
-					$exists = fetch('name','txp_plugin','name',doSlash($name));
+					$exists = fetch('name','txp_plugin','name',$name);
 
 					if (isset($help_raw) && empty($plugin['allow_html_help'])) {
 							// default: help is in Textile format
@@ -276,7 +277,7 @@ $LastChangedRevision$
 						$rs = safe_update(
 						   "txp_plugin",
 							"status      = 0,
-							type         = '".doSlash($type)."',
+							type         = $type,
 							author       = '".doSlash($author)."',
 							author_uri   = '".doSlash($author_uri)."',
 							version      = '".doSlash($version)."',
@@ -294,7 +295,7 @@ $LastChangedRevision$
 						   "txp_plugin",
 						   "name         = '".doSlash($name)."',
 							status       = 0,
-							type         = '".doSlash($type)."',
+							type         = $type,
 							author       = '".doSlash($author)."',
 							author_uri   = '".doSlash($author_uri)."',
 							version      = '".doSlash($version)."',

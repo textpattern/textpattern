@@ -385,7 +385,7 @@ begin generic functions
 	{
 		$vals = array();
 
-		$type = ($type) ? "type = '$type'" : '1 = 1';
+		$type = ($type) ? "type = '".doSlash($type)."'" : '1 = 1';
 
 		$rs = safe_rows_start('name', 'txp_form', "$type order by name");
 

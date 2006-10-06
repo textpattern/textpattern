@@ -294,10 +294,11 @@ $LastChangedRevision$
 		{
 			$id = gps('id');
 		}
+		$id = assert_int($id);
 
 		$categories = getTree('root', 'file');
 
-		$rs = safe_row('*', 'txp_file', "id = '$id'");
+		$rs = safe_row('*', 'txp_file', "id = $id");
 
 		if ($rs)
 		{
@@ -359,7 +360,7 @@ $LastChangedRevision$
 
 									hInput('id',$id).
 									hInput('category',$category).
-									hInput('perms',($permissions=='-1')?'':$permissions).
+									hInput('perms',($permissions=='-1') ? '' : $permissions).
 									hInput('description',$description).
 
 									hInput('sort', $sort).
@@ -458,10 +459,11 @@ $LastChangedRevision$
 				file_list(gTxt('file_upload_failed').' (db_add)');
 			} else {
 
+				$id = assert_int($id);
 				$newpath = build_file_path($file_base_path,trim($name));
 				
 				if(!shift_uploaded_file($file, $newpath)) {
-					safe_delete("txp_file","id='$id'");
+					safe_delete("txp_file","id = $id");
 					safe_alter("txp_file", "auto_increment=$id");
 					if ( isset( $GLOBALS['ID'])) unset( $GLOBALS['ID']);
 					file_list($newpath.' '.gTxt('upload_dir_perms'));
@@ -489,9 +491,9 @@ $LastChangedRevision$
 	{	
 		global $txpcfg,$extensions,$txp_user,$file_base_path;
 		extract($txpcfg);
-		$id = gps('id');
+		$id = assert_int(gps('id'));
 
-		$rs = safe_row('filename','txp_file',"id='$id'");
+		$rs = safe_row('filename','txp_file',"id = $id");
 		
 		if (!$rs) {
 			file_list(messenger(gTxt('invalid_id'),$id,''));
@@ -519,7 +521,7 @@ $LastChangedRevision$
 			}
 	
 			if(!shift_uploaded_file($file, $newpath)) {
-				safe_delete("txp_file","id='$id'");
+				safe_delete("txp_file","id = $id");
 
 				file_list($newpath.sp.gTxt('upload_dir_perms'));
 				// rename tmp back
@@ -546,9 +548,9 @@ $LastChangedRevision$
 	{
 		extract(doSlash(gpsa(array('id','filename','category','description'))));
 		
-		
 		if ($id) {
-			if (safe_update('txp_file','downloads=0',"id='${id}'")) {
+			$id = assert_int($id);
+			if (safe_update('txp_file','downloads = 0',"id = $id")) {
 				file_edit(gTxt('reset_file_count_success'),$id);
 			}
 		} else {
@@ -564,7 +566,7 @@ $LastChangedRevision$
 
 		extract(doSlash(gpsa(array('id', 'filename', 'category', 'description'))));
 
-		$id = intval($id);
+		$id = assert_int($id);
 
 		$permissions = gps('perms');
 		if (is_array($permissions)) {
@@ -574,7 +576,7 @@ $LastChangedRevision$
 
 		$perms = doSlash($permissions);
 		
-		$old_filename = fetch('filename','txp_file','id','$id');
+		$old_filename = fetch('filename','txp_file','id',$id);
 		
 		if ($old_filename != false && strcmp($old_filename, $filename) != 0)
 		{
@@ -632,7 +634,7 @@ $LastChangedRevision$
 
 		extract($txpcfg);
 
-		$id = intval(ps('id'));
+		$id = assert_int(ps('id'));
 
 		$rs = safe_row('*', 'txp_file', "id = $id");
 
