@@ -758,12 +758,12 @@ $LastChangedRevision$
 			function install_lang_key(&$value, $key)
 			{
 				extract(gpsa(array('lang_code','updating')));
-				$exists = safe_field('name','txp_lang',"name='".doSlash($value[name])."' AND lang='".doSlash($lang_code)."'");				
+				$exists = safe_field('name','txp_lang',"name='".doSlash($value['name'])."' AND lang='".doSlash($lang_code)."'");				
 				$q = "name='".doSlash($value['name'])."', event='".doSlash($value['event'])."', data='".doSlash($value['data'])."', lastmod='".doSlash(strftime('%Y%m%d%H%M%S',$value['uLastmod']))."'";
 
 				if ($exists)
 				{
-					$value['ok'] = safe_update('txp_lang',$q,"lang='".doSlash($lang_code)."' AND name='".doSlash($value[name])."'");
+					$value['ok'] = safe_update('txp_lang',$q,"lang='".doSlash($lang_code)."' AND name='".doSlash($value['name'])."'");
 				}else{
 					$value['ok'] = safe_insert('txp_lang',$q.", lang='".doSlash($lang_code)."'");
 				}
