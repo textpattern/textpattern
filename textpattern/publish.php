@@ -562,9 +562,25 @@ $LastChangedRevision$
 		if($q && !$iscustom && !$issticky) {
 			include_once txpath.'/publish/search.php';
 			$s_filter = ($searchall ? filterSearch() : '');
-			$q = doSlash($q);
-			$match = ", match (Title,Body) against ('$q') as score";
-			$search = " and (Title rlike '$q' or Body rlike '$q') $s_filter";
+			$match = ", match (Title,Body) against ('".doSlash($q)."') as score";
+
+			// divide the search term up into short and long words
+			// nb, this assumes MySQL's ft_min_word_len setting is 4, the default
+			$words = preg_split('/\s+/', $q);
+			$search_w = $words_l = array();
+			foreach ($words as $w) {
+				// put short words into individual rlike clauses
+				if (strlen($w) < 4)
+					$search_w[] = "(Title rlike '".doSlash(preg_quote($w))."' or Body rlike '".doSlash(preg_quote($w))."')";
+				else
+					$words_l[] = $w;
+			}
+
+			// put all the longer words into a match/against clause
+			if ($words_l)
+				$search_w[] = "match (Title,Body) against ('".doSlash(join(' ', $words_l))."')";
+
+			$search = " and " . join(' and ', $search_w) . " $s_filter";
 
 			// searchall=0 can be used to show search results for the current section only
 			if ($searchall) $section = '';
