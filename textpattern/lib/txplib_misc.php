@@ -1835,7 +1835,7 @@ eod;
 			return (int) $myvar;
 		}
 
-		if ($production_status == 'debug') {
+		if (($production_status == 'debug') || (txpinterface == 'admin')) {
 			trigger_error("<pre>Error: '".htmlspecialchars($myvar)."' is not an integer</pre>".
 						  "\n".'<pre style="padding-left: 2em;" class="backtrace"><code>'.
 						  escape_output(join("\n", get_caller(5,1))).'</code></pre>', E_USER_ERROR);
