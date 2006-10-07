@@ -2121,7 +2121,7 @@ function body($atts)
 	}
 
 // -------------------------------------------------------------
-	function search_result_title($atts) 
+	function search_result_title($atts)
 	{
 		return permlink($atts, '<txp:title />');
 	}
@@ -2140,7 +2140,7 @@ function body($atts)
 		extract($thisarticle);
 		
 		$result = preg_replace("/>\s*</","> <",$body);
-		preg_match_all("/\s.{1,50}".preg_quote($q).".{1,50}\s/iu",$result,$concat);
+		preg_match_all("/(?:\s|^).{1,50}".preg_quote($q).".{1,50}(?:\s|$)/iu",$result,$concat);
 
 		$r = array();
 		for ($i=0; $i < min($limit, count($concat[0])); $i++)
