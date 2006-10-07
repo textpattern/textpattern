@@ -66,7 +66,8 @@ if (!empty($event) and $event == 'article') {
 		$incoming = textile_main_fields($incoming, $use_textile);
 
 		extract(doSlash($incoming));
-		extract(array_map('assert_int', psa(array('Annotate', 'Status', 'textile_body', 'textile_excerpt'))));
+		extract(array_map('assert_int', psa(array( 'Status', 'textile_body', 'textile_excerpt'))));
+		$Annotate = ( ps( 'Annotate')) ? assert_int( ps( 'Annotate')) : 0;
 
 		if ($publish_now==1) {
 			$when = 'now()';
@@ -157,7 +158,8 @@ if (!empty($event) and $event == 'article') {
 		$incoming = textile_main_fields($incoming, $use_textile);
 
 		extract(doSlash($incoming));
-		extract(array_map('assert_int', psa(array('ID', 'Annotate', 'Status', 'textile_body', 'textile_excerpt'))));
+		extract(array_map('assert_int', psa(array('ID', 'Status', 'textile_body', 'textile_excerpt'))));  
+		$Annotate = ( ps( 'Annotate')) ? assert_int( ps( 'Annotate')) : 0;
 
 		if (!has_privs('article.publish') && $Status>=4) $Status = 3;
 		
