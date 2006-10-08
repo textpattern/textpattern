@@ -25,8 +25,6 @@ $LastChangedRevision$
 	}
 
 //-------------------------------------------------------------
-	// Removed (broken) function discuss_delete() since it was not used.
-//-------------------------------------------------------------
 	function discuss_save()
 	{
 		extract(doSlash(gpsa(array('email','name','web','message','ip'))));

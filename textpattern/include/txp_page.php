@@ -27,8 +27,9 @@ $LastChangedRevision$
 	{
 		global $step;
 		pagetop(gTxt('edit_pages'),$message);
-		extract(gpsa(array('name','div')));
+		extract(gpsa(array('name','div','newname','copy')));
 		$name = (!$name or $step=='page_delete') ? 'default' : $name;
+		$name = ( $newname && $copy) ? $newname : $name;
 
 		echo 
 			startTable('edit').
