@@ -205,8 +205,8 @@ $LastChangedRevision$
 					$Title = eLink('article', 'edit', 'ID', $ID, $Title);
 				}
 
-				$Category1 = ($Category1) ? '<span title="'.fetch_category_title($Category1).'">'.$Category1.'</span>' : '';
-				$Category2 = ($Category2) ? '<span title="'.fetch_category_title($Category2).'">'.$Category2.'</span>' : '';
+				$Category1 = ($Category1) ? '<span title="'.htmlspecialchars(fetch_category_title($Category1)).'">'.$Category1.'</span>' : '';
+				$Category2 = ($Category2) ? '<span title="'.htmlspecialchars(fetch_category_title($Category2)).'">'.$Category2.'</span>' : '';
 
 				$manage = n.'<ul class="articles_detail">'.
 						n.t.'<li>'.eLink('article', 'edit', 'ID', $ID, gTxt('edit')).'</li>'.
@@ -252,7 +252,7 @@ $LastChangedRevision$
 					td($Title).
 
 					td(
-						'<span title="'.fetch_section_title($Section).'">'.$Section.'</span>'
+						'<span title="'.htmlspecialchars(fetch_section_title($Section)).'">'.$Section.'</span>'
 					, 75).
 
 					td($Category1, 100, "articles_detail").
@@ -260,7 +260,7 @@ $LastChangedRevision$
 					td(($a['Status'] < 4 ? $Status : '<a href="'.permlinkurl($a).'">'.$Status.'</a>'), 50).
 
 					td(
-						'<span title="'.get_author_name($AuthorID).'">'.$AuthorID.'</span>'
+						'<span title="'.htmlspecialchars(get_author_name($AuthorID)).'">'.$AuthorID.'</span>'
 					).
 
 					td($comments, 50, "articles_detail").

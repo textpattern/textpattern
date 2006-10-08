@@ -47,7 +47,7 @@ $LastChangedRevision$
 				extract($a);
 					$editlink = ($curname!=$name) 
 					?	eLink('form','form_edit','name',$name,$name)
-					:	$name;
+					:	htmlspecialchars($name);
 					$modbox = (!in_array($name, $essential_forms))
 					?	'<input type="checkbox" name="selected_forms[]" value="'.$name.'" />'
 					:	sp;
