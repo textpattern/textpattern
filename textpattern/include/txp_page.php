@@ -81,6 +81,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
+	#deprecated
 	function div_edit() 
 	{
 		return page_edit();
@@ -203,6 +204,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
+	#deprecated
 	function extract_div() 
 	{
 		extract(doSlash(gpsa(array('name','div'))));
@@ -241,7 +243,7 @@ $LastChangedRevision$
 	}
 	
 // -------------------------------------------------------------
-
+	#deprecated
 	function div_save()
 	{
 		extract(gpsa(array('html_array', 'html', 'start_pos', 'stop_pos', 'name')));

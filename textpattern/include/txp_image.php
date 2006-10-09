@@ -383,7 +383,7 @@ $LastChangedRevision$
 			if(shift_uploaded_file($file, $newpath) == false) {
 				image_list($newpath.sp.gTxt('upload_dir_perms'));
 			} else {
-				chmod($newpath,0755);
+				chmod($newpath,0644);
 				safe_update("txp_image", "thumbnail = 1", "id = $id");
 
 				$message = gTxt('image_uploaded', array('{name}' => $name));

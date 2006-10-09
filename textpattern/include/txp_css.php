@@ -75,7 +75,8 @@ $LastChangedRevision$
 	{
 		global $step;
 		$name = (!gps('name') or $step=='css_delete') ? 'default' : gps('name');
-//		if (gps('newname')) $name = gps('newname');
+		if (gps('copy') && trim(preg_replace('/[<>&"\']/', '', gps('newname'))) )
+			$name = gps('newname');
 		$css = base64_decode(fetch("css",'txp_css','name',$name));
 		$css = parseCSS($css);
 		
@@ -163,7 +164,8 @@ $LastChangedRevision$
 	{
 		global $step;
 		$name = (!gps('name') or $step=='css_delete') ? 'default' : gps('name');
-		if (gps('newname')) $name = gps('newname');
+		if (gps('copy') && trim(preg_replace('/[<>&"\']/', '', gps('newname'))) )
+			$name = gps('newname');
 
 		if ($step=='pour') 
 		{
@@ -223,16 +225,16 @@ $LastChangedRevision$
 	function parseCSS($css) // parse raw css into a multidimensional array
 	{
 		$css = preg_replace("/\/\*.+\*\//Usi","",$css); // remove comments
-		$selectors = explode("}",$css);
-        foreach($selectors as $selector) { 
-	        if(trim($selector)) {
+		$selectors = preg_replace('/\s+/',' ',strip_rn(explode("}",$css)));
+		foreach($selectors as $selector) { 
+			if(trim($selector)) {
 			list($keystr,$codestr) = explode("{",$selector);
 				if (trim($keystr)) {
 					$codes = explode(";",trim($codestr));
 					foreach ($codes as $code) {
 						if (trim($code)) {
 							list($property,$value) = explode(":",$code,2);
-							$out[trim($keystr)][trim($property)] = $value;
+							$out[trim($keystr)][trim($property)] = trim($value);
 						} 
 					}
 				}
@@ -301,13 +303,18 @@ $LastChangedRevision$
 
 		if ($savenew or $copy)
 		{
-			if ($newname)
+			$newname = doSlash(trim(preg_replace('/[<>&"\']/', '', gps('newname'))));
+
+			if ($newname and safe_field('name', 'txp_css', "name = '$newname'"))
 			{
-				safe_insert('txp_css', "name = '".doSlash($newname)."', css = '$css'");
+				$message = gTxt('css_already_exists', array('{name}' => $newname));
+			}
+			elseif ($newname) 
+			{
+				safe_insert('txp_css', "name = '".$newname."', css = '$css'");
 
 				$message = gTxt('css_created', array('{name}' => $newname));
 			}
-
 			else
 			{
 				$message = gTxt('css_name_required');
