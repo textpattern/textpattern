@@ -239,7 +239,6 @@ $LastChangedRevision$
 		global $txpcfg;
 
 		extract(doSlash(psa(array('page','css','old_name'))));
-		extract(array_map('assert_int',psa(array('is_default','on_frontpage','in_rss','searchable'))));
 		extract(psa(array('name', 'title')));
 
 		if (empty($title))
@@ -274,6 +273,7 @@ $LastChangedRevision$
 
 		else
 		{
+			extract(array_map('assert_int',psa(array('is_default','on_frontpage','in_rss','searchable'))));
 			// note this means 'selected by default' not 'default page'
 			if ($is_default)
 			{
