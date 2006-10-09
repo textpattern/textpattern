@@ -293,7 +293,7 @@ $LastChangedRevision$
 	#	$fail['cgi_header_config'] = gTxt('cgi_header_config');
 
 	$guess_site_url = $_SERVER['HTTP_HOST'] . preg_replace('#[/\\\\]$#','',dirname(dirname($_SERVER['SCRIPT_NAME'])));
-	if ($siteurl and $siteurl != $guess_site_url)
+	if ($siteurl and strip_prefix($siteurl, 'www.') != strip_prefix($guess_site_url, 'www.'))
 		$fail['site_url_mismatch'] = gTxt('site_url_mismatch').cs.$guess_site_url;
 		
 	# test clean URL server vars

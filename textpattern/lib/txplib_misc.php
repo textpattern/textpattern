@@ -1890,4 +1890,8 @@ eod;
 		return chunk_split($text, $width, $break);
 	}
 
+//-------------------------------------------------------------
+	function strip_prefix($str, $pfx) {
+		return preg_replace('/^'.preg_quote($pfx, '/').'/', '', $str);
+	}
 ?>
