@@ -298,7 +298,7 @@ $LastChangedRevision$
 		
 	# test clean URL server vars
 	if (hu) {
-		if (ini_get('allow_url_fopen')) {
+		if (ini_get('allow_url_fopen') and ($permlink_mode != 'messy')) {
 			$s = md5(uniqid(rand(), true));
 			$pretext_data = @file(hu.$s.'/?txpcleantest=1');
 			if ($pretext_data) {
@@ -309,12 +309,6 @@ $LastChangedRevision$
 			else
 				$fail['clean_url_test_failed'] = gTxt('clean_url_test_failed');
 		}
-		else {
-			# unable to confirm whether or not clean URLs are working
-			if ($permlink_mode != 'messy')
-				$fail['clean_url_untested'] = gTxt('clean_url_untested');
-		}
-
 	}
 
 	if ($tables = list_txp_tables()) {
