@@ -97,7 +97,7 @@ $LastChangedRevision$
 		return $table_names;
 	}
 
-	function check_tables($tables, $type='FAST QUICK', $warnings=0) {
+	function check_tables($tables, $type='FAST', $warnings=0) {
 		$msgs = array();
 		foreach ($tables as $table) {
 			$rs = getRows("CHECK TABLE $table $type");
