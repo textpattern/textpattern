@@ -469,7 +469,9 @@ class Textile
             $nextline = next($text);
             if (preg_match("/^([#*]+)($this->a$this->c) (.*)$/s", $line, $m)) {
                 list(, $tl, $atts, $content) = $m;
-                $nl = preg_replace("/^([#*]+)\s.*/", "$1", $nextline);
+                $nl = '';
+                if (preg_match("/^([#*]+)\s.*/", $nextline, $nm))
+                	$nl = $nm[1];
                 if (!isset($lists[$tl])) {
                     $lists[$tl] = true;
                     $atts = $this->pba($atts);
