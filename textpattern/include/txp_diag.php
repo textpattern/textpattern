@@ -285,8 +285,23 @@ $LastChangedRevision$
 		$fail['dev_version_live'] = gTxt('dev_version_live').cs.join(', '.n.t, $dev_files);
 
 	# anything might break if arbitrary functions are disabled
-	if (ini_get('disable_functions'))
-		$fail['some_php_functions_disabled'] = gTxt('some_php_functions_disabled').cs.ini_get('disable_functions');
+	if (ini_get('disable_functions')) {
+		$disabled_funcs = explode(',', ini_get('disable_functions'));
+		# commonly disabled functions taht we don't need
+		$disabled_funcs = array_diff($disabled_funcs, array(
+			'imagefilltoborder',
+			'exec',
+			'system',
+			'dl',
+			'passthru',
+			'chown',
+			'shell_exec',
+			'popen',
+			'proc_open',
+		));
+		if ($disabled_funcs)
+			$fail['some_php_functions_disabled'] = gTxt('some_php_functions_disabled').cs.ini_get('disable_functions');
+	}
 
 	# not sure about this one
 	#if (strncmp(php_sapi_name(), 'cgi', 3) == 0 and ini_get('cgi.rfc2616_headers'))
