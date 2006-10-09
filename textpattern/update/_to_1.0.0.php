@@ -393,7 +393,7 @@ eod;
 		$prefs['blog_uid'] = md5(uniqid(rand(),true));
 		safe_insert('txp_prefs',"name='blog_uid', val='".$prefs['blog_uid']."', prefs_id='1'");
 	}
-	if (!safe_field('val','txp_prefs',"name='blog_mail_uid'"))
+	if (!safe_field('name','txp_prefs',"name='blog_mail_uid'"))
 	{
 		$mail = safe_field('email', 'txp_users', "privs='1' LIMIT 1");
 		safe_insert('txp_prefs',"name='blog_mail_uid', val='$mail', prefs_id='1'");
