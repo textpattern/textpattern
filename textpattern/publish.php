@@ -145,7 +145,9 @@ $LastChangedRevision$
 						if ((connection_status()==0) and !connection_aborted() ) {
 							safe_update("txp_file", "downloads=downloads+1", 'id='.intval($id));
 						} else {
-							$pretext['request_uri'] .= "#aborted-at-".floor($sent*100/$filesize)."%";
+							$pretext['request_uri'] .= ($sent >= $filesize) 
+								? '#aborted' 
+								: "#aborted-at-".floor($sent*100/$filesize)."%";
 							log_hit('200');
 						}
 					}
@@ -1103,7 +1105,7 @@ $LastChangedRevision$
 	function makeOut() 
 	{
 		foreach(func_get_args() as $a) {
-			$array[$a] = htmlspecialchars(gps($a));
+			$array[$a] = gps($a);
 		}
 		return $array;
 	}
