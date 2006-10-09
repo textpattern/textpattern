@@ -92,7 +92,7 @@ $LastChangedRevision$
 			graf(eLink('css', 'css_edit_raw', 'name', $name, gTxt('edit_raw_css'))).
 			graf(sLink('css', 'pour', gTxt('bulkload_existing_css'))); 
 
-		$out[] = startTable('edit');
+		$out[] = startTable('css-edit', '', '', 3);
 		
 		$out[] = 
 		tr(
