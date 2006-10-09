@@ -29,7 +29,7 @@ $LastChangedRevision$
 		pagetop(gTxt('edit_pages'),$message);
 		extract(gpsa(array('name','div','newname','copy')));
 		$name = (!$name or $step=='page_delete') ? 'default' : $name;
-		$name = ( $newname && $copy) ? $newname : $name;
+		$name = ( $copy && trim(preg_replace('/[<>&"\']/', '', $newname)) ) ? $newname : $name;
 
 		echo 
 			startTable('edit').
@@ -130,7 +130,7 @@ $LastChangedRevision$
 		while ($a = nextRow($rs)) {
 			extract($a);
 			$dlink = ($name!='default') ? dLink('page','page_delete','name',$name) :'';
-			$link =  '<a href="?event=page'.a.'name='.$name.'">'.$name.'</a>';
+			$link  = eLink('page', '', 'name', $name, $name);
 			$out[] = ($current == $name) 
 			?	tr(td($name).td($dlink))
 			:	tr(td($link).td($dlink));
@@ -160,17 +160,28 @@ $LastChangedRevision$
 
 	function page_save()
 	{
-		extract(doSlash(gpsa(array('name', 'html', 'newname', 'copy'))));
+		extract(doSlash(gpsa(array('name', 'html', 'copy'))));
 
-		if ($newname && $copy)
+		if ($copy)
 		{
-			safe_insert('txp_page', "name = '$newname', user_html = '$html'");
+			$newname = doSlash(trim(preg_replace('/[<>&"\']/', '', gps('newname'))));
+			if ($newname and safe_field('name', 'txp_page', "name = '$newname'"))
+			{
+				$message = gTxt('page_already_exists', array('{name}' => $newname));
+			}
+			elseif ($newname) 
+			{
+				safe_insert('txp_page', "name = '$newname', user_html = '$html'");
+				update_lastmod();
+ 
+				$message = gTxt('page_created', array('{name}' => $newname));
+			}
+			else 
+			{
+				$message = gTxt('page_name_invalid');
+			}
 
-			update_lastmod();
-
-			$message = gTxt('page_created', array('{name}' => $newname));
-
-			page_edit($message);
+ 			page_edit($message);
 		}
 
 		else
