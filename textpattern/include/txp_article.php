@@ -808,7 +808,7 @@ if (!empty($event) and $event == 'article') {
 				, ' class="small"').
 
 				n.graf(
-					'<a href="http://textism.com/tools/textile/" target="_blank">'.gTxt('More').'</a>').
+					'<a href="http://textile.thresholdstate.com/" target="_blank">'.gTxt('More').'</a>').
 
 				n.'</div>';
 		}
