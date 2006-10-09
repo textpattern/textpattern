@@ -110,15 +110,16 @@ $LastChangedRevision$
 		pagetop(gTxt('edit_forms'),$message);
 
 		extract(gpsa(array('Form','name','type')));
+		$name = trim(preg_replace('/[<>&"\']/', '', $name));
 
 		if ($step=='form_create') {
-			$Form=''; $name=''; $type='';
 			$inputs = fInput('submit','savenew',gTxt('save_new'),'publish').
 				eInput("form").sInput('form_save');
 		} else {
 			$name = (!$name or $step=='form_delete') ? 'default' : $name;
 			$rs = safe_row("*", "txp_form", "name='".doSlash($name)."'");
-			if ($rs) {
+//			if ($rs)
+ {
 				extract($rs);
 				$inputs = fInput('submit','save',gTxt('save'),'publish').
 					eInput("form").sInput('form_save').hInput('oldname',$name);
@@ -193,12 +194,22 @@ $LastChangedRevision$
 		global $vars, $step, $essential_forms;
 
 		extract(doSlash(gpsa($vars)));
+		$name = doSlash(trim(preg_replace('/[<>&"\']/', '', gps('name'))));
 
 		if (!$name)
 		{
 			$step = 'form_create';
+			$message = gTxt('form_name_invalid');
 
-			return form_edit();
+			return form_edit($message);
+		}
+
+		if (!in_array($type, array('article','comment','link','misc','file')))
+		{
+			$step = 'form_create';
+			$message = gTxt('form_type_missing');
+
+			return form_edit($message);
 		}
 
 		if ($savenew)
@@ -207,6 +218,7 @@ $LastChangedRevision$
 
 			if ($exists)
 			{
+				$step = 'form_create';
 				$message = gTxt('form_already_exists', array('{name}' => $name));
 
 				return form_edit($message);
