@@ -787,7 +787,7 @@ $LastChangedRevision$
 		global $s, $c;
 
 		extract(lAtts(array(
-			'label'        => '',
+			'label'        => gTxt('browse'),
 			'wraptag'      => '',
 			'section'      => '',
 			'this_section' => 0,
