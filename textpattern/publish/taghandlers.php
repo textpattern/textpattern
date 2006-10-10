@@ -600,7 +600,7 @@ $LastChangedRevision$
 			'break'    => br,
 			'category' => '',
 			'class'    => __FUNCTION__,
-			'label'    => '',
+			'label'    => gTxt('recent_articles'),
 			'labeltag' => '',
 			'limit'    => 10,
 			'section'  => '',
