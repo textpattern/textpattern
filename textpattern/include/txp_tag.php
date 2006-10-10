@@ -1795,7 +1795,7 @@ begin tag builder functions
 			tagRow('class',
 				fInput('text', 'class', $class, 'edit', '', '', 25)).
 
-			tagRow('style',
+			tagRow('inline_style',
 				fInput('text', 'style', $style, 'edit', '', '', 25)).
 
 			$endform
@@ -1982,7 +1982,7 @@ begin tag builder functions
 				, 2)
 			).
 
-			tagRow('thumbnail',
+			tagRow('use_thumbnail',
 				yesno2_pop('thumbnail', $thumbnail)).
 
 			tagRow('escape',
@@ -1994,7 +1994,7 @@ begin tag builder functions
 			tagRow('class',
 				fInput('text', 'class', $class, 'edit', '', '', 25)).
 
-			tagRow('style',
+			tagRow('inline_style',
 				fInput('text', 'style', $style, 'edit', '', '', 25)).
 
 			tagRow('align',
@@ -2364,7 +2364,7 @@ begin tag builder functions
 			tagRow('gmt',
 				yesno2_pop('gmt', $gmt)).
 
-			tagRow('lang',
+			tagRow('locale',
 				fInput('text', 'lang', $lang, 'edit', '', '', 25)).
 
 			$endform
@@ -2407,7 +2407,7 @@ begin tag builder functions
 			tagRow('gmt',
 				yesno2_pop('gmt', $gmt)).
 
-			tagRow('lang',
+			tagRow('locale',
 				fInput('text', 'lang', $lang, 'edit', '', '', 25)).
 
 			$endform
@@ -2518,7 +2518,7 @@ begin tag builder functions
 			tagRow('gmt',
 				yesno2_pop('gmt', $gmt)).
 
-			tagRow('lang',
+			tagRow('locale',
 				fInput('text', 'lang', $lang, 'edit', '', '', 25)).
 
 			$endform
@@ -2553,7 +2553,7 @@ begin tag builder functions
 				, 2)
 			).
 
-			tagRow('link',
+			tagRow('comment_name_link',
 				yesno2_pop('link', $link)).
 
 			$endform
@@ -2984,7 +2984,7 @@ begin tag builder functions
 			tagRow('hilight',
 				input_tag('hilight', $hilight)).
 
-			tagRow('limit',
+			tagRow('hilight_limit',
 				input_limit($limit)).
 
 			$endform
@@ -3048,7 +3048,7 @@ begin tag builder functions
 			tagRow('gmt',
 				yesno2_pop('gmt', $gmt)).
 
-			tagRow('lang',
+			tagRow('locale',
 				fInput('text', 'lang', $lang, 'edit', '', '', 25)).
 
 			$endform
@@ -3194,7 +3194,7 @@ begin tag builder functions
 			tagRow('class',
 				fInput('text', 'class', $class, 'edit', '', '', 25)).
 
-			tagRow('style',
+			tagRow('inline_style',
 				fInput('text', 'style', $style, 'edit', '', '', 25)).
 
 			tagRow('wraptag',
@@ -3391,7 +3391,7 @@ begin tag builder functions
 				, 2)
 			).
 
-			tagRow('format',
+			tagRow('time_format',
 				fInput('text', 'format', $format, 'edit', '', '', 15)).
 
 			$endform
@@ -3426,7 +3426,7 @@ begin tag builder functions
 				, 2)
 			).
 
-			tagRow('format',
+			tagRow('time_format',
 				fInput('text', 'format', $format, 'edit', '', '', 15)).
 
 			$endform
@@ -3470,7 +3470,7 @@ begin tag builder functions
 			, 2)
 			).
 
-			tagRow('format',
+			tagRow('size_format',
 				' '.selectInput('format', $formats, $format, true)).
 
 			tagRow('decimals',
