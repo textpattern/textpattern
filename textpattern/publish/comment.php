@@ -538,7 +538,7 @@ $LastChangedRevision$
 		$out .= str_replace('{title}',$Title,gTxt('comment_recorded'))."\r\n";
 		$out .= permlinkurl_id($parentid)."\r\n";
 		if (has_privs('discuss', $AuthorID))
-			$out .= hu.'textpattern/?event=discuss&step=discuss_edit&discussid='.$discussid."\r\n";
+			$out .= hu.'textpattern/index.php?event=discuss&step=discuss_edit&discussid='.$discussid."\r\n";
 		$out .= "\r\n";
 		$out .= gTxt('comment_name').": $cname\r\n";
 		$out .= gTxt('comment_email').": $cemail\r\n";
