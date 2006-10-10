@@ -41,27 +41,27 @@ $LastChangedRevision$
 					, 2).
 
 					n.n.hed(
-						'<a href="#" onclick="toggleDisplay(\'article-tags\'); return false;">'.gTxt('page_article_hed').'</a>'
+						'<a href="#article-tags" onclick="toggleDisplay(\'article-tags\'); return false;">'.gTxt('page_article_hed').'</a>'
 					, 3, ' class="plain"').
 						n.'<div id="article-tags">'.taglinks('page_article').'</div>'.
 
-					n.n.hed('<a href="#" onclick="toggleDisplay(\'article-nav-tags\'); return false;">'.gTxt('page_article_nav_hed').'</a>'
+					n.n.hed('<a href="#article-nav-tags" onclick="toggleDisplay(\'article-nav-tags\'); return false;">'.gTxt('page_article_nav_hed').'</a>'
 					, 3, ' class="plain"').
 						n.'<div id="article-nav-tags" style="display: none;">'.taglinks('page_article_nav').'</div>'.
 
-					n.n.hed('<a href="#" onclick="toggleDisplay(\'nav-tags\'); return false;">'.gTxt('page_nav_hed').'</a>'
+					n.n.hed('<a href="#nav-tags" onclick="toggleDisplay(\'nav-tags\'); return false;">'.gTxt('page_nav_hed').'</a>'
 					, 3, ' class="plain"').
 						n.'<div id="nav-tags" style="display: none;">'.taglinks('page_nav').'</div>'.
 
-					n.n.hed('<a href="#" onclick="toggleDisplay(\'xml-tags\'); return false;">'.gTxt('page_xml_hed').'</a>'
+					n.n.hed('<a href="#xml-tags" onclick="toggleDisplay(\'xml-tags\'); return false;">'.gTxt('page_xml_hed').'</a>'
 					, 3, ' class="plain"').
 						n.'<div id="xml-tags" style="display: none;">'.taglinks('page_xml').'</div>'.
 
-					n.n.hed('<a href="#" onclick="toggleDisplay(\'misc-tags\'); return false;">'.gTxt('page_misc_hed').'</a>'
+					n.n.hed('<a href="#misc-tags" onclick="toggleDisplay(\'misc-tags\'); return false;">'.gTxt('page_misc_hed').'</a>'
 					, 3, ' class="plain"').
 						n.'<div id="misc-tags" style="display: none;">'.taglinks('page_misc').'</div>'.
 
-					n.n.hed('<a href="#" onclick="toggleDisplay(\'file-tags\'); return false;">'.gTxt('page_file_hed').'</a>'
+					n.n.hed('<a href="#file-tags" onclick="toggleDisplay(\'file-tags\'); return false;">'.gTxt('page_file_hed').'</a>'
 					, 3, ' class="plain"').
 						n.'<div id="file-tags" style="display: none;">'.taglinks('page_file').'</div>'
 
