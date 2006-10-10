@@ -41,7 +41,7 @@ $LastChangedRevision$
 
 		if ($rs and numRows($rs) > 0)
 		{
-			echo assHead('plugin', 'author', 'version', 'modified', 'description', 'active', 'help', '', '');
+			echo assHead('plugin', 'author', 'version', 'plugin_modified', 'description', 'active', 'help', '', '');
 
 			while ($a = nextRow($rs))
 			{
