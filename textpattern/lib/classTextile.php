@@ -245,7 +245,7 @@ class Textile
         $this->url_schemes = array('http','https','ftp','mailto');
 
         $this->btag = array('bq', 'bc', 'notextile', 'pre', 'h[1-6]', 'fn\d+', 'p');
-        
+
         $this->glyph = array(
            'quote_single_open'  => txt_quote_single_open,
            'quote_single_close' => txt_quote_single_close,
@@ -956,14 +956,11 @@ function refs($m)
         $pnc = '[[:punct:]]';
 
         $glyph_search = array(
-            '/([^\s[{(>_*])?\'(?(1)|(?=\s|s\b|'.$pnc.'))/',      //  single closing
+            '/(\w)\'(\w)/',                                      // apostrophe's
+            '/(\S)\'(?=\s|'.$pnc.'|<|$)/',                       //  single closing
             '/\'/',                                              //  single opening
-            '/([^\s[{(>_*])?"(?(1)|(?=\s|'.$pnc.'))/',           //  double closing
+            '/(\S)\"(?=\s|'.$pnc.'|<|$)/',                       //  double closing
             '/"/',                                               //  double opening
-            '/(\d+)\'(?=\d|\s|$)/',                              // 5' (feet)
-            '/(\w+)\'/',                                         // apostrophe's
-            '/(\s)\'(\w)/',                                      // the '80s
-            '/(\d+)\"/',                                         // 3" (inch)
             '/\b([A-Z][A-Z0-9]{2,})\b(?:[(]([^)]*)[)])/',        //  3+ uppercase acronym
             '/\b([A-Z][A-Z\'\-]+[A-Z])(?=[\s.,\)>])/',           //  3+ uppercase
             '/\b( )?\.{3}/',                                     //  ellipsis
@@ -978,14 +975,11 @@ function refs($m)
         extract($this->glyph, EXTR_PREFIX_ALL, 'txt');
 
         $glyph_replace = array(
-            '$1'.$txt_quote_single_close.'$2',   //  single closing
+            '$1'.$txt_apostrophe.'$2',           // apostrophe's
+            '$1'.$txt_quote_single_close,        //  single closing
             $txt_quote_single_open,              //  single opening
             '$1'.$txt_quote_double_close,        //  double closing
             $txt_quote_double_open,              //  double opening
-            '$1'.$txt_prime,                     // 5' (feet)
-            '$1'.$txt_apostrophe,                // apostrophe's
-            '$1'.$txt_apostrophe.'$2',           // the '80s
-            '$1'.$txt_prime_double,              // 3" (inch)
             '<acronym title="$2">$1</acronym>',  //  3+ uppercase acronym
             '<span class="caps">$1</span>',      //  3+ uppercase
             '$1'.$txt_ellipsis,                  //  ellipsis
