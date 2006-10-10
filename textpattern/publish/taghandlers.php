@@ -596,6 +596,7 @@ $LastChangedRevision$
 
 	function recent_articles($atts)
 	{
+		global $prefs;
 		extract(lAtts(array(
 			'break'    => br,
 			'category' => '',
@@ -608,6 +609,7 @@ $LastChangedRevision$
 			'sortby'   => '',
 			'sortdir'  => '',
 			'wraptag'  => '',
+			'no_widow' => @$prefs['title_no_widow'],
 		), $atts));
 
 		// for backwards compatibility
@@ -639,7 +641,8 @@ $LastChangedRevision$
 
 			while ($a = nextRow($rs))
 			{
-				$out[] = href(escape_title($a['Title']), permlinkurl($a));
+				$a['Title'] = ($no_widow) ? noWidow(escape_title($a['Title'])) : escape_title($a['Title']);
+				$out[] = href($a['Title'], permlinkurl($a));
 			}
 
 			if ($out)
