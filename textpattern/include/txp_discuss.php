@@ -275,7 +275,7 @@ $LastChangedRevision$
 					td($name, 75).
 
 					td(
-						soft_wrap(short_preview($dmessage), 40)
+						short_preview($dmessage)
 					).
 
 					td("<ul><li>".soft_wrap($email, 30)."</li><li>".soft_wrap($web, 30)."</li><li>$ip</li></ul>", 100, 'discuss_detail').

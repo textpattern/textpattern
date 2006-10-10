@@ -444,92 +444,38 @@ eod;
 	function langs()
 	{
 		$langs = array(
-
-			// Catalan
-			'ca-es' => 'Catal&#224;',
-
-			// Czech
-			'cs-cz' => '&#268;e&#353;tina',
-
-			// Danish
+			'ar-dz' => 'جزائري عربي',
+			'ca-es' => 'Català',
+			'cs-cz' => 'Čeština',
 			'da-dk' => 'Dansk',
-
-			// German
 			'de-de' => 'Deutsch',
-
+			'el-gr' => 'Ελληνικά',
 			'en-gb' => 'English (GB)',
 			'en-us' => 'English (US)',
-
-			// Spanish
-			'es-es' => 'Espa&#241;ol',
-
-			// Greek
-			'el-gr' => '&#917;&#955;&#955;&#951;&#957;&#953;&#954;&#940;',
-
-			// French
-			'fr-fr' => 'Fran&#231;ais',
-
-			// Italian
-			'it-it' => 'Italiano',
-
-			// Indonesian
-			// NEEDED
-			// 'id-id' => 'Bahasa Indonesia',
-
-			// Icelandic
-			'is-is' => '&#205;slenska',
-
-			// Hebrew
-			'he-il' => '&#1506;&#1489;&#1512;&#1497;&#1514;',
-
-			// Japanese
-			'ja-jp' => '&#26085;&#26412;&#35486;',
-
-			// Latvian
-			// NEEDED
-			// 'lv-lv' => 'Latvie&#353;u',
-
-			// Hungarian
-			'hu-hu' => 'Magyar',
-
-			// Dutch
-			'nl-nl' => 'Nederlands',
-
-			// Norwegian
-			'no-no' => 'Norsk',
-
-			// Portuguese
-			'pt-pt' => 'Portugu&#234;s',
-
-			// Polish
-			// NEEDED
-			// 'pl-pl' => 'Polski',
-
-			// Romanian
-			'ro-ro' => 'Rom&#226;n&#259;',
-
-			// Russian
-			'ru-ru' => '&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081;',
-
-			// Slovak
-			'sk-sk' => 'Sloven&#269;ina',
-
-			// Finnish
+			'es-es' => 'Español',
+			'et-ee' => 'Eesti',
 			'fi-fi' => 'Suomi',
-
-			// Swedish
+			'fr-fr' => 'Français',
+			'gl-gz' => 'Galego (Galiza)',
+			'he-il' => 'עברית',
+			'hu-hu' => 'Magyar',
+			'id-id' => 'Bahasa Indonesia',
+			'is-is' => 'Íslenska',
+			'it-it' => 'Italiano',
+			'ja-jp' => '日本語',
+			'lv-lv' => 'Latviešu',
+			'nl-nl' => 'Nederlands',
+			'no-no' => 'Norsk',
+			'pl-pl' => 'Polski',
+			'pt-pt' => 'Português',
+			'ro-ro' => 'Română',
+			'ru-ru' => 'Русский',
+			'sk-sk' => 'Slovenčina',
 			'sv-se' => 'Svenska',
-
-			// Thai
-			'th-th' => '&#3652;&#3607;&#3618;',
-
-			// Chinese (Simplified)
-			// NEEDED
-			// 'zh-cn' => '&#20013;&#25991;(&#31616;&#20307;)',
-
-			// Chinese (Traditional)
-			// NEEDED
-			// 'zh-tw' => '&#20013;&#25991;(&#32321;&#39636;)'
+			'th-th' => 'ไทย',
+			'uk-ua' => 'Українська',
+			'zh-cn' => '中文(简体)',
+			'zh-tw' => '中文(繁體)'
 		);
 
 		$default	= 'en-gb';
