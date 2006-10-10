@@ -1034,7 +1034,7 @@ $LastChangedRevision$
 			'form'    => 'search_input',
 			'wraptag' => 'p',
 			'size'    => '15',
-			'label'   => 'Search',
+			'label'   => gTxt('search'),
 			'button'  => '',
 			'section' => '',
 		),$atts));	
