@@ -972,7 +972,7 @@ begin tag builder functions
 				fInput('text', 'limit', $limit, 'edit', '', '', 2)).
 
 			tagRow('label',
-				fInput('text', 'label', ($label ? $label : gTxt('recently')), 'edit', '', '', 20)).
+				fInput('text', 'label', ($label ? $label : gTxt('recent_articles')), 'edit', '', '', 20)).
 
 			tagRow('labeltag',
 				input_tag('labeltag', $labeltag)).
@@ -1197,7 +1197,7 @@ begin tag builder functions
 				yesno2_pop('this_section', $this_section)).
 
 			tagRow('label',
-				fInput('text', 'label', $label, 'edit', '', '', 25)).
+				fInput('text', 'label', ($label ? $label : gTxt('browse')), 'edit', '', '', 25)).
 
 			tagRow('wraptag',
 				input_tag('wraptag', $wraptag)).
