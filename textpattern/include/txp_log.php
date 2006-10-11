@@ -168,7 +168,8 @@ $LastChangedRevision$
 					column_head('page', 'page', 'log', true, $switch_dir, $crit, $search_method).
 					column_head('referrer', 'refer', 'log', true, $switch_dir, $crit, $search_method).
 					column_head('method', 'method', 'log', true, $switch_dir, $crit, $search_method, 'log_detail').
-					column_head('status', 'status', 'log', true, $switch_dir, $crit, $search_method, 'log_detail')
+					column_head('status', 'status', 'log', true, $switch_dir, $crit, $search_method, 'log_detail').
+					hCell()
 				);
 
 			while ($a = nextRow($rs))
