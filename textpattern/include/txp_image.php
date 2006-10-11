@@ -324,22 +324,28 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function image_insert() 
-	{	
-		global $txpcfg,$extensions,$txp_user;
+
+	function image_insert()
+	{
+		global $txpcfg, $extensions, $txp_user;
+
 		extract($txpcfg);
-		$category = doSlash(gps('category'));
-		
-		$img_result = image_data($_FILES['thefile'], $category);
-		
-		if(is_array($img_result))
+
+		$meta = doSlash(gpsa(array('caption', 'alt', 'category')));
+
+		$img_result = image_data($_FILES['thefile'], $meta);
+
+		if (is_array($img_result))
 		{
 			list($message, $id) = $img_result;
+
 			return image_edit($message, $id);
-		}else{
+		}
+
+		else
+		{
 			return image_list($img_result);
 		}
-		
 	}
 
 // -------------------------------------------------------------
@@ -496,39 +502,50 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function thumbnail_create() 
+
+	function thumbnail_create()
 	{
-	
-		$id = gps('id');
-		$width = gps('width');
-		$height = gps('height');
-		if (!is_numeric ($width) && !is_numeric($height)) {
-			image_edit(messenger('invalid_width_or_height',"($width)/($height)", ''),$id);
+		extract(doSlash(gpsa(array('id', 'width', 'height'))));
+
+		if (!is_numeric ($width) && !is_numeric($height))
+		{
+			image_edit(messenger('invalid_width_or_height', "($width)/($height)", ''), $id);
 			return;
 		}
-		
+
 		$crop = gps('crop');
-		
+
 		$t = new txp_thumb( $id );
 		$t->crop = ($crop == '1');
 		$t->hint = '0';
-		if ( is_numeric ($width)) $t->width = $width;
-		if ( is_numeric ($height)) $t->height = $height;
-		
+
+		if (is_numeric($width))
+		{
+			$t->width = $width;
+		}
+
+		if (is_numeric($height))
+		{
+			$t->height = $height;
+		}
+
 		if ($t->write())
 		{
 			global $prefs;
+
 			$prefs['thumb_w'] = $width;
 			$prefs['thumb_h'] = $height;
 			$prefs['thumb_crop'] = $crop;
-			set_pref('thumb_w', $width, 'image',  1);
-			set_pref('thumb_h', $height, 'image',  1);
-			set_pref('thumb_crop', $crop, 'image',  1);
+
+			// hidden prefs
+			set_pref('thumb_w', $width, 'image',	2);
+			set_pref('thumb_h', $height, 'image',	 2);
+			set_pref('thumb_crop', $crop, 'image',	2);
 
 			$message = gTxt('thumbnail_saved', array('{id}' => $id));
 
 			image_edit($message, $id);
-		 }
+		}
 
 		else
 		{
@@ -538,73 +555,120 @@ $LastChangedRevision$
 		}
 	}
 
-// -------------------------------------------------------------	
+// -------------------------------------------------------------
 // Refactoring attempt, allowing other - plugin - functions to
 // upload images without the need for writting duplicated code.
-// -------------------------------------------------------------	
-	function image_data($file , $category = '', $id = '', $uploaded = true)
+
+	function image_data($file , $meta = '', $id = '', $uploaded = true)
 	{
 		global $txpcfg, $extensions, $txp_user, $prefs, $file_max_upload_size;
-		extract($txpcfg); 
-		
+
+		extract($txpcfg);
+
 		$name = $file['name'];
 		$error = $file['error'];
 		$file = $file['tmp_name'];
-		
-		if($uploaded) {
+
+		if ($uploaded)
+		{
 			$file = get_uploaded_file($file);
-			if ($file_max_upload_size < filesize($file)) {
+
+			if ($file_max_upload_size < filesize($file))
+			{
 				unlink($file);
+
 				return upload_get_errormsg(UPLOAD_ERR_FORM_SIZE);
 			}
 		}
-		
-		list($w,$h,$extension) = getimagesize($file);
 
-		if (($file !== false) && @$extensions[$extension]) {
+		list($w, $h, $extension) = getimagesize($file);
+
+		if (($file !== false) && @$extensions[$extension])
+		{
 			$ext = $extensions[$extension];
-			$name = substr($name,0,strrpos($name,'.'));
-			$name .= $ext;
-			$name2db = doSlash($name);
-			
-			$q ="w        = $w,
-				 h        = $h,
-				 ext      = '$ext',
-				 name   = '$name2db',
-				 date   = now(),
-				 author   = '$txp_user'";
-			if (empty($id)) {
-				$q.= ", category = '$category'";
-				$rs = safe_insert("txp_image",$q);
-				$id = $GLOBALS['ID'] = mysql_insert_id();	
-			}else{
-				$id = assert_int($id);
-				$rs = safe_update('txp_image',$q, "id = $id");
+
+			$name = doSlash(substr($name, 0, strrpos($name, '.')).$ext);
+
+			if ($meta == false)
+			{
+				$meta = array('category' => '', 'caption' => '', 'alt' => '');
 			}
-			
-			if(!$rs){
-				
+
+			extract($meta);
+
+			$q ="
+				name = '$name',
+				ext = '$ext',
+				w = $w,
+				h = $h,
+				alt = '$alt',
+				caption = '$caption',
+				category = '$category',
+				date = now(),
+				author = '$txp_user'
+			";
+
+			if (empty($id))
+			{
+				$rs = safe_insert('txp_image', $q);
+
+				$id = $GLOBALS['ID'] = mysql_insert_id();
+			}
+
+			else
+			{
+				$id = assert_int($id);
+
+				$rs = safe_update('txp_image', $q, "id = $id");
+			}
+
+			if (!$rs)
+			{
 				return gTxt('image_save_error');
+			}
 
-			} else {
-
+			else
+			{
 				$newpath = IMPATH.$id.$ext;
 
-				if(shift_uploaded_file($file, $newpath) == false) {
+				if (shift_uploaded_file($file, $newpath) == false)
+				{
 					$id = assert_int($id);
-					safe_delete("txp_image","id = $id");
-					safe_alter("txp_image", "auto_increment = $id");
-					if ( isset( $GLOBALS['ID'])) unset( $GLOBALS['ID']);
+
+					safe_delete('txp_image', "id = $id");
+
+					safe_alter('txp_image', "auto_increment = $id");
+
+					if (isset($GLOBALS['ID']))
+					{
+						unset( $GLOBALS['ID']);
+					}
+
 					return $newpath.sp.gTxt('upload_dir_perms');
-				} else {
-					@chmod($newpath,0644);
+				}
+
+				else
+				{
+					@chmod($newpath, 0644);
+
 					// Auto-generate a thumbnail using the last settings
-					if (isset($prefs['thumb_w'], $prefs['thumb_h'], $prefs['thumb_crop'])) {
+					if (isset($prefs['thumb_w'], $prefs['thumb_h'], $prefs['thumb_crop']))
+					{
 						$t = new txp_thumb( $id );
+
 						$t->crop = ($prefs['thumb_crop'] == '1');
 						$t->hint = '0';
-						if ( is_numeric ($prefs['thumb_w'])) $t->width = $prefs['thumb_w'];
-						if ( is_numeric ($prefs['thumb_h'])) $t->height = $prefs['thumb_h'];
+
+						if (is_numeric($prefs['thumb_w']))
+						{
+							$t->width = $prefs['thumb_w'];
+						}
+
+						if (is_numeric($prefs['thumb_h']))
+						{
+							$t->height = $prefs['thumb_h'];
+						}
+
 						$t->write();
 					}
 
@@ -613,11 +677,19 @@ $LastChangedRevision$
 					return array($message, $id);
 				}
 			}
-		} else {
+		}
+
+		else
+		{
 			if ($file === false)
+			{
 				return upload_get_errormsg($error);
+			}
+
 			else
+			{
 				return gTxt('only_graphic_files_allowed');
+			}
 		}
 	}
 
