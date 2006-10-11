@@ -121,8 +121,8 @@ $create_sql[] = "INSERT INTO `".PFX."txp_category` VALUES (9, 'site-design', 'im
 
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_css` (
-  `name` varchar(255) default NULL,
-  `css` text,
+  `name` varchar(255) NOT NULL,
+  `css` text NOT NULL default '',
   UNIQUE KEY `name` (`name`)
 ) $tabletype ";
 
@@ -214,9 +214,9 @@ $create_sql[] = "INSERT INTO `".PFX."txp_image` VALUES (1, 'divider.gif', 'site-
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_lang` (
   `id` int(9) NOT NULL auto_increment,
-  `lang` varchar(16) default NULL,
-  `name` varchar(64) default NULL,
-  `event` varchar(64) default NULL,
+  `lang` varchar(16) NOT NULL,
+  `name` varchar(64) NOT NULL,
+  `event` varchar(64) NOT NULL,
   `data` tinytext,
   `lastmod` timestamp,
   PRIMARY KEY  (`id`),
@@ -277,9 +277,9 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_plugin` (
 ) $tabletype ";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_prefs` (
-  `prefs_id` int(11) default NULL,
-  `name` varchar(255) default NULL,
-  `val` varchar(255) default NULL,
+  `prefs_id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `val` varchar(255) NOT NULL default '',
   `type` smallint(5) unsigned NOT NULL default '2',
   `event` varchar(12) NOT NULL default 'publish',
   `html` varchar(64) NOT NULL default 'text_input',
