@@ -19,9 +19,15 @@ $LastChangedRevision$
 	include './textpattern/config.php';
 	ob_end_clean();
 
-	if (!isset($txpcfg['txpath']) )	{ 
-		header('Status: 503 Service Unavailable'); header('HTTP/1.0 503 Service Unavailable');
-		exit('config.php is not ok or not found. If you would like to install, go to [/subdir]/textpattern/setup/'); 
+	if (!isset($txpcfg['txpath']) )	{
+		$status = '503 Service Unavailable';
+		if (substr(php_sapi_name(), 0, 3) == 'cgi' and empty($_SERVER['FCGI_ROLE']) and empty($_ENV['FCGI_ROLE']))
+			header("Status: $status");
+		else
+			header("HTTP/1.1 $status");
+
+		$msg = 'config.php is missing or corrupt.  To install Textpattern, visit <a href="./textpattern/setup/">textpattern/setup/</a>';
+		exit ($msg);
 	}
 
 	include $txpcfg['txpath'].'/publish.php';
