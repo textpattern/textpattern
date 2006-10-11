@@ -165,14 +165,14 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_file` (
   `filename` varchar(255) NOT NULL default '',
   `category` varchar(255) NOT NULL default '',
   `permissions` varchar(32) NOT NULL default '0',
-  `description` text NOT NULL,
+  `description` text NOT NULL  default '',
   `downloads` int(4) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id`),
   UNIQUE KEY `filename` (`filename`)
 ) $tabletype PACK_KEYS=0 AUTO_INCREMENT=1 ";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_form` (
-  `name` varchar(64) NOT NULL default '',
+  `name` varchar(64) NOT NULL,
   `type` varchar(28) NOT NULL default '',
   `Form` text NOT NULL,
   PRIMARY KEY (`name`)
@@ -203,7 +203,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_image` (
   `w` int(8) NOT NULL default '0',
   `h` int(8) NOT NULL default '0',
   `alt` varchar(255) NOT NULL default '',
-  `caption` text NOT NULL,
+  `caption` text NOT NULL  default '',
   `date` datetime NOT NULL default '0000-00-00 00:00:00',
   `author` varchar(255) NOT NULL default '',
   `thumbnail` int(2) NOT NULL default '0',
@@ -231,7 +231,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_link` (
   `url` text NOT NULL,
   `linkname` varchar(255) NOT NULL default '',
   `linksort` varchar(128) NOT NULL default '',
-  `description` text NOT NULL,
+  `description` text NOT NULL  default '',
   PRIMARY KEY  (`id`)
 ) $tabletype PACK_KEYS=1 AUTO_INCREMENT=4 ";
 
@@ -253,7 +253,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_log` (
 ) $tabletype AUTO_INCREMENT=77 ";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_page` (
-  `name` varchar(128) NOT NULL default '',
+  `name` varchar(128) NOT NULL,
   `user_html` text NOT NULL,
   PRIMARY KEY (`name`)
 ) $tabletype PACK_KEYS=1";
@@ -267,8 +267,8 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_plugin` (
   `author` varchar(128) NOT NULL default '',
   `author_uri` varchar(128) NOT NULL default '',
   `version` varchar(10) NOT NULL default '1.0',
-  `description` text NOT NULL,
-  `help` text NOT NULL,
+  `description` text NOT NULL default '',
+  `help` text NOT NULL default '',
   `code` text NOT NULL,
   `code_restore` text NOT NULL,
   `code_md5` varchar(32) NOT NULL default '',
@@ -377,7 +377,7 @@ $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'dbupdatetime', '1122
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'version', '1.0rc4', 2, 'publish', 'text_input', 0)";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_section` (
-  `name` varchar(128) NOT NULL default '',
+  `name` varchar(128) NOT NULL,
   `page` varchar(128) NOT NULL default '',
   `css` varchar(128) NOT NULL default '',
   `is_default` int(2) NOT NULL default '0',
