@@ -529,3 +529,10 @@ p#tagbuilder-output {
 margin-top: 10px;
 text-align: center;
 }
+
+/* preferences
+----------------------------------------------- */
+
+h2.pref-heading {
+margin: 20px 0 0 0;
+}

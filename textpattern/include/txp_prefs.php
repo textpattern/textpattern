@@ -78,13 +78,13 @@ $LastChangedRevision$
 				, 3)
 			).
 
-		n.n.tr(
-			tdcs(
-				sLink('prefs', 'prefs_list', gTxt('site_prefs'), 'navlink-active').sp.
-				sLink('prefs', 'advanced_prefs', gTxt('advanced_preferences'), 'navlink').sp.
-				sLink('prefs', 'list_languages', gTxt('manage_languages'), 'navlink')
-			, '3')
-		);
+			n.n.tr(
+				tdcs(
+					sLink('prefs', 'prefs_list', gTxt('site_prefs'), 'navlink-active').sp.
+					sLink('prefs', 'advanced_prefs', gTxt('advanced_preferences'), 'navlink').sp.
+					sLink('prefs', 'list_languages', gTxt('manage_languages'), 'navlink')
+				, '3')
+			);
 
 		$evt_list = safe_column('event', 'txp_prefs', "type = 0 and prefs_id = 1 group by 'event' order by event desc");
 
@@ -107,7 +107,7 @@ $LastChangedRevision$
 
 					echo n.n.tr(
 						tdcs(
-							hed(gTxt($a['event']), 1)
+							hed(gTxt($a['event']), 2, ' class="pref-heading"')
 						, 3)
 					);
 				}
@@ -459,7 +459,7 @@ $LastChangedRevision$
 
 				echo n.n.tr(
 					tdcs(
-						hed(gTxt($a['event']), 1)
+						hed(gTxt($a['event']), 2, ' class="pref-heading"')
 					, 3)
 				);
 			}
