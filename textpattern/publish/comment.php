@@ -440,7 +440,7 @@ $LastChangedRevision$
 			if (!file_exists($file)) {
 				$fp = fopen($file,'wb');
 				if ($fp) 
-					fwrite($fp,"<?php exit; ?>\n".
+					fwrite($fp,"<?php return; ?>\n".
 					"This trace-file tracks saved comments. (created ".safe_strftime($prefs['archive_dateformat'],time()).")\n".
 					"Format is: Type; Probability; Message (Type can be -1 => spam, 0 => moderate, 1 => visible)\n\n");
 			} else {
