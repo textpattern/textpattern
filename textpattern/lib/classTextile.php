@@ -221,6 +221,7 @@ class Textile
     
     var $shelf = array();
     var $restricted = false;
+    var $noimage = false;
     var $lite = false;
     var $url_schemes = array();
     var $glyph = array();
@@ -272,6 +273,7 @@ class Textile
         if ($rel)
            $this->rel = ' rel="'.$rel.'" ';
         $this->lite = $lite;
+        $this->noimage = $noimage;
 
         if ($encode) {
          $text = $this->incomingEntities($text);
@@ -308,6 +310,7 @@ class Textile
     {
         $this->restricted = true;
         $this->lite = $lite;
+        $this->noimage = $noimage;
         if ($rel)
            $this->rel = ' rel="'.$rel.'" ';
 
@@ -586,7 +589,6 @@ class Textile
     {
         // $this->dump($m);
         list(, $tag, $atts, $ext, $cite, $content) = $m;
-
         $atts = $this->pba($atts);
 
         $o1 = $o2 = $c2 = $c1 = '';
@@ -613,7 +615,7 @@ class Textile
             $o2 = "<code$atts>";
             $c2 = "</code>";
             $c1 = "</pre>";
-            $content = $this->shelve($this->encode_html($content));
+            $content = $this->shelve($this->encode_html($content."\n"));
         }
         elseif ($tag == 'notextile') {
             $content = $this->shelve($content);
@@ -621,7 +623,7 @@ class Textile
             $c1 = $c2 = '';
         }
         elseif ($tag == 'pre') {
-            $content = $this->shelve($this->encode_html($content));
+            $content = $this->shelve($this->encode_html($content."\n"));
             $o1 = "<pre$atts>";
             $o2 = $c2 = '';
             $c1 = "</pre>";
@@ -731,7 +733,7 @@ class Textile
         $atts = $this->pba($atts);
         $atts .= ($title != '') ? ' title="' . $this->encode_html($title) . '"' : '';
 
-        if (!$noimage)
+        if (!$this->noimage)
             $text = $this->image($text);
 
         $text = $this->span($text);
