@@ -731,14 +731,18 @@ class Textile
         $atts = $this->pba($atts);
         $atts .= ($title != '') ? ' title="' . $this->encode_html($title) . '"' : '';
 
-        $atts = ($atts) ? $this->shelve($atts) : '';
+        if (!$noimage)
+            $text = $this->image($text);
+
+        $text = $this->span($text);
+        $text = $this->glyphs($text);
 
         $url = $this->relURL($url);
 
         $out = '<a href="' . $this->encode_html($url . $slash) . '"' . $atts . $this->rel . '>' . $text . '</a>' . $post;
 
         // $this->dump($out);
-        return $out;
+        return $this->shelve($out);
 
     }
 
@@ -853,7 +857,7 @@ function refs($m)
 // -------------------------------------------------------------
     function shelve($val)
     {
-        $i = '{'.uniqid(rand()).'}';
+        $i = uniqid(rand());
         $this->shelf[$i] = $val;
         return $i;
     }
