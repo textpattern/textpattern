@@ -962,6 +962,7 @@ function refs($m)
 
         $glyph_search = array(
             '/(\w)\'(\w)/',                                      // apostrophe's
+            '/(\s)\'(\d+\w?)\b(?!\')/',                          // back in '88
             '/(\S)\'(?=\s|'.$pnc.'|<|$)/',                       //  single closing
             '/\'/',                                              //  single opening
             '/(\S)\"(?=\s|'.$pnc.'|<|$)/',                       //  double closing
@@ -981,6 +982,7 @@ function refs($m)
 
         $glyph_replace = array(
             '$1'.$txt_apostrophe.'$2',           // apostrophe's
+            '$1'.$txt_apostrophe.'$2',           // back in '88
             '$1'.$txt_quote_single_close,        //  single closing
             $txt_quote_single_open,              //  single opening
             '$1'.$txt_quote_double_close,        //  double closing
