@@ -421,6 +421,7 @@ class Textile
     {
         // checks whether the text has text not already enclosed by a block tag
         $r = trim(preg_replace('@<(p|blockquote|div|form|table|ul|ol|pre|h\d)[^>]*?>.*</\1>@s', '', trim($text)));
+        $r = trim(preg_replace('@<(hr|br)[^>]*?/>@', '', $r));
         return '' != $r;
     }
 
