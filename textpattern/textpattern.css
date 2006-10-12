@@ -105,6 +105,15 @@ color: #000;
 background-color: #ffc;
 border-right: 1px solid #ddd;
 border-bottom: 1px solid #ddd;
+border-left: 1px solid #f1f1f1;
+}
+
+a.navlink-active {
+padding: 3px;
+color: #000;
+border-right: 1px solid #ddd;
+border-bottom: 1px solid #ddd;
+border-left: 1px solid #f1f1f1;
 }
 
 a.plain, a.plain:visited, a.plain:active {
@@ -139,13 +148,11 @@ font-size: 0.9em;
 textarea {
 padding: 3px;
 line-height: 1.4em;
-color: inherit;
 background-color: #eee;
 }
 
 select {
 font-size: 0.9em;
-color: inherit;
 background-color: #eee;
 }
 
@@ -182,7 +189,6 @@ input.edit {
 margin-top: 5px;
 padding: 1px;
 font-size: 1em;
-color: inherit;
 background-color: #eee;
 }
 
@@ -204,13 +210,11 @@ margin-left: 100px;
 input.list {
 margin: 5px 5px auto auto;
 padding: 3px;
-color: inherit;
 background-color: #ddd;
 }
 
 input.navbox {
 margin-right: 10px;
-color: inherit;
 background-color: #eee;
 }
 
@@ -225,20 +229,17 @@ border-color: #b00 #600 #600 #b00;
 input.smallbox {
 margin-right: 10px;
 vertical-align: text-top;
-color: inherit;
 background-color: #ddd;
 }
 
 input.smallerbox {
 padding: 2px;
-color: inherit;
 background-color: #ddd;
 }
 
 input.smallerboxsp {
 margin-right: 10px;
 padding: 2px;
-color: inherit;
 background-color: #ddd;
 }
 
@@ -325,6 +326,7 @@ color: #999;
 background-color: #eee;
 border-right: 1px solid #ddd;
 border-bottom: 1px solid #ddd;
+border-left: 1px solid #f1f1f1;
 }
 
 p#js {
@@ -351,7 +353,6 @@ margin: 0 auto 15px auto;
 padding: 10px;
 width: 30em;
 text-align: center;
-color: inherit;
 background-color: #fff4f4;
 border: 2px solid #fdd;
 }
@@ -369,13 +370,11 @@ text-align: center;
 }
 
 td.tabdown {
-color: inherit;
 background: transparent url(txp_img/down.gif) no-repeat top left;
 cursor: pointer;
 }
 
 td.tabdown2 {
-color: inherit;
 background: transparent url(txp_img/down2.gif) no-repeat top left;
 cursor: pointer;
 }
@@ -389,7 +388,6 @@ border: 0;
 td.tabs {
 height: 25px;
 text-align: center;
-color: inherit;
 background: transparent url(txp_img/tabshadow.gif) repeat-x top left;
 }
 
@@ -398,7 +396,6 @@ vertical-align: middle;
 }
 
 td.tabup, td.tabup2 {
-color: inherit;
 background: transparent url(txp_img/up.gif) no-repeat top left;
 }
 
@@ -486,7 +483,6 @@ font-weight: bold;
 input.css {
 margin: 0;
 padding: 1px;
-color: inherit;
 background-color: #eee;
 border-width: 1px;
 border-style: solid;

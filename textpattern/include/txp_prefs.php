@@ -80,6 +80,7 @@ $LastChangedRevision$
 
 		n.n.tr(
 			tdcs(
+				sLink('prefs', 'prefs_list', gTxt('site_prefs'), 'navlink-active').sp.
 				sLink('prefs', 'advanced_prefs', gTxt('advanced_preferences'), 'navlink').sp.
 				sLink('prefs', 'list_languages', gTxt('manage_languages'), 'navlink')
 			, '3')
@@ -441,6 +442,7 @@ $LastChangedRevision$
 			n.n.tr(
 				tdcs(
 					sLink('prefs', 'prefs_list', gTxt('site_prefs'), 'navlink').sp.
+					sLink('prefs', 'advanced_prefs', gTxt('advanced_preferences'), 'navlink-active').sp.
 					sLink('prefs', 'list_languages', gTxt('manage_languages'), 'navlink')
 				, '3')
 			);
@@ -693,8 +695,21 @@ $LastChangedRevision$
 			echo tag ($msg,'p',' style="text-align:center;color:red;width:50%;margin: 2em auto"' );
 
 		echo startTable('list'),				
-		tr(tdcs(hed(gTxt('manage_languages'),1),3)),
-		tr(tdcs(sLink('prefs','prefs_list',gTxt('site_prefs'),'navlink').sp.sLink('prefs','advanced_prefs',gTxt('advanced_preferences'),'navlink'),'3')),
+
+		tr(
+			tdcs(
+				hed(gTxt('manage_languages'), 1)
+			, 3)
+		),
+
+		tr(
+			tdcs(
+				sLink('prefs', 'prefs_list', gTxt('site_prefs'), 'navlink').sp.
+				sLink('prefs','advanced_prefs',gTxt('advanced_preferences'),'navlink').sp.
+				sLink('prefs', 'list_languages', gTxt('manage_languages'), 'navlink-active')
+			, '3')
+		),
+
 		tr(tda('&nbsp;',' colspan="3" style="font-size:0.25em"')),
 		tr( $lang_form ),
 		tr(tda('&nbsp;',' colspan="3" style="font-size:0.25em"')),
