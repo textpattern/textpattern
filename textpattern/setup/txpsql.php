@@ -122,7 +122,7 @@ $create_sql[] = "INSERT INTO `".PFX."txp_category` VALUES (9, 'site-design', 'im
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_css` (
   `name` varchar(255) NOT NULL,
-  `css` text NOT NULL default '',
+  `css` text NOT NULL,
   UNIQUE KEY `name` (`name`)
 ) $tabletype ";
 
@@ -165,7 +165,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_file` (
   `filename` varchar(255) NOT NULL default '',
   `category` varchar(255) NOT NULL default '',
   `permissions` varchar(32) NOT NULL default '0',
-  `description` text NOT NULL  default '',
+  `description` text NOT NULL,
   `downloads` int(4) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id`),
   UNIQUE KEY `filename` (`filename`)
@@ -203,7 +203,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_image` (
   `w` int(8) NOT NULL default '0',
   `h` int(8) NOT NULL default '0',
   `alt` varchar(255) NOT NULL default '',
-  `caption` text NOT NULL  default '',
+  `caption` text NOT NULL,
   `date` datetime NOT NULL default '0000-00-00 00:00:00',
   `author` varchar(255) NOT NULL default '',
   `thumbnail` int(2) NOT NULL default '0',
@@ -231,7 +231,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_link` (
   `url` text NOT NULL,
   `linkname` varchar(255) NOT NULL default '',
   `linksort` varchar(128) NOT NULL default '',
-  `description` text NOT NULL  default '',
+  `description` text NOT NULL,
   PRIMARY KEY  (`id`)
 ) $tabletype PACK_KEYS=1 AUTO_INCREMENT=4 ";
 
@@ -267,8 +267,8 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_plugin` (
   `author` varchar(128) NOT NULL default '',
   `author_uri` varchar(128) NOT NULL default '',
   `version` varchar(10) NOT NULL default '1.0',
-  `description` text NOT NULL default '',
-  `help` text NOT NULL default '',
+  `description` text NOT NULL,
+  `help` text NOT NULL,
   `code` text NOT NULL,
   `code_restore` text NOT NULL,
   `code_md5` varchar(32) NOT NULL default '',
