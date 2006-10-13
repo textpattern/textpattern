@@ -615,7 +615,7 @@ class Textile
             $o2 = "<code$atts>";
             $c2 = "</code>";
             $c1 = "</pre>";
-            $content = $this->shelve($this->encode_html($content."\n"));
+            $content = $this->shelve($this->encode_html(rtrim($content, "\n")."\n"));
         }
         elseif ($tag == 'notextile') {
             $content = $this->shelve($content);
@@ -623,7 +623,7 @@ class Textile
             $c1 = $c2 = '';
         }
         elseif ($tag == 'pre') {
-            $content = $this->shelve($this->encode_html($content."\n"));
+            $content = $this->shelve($this->encode_html(rtrim($content, "\n").$content."\n"));
             $o1 = "<pre$atts>";
             $o2 = $c2 = '';
             $c1 = "</pre>";
