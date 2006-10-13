@@ -177,7 +177,7 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function nav_form($event, $page, $numPages, $sort, $dir, $crit, $method)
+	function nav_form($event, $page, $numPages, $sort, $dir, $crit, $search_method)
 	{
 		if ($numPages > 1)
 		{
@@ -199,7 +199,7 @@ $LastChangedRevision$
 			$nav = array();
 
 			$nav[] = ($page > 1) ? 
-				PrevNextLink($event, $page - 1, gTxt('prev'), 'prev', $sort, $dir, $crit, $method).sp : 
+				PrevNextLink($event, $page - 1, gTxt('prev'), 'prev', $sort, $dir, $crit, $search_method).sp : 
 				tag('&#8249; '.gTxt('prev'), 'span', ' class="navlink-disabled"').sp;
 
 			$nav[] = '<select name="page" class="list" onchange="submit(this.form);">';
@@ -208,13 +208,13 @@ $LastChangedRevision$
 			$nav[] = '<noscript> <input type="submit" value="'.gTxt('go').'" class="smallerbox" /></noscript>';
 
 			$nav[] = ($page != $numPages) ? 
-				sp.PrevNextLink($event, $page + 1, gTxt('next'), 'next', $sort, $dir, $crit, $method) : 
+				sp.PrevNextLink($event, $page + 1, gTxt('next'), 'next', $sort, $dir, $crit, $search_method) : 
 				sp.tag(gTxt('next').' &#8250;', 'span', ' class="navlink-disabled"');
 
 			return '<form class="prev-next" method="get" action="index.php">'.
 				n.eInput($event).
 				( $sort ? n.hInput('sort', $sort).n.hInput('dir', $dir) : '' ).
-				( $crit ? n.hInput('crit', $crit).n.hInput('method', $method) : '' ).
+				( $crit ? n.hInput('crit', $crit).n.hInput('search_method', $search_method) : '' ).
 				join('', $nav).
 				'</form>';
 		}
