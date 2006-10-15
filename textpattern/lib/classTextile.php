@@ -287,11 +287,6 @@ class Textile
 
             $text = $this->getRefs($text);
 
-            $text = $this->links($text);
-            if (!$noimage) {
-                $text = $this->image($text);
-            }
-
             if (!$lite) {
                 $text = $this->block($text);
             }
@@ -319,10 +314,6 @@ class Textile
 
             $text = $this->cleanWhiteSpace($text);
             $text = $this->getRefs($text);
-
-            $text = $this->links($text);
-            if (!$noimage)
-                $text = $this->image($text);
 
             if ($lite) {
                 $text = $this->blockLite($text);
@@ -645,8 +636,15 @@ class Textile
         if (!$this->lite) {
             $text = $this->noTextile($text);
             $text = $this->code($text);
-                $text = $this->lists($text);
-                $text = $this->table($text);
+        }
+
+        $text = $this->links($text);
+        if (!$this->noimage)
+            $text = $this->image($text);
+
+        if (!$this->lite) {
+            $text = $this->lists($text);
+            $text = $this->table($text);
         }
 
         $text = $this->span($text);
