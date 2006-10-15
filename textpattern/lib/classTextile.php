@@ -225,6 +225,9 @@ class Textile
     var $lite = false;
     var $url_schemes = array();
     var $glyph = array();
+    
+    var $ver = '2.0.0';
+    var $rev = '$Rev$';
 
 // -------------------------------------------------------------
     function Textile()
