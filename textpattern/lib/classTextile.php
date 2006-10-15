@@ -20,7 +20,7 @@ T E X T I L E
 
 A Humane Web Text Generator
 
-Version 1.5 beta
+Version 2.0
 
 Copyright (c) 2003-2004, Dean Allen <dean@textism.com>
 All rights reserved.
@@ -412,20 +412,20 @@ class Textile
     }
 
 // -------------------------------------------------------------
-    function table($text)
-    {
-        $text = $text . "\n\n";
-        return preg_replace_callback("/^(?:table(_?{$this->s}{$this->a}{$this->c})\. ?\n)?^({$this->a}{$this->c}\.? ?\|.*\|)\n\n/smU",
-           array(&$this, "fTable"), $text);
-    }
-
-// -------------------------------------------------------------
     function hasRawText($text)
     {
         // checks whether the text has text not already enclosed by a block tag
         $r = trim(preg_replace('@<(p|blockquote|div|form|table|ul|ol|pre|h\d)[^>]*?>.*</\1>@s', '', trim($text)));
         $r = trim(preg_replace('@<(hr|br)[^>]*?/>@', '', $r));
         return '' != $r;
+    }
+
+// -------------------------------------------------------------
+    function table($text)
+    {
+        $text = $text . "\n\n";
+        return preg_replace_callback("/^(?:table(_?{$this->s}{$this->a}{$this->c})\. ?\n)?^({$this->a}{$this->c}\.? ?\|.*\|)\n\n/smU",
+           array(&$this, "fTable"), $text);
     }
 
 // -------------------------------------------------------------
@@ -754,9 +754,9 @@ class Textile
         return preg_replace_callback("/(?<=^|\s)\[(.+)\]((?:http:\/\/|\/)\S+)(?=\s|$)/U",
             array(&$this, "refs"), $text);
     }
-    // -------------------------------------------------------------
 
-function refs($m)
+// -------------------------------------------------------------
+    function refs($m)
     {
         list(, $flag, $url) = $m;
         $this->urlrefs[$flag] = $url;
@@ -877,12 +877,14 @@ function refs($m)
     }
 
 // -------------------------------------------------------------
+// NOTE: deprecated
     function incomingEntities($text)
     {
         return preg_replace("/&(?![#a-z0-9]+;)/i", "x%x%", $text);
     }
 
 // -------------------------------------------------------------
+// NOTE: deprecated
     function encodeEntities($text)
     {
         return (function_exists('mb_encode_numericentity'))
@@ -891,6 +893,7 @@ function refs($m)
     }
 
 // -------------------------------------------------------------
+// NOTE: deprecated
     function fixEntities($text)
     {
         /*  de-entify any remaining angle brackets or ampersands */
@@ -1000,29 +1003,14 @@ function refs($m)
             $txt_copyright,                      //  copyright
          );
 
-        $codepre = false;
-        /*  if no html, do a simple search and replace... */
-        if (!preg_match("/<.*>/", $text)) {
-            $text = preg_replace($glyph_search, $glyph_replace, $text);
-            return $text;
-        }
-        else {
-            $text = preg_split("/(<.*>)/U", $text, -1, PREG_SPLIT_DELIM_CAPTURE);
-            foreach($text as $line) {
-                $offtags = ('code|pre|kbd|notextile|txp:php');
-
-                /*  matches are off if we're between <code>, <pre> etc. */
-                if (preg_match('/<(' . $offtags . ')>/i', $line)) $codepre = true;
-                if (preg_match('/<\/(' . $offtags . ')>/i', $line)) $codepre = false;
-
-                if (!preg_match("/<.*>/", $line) && $codepre == false) {
-                    $line = preg_replace($glyph_search, $glyph_replace, $line);
-                }
-
-                $glyph_out[] = $line;
-            }
-            return join('', $glyph_out);
-        }
+         $text = preg_split("/(<.*>)/U", $text, -1, PREG_SPLIT_DELIM_CAPTURE);
+         foreach($text as $line) {
+             if (!preg_match("/<.*>/", $line)) {
+                 $line = preg_replace($glyph_search, $glyph_replace, $line);
+             }
+              $glyph_out[] = $line;
+         }
+         return join('', $glyph_out);
     }
 
 // -------------------------------------------------------------
@@ -1057,18 +1045,21 @@ function refs($m)
     }
 
 // -------------------------------------------------------------
+// NOTE: deprecated
     function encode_high($text, $charset = "UTF-8")
     {
         return mb_encode_numericentity($text, $this->cmap(), $charset);
     }
 
 // -------------------------------------------------------------
+// NOTE: deprecated
     function decode_high($text, $charset = "UTF-8")
     {
         return mb_decode_numericentity($text, $this->cmap(), $charset);
     }
 
 // -------------------------------------------------------------
+// NOTE: deprecated
     function cmap()
     {
         $f = 0xffff;
@@ -1102,6 +1093,7 @@ function refs($m)
     }
 
 // -------------------------------------------------------------
+// NOTE: deprecated
     function txtgps($thing)
     {
         if (isset($_POST[$thing])) {
@@ -1118,12 +1110,13 @@ function refs($m)
     }
 
 // -------------------------------------------------------------
+// NOTE: deprecated
     function dump()
     {
         foreach (func_get_args() as $a)
             echo "\n<pre>",(is_array($a)) ? print_r($a) : $a, "</pre>\n";
     }
-    
+
 // -------------------------------------------------------------
 
     function blockLite($text)
