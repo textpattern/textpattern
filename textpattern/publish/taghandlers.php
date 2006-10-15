@@ -1089,9 +1089,11 @@ $LastChangedRevision$
 
 			if ($thing)
 			{
+				$thing = parse($thing);
+
 				return '<a rel="next" href="'.$url.'"'.
 					($next_title != $thing ? ' title="'.$next_title.'"' : '').
-					'>'.parse($thing).'</a>';
+					'>'.$thing.'</a>';
 			}
 
 			return $url;
@@ -1128,9 +1130,11 @@ $LastChangedRevision$
 
 			if ($thing)
 			{
+				$thing = parse($thing);
+
 				return '<a rel="prev" href="'.$url.'"'.
 					($prev_title != $thing ? ' title="'.$prev_title.'"' : '').
-					'>'.parse($thing).'</a>';
+					'>'.$thing.'</a>';
 			}
 
 			return $url;
