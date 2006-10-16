@@ -212,7 +212,7 @@ $LastChangedRevision$
 		if (!$out['request_uri'] and serverSet('argv'))
 		{
 			$argv = serverSet('argv');
-			$out['request_uri'] = @substr($argv[0], strpos($argv[0], ';' + 1));
+			$out['request_uri'] = @substr($argv[0], strpos($argv[0], ';') + 1);
 		}
 
 			// define the useable url, minus any subdirectories.
