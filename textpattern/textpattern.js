@@ -14,7 +14,7 @@ function checkCookies()
 
 	date.setTime(date.getTime() - (60 * 1000));
 
-	document.cookie = 'testcookie; expires='+date.toGMTString()+'; path=/';
+	document.cookie = 'testcookie=; expires='+date.toGMTString()+'; path=/';
 
 	return cookieEnabled;
 }

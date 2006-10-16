@@ -4,10 +4,19 @@ Changes since 4.0.3:
 * RSS and Atom feed fixes and improvements
 * Many improvements to admin interface XHTML markup and CSS
 * Many subtle improvements to the admin UI
+* Add automatical detection of and working with SSL
+* add nowidow-attribute to article tags 
+* Adapt navigation-elemts to the user's permissions 
+* Lots of textile improvements
+* Fixed sending Last-Modified header
 * Better indexing for faster article list queries
+* Update to tagbuilders
+* Show (source of) plugin-help before installation
+* Improvements in translations (and translateables) (thanks Skubidu and others)
 * New translations: Indonesian, Hebrew, Hungarian, Romanian
 * Improved handling of comma-separated values in tag attributes
 * article, article_custom tags: new 'sort' attribute
+* New conditional if_article_id
 * author, category, category1, category2 tags: can link to any section by name
 * Improved xhtml attributes on many tags (class, rel)
 * time and date tags: new attributes for overriding language, GMT
@@ -15,10 +24,11 @@ Changes since 4.0.3:
 * New link tags: link_category, link_date, link_name, link_url
 * Navigation tag improvements (new attributes, improved xhtml output)
 * Warn if article or comment tags are used in the wrong context
-* Improved error checking and reporting
+* Improved error checking, reporting and diagnostics
 * Stricter 404 checking (missing category, author, messy article ID)
 * Simplify and improve comment preview and input form tags
 * Improved article load/parse logic on individual article pages
+* Workaround some rare FCGI problems with HTTP headers
 * Fix some IIS clean URL issues
 * Improved multi-edit support on admin pages
 * Deprecate old-style PHP tags
@@ -170,3 +180,4 @@ Changes since 4.0:
 * improvements to older/newer tags
 * developers: added more consistent url generation via new pagelinkurl() function
 * developers: added callbacks to public side (for example to handle 404s)
+if_article_id 
