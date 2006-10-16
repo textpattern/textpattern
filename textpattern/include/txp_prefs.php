@@ -524,8 +524,7 @@ $LastChangedRevision$
 		// The minimum of the candidates, is the real max. possible size
 		$candidates = array($user_max,
 							ini_get('post_max_size'), 
-							ini_get('upload_max_filesize'),
-							ini_get('memory_limit'));
+							ini_get('upload_max_filesize'));
 		$real_max = null;
 		foreach ($candidates as $item)
 		{
