@@ -163,7 +163,8 @@ $LastChangedRevision$
 
 		else
 		{
-			return trigger_error(gTxt('unknown_image'));
+			trigger_error(gTxt('unknown_image'));
+			return;
 		}
 
 		if ($rs)
@@ -187,7 +188,7 @@ $LastChangedRevision$
 			return ($wraptag) ? doTag($out, $wraptag, $class, '', $html_id) : $out;
 		}
 
-		return trigger_error(gTxt('unknown_image'));
+		trigger_error(gTxt('unknown_image'));
 	}
 
 // -------------------------------------------------------------
@@ -224,7 +225,8 @@ $LastChangedRevision$
 
 		else
 		{
-			return trigger_error(gTxt('unknown_image'));
+			trigger_error(gTxt('unknown_image'));
+			return;
 		}
 
 		if ($rs)
@@ -257,10 +259,9 @@ $LastChangedRevision$
 				return ($wraptag) ? doTag($out, $wraptag, $class, '', $html_id) : $out;
 			}
 
-			return trigger_error(gTxt('unknown_image'));
 		}
 
-		return trigger_error(gTxt('unknown_image'));
+		trigger_error(gTxt('unknown_image'));
 	}
 
 // -------------------------------------------------------------
@@ -2106,7 +2107,8 @@ function body($atts)
 
 			else
 			{
-				return trigger_error(gTxt('unknown_image'));
+				trigger_error(gTxt('unknown_image'));
+				return;
 			}
 		}
 
