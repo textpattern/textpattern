@@ -1,0 +1,183 @@
+Changes since 4.0.3:
+
+* RSS 2.0 support
+* RSS and Atom feed fixes and improvements
+* Many improvements to admin interface XHTML markup and CSS
+* Many subtle improvements to the admin UI
+* Add automatical detection of and working with SSL
+* add nowidow-attribute to article tags 
+* Adapt navigation-elemts to the user's permissions 
+* Lots of textile improvements
+* Fixed sending Last-Modified header
+* Better indexing for faster article list queries
+* Update to tagbuilders
+* Show (source of) plugin-help before installation
+* Improvements in translations (and translateables) (thanks Skubidu and others)
+* New translations: Indonesian, Hebrew, Hungarian, Romanian
+* Improved handling of comma-separated values in tag attributes
+* article, article_custom tags: new 'sort' attribute
+* New conditional if_article_id
+* author, category, category1, category2 tags: can link to any section by name
+* Improved xhtml attributes on many tags (class, rel)
+* time and date tags: new attributes for overriding language, GMT
+* css, feed_link tags: easier generation of xhtml 'link' tags
+* New link tags: link_category, link_date, link_name, link_url
+* Navigation tag improvements (new attributes, improved xhtml output)
+* Warn if article or comment tags are used in the wrong context
+* Improved error checking, reporting and diagnostics
+* Stricter 404 checking (missing category, author, messy article ID)
+* Simplify and improve comment preview and input form tags
+* Improved article load/parse logic on individual article pages
+* Workaround some rare FCGI problems with HTTP headers
+* Fix some IIS clean URL issues
+* Improved multi-edit support on admin pages
+* Deprecate old-style PHP tags
+* Don't lose your place in admin lists when returning from an edit
+* Extra diagnostic info and pre-flight tests
+* Better time zone handling
+* Remember and automatically reuse thumbnail size settings
+* Textile: fix inline class/style/lang
+* Warn when article and comment tags are used in the wrong place
+* New "if_plugin" conditional checks for an active plugin, with optional version number
+* Fix an occasional time zone bug
+* Fix 404 errors on clean category URLs
+* Add backtrace list to error messages in Debug mode
+* Add limit attribute to search_result_excerpt tag
+* Add escape and default attributes to custom_field tag
+* fix image-upload for outdated gdlib-installations (wet)
+* fix label attribute breadcrumb function (richard)
+* add if_author, if_article_author (with attribute 'name') (mary)
+* allow multiple sections for if_article_section (like for if_section, if_category) (mary)
+* display link category's title, rather than name, in the links page. (mary)
+* extend article_image tag to optionally display the article image thumbnail. (mary)
+* Many minor bugfixes
+
+Changes since 4.0.2:
+
+* fixed 2 potential security holes(detected in internal code review).
+  Updade is recommended. 
+* Textile i18n improvements
+* Add a bulk Ban function for comments
+* Automatically hide comments when banning an IP
+* Fix comments "page by"
+* Fix double translated linebreaks in comments.
+* Fix nofollow in comments
+* Fix preview without textile in certain edge cases
+* Seperate hidden comments into unmoderated and spam
+* Add bulk changing of comment status (visible, moderated, spam)
+* Better error-handling in comments-form when critical fields are missing
+  New tag: <txp:comments_error /> (and conditional <txp:if_comments_error >)
+  Style-able error-message and form-elements via CSS (class=comments_warn).
+* Plugin-Authors: Add callbacks for future spam-plugins [comment.save, comment.form]
+* Plugin-Authors: Add getComment() and comment_evaluator for future spam-plugins
+* Plugin-Authors: Allow (optionally, transparently) for installing compressed plugins.
+* Plugin-Authors: Add window events using addEvent, to allow multiple events loading 
+                  at window.onload, useful for admin side plugins.
+* Improve mysql5-compatibility
+* Add comment edit link to notification emails
+* Make comment-time format customizable in tag (mary)
+* Add offset-attribute to file_download_list (mary)
+* Make older, newer and link_to_home work more consistantly with other nav-tags (mary)
+* Fix mailto: links
+* Fix tag trace output for enclosing tags
+* Update comment_count after import
+* Add extra info to the tag trace (SQL queries, conditional tag results, page template and form names)
+
+Changes since 4.0.1:
+
+* Fix a bug in 404 handling on some fastcgi servers
+* Fix a bug that prevented file_download_list from working properly
+* Fix a redirection bug in the comment form
+* Fix occasional category URL i18n problems
+* Remove extra trailing slash in some breadcrumb links
+* Make articles by author work properly
+* Make feed_link support section and category correctly
+* Add correct content-type to popup comments page
+* Fix an obscure feed caching bug
+* Fix a possible problem with circular dependencies when loading plugins
+* Fix timestamps in Atom feeds
+* Fix occasional Atom encoding issues
+* UI improvements when creating/copying/deleting styles
+* Improve performance of the language loader
+* Make date-based permlinks work properly in comment emails
+* Better handling of invalid login cookies
+* Use page templates for 404 (and other) error pages
+* Minor Atom validation improvements
+* Improved comment conditionals logic; txp:if_comments now means "if the current article has at least 1 comment"
+* Minor performance improvements
+* New txp:if_status and txp:page_url tags
+* Prevent config.php whitespace from breaking stylesheets
+* UI improvements to javascript toggles
+* Improved comment input form HTML markup
+* Improved txp:section and txp:category tags
+* New tags: txp:if_different, txp:if_first_article, txp:if_last_article
+* Localize the XML feed link title
+* Better encoding of article titles
+* Fix rare problems caused by magic_quotes_runtime
+* Improved file upload forms
+* New language: Latvian
+* Support section and category titles in txp:breadcrumb
+* Allow decimals=0 in txp:file_download_size tag
+* Minor diagnostic info changes
+* New labeltag attribute on most list tags
+* Restore use_textile preference
+* Minor HTML validation fixes
+* Developers: new safe_upsert() database function
+* Fall back to English if no language data is available
+* Support comma-separated names in txp:if_category and txp:if_section
+* Identify the offending tag when displaying error messages in templates and forms
+* Add include_default attribute to txp:section_list
+* Add support for changing status and section on multiple articles at once
+* Fix nested category titles in txp:breadcrumb
+* Improved comment message markup
+* Restore the comments_closed message
+* Better handling of per-article Use Textile selection
+* Add class attribute to comments_invite for css-classes 
+* Added 4 attributes to comments_invite: showcount, wraptag, textonly (just the invite-text)
+    and showalways (also display on individual article-pages). Example:
+    <comments_invite wraptag="p" showcount="0" textonly="1" showalways="1" />
+* Support c-style backslash sequences in tag attributes
+* Fix some rare bugs in feeds, admin list paging
+* Add a pageby attribute to txp:article, for multi-column lists
+* Fix txp:link_to_next/prev so they work at the top of a page
+* Minor speed improvements, new class and linkclass attributes for txp:breadcrumb tag
+* Added txp:comments_preview and txp:if_comments_preview tags. Example usage:
+	<txp:if_comments_preview>
+	 <div id="cpreview" style="background-color:#FF0"><b>Hello, the following is your preview</b>
+	   <txp:comments_preview /><txp:comments_form preview="1" />
+	 </div>
+	</txp:if_comments_preview>
+* Fixed unparsed excerpts in Feeds.
+* Textile: smarter handling of relative link and image paths
+* Textile: stop footnote links from clashing in article lists
+* Add fi_FI locale support
+
+Changes since 4.0:
+
+* fixed some serious security issues. Updates are strongly recommended.
+* fixed textile problems (missing block-elements in some cases; notextile; span-handling)
+* fixed updating of comment_count when deleting comments
+* fixed bug in atom feeds (multiple identical excerpts)
+* added new permission level (article.edit.own.published, allows you to edit own articles _after_ publishing)
+* added very basic 404 support (correct 404 Headers are sent)
+* added new languages (Íslenska, Suomi, ..(..), ..(..))
+* fixed bugs in articles by author (clean and messy urls)
+* fixed category_list to use clean urls when appropriate
+* fixed installation problems with certain db prefixes by limiting possible prefixes
+* fixed timezone issue with ymd permlinks
+* fixed GMT formatting of dates
+* fixed bugs with i18n-ascii.txt and added a few new items
+* added language overrides to dirifying url_titles
+* several improvements to url_titles (including not updating them until published)
+* several improvements to diagnostics
+* added style and class attributes to txp:permlink
+* fixed bugs with multibyte strings in some urls
+* added contextual information to page title on the admin side
+* fixed problems with larger file downloads
+* fixed file_download_link with multiple files
+* fixed logging of file downloads (only finished downloads are counted; aborts go to normal logs)
+* fixed problems with sending mail on some systems
+* improvements to older/newer tags
+* developers: added more consistent url generation via new pagelinkurl() function
+* developers: added callbacks to public side (for example to handle 404s)
+if_article_id 
