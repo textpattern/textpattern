@@ -180,13 +180,13 @@ $LastChangedRevision$
 		$checkbox .= ' '.hInput('checkbox_type', $checkbox_type);
 
 		$vals = array(
-			'comment_name_input'		=> fInput('text', 'name', htmlspecialchars($name), 'comment_name_input'.($namewarn ? ' comments_error' : ''), '', '', $isize),
-			'comment_email_input'		=> fInput('text', 'email', htmlspecialchars($email), 'comment_email_input'.($emailwarn ? ' comments_error' : ''), '', '', $isize),
-			'comment_web_input'			=> fInput('text', 'web', htmlspecialchars($web)	, 'comment_web_input', '', '', $isize),
-			'comment_message_input' => $textarea.'<!-- plugin-place-holder -->',
+			'comment_name_input'		=> fInput('text', 'name', htmlspecialchars($name), 'comment_name_input'.($namewarn ? ' comments_error' : ''), '', '', $isize, '', 'comment_name_input'),
+			'comment_email_input'		=> fInput('text', 'email', htmlspecialchars($email), 'comment_email_input'.($emailwarn ? ' comments_error' : ''), '', '', $isize, '', 'comment_email_input'),
+			'comment_web_input'			=> fInput('text', 'web', htmlspecialchars($web)	, 'comment_web_input', '', '', $isize, '', 'comment_web_input'),
+			'comment_message_input' 	=> $textarea.'<!-- plugin-place-holder -->',
 			'comment_remember'			=> $checkbox,
-			'comment_preview'				=> fInput('submit', 'preview', gTxt('preview'), 'button'),
-			'comment_submit'				=> $comment_submit_button
+			'comment_preview'			=> fInput('submit', 'preview', gTxt('preview'), 'button'),
+			'comment_submit'			=> $comment_submit_button
 		);
 
 		foreach ($vals as $a => $b)
@@ -549,5 +549,18 @@ $LastChangedRevision$
 
 		$success = txpMail($email, $subject, $out, $cemail);
 	}
-
+// -------------------------------------------------------------
+	# deprecated, use fInput instead
+	function input($type,$name,$val,$size='',$class='',$tab='',$chkd='') 
+	{
+		$o = array(
+			'<input type="'.$type.'" name="'.$name.'" id="'.$name.'" value="'.$val.'"',
+			($size)	? ' size="'.$size.'"'	  : '',
+			($class) ? ' class="'.$class.'"'	: '',
+			($tab)	 ? ' tabindex="'.$tab.'"'	: '',
+			($chkd)	? ' checked="checked"'	: '',
+			' />'.n
+		);
+		return join('',$o);
+	}
 ?>
