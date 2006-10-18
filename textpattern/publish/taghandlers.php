@@ -2321,8 +2321,11 @@ function body($atts)
 		{
 			$atts .= ' class="'.$class.'"';
 		}
-
-		$breakatts = ($breakclass) ? ' class="'.$breakclass.'"' : '';
+		
+		if ($breakclass) 
+		{
+			$breakatts.= ' class="'.$breakclass.'"';
+		}
 
 		// non-enclosing breaks
 		if (!preg_match('/^\w+$/', $break) or $break == 'br' or $break == 'hr')
