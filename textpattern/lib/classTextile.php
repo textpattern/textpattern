@@ -9,7 +9,7 @@
  */
 
 /*
-$HeadURL$
+$Id: classTextile.php 216 2006-10-17 22:31:53Z zem $
 $LastChangedRevision$
 */
 
@@ -225,6 +225,7 @@ class Textile
     var $lite = false;
     var $url_schemes = array();
     var $glyph = array();
+    var $hu = '';
     
     var $ver = '2.0.0';
     var $rev = '$Rev$';
@@ -267,6 +268,8 @@ class Textile
            'copyright'          => txt_copyright,
         );
 
+        if (defined('hu'))
+            $this->hu = hu;
 
     }
 
@@ -777,7 +780,7 @@ class Textile
         if ((empty($parts['scheme']) or @$parts['scheme'] == 'http') and
              empty($parts['host']) and
              preg_match('/^\w/', @$parts['path']))
-            $url = hu.$url;
+            $url = $this->hu.$url;
         if ($this->restricted and !empty($parts['scheme']) and
               !in_array($parts['scheme'], $this->url_schemes))
             return '#';
