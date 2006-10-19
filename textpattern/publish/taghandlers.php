@@ -2909,17 +2909,21 @@ function body($atts)
 			'id'			 => '',
 		), $atts));
 
-		if (empty($thisfile))
-		{
-			if ($id)
-			{
-				$thisfile = fileDownloadFetchInfo('id = '.intval($id));
-			}
+		$from_form = false;
 
-			elseif ($filename)
-			{
-				$thisfile = fileDownloadFetchInfo("filename = '".doSlash($filename)."'");
-			}
+		if ($id)
+		{
+			$thisfile = fileDownloadFetchInfo('id = '.intval($id));
+		}
+
+		elseif ($filename)
+		{
+			$thisfile = fileDownloadFetchInfo("filename = '".doSlash($filename)."'");
+		}
+
+		elseif ($thisfile)
+		{
+			$from_form = true;
 		}
 
 		if ($thisfile)
@@ -2928,7 +2932,12 @@ function body($atts)
 
 			$out = parse($form);
 
-			unset($thisfile);
+			// cleanup: this wasn't called from a form,
+			// so we don't want this value remaining
+			if (!$from_form)
+			{
+				$GLOBALS['thisfile'] = '';
+			}
 
 			return $out;
 		}
@@ -2945,21 +2954,21 @@ function body($atts)
 			'id'			 => '',
 		), $atts));
 
-		$from_form = true;
+		$from_form = false;
 
-		if (empty($thisfile))
+		if ($id)
 		{
-			$from_form = false;
-
-			if ($id)
-			{
-				$thisfile = fileDownloadFetchInfo('id = '.intval($id));
-			}
-
-			elseif ($filename)
-			{
-				$thisfile = fileDownloadFetchInfo("filename = '".doSlash($filename)."'");
-			}
+			$thisfile = fileDownloadFetchInfo('id = '.intval($id));
+		}
+		
+		elseif ($filename)
+		{
+			$thisfile = fileDownloadFetchInfo("filename = '".doSlash($filename)."'");
+		}
+		
+		elseif ($thisfile)
+		{
+			$from_form = true;
 		}
 
 		if ($thisfile)
@@ -2972,9 +2981,9 @@ function body($atts)
 
 			// cleanup: this wasn't called from a form,
 			// so we don't want this value remaining
-			if ($from_form == false)
+			if (!$from_form)
 			{
-				unset($thisfile);
+				$GLOBALS['thisfile'] = '';
 			}
 
 			return $out;
