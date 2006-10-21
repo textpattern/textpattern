@@ -175,7 +175,7 @@ if ($event == 'category') {
 					}
 				}
 			}
-			rebuild_tree('root', 1, $type);
+			rebuild_tree_full($type);
 
 			$message = gTxt($type.'_categories_deleted', array('{list}' => join(', ',$categories)));
 
@@ -340,7 +340,7 @@ if ($event == 'category') {
 
 		if ($q)
 		{
-			rebuild_tree('root', 1, $event);
+			rebuild_tree_full($event);
 
 			$message = gTxt($event.'_category_created', array('{name}' => $name));
 
@@ -407,7 +407,7 @@ if ($event == 'category') {
 			safe_update('txp_category', "parent = '$name'", "parent = '$old_name'");
 		}
 
-		rebuild_tree('root', 1, $event);
+		rebuild_tree_full($event);
 
 		if ($event == 'article')
 		{

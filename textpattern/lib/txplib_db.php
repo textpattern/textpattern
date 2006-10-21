@@ -437,6 +437,16 @@ $DB = new DB;
 		);
 		return $right+1;
 	}
+	
+//-------------------------------------------------------------
+	function rebuild_tree_full($type)
+	{
+		# fix circular references, otherwise rebuild_tree() could get stuck in a loop
+		safe_update('txp_category', "parent=''", "type='".doSlash($type)."' and name='root'");
+		safe_update('txp_category', "parent='root'", "type='".doSlash($type)."' and parent=name");
+		
+		rebuild_tree('root', 1, $type);
+	}
 
 //-------------------------------------------------------------
 	function get_prefs()
