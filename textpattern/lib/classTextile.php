@@ -612,7 +612,7 @@ class Textile
             $o2 = "<code$atts>";
             $c2 = "</code>";
             $c1 = "</pre>";
-            $content = $this->shelve($this->encode_html(rtrim($content, "\n")."\n"));
+            $content = $this->shelve($this->r_encode_html(rtrim($content, "\n")."\n"));
         }
         elseif ($tag == 'notextile') {
             $content = $this->shelve($content);
@@ -620,7 +620,7 @@ class Textile
             $c1 = $c2 = '';
         }
         elseif ($tag == 'pre') {
-            $content = $this->shelve($this->encode_html(rtrim($content, "\n")."\n"));
+            $content = $this->shelve($this->r_encode_html(rtrim($content, "\n")."\n"));
             $o1 = "<pre$atts>";
             $o2 = $c2 = '';
             $c1 = "</pre>";
@@ -843,22 +843,14 @@ class Textile
     function fCode($m)
     {
       @list(, $before, $text, $after) = $m;
-      if ($this->restricted)
-          // $text is already escaped
-            return $before.$this->shelve('<code>'.$text.'</code>').$after;
-      else
-            return $before.$this->shelve('<code>'.$this->encode_html($text).'</code>').$after;
+      return $before.$this->shelve('<code>'.$this->r_encode_html($text).'</code>').$after;
     }
 
 // -------------------------------------------------------------
     function fPre($m)
     {
       @list(, $before, $text, $after) = $m;
-      if ($this->restricted)
-          // $text is already escaped
-            return $before.'<pre>'.$this->shelve($text).'</pre>'.$after;
-      else
-            return $before.'<pre>'.$this->shelve($this->encode_html($text)).'</pre>'.$after;
+      return $before.'<pre>'.$this->shelve($this->r_encode_html($text)).'</pre>'.$after;
     }
 // -------------------------------------------------------------
     function shelve($val)
@@ -1086,6 +1078,15 @@ class Textile
         );
 
         return strtr($str, $a);
+    }
+    
+// -------------------------------------------------------------
+    function r_encode_html($str, $quotes=1)
+    {
+        // in restricted mode, input has already been escaped
+        if ($this->restricted)
+            return $str;
+        return $this->encode_html($str, $quotes);
     }
 
 // -------------------------------------------------------------
