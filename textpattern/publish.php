@@ -454,12 +454,12 @@ $LastChangedRevision$
 		$pretext['secondpass'] = true;
 		trace_add('[ ~~~ '.gTxt('secondpass').' ~~~ ]');
 		$html = parse($html); // the function so nice, he ran it twice
-		restore_error_handler();
 		$html = ($prefs['allow_page_php_scripting']) ? evalString($html) : $html;
 
 		// make sure the page has an article tag if necessary
 		if (!$has_article_tag and $production_status != 'live' and (!empty($pretext['id']) or !empty($pretext['c']) or !empty($pretext['q']) or !empty($pretext['pg'])))
 			trigger_error(gTxt('missing_article_tag', array('{page}' => $pretext['page'])));
+		restore_error_handler();
 
 		header("Content-type: text/html; charset=utf-8");
 		echo $html;
