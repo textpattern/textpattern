@@ -3225,7 +3225,36 @@ begin tag builder functions
 				case 'textile':
 					$alt = ($alt) ? ' ('.$alt.')' : '';
 
-					$out .= tdb('!'.$url.$alt.'!');
+					if ($wraptag)
+					{
+						if ($class)
+						{
+							$wraptag .= '('.$class;
+
+							if ($html_id)
+							{
+								$wraptag .= '#'.$html_id;
+							}
+
+							$wraptag .= ')';
+						}
+
+						elseif ($html_id)
+						{
+							$wraptag .= "(#$html_id)";
+						}
+
+						if ($style)
+						{
+							$wraptag .= '{'.$style.'}';
+						}
+
+						$wraptag .= '. ';
+					}
+
+					$out .= tdb(
+						$wraptag.$url.$alt.'!'
+					);
 				break;
 
 				case 'xhtml':
