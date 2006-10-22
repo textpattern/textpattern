@@ -274,12 +274,13 @@ class Textile
     }
 
 // -------------------------------------------------------------
-    function TextileThis($text, $lite='', $encode='', $noimage='', $strict='', $rel='')
-    {
-        if ($rel)
-           $this->rel = ' rel="'.$rel.'" ';
-        $this->lite = $lite;
-        $this->noimage = $noimage;
+
+	function TextileThis($text, $lite = '', $encode = '', $noimage = '', $strict = '', $rel = '')
+	{
+		$this->rel = ($rel) ? ' rel="'.$rel.'"' : '';
+
+		$this->lite = $lite;
+		$this->noimage = $noimage;
 
         if ($encode) {
          $text = $this->incomingEntities($text);
@@ -307,13 +308,14 @@ class Textile
     }
 
 // -------------------------------------------------------------
-    function TextileRestricted($text, $lite=1, $noimage=1, $rel='nofollow')
-    {
-        $this->restricted = true;
-        $this->lite = $lite;
-        $this->noimage = $noimage;
-        if ($rel)
-           $this->rel = ' rel="'.$rel.'" ';
+
+	function TextileRestricted($text, $lite = 1, $noimage = 1, $rel = 'nofollow')
+	{
+		$this->restricted = true;
+		$this->lite = $lite;
+		$this->noimage = $noimage;
+
+		$this->rel = ($rel) ? ' rel="'.$rel.'"' : '';
 
             // escape any raw html
             $text = $this->encode_html($text, 0);
