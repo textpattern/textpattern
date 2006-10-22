@@ -1,4 +1,5 @@
-Textpattern 4.0.3 - 29 Dec 2005
+Textpattern 4.0.4 - 17 Oct 2006
+
 Released under the Gnu General Public License
 
 == Installation ==
