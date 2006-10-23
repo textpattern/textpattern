@@ -89,7 +89,8 @@ $LastChangedRevision$
 
 		elseif ($s)
 		{
-			$url = hu.'textpattern/css.php?s='.$s;
+			$sn = safe_field('css','txp_section',"name='".doSlash($s)."'");
+			$url = hu.'textpattern/css.php?n='.$sn;
 		}
 
 		else
