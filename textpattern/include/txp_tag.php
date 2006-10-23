@@ -1260,7 +1260,6 @@ begin tag builder functions
 
 		$atts = gpsa(array(
 			'button',
-			'class',
 			'form',
 			'label',
 			'section',
@@ -1293,9 +1292,6 @@ begin tag builder functions
 
 			tagRow('wraptag',
 				input_tag('wraptag', $wraptag)).
-
-			tagRow('class',
-				fInput('text', 'class', $class, 'edit', '', '', 25)).
 
 			tagRow('form',
 				form_pop('form', 'misc', $form)).
