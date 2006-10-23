@@ -289,6 +289,9 @@ $LastChangedRevision$
 
 		safe_update('txp_css', "css = '$css'", "name = '".doSlash($name)."'");
 
+		// update site last mod time
+		update_lastmod(); 
+
 		$message = gTxt('css_updated', array('{name}' => $name));
 
 		css_edit($message);
@@ -309,12 +312,17 @@ $LastChangedRevision$
 			{
 				$message = gTxt('css_already_exists', array('{name}' => $newname));
 			}
+
 			elseif ($newname) 
 			{
 				safe_insert('txp_css', "name = '".$newname."', css = '$css'");
 
+				// update site last mod time
+				update_lastmod(); 
+
 				$message = gTxt('css_created', array('{name}' => $newname));
 			}
+
 			else
 			{
 				$message = gTxt('css_name_required');
@@ -326,6 +334,9 @@ $LastChangedRevision$
 		else
 		{
 			safe_update('txp_css', "css = '$css'", "name = '".doSlash($name)."'");
+
+			// update site last mod time
+			update_lastmod(); 
 
 			$message = gTxt('css_updated', array('{name}' => $name));
 
@@ -380,6 +391,10 @@ $LastChangedRevision$
  		}
 		$css = base64_encode(css_format($out));
 		safe_update("txp_css", "css='".doSlash($css)."'", "name='".doSlash($name)."'");
+
+		// update site last mod time
+		update_lastmod(); 
+
 		return parseCSS(base64_decode(fetch('css','txp_css','name',$name)));
 	}
 
