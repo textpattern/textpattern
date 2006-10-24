@@ -281,7 +281,7 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function feed_link($atts)
+	function feed_link($atts, $thing=NULL)
 	{
 		global $s, $c;
 
@@ -317,7 +317,8 @@ $LastChangedRevision$
 			return '<link rel="alternate" type="'.$type.'" title="'.$title.'" href="'.$url.'" />';
 		}
 
-		$out = '<a href="'.$url.'" title="'.$title.'">'.$label.'</a>';
+		$txt = ($thing === NULL ? $label : parse($thing));
+		$out = '<a href="'.$url.'" title="'.$title.'">'.$txt.'</a>';
 
 		return ($wraptag) ? tag($out, $wraptag) : $out;
 	}
@@ -2711,41 +2712,43 @@ function body($atts)
 			'default' => '',
 		),$atts));
 
+		$name = strtolower($name);
 		if (!empty($thisarticle[$name]))
 			$out = $thisarticle[$name];
 		else
 			$out = $default;
 
 		return ($escape == 'html' ? escape_output($out) : $out);
-	}	
-	
+	}
+
 //--------------------------------------------------------------------------
 	function if_custom_field($atts, $thing)
 	{
 		global $thisarticle, $prefs;
 		assert_article();
-		
+
 		extract(lAtts(array(
 			'name' => @$prefs['custom_1_set'],
 			'val' => NULL,
 		),$atts));
 
+		$name = strtolower($name);
 		if ($val !== NULL)
 			$cond = (@$thisarticle[$name] == $val);
 		else
 			$cond = !empty($thisarticle[$name]);
 
 		return parse(EvalElse($thing, $cond));
-	}	
+	}
 
 // -------------------------------------------------------------
-	function site_url($atts) 
+	function site_url($atts)
 	{
 		return hu;
 	}
 
 // -------------------------------------------------------------
-	function img($atts) 
+	function img($atts)
 	{
 		extract(lAtts(array(
 			'src' => '',

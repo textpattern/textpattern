@@ -8,25 +8,25 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function doArray($in,$function)
 	{
-		return is_array($in) ? array_map($function,$in) : $function($in); 
+		return is_array($in) ? array_map($function,$in) : $function($in);
 	}
-	
+
 // -------------------------------------------------------------
 	function doStrip($in)
-	{ 
-		return doArray($in,'stripslashes'); 
+	{
+		return doArray($in,'stripslashes');
 	}
 
 // -------------------------------------------------------------
 	function doStripTags($in)
-	{ 
-		return doArray($in,'strip_tags'); 
+	{
+		return doArray($in,'strip_tags');
 	}
 
 // -------------------------------------------------------------
-	function doDeEnt($in) 
+	function doDeEnt($in)
 	{
-		return doArray($in,'deEntBrackets'); 
+		return doArray($in,'deEntBrackets');
 	}
 
 // -------------------------------------------------------------
@@ -61,6 +61,17 @@ $LastChangedRevision$
 	function doSpecial($in)
 	{
 		return doArray($in,'htmlspecialchars');
+	}
+
+// -------------------------------------------------------------
+	function _null($a)
+	{
+		return NULL;
+	}
+// -------------------------------------------------------------
+	function array_null($in)
+	{
+		return array_map('_null', $in);
 	}
 
 // -------------------------------------------------------------
@@ -206,7 +217,7 @@ $LastChangedRevision$
 		$rs = safe_rows_start('name, data','txp_lang',"lang='".doSlash($lang_code)."' AND event='".doSlash($event)."'");		
 		
 		$out = array();
-		
+
 		if ($rs && !empty($rs))
 		{
 			while ($a = nextRow($rs))
