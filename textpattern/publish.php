@@ -510,6 +510,9 @@ $LastChangedRevision$
 		global $pretext, $prefs, $txpcfg;
 		extract($pretext);
 		extract($prefs);
+		$customFields = getCustomFields();
+		$customlAtts = array_null(array_flip($customFields));
+
 		//getting attributes
 		$theAtts = lAtts(array(
 			'form'      => 'default',
@@ -535,7 +538,7 @@ $LastChangedRevision$
 			'searchsticky' => 0,
 			'allowoverride' => (!$q and !$iscustom),
 			'offset'    => 0,
-		),$atts);		
+		)+$customlAtts,$atts);
 
 		// if an article ID is specified, treat it as a custom list
 		$iscustom = (!empty($theAtts['id'])) ? true : $iscustom;
@@ -615,9 +618,6 @@ $LastChangedRevision$
 			
 		$custom = '';
 
-		// trying custom fields here
-		$customFields = getCustomFields();
-		
 		if ($customFields) {
 			foreach($customFields as $cField) {
 				if (isset($atts[$cField]))
@@ -1006,14 +1006,14 @@ $LastChangedRevision$
 	function getCustomFields()
 	{
 		global $prefs;
+		$out = array();
 		$i = 0;
-		while ($i < 10) {
-			$i++;
+		for ($i=1; $i<=10; $i++) {
 			if (!empty($prefs['custom_'.$i.'_set'])) {
-				$out[$i] = $prefs['custom_'.$i.'_set'];
+				$out[$i] = strtolower($prefs['custom_'.$i.'_set']);
 			}
 		}
-		return (!empty($out)) ? $out : false;
+		return $out;
 	}
 	
 // -------------------------------------------------------------
