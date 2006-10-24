@@ -1395,19 +1395,20 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
+
 	function markup_comment($msg)
 	{
-		global $prefs, $txpcfg;
+		global $prefs;
+
+		$disallow_images = !empty($prefs['comments_disallow_images']) ? true : false;
+
+		$rel = !empty($prefs['comment_nofollow']) ? 'nofollow' : '';
 
 		include_once txpath.'/lib/classTextile.php';
+
 		$textile = new Textile();
 
-		extract($prefs);
-
-		$im = (!empty($comments_disallow_images)) ? 1 : '';
-		$msg = $textile->TextileRestricted($msg, 1, $im);
-
-		return $msg;
+		return $textile->TextileRestricted($msg, true, $disallow_images, $rel);
 	}
 
 //-------------------------------------------------------------
