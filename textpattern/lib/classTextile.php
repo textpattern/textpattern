@@ -669,14 +669,14 @@ class Textile
 
         foreach($qtags as $f) {
             $text = preg_replace_callback("/
-                (?:^|(?<=[\s>$pnct])|([{[]))
+                (?:^|(?<=[\s>$pnct\(])|([{[]))
                 ($f)(?!$f)
                 ({$this->c})
                 (?::(\S+))?
                 ([^\s].*?)
                 ([$pnct]*)
                 $f
-                (?:$|([\]}])|(?=[[:punct:]]{1,2}|\s))
+                (?:$|([\]}])|(?=[[:punct:]]{1,2}|\s|\)))
             /x", array(&$this, "fSpan"), $text);
         }
         return $text;
@@ -803,7 +803,7 @@ class Textile
             (?:\(([^\)]+)\))?  # optional title
             \!                 # closing
             (?::(\S+))?        # optional href
-            (?:[\]}]|(?=\s|$)) # lookahead: space or end of string
+            (?:[\]}]|(?=\s|$|\))) # lookahead: space or end of string
         /Ux", array(&$this, "fImage"), $text);
     }
 
