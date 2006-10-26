@@ -795,7 +795,7 @@ class Textile
         return preg_replace_callback("/
             (?:[[{])?          # pre
             \!                 # opening !
-            (\<|\=|\>)??       # optional alignment atts
+            (\<|\=|\>)?        # optional alignment atts
             ($this->c)         # optional style,class atts
             (?:\. )?           # optional dot-space
             ([^\s(!]+)         # presume this is the src
@@ -804,7 +804,7 @@ class Textile
             \!                 # closing
             (?::(\S+))?        # optional href
             (?:[\]}]|(?=\s|$|\))) # lookahead: space or end of string
-        /Ux", array(&$this, "fImage"), $text);
+        /x", array(&$this, "fImage"), $text);
     }
 
 // -------------------------------------------------------------
