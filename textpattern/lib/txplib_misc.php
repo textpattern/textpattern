@@ -1465,6 +1465,9 @@ $LastChangedRevision$
 				if (!$exit)
 					return array('304', $last);
 				txp_status_header('304 Not Modified');
+				# some mod_deflate versions have a bug that breaks subsequent
+				# requests when keepalive is used.  dropping the connection
+				# is the only reliable way to fix this.
 				if (empty($lastmod_keepalive))
 					header('Connection: close');
 				header('Content-Length: 0');
