@@ -1667,6 +1667,15 @@ eod;
 	}
 
 // -------------------------------------------------------------
+	function filedownloadurl($id, $filename='')
+	{
+		global $permlink_mode;
+		return ($permlink_mode == 'messy') ?
+			hu.'index.php?s=file_download'.a.'id='.$id :
+			hu.gTxt('file_download').'/'.$id.($filename ? '/'.$filename : '');
+	}
+
+// -------------------------------------------------------------
 
 	function in_list($val, $list, $delim = ',')
 	{

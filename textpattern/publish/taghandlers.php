@@ -2977,9 +2977,7 @@ function body($atts)
 
 		if ($thisfile)
 		{
-			$url = ($permlink_mode == 'messy') ?
-				hu.'index.php?s=file_download'.a.'id='.$thisfile['id'] :
-				hu.gTxt('file_download').'/'.$thisfile['id'];
+			$url = filedownloadurl($thisfile['id'], $thisfile['filename']);
 
 			$out = ($thing) ? href(parse($thing), $url) : $url;
 
