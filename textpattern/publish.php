@@ -144,6 +144,7 @@ $LastChangedRevision$
 						// record download
 						if ((connection_status()==0) and !connection_aborted() ) {
 							safe_update("txp_file", "downloads=downloads+1", 'id='.intval($id));
+							log_hit('200');
 						} else {
 							$pretext['request_uri'] .= ($sent >= $filesize) 
 								? '#aborted' 
