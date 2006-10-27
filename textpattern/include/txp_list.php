@@ -246,7 +246,7 @@ $LastChangedRevision$
 					n.td(eLink('article', 'edit', 'ID', $ID, $ID).$manage).
 
 					td(
-						safe_strftime('%d %b %Y %I:%M %p', $posted)
+						safe_strftime('%d %b %Y %X', $posted)
 					).
 
 					td($Title).

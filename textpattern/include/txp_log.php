@@ -202,7 +202,7 @@ $LastChangedRevision$
 				echo tr(
 
 					n.td(
-						safe_strftime('%d %b %Y %I:%M:%S %p', $log_uTime)
+						safe_strftime('%d %b %Y %X', $log_uTime)
 					, 85).
 
 					td($log_ip, 20, 'log_detail').

@@ -517,9 +517,9 @@ if (!empty($event) and $event == 'article') {
 	//-- author --------------
 	
 		if ($view=="text" && $step != "create") {
-			echo '<p class="small">'.gTxt('posted_by').": $AuthorID &#183; ".safe_strftime('%d %b %Y &#183; %I:%M:%S %p',$sPosted);
+			echo '<p class="small">'.gTxt('posted_by').": $AuthorID &#183; ".safe_strftime('%d %b %Y &#183; %X',$sPosted);
 			if($sPosted != $sLastMod) {
-				echo br.gTxt('modified_by').": $LastModID &#183; ".safe_strftime('%d %b %Y &#183; %I:%M:%S %p',$sLastMod);
+				echo br.gTxt('modified_by').": $LastModID &#183; ".safe_strftime('%d %b %Y &#183; %X',$sLastMod);
 			}
 				echo '</p>';
 			}

@@ -655,7 +655,7 @@ $LastChangedRevision$
 			$rpc_updated = ( @$langdat['rpc_lastmod'] > @$langdat['db_lastmod']);
 			$rpc_install = tda( strong(eLink('prefs','get_language','lang_code',$langname,(isset($langdat['db_lastmod'])) 
 										? gTxt('update') : gTxt('install'),'updating',isset($langdat['db_lastmod']) )).
-								br.safe_strftime($prefs['archive_dateformat'],@$langdat['rpc_lastmod'])
+								br.safe_strftime('%d %b %Y %X',@$langdat['rpc_lastmod'])
 							,(isset($langdat['db_lastmod'])) 
 								? ' style="color:red;text-align:center;background-color:#FFFFCC;"'
 								: ' style="color:#667;vertical-align:middle;text-align:center"');
@@ -663,7 +663,7 @@ $LastChangedRevision$
 				# Lang-Name & Date
 				tda(gTxt($langname).
 					 tag( ( isset($langdat['db_lastmod']) ) 
-							? br.'&nbsp;'.safe_strftime($prefs['archive_dateformat'],$langdat['db_lastmod'])
+							? br.'&nbsp;'.safe_strftime('%d %b %Y %X',$langdat['db_lastmod'])
 							: ''
 						, 'span',' style="color:#aaa;font-style:italic"')
 					, (isset($langdat['db_lastmod']) && $rpc_updated) #tda attribute

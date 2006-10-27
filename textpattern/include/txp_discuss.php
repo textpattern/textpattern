@@ -269,7 +269,7 @@ $LastChangedRevision$
 					, 50).
 
 					td(
-						safe_strftime('%d %b %Y %I:%M %p', $uPosted), 140
+						safe_strftime('%d %b %Y %X', $uPosted), 140
 					).
 
 					td($name, 75).
@@ -380,7 +380,7 @@ $LastChangedRevision$
 
 					fLabelCell('date').
 					td(
-						safe_strftime('%d %b %Y %I:%M:%S %p', $uPosted)
+						safe_strftime('%d %b %Y %X', $uPosted)
 					),
 
 					tda(gTxt('message')).

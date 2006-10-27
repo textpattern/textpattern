@@ -195,7 +195,7 @@ $LastChangedRevision$
 						, 125).
 
 						td(
-							safe_strftime('%d %b %Y %I:%M %p', $uDate)
+							safe_strftime('%d %b %Y %X', $uDate)
 						, 75).
 
 						td(
