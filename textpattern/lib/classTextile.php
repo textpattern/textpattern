@@ -977,9 +977,9 @@ class Textile
             '/(\s?)--(\s?)/',                                    //  em dash
             '/\s-(?:\s|$)/',                                     //  en dash
             '/(\d+)( ?)x( ?)(?=\d+)/',                           //  dimension sign
-            '/\b ?[([]TM[])]/i',                                 //  trademark
-            '/\b ?[([]R[])]/i',                                  //  registered
-            '/\b ?[([]C[])]/i',                                  //  copyright
+            '/(\b ?|\s|^)[([]TM[])]/i',                          //  trademark
+            '/(\b ?|\s|^)[([]R[])]/i',                           //  registered
+            '/(\b ?|\s|^)[([]C[])]/i',                           //  copyright
          );
 
         extract($this->glyph, EXTR_PREFIX_ALL, 'txt');
@@ -997,9 +997,9 @@ class Textile
             '$1'.$txt_emdash.'$2',               //  em dash
             ' '.$txt_endash.' ',                 //  en dash
             '$1$2'.$txt_dimension.'$3',          //  dimension sign
-            $txt_trademark,                      //  trademark
-            $txt_registered,                     //  registered
-            $txt_copyright,                      //  copyright
+            '$1'.$txt_trademark,                 //  trademark
+            '$1'.$txt_registered,                //  registered
+            '$1'.$txt_copyright,                 //  copyright
          );
 
          $text = preg_split("/(<.*>)/U", $text, -1, PREG_SPLIT_DELIM_CAPTURE);
