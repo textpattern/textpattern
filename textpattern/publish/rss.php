@@ -22,8 +22,8 @@ $LastChangedRevision$
 
 		$area = gps('area');
 
-		$sitename .= ($section) ? ' - '.$section : '';
-		$sitename .= ($category) ? ' - '.$category : '';
+		$sitename .= ($section) ? ' - '.fetch_section_title($section) : '';
+		$sitename .= ($category) ? ' - '.fetch_category_title($category) : '';
 		$dn = explode('/',$siteurl);
 		$mail_or_domain = ($use_mail_on_feeds_id)? eE($blog_mail_uid):$dn[0];
 
