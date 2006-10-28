@@ -959,6 +959,7 @@ class Textile
 // -------------------------------------------------------------
     function glyphs($text)
     {
+
         // fix: hackish
         $text = preg_replace('/"\z/', "\" ", $text);
         $pnc = '[[:punct:]]';
@@ -971,7 +972,7 @@ class Textile
             '/(\S)\"(?=\s|'.$pnc.'|<|$)/',                       //  double closing
             '/"/',                                               //  double opening
             '/\b([A-Z][A-Z0-9]{2,})\b(?:[(]([^)]*)[)])/',        //  3+ uppercase acronym
-            '/\b([A-Z][A-Z\'\-]+[A-Z])(?=[\s.,\)>])/',           //  3+ uppercase
+            '/\b([A-Z][A-Z\'\-]+[A-Z])(?=[\s.,\)>]|$)/',         //  3+ uppercase
             '/\b( )?\.{3}/',                                     //  ellipsis
             '/(\s?)--(\s?)/',                                    //  em dash
             '/\s-(?:\s|$)/',                                     //  en dash
