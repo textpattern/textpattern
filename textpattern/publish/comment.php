@@ -521,7 +521,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 		function comments_help()
 	{
-		return ('<a id="txpCommentHelpLink" href="http://www.textpattern.com/help/?item=textile_comments" onclick="window.open(this.href, \'popupwindow\', \'width=300,height=400,scrollbars,resizable\'); return false;">'.gTxt('textile_help').'</a>');
+		return ('<a id="txpCommentHelpLink" href="http://textile.thresholdstate.com/help-lite/?lang='.LANG.'" onclick="window.open(this.href, \'popupwindow\', \'width=300,height=400,scrollbars,resizable\'); return false;">'.gTxt('textile_help').'</a>');
 	}
 
 // -------------------------------------------------------------
