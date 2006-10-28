@@ -420,7 +420,7 @@ $LastChangedRevision$
 
 		$out['path_to_site']   = $path_to_site;
 		$out['permlink_mode']  = $permlink_mode;
-		$out['sitename']       = htmlspecialchars($sitename);
+		$out['sitename']       = $sitename;
 
 		return $out; 
 
