@@ -2192,16 +2192,14 @@ function body($atts)
 // -------------------------------------------------------------
 	function image_index($atts)
 	{
-		global $permlink_mode,$s,$c,$p,$txpcfg,$img_dir,$path_to_site;
+		global $s,$c,$p,$img_dir,$path_to_site;
 		extract(lAtts(array(
 			'label'    => '',
 			'break'    => br,
 			'wraptag'  => '',
-			'parent'   => '',
-			'type'    => 'article',
 			'class'    => __FUNCTION__,
 			'labeltag' => '',
-			'c' => doSlash($c), // Keep the option to override categories due to backward compatiblity
+			'c' => $c, // Keep the option to override categories due to backward compatiblity
 		),$atts));
 		$c = doSlash($c);
 		
