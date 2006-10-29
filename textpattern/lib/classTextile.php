@@ -837,7 +837,7 @@ class Textile
         $atts .= (isset($m[4])) ? ' alt="'   . $m[4] . '"' : ' alt=""';
         $size = false;
         if ($this->isRelUrl($url))
-	        $size = getimagesize(realpath($this->doc_root.ltrim($url, $this->ds)));
+	        $size = @getimagesize(realpath($this->doc_root.ltrim($url, $this->ds)));
         if ($size) $atts .= " $size[3]";
 
         $href = (isset($m[5])) ? $this->checkRefs($m[5]) : '';
