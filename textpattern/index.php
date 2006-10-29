@@ -65,7 +65,7 @@ $LastChangedRevision$
 		//i18n: define("LANG","en-gb");
 		define('txp_version', $thisversion);
 		if ( !defined(  'PROTOCOL'))
-			define( 'PROTOCOL', ( strtolower( serverSet( 'HTTPS')) == 'on' ? 'https://' : 'http://'));
+			define(  'PROTOCOL', (  (  serverSet( 'HTTPS') != '' ) ? 'https://' : 'http://') );
 		define("hu",PROTOCOL.$siteurl.'/');
 		// v1.0 experimental relative url global
 		define("rhu",preg_replace("/https?:\/\/.+(\/.*)\/?$/U","$1",hu));
