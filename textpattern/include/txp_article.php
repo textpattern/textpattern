@@ -965,9 +965,15 @@ if (!empty($event) and $event == 'article') {
 
 	function do_pings()
 	{
-		global $txpcfg, $prefs;
+		global $txpcfg, $prefs, $production_status;
+
+		# only ping for Live sites
+		if ($production_status !== 'live')
+			return;
 
 		include_once txpath.'/lib/IXRClass.php';
+
+		callback_event('ping');
 		
 		if ($prefs['ping_textpattern_com']) {
 			$tx_client = new IXR_Client('http://textpattern.com/xmlrpc/');
