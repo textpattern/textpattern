@@ -229,6 +229,8 @@ class Textile
     
     var $ver = '2.0.0';
     var $rev = '$Rev$';
+    
+    var $doc_root;
 
 // -------------------------------------------------------------
     function Textile()
@@ -270,6 +272,17 @@ class Textile
 
         if (defined('hu'))
             $this->hu = hu;
+
+        if (defined('DIRECTORY_SEPARATOR'))
+            $this->ds = constant('DIRECTORY_SEPARATOR');
+        else
+            $this->ds = '/';
+
+        $this->doc_root = @$_SERVER['DOCUMENT_ROOT'];
+        if (!$this->doc_root)
+            $this->doc_root = @$_SERVER['PATH_TRANSLATED']; // IIS
+            
+        $this->doc_root = rtrim($this->doc_root, $this->ds).$this->ds;
 
     }
 
@@ -790,6 +803,13 @@ class Textile
     }
 
 // -------------------------------------------------------------
+    function isRelURL($url)
+    {
+        $parts = parse_url($url);
+        return (empty($parts['scheme']) and empty($parts['host']));
+    }
+
+// -------------------------------------------------------------
     function image($text)
     {
         return preg_replace_callback("/
@@ -815,7 +835,9 @@ class Textile
         $atts .= ($algn != '')  ? ' align="' . $this->iAlign($algn) . '"' : '';
         $atts .= (isset($m[4])) ? ' title="' . $m[4] . '"' : '';
         $atts .= (isset($m[4])) ? ' alt="'   . $m[4] . '"' : ' alt=""';
-        $size = @getimagesize($url);
+        $size = false;
+        if ($this->isRelUrl($url))
+	        $size = getimagesize(realpath($this->doc_root.ltrim($url, $this->ds)));
         if ($size) $atts .= " $size[3]";
 
         $href = (isset($m[5])) ? $this->checkRefs($m[5]) : '';
