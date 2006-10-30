@@ -30,8 +30,8 @@ $LastChangedRevision$
 
 		$last = fetch('unix_timestamp(val)','txp_prefs','name','lastmod');
 
-		$sitename .= ($section) ? ' - '.fetch_section_name($section) : '';
-		$sitename .= ($category) ? ' - '.fetch_category_name($category) : '';
+		$sitename .= ($section) ? ' - '.fetch_section_title($section) : '';
+		$sitename .= ($category) ? ' - '.fetch_category_title($category) : '';
 
 		$pub = safe_row("RealName, email", "txp_users", "privs=1");
 
