@@ -129,7 +129,8 @@ $LastChangedRevision$
 					$filesize = filesize($fullpath); $sent = 0;
 					header('Content-Description: File Download');
 					header('Content-Type: application/octet-stream');
-					header('Content-Length: ' . $filesize);
+					#FIXME: some versions of mod_deflate break downloads if we send the content length
+					#header('Content-Length: ' . $filesize);
 					header('Content-Disposition: attachment; filename="' . basename($filename) . '"');
 					@ini_set("zlib.output_compression", "Off");
 					@set_time_limit(0);
