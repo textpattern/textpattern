@@ -1581,7 +1581,7 @@ begin tag builder functions
 
 		if ($step == 'build')
 		{
-			$out .= tdb(tb($tag_name, $atts));
+			$out .= tdb(tb($tag_name, $atts, $thing));
 		}
 
 		return $out;
@@ -1621,7 +1621,7 @@ begin tag builder functions
 
 		if ($step == 'build')
 		{
-			$out .= tdb(tb($tag_name, $atts));
+			$out .= tdb(tb($tag_name, $atts, $thing));
 		}
 
 		return $out;
