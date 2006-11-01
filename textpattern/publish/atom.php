@@ -157,7 +157,7 @@ $LastChangedRevision$
 
 					$e['issued'] = tag(safe_strftime('w3cdtf', strtotime($date)),'published');
 					$e['modified'] = tag(gmdate('Y-m-d\TH:i:s\Z',strtotime($date)),'updated');
-					$e['id'] = tag('tag:'.$mail_or_domain.','.$feed_time.':'.$id,'id');
+					$e['id'] = tag('tag:'.$mail_or_domain.','.safe_strftime( '%Y-%m-%d', strtotime( $date)).':'.$blog_uid.'/'.$id,'id');
 
 					$articles[$id] = tag(n.t.t.join(n.t.t,$e).n,'entry');
 
