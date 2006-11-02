@@ -163,13 +163,13 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function PrevNextLink($event, $page, $label, $type, $sort = '', $dir = '', $crit = '', $method = '')
+	function PrevNextLink($event, $page, $label, $type, $sort = '', $dir = '', $crit = '', $search_method = '')
 	{
 		return '<a href="?event='.$event.a.'step=list'.a.'page='.$page.
 			($sort ? a.'sort='.$sort : '').
 			($dir ? a.'dir='.$dir : '').
 			($crit ? a.'crit='.$crit : '').
-			($method ? a.'method='.$method : '').
+			($search_method ? a.'search_method='.$search_method : '').
 			'" class="navlink">'.
 			($type == 'prev' ? '&#8249;'.sp.$label : $label.sp.'&#8250;').
 			'</a>';
