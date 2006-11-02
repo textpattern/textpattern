@@ -390,6 +390,8 @@ $LastChangedRevision$
 			}
 
 			$changed = join(', ', $ids);
+
+			safe_update('txp_discuss', "visible = ".MODERATE, "parentid in($changed)");
 		}
 
 		else
