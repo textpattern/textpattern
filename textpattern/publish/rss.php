@@ -20,8 +20,6 @@ $LastChangedRevision$
 
 		extract(doSlash(gpsa(array('category','section','limit','area'))));
 
-		$area = gps('area');
-
 		$sitename .= ($section) ? ' - '.fetch_section_title($section) : '';
 		$sitename .= ($category) ? ' - '.fetch_category_title($category) : '';
 		$dn = explode('/',$siteurl);

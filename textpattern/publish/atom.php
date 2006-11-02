@@ -25,8 +25,7 @@ $LastChangedRevision$
 		define("r_relalt",' rel="alternate"');
 		define("r_relself",' rel="self"');
 
-		$area = doSlash(gps('area'));
-		extract(doSlash(gpsa(array('category','section','limit'))));
+		extract(doSlash(gpsa(array('category','section','limit','area'))));
 
 		$last = fetch('unix_timestamp(val)','txp_prefs','name','lastmod');
 
