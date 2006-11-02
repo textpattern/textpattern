@@ -106,6 +106,10 @@ $LastChangedRevision$
 				$sort_sql = 'message '.$dir.', posted asc';
 			break;
 
+			case 'status':
+				$sort_sql = "visible $dir, posted asc";
+			break;
+
 			case 'parent':
 				$sort_sql = 'parentid '.$dir.', posted asc';
 			break;
