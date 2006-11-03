@@ -3569,7 +3569,7 @@ begin tag builder functions
 
 			$url = ($permlink_mode == 'messy') ?
 				hu.'index.php?s=file_download'.a.'id='.$id:
-				hu.'file_download/'.$id;
+				hu.gTxt('file_download').'/'.$id.($filename ? '/'.$filename : '');
 
 			switch ($type)
 			{
