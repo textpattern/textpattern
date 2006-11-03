@@ -1412,8 +1412,16 @@ $LastChangedRevision$
 
 		$out = '';
 		if ($id) {
+			$ip = serverset('REMOTE_ADDR');
+
+			$blacklisted = is_blacklisted($ip);
+
 			if (!checkCommentsAllowed($id)) {
-				$out = graf(gTxt("comments_closed"));
+				$out = graf(gTxt("comments_closed"), ' id="comments_closed"');
+			} elseif (!checkBan($ip)) {
+				$out = graf(gTxt('you_have_been_banned'), ' id="comments_banned"');
+			} elseif ($blacklisted) {
+				$out = graf(gTxt('your_ip_is_blacklisted_by'.' '.$blacklisted), ' id="comments_blacklisted"');
 			} elseif (gps('commented')!=='') {
 				$out = gTxt("comment_posted");
 				if (gps('commented')==='0')
