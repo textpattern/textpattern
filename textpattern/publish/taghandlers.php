@@ -2578,10 +2578,13 @@ function body($atts)
 			}
 		}
 
-		//Add the label at the end, to prevent breadcrumb for home page
-		if (!empty($content)) $content = array_merge(array($label),$content);
-		//Add article title without link if we're on an individual archive page?
-		return doTag(join($sep, $content), $wraptag, $class);
+		// add the label at the end, to prevent breadcrumb for home page
+		if ($content)
+		{
+			$content = array_merge(array($label), $content);
+
+			return doTag(join($sep, $content), $wraptag, $class);
+		}
 	}
 
 
