@@ -128,7 +128,7 @@ class wet_thumb {
 	    }
 	    else {
 		$this->_DST['width']	= $this->longside;
-		$this->_DST['height']	= round($longside/($this->_SRC['width']/$this->_SRC['height']));
+		$this->_DST['height']	= round($this->longside/($this->_SRC['width']/$this->_SRC['height']));
 	    }
         }
 	elseif (is_numeric($this->shortside)) {
