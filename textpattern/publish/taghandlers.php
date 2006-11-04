@@ -275,7 +275,7 @@ $LastChangedRevision$
 		if (!$form)
 			trigger_error(gTxt('form_not_specified'));
 		else
-			return parse(fetch_form($form));
+			return parse_form($form);
 
 	}
 
