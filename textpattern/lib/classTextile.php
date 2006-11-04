@@ -732,7 +732,6 @@ class Textile
             "                            # start
             (' . $this->c . ')           # $atts
             ([^"]+)                      # $text
-            \s?
             (?:\(([^)]+)\)(?="))?        # $title
             ":
             ('.$this->urlch.'+)          # $url
@@ -760,7 +759,7 @@ class Textile
 
         $url = $this->relURL($url);
 
-        $out = '<a href="' . $this->encode_html($url . $slash) . '"' . $atts . $this->rel . '>' . $text . '</a>' . $post;
+        $out = '<a href="' . $this->encode_html($url . $slash) . '"' . $atts . $this->rel . '>' . trim($text) . '</a>' . $post;
 
         // $this->dump($out);
         return $this->shelve($out);
