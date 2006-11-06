@@ -3046,6 +3046,10 @@ function body($atts)
 			{
 				$file['modified'] = $modified;
 			}
+		} else {
+			$file['size'] = false;
+			$file['created'] = false;
+			$file['modified'] = false;
 		}
 
 		return $file;
@@ -3156,10 +3160,12 @@ function body($atts)
 			'format' => '',
 		), $atts));
 
-		return fileDownloadFormatTime(array(
-			'ftime'	 => $thisfile['created'],
-			'format' => $format
-		));
+		if ($thisfile['created']) {
+			return fileDownloadFormatTime(array(
+				'ftime'	 => $thisfile['created'],
+				'format' => $format
+			));
+		}
 	}
 
 //--------------------------------------------------------------------------
@@ -3172,10 +3178,12 @@ function body($atts)
 			'format' => '',
 		), $atts));
 
-		return fileDownloadFormatTime(array(
-			'ftime'	 => $thisfile['modified'],
-			'format' => $format
-		));
+		if ($thisfile['modified']) {
+			return fileDownloadFormatTime(array(
+				'ftime'	 => $thisfile['modified'],
+				'format' => $format
+			));
+		}
 	}
 
 //-------------------------------------------------------------------------
