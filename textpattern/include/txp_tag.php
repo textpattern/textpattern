@@ -124,9 +124,15 @@ begin generic functions
 
 //--------------------------------------------------------------
 
-	function input_time($time)
+	function time_pop($time)
 	{
-		return fInput('text', 'time', $time, 'edit', '', '', 6);
+		$vals = array(
+			'past'   => gTxt('time_past'),
+			'future' => gTxt('time_future'),
+			'any'    => gTxt('time_any')
+		);
+
+		return ' '.selectInput('time', $vals, $time, true);
 	}
 
 //--------------------------------------------------------------
@@ -494,7 +500,7 @@ begin tag builder functions
 				status_pop($status)).
 
 			tagRow('time',
-				input_time($time)).
+				time_pop($time)).
 
 			tagRow('searchall',
 				yesno2_pop('searchall', $searchall)).
@@ -586,7 +592,7 @@ begin tag builder functions
 				article_category_pop($category)).
 
 			tagRow('time',
-				input_time($time)).
+				time_pop($time)).
 
 			tagRow('month',
 				fInput('text', 'month', $month, 'edit', '', '', 7). ' ('.gTxt('yyyy-mm').')') .
