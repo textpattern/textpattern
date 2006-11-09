@@ -163,7 +163,7 @@ text-align: center;
 input.cancel, input.delete,
 input.interbox, input.interbox2,
 input.navbox,
-input.publish, input.preview,
+input.preview,
 input.smallbox, input.smallerbox, input.smallerboxsp,
 select {
 border-width: 1px;
@@ -192,15 +192,13 @@ font-size: 1em;
 background-color: #eee;
 }
 
-input.interbox, input.interbox2,
 input.navbox,
 input.smallbox, input.smallerbox, input.smallerboxsp {
 padding: 3px 6px 4px 6px;
 }
 
 input.interbox, input.interbox2	 {
-padding-right: 4px;
-padding-left: 4px;
+padding: 3px 4px 4px 4px;
 }
 
 input.interbox2 {
