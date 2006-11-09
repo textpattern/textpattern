@@ -1201,12 +1201,19 @@ $LastChangedRevision$
 		{
 			$nextpg = ($pg - 1 == 1) ? 0 : ($pg - 1);
 
+			// author urls should use RealName, rather than username
+			if (!empty($pretext['author'])) {
+				$author = safe_field('RealName', 'txp_users', "name = '".doSlash($pretext['author'])."'");
+			} else {
+				$author = '';
+			}
+
 			$url = pagelinkurl(array(
 				'pg'		 => $nextpg,
 				's'			 => @$pretext['s'],
 				'c'			 => @$pretext['c'],
 				'q'			 => @$pretext['q'],
-				'author' => @$pretext['author']
+				'author' => $author
 			));
 
 			if ($thing)
@@ -1239,12 +1246,19 @@ $LastChangedRevision$
 		{
 			$nextpg = $pg + 1;
 
+			// author urls should use RealName, rather than username
+			if (!empty($pretext['author'])) {
+				$author = safe_field('RealName', 'txp_users', "name = '".doSlash($pretext['author'])."'");
+			} else {
+				$author = '';
+			}
+
 			$url = pagelinkurl(array(
 				'pg'		 => $nextpg,
 				's'			 => @$pretext['s'],
 				'c'			 => @$pretext['c'],
 				'q'			 => @$pretext['q'],
-				'author' => @$pretext['author']
+				'author' => $author
 			));
 
 			if ($thing)
