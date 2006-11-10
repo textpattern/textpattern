@@ -718,22 +718,31 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function filterFrontPage() 
+
+	function filterFrontPage()
 	{
-        static $filterFrontPage;
+		static $filterFrontPage;
 
-        if (isset($filterFrontPage)) return $filterFrontPage;
-
-		$rs = safe_column("name","txp_section", "on_frontpage != '1'");
-		if ($rs) {
-			foreach($rs as $name) $filters[] = "and Section != '".doSlash($name)."'";	
-			$filterFrontPage = join(' ',$filters);
-            return $filterFrontPage;
+		if (isset($filterFrontPage)) {
+			return $filterFrontPage;
 		}
-        $filterFrontPage = false;
+
+		$filterFrontPage = false;
+
+		$rs = safe_column('name', 'txp_section', "on_frontpage != '1'");
+
+		if ($rs) {
+			$filters = array();
+
+			foreach ($rs as $name) {
+				$filters[] = " and Section != '".doSlash($name)."'";
+			}
+			
+			$filterFrontPage = join('', $filters);
+		}
+
 		return $filterFrontPage;
 	}
-
 
 // -------------------------------------------------------------
 	function doArticle($atts) 
