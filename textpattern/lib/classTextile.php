@@ -759,7 +759,7 @@ class Textile
 
         $url = $this->relURL($url);
 
-        $out = '<a href="' . $this->encode_html($url . $slash) . '"' . $atts . $this->rel . '>' . trim($text) . '</a>' . $post;
+        $out = '<a href="' . $this->r_encode_html($url . $slash) . '"' . $atts . $this->rel . '>' . trim($text) . '</a>' . $post;
 
         // $this->dump($out);
         return $this->shelve($out);
