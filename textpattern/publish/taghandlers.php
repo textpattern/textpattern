@@ -855,7 +855,7 @@ $LastChangedRevision$
 
 				return '<form method="get" action="'.hu.'">'.
 					'<div>'.
-					( ($section and $s) ? n.hInput('s', $section) : '').
+					( ($type != 's' and $section and $s) ? n.hInput('s', $section) : '').
 					n.$out.
 					n.'<noscript><div><input type="submit" value="'.gTxt('go').'" /></div></noscript>'.
 					n.'</div>'.
