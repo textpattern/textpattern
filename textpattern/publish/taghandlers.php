@@ -2354,10 +2354,10 @@ function body($atts)
 		{
 			if ($break == 'br' or $break == 'hr')
 			{
-				$break = "<$break $breakatts/>";
+				$break = "<$break $breakatts/>".n;
 			}
 
-			return ($wraptag) ?	tag(join($break.n, $list), $wraptag, $atts) :	join(n.$break, $list);
+			return ($wraptag) ?	tag(join($break, $list), $wraptag, $atts) :	join($break, $list);
 		}
 
 		// enclosing breaks should be specified by name only, no '<' or '>'
