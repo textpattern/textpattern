@@ -718,11 +718,11 @@ begin tag builder functions
 
 		$atts = gpsa(array(
 			'break',
-			'category',
 			'form',
 			'label',
 			'labeltag',
 			'limit',
+			'parent',
 			'sort',
 			'wraptag',
 		));
@@ -752,7 +752,7 @@ begin tag builder functions
 			).
 
 			tagRow('category',
-				link_category_pop($category)).
+				link_category_pop($parent)).
 
 			tagRow('limit',
 				input_limit($limit)).
