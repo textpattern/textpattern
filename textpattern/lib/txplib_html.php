@@ -540,7 +540,7 @@ $LastChangedRevision$
 				sInput($step).
 				fInput('submit', 'search', gTxt('go'), 'smallerbox')
 			)
-		, 'margin: auto; text-align: center;');
+		, '', '', 'get', 'search-form');
 	}
 
 //-------------------------------------------------------------

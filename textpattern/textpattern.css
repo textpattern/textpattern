@@ -156,6 +156,11 @@ font-size: 0.9em;
 background-color: #eee;
 }
 
+form.search-form {
+margin: auto;
+text-align: center;
+}
+
 form.upload-form {
 text-align: center;
 }
