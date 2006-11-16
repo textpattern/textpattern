@@ -211,11 +211,14 @@ $LastChangedRevision$
 	}
 
 //-------------------------------------------------------------
-	function form($contents,$style='',$onsubmit='')
+
+	function form($contents, $style = '', $onsubmit = '', $method = 'post', $class = '')
 	{	
-		$style = ($style) ? ' style="'.$style.'"' : '';
-		$onsubmit = ($onsubmit) ? ' onsubmit="return '.$onsubmit.'"' : '';
-		return "\n".'<form action="index.php" method="post"'.$style.$onsubmit.'>'.$contents.'</form>'."\n";
+		return n.'<form method="'.$method.'" action="index.php"'.
+			($class ? ' class="'.$class.'"' : '').
+			($style ? ' style="'.$style.'"' : '').
+			($onsubmit ? ' onsubmit="return '.$onsubmit.'"' : '').
+			'>'.$contents.'</form>'.n;
 	}
 
 // -------------------------------------------------------------
