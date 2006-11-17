@@ -682,12 +682,6 @@ $LastChangedRevision$
 		else
 			$fname = ($listform ? $listform : $form);
 
-		// fetch the form
-		if (gps('Form') and @constant('txpinterface') === 'admin')
-			$form = gps('Form');
-		else
-			$form = fetch_form($fname);
-
 		if ($rs) {
 			$count = 0;
 			
@@ -698,13 +692,17 @@ $LastChangedRevision$
 				global $thisarticle, $uPosted, $limit;
 				$thisarticle['is_first'] = ($count == 1);
 				$thisarticle['is_last'] = ($count == numRows($rs));
-				// define the article form
-				$article = ($allowoverride and $a['override_form']) 
-				?	fetch_form($a['override_form'])
-				:	$form;
 
-				$articles[] = parse($article);
-				
+				if (@constant('txpinterface') === 'admin' and gps('Form')) {
+					$articles[] = parse(gps('Form'));
+				}
+				elseif ($allowoverride and $a['override_form']) {
+					$articles[] = parse_form($a['override_form']);
+				}
+				else {
+					$articles[] = parse_form($fname);
+				}
+
 				// sending these to paging_link(); Required?
 				$uPosted = $a['uPosted'];
 				$limit = $limit;
@@ -782,14 +780,10 @@ $LastChangedRevision$
 
 			$form = ($allowoverride and $override_form) ? $override_form : $form;
 
-			// define the article form
-			$article = fetch_form($form);
-
-			$article = parse($article);
+			$article = parse_form($form);
 
 			if ($use_comments and $comments_auto_append) {
-				$f = fetch_form('comments_display');
-				$article .= parse($f);
+				$article .= parse_form('comments_display');
 			}
 
 			

@@ -28,7 +28,7 @@ $LastChangedRevision$
 		$rs = safe_row('*, unix_timestamp(Posted) as uPosted', 'textpattern', 'ID='.intval($id).' and Status >= 4');
 		if ($rs) {
 			populateArticleData($rs);
-			$result = parse(fetch_form('comments_display'));
+			$result = parse_form('comments_display');
 			return $result;
 		}
 
