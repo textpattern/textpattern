@@ -902,11 +902,11 @@ begin tag builder functions
 			tagRow('exclude',
 				fInput('text', 'exclude', $exclude, 'edit', '', '', 20)).
 
-			tagRow('section',
-				section_pop('section', $section)).
-
 			tagRow('this_section',
 				yesno2_pop('this_section', $this_section)).
+
+			tagRow('category_list_section',
+				section_pop('section', $section)).
 
 			tagRow('label',
 				fInput('text', 'label', ($label ? $label : gTxt('categories')), 'edit', '', '', 20)).
