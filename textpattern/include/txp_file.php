@@ -8,8 +8,8 @@
    /___________)                               (___________\
 
 	Textpattern Copyright 2004 by Dean Allen. All rights reserved.
-	Use of this software denotes acceptance of the Textpattern license agreement 
-	
+	Use of this software denotes acceptance of the Textpattern license agreement
+
 	"Mod File Upload" Copyright 2004 by Michael Manfre. All rights reserved.
 	Use of this mod denotes acceptance of the Textpattern license agreement
 
@@ -25,6 +25,13 @@ $LastChangedRevision$
 		0 => gTxt('public')
 	);
 
+	global $file_statuses;
+	$file_statuses = array(
+			2 => gTxt('hidden'),
+			3 => gTxt('pending'),
+			4 => gTxt('live'),
+	);
+
 	if ($event == 'file') {
 		require_privs('file');		
 
@@ -37,7 +44,7 @@ $LastChangedRevision$
 
 	function file_list($message = '') 
 	{
-		global $txpcfg, $extensions, $file_base_path;
+		global $txpcfg, $extensions, $file_base_path, $file_statuses;
 
 		pagetop(gTxt('file'), $message);
 
@@ -175,6 +182,7 @@ $LastChangedRevision$
 					// column_head('permissions', 'permissions', 'file', true, $switch_dir, $crit, $search_method).
 					hCell(gTxt('tags')).
 					hCell(gTxt('status')).
+					hCell(gTxt('condition')).
 					column_head('downloads', 'downloads', 'file', true, $switch_dir, $crit, $search_method).
 					hCell()
 				);
@@ -195,11 +203,11 @@ $LastChangedRevision$
 				$tag_url = '?event=tag'.a.'tag_name=file_download_link'.a.'id='.$id.a.'description='.urlencode($description).
 					a.'filename='.urlencode($filename);
 
-				$status = '<span class="';
-				$status .= ($file_exists) ? 'ok' : 'not-ok';
-				$status .= '">';
-				$status .= ($file_exists) ? gTxt('file_status_ok') : gTxt('file_status_missing');
-				$status .= '</span>';
+				$condition = '<span class="';
+				$condition .= ($file_exists) ? 'ok' : 'not-ok';
+				$condition .= '">';
+				$condition .= ($file_exists) ? gTxt('file_status_ok') : gTxt('file_status_missing');
+				$condition .= '</span>';
 
 				// does the downloads column exist?
 				if (!isset($downloads))
@@ -246,7 +254,9 @@ $LastChangedRevision$
 						n.'</ul>'
 					, 75).
 
-					td($status, 45).
+					td($file_statuses[$status], 45).
+
+					td($condition, 45).
 
 					td(
 						($downloads == '0' ? gTxt('none') : $downloads)
@@ -282,9 +292,9 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function file_edit($message = '', $id = '') 
+	function file_edit($message = '', $id = '')
 	{
-		global $txpcfg, $file_base_path, $levels, $path_from_root;
+		global $txpcfg, $file_base_path, $levels, $path_from_root, $file_statuses;
 
 		pagetop('file', $message);
 
@@ -307,19 +317,19 @@ $LastChangedRevision$
 			if ($permissions=='') $permissions='-1';
 
 			$file_exists = file_exists(build_file_path($file_base_path,$filename));
-			
+
 			$existing_files = get_filenames();
 
-			$status = '<span class="';
-			$status .= ($file_exists) ? 'ok' : 'not-ok';
-			$status .= '">';
-			$status .= ($file_exists)?gTxt('file_status_ok'):gTxt('file_status_missing');
-			$status .= '</span>';
+			$condition = '<span class="';
+			$condition .= ($file_exists) ? 'ok' : 'not-ok';
+			$condition .= '">';
+			$condition .= ($file_exists)?gTxt('file_status_ok'):gTxt('file_status_missing');
+			$condition .= '</span>';
 
 			$downloadlink = ($file_exists)?make_download_link($id, $filename):$filename;
-			
+
 			$form = '';
-			
+
 			if ($file_exists) {
 				$form =	tr(
 							td(
@@ -328,6 +338,7 @@ $LastChangedRevision$
 									 		$categories,$category)) .
 //									graf(gTxt('permissions').br.selectInput('perms',$levels,$permissions)).
 									graf(gTxt('description').br.text_area('description','100','400',$description)) .
+									fieldset(radio_list('status', $file_statuses, $status, 4), gTxt('status'), 'file-status').
 									graf(fInput('submit','',gTxt('save'))) .
 
 									eInput('file') .
@@ -378,7 +389,7 @@ $LastChangedRevision$
 			echo startTable('list'),
 			tr(
 				td(
-					graf(gTxt('file_status').br.$status) .
+					graf(gTxt('file_status').br.$condition) .
 					graf(gTxt('file_name').br.$downloadlink) .
 					graf(gTxt('file_download_count').br.(isset($downloads)?$downloads:0))					
 				)
@@ -564,7 +575,7 @@ $LastChangedRevision$
 	{
 		global $file_base_path;
 
-		extract(doSlash(gpsa(array('id', 'filename', 'category', 'description'))));
+		extract(doSlash(gpsa(array('id', 'filename', 'category', 'description', 'status'))));
 
 		$id = assert_int($id);
 
@@ -600,7 +611,8 @@ $LastChangedRevision$
 			filename = '$filename',
 			category = '$category',
 			permissions = '$perms',
-			description = '$description'
+			description = '$description',
+			status = '$status'
 		", "id = $id");
 
 		if (!$rs)

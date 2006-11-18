@@ -73,7 +73,7 @@ $LastChangedRevision$
 	if (!defined('rhu'))
 		define("rhu",preg_replace("/https?:\/\/.+(\/.*)\/?$/U","$1",hu));
 
-		// 1.0: a new $here variable in the top-level index.php 
+		// 1.0: a new $here variable in the top-level index.php
 		// should let us know the server path to the live site
 		// let's save it to prefs
 	if (isset($here) and $path_to_site != $here) updateSitePath($here);
@@ -105,10 +105,10 @@ $LastChangedRevision$
 	$pretext = !isset($pretext) ? array() : $pretext;
 	$pretext = array_merge($pretext, pretext($s,$prefs));
 	extract($pretext);
-	
+
 	// Now that everything is initialized, we can crank down error reporting
 	set_error_level($production_status);
-	
+
 	if (gps('parentid') && gps('submit')) {
 		saveComment();
 	} elseif (gps('parentid') and $comments_mode==1) { // popup comments?
@@ -118,6 +118,7 @@ $LastChangedRevision$
 
 	// we are dealing with a download
 	if (@$s == 'file_download') {
+		callback_event('file_download');
 		if (!isset($file_error)) {
 
 				$fullpath = build_file_path($file_base_path,$filename);
@@ -147,8 +148,8 @@ $LastChangedRevision$
 							safe_update("txp_file", "downloads=downloads+1", 'id='.intval($id));
 							log_hit('200');
 						} else {
-							$pretext['request_uri'] .= ($sent >= $filesize) 
-								? '#aborted' 
+							$pretext['request_uri'] .= ($sent >= $filesize)
+								? '#aborted'
 								: "#aborted-at-".floor($sent*100/$filesize)."%";
 							log_hit('200');
 						}
@@ -1038,7 +1039,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function getStatusNum($name) 
+	function getStatusNum($name)
 	{
 		$labels = array('draft' => 1, 'hidden' => 2, 'pending' => 3, 'live' => 4, 'sticky' => 5);
 		$status = strtolower($name);

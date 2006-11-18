@@ -251,4 +251,20 @@ $LastChangedRevision$
 		return join('',$out);
 	}
 
+
+//-------------------------------------------------------------
+	function radio_list($name, $values, $current_val='', $hilight_val='')
+	{
+		// $values is an array of value => label pairs
+		foreach ($values as $k => $v)
+		{
+			$id = $name.'-'.$k;
+			$out[] = n.t.'<li>'.radio($name, $k, ($current_val == $k) ? 1 : 0, $id).
+				'<label for="'.$id.'">'.($hilight_val == $k ? strong($v) : $v).'</label></li>';
+		}
+
+		return '<ul class="plain-list">'.join('', $out).n.'</ul>';
+	}
+
+
 ?>

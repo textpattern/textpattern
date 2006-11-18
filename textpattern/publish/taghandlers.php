@@ -2880,15 +2880,22 @@ function body($atts)
 			'offset'	 => '0',
 			'sort'		 => 'filename asc',
 			'wraptag'	 => '',
+			'status'     => '4',
 		), $atts));
+		
+		if (!is_numeric($status))
+			$status = getStatusNum($status);
+
+		$where = array('1=1');
+		if ($category) $where[] = "category = '".doSlash($category)."'";
+		if ($status) $where[] = "status = '".doSlash($status)."'";
 
 		$qparts = array(
-			($category) ? "category = '".doSlash($category)."'" : '1',
 			'order by '.doSlash($sort),
-			($limit) ? 'limit '.intval($offset).', '.intval($limit) : ''
+			($limit) ? 'limit '.intval($offset).', '.intval($limit) : '',
 		);
 
-		$rs = safe_rows_start('id, filename, category, description, downloads', 'txp_file', join(' ', $qparts));
+		$rs = safe_rows_start('id, filename, category, description, downloads', 'txp_file', join(' and ', $where).' '.join(' ', $qparts));
 
 		if ($rs)
 		{
