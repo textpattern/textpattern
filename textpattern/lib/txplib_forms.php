@@ -51,7 +51,7 @@ $LastChangedRevision$
 
 //-------------------------------------------------------------
 
-	function selectInput($name = '', $array = '', $value = '', $blank_first = '', $onchange = '', $select_id = '')
+	function selectInput($name = '', $array = '', $value = '', $blank_first = '', $onchange = '', $select_id = '', $check_type = false)
 	{
 		$out = array();
 
@@ -59,15 +59,22 @@ $LastChangedRevision$
 
 		foreach ($array as $avalue => $alabel)
 		{
-			if ($avalue == $value || $alabel == $value)
-			{
-				$sel = ' selected="selected"';
-				$selected = true;
+			if ($check_type) {
+				if ($avalue === $value || $alabel === $value) {
+					$sel = ' selected="selected"';
+					$selected = true;
+				} else {
+					$sel = '';
+				}
 			}
 
-			else
-			{
-				$sel = '';
+			else {
+				if ($avalue == $value || $alabel == $value) {
+					$sel = ' selected="selected"';
+					$selected = true;
+				} else {
+					$sel = '';
+				}
 			}
 
 			$out[] = n.t.'<option value="'.htmlspecialchars($avalue).'"'.$sel.'>'.htmlspecialchars($alabel).'</option>';
