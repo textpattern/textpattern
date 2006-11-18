@@ -2547,7 +2547,7 @@ function body($atts)
 	}
 
 // -------------------------------------------------------------
-// Testing breadcrumbs
+
 	function breadcrumb($atts)
 	{
 		global $pretext,$thisarticle,$sitename;
@@ -2555,13 +2555,22 @@ function body($atts)
 		extract(lAtts(array(
 			'wraptag' => 'p',
 			'sep' => '&#160;&#187;&#160;',
-			'link' => 'y',
+			'link' => 1,
 			'label' => $sitename,
 			'title' => '',
 			'class' => '',
 			'linkclass' => 'noline',
 		),$atts));
-		$linked = ($link == 'y')? true: false; 		
+
+		// bc, get rid of in crockery
+		if ($link == 'y') {
+			$linked = true;
+		} elseif ($link == 'n') {
+			$linked = false;
+		} else {
+			$linked = $link;
+		}
+
 		if ($linked) $label = doTag($label,'a',$linkclass,' href="'.hu.'"');
 		
 		$content = array();

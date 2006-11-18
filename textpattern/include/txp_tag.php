@@ -158,26 +158,17 @@ begin generic functions
 
 //--------------------------------------------------------------
 
-	function yesno_pop($select_name, $val)
-	{
-		$vals = array(
-			'y' => gTxt('yes'),
-			'n' => gTxt('no')
-		);
-
-		return ' '.selectInput($select_name, $vals, $val, true);
-	}
-
-//--------------------------------------------------------------
-
-	function yesno2_pop($select_name, $val)
-	{
+	function yesno_pop($select_name, $val) {
 		$vals = array(
 			1 => gTxt('yes'),
 			0 => gTxt('no'),
 		);
 
-		return ' '.selectInput($select_name, $vals, $val, true);
+		if (is_numeric($val)) {
+			$val = (int) $val;
+		}
+
+		return ' '.selectInput($select_name, $vals, $val, true, '', '', true);
 	}
 
 //--------------------------------------------------------------
@@ -503,10 +494,10 @@ begin tag builder functions
 				time_pop($time)).
 
 			tagRow('searchall',
-				yesno2_pop('searchall', $searchall)).
+				yesno_pop('searchall', $searchall)).
 
 			tagRow('searchsticky',
-				yesno2_pop('searchsticky', $searchsticky)).
+				yesno_pop('searchsticky', $searchsticky)).
 
 			tagRow('limit',
 				input_limit($limit)).
@@ -524,7 +515,7 @@ begin tag builder functions
 				pgonly_pop($pgonly)).
 
 			tagRow('allowoverride',
-				yesno2_pop('allowoverride', $allowoverride)).
+				yesno_pop('allowoverride', $allowoverride)).
 
 			tagRow('form',
 				form_pop('form', 'article', $form)).
@@ -619,7 +610,7 @@ begin tag builder functions
 				pgonly_pop($pgonly)).
 
 			tagRow('allowoverride',
-				yesno2_pop('allowoverride', $allowoverride)).
+				yesno_pop('allowoverride', $allowoverride)).
 
 			tagRow('form',
 				form_pop('form', 'article', $form)).
@@ -817,7 +808,7 @@ begin tag builder functions
 			).
 
 			tagRow('include_default',
-				yesno2_pop('include_default', $include_default)).
+				yesno_pop('include_default', $include_default)).
 
 			tagRow('default_title',
 				fInput('text', 'default_title', $default_title, 'edit', '', '', 20)).
@@ -903,7 +894,7 @@ begin tag builder functions
 				fInput('text', 'exclude', $exclude, 'edit', '', '', 20)).
 
 			tagRow('this_section',
-				yesno2_pop('this_section', $this_section)).
+				yesno_pop('this_section', $this_section)).
 
 			tagRow('category_list_section',
 				section_pop('section', $section)).
@@ -1200,7 +1191,7 @@ begin tag builder functions
 				section_pop('section', $section)).
 
 			tagRow('this_section',
-				yesno2_pop('this_section', $this_section)).
+				yesno_pop('this_section', $this_section)).
 
 			tagRow('label',
 				fInput('text', 'label', ($label ? $label : gTxt('browse')), 'edit', '', '', 25)).
@@ -1339,7 +1330,7 @@ begin tag builder functions
 			).
 
 			tagRow('title',
-				yesno2_pop('title', $title)).
+				yesno_pop('title', $title)).
 
 			tagRow('link_to_this_category',
 				yesno_pop('link', $link)).
@@ -1348,7 +1339,7 @@ begin tag builder functions
 				section_pop('section', $section)).
 
 			tagRow('this_section',
-				yesno2_pop('this_section', $this_section)).
+				yesno_pop('this_section', $this_section)).
 
 			tagRow('wraptag',
 				input_tag('wraptag', $wraptag)).
@@ -1393,7 +1384,7 @@ begin tag builder functions
 			).
 
 			tagRow('title',
-				yesno2_pop('title', $title)).
+				yesno_pop('title', $title)).
 
 			tagRow('link_to_this_category',
 				yesno_pop('link', $link)).
@@ -1402,7 +1393,7 @@ begin tag builder functions
 				section_pop('section', $section)).
 
 			tagRow('this_section',
-				yesno2_pop('this_section', $this_section)).
+				yesno_pop('this_section', $this_section)).
 
 			tagRow('wraptag',
 				input_tag('wraptag', $wraptag)).
@@ -1500,7 +1491,7 @@ begin tag builder functions
 				section_pop('section', $section)).
 
 			tagRow('this_section',
-				yesno2_pop('this_section', $this_section)).
+				yesno_pop('this_section', $this_section)).
 
 			$endform
 		);
@@ -1985,7 +1976,7 @@ begin tag builder functions
 			).
 
 			tagRow('use_thumbnail',
-				yesno2_pop('thumbnail', $thumbnail)).
+				yesno_pop('thumbnail', $thumbnail)).
 
 			tagRow('escape',
 				escape_pop($escape)).
@@ -2312,7 +2303,7 @@ begin tag builder functions
 			).
 
 			tagRow('title',
-				yesno2_pop('title', $title)).
+				yesno_pop('title', $title)).
 
 			tagRow('label',
 				fInput('text', 'label', $label, 'edit', '', '', 25)).
@@ -2364,7 +2355,7 @@ begin tag builder functions
 				fInput('text', 'format', $format, 'edit', '', '', 25)).
 
 			tagRow('gmt',
-				yesno2_pop('gmt', $gmt)).
+				yesno_pop('gmt', $gmt)).
 
 			tagRow('locale',
 				fInput('text', 'lang', $lang, 'edit', '', '', 25)).
@@ -2407,7 +2398,7 @@ begin tag builder functions
 				fInput('text', 'format', $format, 'edit', '', '', 25)).
 
 			tagRow('gmt',
-				yesno2_pop('gmt', $gmt)).
+				yesno_pop('gmt', $gmt)).
 
 			tagRow('locale',
 				fInput('text', 'lang', $lang, 'edit', '', '', 25)).
@@ -2448,10 +2439,10 @@ begin tag builder functions
 			).
 
 			tagRow('textonly',
-				yesno2_pop('textonly', $textonly)).
+				yesno_pop('textonly', $textonly)).
 
 			tagRow('showcount',
-				yesno2_pop('showcount', $showcount)).
+				yesno_pop('showcount', $showcount)).
 
 			tagRow('wraptag',
 				input_tag('wraptag', $wraptag)).
@@ -2518,7 +2509,7 @@ begin tag builder functions
 				fInput('text', 'format', $format, 'edit', '', '', 25)).
 
 			tagRow('gmt',
-				yesno2_pop('gmt', $gmt)).
+				yesno_pop('gmt', $gmt)).
 
 			tagRow('locale',
 				fInput('text', 'lang', $lang, 'edit', '', '', 25)).
@@ -2556,7 +2547,7 @@ begin tag builder functions
 			).
 
 			tagRow('comment_name_link',
-				yesno2_pop('link', $link)).
+				yesno_pop('link', $link)).
 
 			$endform
 		);
@@ -3048,7 +3039,7 @@ begin tag builder functions
 				fInput('text', 'format', $format, 'edit', '', '', 25)).
 
 			tagRow('gmt',
-				yesno2_pop('gmt', $gmt)).
+				yesno_pop('gmt', $gmt)).
 
 			tagRow('locale',
 				fInput('text', 'lang', $lang, 'edit', '', '', 25)).
