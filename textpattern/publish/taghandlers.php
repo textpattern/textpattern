@@ -13,51 +13,31 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function page_title($atts)
-	{
-		global $sitename, $s, $c, $q, $pg, $id, $parentid;
+	function page_title($atts) {
+		global $parentid, $thisarticle, $id, $q, $c, $s, $pg, $sitename;
 
 		extract(lAtts(array(
 			'separator' => ': ',
 		), $atts));
 
-		$out = $sitename;
-
-		if ($pg)
-		{
-			$out = $sitename.$separator.gTxt('page').' '.$pg;
-		}
-
-		if ($s and $s != 'default')
-		{
-			$out = $sitename.$separator.fetch_section_title($s);
-		}
-
-		if ($c)
-		{
-			$out = $sitename.$separator.fetch_category_title($c);
-		}
-
-		if ($q)
-		{
-			$out = $sitename.$separator.gTxt('search_results').
-				$separator.' '.$q;
-		}
-
-		if ($id)
-		{
-			$id = (int) $id;
-
-			$out = $sitename.$separator.
-				safe_field('Title', 'textpattern', "ID = $id");
-		}
-
-		if ($parentid)
-		{
+		if ($parentid) {
 			$parent_id = (int) $parent_id;
-
-			$out = $sitename.$separator.gTxt('comments_on').' '.
-				safe_field('Title', 'textpattern', "ID = $parentid");
+			$out = $sitename.$separator.gTxt('comments_on').' '.safe_field('Title', 'textpattern', "ID = $parentid");
+		} elseif ($thisarticle['title']) {
+			$out = $sitename.$separator.$thisarticle['title'];
+		} elseif ($id) { // would this one still be needed?
+			$id = (int) $id;
+			$out = $sitename.$separator.safe_field('Title', 'textpattern', "ID = $id");
+		} elseif ($q) {
+			$out = $sitename.$separator.gTxt('search_results')."$separator $q";
+		} elseif ($c) {
+			$out = fetch_category_title($c);
+		} elseif ($s and $s != 'default') {
+			$out = $sitename.$separator.fetch_section_title($s);
+		} elseif ($pg) {
+			$out = $sitename.$separator.gTxt('page')." $pg";
+		} else {
+			$out = $sitename;
 		}
 
 		return escape_title($out);
