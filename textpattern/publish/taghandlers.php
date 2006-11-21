@@ -1324,7 +1324,7 @@ $LastChangedRevision$
 			}
 		}
 
-		return ($wraptag) ? doWrap($out, $wraptag, '', $class) : $out;
+		return ($wraptag) ? doTag($out, $wraptag, '', $class) : $out;
 	}
 
 // -------------------------------------------------------------
