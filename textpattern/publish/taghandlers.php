@@ -556,6 +556,11 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function password_protect($atts)
 	{
+		if (!is_mod_php()) {
+			trigger_error(gTxt('http_auth_requires_mod_php'));
+			return;
+		}
+
 		ob_start();
 
 		extract(lAtts(array(
@@ -567,7 +572,7 @@ $LastChangedRevision$
 		$ap = serverSet('PHP_AUTH_PW');
 		if ($login && $pass) {
 			if (!$au || !$ap || $au!= $login || $ap!= $pass) {
-				header('WWW-Authenticate: Basic realm="Private"'); 
+				header('WWW-Authenticate: Basic realm="Private"');
 				txp_die(gTxt('auth_required'), '401');
 			}
 		}

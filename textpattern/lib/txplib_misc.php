@@ -1268,6 +1268,18 @@ $LastChangedRevision$
 		return (PHP_OS == 'WINNT' or PHP_OS == 'WIN32' or PHP_OS == 'Windows');
 	}
 
+// -------------------------------------------------------------
+	function is_cgi()
+	{
+		return (preg_match('/^cgi/i', php_sapi_name()) == 1);
+	}
+
+// -------------------------------------------------------------
+	function is_mod_php()
+	{
+		return (php_sapi_name() == 'apache');
+	}
+
 // --------------------------------------------------------------
 	function build_file_path($base,$path)
 	{
