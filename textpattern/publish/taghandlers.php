@@ -2408,11 +2408,6 @@ function body($atts)
 				return $url;
 			}
 
-			if ($title == false and ($id == false or $id == $thisarticle['thisid']))
-			{
-				$title = gTxt('permanent_link');
-			}
-
 			return tag(parse($thing), 'a', ' rel="bookmark" href="'.$url.'"'.
 				($title ? ' title="'.$title.'"' : '').
 				($style ? ' style="'.$style.'"' : '').
