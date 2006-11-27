@@ -23,12 +23,19 @@ $LastChangedRevision$
 	}
 	
 //-------------------------------------------------------------
-	function page_edit($message='')
-	{
+
+	function page_edit($message = '') {
 		global $step;
-		pagetop(gTxt('edit_pages'),$message);
-		extract(gpsa(array('name','div','newname','copy')));
-		$name = (!$name or $step=='page_delete') ? 'default' : $name;
+
+		pagetop(gTxt('edit_pages'), $message);
+
+		extract(gpsa(array('name', 'div', 'newname', 'copy')));
+
+		if (!$name)
+		{
+			$name = safe_field('page', 'txp_section', "name = 'default'");
+		}
+
 		$name = ( $copy && trim(preg_replace('/[<>&"\']/', '', $newname)) ) ? $newname : $name;
 
 		echo 
@@ -125,20 +132,29 @@ $LastChangedRevision$
 	}
 
 //-------------------------------------------------------------
-	function page_list($current)
-	{
-		$rs = safe_rows_start("name", "txp_page", "name != '' order by name");			
+
+	function page_list($current) {
+		$protected = array(
+			safe_field('page', 'txp_section', "name = 'default'"),
+			'error_default'
+		);
+
+		$rs = safe_rows_start('name', 'txp_page', "1 order by name asc");
+
 		while ($a = nextRow($rs)) {
 			extract($a);
-			$dlink = ($name!='default') ? dLink('page','page_delete','name',$name) :'';
+
 			$link  = eLink('page', '', 'name', $name, $name);
-			$out[] = ($current == $name) 
-			?	tr(td($name).td($dlink))
-			:	tr(td($link).td($dlink));
+			$dlink = !in_array($name, $protected) ? dLink('page', 'page_delete', 'name', $name) : '';
+
+			$out[] = ($current == $name) ?
+				tr(td($name).td($dlink)) :
+				tr(td($link).td($dlink));
 		}
-		return startTable('list').join(n,$out).endTable();
+
+		return startTable('list').join(n, $out).endTable();
 	}
-	
+
 //-------------------------------------------------------------
 
 	function page_delete()
