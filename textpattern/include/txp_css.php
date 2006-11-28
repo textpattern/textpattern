@@ -28,22 +28,25 @@ $LastChangedRevision$
 	}
 
 //-------------------------------------------------------------
-	function css_list($name) 
-	{	
-		$out[] = startTable('list','left');	
-		$rs = safe_rows_start("name as cssname","txp_css","1=1");
+
+	function css_list($current, $default) {	
+		$out[] = startTable('list', 'left');	
+
+		$rs = safe_rows_start('name', 'txp_css', "1=1");
+
 		if ($rs) {
 			while ($a = nextRow($rs)) {
 				extract($a);
-				$namelink = ($name!=$cssname)
-				?	eLink('css','','name',$cssname,$cssname)
-				:	$cssname;
-				$deletelink = ($cssname!='default') ? 
-					dLink('css','css_delete','name',$cssname) : '';
-				$out[] = tr(td($namelink).td($deletelink));
+
+				$edit = ($current != $name) ?	eLink('css', '', 'name', $name, $name) : $name;
+				$delete = ($name != $default) ? dLink('css', 'css_delete', 'name', $name) : '';
+
+				$out[] = tr(td($edit).td($delete));
 			}
+
 			$out[] =  endTable();
-			return join('',$out);
+
+			return join('', $out);
 		}
 	}
 
@@ -71,10 +74,16 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function css_edit_form() 
-	{
+
+	function css_edit_form() {
 		global $step;
-		$name = (!gps('name') or $step=='css_delete') ? 'default' : gps('name');
+
+		$name = gps('name');
+
+		$default_name = safe_field('css', 'txp_section', "name = 'default'");
+
+		$name = (!$name or $step == 'css_delete') ? $default_name : $name;
+
 		if (gps('copy') && trim(preg_replace('/[<>&"\']/', '', gps('newname'))) )
 			$name = gps('newname');
 		$css = base64_decode(fetch("css",'txp_css','name',$name));
@@ -86,7 +95,7 @@ $LastChangedRevision$
 
 		$right = 
 		hed(gTxt('all_stylesheets'),2).
-		css_list($name);
+		css_list($name, $default_name);
 
 		$left = graf(gTxt('you_are_editing_css').br.strong($name)).
 			graf(eLink('css', 'css_edit_raw', 'name', $name, gTxt('edit_raw_css'))).
@@ -160,10 +169,16 @@ $LastChangedRevision$
 	}
 
 //-------------------------------------------------------------
-	function css_edit_raw() 
-	{
+
+	function css_edit_raw() {
 		global $step;
-		$name = (!gps('name') or $step=='css_delete') ? 'default' : gps('name');
+
+		$name = gps('name');
+
+		$default_name = safe_field('css', 'txp_section', "name = 'default'");
+
+		$name = (!$name or $step == 'css_delete') ? $default_name : $name;
+
 		if (gps('copy') && trim(preg_replace('/[<>&"\']/', '', gps('newname'))) )
 			$name = gps('newname');
 
@@ -195,7 +210,7 @@ $LastChangedRevision$
 
 		$right = 
 		hed(gTxt('all_stylesheets'),2).
-		css_list($name);
+		css_list($name, $default_name);
 
 		echo 
 		startTable('edit').
@@ -399,21 +414,19 @@ $LastChangedRevision$
 	}
 
 //-------------------------------------------------------------
-	function css_delete()
-	{
+
+	function css_delete() {
 		$name = ps('name');
 
-		if ($name != 'default')
-		{
+		$default_name = safe_field('css', 'txp_section', "name = 'default'");
+
+		if ($name != $default_name) {
 			safe_delete('txp_css', "name = '".doSlash($name)."'");
 
 			css_edit(
 				gTxt('css_deleted', array('{name}' => $name))
 			);
-		}
-
-		else
-		{
+		} else {
 			echo gTxt('cannot_delete_default_css').'.';
 		}
 	}
