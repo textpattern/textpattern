@@ -31,7 +31,7 @@ $LastChangedRevision$
 
 		extract(gpsa(array('name', 'div', 'newname', 'copy')));
 
-		if (!$name)
+		if (!$name or $step == 'page_delete')
 		{
 			$name = safe_field('page', 'txp_section', "name = 'default'");
 		}
