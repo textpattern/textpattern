@@ -3246,7 +3246,7 @@ begin tag builder functions
 					}
 
 					$out .= tdb(
-						$wraptag.$url.$alt.'!'
+						$wraptag.'!'.$url.$alt.'!'
 					);
 				break;
 
