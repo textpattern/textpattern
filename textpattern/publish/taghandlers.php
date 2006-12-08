@@ -45,41 +45,26 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function css($atts)
-	{
-		global $txp_error_code, $s;
+	function css($atts) {
+		global $s;
 
 		extract(lAtts(array(
 			'format' => 'url',
-			'media'  => 'screen',
-			'n'      => '',
-			'rel'    => 'stylesheet',
-			'title'  => '',
+			'media'	 => 'screen',
+			'n'			 => '',
+			'rel'		 => 'stylesheet',
+			'title'	 => '',
 		), $atts));
 
-		if ($txp_error_code == '404')
-		{
-			$url = hu.'textpattern/css.php?n=default';
-		}
-	
-		elseif ($n)
-		{
+		if ($n) {
 			$url = hu.'textpattern/css.php?n='.$n;
-		}
-
-		elseif ($s)
-		{
-			$sn = safe_field('css','txp_section',"name='".doSlash($s)."'");
-			$url = hu.'textpattern/css.php?n='.$sn;
-		}
-
-		else
-		{
+		} elseif ($s) {
+			$url = hu.'textpattern/css.php?s='.$s;
+		} else {
 			$url = hu.'textpattern/css.php?n=default';
 		}
 
-		if ($format == 'link')
-		{
+		if ($format == 'link') {
 			return '<link rel="'.$rel.'" type="text/css"'.
 				($media ? ' media="'.$media.'"' : '').
 				($title ? ' title="'.$title.'"' : '').
