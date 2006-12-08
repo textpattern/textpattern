@@ -1932,11 +1932,12 @@ eod;
 
 //-------------------------------------------------------------
 
-	function pager($total, $limit, $page)
-	{
-		$num_pages = ceil($total / $limit);
+	function pager($total, $limit, $page) {
+		$total = (int) $total;
+		$limit = (int) $limit;
+		$page = (int) $page;
 
-		$page = $page ? (int) $page : 1;
+		$num_pages = ceil($total / $limit);
 
 		$page = min(max($page, 1), $num_pages);
 
