@@ -290,7 +290,6 @@ if (!empty($event) and $event == 'article') {
 					// coming from either html or preview
 				if (isset($_POST['store'])) {
 					$store = unserialize(base64_decode($_POST['store']));
-					echo "<!--";var_dump($store);echo "-->\n";
 					extract($store);
 				}
 			}
