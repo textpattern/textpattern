@@ -711,12 +711,15 @@ class Textile
             '^'  => 'sup',
         );
 
-        list(,, $tag, $atts, $cite, $content, $end) = $m;
+        list(, $pre, $tag, $atts, $cite, $content, $end, $tail) = $m;
         $tag = $qtags[$tag];
         $atts = $this->pba($atts);
         $atts .= ($cite != '') ? 'cite="' . $cite . '"' : '';
 
         $out = "<$tag$atts>$content$end</$tag>";
+
+        if (($pre and !$tail) or ($tail and !$pre))
+            $out = $pre.$out.$tail;
 
 //      $this->dump($out);
 
@@ -744,7 +747,7 @@ class Textile
 // -------------------------------------------------------------
     function fLink($m)
     {
-        list(, $pre, $atts, $text, $title, $url, $slash, $post) = $m;
+        list(, $pre, $atts, $text, $title, $url, $slash, $post, $tail) = $m;
 
         $url = $this->checkRefs($url);
 
@@ -760,6 +763,9 @@ class Textile
         $url = $this->relURL($url);
 
         $out = '<a href="' . $this->r_encode_html($url . $slash) . '"' . $atts . $this->rel . '>' . trim($text) . '</a>' . $post;
+        
+        if (($pre and !$tail) or ($tail and !$pre))
+            $out = $pre.$out.$tail;
 
         // $this->dump($out);
         return $this->shelve($out);
