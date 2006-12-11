@@ -1023,9 +1023,16 @@ class Textile
             '$1'.$txt_copyright,                 //  copyright
          );
 
-         $text = preg_split("/(<.*>)/U", $text, -1, PREG_SPLIT_DELIM_CAPTURE);
+         $text = preg_split("@(<[\w/!?].*>)@Us", $text, -1, PREG_SPLIT_DELIM_CAPTURE);
+         $i = 0;
          foreach($text as $line) {
-             if (!preg_match("/<.*>/", $line)) {
+             // text tag text tag text ...
+             if (++$i % 2) {
+                 // raw < > & chars are already entity encoded in restricted mode
+                 if (!$this->restricted) {
+                     $line = $this->encode_raw_amp($line);
+                     $line = $this->encode_lt_gt($line);
+                 }
                  $line = preg_replace($glyph_search, $glyph_replace, $line);
              }
               $glyph_out[] = $line;
@@ -1089,6 +1096,18 @@ class Textile
     }
 
 // -------------------------------------------------------------
+    function encode_raw_amp($text)
+	 {
+        return preg_replace('/&(?!#?[a-z0-9]+;)/i', '&#38;', $text);
+    }
+
+// -------------------------------------------------------------
+    function encode_lt_gt($text)
+	 {
+        return strtr($text, array('<' => '&#60;', '>' => '&#62;'));
+    }
+
+// -------------------------------------------------------------
     function encode_html($str, $quotes=1)
     {
         $a = array(
@@ -1103,7 +1122,7 @@ class Textile
 
         return strtr($str, $a);
     }
-    
+
 // -------------------------------------------------------------
     function r_encode_html($str, $quotes=1)
     {
