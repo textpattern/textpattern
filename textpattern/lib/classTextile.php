@@ -790,7 +790,7 @@ class Textile
 // -------------------------------------------------------------
     function relURL($url)
     {
-        $parts = parse_url($url);
+        $parts = parse_url(urldecode($url));
         if ((empty($parts['scheme']) or @$parts['scheme'] == 'http') and
              empty($parts['host']) and
              preg_match('/^\w/', @$parts['path']))
