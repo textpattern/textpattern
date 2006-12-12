@@ -1555,7 +1555,7 @@ $LastChangedRevision$
 
 		if (@$thisid) $id = $thisid;
 
-		$preview = psas(array('name','email','web','message','parentid','remember'));
+		$preview = psa(array('name','email','web','message','parentid','remember'));
 		$preview['time'] = time();
 		$preview['discussid'] = 0;
 		if ($preview['message'] == '')

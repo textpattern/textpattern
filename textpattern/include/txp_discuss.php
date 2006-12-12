@@ -346,10 +346,7 @@ $LastChangedRevision$
 		{
 			extract($rs);
 
-			$message = preg_replace(
-				array('/</', '/>/'), 
-				array('&lt;', '&gt;')
-			, $message);
+			$message = escape_output($message);
 
 			if (fetch('ip', 'txp_discuss_ipban', 'ip', $ip))
 			{
