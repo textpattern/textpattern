@@ -854,9 +854,10 @@ $LastChangedRevision$
 	function getNeighbour($Posted, $s, $type) 
 	{
 		$type = ($type == '>') ? '>' : '<';
+		$safe_name = safe_pfx('textpattern');
 		$q = array(
 			"select ID, Title, url_title, unix_timestamp(Posted) as uposted
-			from ".PFX."textpattern where Posted $type '".doSlash($Posted)."'",
+			from ".$safe_name." where Posted $type '".doSlash($Posted)."'",
 			($s!='' && $s!='default') ? "and Section = '".doSlash($s)."'" : filterFrontPage(),
 			'and Status=4 and Posted < now() order by Posted',
 			($type=='<') ? 'desc' : 'asc',
