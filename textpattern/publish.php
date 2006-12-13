@@ -476,6 +476,8 @@ $LastChangedRevision$
 			if (!empty($txptrace) and is_array($txptrace))
 				echo n, comment('txp tag trace: '.n.join(n, $txptrace).n);
 		}
+
+		callback_event('textpattern_end');
 	}
 
 // -------------------------------------------------------------
