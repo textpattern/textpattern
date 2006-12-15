@@ -86,7 +86,7 @@ $LastChangedRevision$
 				, '3')
 			);
 
-		$evt_list = safe_column('event', 'txp_prefs', "type = 0 and prefs_id = 1 group by 'event' order by event desc");
+		$evt_list = safe_column('event', 'txp_prefs', "type = 0 and prefs_id = 1 group by event order by event desc");
 
 		foreach ($evt_list as $event)
 		{
