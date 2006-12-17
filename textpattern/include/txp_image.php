@@ -507,10 +507,23 @@ $LastChangedRevision$
 	{
 		extract(doSlash(gpsa(array('id', 'width', 'height'))));
 
-		if (!is_numeric ($width) && !is_numeric($height))
-		{
+		// better checking of thumbnail dimensions
+		// don't try and use zeros
+
+		$width = (int) $width;
+		$height = (int) $height;
+
+		if ($width == 0 && $height == 0) {
 			image_edit(messenger('invalid_width_or_height', "($width)/($height)", ''), $id);
 			return;
+		} else {
+			if ($width == 0) {
+				$width = '';
+			}
+
+			if ($height == 0) {
+				$height = '';
+			}
 		}
 
 		$crop = gps('crop');
@@ -519,15 +532,8 @@ $LastChangedRevision$
 		$t->crop = ($crop == '1');
 		$t->hint = '0';
 
-		if (is_numeric($width))
-		{
-			$t->width = $width;
-		}
-
-		if (is_numeric($height))
-		{
-			$t->height = $height;
-		}
+		$t->width = $width;
+		$t->height = $height;
 
 		if ($t->write())
 		{
