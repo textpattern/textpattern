@@ -231,7 +231,7 @@ $LastChangedRevision$
 			'category'		=> gTxt('link_category')
 		);
 
-		return search_form('link', 'link_edit', $crit, $methods, $method, 'name');
+		return search_form('link', 'link_post', $crit, $methods, $method, 'name');
 	}
 
 // -------------------------------------------------------------
