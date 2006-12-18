@@ -231,7 +231,7 @@ $LastChangedRevision$
 			'category'		=> gTxt('link_category')
 		);
 
-		return search_form('link', 'link_post', $crit, $methods, $method, 'name');
+		return search_form('link', 'link_edit', $crit, $methods, $method, 'name');
 	}
 
 // -------------------------------------------------------------
@@ -305,8 +305,9 @@ $LastChangedRevision$
 			endTable().
 
 			eInput('link').
-			sInput( ($step == 'link_edit' ? 'link_save' : 'link_post') ).
-			hInput('id', $id).
+
+			($id ? sInput('link_save').hInput('id', $id) : sInput('link_post')).
+
 			hInput('search_method', gps('search_method')).
 			hInput('crit', gps('crit'))
 		, 'margin-bottom: 25px;');
