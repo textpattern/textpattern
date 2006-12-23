@@ -657,27 +657,6 @@ $LastChangedRevision$
 				{
 					@chmod($newpath, 0644);
 
-					// Auto-generate a thumbnail using the last settings
-					if (isset($prefs['thumb_w'], $prefs['thumb_h'], $prefs['thumb_crop']))
-					{
-						$t = new txp_thumb( $id );
-
-						$t->crop = ($prefs['thumb_crop'] == '1');
-						$t->hint = '0';
-
-						if (is_numeric($prefs['thumb_w']))
-						{
-							$t->width = $prefs['thumb_w'];
-						}
-
-						if (is_numeric($prefs['thumb_h']))
-						{
-							$t->height = $prefs['thumb_h'];
-						}
-
-						$t->write();
-					}
-
 					$message = gTxt('image_uploaded', array('{name}' => $name));
 
 					return array($message, $id);
