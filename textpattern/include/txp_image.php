@@ -393,6 +393,7 @@ $LastChangedRevision$
 				safe_update("txp_image", "thumbnail = 1", "id = $id");
 
 				$message = gTxt('image_uploaded', array('{name}' => $name));
+				update_lastmod();
 
 				image_edit($message, $id);
 			}
@@ -421,6 +422,7 @@ $LastChangedRevision$
 		);
 
 		$message = gTxt('image_updated', array('{name}' => $name));
+		update_lastmod();
 
 		image_list($message);
 	}
@@ -444,6 +446,7 @@ $LastChangedRevision$
 			if ($rsd && $ul)
 			{
 				$message = gTxt('image_deleted', array('{name}' => $name));
+				update_lastmod();
 
 				image_list($message);
 			}
@@ -549,6 +552,7 @@ $LastChangedRevision$
 			set_pref('thumb_crop', $crop, 'image',	2);
 
 			$message = gTxt('thumbnail_saved', array('{id}' => $id));
+			update_lastmod();
 
 			image_edit($message, $id);
 		}
@@ -658,6 +662,7 @@ $LastChangedRevision$
 					@chmod($newpath, 0644);
 
 					$message = gTxt('image_uploaded', array('{name}' => $name));
+					update_lastmod();
 
 					return array($message, $id);
 				}
