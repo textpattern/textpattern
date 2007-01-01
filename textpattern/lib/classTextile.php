@@ -460,10 +460,10 @@ class Textile
                     $cell = $cmtch[2];
                 } else $catts = '';
 
-                $cell = $this->graf($this->span($cell));
+                $cell = $this->graf($cell);
 
                 if (trim($cell) != '')
-                    $cells[] = "\t\t\t<t$ctyp$catts>$cell</t$ctyp>";
+                    $cells[] = $this->doTagBr("t$ctyp", "\t\t\t<t$ctyp$catts>$cell</t$ctyp>");
             }
             $rows[] = "\t\t<tr$ratts>\n" . join("\n", $cells) . ($cells ? "\n" : "") . "\t\t</tr>";
             unset($cells, $catts);
@@ -518,9 +518,16 @@ class Textile
     }
 
 // -------------------------------------------------------------
+    function doTagBr($tag, $in)
+    {
+        return preg_replace_callback('@<('.preg_quote($tag).')([^>]*?)>(.*)(</\1>)@s', array(&$this, 'doBr'), $in);
+    }
+
+
+// -------------------------------------------------------------
     function doPBr($in)
     {
-        return preg_replace_callback('@<(p)([^>]*?)>(.*)(</\1>)@s', array(&$this, 'doBr'), $in);
+        return $this->doTagBr('p', $in);
     }
 
 // -------------------------------------------------------------
