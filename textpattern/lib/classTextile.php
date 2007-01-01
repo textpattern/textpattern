@@ -682,14 +682,14 @@ class Textile
 
         foreach($qtags as $f) {
             $text = preg_replace_callback("/
-                (?:^|(?<=[\s>$pnct\(])|([{[]))
+                (^|(?<=[\s>$pnct\(])|[{[])
                 ($f)(?!$f)
                 ({$this->c})
                 (?::(\S+))?
                 ([^\s$f]+|\S.*?[^\s$f\n])
                 ([$pnct]*)
                 $f
-                (?:$|([\]}])|(?=[[:punct:]]{1,2}|\s|\)))
+                ($|[\]}]|(?=[[:punct:]]{1,2}|\s|\)))
             /x", array(&$this, "fSpan"), $text);
         }
         return $text;
@@ -731,7 +731,7 @@ class Textile
     function links($text)
     {
         return preg_replace_callback('/
-            (?:^|(?<=[\s>.$pnct\(])|([{[])) # $pre
+            (^|(?<=[\s>.$pnct\(])|[{[]) # $pre
             "                            # start
             (' . $this->c . ')           # $atts
             ([^"]+?)                     # $text
@@ -740,7 +740,7 @@ class Textile
             ('.$this->urlch.'+?)         # $url
             (\/)?                        # $slash
             ([^\w\/;]*?)                 # $post
-            (?:([\]}])|(?=\s|$|\)))
+            ([\]}]|(?=\s|$|\)))
         /x', array(&$this, "fLink"), $text);
     }
 
@@ -999,7 +999,7 @@ class Textile
             '/(\S)\"(?=\s|'.$pnc.'|<|$)/',                       //  double closing
             '/"/',                                               //  double opening
             '/\b([A-Z][A-Z0-9]{2,})\b(?:[(]([^)]*)[)])/',        //  3+ uppercase acronym
-            '/\b([A-Z][A-Z\'\-]+[A-Z])(?=[\s.,\)>]|$)/',         //  3+ uppercase
+            '/\b([A-Z][A-Z\'\-]+[A-Z])\b/',                      //  3+ uppercase
             '/\b( )?\.{3}/',                                     //  ellipsis
             '/(\s?)--(\s?)/',                                    //  em dash
             '/\s-(?:\s|$)/',                                     //  en dash
