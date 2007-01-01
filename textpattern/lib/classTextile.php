@@ -352,7 +352,7 @@ class Textile
     }
 
 // -------------------------------------------------------------
-    function pba($in, $element = "") // "parse block attributes"
+    function pba($in, $element = "", $include_id = 1) // "parse block attributes"
     {
         $style = '';
         $class = '';
@@ -415,7 +415,7 @@ class Textile
                 ($style)   ? ' style="'   . join("", $style) .'"':'',
                 ($class)   ? ' class="'   . $class           .'"':'',
                 ($lang)    ? ' lang="'    . $lang            .'"':'',
-                ($id)      ? ' id="'      . $id              .'"':'',
+                ($id and $include_id) ? ' id="'      . $id              .'"':'',
                 ($colspan) ? ' colspan="' . $colspan         .'"':'',
                 ($rowspan) ? ' rowspan="' . $rowspan         .'"':''
             ));
@@ -600,8 +600,8 @@ class Textile
     function fBlock($m)
     {
         // $this->dump($m);
-        list(, $tag, $atts, $ext, $cite, $content) = $m;
-        $atts = $this->pba($atts);
+        list(, $tag, $att, $ext, $cite, $content) = $m;
+        $atts = $this->pba($att);
 
         $o1 = $o2 = $c2 = $c1 = '';
 
@@ -618,13 +618,13 @@ class Textile
             $cite = $this->checkRefs($cite);
             $cite = ($cite != '') ? ' cite="' . $cite . '"' : '';
             $o1 = "\t<blockquote$cite$atts>\n";
-            $o2 = "\t\t<p$atts>";
+            $o2 = "\t\t<p".$this->pba($att, '', 0).">";
             $c2 = "</p>";
             $c1 = "\n\t</blockquote>";
         }
         elseif ($tag == 'bc') {
             $o1 = "<pre$atts>";
-            $o2 = "<code$atts>";
+            $o2 = "<code".$this->pba($att, '', 0).">";
             $c2 = "</code>";
             $c1 = "</pre>";
             $content = $this->shelve($this->r_encode_html(rtrim($content, "\n")."\n"));
