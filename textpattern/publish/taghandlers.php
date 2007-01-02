@@ -31,7 +31,7 @@ $LastChangedRevision$
 		} elseif ($q) {
 			$out = $sitename.$separator.gTxt('search_results')."$separator $q";
 		} elseif ($c) {
-			$out = fetch_category_title($c);
+			$out = $sitename.$separator.fetch_category_title($c);
 		} elseif ($s and $s != 'default') {
 			$out = $sitename.$separator.fetch_section_title($s);
 		} elseif ($pg) {
