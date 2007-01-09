@@ -66,8 +66,10 @@ if (!empty($event) and $event == 'article') {
 		$incoming = textile_main_fields($incoming, $use_textile);
 
 		extract(doSlash($incoming));
+
 		extract(array_map('assert_int', psa(array( 'Status', 'textile_body', 'textile_excerpt'))));
-		$Annotate = ( ps( 'Annotate')) ? assert_int( ps( 'Annotate')) : 0;
+
+		$Annotate = (int) $Annotate;
 
 		if ($publish_now==1) {
 			$when = 'now()';
@@ -80,7 +82,6 @@ if (!empty($event) and $event == 'article') {
 			
 			if (!has_privs('article.publish') && $Status>=4) $Status = 3;
 			if (empty($url_title)) $url_title = stripSpace($Title_plain, 1);  	
-			if (!$Annotate) $Annotate = 0;
 
 			safe_insert(
 			   "textpattern",
@@ -159,7 +160,8 @@ if (!empty($event) and $event == 'article') {
 
 		extract(doSlash($incoming));
 		extract(array_map('assert_int', psa(array('ID', 'Status', 'textile_body', 'textile_excerpt'))));  
-		$Annotate = ( ps( 'Annotate')) ? assert_int( ps( 'Annotate')) : 0;
+
+		$Annotate = (int) $Annotate;
 
 		if (!has_privs('article.publish') && $Status>=4) $Status = 3;
 
@@ -182,7 +184,6 @@ if (!empty($event) and $event == 'article') {
 		{
 			$url_title = stripSpace($Title_plain, 1);
 		}
-		if (!$Annotate) $Annotate = 0;
 
 		safe_update("textpattern", 
 		   "Title           = '$Title',
