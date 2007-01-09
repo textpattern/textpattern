@@ -708,7 +708,6 @@ $LastChangedRevision$
 
 				// sending these to paging_link(); Required?
 				$uPosted = $a['uPosted'];
-				$limit = $limit;
 
 				unset($GLOBALS['thisarticle']);
 				unset($GLOBALS['theseatts']);//Required?				
