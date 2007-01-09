@@ -761,7 +761,7 @@ $LastChangedRevision$
 					$codes[] = strpos($code, '.') ? $code : '127.0.0.'.$code;
 				}
 			}
-			$hosts = @gethostbynamel($rip.'.'.$rbl);
+			$hosts = @gethostbynamel($rip.'.'.trim($rbl,'. ').'.');
 			if ($hosts and (!isset($codes) or array_intersect($hosts, $codes))) {
 				$listed[] = $rbl;
 			}
