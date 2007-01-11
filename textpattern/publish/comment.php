@@ -180,9 +180,9 @@ $LastChangedRevision$
 		$checkbox .= ' '.hInput('checkbox_type', $checkbox_type);
 
 		$vals = array(
-			'comment_name_input'		=> fInput('text', 'name', htmlspecialchars($name), 'comment_name_input'.($namewarn ? ' comments_error' : ''), '', '', $isize, '', 'comment_name_input'),
-			'comment_email_input'		=> fInput('text', 'email', htmlspecialchars($email), 'comment_email_input'.($emailwarn ? ' comments_error' : ''), '', '', $isize, '', 'comment_email_input'),
-			'comment_web_input'			=> fInput('text', 'web', htmlspecialchars($web)	, 'comment_web_input', '', '', $isize, '', 'comment_web_input'),
+			'comment_name_input'		=> fInput('text', 'name', htmlspecialchars($name), 'comment_name_input'.($namewarn ? ' comments_error' : ''), '', '', $isize, '', 'name'),
+			'comment_email_input'		=> fInput('text', 'email', htmlspecialchars($email), 'comment_email_input'.($emailwarn ? ' comments_error' : ''), '', '', $isize, '', 'email'),
+			'comment_web_input'			=> fInput('text', 'web', htmlspecialchars($web)	, 'comment_web_input', '', '', $isize, '', 'web'),
 			'comment_message_input' 	=> $textarea.'<!-- plugin-place-holder -->',
 			'comment_remember'			=> $checkbox,
 			'comment_preview'			=> fInput('submit', 'preview', gTxt('preview'), 'button'),
