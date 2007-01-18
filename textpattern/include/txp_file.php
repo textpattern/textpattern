@@ -400,20 +400,23 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function file_db_add($filename,$category,$permissions,$description)
+	function file_db_add($filename,$category,$permissions,$description,$size)
 	{
 		$rs = safe_insert("txp_file",
 			"filename = '$filename',
 			 category = '$category',
 			 permissions = '$permissions',
-			 description = '$description'
+			 description = '$description',
+			 size = '$size',
+			 created = now(),
+			 modified = now()
 		");
 		
 		if ($rs) {
 			$GLOBALS['ID'] = mysql_insert_id( );
 			return $GLOBALS['ID'];
 		}
-			
+
 		return false;
 	}	
 	
@@ -456,15 +459,16 @@ $LastChangedRevision$
 			return;
 		}
 
-		if ($file_max_upload_size < filesize($file)) {
+		$size = filesize($file);
+		if ($file_max_upload_size < $size) {
 			unlink($file);
 			file_list(gTxt('file_upload_failed') ." $name - ".upload_get_errormsg(UPLOAD_ERR_FORM_SIZE));
 			return;
 		}
-		
+
 		if (!is_file(build_file_path($file_base_path,$name))) {
 
-			$id = file_db_add($name,$category,$permissions,$description);
+			$id = file_db_add($name,$category,$permissions,$description,$size);
 			
 			if(!$id){
 				file_list(gTxt('file_upload_failed').' (db_add)');
@@ -510,7 +514,7 @@ $LastChangedRevision$
 			file_list(messenger(gTxt('invalid_id'),$id,''));
 			return;
 		}
-		
+
 		extract($rs);
 		
 		$file = file_get_uploaded();
@@ -530,7 +534,7 @@ $LastChangedRevision$
 			if (is_file($newpath)) {
 				rename($newpath,$newpath.'.tmp');
 			}
-	
+
 			if(!shift_uploaded_file($file, $newpath)) {
 				safe_delete("txp_file","id = $id");
 
@@ -542,6 +546,8 @@ $LastChangedRevision$
 				unlink($file);				
 			} else {
 				file_set_perm($newpath);
+				if ($size = filesize($newpath))
+					safe_update('txp_file', "size='".doSlash($size)."'", "id='".doSlash($id)."'");
 
 				$message = gTxt('file_uploaded', array('{name}' => $name));
 
@@ -586,7 +592,7 @@ $LastChangedRevision$
 		}
 
 		$perms = doSlash($permissions);
-		
+
 		$old_filename = fetch('filename','txp_file','id',$id);
 		
 		if ($old_filename != false && strcmp($old_filename, $filename) != 0)
@@ -607,12 +613,15 @@ $LastChangedRevision$
 			}
 		}
 
+		$size = filesize(build_file_path($file_base_path,$filename));
 		$rs = safe_update('txp_file', "
 			filename = '$filename',
 			category = '$category',
 			permissions = '$perms',
 			description = '$description',
-			status = '$status'
+			status = '$status',
+			size = '$size',
+			modified = now()
 		", "id = $id");
 
 		if (!$rs)

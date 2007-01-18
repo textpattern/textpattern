@@ -2879,7 +2879,7 @@ function body($atts)
 			($limit) ? 'limit '.intval($offset).', '.intval($limit) : '',
 		);
 
-		$rs = safe_rows_start('id, filename, category, description, downloads', 'txp_file', join(' and ', $where).' '.join(' ', $qparts));
+		$rs = safe_rows_start('*, unix_timestamp(created) as created, unix_timestamp(modified) as modified', 'txp_file', join(' and ', $where).' '.join(' ', $qparts));
 
 		if ($rs)
 		{
@@ -3000,7 +3000,7 @@ function body($atts)
 
 	function fileDownloadFetchInfo($where)
 	{
-		$rs = safe_row('id, filename, category, description, downloads', 'txp_file', $where);
+		$rs = safe_row('*, unix_timestamp(created) as created, unix_timestamp(modified) as modified', 'txp_file', $where);
 
 		if ($rs)
 		{
@@ -3014,39 +3014,6 @@ function body($atts)
 
 	function file_download_format_info($file)
 	{
-		global $file_base_path;
-
-		// get filesystem info
-		$filepath = build_file_path($file_base_path, $file['filename']);
-
-		if (file_exists($filepath))
-		{
-			$filesize = filesize($filepath);
-
-			if ($filesize !== false)
-			{
-				$file['size'] = $filesize;
-			}
-
-			$created = filectime($filepath);
-
-			if ($created !== false)
-			{
-				$file['created'] = $created;
-			}
-
-			$modified = filemtime($filepath);
-
-			if ($modified !== false)
-			{
-				$file['modified'] = $modified;
-			}
-		} else {
-			$file['size'] = false;
-			$file['created'] = false;
-			$file['modified'] = false;
-		}
-
 		return $file;
 	}
 
@@ -3079,7 +3046,7 @@ function body($atts)
 			{
 				$divs = 0;
 
-				while ($size > 1024)
+				while ($size >= 1024)
 				{
 					$size /= 1024;
 					$divs++;
