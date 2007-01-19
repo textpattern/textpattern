@@ -298,7 +298,7 @@ $LastChangedRevision$
 
 		pagetop('file', $message);
 
-		extract(gpsa(array('name', 'category', 'permissions', 'description', 'sort', 'dir', 'page', 'crit', 'search_method')));
+		extract(gpsa(array('name', 'category', 'permissions', 'description', 'sort', 'dir', 'page', 'crit', 'search_method', 'publish_now')));
 
 		if (!$id)
 		{
@@ -308,7 +308,7 @@ $LastChangedRevision$
 
 		$categories = getTree('root', 'file');
 
-		$rs = safe_row('*', 'txp_file', "id = $id");
+		$rs = safe_row('*, unix_timestamp(created) as created, unix_timestamp(modified) as modified', 'txp_file', "id = $id");
 
 		if ($rs)
 		{
@@ -327,6 +327,23 @@ $LastChangedRevision$
 			$condition .= '</span>';
 
 			$downloadlink = ($file_exists)?make_download_link($id, $filename):$filename;
+			
+			$created =
+					n.graf(checkbox('publish_now', '1', $publish_now, '', 'publish_now').'<label for="publish_now">'.gTxt('set_to_now').'</label>').
+
+					n.graf(gTxt('or_publish_at').sp.popHelp('timestamp')).
+
+					n.graf(gtxt('date').sp.
+						tsi('year', '%Y', $rs['created']).' / '.
+						tsi('month', '%m', $rs['created']).' / '.
+						tsi('day', '%d', $rs['created'])
+					).
+
+					n.graf(gTxt('time').sp.
+						tsi('hour', '%H', $rs['created']).' : '.
+						tsi('minute', '%M', $rs['created']).' : '.
+						tsi('second', '%S', $rs['created'])
+					);
 
 			$form = '';
 
@@ -339,6 +356,7 @@ $LastChangedRevision$
 //									graf(gTxt('permissions').br.selectInput('perms',$levels,$permissions)).
 									graf(gTxt('description').br.text_area('description','100','400',$description)) .
 									fieldset(radio_list('status', $file_statuses, $status, 4), gTxt('status'), 'file-status').
+									fieldset($created, gTxt('timestamp'), 'file-created').
 									graf(fInput('submit','',gTxt('save'))) .
 
 									eInput('file') .
@@ -502,7 +520,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function file_replace() 
+	function file_replace()
 	{	
 		global $txpcfg,$extensions,$txp_user,$file_base_path;
 		extract($txpcfg);
@@ -581,7 +599,7 @@ $LastChangedRevision$
 	{
 		global $file_base_path;
 
-		extract(doSlash(gpsa(array('id', 'filename', 'category', 'description', 'status'))));
+		extract(doSlash(gpsa(array('id', 'filename', 'category', 'description', 'status', 'publish_now', 'year', 'month', 'day', 'hour', 'minute', 'second'))));
 
 		$id = assert_int($id);
 
@@ -612,6 +630,14 @@ $LastChangedRevision$
 				file_set_perm($new_path);
 			}
 		}
+		
+		$created_ts = @safe_strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second);
+		if ($publish_now)
+			$created = 'now()';
+		elseif ($created_ts > 0)
+			$created = "from_unixtime('".$created_ts."')";
+		else
+			$created = '';
 
 		$size = filesize(build_file_path($file_base_path,$filename));
 		$rs = safe_update('txp_file', "
@@ -621,8 +647,9 @@ $LastChangedRevision$
 			description = '$description',
 			status = '$status',
 			size = '$size',
-			modified = now()
-		", "id = $id");
+			modified = now()"
+			.($created ? ", created = $created" : '')
+		, "id = $id");
 
 		if (!$rs)
 		{

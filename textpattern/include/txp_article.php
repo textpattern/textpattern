@@ -752,16 +752,6 @@ if (!empty($event) and $event == 'article') {
 	}
 
 //--------------------------------------------------------------
-	function tsi($name,$datevar,$time,$tab='')
-	{
-		$size = ($name=='year') ? 4 : 2;
-
-		return n.'<input type="text" name="'.$name.'" value="'.
-			safe_strftime($datevar, $time)
-		.'" size="'.$size.'" maxlength="'.$size.'" class="edit" tabindex="'.$tab.'" title="'.gTxt('article_'.$name).'" />';
-	}
-
-//--------------------------------------------------------------
 // remember to show markup help for both body and excerpt 
 // if they are different
 
