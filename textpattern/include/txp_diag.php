@@ -342,6 +342,38 @@ $LastChangedRevision$
 		}
 	}
 
+	// check GD info
+	if (function_exists('gd_info')) {
+		$gd_info = gd_info();
+
+		$gd_support = array();
+
+		if ($gd_info['GIF Create Support']) {
+			$gd_support[] = 'GIF';
+		}
+
+		if ($gd_info['JPG Support']) {
+			$gd_support[] = 'JPG';
+		}
+
+		if ($gd_info['PNG Support']) {
+			$gd_support[] = 'PNG';
+		}
+
+		if ($gd_support) {
+			$gd_support = join(', ', $gd_support);
+		} else {
+			$gd_support = gTxt('none');
+		}
+
+		$gd = gTxt('gd_info', array(
+			'{version}'   => $gd_info['GD Version'], 
+			'{supported}' => $gd_support
+		));
+	} else {
+		$gd = gTxt('gd_unavailable');
+	}
+
 	echo 
 	pagetop(gTxt('tab_diagnostics'),''),
 	startTable('list'),
@@ -389,6 +421,8 @@ $LastChangedRevision$
 		gTxt('php_version').cs.phpversion().n,
 
 		($is_register_globals) ? gTxt('register_globals').cs.$is_register_globals.n : '',
+
+		gTxt('gd_library').cs.$gd.n,
 
 		gTxt('server_time').cs.strftime('%Y-%m-%d %H:%M:%S').n,
 
