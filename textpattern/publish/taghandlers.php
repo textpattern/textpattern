@@ -673,7 +673,7 @@ $LastChangedRevision$
 
 	function related_articles($atts)
 	{
-		global $thisarticle;
+		global $thisarticle, $prefs;
 
 		assert_article();
 
@@ -684,6 +684,7 @@ $LastChangedRevision$
 			'labeltag' => '',
 			'limit'    => 10,
 			'match'    => 'Category1,Category2',
+			'no_widow' => @$prefs['title_no_widow'],
 			'section'  => '',
 			'sort'     => 'Posted desc',
 			'wraptag'  => '',
@@ -742,7 +743,9 @@ $LastChangedRevision$
 
 			while ($a = nextRow($rs))
 			{
-				$out[] = href(escape_title($a['Title']), permlinkurl($a));
+				$a['Title'] = ($no_widow) ? noWidow(escape_title($a['Title'])) : escape_title($a['Title']);
+
+				$out[] = href($a['Title'], permlinkurl($a));
 			}
 
 			if ($out)
