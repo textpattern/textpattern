@@ -19,7 +19,7 @@ $LastChangedRevision: 711 $
 		safe_alter('txp_file',
 			"add status smallint NOT NULL DEFAULT '4'");
 	}
-	$update_ts = 0;
+	$update_files = 0;
 	if (!in_array('modified',$txpfile)) {
 		safe_alter('txp_file',
 			"add modified timestamp NOT NULL");
