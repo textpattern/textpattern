@@ -136,8 +136,6 @@ $LastChangedRevision$
 				$buf .= $b;
 			@ob_start('ob_gzhandler');
 			echo $buf;
-
-		  @ob_start("ob_gzhandler");
 		}
 
 		handle_lastmod();
