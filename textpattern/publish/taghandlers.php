@@ -2623,26 +2623,33 @@ function body($atts)
 	}
 
 //--------------------------------------------------------------------------
-	function if_article_category($atts, $thing)
-	{
+
+	function if_article_category($atts, $thing) {
 		global $thisarticle;
+
 		assert_article();
 
 		extract(lAtts(array(
-			'name' => '',
+			'name'	 => '',
 			'number' => '',
-		),$atts));
+		), $atts));
 
-		if ($number)
-			$cats = array($thisarticle['category' . $number]);
-		else
+		$cats = array();
+
+		if ($number) {
+			if (!empty($thisarticle['category'.$number])) {
+				$cats = array($thisarticle['category'.$number]);
+			}
+		} else {
 			$cats = array_unique(array($thisarticle['category1'], $thisarticle['category2']));
+			sort($cats);
+		}
 
-		sort($cats);
-		if ($name)
-			return parse(EvalElse($thing, (in_array($name, $cats))));
-
-		return parse(EvalElse($thing, (array_shift($cats) != '')));
+		if ($name) {
+			return parse(EvalElse($thing, in_array($name, $cats)));
+		} else {
+			return parse(EvalElse($thing, ($cats)));
+		}
 	}
 
 //--------------------------------------------------------------------------
