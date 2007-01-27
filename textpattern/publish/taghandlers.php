@@ -2641,8 +2641,15 @@ function body($atts)
 				$cats = array($thisarticle['category'.$number]);
 			}
 		} else {
-			$cats = array_unique(array($thisarticle['category1'], $thisarticle['category2']));
-			sort($cats);
+			if (!empty($thisarticle['category1'])) {
+				$cats[] = $thisarticle['category1'];
+			}
+
+			if (!empty($thisarticle['category2'])) {
+				$cats[] = $thisarticle['category2'];
+			}
+
+			$cats = array_unique($cats);
 		}
 
 		if ($name) {
