@@ -566,10 +566,10 @@ $LastChangedRevision$
 		$c = preg_replace('@<(/?)script@', '\\x3c$1script', $c);
 		$js = <<<EOF
 var e = document.getElementById('{$id}');
-var n = document.createElement('{$wraptag}')
-n.innerHTML = '{$c}'
+var n = document.createElement('{$wraptag}');
+n.innerHTML = '{$c}';
 n.setAttribute('id','{$wraptagid}');
-e.appendChild(n)
+e.appendChild(n);
 EOF;
 
 		return script_js($js, $noscript);
