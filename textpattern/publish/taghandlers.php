@@ -1180,6 +1180,7 @@ $LastChangedRevision$
 			}
 
 			$url = pagelinkurl(array(
+				'month'  => @$pretext['month'],
 				'pg'		 => $nextpg,
 				's'			 => @$pretext['s'],
 				'c'			 => @$pretext['c'],
@@ -1225,6 +1226,7 @@ $LastChangedRevision$
 			}
 
 			$url = pagelinkurl(array(
+				'month'  => @$pretext['month'],
 				'pg'		 => $nextpg,
 				's'			 => @$pretext['s'],
 				'c'			 => @$pretext['c'],
