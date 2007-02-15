@@ -290,9 +290,14 @@ if ($event == 'category') {
 
 				$count = isset($total_count[$name]) ? '('.href($total_count[$name], $url).')' : '(0)';
 
+				if (empty($title)) {
+					$edit_link = '<em>'.eLink('category', 'cat_'.$event.'_edit', 'id', $id, gTxt('untitled')).'</em>';
+				} else {
+					$edit_link = eLink('category', 'cat_'.$event.'_edit', 'id', $id, $title);
+				}
+
 				$items[] = graf(
-					checkbox('selected[]', $id, 0).sp.str_repeat(sp.sp, $level * 2).
-					eLink('category', 'cat_'.$event.'_edit', 'id', $id, $title).sp.small($count)
+					checkbox('selected[]', $id, 0).sp.str_repeat(sp.sp, $level * 2).$edit_link.sp.small($count)
 				);
 			}
 
