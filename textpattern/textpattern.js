@@ -264,6 +264,7 @@ function toggleClassRemember(className)
 	setCookie('toggle_' + className, v, 365);
 
 	setClassDisplay(className, v);
+	setClassDisplay(className+'_neg', 1-v);
 }
 
 // -------------------------------------------------------------
@@ -274,4 +275,5 @@ function setClassRemember(className)
 	var v = getCookie('toggle_' + className);
 
 	setClassDisplay(className, v);
+	setClassDisplay(className+'_neg', 1-v);
 }
