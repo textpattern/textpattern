@@ -38,13 +38,13 @@ function doImportMT($file, $section, $status, $invite) {
 		}
 		elseif ($line == '-----' and $state == 'multiline') {
 			if (!empty($multiline_type))
-				$item[$multiline_type][] = $multiline_data;
+				$item[$multiline_type][] = import_mt_utf8($multiline_data);
 			$state = 'multiline';
 			$multiline_type = '';
 		}
 		elseif ($state == 'metadata') {
 			if (preg_match('/^([A-Z ]+):\s*(.*)$/', $line, $match))
-				$item[$match[1]] = $match[2];
+				$item[$match[1]] = import_mt_utf8($match[2]);
 		}
 		elseif ($state == 'multiline' and empty($multiline_type)) {
 			if (preg_match('/^([A-Z ]+):\s*$/', $line, $match)) {
@@ -61,13 +61,13 @@ function doImportMT($file, $section, $status, $invite) {
 
 			if (empty($multiline_data['content']) and preg_match('/^([A-Z ]+):\s*(.*)$/', $line, $match)) {
 				# Metadata within the multiline field
-				$multiline_data[$match[1]] = $match[2];
+				$multiline_data[$match[1]] = import_mt_utf8($match[2]);
 			}
 			elseif (empty($multiline_data['content'])) {
-				$multiline_data['content'] = ($line . "\n");
+				$multiline_data['content'] = import_mt_utf8(($line . "\n"));
 			}
 			else {
-				$multiline_data['content'] .= ($line . "\n");
+				$multiline_data['content'] .= import_mt_utf8(($line . "\n"));
 			}
 		}
 	}
@@ -134,9 +134,9 @@ function import_mt_item($item, $section, $status, $invite) {
 		//Add new authors
 		safe_insert('txp_users', "name='".doSlash($item['AUTHOR'])."'");
 
-		
+
 	if (!safe_field("ID", "textpattern", "Title = '".doSlash($title)."' AND Posted = '".doSlash($date)."'")) {
-		safe_insert('textpattern', 
+		$parentid = safe_insert('textpattern',
 			"Posted='".doSlash($date)."',".
 			"LastMod='".doSlash($date)."',".
 			"AuthorID='".doSlash($item['AUTHOR'])."',".
@@ -156,16 +156,13 @@ function import_mt_item($item, $section, $status, $invite) {
 			"uid='".md5(uniqid(rand(),true))."',".
 			"feed_time='".substr($date,0,10)."',".
 			"url_title='".doSlash($url_title)."'");
-			
 
-		$parentid = mysql_insert_id();
-	
 		if (!empty($item['COMMENT'])) {
 			foreach ($item['COMMENT'] as $comment) {
 				$comment_date = safe_strftime('%Y-%m-%d %H:%M:%S', safe_strtotime(@$comment['DATE']));
 				$comment_content = $textile->TextileThis(nl2br(@$comment['content']),1);
 				if (!safe_field("discussid","txp_discuss","posted = '".doSlash($comment_date)."' AND message = '".doSlash($comment_content)."'")) {
-					safe_insert('txp_discuss', 
+					safe_insert('txp_discuss',
 						"parentid='".doSlash($parentid)."',".
 						"name='".doSlash(@$comment['AUTHOR'])."',".
 						"email='".doSlash(@$comment['EMAIL'])."',".
@@ -181,6 +178,16 @@ function import_mt_item($item, $section, $status, $invite) {
 		return $title;
 	}
 	return $title.' already imported';
+}
+
+function import_mt_utf8($str) {
+	if (is_callable('mb_detect_encoding')) {
+		$enc = mb_detect_encoding($str, 'UTF-8,ASCII,ISO-8859-1');
+		if ($enc and $enc != 'UTF-8') {
+			$str = mb_convert_encoding($str, 'UTF-8', $enc);
+		}
+	}
+	return $str;
 }
 
 ?>
