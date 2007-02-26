@@ -1802,10 +1802,7 @@ eod;
 				if (!empty($bt[$i]['function'])) {
 					$t .= $bt[$i]['function'];
 
-					if (!empty($bt[$i]['args']))
-						$t .= '('.@join(', ', $bt[$i]['args']).')';
-					else 
-						$t .= '()';
+				$t .= '()';
 				}
 				
 
