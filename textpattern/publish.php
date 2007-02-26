@@ -133,6 +133,8 @@ $LastChangedRevision$
 					#FIXME: some versions of mod_deflate break downloads if we send the content length
 					#header('Content-Length: ' . $filesize);
 					header('Content-Disposition: attachment; filename="' . basename($filename) . '"');
+					// Fix for lame IE 6 pdf bug on servers configured to send cache headers
+					header('Cache-Control: private');
 					@ini_set("zlib.output_compression", "Off");
 					@set_time_limit(0);
 					@ignore_user_abort(true);
