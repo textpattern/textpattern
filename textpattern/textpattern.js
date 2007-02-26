@@ -270,8 +270,10 @@ function toggleClassRemember(className)
 // -------------------------------------------------------------
 // show/hide matching elements based on cookie value
 
-function setClassRemember(className)
+function setClassRemember(className, force)
 {
+	if (typeof(force) != 'undefined')
+		setCookie('toggle_' + className, force, 365);
 	var v = getCookie('toggle_' + className);
 
 	setClassDisplay(className, v);
