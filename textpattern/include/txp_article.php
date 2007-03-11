@@ -500,7 +500,7 @@ if (!empty($event) and $event == 'article') {
 				$Excerpt = str_replace('&amp;', '&', htmlspecialchars($Excerpt));
 
 				echo n.graf('<label for="excerpt">'.gTxt('excerpt').'</label>'.sp.popHelp('excerpt').br.
-					'<textarea id="excerpt" name="Excerpt" cols="55" rows="5" tabindex="3">'.$Excerpt.'</textarea>');
+					'<textarea id="excerpt" name="Excerpt" cols="55" rows="5" tabindex="3">'.htmlspecialchars($Excerpt).'</textarea>');
 			}
 
 			else
