@@ -135,7 +135,7 @@ $LastChangedRevision$
 				'message' => "message like '%$crit_escaped%'",
 				'email'		=> "email like '%$crit_escaped%'",
 				'website' => "web like '%$crit_escaped%'",
-				'ip'			=> "ip like %$crit_escaped%",
+				'ip'			=> "ip like '%$crit_escaped%'",
 			);
 
 			if (array_key_exists($search_method, $critsql))
