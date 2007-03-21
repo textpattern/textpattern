@@ -743,7 +743,7 @@ $LastChangedRevision$
 	function noWidow($str)
 	{
 		// replace the last space with a nbsp
-		return preg_replace('@[ ]+(\w+[[:punct:]]?)$@', '&#160;$1', rtrim($str));
+		return preg_replace('@[ ]+([[:punct:]]?\w+[[:punct:]]?)$@', '&#160;$1', rtrim($str));
 	}
 
 // -------------------------------------------------------------
@@ -1083,7 +1083,7 @@ $LastChangedRevision$
 			$gmt = 1;
 		}
 		elseif ($format == 'rfc822') {
-			$format = '%a, %d %b %Y %T GMT';
+			$format = '%a, %d %b %Y %H:%M:%S GMT';
 			$gmt = 1;
 			$override_locale = 'en-gb';
 		}
