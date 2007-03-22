@@ -743,6 +743,8 @@ $LastChangedRevision$
 	function noWidow($str)
 	{
 		// replace the last space with a nbsp
+		if (REGEXP_UTF8 == 1)
+			return preg_replace('@[ ]+([[:punct:]]?\pL+[[:punct:]]?)$@u', '&#160;$1', rtrim($str));
 		return preg_replace('@[ ]+([[:punct:]]?\w+[[:punct:]]?)$@', '&#160;$1', rtrim($str));
 	}
 
