@@ -989,7 +989,7 @@ class Textile
         $fnid = $this->fn[$id];
         return '<sup class="footnote"><a href="#fn'.$fnid.'">'.$id.'</a></sup>'.$t;
     }
-
+    
 // -------------------------------------------------------------
     function glyphs($text)
     {
@@ -1006,7 +1006,7 @@ class Textile
             '/(\S)\"(?=\s|'.$pnc.'|<|$)/',                       //  double closing
             '/"/',                                               //  double opening
             '/\b([A-Z][A-Z0-9]{2,})\b(?:[(]([^)]*)[)])/',        //  3+ uppercase acronym
-            '/\b([A-Z][A-Z\'\-]+[A-Z])\b/',                      //  3+ uppercase
+            '/(?<!")\b([A-Z][A-Z\'\-]+[A-Z])([a-z]*)\b/',        //  3+ uppercase
             '/\b( )?\.{3}/',                                     //  ellipsis
             '/(\s?)--(\s?)/',                                    //  em dash
             '/\s-(?:\s|$)/',                                     //  en dash
@@ -1026,7 +1026,7 @@ class Textile
             '$1'.$txt_quote_double_close,        //  double closing
             $txt_quote_double_open,              //  double opening
             '<acronym title="$2">$1</acronym>',  //  3+ uppercase acronym
-            '<span class="caps">$1</span>',      //  3+ uppercase
+            '<span class="caps">$1</span>$2',    //  3+ uppercase
             '$1'.$txt_ellipsis,                  //  ellipsis
             '$1'.$txt_emdash.'$2',               //  em dash
             ' '.$txt_endash.' ',                 //  en dash
