@@ -445,7 +445,8 @@ $LastChangedRevision$
 		extract($txpcfg);
 		extract(doSlash(gpsa(array('filename','category','permissions','description'))));
 
-		$id = file_db_add($filename,$category,$permissions,$description);
+		$size = filesize(build_file_path($file_base_path,$filename));
+		$id = file_db_add($filename,$category,$permissions,$description, $size);
 		
 		if($id === false){
 			file_list(gTxt('file_upload_failed').' (db_add)');
