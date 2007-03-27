@@ -49,6 +49,8 @@ $LastChangedRevision$
 						"name = '".doSlash($prefname)."' and prefs_id = 1"
 					);
 				}
+
+				update_lastmod();
 			}			
 		}
 		

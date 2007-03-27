@@ -499,6 +499,8 @@ $LastChangedRevision$
 
 		if ($changed)
 		{
+			update_lastmod();
+
 			return list_list(
 				messenger('article', $changed, (($method == 'delete') ? 'deleted' : 'modified' ))
 			);
