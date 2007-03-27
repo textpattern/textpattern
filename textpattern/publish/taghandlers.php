@@ -2655,7 +2655,7 @@ function body($atts)
 		}
 
 		if ($name) {
-			return parse(EvalElse($thing, in_array($name, $cats)));
+			return parse(EvalElse($thing, array_intersect(do_list($name), $cats)));
 		} else {
 			return parse(EvalElse($thing, ($cats)));
 		}
