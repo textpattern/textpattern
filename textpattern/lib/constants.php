@@ -28,5 +28,7 @@ define('MAGIC_QUOTES_GPC', get_magic_quotes_gpc());
 
 define('REGEXP_UTF8', @preg_match('@\pL@u', 'q'));
 
+define('EXTRA_MEMORY', '32M');
+
 error_reporting($old_level);unset($old_level);
 ?>

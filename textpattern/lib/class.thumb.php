@@ -160,6 +160,11 @@ class wet_thumb {
 	$this->_DST['type'] = $this->_SRC['type']; 
 	$this->_DST['file'] = $outfile;
 
+	// Make sure we have enough memory if the image is large
+	if (max($this->_SRC['width'], $this->_SRC['height']) > 1024)
+		// this won't work on all servers but it's worth a try
+		ini_set('memory_limit', MORE_MEMORY);
+
 	// SRC einlesen
 	if ($this->_SRC['type'] == 1)	$this->_SRC['image'] = imagecreatefromgif($this->_SRC['file']);
 	elseif ($this->_SRC['type'] == 2)	$this->_SRC['image'] = imagecreatefromjpeg($this->_SRC['file']);
