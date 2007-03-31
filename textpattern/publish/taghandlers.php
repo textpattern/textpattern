@@ -1845,6 +1845,7 @@ function body($atts)
 			{
 				$out = '<a'.
 					($permlink_mode != 'messy' ? ' rel="tag"' : '').
+					( ($class and !$wraptag) ? ' class="'.$class.'"' : '' ).
 					' href="'.pagelinkurl(array('s' => $section, 'c' => $category)).'"'.
 					($title ? ' title="'.$label.'"' : '').
 					'>'.parse($thing).'</a>';
@@ -1894,6 +1895,7 @@ function body($atts)
 			{
 				$out = '<a'.
 					($permlink_mode != 'messy' ? ' rel="tag"' : '').
+					( ($class and !$wraptag) ? ' class="'.$class.'"' : '' ).
 					' href="'.pagelinkurl(array('s' => $section, 'c' => $category)).'"'.
 					($title ? ' title="'.$label.'"' : '').
 					'>'.parse($thing).'</a>';
@@ -1942,6 +1944,7 @@ function body($atts)
 			if ($thing)
 			{
 				$out = '<a href="'.pagelinkurl(array('s' => $section, 'c' => $category,)).'"'.
+					( ($class and !$wraptag) ? ' class="'.$class.'"' : '' ).
 					($title ? ' title="'.$label.'"' : '').
 					'>'.parse($thing).'</a>';
 			}
@@ -1998,6 +2001,7 @@ function body($atts)
 			if ($thing)
 			{
 				$out = '<a href="'.pagelinkurl(array('s' => $sec)).'"'.
+					( ($class and !$wraptag) ? ' class="'.$class.'"' : '' ).
 					($title ? ' title="'.$label.'"' : '').
 					'>'.parse($thing).'</a>';
 			}
