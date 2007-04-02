@@ -31,7 +31,7 @@
 	 *  full server path to textpattern dir (no slash at end)
 	 */
 
-		$txpcfg['txpath'] = '/home/path/to/textpattern/dir';
+		$txpcfg['txpath'] = '/home/path/to/textpattern';
 
 	/**
 	 *  DB Connetion Charset, only for MySQL4.1 and up. Must be equal to the Table-Charset.
