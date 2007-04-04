@@ -338,7 +338,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function graf ($item,$atts='') 
+	function graf ($item,$atts='')
 	{
 		return tag($item,'p',$atts);
 	}
@@ -471,7 +471,7 @@ $LastChangedRevision$
 	function pageby_form($event, $val) 
 	{
 		$vals = array(
-			15  => 15, 
+			15  => 15,
 			25  => 25, 
 			50  => 50,
 			100 => 100
@@ -594,7 +594,7 @@ EOF;
 	function toggle_box($classname, $form=0) {
 
 		$name = 'cb_toggle_'.$classname;
-		$i = 
+		$i =
 			'<input type="checkbox" name="'.$name.'" id="'.$name.'" value="1" '.
 			(cs('toggle_'.$classname) ? 'checked="checked" ' : '').
 			'class="checkbox" onclick="toggleClassRemember(\''.$classname.'\');" />'.
@@ -605,7 +605,26 @@ EOF;
 		else
 			return n.$i;
 	}
-	
+
+//-------------------------------------------------------------
+	function cookie_box($classname, $form=1) {
+
+		$name = 'cb_'.$classname;
+		$val = cs('toggle_'.$classname) ? 1 : 0;
+
+		$i =
+			'<input type="checkbox" name="'.$name.'" id="'.$name.'" value="1" '.
+			($val ? 'checked="checked" ' : '').
+			'class="checkbox" onclick="setClassRemember(\''.$classname.'\','.(1-$val).');submit(this.form);" />'.
+			' <label for="'.$name.'">'.gTxt($classname).'</label> ';
+
+		if ($form)
+			return n.form($i . eInput(gps('event')).sInput(gps('step')).'<noscript><div><input type="submit" value="'.gTxt('go').'" /></div></noscript>');
+		else
+			return n.$i;
+	}
+
+
 //-------------------------------------------------------------
 	function fieldset($content, $legend='', $id='') {
 		$a_id = ($id ? ' id="'.$id.'"' : '');

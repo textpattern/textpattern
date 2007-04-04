@@ -181,8 +181,10 @@ $LastChangedRevision$
 
 		echo discuss_search_form($crit, $search_method);
 
-		$rs = safe_rows_start('*, unix_timestamp(posted) as uPosted', 'txp_discuss', 
-			"$criteria order by $sort_sql limit $offset, $limit");
+		$spamq = cs('toggle_show_spam') ? '1=1' : 'visible != '.intval(SPAM);
+
+		$rs = safe_rows_start('*, unix_timestamp(posted) as uPosted', 'txp_discuss',
+			"$spamq and $criteria order by $sort_sql limit $offset, $limit");
 
 		if ($rs)
 		{
@@ -295,7 +297,8 @@ $LastChangedRevision$
 
 			echo tr(
 				tda(
-					toggle_box('discuss_detail'),
+					toggle_box('discuss_detail').br.
+					cookie_box('show_spam'),
 					' colspan="2" style="text-align: left; border: none;"'
 				).
 				tda(
