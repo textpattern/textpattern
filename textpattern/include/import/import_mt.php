@@ -9,6 +9,8 @@ function doImportMT($file, $section, $status, $invite) {
 	# http://www.movabletype.org/docs/mtimport.html
 	# This doesn't interpret the data at all, just parse it into
 	# a structure.
+	
+	ini_set('auto_detect_line_endings', 1);
 
 	$fp = fopen($file, 'r');
 	if (!$fp)
@@ -37,14 +39,16 @@ function doImportMT($file, $section, $status, $invite) {
 			$multiline_type = '';
 		}
 		elseif ($line == '-----' and $state == 'multiline') {
-			if (!empty($multiline_type))
+			if (!empty($multiline_type)) {
 				$item[$multiline_type][] = import_mt_utf8($multiline_data);
+			}
 			$state = 'multiline';
 			$multiline_type = '';
 		}
 		elseif ($state == 'metadata') {
-			if (preg_match('/^([A-Z ]+):\s*(.*)$/', $line, $match))
+			if (preg_match('/^([A-Z ]+):\s*(.*)$/', $line, $match)) {
 				$item[$match[1]] = import_mt_utf8($match[2]);
+			}
 		}
 		elseif ($state == 'multiline' and empty($multiline_type)) {
 			if (preg_match('/^([A-Z ]+):\s*$/', $line, $match)) {
@@ -96,10 +100,13 @@ function import_mt_item($item, $section, $status, $invite) {
 	//nice non-english permlinks	
 	$url_title = stripSpace($title,1);
 
-	$body = $item['BODY'][0]['content'] . (isset($item['EXTENDED BODY']) ? "\n <!-- more -->\n\n" . $item['EXTENDED BODY'][0]['content'] : '');
+	$body = isset($item['BODY'][0]['content']) ? $item['BODY'][0]['content'] : '';
+	if (isset($item['EXTENDED BODY'][0]['content']))
+		$body .= "\n <!-- more -->\n\n" . $item['EXTENDED BODY'][0]['content'];
+
 	$body_html = $textile->textileThis($body);
 
-	$excerpt = @$item['EXCERPT'][0]['content'];
+	$excerpt = isset($item['EXCERPT'][0]['content']) ? $item['EXCERPT'][0]['content'] : '';
 	$excerpt_html = $textile->textileThis($excerpt);
 
 	$date = safe_strtotime($item['DATE']);
@@ -120,7 +127,7 @@ function import_mt_item($item, $section, $status, $invite) {
 	if ($category2 and !safe_field("name","txp_category","name = '$category2'"))
 			safe_insert('txp_category', "name='".doSlash($category2)."', type='article', parent='root'");
 
-	$keywords = @$item['KEYWORDS'][0]['content'];
+	$keywords = isset($item['KEYWORDS'][0]['content']) ? $item['KEYWORDS'][0]['content'] : '';
 
 	$annotate = !empty($item['ALLOW COMMENTS']);
 	if (isset($item['ALLOW COMMENTS']))
@@ -157,7 +164,7 @@ function import_mt_item($item, $section, $status, $invite) {
 			"feed_time='".substr($date,0,10)."',".
 			"url_title='".doSlash($url_title)."'");
 
-		if (!empty($item['COMMENT'])) {
+		if (!empty($item['COMMENT']) and is_array($item['COMMENT'])) {
 			foreach ($item['COMMENT'] as $comment) {
 				$comment_date = safe_strftime('%Y-%m-%d %H:%M:%S', safe_strtotime(@$comment['DATE']));
 				$comment_content = $textile->TextileThis(nl2br(@$comment['content']),1);
