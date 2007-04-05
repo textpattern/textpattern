@@ -49,6 +49,7 @@ else {
 		$permlink_mode = 'messy';
 }
 
+if (empty($name)) $name = 'anon';
 
 $create_sql = array();
 
