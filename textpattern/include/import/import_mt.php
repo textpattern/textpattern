@@ -97,7 +97,7 @@ function import_mt_item($item, $section, $status, $invite) {
 
 
 	$title = $textile->TextileThis($item['TITLE'], 1);
-	//nice non-english permlinks	
+	//nice non-english permlinks
 	$url_title = stripSpace($title,1);
 
 	$body = isset($item['BODY'][0]['content']) ? $item['BODY'][0]['content'] : '';
@@ -110,7 +110,7 @@ function import_mt_item($item, $section, $status, $invite) {
 	$excerpt_html = $textile->textileThis($excerpt);
 
 	$date = safe_strtotime($item['DATE']);
-	$date = safe_strftime('%Y-%m-%d %H:%M:%S', $date);
+	$date = strftime('%Y-%m-%d %H:%M:%S', $date);
 
 	if (isset($item['STATUS']))
 		$post_status = ($item['STATUS'] == 'Draft' ? 1 : 4);
@@ -166,7 +166,7 @@ function import_mt_item($item, $section, $status, $invite) {
 
 		if (!empty($item['COMMENT']) and is_array($item['COMMENT'])) {
 			foreach ($item['COMMENT'] as $comment) {
-				$comment_date = safe_strftime('%Y-%m-%d %H:%M:%S', safe_strtotime(@$comment['DATE']));
+				$comment_date = strftime('%Y-%m-%d %H:%M:%S', safe_strtotime(@$comment['DATE']));
 				$comment_content = $textile->TextileThis(nl2br(@$comment['content']),1);
 				if (!safe_field("discussid","txp_discuss","posted = '".doSlash($comment_date)."' AND message = '".doSlash($comment_content)."'")) {
 					safe_insert('txp_discuss',
