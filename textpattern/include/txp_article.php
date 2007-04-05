@@ -334,7 +334,6 @@ if (!empty($event) and $event == 'article') {
 		echo hInput('ID', $ID).
 			eInput('article').
 			sInput($step).
-			'<input type="hidden" name="view" />'.
 
 			startTable('edit').
 
@@ -854,12 +853,15 @@ if (!empty($event) and $event == 'article') {
 //--------------------------------------------------------------
 	function tab($tabevent,$view) 
 	{
-		$state = ($view==$tabevent) ? 'up' : 'down';
-		$img = 'txp_img/'.$tabevent.$state.'.gif';
-		$out = '<img src="'.$img.'"';
-		$out.=($tabevent!=$view) ? ' onclick="document.article.view.value=\''.$tabevent.'\'; document.article.submit(); return false;"' : "";
-		$out.= ' height="100" width="19" alt="" />';
-      	return $out;
+		if ($view==$tabevent)
+		{
+			return '<img src="txp_img/'.$view.'up.gif" height="100" width="19" alt="" />';
+		}
+
+		else
+		{
+			return '<input name="view" type="image" src="txp_img/'.$tabevent.'down.gif" value="'.$tabevent.'" />';
+		}
 	}
 
 //--------------------------------------------------------------
