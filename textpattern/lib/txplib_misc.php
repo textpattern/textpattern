@@ -253,17 +253,22 @@ $LastChangedRevision$
 	function has_privs($res, $user='')
 	{
 		global $txp_user, $txp_permissions;
+		static $privs;
 
 		// If no user name is supplied, assume the current login name
 		if (empty($user))
 			$user = $txp_user;
 
-		$privs = safe_field("privs", "txp_users", "name='".doSlash($user)."'");
+		if (!isset($privs[$user]))
+		{
+			$privs[$user] = safe_field("privs", "txp_users", "name='".doSlash($user)."'");
+		}
+
 		if (@$txp_permissions[$res])
 			$req = explode(',', $txp_permissions[$res]);
 		else
 			$req = array('1'); // The Publisher gets prived for anything
-		return in_array($privs, $req);
+		return in_array($privs[$user], $req);
 	}
 
 // -------------------------------------------------------------
