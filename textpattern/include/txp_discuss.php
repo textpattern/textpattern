@@ -297,8 +297,7 @@ $LastChangedRevision$
 
 			echo tr(
 				tda(
-					toggle_box('discuss_detail').br.
-					cookie_box('show_spam'),
+					toggle_box('discuss_detail'),
 					' colspan="2" style="text-align: left; border: none;"'
 				).
 				tda(
@@ -309,6 +308,8 @@ $LastChangedRevision$
 
 			endTable().
 			'</form>'.
+
+			cookie_box('show_spam').
 
 			nav_form('discuss', $page, $numPages, $sort, $dir, $crit, $search_method).
 
