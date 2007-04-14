@@ -639,7 +639,7 @@ $LastChangedRevision$
 		if ($keywords) {
 			$keys = split(',',$keywords);
 			foreach ($keys as $key) {
-				$keyparts[] = " Keywords like '%".doSlash(trim($key))."%'";
+				$keyparts[] = " Keywords like '% ".doSlash(trim($key))." %'";
 			}
 			$keywords = " and (" . join(' or ',$keyparts) . ")"; 
 		}

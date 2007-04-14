@@ -77,11 +77,14 @@ if (!empty($event) and $event == 'article') {
 			$when = strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second)-tz_offset();
 			$when = "from_unixtime($when)";
 		}
+		
+		if (trim($Keywords))
+			$Keywords = ' '.join(' ', preg_split('/\s+/', trim($Keywords))).' ';
 
 		if ($Title or $Body or $Excerpt) {
-			
+
 			if (!has_privs('article.publish') && $Status>=4) $Status = 3;
-			if (empty($url_title)) $url_title = stripSpace($Title_plain, 1);  	
+			if (empty($url_title)) $url_title = stripSpace($Title_plain, 1);
 
 			safe_insert(
 			   "textpattern",
@@ -184,6 +187,9 @@ if (!empty($event) and $event == 'article') {
 		{
 			$url_title = stripSpace($Title_plain, 1);
 		}
+
+		if (trim($Keywords))
+			$Keywords = ' '.join(' ', preg_split('/\s+/', trim($Keywords))).' ';
 
 		safe_update("textpattern", 
 		   "Title           = '$Title',

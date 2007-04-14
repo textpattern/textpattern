@@ -2028,7 +2028,7 @@ function body($atts)
 		global $thisarticle;
 		assert_article();
 
-		return ($thisarticle['keywords']) ? $thisarticle['keywords'] : '';
+		return trim($thisarticle['keywords']);
 	}
 
 // -------------------------------------------------------------
