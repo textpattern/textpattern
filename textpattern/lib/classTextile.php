@@ -803,7 +803,7 @@ class Textile
 // -------------------------------------------------------------
     function relURL($url)
     {
-        $parts = parse_url(urldecode($url));
+        $parts = @parse_url(urldecode($url));
         if ((empty($parts['scheme']) or @$parts['scheme'] == 'http') and
              empty($parts['host']) and
              preg_match('/^\w/', @$parts['path']))
@@ -817,7 +817,7 @@ class Textile
 // -------------------------------------------------------------
     function isRelURL($url)
     {
-        $parts = parse_url($url);
+        $parts = @parse_url($url);
         return (empty($parts['scheme']) and empty($parts['host']));
     }
 
