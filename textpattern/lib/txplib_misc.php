@@ -841,7 +841,7 @@ $LastChangedRevision$
 
 	function is_valid_email($address)
 	{
-		return preg_match('/^[\w._-]+@([\w-]+\.)+[\w-]+$/', $address);
+		return preg_match('/^\w[\w._+-]*@([a-z][a-z0-9-]*\.)+[a-z]{2,6}$/i', $address);
 	}
 
 // -------------------------------------------------------------
