@@ -79,7 +79,7 @@ if (!empty($event) and $event == 'article') {
 		}
 		
 		if (trim($Keywords))
-			$Keywords = ' '.join(' ', preg_split('/\s+/', trim($Keywords))).' ';
+			$Keywords = ','.join(',', preg_split('/,+/', trim($Keywords))).',';
 
 		if ($Title or $Body or $Excerpt) {
 
@@ -189,7 +189,7 @@ if (!empty($event) and $event == 'article') {
 		}
 
 		if (trim($Keywords))
-			$Keywords = ' '.join(' ', preg_split('/\s+/', trim($Keywords))).' ';
+			$Keywords = ','.join(',', preg_split('/,+/', trim($Keywords))).',';
 
 		safe_update("textpattern", 
 		   "Title           = '$Title',
@@ -383,7 +383,7 @@ if (!empty($event) and $event == 'article') {
 
 			// keywords
 				n.graf('<label for="keywords">'.gTxt('keywords').'</label>'.sp.popHelp('keywords').br.
-					n.'<textarea id="keywords" name="Keywords" cols="18" rows="5">'.$Keywords.'</textarea>'),
+					n.'<textarea id="keywords" name="Keywords" cols="18" rows="5">'.trim($Keywords,',').'</textarea>'),
 
 			// article image
 				n.graf('<label for="article-image">'.gTxt('article_image').'</label>'.sp.popHelp('article_image').br.

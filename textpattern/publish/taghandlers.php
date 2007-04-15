@@ -2023,12 +2023,12 @@ function body($atts)
 	}
 
 // -------------------------------------------------------------
-	function keywords($atts) 
+	function keywords($atts)
 	{
 		global $thisarticle;
 		assert_article();
 
-		return trim($thisarticle['keywords']);
+		return trim($thisarticle['keywords'], ',');
 	}
 
 // -------------------------------------------------------------
