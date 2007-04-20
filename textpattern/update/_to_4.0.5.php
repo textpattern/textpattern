@@ -49,7 +49,7 @@ $LastChangedRevision: 711 $
 
 	}
 
-	safe_update('textpattern', "Keywords=concat(',',trim(Keywords),',')", "Keywords != ''");
+	safe_update('textpattern', "Keywords=TRIM(BOTH ',' FROM REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Keywords,'\n',','),'\r',','),'\t',','),'    ',' '),'  ',' '),'  ',' '),' ,',','),', ',','),',,,,',','),',,',','),',,',','))", "Keywords != ''");
 
 	// shift preferences to more intuitive spots
 	// give positions, leave enough room for later additions

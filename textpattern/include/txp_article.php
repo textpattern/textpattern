@@ -78,8 +78,7 @@ if (!empty($event) and $event == 'article') {
 			$when = "from_unixtime($when)";
 		}
 		
-		if (trim($Keywords))
-			$Keywords = ','.join(',', preg_split('/,+/', trim($Keywords))).',';
+		$Keywords = doSlash(trim(preg_replace('/( ?[\r\n\t,])+ ?/s', ',', preg_replace('/ +/', ' ', ps('Keywords'))), ','));
 
 		if ($Title or $Body or $Excerpt) {
 
@@ -188,8 +187,7 @@ if (!empty($event) and $event == 'article') {
 			$url_title = stripSpace($Title_plain, 1);
 		}
 
-		if (trim($Keywords))
-			$Keywords = ','.join(',', preg_split('/,+/', trim($Keywords))).',';
+		$Keywords = doSlash(trim(preg_replace('/( ?[\r\n\t,])+ ?/s', ',', preg_replace('/ +/', ' ', ps('Keywords'))), ','));
 
 		safe_update("textpattern", 
 		   "Title           = '$Title',
@@ -383,7 +381,7 @@ if (!empty($event) and $event == 'article') {
 
 			// keywords
 				n.graf('<label for="keywords">'.gTxt('keywords').'</label>'.sp.popHelp('keywords').br.
-					n.'<textarea id="keywords" name="Keywords" cols="18" rows="5">'.trim($Keywords,',').'</textarea>'),
+					n.'<textarea id="keywords" name="Keywords" cols="18" rows="5">'.str_replace(',' ,', ', $Keywords).'</textarea>'),
 
 			// article image
 				n.graf('<label for="article-image">'.gTxt('article_image').'</label>'.sp.popHelp('article_image').br.

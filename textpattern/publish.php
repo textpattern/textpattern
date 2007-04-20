@@ -637,9 +637,9 @@ $LastChangedRevision$
 
 		//Allow keywords for no-custom articles. That tagging mode, you know
 		if ($keywords) {
-			$keys = split(',',$keywords);
+			$keys = doSlash(array_map('trim', split(',' ,$keywords)));
 			foreach ($keys as $key) {
-				$keyparts[] = " Keywords like '%,".doSlash(trim($key)).",%'";
+				$keyparts[] = "FIND_IN_SET('".$key."',Keywords)";
 			}
 			$keywords = " and (" . join(' or ',$keyparts) . ")"; 
 		}
