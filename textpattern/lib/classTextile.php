@@ -1006,7 +1006,7 @@ class Textile
             '/(\S)\"(?=\s|'.$pnc.'|<|$)/',                       //  double closing
             '/"/',                                               //  double opening
             '/\b([A-Z][A-Z0-9]{2,})\b(?:[(]([^)]*)[)])/',        //  3+ uppercase acronym
-            '/(?<!")\b([A-Z][A-Z\'\-]+[A-Z])([a-z]?)\b/',        //  3+ uppercase
+            '/(?<!")\b([A-Z]{3,})([a-z]*)\b/',                   //  3+ uppercase
             '/([^.]?)\.{3}/',                                    //  ellipsis
             '/(\s?)--(\s?)/',                                    //  em dash
             '/\s-(?:\s|$)/',                                     //  en dash
