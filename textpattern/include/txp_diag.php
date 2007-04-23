@@ -112,7 +112,7 @@ $LastChangedRevision$
 
 	function doDiagnostics()
 	{
-		global $files, $txpcfg, $step;
+		global $prefs, $files, $txpcfg, $step;
 		extract(get_prefs());
 		
 	$urlparts = parse_url(hu);
@@ -372,6 +372,11 @@ $LastChangedRevision$
 		));
 	} else {
 		$gd = gTxt('gd_unavailable');
+	}
+
+	if ( realpath($prefs['tempdir']) == realpath($prefs['plugin_cache_dir']) )
+	{
+		$fail['tmp_plugin_paths_match'] = gTxt('tmp_plugin_paths_match');
 	}
 
 	echo 
