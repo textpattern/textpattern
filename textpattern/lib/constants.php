@@ -1,7 +1,7 @@
 <?php
 /*
-$HeadURL: $
-$LastChangedRevision: $
+$HeadURL$
+$LastChangedRevision$
 */
 
 $old_level = error_reporting(E_ALL ^ (E_NOTICE));

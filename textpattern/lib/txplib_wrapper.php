@@ -1,5 +1,10 @@
 <?php
 
+/*
+$HeadURL$
+$LastChangedRevision$
+*/
+
 /**
  * Textpattern Wrapper Class for Textpattern 4.0.x
  * 
