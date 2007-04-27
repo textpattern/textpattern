@@ -1519,7 +1519,7 @@ $LastChangedRevision$
 	}
 
 //-------------------------------------------------------------
-	function set_pref($name, $val, $event,  $type, $html='text_input')
+	function set_pref($name, $val, $event='publish',  $type=0, $html='text_input')
 	{
 		extract(doSlash(func_get_args()));
 
