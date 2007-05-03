@@ -858,9 +858,9 @@ if (!empty($event) and $event == 'article') {
 	function tab($tabevent,$view)
 	{
 		if ($view==$tabevent) {
-			return '<img src="txp_img/'.$view.'up.gif" height="100" width="19" alt="" id="article-tab-$tabevent" />';
+			return '<img src="txp_img/'.$view.'up.gif" height="100" width="19" alt="" id="article-tab-'.$tabevent.'" />';
 		} else {
-			return '<input name="view" type="image" src="txp_img/'.$tabevent.'down.gif" value="'.$tabevent.'" id="article-tab-$tabevent" />';
+			return '<input name="view" type="image" src="txp_img/'.$tabevent.'down.gif" value="'.$tabevent.'" id="article-tab-'.$tabevent.'" />';
 		}
 	}
 
