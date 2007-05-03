@@ -288,7 +288,7 @@ $LastChangedRevision$
 
 		return n.'<input type="text" name="'.$name.'" value="'.
 			safe_strftime($datevar, $time)
-		.'" size="'.$size.'" maxlength="'.$size.'" class="edit" tabindex="'.$tab.'" title="'.gTxt('article_'.$name).'" />';
+		.'" size="'.$size.'" maxlength="'.$size.'" class="edit"'.(empty($tab) ? '' : ' tabindex="'.$tab.'"').' title="'.gTxt('article_'.$name).'" />';
 	}
 
 ?>
