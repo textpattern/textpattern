@@ -286,8 +286,8 @@ $LastChangedRevision$
 
 	# anything might break if arbitrary functions are disabled
 	if (ini_get('disable_functions')) {
-		$disabled_funcs = explode(',', ini_get('disable_functions'));
-		# commonly disabled functions taht we don't need
+		$disabled_funcs = array_map('trim', explode(',', ini_get('disable_functions')));
+		# commonly disabled functions that we don't need
 		$disabled_funcs = array_diff($disabled_funcs, array(
 			'imagefilltoborder',
 			'exec',
@@ -300,7 +300,7 @@ $LastChangedRevision$
 			'proc_open',
 		));
 		if ($disabled_funcs)
-			$fail['some_php_functions_disabled'] = gTxt('some_php_functions_disabled').cs.ini_get('disable_functions');
+			$fail['some_php_functions_disabled'] = gTxt('some_php_functions_disabled').cs.join(', ',$disabled_funcs);
 	}
 
 	# not sure about this one
