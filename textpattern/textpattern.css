@@ -446,6 +446,10 @@ padding-left: 10px;
 width: 200px;
 }
 
+td#article-col-2 fieldset {
+width: auto;
+}
+
 textarea#body {
 width: 400px;
 height: 420px;

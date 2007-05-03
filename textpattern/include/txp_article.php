@@ -838,7 +838,7 @@ if (!empty($event) and $event == 'article') {
 
 		if ($rs)
 		{
-			return treeSelectInput($name,$rs,$val, $id);
+			return treeSelectInput($name,$rs,$val, $id, 35);
 		}
 
 		return false;

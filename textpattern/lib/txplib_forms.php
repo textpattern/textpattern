@@ -90,7 +90,7 @@ $LastChangedRevision$
 
 //-------------------------------------------------------------
 
-	function treeSelectInput($select_name = '', $array = '', $value = '', $select_id = '')
+	function treeSelectInput($select_name = '', $array = '', $value = '', $select_id = '', $truncate = 0)
 	{
 		$out = array();
 
@@ -118,7 +118,15 @@ $LastChangedRevision$
 
 			$sp = str_repeat(sp.sp, $level);
 
-			$out[] = n.t.'<option value="'.htmlspecialchars($name).'"'.$sel.'>'.$sp.htmlspecialchars($title).'</option>';
+			if (($truncate > 3) && (strlen(utf8_decode($title)) > $truncate)) {
+				$htmltitle = ' title="'.htmlspecialchars($title).'"';
+				$title = preg_replace('/^(.{0,'.($truncate - 3).'}).*$/su','$1',$title);
+				$hellip = '&#8230;';
+			} else {
+				$htmltitle = $hellip = '';
+			}
+
+			$out[] = n.t.'<option value="'.htmlspecialchars($name).'"'.$htmltitle.$sel.'>'.$sp.htmlspecialchars($title).$hellip.'</option>';
 		}
 
 		return n.'<select'.( $select_id ? ' id="'.$select_id.'" ' : '' ).' name="'.$select_name.'" class="list">'.
