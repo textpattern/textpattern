@@ -1214,7 +1214,7 @@ $LastChangedRevision$
 		$numPages = $thispage['numPages'];
 		$pg				= $thispage['pg'];
 
-		if ($numPages > 1 and $pg != $numPages)
+		if ($numPages > 1 and $pg < $numPages)
 		{
 			$nextpg = $pg + 1;
 
