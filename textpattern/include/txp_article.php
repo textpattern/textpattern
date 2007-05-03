@@ -690,6 +690,10 @@ if (!empty($event) and $event == 'article') {
 
 			//-- timestamp ------------------- 
 
+				if (!empty($year)) {
+					$sPosted = safe_strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second);					
+				}	
+					
 				echo n.n.'<fieldset id="write-timestamp">'.
 					n.'<legend>'.gTxt('timestamp').'</legend>'.
 
