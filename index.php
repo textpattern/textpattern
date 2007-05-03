@@ -23,6 +23,8 @@ $LastChangedRevision$
 		$status = '503 Service Unavailable';
 		if (substr(php_sapi_name(), 0, 3) == 'cgi' and empty($_SERVER['FCGI_ROLE']) and empty($_ENV['FCGI_ROLE']))
 			header("Status: $status");
+		elseif ($_SERVER['SERVER_PROTOCOL'] == 'HTTP/1.0')
+			header("HTTP/1.0 $status");
 		else
 			header("HTTP/1.1 $status");
 
