@@ -130,9 +130,7 @@ $LastChangedRevision$
 					$filesize = filesize($fullpath); $sent = 0;
 					header('Content-Description: File Download');
 					header('Content-Type: application/octet-stream');
-					#FIXME: some versions of mod_deflate break downloads if we send the content length
-					#header('Content-Length: ' . $filesize);
-					header('Content-Disposition: attachment; filename="' . basename($filename) . '"');
+					header('Content-Disposition: attachment; filename="' . basename($filename) . '"; size = "'.$filesize.'"');
 					// Fix for lame IE 6 pdf bug on servers configured to send cache headers
 					header('Cache-Control: private');
 					@ini_set("zlib.output_compression", "Off");
