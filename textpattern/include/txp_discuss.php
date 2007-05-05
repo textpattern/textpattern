@@ -74,16 +74,12 @@ $LastChangedRevision$
 
 		extract(gpsa(array('sort', 'dir', 'page', 'crit', 'search_method')));
 
-		$dir = ($dir == 'desc') ? 'desc' : 'asc';
+		$dir = ($dir == 'asc') ? 'asc' : 'desc';
 
 		switch ($sort)
 		{
 			case 'id':
 				$sort_sql = 'discussid '.$dir;
-			break;
-
-			case 'date':
-				$sort_sql = 'posted '.$dir;
 			break;
 
 			case 'ip':
@@ -115,7 +111,7 @@ $LastChangedRevision$
 			break;
 
 			default:
-				$dir = 'desc';
+				$sort = 'date';
 				$sort_sql = 'posted '.$dir;
 			break;
 		}
@@ -193,20 +189,15 @@ $LastChangedRevision$
 				n.startTable('list','','','','90%').
 
 				n.n.tr(
-					column_head('ID', 'id', 'discuss', true, $switch_dir, $crit, $search_method).
-					column_head('date', 'date', 'discuss', true, $switch_dir, $crit, $search_method).
-					column_head('name', 'name', 'discuss', true, $switch_dir, $crit, $search_method).
-					column_head('message', 'message', 'discuss', true, $switch_dir, $crit, $search_method).
-					column_multi_head( array(
-						array ('value' => 'email', 'sort' => 'email', 'event' => 'discuss','is_link' => true,
-							    'dir' => $switch_dir, 'crit' => $crit, 'method' => $search_method),
-						array ('value' => 'website', 'sort' => 'website', 'event' => 'discuss','is_link' => true,
-							    'dir' => $switch_dir, 'crit' => $crit, 'method' => $search_method),
-						array ('value' => 'IP', 'sort' => 'ip', 'event' => 'discuss','is_link' => true,
-							    'dir' => $switch_dir, 'crit' => $crit, 'method' => $search_method)
-					), 'discuss_detail').
-					column_head('status', 'status', 'discuss', true, $switch_dir, $crit, $search_method, 'discuss_detail').
-					column_head('parent', 'parent', 'discuss', true, $switch_dir, $crit, $search_method).
+					column_head('ID', 'id', 'discuss', true, $switch_dir, $crit, $search_method, ('id' == $sort) ? $dir : '').
+					column_head('date', 'date', 'discuss', true, $switch_dir, $crit, $search_method, ('date' == $sort) ? $dir : '').
+					column_head('name', 'name', 'discuss', true, $switch_dir, $crit, $search_method, ('name' == $sort) ? $dir : '').
+					column_head('message', 'message', 'discuss', true, $switch_dir, $crit, $search_method, ('message' == $sort) ? $dir : '').
+					column_head('email', 'email', 'discuss', true, $switch_dir, $crit, $search_method, (('email' == $sort) ? "$dir " : '').'discuss_detail').
+					column_head('website', 'website', 'discuss', true, $switch_dir, $crit, $search_method, (('website' == $sort) ? "$dir " : '').'discuss_detail').
+					column_head('IP', 'ip', 'discuss', true, $switch_dir, $crit, $search_method, (('ip' == $sort) ? "$dir " : '').'discuss_detail').
+					column_head('status', 'status', 'discuss', true, $switch_dir, $crit, $search_method, (('status' == $sort) ? "$dir " : '').'discuss_detail').
+					column_head('parent', 'parent', 'discuss', true, $switch_dir, $crit, $search_method, ('parent' == $sort) ? $dir : '').
 					hCell()
 				);
 
@@ -284,7 +275,10 @@ $LastChangedRevision$
 						short_preview($dmessage)
 					).
 
-					td("<ul><li>".soft_wrap($email, 30)."</li><li>".soft_wrap($web, 30)."</li><li>$ip</li></ul>", 100, 'discuss_detail').
+					/* td("<ul><li>".soft_wrap($email, 30)."</li><li>".soft_wrap($web, 30)."</li><li>$ip</li></ul>", 100, 'discuss_detail'). */
+					td(soft_wrap($email, 30), 100, 'discuss_detail').
+					td(soft_wrap($web, 30), 100, 'discuss_detail').
+					td($ip, 75, 'discuss_detail').
 					td($comment_status, 75, 'discuss_detail').
 					td($parent, 75).
 
@@ -502,7 +496,7 @@ $LastChangedRevision$
 					hCell(gTxt('IP')).
 					hCell(gTxt('name_used')).
 					hCell(gTxt('banned_for')).
-					td()
+					hCell()
 				);
 
 			while ($a = nextRow($rs))

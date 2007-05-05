@@ -66,10 +66,6 @@ $LastChangedRevision$
 				$sort_sql = 'id '.$dir;
 			break;
 
-			case 'name':
-				$sort_sql = 'linksort '.$dir.', id asc';
-			break;
-
 			case 'description':
 				$sort_sql = 'description '.$dir.', id asc';
 			break;
@@ -83,8 +79,8 @@ $LastChangedRevision$
 			break;
 
 			default:
-				$dir = 'asc';
-				$sort_sql = 'linksort asc';
+				$sort = 'name';
+				$sort_sql = 'linksort '.$dir.', id asc';
 			break;
 		}
 
@@ -155,12 +151,12 @@ $LastChangedRevision$
 				startTable('list').
 
 				n.tr(
-					column_head('ID', 'id', 'link', true, $switch_dir, $crit, $search_method).
+					column_head('ID', 'id', 'link', true, $switch_dir, $crit, $search_method, ('id' == $sort) ? $dir : '').
 					hCell().
-					column_head('link_name', 'name', 'link', true, $switch_dir, $crit, $search_method).
-					column_head('description', 'description', 'link', true, $switch_dir, $crit, $search_method).
-					column_head('link_category', 'category', 'link', true, $switch_dir, $crit, $search_method).
-					column_head('date', 'date', 'link', true, $switch_dir, $crit, $search_method).
+					column_head('link_name', 'name', 'link', true, $switch_dir, $crit, $search_method, ('name' == $sort) ? $dir : '').
+					column_head('description', 'description', 'link', true, $switch_dir, $crit, $search_method, ('description' == $sort) ? $dir : '').
+					column_head('link_category', 'category', 'link', true, $switch_dir, $crit, $search_method, ('category' == $sort) ? $dir : '').
+					column_head('date', 'date', 'link', true, $switch_dir, $crit, $search_method, ('date' == $sort) ? $dir : '').
 					hCell()
 				);
 

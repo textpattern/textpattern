@@ -44,16 +44,12 @@ $LastChangedRevision$
 
 		$sesutats = array_flip($statuses);
 
-		$dir = ($dir == 'desc') ? 'desc' : 'asc';
+		$dir = ($dir == 'asc') ? 'asc' : 'desc';
 
 		switch ($sort)
 		{
 			case 'id':
 				$sort_sql = 'ID '.$dir;
-			break;
-
-			case 'posted':
-				$sort_sql = 'Posted '.$dir;
 			break;
 
 			case 'title':
@@ -85,7 +81,7 @@ $LastChangedRevision$
 			break;
 
 			default:
-				$dir = 'desc';
+				$sort = 'posted';
 				$sort_sql = 'Posted '.$dir;
 			break;
 		}
@@ -177,15 +173,15 @@ $LastChangedRevision$
 
 				n.startTable('list','','','','90%').
 				n.tr(
-					n.column_head('ID', 'id', 'list', true, $switch_dir, $crit, $search_method).
-					column_head('posted', 'posted', 'list', true, $switch_dir, $crit, $search_method).
-					column_head('title', 'title', 'list', true, $switch_dir, $crit, $search_method).
-					column_head('section', 'section', 'list', true, $switch_dir, $crit, $search_method).
-					column_head('category1', 'category1', 'list', true, $switch_dir, $crit, $search_method, 'articles_detail').
-					column_head('category2', 'category2', 'list', true, $switch_dir, $crit, $search_method, 'articles_detail').
-					column_head('status', 'status', 'list', true, $switch_dir, $crit, $search_method).
-					column_head('author', 'author', 'list', true, $switch_dir, $crit, $search_method).
-					column_head('comments', 'comments', 'list', true, $switch_dir, $crit, $search_method, 'articles_detail').
+					n.column_head('ID', 'id', 'list', true, $switch_dir, $crit, $search_method, ('id' == $sort) ? $dir : '').
+					column_head('posted', 'posted', 'list', true, $switch_dir, $crit, $search_method, ('posted' == $sort) ? $dir : '').
+					column_head('title', 'title', 'list', true, $switch_dir, $crit, $search_method, ('title' == $sort) ? $dir : '').
+					column_head('section', 'section', 'list', true, $switch_dir, $crit, $search_method, ('section' == $sort) ? $dir : '').
+					column_head('category1', 'category1', 'list', true, $switch_dir, $crit, $search_method, (('category1' == $sort) ? "$dir " : '').'articles_detail').
+					column_head('category2', 'category2', 'list', true, $switch_dir, $crit, $search_method, (('category2' == $sort) ? "$dir " : '').'articles_detail').
+					column_head('status', 'status', 'list', true, $switch_dir, $crit, $search_method, ('status' == $sort) ? $dir : '').
+					column_head('author', 'author', 'list', true, $switch_dir, $crit, $search_method, ('author' == $sort) ? $dir : '').
+					column_head('comments', 'comments', 'list', true, $switch_dir, $crit, $search_method, (('comments' == $sort) ? "$dir " : '').'articles_detail').
 					hCell()
 				);
 

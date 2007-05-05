@@ -87,10 +87,6 @@ $LastChangedRevision$
 				$sort_sql = 'id '.$dir;
 			break;
 
-			case 'filename':
-				$sort_sql = 'filename '.$dir;
-			break;
-
 			case 'description':
 				$sort_sql = 'description '.$dir.', filename desc';
 			break;
@@ -104,7 +100,7 @@ $LastChangedRevision$
 			break;
 
 			default:
-				$dir = 'desc';
+				$sort = 'filename';
 				$sort_sql = 'filename '.$dir;
 			break;
 		}
@@ -174,16 +170,16 @@ $LastChangedRevision$
 			echo startTable('list').
 
 				tr(
-					column_head('ID', 'id', 'file', true, $switch_dir, $crit, $search_method).
-					td().
-					column_head('file_name', 'filename', 'file', true, $switch_dir, $crit, $search_method).
-					column_head('description', 'description', 'file', true, $switch_dir, $crit, $search_method).
-					column_head('file_category', 'category', 'file', true, $switch_dir, $crit, $search_method).
+					column_head('ID', 'id', 'file', true, $switch_dir, $crit, $search_method, ('id' == $sort) ? $dir : '').
+					hCell().
+					column_head('file_name', 'filename', 'file', true, $switch_dir, $crit, $search_method, ('filename' == $sort) ? $dir : '').
+					column_head('description', 'description', 'file', true, $switch_dir, $crit, $search_method, ('description' == $sort) ? $dir : '').
+					column_head('file_category', 'category', 'file', true, $switch_dir, $crit, $search_method, ('category' == $sort) ? $dir : '').
 					// column_head('permissions', 'permissions', 'file', true, $switch_dir, $crit, $search_method).
 					hCell(gTxt('tags')).
 					hCell(gTxt('status')).
 					hCell(gTxt('condition')).
-					column_head('downloads', 'downloads', 'file', true, $switch_dir, $crit, $search_method).
+					column_head('downloads', 'downloads', 'file', true, $switch_dir, $crit, $search_method, ('downloads' == $sort) ? $dir : '').
 					hCell()
 				);
 

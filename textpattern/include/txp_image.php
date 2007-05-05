@@ -55,14 +55,10 @@ $LastChangedRevision$
 			echo upload_form(gTxt('upload_image'), 'upload', 'image_insert', 'image', '', $file_max_upload_size);
 		}
 
-		$dir = ($dir == 'desc') ? 'desc' : 'asc';
+		$dir = ($dir == 'asc') ? 'asc' : 'desc';
 
 		switch ($sort)
 		{
-			case 'id':
-				$sort_sql = 'id '.$dir;
-			break;
-
 			case 'name':
 				$sort_sql = 'name '.$dir;
 			break;
@@ -84,7 +80,7 @@ $LastChangedRevision$
 			break;
 
 			default:
-				$dir = 'desc';
+				$sort = 'id';
 				$sort_sql = 'id '.$dir;
 			break;
 		}
@@ -154,14 +150,14 @@ $LastChangedRevision$
 		{
 			echo n.n.startTable('list').
 				n.tr(
-					column_head('ID', 'id', 'image', true, $switch_dir, $crit, $search_method).
+					column_head('ID', 'id', 'image', true, $switch_dir, $crit, $search_method, ('id' == $sort) ? $dir : '').
 					hCell().
-					column_head('date', 'date', 'image', true, $switch_dir, $crit, $search_method).
-					column_head('name', 'name', 'image', true, $switch_dir, $crit, $search_method).
-					column_head('thumbnail', 'thumbnail', 'image', true, $switch_dir, $crit, $search_method).
+					column_head('date', 'date', 'image', true, $switch_dir, $crit, $search_method, ('date' == $sort) ? $dir : '').
+					column_head('name', 'name', 'image', true, $switch_dir, $crit, $search_method, ('name' == $sort) ? $dir : '').
+					column_head('thumbnail', 'thumbnail', 'image', true, $switch_dir, $crit, $search_method, ('thumbnail' == $sort) ? $dir : '').
 					hCell(gTxt('tags')).
-					column_head('image_category', 'category', 'image', true, $switch_dir, $crit, $search_method).
-					column_head('author', 'author', 'image', true, $switch_dir, $crit, $search_method).
+					column_head('image_category', 'category', 'image', true, $switch_dir, $crit, $search_method, ('category' == $sort) ? $dir : '').
+					column_head('author', 'author', 'image', true, $switch_dir, $crit, $search_method, ('author' == $sort) ? $dir : '').
 					hCell()
 				);
 
@@ -202,7 +198,7 @@ $LastChangedRevision$
 						href($name, $edit_url)
 					, 75).
 
-					td($thumbnail, 75).
+					td($thumbnail, 80).
 
 					td(
 						'<ul>'.

@@ -54,14 +54,10 @@ $LastChangedRevision$
 
 		safe_delete('txp_log', "time < date_sub(now(), interval $expire_logs_after day)");
 
-		$dir = ($dir == 'desc') ? 'desc' : 'asc';
+		$dir = ($dir == 'asc') ? 'asc' : 'desc';
 
 		switch ($sort)
 		{
-			case 'time':
-				$sort_sql = 'time '.$dir;
-			break;
-
 			case 'ip':
 				$sort_sql = 'ip '.$dir;
 			break;
@@ -87,7 +83,7 @@ $LastChangedRevision$
 			break;
 
 			default:
-				$dir = 'desc';
+				$sort = 'time';
 				$sort_sql = 'time '.$dir;
 			break;
 		}
@@ -162,13 +158,13 @@ $LastChangedRevision$
 				startTable('list','','','','90%').
 
 				n.tr(
-					n.column_head('time', 'time', 'log', true, $switch_dir, $crit, $search_method).
-					column_head('IP', 'ip', 'log', true, $switch_dir, $crit, $search_method, 'log_detail').
-					column_head('host', 'host', 'log', true, $switch_dir, $crit, $search_method).
-					column_head('page', 'page', 'log', true, $switch_dir, $crit, $search_method).
-					column_head('referrer', 'refer', 'log', true, $switch_dir, $crit, $search_method).
-					column_head('method', 'method', 'log', true, $switch_dir, $crit, $search_method, 'log_detail').
-					column_head('status', 'status', 'log', true, $switch_dir, $crit, $search_method, 'log_detail').
+					n.column_head('time', 'time', 'log', true, $switch_dir, $crit, $search_method, ('time' == $sort) ? $dir : '').
+					column_head('IP', 'ip', 'log', true, $switch_dir, $crit, $search_method, (('ip' == $sort) ? "$dir " : '').'log_detail').
+					column_head('host', 'host', 'log', true, $switch_dir, $crit, $search_method, ('host' == $sort) ? $dir : '').
+					column_head('page', 'page', 'log', true, $switch_dir, $crit, $search_method, ('page' == $sort) ? $dir : '').
+					column_head('referrer', 'refer', 'log', true, $switch_dir, $crit, $search_method, ('refer' == $sort) ? $dir : '').
+					column_head('method', 'method', 'log', true, $switch_dir, $crit, $search_method, (('method' == $sort) ? "$dir " : '').'log_detail').
+					column_head('status', 'status', 'log', true, $switch_dir, $crit, $search_method, (('status' == $sort) ? "$dir " : '').'log_detail').
 					hCell()
 				);
 
@@ -211,8 +207,8 @@ $LastChangedRevision$
 
 					td($log_page).
 					td($log_refer).
-					td($log_method, 50, 'log_detail').
-					td($log_status, 50, 'log_detail').
+					td($log_method, 60, 'log_detail').
+					td($log_status, 60, 'log_detail').
 
 					td(
 						fInput('checkbox', 'selected[]', $log_id)
