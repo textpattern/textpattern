@@ -2421,14 +2421,17 @@ function body($atts)
 	}
 
 // -------------------------------------------------------------
-	function permlinkurl_id($ID)
-	{
-		$article = safe_row(
-			"*,ID as thisid, unix_timestamp(Posted) as posted",
-			"textpattern",
-			'ID='.intval($ID));
-		
-		return permlinkurl($article);
+
+	function permlinkurl_id($id) {
+		$id = (int) $id;
+
+		$rs = safe_row(
+			"ID as thisid, Section as section, Title as title, url_title, unix_timestamp(Posted) as posted",
+			'textpattern',
+			"ID = $id"
+		);
+
+		return permlinkurl($rs);
 	}
 
 // -------------------------------------------------------------
