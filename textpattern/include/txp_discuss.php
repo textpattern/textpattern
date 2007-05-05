@@ -275,7 +275,6 @@ $LastChangedRevision$
 						short_preview($dmessage)
 					).
 
-					/* td("<ul><li>".soft_wrap($email, 30)."</li><li>".soft_wrap($web, 30)."</li><li>$ip</li></ul>", 100, 'discuss_detail'). */
 					td(soft_wrap($email, 30), 100, 'discuss_detail').
 					td(soft_wrap($web, 30), 100, 'discuss_detail').
 					td($ip, 75, 'discuss_detail').
@@ -303,7 +302,7 @@ $LastChangedRevision$
 			endTable().
 			'</form>'.
 
-			cookie_box('show_spam').
+			n.tag(cookie_box('show_spam'),'div',' style="margin:auto;padding:0 0 0 10px; width:90%"').
 
 			nav_form('discuss', $page, $numPages, $sort, $dir, $crit, $search_method).
 
