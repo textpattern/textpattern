@@ -194,13 +194,13 @@ function deleteCookie(name)
 // @see http://www.snook.ca/archives/javascript/your_favourite_1/
 function getElementsByClass(classname, node)
 {
-    var a = [];
-    var re = new RegExp('(^|\\s)' + classname + '(\\s|$)');
+	var a = [];
+	var re = new RegExp('(^|\\s)' + classname + '(\\s|$)');
 	if(node == null) node = document;
 	var els = node.getElementsByTagName("*");
-    for(var i=0,j=els.length; i<j; i++)
-        if(re.test(els[i].className)) a.push(els[i]);
-    return a;
+	for(var i=0,j=els.length; i<j; i++)
+		if(re.test(els[i].className)) a.push(els[i]);
+	return a;
 }
 
 // -------------------------------------------------------------
