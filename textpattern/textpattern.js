@@ -191,21 +191,16 @@ function deleteCookie(name)
 }
 
 // -------------------------------------------------------------
-
-function getElementsByClass (className)
+// @see http://www.snook.ca/archives/javascript/your_favourite_1/
+function getElementsByClass(classname, node)
 {
-	var all = document.all ? document.all : document.getElementsByTagName('*');
-	var elements = new Array();
-
-	for (var e = 0; e < all.length; e++)
-	{
-		if (all[e].className == className)
-		{
-			elements[elements.length] = all[e];
-		}
-	}
-
-	return elements;
+    var a = [];
+    var re = new RegExp('(^|\\s)' + classname + '(\\s|$)');
+	if(node == null) node = document;
+	var els = node.getElementsByTagName("*");
+    for(var i=0,j=els.length; i<j; i++)
+        if(re.test(els[i].className)) a.push(els[i]);
+    return a;
 }
 
 // -------------------------------------------------------------
