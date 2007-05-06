@@ -349,11 +349,18 @@ $LastChangedRevision$
 	{	
 		global $txpcfg,$extensions,$txp_user;
 		extract($txpcfg);
-		$id = gps('id');
+			
+		$id = assert_int(gps('id'));
+		$rs = safe_row("*", "txp_image", "id = $id");
 		
-		$img_result = image_data($_FILES['thefile'], '', $id);
+		if ($rs) {
+			$meta = array('category' => $rs['category'], 'caption' => $rs['caption'], 'alt' => $rs['alt']);
+		} else {
+			$meta = '';
+		} 
 		
-
+		$img_result = image_data($_FILES['thefile'], $meta, $id);
+		
 		if(is_array($img_result))
 		{
 			list($message, $id) = $img_result;
