@@ -1,4 +1,4 @@
-#@version 4.0.1;1127915659
+﻿#@version 4.0.1;1127915659
 #@admin
 add_new_author => Add new author
 and_mailed_to => and mailed to
@@ -251,6 +251,8 @@ thumb_width => Width
 upload_category => Category
 upload_dir_perms => directory permissions must be 777
 upload_thumbnail => Upload thumbnail
+thumbnail_deleted => Thumbnail deleted
+thumbnail_delete_failed => Failed to delete thumbnail
 #@import
 continue => Continue
 database_stuff => Database Data

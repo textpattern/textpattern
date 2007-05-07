@@ -31,11 +31,6 @@
  *
  */
  
-/* changelog:
- * 2005-07-24	wet	initial release
- * 2005-07-27	wet	extracted file based thumbs as wet_thumb class
- */
-
 /*
 $HeadURL$
 $LastChangedRevision$
@@ -163,7 +158,7 @@ class wet_thumb {
 	// Make sure we have enough memory if the image is large
 	if (max($this->_SRC['width'], $this->_SRC['height']) > 1024)
 		// this won't work on all servers but it's worth a try
-		ini_set('memory_limit', MORE_MEMORY);
+		ini_set('memory_limit', EXTRA_MEMORY);
 
 	// SRC einlesen
 	if ($this->_SRC['type'] == 1)	$this->_SRC['image'] = imagecreatefromgif($this->_SRC['file']);
@@ -304,7 +299,6 @@ class txp_thumb extends wet_thumb {
         $id = assert_int($id);
         $rs = safe_row('*', 'txp_image', 'id = '.$id.' limit 1');
         if ($rs) {
-	    // dmp ($rs);
             extract($rs);
             $this->m_ext = $ext;
             $this->m_id = $id;
@@ -320,22 +314,27 @@ class txp_thumb extends wet_thumb {
         if ( !isset($this->m_ext) ) return false;
         
         if ( parent::write ( IMPATH.$this->m_id.$this->m_ext, IMPATH.$this->m_id.'t'.$this->m_ext ) ) {
-	    safe_update('txp_image', 'thumbnail = 1', 'id = '.$this->m_id);
-	    return true;
-	}
+		    safe_update('txp_image', 'thumbnail = 1', 'id = '.$this->m_id);
+		    return true;
+		}
+		return false;
+    }
+
+     /**
+     * delete thumbnail
+     * @return	boolean, true indicates success
+     */
+    function delete( ) {
+        if (!isset($this->m_ext)) return false;
+        
+		if (unlink(IMPATH.$this->m_id.'t'.$this->m_ext)) {
+			safe_update('txp_image', 'thumbnail = 0', 'id = '.$this->m_id);
+	    	return true;
+		}
 	return false;
     }
-   
+  
 }
-
-
-/**
- * wet image manipulation tools
- */ 
-
-/* change log:
- *  2005-07-27  wet     initial creation
- */
 
 /**
  * Unsharp mask algorithm by Torstein Hønsi 2003 (thoensi_at_netcom_dot_no)
@@ -414,22 +413,3 @@ function UnsharpMask($img, $amount, $radius, $threshold)    {
     }
     return $img;
 }
-
-
-
-
-
-/**
- * @todo
- * TxP tag wrappers
- * <txp:wet_thumb />
- * attributes (reflecting txp_thumb object properties):
- *  id: image id
- *  width: integer
- *  height: integer
- *  shortside: integer
- *  longside: integer
- *  link: "true"|"false"
- *  window: "true"|"false"
- *  hint: "true"|"false"
- */

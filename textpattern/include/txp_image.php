@@ -24,7 +24,7 @@ $LastChangedRevision$
 	if ($event == 'image') {	
 		require_privs('image');		
 
-		if(!$step or !in_array($step, array('image_list','image_edit','image_insert','image_delete','image_replace','image_save','thumbnail_insert','image_change_pageby','thumbnail_create'
+		if(!$step or !in_array($step, array('image_list','image_edit','image_insert','image_delete','image_replace','image_save','thumbnail_insert','image_change_pageby','thumbnail_create','thumbnail_delete'
 		))){
 			image_list();
 		} else $step();
@@ -263,7 +263,8 @@ $LastChangedRevision$
 			tr(
 				td(
 					'<img src="'.hu.$img_dir.
-						'/'.$id.$ext.'" height="'.$h.'" width="'.$w.'" alt="" />'.
+						'/'.$id.$ext.'" height="'.$h.'" width="'.$w.'" alt="" '.
+						"title='$id$ext ($w &#215; $h)' />".
 						br.upload_form(gTxt('replace_image'),'replace_image_form',
 							'image_replace','image',$id,$file_max_upload_size, 'image-replace', '')
 				)
@@ -273,9 +274,13 @@ $LastChangedRevision$
 					join('',
 						array(
 							($thumbnail)
-							?	'<img src="'.hu.$img_dir.
-								'/'.$id.'t'.$ext.'" alt="" />'.br
-							:	'',
+							? 	startTable('image-thumbnail').
+									tr(
+										td('<img src="'.hu.$img_dir.'/'.$id.'t'.$ext.'" alt="" />').
+										td(dLink('image','thumbnail_delete','id',$id))
+									).
+								endTable().br
+							: 	'',
 							upload_form(gTxt('upload_thumbnail'),'upload_thumbnail',
 								'thumbnail_insert','image',$id,$file_max_upload_size, 'upload-thumbnail', '')
 						)
@@ -565,6 +570,18 @@ $LastChangedRevision$
 			$message = gTxt('thumbnail_not_saved', array('{id}' => $id));
 
 			image_edit($message, $id);
+		}
+	}
+
+// -------------------------------------------------------------
+	function thumbnail_delete() 
+	{
+		$id = assert_int(gps('id'));
+		$t = new txp_thumb($id);
+		if ($t->delete()) {
+			image_edit(gTxt('thumbnail_deleted'),$id);
+		} else {
+			image_edit(gTxt('thumbnail_delete_failed'),$id);
 		}
 	}
 

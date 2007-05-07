@@ -559,3 +559,14 @@ text-align: center;
 h2.pref-heading {
 margin: 20px 0 0 0;
 }
+
+/* images
+----------------------------------------------- */
+
+table#image-thumbnail {
+width: 100%;
+}
+
+table#image-thumbnail td {
+border: none;
+}
