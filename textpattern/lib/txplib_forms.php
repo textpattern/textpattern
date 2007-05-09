@@ -144,16 +144,18 @@ $LastChangedRevision$
 					$onClick='',
 					$size='',
 					$tab='',
-					$id='') 
+					$id='',
+					$disabled = false) 
 	{
 		$o  = '<input type="'.$type.'" name="'.$name.'"'; 
 		$o .= ' value="'.cleanfInput($value).'"';
-		$o .= ($size)    ? ' size="'.$size.'"' : '';
-		$o .= ($class)   ? ' class="'.$class.'"' : '';
-		$o .= ($title)   ? ' title="'.$title.'"' : '';
-		$o .= ($onClick) ? ' onclick="'.$onClick.'"' : '';
-		$o .= ($tab)     ? ' tabindex="'.$tab.'"' : '';
-		$o .= ($id)      ? ' id="'.$id.'"' : '';
+		$o .= ($size)     ? ' size="'.$size.'"' : '';
+		$o .= ($class)    ? ' class="'.$class.'"' : '';
+		$o .= ($title)    ? ' title="'.$title.'"' : '';
+		$o .= ($onClick)  ? ' onclick="'.$onClick.'"' : '';
+		$o .= ($tab)      ? ' tabindex="'.$tab.'"' : '';
+		$o .= ($id)       ? ' id="'.$id.'"' : '';
+		$o .= ($disabled) ? ' disabled="disabled"' : '';
 		$o .= " />";
 		return $o;
 	}
