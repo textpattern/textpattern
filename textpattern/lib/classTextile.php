@@ -305,13 +305,12 @@ class Textile
 				$text = $this->cleanWhiteSpace($text);
 			}
 
-			$text = $this->getRefs($text);
-
 			if (!$lite) {
 				$text = $this->block($text);
 			}
 
 			$text = $this->retrieve($text);
+			$text = $this->retrieveURLs($text);
 
 				// just to be tidy
 			$text = str_replace("<br />", "<br />\n", $text);
@@ -334,7 +333,6 @@ class Textile
 			$text = $this->encode_html($text, 0);
 
 			$text = $this->cleanWhiteSpace($text);
-			$text = $this->getRefs($text);
 
 			if ($lite) {
 				$text = $this->blockLite($text);
@@ -344,6 +342,7 @@ class Textile
 			}
 
 			$text = $this->retrieve($text);
+			$text = $this->retrieveURLs($text);
 
 				// just to be tidy
 			$text = str_replace("<br />", "<br />\n", $text);
@@ -622,7 +621,7 @@ class Textile
 		}
 
 		if ($tag == "bq") {
-			$cite = $this->checkRefs($cite);
+			$cite = $this->shelveURL($cite);
 			$cite = ($cite != '') ? ' cite="' . $cite . '"' : '';
 			$o1 = "\t<blockquote$cite$atts>\n";
 			$o2 = "\t\t<p".$this->pba($att, '', 0).">";
@@ -666,6 +665,7 @@ class Textile
 			$text = $this->code($text);
 		}
 
+		$text = $this->getRefs($text);
 		$text = $this->links($text);
 		if (!$this->noimage)
 			$text = $this->image($text);
@@ -756,8 +756,6 @@ class Textile
 	{
 		list(, $pre, $atts, $text, $title, $url, $slash, $post, $tail) = $m;
 
-		$url = $this->checkRefs($url);
-
 		$atts = $this->pba($atts);
 		$atts .= ($title != '') ? ' title="' . $this->encode_html($title) . '"' : '';
 
@@ -767,9 +765,9 @@ class Textile
 		$text = $this->span($text);
 		$text = $this->glyphs($text);
 
-		$url = $this->relURL($url);
+		$url = $this->shelveURL($url.$slash);
 
-		$out = '<a href="' . $this->r_encode_html($url . $slash) . '"' . $atts . $this->rel . '>' . trim($text) . '</a>' . $post;
+		$out = '<a href="' . $url . '"' . $atts . $this->rel . '>' . trim($text) . '</a>' . $post;
 		
 		if (($pre and !$tail) or ($tail and !$pre))
 			$out = $pre.$out.$tail;
@@ -795,9 +793,31 @@ class Textile
 	}
 
 // -------------------------------------------------------------
-	function checkRefs($text)
+	function shelveURL($text)
 	{
-		return (isset($this->urlrefs[$text])) ? $this->urlrefs[$text] : $text;
+		if (!$text) return '';
+		$ref = md5($text);
+		$this->urlshelf[$ref] = $text;
+		return 'urlref:'.$ref;
+	}
+
+// -------------------------------------------------------------
+	function retrieveURLs($text)
+	{
+		return preg_replace_callback('/urlref:(\w{32})/',
+			array(&$this, "retrieveURL"), $text);
+	}
+
+// -------------------------------------------------------------
+	function retrieveURL($m)
+	{
+		$ref = $m[1];
+		if (!isset($this->urlshelf[$ref]))
+			return $ref;
+		$url = $this->urlshelf[$ref];
+		if (isset($this->urlrefs[$url]))
+			$url = $this->urlrefs[$url];
+		return $this->r_encode_html($this->relURL($url));
 	}
 
 // -------------------------------------------------------------
@@ -852,10 +872,8 @@ class Textile
 			$size = @getimagesize(realpath($this->doc_root.ltrim($url, $this->ds)));
 		if ($size) $atts .= " $size[3]";
 
-		$href = (isset($m[5])) ? $this->checkRefs($m[5]) : '';
-		$url = $this->checkRefs($url);
-
-		$url = $this->relURL($url);
+		$href = (isset($m[5])) ? $this->shelveURL($m[5]) : '';
+		$url = $this->shelveURL($url);
 
 		$out = array(
 			($href) ? '<a href="' . $href . '">' : '',
