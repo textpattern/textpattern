@@ -863,7 +863,7 @@ class Textile
             ($href) ? '</a>' : ''
         );
 
-        return join('',$out);
+        return $this->shelve(join('',$out));
     }
 
 // -------------------------------------------------------------
