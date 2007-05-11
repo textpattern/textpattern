@@ -491,9 +491,9 @@ class Textile
                 if (!isset($lists[$tl])) {
                     $lists[$tl] = true;
                     $atts = $this->pba($atts);
-                    $line = "\t<" . $this->lT($tl) . "l$atts>\n\t\t<li>" . $this->graf($content);
+                    $line = "\t<" . $this->lT($tl) . "l$atts>\n\t\t<li>" . $content;
                 } else {
-                    $line = "\t\t<li>" . $this->graf($content);
+                    $line = "\t\t<li>" . $content;
                 }
 
                 if(strlen($nl) <= strlen($tl)) $line .= "</li>";
@@ -1006,7 +1006,7 @@ class Textile
             '/(\S)\"(?=\s|'.$pnc.'|<|$)/',                       //  double closing
             '/"/',                                               //  double opening
             '/\b([A-Z][A-Z0-9]{2,})\b(?:[(]([^)]*)[)])/',        //  3+ uppercase acronym
-            '/(?<!")\b([A-Z]{3,})([a-z]*)\b/',                   //  3+ uppercase
+            '/(?<=\s|^|[>(;-])([A-Z]{3,})([a-z]*)(?=\s|'.$pnc.'|<|$)/',  //  3+ uppercase
             '/([^.]?)\.{3}/',                                    //  ellipsis
             '/(\s?)--(\s?)/',                                    //  em dash
             '/\s-(?:\s|$)/',                                     //  en dash
