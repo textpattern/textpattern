@@ -274,15 +274,15 @@ $LastChangedRevision$
 
 	# files that haven't been updated
 	if ($old_files)
-		$fail['old_files'] = gTxt('old_files').cs.join(', '.n.t, $old_files);
+		$fail['old_files'] = gTxt('old_files').cs.n.t.join(', '.n.t, $old_files);
 
 	# files that don't match their checksums
 	if ($modified_files)
-		$fail['modified_files'] = gTxt('modified_files').cs.join(', '.n.t, $modified_files);
+		$fail['modified_files'] = gTxt('modified_files').cs.n.t.join(', '.n.t, $modified_files);
 
 	# running development code in live mode is not recommended
 	if ($dev_files and $production_status == 'live')
-		$fail['dev_version_live'] = gTxt('dev_version_live').cs.join(', '.n.t, $dev_files);
+		$fail['dev_version_live'] = gTxt('dev_version_live').cs.n.t.join(', '.n.t, $dev_files);
 
 	# anything might break if arbitrary functions are disabled
 	if (ini_get('disable_functions')) {
@@ -329,7 +329,7 @@ $LastChangedRevision$
 	if ($tables = list_txp_tables()) {
 		$table_errors = check_tables($tables);
 		if ($table_errors)
-			$fail['mysql_table_errors'] = gTxt('mysql_table_errors').cs.join(', '.n.t, $table_errors);
+			$fail['mysql_table_errors'] = gTxt('mysql_table_errors').cs.n.t.join(', '.n.t, $table_errors);
 	}
 
 	$active_plugins = array();
