@@ -862,22 +862,13 @@ $LastChangedRevision$
 			extract(safe_row('RealName, email', 'txp_users', "email = '".doSlash($to_address)."'"));
 		}
 
-		if ($prefs['override_emailcharset'])
+		if ($prefs['override_emailcharset'] and is_callable('utf8_decode'))
 		{
 			$charset = 'ISO-8599-1';
 
-			if (is_callable('utf8_decode'))
-			{
-				$RealName		= utf8_decode($RealName);
-				$subject		= utf8_decode($subject);
-				$body				= utf8_decode($body);
-				$to_address = utf8_decode($to_address);
-
-				if (!is_null($reply_to))
-				{
-					$reply_to = utf8_decode($reply_to);
-				}
-			}
+			$RealName = utf8_decode($RealName);
+			$subject = utf8_decode($subject);
+			$body = utf8_decode($body);
 		}
 
 		else
@@ -934,7 +925,7 @@ $LastChangedRevision$
 			}
 			return $string;
 		}
-		if ($prefs['override_emailcharset']) {
+		if ($prefs['override_emailcharset'] and is_callable('utf8_decode')) {
 			$start = '=?ISO-8859-1?B?';
 			$pcre  = '/.{1,42}/s';
 		}
