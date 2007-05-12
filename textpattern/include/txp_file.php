@@ -290,7 +290,7 @@ $LastChangedRevision$
 
 	function file_edit($message = '', $id = '')
 	{
-		global $txpcfg, $file_base_path, $levels, $path_from_root, $file_statuses;
+		global $txpcfg, $file_base_path, $levels, $file_statuses;
 
 		pagetop('file', $message);
 

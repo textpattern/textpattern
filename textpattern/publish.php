@@ -417,8 +417,8 @@ $LastChangedRevision$
 			}
 		}
 
-		$out['path_from_root'] = $path_from_root; // these are deprecated as of 1.0
-		$out['pfr']            = $path_from_root; // leaving them here for plugin compat
+		$out['path_from_root'] = rhu.'/'; // these are deprecated as of 1.0
+		$out['pfr']            = rhu.'/'; // leaving them here for plugin compat
 
 		$out['path_to_site']   = $path_to_site;
 		$out['permlink_mode']  = $permlink_mode;
