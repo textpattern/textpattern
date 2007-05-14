@@ -91,8 +91,6 @@ $LastChangedRevision$
 	{
 		global $txp_user;
 
-		require_privs('admin.edit');
-
 		$new_email = gps('new_email');
 
 		if (!is_valid_email($new_email))
