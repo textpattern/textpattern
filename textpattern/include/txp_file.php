@@ -205,19 +205,6 @@ $LastChangedRevision$
 				$condition .= ($file_exists) ? gTxt('file_status_ok') : gTxt('file_status_missing');
 				$condition .= '</span>';
 
-				// does the downloads column exist?
-				if (!isset($downloads))
-				{
-					// nope, add it
-					safe_alter('txp_file', "ADD downloads INT DEFAULT '0' NOT NULL");
-					$downloads = 0;
-				}
-
-				elseif (empty($downloads))
-				{
-					$downloads = '0';
-				}
-
 				echo tr(
 
 					n.td($id).
@@ -405,7 +392,7 @@ $LastChangedRevision$
 				td(
 					graf(gTxt('file_status').br.$condition) .
 					graf(gTxt('file_name').br.$downloadlink) .
-					graf(gTxt('file_download_count').br.(isset($downloads)?$downloads:0))					
+					graf(gTxt('file_download_count').br.$downloads)
 				)
 			),
 			$form,
@@ -562,7 +549,7 @@ $LastChangedRevision$
 			} else {
 				file_set_perm($newpath);
 				if ($size = filesize($newpath))
-					safe_update('txp_file', "size='".doSlash($size)."'", "id='".doSlash($id)."'");
+					safe_update('txp_file', 'size = '.$size.', modified = now()', 'id = '.$id);
 
 				$message = gTxt('file_uploaded', array('{name}' => $name));
 

@@ -22,18 +22,24 @@ $LastChangedRevision: 711 $
 	$update_files = 0;
 	if (!in_array('modified',$txpfile)) {
 		safe_alter('txp_file',
-			"add modified timestamp NOT NULL");
+			"add modified datetime NOT NULL default '0000-00-00 00:00:00'");
 		$update_files = 1;
 	}
 	if (!in_array('created',$txpfile)) {
 		safe_alter('txp_file',
-			"add created timestamp NOT NULL");
+			"add created datetime NOT NULL default '0000-00-00 00:00:00'");
 		$update_files = 1;
 	}
 	if (!in_array('size',$txpfile)) {
 		safe_alter('txp_file',
 			"add size bigint");
 		$update_files = 1;
+	}
+	if (!in_array('downloads',$txpfile)) {
+		safe_alter('txp_file', "ADD downloads INT DEFAULT '0' NOT NULL");
+	}
+	if (array_intersect(array('modified', 'created'), $txpfile)) {
+		safe_alter('txp_file', "MODIFY modified datetime NOT NULL default '0000-00-00 00:00:00', MODIFY created datetime NOT NULL default '0000-00-00 00:00:00'");
 	}
 
 	// copy existing file timestamps into the new database columns
