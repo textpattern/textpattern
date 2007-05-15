@@ -171,7 +171,7 @@ $LastChangedRevision$
 				$name = empty($name) ? gTxt('unnamed') : $name;
 
 				$thumbnail = ($thumbnail) ?
-					'<img src="'.hu.$img_dir.'/'.$id.'t'.$ext.'" />' :
+					'<img src="'.hu.$img_dir.'/'.$id.'t'.$ext.'" alt="" />' :
 					gTxt('no');
 
 				$tag_url = '?event=tag'.a.'tag_name=image'.a.'id='.$id.a.'ext='.$ext.
@@ -198,7 +198,9 @@ $LastChangedRevision$
 						href($name, $edit_url)
 					, 75).
 
-					td($thumbnail, 80).
+					td(
+						href($thumbnail, $edit_url)
+					, 80).
 
 					td(
 						'<ul>'.
