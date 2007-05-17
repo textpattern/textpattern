@@ -318,7 +318,7 @@ $LastChangedRevision$
 			$pretext_data = @file(hu.$s.'/?txpcleantest=1');
 			if ($pretext_data) {
 				$pretext_req = trim(@$pretext_data[0]);
-				if ($pretext_req != '/'.$s.'/?txpcleantest=1')
+				if ($pretext_req != md5('/'.$s.'/?txpcleantest=1'))
 					$fail['clean_url_data_failed'] = gTxt('clean_url_data_failed').cs.htmlspecialchars($pretext_req);
 			}
 			else
@@ -501,11 +501,13 @@ $LastChangedRevision$
 		$out[] = n.gTxt('php_extensions').cs.join(', ', $extv).n;
 
 		if (is_callable('apache_get_modules'))
-			$out[] = n.gTxt('apache_modules').cs.join(', ', apache_get_modules()).n.n;
+			$out[] = n.gTxt('apache_modules').cs.join(', ', apache_get_modules()).n;
 			
-		if (@is_array($pretext_data)) {
-			$out[] = n.gTxt('pretext_data').cs.htmlspecialchars(join('', array_slice($pretext_data, 1, 20))).n.n;
+		if (@is_array($pretext_data) and count($pretext_data) > 1) {
+			$out[] = n.gTxt('pretext_data').cs.htmlspecialchars(join('', array_slice($pretext_data, 1, 20))).n;
 		}
+
+		$out[] = n;
 
 		foreach ($files as $f) {
 			$rev = '';

@@ -229,7 +229,7 @@ $LastChangedRevision$
 		if (!$out['id'] && !$out['s'] && !(txpinterface=='css') &&! ( txpinterface=='admin') ) {
 			
 			// return clean URL test results for diagnostics
-			if (gps('txpcleantest') and serverSet('SERVER_ADDR') == serverSet('REMOTE_ADDR')) {
+			if (gps('txpcleantest')) {
 				exit(show_clean_test($out));
 			}
 

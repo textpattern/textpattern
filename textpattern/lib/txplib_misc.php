@@ -1923,8 +1923,11 @@ eod;
 
 //-------------------------------------------------------------
 	function show_clean_test($pretext) {
-		echo @$pretext['req'].n;
-		var_export($pretext);
+		echo md5(@$pretext['req']).n;
+		if (serverSet('SERVER_ADDR') == serverSet('REMOTE_ADDR'))
+		{
+			var_export($pretext);
+		}
 	}
 
 //-------------------------------------------------------------
