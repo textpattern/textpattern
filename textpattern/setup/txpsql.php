@@ -223,7 +223,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_lang` (
   PRIMARY KEY  (`id`),
   UNIQUE KEY `lang` (`lang`,`name`),
   KEY `lang_2` (`lang`,`event`)
-) $tabletype DELAY_KEY_WRITE=1 AUTO_INCREMENT=1 ";
+) $tabletype AUTO_INCREMENT=1 ";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_link` (
   `id` int(6) NOT NULL auto_increment,

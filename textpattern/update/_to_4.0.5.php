@@ -10,6 +10,8 @@ $LastChangedRevision: 711 $
 		exit("Nothing here. You can't access this file directly.");
 	}
 
+	safe_alter('txp_lang', 'DELAY_KEY_WRITE = 0');
+
 	if (!safe_field('name', 'txp_prefs', "name = 'lastmod_keepalive'"))
 		safe_insert('txp_prefs', "prefs_id = 1, name = 'lastmod_keepalive', val = '0', type = '1', html='yesnoradio'");
 		
