@@ -1269,13 +1269,13 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function is_cgi()
 	{
-		return (preg_match('/^cgi/i', php_sapi_name()) == 1);
+		return IS_CGI;
 	}
 
 // -------------------------------------------------------------
 	function is_mod_php()
 	{
-		return (php_sapi_name() == 'apache');
+		return IS_APACHE;
 	}
 
 // --------------------------------------------------------------
@@ -1532,7 +1532,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function txp_status_header($status='200 OK')
 	{
-		if (substr(php_sapi_name(), 0, 3) == 'cgi' and empty($_SERVER['FCGI_ROLE']) and empty($_ENV['FCGI_ROLE']))
+		if (IS_FASTCGI)
 			header("Status: $status");
 		elseif ($_SERVER['SERVER_PROTOCOL'] == 'HTTP/1.0')
 			header("HTTP/1.0 $status");

@@ -439,7 +439,7 @@ $LastChangedRevision$
 
 		(is_callable('apache_get_version')) ? gTxt('apache_version').cs.apache_get_version().n : '',
 
-		gTxt('php_sapi_mode').cs.php_sapi_name().n,
+		gTxt('php_sapi_mode').cs.PHP_SAPI.n,
 
 		gTxt('rfc2616_headers').cs.ini_get('cgi.rfc2616_headers').n,
 
