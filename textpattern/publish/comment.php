@@ -375,13 +375,12 @@ $LastChangedRevision$
 
 					$backpage = substr($backpage, 0, $prefs['max_url_len']);
 					$backpage = preg_replace("/[\x0a\x0d#].*$/s",'',$backpage);
-					$backpage .= ((strstr($backpage,'?')) ? '&' : '?') . 'commented='.(($visible==VISIBLE) ? '1' : '0');
 					$backpage = preg_replace("#(https?://[^/]+)/.*$#","$1",hu).$backpage;
-
 					if (defined('PARTLY_MESSY') and (PARTLY_MESSY))
 					{
 						$backpage = permlinkurl_id($parentid);
 					}
+					$backpage .= ((strstr($backpage,'?')) ? '&' : '?') . 'commented='.(($visible==VISIBLE) ? '1' : '0');
 
 					txp_status_header('302 Found');
 					if($comments_moderate){
