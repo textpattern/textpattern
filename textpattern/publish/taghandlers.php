@@ -363,6 +363,7 @@ $LastChangedRevision$
 				extract($a);
 
 				$thislink = array(
+					'id'          => $id,
 					'linkname'    => $linkname,
 					'url'         => $url,
 					'description' => $description,
