@@ -71,7 +71,7 @@ $LastChangedRevision$
 	
 		// v1.0 experimental relative url global
 	if (!defined('rhu'))
-		define("rhu",preg_replace("/https?:\/\/.+(\/.*)\/?$/U","$1",hu));
+		define("rhu",preg_replace("|^https?://[^/]+|","",hu));
 
 		// 1.0: a new $here variable in the top-level index.php
 		// should let us know the server path to the live site
