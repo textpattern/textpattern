@@ -1876,14 +1876,28 @@ eod;
 	function assert_article() {
 		global $thisarticle;
 		if (empty($thisarticle))
-         trigger_error(gTxt('error_article_context'));
+			trigger_error(gTxt('error_article_context'));
 	}
 
 //-------------------------------------------------------------
 	function assert_comment() {
 		global $thiscomment;
 		if (empty($thiscomment))
-         trigger_error(gTxt('error_comment_context'));
+			trigger_error(gTxt('error_comment_context'));
+	}
+
+//-------------------------------------------------------------
+	function assert_file() {
+		global $thisfile;
+		if (empty($thisfile))
+			trigger_error(gTxt('error_file_context'));
+	}
+
+//-------------------------------------------------------------
+	function assert_link() {
+		global $thislink;
+		if (empty($thislink))
+			trigger_error(gTxt('error_link_context'));
 	}
 
 //-------------------------------------------------------------

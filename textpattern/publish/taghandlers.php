@@ -372,6 +372,8 @@ $LastChangedRevision$
 				);
 
 				$out[] = parse_form($form);
+
+				$thislink = '';
 			}
 
 			if ($out)
@@ -388,6 +390,7 @@ $LastChangedRevision$
 	function tpt_link($atts)
 	{
 		global $thislink;
+		assert_link();
 
 		extract(lAtts(array(
 			'rel' => '',
@@ -405,6 +408,7 @@ $LastChangedRevision$
 	function linkdesctitle($atts)
 	{
 		global $thislink;
+		assert_link();
 
 		extract(lAtts(array(
 			'rel' => '',
@@ -426,6 +430,7 @@ $LastChangedRevision$
 	function link_name($atts)
 	{
 		global $thislink;
+		assert_link();
 
 		extract(lAtts(array(
 			'escape'	 => '',
@@ -441,6 +446,7 @@ $LastChangedRevision$
 	function link_url($atts)
 	{
 		global $thislink;
+		assert_link();
 
 		return $thislink['url'];
 	}
@@ -450,6 +456,7 @@ $LastChangedRevision$
 	function link_description($atts)
 	{
 		global $thislink;
+		assert_link();
 
 		extract(lAtts(array(
 			'class'		 => '',
@@ -474,6 +481,7 @@ $LastChangedRevision$
 	function link_date($atts)
 	{
 		global $thislink, $dateformat;
+		assert_link();
 
 		extract(lAtts(array(
 			'format' => $dateformat,
@@ -489,6 +497,7 @@ $LastChangedRevision$
 	function link_category($atts)
 	{
 		global $thislink;
+		assert_link();
 
 		extract(lAtts(array(
 			'class'		 => '',
@@ -2914,11 +2923,11 @@ function body($atts)
 
 			while ($a = nextRow($rs))
 			{
-				$GLOBALS['thisfile'] = file_download_format_info($a);
+				$thisfile = file_download_format_info($a);
 
 				$out[] = parse_form($form);
 
-				$GLOBALS['thisfile'] = '';
+				$thisfile = '';
 			}
 
 			if ($out)
@@ -2958,8 +2967,10 @@ function body($atts)
 			$thisfile = fileDownloadFetchInfo("filename = '".doSlash($filename)."'");
 		}
 
-		elseif ($thisfile)
+		else
 		{
+			assert_file();
+
 			$from_form = true;
 		}
 
@@ -2971,7 +2982,7 @@ function body($atts)
 			// so we don't want this value remaining
 			if (!$from_form)
 			{
-				$GLOBALS['thisfile'] = '';
+				$thisfile = '';
 			}
 
 			return $out;
@@ -3001,8 +3012,10 @@ function body($atts)
 			$thisfile = fileDownloadFetchInfo("filename = '".doSlash($filename)."'");
 		}
 
-		elseif ($thisfile)
+		else
 		{
+			assert_file();
+
 			$from_form = true;
 		}
 
@@ -3016,7 +3029,7 @@ function body($atts)
 			// so we don't want this value remaining
 			if (!$from_form)
 			{
-				$GLOBALS['thisfile'] = '';
+				$thisfile = '';
 			}
 
 			return $out;
@@ -3054,6 +3067,7 @@ function body($atts)
 	function file_download_size($atts)
 	{
 		global $thisfile;
+		assert_file();
 
 		extract(lAtts(array(
 			'decimals' => 2,
@@ -3149,6 +3163,7 @@ function body($atts)
 	function file_download_created($atts)
 	{
 		global $thisfile;
+		assert_file();
 
 		extract(lAtts(array(
 			'format' => '',
@@ -3167,6 +3182,7 @@ function body($atts)
 	function file_download_modified($atts)
 	{
 		global $thisfile;
+		assert_file();
 
 		extract(lAtts(array(
 			'format' => '',
@@ -3203,6 +3219,7 @@ function body($atts)
 	function file_download_id($atts)
 	{
 		global $thisfile;
+		assert_file();
 		return $thisfile['id'];
 	}
 
@@ -3211,6 +3228,7 @@ function body($atts)
 	function file_download_name($atts)
 	{
 		global $thisfile;
+		assert_file();
 		return $thisfile['filename'];
 	}
 
@@ -3219,6 +3237,7 @@ function body($atts)
 	function file_download_category($atts)
 	{
 		global $thisfile;
+		assert_file();
 
 		extract(lAtts(array(
 			'class'   => '',
@@ -3241,6 +3260,7 @@ function body($atts)
 	function file_download_downloads($atts)
 	{
 		global $thisfile;
+		assert_file();
 		return $thisfile['downloads'];
 	}
 
@@ -3249,6 +3269,7 @@ function body($atts)
 	function file_download_description($atts)
 	{
 		global $thisfile;
+		assert_file();
 
 		extract(lAtts(array(
 			'class'   => '',
