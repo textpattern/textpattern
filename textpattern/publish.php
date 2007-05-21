@@ -377,6 +377,7 @@ $LastChangedRevision$
 		$out['status'] = ($is_404 ? '404' : '200');
 
 		$out['pg'] = is_numeric($out['pg']) ? intval($out['pg']) : '';
+		$out['id'] = is_numeric($out['id']) ? intval($out['id']) : '';
 		
 		if ($out['s'] == 'file_download') {
 			// get id of potential filename
