@@ -378,6 +378,8 @@ $LastChangedRevision$
 
 		// Stats: found or not
 		$out['status'] = ($is_404 ? '404' : '200');
+
+		$out['pg'] = is_numeric($out['pg']) ? intval($out['pg']) : '';
 		
 		if ($out['s'] == 'file_download') {
 			// get id of potential filename
@@ -1097,7 +1099,7 @@ $LastChangedRevision$
 	function makeOut() 
 	{
 		foreach(func_get_args() as $a) {
-			$array[$a] = gps($a);
+			$array[$a] = strval(gps($a));
 		}
 		return $array;
 	}
