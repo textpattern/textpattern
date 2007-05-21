@@ -262,9 +262,6 @@ $LastChangedRevision$
 						$out['s'] = 'file_download';
 						$out['id'] = (!empty($u2)) ? $u2 : ''; break;
 					
-					case 'p':
-						$out['p'] = (is_numeric($u2)) ? $u2 : ''; break;
-					
 					default:
 						// then see if the prefs-defined permlink scheme is usable
 						switch ($permlink_mode) {
