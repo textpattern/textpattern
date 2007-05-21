@@ -236,7 +236,7 @@ $LastChangedRevision$
 			extract(chopUrl($req));
 	
 				//first we sniff out some of the preset url schemes
-			if (!empty($u1)) {
+			if (strlen($u1)) {
 
 				switch($u1) {
 	
@@ -1111,11 +1111,11 @@ $LastChangedRevision$
 		if ($qs) $req = substr($req, 0, $qs);
 		$req = preg_replace('/index\.php$/', '', $req);
 		$r = array_map('urldecode', explode('/',$req));
-		$o['u0'] = (!empty($r[0])) ? $r[0] : '';
-		$o['u1'] = (!empty($r[1])) ? $r[1] : '';
-		$o['u2'] = (!empty($r[2])) ? $r[2] : '';
-		$o['u3'] = (!empty($r[3])) ? $r[3] : '';
-		$o['u4'] = (!empty($r[4])) ? $r[4] : '';
+		$o['u0'] = (isset($r[0])) ? $r[0] : '';
+		$o['u1'] = (isset($r[1])) ? $r[1] : '';
+		$o['u2'] = (isset($r[2])) ? $r[2] : '';
+		$o['u3'] = (isset($r[3])) ? $r[3] : '';
+		$o['u4'] = (isset($r[4])) ? $r[4] : '';
 
 		return $o;
 	}
