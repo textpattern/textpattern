@@ -206,7 +206,7 @@ $LastChangedRevision$
 		$out =  makeOut('id','s','c','q','pg','p','month','author');
 
 			// some useful vars for taghandlers, plugins
-		$out['request_uri'] = serverSet('REQUEST_URI');
+		$out['request_uri'] = preg_replace("|^https?://[^/]+|i","",serverSet('REQUEST_URI'));
 		$out['qs'] = serverSet('QUERY_STRING');
 			// IIS fix 
 		if (!$out['request_uri'] and serverSet('SCRIPT_NAME'))
