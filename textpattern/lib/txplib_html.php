@@ -122,27 +122,44 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function dLink($event,$step,$thing,$value,$verify='',$thing2='',$thing2val='',$get='')
-	{
+
+	function dLink($event, $step, $thing, $value, $verify = '', $thing2 = '', $thing2val = '', $get = '', $remember = null) {
+		if ($remember) {
+			list($page, $sort, $dir, $crit, $search_method) = $remember;
+		}
+
 		if ($get) {
-			return join('',array(
-				'<a href="?event='.$event.a.'step='.$step.a.$thing.'='.urlencode($value),
-				($thing2) ? a.$thing2.'='.$thing2val : '',
-				'"',
-				' class="dlink"',
-				' onclick="return verify(\'',
+			$url = '?event='.$event.a.'step='.$step.a.$thing.'='.urlencode($value);
+
+			if ($thing2) {
+				$url .= a.$thing2.'='.urlencode($thing2val);
+			}
+
+			if ($remember) {
+				$url .= a.'page='.$page.a.'sort='.$sort.a.'dir='.$dir.a.'crit='.$crit.a.'search_method='.$search_method;
+			}
+
+			return join('', array(
+				'<a href="'.$url.'" class="dlink" onclick="return verify(\'',
 				($verify) ? gTxt($verify) : gTxt('confirm_delete_popup'),
 				'\')">&#215;</a>'
 			));
 		}
 
-		return join('',array(
-			'<form action="index.php" method="post" onsubmit="return confirm(\''.gTxt('confirm_delete_popup').'\');">',
-			fInput('submit','','&#215;','smallerbox'),
-			eInput($event).sInput($step),
-			hInput($thing,$value),
-			($thing2) ? hInput($thing2,$thing2val) : '',
-			'</form>'));
+		return join('', array(
+			'<form method="post" action="index.php" onsubmit="return confirm(\''.gTxt('confirm_delete_popup').'\');">',
+			 fInput('submit', '', '&#215;', 'smallerbox'),
+			 eInput($event).
+			 sInput($step),
+			 hInput($thing, $value),
+			 ($thing2) ? hInput($thing2, $thing2val) : '',
+			 ($remember) ? hInput('page', $page) : '',
+			 ($remember) ? hInput('sort', $sort) : '',
+			 ($remember) ? hInput('dir', $dir) : '',
+			 ($remember) ? hInput('crit', $crit) : '',
+			 ($remember) ? hInput('search_method', $search_method) : '',
+			'</form>'
+		));
 	}
 
 // -------------------------------------------------------------

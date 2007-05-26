@@ -217,7 +217,7 @@ $LastChangedRevision$
 					, 75).
 
 					td(
-						dLink('image', 'image_delete', 'id', $id)
+						dLink('image', 'image_delete', 'id', $id, '', '', '', false, array($page, $sort, $dir, $crit, $search_method))
 					, 10)
 				);
 			}
@@ -442,7 +442,8 @@ $LastChangedRevision$
 	{
 		global $txpcfg;
 		extract($txpcfg);
-		$id = assert_int(ps('id'));
+
+		$id = assert_int((int)gps('id'));
 		
 		$rs = safe_row("*", "txp_image", "id = $id");
 		if ($rs) {

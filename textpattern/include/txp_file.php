@@ -246,7 +246,7 @@ $LastChangedRevision$
 					, 25).
 
 					td(
-						dLink('file', 'file_delete', 'id', $id)
+						dLink('file', 'file_delete', 'id', $id, '', '', '', false, array($page, $sort, $dir, $crit, $search_method))
 					, 10)
 				);
 			}
