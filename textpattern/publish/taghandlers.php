@@ -1143,6 +1143,12 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
+	function site_name() {
+		return $GLOBALS['sitename'];
+	}
+
+// -------------------------------------------------------------
+
 	function site_slogan()
 	{
 		return $GLOBALS['site_slogan'];
