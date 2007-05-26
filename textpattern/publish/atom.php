@@ -166,10 +166,30 @@ $LastChangedRevision$
 
 				}
 			}
-		
 		}
-		if (!empty($articles)) {
 
+		if (!$articles) {
+			if ($section) {
+				if (safe_field('name', 'txp_section', "name = '$section'") == false) {
+					txp_die(gTxt('404_not_found'), '404');
+				}
+			} elseif ($category) {
+				switch ($area) {
+					case 'link':
+							if (safe_field('id', 'txp_category', "name = '$category' and type = 'link'") == false) {
+								txp_die(gTxt('404_not_found'), '404');
+							}
+					break;
+
+					case 'article':
+					default:
+							if (safe_field('id', 'txp_category', "name = '$category' and type = 'article'") == false) {
+								txp_die(gTxt('404_not_found'), '404');
+							}
+					break;
+				}
+			}
+		} else {
 			//turn on compression if we aren't using it already
 			if (extension_loaded('zlib') && ini_get("zlib.output_compression") == 0 && ini_get('output_handler') != 'ob_gzhandler' && !headers_sent()) {
 				// make sure notices/warnings/errors don't fudge up the feed
@@ -181,7 +201,7 @@ $LastChangedRevision$
 				echo $buf;
 			}
 
-			handle_lastmod();		  
+			handle_lastmod();
 			$hims = serverset('HTTP_IF_MODIFIED_SINCE');
 			$imsd = ($hims) ? strtotime($hims) : 0;
 
@@ -200,11 +220,11 @@ $LastChangedRevision$
 			} else {
 				$canaim = false;
 			}
-		  
+
 			$hinm = stripslashes(serverset('HTTP_IF_NONE_MATCH'));
 
 			$cutarticles = false;
-		
+
 			if ($canaim !== false) {
 				foreach($articles as $id=>$thing) {
 					if (strpos($hinm, $etags[$id])) {
@@ -242,19 +262,20 @@ $LastChangedRevision$
 			if ($etag) header('ETag: "'.$etag.'"');
 
 			if ($cutarticles) {
-				//header("HTTP/1.1 226 IM Used"); 
+				//header("HTTP/1.1 226 IM Used");
 				//This should be used as opposed to 200, but Apache doesn't like it.
 				//http://intertwingly.net/blog/2004/09/11/Vary-ETag/ says that the status code should be 200.
 				header("Cache-Control: no-store, im");
 				header("IM: feed");
 			}
-		
-			$out = array_merge($out, $articles);
 
-			header('Content-type: application/atom+xml; charset=utf-8');
-			return chr(60).'?xml version="1.0" encoding="UTF-8"?'.chr(62).n.
-			'<feed xml:lang="'.$language.'" xmlns="http://www.w3.org/2005/Atom">'.join(n,$out).'</feed>';
 		}
+
+		$out = array_merge($out, $articles);
+
+		header('Content-type: application/atom+xml; charset=utf-8');
+		return chr(60).'?xml version="1.0" encoding="UTF-8"?'.chr(62).n.
+			'<feed xml:lang="'.$language.'" xmlns="http://www.w3.org/2005/Atom">'.join(n,$out).'</feed>';
 	}
 
 

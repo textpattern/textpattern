@@ -123,86 +123,105 @@ $LastChangedRevision$
 					$etags[$id] = strtoupper(dechex(crc32($articles[$id])));
 					$dates[$id] = $date;
 				}
-
 			}
 		}
-		
-		  //turn on compression if we aren't using it already
-		if (extension_loaded('zlib') && ini_get("zlib.output_compression") == 0 && ini_get('output_handler') != 'ob_gzhandler' && !headers_sent()) {
-			// make sure notices/warnings/errors don't fudge up the feed
-			// when compression is used
-			$buf = '';
-			while ($b = @ob_get_clean())
-				$buf .= $b;
-			@ob_start('ob_gzhandler');
-			echo $buf;
-		}
 
-		handle_lastmod();
-		$hims = serverset('HTTP_IF_MODIFIED_SINCE');
-		$imsd = ($hims) ? strtotime($hims) : 0;
+		if (!$articles) {
+			if ($section) {
+				if (safe_field('name', 'txp_section', "name = '$section'") == false) {
+					txp_die(gTxt('404_not_found'), '404');
+				}
+			} elseif ($category) {
+				switch ($area) {
+					case 'link':
+							if (safe_field('id', 'txp_category', "name = '$category' and type = 'link'") == false) {
+								txp_die(gTxt('404_not_found'), '404');
+							}
+					break;
 
-		if (is_callable('apache_request_headers')) {
-			$headers = apache_request_headers();
-			if (isset($headers["A-IM"])) {
-				$canaim = strpos($headers["A-IM"], "feed");
+					case 'article':
+					default:
+							if (safe_field('id', 'txp_category', "name = '$category' and type = 'article'") == false) {
+								txp_die(gTxt('404_not_found'), '404');
+							}
+					break;
+				}
+			}
+		} else {
+			//turn on compression if we aren't using it already
+			if (extension_loaded('zlib') && ini_get("zlib.output_compression") == 0 && ini_get('output_handler') != 'ob_gzhandler' && !headers_sent()) {
+				// make sure notices/warnings/errors don't fudge up the feed
+				// when compression is used
+				$buf = '';
+				while ($b = @ob_get_clean())
+					$buf .= $b;
+				@ob_start('ob_gzhandler');
+				echo $buf;
+			}
+
+			handle_lastmod();
+			$hims = serverset('HTTP_IF_MODIFIED_SINCE');
+			$imsd = ($hims) ? strtotime($hims) : 0;
+
+			if (is_callable('apache_request_headers')) {
+				$headers = apache_request_headers();
+				if (isset($headers["A-IM"])) {
+					$canaim = strpos($headers["A-IM"], "feed");
+				} else {
+					$canaim = false;
+				}
 			} else {
 				$canaim = false;
 			}
-		} else {
-			$canaim = false;
-		}
 
-		$hinm = stripslashes(serverset('HTTP_IF_NONE_MATCH'));
+			$hinm = stripslashes(serverset('HTTP_IF_NONE_MATCH'));
 
-		$cutarticles = false;
+			$cutarticles = false;
 
-		if ($canaim !== false) {
-			foreach($articles as $id=>$thing) {
-				if (strpos($hinm, $etags[$id]) !== false) {
-					unset($articles[$id]);
-					$cutarticles = true;
-					$cut_etag = true;
+			if ($canaim !== false) {
+				foreach($articles as $id=>$thing) {
+					if (strpos($hinm, $etags[$id]) !== false) {
+						unset($articles[$id]);
+						$cutarticles = true;
+						$cut_etag = true;
+					}
+
+					if ($dates[$id] < $imsd) {
+						unset($articles[$id]);
+						$cutarticles = true;
+						$cut_time = true;
+					}
 				}
+			}
 
-				if ($dates[$id] < $imsd) {
-					unset($articles[$id]);
-					$cutarticles = true;
-					$cut_time = true;
-				}
+			if (isset($cut_etag) && isset($cut_time)) {
+				header("Vary: If-None-Match, If-Modified-Since");
+			} else if (isset($cut_etag)) {
+				header("Vary: If-None-Match");
+			} else if (isset($cut_time)) {
+				header("Vary: If-Modified-Since");
+			}
+
+			$etag = @join("-",$etags);
+
+			if (strstr($hinm, $etag)) {
+				if ($_SERVER['SERVER_PROTOCOL'] == 'HTTP/1.0')
+					header("HTTP/1.0 304 Not Modified");
+				else
+					header("HTTP/1.1 304 Not Modified");
+				exit;
+			}
+
+			if ($cutarticles) {
+				//header("HTTP/1.1 226 IM Used");
+				//This should be used as opposed to 200, but Apache doesn't like it.
+				//http://intertwingly.net/blog/2004/09/11/Vary-ETag/ says that the status code should be 200.
+				header("Cache-Control: no-store, im");
+				header("IM: feed");
 			}
 		}
 
-		if (isset($cut_etag) && isset($cut_time)) {
-			header("Vary: If-None-Match, If-Modified-Since");
-		} else if (isset($cut_etag)) {
-			header("Vary: If-None-Match");
-		} else if (isset($cut_time)) {
-			header("Vary: If-Modified-Since");
-		}
-
-
-		$etag = @join("-",$etags);
-
-		if (strstr($hinm, $etag)) {
-			if ($_SERVER['SERVER_PROTOCOL'] == 'HTTP/1.0')
-				header("HTTP/1.0 304 Not Modified");
-			else
-				header("HTTP/1.1 304 Not Modified");
-			exit;
-		}
-
-
-		if ($cutarticles) {
-			//header("HTTP/1.1 226 IM Used");
-			//This should be used as opposed to 200, but Apache doesn't like it.
-			//http://intertwingly.net/blog/2004/09/11/Vary-ETag/ says that the status code should be 200.
-			header("Cache-Control: no-store, im");
-			header("IM: feed");
-		}
-
 		$out = array_merge($out, $articles);
-
 
 		header("Content-Type: application/rss+xml; charset=utf-8");
 		if ($etag) header('ETag: "'.$etag.'"');
