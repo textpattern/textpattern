@@ -443,7 +443,7 @@ $LastChangedRevision$
 		global $txpcfg;
 		extract($txpcfg);
 
-		$id = assert_int((int)gps('id'));
+		$id = assert_int(ps('id'));
 		
 		$rs = safe_row("*", "txp_image", "id = $id");
 		if ($rs) {
