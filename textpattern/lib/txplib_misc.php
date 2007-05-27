@@ -1452,7 +1452,7 @@ $LastChangedRevision$
 
 //-------------------------------------------------------------
 	function update_lastmod() {
-		safe_update("txp_prefs", "val = now()", "name = 'lastmod'");
+		safe_upsert("txp_prefs", "val = now()", "name = 'lastmod'");
 	}
 
 //-------------------------------------------------------------
