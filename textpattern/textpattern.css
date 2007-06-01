@@ -414,6 +414,24 @@ td.tabs td {
 vertical-align: middle;
 }
 
+table#pagetop {
+width: 100%;
+margin-bottom: 2em;
+}
+
+tr#branding {
+background-color: #FFCC33;
+}
+
+tr#branding img {
+width: 368px;
+height: 15px;
+}
+
+tr#branding td#navpop {
+text-align: right;
+}
+
 td.tabup, td.tabup2 {
 background: transparent url(txp_img/up.gif) no-repeat top left;
 }
