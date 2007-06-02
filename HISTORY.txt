@@ -1,3 +1,22 @@
+Changes since 4.0.4
+
+* Keep image properties on replacement
+* Add 'delete thumbnail' function
+* Support back end branding: customizable logo and color bar
+* Table sort indicators
+* Textile improvements
+* Smarter comment submit button emphasises preview step
+* Optionally hide spam comments in back end list
+* Truncate longish article category titles in the write screen
+* Handle thumbnailing of larger images 
+* Better MoveableType import
+* Fix some more IIS issues
+* New callback event: 'textpattern_end'
+* New callback event: 'ping'
+* New tag: <txp:article_url_title />
+* Changed tag: <txp:permlink /> loses default title attribute
+* Changed tag: <txp:file_download_link /> returns filename as an additional URL part
+
 Changes since 4.0.3:
 
 * RSS 2.0 support
@@ -160,7 +179,7 @@ Changes since 4.0:
 * fixed bug in atom feeds (multiple identical excerpts)
 * added new permission level (article.edit.own.published, allows you to edit own articles _after_ publishing)
 * added very basic 404 support (correct 404 Headers are sent)
-* added new languages (Íslenska, Suomi, ..(..), ..(..))
+* added new languages (ï¿½slenska, Suomi, ..(..), ..(..))
 * fixed bugs in articles by author (clean and messy urls)
 * fixed category_list to use clean urls when appropriate
 * fixed installation problems with certain db prefixes by limiting possible prefixes
