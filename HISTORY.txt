@@ -179,7 +179,7 @@ Changes since 4.0:
 * fixed bug in atom feeds (multiple identical excerpts)
 * added new permission level (article.edit.own.published, allows you to edit own articles _after_ publishing)
 * added very basic 404 support (correct 404 Headers are sent)
-* added new languages (�slenska, Suomi, ..(..), ..(..))
+* added new languages (?slenska, Suomi, ..(..), ..(..))
 * fixed bugs in articles by author (clean and messy urls)
 * fixed category_list to use clean urls when appropriate
 * fixed installation problems with certain db prefixes by limiting possible prefixes
