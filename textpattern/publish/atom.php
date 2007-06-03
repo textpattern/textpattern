@@ -205,11 +205,6 @@ $LastChangedRevision$
 			$hims = serverset('HTTP_IF_MODIFIED_SINCE');
 			$imsd = ($hims) ? strtotime($hims) : 0;
 
-			if ($imsd >= $last) {
-				txp_status_header("304 Not Modified"); exit;
-			}
-			header("Last-Modified: ".gmdate('D, d M Y H:i:s \G\M\T',$last));
-
 			if (is_callable('apache_request_headers')) {
 				$headers = apache_request_headers();
 				if (isset($headers["A-IM"])) {
