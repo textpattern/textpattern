@@ -428,7 +428,7 @@ $LastChangedRevision$
 							fInput('text', 'RealName', $RealName, 'edit')
 						).
 
-						td($name).
+						td(htmlspecialchars($name)).
 						td(
 							fInput('text', 'email', $email, 'edit')
 						);
@@ -477,7 +477,7 @@ $LastChangedRevision$
 			{
 				while ($a = nextRow($rs))
 				{
-					extract($a);
+					extract(doSpecial($a));
 
 					echo tr(
 						td($RealName).

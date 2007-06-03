@@ -21,7 +21,7 @@ $LastChangedRevision$
 			'<a href="http://www.textpattern.com"><img src="txp_img/carver.gif" width="60" height="48" border="0" alt="" /></a>';
 			echo graf('Textpattern &#183; '.txp_version);
 			echo($txp_user)
-			?	graf(gTxt('logged_in_as').' '.$txp_user.br.
+			?	graf(gTxt('logged_in_as').' '.htmlspecialchars($txp_user).br.
 					'<a href="index.php?logout=1">'.gTxt('logout').'</a>').'</div>'
 			:	'</div>';
 			echo n.'</body>'.n.'</html>';

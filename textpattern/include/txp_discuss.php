@@ -244,7 +244,7 @@ $LastChangedRevision$
 
 				else
 				{
-					$parent_title = empty($tq['Title']) ? '<em>'.gTxt('untitled').'</em>' : $tq['Title'];
+					$parent_title = empty($tq['Title']) ? '<em>'.gTxt('untitled').'</em>' : escape_title($tq['Title']);
 
 					$parent = href($parent_title, '?event=list'.a.'step=list'.a.'search_method=id'.a.'crit='.$tq['ID']);
 
@@ -269,14 +269,14 @@ $LastChangedRevision$
 						safe_strftime('%d %b %Y %X', $uPosted), 140
 					).
 
-					td($name, 75).
+					td(htmlspecialchars($name), 75).
 
 					td(
 						short_preview($dmessage)
 					).
 
-					td(soft_wrap($email, 30), 100, 'discuss_detail').
-					td(soft_wrap($web, 30), 100, 'discuss_detail').
+					td(htmlspecialchars(soft_wrap($email, 30)), 100, 'discuss_detail').
+					td(htmlspecialchars(soft_wrap($web, 30)), 100, 'discuss_detail').
 					td($ip, 75, 'discuss_detail').
 					td($comment_status, 75, 'discuss_detail').
 					td($parent, 75).

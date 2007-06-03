@@ -179,15 +179,15 @@ $LastChangedRevision$
 						, 35).
 
 						td(
-							href($linkname, $edit_url)
+							href(htmlspecialchars($linkname), $edit_url)
 						, 125).
 
 						td(
-							$description
+							htmlspecialchars($description)
 						, 150).
 
 						td(
-							'<span title="'.fetch_category_title($category, 'link').'">'.$category.'</span>'
+							'<span title="'.htmlspecialchars(fetch_category_title($category, 'link')).'">'.$category.'</span>'
 						, 125).
 
 						td(
@@ -287,7 +287,7 @@ $LastChangedRevision$
 				,' style="text-align: right; vertical-align: top;"').
 
 				td(
-					'<textarea id="link-description" name="description" cols="40" rows="7" tabindex="4">'.$description.'</textarea>'
+					'<textarea id="link-description" name="description" cols="40" rows="7" tabindex="4">'.htmlspecialchars($description).'</textarea>'
 				)
 			).
 

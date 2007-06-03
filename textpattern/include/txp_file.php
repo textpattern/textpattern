@@ -194,7 +194,7 @@ $LastChangedRevision$
 
 				$download_link = ($file_exists) ? '<li>'.make_download_link($id).'</li>' : '';
 
-				$category = ($category) ? '<span title="'.fetch_category_title($category, 'file').'">'.$category.'</span>' : '';
+				$category = ($category) ? '<span title="'.htmlspecialchars(fetch_category_title($category, 'file')).'">'.$category.'</span>' : '';
 
 				$tag_url = '?event=tag'.a.'tag_name=file_download_link'.a.'id='.$id.a.'description='.urlencode($description).
 					a.'filename='.urlencode($filename);
@@ -217,10 +217,10 @@ $LastChangedRevision$
 					, 65).
 
 					td(
-						href($filename, $edit_url)
+						href(htmlspecialchars($filename), $edit_url)
 					, 125).
 
-					td($description, 150).
+					td(htmlspecialchars($description), 150).
 					td($category, 90).
 
 					/*
@@ -309,7 +309,7 @@ $LastChangedRevision$
 			$condition .= ($file_exists)?gTxt('file_status_ok'):gTxt('file_status_missing');
 			$condition .= '</span>';
 
-			$downloadlink = ($file_exists)?make_download_link($id, $filename):$filename;
+			$downloadlink = ($file_exists)?make_download_link($id, htmlspecialchars($filename)):htmlspecialchars($filename);
 			
 			$created =
 					n.graf(checkbox('publish_now', '1', $publish_now, '', 'publish_now').'<label for="publish_now">'.gTxt('set_to_now').'</label>').
@@ -488,7 +488,7 @@ $LastChangedRevision$
 				} else {
 					file_set_perm($newpath);
 
-					$message = gTxt('file_uploaded', array('{name}' => $name));
+					$message = gTxt('file_uploaded', array('{name}' => htmlspecialchars($name)));
 
 					file_edit($message, $id);
 				}
@@ -551,7 +551,7 @@ $LastChangedRevision$
 				if ($size = filesize($newpath))
 					safe_update('txp_file', 'size = '.$size.', modified = now()', 'id = '.$id);
 
-				$message = gTxt('file_uploaded', array('{name}' => $name));
+				$message = gTxt('file_uploaded', array('{name}' => htmlspecialchars($name)));
 
 				file_edit($message, $id);
 				// clean up old

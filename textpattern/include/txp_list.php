@@ -256,7 +256,7 @@ $LastChangedRevision$
 					td(($a['Status'] < 4 ? $Status : '<a href="'.permlinkurl($a).'">'.$Status.'</a>'), 50).
 
 					td(
-						'<span title="'.htmlspecialchars(get_author_name($AuthorID)).'">'.$AuthorID.'</span>'
+						'<span title="'.htmlspecialchars(get_author_name($AuthorID)).'">'.htmlspecialchars($AuthorID).'</span>'
 					).
 
 					td($comments, 50, "articles_detail").

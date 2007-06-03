@@ -381,7 +381,7 @@ if (!empty($event) and $event == 'article') {
 
 			// keywords
 				n.graf('<label for="keywords">'.gTxt('keywords').'</label>'.sp.popHelp('keywords').br.
-					n.'<textarea id="keywords" name="Keywords" cols="18" rows="5">'.str_replace(',' ,', ', $Keywords).'</textarea>'),
+					n.'<textarea id="keywords" name="Keywords" cols="18" rows="5">'.htmlspecialchars(str_replace(',' ,', ', $Keywords)).'</textarea>'),
 
 			// article image
 				n.graf('<label for="article-image">'.gTxt('article_image').'</label>'.sp.popHelp('article_image').br.
@@ -409,7 +409,7 @@ if (!empty($event) and $event == 'article') {
 						$recent['Title'] = gTxt('untitled').sp.$recent['ID'];
 					}
 
-					echo n.t.'<li><a href="?event=article'.a.'step=edit'.a.'ID='.$recent['ID'].'">'.$recent['Title'].'</a></li>';
+					echo n.t.'<li><a href="?event=article'.a.'step=edit'.a.'ID='.$recent['ID'].'">'.escape_title($recent['Title']).'</a></li>';
 				}
 
 				echo '</ul>';
@@ -522,9 +522,9 @@ if (!empty($event) and $event == 'article') {
 	//-- author --------------
 	
 		if ($view=="text" && $step != "create") {
-			echo '<p class="small">'.gTxt('posted_by').": $AuthorID &#183; ".safe_strftime('%d %b %Y &#183; %X',$sPosted);
+			echo '<p class="small">'.gTxt('posted_by').': '.htmlspecialchars($AuthorID).' &#183; '.safe_strftime('%d %b %Y &#183; %X',$sPosted);
 			if($sPosted != $sLastMod) {
-				echo br.gTxt('modified_by').": $LastModID &#183; ".safe_strftime('%d %b %Y &#183; %X',$sLastMod);
+				echo br.gTxt('modified_by').': '.htmlspecialchars($LastModID).' &#183; '.safe_strftime('%d %b %Y &#183; %X',$sLastMod);
 			}
 				echo '</p>';
 			}

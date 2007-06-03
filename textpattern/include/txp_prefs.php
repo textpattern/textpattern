@@ -344,7 +344,7 @@ $LastChangedRevision$
 				' selected="selected"' :
 				'';
 
-			$out .= n.t.'<option value="'.htmlspecialchars($avalue).'"'.$selected.'>'.$alabel.'</option>'.n;
+			$out .= n.t.'<option value="'.htmlspecialchars($avalue).'"'.$selected.'>'.htmlspecialchars($alabel).'</option>'.n;
 		}
 
 		$out .= n.'</select>';

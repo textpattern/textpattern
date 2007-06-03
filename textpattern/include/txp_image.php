@@ -168,7 +168,7 @@ $LastChangedRevision$
 				$edit_url = '?event=image'.a.'step=image_edit'.a.'id='.$id.a.'sort='.$sort.
 					a.'dir='.$dir.a.'page='.$page.a.'search_method='.$search_method.a.'crit='.$crit;
 
-				$name = empty($name) ? gTxt('unnamed') : $name;
+				$name = empty($name) ? gTxt('unnamed') : htmlspecialchars($name);
 
 				$thumbnail = ($thumbnail) ?
 					'<img src="'.hu.$img_dir.'/'.$id.'t'.$ext.'" alt="" />' :
@@ -177,7 +177,7 @@ $LastChangedRevision$
 				$tag_url = '?event=tag'.a.'tag_name=image'.a.'id='.$id.a.'ext='.$ext.
 					a.'w='.$w.a.'h='.$h.a.'alt='.urlencode($alt).a.'caption='.urlencode($caption);
 
-				$category = ($category) ? '<span title="'.fetch_category_title($category, 'image').'">'.$category.'</span>' : '';
+				$category = ($category) ? '<span title="'.htmlspecialchars(fetch_category_title($category, 'image')).'">'.$category.'</span>' : '';
 
 				echo n.n.tr(
 
@@ -213,7 +213,7 @@ $LastChangedRevision$
 					td($category, 75).
 
 					td(
-						'<span title="'.get_author_name($author).'">'.$author.'</span>'
+						'<span title="'.htmlspecialchars(get_author_name($author)).'">'.htmlspecialchars($author).'</span>'
 					, 75).
 
 					td(
