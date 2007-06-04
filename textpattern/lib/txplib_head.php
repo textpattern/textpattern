@@ -161,6 +161,7 @@ $LastChangedRevision$
 ?>
 	-->
 	</script>
+	<script type="text/javascript" src="jquery.js"></script>
 	</head>
 	<body>
   <table id="pagetop" cellpadding="0" cellspacing="0">
