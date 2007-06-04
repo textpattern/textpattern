@@ -36,23 +36,21 @@ $LastChangedRevision$
 
 		foreach($prefnames as $prefname) {
 			if (isset($post[$prefname])) {
- 				if ($prefname == 'lastmod') {
-					safe_update("txp_prefs","val=now()", "name='lastmod'");
-				} else {
-					if($prefname == 'siteurl') {
-						$post[$prefname] = str_replace("http://",'',$post[$prefname]);
-						$post[$prefname] = rtrim($post[$prefname],"/");
-					}
-					safe_update(
-						"txp_prefs", 
-						"val = '".$post[$prefname]."'",
-						"name = '".doSlash($prefname)."' and prefs_id = 1"
-					);
+				if ($prefname == 'siteurl')
+				{
+					$post[$prefname] = str_replace("http://",'',$post[$prefname]);
+					$post[$prefname] = rtrim($post[$prefname],"/");
 				}
 
-				update_lastmod();
+				safe_update(
+					"txp_prefs", 
+					"val = '".$post[$prefname]."'",
+					"name = '".doSlash($prefname)."' and prefs_id = 1"
+				);
 			}			
 		}
+
+		update_lastmod();
 		
 		prefs_list(gTxt('preferences_saved'));		
 	}
@@ -154,8 +152,7 @@ $LastChangedRevision$
 				fInput('submit', 'Submit', gTxt('save_button'), 'publish').
 				n.sInput('prefs_save').
 				n.eInput('prefs').
-				n.hInput('prefs_id', '1').
-				n.hInput('lastmod', 'now()')
+				n.hInput('prefs_id', '1')
 			, ' colspan="3" class="noline"')
 		).
 
@@ -510,8 +507,7 @@ $LastChangedRevision$
 				fInput('submit', 'Submit', gTxt('save_button'), 'publish').
 				sInput('advanced_prefs_save').
 				eInput('prefs').
-				hInput('prefs_id', '1').
-				hInput('lastmod', 'now()')
+				hInput('prefs_id', '1')
 			, ' colspan="3" class="noline"')
 		).
 
@@ -570,6 +566,8 @@ $LastChangedRevision$
 					);
 			}			
 		}
+
+		update_lastmod();
 		
 		advanced_prefs(gTxt('preferences_saved'));	
 	}
