@@ -128,7 +128,7 @@ $DB = new DB;
 	{
 		// FIXME: lock the table so this is atomic?
 		$r = safe_update($table, $set, $where, $debug);
-		if ($r and mysql_affected_rows())
+		if ($r and (mysql_affected_rows() or safe_count($table, $where, $debug)))
 			return $r;
 		else
 			return safe_insert($table, join(', ', array($where, $set)), $debug);
