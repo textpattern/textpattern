@@ -1,14 +1,17 @@
 #DirectoryIndex index.php index.html
+
 #Options +FollowSymLinks
-#RewriteBase /relative/web/path/
+#Options -Indexes
 
 <IfModule mod_rewrite.c>
- RewriteEngine On
- RewriteCond %{REQUEST_FILENAME} -f [OR]
- RewriteCond %{REQUEST_FILENAME} -d
- RewriteRule ^(.+) - [PT,L]
- 
- RewriteRule ^(.*) index.php
+	RewriteEngine On
+	#RewriteBase /relative/web/path/
+
+	RewriteCond %{REQUEST_FILENAME} -f [OR]
+	RewriteCond %{REQUEST_FILENAME} -d
+	RewriteRule ^(.+) - [PT,L]
+
+	RewriteRule ^(.*) index.php
 </IfModule>
 
 #php_value register_globals 0
