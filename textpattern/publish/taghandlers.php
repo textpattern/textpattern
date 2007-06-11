@@ -862,10 +862,13 @@ $LastChangedRevision$
 			'labeltag'     => '',
 			'parent'       => '',
 			'section'      => '',
+			'sort'         => '',
 			'this_section' => 0,
 			'type'         => 'article',
 			'wraptag'      => '',
 		), $atts));
+
+		$sort = doSlash($sort);
 
 		if ($categories)
 		{
@@ -873,7 +876,7 @@ $LastChangedRevision$
 			$categories = join("','", doSlash($categories));
 
 			$rs = safe_rows_start('name, title', 'txp_category', 
-				"type = '".doSlash($type)."' and name in ('$categories') order by field(name, '$categories')");
+				"type = '".doSlash($type)."' and name in ('$categories') order by ".($sort ? $sort : "field(name, '$categories')"));
 		}
 
 		else
@@ -896,14 +899,14 @@ $LastChangedRevision$
 					extract($qs);
 
 					$rs = safe_rows_start('name, title', 'txp_category', 
-						"(lft between $lft and $rgt) and type = '".doSlash($type)."' and name != 'default' $exclude order by lft asc");
+						"(lft between $lft and $rgt) and type = '".doSlash($type)."' and name != 'default' $exclude order by ".($sort ? $sort : 'lft ASC'));
 				}
 			}
 
 			else
 			{
 				$rs = safe_rows_start('name, title', 'txp_category', 
-					"type = '$type' and name not in('default','root') $exclude order by name");
+					"type = '$type' and name not in('default','root') $exclude order by ".($sort ? $sort : 'name ASC'));
 			}
 		}
 
@@ -952,8 +955,11 @@ $LastChangedRevision$
 			'label'           => '',
 			'labeltag'        => '',
 			'sections'        => '',
+			'sort'            => '',
 			'wraptag'         => '',
 		), $atts));
+
+		$sort = doSlash($sort);
 
 		if ($sections)
 		{
@@ -961,7 +967,7 @@ $LastChangedRevision$
 
 			$sections = join("','", doSlash($sections));
 
-			$rs = safe_rows_start('name, title', 'txp_section', "name in ('$sections') order by field(name, '$sections')");
+			$rs = safe_rows_start('name, title', 'txp_section', "name in ('$sections') order by ".($sort ? $sort : "field(name, '$sections')"));
 		}
 
 		else
@@ -975,7 +981,7 @@ $LastChangedRevision$
 				$exclude = "and name not in('$exclude')";
 			}
 
-			$rs = safe_rows_start('name, title', 'txp_section', "name != 'default' $exclude order by name");
+			$rs = safe_rows_start('name, title', 'txp_section', "name != 'default' $exclude order by ".($sort ? $sort : 'name ASC'));
 		}
 
 		if ($rs)
@@ -1526,6 +1532,7 @@ $LastChangedRevision$
 			'break'		=> ($comments_are_ol ? 'li' : 'div'),
 			'class'		=> __FUNCTION__,
 			'breakclass'=> '',
+			'sort'		=> 'posted ASC',
 		),$atts));	
 
 		assert_article();
@@ -1535,7 +1542,7 @@ $LastChangedRevision$
 		if (@$thisid) $id = $thisid;
 
 		$rs = safe_rows_start("*, unix_timestamp(posted) as time", "txp_discuss",
-			'parentid='.intval($id).' and visible='.VISIBLE.' order by posted asc');
+			'parentid='.intval($id).' and visible='.VISIBLE.' order by '.doSlash($sort));
 
 		$out = '';
 
@@ -2221,10 +2228,11 @@ function body($atts)
 			'class'    => __FUNCTION__,
 			'labeltag' => '',
 			'c' => $c, // Keep the option to override categories due to backward compatiblity
+			'sort'     => 'name ASC',
 		),$atts));
 		$c = doSlash($c);
 		
-		$rs = safe_rows_start("*", "txp_image","category='$c' and thumbnail=1 order by name");
+		$rs = safe_rows_start("*", "txp_image","category='$c' and thumbnail=1 order by ".doSlash($sort));
 
 		if ($rs) {
 			$out = array();
