@@ -479,7 +479,7 @@ class Textile
 // -------------------------------------------------------------
 	function fList($m)
 	{
-		$text = explode("\n", $m[0]);
+		$text = preg_split('/\n(?=[*#])/m', $m[0]);
 		foreach($text as $line) {
 			$nextline = next($text);
 			if (preg_match("/^([#*]+)($this->a$this->c) (.*)$/s", $line, $m)) {
@@ -490,9 +490,9 @@ class Textile
 				if (!isset($lists[$tl])) {
 					$lists[$tl] = true;
 					$atts = $this->pba($atts);
-					$line = "\t<" . $this->lT($tl) . "l$atts>\n\t\t<li>" . $content;
+					$line = "\t<" . $this->lT($tl) . "l$atts>\n\t\t<li>" . rtrim($content);
 				} else {
-					$line = "\t\t<li>" . $content;
+					$line = "\t\t<li>" . rtrim($content);
 				}
 
 				if(strlen($nl) <= strlen($tl)) $line .= "</li>";
@@ -504,6 +504,9 @@ class Textile
 						unset($lists[$k]);
 					}
 				}
+			}
+			else {
+				$line .= n;
 			}
 			$out[] = $line;
 		}
@@ -671,8 +674,8 @@ class Textile
 			$text = $this->image($text);
 
 		if (!$this->lite) {
-			$text = $this->lists($text);
 			$text = $this->table($text);
+			$text = $this->lists($text);
 		}
 
 		$text = $this->span($text);
