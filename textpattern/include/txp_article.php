@@ -277,12 +277,6 @@ if (!empty($event) and $event == 'article') {
 			);
 
 			extract($rs);
-
-			if ($AnnotateInvite!= $comments_default_invite) {
-				$AnnotateInvite = $AnnotateInvite;
-			} else {
-				$AnnotateInvite = $comments_default_invite;
-			}
 			$reset_time = $publish_now = ($Status < 4);
 
 		} else {
