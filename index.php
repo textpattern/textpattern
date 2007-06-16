@@ -12,6 +12,8 @@ $LastChangedRevision$
 		foreach ( $_REQUEST as $name => $value )
 			unset($$name);
 	define("txpinterface", "public");
+	if (!defined('txpath'))
+		define("txpath", dirname(__FILE__).'/textpattern');
 
 	// Use buffering to ensure bogus whitespace in config.php is ignored
 	ob_start(NULL, 2048);
@@ -19,6 +21,7 @@ $LastChangedRevision$
 	include './textpattern/config.php';
 	ob_end_clean();
 
+	include_once txpath.'/lib/constants.php';
 	if (!isset($txpcfg['txpath']) )	{
 		$status = '503 Service Unavailable';
 		if (IS_FASTCGI)
