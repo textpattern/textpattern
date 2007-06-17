@@ -17,7 +17,7 @@ $LastChangedRevision$
 	if (!defined('txpinterface')) die('txpinterface is undefined.');
 
 	global $extensions;
-	$extensions = array(0,'.gif','.jpg','.png','.swf');
+	$extensions = array(0,'.gif','.jpg','.png','.swf',0,0,0,0,0,0,0,0,'.swf');
 	define("IMPATH",$path_to_site.'/'.$img_dir.'/');
 	include txpath.'/lib/class.thumb.php';
 
@@ -391,7 +391,7 @@ $LastChangedRevision$
 		
 		list(,,$extension) = getimagesize($file);
 	
-		if (($file !== false) && $extensions[$extension]) {
+		if (($file !== false) && @$extensions[$extension]) {
 			$ext = $extensions[$extension];
 
 				$newpath = IMPATH.$id.'t'.$ext;
