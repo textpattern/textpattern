@@ -154,11 +154,11 @@ $LastChangedRevision$
 			'>'.htmlspecialchars($message).'</textarea>';
 
 		// by default, the submit button is visible but disabled
-		$comment_submit_button = fInput('submit', 'submit', gTxt('submit'), 'button', '', '', '', '', '', true);
+		$comment_submit_button = fInput('submit', 'submit', gTxt('submit'), 'button disabled', '', '', '', '', 'txpCommentSubmit', true);
 
 		// if all fields checkout, the submit button is active/clickable
 		if ($preview and ($evaluator->get_result() != RELOAD) ) {
-			$comment_submit_button = fInput('submit', 'submit', gTxt('submit'), 'button');
+			$comment_submit_button = fInput('submit', 'submit', gTxt('submit'), 'button', '', '', '', '', 'txpCommentSubmit', false);
 		}
 
 		if ($checkbox_type == 'forget')
@@ -191,7 +191,7 @@ $LastChangedRevision$
 			'comment_web_input'			=> fInput('text', 'web', htmlspecialchars($web)	, 'comment_web_input', '', '', $isize, '', 'web'),
 			'comment_message_input' 	=> $textarea.'<!-- plugin-place-holder -->',
 			'comment_remember'			=> $checkbox,
-			'comment_preview'			=> fInput('submit', 'preview', gTxt('preview'), 'button'),
+			'comment_preview'			=> fInput('submit', 'preview', gTxt('preview'), 'button', '', '', '', '', 'txpCommentPreview', false),
 			'comment_submit'			=> $comment_submit_button
 		);
 
