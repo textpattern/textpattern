@@ -80,6 +80,10 @@ $LastChangedRevision$
 				$sort_sql = 'comments_count '.$dir.', Posted desc';
 			break;
 
+			case 'lastmod':
+				$sort_sql = 'LastMod '.$dir.', Posted desc';
+			break;
+
 			default:
 				$sort = 'posted';
 				$sort_sql = 'Posted '.$dir;
@@ -97,10 +101,12 @@ $LastChangedRevision$
 			$critsql = array(
 				'id'         => "ID = '$crit_escaped'",
 				'title_body' => "Title rlike '$crit_escaped' or Body rlike '$crit_escaped'",
-				'section'		 => "Section rlike '$crit_escaped'",
+				'section'	 => "Section rlike '$crit_escaped'",
 				'categories' => "Category1 rlike '$crit_escaped' or Category2 rlike '$crit_escaped'",
-				'status'		 => "Status = '".(@$sesutats[gTxt($crit_escaped)])."'",
-				'author'		 => "AuthorID rlike '$crit_escaped'",
+				'status'	 => "Status = '".(@$sesutats[gTxt($crit_escaped)])."'",
+				'author'	 => "AuthorID rlike '$crit_escaped'",
+				'posted' 	 => "Posted like '$crit_escaped%'",
+				'lastmod' 	 => "LastMod like '$crit_escaped%'" 
 			);
 
 			if (array_key_exists($search_method, $critsql))
@@ -146,7 +152,7 @@ $LastChangedRevision$
 
 		echo n.list_search_form($crit, $search_method);
 
-		$rs = safe_rows_start('*, unix_timestamp(Posted) as posted', 'textpattern',
+		$rs = safe_rows_start('*, unix_timestamp(Posted) as posted, unix_timestamp(LastMod) as lastmod', 'textpattern',
 			"$criteria order by $sort_sql limit $offset, $limit"
 		);
 
@@ -175,6 +181,7 @@ $LastChangedRevision$
 				n.tr(
 					n.column_head('ID', 'id', 'list', true, $switch_dir, $crit, $search_method, ('id' == $sort) ? $dir : '').
 					column_head('posted', 'posted', 'list', true, $switch_dir, $crit, $search_method, ('posted' == $sort) ? $dir : '').
+					column_head('last_modification', 'lastmod', 'list', true, $switch_dir, $crit, $search_method, (('lastmod' == $sort) ? "$dir " : '').'articles_detail'). 
 					column_head('title', 'title', 'list', true, $switch_dir, $crit, $search_method, ('title' == $sort) ? $dir : '').
 					column_head('section', 'section', 'list', true, $switch_dir, $crit, $search_method, ('section' == $sort) ? $dir : '').
 					column_head('category1', 'category1', 'list', true, $switch_dir, $crit, $search_method, (('category1' == $sort) ? "$dir " : '').'articles_detail').
@@ -245,6 +252,10 @@ $LastChangedRevision$
 						safe_strftime('%d %b %Y %X', $posted)
 					).
 
+					td(
+						safe_strftime('%d %b %Y %X', $lastmod), '', "articles_detail"
+					).
+
 					td($Title).
 
 					td(
@@ -309,10 +320,12 @@ $LastChangedRevision$
 		$methods =	array(
 			'id'				 => gTxt('ID'),
 			'title_body' => gTxt('title_body'),
-			'section'		 => gTxt('section'),
+			'section'	 => gTxt('section'),
 			'categories' => gTxt('categories'),
-			'status'		 => gTxt('status'),
-			'author'		 => gTxt('author')
+			'status'	 => gTxt('status'),
+			'author'	 => gTxt('author'),
+			'posted'	 => gTxt('posted'),
+			'lastmod'	 => gTxt('last_modification')
 		);
 
 		return search_form('list', 'list', $crit, $methods, $method, 'title_body');
