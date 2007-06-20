@@ -25,7 +25,7 @@ $LastChangedRevision$
 			' (Otherwise note that publish.php cannot be called directly.)');
 
 
-#	include_once txpath.'/lib/constants.php';
+	include_once txpath.'/lib/constants.php';
 	include_once txpath.'/lib/txplib_db.php';
 	include_once txpath.'/lib/txplib_html.php';
 	include_once txpath.'/lib/txplib_forms.php';

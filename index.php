@@ -21,7 +21,7 @@ $LastChangedRevision$
 	include './textpattern/config.php';
 	ob_end_clean();
 
-	include_once txpath.'/lib/constants.php';
+	include txpath.'/lib/constants.php';
 	if (!isset($txpcfg['txpath']) )	{
 		$status = '503 Service Unavailable';
 		if (IS_FASTCGI)
