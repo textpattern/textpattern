@@ -618,8 +618,6 @@ $LastChangedRevision$
 			default:
 				$time = " and Posted <= now()";
 		}
-		if (!is_numeric($status))
-			$status = getStatusNum($status);
 			
 		$custom = '';
 
@@ -629,8 +627,8 @@ $LastChangedRevision$
 					$customPairs[$cField] = $atts[$cField];
 			}
 			if(!empty($customPairs)) {
-				$custom =  buildCustomSql($customFields,$customPairs);
-			} else $custom = '';
+				$custom = buildCustomSql($customFields,$customPairs);
+			}
 		}
 
 		//Allow keywords for no-custom articles. That tagging mode, you know
@@ -710,7 +708,6 @@ $LastChangedRevision$
 				$uPosted = $a['uPosted'];
 
 				unset($GLOBALS['thisarticle']);
-				unset($GLOBALS['theseatts']);//Required?				
 			}
 
 			return join('',$articles);

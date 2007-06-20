@@ -577,6 +577,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
+	// deprecated, use lAtts instead
 	function getAtt($name, $default=NULL) { // thanks zem!
 		global $theseatts;
 		return isset($theseatts[$name]) ? $theseatts[$name] : $default;
