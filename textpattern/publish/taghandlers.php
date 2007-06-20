@@ -923,7 +923,7 @@ $LastChangedRevision$
 					$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
 
 					$out[] = tag(str_replace('& ', '&#38; ', $title), 'a', 
-						( ($active_class and ($c == $name)) ? ' class="'.$active_class.'"' : '' ).
+						( ($active_class and ($c == strtolower($name))) ? ' class="'.$active_class.'"' : '' ).
 						' href="'.pagelinkurl(array('s' => $section, 'c' => $name)).'"'
 					);
 				}
@@ -995,7 +995,7 @@ $LastChangedRevision$
 				$url = pagelinkurl(array('s' => $name));
 
 				$out[] = tag($title, 'a', 
-					( ($active_class and ($s == $name)) ? ' class="'.$active_class.'"' : '' ).
+					( ($active_class and ($s == strtolower($name))) ? ' class="'.$active_class.'"' : '' ).
 					' href="'.$url.'"'
 				);
 			}
