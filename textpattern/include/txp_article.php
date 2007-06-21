@@ -245,25 +245,28 @@ if (!empty($event) and $event == 'article') {
 		extract($prefs);
 
 		extract(gpsa(array('view','from_view','step')));
-		
+
 		if(!empty($GLOBALS['ID'])) { // newly-saved article
 			$ID = $GLOBALS['ID'];
 			$step = 'edit';
 		} else {  
 			$ID = gps('ID');
 		}
-		
 
 		include_once txpath.'/lib/classTextile.php';
 		$textile = new Textile();
 
-		if (!$view) $view = "text";
+		// switch to 'text' view upon page load and after article post
+		if(!$view || gps('save') || gps('publish')) {
+			$view = $from_view = 'text';
+		}
+		
 		if (!$step) $step = "create";
 
 		if ($step == "edit" 
 			&& $view=="text" 
 			&& !empty($ID) 
-			&& $from_view != "preview" 
+			&& $from_view != 'preview' 
 			&& $from_view != 'html') {
 
 			$pull = true;          //-- it's an existing article - off we go to the db
@@ -332,6 +335,7 @@ if (!empty($event) and $event == 'article') {
 		echo hInput('ID', $ID).
 			eInput('article').
 			sInput($step).
+			'<input type="hidden" name="view" />'.
 
 			startTable('edit').
 
@@ -742,6 +746,12 @@ if (!empty($event) and $event == 'article') {
 // -------------------------------------------------------------
 	function checkIfNeighbour($whichway,$sPosted)
 	{
+		// transient article, not yet saved?
+		if(empty($sPosted)) {
+			return NULL;
+		}
+		
+		// persistent article
 		$sPosted = assert_int($sPosted);
 		$dir = ($whichway == 'prev') ? '<' : '>'; 
 		$ord = ($whichway == 'prev') ? 'desc' : 'asc'; 
@@ -853,13 +863,14 @@ if (!empty($event) and $event == 'article') {
 	}
 
 //--------------------------------------------------------------
-	function tab($tabevent,$view)
+	function tab($tabevent,$view) 
 	{
-		if ($view==$tabevent) {
-			return '<img src="txp_img/'.$view.'up.gif" height="100" width="19" alt="" id="article-tab-'.$tabevent.'" />';
-		} else {
-			return '<input name="view" type="image" src="txp_img/'.$tabevent.'down.gif" value="'.$tabevent.'" id="article-tab-'.$tabevent.'" />';
-		}
+		$state = ($view==$tabevent) ? 'up' : 'down';
+		$img = 'txp_img/'.$tabevent.$state.'.gif';
+		$out = '<img src="'.$img.'"';
+		$out.=($tabevent!=$view) ? ' onclick="document.article.view.value=\''.$tabevent.'\'; document.article.submit(); return false;"' : "";
+		$out.= ' height="100" width="19" alt="" id="article-tab-'.$tabevent.'" />';
+      	return $out;
 	}
 
 //--------------------------------------------------------------
