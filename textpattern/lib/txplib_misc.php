@@ -133,6 +133,12 @@ $LastChangedRevision$
 		return $var;
 	}
 
+//-------------------------------------------------------------
+	function gTime($timestamp)
+	{
+		return safe_strftime('%d&#160;%b&#160;%Y %X', $timestamp);
+	}
+
 // -------------------------------------------------------------
     function dmp() 
     {

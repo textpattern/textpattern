@@ -266,7 +266,7 @@ $LastChangedRevision$
 					, 50).
 
 					td(
-						safe_strftime('%d %b %Y %X', $uPosted), 140
+						gTime($uPosted), 140
 					).
 
 					td(htmlspecialchars($name), 75).

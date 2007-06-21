@@ -181,7 +181,7 @@ $LastChangedRevision$
 				n.tr(
 					n.column_head('ID', 'id', 'list', true, $switch_dir, $crit, $search_method, ('id' == $sort) ? $dir : '').
 					column_head('posted', 'posted', 'list', true, $switch_dir, $crit, $search_method, ('posted' == $sort) ? $dir : '').
-					column_head('last_modification', 'lastmod', 'list', true, $switch_dir, $crit, $search_method, (('lastmod' == $sort) ? "$dir " : '').'articles_detail'). 
+					column_head('article_modified', 'lastmod', 'list', true, $switch_dir, $crit, $search_method, (('lastmod' == $sort) ? "$dir " : '').'articles_detail'). 
 					column_head('title', 'title', 'list', true, $switch_dir, $crit, $search_method, ('title' == $sort) ? $dir : '').
 					column_head('section', 'section', 'list', true, $switch_dir, $crit, $search_method, ('section' == $sort) ? $dir : '').
 					column_head('category1', 'category1', 'list', true, $switch_dir, $crit, $search_method, (('category1' == $sort) ? "$dir " : '').'articles_detail').
@@ -249,11 +249,11 @@ $LastChangedRevision$
 					n.td(eLink('article', 'edit', 'ID', $ID, $ID).$manage).
 
 					td(
-						safe_strftime('%d %b %Y %X', $posted)
+						gTime($posted)
 					).
 
 					td(
-						safe_strftime('%d %b %Y %X', $lastmod), '', "articles_detail"
+						gTime($lastmod), '', "articles_detail"
 					).
 
 					td($Title).
