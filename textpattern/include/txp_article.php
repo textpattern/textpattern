@@ -117,8 +117,8 @@ if (!empty($event) and $event == 'article') {
 				custom_8        = '$custom_8',
 				custom_9        = '$custom_9',
 				custom_10       = '$custom_10',
-				uid				= '".md5(uniqid(rand(),true))."',
-				feed_time		= now()"
+				uid             = '".md5(uniqid(rand(),true))."',
+				feed_time       = now()"
 			);
 			
 			$GLOBALS['ID'] = mysql_insert_id();
@@ -258,7 +258,7 @@ if (!empty($event) and $event == 'article') {
 
 		// switch to 'text' view upon page load and after article post
 		if(!$view || gps('save') || gps('publish')) {
-			$view = $from_view = 'text';
+			$view = 'text';
 		}
 		
 		if (!$step) $step = "create";
@@ -286,21 +286,23 @@ if (!empty($event) and $event == 'article') {
 
 			$pull = false;         //-- assume they came from post
 
-			if (!$from_view or $from_view=='text') {
-				extract(gpsa($vars));
-			} elseif($from_view=='preview' or $from_view=='html') {
-					// coming from either html or preview
-				if (isset($_POST['store'])) {
-					$store = unserialize(base64_decode($_POST['store']));
-					extract($store);
+			if ($from_view=='preview' or $from_view=='html')
+			{
+				$store_out = array();
+				$store = unserialize(base64_decode(ps('store')));
+
+				foreach($vars as $var)
+				{
+					if (isset($store[$var])) $store_out[$var] = $store[$var];
 				}
 			}
 
-			foreach($vars as $var){
-				if(isset($$var)){
-					$store_out[$var] = $$var;		
-				}
+			else 
+			{
+				$store_out = gpsa($vars);
 			}
+
+			extract($store_out);
 		}
 
 		$GLOBALS['step'] = $step;
@@ -421,7 +423,7 @@ if (!empty($event) and $event == 'article') {
 			echo sp;
 		}
 
-  	echo '</td>'.n.'<td id="article-main">';
+		echo '</td>'.n.'<td id="article-main">';
 
 	//-- title input -------------- 
 
@@ -430,12 +432,12 @@ if (!empty($event) and $event == 'article') {
 			echo hed(gTxt('preview'), 2).graf($Title);
 		}
 
-		if ($view == 'html')
+		elseif ($view == 'html')
 		{
 			echo hed('XHTML',2).graf($Title);
 		}
 
-		if ($view == 'text')
+		elseif ($view == 'text')
 		{
 			echo '<p><input type="text" id="title" name="Title" value="'.cleanfInput($Title).'" class="edit" size="40" tabindex="1" />';
 
@@ -449,8 +451,10 @@ if (!empty($event) and $event == 'article') {
 			echo '</p>';
 		}
 
-    if ($view == 'preview')
-    { 
+	//-- body --------------------
+
+		if ($view == 'preview')
+		{ 
 			if ($textile_body == USE_TEXTILE)
 			{
 				echo $textile->TextileThis($Body);
@@ -465,10 +469,10 @@ if (!empty($event) and $event == 'article') {
 			{
 				echo $Body;
 			}
-    }
+		}
 
-    elseif ($view == 'html')
-    {
+		elseif ($view == 'html')
+		{
 			if ($textile_body == USE_TEXTILE)
 			{
 				$bod = $textile->TextileThis($Body);
@@ -527,19 +531,17 @@ if (!empty($event) and $event == 'article') {
 				echo '</p>';
 			}
 
-	echo hInput('from_view',$view),
-	'</td>';
-	echo '<td id="article-tabs">';
+		echo hInput('from_view',$view),
+		'</td>';
+		echo '<td id="article-tabs">';
 
   	//-- layer tabs -------------------
 
 		echo ($use_textile == USE_TEXTILE || $textile_body == USE_TEXTILE)
-		?	graf(tab('text',$view).br.tab('html',$view).br.tab('preview',$view))
-		:	'&#160;';
-	echo '</td>';
-?>	
-<td id="article-col-2">
-<?php 
+			? graf(tab('text',$view).br.tab('html',$view).br.tab('preview',$view))
+			: '&#160;';
+		echo '</td>';
+		echo '<td id="article-col-2">';
 
 		if ($view == 'text')
 		{
@@ -594,7 +596,7 @@ if (!empty($event) and $event == 'article') {
 
 		//-- "More" section
 				n.n.'<h3 class="plain"><a href="#more" onclick="toggleDisplay(\'more\'); return false;">'.gTxt('more').'</a></h3>',
-			'<div id="more" style="display: none;">';
+				'<div id="more" style="display: none;">';
 
 		//-- comments stuff --------------
 
@@ -731,7 +733,7 @@ if (!empty($event) and $event == 'article') {
 			}
 		}
 
-    echo '</td></tr></table></form>';
+		echo '</td></tr></table></form>';
 	
 	}
 
@@ -746,12 +748,6 @@ if (!empty($event) and $event == 'article') {
 // -------------------------------------------------------------
 	function checkIfNeighbour($whichway,$sPosted)
 	{
-		// transient article, not yet saved?
-		if(empty($sPosted)) {
-			return NULL;
-		}
-		
-		// persistent article
 		$sPosted = assert_int($sPosted);
 		$dir = ($whichway == 'prev') ? '<' : '>'; 
 		$ord = ($whichway == 'prev') ? 'desc' : 'asc'; 
@@ -870,7 +866,7 @@ if (!empty($event) and $event == 'article') {
 		$out = '<img src="'.$img.'"';
 		$out.=($tabevent!=$view) ? ' onclick="document.article.view.value=\''.$tabevent.'\'; document.article.submit(); return false;"' : "";
 		$out.= ' height="100" width="19" alt="" id="article-tab-'.$tabevent.'" />';
-      	return $out;
+		return $out;
 	}
 
 //--------------------------------------------------------------
