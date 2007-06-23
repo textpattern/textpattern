@@ -11,7 +11,7 @@
 /include/txp_log.php: r2439 (03cb8cb430b095e7970226a702faaff3)
 /include/txp_preview.php: r1238 (5d3f54eeb736dc7cde1ae8d269d7ed37)
 /include/txp_image.php: r2439 (d5c4c5109f96cc10926b2b046fb35665)
-/include/txp_article.php: r2440 (e2798a18263faa85d5b06e5a87c3bbd8)
+/include/txp_article.php: r2446 (6194ec4d3cefb44b09eecd48c18e997d)
 /include/txp_css.php: r2403 (80a27e18f156a1cb7c8ba82535aa7e87)
 /include/txp_admin.php: r2403 (676c406bf6695a9a0657b96dff09f681)
 /include/txp_link.php: r2439 (8975e5b66fb08a7da05c58f9906f38bc)
