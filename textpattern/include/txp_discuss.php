@@ -275,8 +275,8 @@ $LastChangedRevision$
 						short_preview($dmessage)
 					).
 
-					td(htmlspecialchars(soft_wrap($email, 30)), 100, 'discuss_detail').
-					td(htmlspecialchars(soft_wrap($web, 30)), 100, 'discuss_detail').
+					td(soft_wrap(htmlspecialchars($email), 30), 100, 'discuss_detail').
+					td(soft_wrap(htmlspecialchars($web), 30), 100, 'discuss_detail').
 					td($ip, 75, 'discuss_detail').
 					td($comment_status, 75, 'discuss_detail').
 					td($parent, 75).
