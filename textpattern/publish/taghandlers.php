@@ -1593,6 +1593,7 @@ $LastChangedRevision$
 
 		}
 		$preview['message'] = markup_comment($preview['message']);
+		$preview['web'] = clean_url($preview['web']);
 
 		$GLOBALS['thiscomment'] = $preview;
 		$comments = parse_form($form).n;
@@ -3098,7 +3099,7 @@ function body($atts)
 			$decimals = 2;
 		}
 
-		if ($thisfile['size'])
+		if (@$thisfile['size'])
 		{
 			$size = $thisfile['size'];
 

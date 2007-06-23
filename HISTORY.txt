@@ -1,14 +1,20 @@
 Changes since 4.0.4
 
+* Search for posted and last modifed dates in article list
+* New tag: <txp:hide /> as a container for comments and other internal content
+* Changed tags: <txp:comments />, <txp:category_list />, <txp:section_list /> 
+  and <txp:image_index /> support 'sort' attribute
+* Distribute jQuery 1.1.2 as a default JavaScript library
 * Keep image properties on replacement
 * Add 'delete thumbnail' function
 * Support back end branding: customizable logo and color bar
 * Table sort indicators
 * Textile improvements
+* Better coperation with some Proxies (and other HTTP/1.0 clients)
 * Smarter comment submit button emphasises preview step
 * Optionally hide spam comments in back end list
 * Truncate longish article category titles in the write screen
-* Handle thumbnailing of larger images 
+* Handle thumbnailing of larger images
 * Better MoveableType import
 * Fix some more IIS issues
 * New callback event: 'textpattern_end'
@@ -16,6 +22,8 @@ Changes since 4.0.4
 * New tag: <txp:article_url_title />
 * Changed tag: <txp:permlink /> loses default title attribute
 * Changed tag: <txp:file_download_link /> returns filename as an additional URL part
+* Many, many minor improvements, see:
+  http://dev.textpattern.com/log/development/4.0/?action=stop_on_copy&rev=2443&stop_rev=1963
 
 Changes since 4.0.3:
 
