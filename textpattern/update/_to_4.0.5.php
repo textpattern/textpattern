@@ -50,7 +50,7 @@ $LastChangedRevision$
 		$rs = safe_rows('*', 'txp_file', '1=1');
 		foreach ($rs as $row) {
 			$path = build_file_path(@$prefs['file_base_path'], @$row['filename']);
-			if ($path and ($stat = stat($path))) {
+			if ($path and ($stat = @stat($path))) {
 				safe_update('txp_file', "created='".strftime('%Y-%m-%d %H:%M:%S', $stat['ctime'])."', modified='".strftime('%Y-%m-%d %H:%M:%S', $stat['mtime'])."', size='".doSlash(sprintf('%u', $stat['size']))."'", "id='".doSlash($row['id'])."'");
 			}
 		}
