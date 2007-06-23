@@ -325,7 +325,7 @@ $LastChangedRevision$
 			'status'	 => gTxt('status'),
 			'author'	 => gTxt('author'),
 			'posted'	 => gTxt('posted'),
-			'lastmod'	 => gTxt('last_modification')
+			'lastmod'	 => gTxt('article_modified')
 		);
 
 		return search_form('list', 'list', $crit, $methods, $method, 'title_body');
