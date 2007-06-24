@@ -1971,7 +1971,18 @@ eod;
 // word-wrap a string using a zero width space
 	function soft_wrap($text, $width, $break='&#8203;')
 	{
-		return chunk_split($text, $width, $break);
+		$wbr = chr(226).chr(128).chr(139);
+		$words = explode(' ', $text);
+		foreach($words as $wordnr => $word) {
+			$word = preg_replace('|([,./\\>?!:;@-]+)(?=.)|', '$1 ', $word);
+			$parts = explode(' ', $word);
+			foreach($parts as $partnr => $part) {
+				$len = strlen(utf8_decode($part));
+				$parts[$partnr] = preg_replace('/(.{'.ceil($len/ceil($len/$width)).'})(?=.)/u', '$1'.$wbr, $part);
+			}
+			$words[$wordnr] = join($wbr, $parts);
+		}
+		return join(' ', $words);
 	}
 
 //-------------------------------------------------------------
