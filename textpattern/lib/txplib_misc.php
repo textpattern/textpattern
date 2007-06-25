@@ -1978,6 +1978,7 @@ eod;
 			$parts = explode(' ', $word);
 			foreach($parts as $partnr => $part) {
 				$len = strlen(utf8_decode($part));
+				if (!$len) continue;
 				$parts[$partnr] = preg_replace('/(.{'.ceil($len/ceil($len/$width)).'})(?=.)/u', '$1'.$wbr, $part);
 			}
 			$words[$wordnr] = join($wbr, $parts);
