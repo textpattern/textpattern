@@ -429,12 +429,12 @@ if (!empty($event) and $event == 'article') {
 
 		if ($view == 'preview')
 		{
-			echo hed(gTxt('preview'), 2).graf($Title);
+			echo hed(gTxt('preview'), 2).hed($Title, 1);
 		}
 
 		elseif ($view == 'html')
 		{
-			echo hed('XHTML',2).graf($Title);
+			echo hed('XHTML', 2).hed($Title, 1);
 		}
 
 		elseif ($view == 'text')
