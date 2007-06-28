@@ -871,7 +871,7 @@ $LastChangedRevision$
 
 		if ($prefs['override_emailcharset'] and is_callable('utf8_decode'))
 		{
-			$charset = 'ISO-8599-1';
+			$charset = 'ISO-8859-1';
 
 			$RealName = utf8_decode($RealName);
 			$subject = utf8_decode($subject);
