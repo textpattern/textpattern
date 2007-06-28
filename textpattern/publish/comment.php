@@ -157,7 +157,7 @@ $LastChangedRevision$
 		$comment_submit_button = fInput('submit', 'submit', gTxt('submit'), 'button disabled', '', '', '', '', 'txpCommentSubmit', true);
 
 		// if all fields checkout, the submit button is active/clickable
-		if ($preview and ($evaluator->get_result() != RELOAD) ) {
+		if ($preview) ) {
 			$comment_submit_button = fInput('submit', 'submit', gTxt('submit'), 'button', '', '', '', '', 'txpCommentSubmit', false);
 		}
 
