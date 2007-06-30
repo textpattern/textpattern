@@ -510,7 +510,7 @@ class Textile
 			}
 			$out[] = $line;
 		}
-		return join("\n", $out);
+		return $this->doTagBr('li', join("\n", $out));
 	}
 
 // -------------------------------------------------------------
