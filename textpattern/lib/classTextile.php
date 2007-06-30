@@ -958,7 +958,7 @@ class Textile
 	function cleanWhiteSpace($text)
 	{
 		$out = str_replace("\r\n", "\n", $text);		# DOS line endings
-		$out = preg_replace("/^ *\n/m", "\n", $out);	# lines containing only spaces
+		$out = preg_replace("/^[ \t]*\n/m", "\n", $out);	# lines containing only whitespace
 		$out = preg_replace("/\n{3,}/", "\n\n", $out);	# 3 or more line ends
 		$out = preg_replace("/^\n*/", "", $out);		# leading blank lines
 		return $out;
