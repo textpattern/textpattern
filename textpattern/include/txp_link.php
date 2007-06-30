@@ -321,19 +321,9 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function link_post()
 	{
-		global $txpcfg,$prefs,$vars;
+		global $txpcfg,$vars;
 		$varray = gpsa($vars);
 
-		if($prefs['textile_links']) {
-
-			include_once txpath.'/lib/classTextile.php';
-			$textile = new Textile();
-		
-			$varray['linkname'] = $textile->TextileThis($varray['linkname'],'',1);
-			$varray['description'] = $textile->TextileThis($varray['description'],1);
-	
-		}
-	
 		extract(doSlash($varray));
 
 		if (!$linksort) $linksort = $linkname;
@@ -363,19 +353,9 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function link_save() 
 	{
-		global $txpcfg,$prefs,$vars;
+		global $txpcfg,$vars;
 		$varray = gpsa($vars);
 
-		if($prefs['textile_links']) {
-
-			include_once txpath.'/lib/classTextile.php';
-			$textile = new Textile();
-			
-			$varray['linkname'] = $textile->TextileThis($varray['linkname'],'',1);
-			$varray['description'] = $textile->TextileThis($varray['description'],1);
-		
-		}
-		
 		extract(doSlash($varray));
 		
 		if (!$linksort) $linksort = $linkname;

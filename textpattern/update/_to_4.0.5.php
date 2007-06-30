@@ -155,5 +155,8 @@ $LastChangedRevision$
 		'include_email_atom',
 		'use_mail_on_feeds_id'
 	)");
+	
+	# 'Textile links' feature removed due to unclear specs.
+	safe_delete('txp_prefs', "event='link' and name='textile_links'");
 
 ?>
