@@ -21,7 +21,7 @@ Changes since 4.0.4
 * Fix comment spam blacklist false positives (see faq for 4.0.4)
 * Fix file_download-tag from showing the same url for different downloads (see faq for 4.0.4)
 * Fix disappearing comment preferences in certain ciscumstances (see faq for 4.0.4)
-* Fix "active class" in section_list
+* Fix "active class" in section_list, category_list
 * Better cooperation with some proxies (and other HTTP/1.0 clients)
 * Smarter comment submit button emphasises preview step
 * Optionally hide spam comments in back end list
