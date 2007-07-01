@@ -68,7 +68,7 @@ $LastChangedRevision$
 		if ((include txpath.DS.'update'.DS.'_to_4.0.5.php') !== false)
 			$dbversion = '4.0.5';
 	}
-
+ 
 	// keep track of updates for svn users
 	safe_delete('txp_prefs',"name = 'dbupdatetime'");
 	safe_insert('txp_prefs', "prefs_id=1, name='dbupdatetime',val='".max(newest_file(),time())."', type='2'");

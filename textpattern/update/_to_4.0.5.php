@@ -9,7 +9,7 @@ $LastChangedRevision$
 	{
 		exit("Nothing here. You can't access this file directly.");
 	}
-
+ 
 	safe_alter('txp_lang', 'DELAY_KEY_WRITE = 0');
 
 	if (!safe_field('name', 'txp_prefs', "name = 'lastmod_keepalive'"))
