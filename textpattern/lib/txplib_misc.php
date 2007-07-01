@@ -1446,7 +1446,8 @@ $LastChangedRevision$
 	{
 		global $prefs;
 
-		$disallow_images = !empty($prefs['comments_disallow_images']) ? true : false;
+		$disallow_images = !empty($prefs['comments_disallow_images']);
+		$lite = empty($prefs['comments_use_fat_textile']);
 
 		$rel = !empty($prefs['comment_nofollow']) ? 'nofollow' : '';
 
@@ -1454,7 +1455,7 @@ $LastChangedRevision$
 
 		$textile = new Textile();
 
-		return $textile->TextileRestricted($msg, true, $disallow_images, $rel);
+		return $textile->TextileRestricted($msg, $lite, $disallow_images, $rel);
 	}
 
 //-------------------------------------------------------------
