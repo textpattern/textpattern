@@ -66,11 +66,11 @@ $LastChangedRevision$
 		switch (serverSet('HTTPS')) {
 			case '':
 			case 'off': // ISAPI with IIS
-				define('PROTOCOL', 'https://');
+				define('PROTOCOL', 'http://');
 			break;
 
 			default:
-				define('PROTOCOL', 'http://');
+				define('PROTOCOL', 'https://');
 			break;
 		}
 	}
