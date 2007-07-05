@@ -62,9 +62,19 @@ $LastChangedRevision$
 	if (empty($path_to_site))
 		updateSitePath(dirname(dirname(__FILE__)));
 
-	if (!defined( 'PROTOCOL'))
-		define( 'PROTOCOL', ( ( serverSet('HTTPS') != '' ) ? 'https://' : 'http://') );
-		
+	if (!defined('PROTOCOL')) {
+		switch (serverSet('HTTPS')) {
+			case '':
+			case 'off': // ISAPI with IIS
+				define('PROTOCOL', 'https://');
+			break;
+
+			default:
+				define('PROTOCOL', 'http://');
+			break;
+		}
+	}
+
 		// v1.0: this should be the definitive http address of the site	
 	if (!defined('hu'))
 		define("hu",PROTOCOL.$siteurl.'/');
