@@ -410,7 +410,7 @@ $LastChangedRevision$
 				n.hCell()
 			);
 
-		$rs = safe_rows_start('*', 'txp_users', '1 = 1');
+		$rs = safe_rows_start('*', 'txp_users', '1 = 1 order by name asc');
 
 		if ($rs)
 		{
