@@ -334,7 +334,7 @@ $LastChangedRevision$
 
 		extract($txpcfg);
 
-		$meta = doSlash(gpsa(array('caption', 'alt', 'category')));
+		$meta = gpsa(array('caption', 'alt', 'category'));
 
 		$img_result = image_data($_FILES['thefile'], $meta);
 
@@ -627,7 +627,7 @@ $LastChangedRevision$
 				$meta = array('category' => '', 'caption' => '', 'alt' => '');
 			}
 
-			extract($meta);
+			extract(doSlash($meta));
 
 			$q ="
 				name = '$name',
