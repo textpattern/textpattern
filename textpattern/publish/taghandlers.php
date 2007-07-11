@@ -551,11 +551,6 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function password_protect($atts)
 	{
-		if (!is_mod_php()) {
-			trigger_error(gTxt('http_auth_requires_mod_php'));
-			return;
-		}
-
 		ob_start();
 
 		extract(lAtts(array(
@@ -565,6 +560,11 @@ $LastChangedRevision$
 
 		$au = serverSet('PHP_AUTH_USER');
 		$ap = serverSet('PHP_AUTH_PW');
+		//For php as (f)cgi, two rules in htaccess often allow this workaround
+		$ru = serverSet('REDIRECT_REMOTE_USER');
+		if ($ru && !$au && !$ap && substr( $ru,0,5) == 'Basic' ) {
+			list ( $au, $ap ) = explode( ':', base64_decode( substr( $ru,6)));
+		}
 		if ($login && $pass) {
 			if (!$au || !$ap || $au!= $login || $ap!= $pass) {
 				header('WWW-Authenticate: Basic realm="Private"');

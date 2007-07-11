@@ -12,6 +12,9 @@
 	RewriteRule ^(.+) - [PT,L]
 
 	RewriteRule ^(.*) index.php
+
+	RewriteCond %{HTTP:Authorization}  !^$
+	RewriteRule .* - [E=REMOTE_USER:%{HTTP:Authorization}]
 </IfModule>
 
 #php_value register_globals 0
