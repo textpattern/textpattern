@@ -64,8 +64,20 @@ $LastChangedRevision$
 		define("LANG",$language);
 		//i18n: define("LANG","en-gb");
 		define('txp_version', $thisversion);
-		if ( !defined(  'PROTOCOL'))
-			define(  'PROTOCOL', (  (  serverSet( 'HTTPS') != '' ) ? 'https://' : 'http://') );
+
+		if (!defined('PROTOCOL')) {
+			switch (serverSet('HTTPS')) {
+				case '':
+				case 'off': // ISAPI with IIS
+					define('PROTOCOL', 'http://');
+				break;
+
+				default:
+					define('PROTOCOL', 'https://');
+				break;
+			}
+		}
+
 		define("hu",PROTOCOL.$siteurl.'/');
 		// v1.0 experimental relative url global
 		define("rhu",preg_replace("/https?:\/\/.+(\/.*)\/?$/U","$1",hu));
