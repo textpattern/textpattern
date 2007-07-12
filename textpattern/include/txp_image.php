@@ -438,34 +438,43 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function image_delete() 
-	{
+
+	function image_delete() {
 		global $txpcfg;
+
 		extract($txpcfg);
 
 		$id = assert_int(ps('id'));
-		
-		$rs = safe_row("*", "txp_image", "id = $id");
+
+		$rs = safe_row('*', 'txp_image', "id = $id");
+
 		if ($rs) {
 			extract($rs);
-			$rsd = safe_delete("txp_image","id = $id");
-			$ul = unlink(IMPATH.$id.$ext) or exit(image_list());
-			if(is_file(IMPATH.$id.'t'.$ext)){
+
+			$rsd = safe_delete('txp_image', "id = $id");
+
+			$ul = false;
+
+			if (is_file(IMPATH.$id.$ext)) {
+				$ul = unlink(IMPATH.$id.$ext);
+			}
+
+			if (is_file(IMPATH.$id.'t'.$ext)) {
 				$ult = unlink(IMPATH.$id.'t'.$ext);
 			}
 
-			if ($rsd && $ul)
-			{
-				$message = gTxt('image_deleted', array('{name}' => $name));
+			if ($rsd && $ul) {
 				update_lastmod();
 
-				image_list($message);
+				image_list(gTxt('image_deleted', array('{name}' => $name)));
+			} else {
+				image_list(gTxt('image_delete_failed', array('{name}' => $name)));
 			}
-		} else image_list();
+		} else {
+			image_list();
+		}
 	}
 
-
-	
 // -------------------------------------------------------------
 	function image_change_pageby()
 	{
