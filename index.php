@@ -18,7 +18,7 @@ $LastChangedRevision$
 	// Use buffering to ensure bogus whitespace in config.php is ignored
 	ob_start(NULL, 2048);
 	$here = dirname(__FILE__);
-	include './textpattern/config.php';
+	include txpath.'/config.php';
 	ob_end_clean();
 
 	include txpath.'/lib/constants.php';
@@ -35,6 +35,7 @@ $LastChangedRevision$
 		exit ($msg);
 	}
 
-	include $txpcfg['txpath'].'/publish.php';
+	include txpath.'/publish.php';
 	textpattern();
+
 ?>
