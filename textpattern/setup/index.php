@@ -445,18 +445,19 @@ eod;
 	{
 		$langs = array(
 			'ar-dz' => 'جزائري عربي',
+			'bg-bg' => 'Български'
 			'ca-es' => 'Català',
 			'cs-cz' => 'Čeština',
 			'da-dk' => 'Dansk',
 			'de-de' => 'Deutsch',
 			'el-gr' => 'Ελληνικά',
-			'en-gb' => 'English (GB)',
-			'en-us' => 'English (US)',
+			'en-gb' => 'English (Great Britain)',
+			'en-us' => 'English (United States)',
 			'es-es' => 'Español',
 			'et-ee' => 'Eesti',
 			'fi-fi' => 'Suomi',
 			'fr-fr' => 'Français',
-			'gl-gz' => 'Galego (Galiza)',
+			'gl-gz' => 'Galego',
 			'he-il' => 'עברית',
 			'hu-hu' => 'Magyar',
 			'id-id' => 'Bahasa Indonesia',
@@ -467,7 +468,8 @@ eod;
 			'nl-nl' => 'Nederlands',
 			'no-no' => 'Norsk',
 			'pl-pl' => 'Polski',
-			'pt-pt' => 'Português',
+			'pt-br' => 'Português (Brasil)',
+			'pt-pt' => 'Português (Portugal)',
 			'ro-ro' => 'Română',
 			'ru-ru' => 'Русский',
 			'sk-sk' => 'Slovenčina',
@@ -476,7 +478,6 @@ eod;
 			'uk-ua' => 'Українська',
 			'zh-cn' => '中文(简体)',
 			'zh-tw' => '中文(繁體)',
-			'bg-bg' => 'Български'
 		);
 
 		$default	= 'en-gb';
