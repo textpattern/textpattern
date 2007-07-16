@@ -445,7 +445,7 @@ eod;
 	{
 		$langs = array(
 			'ar-dz' => 'جزائري عربي',
-			'bg-bg' => 'Български'
+			'bg-bg' => 'Български',
 			'ca-es' => 'Català',
 			'cs-cz' => 'Čeština',
 			'da-dk' => 'Dansk',
