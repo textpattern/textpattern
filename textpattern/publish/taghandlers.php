@@ -2478,7 +2478,7 @@ function body($atts)
 		if (empty($thisid)) $thisid = $ID;
 
 		$section = urlencode($section);
-		$url_title = urlencode($url_title);
+		$url_title = clean_urltitle($url_title);
 		
 		switch($permlink_mode) {
 			case 'section_id_title':
