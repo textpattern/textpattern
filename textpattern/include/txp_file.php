@@ -300,6 +300,7 @@ $LastChangedRevision$
 			if ($permissions=='') $permissions='-1';
 
 			$file_exists = file_exists(build_file_path($file_base_path,$filename));
+			$replace = ($file_exists) ? tr(td(file_upload_form(gTxt('replace_file'),'upload','file_replace',$id))) : '';
 
 			$existing_files = get_filenames();
 
@@ -374,6 +375,7 @@ $LastChangedRevision$
 									hInput('category',$category).
 									hInput('perms',($permissions=='-1') ? '' : $permissions).
 									hInput('description',$description).
+									hInput('status',$status).
 
 									hInput('sort', $sort).
 									hInput('dir', $dir).
@@ -396,6 +398,7 @@ $LastChangedRevision$
 				)
 			),
 			$form,
+			$replace,
 			endTable();
 		}
 	}
