@@ -618,17 +618,6 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-// allow certain manually-entered characters in url_titles
-
-	function clean_urltitle($text) {
-		$text = urlencode($text);
-
-		$text = str_replace('%2F', '/', $text);
-
-		return $text;
-	}
-
-// -------------------------------------------------------------
 	function stripSpace($text, $force=0) 
 	{
 		global $prefs;
