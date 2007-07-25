@@ -635,10 +635,12 @@ EOF;
 			'class="checkbox" onclick="setClassRemember(\''.$classname.'\','.(1-$val).');submit(this.form);" />'.
 			' <label for="'.$name.'">'.gTxt($classname).'</label> ';
 
-		if ($form)
-			return n.form($i . eInput(gps('event')).sInput(gps('step')).'<noscript><div><input type="submit" value="'.gTxt('go').'" /></div></noscript>');
-		else
+		if ($form) {
+			$args = empty($_SERVER['argv']) ? '' : '?'.doSpecial(join($_SERVER['argv']), '');
+			return '<form method="post" action="index.php'.$args.'">'.$i.eInput(gps('event')).n.'<noscript><div><input type="submit" value="'.gTxt('go').'" /></div></noscript></form>';
+		} else {
 			return n.$i;
+		}
 	}
 
 
