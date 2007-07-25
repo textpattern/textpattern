@@ -518,6 +518,12 @@ tr.spam a, tr.moderate a {
 font-weight: bold;
 }
 
+form.cb_show_spam {
+margin: 0 auto;
+padding: 0 0 0 10px; 
+width: 90%;
+}
+
 /* pages, forms, style, plugins
 ----------------------------------------------- */
 

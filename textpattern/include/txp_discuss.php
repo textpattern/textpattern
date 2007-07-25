@@ -292,7 +292,7 @@ $LastChangedRevision$
 			endTable().
 			'</form>'.
 
-			n.tag(cookie_box('show_spam'),'div',' style="margin:auto;padding:0 0 0 10px; width:90%"').
+			n.cookie_box('show_spam').
 
 			nav_form('discuss', $page, $numPages, $sort, $dir, $crit, $search_method).
 

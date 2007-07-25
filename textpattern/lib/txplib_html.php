@@ -637,7 +637,7 @@ EOF;
 
 		if ($form) {
 			$args = empty($_SERVER['argv']) ? '' : '?'.doSpecial(join($_SERVER['argv']), '');
-			return '<form method="post" action="index.php'.$args.'">'.$i.eInput(gps('event')).n.'<noscript><div><input type="submit" value="'.gTxt('go').'" /></div></noscript></form>';
+			return '<form class="'.$name.'" method="post" action="index.php'.$args.'">'.$i.eInput(gps('event')).n.'<noscript><div><input type="submit" value="'.gTxt('go').'" /></div></noscript></form>';
 		} else {
 			return n.$i;
 		}
