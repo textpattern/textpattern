@@ -1044,11 +1044,22 @@ $LastChangedRevision$
 		$out = (!empty($label)) ? $label.br.$out.$sub : $out.$sub;
 		$out = ($wraptag) ? tag($out,$wraptag) : $out;
 	
-		if (!$section)
-			return '<form action="'.hu.'" method="get">'.$out.'</form>';
+		if (!$section) {
+			return '<form method="get" action="'.hu.'">'.
+				n.$out.
+				n.'</form>';
+		}
 
-		$url = pagelinkurl(array('s'=>$section));	
-		return '<form action="'.$url.'" method="get">'.$out.'</form>';
+		if ($permlink_mode != 'messy') {
+			return '<form method="get" action="'.pagelinkurl(array('s' => $section)).'">'.
+				n.$out.
+				n.'</form>';
+		}
+
+		return '<form method="get" action="'.hu.'">'.
+			n.hInput('s', $section).
+			n.$out.
+			n.'</form>';
 	}
 
 // -------------------------------------------------------------
