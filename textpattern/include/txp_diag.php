@@ -162,13 +162,13 @@ $LastChangedRevision$
 		'dir_not_writable' =>
 		trim(
 			((!@is_writable($path_to_site.'/'.$img_dir))
-			?	str_replace('{dirtype}', gTxt('img_dir'), gTxt('dir_not_writable')).": {$path_to_site}/{$img_dir}\r\n"
+			?	str_replace('{dirtype}', gTxt('img_dir'), gTxt('dir_not_writable')).": {$path_to_site}/{$img_dir}".n
 			:	'').
 			((!@is_writable($file_base_path))
-			?	str_replace('{dirtype}', gTxt('file_base_path'), gTxt('dir_not_writable')).": {$file_base_path}\r\n"
+			?	str_replace('{dirtype}', gTxt('file_base_path'), gTxt('dir_not_writable')).": {$file_base_path}".n
 			:	'').
 			((!@is_writable($tempdir))
-			?	str_replace('{dirtype}', gTxt('tempdir'), gTxt('dir_not_writable')).": {$tempdir}\r\n"
+			?	str_replace('{dirtype}', gTxt('tempdir'), gTxt('dir_not_writable')).": {$tempdir}".n
 			:	'')),
 
 		'cleanurl_only_apache' =>

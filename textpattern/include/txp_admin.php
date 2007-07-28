@@ -244,12 +244,12 @@ $LastChangedRevision$
 
 		$message = gTxt('greeting').' '.$RealName.','.
 
-			"\r\n"."\r\n".gTxt('you_have_been_registered').' '.$sitename.
+			n.n.gTxt('you_have_been_registered').' '.$sitename.
 
-			"\r\n"."\r\n".gTxt('your_login_is').': '.$name.
-			"\r\n".gTxt('your_password_is').': '.$password.
+			n.n.gTxt('your_login_is').': '.$name.
+			n.gTxt('your_password_is').': '.$password.
 
-			"\r\n"."\r\n".gTxt('log_in_at').': '.hu.'textpattern/index.php';
+			n.n.gTxt('log_in_at').': '.hu.'textpattern/index.php';
 
 		return txpMail($email, "[$sitename] ".gTxt('your_login_info'), $message);
 	}
@@ -264,9 +264,9 @@ $LastChangedRevision$
 			
 		$message = gTxt('greeting').' '.$name.','.
 
-			"\r\n"."\r\n".gTxt('your_password_is').': '.$password.
+			n.n.gTxt('your_password_is').': '.$password.
 
-			"\r\n"."\r\n".gTxt('log_in_at').': '.hu.'textpattern/index.php';
+			n.n.gTxt('log_in_at').': '.hu.'textpattern/index.php';
 
 		return txpMail($email, "[$sitename] ".gTxt('your_new_password'), $message);
 	}

@@ -553,16 +553,16 @@ $LastChangedRevision$
 
 		$evaluator =& get_comment_evaluator();
 	
-		$out = gTxt('greeting')." $RealName,\r\n\r\n";
-		$out .= str_replace('{title}',$Title,gTxt('comment_recorded'))."\r\n";
-		$out .= permlinkurl_id($parentid)."\r\n";
+		$out = gTxt('greeting')." $RealName,".n.n;
+		$out .= str_replace('{title}',$Title,gTxt('comment_recorded')).n;
+		$out .= permlinkurl_id($parentid).n;
 		if (has_privs('discuss', $AuthorID))
-			$out .= hu.'textpattern/index.php?event=discuss&step=discuss_edit&discussid='.$discussid."\r\n";
-		$out .= gTxt('status').": ".$evaluator->get_result('text').'. '.implode(',',$evaluator->get_result_message())."\r\n";
-		$out .= "\r\n";
-		$out .= gTxt('comment_name').": $cname\r\n";
-		$out .= gTxt('comment_email').": $cemail\r\n";
-		$out .= gTxt('comment_web').": $cweb\r\n";
+			$out .= hu.'textpattern/index.php?event=discuss&step=discuss_edit&discussid='.$discussid.n;
+		$out .= gTxt('status').": ".$evaluator->get_result('text').'. '.implode(',',$evaluator->get_result_message()).n;
+		$out .= n;
+		$out .= gTxt('comment_name').": $cname".n;
+		$out .= gTxt('comment_email').": $cemail".n;
+		$out .= gTxt('comment_web').": $cweb".n;
 		$out .= gTxt('comment_comment').": $message";
 
 		$subject = strtr(gTxt('comment_received'),array('{site}' => $sitename, '{title}' => $Title));
