@@ -1077,6 +1077,8 @@ $LastChangedRevision$
 		{
 			global $thisarticle, $s;
 
+			assert_article();
+
 			extract(getNextPrev(
 				@$thisarticle['thisid'],
 				@strftime('%Y-%m-%d %H:%M:%S', $thisarticle['posted']),
@@ -1117,6 +1119,8 @@ $LastChangedRevision$
 		if (intval($id) == 0)
 		{
 			global $thisarticle, $s;
+
+			assert_article();
 
 			extract(getNextPrev(
 				$thisarticle['thisid'],
@@ -1798,6 +1802,8 @@ $LastChangedRevision$
 	{
 		global $thisarticle;
 
+		assert_article();
+
 		extract(lAtts(array(
 			'name' => '',
 		), $atts));
@@ -1814,7 +1820,7 @@ $LastChangedRevision$
 	
 // -------------------------------------------------------------
 
-function body($atts) 
+	function body($atts) 
 	{
 		global $thisarticle, $is_article_body;
 		assert_article();
@@ -2573,7 +2579,7 @@ function body($atts)
 
 	function breadcrumb($atts)
 	{
-		global $pretext,$thisarticle,$sitename;
+		global $pretext,$sitename;
 		
 		extract(lAtts(array(
 			'wraptag' => 'p',
@@ -2632,12 +2638,12 @@ function body($atts)
 
 	function if_excerpt($atts, $thing)
 	{
-	        global $thisarticle;
-           assert_article();
-	        # eval condition here. example for article excerpt
-	        $excerpt = trim($thisarticle['excerpt']);
-	        $condition = (!empty($excerpt))? true : false;
-	        return parse(EvalElse($thing, $condition));
+		global $thisarticle;
+		assert_article();
+		# eval condition here. example for article excerpt
+		$excerpt = trim($thisarticle['excerpt']);
+		$condition = (!empty($excerpt))? true : false;
+		return parse(EvalElse($thing, $condition));
 	}
 
 //--------------------------------------------------------------------------
