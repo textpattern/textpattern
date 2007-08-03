@@ -613,7 +613,7 @@ $LastChangedRevision$
 		}
 
 		//Building query parts
-		$frontpage = ($frontpage and !$q) ? filterFrontPage() : '';		
+		$frontpage = ($frontpage and (!$q or $issticky)) ? filterFrontPage() : '';		
 		$category  = (!$category)  ? '' : " and ((Category1='".doSlash($category)."') or (Category2='".doSlash($category)."')) ";
 		$section   = (!$section)   ? '' : " and Section = '".doSlash($section)."'";
 		$excerpted = ($excerpted=='y')  ? " and Excerpt !=''" : '';
