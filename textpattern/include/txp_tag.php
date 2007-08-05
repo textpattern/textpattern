@@ -364,6 +364,21 @@ begin generic functions
 		return ' '.selectInput('sort', $vals, $val, true);
 	}
 
+	function list_sort_pop($val)
+	{
+		$asc = ' ('.gTxt('ascending').')';
+		$desc = ' ('.gTxt('descending').')';
+
+		$vals = array(
+			'title asc'		=> gTxt('tag_title').$asc,
+			'title desc'	=> gTxt('tag_title').$desc,
+			'name asc'		=> gTxt('name').$asc,
+			'name desc'		=> gTxt('name').$desc,
+		);
+
+		return ' '.selectInput('sort', $vals, $val, true);
+	}
+
 //--------------------------------------------------------------
 
 	function pgonly_pop($val)
@@ -793,6 +808,7 @@ begin tag builder functions
 			'label',
 			'labeltag',
 			'sections',
+			'sort',
 			'wraptag'
 		));
 
@@ -809,6 +825,9 @@ begin tag builder functions
 
 			tagRow('include_default',
 				yesno_pop('include_default', $include_default)).
+
+			tagRow('sort',
+				list_sort_pop($sort)).
 
 			tagRow('default_title',
 				fInput('text', 'default_title', $default_title, 'edit', '', '', 20)).
@@ -865,6 +884,7 @@ begin tag builder functions
 			'labeltag',
 			'parent',
 			'section',
+			'sort',
 			'this_section',
 			'type',
 			'wraptag',
@@ -898,6 +918,9 @@ begin tag builder functions
 
 			tagRow('category_list_section',
 				section_pop('section', $section)).
+
+			tagRow('sort',
+				list_sort_pop($sort)).
 
 			tagRow('label',
 				fInput('text', 'label', ($label ? $label : gTxt('categories')), 'edit', '', '', 20)).
@@ -2782,6 +2805,7 @@ begin tag builder functions
 			'class',
 			'id',
 			'form',
+			'sort',
 			'wraptag'
 		));
 
@@ -2801,6 +2825,9 @@ begin tag builder functions
 
 			tagRow('form',
 				form_pop('form', 'comment', $form)).
+
+			tagRow('sort',
+				discuss_sort_pop($sort)).
 
 			tagRow('wraptag',
 				input_tag('wraptag', $wraptag)).
