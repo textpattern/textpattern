@@ -297,7 +297,7 @@ $LastChangedRevision$
 
 	function new_pass_form()
 	{
-		return '<div style="margin-top: 3em auto auto auto; text-align: center;">'.
+		return '<div style="margin: 3em auto auto auto; text-align: center;">'.
 		form(
 			tag(gTxt('change_password'), 'h3').
 
@@ -379,7 +379,7 @@ $LastChangedRevision$
 
 	function change_email_form($email)
 	{
-		return '<div style="margin-top: 3em auto auto auto; text-align: center;">'.
+		return '<div style="margin: 3em auto auto auto; text-align: center;">'.
 		form(
 			tag(gTxt('change_email_address'), 'h3').
 			graf('<label for="new_email">'.gTxt('new_email').'</label> '.
