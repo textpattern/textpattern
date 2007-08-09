@@ -265,17 +265,27 @@ $LastChangedRevision$
 		$categories = getTree("root", "image");
 		
 		$rs = safe_row("*", "txp_image", "id = $id");
-		
+
 		if ($rs) {
 			extract($rs);
+
+			if ($ext != '.swf') {
+				$img = '<img src="'.hu.$img_dir.'/'.$id.$ext.'" height="'.$h.'" width="'.$w.'" alt="" "title="'.$id.$ext.' ('.$w.' &#215; '.$h.')" />';
+			} else {
+				$img = '';
+			}
+
+			if ($thumbnail and ($ext != '.swf')) {
+				$thumb = '<img src="'.hu.$img_dir.'/'.$id.'t'.$ext.'" alt="" />';
+			} else {
+				$thumb = '';
+			}
+
 			echo startTable('list'),
 			tr(
 				td(
-					'<img src="'.hu.$img_dir.
-						'/'.$id.$ext.'" height="'.$h.'" width="'.$w.'" alt="" '.
-						"title='$id$ext ($w &#215; $h)' />".
-						br.upload_form(gTxt('replace_image'),'replace_image_form',
-							'image_replace','image',$id,$file_max_upload_size, 'image-replace', '')
+					$img.br.
+					upload_form(gTxt('replace_image'), 'replace_image_form', 'image_replace', 'image', $id, $file_max_upload_size, 'image-replace', '')
 				)
 			),
 			tr(
@@ -285,7 +295,7 @@ $LastChangedRevision$
 							($thumbnail)
 							? 	startTable('image-thumbnail').
 									tr(
-										td('<img src="'.hu.$img_dir.'/'.$id.'t'.$ext.'" alt="" />').
+										td($thumb).
 										td(dLink('image','thumbnail_delete','id',$id))
 									).
 								endTable().br
