@@ -170,12 +170,26 @@ $LastChangedRevision$
 
 				$name = empty($name) ? gTxt('unnamed') : htmlspecialchars($name);
 
-				$thumbnail = ($thumbnail) ?
-					'<img src="'.hu.$img_dir.'/'.$id.'t'.$ext.'" alt="" />' :
-					gTxt('no');
+				if ($thumbnail) {
+					if ($ext != '.swf') {
+						$thumbnail = '<img src="'.hu.$img_dir.'/'.$id.'t'.$ext.'" alt="" />';
+					} else {
+						$thumbnail = '';
+					}
+				} else {
+					$thumbnail = gTxt('no');
+				}
 
-				$tag_url = '?event=tag'.a.'tag_name=image'.a.'id='.$id.a.'ext='.$ext.
-					a.'w='.$w.a.'h='.$h.a.'alt='.urlencode($alt).a.'caption='.urlencode($caption);
+				if ($ext != '.swf') {
+					$tag_url = '?event=tag'.a.'tag_name=image'.a.'id='.$id.a.'ext='.$ext.a.'w='.$w.a.'h='.$h.a.'alt='.urlencode($alt).a.'caption='.urlencode($caption);
+					$tagbuilder = '<ul>'.
+							'<li><a target="_blank" href="'.$tag_url.a.'type=textile" onclick="popWin(this.href); return false;">Textile</a></li>'.
+							'<li><a target="_blank" href="'.$tag_url.a.'type=textpattern" onclick="popWin(this.href); return false;">Textpattern</a></li>'.
+							'<li><a target="_blank" href="'.$tag_url.a.'type=xhtml" onclick="popWin(this.href); return false;">XHTML</a></li>'.
+							'</ul>';
+				} else {
+					$tagbuilder = sp;
+				}
 
 				$category = ($category) ? '<span title="'.htmlspecialchars(fetch_category_title($category, 'image')).'">'.$category.'</span>' : '';
 
@@ -202,14 +216,7 @@ $LastChangedRevision$
 						href($thumbnail, $edit_url)
 					, 80).
 
-					td(
-						'<ul>'.
-						'<li><a target="_blank" href="'.$tag_url.a.'type=textile" onclick="popWin(this.href); return false;">Textile</a></li>'.
-						'<li><a target="_blank" href="'.$tag_url.a.'type=textpattern" onclick="popWin(this.href); return false;">Textpattern</a></li>'.
-						'<li><a target="_blank" href="'.$tag_url.a.'type=xhtml" onclick="popWin(this.href); return false;">XHTML</a></li>'.
-						'</ul>'
-					, 85).
-
+					td($tagbuilder, 85).
 					td($category, 75).
 
 					td(
