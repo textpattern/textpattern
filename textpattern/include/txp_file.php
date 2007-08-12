@@ -460,7 +460,7 @@ $LastChangedRevision$
 
 		if ($file === false) {
 			// could not get uploaded file
-			file_list(gTxt('file_upload_failed') ." $name - ".upload_get_errormsg(@$_FILES['file']['error']));
+			file_list(gTxt('file_upload_failed') ." $name - ".upload_get_errormsg($_FILES['thefile']['error']));
 			return;
 		}
 
@@ -527,7 +527,7 @@ $LastChangedRevision$
 
 		if ($file === false) {
 			// could not get uploaded file
-			file_list(gTxt('file_upload_failed') ." $name ".upload_get_errormsg($_FILES['file']['error']));
+			file_list(gTxt('file_upload_failed') ." $name ".upload_get_errormsg($_FILES['thefile']['error']));
 			return;
 		}
 

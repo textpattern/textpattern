@@ -1261,8 +1261,12 @@ $LastChangedRevision$
 			case UPLOAD_ERR_PARTIAL    : $msg = gTxt('upload_err_partial');break;
 				// Value: 4; No file was uploaded. 
 			case UPLOAD_ERR_NO_FILE    : $msg = gTxt('upload_err_no_file');break;
-     			// Value: 6; Missing a temporary folder. Introduced in PHP 4.3.10 and PHP 5.0.3. 
+				// Value: 6; Missing a temporary folder. Introduced in PHP 4.3.10 and PHP 5.0.3. 
 			case UPLOAD_ERR_NO_TMP_DIR : $msg = gTxt('upload_err_tmp_dir');break;
+				// Value: 7; Failed to write file to disk. Introduced in PHP 5.1.0.
+			case UPLOAD_ERR_CANT_WRITE : $msg = gTxt('upload_err_cant_write');break;
+				// Value: 8; File upload stopped by extension. Introduced in PHP 5.2.0.
+			case UPLOAD_ERR_EXTENSION  : $msg = gTxt('upload_err_extension');break;
 		}
 		return $msg;
 	}
