@@ -39,7 +39,7 @@ $LastChangedRevision$
 				if ($prefname == 'siteurl')
 				{
 					$post[$prefname] = str_replace("http://",'',$post[$prefname]);
-					$post[$prefname] = rtrim($post[$prefname],"/");
+					$post[$prefname] = rtrim($post[$prefname],"/ ");
 				}
 
 				safe_update(
