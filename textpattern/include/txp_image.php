@@ -716,8 +716,8 @@ $LastChangedRevision$
 						// Auto-generate a thumbnail using the last settings
 						if (isset($prefs['thumb_w'], $prefs['thumb_h'], $prefs['thumb_crop']))
 						{
-							$width  = intval($prefs['thumb_w']) ? intval($prefs['thumb_w']) : '';
-							$height = intval($prefs['thumb_h']) ? intval($prefs['thumb_h']) : '';
+							$width  = intval($prefs['thumb_w']);
+							$height = intval($prefs['thumb_h']);
 
 							if ($width > 0 or $height > 0)
 							{
