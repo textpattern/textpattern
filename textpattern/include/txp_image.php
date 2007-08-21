@@ -711,16 +711,22 @@ $LastChangedRevision$
 					@chmod($newpath, 0644);
 
 					// GD is supported
-					if (check_gd($ext)) {
+					if (check_gd($ext))
+					{
 						// Auto-generate a thumbnail using the last settings
-						if (isset($prefs['thumb_w'], $prefs['thumb_h'], $prefs['thumb_crop'])) {
-							if (intval($prefs['thumb_w']) > 0 and intval($prefs['thumb_h']) > 0) {
+						if (isset($prefs['thumb_w'], $prefs['thumb_h'], $prefs['thumb_crop']))
+						{
+							$width  = intval($prefs['thumb_w']) ? intval($prefs['thumb_w']) : '';
+							$height = intval($prefs['thumb_h']) ? intval($prefs['thumb_h']) : '';
+
+							if ($width > 0 or $height > 0)
+							{
 								$t = new txp_thumb( $id );
 
 								$t->crop = ($prefs['thumb_crop'] == '1');
 								$t->hint = '0';
-								$t->width = intval($prefs['thumb_w']);
-								$t->height = intval($prefs['thumb_h']);
+								$t->width = $width;
+								$t->height = $height;
 
 								$t->write();
 							}
