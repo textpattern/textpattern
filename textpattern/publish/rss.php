@@ -32,6 +32,7 @@ $LastChangedRevision$
 		$out[] = tag(doSpecial($site_slogan),'description');
 		$last = fetch('unix_timestamp(val)','txp_prefs','name','lastmod');
 		$out[] = tag(safe_strftime('rfc822',$last),'pubDate');
+		$out[] = callback_event('rss_head');
 
 		$articles = array();
 

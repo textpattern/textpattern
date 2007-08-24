@@ -56,6 +56,7 @@ $LastChangedRevision$
 		$auth[] = tag(hu,'uri');
 		
 		$out[] = tag(n.t.t.join(n.t.t,$auth).n,'author');
+		$out[] = callback_event('atom_head');
 
 		if (!$area or $area=='article') {
 			
