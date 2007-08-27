@@ -83,38 +83,40 @@ $LastChangedRevision$
 			break;
 
 			case 'ip':
-				$sort_sql = 'ip '.$dir.', posted asc';
+				$sort_sql = 'ip '.$dir;
 			break;
 
 			case 'name':
-				$sort_sql = 'name '.$dir.', posted asc';
+				$sort_sql = 'name '.$dir;
 			break;
 
 			case 'email':
-				$sort_sql = 'email '.$dir.', posted asc';
+				$sort_sql = 'email '.$dir;
 			break;
 
 			case 'website':
-				$sort_sql = 'web '.$dir.', posted asc';
+				$sort_sql = 'web '.$dir;
 			break;
 
 			case 'message':
-				$sort_sql = 'message '.$dir.', posted asc';
+				$sort_sql = 'message '.$dir;
 			break;
 
 			case 'status':
-				$sort_sql = "visible $dir, posted asc";
+				$sort_sql = 'visible '.$dir;
 			break;
 
 			case 'parent':
-				$sort_sql = 'parentid '.$dir.', posted asc';
+				$sort_sql = 'parentid '.$dir;
 			break;
 
 			default:
 				$sort = 'date';
-				$sort_sql = 'posted '.$dir;
+				$sort_sql = 'txp_discuss.posted '.$dir;
 			break;
 		}
+
+		if ($sort != 'date') $sort_sql .= ', txp_discuss.posted asc';
 
 		$switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
@@ -125,13 +127,13 @@ $LastChangedRevision$
 			$crit_escaped = doSlash($crit);
 
 			$critsql = array(
-				'id'			=> "discussid = '$crit_escaped'",
-				'parent'  => "parentid = '$crit_escaped'",
-				'name'		=> "name like '%$crit_escaped%'",
+				'id'      => "discussid = '$crit_escaped'",
+				'parent'  => "parentid = '$crit_escaped' OR title like '%$crit_escaped%'",
+				'name'    => "name like '%$crit_escaped%'",
 				'message' => "message like '%$crit_escaped%'",
-				'email'		=> "email like '%$crit_escaped%'",
+				'email'   => "email like '%$crit_escaped%'",
 				'website' => "web like '%$crit_escaped%'",
-				'ip'			=> "ip like '%$crit_escaped%'",
+				'ip'      => "ip like '%$crit_escaped%'",
 			);
 
 			if (array_key_exists($search_method, $critsql))
@@ -153,7 +155,13 @@ $LastChangedRevision$
 			$crit = '';
 		}
 
-		$total = safe_count('txp_discuss', "$criteria");
+		$spamq = cs('toggle_show_spam') ? '1=1' : 'visible != '.intval(SPAM);
+
+		$total = getThing(
+			'SELECT COUNT(*)'.
+			' FROM '.safe_pfx_j('txp_discuss').' LEFT JOIN '.safe_pfx_j('textpattern').' ON txp_discuss.parentid = textpattern.ID'. 
+			' WHERE '.$spamq.' AND '.$criteria
+		);
 
 		if ($total < 1)
 		{
@@ -177,10 +185,13 @@ $LastChangedRevision$
 
 		echo discuss_search_form($crit, $search_method);
 
-		$spamq = cs('toggle_show_spam') ? '1=1' : 'visible != '.intval(SPAM);
-
-		$rs = safe_rows_start('*, unix_timestamp(posted) as uPosted', 'txp_discuss',
-			"$spamq and $criteria order by $sort_sql limit $offset, $limit");
+		$rs = safe_query(
+			'SELECT txp_discuss.*, unix_timestamp(txp_discuss.posted) as uPosted, ID as thisid, Section as section, url_title, Title as title, Status, unix_timestamp(textpattern.Posted) as posted'.
+			' FROM '.safe_pfx_j('txp_discuss').' LEFT JOIN '.safe_pfx_j('textpattern').' ON txp_discuss.parentid = textpattern.ID'. 
+			' WHERE '.$spamq.' AND '.$criteria.
+			' ORDER BY '.$sort_sql.
+			' LIMIT '.$offset.', '.$limit
+		);
 
 		if ($rs)
 		{
@@ -208,8 +219,6 @@ $LastChangedRevision$
 				extract($a);
 				$parentid = assert_int($parentid);
 
-				$tq = safe_row('*, ID as thisid, unix_timestamp(Posted) as posted', 'textpattern', "ID = $parentid");
-
 				$edit_url = '?event=discuss'.a.'step=discuss_edit'.a.'discussid='.$discussid.a.'sort='.$sort.
 					a.'dir='.$dir.a.'page='.$page.a.'search_method='.$search_method.a.'crit='.$crit;
 
@@ -236,7 +245,7 @@ $LastChangedRevision$
 					break;
 				}
 
-				if (empty($tq))
+				if (empty($thisid))
 				{
 					$parent = gTxt('article_deleted').' ('.$parentid.')';
 					$view = '';
@@ -244,15 +253,15 @@ $LastChangedRevision$
 
 				else
 				{
-					$parent_title = empty($tq['Title']) ? '<em>'.gTxt('untitled').'</em>' : escape_title($tq['Title']);
+					$parent_title = empty($title) ? '<em>'.gTxt('untitled').'</em>' : escape_title($title);
 
-					$parent = href($parent_title, '?event=list'.a.'step=list'.a.'search_method=id'.a.'crit='.$tq['ID']);
+					$parent = href($parent_title, '?event=list'.a.'step=list'.a.'search_method=id'.a.'crit='.$parentid);
 
 					$view = '';
 
-					if ($visible == VISIBLE and in_array($tq['Status'], array(4,5)))
+					if ($visible == VISIBLE and in_array($Status, array(4,5)))
 					{
-						$view = n.t.'<li><a href="'.permlinkurl($tq).'#c'.$discussid.'">'.gTxt('view').'</a></li>';
+						$view = n.t.'<li><a href="'.permlinkurl($a).'#c'.$discussid.'">'.gTxt('view').'</a></li>';
 					}
 				}
 
