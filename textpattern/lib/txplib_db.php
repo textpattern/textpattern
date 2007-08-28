@@ -71,8 +71,11 @@ $DB = new DB;
 		if (!$q) return false;
 		if ($debug or TXP_DEBUG === 1) { 
 			dmp($q);
-			dmp(mysql_error());
-//			dmp(debug_backtrace());
+			if (mysql_errno())
+			{
+				dmp(mysql_error());
+//				dmp(debug_backtrace());
+			}
 		}
 		$start = getmicrotime();
 		$result = $method($q,$DB->link);
