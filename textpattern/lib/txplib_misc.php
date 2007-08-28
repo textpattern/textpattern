@@ -154,13 +154,14 @@ $LastChangedRevision$
 	{
 		global $txpcfg;
 
-		$installed = safe_field('name', 'txp_lang',"lang='".doSlash($lang)."' limit 1");
-
-		$lang_code = ($installed)? $lang : 'en-gb';
-
-		$rs = (txpinterface == 'admin')
+		foreach(array($lang, 'en-gb') as $lang_code)
+		{
+			$rs = (txpinterface == 'admin')
 				? safe_rows_start('name, data','txp_lang',"lang='".doSlash($lang_code)."'")
 				: safe_rows_start('name, data','txp_lang',"lang='".doSlash($lang_code)."' AND ( event='public' OR event='common')");
+
+			if (mysql_num_rows($rs)) break;
+		}
 
 		$out = array();
 
