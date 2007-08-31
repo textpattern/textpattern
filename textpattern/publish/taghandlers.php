@@ -1460,7 +1460,7 @@ $LastChangedRevision$
 			# display a comment preview if required
 			if (ps('preview') and $show_preview)
 				$out = comments_preview(array());
-			$out .= commentForm($id,$atts);
+			$out .= commentForm($thisid,$atts);
 		}
 
 		return (!$wraptag ? $out : doTag($out,$wraptag,$class) );
