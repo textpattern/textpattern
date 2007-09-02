@@ -104,7 +104,7 @@ $page_xml_tags = array(
 $page_misc_tags = array(
 	'page_title',
 	'css',
-	'sitename',
+	'site_name',
 	'site_slogan',
 	'breadcrumb',
 	'search_input',
