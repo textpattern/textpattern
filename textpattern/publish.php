@@ -8,10 +8,10 @@
     /      |_______________________________________|      \
    /___________)                               (___________\
 
-	Copyright 2005 by Dean Allen 
+	Copyright 2005 by Dean Allen
 	All rights reserved.
 
-	Use of this software denotes acceptance of the Textpattern license agreement 
+	Use of this software denotes acceptance of the Textpattern license agreement
 
 $HeadURL$
 $LastChangedRevision$
@@ -20,7 +20,7 @@ $LastChangedRevision$
 
 	if (!defined('txpath'))
 		define("txpath", dirname(__FILE__));
-	if (!defined("txpinterface"))	
+	if (!defined("txpinterface"))
 		die('If you just updated and expect to see your site here, please also update the files in your main installation directory.'.
 			' (Otherwise note that publish.php cannot be called directly.)');
 
@@ -40,16 +40,16 @@ $LastChangedRevision$
 
 	ob_start();
 
-    	// start the clock for runtime
+		// start the clock for runtime
 	$microstart = getmicrotime();
 
 		// check the size of the url request
 	bombShelter();
 
 		// get all prefs as an array
- 	$prefs = get_prefs();
+	$prefs = get_prefs();
 
- 		// add prefs to globals
+		// add prefs to globals
 	extract($prefs);
 
 		// set a higher error level during initialization
@@ -58,7 +58,7 @@ $LastChangedRevision$
 		// use the current URL path if $siteurl is unknown
 	if (empty($siteurl))
 		$prefs['siteurl'] = $siteurl = $_SERVER['HTTP_HOST'] . rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
-	
+
 	if (empty($path_to_site))
 		updateSitePath(dirname(dirname(__FILE__)));
 
@@ -75,10 +75,10 @@ $LastChangedRevision$
 		}
 	}
 
-		// v1.0: this should be the definitive http address of the site	
+		// v1.0: this should be the definitive http address of the site
 	if (!defined('hu'))
 		define("hu",PROTOCOL.$siteurl.'/');
-	
+
 		// v1.0 experimental relative url global
 	if (!defined('rhu'))
 		define("rhu",preg_replace("|^https?://[^/]+|","",hu));
@@ -218,7 +218,7 @@ $LastChangedRevision$
 			// some useful vars for taghandlers, plugins
 		$out['request_uri'] = preg_replace("|^https?://[^/]+|i","",serverSet('REQUEST_URI'));
 		$out['qs'] = serverSet('QUERY_STRING');
-			// IIS fix 
+			// IIS fix
 		if (!$out['request_uri'] and serverSet('SCRIPT_NAME'))
 			$out['request_uri'] = serverSet('SCRIPT_NAME').( (serverSet('QUERY_STRING')) ? '?'.serverSet('QUERY_STRING') : '');
 			// another IIS fix
@@ -237,19 +237,19 @@ $LastChangedRevision$
 
 			// if messy vars exist, bypass url parsing
 		if (!$out['id'] && !$out['s'] && !(txpinterface=='css') &&! ( txpinterface=='admin') ) {
-			
+
 			// return clean URL test results for diagnostics
 			if (gps('txpcleantest')) {
 				exit(show_clean_test($out));
 			}
 
 			extract(chopUrl($req));
-	
+
 				//first we sniff out some of the preset url schemes
 			if (strlen($u1)) {
 
 				switch($u1) {
-	
+
 					case 'atom':
 						include txpath.'/publish/atom.php'; exit(atom());
 
@@ -260,23 +260,23 @@ $LastChangedRevision$
 					// make it multibyte-safe without breaking backwards-compatibility
 					case urldecode(strtolower(urlencode(gTxt('section')))):
 						$out['s'] = (ckEx('section',$u2)) ? $u2 : ''; $is_404 = empty($out['s']); break;
-	
+
 					case urldecode(strtolower(urlencode(gTxt('category')))):
 						$out['c'] = (ckEx('category',$u2)) ? $u2 : ''; $is_404 = empty($out['c']); break;
-	
+
 					case urldecode(strtolower(urlencode(gTxt('author')))):
 						$out['author'] = (!empty($u2)) ? $u2 : ''; break;
 						// AuthorID gets resolved from Name further down
-	
+
 					case urldecode(strtolower(urlencode(gTxt('file_download')))):
 						$out['s'] = 'file_download';
 						$out['id'] = (!empty($u2)) ? $u2 : ''; break;
-					
+
 					default:
 						// then see if the prefs-defined permlink scheme is usable
 						switch ($permlink_mode) {
-			
-							case 'section_id_title': 
+
+							case 'section_id_title':
 								if (empty($u2)) {
 									$out['s'] = (ckEx('section',$u1)) ? $u1 : '';
 									$is_404 = empty($out['s']);
@@ -288,7 +288,7 @@ $LastChangedRevision$
 									$is_404 = (empty($out['s']) or empty($out['id']));
 								}
 							break;
-			
+
 							case 'year_month_day_title':
 								if (empty($u2)) {
 									$out['s'] = (ckEx('section',$u1)) ? $u1 : '';
@@ -313,7 +313,7 @@ $LastChangedRevision$
 								}
 							break;
 
-							case 'section_title': 
+							case 'section_title':
 								if (empty($u2)) {
 									$out['s'] = (ckEx('section',$u1)) ? $u1 : '';
 									$is_404 = empty($out['s']);
@@ -325,16 +325,16 @@ $LastChangedRevision$
 									$is_404 = (empty($out['s']) or empty($out['id']));
 								}
 							break;
-							
-							case 'title_only': 
+
+							case 'title_only':
 								$rs = lookupByTitle($u1);
 								$out['id'] = @$rs['ID'];
-								$out['s'] = (empty($rs['Section']) ? ckEx('section', $u1) : 
+								$out['s'] = (empty($rs['Section']) ? ckEx('section', $u1) :
 										$rs['Section']);
 								$is_404 = empty($out['s']);
 							break;
 
-							case 'id_title': 		
+							case 'id_title':
 								if (is_numeric($u1) && ckExID($u1))
 								{
 									$rs = lookupByID($u1);
@@ -347,7 +347,7 @@ $LastChangedRevision$
 									$is_404 = empty($out['s']);
 								}
 							break;
-			
+
 						}
 				}
 			} else {
@@ -368,7 +368,7 @@ $LastChangedRevision$
 		if ($out['author'])
 		{
 			$name = urldecode(strtolower(urlencode($out['author'])));
-		
+
 			$name = safe_field('name', 'txp_users', "RealName like '".doSlash($out['author'])."'");
 
 			if ($name)
@@ -388,7 +388,7 @@ $LastChangedRevision$
 
 		$out['pg'] = is_numeric($out['pg']) ? intval($out['pg']) : '';
 		$out['id'] = is_numeric($out['id']) ? intval($out['id']) : '';
-		
+
 		if ($out['s'] == 'file_download') {
 			// get id of potential filename
 			if (!is_numeric($out['id'])) {
@@ -400,7 +400,7 @@ $LastChangedRevision$
 			$out = ($rs)? array_merge($out, $rs) : array('s'=>'file_download','file_error'=> 404);
 			return $out;
 		}
-		
+
 		if (!$is_404)
 			$out['s'] = (empty($out['s'])) ? 'default' : $out['s'];
 		$s = $out['s'];
@@ -412,7 +412,7 @@ $LastChangedRevision$
 
 			// by this point we should know the section, so grab its page and css
 		$rs = safe_row("*", "txp_section", "name = '".doSlash($s)."' limit 1");
-		$out['page'] = @$rs['page'];		
+		$out['page'] = @$rs['page'];
 
 		if(is_numeric($id)) {
 			$a = safe_row('*, unix_timestamp(Posted) as uPosted', 'textpattern', 'ID='.intval($id).' and Status = 4');
@@ -434,7 +434,7 @@ $LastChangedRevision$
 		$out['permlink_mode']  = $permlink_mode;
 		$out['sitename']       = $sitename;
 
-		return $out; 
+		return $out;
 
 	}
 
@@ -442,7 +442,7 @@ $LastChangedRevision$
 //	the variables passed to it by pretext();
 
 // -------------------------------------------------------------
-	function textpattern() 
+	function textpattern()
 	{
 		global $pretext,$microstart,$prefs,$qcount,$qtime,$production_status,$txptrace,$siteurl,$has_article_tag;
 
@@ -454,7 +454,7 @@ $LastChangedRevision$
 			txp_die(gTxt('404_not_found'), '404');
 
 		$html = safe_field('user_html','txp_page',"name='".doSlash($pretext['page'])."'");
-		if (!$html) 
+		if (!$html)
 			txp_die(gTxt('unknown_section'), '404');
 
 		// useful for clean urls with error-handlers
@@ -521,7 +521,7 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 	function doArticles($atts, $iscustom)
-	{	
+	{
 		global $pretext, $prefs, $txpcfg;
 		extract($pretext);
 		extract($prefs);
@@ -567,7 +567,7 @@ $LastChangedRevision$
 			$theAtts['author'] = (!empty($author)? $author: '');
 			$theAtts['month'] = (!empty($month)? $month: '');
 			$theAtts['frontpage'] = ($s && $s=='default')? true: false;
-			$theAtts['excerpted'] = '';			
+			$theAtts['excerpted'] = '';
 		}
 		extract($theAtts);
 
@@ -577,14 +577,16 @@ $LastChangedRevision$
 		if (!is_numeric($status))
 			$status = getStatusNum($status);
 		$issticky = ($status == 5);
-			
+
 		//give control to search, if necesary
-		if($q && !$iscustom && !$issticky) {
+		if($q && !$iscustom && !$issticky)
+		{
 			include_once txpath.'/publish/search.php';
+
 			$s_filter = ($searchall ? filterSearch() : '');
-			$q = doSlash($q);
-			$match = ", match (Title,Body) against ('$q') as score";
-			$search = " and (Title rlike '$q' or Body rlike '$q') $s_filter";
+			$q        = doSlash($q);
+			$match    = ", match (Title,Body) against ('$q') as score";
+			$search   = " and (Title rlike '$q' or Body rlike '$q') $s_filter";
 
 			// searchall=0 can be used to show search results for the current section only
 			if ($searchall) $section = '';
@@ -613,7 +615,7 @@ $LastChangedRevision$
 		}
 
 		//Building query parts
-		$frontpage = ($frontpage and (!$q or $issticky)) ? filterFrontPage() : '';		
+		$frontpage = ($frontpage and (!$q or $issticky)) ? filterFrontPage() : '';
 		$category  = (!$category)  ? '' : " and ((Category1='".doSlash($category)."') or (Category2='".doSlash($category)."')) ";
 		$section   = (!$section)   ? '' : " and Section = '".doSlash($section)."'";
 		$excerpted = ($excerpted=='y')  ? " and Excerpt !=''" : '';
@@ -628,7 +630,7 @@ $LastChangedRevision$
 			default:
 				$time = " and Posted <= now()";
 		}
-			
+
 		$custom = '';
 
 		if ($customFields) {
@@ -647,7 +649,7 @@ $LastChangedRevision$
 			foreach ($keys as $key) {
 				$keyparts[] = "FIND_IN_SET('".$key."',Keywords)";
 			}
-			$keywords = " and (" . join(' or ',$keyparts) . ")"; 
+			$keywords = " and (" . join(' or ',$keyparts) . ")";
 		}
 
 		if ($q and $searchsticky)
@@ -657,7 +659,7 @@ $LastChangedRevision$
 		else
 			$statusq = ' and Status = '.intval($status);
 
-		$where = "1" . $statusq. $time.
+		$where = "1=1" . $statusq. $time.
 			$search . $id . $category . $section . $excerpted . $month . $author . $keywords . $custom . $frontpage;
 
 		//do not paginate if we are on a custom list
@@ -665,9 +667,9 @@ $LastChangedRevision$
 		{
 			$grand_total = safe_count('textpattern',$where);
 			$total = $grand_total - $offset;
-			$numPages = ceil($total/$pageby);  
+			$numPages = ceil($total/$pageby);
 			$pg = (!$pg) ? 1 : $pg;
-			$pgoffset = $offset + (($pg - 1) * $pageby);	
+			$pgoffset = $offset + (($pg - 1) * $pageby);
 			// send paging info to txp:newer and txp:older
 			$pageout['pg']       = $pg;
 			$pageout['numPages'] = $numPages;
@@ -685,7 +687,7 @@ $LastChangedRevision$
 			$pgoffset = $offset;
 		}
 
-		$rs = safe_rows_start("*, unix_timestamp(Posted) as uPosted".$match, 'textpattern', 
+		$rs = safe_rows_start("*, unix_timestamp(Posted) as uPosted".$match, 'textpattern',
 		$where.' order by '.doSlash($sort).' limit '.intval($pgoffset).', '.intval($limit));
 		// get the form name
 		if ($q and !$iscustom and !$issticky)
@@ -695,7 +697,7 @@ $LastChangedRevision$
 
 		if ($rs) {
 			$count = 0;
-			
+
 			$articles = array();
 			while($a = nextRow($rs)) {
 				++$count;
@@ -744,7 +746,7 @@ $LastChangedRevision$
 			foreach ($rs as $name) {
 				$filters[] = " and Section != '".doSlash($name)."'";
 			}
-			
+
 			$filterFrontPage = join('', $filters);
 		}
 
@@ -752,7 +754,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function doArticle($atts) 
+	function doArticle($atts)
 	{
 		global $pretext,$prefs, $thisarticle;
 		extract($prefs);
@@ -764,7 +766,7 @@ $LastChangedRevision$
 			'allowoverride' => '1',
 			'form'          => 'default',
 			'status'        => '4',
-		),$atts, 0));		
+		),$atts, 0));
 
 		if ($status or empty($thisarticle) or $thisarticle['thisid'] != $id) {
 			$thisarticle = NULL;
@@ -773,7 +775,7 @@ $LastChangedRevision$
 
 			$q_status = ($status ? 'and Status = '.intval($status) : 'and Status in (4,5)');
 
-			$rs = safe_row("*, unix_timestamp(Posted) as uPosted", 
+			$rs = safe_row("*, unix_timestamp(Posted) as uPosted",
 					"textpattern", 'ID = '.intval($id)." $q_status limit 1");
 
 			if ($rs) {
@@ -795,12 +797,12 @@ $LastChangedRevision$
 				$article .= parse_form('comments_display');
 			}
 
-			
-			unset($GLOBALS['thisarticle']);	
+
+			unset($GLOBALS['thisarticle']);
 
 			return $article;
 		}
-}	
+}
 
 // -------------------------------------------------------------
 	function article_custom($atts)
@@ -853,13 +855,13 @@ $LastChangedRevision$
 			foreach ($custom as $i => $name)
 				$out[$name] = $rs['custom_' . $i];
 		}
-		
+
 		global $thisarticle;
-		$thisarticle = $out;	
+		$thisarticle = $out;
 	}
 
 // -------------------------------------------------------------
-	function getNeighbour($Posted, $s, $type) 
+	function getNeighbour($Posted, $s, $type)
 	{
 		$type = ($type == '>') ? '>' : '<';
 		$safe_name = safe_pfx('textpattern');
@@ -884,7 +886,7 @@ $LastChangedRevision$
 		// If next/prev tags are placed before an article tag on a list page, we
 		// have to guess what the current article is
 		if (!$id) {
-			$current = safe_row('ID, Posted', 'textpattern', 
+			$current = safe_row('ID, Posted', 'textpattern',
 				'1=1 '.
 				(($s!='' && $s!='default') ? "and Section = '".doSlash($s)."'" : filterFrontPage()).
 				'and Status=4 and Posted < now() order by Posted desc limit 1');
@@ -919,10 +921,10 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function lastMod() 
+	function lastMod()
 	{
 		$last = safe_field("unix_timestamp(val)", "txp_prefs", "`name`='lastmod' and prefs_id=1");
-		return gmdate("D, d M Y H:i:s \G\M\T",$last);	
+		return gmdate("D, d M Y H:i:s \G\M\T",$last);
 	}
 
 // -------------------------------------------------------------
@@ -1030,7 +1032,7 @@ $LastChangedRevision$
 		}
 		return $out;
 	}
-	
+
 // -------------------------------------------------------------
 	function buildCustomSql($custom,$pairs)
 	{
@@ -1044,7 +1046,7 @@ $LastChangedRevision$
 				}
 			}
 		}
-		return (!empty($out)) ? ' '.join(' ',$out).' ' : false; 
+		return (!empty($out)) ? ' '.join(' ',$out).' ' : false;
 	}
 
 // -------------------------------------------------------------
@@ -1055,53 +1057,53 @@ $LastChangedRevision$
 		$num = empty($labels[$status]) ? 4 : $labels[$status];
 		return $num;
 	}
-	
+
 // -------------------------------------------------------------
-	function ckEx($table,$val,$debug='') 
+	function ckEx($table,$val,$debug='')
 	{
 		return safe_field("name",'txp_'.$table,"`name` like '".doSlash($val)."' limit 1",$debug);
 	}
 
 // -------------------------------------------------------------
-	function ckExID($val,$debug='') 
+	function ckExID($val,$debug='')
 	{
 		return safe_row("ID,Section",'textpattern','ID = '.intval($val).' and Status >= 4 limit 1',$debug);
 	}
 
 // -------------------------------------------------------------
-	function lookupByTitle($val,$debug='') 
+	function lookupByTitle($val,$debug='')
 	{
 		return safe_row("ID,Section",'textpattern',"url_title like '".doSlash($val)."' and Status >= 4 limit 1",$debug);
 	}
 // -------------------------------------------------------------
-	function lookupByTitleSection($val,$section,$debug='') 
+	function lookupByTitleSection($val,$section,$debug='')
 	{
 		return safe_row("ID,Section",'textpattern',"url_title like '".doSlash($val)."' AND Section='".doSlash($section)."' and Status >= 4 limit 1",$debug);
-	}	
+	}
 
 // -------------------------------------------------------------
 
-	function lookupByIDSection($id, $section, $debug = '') 
+	function lookupByIDSection($id, $section, $debug = '')
 	{
-		return safe_row('ID, Section', 'textpattern', 
+		return safe_row('ID, Section', 'textpattern',
 			'ID = '.intval($id)." and Section = '".doSlash($section)."' and Status >= 4 limit 1", $debug);
-	}	
+	}
 
 // -------------------------------------------------------------
-	function lookupByID($id,$debug='') 
+	function lookupByID($id,$debug='')
 	{
 		return safe_row("ID,Section",'textpattern','ID = '.intval($id).' and Status >= 4 limit 1',$debug);
 	}
 
 // -------------------------------------------------------------
-	function lookupByDateTitle($when,$title,$debug='') 
+	function lookupByDateTitle($when,$title,$debug='')
 	{
 		return safe_row("ID,Section","textpattern",
 		"posted like '".doSlash($when)."%' and url_title like '".doSlash($title)."' and Status >= 4 limit 1");
 	}
 
 // -------------------------------------------------------------
-	function makeOut() 
+	function makeOut()
 	{
 		foreach(func_get_args() as $a) {
 			$array[$a] = strval(gps($a));
@@ -1110,7 +1112,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function chopUrl($req) 
+	function chopUrl($req)
 	{
 		$req = strtolower($req);
 		//strip off query_string, if present
@@ -1126,5 +1128,5 @@ $LastChangedRevision$
 
 		return $o;
 	}
-	
+
 ?>
