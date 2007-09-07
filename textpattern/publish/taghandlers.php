@@ -4,7 +4,7 @@
 	This is Textpattern
 	Copyright 2005 by Dean Allen - all rights reserved.
 
-	Use of this software denotes acceptance of the Textpattern license agreement 
+	Use of this software denotes acceptance of the Textpattern license agreement
 
 $HeadURL$
 $LastChangedRevision$
@@ -13,7 +13,8 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function page_title($atts) {
+	function page_title($atts)
+	{
 		global $parentid, $thisarticle, $id, $q, $c, $s, $pg, $sitename;
 
 		extract(lAtts(array(
@@ -25,9 +26,6 @@ $LastChangedRevision$
 			$out = $sitename.$separator.gTxt('comments_on').' '.safe_field('Title', 'textpattern', "ID = $parentid");
 		} elseif ($thisarticle['title']) {
 			$out = $sitename.$separator.$thisarticle['title'];
-		} elseif ($id) { // would this one still be needed?
-			$id = (int) $id;
-			$out = $sitename.$separator.safe_field('Title', 'textpattern', "ID = $id");
 		} elseif ($q) {
 			$out = $sitename.$separator.gTxt('search_results')."$separator $q";
 		} elseif ($c) {
@@ -45,15 +43,16 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function css($atts) {
+	function css($atts)
+	{
 		global $s;
 
 		extract(lAtts(array(
 			'format' => 'url',
-			'media'	 => 'screen',
-			'n'			 => '',
-			'rel'		 => 'stylesheet',
-			'title'	 => '',
+			'media'  => 'screen',
+			'n'      => '',
+			'rel'    => 'stylesheet',
+			'title'  => '',
 		), $atts));
 
 		if ($n) {
@@ -231,7 +230,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function output_form($atts) 
+	function output_form($atts)
 	{
 		extract(lAtts(array(
 			'form' => '',
@@ -335,15 +334,15 @@ $LastChangedRevision$
 		global $thislink;
 
 		extract(lAtts(array(
-			'break'		 => '',
+			'break'    => '',
 			'category' => '',
-			'class'		 => __FUNCTION__,
-			'form'		 => 'plainlinks',
-			'label'		 => '',
+			'class'    => __FUNCTION__,
+			'form'     => 'plainlinks',
+			'label'    => '',
 			'labeltag' => '',
-			'limit'		 => '',
-			'sort'		 => 'linksort asc',
-			'wraptag'	 => '',
+			'limit'    => '',
+			'sort'     => 'linksort asc',
+			'wraptag'  => '',
 		), $atts));
 
 		$qparts = array(
@@ -414,8 +413,8 @@ $LastChangedRevision$
 			'rel' => '',
 		), $atts));
 
-		$description = ($thislink['description']) ? 
-			' title="'.escape_output($thislink['description']).'"' : 
+		$description = ($thislink['description']) ?
+			' title="'.escape_output($thislink['description']).'"' :
 			'';
 
 		return tag(
@@ -433,11 +432,11 @@ $LastChangedRevision$
 		assert_link();
 
 		extract(lAtts(array(
-			'escape'	 => '',
+			'escape' => '',
 		), $atts));
 
-		return ($escape == 'html') ? 
-			escape_output($thislink['linkname']) : 
+		return ($escape == 'html') ?
+			escape_output($thislink['linkname']) :
 			$thislink['linkname'];
 	}
 
@@ -459,11 +458,11 @@ $LastChangedRevision$
 		assert_link();
 
 		extract(lAtts(array(
-			'class'		 => '',
-			'escape'	 => '',
-			'label'		 => '',
+			'class'    => '',
+			'escape'   => '',
+			'label'    => '',
 			'labeltag' => '',
-			'wraptag'	 => '',
+			'wraptag'  => '',
 		), $atts));
 
 		if ($thislink['description'])
@@ -485,8 +484,8 @@ $LastChangedRevision$
 
 		extract(lAtts(array(
 			'format' => $dateformat,
-			'gmt'		 => '',
-			'lang'	 => '',
+			'gmt'    => '',
+			'lang'   => '',
 		), $atts));
 
 		return safe_strftime($format, $thislink['date'], $gmt, $lang);
@@ -500,11 +499,11 @@ $LastChangedRevision$
 		assert_link();
 
 		extract(lAtts(array(
-			'class'		 => '',
-			'label'		 => '',
+			'class'    => '',
+			'label'    => '',
 			'labeltag' => '',
-			'title'		 => 0,
-			'wraptag'	 => '',
+			'title'    => 0,
+			'wraptag'  => '',
 		), $atts));
 
 		if ($thislink['category'])
@@ -520,10 +519,10 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function eE($txt) // convert email address into unicode entities
 	{
-		 for ($i=0;$i<strlen($txt);$i++) { 
-			  $ent[] = "&#".ord(substr($txt,$i,1)).";"; 
-		 } 
-		 if (!empty($ent)) return join('',$ent); 
+		for ($i=0;$i<strlen($txt);$i++) {
+			$ent[] = "&#".ord(substr($txt,$i,1)).";";
+		}
+		if (!empty($ent)) return join('',$ent);
 	}
 
 // -------------------------------------------------------------
@@ -547,7 +546,7 @@ $LastChangedRevision$
 		}
 		return '';
 	}
-	
+
 // -------------------------------------------------------------
 	function password_protect($atts)
 	{
@@ -613,7 +612,7 @@ $LastChangedRevision$
 		$categories = ($category) ? "and (Category1 = '".doSlash($category)."' or Category2 = '".doSlash($category)."')" : '';
 		$section = ($section) ? " and Section = '".doSlash($section)."'" : '';
 
-		$rs = safe_rows_start('*, id as thisid, unix_timestamp(Posted) as posted', 'textpattern', 
+		$rs = safe_rows_start('*, id as thisid, unix_timestamp(Posted) as posted', 'textpattern',
 			"Status = 4 $section $categories and Posted <= now() order by ".doSlash($sort).' limit 0,'.intval($limit));
 
 		if ($rs)
@@ -640,16 +639,16 @@ $LastChangedRevision$
 	function recent_comments($atts)
 	{
 		extract(lAtts(array(
-			'break'		 => br,
-			'class'		 => __FUNCTION__,
-			'label'		 => '',
+			'break'    => br,
+			'class'    => __FUNCTION__,
+			'label'    => '',
 			'labeltag' => '',
-			'limit'		 => 10,
+			'limit'    => 10,
 			'sort'     => 'posted desc',
-			'wraptag'	 => '',
+			'wraptag'  => '',
 		), $atts));
 
-		$rs = safe_rows_start('parentid, name, discussid', 'txp_discuss', 
+		$rs = safe_rows_start('parentid, name, discussid', 'txp_discuss',
 			'visible = '.VISIBLE.' order by '.doSlash($sort).' limit 0,'.intval($limit));
 
 		if ($rs)
@@ -658,13 +657,13 @@ $LastChangedRevision$
 
 			while ($c = nextRow($rs))
 			{
-				$a = safe_row('*, ID as thisid, unix_timestamp(Posted) as posted', 
+				$a = safe_row('*, ID as thisid, unix_timestamp(Posted) as posted',
 					'textpattern', 'ID = '.intval($c['parentid']));
 
 				If ($a['Status'] >= 4)
 				{
 					$out[] = href(
-						$c['name'].' ('.escape_title($a['Title']).')', 
+						$c['name'].' ('.escape_title($a['Title']).')',
 						permlinkurl($a).'#c'.$c['discussid']
 					);
 				}
@@ -744,9 +743,9 @@ $LastChangedRevision$
 
 		$section = ($section) ? " and Section = '".doSlash($section)."'" : '';
 
-		$rs = safe_rows_start('*, unix_timestamp(Posted) as posted', 'textpattern', 
+		$rs = safe_rows_start('*, unix_timestamp(Posted) as posted', 'textpattern',
 			'ID != '.intval($id)." and Status = 4 and Posted <= now() $categories $section order by ".doSlash($sort).' limit 0,'.intval($limit));
-	
+
 		if ($rs)
 		{
 			$out = array();
@@ -875,7 +874,7 @@ $LastChangedRevision$
 			$categories = do_list($categories);
 			$categories = join("','", doSlash($categories));
 
-			$rs = safe_rows_start('name, title', 'txp_category', 
+			$rs = safe_rows_start('name, title', 'txp_category',
 				"type = '".doSlash($type)."' and name in ('$categories') order by ".($sort ? $sort : "field(name, '$categories')"));
 		}
 
@@ -898,14 +897,14 @@ $LastChangedRevision$
 				{
 					extract($qs);
 
-					$rs = safe_rows_start('name, title', 'txp_category', 
+					$rs = safe_rows_start('name, title', 'txp_category',
 						"(lft between $lft and $rgt) and type = '".doSlash($type)."' and name != 'default' $exclude order by ".($sort ? $sort : 'lft ASC'));
 				}
 			}
 
 			else
 			{
-				$rs = safe_rows_start('name, title', 'txp_category', 
+				$rs = safe_rows_start('name, title', 'txp_category',
 					"type = '$type' and name not in('default','root') $exclude order by ".($sort ? $sort : 'name ASC'));
 			}
 		}
@@ -922,7 +921,7 @@ $LastChangedRevision$
 				{
 					$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
 
-					$out[] = tag(str_replace('& ', '&#38; ', $title), 'a', 
+					$out[] = tag(str_replace('& ', '&#38; ', $title), 'a',
 						( ($active_class and (0 == strcasecmp($c, $name))) ? ' class="'.$active_class.'"' : '' ).
 						' href="'.pagelinkurl(array('s' => $section, 'c' => $name)).'"'
 					);
@@ -932,7 +931,7 @@ $LastChangedRevision$
 			if ($out)
 			{
 				return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
-			}			
+			}
 		}
 
 		return '';
@@ -941,7 +940,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 // output href list of site sections
 
-	function section_list($atts) 
+	function section_list($atts)
 	{
 		global $sitename, $s;
 
@@ -977,7 +976,7 @@ $LastChangedRevision$
 				$exclude = do_list($exclude);
 
 				$exclude = join("','", doSlash($exclude));
-				
+
 				$exclude = "and name not in('$exclude')";
 			}
 
@@ -994,7 +993,7 @@ $LastChangedRevision$
 
 				$url = pagelinkurl(array('s' => $name));
 
-				$out[] = tag($title, 'a', 
+				$out[] = tag($title, 'a',
 					( ($active_class and (0 == strcasecmp($s, $name))) ? ' class="'.$active_class.'"' : '' ).
 					' href="'.$url.'"'
 				);
@@ -1005,7 +1004,7 @@ $LastChangedRevision$
 				if ($include_default)
 				{
 					$out = array_merge(array(
-						tag($default_title,'a', 
+						tag($default_title,'a',
 							( ($active_class and ($s == 'default')) ? ' class="'.$active_class.'"' : '' ).
 							' href="'.hu.'"'
 						)
@@ -1030,7 +1029,7 @@ $LastChangedRevision$
 			'label'   => gTxt('search'),
 			'button'  => '',
 			'section' => '',
-		),$atts));	
+		),$atts));
 
 		if ($form) {
 			$rs = fetch('form','txp_form','name',$form);
@@ -1043,7 +1042,7 @@ $LastChangedRevision$
 		$out = fInput('text','q',$q,'','','',$size);
 		$out = (!empty($label)) ? $label.br.$out.$sub : $out.$sub;
 		$out = ($wraptag) ? tag($out,$wraptag) : $out;
-	
+
 		if (!$section) {
 			return '<form method="get" action="'.hu.'">'.
 				n.$out.
@@ -1108,7 +1107,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 // link to next article, if it exists
 
-	function link_to_prev($atts, $thing) 
+	function link_to_prev($atts, $thing)
 	{
 		global $id, $prev_id, $prev_title;
 
@@ -1124,7 +1123,7 @@ $LastChangedRevision$
 
 			extract(getNextPrev(
 				$thisarticle['thisid'],
-				@strftime('%Y-%m-%d %H:%M:%S', $thisarticle['posted']), 
+				@strftime('%Y-%m-%d %H:%M:%S', $thisarticle['posted']),
 				@$s
 			));
 		}
@@ -1164,7 +1163,8 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function site_name() {
+	function site_name()
+	{
 		return $GLOBALS['sitename'];
 	}
 
@@ -1176,8 +1176,8 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	
-	function link_to_home($atts, $thing = false) 
+
+	function link_to_home($atts, $thing = false)
 	{
 		extract(lAtts(array(
 			'class' => false,
@@ -1218,10 +1218,10 @@ $LastChangedRevision$
 
 			$url = pagelinkurl(array(
 				'month'  => @$pretext['month'],
-				'pg'		 => $nextpg,
-				's'			 => @$pretext['s'],
-				'c'			 => @$pretext['c'],
-				'q'			 => @$pretext['q'],
+				'pg'     => $nextpg,
+				's'      => @$pretext['s'],
+				'c'      => @$pretext['c'],
+				'q'      => @$pretext['q'],
 				'author' => $author
 			));
 
@@ -1264,10 +1264,10 @@ $LastChangedRevision$
 
 			$url = pagelinkurl(array(
 				'month'  => @$pretext['month'],
-				'pg'		 => $nextpg,
-				's'			 => @$pretext['s'],
-				'c'			 => @$pretext['c'],
-				'q'			 => @$pretext['q'],
+				'pg'     => $nextpg,
+				's'      => @$pretext['s'],
+				'c'      => @$pretext['c'],
+				'q'      => @$pretext['q'],
 				'author' => $author
 			));
 
@@ -1285,7 +1285,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function text($atts) 
+	function text($atts)
 	{
 		extract(lAtts(array(
 			'item' => '',
@@ -1306,7 +1306,8 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function article_url_title() {
+	function article_url_title()
+	{
 		global $thisarticle;
 
 		assert_article();
@@ -1371,7 +1372,7 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function comments_count($atts) 
+	function comments_count($atts)
 	{
 		global $thisarticle;
 
@@ -1381,12 +1382,12 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function comments_invite($atts) 
+	function comments_invite($atts)
 	{
 		global $thisarticle,$is_article_list;
 
 		assert_article();
-		
+
 		extract($thisarticle);
 		global $comments_mode;
 
@@ -1507,7 +1508,7 @@ $LastChangedRevision$
 		),$atts));
 
 		assert_article();
-		
+
 		extract($thisarticle);
 
 		extract(
@@ -1536,10 +1537,10 @@ $LastChangedRevision$
 			'class'		=> __FUNCTION__,
 			'breakclass'=> '',
 			'sort'		=> 'posted ASC',
-		),$atts));	
+		),$atts));
 
 		assert_article();
-		
+
 		extract($thisarticle);
 
 		if (!$comments_count) return '';
@@ -1563,7 +1564,7 @@ $LastChangedRevision$
 
 		return $out;
 	}
-	
+
 // -------------------------------------------------------------
 	function comments_preview($atts, $thing='', $me='')
 	{
@@ -1579,7 +1580,7 @@ $LastChangedRevision$
 		),$atts));
 
 		assert_article();
-		
+
 		$preview = psa(array('name','email','web','message','parentid','remember'));
 		$preview['time'] = time();
 		$preview['discussid'] = 0;
@@ -1596,48 +1597,48 @@ $LastChangedRevision$
 		$comments = parse_form($form).n;
 		unset($GLOBALS['thiscomment']);
 		$out = doTag($comments,$wraptag,$class);
-		
+
 		# set a flag, to tell the comments_form tag that it doesn't have to show a preview
 		$has_comments_preview = true;
 
 		return $out;
 	}
-	
+
 // -------------------------------------------------------------
-	function if_comments_preview($atts, $thing)	
+	function if_comments_preview($atts, $thing)
 	{
 		return parse(EvalElse($thing, ps('preview') && checkCommentsAllowed(gps('parentid')) ));
 	}
 
 // -------------------------------------------------------------
-	function comment_permlink($atts,$thing) 
+	function comment_permlink($atts,$thing)
 	{
 		global $thisarticle, $thiscomment;
 
 		assert_article();
 		assert_comment();
-		
+
 		extract($thiscomment);
 		extract(lAtts(array(
 			'anchor' => empty($thiscomment['has_anchor_tag']),
 		),$atts));
 
 		$dlink = permlinkurl($thisarticle).'#c'.$discussid;
-		
+
 		$thing = parse($thing);
 
 		$name = ($anchor ? ' id="c'.$discussid.'"' : '');
-	
+
 		return tag($thing,'a',' href="'.$dlink.'"'.$name);
 	}
 
 // -------------------------------------------------------------
-	function comment_id($atts) 
+	function comment_id($atts)
 	{
 		global $thiscomment;
 
 		assert_comment();
-		
+
 		return $thiscomment['discussid'];
 	}
 
@@ -1676,21 +1677,21 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function comment_email($atts) 
+	function comment_email($atts)
 	{
 		global $thiscomment;
 
 		assert_comment();
-		
+
 		return $thiscomment['email'];
 	}
 
 // -------------------------------------------------------------
-	function comment_web($atts) 
+	function comment_web($atts)
 	{
 		global $thiscomment;
 		assert_comment();
-		
+
 		return $thiscomment['web'];
 	}
 
@@ -1704,36 +1705,36 @@ $LastChangedRevision$
 
 		extract(lAtts(array(
 			'format' => $comments_dateformat,
-			'gmt'		 => '',
-			'lang'	 => '',
+			'gmt'    => '',
+			'lang'   => '',
 		), $atts));
 
 		return safe_strftime($format, $thiscomment['time'], $gmt, $lang);
 	}
 
 // -------------------------------------------------------------
-	function comment_message($atts) 
+	function comment_message($atts)
 	{
 		global $thiscomment;
 		assert_comment();
-		
+
 		return $thiscomment['message'];
 	}
 
 // -------------------------------------------------------------
-	function comment_anchor($atts) 
+	function comment_anchor($atts)
 	{
 		global $thiscomment;
 
 		assert_comment();
-		
+
 		$thiscomment['has_anchor_tag'] = 1;
 		return '<a id="c'.$thiscomment['discussid'].'"></a>';
 	}
 
 // -------------------------------------------------------------
 // DEPRECATED: the old comment message body tag
-	function message($atts) 
+	function message($atts)
 	{
 		return comment_message($atts);
 	}
@@ -1747,8 +1748,8 @@ $LastChangedRevision$
 		assert_article();
 
 		extract(lAtts(array(
-			'link'				 => '',
-			'section'			 => '',
+			'link'         => '',
+			'section'      => '',
 			'this_section' => 0,
 		), $atts));
 
@@ -1765,7 +1766,7 @@ $LastChangedRevision$
 
 	function if_author($atts, $thing)
 	{
-		global $author;		
+		global $author;
 
 		extract(lAtts(array(
 			'name' => '',
@@ -1800,29 +1801,29 @@ $LastChangedRevision$
 
 		return parse(EvalElse($thing, !empty($author)));
 	}
-	
+
 // -------------------------------------------------------------
 
-	function body($atts) 
+	function body($atts)
 	{
 		global $thisarticle, $is_article_body;
 		assert_article();
-		
-		$is_article_body = 1;		
+
+		$is_article_body = 1;
 		$out = parse($thisarticle['body']);
 		$is_article_body = 0;
 		return $out;
-	}	
-	
+	}
+
 // -------------------------------------------------------------
-	function title($atts) 
+	function title($atts)
 	{
 		global $thisarticle, $prefs;
 		assert_article();
 		extract(lAtts(array(
 			'no_widow' => @$prefs['title_no_widow'],
 		), $atts));
-		
+
 		$t = escape_title($thisarticle['title']);
 		if ($no_widow)
 			$t = noWidow($t);
@@ -1830,12 +1831,12 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function excerpt($atts) 
+	function excerpt($atts)
 	{
 		global $thisarticle, $is_article_body;
 		assert_article();
-		
-		$is_article_body = 1;		
+
+		$is_article_body = 1;
 		$out = parse($thisarticle['excerpt']);
 		$is_article_body = 0;
 		return $out;
@@ -1850,12 +1851,12 @@ $LastChangedRevision$
 		assert_article();
 
 		extract(lAtts(array(
-			'class'				 => '',
-			'link'				 => 0,
-			'title'				 => 0,
-			'section'			 => '',
+			'class'        => '',
+			'link'         => 0,
+			'title'        => 0,
+			'section'      => '',
 			'this_section' => 0,
-			'wraptag'			 => '',
+			'wraptag'      => '',
 		), $atts));
 
 		if ($thisarticle['category1'])
@@ -1900,12 +1901,12 @@ $LastChangedRevision$
 		assert_article();
 
 		extract(lAtts(array(
-			'class'				 => '',
-			'link'				 => 0,
-			'title'				 => 0,
-			'section'			 => '',
+			'class'        => '',
+			'link'         => 0,
+			'title'        => 0,
+			'section'      => '',
 			'this_section' => 0,
-			'wraptag'			 => '',
+			'wraptag'      => '',
 		), $atts));
 
 		if ($thisarticle['category2'])
@@ -1948,14 +1949,14 @@ $LastChangedRevision$
 		global $s, $c;
 
 		extract(lAtts(array(
-			'class'				 => '',
-			'link'				 => 0,
-			'name'				 => '',
-			'section'			 => $s, // fixme in crockery
+			'class'        => '',
+			'link'         => 0,
+			'name'         => '',
+			'section'      => $s, // fixme in crockery
 			'this_section' => 0,
-			'title'				 => 0,
-			'type'				 => 'article',
-			'wraptag'			 => '',
+			'title'        => 0,
+			'type'         => 'article',
+			'wraptag'      => '',
 		), $atts));
 
 		$category = ($name) ? $name : $c;
@@ -2064,11 +2065,11 @@ $LastChangedRevision$
 		assert_article();
 
 		extract(lAtts(array(
-			'align' 	  => '', // remove in crockery
+			'align'     => '', // remove in crockery
 			'class'     => '',
 			'escape'    => '',
 			'html_id'   => '',
-			'style' 	  => '', // remove in crockery?
+			'style'     => '', // remove in crockery?
 			'thumbnail' => 0,
 			'wraptag'   => '',
 		), $atts));
@@ -2163,44 +2164,47 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function search_result_excerpt($atts) 
+	function search_result_excerpt($atts)
 	{
 		global $thisarticle, $pretext;
+
+		assert_article();
+
 		extract(lAtts(array(
-			'hilight'     => 'strong',
-			'limit'       => 5,
-		),$atts));
-	
-		assert_article();	
-		extract($pretext);
-		extract($thisarticle);
-		
-		$result = preg_replace("/>\s*</","> <",$body);
-		preg_match_all("/(?:\s|^).{1,50}".preg_quote($q).".{1,50}(?:\s|$)/iu",$result,$concat);
+			'break'   => ' &#8230;',
+			'hilight' => 'strong',
+			'limit'   => 5,
+		), $atts));
 
-		$r = array();
-		for ($i=0; $i < min($limit, count($concat[0])); $i++)
+		$q = $pretext['q'];
+
+		$result = preg_replace('/\s+/', ' ', strip_tags(str_replace('><', '> <', $thisarticle['body'])));
+		preg_match_all("/\b.{1,50}".preg_quote($q).".{1,50}\b/iu", $result, $concat);
+
+		for ($i = 0, $r = array(); $i < min($limit, count($concat[0])); $i++)
+		{
 			$r[] = trim($concat[0][$i]);
-		$concat = join(" ...\n", $r);
+		}
 
-		$concat = strip_tags($concat);
-		$concat = preg_replace('/^[^>]+>/U',"",$concat);
-		$concat = preg_replace("/(".preg_quote($q).")/i","<$hilight>$1</$hilight>",$concat);
-		return ($concat) ? "... ".$concat." ..." : '';
+		$concat = join($break.n, $r);
+		$concat = preg_replace('/^[^>]+>/U', '', $concat);
+		$concat = preg_replace('/('.preg_quote($q).')/i', "<$hilight>$1</$hilight>", $concat);
+
+		return ($concat) ? trim($break.$concat.$break) : '';
 	}
 
 // -------------------------------------------------------------
-	function search_result_url($atts) 
+	function search_result_url($atts)
 	{
 		global $thisarticle;
 		assert_article();
-		
+
 		$l = permlinkurl($thisarticle);
 		return permlink($atts, $l);
 	}
 
 // -------------------------------------------------------------
-	function search_result_date($atts) 
+	function search_result_date($atts)
 	{
 		assert_article();
 		return posted($atts);
@@ -2232,7 +2236,7 @@ $LastChangedRevision$
 			'sort'     => 'name ASC',
 		),$atts));
 		$c = doSlash($c);
-		
+
 		$rs = safe_rows_start("*", "txp_image","category='$c' and thumbnail=1 order by ".doSlash($sort));
 
 		if ($rs) {
@@ -2244,18 +2248,18 @@ $LastChangedRevision$
 				$dims = (!empty($imginfo[3])) ? ' '.$imginfo[3] : '';
 				$url = pagelinkurl(array('c'=>$c, 's'=>$s, 'p'=>$id));
 				$out[] = '<a href="'.$url.'">'.
-               '<img src="'.hu.$impath.'"'.$dims.' alt="'.$alt.'" />'.'</a>';
+					'<img src="'.hu.$impath.'"'.$dims.' alt="'.$alt.'" />'.'</a>';
 
 			}
 			if (count($out)) {
 				return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
-			}	
+			}
 		}
 		return '';
 	}
 
 // -------------------------------------------------------------
-	function image_display($atts) 
+	function image_display($atts)
 	{
 		if (is_array($atts)) extract($atts);
 		global $s,$c,$p,$img_dir;
@@ -2271,7 +2275,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function if_comments($atts, $thing)	
+	function if_comments($atts, $thing)
 	{
 		global $thisarticle;
 		assert_article();
@@ -2298,21 +2302,21 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function if_individual_article($atts, $thing)	
+	function if_individual_article($atts, $thing)
 	{
 		global $is_article_list;
 		return parse(EvalElse($thing, ($is_article_list == false)));
 	}
 
 // -------------------------------------------------------------
-	function if_article_list($atts, $thing)	
+	function if_article_list($atts, $thing)
 	{
 		global $is_article_list;
 		return parse(EvalElse($thing, ($is_article_list == true)));
 	}
 
 // -------------------------------------------------------------
-	function meta_keywords() 
+	function meta_keywords()
 	{
 		global $id_keywords;
 		return ($id_keywords)
@@ -2321,7 +2325,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function meta_author() 
+	function meta_author()
 	{
 		global $id_author;
 		return ($id_author)
@@ -2347,8 +2351,8 @@ $LastChangedRevision$
 		{
 			$atts .= ' class="'.$class.'"';
 		}
-		
-		if ($breakclass) 
+
+		if ($breakclass)
 		{
 			$breakatts.= ' class="'.$breakclass.'"';
 		}
@@ -2405,7 +2409,7 @@ $LastChangedRevision$
 		}
 		return '';
 	}
-	
+
 // -------------------------------------------------------------
 
 	function permlink($atts, $thing = NULL)
@@ -2443,7 +2447,8 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function permlinkurl_id($id) {
+	function permlinkurl_id($id)
+	{
 		$id = (int) $id;
 
 		$rs = safe_row(
@@ -2456,7 +2461,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function permlinkurl($article_array) 
+	function permlinkurl($article_array)
 	{
 		global $permlink_mode, $prefs;
 
@@ -2464,9 +2469,9 @@ $LastChangedRevision$
 			return call_user_func($prefs['custom_url_func'], $article_array);
 
 		if (empty($article_array)) return;
-		
+
 		extract($article_array);
-		
+
 		if (!isset($title)) $title = $Title;
 		if (empty($url_title)) $url_title = stripSpace($title);
 		if (empty($section)) $section = $Section; // lame, huh?
@@ -2475,7 +2480,7 @@ $LastChangedRevision$
 
 		$section = urlencode($section);
 		$url_title = urlencode($url_title);
-		
+
 		switch($permlink_mode) {
 			case 'section_id_title':
 				if ($prefs['attach_titles_to_permalinks'])
@@ -2497,13 +2502,13 @@ $LastChangedRevision$
 			case 'section_title':
 				return hu."$section/$url_title";
 			case 'title_only':
-				return hu."$url_title";	
+				return hu."$url_title";
 			case 'messy':
-				return hu."index.php?id=$thisid";	
+				return hu."index.php?id=$thisid";
 		}
 	}
-	
-// -------------------------------------------------------------	
+
+// -------------------------------------------------------------
 	function lang($atts)
 	{
 		return LANG;
@@ -2535,7 +2540,7 @@ $LastChangedRevision$
 	}
 // -------------------------------------------------------------
 	# DEPRECATED - provided only for backwards compatibility
-   function doPermlink($text, $plink, $Title, $url_title)
+	function doPermlink($text, $plink, $Title, $url_title)
 	{
 		global $url_mode;
 		$Title = ($url_title) ? $url_title : stripSpace($Title);
@@ -2548,7 +2553,7 @@ $LastChangedRevision$
 	# DEPRECATED - provided only for backwards compatibility
 	function doArticleHref($ID,$Title,$url_title,$Section)
 	{
-		$conTitle = ($url_title) ? $url_title : stripSpace($Title);	
+		$conTitle = ($url_title) ? $url_title : stripSpace($Title);
 		return ($GLOBALS['url_mode'])
 		?	tag($Title,'a',' href="'.hu.$Section.'/'.$ID.'/'.$conTitle.'"')
 		:	tag($Title,'a',' href="'.hu.'index.php?id='.$ID.'"');
@@ -2559,7 +2564,7 @@ $LastChangedRevision$
 	function breadcrumb($atts)
 	{
 		global $pretext,$sitename;
-		
+
 		extract(lAtts(array(
 			'wraptag' => 'p',
 			'sep' => '&#160;&#187;&#160;',
@@ -2580,24 +2585,24 @@ $LastChangedRevision$
 		}
 
 		if ($linked) $label = doTag($label,'a',$linkclass,' href="'.hu.'"');
-		
+
 		$content = array();
 		extract($pretext);
 		if(!empty($s) && $s!= 'default')
-		{ 
+		{
 			$section_title = ($title) ? fetch_section_title($s) : $s;
 			$section_title_html = escape_title($section_title);
 			$content[] = ($linked)? (
 					doTag($section_title_html,'a',$linkclass,' href="'.pagelinkurl(array('s'=>$s)).'"')
 				):$section_title_html;
 		}
-		
+
 		$category = empty($c)? '': $c;
 
 		foreach (getTreePath($category, 'article') as $cat) {
 			if ($cat['name'] != 'root') {
 				$category_title_html = $title ? escape_title($cat['title']) : $cat['name'];
-				$content[] = ($linked)? 
+				$content[] = ($linked)?
 					doTag($category_title_html,'a',$linkclass,' href="'.pagelinkurl(array('c'=>$cat['name'])).'"')
 						:$category_title_html;
 			}
@@ -2654,13 +2659,14 @@ $LastChangedRevision$
 
 //--------------------------------------------------------------------------
 
-	function if_article_category($atts, $thing) {
+	function if_article_category($atts, $thing)
+	{
 		global $thisarticle;
 
 		assert_article();
 
 		extract(lAtts(array(
-			'name'	 => '',
+			'name'   => '',
 			'number' => '',
 		), $atts));
 
@@ -2747,13 +2753,13 @@ $LastChangedRevision$
 		}
 		return ob_get_clean();
 	}
-	
+
 //--------------------------------------------------------------------------
 	function custom_field($atts)
 	{
 		global $thisarticle, $prefs;
 		assert_article();
-		
+
 		extract(lAtts(array(
 			'name' => @$prefs['custom_1_set'],
 			'escape' => '',
@@ -2810,19 +2816,19 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function error_message($atts) 
+	function error_message($atts)
 	{
 		return @$GLOBALS['txp_error_message'];
 	}
 
 // -------------------------------------------------------------
-	function error_status($atts) 
+	function error_status($atts)
 	{
 		return @$GLOBALS['txp_error_status'];
 	}
 
 // -------------------------------------------------------------
-	function if_status($atts, $thing='') 
+	function if_status($atts, $thing='')
 	{
 		global $pretext;
 
@@ -2830,15 +2836,15 @@ $LastChangedRevision$
 			'status' => '200',
 		), $atts));
 
-		$page_status = !empty($GLOBALS['txp_error_code']) 
-			? $GLOBALS['txp_error_code'] 
+		$page_status = !empty($GLOBALS['txp_error_code'])
+			? $GLOBALS['txp_error_code']
 			: $pretext['status'];
 
 		return parse(EvalElse($thing, $status == $page_status));
 	}
 
 // -------------------------------------------------------------
-	function page_url($atts) 
+	function page_url($atts)
 	{
 		global $pretext;
 
@@ -2846,11 +2852,11 @@ $LastChangedRevision$
 			'type' => 'request_uri',
 		), $atts));
 
-		return @htmlspecialchars($pretext[$type]);	
+		return @htmlspecialchars($pretext[$type]);
 	}
 
 // -------------------------------------------------------------
-	function if_different($atts, $thing) 
+	function if_different($atts, $thing)
 	{
 		static $last;
 
@@ -2867,7 +2873,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function if_first_article($atts, $thing) 
+	function if_first_article($atts, $thing)
 	{
 		global $thisarticle;
 		assert_article();
@@ -2875,7 +2881,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function if_last_article($atts, $thing) 
+	function if_last_article($atts, $thing)
 	{
 		global $thisarticle;
 		assert_article();
@@ -2883,13 +2889,13 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function if_plugin($atts, $thing) 
+	function if_plugin($atts, $thing)
 	{
 		global $plugins, $plugins_ver;
 		extract(lAtts(array(
 			'name'    => '',
 			'ver'     => '',
-		),$atts));	
+		),$atts));
 
 		return parse(EvalElse($thing, @in_array($name, $plugins) and (!$ver or version_compare($plugins_ver[$name], $ver) >= 0)));
 	}
@@ -2901,19 +2907,19 @@ $LastChangedRevision$
 		global $thisfile;
 
 		extract(lAtts(array(
-			'break'		 => br,
+			'break'    => br,
 			'category' => '',
-			'class'		 => __FUNCTION__,
-			'form'		 => 'files',
-			'label'		 => '',
+			'class'    => __FUNCTION__,
+			'form'     => 'files',
+			'label'    => '',
 			'labeltag' => '',
-			'limit'		 => '10',
-			'offset'	 => '0',
-			'sort'		 => 'filename asc',
-			'wraptag'	 => '',
-			'status'     => '4',
+			'limit'    => '10',
+			'offset'   => '0',
+			'sort'     => 'filename asc',
+			'wraptag'  => '',
+			'status'   => '4',
 		), $atts));
-		
+
 		if (!is_numeric($status))
 			$status = getStatusNum($status);
 
@@ -2962,8 +2968,8 @@ $LastChangedRevision$
 
 		extract(lAtts(array(
 			'filename' => '',
-			'form'		 => 'files',
-			'id'			 => '',
+			'form'     => 'files',
+			'id'       => '',
 		), $atts));
 
 		$from_form = false;
@@ -3008,7 +3014,7 @@ $LastChangedRevision$
 
 		extract(lAtts(array(
 			'filename' => '',
-			'id'			 => '',
+			'id'       => '',
 		), $atts));
 
 		$from_form = false;
@@ -3082,7 +3088,7 @@ $LastChangedRevision$
 
 		extract(lAtts(array(
 			'decimals' => 2,
-			'format'	 => '',
+			'format'   => '',
 		), $atts));
 
 		if (is_numeric($decimals) and $decimals >= 0)
@@ -3182,7 +3188,7 @@ $LastChangedRevision$
 
 		if ($thisfile['created']) {
 			return fileDownloadFormatTime(array(
-				'ftime'	 => $thisfile['created'],
+				'ftime'  => $thisfile['created'],
 				'format' => $format
 			));
 		}
@@ -3201,7 +3207,7 @@ $LastChangedRevision$
 
 		if ($thisfile['modified']) {
 			return fileDownloadFormatTime(array(
-				'ftime'	 => $thisfile['modified'],
+				'ftime'  => $thisfile['modified'],
 				'format' => $format
 			));
 		}
@@ -3298,7 +3304,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function hide($atts, $thing) 
+	function hide($atts, $thing)
 	{
 		return '';
 	}
