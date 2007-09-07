@@ -415,11 +415,11 @@ $LastChangedRevision$
 		$out['page'] = @$rs['page'];
 
 		if(is_numeric($id)) {
-			$a = safe_row('*, unix_timestamp(Posted) as uPosted', 'textpattern', 'ID='.intval($id).' and Status = 4');
+			$a = safe_row('*, unix_timestamp(Posted) as uPosted', 'textpattern', 'ID='.intval($id).' and Status in (4,5)');
 			if ($a) {
-				$Posted             = @$a['Posted'];
-				$out['id_keywords'] = @$a['Keywords'];
-				$out['id_author']   = @$a['AuthorID'];
+				$Posted             = $a['Posted'];
+				$out['id_keywords'] = $a['Keywords'];
+				$out['id_author']   = $a['AuthorID'];
 				populateArticleData($a);
 
 				if ($np = getNextPrev($id, $Posted, $s))
@@ -768,10 +768,14 @@ $LastChangedRevision$
 			'status'        => '4',
 		),$atts, 0));
 
-		if ($status or empty($thisarticle) or $thisarticle['thisid'] != $id) {
+		if ($status and !is_numeric($status))
+		{
+			$status = getStatusNum($status);
+		}
+
+		if (empty($thisarticle) or $thisarticle['thisid'] != $id)
+		{
 			$thisarticle = NULL;
-			if ($status and !is_numeric($status))
-				$status = getStatusNum($status);
 
 			$q_status = ($status ? 'and Status = '.intval($status) : 'and Status in (4,5)');
 
@@ -784,7 +788,8 @@ $LastChangedRevision$
 			}
 		}
 
-		if (!empty($thisarticle)) {
+		if (!empty($thisarticle) and $thisarticle['status'] == $status)
+		{
 			extract($thisarticle);
 			$thisarticle['is_first'] = 1;
 			$thisarticle['is_last'] = 1;
@@ -793,16 +798,16 @@ $LastChangedRevision$
 
 			$article = parse_form($form);
 
-			if ($use_comments and $comments_auto_append) {
+			if ($use_comments and $comments_auto_append)
+			{
 				$article .= parse_form('comments_display');
 			}
-
 
 			unset($GLOBALS['thisarticle']);
 
 			return $article;
 		}
-}
+	}
 
 // -------------------------------------------------------------
 	function article_custom($atts)
@@ -835,6 +840,7 @@ $LastChangedRevision$
 		trace_add("[".gTxt('Article')." $ID]");
 		$out['thisid']          = $ID;
 		$out['posted']          = $uPosted;
+		$out['modified']	= $LastMod;
 		$out['annotate']        = $Annotate;
 		$out['comments_invite'] = $AnnotateInvite;
 		$out['authorid']        = $AuthorID;
@@ -848,7 +854,8 @@ $LastChangedRevision$
 		$out['comments_count']  = $comments_count;
 		$out['body']            = $Body_html;
 		$out['excerpt']         = $Excerpt_html;
-		$out['override_form']		= $override_form;
+		$out['override_form']   = $override_form;
+		$out['status']          = $Status;
 
 		$custom = getCustomFields();
 		if ($custom) {
