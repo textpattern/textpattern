@@ -2642,6 +2642,21 @@ $LastChangedRevision$
 	}
 
 //--------------------------------------------------------------------------
+
+	function if_search_results($atts, $thing)
+	{
+		global $thispage, $pretext;
+
+		if(empty($pretext['q'])) return '';
+
+		extract(lAtts(array(
+			'limit' => 0,
+		),$atts));
+
+		return parse(EvalElse($thing, (int)$thispage['grand_total'] > $limit));
+	}
+
+//--------------------------------------------------------------------------
 	function if_category($atts, $thing)
 	{
 		global $c;
