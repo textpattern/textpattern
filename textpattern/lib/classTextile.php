@@ -480,8 +480,8 @@ class Textile
 	function fList($m)
 	{
 		$text = preg_split('/\n(?=[*#])/m', $m[0]);
-		foreach($text as $line) {
-			$nextline = next($text);
+		foreach($text as $nr => $line) {
+			$nextline = isset($text[$nr+1]) ? $text[$nr+1] : false;
 			if (preg_match("/^([#*]+)($this->a$this->c) (.*)$/s", $line, $m)) {
 				list(, $tl, $atts, $content) = $m;
 				$nl = '';
