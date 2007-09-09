@@ -624,22 +624,23 @@ class TXP_Wrapper
 		
 		include_once $txpcfg['txpath'].'/lib/classTextile.php';
 		$textile = new Textile();
-		
+
 		if (!empty($event) and $event == 'article') 
 		{
 			$incoming['Title_plain'] = $incoming['Title'];
 		}
-		
+
 		if ($incoming['textile_body'] == USE_TEXTILE) 
 		{
 			$incoming['Title'] = $textile->TextileThis($incoming['Title'],'',1);
 		}
-		
-		
+
+		$incoming['url_title'] = preg_replace('|[\x00-\x1f#%+/?\x7f]|', '', $incoming['url_title']);
+
 		$incoming['Body_html'] = TXP_Wrapper::format_field($incoming['Body'],$incoming['textile_body'],$textile);
-		
+
 		$incoming['Excerpt_html'] = TXP_Wrapper::format_field($incoming['Excerpt'],$incoming['textile_excerpt'],$textile);
-		
+
 		return $incoming;
 	}
 
