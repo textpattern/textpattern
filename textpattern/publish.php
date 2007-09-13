@@ -982,14 +982,17 @@ $LastChangedRevision$
 			$out = $tag($atts, $thing, $matches[0]);
 		}
 
+		// deprecated, remove in crockery
 		elseif (isset($pretext[$tag]))
 		{
 			$out = escape_output($pretext[$tag]);
+
+			trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
 		}
 
 		else
 		{
-			trigger_error(gTxt('unknown_tag', array('{tag}' => $tag)), E_USER_WARNING);
+			trigger_error(gTxt('unknown_tag'), E_USER_WARNING);
 		}
 
 		@--$txptracelevel;

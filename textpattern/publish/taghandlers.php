@@ -1500,7 +1500,9 @@ $LastChangedRevision$
 	# no point in having two tags for one functionality
 	function comments_annotateinvite($atts,$thing=NULL)
 	{
-		global $thisarticle;
+		trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
+	
+		global $thisarticle, $pretext;
 
 		extract(lAtts(array(
 			'class'		=> __FUNCTION__,
@@ -1736,6 +1738,8 @@ $LastChangedRevision$
 // DEPRECATED: the old comment message body tag
 	function message($atts)
 	{
+		trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
+
 		return comment_message($atts);
 	}
 
@@ -2518,6 +2522,8 @@ $LastChangedRevision$
 	# DEPRECATED - provided only for backwards compatibility
 	function formatPermLink($ID,$Section)
 	{
+		trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
+
 		return permlinkurl_id($ID);
 	}
 
@@ -2525,6 +2531,8 @@ $LastChangedRevision$
 	# DEPRECATED - provided only for backwards compatibility
 	function formatCommentsInvite($AnnotateInvite,$Section,$ID)
 	{
+		trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
+
 		global $comments_mode;
 
 		$dc = safe_count('txp_discuss','parentid='.intval($ID).' and visible='.VISIBLE);
@@ -2542,6 +2550,8 @@ $LastChangedRevision$
 	# DEPRECATED - provided only for backwards compatibility
 	function doPermlink($text, $plink, $Title, $url_title)
 	{
+		trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
+
 		global $url_mode;
 		$Title = ($url_title) ? $url_title : stripSpace($Title);
 		$Title = ($url_mode) ? $Title : '';
@@ -2553,7 +2563,9 @@ $LastChangedRevision$
 	# DEPRECATED - provided only for backwards compatibility
 	function doArticleHref($ID,$Title,$url_title,$Section)
 	{
-		$conTitle = ($url_title) ? $url_title : stripSpace($Title);
+		trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
+
+		$conTitle = ($url_title) ? $url_title : stripSpace($Title);	
 		return ($GLOBALS['url_mode'])
 		?	tag($Title,'a',' href="'.hu.$Section.'/'.$ID.'/'.$conTitle.'"')
 		:	tag($Title,'a',' href="'.hu.'index.php?id='.$ID.'"');
