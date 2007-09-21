@@ -648,25 +648,26 @@ $LastChangedRevision$
 			'wraptag'  => '',
 		), $atts));
 
-		$rs = safe_rows_start('parentid, name, discussid', 'txp_discuss',
-			'visible = '.VISIBLE.' order by '.doSlash($sort).' limit 0,'.intval($limit));
+		$pattern = '/\s*(parentid|name|discussid|web|email|ip|posted|message|visible)/';
+		$replace = 'd.\\1';
+		$sort = preg_replace($pattern, $replace, $sort);
 
+		$fields = 'd.name, d.discussid, t.ID as thisid, unix_timestamp(t.Posted) as posted,'.
+			't.AuthorID, t.LastMod, t.LastModID, t.Title, t.Image, t.Category1, t.Category2, '.
+			't.Annotate, t.AnnotateInvite, t.comments_count, t.Status, t.Section, t.override_form, t.Keywords, t.url_title,'.
+			't.custom_1, t.custom_2, t.custom_3, t.custom_4, t.custom_5, t.custom_6, t.custom_7, t.custom_8, t.custom_9, t.custom_10, t.uid';
+
+		$rs = startRows('select '. $fields .
+				' from '. safe_pfx('txp_discuss') .' as d inner join '. safe_pfx('textpattern') .' as t on d.parentid = t.ID '.
+				'where t.Status >= 4 and d.visible = '.VISIBLE.' order by '.doSlash($sort).' limit 0,'.intval($limit));	
 		if ($rs)
 		{
-			$out = array();
-
 			while ($c = nextRow($rs))
 			{
-				$a = safe_row('*, ID as thisid, unix_timestamp(Posted) as posted',
-					'textpattern', 'ID = '.intval($c['parentid']));
-
-				If ($a['Status'] >= 4)
-				{
-					$out[] = href(
-						$c['name'].' ('.escape_title($a['Title']).')',
-						permlinkurl($a).'#c'.$c['discussid']
-					);
-				}
+				$out[] = href(
+					$c['name'].' ('.escape_title($c['Title']).')', 
+					permlinkurl($c).'#c'.$c['discussid']
+				);
 			}
 
 			if ($out)
@@ -2666,7 +2667,7 @@ $LastChangedRevision$
 		),$atts));
 
 		$results = (int)$thispage['grand_total'];
-		return parse(EvalElse($thing, $results >= $min and (!$max || $results <= $max)));
+		return parse(EvalElse($thing, $results >= $min && (!$max || $results <= $max)));
 	}
 
 //--------------------------------------------------------------------------
