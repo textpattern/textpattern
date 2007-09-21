@@ -1,3 +1,11 @@
+Changes since 4.0.5
+
+* New tag: if_search_results
+* Fix incompatibility with PHP 5.2.4
+* Corrections in the tag builder
+* Refrain from showing sticky articles from non-frontpage sections in search results
+* Enable separate search section for messy URL mode
+
 Changes since 4.0.4
 
 * Fixed security issue on public-side (XSS) (thanks zarathu)
