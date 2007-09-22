@@ -300,7 +300,7 @@ $LastChangedRevision$
 		{
 			$style = ($inline) ? ' style="display: inline;"': '';
 
-			return '<form method="get" action="index.php"'.$style.'>'.
+			return '<form method="get" action="index.php" class="navpop"'.$style.'>'.
 				n.'<select name="event" onchange="submit(this.form);">'.
 				n.t.'<option>'.gTxt('go').'&#8230;</option>'.
 				join('', $out).

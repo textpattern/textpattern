@@ -440,6 +440,11 @@ td.tabup a {
 cursor: default;
 }
 
+div#end_page {
+text-align: center;
+margin: 4em;
+}
+
 /* setup
 ----------------------------------------------- */
 

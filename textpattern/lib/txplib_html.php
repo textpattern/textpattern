@@ -16,13 +16,13 @@ $LastChangedRevision$
 	{
 		global $txp_user,$event;
 		if($event!='tag') {
-			echo '<div style="text-align:center;margin:4em">',
-			navPop(),
-			'<a href="http://www.textpattern.com"><img src="txp_img/carver.gif" width="60" height="48" border="0" alt="" /></a>';
-			echo graf('Textpattern &#183; '.txp_version);
+			echo '<div id="end_page">',
+			navPop().n,
+			'<a href="http://www.textpattern.com"><img src="txp_img/carver.gif" width="60" height="48" border="0" alt="" /></a>'.n;
+			echo graf('Textpattern &#183; '.txp_version).n;
 			echo($txp_user)
-			?	graf(gTxt('logged_in_as').' '.htmlspecialchars($txp_user).br.
-					'<a href="index.php?logout=1">'.gTxt('logout').'</a>').'</div>'
+			?	graf(gTxt('logged_in_as').' '.span(htmlspecialchars($txp_user)).br.
+					'<a href="index.php?logout=1">'.gTxt('logout').'</a>', ' id="moniker"').n.'</div>'
 			:	'</div>';
 			echo n.'</body>'.n.'</html>';
 		}
@@ -376,6 +376,12 @@ $LastChangedRevision$
 	function strong($item)
 	{
 		return tag($item,'strong');
+	}	
+
+// -------------------------------------------------------------
+	function span($item)
+	{
+		return tag($item,'span');
 	}	
 
 // -------------------------------------------------------------
