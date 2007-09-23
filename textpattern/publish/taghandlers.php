@@ -892,7 +892,7 @@ $LastChangedRevision$
 
 			if ($parent)
 			{
-				$qs = safe_row('lft, rgt', 'txp_category', "name = '".doSlash($parent)."'");
+				$qs = safe_row('lft, rgt', 'txp_category', "type = '".doSlash($type)."' and name = '".doSlash($parent)."'");
 
 				if ($qs)
 				{
@@ -906,7 +906,7 @@ $LastChangedRevision$
 			else
 			{
 				$rs = safe_rows_start('name, title', 'txp_category',
-					"type = '$type' and name not in('default','root') $exclude order by ".($sort ? $sort : 'name ASC'));
+					"type = '".doSlash($type)."' and name not in('default','root') $exclude order by ".($sort ? $sort : 'name ASC'));
 			}
 		}
 
