@@ -659,7 +659,7 @@ $LastChangedRevision$
 			while ($c = nextRow($rs))
 			{
 				$out[] = href(
-					$c['name'].' ('.escape_title($c['Title']).')', 
+					$c['name'].' ('.escape_title($c['title']).')', 
 					permlinkurl($c).'#c'.$c['discussid']
 				);
 			}
