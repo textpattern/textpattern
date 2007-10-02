@@ -506,7 +506,7 @@ class Textile
 				}
 			}
 			else {
-				$line .= n;
+				$line .= "\n";
 			}
 			$out[] = $line;
 		}
