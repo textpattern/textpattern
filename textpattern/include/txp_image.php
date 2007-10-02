@@ -270,7 +270,7 @@ $LastChangedRevision$
 			extract($rs);
 
 			if ($ext != '.swf') {
-				$img = '<img src="'.hu.$img_dir.'/'.$id.$ext.'" height="'.$h.'" width="'.$w.'" alt="" "title="'.$id.$ext.' ('.$w.' &#215; '.$h.')" />';
+				$img = '<img src="'.hu.$img_dir.'/'.$id.$ext.'" height="'.$h.'" width="'.$w.'" alt="" title="'.$id.$ext.' ('.$w.' &#215; '.$h.')" />';
 			} else {
 				$img = '';
 			}
