@@ -9,7 +9,7 @@
  */
 
 /*
-$Id: classTextile.php 216 2006-10-17 22:31:53Z zem $
+$HeadURL$
 $LastChangedRevision$
 */
 
