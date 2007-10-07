@@ -298,7 +298,7 @@ vertical-align: bottom;
 }
 
 table#list th a {
-margin-right: 14px; 	
+margin-right: 14px;
 }
 
 table#list th.asc a {
@@ -309,7 +309,7 @@ margin-right: 0;
 
 table#list th.desc a {
 background: url(txp_img/arrowupdn.gif) no-repeat right -18px;
-padding-right: 14px;	
+padding-right: 14px;
 margin-right: 0;
 }
 
@@ -472,7 +472,7 @@ width: 165px;
 
 td#article-main {
 padding-left: 20px;
-width: 400px;
+width: 500px;
 }
 
 td#article-tabs {
@@ -490,18 +490,24 @@ width: auto;
 }
 
 textarea#body {
-width: 400px;
+width: 500px;
 height: 420px;
+line-height: 1.6em;
 }
 
 textarea#excerpt {
-width: 400px;
-height: 75px;
+width: 500px;
+height: 100px;
+line-height: 1.6em;
 }
 
 textarea#keywords {
 width: 140px;
 height: 80px;
+}
+
+input#title {
+width: 420px;
 }
 
 /* comments
@@ -525,7 +531,7 @@ font-weight: bold;
 
 form.cb_show_spam {
 margin: 0 auto;
-padding: 0 0 0 10px; 
+padding: 0 0 0 10px;
 width: 90%;
 }
 
