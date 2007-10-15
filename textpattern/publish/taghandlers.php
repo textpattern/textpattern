@@ -652,14 +652,14 @@ $LastChangedRevision$
 
 		$rs = startRows('select d.name, d.discussid, t.ID as thisid, unix_timestamp(t.Posted) as posted, t.Title as title, t.Section as section, t.url_title '.
 				'from '. safe_pfx('txp_discuss') .' as d inner join '. safe_pfx('textpattern') .' as t on d.parentid = t.ID '.
-				'where t.Status >= 4 and d.visible = '.VISIBLE.' order by '.doSlash($sort).' limit 0,'.intval($limit));	
+				'where t.Status >= 4 and d.visible = '.VISIBLE.' order by '.doSlash($sort).' limit 0,'.intval($limit));
 
 		if ($rs)
 		{
 			while ($c = nextRow($rs))
 			{
 				$out[] = href(
-					$c['name'].' ('.escape_title($c['title']).')', 
+					$c['name'].' ('.escape_title($c['title']).')',
 					permlinkurl($c).'#c'.$c['discussid']
 				);
 			}
@@ -1054,6 +1054,19 @@ $LastChangedRevision$
 			n.hInput('s', $section).
 			n.$out.
 			n.'</form>';
+	}
+
+// -------------------------------------------------------------
+	function search_term($atts)
+	{
+		global $q;
+		if(empty($q)) return '';
+
+		extract(lAtts(array(
+			'escape'	=> 'html'
+		),$atts));
+
+		return ($escape == 'html' ? escape_output($q) : $q);
 	}
 
 // -------------------------------------------------------------
@@ -1496,7 +1509,7 @@ $LastChangedRevision$
 	function comments_annotateinvite($atts,$thing=NULL)
 	{
 		trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
-	
+
 		global $thisarticle, $pretext;
 
 		extract(lAtts(array(
@@ -2560,7 +2573,7 @@ $LastChangedRevision$
 	{
 		trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
 
-		$conTitle = ($url_title) ? $url_title : stripSpace($Title);	
+		$conTitle = ($url_title) ? $url_title : stripSpace($Title);
 		return ($GLOBALS['url_mode'])
 		?	tag($Title,'a',' href="'.hu.$Section.'/'.$ID.'/'.$conTitle.'"')
 		:	tag($Title,'a',' href="'.hu.'index.php?id='.$ID.'"');
