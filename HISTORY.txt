@@ -1,6 +1,6 @@
 Changes since 4.0.5
 
-* New tag: if_search_results
+* New tags: <txp:if_search_results>, <txp:search_term />
 * Fix incompatibility with PHP 5.2.4
 * Corrections in the tag builder
 * Refrain from showing sticky articles from non-frontpage sections in search results
@@ -12,7 +12,7 @@ Changes since 4.0.4
 * Fixed path disclosure issue (thanks zarathu)
 * Search for posted and last modifed dates in article list
 * New tag: <txp:hide /> as a container for comments and other internal content
-* Changed tags: <txp:comments />, <txp:category_list />, <txp:section_list /> 
+* Changed tags: <txp:comments />, <txp:category_list />, <txp:section_list />
   and <txp:image_index /> support 'sort' attribute
 * Distribute jQuery 1.1.2 as a default JavaScript library
 * Keep image properties on replacement
@@ -52,8 +52,8 @@ Changes since 4.0.3:
 * Many improvements to admin interface XHTML markup and CSS
 * Many subtle improvements to the admin UI
 * Add automatical detection of and working with SSL
-* add nowidow-attribute to article tags 
-* Adapt navigation-elemts to the user's permissions 
+* add nowidow-attribute to article tags
+* Adapt navigation-elemts to the user's permissions
 * Lots of textile improvements
 * Fixed sending Last-Modified header
 * Better indexing for faster article list queries
@@ -102,7 +102,7 @@ Changes since 4.0.3:
 Changes since 4.0.2:
 
 * fixed 2 potential security holes(detected in internal code review).
-  Updade is recommended. 
+  Updade is recommended.
 * Textile i18n improvements
 * Add a bulk Ban function for comments
 * Automatically hide comments when banning an IP
@@ -118,7 +118,7 @@ Changes since 4.0.2:
 * Plugin-Authors: Add callbacks for future spam-plugins [comment.save, comment.form]
 * Plugin-Authors: Add getComment() and comment_evaluator for future spam-plugins
 * Plugin-Authors: Allow (optionally, transparently) for installing compressed plugins.
-* Plugin-Authors: Add window events using addEvent, to allow multiple events loading 
+* Plugin-Authors: Add window events using addEvent, to allow multiple events loading
                   at window.onload, useful for admin side plugins.
 * Improve mysql5-compatibility
 * Add comment edit link to notification emails
@@ -179,7 +179,7 @@ Changes since 4.0.1:
 * Improved comment message markup
 * Restore the comments_closed message
 * Better handling of per-article Use Textile selection
-* Add class attribute to comments_invite for css-classes 
+* Add class attribute to comments_invite for css-classes
 * Added 4 attributes to comments_invite: showcount, wraptag, textonly (just the invite-text)
     and showalways (also display on individual article-pages). Example:
     <comments_invite wraptag="p" showcount="0" textonly="1" showalways="1" />
@@ -227,4 +227,4 @@ Changes since 4.0:
 * improvements to older/newer tags
 * developers: added more consistent url generation via new pagelinkurl() function
 * developers: added callbacks to public side (for example to handle 404s)
-if_article_id 
+if_article_id
