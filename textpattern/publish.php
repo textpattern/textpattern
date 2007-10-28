@@ -616,10 +616,11 @@ $LastChangedRevision$
 
 		//Building query parts
 		$frontpage = ($frontpage and (!$q or $issticky)) ? filterFrontPage() : '';
-		$category  = (!$category)  ? '' : " and ((Category1='".doSlash($category)."') or (Category2='".doSlash($category)."')) ";
-		$section   = (!$section)   ? '' : " and Section = '".doSlash($section)."'";
+		$category  = join("','", doSlash(do_list($category)));
+		$category  = (!$category)  ? '' : " and (Category1 IN ('".$category."') or Category2 IN ('".$category."'))";
+		$section   = (!$section)   ? '' : " and Section IN ('".join("','", doSlash(do_list($section)))."')";
 		$excerpted = ($excerpted=='y')  ? " and Excerpt !=''" : '';
-		$author    = (!$author)    ? '' : " and AuthorID = '".doSlash($author)."'";
+		$author    = (!$author)    ? '' : " and AuthorID IN ('".join("','", doSlash(do_list($author)))."')";
 		$month     = (!$month)     ? '' : " and Posted like '".doSlash($month)."%'";
 		$id        = (!$id)        ? '' : " and ID = '".intval($id)."'";
 		switch ($time) {
@@ -645,7 +646,7 @@ $LastChangedRevision$
 
 		//Allow keywords for no-custom articles. That tagging mode, you know
 		if ($keywords) {
-			$keys = doSlash(array_map('trim', split(',' ,$keywords)));
+			$keys = doSlash(do_list($keywords));
 			foreach ($keys as $key) {
 				$keyparts[] = "FIND_IN_SET('".$key."',Keywords)";
 			}

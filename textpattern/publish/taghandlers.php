@@ -346,7 +346,7 @@ $LastChangedRevision$
 		), $atts));
 
 		$qparts = array(
-			($category) ? "category = '".doSlash($category)."'" : '1',
+			($category) ? "category IN ('".join("','", doSlash(do_list($category)))."')" : '1=1',
 			'order by '.doSlash($sort),
 			($limit) ? 'limit '.intval($limit) : ''
 		);
@@ -609,8 +609,9 @@ $LastChangedRevision$
 			$sort = "Posted $sortdir";
 		}
 
-		$categories = ($category) ? "and (Category1 = '".doSlash($category)."' or Category2 = '".doSlash($category)."')" : '';
-		$section = ($section) ? " and Section = '".doSlash($section)."'" : '';
+		$category   = join("','", doSlash(do_list($category)));
+		$categories = ($category) ? "and (Category1 IN ('".$category."') or Category2 IN ('".$category."'))" : '';
+		$section = ($section) ? " and Section IN ('".join("','", doSlash(do_list($section)))."')" : '';
 
 		$rs = safe_rows_start('*, id as thisid, unix_timestamp(Posted) as posted', 'textpattern',
 			"Status = 4 $section $categories and Posted <= now() order by ".doSlash($sort).' limit 0,'.intval($limit));
@@ -736,7 +737,7 @@ $LastChangedRevision$
 
 		$categories = 'and ('.join(' or ', $categories).')';
 
-		$section = ($section) ? " and Section = '".doSlash($section)."'" : '';
+		$section = ($section) ? " and Section IN ('".join("','", doSlash(do_list($section)))."')" : '';
 
 		$rs = safe_rows_start('*, unix_timestamp(Posted) as posted', 'textpattern',
 			'ID != '.intval($id)." and Status = 4 and Posted <= now() $categories $section order by ".doSlash($sort).' limit 0,'.intval($limit));
@@ -2960,7 +2961,7 @@ $LastChangedRevision$
 			$status = getStatusNum($status);
 
 		$where = array('1=1');
-		if ($category) $where[] = "category = '".doSlash($category)."'";
+		if ($category) $where[] = "category IN ('".join("','", doSlash(do_list($category)))."')";
 		if ($status) $where[] = "status = '".doSlash($status)."'";
 
 		$qparts = array(

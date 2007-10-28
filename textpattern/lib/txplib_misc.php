@@ -1740,13 +1740,7 @@ eod;
 
 	function do_list($list, $delim = ',')
 	{
-		$list = explode($delim, $list);
-
-		foreach ($list as $key => $value) {
-			$list[$key] = trim($value);
-		}
-
-		return $list;
+		return array_map('trim', explode($delim, $list));
 	}
 
 // -------------------------------------------------------------
