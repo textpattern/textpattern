@@ -78,7 +78,7 @@ if (!empty($event) and $event == 'article') {
 			$when = "from_unixtime($when)";
 		}
 		
-		$Keywords = doSlash(trim(preg_replace('/( ?[\r\n\t,])+ ?/s', ',', preg_replace('/ +/', ' ', ps('Keywords'))), ','));
+		$Keywords = doSlash(trim(preg_replace('/( ?[\r\n\t,])+ ?/s', ',', preg_replace('/ +/', ' ', ps('Keywords'))), ', '));
 
 		if ($Title or $Body or $Excerpt) {
 
@@ -187,7 +187,7 @@ if (!empty($event) and $event == 'article') {
 			$url_title = stripSpace($Title_plain, 1);
 		}
 
-		$Keywords = doSlash(trim(preg_replace('/( ?[\r\n\t,])+ ?/s', ',', preg_replace('/ +/', ' ', ps('Keywords'))), ','));
+		$Keywords = doSlash(trim(preg_replace('/( ?[\r\n\t,])+ ?/s', ',', preg_replace('/ +/', ' ', ps('Keywords'))), ', '));
 
 		safe_update("textpattern", 
 		   "Title           = '$Title',
