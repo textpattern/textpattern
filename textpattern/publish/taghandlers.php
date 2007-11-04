@@ -163,15 +163,16 @@ $LastChangedRevision$
 		global $img_dir;
 
 		extract(lAtts(array(
-			'align'			=> '', // remove in crockery
-			'class'			=> '',
-			'escape'		=> '',
-			'html_id'		=> '',
-			'id'				=> '',
-			'name'			=> '',
-			'poplink'		=> '',
-			'style'			=> '', // remove in crockery?
-			'wraptag'		=> ''
+			'align'     => '', // remove in crockery
+			'class'     => '',
+			'escape'    => '',
+			'html_id'   => '',
+			'id'        => '',
+			'link'      => 0,
+			'name'      => '',
+			'poplink'   => 0, // remove in crockery
+			'style'     => '', // remove in crockery
+			'wraptag'   => ''
 		), $atts));
 
 		if ($name)
@@ -214,7 +215,12 @@ $LastChangedRevision$
 					($align ? ' align="'.$align.'"' : '').
 					' />';
 
-				if ($poplink)
+				if ($link)
+				{
+					$out = href($out, hu.$img_dir.'/'.$id.$ext);
+				}
+
+				elseif ($poplink)
 				{
 					$out = '<a href="'.hu.$img_dir.'/'.$id.$ext.'"'.
 						' onclick="window.open(this.href, \'popupwindow\', '.
