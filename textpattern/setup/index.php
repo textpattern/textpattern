@@ -475,6 +475,8 @@ eod;
 			'ro-ro' => 'Română',
 			'ru-ru' => 'Русский',
 			'sk-sk' => 'Slovenčina',
+			'sp-rs' => 'Srpski',
+			'sr-rs' => 'Српски',
 			'sv-se' => 'Svenska',
 			'th-th' => 'ไทย',
 			'uk-ua' => 'Українська',
