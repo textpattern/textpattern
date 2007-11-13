@@ -479,6 +479,7 @@ eod;
 			'sr-rs' => 'Српски',
 			'sv-se' => 'Svenska',
 			'th-th' => 'ไทย',
+			'tr-tr' => 'Türkçe',
 			'uk-ua' => 'Українська',
 			'vi-vn' => 'Tiếng Việt (Việt Nam)',
 			'zh-cn' => '中文(简体)',
