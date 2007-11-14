@@ -30,7 +30,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function deEntBrackets($in) 
+	function deEntBrackets($in)
 	{
 		$array = array(
 			'&#60;'  => '<',
@@ -40,7 +40,7 @@ $LastChangedRevision$
 			'&gt;'   => '>',
 			'&#x3E;' => '>'
 		);
-		
+
 		foreach($array as $k=>$v){
 			$in = preg_replace("/".preg_quote($k)."/i",$v, $in);
 		}
@@ -140,7 +140,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-    function dmp() 
+    function dmp()
     {
 		$a = func_get_args();
 		echo "<pre>".n;
@@ -188,7 +188,7 @@ $LastChangedRevision$
 				@fclose($filename);
 			}
 		}
-		
+
 		return $out;
 	}
 
@@ -207,31 +207,31 @@ $LastChangedRevision$
 				$out[trim($name)] = trim($val);
 			}
 			return $out;
-		} 
+		}
 		return false;
 	}
 // -------------------------------------------------------------
 
 	function load_lang_event($event)
-	{		
+	{
 		global $txpcfg;
 		$lang = LANG;
-				
+
 		$installed = safe_field('name', 'txp_lang',"lang='".doSlash($lang)."' limit 1");
-		
+
 		$lang_code = ($installed)? $lang : 'en-gb';
-				
-		$rs = safe_rows_start('name, data','txp_lang',"lang='".doSlash($lang_code)."' AND event='".doSlash($event)."'");		
-		
+
+		$rs = safe_rows_start('name, data','txp_lang',"lang='".doSlash($lang_code)."' AND event='".doSlash($event)."'");
+
 		$out = array();
 
 		if ($rs && !empty($rs))
 		{
 			while ($a = nextRow($rs))
 			{
-				$out[$a['name']] = $a['data']; 
+				$out[$a['name']] = $a['data'];
 			}
-		}		
+		}
 		return ($out) ? $out : '';
 	}
 
@@ -287,7 +287,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function sizeImage($name) 
+	function sizeImage($name)
 	{
 		$size = @getimagesize($name);
 		return(is_array($size)) ? $size[3] : false;
@@ -354,9 +354,9 @@ $LastChangedRevision$
 		}
 		return $out;
 	}
-	
+
 // -------------------------------------------------------------
-	function stripPost() 
+	function stripPost()
 	{
 		if (isset($_POST)) {
 			if (MAGIC_QUOTES_GPC) {
@@ -369,13 +369,13 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function serverSet($thing) // Get a var from $_SERVER global array, or create it 
+	function serverSet($thing) // Get a var from $_SERVER global array, or create it
 	{
 		return (isset($_SERVER[$thing])) ? $_SERVER[$thing] : '';
 	}
 
 // -------------------------------------------------------------
- 	function pcs($thing) //	Get a var from POST or COOKIE; if not, create it 
+ 	function pcs($thing) //	Get a var from POST or COOKIE; if not, create it
 	{
 		if (isset($_COOKIE["txp_".$thing])) {
 			if (MAGIC_QUOTES_GPC) {
@@ -385,12 +385,12 @@ $LastChangedRevision$
 			if (MAGIC_QUOTES_GPC) {
 				return doStrip($_POST[$thing]);
 			} else return $_POST[$thing];
-		} 
+		}
 		return '';
 	}
 
 // -------------------------------------------------------------
- 	function cs($thing) //	Get a var from COOKIE; if not, create it 
+ 	function cs($thing) //	Get a var from COOKIE; if not, create it
 	{
 		if (isset($_COOKIE[$thing])) {
 			if (MAGIC_QUOTES_GPC) {
@@ -401,15 +401,15 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function yes_no($status) 
+	function yes_no($status)
 	{
 		return ($status==0) ? (gTxt('no')) : (gTxt('yes'));
 	}
-	
+
 // -------------------------------------------------------------
-	function getmicrotime() { 
-    	list($usec, $sec) = explode(" ",microtime()); 
-    	return ((float)$usec + (float)$sec); 
+	function getmicrotime() {
+    	list($usec, $sec) = explode(" ",microtime());
+    	return ((float)$usec + (float)$sec);
     }
 
 // -------------------------------------------------------------
@@ -420,7 +420,7 @@ $LastChangedRevision$
 		if (is_array($plugins) and in_array($name,$plugins)) {
 			return true;
 		}
-		
+
 		if (!empty($prefs['plugin_cache_dir'])) {
 			$dir = rtrim($prefs['plugin_cache_dir'], '/') . '/';
 			# in case it's a relative path
@@ -436,20 +436,20 @@ $LastChangedRevision$
 				return true;
 			}
 		}
-							
+
 		$rs = safe_row("name,code,version","txp_plugin","status = 1 AND name='".doSlash($name)."'");
 		if ($rs) {
 			$plugins[] = $rs['name'];
 			$plugins_ver[$rs['name']] = $rs['version'];
-			
+
 			set_error_handler("pluginErrorHandler");
 			$txp_current_plugin = $rs['name'];
 			eval($rs['code']);
 			restore_error_handler();
-			
-			return true;	
+
+			return true;
 		}
-		
+
 		return false;
 	}
 
@@ -459,7 +459,7 @@ $LastChangedRevision$
 		if (!load_plugin($name))
 			trigger_error("Unable to include required plugin \"{$name}\"",E_USER_ERROR);
 	}
-	
+
 // -------------------------------------------------------------
 	function include_plugin($name)
 	{
@@ -470,7 +470,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function pluginErrorHandler($errno, $errstr, $errfile, $errline)
 	{
-		$error = array( E_WARNING => "Warning", E_NOTICE => "Notice", E_USER_ERROR => "User_Error", 
+		$error = array( E_WARNING => "Warning", E_NOTICE => "Notice", E_USER_ERROR => "User_Error",
 						E_USER_WARNING => "User_Warning", E_USER_NOTICE => "User_Notice");
 
 		if (!($errno & error_reporting())) return;
@@ -487,7 +487,7 @@ $LastChangedRevision$
 	{
 		global $production_status;
 
-		$error = array( E_WARNING => "Warning", E_NOTICE => "Notice", E_USER_ERROR => "Textpattern Error", 
+		$error = array( E_WARNING => "Warning", E_NOTICE => "Notice", E_USER_ERROR => "Textpattern Error",
 						E_USER_WARNING => "Textpattern Warning", E_USER_NOTICE => "Textpattern Notice");
 
 		if (!($errno & error_reporting())) return;
@@ -505,9 +505,9 @@ $LastChangedRevision$
    function load_plugins($type=NULL)
    {
 		global $prefs,$plugins, $plugins_ver;
-		
+
 		if (!is_array($plugins)) $plugins = array();
-		
+
 		if (!empty($prefs['plugin_cache_dir'])) {
 			$dir = rtrim($prefs['plugin_cache_dir'], '/') . '/';
 			# allow a relative path
@@ -533,7 +533,7 @@ $LastChangedRevision$
 					$plugins_ver[$a['name']] = $a['version'];
 					$GLOBALS['txp_current_plugin'] = $a['name'];
 					$eval_ok = eval($a['code']);
-					if ($eval_ok === FALSE) 
+					if ($eval_ok === FALSE)
 						echo gTxt('plugin_load_error_above').strong($a['name']).n.br;
 					unset($GLOBALS['txp_current_plugin']);
 				}
@@ -576,10 +576,10 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function register_tab($area, $event, $title) 
+	function register_tab($area, $event, $title)
 	{
 		global $plugin_areas;
-		
+
 		$plugin_areas[$area][$title] = $event;
 	}
 
@@ -589,7 +589,7 @@ $LastChangedRevision$
 		global $theseatts;
 		return isset($theseatts[$name]) ? $theseatts[$name] : $default;
 	}
-	
+
 // -------------------------------------------------------------
 		function gAtt(&$atts, $name, $default=NULL) {
 			return isset($atts[$name]) ? $atts[$name] : $default;
@@ -609,7 +609,7 @@ $LastChangedRevision$
 		}
 
 // -------------------------------------------------------------
-	function select_buttons() 
+	function select_buttons()
 	{
 		return
 		gTxt('select').': '.
@@ -619,11 +619,11 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function stripSpace($text, $force=0) 
+	function stripSpace($text, $force=0)
 	{
 		global $prefs;
 		if ($force or !empty($prefs['attach_titles_to_permalinks'])) {
-		
+
 			$text = sanitizeForUrl($text);
 			if ($prefs['permalink_title_format']) {
 				return strtolower($text);
@@ -634,7 +634,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function sanitizeForUrl($text) 
+	function sanitizeForUrl($text)
 	{
 		// Remove names entities and tags
 		$text = preg_replace("/(^|&\S+;)|(<[^>]*>)/U","",dumbDown($text));
@@ -646,15 +646,15 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function dumbDown($str, $lang=NULL) 
+	function dumbDown($str, $lang=NULL)
 	{
-		$array = array( // nasty, huh?. 
+		$array = array( // nasty, huh?.
 			'&#192;'=>'A','&Agrave;'=>'A','&#193;'=>'A','&Aacute;'=>'A','&#194;'=>'A','&Acirc;'=>'A',
 			'&#195;'=>'A','&Atilde;'=>'A','&#196;'=>'Ae','&Auml;'=>'A','&#197;'=>'A','&Aring;'=>'A',
-			'&#198;'=>'Ae','&AElig;'=>'AE',			
-			'&#256;'=>'A','&#260;'=>'A','&#258;'=>'A',			
+			'&#198;'=>'Ae','&AElig;'=>'AE',
+			'&#256;'=>'A','&#260;'=>'A','&#258;'=>'A',
 			'&#199;'=>'C','&Ccedil;'=>'C','&#262;'=>'C','&#268;'=>'C','&#264;'=>'C','&#266;'=>'C',
-			'&#270;'=>'D','&#272;'=>'D','&#208;'=>'D','&ETH;'=>'D',			
+			'&#270;'=>'D','&#272;'=>'D','&#208;'=>'D','&ETH;'=>'D',
 			'&#200;'=>'E','&Egrave;'=>'E','&#201;'=>'E','&Eacute;'=>'E','&#202;'=>'E','&Ecirc;'=>'E','&#203;'=>'E','&Euml;'=>'E',
 			'&#274;'=>'E','&#280;'=>'E','&#282;'=>'E','&#276;'=>'E','&#278;'=>'E',
 			'&#284;'=>'G','&#286;'=>'G','&#288;'=>'G','&#290;'=>'G',
@@ -679,7 +679,7 @@ $LastChangedRevision$
 			'&#372;'=>'W',
 			'&#221;'=>'Y','&Yacute;'=>'Y','&#374;'=>'Y','&#376;'=>'Y',
 			'&#377;'=>'Z','&#381;'=>'Z','&#379;'=>'Z',
-			'&#222;'=>'T','&THORN;'=>'T',			
+			'&#222;'=>'T','&THORN;'=>'T',
 			'&#224;'=>'a','&#225;'=>'a','&#226;'=>'a','&#227;'=>'a','&#228;'=>'ae',
 			'&auml;'=>'ae',
 			'&#229;'=>'a','&#257;'=>'a','&#261;'=>'a','&#259;'=>'a','&aring;'=>'a',
@@ -762,7 +762,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function is_blacklisted($ip, $checks = '') 
+	function is_blacklisted($ip, $checks = '')
 	{
 		global $prefs;
 		if (!$checks) $checks = explode(',', $prefs['spam_blacklists']);
@@ -785,7 +785,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function updateSitePath($here) 
+	function updateSitePath($here)
 	{
 		$here = doSlash($here);
 		$rs = safe_field ("name",'txp_prefs',"name = 'path_to_site'");
@@ -926,7 +926,7 @@ $LastChangedRevision$
 			if ("phrase" == $type) {
 				if (preg_match('/[][()<>@,;:".\x5C]/', $string)) {
 					$string = '"'. strtr($string, array("\\" => "\\\\", '"' => '\"')) . '"';
-				} 
+				}
 			}
 			elseif ( "text" != $type) {
 				trigger_error( 'Unknown encode_mailheader type', E_USER_WARNING);
@@ -948,7 +948,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function stripPHP($in) 
+	function stripPHP($in)
 	{
 		return preg_replace("/".chr(60)."\?(?:php)?|\?".chr(62)."/i",'',$in);
 	}
@@ -958,7 +958,7 @@ $LastChangedRevision$
 /**
  * PEDRO:
  * Helper functions for common textpattern event files actions.
- * Code refactoring from original files. Intended to do easy and less error 
+ * Code refactoring from original files. Intended to do easy and less error
  * prone the future build of new textpattern extensions, and to add new
  * events to multiedit forms.
  */
@@ -976,8 +976,8 @@ $LastChangedRevision$
 		return false;
 	}
 
-// ------------------------------------------------------------- 	
- 	function event_change_pageby($name) 
+// -------------------------------------------------------------
+ 	function event_change_pageby($name)
 	{
 		$qty = gps('qty');
 		safe_update('txp_prefs',"val='".doSlash($qty)."'","name='".doSlash($name).'_list_pageby'."'");
@@ -998,7 +998,7 @@ $LastChangedRevision$
 		}
 
 		return '<label for="withselected">'.gTxt('with_selected').'</label>'.sp.
-			selectInput('edit_method', $methods, $method, 1, 
+			selectInput('edit_method', $methods, $method, 1,
 				( ($name == 'list') ? ' id="withselected" onchange="poweredit(this); return false;"' : ' id="withselected"' )
 			).
 			n.eInput($name).
@@ -1038,12 +1038,12 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function since($stamp) 
+	function since($stamp)
 	{
 		$diff = (time() - $stamp);
 		if ($diff <= 3600) {
 			$mins = round($diff / 60);
-			$since = ($mins <= 1) 
+			$since = ($mins <= 1)
 			?	($mins==1)
 				?	'1 '.gTxt('minute')
 				:	gTxt('a_few_seconds')
@@ -1062,13 +1062,13 @@ $LastChangedRevision$
 // Calculate the offset between the server local time and the
 // user's selected time zone
 	function tz_offset()
-	{	
+	{
 		global $gmtoffset, $is_dst;
 
 		extract(getdate());
 		$serveroffset = gmmktime(0,0,0,$mon,$mday,$year) - mktime(0,0,0,$mon,$mday,$year);
 		$offset = $gmtoffset - $serveroffset;
-		
+
 		return $offset + ($is_dst ? 3600 : 0);
 	}
 
@@ -1113,7 +1113,7 @@ $LastChangedRevision$
 
 		if ($charset != 'UTF-8' and $format != 'since') {
 			$new = '';
-			if (is_callable('iconv')) 
+			if (is_callable('iconv'))
 				$new = @iconv($charset, 'UTF-8', $str);
 
 			if ($new)
@@ -1137,7 +1137,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function myErrorHandler($errno, $errstr, $errfile, $errline) 
+	function myErrorHandler($errno, $errstr, $errfile, $errline)
 	{
 		# error_reporting() returns 0 when the '@' suppression
 		# operator is used
@@ -1233,7 +1233,7 @@ $LastChangedRevision$
 		}
 	}
 
-	
+
 // -------------------------------------------------------------
 	function shift_uploaded_file($f, $dest)
 	{
@@ -1247,22 +1247,22 @@ $LastChangedRevision$
 		}
 	}
 // -------------------------------------------------------------
-	function upload_get_errormsg($err_code) 
+	function upload_get_errormsg($err_code)
 	{
 		$msg = '';
 		switch ($err_code)
 		{
-				// Value: 0; There is no error, the file uploaded with success. 
-			case UPLOAD_ERR_OK         : $msg = '';break; 
-				// Value: 1; The uploaded file exceeds the upload_max_filesize directive in php.ini. 
+				// Value: 0; There is no error, the file uploaded with success.
+			case UPLOAD_ERR_OK         : $msg = '';break;
+				// Value: 1; The uploaded file exceeds the upload_max_filesize directive in php.ini.
 			case UPLOAD_ERR_INI_SIZE   : $msg = gTxt('upload_err_ini_size');break;
-				// Value: 2; The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form. 
+				// Value: 2; The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.
 			case UPLOAD_ERR_FORM_SIZE  : $msg = gTxt('upload_err_form_size');break;
-				// Value: 3; The uploaded file was only partially uploaded. 
+				// Value: 3; The uploaded file was only partially uploaded.
 			case UPLOAD_ERR_PARTIAL    : $msg = gTxt('upload_err_partial');break;
-				// Value: 4; No file was uploaded. 
+				// Value: 4; No file was uploaded.
 			case UPLOAD_ERR_NO_FILE    : $msg = gTxt('upload_err_no_file');break;
-				// Value: 6; Missing a temporary folder. Introduced in PHP 4.3.10 and PHP 5.0.3. 
+				// Value: 6; Missing a temporary folder. Introduced in PHP 4.3.10 and PHP 5.0.3.
 			case UPLOAD_ERR_NO_TMP_DIR : $msg = gTxt('upload_err_tmp_dir');break;
 				// Value: 7; Failed to write file to disk. Introduced in PHP 5.1.0.
 			case UPLOAD_ERR_CANT_WRITE : $msg = gTxt('upload_err_cant_write');break;
@@ -1294,11 +1294,11 @@ $LastChangedRevision$
 	function build_file_path($base,$path)
 	{
 		$base = rtrim($base,'/\\');
-		$path = ltrim($path,'/\\');		
-		
+		$path = ltrim($path,'/\\');
+
 		return $base.DIRECTORY_SEPARATOR.$path;
-	}	
-	
+	}
+
 // --------------------------------------------------------------
 	function get_author_name($name)
 	{
@@ -1314,7 +1314,7 @@ $LastChangedRevision$
 
 
 // --------------------------------------------------------------
-	function EvalElse($thing, $condition) 
+	function EvalElse($thing, $condition)
 	{
 		$f = '@(</?txp:\S+\b.*(?:(?<!br )/)?'.chr(62).')@sU';
 
@@ -1353,7 +1353,7 @@ $LastChangedRevision$
 	}
 
 // --------------------------------------------------------------
-	function fetch_form($name) 
+	function fetch_form($name)
 	{
 		static $forms = array();
 
@@ -1392,7 +1392,7 @@ $LastChangedRevision$
 	}
 
 // --------------------------------------------------------------
-	function fetch_category_title($name, $type='article') 
+	function fetch_category_title($name, $type='article')
 	{
 		static $cattitles = array();
 
@@ -1418,7 +1418,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function update_comments_count($id) 
+	function update_comments_count($id)
 	{
 		$id = assert_int($id);
 		$thecount = safe_field('count(*)','txp_discuss','parentid='.$id.' and visible='.VISIBLE);
@@ -1428,7 +1428,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function clean_comment_counts($parentids) 
+	function clean_comment_counts($parentids)
 	{
 		$parentids = array_map('assert_int',$parentids);
 		$rs = safe_rows_start('parentid, count(*) as thecount','txp_discuss','parentid IN ('.implode(',',$parentids).') AND visible='.VISIBLE.' group by parentid');
@@ -1620,13 +1620,14 @@ eod;
 			$GLOBALS['txp_error_status'] = $status;
 			$GLOBALS['txp_error_code'] = $code;
 
+			set_error_handler("tagErrorHandler");
 			die(parse($out));
 		}
 		else {
 			$out = preg_replace(array('@<txp:error_status[^>]*/>@', '@<txp:error_message[^>]*/>@'),
 				array($status, $msg),
 				$out);
-			die($out);		
+			die($out);
 		}
 	}
 
@@ -1811,7 +1812,7 @@ eod;
 
 				$t .= '()';
 				}
-				
+
 
 				$out[] = $t;
 			}
@@ -1830,7 +1831,7 @@ eod;
 
 		// Locale identifiers vary from system to system.  The
 		// following code will attempt to discover which identifiers
-		// are available.  We'll need to expand these lists to 
+		// are available.  We'll need to expand these lists to
 		// improve support.
 		// ISO identifiers: http://www.w3.org/WAI/ER/IG/ert/iso639.htm
 		// Windows: http://msdn.microsoft.com/library/default.asp?url=/library/en-us/vclib/html/_crt_language_strings.asp
