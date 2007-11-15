@@ -4,7 +4,7 @@
 $HeadURL$
 $LastChangedRevision$
 */
-	
+
 	define("t","\t");
 	define("n","\n");
 	define("br","<br />");
@@ -55,7 +55,7 @@ $LastChangedRevision$
 				'dir'		=> '',
 				'crit'		=> '',
 				'method'	=> '',
-			),$item));	
+			),$item));
 
 			$o .= ($first_item) ? '' : ', '; $first_item = false;
 
@@ -90,7 +90,7 @@ $LastChangedRevision$
 		$text = (!$text) ? sp : $text;
 		return tag($text,'th');
 	}
-	
+
 // -------------------------------------------------------------
 	function sLink($event,$step,$linktext,$class='')
 	{
@@ -199,14 +199,14 @@ $LastChangedRevision$
 		if ($numPages > 1)
 		{
 			$option_list = array();
-	
+
 			for ($i = 1; $i <= $numPages; $i++)
 			{
 				if ($i == $page)
 				{
 					$option_list[] = '<option value="'.$i.'" selected="selected">'."$i/$numPages".'</option>';
 				}
-	
+
 				else
 				{
 					$option_list[] = '<option value="'.$i.'">'."$i/$numPages".'</option>';
@@ -215,8 +215,8 @@ $LastChangedRevision$
 
 			$nav = array();
 
-			$nav[] = ($page > 1) ? 
-				PrevNextLink($event, $page - 1, gTxt('prev'), 'prev', $sort, $dir, $crit, $search_method).sp : 
+			$nav[] = ($page > 1) ?
+				PrevNextLink($event, $page - 1, gTxt('prev'), 'prev', $sort, $dir, $crit, $search_method).sp :
 				tag('&#8249; '.gTxt('prev'), 'span', ' class="navlink-disabled"').sp;
 
 			$nav[] = '<select name="page" class="list" onchange="submit(this.form);">';
@@ -224,8 +224,8 @@ $LastChangedRevision$
 			$nav[] = n.'</select>';
 			$nav[] = '<noscript> <input type="submit" value="'.gTxt('go').'" class="smallerbox" /></noscript>';
 
-			$nav[] = ($page != $numPages) ? 
-				sp.PrevNextLink($event, $page + 1, gTxt('next'), 'next', $sort, $dir, $crit, $search_method) : 
+			$nav[] = ($page != $numPages) ?
+				sp.PrevNextLink($event, $page + 1, gTxt('next'), 'next', $sort, $dir, $crit, $search_method) :
 				sp.tag(gTxt('next').' &#8250;', 'span', ' class="navlink-disabled"');
 
 			return '<form class="prev-next" method="get" action="index.php">'.
@@ -245,7 +245,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function startSkelTable()
 	{
-		return 
+		return
 		'<table width="300" cellpadding="0" cellspacing="0" style="border:1px #ccc solid">';
 	}
 
@@ -259,20 +259,20 @@ $LastChangedRevision$
 		return '<table cellpadding="'.$p.'" cellspacing="0" border="0" id="'.
 			$type.'" align="'.$align.'"'.$class.$width.'>'.n;
 	}
-	
+
 // -------------------------------------------------------------
 	function endTable ()
 	{
 		return n.'</table>'.n;
 	}
-	
+
 // -------------------------------------------------------------
-	function stackRows() 
+	function stackRows()
 	{
 		foreach(func_get_args() as $a) { $o[] = tr($a); }
 		return join('',$o);
 	}
-	
+
 // -------------------------------------------------------------
 	function td($content='',$width='',$class='',$id='')
 	{
@@ -323,7 +323,7 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function fLabelCell($text, $help = '', $label_id = '') 
+	function fLabelCell($text, $help = '', $label_id = '')
 	{
 		$help = ($help) ? popHelp($help) : '';
 
@@ -339,7 +339,7 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function fInputCell($name, $var = '', $tabindex = '', $size = '', $help = '', $id = '') 
+	function fInputCell($name, $var = '', $tabindex = '', $size = '', $help = '', $id = '')
 	{
 		$pop = ($help) ? sp.popHelp($name) : '';
 
@@ -361,46 +361,46 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function hed($item,$level,$atts='') 
+	function hed($item,$level,$atts='')
 	{
 		return tag($item,'h'.$level,$atts);
 	}
 
 // -------------------------------------------------------------
-	function href($item,$href) 
+	function href($item,$href,$atts='')
 	{
-		return tag($item,'a',' href="'.$href.'"');
+		return tag($item,'a',$atts.' href="'.$href.'"');
 	}
 
 // -------------------------------------------------------------
 	function strong($item)
 	{
 		return tag($item,'strong');
-	}	
+	}
 
 // -------------------------------------------------------------
 	function span($item)
 	{
 		return tag($item,'span');
-	}	
+	}
 
 // -------------------------------------------------------------
 	function htmlPre($item)
 	{
 		return '<pre>'.tag($item,'code').'</pre>';
-	}	
+	}
 
 // -------------------------------------------------------------
 	function comment($item)
 	{
 		return '<!-- '.$item.' -->';
-	}	
+	}
 
 // -------------------------------------------------------------
 	function small($item)
 	{
 		return tag($item,'small');
-	}	
+	}
 
 // -------------------------------------------------------------
 	function assRow($array, $atts ='')
@@ -408,7 +408,7 @@ $LastChangedRevision$
 		foreach($array as $a => $b) $o[] = tda($a,' width="'.$b.'"');
 		return tr(join(n.t,$o), $atts);
 	}
-	
+
 // -------------------------------------------------------------
 	function assHead()
 	{
@@ -419,7 +419,7 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function popHelp($help_var, $width = '', $height = '') 
+	function popHelp($help_var, $width = '', $height = '')
 	{
 		return '<a target="_blank"'.
 			' href="http://rpc.textpattern.com/help/?item='.$help_var.a.'language='.LANG.'"'.
@@ -431,7 +431,7 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function popHelpSubtle($help_var, $width = '', $height = '') 
+	function popHelpSubtle($help_var, $width = '', $height = '')
 	{
 		return '<a target="_blank"'.
 			' href="http://rpc.textpattern.com/help/?item='.$help_var.a.'language='.LANG.'"'.
@@ -443,7 +443,7 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function popTag($var, $text, $width = '', $height = '') 
+	function popTag($var, $text, $width = '', $height = '')
 	{
 		return '<a target="_blank"'.
 			' href="?event=tag'.a.'tag_name='.$var.'"'.
@@ -452,10 +452,10 @@ $LastChangedRevision$
 			($height ? ', '.$height : '').
 			'); return false;">'.$text.'</a>';
 	}
-	
+
 // -------------------------------------------------------------
 
-	function popTagLinks($type) 
+	function popTagLinks($type)
 	{
 		global $txpcfg;
 
@@ -485,11 +485,11 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function pageby_form($event, $val) 
+	function pageby_form($event, $val)
 	{
 		$vals = array(
 			15  => 15,
-			25  => 25, 
+			25  => 25,
 			50  => 50,
 			100 => 100
 		);

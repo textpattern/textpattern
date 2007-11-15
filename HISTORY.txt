@@ -1,5 +1,6 @@
 Changes since 4.0.5
 
+* Changed tag: <txp:thumbnail /> allows-non-JS links to the full-size image
 * New tags: <txp:if_search_results>, <txp:search_term />
 * Fix incompatibility with PHP 5.2.4
 * Corrections in the tag builder
