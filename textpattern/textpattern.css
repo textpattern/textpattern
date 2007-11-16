@@ -398,6 +398,12 @@ background: transparent url(txp_img/down2.gif) no-repeat top left;
 cursor: pointer;
 }
 
+td.tabup a, td.tabdown a,
+td.tabup2 a, td.tabdown2 a {
+width: 100%;
+display: block;
+}
+
 td.tabdown a {
 color: #000;
 background-color: transparent;

@@ -14,7 +14,7 @@ $LastChangedRevision$
 		$bm = gps('bm');
 
 		$privs = safe_field("privs", "txp_users", "name = '".doSlash($txp_user)."'");
-		
+
 		$GLOBALS['privs'] = $privs;
 
 		$areas = areas();
@@ -22,7 +22,7 @@ $LastChangedRevision$
 			if (in_array($event, $v))
 				$area = $k;
 		}
-		
+
 	?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 			"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 	<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -40,14 +40,14 @@ $LastChangedRevision$
 		if (!cookieEnabled)
 		{
 			confirm('<?php echo trim(gTxt('cookies_must_be_enabled')); ?>');
-		}	
-	
+		}
+
 <?php
 
 	if ($event == 'list')
 	{
 		$sarr = array("\n", '-');
-		$rarr = array('', '&#45;'); 
+		$rarr = array('', '&#45;');
 
 		$sections = '';
 
@@ -171,7 +171,7 @@ $LastChangedRevision$
  		if (!$bm) {
 			echo '<table cellpadding="0" cellspacing="0" align="center"><tr>
   <td valign="middle" style="width:368px">&nbsp;'.$message.'</td>',
-  			
+
 			has_privs('tab.content')
 			? areatab(gTxt('tab_content'), 'content', 'article', $area)
 			: '',
@@ -187,7 +187,7 @@ $LastChangedRevision$
 
 			'<td class="tabdown"><a href="'.hu.'" class="plain" target="blank">'.gTxt('tab_view_site').'</a></td>',
 		 '</tr></table>',
-		
+
 		'</td></tr><tr id="nav-secondary"><td align="center" class="tabs" colspan="2">
 			<table cellpadding="0" cellspacing="0" align="center"><tr>',
 				tabsort($area,$event),
@@ -197,24 +197,24 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function areatab($label,$event,$tarea,$area) 
+	function areatab($label,$event,$tarea,$area)
 	{
 		$tc = ($area == $event) ? 'tabup' : 'tabdown';
-		$atts=' class="'.$tc.'" onclick="window.location.href=\'?event='.$tarea.'\'"';
+		$atts=' class="'.$tc.'"';
 		$hatts=' href="?event='.$tarea.'" class="plain"';
       	return tda(tag($label,'a',$hatts),$atts);
 	}
 
 // -------------------------------------------------------------
-	function tabber($label,$tabevent,$event) 
-	{		
+	function tabber($label,$tabevent,$event)
+	{
 		$tc = ($event==$tabevent) ? 'tabup' : 'tabdown2';
-		$out = '<td class="'.$tc.'" onclick="window.location.href=\'?event='.$tabevent.'\'" ><a href="?event='.$tabevent.'" class="plain">'.$label.'</a></td>';
-      	return $out;
+		$out = '<td class="'.$tc.'"><a href="?event='.$tabevent.'" class="plain">'.$label.'</a></td>';
+		return $out;
 	}
 
 // -------------------------------------------------------------
-	function tabsort($area,$event) 
+	function tabsort($area,$event)
 	{
 		$areas = areas();
 		foreach($areas[$area] as $a=>$b) {
@@ -226,20 +226,20 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function areas() 
+	function areas()
 	{
 		global $privs, $plugin_areas;
-		
+
 		$areas['content'] = array(
 			gTxt('tab_organise') => 'category',
 			gTxt('tab_write')    => 'article',
 			gTxt('tab_list')    =>  'list',
 			gTxt('tab_image')    => 'image',
-			gTxt('tab_file')	 => 'file',			
+			gTxt('tab_file')	 => 'file',
 			gTxt('tab_link')     => 'link',
 			gTxt('tab_comments') => 'discuss'
 		);
-		
+
 		$areas['presentation'] = array(
 			gTxt('tab_sections') => 'section',
 			gTxt('tab_pages')    => 'page',
@@ -254,7 +254,7 @@ $LastChangedRevision$
 			gTxt('tab_logs')        => 'log',
 			gTxt('tab_plugins')     => 'plugin',
 			gTxt('tab_import')      => 'import'
-		);	
+		);
 
 		$areas['extensions'] = array(
 		);
@@ -262,7 +262,7 @@ $LastChangedRevision$
 		if (is_array($plugin_areas))
 			$areas = array_merge_recursive($areas, $plugin_areas);
 
-		return $areas;	
+		return $areas;
 	}
 
 // -------------------------------------------------------------
@@ -310,7 +310,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function button($label,$link) 
+	function button($label,$link)
 	{
 		return '<span style="margin-right:2em"><a href="?event='.$link.'" class="plain">'.$label.'</a></span>';
 	}
