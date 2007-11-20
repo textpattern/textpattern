@@ -16,14 +16,16 @@ $LastChangedRevision$
 
 if (!defined('txpinterface')) die('txpinterface is undefined.');
 
-function doAuth() {
+function doAuth()
+{
 	global $txp_user;
 			
 	$txp_user = NULL;
 	
 	$message = doTxpValidate();
 	
-	if(!$txp_user) {
+	if(!$txp_user)
+	{
 		doLoginForm($message);
 	}
 
@@ -31,7 +33,8 @@ function doAuth() {
 }
 
 // -------------------------------------------------------------
-	function txp_validate($user,$password) {
+	function txp_validate($user,$password)
+	{
 		$safe_user = doSlash($user);
 		$passwords = array();
 
@@ -118,70 +121,78 @@ function doAuth() {
 	function doTxpValidate() 
 	{
 		global $logout,$txpcfg, $txp_user;
-		$p_userid = ps('p_userid');
+		$p_userid   = ps('p_userid');
 		$p_password = ps('p_password');
-		$logout = gps('logout');
-		$stay = ps('stay');
+		$logout     = gps('logout');
+		$stay       = ps('stay');
 		
-		if ($logout) {
+		if ($logout)
+		{
 			setcookie('txp_login','',time()-3600);
 		}
-		if (!empty($_COOKIE['txp_login']) and !$logout) {	// cookie exists
-	
+
+		if (!empty($_COOKIE['txp_login']) and !$logout)	// cookie exists
+		{
 			@list($c_userid,$cookie_hash) = split(',',cs('txp_login'));
 
 			$nonce = safe_field('nonce','txp_users',"name='".doSlash($c_userid)."'");
 
-			if ((md5($c_userid.$nonce) === $cookie_hash) && $nonce) {  // check nonce
-	
-				$txp_user = $c_userid;	// cookie is good, create $txp_user
+			if ($nonce && $nonce === md5($c_userid.pack('H*', $cookie_hash))) // check nonce
+			{
+				// cookie is good, create $txp_user
+				$txp_user = $c_userid;
 				return '';
-	
-			} else {
-					// something's gone wrong
+			}
+			else
+			{
+				// something's gone wrong
 				$txp_user = '';
 				setcookie('txp_login','',time()-3600);
 				return gTxt('bad_cookie');
 			}
 			
-		} elseif ($p_userid and $p_password) {	// no cookie, but incoming login vars
-		
-				sleep(3); // should grind dictionary attacks to a halt
+		}
+		elseif ($p_userid and $p_password) // no cookie, but incoming login vars
+		{
+			sleep(3); // should grind dictionary attacks to a halt
 	
-				if (txp_validate($p_userid,$p_password)) {
+			if (txp_validate($p_userid,$p_password))
+			{
+				$cookie_hash = md5(uniqid(rand()));
 
-					$nonce = safe_field('nonce','txp_users',"name='".doSlash($p_userid)."'");
+				safe_update('txp_users',
+					"nonce = '".doSlash(md5($p_userid.pack('H*',$cookie_hash)))."'",
+					"name = '".doSlash($p_userid)."'");
 
-					if (!$nonce) {
-							define('TXP_UPDATE', 1);
-							include_once txpath.'/update/_update.php';
-							exit(graf('Please reload'));
+				if ($stay) // persistent cookie required
+				{
+					setcookie('txp_login',
+						$p_userid.','.$cookie_hash,
+						time()+3600*24*365); // expires in 1 year
+
+					if (cs('txp_nostay'))
+					{
+						setcookie('txp_nostay','',time()-3600);
 					}
-
-					if ($stay) {	// persistent cookie required
-
-						setcookie('txp_login',
-							$p_userid.','.md5($p_userid.$nonce),
-							time()+3600*24*365);	// expires in 1 year
-						if (cs('txp_nostay')) setcookie('txp_nostay','',time()-3600);
-
-	
-					} else {    // session-only cookie required
-	
-						setcookie('txp_login',$p_userid.','.md5($p_userid.$nonce));    			
-						setcookie('txp_nostay','1',
-							time()+3600*24*365);	// remember nostay for 1 year
-					}
-				
-					$txp_user = $p_userid;	// login is good, create $txp_user
-					return '';
-
-				} else {
-					$txp_user = '';
-					return gTxt('could_not_log_in');
+				} 
+				else // session-only cookie required
+				{
+					setcookie('txp_login',$p_userid.','.$cookie_hash);    			
+					setcookie('txp_nostay','1',
+						time()+3600*24*365); // remember nostay for 1 year
 				}
-	
-		} else {
+				
+				$txp_user = $p_userid; // login is good, create $txp_user
+				return '';
+			}
+			else
+			{
+				$txp_user = '';
+				return gTxt('could_not_log_in');
+			}
+		}
+		else
+		{
 			$txp_user = '';
 			return gTxt('login_to_textpattern');
 		}	
