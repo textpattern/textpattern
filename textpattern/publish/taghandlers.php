@@ -664,6 +664,7 @@ $LastChangedRevision$
 
 		if ($rs)
 		{
+			$out = array();
 			while ($c = nextRow($rs))
 			{
 				$out[] = href(
