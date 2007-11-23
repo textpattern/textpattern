@@ -509,10 +509,12 @@ $LastChangedRevision$
 		if (!is_array($plugins)) $plugins = array();
 
 		if (!empty($prefs['plugin_cache_dir'])) {
-			$dir = rtrim($prefs['plugin_cache_dir'], '/') . '/';
+			$dir = rtrim($prefs['plugin_cache_dir'], DS) . DS;
 			# allow a relative path
-			if (!is_dir($dir))
-				$dir = rtrim(realpath(txpath.'/'.$dir), '/') . '/';
+			if (!is_dir($dir)) {
+				$dir = realpath(txpath.DS.$dir);
+				if($dir) $dir = rtrim($dir, DS) . DS;
+			}
 			$dh = @opendir($dir);
 			while ($dh and false !== ($f = @readdir($dh))) {
 				if ($f{0} != '.')
