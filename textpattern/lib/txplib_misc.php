@@ -1940,8 +1940,9 @@ eod;
 			$html = preg_replace('@(<img[^>]+src=")/@','$1'.PROTOCOL.serverSet('HTTP_HOST').'/',$html);
 		}
 		# "foo/bar" - relative to the textpattern root
-		$html = preg_replace('@(<a[^>]+href=")(?!http://)@','$1'.PROTOCOL.$siteurl.'/$2',$html);
-		$html = preg_replace('@(<img[^>]+src=")(?!http://)@','$1'.PROTOCOL.$siteurl.'/$2',$html);
+		# leave "http:", "mailto:" et al. as absolute urls
+		$html = preg_replace('@(<a[^>]+href=")(?!\w+:)@','$1'.PROTOCOL.$siteurl.'/$2',$html);
+		$html = preg_replace('@(<img[^>]+src=")(?!\w+:)@','$1'.PROTOCOL.$siteurl.'/$2',$html);
 
 		if ($permalink)
 			$html = preg_replace("/href=\\\"#(.*)\"/","href=\"".$permalink."#\\1\"",$html);
