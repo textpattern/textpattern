@@ -1,11 +1,22 @@
 Changes since 4.0.5
 
-* Changed tag: <txp:thumbnail /> allows-non-JS links to the full-size image
+* Changed tag: <txp:thumbnail /> allows non-JS links to the full-size image
+* Changed tag: <txp:article_custom /> allows comma-separated lists for category, section and author attributes (thanks Manfre)
+* Changed tag: <txp:linklist /> allows comma-separated list for category attribute
+* Changed tag: <txp:file_download_list /> allows comma-separated list for category attribute
+* Changed tag: <txp:recent_articles /> allows comma-separated lists for category and section attribute
+* Changed tag: <txp:related_articles /> allows comma-separated list for section attribute
+* Changed tag: <txp:thumbnail /> allows non-JS links to the full-size image
+* Deprecated tag: <txp:sitename /> replaced by <txp:site_name />.
+* New languages: Turkish, Serbian (Latin + Cyrillic)
 * New tags: <txp:if_search_results>, <txp:search_term />
 * Fix incompatibility with PHP 5.2.4
 * Corrections in the tag builder
 * Refrain from showing sticky articles from non-frontpage sections in search results
 * Enable separate search section for messy URL mode
+* Security improvements
+* Many, many minor improvements, see:
+  http://dev.textpattern.com/log/development/4.0/?action=stop_on_copy&rev=2700&stop_rev=2448 #TODO: rev=????
 
 Changes since 4.0.4
 
