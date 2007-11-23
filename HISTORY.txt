@@ -1,5 +1,7 @@
 Changes since 4.0.5
 
+* Security: add missing escape in SQL query (admin side)
+* Security: safer use of txp_login cookie + nonce (note: users are logged after upgrading!)
 * Changed tag: <txp:thumbnail /> allows non-JS links to the full-size image
 * Changed tag: <txp:article_custom /> allows comma-separated lists for category, section and author attributes (thanks Manfre)
 * Changed tag: <txp:linklist /> allows comma-separated list for category attribute
@@ -7,14 +9,27 @@ Changes since 4.0.5
 * Changed tag: <txp:recent_articles /> allows comma-separated lists for category and section attribute
 * Changed tag: <txp:related_articles /> allows comma-separated list for section attribute
 * Changed tag: <txp:thumbnail /> allows non-JS links to the full-size image
-* Deprecated tag: <txp:sitename /> replaced by <txp:site_name />.
-* New languages: Turkish, Serbian (Latin + Cyrillic)
-* New tags: <txp:if_search_results>, <txp:search_term />
-* Fix incompatibility with PHP 5.2.4
+* Deprecated tag: <txp:sitename /> replaced by <txp:site_name />
+* Deprecated tag: <txp:request_uri /> replaced by <txp:page_url />
+* Deprecated tag: <txp:s /> replaced by <txp:page_url type="s" />
+* Deprecated tag: <txp:c /> replaced by <txp:page_url type="c" />
+* Deprecated tag: <txp:q /> replaced by <txp:page_url type="q" />
+* Deprecated tag: <txp:id /> replaced by <txp:page_url type="id" />
+* Deprecated tag: <txp:pg /> replaced by <txp:page_url type="pg" />
+* New tag: <txp:if_search_results> </txp:if_search_results>
+* New tag: <txp:search_term />
+* New languages: Croatian, Korean, Português (Brasil), Serbian (Latin + Cyrillic), Turkish and Vietnamese 
+* Speed: less SQL queries (-2 for individual article pages, -1 for other pages)
+* Speed: recent_comments tag (thanks Manfre) and admin side comments list only uses 1 query
+* Added 'modified' and 'status' to global $thisarticle array
+* Update to jQuery 1.2.1 as a default JavaScript library
+* Fix textile list incompatibility with PHP 5.2.4 (and higher)
+* Fix http-auth when using lighttpd or (mostly) apache+fcgi
+* Fix HTTPS protocol check for ISAPI with IIS 
+* Fix use of article tags on a sticky article page
 * Corrections in the tag builder
 * Refrain from showing sticky articles from non-frontpage sections in search results
 * Enable separate search section for messy URL mode
-* Security improvements
 * Many, many minor improvements, see:
   http://dev.textpattern.com/log/development/4.0/?action=stop_on_copy&rev=2700&stop_rev=2448 #TODO: rev=????
 
