@@ -248,11 +248,8 @@ $LastChangedRevision$
 			$etag = @join("-",$etags);
 
 			if (strstr($hinm, $etag)) {
-				if ($_SERVER['SERVER_PROTOCOL'] == 'HTTP/1.0')
-					header("HTTP/1.0 304 Not Modified");
-				else
-					header("HTTP/1.1 304 Not Modified");
-				exit;
+				txp_status_header('304 Not Modified');
+				exit(0);
 			}
 
 			if ($etag) header('ETag: "'.$etag.'"');

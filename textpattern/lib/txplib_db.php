@@ -462,7 +462,7 @@ $DB = new DB;
 	function db_down()
 	{
 		// 503 status might discourage search engines from indexing or caching the error message
-		header('Status: 503 Service Unavailable');
+		txp_status_header('503 Service Unavailable');
 		$error = mysql_error();
 		return <<<eod
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
