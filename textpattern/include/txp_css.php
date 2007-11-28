@@ -415,20 +415,26 @@ $LastChangedRevision$
 
 //-------------------------------------------------------------
 
-	function css_delete() {
-		$name = ps('name');
+	function css_delete()
+	{
+		$name  = ps('name');
+		$count = safe_count('txp_section', "css = '".doSlash($name)."'");
 
 		$default_name = safe_field('css', 'txp_section', "name = 'default'");
 
-		if ($name != $default_name) {
+		if ($count)
+		{
+			$message = gTxt('css_used_by_section', array('{name}' => $name, '{count}' => $count));
+		}
+		
+		else
+		{
 			safe_delete('txp_css', "name = '".doSlash($name)."'");
 
-			css_edit(
-				gTxt('css_deleted', array('{name}' => $name))
-			);
-		} else {
-			echo gTxt('cannot_delete_default_css').'.';
+			$message = gTxt('css_deleted', array('{name}' => $name));
 		}
+		
+		css_edit($message);
 	}
 
 ?>

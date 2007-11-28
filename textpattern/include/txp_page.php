@@ -159,16 +159,25 @@ $LastChangedRevision$
 
 	function page_delete()
 	{
-		$name = doSlash(ps('name'));
+		$name  = ps('name');
+		$count = safe_count('txp_section', "page = '".doSlash($name)."'");
 
 		if ($name == 'default')
 		{
 			return page_edit();
 		}
 
-		safe_delete('txp_page', "name = '$name'");
+		if ($count)
+		{
+			$message = gTxt('page_used_by_section', array('{name}' => $name, '{count}' => $count));		
+		}
 
-		$message = gTxt('page_deleted', array('{name}' => $name));
+		else
+		{
+			safe_delete('txp_page', "name = '".doSlash($name)."'");
+
+			$message = gTxt('page_deleted', array('{name}' => $name));
+		}
 
 		page_edit($message);
 	}
@@ -182,6 +191,7 @@ $LastChangedRevision$
 		if ($copy)
 		{
 			$newname = doSlash(trim(preg_replace('/[<>&"\']/', '', gps('newname'))));
+
 			if ($newname and safe_field('name', 'txp_page', "name = '$newname'"))
 			{
 				$message = gTxt('page_already_exists', array('{name}' => $newname));

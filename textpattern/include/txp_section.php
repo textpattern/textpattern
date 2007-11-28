@@ -305,11 +305,20 @@ $LastChangedRevision$
 
 	function section_delete() 
 	{
-		$name = ps('name');
+		$name  = ps('name');
+		$count = safe_count('textpattern', "section = '".doSlash($name)."'");
 
-		safe_delete('txp_section', "name = '".doSlash($name)."'");
+		if ($count)
+		{
+			$message = gTxt('section_used_by_article', array('{name}' => $name, '{count}' => $count));
+		}
 
-		$message = gTxt('section_deleted', array('{name}' => $name));
+		else
+		{
+			safe_delete('txp_section', "name = '".doSlash($name)."'");
+
+			$message = gTxt('section_deleted', array('{name}' => $name));
+		}
 
 		sec_section_list($message);
 	}
