@@ -16,7 +16,7 @@ $LastChangedRevision$
 	function atom()
 	{
 		global $thisarticle;
-		set_error_handler('tagErrorHandler');
+		set_error_handler('feedErrorHandler');
 		extract($GLOBALS['prefs']);
 		define("t_texthtml",' type="text/html"');
 		define("t_text",' type="text"');

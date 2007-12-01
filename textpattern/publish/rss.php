@@ -16,7 +16,7 @@ $LastChangedRevision$
 	function rss()
 	{
 		global $prefs,$thisarticle;
-		set_error_handler('tagErrorHandler');
+		set_error_handler('feedErrorHandler');
 		extract($prefs);
 
 		extract(doSlash(gpsa(array('category','section','limit','area'))));

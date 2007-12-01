@@ -502,8 +502,18 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-   function load_plugins($type=NULL)
-   {
+	function feedErrorHandler($errno, $errstr, $errfile, $errline)
+	{
+		global $production_status;
+
+		if ($production_status != 'debug') return;
+
+		return tagErrorHandler($errno, $errstr, $errfile, $errline);
+	}
+
+// -------------------------------------------------------------
+	function load_plugins($type=NULL)
+	{
 		global $prefs,$plugins, $plugins_ver;
 
 		if (!is_array($plugins)) $plugins = array();
