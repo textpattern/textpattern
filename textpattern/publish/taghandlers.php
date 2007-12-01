@@ -347,7 +347,8 @@ $LastChangedRevision$
 			'form'     => 'plainlinks',
 			'label'    => '',
 			'labeltag' => '',
-			'limit'    => '',
+			'limit'    => 0,
+			'offset'   => 0,
 			'sort'     => 'linksort asc',
 			'wraptag'  => '',
 		), $atts));
@@ -355,7 +356,7 @@ $LastChangedRevision$
 		$qparts = array(
 			($category) ? "category IN ('".join("','", doSlash(do_list($category)))."')" : '1=1',
 			'order by '.doSlash($sort),
-			($limit) ? 'limit '.intval($limit) : ''
+			($limit) ? 'limit '.intval($offset).', '.intval($limit) : ''
 		);
 
 		$rs = safe_rows_start('*, unix_timestamp(date) as uDate', 'txp_link', join(' ', $qparts));
@@ -1550,12 +1551,14 @@ $LastChangedRevision$
 		extract($prefs);
 
 		extract(lAtts(array(
-			'form'		=> 'comments',
-			'wraptag'	=> ($comments_are_ol ? 'ol' : ''),
-			'break'		=> ($comments_are_ol ? 'li' : 'div'),
-			'class'		=> __FUNCTION__,
-			'breakclass'=> '',
-			'sort'		=> 'posted ASC',
+			'form'       => 'comments',
+			'wraptag'    => ($comments_are_ol ? 'ol' : ''),
+			'break'      => ($comments_are_ol ? 'li' : 'div'),
+			'class'      => __FUNCTION__,
+			'breakclass' => '',
+			'limit'      => 0,
+			'offset'     => 0,
+			'sort'       => 'posted ASC',
 		),$atts));
 
 		assert_article();
@@ -1564,8 +1567,13 @@ $LastChangedRevision$
 
 		if (!$comments_count) return '';
 
-		$rs = safe_rows_start("*, unix_timestamp(posted) as time", "txp_discuss",
-			'parentid='.intval($thisid).' and visible='.VISIBLE.' order by '.doSlash($sort));
+		$qparts = array(
+			'parentid='.intval($thisid).' and visible='.VISIBLE,
+			'order by '.doSlash($sort),
+			($limit) ? 'limit '.intval($offset).', '.intval($limit) : ''
+		);
+
+		$rs = safe_rows_start('*, unix_timestamp(posted) as time', 'txp_discuss', join(' ', $qparts));
 
 		$out = '';
 
@@ -2253,12 +2261,19 @@ $LastChangedRevision$
 			'wraptag'  => '',
 			'class'    => __FUNCTION__,
 			'labeltag' => '',
-			'c' => $c, // Keep the option to override categories due to backward compatiblity
+			'c'        => $c, // Keep the option to override categories due to backward compatiblity
+			'limit'    => 0,
+			'offset'   => 0,
 			'sort'     => 'name ASC',
 		),$atts));
-		$c = doSlash($c);
 
-		$rs = safe_rows_start("*", "txp_image","category='$c' and thumbnail=1 order by ".doSlash($sort));
+		$qparts = array(
+			"category = '".doSlash($c)."' and thumbnail = 1",
+			'order by '.doSlash($sort),
+			($limit) ? 'limit '.intval($offset).', '.intval($limit) : ''
+		);
+
+		$rs = safe_rows_start('*', 'txp_image',  join(' ', $qparts));
 
 		if ($rs) {
 			$out = array();
@@ -2958,8 +2973,8 @@ $LastChangedRevision$
 			'form'     => 'files',
 			'label'    => '',
 			'labeltag' => '',
-			'limit'    => '10',
-			'offset'   => '0',
+			'limit'    => 10,
+			'offset'   => 0,
 			'sort'     => 'filename asc',
 			'wraptag'  => '',
 			'status'   => '4',
