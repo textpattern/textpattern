@@ -173,13 +173,13 @@ $LastChangedRevision$
 		if (isset($file_error)) {
 			switch($file_error) {
 			case 403:
-				txp_status_header('403 Forbidden');
+				txp_die(gTxt('403_forbidden'), '403');
 				break;
 			case 404:
-				txp_status_header('404 File Not Found');
+				txp_die(gTxt('404_not_found'), '404');
 				break;
 			default:
-				txp_status_header('500 Internal Server Error');
+				txp_die(gTxt('500_internal_server_error'), '500');
 				break;
 			}
 		}
@@ -392,9 +392,9 @@ $LastChangedRevision$
 		if ($out['s'] == 'file_download') {
 			// get id of potential filename
 			if (!is_numeric($out['id'])) {
-				$rs = safe_row("*", "txp_file", "filename='".doSlash($out['id'])."'");
+				$rs = safe_row("*", "txp_file", "filename='".doSlash($out['id'])."' and status = 4");
 			} else {
-				$rs = safe_row("*", "txp_file", 'id='.intval($out['id']));
+				$rs = safe_row("*", "txp_file", 'id='.intval($out['id']).' and status = 4');
 			}
 
 			$out = ($rs)? array_merge($out, $rs) : array('s'=>'file_download','file_error'=> 404);
