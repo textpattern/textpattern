@@ -18,7 +18,7 @@ Changes since 4.0.5
 * Deprecated tag: <txp:pg /> replaced by <txp:page_url type="pg" />
 * New tag: <txp:if_search_results> </txp:if_search_results>
 * New tag: <txp:search_term />
-* New languages: Croatian, Korean, Português (Brasil), Serbian (Latin + Cyrillic), Turkish and Vietnamese 
+* New languages: Croatian, Korean, Português (Brasil), Serbian (Latin + Cyrillic), Turkish and Vietnamese (thanks: Filip Baraka, Alexsander Albert Santana, Vladimir Siljkovic, Süleyman Şentürk, Quang Anh Do)
 * Speed: less SQL queries (-2 for individual article pages, -1 for other pages)
 * Speed: recent_comments tag (thanks Manfre) and admin side comments list only uses 1 query
 * Added 'modified' and 'status' to global $thisarticle array
