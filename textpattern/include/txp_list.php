@@ -1,10 +1,10 @@
 <?php
 /*
 	This is Textpattern
-	Copyright 2005 by Dean Allen 
+	Copyright 2005 by Dean Allen
  	All rights reserved.
 
-	Use of this software indicates acceptance of the Textpattern license agreement 
+	Use of this software indicates acceptance of the Textpattern license agreement
 
 $HeadURL$
 $LastChangedRevision$
@@ -106,7 +106,7 @@ $LastChangedRevision$
 				'status'	 => "Status = '".(@$sesutats[gTxt($crit_escaped)])."'",
 				'author'	 => "AuthorID rlike '$crit_escaped'",
 				'posted' 	 => "Posted like '$crit_escaped%'",
-				'lastmod' 	 => "LastMod like '$crit_escaped%'" 
+				'lastmod' 	 => "LastMod like '$crit_escaped%'"
 			);
 
 			if (array_key_exists($search_method, $critsql))
@@ -170,7 +170,7 @@ $LastChangedRevision$
 				{
 					$pid = $a['parentid'];
 					$num = $a['num'];
-	
+
 					$total_comments[$pid] = $num;
 				}
 			}
@@ -181,7 +181,7 @@ $LastChangedRevision$
 				n.tr(
 					n.column_head('ID', 'id', 'list', true, $switch_dir, $crit, $search_method, ('id' == $sort) ? $dir : '').
 					column_head('posted', 'posted', 'list', true, $switch_dir, $crit, $search_method, ('posted' == $sort) ? $dir : '').
-					column_head('article_modified', 'lastmod', 'list', true, $switch_dir, $crit, $search_method, (('lastmod' == $sort) ? "$dir " : '').'articles_detail'). 
+					column_head('article_modified', 'lastmod', 'list', true, $switch_dir, $crit, $search_method, (('lastmod' == $sort) ? "$dir " : '').'articles_detail').
 					column_head('title', 'title', 'list', true, $switch_dir, $crit, $search_method, ('title' == $sort) ? $dir : '').
 					column_head('section', 'section', 'list', true, $switch_dir, $crit, $search_method, ('section' == $sort) ? $dir : '').
 					column_head('category1', 'category1', 'list', true, $switch_dir, $crit, $search_method, (('category1' == $sort) ? "$dir " : '').'articles_detail').
@@ -249,7 +249,7 @@ $LastChangedRevision$
 					n.td(eLink('article', 'edit', 'ID', $ID, $ID).$manage).
 
 					td(
-						gTime($posted)
+						gTime($posted), '', $posted < time() ? '' : 'unpublished'
 					).
 
 					td(
@@ -274,11 +274,11 @@ $LastChangedRevision$
 
 					td((
 						(  ($a['Status'] >= 4 and has_privs('article.edit.published'))
-						or ($a['Status'] >= 4 and $AuthorID == $txp_user 
+						or ($a['Status'] >= 4 and $AuthorID == $txp_user
 											     and has_privs('article.edit.own.published'))
 						or ($a['Status'] < 4 and has_privs('article.edit'))
 						or ($a['Status'] < 4 and $AuthorID == $txp_user and has_privs('article.edit.own'))
-						)  
+						)
 						? fInput('checkbox', 'selected[]', $ID)
 						: '&nbsp;'
 					))
@@ -307,7 +307,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function list_change_pageby() 
+	function list_change_pageby()
 	{
 		event_change_pageby('article');
 		list_list();
@@ -408,8 +408,8 @@ $LastChangedRevision$
 
 		else
 		{
-			$selected = array_map('assert_int', $selected);  
-			$selected = safe_rows('ID, AuthorID, Status', 'textpattern', 
+			$selected = array_map('assert_int', $selected);
+			$selected = safe_rows('ID, AuthorID, Status', 'textpattern',
 									  'ID in ('. implode(',',$selected) .')');
 
 			$allowed = array();
