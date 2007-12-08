@@ -8,7 +8,6 @@ Changes since 4.0.5
 * Changed tag: <txp:file_download_list /> allows comma-separated list for category attribute
 * Changed tag: <txp:recent_articles /> allows comma-separated lists for category and section attribute
 * Changed tag: <txp:related_articles /> allows comma-separated list for section attribute
-* Changed tag: <txp:thumbnail /> allows non-JS links to the full-size image
 * Deprecated tag: <txp:sitename /> replaced by <txp:site_name />
 * Deprecated tag: <txp:request_uri /> replaced by <txp:page_url />
 * Deprecated tag: <txp:s /> replaced by <txp:page_url type="s" />
@@ -25,7 +24,7 @@ Changes since 4.0.5
 * Update to jQuery 1.2.1 as a default JavaScript library
 * Fix textile list incompatibility with PHP 5.2.4 (and higher)
 * Fix http-auth when using lighttpd or (mostly) apache+fcgi
-* Fix HTTPS protocol check for ISAPI with IIS 
+* Fix HTTPS protocol check for ISAPI with IIS
 * Fix use of article tags on a sticky article page
 * Corrections in the tag builder
 * Refrain from showing sticky articles from non-frontpage sections in search results
