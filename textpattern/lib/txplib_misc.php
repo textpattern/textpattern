@@ -797,6 +797,27 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
+	function is_logged_in($user = '')
+	{
+		if (!cs('txp_login_public')) return FALSE;
+		
+		$name = substr(cs('txp_login_public'), 10);
+
+		if (strlen($user) and $user !== $name) return FALSE;
+
+		$nonce = safe_field('nonce', 'txp_users', "name = '".doSlash($name)."'");
+
+		if ($nonce and substr(md5($nonce), -10) === substr(cs('txp_login_public'), 0, 10))
+		{
+			return $name;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+
+// -------------------------------------------------------------
 	function updateSitePath($here)
 	{
 		$here = doSlash($here);

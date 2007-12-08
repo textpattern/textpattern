@@ -33,6 +33,8 @@ $LastChangedRevision$
 	{
 		require_privs('admin');
 
+		include_once txpath.'/lib/txplib_admin.php';
+
 		$available_steps = array(
 			'admin',
 			'author_change_pass',
@@ -234,65 +236,6 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function send_password($RealName, $name, $email, $password)
-	{
-		global $sitename;
-
-		require_privs('admin.edit');
-
-		$message = gTxt('greeting').' '.$RealName.','.
-
-			n.n.gTxt('you_have_been_registered').' '.$sitename.
-
-			n.n.gTxt('your_login_is').': '.$name.
-			n.gTxt('your_password_is').': '.$password.
-
-			n.n.gTxt('log_in_at').': '.hu.'textpattern/index.php';
-
-		return txpMail($email, "[$sitename] ".gTxt('your_login_info'), $message);
-	}
-
-// -------------------------------------------------------------
-
-	function send_new_password($password, $email, $name)
-	{
-		global $txp_user, $sitename;
-
-		if ( empty( $name)) $name = $txp_user;
-			
-		$message = gTxt('greeting').' '.$name.','.
-
-			n.n.gTxt('your_password_is').': '.$password.
-
-			n.n.gTxt('log_in_at').': '.hu.'textpattern/index.php';
-
-		return txpMail($email, "[$sitename] ".gTxt('your_new_password'), $message);
-	}
-
-// -------------------------------------------------------------
-
-	function generate_password($length = 10)
-	{
-		$pass = '';
-		$chars = '023456789bcdfghjkmnpqrstvwxyz';
-		$i = 0;
-
-		while ($i < $length)
-		{
-			$char = substr($chars, mt_rand(0, strlen($chars)-1), 1);
-
-			if (!strstr($pass, $char))
-			{
-				$pass .= $char;
-				$i++;
-			}
-		}
-
-		return $pass;
-	}
-
-// -------------------------------------------------------------
-
 	function new_pass_form()
 	{
 		return '<div style="margin: 3em auto auto auto; text-align: center;">'.
@@ -347,30 +290,7 @@ $LastChangedRevision$
 	{
 		require_privs('admin.edit');
 
-		$name = ps('name');
-
-		$email = safe_field('email', 'txp_users', "name = '".doSlash($name)."'");
-		$new_pass = doSlash(generate_password(6));
-
-		$rs = safe_update('txp_users', "pass = password(lower('$new_pass'))", "name = '".doSlash($name)."'");
-
-		if ($rs)
-		{
-			if (send_new_password($new_pass, $email, $name))
-			{
-				admin(gTxt('password_sent_to').' '.$email);
-			}
-
-			else
-			{
-				admin(gTxt('could_not_mail').' '.$email);
-			}
-		}
-
-		else
-		{
-			admin(gTxt('could_not_update_author').' '.$name);
-		}
+		admin(reset_author_pass(ps('name')));
 	}
 
 // -------------------------------------------------------------
