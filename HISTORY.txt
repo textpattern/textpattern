@@ -21,6 +21,7 @@ Changes since 4.0.5
 * Speed: less SQL queries (-2 for individual article pages, -1 for other pages)
 * Speed: recent_comments tag (thanks Manfre) and admin side comments list only uses 1 query
 * Added 'modified' and 'status' to global $thisarticle array
+* Added 'password reset' functionality (with confirmation email) on the login screen
 * Update to jQuery 1.2.1 as a default JavaScript library
 * Fix textile list incompatibility with PHP 5.2.4 (and higher)
 * Fix http-auth when using lighttpd or (mostly) apache+fcgi
