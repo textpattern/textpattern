@@ -22,6 +22,7 @@ Changes since 4.0.5
 * Speed: recent_comments tag (thanks Manfre) and admin side comments list only uses 1 query
 * Added 'modified' and 'status' to global $thisarticle array
 * Added 'password reset' functionality (with confirmation email) on the login screen
+* Added 'is_logged_in()' function to check on the public side if the visitor is logged in on the admin side
 * Update to jQuery 1.2.1 as a default JavaScript library
 * Fix textile list incompatibility with PHP 5.2.4 (and higher)
 * Fix http-auth when using lighttpd or (mostly) apache+fcgi
