@@ -420,8 +420,6 @@ $LastChangedRevision$
 		$name  = ps('name');
 		$count = safe_count('txp_section', "css = '".doSlash($name)."'");
 
-		$default_name = safe_field('css', 'txp_section', "name = 'default'");
-
 		if ($count)
 		{
 			$message = gTxt('css_used_by_section', array('{name}' => $name, '{count}' => $count));
