@@ -194,12 +194,14 @@ $LastChangedRevision$
 		if ($name && is_valid_email($email))
 		{
 			$password = doSlash(generate_password(6));
+			$nonce    = doSlash(md5(uniqid(mt_rand(), TRUE)));
 
 			$rs = safe_insert('txp_users', "
 				privs    = $privs,
 				name     = '$name',
 				email    = '$email',
 				RealName = '$RealName',
+				nonce    = '$nonce',
 				pass     = password(lower('$password'))
 			");
 
