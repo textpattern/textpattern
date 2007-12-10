@@ -799,17 +799,19 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function is_logged_in($user = '')
 	{
-		if (!cs('txp_login_public')) return FALSE;
-		
 		$name = substr(cs('txp_login_public'), 10);
 
-		if (strlen($user) and $user !== $name) return FALSE;
-
-		$nonce = safe_field('nonce', 'txp_users', "name = '".doSlash($name)."'");
-
-		if ($nonce and substr(md5($nonce), -10) === substr(cs('txp_login_public'), 0, 10))
+		if (!strlen($name) or strlen($user) and $user !== $name)
 		{
-			return $name;
+			return FALSE;
+		}
+
+		$rs = safe_row('nonce, name, RealName, email, privs', 'txp_users', "name = '".doSlash($name)."'");
+
+		if ($rs and substr(md5($rs['nonce']), -10) === substr(cs('txp_login_public'), 0, 10))
+		{
+			unset($rs['nonce']);
+			return $rs;
 		}
 		else
 		{
