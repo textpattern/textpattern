@@ -43,14 +43,14 @@ $LastChangedRevision$
 		// start the clock for runtime
 	$microstart = getmicrotime();
 
-		// check the size of the url request
-	bombShelter();
-
 		// get all prefs as an array
 	$prefs = get_prefs();
 
 		// add prefs to globals
 	extract($prefs);
+
+	// check the size of the url request
+	bombShelter();
 
 		// set a higher error level during initialization
 	set_error_level(@$production_status == 'live' ? 'testing' : @$production_status);
