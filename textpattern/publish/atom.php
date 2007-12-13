@@ -17,6 +17,7 @@ $LastChangedRevision$
 	{
 		global $thisarticle;
 		set_error_handler('feedErrorHandler');
+		while(@ob_end_clean());
 		extract($GLOBALS['prefs']);
 		define("t_texthtml",' type="text/html"');
 		define("t_text",' type="text"');
@@ -54,14 +55,14 @@ $LastChangedRevision$
 		$auth[] = tag($pub['RealName'],'name');
 		$auth[] = ($include_email_atom) ? tag(eE($pub['email']),'email') : '';
 		$auth[] = tag(hu,'uri');
-		
+
 		$out[] = tag(n.t.t.join(n.t.t,$auth).n,'author');
 		$out[] = callback_event('atom_head');
 
 		if (!$area or $area=='article') {
-			
+
 			$sfilter = ($section) ? "and Section = '".$section."'" : '';
-			$cfilter = ($category) 
+			$cfilter = ($category)
 				? "and (Category1='".$category."' or Category2='".$category."')":'';
 			$limit = ($limit) ? $limit : $rss_how_many;
 			$limit = intval(min($limit,max(100,$rss_how_many)));
@@ -72,18 +73,18 @@ $LastChangedRevision$
 			foreach($frs as $f) $query[] = "and Section != '".doSlash($f)."'";
 			$query[] = $sfilter;
 			$query[] = $cfilter;
-				
+
 			$rs = safe_rows_start(
-				"*, 
-				ID as thisid, 
+				"*,
+				ID as thisid,
 				unix_timestamp(Posted) as uPosted,
 				unix_timestamp(LastMod) as uLastMod",
-				"textpattern", 
+				"textpattern",
 				"Status=4 and Posted <= now() ".
 					join(' ',$query).
-					"order by Posted desc limit $limit" 
+					"order by Posted desc limit $limit"
 			);
-			if ($rs) {	
+			if ($rs) {
 				while ($a = nextRow($rs)) {
 
 					extract($a);
@@ -138,17 +139,17 @@ $LastChangedRevision$
 				}
 			}
 		} elseif ($area=='link') {
-		
+
 			$cfilter = ($category) ? "category='".$category."'" : '1';
 			$limit = ($limit) ? $limit : $rss_how_many;
 			$limit = intval(min($limit,max(100,$rss_how_many)));
-		
+
 			$rs = safe_rows_start("*", "txp_link", "$cfilter order by date desc, id desc limit $limit");
 
 			if ($rs) {
 				while ($a = nextRow($rs)) {
 					extract($a);
- 
+
 					$e['title'] = tag(htmlspecialchars($linkname),'title',t_html);
 					$e['content'] = tag(n.htmlspecialchars($description).n,'content',t_html);
 
@@ -277,7 +278,7 @@ $LastChangedRevision$
 // see the above code for more appropriate ways of handling feed content
 
 	function safe_hed($toUnicode) {
-		
+
 		if (version_compare(phpversion(), "5.0.0", ">=")) {
 			$str =  html_entity_decode($toUnicode, ENT_QUOTES, "UTF-8");
 		} else {

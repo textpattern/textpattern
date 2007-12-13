@@ -17,6 +17,7 @@ $LastChangedRevision$
 	{
 		global $prefs,$thisarticle;
 		set_error_handler('feedErrorHandler');
+		while(@ob_end_clean());
 		extract($prefs);
 
 		extract(doSlash(gpsa(array('category','section','limit','area'))));
@@ -60,7 +61,7 @@ $LastChangedRevision$
 				while ($a = nextRow($rs)) {
 					extract($a);
 					populateArticleData($a);
-					
+
 					$cb = callback_event('rss_entry');
 
 					$a['posted'] = $uPosted;
@@ -114,7 +115,7 @@ $LastChangedRevision$
 			if ($rs) {
 				while ($a = nextRow($rs)) {
 					extract($a);
-					$item = 
+					$item =
 						tag(doSpecial($linkname),'title').n.
 						tag(doSpecial($description),'description').n.
 						tag(doSpecial($url),'link').n.
