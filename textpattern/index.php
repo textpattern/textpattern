@@ -41,10 +41,10 @@ $LastChangedRevision$
 	@ini_set("display_errors","1");
 
 	include_once txpath.'/lib/constants.php';
+	include txpath.'/lib/txplib_misc.php';
 	include txpath.'/lib/txplib_db.php';
 	include txpath.'/lib/txplib_forms.php';
 	include txpath.'/lib/txplib_html.php';
-	include txpath.'/lib/txplib_misc.php';
 	include txpath.'/lib/admin_config.php';
 
 	$microstart = getmicrotime();
