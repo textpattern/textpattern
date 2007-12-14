@@ -26,10 +26,10 @@ $LastChangedRevision$
 
 
 	include_once txpath.'/lib/constants.php';
+	include_once txpath.'/lib/txplib_misc.php';
 	include_once txpath.'/lib/txplib_db.php';
 	include_once txpath.'/lib/txplib_html.php';
 	include_once txpath.'/lib/txplib_forms.php';
-	include_once txpath.'/lib/txplib_misc.php';
 	include_once txpath.'/lib/admin_config.php';
 
 	include_once txpath.'/publish/taghandlers.php';
