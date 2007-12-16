@@ -17,7 +17,7 @@ $LastChangedRevision$
 	{
 		global $thisarticle;
 		set_error_handler('feedErrorHandler');
-		while(@ob_end_clean());
+		ob_clean();
 		extract($GLOBALS['prefs']);
 		define("t_texthtml",' type="text/html"');
 		define("t_text",' type="text"');

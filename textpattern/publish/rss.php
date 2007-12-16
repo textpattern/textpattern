@@ -17,7 +17,7 @@ $LastChangedRevision$
 	{
 		global $prefs,$thisarticle;
 		set_error_handler('feedErrorHandler');
-		while(@ob_end_clean());
+		ob_clean();
 		extract($prefs);
 
 		extract(doSlash(gpsa(array('category','section','limit','area'))));
