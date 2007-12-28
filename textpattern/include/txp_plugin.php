@@ -203,8 +203,19 @@ $LastChangedRevision$
 		if(isset($plugin)) {
 			$plugin_encoded = $plugin;
 			$plugin = base64_decode($plugin);
-			if (strncmp($plugin,"\x1F\x8B",2)===0)
-				$plugin = gzinflate(substr($plugin, 10));
+
+			if (strncmp($plugin, "\x1F\x8B", 2) === 0)
+			{
+				if (function_exists('gzinflate'))
+				{
+					$plugin = gzinflate(substr($plugin, 10));
+				}
+
+				else
+				{
+					plugin_list(gTxt('plugin_compression_unsupported'));
+				}
+			}
 
 			if ($plugin = @unserialize($plugin))
 			{ 
