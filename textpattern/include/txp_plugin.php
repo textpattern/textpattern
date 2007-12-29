@@ -7,7 +7,7 @@
 	www.textpattern.com
 	All rights reserved
 
-	Use of this software indicates acceptance of the Textpattern license agreement 
+	Use of this software indicates acceptance of the Textpattern license agreement
 
 $HeadURL$
 $LastChangedRevision$
@@ -17,17 +17,17 @@ $LastChangedRevision$
 	if (!defined('txpinterface')) die('txpinterface is undefined.');
 
 	if ($event == 'plugin') {
-		require_privs('plugin');		
+		require_privs('plugin');
 
 		if(!$step or !in_array($step, array('plugin_delete','plugin_edit','plugin_help','plugin_list','plugin_install','plugin_save','plugin_verify','switch_status'))){
 			plugin_list();
 		} else $step();
 	}
-	
+
 // -------------------------------------------------------------
 
 	function plugin_list($message = '')
-	{	
+	{
 		pagetop(gTxt('edit_plugins'), $message);
 
 		echo n.n.startTable('list').
@@ -95,7 +95,7 @@ $LastChangedRevision$
 
 		echo endTable();
 	}
-	
+
 // -------------------------------------------------------------
 
 	function switch_status()
@@ -119,22 +119,22 @@ $LastChangedRevision$
 		echo plugin_edit_form($name);
   }
 
-  
+
 // -------------------------------------------------------------
-	function plugin_help() 
+	function plugin_help()
 	{
 		$name = gps('name');
 		pagetop(gTxt('plugin_help'));
 		$help = ($name) ? safe_field('help','txp_plugin',"name = '".doSlash($name)."'") : '';
-		echo 
+		echo
 		startTable('edit')
 		.	tr(tda($help,' width="600"'))
 		.	endTable();
-		
+
 	}
 
 // -------------------------------------------------------------
-	function plugin_edit_form($name='') 
+	function plugin_edit_form($name='')
 	{
 		$sub = fInput('submit','',gTxt('save'),'publish');
 		$code = ($name) ? fetch('code','txp_plugin','name',$name) : '';
@@ -143,7 +143,7 @@ $LastChangedRevision$
 		:	'';
 		$textarea = '<textarea id="plugin-code" class="code" name="code" rows="28" cols="90">'.htmlspecialchars($thing).'</textarea>';
 
-		return 
+		return
 		form(startTable('edit')
 		.	tr(td($textarea))
 		.	tr(td($sub))
@@ -151,7 +151,7 @@ $LastChangedRevision$
 		.	endTable().sInput('plugin_save').eInput('plugin').hInput('name',$name));
 	}
 
-// -------------------------------------------------------------  
+// -------------------------------------------------------------
 
 	function plugin_save()
 	{
@@ -188,13 +188,13 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function plugin_verify() 
-	{	
+	function plugin_verify()
+	{
 
 		if (ps('txt_plugin')) {
 			$plugin = join("\n", file($_FILES['theplugin']['tmp_name']));
 		} else {
-			$plugin = ps('plugin');	
+			$plugin = ps('plugin');
 		}
 
 		$plugin = preg_replace('@.*\$plugin=\'([\w=+/]+)\'.*@s', '$1', $plugin);
@@ -214,11 +214,12 @@ $LastChangedRevision$
 				else
 				{
 					plugin_list(gTxt('plugin_compression_unsupported'));
+					return;
 				}
 			}
 
 			if ($plugin = @unserialize($plugin))
-			{ 
+			{
 				if(is_array($plugin)){
 					extract($plugin);
 					$source = '';
@@ -231,9 +232,9 @@ $LastChangedRevision$
 					}
 					$source.= highlight_string('<?php'.$plugin['code'].'?>', true);
 					$sub = fInput('submit','',gTxt('install'),'publish');
-		
+
 					pagetop(gTxt('edit_plugins'));
-					echo 
+					echo
 					form(
 						hed(gTxt('previewing_plugin'), 3).
 						tag($source, 'div', ' id="preview-plugin" class="code"').
@@ -251,12 +252,12 @@ $LastChangedRevision$
 		plugin_list(gTxt('bad_plugin_code'));
 
 	}
-	
-// -------------------------------------------------------------
-	function plugin_install() 
-	{	
 
-		$plugin = ps('plugin64');	
+// -------------------------------------------------------------
+	function plugin_install()
+	{
+
+		$plugin = ps('plugin64');
 
 		$plugin = preg_replace('@.*\$plugin=\'([\w=+/]+)\'.*@s', '$1', $plugin);
 		$plugin = preg_replace('/^#.*$/m', '', $plugin);
@@ -343,7 +344,7 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function plugin_form() 
+	function plugin_form()
 	{
 		return n.n.form(
 			graf(
