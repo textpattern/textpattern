@@ -37,7 +37,7 @@ $LastChangedRevision$
 				,' colspan="8" style="height: 30px; border: none;"')
 			);
 
-		$rs = safe_rows_start('name, status, author, author_uri, version, description, code_md5, help, md5(code) as md5',
+		$rs = safe_rows_start('name, status, author, author_uri, version, description, code_md5, length(help) as help, md5(code) as md5',
 			'txp_plugin', '1 order by name');
 
 		if ($rs and numRows($rs) > 0)
