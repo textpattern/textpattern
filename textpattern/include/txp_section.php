@@ -7,7 +7,7 @@
 	www.textpattern.com
 	All rights reserved
 
-	Use of this software indicates acceptance ofthe Textpattern license agreement 
+	Use of this software indicates acceptance ofthe Textpattern license agreement
 
 $HeadURL$
 $LastChangedRevision$
@@ -17,7 +17,7 @@ $LastChangedRevision$
 	if (!defined('txpinterface')) die('txpinterface is undefined.');
 
 	if ($event == 'section') {
-		require_privs('section');		
+		require_privs('section');
 
 		if(!$step or !function_exists($step) or !in_array($step, array('sec_section_list','section_create','section_delete','section_save'))){
 			sec_section_list();
@@ -165,13 +165,15 @@ $LastChangedRevision$
 								, ' colspan="2" class="noline"')
 							).
 
-							endTable()
+							endTable(),
+							'', '', 'post', '', 'section-'.$name
 						)
 					).
 
 					td(
 						dLink('section', 'section_delete', 'name', $name, '', 'type', 'section')
-					)
+					),
+					" id=\"section-$name\""
 				);
 			}
 		}
@@ -180,17 +182,17 @@ $LastChangedRevision$
 	}
 
 //-------------------------------------------------------------
-	function section_create() 
+	function section_create()
 	{
 		global $txpcfg;
 		$name = ps('name');
-		
+
 		//Prevent non url chars on section names
 		include_once txpath.'/lib/classTextile.php';
 		$textile = new Textile();
 		$title = $textile->TextileThis($name,1);
 		$name = sanitizeForUrl($name);
-		
+
 		$chk = fetch('name','txp_section','name',$name);
 
 		if (!$chk)
@@ -200,7 +202,7 @@ $LastChangedRevision$
 				$rs = safe_insert(
 				   "txp_section",
 				   "name         = '".doSlash($name) ."',
-					title        = '".doSlash($title)."', 
+					title        = '".doSlash($title)."',
 					page         = 'default',
 					css          = 'default',
 					is_default   = 0,
@@ -279,7 +281,7 @@ $LastChangedRevision$
 			{
 				safe_update("txp_section", "is_default = 0", "name != '$old_name'");
 			}
-	
+
 			safe_update('txp_section', "
 				name         = '$name',
 				title        = '$title',
@@ -303,7 +305,7 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function section_delete() 
+	function section_delete()
 	{
 		$name  = ps('name');
 		$count = safe_count('textpattern', "section = '".doSlash($name)."'");

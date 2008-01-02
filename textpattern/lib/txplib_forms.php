@@ -145,9 +145,9 @@ $LastChangedRevision$
 					$size='',
 					$tab='',
 					$id='',
-					$disabled = false) 
+					$disabled = false)
 	{
-		$o  = '<input type="'.$type.'" name="'.$name.'"'; 
+		$o  = '<input type="'.$type.'" name="'.$name.'"';
 		$o .= ' value="'.cleanfInput($value).'"';
 		$o .= ($size)     ? ' size="'.$size.'"' : '';
 		$o .= ($class)    ? ' class="'.$class.'"' : '';
@@ -161,7 +161,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function cleanfInput($text) 
+	function cleanfInput($text)
 	{
 		return str_replace(
 			array('"',"'","<",">"),
@@ -181,13 +181,13 @@ $LastChangedRevision$
 	{
 		return hInput('step',$step);
 	}
-	
+
 //-------------------------------------------------------------
 	function eInput($event)				// hidden event input
 	{
 		return hInput('event',$event);
 	}
-	
+
 //-------------------------------------------------------------
 
 	function checkbox($name, $value, $checked = '1', $tabindex = '', $id = '')
@@ -229,9 +229,9 @@ $LastChangedRevision$
 
 //-------------------------------------------------------------
 
-	function form($contents, $style = '', $onsubmit = '', $method = 'post', $class = '')
-	{	
-		return n.'<form method="'.$method.'" action="index.php"'.
+	function form($contents, $style = '', $onsubmit = '', $method = 'post', $class = '', $fragment = '')
+	{
+		return n.'<form method="'.$method.'" action="index.php'.($fragment ? '#'.$fragment.'"' : '"').
 			($class ? ' class="'.$class.'"' : '').
 			($style ? ' style="'.$style.'"' : '').
 			($onsubmit ? ' onsubmit="return '.$onsubmit.'"' : '').
@@ -240,7 +240,7 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 	function fetch_editable($name,$event,$identifier,$id)
-	{	
+	{
 		$q = fetch($name,'txp_'.$event,$identifier,$id);
 		return htmlspecialchars($q);
 	}
