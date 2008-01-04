@@ -23,8 +23,7 @@ $LastChangedRevision$
 				$area = $k;
 		}
 
-	?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-			"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+	?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 	<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo LANG; ?>" lang="<?php echo LANG; ?>" dir="<?php echo gTxt('lang_dir'); ?>">
 	<head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -163,7 +162,7 @@ $LastChangedRevision$
 	</script>
 	<script type="text/javascript" src="jquery.js"></script>
 	</head>
-	<body>
+	<body id="event-<?php echo $event; ?>">
   <table id="pagetop" cellpadding="0" cellspacing="0">
   <tr id="branding"><td><img src="txp_img/textpattern.gif" alt="textpattern" /></td><td id="navpop"><?php echo navPop(1); ?></td></tr>
   <tr id="nav-primary"><td align="center" class="tabs" colspan="2">
