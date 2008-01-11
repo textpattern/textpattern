@@ -503,6 +503,7 @@
 				$rs = mysql_query("
 					insert into ".safe_pfx('txp_link')." set
 						linkname    = '".doSlash($linkname)."',
+						linksort    = '".doSlash($linkname)."',
 						description = '".doSlash($description)."',
 						category    = '".doSlash($category)."',
 						date        = '".doSlash($date)."',
