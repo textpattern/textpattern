@@ -184,7 +184,7 @@ $LastChangedRevision$
  		<?php
  		if (!$bm) {
 			echo '<table cellpadding="0" cellspacing="0" align="center"><tr>
-  <td valign="middle" style="width:368px">&nbsp;'.$message.'</td>',
+  <td valign="middle" style="width:368px">&nbsp;'.setup_nag().$message.'</td>',
 
 			has_privs('tab.content')
 			? areatab(gTxt('tab_content'), 'content', 'article', $area)
@@ -327,5 +327,18 @@ $LastChangedRevision$
 	function button($label,$link)
 	{
 		return '<span style="margin-right:2em"><a href="?event='.$link.'" class="plain">'.$label.'</a></span>';
+	}
+
+// -------------------------------------------------------------
+	function setup_nag()
+	{
+		global $txp_using_svn;
+		$user = is_logged_in();
+		$level = @$user['privs'];
+		if ($level != 1) return '';
+		if(is_file(txpath.'/setup/index.php')) {
+			return $txp_using_svn ? '' : gTxt('please_remove_setup_directory').' ';
+		}
+		return '';
 	}
 ?>

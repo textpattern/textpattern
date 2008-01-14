@@ -28,7 +28,7 @@ include_once txpath.'/lib/txplib_misc.php';
 
 header("Content-type: text/html; charset=utf-8");
 
-$rel_siteurl = preg_replace('#^(.*)/textpattern[/setuphindx.]*?$#i','\\1',$_SERVER['PHP_SELF']);
+$rel_siteurl = preg_replace('#^(.*)/textpattern.*$#i','\\1',$_SERVER['PHP_SELF']);
 print <<<eod
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 			"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -36,7 +36,7 @@ print <<<eod
 	<head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<title>Textpattern &#8250; setup</title>
-	<link rel="Stylesheet" href="$rel_siteurl/textpattern/textpattern.css" type="text/css" />
+	<link rel="stylesheet" href="$rel_siteurl/textpattern/textpattern.css" type="text/css" />
 	</head>
 	<body style="border-top:15px solid #FC3">
 	<div align="center">
@@ -44,7 +44,7 @@ eod;
 
 
 	$step = isPost('step');
-	switch ($step) {	
+	switch ($step) {
 		case "": chooseLang(); break;
 		case "getDbInfo": getDbInfo(); break;
 		case "getTxpLogin": getTxpLogin(); break;
@@ -60,7 +60,7 @@ eod;
 // dmp($_POST);
 
 // -------------------------------------------------------------
-	function chooseLang() 
+	function chooseLang()
 	{
 	  echo '<form action="'.$GLOBALS['rel_siteurl'].'/textpattern/setup/index.php" method="post">',
 	  	'<table id="setup" cellpadding="0" cellspacing="0" border="0">',
@@ -104,7 +104,7 @@ eod;
 	  	'<table id="setup" cellpadding="0" cellspacing="0" border="0">',
 		tr(
 			tda(
-			  hed(gTxt('welcome_to_textpattern'),3). 
+			  hed(gTxt('welcome_to_textpattern'),3).
 			  graf(gTxt('need_details'),' style="margin-bottom:3em"').
 			  hed('MySQL',3).
 			  graf(gTxt('db_must_exist'))
@@ -180,15 +180,15 @@ eod;
 
 		$carry['txpath']   = preg_replace("/^(.*)\/$/","$1",$carry['txpath']);
 		$carry['ftpath']   = preg_replace("/^(.*)\/$/","$1",$carry['ftpath']);
-		
+
 		extract($carry);
 
 		$GLOBALS['textarray'] = setup_load_lang($lang);
 		// FIXME, remove when all languages are updated with this string
 		if (!isset($GLOBALS['textarray']['prefix_bad_characters']))
-			$GLOBALS['textarray']['prefix_bad_characters'] = 
+			$GLOBALS['textarray']['prefix_bad_characters'] =
 				'The Table prefix {dbprefix} contains characters that are not allowed.<br />'.
-				'The first character must match one of <b>a-zA-Z_</b> and all following 
+				'The first character must match one of <b>a-zA-Z_</b> and all following
 				 characters must match one of <b>a-zA-Z0-9_</b>';
 
 		echo graf(gTxt("checking_database"));
@@ -218,7 +218,7 @@ eod;
 
 		// On 4.1 or greater use utf8-tables
 		$version = mysql_get_server_info();
-		if ( intval($version[0]) >= 5 || preg_match('#^4\.[1-9]#',$version)) 
+		if ( intval($version[0]) >= 5 || preg_match('#^4\.[1-9]#',$version))
 		{
 			if (mysql_query("SET NAMES utf8"))
 			{
@@ -230,7 +230,7 @@ eod;
 		echo graf(
 			gTxt('using_db', array('{dbname}' => strong($ddb)))
 		.' ('. $carry['dbcharset'] .')' ),
-		
+
 		graf(
 			strong(gTxt('before_you_proceed')).', '.gTxt('create_config', array('{txpath}' => txpath))
 		),
@@ -245,7 +245,7 @@ eod;
 	}
 
 // -------------------------------------------------------------
-	function getTxpLogin() 
+	function getTxpLogin()
 	{
 		$carry = postDecode(isPost('carry'));
 		extract($carry);
@@ -262,7 +262,7 @@ eod;
 					'{txpath}' => txpath
 				))
 			),
-	
+
 			'<textarea style="width:400px;height:200px" name="config" rows="1" cols="1">',
 			makeConfig($carry),
 			'</textarea>',
@@ -304,7 +304,7 @@ eod;
 
 // -------------------------------------------------------------
 
-	function createTxp() 
+	function createTxp()
 	{
 		$email = isPost('email');
 
@@ -328,7 +328,7 @@ eod;
 
 		$siteurl = str_replace("http://",'',$siteurl);
 		$siteurl = rtrim($siteurl,"/");
-		
+
 		define("PFX",trim($dprefix));
 		define('TXP_INSTALL', 1);
 
@@ -357,15 +357,15 @@ eod;
 	function isPost($val)
 	{
 		if(isset($_POST[$val])) {
-			return (MAGIC_QUOTES_GPC) 
+			return (MAGIC_QUOTES_GPC)
 			?	stripslashes($_POST[$val])
-			:	$_POST[$val];						
-		} 
+			:	$_POST[$val];
+		}
 		return '';
 	}
 
 // -------------------------------------------------------------
-	function makeConfig($ar) 
+	function makeConfig($ar)
 	{
 		define("nl","';\n");
 		define("o",'$txpcfg[\'');
@@ -387,7 +387,7 @@ eod;
 
 // -------------------------------------------------------------
 
-	function fbCreate() 
+	function fbCreate()
 	{
 		if ($GLOBALS['txp_install_successful'] === false)
 		{
@@ -433,10 +433,10 @@ eod;
 	}
 
 // -------------------------------------------------------------
-	function enumPostItems() 
+	function enumPostItems()
 	{
 		foreach(func_get_args() as $item) { $out[$item] = isPost($item); }
-		return $out; 
+		return $out;
 	}
 
 //-------------------------------------------------------------
@@ -503,7 +503,7 @@ eod;
 	}
 
 // -------------------------------------------------------------
-	function setup_load_lang($lang) 
+	function setup_load_lang($lang)
 	{
 		require_once txpath.'/setup/setup-langs.php';
 		$lang = (isset($langs[$lang]) && !empty($langs[$lang]))? $lang : 'en-gb';
@@ -513,7 +513,7 @@ eod;
 
 // -------------------------------------------------------------
 	function sDoSlash($in)
-	{ 
+	{
 		if(phpversion() >= "4.3.0") {
 			return doArray($in,'mysql_real_escape_string');
 		} else {

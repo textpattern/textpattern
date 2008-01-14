@@ -1611,13 +1611,15 @@ $LastChangedRevision$
 		$preview = psa(array('name','email','web','message','parentid','remember'));
 		$preview['time'] = time();
 		$preview['discussid'] = 0;
+		$preview['name'] = strip_tags($preview['name']);
+		$preview['email'] = htmlspecialchars(clean_url($preview['email']));
 		if ($preview['message'] == '')
 		{
 			$in = getComment();
 			$preview['message'] = $in['message'];
 
 		}
-		$preview['message'] = markup_comment($preview['message']);
+		$preview['message'] = markup_comment(substr(trim($preview['message']), 0, 65535)); // it is called 'message', not 'novel'
 		$preview['web'] = clean_url($preview['web']);
 
 		$GLOBALS['thiscomment'] = $preview;
@@ -1691,12 +1693,12 @@ $LastChangedRevision$
 
 			if ($web)
 			{
-				return '<a href="http://'.$web.'"'.$nofollow.'>'.$name.'</a>';
+				return '<a href="http://'.htmlspecialchars($web).'"'.$nofollow.'>'.htmlspecialchars($name).'</a>';
 			}
 
 			if ($email && !$never_display_email)
 			{
-				return '<a href="'.eE('mailto:'.$email).'"'.$nofollow.'>'.$name.'</a>';
+				return '<a href="'.eE('mailto:'.htmlspecialchars($email)).'"'.$nofollow.'>'.htmlspecialchars($name).'</a>';
 			}
 		}
 
@@ -1719,7 +1721,7 @@ $LastChangedRevision$
 		global $thiscomment;
 		assert_comment();
 
-		return $thiscomment['web'];
+		return htmlspecialchars($thiscomment['web']);
 	}
 
 // -------------------------------------------------------------
