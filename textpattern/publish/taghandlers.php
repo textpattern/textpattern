@@ -1612,7 +1612,7 @@ $LastChangedRevision$
 		$preview['time'] = time();
 		$preview['discussid'] = 0;
 		$preview['name'] = strip_tags($preview['name']);
-		$preview['email'] = htmlspecialchars(clean_url($preview['email']));
+		$preview['email'] = clean_url($preview['email']);
 		if ($preview['message'] == '')
 		{
 			$in = getComment();
@@ -1688,7 +1688,7 @@ $LastChangedRevision$
 
 		if ($link)
 		{
-			$web = str_replace('http://', '', $web);
+			$web      = str_replace('http://', '', $web);
 			$nofollow = (@$comment_nofollow ? ' rel="nofollow"' : '');
 
 			if ($web)
@@ -1698,7 +1698,7 @@ $LastChangedRevision$
 
 			if ($email && !$never_display_email)
 			{
-				return '<a href="'.eE('mailto:'.htmlspecialchars($email)).'"'.$nofollow.'>'.htmlspecialchars($name).'</a>';
+				return '<a href="'.eE('mailto:'.$email).'"'.$nofollow.'>'.htmlspecialchars($name).'</a>';
 			}
 		}
 
@@ -1712,13 +1712,14 @@ $LastChangedRevision$
 
 		assert_comment();
 
-		return $thiscomment['email'];
+		return htmlspecialchars($thiscomment['email']);
 	}
 
 // -------------------------------------------------------------
 	function comment_web($atts)
 	{
 		global $thiscomment;
+
 		assert_comment();
 
 		return htmlspecialchars($thiscomment['web']);
@@ -1745,6 +1746,7 @@ $LastChangedRevision$
 	function comment_message($atts)
 	{
 		global $thiscomment;
+
 		assert_comment();
 
 		return $thiscomment['message'];

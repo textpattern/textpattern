@@ -22,34 +22,36 @@ if ($result) die("Textpattern database table already exist. Can't run setup.");
 $version = mysql_get_server_info();
 //Use "ENGINE" if version of MySQL > (4.0.18 or 4.1.2)
 $tabletype = ( intval($version[0]) >= 5 || preg_match('#^4\.(0\.[2-9]|(1[89]))|(1\.[2-9])#',$version)) 
-				? " ENGINE=MyISAM " 
-				: " TYPE=MyISAM ";
+	? " ENGINE=MyISAM " 
+	: " TYPE=MyISAM ";
 
 // On 4.1 or greater use utf8-tables
 if ( isset($dbcharset) && (intval($version[0]) >= 5 || preg_match('#^4\.[1-9]#',$version))) 
 {
 	$tabletype .= " CHARACTER SET = $dbcharset ";
-	if (isset($dbcollate)) 
-		$tabletype .= " COLLATE $dbcollate ";
+	if ($dbcharset == 'utf8')
+		$tabletype .= " COLLATE utf8_general_ci ";
 	mysql_query("SET NAMES ".$dbcharset);
 }
 
 // Default to messy URLs if we know clean ones won't work
 $permlink_mode = 'section_id_title';
-if (is_callable('apache_get_modules')) {
+if (is_callable('apache_get_modules'))
+{
 	$modules = apache_get_modules();
 	if (!in_array('mod_rewrite', $modules))
 		$permlink_mode = 'messy';
 }
-else {
+else
+{
 	$server_software = (@$_SERVER['SERVER_SOFTWARE'] || @$_SERVER['HTTP_HOST'])
 		? ( (@$_SERVER['SERVER_SOFTWARE']) ?  @$_SERVER['SERVER_SOFTWARE'] :  $_SERVER['HTTP_HOST'] )
 		: '';
-   if (!stristr($server_software, 'Apache'))
+	if (!stristr($server_software, 'Apache'))
 		$permlink_mode = 'messy';
 }
 
-if (empty($name)) $name = 'anon';
+$name = ps('name') ? ps('name') : 'anon';
 
 $create_sql = array();
 
@@ -96,12 +98,8 @@ $create_sql[] = "CREATE TABLE `".PFX."textpattern` (
   FULLTEXT KEY `searching` (`Title`,`Body`)
 ) $tabletype PACK_KEYS=1 AUTO_INCREMENT=2 ";
 
-$setup_comment_invite = addslashes( ( gTxt('setup_comment_invite')=='setup_comment_invite') ? 'Comment' : gTxt('setup_comment_invite') );
-$create_sql[] = "INSERT INTO `".PFX."textpattern` VALUES (1, now(), '$name', now(), '', 'First Post', '', 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec rutrum est eu mauris. In volutpat blandit felis. Suspendisse eget pede. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Quisque sed arcu. Aenean purus nulla, condimentum ac, pretium at, commodo sit amet, turpis. Aenean lacus. Ut in justo. Ut viverra dui vel ante. Duis imperdiet porttitor mi. Maecenas at lectus eu justo porta tempus. Cras fermentum ligula non purus. Duis id orci non magna rutrum bibendum. Mauris tincidunt, massa in rhoncus consectetuer, lectus dui ornare enim, ut egestas ipsum purus id urna. Vestibulum volutpat porttitor metus. Donec congue vehicula ante.', '	<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec rutrum est eu mauris. In volutpat blandit felis. Suspendisse eget pede. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Quisque sed arcu. Aenean purus nulla, condimentum ac, pretium at, commodo sit amet, turpis. Aenean lacus. Ut in justo. Ut viverra dui vel ante. Duis imperdiet porttitor mi. Maecenas at lectus eu justo porta tempus. Cras fermentum ligula non purus. Duis id orci non magna rutrum bibendum. Mauris tincidunt, massa in rhoncus consectetuer, lectus dui ornare enim, ut egestas ipsum purus id urna. Vestibulum volutpat porttitor metus. Donec congue vehicula ante.</p>\n\n\n ', '', '', '', 'hope-for-the-future', 'meaningful-labor', 1, '".$setup_comment_invite."', 1, 4, 1, 1, 'articles', '', '', 'first-post', '', '', '', '', '', '', '', '', '', '', '".md5(uniqid(rand(), true))."', now())";
-
-
-
-
+$setup_comment_invite = doSlash( ( gTxt('setup_comment_invite')=='setup_comment_invite') ? 'Comment' : gTxt('setup_comment_invite') );
+$create_sql[] = "INSERT INTO `".PFX."textpattern` VALUES (1, now(), '".doSlash($name)."', now(), '', 'First Post', '', 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec rutrum est eu mauris. In volutpat blandit felis. Suspendisse eget pede. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Quisque sed arcu. Aenean purus nulla, condimentum ac, pretium at, commodo sit amet, turpis. Aenean lacus. Ut in justo. Ut viverra dui vel ante. Duis imperdiet porttitor mi. Maecenas at lectus eu justo porta tempus. Cras fermentum ligula non purus. Duis id orci non magna rutrum bibendum. Mauris tincidunt, massa in rhoncus consectetuer, lectus dui ornare enim, ut egestas ipsum purus id urna. Vestibulum volutpat porttitor metus. Donec congue vehicula ante.', '	<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec rutrum est eu mauris. In volutpat blandit felis. Suspendisse eget pede. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Quisque sed arcu. Aenean purus nulla, condimentum ac, pretium at, commodo sit amet, turpis. Aenean lacus. Ut in justo. Ut viverra dui vel ante. Duis imperdiet porttitor mi. Maecenas at lectus eu justo porta tempus. Cras fermentum ligula non purus. Duis id orci non magna rutrum bibendum. Mauris tincidunt, massa in rhoncus consectetuer, lectus dui ornare enim, ut egestas ipsum purus id urna. Vestibulum volutpat porttitor metus. Donec congue vehicula ante.</p>\n\n\n ', '', '', '', 'hope-for-the-future', 'meaningful-labor', 1, '".$setup_comment_invite."', 1, 4, 1, 1, 'articles', '', '', 'first-post', '', '', '', '', '', '', '', '', '', '', '".md5(uniqid(rand(), true))."', now())";
 
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_category` (
@@ -184,10 +182,6 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_form` (
   PRIMARY KEY (`name`)
 ) $tabletype PACK_KEYS=1";
 
-
-
-
-
 $create_sql[] = "INSERT INTO `".PFX."txp_form` VALUES ('Links', 'link', '<p><txp:link /><br />\n<txp:link_description /></p>')";
 $create_sql[] = "INSERT INTO `".PFX."txp_form` VALUES ('lofi', 'article', '<h3 class=\"entry-title\"><txp:title /> <txp:permlink>#</txp:permlink></h3>\n\n<p class=\"published\"><txp:posted /></p>\n\n<div class=\"entry-content\">\n<txp:body />\n</div>\n\n<hr />\n\n')";
 $create_sql[] = "INSERT INTO `".PFX."txp_form` VALUES ('single', 'article', '<h3 class=\"entry-title\"><txp:permlink><txp:title /></txp:permlink></h3>\n\t<p class=\"published\"><txp:posted /></p>\n\n<div class=\"entry-content\">\n<txp:body />\n</div>\n\n')";
@@ -217,7 +211,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_image` (
   PRIMARY KEY  (`id`)
 ) $tabletype PACK_KEYS=0 AUTO_INCREMENT=2 ";
 
-$create_sql[] = "INSERT INTO `".PFX."txp_image` VALUES (1, 'divider.gif', 'site-design', '.gif', 400, 1, '', '', '2005-07-22 16:37:11', '$name', 0)";
+$create_sql[] = "INSERT INTO `".PFX."txp_image` VALUES (1, 'divider.gif', 'site-design', '.gif', 400, 1, '', '', '2005-07-22 16:37:11', '".doSlash($name)."', 0)";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_lang` (
   `id` int(9) NOT NULL auto_increment,
@@ -297,9 +291,9 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_prefs` (
 
 $prefs['blog_uid'] = md5(uniqid(rand(),true));
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'prefs_id', '1', 2, 'publish', 'text_input', 0)";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'sitename', '".addslashes(gTxt('my_site'))."', 0, 'publish', 'text_input', 10)";
+$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'sitename', '".doSlash(gTxt('my_site'))."', 0, 'publish', 'text_input', 10)";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'siteurl', 'comment.local', 0, 'publish', 'text_input', 20)";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'site_slogan', '".addslashes(gTxt('my_slogan'))."', 0, 'publish', 'text_input', 30)";
+$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'site_slogan', '".doSlash(gTxt('my_slogan'))."', 0, 'publish', 'text_input', 30)";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'language', 'en-gb', 2, 'publish', 'languages', 40)";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'url_mode', '1', 2, 'publish', 'text_input', 0)";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'timeoffset', '0', 2, 'publish', 'text_input', 0)";
@@ -332,14 +326,14 @@ $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'link_list_pageby', '
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'image_list_pageby', '25', 2, 'publish', 'text_input', 0)";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'log_list_pageby', '25', 2, 'publish', 'text_input', 0)";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'comment_list_pageby', '25', 2, 'publish', 'text_input', 0)";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'permlink_mode', '".addslashes($permlink_mode)."', 0, 'publish', 'permlinkmodes', 90)";
+$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'permlink_mode', '".doSlash($permlink_mode)."', 0, 'publish', 'permlinkmodes', 90)";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'comments_are_ol', '1', 0, 'comments', 'yesnoradio', 150)";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'is_dst', '0', 0, 'publish', 'yesnoradio', 60)";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'locale', 'en_GB.UTF-8', 2, 'publish', 'text_input', 0)";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'tempdir', '".addslashes(find_temp_dir())."', 1, 'admin', 'text_input', 0)";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'file_base_path', '".addslashes(dirname(txpath).DS.'files')."', 1, 'admin', 'text_input', 0)";
+$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'tempdir', '".doSlash(find_temp_dir())."', 1, 'admin', 'text_input', 0)";
+$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'file_base_path', '".doSlash(dirname(txpath).DS.'files')."', 1, 'admin', 'text_input', 0)";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'blog_uid', '". $prefs['blog_uid'] ."', 2, 'publish', 'text_input', 0)";
-$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'blog_mail_uid', '".addslashes($_POST['email'])."', 2, 'publish', 'text_input', 0)";
+$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'blog_mail_uid', '".doSlash(ps('email'))."', 2, 'publish', 'text_input', 0)";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'blog_time_uid', '2005', 2, 'publish', 'text_input', 0)";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'edit_raw_css_by_default', '1', 1, 'css', 'yesnoradio', 0)";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'allow_page_php_scripting', '1', 1, 'publish', 'yesnoradio', 0)";
@@ -433,10 +427,11 @@ if (defined('TXP_TEST'))
 
 require_once txpath.'/lib/IXRClass.php';
 $client = new IXR_Client('http://rpc.textpattern.com');
-if (!$client->query('tups.getLanguage',$prefs['blog_uid'],$lang))
+
+if (!$client->query('tups.getLanguage',$prefs['blog_uid'],LANG))
 {
 	# If cannot install from lang file, setup the english lang
-	if (!install_language_from_file($lang))
+	if (!install_language_from_file(LANG))
 	{
 		$lang = 'en-gb';
 		include_once txpath.'/setup/en-gb.php';
@@ -445,22 +440,25 @@ if (!$client->query('tups.getLanguage',$prefs['blog_uid'],$lang))
 		{
 			foreach ($evt_strings as $lang_key => $lang_val)
 			{
-				$lang_val = addslashes($lang_val);
+				$lang_val = doSlash($lang_val);
 				if (@$lang_val)
-					mysql_query("INSERT DELAYED INTO `".PFX."txp_lang`  SET `lang`='en-gb',`name`='$lang_key',`event`='$evt_name',`data`='$lang_val',`lastmod`='$lastmod'");
+					mysql_query("INSERT DELAYED INTO `".PFX."txp_lang` SET lang='en-gb', name='".$lang_key."', event='".$evt_name."', data='".$lang_val."', lastmod='".$lastmod."'");
 			}
 		}
 	}
-}else {
+}
+else 
+{
 	$response = $client->getResponse();
 	$lang_struct = unserialize($response);
 	foreach ($lang_struct as $item)
 	{
 		foreach ($item as $name => $value) 
-			$item[$name] = addslashes($value);
-		mysql_query("INSERT DELAYED INTO `".PFX."txp_lang`  SET `lang`='$lang',`name`='$item[name]',`event`='$item[event]',`data`='$item[data]',`lastmod`='".strftime('%Y%m%d%H%M%S',$item['uLastmod'])."'");
+			$item[$name] = doSlash($value);
+		mysql_query("INSERT DELAYED INTO `".PFX."txp_lang` SET lang='".LANG."', name='".$item[name]."', event='".$item[event]."', data='".$item[data]."', lastmod='".strftime('%Y%m%d%H%M%S',$item['uLastmod'])."'");
 	}		
 }
+
 mysql_query("FLUSH TABLE `".PFX."txp_lang`");
 
 ?>

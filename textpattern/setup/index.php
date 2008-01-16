@@ -42,8 +42,7 @@ print <<<eod
 	<div align="center">
 eod;
 
-
-	$step = isPost('step');
+	$step = ps('step');
 	switch ($step) {
 		case "": chooseLang(); break;
 		case "getDbInfo": getDbInfo(); break;
@@ -56,8 +55,6 @@ eod;
 </body>
 </html>
 <?php
-
-// dmp($_POST);
 
 // -------------------------------------------------------------
 	function chooseLang()
@@ -76,14 +73,10 @@ eod;
 		'</table></form>';
 	}
 
-
 // -------------------------------------------------------------
-
 	function getDbInfo()
 	{
-		$lang = isPost('lang');
-
-		$GLOBALS['textarray'] = setup_load_lang($lang);
+		$GLOBALS['textarray'] = setup_load_lang(ps('lang'));
 
 		@include txpath.'/config.php';
 
@@ -95,13 +88,19 @@ eod;
 		}
 
 		$temp_txpath = txpath;
+
 		if (@$_SERVER['SCRIPT_NAME'] && (@$_SERVER['SERVER_NAME'] || @$_SERVER['HTTP_HOST']))
 		{
 			$guess_siteurl = (@$_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
 			$guess_siteurl .= $GLOBALS['rel_siteurl'];
-		} else $guess_siteurl = 'mysite.com';
-	  echo '<form action="'.$GLOBALS['rel_siteurl'].'/textpattern/setup/index.php" method="post">',
-	  	'<table id="setup" cellpadding="0" cellspacing="0" border="0">',
+		}
+		else
+		{
+			$guess_siteurl = 'mysite.com';
+		}
+
+		echo '<form action="'.$GLOBALS['rel_siteurl'].'/textpattern/setup/index.php" method="post">',
+			'<table id="setup" cellpadding="0" cellspacing="0" border="0">',
 		tr(
 			tda(
 			  hed(gTxt('welcome_to_textpattern'),3).
@@ -144,28 +143,31 @@ eod;
 				tdcs(fInput('text','siteurl',$guess_siteurl,'edit','','',40).
 				popHelp('siteurl'),3)
 		);
+
 		if (!is_callable('mail'))
 		{
-			echo 	tr(
-							tdcs(gTxt('warn_mail_unavailable'),3,null,'" style="color:red;text-align:center')
-					);
-		}
-		echo
-			tr(
-				td().td(fInput('submit','Submit',gTxt('next'),'publish')).td().td()
+			echo tr(
+				tdcs(gTxt('warn_mail_unavailable'),3,null,'" style="color:red;text-align:center')
 			);
+		}
+
+		echo tr(
+			td().td(fInput('submit','Submit',gTxt('next'),'publish')).td().td()
+		);
 		echo endTable(),
-		hInput('lang',$lang),
+		hInput('lang', LANG),
 		sInput('printConfig'),
 		'</form>';
 	}
 
 // -------------------------------------------------------------
-
 	function printConfig()
 	{
-		$carry = enumPostItems('ddb','duser','dpass','dhost','dprefix','txprefix','txpath',
-			'siteurl','ftphost','ftplogin','ftpass','ftpath','lang');
+		$carry = psa(array('ddb','duser','dpass','dhost','dprefix','txpath','siteurl','lang'));
+		$carry['txpath'] = preg_replace("/^(.*)\/$/","$1",$carry['txpath']);
+		extract($carry);
+
+		$GLOBALS['textarray'] = setup_load_lang($lang);
 
 		@include txpath.'/config.php';
 
@@ -178,12 +180,6 @@ eod;
 			));
 		}
 
-		$carry['txpath']   = preg_replace("/^(.*)\/$/","$1",$carry['txpath']);
-		$carry['ftpath']   = preg_replace("/^(.*)\/$/","$1",$carry['ftpath']);
-
-		extract($carry);
-
-		$GLOBALS['textarray'] = setup_load_lang($lang);
 		// FIXME, remove when all languages are updated with this string
 		if (!isset($GLOBALS['textarray']['prefix_bad_characters']))
 			$GLOBALS['textarray']['prefix_bad_characters'] =
@@ -192,7 +188,9 @@ eod;
 				 characters must match one of <b>a-zA-Z0-9_</b>';
 
 		echo graf(gTxt("checking_database"));
-		if (!($mylink = mysql_connect($dhost,$duser,$dpass))){
+
+		if (!($mylink = mysql_connect($dhost,$duser,$dpass)))
+		{
 			exit(graf(gTxt('db_cant_connect')));
 		}
 
@@ -218,19 +216,27 @@ eod;
 
 		// On 4.1 or greater use utf8-tables
 		$version = mysql_get_server_info();
+
 		if ( intval($version[0]) >= 5 || preg_match('#^4\.[1-9]#',$version))
 		{
 			if (mysql_query("SET NAMES utf8"))
 			{
 				$carry['dbcharset'] = "utf8";
-				$carry['dbcollate'] = "utf8_general_ci";
-			} else $carry['dbcharset'] = "latin1";
-		} else $carry['dbcharset'] = "latin1";
+			} 
+			else
+			{
+				$carry['dbcharset'] = "latin1";
+			}
+		}
+		else
+		{
+			$carry['dbcharset'] = "latin1";
+		}
 
 		echo graf(
 			gTxt('using_db', array('{dbname}' => strong($ddb)))
-		.' ('. $carry['dbcharset'] .')' ),
-
+			.' ('. $carry['dbcharset'] .')' 
+		),
 		graf(
 			strong(gTxt('before_you_proceed')).', '.gTxt('create_config', array('{txpath}' => txpath))
 		),
@@ -247,14 +253,14 @@ eod;
 // -------------------------------------------------------------
 	function getTxpLogin()
 	{
-		$carry = postDecode(isPost('carry'));
+		$carry = postDecode(ps('carry'));
 		extract($carry);
 
 		$GLOBALS['textarray'] = setup_load_lang($lang);
 
 		@include txpath.'/config.php';
 
-		if (!isset($txpcfg) || ($txpcfg['db'] != $carry['ddb']) || ($txpcfg['txpath'] != $carry['txpath']))
+		if (!isset($txpcfg) || ($txpcfg['db'] != $ddb) || ($txpcfg['txpath'] != $txpath))
 		{
 			echo graf(
 				strong(gTxt('before_you_proceed')).', '.
@@ -298,70 +304,51 @@ eod;
 		),
 		endTable(),
 		sInput('createTxp'),
-		hInput('carry',postEncode($carry)),
+		hInput('lang', htmlspecialchars($lang)),
+		hInput('siteurl', htmlspecialchars($siteurl)),
 		'</form>';
 	}
 
 // -------------------------------------------------------------
-
 	function createTxp()
 	{
-		$email = isPost('email');
+		$GLOBALS['textarray'] = setup_load_lang(ps('lang'));
 
-		if (!is_valid_email($email))
+		if (!is_valid_email(ps('email')))
 		{
 			exit(graf(gTxt('email_required')));
 		}
 
-		$carry = isPost('carry');
-
-		extract(postDecode($carry));
-
 		require txpath.'/config.php';
-		$dbb = $txpcfg['db'];
+		$ddb = $txpcfg['db'];
 		$duser = $txpcfg['user'];
 		$dpass = $txpcfg['pass'];
 		$dhost = $txpcfg['host'];
 		$dprefix = $txpcfg['table_prefix'];
+		$dbcharset = $txpcfg['dbcharset'];
 
-		$GLOBALS['textarray'] = setup_load_lang($lang);
-
-		$siteurl = str_replace("http://",'',$siteurl);
+		$siteurl = str_replace("http://",'', ps('siteurl'));
 		$siteurl = rtrim($siteurl,"/");
 
 		define("PFX",trim($dprefix));
 		define('TXP_INSTALL', 1);
 
-		$name = addslashes(gps('name'));
-
 		include_once txpath.'/lib/txplib_update.php';
  		include txpath.'/setup/txpsql.php';
 
 		// This has to come after txpsql.php, because otherwise we can't call mysql_real_escape_string
-		extract(sDoSlash(gpsa(array('name','pass','RealName','email'))));
+		extract(doSlash(psa(array('name','pass','RealName','email'))));
 
  		$nonce = md5( uniqid( rand(), true ) );
 
 		mysql_query("INSERT INTO `".PFX."txp_users` VALUES
 			(1,'$name',password(lower('$pass')),'$RealName','$email',1,now(),'$nonce')");
 
-		mysql_query("update `".PFX."txp_prefs` set val = '$siteurl' where `name`='siteurl'");
-		mysql_query("update `".PFX."txp_prefs` set val = '$lang' where `name`='language'");
-		mysql_query("update `".PFX."txp_prefs` set val = '".getlocale($lang)."' where `name`='locale'");
+		mysql_query("update `".PFX."txp_prefs` set val = '".doSlash($siteurl)."' where `name`='siteurl'");
+		mysql_query("update `".PFX."txp_prefs` set val = '".LANG."' where `name`='language'");
+		mysql_query("update `".PFX."txp_prefs` set val = '".getlocale(LANG)."' where `name`='locale'");
 
  		echo fbCreate();
-	}
-
-
-// -------------------------------------------------------------
-	function isPost($val)
-	{
-		if(isset($_POST[$val])) {
-			return (MAGIC_QUOTES_GPC)
-			?	stripslashes($_POST[$val])
-			:	$_POST[$val];
-		}
-		return '';
 	}
 
 // -------------------------------------------------------------
@@ -386,7 +373,6 @@ eod;
 	}
 
 // -------------------------------------------------------------
-
 	function fbCreate()
 	{
 		if ($GLOBALS['txp_install_successful'] === false)
@@ -433,14 +419,6 @@ eod;
 	}
 
 // -------------------------------------------------------------
-	function enumPostItems()
-	{
-		foreach(func_get_args() as $item) { $out[$item] = isPost($item); }
-		return $out;
-	}
-
-//-------------------------------------------------------------
-
 	function langs()
 	{
 		$langs = array(
@@ -486,7 +464,7 @@ eod;
 			'zh-tw' => '中文(繁體)',
 		);
 
-		$default	= 'en-gb';
+		$default = 'en-gb';
 
 		$out = n.'<select name="lang">';
 
@@ -510,16 +488,5 @@ eod;
 		define('LANG', $lang);
 		return $langs[LANG];
 	}
-
-// -------------------------------------------------------------
-	function sDoSlash($in)
-	{
-		if(phpversion() >= "4.3.0") {
-			return doArray($in,'mysql_real_escape_string');
-		} else {
-			return doArray($in,'mysql_escape_string');
-		}
-	}
-
 
 ?>
