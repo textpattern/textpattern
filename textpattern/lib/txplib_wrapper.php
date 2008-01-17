@@ -622,7 +622,7 @@ class TXP_Wrapper
 	{
 		global $txpcfg;
 		
-		include_once $txpcfg['txpath'].'/lib/classTextile.php';
+		include_once txpath.'/lib/classTextile.php';
 		$textile = new Textile();
 
 		if (!empty($event) and $event == 'article') 

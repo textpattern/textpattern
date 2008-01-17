@@ -87,8 +87,6 @@ eod;
 			));
 		}
 
-		$temp_txpath = txpath;
-
 		if (@$_SERVER['SCRIPT_NAME'] && (@$_SERVER['SERVER_NAME'] || @$_SERVER['HTTP_HOST']))
 		{
 			$guess_siteurl = (@$_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
@@ -124,17 +122,6 @@ eod;
 		tr(tdcs('&nbsp;',4)),
 		tr(
 			tdcs(
-				hed(gTxt('site_path'),3).
-				graf(gTxt('confirm_site_path')),4)
-		),
-		tr(
-			fLabelCell(gTxt('full_path_to_txp')).
-				tdcs(fInput('text','txpath',$temp_txpath,'edit','','',40).
-				popHelp('full_path'),3)
-		),
-		tr(tdcs('&nbsp;',4)),
-		tr(
-			tdcs(
 				hed(gTxt('site_url'),3).
 				graf(gTxt('please_enter_url')),4)
 		),
@@ -163,8 +150,7 @@ eod;
 // -------------------------------------------------------------
 	function printConfig()
 	{
-		$carry = psa(array('ddb','duser','dpass','dhost','dprefix','txpath','siteurl','lang'));
-		$carry['txpath'] = preg_replace("/^(.*)\/$/","$1",$carry['txpath']);
+		$carry = psa(array('ddb','duser','dpass','dhost','dprefix','siteurl','lang'));
 		extract($carry);
 
 		$GLOBALS['textarray'] = setup_load_lang($lang);
@@ -260,7 +246,7 @@ eod;
 
 		@include txpath.'/config.php';
 
-		if (!isset($txpcfg) || ($txpcfg['db'] != $ddb) || ($txpcfg['txpath'] != $txpath))
+		if (!isset($txpcfg) || ($txpcfg['db'] != $ddb) || ($txpcfg['table_prefix'] != $dprefix))
 		{
 			echo graf(
 				strong(gTxt('before_you_proceed')).', '.
@@ -361,14 +347,14 @@ eod;
 		$close = '?'.chr(62);
 		extract($ar);
 		return
-		$open."\n".
-		o.'db'			  .m.$ddb.nl
-		.o.'user'		  .m.$duser.nl
-		.o.'pass'		  .m.$dpass.nl
-		.o.'host'		  .m.$dhost.nl
+		$open."\n"
+		.o.'db'           .m.$ddb.nl
+		.o.'user'         .m.$duser.nl
+		.o.'pass'         .m.$dpass.nl
+		.o.'host'         .m.$dhost.nl
 		.o.'table_prefix' .m.$dprefix.nl
-		.o.'txpath'		  .m.$txpath.nl
-		.o.'dbcharset'	  .m.$dbcharset.nl
+		.o.'txpath'       .m.txpath.nl   // remove in crockery
+		.o.'dbcharset'    .m.$dbcharset.nl
 		.$close;
 	}
 
