@@ -455,7 +455,7 @@ else
 	{
 		foreach ($item as $name => $value) 
 			$item[$name] = doSlash($value);
-		mysql_query("INSERT DELAYED INTO `".PFX."txp_lang` SET lang='".LANG."', name='".$item[name]."', event='".$item[event]."', data='".$item[data]."', lastmod='".strftime('%Y%m%d%H%M%S',$item['uLastmod'])."'");
+		mysql_query("INSERT DELAYED INTO `".PFX."txp_lang` SET lang='".LANG."', name='".$item['name']."', event='".$item['event']."', data='".$item['data']."', lastmod='".strftime('%Y%m%d%H%M%S',$item['uLastmod'])."'");
 	}		
 }
 
