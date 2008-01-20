@@ -22,7 +22,8 @@ $LastChangedRevision$
 	ob_end_clean();
 
 	include txpath.'/lib/constants.php';
-	if (!isset($txpcfg['txpath']) )	{
+	if (!isset($txpcfg['table_prefix']))
+	{
 		$status = '503 Service Unavailable';
 		if (IS_FASTCGI)
 			header("Status: $status");

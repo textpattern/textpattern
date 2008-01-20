@@ -986,7 +986,7 @@ $LastChangedRevision$
 		// deprecated, remove in crockery
 		elseif (isset($pretext[$tag]))
 		{
-			$out = escape_output($pretext[$tag]);
+			$out = htmlspecialchars($pretext[$tag]);
 
 			trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
 		}

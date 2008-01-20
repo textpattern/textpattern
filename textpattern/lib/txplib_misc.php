@@ -88,18 +88,10 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
+// deprecated, use htmlspecialchars instead. Remove in crockery
 	function escape_output($str)
 	{
-		# should be safe for xhtml and xml
-		return strtr($str,
-			array(
-				'&' => '&#38;',
-				'<' => '&#60;',
-				'>' => '&#62;',
-				"'" => '&#39;',
-				'"' => '&#34;',
-			)
-		);
+		return htmlspecialchars($str);
 	}
 
 // -------------------------------------------------------------
@@ -479,7 +471,7 @@ $LastChangedRevision$
 		printf ("<pre>".gTxt('plugin_load_error').' <b>%s</b> -> <b>%s: %s on line %s</b></pre>',
 				$txp_current_plugin, $error[$errno], $errstr, $errline);
 		if ($production_status == 'debug')
-			print "\n<pre style=\"padding-left: 2em;\" class=\"backtrace\"><code>".escape_output(join("\n", get_caller(10)))."</code></pre>";
+			print "\n<pre style=\"padding-left: 2em;\" class=\"backtrace\"><code>".htmlspecialchars(join("\n", get_caller(10)))."</code></pre>";
 	}
 
 // -------------------------------------------------------------
@@ -499,7 +491,7 @@ $LastChangedRevision$
 				htmlspecialchars($txp_current_tag), $error[$errno], $errstr, $errline );
 		if ($production_status == 'debug')
 			{
-			print "\n<pre style=\"padding-left: 2em;\" class=\"backtrace\"><code>".escape_output(join("\n", get_caller(10)))."</code></pre>";
+			print "\n<pre style=\"padding-left: 2em;\" class=\"backtrace\"><code>".htmlspecialchars(join("\n", get_caller(10)))."</code></pre>";
 
 			$trace_msg = gTxt('tag_error').' '.$txp_current_tag.' -> '.$error[$errno].': '.$errstr.' '.$errline;
 			trace_add( $trace_msg );
@@ -1964,7 +1956,7 @@ eod;
 		if (($production_status == 'debug') || (txpinterface == 'admin')) {
 			trigger_error("<pre>Error: '".htmlspecialchars($myvar)."' is not an integer</pre>".
 						  "\n".'<pre style="padding-left: 2em;" class="backtrace"><code>'.
-						  escape_output(join("\n", get_caller(5,1))).'</code></pre>', E_USER_WARNING);
+						  htmlspecialchars(join("\n", get_caller(5,1))).'</code></pre>', E_USER_WARNING);
 		} else trigger_error("'".htmlspecialchars($myvar)."' is not an integer.", E_USER_WARNING);
 		return false;
 	}

@@ -138,8 +138,8 @@ $LastChangedRevision$
 
 			if ($escape == 'html')
 			{
-				$alt = escape_output($alt);
-				$caption = escape_output($caption);
+				$alt = htmlspecialchars($alt);
+				$caption = htmlspecialchars($caption);
 			}
 
 			$out = '<img src="'.hu.$img_dir.'/'.$id.$ext.'" width="'.$w.'" height="'.$h.'" alt="'.$alt.'"'.
@@ -204,8 +204,8 @@ $LastChangedRevision$
 			{
 				if ($escape == 'html')
 				{
-					$alt = escape_output($alt);
-					$caption = escape_output($caption);
+					$alt = htmlspecialchars($alt);
+					$caption = htmlspecialchars($caption);
 				}
 
 				$out = '<img src="'.hu.$img_dir.'/'.$id.'t'.$ext.'" alt="'.$alt.'"'.
@@ -279,7 +279,7 @@ $LastChangedRevision$
 			$title = ($title == gTxt('rss_feed_title')) ? gTxt('atom_feed_title') : $title;
 		}
 
-		$title = escape_output($title);
+		$title = htmlspecialchars($title);
 
 		if ($format == 'link')
 		{
@@ -320,7 +320,7 @@ $LastChangedRevision$
 			$title = ($title == gTxt('rss_feed_title')) ? gTxt('atom_feed_title') : $title;
 		}
 
-		$title = escape_output($title);
+		$title = htmlspecialchars($title);
 
 		if ($format == 'link')
 		{
@@ -404,7 +404,7 @@ $LastChangedRevision$
 		), $atts));
 
 		return tag(
-			escape_output($thislink['linkname']), 'a',
+			htmlspecialchars($thislink['linkname']), 'a',
 			($rel ? ' rel="'.$rel.'"' : '').
 			' href="'.doSpecial($thislink['url']).'"'
 		);
@@ -422,11 +422,11 @@ $LastChangedRevision$
 		), $atts));
 
 		$description = ($thislink['description']) ?
-			' title="'.escape_output($thislink['description']).'"' :
+			' title="'.htmlspecialchars($thislink['description']).'"' :
 			'';
 
 		return tag(
-			escape_output($thislink['linkname']), 'a',
+			htmlspecialchars($thislink['linkname']), 'a',
 			($rel ? ' rel="'.$rel.'"' : '').
 			' href="'.doSpecial($thislink['url']).'"'.$description
 		);
@@ -444,7 +444,7 @@ $LastChangedRevision$
 		), $atts));
 
 		return ($escape == 'html') ?
-			escape_output($thislink['linkname']) :
+			htmlspecialchars($thislink['linkname']) :
 			$thislink['linkname'];
 	}
 
@@ -476,7 +476,7 @@ $LastChangedRevision$
 		if ($thislink['description'])
 		{
 			$description = ($escape == 'html') ?
-				escape_output($thislink['description']) :
+				htmlspecialchars($thislink['description']) :
 				$thislink['description'];
 
 			return doLabel($label, $labeltag).doTag($description, $wraptag, $class);
@@ -1076,7 +1076,7 @@ $LastChangedRevision$
 			'escape'	=> 'html'
 		),$atts));
 
-		return ($escape == 'html' ? escape_output($q) : $q);
+		return ($escape == 'html' ? htmlspecialchars($q) : $q);
 	}
 
 // -------------------------------------------------------------
@@ -2131,8 +2131,8 @@ $LastChangedRevision$
 
 						if ($escape == 'html')
 						{
-							$alt = escape_output($alt);
-							$caption = escape_output($caption);
+							$alt = htmlspecialchars($alt);
+							$caption = htmlspecialchars($caption);
 						}
 
 						$out = '<img src="'.hu.$img_dir.'/'.$id.'t'.$ext.'" alt="'.$alt.'"'.
@@ -2156,8 +2156,8 @@ $LastChangedRevision$
 
 					if ($escape == 'html')
 					{
-						$alt = escape_output($alt);
-						$caption = escape_output($caption);
+						$alt = htmlspecialchars($alt);
+						$caption = htmlspecialchars($caption);
 					}
 
 					$out = '<img src="'.hu.$img_dir.'/'.$id.$ext.'" width="'.$w.'" height="'.$h.'" alt="'.$alt.'"'.
@@ -2836,7 +2836,7 @@ $LastChangedRevision$
 		else
 			$out = $default;
 
-		return ($escape == 'html' ? escape_output($out) : $out);
+		return ($escape == 'html' ? htmlspecialchars($out) : $out);
 	}
 
 //--------------------------------------------------------------------------
@@ -3361,7 +3361,7 @@ $LastChangedRevision$
 		if ($thisfile['description'])
 		{
 			$description = ($escape == 'html') ?
-				escape_output($thisfile['description']) : $thisfile['description'];
+				htmlspecialchars($thisfile['description']) : $thisfile['description'];
 
 			return ($wraptag) ? doTag($description, $wraptag, $class) : $description;
 		}

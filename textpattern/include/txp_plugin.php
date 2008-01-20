@@ -322,14 +322,14 @@ $LastChangedRevision$
 
 					if ($rs and $code)
 					{
-						$message = gTxt('plugin_installed', array('{name}' => escape_output($name)));
+						$message = gTxt('plugin_installed', array('{name}' => htmlspecialchars($name)));
 
 						plugin_list($message);
 					}
 
 					else
 					{
-						$message = gTxt('plugin_install_failed', array('{name}' => escape_output($name)));
+						$message = gTxt('plugin_install_failed', array('{name}' => htmlspecialchars($name)));
 
 						plugin_list($message);
 					}

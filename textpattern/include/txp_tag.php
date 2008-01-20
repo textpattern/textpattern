@@ -3234,8 +3234,8 @@ begin tag builder functions
 		{
 			if ($escape == 'html')
 			{
-				$alt = str_replace('&', '&#38;', escape_output($alt));
-				$caption = str_replace('&', '&#38;', escape_output($caption));
+				$alt = str_replace('&', '&#38;', htmlspecialchars($alt));
+				$caption = str_replace('&', '&#38;', htmlspecialchars($caption));
 			}
 
 			$url = hu.$img_dir.'/'.$id.$ext;
@@ -3589,7 +3589,7 @@ begin tag builder functions
 
 		if ($step == 'build')
 		{
-			$description = str_replace('&', '&#38;', escape_output($description));
+			$description = str_replace('&', '&#38;', htmlspecialchars($description));
 
 			$url = ($permlink_mode == 'messy') ?
 				hu.'index.php?s=file_download'.a.'id='.$id:

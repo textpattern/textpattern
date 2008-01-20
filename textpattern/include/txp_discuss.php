@@ -342,7 +342,7 @@ $LastChangedRevision$
 		{
 			extract($rs);
 
-			$message = escape_output($message);
+			$message = htmlspecialchars($message);
 
 			if (fetch('ip', 'txp_discuss_ipban', 'ip', $ip))
 			{

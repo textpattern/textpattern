@@ -36,8 +36,8 @@ $LastChangedRevision$
 
 		$pub = safe_row("RealName, email", "txp_users", "privs=1");
 
-		$out[] = tag(escape_output($sitename),'title',t_text);
-		$out[] = tag(escape_output($site_slogan),'subtitle',t_text);
+		$out[] = tag(htmlspecialchars($sitename),'title',t_text);
+		$out[] = tag(htmlspecialchars($site_slogan),'subtitle',t_text);
 		$out[] = '<link'.r_relself.' href="'.pagelinkurl(array('atom'=>1,'area'=>$area,'section'=>$section,'category'=>$category,'limit'=>$limit)).'" />';
 		$out[] = '<link'.r_relalt.t_texthtml.' href="'.hu.'" />';
 		$articles = array();
@@ -105,7 +105,7 @@ $LastChangedRevision$
 					$e['issued'] = tag(safe_strftime('w3cdtf',$uPosted),'published');
 					$e['modified'] = tag(safe_strftime('w3cdtf',$uLastMod),'updated');
 
-					$escaped_title = escape_output($Title);
+					$escaped_title = htmlspecialchars($Title);
 					$e['title'] = tag($escaped_title.$count,'title',t_html);
 
 					$permlink = permlinkurl($a);
