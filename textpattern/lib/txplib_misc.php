@@ -132,14 +132,14 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-    function dmp()
-    {
+	function dmp()
+	{
 		$a = func_get_args();
 		echo "<pre>".n;
 		foreach ($a as $thing)
 			echo htmlspecialchars(is_scalar($thing) ? strval($thing) : var_export($thing, true)), n;
 		echo "</pre>".n;
-    }
+	}
 
 // -------------------------------------------------------------
 	function load_lang($lang)
@@ -399,10 +399,11 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function getmicrotime() {
-    	list($usec, $sec) = explode(" ",microtime());
-    	return ((float)$usec + (float)$sec);
-    }
+	function getmicrotime()
+	{
+		list($usec, $sec) = explode(" ",microtime());
+		return ((float)$usec + (float)$sec);
+	}
 
 // -------------------------------------------------------------
 	function load_plugin($name)
@@ -549,10 +550,10 @@ $LastChangedRevision$
 			}
 			restore_error_handler();
 		}
-   }
+	}
 
 // -------------------------------------------------------------
-   function register_callback($func, $event, $step='', $pre=0)
+	function register_callback($func, $event, $step='', $pre=0)
 	{
 		global $plugin_callback;
 
@@ -560,14 +561,14 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-   function register_page_extension($func, $event, $step='', $top=0)
+	function register_page_extension($func, $event, $step='', $top=0)
 	{
 		# For now this just does the same as register_callback
 		register_callback($func, $event, $step, $top);
 	}
 
 // -------------------------------------------------------------
-   function callback_event($event, $step='', $pre=0)
+	function callback_event($event, $step='', $pre=0)
 	{
 		global $plugin_callback;
 
@@ -593,29 +594,39 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	// deprecated, use lAtts instead
-	function getAtt($name, $default=NULL) { // thanks zem!
+	// deprecated, use lAtts instead. Remove in crockery
+	function getAtt($name, $default=NULL)
+	{
 		global $theseatts;
 		return isset($theseatts[$name]) ? $theseatts[$name] : $default;
 	}
 
 // -------------------------------------------------------------
-		function gAtt(&$atts, $name, $default=NULL) {
-			return isset($atts[$name]) ? $atts[$name] : $default;
-		}
+	// deprecated, use lAtts instead. Remove in crockery
+	function gAtt(&$atts, $name, $default=NULL) {
+		return isset($atts[$name]) ? $atts[$name] : $default;
+	}
 
 // -------------------------------------------------------------
-		function lAtts($pairs, $atts, $warn=1) {
-			global $production_status;
-			foreach($pairs as $name => $default) {
-				$out[$name] = gAtt($atts,$name,$default);
-			}
-			if ($warn and ($production_status == 'debug' or $production_status == 'testing')) {
-				foreach (array_diff(array_keys($atts), array_keys($pairs)) as $a)
-					trigger_error(gTxt('unknown_attribute', array('{att}' => $a)));
-			}
-			return ($out) ? $out : false;
+	function lAtts($pairs, $atts, $warn=1)
+	{
+		global $production_status;
+
+		foreach($pairs as $name => $default)
+		{
+			$out[$name] = isset($atts[$name]) ? $atts[$name] : $default;
 		}
+
+		if ($warn and ($production_status == 'debug' or $production_status == 'testing'))
+		{
+			foreach (array_diff(array_keys($atts), array_keys($pairs)) as $a)
+			{
+				trigger_error(gTxt('unknown_attribute', array('{att}' => $a)));
+			}
+		}
+
+		return ($out) ? $out : false;
+	}
 
 // -------------------------------------------------------------
 	function select_buttons()
@@ -631,8 +642,8 @@ $LastChangedRevision$
 	function stripSpace($text, $force=0)
 	{
 		global $prefs;
-		if ($force or !empty($prefs['attach_titles_to_permalinks'])) {
-
+		if ($force or !empty($prefs['attach_titles_to_permalinks']))
+		{
 			$text = sanitizeForUrl($text);
 			if ($prefs['permalink_title_format']) {
 				return strtolower($text);
@@ -874,7 +885,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function strip_rn($str)
 	{
-      return preg_replace('/[\r\n]/', ' ', $str);
+		return preg_replace('/[\r\n]/', ' ', $str);
 	}
 
 // -------------------------------------------------------------
@@ -1559,8 +1570,8 @@ $LastChangedRevision$
 	{
 		extract(doSlash(func_get_args()));
 
-    	if (!safe_row("*", 'txp_prefs', "name = '$name'") ) {
-        	return safe_insert('txp_prefs', "
+		if (!safe_row("*", 'txp_prefs', "name = '$name'") ) {
+			return safe_insert('txp_prefs', "
 				name  = '$name',
 				val   = '$val',
 				event = '$event',
@@ -1571,7 +1582,7 @@ $LastChangedRevision$
     	} else {
         	return safe_update('txp_prefs', "val = '$val'","name like '$name'");
     	}
-    	return false;
+    		return false;
 	}
 
 // -------------------------------------------------------------
