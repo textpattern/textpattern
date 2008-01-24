@@ -174,20 +174,16 @@ $LastChangedRevision$
 
 				if ($log_refer)
 				{
-					$log_refer = htmlspecialchars('http://'.$log_refer);
+					$log_refer = 'http://'.$log_refer;
 
-					$log_refer = '<a href="'.$log_refer.'" target="_blank">'.soft_wrap($log_refer, 30).'</a>';
+					$log_refer = '<a href="'.htmlspecialchars($log_refer).'" target="_blank">'.htmlspecialchars(soft_wrap($log_refer, 30)).'</a>';
 				}
 
 				if ($log_page)
 				{
-					$log_page = htmlspecialchars($log_page);
+					$log_page = preg_replace('/\/$/','', substr($log_page, 1));
 
-					$log_page = '<a href="'.$log_page.'" target="_blank">'.
-						soft_wrap(
-							preg_replace('/\/$/','', substr($log_page, 1))
-						, 30).
-						'</a>';
+					$log_page = '<a href="'.htmlspecialchars($log_page).'" target="_blank">'.htmlspecialchars(soft_wrap($log_page), 30).'</a>';
 
 					if ($log_method == 'POST')
 					{
@@ -207,7 +203,7 @@ $LastChangedRevision$
 
 					td($log_page).
 					td($log_refer).
-					td($log_method, 60, 'log_detail').
+					td(htmlspecialchars($log_method), 60, 'log_detail').
 					td($log_status, 60, 'log_detail').
 
 					td(
