@@ -297,7 +297,7 @@ class Textile
 
 		if ($encode) {
 		 $text = $this->incomingEntities($text);
-			$text = str_replace("x%x%", "&#38;", $text);
+			$text = str_replace("x%x%", "&amp;", $text);
 			return $text;
 		} else {
 
@@ -1132,26 +1132,26 @@ class Textile
 // -------------------------------------------------------------
 	function encode_raw_amp($text)
 	 {
-		return preg_replace('/&(?!#?[a-z0-9]+;)/i', '&#38;', $text);
+		return preg_replace('/&(?!#?[a-z0-9]+;)/i', '&amp;', $text);
 	}
 
 // -------------------------------------------------------------
 	function encode_lt_gt($text)
 	 {
-		return strtr($text, array('<' => '&#60;', '>' => '&#62;'));
+		return strtr($text, array('<' => '&lt;', '>' => '&gt;'));
 	}
 
 // -------------------------------------------------------------
 	function encode_html($str, $quotes=1)
 	{
 		$a = array(
-			'&' => '&#38;',
-			'<' => '&#60;',
-			'>' => '&#62;',
+			'&' => '&amp;',
+			'<' => '&lt;',
+			'>' => '&gt;',
 		);
 		if ($quotes) $a = $a + array(
-			"'" => '&#39;',
-			'"' => '&#34;',
+			"'" => '&#39;', // numeric, as in htmlspecialchars
+			'"' => '&quot;',
 		);
 
 		return strtr($str, $a);
