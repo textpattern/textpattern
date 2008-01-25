@@ -18,9 +18,15 @@ $LastChangedRevision$
 		$GLOBALS['privs'] = $privs;
 
 		$areas = areas();
-		foreach ($areas as $k=>$v) {
+		$area = false;
+
+		foreach ($areas as $k => $v)
+		{
 			if (in_array($event, $v))
+			{
 				$area = $k;
+				break;
+			}
 		}
 
 		if (gps('logout'))
@@ -228,15 +234,27 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function tabsort($area,$event)
+
+	function tabsort($area, $event)
 	{
-		$areas = areas();
-		foreach($areas[$area] as $a=>$b) {
-			if (has_privs($b)) {
-				$out[] = tabber($a,$b,$event,2);
+		if ($area)
+		{
+			$areas = areas();
+
+			$out = array();
+
+			foreach ($areas[$area] as $a => $b)
+			{
+				if (has_privs($b))
+				{
+					$out[] = tabber($a, $b, $event, 2);
+				}
 			}
+
+			return ($out) ? join('', $out) : '';
 		}
-		return (empty($out) ? '' : join('',$out));
+
+		return '';
 	}
 
 // -------------------------------------------------------------
