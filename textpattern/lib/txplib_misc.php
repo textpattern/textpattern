@@ -263,10 +263,15 @@ $LastChangedRevision$
 			$privs[$user] = safe_field("privs", "txp_users", "name='".doSlash($user)."'");
 		}
 
-		if (@$txp_permissions[$res])
-			$req = explode(',', $txp_permissions[$res]);
+		if (isset($txp_permissions[$res]))
+		{
+			return in_array($privs[$user], explode(',', $txp_permissions[$res]));
+		}
 
-		return in_array($privs[$user], $req);
+		else
+		{
+			return false;
+		}
 	}
 
 // -------------------------------------------------------------
