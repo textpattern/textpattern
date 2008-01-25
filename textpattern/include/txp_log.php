@@ -183,7 +183,7 @@ $LastChangedRevision$
 				{
 					$log_page = preg_replace('/\/$/','', substr($log_page, 1));
 
-					$log_page = '<a href="'.htmlspecialchars($log_page).'" target="_blank">'.htmlspecialchars(soft_wrap($log_page), 30).'</a>';
+					$log_page = '<a href="'.htmlspecialchars($log_page).'" target="_blank">'.htmlspecialchars(soft_wrap($log_page, 30)).'</a>';
 
 					if ($log_method == 'POST')
 					{
