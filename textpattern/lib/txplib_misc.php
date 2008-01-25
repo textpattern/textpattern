@@ -265,8 +265,7 @@ $LastChangedRevision$
 
 		if (@$txp_permissions[$res])
 			$req = explode(',', $txp_permissions[$res]);
-		else
-			$req = array('1'); // The Publisher gets prived for anything
+
 		return in_array($privs[$user], $req);
 	}
 
