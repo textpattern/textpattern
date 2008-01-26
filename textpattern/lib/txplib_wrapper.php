@@ -14,12 +14,13 @@ $LastChangedRevision$
  * 
  * @link http://txp.kusor.com/wrapper
  * @author Pedro Palazon - http://kusor.net/
- * @copyright 2005-2006 The Textpattern Development Team - http://textpattern.com
+ * @copyright 2005-2008 The Textpattern Development Team - http://textpattern.com
  */
 
 # This class requires to include some Textpattern files in order to work properly.
 # See RPC Server implementation to view an example of the required files and predefined variables.
 
+if (!defined('txpath')) die('txpath is undefined.');
 include_once txpath.'/include/txp_auth.php';
 # Include constants.php?
 if (!defined('LEAVE_TEXT_UNTOUCHED')) define('LEAVE_TEXT_UNTOUCHED', 0);
@@ -96,17 +97,21 @@ class TXP_Wrapper
 	 * @param string $where SQL condition to match
 	 * @param string $offset SQL offset
 	 * @param string $limit SQL limit
+	 * @param boolean $slash escape SQL column names and condition	 
 	 * @return mixed array on success, false on failure	 	 	 
 	 */
-	function getArticleList($what='*', $where='1', $offset='0', $limit='10')
+	function getArticleList($what='*', $where='1', $offset='0', $limit='10', $slash=true)
 	{
 		
 		if ($this->loggedin && has_privs('article.edit.own', $this->txp_user))
 		{
 			$offset = assert_int($offset); 
 			$limit = assert_int($limit);
-			$where = doSlash($where);
-			$what = doSlash($what);
+
+			if ($slash) {
+				$where = doSlash($where);
+				$what = doSlash($what);
+			}
 			
 			if (has_privs('article.edit', $this->txp_user)) {
 				$rs = safe_rows_start($what, 'textpattern', $where." order by Posted desc LIMIT $offset, $limit");
@@ -130,19 +135,24 @@ class TXP_Wrapper
 	/**
 	 * Retrieves an article matching the given criteria
 	 * @param string $what SQL column names to retrieve
-	 * @param string $where SQL condition to match	 
+	 * @param string $where SQL condition to match
+	 * @param boolean $slash escape SQL column names and condition	 
 	 * @return mixed array on success, false on failure	 
 	 */	
-	function getArticle($what='*', $where='1')
+	function getArticle($what='*', $where='1', $slash=true)
 	{
 		if ($this->loggedin && has_privs('article.edit.own', $this->txp_user))
 		{
+			if ($slash) {
+				$what  = doSlash($what);
+				$where = doSlash($where);
+			}
 			// Higer user groups should be able to edit any article
 			if (has_privs('article.edit', $this->txp_user)) {
-				return safe_row(doSlash($what), 'textpattern', doSlash($where));
+				return safe_row($what, 'textpattern', $where);
 			}else {
 				// While restricted users should be able to edit their own articles only
-				return safe_row(doSlash($what), 'textpattern', doSlash($where)." AND AuthorID='".doSlash($this->txp_user)."'");
+				return safe_row($what, 'textpattern', $where." AND AuthorID='".doSlash($this->txp_user)."'");
 			}			
 		}
 		return false;
@@ -266,7 +276,7 @@ class TXP_Wrapper
 		return false;
 	}
 	/**
-	 * Get one category
+	 * Get one category by category name
 	 * @param string $name the category name
 	 * @return mixed array on success, false on failure	 	 
 	 */	
@@ -280,16 +290,30 @@ class TXP_Wrapper
 		return false;
 	}
 	/**
-	 * Same thing, but using category id
-	 * @param mixed(string|integer) $id category id	 
-	 * @return mixed array on success, false on failure	 	 
-	 */	
+	 * Get one category by category id
+	 * @param mixed(string|integer) $id category id
+	 * @return mixed array on success, false on failure
+	 */
 	function getCategoryID($id)
 	{
 		if ($this->loggedin && has_privs('article', $this->txp_user))
 		{
 			$id = assert_int($id);
 			return safe_row('*', 'txp_category',"id = $id");
+		}
+		return false;
+	}
+	/**
+	 * Get one category by category title
+	 * @param string $title the category title
+	 * @return mixed array on success, false on failure
+	 */
+	function getCategoryTitle($title)
+	{
+		if ($this->loggedin && has_privs('article', $this->txp_user))
+		{
+			$title = doSlash($title);
+			return safe_row('*', 'txp_category',"title='$title' AND type='article'");
 		}
 		return false;
 	}
