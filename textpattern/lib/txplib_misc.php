@@ -132,26 +132,39 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-    function dmp()
-    {
-		if(defined('txpdmpfile')) {
+	function dmp()
+	{
+		static $f = FALSE;
+
+		if(defined('txpdmpfile'))
+		{
 			global $prefs;
-			static $f;
+
 			if(!$f) $f = fopen($prefs['tempdir'].'/'.txpdmpfile, 'a');
+
 			fwrite($f, "\n[".safe_strftime('iso8601')."]\n");
 		}
+
 		$a = func_get_args();
+
 		if(!$f) echo "<pre>".n;
-		foreach ($a as $thing) {
+
+		foreach ($a as $thing)
+		{
 			$out = is_scalar($thing) ? strval($thing) : var_export($thing, true);
-			if ($f) {
+
+			if ($f)
+			{
 				fwrite($f, $out."\n");
-			} else {
+			}
+			else
+			{
 				echo htmlspecialchars($out), n;
 			}
 		}
+
 		if(!$f) echo "</pre>".n;
-    }
+	}
 
 // -------------------------------------------------------------
 	function load_lang($lang)
