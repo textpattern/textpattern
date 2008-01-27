@@ -30,6 +30,7 @@ $LastChangedRevision$
 		$out[] = tag('http://textpattern.com/?v='.$version, 'generator');
 		$out[] = tag(doSpecial($sitename),'title');
 		$out[] = tag(hu,'link');
+		$out[] = '<atom:link href="'.pagelinkurl(array('rss'=>1,'area'=>$area,'section'=>$section,'category'=>$category,'limit'=>$limit)).'" rel="self" type="application/rss+xml" />';
 		$out[] = tag(doSpecial($site_slogan),'description');
 		$last = fetch('unix_timestamp(val)','txp_prefs','name','lastmod');
 		$out[] = tag(safe_strftime('rfc822',$last),'pubDate');
@@ -226,7 +227,7 @@ $LastChangedRevision$
 		if ($etag) header('ETag: "'.$etag.'"');
 		return
 			'<?xml version="1.0" encoding="utf-8"?>'.n.
-			'<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/">'.n.
+			'<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom">'.n.
 			tag(join(n,$out),'channel').n.
 			'</rss>';
 	}
