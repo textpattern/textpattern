@@ -1,7 +1,11 @@
 Changes since 4.0.5
 
 * Security: add missing escape in SQL query (admin side)
-* Security: safer use of txp_login cookie + nonce (note: users are logged after upgrading!)
+* Security: safer use of txp_login cookie + nonce (note: users are logged out after upgrading!)
+* Security: fixed XSS vulnerability (thanks DSecRG) and input validation in setup script.
+* Security: fixed local file include vulnerability (publisher only) in textpattern/index.php (thanks DSecRG and Victor)
+* Security: fixed XSS vulnerability and parameter value overflow in comments preview (thanks DSecRG)
+* Security: escape request method as shown on logs tab (thanks Victor)
 * Changed tag: <txp:thumbnail /> allows non-JS links to the full-size image
 * Changed tag: <txp:article_custom /> allows comma-separated lists for category, section and author attributes (thanks Manfre)
 * Changed tag: <txp:linklist /> allows comma-separated list for category attribute
@@ -16,6 +20,10 @@ Changes since 4.0.5
 * Deprecated tag: <txp:q /> replaced by <txp:page_url type="q" />
 * Deprecated tag: <txp:id /> replaced by <txp:page_url type="id" />
 * Deprecated tag: <txp:pg /> replaced by <txp:page_url type="pg" />
+* Deprecated function: escape_output(), use htmlspecialchars() instead
+* Deprecated function: gAtt() (and getAtt()), use lAtts() instead
+* Deprecated variable: $txpcfg['txpath'], use constant 'txpath' instead
+* Plugins: using add_privs() for admin-side plugins is now required (used to be optional for publisher-only plugins)
 * New tag: <txp:if_search_results> </txp:if_search_results>
 * New tag: <txp:search_term />
 * New languages: Croatian, Korean, Português (Brasil), Serbian (Latin + Cyrillic), Turkish and Vietnamese (thanks: Filip Baraka, Alexsander Albert Santana, Vladimir Siljkovic, Süleyman Şentürk, Quang Anh Do)
@@ -29,6 +37,7 @@ Changes since 4.0.5
 * Fix http-auth when using lighttpd or (mostly) apache+fcgi
 * Fix HTTPS protocol check for ISAPI with IIS
 * Fix use of article tags on a sticky article page
+* Pages, categories and styles cannot be accidentally deleted if they are used on other tabs.
 * Corrections in the tag builder
 * Refrain from showing sticky articles from non-frontpage sections in search results
 * Enable separate search section for messy URL mode
