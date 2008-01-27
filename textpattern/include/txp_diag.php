@@ -499,7 +499,7 @@ $LastChangedRevision$
 				$table_msg[] = $table .cs. mysql_result($ctr,0,'Msg_Text');
 		}
 		if ($table_msg == array())
-			$table_msg = (count($table_names) < 18) ?  array('-') : array('OK');
+			$table_msg = (count($table_names) < 17) ?  array('-') : array('OK');
 		$out[] = count($table_names).' Tables'.cs. implode(', ',$table_msg).n;
 
 		$extns = get_loaded_extensions();
