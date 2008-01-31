@@ -1,4 +1,4 @@
-Changes since 4.0.5
+Changes in 4.0.6
 
 * Security: add missing escape in SQL query (admin side)
 * Security: safer use of txp_login cookie + nonce (note: users are logged out after upgrading!)
@@ -27,11 +27,12 @@ Changes since 4.0.5
 * New tag: <txp:if_search_results> </txp:if_search_results>
 * New tag: <txp:search_term />
 * New languages: Croatian, Korean, Português (Brasil), Serbian (Latin + Cyrillic), Turkish and Vietnamese (thanks: Filip Baraka, Alexsander Albert Santana, Vladimir Siljkovic, Süleyman Şentürk, Quang Anh Do)
+* Developer: dmp() prints debug output to a file in the temporary directory according to preferences. Define 'txpdmpfile' for the file name.
 * Speed: less SQL queries (-2 for individual article pages, -1 for other pages)
 * Speed: recent_comments tag (thanks Manfre) and admin side comments list only uses 1 query
-* Added 'modified' and 'status' to global $thisarticle array
+* Developer: Added 'modified' and 'status' to global $thisarticle array
 * Added 'password reset' functionality (with confirmation email) on the login screen
-* Added 'is_logged_in()' function to check on the public side if the visitor is logged in on the admin side
+* Developer: Added 'is_logged_in()' function to check on the public side if the visitor is logged in on the admin side
 * Update to jQuery 1.2.1 as a default JavaScript library
 * Fix textile list incompatibility with PHP 5.2.4 (and higher)
 * Fix http-auth when using lighttpd or (mostly) apache+fcgi
@@ -44,7 +45,7 @@ Changes since 4.0.5
 * Many, many minor improvements, see:
   http://dev.textpattern.com/log/development/4.0/?action=stop_on_copy&rev=2700&stop_rev=2448 #TODO: rev=????
 
-Changes since 4.0.4
+Changes in 4.0.5
 
 * Fixed security issue on public-side (XSS) (thanks zarathu)
 * Fixed path disclosure issue (thanks zarathu)
@@ -83,7 +84,7 @@ Changes since 4.0.4
 * Many, many minor improvements, see:
   http://dev.textpattern.com/log/development/4.0/?action=stop_on_copy&rev=2443&stop_rev=1963
 
-Changes since 4.0.3:
+Changes in 4.0.4:
 
 * RSS 2.0 support
 * RSS and Atom feed fixes and improvements
@@ -137,7 +138,7 @@ Changes since 4.0.3:
 * extend article_image tag to optionally display the article image thumbnail. (mary)
 * Many minor bugfixes
 
-Changes since 4.0.2:
+Changes in 4.0.3:
 
 * fixed 2 potential security holes(detected in internal code review).
   Updade is recommended.
@@ -168,7 +169,7 @@ Changes since 4.0.2:
 * Update comment_count after import
 * Add extra info to the tag trace (SQL queries, conditional tag results, page template and form names)
 
-Changes since 4.0.1:
+Changes in 4.0.2:
 
 * Fix a bug in 404 handling on some fastcgi servers
 * Fix a bug that prevented file_download_list from working properly
@@ -237,7 +238,7 @@ Changes since 4.0.1:
 * Textile: stop footnote links from clashing in article lists
 * Add fi_FI locale support
 
-Changes since 4.0:
+Changes in 4.0.1:
 
 * fixed some serious security issues. Updates are strongly recommended.
 * fixed textile problems (missing block-elements in some cases; notextile; span-handling)
