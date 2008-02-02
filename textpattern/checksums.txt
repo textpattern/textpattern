@@ -20,7 +20,7 @@
 /include/txp_preview.php: r1238 (c45992b3273ac8019477e2f959d63120)
 /include/txp_section.php: r2759 (9208297e0bd7b3d41bd0e6f9fc9ab120)
 /include/txp_tag.php: r2774 (f371b400e8d7318e2ac48e032fe6c274)
-/index.php: r2749 (3f18dbf89eb8a3cb770f09453d4d6fa1)
+/index.php: r2805 (ee8ab2e3c4bc9abd77aa7384ecba5268)
 /lib/IXRClass.php: r765 (0120eb4713c9b6446a0eebe8b1039d1c)
 /lib/admin_config.php: r1747 (b972529744cb37a7695fe00316dada41)
 /lib/class.thumb.php: r2329 (c7f66a32531f32d6dfcbe5c7d26c7852)
