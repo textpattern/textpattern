@@ -23,17 +23,17 @@ Changes in 4.0.6
 * Deprecated function: escape_output(), use htmlspecialchars() instead
 * Deprecated function: gAtt() (and getAtt()), use lAtts() instead
 * Deprecated variable: $txpcfg['txpath'], use constant 'txpath' instead
-* Plugins: using add_privs() for admin-side plugins is now required (used to be optional for publisher-only plugins)
 * New tag: <txp:if_search_results> </txp:if_search_results>
 * New tag: <txp:search_term />
 * New languages: Croatian, Korean, Português (Brasil), Serbian (Latin + Cyrillic), Turkish and Vietnamese (thanks: Filip Baraka, Alexsander Albert Santana, Vladimir Siljkovic, Süleyman Şentürk, Quang Anh Do)
+* Developer: using add_privs() for admin-side plugins is now required (used to be optional for publisher-only plugins)
 * Developer: dmp() prints debug output to a file in the temporary directory according to preferences. Define 'txpdmpfile' for the file name.
+* Developer: Added 'modified' and 'status' to global $thisarticle array
+* Developer: Added 'is_logged_in()' function to check on the public side if the visitor is logged in on the admin side
 * Speed: less SQL queries (-2 for individual article pages, -1 for other pages)
 * Speed: recent_comments tag (thanks Manfre) and admin side comments list only uses 1 query
-* Developer: Added 'modified' and 'status' to global $thisarticle array
 * Added 'password reset' functionality (with confirmation email) on the login screen
-* Developer: Added 'is_logged_in()' function to check on the public side if the visitor is logged in on the admin side
-* Update to jQuery 1.2.1 as a default JavaScript library
+* Update to jQuery 1.2.2 as a default JavaScript library
 * Fix textile list incompatibility with PHP 5.2.4 (and higher)
 * Fix http-auth when using lighttpd or (mostly) apache+fcgi
 * Fix HTTPS protocol check for ISAPI with IIS
