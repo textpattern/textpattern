@@ -43,7 +43,7 @@ Changes in 4.0.6
 * Refrain from showing sticky articles from non-frontpage sections in search results
 * Enable separate search section for messy URL mode
 * Many, many minor improvements, see:
-  http://dev.textpattern.com/log/development/4.0/?action=stop_on_copy&rev=2700&stop_rev=2448 #TODO: rev=????
+  http://dev.textpattern.com/log/development/4.0?action=stop_on_copy&rev=2802&stop_rev=2471
 
 Changes in 4.0.5
 
