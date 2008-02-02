@@ -430,16 +430,6 @@ class TXP_Wrapper
 		//All validation rules assumed to be passed before this point.
 		//Do content processing here
 		
-		$incoming = $this->_check_keys($incoming, 
-			array(
-				'AuthorID' => $this->txp_user,
-				'Annotate' => $comments_on_default,
-				'AnnotateInvite' => $comments_default_invite,
-				'textile_body' => $use_textile,
-				'textile_excerpt' => $use_textile
-			)
-		);
-		
 		
 		$incoming_with_markup = $this->textile_main_fields($incoming, $use_textile);
 		
@@ -488,8 +478,6 @@ class TXP_Wrapper
 				}								
 				
 			}else{				
-
-				if (empty($incoming['url_title'])) $incoming['url_title'] = stripSpace($incoming['Title']);
 				//Status should be defined previously. Be sure of that.				
 				if (!has_privs('article.publish', $this->txp_user) && $incoming['Status']==4) $incoming['Status'] = 3;
 			}
@@ -499,6 +487,17 @@ class TXP_Wrapper
 				$incoming['Section'] = safe_field('Section','textpattern',"ID = $article_id");
 			}
 			
+			$incoming = $this->_check_keys($incoming, 
+				array(
+					'AuthorID' => $this->txp_user,
+					'Annotate' => $comments_on_default,
+					'AnnotateInvite' => $comments_default_invite,
+					'textile_body' => $use_textile,
+					'textile_excerpt' => $use_textile,
+					'url_title' => stripSpace($incoming['Title'])
+				)
+			);
+		
 			//Build the SQL query
 			$sql = array();
 			
@@ -607,7 +606,6 @@ class TXP_Wrapper
 	 */
 	function _check_keys($incoming, $default = array())
 	{				
-		
 		$out = array();
 		# strip off unsuited keys
 		foreach ($incoming as $key => $val)
