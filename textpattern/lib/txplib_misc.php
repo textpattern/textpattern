@@ -50,11 +50,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function doSlash($in)
 	{
-		if(phpversion() >= "4.3.0") {
-			return doArray($in,'mysql_real_escape_string');
-		} else {
-			return doArray($in,'mysql_escape_string');
-		}
+		return doArray($in,'mysql_real_escape_string');
 	}
 
 // -------------------------------------------------------------
@@ -95,6 +91,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
+// unused function => deprecate and remove in crockery?
 	function escape_tags($str)
 	{
 		return strtr($str,
@@ -632,7 +629,8 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 	// deprecated, use lAtts instead. Remove in crockery
-	function gAtt(&$atts, $name, $default=NULL) {
+	function gAtt(&$atts, $name, $default=NULL)
+	{
 		return isset($atts[$name]) ? $atts[$name] : $default;
 	}
 
@@ -641,20 +639,19 @@ $LastChangedRevision$
 	{
 		global $production_status;
 
-		foreach($pairs as $name => $default)
+		foreach($atts as $name => $value)
 		{
-			$out[$name] = isset($atts[$name]) ? $atts[$name] : $default;
-		}
-
-		if ($warn and ($production_status == 'debug' or $production_status == 'testing'))
-		{
-			foreach (array_diff(array_keys($atts), array_keys($pairs)) as $a)
+			if (array_key_exists($name, $pairs))
 			{
-				trigger_error(gTxt('unknown_attribute', array('{att}' => $a)));
+				$pairs[$name] = $value;
+			}
+			elseif ($warn and $production_status != 'live')
+			{
+				trigger_error(gTxt('unknown_attribute', array('{att}' => $name)));
 			}
 		}
 
-		return ($out) ? $out : false;
+		return ($pairs) ? $pairs : false;
 	}
 
 // -------------------------------------------------------------
@@ -914,7 +911,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function strip_rn($str)
 	{
-		return preg_replace('/[\r\n]/', ' ', $str);
+		return strtr($str, "\r\n", '  ');
 	}
 
 // -------------------------------------------------------------
