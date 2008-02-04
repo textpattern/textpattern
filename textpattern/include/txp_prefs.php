@@ -402,7 +402,7 @@ $LastChangedRevision$
 			}
 		}
 
-		$vals['since'] = 'hrs/days ago';
+		$vals['since'] = gTxt('hours_days_ago');
 
 		return selectInput($name, array_unique($vals), $val, '', '', $name);
 	}
