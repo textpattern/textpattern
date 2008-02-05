@@ -9,7 +9,7 @@ $LastChangedRevision$
 
 	if ($event == 'css') {
 		require_privs('css');
-	
+
 		switch ($step) {
 			case '': css_edit(); break;
 			case 'css_edit_raw': css_edit();           break;
@@ -29,8 +29,8 @@ $LastChangedRevision$
 
 //-------------------------------------------------------------
 
-	function css_list($current, $default) {	
-		$out[] = startTable('list', 'left');	
+	function css_list($current, $default) {
+		$out[] = startTable('list', 'left');
 
 		$rs = safe_rows_start('name', 'txp_css', "1=1");
 
@@ -61,7 +61,7 @@ $LastChangedRevision$
 				css_edit_raw();
 			} else {
 				css_edit_form();
-			}	
+			}
 
 		} else {
 
@@ -88,27 +88,27 @@ $LastChangedRevision$
 			$name = gps('newname');
 		$css = base64_decode(fetch("css",'txp_css','name',$name));
 		$css = parseCSS($css);
-		
+
 		$css = ($step == 'add_dec') ? add_declaration($css) : $css;
 		$css = ($step == 'del_dec') ? delete_declaration($css) : $css;
 		$css = ($step == 'add_sel') ? addSel($css) : $css;
 
-		$right = 
+		$right =
 		hed(gTxt('all_stylesheets'),2).
 		css_list($name, $default_name);
 
 		$left = graf(gTxt('you_are_editing_css').br.strong($name)).
 			graf(eLink('css', 'css_edit_raw', 'name', $name, gTxt('edit_raw_css'))).
-			graf(sLink('css', 'pour', gTxt('bulkload_existing_css'))); 
+			graf(sLink('css', 'pour', gTxt('bulkload_existing_css')));
 
 		$out[] = startTable('css-edit', '', '', 3);
-		
-		$out[] = 
+
+		$out[] =
 		tr(
 			td(strong(gTxt('css_selector'))).
 			td(strong(gTxt('css_property_value')))
 		);
-		
+
 		$i = -1;
 		foreach($css as $selector=>$propvals) {
 			$out[] = n.'<tr>'.n.
@@ -128,11 +128,11 @@ $LastChangedRevision$
 			$out[] = '</td>'.n.'</tr>';
 		 }
 		}
-		
+
 		$out[] = tr(tdcs(fInput('submit','',gTxt('save'),'publish'),2)).
 		endTable().eInput('css').sInput('css_save_posted').hInput('name',$name);
-		
-		echo 
+
+		echo
 		startTable('edit').
 		tr(
 			tdtl(
@@ -165,7 +165,7 @@ $LastChangedRevision$
 			)
 		).
 		endTable();
-	
+
 	}
 
 //-------------------------------------------------------------
@@ -182,9 +182,9 @@ $LastChangedRevision$
 		if (gps('copy') && trim(preg_replace('/[<>&"\']/', '', gps('newname'))) )
 			$name = gps('newname');
 
-		if ($step=='pour') 
+		if ($step=='pour')
 		{
-			$buttons = 
+			$buttons =
 			gTxt('name_for_this_style').': '
 			.fInput('text','newname','','edit','','',20).
 			hInput('savenew','savenew');
@@ -194,25 +194,25 @@ $LastChangedRevision$
 			$buttons = '';
 			$thecss = base64_decode(fetch("css",'txp_css','name',$name));
 		}
-	
+
 		if ($step!='pour') {
 
 			$left = graf(gTxt('you_are_editing_css').br.strong($name)).
 				graf(eLink('css', 'css_edit_form', 'name', $name, gTxt('edit_css_in_form'))).
 				graf(sLink('css', 'pour', gTxt('bulkload_existing_css')));
-			
+
 			$copy = gTxt('copy_css_as').sp.fInput('text', 'newname', '', 'edit').sp.
-				fInput('submit', 'copy', gTxt('copy'), 'smallerbox');		
+				fInput('submit', 'copy', gTxt('copy'), 'smallerbox');
 		} else {
 			$left = '&nbsp;';
 			$copy = '';
 		}
 
-		$right = 
+		$right =
 		hed(gTxt('all_stylesheets'),2).
 		css_list($name, $default_name);
 
-		echo 
+		echo
 		startTable('edit').
 		tr(
 			tdtl(
@@ -233,7 +233,7 @@ $LastChangedRevision$
 			)
 		).
 		endTable();
-		
+
 	}
 
 // -------------------------------------------------------------
@@ -241,7 +241,7 @@ $LastChangedRevision$
 	{
 		$css = preg_replace("/\/\*.+\*\//Usi","",$css); // remove comments
 		$selectors = preg_replace('/\s+/',' ',strip_rn(explode("}",$css)));
-		foreach($selectors as $selector) { 
+		foreach($selectors as $selector) {
 			if(trim($selector)) {
 			list($keystr,$codestr) = explode("{",$selector);
 				if (trim($keystr)) {
@@ -250,7 +250,7 @@ $LastChangedRevision$
 						if (trim($code)) {
 							list($property,$value) = explode(":",$code,2);
 							$out[trim($keystr)][trim($property)] = trim($value);
-						} 
+						}
 					}
 				}
 			}
@@ -278,7 +278,7 @@ $LastChangedRevision$
 		}
 		return (isset($out)) ? $out : array();
 	}
-	
+
 // -------------------------------------------------------------
 
 	function css_copy()
@@ -296,7 +296,7 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function css_save_posted() 
+	function css_save_posted()
 	{
 		$name = gps('name');
 		$css  = parsePostedCSS();
@@ -305,7 +305,7 @@ $LastChangedRevision$
 		safe_update('txp_css', "css = '$css'", "name = '".doSlash($name)."'");
 
 		// update site last mod time
-		update_lastmod(); 
+		update_lastmod();
 
 		$message = gTxt('css_updated', array('{name}' => $name));
 
@@ -328,12 +328,12 @@ $LastChangedRevision$
 				$message = gTxt('css_already_exists', array('{name}' => $newname));
 			}
 
-			elseif ($newname) 
+			elseif ($newname)
 			{
 				safe_insert('txp_css', "name = '".$newname."', css = '$css'");
 
 				// update site last mod time
-				update_lastmod(); 
+				update_lastmod();
 
 				$message = gTxt('css_created', array('{name}' => $newname));
 			}
@@ -351,7 +351,7 @@ $LastChangedRevision$
 			safe_update('txp_css', "css = '$css'", "name = '".doSlash($name)."'");
 
 			// update site last mod time
-			update_lastmod(); 
+			update_lastmod();
 
 			$message = gTxt('css_updated', array('{name}' => $name));
 
@@ -371,7 +371,7 @@ $LastChangedRevision$
 		}
 		return trim($out);
 	}
-	
+
 // -------------------------------------------------------------
 	function addSel($css)
 	{
@@ -389,14 +389,14 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function delete_declaration($css) 
+	function delete_declaration($css)
 	{
 		$thedec = gps('declaration');
 		$name = gps('name');
 		$i = 0;
 		foreach($css as $a=>$b) {
 			$cursel = $i++;
-			$ii = 0;		
+			$ii = 0;
 			foreach($b as $c=>$d) {
 				$curdec = $ii++;
 				if(($cursel.'-'.$curdec)!=$thedec) {
@@ -408,7 +408,7 @@ $LastChangedRevision$
 		safe_update("txp_css", "css='".doSlash($css)."'", "name='".doSlash($name)."'");
 
 		// update site last mod time
-		update_lastmod(); 
+		update_lastmod();
 
 		return parseCSS(base64_decode(fetch('css','txp_css','name',$name)));
 	}
@@ -424,14 +424,14 @@ $LastChangedRevision$
 		{
 			$message = gTxt('css_used_by_section', array('{name}' => $name, '{count}' => $count));
 		}
-		
+
 		else
 		{
 			safe_delete('txp_css', "name = '".doSlash($name)."'");
 
 			$message = gTxt('css_deleted', array('{name}' => $name));
 		}
-		
+
 		css_edit($message);
 	}
 

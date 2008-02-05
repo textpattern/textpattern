@@ -32,7 +32,7 @@ $LastChangedRevision: 2726 $
 		global $txp_user, $sitename;
 
 		if ( empty( $name)) $name = $txp_user;
-			
+
 		$message = gTxt('greeting').' '.$name.','.
 
 			n.n.gTxt('your_password_is').': '.$password.
@@ -49,12 +49,12 @@ $LastChangedRevision: 2726 $
 		global $sitename;
 
 		$rs = safe_row('email, nonce', 'txp_users', "name = '".doSlash($name)."'");
-		
-		if ($rs) 
+
+		if ($rs)
 		{
 			extract($rs);
 
-			$confirm = bin2hex(pack('H*', substr(md5($nonce), 0, 10)).$name);		
+			$confirm = bin2hex(pack('H*', substr(md5($nonce), 0, 10)).$name);
 
 			$message = gTxt('greeting').' '.$name.','.
 

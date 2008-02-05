@@ -98,7 +98,7 @@ $DB = new DB;
 	}
 
 // -------------------------------------------------------------
-	function safe_update($table, $set, $where, $debug='') 
+	function safe_update($table, $set, $where, $debug='')
 	{
 		$q = "update ".safe_pfx($table)." set $set where $where";
 		if ($r = safe_query($q,$debug)) {
@@ -108,7 +108,7 @@ $DB = new DB;
 	}
 
 // -------------------------------------------------------------
-	function safe_insert($table,$set,$debug='') 
+	function safe_insert($table,$set,$debug='')
 	{
 		global $DB;
 		$q = "insert into ".safe_pfx($table)." set $set";
@@ -121,7 +121,7 @@ $DB = new DB;
 
 // -------------------------------------------------------------
 // insert or update
-	function safe_upsert($table,$set,$where,$debug='') 
+	function safe_upsert($table,$set,$where,$debug='')
 	{
 		// FIXME: lock the table so this is atomic?
 		$r = safe_update($table, $set, $where, $debug);
@@ -132,7 +132,7 @@ $DB = new DB;
 	}
 
 // -------------------------------------------------------------
-	function safe_alter($table, $alter, $debug='') 
+	function safe_alter($table, $alter, $debug='')
 	{
 		$q = "alter table ".safe_pfx($table)." $alter";
 		if ($r = safe_query($q,$debug)) {
@@ -142,7 +142,7 @@ $DB = new DB;
 	}
 
 // -------------------------------------------------------------
-	function safe_optimize($table, $debug='') 
+	function safe_optimize($table, $debug='')
 	{
 		$q = "optimize table ".safe_pfx($table)."";
 		if ($r = safe_query($q,$debug)) {
@@ -152,7 +152,7 @@ $DB = new DB;
 	}
 
 // -------------------------------------------------------------
-	function safe_repair($table, $debug='') 
+	function safe_repair($table, $debug='')
 	{
 		$q = "repair table ".safe_pfx($table)."";
 		if ($r = safe_query($q,$debug)) {
@@ -162,7 +162,7 @@ $DB = new DB;
 	}
 
 // -------------------------------------------------------------
-	function safe_field($thing, $table, $where, $debug='') 
+	function safe_field($thing, $table, $where, $debug='')
 	{
 		$q = "select $thing from ".safe_pfx_j($table)." where $where";
 		$r = safe_query($q,$debug);
@@ -175,7 +175,7 @@ $DB = new DB;
 	}
 
 // -------------------------------------------------------------
-	function safe_column($thing, $table, $where, $debug='') 
+	function safe_column($thing, $table, $where, $debug='')
 	{
 		$q = "select $thing from ".safe_pfx_j($table)." where $where";
 		$rs = getRows($q,$debug);
@@ -190,7 +190,7 @@ $DB = new DB;
 	}
 
 // -------------------------------------------------------------
-	function safe_row($things, $table, $where, $debug='') 
+	function safe_row($things, $table, $where, $debug='')
 	{
 		$q = "select $things from ".safe_pfx_j($table)." where $where";
 		$rs = getRow($q,$debug);
@@ -202,7 +202,7 @@ $DB = new DB;
 
 
 // -------------------------------------------------------------
-	function safe_rows($things, $table, $where, $debug='') 
+	function safe_rows($things, $table, $where, $debug='')
 	{
 		$q = "select $things from ".safe_pfx_j($table)." where $where";
 		$rs = getRows($q,$debug);
@@ -213,20 +213,20 @@ $DB = new DB;
 	}
 
 // -------------------------------------------------------------
-	function safe_rows_start($things, $table, $where, $debug='') 
+	function safe_rows_start($things, $table, $where, $debug='')
 	{
 		$q = "select $things from ".safe_pfx_j($table)." where $where";
 		return startRows($q,$debug);
 	}
 
 //-------------------------------------------------------------
-	function safe_count($table, $where, $debug='') 
+	function safe_count($table, $where, $debug='')
 	{
 		return getThing("select count(*) from ".safe_pfx_j($table)." where $where",$debug);
 	}
 
 // -------------------------------------------------------------
-	function safe_show($thing, $table, $debug='') 
+	function safe_show($thing, $table, $debug='')
 	{
 		$q = "show $thing from ".safe_pfx($table)."";
 		$rs = getRows($q,$debug);
@@ -238,7 +238,7 @@ $DB = new DB;
 
 
 //-------------------------------------------------------------
-	function fetch($col,$table,$key,$val,$debug='') 
+	function fetch($col,$table,$key,$val,$debug='')
 	{
 		$key = doSlash($key);
 		$val = (is_int($val)) ? $val : "'".doSlash($val)."'";
@@ -252,7 +252,7 @@ $DB = new DB;
 	}
 
 //-------------------------------------------------------------
-	function getRow($query,$debug='') 
+	function getRow($query,$debug='')
 	{
 		if ($r = safe_query($query,$debug)) {
 			$row = (mysql_num_rows($r) > 0) ? mysql_fetch_assoc($r) : false;
@@ -263,11 +263,11 @@ $DB = new DB;
 	}
 
 //-------------------------------------------------------------
-	function getRows($query,$debug='') 
+	function getRows($query,$debug='')
 	{
 		if ($r = safe_query($query,$debug)) {
 			if (mysql_num_rows($r) > 0) {
-				while ($a = mysql_fetch_assoc($r)) $out[] = $a; 
+				while ($a = mysql_fetch_assoc($r)) $out[] = $a;
 				mysql_free_result($r);
 				return $out;
 			}
@@ -297,7 +297,7 @@ $DB = new DB;
 	}
 
 //-------------------------------------------------------------
-	function getThing($query,$debug='') 
+	function getThing($query,$debug='')
 	{
 		if ($r = safe_query($query,$debug)) {
 			$thing = (mysql_num_rows($r) != 0) ? mysql_result($r,0) : '';
@@ -308,7 +308,7 @@ $DB = new DB;
 	}
 
 //-------------------------------------------------------------
-	function getThings($query,$debug='') 
+	function getThings($query,$debug='')
 	// return values of one column from multiple rows in an num indexed array
 	{
 		$rs = getRows($query,$debug);
@@ -318,9 +318,9 @@ $DB = new DB;
 		}
 		return array();
 	}
-	
+
 //-------------------------------------------------------------
-	function getCount($table,$where,$debug='') 
+	function getCount($table,$where,$debug='')
 	{
 		return getThing("select count(*) from ".safe_pfx_j($table)." where $where",$debug);
 	}
@@ -342,13 +342,13 @@ $DB = new DB;
 		extract($rs);
 
 		$out = array();
-		$right = array(); 
+		$right = array();
 
 		$rs = safe_rows_start(
 			"id, name, lft, rgt, parent, title",
 			"txp_category",
 			"lft between $l and $r and type = '$type' and name != 'root' and $where order by lft asc"
-		); 
+		);
 
 		while ($rs and $row = nextRow($rs)) {
 			extract($row);
@@ -434,14 +434,14 @@ $DB = new DB;
 		);
 		return $right+1;
 	}
-	
+
 //-------------------------------------------------------------
 	function rebuild_tree_full($type)
 	{
 		# fix circular references, otherwise rebuild_tree() could get stuck in a loop
 		safe_update('txp_category', "parent=''", "type='".doSlash($type)."' and name='root'");
 		safe_update('txp_category', "parent='root'", "type='".doSlash($type)."' and parent=name");
-		
+
 		rebuild_tree('root', 1, $type);
 	}
 

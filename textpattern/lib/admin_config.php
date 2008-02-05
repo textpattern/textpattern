@@ -1,20 +1,20 @@
 <?php
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- 
+
                 (M O S T L Y)  D E P R E C A T E D  AS  OF  1.0RC4
 
- *	IMPORTANT:  Most settings in this file  (all that is in  $txpac)  have moved 
-	into the  Database. This file remains here  mainly for  not breaking updates 
- *	for people that are coming from older revisions (up to and including 1.0RC3)! 
-	If you would like to change any of these settings, you can do so in Advanced 
+ *	IMPORTANT:  Most settings in this file  (all that is in  $txpac)  have moved
+	into the  Database. This file remains here  mainly for  not breaking updates
+ *	for people that are coming from older revisions (up to and including 1.0RC3)!
+	If you would like to change any of these settings, you can do so in Advanced
  *	Preferences	of your Textpattern admin panel.
-	
+
  *	Only the Permission-Settings at the bottom this file are still actively used,
-	and these will be moved to the db before the next release 
+	and these will be moved to the db before the next release
 
 $HeadURL$
 $LastChangedRevision$
- 
+
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 
@@ -28,17 +28,17 @@ $txpac = array(
 
 
 // -------------------------------------------------------------
-// php scripts on page templates will be parsed 
+// php scripts on page templates will be parsed
 
 	'allow_page_php_scripting'    => 1,
 
 // -------------------------------------------------------------
-// php scripts in article bodies will be parsed 
+// php scripts in article bodies will be parsed
 
 	'allow_article_php_scripting' => 1,
 
 // -------------------------------------------------------------
-// use Textile on link titles and descriptions 
+// use Textile on link titles and descriptions
 
 	'textile_links'               => 0,
 
@@ -59,18 +59,18 @@ $txpac = array(
 // include articles or full excerpts in feeds
 // 0 = full article body
 // 1 = excerpt
-		
+
 	'syndicate_body_or_excerpt'   => 1,
 
 
 // -------------------------------------------------------------
 // include (encoded) author email in atom feeds
-		
+
 	'include_email_atom'          => 1,
-	
+
 
 // -------------------------------------------------------------
-// each comment received updates the site Last-Modified header 
+// each comment received updates the site Last-Modified header
 
 	'comment_means_site_updated'  => 1,
 
@@ -118,19 +118,19 @@ $txpac = array(
 
 // -------------------------------------------------------------
 // number of days after which logfiles are purged
-		
+
 	'expire_logs_after'           => 7,
 
 
 // -------------------------------------------------------------
 // plugins on or off
-		
+
 	'use_plugins'                 => 1,
 
 // -------------------------------------------------------------
-// use custom fields for articles - must be in 'quotes', and 
+// use custom fields for articles - must be in 'quotes', and
 // must contain no spaces
-		
+
 	'custom_1_set'                => 'custom1',
 	'custom_2_set'                => 'custom2',
 	'custom_3_set'                => '',
@@ -144,33 +144,33 @@ $txpac = array(
 
 // -------------------------------------------------------------
 // ping textpattern.com when an article is published
-		
+
 	'ping_textpattern_com'        => 1,
 
 // -------------------------------------------------------------
 // use DNS lookups in referrer log
-		
+
 	'use_dns'        => 1,
 
 // -------------------------------------------------------------
 // load plugins in the admin interface
-		
+
 	'admin_side_plugins'        => 1,
 
 // -------------------------------------------------------------
 // use rel="nofollow" on comment links
-		
+
 	'comment_nofollow'        => 1,
-	
+
 // -------------------------------------------------------------
 // use encoded email on atom feeds id, instead of domain name
 // (if you plan to move this install to another domain, you should use this)
-		
+
 	'use_mail_on_feeds_id'	   =>0,
 
 // -------------------------------------------------------------
 // maximum url length before it should be considered malicious
-		
+
 	'max_url_len'               => 200,
 
 // -------------------------------------------------------------

@@ -7,7 +7,7 @@
 	www.textpattern.com
 	All rights reserved
 
-	Use of this software indicates acceptance of the Textpattern license agreement 
+	Use of this software indicates acceptance of the Textpattern license agreement
 
 $HeadURL$
 $LastChangedRevision$
@@ -24,7 +24,7 @@ $LastChangedRevision$
 	$txp_using_svn = true; // set false for releases
 
 	ob_start(NULL, 2048);
-	if (!@include './config.php') { 
+	if (!@include './config.php') {
 		ob_end_clean();
 		include txpath.'/setup/index.php';
 		exit();
@@ -36,7 +36,7 @@ $LastChangedRevision$
 		textpattern();
 		exit;
 	}
-	
+
 	error_reporting(E_ALL);
 	@ini_set("display_errors","1");
 
@@ -60,7 +60,7 @@ $LastChangedRevision$
 			$siteurl = $_SERVER['HTTP_HOST'] . rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'])), '/');
 		if (empty($path_to_site))
 			updateSitePath(dirname(dirname(__FILE__)));
-	
+
 		define("LANG",$language);
 		//i18n: define("LANG","en-gb");
 		define('txp_version', $thisversion);
@@ -84,13 +84,13 @@ $LastChangedRevision$
 
 		if (!empty($locale)) setlocale(LC_ALL, $locale);
 		$textarray = load_lang(LANG);
-	
+
 		include txpath.'/include/txp_auth.php';
 		doAuth();
 
 		$event = (gps('event') ? gps('event') : 'article');
 		$step = gps('step');
-		
+
 		if (!$dbversion or ($dbversion != $thisversion) or $txp_using_svn)
 		{
 			define('TXP_UPDATE', 1);
@@ -104,9 +104,9 @@ $LastChangedRevision$
 
 		// ugly hack, for the people that don't update their admin_config.php
 		// Get rid of this when we completely remove admin_config and move privs to db
-		if ($event == 'list') 		
-			require_privs('article'); 
-		else 
+		if ($event == 'list')
+			require_privs('article');
+		else
 			require_privs($event);
 
 		callback_event($event, $step, 1);
@@ -114,7 +114,7 @@ $LastChangedRevision$
 		$inc = txpath . '/include/txp_'.$event.'.php';
 		if (is_readable($inc))
 			include($inc);
-	
+
 		callback_event($event, $step, 0);
 
 		$microdiff = (getmicrotime() - $microstart);

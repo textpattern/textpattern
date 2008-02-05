@@ -9,15 +9,15 @@ function doImportMT($file, $section, $status, $invite) {
 	# http://www.movabletype.org/docs/mtimport.html
 	# This doesn't interpret the data at all, just parse it into
 	# a structure.
-	
+
 	ini_set('auto_detect_line_endings', 1);
 
 	$fp = fopen($file, 'r');
 	if (!$fp)
 		return false;
-		
+
 	//Keep some response on some part
-	$results = array();	
+	$results = array();
 
 	$state = 'metadata';
 	$item = array();

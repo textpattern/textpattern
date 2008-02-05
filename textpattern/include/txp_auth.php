@@ -7,7 +7,7 @@ Copyright 2005 by Dean Allen
 www.textpattern.com
 All rights reserved
 
-Use of this software indicates acceptance of the Textpattern license agreement 
+Use of this software indicates acceptance of the Textpattern license agreement
 
 $HeadURL$
 $LastChangedRevision$
@@ -19,11 +19,11 @@ if (!defined('txpinterface')) die('txpinterface is undefined.');
 function doAuth()
 {
 	global $txp_user;
-			
+
 	$txp_user = NULL;
-	
+
 	$message = doTxpValidate();
-	
+
 	if(!$txp_user)
 	{
 		doLoginForm($message);
@@ -56,11 +56,11 @@ function doAuth()
 			safe_update("txp_users", "last_access = now()", "name = '$safe_user'");
 			return true;
 
-		} 
-		
+		}
+
 		return false;
 	}
-	
+
 // -------------------------------------------------------------
 
 	function doLoginForm($message)
@@ -97,7 +97,7 @@ function doAuth()
 					)
 				).
 
-				($reset ? '' : 
+				($reset ? '' :
 					n.n.tr(
 						n.td().
 						td(
@@ -128,7 +128,7 @@ function doAuth()
 	}
 
 // -------------------------------------------------------------
-	function doTxpValidate() 
+	function doTxpValidate()
 	{
 		global $logout,$txpcfg, $txp_user;
 		$p_userid   = ps('p_userid');
@@ -148,7 +148,7 @@ function doAuth()
 			$c_hash   = '';
 			$c_userid = '';
 		}
-		
+
 		if ($logout)
 		{
 			setcookie('txp_login', '', time()-3600);
@@ -170,12 +170,12 @@ function doAuth()
 				setcookie('txp_login_public', '', time()-3600, $pub_path);
 				$message = gTxt('bad_cookie');
 			}
-			
+
 		}
 		elseif ($p_userid and $p_password) // incoming login vars
 		{
 			sleep(3);
-	
+
 			if (txp_validate($p_userid,$p_password))
 			{
 				$c_hash = md5(uniqid(mt_rand(), TRUE));
@@ -199,7 +199,7 @@ function doAuth()
 					($stay ? time()+3600*24*30 : 0),
 					$pub_path
 				);
-				
+
 				// login is good, create $txp_user
 				$txp_user = $p_userid;
 				return '';

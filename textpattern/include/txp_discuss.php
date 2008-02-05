@@ -7,7 +7,7 @@
 	www.textpattern.com
 	All rights reserved
 
-	Use of this software indicates acceptance of the Textpattern license agreement 
+	Use of this software indicates acceptance of the Textpattern license agreement
 
 $HeadURL$
 $LastChangedRevision$
@@ -159,7 +159,7 @@ $LastChangedRevision$
 
 		$total = getThing(
 			'SELECT COUNT(*)'.
-			' FROM '.safe_pfx_j('txp_discuss').' LEFT JOIN '.safe_pfx_j('textpattern').' ON txp_discuss.parentid = textpattern.ID'. 
+			' FROM '.safe_pfx_j('txp_discuss').' LEFT JOIN '.safe_pfx_j('textpattern').' ON txp_discuss.parentid = textpattern.ID'.
 			' WHERE '.$spamq.' AND '.$criteria
 		);
 
@@ -187,7 +187,7 @@ $LastChangedRevision$
 
 		$rs = safe_query(
 			'SELECT txp_discuss.*, unix_timestamp(txp_discuss.posted) as uPosted, ID as thisid, Section as section, url_title, Title as title, Status, unix_timestamp(textpattern.Posted) as posted'.
-			' FROM '.safe_pfx_j('txp_discuss').' LEFT JOIN '.safe_pfx_j('textpattern').' ON txp_discuss.parentid = textpattern.ID'. 
+			' FROM '.safe_pfx_j('txp_discuss').' LEFT JOIN '.safe_pfx_j('textpattern').' ON txp_discuss.parentid = textpattern.ID'.
 			' WHERE '.$spamq.' AND '.$criteria.
 			' ORDER BY '.$sort_sql.
 			' LIMIT '.$offset.', '.$limit
@@ -422,7 +422,7 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function ipban_add() 
+	function ipban_add()
 	{
 		extract(gpsa(array('ip', 'name', 'discussid')));
 		$discussid = assert_int($discussid);
@@ -442,9 +442,9 @@ $LastChangedRevision$
 		}
 
 		$rs = safe_insert('txp_discuss_ipban', "
-			ip = '".doSlash($ip)."', 
-			name_used = '".doSlash($name)."', 
-			banned_on_message = $discussid, 
+			ip = '".doSlash($ip)."',
+			name_used = '".doSlash($name)."',
+			banned_on_message = $discussid,
 			date_banned = now()
 		");
 
@@ -483,7 +483,7 @@ $LastChangedRevision$
 	{
 		pageTop(gTxt('list_banned_ips'), $message);
 
-		$rs = safe_rows_start('*, unix_timestamp(date_banned) as uBanned', 'txp_discuss_ipban', 
+		$rs = safe_rows_start('*, unix_timestamp(date_banned) as uBanned', 'txp_discuss_ipban',
 			"1 = 1 order by date_banned desc");
 
 		if ($rs and numRows($rs) > 0)
@@ -535,7 +535,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function discuss_change_pageby() 
+	function discuss_change_pageby()
 	{
 		event_change_pageby('comment');
 		discuss_list();
@@ -543,7 +543,7 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function discuss_multiedit_form($page, $sort, $dir, $crit, $search_method) 
+	function discuss_multiedit_form($page, $sort, $dir, $crit, $search_method)
 	{
 		$methods = array(
 			'visible'     => gTxt('show'),
@@ -557,10 +557,10 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function discuss_multi_edit() 
+	function discuss_multi_edit()
 	{
 		//FIXME, this method needs some refactoring
-		
+
 		$selected = ps('selected');
 		$method = ps('edit_method');
 		$done = array();
@@ -577,7 +577,7 @@ $LastChangedRevision$
 				$parentids[] = $parentid;
 
 				if ($method == 'delete') {
-					// Delete and if succesful update commnet count 
+					// Delete and if succesful update commnet count
 					if (safe_delete('txp_discuss', "discussid = $id"))
 						$done[] = $id;
 				}
@@ -618,7 +618,7 @@ $LastChangedRevision$
 						))
 							$done[] = $id;
 				}
-				
+
 			}
 
 			$done = join(', ', $done);

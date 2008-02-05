@@ -4,11 +4,11 @@
 	This is Textpattern
 	Copyright 2005 by Dean Allen - all rights reserved.
 
-	Use of this software denotes acceptance of the Textpattern license agreement 
+	Use of this software denotes acceptance of the Textpattern license agreement
 
 $HeadURL$
 $LastChangedRevision$
-	
+
 */
 
 
@@ -20,7 +20,7 @@ $LastChangedRevision$
 		global $prefs;
 		$url = $prefs['siteurl'];
 		extract($prefs);
-		
+
 		$s_filter = filterSearch();
 
 		$form = fetch('form','txp_form','name','search_results');
@@ -34,7 +34,7 @@ $LastChangedRevision$
 			"textpattern",
 			"(Title rlike '$q' or Body rlike '$q') $s_filter
 			and Status = 4 and Posted <=now() order by score desc limit 40");
-		
+
 		if($rs) {
 			$result_rows = count($rs);
 			$text = ($result_rows == 1) ? gTxt('article_found') : gTxt('articles_found');
@@ -47,18 +47,18 @@ $LastChangedRevision$
 		if($result_rows > 0) {
 			foreach($rs as $a) {
 				extract($a);
-								
+
 				$result_date = safe_strftime($archive_dateformat,$posted);
 				$uTitle = ($url_title) ? $url_title : stripSpace($Title);
 				$hurl = permlinkurl($a);
 				$result_url = '<a href="'.$hurl.'">'.$hurl.'</a>';
 				$result_title = '<a href="'.$hurl.'">'.$Title.'</a>';
-	
+
 				$result = preg_replace("/>\s*</","> <",$Body_html);
 				preg_match_all("/\s.{1,50}".preg_quote($q).".{1,50}\s/i",$result,$concat);
-						
+
 					$concat = join(" ... ",$concat[0]);
-					
+
 					$concat = strip_tags($concat);
 					$concat = preg_replace('/^[^>]+>/U',"",$concat);
 					$concat = preg_replace("/($q)/i","<strong>$1</strong>",$concat);
@@ -70,7 +70,7 @@ $LastChangedRevision$
 					$glob['search_result_date']    = $result_date;
 
 					$GLOBALS['this_result'] = $glob;
-					
+
 					$thisresult = $form;
 
 					$results[] = parse($thisresult);
@@ -80,11 +80,11 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function filterSearch() 
+	function filterSearch()
 	{
 		$rs = safe_column("name", "txp_section", "searchable != '1'");
 		if ($rs) {
-			foreach($rs as $name) $filters[] = "and Section != '".doSlash($name)."'";	
+			foreach($rs as $name) $filters[] = "and Section != '".doSlash($name)."'";
 			return join(' ',$filters);
 		}
 		return false;
@@ -92,7 +92,7 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 // DEPRECATED
-	function legacy_form() 
+	function legacy_form()
 	{	// lose this eventually
 		return '<h2><txp:search_result_title /></h2>
 <p><txp:search_result_excerpt /><br/>

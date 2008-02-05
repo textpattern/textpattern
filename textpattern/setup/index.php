@@ -208,7 +208,7 @@ eod;
 			if (mysql_query("SET NAMES utf8"))
 			{
 				$carry['dbcharset'] = "utf8";
-			} 
+			}
 			else
 			{
 				$carry['dbcharset'] = "latin1";
@@ -221,7 +221,7 @@ eod;
 
 		echo graf(
 			gTxt('using_db', array('{dbname}' => strong($ddb)))
-			.' ('. $carry['dbcharset'] .')' 
+			.' ('. $carry['dbcharset'] .')'
 		),
 		graf(
 			strong(gTxt('before_you_proceed')).', '.gTxt('create_config', array('{txpath}' => txpath))

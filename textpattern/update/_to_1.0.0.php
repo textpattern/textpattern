@@ -12,7 +12,7 @@ $LastChangedRevision: 711 $
 	$txpcat = getThings('describe `'.PFX.'txp_category`');
 
 	if (!in_array('id',$txpcat)) {
-		safe_alter('txp_category', 
+		safe_alter('txp_category',
 			'add `id` int(6) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST');
 	}
 
@@ -38,7 +38,7 @@ $LastChangedRevision: 711 $
 	if (!in_array('Keywords',$txp)) {
 		safe_alter("textpattern", "add `Keywords` varchar(255) not null");
 	}
-	
+
 	if (in_array('Listing1',$txp) && !in_array('textile_body',$txp)) {
 		safe_alter("textpattern",
 						"change Listing1 textile_body INT(2) DEFAULT '1' NOT NULL");
@@ -120,7 +120,7 @@ $LastChangedRevision: 711 $
 	$txpuser = getThings('describe `'.PFX.'txp_users`');
 
 	if (!in_array('nonce',$txpuser)) {
-		safe_alter("txp_users", "add `nonce` varchar(64) not null");		
+		safe_alter("txp_users", "add `nonce` varchar(64) not null");
 	};
 
 
@@ -138,7 +138,7 @@ $LastChangedRevision: 711 $
 	}
 
 	// 1.0rc: expanding password field in txp_users
-	
+
 	safe_alter('txp_users',"CHANGE `pass` `pass` VARCHAR( 128 ) NOT NULL");
 
 	safe_alter('textpattern',"CHANGE `Body` `Body` MEDIUMTEXT NOT NULL");
@@ -148,9 +148,9 @@ $LastChangedRevision: 711 $
 	safe_alter('textpattern',"CHANGE `Excerpt` `Excerpt` TEXT NOT NULL");
 
 	$popcom = fetch("*",'txp_form','name',"popup_comments");
-	
+
 	if (!$popcom) {
-	
+
 		$popform = <<<eod
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -172,7 +172,7 @@ eod;
 		$popform = addslashes($popform);
 		safe_insert("txp_form","name='popup_comments',type='comment',Form='$popform'");
 	}
-	
+
 	safe_update("txp_category", "lft=0,rgt=0","name!='root'");
 
 	safe_delete("txp_category", "name='root'");
@@ -224,14 +224,14 @@ eod;
 	// so we can start using title as an url search option
 
 	$rs = mysql_query("select ID, Title from `".PFX."textpattern` where url_title like ''");
-	
+
 		while ($a = mysql_fetch_array($rs)){
 			extract($a);
 			$url_title = addslashes(stripSpace($Title,1));
 			safe_update("textpattern","url_title = '$url_title'","ID=$ID");
 		}
 
-		
+
 	// 1.0: properly i18n
 	//Change current language names by language codes
 		$lang = fetch('val','txp_prefs','name','language');
@@ -310,14 +310,14 @@ eod;
 		$tempdir = addslashes(find_temp_dir());
 		safe_insert('txp_prefs',"prefs_id=1,name='tempdir',val='$tempdir'");
 	}
-	
+
 	//non image file upload tab:
 	if (!safe_field('val', 'txp_prefs',"name='file_list_pageby'")){
 		safe_insert('txp_prefs',"val=25,name='file_list_pageby',prefs_id=1");
 	}
-	
+
 	// 1.0: max file upload size
-	if (!safe_field('val', 'txp_prefs',"name='file_max_upload_size'")){	
+	if (!safe_field('val', 'txp_prefs',"name='file_max_upload_size'")){
 		safe_insert('txp_prefs',"prefs_id=1,name='file_max_upload_size',val=2000000");
 	}
 
@@ -326,16 +326,16 @@ eod;
 		safe_insert('txp_category',"name='root',type='file',lft=1,rgt=0");
 	}
 	rebuild_tree('root',1,'file');
-	
+
 	// 1.0: txp_file folder
 	if (!safe_field('val', 'txp_prefs',"name='file_base_path'")){
 		safe_insert('txp_prefs',"val='$tempdir',name='file_base_path',prefs_id=1");
 	}
-	
+
 	// 1.0: txp_file table
 	if (!safe_query("SELECT 1 FROM `".PFX."txp_file` LIMIT 0")) {
 		// do install
-		safe_query("CREATE TABLE `".PFX."txp_file` ( 
+		safe_query("CREATE TABLE `".PFX."txp_file` (
 				`id` int(11) NOT NULL auto_increment,
 				`filename` varchar( 255 ) NOT NULL default '',
 				`category` varchar( 255 ) NOT NULL default '',
@@ -343,10 +343,10 @@ eod;
 				`description` text NOT NULL default '',
 				`downloads` int(4) unsigned NOT NULL default '0',
 				PRIMARY KEY ( `id` ) ,
-				UNIQUE KEY `filename` ( `filename` ) 
+				UNIQUE KEY `filename` ( `filename` )
 			) $tabletype PACK_KEYS=0 AUTO_INCREMENT=1 ");
 	}
-	
+
 	if (!safe_field('name', 'txp_form', "type='file'")){
 		safe_insert('txp_form',"
 			name='files',
@@ -379,13 +379,13 @@ eod;
 	$rs = mysql_query("select ID, Excerpt, textile_excerpt from `".PFX."textpattern` where Excerpt_html like ''");
 	require_once txpath.'/lib/classTextile.php';
 	$textile = new Textile();
-	while ($a = @mysql_fetch_assoc($rs)){		
-		extract($a);		
+	while ($a = @mysql_fetch_assoc($rs)){
+		extract($a);
 		$lite = ($textile_excerpt)? '' : 1;
 		$Excerpt_html = $textile->TextileThis($Excerpt,$lite);
 		safe_update("textpattern","Excerpt_html = '$Excerpt_html'","ID=$ID");
 	}
-	
+
 	//1.0 feed unique ids
 	//blog unique id
 	if (!safe_field('val','txp_prefs',"name='blog_uid'"))
@@ -397,7 +397,7 @@ eod;
 	{
 		$mail = safe_field('email', 'txp_users', "privs='1' LIMIT 1");
 		safe_insert('txp_prefs',"name='blog_mail_uid', val='$mail', prefs_id='1'");
-	}	
+	}
 	if (!safe_field('val','txp_prefs',"name='blog_time_uid'"))
 	{
 		safe_insert('txp_prefs',"name='blog_time_uid', val='".date("Y")."', prefs_id='1'");
@@ -407,7 +407,7 @@ eod;
 	{
 		safe_alter('textpattern',"add `uid` varchar(32) not null");
 		safe_alter('textpattern',"add `feed_time` DATE not null DEFAULT '0000-00-00'");
-		
+
 		$rs = safe_rows_start('ID,Posted','textpattern','1');
 		if ($rs)
 		{
@@ -429,14 +429,14 @@ eod;
 		}
 
 
-	
+
 	// 1.0: Human-friendly title for sections and categories, to solve i18n problems
 	if (!in_array('title',$txpsect)) {
 		safe_alter("txp_section", "add `title` varchar(255) not null default ''");
 	}
 	if (!in_array('title',$txpcat)) {
 		safe_alter("txp_category", "add `title` varchar(255) not null default ''");
-	}	
+	}
 	if (safe_count('txp_section', "title=''") > 0)
 		safe_update('txp_section', 'title=name', "title=''");
 	if (safe_count('txp_category', "title=''") > 0)
@@ -450,11 +450,11 @@ eod;
 			$has_prefs_idx = 1;
 	if (!$has_prefs_idx)
 		safe_query('alter ignore table `'.PFX.'txp_prefs` add unique prefs_idx(prefs_id,name)');
-		
+
 	$txpprefs = getThings('describe `'.PFX.'txp_prefs`');
 	if (!in_array('type', $txpprefs))
 		safe_alter('txp_prefs', "add `type` smallint unsigned not null default '2'");
-	# update the updated with default hidden type for old plugins prefs	
+	# update the updated with default hidden type for old plugins prefs
 	safe_alter('txp_prefs',"change `type` `type` smallint unsigned not null default '2'");
 	if (!in_array('event', $txpprefs))
 		safe_alter('txp_prefs', "add `event` varchar(12) not null default 'publish'");
@@ -463,7 +463,7 @@ eod;
 	if (!in_array('position', $txpprefs))
 	{
 		safe_alter('txp_prefs', "add `position` smallint unsigned not null default '0'");
-		
+
 		# add new column values to prefs
 			$prefs_new_cols = array(
 				'attach_titles_to_permalinks' => array('html' => 'yesnoradio', 'event'=> 'publish', 'type' => '1', 'position' => '1'),
@@ -483,7 +483,7 @@ eod;
 				'use_textile' => array('html' => 'pref_text','event'=> 'publish', 'type' => '0', 'position' => '11'),
 				'tempdir' => array('html' => 'text_input','event'=> 'admin', 'type' => '1', 'position' => '0'),
 				'file_base_path' => array('html' => 'text_input','event'=> 'admin', 'type' => '1', 'position' => '0'),
-				'file_max_upload_size' => array('html' => 'text_input','event'=> 'admin', 'type' => '1', 'position' => '0'),		
+				'file_max_upload_size' => array('html' => 'text_input','event'=> 'admin', 'type' => '1', 'position' => '0'),
 				'comments_moderate' => array('html' => 'yesnoradio','event'=> 'comments', 'type' => '0', 'position' => '13'),
 				'comments_on_default' => array('html' => 'yesnoradio','event'=> 'comments', 'type' => '0', 'position' => '14'),
 				'comments_are_ol' => array('html' => 'yesnoradio','event'=> 'comments', 'type' => '0', 'position' => '15'),
@@ -496,22 +496,22 @@ eod;
 				'img_dir' => array('html' => 'text_input','event'=> 'admin', 'type' => '1', 'position' => '0'),
 				'rss_how_many' => array('html' => 'text_input','event'=> 'admin', 'type' => '1', 'position' => '0'),
 			);
-			
+
 			foreach ($prefs_new_cols as $pref_key => $pref_val)
 			{
 				safe_update('txp_prefs', "html='$pref_val[html]',event='$pref_val[event]',type='$pref_val[type]', position='$pref_val[position]'", "name='$pref_key' AND prefs_id='1'");
 			}
-			
+
 			$prefs_hidden_rows = array('prefs_id','use_categories','use_sections','path_from_root','url_mode','record_mentions',
 			'locale','file_base_path','lastmod','version','path_to_site','dbupdatetime','timeoffset','article_list_pageby',
 			'blog_mail_uid','blog_time_uid','blog_uid','comment_list_pageby','file_list_pageby','image_list_pageby','link_list_pageby',
 			'log_list_pageby',);
-			
+
 			foreach ($prefs_hidden_rows as $hidden_pref)
 			{
 				safe_update('txp_prefs', "type='2'", "name='$hidden_pref' AND prefs_id='1'");
 			}
-			
+
 			global $txpac;
 			#advanced prefs
 			foreach ($txpac as $key => $val)
@@ -533,7 +533,7 @@ eod;
 							$evt = 'custom';
 							$html = 'text_input';
 						break;
-						
+
 						case 'edit_raw_css_by_default':
 							$evt = 'css';
 							$html = 'yesnoradio';
@@ -545,31 +545,31 @@ eod;
 							$evt = 'publish';
 						break;
 						case 'textile_links':
-							$html = 'yesnoradio';	
+							$html = 'yesnoradio';
 							$evt = 'link';
 						break;
 						case 'show_article_category_count':
-							$html = 'yesnoradio';	
-							$evt = 'category';				
+							$html = 'yesnoradio';
+							$evt = 'category';
 						break;
 						case 'comments_require_name':
 						case 'comments_require_email':
-							$html = 'yesnoradio';	
-							$evt = 'comments';				
+							$html = 'yesnoradio';
+							$evt = 'comments';
 						break;
 						default:
 							$html = 'yesnoradio';
 							$evt = 'publish';
-						break;				
+						break;
 					}
 					safe_insert('txp_prefs',"val = '$val', name = '$key' , prefs_id ='1', type='1', html='$html', event='$evt'");
 				}
-			}		
+			}
 	}
-	
+
 	safe_alter('txp_prefs',"CHANGE `html` `html` VARCHAR( 64 ) DEFAULT 'text_input' NOT NULL");
 	safe_update('txp_prefs',"html='text_input'","html=''");
-		
+
 	if (!fetch('form','txp_form','name','search_results')) {
 		$form = <<<EOF
 <h3><txp:permlink><txp:title /></txp:permlink></h3>
@@ -579,8 +579,8 @@ eod;
 EOF;
 		safe_insert('txp_form', "name='search_results', type='article', Form='$form'");
 	}
-	
-	
+
+
 	if (!safe_query("SELECT 1 FROM `".PFX."txp_lang` LIMIT 0")) {
 		// do install
 		safe_query("CREATE TABLE `".PFX."txp_lang` (
@@ -595,34 +595,34 @@ EOF;
 			INDEX (`lang`, `event`)
 			) $tabletype;");
 
-			require_once txpath.'/lib/IXRClass.php';		
-	
-			$client = new IXR_Client('http://rpc.textpattern.com');	
+			require_once txpath.'/lib/IXRClass.php';
+
+			$client = new IXR_Client('http://rpc.textpattern.com');
 
 			if (!$client->query('tups.getLanguage',$prefs['blog_uid'],LANG))
-			{				
-				echo '<p style="color:red">Error trying to install language. Please, try it again again.<br /> 
+			{
+				echo '<p style="color:red">Error trying to install language. Please, try it again again.<br />
 				If problem connecting to the RPC server persists, you can go to <a href="http://rpc.textpattern.com/lang/">http://rpc.textpattern.com/lang/</a>, download the
 				desired language file and place it in the /lang/ directory of your textpattern install. You can then install the language from file.</p>';
 			}else {
 				$response = $client->getResponse();
 				$lang_struct = unserialize($response);
 				function install_lang_key($value, $key)
-				{			
-					$q = "name='$value[name]', event='$value[event]', data='$value[data]', lastmod='".strftime('%Y%m%d%H%M%S',$value['uLastmod'])."'";					
+				{
+					$q = "name='$value[name]', event='$value[event]', data='$value[data]', lastmod='".strftime('%Y%m%d%H%M%S',$value['uLastmod'])."'";
 					safe_insert('txp_lang',$q.", lang='".LANG."'");
-				}			
+				}
 				array_walk($lang_struct,'install_lang_key');
-			}		
+			}
 	}
 
 	$maxpos = safe_field('max(position)', 'txp_prefs', '1');
 	// 1.0: production_status setting to control error reporting
 	if (!safe_field('val','txp_prefs',"name='production_status'"))
-	{		
+	{
 		safe_insert('txp_prefs',"name='production_status', val='testing', prefs_id='1', type='0', position='".doSlash($maxpos)."', html='prod_levels'");
 	}
-	
+
 	# multiply position on prefs to allow easy reordering
 	if(intval($maxpos) < 100)
 	{
@@ -632,14 +632,14 @@ EOF;
 	if (safe_field('name','txp_prefs',"name='logs_expire'"))
 	{
 		safe_delete('txp_prefs',"name='logs_expire'");
-	}	
+	}
 
 	// Let's make this visible in advanced prefs
 	safe_update('txp_prefs',"type = '1'","name = 'file_base_path'");
 
 	// 1.0: add option to override charset for emails (ISO-8559-1 instead of UTF-8)
 	if (!safe_field('name','txp_prefs',"name='override_emailcharset'"))
-	{		
+	{
 		safe_insert('txp_prefs',"name='override_emailcharset', val='0', prefs_id='1', type='1', event='admin', position='".doSlash($maxpos)."', html='yesnoradio'");
 	}
 
@@ -656,9 +656,9 @@ EOF;
 		safe_insert('txp_form', "name='comments_display', type='article', Form='$form'");
 	}
 
-	// /tmp is bad for permanent storage of files, 
+	// /tmp is bad for permanent storage of files,
 	// if no files are uploaded yet, switch to the files directory in the top-txp dir.
-	if (!safe_count('txp_file',"1")){ 
+	if (!safe_count('txp_file',"1")){
 		$tempdir = find_temp_dir();
 		if ($tempdir == safe_field('val','txp_prefs',"name='file_base_path'"))
 			safe_update('txp_prefs',"val='".doSlash(dirname(txpath).DS.'files')."',prefs_id=1","name='file_base_path'");

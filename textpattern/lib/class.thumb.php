@@ -11,12 +11,12 @@
  * Purpose: creates cached thumbnails
  * Home: http://www.cerdmann.com/thumb/
  * Copyright (C) 2005 Christoph Erdmann
- * 
+ *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public License along with this library; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110, USA 
+ *
+ * You should have received a copy of the GNU Lesser General Public License along with this library; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110, USA
  * -------------------------------------------------------------
  * Author:   Christoph Erdmann (CE) <smarty@cerdmann.com>
  * Internet: http://www.cerdmann.com
@@ -30,7 +30,7 @@
  * Author: Andreas Bösch (AB)
  *
  */
- 
+
 /*
 $HeadURL$
 $LastChangedRevision$
@@ -53,7 +53,7 @@ class wet_thumb {
     // link related params
     var $linkurl;    // Set to your target URL (a href="linkurl")
     var $html;       // Will be inserted in the image-tag
-   
+
     var $types = array('','.gif','.jpg','.png');
     var $_SRC;
     var $_DST;
@@ -61,7 +61,7 @@ class wet_thumb {
     /**
      * constructor
      */
-    function wet_thumb(  ) {        
+    function wet_thumb(  ) {
 	$this->extrapolate = false;
 	$this->crop = true;
 	$this->sharpen = true;
@@ -71,7 +71,7 @@ class wet_thumb {
 	$this->html = " alt=\"\" title=\"\" ";
 	$this->link = true;
     }
-    
+
     /**
      * write thumbnail file
      * @param	infile	image file name
@@ -80,9 +80,9 @@ class wet_thumb {
      */
     function write( $infile, $outfile ) {
         global $verbose;
-        
+
         if( $verbose )echo "writing thumb nail...";
-        
+
 	### Info über Source (SRC) holen
 	$temp = getimagesize($infile);
 
@@ -152,7 +152,7 @@ class wet_thumb {
 	    $this->_DST['height'] = $this->_SRC['height'];
 	}
 
-	$this->_DST['type'] = $this->_SRC['type']; 
+	$this->_DST['type'] = $this->_SRC['type'];
 	$this->_DST['file'] = $outfile;
 
 	// Make sure we have enough memory if the image is large
@@ -172,18 +172,18 @@ class wet_thumb {
 	    if($this->_SRC['height'] < $this->_SRC['width']) {
 		$ratio = (double)($this->_SRC['height'] / $this->_DST['height']);
 		$cpyWidth = round($this->_DST['width'] * $ratio);
-		if ($cpyWidth > $this->_SRC['width']) {           		
+		if ($cpyWidth > $this->_SRC['width']) {
 		    $ratio = (double)($this->_SRC['width'] / $this->_DST['width']);
 		    $cpyWidth = $this->_SRC['width'];
 		    $cpyHeight = round($this->_DST['height'] * $ratio);
 		    $off_w = 0;
-		    $off_h = round(($this->_SRC['height'] - $cpyHeight) / 2);                              
+		    $off_h = round(($this->_SRC['height'] - $cpyHeight) / 2);
 		    $this->_SRC['height'] = $cpyHeight;
 		}
-		else {           		
+		else {
 		    $cpyHeight = $this->_SRC['height'];
 		    $off_w = round(($this->_SRC['width'] - $cpyWidth) / 2);
-		    $off_h = 0;               
+		    $off_h = 0;
 		    $this->_SRC['width']= $cpyWidth;
 		}
 	    }
@@ -195,16 +195,16 @@ class wet_thumb {
 		    $cpyHeight = $this->_SRC['height'];
 		    $cpyWidth = round($this->_DST['width'] * $ratio);
 		    $off_w = round(($this->_SRC['width'] - $cpyWidth) / 2);
-		    $off_h = 0;               
-		    $this->_SRC['width']= $cpyWidth;               
+		    $off_h = 0;
+		    $this->_SRC['width']= $cpyWidth;
 		}
 		else {
 		    $cpyWidth = $this->_SRC['width'];
 		    $off_w = 0;
-		    $off_h = round(($this->_SRC['height'] - $cpyHeight) / 2);               
-		    $this->_SRC['height'] = $cpyHeight;               
+		    $off_h = round(($this->_SRC['height'] - $cpyHeight) / 2);
+		    $this->_SRC['height'] = $cpyHeight;
 		}
-	    }		
+	    }
 	}
 
 	// DST erstellen
@@ -232,8 +232,8 @@ class wet_thumb {
 	    imagedestroy($magnifier);
 	}
 
-        if ($verbose ) echo "... saving image ...";        
-	
+        if ($verbose ) echo "... saving image ...";
+
         if ($this->_DST['type'] == 1)	{
 	    imagetruecolortopalette($this->_DST['image'], false, 256);
 		if ( function_exists ('imagegif') ) {
@@ -250,14 +250,14 @@ class wet_thumb {
 	elseif ($this->_DST['type'] == 3) {
 	    imagepng($this->_DST['image'], $this->_DST['file']);
 	}
-	
+
         if ($verbose ) echo "... image successfully saved ...";
-        
+
 	imagedestroy($this->_DST['image']);
 	imagedestroy($this->_SRC['image']);
 	return true;
     }
-    
+
     /**
      * return a reference to the the thumbnailimage as a HTML <a> or <img> tag
      * @param	aslink	return an anchor tag to the source image
@@ -271,7 +271,7 @@ class wet_thumb {
                     "width=\"".$this->width."\" " .
                     "height=\"".$this->height."\" " .
                     "/>";
-                    
+
         if ( $aslink === true ) {
             return "<a href=\"" . ((empty($this->linkurl)) ? $this->_SRC['file'] : $this->linkurl) . "\" " .
                     (($aspopup === true) ? "target=\"_blank\"" : "") . ">" .
@@ -280,17 +280,17 @@ class wet_thumb {
         }
         else {
             return $imgtag;
-        }    
+        }
     }
 }
 /**
  * class txp_thumb: wrapper for wet_thumb interfacing the TxP repository
- */ 
+ */
 class txp_thumb extends wet_thumb {
-    
+
     var $m_ext;
     var $m_id;
-    
+
     /***
      * constructor
      * @param	$id	image id
@@ -305,14 +305,14 @@ class txp_thumb extends wet_thumb {
         }
         $this->wet_thumb(); // construct base class instance
     }
-    
+
     /**
      * create thumbnail image from source image
      * @return	boolean, true indicates success
      */
     function write( ) {
         if ( !isset($this->m_ext) ) return false;
-        
+
         if ( parent::write ( IMPATH.$this->m_id.$this->m_ext, IMPATH.$this->m_id.'t'.$this->m_ext ) ) {
 		    safe_update('txp_image', 'thumbnail = 1', 'id = '.$this->m_id);
 		    return true;
@@ -326,14 +326,14 @@ class txp_thumb extends wet_thumb {
      */
     function delete( ) {
         if (!isset($this->m_ext)) return false;
-        
+
 		if (unlink(IMPATH.$this->m_id.'t'.$this->m_ext)) {
 			safe_update('txp_image', 'thumbnail = 0', 'id = '.$this->m_id);
 	    	return true;
 		}
 	return false;
     }
-  
+
 }
 
 /**
@@ -346,7 +346,7 @@ class txp_thumb extends wet_thumb {
  * @param   treshold    filter parameter
  * @return  sharpened image as a ressource
  *
- * 
+ *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option) any later version.
 */
 
@@ -357,19 +357,19 @@ function UnsharpMask($img, $amount, $radius, $threshold)    {
     if ($radius > 50) $radius = 50;
     $radius = $radius * 2;
     if ($threshold > 255) $threshold = 255;
-    
+
     $radius = abs(round($radius)); 	// Only integers make sense.
     if ($radius == 0) {	return $img; imagedestroy($img); break;	}
     $w = imagesx($img); $h = imagesy($img);
     $imgCanvas = $img;
     $imgCanvas2 = $img;
     $imgBlur = imagecreatetruecolor($w, $h);
-    
+
     // Gaussian blur matrix:
-    //	1	2	1		
-    //	2	4	2		
-    //	1	2	1		
-    
+    //	1	2	1
+    //	2	4	2
+    //	1	2	1
+
     // Move copies of the image around one pixel at the time and merge them with weight
     // according to the matrix. The same matrix is simply repeated for higher radii.
     for ($i = 0; $i < $radius; $i++)
@@ -384,8 +384,8 @@ function UnsharpMask($img, $amount, $radius, $threshold)    {
             imagecopymerge ($imgBlur, $imgCanvas, 0, 1, 0, 0, $w, $h, 16.666667); // down
             imagecopymerge ($imgBlur, $imgCanvas, 0, 0, 0, 0, $w, $h, 50); // center
             }
-    $imgCanvas = $imgBlur;	
-            
+    $imgCanvas = $imgBlur;
+
     // Calculate the difference between the blurred pixels and the original
     // and set the pixels
     for ($x = 0; $x < $w; $x++) { // each row
@@ -398,13 +398,13 @@ function UnsharpMask($img, $amount, $radius, $threshold)    {
             $rBlur = (($rgbBlur >> 16) & 0xFF);
             $gBlur = (($rgbBlur >> 8) & 0xFF);
             $bBlur = ($rgbBlur & 0xFF);
-    
+
             // When the masked pixels differ less from the original
             // than the threshold specifies, they are set to their original value.
             $rNew = (abs($rOrig - $rBlur) >= $threshold) ? max(0, min(255, ($amount * ($rOrig - $rBlur)) + $rOrig)) : $rOrig;
             $gNew = (abs($gOrig - $gBlur) >= $threshold) ? max(0, min(255, ($amount * ($gOrig - $gBlur)) + $gOrig)) : $gOrig;
             $bNew = (abs($bOrig - $bBlur) >= $threshold) ? max(0, min(255, ($amount * ($bOrig - $bBlur)) + $bOrig)) : $bOrig;
-            
+
             if (($rOrig != $rNew) || ($gOrig != $gNew) || ($bOrig != $bNew)) {
                 $pixCol = ImageColorAllocate($img, $rNew, $gNew, $bNew);
                 ImageSetPixel($img, $x, $y, $pixCol);

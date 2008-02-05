@@ -3295,9 +3295,9 @@ begin tag builder functions
 				default:
 
 					$atts = array(
-						'class'   => $class, 
-						'html_id' => $html_id, 
-						'id'      => $id, 
+						'class'   => $class,
+						'html_id' => $html_id,
+						'id'      => $id,
 						'style'   => $style,
 						'wraptag' => $wraptag
 					);

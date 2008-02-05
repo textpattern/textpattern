@@ -7,7 +7,7 @@
 	www.textpattern.com
 	All rights reserved
 
-	Use of this software indicates acceptance of the Textpattern license agreement 
+	Use of this software indicates acceptance of the Textpattern license agreement
 
 $HeadURL$
 $LastChangedRevision$
@@ -21,8 +21,8 @@ $LastChangedRevision$
 	define("IMPATH",$path_to_site.DS.$img_dir.DS);
 	include txpath.'/lib/class.thumb.php';
 
-	if ($event == 'image') {	
-		require_privs('image');		
+	if ($event == 'image') {
+		require_privs('image');
 
 		if(!$step or !in_array($step, array('image_list','image_edit','image_insert','image_delete','image_replace','image_save','thumbnail_insert','image_change_pageby','thumbnail_create','thumbnail_delete'
 		))){
@@ -252,7 +252,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function image_edit($message='',$id='') 
+	function image_edit($message='',$id='')
 	{
 		if (!$id) $id = gps('id');
 		$id = assert_int($id);
@@ -263,7 +263,7 @@ $LastChangedRevision$
 		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
 
 		$categories = getTree("root", "image");
-		
+
 		$rs = safe_row("*", "txp_image", "id = $id");
 
 		if ($rs) {
@@ -369,22 +369,22 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function image_replace() 
-	{	
+	function image_replace()
+	{
 		global $txpcfg,$extensions,$txp_user;
 		extract($txpcfg);
-			
+
 		$id = assert_int(gps('id'));
 		$rs = safe_row("*", "txp_image", "id = $id");
-		
+
 		if ($rs) {
 			$meta = array('category' => $rs['category'], 'caption' => $rs['caption'], 'alt' => $rs['alt']);
 		} else {
 			$meta = '';
-		} 
-		
+		}
+
 		$img_result = image_data($_FILES['thefile'], $meta, $id);
-		
+
 		if(is_array($img_result))
 		{
 			list($message, $id) = $img_result;
@@ -395,24 +395,24 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function thumbnail_insert() 
+	function thumbnail_insert()
 	{
 		global $txpcfg,$extensions,$txp_user,$img_dir,$path_to_site;
 		extract($txpcfg);
 		$id = assert_int(gps('id'));
-		
+
 		$file = $_FILES['thefile']['tmp_name'];
 		$name = $_FILES['thefile']['name'];
 
 		$file = get_uploaded_file($file);
-		
+
 		list(,,$extension) = getimagesize($file);
-	
+
 		if (($file !== false) && @$extensions[$extension]) {
 			$ext = $extensions[$extension];
 
 				$newpath = IMPATH.$id.'t'.$ext;
-			
+
 			if(shift_uploaded_file($file, $newpath) == false) {
 				image_list($newpath.sp.gTxt('upload_dir_perms'));
 			} else {
@@ -434,11 +434,11 @@ $LastChangedRevision$
 
 
 // -------------------------------------------------------------
-	function image_save() 
+	function image_save()
 	{
 		extract(doSlash(gpsa(array('id','name','category','caption','alt'))));
 		$id = assert_int($id);
-		
+
 		safe_update(
 			"txp_image",
 			"name     = '$name',
@@ -501,7 +501,7 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 	function thumb_ui($id)
-	{		
+	{
 		global $prefs, $sort, $dir, $page, $search_method, $crit;
 		extract($prefs);
 		return
@@ -511,13 +511,13 @@ $LastChangedRevision$
 					graf(gTxt('create_thumbnail')) .
 					startTable('','left','',1) .
 						tr(
-							fLabelCell(gTxt('thumb_width'), '', 'width') . 
+							fLabelCell(gTxt('thumb_width'), '', 'width') .
 							fInputCell('width', @$thumb_w, 1, 4, '', 'width').
 
-							fLabelCell(gTxt('thumb_height'), '', 'height') . 
+							fLabelCell(gTxt('thumb_height'), '', 'height') .
 							fInputCell('height', @$thumb_h, 1, 4, '', 'height').
 
-							fLabelCell(gTxt('keep_square_pixels'), '', 'crop') . 
+							fLabelCell(gTxt('keep_square_pixels'), '', 'crop') .
 							tda(checkbox('crop', 1, @$thumb_crop, '', 'crop'), ' class="noline"').
 
 							tda(
@@ -603,7 +603,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function thumbnail_delete() 
+	function thumbnail_delete()
 	{
 		$id = assert_int(gps('id'));
 		$t = new txp_thumb($id);

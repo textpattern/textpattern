@@ -12,7 +12,7 @@ function doImportBLOGGER($file, $section, $status, $invite) {
 	$fp = fopen($file, 'r');
 	if (!$fp)
 		return false;
-		
+
 	//Keep some response on some part
 	$results = array();
 	$multiline_type = '';
@@ -91,8 +91,8 @@ function import_blogger_item($item, $section, $status, $invite) {
 
 	include_once txpath.'/lib/classTextile.php';
 	$textile = new Textile();
-	
-	$title = $textile->TextileThis($item['TITLE'], 1);	
+
+	$title = $textile->TextileThis($item['TITLE'], 1);
 	$url_title = stripSpace($title,1);
 
 	$body = $item['BODY'][0]['content'];
@@ -113,9 +113,9 @@ function import_blogger_item($item, $section, $status, $invite) {
 		//Add new authors
 		safe_insert('txp_users', "name='".doSlash(stripSpace($textile->TextileThis($item['AUTHOR'],1)))."', RealName='".doSlash($item['AUTHOR'])."'");
 
-		
+
 	if (!safe_field("ID", "textpattern", "Title = '".doSlash($title)."' AND Posted = '".doSlash($date)."'")) {
-		safe_insert('textpattern', 
+		safe_insert('textpattern',
 			"Posted='".doSlash($date)."',".
 			"LastMod='".doSlash($date)."',".
 			"AuthorID='".doSlash($item['AUTHOR'])."',".
@@ -129,10 +129,10 @@ function import_blogger_item($item, $section, $status, $invite) {
 			"uid='".md5(uniqid(rand(),true))."',".
 			"feed_time='".substr($date,0,10)."',".
 			"url_title='".doSlash($url_title)."'");
-			
+
 
 		$parentid = mysql_insert_id();
-	
+
 		if (!empty($item['COMMENT'])) {
 			foreach ($item['COMMENT'] as $comment) {
 				$comment_date = date('Y-m-d H:i:s', strtotime(@$comment['DATE']));
@@ -143,7 +143,7 @@ function import_blogger_item($item, $section, $status, $invite) {
 					@$comment['AUTHOR'] = $match[2];
 				}
 				if (!safe_field("discussid","txp_discuss","posted = '".doSlash($comment_date)."' AND message = '".doSlash($comment_content)."'")) {
-					safe_insert('txp_discuss', 
+					safe_insert('txp_discuss',
 						"parentid='".doSlash($parentid)."',".
 						//blogger places the link to user profile page as comment author
 						"name='".doSlash(strip_tags(@$comment['AUTHOR']))."',".

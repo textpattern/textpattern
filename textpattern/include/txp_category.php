@@ -7,7 +7,7 @@
 	www.textpattern.com
 	All rights reserved
 
-	Use of this software indicates acceptance ofthe Textpattern license agreement 
+	Use of this software indicates acceptance ofthe Textpattern license agreement
 
 $HeadURL$
 $LastChangedRevision$
@@ -16,12 +16,12 @@ $LastChangedRevision$
 if (!defined('txpinterface')) die('txpinterface is undefined.');
 
 if ($event == 'category') {
-	require_privs('category');	
+	require_privs('category');
 
 	if(!$step or !in_array($step, array(
 		'cat_category_list','cat_article_create','cat_image_create','cat_file_create','cat_link_create',
 		'cat_category_multiedit','cat_article_save','cat_image_save','cat_file_save','cat_link_save',
-		'cat_article_edit','cat_image_edit','cat_file_edit','cat_link_edit',		
+		'cat_article_edit','cat_image_edit','cat_file_edit','cat_link_edit',
 	))){
 		cat_category_list();
 	} else $step();
@@ -42,9 +42,9 @@ if ($event == 'category') {
 		echo join(n,$out);
 	}
 
- 
+
 //-------------------------------------------------------------
-	function cat_article_list() 
+	function cat_article_list()
 	{
 		return cat_event_category_list('article');
 	}
@@ -93,7 +93,7 @@ if ($event == 'category') {
 	}
 
 // -------------------------------------------------------------
-	function cat_link_list() 
+	function cat_link_list()
 	{
 		return cat_event_category_list('link');
 	}
@@ -117,7 +117,7 @@ if ($event == 'category') {
 	}
 
 // -------------------------------------------------------------
-	function cat_image_list() 
+	function cat_image_list()
 	{
 		return cat_event_category_list('image');
 	}
@@ -188,7 +188,7 @@ if ($event == 'category') {
 
 //-------------------------------------------------------------
 
-	function cat_event_category_list($event) 
+	function cat_event_category_list($event)
 	{
 		$out = n.n.hed(gTxt($event.'_head').sp.popHelp($event.'_category'), 3).
 
@@ -274,15 +274,15 @@ if ($event == 'category') {
 					case 'article':
 						$url = 'index.php?event=list'.a.'search_method=categories'.a.'crit='.$name;
 					break;
-	
+
 					case 'link':
 						$url = 'index.php?event=link'.a.'search_method=category'.a.'crit='.$name;
 					break;
-	
+
 					case 'image':
 						$url = 'index.php?event=image'.a.'search_method=category'.a.'crit='.$name;
 					break;
-	
+
 					case 'file':
 						$url = 'index.php?event=file'.a.'search_method=category'.a.'crit='.$name;
 					break;
@@ -455,6 +455,6 @@ if ($event == 'category') {
 	{
 		return cat_event_category_save('file','txp_file');
 	}
-	
-	
+
+
 ?>

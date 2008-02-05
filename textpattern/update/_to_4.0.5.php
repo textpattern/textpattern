@@ -14,7 +14,7 @@ $LastChangedRevision$
 
 	if (!safe_field('name', 'txp_prefs', "name = 'lastmod_keepalive'"))
 		safe_insert('txp_prefs', "prefs_id = 1, name = 'lastmod_keepalive', val = '0', type = '1', html='yesnoradio'");
-		
+
 	// new Status field for file downloads
 	$txpfile = getThings('describe '.PFX.'txp_file');
 	if (!in_array('status',$txpfile)) {
@@ -120,7 +120,7 @@ $LastChangedRevision$
 		'spam_blacklists',
 		'lastmod_keepalive'
 	)");
-	
+
 	safe_update('txp_prefs', "position = 160", "name in(
 		'archive_dateformat',
 		'comments_are_ol',
@@ -155,7 +155,7 @@ $LastChangedRevision$
 		'include_email_atom',
 		'use_mail_on_feeds_id'
 	)");
-	
+
 	# 'Textile links' feature removed due to unclear specs.
 	safe_delete('txp_prefs', "event='link' and name='textile_links'");
 

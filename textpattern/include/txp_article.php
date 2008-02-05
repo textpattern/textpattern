@@ -1,10 +1,10 @@
 <?php
 /*
 	This is Textpattern
-	Copyright 2005 by Dean Allen 
+	Copyright 2005 by Dean Allen
  	All rights reserved.
 
-	Use of this software indicates acceptance of the Textpattern license agreement 
+	Use of this software indicates acceptance of the Textpattern license agreement
 
 $HeadURL$
 $LastChangedRevision$
@@ -42,7 +42,7 @@ if (!empty($event) and $event == 'article') {
 	$publish = gps('publish');
 	if ($publish) $step = 'publish';
 
-		
+
 	switch(strtolower($step)) {
 		case "":         article_edit();    break;
 		case "create":   article_edit();    break;
@@ -56,7 +56,7 @@ if (!empty($event) and $event == 'article') {
 
 	function article_post()
 	{
-		global $txp_user, $vars, $txpcfg, $prefs;		
+		global $txp_user, $vars, $txpcfg, $prefs;
 
 		extract($prefs);
 
@@ -77,7 +77,7 @@ if (!empty($event) and $event == 'article') {
 			$when = strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second)-tz_offset();
 			$when = "from_unixtime($when)";
 		}
-		
+
 		$Keywords = doSlash(trim(preg_replace('/( ?[\r\n\t,])+ ?/s', ',', preg_replace('/ +/', ' ', ps('Keywords'))), ', '));
 
 		if ($Title or $Body or $Excerpt) {
@@ -120,13 +120,13 @@ if (!empty($event) and $event == 'article') {
 				uid             = '".md5(uniqid(rand(),true))."',
 				feed_time       = now()"
 			);
-			
+
 			$GLOBALS['ID'] = mysql_insert_id();
-				
+
 			if ($Status>=4) {
-				
+
 				do_pings();
-				
+
 				update_lastmod();
 			}
 			article_edit(
@@ -152,7 +152,7 @@ if (!empty($event) and $event == 'article') {
 		    	or ($oldArticle['Status'] < 4 and has_privs('article.edit'))
 				or ($oldArticle['Status'] < 4 and $incoming['AuthorID']==$txp_user and has_privs('article.edit.own'))))
 		{
-				// Not allowed, you silly rabbit, you shouldn't even be here. 
+				// Not allowed, you silly rabbit, you shouldn't even be here.
 				// Show default editing screen.
 			article_edit();
 			return;
@@ -161,14 +161,14 @@ if (!empty($event) and $event == 'article') {
 		$incoming = textile_main_fields($incoming, $use_textile);
 
 		extract(doSlash($incoming));
-		extract(array_map('assert_int', psa(array('ID', 'Status', 'textile_body', 'textile_excerpt'))));  
+		extract(array_map('assert_int', psa(array('ID', 'Status', 'textile_body', 'textile_excerpt'))));
 
 		$Annotate = (int) $Annotate;
 
 		if (!has_privs('article.publish') && $Status>=4) $Status = 3;
 
 		if($reset_time) {
-			$whenposted = "Posted=now()"; 
+			$whenposted = "Posted=now()";
 		} else {
 			$when = strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second)-tz_offset();
 			$when = "from_unixtime($when)";
@@ -177,8 +177,8 @@ if (!empty($event) and $event == 'article') {
 
 		//Auto-Update custom-titles according to Title, as long as unpublished and NOT customized
 		if ( empty($url_title)
-			  || ( ($oldArticle['Status'] < 4) 
-					&& ($oldArticle['url_title'] == $url_title ) 
+			  || ( ($oldArticle['Status'] < 4)
+					&& ($oldArticle['url_title'] == $url_title )
 					&& ($oldArticle['url_title'] == stripSpace($oldArticle['Title'],1))
 					&& ($oldArticle['Title'] != $Title)
 				 )
@@ -189,7 +189,7 @@ if (!empty($event) and $event == 'article') {
 
 		$Keywords = doSlash(trim(preg_replace('/( ?[\r\n\t,])+ ?/s', ',', preg_replace('/ +/', ' ', ps('Keywords'))), ', '));
 
-		safe_update("textpattern", 
+		safe_update("textpattern",
 		   "Title           = '$Title',
 			Body            = '$Body',
 			Body_html       = '$Body_html',
@@ -225,11 +225,11 @@ if (!empty($event) and $event == 'article') {
 
 		if($Status >= 4) {
 			if ($oldArticle['Status'] < 4) {
-				do_pings();	
+				do_pings();
 			}
 			update_lastmod();
 		}
-		
+
 		article_edit(
 			get_status_message($Status).check_url_title($url_title)
 		);
@@ -249,7 +249,7 @@ if (!empty($event) and $event == 'article') {
 		if(!empty($GLOBALS['ID'])) { // newly-saved article
 			$ID = $GLOBALS['ID'];
 			$step = 'edit';
-		} else {  
+		} else {
 			$ID = gps('ID');
 		}
 
@@ -260,13 +260,13 @@ if (!empty($event) and $event == 'article') {
 		if(!$view || gps('save') || gps('publish')) {
 			$view = 'text';
 		}
-		
+
 		if (!$step) $step = "create";
 
-		if ($step == "edit" 
-			&& $view=="text" 
-			&& !empty($ID) 
-			&& $from_view != 'preview' 
+		if ($step == "edit"
+			&& $view=="text"
+			&& !empty($ID)
+			&& $from_view != 'preview'
 			&& $from_view != 'html') {
 
 			$pull = true;          //-- it's an existing article - off we go to the db
@@ -275,7 +275,7 @@ if (!empty($event) and $event == 'article') {
 			$rs = safe_row(
 				"*, unix_timestamp(Posted) as sPosted,
 				unix_timestamp(LastMod) as sLastMod",
-				"textpattern", 
+				"textpattern",
 				"ID=$ID"
 			);
 
@@ -297,7 +297,7 @@ if (!empty($event) and $event == 'article') {
 				}
 			}
 
-			else 
+			else
 			{
 				$store_out = gpsa($vars);
 			}
@@ -316,9 +316,9 @@ if (!empty($event) and $event == 'article') {
 
 		if ($step!='create') {
 
-			// Previous record?				
+			// Previous record?
 			$prev_id = checkIfNeighbour('prev',$sPosted);
-			
+
 			// Next record?
 			$next_id = checkIfNeighbour('next',$sPosted);
 		}
@@ -366,7 +366,7 @@ if (!empty($event) and $event == 'article') {
 			?	graf('<label for="override-form">'.gTxt('override_default_form').'</label>'.br.
 					form_pop($override_form, 'override-form').sp.popHelp('override_form'))
 			:	'',
-			
+
 				// custom fields, believe it or not
 			($custom_1_set)  ? custField(  1, $custom_1_set,  $custom_1 )    : '',
 			($custom_2_set)  ? custField(  2, $custom_2_set,  $custom_2 )    : '',
@@ -390,14 +390,14 @@ if (!empty($event) and $event == 'article') {
 			// url title
 				n.graf('<label for="url-title">'.gTxt('url_title').'</label>'.sp.popHelp('url_title').br.
 					fInput('text', 'url_title', $url_title, 'edit', '', '', 22, '', 'url-title')),
-		
+
 			'</div>
-			
+
 			<h3 class="plain"><a href="#recent" onclick="toggleDisplay(\'recent\'); return false;">'.gTxt('recent_articles').'</a>'.'</h3>'.
 			'<div id="recent" style="display:none;">';
-			
+
 			$recents = safe_rows_start("Title, ID",'textpattern',"1=1 order by LastMod desc limit 10");
-			
+
 			if ($recents)
 			{
 				echo '<ul class="plain-list">';
@@ -414,7 +414,7 @@ if (!empty($event) and $event == 'article') {
 
 				echo '</ul>';
 			}
-			
+
 			echo '</div>';
 		}
 
@@ -425,7 +425,7 @@ if (!empty($event) and $event == 'article') {
 
 		echo '</td>'.n.'<td id="article-main">';
 
-	//-- title input -------------- 
+	//-- title input --------------
 
 		if ($view == 'preview')
 		{
@@ -454,7 +454,7 @@ if (!empty($event) and $event == 'article') {
 	//-- body --------------------
 
 		if ($view == 'preview')
-		{ 
+		{
 			if ($textile_body == USE_TEXTILE)
 			{
 				echo $textile->TextileThis($Body);
@@ -522,7 +522,7 @@ if (!empty($event) and $event == 'article') {
 
 
 	//-- author --------------
-	
+
 		if ($view=="text" && $step != "create") {
 			echo '<p class="small">'.gTxt('posted_by').': '.htmlspecialchars($AuthorID).' &#183; '.safe_strftime('%d %b %Y &#183; %X',$sPosted);
 			if($sPosted != $sLastMod) {
@@ -550,7 +550,7 @@ if (!empty($event) and $event == 'article') {
 				echo n.graf(href(gtxt('create_new'), 'index.php?event=article'));
 			}
 
-		//-- prev/next article links -- 
+		//-- prev/next article links --
 
 			if ($step!='create' and ($prev_id or $next_id)) {
 				echo '<p>',
@@ -646,7 +646,7 @@ if (!empty($event) and $event == 'article') {
 
 			if ($step == "create" and empty($GLOBALS['ID']))
 			{
-		//-- timestamp ------------------- 
+		//-- timestamp -------------------
 
 				//Avoiding modified date to disappear
 				$persist_timestamp = (!empty($store_out['year']))?
@@ -688,12 +688,12 @@ if (!empty($event) and $event == 'article') {
 			else
 			{
 
-			//-- timestamp ------------------- 
+			//-- timestamp -------------------
 
 				if (!empty($year)) {
-					$sPosted = safe_strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second);					
-				}	
-					
+					$sPosted = safe_strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second);
+				}
+
 				echo n.n.'<fieldset id="write-timestamp">'.
 					n.'<legend>'.gTxt('timestamp').'</legend>'.
 
@@ -734,7 +734,7 @@ if (!empty($event) and $event == 'article') {
 		}
 
 		echo '</td></tr></table></form>';
-	
+
 	}
 
 // -------------------------------------------------------------
@@ -749,15 +749,15 @@ if (!empty($event) and $event == 'article') {
 	function checkIfNeighbour($whichway,$sPosted)
 	{
 		$sPosted = assert_int($sPosted);
-		$dir = ($whichway == 'prev') ? '<' : '>'; 
-		$ord = ($whichway == 'prev') ? 'desc' : 'asc'; 
+		$dir = ($whichway == 'prev') ? '<' : '>';
+		$ord = ($whichway == 'prev') ? 'desc' : 'asc';
 
-		return safe_field("ID", "textpattern", 
+		return safe_field("ID", "textpattern",
 			"Posted $dir from_unixtime($sPosted) order by Posted $ord limit 1");
 	}
 
 //--------------------------------------------------------------
-// remember to show markup help for both body and excerpt 
+// remember to show markup help for both body and excerpt
 // if they are different
 
 	function side_help($textile_body, $textile_excerpt)
@@ -859,7 +859,7 @@ if (!empty($event) and $event == 'article') {
 	}
 
 //--------------------------------------------------------------
-	function tab($tabevent,$view) 
+	function tab($tabevent,$view)
 	{
 		$state = ($view==$tabevent) ? 'up' : 'down';
 		$img = 'txp_img/'.$tabevent.$state.'.gif';
@@ -870,7 +870,7 @@ if (!empty($event) and $event == 'article') {
 	}
 
 //--------------------------------------------------------------
-	function getDefaultSection() 
+	function getDefaultSection()
 	{
 		return safe_field("name", "txp_section","is_default=1");
 	}
@@ -925,40 +925,40 @@ if (!empty($event) and $event == 'article') {
 	function textile_main_fields($incoming, $use_textile)
 	{
 		global $txpcfg;
-		
+
 		include_once txpath.'/lib/classTextile.php';
 		$textile = new Textile();
-		
+
 		$incoming['Title_plain'] = $incoming['Title'];
 		$incoming['url_title'] = preg_replace('|[\x00-\x1f#%+/?\x7f]|', '', $incoming['url_title']);
-		
+
 		if ($incoming['textile_body'] == LEAVE_TEXT_UNTOUCHED) {
-		
+
 			$incoming['Body_html'] = trim($incoming['Body']);
-			
+
 		}elseif ($incoming['textile_body'] == USE_TEXTILE){
-		
+
 			$incoming['Body_html'] = $textile->TextileThis($incoming['Body']);
 			$incoming['Title'] = $textile->TextileThis($incoming['Title'],'',1);
-			
+
 		}elseif ($incoming['textile_body'] == CONVERT_LINEBREAKS){
-			
+
 			$incoming['Body_html'] = nl2br(trim($incoming['Body']));
 		}
 
 		if ($incoming['textile_excerpt'] == LEAVE_TEXT_UNTOUCHED) {
-		
+
 			$incoming['Excerpt_html'] = trim($incoming['Excerpt']);
-			
+
 		}elseif ($incoming['textile_excerpt'] == USE_TEXTILE){
-		
+
 			$incoming['Excerpt_html'] = $textile->TextileThis($incoming['Excerpt']);
-			
+
 		}elseif ($incoming['textile_excerpt'] == CONVERT_LINEBREAKS){
-			
+
 			$incoming['Excerpt_html'] = nl2br(trim($incoming['Excerpt']));
 		}
-		
+
 		return $incoming;
 	}
 // -------------------------------------------------------------
@@ -974,7 +974,7 @@ if (!empty($event) and $event == 'article') {
 		include_once txpath.'/lib/IXRClass.php';
 
 		callback_event('ping');
-		
+
 		if ($prefs['ping_textpattern_com']) {
 			$tx_client = new IXR_Client('http://textpattern.com/xmlrpc/');
 			$tx_client->query('ping.Textpattern', $prefs['sitename'], hu);

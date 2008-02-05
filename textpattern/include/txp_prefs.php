@@ -7,7 +7,7 @@
 	www.textpattern.com
 	All rights reserved
 
-	Use of this software indicates acceptance of the Textpattern license agreement 
+	Use of this software indicates acceptance of the Textpattern license agreement
 
 $HeadURL$
 $LastChangedRevision$
@@ -28,7 +28,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function prefs_save() 
+	function prefs_save()
 	{
 		$prefnames = safe_column("name", "txp_prefs", "prefs_id = 1");
 
@@ -43,16 +43,16 @@ $LastChangedRevision$
 				}
 
 				safe_update(
-					"txp_prefs", 
+					"txp_prefs",
 					"val = '".$post[$prefname]."'",
 					"name = '".doSlash($prefname)."' and prefs_id = 1"
 				);
-			}			
+			}
 		}
 
 		update_lastmod();
-		
-		prefs_list(gTxt('preferences_saved'));		
+
+		prefs_list(gTxt('preferences_saved'));
 	}
 
 // -------------------------------------------------------------
@@ -517,11 +517,11 @@ $LastChangedRevision$
 	}
 
 //-------------------------------------------------------------
-	function real_max_upload_size($user_max) 
+	function real_max_upload_size($user_max)
 	{
 		// The minimum of the candidates, is the real max. possible size
 		$candidates = array($user_max,
-							ini_get('post_max_size'), 
+							ini_get('post_max_size'),
 							ini_get('upload_max_filesize'));
 		$real_max = null;
 		foreach ($candidates as $item)
@@ -535,7 +535,7 @@ $LastChangedRevision$
 				case 'k': $val *= 1024;
 			}
 			if ($val > 1) {
-				if (is_null($real_max)) 
+				if (is_null($real_max))
 					$real_max = $val;
 				elseif ($val < $real_max)
 					$real_max = $val;
@@ -548,7 +548,7 @@ $LastChangedRevision$
 	function advanced_prefs_save()
 	{
 		$prefnames = safe_column("name", "txp_prefs", "prefs_id = 1 AND type = 1");
-		
+
 		$post = doSlash(stripPost());
 
 		if (empty($post['tempdir']))
@@ -560,18 +560,18 @@ $LastChangedRevision$
 		foreach($prefnames as $prefname) {
 			if (isset($post[$prefname])) {
 					safe_update(
-						"txp_prefs", 
+						"txp_prefs",
 						"val = '".$post[$prefname]."'",
 						"name = '".doSlash($prefname)."' and prefs_id = 1"
 					);
-			}			
+			}
 		}
 
 		update_lastmod();
-		
-		advanced_prefs(gTxt('preferences_saved'));	
+
+		advanced_prefs(gTxt('preferences_saved'));
 	}
-	
+
 //-------------------------------------------------------------
 	# RPC install/update languages
 	function list_languages($message='')
@@ -596,7 +596,7 @@ $LastChangedRevision$
 								eInput('prefs').sInput('list_languages')
 							,'display:inline;')
 						,' style="text-align:center" colspan="3"');
-		
+
 
 		$client = new IXR_Client(RPC_SERVER);
 		#$client->debug = true;
@@ -612,14 +612,14 @@ $LastChangedRevision$
 			$response = $client->getResponse();
 			foreach ($response as $language)
 				$available_lang[$language['language']]['rpc_lastmod'] = gmmktime($language['lastmodified']->hour,$language['lastmodified']->minute,$language['lastmodified']->second,$language['lastmodified']->month,$language['lastmodified']->day,$language['lastmodified']->year);
-		} elseif (gps('force')!='file') 
+		} elseif (gps('force')!='file')
 		{
 			$msg = gTxt('rpc_connect_error')."<!--".$client->getErrorCode().' '.$client->getErrorMessage()."-->";
 		}
 
 		# Get items from Filesystem
 		$files = get_lang_files();
-		if (gps('force')=='file' || !$rpc_connect) 
+		if (gps('force')=='file' || !$rpc_connect)
 			$show_files = true;
 		if ( $show_files && is_array($files) && !empty($files) )
 		{
@@ -630,9 +630,9 @@ $LastChangedRevision$
 					$name = str_replace('.txt','',$file);
 					$firstline = fgets($fp, 4069);
 					fclose($fp);
-					if (strpos($firstline,'#@version') !== false) 
+					if (strpos($firstline,'#@version') !== false)
 						@list($fversion,$ftime) = explode(';',trim(substr($firstline,strpos($firstline,' ',1))));
-					else 
+					else
 						$fversion = $ftime = NULL;
 					$available_lang[$name]['file_note'] = (isset($fversion)) ? $fversion : 0;
 					$available_lang[$name]['file_lastmod'] = (isset($ftime)) ? $ftime : 0;
@@ -648,36 +648,36 @@ $LastChangedRevision$
 		}
 
 		$list = '';
-		# Show the language table 
+		# Show the language table
 		foreach ($available_lang as $langname => $langdat)
 		{
 			$file_updated = ( isset($langdat['db_lastmod']) && @$langdat['file_lastmod'] > $langdat['db_lastmod']);
 			$rpc_updated = ( @$langdat['rpc_lastmod'] > @$langdat['db_lastmod']);
-			$rpc_install = tda( strong(eLink('prefs','get_language','lang_code',$langname,(isset($langdat['db_lastmod'])) 
+			$rpc_install = tda( strong(eLink('prefs','get_language','lang_code',$langname,(isset($langdat['db_lastmod']))
 										? gTxt('update') : gTxt('install'),'updating',isset($langdat['db_lastmod']) )).
 								br.safe_strftime('%d %b %Y %X',@$langdat['rpc_lastmod'])
-							,(isset($langdat['db_lastmod'])) 
+							,(isset($langdat['db_lastmod']))
 								? ' style="color:red;text-align:center;background-color:#FFFFCC;"'
 								: ' style="color:#667;vertical-align:middle;text-align:center"');
 			$list.= tr (
 				# Lang-Name & Date
 				tda(gTxt($langname).
-					 tag( ( isset($langdat['db_lastmod']) ) 
+					 tag( ( isset($langdat['db_lastmod']) )
 							? br.'&nbsp;'.safe_strftime('%d %b %Y %X',$langdat['db_lastmod'])
 							: ''
 						, 'span',' style="color:#aaa;font-style:italic"')
 					, (isset($langdat['db_lastmod']) && $rpc_updated) #tda attribute
-							? ' nowrap="nowrap" style="color:red;background-color:#FFFFCC;"' 
+							? ' nowrap="nowrap" style="color:red;background-color:#FFFFCC;"'
 							: ' nowrap="nowrap" style="vertical-align:middle"' ).n.
 				# RPC - Info
-				(  ($rpc_updated) 
-					? $rpc_install 
+				(  ($rpc_updated)
+					? $rpc_install
 					: tda( (isset($langdat['rpc_lastmod'])) ? gTxt('updated') : '-'
 						,' style="vertical-align:middle;text-align:center"')
 				).n.
 				# File - Info
 				( ($show_files)
-					?	tda( tag( ( isset($langdat['file_lastmod']) ) 
+					?	tda( tag( ( isset($langdat['file_lastmod']) )
 									? eLink('prefs','get_language','lang_code',$langname,($file_updated) ? gTxt('update') : gTxt('install'),'force','file').
 											br.'&nbsp;'.safe_strftime($prefs['archive_dateformat'],$langdat['file_lastmod'])
 									: ' &nbsp; '  # No File available
@@ -693,7 +693,7 @@ $LastChangedRevision$
 		if (isset($msg) && $msg)
 			echo tag ($msg,'p',' style="text-align:center;color:red;width:50%;margin: 2em auto"' );
 
-		echo startTable('list'),				
+		echo startTable('list'),
 
 		tr(
 			tdcs(
@@ -734,23 +734,23 @@ $LastChangedRevision$
 		echo tag( $install_langfile ,'p',' style="text-align:center;width:50%;margin: 2em auto"' );
 
 	}
-	
+
 //-------------------------------------------------------------
 	function get_language()
 	{
 		global $prefs, $txpcfg, $textarray;
 		require_once txpath.'/lib/IXRClass.php';
-		$lang_code = gps('lang_code');		
+		$lang_code = gps('lang_code');
 
 		$client = new IXR_Client(RPC_SERVER);
 //		$client->debug = true;
-		
+
 		@set_time_limit(90);
 		if (gps('force')=='file' || !$client->query('tups.getLanguage',$prefs['blog_uid'],$lang_code))
 		{
 			if ( (gps('force')=='file' || gps('updating')!=='1') && install_language_from_file($lang_code) )
 			{
-				if (defined('LANG')) 
+				if (defined('LANG'))
 					$textarray = load_lang(LANG);
 				return list_languages(gTxt($lang_code).sp.gTxt('updated'));
 			}else{
@@ -762,17 +762,17 @@ $LastChangedRevision$
 				if ( $install_langfile == 'install_langfile')
 					$install_langfile = 'To install new languages from file you can download them from <b><a href="'.RPC_SERVER.'/lang/">'.RPC_SERVER.'/lang/</a></b> and place them inside your ./textpattern/lang/ directory.';
 				pagetop(gTxt('installing_language'));
-				echo tag( gTxt('rpc_connect_error')."<!--".$client->getErrorCode().' '.$client->getErrorMessage()."-->" 
+				echo tag( gTxt('rpc_connect_error')."<!--".$client->getErrorCode().' '.$client->getErrorMessage()."-->"
 						 ,'p',' style="text-align:center;color:red;width:50%;margin: 2em auto"' );
 				echo tag( $install_langfile ,'p',' style="text-align:center;width:50%;margin: 2em auto"' );
-			}			
+			}
 		}else {
 			$response = $client->getResponse();
 			$lang_struct = unserialize($response);
 			function install_lang_key(&$value, $key)
 			{
 				extract(gpsa(array('lang_code','updating')));
-				$exists = safe_field('name','txp_lang',"name='".doSlash($value['name'])."' AND lang='".doSlash($lang_code)."'");				
+				$exists = safe_field('name','txp_lang',"name='".doSlash($value['name'])."' AND lang='".doSlash($lang_code)."'");
 				$q = "name='".doSlash($value['name'])."', event='".doSlash($value['event'])."', data='".doSlash($value['data'])."', lastmod='".doSlash(strftime('%Y%m%d%H%M%S',$value['uLastmod']))."'";
 
 				if ($exists)
@@ -781,7 +781,7 @@ $LastChangedRevision$
 				}else{
 					$value['ok'] = safe_insert('txp_lang',$q.", lang='".doSlash($lang_code)."'");
 				}
-			}			
+			}
 			array_walk($lang_struct,'install_lang_key');
 			$size = count($lang_struct);
 			$errors = 0;
@@ -789,23 +789,23 @@ $LastChangedRevision$
 			{
 				$errors += ( !$lang_struct[$i]['ok'] );
 			}
-			if (defined('LANG')) 
+			if (defined('LANG'))
 				$textarray = load_lang(LANG);
 			$msg = gTxt($lang_code).sp.gTxt('updated');
-			if ($errors > 0) 
+			if ($errors > 0)
 				$msg .= sprintf(" (%s errors, %s ok)",$errors, ($size-$errors));
 			return list_languages($msg);
-		}		
+		}
 	}
-	
+
 // ----------------------------------------------------------------------
 
 function get_lang_files()
 {
 	global $txpcfg;
-	
+
 	$dirlist = array();
-	
+
 	$lang_dir = txpath.DS.'lang'.DS;
 
 	if (!is_dir($lang_dir))
@@ -813,7 +813,7 @@ function get_lang_files()
 		trigger_error('Lang directory is not a directory: '.$lang_dir, E_USER_WARNING);
 		return $dirlist;
 	}
-	
+
 	if (chdir($lang_dir)) {
 		if (function_exists('glob')){
 			$g_array = glob("*.txt");
@@ -826,7 +826,7 @@ function get_lang_files()
 					$g_array[] = $filename;
 			}
 			closedir($dh);
-			
+
 		}
 		# build an array of lang-codes => filemtimes
 		if ($g_array) {
@@ -839,5 +839,5 @@ function get_lang_files()
 	}
 	return $g_array;
 }
-	
+
 ?>

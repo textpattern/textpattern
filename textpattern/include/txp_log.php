@@ -8,7 +8,7 @@
 	All rights reserved
 
 	Use of this software indicates acceptance of
-	the Textpattern license agreement 
+	the Textpattern license agreement
 
 $HeadURL$
 $LastChangedRevision$
@@ -42,7 +42,7 @@ $LastChangedRevision$
 
 //-------------------------------------------------------------
 
-	function log_list($message = '') 
+	function log_list($message = '')
 	{
 		pagetop(gTxt('visitor_logs'), $message);
 
@@ -141,7 +141,7 @@ $LastChangedRevision$
 
 			return;
 		}
- 
+
 		$limit = max(@$log_list_pageby, 15);
 
 		list($page, $offset, $numPages) = pager($total, $limit, $page);
@@ -183,7 +183,7 @@ $LastChangedRevision$
 				{
 					$log_anchor = preg_replace('/\/$/','',$log_page);
 					$log_anchor = soft_wrap(substr($log_anchor,1), 30);
-					
+
 					$log_page = '<a href="'.htmlspecialchars($log_page).'" target="_blank">'.htmlspecialchars($log_anchor).'</a>';
 
 					if ($log_method == 'POST')
@@ -231,7 +231,7 @@ $LastChangedRevision$
 			n.nav_form('log', $page, $numPages, $sort, $dir, $crit, $search_method).
 
 			n.pageby_form('log', $log_list_pageby);
-		} 
+		}
 	}
 
 //-------------------------------------------------------------
@@ -252,7 +252,7 @@ $LastChangedRevision$
 
 //-------------------------------------------------------------
 
-	function log_change_pageby() 
+	function log_change_pageby()
 	{
 		event_change_pageby('log');
 		log_list();
@@ -260,7 +260,7 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function log_multiedit_form($page, $sort, $dir, $crit, $search_method) 
+	function log_multiedit_form($page, $sort, $dir, $crit, $search_method)
 	{
 		$methods = array(
 			'delete' => gTxt('delete')
@@ -271,7 +271,7 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function log_multi_edit() 
+	function log_multi_edit()
 	{
 		$deleted = event_multi_edit('txp_log', 'id');
 
@@ -284,5 +284,5 @@ $LastChangedRevision$
 
 		return log_list();
 	}
-	
+
 ?>

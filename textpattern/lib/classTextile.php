@@ -218,7 +218,7 @@ class Textile
 	var $pnct;
 	var $rel;
 	var $fn;
-	
+
 	var $shelf = array();
 	var $restricted = false;
 	var $noimage = false;
@@ -226,10 +226,10 @@ class Textile
 	var $url_schemes = array();
 	var $glyph = array();
 	var $hu = '';
-	
+
 	var $ver = '2.0.0';
 	var $rev = '$Rev$';
-	
+
 	var $doc_root;
 
 // -------------------------------------------------------------
@@ -281,7 +281,7 @@ class Textile
 		$this->doc_root = @$_SERVER['DOCUMENT_ROOT'];
 		if (!$this->doc_root)
 			$this->doc_root = @$_SERVER['PATH_TRANSLATED']; // IIS
-			
+
 		$this->doc_root = rtrim($this->doc_root, $this->ds).$this->ds;
 
 	}
@@ -771,7 +771,7 @@ class Textile
 		$url = $this->shelveURL($url.$slash);
 
 		$out = '<a href="' . $url . '"' . $atts . $this->rel . '>' . trim($text) . '</a>' . $post;
-		
+
 		if (($pre and !$tail) or ($tail and !$pre))
 			$out = $pre.$out.$tail;
 

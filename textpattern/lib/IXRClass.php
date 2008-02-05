@@ -1,6 +1,6 @@
 <?php
 
-/* 
+/*
    IXR - The Inutio XML-RPC Library - (c) Incutio Ltd 2002
    Version 1.61 - Simon Willison, 11th July 2003 (htmlentities -> htmlspecialchars)
    Site:   http://scripts.incutio.com/xmlrpc/
@@ -51,7 +51,7 @@ class IXR_Value {
         }
         // If it is a normal PHP object convert it in to a struct
         if (is_object($this->data)) {
-            
+
             $this->data = get_object_vars($this->data);
             return 'struct';
         }
@@ -269,7 +269,7 @@ class IXR_Message {
                 $this->params[] = $value;
             }
         }
-    }       
+    }
 }
 
 
@@ -364,8 +364,8 @@ EOD;
     }
     function output($xml) {
         $xml = '<?xml version="1.0" encoding="utf-8" ?>'."\n".$xml;
-		if ( (@strpos($_SERVER["HTTP_ACCEPT_ENCODING"],'gzip') !== false) && extension_loaded('zlib') && 
-			ini_get("zlib.output_compression") == 0 && ini_get('output_handler') != 'ob_gzhandler' && !headers_sent()) 
+		if ( (@strpos($_SERVER["HTTP_ACCEPT_ENCODING"],'gzip') !== false) && extension_loaded('zlib') &&
+			ini_get("zlib.output_compression") == 0 && ini_get('output_handler') != 'ob_gzhandler' && !headers_sent())
 		{
 			$xml = gzencode($xml,7,FORCE_GZIP);
 			header("Content-Encoding: gzip");
@@ -396,7 +396,7 @@ EOD;
                 'specUrl' => 'http://www.xmlrpc.com/discuss/msgReader$1208',
                 'specVersion' => 1
             ),
-        );   
+        );
     }
     function getCapabilities($args) {
         return $this->capabilities;
@@ -506,7 +506,7 @@ class IXR_Client {
         $request .= "Content-Type: text/xml$r";
         $request .= "User-Agent: {$this->useragent}$r";
 		// Accept gzipped response if zlib and if php4.3+ (fgets turned binary safe)
-		if ( extension_loaded('zlib') && preg_match('#^(4\.[3-9])|([5-9])#',phpversion()) ) 
+		if ( extension_loaded('zlib') && preg_match('#^(4\.[3-9])|([5-9])#',phpversion()) )
 			$request .= "Accept-Encoding: gzip$r";
         $request .= "Content-length: {$length}$r$r";
         $request .= $xml;
@@ -545,13 +545,13 @@ class IXR_Client {
             if (!$gettingHeaders) {
 		        // We do a binary comparison of the first two bytes, see
 		        // rfc1952, to check wether the content is gzipped.
-				if ( ($contents=='') && (strncmp($line,"\x1F\x8B",2)===0)) 
+				if ( ($contents=='') && (strncmp($line,"\x1F\x8B",2)===0))
 					$is_gzipped = true;
                 $contents .= ($is_gzipped) ? $line : trim($line)."\n";
             }
         }
 		# if gzipped, strip the 10 byte header, and pass it to gzinflate (rfc1952)
-		if ($is_gzipped) 
+		if ($is_gzipped)
 		{
 			$contents = gzinflate(substr($contents, 10));
 			//simulate trim() for each line; don't know why, but it won't work otherwise
@@ -615,7 +615,7 @@ class IXR_Error {
       </struct>
     </value>
   </fault>
-</methodResponse> 
+</methodResponse>
 
 EOD;
         return $xml;
@@ -648,7 +648,7 @@ class IXR_Date {
     }
     function parseIso($iso) {
         $this->year = substr($iso, 0, 4);
-        $this->month = substr($iso, 4, 2); 
+        $this->month = substr($iso, 4, 2);
         $this->day = substr($iso, 6, 2);
         $this->hour = substr($iso, 9, 2);
         $this->minute = substr($iso, 12, 2);
@@ -688,27 +688,27 @@ class IXR_IntrospectionServer extends IXR_Server {
             'specVersion' => 1
         );
         $this->addCallback(
-            'system.methodSignature', 
-            'this:methodSignature', 
-            array('array', 'string'), 
+            'system.methodSignature',
+            'this:methodSignature',
+            array('array', 'string'),
             'Returns an array describing the return type and required parameters of a method'
         );
         $this->addCallback(
-            'system.getCapabilities', 
-            'this:getCapabilities', 
-            array('struct'), 
+            'system.getCapabilities',
+            'this:getCapabilities',
+            array('struct'),
             'Returns a struct describing the XML-RPC specifications supported by this server'
         );
         $this->addCallback(
-            'system.listMethods', 
-            'this:listMethods', 
-            array('array'), 
+            'system.listMethods',
+            'this:listMethods',
+            array('array'),
             'Returns an array of available methods on this server'
         );
         $this->addCallback(
-            'system.methodHelp', 
-            'this:methodHelp', 
-            array('string', 'string'), 
+            'system.methodHelp',
+            'this:methodHelp',
+            array('string', 'string'),
             'Returns a documentation string for the specified method'
         );
     }

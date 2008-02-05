@@ -21,12 +21,12 @@ if ($result) die("Textpattern database table already exist. Can't run setup.");
 
 $version = mysql_get_server_info();
 //Use "ENGINE" if version of MySQL > (4.0.18 or 4.1.2)
-$tabletype = ( intval($version[0]) >= 5 || preg_match('#^4\.(0\.[2-9]|(1[89]))|(1\.[2-9])#',$version)) 
-	? " ENGINE=MyISAM " 
+$tabletype = ( intval($version[0]) >= 5 || preg_match('#^4\.(0\.[2-9]|(1[89]))|(1\.[2-9])#',$version))
+	? " ENGINE=MyISAM "
 	: " TYPE=MyISAM ";
 
 // On 4.1 or greater use utf8-tables
-if ( isset($dbcharset) && (intval($version[0]) >= 5 || preg_match('#^4\.[1-9]#',$version))) 
+if ( isset($dbcharset) && (intval($version[0]) >= 5 || preg_match('#^4\.[1-9]#',$version)))
 {
 	$tabletype .= " CHARACTER SET = $dbcharset ";
 	if ($dbcharset == 'utf8')
@@ -412,7 +412,7 @@ $GLOBALS['txp_err_count'] = 0;
 foreach ($create_sql as $query)
 {
 	$result = mysql_query($query);
-	if (!$result) 
+	if (!$result)
 	{
 		$GLOBALS['txp_err_count']++;
 		echo "<b>".$GLOBALS['txp_err_count'].".</b> ".mysql_error()."<br />\n";
@@ -447,16 +447,16 @@ if (!$client->query('tups.getLanguage',$prefs['blog_uid'],LANG))
 		}
 	}
 }
-else 
+else
 {
 	$response = $client->getResponse();
 	$lang_struct = unserialize($response);
 	foreach ($lang_struct as $item)
 	{
-		foreach ($item as $name => $value) 
+		foreach ($item as $name => $value)
 			$item[$name] = doSlash($value);
 		mysql_query("INSERT DELAYED INTO `".PFX."txp_lang` SET lang='".LANG."', name='".$item['name']."', event='".$item['event']."', data='".$item['data']."', lastmod='".strftime('%Y%m%d%H%M%S',$item['uLastmod'])."'");
-	}		
+	}
 }
 
 mysql_query("FLUSH TABLE `".PFX."txp_lang`");

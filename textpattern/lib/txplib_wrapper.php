@@ -7,11 +7,11 @@ $LastChangedRevision$
 
 /**
  * Textpattern Wrapper Class for Textpattern 4.0.x
- * 
+ *
  * Main goal for this class is to be used as a textpattern data wrapper by
  * any code which needs to have access to the textpattern articles data,
  * like XML-RPC, Atom, Moblogging or other external implementations.
- * 
+ *
  * @link http://txp.kusor.com/wrapper
  * @author Pedro Palazon - http://kusor.net/
  * @copyright 2005-2008 The Textpattern Development Team - http://textpattern.com
@@ -31,25 +31,25 @@ class TXP_Wrapper
 {
 	/**
 	 * @var string The current user
-	 * 
+	 *
 	 * Remeber to use allways $this->txp_user when checking for permissions with this class
-	 */	
+	 */
 	var $txp_user = null;
 	/**
 	 * @var boolean Is the user authenticated
-	 */	
+	 */
 	var $loggedin = false;
 	/**
 	 * @var array Predefined Textpattern vars to be populated
-	 */	
+	 */
 	var $vars = array(
 		'ID','Title','Title_html','Body','Body_html','Excerpt','Excerpt_html','textile_excerpt','Image',
 		'textile_body', 'Keywords','Status','Posted','Section','Category1','Category2',
 		'Annotate','AnnotateInvite','AuthorID','Posted','override_form',
 		'url_title','custom_1','custom_2','custom_3','custom_4','custom_5',
 		'custom_6','custom_7','custom_8','custom_9','custom_10'
-	);	
-	
+	);
+
 	//Class constructor
 	/**
 	 * Class constructor
@@ -66,7 +66,7 @@ class TXP_Wrapper
 			$this->loggedin = true;
 		}
 	}
-	
+
 	//Delete the article given the id
 	/**
 	 * Delete the article given the id
@@ -85,11 +85,11 @@ class TXP_Wrapper
 			if ($r || has_privs('article.delete', $this->txp_user))
 			{
 				return safe_delete('textpattern', "ID = $article_id");
-			}			
+			}
 		}
 		return false;
 	}
-	
+
 	//Retrieves a list of articles matching the given criteria
 	/**
 	 * Retrieves a list of articles matching the given criteria
@@ -97,22 +97,22 @@ class TXP_Wrapper
 	 * @param string $where SQL condition to match
 	 * @param string $offset SQL offset
 	 * @param string $limit SQL limit
-	 * @param boolean $slash escape SQL column names and condition	 
-	 * @return mixed array on success, false on failure	 	 	 
+	 * @param boolean $slash escape SQL column names and condition
+	 * @return mixed array on success, false on failure
 	 */
 	function getArticleList($what='*', $where='1', $offset='0', $limit='10', $slash=true)
 	{
-		
+
 		if ($this->loggedin && has_privs('article.edit.own', $this->txp_user))
 		{
-			$offset = assert_int($offset); 
+			$offset = assert_int($offset);
 			$limit = assert_int($limit);
 
 			if ($slash) {
 				$where = doSlash($where);
 				$what = doSlash($what);
 			}
-			
+
 			if (has_privs('article.edit', $this->txp_user)) {
 				$rs = safe_rows_start($what, 'textpattern', $where." order by Posted desc LIMIT $offset, $limit");
 			}else{
@@ -130,15 +130,15 @@ class TXP_Wrapper
 		}
 		return false;
 	}
-	
+
 	//Retrieves an article matching the given criteria
 	/**
 	 * Retrieves an article matching the given criteria
 	 * @param string $what SQL column names to retrieve
 	 * @param string $where SQL condition to match
-	 * @param boolean $slash escape SQL column names and condition	 
-	 * @return mixed array on success, false on failure	 
-	 */	
+	 * @param boolean $slash escape SQL column names and condition
+	 * @return mixed array on success, false on failure
+	 */
 	function getArticle($what='*', $where='1', $slash=true)
 	{
 		if ($this->loggedin && has_privs('article.edit.own', $this->txp_user))
@@ -153,18 +153,18 @@ class TXP_Wrapper
 			}else {
 				// While restricted users should be able to edit their own articles only
 				return safe_row($what, 'textpattern', $where." AND AuthorID='".doSlash($this->txp_user)."'");
-			}			
+			}
 		}
 		return false;
 	}
-	
+
 	//Same thing, but handy shortcut known the ID
 	/**
 	 * Same thing, but handy shortcut known the ID
 	 * @param mixed(string|integer) $article_id the ID of the article
-	 * @param string $what SQL column names to retrieve	 
-	 * @return mixed array on success, false on failure	 
-	 */	
+	 * @param string $what SQL column names to retrieve
+	 * @return mixed array on success, false on failure
+	 */
 	function getArticleID($article_id, $what='*')
 	{
 		if ($this->loggedin && has_privs('article.edit.own', $this->txp_user))
@@ -178,21 +178,21 @@ class TXP_Wrapper
 		}
 		return false;
 	}
-	
+
 	//Updates an existing article
 	/**
 	 * Updates an existing article
 	 * @param array $params the article fields to update
-	 * @param mixed(string|integer) $article_id the ID of the article to update 
-	 * @return mixed integer article id on success, false on failure	 
+	 * @param mixed(string|integer) $article_id the ID of the article to update
+	 * @return mixed integer article id on success, false on failure
 	 * @see _setArticle
-	 */	
+	 */
 	function updateArticleID($article_id, $params)
 	{
 		$article_id = assert_int($article_id);
 
 		$r = safe_field('ID', 'textpattern', "AuthorID='".doSlash($this->txp_user)."' AND ID = $article_id");
-		
+
 		if ($this->loggedin && $r && has_privs('article.edit.own', $this->txp_user))
 		{	//Unprivileged user
 			//Check if can edit published arts
@@ -200,43 +200,43 @@ class TXP_Wrapper
 			$oldstatus = safe_field('Status', 'textpattern', "ID = $r");
 			if (($oldstatus=='4' || $oldstatus == '5') && !has_privs('article.edit.published', $this->txp_user)) return false;
 			//If can, let's go
-			return $this->_setArticle($params, $article_id);			
+			return $this->_setArticle($params, $article_id);
 		}
 		elseif ($this->loggedin && has_privs('article.edit', $this->txp_user))
 		{//Admin editing. Desires are behest.
 			return $this->_setArticle($params, $article_id);
 		}
-		
+
 		return false;
 	}
-	
+
 	//Creates a new article
 	/**
 	 * Creates a new article
-	 * @param array $params the article fields	 
+	 * @param array $params the article fields
 	 * @return mixed integer article id on success, false on failure
 	 * @see _setArticle
-	 */	
+	 */
 	function newArticle($params)
 	{
 		if ($this->loggedin && has_privs('article', $this->txp_user))
 		{
 			//Prevent junior authors to publish articles
 			if (($params['Status']=='4' || $params['Status']=='5') && !has_privs('article.publish', $this->txp_user))
-			{				
+			{
 				$params['Status']='3';
 			}
-			
+
 			return $this->_setArticle($params);
 		}
 		return false;
 	}
-	
+
 	//Get full sections information
 	/**
 	 * Get full sections information
-	 * @return mixed array on success, false on failure	 	 
-	 */	
+	 * @return mixed array on success, false on failure
+	 */
 	function getSectionsList()
 	{
 		if ($this->loggedin && has_privs('article', $this->txp_user))
@@ -245,13 +245,13 @@ class TXP_Wrapper
 		}
 		return false;
 	}
-	
+
 	//Get one section
 	/**
 	 * Get one section
 	 * @param string $name the section name
-	 * @return mixed array on success, false on failure	 	 
-	 */	
+	 * @return mixed array on success, false on failure
+	 */
 	function getSection($name)
 	{
 		if ($this->loggedin && has_privs('article', $this->txp_user))
@@ -261,12 +261,12 @@ class TXP_Wrapper
 		}
 		return false;
 	}
-	
+
 	//Get full categories information
 	/**
 	 * Get full categories information
-	 * @return mixed array on success, false on failure	 	 
-	 */	
+	 * @return mixed array on success, false on failure
+	 */
 	function getCategoryList()
 	{
 		if ($this->loggedin && has_privs('article', $this->txp_user))
@@ -278,8 +278,8 @@ class TXP_Wrapper
 	/**
 	 * Get one category by category name
 	 * @param string $name the category name
-	 * @return mixed array on success, false on failure	 	 
-	 */	
+	 * @return mixed array on success, false on failure
+	 */
 	function getCategory($name)
 	{
 		if ($this->loggedin && has_privs('article', $this->txp_user))
@@ -320,8 +320,8 @@ class TXP_Wrapper
 	//Get full information for current user
 	/**
 	 * Get full information for current user
-	 * @return mixed array on success, false on failure	 	 
-	 */	
+	 * @return mixed array on success, false on failure
+	 */
 	function getUser()
 	{
 		if ($this->loggedin)
@@ -330,12 +330,12 @@ class TXP_Wrapper
 		}
 		return false;
 	}
-	
+
 	//Retrieves a template with the given name
 	/**
 	 * Retrieves a template with the given name
 	 * @param string $name the template name
-	 */	
+	 */
 	function getTemplate($name)
 	{
 		if ($this->loggedin && has_privs('page', $this->txp_user))
@@ -350,8 +350,8 @@ class TXP_Wrapper
 	 * Updates a template with the given name
 	 * @param string $name the template name
 	 * @param string $html the template contents
-	 * @return boolean true on success	 
-	 */	
+	 * @return boolean true on success
+	 */
 	function setTemplate($name, $html)
 	{
 		if ($this->loggedin && has_privs('page', $this->txp_user))
@@ -361,16 +361,16 @@ class TXP_Wrapper
 			return safe_update('txp_page', "user_html='$html'", "name='$name'");
 		}
 	}
-	
+
 	// Intended to update article non content fields, like categories
 	// section or Keywords
 	/**
 	 * Intended to update article non content fields, like categories, section or Keywords
-	 * @param mixed(string|integer) $article_id the ID of the article to update	 
+	 * @param mixed(string|integer) $article_id the ID of the article to update
 	 * @param string $field the name of the field to update
 	 * @param mixed $value desired value for that field
 	 * @return boolean true on success
-	 */	
+	 */
 	function updateArticleField($article_id, $field, $value)
 	{
 		$disallow = array('Body','Body_html','Title','Title_html','Excerpt',
@@ -380,8 +380,8 @@ class TXP_Wrapper
 		{
 			$field = doSlash($field);
 			$value = doSlash($value);
-			
-			if($field == 'Posted') 
+
+			if($field == 'Posted')
 			{
 				$value = strtotime($value)-tz_offset();
 				$value = "from_unixtime($value)";
@@ -393,8 +393,8 @@ class TXP_Wrapper
 			}else{
 				$sql = "$field='$value'";
 			}
-			
-			
+
+
 			$sql.= ", LastMod = now(),
 					LastModID = '$this->txp_user'";
 			$article_id = assert_int($article_id);
@@ -402,8 +402,8 @@ class TXP_Wrapper
 			//Do not update lastmod pref here. No new content at all.
 			return $rs;
 		}
-		return false; 
-	}	
+		return false;
+	}
 
 // -------------------------------------------------------------
 // Private. Real action takes place here.
@@ -413,30 +413,30 @@ class TXP_Wrapper
 	 * @param array $incoming containing the desired article fields
 	 * @param mixed(string|integer) $article_id the ID of the article to update
 	 * @return mixed integer article id on success, false otherwise
-	 * @access private	 
+	 * @access private
 	 */
 	function _setArticle($incoming, $article_id = null)
 	{
 		global $txpcfg;
-		
+
 		$prefs = get_prefs();
-		
+
 		extract($prefs);
-		
+
 		if ($article_id!==null) {
 			$article_id = assert_int($article_id);
 		}
-		
+
 		//All validation rules assumed to be passed before this point.
 		//Do content processing here
-		
-		
+
+
 		$incoming_with_markup = $this->textile_main_fields($incoming, $use_textile);
-		
+
 		$incoming['Title'] = $incoming_with_markup['Title'];
-		
+
 		if (empty($incoming['Body_html']) && !empty($incoming['Body']))
-		{			
+		{
 			$incoming['Body_html'] = $incoming_with_markup['Body_html'];
 		}
 
@@ -444,7 +444,7 @@ class TXP_Wrapper
 		{
 				$incoming['Excerpt_html'] = $incoming_with_markup['Excerpt_html'];
 		}
-		
+
 		unset($incoming_with_markup);
 
 		if (empty($incoming['Posted'])) {
@@ -459,35 +459,35 @@ class TXP_Wrapper
 			$when = strtotime($incoming['Posted'])-tz_offset();
 			$when = "from_unixtime($when)";
 		}
-		
+
 
 		if ($incoming['Title'] || $incoming['Body'] || $incoming['Excerpt']) {
 			//Build SQL then and run query
-			
+
 			//Prevent data erase if not defined on the update action
 			//but it was on the DB from a previous creation/edition time
 			if ($article_id){
-				
+
 				$old = safe_row('*','textpattern', "ID = $article_id");
 				//Status should be defined previously. Be sure of that.
 				if (!has_privs('article.publish', $this->txp_user) && $incoming['Status']==4 && $old['Status']!=4) $incoming['Status'] = 3;
-				
+
 				foreach ($old as $key=>$val)
 				{
 					 if (!isset($incoming[$key])) $incoming[$key] = $val;
-				}								
-				
-			}else{				
-				//Status should be defined previously. Be sure of that.				
+				}
+
+			}else{
+				//Status should be defined previously. Be sure of that.
 				if (!has_privs('article.publish', $this->txp_user) && $incoming['Status']==4) $incoming['Status'] = 3;
 			}
-			
+
 			if (empty($incoming['Section']) && $article_id)
 			{
 				$incoming['Section'] = safe_field('Section','textpattern',"ID = $article_id");
 			}
-			
-			$incoming = $this->_check_keys($incoming, 
+
+			$incoming = $this->_check_keys($incoming,
 				array(
 					'AuthorID' => $this->txp_user,
 					'Annotate' => $comments_on_default,
@@ -497,10 +497,10 @@ class TXP_Wrapper
 					'url_title' => stripSpace($incoming['Title'])
 				)
 			);
-		
+
 			//Build the SQL query
 			$sql = array();
-			
+
 			foreach ($incoming as $key => $val)
 			{
 				if($key == 'Posted' && $val == 'now()')
@@ -512,7 +512,7 @@ class TXP_Wrapper
 				}
 			}
 			$sql[]= 'LastMod = now()';
-			$sql[]= "LastModID = '".doSlash($this->txp_user)."'";			
+			$sql[]= "LastModID = '".doSlash($this->txp_user)."'";
 			if (!$article_id) $sql[]= "uid = '".doSlash(md5(uniqid(rand(),true)))."'";
 			if (!$article_id)
 			{
@@ -525,26 +525,26 @@ class TXP_Wrapper
 					$sql[]= "feed_time ='".doSlash($when)."'";
 				}
 			}
-			$sql = join(', ', $sql);			
-			
+			$sql = join(', ', $sql);
+
 			$rs = ($article_id)?
 			   	safe_update('textpattern', $sql, "ID = $article_id"):
-			   	safe_insert('textpattern', $sql);			   	
-			   		   			   										   
+			   	safe_insert('textpattern', $sql);
+
 		   $oldstatus = ($article_id)? $old['Status'] : '';
-		   
+
 		   if (!$article_id && $rs) $article_id = $rs;
-		   
-		   if (($incoming['Status']>=4 && !$article_id) || ($oldstatus!=4 && $article_id)) {	
+
+		   if (($incoming['Status']>=4 && !$article_id) || ($oldstatus!=4 && $article_id)) {
 				safe_update("txp_prefs", "val = now()", "name = 'lastmod'");
-				//@$this->_sendPings();							
-		   }			   
+				//@$this->_sendPings();
+		   }
 		   return $article_id;
 		}
-		
+
 		return false;
 	}
-	
+
 // -------------------------------------------------------------
 // Private
 // -------------------------------------------------------------
@@ -558,9 +558,9 @@ class TXP_Wrapper
 	 * @return boolean, true if user is logged in
 	 */
 	function _validate($user,$password = NULL) {
-    	
+
 		if ($password!==NULL)
-    	{			
+    	{
 	    	$r = txp_validate($user, $password);
     	}else{
     		$r = true;
@@ -572,8 +572,8 @@ class TXP_Wrapper
 			return true;
     	}
 		return false;
-	}	
-	
+	}
+
 // -------------------------------------------------------------
 // Keep this apart for now. Maybe future changes ob this?
 // -------------------------------------------------------------
@@ -583,9 +583,9 @@ class TXP_Wrapper
 	{
 		global $prefs, $txpcfg;
 		extract($prefs);
-		
+
 		include_once txpath.'/lib/IXRClass.php';
-					
+
 		if ($ping_textpattern_com) {
 			$tx_client = new IXR_Client('http://textpattern.com/xmlrpc/');
 			$tx_client->query('ping.Textpattern', $sitename, hu);
@@ -605,7 +605,7 @@ class TXP_Wrapper
 	 * @return array properly striped off the fields which don't match the defined ones.
 	 */
 	function _check_keys($incoming, $default = array())
-	{				
+	{
 		$out = array();
 		# strip off unsuited keys
 		foreach ($incoming as $key => $val)
@@ -615,7 +615,7 @@ class TXP_Wrapper
 				$out[$key] = $val;
 			}
 		}
-		
+
 		foreach ($this->vars as $def_key)
 		{
 			# Add those ones inexistent in the incoming array
@@ -629,9 +629,9 @@ class TXP_Wrapper
 				$out[$def_key] = $default[$def_key];
 			}
 		}
-		return $out;		
+		return $out;
 	}
-	
+
 	/**
 	 * Apply textile to the main article fields
 	 * (duplicated from txp_article.php!)
@@ -639,20 +639,20 @@ class TXP_Wrapper
 	 * @param global use_textile preference
 	 * @return array the same one containing the formatted fields
 	 */
-	
+
 	function textile_main_fields($incoming, $use_textile = 1)
 	{
 		global $txpcfg;
-		
+
 		include_once txpath.'/lib/classTextile.php';
 		$textile = new Textile();
 
-		if (!empty($event) and $event == 'article') 
+		if (!empty($event) and $event == 'article')
 		{
 			$incoming['Title_plain'] = $incoming['Title'];
 		}
 
-		if ($incoming['textile_body'] == USE_TEXTILE) 
+		if ($incoming['textile_body'] == USE_TEXTILE)
 		{
 			$incoming['Title'] = $textile->TextileThis($incoming['Title'],'',1);
 		}
@@ -675,7 +675,7 @@ class TXP_Wrapper
 	 * @param object $textile instance
 	 * @return string html formated field
 	 */
-	
+
 	function format_field($field, $format,$textile)
 	{
 		switch ($format){

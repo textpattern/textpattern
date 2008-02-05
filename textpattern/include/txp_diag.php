@@ -2,12 +2,12 @@
 
 /*
 	This is Textpattern
- 
+
 	Copyright 2005 by Dean Allen
 	www.textpattern.com
 	All rights reserved
 
-	Use of this software indicates acceptance of the Textpattern license agreement 
+	Use of this software indicates acceptance of the Textpattern license agreement
 
 $HeadURL$
 $LastChangedRevision$
@@ -22,7 +22,7 @@ $LastChangedRevision$
 	define("ln",str_repeat('-', 24).n);
 
 	global $files;
-	
+
 	$files = array(
 		'/../index.php',
 		'/css.php',
@@ -123,16 +123,16 @@ $LastChangedRevision$
 	{
 		global $prefs, $files, $txpcfg, $step;
 		extract(get_prefs());
-		
+
 	$urlparts = parse_url(hu);
 	$mydomain = $urlparts['host'];
-	$server_software = (@$_SERVER['SERVER_SOFTWARE'] || @$_SERVER['HTTP_HOST']) 
+	$server_software = (@$_SERVER['SERVER_SOFTWARE'] || @$_SERVER['HTTP_HOST'])
 						? ( (@$_SERVER['SERVER_SOFTWARE']) ?  @$_SERVER['SERVER_SOFTWARE'] :  $_SERVER['HTTP_HOST'] )
 						: '';
-	$is_apache = ($server_software and stristr($server_software, 'Apache')) 
+	$is_apache = ($server_software and stristr($server_software, 'Apache'))
 				   or (is_callable('apache_get_version'));
 	$real_doc_root = (isset($_SERVER['DOCUMENT_ROOT'])) ? realpath($_SERVER['DOCUMENT_ROOT']) : '';
-	
+
 	// ini_get() returns string values passed via php_value as a string, not boolean
 	$is_register_globals = ( (strcasecmp(ini_get('register_globals'),'on')===0) or (ini_get('register_globals')==='1'));
 
@@ -148,7 +148,7 @@ $LastChangedRevision$
 		? gTxt('path_to_site_missing')
 		: '',
 
-		'dns_lookup_fails' =>	
+		'dns_lookup_fails' =>
 		(@gethostbyname($mydomain) == $mydomain)
 		?	gTxt('dns_lookup_fails').cs. $mydomain
 		:	'',
@@ -185,7 +185,7 @@ $LastChangedRevision$
 		? gTxt('cleanurl_only_apache')
 		: '',
 
-		'htaccess_missing' =>	
+		'htaccess_missing' =>
 		($permlink_mode != 'messy' and !@is_readable($path_to_site.'/.htaccess'))
 		?	gTxt('htaccess_missing')
 		:	'',
@@ -216,8 +216,8 @@ $LastChangedRevision$
 		: '',
 
 		'warn_register_globals_or_update' =>
-		( $is_register_globals && 
-		  (    version_compare(phpversion(),'4.4.0','<=') 
+		( $is_register_globals &&
+		  (    version_compare(phpversion(),'4.4.0','<=')
 			or ( version_compare(phpversion(),'5.0.0','>=') and version_compare(phpversion(),'5.0.5','<=') )
 		))
 		? gTxt('warn_register_globals_or_update')
@@ -319,7 +319,7 @@ $LastChangedRevision$
 	$guess_site_url = $_SERVER['HTTP_HOST'] . preg_replace('#[/\\\\]$#','',dirname(dirname($_SERVER['SCRIPT_NAME'])));
 	if ($siteurl and strip_prefix($siteurl, 'www.') != strip_prefix($guess_site_url, 'www.'))
 		$fail['site_url_mismatch'] = gTxt('site_url_mismatch').cs.$guess_site_url;
-		
+
 	# test clean URL server vars
 	if (hu) {
 		if (ini_get('allow_url_fopen') and ($permlink_mode != 'messy')) {
@@ -376,7 +376,7 @@ $LastChangedRevision$
 		}
 
 		$gd = gTxt('gd_info', array(
-			'{version}'   => $gd_info['GD Version'], 
+			'{version}'   => $gd_info['GD Version'],
 			'{supported}' => $gd_support
 		));
 	} else {
@@ -388,7 +388,7 @@ $LastChangedRevision$
 		$fail['tmp_plugin_paths_match'] = gTxt('tmp_plugin_paths_match');
 	}
 
-	echo 
+	echo
 	pagetop(gTxt('tab_diagnostics'),''),
 	startTable('list'),
 	tr(td(hed(gTxt('preflight_check'),1)));
@@ -406,7 +406,7 @@ $LastChangedRevision$
 
 
 	$fmt_date = '%Y-%m-%d %H:%M:%S';
-	
+
 	$out = array(
 		'<textarea cols="78" rows="18" readonly="readonly" style="width: 500px; height: 300px;">',
 
@@ -511,7 +511,7 @@ $LastChangedRevision$
 
 		if (is_callable('apache_get_modules'))
 			$out[] = n.gTxt('apache_modules').cs.join(', ', apache_get_modules()).n;
-			
+
 		if (@is_array($pretext_data) and count($pretext_data) > 1) {
 			$out[] = n.gTxt('pretext_data').cs.htmlspecialchars(join('', array_slice($pretext_data, 1, 20))).n;
 		}
@@ -534,10 +534,10 @@ $LastChangedRevision$
 	}
 
 	$out[] = '</textarea>'.br;
-	
+
 	$dets = array('low'=>gTxt('low'),'high'=>gTxt('high'));
-	
-	$out[] = 
+
+	$out[] =
 		form(
 			eInput('diag').n.
 			gTxt('detail').cs.
@@ -548,5 +548,5 @@ $LastChangedRevision$
 
 	endTable();
 	}
-	
+
 ?>

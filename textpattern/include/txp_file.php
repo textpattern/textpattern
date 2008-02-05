@@ -33,7 +33,7 @@ $LastChangedRevision$
 	);
 
 	if ($event == 'file') {
-		require_privs('file');		
+		require_privs('file');
 
 		if(!$step or !in_array($step, array('file_change_max_size','file_change_pageby','file_db_add','file_delete','file_edit','file_insert','file_list','file_replace','file_save','file_reset_count','file_create'))){
 			file_list();
@@ -42,7 +42,7 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function file_list($message = '') 
+	function file_list($message = '')
 	{
 		global $txpcfg, $extensions, $file_base_path, $file_statuses;
 
@@ -258,7 +258,7 @@ $LastChangedRevision$
 			pageby_form('file', $file_list_pageby);
 		}
 	}
-	
+
 // -------------------------------------------------------------
 
 	function file_search_form($crit, $method)
@@ -311,7 +311,7 @@ $LastChangedRevision$
 			$condition .= '</span>';
 
 			$downloadlink = ($file_exists)?make_download_link($id, htmlspecialchars($filename),$filename):htmlspecialchars($filename);
-			
+
 			$created =
 					n.graf(checkbox('publish_now', '1', $publish_now, '', 'publish_now').'<label for="publish_now">'.gTxt('set_to_now').'</label>').
 
@@ -358,7 +358,7 @@ $LastChangedRevision$
 							)
 						);
 			} else {
-			
+
 				$form =	tr(
 							tda(
 								hed(gTxt('file_relink'),3).
@@ -415,25 +415,25 @@ $LastChangedRevision$
 			 created = now(),
 			 modified = now()
 		");
-		
+
 		if ($rs) {
 			$GLOBALS['ID'] = mysql_insert_id( );
 			return $GLOBALS['ID'];
 		}
 
 		return false;
-	}	
-	
+	}
+
 // -------------------------------------------------------------
-	function file_create() 
-	{	
+	function file_create()
+	{
 		global $txpcfg,$extensions,$txp_user,$file_base_path;
 		extract($txpcfg);
 		extract(doSlash(gpsa(array('filename','category','permissions','description'))));
 
 		$size = filesize(build_file_path($file_base_path,$filename));
 		$id = file_db_add($filename,$category,$permissions,$description, $size);
-		
+
 		if($id === false){
 			file_list(gTxt('file_upload_failed').' (db_add)');
 		} else {
@@ -449,8 +449,8 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function file_insert() 
-	{	
+	function file_insert()
+	{
 		global $txpcfg,$extensions,$txp_user,$file_base_path,$file_max_upload_size;
 		extract($txpcfg);
 		extract(doSlash(gpsa(array('category','permissions','description'))));
@@ -474,14 +474,14 @@ $LastChangedRevision$
 		if (!is_file(build_file_path($file_base_path,$name))) {
 
 			$id = file_db_add($name,$category,$permissions,$description,$size);
-			
+
 			if(!$id){
 				file_list(gTxt('file_upload_failed').' (db_add)');
 			} else {
 
 				$id = assert_int($id);
 				$newpath = build_file_path($file_base_path,trim($name));
-				
+
 				if(!shift_uploaded_file($file, $newpath)) {
 					safe_delete("txp_file","id = $id");
 					safe_alter("txp_file", "auto_increment=$id");
@@ -508,20 +508,20 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 	function file_replace()
-	{	
+	{
 		global $txpcfg,$extensions,$txp_user,$file_base_path;
 		extract($txpcfg);
 		$id = assert_int(gps('id'));
 
 		$rs = safe_row('filename','txp_file',"id = $id");
-		
+
 		if (!$rs) {
 			file_list(messenger(gTxt('invalid_id'),$id,''));
 			return;
 		}
 
 		extract($rs);
-		
+
 		$file = file_get_uploaded();
 		$name = file_get_uploaded_name();
 
@@ -546,9 +546,9 @@ $LastChangedRevision$
 				file_list($newpath.sp.gTxt('upload_dir_perms'));
 				// rename tmp back
 				rename($newpath.'.tmp',$newpath);
-				
+
 				// remove tmp upload
-				unlink($file);				
+				unlink($file);
 			} else {
 				file_set_perm($newpath);
 				if ($size = filesize($newpath))
@@ -566,10 +566,10 @@ $LastChangedRevision$
 
 
 // -------------------------------------------------------------
-	function file_reset_count() 
+	function file_reset_count()
 	{
 		extract(doSlash(gpsa(array('id','filename','category','description'))));
-		
+
 		if ($id) {
 			$id = assert_int($id);
 			if (safe_update('txp_file','downloads = 0',"id = $id")) {
@@ -577,12 +577,12 @@ $LastChangedRevision$
 			}
 		} else {
 			file_list(gTxt('reset_file_count_failure'));
-		}		
+		}
 	}
 
 // -------------------------------------------------------------
 
-	function file_save() 
+	function file_save()
 	{
 		global $file_base_path;
 
@@ -599,7 +599,7 @@ $LastChangedRevision$
 		$perms = doSlash($permissions);
 
 		$old_filename = fetch('filename','txp_file','id',$id);
-		
+
 		if ($old_filename != false && strcmp($old_filename, $filename) != 0)
 		{
 			$old_path = build_file_path($file_base_path,$old_filename);
@@ -617,7 +617,7 @@ $LastChangedRevision$
 				file_set_perm($new_path);
 			}
 		}
-		
+
 		$created_ts = @safe_strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second);
 		if ($publish_now)
 			$created = 'now()';
@@ -715,36 +715,36 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function file_get_uploaded()
 	{
-		return get_uploaded_file($_FILES['thefile']['tmp_name']);		
+		return get_uploaded_file($_FILES['thefile']['tmp_name']);
 	}
-	
+
 // -------------------------------------------------------------
 	function file_set_perm($file)
 	{
 		return @chmod($file,0644);
-	}	
+	}
 
 // -------------------------------------------------------------
 	function file_upload_form($label,$pophelp,$step,$id='')
 	{
 		global $file_max_upload_size;
-		
+
 		if (!$file_max_upload_size || intval($file_max_upload_size)==0) $file_max_upload_size = 2*(1024*1024);
-		
+
 		$max_file_size = (intval($file_max_upload_size) == 0) ? '': intval($file_max_upload_size);
-			
+
 		return upload_form($label, $pophelp, $step, 'file', $id, $max_file_size);
 	}
-	
+
 // -------------------------------------------------------------
-	function file_change_pageby() 
+	function file_change_pageby()
 	{
 		event_change_pageby('file');
 		file_list();
 	}
-	
+
 // -------------------------------------------------------------
-	function file_change_max_size() 
+	function file_change_max_size()
 	{
 		// DEPRECATED function; removed old code
 		file_list();
@@ -758,17 +758,17 @@ $LastChangedRevision$
 		$url = filedownloadurl($id, $filename);
 		return '<a href="'.$url.'">'.$label.'</a>';
 	}
-	
+
 // -------------------------------------------------------------
 	function get_filenames()
 	{
 		global $file_base_path;
-		
+
 		$dirlist = array();
 
 		if (!is_dir($file_base_path))
-			return $dirlist;		
-		
+			return $dirlist;
+
 		if (chdir($file_base_path)) {
 			if (function_exists('glob'))
 				$g_array = glob("*.*");
@@ -779,9 +779,9 @@ $LastChangedRevision$
 					$g_array[] = $filename;
 				}
 				closedir($dh);
-				
+
 			}
-			
+
 			if ($g_array) {
 				foreach ($g_array as $filename) {
 					if (is_file($filename)) {
@@ -799,8 +799,8 @@ $LastChangedRevision$
 				$files[$a['filename']] = $a['filename'];
 			}
 		}
-		
+
 		return array_diff($dirlist,$files);
 	}
-	
+
 ?>

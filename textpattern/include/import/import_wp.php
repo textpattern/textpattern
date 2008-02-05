@@ -93,8 +93,8 @@
 		$categories = array();
 
 		$category_query = mysql_query("
-			select 
-				t.slug as name, 
+			select
+				t.slug as name,
 				t.name as title,
 				tt.taxonomy as type,
 				tt.parent as parent
@@ -108,9 +108,9 @@
 			if ($category['parent'] != 0)
 			{
 				$category_parent_query = mysql_query("
-					select 
+					select
 						slug as name
-					from ".$wpdbprefix."terms 
+					from ".$wpdbprefix."terms
 					where term_id = '".doSlash($category['parent'])."'
 				", $b2link) or $errors[] = mysql_error();
 
@@ -119,7 +119,7 @@
 					$category['parent'] = $parent['name'];
 				}
 			}
-			
+
 			else
 			{
 				$category['parent'] = 'root';
@@ -131,7 +131,7 @@
 				case 'category':
 					$category['type'] = 'article';
 				break;
-				
+
 				case 'link_category':
 					$category['type'] = 'link';
 				break;
@@ -233,14 +233,14 @@
 			$article_categories = array();
 
 			$article_category_query = mysql_query("
-				select 
-					t.name as title, 
+				select
+					t.name as title,
 					t.slug as name
 				from ".$wpdbprefix."terms as t inner join ".$wpdbprefix."term_taxonomy as tt
-					on(t.term_id = tt.term_id) 
+					on(t.term_id = tt.term_id)
 				inner join ".$wpdbprefix."term_relationships as tr
 					on(tt.term_taxonomy_id = tr.term_taxonomy_id)
-				where tr.object_id = '".$article['ID']."' and tt.taxonomy in('post_tag', 'category') 
+				where tr.object_id = '".$article['ID']."' and tt.taxonomy in('post_tag', 'category')
 				order by tr.object_id asc, t.name asc
 				limit 2;
 			", $b2link) or $errors[] = mysql_error();
@@ -281,14 +281,14 @@
 			$link_categories = array();
 
 			$link_category_query = mysql_query("
-				select 
-					t.name as title, 
+				select
+					t.name as title,
 					t.slug as name
 				from ".$wpdbprefix."terms as t inner join ".$wpdbprefix."term_taxonomy as tt
-					on(t.term_id = tt.term_id) 
+					on(t.term_id = tt.term_id)
 				inner join ".$wpdbprefix."term_relationships as tr
 					on(tt.term_taxonomy_id = tr.term_taxonomy_id)
-				where tr.object_id = '".$link['id']."' and tt.taxonomy = 'link_category' 
+				where tr.object_id = '".$link['id']."' and tt.taxonomy = 'link_category'
 				order by tr.object_id asc, t.name asc
 			", $b2link) or $errors[] = mysql_error();
 

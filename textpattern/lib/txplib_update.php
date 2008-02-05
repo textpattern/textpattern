@@ -9,7 +9,7 @@ $LastChangedRevision$
 function install_language_from_file($lang)
 {
 	$lang_file = txpath.'/lang/'.$lang.'.txt';
-	# first attempt with local file		
+	# first attempt with local file
 	if (is_file($lang_file) && is_readable($lang_file))
 	{
 		$lang_file = txpath.'/lang/'.$lang.'.txt';
@@ -20,13 +20,13 @@ function install_language_from_file($lang)
 			$lastmod = date('YmdHis',$lastmod);
 			$data = array();
 			$event = '';
-			
+
 			while (!feof($file)) {
 				$line = fgets($file, 4096);
 				# any line starting with #, not followed by @ is a simple comment
 				if($line[0]=='#' && $line[1]!='@' && $line[1]!='#') continue;
 				# if available use the lastmod time from the file
-				if (strpos($line,'#@version') === 0) 
+				if (strpos($line,'#@version') === 0)
 				{	# Looks like: "#@version id;unixtimestamp"
 					@list($fversion,$ftime) = explode(';',trim(substr($line,strpos($line,' ',1))));
 					$lastmod = date("YmdHis",min($ftime, time()));
@@ -55,7 +55,7 @@ function install_language_from_file($lang)
 					$event = rtrim($event);
 					continue;
 				}
-				 
+
 				@list($name,$val) = explode(' => ',trim($line));
 				$data[$name] = $val;
 			}
@@ -101,9 +101,9 @@ function checkUpdates()
 			foreach ($response as $key => $val)
 			{
 				$rversion = explode('.',$val);
-			
+
 				if ($key == 'txp_current_version_'.$branch)
-				{					
+				{
 					if (isset($lversion[2]) && isset($rversion[2]) && (intval($rversion[2])>intval($lversion[2])))
 					{
 						$msg[]= gTxt('updated_branch_version_available');

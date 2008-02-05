@@ -4,7 +4,7 @@
 	This is Textpattern
 	Copyright 2005 by Dean Allen - all rights reserved.
 
-	Use of this software denotes acceptance of the Textpattern license agreement 
+	Use of this software denotes acceptance of the Textpattern license agreement
 
 $HeadURL$
 $LastChangedRevision$
@@ -51,15 +51,15 @@ $LastChangedRevision$
 		$out['status'] = $status;
 		$out['method'] = serverSet('REQUEST_METHOD');
 		if (preg_match("/^[^\.]*\.?$mydomain/i", $out['ref'])) $out['ref'] = "";
-		
+
 		if ($r=='refer') {
 			if (trim($out['ref']) != "") { insert_logit($out); }
 		} else insert_logit($out);
 	}
 
 // -------------------------------------------------------------
-	function insert_logit($in) 
-	{	
+	function insert_logit($in)
+	{
 		global $DB;
 		$in = doSlash($in);
 		extract($in);
