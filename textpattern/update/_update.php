@@ -84,5 +84,9 @@ $LastChangedRevision$
 	// updated, baby. So let's get the fresh prefs and send them to languages
 	$event = 'prefs';
 	$step = 'list_languages';
-	$prefs = extract(get_prefs());
+
+	$prefs = get_prefs();
+
+	extract($prefs);
+
 ?>
