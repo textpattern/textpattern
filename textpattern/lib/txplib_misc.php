@@ -1385,40 +1385,54 @@ $LastChangedRevision$
 // --------------------------------------------------------------
 	function EvalElse($thing, $condition)
 	{
-		$f = '@(</?txp:\S+\b.*(?:(?<!br )/)?'.chr(62).')@sU';
+		global $txp_current_tag;
 
-		$parsed = preg_split($f, $thing, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+		trace_add("[$txp_current_tag: ".($condition ? gTxt('true') : gTxt('false'))."]");
 
-		$tagpat = '@^<(/?)txp:(\w+).*?(/?)>$@';
+		$els = strpos($thing, '<txp:else');
 
-		$parts = array(0 => '', 1 => '');
-		$in = 0;
-		$level = 0;
-		foreach ($parsed as $chunk) {
-			if (preg_match($tagpat, $chunk, $m)) {
-				if ($m[2] == 'else' and $m[3] == '/' and $level == 0) {
-					$in = 1-$in;
-				}
-				elseif ($m[1] == '' and $m[3] == '') {
-					++$level;
-					$parts[$in] .= $chunk;
-				}
-				elseif ($m[1] == '/') {
-					--$level;
-					$parts[$in] .= $chunk;
-				}
-				else {
-					$parts[$in] .= $chunk;
-				}
-			}
-			else {
-				$parts[$in] .= $chunk;
-			}
+		if ($els === FALSE)
+		{
+			return $condition ? $thing : '';
+		}
+		elseif ($els === strpos($thing, '<txp:'))
+		{
+			return $condition
+				? substr($thing, 0, $els)
+				: substr($thing, strpos($thing, '>', $els) + 1);
 		}
 
-		global $txp_current_tag;
-		trace_add("[$txp_current_tag: ".($condition ? gTxt('true') : gTxt('false'))."]");
-		return ($condition ? $parts[0] : $parts[1]);
+		$tag    = FALSE;
+		$level  = 0;
+		$str    = '';
+		$regex  = '@(</?txp:\S+\b.*(?:(?<!br )/)?'.chr(62).')@sU';
+		$parsed = preg_split($regex, $thing, -1, PREG_SPLIT_DELIM_CAPTURE);
+
+		foreach ($parsed as $chunk)
+		{
+			if ($tag)
+			{
+				if ($level === 0 and strpos($chunk, 'else') === 5 and substr($chunk, -2, 1) === '/')
+				{
+					return $condition
+						? $str
+						: substr($thing, strlen($str)+strlen($chunk));
+				}
+				elseif (substr($chunk, 1, 1) === '/')
+				{
+					$level--;
+				}
+				elseif (substr($chunk, -2, 1) !== '/')
+				{
+					$level++;
+				}
+			}
+
+			$tag = !$tag;
+			$str .= $chunk;
+		}
+
+		return $condition ? $thing : '';
 	}
 
 // --------------------------------------------------------------
