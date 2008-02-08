@@ -8,6 +8,7 @@
  * $LastChangedRevision$
  */
 
+require_once txpath.'/lib/txplib_html.php';
 class TXP_RPCServer extends IXR_IntrospectionServer
 {
 	# save debug logs on tmp dir if debug enabled
@@ -180,7 +181,9 @@ class TXP_RPCServer extends IXR_IntrospectionServer
             global $HTTP_RAW_POST_DATA;
 
             if (!$HTTP_RAW_POST_DATA) {
-               die('XML-RPC server accepts POST requests only.');
+            	# RSD lets them find us via GET requests
+               	$this->rsd();
+               	exit;
             }
 
             $rx = '/<?xml.*encoding=[\'"](.*?)[\'"].*?>/m';
@@ -275,6 +278,26 @@ EOD;
 		header('Date: '.date('r'));
 		echo $xml;
 		exit;
+	}
+
+	# Really Simple Discoverability 1.0 response
+
+	function rsd()
+	{
+		$this->output(
+			tag(
+		  		n.tag(
+		    		n.tag('Textpattern', 'engineName').
+		    		n.tag('http://textpattern.com/', 'engineLink').
+		    		n.tag(hu, 'homePageLink').
+		    		n.tag(
+		    			n.'<api name="Movable Type" blogID="" preferred="true" apiLink="'.txrpcpath.'" />'.
+		    			n.'<api name="MetaWeblog" blogID="" preferred="false" apiLink="'.txrpcpath.'" />'.
+		    			n.'<api name="Blogger" blogID="" preferred="false" apiLink="'.txrpcpath.'" />'.n,
+		    		'apis').n,
+				'service').n,
+		   	'rsd', ' version="1.0" xmlns="http://archipelago.phrasewise.com/rsd"')
+	    );
 	}
 
 	# Blogger API

@@ -1,15 +1,11 @@
 <?php
-
-/*
-$HeadURL$
-$LastChangedRevision$
-*/
-
 /**
  * XML-RPC Server for Textpattern 4.0.x
  * http://txp.kusor.com/rpc-api
  * (C)2005-2006 The Textpattern Development Team - http://textpattern.com
  * @author Pedro Palazón - http://kusor.com
+ * $HeadURL$
+ * $LastChangedRevision$
  */
 
 
@@ -21,7 +17,7 @@ ini_set("display_errors","0");
 
 
 /* DEBUG */ if (!defined('txpdmpfile')) define('txpdmpfile', 'txpxmlrpc.txt');
-if (!defined('txpath')) define("txpath", dirname(dirname(__FILE__)).'/textpattern');
+if (!defined('txpath')) define('txpath', dirname(dirname(__FILE__)).'/textpattern');
 define('txpinterface','xmlrpc');
 
 require_once txpath.'/config.php';
@@ -41,6 +37,7 @@ if ($connected && safe_query("describe ".PFX."textpattern")) {
 
 		if (!defined('LANG')) define("LANG",$language);
 		if (!defined('hu')) define("hu",'http://'.$siteurl.'/');
+		if (!defined('txrpcpath')) define('txrpcpath', hu.'rpc/');
 
 		if (!empty($locale)) setlocale(LC_ALL, $locale);
 		$textarray = load_lang(LANG);
@@ -56,7 +53,6 @@ if ($connected && safe_query("describe ".PFX."textpattern")) {
 require_once txpath.'/lib/txplib_wrapper.php';
 require_once 'TXP_RPCServer.php';
 
-dmp($dbversion, $dbversion, 'aaa');
 # run the XML-RPC Server
 $server = new TXP_RPCServer();
 $server->serve();
