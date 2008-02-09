@@ -3373,4 +3373,10 @@ $LastChangedRevision$
 		return '';
 	}
 
+// -------------------------------------------------------------
+	function rsd($atts)
+	{
+		return '<link rel="EditURI" type="application/rsd+xml" title="RSD" href="'.hu.'rpc/" />';
+	}
+
 ?>
