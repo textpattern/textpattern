@@ -2803,8 +2803,9 @@ begin tag builder functions
 			'break',
 			'breakclass',
 			'class',
-			'id',
 			'form',
+			'limit',
+			'offset',
 			'sort',
 			'wraptag'
 		));
@@ -2820,14 +2821,17 @@ begin tag builder functions
 				, 2)
 			).
 
-			tagRow('id',
-				input_id($id)).
-
 			tagRow('form',
 				form_pop('form', 'comment', $form)).
 
 			tagRow('sort',
 				discuss_sort_pop($sort)).
+
+			tagRow('limit',
+				input_limit($limit)).
+
+			tagRow('offset',
+				input_offset($offset)).
 
 			tagRow('wraptag',
 				input_tag('wraptag', $wraptag)).
