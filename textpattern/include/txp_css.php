@@ -240,7 +240,7 @@ $LastChangedRevision$
 	function parseCSS($css) // parse raw css into a multidimensional array
 	{
 		$css = preg_replace("/\/\*.+\*\//Usi","",$css); // remove comments
-		$selectors = preg_replace('/\s+/',' ',strip_rn(explode("}",$css)));
+		$selectors = preg_replace('/\s+/',' ',explode("}",strip_rn($css)));
 		foreach($selectors as $selector) {
 			if(trim($selector)) {
 			list($keystr,$codestr) = explode("{",$selector);
