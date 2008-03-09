@@ -65,7 +65,7 @@ $LastChangedRevision$
 
 		pagetop(gTxt('site_administration'), $message);
 
-		if (!is_callable('mail'))
+		if (is_disabled('mail'))
 		{
 			echo tag(gTxt('warn_mail_unavailable'), 'p',' id="warning" ');
 		}

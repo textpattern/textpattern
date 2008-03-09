@@ -211,7 +211,7 @@ $LastChangedRevision$
 		: '',
 
 		'warn_mail_unavailable' =>
-		(!is_callable('mail'))
+		(is_disabled('mail'))
 		? gTxt('warn_mail_unavailable')
 		: '',
 

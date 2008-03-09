@@ -927,6 +927,12 @@ $LastChangedRevision$
 	{
 		global $txp_user, $prefs;
 
+		// if mailing isn't possible, don't even try
+		if (is_disabled('mail'))
+		{
+			return false;
+		}
+
 		// Likely sending passwords
 		if (isset($txp_user))
 		{
@@ -962,29 +968,21 @@ $LastChangedRevision$
 			$reply_to = strip_rn($reply_to);
 		}
 
-		if (!is_callable('mail'))
-		{
-			return false;
-		}
+		$sep = !is_windows() ? "\n" : "\r\n";
 
-		else
-		{
-			$sep = !is_windows() ? "\n" : "\r\n";
+		$body = str_replace("\r\n", "\n", $body);
+		$body = str_replace("\r", "\n", $body);
+		$body = str_replace("\n", $sep, $body);
 
-			$body = str_replace("\r\n", "\n", $body);
-			$body = str_replace("\r", "\n", $body);
-			$body = str_replace("\n", $sep, $body);
+		return mail($to_address, $subject, $body,
 
-			return mail($to_address, $subject, $body,
-
-				"From: $RealName <$email>".
-				$sep.'Reply-To: '.( isset($reply_to) ? $reply_to : "$RealName <$email>" ).
-				$sep.'X-Mailer: Textpattern'.
-				$sep.'Content-Transfer-Encoding: 8bit'.
-				$sep.'Content-Type: text/plain; charset="'.$charset.'"'.
-				$sep
-			);
-		}
+			"From: $RealName <$email>".
+			$sep.'Reply-To: '.( isset($reply_to) ? $reply_to : "$RealName <$email>" ).
+			$sep.'X-Mailer: Textpattern'.
+			$sep.'Content-Transfer-Encoding: 8bit'.
+			$sep.'Content-Type: text/plain; charset="'.$charset.'"'.
+			$sep
+		);
 	}
 
 // -------------------------------------------------------------
@@ -1357,6 +1355,14 @@ $LastChangedRevision$
 	function is_mod_php()
 	{
 		return IS_APACHE;
+	}
+
+// -------------------------------------------------------------
+
+	function is_disabled($function)
+	{
+		static $disabled = explode(',', ini_get('disable_functions'));
+		return in_array($function, $disabled_functions);
 	}
 
 // --------------------------------------------------------------

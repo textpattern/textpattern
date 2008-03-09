@@ -131,7 +131,7 @@ eod;
 				popHelp('siteurl'),3)
 		);
 
-		if (!is_callable('mail'))
+		if (is_disabled('mail'))
 		{
 			echo tr(
 				tdcs(gTxt('warn_mail_unavailable'),3,null,'" style="color:red;text-align:center')
