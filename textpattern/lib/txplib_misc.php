@@ -1368,7 +1368,7 @@ $LastChangedRevision$
 			$disabled = explode(',', ini_get('disable_functions'));
 		}
 
-		return in_array($function, $disabled_functions);
+		return in_array($function, $disabled);
 	}
 
 // --------------------------------------------------------------
