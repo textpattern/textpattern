@@ -1361,7 +1361,13 @@ $LastChangedRevision$
 
 	function is_disabled($function)
 	{
-		static $disabled = explode(',', ini_get('disable_functions'));
+		static $disabled;
+
+		if (!isset($disabled))
+		{
+			$disabled = explode(',', ini_get('disable_functions'));
+		}
+
 		return in_array($function, $disabled_functions);
 	}
 
