@@ -262,7 +262,7 @@ $LastChangedRevision$
 
 		$names = array();
 
-		$them = safe_rows_start('*', 'txp_users', "name != '".doSlash($txp_user)."'");
+		$them = safe_rows_start('*', 'txp_users', "name != '".doSlash($txp_user)."' ORDER BY RealName");
 
 		while ($a = nextRow($them))
 		{
