@@ -122,7 +122,7 @@ function doAuth()
 		).
 
 
-		n.'</div>'.n.n.'</body>'.n.'</html>';
+		n.'</body>'.n.'</html>';
 
 		exit(0);
 	}

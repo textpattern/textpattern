@@ -206,12 +206,17 @@ $LastChangedRevision$
 			:	'',
 
 			'<td class="tabdown"><a href="'.hu.'" class="plain" target="_blank">'.gTxt('tab_view_site').'</a></td>',
-		 '</tr></table>',
+		 '</tr></table>';
 
-		'</td></tr><tr id="nav-secondary"><td align="center" class="tabs" colspan="2">
+		 	$secondary = tabsort($area,$event);
+
+		 	if ($secondary)
+		 	{
+		 		echo '</td></tr><tr id="nav-secondary"><td align="center" class="tabs" colspan="2">
 			<table cellpadding="0" cellspacing="0" align="center"><tr>',
-				tabsort($area,$event),
+				$secondary,
 			'</tr></table>';
+			}
 		}
 		echo '</td></tr></table>';
 	}
