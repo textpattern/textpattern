@@ -255,7 +255,7 @@ $LastChangedRevision$
 				{
 					$parent_title = empty($title) ? '<em>'.gTxt('untitled').'</em>' : escape_title($title);
 
-					$parent = href($parent_title, '?event=list'.a.'step=list'.a.'search_method=id'.a.'crit='.$parentid);
+					$parent = href($parent_title, '?event=article'.a.'step=edit'.a.'ID='.$parentid);
 
 					$view = '';
 
