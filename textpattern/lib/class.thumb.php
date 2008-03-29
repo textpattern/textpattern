@@ -207,6 +207,10 @@ class wet_thumb {
 	    }
 	}
 
+	// ensure non-zero height/width
+	if (!$this->_DST['height']) $this->_DST['height'] = 1;
+	if (!$this->_DST['width'])  $this->_DST['width']  = 1;
+
 	// DST erstellen
 	$this->_DST['image'] = imagecreatetruecolor($this->_DST['width'], $this->_DST['height']);
 	imagecopyresampled($this->_DST['image'], $this->_SRC['image'], 0, 0, $off_w, $off_h, $this->_DST['width'], $this->_DST['height'], $this->_SRC['width'], $this->_SRC['height']);
