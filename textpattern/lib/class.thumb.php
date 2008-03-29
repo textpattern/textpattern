@@ -27,7 +27,7 @@
  * Author: Marcus Gueldenmeister (MG)
  * Internet: http://www.gueldenmeister.de/marcus/
  *
- * Author: Andreas Bösch (AB)
+ * Author: Andreas BÃ¶sch (AB)
  *
  */
 
@@ -44,11 +44,11 @@ class wet_thumb {
     var $height;	// The height of your thumbnail. The width (if not set) will be automatically calculated.
     var $longside;	// Set the longest side of the image if width, height and shortside is not set.
     var $shortside;	// Set the shortest side of the image if width, height and longside is not set.
-    var $extrapolate;  // Set to »false« if your source image is smaller than the calculated thumb and you do not want the image to get extrapolated.
-    var $crop;	// If set to »true«, image will be cropped in the center to destination width and height params, while keeping aspect ratio. Otherwise the image will get resized.
-    var $sharpen;	// Set to »false« if you don’t want to use the Unsharp-Mask. Thumbnail creation will be faster, but quality is reduced.
-    var $hint; 	// If set to »false« the image will not have a lens-icon.
-    var $addgreytohint; // Set to »false« to get no lightgrey bottombar.
+    var $extrapolate;  // Set to 'false' if your source image is smaller than the calculated thumb and you do not want the image to get extrapolated.
+    var $crop;	// If set to 'true', image will be cropped in the center to destination width and height params, while keeping aspect ratio. Otherwise the image will get resized.
+    var $sharpen;	// Set to 'false' if you don't want to use the Unsharp-Mask. Thumbnail creation will be faster, but quality is reduced.
+    var $hint; 	// If set to 'false' the image will not have a lens-icon.
+    var $addgreytohint; // Set to 'false' to get no lightgrey bottombar.
     var $quality;	// JPEG image quality (0...100, defaults to 80).
     // link related params
     var $linkurl;    // Set to your target URL (a href="linkurl")
@@ -83,7 +83,7 @@ class wet_thumb {
 
         if( $verbose )echo "writing thumb nail...";
 
-	### Info über Source (SRC) holen
+	### fetch source (SRC) info
 	$temp = getimagesize($infile);
 
 	$this->_SRC['file']		= $infile;
@@ -94,14 +94,14 @@ class wet_thumb {
 	$this->_SRC['filename'] 	= basename($infile);
 	//$this->_SRC['modified'] 	= filemtime($infile);
 
-	//Prüfen ob das Orginalbild hoch oder querformatig ist
+	//check image orientation
 	if ($this->_SRC['width'] >= $this->_SRC['height']) {
 	    $this->_SRC['format'] = 'landscape';
 	} else {
 	    $this->_SRC['format'] = 'portrait';
 	}
 
-	### Info über Destination (DST) holen
+	### fetch destination (DST) info
 	if (is_numeric($this->width) AND empty($this->height)) {
 		$this->_DST['width']	= $this->width;
 		$this->_DST['height']	= round($this->width/($this->_SRC['width']/$this->_SRC['height']));
@@ -115,8 +115,7 @@ class wet_thumb {
 		$this->_DST['height']	= $this->height;
 	}
 	elseif (is_numeric($this->longside) AND empty($this->shortside)) {
-	    // Das Größenverhältnis soll erhalten bleiben egal ob das Bild hoch oder querformatig ist.
-	    // Hier wurde die lange Seite angegeben
+	    // preserve aspect ratio based on provided height
 	    if ($this->_SRC['format'] == 'portrait') {
 		$this->_DST['height']	= $this->longside;
 		$this->_DST['width']	= round($this->longside/($this->_SRC['height']/$this->_SRC['width']));
@@ -127,8 +126,7 @@ class wet_thumb {
 	    }
         }
 	elseif (is_numeric($this->shortside)) {
-	    // Das Größenverhältnis soll erhalten bleiben egal ob das Bild hoch oder querformatig ist.
-	    // aber hier wurde die kurze Seite angeben.
+	    // preserve aspect ratio based on provided width
 	    if ($this->_SRC['format'] == 'portrait') {
 		$this->_DST['width']	= $this->shortside;
 		$this->_DST['height']	= round($this->shortside/($this->_SRC['width']/$this->_SRC['height']));
@@ -145,7 +143,7 @@ class wet_thumb {
         }
 
 
-	// Wenn das Ursprungsbild kleiner als das Ziel-Bild ist, soll nicht hochskaliert werden
+	// don't make the new image larger than the original image
 	if ($this->extrapolate === false && $this->_DST['height'] > $this->_SRC['height'] &&
 					    $this->_DST['width'] > $this->_SRC['width']) {
 	    $this->_DST['width'] = $this->_SRC['width'];
@@ -155,17 +153,17 @@ class wet_thumb {
 	$this->_DST['type'] = $this->_SRC['type'];
 	$this->_DST['file'] = $outfile;
 
-	// Make sure we have enough memory if the image is large
+	// make sure we have enough memory if the image is large
 	if (max($this->_SRC['width'], $this->_SRC['height']) > 1024)
 		// this won't work on all servers but it's worth a try
 		ini_set('memory_limit', EXTRA_MEMORY);
 
-	// SRC einlesen
+	// read SRC
 	if ($this->_SRC['type'] == 1)	$this->_SRC['image'] = imagecreatefromgif($this->_SRC['file']);
 	elseif ($this->_SRC['type'] == 2)	$this->_SRC['image'] = imagecreatefromjpeg($this->_SRC['file']);
 	elseif ($this->_SRC['type'] == 3)	$this->_SRC['image'] = imagecreatefrompng($this->_SRC['file']);
 
-	// Soll beschnitten werden?
+	// crop image?
 	$off_w = 0;
 	$off_h = 0;
 	if($this->crop != false) {
@@ -211,7 +209,7 @@ class wet_thumb {
 	if (!$this->_DST['height']) $this->_DST['height'] = 1;
 	if (!$this->_DST['width'])  $this->_DST['width']  = 1;
 
-	// DST erstellen
+	// create DST
 	$this->_DST['image'] = imagecreatetruecolor($this->_DST['width'], $this->_DST['height']);
 	imagecopyresampled($this->_DST['image'], $this->_SRC['image'], 0, 0, $off_w, $off_h, $this->_DST['width'], $this->_DST['height'], $this->_SRC['width'], $this->_SRC['height']);
 	if ($this->sharpen === true) {
@@ -222,9 +220,9 @@ class wet_thumb {
         $this->height =  $this->_DST['height'];
         $this->width =  $this->_DST['width'];
 
-	// Soll eine Lupe eingefügt werden?
+	// add magnifying glass?
 	if ( $this->hint === true) {
-	    //Soll der weiße Balken wirklich hinzugefügt werden?
+	    // should we really add white bars?
 	    if ( $this->addgreytohint === true ) {
 		$trans = imagecolorallocatealpha($this->_DST['image'], 255, 255, 255, 25);
 		imagefilledrectangle($this->_DST['image'], 0, $this->_DST['height']-9, $this->_DST['width'], $this->_DST['height'], $trans);
@@ -341,7 +339,7 @@ class txp_thumb extends wet_thumb {
 }
 
 /**
- * Unsharp mask algorithm by Torstein Hønsi 2003 (thoensi_at_netcom_dot_no)
+ * Unsharp mask algorithm by Torstein HÃ¸nsi 2003 (thoensi_at_netcom_dot_no)
  * Christoph Erdmann: changed it a little, cause i could not reproduce the
  * darker blurred image, now it is up to 15% faster with same results
  * @param   img     image as a ressource
