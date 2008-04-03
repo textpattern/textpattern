@@ -925,7 +925,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function parse($text)
 	{
-		$f = '/<txp:(\S+)\b(.*)(?:(?<!br )(\/))?'.chr(62).'(?(3)|(.+)<\/txp:\1>)/sU';
+		$f = '/<txp:(\S+)\b(.*)(?:(?<!br )(\/))?'.chr(62).'(?(3)|(.*)<\/txp:\1>)/sU';
 		return preg_replace_callback($f, 'processTags', $text);
 	}
 
