@@ -1271,7 +1271,7 @@ $LastChangedRevision$
 			$newfile = $dest;
 		}
 		else {
-			$newfile = @tempnam($tempdir, 'txp_');
+			$newfile = tempnam($tempdir, 'txp_');
 			if (!$newfile)
 				return false;
 		}
