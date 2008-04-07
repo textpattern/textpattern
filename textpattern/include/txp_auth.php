@@ -47,14 +47,14 @@ function doAuth()
 			$passwords[] = "old_password('".doSlash($password)."')";
 		}
 
-		$r = safe_field("name", "txp_users",
+		$name = safe_field("name", "txp_users",
 			"name = '$safe_user' and (pass = ".join(' or pass = ', $passwords).") and privs > 0");
 
-		if ($r)
+		if ($name !== FALSE)
 		{
 			// update the last access time
 			safe_update("txp_users", "last_access = now()", "name = '$safe_user'");
-			return true;
+			return $name;
 
 		}
 
@@ -176,32 +176,34 @@ function doAuth()
 		{
 			sleep(3);
 
-			if (txp_validate($p_userid,$p_password))
+			$name = txp_validate($p_userid,$p_password);
+
+			if ($name !== FALSE)
 			{
 				$c_hash = md5(uniqid(mt_rand(), TRUE));
-				$nonce  = md5($p_userid.pack('H*',$c_hash));
+				$nonce  = md5($name.pack('H*',$c_hash));
 
 				safe_update(
 					'txp_users',
 					"nonce = '".doSlash($nonce)."'",
-					"name = '".doSlash($p_userid)."'"
+					"name = '".doSlash($name)."'"
 				);
 
 				setcookie(
 					'txp_login',
-					$p_userid.','.$c_hash,
+					$name.','.$c_hash,
 					($stay ? time()+3600*24*365 : 0)
 				);
 
 				setcookie(
 					'txp_login_public',
-					substr(md5($nonce), -10).$p_userid,
+					substr(md5($nonce), -10).$name,
 					($stay ? time()+3600*24*30 : 0),
 					$pub_path
 				);
 
 				// login is good, create $txp_user
-				$txp_user = $p_userid;
+				$txp_user = $name;
 				return '';
 			}
 			else
