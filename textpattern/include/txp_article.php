@@ -145,7 +145,7 @@ if (!empty($event) and $event == 'article') {
 
 		$incoming = psa($vars);
 
-		$oldArticle = safe_row('Status, url_title, Title','textpattern','ID = '.(int)$incoming['ID']);
+		$oldArticle = safe_row('Status, url_title, Title, unix_timestamp(LastMod) as sLastMod, LastModID','textpattern','ID = '.(int)$incoming['ID']);
 
 		if (! (    ($oldArticle['Status'] >= 4 and has_privs('article.edit.published'))
 				or ($oldArticle['Status'] >= 4 and $incoming['AuthorID']==$txp_user and has_privs('article.edit.own.published'))
@@ -155,6 +155,12 @@ if (!empty($event) and $event == 'article') {
 				// Not allowed, you silly rabbit, you shouldn't even be here.
 				// Show default editing screen.
 			article_edit();
+			return;
+		}
+
+		if ($oldArticle['sLastMod'] != $incoming['sLastMod'])
+		{
+			article_edit(gTxt('concurrent_edit_by', array('author' => htmlspecialchars($oldArticle['LastModID']))), TRUE);
 			return;
 		}
 
@@ -238,7 +244,7 @@ if (!empty($event) and $event == 'article') {
 
 //--------------------------------------------------------------
 
-	function article_edit($message = '')
+	function article_edit($message = '', $concurrent = FALSE)
 	{
 		global $vars, $txp_user, $comments_disabled_after, $txpcfg, $prefs;
 
@@ -267,8 +273,9 @@ if (!empty($event) and $event == 'article') {
 			&& $view=="text"
 			&& !empty($ID)
 			&& $from_view != 'preview'
-			&& $from_view != 'html') {
-
+			&& $from_view != 'html'
+			&& !$concurrent)
+		{
 			$pull = true;          //-- it's an existing article - off we go to the db
 			$ID = assert_int($ID);
 
@@ -300,6 +307,11 @@ if (!empty($event) and $event == 'article') {
 			else
 			{
 				$store_out = gpsa($vars);
+
+				if ($concurrent)
+				{
+					$store_out['sLastMod'] = safe_field('unix_timestamp(LastMod) as sLastMod', 'textpattern', 'ID='.$ID);
+				}
 			}
 
 			extract($store_out);
