@@ -875,17 +875,39 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function splat($text)
 	{
-		$atts = array();
-		if (preg_match_all('/(\w+)\s*=\s*"([^"]*)"(?:\s|$)|(\w+)\s*=\s*\'([^\']*)\'(?:\s|$)|(\w+)\s*=\s*([^\s\'"]+)(?:\s|$)/', $text, $match, PREG_SET_ORDER)) {
-			foreach ($match as $m) {
-				if (!empty($m[1]))
-					$atts[strtolower($m[1])] = stripcslashes($m[2]);
-				elseif (!empty($m[3]))
-					$atts[strtolower($m[3])] = stripcslashes($m[4]);
-				elseif (!empty($m[5]))
-					$atts[strtolower($m[5])] = stripcslashes($m[6]);
+		$atts  = array();
+
+		if (preg_match_all('@(\w+)\s*=\s*(?:"((?:[^"]|"")*)"|\'((?:[^\']|\'\')*)\'|([^\s\'"/>]+))@s', $text, $match, PREG_SET_ORDER))
+		{
+			foreach ($match as $m)
+			{
+				switch (count($m))
+				{
+					case 3:
+						$val = str_replace('""', '"', $m[2]);
+						break;
+					case 4:
+						$val = str_replace("''", "'", $m[3]);
+
+						if (strpos($m[3], '<txp:') !== FALSE)
+						{
+							trace_add("[attribute '".$m[1]."']");
+							$val = parse($val);
+							trace_add("[/attribute]");
+						}
+
+						break;
+					case 5:
+						$val = $m[4];
+						trigger_error(gTxt('attribute_values_must_be_quoted'), E_USER_WARNING);
+						break;
+				}
+
+				$atts[strtolower($m[1])] = $val;
 			}
+
 		}
+
 		return $atts;
 	}
 
@@ -1424,7 +1446,7 @@ $LastChangedRevision$
 		$tag    = FALSE;
 		$level  = 0;
 		$str    = '';
-		$regex  = '@(</?txp:\S+\b.*(?:(?<!br )/)?'.chr(62).')@sU';
+		$regex  = '@(</?txp:\w+(?:\s+\w+\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))*\s*/?'.chr(62).')@s';
 		$parsed = preg_split($regex, $thing, -1, PREG_SPLIT_DELIM_CAPTURE);
 
 		foreach ($parsed as $chunk)
@@ -1862,10 +1884,14 @@ eod;
 // -------------------------------------------------------------
 	function trace_add($msg)
 	{
-		global $production_status,$txptrace,$txptracelevel;
+		global $production_status;
 
-		if (in_array($production_status, array('debug')))
-			 @$txptrace[] = str_repeat("\t", @$txptracelevel).$msg;
+		if ($production_status === 'debug')
+		{
+			global $txptrace,$txptracelevel;
+
+			$txptrace[] = str_repeat("\t", $txptracelevel).$msg;
+		}
 	}
 
 //-------------------------------------------------------------

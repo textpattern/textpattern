@@ -43,6 +43,11 @@ $LastChangedRevision$
 		// start the clock for runtime
 	$microstart = getmicrotime();
 
+		// initialize parse trace globals
+	$txptrace        = array();
+	$txptracelevel   = '';
+	$txp_current_tag = '';
+
 		// get all prefs as an array
 	$prefs = get_prefs();
 
@@ -923,55 +928,111 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function parse($text)
+	function parse($thing)
 	{
-		$f = '/<txp:(\S+)\b(.*)(?:(?<!br )(\/))?'.chr(62).'(?(3)|(.*)<\/txp:\1>)/sU';
-		return preg_replace_callback($f, 'processTags', $text);
+		$f = '@(</?txp:\w+(?:\s+\w+\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))*\s*/?'.chr(62).')@s';
+		$t = '@:(\w+)(.*?)/?.$@s';
+
+		$parsed = preg_split($f, $thing, -1, PREG_SPLIT_DELIM_CAPTURE);
+
+		$level  = 0;
+		$out    = '';
+		$inside = '';
+		$istag  = FALSE;
+
+		foreach ($parsed as $chunk)
+		{
+			if ($istag)
+			{
+				if ($level === 0)
+				{
+					preg_match($t, $chunk, $tag);
+
+					if (substr($chunk, -2, 1) === '/')
+					{ # self closing
+						$out .= processTags($tag[1], $tag[2]);
+					}
+					else
+					{ # opening
+						$level++;
+					}
+				}
+				else
+				{
+					if (substr($chunk, 1, 1) === '/')
+					{ # closing
+						if (--$level === 0)
+						{
+							$out  .= processTags($tag[1], $tag[2], $inside);
+							$inside = '';
+						}
+						else
+						{
+							$inside .= $chunk;
+						}
+					}
+					elseif (substr($chunk, -2, 1) !== '/')
+					{ # opening inside open
+						++$level;
+						$inside .= $chunk;
+					}
+					else
+					{
+						$inside .= $chunk;
+					}
+				}
+			}
+			else
+			{
+				if ($level)
+				{
+					$inside .= $chunk;
+				}
+				else
+				{
+					$out .= $chunk;
+				}
+			}
+
+			$istag = !$istag;
+		}
+
+		return $out;
 	}
 
 // -------------------------------------------------------------
 
-	function processTags($matches)
+	function processTags($tag, $atts, $thing = null)
 	{
-		global $pretext, $production_status, $txptrace, $txptracelevel, $txp_current_tag;
+		global $production_status, $txptrace, $txptracelevel, $txp_current_tag;
 
-		$tag = $matches[1];
+		if ($production_status !== 'live')
+		{
+			$old_tag = $txp_current_tag;
 
-		$trouble_makers = array(
-			'link'
-		);
+			$txp_current_tag = '<txp:'.$tag.$atts.(isset($thing) ? '>' : '/>');
 
-		if (in_array($tag, $trouble_makers))
+			trace_add($txp_current_tag);
+			++$txptracelevel;
+
+			if ($production_status === 'debug')
+			{
+				maxMemUsage($txp_current_tag);
+			}
+		}
+
+		if ($tag === 'link')
 		{
 			$tag = 'tpt_'.$tag;
 		}
-
-		$atts = isset($matches[2]) ? splat($matches[2]) : '';
-		$thing = isset($matches[4]) ? $matches[4] : null;
-
-		$old_tag = @$txp_current_tag;
-
-		$txp_current_tag = '<txp:'.$tag.
-			($atts ? $matches[2] : '').
-			($thing ? '>' : '/>');
-
-		trace_add($txp_current_tag);
-		@++$txptracelevel;
-
-		if ($production_status == 'debug')
-		{
-			maxMemUsage(trim($matches[0]));
-		}
-
-		$out = '';
-
+		
 		if (function_exists($tag))
 		{
-			$out = $tag($atts, $thing, $matches[0]);
+			$out = $tag(splat($atts), $thing);
 		}
 
 		// deprecated, remove in crockery
-		elseif (isset($pretext[$tag]))
+		elseif (isset($GLOBALS['pretext'][$tag]))
 		{
 			$out = htmlspecialchars($pretext[$tag]);
 
@@ -980,17 +1041,21 @@ $LastChangedRevision$
 
 		else
 		{
+			$out = '';
 			trigger_error(gTxt('unknown_tag'), E_USER_WARNING);
 		}
 
-		@--$txptracelevel;
-
-		if (isset($matches[4]))
+		if ($production_status !== 'live')
 		{
-			trace_add('</txp:'.$tag.'>');
-		}
+			--$txptracelevel;
 
-		$txp_current_tag = $old_tag;
+			if (isset($thing))
+			{
+				trace_add('</txp:'.$tag.'>');
+			}
+
+			$txp_current_tag = $old_tag;
+		}
 
 		return $out;
 	}
