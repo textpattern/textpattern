@@ -82,7 +82,7 @@ $LastChangedRevision$
 						$count = ($comments_count > 0) ? ' ['.$comments_count.']' : '';
 					} else $count = '';
 
-					$Title = htmlspecialchars(strip_tags($Title)).$count;
+					$Title = escape_title(strip_tags($Title)).$count;
 
 					$thisauthor = get_author_name($AuthorID);
 
