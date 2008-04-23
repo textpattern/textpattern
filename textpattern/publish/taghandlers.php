@@ -852,9 +852,9 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 // output href list of site categories
 
-	function category_list($atts)
+	function category_list($atts, $thing='')
 	{
-		global $s, $c;
+		global $s, $c, $thiscategory;
 
 		extract(lAtts(array(
 			'active_class' => '',
@@ -862,6 +862,7 @@ $LastChangedRevision$
 			'categories'   => '',
 			'class'        => __FUNCTION__,
 			'exclude'      => '',
+			'form'         => '',
 			'label'        => '',
 			'labeltag'     => '',
 			'parent'       => '',
@@ -918,6 +919,7 @@ $LastChangedRevision$
 		{
 			$out = array();
 
+			$old_category = $thiscategory;
 			while ($a = nextRow($rs))
 			{
 				extract($a);
@@ -926,12 +928,25 @@ $LastChangedRevision$
 				{
 					$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
 
-					$out[] = tag(str_replace('& ', '&#38; ', $title), 'a',
-						( ($active_class and (0 == strcasecmp($c, $name))) ? ' class="'.$active_class.'"' : '' ).
-						' href="'.pagelinkurl(array('s' => $section, 'c' => $name)).'"'
-					);
+					if (empty($form) && empty($thing))
+					{
+						$out[] = tag(str_replace('& ', '&#38; ', $title), 'a',
+							( ($active_class and (0 == strcasecmp($c, $name))) ? ' class="'.$active_class.'"' : '' ).
+							' href="'.pagelinkurl(array('s' => $section, 'c' => $name)).'"'
+						);
+					}
+					else
+					{
+						$thiscategory = array(
+							'name'   => $name,
+							'title'  => $title,
+							'url'    => pagelinkurl(array('s' => $section, 'c' => $name)),
+						);
+						$out[] = empty($thing) ? parse_form($form) : parse($thing);
+					}
 				}
 			}
+			$thiscategory = $old_category;
 
 			if ($out)
 			{
@@ -943,11 +958,66 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
+
+	function category_name($atts)
+	{
+		global $thiscategory;
+		assert_category();
+		extract(lAtts(array(
+			'escape'	=> ''
+		), $atts));
+		return ($escape == 'html') ? htmlspecialchars($thiscategory['name']) : $thiscategory['name'];
+	}
+
+// -------------------------------------------------------------
+
+	function category_title($atts)
+	{
+		global $thiscategory;
+		assert_category();
+		extract(lAtts(array(
+			'escape'	=> ''
+		), $atts));
+		return ($escape == 'html') ? htmlspecialchars($thiscategory['title']) : $thiscategory['title'];
+	}
+
+// -------------------------------------------------------------
+
+	function category_url()
+	{
+		global $thiscategory;
+		assert_category();
+		return $thiscategory['url'];
+	}
+
+// -------------------------------------------------------------
+
+	function if_active_category($atts, $thing)
+	{
+		global $thiscategory, $c;
+		assert_category();
+		extract(lAtts(array(
+			'dir' => 'none'
+		), $atts));
+
+		switch ($dir) {
+			case 'none':
+				return parse(EvalElse($thing, $thiscategory['name'] == $c));
+			case 'trunk':
+			case 'leaf':
+			case 'both':
+				// FIXME: Check for any active descendant/ancestor in cat tree
+				return parse(EvalElse($thing, $thiscategory['name'] == $c));
+		}
+		return '';
+	}
+
+// -------------------------------------------------------------
 // output href list of site sections
 
-	function section_list($atts)
+	function section_list($atts, $thing='')
 	{
-		global $sitename, $s;
+		global $sitename, $s, $thissection;
 
 		extract(lAtts(array(
 			'active_class'    => '',
@@ -955,6 +1025,7 @@ $LastChangedRevision$
 			'class'           => __FUNCTION__,
 			'default_title'   => $sitename,
 			'exclude'         => '',
+			'form'            => '',
 			'include_default' => '',
 			'label'           => '',
 			'labeltag'        => '',
@@ -965,13 +1036,14 @@ $LastChangedRevision$
 
 		$sort = doSlash($sort);
 
+		$rs = array();
 		if ($sections)
 		{
 			$sections = do_list($sections);
 
 			$sections = join("','", doSlash($sections));
 
-			$rs = safe_rows_start('name, title', 'txp_section', "name in ('$sections') order by ".($sort ? $sort : "field(name, '$sections')"));
+			$rs = safe_rows('name, title', 'txp_section', "name in ('$sections') order by ".($sort ? $sort : "field(name, '$sections')"));
 		}
 
 		else
@@ -985,42 +1057,94 @@ $LastChangedRevision$
 				$exclude = "and name not in('$exclude')";
 			}
 
-			$rs = safe_rows_start('name, title', 'txp_section', "name != 'default' $exclude order by ".($sort ? $sort : 'name ASC'));
+			$rs = safe_rows('name, title', 'txp_section', "name != 'default' $exclude order by ".($sort ? $sort : 'name ASC'));
+		}
+
+		if ($include_default)
+		{
+			array_unshift($rs, array('name' => 'default',
+									'title' => $default_title,
+									'url' => pagelinkurl(array('s' => 'default'))));
 		}
 
 		if ($rs)
 		{
 			$out = array();
 
-			while ($a = nextRow($rs))
+			$old_section = $thissection;
+			foreach ($rs as $a)
 			{
 				extract($a);
 
-				$url = pagelinkurl(array('s' => $name));
+				if (empty($form) && empty($thing))
+				{
+					$url = pagelinkurl(array('s' => $name));
 
-				$out[] = tag($title, 'a',
-					( ($active_class and (0 == strcasecmp($s, $name))) ? ' class="'.$active_class.'"' : '' ).
-					' href="'.$url.'"'
-				);
+					$out[] = tag($title, 'a',
+						( ($active_class and (0 == strcasecmp($s, $name))) ? ' class="'.$active_class.'"' : '' ).
+						' href="'.$url.'"'
+					);
+				}
+				else
+				{
+					$thissection = array(
+						'name'   => $name,
+						'title'  => ($name == 'default') ? $default_title : $title,
+						'url'    => pagelinkurl(array('s' => $name))
+					);
+					$out[] = (empty($thing)) ? parse_form($form): parse($thing);
+				}
 			}
+			$thissection = $old_section;
 
 			if ($out)
 			{
-				if ($include_default)
-				{
-					$out = array_merge(array(
-						tag($default_title,'a',
-							( ($active_class and ($s == 'default')) ? ' class="'.$active_class.'"' : '' ).
-							' href="'.hu.'"'
-						)
-					), $out);
-				}
-
 				return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
 			}
 		}
 
 		return '';
+	}
+// -------------------------------------------------------------
+
+	function section_name($atts)
+	{
+		global $thissection;
+		assert_section();
+		extract(lAtts(array(
+			'escape'	=> ''
+		), $atts));
+		return ($escape == 'html') ? htmlspecialchars($thissection['name']) : $thissection['name'];
+	}
+
+// -------------------------------------------------------------
+
+	function section_title($atts)
+	{
+		global $thissection;
+		assert_section();
+		extract(lAtts(array(
+			'escape'	=> ''
+		), $atts));
+		return ($escape == 'html') ? htmlspecialchars($thissection['title']) : $thissection['title'];
+	}
+
+// -------------------------------------------------------------
+
+	function section_url($atts)
+	{
+		global $thissection;
+		assert_section();
+		return $thissection['url'];
+	}
+
+// -------------------------------------------------------------
+
+	function if_active_section($atts, $thing)
+	{
+		global $thissection, $s;
+		assert_section();
+		return parse(EvalElse($thing, $thissection['name'] == $s));
 	}
 
 // -------------------------------------------------------------
