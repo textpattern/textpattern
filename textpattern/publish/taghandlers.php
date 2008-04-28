@@ -930,18 +930,14 @@ $LastChangedRevision$
 
 					if (empty($form) && empty($thing))
 					{
-						$out[] = tag(str_replace('& ', '&#38; ', $title), 'a',
+						$out[] = tag(htmlspecialchars($title), 'a',
 							( ($active_class and (0 == strcasecmp($c, $name))) ? ' class="'.$active_class.'"' : '' ).
 							' href="'.pagelinkurl(array('s' => $section, 'c' => $name)).'"'
 						);
 					}
 					else
 					{
-						$thiscategory = array(
-							'name'   => $name,
-							'title'  => $title,
-							'url'    => pagelinkurl(array('s' => $section, 'c' => $name)),
-						);
+						$thiscategory = array('name' => $name, 'title' => $title, 'type' => $type);
 						$out[] = empty($thing) ? parse_form($form) : parse($thing);
 					}
 				}
@@ -954,61 +950,6 @@ $LastChangedRevision$
 			}
 		}
 
-		return '';
-	}
-
-// -------------------------------------------------------------
-
-	function category_name($atts)
-	{
-		global $thiscategory;
-		assert_category();
-		extract(lAtts(array(
-			'escape'	=> ''
-		), $atts));
-		return ($escape == 'html') ? htmlspecialchars($thiscategory['name']) : $thiscategory['name'];
-	}
-
-// -------------------------------------------------------------
-
-	function category_title($atts)
-	{
-		global $thiscategory;
-		assert_category();
-		extract(lAtts(array(
-			'escape'	=> ''
-		), $atts));
-		return ($escape == 'html') ? htmlspecialchars($thiscategory['title']) : $thiscategory['title'];
-	}
-
-// -------------------------------------------------------------
-
-	function category_url()
-	{
-		global $thiscategory;
-		assert_category();
-		return $thiscategory['url'];
-	}
-
-// -------------------------------------------------------------
-
-	function if_active_category($atts, $thing)
-	{
-		global $thiscategory, $c;
-		assert_category();
-		extract(lAtts(array(
-			'dir' => 'none'
-		), $atts));
-
-		switch ($dir) {
-			case 'none':
-				return parse(EvalElse($thing, $thiscategory['name'] == $c));
-			case 'trunk':
-			case 'leaf':
-			case 'both':
-				// FIXME: Check for any active descendant/ancestor in cat tree
-				return parse(EvalElse($thing, $thiscategory['name'] == $c));
-		}
 		return '';
 	}
 
@@ -1062,9 +1003,7 @@ $LastChangedRevision$
 
 		if ($include_default)
 		{
-			array_unshift($rs, array('name' => 'default',
-									'title' => $default_title,
-									'url' => pagelinkurl(array('s' => 'default'))));
+			array_unshift($rs, array('name' => 'default', 'title' => $default_title));
 		}
 
 		if ($rs)
@@ -1080,18 +1019,14 @@ $LastChangedRevision$
 				{
 					$url = pagelinkurl(array('s' => $name));
 
-					$out[] = tag($title, 'a',
+					$out[] = tag(htmlspecialchars($title), 'a',
 						( ($active_class and (0 == strcasecmp($s, $name))) ? ' class="'.$active_class.'"' : '' ).
 						' href="'.$url.'"'
 					);
 				}
 				else
 				{
-					$thissection = array(
-						'name'   => $name,
-						'title'  => ($name == 'default') ? $default_title : $title,
-						'url'    => pagelinkurl(array('s' => $name))
-					);
+					$thissection = array('name' => $name, 'title' => ($name == 'default') ? $default_title : $title);
 					$out[] = (empty($thing)) ? parse_form($form): parse($thing);
 				}
 			}
@@ -1104,47 +1039,6 @@ $LastChangedRevision$
 		}
 
 		return '';
-	}
-// -------------------------------------------------------------
-
-	function section_name($atts)
-	{
-		global $thissection;
-		assert_section();
-		extract(lAtts(array(
-			'escape'	=> ''
-		), $atts));
-		return ($escape == 'html') ? htmlspecialchars($thissection['name']) : $thissection['name'];
-	}
-
-// -------------------------------------------------------------
-
-	function section_title($atts)
-	{
-		global $thissection;
-		assert_section();
-		extract(lAtts(array(
-			'escape'	=> ''
-		), $atts));
-		return ($escape == 'html') ? htmlspecialchars($thissection['title']) : $thissection['title'];
-	}
-
-// -------------------------------------------------------------
-
-	function section_url($atts)
-	{
-		global $thissection;
-		assert_section();
-		return $thissection['url'];
-	}
-
-// -------------------------------------------------------------
-
-	function if_active_section($atts, $thing)
-	{
-		global $thissection, $s;
-		assert_section();
-		return parse(EvalElse($thing, $thissection['name'] == $s));
 	}
 
 // -------------------------------------------------------------
@@ -2103,7 +1997,7 @@ $LastChangedRevision$
 
 	function category($atts, $thing = '')
 	{
-		global $s, $c;
+		global $s, $c, $thiscategory;
 
 		extract(lAtts(array(
 			'class'        => '',
@@ -2113,19 +2007,36 @@ $LastChangedRevision$
 			'this_section' => 0,
 			'title'        => 0,
 			'type'         => 'article',
+			'url'          => 0,
 			'wraptag'      => '',
 		), $atts));
 
-		$category = ($name) ? $name : $c;
+		if ($name)
+		{
+			$category = $name;
+		}
+
+		elseif (!empty($thiscategory['name']))
+		{
+			$category = $thiscategory['name'];
+			$type = $thiscategory['type'];
+		}
+
+		else
+		{
+			$category = $c;
+		}
 
 		if ($category)
 		{
 			$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
-			$label = ($title) ? fetch_category_title($category, $type) : $category;
+			$label = htmlspecialchars( ($title) ? fetch_category_title($category, $type) : $category );
+
+			$href = pagelinkurl(array('s' => $section, 'c' => $category));
 
 			if ($thing)
 			{
-				$out = '<a href="'.pagelinkurl(array('s' => $section, 'c' => $category,)).'"'.
+				$out = '<a href="'.$href.'"'.
 					( ($class and !$wraptag) ? ' class="'.$class.'"' : '' ).
 					($title ? ' title="'.$label.'"' : '').
 					'>'.parse($thing).'</a>';
@@ -2133,9 +2044,12 @@ $LastChangedRevision$
 
 			elseif ($link)
 			{
-				$out = href($label,
-					pagelinkurl(array('s' => $section, 'c' => $category))
-				);
+				$out = href($label, $href);
+			}
+
+			elseif ($url)
+			{
+				$out = $href;
 			}
 
 			else
@@ -2151,19 +2065,25 @@ $LastChangedRevision$
 
 	function section($atts, $thing = '')
 	{
-		global $thisarticle, $s;
+		global $thisarticle, $s, $thissection;
 
 		extract(lAtts(array(
 			'class'   => '',
 			'link'		=> 0,
 			'name'		=> '',
 			'title'		=> 0,
+			'url'		=> 0,
 			'wraptag' => '',
 		), $atts));
 
 		if ($name)
 		{
 			$sec = $name;
+		}
+
+		elseif (!empty($thissection['name']))
+		{
+			$sec = $thissection['name'];
 		}
 
 		elseif (!empty($thisarticle['section']))
@@ -2178,11 +2098,13 @@ $LastChangedRevision$
 
 		if ($sec)
 		{
-			$label = ($title) ? fetch_section_title($sec) : $sec;
+			$label = htmlspecialchars( ($title) ? fetch_section_title($sec) : $sec );
+
+			$href = pagelinkurl(array('s' => $sec));
 
 			if ($thing)
 			{
-				$out = '<a href="'.pagelinkurl(array('s' => $sec)).'"'.
+				$out = '<a href="'.$href.'"'.
 					( ($class and !$wraptag) ? ' class="'.$class.'"' : '' ).
 					($title ? ' title="'.$label.'"' : '').
 					'>'.parse($thing).'</a>';
@@ -2190,9 +2112,12 @@ $LastChangedRevision$
 
 			elseif ($link)
 			{
-				$out = href($label,
-					pagelinkurl(array('s' => $sec))
-				);
+				$out = href($label, $href);
+			}
+
+			elseif ($url)
+			{
+				$out = $href;
 			}
 
 			else

@@ -1519,11 +1519,18 @@ $LastChangedRevision$
 	function fetch_category_title($name, $type='article')
 	{
 		static $cattitles = array();
+		global $thiscategory;
 
 		if (isset($cattitles[$type][$name]))
 			return $cattitles[$type][$name];
 
-		$f = safe_field('title','txp_category',"name='".doSlash($name)."' and type='".doSlash($type)."'");
+		if(!empty($thiscategory['title']) && $thiscategory['name'] == $name && $thiscategory['type'] == $type)
+		{
+			$cattitles[$type][$name] = $thiscategory['title'];
+			return $thiscategory['title'];
+		}
+
+		$f = safe_field('title','txp_category',"name='".doSlash($name)."' and type='".doSlash($type)."'",1);
 		$cattitles[$type][$name] = $f;
 		return $f;
 	}
@@ -1532,9 +1539,16 @@ $LastChangedRevision$
 	function fetch_section_title($name)
 	{
 		static $sectitles = array();
+		global $thissection;
 
 		if (isset($sectitles[$name]))
 			return $sectitles[$name];
+
+		if(!empty($thissection['title']) && $thissection['name'] == $name)
+		{
+			$sectitles[$name] = $thissection['title'];
+			return $thissection['title'];
+		}
 
 		$f = safe_field('title','txp_section',"name='".doSlash($name)."'");
 		$sectitles[$name] = $f;
