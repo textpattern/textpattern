@@ -336,7 +336,7 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function linklist($atts)
+	function linklist($atts, $thing='')
 	{
 		global $thislink;
 
@@ -378,7 +378,7 @@ $LastChangedRevision$
 					'category'    => $category,
 				);
 
-				$out[] = parse_form($form);
+				$out[] = ($thing) ? parse($thing) : parse_form($form);
 
 				$thislink = '';
 			}
@@ -938,7 +938,7 @@ $LastChangedRevision$
 					else
 					{
 						$thiscategory = array('name' => $name, 'title' => $title, 'type' => $type);
-						$out[] = empty($thing) ? parse_form($form) : parse($thing);
+						$out[] = ($thing) ? parse($thing) : parse_form($form);
 					}
 				}
 			}
@@ -1027,7 +1027,7 @@ $LastChangedRevision$
 				else
 				{
 					$thissection = array('name' => $name, 'title' => ($name == 'default') ? $default_title : $title);
-					$out[] = (empty($thing)) ? parse_form($form): parse($thing);
+					$out[] = ($thing) ? parse($thing) : parse_form($form);
 				}
 			}
 			$thissection = $old_section;

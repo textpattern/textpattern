@@ -1530,7 +1530,7 @@ $LastChangedRevision$
 			return $thiscategory['title'];
 		}
 
-		$f = safe_field('title','txp_category',"name='".doSlash($name)."' and type='".doSlash($type)."'",1);
+		$f = safe_field('title','txp_category',"name='".doSlash($name)."' and type='".doSlash($type)."'");
 		$cattitles[$type][$name] = $f;
 		return $f;
 	}
