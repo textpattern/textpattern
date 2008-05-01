@@ -3046,7 +3046,7 @@ $LastChangedRevision$
 
 //--------------------------------------------------------------------------
 
-	function file_download_list($atts)
+	function file_download_list($atts, $thing='')
 	{
 		global $thisfile;
 
@@ -3086,7 +3086,7 @@ $LastChangedRevision$
 			{
 				$thisfile = file_download_format_info($a);
 
-				$out[] = parse_form($form);
+				$out[] = ($thing) ? parse($thing) : parse_form($form);
 
 				$thisfile = '';
 			}
