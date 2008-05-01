@@ -645,37 +645,66 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function recent_comments($atts)
+	function recent_comments($atts, $thing='')
 	{
+		global $thisarticle, $thiscomment;
 		extract(lAtts(array(
 			'break'    => br,
 			'class'    => __FUNCTION__,
+			'form'     => '',
 			'label'    => '',
 			'labeltag' => '',
 			'limit'    => 10,
+			'offset'   => 0,
 			'sort'     => 'posted desc',
 			'wraptag'  => '',
 		), $atts));
 
 		$sort = preg_replace('/\bposted\b/', 'd.posted', $sort);
 
-		$rs = startRows('select d.name, d.discussid, t.ID as thisid, unix_timestamp(t.Posted) as posted, t.Title as title, t.Section as section, t.url_title '.
+		$rs = startRows('select d.name, d.email, d.web, d.message, d.discussid, unix_timestamp(d.Posted) as time, '.
+				't.ID as thisid, unix_timestamp(t.Posted) as posted, t.Title as title, t.Section as section, t.url_title '.
 				'from '. safe_pfx('txp_discuss') .' as d inner join '. safe_pfx('textpattern') .' as t on d.parentid = t.ID '.
-				'where t.Status >= 4 and d.visible = '.VISIBLE.' order by '.doSlash($sort).' limit 0,'.intval($limit));
+				'where t.Status >= 4 and d.visible = '.VISIBLE.' order by '.doSlash($sort).' limit '.intval($offset).','.intval($limit));
 
 		if ($rs)
 		{
 			$out = array();
+			$old_article = $thisarticle;
 			while ($c = nextRow($rs))
 			{
-				$out[] = href(
-					$c['name'].' ('.escape_title($c['title']).')',
-					permlinkurl($c).'#c'.$c['discussid']
-				);
+				if (empty($form) && empty($thing))
+				{
+					$out[] = href(
+						htmlspecialchars($c['name']).' ('.htmlspecialchars($c['title']).')',
+						permlinkurl($c).'#c'.$c['discussid']
+					);
+				}
+				else
+				{
+					$thiscomment['name'] = $c['name'];
+					$thiscomment['email'] = $c['email'];
+					$thiscomment['web'] = $c['web'];
+					$thiscomment['message'] = $c['message'];
+					$thiscomment['discussid'] = $c['discussid'];
+					$thiscomment['time'] = $c['time'];
+
+					// allow permlink guesstimation in permlinkurl(), elsewhere
+					$thisarticle['ID'] = $c['thisid'];
+					$thisarticle['posted'] = $c['posted'];
+					$thisarticle['title'] = $c['title'];
+					$thisarticle['section'] = $c['section'];
+					$thisarticle['url_title'] = $c['url_title'];
+					$thisarticle['ID'] = $c['thisid'];
+
+					$out[] = ($thing) ? parse($thing) : parse_form($form);
+				}
 			}
 
 			if ($out)
 			{
+				unset($GLOBALS['thiscomment']);
+				$thisarticle = $old_article;
 				return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
 			}
 		}
@@ -1704,6 +1733,8 @@ $LastChangedRevision$
 			'link' => 1,
 		), $atts));
 
+		$name = htmlspecialchars($name);
+
 		if ($link)
 		{
 			$web      = str_replace('http://', '', $web);
@@ -1711,12 +1742,12 @@ $LastChangedRevision$
 
 			if ($web)
 			{
-				return '<a href="http://'.htmlspecialchars($web).'"'.$nofollow.'>'.htmlspecialchars($name).'</a>';
+				return '<a href="http://'.htmlspecialchars($web).'"'.$nofollow.'>'.$name.'</a>';
 			}
 
 			if ($email && !$never_display_email)
 			{
-				return '<a href="'.eE('mailto:'.$email).'"'.$nofollow.'>'.htmlspecialchars($name).'</a>';
+				return '<a href="'.eE('mailto:'.$email).'"'.$nofollow.'>'.$name.'</a>';
 			}
 		}
 
