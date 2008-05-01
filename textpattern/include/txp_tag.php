@@ -1435,6 +1435,100 @@ begin tag builder functions
 		return $out;
 	}
 
+// -------------------------------------------------------------
+
+	function tag_category()
+	{
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'class',
+			'link',
+			'name',
+			'this_section',
+			'title',
+			'type',
+			'url',
+			'wraptag'
+		));
+
+		extract($atts);
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('name',
+				fInput('text', 'name', $name, 'edit', '', '', 25)).
+
+			tagRow('link_to_this_category',
+				yesno_pop('link', $link)).
+
+			tagRow('title',
+				yesno_pop('link', $link)).
+
+			tagRow('type',
+				type_pop('type', $link)).
+
+			tagRow('url_only',
+				yesno_pop('url', $link)).
+
+			tagRow('wraptag',
+				input_tag('wraptag', $wraptag)).
+
+			tagRow('class',
+				fInput('text', 'class', $class, 'edit', '', '', 25)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts));
+		}
+
+		return $out;
+	}
+
+// -------------------------------------------------------------
+
+	function tag_if_category()
+	{
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'name'
+		));
+
+		extract($atts);
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('name',
+				fInput('text', 'name', $name, 'edit', '', '', 25)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts, gTxt('...')));
+		}
+
+		return $out;
+	}
 
 // -------------------------------------------------------------
 
@@ -1447,6 +1541,7 @@ begin tag builder functions
 			'link',
 			'name',
 			'title',
+			'url',
 			'wraptag'
 		));
 
@@ -1467,6 +1562,9 @@ begin tag builder functions
 			tagRow('link_to_this_section',
 				yesno_pop('link', $link)).
 
+			tagRow('url_only',
+				yesno_pop('url', $link)).
+
 			tagRow('wraptag',
 				input_tag('wraptag', $wraptag)).
 
@@ -1479,6 +1577,41 @@ begin tag builder functions
 		if ($step == 'build')
 		{
 			$out .= tdb(tb($tag_name, $atts));
+		}
+
+		return $out;
+	}
+
+// -------------------------------------------------------------
+
+	function tag_if_section()
+	{
+		global $step, $endform, $tag_name;
+
+		$atts = gpsa(array(
+			'name'
+		));
+
+		extract($atts);
+
+		$out = form(
+			startTable('tagbuilder').
+
+			tr(
+				tdcs(
+					hed(gTxt('tag_'.$tag_name), 3)
+				, 2)
+			).
+
+			tagRow('name',
+				section_pop('name', $tag_name)).
+
+			$endform
+		);
+
+		if ($step == 'build')
+		{
+			$out .= tdb(tb($tag_name, $atts, gTxt('...')));
 		}
 
 		return $out;

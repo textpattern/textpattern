@@ -71,6 +71,16 @@ $file_download_tags = array(
 	'file_download_downloads',
 );
 
+$category_tags = array(
+	'category',
+	'if_category'
+);
+
+$section_tags = array(
+	'section',
+	'if_section'
+);
+
 $page_article_tags = array(
 	'article',
 	'article_custom',

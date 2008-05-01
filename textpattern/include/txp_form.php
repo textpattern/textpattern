@@ -163,8 +163,16 @@ $LastChangedRevision$
 
 					hed('<a href="#file-tags" onclick="toggleDisplay(\'file-tags\'); return false;">'.gTxt('file_download_tags').'</a>'.
 						sp.popHelp('form_file_download_tags'), 3, ' class="plain"').
-						'<div id="file-tags" style="display: none;">'.popTagLinks('file_download').'</div>'
-				).
+						'<div id="file-tags" style="display: none;">'.popTagLinks('file_download').'</div>'.
+
+					hed('<a href="#category-tags" onclick="toggleDisplay(\'category-tags\'); return false;">'.gTxt('category_tags').'</a>'.
+						sp.popHelp('form_category_tags'), 3, ' class="plain"').
+						'<div id="category-tags" style="display: none;">'.popTagLinks('category').'</div>'.
+
+					hed('<a href="#section-tags" onclick="toggleDisplay(\'section-tags\'); return false;">'.gTxt('section_tags').'</a>'.
+						sp.popHelp('form_section_tags'), 3, ' class="plain"').
+						'<div id="section-tags" style="display: none;">'.popTagLinks('section').'</div>'
+						).
 				tdtl(
 					'<form action="index.php" method="post">'.
 						'<textarea id="form" class="code" name="Form" cols="60" rows="20">'.htmlspecialchars($Form).'</textarea>'.
@@ -204,7 +212,7 @@ $LastChangedRevision$
 			return form_edit($message);
 		}
 
-		if (!in_array($type, array('article','comment','link','misc','file')))
+		if (!in_array($type, array('article','category','comment','file','link','misc','section')))
 		{
 			$step = 'form_create';
 			$message = gTxt('form_type_missing');
@@ -257,7 +265,8 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function formTypes($type)
 	{
-	 	$types = array(''=>'','article'=>'article','comment'=>'comment','link'=>'link','misc'=>'misc','file'=>'file');
+	 	$types = array(''=>'','article'=>'article','category'=>'category','comment'=>'comment',
+	 		'file'=>'file','link'=>'link','misc'=>'misc','section'=>'section');
 		return selectInput('type',$types,$type);
 	}
 
