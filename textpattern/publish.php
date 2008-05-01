@@ -841,36 +841,34 @@ $LastChangedRevision$
 // new article tags.
 	function populateArticleData($rs)
 	{
+		global $thisarticle;
 		extract($rs);
 
 		trace_add("[".gTxt('Article')." $ID]");
-		$out['thisid']          = $ID;
-		$out['posted']          = $uPosted;
-		$out['modified']	= $LastMod;
-		$out['annotate']        = $Annotate;
-		$out['comments_invite'] = $AnnotateInvite;
-		$out['authorid']        = $AuthorID;
-		$out['title']           = $Title;
-		$out['url_title']       = $url_title;
-		$out['category1']       = $Category1;
-		$out['category2']       = $Category2;
-		$out['section']         = $Section;
-		$out['keywords']        = $Keywords;
-		$out['article_image']   = $Image;
-		$out['comments_count']  = $comments_count;
-		$out['body']            = $Body_html;
-		$out['excerpt']         = $Excerpt_html;
-		$out['override_form']   = $override_form;
-		$out['status']          = $Status;
+		$thisarticle['thisid']          = $ID;
+		$thisarticle['posted']          = $uPosted;
+		$thisarticle['modified']	= $LastMod;
+		$thisarticle['annotate']        = $Annotate;
+		$thisarticle['comments_invite'] = $AnnotateInvite;
+		$thisarticle['authorid']        = $AuthorID;
+		$thisarticle['title']           = $Title;
+		$thisarticle['url_title']       = $url_title;
+		$thisarticle['category1']       = $Category1;
+		$thisarticle['category2']       = $Category2;
+		$thisarticle['section']         = $Section;
+		$thisarticle['keywords']        = $Keywords;
+		$thisarticle['article_image']   = $Image;
+		$thisarticle['comments_count']  = $comments_count;
+		$thisarticle['body']            = $Body_html;
+		$thisarticle['excerpt']         = $Excerpt_html;
+		$thisarticle['override_form']   = $override_form;
+		$thisarticle['status']          = $Status;
 
 		$custom = getCustomFields();
 		if ($custom) {
 			foreach ($custom as $i => $name)
-				$out[$name] = $rs['custom_' . $i];
+				$thisarticle[$name] = $rs['custom_' . $i];
 		}
-
-		global $thisarticle;
-		$thisarticle = $out;
 	}
 
 // -------------------------------------------------------------
@@ -1025,7 +1023,7 @@ $LastChangedRevision$
 		{
 			$tag = 'tpt_'.$tag;
 		}
-		
+
 		if (function_exists($tag))
 		{
 			$out = $tag(splat($atts), $thing);
