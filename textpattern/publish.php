@@ -489,7 +489,8 @@ $LastChangedRevision$
 			echo n,comment('Queries: '.$qcount);
 			echo maxMemUsage('end of textpattern()',1);
 			if (!empty($txptrace) and is_array($txptrace))
-				echo n, comment('txp tag trace: '.n.join(n, $txptrace).n);
+				echo n, comment('txp tag trace: '.n.str_replace('--','&shy;&shy;',join(n, $txptrace)).n);
+				// '&shy;&shy;' is *no* tribute to Kajagoogoo, but an attempt to avoid prematurely terminating HTML comments
 		}
 
 		callback_event('textpattern_end');
@@ -513,7 +514,7 @@ $LastChangedRevision$
 //	otherwise, output a list.
 
 // -------------------------------------------------------------
-	function article($atts)
+	function article($atts, $thing='')
 	{
 		global $is_article_body, $has_article_tag;
 		if ($is_article_body) {
@@ -521,11 +522,11 @@ $LastChangedRevision$
 			return '';
 		}
 		$has_article_tag = true;
-		return parseArticles($atts);
+		return parseArticles($atts, '0', $thing);
 	}
 
 // -------------------------------------------------------------
-	function doArticles($atts, $iscustom)
+	function doArticles($atts, $iscustom, $thing = '')
 	{
 		global $pretext, $prefs, $txpcfg;
 		extract($pretext);
@@ -558,6 +559,11 @@ $LastChangedRevision$
 			'searchsticky' => 0,
 			'allowoverride' => (!$q and !$iscustom),
 			'offset'    => 0,
+			'wraptag'	=> '',
+			'break'		=> '',
+			'label'		=> '',
+			'labeltag'	=> '',
+			'class'		=> ''
 		)+$customlAtts,$atts);
 
 		// if an article ID is specified, treat it as a custom list
@@ -575,6 +581,9 @@ $LastChangedRevision$
 			$theAtts['excerpted'] = '';
 		}
 		extract($theAtts);
+
+		// if a listform is specified, $thing is for doArticle() - hence ignore here.
+		if (!empty($listform)) $thing = '';
 
 		$pageby = (empty($pageby) ? $limit : $pageby);
 
@@ -719,7 +728,7 @@ $LastChangedRevision$
 					$articles[] = parse_form($a['override_form']);
 				}
 				else {
-					$articles[] = parse_form($fname);
+					$articles[] = ($thing) ? parse($thing) : parse_form($fname);
 				}
 
 				// sending these to paging_link(); Required?
@@ -728,7 +737,7 @@ $LastChangedRevision$
 				unset($GLOBALS['thisarticle']);
 			}
 
-			return join('',$articles);
+			return doLabel($label, $labeltag).doWrap($articles, $wraptag, $break, $class);
 		}
 	}
 
@@ -760,7 +769,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function doArticle($atts)
+	function doArticle($atts, $thing = '')
 	{
 		global $pretext,$prefs, $thisarticle;
 		extract($prefs);
@@ -773,6 +782,9 @@ $LastChangedRevision$
 			'form'          => 'default',
 			'status'        => '4',
 		),$atts, 0));
+
+		// if a form is specified, $thing is for doArticles() - hence ignore $thing here.
+		if (!empty($atts['form'])) $thing = '';
 
 		if ($status and !is_numeric($status))
 		{
@@ -800,9 +812,14 @@ $LastChangedRevision$
 			$thisarticle['is_first'] = 1;
 			$thisarticle['is_last'] = 1;
 
-			$form = ($allowoverride and $override_form) ? $override_form : $form;
-
-			$article = parse_form($form);
+			if ($allowoverride and $override_form)
+			{
+				$article = parse_form($override_form);
+			}
+			else
+			{
+				$article = ($thing) ? parse($thing) : parse_form($form);
+			}
 
 			if ($use_comments and $comments_auto_append)
 			{
@@ -816,19 +833,19 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function article_custom($atts)
+	function article_custom($atts, $thing = '')
 	{
-		return parseArticles($atts, '1');
+		return parseArticles($atts, '1', $thing);
 	}
 
 // -------------------------------------------------------------
-	function parseArticles($atts, $iscustom = '')
+	function parseArticles($atts, $iscustom = '', $thing = '')
 	{
 		global $pretext, $is_article_list;
 		$old_ial = $is_article_list;
 		$is_article_list = ($pretext['id'] && !$iscustom)? false : true;
 		article_push();
-		$r = ($is_article_list)? doArticles($atts, $iscustom) : doArticle($atts);
+		$r = ($is_article_list)? doArticles($atts, $iscustom, $thing) : doArticle($atts, $thing);
 		article_pop();
 		$is_article_list = $old_ial;
 
