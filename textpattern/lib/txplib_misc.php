@@ -334,6 +334,7 @@ $LastChangedRevision$
 	function gpsa($array) // performs gps() on an array of variable names
 	{
 		if(is_array($array)) {
+			$out = array();
 			foreach($array as $a) {
 				$out[$a] = gps($a);
 			}
