@@ -74,6 +74,7 @@ $LastChangedRevision$
 		'/update/_to_4.0.4.php',
 		'/update/_to_4.0.5.php',
 		'/update/_to_4.0.6.php',
+		'/update/_to_4.0.7.php',
 		'/update/_update.php'
 	);
 

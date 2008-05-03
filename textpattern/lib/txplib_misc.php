@@ -560,7 +560,7 @@ $LastChangedRevision$
 		if ($type !== NULL)
 			$where .= (" and type='".doSlash($type)."'");
 
-		$rs = safe_rows("name, code, version", "txp_plugin", $where);
+		$rs = safe_rows("name, code, version", "txp_plugin", $where. ' order by `order`');
 		if ($rs) {
 			$old_error_handler = set_error_handler("pluginErrorHandler");
 			foreach($rs as $a) {

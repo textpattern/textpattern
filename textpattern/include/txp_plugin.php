@@ -19,7 +19,7 @@ $LastChangedRevision$
 	if ($event == 'plugin') {
 		require_privs('plugin');
 
-		if(!$step or !in_array($step, array('plugin_delete','plugin_edit','plugin_help','plugin_list','plugin_install','plugin_save','plugin_verify','switch_status'))){
+		if(!$step or !in_array($step, array('plugin_delete','plugin_edit','plugin_help','plugin_list','plugin_install','plugin_save','plugin_verify','switch_status','set_order'))){
 			plugin_list();
 		} else $step();
 	}
@@ -37,12 +37,12 @@ $LastChangedRevision$
 				,' colspan="8" style="height: 30px; border: none;"')
 			);
 
-		$rs = safe_rows_start('name, status, author, author_uri, version, description, code_md5, length(help) as help, md5(code) as md5',
+		$rs = safe_rows_start('name, status, author, author_uri, version, description, code_md5, length(help) as help, md5(code) as md5, `order`',
 			'txp_plugin', '1 order by name');
 
 		if ($rs and numRows($rs) > 0)
 		{
-			echo assHead('plugin', 'author', 'version', 'plugin_modified', 'description', 'active', 'help', '', '');
+			echo assHead('plugin', 'author', 'version', 'plugin_modified', 'description', 'active', 'help', 'order', '', '');
 
 			while ($a = nextRow($rs))
 			{
@@ -80,6 +80,8 @@ $LastChangedRevision$
 					,30).
 
 					td($help).
+
+					td(plugin_order_form($name, $order)).
 
 					td(
 						eLink('plugin', 'plugin_edit', 'name', $name, gTxt('edit'))
@@ -174,6 +176,20 @@ $LastChangedRevision$
 		safe_delete('txp_plugin', "name = '$name'");
 
 		$message = gTxt('plugin_deleted', array('{name}' => $name));
+
+		plugin_list($message);
+	}
+
+// -------------------------------------------------------------
+
+	function set_order()
+	{
+		extract(doSlash(gpsa(array('name', 'order'))));
+		$order = min(max( intval($order), 1), 9);
+
+		safe_update('txp_plugin', "`order` = $order", "name = '$name'");
+
+		$message = gTxt('plugin_saved', array('{name}' => $name));
 
 		plugin_list($message);
 	}
@@ -277,6 +293,9 @@ $LastChangedRevision$
 					if (empty($type)) $type = 0;
 					$type = assert_int($type);
 
+					if (empty($order)) $order = 5;
+					$order = assert_int($order);
+
 					$exists = fetch('name','txp_plugin','name',$name);
 
 					if (isset($help_raw) && empty($plugin['allow_html_help'])) {
@@ -316,7 +335,8 @@ $LastChangedRevision$
 							help         = '".doSlash($help)."',
 							code         = '".doSlash($code)."',
 							code_restore = '".doSlash($code)."',
-							code_md5     = '".doSlash($md5)."'"
+							code_md5     = '".doSlash($md5)."',
+							`order`	 	 = '".$order."'"
 						);
 					}
 
@@ -363,5 +383,17 @@ $LastChangedRevision$
 			)
 		, 'text-align: center;');
 	}
+// -------------------------------------------------------------
 
+	function  plugin_order_form($name, $order)
+	{
+		for ($i = 1; $i <= 9; $i++) $orders[$i] = $i;
+
+		return form(
+			eInput('plugin').n.
+			sInput('set_order').n.
+			hInput('name', $name).n.
+			selectInput('order', $orders, $order, 0, 1)
+		);
+	}
 ?>
