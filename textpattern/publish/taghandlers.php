@@ -1384,12 +1384,12 @@ $LastChangedRevision$
 
 	function if_article_id($atts, $thing)
 	{
-		global $thisarticle;
+		global $thisarticle, $pretext;
 
 		assert_article();
 
 		extract(lAtts(array(
-			'id' => '',
+			'id' => $pretext['id'],
 		), $atts));
 
 		if ($id)
