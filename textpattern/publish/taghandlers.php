@@ -714,7 +714,7 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function related_articles($atts)
+	function related_articles($atts, $thing='')
 	{
 		global $thisarticle, $prefs;
 
@@ -723,6 +723,7 @@ $LastChangedRevision$
 		extract(lAtts(array(
 			'break'    => br,
 			'class'    => __FUNCTION__,
+			'form'	   => '',
 			'label'    => '',
 			'labeltag' => '',
 			'limit'    => 10,
@@ -783,13 +784,23 @@ $LastChangedRevision$
 		if ($rs)
 		{
 			$out = array();
+			$old_article = $thisarticle;
 
 			while ($a = nextRow($rs))
 			{
 				$a['Title'] = ($no_widow) ? noWidow(escape_title($a['Title'])) : escape_title($a['Title']);
 
-				$out[] = href($a['Title'], permlinkurl($a));
+				if (empty($form) && empty($thing))
+				{
+					$out[] = href($a['Title'], permlinkurl($a));
+				}
+				else
+				{
+					populateArticleData($a);
+					$out[] = ($thing) ?  parse($thing) : parse_form($form);
+				}
 			}
+			$thisarticle = $old_article;
 
 			if ($out)
 			{
