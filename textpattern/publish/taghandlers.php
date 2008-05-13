@@ -784,6 +784,7 @@ $LastChangedRevision$
 			while ($a = nextRow($rs))
 			{
 				$a['Title'] = ($no_widow) ? noWidow(escape_title($a['Title'])) : escape_title($a['Title']);
+				$a['uPosted'] = $a['posted']; // populateArticleData() and permlinkurl() assume quite a bunch of posting dates...
 
 				if (empty($form) && empty($thing))
 				{
