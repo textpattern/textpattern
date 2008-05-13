@@ -416,8 +416,9 @@ $LastChangedRevision$
 		if(empty($id)) $is_article_list = true;
 
 			// by this point we should know the section, so grab its page and css
-		$rs = safe_row("*", "txp_section", "name = '".doSlash($s)."' limit 1");
+		$rs = safe_row("page, css", "txp_section", "name = '".doSlash($s)."' limit 1");
 		$out['page'] = @$rs['page'];
+		$out['css'] = @$rs['css'];
 
 		if(is_numeric($id)) {
 			$a = safe_row('*, unix_timestamp(Posted) as uPosted', 'textpattern', 'ID='.intval($id).' and Status in (4,5)');

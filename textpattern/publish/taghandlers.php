@@ -45,23 +45,18 @@ $LastChangedRevision$
 
 	function css($atts)
 	{
-		global $s;
+		global $css;
 
 		extract(lAtts(array(
 			'format' => 'url',
 			'media'  => 'screen',
-			'n'      => '',
+			'n'      => $css,
 			'rel'    => 'stylesheet',
 			'title'  => '',
 		), $atts));
 
-		if ($n) {
-			$url = hu.'textpattern/css.php?n='.$n;
-		} elseif ($s) {
-			$url = hu.'textpattern/css.php?s='.$s;
-		} else {
-			$url = hu.'textpattern/css.php?n=default';
-		}
+		if (empty($n)) $n = 'default';
+		$url = hu.'textpattern/css.php?n='.$n;
 
 		if ($format == 'link') {
 			return '<link rel="'.$rel.'" type="text/css"'.
