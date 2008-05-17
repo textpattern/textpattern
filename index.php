@@ -22,18 +22,11 @@ $LastChangedRevision$
 	ob_end_clean();
 
 	include txpath.'/lib/constants.php';
+	include txpath.'/lib/txplib_misc.php';
 	if (!isset($txpcfg['table_prefix']))
 	{
-		$status = '503 Service Unavailable';
-		if (IS_FASTCGI)
-			header("Status: $status");
-		elseif ($_SERVER['SERVER_PROTOCOL'] == 'HTTP/1.0')
-			header("HTTP/1.0 $status");
-		else
-			header("HTTP/1.1 $status");
-
-		$msg = 'config.php is missing or corrupt.  To install Textpattern, visit <a href="./textpattern/setup/">textpattern/setup/</a>';
-		exit ($msg);
+		txp_status_header('503 Service Unavailable');
+		exit('config.php is missing or corrupt.  To install Textpattern, visit <a href="./textpattern/setup/">textpattern/setup/</a>');
 	}
 
 	include txpath.'/publish.php';
