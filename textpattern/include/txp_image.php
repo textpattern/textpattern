@@ -545,28 +545,32 @@ $LastChangedRevision$
 
 	function thumbnail_create()
 	{
-		extract(doSlash(gpsa(array('id', 'width', 'height'))));
+		global $prefs;
 
-		// better checking of thumbnail dimensions
-		// don't try and use zeros
+		extract(doSlash(gpsa(array('id', 'width', 'height'))));
 
 		$width = (int) $width;
 		$height = (int) $height;
 
-		if ($width == 0 && $height == 0) {
-			image_edit(messenger('invalid_width_or_height', "($width)/($height)", ''), $id);
-			return;
-		} else {
-			if ($width == 0) {
-				$width = '';
-			}
-
-			if ($height == 0) {
-				$height = '';
-			}
-		}
+		if ($width == 0) $width = '';
+		if ($height == 0) $height = '';
 
 		$crop = gps('crop');
+
+		$prefs['thumb_w'] = $width;
+		$prefs['thumb_h'] = $height;
+		$prefs['thumb_crop'] = $crop;
+
+		// hidden prefs
+		set_pref('thumb_w', $width, 'image', 2);
+		set_pref('thumb_h', $height, 'image', 2);
+		set_pref('thumb_crop', $crop, 'image', 2);
+
+		if ($width === '' && $height === '')
+		{
+			image_edit(gTxt('invalid_width_or_height'), $id);
+			return;
+		}
 
 		$t = new txp_thumb( $id );
 		$t->crop = ($crop == '1');
@@ -577,17 +581,6 @@ $LastChangedRevision$
 
 		if ($t->write())
 		{
-			global $prefs;
-
-			$prefs['thumb_w'] = $width;
-			$prefs['thumb_h'] = $height;
-			$prefs['thumb_crop'] = $crop;
-
-			// hidden prefs
-			set_pref('thumb_w', $width, 'image',	2);
-			set_pref('thumb_h', $height, 'image',	 2);
-			set_pref('thumb_crop', $crop, 'image',	2);
-
 			$message = gTxt('thumbnail_saved', array('{id}' => $id));
 			update_lastmod();
 
