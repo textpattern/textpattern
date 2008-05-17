@@ -148,7 +148,7 @@ $LastChangedRevision$
 					$disabled = false)
 	{
 		$o  = '<input type="'.$type.'" name="'.$name.'"';
-		$o .= ' value="'.cleanfInput($value).'"';
+		$o .= ' value="'.htmlspecialchars($value).'"';
 		$o .= ($size)     ? ' size="'.$size.'"' : '';
 		$o .= ($class)    ? ' class="'.$class.'"' : '';
 		$o .= ($title)    ? ' title="'.$title.'"' : '';
@@ -161,13 +161,10 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
+	// deprecated (use escape_title instead), remove in crockery
 	function cleanfInput($text)
 	{
-		return str_replace(
-			array('"',"'","<",">"),
-			array("&#34;","&#39;","&#60;","&#62;"),
-			$text
-		);
+		return escape_title($text);
 	}
 
 //-------------------------------------------------------------

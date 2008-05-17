@@ -451,7 +451,7 @@ if (!empty($event) and $event == 'article') {
 
 		elseif ($view == 'text')
 		{
-			echo '<p><input type="text" id="title" name="Title" value="'.cleanfInput($Title).'" class="edit" size="40" tabindex="1" />';
+			echo '<p><input type="text" id="title" name="Title" value="'.escape_title($Title).'" class="edit" size="40" tabindex="1" />';
 
 			if ( ($Status == 4 or $Status == 5) and $step != 'create')
 			{
