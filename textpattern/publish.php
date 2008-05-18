@@ -652,7 +652,7 @@ $LastChangedRevision$
 		$excerpted = ($excerpted=='y')  ? " and Excerpt !=''" : '';
 		$author    = (!$author)    ? '' : " and AuthorID IN ('".join("','", doSlash(do_list($author)))."')";
 		$month     = (!$month)     ? '' : " and Posted like '".doSlash($month)."%'";
-		$id        = (!$id)        ? '' : " and ID = '".intval($id)."'";
+		$id        = (!$id)        ? '' : " and ID IN (".join(',', array_map('intval', do_list($id))).")";
 		switch ($time) {
 			case 'any':
 				$time = ""; break;
