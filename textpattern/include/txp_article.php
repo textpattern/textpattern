@@ -453,11 +453,17 @@ if (!empty($event) and $event == 'article') {
 		{
 			echo '<p><input type="text" id="title" name="Title" value="'.escape_title($Title).'" class="edit" size="40" tabindex="1" />';
 
-			if ( ($Status == 4 or $Status == 5) and $step != 'create')
+			if ($step != 'create')
 			{
 				include_once txpath.'/publish/taghandlers.php';
+				$url = permlinkurl_id($ID);
 
-				echo sp.sp.'<a href="'.permlinkurl_id($ID).'">'.gTxt('view').'</a>';
+				if ($Status != 4 and $Status != 5)
+				{
+					$url .= (strpos($url, '?') === FALSE ? '?' : '&amp;') . 'txpreview='.intval($ID);
+				}
+
+				echo sp.sp.'<a href="'.$url.'" id="article-view">'.gTxt('view').'</a>';
 			}
 
 			echo '</p>';

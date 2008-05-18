@@ -211,9 +211,16 @@ $LastChangedRevision$
 				$Category1 = ($Category1) ? '<span title="'.htmlspecialchars(fetch_category_title($Category1)).'">'.$Category1.'</span>' : '';
 				$Category2 = ($Category2) ? '<span title="'.htmlspecialchars(fetch_category_title($Category2)).'">'.$Category2.'</span>' : '';
 
+				$view_url = permlinkurl($a);
+
+				if ($Status != 4 and $Status != 5)
+				{
+					$view_url .= (strpos($view_url, '?') === FALSE ? '?' : '&amp;') . 'txpreview='.intval($ID);
+				}
+
 				$manage = n.'<ul class="articles_detail">'.
 						n.t.'<li>'.eLink('article', 'edit', 'ID', $ID, gTxt('edit')).'</li>'.
-						( ($Status == 4 or $Status == 5) ? n.t.'<li><a href="'.permlinkurl($a).'">'.gTxt('view').'</a></li>' : '' ).
+						n.t.'<li><a href="'.$view_url.'" class="article-view">'.gTxt('view').'</a></li>'.
 						n.'</ul>';
 
 				$Status = !empty($Status) ? $statuses[$Status] : '';

@@ -388,6 +388,21 @@ $LastChangedRevision$
 			}
 		}
 
+		// allow article preview
+		if (gps('txpreview') and is_logged_in())
+		{
+			global $nolog;
+
+			$nolog = true;
+			$rs = safe_row("ID as id,Section as s",'textpattern','ID = '.intval(gps('txpreview')).' limit 1');
+
+			if ($rs and $is_404)
+			{
+				$is_404 = false;
+				$out = array_merge($out, $rs);
+			}
+		}
+
 		// Stats: found or not
 		$out['status'] = ($is_404 ? '404' : '200');
 
@@ -420,8 +435,8 @@ $LastChangedRevision$
 		$out['page'] = @$rs['page'];
 		$out['css'] = @$rs['css'];
 
-		if(is_numeric($id)) {
-			$a = safe_row('*, unix_timestamp(Posted) as uPosted', 'textpattern', 'ID='.intval($id).' and Status in (4,5)');
+		if(is_numeric($id) and !$is_404) {
+			$a = safe_row('*, unix_timestamp(Posted) as uPosted', 'textpattern', 'ID='.intval($id).(gps('txpreview') ? '' : ' and Status in (4,5)'));
 			if ($a) {
 				$Posted             = $a['Posted'];
 				$out['id_keywords'] = $a['Keywords'];
@@ -807,7 +822,7 @@ $LastChangedRevision$
 			}
 		}
 
-		if (!empty($thisarticle) and $thisarticle['status'] == $status)
+		if (!empty($thisarticle) and ($thisarticle['status'] == $status or gps('txpreview')))
 		{
 			extract($thisarticle);
 			$thisarticle['is_first'] = 1;
@@ -1131,7 +1146,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function getStatusNum($name)
 	{
-		$labels = array('draft' => 1, 'hidden' => 2, 'pending' => 3, 'live' => 4, 'sticky' => 5);
+		$labels = array('live' => 4, 'sticky' => 5);
 		$status = strtolower($name);
 		$num = empty($labels[$status]) ? 4 : $labels[$status];
 		return $num;
