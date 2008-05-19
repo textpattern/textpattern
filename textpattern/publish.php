@@ -604,8 +604,7 @@ $LastChangedRevision$
 		$pageby = (empty($pageby) ? $limit : $pageby);
 
 		// treat sticky articles differently wrt search filtering, etc
-		if (!is_numeric($status))
-			$status = getStatusNum($status);
+		$status = in_array(strtolower($status), array('sticky', '5')) ? 5 : 4;
 		$issticky = ($status == 5);
 
 		//give control to search, if necesary
@@ -802,9 +801,9 @@ $LastChangedRevision$
 		// if a form is specified, $thing is for doArticles() - hence ignore $thing here.
 		if (!empty($atts['form'])) $thing = '';
 
-		if ($status and !is_numeric($status))
+		if ($status)
 		{
-			$status = getStatusNum($status);
+			$status = in_array(strtolower($status), array('sticky', '5')) ? 5 : 4;
 		}
 
 		if (empty($thisarticle) or $thisarticle['thisid'] != $id)
@@ -1146,7 +1145,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function getStatusNum($name)
 	{
-		$labels = array('live' => 4, 'sticky' => 5);
+		$labels = array('draft' => 1, 'hidden' => 2, 'pending' => 3, 'live' => 4, 'sticky' => 5);
 		$status = strtolower($name);
 		$num = empty($labels[$status]) ? 4 : $labels[$status];
 		return $num;
