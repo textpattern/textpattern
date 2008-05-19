@@ -463,7 +463,7 @@ if (!empty($event) and $event == 'article') {
 					$url .= (strpos($url, '?') === FALSE ? '?' : '&amp;') . 'txpreview='.intval($ID);
 				}
 
-				echo sp.sp.'<a href="'.$url.'" id="article-view">'.gTxt('view').'</a>';
+				echo sp.sp.'<a href="'.$url.'" class="article-view">'.gTxt('view').'</a>';
 			}
 
 			echo '</p>';
