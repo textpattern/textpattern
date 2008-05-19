@@ -530,7 +530,7 @@ $LastChangedRevision$
 //	otherwise, output a list.
 
 // -------------------------------------------------------------
-	function article($atts, $thing='')
+	function article($atts, $thing = NULL)
 	{
 		global $is_article_body, $has_article_tag;
 		if ($is_article_body) {
@@ -542,7 +542,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function doArticles($atts, $iscustom, $thing = '')
+	function doArticles($atts, $iscustom, $thing = NULL)
 	{
 		global $pretext, $prefs, $txpcfg;
 		extract($pretext);
@@ -784,7 +784,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function doArticle($atts, $thing = '')
+	function doArticle($atts, $thing = NULL)
 	{
 		global $pretext,$prefs, $thisarticle;
 		extract($prefs);
@@ -848,13 +848,13 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function article_custom($atts, $thing = '')
+	function article_custom($atts, $thing = NULL)
 	{
 		return parseArticles($atts, '1', $thing);
 	}
 
 // -------------------------------------------------------------
-	function parseArticles($atts, $iscustom = '', $thing = '')
+	function parseArticles($atts, $iscustom = 0, $thing = NULL)
 	{
 		global $pretext, $is_article_list;
 		$old_ial = $is_article_list;
@@ -1032,7 +1032,7 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function processTags($tag, $atts, $thing = null)
+	function processTags($tag, $atts, $thing = NULL)
 	{
 		global $production_status, $txptrace, $txptracelevel, $txp_current_tag;
 

@@ -247,7 +247,7 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function feed_link($atts, $thing=NULL)
+	function feed_link($atts, $thing = NULL)
 	{
 		global $s, $c;
 
@@ -331,7 +331,7 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function linklist($atts, $thing='')
+	function linklist($atts, $thing = NULL)
 	{
 		global $thislink;
 
@@ -445,7 +445,7 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function link_url($atts)
+	function link_url()
 	{
 		global $thislink;
 		assert_link();
@@ -529,7 +529,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function email($atts, $thing='') // simple contact link
+	function email($atts, $thing = NULL)
 	{
 		extract(lAtts(array(
 			'email'    => '',
@@ -640,7 +640,7 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function recent_comments($atts, $thing='')
+	function recent_comments($atts, $thing = NULL)
 	{
 		global $thisarticle, $thiscomment;
 		extract(lAtts(array(
@@ -709,7 +709,7 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function related_articles($atts, $thing='')
+	function related_articles($atts, $thing = NULL)
 	{
 		global $thisarticle, $prefs;
 
@@ -888,7 +888,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 // output href list of site categories
 
-	function category_list($atts, $thing='')
+	function category_list($atts, $thing = NULL)
 	{
 		global $s, $c, $thiscategory;
 
@@ -992,7 +992,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 // output href list of site sections
 
-	function section_list($atts, $thing='')
+	function section_list($atts, $thing = NULL)
 	{
 		global $sitename, $s, $thissection;
 
@@ -1127,7 +1127,7 @@ $LastChangedRevision$
 		if(empty($q)) return '';
 
 		extract(lAtts(array(
-			'escape'	=> 'html'
+			'escape' => 'html'
 		),$atts));
 
 		return ($escape == 'html' ? htmlspecialchars($q) : $q);
@@ -1136,7 +1136,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 // link to next article, if it exists
 
-	function link_to_next($atts, $thing)
+	function link_to_next($atts, $thing = NULL)
 	{
 		global $id, $next_id, $next_title;
 
@@ -1179,7 +1179,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 // link to next article, if it exists
 
-	function link_to_prev($atts, $thing)
+	function link_to_prev($atts, $thing = NULL)
 	{
 		global $id, $prev_id, $prev_title;
 
@@ -1249,7 +1249,7 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function link_to_home($atts, $thing = false)
+	function link_to_home($atts, $thing = NULL)
 	{
 		extract(lAtts(array(
 			'class' => false,
@@ -1266,7 +1266,7 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function newer($atts, $thing = false, $match = '')
+	function newer($atts, $thing = NULL)
 	{
 		global $thispage, $pretext, $permlink_mode;
 
@@ -1275,7 +1275,7 @@ $LastChangedRevision$
 		), $atts));
 
 		$numPages = $thispage['numPages'];
-		$pg				= $thispage['pg'];
+		$pg = $thispage['pg'];
 
 		if ($numPages > 1 and $pg > 1 and $pg <= $numPages)
 		{
@@ -1312,7 +1312,7 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function older($atts, $thing = false, $match = '')
+	function older($atts, $thing = NULL)
 	{
 		global $thispage, $pretext, $permlink_mode;
 
@@ -1321,7 +1321,7 @@ $LastChangedRevision$
 		), $atts));
 
 		$numPages = $thispage['numPages'];
-		$pg				= $thispage['pg'];
+		$pg = $thispage['pg'];
 
 		if ($numPages > 1 and $pg > 0 and $pg < $numPages)
 		{
@@ -1444,7 +1444,7 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function comments_count($atts)
+	function comments_count()
 	{
 		global $thisarticle;
 
@@ -1570,7 +1570,7 @@ $LastChangedRevision$
 	# DEPRECATED - provided only for backwards compatibility
 	# this functionality will be merged into comments_invite
 	# no point in having two tags for one functionality
-	function comments_annotateinvite($atts,$thing=NULL)
+	function comments_annotateinvite($atts, $thing)
 	{
 		trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
 
@@ -1647,7 +1647,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function comments_preview($atts, $thing='', $me='')
+	function comments_preview($atts)
 	{
 		global $has_comments_preview;
 
@@ -1694,7 +1694,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function comment_permlink($atts,$thing)
+	function comment_permlink($atts, $thing)
 	{
 		global $thisarticle, $thiscomment;
 
@@ -1716,7 +1716,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function comment_id($atts)
+	function comment_id()
 	{
 		global $thiscomment;
 
@@ -1762,7 +1762,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function comment_email($atts)
+	function comment_email()
 	{
 		global $thiscomment;
 
@@ -1772,7 +1772,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function comment_web($atts)
+	function comment_web()
 	{
 		global $thiscomment;
 
@@ -1799,7 +1799,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function comment_message($atts)
+	function comment_message()
 	{
 		global $thiscomment;
 
@@ -1809,7 +1809,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function comment_anchor($atts)
+	function comment_anchor()
 	{
 		global $thiscomment;
 
@@ -1893,7 +1893,7 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function body($atts)
+	function body()
 	{
 		global $thisarticle, $is_article_body;
 		assert_article();
@@ -1920,7 +1920,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function excerpt($atts)
+	function excerpt()
 	{
 		global $thisarticle, $is_article_body;
 		assert_article();
@@ -1933,7 +1933,7 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function category1($atts, $thing = '')
+	function category1($atts, $thing = NULL)
 	{
 		global $thisarticle, $s, $permlink_mode;
 
@@ -1983,7 +1983,7 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function category2($atts, $thing = '')
+	function category2($atts, $thing = NULL)
 	{
 		global $thisarticle, $s, $permlink_mode;
 
@@ -2033,7 +2033,7 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function category($atts, $thing = '')
+	function category($atts, $thing = NULL)
 	{
 		global $s, $c, $thiscategory;
 
@@ -2101,7 +2101,7 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function section($atts, $thing = '')
+	function section($atts, $thing = NULL)
 	{
 		global $thisarticle, $s, $thissection;
 
@@ -2168,7 +2168,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function keywords($atts)
+	function keywords()
 	{
 		global $thisarticle;
 		assert_article();
@@ -2636,7 +2636,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function lang($atts)
+	function lang()
 	{
 		return LANG;
 	}
@@ -2947,7 +2947,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function site_url($atts)
+	function site_url()
 	{
 		return hu;
 	}
@@ -2967,19 +2967,19 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function error_message($atts)
+	function error_message()
 	{
 		return @$GLOBALS['txp_error_message'];
 	}
 
 // -------------------------------------------------------------
-	function error_status($atts)
+	function error_status()
 	{
 		return @$GLOBALS['txp_error_status'];
 	}
 
 // -------------------------------------------------------------
-	function if_status($atts, $thing='')
+	function if_status($atts, $thing)
 	{
 		global $pretext;
 
@@ -3053,7 +3053,7 @@ $LastChangedRevision$
 
 //--------------------------------------------------------------------------
 
-	function file_download_list($atts, $thing='')
+	function file_download_list($atts, $thing = NULL)
 	{
 		global $thisfile;
 
@@ -3159,7 +3159,7 @@ $LastChangedRevision$
 
 //--------------------------------------------------------------------------
 
-	function file_download_link($atts, $thing)
+	function file_download_link($atts, $thing = NULL)
 	{
 		global $thisfile, $permlink_mode;
 
@@ -3384,7 +3384,7 @@ $LastChangedRevision$
 
 //--------------------------------------------------------------------------
 
-	function file_download_id($atts)
+	function file_download_id()
 	{
 		global $thisfile;
 		assert_file();
@@ -3393,7 +3393,7 @@ $LastChangedRevision$
 
 //--------------------------------------------------------------------------
 
-	function file_download_name($atts)
+	function file_download_name()
 	{
 		global $thisfile;
 		assert_file();
@@ -3425,7 +3425,7 @@ $LastChangedRevision$
 
 //--------------------------------------------------------------------------
 
-	function file_download_downloads($atts)
+	function file_download_downloads()
 	{
 		global $thisfile;
 		assert_file();
@@ -3455,13 +3455,13 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function hide($atts, $thing)
+	function hide()
 	{
 		return '';
 	}
 
 // -------------------------------------------------------------
-	function rsd($atts)
+	function rsd()
 	{
 		return '<link rel="EditURI" type="application/rsd+xml" title="RSD" href="'.hu.'rpc/" />';
 	}
