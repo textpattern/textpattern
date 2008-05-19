@@ -142,13 +142,13 @@ $LastChangedRevision$
 			return join('', array(
 				'<a href="'.$url.'" class="dlink" onclick="return verify(\'',
 				($verify) ? gTxt($verify) : gTxt('confirm_delete_popup'),
-				'\')">&#215;</a>'
+				'\')">×</a>'
 			));
 		}
 
 		return join('', array(
 			'<form method="post" action="index.php" onsubmit="return confirm(\''.gTxt('confirm_delete_popup').'\');">',
-			 fInput('submit', '', '&#215;', 'smallerbox'),
+			 fInput('submit', '', '×', 'smallerbox'),
 			 eInput($event).
 			 sInput($step),
 			 hInput($thing, $value),
