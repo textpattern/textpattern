@@ -27,7 +27,7 @@ require_once txpath.'/lib/admin_config.php';
 
 require_once txpath.'/lib/IXRClass.php';
 
-if ($connected && safe_query("describe ".PFX."textpattern")) {
+if ($connected && safe_query("describe `".PFX."textpattern`")) {
 
 		$dbversion = safe_field('val','txp_prefs',"name = 'version'");
 
