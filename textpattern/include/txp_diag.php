@@ -110,7 +110,7 @@ $LastChangedRevision$
 	function check_tables($tables, $type='FAST', $warnings=0) {
 		$msgs = array();
 		foreach ($tables as $table) {
-			$rs = getRows("CHECK TABLE $table $type");
+			$rs = getRows("CHECK TABLE `$table` $type");
 			if ($rs) {
 				foreach ($rs as $r)
 					if ($r['Msg_type'] != 'status' and ($warnings or $r['Msg_type'] != 'warning'))
