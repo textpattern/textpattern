@@ -243,7 +243,7 @@ $LastChangedRevision$
 					if (isset($help_raw) && empty($plugin['allow_html_help'])) {
 						include_once txpath.'/lib/classTextile.php';
 						$textile = new Textile();
-						$help_source = $textile->TextileRestricted($help_raw, 0, 0);
+							$help_source = $textile->TextileThis($help_raw, false, false, true);
 					} else {
 						$help_source= highlight_string($help, true);
 					}
@@ -302,7 +302,7 @@ $LastChangedRevision$
 							// default: help is in Textile format
 							include_once txpath.'/lib/classTextile.php';
 							$textile = new Textile();
-							$help = $textile->TextileRestricted($help_raw, 0, 0);
+							$help = $textile->TextileThis($help_raw, false, false, true);
 					}
 
 					if ($exists) {
