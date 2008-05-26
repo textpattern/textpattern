@@ -21,21 +21,22 @@ $LastChangedRevision$
 			'separator' => ': ',
 		), $atts));
 
+		$sn = htmlspecialchars($sitename);
 		if ($parentid) {
 			$parent_id = (int) $parent_id;
-			$out = $sitename.$separator.gTxt('comments_on').' '.safe_field('Title', 'textpattern', "ID = $parentid");
+			$out = $sn.$separator.gTxt('comments_on').' '.safe_field('Title', 'textpattern', "ID = $parentid");
 		} elseif ($thisarticle['title']) {
-			$out = $sitename.$separator.$thisarticle['title'];
+			$out = $sn.$separator.$thisarticle['title'];
 		} elseif ($q) {
-			$out = $sitename.$separator.gTxt('search_results')."$separator $q";
+			$out = $sn.$separator.gTxt('search_results')."$separator $q";
 		} elseif ($c) {
-			$out = $sitename.$separator.fetch_category_title($c);
+			$out = $sn.$separator.fetch_category_title($c);
 		} elseif ($s and $s != 'default') {
-			$out = $sitename.$separator.fetch_section_title($s);
+			$out = $sn.$separator.fetch_section_title($s);
 		} elseif ($pg) {
-			$out = $sitename.$separator.gTxt('page')." $pg";
+			$out = $sn.$separator.gTxt('page')." $pg";
 		} else {
-			$out = $sitename;
+			$out = $sn;
 		}
 
 		return escape_title($out);
@@ -1237,14 +1238,14 @@ $LastChangedRevision$
 
 	function site_name()
 	{
-		return $GLOBALS['sitename'];
+		return htmlspecialchars($GLOBALS['sitename']);
 	}
 
 // -------------------------------------------------------------
 
 	function site_slogan()
 	{
-		return $GLOBALS['site_slogan'];
+		return htmlspecialchars($GLOBALS['site_slogan']);
 	}
 
 // -------------------------------------------------------------
