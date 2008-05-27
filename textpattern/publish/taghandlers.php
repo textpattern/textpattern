@@ -3456,15 +3456,79 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
+
 	function hide()
 	{
 		return '';
 	}
 
 // -------------------------------------------------------------
+
 	function rsd()
 	{
 		return '<link rel="EditURI" type="application/rsd+xml" title="RSD" href="'.hu.'rpc/" />';
 	}
 
+// -------------------------------------------------------------
+
+	function variable($atts, $thing = NULL)
+	{
+		global $variable;
+
+		extract(lAtts(array(
+			'name'	=> '',
+			'value'	=> $thing
+		), $atts));
+
+		if (empty($name))
+		{
+			trigger_error(gTxt('variable_name_empty'));
+			return;
+		}
+
+		if (empty($value))
+		{
+			return $variable[$name];
+		}
+		else
+		{
+			$variable[$name] = $value;
+		}
+	}
+
+// -------------------------------------------------------------
+
+	function if_variable($atts, $thing = NULL)
+	{
+		global $variable;
+
+		extract(lAtts(array(
+			'name'	=> '',
+			'value'	=> ''
+		), $atts));
+
+		if (empty($name))
+		{
+			trigger_error(gTxt('variable_name_empty'));
+			return;
+		}
+
+		if (isset($variable[$name]))
+		{
+			if (empty($value))
+			{
+				$x = true;
+			}
+			else
+			{
+				$x = $variable[$name] == $value;
+			}
+		}
+		else
+		{
+			$x = false;
+		}
+
+		return parse(EvalElse($thing, $x));
+	}
 ?>
