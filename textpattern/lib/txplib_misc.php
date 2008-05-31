@@ -685,8 +685,8 @@ $LastChangedRevision$
 	{
 		// Remove names entities and tags
 		$text = preg_replace("/(^|&\S+;)|(<[^>]*>)/U","",dumbDown($text));
-		// Collapse spaces, minuses and non-words
-		$text = preg_replace('/[\s\-]+/', '-', trim(preg_replace('/[^\w\s\-]/', '', $text)));
+		// Collapse spaces, minuses, (back-)slashes and non-words
+		$text = preg_replace('/[\s\-\/\\\\]+/', '-', trim(preg_replace('/[^\w\s\-\/\\\\]/', '', $text)));
 		// Remove all non-whitelisted characters
 		$text = preg_replace("/[^A-Za-z0-9\-_]/","",$text);
 		return $text;
