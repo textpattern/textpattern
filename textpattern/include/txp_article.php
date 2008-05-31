@@ -460,7 +460,7 @@ if (!empty($event) and $event == 'article') {
 
 				if ($Status != 4 and $Status != 5)
 				{
-					$url .= (strpos($url, '?') === FALSE ? '?' : '&amp;') . 'txpreview='.intval($ID);
+					$url .= (strpos($url, '?') === FALSE ? '?' : '&amp;') . 'txpreview='.intval($ID).'&amp;cachebuster='.time();
 				}
 
 				echo sp.sp.'<a href="'.$url.'" class="article-view">'.gTxt('view').'</a>';

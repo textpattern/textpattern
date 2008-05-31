@@ -215,7 +215,7 @@ $LastChangedRevision$
 
 				if ($Status != 4 and $Status != 5)
 				{
-					$view_url .= (strpos($view_url, '?') === FALSE ? '?' : '&amp;') . 'txpreview='.intval($ID);
+					$view_url .= (strpos($view_url, '?') === FALSE ? '?' : '&amp;') . 'txpreview='.intval($ID).'&amp;cachebuster='.time();
 				}
 
 				$manage = n.'<ul class="articles_detail">'.
