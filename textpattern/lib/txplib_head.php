@@ -63,51 +63,36 @@ $LastChangedRevision$
 		}
 
 <?php
+	$edit = array();
 
 	if ($event == 'list')
 	{
-		$sarr = array("\n", '-');
-		$rarr = array('', '&#45;');
-
-		$sections = '';
-
 		$rs = safe_column('name', 'txp_section', "name != 'default'");
 
-		if ($rs)
-		{
-			$sections = str_replace($sarr, $rarr, addslashes(selectInput('Section', $rs, '', true)));
-		}
-
-		$category1 = '';
-		$category2 = '';
+		$edit['section'] = $rs ? selectInput('Section', $rs, '', true) : '';
 
 		$rs = getTree('root', 'article');
 
-		if ($rs)
-		{
-			$category1 = str_replace($sarr, $rarr, addslashes(treeSelectInput('Category1', $rs, '')));
-			$category2 = str_replace($sarr, $rarr, addslashes(treeSelectInput('Category2', $rs, '')));
-		}
+		$edit['category1'] = $rs ? treeSelectInput('Category1', $rs, '') : '';
+		$edit['category2'] = $rs ? treeSelectInput('Category2', $rs, '') : '';
 
-		$statuses = str_replace($sarr, $rarr, addslashes(selectInput('Status', array(
+		$edit['comments'] = onoffRadio('Annotate', safe_field('val', 'txp_prefs', "name = 'comments_on_default'"));
+
+		$edit['status'] = selectInput('Status', array(
 			1 => gTxt('draft'),
 			2 => gTxt('hidden'),
 			3 => gTxt('pending'),
 			4 => gTxt('live'),
 			5 => gTxt('sticky'),
-		), '', true)));
-
-		$comments_annotate = addslashes(onoffRadio('Annotate', safe_field('val', 'txp_prefs', "name = 'comments_on_default'")));
-
-		$authors = '';
+		), '', true);
 
 		$rs = safe_column('name', 'txp_users', "privs not in(0,6)");
 
-		if ($rs)
-		{
-			$authors = str_replace($sarr, $rarr, addslashes(selectInput('AuthorID', $rs, '', true)));
-		}
+		$edit['author'] = $rs ? selectInput('AuthorID', $rs, '', true) : '';
+	}
 
+	if ($edit)
+	{
 		// output JavaScript
 ?>
 		function poweredit(elm)
@@ -136,36 +121,14 @@ $LastChangedRevision$
 			{
 				switch (something)
 				{
-					case 'changesection':
-						var sections = '<?php echo $sections; ?>';
-						pjs.innerHTML = '<span><?php echo gTxt('section') ?>: '+sections+'</span>';
-					break;
-
-					case 'changecategory1':
-						var categories = '<?php echo $category1; ?>';
-						pjs.innerHTML = '<span><?php echo gTxt('category1') ?>: '+categories+'</span>';
-					break;
-
-					case 'changecategory2':
-						var categories = '<?php echo $category2; ?>';
-						pjs.innerHTML = '<span><?php echo gTxt('category2') ?>: '+categories+'</span>';
-					break;
-
-					case 'changestatus':
-						var statuses = '<?php echo $statuses; ?>';
-						pjs.innerHTML = '<span><?php echo gTxt('status') ?>: '+statuses+'</span>';
-					break;
-
-					case 'changecomments':
-						var comments = '<?php echo $comments_annotate; ?>';
-						pjs.innerHTML = '<span><?php echo gTxt('comments'); ?>: '+comments+'</span>';
-					break;
-
-					case 'changeauthor':
-						var authors = '<?php echo $authors; ?>';
-						pjs.innerHTML = '<span><?php echo gTxt('author'); ?>: '+authors+'</span>';
-					break;
-
+<?php
+		foreach($edit as $key => $val)
+		{
+			echo "case 'change".$key."':".n.
+				t."pjs.innerHTML = '<span>".str_replace(array("\n", '-'), array('', '&#45;'), addslashes($val))."</span>';".n.
+				t.'break;'.n.n;
+		}
+?>
 					default:
 						pjs.style.display = 'none';
 					break;
