@@ -91,9 +91,14 @@ $LastChangedRevision$
 		$edit['author'] = $rs ? selectInput('AuthorID', $rs, '', true) : '';
 	}
 
-	if ($edit)
+	if (in_array($event, array('image')))
 	{
-		// output JavaScript
+		$rs = getTree('root', $event);
+
+		$edit['category'] = $rs ? treeSelectInput('category', $rs, '') : '';
+	}
+
+	// output JavaScript
 ?>
 		function poweredit(elm)
 		{
@@ -139,9 +144,6 @@ $LastChangedRevision$
 		}
 
 		addEvent(window, 'load', cleanSelects);
-<?php
-	}
-?>
 	-->
 	</script>
 	<script type="text/javascript" src="jquery.js"></script>

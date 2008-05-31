@@ -1095,9 +1095,7 @@ $LastChangedRevision$
 		}
 
 		return '<label for="withselected">'.gTxt('with_selected').'</label>'.sp.
-			selectInput('edit_method', $methods, $method, 1,
-				( ($name == 'list') ? ' id="withselected" onchange="poweredit(this); return false;"' : ' id="withselected"' )
-			).
+			selectInput('edit_method', $methods, $method, 1, ' id="withselected" onchange="poweredit(this); return false;"').
 			n.eInput($name).
 			n.sInput($name.'_multi_edit').
 			n.hInput('page', $page).

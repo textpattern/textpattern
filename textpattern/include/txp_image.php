@@ -21,13 +21,18 @@ $LastChangedRevision$
 	define("IMPATH",$path_to_site.DS.$img_dir.DS);
 	include txpath.'/lib/class.thumb.php';
 
-	if ($event == 'image') {
+	if ($event == 'image')
+	{
 		require_privs('image');
 
-		if(!$step or !in_array($step, array('image_list','image_edit','image_insert','image_delete','image_replace','image_save','thumbnail_insert','image_change_pageby','thumbnail_create','thumbnail_delete'
-		))){
+		if(!$step or !in_array($step, array('image_list','image_edit','image_insert','image_replace','image_save','thumbnail_insert','image_change_pageby','thumbnail_create','thumbnail_delete','image_multi_edit')))
+		{
 			image_list();
-		} else $step();
+		}
+		else
+		{
+			$step();
+		}
 	}
 
 // -------------------------------------------------------------
@@ -148,7 +153,9 @@ $LastChangedRevision$
 
 		if ($rs)
 		{
-			echo n.n.startTable('list').
+			echo n.n.'<form name="longform" method="post" action="index.php" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
+
+			n.n.startTable('list').
 				n.tr(
 					column_head('ID', 'id', 'image', true, $switch_dir, $crit, $search_method, ('id' == $sort) ? $dir : '').
 					hCell().
@@ -224,12 +231,20 @@ $LastChangedRevision$
 					, 75).
 
 					td(
-						dLink('image', 'image_delete', 'id', $id, '', '', '', false, array($page, $sort, $dir, $crit, $search_method))
+						fInput('checkbox', 'selected[]', $id)
 					, 10)
 				);
 			}
 
-			echo endTable().
+			echo n.n.tr(
+				tda(
+					select_buttons().
+					image_multiedit_form($page, $sort, $dir, $crit, $search_method)
+				,' colspan="9" style="text-align: right; border: none;"')
+			).
+
+			endTable().
+			'</form>'.
 
 			nav_form('image', $page, $numPages, $sort, $dir, $crit, $search_method).
 
@@ -249,6 +264,58 @@ $LastChangedRevision$
 		);
 
 		return search_form('image', 'image_list', $crit, $methods, $method, 'name');
+	}
+
+// -------------------------------------------------------------
+
+	function image_multiedit_form($page, $sort, $dir, $crit, $search_method)
+	{
+		$methods = array(
+			'changecategory'  => gTxt('changecategory'),
+			'delete'          => gTxt('delete'),
+		);
+
+		return event_multiedit_form('image', $methods, $page, $sort, $dir, $crit, $search_method);
+	}
+
+// -------------------------------------------------------------
+
+	function image_multi_edit()
+	{
+		$selected = array_map('assert_int', ps('selected'));
+
+		if (!$selected)
+		{
+			return image_list();
+		}
+
+		$method  = ps('edit_method');
+		$changed = array();
+
+		if ($method == 'delete')
+		{
+			return image_delete($selected);
+		}
+
+		if ($method == 'changecategory')
+		{
+			foreach ($selected as $id)
+			{
+				if (safe_update('txp_image', "category = '".doSlash(ps('category'))."'", "id = $id"))
+				{
+					$changed[] = $id;
+				}
+			}
+		}
+
+		if ($changed)
+		{
+			update_lastmod();
+
+			return image_list(gTxt('image_updated', array('{name}' => join(', ', $changed))));
+		}
+
+		return image_list();
 	}
 
 // -------------------------------------------------------------
@@ -456,38 +523,52 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function image_delete() {
-		global $txpcfg;
+	function image_delete($ids = array())
+	{
+		$ids  = $ids ? array_map('assert_int', $ids) : array(assert_int(ps('id')));
+		$fail = array();
 
-		extract($txpcfg);
+		$rs   = safe_rows_start('id, ext', 'txp_image', 'id IN ('.join(',', $ids).')');
 
-		$id = assert_int(ps('id'));
+		if ($rs)
+		{
+			while ($a = nextRow($rs))
+			{
+				extract($a);
 
-		$rs = safe_row('*', 'txp_image', "id = $id");
+				$rsd = safe_delete('txp_image', "id = $id");
 
-		if ($rs) {
-			extract($rs);
+				$ul  = false;
 
-			$rsd = safe_delete('txp_image', "id = $id");
+				if (is_file(IMPATH.$id.$ext))
+				{
+					$ul = unlink(IMPATH.$id.$ext);
+				}
 
-			$ul = false;
+				if (is_file(IMPATH.$id.'t'.$ext))
+				{
+					$ult = unlink(IMPATH.$id.'t'.$ext);
+				}
 
-			if (is_file(IMPATH.$id.$ext)) {
-				$ul = unlink(IMPATH.$id.$ext);
+				if (!$rsd or !$ul)
+				{
+					$fail[] = $id;
+				}
 			}
 
-			if (is_file(IMPATH.$id.'t'.$ext)) {
-				$ult = unlink(IMPATH.$id.'t'.$ext);
+			if ($fail)
+			{
+				image_list(gTxt('image_delete_failed', array('{name}' => join(', ', $fail))));
 			}
-
-			if ($rsd && $ul) {
+			else
+			{
 				update_lastmod();
 
-				image_list(gTxt('image_deleted', array('{name}' => $name)));
-			} else {
-				image_list(gTxt('image_delete_failed', array('{name}' => $name)));
+				image_list(gTxt('image_deleted', array('{name}' => join(', ', $ids))));
 			}
-		} else {
+		}
+		else
+		{
 			image_list();
 		}
 	}
