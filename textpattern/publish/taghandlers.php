@@ -2083,7 +2083,7 @@ $LastChangedRevision$
 
 			elseif ($link)
 			{
-				$out = href($label, $href);
+				$out = href($label, $href, ($class and !$wraptag) ? ' class="'.$class.'"' : '');
 			}
 
 			elseif ($url)
@@ -2151,7 +2151,7 @@ $LastChangedRevision$
 
 			elseif ($link)
 			{
-				$out = href($label, $href);
+				$out = href($label, $href, ($class and !$wraptag) ? ' class="'.$class.'"' : '');
 			}
 
 			elseif ($url)
