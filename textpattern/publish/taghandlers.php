@@ -3486,7 +3486,7 @@ $LastChangedRevision$
 			return;
 		}
 
-		if (!isset($atts['name']))
+		if (!isset($atts['value']))
 		{
 			return $variable[$name];
 		}
