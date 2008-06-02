@@ -109,7 +109,7 @@ function cleanSelects()
 {
 	var withsel = document.getElementById('withselected');
 
-	if (withsel.options[withsel.selectedIndex].value != '')
+	if (withsel && withsel.options[withsel.selectedIndex].value != '')
 	{
 		return (withsel.selectedIndex = 0);
 	}
