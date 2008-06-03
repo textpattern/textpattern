@@ -91,7 +91,7 @@ $LastChangedRevision$
 		$edit['author'] = $rs ? selectInput('AuthorID', $rs, '', true) : '';
 	}
 
-	if (in_array($event, array('image')))
+	if (in_array($event, array('image', 'file')))
 	{
 		$rs = getTree('root', $event);
 
