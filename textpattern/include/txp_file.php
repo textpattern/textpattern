@@ -35,7 +35,7 @@ $LastChangedRevision$
 	if ($event == 'file') {
 		require_privs('file');
 
-		if(!$step or !in_array($step, array('file_change_max_size','file_change_pageby','file_db_add','file_delete','file_edit','file_insert','file_list','file_replace','file_save','file_reset_count','file_create'))){
+		if(!$step or !in_array($step, array('file_change_max_size','file_change_pageby','file_db_add','file_multi_edit','file_edit','file_insert','file_list','file_replace','file_save','file_reset_count','file_create'))){
 			file_list();
 		} else $step();
 	}
@@ -167,7 +167,9 @@ $LastChangedRevision$
 
 		if ($rs)
 		{
-			echo startTable('list').
+			echo '<form name="longform" method="post" action="index.php" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
+
+			startTable('list').
 
 				tr(
 					column_head('ID', 'id', 'file', true, $switch_dir, $crit, $search_method, ('id' == $sort) ? $dir : '').
@@ -246,12 +248,20 @@ $LastChangedRevision$
 					, 25).
 
 					td(
-						dLink('file', 'file_delete', 'id', $id, '', '', '', false, array($page, $sort, $dir, $crit, $search_method))
+						fInput('checkbox', 'selected[]', $id)
 					, 10)
 				);
 			}
 
-			echo endTable().
+			echo tr(
+				tda(
+					select_buttons().
+					file_multiedit_form($page, $sort, $dir, $crit, $search_method)
+				,' colspan="10" style="text-align: right; border: none;"')
+			).
+
+			endTable().
+			'</form>'.
 
 			nav_form('file', $page, $numPages, $sort, $dir, $crit, $search_method).
 
@@ -271,6 +281,58 @@ $LastChangedRevision$
 		);
 
 		return search_form('file', 'file_list', $crit, $methods, $method, 'filename');
+	}
+
+// -------------------------------------------------------------
+
+	function file_multiedit_form($page, $sort, $dir, $crit, $search_method)
+	{
+		$methods = array(
+			'changecategory'  => gTxt('changecategory'),
+			'delete'          => gTxt('delete'),
+		);
+
+		return event_multiedit_form('file', $methods, $page, $sort, $dir, $crit, $search_method);
+	}
+
+// -------------------------------------------------------------
+
+	function file_multi_edit()
+	{
+		$selected = array_map('assert_int', ps('selected'));
+
+		if (!$selected)
+		{
+			return file_list();
+		}
+
+		$method  = ps('edit_method');
+		$changed = array();
+
+		if ($method == 'delete')
+		{
+			return file_delete($selected);
+		}
+
+		if ($method == 'changecategory')
+		{
+			foreach ($selected as $id)
+			{
+				if (safe_update('txp_file', "category = '".doSlash(ps('category'))."'", "id = $id"))
+				{
+					$changed[] = $id;
+				}
+			}
+		}
+
+		if ($changed)
+		{
+			update_lastmod();
+
+			return file_list(gTxt('file_updated', array('{name}' => join(', ', $changed))));
+		}
+
+		return file_list();
 	}
 
 // -------------------------------------------------------------
@@ -663,46 +725,50 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function file_delete()
+	function file_delete($ids = array())
 	{
-		global $txpcfg, $file_base_path;
+		global $file_base_path;
 
-		extract($txpcfg);
+		$ids  = $ids ? array_map('assert_int', $ids) : array(assert_int(ps('id')));
+		$fail = array();
 
-		$id = assert_int(ps('id'));
-
-		$rs = safe_row('*', 'txp_file', "id = $id");
+		$rs = safe_rows_start('id, filename', 'txp_file', 'id IN ('.join(',', $ids).')');
 
 		if ($rs)
 		{
-			extract($rs);
-
-			$filepath = build_file_path($file_base_path, $filename);
-
-			$rsd = safe_delete('txp_file', "id = $id");
-			$ul = false;
-
-			if ($rsd && is_file($filepath))
+			while ($a = nextRow($rs))
 			{
-				$ul = unlink($filepath);
+				extract($a);
+
+				$filepath = build_file_path($file_base_path, $filename);
+
+				$rsd = safe_delete('txp_file', "id = $id");
+				$ul  = false;
+
+				if ($rsd && is_file($filepath))
+				{
+					$ul = unlink($filepath);
+				}
+
+				if (!$rsd or !$ul)
+				{
+					$fail[] = $id;
+				}
 			}
 
-			if ($rsd && $ul)
+
+			if ($fail)
 			{
-				$message = gTxt('file_deleted', array('{name}' => $filename));
-
-				return file_list($message);
+				file_list(messenger(gTxt('file_delete_failed'), join(', ', $fail), ''));
 			}
-
 			else
 			{
-				file_list(messenger(gTxt('file_delete_failed'), $filename, ''));
+				file_list(gTxt('file_deleted', array('{name}' => join(', ', $ids))));
 			}
 		}
-
 		else
 		{
-			file_list(messenger(gTxt('file_not_found'), $filename, ''));
+			file_list(messenger(gTxt('file_not_found'), join(', ', $ids), ''));
 		}
 	}
 
