@@ -392,6 +392,7 @@ $LastChangedRevision$
 	function link_multiedit_form($page, $sort, $dir, $crit, $search_method)
 	{
 		$methods = array(
+			'changecategory' => gTxt('changecategory'),
 			'delete' => gTxt('delete')
 		);
 
@@ -402,13 +403,42 @@ $LastChangedRevision$
 
 	function link_multi_edit()
 	{
-		$deleted = event_multi_edit('txp_link', 'id');
+		$selected = array_map('assert_int', ps('selected'));
 
-		if ($deleted)
+		if (!$selected)
 		{
-			$message = gTxt('links_deleted', array('{list}' => $deleted));
+			return link_edit();
+		}
 
-			return link_edit($message);
+		$method  = ps('edit_method');
+		$changed = array();
+
+		if ($method == 'delete')
+		{
+			foreach ($selected as $id)
+			{
+				if (safe_delete('txp_link', 'id = '.$id))
+				{
+					$changed[] = $id;
+				}
+			}
+		}
+		elseif ($method == 'changecategory')
+		{
+			foreach ($selected as $id)
+			{
+				if (safe_update('txp_link', "category = '".doSlash(ps('category'))."'", "id = $id"))
+				{
+					$changed[] = $id;
+				}
+			}
+		}
+
+		if ($changed)
+		{
+			return link_edit(gTxt(
+				($method == 'delete' ? 'links_deleted' : 'link_updated'),
+				array(($method == 'delete' ? '{list}' : '{name}') => join(', ', $changed))));
 		}
 
 		return link_edit();
