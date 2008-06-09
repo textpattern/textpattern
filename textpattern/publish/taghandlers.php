@@ -80,7 +80,7 @@ $LastChangedRevision$
 		extract(lAtts(array(
 			'align'		=> '', // remove in crockery
 			'class'		=> '',
-			'escape'	=> '',
+			'escape'	=> 'html',
 			'html_id' => '',
 			'id'			=> '',
 			'name'		=> '',
@@ -161,7 +161,7 @@ $LastChangedRevision$
 		extract(lAtts(array(
 			'align'     => '', // remove in crockery
 			'class'     => '',
-			'escape'    => '',
+			'escape'    => 'html',
 			'html_id'   => '',
 			'id'        => '',
 			'link'      => 0,
@@ -436,7 +436,7 @@ $LastChangedRevision$
 		assert_link();
 
 		extract(lAtts(array(
-			'escape' => '',
+			'escape' => 'html',
 		), $atts));
 
 		return ($escape == 'html') ?
@@ -463,7 +463,7 @@ $LastChangedRevision$
 
 		extract(lAtts(array(
 			'class'    => '',
-			'escape'   => '',
+			'escape'   => 'html',
 			'label'    => '',
 			'labeltag' => '',
 			'wraptag'  => '',
@@ -2188,7 +2188,7 @@ $LastChangedRevision$
 		extract(lAtts(array(
 			'align'     => '', // remove in crockery
 			'class'     => '',
-			'escape'    => '',
+			'escape'    => 'html',
 			'html_id'   => '',
 			'style'     => '', // remove in crockery?
 			'thumbnail' => 0,
@@ -3442,7 +3442,7 @@ $LastChangedRevision$
 
 		extract(lAtts(array(
 			'class'   => '',
-			'escape'  => '',
+			'escape'  => 'html',
 			'wraptag' => '',
 		), $atts));
 
