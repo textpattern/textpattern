@@ -691,7 +691,6 @@ $LastChangedRevision$
 					$thisarticle['title'] = $c['title'];
 					$thisarticle['section'] = $c['section'];
 					$thisarticle['url_title'] = $c['url_title'];
-					$thisarticle['ID'] = $c['thisid'];
 
 					$out[] = ($thing) ? parse($thing) : parse_form($form);
 				}
