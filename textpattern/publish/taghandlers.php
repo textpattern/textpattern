@@ -2577,6 +2577,9 @@ $LastChangedRevision$
 
 	function permlinkurl_id($id)
 	{
+		global $permlinks;
+		if (isset($permlinks[$id])) return $permlinks[$id];
+
 		$id = (int) $id;
 
 		$rs = safe_row(
@@ -2591,7 +2594,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function permlinkurl($article_array)
 	{
-		global $permlink_mode, $prefs;
+		global $permlink_mode, $prefs, $permlinks;
 
 		if (isset($prefs['custom_url_func']) and is_callable($prefs['custom_url_func']))
 			return call_user_func($prefs['custom_url_func'], $article_array);
@@ -2600,11 +2603,14 @@ $LastChangedRevision$
 
 		extract($article_array);
 
+		if (empty($thisid)) $thisid = $ID;
+
+		if (isset($permlinks[$thisid])) return $permlinks[$thisid];
+
 		if (!isset($title)) $title = $Title;
 		if (empty($url_title)) $url_title = stripSpace($title);
 		if (empty($section)) $section = $Section; // lame, huh?
 		if (empty($posted)) $posted = $Posted;
-		if (empty($thisid)) $thisid = $ID;
 
 		$section = urlencode($section);
 		$url_title = urlencode($url_title);
@@ -2613,27 +2619,34 @@ $LastChangedRevision$
 			case 'section_id_title':
 				if ($prefs['attach_titles_to_permalinks'])
 				{
-					return hu."$section/$thisid/$url_title";
+					$out = hu."$section/$thisid/$url_title";
 				}else{
-					return hu."$section/$thisid/";
+					$out = hu."$section/$thisid/";
 				}
+				break;
 			case 'year_month_day_title':
 				list($y,$m,$d) = explode("-",date("Y-m-d",$posted));
-				return hu."$y/$m/$d/$url_title";
+				$out =  hu."$y/$m/$d/$url_title";
+				break;
 			case 'id_title':
 				if ($prefs['attach_titles_to_permalinks'])
 				{
-					return hu."$thisid/$url_title";
+					$out = hu."$thisid/$url_title";
 				}else{
-					return hu."$thisid/";
+					$out = hu."$thisid/";
 				}
+				break;
 			case 'section_title':
-				return hu."$section/$url_title";
+				$out = hu."$section/$url_title";
+				break;
 			case 'title_only':
-				return hu."$url_title";
+				$out = hu."$url_title";
+				break;
 			case 'messy':
-				return hu."index.php?id=$thisid";
+				$out = hu."index.php?id=$thisid";
+				break;
 		}
+		return $permlinks[$thisid] = $out;
 	}
 
 // -------------------------------------------------------------
