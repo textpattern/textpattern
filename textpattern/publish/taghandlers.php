@@ -3490,7 +3490,7 @@ $LastChangedRevision$
 
 		extract(lAtts(array(
 			'name'	=> '',
-			'value'	=> $thing
+			'value'	=> parse($thing)
 		), $atts));
 
 		if (empty($name))
@@ -3499,7 +3499,7 @@ $LastChangedRevision$
 			return;
 		}
 
-		if (!isset($atts['value']))
+		if (!isset($atts['value']) and empty($thing))
 		{
 			return $variable[$name];
 		}
