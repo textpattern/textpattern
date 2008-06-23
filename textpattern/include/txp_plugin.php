@@ -19,7 +19,7 @@ $LastChangedRevision$
 	if ($event == 'plugin') {
 		require_privs('plugin');
 
-		if(!$step or !in_array($step, array('plugin_delete','plugin_edit','plugin_help','plugin_list','plugin_install','plugin_save','plugin_verify','switch_status','set_order'))){
+		if(!$step or !in_array($step, array('plugin_edit','plugin_help','plugin_list','plugin_install','plugin_save','plugin_verify','switch_status','plugin_multi_edit'))){
 			plugin_list();
 		} else $step();
 	}
@@ -30,19 +30,45 @@ $LastChangedRevision$
 	{
 		pagetop(gTxt('edit_plugins'), $message);
 
-		echo n.n.startTable('list').
+		echo n.n.startTable('edit').
 			tr(
 				tda(
 					plugin_form()
 				,' colspan="8" style="height: 30px; border: none;"')
-			);
+			).
+		endTable();
 
-		$rs = safe_rows_start('name, status, author, author_uri, version, description, code_md5, length(help) as help, md5(code) as md5, `order`',
-			'txp_plugin', '1 order by name');
+		extract(gpsa(array('sort', 'dir')));
+
+		$dir = ($dir == 'desc') ? 'desc' : 'asc';
+
+		if (!in_array($sort, array('name', 'status', 'author', 'version', 'modified', 'load_order'))) $sort = 'name';
+		
+		$sort_sql = $sort.' '.$dir;
+
+		$switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
+
+		$rs = safe_rows_start('name, status, author, author_uri, version, description, length(help) as help, abs(strcmp(md5(code),code_md5)) as modified, load_order',
+			'txp_plugin', '1 order by '.$sort_sql);
 
 		if ($rs and numRows($rs) > 0)
 		{
-			echo assHead('plugin', 'author', 'version', 'plugin_modified', 'description', 'active', 'help', 'order', '', '');
+			echo '<form action="index.php" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
+
+			startTable('list').
+
+			tr(
+				column_head('plugin', 'name', 'plugin', true, $switch_dir, '', '', ('name' == $sort) ? $dir : '').
+				column_head('author', 'author', 'plugin', true, $switch_dir, '', '', ('author' == $sort) ? $dir : '').
+				column_head('version', 'version', 'plugin', true, $switch_dir, '', '', ('version' == $sort) ? $dir : '').
+				column_head('plugin_modified', 'modified', 'plugin', true, $switch_dir, '', '', ('modified' == $sort) ? $dir : '').
+				hCell(gTxt('description')).
+				column_head('active', 'status', 'plugin', true, $switch_dir, '', '', ('status' == $sort) ? $dir : '').
+				column_head('order', 'load_order', 'plugin', true, $switch_dir, '', '', ('load_order' == $sort) ? $dir : '').
+				hCell().
+				hCell().
+				hCell()
+			);
 
 			while ($a = nextRow($rs))
 			{
@@ -60,9 +86,6 @@ $LastChangedRevision$
 					'<a href="?event=plugin'.a.'step=plugin_help'.a.'name='.$name.'">'.gTxt('view').'</a>' :
 					gTxt('none');
 
-				// modified?
-				$modified = (strtolower($md5) != strtolower($code_md5));
-
 				echo tr(
 
 					n.td($name).
@@ -79,16 +102,15 @@ $LastChangedRevision$
 						status_link($status, $name, yes_no($status))
 					,30).
 
+					td($load_order).
 					td($help).
-
-					td(plugin_order_form($name, $order)).
 
 					td(
 						eLink('plugin', 'plugin_edit', 'name', $name, gTxt('edit'))
 					).
 
 					td(
-						dLink('plugin', 'plugin_delete', 'name', $name)
+						fInput('checkbox', 'selected[]', $name)
 					,30)
 				);
 
@@ -96,7 +118,15 @@ $LastChangedRevision$
 			}
 		}
 
-		echo endTable();
+		echo tr(
+			tda(
+				select_buttons().
+				plugin_multiedit_form('', $sort, $dir, '', '')
+			, ' colspan="10" style="text-align: right; border: none;"')
+		).
+
+		n.endTable().
+		n.'</form>';
 	}
 
 // -------------------------------------------------------------
@@ -169,32 +199,6 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function plugin_delete()
-	{
-		$name = doSlash(ps('name'));
-
-		safe_delete('txp_plugin', "name = '$name'");
-
-		$message = gTxt('plugin_deleted', array('{name}' => $name));
-
-		plugin_list($message);
-	}
-
-// -------------------------------------------------------------
-
-	function set_order()
-	{
-		extract(doSlash(gpsa(array('name', 'order'))));
-		$order = min(max( intval($order), 1), 9);
-
-		safe_update('txp_plugin', "`order` = $order", "name = '$name'");
-
-		$message = gTxt('plugin_saved', array('{name}' => $name));
-
-		plugin_list($message);
-	}
-
-// -------------------------------------------------------------
 	function status_link($status,$name,$linktext)
 	{
 		$out = '<a href="index.php?';
@@ -290,11 +294,9 @@ $LastChangedRevision$
 				if(is_array($plugin)){
 
 					extract($plugin);
-					if (empty($type)) $type = 0;
-					$type = assert_int($type);
 
-					if (empty($order)) $order = 5;
-					$order = assert_int($order);
+					$type  = empty($type)  ? 0 : min(max(intval($type), 0), 2);
+					$order = empty($order) ? 5 : min(max(intval($order), 1), 9);
 
 					$exists = fetch('name','txp_plugin','name',$name);
 
@@ -336,7 +338,7 @@ $LastChangedRevision$
 							code         = '".doSlash($code)."',
 							code_restore = '".doSlash($code)."',
 							code_md5     = '".doSlash($md5)."',
-							`order`	 	 = '".$order."'"
+							load_order   = '".$order."'"
 						);
 					}
 
@@ -383,17 +385,52 @@ $LastChangedRevision$
 			)
 		, 'text-align: center;');
 	}
+
 // -------------------------------------------------------------
 
-	function  plugin_order_form($name, $order)
+	function plugin_multiedit_form($page, $sort, $dir, $crit, $search_method)
 	{
-		for ($i = 1; $i <= 9; $i++) $orders[$i] = $i;
-
-		return form(
-			eInput('plugin').n.
-			sInput('set_order').n.
-			hInput('name', $name).n.
-			selectInput('order', $orders, $order, 0, 1)
+		$methods = array(
+			'changestatus' => gTxt('changestatus'),
+			'changeorder' => gTxt('changeorder'),
+			'delete' => gTxt('delete')
 		);
+
+		return event_multiedit_form('plugin', $methods, $page, $sort, $dir, $crit, $search_method);
+	}
+
+// -------------------------------------------------------------
+
+	function plugin_multi_edit()
+	{
+		$selected = ps('selected');
+		$method   = ps('edit_method');
+
+		if (!$selected or !is_array($selected))
+		{
+			return plugin_list();
+		}
+
+		$where = "name IN ('".join("','", doSlash($selected))."')";
+
+		switch ($method)
+		{
+			case 'delete':
+				safe_delete('txp_plugin', $where);
+				break;
+
+			case 'changestatus':
+				safe_update('txp_plugin', 'status = (1-status)', $where);
+				break;
+
+			case 'changeorder':
+				$order = min(max(intval(ps('order')), 1), 9);
+				safe_update('txp_plugin', 'load_order = '.$order, $where);
+				break;
+		}
+
+		$message = gTxt('plugin_'.($method == 'deleted' ? 'deleted' : 'updated'), array('{name}' => join(', ', $selected)));
+
+		plugin_list($message);
 	}
 ?>

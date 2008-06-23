@@ -11,9 +11,9 @@ $LastChangedRevision$
 	}
 
 	$txpplugin = getThings('describe `'.PFX.'txp_plugin`');
- 	if (!in_array('order', $txpplugin)) {
+ 	if (!in_array('load_order', $txpplugin)) {
 		safe_alter('txp_plugin',
-			"ADD `order` TINYINT UNSIGNED DEFAULT 5");
+			"ADD load_order TINYINT UNSIGNED NOT NULL DEFAULT 5");
 	}
 ?>
 
