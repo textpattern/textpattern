@@ -99,10 +99,12 @@ $LastChangedRevision$
 			$crit_escaped = doSlash($crit);
 
 			$critsql = array(
-				'id'			 => "id = '$crit_escaped'",
-				'name'		 => "name like '%$crit_escaped%'",
-				'category' => "category like '%$crit_escaped%'",
-				'author'	 => "author like '%$crit_escaped%'"
+				'id'		=> "id = '$crit_escaped'",
+				'name'		=> "name like '%$crit_escaped%'",
+				'category' 	=> "category like '%$crit_escaped%'",
+				'author'	=> "author like '%$crit_escaped%'",
+				'alt'		=> "alt like '%$crit_escaped%'",
+				'caption'	=> "caption like '%$crit_escaped%'"
 			);
 
 			if (array_key_exists($search_method, $critsql))
@@ -257,10 +259,12 @@ $LastChangedRevision$
 	function image_search_form($crit, $method)
 	{
 		$methods =	array(
-			'id'       => gTxt('ID'),
-			'name'     => gTxt('name'),
-			'category' => gTxt('image_category'),
-			'author'	 => gTxt('author')
+			'id'       	=> gTxt('ID'),
+			'name'     	=> gTxt('name'),
+			'category' 	=> gTxt('image_category'),
+			'author'	=> gTxt('author'),
+			'alt'	 	=> gTxt('alt_text'),
+			'caption'	=> gTxt('caption')
 		);
 
 		return search_form('image', 'image_list', $crit, $methods, $method, 'name');
