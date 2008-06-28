@@ -1540,14 +1540,19 @@ $LastChangedRevision$
 		static $sectitles = array();
 		global $thissection;
 
+		// try cache
 		if (isset($sectitles[$name]))
 			return $sectitles[$name];
 
+		// try global set by section_list()
 		if(!empty($thissection['title']) && $thissection['name'] == $name)
 		{
 			$sectitles[$name] = $thissection['title'];
 			return $thissection['title'];
 		}
+
+		if($name == 'default' or empty($name))
+			return '';
 
 		$f = safe_field('title','txp_section',"name='".doSlash($name)."'");
 		$sectitles[$name] = $f;
