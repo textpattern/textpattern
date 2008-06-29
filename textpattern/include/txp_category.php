@@ -189,9 +189,9 @@ if ($event == 'category') {
 					$names[] = $cat['name'];
 				}
 
-				if (safe_update('txp_category', "parent='root'", "type='".$type."' and parent IN ('".join("','", doSlash($names))."')") and
-				    safe_delete('txp_category','id IN ('.join(',', $catid).')'))
+				if (safe_update('txp_category', "parent='root'", "type='".$type."' and parent IN ('".join("','", doSlash($names))."')"))
 				{
+					safe_delete('txp_category','id IN ('.join(',', $catid).')');
 					rebuild_tree_full($type);
 
 					$message = gTxt($type.'_categories_deleted', array('{list}' => join(', ',$catid)));
