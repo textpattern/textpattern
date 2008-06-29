@@ -163,24 +163,45 @@ if ($event == 'category') {
 		$type = ps('type');
 		$method = ps('edit_method');
 		$things = ps('selected');
-		if ($things) {
-			foreach($things as $catid) {
-				$catid = assert_int($catid);
-				if ($method == 'delete') {
-					$catname = safe_field('name', 'txp_category', "id=$catid");
-					if (safe_delete('txp_category',"id=$catid")) {
-						if ($catname)
-							safe_update('txp_category', "parent='root'", "type='".doSlash($type)."' and parent='".doSlash($catname)."'");
-						$categories[] = $catid;
-					}
+
+		if ($method == 'delete' and is_array($things) and $things and in_array($type, array('article','image','link','file')))
+		{
+			$things = array_map('assert_int', $things);
+
+			if ($type === 'article')
+			{
+				$cat1 = safe_column('DISTINCT category1', 'textpattern', '1=1');
+				$cat2 = safe_column('DISTINCT category2', 'textpattern', '1=1');
+				$used = array_unique($cat1 + $cat2);
+			}
+			else
+			{
+				$used = safe_column('DISTINCT category', 'txp_'.$type, '1=1');
+			}
+
+			$rs = safe_rows('id, name', 'txp_category', "id IN (".join(',', $things).") AND type='".$type."' AND NOT name IN ('".join("','", doSlash($used))."')");
+
+			if ($rs)
+			{
+				foreach($rs as $cat)
+				{
+					$catid[] = $cat['id'];
+					$names[] = $cat['name'];
+				}
+
+				if (safe_update('txp_category', "parent='root'", "type='".$type."' and parent IN ('".join("','", doSlash($names))."')") and
+				    safe_delete('txp_category','id IN ('.join(',', $catid).')'))
+				{
+					rebuild_tree_full($type);
+
+					$message = gTxt($type.'_categories_deleted', array('{list}' => join(', ',$catid)));
+
+					return cat_category_list($message);
 				}
 			}
-			rebuild_tree_full($type);
-
-			$message = gTxt($type.'_categories_deleted', array('{list}' => join(', ',$categories)));
-
-			cat_category_list($message);
 		}
+
+		return cat_category_list();
 	}
 
 //Refactoring: Functions are more or less the same for all event types
