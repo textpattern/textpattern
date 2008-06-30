@@ -1093,7 +1093,7 @@ $LastChangedRevision$
 		if ($form) {
 			$rs = fetch('form','txp_form','name',$form);
 			if ($rs) {
-				return $rs;
+				return parse($rs);
 			}
 		}
 
