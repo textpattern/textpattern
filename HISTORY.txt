@@ -6,10 +6,17 @@ Changes in 4.0.7
 * Changed tags: Container and form capabilities/improvements for <txp:section_list />, <txp:category_list />, <txp:article />,
   <txp:article_custom />, <txp:recent_comments />, <txp:file_download_list />
 * Changed tag: <txp:recent_comment /> allows new attribute 'offset'
+* Changed tag: <txp:if_article_id /> defaults to the current article's id.
 * Changed tags: <txp:article /> and <txp:article_custom /> allow new attributes 'wraptag', 'break'
+* Changed tags: <txp:category /> and <txp:section /> apply the 'class' attribute to the <A> element when wraptag is empty.
 * XML-RPC server
 * User-selectable plugin run order
 * Concurrent article edit warning
+* WYSIWYG preview for draft articles
+* More verbose "First Post" article with basic instructions and helpful links.
+* Developer: getTree() receives an optional 'table' name, returned array contains 'parent' field.
+* Developer: New event 'pretext_set'.
+* jQuery 1.2.6
 
 Changes in 4.0.6
 
