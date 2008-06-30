@@ -286,20 +286,28 @@ EOD;
 
   function rsd()
   {
-    $this->output(
-      tag(
-          n.tag(
-            n.tag('Textpattern', 'engineName').
-            n.tag('http://textpattern.com/', 'engineLink').
-            n.tag(hu, 'homePageLink').
-            n.tag(
-              n.'<api name="Movable Type" blogID="" preferred="true" apiLink="'.txrpcpath.'" />'.
-              n.'<api name="MetaWeblog" blogID="" preferred="false" apiLink="'.txrpcpath.'" />'.
-              n.'<api name="Blogger" blogID="" preferred="false" apiLink="'.txrpcpath.'" />'.n,
-            'apis').n,
-        'service').n,
-         'rsd', ' version="1.0" xmlns="http://archipelago.phrasewise.com/rsd"')
-      );
+    global $enable_xmlrpc_server;
+
+	if ($enable_xmlrpc_server) {
+	    $this->output(
+	      tag(
+	          n.tag(
+	            n.tag('Textpattern', 'engineName').
+	            n.tag('http://textpattern.com/', 'engineLink').
+	            n.tag(hu, 'homePageLink').
+	            n.tag(
+	              n.'<api name="Movable Type" blogID="" preferred="true" apiLink="'.txrpcpath.'" />'.
+	              n.'<api name="MetaWeblog" blogID="" preferred="false" apiLink="'.txrpcpath.'" />'.
+	              n.'<api name="Blogger" blogID="" preferred="false" apiLink="'.txrpcpath.'" />'.n,
+	            'apis').n,
+	        'service').n,
+	         'rsd', ' version="1.0" xmlns="http://archipelago.phrasewise.com/rsd"')
+	      );
+	} else {
+		header('Status: 501 Not Implemented');
+		header('HTTP/1.1 501 Not Implemented');
+		die('Not Implemented');
+	}
   }
 
   # Blogger API
