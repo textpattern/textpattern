@@ -362,7 +362,8 @@ $DB = new DB;
 					'name' => $name,
 					'title' => $title,
 					'level' => count($right),
-					'children' => ($rgt - $lft - 1) / 2
+					'children' => ($rgt - $lft - 1) / 2,
+					'parent' => $parent
 				);
 
 			$right[] = $rgt;
