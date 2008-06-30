@@ -43,7 +43,7 @@ $LastChangedRevision$
 		$dir = ($dir == 'desc') ? 'desc' : 'asc';
 
 		if (!in_array($sort, array('name', 'status', 'author', 'version', 'modified', 'load_order'))) $sort = 'name';
-		
+
 		$sort_sql = $sort.' '.$dir;
 
 		$switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
@@ -116,17 +116,17 @@ $LastChangedRevision$
 
 				unset($name, $page, $deletelink);
 			}
+
+			echo tr(
+				tda(
+					select_buttons().
+					plugin_multiedit_form('', $sort, $dir, '', '')
+				, ' colspan="10" style="text-align: right; border: none;"')
+			).
+
+			n.endTable().
+			n.'</form>';
 		}
-
-		echo tr(
-			tda(
-				select_buttons().
-				plugin_multiedit_form('', $sort, $dir, '', '')
-			, ' colspan="10" style="text-align: right; border: none;"')
-		).
-
-		n.endTable().
-		n.'</form>';
 	}
 
 // -------------------------------------------------------------
