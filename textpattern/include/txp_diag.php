@@ -68,6 +68,8 @@ $LastChangedRevision$
 		'/publish/rss.php',
 		'/publish/search.php',
 		'/publish/taghandlers.php',
+		'/rpc/index.php',
+		'/rpc/TXP_RPCServer.php',
 		'/update/_to_1.0.0.php',
 		'/update/_to_4.0.2.php',
 		'/update/_to_4.0.3.php',

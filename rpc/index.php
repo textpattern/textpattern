@@ -11,7 +11,7 @@
 
 # comment on production
 # save some raw post data
-/* DEBUG */ write_log();
+# /* DEBUG */ write_log();
 error_reporting(E_ALL & ~E_NOTICE);
 ini_set("display_errors","0");
 

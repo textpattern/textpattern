@@ -3478,7 +3478,8 @@ $LastChangedRevision$
 
 	function rsd()
 	{
-		return '<link rel="EditURI" type="application/rsd+xml" title="RSD" href="'.hu.'rpc/" />';
+		global $prefs;
+		return ($prefs['enable_xmlrpc_server']) ? '<link rel="EditURI" type="application/rsd+xml" title="RSD" href="'.hu.'rpc/" />' : '';
 	}
 
 // -------------------------------------------------------------
