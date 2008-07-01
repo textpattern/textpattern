@@ -179,7 +179,7 @@ if ($event == 'category') {
 				$used = safe_column('DISTINCT category', 'txp_'.$type, '1=1');
 			}
 
-			$rs = safe_rows('id, name', 'txp_category', "id IN (".join(',', $things).") AND type='".$type."' AND NOT name IN ('".join("','", doSlash($used))."')");
+			$rs = safe_rows('id, name', 'txp_category', "id IN (".join(',', $things).") AND type='".$type."' AND rgt - lft = 1 AND NOT name IN ('".join("','", doSlash($used))."')");
 
 			if ($rs)
 			{
@@ -189,9 +189,8 @@ if ($event == 'category') {
 					$names[] = $cat['name'];
 				}
 
-				if (safe_update('txp_category', "parent='root'", "type='".$type."' and parent IN ('".join("','", doSlash($names))."')"))
+				if (safe_delete('txp_category','id IN ('.join(',', $catid).') AND rgt - lft = 1'))
 				{
-					safe_delete('txp_category','id IN ('.join(',', $catid).')');
 					rebuild_tree_full($type);
 
 					$message = gTxt($type.'_categories_deleted', array('{list}' => join(', ',$catid)));
