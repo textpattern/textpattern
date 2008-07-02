@@ -7,6 +7,8 @@
    Manual: http://scripts.incutio.com/xmlrpc/manual.php
    Made available under the Artistic License: http://www.opensource.org/licenses/artistic-license.php
 
+   Contains Textpatternish amendments.
+
 $HeadURL$
 $LastChangedRevision$
 */
@@ -630,6 +632,7 @@ class IXR_Date {
     var $hour;
     var $minute;
     var $second;
+    var $tz;
     function IXR_Date($time) {
         // $time can be a PHP timestamp or an ISO one
         if (is_numeric($time)) {
@@ -653,9 +656,10 @@ class IXR_Date {
         $this->hour = substr($iso, 9, 2);
         $this->minute = substr($iso, 12, 2);
         $this->second = substr($iso, 15, 2);
+        $this->tz = substr($iso, 17);
     }
     function getIso() {
-        return $this->year.$this->month.$this->day.'T'.$this->hour.':'.$this->minute.':'.$this->second;
+        return $this->year.$this->month.$this->day.'T'.$this->hour.':'.$this->minute.':'.$this->second.$this->tz;
     }
     function getXml() {
         return '<dateTime.iso8601>'.$this->getIso().'</dateTime.iso8601>';
