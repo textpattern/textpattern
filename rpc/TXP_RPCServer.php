@@ -329,11 +329,9 @@ EOD;
 
     $rs = $txp->newArticle($contents);
 
-    if ($rs){
-      return intval($rs);
-    }
+    if (false === $rs) return new IXR_Error(201, gTxt('problem_creating_article'));
 
-    return new IXR_Error(201, gTxt('problem_creating_article'));
+    return intval($rs);
   }
 
   function blogger_editPost($params)
@@ -355,7 +353,7 @@ EOD;
 
     $rs = $txp->updateArticleID($postid, $contents);
 
-    if (!$rs) return new IXR_Error(202, gTxt('problem_updating_article'));
+    if (false === $rs) return new IXR_Error(202, gTxt('problem_updating_article'));
 
     return true;
   }
@@ -373,7 +371,7 @@ EOD;
     }
 
     $rs = $txp->getSectionsList();
-    if (!$rs) return new IXR_Error(203, gTxt('problem_retrieving_sections'));
+    if (false === $rs) return new IXR_Error(203, gTxt('problem_retrieving_sections'));
 
     $sections = array();
     foreach ($rs as $section)
@@ -526,7 +524,7 @@ EOD;
 
     $articles = $txp->getArticleList('ID, Body, AuthorId, unix_timestamp(Posted) as uPosted', 'Section=\''.doSlash($blogid).'\'', '0', $numberOfPosts, false);
 
-    if (!$articles) return new IXR_Error(207, gTxt('problem_getting_articles'));
+    if (false == $articles) return new IXR_Error(207, gTxt('problem_getting_articles'));
 
     foreach ($articles as $rs)
     {
@@ -578,11 +576,9 @@ EOD;
 
     $rs = $txp->newArticle($contents);
 
-    if ($rs){
-      return "$rs";
-    }
+    if (false === $rs) return new IXR_Error(201, gTxt('problem_creating_article'));
 
-    return new IXR_Error(201, gTxt('problem_creating_article'));
+    return "$rs";
   }
 
   function metaWeblog_editPost($params)
@@ -600,12 +596,11 @@ EOD;
 
     $rs = $txp->updateArticleID($postid,$contents);
 
-    if ($rs){
-      return true;
-    }
+    if (false === $rs) return new IXR_Error(201, gTxt('problem_updating_article'));
 
-    return new IXR_Error(201, gTxt('problem_updating_article'));
+    return true;
   }
+
   function metaWeblog_getCategories($params)
   {
     list($blogid, $username, $password) = $params;
@@ -621,7 +616,7 @@ EOD;
 
     $rs = $txp->getCategoryList();
 
-    if (!$rs) return new IXR_Error(210, gTxt('problem_retrieving_categories'));
+    if (false === $rs) return new IXR_Error(210, gTxt('problem_retrieving_categories'));
 
     $cats = array();
 
@@ -652,7 +647,7 @@ EOD;
     $articles = $txp->getArticleList('ID, Title, url_title, Body, Excerpt, Annotate, Keywords, Section, Category1, Category2, textile_body, AuthorID, unix_timestamp(Posted) as uPosted',
                     'Section=\''.doSlash($blogid).'\'', '0', $numberOfPosts, false);
 
-    if (!$articles) return new IXR_Error(207, gTxt('problem_getting_articles'));
+    if (false === $articles) return new IXR_Error(207, gTxt('problem_getting_articles'));
 
     $out = array();
 
@@ -680,7 +675,7 @@ EOD;
 
     $articles = $txp->getArticleList('ID, Title, AuthorID, unix_timestamp(Posted) as uPosted', 'Section=\''.doSlash($blogid).'\'', '0', $numberOfPosts, false);
 
-    if (!$articles) return new IXR_Error(207, gTxt('problem_getting_articles_or_empty_article_list_for_this_blog'));
+    if (false === $articles) return new IXR_Error(207, gTxt('problem_getting_articles'));
 
     extract($prefs);
 
@@ -713,7 +708,7 @@ EOD;
 
     $rs = $txp->getCategoryList();
 
-    if (!$rs) return new IXR_Error(210, gTxt('problem_retrieving_categories'));
+    if (false === $rs) return new IXR_Error(210, gTxt('problem_retrieving_categories'));
 
     $cats = array();
 

@@ -360,6 +360,7 @@ class TXP_Wrapper
 			$html = doSlash($html);
 			return safe_update('txp_page', "user_html='$html'", "name='$name'");
 		}
+		return false;
 	}
 
 	// Intended to update article non content fields, like categories
