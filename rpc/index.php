@@ -11,7 +11,7 @@
 
 # comment on production
 # save some raw post data
-# /* DEBUG */ write_log();
+#/* DEBUG */ write_log();
 error_reporting(E_ALL & ~E_NOTICE);
 ini_set("display_errors","0");
 
@@ -71,7 +71,7 @@ function write_log(){
 		fwrite($fp, '[USER_AGENT] '.$_SERVER['HTTP_USER_AGENT']);
 		fwrite($fp, $lnsep);
 		fwrite($fp, '[ACCEPT_ENCODING] '.$_SERVER['HTTP_ACCEPT_ENCODING']);
-		if (strpos(strtolower($_SERVER['SERVER_SOFTWARE']),'apache')!==false)
+		if (strpos(strtolower($_SERVER['SERVER_SOFTWARE']),'apache')!==false && is_callable('getallheaders'))
 		{
 			fwrite($fp, $lnsep);
 			fwrite($fp, "Apache Request Headers:\n");
