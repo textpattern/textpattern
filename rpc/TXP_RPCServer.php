@@ -864,6 +864,8 @@ EOD;
   #code refactoring for metaWeblog_newPost & metaweblog_EditPost
   function _getMetaWeblogContents($struct, $publish, $txp)
   {
+    global $gmtoffset, $is_dst;
+
     /* DEBUG */ dmp('_getMetaWeblogContents receives: ', $struct);
     $contents = array(
       'Body' => str_replace('\n',"\n",$struct['description']),
@@ -885,10 +887,37 @@ EOD;
       }
     }
 
+    if (isset($struct['date_created_gmt']))
+    {
+      $struct['dateCreated'] = $struct['date_created_gmt'];
+      $struct['dateCreated']->tz = 'Z'; // force GMT timezone
+    }
+
     if (isset($struct['dateCreated']))
     {
-      $contents['Posted'] = date('Y-m-d H:i:s',$struct['dateCreated']->getTimestamp());
+    	if ($struct['dateCreated']->tz == 'Z')
+    	{
+	    	// GMT-based posting time; transform into server time zone
+	    	$posted = $struct['dateCreated']->getTimestamp() - tz_offset() + $gmtoffset + ($is_dst ? 3600 : 0);
+    	}
+    	elseif (!$struct['dateCreated']->tz)
+    	{
+	    	// posting in an unspecified time zone: Assume site time.
+    		$posted = $struct['dateCreated']->getTimestamp() - tz_offset();
+    	}
+    	else
+    	{
+    		// numeric time zone offsets
+    		preg_match('/([+-][0-9]{1,2}):([0-9]{2})/', $struct['dateCreated']->tz, $t);
+    		if(is_int($t[1]) && is_int($t[2]))
+    		{
+	    		$tz = $t[1] * 3600 + $t[2] * 60;
+    			$posted = $struct['dateCreated']->getTimestamp() - tz_offset() + $gmtoffset + ($is_dst ? 3600 : 0) - $tz;
+    		}
+    	}
     }
+
+    if (isset($posted)) $contents['Posted'] = date('Y-m-d H:i:s', $posted);
 
     # MovableType Implementation Add ons
     if (isset($struct['mt_allow_comments'])) $contents['Annotate'] = $struct['mt_allow_comments'];
@@ -915,9 +944,8 @@ EOD;
   function _buildMetaWeblogStruct($rs, $txp)
   {
     /* DEBUG */ dmp('_buildMetaWeblogStruct receives:', $rs);
-    global $prefs;
-    # do not extract, since we only need this one
-    $permlink_mode =& $prefs['permlink_mode'];
+    global $permlink_mode, $is_dst, $gmtoffset;
+
     switch ($permlink_mode){
       case 'section_id_title':
         $url = hu.join('/', array($rs['Section'],$rs['ID'],$rs['url_title']));
@@ -955,11 +983,13 @@ EOD;
       'description' => $rs['Body'],
       'userid' => $txp->txp_user,
       'postid' => $rs['ID'],
-      'dateCreated' => new IXR_Date($rs['uPosted']+tz_offset()),
+      'dateCreated' => new IXR_Date($rs['uPosted'] + tz_offset() - $gmtoffset - ($is_dst ? 3600 : 0)),
       'link'=>$url,
       'permaLink'=>$url,
       'title'=>$rs['Title'],
     );
+    $out['dateCreated']->tz='Z'; // GMT
+
     # MovableType Implementation Add ons
     if (isset($rs['Annotate']) && !empty($rs['Annotate'])) $out['mt_allow_comments'] = intval($rs['Annotate']);
     if (isset($rs['textile_body']) && !empty($rs['textile_body'])) $out['mt_convert_breaks'] = strval($rs['textile_body']);
