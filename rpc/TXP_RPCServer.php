@@ -8,6 +8,7 @@
  * $LastChangedRevision$
  */
 
+if (!defined('txpath')) die('txpath is undefined.');
 require_once txpath.'/lib/txplib_html.php';
 class TXP_RPCServer extends IXR_IntrospectionServer
 {
@@ -629,7 +630,7 @@ EOD;
         'rssUrl'=>hu.'?rss=1&#38;category='.$c['name']
       );
     }
-    /* DEBUG */ dmp('metaWeblog_getCategories returns:', $cats);
+    # /* DEBUG */ dmp('metaWeblog_getCategories returns:', $cats);
     return $cats;
   }
 
@@ -654,7 +655,7 @@ EOD;
     foreach ($articles as $rs){
       $out[] = $this->_buildMetaWeblogStruct($rs, $txp);
     }
-    /* DEBUG */ dmp('metaWeblog_getRecentPosts returns:', $out);
+    # /* DEBUG */ dmp('metaWeblog_getRecentPosts returns:', $out);
     return $out;
   }
 
@@ -691,7 +692,7 @@ EOD;
       );
 
     }
-    /* DEBUG */ dmp('metaWeblog_getRecentPostTitles returns:', $out);
+    # /* DEBUG */ dmp('metaWeblog_getRecentPostTitles returns:', $out);
     return $out;
   }
 
@@ -719,7 +720,7 @@ EOD;
         'categoryId'=>$c['id'],
       );
     }
-    /* DEBUG */ dmp('mt_getCategoryList returns:', $cats);
+    # /* DEBUG */ dmp('mt_getCategoryList returns:', $cats);
     return $cats;
   }
 
@@ -768,7 +769,7 @@ EOD;
       if($isPrimary) $isPrimary = false;
     }
 
-    /* DEBUG */ dmp('mt_getPostCategories returns: ', $out);
+    # /* DEBUG */ dmp('mt_getPostCategories returns: ', $out);
     return $out;
 
   }
@@ -808,7 +809,7 @@ EOD;
     $Category1='';
     $Category2='';
 
-    /* DEBUG */ dmp('mt_setPostCategories receives:', $categories);
+    # /* DEBUG */ dmp('mt_setPostCategories receives:', $categories);
     foreach ($categories as $category)
     {
       extract($category);
@@ -866,7 +867,7 @@ EOD;
   {
     global $gmtoffset, $is_dst;
 
-    /* DEBUG */ dmp('_getMetaWeblogContents receives: ', $struct);
+    # /* DEBUG */ dmp('_getMetaWeblogContents receives: ', $struct);
     $contents = array(
       'Body' => str_replace('\n',"\n",$struct['description']),
       'Status' => ($publish)? '4' : '1',
@@ -933,7 +934,7 @@ EOD;
     } elseif (isset($struct['wp_slug'])) {
       $contents['url_title'] = stripSpace($struct['wp_slug']);
     }
-    /* DEBUG */ dmp('_getMetaWeblogContents returns: ', $contents);
+    # /* DEBUG */ dmp('_getMetaWeblogContents returns: ', $contents);
 
     return $contents;
   }
@@ -943,7 +944,7 @@ EOD;
   # remove if it is the case
   function _buildMetaWeblogStruct($rs, $txp)
   {
-    /* DEBUG */ dmp('_buildMetaWeblogStruct receives:', $rs);
+    # /* DEBUG */ dmp('_buildMetaWeblogStruct receives:', $rs);
     global $permlink_mode, $is_dst, $gmtoffset;
 
     switch ($permlink_mode){
@@ -996,7 +997,7 @@ EOD;
     if (isset($rs['Excerpt']) && !empty($rs['Excerpt'])) $out['mt_excerpt'] = $rs['Excerpt'];
     if (isset($rs['Keywords']) && !empty($rs['Keywords'])) $out['mt_keywords'] = $rs['Keywords'];
     if (isset($rs['url_title']) && !empty($rs['url_title'])) $out['mt_basename'] = $out['wp_slug'] = $rs['url_title'];
-    /* DEBUG */ dmp('_buildMetaWeblogStruct returns:', $out);
+    # /* DEBUG */ dmp('_buildMetaWeblogStruct returns:', $out);
     return $out;
   }
 }

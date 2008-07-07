@@ -11,12 +11,15 @@
 
 # comment on production
 # save some raw post data
-#/* DEBUG */ write_log();
+# /* DEBUG */ write_log();
 error_reporting(E_ALL & ~E_NOTICE);
 ini_set("display_errors","0");
 
+if (@ini_get('register_globals'))
+	foreach ( $_REQUEST as $name => $value )
+		unset($$name);
 
-/* DEBUG */ if (!defined('txpdmpfile')) define('txpdmpfile', 'txpxmlrpc.txt');
+# /* DEBUG */ if (!defined('txpdmpfile')) define('txpdmpfile', 'txpxmlrpc.txt');
 if (!defined('txpath')) define('txpath', dirname(dirname(__FILE__)).'/textpattern');
 define('txpinterface','xmlrpc');
 
