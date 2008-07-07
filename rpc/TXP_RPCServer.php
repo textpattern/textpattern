@@ -909,8 +909,7 @@ EOD;
     	else
     	{
     		// numeric time zone offsets
-    		preg_match('/([+-][0-9]{1,2}):([0-9]{2})/', $struct['dateCreated']->tz, $t);
-    		if(is_int($t[1]) && is_int($t[2]))
+    		if (preg_match('/([+-][0-9]{2})([0-9]{2})/', $struct['dateCreated']->tz, $t))
     		{
 	    		$tz = $t[1] * 3600 + $t[2] * 60;
     			$posted = $struct['dateCreated']->getTimestamp() - tz_offset() + $gmtoffset + ($is_dst ? 3600 : 0) - $tz;
