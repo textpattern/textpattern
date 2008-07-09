@@ -3528,7 +3528,7 @@ $LastChangedRevision$
 
 		if (isset($variable[$name]))
 		{
-			if (empty($value))
+			if (!isset($atts['value']))
 			{
 				$x = true;
 			}
