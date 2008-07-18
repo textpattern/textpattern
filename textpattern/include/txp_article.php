@@ -160,7 +160,7 @@ if (!empty($event) and $event == 'article') {
 
 		if ($oldArticle['sLastMod'] != $incoming['sLastMod'])
 		{
-			article_edit(gTxt('concurrent_edit_by', array('author' => htmlspecialchars($oldArticle['LastModID']))), TRUE);
+			article_edit(gTxt('concurrent_edit_by', array('{author}' => htmlspecialchars($oldArticle['LastModID']))), TRUE);
 			return;
 		}
 
