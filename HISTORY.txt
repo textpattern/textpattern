@@ -6,6 +6,7 @@ Changes in 4.0.7
 * Changed tags: Container and form capabilities/improvements for <txp:section_list />, <txp:category_list />, <txp:article />,
   <txp:article_custom />, <txp:recent_comments />, <txp:file_download_list />
 * Changed tag: <txp:recent_comment /> allows new attribute 'offset'
+* Changed tag: <txp:search_input /> allows new attribute 'html_id' to determine the form's id.
 * Changed tag: <txp:if_article_id /> defaults to the current article's id.
 * Changed tags: <txp:article /> and <txp:article_custom /> allow new attributes 'wraptag', 'break'
 * Changed tags: <txp:category /> and <txp:section /> apply the 'class' attribute to the <A> element when wraptag is empty.

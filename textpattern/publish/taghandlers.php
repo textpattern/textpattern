@@ -1085,6 +1085,7 @@ $LastChangedRevision$
 			'form'    => 'search_input',
 			'wraptag' => 'p',
 			'size'    => '15',
+			'html_id' => '',
 			'label'   => gTxt('search'),
 			'button'  => '',
 			'section' => '',
@@ -1098,23 +1099,24 @@ $LastChangedRevision$
 		}
 
 		$sub = (!empty($button)) ? '<input type="submit" value="'.$button.'" />' : '';
+		$id =  (!empty($html_id)) ? ' id="'.$html_id.'"' : '';
 		$out = fInput('text','q',$q,'','','',$size);
 		$out = (!empty($label)) ? $label.br.$out.$sub : $out.$sub;
 		$out = ($wraptag) ? tag($out,$wraptag) : $out;
 
 		if (!$section) {
-			return '<form method="get" action="'.hu.'">'.
+			return '<form method="get" action="'.hu.'"'.$id.'>'.
 				n.$out.
 				n.'</form>';
 		}
 
 		if ($permlink_mode != 'messy') {
-			return '<form method="get" action="'.pagelinkurl(array('s' => $section)).'">'.
+			return '<form method="get" action="'.pagelinkurl(array('s' => $section)).'"'.$id.'">'.
 				n.$out.
 				n.'</form>';
 		}
 
-		return '<form method="get" action="'.hu.'">'.
+		return '<form method="get" action="'.hu.'"'.$id.'">'.
 			n.hInput('s', $section).
 			n.$out.
 			n.'</form>';
