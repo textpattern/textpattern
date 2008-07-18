@@ -65,7 +65,7 @@ $LastChangedRevision$
 				hCell(gTxt('description')).
 				column_head('active', 'status', 'plugin', true, $switch_dir, '', '', ('status' == $sort) ? $dir : '').
 				column_head('order', 'load_order', 'plugin', true, $switch_dir, '', '', ('load_order' == $sort) ? $dir : '').
-				hCell().
+				hCell(gTxt('help')).
 				hCell().
 				hCell()
 			);
