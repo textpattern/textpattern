@@ -99,7 +99,7 @@ $LastChangedRevision$
 			$crit_escaped = doSlash($crit);
 
 			$critsql = array(
-				'id'         => "ID = '$crit_escaped'",
+				'id'         => "ID in ('" .join("','", do_list($crit_escaped)). "')",
 				'title_body' => "Title rlike '$crit_escaped' or Body rlike '$crit_escaped'",
 				'section'	 => "Section rlike '$crit_escaped'",
 				'categories' => "Category1 rlike '$crit_escaped' or Category2 rlike '$crit_escaped'",

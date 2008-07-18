@@ -93,10 +93,10 @@ $LastChangedRevision$
 			$crit_escaped = doSlash($crit);
 
 			$critsql = array(
-				'id'			     => "id = '$crit_escaped'",
-				'name'		     => "linkname like '%$crit_escaped%'",
-				'description'	 => "description like '%$crit_escaped%'",
-				'category'     => "category like '%$crit_escaped%'"
+				'id'         	=> "ID in ('" .join("','", do_list($crit_escaped)). "')",
+				'name'			=> "linkname like '%$crit_escaped%'",
+				'description'	=> "description like '%$crit_escaped%'",
+				'category'		=> "category like '%$crit_escaped%'"
 			);
 
 			if (array_key_exists($search_method, $critsql))

@@ -114,7 +114,7 @@ $LastChangedRevision$
 			$crit_escaped = doSlash($crit);
 
 			$critsql = array(
-				'id'			    => "id = '$crit_escaped'",
+				'id'		  => "ID in ('" .join("','", do_list($crit_escaped)). "')",
 				'filename'    => "filename like '%$crit_escaped%'",
 				'description' => "description like '%$crit_escaped%'",
 				'category'    => "category like '%$crit_escaped%'"

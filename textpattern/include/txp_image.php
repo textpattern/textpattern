@@ -99,7 +99,7 @@ $LastChangedRevision$
 			$crit_escaped = doSlash($crit);
 
 			$critsql = array(
-				'id'		=> "id = '$crit_escaped'",
+				'id'		=> "ID in ('" .join("','", do_list($crit_escaped)). "')",
 				'name'		=> "name like '%$crit_escaped%'",
 				'category' 	=> "category like '%$crit_escaped%'",
 				'author'	=> "author like '%$crit_escaped%'",
