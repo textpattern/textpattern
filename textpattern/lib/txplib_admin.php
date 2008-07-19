@@ -82,7 +82,7 @@ $LastChangedRevision: 2726 $
 	function generate_password($length = 10)
 	{
 		$pass = '';
-		$chars = '023456789bcdfghjkmnpqrstvwxyz';
+		$chars = '23456789abcdefghijkmnopqrstuvwxyz';
 		$i = 0;
 
 		while ($i < $length)
