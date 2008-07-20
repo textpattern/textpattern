@@ -154,7 +154,7 @@ $LastChangedRevision$
 		echo n.list_search_form($crit, $search_method);
 
 		$rs = safe_rows_start('*, unix_timestamp(Posted) as posted, unix_timestamp(LastMod) as lastmod', 'textpattern',
-			"$criteria order by $sort_sql limit $offset, $limit" ,1 #TODO
+			"$criteria order by $sort_sql limit $offset, $limit"
 		);
 
 		if ($rs)
