@@ -97,14 +97,15 @@ $LastChangedRevision$
 		if ($search_method and $crit)
 		{
 			$crit_escaped = doSlash($crit);
-
 			$critsql = array(
 				'id'         => "ID in ('" .join("','", do_list($crit_escaped)). "')",
 				'title_body' => "Title rlike '$crit_escaped' or Body rlike '$crit_escaped'",
 				'section'	 => "Section rlike '$crit_escaped'",
+				'keywords'	 => "Keywords rlike '".regexp_list($crit_escaped)."'",
 				'categories' => "Category1 rlike '$crit_escaped' or Category2 rlike '$crit_escaped'",
 				'status'	 => "Status = '".(@$sesutats[gTxt($crit_escaped)])."'",
 				'author'	 => "AuthorID rlike '$crit_escaped'",
+				'article_image' => "Image in ('" .join("','", do_list($crit_escaped)). "')",
 				'posted' 	 => "Posted like '$crit_escaped%'",
 				'lastmod' 	 => "LastMod like '$crit_escaped%'"
 			);
@@ -153,7 +154,7 @@ $LastChangedRevision$
 		echo n.list_search_form($crit, $search_method);
 
 		$rs = safe_rows_start('*, unix_timestamp(Posted) as posted, unix_timestamp(LastMod) as lastmod', 'textpattern',
-			"$criteria order by $sort_sql limit $offset, $limit"
+			"$criteria order by $sort_sql limit $offset, $limit" ,1 #TODO
 		);
 
 		if ($rs)
@@ -329,8 +330,10 @@ $LastChangedRevision$
 			'title_body' => gTxt('title_body'),
 			'section'	 => gTxt('section'),
 			'categories' => gTxt('categories'),
+			'keywords'	 => gTxt('keywords'),
 			'status'	 => gTxt('status'),
 			'author'	 => gTxt('author'),
+			'article_image' => gTxt('article_image'),
 			'posted'	 => gTxt('posted'),
 			'lastmod'	 => gTxt('article_modified')
 		);
