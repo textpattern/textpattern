@@ -179,7 +179,7 @@ if ($event == 'category') {
 				$used = safe_column('DISTINCT category', 'txp_'.$type, '1=1');
 			}
 
-			$rs = safe_rows('id, name', 'txp_category', "id IN (".join(',', $things).") AND type='".$type."' AND rgt - lft = 1 AND NOT name IN ('".join("','", doSlash($used))."')");
+			$rs = safe_rows('id, name', 'txp_category', "id IN (".join(',', $things).") AND type='".$type."' AND rgt - lft = 1 AND name NOT IN ('".join("','", doSlash($used))."')");
 
 			if ($rs)
 			{
