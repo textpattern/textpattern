@@ -295,7 +295,7 @@ $LastChangedRevision$
 
 					extract($plugin);
 
-					$type  = empty($type)  ? 0 : min(max(intval($type), 0), 2);
+					$type  = empty($type)  ? 0 : min(max(intval($type), 0), 3);
 					$order = empty($order) ? 5 : min(max(intval($order), 1), 9);
 
 					$exists = fetch('name','txp_plugin','name',$name);

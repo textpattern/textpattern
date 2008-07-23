@@ -537,7 +537,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function load_plugins($type=NULL)
+	function load_plugins($type=0)
 	{
 		global $prefs,$plugins, $plugins_ver;
 
@@ -557,11 +557,9 @@ $LastChangedRevision$
 			}
 		}
 
-		$where = 'status = 1';
-		if ($type !== NULL)
-			$where .= (" and type='".doSlash($type)."'");
+		$where = 'status = 1 AND type IN ('.($type ? '1,3' : '0,1').')';
 
-		$rs = safe_rows("name, code, version", "txp_plugin", $where. ' order by load_order');
+		$rs = safe_rows("name, code, version", "txp_plugin", $where.' order by load_order');
 		if ($rs) {
 			$old_error_handler = set_error_handler("pluginErrorHandler");
 			foreach($rs as $a) {
