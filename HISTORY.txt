@@ -1,23 +1,47 @@
 Changes in 4.0.7
 
-* New parser allows tags as attributes and tag nesting, increases tag parsing speed
+* Parser: full nesting support, allowing unlimited nesting of identical tags.
+* Parser: attribute values are parsed when enclosed in single quotes.
+* Parser: unquoted attribute values are deprecated and will result in warnings when site status is not set to 'live'. Fix your templates and use double quotes to delimit attribute values.
+* Speed: various components of the parsing process have been optimized, which compensates the impact of increased parser complexity, resulting in slightly faster parsing speed
 * New tag: <txp:rsd /> specifies the Really Simple Discovery endpoint for XML-RPC clients
-* New tags: <txp:variable />, <txp:if_variable>
-* Changed tags: Container and form capabilities/improvements for <txp:section_list />, <txp:category_list />, <txp:article />,
-  <txp:article_custom />, <txp:recent_comments />, <txp:file_download_list />
-* Changed tag: <txp:recent_comment /> allows new attribute 'offset'
-* Changed tag: <txp:search_input /> allows new attribute 'html_id' to determine the form's id.
+* New tag: <txp:variable />
+* New tag: <txp:if_variable>
+* Changed tag: <txp:article /> can be used as a container tag
+* Changed tag: <txp:article /> allows new attributes 'wraptag' and 'break'
+* Changed tag: <txp:article_custom /> can be used as a container tag
+* Changed tag: <txp:article_custom /> allows new attributes 'wraptag' and 'break'
+* Changed tag: <txp:article_custom /> allows comma separated list for 'id' attributes (this doesn't imply a sort order).
+* Changed tag: <txp:category /> applies 'class' attribute to the <a> element when wraptag is empty.
+* Changed tag: <txp:category_list /> can be used as a container tag
+* Changed tag: <txp:file_download_list /> can be used as a container tag
 * Changed tag: <txp:if_article_id /> defaults to the current article's id.
-* Changed tags: <txp:article /> and <txp:article_custom /> allow new attributes 'wraptag', 'break'
-* Changed tags: <txp:category /> and <txp:section /> apply the 'class' attribute to the <A> element when wraptag is empty.
-* XML-RPC server
-* User-selectable plugin run order
-* Concurrent article edit warning
-* WYSIWYG preview for draft articles
-* Added article images and keywords to the the article list's search criteria.
+* Changed tag: <txp:linklist /> can be used as a container tag
+* Changed tag: <txp:recent_comments /> can be used as a container tag
+* Changed tag: <txp:recent_comments /> allows new attribute 'offset'
+* Changed tag: <txp:search_input /> allows new attribute 'html_id' to set the form's id.
+* Changed tag: <txp:section /> applies the 'class' attribute to the <a> element when wraptag is empty.
+* Changed tag: <txp:section_list /> can be used as a container tag
+* XML-RPC: server now included in main TXP package, disabled by default
+* Articles tab: added 'article image' and 'keywords' as search criteria
+* Categories tab: categories cannot be accidentally deleted if they are still in use.
+* Write tab: Concurrent article edit warning
+* Write tab: WYSIWYG preview for draft/pending/hidden articles
+* Images tab: added 'alternate text' and 'caption' as search criteria
+* Images tab: multi-edit functionality (delete, change category)
+* Images tab: setting both thumb width and height to zero or empty values disables auto-thumbnailing
+* Links tab: multi-edit functionality (change category)
+* Files tab: multi-edit functionality (delete, change category)
+* Users tab: multi-edit functionality (delete, reset password, change privilege)
+* Users tab: sortable and paginated author list
+* Users tab: 'last login' shown in author list
+* Plugins tab: User-selectable plugin load order
+* Plugins tab: sortable and multi-edit functionality (change order/status, delete)
 * More verbose "First Post" article with basic instructions and helpful links.
 * Developer: getTree() receives an optional 'table' name, returned array contains 'parent' field.
 * Developer: New event 'pretext_set'.
+* Developer: new plugin type '3' for admin-only plugins (0=public, 1=admin+public, 2=library)
+* Developer: fInput now uses htmlspecialchars on the value parameter (previously only escape_title)
 * jQuery 1.2.6
 
 Changes in 4.0.6
