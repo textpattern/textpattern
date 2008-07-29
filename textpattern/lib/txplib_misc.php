@@ -1075,7 +1075,11 @@ $LastChangedRevision$
  	function event_change_pageby($name)
 	{
 		$qty = gps('qty');
-		safe_update('txp_prefs',"val='".doSlash($qty)."'","name='".doSlash($name).'_list_pageby'."'");
+		$pageby = $name.'_list_pageby';
+		$GLOBALS[$pageby] = $qty;
+
+		safe_update('txp_prefs', "val='".doSlash($qty)."'", "name='".doSlash($pageby)."'");
+
 		return;
 	}
 

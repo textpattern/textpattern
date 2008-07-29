@@ -37,8 +37,8 @@ $LastChangedRevision$
 
 		$available_steps = array(
 			'admin',
-			'author_change_pass',
-			'author_delete',
+			'admin_multi_edit',
+			'admin_change_pageby',
 			'author_list',
 			'author_save',
 			'author_save_new',
@@ -72,18 +72,21 @@ $LastChangedRevision$
 
 		$email = fetch('email', 'txp_users', 'name', $txp_user);
 
-		echo new_pass_form().
-			change_email_form($email);
+		if (has_privs('admin.edit'))
+		{
+			echo author_form();
+		}
 
 		if (has_privs('admin.list'))
 		{
 			echo author_list();
 		}
 
-		if (has_privs('admin.edit'))
+		echo new_pass_form();
+
+		if (!has_privs('admin.edit'))
 		{
-			echo new_author_form().
-				reset_author_pass_form();
+			echo change_email_form($email);
 		}
 	}
 
@@ -128,9 +131,9 @@ $LastChangedRevision$
 		}
 
 		$rs = safe_update('txp_users', "
-			privs		 = $privs,
+			privs    = $privs,
 			RealName = '$RealName',
-			email		 = '$email'",
+			email    = '$email'",
 			"user_id = $user_id"
 		);
 
@@ -256,47 +259,6 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function reset_author_pass_form()
-	{
-		global $txp_user;
-
-		$names = array();
-
-		$them = safe_rows_start('*', 'txp_users', "name != '".doSlash($txp_user)."' ORDER BY RealName");
-
-		while ($a = nextRow($them))
-		{
-			extract($a);
-
-			$names[$name] = $RealName.' ('.$name.')';
-		}
-
-		if ($names)
-		{
-			return '<div style="margin: 3em auto auto auto; text-align: center;">'.
-			form(
-				tag(gTxt('reset_author_password'), 'h3').
-				graf(gTxt('a_new_password_will_be_mailed')).
-					graf(selectInput('name', $names, '', 1).
-					fInput('submit', 'author_change_pass', gTxt('submit'), 'smallerbox').
-					eInput('admin').
-					sInput('author_change_pass')
-				,' style="text-align: center;"')
-			).'</div>';
-		}
-	}
-
-// -------------------------------------------------------------
-
-	function author_change_pass()
-	{
-		require_privs('admin.edit');
-
-		admin(reset_author_pass(ps('name')));
-	}
-
-// -------------------------------------------------------------
-
 	function change_email_form($email)
 	{
 		return '<div style="margin: 3em auto auto auto; text-align: center;">'.
@@ -315,174 +277,239 @@ $LastChangedRevision$
 
 	function author_list()
 	{
-		global $txp_user;
+		global $txp_user, $author_list_pageby;
 
-		echo n.n.hed(gTxt('authors'), 3,' style="text-align: center;"').
+		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
 
-			n.n.startTable('list').
+		if (!in_array($sort, array('name', 'RealName', 'email', 'privs', 'last_login'))) $sort = 'name';
 
-			n.tr(
-				n.hCell(gTxt('real_name')).
-				n.hCell(gTxt('login_name')).
-				n.hCell(gTxt('email')).
-				n.hCell(gTxt('privileges')).
-				n.hCell().
-				n.hCell()
-			);
+		$dir        = ($dir == 'desc') ? 'desc' : 'asc';
+		$sort_sql   = $sort.' '.$dir;
+		$switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
-		$rs = safe_rows_start('*', 'txp_users', '1 = 1 order by name asc');
+		$total = getCount('txp_users', '1=1');
+		$limit = max($author_list_pageby, 15);
+
+		list($page, $offset, $numPages) = pager($total, $limit, $page);
+
+		$rs = safe_rows_start('*, unix_timestamp(last_access) as last_login', 'txp_users', '1 = 1 order by '.$sort_sql.' limit '.$offset.', '.$limit);
 
 		if ($rs)
 		{
-			if (has_privs('admin.edit'))
+			echo '<form action="index.php" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
+
+			startTable('list').
+
+			tr(
+				column_head('login_name', 'name', 'admin', true, $switch_dir, '', '', ('name' == $sort) ? $dir : '').
+				column_head('real_name', 'RealName', 'admin', true, $switch_dir, '', '', ('RealName' == $sort) ? $dir : '').
+				column_head('email', 'email', 'admin', true, $switch_dir, '', '', ('email' == $sort) ? $dir : '').
+				column_head('privileges', 'privs', 'admin', true, $switch_dir, '', '', ('privs' == $sort) ? $dir : '').
+				column_head('last_login', 'last_login', 'admin', true, $switch_dir, '', '', ('last_login' == $sort) ? $dir : '').
+				hCell().
+				hCell()
+			);
+
+			while ($a = nextRow($rs))
 			{
-				while ($a = nextRow($rs))
-				{
-					extract($a);
+				extract(doSpecial($a));
 
-					echo n.n.'<tr>'.
-
-						n.'<form method="post" action="index.php">'.
-
-						n.td(
-							fInput('text', 'RealName', $RealName, 'edit')
-						).
-
-						td(htmlspecialchars($name)).
-						td(
-							fInput('text', 'email', $email, 'edit')
-						);
-
-					if ($name != $txp_user)
-					{
-						echo td(
-							privs($privs).sp.popHelp('about_privileges')
-						);
-					}
-
-					else
-					{
-						echo td(
-							get_priv_level($privs).sp.popHelp('about_privileges').
-							hInput('privs', $privs)
-						);
-					}
-
-					echo td(
-						fInput('submit', 'save', gTxt('save'), 'smallerbox')
-					).
-
-					n.hInput('user_id', $user_id).
-					n.eInput('admin').
-					n.sInput('author_save').
-					n.'</form>';
-
-					if ($name != $txp_user)
-					{
-						echo td(
-							dLink('admin', 'author_delete', 'user_id', $user_id)
-						);
-					}
-
-					else
-					{
-						echo td();
-					}
-
-					echo n.'</tr>';
-				}
-			}
-
-			else
-			{
-				while ($a = nextRow($rs))
-				{
-					extract(doSpecial($a));
-
-					echo tr(
-						td($RealName).
-						td($name).
-						td('<a href="mailto:'.$email.'">'.$email.'</a>').
-						td(
-							get_priv_level($privs).sp.popHelp('about_privileges').
-							hInput('privs', $privs)
-						).
-						td().
-						td()
-					);
-				}
-			}
-
-			echo n.endTable();
-		}
-	}
-
-// -------------------------------------------------------------
-
-	function author_delete()
-	{
-		require_privs('admin.edit');
-
-		$user_id = assert_int(ps('user_id'));
-
-		$name = fetch('Realname', 'txp_users', 'user_id', $user_id);
-
-		if ($name)
-		{
-			$rs = safe_delete('txp_users', "user_id = $user_id");
-
-			if ($rs)
-			{
-				admin(
-					gTxt('author_deleted', array('{name}' => $name))
+				echo tr(
+					td($name).
+					td($RealName).
+					td('<a href="mailto:'.$email.'">'.$email.'</a>').
+					td(get_priv_level($privs)).
+					td($last_login ? safe_strftime('%b&#160;%Y', $last_login) : '').
+					td(eLink('admin', 'author_edit', 'user_id', $user_id, gTxt('edit'))).
+					td((has_privs('admin.edit') and $txp_user != $a['name']) ? fInput('checkbox', 'selected[]', $a['name']) : '')
 				);
 			}
+
+			echo n.n.tr(
+				tda(
+					select_buttons().
+					author_multiedit_form($page, $sort, $dir, $crit, $search_method)
+				, ' colspan="6" style="text-align: right; border: none;"')
+			).
+
+			endTable().
+			'</form>'.
+
+			nav_form('admin', $page, $numPages, $sort, $dir, $crit, $search_method).
+
+			pageby_form('admin', $author_list_pageby);
 		}
 	}
 
 // -------------------------------------------------------------
 
-	function new_author_form()
+	function author_form()
 	{
+		global $step, $txp_user;
+
+		$vars = array('user_id', 'name', 'RealName', 'email', 'privs');
+		
+		extract(gpsa($vars));
+
+		if ($user_id && $step == 'author_edit')
+		{
+			$user_id = assert_int($user_id);
+			extract(safe_row('*', 'txp_users', "user_id = $user_id"));
+		}
+
+		if ($step == 'author_save' or $step == 'author_save_new')
+		{
+			foreach ($vars as $var)
+			{
+				$$var = '';
+			}
+		}
+		
 		return form(
-			hed(gTxt('add_new_author'), 3,' style="margin-top: 2em; text-align: center;"').
-			graf(gTxt('a_message_will_be_sent_with_login'), ' style="text-align: center;"').
 
 			startTable('edit').
 			tr(
-				fLabelCell('real_name').
-				fInputCell('RealName')
+				fLabelCell('login_name').
+				($user_id ? td(strong($name)) : fInputCell('name', $name))
 			).
 
 			tr(
-				fLabelCell('login_name').
-				fInputCell('name')
+				fLabelCell('real_name').
+				fInputCell('RealName', $RealName)
 			).
 
 			tr(
 				fLabelCell('email').
-				fInputCell('email')
+				fInputCell('email', $email)
 			).
 
 			tr(
 				fLabelCell('privileges').
 				td(
-					privs().sp.popHelp('about_privileges')
+					($txp_user != $name
+						? privs($privs)
+						: hInput('privs', $privs).strong(get_priv_level($privs))
+					)
+					.sp.popHelp('about_privileges')
 				)
 			).
 
 			tr(
 				td().
 				td(
-					fInput('submit', '', gTxt('save'), 'publish').sp.popHelp('add_new_author')
+					fInput('submit', '', gTxt('save'), 'publish').($user_id ? '' : sp.popHelp('add_new_author'))
 				)
 			).
 
 			endTable().
 
 			eInput('admin').
-			sInput('author_save_new')
+			($user_id ? hInput('user_id', $user_id).sInput('author_save') : sInput('author_save_new'))
 		);
 	}
 
+// -------------------------------------------------------------
+
+	function admin_change_pageby()
+	{
+		event_change_pageby('author');
+		admin();
+	}
+
+// -------------------------------------------------------------
+
+	function author_multiedit_form($page, $sort, $dir, $crit, $search_method)
+	{
+		$methods = array(
+			'changeprivilege' => gTxt('changeprivilege'),
+			'resetpassword' => gTxt('resetpassword'),
+			'delete' => gTxt('delete')
+		);
+
+		return event_multiedit_form('admin', $methods, $page, $sort, $dir, $crit, $search_method);
+	}
+
+// -------------------------------------------------------------
+
+	function admin_multi_edit()
+	{
+		global $txp_user;
+
+		require_privs('admin.edit');
+
+		$selected = ps('selected');
+		$method   = ps('edit_method');
+		$changed  = array();
+
+		if (!$selected or !is_array($selected))
+                {
+                	return admin();
+		}                                                
+
+		$names = safe_column('name', 'txp_users', "name IN ('".join("','", doSlash($selected))."') AND NOT name = '".doSlash($txp_user)."'");
+
+		if (!$names) return admin();
+
+		switch ($method)
+		{
+			case 'delete':
+
+				if (safe_delete('txp_users', "name IN ('".join("','", doSlash($names))."')"))
+				{
+					$changed = $names;
+					$msg = 'author_deleted';
+				}
+
+				break;
+
+			case 'changeprivilege':
+
+				global $levels;
+
+				$privilege = ps('privilege');
+
+				if (!isset($levels[$privilege])) return admin();
+
+				if (safe_update('txp_users', 'privs = '.intval($privilege), "name IN ('".join("','", doSlash($names))."')"))
+				{
+					$changed = $names;
+					$msg = 'author_updated';
+				}
+
+				break;
+			
+			case 'resetpassword':
+
+				$failed  = array();
+
+				foreach ($names as $name)
+				{
+					$passwd = generate_password(6);
+
+					if (safe_update('txp_users', "pass = password('".doSlash($passwd)."')", "name = '".doSlash($name)."'"));
+					{
+						$email = safe_field('email', 'txp_users', "name = '".doSlash($name)."'");
+
+						if (send_new_password($passwd, $email, $name))
+						{
+							$changed[] = $name;
+							$msg = 'author_updated';
+						}
+						else
+						{
+							return admin(gTxt('could_not_mail').' '.htmlspecialchars($name));
+						}
+					}
+				}
+				
+				break;
+		}
+
+		if ($changed)
+		{
+			return admin(gTxt($msg, array('{name}' => htmlspecialchars(join(', ', $changed)))));
+		}
+
+		admin();
+	}
 ?>
