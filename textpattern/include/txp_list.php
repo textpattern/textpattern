@@ -34,11 +34,9 @@ $LastChangedRevision$
 
 	function list_list($message = '', $post = '')
 	{
-		global $statuses, $comments_disabled_after, $step, $txp_user;
+		global $statuses, $comments_disabled_after, $step, $txp_user, $article_list_pageby;
 
 		pagetop(gTxt('tab_list'), $message);
-
-		extract(get_prefs());
 
 		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
 
@@ -147,7 +145,7 @@ $LastChangedRevision$
 			return;
 		}
 
-		$limit = max(@$article_list_pageby, 15);
+		$limit = max($article_list_pageby, 15);
 
 		list($page, $offset, $numPages) = pager($total, $limit, $page);
 

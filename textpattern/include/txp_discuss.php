@@ -64,13 +64,13 @@ $LastChangedRevision$
 
 	function discuss_list($message = '')
 	{
+		global $comment_list_pageby;
+
 		pagetop(gTxt('list_discussions'), $message);
 
 		echo graf(
 			'<a href="index.php?event=discuss'.a.'step=ipban_list">'.gTxt('list_banned_ips').'</a>'
 		, ' style="text-align: center;"');
-
-		extract(get_prefs());
 
 		extract(gpsa(array('sort', 'dir', 'page', 'crit', 'search_method')));
 
@@ -179,7 +179,7 @@ $LastChangedRevision$
 			return;
 		}
 
-		$limit = max(@$comment_list_pageby, 15);
+		$limit = max($comment_list_pageby, 15);
 
 		list($page, $offset, $numPages) = pager($total, $limit, $page);
 

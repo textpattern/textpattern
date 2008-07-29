@@ -54,8 +54,6 @@ $LastChangedRevision$
 	{
 		global $step, $link_list_pageby;
 
-		extract(get_prefs());
-
 		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
 
 		$dir = ($dir == 'desc') ? 'desc' : 'asc';
@@ -136,7 +134,7 @@ $LastChangedRevision$
 			return;
 		}
 
-		$limit = max(@$link_list_pageby, 15);
+		$limit = max($link_list_pageby, 15);
 
 		list($page, $offset, $numPages) = pager($total, $limit, $page);
 

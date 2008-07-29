@@ -44,12 +44,11 @@ $LastChangedRevision$
 
 	function file_list($message = '')
 	{
-		global $txpcfg, $extensions, $file_base_path, $file_statuses;
+		global $txpcfg, $extensions, $file_base_path, $file_statuses, $file_list_pageby;
 
 		pagetop(gTxt('file'), $message);
 
 		extract($txpcfg);
-		extract(get_prefs());
 
 		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
 
@@ -157,7 +156,7 @@ $LastChangedRevision$
 			return;
 		}
 
-		$limit = max(@$file_list_pageby, 15);
+		$limit = max($file_list_pageby, 15);
 
 		list($page, $offset, $numPages) = pager($total, $limit, $page);
 

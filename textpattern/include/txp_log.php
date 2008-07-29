@@ -44,9 +44,9 @@ $LastChangedRevision$
 
 	function log_list($message = '')
 	{
-		pagetop(gTxt('visitor_logs'), $message);
+		global $log_list_pageby, $expire_logs_after;
 
-		extract(get_prefs());
+		pagetop(gTxt('visitor_logs'), $message);
 
 		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
 
@@ -142,7 +142,7 @@ $LastChangedRevision$
 			return;
 		}
 
-		$limit = max(@$log_list_pageby, 15);
+		$limit = max($log_list_pageby, 15);
 
 		list($page, $offset, $numPages) = pager($total, $limit, $page);
 

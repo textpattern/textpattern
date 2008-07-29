@@ -39,12 +39,11 @@ $LastChangedRevision$
 
 	function image_list($message = '')
 	{
-		global $txpcfg, $extensions, $img_dir, $file_max_upload_size;
+		global $txpcfg, $extensions, $img_dir, $file_max_upload_size, $image_list_pageby;
 
 		pagetop(gTxt('images'), $message);
 
 		extract($txpcfg);
-		extract(get_prefs());
 
 		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
 
@@ -143,7 +142,7 @@ $LastChangedRevision$
 			return;
 		}
 
-		$limit = max(@$image_list_pageby, 15);
+		$limit = max($image_list_pageby, 15);
 
 		list($page, $offset, $numPages) = pager($total, $limit, $page);
 
