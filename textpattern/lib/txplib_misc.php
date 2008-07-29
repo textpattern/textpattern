@@ -1902,13 +1902,6 @@ eod;
 	}
 
 // -------------------------------------------------------------
-
-	function regexp_list($list, $delim = ',')
-	{
-		return join('|', do_list(str_replace('|', '\\\\|', $list), $delim));
-	}
-
-// -------------------------------------------------------------
 	function trace_add($msg)
 	{
 		global $production_status;

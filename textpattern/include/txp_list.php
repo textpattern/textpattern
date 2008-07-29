@@ -98,14 +98,14 @@ $LastChangedRevision$
 			$critsql = array(
 				'id'         => "ID in ('" .join("','", do_list($crit_escaped)). "')",
 				'title_body' => "Title rlike '$crit_escaped' or Body rlike '$crit_escaped'",
-				'section'	 => "Section rlike '$crit_escaped'",
-				'keywords'	 => "Keywords rlike '".regexp_list($crit_escaped)."'",
+				'section'    => "Section rlike '$crit_escaped'",
+				'keywords'   => "FIND_IN_SET('".$crit_escaped."',Keywords)",
 				'categories' => "Category1 rlike '$crit_escaped' or Category2 rlike '$crit_escaped'",
-				'status'	 => "Status = '".(@$sesutats[gTxt($crit_escaped)])."'",
-				'author'	 => "AuthorID rlike '$crit_escaped'",
+				'status'     => "Status = '".(@$sesutats[gTxt($crit_escaped)])."'",
+				'author'     => "AuthorID rlike '$crit_escaped'",
 				'article_image' => "Image in ('" .join("','", do_list($crit_escaped)). "')",
-				'posted' 	 => "Posted like '$crit_escaped%'",
-				'lastmod' 	 => "LastMod like '$crit_escaped%'"
+				'posted'     => "Posted like '$crit_escaped%'",
+				'lastmod'    => "LastMod like '$crit_escaped%'"
 			);
 
 			if (array_key_exists($search_method, $critsql))
