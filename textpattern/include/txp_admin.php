@@ -36,7 +36,6 @@ $LastChangedRevision$
 		include_once txpath.'/lib/txplib_admin.php';
 
 		$available_steps = array(
-			'admin',
 			'admin_multi_edit',
 			'admin_change_pageby',
 			'author_list',
@@ -348,7 +347,7 @@ $LastChangedRevision$
 		global $step, $txp_user;
 
 		$vars = array('user_id', 'name', 'RealName', 'email', 'privs');
-		
+
 		extract(gpsa($vars));
 
 		if ($user_id && $step == 'author_edit')
@@ -364,13 +363,13 @@ $LastChangedRevision$
 				$$var = '';
 			}
 		}
-		
+
 		return form(
 
 			startTable('edit').
 			tr(
 				fLabelCell('login_name').
-				($user_id ? td(strong($name)) : fInputCell('name', $name))
+				($user_id && $step == 'author_edit' ? td(strong($name)) : fInputCell('name', $name))
 			).
 
 			tr(
@@ -444,7 +443,7 @@ $LastChangedRevision$
 		if (!$selected or !is_array($selected))
                 {
                 	return admin();
-		}                                                
+		}
 
 		$names = safe_column('name', 'txp_users', "name IN ('".join("','", doSlash($selected))."') AND NOT name = '".doSlash($txp_user)."'");
 
@@ -466,7 +465,7 @@ $LastChangedRevision$
 
 				global $levels;
 
-				$privilege = ps('privilege');
+				$privilege = ps('privs');
 
 				if (!isset($levels[$privilege])) return admin();
 
@@ -477,7 +476,7 @@ $LastChangedRevision$
 				}
 
 				break;
-			
+
 			case 'resetpassword':
 
 				$failed  = array();
@@ -501,7 +500,7 @@ $LastChangedRevision$
 						}
 					}
 				}
-				
+
 				break;
 		}
 
