@@ -319,7 +319,7 @@ $LastChangedRevision$
 					td('<a href="mailto:'.$email.'">'.$email.'</a>').
 					td(get_priv_level($privs)).
 					td($last_login ? safe_strftime('%b&#160;%Y', $last_login) : '').
-					td(eLink('admin', 'author_edit', 'user_id', $user_id, gTxt('edit'))).
+					td((has_privs('admin.edit')) ? eLink('admin', 'author_edit', 'user_id', $user_id, gTxt('edit')) : '').
 					td((has_privs('admin.edit') and $txp_user != $a['name']) ? fInput('checkbox', 'selected[]', $a['name']) : '')
 				);
 			}
@@ -364,12 +364,19 @@ $LastChangedRevision$
 			}
 		}
 
+		$caption = ($step == 'author_edit') ? gTxt('edit_author', array('{name}' => htmlspecialchars($name))) : gTxt('add_new_author');
+
 		return form(
 
+			hed($caption, 3,' style="text-align: center;"').
+
 			startTable('edit').
-			tr(
-				fLabelCell('login_name').
-				($user_id && $step == 'author_edit' ? td(strong($name)) : fInputCell('name', $name))
+
+			(($user_id && $step == 'author_edit') ? '' :
+				tr(
+					fLabelCell('login_name').
+					fInputCell('name', $name)
+				)
 			).
 
 			tr(
