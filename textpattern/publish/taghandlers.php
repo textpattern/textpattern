@@ -954,10 +954,13 @@ $LastChangedRevision$
 		if ($rs)
 		{
 			$out = array();
+			$count = 0;
+			$last = numRows($rs);
 
 			$old_category = $thiscategory;
 			while ($a = nextRow($rs))
 			{
+				++$count;
 				extract($a);
 
 				if ($name)
@@ -974,6 +977,8 @@ $LastChangedRevision$
 					else
 					{
 						$thiscategory = array('name' => $name, 'title' => $title, 'type' => $type);
+						$thiscategory['is_first'] = ($count == 1);
+						$thiscategory['is_last'] = ($count == $last);
 						$out[] = ($thing) ? parse($thing) : parse_form($form);
 					}
 				}
@@ -1045,10 +1050,13 @@ $LastChangedRevision$
 		if ($rs)
 		{
 			$out = array();
+			$count = 0;
+			$last = count($rs);
 
 			$old_section = $thissection;
 			foreach ($rs as $a)
 			{
+				++$count;
 				extract($a);
 
 				if (empty($form) && empty($thing))
@@ -1063,6 +1071,8 @@ $LastChangedRevision$
 				else
 				{
 					$thissection = array('name' => $name, 'title' => ($name == 'default') ? $default_title : $title);
+					$thissection['is_first'] = ($count == 1);
+					$thissection['is_last'] = ($count == $last);
 					$out[] = ($thing) ? parse($thing) : parse_form($form);
 				}
 			}
@@ -2861,6 +2871,22 @@ $LastChangedRevision$
 		}
 	}
 
+// -------------------------------------------------------------
+	function if_first_category($atts, $thing)
+	{
+		global $thiscategory;
+		assert_category();
+		return parse(EvalElse($thing, !empty($thiscategory['is_first'])));
+	}
+
+// -------------------------------------------------------------
+	function if_last_category($atts, $thing)
+	{
+		global $thiscategory;
+		assert_category();
+		return parse(EvalElse($thing, !empty($thiscategory['is_last'])));
+	}
+
 //--------------------------------------------------------------------------
 	function if_section($atts, $thing)
 	{
@@ -2893,6 +2919,22 @@ $LastChangedRevision$
 		$section = $thisarticle['section'];
 
 		return parse(EvalElse($thing, in_list($section, $name)));
+	}
+
+// -------------------------------------------------------------
+	function if_first_section($atts, $thing)
+	{
+		global $thissection;
+		assert_section();
+		return parse(EvalElse($thing, !empty($thissection['is_first'])));
+	}
+
+// -------------------------------------------------------------
+	function if_last_section($atts, $thing)
+	{
+		global $thissection;
+		assert_section();
+		return parse(EvalElse($thing, !empty($thissection['is_last'])));
 	}
 
 //--------------------------------------------------------------------------
