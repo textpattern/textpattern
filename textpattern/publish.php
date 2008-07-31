@@ -728,6 +728,7 @@ $LastChangedRevision$
 
 		if ($rs) {
 			$count = 0;
+			$last = numRows($rs);
 
 			$articles = array();
 			while($a = nextRow($rs)) {
@@ -735,7 +736,7 @@ $LastChangedRevision$
 				populateArticleData($a);
 				global $thisarticle, $uPosted, $limit;
 				$thisarticle['is_first'] = ($count == 1);
-				$thisarticle['is_last'] = ($count == numRows($rs));
+				$thisarticle['is_last'] = ($count == $last);
 
 				if (@constant('txpinterface') === 'admin' and gps('Form')) {
 					$articles[] = parse(gps('Form'));
