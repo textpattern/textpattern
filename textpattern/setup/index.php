@@ -315,6 +315,7 @@ eod;
 
 		$siteurl = str_replace("http://",'', ps('siteurl'));
 		$siteurl = rtrim($siteurl,"/");
+		$urlpath = preg_replace('#^[^/]+#', '', $siteurl);
 
 		define("PFX",trim($dprefix));
 		define('TXP_INSTALL', 1);
@@ -333,6 +334,7 @@ eod;
 		mysql_query("update `".PFX."txp_prefs` set val = '".doSlash($siteurl)."' where `name`='siteurl'");
 		mysql_query("update `".PFX."txp_prefs` set val = '".LANG."' where `name`='language'");
 		mysql_query("update `".PFX."txp_prefs` set val = '".getlocale(LANG)."' where `name`='locale'");
+		mysql_query("update `".PFX."textpattern` set Body = replace(Body, 'siteurl', '".doSlash($urlpath)."'), Body_html = replace(Body_html, 'siteurl', '".doSlash($urlpath)."') WHERE ID = 1");
 
  		echo fbCreate();
 	}
