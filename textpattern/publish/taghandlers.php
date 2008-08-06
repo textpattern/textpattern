@@ -1121,12 +1121,12 @@ $LastChangedRevision$
 		}
 
 		if ($permlink_mode != 'messy') {
-			return '<form method="get" action="'.pagelinkurl(array('s' => $section)).'"'.$id.'">'.
+			return '<form method="get" action="'.pagelinkurl(array('s' => $section)).'"'.$id.'>'.
 				n.$out.
 				n.'</form>';
 		}
 
-		return '<form method="get" action="'.hu.'"'.$id.'">'.
+		return '<form method="get" action="'.hu.'"'.$id.'>'.
 			n.hInput('s', $section).
 			n.$out.
 			n.'</form>';
