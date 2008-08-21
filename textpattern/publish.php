@@ -437,7 +437,7 @@ $LastChangedRevision$
 		$out['css'] = @$rs['css'];
 
 		if(is_numeric($id) and !$is_404) {
-			$a = safe_row('*, unix_timestamp(Posted) as uPosted', 'textpattern', 'ID='.intval($id).(gps('txpreview') ? '' : ' and Status in (4,5)'));
+			$a = safe_row('*, unix_timestamp(Posted) as uPosted, unix_timestamp(LastMod) as uLastMod', 'textpattern', 'ID='.intval($id).(gps('txpreview') ? '' : ' and Status in (4,5)'));
 			if ($a) {
 				$Posted             = $a['Posted'];
 				$out['id_keywords'] = $a['Keywords'];
@@ -718,7 +718,7 @@ $LastChangedRevision$
 			$pgoffset = $offset;
 		}
 
-		$rs = safe_rows_start("*, unix_timestamp(Posted) as uPosted".$match, 'textpattern',
+		$rs = safe_rows_start("*, unix_timestamp(Posted) as uPosted, unix_timestamp(LastMod) as uLastMod".$match, 'textpattern',
 		$where.' order by '.doSlash($sort).' limit '.intval($pgoffset).', '.intval($limit));
 		// get the form name
 		if ($q and !$iscustom and !$issticky)
@@ -814,7 +814,7 @@ $LastChangedRevision$
 
 			$q_status = ($status ? 'and Status = '.intval($status) : 'and Status in (4,5)');
 
-			$rs = safe_row("*, unix_timestamp(Posted) as uPosted",
+			$rs = safe_row("*, unix_timestamp(Posted) as uPosted, unix_timestamp(LastMod) as uLastMod",
 					"textpattern", 'ID = '.intval($id)." $q_status limit 1");
 
 			if ($rs) {
@@ -881,7 +881,8 @@ $LastChangedRevision$
 		trace_add("[".gTxt('Article')." $ID]");
 		$thisarticle['thisid']          = $ID;
 		$thisarticle['posted']          = $uPosted;
-		$thisarticle['modified']	= $LastMod;
+		$thisarticle['modified']		= $LastMod;
+		$thisarticle['umodified']		= $uLastMod;
 		$thisarticle['annotate']        = $Annotate;
 		$thisarticle['comments_invite'] = $AnnotateInvite;
 		$thisarticle['authorid']        = $AuthorID;

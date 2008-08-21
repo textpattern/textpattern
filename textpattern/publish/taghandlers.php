@@ -1430,7 +1430,7 @@ $LastChangedRevision$
 			'format'  => '',
 			'gmt'     => '',
 			'lang'    => '',
-			'wraptag' => '',
+			'wraptag' => ''
 		), $atts));
 
 		if ($format)
@@ -1454,6 +1454,43 @@ $LastChangedRevision$
 		return ($wraptag) ? doTag($out, $wraptag, $class) : $out;
 	}
 
+// -------------------------------------------------------------
+
+	function modified($atts)
+	{
+		global $thisarticle, $id, $c, $pg, $dateformat, $archive_dateformat;
+		
+		assert_article();
+
+		extract(lAtts(array(
+			'class'   => '',
+			'format'  => '',
+			'gmt'     => '',
+			'lang'    => '',
+			'wraptag' => ''
+		), $atts));
+
+		if ($format) 
+		{
+			$out = safe_strftime($format, $thisarticle['umodified'], $gmt, $lang);
+		} 
+
+		else 
+		{
+			if ($id or $c or $pg) 
+			{
+				$out =  safe_strftime($archive_dateformat, $thisarticle['umodified']);
+			}
+
+			else
+			{
+				$out =  safe_strftime($dateformat, $thisarticle['umodified']);
+			}
+		}
+
+		return ($wraptag) ? doTag($out, $wraptag, $class) : $out;
+	}
+	
 // -------------------------------------------------------------
 
 	function comments_count()
@@ -2188,6 +2225,22 @@ $LastChangedRevision$
 		return $thisarticle['keywords'];
 	}
 
+// -------------------------------------------------------------
+	function if_keywords($atts, $thing = NULL)
+	{
+		global $thisarticle;
+		assert_article();
+		extract(lAtts(array(
+			'keywords' => ''
+		), $atts));
+		
+		$condition = empty($keywords) ? 
+			$thisarticle['keywords'] :
+			array_intersect(do_list($keywords), do_list($thisarticle['keywords']));
+
+		return EvalElse($thing, !empty($condition));
+	}
+	
 // -------------------------------------------------------------
 
 	function article_image($atts)
