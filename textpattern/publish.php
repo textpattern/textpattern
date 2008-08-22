@@ -881,8 +881,7 @@ $LastChangedRevision$
 		trace_add("[".gTxt('Article')." $ID]");
 		$thisarticle['thisid']          = $ID;
 		$thisarticle['posted']          = $uPosted;
-		$thisarticle['modified']		= $LastMod;
-		$thisarticle['umodified']		= $uLastMod;
+		$thisarticle['modified']		= $uLastMod;
 		$thisarticle['annotate']        = $Annotate;
 		$thisarticle['comments_invite'] = $AnnotateInvite;
 		$thisarticle['authorid']        = $AuthorID;

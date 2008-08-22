@@ -1463,32 +1463,28 @@ $LastChangedRevision$
 		assert_article();
 
 		extract(lAtts(array(
-			'class'   => '',
 			'format'  => '',
 			'gmt'     => '',
-			'lang'    => '',
-			'wraptag' => ''
+			'lang'    => ''
 		), $atts));
 
 		if ($format) 
 		{
-			$out = safe_strftime($format, $thisarticle['umodified'], $gmt, $lang);
+			return safe_strftime($format, $thisarticle['modified'], $gmt, $lang);
 		} 
 
 		else 
 		{
 			if ($id or $c or $pg) 
 			{
-				$out =  safe_strftime($archive_dateformat, $thisarticle['umodified']);
+				return safe_strftime($archive_dateformat, $thisarticle['modified']);
 			}
 
 			else
 			{
-				$out =  safe_strftime($dateformat, $thisarticle['umodified']);
+				return safe_strftime($dateformat, $thisarticle['modified']);
 			}
 		}
-
-		return ($wraptag) ? doTag($out, $wraptag, $class) : $out;
 	}
 	
 // -------------------------------------------------------------
