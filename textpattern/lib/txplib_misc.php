@@ -1002,6 +1002,20 @@ $LastChangedRevision$
 		$body = str_replace("\r", "\n", $body);
 		$body = str_replace("\n", $sep, $body);
 
+		$params = '';
+
+		if (is_valid_email($prefs['smtp_from']))
+		{
+			if (is_windows())
+			{
+				ini_set('sendmail_from', $prefs['smtp_from']);
+			}
+			elseif (!ini_get('safe_mode'))
+			{
+				$params = '-f'.$prefs['smtp_from'];
+			}
+		}
+
 		return mail($to_address, $subject, $body,
 
 			"From: $RealName <$email>".
@@ -1009,7 +1023,9 @@ $LastChangedRevision$
 			$sep.'X-Mailer: Textpattern'.
 			$sep.'Content-Transfer-Encoding: 8bit'.
 			$sep.'Content-Type: text/plain; charset="'.$charset.'"'.
-			$sep
+			$sep,
+
+			$params
 		);
 	}
 
