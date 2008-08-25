@@ -270,7 +270,7 @@ $LastChangedRevision$
 	}
 
 //-------------------------------------------------------------
-
+// Deprecated; permlinkmodes is used instead now
 	function urlmodes($name, $val)
 	{
 		$vals = array(
