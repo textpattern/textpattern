@@ -817,23 +817,36 @@ $LastChangedRevision$
 	function is_blacklisted($ip, $checks = '')
 	{
 		global $prefs;
-		if (!$checks) $checks = explode(',', $prefs['spam_blacklists']);
 
-		$rip = join('.',array_reverse(explode(".",$ip)));
-		foreach ($checks as $a) {
-			$parts = explode(':', trim($a), 2);
+		if (!$checks)
+		{
+			$checks = do_list($prefs['spam_blacklists']);
+		}
+
+		$rip = join('.', array_reverse(explode('.', $ip)));
+
+		foreach ($checks as $a)
+		{
+			$parts = explode(':', $a, 2);
 			$rbl   = $parts[0];
-			if (isset($parts[1])) {
-				foreach (explode(':', $parts[1]) as $code) {
+
+			if (isset($parts[1]))
+			{
+				foreach (explode(':', $parts[1]) as $code)
+				{
 					$codes[] = strpos($code, '.') ? $code : '127.0.0.'.$code;
 				}
 			}
-			$hosts = @gethostbynamel($rip.'.'.trim($rbl,'. ').'.');
-			if ($hosts and (!isset($codes) or array_intersect($hosts, $codes))) {
+
+			$hosts = $rbl ? @gethostbynamel($rip.'.'.trim($rbl, '. ').'.') : FALSE;
+
+			if ($hosts and (!isset($codes) or array_intersect($hosts, $codes)))
+			{
 				$listed[] = $rbl;
 			}
 		}
-		return (!empty($listed)) ? join(', ',$listed) : false;
+		
+		return (!empty($listed)) ? join(', ', $listed) : false;
 	}
 
 // -------------------------------------------------------------
