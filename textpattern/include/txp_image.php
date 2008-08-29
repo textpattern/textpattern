@@ -180,7 +180,7 @@ $LastChangedRevision$
 
 				if ($thumbnail) {
 					if ($ext != '.swf') {
-						$thumbnail = '<img src="'.hu.$img_dir.'/'.$id.'t'.$ext.'" alt="" />';
+						$thumbnail = '<img src="'.hu.$img_dir.'/'.$id.'t'.$ext."?$uDate".'" alt="" />';
 					} else {
 						$thumbnail = '';
 					}
@@ -334,19 +334,19 @@ $LastChangedRevision$
 
 		$categories = getTree("root", "image");
 
-		$rs = safe_row("*", "txp_image", "id = $id");
+		$rs = safe_row("*, unix_timestamp(date) as uDate", "txp_image", "id = $id");
 
 		if ($rs) {
 			extract($rs);
 
 			if ($ext != '.swf') {
-				$img = '<img src="'.hu.$img_dir.'/'.$id.$ext.'" height="'.$h.'" width="'.$w.'" alt="" title="'.$id.$ext.' ('.$w.' &#215; '.$h.')" />';
+				$img = '<img src="'.hu.$img_dir.'/'.$id.$ext."?$uDate".'" height="'.$h.'" width="'.$w.'" alt="" title="'.$id.$ext.' ('.$w.' &#215; '.$h.')" />';
 			} else {
 				$img = '';
 			}
 
 			if ($thumbnail and ($ext != '.swf')) {
-				$thumb = '<img src="'.hu.$img_dir.'/'.$id.'t'.$ext.'" alt="" />';
+				$thumb = '<img src="'.hu.$img_dir.'/'.$id.'t'.$ext."?$uDate".'" alt="" />';
 			} else {
 				$thumb = '';
 			}
