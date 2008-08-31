@@ -97,7 +97,7 @@ $LastChangedRevision$
 			$crit_escaped = doSlash($crit);
 			$critsql = array(
 				'id'         => "ID in ('" .join("','", do_list($crit_escaped)). "')",
-				'title_body' => "Title rlike '$crit_escaped' or Body rlike '$crit_escaped'",
+				'title_body_excerpt' => "Title rlike '$crit_escaped' or Body rlike '$crit_escaped' or Excerpt rlike '$crit_escaped'",
 				'section'    => "Section rlike '$crit_escaped'",
 				'keywords'   => "FIND_IN_SET('".$crit_escaped."',Keywords)",
 				'categories' => "Category1 rlike '$crit_escaped' or Category2 rlike '$crit_escaped'",
@@ -325,7 +325,7 @@ $LastChangedRevision$
 	{
 		$methods =	array(
 			'id'				 => gTxt('ID'),
-			'title_body' => gTxt('title_body'),
+			'title_body_excerpt' => gTxt('title_body_excerpt'),
 			'section'	 => gTxt('section'),
 			'categories' => gTxt('categories'),
 			'keywords'	 => gTxt('keywords'),
@@ -336,7 +336,7 @@ $LastChangedRevision$
 			'lastmod'	 => gTxt('article_modified')
 		);
 
-		return search_form('list', 'list', $crit, $methods, $method, 'title_body');
+		return search_form('list', 'list', $crit, $methods, $method, 'title_body_excerpt');
 	}
 
 // -------------------------------------------------------------
