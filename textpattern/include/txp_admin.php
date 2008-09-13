@@ -195,6 +195,13 @@ $LastChangedRevision$
 
 		if ($name && is_valid_email($email))
 		{
+			list($valid, $msg) = is_valid_username($name);
+			if (!$valid)  
+			{
+				admin($msg);
+				return;
+			}
+
 			$password = doSlash(generate_password(6));
 			$nonce    = doSlash(md5(uniqid(mt_rand(), TRUE)));
 
