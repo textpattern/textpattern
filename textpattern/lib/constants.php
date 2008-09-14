@@ -34,8 +34,6 @@ define('IS_CGI', substr(PHP_SAPI, 0, 3) == 'cgi' );
 define('IS_FASTCGI', IS_CGI and empty($_SERVER['FCGI_ROLE']) and empty($_ENV['FCGI_ROLE']) );
 define('IS_APACHE', !IS_CGI and substr(PHP_SAPI, 0, 6) == 'apache' );
 
-define('USERNAME_MAX_LENGTH', 64); // set to field width of txp_users.name
-
 error_reporting($old_level);
 unset($old_level);
 

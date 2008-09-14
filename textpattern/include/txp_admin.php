@@ -193,15 +193,8 @@ $LastChangedRevision$
 		extract(doSlash(psa(array('privs', 'name', 'email', 'RealName'))));
 		$privs = assert_int($privs);
 
-		if ($name && is_valid_email($email))
+		if ($name and strlen($name) <= 64 and is_valid_email($email))
 		{
-			list($valid, $msg) = is_valid_username($name);
-			if (!$valid)  
-			{
-				admin($msg);
-				return;
-			}
-
 			$password = doSlash(generate_password(6));
 			$nonce    = doSlash(md5(uniqid(mt_rand(), TRUE)));
 

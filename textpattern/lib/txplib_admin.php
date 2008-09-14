@@ -126,20 +126,4 @@ $LastChangedRevision: 2726 $
 			return(gTxt('could_not_update_author').' '.htmlspecialchars($name));
 		}
 	}
-
-// -------------------------------------------------------------
-
-	function is_valid_username($name)
-	{
-		$res = array(true, gTxt('ok'));
-
-		// limit binary string length (mbstring.func_overload safe)
-		$len = (function_exists('mb_strlen')) ? mb_strlen($name, 'ASCII') : strlen($name);
-		if ($len >= USERNAME_MAX_LENGTH)
-		{
-			$res = array(false, gTxt('username_too_long'));
-		}
-		return $res;
-	}
-
 ?>
