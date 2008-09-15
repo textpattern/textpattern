@@ -532,16 +532,18 @@ $LastChangedRevision$
 			return;
 		}
 
-		if (!is_file(build_file_path($file_base_path,$name))) {
+		$newname = sanitizeForFile($name);
+		$newpath = build_file_path($file_base_path, $newname);
 
-			$id = file_db_add($name,$category,$permissions,$description,$size);
+		if (!is_file($newname)) {
+
+			$id = file_db_add($newname,$category,$permissions,$description,$size);
 
 			if(!$id){
 				file_list(gTxt('file_upload_failed').' (db_add)');
 			} else {
 
 				$id = assert_int($id);
-				$newpath = build_file_path($file_base_path,trim($name));
 
 				if(!shift_uploaded_file($file, $newpath)) {
 					safe_delete("txp_file","id = $id");
@@ -552,7 +554,7 @@ $LastChangedRevision$
 				} else {
 					file_set_perm($newpath);
 
-					$message = gTxt('file_uploaded', array('{name}' => htmlspecialchars($name)));
+					$message = gTxt('file_uploaded', array('{name}' => htmlspecialchars($newname)));
 
 					file_edit($message, $id);
 				}
@@ -561,7 +563,7 @@ $LastChangedRevision$
 
 		else
 		{
-			$message = gTxt('file_already_exists', array('{name}' => $name));
+			$message = gTxt('file_already_exists', array('{name}' => $newname));
 
 			file_list($message);
 		}
