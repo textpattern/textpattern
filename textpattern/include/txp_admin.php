@@ -191,9 +191,11 @@ $LastChangedRevision$
 		require_privs('admin.edit');
 
 		extract(doSlash(psa(array('privs', 'name', 'email', 'RealName'))));
-		$privs = assert_int($privs);
 
-		if ($name and strlen($name) <= 64 and is_valid_email($email))
+		$privs  = assert_int($privs);
+		$length = function_exists('mb_strlen') ? mb_strlen($name, '8bit') : strlen($name);
+
+		if ($name and $length <= 64 and is_valid_email($email))
 		{
 			$password = doSlash(generate_password(6));
 			$nonce    = doSlash(md5(uniqid(mt_rand(), TRUE)));
