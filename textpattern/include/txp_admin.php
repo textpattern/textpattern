@@ -494,7 +494,7 @@ $LastChangedRevision$
 				{
 					$passwd = generate_password(6);
 
-					if (safe_update('txp_users', "pass = password('".doSlash($passwd)."')", "name = '".doSlash($name)."'"));
+					if (safe_update('txp_users', "pass = password(lower('".doSlash($passwd)."'))", "name = '".doSlash($name)."'"));
 					{
 						$email = safe_field('email', 'txp_users', "name = '".doSlash($name)."'");
 
