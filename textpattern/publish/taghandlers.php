@@ -773,7 +773,7 @@ $LastChangedRevision$
 
 		$section = ($section) ? " and Section IN ('".join("','", doSlash(do_list($section)))."')" : '';
 
-		$rs = safe_rows_start('*, unix_timestamp(Posted) as posted', 'textpattern',
+		$rs = safe_rows_start('*, unix_timestamp(Posted) as posted, unix_timestamp(LastMod) as uLastMod', 'textpattern',
 			'ID != '.intval($id)." and Status = 4 and Posted <= now() $categories $section order by ".doSlash($sort).' limit 0,'.intval($limit));
 
 		if ($rs)
