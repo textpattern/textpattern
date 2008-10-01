@@ -451,7 +451,8 @@ if (!empty($event) and $event == 'article') {
 
 		elseif ($view == 'text')
 		{
-			echo '<p><input type="text" id="title" name="Title" value="'.escape_title($Title).'" class="edit" size="40" tabindex="1" />';
+			echo n.'<p><label for="title">'.gTxt('title').'</label>'.sp.popHelp('title').br.
+				'<input type="text" id="title" name="Title" value="'.escape_title($Title).'" class="edit" size="40" tabindex="1" />';
 
 			if ($step != 'create')
 			{
@@ -511,7 +512,8 @@ if (!empty($event) and $event == 'article') {
 
 		else
 		{
-			echo n.graf('<textarea id="body" name="Body" cols="55" rows="31" tabindex="2">'.htmlspecialchars($Body).'</textarea>');
+			echo n.graf('<label for="body">'.gTxt('body').'</label>'.sp.popHelp('body').br.
+				'<textarea id="body" name="Body" cols="55" rows="31" tabindex="2">'.htmlspecialchars($Body).'</textarea>');
 		}
 
 	//-- excerpt --------------------
