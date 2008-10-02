@@ -22,8 +22,9 @@ class DB {
 		$this->db	= $txpcfg['db'];
 		$this->user = $txpcfg['user'];
 		$this->pass = $txpcfg['pass'];
+		$this->client_flags = isset($txpcfg['client_flags']) ? $txpcfg['client_flags'] : 0;
 
-		$this->link = @mysql_connect($this->host, $this->user, $this->pass);
+		$this->link = @mysql_connect($this->host, $this->user, $this->pass, false, $this->client_flags);
 		if (!$this->link) die(db_down());
 
 		$this->version = mysql_get_server_info();

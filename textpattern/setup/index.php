@@ -175,10 +175,12 @@ eod;
 
 		echo graf(gTxt("checking_database"));
 
-		if (!($mylink = mysql_connect($dhost,$duser,$dpass)))
-		{
+		if (($mylink = mysql_connect($dhost, $duser, $dpass)))
+ 			$carry['dclient_flags'] = 0;
+		elseif (($mylink = mysql_connect($dhost, $duser, $dpass, false, MYSQL_CLIENT_SSL)))
+ 			$carry['dclient_flags'] = 'MYSQL_CLIENT_SSL';
+		else 
 			exit(graf(gTxt('db_cant_connect')));
-		}
 
 		echo graf(gTxt('db_connected'));
 
@@ -310,6 +312,7 @@ eod;
 		$duser = $txpcfg['user'];
 		$dpass = $txpcfg['pass'];
 		$dhost = $txpcfg['host'];
+		$dclient_flags = isset($txpcfg['client_flags']) ? $txpcfg['client_flags'] : 0;
 		$dprefix = $txpcfg['table_prefix'];
 		$dbcharset = $txpcfg['dbcharset'];
 
@@ -354,6 +357,7 @@ eod;
 		.o.'user'         .m.$duser.nl
 		.o.'pass'         .m.$dpass.nl
 		.o.'host'         .m.$dhost.nl
+		.($dclient_flags ? o.'client_flags'."'] = ".$dclient_flags.";\n" : '')
 		.o.'table_prefix' .m.$dprefix.nl
 		.o.'txpath'       .m.txpath.nl   // remove in crockery
 		.o.'dbcharset'    .m.$dbcharset.nl

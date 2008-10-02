@@ -34,9 +34,15 @@
 		$txpcfg['txpath'] = '/home/path/to/textpattern';
 
 	/**
-	 *  DB Connetion Charset, only for MySQL4.1 and up. Must be equal to the Table-Charset.
+	 *  DB Connection Charset, only for MySQL4.1 and up. Must be equal to the Table-Charset.
 	 */
 
 		$txpcfg['dbcharset'] = 'latin1';
+
+	/**
+	 *  optional: database client flags as needed (@see http://www.php.net/manual/function.mysql-connect.php)
+	 */
+
+	#	$txpcfg['client_flags'] = MYSQL_CLIENT_SSL | MYSQL_CLIENT_COMPRESS;
 
 ?>

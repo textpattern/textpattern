@@ -12,7 +12,7 @@ if (!defined('TXP_INSTALL'))
 @ignore_user_abort(1);
 @set_time_limit(0);
 
-mysql_connect($dhost,$duser,$dpass);
+mysql_connect($dhost,$duser,$dpass,false,$dclient_flags);
 mysql_select_db($ddb);
 
 $result = mysql_query("describe `".PFX."textpattern`");
