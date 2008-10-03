@@ -157,8 +157,10 @@ $LastChangedRevision$
 	-->
 	</script>
 	<script type="text/javascript" src="jquery.js"></script>
+	<?php callback_event('admin_side', 'head_end'); ?>
 	</head>
 	<body id="<?php echo $body_id; ?>">
+	<?php callback_event('admin_side', 'pagetop_start'); ?>
   <table id="pagetop" cellpadding="0" cellspacing="0">
   <tr id="branding"><td><img src="txp_img/textpattern.gif" alt="textpattern" /></td><td id="navpop"><?php echo navPop(1); ?></td></tr>
   <tr id="nav-primary"><td align="center" class="tabs" colspan="2">
@@ -194,6 +196,7 @@ $LastChangedRevision$
 			}
 		}
 		echo '</td></tr></table>';
+		callback_event('admin_side', 'pagetop_end');
 	}
 
 // -------------------------------------------------------------

@@ -24,6 +24,7 @@ $LastChangedRevision$
 			?	graf(gTxt('logged_in_as').' '.span(htmlspecialchars($txp_user)).br.
 					'<a href="index.php?logout=1">'.gTxt('logout').'</a>', ' id="moniker"').n.'</div>'
 			:	'</div>';
+			callback_event('admin_side', 'body_end');
 			echo n.'</body>'.n.'</html>';
 		}
 	}
