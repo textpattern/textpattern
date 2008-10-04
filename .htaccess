@@ -11,6 +11,7 @@
 	RewriteCond %{REQUEST_FILENAME} -d
 	RewriteRule ^(.+) - [PT,L]
 
+	RewriteCond %{REQUEST_URI} !=/favicon.ico
 	RewriteRule ^(.*) index.php
 
 	RewriteCond %{HTTP:Authorization}  !^$
