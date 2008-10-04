@@ -517,6 +517,7 @@ height: 80px;
 }
 
 input#title {
+margin-top: 1px;
 width: 420px;
 }
 
