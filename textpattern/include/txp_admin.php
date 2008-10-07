@@ -454,7 +454,7 @@ $LastChangedRevision$
                 	return admin();
 		}
 
-		$names = safe_column('name', 'txp_users', "name IN ('".join("','", doSlash($selected))."') AND NOT name = '".doSlash($txp_user)."'");
+		$names = safe_column('name', 'txp_users', "name IN ('".join("','", doSlash($selected))."') AND name != '".doSlash($txp_user)."'");
 
 		if (!$names) return admin();
 
