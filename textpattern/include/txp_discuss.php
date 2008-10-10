@@ -160,7 +160,7 @@ $LastChangedRevision$
 		$total = getThing(
 			'SELECT COUNT(*)'.
 			' FROM '.safe_pfx_j('txp_discuss').' LEFT JOIN '.safe_pfx_j('textpattern').' ON txp_discuss.parentid = textpattern.ID'.
-			' WHERE '.$spamq.' AND '.$criteria
+			' WHERE '.$criteria
 		);
 
 		if ($total < 1)
@@ -286,7 +286,10 @@ $LastChangedRevision$
 
 				, ' class="'.$row_class.'"');
 			}
-
+			
+			if (empty($message))
+				echo tr(tda(gTxt('just_spam_results_found'),' colspan="9" style="text-align: left; border: none;"'));
+			
 			echo tr(
 				tda(
 					toggle_box('discuss_detail'),
