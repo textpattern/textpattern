@@ -155,14 +155,15 @@ $LastChangedRevision$
 			$crit = '';
 		}
 
-		$spamq = cs('toggle_show_spam') ? '1=1' : 'visible != '.intval(SPAM);
-
-		$total = getThing(
-			'SELECT COUNT(*)'.
-			' FROM '.safe_pfx_j('txp_discuss').' LEFT JOIN '.safe_pfx_j('textpattern').' ON txp_discuss.parentid = textpattern.ID'.
-			' WHERE '.$criteria
-		);
-
+		$counts = safe_rows('visible, COUNT(*) AS c', 'txp_discuss', $criteria.' GROUP BY visible');
+		$count[SPAM] = $count[MODERATE] = $count[VISIBLE] = 0;
+		foreach($counts as $c)
+		{
+			$count[$c['visible']] = $c['c'];
+		}
+		
+		// grand total comment count
+		$total = $count[SPAM] + $count[MODERATE] + $count[VISIBLE];
 		if ($total < 1)
 		{
 			if ($criteria != 1)
@@ -179,11 +180,14 @@ $LastChangedRevision$
 			return;
 		}
 
+		// paging through displayed comments
+		$total = ((cs('toggle_show_spam')) ? $count[SPAM] : 0) + $count[MODERATE] + $count[VISIBLE];		
 		$limit = max($comment_list_pageby, 15);
-
 		list($page, $offset, $numPages) = pager($total, $limit, $page);
 
 		echo discuss_search_form($crit, $search_method);
+
+		$spamq = cs('toggle_show_spam') ? '1=1' : 'visible != '.intval(SPAM);
 
 		$rs = safe_query(
 			'SELECT txp_discuss.*, unix_timestamp(txp_discuss.posted) as uPosted, ID as thisid, Section as section, url_title, Title as title, Status, unix_timestamp(textpattern.Posted) as posted'.
