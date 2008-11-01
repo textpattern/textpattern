@@ -903,6 +903,7 @@ $LastChangedRevision$
 			'labeltag'     => '',
 			'parent'       => '',
 			'section'      => '',
+			'shallow'      => '',
 			'sort'         => '',
 			'this_section' => 0,
 			'type'         => 'article',
@@ -922,6 +923,12 @@ $LastChangedRevision$
 
 		else
 		{
+			if ($shallow)
+			{
+				// descend only one level from either 'parent' or 'root', plus parent category
+				$shallow = ($parent) ? "and (parent = '".doSlash($parent)."' or name = '".doSlash($parent)."')" : "and parent = 'root'" ;
+			}
+
 			if ($exclude)
 			{
 				$exclude = do_list($exclude);
@@ -940,14 +947,14 @@ $LastChangedRevision$
 					extract($qs);
 
 					$rs = safe_rows_start('name, title', 'txp_category',
-						"(lft between $lft and $rgt) and type = '".doSlash($type)."' and name != 'default' $exclude order by ".($sort ? $sort : 'lft ASC'));
+						"(lft between $lft and $rgt) and type = '".doSlash($type)."' and name != 'default' $exclude $shallow order by ".($sort ? $sort : 'lft ASC'));
 				}
 			}
 
 			else
 			{
 				$rs = safe_rows_start('name, title', 'txp_category',
-					"type = '".doSlash($type)."' and name not in('default','root') $exclude order by ".($sort ? $sort : 'name ASC'));
+					"type = '".doSlash($type)."' and name not in('default','root') $exclude $shallow order by ".($sort ? $sort : 'name ASC'));
 			}
 		}
 
