@@ -506,12 +506,14 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function image_save()
 	{
-		extract(doSlash(gpsa(array('id','name','category','caption','alt'))));
+		extract(doSlash(gpsa(array('id','category','caption','alt'))));
+		$name = gps('name');
+		$safename = doSlash($name);
 		$id = assert_int($id);
 
 		safe_update(
 			"txp_image",
-			"name     = '$name',
+			"name     = '$safename',
 			category = '$category',
 			alt      = '$alt',
 			caption  = '$caption'",
@@ -693,7 +695,7 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 // Refactoring attempt, allowing other - plugin - functions to
-// upload images without the need for writting duplicated code.
+// upload images without the need for writing duplicated code.
 
 	function image_data($file , $meta = '', $id = '', $uploaded = true)
 	{
@@ -723,7 +725,8 @@ $LastChangedRevision$
 		{
 			$ext = $extensions[$extension];
 
-			$name = doSlash(substr($name, 0, strrpos($name, '.')).$ext);
+			$name = substr($name, 0, strrpos($name, '.')).$ext;
+			$safename = doSlash($name);
 
 			if ($meta == false)
 			{
@@ -733,7 +736,7 @@ $LastChangedRevision$
 			extract(doSlash($meta));
 
 			$q ="
-				name = '$name',
+				name = '$safename',
 				ext = '$ext',
 				w = $w,
 				h = $h,
