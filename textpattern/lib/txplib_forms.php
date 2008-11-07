@@ -7,14 +7,15 @@ $LastChangedRevision$
 
 //-------------------------------------------------------------
 
-	function yesnoRadio($field, $var, $tabindex = '', $id = '')
+	function radioSet($vals, $field, $var, $tabindex = '', $id = '')
 	{
 		$id = ($id) ? $id.'-'.$field : $field;
 
-		$vals = array(
-			'0' => gTxt('no'),
-			'1' => gTxt('yes')
-		);
+		if (!is_array($vals) || count($vals) < 2)
+			$vals = array(
+				'0' => gTxt('no'),
+				'1' => gTxt('yes')
+			);
 
 		foreach ($vals as $a => $b)
 		{
@@ -29,24 +30,25 @@ $LastChangedRevision$
 
 //-------------------------------------------------------------
 
+	function yesnoRadio($field, $var, $tabindex = '', $id = '')
+	{
+		$vals = array(
+			'0' => gTxt('no'),
+			'1' => gTxt('yes')
+		);
+		return radioSet ($vals, $field, $var, $tabindex, $id);
+	}
+
+//-------------------------------------------------------------
+
 	function onoffRadio($field, $var, $tabindex = '', $id = '')
 	{
-		$id = ($id) ? $id.'-'.$field : $field;
-
 		$vals = array(
 			'0' => gTxt('off'),
 			'1' => gTxt('on')
 		);
 
-		foreach ($vals as $a => $b)
-		{
-			$out[] = '<input type="radio" id="'.$id.'-'.$a.'" name="'.$field.'" value="'.$a.'" class="radio"';
-			$out[] = ($a == $var) ? ' checked="checked"' : '';
-			$out[] = ($tabindex) ? ' tabindex="'.$tabindex.'"' : '';
-			$out[] = ' /><label for="'.$id.'-'.$a.'">'.$b.'</label> ';
-		}
-
-		return join('', $out);
+		return radioSet ($vals, $field, $var, $tabindex, $id);
 	}
 
 //-------------------------------------------------------------
