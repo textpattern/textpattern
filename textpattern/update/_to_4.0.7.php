@@ -31,5 +31,28 @@ $LastChangedRevision$
 	{
 		safe_insert('txp_prefs', "prefs_id = 1, name = 'author_list_pageby', val = 25, type = 2");
 	}
+
+	# Expiry datetime for articles
+	$txp = getThings('describe `'.PFX.'textpattern`');
+	if (!in_array('Expires',$txp)) {
+		safe_alter("textpattern", "add `Expires` datetime NOT NULL default '0000-00-00 00:00:00' after `Posted`");
+	}
+
+	$has_expires_idx = 0;
+	$rs = getRows('show index from `'.PFX.'textpattern`');
+	foreach ($rs as $row) {
+		if ($row['Key_name'] == 'Expires_idx')
+			$has_expires_idx = 1;
+	}
+
+	if (!$has_expires_idx) {
+		safe_query('alter ignore table `'.PFX.'textpattern` add index Expires_idx(Expires)');
+	}
+
+	//  Publish expired articles, or return 410?
+	if (!safe_field('name', 'txp_prefs', "name = 'publish_expired_articles'"))
+		safe_insert('txp_prefs', "prefs_id = 1, name = 'publish_expired_articles', val = '0', type = '1', event='publish', html='yesnoradio', position='130'");
+
+	
 ?>
 

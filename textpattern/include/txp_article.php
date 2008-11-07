@@ -17,11 +17,12 @@ global $vars, $statuses;
 
 $vars = array(
 	'ID','Title','Title_html','Body','Body_html','Excerpt','textile_excerpt','Image',
-	'textile_body', 'Keywords','Status','Posted','Section','Category1','Category2',
+	'textile_body', 'Keywords','Status','Posted','Expires','Section','Category1','Category2',
 	'Annotate','AnnotateInvite','publish_now','reset_time','AuthorID','sPosted',
 	'LastModID','sLastMod','override_form','from_view','year','month','day','hour',
 	'minute','second','url_title','custom_1','custom_2','custom_3','custom_4','custom_5',
-	'custom_6','custom_7','custom_8','custom_9','custom_10'
+	'custom_6','custom_7','custom_8','custom_9','custom_10','exp_year','exp_month','exp_day','exp_hour',
+	'exp_minute','exp_second','sExpires'
 );
 
 $statuses = array(
@@ -73,13 +74,37 @@ if (!empty($event) and $event == 'article') {
 
 		if ($publish_now==1) {
 			$when = 'now()';
+			$when_ts = time();
 		} else {
-			$when = strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second)-tz_offset();
+			$when = $when_ts = strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second)-tz_offset();
 			$when = "from_unixtime($when)";
 		}
 
 		$Keywords = doSlash(trim(preg_replace('/( ?[\r\n\t,])+ ?/s', ',', preg_replace('/ +/', ' ', ps('Keywords'))), ', '));
 
+		if (empty($exp_year)) {
+			$expires =  NULLDATETIME;
+			$whenexpires = NULLDATETIME;
+		}
+		else {			
+			if(empty($exp_month)) $exp_month=1;
+			if(empty($exp_day)) $exp_day=1;
+			if(empty($exp_hour)) $exp_hour=0;
+			if(empty($exp_minute)) $exp_minute=0;
+			if(empty($exp_second)) $exp_second=0;
+			
+			$expires = strtotime($exp_year.'-'.$exp_month.'-'.$exp_day.' '.
+					$exp_hour.':'.$exp_minute.':'.$exp_second)-tz_offset();
+			$whenexpires = "from_unixtime($expires)";
+		}		
+
+		if ($expires != NULLDATETIME) {
+			if ($expires <= $when_ts) {
+				article_edit(gTxt('article_expires_before_postdate'));
+				return;
+			}
+		}
+		
 		if ($Title or $Body or $Excerpt) {
 
 			if (!has_privs('article.publish') && $Status>=4) $Status = 3;
@@ -96,6 +121,7 @@ if (!empty($event) and $event == 'article') {
 				Keywords        = '$Keywords',
 				Status          =  $Status,
 				Posted          =  $when,
+				Expires         =  $whenexpires,
 				LastMod         =  now(),
 				AuthorID        = '$txp_user',
 				Section         = '$Section',
@@ -175,10 +201,31 @@ if (!empty($event) and $event == 'article') {
 
 		if($reset_time) {
 			$whenposted = "Posted=now()";
+			$when_ts = time();
 		} else {
-			$when = strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second)-tz_offset();
-			$when = "from_unixtime($when)";
-			$whenposted = "Posted=$when";
+			$when = $when_ts = strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second)-tz_offset();
+			$whenposted = "Posted=from_unixtime($when)";
+		}
+
+		if(empty($exp_year)) {
+			$expires = NULLDATETIME;
+			$whenexpires = "Expires='".NULLDATETIME."'";
+		} else {
+			if(empty($exp_month)) $exp_month=1;
+			if(empty($exp_day)) $exp_day=1;
+			if(empty($exp_hour)) $exp_hour=0;
+			if(empty($exp_minute)) $exp_minute=0;
+			if(empty($exp_second)) $exp_second=0;
+			
+			$expires = strtotime($exp_year.'-'.$exp_month.'-'.$exp_day.' '.$exp_hour.':'.$exp_minute.':'.$exp_second)-tz_offset();
+			$whenexpires = "Expires=from_unixtime($expires)";	
+		}
+
+		if ($expires != NULLDATETIME) {
+			if ($expires <= $when_ts) {
+				article_edit(gTxt('article_expires_before_postdate'));
+				return;
+			}
 		}
 
 		//Auto-Update custom-titles according to Title, as long as unpublished and NOT customized
@@ -225,7 +272,8 @@ if (!empty($event) and $event == 'article') {
 			custom_8        = '$custom_8',
 			custom_9        = '$custom_9',
 			custom_10       = '$custom_10',
-			$whenposted",
+			$whenposted,
+			$whenexpires",
 			"ID = $ID"
 		);
 
@@ -281,6 +329,7 @@ if (!empty($event) and $event == 'article') {
 
 			$rs = safe_row(
 				"*, unix_timestamp(Posted) as sPosted,
+				unix_timestamp(Expires) as sExpires,
 				unix_timestamp(LastMod) as sLastMod",
 				"textpattern",
 				"ID=$ID"
@@ -692,8 +741,30 @@ if (!empty($event) and $event == 'article') {
 						tsi('second', '%S', $persist_timestamp)
 					).
 
-				n.'</fieldset>'.
+				n.'</fieldset>';
 
+		//-- expires ------------------- 
+
+				$persist_timestamp = (!empty($store_out['exp_year']))?
+					safe_strtotime($store_out['exp_year'].'-'.$store_out['exp_month'].'-'.$store_out['exp_day'].' '.$store_out['exp_hour'].':'.$store_out['exp_minute'].':'.$store_out['second'])
+					: NULLDATETIME;
+
+				echo n.n.'<fieldset id="write-expires">'.
+					n.'<legend>'.gTxt('expires').'</legend>'.
+
+					n.graf(gtxt('date').sp.
+						tsi('exp_year', '%Y', $persist_timestamp).' / '.
+						tsi('exp_month', '%m', $persist_timestamp).' / '.
+						tsi('exp_day', '%d', $persist_timestamp)
+					).
+
+					n.graf(gTxt('time').sp.
+						tsi('exp_hour', '%H', $persist_timestamp).' : '.
+						tsi('exp_minute', '%M', $persist_timestamp).' : '.
+						tsi('exp_second', '%S', $persist_timestamp)
+					).
+
+				n.'</fieldset>'.
 				// end "More" section
 				n.n.'</div>';
 
@@ -737,6 +808,35 @@ if (!empty($event) and $event == 'article') {
 					n.hInput('sLastMod', $sLastMod),
 					n.hInput('AuthorID', $AuthorID),
 					n.hInput('LastModID', $LastModID),
+
+				n.'</fieldset>';
+
+			//-- expires ------------------- 
+				if (!empty($exp_year))
+				{	
+					if(empty($exp_month)) $exp_month=1;
+					if(empty($exp_day)) $exp_day=1;
+					if(empty($exp_hour)) $exp_hour=0;
+					if(empty($exp_minute)) $exp_minute=0;
+					if(empty($exp_second)) $exp_second=0;
+					$sExpires = safe_strtotime($exp_year.'-'.$exp_month.'-'.$exp_day.' '.$exp_hour.':'.$exp_minute.':'.$exp_second);
+				}
+					
+				echo n.n.'<fieldset id="write-expires">'.
+					n.'<legend>'.gTxt('expires').'</legend>'.
+
+					n.graf(gtxt('date').sp.
+						tsi('exp_year', '%Y', $sExpires).' / '.
+						tsi('exp_month', '%m', $sExpires).' / '.
+						tsi('exp_day', '%d', $sExpires)
+					).
+
+					n.graf(gTxt('time').sp.
+						tsi('exp_hour', '%H', $sExpires).' : '.
+						tsi('exp_minute', '%M', $sExpires).' : '.
+						tsi('exp_second', '%S', $sExpires)
+					).
+					n.hInput('sExpires', $sExpires).
 
 				n.'</fieldset>'.
 

@@ -50,6 +50,10 @@ $LastChangedRevision$
 				$sort_sql = 'ID '.$dir;
 			break;
 
+			case 'expires':
+				$sort_sql = 'Expires '.$dir;
+			break;
+
 			case 'title':
 				$sort_sql = 'Title '.$dir.', Posted desc';
 			break;
@@ -151,7 +155,7 @@ $LastChangedRevision$
 
 		echo n.list_search_form($crit, $search_method);
 
-		$rs = safe_rows_start('*, unix_timestamp(Posted) as posted, unix_timestamp(LastMod) as lastmod', 'textpattern',
+		$rs = safe_rows_start('*, unix_timestamp(Posted) as posted, unix_timestamp(LastMod) as lastmod, unix_timestamp(Expires) as expires', 'textpattern',
 			"$criteria order by $sort_sql limit $offset, $limit"
 		);
 
@@ -181,6 +185,7 @@ $LastChangedRevision$
 					n.column_head('ID', 'id', 'list', true, $switch_dir, $crit, $search_method, ('id' == $sort) ? $dir : '').
 					column_head('posted', 'posted', 'list', true, $switch_dir, $crit, $search_method, ('posted' == $sort) ? $dir : '').
 					column_head('article_modified', 'lastmod', 'list', true, $switch_dir, $crit, $search_method, (('lastmod' == $sort) ? "$dir " : '').'articles_detail').
+					column_head('expires', 'expires', 'list', true, $switch_dir, $crit, $search_method, (('expires' == $sort) ? "$dir " : '').'articles_detail').
 					column_head('title', 'title', 'list', true, $switch_dir, $crit, $search_method, ('title' == $sort) ? $dir : '').
 					column_head('section', 'section', 'list', true, $switch_dir, $crit, $search_method, ('section' == $sort) ? $dir : '').
 					column_head('category1', 'category1', 'list', true, $switch_dir, $crit, $search_method, (('category1' == $sort) ? "$dir " : '').'articles_detail').
@@ -260,6 +265,10 @@ $LastChangedRevision$
 
 					td(
 						gTime($lastmod), '', "articles_detail"
+					).
+
+					td(
+						($expires != NULLDATETIME) ? gTime($expires) : '', '' ,'articles_detail'
 					).
 
 					td($Title).

@@ -616,9 +616,10 @@ $LastChangedRevision$
 		$category   = join("','", doSlash(do_list($category)));
 		$categories = ($category) ? "and (Category1 IN ('".$category."') or Category2 IN ('".$category."'))" : '';
 		$section = ($section) ? " and Section IN ('".join("','", doSlash(do_list($section)))."')" : '';
+		$expired = ($prefs['publish_expired_articles']) ? '' : ' and (now() <= Expires or Expires = '.NULLDATETIME.') ';
 
 		$rs = safe_rows_start('*, id as thisid, unix_timestamp(Posted) as posted', 'textpattern',
-			"Status = 4 $section $categories and Posted <= now() order by ".doSlash($sort).' limit 0,'.intval($limit));
+			"Status = 4 $section $categories and Posted <= now()$expired order by ".doSlash($sort).' limit 0,'.intval($limit));
 
 		if ($rs)
 		{
@@ -643,6 +644,8 @@ $LastChangedRevision$
 
 	function recent_comments($atts, $thing = NULL)
 	{
+
+		global $prefs;
 		global $thisarticle, $thiscomment;
 		extract(lAtts(array(
 			'break'    => br,
@@ -657,12 +660,12 @@ $LastChangedRevision$
 		), $atts));
 
 		$sort = preg_replace('/\bposted\b/', 'd.posted', $sort);
+		$expired = ($prefs['publish_expired_articles']) ? '' : ' and (now() <= t.Expires or t.Expires = '.NULLDATETIME.') ';
 
 		$rs = startRows('select d.name, d.email, d.web, d.message, d.discussid, unix_timestamp(d.Posted) as time, '.
 				't.ID as thisid, unix_timestamp(t.Posted) as posted, t.Title as title, t.Section as section, t.url_title '.
 				'from '. safe_pfx('txp_discuss') .' as d inner join '. safe_pfx('textpattern') .' as t on d.parentid = t.ID '.
-				'where t.Status >= 4 and d.visible = '.VISIBLE.' order by '.doSlash($sort).' limit '.intval($offset).','.intval($limit));
-
+				'where t.Status >= 4'.$expired.' and d.visible = '.VISIBLE.' order by '.doSlash($sort).' limit '.intval($offset).','.intval($limit));
 		if ($rs)
 		{
 			$out = array();
@@ -773,8 +776,9 @@ $LastChangedRevision$
 
 		$section = ($section) ? " and Section IN ('".join("','", doSlash(do_list($section)))."')" : '';
 
+		$expired = ($prefs['publish_expired_articles']) ? '' : ' and (now() <= Expires or Expires = '.NULLDATETIME.') ';
 		$rs = safe_rows_start('*, unix_timestamp(Posted) as posted, unix_timestamp(LastMod) as uLastMod', 'textpattern',
-			'ID != '.intval($id)." and Status = 4 and Posted <= now() $categories $section order by ".doSlash($sort).' limit 0,'.intval($limit));
+			'ID != '.intval($id)." and Status = 4 $expired  and Posted <= now() $categories $section order by ".doSlash($sort).' limit 0,'.intval($limit));
 
 		if ($rs)
 		{
@@ -1459,6 +1463,67 @@ $LastChangedRevision$
 		}
 
 		return ($wraptag) ? doTag($out, $wraptag, $class) : $out;
+	}
+
+// -------------------------------------------------------------
+
+	function expires($atts)
+	{
+		global $thisarticle, $id, $c, $pg, $dateformat, $archive_dateformat;
+
+		assert_article();
+
+		if($thisarticle['expires'] == NULLDATETIME)
+		{
+			return;
+		}
+
+		extract(lAtts(array(
+			'class'   => '',
+			'format'  => '',
+			'gmt'     => '',
+			'lang'    => '',
+			'wraptag' => '',
+		), $atts));
+
+		if ($format)
+		{
+			$out = safe_strftime($format, $thisarticle['expires'], $gmt, $lang);
+		}
+
+		else
+		{
+			if ($id or $c or $pg)
+			{
+				$out = safe_strftime($archive_dateformat, $thisarticle['expires']);
+			}
+
+			else
+			{
+				$out = safe_strftime($dateformat, $thisarticle['expires']);
+			}
+		}
+
+		return ($wraptag) ? doTag($out, $wraptag, '', $class) : $out;
+	}
+
+// -------------------------------------------------------------
+
+	function if_expires($atts, $thing)
+	{
+		global $thisarticle;
+		assert_article();
+		return parse(EvalElse($thing, $thisarticle['expires'] != NULLDATETIME));
+	}
+
+// -------------------------------------------------------------
+
+	function if_expired($atts, $thing)
+	{
+		global $thisarticle;
+		assert_article();
+		return parse(EvalElse($thing,
+			($thisarticle['expires'] != NULLDATETIME) && ($thisarticle['expires'] <= time() )));
 	}
 
 // -------------------------------------------------------------

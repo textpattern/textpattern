@@ -3,12 +3,14 @@ Changes in 4.0.7
 * Parser: full nesting support, allowing unlimited nesting of identical tags.
 * Parser: attribute values are parsed when enclosed in single quotes.
 * Parser: unquoted attribute values are deprecated and will result in warnings when site status is not set to 'live'. Fix your templates and use double quotes to delimit attribute values.
+* Feature: Expiry time for articles, accompanied by related tags
 * Speed: various components of the parsing process have been optimized, which compensates the impact of increased parser complexity, resulting in slightly faster parsing speed
 * New tag: <txp:rsd /> specifies the Really Simple Discovery endpoint for XML-RPC clients
 * New tag: <txp:variable />
 * New tag: <txp:if_variable>
 * New tags: <txp:if_first_section>, <txp:if_last_section>
 * New tags: <txp:if_first_category>, <txp:if_last_category>
+* New tags: <txp:expires />, <txp:if_expired>, <txp:if_expires>
 * Changed tag: <txp:article /> can be used as a container tag
 * Changed tag: <txp:article /> allows new attributes 'wraptag' and 'break'
 * Changed tag: <txp:article_custom /> can be used as a container tag
@@ -45,6 +47,7 @@ Changes in 4.0.7
 * Developer: new plugin type '3' for admin-only plugins (0=public, 1=admin+public, 2=library)
 * Developer: fInput now uses htmlspecialchars on the value parameter (previously only escape_title)
 * jQuery 1.2.6
+* Ability to connect to the MySQL server through SSL
 
 Changes in 4.0.6
 

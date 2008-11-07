@@ -74,14 +74,15 @@ $LastChangedRevision$
 			$query[] = $sfilter;
 			$query[] = $cfilter;
 
+			$expired = ($publish_expired_articles) ? '' : ' and (now() <= Expires or Expires = '.NULLDATETIME.') ';
 			$rs = safe_rows_start(
 				"*,
 				ID as thisid,
 				unix_timestamp(Posted) as uPosted,
+				unix_timestamp(Expires) as uExpires,
 				unix_timestamp(LastMod) as uLastMod",
 				"textpattern",
-				"Status=4 and Posted <= now() ".
-					join(' ',$query).
+				"Status=4 and Posted <= now() $expired".join(' ',$query).
 					"order by Posted desc limit $limit"
 			);
 			if ($rs) {

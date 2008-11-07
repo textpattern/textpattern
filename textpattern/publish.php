@@ -437,12 +437,17 @@ $LastChangedRevision$
 		$out['css'] = @$rs['css'];
 
 		if(is_numeric($id) and !$is_404) {
-			$a = safe_row('*, unix_timestamp(Posted) as uPosted, unix_timestamp(LastMod) as uLastMod', 'textpattern', 'ID='.intval($id).(gps('txpreview') ? '' : ' and Status in (4,5)'));
+			$a = safe_row('*, unix_timestamp(Posted) as uPosted, unix_timestamp(Expires) as uExpires, unix_timestamp(LastMod) as uLastMod', 'textpattern', 'ID='.intval($id).(gps('txpreview') ? '' : ' and Status in (4,5)'));
 			if ($a) {
 				$Posted             = $a['Posted'];
 				$out['id_keywords'] = $a['Keywords'];
 				$out['id_author']   = $a['AuthorID'];
 				populateArticleData($a);
+				
+				$uExpires = $a['uExpires'];
+				if ($uExpires != NULLDATETIME and time() > $uExpires and !$publish_expired_articles) {
+					$out['status'] = '410';
+				}
 
 				if ($np = getNextPrev($id, $Posted, $s))
 					$out = array_merge($out, $np);
@@ -474,6 +479,9 @@ $LastChangedRevision$
 
 		if ($pretext['status'] == '404')
 			txp_die(gTxt('404_not_found'), '404');
+
+		if ($pretext['status'] == '410')
+			txp_die(gTxt('410_gone'), '410');
 
 		$html = safe_field('user_html','txp_page',"name='".doSlash($pretext['page'])."'");
 		if (!$html)
@@ -614,9 +622,10 @@ $LastChangedRevision$
 			include_once txpath.'/publish/search.php';
 
 			$s_filter = ($searchall ? filterSearch() : '');
-			$q        = doSlash($q);
-			$match    = ", match (Title,Body) against ('$q') as score";
-			$search   = " and (Title rlike '$q' or Body rlike '$q') $s_filter";
+			$q = doSlash($q);
+			$match = ", match (Title, Body, Excerpt, Keywords) against ('$q') as score";
+			$search = " and (Title rlike '$q' or Body rlike '$q' or ".
+			"Excerpt rlike '$q' or Keywords rlike '$q') $s_filter";
 
 			// searchall=0 can be used to show search results for the current section only
 			if ($searchall) $section = '';
@@ -660,6 +669,9 @@ $LastChangedRevision$
 				$time = " and Posted > now()"; break;
 			default:
 				$time = " and Posted <= now()";
+		}		
+		if (!$publish_expired_articles) {
+			$time .= " and (now() <= Expires or Expires = ".NULLDATETIME.")";
 		}
 
 		$custom = '';
@@ -718,7 +730,7 @@ $LastChangedRevision$
 			$pgoffset = $offset;
 		}
 
-		$rs = safe_rows_start("*, unix_timestamp(Posted) as uPosted, unix_timestamp(LastMod) as uLastMod".$match, 'textpattern',
+		$rs = safe_rows_start("*, unix_timestamp(Posted) as uPosted, unix_timestamp(Expires) as uExpires, unix_timestamp(LastMod) as uLastMod".$match, 'textpattern',
 		$where.' order by '.doSlash($sort).' limit '.intval($pgoffset).', '.intval($limit));
 		// get the form name
 		if ($q and !$iscustom and !$issticky)
@@ -814,7 +826,7 @@ $LastChangedRevision$
 
 			$q_status = ($status ? 'and Status = '.intval($status) : 'and Status in (4,5)');
 
-			$rs = safe_row("*, unix_timestamp(Posted) as uPosted, unix_timestamp(LastMod) as uLastMod",
+			$rs = safe_row("*, unix_timestamp(Posted) as uPosted, unix_timestamp(Expires) as uExpires, unix_timestamp(LastMod) as uLastMod",
 					"textpattern", 'ID = '.intval($id)." $q_status limit 1");
 
 			if ($rs) {
@@ -903,18 +915,23 @@ $LastChangedRevision$
 			foreach ($custom as $i => $name)
 				$thisarticle[$name] = $rs['custom_' . $i];
 		}
+
+		$thisarticle['expires']         = $uExpires;
 	}
 
 // -------------------------------------------------------------
 	function getNeighbour($Posted, $s, $type)
 	{
+		global $prefs;
+		extract($prefs);
+		$expired = ($publish_expired_articles) ? '' : ' and (now() <= Expires or Expires = '.NULLDATETIME.')';
 		$type = ($type == '>') ? '>' : '<';
 		$safe_name = safe_pfx('textpattern');
 		$q = array(
 			"select ID, Title, url_title, unix_timestamp(Posted) as uposted
 			from ".$safe_name." where Posted $type '".doSlash($Posted)."'",
 			($s!='' && $s!='default') ? "and Section = '".doSlash($s)."'" : filterFrontPage(),
-			'and Status=4 and Posted < now() order by Posted',
+			'and Status=4 and Posted < now()'.$expired.' order by Posted',
 			($type=='<') ? 'desc' : 'asc',
 			'limit 1'
 		);
