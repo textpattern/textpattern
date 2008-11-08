@@ -607,7 +607,7 @@ if (!empty($event) and $event == 'article') {
   	//-- layer tabs -------------------
 
 		echo ($use_textile == USE_TEXTILE || $textile_body == USE_TEXTILE)
-			? graf(tab('text',$view).br.tab('html',$view).br.tab('preview',$view))
+			? '<ul>'.(tab('text',$view).tab('html',$view).tab('preview',$view)).'</ul>'
 			: '&#160;';
 		echo '</td>';
 		echo '<td id="article-col-2">';
@@ -982,10 +982,9 @@ if (!empty($event) and $event == 'article') {
 	function tab($tabevent,$view)
 	{
 		$state = ($view==$tabevent) ? 'up' : 'down';
-		$img = 'txp_img/'.$tabevent.$state.'.gif';
-		$out = '<img src="'.$img.'"';
-		$out.=($tabevent!=$view) ? ' onclick="document.article.view.value=\''.$tabevent.'\'; document.article.submit(); return false;"' : "";
-		$out.= ' height="100" width="19" alt="" id="article-tab-'.$tabevent.'" />';
+		$out = "<li id='tab-$tabevent$state'>";
+		$out.=($tabevent!=$view) ? '<a href="javascript:document.article.view.value=\''.$tabevent.'\';document.article.submit();">'.gTxt($tabevent).'</a>' : gTxt($tabevent);
+		$out.='</li>';
 		return $out;
 	}
 

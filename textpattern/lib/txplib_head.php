@@ -50,7 +50,7 @@ $LastChangedRevision$
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<meta name="robots" content="noindex, nofollow" />
 	<title>Txp &#8250; <?php echo htmlspecialchars($sitename) ?> &#8250; <?php echo escape_title($pagetitle) ?></title>
-	<link href="textpattern.css" rel="Stylesheet" type="text/css" />
+	<link href="textpattern.css" rel="stylesheet" type="text/css" />
 	<script type="text/javascript" src="textpattern.js"></script>
 	<script type="text/javascript">
 	<!--
@@ -162,7 +162,7 @@ $LastChangedRevision$
 	<body id="<?php echo $body_id; ?>">
 	<?php callback_event('admin_side', 'pagetop_start'); ?>
   <table id="pagetop" cellpadding="0" cellspacing="0">
-  <tr id="branding"><td><img src="txp_img/textpattern.gif" alt="textpattern" /></td><td id="navpop"><?php echo navPop(1); ?></td></tr>
+  <tr id="branding"><td><h1 id="textpattern">Textpattern</h1></td><td id="navpop"><?php echo navPop(1); ?></td></tr>
   <tr id="nav-primary"><td align="center" class="tabs" colspan="2">
  		<?php
  		if (!$bm) {

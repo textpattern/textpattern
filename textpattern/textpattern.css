@@ -383,6 +383,16 @@ border: 2px solid #fdd;
 /* global layout
 ----------------------------------------------- */
 
+h1#textpattern {
+font-size: 15px;
+text-indent: -9999px;
+width: 368px;
+height: 17px;
+padding: 0;
+margin: 0;
+background: transparent url(txp_img/textpattern.gif) no-repeat top left;
+}
+
 td.tabup, td.tabdown,
 td.tabup2, td.tabdown2 {
 padding-top: 6px;
@@ -519,6 +529,51 @@ height: 80px;
 input#title {
 margin-top: 1px;
 width: 420px;
+}
+
+td#article-tabs ul {
+list-style-type: none;
+margin: 0;
+}
+
+td#article-tabs li {
+width: 19px;
+height: 100px;
+margin: 0;
+padding: 0;
+text-indent: -9999px;
+background: transparent top left no-repeat;
+}
+
+td#article-tabs a {
+display: block;
+width: 15px;
+height: 100px;
+outline: none;
+}
+
+td#article-tabs #tab-textup {
+background-image: url(txp_img/textup.gif);
+}
+
+td#article-tabs #tab-textdown {
+background-image: url(txp_img/textdown.gif);
+}
+
+td#article-tabs #tab-htmlup {
+background-image: url(txp_img/htmlup.gif);
+}
+
+td#article-tabs #tab-htmldown {
+background-image: url(txp_img/htmldown.gif);
+}
+
+td#article-tabs #tab-previewup {
+background-image: url(txp_img/previewup.gif);
+}
+
+td#article-tabs #tab-previewdown {
+background-image: url(txp_img/previewdown.gif);
 }
 
 /* comments
