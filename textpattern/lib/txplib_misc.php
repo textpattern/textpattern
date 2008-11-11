@@ -1834,11 +1834,14 @@ eod;
 
 	function pagelinkurl($parts, $inherit = array())
 	{
-		global $permlink_mode;
+		global $permlink_mode, $prefs;
 
 		// $inherit can be used to add parameters to an existing url, e.g:
 		// $url = pagelinkurl(array('pg'=>2), $pretext);
 		$keys = array_merge($inherit, $parts);
+
+		if (isset($prefs['custom_url_func']) and is_callable($prefs['custom_url_func']))
+			return call_user_func($prefs['custom_url_func'], $keys, PAGELINKURL);
 
 		// can't use this to link to an article
 		if (isset($keys['id']))
