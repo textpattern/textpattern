@@ -138,12 +138,12 @@ $LastChangedRevision$
 			if ($criteria != 1)
 			{
 				echo n.list_search_form($crit, $search_method).
-					n.graf(gTxt('no_results_found'), ' style="text-align: center;"');
+					n.graf(gTxt('no_results_found'), ' class="indicator"');
 			}
 
 			else
 			{
-				echo graf(gTxt('no_articles_recorded'), ' style="text-align: center;"');
+				echo graf(gTxt('no_articles_recorded'), ' class="indicator"');
 			}
 
 			return;

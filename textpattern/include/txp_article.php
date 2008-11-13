@@ -413,7 +413,7 @@ if (!empty($event) and $event == 'article') {
 			echo side_help($textile_body, $textile_excerpt).
 
 			'<h3 class="plain"><a href="#advanced" onclick="toggleDisplay(\'advanced\'); return false;">'.gTxt('advanced_options').'</a></h3>',
-			'<div id="advanced" style="display:none;">',
+			'<div id="advanced" class="toggle">',
 
 			// markup selection
 				n.graf('<label for="markup-body">'.gTxt('article_markup').'</label>'.br.
@@ -455,7 +455,7 @@ if (!empty($event) and $event == 'article') {
 			'</div>
 
 			<h3 class="plain"><a href="#recent" onclick="toggleDisplay(\'recent\'); return false;">'.gTxt('recent_articles').'</a>'.'</h3>'.
-			'<div id="recent" style="display:none;">';
+			'<div id="recent" class="toggle">';
 
 			$recents = safe_rows_start("Title, ID",'textpattern',"1=1 order by LastMod desc limit 10");
 
@@ -665,7 +665,7 @@ if (!empty($event) and $event == 'article') {
 
 		//-- "More" section
 				n.n.'<h3 class="plain"><a href="#more" onclick="toggleDisplay(\'more\'); return false;">'.gTxt('more').'</a></h3>',
-				'<div id="more" style="display: none;">';
+				'<div id="more" class="toggle">';
 
 		//-- comments stuff --------------
 
@@ -888,7 +888,7 @@ if (!empty($event) and $event == 'article') {
 				'<a href="#textile_help" onclick="toggleDisplay(\'textile_help\'); return false;">'.gTxt('textile_help').'</a>'
 			, 3, ' class="plain"').
 
-				n.'<div id="textile_help" style="display: none;">'.
+				n.'<div id="textile_help" class="toggle">'.
 
 				n.'<ul class="plain-list small">'.
 					n.t.'<li>'.gTxt('header').': <strong>h<em>n</em>.</strong>'.sp.

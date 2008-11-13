@@ -343,6 +343,14 @@ font-size: 0.9em;
 text-align: center;
 }
 
+.toggle {
+display: none;
+}
+
+.toggle.on {
+display: block;
+}
+
 span.navlink-disabled {
 padding: 3px;
 color: #999;
@@ -361,6 +369,10 @@ display: none;
 p#js span {
 padding: 10px;
 background-color: #ffc;
+}
+
+p.indication {
+text-align: center;
 }
 
 ul.plain-list {

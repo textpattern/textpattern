@@ -123,12 +123,12 @@ $LastChangedRevision$
 			if ($criteria != 1)
 			{
 				echo n.link_search_form($crit, $search_method).
-					n.graf(gTxt('no_results_found'), ' style="text-align: center;"');
+					n.graf(gTxt('no_results_found'), ' class="indicator"');
 			}
 
 			else
 			{
-				echo n.graf(gTxt('no_links_recorded'), ' style="text-align: center;"');
+				echo n.graf(gTxt('no_links_recorded'), ' class="indicator"');
 			}
 
 			return;

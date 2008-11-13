@@ -145,12 +145,12 @@ $LastChangedRevision$
 			if ($criteria != 1)
 			{
 				echo n.file_search_form($crit, $search_method).
-					n.graf(gTxt('no_results_found'), ' style="text-align: center;"');
+					n.graf(gTxt('no_results_found'), ' class="indicator"');
 			}
 
 			else
 			{
-				echo n.graf(gTxt('no_files_recorded'), ' style="text-align: center;"');
+				echo n.graf(gTxt('no_files_recorded'), ' class="indicator"');
 			}
 
 			return;

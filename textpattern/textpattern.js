@@ -208,22 +208,8 @@ function getElementsByClass(classname, node)
 
 function toggleDisplay(id)
 {
-	if (!document.getElementById)
-	{
-		return false;
-	}
-
-	var obj = document.getElementById(id);
-
-	if (obj.style.display == 'none')
-	{
-		obj.style.display = 'block';
-	}
-
-	else
-	{
-		obj.style.display = 'none';
-	}
+	var obj = $('#' + id);
+	if (obj) obj.toggle();
 }
 
 // -------------------------------------------------------------
