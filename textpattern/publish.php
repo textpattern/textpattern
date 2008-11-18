@@ -616,24 +616,34 @@ $LastChangedRevision$
 		$status = in_array(strtolower($status), array('sticky', '5')) ? 5 : 4;
 		$issticky = ($status == 5);
 
-		//give control to search, if necesary
-		if($q && !$iscustom && !$issticky)
+		// give control to search, if necessary
+		if ($q && !$iscustom && !$issticky)
 		{
 			include_once txpath.'/publish/search.php';
 
 			$s_filter = ($searchall ? filterSearch() : '');
 			$q = doSlash($q);
-			$match = ", match (Title, Body, Excerpt, Keywords) against ('$q') as score";
-			$search = " and (Title rlike '$q' or Body rlike '$q' or ".
-			"Excerpt rlike '$q' or Keywords rlike '$q') $s_filter";
 
+			// $txpcfg['ftindex_columns'] is an optional custom array of full-text indexed columns, e.g. array('Title', 'Excerpt', 'Body')
+            // caveat: requires a matching custom database fulltext index created either manually or by a plugin.
+			global $txpcfg;
+			$cols = (isset($txpcfg['ftindex_columns']) && is_array($txpcfg['ftindex_columns']) && count($txpcfg['ftindex_columns'])) ? 
+					$txpcfg['ftindex_columns'] : array('Title', 'Body');
+			$match = ', match (`'.join('`, `', $cols)."`) against ('$q') as score";
+		    for ($i = 0; $i < count($cols); $i++) 
+		    {
+	            $cols[$i] = "`$cols[$i]` rlike '$q'";
+            }			
+			$cols = join(" or ", $cols);
+			$search = " and ($cols) $s_filter";
+			
 			// searchall=0 can be used to show search results for the current section only
 			if ($searchall) $section = '';
-			if (!$sort) $sort='score desc';
+			if (!$sort) $sort = 'score desc';
 		}
 		else {
 			$match = $search = '';
-			if (!$sort) $sort='Posted desc';
+			if (!$sort) $sort = 'Posted desc';
 		}
 
 		// for backwards compatibility
