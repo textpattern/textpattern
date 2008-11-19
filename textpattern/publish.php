@@ -630,10 +630,10 @@ $LastChangedRevision$
 			$cols = (isset($txpcfg['ftindex_columns']) && is_array($txpcfg['ftindex_columns']) && count($txpcfg['ftindex_columns'])) ? 
 					$txpcfg['ftindex_columns'] : array('Title', 'Body');
 			$match = ', match (`'.join('`, `', $cols)."`) against ('$q') as score";
-		    for ($i = 0; $i < count($cols); $i++) 
-		    {
-	            $cols[$i] = "`$cols[$i]` rlike '$q'";
-            }			
+			for ($i = 0; $i < count($cols); $i++)
+			{
+				$cols[$i] = "`$cols[$i]` rlike '$q'";
+			}			
 			$cols = join(" or ", $cols);
 			$search = " and ($cols) $s_filter";
 			
