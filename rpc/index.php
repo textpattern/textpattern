@@ -1,12 +1,12 @@
 <?php
-/**
- * XML-RPC Server for Textpattern 4.0.x
- * http://txp.kusor.com/rpc-api
- * (C)2005-2006 The Textpattern Development Team - http://textpattern.com
- * @author Pedro Palazón - http://kusor.com
- * $HeadURL$
- * $LastChangedRevision$
- */
+/*
+XML-RPC Server for Textpattern 4.0.x
+http://txp.kusor.com/rpc-api
+(C)2005-2006 The Textpattern Development Team - http://textpattern.com
+@author Pedro Palazón - http://kusor.com
+$HeadURL$
+$LastChangedRevision$
+*/
 
 #TODO: change error reporting to E_ALL, including E_NOTICE to detect subtle bugs?
 error_reporting(E_ALL & ~E_NOTICE);

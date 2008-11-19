@@ -1,11 +1,11 @@
 <?php
-/**
- * XML-RPC Server for Textpattern 4.0.x
- * http://txp.kusor.com/rpc-api
- * (C)2005-2006 The Textpattern Development Team - http://textpattern.com
- * @author Pedro Palazón - http://kusor.com
- * $HeadURL$
- * $LastChangedRevision$
+/*
+XML-RPC Server for Textpattern 4.0.x
+http://txp.kusor.com/rpc-api
+(C)2005-2006 The Textpattern Development Team - http://textpattern.com
+@author Pedro Palazón - http://kusor.com
+$HeadURL$
+$LastChangedRevision$
  */
 
 if (!defined('txpath')) die('txpath is undefined.');
