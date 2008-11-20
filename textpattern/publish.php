@@ -119,7 +119,7 @@ $LastChangedRevision$
 
 	$pretext = !isset($pretext) ? array() : $pretext;
 	$pretext = array_merge($pretext, pretext($s,$prefs));
-	callback_event('pretext_set');
+	callback_event('pretext_end');
 	extract($pretext);
 
 	// Now that everything is initialized, we can crank down error reporting

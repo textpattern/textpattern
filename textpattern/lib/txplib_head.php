@@ -160,7 +160,7 @@ $LastChangedRevision$
 	<?php callback_event('admin_side', 'head_end'); ?>
 	</head>
 	<body id="<?php echo $body_id; ?>">
-	<?php callback_event('admin_side', 'pagetop_start'); ?>
+	<?php callback_event('admin_side', 'pagetop'); ?>
   <table id="pagetop" cellpadding="0" cellspacing="0">
   <tr id="branding"><td><h1 id="textpattern">Textpattern</h1></td><td id="navpop"><?php echo navPop(1); ?></td></tr>
   <tr id="nav-primary"><td align="center" class="tabs" colspan="2">
