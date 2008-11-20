@@ -131,12 +131,12 @@ $LastChangedRevision$
 			if ($criteria != 1)
 			{
 				echo n.log_search_form($crit, $search_method).
-					n.graf(gTxt('no_results_found'), ' class="indication"');
+					n.graf(gTxt('no_results_found'), ' class="indicator"');
 			}
 
 			else
 			{
-				echo graf(gTxt('no_refers_recorded'), ' class="indication"');
+				echo graf(gTxt('no_refers_recorded'), ' class="indicator"');
 			}
 
 			return;
