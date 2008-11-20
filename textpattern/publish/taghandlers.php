@@ -21,25 +21,26 @@ $LastChangedRevision$
 			'separator' => ': ',
 		), $atts));
 
-		$sn = htmlspecialchars($sitename);
+		$out = htmlspecialchars($sitename.$separator);
+
 		if ($parentid) {
 			$parent_id = (int) $parent_id;
-			$out = $sn.$separator.gTxt('comments_on').' '.safe_field('Title', 'textpattern', "ID = $parentid");
+			$out .= gTxt('comments_on').' '.escape_title(safe_field('Title', 'textpattern', "ID = $parentid"));
 		} elseif ($thisarticle['title']) {
-			$out = $sn.$separator.$thisarticle['title'];
+			$out .= escape_title($thisarticle['title']);
 		} elseif ($q) {
-			$out = $sn.$separator.gTxt('search_results')."$separator $q";
+			$out .= gTxt('search_results').htmlspecialchars($separator.$q);
 		} elseif ($c) {
-			$out = $sn.$separator.fetch_category_title($c);
+			$out .= htmlspecialchars(fetch_category_title($c));
 		} elseif ($s and $s != 'default') {
-			$out = $sn.$separator.fetch_section_title($s);
+			$out .= htmlspecialchars(fetch_section_title($s));
 		} elseif ($pg) {
-			$out = $sn.$separator.gTxt('page')." $pg";
+			$out .= gTxt('page').' '.$pg;
 		} else {
-			$out = $sn;
+			$out = htmlspecialchars($sitename);
 		}
 
-		return escape_title($out);
+		return $out;
 	}
 
 // -------------------------------------------------------------
@@ -1187,6 +1188,7 @@ $LastChangedRevision$
 			if ($thing)
 			{
 				$thing = parse($thing);
+				$next_title = escape_title($next_title);
 
 				return '<a rel="next" href="'.$url.'"'.
 					($next_title != $thing ? ' title="'.$next_title.'"' : '').
@@ -1230,6 +1232,7 @@ $LastChangedRevision$
 			if ($thing)
 			{
 				$thing = parse($thing);
+				$prev_title = escape_title($prev_title);
 
 				return '<a rel="prev" href="'.$url.'"'.
 					($prev_title != $thing ? ' title="'.$prev_title.'"' : '').
@@ -1246,14 +1249,14 @@ $LastChangedRevision$
 
 	function next_title()
 	{
-		return $GLOBALS['next_title'];
+		return escape_title($GLOBALS['next_title']);
 	}
 
 // -------------------------------------------------------------
 
 	function prev_title()
 	{
-		return $GLOBALS['prev_title'];
+		return escape_title($GLOBALS['prev_title']);
 	}
 
 // -------------------------------------------------------------
@@ -2070,7 +2073,7 @@ $LastChangedRevision$
 			$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
 			$category = $thisarticle['category1'];
 
-			$label = ($title) ? fetch_category_title($category) : $category;
+			$label = htmlspecialchars(($title) ? fetch_category_title($category) : $category);
 
 			if ($thing)
 			{
@@ -2120,7 +2123,7 @@ $LastChangedRevision$
 			$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
 			$category = $thisarticle['category2'];
 
-			$label = ($title) ? fetch_category_title($category) : $category;
+			$label = htmlspecialchars(($title) ? fetch_category_title($category) : $category);
 
 			if ($thing)
 			{
@@ -2290,7 +2293,7 @@ $LastChangedRevision$
 		global $thisarticle;
 		assert_article();
 
-		return $thisarticle['keywords'];
+		return htmlspecialchars($thisarticle['keywords']);
 	}
 
 // -------------------------------------------------------------
@@ -2441,6 +2444,7 @@ $LastChangedRevision$
 
 		$concat = join($break.n, $r);
 		$concat = preg_replace('/^[^>]+>/U', '', $concat);
+#TODO
 		$concat = preg_replace('/('.preg_quote($q).')/i', "<$hilight>$1</$hilight>", $concat);
 
 		return ($concat) ? trim($break.$concat.$break) : '';
@@ -2580,7 +2584,7 @@ $LastChangedRevision$
 	{
 		global $id_keywords;
 		return ($id_keywords)
-		?	'<meta name="keywords" content="'.$id_keywords.'" />'
+		?	'<meta name="keywords" content="'.htmlspecialchars($id_keywords).'" />'
 		:	'';
 	}
 
@@ -2589,7 +2593,7 @@ $LastChangedRevision$
 	{
 		global $id_author;
 		return ($id_author)
-		?	'<meta name="author" content="'.$id_author.'" />'
+		?	'<meta name="author" content="'.htmlspecialchars($id_author).'" />'
 		:	'';
 	}
 
@@ -3091,7 +3095,7 @@ $LastChangedRevision$
 
 		extract(lAtts(array(
 			'name' => @$prefs['custom_1_set'],
-			'escape' => '',
+			'escape' => 'html',
 			'default' => '',
 		),$atts));
 
