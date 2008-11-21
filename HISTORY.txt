@@ -20,6 +20,7 @@ Changes in 4.0.7
 * Changed tag: <txp:article_custom /> allows comma separated list for 'id' attributes (this doesn't imply a sort order).
 * Changed tag: <txp:category /> applies 'class' attribute to the <a> element when wraptag is empty.
 * Changed tag: <txp:category_list /> can be used as a container tag
+* Changed tag: <txp:category_list /> accepts a 'children' attribute which limits the list depth to one level below the parent category when set to '0'.
 * Changed tag: <txp:file_download_list /> can be used as a container tag
 * Changed tag: <txp:if_article_id /> defaults to the current article's id.
 * Changed tag: <txp:linklist /> can be used as a container tag

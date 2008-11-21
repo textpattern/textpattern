@@ -908,7 +908,7 @@ $LastChangedRevision$
 			'labeltag'     => '',
 			'parent'       => '',
 			'section'      => '',
-			'shallow'      => '',
+			'children'     => '1',
 			'sort'         => '',
 			'this_section' => 0,
 			'type'         => 'article',
@@ -928,8 +928,10 @@ $LastChangedRevision$
 
 		else
 		{
-			if ($shallow)
+			if ($children)
 			{
+				$shallow = '';
+			} else {
 				// descend only one level from either 'parent' or 'root', plus parent category
 				$shallow = ($parent) ? "and (parent = '".doSlash($parent)."' or name = '".doSlash($parent)."')" : "and parent = 'root'" ;
 			}
