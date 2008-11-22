@@ -424,8 +424,8 @@ if (!empty($event) and $event == 'article') {
 
 				// form override
 			($allow_form_override)
-			?	graf('<label for="override-form">'.gTxt('override_default_form').'</label>'.br.
-					form_pop($override_form, 'override-form').sp.popHelp('override_form'))
+			?	graf('<label for="override-form">'.gTxt('override_default_form').'</label>'.sp.popHelp('override_form').br.
+					form_pop($override_form, 'override-form'))
 			:	'',
 
 				// custom fields, believe it or not
@@ -927,7 +927,7 @@ if (!empty($event) and $event == 'article') {
 				, ' class="small"').
 
 				n.graf(
-					'<a href="http://textile.thresholdstate.com/" target="_blank">'.gTxt('More').'</a>').
+					'<a id="textile-docs-link" href="http://textile.thresholdstate.com/" target="_blank">'.gTxt('More').'</a>').
 
 				n.'</div>';
 		}

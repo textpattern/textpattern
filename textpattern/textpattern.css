@@ -521,6 +521,10 @@ td#article-col-2 fieldset {
 width: auto;
 }
 
+td#article-col-1 select, td#article-col-1 input, td#article-col-1 textarea {
+width: 155px;
+}
+
 textarea#body {
 width: 500px;
 height: 420px;
