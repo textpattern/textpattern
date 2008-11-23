@@ -927,7 +927,7 @@ if (!empty($event) and $event == 'article') {
 				, ' class="small"').
 
 				n.graf(
-					'<a id="textile-docs-link" href="http://textile.thresholdstate.com/" target="_blank">'.gTxt('More').'</a>').
+					'<a id="textile-docs-link" href="http://textpattern.com/textile-sandbox" target="_blank">'.gTxt('More').'</a>').
 
 				n.'</div>';
 		}
