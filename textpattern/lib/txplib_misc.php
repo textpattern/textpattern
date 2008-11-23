@@ -698,7 +698,7 @@ $LastChangedRevision$
 	function sanitizeForFile($text)
 	{
 		// Remove anything but alphanumeric, dot, dash and underscore
-		$text = preg_replace('/[^a-zA-Z0-9._-]/', '', $text);
+		$text = preg_replace('/[^a-zA-Z0-9._-]/', '', dumbDown($text));
 		// Remove duplicate dots and any leading or trailing dots
 		$text = preg_replace('/[.]{2,}/', '.', trim($text, '.'));
 		return $text;
