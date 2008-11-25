@@ -532,7 +532,11 @@ $LastChangedRevision$
 			return;
 		}
 
-		$newname = sanitizeForFile($name);
+		// Remove control characters and " * \ : < > ? / |
+		// Remove duplicate dots and any leading or trailing dots/spaces
+		$newname = preg_replace('/[\x00-\x1f\x22\x2a\x2f\x3a\x3c\x3e\x3f\x5c\x7c\x7f]+/', '', $name);
+		$newname = preg_replace('/[.]{2,}/', '.', trim($newname, '. '));
+
 		$newpath = build_file_path($file_base_path, $newname);
 
 		if (!is_file($newname)) {
