@@ -25,7 +25,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function discuss($id)
 	{
-		$rs = safe_row('*, unix_timestamp(Posted) as uPosted', 'textpattern', 'ID='.intval($id).' and Status >= 4');
+		$rs = safe_row('*, unix_timestamp(Posted) as uPosted, unix_timestamp(LastMod) as uLastMod, unix_timestamp(Expires) as uExpires', 'textpattern', 'ID='.intval($id).' and Status >= 4');
 		if ($rs) {
 			populateArticleData($rs);
 			$result = parse_form('comments_display');
