@@ -11,12 +11,6 @@ $LastChangedRevision$
 	{
 		$id = ($id) ? $id.'-'.$field : $field;
 
-		if (!is_array($vals) || count($vals) < 2)
-			$vals = array(
-				'0' => gTxt('no'),
-				'1' => gTxt('yes')
-			);
-
 		foreach ($vals as $a => $b)
 		{
 			$out[] = '<input type="radio" id="'.$id.'-'.$a.'" name="'.$field.'" value="'.$a.'" class="radio"';
