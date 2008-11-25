@@ -366,7 +366,7 @@ $LastChangedRevision$
 			}
 		}
 
-		$caption = ($step == 'author_edit') ? gTxt('edit_author', array('{name}' => htmlspecialchars($name))) : gTxt('add_new_author');
+		$caption = gTxt(($step == 'author_edit') ? 'edit_author' : 'add_new_author');
 
 		return form(
 
@@ -374,11 +374,9 @@ $LastChangedRevision$
 
 			startTable('edit').
 
-			(($user_id && $step == 'author_edit') ? '' :
-				tr(
-					fLabelCell('login_name').
-					fInputCell('name', $name)
-				)
+			tr(
+				fLabelCell('login_name').
+				($user_id && $step == 'author_edit' ? td(strong($name)) : fInputCell('name', $name))
 			).
 
 			tr(
