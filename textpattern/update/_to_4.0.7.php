@@ -49,10 +49,13 @@ $LastChangedRevision$
 		safe_query('alter ignore table `'.PFX.'textpattern` add index Expires_idx(Expires)');
 	}
 
-	//  Publish expired articles, or return 410?
+	#  Publish expired articles, or return 410?
 	if (!safe_field('name', 'txp_prefs', "name = 'publish_expired_articles'"))
 		safe_insert('txp_prefs', "prefs_id = 1, name = 'publish_expired_articles', val = '0', type = '1', event='publish', html='yesnoradio', position='130'");
 
+	#  Searchable article fields hidden preference
+	if (!safe_field('name', 'txp_prefs', "name = 'searchable_article_fields'"))
+		safe_insert('txp_prefs', "prefs_id = 1, name = 'searchable_article_fields', val = 'Title, Body', type = '2', event='publish', html='text_input', position='0'");
 	
 ?>
 

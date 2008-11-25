@@ -553,7 +553,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function doArticles($atts, $iscustom, $thing = NULL)
 	{
-		global $pretext, $prefs, $txpcfg;
+		global $pretext, $prefs;
 		extract($pretext);
 		extract($prefs);
 		$customFields = getCustomFields();
@@ -624,11 +624,11 @@ $LastChangedRevision$
 			$s_filter = ($searchall ? filterSearch() : '');
 			$q = doSlash($q);
 
-			// $txpcfg['ftindex_columns'] is an optional custom array of full-text indexed columns, e.g. array('Title', 'Excerpt', 'Body')
-            // caveat: requires a matching custom database fulltext index created either manually or by a plugin.
-			global $txpcfg;
-			$cols = (isset($txpcfg['ftindex_columns']) && is_array($txpcfg['ftindex_columns']) && count($txpcfg['ftindex_columns'])) ? 
-					$txpcfg['ftindex_columns'] : array('Title', 'Body');
+            		// searchable article fields are limited to the columns of 
+            		// the textpattern table and a matching fulltext index must exist.
+			$cols = do_list($searchable_article_fields);
+			if (empty($cols) or $cols[0] == '') $cols = array('Title', 'Body');
+
 			$match = ', match (`'.join('`, `', $cols)."`) against ('$q') as score";
 			for ($i = 0; $i < count($cols); $i++)
 			{
