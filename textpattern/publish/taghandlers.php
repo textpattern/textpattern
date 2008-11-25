@@ -971,7 +971,7 @@ $LastChangedRevision$
 			$count = 0;
 			$last = numRows($rs);
 
-			$old_category = $thiscategory;
+			if (isset($thiscategory)) $old_category = $thiscategory;
 			while ($a = nextRow($rs))
 			{
 				++$count;
@@ -997,7 +997,7 @@ $LastChangedRevision$
 					}
 				}
 			}
-			$thiscategory = $old_category;
+			if (isset($old_category)) $thiscategory = $old_category;
 
 			if ($out)
 			{
@@ -1067,7 +1067,7 @@ $LastChangedRevision$
 			$count = 0;
 			$last = count($rs);
 
-			$old_section = $thissection;
+			if (isset($thissection)) $old_section = $thissection;
 			foreach ($rs as $a)
 			{
 				++$count;
@@ -1090,7 +1090,7 @@ $LastChangedRevision$
 					$out[] = ($thing) ? parse($thing) : parse_form($form);
 				}
 			}
-			$thissection = $old_section;
+			if (isset($old_section)) $thissection = $old_section;
 
 			if ($out)
 			{
