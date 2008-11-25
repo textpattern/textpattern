@@ -778,7 +778,7 @@ $LastChangedRevision$
 		$section = ($section) ? " and Section IN ('".join("','", doSlash(do_list($section)))."')" : '';
 
 		$expired = ($prefs['publish_expired_articles']) ? '' : ' and (now() <= Expires or Expires = '.NULLDATETIME.') ';
-		$rs = safe_rows_start('*, unix_timestamp(Posted) as posted, unix_timestamp(LastMod) as uLastMod', 'textpattern',
+		$rs = safe_rows_start('*, unix_timestamp(Posted) as posted, unix_timestamp(LastMod) as uLastMod, unix_timestamp(Expires) as uExpires', 'textpattern',
 			'ID != '.intval($id)." and Status = 4 $expired  and Posted <= now() $categories $section order by ".doSlash($sort).' limit 0,'.intval($limit));
 
 		if ($rs)
