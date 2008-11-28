@@ -1,6 +1,6 @@
 <?php
 
-// Generated: 19 Nov 2008, 06:44:43 GMT
+// Generated: 28 Nov 2008, 06:12:02 GMT
 
 $langs = array(
 	'ar-dz' => array(
@@ -1230,20 +1230,20 @@ $langs = array(
 	),
 	'ru-ru' => array(
 		'about_to_create' => 'Сейчас в базе данных будут созданы и заполнены таблицы.',
-		'already_installed' => 'Похоже, что Textpattern уже установлен. Если вы хотите установить все сначала, удалите <code>config.php</code> из директории <code>/textpattern/</code> и попытайтесь сн',
+		'already_installed' => 'Похоже, что Textpattern уже установлен. Для  установки по-новой, удалите файл <code>config.php</code> из директории <code>/textpattern/</code> и повторите попытку',
 		'before_you_proceed' => 'До того как вы продолжите',
 		'checking_database' => 'Проверяется связь с базой данных...',
 		'choose_password' => 'Выберите пароль',
 		'confirm_site_path' => 'Пожалуйста, подтвердите правильность пути',
-		'create_config' => 'создайте файл <code>config.php</code> в директории <code>/textpattern/</code> и вставьте в него вот это:',
+		'create_config' => 'Создайте файл <code>config.php</code> в директории <code>/textpattern/</code> и вставьте в него вот это:',
 		'database_engine' => 'Тип базы данных',
-		'db_cant_connect' => 'Не получается подключиться к базе данных.',
+		'db_cant_connect' => 'Не получается подключиться к базе данных',
 		'db_connected' => 'Подключено',
-		'db_doesnt_exist' => 'База данных {dbname} не существует. Создайте ее, пожалуйста, или укажите другую.',
-		'db_must_exist' => 'Заметьте, что база данных, которую вы укажете, должна существовать; Textpattern не создаст ее за вас.',
+		'db_doesnt_exist' => 'База данных {dbname} не существует, или у вас нет прав для доступа к ней. Создайте ее, пожалуйста, или укажите другую.',
+		'db_must_exist' => 'Заметьте, что база данных, которую вы укажете, должна существовать, Textpattern не создаст ее за вас.',
 		'did_it' => 'Сделано',
 		'email_required' => 'Пожалуйста, введите действительный адрес электронной почты.',
-		'errors_during_install' => 'Во время установки произошло следующее количество ошибок: {num}. Вы можете попросить помочь вам разобраться на форуме.',
+		'errors_during_install' => 'Во время установки произошло следующее количество ошибок: {num}. Вы можете попросить помочь вам разобраться на форумах Textpattern.',
 		'full_path_to_txp' => 'Полный путь к Textpattern на сервере',
 		'mysql' => 'MySQL',
 		'mysqli' => 'MySQLi',
@@ -1252,7 +1252,7 @@ $langs = array(
 		'mysql_password' => 'MySQL пароль',
 		'mysql_server' => 'MySQL сервер',
 		'my_site' => 'Мой сайт',
-		'my_slogan' => 'Мой простой слоган',
+		'my_slogan' => 'Мой простенький слоган',
 		'need_details' => 'Нам необходимо кое-что знать',
 		'pdo_sqlite' => 'SQLite',
 		'please_enter_url' => 'Введите адрес вашего сайта, доступный через Интернет',
@@ -1260,15 +1260,15 @@ $langs = array(
 		'prefix_bad_characters' => 'Префикс {dbprefix} содержит недопустимые символы. Первый символ должен быть выбран из <strong>a-zA-Z_</strong>, а последующие из <strong>a-zA-Z0-9_</strong>',
 		'prefix_warning' => '(Используйте <strong>только</strong> в том случае, <strong>если вам необходимо</strong> иметь несколько Textpattern в одной базе данных)',
 		'setup_comment_invite' => 'Комментарии',
-		'setup_login' => 'Выберите себе логин (допустимы лишь основные знаки и пробел)',
+		'setup_login' => 'Выберите себе логин (допустимы лишь основные символы и пробел)',
 		'site_path' => 'Путь к сайту',
 		'site_url' => 'URL сайта',
 		'table_prefix' => 'Префикс таблиц',
 		'thanks' => 'Спасибо.',
-		'thanks_for_interest' => 'Спасибо за ваш интерес к Textpattern.',
+		'thanks_for_interest' => 'Спасибо за Ваш интерес к Textpattern.',
 		'that_went_well' => 'Все прошло хорошо. Таблицы в базе данных были созданы и заполнены.',
 		'using_db' => 'Используется {dbname}',
-		'warn_mail_unavailable' => 'В установке вашего PHP отсутствует функция mail(). Из-за этого Textpattern не сможет отправлять письма, что, конечно же, несколько ограничит функцион',
+		'warn_mail_unavailable' => 'В установке вашего PHP отсутствует функция mail(). Поэтому Textpattern не сможет отправлять письма, что несколько ограничит функциональность.',
 		'welcome_to_textpattern' => 'Добро пожаловать в Textpattern!',
 		'your_email' => 'Ваш E-mail',
 		'your_full_name' => 'Ваше полное имя',

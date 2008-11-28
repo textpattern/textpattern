@@ -1,4 +1,4 @@
-#@version 4.0.6;1227118383
+#@version 4.0.7;1227772927
 #@admin
 add_new_author => Add New Author
 and_mailed_to => and mailed to
@@ -13,7 +13,7 @@ copy_editor => Copy Editor
 could_not_mail => Could not mail
 could_not_update_author => Could not update author
 designer => Designer
-edit_author => Edit Author <strong>“{name}”</strong>
+edit_author => Edit Author
 email_changed => E-mail address changed to {email}.
 error_adding_new_author => Error adding new author.
 freelancer => Freelancer
@@ -51,7 +51,7 @@ you_have_been_registered => You have been registered as a contributor to the sit
 #@article
 advanced_options => Advanced Options
 article_day => Day
-article_expires_before_postdate => Article expires <strong>before</strong> post date.
+article_expires_before_postdate => Error: Article expires <strong>before</strong> post date.
 article_hour => Hour
 article_image => Article image
 article_markup => Article Markup
@@ -64,7 +64,7 @@ article_saved_hidden => Article saved as hidden.
 article_saved_pending => Article saved as pending.
 article_second => Second
 article_year => Year
-concurrent_edit_by => This article was concurrently edited by {author}.
+concurrent_edit_by => Article NOT saved. {author} modified the article while you were editing it. If you're sure, press the 'save' button once more.
 excerpt_markup => Excerpt Markup
 expires => Expires
 no_articles_recorded => No articles recorded.
@@ -647,6 +647,7 @@ send_lastmod => Send “Last-Modified” header?
 show_article_category_count => Show article count on categories tab?
 show_comment_count_in_feed => Show comment count in feeds?
 site_prefs => Basic
+smtp_from => SMTP envelope sender address
 spam_blacklists => Spam blacklists (comma-separated)
 spanish => Español
 swedish => Swedish
