@@ -1146,7 +1146,6 @@ $LastChangedRevision$
 	{
 		global $prefs;
 		$out = array();
-		$i = 0;
 		for ($i=1; $i<=10; $i++) {
 			if (!empty($prefs['custom_'.$i.'_set'])) {
 				$out[$i] = strtolower($prefs['custom_'.$i.'_set']);
