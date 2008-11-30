@@ -181,7 +181,11 @@ $LastChangedRevision$
 		.	tr(td($textarea))
 		.	tr(td($sub))
 #		.	tr(td($help))
-		.	endTable().sInput('plugin_save').eInput('plugin').hInput('name',$name));
+		.	endTable().sInput('plugin_save').eInput('plugin').hInput('name',$name)).
+		n.'<script type="text/javascript">'.
+		n.'if(jQuery.browser.mozilla){$("#plugin-code").attr("spellcheck", false);}'.
+		n.'</script>';
+		;
 	}
 
 // -------------------------------------------------------------

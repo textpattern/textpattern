@@ -232,8 +232,10 @@ $LastChangedRevision$
 				$right
 			)
 		).
-		endTable();
-
+		endTable().
+		n.'<script type="text/javascript">'.
+		n.'if(jQuery.browser.mozilla){$("#css").attr("spellcheck", false);}'.
+		n.'</script>';
 	}
 
 // -------------------------------------------------------------
