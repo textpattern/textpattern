@@ -17,7 +17,7 @@ $LastChangedRevision$
 	if ($event == 'page') {
 		require_privs('page');
 
-		if(!$step or !in_array($step, array('page_edit','page_save','page_delete','div_edit','div_save','page_list'))){
+		if(!$step or !in_array($step, array('page_edit','page_save','page_delete','page_list'))){
 			page_edit();
 		} else $step();
 	}
@@ -29,7 +29,7 @@ $LastChangedRevision$
 
 		pagetop(gTxt('edit_pages'), $message);
 
-		extract(gpsa(array('name', 'div', 'newname', 'copy')));
+		extract(gpsa(array('name', 'newname', 'copy')));
 
 		if (!$name or $step == 'page_delete')
 		{
@@ -87,47 +87,23 @@ $LastChangedRevision$
 			endTable();
 	}
 
-// -------------------------------------------------------------
-	#deprecated
-	function div_edit()
-	{
-		return page_edit();
-	}
-
 //-------------------------------------------------------------
 	function page_edit_form($name)
 	{
 		global $step;
-		if ($step=='div_edit') {
-			list($html_array,$html,$start_pos,$stop_pos) = extract_div();
-			$html_array = serialize($html_array);
-			$outstep = 'div_save';
-		} else {
-			$html = safe_field('user_html','txp_page',"name='".doSlash($name)."'");
-			$outstep = 'page_save';
-		}
+		$html = safe_field('user_html','txp_page',"name='".doSlash($name)."'");
 
-		$divline = ($step == 'div_edit') ? graf(gTxt('you_are_editing_div').sp.strong($div)) : '';
-
-		$out[] = '<p>'.gTxt('you_are_editing_page').sp.strong($name).$divline.br.
+		$out[] = '<p>'.gTxt('you_are_editing_page').sp.strong($name).br.
 					'<textarea id="html" class="code" name="html" cols="84" rows="36">'.htmlspecialchars($html).'</textarea>'.br.
 					n.fInput('submit','save',gTxt('save'),'publish').
 					n.eInput('page').
-					n.sInput($outstep).
+					n.sInput('page_save').
 					n.hInput('name',$name);
 
-			if($step=='div_edit') {
-				$out[] =
-					n.hInput('html_array',$html_array).
-				  	n.hInput('start_pos',$start_pos).
-				  	n.hInput('stop_pos',$stop_pos).
-				  	n.hInput('name',$name);
-			} else {
-				$out[] =
-						n.'<label for="copy-page">'.gTxt('copy_page_as').'</label>'.sp.
-						n.fInput('text', 'newname', '', 'edit', '', '', '', '', 'copy-page').
-						n.fInput('submit','copy',gTxt('copy'),'smallerbox').'</p>';
-			}
+		$out[] =
+				n.'<label for="copy-page">'.gTxt('copy_page_as').'</label>'.sp.
+				n.fInput('text', 'newname', '', 'edit', '', '', '', '', 'copy-page').
+				n.fInput('submit','copy',gTxt('copy'),'smallerbox').'</p>';
 		return form(join('',$out));
 	}
 
@@ -228,67 +204,4 @@ $LastChangedRevision$
 	{
 		return popTagLinks($type);
 	}
-
-// -------------------------------------------------------------
-	#deprecated
-	function extract_div()
-	{
-		extract(doSlash(gpsa(array('name','div'))));
-		$name = (!$name) ? 'default' : $name;
-		$html = safe_field('user_html','txp_page',"name='$name'");
-
-		$goodlevel = (preg_match("/<div id=\"container\"/i",$html)) ? 2 : 1;
-
-		if ($div) {
-
-			$html_array = preg_split("/(<.*>)/U",$html,-1,PREG_SPLIT_DELIM_CAPTURE);
-
-			$level = 0;
-			$count = -1;
-			$indiv = false;
-			foreach($html_array as $a) {
-				$count++;
-				if(preg_match("/^<div/i",$a)) $level++;
-				if(preg_match("/^<div id=\"$div\"/i",$a)) {
-					$indiv = true;
-					$start_pos = $count;
-				}
-
-				if ($indiv) $thediv[] = $a;
-
-#				print n.$count.': '.$level.': '.$a;
-
-				if($level==$goodlevel && preg_match("/^<\/div/i",$a) && $indiv) {
-					$indiv = false;
-					$stop_pos = $count;
-				}
-				if(preg_match("/^<\/div/i",$a)) $level--;
-			}
-			return array($html_array,join('',$thediv),$start_pos,$stop_pos);
-		}
-	}
-
-// -------------------------------------------------------------
-	#deprecated
-	function div_save()
-	{
-		extract(gpsa(array('html_array', 'html', 'start_pos', 'stop_pos', 'name')));
-
-		$html_array = unserialize($html_array);
-
-		$repl_array = preg_split("/(<.*>)/U", $html, -1, PREG_SPLIT_DELIM_CAPTURE);
-
-		array_splice($html_array, $start_pos, ($stop_pos - $start_pos) + 1, $repl_array);
-
-		$html = doSlash(join('', $html_array));
-
-		safe_update('txp_page', "user_html = '$html'", "name = '".doSlash($name)."'");
-
-		$message = gTxt('page_updated', array('{name}' => $name));
-
-		page_edit($message);
-
-		// print_r($html_array);
-	}
-
 ?>
