@@ -997,7 +997,7 @@ $LastChangedRevision$
 					}
 				}
 			}
-			if (isset($old_category)) $thiscategory = $old_category;
+			$thiscategory = (isset($old_category) ? $old_category : NULL);
 
 			if ($out)
 			{
@@ -1090,7 +1090,7 @@ $LastChangedRevision$
 					$out[] = ($thing) ? parse($thing) : parse_form($form);
 				}
 			}
-			if (isset($old_section)) $thissection = $old_section;
+			$thissection = (isset($old_section) ? $old_section : NULL);
 
 			if ($out)
 			{
