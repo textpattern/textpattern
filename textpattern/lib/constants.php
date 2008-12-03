@@ -27,7 +27,7 @@ else
 define('MAGIC_QUOTES_GPC', get_magic_quotes_gpc());
 
 define('REGEXP_UTF8', @preg_match('@\pL@u', 'q'));
-define('NULLDATETIME', 0); // MySQL value for an unset timestamp.
+define('NULLDATETIME', '\'0000-00-00 00:00:00\'');
 
 define('PERMLINKURL', 0);
 define('PAGELINKURL', 1);

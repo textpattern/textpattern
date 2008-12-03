@@ -1478,7 +1478,7 @@ $LastChangedRevision$
 
 		assert_article();
 
-		if($thisarticle['expires'] == NULLDATETIME)
+		if($thisarticle['expires'] == 0)
 		{
 			return;
 		}
@@ -1518,7 +1518,7 @@ $LastChangedRevision$
 	{
 		global $thisarticle;
 		assert_article();
-		return parse(EvalElse($thing, $thisarticle['expires'] != NULLDATETIME));
+		return parse(EvalElse($thing, $thisarticle['expires']));
 	}
 
 // -------------------------------------------------------------
@@ -1528,7 +1528,7 @@ $LastChangedRevision$
 		global $thisarticle;
 		assert_article();
 		return parse(EvalElse($thing,
-			($thisarticle['expires'] != NULLDATETIME) && ($thisarticle['expires'] <= time() )));
+			$thisarticle['expires'] && ($thisarticle['expires'] <= time() )));
 	}
 
 // -------------------------------------------------------------

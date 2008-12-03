@@ -83,7 +83,7 @@ if (!empty($event) and $event == 'article') {
 		$Keywords = doSlash(trim(preg_replace('/( ?[\r\n\t,])+ ?/s', ',', preg_replace('/ +/', ' ', ps('Keywords'))), ', '));
 
 		if (empty($exp_year)) {
-			$expires =  NULLDATETIME;
+			$expires = 0;
 			$whenexpires = NULLDATETIME;
 		}
 		else {			
@@ -98,7 +98,7 @@ if (!empty($event) and $event == 'article') {
 			$whenexpires = "from_unixtime($expires)";
 		}		
 
-		if ($expires != NULLDATETIME) {
+		if ($expires) {
 			if ($expires <= $when_ts) {
 				article_edit(gTxt('article_expires_before_postdate'));
 				return;
@@ -207,9 +207,9 @@ if (!empty($event) and $event == 'article') {
 			$whenposted = "Posted=from_unixtime($when)";
 		}
 
-		if(empty($exp_year)) {
-			$expires = NULLDATETIME;
-			$whenexpires = "Expires='".NULLDATETIME."'";
+		if (empty($exp_year)) {
+			$expires = 0;
+			$whenexpires = "Expires=".NULLDATETIME;
 		} else {
 			if(empty($exp_month)) $exp_month=1;
 			if(empty($exp_day)) $exp_day=1;
@@ -221,7 +221,7 @@ if (!empty($event) and $event == 'article') {
 			$whenexpires = "Expires=from_unixtime($expires)";	
 		}
 
-		if ($expires != NULLDATETIME) {
+		if ($expires) {
 			if ($expires <= $when_ts) {
 				article_edit(gTxt('article_expires_before_postdate'));
 				return;

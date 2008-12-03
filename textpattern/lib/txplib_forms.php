@@ -280,7 +280,7 @@ $LastChangedRevision$
 	function tsi($name,$datevar,$time,$tab='')
 	{
 		$size = ($name=='year' or $name=='exp_year') ? 4 : 2;
-		$s = ($time == NULLDATETIME)? '' : safe_strftime($datevar, $time);
+		$s = ($time == 0)? '' : safe_strftime($datevar, $time);
 		return n.'<input type="text" name="'.$name.'" value="'.
 			$s
 		.'" size="'.$size.'" maxlength="'.$size.'" class="edit"'.(empty($tab) ? '' : ' tabindex="'.$tab.'"').' title="'.gTxt('article_'.$name).'" />';

@@ -445,7 +445,7 @@ $LastChangedRevision$
 				populateArticleData($a);
 				
 				$uExpires = $a['uExpires'];
-				if ($uExpires != NULLDATETIME and time() > $uExpires and !$publish_expired_articles) {
+				if ($uExpires and time() > $uExpires and !$publish_expired_articles) {
 					$out['status'] = '410';
 				}
 
@@ -903,6 +903,7 @@ $LastChangedRevision$
 		trace_add("[".gTxt('Article')." $ID]");
 		$thisarticle['thisid']          = $ID;
 		$thisarticle['posted']          = $uPosted;
+		$thisarticle['expires']         = $uExpires;
 		$thisarticle['modified']		= $uLastMod;
 		$thisarticle['annotate']        = $Annotate;
 		$thisarticle['comments_invite'] = $AnnotateInvite;
@@ -926,7 +927,6 @@ $LastChangedRevision$
 				$thisarticle[$name] = $rs['custom_' . $i];
 		}
 
-		$thisarticle['expires']         = $uExpires;
 	}
 
 // -------------------------------------------------------------

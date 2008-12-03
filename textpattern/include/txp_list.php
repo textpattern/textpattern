@@ -268,7 +268,7 @@ $LastChangedRevision$
 					).
 
 					td(
-						($expires != NULLDATETIME) ? gTime($expires) : '', '' ,'articles_detail'
+						($expires ? gTime($expires) : ''), '' ,'articles_detail'
 					).
 
 					td($Title).
