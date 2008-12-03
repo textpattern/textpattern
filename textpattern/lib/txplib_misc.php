@@ -452,7 +452,7 @@ $LastChangedRevision$
 				if (isset($txp_current_plugin)) $txp_parent_plugin = $txp_current_plugin;
 				$txp_current_plugin = $name;
 				include($dir . $name . '.php');
-				if (isset($txp_parent_plugin)) $txp_current_plugin = $txp_parent_plugin;
+				$txp_current_plugin = (isset($txp_parent_plugin) ? $txp_parent_plugin : NULL);
 				$plugins_ver[$name] = @$plugin['version'];
 				restore_error_handler();
 				return true;
@@ -468,7 +468,7 @@ $LastChangedRevision$
 			if (isset($txp_current_plugin)) $txp_parent_plugin = $txp_current_plugin;
 			$txp_current_plugin = $rs['name'];
 			eval($rs['code']);
-			if (isset($txp_parent_plugin)) $txp_current_plugin = $txp_parent_plugin;
+			$txp_current_plugin = (isset($txp_parent_plugin) ? $txp_parent_plugin : NULL);
 			restore_error_handler();
 
 			return true;
