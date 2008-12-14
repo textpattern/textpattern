@@ -2734,8 +2734,12 @@ $LastChangedRevision$
 	{
 		global $permlink_mode, $prefs, $permlinks;
 
-		if (isset($prefs['custom_url_func']) and is_callable($prefs['custom_url_func']))
-			return call_user_func($prefs['custom_url_func'], $article_array, PERMLINKURL);
+		if (isset($prefs['custom_url_func'])
+		    and is_callable($prefs['custom_url_func'])
+		    and ($url = call_user_func($prefs['custom_url_func'], $article_array, PERMLINKURL)) !== FALSE)
+		{
+			return $url;
+		}
 
 		if (empty($article_array)) return;
 
