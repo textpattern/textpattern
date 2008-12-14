@@ -1,8 +1,8 @@
 <?php
 
 /*
-$HeadURL: http://svn.textpattern.com/development/4.0/textpattern/update/_to_4.0.6.php $
-$LastChangedRevision: 2464 $
+$HeadURL$
+$LastChangedRevision$
 */
 
 	if (!defined('TXP_UPDATE'))
