@@ -343,14 +343,6 @@ font-size: 0.9em;
 text-align: center;
 }
 
-.toggle {
-display: none;
-}
-
-.toggle.on {
-display: block;
-}
-
 span.navlink-disabled {
 padding: 3px;
 color: #999;
