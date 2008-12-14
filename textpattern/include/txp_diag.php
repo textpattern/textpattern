@@ -77,6 +77,7 @@ $LastChangedRevision$
 		'/update/_to_4.0.5.php',
 		'/update/_to_4.0.6.php',
 		'/update/_to_4.0.7.php',
+		'/update/_to_4.0.8.php',
 		'/update/_update.php'
 	);
 
@@ -250,18 +251,26 @@ $LastChangedRevision$
 		if (empty($v)) unset($fail[$k]);
 
 	# Find the highest revision number
-	$file_revs = array();
+	$file_revs = $file_md5 = array();
 	$rev = 0;
-	foreach ($files as $f) {
-		$lines = @file(txpath . $f);
-		if ($lines) {
-			foreach ($lines as $line) {
-				if (preg_match('/^\$'.'LastChangedRevision: (\w+) \$/', $line, $match)) {
-					$file_revs[$f] = $match[1];
-					if (intval($match[1]) > $rev)
-						$rev = intval($match[1]);
+
+	foreach ($files as $f)
+	{
+		$file = @file_get_contents(txpath . $f);
+
+		if ($file !== FALSE)
+		{
+			if (preg_match('/^\$LastChangedRevision$file, $match))
+			{
+				$file_revs[$f] = $match[1];
+
+				if ($match[1] > $rev)
+				{
+					$rev = $match[1];
 				}
 			}
+
+			$file_md5[$f]  = md5(str_replace("\r\n", "\n", $file));
 		}
 	}
 
@@ -277,7 +286,7 @@ $LastChangedRevision$
 				elseif (!empty($file_revs[$file]) and $r and $file_revs[$file] > $r) {
 					$dev_files[] = $file;
 				}
-				elseif (@is_readable(txpath . $file) and ($sum=md5_file(txpath . $file)) != $md5) {
+				elseif ($file_md5[$file] != $md5) {
 					$modified_files[] = $file;
 				}
 			}
