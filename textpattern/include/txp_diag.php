@@ -238,14 +238,26 @@ $LastChangedRevision$
 	}
 
 	$missing = array();
-	foreach ($files as $f) {
-		if (!is_readable(txpath . $f))
+
+	foreach ($files as $f)
+	{
+		$realpath = realpath(txpath . $f);
+
+		if (is_readable($realpath))
+		{
+			$found[] = $realpath;
+		}
+		else
+		{
 			$missing[] = txpath . $f;
+		}
 	}
 
-	if ($missing)
-		$fail['missing_files'] = gTxt('missing_files').cs.join(', ', $missing);
+	$files = $found;
+	unset($found);
 
+	if ($missing)
+		$fail['missing_files'] = gTxt('missing_files').cs.n.t.join(', '.n.t, $missing);
 
 	foreach ($fail as $k=>$v)
 		if (empty($v)) unset($fail[$k]);
@@ -256,11 +268,11 @@ $LastChangedRevision$
 
 	foreach ($files as $f)
 	{
-		$file = @file_get_contents(txpath . $f);
+		$content = @file_get_contents($f);
 
-		if ($file !== FALSE)
+		if ($content !== FALSE)
 		{
-			if (preg_match('/^\$LastChangedRevision$file, $match))
+			if (preg_match('/^\$'.'LastChangedRevision: (\d+) \$/m', $content, $match))
 			{
 				$file_revs[$f] = $match[1];
 
@@ -270,23 +282,32 @@ $LastChangedRevision$
 				}
 			}
 
-			$file_md5[$f]  = md5(str_replace("\r\n", "\n", $file));
+			$file_md5[$f]  = md5(str_replace("\r\n", "\n", $content));
 		}
 	}
 
 	# Check revs & md5 against stable release, if possible
 	$dev_files = $old_files = $modified_files = array();
-	if ($cs = @file(txpath.'/checksums.txt')) {
-		foreach ($cs as $c) {
-			if (preg_match('@^(\S+): r?(\S+) \((.*)\)$@', trim($c), $m)) {
+
+	if ($cs = @file(txpath . '/checksums.txt'))
+	{
+		foreach ($cs as $c)
+		{
+			if (preg_match('@^(\S+): r?(\S+) \((.*)\)$@', trim($c), $m))
+			{
 				list(,$file,$r,$md5) = $m;
-				if (!empty($file_revs[$file]) and $r and $file_revs[$file] < $r) {
+				$file = realpath(txpath . $file);
+
+				if (!empty($file_revs[$file]) and $r and $file_revs[$file] < $r)
+				{
 					$old_files[] = $file;
 				}
-				elseif (!empty($file_revs[$file]) and $r and $file_revs[$file] > $r) {
+				elseif (!empty($file_revs[$file]) and $r and $file_revs[$file] > $r)
+				{
 					$dev_files[] = $file;
 				}
-				elseif ($file_md5[$file] != $md5) {
+				elseif (!empty($file_md5[$file]) and $file_md5[$file] != $md5)
+				{
 					$modified_files[] = $file;
 				}
 			}
@@ -530,18 +551,12 @@ $LastChangedRevision$
 
 		$out[] = n;
 
-		foreach ($files as $f) {
-			$rev = '';
-			$checksum = '';
+		foreach ($files as $f)
+		{
+			$checksum = isset($file_md5[$f]) ? $file_md5[$f] : gTxt('unknown');
+			$revision = isset($file_revs[$f]) ? 'r'.$file_revs[$f] : gTxt('unknown');
 
-			if (is_callable('md5_file') and is_readable(txpath . $f)) {
-				$checksum = md5_file(txpath . $f);
-			}
-
-			if (isset($file_revs[$f]))
-				$rev = $file_revs[$f];
-
-			$out[] = "$f" .cs. ($rev ? "r".$rev : gTxt('unknown')).' ('.($checksum ? $checksum : gTxt('unknown')).')'.n;
+			$out[] = "$f" .cs.n.t. $revision .' ('.$checksum.')'.n;
 		}
 	}
 
