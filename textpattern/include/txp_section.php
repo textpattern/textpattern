@@ -129,28 +129,28 @@ $LastChangedRevision$
 							).
 
 							n.n.tr(
-								fLabelCell(gTxt('selected_by_default').'?').
+								fLabelCell(gTxt('selected_by_default')).
 								td(
 									yesnoradio('is_default', $is_default, '', $name).sp.popHelp('section_is_default')
 								, '', 'noline')
 							).
 
 							n.n.tr(
-								fLabelCell(gTxt('on_front_page').'?').
+								fLabelCell(gTxt('on_front_page')).
 								td(
 									yesnoradio('on_frontpage', $on_frontpage, '', $name).sp.popHelp('section_on_frontpage')
 								, '', 'noline')
 							).
 
 							n.n.tr(
-								fLabelCell(gTxt('syndicate').'?') .
+								fLabelCell(gTxt('syndicate')) .
 								td(
 									yesnoradio('in_rss', $in_rss, '', $name).sp.popHelp('section_syndicate')
 								, '', 'noline')
 							).
 
 							n.n.tr(
-								fLabelCell(gTxt('include_in_search').'?').
+								fLabelCell(gTxt('include_in_search')).
 								td(
 									yesnoradio('searchable', $searchable, '', $name).sp.popHelp('section_searchable')
 								, '', 'noline')
