@@ -340,7 +340,7 @@ $LastChangedRevision$
 	{
 		global $txpcfg, $file_base_path, $levels, $file_statuses;
 
-		pagetop('file', $message);
+		pagetop(gTxt('file'), $message);
 
 		extract(gpsa(array('name', 'category', 'permissions', 'description', 'sort', 'dir', 'page', 'crit', 'search_method', 'publish_now')));
 
