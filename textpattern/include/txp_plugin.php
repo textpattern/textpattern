@@ -433,7 +433,7 @@ $LastChangedRevision$
 				break;
 		}
 
-		$message = gTxt('plugin_'.($method == 'deleted' ? 'deleted' : 'updated'), array('{name}' => join(', ', $selected)));
+		$message = gTxt('plugin_'.($method == 'delete' ? 'deleted' : 'updated'), array('{name}' => join(', ', $selected)));
 
 		plugin_list($message);
 	}
