@@ -1,3 +1,11 @@
+Changes in 4.0.8
+
+* Fixed: Current section/category is overwritten in <txp:section_list> and <txp:category_list> (container or form mode)
+* Fixed: Registration and notification mails are not sent in PHP safe mode.
+* Fixed: Error message upon article save from MySQL 5 in 'strict' mode.
+* Speed improvements at loading plugins from the database.
+* More legible and dependable diagnostic output.
+
 Changes in 4.0.7
 
 * Parser: full nesting support, allowing unlimited nesting of identical tags.
