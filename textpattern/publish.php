@@ -497,7 +497,7 @@ $LastChangedRevision$
 		$pretext['secondpass'] = true;
 		trace_add('[ ~~~ '.gTxt('secondpass').' ~~~ ]');
 		$html = parse($html); // the function so nice, he ran it twice
-		$html = ($prefs['allow_page_php_scripting']) ? evalString($html) : $html;
+		if ($prefs['allow_page_php_scripting']) $html = evalString($html);
 
 		// make sure the page has an article tag if necessary
 		if (!$has_article_tag and $production_status != 'live' and (!empty($pretext['id']) or !empty($pretext['c']) or !empty($pretext['q']) or !empty($pretext['pg'])))
