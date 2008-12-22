@@ -143,8 +143,9 @@ $LastChangedRevision$
 					$id='',
 					$disabled = false)
 	{
-		$o  = '<input type="'.$type.'" name="'.$name.'"';
+		$o  = '<input type="'.$type.'"';
 		$o .= ' value="'.htmlspecialchars($value).'"';
+		$o .= ($name)     ? ' name="'.$name.'"' : '';
 		$o .= ($size)     ? ' size="'.$size.'"' : '';
 		$o .= ($class)    ? ' class="'.$class.'"' : '';
 		$o .= ($title)    ? ' title="'.$title.'"' : '';
