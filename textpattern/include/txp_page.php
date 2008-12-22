@@ -115,7 +115,7 @@ $LastChangedRevision$
 
 	function page_list($current)
 	{
-		$protected = safe_column('page', 'txp_section', '1=1 GROUP BY page') + array('error_default');
+		$protected = safe_column('DISTINCT page', 'txp_section', '1=1') + array('error_default');
 
 		$rs = safe_rows_start('name', 'txp_page', "1 order by name asc");
 
