@@ -113,19 +113,18 @@ $LastChangedRevision$
 
 //-------------------------------------------------------------
 
-	function page_list($current) {
-		$protected = array(
-			safe_field('page', 'txp_section', "name = 'default'"),
-			'error_default'
-		);
+	function page_list($current)
+	{
+		$protected = safe_column('page', 'txp_section', '1=1 GROUP BY page');
 
 		$rs = safe_rows_start('name', 'txp_page', "1 order by name asc");
 
-		while ($a = nextRow($rs)) {
+		while ($a = nextRow($rs))
+		{
 			extract($a);
 
 			$link  = eLink('page', '', 'name', $name, $name);
-			$dlink = !in_array($name, $protected) ? dLink('page', 'page_delete', 'name', $name) : '';
+			$dlink = (in_array($name, $protected) or preg_match('/^error_(default|\d{3})$/', $name)) ? '' : dLink('page', 'page_delete', 'name', $name);
 
 			$out[] = ($current == $name) ?
 				tr(td($name).td($dlink)) :
@@ -142,7 +141,7 @@ $LastChangedRevision$
 		$name  = ps('name');
 		$count = safe_count('txp_section', "page = '".doSlash($name)."'");
 
-		if ($name == 'default')
+		if (preg_match('/^error_(default|\d{3})$/', $name))
 		{
 			return page_edit();
 		}
