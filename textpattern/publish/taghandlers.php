@@ -2954,14 +2954,17 @@ $LastChangedRevision$
 		global $c;
 
 		extract(lAtts(array(
-			'name' => '',
+			'name' => FALSE,
 		),$atts));
 
-		if (trim($name)) {
+		if ($name === FALSE)
+		{
+			return parse(EvalElse($thing, !empty($c)));
+		}
+		else
+		{
 			return parse(EvalElse($thing, in_list($c, $name)));
 		}
-
-		return parse(EvalElse($thing, !empty($c)));
 	}
 
 //--------------------------------------------------------------------------
@@ -3025,15 +3028,15 @@ $LastChangedRevision$
 		extract($pretext);
 
 		extract(lAtts(array(
-			'name' => '',
+			'name' => FALSE,
 		),$atts));
 
 		$section = ($s == 'default' ? '' : $s);
 
 		if ($section)
-			return parse(EvalElse($thing, in_list($section, $name)));
+			return parse(EvalElse($thing, $name === FALSE or in_list($section, $name)));
 		else
-			return parse(EvalElse($thing, in_list('', $name) or in_list('default', $name)));
+			return parse(EvalElse($thing, $name !== FALSE and (in_list('', $name) or in_list('default', $name))));
 
 	}
 
