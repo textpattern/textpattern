@@ -357,6 +357,7 @@ $LastChangedRevision$
 	if (hu) {
 		if (ini_get('allow_url_fopen') and ($permlink_mode != 'messy')) {
 			$s = md5(uniqid(rand(), true));
+			ini_set('default_socket_timeout', 10); 
 			$pretext_data = @file(hu.$s.'/?txpcleantest=1');
 			if ($pretext_data) {
 				$pretext_req = trim(@$pretext_data[0]);
