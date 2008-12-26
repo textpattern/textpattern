@@ -282,7 +282,7 @@ $LastChangedRevision$
 				}
 			}
 
-			$file_md5[$f]  = md5(str_replace("\r\n", "\n", $content));
+			$file_md5[$f]  = md5(str_replace('$'.'HeadURL: http:', '$'.'HeadURL: https:', str_replace("\r\n", "\n", $content)));
 		}
 	}
 
