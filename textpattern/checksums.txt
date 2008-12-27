@@ -5,7 +5,7 @@
 /include/txp_auth.php: r2856 (568bf65e243bd9c8005712d67a37f066)
 /include/txp_category.php: r2947 (b77d12414b33cd581f6ff731b27f595b)
 /include/txp_css.php: r3032 (ef24a62bf92eb7894a9b6af39b8a59e0)
-/include/txp_diag.php: r3043 (730bc5fd4d303bc76b7dedbe6cbf0e42)
+/include/txp_diag.php: r3060 (56738e722db1357dddfaeb31e2249da1)
 /include/txp_discuss.php: r2994 (ec9d79abddff04c921d0703a9076773e)
 /include/txp_file.php: r3049 (2b876e6cd18b3ca043fdbf83cefd80ba)
 /include/txp_form.php: r3040 (5e338562fb5476c7aaa0ed5e8f5d9337)
