@@ -179,7 +179,7 @@ eod;
  			$carry['dclient_flags'] = 0;
 		elseif (($mylink = mysql_connect($dhost, $duser, $dpass, false, MYSQL_CLIENT_SSL)))
  			$carry['dclient_flags'] = 'MYSQL_CLIENT_SSL';
-		else 
+		else
 			exit(graf(gTxt('db_cant_connect')));
 
 		echo graf(gTxt('db_connected'));
@@ -380,11 +380,15 @@ eod;
 
 		else
 		{
+			$warnings = @find_temp_dir() ? '' : graf(gTxt('set_temp_dir_prefs'));
+
 			return '<div width="450" valign="top" style="margin-right: auto; margin-left: auto;">'.
 
 			graf(
 				gTxt('that_went_well')
 			,' style="margin-top:3em"').
+
+			$warnings.
 
 			graf(
 				gTxt('you_can_access', array(
