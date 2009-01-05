@@ -847,7 +847,7 @@ $LastChangedRevision$
 				$listed[] = $rbl;
 			}
 		}
-		
+
 		return (!empty($listed)) ? join(', ', $listed) : false;
 	}
 
@@ -1305,7 +1305,8 @@ $LastChangedRevision$
 			$guess = array(txpath.DS.'tmp', '', DS.'tmp', $path_to_site.DS.$img_dir);
 
 		foreach ($guess as $dir) {
-			$tf = realpath(@tempnam($dir, 'txp_'));
+			$tf = @tempnam($dir, 'txp_');
+			if ($tf) $tf = realpath($tf);
 			if ($tf and file_exists($tf)) {
 				unlink($tf);
 				return dirname($tf);
