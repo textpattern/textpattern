@@ -2437,7 +2437,7 @@ $LastChangedRevision$
 		$q = $pretext['q'];
 
 		$result = preg_replace('/\s+/', ' ', strip_tags(str_replace('><', '> <', $thisarticle['body'])));
-		preg_match_all("/\b.{1,50}".preg_quote($q).".{1,50}\b/iu", $result, $concat);
+		preg_match_all('/(\G|\s).{0,50}'.preg_quote($q).'.{0,50}(\s|$)/iu', $result, $concat);
 
 		for ($i = 0, $r = array(); $i < min($limit, count($concat[0])); $i++)
 		{
