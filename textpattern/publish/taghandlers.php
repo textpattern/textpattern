@@ -452,7 +452,7 @@ $LastChangedRevision$
 		global $thislink;
 		assert_link();
 
-		return $thislink['url'];
+		return doSpecial($thislink['url']);
 	}
 
 // -------------------------------------------------------------
