@@ -155,15 +155,22 @@ $LastChangedRevision$
 			$crit = '';
 		}
 
-		$counts = safe_rows('visible, COUNT(*) AS c', 'txp_discuss', $criteria.' GROUP BY visible');
+		$counts = getRows(
+			'SELECT visible, COUNT(*) AS c'.
+			' FROM '.safe_pfx_j('txp_discuss').' LEFT JOIN '.safe_pfx_j('textpattern').' ON txp_discuss.parentid = textpattern.ID'.
+			' WHERE '. $criteria.' GROUP BY visible'
+		);
+
 		$count[SPAM] = $count[MODERATE] = $count[VISIBLE] = 0;
-		foreach($counts as $c)
+
+		if ($counts) foreach($counts as $c)
 		{
 			$count[$c['visible']] = $c['c'];
 		}
 		
 		// grand total comment count
 		$total = $count[SPAM] + $count[MODERATE] + $count[VISIBLE];
+
 		if ($total < 1)
 		{
 			if ($criteria != 1)
