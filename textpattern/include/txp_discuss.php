@@ -571,7 +571,9 @@ $LastChangedRevision$
 		$selected = ps('selected');
 		$method = ps('edit_method');
 		$done = array();
-		if ($selected) {
+
+		if ($selected and is_array($selected))
+		{
 			// Get all articles for which we have to update the count
 			foreach($selected as $id)
 				$ids[] = assert_int($id);

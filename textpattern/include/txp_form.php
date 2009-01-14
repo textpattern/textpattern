@@ -73,7 +73,7 @@ $LastChangedRevision$
 		$method = ps('edit_method');
 		$forms = ps('selected_forms');
 
-		if (is_array($forms))
+		if ($forms and is_array($forms))
 		{
 			if ($method == 'delete')
 			{

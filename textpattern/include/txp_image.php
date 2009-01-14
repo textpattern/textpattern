@@ -285,15 +285,16 @@ $LastChangedRevision$
 
 	function image_multi_edit()
 	{
-		$selected = array_map('assert_int', ps('selected'));
+		$selected = ps('selected');
 
-		if (!$selected)
+		if (!$selected or !is_array($selected))
 		{
 			return image_list();
 		}
 
-		$method  = ps('edit_method');
-		$changed = array();
+		$selected = array_map('assert_int', $selected);
+		$method   = ps('edit_method');
+		$changed  = array();
 
 		if ($method == 'delete')
 		{
