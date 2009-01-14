@@ -128,7 +128,7 @@ $LastChangedRevision$
 
 			$critsql = array(
 				'id'      => "discussid = '$crit_escaped'",
-				'parent'  => "parentid = '$crit_escaped' OR title like '%$crit_escaped%'",
+				'parent'  => "parentid = '$crit_escaped'".(intval($crit_escaped) ? '' : " OR title like '%$crit_escaped%'"),
 				'name'    => "name like '%$crit_escaped%'",
 				'message' => "message like '%$crit_escaped%'",
 				'email'   => "email like '%$crit_escaped%'",
