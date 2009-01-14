@@ -3,8 +3,11 @@ Changes in 4.0.8
 * Fixed: Current section/category is overwritten in <txp:section_list> and <txp:category_list> (container or form mode)
 * Fixed: Registration and notification mails are not sent in PHP safe mode.
 * Fixed: Error message upon article save from MySQL 5 in 'strict' mode.
+* Fixed: Timeout during "clean URL test" causes WSOD in diagnostics tab.
+* Partly fixed: Search result excerpt breaks HTML entities.
 * Changed tag: <txp:if_section> without a name attribute is now TRUE on a section page (old behaviour is preserved on upgrades).
 * Changed tag: <txp:if_category name=""> is now FALSE on a category page (old behaviour is preserved on upgrades).
+* Changed tag: <txp:link_url /> escapes its output.
 * Speed: faster plugin loading from the database.
 * Diagnostics tab: ignore line endings when checking for modified files and show full paths.
 * Pages tab: allow 'default' page to be deleted if not used by a section.

@@ -1,4 +1,4 @@
-Textpattern 4.0.7
+Textpattern 4.0.8
 
 Released under the Gnu General Public License
 
