@@ -343,7 +343,7 @@ if ($event == 'category') {
 
 		$title = ps('title');
 
-		$name = sanitizeForUrl($title);
+		$name = strtolower(sanitizeForUrl($title));
 
 		if (!$name)
 		{

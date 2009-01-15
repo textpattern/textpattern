@@ -191,7 +191,7 @@ $LastChangedRevision$
 		include_once txpath.'/lib/classTextile.php';
 		$textile = new Textile();
 		$title = $textile->TextileThis($name,1);
-		$name = sanitizeForUrl($name);
+		$name = strtolower(sanitizeForUrl($name));
 
 		$chk = fetch('name','txp_section','name',$name);
 
