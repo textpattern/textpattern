@@ -1536,7 +1536,7 @@ $LastChangedRevision$
 	function modified($atts)
 	{
 		global $thisarticle, $id, $c, $pg, $dateformat, $archive_dateformat;
-		
+
 		assert_article();
 
 		extract(lAtts(array(
@@ -1545,14 +1545,14 @@ $LastChangedRevision$
 			'lang'    => ''
 		), $atts));
 
-		if ($format) 
+		if ($format)
 		{
 			return safe_strftime($format, $thisarticle['modified'], $gmt, $lang);
-		} 
+		}
 
-		else 
+		else
 		{
-			if ($id or $c or $pg) 
+			if ($id or $c or $pg)
 			{
 				return safe_strftime($archive_dateformat, $thisarticle['modified']);
 			}
@@ -1563,7 +1563,7 @@ $LastChangedRevision$
 			}
 		}
 	}
-	
+
 // -------------------------------------------------------------
 
 	function comments_count()
@@ -2306,14 +2306,14 @@ $LastChangedRevision$
 		extract(lAtts(array(
 			'keywords' => ''
 		), $atts));
-		
-		$condition = empty($keywords) ? 
+
+		$condition = empty($keywords) ?
 			$thisarticle['keywords'] :
 			array_intersect(do_list($keywords), do_list($thisarticle['keywords']));
 
 		return EvalElse($thing, !empty($condition));
 	}
-	
+
 // -------------------------------------------------------------
 
 	function article_image($atts)
@@ -3291,12 +3291,7 @@ $LastChangedRevision$
 
 			if ($out)
 			{
-				if ($wraptag == 'ul' or $wraptag == 'ol')
-				{
-					return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
-				}
-
-				return ($wraptag) ? tag(join($break, $out), $wraptag) : join(n, $out);
+				return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
 			}
 		}
 		return '';
