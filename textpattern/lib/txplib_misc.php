@@ -1694,7 +1694,7 @@ $LastChangedRevision$
 	}
 
 //-------------------------------------------------------------
-	function set_pref($name, $val, $event='publish',  $type=0, $html='text_input')
+	function set_pref($name, $val, $event='publish',  $type=0, $html='text_input', $position=0)
 	{
 		extract(doSlash(func_get_args()));
 
@@ -1705,6 +1705,7 @@ $LastChangedRevision$
 				event = '$event',
 				html  = '$html',
 				type  = '$type',
+				position = '$position',
 				prefs_id = 1"
 			);
     	} else {
