@@ -14,7 +14,7 @@ Released under the Gnu General Public License
 == Upgrading ==
 
 * Simply replace the two files in your main installation directory
-  (index.php and .htaccess), everything in your /rcp/ directory and
+  (index.php and .htaccess), everything in your /rpc/ directory and
   everything in your /textpattern/ directory (except config.php)
   with the corresponding files in this distribution.
 * When you login to the admin-side, the relevant upgrade script is
