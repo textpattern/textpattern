@@ -2752,7 +2752,7 @@ $LastChangedRevision$
 		if (!isset($title)) $title = $Title;
 		if (empty($url_title)) $url_title = stripSpace($title);
 		if (empty($section)) $section = $Section; // lame, huh?
-		if (empty($posted)) $posted = $Posted;
+		if (empty($posted) and isset($Posted)) $posted = $Posted;
 
 		$section = urlencode($section);
 		$url_title = urlencode($url_title);
