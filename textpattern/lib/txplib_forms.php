@@ -145,7 +145,7 @@ $LastChangedRevision$
 	{
 		$o  = '<input type="'.$type.'"';
 		$o .= ' value="'.htmlspecialchars($value).'"';
-		$o .= ($name)     ? ' name="'.$name.'"' : '';
+		$o .= strlen($name)? ' name="'.$name.'"' : '';
 		$o .= ($size)     ? ' size="'.$size.'"' : '';
 		$o .= ($class)    ? ' class="'.$class.'"' : '';
 		$o .= ($title)    ? ' title="'.$title.'"' : '';
@@ -286,5 +286,5 @@ $LastChangedRevision$
 			$s
 		.'" size="'.$size.'" maxlength="'.$size.'" class="edit"'.(empty($tab) ? '' : ' tabindex="'.$tab.'"').' title="'.gTxt('article_'.$name).'" />';
 	}
-	
+
 ?>
