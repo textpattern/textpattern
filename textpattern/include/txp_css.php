@@ -38,7 +38,7 @@ $LastChangedRevision$
 			while ($a = nextRow($rs)) {
 				extract($a);
 
-				$edit = ($current != $name) ?	eLink('css', '', 'name', $name, htmlspecialchars($name)) : htmlspecialchars($name);
+				$edit = ($current != $name) ?	eLink('css', '', 'name', $name, $name) : htmlspecialchars($name);
 				$delete = ($name != $default) ? dLink('css', 'css_delete', 'name', $name) : '';
 
 				$out[] = tr(td($edit).td($delete));
