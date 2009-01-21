@@ -38,7 +38,7 @@ $LastChangedRevision$
 			while ($a = nextRow($rs)) {
 				extract($a);
 
-				$edit = ($current != $name) ?	eLink('css', '', 'name', $name, $name) : $name;
+				$edit = ($current != $name) ?	eLink('css', '', 'name', $name, htmlspecialchars($name)) : htmlspecialchars($name);
 				$delete = ($name != $default) ? dLink('css', 'css_delete', 'name', $name) : '';
 
 				$out[] = tr(td($edit).td($delete));
@@ -97,7 +97,7 @@ $LastChangedRevision$
 		hed(gTxt('all_stylesheets'),2).
 		css_list($name, $default_name);
 
-		$left = graf(gTxt('you_are_editing_css').br.strong($name)).
+		$left = graf(gTxt('you_are_editing_css').br.strong(htmlspecialchars($name))).
 			graf(eLink('css', 'css_edit_raw', 'name', $name, gTxt('edit_raw_css'))).
 			graf(sLink('css', 'pour', gTxt('bulkload_existing_css')));
 
@@ -197,7 +197,7 @@ $LastChangedRevision$
 
 		if ($step!='pour') {
 
-			$left = graf(gTxt('you_are_editing_css').br.strong($name)).
+			$left = graf(gTxt('you_are_editing_css').br.strong(htmlspecialchars($name))).
 				graf(eLink('css', 'css_edit_form', 'name', $name, gTxt('edit_css_in_form'))).
 				graf(sLink('css', 'pour', gTxt('bulkload_existing_css')));
 
