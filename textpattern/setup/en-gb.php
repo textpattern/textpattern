@@ -850,7 +850,6 @@ $en_gb_lang = array(
 		'submit' => 'Submit',
 		'subscript' => 'subscript',
 		'superscript' => 'superscript',
-		'syndicate' => 'Syndicate',
 		'tag_error' => 'Tag error: ',
 		'textile_help' => 'Textile Help',
 		'textile_lite_help' => 'Textile Lite Help',
@@ -901,6 +900,7 @@ $en_gb_lang = array(
 		'section_used_by_article' => 'Section <strong>{name}</strong> not deleted; used by {count} article(s).',
 		'selected_by_default' => 'Selected by default',
 		'style' => 'Style',
+		'syndicate' => 'Syndicate?',
 		'uses_page' => 'Uses page',
 		'uses_style' => 'Uses style',
 	),
@@ -937,6 +937,7 @@ $en_gb_lang = array(
 		'prefix_warning' => '(Use <strong>only</strong> if you require multiple installations in one database)',
 		'setup_comment_invite' => 'Comment',
 		'setup_login' => 'Choose a login name (only basic characters and spaces please)',
+		'set_temp_dir_prefs' => 'Sorry, but we failed to find a writable directory to hold temporary files.<br />Please visit the &#8220;Advanced Preferences&#8221; tab and adjust the &#8220;Temporary directory path&#8221; setting to suit your needs.',
 		'site_path' => 'Site path',
 		'site_url' => 'Site URL',
 		'table_prefix' => 'Table prefix',
@@ -1129,5 +1130,5 @@ $en_gb_lang = array(
 		'wraptag' => 'Wrap tag',
 	)
 );
-$lastmod = gmdate('Y-m-d H:m:s',1227772927);
+$lastmod = gmdate('Y-m-d H:m:s',1231776512);
 ?>

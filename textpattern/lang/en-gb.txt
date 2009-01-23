@@ -1,4 +1,4 @@
-#@version 4.0.7;1227772927
+#@version 4.0.8;1231776512
 #@admin
 add_new_author => Add New Author
 and_mailed_to => and mailed to
@@ -318,6 +318,7 @@ mod_rewrite_missing => Apache module mod_rewrite is not installed
 old_files => Some Textpattern files are out of date
 old_placeholder => Old placeholder file is in the way
 os_version => Server OS
+path_not_doc_root => 
 path_to_site_inacc => $path_to_site is inaccessible.
 php_extensions => PHP extensions
 php_sapi_mode => PHP Server API
@@ -831,7 +832,6 @@ strong => strong
 submit => Submit
 subscript => subscript
 superscript => superscript
-syndicate => Syndicate
 tag_error => Tag error: 
 textile_help => Textile Help
 textile_lite_help => Textile Lite Help
@@ -881,6 +881,7 @@ section_updated => Section <strong><a href="#section-{name}">{name}</a></strong>
 section_used_by_article => Section <strong>{name}</strong> not deleted; used by {count} article(s).
 selected_by_default => Selected by default
 style => Style
+syndicate => Syndicate?
 uses_page => Uses page
 uses_style => Uses style
 #@setup
@@ -916,6 +917,7 @@ prefix_bad_characters => The table prefix {dbprefix} contains characters that ar
 prefix_warning => (Use <strong>only</strong> if you require multiple installations in one database)
 setup_comment_invite => Comment
 setup_login => Choose a login name (only basic characters and spaces please)
+set_temp_dir_prefs => Sorry, but we failed to find a writable directory to hold temporary files.<br />Please visit the &#8220;Advanced Preferences&#8221; tab and adjust the &#8220;Temporary directory path&#8221; setting to suit your needs.
 site_path => Site path
 site_url => Site URL
 table_prefix => Table prefix
