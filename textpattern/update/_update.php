@@ -84,7 +84,7 @@ $LastChangedRevision$
 	if (version_compare($dbversion, '4.0.8', '<'))
 	{
 		if ((include txpath.DS.'update'.DS.'_to_4.0.8.php') !== false)
-;#			$dbversion = '4.0.8';
+			$dbversion = '4.0.8';
 	}
 
 	// keep track of updates for svn users
