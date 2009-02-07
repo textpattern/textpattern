@@ -543,17 +543,21 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function load_plugins($type=0)
 	{
-		global $prefs,$plugins, $plugins_ver;
+		global $prefs, $plugins, $plugins_ver;
 
 		if (!is_array($plugins)) $plugins = array();
 
 		if (!empty($prefs['plugin_cache_dir'])) {
 			$dir = rtrim($prefs['plugin_cache_dir'], '/') . '/';
-			# in case it's a relative path
+			// in case it's a relative path
 			if (!is_dir($dir))
 				$dir = rtrim(realpath(txpath.'/'.$dir), '/') . '/';
-			foreach (glob($dir.'*.php') as $f) {
-				load_plugin(basename($f, '.php'));
+			$files = glob($dir.'*.php');
+			if ($files) {
+				foreach ($files as $f) {
+					dmp($f);
+					load_plugin(basename($f, '.php'));
+				}
 			}
 		}
 
