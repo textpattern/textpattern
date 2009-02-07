@@ -802,42 +802,19 @@ $LastChangedRevision$
 
 function get_lang_files()
 {
-	global $txpcfg;
-
-	$dirlist = array();
-
 	$lang_dir = txpath.DS.'lang'.DS;
 
 	if (!is_dir($lang_dir))
 	{
 		trigger_error('Lang directory is not a directory: '.$lang_dir, E_USER_WARNING);
-		return $dirlist;
+		return array();
 	}
 
-	if (chdir($lang_dir)) {
-		if (function_exists('glob')){
-			$g_array = glob("*.txt");
-		}else {
-			# filter .txt only files here?
-			$dh = opendir($lang_dir);
-			$g_array = array();
-			while (false !== ($filename = readdir($dh))) {
-				if (strstr($filename, '.txt'))
-					$g_array[] = $filename;
-			}
-			closedir($dh);
-
-		}
-		# build an array of lang-codes => filemtimes
-		if ($g_array) {
-			foreach ($g_array as $lang_name) {
-				if (is_file($lang_name)) {
-					$dirlist[substr($lang_name,0,5)] = @filemtime($lang_name);
-				}
-			}
-		}
+	if (chdir($lang_dir))
+	{
+		$files = glob('*.txt');
 	}
-	return $g_array;
+	return (is_array($files)) ? $files : array();
 }
 
 ?>

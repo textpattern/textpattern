@@ -842,18 +842,7 @@ $LastChangedRevision$
 			return $dirlist;
 
 		if (chdir($file_base_path)) {
-			if (function_exists('glob'))
-				$g_array = glob("*.*");
-			else {
-				$dh = opendir($file_base_path);
-				$g_array = array();
-				while (false !== ($filename = readdir($dh))) {
-					$g_array[] = $filename;
-				}
-				closedir($dh);
-
-			}
-
+			$g_array = glob("*.*");
 			if ($g_array) {
 				foreach ($g_array as $filename) {
 					if (is_file($filename)) {
