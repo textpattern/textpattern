@@ -555,7 +555,6 @@ $LastChangedRevision$
 			$files = glob($dir.'*.php');
 			if ($files) {
 				foreach ($files as $f) {
-					dmp($f);
 					load_plugin(basename($f, '.php'));
 				}
 			}
