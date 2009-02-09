@@ -1697,9 +1697,12 @@ $LastChangedRevision$
 	}
 
 //-------------------------------------------------------------
-	function set_pref($name, $val, $event='publish',  $type=0, $html='text_input', $position=0)
+	function set_pref($name, $val, $event='publish',  $type=0, $html='text_input', $position=0, $is_private=PREF_GLOBAL)
 	{
 		extract(doSlash(func_get_args()));
+
+		// TODO
+		if ($is_private == PREF_PRIVATE) $name = "#TODO#$name";
 
 		if (!safe_row("*", 'txp_prefs', "name = '$name'") ) {
 			return safe_insert('txp_prefs', "
@@ -1715,6 +1718,13 @@ $LastChangedRevision$
         	return safe_update('txp_prefs', "val = '$val'","name like '$name'");
     	}
     		return false;
+	}
+
+//-------------------------------------------------------------
+	function get_pref($thing, $default='') // checks $prefs for a named variable, or creates a default
+	{
+		global $prefs;
+		return (isset($prefs[$thing])) ? $prefs[$thing] : $default;
 	}
 
 // -------------------------------------------------------------
@@ -2202,5 +2212,43 @@ eod;
 //-------------------------------------------------------------
 	function strip_prefix($str, $pfx) {
 		return preg_replace('/^'.preg_quote($pfx, '/').'/', '', $str);
+	}
+
+//-------------------------------------------------------------
+// wrap an array of name => value tupels into an XML envelope,
+// supports one level of nested arrays at most.
+	function send_xml_response($response=array())
+	{
+		ob_clean();
+		$default_response = array (
+			'http-status' => '200 OK',
+		);
+
+		// backfill default response properties
+		$response =  doSpecial($response) + $default_response;
+
+		header('Content-Type: text/xml');
+		txp_status_header($response['http-status']);
+		$out[] = '<?xml version="1.0" encoding="utf-8" standalone="yes"?>';
+		$out[] = '<textpattern>';
+		foreach ($response as $element => $value)
+		{
+			if (is_array($value))
+			{
+				$out[] = t."<$element>".n;
+				foreach ($value as $e => $v)
+				{
+					$out[] = t.t."<$e value='$v' />".n;
+				}
+				$out[] = t."</$element>".n;
+			}
+			else
+			{
+				$out[] = t."<$element value='$value' />".n;
+			}
+		}
+		$out[] = '</textpattern>';
+		echo(join(n, $out));
+		exit();
 	}
 ?>

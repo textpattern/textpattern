@@ -90,6 +90,7 @@ $LastChangedRevision$
 
 		$event = (gps('event') ? gps('event') : 'article');
 		$step = gps('step');
+		$app_mode = gps('app_mode');
 
 		if (!$dbversion or ($dbversion != $thisversion) or $txp_using_svn)
 		{

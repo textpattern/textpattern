@@ -38,6 +38,12 @@ define('IS_CGI', substr(PHP_SAPI, 0, 3) == 'cgi' );
 define('IS_FASTCGI', IS_CGI and empty($_SERVER['FCGI_ROLE']) and empty($_ENV['FCGI_ROLE']) );
 define('IS_APACHE', !IS_CGI and substr(PHP_SAPI, 0, 6) == 'apache' );
 
+define('PREF_PRIVATE', true);
+define('PREF_GLOBAL', false);
+define('PREF_BASIC', 0);
+define('PREF_ADVANCED', 1);
+define('PREF_HIDDEN', 2);
+
 error_reporting($old_level);
 unset($old_level);
 

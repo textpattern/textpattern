@@ -8,7 +8,10 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function pagetop($pagetitle,$message="")
 	{
-		global $css_mode,$siteurl,$sitename,$txp_user,$event;
+		global $siteurl,$sitename,$txp_user,$event,$step,$app_mode;
+
+		if ($app_mode == 'async') return;
+
 		$area = gps('area');
 		$event = (!$event) ? 'article' : $event;
 		$bm = gps('bm');
@@ -52,6 +55,9 @@ $LastChangedRevision$
 	<title>Txp &#8250; <?php echo htmlspecialchars($sitename) ?> &#8250; <?php echo escape_title($pagetitle) ?></title>
 	<link href="textpattern.css" rel="stylesheet" type="text/css" />
 	<script type="text/javascript" src="jquery.js"></script>
+	<?php echo script_js(
+		"var textpattern = {event: '$event', step: '$step'};"
+	); ?>
 	<script type="text/javascript" src="textpattern.js"></script>
 	<script type="text/javascript">
 	<!--

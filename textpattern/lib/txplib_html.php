@@ -14,8 +14,9 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function end_page()
 	{
-		global $txp_user,$event;
-		if($event!='tag') {
+		global $txp_user,$event,$app_mode;
+
+		if ($app_mode != 'async' && $event != 'tag') {
 			echo '<div id="end_page">',
 			navPop().n,
 			'<a href="http://www.textpattern.com"><img src="txp_img/carver.gif" width="60" height="48" border="0" alt="" /></a>'.n;

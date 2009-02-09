@@ -50,6 +50,7 @@ if (!empty($event) and $event == 'article') {
 		case "publish":  article_post();    break;
 		case "edit":     article_edit();    break;
 		case "save":     article_save();    break;
+		case "save_pane_state":     article_save_pane_state();    break;
 	}
 }
 
@@ -86,17 +87,17 @@ if (!empty($event) and $event == 'article') {
 			$expires = 0;
 			$whenexpires = NULLDATETIME;
 		}
-		else {			
+		else {
 			if(empty($exp_month)) $exp_month=1;
 			if(empty($exp_day)) $exp_day=1;
 			if(empty($exp_hour)) $exp_hour=0;
 			if(empty($exp_minute)) $exp_minute=0;
 			if(empty($exp_second)) $exp_second=0;
-			
+
 			$expires = strtotime($exp_year.'-'.$exp_month.'-'.$exp_day.' '.
 					$exp_hour.':'.$exp_minute.':'.$exp_second)-tz_offset();
 			$whenexpires = "from_unixtime($expires)";
-		}		
+		}
 
 		if ($expires) {
 			if ($expires <= $when_ts) {
@@ -104,7 +105,7 @@ if (!empty($event) and $event == 'article') {
 				return;
 			}
 		}
-		
+
 		if ($Title or $Body or $Excerpt) {
 
 			if (!has_privs('article.publish') && $Status>=4) $Status = 3;
@@ -216,9 +217,9 @@ if (!empty($event) and $event == 'article') {
 			if(empty($exp_hour)) $exp_hour=0;
 			if(empty($exp_minute)) $exp_minute=0;
 			if(empty($exp_second)) $exp_second=0;
-			
+
 			$expires = strtotime($exp_year.'-'.$exp_month.'-'.$exp_day.' '.$exp_hour.':'.$exp_minute.':'.$exp_second)-tz_offset();
-			$whenexpires = "Expires=from_unixtime($expires)";	
+			$whenexpires = "Expires=from_unixtime($expires)";
 		}
 
 		if ($expires) {
@@ -413,7 +414,7 @@ if (!empty($event) and $event == 'article') {
 			echo side_help($textile_body, $textile_excerpt).
 
 			'<h3 class="plain"><a href="#advanced" onclick="toggleDisplay(\'advanced\'); return false;">'.gTxt('advanced_options').'</a></h3>',
-			'<div id="advanced" class="toggle" style="display:none">',
+			'<div id="advanced" class="toggle" style="display:'.(get_pref('#TODO#pane_article_advanced_visible') ? 'block' : 'none').'">',
 
 			// markup selection
 				n.graf('<label for="markup-body">'.gTxt('article_markup').'</label>'.br.
@@ -455,7 +456,7 @@ if (!empty($event) and $event == 'article') {
 			'</div>
 
 			<h3 class="plain"><a href="#recent" onclick="toggleDisplay(\'recent\'); return false;">'.gTxt('recent_articles').'</a>'.'</h3>'.
-			'<div id="recent" class="toggle" style="display:none">';
+			'<div id="recent" class="toggle" style="display:'.(get_pref('#TODO#pane_article_recent_visible') ? 'block' : 'none').'">';
 
 			$recents = safe_rows_start("Title, ID",'textpattern',"1=1 order by LastMod desc limit 10");
 
@@ -665,7 +666,7 @@ if (!empty($event) and $event == 'article') {
 
 		//-- "More" section
 				n.n.'<h3 class="plain"><a href="#more" onclick="toggleDisplay(\'more\'); return false;">'.gTxt('more').'</a></h3>',
-				'<div id="more" class="toggle" style="display:none">';
+				'<div id="more" class="toggle" style="display:'.(get_pref('#TODO#pane_article_more_visible') ? 'block' : 'none').'">';
 
 		//-- comments stuff --------------
 
@@ -743,7 +744,7 @@ if (!empty($event) and $event == 'article') {
 
 				n.'</fieldset>';
 
-		//-- expires ------------------- 
+		//-- expires -------------------
 
 				$persist_timestamp = (!empty($store_out['exp_year']))?
 					safe_strtotime($store_out['exp_year'].'-'.$store_out['exp_month'].'-'.$store_out['exp_day'].' '.$store_out['exp_hour'].':'.$store_out['exp_minute'].':'.$store_out['second'])
@@ -811,9 +812,9 @@ if (!empty($event) and $event == 'article') {
 
 				n.'</fieldset>';
 
-			//-- expires ------------------- 
+			//-- expires -------------------
 				if (!empty($exp_year))
-				{	
+				{
 					if(empty($exp_month)) $exp_month=1;
 					if(empty($exp_day)) $exp_day=1;
 					if(empty($exp_hour)) $exp_hour=0;
@@ -821,7 +822,7 @@ if (!empty($event) and $event == 'article') {
 					if(empty($exp_second)) $exp_second=0;
 					$sExpires = safe_strtotime($exp_year.'-'.$exp_month.'-'.$exp_day.' '.$exp_hour.':'.$exp_minute.':'.$exp_second);
 				}
-					
+
 				echo n.n.'<fieldset id="write-expires">'.
 					n.'<legend>'.gTxt('expires').'</legend>'.
 
@@ -882,13 +883,15 @@ if (!empty($event) and $event == 'article') {
 
 	function side_help($textile_body, $textile_excerpt)
 	{
+		global $prefs;
+
 		if ($textile_body == USE_TEXTILE or $textile_excerpt == USE_TEXTILE)
 		{
 			return n.hed(
 				'<a href="#textile_help" onclick="toggleDisplay(\'textile_help\'); return false;">'.gTxt('textile_help').'</a>'
 			, 3, ' class="plain"').
 
-				n.'<div id="textile_help" class="toggle" style="display:none">'.
+				n.'<div id="textile_help" class="toggle" style="display:'.(get_pref('#TODO#pane_article_textile_help_visible') ? 'block' : 'none').'">'.
 
 				n.'<ul class="plain-list small">'.
 					n.t.'<li>'.gTxt('header').': <strong>h<em>n</em>.</strong>'.sp.
@@ -1081,7 +1084,6 @@ if (!empty($event) and $event == 'article') {
 		return $incoming;
 	}
 // -------------------------------------------------------------
-
 	function do_pings()
 	{
 		global $txpcfg, $prefs, $production_status;
@@ -1104,5 +1106,18 @@ if (!empty($event) and $event == 'article') {
 			$wl_client->query('weblogUpdates.ping', $prefs['sitename'], hu);
 		}
 	}
-
+// -------------------------------------------------------------
+	function article_save_pane_state()
+	{
+		global $event;
+		$panes = array('textile_help', 'advanced', 'recent', 'more');
+		$pane = gps('pane');
+		if (in_array($pane, $panes))
+		{
+			set_pref("pane_{$event}_{$pane}_visible", (gps('visible') == 'true' ? '1' : '0'), $event, PREF_HIDDEN, '', 0, PREF_PRIVATE);
+			send_xml_response();
+		} else {
+			send_xml_response(array('http-status' => '400 Bad Request'));
+		}
+	}
 ?>

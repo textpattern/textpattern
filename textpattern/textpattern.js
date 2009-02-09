@@ -211,6 +211,15 @@ function toggleDisplay(id)
 	var obj = $('#' + id);
 	if (obj) {
 		obj.toggle();
+		// send state of toggle pane to server
+		sendAsyncEvent(
+			{
+				event: textpattern.event, 
+				step: 'save_pane_state',
+				pane: $(obj).attr('id'),
+				visible: ($(obj).css('display') == 'block')
+			}
+		);
 	}
 }
 
@@ -261,6 +270,14 @@ function setClassRemember(className, force)
 
 	setClassDisplay(className, v);
 	setClassDisplay(className+'_neg', 1-v);
+}
+
+//-------------------------------------------------------------
+// AJAX
+function sendAsyncEvent(data, fn)
+{
+	data.app_mode = 'async';
+	$.post('index.php', data, fn, 'xml');
 }
 
 //-------------------------------------------------------------
