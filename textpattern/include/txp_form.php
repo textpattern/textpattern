@@ -190,10 +190,7 @@ $LastChangedRevision$
 				tdtl(
 					form_list($name)
 				)
-			).endTable().
-			n.'<script type="text/javascript">'.
-			n.'if(jQuery.browser.mozilla){$("#form").attr("spellcheck", false);}'.
-			n.'</script>';
+			).endTable();
 
 		echo $out;
 	}

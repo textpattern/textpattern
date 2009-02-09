@@ -51,6 +51,7 @@ $LastChangedRevision$
 	<meta name="robots" content="noindex, nofollow" />
 	<title>Txp &#8250; <?php echo htmlspecialchars($sitename) ?> &#8250; <?php echo escape_title($pagetitle) ?></title>
 	<link href="textpattern.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="jquery.js"></script>
 	<script type="text/javascript" src="textpattern.js"></script>
 	<script type="text/javascript">
 	<!--
@@ -156,7 +157,6 @@ $LastChangedRevision$
 		addEvent(window, 'load', cleanSelects);
 	-->
 	</script>
-	<script type="text/javascript" src="jquery.js"></script>
 	<?php callback_event('admin_side', 'head_end'); ?>
 	</head>
 	<body id="<?php echo $body_id; ?>">

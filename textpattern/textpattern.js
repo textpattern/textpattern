@@ -209,7 +209,9 @@ function getElementsByClass(classname, node)
 function toggleDisplay(id)
 {
 	var obj = $('#' + id);
-	if (obj) obj.toggle();
+	if (obj) {
+		obj.toggle();
+	}
 }
 
 // -------------------------------------------------------------
@@ -260,3 +262,10 @@ function setClassRemember(className, force)
 	setClassDisplay(className, v);
 	setClassDisplay(className+'_neg', 1-v);
 }
+
+//-------------------------------------------------------------
+// global admin-side behaviour
+$(document).ready(function() {
+	// disable spellchecking on all elements of type "code" in capable browsers
+	if(jQuery.browser.mozilla){$(".code").attr("spellcheck", false)};
+});

@@ -104,10 +104,6 @@ $LastChangedRevision$
 				n.'<label for="copy-page">'.gTxt('copy_page_as').'</label>'.sp.
 				n.fInput('text', 'newname', '', 'edit', '', '', '', '', 'copy-page').
 				n.fInput('submit','copy',gTxt('copy'),'smallerbox').'</p>';
-		$out[] = 
-				n.'<script type="text/javascript">'.
-				n.'if(jQuery.browser.mozilla){$("#html").attr("spellcheck", false);}'.
-				n.'</script>';
 		return form(join('',$out));
 	}
 
