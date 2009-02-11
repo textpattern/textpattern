@@ -1699,12 +1699,19 @@ $LastChangedRevision$
 //-------------------------------------------------------------
 	function set_pref($name, $val, $event='publish',  $type=0, $html='text_input', $position=0, $is_private=PREF_GLOBAL)
 	{
+		global $txp_user;
 		extract(doSlash(func_get_args()));
 
-		// TODO
-		if ($is_private == PREF_PRIVATE) $name = "#TODO#$name";
+		$user_name = '';
+		if ($is_private == PREF_PRIVATE) {
+			if (empty($txp_user))
+				return false;
 
-		if (!safe_row("*", 'txp_prefs', "name = '$name'") ) {
+			$user_name = 'user_name = \''.doSlash($txp_user).'\'';
+		}
+
+		if (!safe_row('name', 'txp_prefs', "name = '$name'" . ($user_name ? " AND $user_name" : ''))) {
+			$user_name = ($user_name ? "$user_name," : '');
 			return safe_insert('txp_prefs', "
 				name  = '$name',
 				val   = '$val',
@@ -1712,12 +1719,12 @@ $LastChangedRevision$
 				html  = '$html',
 				type  = '$type',
 				position = '$position',
+				$user_name
 				prefs_id = 1"
 			);
     	} else {
         	return safe_update('txp_prefs', "val = '$val'","name like '$name'");
     	}
-    		return false;
 	}
 
 //-------------------------------------------------------------

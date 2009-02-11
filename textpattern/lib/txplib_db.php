@@ -450,14 +450,27 @@ $DB = new DB;
 //-------------------------------------------------------------
 	function get_prefs()
 	{
-		$r = safe_rows_start('name, val', 'txp_prefs', 'prefs_id=1');
+		global $txp_user;
+		$out = array();
+
+		// get current user's private prefs
+		if ($txp_user) {
+			$r = safe_rows_start('name, val', 'txp_prefs', 'prefs_id=1 AND user_name=\''.doSlash($txp_user).'\'');
+			if ($r) {
+				while ($a = nextRow($r)) {
+					$out[$a['name']] = $a['val'];
+				}
+			}
+		}
+
+		// get global prefs, eventually override equally named user prefs.
+		$r = safe_rows_start('name, val', 'txp_prefs', 'prefs_id=1 AND user_name=\'\'');
 		if ($r) {
 			while ($a = nextRow($r)) {
 				$out[$a['name']] = $a['val'];
 			}
-			return $out;
 		}
-		return array();
+		return $out;
 	}
 
 // -------------------------------------------------------------

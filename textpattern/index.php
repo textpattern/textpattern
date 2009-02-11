@@ -53,6 +53,7 @@ $LastChangedRevision$
 
 		$dbversion = safe_field('val','txp_prefs',"name = 'version'");
 
+		// global site prefs
 		$prefs = get_prefs();
 		extract($prefs);
 
@@ -87,6 +88,9 @@ $LastChangedRevision$
 
 		include txpath.'/include/txp_auth.php';
 		doAuth();
+
+		// once more for global plus private prefs
+		$prefs = get_prefs();
 
 		$event = (gps('event') ? gps('event') : 'article');
 		$step = gps('step');
