@@ -462,6 +462,7 @@ $LastChangedRevision$
 
 				if (safe_delete('txp_users', "name IN ('".join("','", doSlash($names))."')"))
 				{
+					safe_delete('txp_prefs', "user_name IN ('".join("','", doSlash($names))."')");
 					$changed = $names;
 					$msg = 'author_deleted';
 				}
