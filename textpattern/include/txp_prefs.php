@@ -420,7 +420,6 @@ $LastChangedRevision$
 	}
 
 //-------------------------------------------------------------
-
 	function default_event($name, $val)
 	{
 		$vals = areas();
