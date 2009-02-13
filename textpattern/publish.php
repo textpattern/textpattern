@@ -326,8 +326,8 @@ $LastChangedRevision$
 								}
 								else {
 									$rs = lookupByTitleSection($u2,$u1);
-									$out['id'] = @$rs['ID'];
-									$out['s'] = @$rs['Section'];
+									$out['id'] = isset($rs['ID']) ? $rs['ID'] : '';
+									$out['s'] = isset($rs['Section']) ? $rs['Section'] : '';
 									$is_404 = (empty($out['s']) or empty($out['id']));
 								}
 							break;
@@ -429,21 +429,21 @@ $LastChangedRevision$
 
 		// hackish
 		global $is_article_list;
-		if(empty($id)) $is_article_list = true;
+		if (empty($id)) $is_article_list = true;
 
-			// by this point we should know the section, so grab its page and css
+		// by this point we should know the section, so grab its page and css
 		$rs = safe_row("page, css", "txp_section", "name = '".doSlash($s)."' limit 1");
-		$out['page'] = @$rs['page'];
-		$out['css'] = @$rs['css'];
+		$out['page'] = isset($rs['page']) ? $rs['page'] : '';
+		$out['css'] = isset($rs['css']) ? $rs['css'] : '';
 
-		if(is_numeric($id) and !$is_404) {
+		if (is_numeric($id) and !$is_404) {
 			$a = safe_row('*, unix_timestamp(Posted) as uPosted, unix_timestamp(Expires) as uExpires, unix_timestamp(LastMod) as uLastMod', 'textpattern', 'ID='.intval($id).(gps('txpreview') ? '' : ' and Status in (4,5)'));
 			if ($a) {
 				$Posted             = $a['Posted'];
 				$out['id_keywords'] = $a['Keywords'];
 				$out['id_author']   = $a['AuthorID'];
 				populateArticleData($a);
-				
+
 				$uExpires = $a['uExpires'];
 				if ($uExpires and time() > $uExpires and !$publish_expired_articles) {
 					$out['status'] = '410';
@@ -624,7 +624,7 @@ $LastChangedRevision$
 			$s_filter = ($searchall ? filterSearch() : '');
 			$q = doSlash($q);
 
-            		// searchable article fields are limited to the columns of 
+            		// searchable article fields are limited to the columns of
             		// the textpattern table and a matching fulltext index must exist.
 			$cols = do_list($searchable_article_fields);
 			if (empty($cols) or $cols[0] == '') $cols = array('Title', 'Body');
@@ -633,10 +633,10 @@ $LastChangedRevision$
 			for ($i = 0; $i < count($cols); $i++)
 			{
 				$cols[$i] = "`$cols[$i]` rlike '$q'";
-			}			
+			}
 			$cols = join(" or ", $cols);
 			$search = " and ($cols) $s_filter";
-			
+
 			// searchall=0 can be used to show search results for the current section only
 			if ($searchall) $section = '';
 			if (!$sort) $sort = 'score desc';
@@ -679,7 +679,7 @@ $LastChangedRevision$
 				$time = " and Posted > now()"; break;
 			default:
 				$time = " and Posted <= now()";
-		}		
+		}
 		if (!$publish_expired_articles) {
 			$time .= " and (now() <= Expires or Expires = ".NULLDATETIME.")";
 		}
