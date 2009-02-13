@@ -18,8 +18,7 @@ $LastChangedRevision$
 
 		if ($app_mode != 'async' && $event != 'tag') {
 			echo '<div id="end_page">',
-			navPop().n,
-			'<a href="http://www.textpattern.com"><img src="txp_img/carver.gif" width="60" height="48" border="0" alt="" /></a>'.n;
+			'<a href="http://textpattern.com"><img src="txp_img/carver.gif" width="60" height="48" border="0" alt="" /></a>'.n;
 			echo graf('Textpattern &#183; '.txp_version).n;
 			echo($txp_user)
 			?	graf(gTxt('logged_in_as').' '.span(htmlspecialchars($txp_user)).br.
