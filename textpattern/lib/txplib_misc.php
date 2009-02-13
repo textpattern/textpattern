@@ -1103,11 +1103,13 @@ $LastChangedRevision$
 // -------------------------------------------------------------
  	function event_change_pageby($name)
 	{
+		global $event;
 		$qty = gps('qty');
 		$pageby = $name.'_list_pageby';
 		$GLOBALS[$pageby] = $qty;
 
-		safe_update('txp_prefs', "val='".doSlash($qty)."'", "name='".doSlash($pageby)."'");
+		set_pref($pageby, $qty, $event, PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
+		//safe_update('txp_prefs', "val='".doSlash($qty)."'", "name='".doSlash($pageby)."'");
 
 		return;
 	}
