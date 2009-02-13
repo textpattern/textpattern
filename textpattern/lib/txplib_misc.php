@@ -604,11 +604,11 @@ $LastChangedRevision$
 			return;
 
 		$return_value = '';
-		
+
 		// any payload parameters?
 		$argv = func_get_args();
 		$argv = (count($argv) > 3) ? array_slice($argv, 3) : array();
-		
+
 		foreach ($plugin_callback as $c) {
 			if ($c['event'] == $event and (empty($c['step']) or $c['step'] == $step) and $c['pre'] == $pre) {
 				if (is_callable($c['function'])) {
@@ -789,15 +789,15 @@ $LastChangedRevision$
 			if (is_file(txpath.'/lib/i18n-ascii.txt')) {
 				$i18n = parse_ini_file(txpath.'/lib/i18n-ascii.txt', true);
 				# load the global map
-				if (@is_array($i18n['default'])) {
+				if (isset($i18n['default']) && is_array($i18n['default'])) {
 					$array[$lang] = array_merge($array[$lang], $i18n['default']);
 					# base language overrides: 'de-AT' applies the 'de' section
 					if (preg_match('/([a-zA-Z]+)-.+/', $lang, $m)) {
-						if (@is_array($i18n[$m[1]]))
+						if (isset($i18n[$m[1]]) && is_array($i18n[$m[1]]))
 							$array[$lang] = array_merge($array[$lang], $i18n[$m[1]]);
 					};
 					# regional language overrides: 'de-AT' applies the 'de-AT' section
-					if (@is_array($i18n[$lang]))
+					if (isset($i18n[$lang]) && is_array($i18n[$lang]))
 						$array[$lang] = array_merge($array[$lang], $i18n[$lang]);
 				}
 				# load an old file (no sections) just in case
