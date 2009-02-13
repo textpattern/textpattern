@@ -16,6 +16,7 @@ $LastChangedRevision$
 	function log_hit($status)
 	{
 		global $nolog, $logging;
+		callback_event('log_hit');
 		if(!isset($nolog) && $status != '404') {
 			if($logging == 'refer') {
 				logit('refer', $status);
