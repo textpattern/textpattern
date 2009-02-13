@@ -421,6 +421,33 @@ $LastChangedRevision$
 
 //-------------------------------------------------------------
 
+	function default_event($name, $val)
+	{
+		$vals = areas();
+		
+		$out = array();
+
+		foreach ($vals as $a => $b)
+		{
+			if (count($b) > 0)
+			{
+				$out[] = n.t.'<optgroup label="'.gTxt('tab_'.$a).'">';
+
+				foreach ($b as $c => $d)
+				{
+					$out[] = n.t.t.'<option value="'.$d.'"'.( $val == $d ? ' selected="selected"' : '' ).'>'.$c.'</option>';
+				}
+
+				$out[] = n.t.'</optgroup>';
+			}
+		}
+
+		return n.'<select name="'.$name.'" class="list">'.
+			join('', $out).
+			n.'</select>';
+	}
+
+//-------------------------------------------------------------
 	function advanced_prefs($message = '')
 	{
 		global $textarray;

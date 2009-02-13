@@ -88,11 +88,11 @@ $LastChangedRevision$
 
 		include txpath.'/include/txp_auth.php';
 		doAuth();
-
+        
 		// once more for global plus private prefs
-		$prefs = get_prefs();
+        $prefs = get_prefs(); 
 
-		$event = (gps('event') ? gps('event') : 'article');
+        $event = (gps('event') ? gps('event') : get_pref('default_event', 'article'));
 		$step = gps('step');
 		$app_mode = gps('app_mode');
 
