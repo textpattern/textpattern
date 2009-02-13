@@ -602,11 +602,17 @@ $LastChangedRevision$
 
 		if (!is_array($plugin_callback))
 			return;
+
 		$return_value = '';
+		
+		// any payload parameters?
+		$argv = func_get_args();
+		$argv = (count($argv) > 3) ? array_slice($argv, 3) : array();
+		
 		foreach ($plugin_callback as $c) {
 			if ($c['event'] == $event and (empty($c['step']) or $c['step'] == $step) and $c['pre'] == $pre) {
 				if (is_callable($c['function'])) {
-					$return_value .= call_user_func($c['function'], $event, $step);
+					$return_value .= call_user_func_array($c['function'], array('event' => $event, 'step' => $step) + $argv);
 				}
 			}
 		}
