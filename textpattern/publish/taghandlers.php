@@ -164,13 +164,15 @@ $LastChangedRevision$
 			'class'     => '',
 			'escape'    => 'html',
 			'html_id'   => '',
+			'height'   	=> '',
 			'id'        => '',
 			'link'      => 0,
 			'link_rel'  => '',
 			'name'      => '',
 			'poplink'   => 0, // remove in crockery
 			'style'     => '', // remove in crockery
-			'wraptag'   => ''
+			'wraptag'   => '',
+			'width'   	=> ''
 		), $atts));
 
 		if ($name)
@@ -205,12 +207,17 @@ $LastChangedRevision$
 					$caption = htmlspecialchars($caption);
 				}
 
+				if (empty($width) && $thumb_w) $width = $thumb_w;
+				if (empty($height) && $thumb_h) $height = $thumb_h;
+
 				$out = '<img src="'.hu.$img_dir.'/'.$id.'t'.$ext.'" alt="'.$alt.'"'.
 					($caption ? ' title="'.$caption.'"' : '').
 					( ($html_id and !$wraptag) ? ' id="'.$html_id.'"' : '' ).
 					( ($class and !$wraptag) ? ' class="'.$class.'"' : '' ).
 					($style ? ' style="'.$style.'"' : '').
 					($align ? ' align="'.$align.'"' : '').
+					($width ? ' width="'.$width.'"' : '').
+					($height ? ' height="'.$height.'"' : '').
 					' />';
 
 				if ($link)

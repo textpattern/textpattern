@@ -180,7 +180,9 @@ $LastChangedRevision$
 
 				if ($thumbnail) {
 					if ($ext != '.swf') {
-						$thumbnail = '<img src="'.hu.$img_dir.'/'.$id.'t'.$ext."?$uDate".'" alt="" />';
+						$thumbnail = '<img src="'.hu.$img_dir.'/'.$id.'t'.$ext."?$uDate".'" alt="" '.
+											"title='$id$ext ($w &#215; $h)'".
+											($thumb_w ? "width='$thumb_w' height='$thumb_h'" : ''). ' />';
 					} else {
 						$thumbnail = '';
 					}
@@ -347,7 +349,8 @@ $LastChangedRevision$
 			}
 
 			if ($thumbnail and ($ext != '.swf')) {
-				$thumb = '<img src="'.hu.$img_dir.'/'.$id.'t'.$ext."?$uDate".'" alt="" />';
+				$thumb = '<img src="'.hu.$img_dir.'/'.$id.'t'.$ext."?$uDate".'" alt="" '.
+							($thumb_w ? "width='$thumb_w' height='$thumb_h'" : ''). ' />';
 			} else {
 				$thumb = '';
 			}
@@ -477,18 +480,17 @@ $LastChangedRevision$
 
 		$file = get_uploaded_file($file);
 
-		list(,,$extension) = getimagesize($file);
+		list($w, $h, $extension) = getimagesize($file);
 
 		if (($file !== false) && @$extensions[$extension]) {
 			$ext = $extensions[$extension];
+			$newpath = IMPATH.$id.'t'.$ext;
 
-				$newpath = IMPATH.$id.'t'.$ext;
-
-			if(shift_uploaded_file($file, $newpath) == false) {
+			if (shift_uploaded_file($file, $newpath) == false) {
 				image_list($newpath.sp.gTxt('upload_dir_perms'));
 			} else {
-				chmod($newpath,0644);
-				safe_update("txp_image", "thumbnail = 1", "id = $id");
+				chmod($newpath, 0644);
+				safe_update("txp_image", "thumbnail = 1, thumb_w = $w, thumb_h = $h", "id = $id");
 
 				$message = gTxt('image_uploaded', array('{name}' => $name));
 				update_lastmod();
