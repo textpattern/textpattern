@@ -546,15 +546,13 @@ $LastChangedRevision$
 			'title'    => '',
 		),$atts));
 
-		if($email) {
-			$out  = array(
-				'<a href="'.eE('mailto:'.$email).'"',
-				($title) ? ' title="'.$title.'"' : '',
-				'>',
-				($thing) ? parse($thing) : $linktext,
-				'</a>'
-			);
-			return join('',$out);
+		if ($email) {
+			if ($thing !== NULL) $linktext = parse($thing);
+			// obfuscate link text?
+			if (is_valid_email($linktext)) $linktext = eE($linktext);
+
+			return '<a href="'.eE('mailto:'.$email).'"'.
+				($title ? ' title="'.$title.'"' : '').">$linktext</a>";
 		}
 		return '';
 	}
