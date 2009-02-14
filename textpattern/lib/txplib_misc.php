@@ -601,7 +601,7 @@ $LastChangedRevision$
 		global $plugin_callback;
 
 		if (!is_array($plugin_callback))
-			return;
+			return '';
 
 		$return_value = '';
 
