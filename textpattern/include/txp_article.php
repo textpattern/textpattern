@@ -1050,7 +1050,6 @@ if (!empty($event) and $event == 'article') {
 		$textile = new Textile();
 
 		$incoming['Title_plain'] = $incoming['Title'];
-		$incoming['url_title'] = preg_replace('|[\x00-\x1f#%+/?\x7f]|', '', $incoming['url_title']);
 
 		if ($incoming['textile_body'] == LEAVE_TEXT_UNTOUCHED) {
 

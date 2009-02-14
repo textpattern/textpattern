@@ -680,7 +680,7 @@ $LastChangedRevision$
 		{
 			$text = sanitizeForUrl($text);
 			if ($prefs['permalink_title_format']) {
-				return strtolower($text);
+				return (function_exists('mb_strtolower') ? mb_strtolower($text, 'UTF-8') : strtolower($text));
 			} else {
 				return str_replace('-','',$text);
 			}
@@ -690,6 +690,10 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function sanitizeForUrl($text)
 	{
+		// any overrides?
+		$out = callback_event('sanitize_for_url', '', 0, $text);
+		if ($out !== '') return $out;
+
 		// Remove names entities and tags
 		$text = preg_replace("/(^|&\S+;)|(<[^>]*>)/U","",dumbDown($text));
 		// Dashify high-order chars leftover from dumbDown()
@@ -698,6 +702,20 @@ $LastChangedRevision$
 		$text = preg_replace('/[\s\-\/\\\\]+/', '-', trim(preg_replace('/[^\w\s\-\/\\\\]/', '', $text)));
 		// Remove all non-whitelisted characters
 		$text = preg_replace("/[^A-Za-z0-9\-_]/","",$text);
+		return $text;
+	}
+
+// -------------------------------------------------------------
+	function sanitizeForFile($text)
+	{
+		// any overrides?
+		$out = callback_event('sanitize_for_file', '', 0, $text);
+		if ($out !== '') return $out;
+
+		// Remove control characters and " * \ : < > ? / |
+		$text = preg_replace('/[\x00-\x1f\x22\x2a\x2f\x3a\x3c\x3e\x3f\x5c\x7c\x7f]+/', '', $text);
+		// Remove duplicate dots and any leading or trailing dots/spaces
+		$text = preg_replace('/[.]{2,}/', '.', trim($text, '. '));
 		return $text;
 	}
 
