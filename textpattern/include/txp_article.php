@@ -423,26 +423,32 @@ if (!empty($event) and $event == 'article') {
 				n.graf('<label for="markup-excerpt">'.gTxt('excerpt_markup').'</label>'.br.
 					pref_text('textile_excerpt', $textile_excerpt, 'markup-excerpt')),
 
-				// form override
+			// form override
 			($allow_form_override)
 			?	graf('<label for="override-form">'.gTxt('override_default_form').'</label>'.sp.popHelp('override_form').br.
 					form_pop($override_form, 'override-form'))
-			:	'',
+			:	'';
 
-				// custom fields, believe it or not
-			($custom_1_set)  ? custField(  1, $custom_1_set,  $custom_1 )    : '',
-			($custom_2_set)  ? custField(  2, $custom_2_set,  $custom_2 )    : '',
-			($custom_3_set)  ? custField(  3, $custom_3_set,  $custom_3 )    : '',
-			($custom_4_set)  ? custField(  4, $custom_4_set,  $custom_4 )    : '',
-			($custom_5_set)  ? custField(  5, $custom_5_set,  $custom_5 )    : '',
-			($custom_6_set)  ? custField(  6, $custom_6_set,  $custom_6 )    : '',
-			($custom_7_set)  ? custField(  7, $custom_7_set,  $custom_7 )    : '',
-			($custom_8_set)  ? custField(  8, $custom_8_set,  $custom_8 )    : '',
-			($custom_9_set)  ? custField(  9, $custom_9_set,  $custom_9 )    : '',
-			($custom_10_set) ? custField( 10, $custom_10_set, $custom_10 )   : '',
+			// custom fields, believe it or not
+			$custom_fields = callback_event('custom_get');
+			if ($custom_fields === '')
+			{
+				$custom_fields =
+					(($custom_1_set !== '')  ? custField(  1, $custom_1_set,  $custom_1 )    : '').
+					(($custom_2_set !== '')  ? custField(  2, $custom_2_set,  $custom_2 )    : '').
+					(($custom_3_set !== '')  ? custField(  3, $custom_3_set,  $custom_3 )    : '').
+					(($custom_4_set !== '')  ? custField(  4, $custom_4_set,  $custom_4 )    : '').
+					(($custom_5_set !== '')  ? custField(  5, $custom_5_set,  $custom_5 )    : '').
+					(($custom_6_set !== '')  ? custField(  6, $custom_6_set,  $custom_6 )    : '').
+					(($custom_7_set !== '')  ? custField(  7, $custom_7_set,  $custom_7 )    : '').
+					(($custom_8_set !== '')  ? custField(  8, $custom_8_set,  $custom_8 )    : '').
+					(($custom_9_set !== '')  ? custField(  9, $custom_9_set,  $custom_9 )    : '').
+					(($custom_10_set !== '') ? custField( 10, $custom_10_set, $custom_10 )   : '');
+			}
+			echo $custom_fields;
 
 			// keywords
-				n.graf('<label for="keywords">'.gTxt('keywords').'</label>'.sp.popHelp('keywords').br.
+			echo n.graf('<label for="keywords">'.gTxt('keywords').'</label>'.sp.popHelp('keywords').br.
 					n.'<textarea id="keywords" name="Keywords" cols="18" rows="5">'.htmlspecialchars(str_replace(',' ,', ', $Keywords)).'</textarea>'),
 
 			// article image

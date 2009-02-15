@@ -423,7 +423,7 @@ $LastChangedRevision$
 	function default_event($name, $val)
 	{
 		$vals = areas();
-		
+
 		$out = array();
 
 		foreach ($vals as $a => $b)
@@ -444,6 +444,16 @@ $LastChangedRevision$
 		return n.'<select name="'.$name.'" class="list">'.
 			join('', $out).
 			n.'</select>';
+	}
+
+//-------------------------------------------------------------
+	function custom_set($name, $val)
+	{
+		// use plugged-in form markup for custom field settings?
+		$out = callback_event('custom_set', $name, 0, $val);
+		if ($out !== '') return $out;
+
+		return text_input($name, $val, 20);
 	}
 
 //-------------------------------------------------------------
