@@ -77,6 +77,11 @@ if (!empty($event) and $event == 'article') {
 			$when = 'now()';
 			$when_ts = time();
 		} else {
+			if (!is_numeric($year) || !is_numeric($month) || !is_numeric($day) || !is_numeric($hour)  || !is_numeric($minute) || !is_numeric($second) ) {
+				article_edit(gTxt('invalid_postdate'));
+				return;
+			}
+			
 			$when = $when_ts = strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second)-tz_offset();
 			$when = "from_unixtime($when)";
 		}
@@ -204,6 +209,11 @@ if (!empty($event) and $event == 'article') {
 			$whenposted = "Posted=now()";
 			$when_ts = time();
 		} else {
+			if (!is_numeric($year) || !is_numeric($month) || !is_numeric($day) || !is_numeric($hour)  || !is_numeric($minute) || !is_numeric($second) ) {
+				article_edit(gTxt('invalid_postdate'));
+				return;
+			}
+
 			$when = $when_ts = strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second)-tz_offset();
 			$whenposted = "Posted=from_unixtime($when)";
 		}
