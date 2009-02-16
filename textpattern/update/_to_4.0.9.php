@@ -15,7 +15,7 @@ $LastChangedRevision$
  	if (!in_array('user_name', $cols))
  	{
 		safe_alter('txp_prefs',
-		"ADD `user_name` varchar(64) NOT NULL, DROP INDEX `prefs_idx`, ADD UNIQUE `prefs_idx` (`prefs_id`, `name`, `user_name`), ADD INDEX `user_name` (`user_name`)");
+		"ADD `user_name` varchar(64) NOT NULL default '', DROP INDEX `prefs_idx`, ADD UNIQUE `prefs_idx` (`prefs_id`, `name`, `user_name`), ADD INDEX `user_name` (`user_name`)");
  	}
 
     // add columns for thumbnail dimensions
