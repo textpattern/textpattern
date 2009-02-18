@@ -3729,7 +3729,7 @@ begin tag builder functions
 			$description = str_replace('&', '&#38;', htmlspecialchars($description));
 
 			$url = ($permlink_mode == 'messy') ?
-				hu.'index.php?s=file_download'.a.'id='.$id:
+				hu.'index.php?s=file_download'.($type == 'textile' ? '&' : a).'id='.$id:
 				hu.gTxt('file_download').'/'.$id.($filename ? '/'.$filename : '');
 
 			switch ($type)
