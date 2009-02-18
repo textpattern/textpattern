@@ -147,7 +147,7 @@ $LastChangedRevision$
 		foreach($edit as $key => $val)
 		{
 			echo "case 'change".$key."':".n.
-				t."pjs.innerHTML = '<span>".str_replace(array("\n", '-'), array('', '&#45;'), addslashes($val))."</span>';".n.
+				t."pjs.innerHTML = '<span>".str_replace(array("\n", '-'), array('', '&#45;'), str_replace('</', '<\/', addslashes($val)))."<\/span>';".n.
 				t.'break;'.n.n;
 		}
 ?>
