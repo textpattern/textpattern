@@ -18,13 +18,6 @@ $LastChangedRevision$
 		"ADD `user_name` varchar(64) NOT NULL default '', DROP INDEX `prefs_idx`, ADD UNIQUE `prefs_idx` (`prefs_id`, `name`, `user_name`), ADD INDEX `user_name` (`user_name`)");
  	}
 
-    // add columns for thumbnail dimensions
- 	$cols = getThings('describe `'.PFX.'txp_image`');
- 	if (!in_array('thumb_w', $cols))
- 	{
-		safe_alter('txp_image',	"ADD `thumb_w` int(8) NOT NULL default 0, ADD `thumb_h` int(8) NOT NULL default 0");
- 	}
-
  	// remove a few global prefs in favour of future private ones
 	safe_delete('txp_prefs',
 		"user_name = '' AND name in ('article_list_pageby', 'author_list_pageby', 'comment_list_pageby', 'file_list_pageby', 'image_list_pageby', 'link_list_pageby', 'log_list_pageby')");
@@ -38,4 +31,19 @@ $LastChangedRevision$
 	{
 		safe_insert('txp_prefs', "prefs_id = 1, name = 'default_event', val = 'article', type = '1', event = 'admin', html = 'default_event', position = '150'");
 	}
+	
+    // add columns for thumbnail dimensions
+ 	$cols = getThings('describe `'.PFX.'txp_image`');
+ 	if (!in_array('thumb_w', $cols))
+ 	{
+		safe_alter('txp_image',	"ADD `thumb_w` int(8) NOT NULL default 0, ADD `thumb_h` int(8) NOT NULL default 0");
+ 	}
+
+	$cols = getThings('describe `'.PFX.'txp_plugin`');
+ 	if (!in_array('flags', $cols)) {
+		safe_alter('txp_plugin',
+			"ADD flags SMALLINT UNSIGNED NOT NULL DEFAULT 0");
+	}
+
+	
 ?>

@@ -645,6 +645,10 @@ width: 400px;
 height: 30px;
 }
 
+#page-plugin .manage {
+width: 8em;
+}
+
 /* tagbuilder
 ----------------------------------------------- */
 

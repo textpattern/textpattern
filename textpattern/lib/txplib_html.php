@@ -86,10 +86,10 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function hCell($text="",$caption="")
+	function hCell($text='',$caption='',$atts='')
 	{
 		$text = (!$text) ? sp : $text;
-		return tag($text,'th');
+		return tag($text,'th',$atts);
 	}
 
 // -------------------------------------------------------------

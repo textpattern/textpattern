@@ -48,7 +48,7 @@ $LastChangedRevision$
 
 		$switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
-		$rs = safe_rows_start('name, status, author, author_uri, version, description, length(help) as help, abs(strcmp(md5(code),code_md5)) as modified, load_order',
+		$rs = safe_rows_start('name, status, author, author_uri, version, description, length(help) as help, abs(strcmp(md5(code),code_md5)) as modified, load_order, flags',
 			'txp_plugin', '1 order by '.$sort_sql);
 
 		if ($rs and numRows($rs) > 0)
@@ -56,7 +56,6 @@ $LastChangedRevision$
 			echo '<form action="index.php" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
 
 			startTable('list').
-
 			tr(
 				column_head('plugin', 'name', 'plugin', true, $switch_dir, '', '', ('name' == $sort) ? $dir : '').
 				column_head('author', 'author', 'plugin', true, $switch_dir, '', '', ('author' == $sort) ? $dir : '').
@@ -65,9 +64,8 @@ $LastChangedRevision$
 				hCell(gTxt('description')).
 				column_head('active', 'status', 'plugin', true, $switch_dir, '', '', ('status' == $sort) ? $dir : '').
 				column_head('order', 'load_order', 'plugin', true, $switch_dir, '', '', ('load_order' == $sort) ? $dir : '').
-				hCell(gTxt('help')).
-				hCell().
-				hCell()
+				hCell(gTxt('manage'), '',  ' class="manage"').
+				hCell(/* checkbox */)
 			);
 
 			while ($a = nextRow($rs))
@@ -83,9 +81,11 @@ $LastChangedRevision$
 											$description);
 
 				$help = !empty($help) ?
-					'<a href="?event=plugin'.a.'step=plugin_help'.a.'name='.$name.'">'.gTxt('view').'</a>' :
-					gTxt('none');
+					n.t.'<li><a href="?event=plugin'.a.'step=plugin_help'.a.'name='.urlencode($name).'">'.gTxt('help').'</a></li>' : '';
 
+				$plugin_prefs = ($flags & PLUGIN_HAS_PREFS) && $status ?
+					n.t.'<li><a href="?event=plugin_prefs.'.urlencode($name).'">'.gTxt('plugin_prefs').'</a></li>' : '';
+					
 				echo tr(
 
 					n.td($name).
@@ -103,12 +103,13 @@ $LastChangedRevision$
 					,30).
 
 					td($load_order).
-					td($help).
-
 					td(
-						eLink('plugin', 'plugin_edit', 'name', $name, gTxt('edit'))
+						n.'<ul class="plugin_manage">'.
+						$help.
+						n.t.'<li>'.eLink('plugin', 'plugin_edit', 'name', $name, gTxt('edit')).'</li>'.
+						$plugin_prefs.
+						n.'</ul>'
 					).
-
 					td(
 						fInput('checkbox', 'selected[]', $name)
 					,30)
@@ -297,7 +298,8 @@ $LastChangedRevision$
 
 					$type  = empty($type)  ? 0 : min(max(intval($type), 0), 3);
 					$order = empty($order) ? 5 : min(max(intval($order), 1), 9);
-
+					$flags = empty($flags) ? 0 : intval($flags);
+					
 					$exists = fetch('name','txp_plugin','name',$name);
 
 					if (isset($help_raw) && empty($plugin['allow_html_help'])) {
@@ -319,7 +321,8 @@ $LastChangedRevision$
 							help         = '".doSlash($help)."',
 							code         = '".doSlash($code)."',
 							code_restore = '".doSlash($code)."',
-							code_md5     = '".doSlash($md5)."'",
+							code_md5     = '".doSlash($md5)."',
+							flags     	 = $flags",
 							"name        = '".doSlash($name)."'"
 						);
 
@@ -338,7 +341,8 @@ $LastChangedRevision$
 							code         = '".doSlash($code)."',
 							code_restore = '".doSlash($code)."',
 							code_md5     = '".doSlash($md5)."',
-							load_order   = '".$order."'"
+							load_order   = '".$order."',
+							flags   	 = $flags"
 						);
 					}
 

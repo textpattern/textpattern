@@ -44,6 +44,9 @@ define('PREF_BASIC', 0);
 define('PREF_ADVANCED', 1);
 define('PREF_HIDDEN', 2);
 
+define('PLUGIN_HAS_PREFS', 0x0001);
+define('PLUGIN_RESERVED_FLAGS', 0x0fff); // reserved bits for use by Textpattern core
+
 error_reporting($old_level);
 unset($old_level);
 
