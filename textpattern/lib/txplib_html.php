@@ -479,9 +479,32 @@ $LastChangedRevision$
 	}
 
 //-------------------------------------------------------------
-	function messenger($thing,$thething,$action)
+	function messenger($thing, $thething='', $action='')
 	{
-		return gTxt($thing).' '.strong($thething).' '.gTxt($action);
+ 		// $thing[0]: message text
+ 		// $thing[1]: message type, defaults to "success" unless empty or a different flag is set
+ 		if(!is_array($thing) || !isset($thing[1])) 
+ 		{
+ 			$thing = array($thing, 0);
+ 		}
+ 		
+ 		switch($thing[1])
+ 		{
+ 			case E_ERROR:
+ 				$class = 'error';
+ 				break;
+ 			case E_WARNING:
+ 				$class = 'warning';
+ 				break;
+ 			default:
+ 				$class = 'success';
+ 				break;
+ 		}
+ 		return "<span id='message' class='$class'>".
+ 			gTxt($thing[0]).
+ 			($thething !== '' ? ' '.strong($thething) : '').
+ 			($action !== '' ? ' '.gTxt($action) : '').
+ 			'</span>';
 	}
 
 // -------------------------------------------------------------
