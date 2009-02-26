@@ -339,7 +339,7 @@ $LastChangedRevision$
 
 			else
 			{
-				$message = gTxt('css_name_required');
+				$message = array(gTxt('css_name_required'), E_ERROR);
 			}
 
 			css_edit($message);

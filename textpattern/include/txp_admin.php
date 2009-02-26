@@ -99,7 +99,7 @@ $LastChangedRevision$
 
 		if (!is_valid_email($new_email))
 		{
-			admin(gTxt('email_required'));
+			admin(array(gTxt('email_required'), E_ERROR));
 			return;
 		}
 
@@ -125,7 +125,7 @@ $LastChangedRevision$
 
 		if (!is_valid_email($email))
 		{
-			admin(gTxt('email_required'));
+			admin(array(gTxt('email_required'), E_ERROR));
 			return;
 		}
 
@@ -154,7 +154,7 @@ $LastChangedRevision$
 
 		if (empty($new_pass))
 		{
-			admin(gTxt('password_required'));
+			admin(array(gTxt('password_required'), E_ERROR));
 			return;
 		}
 
@@ -221,7 +221,7 @@ $LastChangedRevision$
 			}
 		}
 
-		admin(gTxt('error_adding_new_author'));
+		admin(array(gTxt('error_adding_new_author'), E_ERROR));
 	}
 
 // -------------------------------------------------------------
@@ -504,7 +504,7 @@ $LastChangedRevision$
 						}
 						else
 						{
-							return admin(gTxt('could_not_mail').' '.htmlspecialchars($name));
+							return admin(array(gTxt('could_not_mail').' '.htmlspecialchars($name), E_ERROR));
 						}
 					}
 				}

@@ -209,7 +209,7 @@ $LastChangedRevision$
 			$step = 'form_create';
 			$message = gTxt('form_name_invalid');
 
-			return form_edit($message);
+			return form_edit(array($message, E_ERROR));
 		}
 
 		if (!in_array($type, array('article','category','comment','file','link','misc','section')))
@@ -217,7 +217,7 @@ $LastChangedRevision$
 			$step = 'form_create';
 			$message = gTxt('form_type_missing');
 
-			return form_edit($message);
+			return form_edit(array($message, E_ERROR));
 		}
 
 		if ($savenew)
@@ -229,7 +229,7 @@ $LastChangedRevision$
 				$step = 'form_create';
 				$message = gTxt('form_already_exists', array('{name}' => $name));
 
-				return form_edit($message);
+			return form_edit(array($message, E_ERROR));
 			}
 
 			safe_insert('txp_form', "Form = '$Form', type = '$type', name = '$name'");

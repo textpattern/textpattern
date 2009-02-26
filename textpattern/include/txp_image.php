@@ -418,7 +418,6 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-
 	function image_insert()
 	{
 		global $txpcfg, $extensions, $txp_user;
@@ -438,7 +437,7 @@ $LastChangedRevision$
 
 		else
 		{
-			return image_list($img_result);
+			return image_list(array($img_result, E_ERROR));
 		}
 	}
 
@@ -464,7 +463,7 @@ $LastChangedRevision$
 			list($message, $id) = $img_result;
 			return image_edit($message, $id);
 		}else{
-			return image_list($img_result);
+			return image_list(array($img_result, E_ERROR));
 		}
 	}
 
@@ -487,7 +486,7 @@ $LastChangedRevision$
 			$newpath = IMPATH.$id.'t'.$ext;
 
 			if (shift_uploaded_file($file, $newpath) == false) {
-				image_list($newpath.sp.gTxt('upload_dir_perms'));
+				image_list(array($newpath.sp.gTxt('upload_dir_perms'), E_ERROR));
 			} else {
 				chmod($newpath, 0644);
 				safe_update("txp_image", "thumbnail = 1, thumb_w = $w, thumb_h = $h", "id = $id");
@@ -499,9 +498,9 @@ $LastChangedRevision$
 			}
 		} else {
 			if ($file === false)
-				image_list(upload_get_errormsg($_FILES['thefile']['error']));
+				image_list(array(upload_get_errormsg($_FILES['thefile']['error']), E_ERROR));
 			else
-				image_list(gTxt('only_graphic_files_allowed'));
+				image_list(array(gTxt('only_graphic_files_allowed'), E_ERROR));
 		}
 	}
 
@@ -566,7 +565,7 @@ $LastChangedRevision$
 
 			if ($fail)
 			{
-				image_list(gTxt('image_delete_failed', array('{name}' => join(', ', $fail))));
+				image_list(array(gTxt('image_delete_failed', array('{name}' => join(', ', $fail))), E_ERROR));
 			}
 			else
 			{
@@ -657,7 +656,7 @@ $LastChangedRevision$
 
 		if ($width === '' && $height === '')
 		{
-			image_edit(gTxt('invalid_width_or_height'), $id);
+			image_edit(array(gTxt('invalid_width_or_height'), E_ERROR), $id);
 			return;
 		}
 
@@ -678,7 +677,7 @@ $LastChangedRevision$
 
 		else
 		{
-			$message = gTxt('thumbnail_not_saved', array('{id}' => $id));
+			$message = array(gTxt('thumbnail_not_saved', array('{id}' => $id)), E_ERROR);
 
 			image_edit($message, $id);
 		}
@@ -692,7 +691,7 @@ $LastChangedRevision$
 		if ($t->delete()) {
 			image_edit(gTxt('thumbnail_deleted'),$id);
 		} else {
-			image_edit(gTxt('thumbnail_delete_failed'),$id);
+			image_edit(array(gTxt('thumbnail_delete_failed'), E_ERROR),$id);
 		}
 	}
 

@@ -228,7 +228,7 @@ $LastChangedRevision$
 
 		else
 		{
-			$message = gTxt('section_name_already_exists', array('{name}' => $name));
+			$message = array(gTxt('section_name_already_exists', array('{name}' => $name)), E_ERROR);
 
 			sec_section_list($message);
 		}
@@ -259,7 +259,7 @@ $LastChangedRevision$
 		{
 			if (safe_field('name', 'txp_section', "name='$name'"))
 			{
-				$message = gTxt('section_name_already_exists', array('{name}' => $name));
+				$message = array(gTxt('section_name_already_exists', array('{name}' => $name)), E_ERROR);
 
 				sec_section_list($message);
 				return;
@@ -312,7 +312,7 @@ $LastChangedRevision$
 
 		if ($count)
 		{
-			$message = gTxt('section_used_by_article', array('{name}' => $name, '{count}' => $count));
+			$message = array(gTxt('section_used_by_article', array('{name}' => $name, '{count}' => $count)), E_ERROR);
 		}
 
 		else

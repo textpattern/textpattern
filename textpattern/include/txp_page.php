@@ -144,7 +144,7 @@ $LastChangedRevision$
 
 		if ($count)
 		{
-			$message = gTxt('page_used_by_section', array('{name}' => $name, '{count}' => $count));
+			$message = array(gTxt('page_used_by_section', array('{name}' => $name, '{count}' => $count)), E_WARNING);
 		}
 
 		else
@@ -169,7 +169,7 @@ $LastChangedRevision$
 
 			if ($newname and safe_field('name', 'txp_page', "name = '$newname'"))
 			{
-				$message = gTxt('page_already_exists', array('{name}' => $newname));
+				$message = array(gTxt('page_already_exists', array('{name}' => $newname)), E_ERROR);
 			}
 			elseif ($newname)
 			{
@@ -180,7 +180,7 @@ $LastChangedRevision$
 			}
 			else
 			{
-				$message = gTxt('page_name_invalid');
+				$message = array(gTxt('page_name_invalid'), E_ERROR);
 			}
 
  			page_edit($message);

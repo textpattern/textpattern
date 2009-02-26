@@ -235,7 +235,7 @@ $LastChangedRevision$
 
 				else
 				{
-					plugin_list(gTxt('plugin_compression_unsupported'));
+					plugin_list(array(gTxt('plugin_compression_unsupported'), E_ERROR));
 					return;
 				}
 			}
@@ -271,7 +271,7 @@ $LastChangedRevision$
 				}
 			}
 		}
-		plugin_list(gTxt('bad_plugin_code'));
+		plugin_list(array(gTxt('bad_plugin_code'), E_ERROR));
 
 	}
 
@@ -355,7 +355,7 @@ $LastChangedRevision$
 
 					else
 					{
-						$message = gTxt('plugin_install_failed', array('{name}' => htmlspecialchars($name)));
+						$message = array(gTxt('plugin_install_failed', array('{name}' => htmlspecialchars($name))), E_ERROR);
 
 						plugin_list($message);
 					}
@@ -364,7 +364,7 @@ $LastChangedRevision$
 
 			else
 			{
-				plugin_list(gTxt('bad_plugin_code'));
+				plugin_list(array(gTxt('bad_plugin_code'), E_ERROR));
 			}
 		}
 	}

@@ -347,7 +347,7 @@ if ($event == 'category') {
 
 		if (!$name)
 		{
-			$message = gTxt($event.'_category_invalid', array('{name}' => $name));
+			$message = array(gTxt($event.'_category_invalid', array('{name}' => $name)), E_ERROR);
 
 			return cat_category_list($message);
 		}
@@ -356,7 +356,7 @@ if ($event == 'category') {
 
 		if ($exists)
 		{
-			$message = gTxt($event.'_category_already_exists', array('{name}' => $name));
+			$message = array(gTxt($event.'_category_already_exists', array('{name}' => $name)), E_ERROR);
 
 			return cat_category_list($message);
 		}
@@ -410,7 +410,7 @@ if ($event == 'category') {
 		// make sure the name is valid
 		if (!$name)
 		{
-			$message = gTxt($event.'_category_invalid', array('{name}' => $name));
+			$message = array(gTxt($event.'_category_invalid', array('{name}' => $name)), E_ERROR);
 
 			return cat_category_list($message);
 		}
@@ -420,7 +420,7 @@ if ($event == 'category') {
 
 		if ($existing_id and $existing_id != $id)
 		{
-			$message = gTxt($event.'_category_already_exists', array('{name}' => $name));
+			$message = array(gTxt($event.'_category_already_exists', array('{name}' => $name)), E_ERROR);
 
 			return cat_category_list($message);
 		}

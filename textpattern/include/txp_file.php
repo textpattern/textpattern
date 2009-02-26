@@ -497,7 +497,7 @@ $LastChangedRevision$
 		$id = file_db_add($filename,$category,$permissions,$description, $size);
 
 		if($id === false){
-			file_list(gTxt('file_upload_failed').' (db_add)');
+			file_list(array(gTxt('file_upload_failed').' (db_add)', E_ERROR));
 		} else {
 			$newpath = build_file_path($file_base_path,trim($filename));
 
@@ -522,14 +522,14 @@ $LastChangedRevision$
 
 		if ($file === false) {
 			// could not get uploaded file
-			file_list(gTxt('file_upload_failed') ." $name - ".upload_get_errormsg($_FILES['thefile']['error']));
+			file_list(array(gTxt('file_upload_failed') ." $name - ".upload_get_errormsg($_FILES['thefile']['error']), E_ERROR));
 			return;
 		}
 
 		$size = filesize($file);
 		if ($file_max_upload_size < $size) {
 			unlink($file);
-			file_list(gTxt('file_upload_failed') ." $name - ".upload_get_errormsg(UPLOAD_ERR_FORM_SIZE));
+			file_list(array(gTxt('file_upload_failed') ." $name - ".upload_get_errormsg(UPLOAD_ERR_FORM_SIZE), E_ERROR));
 			return;
 		}
 
@@ -541,7 +541,7 @@ $LastChangedRevision$
 			$id = file_db_add($newname,$category,$permissions,$description,$size);
 
 			if(!$id){
-				file_list(gTxt('file_upload_failed').' (db_add)');
+				file_list(array(gTxt('file_upload_failed').' (db_add)', E_ERROR));
 			} else {
 
 				$id = assert_int($id);
@@ -550,7 +550,7 @@ $LastChangedRevision$
 					safe_delete("txp_file","id = $id");
 					safe_alter("txp_file", "auto_increment=$id");
 					if ( isset( $GLOBALS['ID'])) unset( $GLOBALS['ID']);
-					file_list($newpath.' '.gTxt('upload_dir_perms'));
+					file_list(array($newpath.' '.gTxt('upload_dir_perms'), E_ERROR));
 					// clean up file
 				} else {
 					file_set_perm($newpath);
@@ -580,7 +580,7 @@ $LastChangedRevision$
 		$rs = safe_row('filename','txp_file',"id = $id");
 
 		if (!$rs) {
-			file_list(messenger(gTxt('invalid_id'),$id,''));
+			file_list(messenger(array(gTxt('invalid_id'), E_ERROR),$id,''));
 			return;
 		}
 

@@ -78,7 +78,7 @@ if (!empty($event) and $event == 'article') {
 			$when_ts = time();
 		} else {
 			if (!is_numeric($year) || !is_numeric($month) || !is_numeric($day) || !is_numeric($hour)  || !is_numeric($minute) || !is_numeric($second) ) {
-				article_edit(gTxt('invalid_postdate'));
+				article_edit(array(gTxt('invalid_postdate'), E_ERROR));
 				return;
 			}
 			
@@ -106,7 +106,7 @@ if (!empty($event) and $event == 'article') {
 
 		if ($expires) {
 			if ($expires <= $when_ts) {
-				article_edit(gTxt('article_expires_before_postdate'));
+				article_edit(array(gTxt('article_expires_before_postdate'), E_ERROR));
 				return;
 			}
 		}
@@ -161,8 +161,9 @@ if (!empty($event) and $event == 'article') {
 
 				update_lastmod();
 			}
+			$s = check_url_title($url_title);
 			article_edit(
-				get_status_message($Status).check_url_title($url_title)
+				array(get_status_message($Status).' '.$s, ($s ? E_WARNING : 0))
 			);
 		} else article_edit();
 	}
@@ -192,7 +193,7 @@ if (!empty($event) and $event == 'article') {
 
 		if ($oldArticle['sLastMod'] != $incoming['sLastMod'])
 		{
-			article_edit(gTxt('concurrent_edit_by', array('{author}' => htmlspecialchars($oldArticle['LastModID']))), TRUE);
+			article_edit(array(gTxt('concurrent_edit_by', array('{author}' => htmlspecialchars($oldArticle['LastModID']))), E_ERROR), TRUE);
 			return;
 		}
 
@@ -210,7 +211,7 @@ if (!empty($event) and $event == 'article') {
 			$when_ts = time();
 		} else {
 			if (!is_numeric($year) || !is_numeric($month) || !is_numeric($day) || !is_numeric($hour)  || !is_numeric($minute) || !is_numeric($second) ) {
-				article_edit(gTxt('invalid_postdate'));
+				article_edit(array(gTxt('invalid_postdate'), E_ERROR));
 				return;
 			}
 
@@ -234,7 +235,7 @@ if (!empty($event) and $event == 'article') {
 
 		if ($expires) {
 			if ($expires <= $when_ts) {
-				article_edit(gTxt('article_expires_before_postdate'));
+				article_edit(array(gTxt('article_expires_before_postdate'), E_ERROR));
 				return;
 			}
 		}
@@ -295,10 +296,10 @@ if (!empty($event) and $event == 'article') {
 			update_lastmod();
 		}
 
+		$s = check_url_title($url_title);
 		article_edit(
-			get_status_message($Status).check_url_title($url_title)
+			array(get_status_message($Status).' '.$s, ($s ? E_WARNING : 0))
 		);
-
 	}
 
 //--------------------------------------------------------------
