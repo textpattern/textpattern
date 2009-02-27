@@ -285,4 +285,6 @@ function sendAsyncEvent(data, fn)
 $(document).ready(function() {
 	// disable spellchecking on all elements of type "code" in capable browsers
 	if(jQuery.browser.mozilla){$(".code").attr("spellcheck", false)};
+	$('#message.error').fadeOut(800).fadeIn(800);
+	$('#message.warning').fadeOut(800).fadeIn(800);
 });
