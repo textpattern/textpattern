@@ -2321,6 +2321,16 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
+	function if_article_image($atts, $thing='')
+	{
+	    global $thisarticle;
+	    assert_article();
+
+	    return parse(EvalElse($thing, $thisarticle['article_image']));
+	}
+
+// -------------------------------------------------------------
+
 	function article_image($atts)
 	{
 		global $thisarticle, $img_dir;
