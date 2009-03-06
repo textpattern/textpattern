@@ -480,15 +480,21 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function require_plugin($name)
 	{
-		if (!load_plugin($name))
+		if (!load_plugin($name)) {
 			trigger_error("Unable to include required plugin \"{$name}\"",E_USER_ERROR);
+			return false;
+		}
+		return true;
 	}
 
 // -------------------------------------------------------------
 	function include_plugin($name)
 	{
-		if (!load_plugin($name))
+		if (!load_plugin($name)) {
 			trigger_error("Unable to include plugin \"{$name}\"",E_USER_WARNING);
+			return false;
+		}
+		return true;
 	}
 
 // -------------------------------------------------------------
