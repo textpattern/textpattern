@@ -167,7 +167,7 @@ $LastChangedRevision$
 		{
 			$count[$c['visible']] = $c['c'];
 		}
-		
+
 		// grand total comment count
 		$total = $count[SPAM] + $count[MODERATE] + $count[VISIBLE];
 
@@ -188,7 +188,7 @@ $LastChangedRevision$
 		}
 
 		// paging through displayed comments
-		$total = ((cs('toggle_show_spam')) ? $count[SPAM] : 0) + $count[MODERATE] + $count[VISIBLE];		
+		$total = ((cs('toggle_show_spam')) ? $count[SPAM] : 0) + $count[MODERATE] + $count[VISIBLE];
 		$limit = max($comment_list_pageby, 15);
 		list($page, $offset, $numPages) = pager($total, $limit, $page);
 
@@ -297,10 +297,10 @@ $LastChangedRevision$
 
 				, ' class="'.$row_class.'"');
 			}
-			
+
 			if (empty($message))
 				echo tr(tda(gTxt('just_spam_results_found'),' colspan="9" style="text-align: left; border: none;"'));
-			
+
 			echo tr(
 				tda(
 					toggle_box('discuss_detail'),
@@ -317,7 +317,7 @@ $LastChangedRevision$
 
 			n.cookie_box('show_spam').
 
-			nav_form('discuss', $page, $numPages, $sort, $dir, $crit, $search_method).
+			nav_form('discuss', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
 
 			pageby_form('discuss', $comment_list_pageby);
 		}

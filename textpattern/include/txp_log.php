@@ -228,7 +228,7 @@ $LastChangedRevision$
 			n.endTable().
 			'</form>'.
 
-			n.nav_form('log', $page, $numPages, $sort, $dir, $crit, $search_method).
+			n.nav_form('log', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
 
 			n.pageby_form('log', $log_list_pageby);
 		}

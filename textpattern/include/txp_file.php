@@ -262,7 +262,7 @@ $LastChangedRevision$
 			endTable().
 			'</form>'.
 
-			nav_form('file', $page, $numPages, $sort, $dir, $crit, $search_method).
+			nav_form('file', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
 
 			pageby_form('file', $file_list_pageby);
 		}

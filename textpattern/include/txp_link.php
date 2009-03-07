@@ -208,7 +208,7 @@ $LastChangedRevision$
 			endTable().
 			'</form>'.
 
-			n.nav_form('link', $page, $numPages, $sort, $dir, $crit, $search_method).
+			n.nav_form('link', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
 
 			pageby_form('link', $link_list_pageby);
 		}

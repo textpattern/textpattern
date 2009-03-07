@@ -315,7 +315,7 @@ $LastChangedRevision$
 			n.endTable().
 			n.'</form>'.
 
-			n.nav_form('list', $page, $numPages, $sort, $dir, $crit, $search_method).
+			n.nav_form('list', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
 
 			n.pageby_form('list', $article_list_pageby);
 		}

@@ -249,7 +249,7 @@ $LastChangedRevision$
 			endTable().
 			'</form>'.
 
-			nav_form('image', $page, $numPages, $sort, $dir, $crit, $search_method).
+			nav_form('image', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
 
 			pageby_form('image', $image_list_pageby);
 		}
