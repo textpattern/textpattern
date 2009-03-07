@@ -172,8 +172,8 @@ $LastChangedRevision$
   <tr id="nav-primary"><td align="center" class="tabs" colspan="2">
  		<?php
  		if (!$bm) {
-			echo '<table cellpadding="0" cellspacing="0" align="center"><tr>
-  <td valign="middle" style="width:368px">&nbsp;'.messenger($message).'</td>',
+			echo '<table cellpadding="0" cellspacing="0" align="center">'.n.
+			'<tr><td id="messagepane">&nbsp;'.messenger($message).'</td>',
 
 			has_privs('tab.content')
 			? areatab(gTxt('tab_content'), 'content', 'article', $area)

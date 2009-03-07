@@ -456,6 +456,11 @@ tr#branding td#navpop {
 text-align: right;
 }
 
+td#messagepane {
+width: 368px;
+text-align: center;
+}
+ 
 td.tabup, td.tabup2 {
 background: transparent url(txp_img/up.gif) no-repeat top left;
 }

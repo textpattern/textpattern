@@ -483,12 +483,15 @@ $LastChangedRevision$
 	{
  		// $thing[0]: message text
  		// $thing[1]: message type, defaults to "success" unless empty or a different flag is set
- 		if(!is_array($thing) || !isset($thing[1])) 
+
+		if ($thing === '') return '';
+
+ 		if (!is_array($thing) || !isset($thing[1]))
  		{
  			$thing = array($thing, 0);
  		}
- 		
- 		switch($thing[1])
+
+ 		switch ($thing[1])
  		{
  			case E_ERROR:
  				$class = 'error';
@@ -500,11 +503,20 @@ $LastChangedRevision$
  				$class = 'success';
  				break;
  		}
- 		return "<span id='message' class='$class'>".
+ 		$html = "<span id='message' class='$class'>".
  			gTxt($thing[0]).
  			($thething !== '' ? ' '.strong($thething) : '').
  			($action !== '' ? ' '.gTxt($action) : '').
  			'</span>';
+ 		// Try to inject $html into the message pane no matter when messenger()'s output is printed
+ 		$js = <<< EOS
+ 		$(document).ready( function(){
+	 		$("#messagepane").html("{$html}");
+			$('#messagepane #message.error').fadeOut(800).fadeIn(800);
+			$('#messagepane #message.warning').fadeOut(800).fadeIn(800);
+		} )
+EOS;
+ 		return script_js($js, $html);
 	}
 
 // -------------------------------------------------------------
