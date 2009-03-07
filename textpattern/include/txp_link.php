@@ -100,7 +100,6 @@ $LastChangedRevision$
 			if (array_key_exists($search_method, $critsql))
 			{
 				$criteria = $critsql[$search_method];
-				$limit = 500;
 			}
 
 			else
