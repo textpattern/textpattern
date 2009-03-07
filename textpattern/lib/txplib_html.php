@@ -195,8 +195,21 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function nav_form($event, $page, $numPages, $sort, $dir, $crit, $search_method)
+	function nav_form($event, $page, $numPages, $sort, $dir, $crit, $search_method, $total=0, $limit=0)
 	{
+		if ($crit && $total > 1)
+		{
+			$out[] = messenger(
+				gTxt('showing_search_results',
+					array(
+						'from' 	=> (($page - 1) * $limit) + 1,
+						'to' 	=> min($total, $page * $limit),
+						'total' => $total
+						)
+					)
+				);
+		}
+
 		if ($numPages > 1)
 		{
 			$option_list = array();
@@ -229,18 +242,19 @@ $LastChangedRevision$
 				sp.PrevNextLink($event, $page + 1, gTxt('next'), 'next', $sort, $dir, $crit, $search_method) :
 				sp.tag(gTxt('next').' &#8250;', 'span', ' class="navlink-disabled"');
 
-			return '<form class="prev-next" method="get" action="index.php">'.
+			$out[] = '<form class="prev-next" method="get" action="index.php">'.
 				n.eInput($event).
 				( $sort ? n.hInput('sort', $sort).n.hInput('dir', $dir) : '' ).
 				( $crit ? n.hInput('crit', $crit).n.hInput('search_method', $search_method) : '' ).
 				join('', $nav).
 				'</form>';
 		}
-
 		else
 		{
-			return graf($page.'/'.$numPages, ' class="prev-next"');
+			$out[] = graf($page.'/'.$numPages, ' class="prev-next"');
 		}
+
+		return join(n, $out);
 	}
 
 // -------------------------------------------------------------
@@ -516,7 +530,7 @@ $LastChangedRevision$
 			$('#messagepane #message.warning').fadeOut(800).fadeIn(800);
 		} )
 EOS;
- 		return script_js($js, $html);
+ 		return script_js(str_replace('</', '<\/', $js), $html);
 	}
 
 // -------------------------------------------------------------
