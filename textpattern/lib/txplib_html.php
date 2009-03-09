@@ -202,9 +202,9 @@ $LastChangedRevision$
 			$out[] = messenger(
 				gTxt('showing_search_results',
 					array(
-						'from' 	=> (($page - 1) * $limit) + 1,
-						'to' 	=> min($total, $page * $limit),
-						'total' => $total
+						'{from}'	=> (($page - 1) * $limit) + 1,
+						'{to}' 		=> min($total, $page * $limit),
+						'{total}' 	=> $total
 						)
 					)
 				);
