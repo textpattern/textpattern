@@ -305,10 +305,13 @@ $LastChangedRevision$
 	{
 
 		$plugin = ps('plugin64');
+		if (strpos($plugin, '$plugin=\'') !== false) {
+			@ini_set('pcre.backtrack_limit', '1000000');
+			$plugin = preg_replace('@.*\$plugin=\'([\w=+/]+)\'.*@s', '$1', $plugin);
+		}
 
-		$plugin = preg_replace('@.*\$plugin=\'([\w=+/]+)\'.*@s', '$1', $plugin);
 		$plugin = preg_replace('/^#.*$/m', '', $plugin);
-
+		
 		if(trim($plugin)) {
 
 			$plugin = base64_decode($plugin);
@@ -376,6 +379,7 @@ $LastChangedRevision$
 						$message = gTxt('plugin_installed', array('{name}' => htmlspecialchars($name)));
 
 						plugin_list($message);
+						return;
 					}
 
 					else
@@ -383,15 +387,12 @@ $LastChangedRevision$
 						$message = array(gTxt('plugin_install_failed', array('{name}' => htmlspecialchars($name))), E_ERROR);
 
 						plugin_list($message);
+						return;
 					}
 				}
 			}
-
-			else
-			{
-				plugin_list(array(gTxt('bad_plugin_code'), E_ERROR));
-			}
 		}
+		plugin_list(array(gTxt('bad_plugin_code'), E_ERROR));
 	}
 
 // -------------------------------------------------------------
