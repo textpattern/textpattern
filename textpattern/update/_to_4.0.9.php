@@ -45,4 +45,5 @@ $LastChangedRevision$
 	}
     
 	safe_alter('txp_plugin', 'CHANGE code code MEDIUMTEXT NOT NULL, CHANGE code_restore code_restore MEDIUMTEXT NOT NULL');	
+	safe_alter('txp_prefs', 'CHANGE val val TEXT NOT NULL');	
 ?>
