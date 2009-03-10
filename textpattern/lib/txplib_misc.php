@@ -433,7 +433,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function load_plugin($name)
+	function load_plugin($name, $force=false)
 	{
 		global $plugins, $plugins_ver, $prefs, $txp_current_plugin;
 
@@ -459,7 +459,7 @@ $LastChangedRevision$
 			}
 		}
 
-		$rs = safe_row("name,code,version","txp_plugin","status = 1 AND name='".doSlash($name)."'");
+		$rs = safe_row("name,code,version","txp_plugin", ($force ? '' : 'status = 1 AND '). "name='".doSlash($name)."'");
 		if ($rs) {
 			$plugins[] = $rs['name'];
 			$plugins_ver[$rs['name']] = $rs['version'];

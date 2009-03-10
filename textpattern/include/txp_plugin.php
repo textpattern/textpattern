@@ -140,6 +140,12 @@ $LastChangedRevision$
 
 		safe_update('txp_plugin', "status = $change", "name = '".doSlash($name)."'");
 
+		if (safe_field('flags', 'txp_plugin', "name ='".doSlash($name)."'") & PLUGIN_LIFECYCLE_NOTIFY)
+		{
+			load_plugin($name, true);
+			callback_event("plugin_lifecycle.$name", $status ? 'disabled' : 'enabled');
+		}
+
 		$message = gTxt('plugin_updated', array('{name}' => $name));
 
 		plugin_list($message);
@@ -376,6 +382,12 @@ $LastChangedRevision$
 
 					if ($rs and $code)
 					{
+						if ($flags & PLUGIN_LIFECYCLE_NOTIFY)
+						{
+							load_plugin($name, true);
+							callback_event("plugin_lifecycle.$name", 'installed');
+						}
+
 						$message = gTxt('plugin_installed', array('{name}' => htmlspecialchars($name)));
 
 						plugin_list($message);
@@ -446,10 +458,28 @@ $LastChangedRevision$
 		switch ($method)
 		{
 			case 'delete':
+				foreach ($selected as $name) 
+				{
+					if (safe_field('flags', 'txp_plugin', "name ='".doSlash($name)."'") & PLUGIN_LIFECYCLE_NOTIFY)
+					{
+						load_plugin($name, true);
+						callback_event("plugin_lifecycle.$name", 'disabled');
+						callback_event("plugin_lifecycle.$name", 'deleted');
+					}
+				}
 				safe_delete('txp_plugin', $where);
 				break;
 
 			case 'changestatus':
+				foreach ($selected as $name) 
+				{
+					if (safe_field('flags', 'txp_plugin', "name ='".doSlash($name)."'") & PLUGIN_LIFECYCLE_NOTIFY)
+					{
+						$status = safe_field('status', 'txp_plugin', "name ='".doSlash($name)."'");
+						load_plugin($name, true);
+						callback_event("plugin_lifecycle.$name", $status ? 'disabled' : 'enabled');
+					}
+				}
 				safe_update('txp_plugin', 'status = (1-status)', $where);
 				break;
 
