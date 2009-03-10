@@ -219,10 +219,35 @@ $LastChangedRevision$
 			$plugin = ps('plugin');
 		}
 
-		$plugin = preg_replace('@.*\$plugin=\'([\w=+/]+)\'.*@s', '$1', $plugin);
+		// pre-4.0 style plugin?
+		if (strpos($plugin, '$plugin=\'') !== false) {
+			// try to increase PCRE's backtrack limit in PHP 5.2+ to accommodate to x-large plugins
+			// @see http://bugs.php.net/bug.php?id=40846 et al.
+			@ini_set('pcre.backtrack_limit', '1000000');
+			$plugin = preg_replace('@.*\$plugin=\'([\w=+/]+)\'.*@s', '$1', $plugin);
+			// have we hit yet another PCRE restriction?
+			if ($plugin === null)
+			{
+				plugin_list(array(
+								gTxt('plugin_pcre_error', array('{errno}' => preg_last_error())), 
+								E_ERROR
+							));
+				return;
+			}
+		}
+		
+		// strip out #comment lines
 		$plugin = preg_replace('/^#.*$/m', '', $plugin);
-
-		if(isset($plugin)) {
+		if ($plugin === null)
+		{
+			plugin_list(array(
+							gTxt('plugin_pcre_error', array('{errno}' => preg_last_error())), 
+							E_ERROR
+						));
+			return;
+		}
+				
+		if (isset($plugin)) {
 			$plugin_encoded = $plugin;
 			$plugin = base64_decode($plugin);
 
