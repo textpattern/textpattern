@@ -41,9 +41,8 @@ $LastChangedRevision$
 
 	$cols = getThings('describe `'.PFX.'txp_plugin`');
  	if (!in_array('flags', $cols)) {
-		safe_alter('txp_plugin',
-			"ADD flags SMALLINT UNSIGNED NOT NULL DEFAULT 0");
+		safe_alter('txp_plugin', "ADD flags SMALLINT UNSIGNED NOT NULL DEFAULT 0");
 	}
-
-	
+    
+	safe_alter('txp_plugin', 'CHANGE code code MEDIUMTEXT NOT NULL, CHANGE code_restore code_restore MEDIUMTEXT NOT NULL');	
 ?>
