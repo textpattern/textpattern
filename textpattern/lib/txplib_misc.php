@@ -139,7 +139,8 @@ $LastChangedRevision$
 
 			if(!$f) $f = fopen($prefs['tempdir'].'/'.txpdmpfile, 'a');
 
-			fwrite($f, "\n[".safe_strftime('iso8601')."]\n");
+			$stack = get_caller();
+			fwrite($f, "\n[".$stack[0].t.safe_strftime('iso8601')."]\n");
 		}
 
 		$a = func_get_args();
