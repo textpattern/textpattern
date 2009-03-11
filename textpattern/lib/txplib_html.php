@@ -523,10 +523,10 @@ $LastChangedRevision$
  			($action !== '' ? ' '.gTxt($action) : '').
  			'</span>';
  		// Try to inject $html into the message pane no matter when messenger()'s output is printed
- 		$html = addslashes($html);
+ 		$js = addslashes($html);
  		$js = <<< EOS
  		$(document).ready( function(){
-	 		$("#messagepane").html("{$html}");
+	 		$("#messagepane").html("{$js}");
 			$('#messagepane #message.error').fadeOut(800).fadeIn(800);
 			$('#messagepane #message.warning').fadeOut(800).fadeIn(800);
 		} )
