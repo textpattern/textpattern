@@ -143,10 +143,9 @@ $LastChangedRevision$
 		if (safe_field('flags', 'txp_plugin', "name ='".doSlash($name)."'") & PLUGIN_LIFECYCLE_NOTIFY)
 		{
 			load_plugin($name, true);
-			callback_event("plugin_lifecycle.$name", $status ? 'disabled' : 'enabled');
+			$message = callback_event("plugin_lifecycle.$name", $status ? 'disabled' : 'enabled');
 		}
-
-		$message = gTxt('plugin_updated', array('{name}' => $name));
+		if (empty($message)) $message = gTxt('plugin_updated', array('{name}' => $name));
 
 		plugin_list($message);
 	}
@@ -385,10 +384,10 @@ $LastChangedRevision$
 						if ($flags & PLUGIN_LIFECYCLE_NOTIFY)
 						{
 							load_plugin($name, true);
-							callback_event("plugin_lifecycle.$name", 'installed');
+							$message = callback_event("plugin_lifecycle.$name", 'installed');
 						}
 
-						$message = gTxt('plugin_installed', array('{name}' => htmlspecialchars($name)));
+						if (empty($message)) $message = gTxt('plugin_installed', array('{name}' => htmlspecialchars($name)));
 
 						plugin_list($message);
 						return;
@@ -477,6 +476,7 @@ $LastChangedRevision$
 					{
 						$status = safe_field('status', 'txp_plugin', "name ='".doSlash($name)."'");
 						load_plugin($name, true);
+						// NB: won't show returned messages anywhere due to potentially overwhelming verbiage.  
 						callback_event("plugin_lifecycle.$name", $status ? 'disabled' : 'enabled');
 					}
 				}
