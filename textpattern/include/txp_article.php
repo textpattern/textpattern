@@ -81,7 +81,7 @@ if (!empty($event) and $event == 'article') {
 				article_edit(array(gTxt('invalid_postdate'), E_ERROR));
 				return;
 			}
-			
+
 			$when = $when_ts = strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second)-tz_offset();
 			$when = "from_unixtime($when)";
 		}
@@ -425,14 +425,14 @@ if (!empty($event) and $event == 'article') {
 
 			echo pluggable_ui('article', 'sidehelp_ui', side_help($textile_body, $textile_excerpt));
 
-			echo pluggable_ui('article', 'advanced_ui', '<h3 class="plain"><a href="#advanced" onclick="toggleDisplay(\'advanced\'); return false;">'.gTxt('advanced_options').'</a></h3>',
+			#TODO handle opening/closing div#advanced tags
+			echo pluggable_ui('article', 'advanced_ui', '<h3 class="plain"><a href="#advanced" onclick="toggleDisplay(\'advanced\'); return false;">'.gTxt('advanced_options').'</a></h3>'.
 			'<div id="advanced" class="toggle" style="display:'.(get_pref('pane_article_advanced_visible') ? 'block' : 'none').'">');
 
 			// markup selection
-			echo pluggable_ui('article', 'markup_ui', 
+			echo pluggable_ui('article', 'markup_ui',
 				n.graf('<label for="markup-body">'.gTxt('article_markup').'</label>'.br.
-					pref_text('textile_body', $textile_body, 'markup-body')),
-
+					pref_text('textile_body', $textile_body, 'markup-body')).
 				n.graf('<label for="markup-excerpt">'.gTxt('excerpt_markup').'</label>'.br.
 					pref_text('textile_excerpt', $textile_excerpt, 'markup-excerpt')),
 				$rs);
@@ -454,9 +454,9 @@ if (!empty($event) and $event == 'article') {
 				(($custom_7_set !== '')  ? custField(  7, $custom_7_set,  $custom_7 )    : '').
 				(($custom_8_set !== '')  ? custField(  8, $custom_8_set,  $custom_8 )    : '').
 				(($custom_9_set !== '')  ? custField(  9, $custom_9_set,  $custom_9 )    : '').
-				(($custom_10_set !== '') ? custField( 10, $custom_10_set, $custom_10 )   : ''), 
+				(($custom_10_set !== '') ? custField( 10, $custom_10_set, $custom_10 )   : ''),
 				$rs);
-			
+
 			// keywords
 			echo pluggable_ui('article', 'keywords_ui',
 				n.graf('<label for="keywords">'.gTxt('keywords').'</label>'.sp.popHelp('keywords').br.
@@ -475,6 +475,7 @@ if (!empty($event) and $event == 'article') {
 					fInput('text', 'url_title', $url_title, 'edit', '', '', 22, '', 'url-title')),
 				$rs);
 
+			#TODO
 			echo '</div>'.n;
 
 			echo '<h3 class="plain"><a href="#recent" onclick="toggleDisplay(\'recent\'); return false;">'.gTxt('recent_articles').'</a>'.'</h3>'.
@@ -659,7 +660,7 @@ if (!empty($event) and $event == 'article') {
 
 		//-- status radios --------------
 
-			echo pluggable_ui('article', 'status_ui', 
+			echo pluggable_ui('article', 'status_ui',
 				n.n.'<fieldset id="write-status">'.
 				n.'<legend>'.gTxt('status').'</legend>'.
 				n.status_radio($Status).
@@ -668,7 +669,7 @@ if (!empty($event) and $event == 'article') {
 
 		//-- category selects -----------
 
-			echo pluggable_ui('article', 'categories_ui', 
+			echo pluggable_ui('article', 'categories_ui',
 				n.n.'<fieldset id="write-sort">'.
 				n.'<legend>'.gTxt('sort_display').'</legend>'.
 
@@ -677,14 +678,14 @@ if (!empty($event) and $event == 'article') {
 					n.category_popup('Category1', $Category1, 'category-1')).
 
 				n.graf('<label for="category-2">'.gTxt('category2').'</label>'.br.
-					n.category_popup('Category2', $Category2, 'category-2')), 
+					n.category_popup('Category2', $Category2, 'category-2')),
 				$rs);
 
 		//-- section select --------------
 
 			if(!$from_view && !$pull) $Section = getDefaultSection();
 
-			echo pluggable_ui('article', 'section_ui', 
+			echo pluggable_ui('article', 'section_ui',
 				n.graf('<label for="section">'.gTxt('section').'</label> '.
 				'<span class="small">['.eLink('section', '', '', '', gTxt('edit')).']</span>'.br.
 				section_popup($Section, 'section')).
