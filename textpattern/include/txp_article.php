@@ -375,6 +375,7 @@ if (!empty($event) and $event == 'article') {
 				}
 			}
 
+			$rs = $store_out;
 			extract($store_out);
 		}
 
@@ -422,57 +423,61 @@ if (!empty($event) and $event == 'article') {
 
 		//-- markup help --------------
 
-			echo side_help($textile_body, $textile_excerpt).
+			echo pluggable_ui('article', 'sidehelp_ui', side_help($textile_body, $textile_excerpt));
 
-			'<h3 class="plain"><a href="#advanced" onclick="toggleDisplay(\'advanced\'); return false;">'.gTxt('advanced_options').'</a></h3>',
-			'<div id="advanced" class="toggle" style="display:'.(get_pref('pane_article_advanced_visible') ? 'block' : 'none').'">',
+			echo pluggable_ui('article', 'advanced_ui', '<h3 class="plain"><a href="#advanced" onclick="toggleDisplay(\'advanced\'); return false;">'.gTxt('advanced_options').'</a></h3>',
+			'<div id="advanced" class="toggle" style="display:'.(get_pref('pane_article_advanced_visible') ? 'block' : 'none').'">');
 
 			// markup selection
+			echo pluggable_ui('article', 'markup_ui', 
 				n.graf('<label for="markup-body">'.gTxt('article_markup').'</label>'.br.
 					pref_text('textile_body', $textile_body, 'markup-body')),
 
 				n.graf('<label for="markup-excerpt">'.gTxt('excerpt_markup').'</label>'.br.
 					pref_text('textile_excerpt', $textile_excerpt, 'markup-excerpt')),
+				$rs);
 
 			// form override
-			($allow_form_override)
-			?	graf('<label for="override-form">'.gTxt('override_default_form').'</label>'.sp.popHelp('override_form').br.
-					form_pop($override_form, 'override-form'))
+			echo ($allow_form_override)
+				? pluggable_ui('article', 'override_ui', graf('<label for="override-form">'.gTxt('override_default_form').'</label>'.sp.popHelp('override_form').br.
+					form_pop($override_form, 'override-form')), $rs)
 			:	'';
 
 			// custom fields, believe it or not
-			$custom_fields = callback_event('custom_get');
-			if ($custom_fields === '')
-			{
-				$custom_fields =
-					(($custom_1_set !== '')  ? custField(  1, $custom_1_set,  $custom_1 )    : '').
-					(($custom_2_set !== '')  ? custField(  2, $custom_2_set,  $custom_2 )    : '').
-					(($custom_3_set !== '')  ? custField(  3, $custom_3_set,  $custom_3 )    : '').
-					(($custom_4_set !== '')  ? custField(  4, $custom_4_set,  $custom_4 )    : '').
-					(($custom_5_set !== '')  ? custField(  5, $custom_5_set,  $custom_5 )    : '').
-					(($custom_6_set !== '')  ? custField(  6, $custom_6_set,  $custom_6 )    : '').
-					(($custom_7_set !== '')  ? custField(  7, $custom_7_set,  $custom_7 )    : '').
-					(($custom_8_set !== '')  ? custField(  8, $custom_8_set,  $custom_8 )    : '').
-					(($custom_9_set !== '')  ? custField(  9, $custom_9_set,  $custom_9 )    : '').
-					(($custom_10_set !== '') ? custField( 10, $custom_10_set, $custom_10 )   : '');
-			}
-			echo $custom_fields;
-
+			echo pluggable_ui('article', 'custom_fields_ui',
+				(($custom_1_set !== '')  ? custField(  1, $custom_1_set,  $custom_1 )    : '').
+				(($custom_2_set !== '')  ? custField(  2, $custom_2_set,  $custom_2 )    : '').
+				(($custom_3_set !== '')  ? custField(  3, $custom_3_set,  $custom_3 )    : '').
+				(($custom_4_set !== '')  ? custField(  4, $custom_4_set,  $custom_4 )    : '').
+				(($custom_5_set !== '')  ? custField(  5, $custom_5_set,  $custom_5 )    : '').
+				(($custom_6_set !== '')  ? custField(  6, $custom_6_set,  $custom_6 )    : '').
+				(($custom_7_set !== '')  ? custField(  7, $custom_7_set,  $custom_7 )    : '').
+				(($custom_8_set !== '')  ? custField(  8, $custom_8_set,  $custom_8 )    : '').
+				(($custom_9_set !== '')  ? custField(  9, $custom_9_set,  $custom_9 )    : '').
+				(($custom_10_set !== '') ? custField( 10, $custom_10_set, $custom_10 )   : ''), 
+				$rs);
+			
 			// keywords
-			echo n.graf('<label for="keywords">'.gTxt('keywords').'</label>'.sp.popHelp('keywords').br.
+			echo pluggable_ui('article', 'keywords_ui',
+				n.graf('<label for="keywords">'.gTxt('keywords').'</label>'.sp.popHelp('keywords').br.
 					n.'<textarea id="keywords" name="Keywords" cols="18" rows="5">'.htmlspecialchars(str_replace(',' ,', ', $Keywords)).'</textarea>'),
+				$rs);
 
 			// article image
+			echo pluggable_ui('article', 'article_image_ui',
 				n.graf('<label for="article-image">'.gTxt('article_image').'</label>'.sp.popHelp('article_image').br.
 					fInput('text', 'Image', $Image, 'edit', '', '', 22, '', 'article-image')),
+				$rs);
 
 			// url title
+			echo pluggable_ui('article', 'url_title_ui',
 				n.graf('<label for="url-title">'.gTxt('url_title').'</label>'.sp.popHelp('url_title').br.
 					fInput('text', 'url_title', $url_title, 'edit', '', '', 22, '', 'url-title')),
+				$rs);
 
-			'</div>
+			echo '</div>'.n;
 
-			<h3 class="plain"><a href="#recent" onclick="toggleDisplay(\'recent\'); return false;">'.gTxt('recent_articles').'</a>'.'</h3>'.
+			echo '<h3 class="plain"><a href="#recent" onclick="toggleDisplay(\'recent\'); return false;">'.gTxt('recent_articles').'</a>'.'</h3>'.
 			'<div id="recent" class="toggle" style="display:'.(get_pref('pane_article_recent_visible') ? 'block' : 'none').'">';
 
 			$recents = safe_rows_start("Title, ID",'textpattern',"1=1 order by LastMod desc limit 10");
@@ -654,14 +659,17 @@ if (!empty($event) and $event == 'article') {
 
 		//-- status radios --------------
 
-			echo n.n.'<fieldset id="write-status">'.
+			echo pluggable_ui('article', 'status_ui', 
+				n.n.'<fieldset id="write-status">'.
 				n.'<legend>'.gTxt('status').'</legend>'.
 				n.status_radio($Status).
-				n.'</fieldset>';
+				n.'</fieldset>',
+				$rs);
 
 		//-- category selects -----------
 
-			echo n.n.'<fieldset id="write-sort">'.
+			echo pluggable_ui('article', 'categories_ui', 
+				n.n.'<fieldset id="write-sort">'.
 				n.'<legend>'.gTxt('sort_display').'</legend>'.
 
 				n.graf('<label for="category-1">'.gTxt('category1').'</label> '.
@@ -669,20 +677,22 @@ if (!empty($event) and $event == 'article') {
 					n.category_popup('Category1', $Category1, 'category-1')).
 
 				n.graf('<label for="category-2">'.gTxt('category2').'</label>'.br.
-					n.category_popup('Category2', $Category2, 'category-2'));
+					n.category_popup('Category2', $Category2, 'category-2')), 
+				$rs);
 
 		//-- section select --------------
 
 			if(!$from_view && !$pull) $Section = getDefaultSection();
 
-			echo n.graf('<label for="section">'.gTxt('section').'</label> '.
+			echo pluggable_ui('article', 'section_ui', 
+				n.graf('<label for="section">'.gTxt('section').'</label> '.
 				'<span class="small">['.eLink('section', '', '', '', gTxt('edit')).']</span>'.br.
 				section_popup($Section, 'section')).
-
-				n.'</fieldset>'.
+				n.'</fieldset>',
+				$rs);
 
 		//-- "More" section
-				n.n.'<h3 class="plain"><a href="#more" onclick="toggleDisplay(\'more\'); return false;">'.gTxt('more').'</a></h3>',
+			echo n.n.'<h3 class="plain"><a href="#more" onclick="toggleDisplay(\'more\'); return false;">'.gTxt('more').'</a></h3>',
 				'<div id="more" class="toggle" style="display:'.(get_pref('pane_article_more_visible') ? 'block' : 'none').'">';
 
 		//-- comments stuff --------------
