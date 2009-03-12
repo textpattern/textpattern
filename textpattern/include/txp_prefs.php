@@ -355,17 +355,17 @@ $LastChangedRevision$
 	{
 		$dayname = '%A';
 		$dayshort = '%a';
-		$daynum = is_numeric(strftime('%e')) ? '%e' : '%d';
+		$daynum = is_numeric(@strftime('%e')) ? '%e' : '%d';
 		$daynumlead = '%d';
-		$daynumord = is_numeric(substr(trim(strftime('%Oe')), 0, 1)) ? '%Oe' : $daynum;
+		$daynumord = is_numeric(substr(trim(@strftime('%Oe')), 0, 1)) ? '%Oe' : $daynum;
 		$monthname = '%B';
 		$monthshort = '%b';
 		$monthnum = '%m';
 		$year = '%Y';
 		$yearshort = '%y';
 		$time24 = '%H:%M';
-		$time12 = strftime('%p') ? '%I:%M %p' : $time24;
-		$date = strftime('%x') ? '%x' : '%Y-%m-%d';
+		$time12 = @strftime('%p') ? '%I:%M %p' : $time24;
+		$date = @strftime('%x') ? '%x' : '%Y-%m-%d';
 
 		$formats = array(
 			"$monthshort $daynumord, $time12",
