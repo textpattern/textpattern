@@ -423,14 +423,15 @@ if (!empty($event) and $event == 'article') {
 
 		//-- markup help --------------
 
-			echo pluggable_ui('article', 'sidehelp_ui', side_help($textile_body, $textile_excerpt));
+			echo pluggable_ui('article_ui', 'sidehelp', side_help($textile_body, $textile_excerpt));
 
-			#TODO handle opening/closing div#advanced tags
-			echo pluggable_ui('article', 'advanced_ui', '<h3 class="plain"><a href="#advanced" onclick="toggleDisplay(\'advanced\'); return false;">'.gTxt('advanced_options').'</a></h3>'.
-			'<div id="advanced" class="toggle" style="display:'.(get_pref('pane_article_advanced_visible') ? 'block' : 'none').'">');
+		//-- advanced --------------
+
+			echo '<h3 class="plain"><a href="#advanced" onclick="toggleDisplay(\'advanced\'); return false;">'.gTxt('advanced_options').'</a></h3>'.
+				'<div id="advanced" class="toggle" style="display:'.(get_pref('pane_article_advanced_visible') ? 'block' : 'none').'">';
 
 			// markup selection
-			echo pluggable_ui('article', 'markup_ui',
+			echo pluggable_ui('article_ui', 'markup',
 				n.graf('<label for="markup-body">'.gTxt('article_markup').'</label>'.br.
 					pref_text('textile_body', $textile_body, 'markup-body')).
 				n.graf('<label for="markup-excerpt">'.gTxt('excerpt_markup').'</label>'.br.
@@ -439,12 +440,12 @@ if (!empty($event) and $event == 'article') {
 
 			// form override
 			echo ($allow_form_override)
-				? pluggable_ui('article', 'override_ui', graf('<label for="override-form">'.gTxt('override_default_form').'</label>'.sp.popHelp('override_form').br.
+				? pluggable_ui('article_ui', 'override', graf('<label for="override-form">'.gTxt('override_default_form').'</label>'.sp.popHelp('override_form').br.
 					form_pop($override_form, 'override-form')), $rs)
-			:	'';
+				: '';
 
 			// custom fields, believe it or not
-			echo pluggable_ui('article', 'custom_fields_ui',
+			echo pluggable_ui('article_ui', 'custom_fields',
 				(($custom_1_set !== '')  ? custField(  1, $custom_1_set,  $custom_1 )    : '').
 				(($custom_2_set !== '')  ? custField(  2, $custom_2_set,  $custom_2 )    : '').
 				(($custom_3_set !== '')  ? custField(  3, $custom_3_set,  $custom_3 )    : '').
@@ -458,28 +459,29 @@ if (!empty($event) and $event == 'article') {
 				$rs);
 
 			// keywords
-			echo pluggable_ui('article', 'keywords_ui',
+			echo pluggable_ui('article_ui', 'keywords',
 				n.graf('<label for="keywords">'.gTxt('keywords').'</label>'.sp.popHelp('keywords').br.
 					n.'<textarea id="keywords" name="Keywords" cols="18" rows="5">'.htmlspecialchars(str_replace(',' ,', ', $Keywords)).'</textarea>'),
 				$rs);
 
 			// article image
-			echo pluggable_ui('article', 'article_image_ui',
+			echo pluggable_ui('article_ui', 'article_image',
 				n.graf('<label for="article-image">'.gTxt('article_image').'</label>'.sp.popHelp('article_image').br.
 					fInput('text', 'Image', $Image, 'edit', '', '', 22, '', 'article-image')),
 				$rs);
 
 			// url title
-			echo pluggable_ui('article', 'url_title_ui',
+			echo pluggable_ui('article_ui', 'url_title',
 				n.graf('<label for="url-title">'.gTxt('url_title').'</label>'.sp.popHelp('url_title').br.
 					fInput('text', 'url_title', $url_title, 'edit', '', '', 22, '', 'url-title')),
 				$rs);
 
-			#TODO
 			echo '</div>'.n;
 
+		//-- recent articles --------------
+
 			echo '<h3 class="plain"><a href="#recent" onclick="toggleDisplay(\'recent\'); return false;">'.gTxt('recent_articles').'</a>'.'</h3>'.
-			'<div id="recent" class="toggle" style="display:'.(get_pref('pane_article_recent_visible') ? 'block' : 'none').'">';
+				'<div id="recent" class="toggle" style="display:'.(get_pref('pane_article_recent_visible') ? 'block' : 'none').'">';
 
 			$recents = safe_rows_start("Title, ID",'textpattern',"1=1 order by LastMod desc limit 10");
 
@@ -660,8 +662,7 @@ if (!empty($event) and $event == 'article') {
 
 		//-- status radios --------------
 
-			echo pluggable_ui('article', 'status_ui',
-				n.n.'<fieldset id="write-status">'.
+			echo pluggable_ui('article_ui', 'status', 				n.n.'<fieldset id="write-status">'.
 				n.'<legend>'.gTxt('status').'</legend>'.
 				n.status_radio($Status).
 				n.'</fieldset>',
@@ -669,8 +670,7 @@ if (!empty($event) and $event == 'article') {
 
 		//-- category selects -----------
 
-			echo pluggable_ui('article', 'categories_ui',
-				n.n.'<fieldset id="write-sort">'.
+			echo pluggable_ui('article_ui', 'categories', 				n.n.'<fieldset id="write-sort">'.
 				n.'<legend>'.gTxt('sort_display').'</legend>'.
 
 				n.graf('<label for="category-1">'.gTxt('category1').'</label> '.
@@ -685,8 +685,7 @@ if (!empty($event) and $event == 'article') {
 
 			if(!$from_view && !$pull) $Section = getDefaultSection();
 
-			echo pluggable_ui('article', 'section_ui',
-				n.graf('<label for="section">'.gTxt('section').'</label> '.
+			echo pluggable_ui('article_ui', 'section', 				n.graf('<label for="section">'.gTxt('section').'</label> '.
 				'<span class="small">['.eLink('section', '', '', '', gTxt('edit')).']</span>'.br.
 				section_popup($Section, 'section')).
 				n.'</fieldset>',
@@ -706,7 +705,7 @@ if (!empty($event) and $event == 'article') {
 
 			if ($use_comments == 1)
 			{
-				echo n.n.'<fieldset id="write-comments">'.
+				$invite[] = n.n.'<fieldset id="write-comments">'.
 					n.'<legend>'.gTxt('comments').'</legend>';
 
 				$comments_expired = false;
@@ -724,12 +723,12 @@ if (!empty($event) and $event == 'article') {
 
 				if ($comments_expired)
 				{
-					echo n.n.graf(gTxt('expired'));
+					$invite[] = n.n.graf(gTxt('expired'));
 				}
 
 				else
 				{
-					echo n.n.graf(
+					$invite[] = n.n.graf(
 						onoffRadio('Annotate', $Annotate)
 					).
 
@@ -739,7 +738,9 @@ if (!empty($event) and $event == 'article') {
 					);
 				}
 
-				echo n.n.'</fieldset>';
+				$invite[] = n.n.'</fieldset>';
+				echo pluggable_ui('article_ui', 'annotate_invite', join('', $invite), $rs);
+
 			}
 
 			if ($step == "create" and empty($GLOBALS['ID']))
@@ -751,7 +752,8 @@ if (!empty($event) and $event == 'article') {
 					safe_strtotime($store_out['year'].'-'.$store_out['month'].'-'.$store_out['day'].' '.$store_out['hour'].':'.$store_out['minute'].':'.$store_out['second'])
 					: time();
 
-				echo n.n.'<fieldset id="write-timestamp">'.
+				echo pluggable_ui('article_ui', 'timestamp',
+					n.n.'<fieldset id="write-timestamp">'.
 					n.'<legend>'.gTxt('timestamp').'</legend>'.
 
 					n.graf(checkbox('publish_now', '1', $publish_now, '', 'publish_now').'<label for="publish_now">'.gTxt('set_to_now').'</label>').
@@ -770,7 +772,8 @@ if (!empty($event) and $event == 'article') {
 						tsi('second', '%S', $persist_timestamp)
 					).
 
-				n.'</fieldset>';
+				n.'</fieldset>',
+				array('sPosted' => $persist_timestamp) + $rs);
 
 		//-- expires -------------------
 
@@ -778,7 +781,8 @@ if (!empty($event) and $event == 'article') {
 					safe_strtotime($store_out['exp_year'].'-'.$store_out['exp_month'].'-'.$store_out['exp_day'].' '.$store_out['exp_hour'].':'.$store_out['exp_minute'].':'.$store_out['second'])
 					: NULLDATETIME;
 
-				echo n.n.'<fieldset id="write-expires">'.
+				echo pluggable_ui('article_ui', 'expires',
+					n.n.'<fieldset id="write-expires">'.
 					n.'<legend>'.gTxt('expires').'</legend>'.
 
 					n.graf(gtxt('date').sp.
@@ -793,9 +797,11 @@ if (!empty($event) and $event == 'article') {
 						tsi('exp_second', '%S', $persist_timestamp)
 					).
 
-				n.'</fieldset>'.
+				n.'</fieldset>',
+				$rs);
+
 				// end "More" section
-				n.n.'</div>';
+				echo n.n.'</div>';
 
 		//-- publish button --------------
 
@@ -814,7 +820,8 @@ if (!empty($event) and $event == 'article') {
 					$sPosted = safe_strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second);
 				}
 
-				echo n.n.'<fieldset id="write-timestamp">'.
+				echo pluggable_ui('article_ui', 'timestamp',
+					n.n.'<fieldset id="write-timestamp">'.
 					n.'<legend>'.gTxt('timestamp').'</legend>'.
 
 					n.graf(checkbox('reset_time', '1', $reset_time, '', 'reset_time').'<label for="reset_time">'.gTxt('reset_time').'</label>').
@@ -833,12 +840,13 @@ if (!empty($event) and $event == 'article') {
 						tsi('second', '%S', $sPosted)
 					).
 
-					n.hInput('sPosted', $sPosted),
-					n.hInput('sLastMod', $sLastMod),
-					n.hInput('AuthorID', $AuthorID),
-					n.hInput('LastModID', $LastModID),
+					n.hInput('sPosted', $sPosted).
+					n.hInput('sLastMod', $sLastMod).
+					n.hInput('AuthorID', $AuthorID).
+					n.hInput('LastModID', $LastModID).
 
-				n.'</fieldset>';
+				n.'</fieldset>',
+				$rs);
 
 			//-- expires -------------------
 				if (!empty($exp_year))
@@ -851,7 +859,8 @@ if (!empty($event) and $event == 'article') {
 					$sExpires = safe_strtotime($exp_year.'-'.$exp_month.'-'.$exp_day.' '.$exp_hour.':'.$exp_minute.':'.$exp_second);
 				}
 
-				echo n.n.'<fieldset id="write-expires">'.
+				echo pluggable_ui('article_ui', 'expires',
+					n.n.'<fieldset id="write-expires">'.
 					n.'<legend>'.gTxt('expires').'</legend>'.
 
 					n.graf(gtxt('date').sp.
@@ -867,10 +876,11 @@ if (!empty($event) and $event == 'article') {
 					).
 					n.hInput('sExpires', $sExpires).
 
-				n.'</fieldset>'.
+				n.'</fieldset>',
+				$rs);
 
 				// end "More" section
-				n.n.'</div>';
+				echo n.n.'</div>';
 
 		//-- save button --------------
 
