@@ -388,6 +388,7 @@ if ($event == 'category') {
 				fLabelCell($evname.'_category_name') . fInputCell('name', $name, 1, 20),
 				fLabelCell('parent') . td(cat_parent_pop($parent,$evname,$id)),
 				fLabelCell($evname.'_category_title') . fInputCell('title', $title, 1, 30),
+				pluggable_ui('category_ui', 'extend_detail_form', '', $row),
 				hInput('id',$id),
 				tdcs(fInput('submit', '', gTxt('save_button'),'smallerbox'), 2)
 			);

@@ -73,6 +73,8 @@ $LastChangedRevision$
 							, '', 'noline')
 						).
 
+						pluggable_ui('section_ui', 'extend_detail_form', '', $default).
+
 						tr(
 							tda(
 								fInput('submit', '', gTxt('save_button'), 'smallerbox').
@@ -155,6 +157,8 @@ $LastChangedRevision$
 									yesnoradio('searchable', $searchable, '', $name).sp.popHelp('section_searchable')
 								, '', 'noline')
 							).
+
+							pluggable_ui('section_ui', 'extend_detail_form', '', $a).
 
 							n.n.tr(
 								tda(

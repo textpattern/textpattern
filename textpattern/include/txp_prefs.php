@@ -449,11 +449,8 @@ $LastChangedRevision$
 //-------------------------------------------------------------
 	function custom_set($name, $val)
 	{
-		// use plugged-in form markup for custom field settings?
-		$out = callback_event('custom_set', $name, 0, $val);
-		if ($out !== '') return $out;
-
-		return text_input($name, $val, 20);
+		return pluggable_ui('prefs_ui', 'custom_set',
+			text_input($name, $val, 20), $name, $val);
 	}
 
 //-------------------------------------------------------------

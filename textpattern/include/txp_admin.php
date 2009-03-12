@@ -349,13 +349,15 @@ $LastChangedRevision$
 		global $step, $txp_user;
 
 		$vars = array('user_id', 'name', 'RealName', 'email', 'privs');
+		$rs = array();
 
 		extract(gpsa($vars));
 
 		if ($user_id && $step == 'author_edit')
 		{
 			$user_id = assert_int($user_id);
-			extract(safe_row('*', 'txp_users', "user_id = $user_id"));
+			$rs = safe_row('*', 'txp_users', "user_id = $user_id");
+			extract($rs);
 		}
 
 		if ($step == 'author_save' or $step == 'author_save_new')
@@ -399,6 +401,8 @@ $LastChangedRevision$
 					.sp.popHelp('about_privileges')
 				)
 			).
+
+			pluggable_ui('author_ui', 'extend_detail_form', '', $rs).
 
 			tr(
 				td().
