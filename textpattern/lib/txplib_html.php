@@ -569,7 +569,9 @@ EOS;
 
 		$label_id = ($label_id) ? $label_id : $event.'-upload';
 
-		return n.n.'<form'.$class.' method="post" enctype="multipart/form-data" action="index.php">'.
+		$argv = func_get_args();
+		return pluggable_ui($event.'_ui', 'upload_form',
+			n.n.'<form'.$class.' method="post" enctype="multipart/form-data" action="index.php">'.
 			n.'<div>'.
 
 			(!empty($max_file_size)? n.hInput('MAX_FILE_SIZE', $max_file_size): '').
@@ -590,7 +592,8 @@ EOS;
 			).
 
 			n.'</div>'.
-			n.'</form>';
+			n.'</form>',
+			$argv);
 	}
 
 //-------------------------------------------------------------
