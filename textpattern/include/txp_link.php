@@ -237,10 +237,12 @@ $LastChangedRevision$
 
 		extract(gpsa($vars));
 
+		$rs = array();
 		if ($id && $step == 'link_edit')
 		{
 			$id = assert_int($id);
-			extract(safe_row('*', 'txp_link', "id = $id"));
+			$rs = safe_row('*', 'txp_link', "id = $id");
+			extract($rs);
 		}
 
 		if ($step == 'link_save' or $step == 'link_post')
@@ -287,6 +289,8 @@ $LastChangedRevision$
 					'<textarea id="link-description" name="description" cols="40" rows="7" tabindex="4">'.htmlspecialchars($description).'</textarea>'
 				)
 			).
+
+			pluggable_ui('link_ui', 'extend_detail_form', '', $rs).
 
 			tr(
 				td().

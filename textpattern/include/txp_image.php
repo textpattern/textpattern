@@ -400,6 +400,8 @@ $LastChangedRevision$
 						graf('<label for="caption">'.gTxt('caption').'</label>'.br.
 							text_area('caption', '100', '400', $caption, 'caption')).
 
+						pluggable_ui('image_ui', 'extend_detail_form', '', $rs).
+
 						n.graf(fInput('submit', '', gTxt('save'), 'publish')).
 						n.hInput('id', $id).
 						n.eInput('image').

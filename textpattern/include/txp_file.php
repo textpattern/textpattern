@@ -403,6 +403,7 @@ $LastChangedRevision$
 									graf(gTxt('description').br.text_area('description','100','400',$description)) .
 									fieldset(radio_list('status', $file_statuses, $status, 4), gTxt('status'), 'file-status').
 									fieldset($created, gTxt('timestamp'), 'file-created').
+									pluggable_ui('file_ui', 'extend_detail_form', '', $rs).
 									graf(fInput('submit','',gTxt('save'))) .
 
 									eInput('file') .
@@ -428,6 +429,7 @@ $LastChangedRevision$
 								form(
 									graf(gTxt('existing_file').' '.
 									selectInput('filename',$existing_files,"",1).
+									pluggable_ui('file_ui', 'extend_detail_form', '', $rs).
 									fInput('submit','',gTxt('Save'),'smallerbox').
 
 									eInput('file').
