@@ -238,7 +238,7 @@ $LastChangedRevision$
 						n.'</ul>'
 					, 75).
 
-					td($file_statuses[$status], 45).
+					td(in_array($status, array_keys($file_statuses)) ? $file_statuses[$status] : '<span class="not-ok">'.gTxt('none').'</span>', 45).
 
 					td($condition, 45).
 
