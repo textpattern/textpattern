@@ -367,9 +367,7 @@ $LastChangedRevision$
 					if ($prefs['comment_means_site_updated']) {
 						update_lastmod();
 					}
-					if ($comments_sendmail) {
-						mail_comment($message,$name,$email,$web,$parentid, $rs);
-					}
+					mail_comment($message, $name, $email, $web, $parentid, $rs);
 
 					$updated = update_comments_count($parentid);
 
@@ -544,14 +542,17 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function mail_comment($message, $cname, $cemail, $cweb, $parentid, $discussid)
 	{
-		global $sitename;
+		global $sitename, $comments_sendmail;
+
+		if (!$comments_sendmail) return;
+		$evaluator =& get_comment_evaluator();
+		if ($comments_sendmail == 2 && $evaluator->get_result() == SPAM) return;
+
 		$parentid = assert_int($parentid);
 		$discussid = assert_int($discussid);
 		$article = safe_row("Section, Posted, ID, url_title, AuthorID, Title", "textpattern", "ID = $parentid");
 		extract($article);
 		extract(safe_row("RealName, email", "txp_users", "name = '".doSlash($AuthorID)."'"));
-
-		$evaluator =& get_comment_evaluator();
 
 		$out = gTxt('greeting')." $RealName,".n.n;
 		$out .= str_replace('{title}',$Title,gTxt('comment_recorded')).n;

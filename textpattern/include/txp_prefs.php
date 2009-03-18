@@ -447,6 +447,18 @@ $LastChangedRevision$
 	}
 
 //-------------------------------------------------------------
+	function commentsendmail($name, $val)
+	{
+		$vals = array(
+			'1'	=> gTxt('all'),
+			'0' => gTxt('none'),
+			'2'	=> gTxt('ham')
+		);
+
+		return selectInput($name, $vals, $val, '', '', $name);
+	}
+
+//-------------------------------------------------------------
 	function custom_set($name, $val)
 	{
 		return pluggable_ui('prefs_ui', 'custom_set',
