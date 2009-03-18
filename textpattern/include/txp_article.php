@@ -425,6 +425,10 @@ if (!empty($event) and $event == 'article') {
 
 			echo pluggable_ui('article_ui', 'sidehelp', side_help($textile_body, $textile_excerpt));
 
+		//-- custom menu entries --------------
+
+			echo pluggable_ui('article_ui', 'extend_col_1', '', $rs);
+
 		//-- advanced --------------
 
 			echo '<h3 class="plain"><a href="#advanced" onclick="toggleDisplay(\'advanced\'); return false;">'.gTxt('advanced_options').'</a></h3>'.
@@ -526,8 +530,10 @@ if (!empty($event) and $event == 'article') {
 
 		elseif ($view == 'text')
 		{
-			echo n.'<p><label for="title">'.gTxt('title').'</label>'.sp.popHelp('title').br.
-				'<input type="text" id="title" name="Title" value="'.escape_title($Title).'" class="edit" size="40" tabindex="1" />';
+			echo  pluggable_ui('article_ui', 'title',
+				n.'<p><label for="title">'.gTxt('title').'</label>'.sp.popHelp('title').br.
+				'<input type="text" id="title" name="Title" value="'.escape_title($Title).'" class="edit" size="40" tabindex="1" />',
+				$rs);
 
 			if ($step != 'create')
 			{
@@ -587,8 +593,10 @@ if (!empty($event) and $event == 'article') {
 
 		else
 		{
-			echo n.graf('<label for="body">'.gTxt('body').'</label>'.sp.popHelp('body').br.
-				'<textarea id="body" name="Body" cols="55" rows="31" tabindex="2">'.htmlspecialchars($Body).'</textarea>');
+			echo pluggable_ui('article_ui', 'body',
+				n.graf('<label for="body">'.gTxt('body').'</label>'.sp.popHelp('body').br.
+				'<textarea id="body" name="Body" cols="55" rows="31" tabindex="2">'.htmlspecialchars($Body).'</textarea>'),
+				$rs);
 		}
 
 	//-- excerpt --------------------
@@ -597,8 +605,10 @@ if (!empty($event) and $event == 'article') {
 		{
 			if ($view == 'text')
 			{
-				echo n.graf('<label for="excerpt">'.gTxt('excerpt').'</label>'.sp.popHelp('excerpt').br.
-					'<textarea id="excerpt" name="Excerpt" cols="55" rows="5" tabindex="3">'.htmlspecialchars($Excerpt).'</textarea>');
+				echo pluggable_ui('article_ui', 'excerpt',
+					n.graf('<label for="excerpt">'.gTxt('excerpt').'</label>'.sp.popHelp('excerpt').br.
+					'<textarea id="excerpt" name="Excerpt" cols="55" rows="5" tabindex="3">'.htmlspecialchars($Excerpt).'</textarea>'),
+					$rs);
 			}
 
 			else
