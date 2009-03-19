@@ -14,16 +14,10 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function end_page()
 	{
-		global $txp_user,$event,$app_mode;
+		global $txp_user, $event, $app_mode, $theme;
 
 		if ($app_mode != 'async' && $event != 'tag') {
-			echo '<div id="end_page">',
-			'<a href="http://textpattern.com"><img src="txp_img/carver.gif" width="60" height="48" border="0" alt="" /></a>'.n;
-			echo graf('Textpattern &#183; '.txp_version).n;
-			echo($txp_user)
-			?	graf(gTxt('logged_in_as').' '.span(htmlspecialchars($txp_user)).br.
-					'<a href="index.php?logout=1">'.gTxt('logout').'</a>', ' id="moniker"').n.'</div>'
-			:	'</div>';
+			echo $theme->footer();
 			callback_event('admin_side', 'body_end');
 			echo n.'</body>'.n.'</html>';
 		}

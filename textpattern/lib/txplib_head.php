@@ -8,7 +8,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function pagetop($pagetitle,$message="")
 	{
-		global $siteurl,$sitename,$txp_user,$event,$step,$app_mode;
+		global $siteurl,$sitename,$txp_user,$event,$step,$app_mode,$theme;
 
 		if ($app_mode == 'async') return;
 
@@ -53,7 +53,6 @@ $LastChangedRevision$
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<meta name="robots" content="noindex, nofollow" />
 	<title>Txp &#8250; <?php echo htmlspecialchars($sitename) ?> &#8250; <?php echo escape_title($pagetitle) ?></title>
-	<link href="textpattern.css" rel="stylesheet" type="text/css" />
 	<script type="text/javascript" src="jquery.js"></script>
 	<?php echo script_js(
 		"var textpattern = {event: '$event', step: '$step'};"
@@ -163,7 +162,10 @@ $LastChangedRevision$
 		addEvent(window, 'load', cleanSelects);
 	-->
 	</script>
-	<?php callback_event('admin_side', 'head_end'); ?>
+	<?php
+	echo $theme->html_head();
+	callback_event('admin_side', 'head_end');
+	?>
 	</head>
 	<body id="<?php echo $body_id; ?>">
 	<?php callback_event('admin_side', 'pagetop'); ?>
@@ -172,7 +174,7 @@ $LastChangedRevision$
   <tr id="nav-primary"><td align="center" class="tabs" colspan="2">
  		<?php
  		if (!$bm) {
-			echo '<table cellpadding="0" cellspacing="0" align="center">'.n.
+ 			echo '<table cellpadding="0" cellspacing="0" align="center">'.n.
 			'<tr><td id="messagepane">&nbsp;'.messenger($message).'</td>',
 
 			has_privs('tab.content')
@@ -202,6 +204,10 @@ $LastChangedRevision$
 			}
 		}
 		echo '</td></tr></table>';
+
+		// TODO
+		$theme->set_menu();
+		echo $theme->header();
 		callback_event('admin_side', 'pagetop_end');
 	}
 

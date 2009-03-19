@@ -45,6 +45,7 @@ $LastChangedRevision$
 	include txpath.'/lib/txplib_db.php';
 	include txpath.'/lib/txplib_forms.php';
 	include txpath.'/lib/txplib_html.php';
+	include txpath.'/lib/txplib_theme.php';
 	include txpath.'/lib/admin_config.php';
 
 	$microstart = getmicrotime();
@@ -85,6 +86,8 @@ $LastChangedRevision$
 
 		if (!empty($locale)) setlocale(LC_ALL, $locale);
 		$textarray = load_lang(LANG);
+
+		$theme = theme::init();
 
 		include txpath.'/include/txp_auth.php';
 		doAuth();

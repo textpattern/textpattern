@@ -306,13 +306,13 @@ margin-right: 14px;
 }
 
 table#list th.asc a {
-background: url(txp_img/arrowupdn.gif) no-repeat right 2px;
+background: url(arrowupdn.gif) no-repeat right 2px;
 padding-right: 14px;
 margin-right: 0;
 }
 
 table#list th.desc a {
-background: url(txp_img/arrowupdn.gif) no-repeat right -18px;
+background: url(arrowupdn.gif) no-repeat right -18px;
 padding-right: 14px;
 margin-right: 0;
 }
@@ -394,7 +394,7 @@ width: 368px;
 height: 17px;
 padding: 0;
 margin: 0;
-background: transparent url(txp_img/textpattern.gif) no-repeat top left;
+background: transparent url(textpattern.gif) no-repeat top left;
 }
 
 td.tabup, td.tabdown,
@@ -407,12 +407,12 @@ text-align: center;
 }
 
 td.tabdown {
-background: transparent url(txp_img/down.gif) no-repeat top left;
+background: transparent url(down.gif) no-repeat top left;
 cursor: pointer;
 }
 
 td.tabdown2 {
-background: transparent url(txp_img/down2.gif) no-repeat top left;
+background: transparent url(down2.gif) no-repeat top left;
 cursor: pointer;
 }
 
@@ -431,7 +431,7 @@ border: 0;
 td.tabs {
 height: 25px;
 text-align: center;
-background: transparent url(txp_img/tabshadow.gif) repeat-x top left;
+background: transparent url(tabshadow.gif) repeat-x top left;
 }
 
 td.tabs td {
@@ -460,9 +460,9 @@ td#messagepane {
 width: 368px;
 text-align: center;
 }
- 
+
 td.tabup, td.tabup2 {
-background: transparent url(txp_img/up.gif) no-repeat top left;
+background: transparent url(up.gif) no-repeat top left;
 }
 
 td.tabup a {
@@ -566,27 +566,27 @@ outline: none;
 }
 
 td#article-tabs #tab-textup {
-background-image: url(txp_img/textup.gif);
+background-image: url(textup.gif);
 }
 
 td#article-tabs #tab-textdown {
-background-image: url(txp_img/textdown.gif);
+background-image: url(textdown.gif);
 }
 
 td#article-tabs #tab-htmlup {
-background-image: url(txp_img/htmlup.gif);
+background-image: url(htmlup.gif);
 }
 
 td#article-tabs #tab-htmldown {
-background-image: url(txp_img/htmldown.gif);
+background-image: url(htmldown.gif);
 }
 
 td#article-tabs #tab-previewup {
-background-image: url(txp_img/previewup.gif);
+background-image: url(previewup.gif);
 }
 
 td#article-tabs #tab-previewdown {
-background-image: url(txp_img/previewdown.gif);
+background-image: url(previewdown.gif);
 }
 
 /* comments
