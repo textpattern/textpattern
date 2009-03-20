@@ -7,7 +7,7 @@ $LastChangedRevision$
 
 if (!defined('txpinterface')) die('txpinterface is undefined.');
 
-require_once(txpath.DS.THEME.'classic/classic.php');
+theme::based_on('classic');
 
 class remora_theme extends classic_theme
 {

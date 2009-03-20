@@ -14,7 +14,10 @@ class theme
 	function theme($name)
 	{
 		$this->name = $name;
+		$this->menu = array();
 		$this->url = hu.'textpattern/'.THEME.$name.'/';
+		$this->is_popup = false;
+		$this->message = '';
 		return $this;
 	}
 
@@ -22,8 +25,17 @@ class theme
 	function init()
 	{
 		$name = get_pref('theme_name_TODO', 'classic');
-		$path = txpath.DS.THEME.DS.$name.DS;
-		require_once($path.$name.'.php');
+		$path = txpath.DS.THEME.DS.$name.DS.$name.'.php';
+		if (is_file($path))
+		{
+			require_once($path);
+		}
+		else
+		{
+			$name = 'classic';
+			set_pref('theme_name_TODO', $name);
+			require_once(txpath.DS.THEME.DS.$name.DS.$name.'.php');
+		}
 		$t = "{$name}_theme";
 		$t = new $t($name);
 		return $t;
@@ -54,9 +66,17 @@ class theme
 			return array();
 	}
 
+	/* static */
+	function based_on($name)
+	{
+		require_once(txpath.DS.THEME.$name.DS.$name.'.php');
+	}
+
 	function set_state($area, $event, $is_popup, $message)
 	{
 		$this->is_popup = $is_popup;
+		$this->message = $message;
+
 		if ($is_popup) return $this;
 
 		// use legacy areas() for b/c
