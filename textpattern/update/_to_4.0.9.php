@@ -51,7 +51,7 @@ $LastChangedRevision$
 	// default theme
 	if (!safe_field('name', 'txp_prefs', "name = 'theme_name_TODO'"))
 	{
-		safe_insert('txp_prefs', "prefs_id = 1, name = 'theme_name_TODO', val = 'classic', type = '1', event = 'admin', html = 'theme', position = '160'");
+		safe_insert('txp_prefs', "prefs_id = 1, name = 'theme_name_TODO', val = 'classic', type = '1', event = 'admin', html = 'themename', position = '160'");
 	}
 
 	safe_alter('txp_plugin', 'CHANGE code code MEDIUMTEXT NOT NULL, CHANGE code_restore code_restore MEDIUMTEXT NOT NULL');

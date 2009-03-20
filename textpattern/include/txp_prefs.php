@@ -466,6 +466,18 @@ $LastChangedRevision$
 	}
 
 //-------------------------------------------------------------
+	function themename($name, $val)
+	{
+		$themes = theme::names();
+		foreach($themes as $t)
+		{
+			$vals[$t] = ucwords($t);
+		}
+
+		return pluggable_ui('prefs_ui', 'theme_name',
+			selectInput($name, $vals, $val, '', '', $name));
+	}
+//-------------------------------------------------------------
 	function advanced_prefs($message = '')
 	{
 		global $textarray;

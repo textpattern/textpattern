@@ -168,45 +168,8 @@ $LastChangedRevision$
 	?>
 	</head>
 	<body id="<?php echo $body_id; ?>">
-	<?php callback_event('admin_side', 'pagetop'); ?>
-  <table id="pagetop" cellpadding="0" cellspacing="0">
-  <tr id="branding"><td><h1 id="textpattern">Textpattern</h1></td><td id="navpop"><?php echo navPop(1); ?></td></tr>
-  <tr id="nav-primary"><td align="center" class="tabs" colspan="2">
- 		<?php
- 		if (!$bm) {
- 			echo '<table cellpadding="0" cellspacing="0" align="center">'.n.
-			'<tr><td id="messagepane">&nbsp;'.messenger($message).'</td>',
-
-			has_privs('tab.content')
-			? areatab(gTxt('tab_content'), 'content', 'article', $area)
-			: '',
-			has_privs('tab.presentation')
-			?	areatab(gTxt('tab_presentation'), 'presentation', 'page', $area)
-			:	'',
-			has_privs('tab.admin')
-			?	areatab(gTxt('tab_admin'), 'admin', 'admin', $area)
-			:	'',
-			(has_privs('tab.extensions') and !empty($areas['extensions']))
-			?	areatab(gTxt('tab_extensions'), 'extensions', array_shift($areas['extensions']), $area)
-			:	'',
-
-			'<td class="tabdown"><a href="'.hu.'" class="plain" target="_blank">'.gTxt('tab_view_site').'</a></td>',
-		 '</tr></table>';
-
-		 	$secondary = tabsort($area,$event);
-
-		 	if ($secondary)
-		 	{
-		 		echo '</td></tr><tr id="nav-secondary"><td align="center" class="tabs" colspan="2">
-			<table cellpadding="0" cellspacing="0" align="center"><tr>',
-				$secondary,
-			'</tr></table>';
-			}
-		}
-		echo '</td></tr></table>';
-
-		// TODO
-		$theme->set_menu();
+	<?php callback_event('admin_side', 'pagetop');
+		$theme->set_state($area, $event, $bm, $message);
 		echo $theme->header();
 		callback_event('admin_side', 'pagetop_end');
 	}

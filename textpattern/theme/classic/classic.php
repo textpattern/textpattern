@@ -12,12 +12,46 @@ class classic_theme extends theme
 	function html_head()
 	{
 		return '<link href="'.$this->url.'textpattern.css" rel="stylesheet" type="text/css" />'.n;
-
 	}
 
 	function header()
 	{
-		return comment('#TODO');
+		$out[] = '<table id="pagetop" cellpadding="0" cellspacing="0">'.n.
+		  '<tr id="branding"><td><h1 id="textpattern">Textpattern</h1></td><td id="navpop">'.navPop(1).'</td></tr>'.n.
+		  '<tr id="nav-primary"><td align="center" class="tabs" colspan="2">';
+
+ 		if (!$this->is_popup)
+ 		{
+ 			$out[] = '<table cellpadding="0" cellspacing="0" align="center">'.n.
+			'<tr><td id="messagepane">&nbsp;'.messenger($this->message).'</td>';
+
+ 			$secondary = '';
+ 			foreach ($this->menu as $tab)
+ 			{
+				$tc = ($tab['active']) ? 'tabup' : 'tabdown';
+				$atts=' class="'.$tc.'"';
+				$hatts=' href="?event='.$tab['event'].'" class="plain"';
+      			$out[] = tda(tag($tab['label'], 'a', $hatts), $atts);
+
+      			if ($tab['active'] && !empty($tab['items']))
+				{
+					$secondary = '</td></tr><tr id="nav-secondary"><td align="center" class="tabs" colspan="2">'.n.
+					'<table cellpadding="0" cellspacing="0" align="center">'.n.
+					'<tr>';
+					foreach($tab['items'] as $item)
+					{
+						$tc = ($item['active']) ? 'tabup' : 'tabdown2';
+						$secondary .= '<td class="'.$tc.'"><a href="?event='.$item['event'].'" class="plain">'.$item['label'].'</a></td>';
+					}
+					$secondary .= '</tr></table>';
+				}
+			}
+			$out[] = '<td class="tabdown"><a href="'.hu.'" class="plain" target="_blank">'.gTxt('tab_view_site').'</a></td>';
+			$out[] = '</tr></table>';
+	 		$out[] = $secondary;
+ 		}
+		$out[] = '</td></tr></table>';
+ 		return join(n, $out);
 	}
 
 	function footer()
@@ -47,9 +81,7 @@ class classic_theme extends theme
 			'author_uri' 	=> 'http://textpattern.com/',
 			'version' 		=> $prefs['version'],
 			'description' 	=> 'Textpattern Classic Theme',
-			'help' 			=> '',
-			'screenshot' 	=> ''
-
+			'help' 			=> 'http://textpattern.com/admin-theme-help',
 		);
 	}
 }
