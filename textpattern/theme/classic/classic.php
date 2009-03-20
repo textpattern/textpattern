@@ -38,7 +38,7 @@ class classic_theme extends theme
 					$secondary = '</td></tr><tr id="nav-secondary"><td align="center" class="tabs" colspan="2">'.n.
 					'<table cellpadding="0" cellspacing="0" align="center">'.n.
 					'<tr>';
-					foreach($tab['items'] as $item)
+					foreach ($tab['items'] as $item)
 					{
 						$tc = ($item['active']) ? 'tabup' : 'tabdown2';
 						$secondary .= '<td class="'.$tc.'"><a href="?event='.$item['event'].'" class="plain">'.$item['label'].'</a></td>';

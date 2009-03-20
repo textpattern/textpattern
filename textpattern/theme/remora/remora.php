@@ -27,7 +27,7 @@ class remora_theme extends classic_theme
 			if (!empty($tab['items']))
 			{
 				$out[] = '<ul>';
-				foreach($tab['items'] as $item)
+				foreach ($tab['items'] as $item)
 				{
 					$class = ($item['active']) ? 'tabup active' : 'tabdown2 inactive';
 					$out[] = "<li class='{$class}'><a href='?event={$item['event']}'>{$item['label']}</a>";
