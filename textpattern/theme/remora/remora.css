@@ -1,1 +1,80 @@
-/* remora theme: dummy stylesheet */
+/* 
+	Remora Theme for Textpattern CMS
+	Suckerfish menu: @see http://htmldog.com/articles/suckerfish/dropdowns/
+*/
+
+#topbar {
+background-color: #FFCC33;
+}
+
+#nav {
+background: #FFCC33 url(../classic/textpattern.gif) no-repeat right center;
+overflow: auto;
+padding: 0 0 0 3em;
+margin: 0 auto;
+width: 985px;
+}
+
+#nav, #nav ul {
+list-style: none;
+}
+
+#nav a {
+display: block;
+width: 10em;
+height: 2em;
+line-height: 2em;
+color: #333;
+}
+
+#nav a:hover {
+text-decoration: none;
+background-color: #EEE;
+}
+
+#nav li {
+float: left;
+width: 10em;
+margin: 0;
+}
+
+#nav li.active {
+font-weight: bold;
+}
+
+#nav li.active li {
+font-weight: normal;
+}
+
+#nav li li.active {
+font-weight: bold;
+}
+
+#nav li ul {
+padding: 0;
+position: absolute;
+width: 10em;
+left: -999em;
+background-color: white;
+border-width: 0 1px 1px 1px;
+border-style: solid;
+border-color: #FFF #333 #333 #CCC;
+}
+
+#nav li:hover ul, #nav li.sfhover ul {
+left: auto;
+}
+
+#nav li ul li {
+height: 2em;
+}
+
+#nav li ul li a {
+padding: 0;
+}
+
+#messagepane {
+height: 2em;
+line-height: 2em;
+text-align: center;
+}

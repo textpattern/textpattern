@@ -13,13 +13,19 @@ class remora_theme extends classic_theme
 {
 	function html_head()
 	{
+		$js = <<<SF
+			$(document).ready( function() {
+				$("#nav li").mouseenter( function() { $(this).addClass("sfhover"); } );
+				$("#nav li").mouseleave( function() { $(this).removeClass("sfhover"); } );
+			});
+SF;
 		return '<link href="'.$this->url.'../classic/textpattern.css" rel="stylesheet" type="text/css" />'.n. // fugly
-		'<link href="'.$this->url.'remora.css" rel="stylesheet" type="text/css" />'.n;
+		'<link href="'.$this->url.'remora.css" rel="stylesheet" type="text/css" />'.n.script_js($js).n;
 	}
 
 	function header()
 	{
-		$out[] = '<ul id="nav">';
+		$out[] = '<div id="topbar"><ul id="nav">';
 		foreach ($this->menu as $tab)
 		{
 			$class = ($tab['active']) ? 'tabup active' : 'tabdown inactive';
@@ -37,7 +43,8 @@ class remora_theme extends classic_theme
 			}
 			$out[] = '</li>';
 		}
-		$out[] = '</ul>';
+		$out[] = '</ul></div>';
+		$out[] = '<div id="messagepane">'.$this->messenger($this->message).'</div>';
 		return join(n, $out);
 	}
 

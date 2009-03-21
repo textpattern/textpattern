@@ -24,7 +24,7 @@ class theme
 	/* static */
 	function init()
 	{
-		$name = get_pref('theme_name_TODO', 'classic');
+		$name = get_pref('theme_name', 'classic');
 		$path = txpath.DS.THEME.DS.$name.DS.$name.'.php';
 		if (is_file($path))
 		{
@@ -33,7 +33,7 @@ class theme
 		else
 		{
 			$name = 'classic';
-			set_pref('theme_name_TODO', $name);
+			set_pref('theme_name', $name);
 			require_once(txpath.DS.THEME.DS.$name.DS.$name.'.php');
 		}
 		$t = "{$name}_theme";
@@ -143,6 +143,11 @@ class theme
 	}
 
 	function footer()
+	{
+		trigger_error(__FUNCTION__.' is abstract.', E_USER_ERROR);
+	}
+
+	function messenger()
 	{
 		trigger_error(__FUNCTION__.' is abstract.', E_USER_ERROR);
 	}

@@ -23,7 +23,7 @@ class classic_theme extends theme
  		if (!$this->is_popup)
  		{
  			$out[] = '<table cellpadding="0" cellspacing="0" align="center">'.n.
-			'<tr><td id="messagepane">&nbsp;'.messenger($this->message).'</td>';
+			'<tr><td id="messagepane">&nbsp;'.$this->messenger($this->message).'</td>';
 
  			$secondary = '';
  			foreach ($this->menu as $tab)
@@ -71,6 +71,47 @@ class classic_theme extends theme
 		$out[] = '</div>';
 
 		return join(n, $out);;
+	}
+
+	function messenger($thing, $thething='', $action='')
+	{
+ 		// $thing[0]: message text
+ 		// $thing[1]: message type, defaults to "success" unless empty or a different flag is set
+
+		if ($thing === '') return '';
+
+		if (!is_array($thing) || !isset($thing[1]))
+ 		{
+ 			$thing = array($thing, 0);
+ 		}
+
+ 		switch ($thing[1])
+ 		{
+ 			case E_ERROR:
+ 				$class = 'error';
+ 				break;
+ 			case E_WARNING:
+ 				$class = 'warning';
+ 				break;
+ 			default:
+ 				$class = 'success';
+ 				break;
+ 		}
+ 		$html = "<span id='message' class='$class'>".
+ 			gTxt($thing[0]).
+ 			($thething !== '' ? ' '.strong($thething) : '').
+ 			($action !== '' ? ' '.gTxt($action) : '').
+ 			'</span>';
+ 		// Try to inject $html into the message pane no matter when messenger()'s output is printed
+ 		$js = addslashes($html);
+ 		$js = <<< EOS
+ 		$(document).ready( function(){
+	 		$("#messagepane").html("{$js}");
+			$('#messagepane #message.error').fadeOut(800).fadeIn(800);
+			$('#messagepane #message.warning').fadeOut(800).fadeIn(800);
+		} )
+EOS;
+ 		return script_js(str_replace('</', '<\/', $js), $html);
 	}
 
 	function manifest()
