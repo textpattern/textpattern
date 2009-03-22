@@ -19,30 +19,30 @@ class remora_theme extends classic_theme
 				$("#nav li").mouseleave( function() { $(this).removeClass("sfhover"); } );
 			});
 SF;
-		return '<link href="'.$this->url.'../classic/textpattern.css" rel="stylesheet" type="text/css" />'.n. // fugly
-		'<link href="'.$this->url.'remora.css" rel="stylesheet" type="text/css" />'.n.script_js($js).n;
+		return '<link href="'.$this->url.'remora.css" rel="stylesheet" type="text/css" />'.n.script_js($js).n;
 	}
 
 	function header()
 	{
-		$out[] = '<div id="topbar"><ul id="nav">';
+		$out[] = '<div id="masthead"><ul id="nav">';
 		foreach ($this->menu as $tab)
 		{
 			$class = ($tab['active']) ? 'tabup active' : 'tabdown inactive';
-			$out[] = "<li class='{$class}'><a href='?event={$tab['event']}'>{$tab['label']}</a>";
+			$out[] = "<li class='primary {$class}'><a href='?event={$tab['event']}'>{$tab['label']}</a>";
 			if (!empty($tab['items']))
 			{
 				$out[] = '<ul>';
 				foreach ($tab['items'] as $item)
 				{
 					$class = ($item['active']) ? 'tabup active' : 'tabdown2 inactive';
-					$out[] = "<li class='{$class}'><a href='?event={$item['event']}'>{$item['label']}</a>";
+					$out[] = "<li class='secondary {$class}'><a href='?event={$item['event']}'>{$item['label']}</a>";
 				}
 				$out[] = '</ul>';
 
 			}
 			$out[] = '</li>';
 		}
+		$out[] = '<li id="view-site" class="primary tabdown inactive"><a href="'.hu.'" class="plain" target="_blank">'.gTxt('tab_view_site').'</a></li>';
 		$out[] = '</ul></div>';
 		$out[] = '<div id="messagepane">'.$this->messenger($this->message).'</div>';
 		return join(n, $out);

@@ -46,7 +46,7 @@ class classic_theme extends theme
 					$secondary .= '</tr></table>';
 				}
 			}
-			$out[] = '<td class="tabdown"><a href="'.hu.'" class="plain" target="_blank">'.gTxt('tab_view_site').'</a></td>';
+			$out[] = '<td id="view-site" class="tabdown"><a href="'.hu.'" class="plain" target="_blank">'.gTxt('tab_view_site').'</a></td>';
 			$out[] = '</tr></table>';
 	 		$out[] = $secondary;
  		}

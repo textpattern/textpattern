@@ -1,16 +1,17 @@
 /* 
-	Remora Theme for Textpattern CMS
-	Suckerfish menu: @see http://htmldog.com/articles/suckerfish/dropdowns/
+Remora Theme for Textpattern CMS
+Suckerfish menu: @see http://htmldog.com/articles/suckerfish/dropdowns/
 */
 
-#topbar {
-background-color: #FFCC33;
+@import url("../classic/textpattern.css");
+
+#masthead {
+background: #FFCC33 url(../classic/textpattern.gif) no-repeat right center;
 }
 
 #nav {
-background: #FFCC33 url(../classic/textpattern.gif) no-repeat right center;
 overflow: auto;
-padding: 0 0 0 3em;
+padding: 0 0 0 10px;
 margin: 0 auto;
 width: 985px;
 }
@@ -21,21 +22,22 @@ list-style: none;
 
 #nav a {
 display: block;
-width: 10em;
-height: 2em;
-line-height: 2em;
-color: #333;
+height: 2.5em;
+line-height: 2.5em;
+color: #000;
+padding: 0 10px;
 }
 
 #nav a:hover {
 text-decoration: none;
-background-color: #EEE;
+background-color: #FFF;
 }
 
 #nav li {
 float: left;
-width: 10em;
-margin: 0;
+margin: 0 -1px 0 -1px;
+line-height: 2.5em;
+height: 2.5em;
 }
 
 #nav li.active {
@@ -51,14 +53,23 @@ font-weight: bold;
 }
 
 #nav li ul {
-padding: 0;
+padding: 0 0 0.5em 0;
 position: absolute;
-width: 10em;
+width: 160px;
 left: -999em;
 background-color: white;
 border-width: 0 1px 1px 1px;
 border-style: solid;
-border-color: #FFF #333 #333 #CCC;
+border-color: #FFF #666 #666 #CCC;
+margin: 0 -1px;
+}
+
+#nav li:hover, #nav li.sfhover {
+position: static;
+background-color: white;
+border-right: 1px solid #666;
+border-left: 1px solid #CCC;
+margin: 0 -2px;
 }
 
 #nav li:hover ul, #nav li.sfhover ul {
@@ -67,13 +78,29 @@ left: auto;
 
 #nav li ul li {
 height: 2em;
-}
-
-#nav li ul li a {
+width: 140px;
 padding: 0;
 }
 
+#nav li ul li:hover, #nav li ul li.sfhover  {
+border: none;
+margin: 0 -1px;
+}
+
+#nav li ul li a {
+padding: 0 10px;
+width: 140px;
+margin: 0;
+}
+
+#nav li ul li a:hover {
+background-color: #f8f8ff;
+border-left: 1px solid #CCC;
+padding-left: 9px;
+}
+
 #messagepane {
+background: white url(dropshadow.gif) repeat-x top left;
 height: 2em;
 line-height: 2em;
 text-align: center;
