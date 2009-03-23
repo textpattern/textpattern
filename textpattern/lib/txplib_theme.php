@@ -22,9 +22,24 @@ class theme
 	}
 
 	/* static */
-	function init()
+	function init($name = '')
 	{
-		$name = get_pref('theme_name', 'classic');
+		static $instance;
+
+		if (empty($name))
+		{
+			$name = pluggable_ui('admin_side', 'theme_name', get_pref('theme_name', 'classic'));
+		}
+
+		if ($instance && is_object($instance) && ($name == $instance->name))
+		{
+			return $instance;
+		}
+		else
+		{
+			$instance = null;
+		}
+
 		$path = txpath.DS.THEME.DS.$name.DS.$name.'.php';
 		if (is_file($path))
 		{
@@ -37,8 +52,8 @@ class theme
 			require_once(txpath.DS.THEME.DS.$name.DS.$name.'.php');
 		}
 		$t = "{$name}_theme";
-		$t = new $t($name);
-		return $t;
+		$instance = new $t($name);
+		return $instance;
 	}
 
 	/* static */

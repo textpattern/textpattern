@@ -87,6 +87,7 @@ $LastChangedRevision$
 		if (!empty($locale)) setlocale(LC_ALL, $locale);
 		$textarray = load_lang(LANG);
 
+		// init global theme
 		$theme = theme::init();
 
 		include txpath.'/include/txp_auth.php';
@@ -108,6 +109,9 @@ $LastChangedRevision$
 
 		if (!empty($admin_side_plugins) and gps('event') != 'plugin')
 			load_plugins(1);
+
+		// init private theme
+		$theme = theme::init();
 
 		include txpath.'/lib/txplib_head.php';
 
