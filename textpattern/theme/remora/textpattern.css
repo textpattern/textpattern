@@ -1,4 +1,4 @@
-/* 
+/*
 Remora Theme for Textpattern CMS
 Suckerfish menu: @see http://htmldog.com/articles/suckerfish/dropdowns/
 */
@@ -94,7 +94,7 @@ margin: 0;
 }
 
 #nav li ul li a:hover {
-background-color: #f8f8ff;
+background-color: #FFFFCC;
 border-left: 1px solid #CCC;
 padding-left: 9px;
 }
