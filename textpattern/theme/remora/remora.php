@@ -19,7 +19,7 @@ class remora_theme extends classic_theme
 				$("#nav li").mouseleave( function() { $(this).removeClass("sfhover"); } );
 			});
 SF;
-		return '<link href="'.$this->url.'remora.css" rel="stylesheet" type="text/css" />'.n.script_js($js).n;
+		return parent::html_head().n.script_js($js).n;
 	}
 
 	function header()
