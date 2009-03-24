@@ -36,7 +36,7 @@ print <<<eod
 	<head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<title>Textpattern &#8250; setup</title>
-	<link rel="stylesheet" href="$rel_siteurl/textpattern/textpattern.css" type="text/css" />
+	<link rel="stylesheet" href="$rel_siteurl/textpattern/theme/classic/textpattern.css" type="text/css" />
 	</head>
 	<body style="border-top:15px solid #FC3">
 	<div align="center">
