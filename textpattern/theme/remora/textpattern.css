@@ -105,3 +105,10 @@ height: 2em;
 line-height: 2em;
 text-align: center;
 }
+
+div#end_page {
+text-align: center;
+margin: 4em 0 0;
+}
+
+

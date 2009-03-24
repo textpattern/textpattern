@@ -59,7 +59,7 @@ class classic_theme extends theme
 		global $txp_user;
 
 		$out[] = '<div id="end_page">'.n.
-			'<a href="http://textpattern.com"><img src="txp_img/carver.gif" width="60" height="48" border="0" alt="" /></a>'.n.
+			'<a href="http://textpattern.com/"><img src="txp_img/carver.gif" width="60" height="48" border="0" alt="" /></a>'.n.
 			graf('Textpattern &#183; '.txp_version);
 
 		if ($txp_user)
