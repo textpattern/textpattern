@@ -637,6 +637,11 @@ width: 500px;
 height: 515px;
 }
 
+textarea#form {
+width: 500px;
+height: 420px;
+}
+
 div#preview-plugin, div#preview-help {
 margin: 0 auto 10px auto;
 padding: 3px;
