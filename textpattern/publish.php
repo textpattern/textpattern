@@ -530,8 +530,8 @@ $LastChangedRevision$
 			$cssname = safe_field('css','txp_section',"name='".doSlash($s)."'");
 		}
 
-		$css = safe_field('css','txp_css',"name='".doSlash($cssname)."'");
-		if ($css) echo base64_decode($css);
+		if (isset($cssname)) $css = safe_field('css','txp_css',"name='".doSlash($cssname)."'");
+		if (isset($css)) echo base64_decode($css);
 	}
 
 //	article() is called when parse() finds a <txp:article /> tag.
