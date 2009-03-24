@@ -58,7 +58,7 @@ $LastChangedRevision$
 		), $atts));
 
 		if (empty($n)) $n = 'default';
-		$url = hu.'textpattern/css.php?n='.$n;
+		$url = hu.'css.php?n='.$n;
 
 		if ($format == 'link') {
 			return '<link rel="'.$rel.'" type="text/css"'.
