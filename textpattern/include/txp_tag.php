@@ -26,8 +26,8 @@ if (!defined('txpinterface'))
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title>Txp &#8250; <?php echo gTxt('build'); ?></title>
-	<link rel="stylesheet" type="text/css" href="textpattern.css" />
-</head>
+	<?php echo $theme->html_head(); ?>
+	</head>
 <body id="tag-event">
 <?php
 
