@@ -26,6 +26,10 @@ if (!defined('txpinterface'))
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title>Txp &#8250; <?php echo gTxt('build'); ?></title>
+	<script type="text/javascript" src="jquery.js"></script>
+	<?php echo script_js(
+		"var textpattern = {event: '$event', step: '$step'};"
+	); ?>
 	<?php echo $theme->html_head(); ?>
 	</head>
 <body id="tag-event">
