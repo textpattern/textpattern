@@ -1,0 +1,5 @@
+/*
+Compatibility style sheet, serves as a fallback for third-party extensions with no admin-side theming capability.
+@deprecated
+*/
+@import "theme/classic/textpattern.css";
