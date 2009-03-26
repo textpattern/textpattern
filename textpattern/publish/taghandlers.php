@@ -2649,12 +2649,6 @@ $LastChangedRevision$
 			return ($wraptag) ?	tag(join($break, $list), $wraptag, $atts) :	join($break, $list);
 		}
 
-		// enclosing breaks should be specified by name only, no '<' or '>'
-		if (($wraptag == 'ul' or $wraptag == 'ol') and empty($break))
-		{
-			$break = 'li';
-		}
-
 		return ($wraptag) ?
 			tag(n.t.tag(join("</$break>".n.t."<{$break}{$breakatts}>", $list), $break, $breakatts).n, $wraptag, $atts) :
 			tag(n.join("</$break>".n."<{$break}{$breakatts}>".n, $list).n, $break, $breakatts);
