@@ -330,7 +330,7 @@ $LastChangedRevision$
 				tda(
 					select_buttons().
 					author_multiedit_form($page, $sort, $dir, $crit, $search_method)
-				, ' colspan="6" style="text-align: right; border: none;"')
+				, ' colspan="7" style="text-align: right; border: none;"')
 			).
 
 			endTable().
@@ -374,7 +374,7 @@ $LastChangedRevision$
 
 			hed($caption, 3,' style="text-align: center;"').
 
-			startTable('edit').
+			startTable('edit', '', 'edit-pane').
 
 			tr(
 				fLabelCell('login_name').

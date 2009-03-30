@@ -453,7 +453,7 @@ $LastChangedRevision$
 							)
 						);
 			}
-			echo startTable('list'),
+			echo startTable('list', '', 'edit-pane'),
 			tr(
 				td(
 					graf(gTxt('file_status').br.$condition) .

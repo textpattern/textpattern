@@ -355,7 +355,7 @@ $LastChangedRevision$
 				$thumb = '';
 			}
 
-			echo startTable('list'),
+			echo startTable('list', '', 'edit-pane'),
 			tr(
 				td(
 					$img.br.

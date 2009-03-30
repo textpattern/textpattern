@@ -77,7 +77,7 @@ function doAuth()
 		list($name) = split(',', cs('txp_login'));
 
 		echo form(
-			startTable('edit').
+			startTable('edit', '', 'login-pane').
 				n.n.tr(
 					n.td().
 					td(graf($message))

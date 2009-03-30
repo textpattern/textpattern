@@ -255,7 +255,7 @@ $LastChangedRevision$
 
 		echo form(
 
-			startTable('edit') .
+			startTable('edit', '', 'edit-pane') .
 
 			tr(
 				fLabelCell('title', '', 'link-title').

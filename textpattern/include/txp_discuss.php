@@ -374,7 +374,7 @@ $LastChangedRevision$
 				a.'name='.urlencode($name).a.'discussid='.$discussid.'">'.$ban_text.'</a>]';
 
 			echo form(
-				startTable('edit').
+				startTable('edit', '', 'edit-pane').
 				stackRows(
 
 					fLabelCell('name').
