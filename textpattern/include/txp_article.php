@@ -638,14 +638,18 @@ if (!empty($event) and $event == 'article') {
 
 		echo hInput('from_view',$view),
 		'</td>';
+
+	//-- layer tabs -------------------
+
 		echo '<td id="article-tabs">';
 
-  	//-- layer tabs -------------------
-
-		echo ($use_textile == USE_TEXTILE || $textile_body == USE_TEXTILE)
-			? '<ul>'.(tab('text',$view).tab('html',$view).tab('preview',$view)).'</ul>'
-			: '&#160;';
+		echo pluggable_ui('article_ui', 'view',
+			($use_textile == USE_TEXTILE || $textile_body == USE_TEXTILE)
+			? tag((tab('text',$view).tab('html',$view).tab('preview',$view)), 'ul')
+			: '&#160;',
+			$rs);
 		echo '</td>';
+
 		echo '<td id="article-col-2">';
 
 		if ($view == 'text')
@@ -672,7 +676,8 @@ if (!empty($event) and $event == 'article') {
 
 		//-- status radios --------------
 
-			echo pluggable_ui('article_ui', 'status', 				n.n.'<fieldset id="write-status">'.
+			echo pluggable_ui('article_ui', 'status',
+				n.n.'<fieldset id="write-status">'.
 				n.'<legend>'.gTxt('status').'</legend>'.
 				n.status_radio($Status).
 				n.'</fieldset>',
@@ -680,7 +685,8 @@ if (!empty($event) and $event == 'article') {
 
 		//-- category selects -----------
 
-			echo pluggable_ui('article_ui', 'categories', 				n.n.'<fieldset id="write-sort">'.
+			echo pluggable_ui('article_ui', 'categories',
+				n.n.'<fieldset id="write-sort">'.
 				n.'<legend>'.gTxt('sort_display').'</legend>'.
 
 				n.graf('<label for="category-1">'.gTxt('category1').'</label> '.
@@ -695,7 +701,8 @@ if (!empty($event) and $event == 'article') {
 
 			if(!$from_view && !$pull) $Section = getDefaultSection();
 
-			echo pluggable_ui('article_ui', 'section', 				n.graf('<label for="section">'.gTxt('section').'</label> '.
+			echo pluggable_ui('article_ui', 'section',
+				n.graf('<label for="section">'.gTxt('section').'</label> '.
 				'<span class="small">['.eLink('section', '', '', '', gTxt('edit')).']</span>'.br.
 				section_popup($Section, 'section')).
 				n.'</fieldset>',
