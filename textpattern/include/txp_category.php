@@ -394,7 +394,7 @@ if ($event == 'category') {
 			);
 		}
 		$out.= eInput( 'category' ) . sInput( 'cat_'.$evname.'_save' ) . hInput( 'old_name',$name );
-		echo form( startTable( 'edit' ) . $out . endTable() );
+		echo form( startTable( 'edit', '', 'edit-pane' ) . $out . endTable() );
 	}
 
 //-------------------------------------------------------------
