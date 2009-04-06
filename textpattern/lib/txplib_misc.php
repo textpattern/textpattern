@@ -631,7 +631,10 @@ $LastChangedRevision$
 	{
 		global $plugin_areas;
 
-		$plugin_areas[$area][$title] = $event;
+		if ($GLOBALS['event'] !== 'plugin')
+		{
+			$plugin_areas[$area][$title] = $event;
+		}
 	}
 
 // -------------------------------------------------------------
