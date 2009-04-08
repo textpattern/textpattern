@@ -82,7 +82,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function hCell($text='',$caption='',$atts='')
 	{
-		$text = (!$text) ? sp : $text;
+		$text = ('' === $text) ? sp : $text;
 		return tag($text,'th',$atts);
 	}
 
@@ -261,7 +261,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function startTable($type,$align='',$class='',$p='',$w='')
 	{
-		if (!$p) $p = ($type=='edit') ? 3 : 0;
+		if ('' === $p) $p = ($type=='edit') ? 3 : 0;
 		$align = (!$align) ? 'center' : $align;
 		$class = ($class) ? ' class="'.$class.'"' : '';
 		$width = ($w) ? ' width="'.$w.'"' : '';
@@ -285,7 +285,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function td($content='',$width='',$class='',$id='')
 	{
-		$content = (!$content) ? '&#160;' : $content;
+		$content = ('' === $content) ? '&#160;' : $content;
 		$atts[] = ($width)  ? ' width="'.$width.'"' : '';
 		$atts[] = ($class)  ? ' class="'.$class.'"' : '';
 		$atts[] = ($id)  ? ' id="'.$id.'"' : '';
@@ -360,7 +360,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function tag($content,$tag,$atts='')
 	{
-		return ($content) ? '<'.$tag.$atts.'>'.$content.'</'.$tag.'>' : '';
+		return ('' !== $content) ? '<'.$tag.$atts.'>'.$content.'</'.$tag.'>' : '';
 	}
 
 // -------------------------------------------------------------
