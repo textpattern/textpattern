@@ -695,7 +695,7 @@ $LastChangedRevision$
 					$thiscomment['time'] = $c['time'];
 
 					// allow permlink guesstimation in permlinkurl(), elsewhere
-					$thisarticle['ID'] = $c['thisid'];
+					$thisarticle['thisid'] = $c['thisid'];
 					$thisarticle['posted'] = $c['posted'];
 					$thisarticle['title'] = $c['title'];
 					$thisarticle['section'] = $c['section'];
