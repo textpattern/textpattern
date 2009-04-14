@@ -60,6 +60,7 @@ $LastChangedRevision$
 		'/lib/txplib_head.php',
 		'/lib/txplib_html.php',
 		'/lib/txplib_misc.php',
+		'/lib/txplib_theme.php',
 		'/lib/txplib_update.php',
 		'/lib/txplib_wrapper.php',
 		'/publish.php',
@@ -71,6 +72,7 @@ $LastChangedRevision$
 		'/publish/taghandlers.php',
 		'/../rpc/index.php',
 		'/../rpc/TXP_RPCServer.php',
+		'/theme/classic/classic.php',
 		'/update/_to_1.0.0.php',
 		'/update/_to_4.0.2.php',
 		'/update/_to_4.0.3.php',
@@ -126,7 +128,7 @@ $LastChangedRevision$
 
 	function doDiagnostics()
 	{
-		global $prefs, $files, $txpcfg, $step;
+		global $prefs, $files, $txpcfg, $step, $theme;
 		extract(get_prefs());
 
 	$urlparts = parse_url(hu);
@@ -386,6 +388,8 @@ $LastChangedRevision$
 		}
 	}
 
+	$theme_manifest = $theme->manifest();
+
 	// check GD info
 	if (function_exists('gd_info')) {
 		$gd_info = gd_info();
@@ -490,6 +494,8 @@ $LastChangedRevision$
 		gTxt('os_version').cs.php_uname('s').' '.php_uname('r').n,
 
 		($active_plugins ? gTxt('active_plugins').cs.join(', ', $active_plugins).n : ''),
+
+		gTxt('theme_name').cs.$theme_name.sp.$theme_manifest['version'].n,
 
 		$fail
 		? n.gTxt('preflight_check').cs.n.ln.join("\n", $fail).n.ln
