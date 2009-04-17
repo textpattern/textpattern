@@ -76,6 +76,10 @@ $LastChangedRevision$
 				$sort_sql = 'date '.$dir.', id asc';
 			break;
 
+			case 'author':
+				$sort_sql = 'author '.$dir.', id asc';
+			break;
+
 			default:
 				$sort = 'name';
 				$sort_sql = 'linksort '.$dir.', id asc';
@@ -94,7 +98,8 @@ $LastChangedRevision$
 				'id'         	=> "ID in ('" .join("','", do_list($crit_escaped)). "')",
 				'name'			=> "linkname like '%$crit_escaped%'",
 				'description'	=> "description like '%$crit_escaped%'",
-				'category'		=> "category like '%$crit_escaped%'"
+				'category'		=> "category like '%$crit_escaped%'",
+				'author'		=> "author like '%$crit_escaped%'"
 			);
 
 			if (array_key_exists($search_method, $critsql))
@@ -154,6 +159,7 @@ $LastChangedRevision$
 					column_head('description', 'description', 'link', true, $switch_dir, $crit, $search_method, ('description' == $sort) ? $dir : '').
 					column_head('link_category', 'category', 'link', true, $switch_dir, $crit, $search_method, ('category' == $sort) ? $dir : '').
 					column_head('date', 'date', 'link', true, $switch_dir, $crit, $search_method, ('date' == $sort) ? $dir : '').
+					column_head('author', 'author', 'link', true, $switch_dir, $crit, $search_method, ('date' == $sort) ? $dir : '').
 					hCell()
 				);
 
@@ -192,6 +198,10 @@ $LastChangedRevision$
 						, 75).
 
 						td(
+							'<span title="'.htmlspecialchars(get_author_name($author)).'">'.htmlspecialchars($author).'</span>'
+						).
+
+						td(
 							fInput('checkbox', 'selected[]', $id)
 						)
 					);
@@ -218,10 +228,11 @@ $LastChangedRevision$
 	function link_search_form($crit, $method)
 	{
 		$methods =	array(
-			'id'					=> gTxt('ID'),
-			'name'				=> gTxt('link_name'),
-			'description' => gTxt('description'),
-			'category'		=> gTxt('link_category')
+			'id'			=> gTxt('ID'),
+			'name'			=> gTxt('link_name'),
+			'description' 	=> gTxt('description'),
+			'category'		=> gTxt('link_category'),
+			'author'		=> gTxt('author')
 		);
 
 		return search_form('link', 'link_edit', $crit, $methods, $method, 'name');
@@ -322,7 +333,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function link_post()
 	{
-		global $txpcfg,$vars;
+		global $txpcfg, $vars, $txp_user;
 		$varray = gpsa($vars);
 
 		extract(doSlash($varray));
@@ -335,7 +346,8 @@ $LastChangedRevision$
 			url         = '".trim($url)."',
 			linkname    = '$linkname',
 			linksort    = '$linksort',
-			description = '$description'"
+			description = '$description',
+			author		= '$txp_user'"
 		);
 
 		$GLOBALS['ID'] = mysql_insert_id( );
@@ -354,7 +366,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function link_save()
 	{
-		global $txpcfg,$vars;
+		global $txpcfg, $vars, $txp_user;
 		$varray = gpsa($vars);
 
 		extract(doSlash($varray));
@@ -367,7 +379,8 @@ $LastChangedRevision$
 			url         = '".trim($url)."',
 			linkname    = '$linkname',
 			linksort    = '$linksort',
-			description = '$description'",
+			description = '$description',
+			author 		= '$txp_user'",
 		   "id = $id"
 		);
 

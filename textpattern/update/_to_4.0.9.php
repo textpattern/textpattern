@@ -56,4 +56,16 @@ $LastChangedRevision$
 
 	safe_alter('txp_plugin', 'CHANGE code code MEDIUMTEXT NOT NULL, CHANGE code_restore code_restore MEDIUMTEXT NOT NULL');
 	safe_alter('txp_prefs', 'CHANGE val val TEXT NOT NULL');
-?>
+
+	// add author column to files and links,
+	// boldy assuming that the publisher in charge of updating this site is the author of any existing content items.
+	foreach (array('txp_file', 'txp_link') as $table)
+	{
+		$cols = getThings('describe `'.PFX.$table.'`');
+	 	if (!in_array('author', $cols))
+	 	{
+			safe_alter($table, "ADD author varchar(255) NOT NULL default ''");
+			safe_update($table, "author='$txp_user'",'1=1');
+	 	}
+	}
+ ?>

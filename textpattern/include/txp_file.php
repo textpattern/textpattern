@@ -98,6 +98,10 @@ $LastChangedRevision$
 				$sort_sql = 'downloads '.$dir.', filename desc';
 			break;
 
+			case 'author':
+				$sort_sql = 'author '.$dir.', id asc';
+			break;
+
 			default:
 				$sort = 'filename';
 				$sort_sql = 'filename '.$dir;
@@ -116,7 +120,8 @@ $LastChangedRevision$
 				'id'		  => "ID in ('" .join("','", do_list($crit_escaped)). "')",
 				'filename'    => "filename like '%$crit_escaped%'",
 				'description' => "description like '%$crit_escaped%'",
-				'category'    => "category like '%$crit_escaped%'"
+				'category'    => "category like '%$crit_escaped%'",
+				'author'	=> "author like '%$crit_escaped%'"
 			);
 
 			if (array_key_exists($search_method, $critsql))
@@ -181,6 +186,7 @@ $LastChangedRevision$
 					hCell(gTxt('status')).
 					hCell(gTxt('condition')).
 					column_head('downloads', 'downloads', 'file', true, $switch_dir, $crit, $search_method, ('downloads' == $sort) ? $dir : '').
+					column_head('author', 'author', 'file', true, $switch_dir, $crit, $search_method, ('author' == $sort) ? $dir : '').
 					hCell()
 				);
 
@@ -247,6 +253,10 @@ $LastChangedRevision$
 					, 25).
 
 					td(
+						'<span title="'.htmlspecialchars(get_author_name($author)).'">'.htmlspecialchars($author).'</span>'
+					).
+
+					td(
 						fInput('checkbox', 'selected[]', $id)
 					, 10)
 				);
@@ -273,10 +283,11 @@ $LastChangedRevision$
 	function file_search_form($crit, $method)
 	{
 		$methods =	array(
-			'id'					=> gTxt('ID'),
+			'id'			=> gTxt('ID'),
 			'filename'		=> gTxt('file_name'),
-			'description' => gTxt('description'),
-			'category'		=> gTxt('file_category')
+			'description' 	=> gTxt('description'),
+			'category'		=> gTxt('file_category'),
+			'author'		=> gTxt('author')
 		);
 
 		return search_form('file', 'file_list', $crit, $methods, $method, 'filename');
@@ -468,8 +479,9 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function file_db_add($filename,$category,$permissions,$description,$size)
+	function file_db_add($filename, $category, $permissions, $description, $size)
 	{
+		global $txp_user;
 		$rs = safe_insert("txp_file",
 			"filename = '$filename',
 			 category = '$category',
@@ -477,7 +489,8 @@ $LastChangedRevision$
 			 description = '$description',
 			 size = '$size',
 			 created = now(),
-			 modified = now()
+			 modified = now(),
+			 author = '$txp_user'
 		");
 
 		if ($rs) {
@@ -650,7 +663,7 @@ $LastChangedRevision$
 
 	function file_save()
 	{
-		global $file_base_path;
+		global $file_base_path, $txp_user;
 
 		extract(doSlash(gpsa(array('id', 'filename', 'category', 'description', 'status', 'publish_now', 'year', 'month', 'day', 'hour', 'minute', 'second'))));
 
@@ -700,7 +713,8 @@ $LastChangedRevision$
 			description = '$description',
 			status = '$status',
 			size = '$size',
-			modified = now()"
+			modified = now(),
+			author = '$txp_user'"
 			.($created ? ", created = $created" : '')
 		, "id = $id");
 
