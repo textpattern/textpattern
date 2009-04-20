@@ -162,7 +162,7 @@ class theme
 		trigger_error(__FUNCTION__.' is abstract.', E_USER_ERROR);
 	}
 
-	function messenger()
+	function announce($thing=array('', 0))
 	{
 		trigger_error(__FUNCTION__.' is abstract.', E_USER_ERROR);
 	}

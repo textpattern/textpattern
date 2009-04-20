@@ -191,9 +191,10 @@ $LastChangedRevision$
 
 	function nav_form($event, $page, $numPages, $sort, $dir, $crit, $search_method, $total=0, $limit=0)
 	{
+		global $theme;
 		if ($crit && $total > 1)
 		{
-			$out[] = messenger(
+			$out[] = $theme->announce(
 				gTxt('showing_search_results',
 					array(
 						'{from}'	=> (($page - 1) * $limit) + 1,
@@ -489,8 +490,7 @@ $LastChangedRevision$
 //-------------------------------------------------------------
 	function messenger($thing, $thething='', $action='')
 	{
-		global $theme;
-		return $theme->messenger($thing, $thething, $action);
+		return gTxt($thing).' '.strong($thething).' '.gTxt($action);
 	}
 
 // -------------------------------------------------------------

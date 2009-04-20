@@ -46,7 +46,7 @@ SF;
 		$out[] = '<li id="view-site" class="primary tabdown inactive"><a href="'.hu.'" target="_blank">'.gTxt('tab_view_site').'</a></li>';
 		if ($txp_user) $out[] = '<li id="logout" class="primary tabdown inactive"><a href="index.php?logout=1" onclick="return verify(\''.gTxt('are_you_sure').'\')">'.gTxt('logout').'</a></li>';
 		$out[] = '</ul></div>';
-		$out[] = '<div id="messagepane">'.$this->messenger($this->message).'</div>';
+		$out[] = '<div id="messagepane">'.$this->announce($this->message).'</div>';
 		return join(n, $out);
 	}
 

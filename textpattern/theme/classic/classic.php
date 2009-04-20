@@ -23,7 +23,7 @@ class classic_theme extends theme
  		if (!$this->is_popup)
  		{
  			$out[] = '<table cellpadding="0" cellspacing="0" align="center">'.n.
-			'<tr><td id="messagepane">&nbsp;'.$this->messenger($this->message).'</td>';
+			'<tr><td id="messagepane">&nbsp;'.$this->announce($this->message).'</td>';
 
  			$secondary = '';
  			foreach ($this->menu as $tab)
@@ -73,7 +73,7 @@ class classic_theme extends theme
 		return join(n, $out);;
 	}
 
-	function messenger($thing, $thething='', $action='')
+	function announce($thing)
 	{
  		// $thing[0]: message text
  		// $thing[1]: message type, defaults to "success" unless empty or a different flag is set
@@ -97,12 +97,8 @@ class classic_theme extends theme
  				$class = 'success';
  				break;
  		}
- 		$html = "<span id='message' class='$class'>".
- 			gTxt($thing[0]).
- 			($thething !== '' ? ' '.strong($thething) : '').
- 			($action !== '' ? ' '.gTxt($action) : '').
- 			'</span>';
- 		// Try to inject $html into the message pane no matter when messenger()'s output is printed
+ 		$html = "<span id='message' class='$class'>".gTxt($thing[0]).'</span>';
+ 		// Try to inject $html into the message pane no matter when announce()'s output is printed
  		$js = addslashes($html);
  		$js = <<< EOS
  		$(document).ready( function(){
