@@ -15,8 +15,7 @@ class remora_theme extends classic_theme
 	{
 		$js = <<<SF
 			$(document).ready( function() {
-				$("#nav li").mouseenter( function() { $(this).addClass("sfhover"); } );
-				$("#nav li").mouseleave( function() { $(this).removeClass("sfhover"); } );
+				$("#nav li").hover( function() { $(this).addClass("sfhover"); }, function() { $(this).removeClass("sfhover"); } );
 			});
 SF;
 		return parent::html_head().n.script_js($js).n;
