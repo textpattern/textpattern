@@ -44,7 +44,8 @@ $LastChangedRevision$
 
 	// plugin flags
 	$cols = getThings('describe `'.PFX.'txp_plugin`');
- 	if (!in_array('flags', $cols)) {
+ 	if (!in_array('flags', $cols))
+ 	{
 		safe_alter('txp_plugin', "ADD flags SMALLINT UNSIGNED NOT NULL DEFAULT 0");
 	}
 
@@ -64,8 +65,25 @@ $LastChangedRevision$
 		$cols = getThings('describe `'.PFX.$table.'`');
 	 	if (!in_array('author', $cols))
 	 	{
-			safe_alter($table, "ADD author varchar(255) NOT NULL default ''");
+			safe_alter($table, "ADD author varchar(255) NOT NULL default '', ADD INDEX author_idx (author)");
 			safe_update($table, "author='$txp_user'",'1=1');
 	 	}
+	}
+
+	// add indices on author columns
+	foreach (array('textpattern' => 'AuthorID', 'txp_image' => 'author') as $table => $col)
+	{
+		$has_idx = 0;
+		$rs = getRows('show index from `'.PFX.$table.'`');
+		foreach ($rs as $row)
+		{
+			if ($row['Key_name'] == 'author_idx')
+				$has_idx = 1;
+		}
+
+		if (!$has_idx)
+		{
+			safe_query('ALTER IGNORE TABLE `'.PFX.$table.'` ADD INDEX author_idx('.$col.')');
+		}
 	}
  ?>

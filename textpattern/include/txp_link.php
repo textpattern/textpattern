@@ -148,6 +148,8 @@ $LastChangedRevision$
 
 		if ($rs)
 		{
+			$show_authors = !has_single_author('txp_link');
+
 			echo n.n.'<form action="index.php" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">',
 
 				startTable('list').
@@ -159,7 +161,7 @@ $LastChangedRevision$
 					column_head('description', 'description', 'link', true, $switch_dir, $crit, $search_method, ('description' == $sort) ? $dir : '').
 					column_head('link_category', 'category', 'link', true, $switch_dir, $crit, $search_method, ('category' == $sort) ? $dir : '').
 					column_head('date', 'date', 'link', true, $switch_dir, $crit, $search_method, ('date' == $sort) ? $dir : '').
-					column_head('author', 'author', 'link', true, $switch_dir, $crit, $search_method, ('date' == $sort) ? $dir : '').
+					($show_authors ? column_head('author', 'author', 'link', true, $switch_dir, $crit, $search_method, ('date' == $sort) ? $dir : '') : '').
 					hCell()
 				);
 
@@ -197,9 +199,9 @@ $LastChangedRevision$
 							gTime($uDate)
 						, 75).
 
-						td(
+						($show_authors ? td(
 							'<span title="'.htmlspecialchars(get_author_name($author)).'">'.htmlspecialchars($author).'</span>'
-						).
+						) : '').
 
 						td(
 							fInput('checkbox', 'selected[]', $id)
@@ -211,7 +213,7 @@ $LastChangedRevision$
 				tda(
 					select_buttons().
 					link_multiedit_form($page, $sort, $dir, $crit, $search_method)
-				, ' colspan="7" style="text-align: right; border: none;"')
+				, ' colspan="'.($show_authors ? '8' : '7').'" style="text-align: right; border: none;"')
 			).
 
 			endTable().

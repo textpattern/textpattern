@@ -1488,6 +1488,12 @@ $LastChangedRevision$
 		return ($realname) ? $realname : $name;
 	}
 
+// --------------------------------------------------------------
+	function has_single_author($table, $col='author')
+	{
+		return (safe_field('COUNT(name)', 'txp_users', '1=1') <= 1) &&
+			(safe_field('COUNT(DISTINCT('.doSlash($col).'))', doSlash($table), '1=1') <= 1);
+	}
 
 // --------------------------------------------------------------
 	function EvalElse($thing, $condition)

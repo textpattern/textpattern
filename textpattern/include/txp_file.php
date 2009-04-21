@@ -171,6 +171,8 @@ $LastChangedRevision$
 
 		if ($rs)
 		{
+			$show_authors = !has_single_author('txp_file');
+
 			echo '<form name="longform" method="post" action="index.php" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
 
 			startTable('list').
@@ -186,7 +188,7 @@ $LastChangedRevision$
 					hCell(gTxt('status')).
 					hCell(gTxt('condition')).
 					column_head('downloads', 'downloads', 'file', true, $switch_dir, $crit, $search_method, ('downloads' == $sort) ? $dir : '').
-					column_head('author', 'author', 'file', true, $switch_dir, $crit, $search_method, ('author' == $sort) ? $dir : '').
+					($show_authors ? column_head('author', 'author', 'file', true, $switch_dir, $crit, $search_method, ('author' == $sort) ? $dir : '') : '').
 					hCell()
 				);
 
@@ -252,9 +254,9 @@ $LastChangedRevision$
 						($downloads == '0' ? gTxt('none') : $downloads)
 					, 25).
 
-					td(
+					($show_authors ? td(
 						'<span title="'.htmlspecialchars(get_author_name($author)).'">'.htmlspecialchars($author).'</span>'
-					).
+					) : '').
 
 					td(
 						fInput('checkbox', 'selected[]', $id)
@@ -266,7 +268,7 @@ $LastChangedRevision$
 				tda(
 					select_buttons().
 					file_multiedit_form($page, $sort, $dir, $crit, $search_method)
-				,' colspan="10" style="text-align: right; border: none;"')
+				,' colspan="'.($show_authors ? '11' : '10').'" style="text-align: right; border: none;"')
 			).
 
 			endTable().

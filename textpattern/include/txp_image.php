@@ -154,6 +154,8 @@ $LastChangedRevision$
 
 		if ($rs)
 		{
+			$show_authors = !has_single_author('txp_image');
+
 			echo n.n.'<form name="longform" method="post" action="index.php" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
 
 			n.n.startTable('list').
@@ -165,7 +167,7 @@ $LastChangedRevision$
 					column_head('thumbnail', 'thumbnail', 'image', true, $switch_dir, $crit, $search_method, ('thumbnail' == $sort) ? $dir : '').
 					hCell(gTxt('tags')).
 					column_head('image_category', 'category', 'image', true, $switch_dir, $crit, $search_method, ('category' == $sort) ? $dir : '').
-					column_head('author', 'author', 'image', true, $switch_dir, $crit, $search_method, ('author' == $sort) ? $dir : '').
+					($show_authors ? column_head('author', 'author', 'image', true, $switch_dir, $crit, $search_method, ('author' == $sort) ? $dir : '') : '').
 					hCell()
 				);
 
@@ -229,9 +231,9 @@ $LastChangedRevision$
 					td($tagbuilder, 85).
 					td($category, 75).
 
-					td(
+					($show_authors ? td(
 						'<span title="'.htmlspecialchars(get_author_name($author)).'">'.htmlspecialchars($author).'</span>'
-					, 75).
+					, 75) : '').
 
 					td(
 						fInput('checkbox', 'selected[]', $id)
@@ -243,7 +245,7 @@ $LastChangedRevision$
 				tda(
 					select_buttons().
 					image_multiedit_form($page, $sort, $dir, $crit, $search_method)
-				,' colspan="9" style="text-align: right; border: none;"')
+				,' colspan="'.($show_authors ? '9' : '8').'" style="text-align: right; border: none;"')
 			).
 
 			endTable().

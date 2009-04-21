@@ -161,6 +161,8 @@ $LastChangedRevision$
 
 		if ($rs)
 		{
+			$show_authors = !has_single_author('textpattern', 'AuthorID');
+
 			$total_comments = array();
 
 			// fetch true comment count, not the public comment count
@@ -191,7 +193,7 @@ $LastChangedRevision$
 					column_head('category1', 'category1', 'list', true, $switch_dir, $crit, $search_method, (('category1' == $sort) ? "$dir " : '').'articles_detail').
 					column_head('category2', 'category2', 'list', true, $switch_dir, $crit, $search_method, (('category2' == $sort) ? "$dir " : '').'articles_detail').
 					column_head('status', 'status', 'list', true, $switch_dir, $crit, $search_method, ('status' == $sort) ? $dir : '').
-					column_head('author', 'author', 'list', true, $switch_dir, $crit, $search_method, ('author' == $sort) ? $dir : '').
+					($show_authors ? column_head('author', 'author', 'list', true, $switch_dir, $crit, $search_method, ('author' == $sort) ? $dir : '') : '').
 					column_head('comments', 'comments', 'list', true, $switch_dir, $crit, $search_method, (('comments' == $sort) ? "$dir " : '').'articles_detail').
 					hCell()
 				);
@@ -281,9 +283,9 @@ $LastChangedRevision$
 					td($Category2, 100, "articles_detail").
 					td(($a['Status'] < 4 ? $Status : '<a href="'.permlinkurl($a).'">'.$Status.'</a>'), 50).
 
-					td(
+					($show_authors ? td(
 						'<span title="'.htmlspecialchars(get_author_name($AuthorID)).'">'.htmlspecialchars($AuthorID).'</span>'
-					).
+					) : '').
 
 					td($comments, 50, "articles_detail").
 
@@ -309,7 +311,7 @@ $LastChangedRevision$
 				tda(
 					select_buttons().
 					list_multiedit_form($page, $sort, $dir, $crit, $search_method)
-				,' colspan="9" style="text-align: right; border: none;"')
+				,' colspan="'.($show_authors ? '10' : '9').'" style="text-align: right; border: none;"')
 			).
 
 			n.endTable().
@@ -358,9 +360,13 @@ $LastChangedRevision$
 			'changecategory2' => gTxt('changecategory2'),
 			'changestatus'    => gTxt('changestatus'),
 			'changecomments'  => gTxt('changecomments'),
-			'changeauthor'    => gTxt('changeauthor'),
 			'delete'          => gTxt('delete'),
 		);
+
+		if(!has_single_author('textpattern', 'AuthorID'))
+		{
+			$methods += array('changeauthor' => gTxt('changeauthor'));
+		}
 
 		return event_multiedit_form('list', $methods, $page, $sort, $dir, $crit, $search_method);
 	}
@@ -439,7 +445,8 @@ $LastChangedRevision$
 				}
 			}
 
-			$selected = $allowed; unset($allowed);
+			$selected = $allowed;
+			unset($allowed);
 
 			switch ($method)
 			{
