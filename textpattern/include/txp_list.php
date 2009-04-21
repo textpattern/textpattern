@@ -360,12 +360,13 @@ $LastChangedRevision$
 			'changecategory2' => gTxt('changecategory2'),
 			'changestatus'    => gTxt('changestatus'),
 			'changecomments'  => gTxt('changecomments'),
+			'changeauthor'    => gTxt('changeauthor'),
 			'delete'          => gTxt('delete'),
 		);
 
-		if(!has_single_author('textpattern', 'AuthorID'))
+		if (has_single_author('textpattern', 'AuthorID'))
 		{
-			$methods += array('changeauthor' => gTxt('changeauthor'));
+			unset($methods['changeauthor']);
 		}
 
 		return event_multiedit_form('list', $methods, $page, $sort, $dir, $crit, $search_method);

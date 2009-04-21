@@ -100,8 +100,10 @@ $LastChangedRevision$
 	if (in_array($event, array('image', 'file', 'link')))
 	{
 		$rs = getTree('root', $event);
-
 		$edit['category'] = $rs ? treeSelectInput('category', $rs, '') : '';
+
+		$rs = safe_column('name', 'txp_users', "privs not in(0,6)");
+		$edit['author'] = $rs ? selectInput('author', $rs, '', true) : '';
 	}
 
 	if ($event == 'plugin')

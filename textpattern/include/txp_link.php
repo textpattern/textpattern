@@ -409,8 +409,14 @@ $LastChangedRevision$
 	{
 		$methods = array(
 			'changecategory' => gTxt('changecategory'),
+			'changeauthor' => gTxt('changeauthor'),
 			'delete' => gTxt('delete')
 		);
+
+		if (has_single_author('txp_link'))
+		{
+			unset($methods['changeauthor']);
+		}
 
 		return event_multiedit_form('link', $methods, $page, $sort, $dir, $crit, $search_method);
 	}
@@ -430,21 +436,39 @@ $LastChangedRevision$
 		$method   = ps('edit_method');
 		$changed  = array();
 
-		if ($method == 'delete')
+		switch ($method)
 		{
-			foreach ($selected as $id)
-			{
-				if (safe_delete('txp_link', 'id = '.$id))
+			case 'delete';
+				foreach ($selected as $id)
 				{
-					$changed[] = $id;
+					if (safe_delete('txp_link', 'id = '.$id))
+					{
+						$changed[] = $id;
+					}
 				}
-			}
+				break;
+
+			case 'changecategory':
+				$key = 'category';
+				$val = ps('category');
+				break;
+
+			case 'changeauthor';
+				$key = 'author';
+				$val = ps('author');
+				break;
+
+			default:
+				$key = '';
+				$val = '';
+				break;
 		}
-		elseif ($method == 'changecategory')
+
+		if ($selected and $key)
 		{
 			foreach ($selected as $id)
 			{
-				if (safe_update('txp_link', "category = '".doSlash(ps('category'))."'", "id = $id"))
+				if (safe_update('txp_link', "$key = '".doSlash($val)."'", "id = $id"))
 				{
 					$changed[] = $id;
 				}
@@ -453,6 +477,8 @@ $LastChangedRevision$
 
 		if ($changed)
 		{
+			update_lastmod();
+
 			return link_edit(gTxt(
 				($method == 'delete' ? 'links_deleted' : 'link_updated'),
 				array(($method == 'delete' ? '{list}' : '{name}') => join(', ', $changed))));

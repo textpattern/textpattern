@@ -301,8 +301,14 @@ $LastChangedRevision$
 	{
 		$methods = array(
 			'changecategory'  => gTxt('changecategory'),
+			'changeauthor' => gTxt('changeauthor'),
 			'delete'          => gTxt('delete'),
 		);
+
+		if (has_single_author('txp_file'))
+		{
+			unset($methods['changeauthor']);
+		}
 
 		return event_multiedit_form('file', $methods, $page, $sort, $dir, $crit, $search_method);
 	}
@@ -322,16 +328,33 @@ $LastChangedRevision$
 		$method   = ps('edit_method');
 		$changed  = array();
 
-		if ($method == 'delete')
+		switch ($method)
 		{
-			return file_delete($selected);
+			case 'delete';
+				return file_delete($selected);
+				break;
+
+			case 'changecategory':
+				$key = 'category';
+				$val = ps('category');
+				break;
+
+			case 'changeauthor';
+				$key = 'author';
+				$val = ps('author');
+				break;
+
+			default:
+				$key = '';
+				$val = '';
+				break;
 		}
 
-		if ($method == 'changecategory')
+		if ($selected and $key)
 		{
 			foreach ($selected as $id)
 			{
-				if (safe_update('txp_file', "category = '".doSlash(ps('category'))."'", "id = $id"))
+				if (safe_update('txp_file', "$key = '".doSlash($val)."'", "id = $id"))
 				{
 					$changed[] = $id;
 				}
