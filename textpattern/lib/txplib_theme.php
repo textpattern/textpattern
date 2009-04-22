@@ -26,7 +26,7 @@ class theme
 	{
 		static $instance;
 
-		if (empty($name))
+		if ($name === '')
 		{
 			$name = pluggable_ui('admin_side', 'theme_name', get_pref('theme_name', 'classic'));
 		}
@@ -40,19 +40,28 @@ class theme
 			$instance = null;
 		}
 
-		$path = txpath.DS.THEME.DS.$name.DS.$name.'.php';
-		if (is_file($path))
+		$path = txpath.DS.THEME.$name.DS.$name.'.php';
+		if (is_readable($path))
 		{
 			require_once($path);
 		}
 		else
 		{
-			$name = 'classic';
-			set_pref('theme_name', $name);
-			require_once(txpath.DS.THEME.DS.$name.DS.$name.'.php');
+			set_pref('theme_name', 'classic');
+			die(gTxt('cannot_read_theme_file', array('path' => $path)));
 		}
+
 		$t = "{$name}_theme";
-		$instance = new $t($name);
+		if (class_exists($t))
+		{
+			$instance = new $t($name);
+		}
+		else
+		{
+			set_pref('theme_name', 'classic');
+			die(gTxt('missing_required_theme_class', array('name' => $name, 'class' => $t)));
+		}
+
 		return $instance;
 	}
 
