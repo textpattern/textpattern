@@ -436,6 +436,8 @@ $LastChangedRevision$
 			'delete' => gTxt('delete')
 		);
 
+		if (safe_count('txp_users', '1=1') <= 1) unset($methods['delete']); // Sorry guy, you're last.
+
 		return event_multiedit_form('admin', $methods, $page, $sort, $dir, $crit, $search_method);
 	}
 
@@ -452,8 +454,8 @@ $LastChangedRevision$
 		$changed  = array();
 
 		if (!$selected or !is_array($selected))
-                {
-                	return admin();
+		{
+			return admin();
 		}
 
 		$names = safe_column('name', 'txp_users', "name IN ('".join("','", doSlash($selected))."') AND name != '".doSlash($txp_user)."'");
@@ -464,10 +466,36 @@ $LastChangedRevision$
 		{
 			case 'delete':
 
-				if (safe_delete('txp_users', "name IN ('".join("','", doSlash($names))."')"))
+				$assign_assets = ps('assign_assets');
+				if ($assign_assets === '')
 				{
-					safe_delete('txp_prefs', "user_name IN ('".join("','", doSlash($names))."')");
+					$msg = array('must_reassign_assets', E_ERROR);
+				}
+				elseif (in_array($assign_assets, $names))
+				{
+					$msg = array('cannot_assign_assets_to_deletee', E_ERROR);
+				}
+
+				elseif (safe_delete('txp_users', "name IN ('".join("','", doSlash($names))."')"))
+				{
 					$changed = $names;
+					$assign_assets = doSlash($assign_assets);
+					$names = join("','", doSlash($names));
+
+					// delete private prefs
+					safe_delete('txp_prefs', "user_name IN ('$names')");
+
+					// assign dangling assets to their new owner
+					$reassign = array(
+						'textpattern' => 'AuthorID',
+						'txp_file' 	=> 'author',
+						'txp_image' => 'author',
+						'txp_link' 	=> 'author',
+					);
+					foreach ($reassign as $table => $col)
+					{
+						safe_update($table, "$col='$assign_assets'", "$col IN ('$names')");
+					}
 					$msg = 'author_deleted';
 				}
 
@@ -521,6 +549,6 @@ $LastChangedRevision$
 			return admin(gTxt($msg, array('{name}' => htmlspecialchars(join(', ', $changed)))));
 		}
 
-		admin();
+		admin($msg);
 	}
 ?>

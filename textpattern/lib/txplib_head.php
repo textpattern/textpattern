@@ -92,7 +92,7 @@ $LastChangedRevision$
 			5 => gTxt('sticky'),
 		), '', true);
 
-		$rs = safe_column('name', 'txp_users', "privs not in(0,6)");
+		$rs = safe_column('name', 'txp_users', "privs not in(0,6) order by name asc");
 
 		$edit['author'] = $rs ? selectInput('AuthorID', $rs, '', true) : '';
 	}
@@ -102,7 +102,7 @@ $LastChangedRevision$
 		$rs = getTree('root', $event);
 		$edit['category'] = $rs ? treeSelectInput('category', $rs, '') : '';
 
-		$rs = safe_column('name', 'txp_users', "privs not in(0,6)");
+		$rs = safe_column('name', 'txp_users', "privs not in(0,6) order by name asc");
 		$edit['author'] = $rs ? selectInput('author', $rs, '', true) : '';
 	}
 
@@ -114,6 +114,8 @@ $LastChangedRevision$
 	if ($event == 'admin')
 	{
 		$edit['privilege'] = privs();
+		$rs = safe_column('name', 'txp_users', '1=1');
+		$edit_assign_assets = $rs ? selectInput('assign_assets', $rs, '', true) : '';
 	}
 
 	// output JavaScript
@@ -151,10 +153,16 @@ $LastChangedRevision$
 				t."pjs.innerHTML = '<span>".str_replace(array("\n", '-'), array('', '&#45;'), str_replace('</', '<\/', addslashes($val)))."<\/span>';".n.
 				t.'break;'.n.n;
 		}
+		if (isset($edit_assign_assets))
+		{
+			echo "case 'delete':".n.
+					t."pjs.innerHTML = '<label for=\"assign_assets\">".gTxt('assign_assets_to')."</label><span>".str_replace(array("\n", '-'), array('', '&#45;'), str_replace('</', '<\/', addslashes($edit_assign_assets)))."<\/span>';".n.
+					t.'break;'.n.n;
+		}
 ?>
 					default:
 						pjs.style.display = 'none';
-					break;
+						break;
 				}
 			}
 
