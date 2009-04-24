@@ -604,6 +604,11 @@ $LastChangedRevision$
 //-------------------------------------------------------------
 	function advanced_prefs_save()
 	{
+		// update custom fields count from database schema and cache it as a hidden pref
+		$max_custom_fields = count(preg_grep('/^custom_\d+/', getThings('describe `'.PFX.'textpattern`')));
+		set_pref('max_custom_fields', $max_custom_fields, 'publish', 2);
+
+		// safe all regular advanced prefs
 		$prefnames = safe_column("name", "txp_prefs", "prefs_id = 1 AND type = 1");
 
 		$post = doSlash(stripPost());

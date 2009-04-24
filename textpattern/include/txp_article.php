@@ -20,10 +20,14 @@ $vars = array(
 	'textile_body', 'Keywords','Status','Posted','Expires','Section','Category1','Category2',
 	'Annotate','AnnotateInvite','publish_now','reset_time','AuthorID','sPosted',
 	'LastModID','sLastMod','override_form','from_view','year','month','day','hour',
-	'minute','second','url_title','custom_1','custom_2','custom_3','custom_4','custom_5',
-	'custom_6','custom_7','custom_8','custom_9','custom_10','exp_year','exp_month','exp_day','exp_hour',
+	'minute','second','url_title','exp_year','exp_month','exp_day','exp_hour',
 	'exp_minute','exp_second','sExpires'
 );
+$x = get_pref('max_custom_fields', 10);
+for($i = 1; $i <= $x; $i++)
+{
+	$vars[] = "custom_$i";
+}
 
 $statuses = array(
 		1 => gTxt('draft'),
@@ -116,6 +120,15 @@ if (!empty($event) and $event == 'article') {
 			if (!has_privs('article.publish') && $Status>=4) $Status = 3;
 			if (empty($url_title)) $url_title = stripSpace($Title_plain, 1);
 
+			$max = get_pref('max_custom_fields', 10);
+			$cfq = array();
+			for ($i = 1; $i <= $max; $i++)
+			{
+				$custom_x = "custom_{$i}";
+				$cfq[] = "custom_$i = '".$$custom_x."'";
+			}
+			$cfq = join(', ', $cfq);
+
 			safe_insert(
 			   "textpattern",
 			   "Title           = '$Title',
@@ -140,16 +153,7 @@ if (!empty($event) and $event == 'article') {
 				override_form   = '$override_form',
 				url_title       = '$url_title',
 				AnnotateInvite  = '$AnnotateInvite',
-				custom_1        = '$custom_1',
-				custom_2        = '$custom_2',
-				custom_3        = '$custom_3',
-				custom_4        = '$custom_4',
-				custom_5        = '$custom_5',
-				custom_6        = '$custom_6',
-				custom_7        = '$custom_7',
-				custom_8        = '$custom_8',
-				custom_9        = '$custom_9',
-				custom_10       = '$custom_10',
+				$cfq,
 				uid             = '".md5(uniqid(rand(),true))."',
 				feed_time       = now()"
 			);
@@ -255,6 +259,15 @@ if (!empty($event) and $event == 'article') {
 
 		$Keywords = doSlash(trim(preg_replace('/( ?[\r\n\t,])+ ?/s', ',', preg_replace('/ +/', ' ', ps('Keywords'))), ', '));
 
+		$max = get_pref('max_custom_fields', 10);
+		$cfq = array();
+		for ($i = 1; $i <= $max; $i++)
+		{
+			$custom_x = "custom_{$i}";
+			$cfq[] = "custom_$i = '".$$custom_x."'";
+		}
+		$cfq = join(', ', $cfq);
+
 		safe_update("textpattern",
 		   "Title           = '$Title',
 			Body            = '$Body',
@@ -275,16 +288,7 @@ if (!empty($event) and $event == 'article') {
 			override_form   = '$override_form',
 			url_title       = '$url_title',
 			AnnotateInvite  = '$AnnotateInvite',
-			custom_1        = '$custom_1',
-			custom_2        = '$custom_2',
-			custom_3        = '$custom_3',
-			custom_4        = '$custom_4',
-			custom_5        = '$custom_5',
-			custom_6        = '$custom_6',
-			custom_7        = '$custom_7',
-			custom_8        = '$custom_8',
-			custom_9        = '$custom_9',
-			custom_10       = '$custom_10',
+			$cfq,
 			$whenposted,
 			$whenexpires",
 			"ID = $ID"
@@ -450,18 +454,15 @@ if (!empty($event) and $event == 'article') {
 				: '';
 
 			// custom fields, believe it or not
-			echo pluggable_ui('article_ui', 'custom_fields',
-				(($custom_1_set !== '')  ? custField(  1, $custom_1_set,  $custom_1 )    : '').
-				(($custom_2_set !== '')  ? custField(  2, $custom_2_set,  $custom_2 )    : '').
-				(($custom_3_set !== '')  ? custField(  3, $custom_3_set,  $custom_3 )    : '').
-				(($custom_4_set !== '')  ? custField(  4, $custom_4_set,  $custom_4 )    : '').
-				(($custom_5_set !== '')  ? custField(  5, $custom_5_set,  $custom_5 )    : '').
-				(($custom_6_set !== '')  ? custField(  6, $custom_6_set,  $custom_6 )    : '').
-				(($custom_7_set !== '')  ? custField(  7, $custom_7_set,  $custom_7 )    : '').
-				(($custom_8_set !== '')  ? custField(  8, $custom_8_set,  $custom_8 )    : '').
-				(($custom_9_set !== '')  ? custField(  9, $custom_9_set,  $custom_9 )    : '').
-				(($custom_10_set !== '') ? custField( 10, $custom_10_set, $custom_10 )   : ''),
-				$rs);
+			$max = get_pref('max_custom_fields', 10);
+			$cf = '';
+			for($i = 1; $i <= $max; $i++)
+			{
+				$custom_x_set = "custom_{$i}_set";
+				$custom_x = "custom_{$i}";
+				$cf .= ($$custom_x_set !== '' ? custField( $i, $$custom_x_set,  $$custom_x ): '');
+			}
+			echo pluggable_ui('article_ui', 'custom_fields', $cf, $rs);
 
 			// keywords
 			echo pluggable_ui('article_ui', 'keywords',
