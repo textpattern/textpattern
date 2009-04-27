@@ -566,8 +566,11 @@ $LastChangedRevision$
 
 			$out[] = "$f" .cs.n.t. $revision .' ('.$checksum.')'.n;
 		}
+		$out[] = n.ln;
+
 	}
 
+	$out[] = callback_event('diag_results', $step).n;
 	$out[] = '</textarea>'.br;
 
 	$dets = array('low'=>gTxt('low'),'high'=>gTxt('high'));
