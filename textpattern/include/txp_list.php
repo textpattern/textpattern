@@ -39,10 +39,11 @@ $LastChangedRevision$
 		pagetop(gTxt('tab_list'), $message);
 
 		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
+		if ($sort === '') $sort = get_pref('article_sort_column', 'posted');
+		if ($dir === '') $dir = get_pref('article_sort_dir', 'desc');
+		$dir = ($dir == 'asc') ? 'asc' : 'desc';
 
 		$sesutats = array_flip($statuses);
-
-		$dir = ($dir == 'asc') ? 'asc' : 'desc';
 
 		switch ($sort)
 		{
@@ -91,6 +92,9 @@ $LastChangedRevision$
 				$sort_sql = 'Posted '.$dir;
 			break;
 		}
+
+		set_pref('article_sort_column', $sort, 'list', 2, '', 0, PREF_PRIVATE);
+		set_pref('article_sort_dir', $dir, 'list', 2, '', 0, PREF_PRIVATE);
 
 		$switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 

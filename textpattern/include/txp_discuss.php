@@ -73,7 +73,8 @@ $LastChangedRevision$
 		, ' style="text-align: center;"');
 
 		extract(gpsa(array('sort', 'dir', 'page', 'crit', 'search_method')));
-
+		if ($sort === '') $sort = get_pref('discuss_sort_column', 'date');
+		if ($dir === '') $dir = get_pref('discuss_sort_dir', 'desc');
 		$dir = ($dir == 'asc') ? 'asc' : 'desc';
 
 		switch ($sort)
@@ -117,6 +118,9 @@ $LastChangedRevision$
 		}
 
 		if ($sort != 'date') $sort_sql .= ', txp_discuss.posted asc';
+
+		set_pref('discuss_sort_column', $sort, 'discuss', 2, '', 0, PREF_PRIVATE);
+		set_pref('discuss_sort_dir', $dir, 'discuss', 2, '', 0, PREF_PRIVATE);
 
 		$switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 

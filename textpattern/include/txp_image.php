@@ -46,6 +46,9 @@ $LastChangedRevision$
 		extract($txpcfg);
 
 		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
+		if ($sort === '') $sort = get_pref('image_sort_column', 'id');
+		if ($dir === '') $dir = get_pref('image_sort_dir', 'desc');
+		$dir = ($dir == 'asc') ? 'asc' : 'desc';
 
 		if (!is_dir(IMPATH) or !is_writeable(IMPATH))
 		{
@@ -58,8 +61,6 @@ $LastChangedRevision$
 		{
 			echo upload_form(gTxt('upload_image'), 'upload', 'image_insert', 'image', '', $file_max_upload_size);
 		}
-
-		$dir = ($dir == 'asc') ? 'asc' : 'desc';
 
 		switch ($sort)
 		{
@@ -88,6 +89,9 @@ $LastChangedRevision$
 				$sort_sql = 'id '.$dir;
 			break;
 		}
+
+		set_pref('image_sort_column', $sort, 'image', 2, '', 0, PREF_PRIVATE);
+		set_pref('image_sort_dir', $dir, 'image', 2, '', 0, PREF_PRIVATE);
 
 		$switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 

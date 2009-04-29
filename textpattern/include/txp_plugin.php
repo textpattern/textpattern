@@ -39,12 +39,15 @@ $LastChangedRevision$
 		endTable();
 
 		extract(gpsa(array('sort', 'dir')));
-
+		if ($sort === '') $sort = get_pref('plugin_sort_column', 'name');
+		if ($dir === '') $dir = get_pref('plugin_sort_dir', 'asc');
 		$dir = ($dir == 'desc') ? 'desc' : 'asc';
-
 		if (!in_array($sort, array('name', 'status', 'author', 'version', 'modified', 'load_order'))) $sort = 'name';
 
 		$sort_sql = $sort.' '.$dir;
+
+		set_pref('plugin_sort_column', $sort, 'plugin', 2, '', 0, PREF_PRIVATE);
+		set_pref('plugin_sort_dir', $dir, 'plugin', 2, '', 0, PREF_PRIVATE);
 
 		$switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
@@ -85,7 +88,7 @@ $LastChangedRevision$
 
 				$plugin_prefs = ($flags & PLUGIN_HAS_PREFS) && $status ?
 					n.t.'<li><a href="?event=plugin_prefs.'.urlencode($name).'">'.gTxt('plugin_prefs').'</a></li>' : '';
-					
+
 				echo tr(
 
 					n.td($name).
@@ -234,24 +237,24 @@ $LastChangedRevision$
 			if ($plugin === null)
 			{
 				plugin_list(array(
-								gTxt('plugin_pcre_error', array('{errno}' => preg_last_error())), 
+								gTxt('plugin_pcre_error', array('{errno}' => preg_last_error())),
 								E_ERROR
 							));
 				return;
 			}
 		}
-		
+
 		// strip out #comment lines
 		$plugin = preg_replace('/^#.*$/m', '', $plugin);
 		if ($plugin === null)
 		{
 			plugin_list(array(
-							gTxt('plugin_pcre_error', array('{errno}' => preg_last_error())), 
+							gTxt('plugin_pcre_error', array('{errno}' => preg_last_error())),
 							E_ERROR
 						));
 			return;
 		}
-				
+
 		if (isset($plugin)) {
 			$plugin_encoded = $plugin;
 			$plugin = base64_decode($plugin);
@@ -316,7 +319,7 @@ $LastChangedRevision$
 		}
 
 		$plugin = preg_replace('/^#.*$/m', '', $plugin);
-		
+
 		if(trim($plugin)) {
 
 			$plugin = base64_decode($plugin);
@@ -332,7 +335,7 @@ $LastChangedRevision$
 					$type  = empty($type)  ? 0 : min(max(intval($type), 0), 3);
 					$order = empty($order) ? 5 : min(max(intval($order), 1), 9);
 					$flags = empty($flags) ? 0 : intval($flags);
-					
+
 					$exists = fetch('name','txp_plugin','name',$name);
 
 					if (isset($help_raw) && empty($plugin['allow_html_help'])) {
@@ -457,7 +460,7 @@ $LastChangedRevision$
 		switch ($method)
 		{
 			case 'delete':
-				foreach ($selected as $name) 
+				foreach ($selected as $name)
 				{
 					if (safe_field('flags', 'txp_plugin', "name ='".doSlash($name)."'") & PLUGIN_LIFECYCLE_NOTIFY)
 					{
@@ -470,13 +473,13 @@ $LastChangedRevision$
 				break;
 
 			case 'changestatus':
-				foreach ($selected as $name) 
+				foreach ($selected as $name)
 				{
 					if (safe_field('flags', 'txp_plugin', "name ='".doSlash($name)."'") & PLUGIN_LIFECYCLE_NOTIFY)
 					{
 						$status = safe_field('status', 'txp_plugin', "name ='".doSlash($name)."'");
 						load_plugin($name, true);
-						// NB: won't show returned messages anywhere due to potentially overwhelming verbiage.  
+						// NB: won't show returned messages anywhere due to potentially overwhelming verbiage.
 						callback_event("plugin_lifecycle.$name", $status ? 'disabled' : 'enabled');
 					}
 				}

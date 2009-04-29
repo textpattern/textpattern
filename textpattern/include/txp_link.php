@@ -55,7 +55,8 @@ $LastChangedRevision$
 		global $step, $link_list_pageby;
 
 		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
-
+		if ($sort === '') $sort = get_pref('link_sort_column', 'name');
+		if ($dir === '') $dir = get_pref('link_sort_dir', 'asc');
 		$dir = ($dir == 'desc') ? 'desc' : 'asc';
 
 		switch ($sort)
@@ -85,6 +86,9 @@ $LastChangedRevision$
 				$sort_sql = 'linksort '.$dir.', id asc';
 			break;
 		}
+
+		set_pref('link_sort_column', $sort, 'link', 2, '', 0, PREF_PRIVATE);
+		set_pref('link_sort_dir', $dir, 'link', 2, '', 0, PREF_PRIVATE);
 
 		$switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 

@@ -49,12 +49,13 @@ $LastChangedRevision$
 		pagetop(gTxt('visitor_logs'), $message);
 
 		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
+		if ($sort === '') $sort = get_pref('log_sort_column', 'time');
+		if ($dir === '') $dir = get_pref('log_sort_dir', 'desc');
+		$dir = ($dir == 'asc') ? 'asc' : 'desc';
 
 		$expire_logs_after = assert_int($expire_logs_after);
 
 		safe_delete('txp_log', "time < date_sub(now(), interval $expire_logs_after day)");
-
-		$dir = ($dir == 'asc') ? 'asc' : 'desc';
 
 		switch ($sort)
 		{
@@ -87,6 +88,9 @@ $LastChangedRevision$
 				$sort_sql = 'time '.$dir;
 			break;
 		}
+
+		set_pref('log_sort_column', $sort, 'log', 2, '', 0, PREF_PRIVATE);
+		set_pref('log_sort_dir', $dir, 'log', 2, '', 0, PREF_PRIVATE);
 
 		$switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 

@@ -281,11 +281,17 @@ $LastChangedRevision$
 		global $txp_user, $author_list_pageby;
 
 		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
+		if ($sort === '') $sort = get_pref('admin_sort_column', 'name');
+		if ($dir === '') $dir = get_pref('admin_sort_dir', 'asc');
+		$dir = ($dir == 'desc') ? 'desc' : 'asc';
 
 		if (!in_array($sort, array('name', 'RealName', 'email', 'privs', 'last_login'))) $sort = 'name';
 
-		$dir        = ($dir == 'desc') ? 'desc' : 'asc';
 		$sort_sql   = $sort.' '.$dir;
+
+		set_pref('admin_sort_column', $sort, 'admin', 2, '', 0, PREF_PRIVATE);
+		set_pref('admin_sort_dir', $dir, 'admin', 2, '', 0, PREF_PRIVATE);
+
 		$switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
 		$total = getCount('txp_users', '1=1');

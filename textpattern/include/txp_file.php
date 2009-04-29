@@ -51,6 +51,9 @@ $LastChangedRevision$
 		extract($txpcfg);
 
 		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
+		if ($sort === '') $sort = get_pref('file_sort_column', 'filename');
+		if ($dir === '') $dir = get_pref('file_sort_dir', 'asc');
+		$dir = ($dir == 'desc') ? 'desc' : 'asc';
 
 		if (!is_dir($file_base_path) or !is_writeable($file_base_path))
 		{
@@ -77,8 +80,6 @@ $LastChangedRevision$
 
 			echo file_upload_form(gTxt('upload_file'), 'upload', 'file_insert');
 		}
-
-		$dir = ($dir == 'desc') ? 'desc' : 'asc';
 
 		switch ($sort)
 		{
@@ -107,6 +108,9 @@ $LastChangedRevision$
 				$sort_sql = 'filename '.$dir;
 			break;
 		}
+
+		set_pref('file_sort_column', $sort, 'file', 2, '', 0, PREF_PRIVATE);
+		set_pref('file_sort_dir', $dir, 'file', 2, '', 0, PREF_PRIVATE);
 
 		$switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
