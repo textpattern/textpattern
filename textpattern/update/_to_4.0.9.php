@@ -29,6 +29,9 @@ $LastChangedRevision$
  	// send comments prefs
 	safe_update('txp_prefs', "html='commentsendmail'", "name='comments_sendmail' AND html='yesnoradio'");
 
+ 	// DST prefs
+	safe_update('txp_prefs', "html='is_dst'", "name='is_dst' AND html='yesnoradio'");
+
 	// default event admin pref
 	if (!safe_field('name', 'txp_prefs', "name = 'default_event'"))
 	{

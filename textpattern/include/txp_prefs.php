@@ -235,9 +235,16 @@ $LastChangedRevision$
 			$vals[sprintf("%s%d", $sign, $z * 3600)] = $label;
 		}
 
-		return selectInput($name, $vals, $val, '', '', $name);
+		return pluggable_ui('prefs_ui', 'gmtoffset', selectInput($name, $vals, $val, '', '', $name), $name, $val);
 	}
 
+
+//-------------------------------------------------------------
+
+	function is_dst($name, $val)
+	{
+		return pluggable_ui('prefs_ui', 'is_dst', yesnoRadio($name, $val), $name, $val);
+	}
 
 //-------------------------------------------------------------
 
@@ -309,7 +316,7 @@ $LastChangedRevision$
 			42	=> '6 '.$weeks
 		);
 
-		return selectInput($name, $vals, $val, '', '', $name);
+		return pluggable_ui('prefs_ui', 'weeks', selectInput($name, $vals, $val, '', '', $name), $name, $val);
 	}
 
 //-------------------------------------------------------------
@@ -461,8 +468,7 @@ $LastChangedRevision$
 //-------------------------------------------------------------
 	function custom_set($name, $val)
 	{
-		return pluggable_ui('prefs_ui', 'custom_set',
-			text_input($name, $val, 20), $name, $val);
+		return pluggable_ui('prefs_ui', 'custom_set', text_input($name, $val, 20), $name, $val);
 	}
 
 //-------------------------------------------------------------
