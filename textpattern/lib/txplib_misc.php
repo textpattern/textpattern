@@ -605,7 +605,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function callback_event($event, $step='', $pre=0)
 	{
-		global $plugin_callback;
+		global $plugin_callback, $production_status;
 
 		if (!is_array($plugin_callback))
 			return '';
@@ -620,6 +620,8 @@ $LastChangedRevision$
 			if ($c['event'] == $event and (empty($c['step']) or $c['step'] == $step) and $c['pre'] == $pre) {
 				if (is_callable($c['function'])) {
 					$return_value .= call_user_func_array($c['function'], array('event' => $event, 'step' => $step) + $argv);
+				} elseif ($production_status == 'debug') {
+					trigger_error(gTxt('unknown_callback_function', array('function' => $c['function'])), E_USER_WARNING);
 				}
 			}
 		}
@@ -638,7 +640,20 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	// deprecated, use lAtts instead. Remove in crockery
+	function pluggable_ui($event, $element, $default='')
+	{
+		$argv = func_get_args();
+		$argv = array_slice($argv, 2);
+		// custom user interface, anyone?
+		// signature for called functions:
+		// string my_called_func(string $event, string $step, string $default_markup[, mixed $context_data...])
+		$ui = call_user_func_array('callback_event', array('event' => $event, 'step' => $element, 'pre' => 0) + $argv);
+		// either plugins provided a user interface, or we render our own
+		return ($ui === '')? $default : $ui;
+	}
+
+// -------------------------------------------------------------
+// deprecated, use lAtts instead. Remove in crockery
 	function getAtt($name, $default=NULL)
 	{
 		global $theseatts;

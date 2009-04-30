@@ -286,15 +286,4 @@ $LastChangedRevision$
 			$s
 		.'" size="'.$size.'" maxlength="'.$size.'" class="edit"'.(empty($tab) ? '' : ' tabindex="'.$tab.'"').' title="'.gTxt('article_'.$name).'" />';
 	}
-
-//-------------------------------------------------------------
-	function pluggable_ui($event, $element, $default)
-	{
-		$argv = func_get_args();
-		$argv = (count($argv) > 3) ? array_slice($argv, 3) : array();
-		// custom user interface, anyone?
-		$ui = call_user_func_array('callback_event', array('event' => $event, 'step' => $element, 'pre' => 0) + $argv);
-		// either plugins provided a user interface, or we render our own 
-		return ($ui === '')? $default : $ui;
-	}
 ?>
