@@ -17,14 +17,18 @@ $LastChangedRevision$
 		foreach ( $_REQUEST as $name => $value )
 			unset($$name);
 
-	define("txpath", dirname(__FILE__));
+	if (!defined('txpath'))
+	{
+		define("txpath", dirname(__FILE__));
+	}
+
 	define("txpinterface", "admin");
 
 	$thisversion = '4.0.8';
 	$txp_using_svn = true; // set false for releases
 
 	ob_start(NULL, 2048);
-	if (!@include './config.php') {
+	if (!isset($txpcfg['table_prefix']) && !@include './config.php') {
 		ob_end_clean();
 		include txpath.'/setup/index.php';
 		exit();

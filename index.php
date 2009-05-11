@@ -12,14 +12,26 @@ $LastChangedRevision$
 		foreach ( $_REQUEST as $name => $value )
 			unset($$name);
 	define("txpinterface", "public");
-	if (!defined('txpath'))
-		define("txpath", dirname(__FILE__).'/textpattern');
 
-	// Use buffering to ensure bogus whitespace in config.php is ignored
-	ob_start(NULL, 2048);
-	$here = dirname(__FILE__);
-	include txpath.'/config.php';
-	ob_end_clean();
+	if (!defined('txpath'))
+	{
+		define("txpath", dirname(__FILE__).'/textpattern');
+	}
+
+	// save server path to site root
+	if (!isset($here))
+	{
+		$here = dirname(__FILE__);
+	}
+
+	// pull in config unless configuration data has already been provided (multi-headed use).
+	if (!isset($txpcfg['table_prefix']))
+	{
+		// Use buffering to ensure bogus whitespace in config.php is ignored
+		ob_start(NULL, 2048);
+		include txpath.'/config.php';
+		ob_end_clean();
+	}
 
 	include txpath.'/lib/constants.php';
 	include txpath.'/lib/txplib_misc.php';

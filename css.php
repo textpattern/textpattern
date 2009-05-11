@@ -10,12 +10,17 @@ if (@ini_get('register_globals'))
 
 header('Content-type: text/css');
 
-if (!defined('txpath'))
+if (!defined("txpath"))
+{
 	define("txpath", dirname(__FILE__).'/textpattern');
+}
 
-ob_start(NULL, 2048);
-include txpath.'/config.php';
-ob_end_clean();
+if (!isset($txpcfg['table_prefix']))
+{
+	ob_start(NULL, 2048);
+	include txpath.'/config.php';
+	ob_end_clean();
+}
 
 $nolog = 1;
 define("txpinterface", "css");
