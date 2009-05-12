@@ -15,7 +15,7 @@ class theme
 	{
 		$this->name = $name;
 		$this->menu = array();
-		$this->url = hu.'textpattern/'.THEME.$name.'/';
+		$this->url = THEME.$name.'/';
 		$this->is_popup = false;
 		$this->message = '';
 		return $this;
