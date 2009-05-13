@@ -1474,13 +1474,13 @@ begin tag builder functions
 				yesno_pop('link', $link)).
 
 			tagRow('title',
-				yesno_pop('title', $link)).
+				yesno_pop('title', $title)).
 
 			tagRow('type',
-				type_pop('type', $link)).
+				type_pop('type', $type)).
 
 			tagRow('url_only',
-				yesno_pop('url', $link)).
+				yesno_pop('url', $url)).
 
 			tagRow('wraptag',
 				input_tag('wraptag', $wraptag)).
@@ -1567,7 +1567,7 @@ begin tag builder functions
 				yesno_pop('link', $link)).
 
 			tagRow('url_only',
-				yesno_pop('url', $link)).
+				yesno_pop('url', $url)).
 
 			tagRow('wraptag',
 				input_tag('wraptag', $wraptag)).
