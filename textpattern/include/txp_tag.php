@@ -1474,7 +1474,7 @@ begin tag builder functions
 				yesno_pop('link', $link)).
 
 			tagRow('title',
-				yesno_pop('link', $link)).
+				yesno_pop('title', $link)).
 
 			tagRow('type',
 				type_pop('type', $link)).
