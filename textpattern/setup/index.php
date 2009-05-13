@@ -16,8 +16,9 @@ $LastChangedRevision$
 if (!defined('txpath'))
 {
 	define("txpath", dirname(dirname(__FILE__)));
-	define("txpinterface", "admin");
 }
+
+define("txpinterface", "admin");
 error_reporting(E_ALL);
 @ini_set("display_errors","1");
 
@@ -28,7 +29,25 @@ include_once txpath.'/lib/txplib_misc.php';
 
 header("Content-type: text/html; charset=utf-8");
 
-$rel_siteurl = preg_replace('#^(.*)/textpattern.*$#i','\\1',$_SERVER['PHP_SELF']);
+// drop trailing cruft
+$_SERVER['PHP_SELF'] = preg_replace('#^(.*index.php).*$#i', '$1', $_SERVER['PHP_SELF']);
+// sniff out the 'textpattern' directory's name
+// '/path/to/site/textpattern/setup/index.php'
+//                -3          -2    -1
+$txpdir = explode('/', $_SERVER['PHP_SELF']);
+if (count($txpdir) > 3)
+{
+	// we live in the regular directory structure
+	$txpdir = '/'.$txpdir[count($txpdir) - 3];
+}
+else
+{
+	// we probably came here from a clever assortment of symlinks and DocumentRoot
+	$txpdir = '/';
+}
+
+$rel_siteurl = preg_replace("#^(.*?)($txpdir)?/setup.*$#i",'$1',$_SERVER['PHP_SELF']);
+$rel_txpurl = rtrim(dirname(dirname($_SERVER['PHP_SELF'])), '/\\');
 print <<<eod
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 			"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -36,7 +55,7 @@ print <<<eod
 	<head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<title>Textpattern &#8250; setup</title>
-	<link rel="stylesheet" href="$rel_siteurl/textpattern/theme/classic/textpattern.css" type="text/css" />
+	<link rel="stylesheet" href="$rel_txpurl/theme/classic/textpattern.css" type="text/css" />
 	</head>
 	<body style="border-top:15px solid #FC3">
 	<div align="center">
@@ -59,7 +78,7 @@ eod;
 // -------------------------------------------------------------
 	function chooseLang()
 	{
-	  echo '<form action="'.$GLOBALS['rel_siteurl'].'/textpattern/setup/index.php" method="post">',
+	  echo '<form action="'.$_SERVER['PHP_SELF'].'" method="post">',
 	  	'<table id="setup" cellpadding="0" cellspacing="0" border="0">',
 		tr(
 			tda(
@@ -78,7 +97,12 @@ eod;
 	{
 		$GLOBALS['textarray'] = setup_load_lang(ps('lang'));
 
-		@include txpath.'/config.php';
+		global $txpcfg;
+
+		if (!isset($txpcfg['db']))
+		{
+			@include txpath.'/config.php';
+		}
 
 		if (!empty($txpcfg['db']))
 		{
@@ -97,7 +121,7 @@ eod;
 			$guess_siteurl = 'mysite.com';
 		}
 
-		echo '<form action="'.$GLOBALS['rel_siteurl'].'/textpattern/setup/index.php" method="post">',
+		echo '<form action="'.$_SERVER['PHP_SELF'].'" method="post">',
 			'<table id="setup" cellpadding="0" cellspacing="0" border="0">',
 		tr(
 			tda(
@@ -155,7 +179,12 @@ eod;
 
 		$GLOBALS['textarray'] = setup_load_lang($lang);
 
-		@include txpath.'/config.php';
+		global $txpcfg;
+
+		if (!isset($txpcfg['db']))
+		{
+			@include txpath.'/config.php';
+		}
 
 		if (!empty($txpcfg['db']))
 		{
@@ -232,7 +261,7 @@ eod;
 		'<textarea name="config" cols="40" rows="5" style="width: 400px; height: 200px">',
 		makeConfig($carry),
 		'</textarea>',
-		'<form action="'.$GLOBALS['rel_siteurl'].'/textpattern/setup/index.php" method="post">',
+		'<form action="'.$_SERVER['PHP_SELF'].'" method="post">',
 		fInput('submit','submit',gTxt('did_it'),'smallbox'),
 		sInput('getTxpLogin'),hInput('carry',postEncode($carry)),
 		'</form>';
@@ -246,7 +275,12 @@ eod;
 
 		$GLOBALS['textarray'] = setup_load_lang($lang);
 
-		@include txpath.'/config.php';
+		global $txpcfg;
+
+		if (!isset($txpcfg['db']))
+		{
+			@include txpath.'/config.php';
+		}
 
 		if (!isset($txpcfg) || ($txpcfg['db'] != $ddb) || ($txpcfg['table_prefix'] != $dprefix))
 		{
@@ -260,14 +294,14 @@ eod;
 			'<textarea style="width:400px;height:200px" name="config" rows="1" cols="1">',
 			makeConfig($carry),
 			'</textarea>',
-			'<form action="'.$GLOBALS['rel_siteurl'].'/textpattern/setup/index.php" method="post">',
+			'<form action="'.$_SERVER['PHP_SELF'].'" method="post">',
 			fInput('submit','submit',gTxt('did_it'),'smallbox'),
 			sInput('getTxpLogin'),hInput('carry',postEncode($carry)),
 			'</form>';
 			return;
 		}
 
-		echo '<form action="'.$GLOBALS['rel_siteurl'].'/textpattern/setup/index.php" method="post">',
+		echo '<form action="'.$_SERVER['PHP_SELF'].'" method="post">',
 	  	startTable('edit'),
 		tr(
 			tda(
@@ -307,7 +341,13 @@ eod;
 			exit(graf(gTxt('email_required')));
 		}
 
-		require txpath.'/config.php';
+		global $txpcfg;
+
+		if (!isset($txpcfg['db']))
+		{
+			require txpath.'/config.php';
+		}
+
 		$ddb = $txpcfg['db'];
 		$duser = $txpcfg['user'];
 		$dpass = $txpcfg['pass'];
@@ -392,7 +432,7 @@ eod;
 
 			graf(
 				gTxt('you_can_access', array(
-					'index.php' => $GLOBALS['rel_siteurl'].'/textpattern/index.php',
+					'index.php' => $GLOBALS['rel_txpurl'].'/index.php',
 				))
 			).
 
