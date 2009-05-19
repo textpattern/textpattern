@@ -44,7 +44,7 @@ $LastChangedRevision$
 
 	function file_list($message = '')
 	{
-		global $txpcfg, $extensions, $file_base_path, $file_statuses, $file_list_pageby;
+		global $txpcfg, $extensions, $file_base_path, $file_statuses, $file_list_pageby, $txp_user;
 
 		pagetop(gTxt('file'), $message);
 
@@ -62,7 +62,7 @@ $LastChangedRevision$
 			, ' id="warning"');
 		}
 
-		else
+		elseif (has_privs('file.edit.own'))
 		{
 			$existing_files = get_filenames();
 
@@ -218,19 +218,21 @@ $LastChangedRevision$
 				$condition .= ($file_exists) ? gTxt('file_status_ok') : gTxt('file_status_missing');
 				$condition .= '</span>';
 
+				$can_edit = has_privs('file.edit') || ($author == $txp_user && has_privs('file.edit.own'));
+
 				echo tr(
 
 					n.td($id).
 
 					td(
 						'<ul>'.
-						'<li>'.href(gTxt('edit'), $edit_url).'</li>'.
+						($can_edit ? '<li>'.href(gTxt('edit'), $edit_url).'</li>' : '').
 						$download_link.
 						'</ul>'
 					, 65).
 
 					td(
-						href(htmlspecialchars($filename), $edit_url)
+						($can_edit ? href(htmlspecialchars($filename), $edit_url) : htmlspecialchars($filename))
 					, 125).
 
 					td(htmlspecialchars($description), 150).
@@ -262,8 +264,7 @@ $LastChangedRevision$
 						'<span title="'.htmlspecialchars(get_author_name($author)).'">'.htmlspecialchars($author).'</span>'
 					) : '').
 
-					td(
-						fInput('checkbox', 'selected[]', $id)
+					td($can_edit ? fInput('checkbox', 'selected[]', $id) : '&nbsp;'
 					, 10)
 				);
 			}
@@ -314,6 +315,11 @@ $LastChangedRevision$
 			unset($methods['changeauthor']);
 		}
 
+		if(!has_privs('file.delete.own') && !has_privs('file.delete'))
+		{
+			unset($methods['delete']);
+		}
+
 		return event_multiedit_form('file', $methods, $page, $sort, $dir, $crit, $search_method);
 	}
 
@@ -321,6 +327,7 @@ $LastChangedRevision$
 
 	function file_multi_edit()
 	{
+		global $txp_user;
 		$selected = ps('selected');
 
 		if (!$selected or !is_array($selected))
@@ -352,6 +359,18 @@ $LastChangedRevision$
 				$key = '';
 				$val = '';
 				break;
+		}
+
+		if (!has_privs('file.edit'))
+		{
+			if (has_privs('file.edit.own'))
+			{
+				$selected = safe_column('id', 'txp_file', 'id IN ('.join(',', $selected).') AND author=\''.doSlash($txp_user).'\'');
+			}
+			else
+			{
+				$selected = array();
+			}
 		}
 
 		if ($selected and $key)
@@ -400,6 +419,7 @@ $LastChangedRevision$
 			extract($rs);
 
 			if ($permissions=='') $permissions='-1';
+			if (!has_privs('file.publish') && $status >= 4) $status = 3;
 
 			$file_exists = file_exists(build_file_path($file_base_path,$filename));
 			$replace = ($file_exists) ? tr(td(file_upload_form(gTxt('replace_file'),'upload','file_replace',$id))) : '';
@@ -534,6 +554,13 @@ $LastChangedRevision$
 	function file_create()
 	{
 		global $txpcfg,$extensions,$txp_user,$file_base_path;
+
+		if (!has_privs('file.edit.own'))
+		{
+			file_list(gTxt('restricted_area'));
+			return;
+		}
+
 		extract($txpcfg);
 		extract(doSlash(gpsa(array('filename','category','permissions','description'))));
 
@@ -559,6 +586,13 @@ $LastChangedRevision$
 	{
 		global $txpcfg,$extensions,$txp_user,$file_base_path,$file_max_upload_size;
 		extract($txpcfg);
+
+		if (!has_privs('file.edit.own'))
+		{
+			file_list(gTxt('restricted_area'));
+			return;
+		}
+
 		extract(doSlash(gpsa(array('category','permissions','description'))));
 
 		$name = file_get_uploaded_name();
@@ -621,7 +655,7 @@ $LastChangedRevision$
 		extract($txpcfg);
 		$id = assert_int(gps('id'));
 
-		$rs = safe_row('filename','txp_file',"id = $id");
+		$rs = safe_row('filename, author','txp_file',"id = $id");
 
 		if (!$rs) {
 			file_list(messenger(array(gTxt('invalid_id'), E_ERROR),$id,''));
@@ -629,6 +663,12 @@ $LastChangedRevision$
 		}
 
 		extract($rs);
+
+		if (!has_privs('file.edit') && !($author == $txp_user && has_privs('file.edit.own')))
+		{
+			file_edit(gTxt('restricted_area'));
+			return;
+		}
 
 		$file = file_get_uploaded();
 		$name = file_get_uploaded_name();
@@ -706,8 +746,14 @@ $LastChangedRevision$
 
 		$perms = doSlash($permissions);
 
-		$old_filename = fetch('filename','txp_file','id',$id);
+		$rs = safe_row('filename, author', 'txp_file', "id=$id");
+		if (!has_privs('file.edit') && !($rs['author'] == $txp_user && has_privs('file.edit.own')))
+		{
+			file_edit(gTxt('restricted_area'));
+			return;
+		}
 
+		$old_filename = $rs['filename'];
 		if ($old_filename != false && strcmp($old_filename, $filename) != 0)
 		{
 			$old_path = build_file_path($file_base_path,$old_filename);
@@ -774,49 +820,59 @@ $LastChangedRevision$
 
 	function file_delete($ids = array())
 	{
-		global $file_base_path;
+		global $file_base_path, $txp_user;
 
 		$ids  = $ids ? array_map('assert_int', $ids) : array(assert_int(ps('id')));
-		$fail = array();
+		$message = '';
 
-		$rs = safe_rows_start('id, filename', 'txp_file', 'id IN ('.join(',', $ids).')');
-
-		if ($rs)
+		if (!has_privs('file.delete'))
 		{
-			while ($a = nextRow($rs))
+			if (has_privs('file.delete.own'))
 			{
-				extract($a);
-
-				$filepath = build_file_path($file_base_path, $filename);
-
-				$rsd = safe_delete('txp_file', "id = $id");
-				$ul  = false;
-
-				if ($rsd && is_file($filepath))
-				{
-					$ul = unlink($filepath);
-				}
-
-				if (!$rsd or !$ul)
-				{
-					$fail[] = $id;
-				}
-			}
-
-
-			if ($fail)
-			{
-				file_list(messenger(gTxt('file_delete_failed'), join(', ', $fail), ''));
+				$ids = safe_column('id', 'txp_file', 'id IN ('.join(',', $ids).') AND author=\''.doSlash($txp_user).'\'' );
 			}
 			else
 			{
-				file_list(gTxt('file_deleted', array('{name}' => join(', ', $ids))));
+				$ids = array();
 			}
 		}
-		else
+
+		if (!empty($ids))
 		{
-			file_list(messenger(gTxt('file_not_found'), join(', ', $ids), ''));
+			$fail = array();
+
+			$rs = safe_rows_start('id, filename', 'txp_file', 'id IN ('.join(',', $ids).')');
+
+			if ($rs)
+			{
+				while ($a = nextRow($rs))
+				{
+					extract($a);
+
+					$filepath = build_file_path($file_base_path, $filename);
+
+					$rsd = safe_delete('txp_file', "id = $id");
+					$ul  = false;
+
+					if ($rsd && is_file($filepath))
+					{
+						$ul = unlink($filepath);
+					}
+
+					if (!$rsd or !$ul)
+					{
+						$fail[] = $id;
+					}
+				}
+				$message = empty($fail) ? 	gTxt('file_deleted', array('{name}' => join(', ', $ids))):
+											messenger(gTxt('file_delete_failed'), join(', ', $fail), '');
+			}
+			else
+			{
+				$message = messenger(gTxt('file_not_found'), join(', ', $ids), '');
+			}
 		}
+		file_list($message);
 	}
 
 // -------------------------------------------------------------
