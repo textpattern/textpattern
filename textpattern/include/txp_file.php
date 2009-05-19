@@ -35,7 +35,7 @@ $LastChangedRevision$
 	if ($event == 'file') {
 		require_privs('file');
 
-		if(!$step or !in_array($step, array('file_change_max_size','file_change_pageby','file_db_add','file_multi_edit','file_edit','file_insert','file_list','file_replace','file_save','file_reset_count','file_create'))){
+		if(!$step or !in_array($step, array('file_change_pageby','file_multi_edit','file_edit','file_insert','file_list','file_replace','file_save','file_reset_count','file_create'))){
 			file_list();
 		} else $step();
 	}
@@ -44,11 +44,9 @@ $LastChangedRevision$
 
 	function file_list($message = '')
 	{
-		global $txpcfg, $extensions, $file_base_path, $file_statuses, $file_list_pageby, $txp_user;
+		global $file_base_path, $file_statuses, $file_list_pageby, $txp_user;
 
 		pagetop(gTxt('file'), $message);
-
-		extract($txpcfg);
 
 		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
 		if ($sort === '') $sort = get_pref('file_sort_column', 'filename');
@@ -398,7 +396,7 @@ $LastChangedRevision$
 
 	function file_edit($message = '', $id = '')
 	{
-		global $txpcfg, $file_base_path, $levels, $file_statuses;
+		global $file_base_path, $levels, $file_statuses;
 
 		pagetop(gTxt('file'), $message);
 
@@ -553,7 +551,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function file_create()
 	{
-		global $txpcfg,$extensions,$txp_user,$file_base_path;
+		global $txp_user,$file_base_path;
 
 		if (!has_privs('file.edit.own'))
 		{
@@ -561,7 +559,6 @@ $LastChangedRevision$
 			return;
 		}
 
-		extract($txpcfg);
 		extract(doSlash(gpsa(array('filename','category','permissions','description'))));
 
 		$size = filesize(build_file_path($file_base_path,$filename));
@@ -584,8 +581,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function file_insert()
 	{
-		global $txpcfg,$extensions,$txp_user,$file_base_path,$file_max_upload_size;
-		extract($txpcfg);
+		global $txp_user,$file_base_path,$file_max_upload_size;
 
 		if (!has_privs('file.edit.own'))
 		{
@@ -651,8 +647,8 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function file_replace()
 	{
-		global $txpcfg,$extensions,$txp_user,$file_base_path;
-		extract($txpcfg);
+		global $txp_user,$file_base_path;
+
 		$id = assert_int(gps('id'));
 
 		$rs = safe_row('filename, author','txp_file',"id = $id");
@@ -716,6 +712,8 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function file_reset_count()
 	{
+		// TODO: accompanying user interface
+
 		extract(doSlash(gpsa(array('id','filename','category','description'))));
 
 		if ($id) {
@@ -909,13 +907,6 @@ $LastChangedRevision$
 	function file_change_pageby()
 	{
 		event_change_pageby('file');
-		file_list();
-	}
-
-// -------------------------------------------------------------
-	function file_change_max_size()
-	{
-		// DEPRECATED function; removed old code
 		file_list();
 	}
 
