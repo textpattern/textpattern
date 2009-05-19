@@ -313,7 +313,7 @@ $LastChangedRevision$
 			unset($methods['changeauthor']);
 		}
 
-		if(!has_privs('file.delete.own') && !has_privs('file.delete'))
+		if (!has_privs('file.delete.own') && !has_privs('file.delete'))
 		{
 			unset($methods['delete']);
 		}
@@ -396,9 +396,7 @@ $LastChangedRevision$
 
 	function file_edit($message = '', $id = '')
 	{
-		global $file_base_path, $levels, $file_statuses;
-
-		pagetop(gTxt('file'), $message);
+		global $file_base_path, $levels, $file_statuses, $txp_user;
 
 		extract(gpsa(array('name', 'category', 'permissions', 'description', 'sort', 'dir', 'page', 'crit', 'search_method', 'publish_now')));
 
@@ -415,6 +413,14 @@ $LastChangedRevision$
 		if ($rs)
 		{
 			extract($rs);
+
+			if (!has_privs('file.edit') && !($author == $txp_user && has_privs('file.edit.own')))
+			{
+				file_list(gTxt('restricted_area'));
+				return;
+			}
+
+			pagetop(gTxt('file'), $message);
 
 			if ($permissions=='') $permissions='-1';
 			if (!has_privs('file.publish') && $status >= 4) $status = 3;
@@ -862,8 +868,15 @@ $LastChangedRevision$
 						$fail[] = $id;
 					}
 				}
-				$message = empty($fail) ? 	gTxt('file_deleted', array('{name}' => join(', ', $ids))):
-											messenger(gTxt('file_delete_failed'), join(', ', $fail), '');
+				if ($fail)
+				{
+					$message = messenger(gTxt('file_delete_failed'), join(', ', $fail), '');
+				}
+				else
+				{
+					update_lastmod();
+					$message = gTxt('file_deleted', array('{name}' => join(', ', $ids)));
+				}
 			}
 			else
 			{
