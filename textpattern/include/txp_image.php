@@ -39,7 +39,7 @@ $LastChangedRevision$
 
 	function image_list($message = '')
 	{
-		global $txpcfg, $extensions, $img_dir, $file_max_upload_size, $image_list_pageby;
+		global $txpcfg, $extensions, $img_dir, $file_max_upload_size, $image_list_pageby, $txp_user;
 
 		pagetop(gTxt('images'), $message);
 
@@ -57,7 +57,7 @@ $LastChangedRevision$
 			,' id="warning"');
 		}
 
-		else
+		elseif (has_privs('image.edit.own'))
 		{
 			echo upload_form(gTxt('upload_image'), 'upload', 'image_insert', 'image', '', $file_max_upload_size);
 		}
@@ -208,6 +208,7 @@ $LastChangedRevision$
 				}
 
 				$category = ($category) ? '<span title="'.htmlspecialchars(fetch_category_title($category, 'image')).'">'.$category.'</span>' : '';
+				$can_edit = has_privs('image.edit') || ($author == $txp_user && has_privs('image.edit.own'));
 
 				echo n.n.tr(
 
@@ -215,7 +216,7 @@ $LastChangedRevision$
 
 					td(
 						n.'<ul>'.
-						n.t.'<li>'.href(gTxt('edit'), $edit_url).'</li>'.
+						($can_edit ? n.t.'<li>'.href(gTxt('edit'), $edit_url).'</li>' : '').
 						n.t.'<li><a href="'.hu.$img_dir.'/'.$id.$ext.'">'.gTxt('view').'</a></li>'.
 						n.'</ul>'
 					, 35).
@@ -225,11 +226,11 @@ $LastChangedRevision$
 					, 75).
 
 					td(
-						href($name, $edit_url)
+						($can_edit ? href($name, $edit_url) : $name)
 					, 75).
 
 					td(
-						href($thumbnail, $edit_url)
+						($can_edit ? href($thumbnail, $edit_url) : $thumbnail)
 					, 80).
 
 					td($tagbuilder, 85).
@@ -292,6 +293,11 @@ $LastChangedRevision$
 			unset($methods['changeauthor']);
 		}
 
+		if (!has_privs('image.delete.own') && !has_privs('image.delete'))
+		{
+			unset($methods['delete']);
+		}
+
 		return event_multiedit_form('image', $methods, $page, $sort, $dir, $crit, $search_method);
 	}
 
@@ -299,6 +305,8 @@ $LastChangedRevision$
 
 	function image_multi_edit()
 	{
+		global $txp_user;
+
 		$selected = ps('selected');
 
 		if (!$selected or !is_array($selected))
@@ -332,6 +340,18 @@ $LastChangedRevision$
 				break;
 		}
 
+		if (!has_privs('image.edit'))
+		{
+			if (has_privs('image.edit.own'))
+			{
+				$selected = safe_column('id', 'txp_image', 'id IN ('.join(',', $selected).') AND author=\''.doSlash($txp_user).'\'');
+			}
+			else
+			{
+				$selected = array();
+			}
+		}
+
 		if ($selected and $key)
 		{
 			foreach ($selected as $id)
@@ -356,20 +376,27 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function image_edit($message='',$id='')
 	{
+		global $txpcfg,$img_dir,$file_max_upload_size,$txp_user;
+
 		if (!$id) $id = gps('id');
 		$id = assert_int($id);
-		global $txpcfg,$img_dir,$file_max_upload_size;
-
-		pagetop(gTxt('edit_image'),$message);
-
-		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
-
-		$categories = getTree("root", "image");
 
 		$rs = safe_row("*, unix_timestamp(date) as uDate", "txp_image", "id = $id");
 
 		if ($rs) {
 			extract($rs);
+
+			if (!has_privs('image.edit') && !($author == $txp_user && has_privs('image.edit.own')))
+			{
+				image_list(gTxt('restricted_area'));
+				return;
+			}
+
+			pagetop(gTxt('edit_image'),$message);
+
+			extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
+
+			$categories = getTree("root", "image");
 
 			if ($ext != '.swf') {
 				$img = '<img src="'.hu.$img_dir.'/'.$id.$ext."?$uDate".'" height="'.$h.'" width="'.$w.'" alt="" title="'.$id.$ext.' ('.$w.' &#215; '.$h.')" id="image-fullsize" />';
@@ -453,6 +480,12 @@ $LastChangedRevision$
 	{
 		global $txpcfg, $extensions, $txp_user;
 
+		if (!has_privs('image.edit.own'))
+		{
+			image_list(gTxt('restricted_area'));
+			return;
+		}
+
 		extract($txpcfg);
 
 		$meta = gpsa(array('caption', 'alt', 'category'));
@@ -481,6 +514,12 @@ $LastChangedRevision$
 		$id = assert_int(gps('id'));
 		$rs = safe_row("*", "txp_image", "id = $id");
 
+		if (!has_privs('image.edit') && !($rs['author'] == $txp_user && has_privs('image.edit.own')))
+		{
+			image_list(gTxt('restricted_area'));
+			return;
+		}
+
 		if ($rs) {
 			$meta = array('category' => $rs['category'], 'caption' => $rs['caption'], 'alt' => $rs['alt']);
 		} else {
@@ -504,6 +543,13 @@ $LastChangedRevision$
 		global $txpcfg,$extensions,$txp_user,$img_dir,$path_to_site;
 		extract($txpcfg);
 		$id = assert_int(gps('id'));
+
+		$author = fetch('author', 'txp_image', 'id', $id);
+		if (!has_privs('image.edit') && !($author == $txp_user && has_privs('image.edit.own')))
+		{
+			image_list(gTxt('restricted_area'));
+			return;
+		}
 
 		$file = $_FILES['thefile']['tmp_name'];
 		$name = $_FILES['thefile']['name'];
@@ -539,10 +585,19 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function image_save()
 	{
+		global $txp_user;
+
 		extract(doSlash(gpsa(array('id','category','caption','alt'))));
 		$name = gps('name');
 		$safename = doSlash($name);
 		$id = assert_int($id);
+
+		$author = fetch('author', 'txp_image', 'id', $id);
+		if (!has_privs('image.edit') && !($author == $txp_user && has_privs('image.edit.own')))
+		{
+			image_list(gTxt('restricted_area'));
+			return;
+		}
 
 		safe_update(
 			"txp_image",
@@ -563,52 +618,67 @@ $LastChangedRevision$
 
 	function image_delete($ids = array())
 	{
-		$ids  = $ids ? array_map('assert_int', $ids) : array(assert_int(ps('id')));
-		$fail = array();
+		global $txp_user;
 
-		$rs   = safe_rows_start('id, ext', 'txp_image', 'id IN ('.join(',', $ids).')');
+		$ids = $ids ? array_map('assert_int', $ids) : array(assert_int(ps('id')));
+		$message = '';
 
-		if ($rs)
+		if (!has_privs('image.delete'))
 		{
-			while ($a = nextRow($rs))
+			if (has_privs('image.delete.own'))
 			{
-				extract($a);
-
-				$rsd = safe_delete('txp_image', "id = $id");
-
-				$ul  = false;
-
-				if (is_file(IMPATH.$id.$ext))
-				{
-					$ul = unlink(IMPATH.$id.$ext);
-				}
-
-				if (is_file(IMPATH.$id.'t'.$ext))
-				{
-					$ult = unlink(IMPATH.$id.'t'.$ext);
-				}
-
-				if (!$rsd or !$ul)
-				{
-					$fail[] = $id;
-				}
-			}
-
-			if ($fail)
-			{
-				image_list(array(gTxt('image_delete_failed', array('{name}' => join(', ', $fail))), E_ERROR));
+				$ids = safe_column('id', 'txp_image', 'id IN ('.join(',', $ids).') AND author=\''.doSlash($txp_user).'\'' );
 			}
 			else
 			{
-				update_lastmod();
-
-				image_list(gTxt('image_deleted', array('{name}' => join(', ', $ids))));
+				$ids = array();
 			}
 		}
-		else
+
+		if (!empty($ids))
 		{
-			image_list();
+			$fail = array();
+
+			$rs   = safe_rows_start('id, ext', 'txp_image', 'id IN ('.join(',', $ids).')');
+
+			if ($rs)
+			{
+				while ($a = nextRow($rs))
+				{
+					extract($a);
+
+					$rsd = safe_delete('txp_image', "id = $id");
+
+					$ul  = false;
+
+					if (is_file(IMPATH.$id.$ext))
+					{
+						$ul = unlink(IMPATH.$id.$ext);
+					}
+
+					if (is_file(IMPATH.$id.'t'.$ext))
+					{
+						$ult = unlink(IMPATH.$id.'t'.$ext);
+					}
+
+					if (!$rsd or !$ul)
+					{
+						$fail[] = $id;
+					}
+				}
+
+				if ($fail)
+				{
+					$message = array(gTxt('image_delete_failed', array('{name}' => join(', ', $fail))), E_ERROR);
+				}
+				else
+				{
+					update_lastmod();
+					$message = gTxt('image_deleted', array('{name}' => join(', ', $ids)));
+				}
+			}
 		}
+		image_list($message);
 	}
 
 // -------------------------------------------------------------
@@ -664,9 +734,17 @@ $LastChangedRevision$
 
 	function thumbnail_create()
 	{
-		global $prefs;
+		global $prefs, $txp_user;
 
 		extract(doSlash(gpsa(array('id', 'width', 'height'))));
+		$id = assert_int($id);
+
+		$author = fetch('author', 'txp_image', 'id', $id);
+		if (!has_privs('image.edit') && !($author == $txp_user && has_privs('image.edit.own')))
+		{
+			image_list(gTxt('restricted_area'));
+			return;
+		}
 
 		$width = (int) $width;
 		$height = (int) $height;
@@ -717,7 +795,17 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function thumbnail_delete()
 	{
+		global $txp_user;
+
 		$id = assert_int(gps('id'));
+
+		$author = fetch('author', 'txp_image', 'id', $id);
+		if (!has_privs('image.edit') && !($author == $txp_user && has_privs('image.edit.own')))
+		{
+			image_list(gTxt('restricted_area'));
+			return;
+		}
+
 		$t = new txp_thumb($id);
 		if ($t->delete()) {
 			image_edit(gTxt('thumbnail_deleted'),$id);
