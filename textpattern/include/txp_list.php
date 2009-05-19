@@ -373,6 +373,11 @@ $LastChangedRevision$
 			unset($methods['changeauthor']);
 		}
 
+		if(!has_privs('article.delete.own') && !has_privs('article.delete'))
+		{
+			unset($methods['delete']);
+		}
+
 		return event_multiedit_form('list', $methods, $page, $sort, $dir, $crit, $search_method);
 	}
 
