@@ -18,13 +18,27 @@ if (!defined('txpinterface')) die('txpinterface is undefined.');
 if ($event == 'category') {
 	require_privs('category');
 
-	if(!$step or !in_array($step, array(
-		'cat_category_list','cat_article_create','cat_image_create','cat_file_create','cat_link_create',
-		'cat_category_multiedit','cat_article_save','cat_image_save','cat_file_save','cat_link_save',
-		'cat_article_edit','cat_image_edit','cat_file_edit','cat_link_edit',
-	))){
-		cat_category_list();
-	} else $step();
+	$available_steps = array(
+		'cat_category_list',
+		'cat_category_multiedit',
+		'cat_article_create',
+		'cat_image_create',
+		'cat_file_create',
+		'cat_link_create',
+		'cat_article_save',
+		'cat_image_save',
+		'cat_file_save',
+		'cat_link_save',
+		'cat_article_edit',
+		'cat_image_edit',
+		'cat_file_edit',
+		'cat_link_edit'
+	);
+
+	if(!$step or !in_array($step, $available_steps)){
+		$step = 'cat_category_list';
+	}
+	$step();
 }
 
 //-------------------------------------------------------------

@@ -22,9 +22,19 @@ $LastChangedRevision$
 	if ($event == 'prefs') {
 		require_privs('prefs');
 
-		if(!$step or !in_array($step, array('advanced_prefs','prefs_save','advanced_prefs_save','get_language','list_languages','prefs_list'))){
-			prefs_list();
-		} else $step();
+		$available_steps = array(
+			'advanced_prefs',
+			'prefs_save',
+			'advanced_prefs_save',
+			'get_language',
+			'list_languages',
+			'prefs_list'
+		);
+
+		if(!$step or !in_array($step, $available_steps)){
+			$step = 'prefs_list';
+		}
+		$step();
 	}
 
 // -------------------------------------------------------------

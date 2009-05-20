@@ -19,9 +19,21 @@ $LastChangedRevision$
 	if ($event == 'plugin') {
 		require_privs('plugin');
 
-		if(!$step or !in_array($step, array('plugin_edit','plugin_help','plugin_list','plugin_install','plugin_save','plugin_verify','switch_status','plugin_multi_edit'))){
-			plugin_list();
-		} else $step();
+		$available_steps = array(
+			'plugin_edit',
+			'plugin_help',
+			'plugin_list',
+			'plugin_install',
+			'plugin_save',
+			'plugin_verify',
+			'switch_status',
+			'plugin_multi_edit'
+		);
+
+		if(!$step or !in_array($step, $available_steps)){
+			$step = 'plugin_list';
+		}
+		$step();
 	}
 
 // -------------------------------------------------------------

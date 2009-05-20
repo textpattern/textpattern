@@ -19,9 +19,10 @@ $LastChangedRevision$
 	if ($event == 'section') {
 		require_privs('section');
 
-		if(!$step or !function_exists($step) or !in_array($step, array('sec_section_list','section_create','section_delete','section_save'))){
-			sec_section_list();
-		} else $step();
+		if(!$step or !in_array($step, array('sec_section_list','section_create','section_delete','section_save'))){
+			$step ='sec_section_list';
+		}
+		$step();
 	}
 
 // -------------------------------------------------------------

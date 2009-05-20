@@ -37,8 +37,9 @@ $LastChangedRevision$
 
 
  	if(!$step or !in_array($step, array('switch_tool','start_import'))){
-		switch_tool();
-	} else $step();
+		$step = 'switch_tool';
+	}
+	$step();
 
 // -------------------------------------------------------------
 // Select the tool we want to import from and provide required data

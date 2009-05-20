@@ -25,9 +25,10 @@ $LastChangedRevision$
 	if ($event=='list') {
 		require_privs('article');
 
-		if(!$step or !in_array($step, array('list_change_pageby','list_list','list_multi_edit','list_list'))){
-			list_list();
-		} else $step();
+		if(!$step or !in_array($step, array('list_list','list_change_pageby','list_multi_edit'))){
+			$step = 'list_list';
+		}
+		$step();
 	}
 
 //--------------------------------------------------------------

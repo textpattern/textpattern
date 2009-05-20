@@ -23,20 +23,10 @@ $LastChangedRevision$
 	{
 		require_privs('log');
 
-		$available_steps = array(
-			'log_change_pageby',
-			'log_multi_edit'
-		);
-
-		if (!$step or !in_array($step, $available_steps))
-		{
-			log_list();
+		if (!$step or !in_array($step, array('log_list', 'log_change_pageby', 'log_multi_edit'))){
+			$step = 'log_list';
 		}
-
-		else
-		{
-			$step();
-		}
+		$step();
 	}
 
 

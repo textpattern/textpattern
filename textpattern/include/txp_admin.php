@@ -38,27 +38,22 @@ $LastChangedRevision$
 		$available_steps = array(
 			'admin_multi_edit',
 			'admin_change_pageby',
-			'author_list',
+			'author_edit',
 			'author_save',
 			'author_save_new',
 			'change_email',
 			'change_pass'
 		);
 
-		if (!$step or !in_array($step, $available_steps))
-		{
-			admin();
+		if (!$step or !in_array($step, $available_steps)) {
+			$step = 'author_edit';
 		}
-
-		else
-		{
-			$step();
-		}
+		$step();
 	}
 
 // -------------------------------------------------------------
 
-	function admin($message = '')
+	function author_edit($message = '')
 	{
 		global $txp_user;
 
@@ -99,7 +94,7 @@ $LastChangedRevision$
 
 		if (!is_valid_email($new_email))
 		{
-			admin(array(gTxt('email_required'), E_ERROR));
+			author_edit(array(gTxt('email_required'), E_ERROR));
 			return;
 		}
 
@@ -107,7 +102,7 @@ $LastChangedRevision$
 
 		if ($rs)
 		{
-			admin(
+			author_edit(
 				gTxt('email_changed', array('{email}' => $new_email))
 			);
 		}
@@ -125,7 +120,7 @@ $LastChangedRevision$
 
 		if (!is_valid_email($email))
 		{
-			admin(array(gTxt('email_required'), E_ERROR));
+			author_edit(array(gTxt('email_required'), E_ERROR));
 			return;
 		}
 
@@ -138,7 +133,7 @@ $LastChangedRevision$
 
 		if ($rs)
 		{
-			admin(
+			author_edit(
 				gTxt('author_updated', array('{name}' => $RealName))
 			);
 		}
@@ -154,7 +149,7 @@ $LastChangedRevision$
 
 		if (empty($new_pass))
 		{
-			admin(array(gTxt('password_required'), E_ERROR));
+			author_edit(array(gTxt('password_required'), E_ERROR));
 			return;
 		}
 
@@ -180,7 +175,7 @@ $LastChangedRevision$
 
 			$message .= '.';
 
-			admin($message);
+			author_edit($message);
 		}
 	}
 
@@ -213,7 +208,7 @@ $LastChangedRevision$
 			{
 				send_password($RealName, $name, $email, $password);
 
-				admin(
+				author_edit(
 					gTxt('password_sent_to').sp.$email
 				);
 
@@ -221,7 +216,7 @@ $LastChangedRevision$
 			}
 		}
 
-		admin(array(gTxt('error_adding_new_author'), E_ERROR));
+		author_edit(array(gTxt('error_adding_new_author'), E_ERROR));
 	}
 
 // -------------------------------------------------------------
@@ -358,7 +353,6 @@ $LastChangedRevision$
 		$rs = array();
 
 		extract(gpsa($vars));
-
 		if ($user_id && $step == 'author_edit')
 		{
 			$user_id = assert_int($user_id);
@@ -429,7 +423,7 @@ $LastChangedRevision$
 	function admin_change_pageby()
 	{
 		event_change_pageby('author');
-		admin();
+		author_edit();
 	}
 
 // -------------------------------------------------------------
@@ -461,12 +455,12 @@ $LastChangedRevision$
 
 		if (!$selected or !is_array($selected))
 		{
-			return admin();
+			return author_edit();
 		}
 
 		$names = safe_column('name', 'txp_users', "name IN ('".join("','", doSlash($selected))."') AND name != '".doSlash($txp_user)."'");
 
-		if (!$names) return admin();
+		if (!$names) return author_edit();
 
 		switch ($method)
 		{
@@ -513,7 +507,7 @@ $LastChangedRevision$
 
 				$privilege = ps('privs');
 
-				if (!isset($levels[$privilege])) return admin();
+				if (!isset($levels[$privilege])) return author_edit();
 
 				if (safe_update('txp_users', 'privs = '.intval($privilege), "name IN ('".join("','", doSlash($names))."')"))
 				{
@@ -542,7 +536,7 @@ $LastChangedRevision$
 						}
 						else
 						{
-							return admin(array(gTxt('could_not_mail').' '.htmlspecialchars($name), E_ERROR));
+							return author_edit(array(gTxt('could_not_mail').' '.htmlspecialchars($name), E_ERROR));
 						}
 					}
 				}
@@ -552,9 +546,16 @@ $LastChangedRevision$
 
 		if ($changed)
 		{
-			return admin(gTxt($msg, array('{name}' => htmlspecialchars(join(', ', $changed)))));
+			return author_edit(gTxt($msg, array('{name}' => htmlspecialchars(join(', ', $changed)))));
 		}
 
-		admin($msg);
+		author_edit($msg);
 	}
+// -------------------------------------------------------------
+//	@deprecated
+	function admin($message = '')
+	{
+		author_edit($message);
+	}
+
 ?>

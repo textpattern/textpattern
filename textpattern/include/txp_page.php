@@ -18,8 +18,9 @@ $LastChangedRevision$
 		require_privs('page');
 
 		if(!$step or !in_array($step, array('page_edit','page_save','page_delete','page_list'))){
-			page_edit();
-		} else $step();
+			$step = 'page_edit';
+		}
+		$step();
 	}
 
 //-------------------------------------------------------------

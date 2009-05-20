@@ -37,8 +37,7 @@ $LastChangedRevision$
 			'link_multi_edit'
 		);
 
-		if (!$step or !function_exists($step) or !in_array($step, $available_steps))
-		{
+		if (!$step or !in_array($step, $available_steps)){
 			$step = 'link_edit';
 		}
 		$step();
