@@ -15,7 +15,7 @@ class theme
 	{
 		$this->name = $name;
 		$this->menu = array();
-		$this->url = THEME.$name.'/';
+		$this->url = THEME.rawurlencode($name).'/';
 		$this->is_popup = false;
 		$this->message = '';
 		return $this;
@@ -184,7 +184,6 @@ class theme
 			'version' 		=> '',
 			'description' 	=> '',
 			'help' 			=> '',
-			'screenshot' 	=> ''
 		);
 	}
 }
