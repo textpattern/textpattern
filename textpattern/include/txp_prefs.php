@@ -69,14 +69,12 @@ $LastChangedRevision$
 
 	function prefs_list($message = '')
 	{
-		global $textarray;
+		global $prefs;
+		extract($prefs);
 
 		echo pagetop(gTxt('edit_preferences'), $message);
 
-		extract(get_prefs());
-
 		$locale = setlocale(LC_ALL, $locale);
-		$textarray = load_lang($language);
 
 		echo n.n.'<form method="post" action="index.php">'.
 
@@ -496,9 +494,6 @@ $LastChangedRevision$
 //-------------------------------------------------------------
 	function advanced_prefs($message = '')
 	{
-		global $textarray;
-
-		// this means new language strings and new help entries
 		echo pagetop(gTxt('advanced_preferences'), $message).
 
 			n.n.'<form method="post" action="index.php">'.
