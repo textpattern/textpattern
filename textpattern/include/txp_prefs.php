@@ -493,7 +493,7 @@ $LastChangedRevision$
 				unset($theme);
 			}
 		}
-		sort($vals, SORT_STRING);
+		asort($vals, SORT_STRING);
 
 		return pluggable_ui('prefs_ui', 'theme_name',
 			selectInput($name, $vals, $val, '', '', $name));
