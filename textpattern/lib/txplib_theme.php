@@ -11,6 +11,14 @@ class theme
 {
 	var $name, $menu, $url, $is_popup, $message;
 
+//----------------------------------------
+// Theme engine methods
+//----------------------------------------
+
+	/**
+	 * Constructor
+	 * @param	string	$name	Theme name
+	 */
 	function theme($name)
 	{
 		$this->name = $name;
@@ -18,9 +26,53 @@ class theme
 		$this->url = THEME.rawurlencode($name).'/';
 		$this->is_popup = false;
 		$this->message = '';
-		return $this;
 	}
 
+	/**
+	 * Get a theme's source path
+	 * @param	string	$name	Theme name
+	 * @returns	string	Source file path for named theme
+	 */
+	/* static */
+	function path($name)
+	{
+		return txpath.DS.THEME.$name.DS.$name.'.php';
+	}
+
+	/**
+	 * Theme factory
+	 * @param	string	$name	Theme name
+	 * @returns	object|boolean	An initialised theme object, or false on failure
+	 */
+	/* static */
+	function factory($name)
+	{
+		$path = theme::path($name);
+		if (is_readable($path))
+		{
+			require_once($path);
+		}
+		else
+		{
+			return false;
+		}
+
+		$t = "{$name}_theme";
+		if (class_exists($t))
+		{
+			return new $t($name);
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	/**
+	 * Initialise the theme singleton
+	 * @param	string 	$name 	Theme name
+	 * @return	object	A valid theme object
+	 */
 	/* static */
 	function init($name = '')
 	{
@@ -40,31 +92,20 @@ class theme
 			$instance = null;
 		}
 
-		$path = txpath.DS.THEME.$name.DS.$name.'.php';
-		if (is_readable($path))
-		{
-			require_once($path);
-		}
-		else
+		$instance = theme::factory($name);
+		if (!$instance)
 		{
 			set_pref('theme_name', 'classic');
-			die(gTxt('cannot_read_theme_file', array('path' => $path)));
-		}
-
-		$t = "{$name}_theme";
-		if (class_exists($t))
-		{
-			$instance = new $t($name);
-		}
-		else
-		{
-			set_pref('theme_name', 'classic');
-			die(gTxt('missing_required_theme_class', array('name' => $name, 'class' => $t)));
+			die(gTxt('cannot_instantiate_theme', array('name' => $name, 'class' => "{$name}_theme", 'path' => theme::path($name))));
 		}
 
 		return $instance;
 	}
 
+	/**
+	 * Get a list of all theme names
+	 * @return array Alphabetically sorted array of all available theme names
+	 */
 	/* static */
 	function names()
 	{
@@ -90,12 +131,36 @@ class theme
 			return array();
 	}
 
+	/**
+	 * Inherit from an ancestor theme
+	 * @param	string	$name	Name of ancestor theme
+	 * @return	boolean	True on success, false on unavailable/invalid ancestor theme
+	 */
 	/* static */
 	function based_on($name)
 	{
-		require_once(txpath.DS.THEME.$name.DS.$name.'.php');
+		global $production_status;
+		$theme = theme::factory($name);
+		if (!$theme)
+		{
+			set_pref('theme_name', 'classic');
+			if ($production_status === 'debug')
+			{
+				echo gTxt('cannot_instantiate_theme', array('name' => $name, 'class' => "{$name}_theme", 'path' => theme::path($name)));
+			}
+			return false;
+		}
+		return true;
 	}
 
+	/**
+	 * Sets Textpatterns menu structure, message contents and other application states
+	 * @param	string	$area	Currently active top level menu
+	 * @param	string	$event	Currently active second level menu
+	 * @param	boolean	$is_popup	Just a popup window for tag builder et cetera
+	 * @param	array	$message	The contents of the notification message pane
+	 * @return	object	This theme object
+	 */
 	function set_state($area, $event, $is_popup, $message)
 	{
 		$this->is_popup = $is_popup;
@@ -156,34 +221,59 @@ class theme
 		return $this;
 	}
 
+//----------------------------------------
+// Overrideable methods for custom themes
+//----------------------------------------
+
+	/**
+	 * Output HEAD element contents. Returned value is rendered into the HEAD element of all admin side pages by core.
+	 * @return string
+	 */
 	function html_head()
 	{
 		trigger_error(__FUNCTION__.' is abstract.', E_USER_ERROR);
 	}
 
+	/**
+	 * Draw the theme's header
+	 * @return string
+	 */
 	function header()
 	{
 		trigger_error(__FUNCTION__.' is abstract.', E_USER_ERROR);
 	}
 
+	/**
+	 * Draw the theme's footer
+	 * @return string
+	 */
 	function footer()
 	{
 		trigger_error(__FUNCTION__.' is abstract.', E_USER_ERROR);
 	}
 
+	/**
+	 * Output notification message
+	 * @param	array	$thing	Message text and status flag
+	 */
 	function announce($thing=array('', 0))
 	{
 		trigger_error(__FUNCTION__.' is abstract.', E_USER_ERROR);
 	}
 
+	/**
+	 * Define bureaucratic details of this theme. All returned items are optional.
+	 * @return array
+	 */
 	function manifest()
 	{
 		return array(
-			'author' 		=> '',
-			'author_uri' 	=> '',
-			'version' 		=> '',
-			'description' 	=> '',
-			'help' 			=> '',
+			'title'			=> '',	// Human-readable title of this theme. No HTML, keep it short.
+			'author' 		=> '',	// Name(s) of this theme's creator(s).
+			'author_uri' 	=> '',	// URI of the theme's site. Decent vanity is accepted.
+			'version' 		=> '',	// Version numbering. Mind version_compare().
+			'description' 	=> '',	// Human readable short description. No HTML.
+			'help' 			=> '',	// URI of the theme's help and docs. Strictly optional.
 		);
 	}
 }
