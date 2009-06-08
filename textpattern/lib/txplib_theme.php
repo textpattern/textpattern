@@ -31,7 +31,7 @@ class theme
 	/**
 	 * Get a theme's source path
 	 * @param	string	$name	Theme name
-	 * @returns	string	Source file path for named theme
+	 * @return	string	Source file path for named theme
 	 */
 	/* static */
 	function path($name)
@@ -42,7 +42,7 @@ class theme
 	/**
 	 * Theme factory
 	 * @param	string	$name	Theme name
-	 * @returns	object|boolean	An initialised theme object, or false on failure
+	 * @return	object|boolean	An initialised theme object, or false on failure
 	 */
 	/* static */
 	function factory($name)
