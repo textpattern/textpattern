@@ -483,10 +483,17 @@ $LastChangedRevision$
 	function themename($name, $val)
 	{
 		$themes = theme::names();
-		foreach($themes as $t)
+		foreach ($themes as $t)
 		{
-			$vals[$t] = ucwords($t);
+			$theme = theme::factory($t);
+			if ($theme) {
+				$m = $theme->manifest();
+				$title = empty($m['title']) ? ucwords($theme->name) : $m['title'];
+				$vals[$t] = $title;
+				unset($theme);
+			}
 		}
+		sort($vals, SORT_STRING);
 
 		return pluggable_ui('prefs_ui', 'theme_name',
 			selectInput($name, $vals, $val, '', '', $name));
