@@ -2316,7 +2316,7 @@ $LastChangedRevision$
 			$thisarticle['keywords'] :
 			array_intersect(do_list($keywords), do_list($thisarticle['keywords']));
 
-		return EvalElse($thing, !empty($condition));
+		return parse(EvalElse($thing, !empty($condition)));
 	}
 
 // -------------------------------------------------------------
