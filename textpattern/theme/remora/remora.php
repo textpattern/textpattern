@@ -35,7 +35,7 @@ SF;
 				foreach ($tab['items'] as $item)
 				{
 					$class = ($item['active']) ? 'tabup active' : 'tabdown2 inactive';
-					$out[] = "<li class='secondary {$class}'><a href='?event={$item['event']}'>{$item['label']}</a>";
+					$out[] = "<li class='secondary {$class}'><a href='?event={$item['event']}'>{$item['label']}</a></li>";
 				}
 				$out[] = '</ul>';
 

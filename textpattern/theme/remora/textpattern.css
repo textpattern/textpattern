@@ -21,11 +21,16 @@ list-style: none;
 }
 
 #nav a {
-display: block;
+display: inline-block;
 height: 2.5em;
 line-height: 2.5em;
 color: #000;
 padding: 0 10px;
+}
+
+* html #nav .sfhover a {
+display: block;
+width: 10em;
 }
 
 #nav a:hover {
