@@ -30,8 +30,8 @@ $LastChangedRevision$
 	ob_start(NULL, 2048);
 	if (!isset($txpcfg['table_prefix']) && !@include './config.php') {
 		ob_end_clean();
-		include txpath.'/setup/index.php';
-		exit();
+		header('HTTP/1.1 503 Service Unavailable');
+		exit('config.php is missing or corrupt.  To install Textpattern, visit <a href="./setup/">setup</a>.');
 	} else ob_end_clean();
 
 	header("Content-type: text/html; charset=utf-8");
