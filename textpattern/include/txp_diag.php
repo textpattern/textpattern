@@ -543,6 +543,10 @@ $LastChangedRevision$
 			$table_msg = (count($table_names) < 17) ?  array('-') : array('OK');
 		$out[] = count($table_names).' Tables'.cs. implode(', ',$table_msg).n;
 
+		$cf = preg_grep('/^custom_\d+/', getThings('describe `'.PFX.'textpattern`'));
+		$out[] = n.get_pref('max_custom_fields', 10).sp.gTxt('custom').cs.
+					implode(', ', $cf).sp.'('.count($cf).')'.n;
+
 		$extns = get_loaded_extensions();
 		$extv = array();
 		foreach ($extns as $e) {
