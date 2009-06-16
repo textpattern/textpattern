@@ -1401,7 +1401,10 @@ $LastChangedRevision$
 		}
 		elseif ($level == 'live') {
 			// don't show errors on screen
-			error_reporting(E_ALL ^ (E_WARNING | E_NOTICE));
+			$suppress = E_WARNING | E_NOTICE;
+			if (defined('E_STRICT')) $suppress |= E_STRICT;
+			if (defined('E_DEPRECATED')) $suppress |= E_DEPRECATED;
+			error_reporting(E_ALL ^ $suppress);
 			@ini_set("display_errors","1");
 		}
 		else {
