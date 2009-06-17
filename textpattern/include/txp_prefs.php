@@ -151,7 +151,7 @@ $LastChangedRevision$
 
 				$out.= tda(popHelp($a['name']), ' style="vertical-align: middle;"');
 
-				echo tr($out);
+				echo tr($out, " id='prefs-{$a['name']}'");
 			}
 		}
 
@@ -574,7 +574,7 @@ $LastChangedRevision$
 				popHelp($a['name'])
 			, ' style="vertical-align: middle;"');
 
-			echo n.n.tr($out);
+			echo n.n.tr($out, " id='prefs-{$a['name']}'");
 		}
 
 		echo n.n.tr(
