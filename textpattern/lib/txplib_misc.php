@@ -2317,4 +2317,170 @@ eod;
 		echo(join(n, $out));
 		exit();
 	}
+
+// -------------------------------------------------------------
+// Perform regular housekeeping.
+// Might evolve into some kind of pseudo-cron later...
+	function janitor()
+	{
+		global $prefs;
+
+		// update DST setting
+		global $auto_dst, $timezone_key, $is_dst;
+		if ($auto_dst && $timezone_key)
+		{
+			$is_dst = $prefs['is_dst'] = timezone::is_dst(time(), $timezone_key);
+			set_pref('is_dst', $is_dst, 'publish', 2);
+		}
+	}
+
+// -------------------------------------------------------------
+// Dealing with timezones.
+	class timezone
+	{
+		/* private */
+		var $_details;
+		var $_offsets;
+
+		/**
+		 * Constructor
+		 */
+		function timezone()
+		{
+			// bail out when we find ourselves riding a dinosaur
+			if (!timezone::is_supported())
+			{
+				$this->_details = array();
+				return;
+			}
+
+			$continents = array('Africa', 'America', 'Antarctica', 'Arctic', 'Asia',
+				'Atlantic', 'Australia', 'Europe', 'Indian', 'Pacific', 'Etc');
+
+			$tzlist = DateTimeZone::listAbbreviations();
+			foreach ($tzlist as $abbr => $timezones)
+			{
+				foreach ($timezones as $tz)
+				{
+					$timezone_id = $tz['timezone_id'];
+					if ($timezone_id)
+					{
+						$parts = explode('/', $timezone_id);
+						if (in_array($parts[0], $continents))
+						{
+							$this->_details[$timezone_id]['continent'] = $parts[0];
+							$this->_details[$timezone_id]['city'] = (isset($parts[1])) ? $parts[1] : '';
+							$this->_details[$timezone_id]['subcity'] = (isset($parts[2])) ? $parts[2] : '';
+							$this->_details[$timezone_id]['offset'] = $tz['offset'];
+							$this->_details[$timezone_id]['dst'] = $tz['dst'];
+							$this->_details[$timezone_id]['abbr'] = strtoupper($abbr);
+
+							// Guesstimate a timezone key for a given GMT offset
+							$this->_offsets[$tz['offset']] = $timezone_id;
+						}
+					}
+				}
+			}
+			ksort($this->_details);
+		}
+
+		/**
+		 * Render HTML SELECT element for choosing a timezone
+		 * @param	string	$name	Element name
+		 * @param	string	$value	Selected timezone
+		 * @param	boolean	$blank_first Add empty first option
+		 * @param	boolean|string	$onchange n/a
+		 * @param	string	$select_id	HTML id attribute
+		 * @return	string	HTML markup
+		 */
+		function selectInput($name = '', $value = '', $blank_first = '', $onchange = '', $select_id = '')
+		{
+			if (!empty($this->_details))
+			{
+				$thiscontinent = '';
+				$selected = false;
+
+				foreach ($this->_details as $timezone_id => $tz)
+				{
+					extract($tz);
+					if ($value == $timezone_id) $selected = true;
+					if ($continent !== $thiscontinent)
+					{
+						if ($thiscontinent !== '') $out[] = n.t.'</optgroup>';
+						$out[] = n.t.'<optgroup label="'.gTxt($continent).'">';
+						$thiscontinent = $continent;
+					}
+
+					$where = gTxt(str_replace('_', ' ', $city))
+								.(!empty($subcity) ? '/'.gTxt(str_replace('_', ' ', $subcity)) : '').t
+								/*."($abbr)"*/;
+					$out[] = n.t.t.'<option value="'.htmlspecialchars($timezone_id).'"'.($value == $timezone_id ? ' selected="selected"' : '').'>'.$where.'</option>';
+				}
+				$out[] = n.t.'</optgroup>';
+				return n.'<select'.( $select_id ? ' id="'.$select_id.'"' : '' ).' name="'.$name.'" class="list"'.
+					($onchange == 1 ? ' onchange="submit(this.form);"' : $onchange).
+					'>'.
+					($blank_first ? n.t.'<option value=""'.($selected == false ? ' selected="selected"' : '').'></option>' : '').
+					join('', $out).
+					n.'</select>';
+			}
+			return '';
+		}
+
+		/**
+		 * Build a matrix of timezone details
+		 * @return	array	Array of timezone details indexed by timezone key
+		 */
+		function details()
+		{
+			return $this->_details;
+		}
+
+		/**
+		 * Find a timezone key matching a given GMT offset.
+		 * NB: More than one key might fit any given GMT offset,
+		 * thus the returned value is ambiguous and merely useful for presentation purposes.
+		 * @param	integer $gmtoffset
+		 * @return	string	timezone key
+		 */
+		function key($gmtoffset)
+		{
+			return isset($this->_keys[$gmtoffset]) ? $this->_keys[$gmtoffset] : '';
+		}
+
+		/**
+		 * Is DST in effect?
+		 * @param	integer $timestamp When?
+		 * @param	string 	$timezone_key Where?
+		 * @return	boolean	Yes, they are saving time, actually.
+		 */
+		function is_dst($timestamp, $timezone_key)
+		{
+			global $is_dst;
+
+			$out = $is_dst;
+			if (timezone::is_supported())
+			{
+				$server_tz = date_default_timezone_get();
+				if ($server_tz)
+				{
+					// switch to client time zone
+					date_default_timezone_set($timezone_key);
+					$out = date('I', $timestamp);
+					// restore server time zone
+					date_default_timezone_set($server_tz);
+				}
+			}
+			return $out;
+		}
+
+		/**
+		 * Check for run-time timezone support
+		 * @return	boolean	All required timezone features are present in this PHP
+		 */
+		function is_supported()
+		{
+			return function_exists('date_default_timezone_set') && method_exists('DateTimeZone', 'listAbbreviations');
+		}
+	}
 ?>

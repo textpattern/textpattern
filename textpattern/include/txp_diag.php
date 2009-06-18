@@ -469,15 +469,17 @@ $LastChangedRevision$
 
 		gTxt('web_domain').cs.$siteurl.n,
 
-		(getenv('TZ')) ? 'TZ: '.getenv('TZ').n : '',
-
 		gTxt('php_version').cs.phpversion().n,
 
 		($is_register_globals) ? gTxt('register_globals').cs.$is_register_globals.n : '',
 
 		gTxt('gd_library').cs.$gd.n,
 
+		gTxt('server').' TZ: '.(timezone::is_supported() ? date_default_timezone_get() : ((getenv('TZ')) ? getenv('TZ') : '-')).n,
 		gTxt('server_time').cs.strftime('%Y-%m-%d %H:%M:%S').n,
+		gTxt('is_dst').cs.$is_dst.n,
+		gTxt('auto_dst').cs.$auto_dst.n,
+		gTxt('gmtoffset').cs.$gmtoffset.n,
 
 		'MySQL'.cs.mysql_get_server_info().n,
 

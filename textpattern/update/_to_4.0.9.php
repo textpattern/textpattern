@@ -29,8 +29,27 @@ $LastChangedRevision$
  	// send comments prefs
 	safe_update('txp_prefs', "html='commentsendmail'", "name='comments_sendmail' AND html='yesnoradio'");
 
- 	// DST prefs
+ 	// Timezone prefs
 	safe_update('txp_prefs', "html='is_dst'", "name='is_dst' AND html='yesnoradio'");
+	if (!safe_field('name', 'txp_prefs', "name = 'auto_dst'"))
+	{
+		safe_insert('txp_prefs', "prefs_id = 1, name = 'auto_dst', val = '0', type = '0', event = 'publish', html = 'yesnoradio', position = '115'");
+	}
+	if (!safe_field('name', 'txp_prefs', "name = 'timezone_key'"))
+	{
+		$tz = '';
+		if (timezone::is_supported())
+		{
+			$tz = new timezone;
+			$tz = $tz->key($gmtoffset);
+		}
+		if (empty($tz))
+		{
+			$sign = ($gmtoffset >= 0 ? '+' : '');
+			$tz = sprintf("Etc/GMT%s%d", $sign, $gmtoffset / 3600);
+		}
+		safe_insert('txp_prefs', "prefs_id = 1, name = 'timezone_key', val = '$tz', type = '2', event = 'publish', html = 'textinput', position = '0'");
+	}
 
 	// default event admin pref
 	if (!safe_field('name', 'txp_prefs', "name = 'default_event'"))

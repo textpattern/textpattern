@@ -110,6 +110,9 @@ $LastChangedRevision$
 		//i18n: $textarray = load_lang('en-gb');
 	$textarray = load_lang(LANG);
 
+		// tidy up the site
+	janitor();
+
 		// here come the plugins
 	if ($use_plugins) load_plugins();
 

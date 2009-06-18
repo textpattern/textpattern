@@ -111,6 +111,8 @@ $LastChangedRevision$
 			include txpath.'/update/_update.php';
 		}
 
+		janitor();
+
 		if (!empty($admin_side_plugins) and gps('event') != 'plugin')
 			load_plugins(1);
 
