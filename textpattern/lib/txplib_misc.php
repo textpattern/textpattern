@@ -2381,7 +2381,6 @@ eod;
 					}
 				}
 			}
-			ksort($this->_details);
 		}
 
 		/**
@@ -2400,6 +2399,7 @@ eod;
 				$thiscontinent = '';
 				$selected = false;
 
+				ksort($this->_details);
 				foreach ($this->_details as $timezone_id => $tz)
 				{
 					extract($tz);
