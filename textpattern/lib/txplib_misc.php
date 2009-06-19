@@ -1236,16 +1236,18 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 // Calculate the offset between the server local time and the
-// user's selected time zone
-	function tz_offset()
+// user's selected time zone at a given point in time
+	function tz_offset($timestamp = NULL)
 	{
-		global $gmtoffset, $is_dst;
+		global $gmtoffset, $timezone_key;
 
-		extract(getdate());
+		if (is_null($timestamp)) $timestamp = time();
+
+		extract(getdate($timestamp));
 		$serveroffset = gmmktime(0,0,0,$mon,$mday,$year) - mktime(0,0,0,$mon,$mday,$year);
-		$offset = $gmtoffset - $serveroffset;
 
-		return $offset + ($is_dst ? 3600 : 0);
+		$real_dst = timezone::is_dst($timestamp, $timezone_key);
+		return $gmtoffset - $serveroffset + ($real_dst ? 3600 : 0);
 	}
 
 // -------------------------------------------------------------
@@ -1309,7 +1311,8 @@ $LastChangedRevision$
 // Convert a time string from the Textpattern time zone to GMT
 	function safe_strtotime($time_str)
 	{
-		return strtotime($time_str, time()+tz_offset()) - tz_offset();
+		$ts = strtotime($time_str);
+		return strtotime($time_str, time() + tz_offset($ts)) - tz_offset($ts);
 	}
 
 // -------------------------------------------------------------
@@ -2351,6 +2354,7 @@ eod;
 			if (!timezone::is_supported())
 			{
 				$this->_details = array();
+				$this->_offsets = array();
 				return;
 			}
 
@@ -2448,7 +2452,7 @@ eod;
 			return isset($this->_keys[$gmtoffset]) ? $this->_keys[$gmtoffset] : '';
 		}
 
-		/**
+		 /**
 		 * Is DST in effect?
 		 * @param	integer $timestamp When?
 		 * @param	string 	$timezone_key Where?
@@ -2459,16 +2463,18 @@ eod;
 			global $is_dst;
 
 			$out = $is_dst;
-			if (timezone::is_supported())
+			if ($timezone_key && timezone::is_supported())
 			{
 				$server_tz = date_default_timezone_get();
 				if ($server_tz)
 				{
 					// switch to client time zone
-					date_default_timezone_set($timezone_key);
-					$out = date('I', $timestamp);
-					// restore server time zone
-					date_default_timezone_set($server_tz);
+					if (date_default_timezone_set($timezone_key))
+					{
+						$out = date('I', $timestamp);
+						// restore server time zone
+						date_default_timezone_set($server_tz);
+					}
 				}
 			}
 			return $out;

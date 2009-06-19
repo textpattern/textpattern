@@ -86,7 +86,8 @@ if (!empty($event) and $event == 'article') {
 				return;
 			}
 
-			$when = $when_ts = strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second)-tz_offset();
+			$ts = strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second);
+			$when = $when_ts = $ts - tz_offset($ts);
 			$when = "from_unixtime($when)";
 		}
 
@@ -103,8 +104,8 @@ if (!empty($event) and $event == 'article') {
 			if(empty($exp_minute)) $exp_minute=0;
 			if(empty($exp_second)) $exp_second=0;
 
-			$expires = strtotime($exp_year.'-'.$exp_month.'-'.$exp_day.' '.
-					$exp_hour.':'.$exp_minute.':'.$exp_second)-tz_offset();
+			$ts = strtotime($exp_year.'-'.$exp_month.'-'.$exp_day.' '.$exp_hour.':'.$exp_minute.':'.$exp_second);
+			$expires = $ts - tz_offset($ts);
 			$whenexpires = "from_unixtime($expires)";
 		}
 
@@ -220,7 +221,8 @@ if (!empty($event) and $event == 'article') {
 				return;
 			}
 
-			$when = $when_ts = strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second)-tz_offset();
+			$ts = strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second);
+			$when = $when_ts = $ts - tz_offset($ts);
 			$whenposted = "Posted=from_unixtime($when)";
 		}
 
@@ -234,7 +236,8 @@ if (!empty($event) and $event == 'article') {
 			if(empty($exp_minute)) $exp_minute=0;
 			if(empty($exp_second)) $exp_second=0;
 
-			$expires = strtotime($exp_year.'-'.$exp_month.'-'.$exp_day.' '.$exp_hour.':'.$exp_minute.':'.$exp_second)-tz_offset();
+			$ts = strtotime($exp_year.'-'.$exp_month.'-'.$exp_day.' '.$exp_hour.':'.$exp_minute.':'.$exp_second);
+			$expires = $ts - tz_offset($ts);
 			$whenexpires = "Expires=from_unixtime($expires)";
 		}
 
