@@ -2332,8 +2332,12 @@ eod;
 		global $auto_dst, $timezone_key, $is_dst;
 		if ($auto_dst && $timezone_key)
 		{
-			$is_dst = $prefs['is_dst'] = timezone::is_dst(time(), $timezone_key);
-			set_pref('is_dst', $is_dst, 'publish', 2);
+			$is_dst = timezone::is_dst(time(), $timezone_key);
+			if ($is_dst != $prefs['is_dst'])
+			{
+				$prefs['is_dst'] = $is_dst;
+				set_pref('is_dst', $is_dst, 'publish', 2);
+			}
 		}
 	}
 
