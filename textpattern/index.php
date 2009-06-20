@@ -101,7 +101,7 @@ $LastChangedRevision$
 		$prefs = get_prefs();
 		extract($prefs);
 
-		$event = (gps('event') ? gps('event') : get_pref('default_event', 'article'));
+		$event = (gps('event') ? gps('event') : (isset($default_event) && has_privs($default_event) ? $default_event : 'article'));
 		$step = gps('step');
 		$app_mode = gps('app_mode');
 
