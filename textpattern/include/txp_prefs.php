@@ -52,11 +52,13 @@ $LastChangedRevision$
             $tzd = $tz->details();
             if (isset($tzd[$key]))
             {
-            	$post['gmtoffset'] = $tzd[$key]['offset'];
+            	global $prefs, $gmtoffset, $is_dst, $timezone_key;
+            	$prefs['timezone_key'] = $timezone_key = $key;
+            	$post['gmtoffset'] = $prefs['gmtoffset'] = $gmtoffset = $tzd[$key]['offset'];
 
 	            if (gps('auto_dst'))
 	            {
-	            	$post['is_dst'] =  timezone::is_dst(time(), $key);
+	            	$post['is_dst'] =  $prefs['is_dst'] = $is_dst = timezone::is_dst(time(), $key);
 	            }
             }
 
