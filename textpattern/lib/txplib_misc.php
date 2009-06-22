@@ -1244,7 +1244,7 @@ $LastChangedRevision$
 		if (is_null($timestamp)) $timestamp = time();
 
 		extract(getdate($timestamp));
-		$serveroffset = gmmktime(0,0,0,$mon,$mday,$year) - mktime(0,0,0,$mon,$mday,$year);
+		$serveroffset = gmmktime($hours,$minutes,0,$mon,$mday,$year) - mktime($hours,$minutes,0,$mon,$mday,$year);
 
 		$real_dst = timezone::is_dst($timestamp, $timezone_key);
 		return $gmtoffset - $serveroffset + ($real_dst ? 3600 : 0);
@@ -1280,7 +1280,7 @@ $LastChangedRevision$
 		elseif ($gmt)
 			$str = gmstrftime($format, $time);
 		else
-			$str = strftime($format, $time + tz_offset());
+			$str = strftime($format, $time + tz_offset($time));
 
 		@list($lang, $charset) = explode('.', $locale);
 		if (empty($charset))
@@ -2464,10 +2464,10 @@ eod;
 		 */
 		function is_dst($timestamp, $timezone_key)
 		{
-			global $is_dst;
+			global $is_dst, $auto_dst;
 
 			$out = $is_dst;
-			if ($timezone_key && timezone::is_supported())
+			if ($auto_dst && $timezone_key && timezone::is_supported())
 			{
 				$server_tz = date_default_timezone_get();
 				if ($server_tz)
