@@ -45,7 +45,7 @@ $LastChangedRevision$
         $post = doSlash(stripPost());
 
         // Forge $gmtoffset and $is_dst from $timezone_key if present
-        if (isset($post['timezone_key']) && timezone::is_supported())
+        if (isset($post['timezone_key']))
         {
             $key = $post['timezone_key'];
             $tz = new timezone;
@@ -55,7 +55,6 @@ $LastChangedRevision$
             	global $prefs, $gmtoffset, $is_dst, $timezone_key;
             	$prefs['timezone_key'] = $timezone_key = $key;
             	$post['gmtoffset'] = $prefs['gmtoffset'] = $gmtoffset = $tzd[$key]['offset'];
-
 	            if (gps('auto_dst'))
 	            {
 	            	$post['is_dst'] =  $prefs['is_dst'] = $is_dst = timezone::is_dst(time(), $key);
@@ -247,32 +246,8 @@ $LastChangedRevision$
     {
         // Fetch *hidden* pref
         $key = safe_field('val', 'txp_prefs', "name='timezone_key'");
-        // Try geographic timezone UI
         $tz = new timezone;
         $ui = $tz->selectInput('timezone_key', $key, true, '', 'gmtoffset');
-        // Fall back to GMT offset UI
-        if (!$ui)
-        {
-            // Standard time zones as compiled by H.M. Nautical Almanac Office, June 2004
-            // http://aa.usno.navy.mil/faq/docs/world_tzones.html
-            $tz = array(
-                -12, -11, -10, -9.5, -9, -8.5, -8, -7, -6, -5, -4, -3.5, -3, -2, -1,
-                0,
-                +1, +2, +3, +3.5, +4, +4.5, +5, +5.5, +6, +6.5, +7, +8, +9, +9.5, +10, +10.5, +11, +11.5, +12, +13, +14,
-            );
-
-            $vals = array();
-
-            foreach ($tz as $z)
-            {
-                $sign = ($z >= 0 ? '+' : '');
-                $label = sprintf("GMT %s%02d:%02d", $sign, $z, abs($z - (int)$z) * 60);
-
-                $vals[sprintf("%s%d", $sign, $z * 3600)] = $label;
-            }
-            $ui = selectInput($name, $vals, $val, '', '', $name);
-        }
-
         return pluggable_ui('prefs_ui', 'gmtoffset', $ui, $name, $val);
     }
 

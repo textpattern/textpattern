@@ -2354,37 +2354,55 @@ eod;
 		 */
 		function timezone()
 		{
-			// bail out when we find ourselves riding a dinosaur
+			// are we riding a dinosaur?
 			if (!timezone::is_supported())
-			{
-				$this->_details = array();
-				$this->_offsets = array();
-				return;
-			}
+            {
+            	// Standard time zones as compiled by H.M. Nautical Almanac Office, June 2004
+	            // http://aa.usno.navy.mil/faq/docs/world_tzones.html
+	            $timezones = array(
+	                -12, -11, -10, -9.5, -9, -8.5, -8, -7, -6, -5, -4, -3.5, -3, -2, -1,
+	                0,
+	                +1, +2, +3, +3.5, +4, +4.5, +5, +5.5, +6, +6.5, +7, +8, +9, +9.5, +10, +10.5, +11, +11.5, +12, +13, +14,
+	            );
 
-			$continents = array('Africa', 'America', 'Antarctica', 'Arctic', 'Asia',
-				'Atlantic', 'Australia', 'Europe', 'Indian', 'Pacific', 'Etc');
+	            foreach ($timezones as $tz)
+	            {
+	            	// Fake timezone id
+	            	$timezone_id = 'GMT'.sprintf('%+05.1f', $tz);
+	            	$sign = ($tz >= 0 ? '+' : '');
+	                $label = sprintf("GMT %s%02d:%02d", $sign, $tz, abs($tz - (int)$tz) * 60);
+	                $this->_details[$timezone_id]['continent'] = gTxt('timezone_gmt');
+	                $this->_details[$timezone_id]['city'] = $label;
+	                $this->_details[$timezone_id]['offset'] = $tz * 3600;
+	                $this->_offsets[$tz * 3600] = $timezone_id;
+	            }
+            }
+            else
+            {
+				$continents = array('Africa', 'America', 'Antarctica', 'Arctic', 'Asia',
+					'Atlantic', 'Australia', 'Europe', 'Indian', 'Pacific');
 
-			$tzlist = DateTimeZone::listAbbreviations();
-			foreach ($tzlist as $abbr => $timezones)
-			{
-				foreach ($timezones as $tz)
+				$tzlist = timezone_abbreviations_list();
+				foreach ($tzlist as $abbr => $timezones)
 				{
-					$timezone_id = $tz['timezone_id'];
-					if ($timezone_id)
+					foreach ($timezones as $tz)
 					{
-						$parts = explode('/', $timezone_id);
-						if (in_array($parts[0], $continents))
+						$timezone_id = $tz['timezone_id'];
+						if ($timezone_id)
 						{
-							$this->_details[$timezone_id]['continent'] = $parts[0];
-							$this->_details[$timezone_id]['city'] = (isset($parts[1])) ? $parts[1] : '';
-							$this->_details[$timezone_id]['subcity'] = (isset($parts[2])) ? $parts[2] : '';
-							$this->_details[$timezone_id]['offset'] = $tz['offset'];
-							$this->_details[$timezone_id]['dst'] = $tz['dst'];
-							$this->_details[$timezone_id]['abbr'] = strtoupper($abbr);
+							$parts = explode('/', $timezone_id);
+							if (in_array($parts[0], $continents))
+							{
+								$this->_details[$timezone_id]['continent'] = $parts[0];
+								$this->_details[$timezone_id]['city'] = (isset($parts[1])) ? $parts[1] : '';
+								$this->_details[$timezone_id]['subcity'] = (isset($parts[2])) ? $parts[2] : '';
+								$this->_details[$timezone_id]['offset'] = $tz['offset'];
+								$this->_details[$timezone_id]['dst'] = $tz['dst'];
+								$this->_details[$timezone_id]['abbr'] = strtoupper($abbr);
 
-							// Guesstimate a timezone key for a given GMT offset
-							$this->_offsets[$tz['offset']] = $timezone_id;
+								// Guesstimate a timezone key for a given GMT offset
+								$this->_offsets[$tz['offset']] = $timezone_id;
+							}
 						}
 					}
 				}
@@ -2453,7 +2471,7 @@ eod;
 		 */
 		function key($gmtoffset)
 		{
-			return isset($this->_keys[$gmtoffset]) ? $this->_keys[$gmtoffset] : '';
+			return isset($this->_offsets[$gmtoffset]) ? $this->_offsets[$gmtoffset] : '';
 		}
 
 		 /**
@@ -2490,7 +2508,7 @@ eod;
 		 */
 		function is_supported()
 		{
-			return function_exists('date_default_timezone_set') && method_exists('DateTimeZone', 'listAbbreviations');
+			return is_callable('date_default_timezone_set') && is_callable('timezone_abbreviations_list') && !defined('NO_TIMEZONE_SUPPORT');
 		}
 	}
 ?>

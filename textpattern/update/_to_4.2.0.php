@@ -37,17 +37,8 @@ $LastChangedRevision$
 	}
 	if (!safe_field('name', 'txp_prefs', "name = 'timezone_key'"))
 	{
-		$tz = '';
-		if (timezone::is_supported())
-		{
-			$tz = new timezone;
-			$tz = $tz->key($gmtoffset);
-		}
-		if (empty($tz))
-		{
-			$sign = ($gmtoffset >= 0 ? '+' : '');
-			$tz = sprintf("Etc/GMT%s%d", $sign, $gmtoffset / 3600);
-		}
+		$tz = new timezone;
+		$tz = $tz->key($gmtoffset);
 		safe_insert('txp_prefs', "prefs_id = 1, name = 'timezone_key', val = '$tz', type = '2', event = 'publish', html = 'textinput', position = '0'");
 	}
 
