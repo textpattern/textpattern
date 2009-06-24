@@ -477,9 +477,9 @@ $LastChangedRevision$
 
 		gTxt('server').' TZ: '.(timezone::is_supported() ? date_default_timezone_get() : ((getenv('TZ')) ? getenv('TZ') : '-')).n,
 		gTxt('server_time').cs.strftime('%Y-%m-%d %H:%M:%S').n,
-		gTxt('is_dst').cs.$is_dst.n,
-		gTxt('auto_dst').cs.$auto_dst.n,
-		gTxt('gmtoffset').cs.$gmtoffset.n,
+		strip_tags(gTxt('is_dst')).cs.$is_dst.n,
+		strip_tags(gTxt('auto_dst')).cs.$auto_dst.n,
+		strip_tags(gTxt('gmtoffset')).cs.$timezone_key.sp."($gmtoffset)".n,
 
 		'MySQL'.cs.mysql_get_server_info().n,
 
