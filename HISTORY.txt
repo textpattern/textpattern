@@ -1,12 +1,17 @@
-Changes in 4.x.x
+Changes in 4.2.0
 
 * Feature: Extendable admin-side themes
 * Feature: Capability for multi-site file system layouts (thanks: Sam Weiss)
 * Feature: Role-based permission checks for images, links and files
 * Feature: Save various pane toggle states
 * Feature: Store author of links and files
+* Feature: Automatic adjustment for DST (requires PHP 5.1+, fall back to manual adjustment for servers running older PHPs)
+* Feature: Timezone selector in preferences (requires PHP 5.1+, GMT-based seelector as a fallback for PHP 4)
 * Fixed: When a user is deleted, reassign her assets
 * Fixed: Tag builders for <txp:category /> and <txp:section />
+* Fixed: Bogus "Article tags cannot be used outside an article context" warning  in <txp:else />-branch of <txp:if_keywords>
+* Fixed: Removed superflous &amp; encoding for article titles in <txp:recent_comments />
+* Fixed: <txp:expires> uses "class" and "wraptag" attributes as intended
 * New: Default event preference setting (thanks: Mary)
 * Developer: pluggable_ui() serves as a base for custom admin-side user interface panels
 * Developer: Per-user preferences
@@ -16,6 +21,10 @@ Changes in 4.x.x
 * Developer: Core support for unlimited custom fields (thanks: Gerhard Lazu)
 * Developer: Thumbnail dimensions are stored in the image table
 * jQuery 1.3.2
+
+Changes in 4.1.0
+
+* Version 4.1.0 was assigned to the experimental "crockery" branch and never officially released.
 
 Changes in 4.0.8
 

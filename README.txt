@@ -1,4 +1,4 @@
-Textpattern 4.0.8
+Textpattern 4.2.0
 
 Released under the Gnu General Public License
 
@@ -24,11 +24,11 @@ Released under the Gnu General Public License
 
 == Getting Started ==
 
-* FAQ is available at http://textpattern.com/faq
+* FAQ is available at http://textpattern.com/faq/
 * In-Depth Documentation and tag-index is available in the TextBook project
   at http://textbook.textpattern.net/
 * You can get support in our forums at http://forum.textpattern.com/
 
 * IMPORTANT: Regularly check back at textpattern.com to see if updates are
-  available. 4.0.x is in maintenance mode which means updates are as painless
+  available. 4.x is in maintenance mode which means updates are as painless
   as possible, and often fix important bugs or security-related issues.
