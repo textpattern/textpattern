@@ -13,14 +13,23 @@ Released under the Gnu General Public License
 
 == Upgrading ==
 
-* Simply replace the two files in your main installation directory
-  (index.php and .htaccess), everything in your /rpc/ directory and
+* Simply replace the three files in your main installation directory
+  (index.php, css.php and .htaccess), everything in your /rpc/ directory and
   everything in your /textpattern/ directory (except config.php)
-  with the corresponding files in this distribution.
+  with the corresponding files in this distribution. css.php and /rpc/
+  might not yet exist in your current site.
 * When you login to the admin-side, the relevant upgrade script is
   run automatically. Please take a look into diagnostics to find out
   whether there are any errors and whether the correct version number
   is displayed.
+  NOTE: Upgrades from versions below 4.2.0 will present this warning
+  upon your very first login to the admin-side:
+    Warning: Unknown column 'user_name' in 'where clause' select name,
+    val from txp_prefs where prefs_id=1 AND user_name='' in
+    /path/to/your/site/textpattern/lib/txplib_db.php on line xx
+  This is expected behaviour for the very first login after an upgrade.
+  Every further move in the admin side must not throw any error message.
+* Verify all preference settings.
 
 == Getting Started ==
 
