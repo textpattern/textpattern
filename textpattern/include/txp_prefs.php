@@ -40,26 +40,35 @@ $LastChangedRevision$
 // -------------------------------------------------------------
     function prefs_save()
     {
-        $prefnames = safe_column("name", "txp_prefs", "prefs_id = 1");
+        global $prefs, $gmtoffset, $is_dst, $auto_dst, $timezone_key;
+
+    	$prefnames = safe_column("name", "txp_prefs", "prefs_id = 1");
 
         $post = doSlash(stripPost());
 
-        // Forge $gmtoffset and $is_dst from $timezone_key if present
+        // Forge $auto_dst for (in-)capable servers
+		if (!timezone::is_supported())
+		{
+			$post['auto_dst'] = false;
+		}
+		$prefs['auto_dst'] = $auto_dst = $post['auto_dst'];
+
+		if (!$post['auto_dst'])
+		{
+			$is_dst = $post['is_dst'];
+		}
+
+		// Forge $gmtoffset and $is_dst from $timezone_key if present
         if (isset($post['timezone_key']))
         {
-            $key = $post['timezone_key'];
+        	$key = $post['timezone_key'];
             $tz = new timezone;
             $tzd = $tz->details();
             if (isset($tzd[$key]))
             {
-            	global $prefs, $gmtoffset, $is_dst, $auto_dst, $timezone_key;
             	$prefs['timezone_key'] = $timezone_key = $key;
             	$post['gmtoffset'] = $prefs['gmtoffset'] = $gmtoffset = $tzd[$key]['offset'];
-	            if (gps('auto_dst'))
-	            {
-	            	$prefs['auto_dst'] = $auto_dst = $post['auto_dst'];
-	            	$post['is_dst'] =  $prefs['is_dst'] = $is_dst = timezone::is_dst(time(), $key);
-	            }
+            	$post['is_dst'] = $prefs['is_dst'] = $is_dst = timezone::is_dst(time(), $key);
             }
 
         }
@@ -257,12 +266,13 @@ $LastChangedRevision$
 
     function is_dst($name, $val)
     {
-        $ui = yesnoRadio ($name, $val).
+        $ui = yesnoRadio ($name, $val).n.
+        script_js ("textpattern.timezone_is_supported = ".(int)timezone::is_supported().";").
 		script_js (<<<EOS
         	$(document).ready(function(){
             	var radio = $("#prefs-is_dst input");
                 if (radio) {
-                	if ($("#auto_dst-1").attr("checked")) {
+                	if ($("#auto_dst-1").attr("checked") && textpattern.timezone_is_supported) {
                         radio.attr("disabled","disabled");
                     }
                     $("#auto_dst-0").click(
@@ -274,7 +284,10 @@ $LastChangedRevision$
                         	radio.attr("disabled","disabled");
                       	});
                	}
-           	});
+				if (!textpattern.timezone_is_supported) {
+					$("#prefs-auto_dst input").attr("disabled","disabled");
+				}
+    });
 EOS
         );
         return pluggable_ui('prefs_ui', 'is_dst', $ui, $name, $val);
