@@ -1845,6 +1845,8 @@ $LastChangedRevision$
 			$code = @$parts[0];
 		}
 
+		callback_event('txp_die', $code);
+
 		if (@$GLOBALS['connected']) {
 			$out = safe_field('user_html','txp_page',"name='error_".doSlash($code)."'");
 			if (empty($out))
