@@ -529,6 +529,15 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
+
+	function link_id()
+	{
+		global $thislink;
+		assert_link();
+		return $thislink['id'];
+	}
+
+// -------------------------------------------------------------
 	function eE($txt) // convert email address into unicode entities
 	{
 		for ($i=0;$i<strlen($txt);$i++) {
