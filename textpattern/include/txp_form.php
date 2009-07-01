@@ -137,40 +137,40 @@ $LastChangedRevision$
 				tdtl(
 					hed(gTxt('tagbuilder'), 2).
 
-					hed('<a href="#article-tags" onclick="toggleDisplay(\'article-tags\'); return false;">'.gTxt('articles').'</a>'.
-						sp.popHelp('form_articles'), 3, ' class="plain"').
+					hed('<a href="#article-tags">'.gTxt('articles').'</a>'.
+						sp.popHelp('form_articles'), 3, ' class="plain lever"').
 						'<div id="article-tags" class="toggle on" style="display:block">'.popTagLinks('article').'</div>'.
 
-					hed('<a href="#link-tags" onclick="toggleDisplay(\'link-tags\'); return false;">'.gTxt('links').'</a>'.
-						sp.popHelp('form_place_link'), 3, ' class="plain"').
+					hed('<a href="#link-tags">'.gTxt('links').'</a>'.
+						sp.popHelp('form_place_link'), 3, ' class="plain lever"').
 						'<div id="link-tags" class="toggle" style="display:none">'.popTagLinks('link').'</div>'.
 
-					hed('<a href="#comment-tags" onclick="toggleDisplay(\'comment-tags\'); return false;">'.gTxt('comments').'</a>'.
-						sp.popHelp('form_comments'), 3, ' class="plain"').
+					hed('<a href="#comment-tags">'.gTxt('comments').'</a>'.
+						sp.popHelp('form_comments'), 3, ' class="plain lever"').
 						'<div id="comment-tags" class="toggle" style="display:none">'.popTagLinks('comment').'</div>'.
 
-					hed('<a href="#comment-detail-tags" onclick="toggleDisplay(\'comment-detail-tags\'); return false;">'.gTxt('comment_details').'</a>'.
-						sp.popHelp('form_comment_details'), 3, ' class="plain"').
+					hed('<a href="#comment-detail-tags">'.gTxt('comment_details').'</a>'.
+						sp.popHelp('form_comment_details'), 3, ' class="plain lever"').
 						'<div id="comment-detail-tags" class="toggle" style="display:none">'.popTagLinks('comment_details').'</div>'.
 
-					hed('<a href="#comment-form-tags" onclick="toggleDisplay(\'comment-form-tags\'); return false;">'.gTxt('comment_form').'</a>'.
-						sp.popHelp('form_comment_form'), 3, ' class="plain"').
+					hed('<a href="#comment-form-tags">'.gTxt('comment_form').'</a>'.
+						sp.popHelp('form_comment_form'), 3, ' class="plain lever"').
 						'<div id="comment-form-tags" class="toggle" style="display:none">'.popTagLinks('comment_form').'</div>'.
 
-					hed('<a href="#search-result-tags" onclick="toggleDisplay(\'search-result-tags\'); return false;">'.gTxt('search_results_form').'</a>'.
-						sp.popHelp('form_search_results'), 3, ' class="plain"').
+					hed('<a href="#search-result-tags">'.gTxt('search_results_form').'</a>'.
+						sp.popHelp('form_search_results'), 3, ' class="plain lever"').
 						'<div id="search-result-tags" class="toggle" style="display:none">'.popTagLinks('search_result').'</div>'.
 
-					hed('<a href="#file-tags" onclick="toggleDisplay(\'file-tags\'); return false;">'.gTxt('file_download_tags').'</a>'.
-						sp.popHelp('form_file_download_tags'), 3, ' class="plain"').
+					hed('<a href="#file-tags">'.gTxt('file_download_tags').'</a>'.
+						sp.popHelp('form_file_download_tags'), 3, ' class="plain lever"').
 						'<div id="file-tags" class="toggle" style="display:none">'.popTagLinks('file_download').'</div>'.
 
-					hed('<a href="#category-tags" onclick="toggleDisplay(\'category-tags\'); return false;">'.gTxt('category_tags').'</a>'.
-						sp.popHelp('form_category_tags'), 3, ' class="plain"').
+					hed('<a href="#category-tags">'.gTxt('category_tags').'</a>'.
+						sp.popHelp('form_category_tags'), 3, ' class="plain lever"').
 						'<div id="category-tags" class="toggle" style="display:none">'.popTagLinks('category').'</div>'.
 
-					hed('<a href="#section-tags" onclick="toggleDisplay(\'section-tags\'); return false;">'.gTxt('section_tags').'</a>'.
-						sp.popHelp('form_section_tags'), 3, ' class="plain"').
+					hed('<a href="#section-tags">'.gTxt('section_tags').'</a>'.
+						sp.popHelp('form_section_tags'), 3, ' class="plain lever"').
 						'<div id="section-tags" class="toggle" style="display:none">'.popTagLinks('section').'</div>'
 						).
 				tdtl(

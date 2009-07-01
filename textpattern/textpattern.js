@@ -40,7 +40,7 @@ function popWin(url, width, height, options)
 }
 
 // -------------------------------------------------------------
-// basic confirmation for potentially powerful choice 
+// basic confirmation for potentially powerful choice
 // (like deletion, for example)
 
 function verify(msg)
@@ -84,7 +84,7 @@ function selectrange()
 	var inrange = false;
 	var elem = window.document.longform.elements;
 	var cnt = elem.length;
-	
+
 	for (var i = 0; i < cnt; i++)
 	{
 		if (elem[i].name == 'selected[]')
@@ -214,13 +214,32 @@ function toggleDisplay(id)
 		// send state of toggle pane to server
 		sendAsyncEvent(
 			{
-				event: textpattern.event, 
+				event: textpattern.event,
 				step: 'save_pane_state',
 				pane: $(obj).attr('id'),
 				visible: ($(obj).css('display') == 'block')
 			}
 		);
 	}
+	return false;
+}
+
+// -------------------------------------------------------------
+// direct show/hide referred #segment; decorate parent lever
+
+function toggleDisplayHref()
+{
+	var href = $(this).attr('href');
+	var lever = $(this).parent('.lever');
+	if (href) toggleDisplay(href.substr(1));
+	if (lever) {
+		if ($(href+':visible').length) {
+			lever.addClass('expanded');
+		} else {
+			lever.removeClass('expanded');
+		}
+	}
+	return false;
 }
 
 // -------------------------------------------------------------
@@ -285,4 +304,6 @@ function sendAsyncEvent(data, fn)
 $(document).ready(function() {
 	// disable spellchecking on all elements of type "code" in capable browsers
 	if(jQuery.browser.mozilla){$(".code").attr("spellcheck", false)};
+	// attach toggle behaviour
+	$('.lever a').click(toggleDisplayHref);
 });

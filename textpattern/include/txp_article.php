@@ -439,7 +439,7 @@ if (!empty($event) and $event == 'article') {
 
 		//-- advanced --------------
 
-			echo '<h3 class="plain"><a href="#advanced" onclick="toggleDisplay(\'advanced\'); return false;">'.gTxt('advanced_options').'</a></h3>'.
+			echo '<h3 class="plain lever"><a href="#advanced">'.gTxt('advanced_options').'</a></h3>'.
 				'<div id="advanced" class="toggle" style="display:'.(get_pref('pane_article_advanced_visible') ? 'block' : 'none').'">';
 
 			// markup selection
@@ -489,7 +489,7 @@ if (!empty($event) and $event == 'article') {
 
 		//-- recent articles --------------
 
-			echo '<h3 class="plain"><a href="#recent" onclick="toggleDisplay(\'recent\'); return false;">'.gTxt('recent_articles').'</a>'.'</h3>'.
+			echo '<h3 class="plain lever"><a href="#recent">'.gTxt('recent_articles').'</a>'.'</h3>'.
 				'<div id="recent" class="toggle" style="display:'.(get_pref('pane_article_recent_visible') ? 'block' : 'none').'">';
 
 			$recents = safe_rows_start("Title, ID",'textpattern',"1=1 order by LastMod desc limit 10");
@@ -714,7 +714,7 @@ if (!empty($event) and $event == 'article') {
 				$rs);
 
 		//-- "More" section
-			echo n.n.'<h3 class="plain"><a href="#more" onclick="toggleDisplay(\'more\'); return false;">'.gTxt('more').'</a></h3>',
+			echo n.n.'<h3 class="plain lever"><a href="#more">'.gTxt('more').'</a></h3>',
 				'<div id="more" class="toggle" style="display:'.(get_pref('pane_article_more_visible') ? 'block' : 'none').'">';
 
 		//-- comments stuff --------------
@@ -946,8 +946,8 @@ if (!empty($event) and $event == 'article') {
 		if ($textile_body == USE_TEXTILE or $textile_excerpt == USE_TEXTILE)
 		{
 			return n.hed(
-				'<a href="#textile_help" onclick="toggleDisplay(\'textile_help\'); return false;">'.gTxt('textile_help').'</a>'
-			, 3, ' class="plain"').
+				'<a href="#textile_help">'.gTxt('textile_help').'</a>'
+			, 3, ' class="plain lever"').
 
 				n.'<div id="textile_help" class="toggle" style="display:'.(get_pref('pane_article_textile_help_visible') ? 'block' : 'none').'">'.
 
