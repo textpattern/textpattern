@@ -306,13 +306,13 @@ margin-right: 14px;
 }
 
 table#list th.asc a {
-background: url(arrowupdn.gif) no-repeat right 2px;
+background: url(../../txp_img/arrowupdn.gif) no-repeat right 2px;
 padding-right: 14px;
 margin-right: 0;
 }
 
 table#list th.desc a {
-background: url(arrowupdn.gif) no-repeat right -18px;
+background: url(../../txp_img/arrowupdn.gif) no-repeat right -18px;
 padding-right: 14px;
 margin-right: 0;
 }
