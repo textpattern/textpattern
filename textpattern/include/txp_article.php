@@ -87,6 +87,12 @@ if (!empty($event) and $event == 'article') {
 			}
 
 			$ts = strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second);
+
+			if ($ts === false || $ts === -1) { // Tracking the PHP meanders on how to return an error
+				article_edit(array(gTxt('invalid_postdate'), E_ERROR));
+				return;
+			}
+
 			$when = $when_ts = $ts - tz_offset($ts);
 			$when = "from_unixtime($when)";
 		}
@@ -222,6 +228,12 @@ if (!empty($event) and $event == 'article') {
 			}
 
 			$ts = strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second);
+
+			if ($ts === false || $ts === -1) {
+				article_edit(array(gTxt('invalid_postdate'), E_ERROR));
+				return;
+			}
+
 			$when = $when_ts = $ts - tz_offset($ts);
 			$whenposted = "Posted=from_unixtime($when)";
 		}
