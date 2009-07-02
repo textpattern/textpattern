@@ -451,7 +451,7 @@ if (!empty($event) and $event == 'article') {
 
 		//-- advanced --------------
 
-			echo '<h3 class="plain lever"><a href="#advanced">'.gTxt('advanced_options').'</a></h3>'.
+			echo '<h3 class="plain lever'.(get_pref('pane_article_advanced_visible') ? ' expanded' : '').'"><a href="#advanced">'.gTxt('advanced_options').'</a></h3>'.
 				'<div id="advanced" class="toggle" style="display:'.(get_pref('pane_article_advanced_visible') ? 'block' : 'none').'">';
 
 			// markup selection
@@ -501,7 +501,7 @@ if (!empty($event) and $event == 'article') {
 
 		//-- recent articles --------------
 
-			echo '<h3 class="plain lever"><a href="#recent">'.gTxt('recent_articles').'</a>'.'</h3>'.
+			echo '<h3 class="plain lever'.(get_pref('pane_article_recent_visible') ? ' expanded' : '').'"><a href="#recent">'.gTxt('recent_articles').'</a>'.'</h3>'.
 				'<div id="recent" class="toggle" style="display:'.(get_pref('pane_article_recent_visible') ? 'block' : 'none').'">';
 
 			$recents = safe_rows_start("Title, ID",'textpattern',"1=1 order by LastMod desc limit 10");
@@ -726,7 +726,7 @@ if (!empty($event) and $event == 'article') {
 				$rs);
 
 		//-- "More" section
-			echo n.n.'<h3 class="plain lever"><a href="#more">'.gTxt('more').'</a></h3>',
+			echo n.n.'<h3 class="plain lever'.(get_pref('pane_article_more_visible') ? ' expanded' : '').'"><a href="#more">'.gTxt('more').'</a></h3>',
 				'<div id="more" class="toggle" style="display:'.(get_pref('pane_article_more_visible') ? 'block' : 'none').'">';
 
 		//-- comments stuff --------------
@@ -959,7 +959,7 @@ if (!empty($event) and $event == 'article') {
 		{
 			return n.hed(
 				'<a href="#textile_help">'.gTxt('textile_help').'</a>'
-			, 3, ' class="plain lever"').
+			, 3, ' class="plain lever'.(get_pref('pane_article_textile_help_visible') ? ' expanded' : '').'"').
 
 				n.'<div id="textile_help" class="toggle" style="display:'.(get_pref('pane_article_textile_help_visible') ? 'block' : 'none').'">'.
 
