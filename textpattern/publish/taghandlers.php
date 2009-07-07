@@ -3271,6 +3271,7 @@ $LastChangedRevision$
 			'category' => '',
 			'class'    => __FUNCTION__,
 			'form'     => 'files',
+			'id'       => '',
 			'label'    => '',
 			'labeltag' => '',
 			'limit'    => 10,
@@ -3285,6 +3286,7 @@ $LastChangedRevision$
 
 		$where = array('1=1');
 		if ($category) $where[] = "category IN ('".join("','", doSlash(do_list($category)))."')";
+		if ($id) $where[] = "id IN ('".join("','", doSlash(do_list($id)))."')";
 		if ($status) $where[] = "status = '".doSlash($status)."'";
 
 		$qparts = array(
