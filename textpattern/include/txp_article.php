@@ -368,7 +368,7 @@ if (!empty($event) and $event == 'article') {
 			);
 
 			extract($rs);
-			$reset_time = $publish_now = ($Status < 4);
+			$reset_time = $publish_now = ($Status < 4) && ($sPosted <= time());
 
 		} else {
 
@@ -926,7 +926,17 @@ if (!empty($event) and $event == 'article') {
 			}
 		}
 
-		echo '</td></tr></table></form>';
+		echo '</td></tr></table></form>'.n;
+		// Assume users would not change the timestamp if they wanted to "publish now"/"reset time"
+		echo script_js( <<<EOS
+		$('#write-timestamp input.edit').change(
+			function() {
+				$('#publish_now').attr('checked', false);
+				$('#reset_time').attr('checked', false);
+			});
+EOS
+);
+
 
 	}
 
