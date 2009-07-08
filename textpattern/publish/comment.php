@@ -308,9 +308,9 @@ $LastChangedRevision$
 		extract($in);
 
 		if (!checkCommentsAllowed($parentid))
-			txp_die ( gTxt('comments_closed'), '403');
+			txp_die(gTxt('comments_closed'), '403');
 
-		$ip = serverset('REMOTE_ADDR');
+		$ip = remote_addr();
 
 		if (!checkBan($ip))
 			txp_die(gTxt('you_have_been_banned'), '403');

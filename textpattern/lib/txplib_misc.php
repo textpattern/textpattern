@@ -395,6 +395,17 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
+	function remote_addr()
+	{
+		$ip = serverSet('REMOTE_ADDR');
+		if (($ip == '127.0.0.1' || $ip == serverSet('SERVER_ADDR')) && serverSet('HTTP_X_FORWARDED_FOR')) {
+			$ips = explode(', ', serverSet('HTTP_X_FORWARDED_FOR'));
+			$ip = $ips[0];
+		}
+		return $ip;
+	}
+
+// -------------------------------------------------------------
  	function pcs($thing) //	Get a var from POST or COOKIE; if not, create it
 	{
 		if (isset($_COOKIE["txp_".$thing])) {

@@ -33,11 +33,7 @@ $LastChangedRevision$
 		$mydomain = str_replace('www.','',preg_quote($siteurl,"/"));
 		$out['uri'] = @$pretext['request_uri'];
 		$out['ref'] = clean_url(str_replace("http://","",serverSet('HTTP_REFERER')));
-		$ip = serverSet('REMOTE_ADDR');
-		if (($ip == '127.0.0.1' or $ip == serverSet('SERVER_ADDR')) and serverSet('HTTP_X_FORWARDED_FOR')) {
-			$ips = explode( ', ', serverSet('HTTP_X_FORWARDED_FOR') );
-			$ip = $ips[0];
-		}
+		$ip = remote_addr();
 		$host = $ip;
 
 		if (!empty($prefs['use_dns'])) {
