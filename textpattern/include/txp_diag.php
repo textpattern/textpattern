@@ -25,6 +25,7 @@ $LastChangedRevision$
 
 	$files = array(
 		'/../index.php',
+		'/../css.php',
 		'/css.php',
 		'/include/txp_admin.php',
 		'/include/txp_article.php',
@@ -81,6 +82,7 @@ $LastChangedRevision$
 		'/update/_to_4.0.6.php',
 		'/update/_to_4.0.7.php',
 		'/update/_to_4.0.8.php',
+		'/update/_to_4.2.0.php',
 		'/update/_update.php'
 	);
 
