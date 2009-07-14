@@ -74,7 +74,7 @@ function doAuth()
 		$stay  = (cs('txp_login') and !gps('logout') ? 1 : 0);
 		$reset = gps('reset');
 
-		list($name) = split(',', cs('txp_login'));
+		list($name) = explode(',', cs('txp_login'));
 
 		echo form(
 			startTable('edit', '', 'login-pane').
@@ -141,7 +141,7 @@ function doAuth()
 
 		if (cs('txp_login') and strpos(cs('txp_login'), ','))
 		{
-			list($c_userid, $c_hash) = split(',', cs('txp_login'));
+			list($c_userid, $c_hash) = explode(',', cs('txp_login'));
 		}
 		else
 		{

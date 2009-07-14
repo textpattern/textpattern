@@ -45,7 +45,7 @@ $LastChangedRevision$
 
 		// initialize parse trace globals
 	$txptrace        = array();
-	$txptracelevel   = '';
+	$txptracelevel   = 0;
 	$txp_current_tag = '';
 
 		// get all prefs as an array

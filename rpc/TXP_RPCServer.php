@@ -456,7 +456,7 @@ EOD;
 
 		if (strpos($RealName, ' ') != 0)
 		{
-			list($firstname, $lastname) = split(' ', $RealName);
+			list($firstname, $lastname) = explode(' ', $RealName);
 		}
 		else
 		{
