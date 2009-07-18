@@ -126,3 +126,8 @@ text-decoration: none;
 background: transparent url(../../txp_img/expandcollapse.gif) no-repeat right 5px;
 }
 
+.lever a.pophelp, .lever a.pophelp:hover {
+background: #eee none;
+padding: 0 2px;
+}
+

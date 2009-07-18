@@ -305,5 +305,5 @@ $(document).ready(function() {
 	// disable spellchecking on all elements of type "code" in capable browsers
 	if(jQuery.browser.mozilla){$(".code").attr("spellcheck", false)};
 	// attach toggle behaviour
-	$('.lever a').click(toggleDisplayHref);
+	$('.lever a[class!=pophelp]').click(toggleDisplayHref);
 });
