@@ -241,17 +241,37 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function output_form($atts)
+
+	function output_form($atts, $thing = NULL)
 	{
+		global $yield;
+
 		extract(lAtts(array(
 			'form' => '',
 		), $atts));
 
 		if (!$form)
+		{
 			trigger_error(gTxt('form_not_specified'));
+		}
 		else
-			return parse_form($form);
+		{
+			$yield[] = $thing !== NULL ? parse($thing) : NULL;
+			$out = parse_form($form);
+			array_pop($yield);
+			return $out;
+		}
+	}
 
+// -------------------------------------------------------------
+
+	function yield()
+	{
+		global $yield;
+
+		$inner = end($yield);
+		
+		return isset($inner) ? $inner : '';
 	}
 
 // -------------------------------------------------------------
