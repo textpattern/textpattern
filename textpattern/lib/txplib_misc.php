@@ -2307,7 +2307,7 @@ eod;
 		);
 
 		// backfill default response properties
-		$response =  doSpecial($response) + $default_response;
+		$response = $response + $default_response;
 
 		header('Content-Type: text/xml');
 		txp_status_header($response['http-status']);
@@ -2315,6 +2315,8 @@ eod;
 		$out[] = '<textpattern>';
 		foreach ($response as $element => $value)
 		{
+			// element *names* must not contain <>&, *values* may.
+			$value = doSpecial($value);
 			if (is_array($value))
 			{
 				$out[] = t."<$element>".n;
