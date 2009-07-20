@@ -84,14 +84,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-// deprecated, use htmlspecialchars instead. Remove in crockery
-	function escape_output($str)
-	{
-		return htmlspecialchars($str);
-	}
-
-// -------------------------------------------------------------
-// unused function => deprecate and remove in crockery?
+// deprecated in 4.2.0
 	function escape_tags($str)
 	{
 		return strtr($str,
@@ -661,21 +654,6 @@ $LastChangedRevision$
 		$ui = call_user_func_array('callback_event', array('event' => $event, 'step' => $element, 'pre' => 0) + $argv);
 		// either plugins provided a user interface, or we render our own
 		return ($ui === '')? $default : $ui;
-	}
-
-// -------------------------------------------------------------
-// deprecated, use lAtts instead. Remove in crockery
-	function getAtt($name, $default=NULL)
-	{
-		global $theseatts;
-		return isset($theseatts[$name]) ? $theseatts[$name] : $default;
-	}
-
-// -------------------------------------------------------------
-	// deprecated, use lAtts instead. Remove in crockery
-	function gAtt(&$atts, $name, $default=NULL)
-	{
-		return isset($atts[$name]) ? $atts[$name] : $default;
 	}
 
 // -------------------------------------------------------------

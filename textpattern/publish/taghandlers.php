@@ -79,13 +79,13 @@ $LastChangedRevision$
 		static $cache = array();
 
 		extract(lAtts(array(
-			'align'		=> '', // remove in crockery
+			'align'		=> '', // deprecated in 4.2.0
 			'class'		=> '',
 			'escape'	=> 'html',
 			'html_id' => '',
 			'id'			=> '',
 			'name'		=> '',
-			'style'		=> '', // remove in crockery?
+			'style'		=> '',
 			'wraptag' => '',
 		), $atts));
 
@@ -160,7 +160,7 @@ $LastChangedRevision$
 		global $img_dir;
 
 		extract(lAtts(array(
-			'align'     => '', // remove in crockery
+			'align'     => '', // deprecated in 4.2.0
 			'class'     => '',
 			'escape'    => 'html',
 			'html_id'   => '',
@@ -169,8 +169,8 @@ $LastChangedRevision$
 			'link'      => 0,
 			'link_rel'  => '',
 			'name'      => '',
-			'poplink'   => 0, // remove in crockery
-			'style'     => '', // remove in crockery
+			'poplink'   => 0, // is this used?
+			'style'     => '',
 			'wraptag'   => '',
 			'width'   	=> ''
 		), $atts));
@@ -1976,15 +1976,6 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-// DEPRECATED: the old comment message body tag
-	function message($atts)
-	{
-		trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
-
-		return comment_message($atts);
-	}
-
-// -------------------------------------------------------------
 
 	function author($atts)
 	{
@@ -2367,11 +2358,11 @@ $LastChangedRevision$
 		assert_article();
 
 		extract(lAtts(array(
-			'align'     => '', // remove in crockery
+			'align'     => '', // deprecated in 4.2.0
 			'class'     => '',
 			'escape'    => 'html',
 			'html_id'   => '',
-			'style'     => '', // remove in crockery?
+			'style'     => '',
 			'thumbnail' => 0,
 			'wraptag'   => '',
 		), $atts));

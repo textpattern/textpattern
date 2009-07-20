@@ -157,13 +157,6 @@ $LastChangedRevision$
 		return $o;
 	}
 
-// -------------------------------------------------------------
-	// deprecated (use escape_title instead), remove in crockery
-	function cleanfInput($text)
-	{
-		return escape_title($text);
-	}
-
 //-------------------------------------------------------------
 	function hInput($name,$value)		// hidden form input
 	{
