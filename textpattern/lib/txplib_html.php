@@ -17,7 +17,7 @@ $LastChangedRevision$
 		global $txp_user, $event, $app_mode, $theme;
 
 		if ($app_mode != 'async' && $event != 'tag') {
-			echo $theme->footer();
+			echo pluggable_ui('admin_side', 'footer', $theme->footer());
 			callback_event('admin_side', 'body_end');
 			echo n.'</body>'.n.'</html>';
 		}

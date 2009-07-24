@@ -180,7 +180,7 @@ $LastChangedRevision$
 	<body id="<?php echo $body_id; ?>">
 	<?php callback_event('admin_side', 'pagetop');
 		$theme->set_state($area, $event, $bm, $message);
-		echo $theme->header();
+		echo pluggable_ui('admin_side', 'header', $theme->header());
 		callback_event('admin_side', 'pagetop_end');
 	}
 
