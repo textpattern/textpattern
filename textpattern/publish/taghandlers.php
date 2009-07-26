@@ -89,6 +89,9 @@ $LastChangedRevision$
 			'wraptag' => '',
 		), $atts));
 
+		if ($align)
+			trigger_error(gTxt('deprecated_attribute', array('{name}' => 'align')), E_USER_NOTICE);
+
 		if ($name)
 		{
 			if (isset($cache['n'][$name]))
@@ -174,6 +177,9 @@ $LastChangedRevision$
 			'wraptag'   => '',
 			'width'   	=> ''
 		), $atts));
+
+		if ($align)
+			trigger_error(gTxt('deprecated_attribute', array('{name}' => 'align')), E_USER_NOTICE);
 
 		if ($name)
 		{
@@ -625,8 +631,8 @@ $LastChangedRevision$
 			'limit'    => 10,
 			'section'  => '',
 			'sort'     => 'Posted desc',
-			'sortby'   => '',
-			'sortdir'  => '',
+			'sortby'   => '', // deprecated
+			'sortdir'  => '', // deprecated
 			'wraptag'  => '',
 			'no_widow' => @$prefs['title_no_widow'],
 		), $atts));
@@ -635,9 +641,15 @@ $LastChangedRevision$
 		// sortby and sortdir are deprecated
 		if ($sortby)
 		{
+			trigger_error(gTxt('deprecated_attribute', array('{name}' => 'sortby')), E_USER_NOTICE);
+
 			if (!$sortdir)
 			{
 				$sortdir = 'desc';
+			}
+			else
+			{
+				trigger_error(gTxt('deprecated_attribute', array('{name}' => 'sortdir')), E_USER_NOTICE);
 			}
 
 			$sort = "$sortby $sortdir";
@@ -645,6 +657,7 @@ $LastChangedRevision$
 
 		elseif ($sortdir)
 		{
+			trigger_error(gTxt('deprecated_attribute', array('{name}' => 'sortdir')), E_USER_NOTICE);
 			$sort = "Posted $sortdir";
 		}
 
@@ -2366,6 +2379,9 @@ $LastChangedRevision$
 			'thumbnail' => 0,
 			'wraptag'   => '',
 		), $atts));
+
+		if ($align)
+			trigger_error(gTxt('deprecated_attribute', array('{name}' => 'align')), E_USER_NOTICE);
 
 		if ($thisarticle['article_image'])
 		{

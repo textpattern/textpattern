@@ -574,6 +574,7 @@ $LastChangedRevision$
 	# deprecated, use fInput instead
 	function input($type,$name,$val,$size='',$class='',$tab='',$chkd='')
 	{
+		trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'fInput')), E_USER_NOTICE);
 		$o = array(
 			'<input type="'.$type.'" name="'.$name.'" id="'.$name.'" value="'.$val.'"',
 			($size)	? ' size="'.$size.'"'	  : '',

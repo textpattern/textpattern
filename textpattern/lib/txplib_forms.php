@@ -157,6 +157,14 @@ $LastChangedRevision$
 		return $o;
 	}
 
+// -------------------------------------------------------------
+	// deprecated in 4.2.0
+	function cleanfInput($text)
+	{
+		trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'escape_title')), E_USER_NOTICE);
+		return escape_title($text);
+	}
+
 //-------------------------------------------------------------
 	function hInput($name,$value)		// hidden form input
 	{

@@ -85,8 +85,17 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 // deprecated in 4.2.0
+	function escape_output($str)
+	{
+		trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'htmlspecialchars')), E_USER_NOTICE);
+		return htmlspecialchars($str);
+	}
+
+// -------------------------------------------------------------
+// deprecated in 4.2.0
 	function escape_tags($str)
 	{
+		trigger_error(gTxt('deprecated_function', array('{name}' => __FUNCTION__)), E_USER_NOTICE);
 		return strtr($str,
 			array(
 				'<' => '&#60;',
@@ -654,6 +663,23 @@ $LastChangedRevision$
 		$ui = call_user_func_array('callback_event', array('event' => $event, 'step' => $element, 'pre' => 0) + $argv);
 		// either plugins provided a user interface, or we render our own
 		return ($ui === '')? $default : $ui;
+	}
+
+// -------------------------------------------------------------
+	// deprecated in 4.2.0
+	function getAtt($name, $default=NULL)
+	{
+		trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'lAtts')), E_USER_NOTICE);
+		global $theseatts;
+		return isset($theseatts[$name]) ? $theseatts[$name] : $default;
+	}
+
+// -------------------------------------------------------------
+	// deprecated in 4.2.0
+	function gAtt(&$atts, $name, $default=NULL)
+	{
+		trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'lAtts')), E_USER_NOTICE);
+		return isset($atts[$name]) ? $atts[$name] : $default;
 	}
 
 // -------------------------------------------------------------

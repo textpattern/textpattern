@@ -574,8 +574,8 @@ $LastChangedRevision$
 			'excerpted' => '',
 			'author'    => '',
 			'sort'      => '',
-			'sortby'    => '',
-			'sortdir'   => '',
+			'sortby'    => '', // deprecated in 4.0.4
+			'sortdir'   => '', // deprecated in 4.0.4
 			'month'     => '',
 			'keywords'  => '',
 			'frontpage' => '',
@@ -653,16 +653,22 @@ $LastChangedRevision$
 		// sortby and sortdir are deprecated
 		if ($sortby)
 		{
+			trigger_error(gTxt('deprecated_attribute', array('{name}' => 'sortby')), E_USER_NOTICE);
+
 			if (!$sortdir)
 			{
 				$sortdir = 'desc';
 			}
-
+			else
+			{
+				trigger_error(gTxt('deprecated_attribute', array('{name}' => 'sortdir')), E_USER_NOTICE);
+			}
 			$sort = "$sortby $sortdir";
 		}
 
 		elseif ($sortdir)
 		{
+			trigger_error(gTxt('deprecated_attribute', array('{name}' => 'sortdir')), E_USER_NOTICE);
 			$sort = "Posted $sortdir";
 		}
 
