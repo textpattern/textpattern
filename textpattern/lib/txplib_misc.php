@@ -574,6 +574,7 @@ $LastChangedRevision$
 				$dir = rtrim(realpath(txpath.'/'.$dir), '/') . '/';
 			$files = glob($dir.'*.php');
 			if ($files) {
+				natsort($files);
 				foreach ($files as $f) {
 					load_plugin(basename($f, '.php'));
 				}
