@@ -128,6 +128,10 @@ $LastChangedRevision$
 	// Now that everything is initialized, we can crank down error reporting
 	set_error_level($production_status);
 
+	if( isset($feed) )
+		exit($feed());
+
+
 	if (gps('parentid') && gps('submit')) {
 		saveComment();
 	} elseif (gps('parentid') and $comments_mode==1) { // popup comments?
@@ -212,17 +216,18 @@ $LastChangedRevision$
 
 		callback_event('pretext');
 
+			// set messy variables
+		$out =  makeOut('id','s','c','q','pg','p','month','author');
+
 		if(gps('rss')) {
 			include txpath.'/publish/rss.php';
-			exit(rss());
+			$out['feed'] = 'rss';
 		}
 
 		if(gps('atom')) {
 			include txpath.'/publish/atom.php';
-			exit(atom());
+			$out['feed'] = 'atom';
 		}
-			// set messy variables
-		$out =  makeOut('id','s','c','q','pg','p','month','author');
 
 			// some useful vars for taghandlers, plugins
 		$out['request_uri'] = preg_replace("|^https?://[^/]+|i","",serverSet('REQUEST_URI'));
@@ -260,10 +265,12 @@ $LastChangedRevision$
 				switch($u1) {
 
 					case 'atom':
-						include txpath.'/publish/atom.php'; exit(atom());
+						include txpath.'/publish/atom.php';
+						$out['feed'] = 'atom'; break;
 
 					case 'rss':
-						include txpath.'/publish/rss.php'; exit(rss());
+						include txpath.'/publish/rss.php';
+						$out['feed'] = 'rss'; break;
 
 					// urldecode(strtolower(urlencode())) looks ugly but is the only way to
 					// make it multibyte-safe without breaking backwards-compatibility
