@@ -7,13 +7,17 @@ Changes in 4.2.0
 * Feature: Store author of links and files
 * Feature: Automatic adjustment for DST (requires PHP 5.1+, fall back to manual adjustment for servers running older PHPs)
 * Feature: Timezone selector in preferences (requires PHP 5.1+, GMT-based selector as a fallback for PHP 4)
+* Feature: Default event preference setting (thanks: Mary)
+* Fixed: PHP 5.3 compatibility (thanks: Mary)
 * Fixed: When a user is deleted, reassign her assets
 * Fixed: Tag builders for <txp:category /> and <txp:section />
 * Fixed: Bogus "Article tags cannot be used outside an article context" warning  in <txp:else />-branch of <txp:if_keywords>
 * Fixed: Removed superflous &amp; encoding for article titles in <txp:recent_comments />
 * Fixed: <txp:expires> uses "class" and "wraptag" attributes as intended
 * New tag: <txp:link_id /> (thanks: Rick Siletti)
-* New: Default event preference setting (thanks: Mary)
+* New tag: <txp:yield />
+* Changed: Article timestamp is left untouched for draft, pending, or hidden articles published into the future.
+* Changed: <txp:file_download_list /> tag accepts a comma-separated list of file ids in a new "id" attribute (thanks: Rick Silletti)
 * Developer: pluggable_ui() serves as a base for custom admin-side user interface panels, see new '*_ui' events below
 * Developer: New events 'log_it', 'plugin_lifecycle', 'plugin_prefs', 'txp_die', 'article_ui', 'author_ui', 'category_ui', 'file_ui', 'image_ui', 'link_ui', 'prefs_ui', 'section_ui'
 * Developer: Per-user preferences
@@ -22,6 +26,10 @@ Changes in 4.2.0
 * Developer: Core support for unlimited custom fields (thanks: Gerhard Lazu)
 * Developer: Thumbnail dimensions are stored in the image table
 * Developer: Sending requests to the admin-side with URL parameter "app_mode" set to "async" suppress any default admin-side output. Think AJAX.
+* Developer: Cached plugins are loaded in natural sort order.
+* Developer: Deprecated cleanfInput(), escape_output(), escape_tags(), getAtt(), gAtt(), and input() functions. These will be removed in next release.
+* Developer: Plugins can flag their interest in lifecycle events (install, uninstall, activate, deactivate). @see http://svn.textpattern.com/development/4.x-plugin-template/
+* Developer: Optional capability to jump to a plugin's options from the plugin tab. @see http://svn.textpattern.com/development/4.x-plugin-template/
 * jQuery 1.3.2
 
 Changes in 4.1.0
