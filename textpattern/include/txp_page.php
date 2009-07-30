@@ -50,7 +50,7 @@ $LastChangedRevision$
 
 					n.n.hed(
 						'<a href="#article-tags">'.gTxt('page_article_hed').'</a>'
-					, 3, ' class="plain lever"').
+					, 3, ' class="plain lever expanded"').
 						n.'<div id="article-tags" class="toggle on" style="display:block">'.taglinks('page_article').'</div>'.
 
 					n.n.hed('<a href="#article-nav-tags">'.gTxt('page_article_nav_hed').'</a>'

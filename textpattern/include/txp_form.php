@@ -138,7 +138,7 @@ $LastChangedRevision$
 					hed(gTxt('tagbuilder'), 2).
 
 					hed('<a href="#article-tags">'.gTxt('articles').'</a>'.
-						sp.popHelp('form_articles'), 3, ' class="plain lever"').
+						sp.popHelp('form_articles'), 3, ' class="plain lever expanded"').
 						'<div id="article-tags" class="toggle on" style="display:block">'.popTagLinks('article').'</div>'.
 
 					hed('<a href="#link-tags">'.gTxt('links').'</a>'.
