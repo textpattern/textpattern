@@ -101,7 +101,7 @@ $LastChangedRevision$
 		$prefs = get_prefs();
 		extract($prefs);
 
-		$event = (gps('event') ? gps('event') : (isset($default_event) && has_privs($default_event) ? $default_event : 'article'));
+		$event = (gps('event') ? gps('event') : (!empty($default_event) && has_privs($default_event) ? $default_event : 'article'));
 		$step = gps('step');
 		$app_mode = gps('app_mode');
 
@@ -115,6 +115,12 @@ $LastChangedRevision$
 
 		if (!empty($admin_side_plugins) and gps('event') != 'plugin')
 			load_plugins(1);
+
+		// plugins may have altered privilege settings
+		if (!gps('event') && !empty($default_event) && has_privs($default_event))
+		{
+			 $event = $default_event;
+		}
 
 		// init private theme
 		$theme = theme::init();

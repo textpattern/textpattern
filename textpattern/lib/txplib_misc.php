@@ -647,7 +647,7 @@ $LastChangedRevision$
 	{
 		global $plugin_areas;
 
-		if ($GLOBALS['event'] !== 'plugin')
+		if (!isset($GLOBALS['event']) || ($GLOBALS['event'] !== 'plugin'))
 		{
 			$plugin_areas[$area][$title] = $event;
 		}
