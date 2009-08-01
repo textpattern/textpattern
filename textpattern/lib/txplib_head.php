@@ -156,7 +156,7 @@ $LastChangedRevision$
 		if (isset($edit_assign_assets))
 		{
 			echo "case 'delete':".n.
-					t."pjs.innerHTML = '<label for=\"assign_assets\">".gTxt('assign_assets_to')."</label><span>".str_replace(array("\n", '-'), array('', '&#45;'), str_replace('</', '<\/', addslashes($edit_assign_assets)))."<\/span>';".n.
+					t."pjs.innerHTML = '<label for=\"assign_assets\">".addslashes(gTxt('assign_assets_to'))."</label><span>".str_replace(array("\n", '-'), array('', '&#45;'), str_replace('</', '<\/', addslashes($edit_assign_assets)))."<\/span>';".n.
 					t.'break;'.n.n;
 		}
 ?>
