@@ -310,7 +310,7 @@ $LastChangedRevision$
 		if (!checkCommentsAllowed($parentid))
 			txp_die(gTxt('comments_closed'), '403');
 
-		$ip = remote_addr();
+		$ip = serverset('REMOTE_ADDR');
 
 		if (!checkBan($ip))
 			txp_die(gTxt('you_have_been_banned'), '403');
