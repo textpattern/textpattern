@@ -146,7 +146,7 @@ class theme
 			set_pref('theme_name', 'classic');
 			if ($production_status === 'debug')
 			{
-				echo gTxt('cannot_instantiate_theme', array('name' => $name, 'class' => "{$name}_theme", 'path' => theme::path($name)));
+				echo gTxt('cannot_instantiate_theme', array('{name}' => $name, '{class}' => "{$name}_theme", '{path}' => theme::path($name)));
 			}
 			return false;
 		}
