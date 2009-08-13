@@ -977,7 +977,7 @@ $LastChangedRevision$
 
 				// check jpg support
 				case '.jpg':
-					return ($gd_info['JPG Support'] == 1) ? true : false;
+					return (!empty($gd_info['JPEG Support']) || !empty($gd_info['JPG Support'])) ? true : false;
 				break;
 
 				// unsupported format

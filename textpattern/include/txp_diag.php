@@ -402,7 +402,8 @@ $LastChangedRevision$
 			$gd_support[] = 'GIF';
 		}
 
-		if ($gd_info['JPG Support']) {
+		 // Aside: In PHP 5.3, they chose to add a previously unemployed capital "E" to the array key.
+		 if (!empty($gd_info['JPEG Support']) || !empty($gd_info['JPG Support'])) {
 			$gd_support[] = 'JPG';
 		}
 
