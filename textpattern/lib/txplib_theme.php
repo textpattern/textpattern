@@ -96,7 +96,7 @@ class theme
 		if (!$instance)
 		{
 			set_pref('theme_name', 'classic');
-			die(gTxt('cannot_instantiate_theme', array('name' => $name, 'class' => "{$name}_theme", 'path' => theme::path($name))));
+			die(gTxt('cannot_instantiate_theme', array('{name}' => $name, '{class}' => "{$name}_theme", '{path}' => theme::path($name))));
 		}
 
 		return $instance;
