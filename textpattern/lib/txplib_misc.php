@@ -2402,21 +2402,31 @@ eod;
 				$continents = array('Africa', 'America', 'Antarctica', 'Arctic', 'Asia',
 					'Atlantic', 'Australia', 'Europe', 'Indian', 'Pacific');
 
+				$server_tz = date_default_timezone_get();
 				$tzlist = timezone_abbreviations_list();
 				foreach ($tzlist as $abbr => $timezones)
 				{
 					foreach ($timezones as $tz)
 					{
 						$timezone_id = $tz['timezone_id'];
-						if ($timezone_id)
+						// $timezone_ids are not unique among abbreviations
+						if ($timezone_id && !isset($this->_details[$timezone_id]))
 						{
 							$parts = explode('/', $timezone_id);
 							if (in_array($parts[0], $continents))
 							{
+								if (!empty($server_tz))
+								{
+									if (date_default_timezone_set($timezone_id))
+									{
+										$is_dst = date('I', time());
+									}
+								}
+
 								$this->_details[$timezone_id]['continent'] = $parts[0];
 								$this->_details[$timezone_id]['city'] = (isset($parts[1])) ? $parts[1] : '';
 								$this->_details[$timezone_id]['subcity'] = (isset($parts[2])) ? $parts[2] : '';
-								$this->_details[$timezone_id]['offset'] = $tz['offset'];
+								$this->_details[$timezone_id]['offset'] = date_offset_get(date_create()) - ($is_dst ? 3600 : 0);
 								$this->_details[$timezone_id]['dst'] = $tz['dst'];
 								$this->_details[$timezone_id]['abbr'] = strtoupper($abbr);
 
@@ -2426,6 +2436,11 @@ eod;
 						}
 					}
 				}
+			}
+
+			if (!empty($server_tz))
+			{
+				date_default_timezone_set($server_tz);
 			}
 		}
 
@@ -2528,7 +2543,9 @@ eod;
 		 */
 		function is_supported()
 		{
-			return is_callable('date_default_timezone_set') && is_callable('timezone_abbreviations_list') && !defined('NO_TIMEZONE_SUPPORT');
+			return is_callable('date_default_timezone_set') && is_callable('timezone_abbreviations_list') && is_callable('date_create') &&
+				is_callable('array_intersect_key') &&
+				!defined('NO_TIMEZONE_SUPPORT');	// user-definable emergency brake
 		}
 	}
 ?>
