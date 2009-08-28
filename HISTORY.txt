@@ -1,12 +1,12 @@
 Changes in 4.2.0
 
-* Feature: Extendable admin-side themes
+* Feature: Extendable admin-side themes. "Classic" and "Remora" theme contained in the core package, user-contributed themes available from http://textgarden.org/layouts/?c=txp-admin
 * Feature: Capability for multi-site file system layouts (thanks: Sam Weiss)
 * Feature: Role-based permission checks for images, links and files
 * Feature: Save various pane toggle states
 * Feature: Store author of links and files
-* Feature: Automatic adjustment for DST (requires PHP 5.1+, fall back to manual adjustment for servers running older PHPs)
-* Feature: Timezone selector in preferences (requires PHP 5.1+, GMT-based selector as a fallback for PHP 4)
+* Feature: Automatic adjustment for DST (requires PHP 5.2+, fall back to manual adjustment for servers running older PHPs)
+* Feature: Timezone selector in preferences (requires PHP 5.2+, GMT-based selector as a fallback)
 * Feature: Default event preference setting (thanks: Mary)
 * Fixed: PHP 5.3 compatibility (thanks: Mary)
 * Fixed: When a user is deleted, reassign her assets

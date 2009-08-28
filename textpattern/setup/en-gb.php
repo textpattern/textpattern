@@ -25,6 +25,7 @@ $en_gb_lang = array(
 		'log_in_at' => 'Login at',
 		'mail_it' => 'Mail it to me',
 		'managing_editor' => 'Managing Editor',
+		'must_reassign_assets' => 'Please re-assign user’s content',
 		'new_email' => 'New e-mail',
 		'new_password' => 'New password',
 		'password_changed' => 'Password changed',
@@ -617,6 +618,7 @@ $en_gb_lang = array(
 		'from_file' => 'Install From File',
 		'from_server' => 'Install From Remote Server',
 		'gmtoffset' => 'Time Zone',
+		'ham' => 'All but spam',
 		'hours_days_ago' => 'hrs/days ago',
 		'id_title' => '/id/title',
 		'img_dir' => 'Image directory',
@@ -1141,5 +1143,5 @@ $en_gb_lang = array(
 		'wraptag' => 'Wrap tag',
 	)
 );
-$lastmod = gmdate('Y-m-d H:m:s',1248601622);
+$lastmod = gmdate('Y-m-d H:m:s',1249014846);
 ?>

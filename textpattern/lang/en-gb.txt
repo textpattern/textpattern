@@ -1,4 +1,4 @@
-#@version 4.0.8;1248601622
+#@version 4.2.0;1249014846
 #@admin
 add_new_author => Add New Author
 and_mailed_to => and mailed to
@@ -23,6 +23,7 @@ login_name => Login
 log_in_at => Login at
 mail_it => Mail it to me
 managing_editor => Managing Editor
+must_reassign_assets => Please re-assign user’s content
 new_email => New e-mail
 new_password => New password
 password_changed => Password changed
@@ -600,6 +601,7 @@ french => Français
 from_file => Install From File
 from_server => Install From Remote Server
 gmtoffset => Time Zone
+ham => All but spam
 hours_days_ago => hrs/days ago
 id_title => /id/title
 img_dir => Image directory
