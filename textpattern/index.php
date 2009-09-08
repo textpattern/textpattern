@@ -117,7 +117,7 @@ $LastChangedRevision$
 			load_plugins(1);
 
 		// plugins may have altered privilege settings
-		if (!gps('event') && !empty($default_event) && has_privs($default_event))
+		if (!defined('TXP_UPDATE') && !gps('event') && !empty($default_event) && has_privs($default_event))
 		{
 			 $event = $default_event;
 		}
