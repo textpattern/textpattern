@@ -29,7 +29,7 @@ $LastChangedRevision: 3238 $
 	{
 		// Use buffering to ensure bogus whitespace in config.php is ignored
 		ob_start(NULL, 2048);
-		include include '../private/config.php';
+		include '../private/config.php';
 		ob_end_clean();
 	}
 
