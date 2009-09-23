@@ -105,7 +105,8 @@ $LastChangedRevision$
 		$step = gps('step');
 		$app_mode = gps('app_mode');
 
-		if (!$dbversion or ($dbversion != $thisversion) or $txp_using_svn)
+		$do_version_update = (!$dbversion or ($dbversion != $thisversion));
+		if ($do_version_update || $txp_using_svn)
 		{
 			define('TXP_UPDATE', 1);
 			include txpath.'/update/_update.php';
@@ -117,7 +118,7 @@ $LastChangedRevision$
 			load_plugins(1);
 
 		// plugins may have altered privilege settings
-		if (!defined('TXP_UPDATE') && !gps('event') && !empty($default_event) && has_privs($default_event))
+		if (!$do_version_update && !gps('event') && !empty($default_event) && has_privs($default_event))
 		{
 			 $event = $default_event;
 		}
