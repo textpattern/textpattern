@@ -443,7 +443,7 @@ if (!empty($event) and $event == 'article') {
 
 		//-- markup help --------------
 
-			echo pluggable_ui('article_ui', 'sidehelp', side_help($textile_body, $textile_excerpt));
+			echo pluggable_ui('article_ui', 'sidehelp', side_help($textile_body, $textile_excerpt), $rs);
 
 		//-- custom menu entries --------------
 
