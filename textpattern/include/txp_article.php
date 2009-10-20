@@ -505,10 +505,11 @@ if (!empty($event) and $event == 'article') {
 				'<div id="recent" class="toggle" style="display:'.(get_pref('pane_article_recent_visible') ? 'block' : 'none').'">';
 
 			$recents = safe_rows_start("Title, ID",'textpattern',"1=1 order by LastMod desc limit 10");
+			$ra = '';
 
 			if ($recents)
 			{
-				echo '<ul class="plain-list">';
+				$ra = '<ul class="plain-list">';
 
 				while($recent = nextRow($recents))
 				{
@@ -517,11 +518,12 @@ if (!empty($event) and $event == 'article') {
 						$recent['Title'] = gTxt('untitled').sp.$recent['ID'];
 					}
 
-					echo n.t.'<li><a href="?event=article'.a.'step=edit'.a.'ID='.$recent['ID'].'">'.escape_title($recent['Title']).'</a></li>';
+					$ra .= n.t.'<li><a href="?event=article'.a.'step=edit'.a.'ID='.$recent['ID'].'">'.escape_title($recent['Title']).'</a></li>';
 				}
 
-				echo '</ul>';
+				$ra .= '</ul>';
 			}
+			echo pluggable_ui('article_ui', 'recent_articles', $ra, $rs);
 
 			echo '</div>';
 		}
