@@ -13,11 +13,6 @@ $LastChangedRevision: 3238 $
 			unset($$name);
 	define("txpinterface", "public");
 
-	if (!defined('txpath'))
-	{
-		define("txpath", realpath(dirname(__FILE__).'/../../../textpattern'));
-	}
-
 	// save server path to site root
 	if (!isset($here))
 	{
@@ -31,6 +26,11 @@ $LastChangedRevision: 3238 $
 		ob_start(NULL, 2048);
 		include '../private/config.php';
 		ob_end_clean();
+	}
+
+	if (!defined('txpath'))
+	{
+		define("txpath", realpath(dirname(__FILE__).'/../../../textpattern'));
 	}
 
 	include txpath.'/lib/constants.php';
