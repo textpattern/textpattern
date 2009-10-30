@@ -1416,12 +1416,13 @@ $LastChangedRevision$
 	{
 
 		if ($level == 'debug') {
-			error_reporting(E_ALL);
+			error_reporting(E_ALL /* TODO: Enable E_STRICT in debug mode/PHP5.x? | (defined('E_STRICT') ? E_STRICT : 0) */);
 		}
 		elseif ($level == 'live') {
 			// don't show errors on screen
 			$suppress = E_WARNING | E_NOTICE;
-			if (defined('E_STRICT')) $suppress |= E_STRICT;
+			 // E_STRICT is defined since PHP 5.x and is a member of E_ALL in PHP 6.x. Now handle that!
+			if (defined('E_STRICT') && (E_ALL & E_STRICT)) $suppress |= E_STRICT;
 			if (defined('E_DEPRECATED')) $suppress |= E_DEPRECATED;
 			error_reporting(E_ALL ^ $suppress);
 			@ini_set("display_errors","1");
