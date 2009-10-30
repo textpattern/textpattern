@@ -217,7 +217,7 @@ $LastChangedRevision$
 		callback_event('pretext');
 
 			// set messy variables
-		$out =  makeOut('id','s','c','q','pg','p','month','author');
+		$out =  makeOut('id','s','c','q','m','pg','p','month','author');
 
 		if(gps('rss')) {
 			include txpath.'/publish/rss.php';
@@ -632,7 +632,9 @@ $LastChangedRevision$
 			include_once txpath.'/publish/search.php';
 
 			$s_filter = ($searchall ? filterSearch() : '');
-			$q = doSlash($q);
+			$q = trim($q);
+			$quoted = ($q[0] === '"') && ($q[strlen($q)-1] === '"');
+			$q = doSlash($quoted ? trim(trim($q, '"')) : $q);
 
             		// searchable article fields are limited to the columns of
             		// the textpattern table and a matching fulltext index must exist.
@@ -640,11 +642,49 @@ $LastChangedRevision$
 			if (empty($cols) or $cols[0] == '') $cols = array('Title', 'Body');
 
 			$match = ', match (`'.join('`, `', $cols)."`) against ('$q') as score";
-			for ($i = 0; $i < count($cols); $i++)
+
+			if ($quoted || empty($m) || $m === 'exact')
 			{
-				$cols[$i] = "`$cols[$i]` rlike '$q'";
+				$search_terms = preg_replace('/\s+/', ' ', str_replace(array('%','_'), array('\\%','\\_'), $q));
+				for ($i = 0; $i < count($cols); $i++)
+				{
+					$cols[$i] = "`$cols[$i]` like '%$search_terms%'";
+				}
 			}
-			$cols = join(" or ", $cols);
+			elseif ($m === 'any')
+			{
+				$search_terms =
+					preg_replace
+					(
+						'/\s+/',
+						' | ',
+						str_replace
+						(
+							array('.','\\','+','*','?','[','^',']','$','(',')','{','}','=','!','<','>','|',':','-'),
+							array('\\\\.','\\\\\\','\\\\+','\\\\*','\\\\?','\\\\[','\\\\^','\\\\]','\\\\$','\\\\(','\\\\)','\\\\{','\\\\}','\\\\=','\\\\!','\\\\<','\\\\>','\\\\|','\\\\:','\\\\-'),
+							$q
+						)
+					);
+				for ($i = 0; $i < count($cols); $i++)
+				{
+					$cols[$i] = "`$cols[$i]` regexp '$search_terms'";
+				}
+			}
+			elseif ($m === 'all')
+			{
+				$search_terms = explode(' ', preg_replace('/\s+/', ' ', str_replace(array('%','_'), array('\\%','\\_'), $q)));
+				for ($i = 0; $i < count($cols); $i++)
+				{
+					$like = array();
+					foreach ($search_terms as $search_term)
+					{
+						$like[] = "`$cols[$i]` like '%$search_term%'";
+					}
+					$cols[$i] = '(' . join(' && ', $like) . ')';
+				}
+			}
+
+			$cols = join(' or ', $cols);
 			$search = " and ($cols) $s_filter";
 
 			// searchall=0 can be used to show search results for the current section only

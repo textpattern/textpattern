@@ -1160,6 +1160,7 @@ $LastChangedRevision$
 			'label'   => gTxt('search'),
 			'button'  => '',
 			'section' => '',
+			'match' => 'exact',
 		),$atts));
 
 		if ($form) {
@@ -1173,6 +1174,7 @@ $LastChangedRevision$
 		$id =  (!empty($html_id)) ? ' id="'.$html_id.'"' : '';
 		$out = fInput('text','q',$q,'','','',$size);
 		$out = (!empty($label)) ? $label.br.$out.$sub : $out.$sub;
+		$out = ($match === 'exact') ? $out : fInput('hidden','m',$match) . $out;
 		$out = ($wraptag) ? tag($out,$wraptag) : $out;
 
 		if (!$section) {
@@ -2485,20 +2487,38 @@ $LastChangedRevision$
 			'limit'   => 5,
 		), $atts));
 
+		$m = $pretext['m'];
 		$q = $pretext['q'];
 
-		$result = preg_replace('/\s+/', ' ', strip_tags(str_replace('><', '> <', $thisarticle['body'])));
-		preg_match_all('/(\G|\s).{0,50}'.preg_quote($q).'.{0,50}(\s|$)/iu', $result, $concat);
+		$quoted = ($q[0] === '"') && ($q[strlen($q)-1] === '"');
+		$q = $quoted ? trim(trim($q, '"')) : $q;
 
-		for ($i = 0, $r = array(); $i < min($limit, count($concat[0])); $i++)
+		$result = preg_replace('/\s+/', ' ', strip_tags(str_replace('><', '> <', $thisarticle['body'])));
+
+		if ($quoted || empty($m) || $m === 'exact')
 		{
-			$r[] = trim($concat[0][$i]);
+			$regex_search = '/(?:\G|\s).{0,50}'.preg_quote($q).'.{0,50}(?:\s|$)/iu';
+			$regex_hilite = '/('.preg_quote($q).')/i';
+		}
+		else
+		{
+			$regex_search = '/(?:\G|\s).{0,50}('.preg_replace('/\s+/', '|', preg_quote($q)).').{0,50}(?:\s|$)/iu';
+			$regex_hilite = '/('.preg_replace('/\s+/', '|', preg_quote($q)).')/i';
+		}
+
+		preg_match_all($regex_search, $result, $concat);
+		$concat = $concat[0];
+
+		for ($i = 0, $r = array(); $i < min($limit, count($concat)); $i++)
+		{
+			$r[] = trim($concat[$i]);
 		}
 
 		$concat = join($break.n, $r);
 		$concat = preg_replace('/^[^>]+>/U', '', $concat);
 #TODO
-		$concat = preg_replace('/('.preg_quote($q).')/i', "<$hilight>$1</$hilight>", $concat);
+
+		$concat = preg_replace($regex_hilite, "<$hilight>$1</$hilight>", $concat);
 
 		return ($concat) ? trim($break.$concat.$break) : '';
 	}
