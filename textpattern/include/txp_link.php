@@ -160,7 +160,7 @@ $LastChangedRevision$
 					column_head('description', 'description', 'link', true, $switch_dir, $crit, $search_method, ('description' == $sort) ? $dir : '').
 					column_head('link_category', 'category', 'link', true, $switch_dir, $crit, $search_method, ('category' == $sort) ? $dir : '').
 					column_head('date', 'date', 'link', true, $switch_dir, $crit, $search_method, ('date' == $sort) ? $dir : '').
-					($show_authors ? column_head('author', 'author', 'link', true, $switch_dir, $crit, $search_method, ('date' == $sort) ? $dir : '') : '').
+					($show_authors ? column_head('author', 'author', 'link', true, $switch_dir, $crit, $search_method, ('author' == $sort) ? $dir : '') : '').
 					hCell()
 				);
 
