@@ -618,7 +618,7 @@ $LastChangedRevision$
 
 		if (!is_file($newname)) {
 
-			$id = file_db_add($newname,$category,$permissions,$description,$size);
+			$id = file_db_add(doSlash($newname),$category,$permissions,$description,$size);
 
 			if(!$id){
 				file_list(array(gTxt('file_upload_failed').' (db_add)', E_ERROR));
@@ -738,7 +738,8 @@ $LastChangedRevision$
 	{
 		global $file_base_path, $txp_user;
 
-		extract(doSlash(gpsa(array('id', 'filename', 'category', 'description', 'status', 'publish_now', 'year', 'month', 'day', 'hour', 'minute', 'second'))));
+		extract(doSlash(gpsa(array('id', 'category', 'description', 'status', 'publish_now', 'year', 'month', 'day', 'hour', 'minute', 'second'))));
+		$filename = gps('filename');
 
 		$id = assert_int($id);
 
@@ -786,7 +787,7 @@ $LastChangedRevision$
 
 		$size = filesize(build_file_path($file_base_path,$filename));
 		$rs = safe_update('txp_file', "
-			filename = '$filename',
+			filename = '".doSlash($filename)."',
 			category = '$category',
 			permissions = '$perms',
 			description = '$description',
