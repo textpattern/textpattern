@@ -211,6 +211,24 @@ class wet_thumb {
 
 	// create DST
 	$this->_DST['image'] = imagecreatetruecolor($this->_DST['width'], $this->_DST['height']);
+
+	// GIF or PNG destination, set the transparency up.
+	if ($this->_DST['type'] == 1 || $this->_DST['type'] == 3) {
+		$trans_idx = imagecolortransparent($this->_SRC['image']);
+
+		// Is there a specific transparent colour?
+		if ($trans_idx >= 0) {
+			$trans_color = imagecolorsforindex($this->_SRC['image'], $trans_idx);
+			$trans_idx = imagecolorallocate($this->_DST['image'], $trans_color['red'], $trans_color['green'], $trans_color['blue']);
+			imagefill($this->_DST['image'], 0, 0, $trans_idx);
+			imagecolortransparent($this->_DST['image'], $trans_idx);
+		} else if ($this->_DST['type'] == 3) {
+			imagealphablending($this->_DST['image'], false);
+			$transparent = imagecolorallocatealpha($this->_DST['image'], 0, 0, 0, 127);
+			imagefill($this->_DST['image'], 0, 0, $transparent);
+			imagesavealpha($this->_DST['image'], true);
+		}
+	}
 	imagecopyresampled($this->_DST['image'], $this->_SRC['image'], 0, 0, $off_w, $off_h, $this->_DST['width'], $this->_DST['height'], $this->_SRC['width'], $this->_SRC['height']);
 	if ($this->sharpen === true) {
 	    $this->_DST['image'] = UnsharpMask($this->_DST['image'],80,.5,3);
