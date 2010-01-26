@@ -541,7 +541,7 @@ $LastChangedRevision$
 		}
 
 		if (isset($cssname)) $css = safe_field('css','txp_css',"name='".doSlash($cssname)."'");
-		if (isset($css)) echo base64_decode($css);
+		if (isset($css)) echo $css;
 	}
 
 //	article() is called when parse() finds a <txp:article /> tag.

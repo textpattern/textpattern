@@ -73,7 +73,7 @@ $LastChangedRevision$
 
 		} else {
 			$buttons = '';
-			$thecss = base64_decode(fetch("css",'txp_css','name',$name));
+			$thecss = fetch("css",'txp_css','name',$name);
 		}
 
 		if ($step!='pour') {
@@ -133,7 +133,7 @@ $LastChangedRevision$
 	function css_save()
 	{
 		extract(gpsa(array('name','css','savenew','newname','copy')));
-		$css = doSlash(base64_encode($css));
+		$css = doSlash($css);
 
 		if ($savenew or $copy)
 		{
