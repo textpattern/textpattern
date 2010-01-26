@@ -719,7 +719,7 @@ $LastChangedRevision$
 		global $prefs;
 		if ($force or !empty($prefs['attach_titles_to_permalinks']))
 		{
-			$text = sanitizeForUrl($text);
+			$text = trim(sanitizeForUrl($text), '-');
 			if ($prefs['permalink_title_format']) {
 				return (function_exists('mb_strtolower') ? mb_strtolower($text, 'UTF-8') : strtolower($text));
 			} else {
