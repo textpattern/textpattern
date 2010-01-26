@@ -192,6 +192,14 @@ $LastChangedRevision$
 
 		if ($name and $length <= 64 and is_valid_email($email))
 		{
+			$exists = safe_field('name', 'txp_users', "name = '" .$name. "'");
+
+			if ($exists)
+			{
+				author_edit(array(gTxt('author_already_exists', array('{name}' => $name)), E_ERROR));
+				return;
+			}
+
 			$password = doSlash(generate_password(6));
 			$nonce    = doSlash(md5(uniqid(mt_rand(), TRUE)));
 
@@ -368,7 +376,7 @@ $LastChangedRevision$
 			}
 		}
 
-		$caption = gTxt(($step == 'author_edit') ? 'edit_author' : 'add_new_author');
+		$caption = gTxt(($user_id && $step == 'author_edit') ? 'edit_author' : 'add_new_author');
 
 		return form(
 
