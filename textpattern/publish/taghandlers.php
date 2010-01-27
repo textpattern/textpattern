@@ -2786,7 +2786,7 @@ $LastChangedRevision$
 			'name'  => '',
 			'id'    => '',
 			'thumb' => 0,
-			'link'  => 0,
+			'link'  => 'auto',
 		), $atts));
 
 		$from_form = false;
@@ -2810,6 +2810,7 @@ $LastChangedRevision$
 		if ($thisimage)
 		{
 			$url = hu.$img_dir.'/'.$thisimage['id'].(($thumb) ? 't' : '').$thisimage['ext'];
+			$link = ($link == 'auto') ? (($thing) ? 1 : 0) : $link;
 			$out = ($thing) ? parse($thing) : $url;
 			$out = ($link) ? href($out, $url) : $out;
 
