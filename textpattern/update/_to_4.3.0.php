@@ -20,4 +20,12 @@ $LastChangedRevision$
 			safe_update('txp_css', "css = '" . doSlash(base64_decode($row['css'])) . "'", "name = '". doSlash($row['name']) ."'");
 		}
 	}
+
+    // add column for file title
+ 	$cols = getThings('describe `'.PFX.'txp_file`');
+ 	if (!in_array('title', $cols))
+ 	{
+		safe_alter('txp_file', "ADD `title` VARCHAR( 255 ) NULL AFTER `filename`");
+ 	}
+
  ?>

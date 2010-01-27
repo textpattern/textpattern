@@ -3987,11 +3987,16 @@ $LastChangedRevision$
 
 //--------------------------------------------------------------------------
 
-	function file_download_name()
+	function file_download_name($atts)
 	{
 		global $thisfile;
 		assert_file();
-		return $thisfile['filename'];
+
+		extract(lAtts(array(
+			'title' => 0,
+		), $atts));
+
+		return ($title) ? $thisfile['title'] : $thisfile['filename'];
 	}
 
 //--------------------------------------------------------------------------

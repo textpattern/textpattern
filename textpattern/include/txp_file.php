@@ -93,6 +93,10 @@ $LastChangedRevision$
 				$sort_sql = 'category '.$dir.', filename desc';
 			break;
 
+			case 'title':
+				$sort_sql = 'title '.$dir.', filename desc';
+			break;
+
 			case 'downloads':
 				$sort_sql = 'downloads '.$dir.', filename desc';
 			break;
@@ -119,11 +123,12 @@ $LastChangedRevision$
 			$crit_escaped = doSlash($crit);
 
 			$critsql = array(
-				'id'		  => "ID in ('" .join("','", do_list($crit_escaped)). "')",
+				'id'          => "ID in ('" .join("','", do_list($crit_escaped)). "')",
 				'filename'    => "filename like '%$crit_escaped%'",
+				'title'       => "title like '%$crit_escaped%'",
 				'description' => "description like '%$crit_escaped%'",
 				'category'    => "category like '%$crit_escaped%'",
-				'author'	=> "author like '%$crit_escaped%'"
+				'author'      => "author like '%$crit_escaped%'"
 			);
 
 			if (array_key_exists($search_method, $critsql))
@@ -183,6 +188,7 @@ $LastChangedRevision$
 					column_head('ID', 'id', 'file', true, $switch_dir, $crit, $search_method, ('id' == $sort) ? $dir : '').
 					hCell().
 					column_head('file_name', 'filename', 'file', true, $switch_dir, $crit, $search_method, ('filename' == $sort) ? $dir : '').
+					column_head('title', 'title', 'file', true, $switch_dir, $crit, $search_method, ('title' == $sort) ? $dir : '').
 					column_head('description', 'description', 'file', true, $switch_dir, $crit, $search_method, ('description' == $sort) ? $dir : '').
 					column_head('file_category', 'category', 'file', true, $switch_dir, $crit, $search_method, ('category' == $sort) ? $dir : '').
 					// column_head('permissions', 'permissions', 'file', true, $switch_dir, $crit, $search_method).
@@ -233,6 +239,7 @@ $LastChangedRevision$
 						($can_edit ? href(htmlspecialchars($filename), $edit_url) : htmlspecialchars($filename))
 					, 125).
 
+					td(htmlspecialchars($title), 90).
 					td(htmlspecialchars($description), 150).
 					td($category, 90).
 
@@ -288,11 +295,12 @@ $LastChangedRevision$
 	function file_search_form($crit, $method)
 	{
 		$methods =	array(
-			'id'			=> gTxt('ID'),
-			'filename'		=> gTxt('file_name'),
-			'description' 	=> gTxt('description'),
-			'category'		=> gTxt('file_category'),
-			'author'		=> gTxt('author')
+			'id'          => gTxt('ID'),
+			'filename'    => gTxt('file_name'),
+			'title'       => gTxt('title'),
+			'description' => gTxt('description'),
+			'category'    => gTxt('file_category'),
+			'author'      => gTxt('author')
 		);
 
 		return search_form('file', 'file_list', $crit, $methods, $method, 'filename');
@@ -398,7 +406,7 @@ $LastChangedRevision$
 	{
 		global $file_base_path, $levels, $file_statuses, $txp_user;
 
-		extract(gpsa(array('name', 'category', 'permissions', 'description', 'sort', 'dir', 'page', 'crit', 'search_method', 'publish_now')));
+		extract(gpsa(array('name', 'title', 'category', 'permissions', 'description', 'sort', 'dir', 'page', 'crit', 'search_method', 'publish_now')));
 
 		if (!$id)
 		{
@@ -461,6 +469,7 @@ $LastChangedRevision$
 				$form =	tr(
 							td(
 								form(
+									graf(gTxt('title').': '.fInput('text','title',$title,'','','',40,'','file_title')) .
 									graf(gTxt('file_category').br.treeSelectInput('category',
 									 		$categories,$category)) .
 //									graf(gTxt('permissions').br.selectInput('perms',$levels,$permissions)).
@@ -502,6 +511,7 @@ $LastChangedRevision$
 									hInput('id',$id).
 									hInput('category',$category).
 									hInput('perms',($permissions=='-1') ? '' : $permissions).
+									hInput('title',$title).
 									hInput('description',$description).
 									hInput('status',$status).
 
@@ -520,9 +530,9 @@ $LastChangedRevision$
 			echo startTable('list', '', 'edit-pane'),
 			tr(
 				td(
-					graf(gTxt('file_status').br.$condition) .
-					graf(gTxt('file_name').br.$downloadlink) .
-					graf(gTxt('file_download_count').br.$downloads)
+					graf(gTxt('file_status').': '.$condition) .
+					graf(gTxt('file_name').': '.$downloadlink) .
+					graf(gTxt('file_download_count').': '.$downloads)
 				)
 			),
 			$form,
@@ -532,11 +542,12 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function file_db_add($filename, $category, $permissions, $description, $size)
+	function file_db_add($filename, $category, $permissions, $description, $size, $title='')
 	{
 		global $txp_user;
 		$rs = safe_insert("txp_file",
 			"filename = '$filename',
+			 title = '$title',
 			 category = '$category',
 			 permissions = '$permissions',
 			 description = '$description',
@@ -565,10 +576,10 @@ $LastChangedRevision$
 			return;
 		}
 
-		extract(doSlash(gpsa(array('filename','category','permissions','description'))));
+		extract(doSlash(gpsa(array('filename','title','category','permissions','description'))));
 
 		$size = filesize(build_file_path($file_base_path,$filename));
-		$id = file_db_add($filename,$category,$permissions,$description, $size);
+		$id = file_db_add($filename,$category,$permissions,$description,$size,$title);
 
 		if($id === false){
 			file_list(array(gTxt('file_upload_failed').' (db_add)', E_ERROR));
@@ -595,7 +606,7 @@ $LastChangedRevision$
 			return;
 		}
 
-		extract(doSlash(gpsa(array('category','permissions','description'))));
+		extract(doSlash(gpsa(array('category','title','permissions','description'))));
 
 		$name = file_get_uploaded_name();
 		$file = file_get_uploaded();
@@ -618,7 +629,7 @@ $LastChangedRevision$
 
 		if (!is_file($newname)) {
 
-			$id = file_db_add(doSlash($newname),$category,$permissions,$description,$size);
+			$id = file_db_add(doSlash($newname),$category,$permissions,$description,$size,$title);
 
 			if(!$id){
 				file_list(array(gTxt('file_upload_failed').' (db_add)', E_ERROR));
@@ -738,7 +749,7 @@ $LastChangedRevision$
 	{
 		global $file_base_path, $txp_user;
 
-		extract(doSlash(gpsa(array('id', 'category', 'description', 'status', 'publish_now', 'year', 'month', 'day', 'hour', 'minute', 'second'))));
+		extract(doSlash(gpsa(array('id', 'category', 'title', 'description', 'status', 'publish_now', 'year', 'month', 'day', 'hour', 'minute', 'second'))));
 		$filename = gps('filename');
 
 		$id = assert_int($id);
@@ -788,6 +799,7 @@ $LastChangedRevision$
 		$size = filesize(build_file_path($file_base_path,$filename));
 		$rs = safe_update('txp_file', "
 			filename = '".doSlash($filename)."',
+			title = '$title',
 			category = '$category',
 			permissions = '$perms',
 			description = '$description',
