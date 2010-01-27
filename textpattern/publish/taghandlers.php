@@ -74,7 +74,7 @@ $LastChangedRevision$
 
 	function image($atts)
 	{
-		global $img_dir;
+		global $img_dir, $thisimage;
 
 		static $cache = array();
 
@@ -126,6 +126,15 @@ $LastChangedRevision$
 			}
 		}
 
+		elseif ($thisimage)
+		{
+			$id = (int) $thisimage['id'];
+
+			$rs = safe_row('*', 'txp_image', "id = $id limit 1");
+
+			$cache['i'][$id] = $rs;
+		}
+
 		else
 		{
 			trigger_error(gTxt('unknown_image'));
@@ -160,7 +169,7 @@ $LastChangedRevision$
 
 	function thumbnail($atts)
 	{
-		global $img_dir;
+		global $img_dir, $thisimage;
 
 		extract(lAtts(array(
 			'align'     => '', // deprecated in 4.2.0
@@ -191,6 +200,13 @@ $LastChangedRevision$
 		elseif ($id)
 		{
 			$id = (int) $id;
+
+			$rs = safe_row('*', 'txp_image', "id = $id limit 1");
+		}
+
+		elseif ($thisimage)
+		{
+			$id = (int) $thisimage['id'];
 
 			$rs = safe_row('*', 'txp_image', "id = $id limit 1");
 		}
@@ -244,6 +260,28 @@ $LastChangedRevision$
 		}
 
 		trigger_error(gTxt('unknown_image'));
+	}
+
+// -------------------------------------------------------------
+	function imageFetchInfo($where)
+	{
+		$rs = safe_row('*', 'txp_image', $where);
+
+		if ($rs)
+		{
+			return image_format_info($rs);
+		}
+
+		return false;
+	}
+
+//--------------------------------------------------------------------------
+	function image_format_info($image)
+	{
+		if (($unix_ts = @strtotime($image['date'])) > 0)
+			$image['date'] = $unix_ts;
+
+		return $image;
 	}
 
 // -------------------------------------------------------------
@@ -2609,6 +2647,308 @@ $LastChangedRevision$
 					'" style="height:'.$h.'px;width:'.$w.'px" alt="'.$alt.'" />';
 			}
 		}
+	}
+
+// -------------------------------------------------------------
+	function image_list($atts, $thing = NULL)
+	{
+		global $s,$c,$p,$img_dir,$path_to_site,$thisimage;
+
+		extract(lAtts(array(
+			'name'      => '',
+			'id'        => '',
+			'label'     => '',
+			'break'     => br,
+			'wraptag'   => '',
+			'class'     => __FUNCTION__,
+			'html_id'   => '',
+			'labeltag'  => '',
+			'category'  => '',
+			'has_thumb' => 0,
+			'form'      => '',
+			'thumb'     => 0,
+			'limit'     => 0,
+			'offset'    => 0,
+			'sort'      => 'name ASC',
+		),$atts));
+
+		$where = array();
+		$pool = array();
+		$has_content = $thing || $form;
+		if ($name) $pool[] = "name IN ('".join("','", doSlash(do_list($name)))."')";
+		if ($id) $pool[] = "id IN ('".join("','", doSlash(do_list($id)))."')";
+		if ($category) $pool[] = "category IN ('".join("','", doSlash(do_list($category)))."')";
+
+		$where[] = ($pool) ? '('. join(' OR ', $pool). ')' : "1=1";
+		if ($has_thumb) $where[] = "thumbnail = 1";
+
+		$qparts = array(
+			join(' AND ', $where),
+			'order by '.doSlash($sort),
+			($limit) ? 'limit '.intval($offset).', '.intval($limit) : ''
+		);
+
+		$rs = safe_rows_start('*', 'txp_image',  join(' ', $qparts));
+
+		if ($rs) {
+			$out = array();
+
+			if (isset($thisimage)) $old_image = $thisimage;
+
+			while ($a = nextRow($rs)) {
+				$thisimage = image_format_info($a);
+				if (!$has_content) {
+					$url = pagelinkurl(array('c'=>$thisimage['category'], 's'=>$s, 'p'=>$thisimage['id']));
+					$src = ($thumb) ? image_url(array('thumb' => '1')) : image_url(array());
+					$dims = ($thumb) ? image_size(array('thumb' => '1', 'as_html' => '1')) : image_size(array('as_html' => '1'));
+					$thing = '<a href="'.$url.'">'.
+						'<img src="'. $src .'" '. $dims.' alt="'.$thisimage['alt'].'" />'.'</a>'.n;
+				}
+				$out[] = ($thing) ? parse($thing) : parse_form($form);
+			}
+
+			$thisimage = (isset($old_image) ? $old_image : NULL);
+
+			if ($out) {
+				return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class, '', '', '', $html_id);
+			}
+		}
+		return '';
+	}
+
+// -------------------------------------------------------------
+	function image_info($atts) {
+		global $thisimage;
+
+		extract(lAtts(array(
+			'name'  => '',
+			'id'    => '',
+			'type'       => 'caption',
+			'escape'     => 'html',
+			'wraptag'    => '',
+			'class'      => '',
+			'break'      => '',
+			'breakclass' => '',
+		), $atts));
+
+		$validItems = array('id','name','category','category_title','alt','caption','ext','author','w','h','thumb_w','thumb_h','date');
+		$type = do_list($type);
+
+		$from_form = false;
+
+		if ($id)
+		{
+			$thisimage = imageFetchInfo('id = '.intval($id));
+		}
+
+		elseif ($name)
+		{
+			$thisimage = imageFetchInfo("name = '".doSlash($name)."'");
+		}
+
+		else
+		{
+			assert_image();
+			$from_form = true;
+		}
+
+		$out = array();
+		if ($thisimage)
+		{
+			$thisimage['category_title'] = fetch_category_title($thisimage['category'], 'image');
+
+			foreach ($type as $item)
+			{
+				if (in_array($item, $validItems))
+				{
+					if (isset($thisimage[$item]))
+					{
+						$out[] = ($escape == 'html') ?
+							htmlspecialchars($thisimage[$item]) : $thisimage[$item];
+					}
+				}
+			}
+
+			if (!$from_form)
+			{
+				$thisimage = '';
+			}
+		}
+		return doWrap($out, $wraptag, $break, $class, $breakclass);
+	}
+
+// -------------------------------------------------------------
+	function image_url($atts, $thing = NULL)
+	{
+		global $thisimage, $img_dir;
+
+		extract(lAtts(array(
+			'name'  => '',
+			'id'    => '',
+			'thumb' => 0,
+			'link'  => 0,
+		), $atts));
+
+		$from_form = false;
+
+		if ($id)
+		{
+			$thisimage = imageFetchInfo('id = '.intval($id));
+		}
+
+		elseif ($name)
+		{
+			$thisimage = imageFetchInfo("name = '".doSlash($name)."'");
+		}
+
+		else
+		{
+			assert_image();
+			$from_form = true;
+		}
+
+		if ($thisimage)
+		{
+			$url = hu.$img_dir.'/'.$thisimage['id'].(($thumb) ? 't' : '').$thisimage['ext'];
+			$out = ($thing) ? parse($thing) : $url;
+			$out = ($link) ? href($out, $url) : $out;
+
+			if (!$from_form)
+			{
+				$thisimage = '';
+			}
+
+			return $out;
+		}
+		return '';
+	}
+
+//--------------------------------------------------------------------------
+	function image_size($atts)
+	{
+		global $thisimage, $path_to_site, $img_dir;
+
+		extract(lAtts(array(
+			'name'  => '',
+			'id'    => '',
+			'type'   => 'width, height',
+			'as_html' => 0,
+			'thumb' => 0,
+			'break' => ' ',
+		), $atts));
+
+		$from_form = false;
+
+		if ($id)
+		{
+			$thisimage = imageFetchInfo('id = '.intval($id));
+		}
+
+		elseif ($name)
+		{
+			$thisimage = imageFetchInfo("name = '".doSlash($name)."'");
+		}
+
+		else
+		{
+			assert_image();
+			$from_form = true;
+		}
+
+		if ($thisimage)
+		{
+			$break = ($as_html) ? ' ' : $break;
+			$type = do_list($type);
+
+			if ($thumb)
+			{
+				$width = (isset($thisimage['thumb_w'])) ? $thisimage['thumb_w'] : '';
+				$height = (isset($thisimage['thumb_h'])) ? $thisimage['thumb_h'] : '';
+				if (!$width || !$height) {
+					$thumbpath = $img_dir.'/'.$thisimage['id'].'t'.$thisimage['ext'];
+					$thumbinfo = @getimagesize($path_to_site.'/'.$thumbpath);
+					$width = (isset($thumbinfo[0])) ? $thumbinfo[0] : $width;
+					$height = (isset($thumbinfo[1])) ? $thumbinfo[1] : $height;
+				}
+			}
+
+			else
+			{
+				$width = $thisimage['w'];
+				$height = $thisimage['h'];
+			}
+
+			$out = array();
+			foreach ($type as $dim) {
+				if ($dim == "width") {
+					$out[] = ($as_html) ? 'width="'.$width.'"' : $width;
+				}
+				if ($dim == "height") {
+					$out[] = ($as_html) ? 'height="'.$height.'"' : $height;
+				}
+			}
+
+			if (!$from_form)
+			{
+				$thisimage = '';
+			}
+
+			return join($break, $out);
+		}
+	}
+
+//--------------------------------------------------------------------------
+	function image_date($atts)
+	{
+		global $thisimage;
+
+		extract(lAtts(array(
+			'name'  => '',
+			'id'    => '',
+			'format' => '',
+		), $atts));
+
+		$from_form = false;
+
+		if ($id)
+		{
+			$thisimage = imageFetchInfo('id = '.intval($id));
+		}
+
+		elseif ($name)
+		{
+			$thisimage = imageFetchInfo("name = '".doSlash($name)."'");
+		}
+
+		else
+		{
+			assert_image();
+			$from_form = true;
+		}
+
+		if (isset($thisimage['date'])) {
+			// Not a typo: use fileDownloadFormatTime() since it is fit for purpose
+			$out = fileDownloadFormatTime(array(
+				'ftime'  => $thisimage['date'],
+				'format' => $format
+			));
+
+			if (!$from_form)
+			{
+				$thisimage = '';
+			}
+
+			return $out;
+		}
+	}
+
+//--------------------------------------------------------------------------
+	function if_thumbnail($atts, $thing)
+	{
+		global $thisimage;
+		assert_image();
+
+		return parse(EvalElse($thing, ($thisimage['thumbnail'] == 1)));
 	}
 
 // -------------------------------------------------------------

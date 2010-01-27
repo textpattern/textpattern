@@ -2191,6 +2191,13 @@ eod;
 	}
 
 //-------------------------------------------------------------
+	function assert_image() {
+		global $thisimage;
+		if (empty($thisimage))
+			trigger_error(gTxt('error_image_context'));
+	}
+
+//-------------------------------------------------------------
 	function assert_link() {
 		global $thislink;
 		if (empty($thislink))
