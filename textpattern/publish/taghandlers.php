@@ -2652,7 +2652,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function image_list($atts, $thing = NULL)
 	{
-		global $s,$c,$p,$img_dir,$path_to_site,$thisimage;
+		global $s,$c,$p,$img_dir,$path_to_site,$thisimage,$thisarticle;
 
 		extract(lAtts(array(
 			'name'      => '',
@@ -2676,10 +2676,31 @@ $LastChangedRevision$
 		$pool = array();
 		$has_content = $thing || $form;
 		if ($name) $pool[] = "name IN ('".join("','", doSlash(do_list($name)))."')";
-		if ($id) $pool[] = "id IN ('".join("','", doSlash(do_list($id)))."')";
+
 		if ($category) $pool[] = "category IN ('".join("','", doSlash(do_list($category)))."')";
 
-		$where[] = ($pool) ? '('. join(' OR ', $pool). ')' : "1=1";
+		if ($id) {
+			if ($id == '*') {
+				$pool[] = '1=1';
+			} else {
+				$pool[] = "id IN ('".join("','", doSlash(do_list($id)))."')";
+			}
+		}
+
+		// If no images have been selected, try the article image field
+		if (!$pool)
+		{
+			if ($thisarticle && !empty($thisarticle['article_image']))
+			{
+				$items = do_list($thisarticle['article_image']);
+				if (is_numeric($items[0]))
+				{
+					$pool[] = "id IN ('".join("','", doSlash($items))."')";
+				}
+			}
+		}
+
+		$where[] = ($pool) ? '('. join(' OR ', $pool). ')' : "0=1"; // If nothing matches, output nothing
 		if ($has_thumb) $where[] = "thumbnail = 1";
 
 		$qparts = array(
@@ -2690,14 +2711,17 @@ $LastChangedRevision$
 
 		$rs = safe_rows_start('*', 'txp_image',  join(' ', $qparts));
 
-		if ($rs) {
+		if ($rs)
+		{
 			$out = array();
 
 			if (isset($thisimage)) $old_image = $thisimage;
 
-			while ($a = nextRow($rs)) {
+			while ($a = nextRow($rs))
+			{
 				$thisimage = image_format_info($a);
-				if (!$has_content) {
+				if (!$has_content)
+				{
 					$url = pagelinkurl(array('c'=>$thisimage['category'], 's'=>$s, 'p'=>$thisimage['id']));
 					$src = ($thumb) ? image_url(array('thumb' => '1')) : image_url(array());
 					$dims = ($thumb) ? image_size(array('thumb' => '1', 'as_html' => '1')) : image_size(array('as_html' => '1'));
@@ -2709,7 +2733,8 @@ $LastChangedRevision$
 
 			$thisimage = (isset($old_image) ? $old_image : NULL);
 
-			if ($out) {
+			if ($out)
+			{
 				return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class, '', '', '', $html_id);
 			}
 		}
@@ -2822,80 +2847,6 @@ $LastChangedRevision$
 			return $out;
 		}
 		return '';
-	}
-
-//--------------------------------------------------------------------------
-	function image_size($atts)
-	{
-		global $thisimage, $path_to_site, $img_dir;
-
-		extract(lAtts(array(
-			'name'  => '',
-			'id'    => '',
-			'type'   => 'width, height',
-			'as_html' => 0,
-			'thumb' => 0,
-			'break' => ' ',
-		), $atts));
-
-		$from_form = false;
-
-		if ($id)
-		{
-			$thisimage = imageFetchInfo('id = '.intval($id));
-		}
-
-		elseif ($name)
-		{
-			$thisimage = imageFetchInfo("name = '".doSlash($name)."'");
-		}
-
-		else
-		{
-			assert_image();
-			$from_form = true;
-		}
-
-		if ($thisimage)
-		{
-			$break = ($as_html) ? ' ' : $break;
-			$type = do_list($type);
-
-			if ($thumb)
-			{
-				$width = (isset($thisimage['thumb_w'])) ? $thisimage['thumb_w'] : '';
-				$height = (isset($thisimage['thumb_h'])) ? $thisimage['thumb_h'] : '';
-				if (!$width || !$height) {
-					$thumbpath = $img_dir.'/'.$thisimage['id'].'t'.$thisimage['ext'];
-					$thumbinfo = @getimagesize($path_to_site.'/'.$thumbpath);
-					$width = (isset($thumbinfo[0])) ? $thumbinfo[0] : $width;
-					$height = (isset($thumbinfo[1])) ? $thumbinfo[1] : $height;
-				}
-			}
-
-			else
-			{
-				$width = $thisimage['w'];
-				$height = $thisimage['h'];
-			}
-
-			$out = array();
-			foreach ($type as $dim) {
-				if ($dim == "width") {
-					$out[] = ($as_html) ? 'width="'.$width.'"' : $width;
-				}
-				if ($dim == "height") {
-					$out[] = ($as_html) ? 'height="'.$height.'"' : $height;
-				}
-			}
-
-			if (!$from_form)
-			{
-				$thisimage = '';
-			}
-
-			return join($break, $out);
-		}
 	}
 
 //--------------------------------------------------------------------------
