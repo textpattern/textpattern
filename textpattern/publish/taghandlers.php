@@ -2724,9 +2724,8 @@ $LastChangedRevision$
 				{
 					$url = pagelinkurl(array('c'=>$thisimage['category'], 's'=>$s, 'p'=>$thisimage['id']));
 					$src = ($thumb) ? image_url(array('thumb' => '1')) : image_url(array());
-					$dims = ($thumb) ? image_size(array('thumb' => '1', 'as_html' => '1')) : image_size(array('as_html' => '1'));
 					$thing = '<a href="'.$url.'">'.
-						'<img src="'. $src .'" '. $dims.' alt="'.$thisimage['alt'].'" />'.'</a>'.n;
+						'<img src="'. $src .'" alt="'.$thisimage['alt'].'" />'.'</a>'.n;
 				}
 				$out[] = ($thing) ? parse($thing) : parse_form($form);
 			}
