@@ -314,7 +314,7 @@ $LastChangedRevision$
 		global $yield;
 
 		$inner = end($yield);
-		
+
 		return isset($inner) ? $inner : '';
 	}
 
@@ -2700,7 +2700,11 @@ $LastChangedRevision$
 			}
 		}
 
-		$where[] = ($pool) ? '('. join(' OR ', $pool). ')' : "0=1"; // If nothing matches, output nothing
+		if (!$pool)
+		{
+			return '';  // If nothing matches, output nothing
+		}
+		$where[] = '('. join(' OR ', $pool). ')';
 		if ($has_thumb) $where[] = "thumbnail = 1";
 
 		$qparts = array(
