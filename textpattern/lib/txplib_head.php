@@ -8,7 +8,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function pagetop($pagetitle,$message="")
 	{
-		global $siteurl,$sitename,$txp_user,$event,$step,$app_mode,$theme;
+		global $siteurl, $sitename, $txp_user, $event, $step, $app_mode, $theme;
 
 		if ($app_mode == 'async') return;
 
@@ -44,7 +44,7 @@ $LastChangedRevision$
 
 		else
 		{
-			$body_id = 'page-'.$event;
+			$body_id = 'page-'.htmlspecialchars($event);
 		}
 
 	?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -53,9 +53,9 @@ $LastChangedRevision$
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<meta name="robots" content="noindex, nofollow" />
 	<title>Txp &#8250; <?php echo htmlspecialchars($sitename) ?> &#8250; <?php echo escape_title($pagetitle) ?></title>
-	<script type="text/javascript" src="jquery.js"></script>
+	<script src="jquery.js" type="text/javascript"></script>
 	<?php echo script_js(
-		"var textpattern = {event: '$event', step: '$step'};"
+		'var textpattern = {event: "'.htmlspecialchars($event).'", step: "'.htmlspecialchars($step).'"};'
 	); ?>
 	<script type="text/javascript" src="textpattern.js"></script>
 	<script type="text/javascript">
