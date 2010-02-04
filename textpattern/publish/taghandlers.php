@@ -2652,19 +2652,23 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function image_list($atts, $thing = NULL)
 	{
-		global $s,$c,$p,$img_dir,$path_to_site,$thisimage,$thisarticle;
+		global $s, $c, $p, $img_dir, $path_to_site, $thisimage, $thisarticle;
 
 		extract(lAtts(array(
 			'name'      => '',
 			'id'        => '',
+			'category'  => '',
+			'author'    => '',
+			'realname'  => '',
+			'ext'       => '',
+			'has_thumb' => 0,
+			'context'   => 'article',
 			'label'     => '',
 			'break'     => br,
 			'wraptag'   => '',
 			'class'     => __FUNCTION__,
 			'html_id'   => '',
 			'labeltag'  => '',
-			'category'  => '',
-			'has_thumb' => 0,
 			'form'      => '',
 			'thumb'     => 0,
 			'limit'     => 0,
@@ -2675,22 +2679,20 @@ $LastChangedRevision$
 		$where = array();
 		$pool = array();
 		$has_content = $thing || $form;
+		$icn = isset($atts['id']) || isset($atts['category']) || isset($atts['name']);
+		$filters = $author || $realname || $ext || $has_thumb;
+		$context_list = (empty($context) || $icn || $filters) ? array() : do_list($context);
+
 		if ($name) $pool[] = "name IN ('".join("','", doSlash(do_list($name)))."')";
 
 		if ($category) $pool[] = "category IN ('".join("','", doSlash(do_list($category)))."')";
 
-		if ($id) {
-			if ($id == '*') {
-				$pool[] = '1=1';
-			} else {
-				$pool[] = "id IN ('".join("','", doSlash(do_list($id)))."')";
-			}
-		}
+		if ($id) $pool[] = "id IN ('".join("','", doSlash(do_list($id)))."')";
 
-		// If no images have been selected, try the article image field
-		if (!$pool)
+		// If no images are selected, try the article image field
+		if (!$pool && !$icn)
 		{
-			if ($thisarticle && !empty($thisarticle['article_image']))
+			if ($thisarticle && in_array('article', $context_list) && !empty($thisarticle['article_image']))
 			{
 				$items = do_list($thisarticle['article_image']);
 				if (is_numeric($items[0]))
@@ -2700,11 +2702,25 @@ $LastChangedRevision$
 			}
 		}
 
+		if (!$pool && ($icn || $context_list))
+		{
+			return ''; // If nothing matches, output nothing
+		}
+
 		if (!$pool)
 		{
-			return '';  // If nothing matches, output nothing
+			$where[] = "1=1"; // If nothing matches, start with all images
 		}
-		$where[] = '('. join(' OR ', $pool). ')';
+		else
+		{
+			$where[] = '('. join(' OR ', $pool). ')';
+		}
+
+		$authorlist = ($author) ? do_list($author) : array();
+		if ($realname) $authorlist += safe_column('name', 'txp_users', 'RealName IN ('. doQuote(join("','", doArray(doSlash(do_list($realname)), 'urldecode'))) .')' );
+		if ($authorlist) $where[] = "author IN ('".join("','", doSlash(array_unique($authorlist)))."')";
+
+		if ($ext) $where[] = "ext IN ('".join("','", doSlash(do_list($ext)))."')";
 		if ($has_thumb) $where[] = "thumbnail = 1";
 
 		$qparts = array(
