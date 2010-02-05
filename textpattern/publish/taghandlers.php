@@ -2661,7 +2661,7 @@ $LastChangedRevision$
 			'author'    => '',
 			'realname'  => '',
 			'ext'       => '',
-			'has_thumb' => 0,
+			'thumbnail' => 0,
 			'context'   => 'article',
 			'label'     => '',
 			'break'     => br,
@@ -2670,7 +2670,6 @@ $LastChangedRevision$
 			'html_id'   => '',
 			'labeltag'  => '',
 			'form'      => '',
-			'thumb'     => 0,
 			'limit'     => 0,
 			'offset'    => 0,
 			'sort'      => 'name ASC',
@@ -2680,7 +2679,7 @@ $LastChangedRevision$
 		$pool = array();
 		$has_content = $thing || $form;
 		$icn = isset($atts['id']) || isset($atts['category']) || isset($atts['name']);
-		$filters = $author || $realname || $ext || $has_thumb;
+		$filters = $author || $realname || $ext || $thumbnail;
 		$context_list = (empty($context) || $icn || $filters) ? array() : do_list($context);
 
 		if ($name) $pool[] = "name IN ('".join("','", doSlash(do_list($name)))."')";
@@ -2721,7 +2720,7 @@ $LastChangedRevision$
 		if ($authorlist) $where[] = "author IN ('".join("','", doSlash(array_unique($authorlist)))."')";
 
 		if ($ext) $where[] = "ext IN ('".join("','", doSlash(do_list($ext)))."')";
-		if ($has_thumb) $where[] = "thumbnail = 1";
+		if ($thumbnail) $where[] = "thumbnail = 1";
 
 		$qparts = array(
 			join(' AND ', $where),
@@ -2743,7 +2742,7 @@ $LastChangedRevision$
 				if (!$has_content)
 				{
 					$url = pagelinkurl(array('c'=>$thisimage['category'], 's'=>$s, 'p'=>$thisimage['id']));
-					$src = ($thumb) ? image_url(array('thumb' => '1')) : image_url(array());
+					$src = image_url(array('thumbnail' => '1'));
 					$thing = '<a href="'.$url.'">'.
 						'<img src="'. $src .'" alt="'.$thisimage['alt'].'" />'.'</a>'.n;
 				}
@@ -2827,10 +2826,10 @@ $LastChangedRevision$
 		global $thisimage, $img_dir;
 
 		extract(lAtts(array(
-			'name'  => '',
-			'id'    => '',
-			'thumb' => 0,
-			'link'  => 'auto',
+			'name'      => '',
+			'id'        => '',
+			'thumbnail' => 0,
+			'link'      => 'auto',
 		), $atts));
 
 		$from_form = false;
@@ -2853,7 +2852,7 @@ $LastChangedRevision$
 
 		if ($thisimage)
 		{
-			$url = hu.$img_dir.'/'.$thisimage['id'].(($thumb) ? 't' : '').$thisimage['ext'];
+			$url = hu.$img_dir.'/'.$thisimage['id'].(($thumbnail) ? 't' : '').$thisimage['ext'];
 			$link = ($link == 'auto') ? (($thing) ? 1 : 0) : $link;
 			$out = ($thing) ? parse($thing) : $url;
 			$out = ($link) ? href($out, $url) : $out;
