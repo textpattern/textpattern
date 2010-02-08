@@ -434,7 +434,7 @@ $LastChangedRevision$
 			if (!has_privs('file.publish') && $status >= 4) $status = 3;
 
 			$file_exists = file_exists(build_file_path($file_base_path,$filename));
-			$replace = ($file_exists) ? tr(td(file_upload_form(gTxt('replace_file'),'upload','file_replace',$id))) : '';
+			$replace = ($file_exists) ? tr(td(file_upload_form(gTxt('replace_file'),'file_replace','file_replace',$id))) : '';
 
 			$existing_files = get_filenames();
 
@@ -498,7 +498,7 @@ $LastChangedRevision$
 				$form =	tr(
 							tda(
 								hed(gTxt('file_relink'),3).
-								file_upload_form(gTxt('upload_file'),'upload','file_replace',$id).
+								file_upload_form(gTxt('upload_file'),'file_reassign','file_replace',$id).
 								form(
 									graf(gTxt('existing_file').' '.
 									selectInput('filename',$existing_files,"",1).

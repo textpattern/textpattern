@@ -59,7 +59,7 @@ $LastChangedRevision$
 
 		elseif (has_privs('image.edit.own'))
 		{
-			echo upload_form(gTxt('upload_image'), 'upload', 'image_insert', 'image', '', $file_max_upload_size);
+			echo upload_form(gTxt('upload_image'), 'upload_image', 'image_insert', 'image', '', $file_max_upload_size);
 		}
 
 		switch ($sort)
