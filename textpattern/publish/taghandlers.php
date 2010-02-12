@@ -1386,7 +1386,9 @@ $LastChangedRevision$
 		global $thispage, $pretext, $permlink_mode;
 
 		extract(lAtts(array(
-			'showalways' => 0,
+			'showalways'	=> 0,
+			'title'			=> '',
+			'escape'		=> 'html'
 		), $atts));
 
 		$numPages = $thispage['numPages'];
@@ -1414,6 +1416,11 @@ $LastChangedRevision$
 
 			if ($thing)
 			{
+				if ($escape == 'html')
+				{
+					$title = escape_title($title);
+				}
+
 				return '<a href="'.$url.'"'.
 					(empty($title) ? '' : ' title="'.$title.'"').
 					'>'.parse($thing).'</a>';
@@ -1432,7 +1439,9 @@ $LastChangedRevision$
 		global $thispage, $pretext, $permlink_mode;
 
 		extract(lAtts(array(
-			'showalways' => 0,
+			'showalways'	=> 0,
+			'title'			=> '',
+			'escape'		=> 'html'
 		), $atts));
 
 		$numPages = $thispage['numPages'];
@@ -1460,6 +1469,11 @@ $LastChangedRevision$
 
 			if ($thing)
 			{
+				if ($escape == 'html')
+				{
+					$title = escape_title($title);
+				}
+
 				return '<a href="'.$url.'"'.
 					(empty($title) ? '' : ' title="'.$title.'"').
 					'>'.parse($thing).'</a>';
