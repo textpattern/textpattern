@@ -402,7 +402,7 @@ $LastChangedRevision$
 							$message = callback_event("plugin_lifecycle.$name", 'installed');
 						}
 
-						if (empty($message)) $message = gTxt('plugin_installed', array('{name}' => htmlspecialchars($name)));
+						if (empty($message)) $message = gTxt('plugin_installed', array('{name}' => $name));
 
 						plugin_list($message);
 						return;
@@ -410,7 +410,7 @@ $LastChangedRevision$
 
 					else
 					{
-						$message = array(gTxt('plugin_install_failed', array('{name}' => htmlspecialchars($name))), E_ERROR);
+						$message = array(gTxt('plugin_install_failed', array('{name}' => $name)), E_ERROR);
 
 						plugin_list($message);
 						return;
