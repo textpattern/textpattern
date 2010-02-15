@@ -114,16 +114,17 @@ $LastChangedRevision$
 	function gTxt($var, $atts=array(), $escape='html')
 	{
 		global $textarray;
+
+		if($escape == 'html')
+		{
+			foreach ($atts as $key => $value)
+			{
+				$atts[$key] = htmlspecialchars($value);
+			}
+		}
+
 		if(isset($textarray[strtolower($var)])) {
 			$out = $textarray[strtolower($var)];
-			if($escape == 'html')
-			{
-				foreach ($atts as $key => $value)
-				{
-					$atts[$key] = htmlspecialchars($value);
-				}
-			}
-
 			return strtr($out, $atts);
 		}
 
