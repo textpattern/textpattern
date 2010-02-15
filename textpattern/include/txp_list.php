@@ -103,7 +103,7 @@ $LastChangedRevision$
 
 		if ($search_method and $crit)
 		{
-			$crit_escaped = doSlash($crit);
+			$crit_escaped = doSlash(preg_quote($crit));
 			$critsql = array(
 				'id'         => "ID in ('" .join("','", do_list($crit_escaped)). "')",
 				'title_body_excerpt' => "Title rlike '$crit_escaped' or Body rlike '$crit_escaped' or Excerpt rlike '$crit_escaped'",
