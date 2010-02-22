@@ -18,11 +18,12 @@ define('RPC_SERVER', 'http://rpc.textpattern.com');
 define('LEAVE_TEXT_UNTOUCHED', 0);
 define('USE_TEXTILE', 1);
 define('CONVERT_LINEBREAKS', 2);
+define('IS_WIN', strtoupper(substr(PHP_OS, 0, 3)) === 'WIN');
 
 if (defined('DIRECTORY_SEPARATOR'))
 	define('DS', DIRECTORY_SEPARATOR);
 else
-	define ('DS', (is_windows() ? '\\' : '/'));
+	define ('DS', (IS_WIN ? '\\' : '/'));
 
 define('MAGIC_QUOTES_GPC', get_magic_quotes_gpc());
 

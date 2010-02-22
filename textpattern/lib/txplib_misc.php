@@ -1088,7 +1088,7 @@ $LastChangedRevision$
 			$reply_to = strip_rn($reply_to);
 		}
 
-		$sep = !is_windows() ? "\n" : "\r\n";
+		$sep = !IS_WIN ? "\n" : "\r\n";
 
 		$body = str_replace("\r\n", "\n", $body);
 		$body = str_replace("\r", "\n", $body);
@@ -1103,7 +1103,7 @@ $LastChangedRevision$
 
 		if (is_valid_email($prefs['smtp_from']))
 		{
-			if (is_windows())
+			if (IS_WIN)
 			{
 				ini_set('sendmail_from', $prefs['smtp_from']);
 			}
@@ -1140,7 +1140,7 @@ $LastChangedRevision$
 			$pcre  = '/.{1,45}(?=[\x00-\x7F\xC0-\xFF]|$)/s';
 		}
 		$end = '?=';
-		$sep = is_windows() ? "\r\n" : "\n";
+		$sep = IS_WIN ? "\r\n" : "\n";
 		preg_match_all($pcre, $string, $matches);
 		return $start . join($end.$sep.' '.$start, array_map('base64_encode',$matches[0])) . $end;
 	}
@@ -1310,7 +1310,7 @@ $LastChangedRevision$
 		@list($lang, $charset) = explode('.', $locale);
 		if (empty($charset))
 			$charset = 'ISO-8859-1';
-		elseif (is_windows() and is_numeric($charset))
+		elseif (IS_WIN and is_numeric($charset))
 			// Score -1 for consistent naming conventions
 			$charset = 'Windows-'.$charset;
 
@@ -1377,7 +1377,7 @@ $LastChangedRevision$
 	{
 		global $path_to_site, $img_dir;
 
-		if (is_windows()) {
+		if (IS_WIN) {
 			$guess = array(txpath.DS.'tmp', getenv('TMP'), getenv('TEMP'), getenv('SystemRoot').DS.'Temp', 'C:'.DS.'Temp', $path_to_site.DS.$img_dir);
 			foreach ($guess as $k=>$v)
 				if (empty($v)) unset($guess[$k]);
@@ -1482,9 +1482,10 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
+	// for b/c only
 	function is_windows()
 	{
-		return (PHP_OS == 'WINNT' or PHP_OS == 'WIN32' or PHP_OS == 'Windows');
+		return IS_WIN;
 	}
 
 // -------------------------------------------------------------
