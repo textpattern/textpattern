@@ -850,7 +850,8 @@ EOS
 
 		$install_langfile = gTxt('install_langfile', array(
 			'{url}' => strong('<a href="'.RPC_SERVER.'/lang/">'.RPC_SERVER.'/lang/</a>')
-		));
+			),
+			'raw');
 
 		if ( $install_langfile == 'install_langfile')
 			$install_langfile = 'To install new languages from file you can download them from <b><a href="'.RPC_SERVER.'/lang/">'.RPC_SERVER.'/lang/</a></b> and place them inside your ./textpattern/lang/ directory.';
