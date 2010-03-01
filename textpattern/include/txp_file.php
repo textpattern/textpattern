@@ -278,7 +278,7 @@ $LastChangedRevision$
 				tda(
 					select_buttons().
 					file_multiedit_form($page, $sort, $dir, $crit, $search_method)
-				,' colspan="'.($show_authors ? '11' : '10').'" style="text-align: right; border: none;"')
+				,' colspan="'.($show_authors ? '12' : '11').'" style="text-align: right; border: none;"')
 			).
 
 			endTable().
