@@ -27,6 +27,7 @@ $LastChangedRevision$
 			'prefs_save',
 			'advanced_prefs_save',
 			'get_language',
+			'get_textpack',
 			'list_languages',
 			'prefs_list'
 		);
@@ -920,6 +921,65 @@ EOS
 				$msg .= sprintf(" (%s errors, %s ok)",$errors, ($size-$errors));
 			return list_languages($msg);
 		}
+	}
+
+//-------------------------------------------------------------
+	function get_textpack()
+	{
+		$textpack = ps('textpack');
+		install_language_from_textpack($textpack);
+		return list_languages(/*$msg*/);
+	}
+
+//-------------------------------------------------------------
+	function install_language_from_textpack($textpack)
+	{
+		global $prefs;
+
+		$textpack = explode(n, $textpack);
+		if (empty($textpack)) return false;
+
+		// presume site language equals textpack language
+		$language = get_pref('language', 'en-US');
+		foreach ($textpack as $line)
+		{
+			$line = trim($line);
+			dmp($line);
+			// any line starting with #, not followed by @ is a simple comment
+			if (preg_match('/^#[^@]/', $line, $m))
+			{
+				continue;
+			}
+
+			// A line starting with #@language switches the current language until further notice
+			// TODO: possible conflicts with $event == 'language'. Ignore?
+			if (preg_match('/^#@language\s+(.*)\s*$/', $line, $m))
+			{
+				$language = doSlash($m[1]);
+				continue;
+			}
+
+			// A line starting with #@ switches the current event
+			if (preg_match('/^#@([a-zA-Z0-9_-]*)\s*$/', $line, $m))
+			{
+				$event = doSlash($m[1]);
+				continue;
+			}
+
+			// Data lines match a "name => value" pattern. Some white space allowed.
+			if (preg_match('/^\s*(\w+)\s*=>\s*(.+)$/', $line, $m))
+			{
+				if(!empty($m[1]) && !empty($m[2]))
+				{
+					$name = doSlash($m[1]);
+					$value = doSlash($m[2]);
+					safe_upsert('txp_lang',
+							"lastmod=NOW(),`data`='$value', event='$event', lang='$language'",
+							"name='$name'", 1);
+				}
+			}
+		}
+		return true;
 	}
 
 // ----------------------------------------------------------------------
