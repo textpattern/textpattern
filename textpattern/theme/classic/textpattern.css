@@ -683,6 +683,22 @@ h2.pref-heading {
 margin: 20px 0 0 0;
 }
 
+#page-prefs .text_uploader {
+margin-top: 10px;
+}
+
+#page-prefs .text_uploader .smallerbox{
+margin-top: 5px;
+}
+
+#page-prefs .text_uploader label {
+display: block;
+}
+
+#page-prefs #textpack-install {
+width: 32em;
+}
+
 /* images
 ----------------------------------------------- */
 

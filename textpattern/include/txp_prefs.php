@@ -838,6 +838,24 @@ EOS
 		tr(tda('&nbsp;',' colspan="3" style="font-size:0.25em"')),
 		tr(tda(gTxt('language')).tda(gTxt('from_server')).( ($show_files) ? tda(gTxt('from_file')) : '' ), ' style="font-weight:bold"');
 		echo $list;
+
+		if (gps('force')!='file')
+		{
+			echo n.
+			tr(
+				tda(
+					form(
+						tag(gTxt('install_textpack'), 'label', ' for="textpack-install"').n.
+						'<textarea id="textpack-install" class="code" name="textpack" cols="45" rows="5"></textarea>'.n.
+						tag(popHelp('get_textpack'), 'span', ' style="vertical-align: top;"').
+						graf(fInput('submit', 'install_new', gTxt('upload'), 'smallerbox')).
+						eInput('prefs').
+						sInput('get_textpack')
+					, '', '', 'post', 'text_uploader')
+				,' colspan="3"')
+			);
+		}
+
 		if (!$show_files)
 		{
 			$linktext =  gTxt('from_file').' ('.gTxt('experts_only').')';
@@ -927,59 +945,8 @@ EOS
 	function get_textpack()
 	{
 		$textpack = ps('textpack');
-		install_language_from_textpack($textpack);
-		return list_languages(/*$msg*/);
-	}
-
-//-------------------------------------------------------------
-	function install_language_from_textpack($textpack)
-	{
-		global $prefs;
-
-		$textpack = explode(n, $textpack);
-		if (empty($textpack)) return false;
-
-		// presume site language equals textpack language
-		$language = get_pref('language', 'en-US');
-		foreach ($textpack as $line)
-		{
-			$line = trim($line);
-			dmp($line);
-			// any line starting with #, not followed by @ is a simple comment
-			if (preg_match('/^#[^@]/', $line, $m))
-			{
-				continue;
-			}
-
-			// A line starting with #@language switches the current language until further notice
-			// TODO: possible conflicts with $event == 'language'. Ignore?
-			if (preg_match('/^#@language\s+(.*)\s*$/', $line, $m))
-			{
-				$language = doSlash($m[1]);
-				continue;
-			}
-
-			// A line starting with #@ switches the current event
-			if (preg_match('/^#@([a-zA-Z0-9_-]*)\s*$/', $line, $m))
-			{
-				$event = doSlash($m[1]);
-				continue;
-			}
-
-			// Data lines match a "name => value" pattern. Some white space allowed.
-			if (preg_match('/^\s*(\w+)\s*=>\s*(.+)$/', $line, $m))
-			{
-				if(!empty($m[1]) && !empty($m[2]))
-				{
-					$name = doSlash($m[1]);
-					$value = doSlash($m[2]);
-					safe_upsert('txp_lang',
-							"lastmod=NOW(),`data`='$value', event='$event', lang='$language'",
-							"name='$name'", 1);
-				}
-			}
-		}
-		return true;
+		$n = install_textpack($textpack);
+		return list_languages(gTxt('textpack_strings_installed', array('count' => $n)));
 	}
 
 // ----------------------------------------------------------------------

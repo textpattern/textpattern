@@ -2566,4 +2566,61 @@ eod;
 				!defined('NO_TIMEZONE_SUPPORT');	// user-definable emergency brake
 		}
 	}
+
+//-------------------------------------------------------------
+	function install_textpack($textpack)
+	{
+		global $prefs;
+
+		$textpack = explode(n, $textpack);
+		if (empty($textpack)) return 0;
+
+		// presume site language equals textpack language
+		$language = get_pref('language', 'en-gb');
+		$done = 0;
+		foreach ($textpack as $line)
+		{
+			$line = trim($line);
+			// A line starting with #, not followed by @ is a simple comment
+			if (preg_match('/^#[^@]/', $line, $m))
+			{
+				continue;
+			}
+
+			// A line matching "#@language xx-xx" establishes the designated language for all subsequent lines
+			if (preg_match('/^#@language\s+(.+)$/', $line, $m))
+			{
+				$language = doSlash($m[1]);
+				continue;
+			}
+
+			// A line matching "#@event_name" establishes the event value for all subsequent lines
+			if (preg_match('/^#@([a-zA-Z0-9_-]+)$/', $line, $m))
+			{
+				$event = doSlash($m[1]);
+				continue;
+			}
+
+			// Data lines match a "name => value" pattern. Some white space allowed.
+			if (preg_match('/^(\w+)\s*=>\s*(.+)$/', $line, $m))
+			{
+				if (!empty($m[1]) && !empty($m[2]))
+				{
+					$name = doSlash($m[1]);
+					$value = doSlash($m[2]);
+					$where = "lang='$language' AND name='$name'";
+					if (safe_count('txp_lang', $where))
+					{
+						safe_update('txp_lang',	"lastmod=NOW(), data='$value', event='$event'", $where);
+					}
+					else
+					{
+						safe_insert('txp_lang',	"lastmod=NOW(), data='$value', event='$event', lang='$language', name='$name'");
+					}
+					++$done;
+				}
+			}
+		}
+		return $done;
+	}
 ?>
