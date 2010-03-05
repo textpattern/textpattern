@@ -3514,12 +3514,18 @@ $LastChangedRevision$
 
 		extract(lAtts(array(
 			'name' => @$prefs['custom_1_set'],
+			'value' => NULL,
 			'val' => NULL,
 		),$atts));
 
+		if (isset($atts['val'])) {
+			$value = $val;
+			trigger_error(gTxt('deprecated_attribute', array('{name}' => 'val')), E_USER_NOTICE);
+		}
+
 		$name = strtolower($name);
-		if ($val !== NULL)
-			$cond = (@$thisarticle[$name] == $val);
+		if ($value !== NULL)
+			$cond = (@$thisarticle[$name] == $value);
 		else
 			$cond = !empty($thisarticle[$name]);
 
