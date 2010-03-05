@@ -3516,6 +3516,8 @@ $LastChangedRevision$
 			'name' => @$prefs['custom_1_set'],
 			'value' => NULL,
 			'val' => NULL,
+			'match' => 'exact',
+			'separator' => '',
 		),$atts));
 
 		if (isset($atts['val'])) {
@@ -3525,7 +3527,48 @@ $LastChangedRevision$
 
 		$name = strtolower($name);
 		if ($value !== NULL)
-			$cond = (@$thisarticle[$name] == $value);
+			switch ($match) {
+				case '':
+				case 'exact':
+					$cond = (@$thisarticle[$name] == $value);
+					break;
+				case 'any':
+					$values = do_list($value);
+					$cond = false;
+					$cf_contents = ($separator) ? do_list(@$thisarticle[$name], $separator) : @$thisarticle[$name];
+					foreach($values as $term) {
+						if ($term == '') continue;
+						$cond = is_array($cf_contents) ? in_array($term, $cf_contents) : ((strpos($cf_contents, $term) !== false) ? true : false);
+
+						// Short circuit if a match is found
+						if ($cond) break;
+					}
+					break;
+				case 'all':
+					$values = do_list($value);
+					$num_values = count($values);
+					$term_count = 0;
+					$cf_contents = ($separator) ? do_list(@$thisarticle[$name], $separator) : @$thisarticle[$name];
+					foreach ($values as $term) {
+						if ($term == '') continue;
+						$term_count += is_array($cf_contents) ? in_array($term, $cf_contents) : ((strpos($cf_contents, $term) !== false) ? true : false);
+					}
+					$cond = ($term_count == $num_values) ? true : false;
+					break;
+				case 'pattern':
+					// Cannot guarantee that a fixed delimiter won't break preg_match (and preg_quote doesn't help) so
+					// dynamically assign the delimiter based on the first entry in $dlmPool that is NOT in the value attribute.
+					// This minimises (does not eliminate) the possibility of a TXP-initiated preg_match error, while still
+					// preserving errors outside TXP's control (e.g. mangled user-submitted PCRE pattern)
+					$dlmPool = array('/', '@', '#', '~', '`', '|', '!', '%');
+					$dlm = array_merge(array_diff($dlmPool, preg_split('//', $value, -1)));
+					$dlm = (count($dlm) > 0) ? $dlm[0].$value.$dlm[0] : $value;
+					$cond = preg_match($dlm, @$thisarticle[$name]);
+					break;
+				default:
+					trigger_error(gTxt('invalid_attribute_value', array('{name}' => 'value')), E_USER_NOTICE);
+					$cond = false;
+			}
 		else
 			$cond = !empty($thisarticle[$name]);
 
