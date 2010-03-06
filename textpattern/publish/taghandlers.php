@@ -3248,12 +3248,18 @@ $LastChangedRevision$
 		extract(lAtts(array(
 			'wraptag' => 'p',
 			'sep' => '&#160;&#187;&#160;',
+			'separator' => '&#160;&#187;&#160;',
 			'link' => 1,
 			'label' => $sitename,
 			'title' => '',
 			'class' => '',
 			'linkclass' => 'noline',
 		),$atts));
+
+		if (isset($atts['sep'])) {
+			$separator = $sep;
+			trigger_error(gTxt('deprecated_attribute', array('{name}' => 'sep')), E_USER_NOTICE);
+		}
 
 		// bc, get rid of in crockery
 		if ($link == 'y') {
@@ -3293,7 +3299,7 @@ $LastChangedRevision$
 		{
 			$content = array_merge(array($label), $content);
 
-			return doTag(join($sep, $content), $wraptag, $class);
+			return doTag(join($separator, $content), $wraptag, $class);
 		}
 	}
 
