@@ -2614,11 +2614,20 @@ $LastChangedRevision$
 			'wraptag'  => '',
 			'class'    => __FUNCTION__,
 			'labeltag' => '',
-			'c'        => $c, // Keep the option to override categories due to backward compatiblity
+			'c'        => $c, // Keep the option to override categories due to backward compatibility
+			'category' => $c,
 			'limit'    => 0,
 			'offset'   => 0,
 			'sort'     => 'name ASC',
 		),$atts));
+
+		if (isset($atts['c'])) {
+			trigger_error(gTxt('deprecated_attribute', array('{name}' => 'c')), E_USER_NOTICE);
+		}
+
+		if (isset($atts['category'])) {
+			$c = $category; // Override the global
+		}
 
 		$qparts = array(
 			"category = '".doSlash($c)."' and thumbnail = 1",
