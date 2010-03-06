@@ -53,9 +53,14 @@ $LastChangedRevision$
 			'format' => 'url',
 			'media'  => 'screen',
 			'n'      => $css,
+			'name'   => $css,
 			'rel'    => 'stylesheet',
 			'title'  => '',
 		), $atts));
+
+		if (isset($atts['name'])) {
+			$n = $name;
+		}
 
 		if (empty($n)) $n = 'default';
 		$url = hu.'css.php?n='.$n;
