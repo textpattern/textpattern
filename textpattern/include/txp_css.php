@@ -12,12 +12,12 @@ $LastChangedRevision$
 
 		switch ($step) {
 			case '': css_edit(); break;
-			case 'css_edit_raw': css_edit();           break;
-			case 'pour': css_edit();	               break;
-			case 'css_save': css_save();               break;
-			case 'css_copy': css_copy();               break;
-			case 'css_delete': css_delete();           break;
-			case 'css_edit': css_edit();               break;
+			case 'css_edit_raw': css_edit();    break;
+			case 'pour': css_edit();            break;
+			case 'css_save': css_save();        break;
+			case 'css_copy': css_copy();        break;
+			case 'css_delete': css_delete();    break;
+			case 'css_edit': css_edit();        break;
 		}
 	}
 
@@ -60,7 +60,7 @@ $LastChangedRevision$
 
 		$name = (!$name or $step == 'css_delete') ? $default_name : $name;
 
-		if (gps('copy') && trim(preg_replace('/[<>&"\']/', '', gps('newname'))) )
+		if ((gps('copy') || gps('savenew')) && trim(preg_replace('/[<>&"\']/', '', gps('newname'))) )
 			$name = gps('newname');
 
 		if ($step=='pour')
