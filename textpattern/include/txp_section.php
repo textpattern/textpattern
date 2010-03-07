@@ -204,12 +204,14 @@ $LastChangedRevision$
 		{
 			if ($name)
 			{
+				$default = safe_row('page, css', 'txp_section', "name = 'default'");
+
 				$rs = safe_insert(
 				   "txp_section",
 				   "name         = '".doSlash($name) ."',
 					title        = '".doSlash($title)."',
-					page         = 'default',
-					css          = 'default',
+					page         = '".$default['page']."',
+					css          = '".$default['css']."',
 					is_default   = 0,
 					in_rss       = 1,
 					on_frontpage = 1"
