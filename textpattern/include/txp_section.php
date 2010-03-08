@@ -204,7 +204,7 @@ $LastChangedRevision$
 		{
 			if ($name)
 			{
-				$default = safe_row('page, css', 'txp_section', "name = 'default'");
+				$default = doSlash(safe_row('page, css', 'txp_section', "name = 'default'"));
 
 				$rs = safe_insert(
 				   "txp_section",
