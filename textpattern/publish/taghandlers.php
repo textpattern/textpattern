@@ -338,6 +338,7 @@ $LastChangedRevision$
 			'section'  => ( $s == 'default' ? '' : $s),
 			'title'    => gTxt('rss_feed_title'),
 			'wraptag'  => '',
+			'class'    => '',
 		), $atts));
 
 		$url = pagelinkurl(array(
@@ -364,7 +365,7 @@ $LastChangedRevision$
 		$txt = ($thing === NULL ? $label : parse($thing));
 		$out = '<a href="'.$url.'" title="'.$title.'">'.$txt.'</a>';
 
-		return ($wraptag) ? tag($out, $wraptag) : $out;
+		return ($wraptag) ? doTag($out, $wraptag, $class) : $out;
 	}
 
 // -------------------------------------------------------------
