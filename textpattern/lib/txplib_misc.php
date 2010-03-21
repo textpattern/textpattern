@@ -1994,8 +1994,9 @@ eod;
 
 			elseif (!empty($keys['c']))
 			{
-				$url = hu.strtolower(urlencode(gTxt('category'))).'/'.urlencode($keys['c']).'/';
-				unset($keys['c']);
+				$ct = (empty($keys['ctype']) || $keys['ctype'] == 'article') ? '' : strtolower(urlencode(gTxt($keys['ctype'].'_ctype'))).'/';
+				$url = hu.strtolower(urlencode(gTxt('category'))).'/'.$ct.urlencode($keys['c']).'/';
+				unset($keys['c'], $keys['ctype']);
 				return $url.join_qs($keys);
 			}
 

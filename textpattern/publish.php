@@ -217,7 +217,7 @@ $LastChangedRevision$
 		callback_event('pretext');
 
 			// set messy variables
-		$out =  makeOut('id','s','c','q','m','pg','p','month','author');
+		$out =  makeOut('id','s','c','ctype','q','m','pg','p','month','author');
 
 		if(gps('rss')) {
 			include txpath.'/publish/rss.php';
@@ -278,7 +278,19 @@ $LastChangedRevision$
 						$out['s'] = (ckEx('section',$u2)) ? $u2 : ''; $is_404 = empty($out['s']); break;
 
 					case urldecode(strtolower(urlencode(gTxt('category')))):
-						$out['c'] = (ckEx('category',$u2)) ? $u2 : ''; $is_404 = empty($out['c']); break;
+						$validTypes = array('article' => gTxt('article_ctype'), 'image' => gTxt('image_ctype'), 'file' => gTxt('file_ctype'), 'link' => gTxt('link_ctype'));
+						if ($u3) {
+							$theType = in_array($u2, $validTypes) ? $u2 : gTxt('article_ctype');
+							$theCat = $u3;
+						} else {
+							$theType = gTxt('article_ctype');
+							$theCat = $u2;
+						}
+						$typecode = array_search($theType, $validTypes);
+						$out['ctype'] = $typecode;
+						$out['c'] = (ckCat($typecode,$theCat)) ? $theCat : '';
+						$is_404 = empty($out['c']);
+						break;
 
 					case urldecode(strtolower(urlencode(gTxt('author')))):
 						$out['author'] = (!empty($u2)) ? $u2 : ''; break;
@@ -784,6 +796,7 @@ $LastChangedRevision$
 			$pageout['numPages'] = $numPages;
 			$pageout['s']        = $s;
 			$pageout['c']        = $c;
+			$pageout['ctype']    = 'article';
 			$pageout['grand_total'] = $grand_total;
 			$pageout['total']    = $total;
 
@@ -1240,6 +1253,12 @@ $LastChangedRevision$
 	function ckEx($table,$val,$debug='')
 	{
 		return safe_field("name",'txp_'.$table,"`name` like '".doSlash($val)."' limit 1",$debug);
+	}
+
+// -------------------------------------------------------------
+	function ckCat($type,$val,$debug='')
+	{
+		return safe_field("name",'txp_category',"`name` like '".doSlash($val)."' AND type = '".doSlash($type)."' limit 1",$debug);
 	}
 
 // -------------------------------------------------------------

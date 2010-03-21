@@ -15,7 +15,7 @@ $LastChangedRevision$
 
 	function page_title($atts)
 	{
-		global $parentid, $thisarticle, $id, $q, $c, $s, $pg, $sitename;
+		global $parentid, $thisarticle, $id, $q, $c, $ctype, $s, $pg, $sitename;
 
 		extract(lAtts(array(
 			'separator' => ': ',
@@ -31,7 +31,7 @@ $LastChangedRevision$
 		} elseif ($q) {
 			$out .= gTxt('search_results').htmlspecialchars($separator.$q);
 		} elseif ($c) {
-			$out .= htmlspecialchars(fetch_category_title($c));
+			$out .= htmlspecialchars(fetch_category_title($c, $ctype));
 		} elseif ($s and $s != 'default') {
 			$out .= htmlspecialchars(fetch_section_title($s));
 		} elseif ($pg) {
@@ -412,7 +412,7 @@ $LastChangedRevision$
 
 	function linklist($atts, $thing = NULL)
 	{
-		global $thislink;
+		global $s, $c, $thislink, $thispage, $pretext;
 
 		extract(lAtts(array(
 			'break'    => '',
@@ -421,16 +421,38 @@ $LastChangedRevision$
 			'form'     => 'plainlinks',
 			'label'    => '',
 			'labeltag' => '',
+			'pageby'   => '',
 			'limit'    => 0,
 			'offset'   => 0,
 			'sort'     => 'linksort asc',
 			'wraptag'  => '',
 		), $atts));
 
+		$pageby = (empty($pageby) ? $limit : $pageby);
+		$where = ($category) ? "category IN ('".join("','", doSlash(do_list($category)))."')" : '1=1';
+
+		// Set up paging
+		$grand_total = safe_count('txp_link', $where);
+		$total = $grand_total - $offset;
+		$numPages = ($pageby > 0) ? ceil($total/$pageby) : 1;
+		$pg = (!$pretext['pg']) ? 1 : $pretext['pg'];
+		$pgoffset = $offset + (($pg - 1) * $pageby);
+		// send paging info to txp:newer and txp:older
+		$pageout['pg']       = $pg;
+		$pageout['numPages'] = $numPages;
+		$pageout['s']        = $s;
+		$pageout['c']        = $c;
+		$pageout['ctype']    = 'link';
+		$pageout['grand_total'] = $grand_total;
+		$pageout['total']    = $total;
+
+		if (empty($thispage))
+			$thispage = $pageout;
+
 		$qparts = array(
-			($category) ? "category IN ('".join("','", doSlash(do_list($category)))."')" : '1=1',
+			$where,
 			'order by '.doSlash($sort),
-			($limit) ? 'limit '.intval($offset).', '.intval($limit) : ''
+			($limit) ? 'limit '.intval($pgoffset).', '.intval($limit) : ''
 		);
 
 		$rs = safe_rows_start('*, unix_timestamp(date) as uDate', 'txp_link', join(' ', $qparts));
@@ -1076,7 +1098,7 @@ $LastChangedRevision$
 					{
 						$out[] = tag(htmlspecialchars($title), 'a',
 							( ($active_class and (0 == strcasecmp($c, $name))) ? ' class="'.$active_class.'"' : '' ).
-							' href="'.pagelinkurl(array('s' => $section, 'c' => $name)).'"'
+							' href="'.pagelinkurl(array('s' => $section, 'c' => $name, 'ctype' => $type)).'"'
 						);
 					}
 					else
@@ -1416,6 +1438,7 @@ $LastChangedRevision$
 				'pg'     => $nextpg,
 				's'      => @$pretext['s'],
 				'c'      => @$pretext['c'],
+				'ctype'  => @$pretext['ctype'],
 				'q'      => @$pretext['q'],
 				'author' => $author
 			));
@@ -1469,6 +1492,7 @@ $LastChangedRevision$
 				'pg'     => $nextpg,
 				's'      => @$pretext['s'],
 				'c'      => @$pretext['c'],
+				'ctype'  => @$pretext['ctype'],
 				'q'      => @$pretext['q'],
 				'author' => $author
 			));
@@ -2290,7 +2314,7 @@ $LastChangedRevision$
 			$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
 			$label = htmlspecialchars( ($title) ? fetch_category_title($category, $type) : $category );
 
-			$href = pagelinkurl(array('s' => $section, 'c' => $category));
+			$href = pagelinkurl(array('s' => $section, 'c' => $category, 'ctype' => $type));
 
 			if ($thing)
 			{
@@ -2650,7 +2674,7 @@ $LastChangedRevision$
 				$impath = $img_dir.'/'.$id.'t'.$ext;
 				$imginfo = getimagesize($path_to_site.'/'.$impath);
 				$dims = (!empty($imginfo[3])) ? ' '.$imginfo[3] : '';
-				$url = pagelinkurl(array('c'=>$c, 's'=>$s, 'p'=>$id));
+				$url = pagelinkurl(array('c'=>$c, 'ctype'=>'image', 's'=>$s, 'p'=>$id));
 				$out[] = '<a href="'.$url.'">'.
 					'<img src="'.hu.$impath.'"'.$dims.' alt="'.$alt.'" />'.'</a>';
 
@@ -2681,7 +2705,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function image_list($atts, $thing = NULL)
 	{
-		global $s, $c, $p, $img_dir, $path_to_site, $thisimage, $thisarticle;
+		global $s, $c, $p, $img_dir, $path_to_site, $thisimage, $thisarticle, $thispage, $pretext;
 
 		extract(lAtts(array(
 			'name'      => '',
@@ -2699,6 +2723,7 @@ $LastChangedRevision$
 			'html_id'   => '',
 			'labeltag'  => '',
 			'form'      => '',
+			'pageby'    => '',
 			'limit'     => 0,
 			'offset'    => 0,
 			'sort'      => 'name ASC',
@@ -2710,6 +2735,7 @@ $LastChangedRevision$
 		$icn = isset($atts['id']) || isset($atts['category']) || isset($atts['name']);
 		$filters = $author || $realname || $ext || $thumbnail;
 		$context_list = (empty($context) || $icn || $filters) ? array() : do_list($context);
+		$pageby = (empty($pageby) ? $limit : $pageby);
 
 		if ($name) $pool[] = "name IN ('".join("','", doSlash(do_list($name)))."')";
 
@@ -2751,10 +2777,28 @@ $LastChangedRevision$
 		if ($ext) $where[] = "ext IN ('".join("','", doSlash(do_list($ext)))."')";
 		if ($thumbnail) $where[] = "thumbnail = 1";
 
+		// Set up paging
+		$grand_total = safe_count('txp_image',join(' AND ', $where));
+		$total = $grand_total - $offset;
+		$numPages = ($pageby > 0) ? ceil($total/$pageby) : 1;
+		$pg = (!$pretext['pg']) ? 1 : $pretext['pg'];
+		$pgoffset = $offset + (($pg - 1) * $pageby);
+		// send paging info to txp:newer and txp:older
+		$pageout['pg']       = $pg;
+		$pageout['numPages'] = $numPages;
+		$pageout['s']        = $s;
+		$pageout['c']        = $c;
+		$pageout['ctype']    = 'image';
+		$pageout['grand_total'] = $grand_total;
+		$pageout['total']    = $total;
+
+		if (empty($thispage))
+			$thispage = $pageout;
+
 		$qparts = array(
 			join(' AND ', $where),
 			'order by '.doSlash($sort),
-			($limit) ? 'limit '.intval($offset).', '.intval($limit) : ''
+			($limit) ? 'limit '.intval($pgoffset).', '.intval($limit) : ''
 		);
 
 		$rs = safe_rows_start('*', 'txp_image',  join(' ', $qparts));
@@ -2770,7 +2814,7 @@ $LastChangedRevision$
 				$thisimage = image_format_info($a);
 				if (!$has_content)
 				{
-					$url = pagelinkurl(array('c'=>$thisimage['category'], 's'=>$s, 'p'=>$thisimage['id']));
+					$url = pagelinkurl(array('c'=>$thisimage['category'], 'ctype'=>'image', 's'=>$s, 'p'=>$thisimage['id']));
 					$src = image_url(array('thumbnail' => '1'));
 					$thing = '<a href="'.$url.'">'.
 						'<img src="'. $src .'" alt="'.$thisimage['alt'].'" />'.'</a>'.n;
@@ -3361,19 +3405,21 @@ $LastChangedRevision$
 //--------------------------------------------------------------------------
 	function if_category($atts, $thing)
 	{
-		global $c;
+		global $c, $ctype;
 
 		extract(lAtts(array(
+			'type' => 'article',
 			'name' => FALSE,
 		),$atts));
 
+		$theType = ($type) ? $type == $ctype : true;
 		if ($name === FALSE)
 		{
-			return parse(EvalElse($thing, !empty($c)));
+			return parse(EvalElse($thing, ($theType && !empty($c))));
 		}
 		else
 		{
-			return parse(EvalElse($thing, in_list($c, $name)));
+			return parse(EvalElse($thing, ($theType && in_list($c, $name))));
 		}
 	}
 
@@ -3705,7 +3751,7 @@ $LastChangedRevision$
 
 	function file_download_list($atts, $thing = NULL)
 	{
-		global $thisfile;
+		global $s, $c, $thisfile, $thispage, $pretext;
 
 		extract(lAtts(array(
 			'break'    => br,
@@ -3715,6 +3761,7 @@ $LastChangedRevision$
 			'id'       => '',
 			'label'    => '',
 			'labeltag' => '',
+			'pageby'   => '',
 			'limit'    => 10,
 			'offset'   => 0,
 			'sort'     => 'filename asc',
@@ -3729,10 +3776,29 @@ $LastChangedRevision$
 		if ($category) $where[] = "category IN ('".join("','", doSlash(do_list($category)))."')";
 		if ($id) $where[] = "id IN ('".join("','", doSlash(do_list($id)))."')";
 		if ($status) $where[] = "status = '".doSlash($status)."'";
+		$pageby = (empty($pageby) ? $limit : $pageby);
+
+		// Set up paging
+		$grand_total = safe_count('txp_file', join(' AND ', $where));
+		$total = $grand_total - $offset;
+		$numPages = ($pageby > 0) ? ceil($total/$pageby) : 1;
+		$pg = (!$pretext['pg']) ? 1 : $pretext['pg'];
+		$pgoffset = $offset + (($pg - 1) * $pageby);
+		// send paging info to txp:newer and txp:older
+		$pageout['pg']       = $pg;
+		$pageout['numPages'] = $numPages;
+		$pageout['s']        = $s;
+		$pageout['c']        = $c;
+		$pageout['ctype']    = 'file';
+		$pageout['grand_total'] = $grand_total;
+		$pageout['total']    = $total;
+
+		if (empty($thispage))
+			$thispage = $pageout;
 
 		$qparts = array(
 			'order by '.doSlash($sort),
-			($limit) ? 'limit '.intval($offset).', '.intval($limit) : '',
+			($limit) ? 'limit '.intval($pgoffset).', '.intval($limit) : '',
 		);
 
 		$rs = safe_rows_start('*', 'txp_file', join(' and ', $where).' '.join(' ', $qparts));
