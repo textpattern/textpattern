@@ -2730,52 +2730,49 @@ $LastChangedRevision$
 		),$atts));
 
 		$where = array();
-		$pool = array();
 		$has_content = $thing || $form;
-		$icn = isset($atts['id']) || isset($atts['category']) || isset($atts['name']);
-		$filters = $author || $realname || $ext || $thumbnail;
-		$context_list = (empty($context) || $icn || $filters) ? array() : do_list($context);
+		$filters = $id || $name || $category || $author || $realname || $ext || $thumbnail;
+		$context_list = (empty($context) || $filters) ? array() : do_list($context);
 		$pageby = (empty($pageby) ? $limit : $pageby);
 
-		if ($name) $pool[] = "name IN ('".join("','", doSlash(do_list($name)))."')";
+		if ($name) $where[] = "name IN ('".join("','", doSlash(do_list($name)))."')";
 
-		if ($category) $pool[] = "category IN ('".join("','", doSlash(do_list($category)))."')";
+		if ($category) $where[] = "category IN ('".join("','", doSlash(do_list($category)))."')";
 
-		if ($id) $pool[] = "id IN ('".join("','", doSlash(do_list($id)))."')";
+		if ($id) $where[] = "id IN ('".join("','", doSlash(do_list($id)))."')";
+
+		if ($author) $where[] = "author IN ('".join("','", doSlash(do_list($author)))."')";
+
+		if ($realname) {
+			$authorlist = safe_column('name', 'txp_users', 'RealName IN ('. doQuote(join("','", doArray(doSlash(do_list($realname)), 'urldecode'))) .')' );
+			$where[] = "author IN ('".join("','", doSlash($authorlist))."')";
+		}
+
+		if ($ext) $where[] = "ext IN ('".join("','", doSlash(do_list($ext)))."')";
+		if ($thumbnail) $where[] = "thumbnail = 1";
 
 		// If no images are selected, try the article image field
-		if (!$pool && !$icn)
+		if (!$where && !$filters)
 		{
 			if ($thisarticle && in_array('article', $context_list) && !empty($thisarticle['article_image']))
 			{
 				$items = do_list($thisarticle['article_image']);
 				if (is_numeric($items[0]))
 				{
-					$pool[] = "id IN ('".join("','", doSlash($items))."')";
+					$where[] = "id IN ('".join("','", doSlash($items))."')";
 				}
 			}
 		}
 
-		if (!$pool && ($icn || $context_list))
+		if (!$where && $context_list)
 		{
 			return ''; // If nothing matches, output nothing
 		}
 
-		if (!$pool)
+		if (!$where)
 		{
 			$where[] = "1=1"; // If nothing matches, start with all images
 		}
-		else
-		{
-			$where[] = '('. join(' OR ', $pool). ')';
-		}
-
-		$authorlist = ($author) ? do_list($author) : array();
-		if ($realname) $authorlist += safe_column('name', 'txp_users', 'RealName IN ('. doQuote(join("','", doArray(doSlash(do_list($realname)), 'urldecode'))) .')' );
-		if ($authorlist) $where[] = "author IN ('".join("','", doSlash(array_unique($authorlist)))."')";
-
-		if ($ext) $where[] = "ext IN ('".join("','", doSlash(do_list($ext)))."')";
-		if ($thumbnail) $where[] = "thumbnail = 1";
 
 		// Set up paging
 		$grand_total = safe_count('txp_image',join(' AND ', $where));
