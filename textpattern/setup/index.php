@@ -218,7 +218,7 @@ eod;
 			exit(graf(
 				gTxt('prefix_bad_characters', array(
 					'{dbprefix}' => strong($dprefix)
-				))
+				), 'raw')
 			));
 		}
 
@@ -227,7 +227,7 @@ eod;
 			exit(graf(
 				gTxt('db_doesnt_exist', array(
 					'{dbname}' => strong($ddb)
-				))
+				), 'raw')
 			));
 		}
 
@@ -251,7 +251,7 @@ eod;
 		}
 
 		echo graf(
-			gTxt('using_db', array('{dbname}' => strong($ddb)))
+			gTxt('using_db', array('{dbname}' => strong($ddb)), 'raw')
 			.' ('. $carry['dbcharset'] .')'
 		),
 		graf(
