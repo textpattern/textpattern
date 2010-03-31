@@ -2714,7 +2714,7 @@ $LastChangedRevision$
 			'author'    => '',
 			'realname'  => '',
 			'ext'       => '',
-			'thumbnail' => 0,
+			'thumbnail' => '',
 			'context'   => 'article',
 			'label'     => '',
 			'break'     => br,
@@ -2731,7 +2731,7 @@ $LastChangedRevision$
 
 		$where = array();
 		$has_content = $thing || $form;
-		$filters = $id || $name || $category || $author || $realname || $ext || $thumbnail;
+		$filters = $id || $name || $category || $author || $realname || $ext || $thumbnail === '1' || $thumbnail === '0';
 		$context_list = (empty($context) || $filters) ? array() : do_list($context);
 		$pageby = (empty($pageby) ? $limit : $pageby);
 
@@ -2749,7 +2749,7 @@ $LastChangedRevision$
 		}
 
 		if ($ext) $where[] = "ext IN ('".join("','", doSlash(do_list($ext)))."')";
-		if ($thumbnail) $where[] = "thumbnail = 1";
+		if ($thumbnail === '0' || $thumbnail === '1') $where[] = "thumbnail = $thumbnail";
 
 		// If no images are selected, try the article image field
 		if (!$where && !$filters)
