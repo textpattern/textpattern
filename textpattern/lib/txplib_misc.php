@@ -1824,6 +1824,22 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
+	function getCustomFields()
+	{
+		global $prefs;
+		$cfs = preg_grep('/^custom_\d+_set/', array_keys($prefs));
+
+		$out = array();
+		foreach ($cfs as $name) {
+			preg_match('/(\d+)/', $name, $match);
+			if (!empty($prefs[$name])) {
+				$out[$match[1]] = strtolower($prefs[$name]);
+			}
+		}
+		return $out;
+	}
+
+// -------------------------------------------------------------
 	function txp_status_header($status='200 OK')
 	{
 		if (IS_FASTCGI)

@@ -23,8 +23,8 @@ $vars = array(
 	'minute','second','url_title','exp_year','exp_month','exp_day','exp_hour',
 	'exp_minute','exp_second','sExpires'
 );
-$x = get_pref('max_custom_fields', 10);
-for($i = 1; $i <= $x; $i++)
+$cfs = getCustomFields();
+foreach($cfs as $i => $cf_name)
 {
 	$vars[] = "custom_$i";
 }
@@ -127,9 +127,9 @@ if (!empty($event) and $event == 'article') {
 			if (!has_privs('article.publish') && $Status>=4) $Status = 3;
 			if (empty($url_title)) $url_title = stripSpace($Title_plain, 1);
 
-			$max = get_pref('max_custom_fields', 10);
 			$cfq = array();
-			for ($i = 1; $i <= $max; $i++)
+			$cfs = getCustomFields();
+			foreach($cfs as $i => $cf_name)
 			{
 				$custom_x = "custom_{$i}";
 				$cfq[] = "custom_$i = '".$$custom_x."'";
@@ -274,9 +274,9 @@ if (!empty($event) and $event == 'article') {
 
 		$Keywords = doSlash(trim(preg_replace('/( ?[\r\n\t,])+ ?/s', ',', preg_replace('/ +/', ' ', ps('Keywords'))), ', '));
 
-		$max = get_pref('max_custom_fields', 10);
 		$cfq = array();
-		for ($i = 1; $i <= $max; $i++)
+		$cfs = getCustomFields();
+		foreach($cfs as $i => $cf_name)
 		{
 			$custom_x = "custom_{$i}";
 			$cfq[] = "custom_$i = '".$$custom_x."'";
@@ -469,9 +469,9 @@ if (!empty($event) and $event == 'article') {
 				: '';
 
 			// custom fields, believe it or not
-			$max = get_pref('max_custom_fields', 10);
 			$cf = '';
-			for($i = 1; $i <= $max; $i++)
+			$cfs = getCustomFields();
+			foreach($cfs as $i => $cf_name)
 			{
 				$custom_x_set = "custom_{$i}_set";
 				$custom_x = "custom_{$i}";

@@ -1211,20 +1211,6 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function getCustomFields()
-	{
-		global $prefs;
-		$max = get_pref('max_custom_fields', 10);
-		$out = array();
-		for ($i = 1; $i <= $max; $i++) {
-			if (!empty($prefs['custom_'.$i.'_set'])) {
-				$out[$i] = strtolower($prefs['custom_'.$i.'_set']);
-			}
-		}
-		return $out;
-	}
-
-// -------------------------------------------------------------
 	function buildCustomSql($custom,$pairs)
 	{
 		if ($pairs) {
