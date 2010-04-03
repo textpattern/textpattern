@@ -428,26 +428,30 @@ $LastChangedRevision$
 			'wraptag'  => '',
 		), $atts));
 
-		$pageby = (empty($pageby) ? $limit : $pageby);
+		$pageby = ($pageby=='limit') ? $limit : $pageby;
 		$where = ($category) ? "category IN ('".join("','", doSlash(do_list($category)))."')" : '1=1';
 
-		// Set up paging
-		$grand_total = safe_count('txp_link', $where);
-		$total = $grand_total - $offset;
-		$numPages = ($pageby > 0) ? ceil($total/$pageby) : 1;
-		$pg = (!$pretext['pg']) ? 1 : $pretext['pg'];
-		$pgoffset = $offset + (($pg - 1) * $pageby);
-		// send paging info to txp:newer and txp:older
-		$pageout['pg']       = $pg;
-		$pageout['numPages'] = $numPages;
-		$pageout['s']        = $s;
-		$pageout['c']        = $c;
-		$pageout['ctype']    = 'link';
-		$pageout['grand_total'] = $grand_total;
-		$pageout['total']    = $total;
+		// Set up paging if required
+		if ($limit && $pageby) {
+			$grand_total = safe_count('txp_link', $where);
+			$total = $grand_total - $offset;
+			$numPages = ($pageby > 0) ? ceil($total/$pageby) : 1;
+			$pg = (!$pretext['pg']) ? 1 : $pretext['pg'];
+			$pgoffset = $offset + (($pg - 1) * $pageby);
+			// send paging info to txp:newer and txp:older
+			$pageout['pg']       = $pg;
+			$pageout['numPages'] = $numPages;
+			$pageout['s']        = $s;
+			$pageout['c']        = $c;
+			$pageout['ctype']    = 'link';
+			$pageout['grand_total'] = $grand_total;
+			$pageout['total']    = $total;
 
-		if (empty($thispage))
-			$thispage = $pageout;
+			if (empty($thispage))
+				$thispage = $pageout;
+		} else {
+			$pgoffset = 1;
+		}
 
 		$qparts = array(
 			$where,
@@ -2733,7 +2737,7 @@ $LastChangedRevision$
 		$has_content = $thing || $form;
 		$filters = $id || $name || $category || $author || $realname || $ext || $thumbnail === '1' || $thumbnail === '0';
 		$context_list = (empty($context) || $filters) ? array() : do_list($context);
-		$pageby = (empty($pageby) ? $limit : $pageby);
+		$pageby = ($pageby=='limit') ? $limit : $pageby;
 
 		if ($name) $where[] = "name IN ('".join("','", doSlash(do_list($name)))."')";
 
@@ -2774,23 +2778,27 @@ $LastChangedRevision$
 			$where[] = "1=1"; // If nothing matches, start with all images
 		}
 
-		// Set up paging
-		$grand_total = safe_count('txp_image',join(' AND ', $where));
-		$total = $grand_total - $offset;
-		$numPages = ($pageby > 0) ? ceil($total/$pageby) : 1;
-		$pg = (!$pretext['pg']) ? 1 : $pretext['pg'];
-		$pgoffset = $offset + (($pg - 1) * $pageby);
-		// send paging info to txp:newer and txp:older
-		$pageout['pg']       = $pg;
-		$pageout['numPages'] = $numPages;
-		$pageout['s']        = $s;
-		$pageout['c']        = $c;
-		$pageout['ctype']    = 'image';
-		$pageout['grand_total'] = $grand_total;
-		$pageout['total']    = $total;
+		// Set up paging if required
+		if ($limit && $pageby) {
+			$grand_total = safe_count('txp_image',join(' AND ', $where));
+			$total = $grand_total - $offset;
+			$numPages = ($pageby > 0) ? ceil($total/$pageby) : 1;
+			$pg = (!$pretext['pg']) ? 1 : $pretext['pg'];
+			$pgoffset = $offset + (($pg - 1) * $pageby);
+			// send paging info to txp:newer and txp:older
+			$pageout['pg']       = $pg;
+			$pageout['numPages'] = $numPages;
+			$pageout['s']        = $s;
+			$pageout['c']        = $c;
+			$pageout['ctype']    = 'image';
+			$pageout['grand_total'] = $grand_total;
+			$pageout['total']    = $total;
 
-		if (empty($thispage))
-			$thispage = $pageout;
+			if (empty($thispage))
+				$thispage = $pageout;
+		} else {
+			$pgoffset = 1;
+		}
 
 		$qparts = array(
 			join(' AND ', $where),
@@ -3773,25 +3781,29 @@ $LastChangedRevision$
 		if ($category) $where[] = "category IN ('".join("','", doSlash(do_list($category)))."')";
 		if ($id) $where[] = "id IN ('".join("','", doSlash(do_list($id)))."')";
 		if ($status) $where[] = "status = '".doSlash($status)."'";
-		$pageby = (empty($pageby) ? $limit : $pageby);
+		$pageby = ($pageby=='limit') ? $limit : $pageby;
 
-		// Set up paging
-		$grand_total = safe_count('txp_file', join(' AND ', $where));
-		$total = $grand_total - $offset;
-		$numPages = ($pageby > 0) ? ceil($total/$pageby) : 1;
-		$pg = (!$pretext['pg']) ? 1 : $pretext['pg'];
-		$pgoffset = $offset + (($pg - 1) * $pageby);
-		// send paging info to txp:newer and txp:older
-		$pageout['pg']       = $pg;
-		$pageout['numPages'] = $numPages;
-		$pageout['s']        = $s;
-		$pageout['c']        = $c;
-		$pageout['ctype']    = 'file';
-		$pageout['grand_total'] = $grand_total;
-		$pageout['total']    = $total;
+		// Set up paging if required
+		if ($limit && $pageby) {
+			$grand_total = safe_count('txp_file', join(' AND ', $where));
+			$total = $grand_total - $offset;
+			$numPages = ($pageby > 0) ? ceil($total/$pageby) : 1;
+			$pg = (!$pretext['pg']) ? 1 : $pretext['pg'];
+			$pgoffset = $offset + (($pg - 1) * $pageby);
+			// send paging info to txp:newer and txp:older
+			$pageout['pg']       = $pg;
+			$pageout['numPages'] = $numPages;
+			$pageout['s']        = $s;
+			$pageout['c']        = $c;
+			$pageout['ctype']    = 'file';
+			$pageout['grand_total'] = $grand_total;
+			$pageout['total']    = $total;
 
-		if (empty($thispage))
-			$thispage = $pageout;
+			if (empty($thispage))
+				$thispage = $pageout;
+		} else {
+			$pgoffset = 1;
+		}
 
 		$qparts = array(
 			'order by '.doSlash($sort),
