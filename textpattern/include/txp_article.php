@@ -159,9 +159,9 @@ if (!empty($event) and $event == 'article') {
 				Annotate        =  $Annotate,
 				override_form   = '$override_form',
 				url_title       = '$url_title',
-				AnnotateInvite  = '$AnnotateInvite',
-				$cfq,
-				uid             = '".md5(uniqid(rand(),true))."',
+				AnnotateInvite  = '$AnnotateInvite',"
+				.(($cfs) ? $cfq.',' : '').
+				"uid             = '".md5(uniqid(rand(),true))."',
 				feed_time       = now()"
 			);
 
@@ -302,9 +302,9 @@ if (!empty($event) and $event == 'article') {
 			textile_excerpt =  $textile_excerpt,
 			override_form   = '$override_form',
 			url_title       = '$url_title',
-			AnnotateInvite  = '$AnnotateInvite',
-			$cfq,
-			$whenposted,
+			AnnotateInvite  = '$AnnotateInvite',"
+			.(($cfs) ? $cfq.',' : '').
+			"$whenposted,
 			$whenexpires",
 			"ID = $ID"
 		);
