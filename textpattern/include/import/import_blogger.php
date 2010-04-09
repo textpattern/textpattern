@@ -27,6 +27,9 @@ function doImportBLOGGER($file, $section, $status, $invite) {
 		# we'll do our best to fake it
 
 		if ($line == '--------') {
+			if ($state == 'multiline' and !empty($multiline_type)) {
+				$item[$multiline_type][] = $multiline_data;
+			}
 			# End of an item, so we can process it
 			$results[]=import_blogger_item($item, $section, $status, $invite);
 			$item = array();
@@ -74,7 +77,7 @@ function doImportBLOGGER($file, $section, $status, $invite) {
 
 	# Catch the last item in the file, if it doesn't end with a separator
 	if (!empty($item))
-		$results[]= import_blogger_item($item, $section, $status, $invite, $blogid);
+		$results[]= import_blogger_item($item, $section, $status, $invite);
 
 	fclose($fp);
 	return join('<br />', $results);
