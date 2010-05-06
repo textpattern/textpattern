@@ -412,11 +412,14 @@ $LastChangedRevision$
 
 	function linklist($atts, $thing = NULL)
 	{
-		global $s, $c, $thislink, $thispage, $pretext;
+		global $s, $c, $ctype, $thislink, $thispage, $pretext;
 
 		extract(lAtts(array(
 			'break'    => '',
 			'category' => '',
+			'author'   => '',
+			'realname' => '',
+			'context'  => 'category',
 			'class'    => __FUNCTION__,
 			'form'     => 'plainlinks',
 			'label'    => '',
@@ -428,8 +431,49 @@ $LastChangedRevision$
 			'wraptag'  => '',
 		), $atts));
 
+		$where = array();
+		$filters = $category || $author || $realname;
+		$context_list = (empty($context) || $filters) ? array() : do_list($context);
 		$pageby = ($pageby=='limit') ? $limit : $pageby;
-		$where = ($category) ? "category IN ('".join("','", doSlash(do_list($category)))."')" : '1=1';
+
+		if ($category) $where[] = "category IN ('".join("','", doSlash(do_list($category)))."')";
+		if ($author) $where[] = "author IN ('".join("','", doSlash(do_list($author)))."')";
+		if ($realname) {
+			$authorlist = safe_column('name', 'txp_users', "RealName IN ('". join("','", doArray(doSlash(do_list($realname)), 'urldecode')) ."')" );
+			$where[] = "author IN ('".join("','", doSlash($authorlist))."')";
+		}
+
+		// If no links are selected, try...
+		if (!$where && !$filters)
+		{
+			foreach ($context_list as $ctxt)
+			{
+				switch ($ctxt)
+				{
+					case 'category':
+						// ... the global category in the URL
+						if ($ctype == 'link' && !empty($c))
+						{
+							$where[] = "category = '".doSlash($c)."'";
+						}
+						break;
+				}
+				// Only one context can be processed
+				if ($where) break;
+			}
+		}
+
+		if (!$where && $context_list)
+		{
+			return ''; // If nothing matches, output nothing
+		}
+
+		if (!$where)
+		{
+			$where[] = "1=1"; // If nothing matches, start with all links
+		}
+
+		$where = join(' AND ', $where);
 
 		// Set up paging if required
 		if ($limit && $pageby) {
@@ -493,7 +537,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-
+// NOTE: tpt_ prefix used because link() is a PHP function. See publish.php
 	function tpt_link($atts)
 	{
 		global $thislink;
@@ -2709,7 +2753,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function image_list($atts, $thing = NULL)
 	{
-		global $s, $c, $p, $img_dir, $path_to_site, $thisimage, $thisarticle, $thispage, $pretext;
+		global $s, $c, $ctype, $p, $img_dir, $path_to_site, $thisimage, $thisarticle, $thispage, $pretext;
 
 		extract(lAtts(array(
 			'name'      => '',
@@ -2719,7 +2763,7 @@ $LastChangedRevision$
 			'realname'  => '',
 			'ext'       => '',
 			'thumbnail' => '',
-			'context'   => 'article',
+			'context'   => 'article, category',
 			'label'     => '',
 			'break'     => br,
 			'wraptag'   => '',
@@ -2748,23 +2792,41 @@ $LastChangedRevision$
 		if ($author) $where[] = "author IN ('".join("','", doSlash(do_list($author)))."')";
 
 		if ($realname) {
-			$authorlist = safe_column('name', 'txp_users', 'RealName IN ('. doQuote(join("','", doArray(doSlash(do_list($realname)), 'urldecode'))) .')' );
+			$authorlist = safe_column('name', 'txp_users', "RealName IN ('". join("','", doArray(doSlash(do_list($realname)), 'urldecode')) ."')" );
 			$where[] = "author IN ('".join("','", doSlash($authorlist))."')";
 		}
 
 		if ($ext) $where[] = "ext IN ('".join("','", doSlash(do_list($ext)))."')";
 		if ($thumbnail === '0' || $thumbnail === '1') $where[] = "thumbnail = $thumbnail";
 
-		// If no images are selected, try the article image field
+		// If no images are selected, try...
 		if (!$where && !$filters)
 		{
-			if ($thisarticle && in_array('article', $context_list) && !empty($thisarticle['article_image']))
+			foreach ($context_list as $ctxt)
 			{
-				$items = do_list($thisarticle['article_image']);
-				if (is_numeric($items[0]))
+				switch($ctxt)
 				{
-					$where[] = "id IN ('".join("','", doSlash($items))."')";
+					case 'article':
+						// ...the article image field
+						if ($thisarticle && !empty($thisarticle['article_image']))
+						{
+							$items = do_list($thisarticle['article_image']);
+							if (is_numeric($items[0]))
+							{
+								$where[] = "id IN ('".join("','", doSlash($items))."')";
+							}
+						}
+						break;
+					case 'category':
+						// ... the global category in the URL
+						if ($ctype == 'image' && !empty($c))
+						{
+							$where[] = "category = '".doSlash($c)."'";
+						}
+						break;
 				}
+				// Only one context can be processed
+				if ($where) break;
 			}
 		}
 
@@ -2778,9 +2840,11 @@ $LastChangedRevision$
 			$where[] = "1=1"; // If nothing matches, start with all images
 		}
 
+		$where = join(' AND ', $where);
+
 		// Set up paging if required
 		if ($limit && $pageby) {
-			$grand_total = safe_count('txp_image',join(' AND ', $where));
+			$grand_total = safe_count('txp_image', $where);
 			$total = $grand_total - $offset;
 			$numPages = ($pageby > 0) ? ceil($total/$pageby) : 1;
 			$pg = (!$pretext['pg']) ? 1 : $pretext['pg'];
@@ -2801,7 +2865,7 @@ $LastChangedRevision$
 		}
 
 		$qparts = array(
-			join(' AND ', $where),
+			$where,
 			'order by '.doSlash($sort),
 			($limit) ? 'limit '.intval($pgoffset).', '.intval($limit) : ''
 		);
@@ -3756,11 +3820,14 @@ $LastChangedRevision$
 
 	function file_download_list($atts, $thing = NULL)
 	{
-		global $s, $c, $thisfile, $thispage, $pretext;
+		global $s, $c, $ctype, $thisfile, $thispage, $pretext;
 
 		extract(lAtts(array(
 			'break'    => br,
 			'category' => '',
+			'author'   => '',
+			'realname' => '',
+			'context'  => 'category',
 			'class'    => __FUNCTION__,
 			'form'     => 'files',
 			'id'       => '',
@@ -3777,15 +3844,56 @@ $LastChangedRevision$
 		if (!is_numeric($status))
 			$status = getStatusNum($status);
 
-		$where = array('1=1');
+		// NB: status treated differently
+		$where = $statwhere = array();
+		$filters = $id || $category || $author || $realname;
+		$context_list = (empty($context) || $filters) ? array() : do_list($context);
+		$pageby = ($pageby=='limit') ? $limit : $pageby;
+
 		if ($category) $where[] = "category IN ('".join("','", doSlash(do_list($category)))."')";
 		if ($id) $where[] = "id IN ('".join("','", doSlash(do_list($id)))."')";
-		if ($status) $where[] = "status = '".doSlash($status)."'";
-		$pageby = ($pageby=='limit') ? $limit : $pageby;
+		if ($status) $statwhere[] = "status = '".doSlash($status)."'";
+		if ($author) $where[] = "author IN ('".join("','", doSlash(do_list($author)))."')";
+		if ($realname) {
+			$authorlist = safe_column('name', 'txp_users', "RealName IN ('". join("','", doArray(doSlash(do_list($realname)), 'urldecode')) ."')" );
+			$where[] = "author IN ('".join("','", doSlash($authorlist))."')";
+		}
+
+		// If no files are selected, try...
+		if (!$where && !$filters)
+		{
+			foreach ($context_list as $ctxt)
+			{
+				switch ($ctxt)
+				{
+					case 'category':
+						// ... the global category in the URL
+						if ($ctype == 'file' && !empty($c))
+						{
+							$where[] = "category = '".doSlash($c)."'";
+						}
+						break;
+				}
+				// Only one context can be processed
+				if ($where) break;
+			}
+		}
+
+		if (!$where && !$statwhere && $context_list)
+		{
+			return ''; // If nothing matches, output nothing
+		}
+
+		if (!$where)
+		{
+			$where[] = "1=1"; // If nothing matches, start with all files
+		}
+
+		$where = join(' AND ', array_merge($where, $statwhere));
 
 		// Set up paging if required
 		if ($limit && $pageby) {
-			$grand_total = safe_count('txp_file', join(' AND ', $where));
+			$grand_total = safe_count('txp_file', $where);
 			$total = $grand_total - $offset;
 			$numPages = ($pageby > 0) ? ceil($total/$pageby) : 1;
 			$pg = (!$pretext['pg']) ? 1 : $pretext['pg'];
@@ -3810,7 +3918,7 @@ $LastChangedRevision$
 			($limit) ? 'limit '.intval($pgoffset).', '.intval($limit) : '',
 		);
 
-		$rs = safe_rows_start('*', 'txp_file', join(' and ', $where).' '.join(' ', $qparts));
+		$rs = safe_rows_start('*', 'txp_file', $where.' '.join(' ', $qparts));
 
 		if ($rs)
 		{
