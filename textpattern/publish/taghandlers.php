@@ -432,7 +432,7 @@ $LastChangedRevision$
 		), $atts));
 
 		$where = array();
-		$filters = $category || $author || $realname;
+		$filters = isset($atts['category']) || isset($atts['author']) || isset($atts['realname']);
 		$context_list = (empty($context) || $filters) ? array() : do_list($context);
 		$pageby = ($pageby=='limit') ? $limit : $pageby;
 
@@ -463,7 +463,7 @@ $LastChangedRevision$
 			}
 		}
 
-		if (!$where && $context_list)
+		if (!$where && ($filters || $context_list))
 		{
 			return ''; // If nothing matches, output nothing
 		}
@@ -494,7 +494,7 @@ $LastChangedRevision$
 			if (empty($thispage))
 				$thispage = $pageout;
 		} else {
-			$pgoffset = 1;
+			$pgoffset = $offset;
 		}
 
 		$qparts = array(
@@ -2779,7 +2779,7 @@ $LastChangedRevision$
 
 		$where = array();
 		$has_content = $thing || $form;
-		$filters = $id || $name || $category || $author || $realname || $ext || $thumbnail === '1' || $thumbnail === '0';
+		$filters = isset($atts['id']) || isset($atts['name']) || isset($atts['category']) || isset($atts['author']) || isset($atts['realname']) || isset($atts['ext']) || $thumbnail === '1' || $thumbnail === '0';
 		$context_list = (empty($context) || $filters) ? array() : do_list($context);
 		$pageby = ($pageby=='limit') ? $limit : $pageby;
 
@@ -2830,7 +2830,7 @@ $LastChangedRevision$
 			}
 		}
 
-		if (!$where && $context_list)
+		if (!$where && ($filters || $context_list))
 		{
 			return ''; // If nothing matches, output nothing
 		}
@@ -2861,7 +2861,7 @@ $LastChangedRevision$
 			if (empty($thispage))
 				$thispage = $pageout;
 		} else {
-			$pgoffset = 1;
+			$pgoffset = $offset;
 		}
 
 		$qparts = array(
@@ -3844,9 +3844,9 @@ $LastChangedRevision$
 		if (!is_numeric($status))
 			$status = getStatusNum($status);
 
-		// NB: status treated differently
+		// N.B. status treated slightly differently
 		$where = $statwhere = array();
-		$filters = $id || $category || $author || $realname;
+		$filters = isset($atts['id']) || isset($atts['category']) || isset($atts['author']) || isset($atts['realname']) || isset($atts['status']);
 		$context_list = (empty($context) || $filters) ? array() : do_list($context);
 		$pageby = ($pageby=='limit') ? $limit : $pageby;
 
@@ -3879,7 +3879,7 @@ $LastChangedRevision$
 			}
 		}
 
-		if (!$where && !$statwhere && $context_list)
+		if (!$where && !$statwhere && ($filters || $context_list))
 		{
 			return ''; // If nothing matches, output nothing
 		}
@@ -3910,7 +3910,7 @@ $LastChangedRevision$
 			if (empty($thispage))
 				$thispage = $pageout;
 		} else {
-			$pgoffset = 1;
+			$pgoffset = $offset;
 		}
 
 		$qparts = array(
