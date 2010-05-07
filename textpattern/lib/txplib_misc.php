@@ -744,6 +744,7 @@ $LastChangedRevision$
 		$out = callback_event('sanitize_for_url', '', 0, $text);
 		if ($out !== '') return $out;
 
+		$in = $text;
 		// Remove names entities and tags
 		$text = preg_replace("/(^|&\S+;)|(<[^>]*>)/U","",dumbDown($text));
 		// Dashify high-order chars leftover from dumbDown()
@@ -752,6 +753,12 @@ $LastChangedRevision$
 		$text = preg_replace('/[\s\-\/\\\\]+/', '-', trim(preg_replace('/[^\w\s\-\/\\\\]/', '', $text)));
 		// Remove all non-whitelisted characters
 		$text = preg_replace("/[^A-Za-z0-9\-_]/","",$text);
+		// Sanitizing shouldn't leave us with plain nothing to show.
+		// Fall back on percent-encoded URLs as a last resort for RFC 1738 conformance.
+		if (empty($text) || $text == '-')
+		{
+			$text = rawurlencode($in);
+		}
 		return $text;
 	}
 
