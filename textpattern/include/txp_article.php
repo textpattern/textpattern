@@ -47,7 +47,6 @@ if (!empty($event) and $event == 'article') {
 	$publish = gps('publish');
 	if ($publish) $step = 'publish';
 
-
 	switch(strtolower($step)) {
 		case "":         article_edit();    break;
 		case "create":   article_edit();    break;
@@ -55,6 +54,7 @@ if (!empty($event) and $event == 'article') {
 		case "edit":     article_edit();    break;
 		case "save":     article_save();    break;
 		case "save_pane_state":     article_save_pane_state();    break;
+		default:         article_edit();    break;
 	}
 }
 
@@ -408,13 +408,15 @@ if (!empty($event) and $event == 'article') {
 
 		}
 
-		if ($step!='create') {
+		if ($step!='create' && $sPosted) {
 
 			// Previous record?
 			$prev_id = checkIfNeighbour('prev',$sPosted);
 
 			// Next record?
 			$next_id = checkIfNeighbour('next',$sPosted);
+		} else {
+			$prev_id = $next_id = 0;
 		}
 
 		$page_title = ($Title) ? $Title : gTxt('write');
