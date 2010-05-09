@@ -15,7 +15,7 @@ $LastChangedRevision$
 
 	function page_title($atts)
 	{
-		global $parentid, $thisarticle, $id, $q, $c, $ctype, $s, $pg, $sitename;
+		global $parentid, $thisarticle, $id, $q, $c, $context, $s, $pg, $sitename;
 
 		extract(lAtts(array(
 			'separator' => ': ',
@@ -31,7 +31,7 @@ $LastChangedRevision$
 		} elseif ($q) {
 			$out .= gTxt('search_results').htmlspecialchars($separator.$q);
 		} elseif ($c) {
-			$out .= htmlspecialchars(fetch_category_title($c, $ctype));
+			$out .= htmlspecialchars(fetch_category_title($c, $context));
 		} elseif ($s and $s != 'default') {
 			$out .= htmlspecialchars(fetch_section_title($s));
 		} elseif ($pg) {
@@ -412,28 +412,28 @@ $LastChangedRevision$
 
 	function linklist($atts, $thing = NULL)
 	{
-		global $s, $c, $ctype, $thislink, $thispage, $pretext;
+		global $s, $c, $context, $thislink, $thispage, $pretext;
 
 		extract(lAtts(array(
-			'break'    => '',
-			'category' => '',
-			'author'   => '',
-			'realname' => '',
-			'context'  => 'category',
-			'class'    => __FUNCTION__,
-			'form'     => 'plainlinks',
-			'label'    => '',
-			'labeltag' => '',
-			'pageby'   => '',
-			'limit'    => 0,
-			'offset'   => 0,
-			'sort'     => 'linksort asc',
-			'wraptag'  => '',
+			'break'       => '',
+			'category'    => '',
+			'author'      => '',
+			'realname'    => '',
+			'auto_detect' => 'category, author',
+			'class'       => __FUNCTION__,
+			'form'        => 'plainlinks',
+			'label'       => '',
+			'labeltag'    => '',
+			'pageby'      => '',
+			'limit'       => 0,
+			'offset'      => 0,
+			'sort'        => 'linksort asc',
+			'wraptag'     => '',
 		), $atts));
 
 		$where = array();
 		$filters = isset($atts['category']) || isset($atts['author']) || isset($atts['realname']);
-		$context_list = (empty($context) || $filters) ? array() : do_list($context);
+		$context_list = (empty($auto_detect) || $filters) ? array() : do_list($auto_detect);
 		$pageby = ($pageby=='limit') ? $limit : $pageby;
 
 		if ($category) $where[] = "category IN ('".join("','", doSlash(do_list($category)))."')";
@@ -452,9 +452,16 @@ $LastChangedRevision$
 				{
 					case 'category':
 						// ... the global category in the URL
-						if ($ctype == 'link' && !empty($c))
+						if ($context == 'link' && !empty($c))
 						{
 							$where[] = "category = '".doSlash($c)."'";
+						}
+						break;
+					case 'author':
+						// ... the global author in the URL
+						if ($context == 'link' && !empty($pretext['author']))
+						{
+							$where[] = "author = '".doSlash($pretext['author'])."'";
 						}
 						break;
 				}
@@ -483,13 +490,13 @@ $LastChangedRevision$
 			$pg = (!$pretext['pg']) ? 1 : $pretext['pg'];
 			$pgoffset = $offset + (($pg - 1) * $pageby);
 			// send paging info to txp:newer and txp:older
-			$pageout['pg']       = $pg;
-			$pageout['numPages'] = $numPages;
-			$pageout['s']        = $s;
-			$pageout['c']        = $c;
-			$pageout['ctype']    = 'link';
+			$pageout['pg']          = $pg;
+			$pageout['numPages']    = $numPages;
+			$pageout['s']           = $s;
+			$pageout['c']           = $c;
+			$pageout['context']     = 'link';
 			$pageout['grand_total'] = $grand_total;
-			$pageout['total']    = $total;
+			$pageout['total']       = $total;
 
 			if (empty($thispage))
 				$thispage = $pageout;
@@ -520,6 +527,7 @@ $LastChangedRevision$
 					'description' => $description,
 					'date'        => $uDate,
 					'category'    => $category,
+					'author'      => $author,
 				);
 
 				$out[] = ($thing) ? parse($thing) : parse_form($form);
@@ -600,6 +608,34 @@ $LastChangedRevision$
 		assert_link();
 
 		return doSpecial($thislink['url']);
+	}
+
+//--------------------------------------------------------------------------
+
+	function link_author($atts)
+	{
+		global $thislink, $s;
+		assert_link();
+
+		extract(lAtts(array(
+			'class'        => '',
+			'link'         => 0,
+			'section'      => '',
+			'this_section' => '',
+			'wraptag'      => '',
+		), $atts));
+
+		if ($thislink['author'])
+		{
+			$author_name = get_author_name($thislink['author']);
+			$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
+
+			$author = ($link) ?
+				href($author_name, pagelinkurl(array('s' => $section, 'author' => $author_name, 'context' => 'link'))) :
+				$author_name;
+
+			return ($wraptag) ? doTag($author, $wraptag, $class) : $author;
+		}
 	}
 
 // -------------------------------------------------------------
@@ -1146,7 +1182,7 @@ $LastChangedRevision$
 					{
 						$out[] = tag(htmlspecialchars($title), 'a',
 							( ($active_class and (0 == strcasecmp($c, $name))) ? ' class="'.$active_class.'"' : '' ).
-							' href="'.pagelinkurl(array('s' => $section, 'c' => $name, 'ctype' => $type)).'"'
+							' href="'.pagelinkurl(array('s' => $section, 'c' => $name, 'context' => $type)).'"'
 						);
 					}
 					else
@@ -1482,13 +1518,13 @@ $LastChangedRevision$
 			}
 
 			$url = pagelinkurl(array(
-				'month'  => @$pretext['month'],
-				'pg'     => $nextpg,
-				's'      => @$pretext['s'],
-				'c'      => @$pretext['c'],
-				'ctype'  => @$pretext['ctype'],
-				'q'      => @$pretext['q'],
-				'author' => $author
+				'month'   => @$pretext['month'],
+				'pg'      => $nextpg,
+				's'       => @$pretext['s'],
+				'c'       => @$pretext['c'],
+				'context' => @$pretext['context'],
+				'q'       => @$pretext['q'],
+				'author'  => $author
 			));
 
 			if ($thing)
@@ -1536,13 +1572,13 @@ $LastChangedRevision$
 			}
 
 			$url = pagelinkurl(array(
-				'month'  => @$pretext['month'],
-				'pg'     => $nextpg,
-				's'      => @$pretext['s'],
-				'c'      => @$pretext['c'],
-				'ctype'  => @$pretext['ctype'],
-				'q'      => @$pretext['q'],
-				'author' => $author
+				'month'   => @$pretext['month'],
+				'pg'      => $nextpg,
+				's'       => @$pretext['s'],
+				'c'       => @$pretext['c'],
+				'context' => @$pretext['context'],
+				'q'       => @$pretext['q'],
+				'author'  => $author
 			));
 
 			if ($thing)
@@ -2147,18 +2183,21 @@ $LastChangedRevision$
 
 	function if_author($atts, $thing)
 	{
-		global $author;
+		global $author, $context;
 
 		extract(lAtts(array(
+			'type' => 'article',
 			'name' => '',
-		), $atts));
+		),$atts));
+
+		$theType = ($type) ? $type == $context : true;
 
 		if ($name)
 		{
-			return parse(EvalElse($thing, in_list($author, $name)));
+			return parse(EvalElse($thing, ($theType && in_list($author, $name))));
 		}
 
-		return parse(EvalElse($thing, !empty($author)));
+		return parse(EvalElse($thing, ($theType && !empty($author))));
 	}
 
 // -------------------------------------------------------------
@@ -2362,7 +2401,7 @@ $LastChangedRevision$
 			$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
 			$label = htmlspecialchars( ($title) ? fetch_category_title($category, $type) : $category );
 
-			$href = pagelinkurl(array('s' => $section, 'c' => $category, 'ctype' => $type));
+			$href = pagelinkurl(array('s' => $section, 'c' => $category, 'context' => $type));
 
 			if ($thing)
 			{
@@ -2722,7 +2761,7 @@ $LastChangedRevision$
 				$impath = $img_dir.'/'.$id.'t'.$ext;
 				$imginfo = getimagesize($path_to_site.'/'.$impath);
 				$dims = (!empty($imginfo[3])) ? ' '.$imginfo[3] : '';
-				$url = pagelinkurl(array('c'=>$c, 'ctype'=>'image', 's'=>$s, 'p'=>$id));
+				$url = pagelinkurl(array('c'=>$c, 'context'=>'image', 's'=>$s, 'p'=>$id));
 				$out[] = '<a href="'.$url.'">'.
 					'<img src="'.hu.$impath.'"'.$dims.' alt="'.$alt.'" />'.'</a>';
 
@@ -2753,34 +2792,34 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function image_list($atts, $thing = NULL)
 	{
-		global $s, $c, $ctype, $p, $img_dir, $path_to_site, $thisimage, $thisarticle, $thispage, $pretext;
+		global $s, $c, $context, $p, $img_dir, $path_to_site, $thisimage, $thisarticle, $thispage, $pretext;
 
 		extract(lAtts(array(
-			'name'      => '',
-			'id'        => '',
-			'category'  => '',
-			'author'    => '',
-			'realname'  => '',
-			'ext'       => '',
-			'thumbnail' => '',
-			'context'   => 'article, category',
-			'label'     => '',
-			'break'     => br,
-			'wraptag'   => '',
-			'class'     => __FUNCTION__,
-			'html_id'   => '',
-			'labeltag'  => '',
-			'form'      => '',
-			'pageby'    => '',
-			'limit'     => 0,
-			'offset'    => 0,
-			'sort'      => 'name ASC',
+			'name'        => '',
+			'id'          => '',
+			'category'    => '',
+			'author'      => '',
+			'realname'    => '',
+			'ext'         => '',
+			'thumbnail'   => '',
+			'auto_detect' => 'article, category, author',
+			'label'       => '',
+			'break'       => br,
+			'wraptag'     => '',
+			'class'       => __FUNCTION__,
+			'html_id'     => '',
+			'labeltag'    => '',
+			'form'        => '',
+			'pageby'      => '',
+			'limit'       => 0,
+			'offset'      => 0,
+			'sort'        => 'name ASC',
 		),$atts));
 
 		$where = array();
 		$has_content = $thing || $form;
 		$filters = isset($atts['id']) || isset($atts['name']) || isset($atts['category']) || isset($atts['author']) || isset($atts['realname']) || isset($atts['ext']) || $thumbnail === '1' || $thumbnail === '0';
-		$context_list = (empty($context) || $filters) ? array() : do_list($context);
+		$context_list = (empty($auto_detect) || $filters) ? array() : do_list($auto_detect);
 		$pageby = ($pageby=='limit') ? $limit : $pageby;
 
 		if ($name) $where[] = "name IN ('".join("','", doSlash(do_list($name)))."')";
@@ -2819,9 +2858,16 @@ $LastChangedRevision$
 						break;
 					case 'category':
 						// ... the global category in the URL
-						if ($ctype == 'image' && !empty($c))
+						if ($context == 'image' && !empty($c))
 						{
 							$where[] = "category = '".doSlash($c)."'";
+						}
+						break;
+					case 'author':
+						// ... the global author in the URL
+						if ($context == 'image' && !empty($pretext['author']))
+						{
+							$where[] = "author = '".doSlash($pretext['author'])."'";
 						}
 						break;
 				}
@@ -2850,13 +2896,13 @@ $LastChangedRevision$
 			$pg = (!$pretext['pg']) ? 1 : $pretext['pg'];
 			$pgoffset = $offset + (($pg - 1) * $pageby);
 			// send paging info to txp:newer and txp:older
-			$pageout['pg']       = $pg;
-			$pageout['numPages'] = $numPages;
-			$pageout['s']        = $s;
-			$pageout['c']        = $c;
-			$pageout['ctype']    = 'image';
+			$pageout['pg']          = $pg;
+			$pageout['numPages']    = $numPages;
+			$pageout['s']           = $s;
+			$pageout['c']           = $c;
+			$pageout['context']     = 'image';
 			$pageout['grand_total'] = $grand_total;
-			$pageout['total']    = $total;
+			$pageout['total']       = $total;
 
 			if (empty($thispage))
 				$thispage = $pageout;
@@ -2883,7 +2929,7 @@ $LastChangedRevision$
 				$thisimage = image_format_info($a);
 				if (!$has_content)
 				{
-					$url = pagelinkurl(array('c'=>$thisimage['category'], 'ctype'=>'image', 's'=>$s, 'p'=>$thisimage['id']));
+					$url = pagelinkurl(array('c'=>$thisimage['category'], 'context'=>'image', 's'=>$s, 'p'=>$thisimage['id']));
 					$src = image_url(array('thumbnail' => '1'));
 					$thing = '<a href="'.$url.'">'.
 						'<img src="'. $src .'" alt="'.$thisimage['alt'].'" />'.'</a>'.n;
@@ -3007,6 +3053,34 @@ $LastChangedRevision$
 			return $out;
 		}
 		return '';
+	}
+
+//--------------------------------------------------------------------------
+
+	function image_author($atts)
+	{
+		global $thisimage, $s;
+		assert_image();
+
+		extract(lAtts(array(
+			'class'        => '',
+			'link'         => 0,
+			'section'      => '',
+			'this_section' => '',
+			'wraptag'      => '',
+		), $atts));
+
+		if ($thisimage['author'])
+		{
+			$author_name = get_author_name($thisimage['author']);
+			$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
+
+			$author = ($link) ?
+				href($author_name, pagelinkurl(array('s' => $section, 'author' => $author_name, 'context' => 'image'))) :
+				$author_name;
+
+			return ($wraptag) ? doTag($author, $wraptag, $class) : $author;
+		}
 	}
 
 //--------------------------------------------------------------------------
@@ -3474,14 +3548,14 @@ $LastChangedRevision$
 //--------------------------------------------------------------------------
 	function if_category($atts, $thing)
 	{
-		global $c, $ctype;
+		global $c, $context;
 
 		extract(lAtts(array(
 			'type' => 'article',
 			'name' => FALSE,
 		),$atts));
 
-		$theType = ($type) ? $type == $ctype : true;
+		$theType = ($type) ? $type == $context : true;
 		if ($name === FALSE)
 		{
 			return parse(EvalElse($thing, ($theType && !empty($c))));
@@ -3820,25 +3894,25 @@ $LastChangedRevision$
 
 	function file_download_list($atts, $thing = NULL)
 	{
-		global $s, $c, $ctype, $thisfile, $thispage, $pretext;
+		global $s, $c, $context, $thisfile, $thispage, $pretext;
 
 		extract(lAtts(array(
-			'break'    => br,
-			'category' => '',
-			'author'   => '',
-			'realname' => '',
-			'context'  => 'category',
-			'class'    => __FUNCTION__,
-			'form'     => 'files',
-			'id'       => '',
-			'label'    => '',
-			'labeltag' => '',
-			'pageby'   => '',
-			'limit'    => 10,
-			'offset'   => 0,
-			'sort'     => 'filename asc',
-			'wraptag'  => '',
-			'status'   => '4',
+			'break'       => br,
+			'category'    => '',
+			'author'      => '',
+			'realname'    => '',
+			'auto_detect' => 'category, author',
+			'class'       => __FUNCTION__,
+			'form'        => 'files',
+			'id'          => '',
+			'label'       => '',
+			'labeltag'    => '',
+			'pageby'      => '',
+			'limit'       => 10,
+			'offset'      => 0,
+			'sort'        => 'filename asc',
+			'wraptag'     => '',
+			'status'      => '4',
 		), $atts));
 
 		if (!is_numeric($status))
@@ -3847,7 +3921,7 @@ $LastChangedRevision$
 		// N.B. status treated slightly differently
 		$where = $statwhere = array();
 		$filters = isset($atts['id']) || isset($atts['category']) || isset($atts['author']) || isset($atts['realname']) || isset($atts['status']);
-		$context_list = (empty($context) || $filters) ? array() : do_list($context);
+		$context_list = (empty($auto_detect) || $filters) ? array() : do_list($auto_detect);
 		$pageby = ($pageby=='limit') ? $limit : $pageby;
 
 		if ($category) $where[] = "category IN ('".join("','", doSlash(do_list($category)))."')";
@@ -3868,9 +3942,16 @@ $LastChangedRevision$
 				{
 					case 'category':
 						// ... the global category in the URL
-						if ($ctype == 'file' && !empty($c))
+						if ($context == 'file' && !empty($c))
 						{
 							$where[] = "category = '".doSlash($c)."'";
+						}
+						break;
+					case 'author':
+						// ... the global author in the URL
+						if ($context == 'file' && !empty($pretext['author']))
+						{
+							$where[] = "author = '".doSlash($pretext['author'])."'";
 						}
 						break;
 				}
@@ -3899,13 +3980,13 @@ $LastChangedRevision$
 			$pg = (!$pretext['pg']) ? 1 : $pretext['pg'];
 			$pgoffset = $offset + (($pg - 1) * $pageby);
 			// send paging info to txp:newer and txp:older
-			$pageout['pg']       = $pg;
-			$pageout['numPages'] = $numPages;
-			$pageout['s']        = $s;
-			$pageout['c']        = $c;
-			$pageout['ctype']    = 'file';
+			$pageout['pg']          = $pg;
+			$pageout['numPages']    = $numPages;
+			$pageout['s']           = $s;
+			$pageout['c']           = $c;
+			$pageout['context']     = 'file';
 			$pageout['grand_total'] = $grand_total;
-			$pageout['total']    = $total;
+			$pageout['total']       = $total;
 
 			if (empty($thispage))
 				$thispage = $pageout;
@@ -4255,6 +4336,34 @@ $LastChangedRevision$
 				$thisfile['category'];
 
 			return ($wraptag) ? doTag($category, $wraptag, $class) : $category;
+		}
+	}
+
+//--------------------------------------------------------------------------
+
+	function file_download_author($atts)
+	{
+		global $thisfile, $s;
+		assert_file();
+
+		extract(lAtts(array(
+			'class'        => '',
+			'link'         => 0,
+			'section'      => '',
+			'this_section' => '',
+			'wraptag'      => '',
+		), $atts));
+
+		if ($thisfile['author'])
+		{
+			$author_name = get_author_name($thisfile['author']);
+			$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
+
+			$author = ($link) ?
+				href($author_name, pagelinkurl(array('s' => $section, 'author' => $author_name, 'context' => 'file'))) :
+				$author_name;
+
+			return ($wraptag) ? doTag($author, $wraptag, $class) : $author;
 		}
 	}
 

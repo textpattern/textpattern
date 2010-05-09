@@ -217,7 +217,7 @@ $LastChangedRevision$
 		callback_event('pretext');
 
 			// set messy variables
-		$out =  makeOut('id','s','c','ctype','q','m','pg','p','month','author');
+		$out =  makeOut('id','s','c','context','q','m','pg','p','month','author');
 
 		if(gps('rss')) {
 			include txpath.'/publish/rss.php';
@@ -262,6 +262,8 @@ $LastChangedRevision$
 				//first we sniff out some of the preset url schemes
 			if (strlen($u1)) {
 
+				$validTypes = array('article' => gTxt('article_context'), 'image' => gTxt('image_context'), 'file' => gTxt('file_context'), 'link' => gTxt('link_context'));
+
 				switch($u1) {
 
 					case 'atom':
@@ -278,22 +280,31 @@ $LastChangedRevision$
 						$out['s'] = (ckEx('section',$u2)) ? $u2 : ''; $is_404 = empty($out['s']); break;
 
 					case urldecode(strtolower(urlencode(gTxt('category')))):
-						$validTypes = array('article' => gTxt('article_ctype'), 'image' => gTxt('image_ctype'), 'file' => gTxt('file_ctype'), 'link' => gTxt('link_ctype'));
 						if ($u3) {
-							$theType = in_array($u2, $validTypes) ? $u2 : gTxt('article_ctype');
+							$theType = in_array($u2, $validTypes) ? $u2 : gTxt('article_context');
 							$theCat = $u3;
 						} else {
-							$theType = gTxt('article_ctype');
+							$theType = gTxt('article_context');
 							$theCat = $u2;
 						}
 						$typecode = array_search($theType, $validTypes);
-						$out['ctype'] = $typecode;
+						$out['context'] = $typecode;
 						$out['c'] = (ckCat($typecode,$theCat)) ? $theCat : '';
 						$is_404 = empty($out['c']);
 						break;
 
 					case urldecode(strtolower(urlencode(gTxt('author')))):
-						$out['author'] = (!empty($u2)) ? $u2 : ''; break;
+						if ($u3) {
+							$theType = in_array($u2, $validTypes) ? $u2 : gTxt('article_context');
+							$theAuthor = $u3;
+						} else {
+							$theType = gTxt('article_context');
+							$theAuthor = $u2;
+						}
+						$typecode = array_search($theType, $validTypes);
+						$out['context'] = $typecode;
+						$out['author'] = (!empty($theAuthor)) ? $theAuthor : '';
+						break;
 						// AuthorID gets resolved from Name further down
 
 					case urldecode(strtolower(urlencode(gTxt('file_download')))):
@@ -792,13 +803,13 @@ $LastChangedRevision$
 			$pg = (!$pg) ? 1 : $pg;
 			$pgoffset = $offset + (($pg - 1) * $pageby);
 			// send paging info to txp:newer and txp:older
-			$pageout['pg']       = $pg;
-			$pageout['numPages'] = $numPages;
-			$pageout['s']        = $s;
-			$pageout['c']        = $c;
-			$pageout['ctype']    = 'article';
+			$pageout['pg']          = $pg;
+			$pageout['numPages']    = $numPages;
+			$pageout['s']           = $s;
+			$pageout['c']           = $c;
+			$pageout['context']     = 'article';
 			$pageout['grand_total'] = $grand_total;
-			$pageout['total']    = $total;
+			$pageout['total']       = $total;
 
 			global $thispage;
 			if (empty($thispage))

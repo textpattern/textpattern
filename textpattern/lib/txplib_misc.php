@@ -2010,16 +2010,17 @@ eod;
 
 			elseif (!empty($keys['author']))
 			{
-				$url = hu.strtolower(urlencode(gTxt('author'))).'/'.urlencode($keys['author']).'/';
-				unset($keys['author']);
+				$ct = (empty($keys['context']) || $keys['context'] == 'article') ? '' : strtolower(urlencode(gTxt($keys['context'].'_context'))).'/';
+				$url = hu.strtolower(urlencode(gTxt('author'))).'/'.$ct.urlencode($keys['author']).'/';
+				unset($keys['author'], $keys['context']);
 				return $url.join_qs($keys);
 			}
 
 			elseif (!empty($keys['c']))
 			{
-				$ct = (empty($keys['ctype']) || $keys['ctype'] == 'article') ? '' : strtolower(urlencode(gTxt($keys['ctype'].'_ctype'))).'/';
+				$ct = (empty($keys['context']) || $keys['context'] == 'article') ? '' : strtolower(urlencode(gTxt($keys['context'].'_context'))).'/';
 				$url = hu.strtolower(urlencode(gTxt('category'))).'/'.$ct.urlencode($keys['c']).'/';
-				unset($keys['c'], $keys['ctype']);
+				unset($keys['c'], $keys['context']);
 				return $url.join_qs($keys);
 			}
 
