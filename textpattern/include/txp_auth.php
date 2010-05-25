@@ -174,8 +174,6 @@ function doAuth()
 		}
 		elseif ($p_userid and $p_password) // incoming login vars
 		{
-			sleep(3);
-
 			$name = txp_validate($p_userid,$p_password);
 
 			if ($name !== FALSE)
@@ -208,6 +206,7 @@ function doAuth()
 			}
 			else
 			{
+				sleep(3);
 				$message = gTxt('could_not_log_in');
 			}
 		}
