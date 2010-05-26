@@ -2593,7 +2593,7 @@ eod;
 	}
 
 //-------------------------------------------------------------
-	function install_textpack($textpack)
+	function install_textpack($textpack, $add_new_langs = false)
 	{
 		global $prefs;
 
@@ -2602,6 +2602,10 @@ eod;
 
 		// presume site language equals textpack language
 		$language = get_pref('language', 'en-gb');
+
+		$installed_langs = safe_column('lang', 'txp_lang', "1 = 1 group by lang");
+		$doit = true;
+
 		$done = 0;
 		foreach ($textpack as $line)
 		{
@@ -2616,6 +2620,8 @@ eod;
 			if (preg_match('/^#@language\s+(.+)$/', $line, $m))
 			{
 				$language = doSlash($m[1]);
+				// May this Textpack introduce texts for this language?
+				$doit = ($add_new_langs || in_array($language, $installed_langs));
 				continue;
 			}
 
@@ -2627,7 +2633,7 @@ eod;
 			}
 
 			// Data lines match a "name => value" pattern. Some white space allowed.
-			if (preg_match('/^(\w+)\s*=>\s*(.+)$/', $line, $m))
+			if ($doit && preg_match('/^(\w+)\s*=>\s*(.+)$/', $line, $m))
 			{
 				if (!empty($m[1]) && !empty($m[2]))
 				{

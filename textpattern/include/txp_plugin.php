@@ -398,7 +398,7 @@ $LastChangedRevision$
 					{
 						if (!empty($textpack))
 						{
-							install_textpack($textpack);
+							install_textpack($textpack, false);
 							// TODO: How do we get rid of stale Textpacks once a plugin is uninstalled?
 						}
 
