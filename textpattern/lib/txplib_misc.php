@@ -2634,13 +2634,14 @@ eod;
 					$name = doSlash($m[1]);
 					$value = doSlash($m[2]);
 					$where = "lang='$language' AND name='$name'";
+					// Store text; do *not* tamper with last modification date from RPC but use a well-known date in the past
 					if (safe_count('txp_lang', $where))
 					{
-						safe_update('txp_lang',	"lastmod=NOW(), data='$value', event='$event'", $where);
+						safe_update('txp_lang',	"lastmod='2005-08-14', data='$value', event='$event'", $where);
 					}
 					else
 					{
-						safe_insert('txp_lang',	"lastmod=NOW(), data='$value', event='$event', lang='$language', name='$name'");
+						safe_insert('txp_lang',	"lastmod='2005-08-14', data='$value', event='$event', lang='$language', name='$name'");
 					}
 					++$done;
 				}
