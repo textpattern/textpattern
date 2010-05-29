@@ -665,37 +665,19 @@ $LastChangedRevision$
 			if (empty($cols) or $cols[0] == '') $cols = array('Title', 'Body');
 
 			$match = ', match (`'.join('`, `', $cols)."`) against ('$q') as score";
+			$search_terms = preg_replace('/\s+/', ' ', str_replace(array('\\','%','_','\''), array('\\\\','\\%','\\_', '\\\''), $q));
 
 			if ($quoted || empty($m) || $m === 'exact')
 			{
-				$search_terms = preg_replace('/\s+/', ' ', str_replace(array('%','_'), array('\\%','\\_'), $q));
 				for ($i = 0; $i < count($cols); $i++)
 				{
 					$cols[$i] = "`$cols[$i]` like '%$search_terms%'";
 				}
 			}
-			elseif ($m === 'any')
+			else
 			{
-				$search_terms =
-					preg_replace
-					(
-						'/\s+/',
-						' | ',
-						str_replace
-						(
-							array('.','\\','+','*','?','[','^',']','$','(',')','{','}','=','!','<','>','|',':','-'),
-							array('\\\\.','\\\\\\','\\\\+','\\\\*','\\\\?','\\\\[','\\\\^','\\\\]','\\\\$','\\\\(','\\\\)','\\\\{','\\\\}','\\\\=','\\\\!','\\\\<','\\\\>','\\\\|','\\\\:','\\\\-'),
-							$q
-						)
-					);
-				for ($i = 0; $i < count($cols); $i++)
-				{
-					$cols[$i] = "`$cols[$i]` regexp '$search_terms'";
-				}
-			}
-			elseif ($m === 'all')
-			{
-				$search_terms = explode(' ', preg_replace('/\s+/', ' ', str_replace(array('%','_'), array('\\%','\\_'), $q)));
+				$colJoin = ($m === 'any') ? 'or' : 'and';
+				$search_terms = explode(' ', $search_terms);
 				for ($i = 0; $i < count($cols); $i++)
 				{
 					$like = array();
@@ -703,7 +685,7 @@ $LastChangedRevision$
 					{
 						$like[] = "`$cols[$i]` like '%$search_term%'";
 					}
-					$cols[$i] = '(' . join(' && ', $like) . ')';
+					$cols[$i] = '(' . join(' ' . $colJoin . ' ', $like) . ')';
 				}
 			}
 
