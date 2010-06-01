@@ -45,4 +45,10 @@
 
 	#	$txpcfg['client_flags'] = MYSQL_CLIENT_SSL | MYSQL_CLIENT_COMPRESS;
 
+	/**
+	 *  optional, advanced: http address of the site serving images
+	 */
+
+	# define('ihu', 'http://static.example.com/images/')
+
 ?>

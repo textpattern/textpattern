@@ -156,7 +156,7 @@ $LastChangedRevision$
 				$caption = htmlspecialchars($caption);
 			}
 
-			$out = '<img src="'.hu.$img_dir.'/'.$id.$ext.'" width="'.$w.'" height="'.$h.'" alt="'.$alt.'"'.
+			$out = '<img src="'.ihu.$img_dir.'/'.$id.$ext.'" width="'.$w.'" height="'.$h.'" alt="'.$alt.'"'.
 				($caption ? ' title="'.$caption.'"' : '').
 				( ($html_id and !$wraptag) ? ' id="'.$html_id.'"' : '' ).
 				( ($class and !$wraptag) ? ' class="'.$class.'"' : '' ).
@@ -237,7 +237,7 @@ $LastChangedRevision$
 				if (empty($width) && $thumb_w) $width = $thumb_w;
 				if (empty($height) && $thumb_h) $height = $thumb_h;
 
-				$out = '<img src="'.hu.$img_dir.'/'.$id.'t'.$ext.'" alt="'.$alt.'"'.
+				$out = '<img src="'.ihu.$img_dir.'/'.$id.'t'.$ext.'" alt="'.$alt.'"'.
 					($caption ? ' title="'.$caption.'"' : '').
 					( ($html_id and !$wraptag) ? ' id="'.$html_id.'"' : '' ).
 					( ($class and !$wraptag) ? ' class="'.$class.'"' : '' ).
@@ -249,12 +249,12 @@ $LastChangedRevision$
 
 				if ($link)
 				{
-					$out = href($out, hu.$img_dir.'/'.$id.$ext, (!empty($link_rel) ? " rel='$link_rel'" : '')." title='$caption'");
+					$out = href($out, ihu.$img_dir.'/'.$id.$ext, (!empty($link_rel) ? " rel='$link_rel'" : '')." title='$caption'");
 				}
 
 				elseif ($poplink)
 				{
-					$out = '<a href="'.hu.$img_dir.'/'.$id.$ext.'"'.
+					$out = '<a href="'.ihu.$img_dir.'/'.$id.$ext.'"'.
 						' onclick="window.open(this.href, \'popupwindow\', '.
 						'\'width='.$w.', height='.$h.', scrollbars, resizable\'); return false;">'.$out.'</a>';
 				}
@@ -2582,7 +2582,7 @@ $LastChangedRevision$
 							$caption = htmlspecialchars($caption);
 						}
 
-						$out = '<img src="'.hu.$img_dir.'/'.$id.'t'.$ext.'" alt="'.$alt.'"'.
+						$out = '<img src="'.ihu.$img_dir.'/'.$id.'t'.$ext.'" alt="'.$alt.'"'.
 							($caption ? ' title="'.$caption.'"' : '').
 							( ($html_id and !$wraptag) ? ' id="'.$html_id.'"' : '' ).
 							( ($class and !$wraptag) ? ' class="'.$class.'"' : '' ).
@@ -2607,7 +2607,7 @@ $LastChangedRevision$
 						$caption = htmlspecialchars($caption);
 					}
 
-					$out = '<img src="'.hu.$img_dir.'/'.$id.$ext.'" width="'.$w.'" height="'.$h.'" alt="'.$alt.'"'.
+					$out = '<img src="'.ihu.$img_dir.'/'.$id.$ext.'" width="'.$w.'" height="'.$h.'" alt="'.$alt.'"'.
 						($caption ? ' title="'.$caption.'"' : '').
 						( ($html_id and !$wraptag) ? ' id="'.$html_id.'"' : '' ).
 						( ($class and !$wraptag) ? ' class="'.$class.'"' : '' ).
@@ -2763,7 +2763,7 @@ $LastChangedRevision$
 				$dims = (!empty($imginfo[3])) ? ' '.$imginfo[3] : '';
 				$url = pagelinkurl(array('c'=>$c, 'context'=>'image', 's'=>$s, 'p'=>$id));
 				$out[] = '<a href="'.$url.'">'.
-					'<img src="'.hu.$impath.'"'.$dims.' alt="'.$alt.'" />'.'</a>';
+					'<img src="'.ihu.$impath.'"'.$dims.' alt="'.$alt.'" />'.'</a>';
 
 			}
 			if (count($out)) {
@@ -2782,7 +2782,7 @@ $LastChangedRevision$
 			$rs = safe_row("*", "txp_image", 'id='.intval($p).' limit 1');
 			if ($rs) {
 				extract($rs);
-				$impath = hu.$img_dir.'/'.$id.$ext;
+				$impath = ihu.$img_dir.'/'.$id.$ext;
 				return '<img src="'.$impath.
 					'" style="height:'.$h.'px;width:'.$w.'px" alt="'.$alt.'" />';
 			}
@@ -3040,7 +3040,7 @@ $LastChangedRevision$
 
 		if ($thisimage)
 		{
-			$url = hu.$img_dir.'/'.$thisimage['id'].(($thumbnail) ? 't' : '').$thisimage['ext'];
+			$url = ihu.$img_dir.'/'.$thisimage['id'].(($thumbnail) ? 't' : '').$thisimage['ext'];
 			$link = ($link == 'auto') ? (($thing) ? 1 : 0) : $link;
 			$out = ($thing) ? parse($thing) : $url;
 			$out = ($link) ? href($out, $url) : $out;

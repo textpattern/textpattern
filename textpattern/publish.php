@@ -88,6 +88,10 @@ $LastChangedRevision$
 	if (!defined('rhu'))
 		define("rhu",preg_replace("|^https?://[^/]+|","",hu));
 
+	// http address of the site serving images
+	if (!defined('ihu'))
+		define('ihu', hu);
+
 		// 1.0: a new $here variable in the top-level index.php
 		// should let us know the server path to the live site
 		// let's save it to prefs

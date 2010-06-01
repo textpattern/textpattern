@@ -88,6 +88,9 @@ $LastChangedRevision$
 		// v1.0 experimental relative url global
 		define("rhu",preg_replace("/https?:\/\/.+(\/.*)\/?$/U","$1",hu));
 
+		// 	http address of the site serving images
+		if (!defined('ihu')) define('ihu', hu);
+
 		if (!empty($locale)) setlocale(LC_ALL, $locale);
 		$textarray = load_lang(LANG);
 
