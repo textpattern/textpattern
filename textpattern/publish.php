@@ -80,17 +80,14 @@ $LastChangedRevision$
 		}
 	}
 
-		// v1.0: this should be the definitive http address of the site
-	if (!defined('hu'))
-		define("hu",PROTOCOL.$siteurl.'/');
+		// definitive http address of the site
+	if (!defined('hu'))	define('hu', PROTOCOL.$siteurl.'/');
 
-		// v1.0 experimental relative url global
-	if (!defined('rhu'))
-		define("rhu",preg_replace("|^https?://[^/]+|","",hu));
+		// relative url global
+	if (!defined('rhu')) define('rhu', preg_replace('|^https?://[^/]+|', '', hu));
 
-	// http address of the site serving images
-	if (!defined('ihu'))
-		define('ihu', hu);
+		// http address of the site serving images
+	if (!defined('ihu')) define('ihu', hu);
 
 		// 1.0: a new $here variable in the top-level index.php
 		// should let us know the server path to the live site
