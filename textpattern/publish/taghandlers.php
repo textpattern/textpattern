@@ -2724,7 +2724,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function image_index($atts)
 	{
-		global $s,$c,$p,$img_dir,$path_to_site;
+		global $s,$c,$p,$path_to_site;
 		extract(lAtts(array(
 			'label'    => '',
 			'break'    => br,
