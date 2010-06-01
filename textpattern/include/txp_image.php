@@ -186,7 +186,7 @@ $LastChangedRevision$
 
 				if ($thumbnail) {
 					if ($ext != '.swf') {
-						$thumbnail = '<img src="'.ihu.$img_dir.'/'.$id.'t'.$ext."?$uDate".'" alt="" '.
+						$thumbnail = '<img src="'.imagesrcurl($id, $ext, true)."?$uDate".'" alt="" '.
 											"title='$id$ext ($w &#215; $h)'".
 											($thumb_w ? "width='$thumb_w' height='$thumb_h'" : ''). ' />';
 					} else {
@@ -217,7 +217,7 @@ $LastChangedRevision$
 					td(
 						n.'<ul>'.
 						($can_edit ? n.t.'<li>'.href(gTxt('edit'), $edit_url).'</li>' : '').
-						n.t.'<li><a href="'.ihu.$img_dir.'/'.$id.$ext.'">'.gTxt('view').'</a></li>'.
+						n.t.'<li><a href="'.imagesrcurl($id, $ext).'">'.gTxt('view').'</a></li>'.
 						n.'</ul>'
 					, 35).
 
@@ -399,13 +399,13 @@ $LastChangedRevision$
 			$categories = getTree("root", "image");
 
 			if ($ext != '.swf') {
-				$img = '<img src="'.ihu.$img_dir.'/'.$id.$ext."?$uDate".'" height="'.$h.'" width="'.$w.'" alt="" title="'.$id.$ext.' ('.$w.' &#215; '.$h.')" id="image-fullsize" />';
+				$img = '<img src="'.imagesrcurl($id, $ext)."?$uDate".'" height="'.$h.'" width="'.$w.'" alt="" title="'.$id.$ext.' ('.$w.' &#215; '.$h.')" id="image-fullsize" />';
 			} else {
 				$img = '';
 			}
 
 			if ($thumbnail and ($ext != '.swf')) {
-				$thumb = '<img src="'.ihu.$img_dir.'/'.$id.'t'.$ext."?$uDate".'" alt="" '.
+				$thumb = '<img src="'.imagesrcurl($id, $ext, true)."?$uDate".'" alt="" '.
 							($thumb_w ? "width='$thumb_w' height='$thumb_h'" : ''). ' />';
 			} else {
 				$thumb = '';

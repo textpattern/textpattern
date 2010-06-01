@@ -3379,7 +3379,7 @@ begin tag builder functions
 				$caption = str_replace('&', '&#38;', htmlspecialchars($caption));
 			}
 
-			$url = hu.$img_dir.'/'.$id.$ext;
+			$url = imagesrcurl($id, $ext);
 
 			switch ($type)
 			{

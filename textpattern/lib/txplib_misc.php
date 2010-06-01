@@ -2044,6 +2044,14 @@ eod;
 	}
 
 // -------------------------------------------------------------
+	function imagesrcurl($id, $ext, $thumbnail = false)
+	{
+		global $img_dir;
+		if ($thumbnail) $thumbnail = 't';
+		return ihu.$img_dir.'/'.$id.$thumbnail.$ext;
+	}
+
+// -------------------------------------------------------------
 
 	function in_list($val, $list, $delim = ',')
 	{

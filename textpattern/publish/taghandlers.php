@@ -79,7 +79,7 @@ $LastChangedRevision$
 
 	function image($atts)
 	{
-		global $img_dir, $thisimage;
+		global $thisimage;
 
 		static $cache = array();
 
@@ -156,7 +156,7 @@ $LastChangedRevision$
 				$caption = htmlspecialchars($caption);
 			}
 
-			$out = '<img src="'.ihu.$img_dir.'/'.$id.$ext.'" width="'.$w.'" height="'.$h.'" alt="'.$alt.'"'.
+			$out = '<img src="'.imagesrcurl($id, $ext).'" width="'.$w.'" height="'.$h.'" alt="'.$alt.'"'.
 				($caption ? ' title="'.$caption.'"' : '').
 				( ($html_id and !$wraptag) ? ' id="'.$html_id.'"' : '' ).
 				( ($class and !$wraptag) ? ' class="'.$class.'"' : '' ).
@@ -174,7 +174,7 @@ $LastChangedRevision$
 
 	function thumbnail($atts)
 	{
-		global $img_dir, $thisimage;
+		global $thisimage;
 
 		extract(lAtts(array(
 			'align'     => '', // deprecated in 4.2.0
@@ -237,7 +237,7 @@ $LastChangedRevision$
 				if (empty($width) && $thumb_w) $width = $thumb_w;
 				if (empty($height) && $thumb_h) $height = $thumb_h;
 
-				$out = '<img src="'.ihu.$img_dir.'/'.$id.'t'.$ext.'" alt="'.$alt.'"'.
+				$out = '<img src="'.imagesrcurl($id, $ext, true).'" alt="'.$alt.'"'.
 					($caption ? ' title="'.$caption.'"' : '').
 					( ($html_id and !$wraptag) ? ' id="'.$html_id.'"' : '' ).
 					( ($class and !$wraptag) ? ' class="'.$class.'"' : '' ).
@@ -249,12 +249,12 @@ $LastChangedRevision$
 
 				if ($link)
 				{
-					$out = href($out, ihu.$img_dir.'/'.$id.$ext, (!empty($link_rel) ? " rel='$link_rel'" : '')." title='$caption'");
+					$out = href($out, imagesrcurl($id, $ext), (!empty($link_rel) ? " rel='$link_rel'" : '')." title='$caption'");
 				}
 
 				elseif ($poplink)
 				{
-					$out = '<a href="'.ihu.$img_dir.'/'.$id.$ext.'"'.
+					$out = '<a href="'.imagesrcurl($id, $ext).'"'.
 						' onclick="window.open(this.href, \'popupwindow\', '.
 						'\'width='.$w.', height='.$h.', scrollbars, resizable\'); return false;">'.$out.'</a>';
 				}
@@ -2537,7 +2537,7 @@ $LastChangedRevision$
 
 	function article_image($atts)
 	{
-		global $thisarticle, $img_dir;
+		global $thisarticle;
 
 		assert_article();
 
@@ -2582,7 +2582,7 @@ $LastChangedRevision$
 							$caption = htmlspecialchars($caption);
 						}
 
-						$out = '<img src="'.ihu.$img_dir.'/'.$id.'t'.$ext.'" alt="'.$alt.'"'.
+						$out = '<img src="'.imagesrcurl($id, $ext, true).'" alt="'.$alt.'"'.
 							($caption ? ' title="'.$caption.'"' : '').
 							( ($html_id and !$wraptag) ? ' id="'.$html_id.'"' : '' ).
 							( ($class and !$wraptag) ? ' class="'.$class.'"' : '' ).
@@ -2607,7 +2607,7 @@ $LastChangedRevision$
 						$caption = htmlspecialchars($caption);
 					}
 
-					$out = '<img src="'.ihu.$img_dir.'/'.$id.$ext.'" width="'.$w.'" height="'.$h.'" alt="'.$alt.'"'.
+					$out = '<img src="'.imagesrcurl($id, $ext).'" width="'.$w.'" height="'.$h.'" alt="'.$alt.'"'.
 						($caption ? ' title="'.$caption.'"' : '').
 						( ($html_id and !$wraptag) ? ' id="'.$html_id.'"' : '' ).
 						( ($class and !$wraptag) ? ' class="'.$class.'"' : '' ).
@@ -2758,12 +2758,13 @@ $LastChangedRevision$
 			$out = array();
 			while ($a = nextRow($rs)) {
 				extract($a);
+				// TODO: substitute getimagesize() w/ txp_image.thumb_w/txp_image.thumb_h for dimensions
 				$impath = $img_dir.'/'.$id.'t'.$ext;
 				$imginfo = getimagesize($path_to_site.'/'.$impath);
 				$dims = (!empty($imginfo[3])) ? ' '.$imginfo[3] : '';
 				$url = pagelinkurl(array('c'=>$c, 'context'=>'image', 's'=>$s, 'p'=>$id));
 				$out[] = '<a href="'.$url.'">'.
-					'<img src="'.ihu.$impath.'"'.$dims.' alt="'.$alt.'" />'.'</a>';
+					'<img src="'.imagesrcurl($id, $ext, true).'"'.$dims.' alt="'.$alt.'" />'.'</a>';
 
 			}
 			if (count($out)) {
@@ -2777,13 +2778,12 @@ $LastChangedRevision$
 	function image_display($atts)
 	{
 		if (is_array($atts)) extract($atts);
-		global $s,$c,$p,$img_dir;
+		global $s,$c,$p;
 		if($p) {
 			$rs = safe_row("*", "txp_image", 'id='.intval($p).' limit 1');
 			if ($rs) {
 				extract($rs);
-				$impath = ihu.$img_dir.'/'.$id.$ext;
-				return '<img src="'.$impath.
+				return '<img src="'.imagesrcurl($id, $ext).
 					'" style="height:'.$h.'px;width:'.$w.'px" alt="'.$alt.'" />';
 			}
 		}
@@ -2792,7 +2792,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function image_list($atts, $thing = NULL)
 	{
-		global $s, $c, $context, $p, $img_dir, $path_to_site, $thisimage, $thisarticle, $thispage, $pretext;
+		global $s, $c, $context, $p, $path_to_site, $thisimage, $thisarticle, $thispage, $pretext;
 
 		extract(lAtts(array(
 			'name'        => '',
@@ -3011,7 +3011,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function image_url($atts, $thing = NULL)
 	{
-		global $thisimage, $img_dir;
+		global $thisimage;
 
 		extract(lAtts(array(
 			'name'      => '',
@@ -3040,7 +3040,7 @@ $LastChangedRevision$
 
 		if ($thisimage)
 		{
-			$url = ihu.$img_dir.'/'.$thisimage['id'].(($thumbnail) ? 't' : '').$thisimage['ext'];
+			$url = imagesrcurl($thisimage['id'], $thisimage['ext'], $thumbnail);
 			$link = ($link == 'auto') ? (($thing) ? 1 : 0) : $link;
 			$out = ($thing) ? parse($thing) : $url;
 			$out = ($link) ? href($out, $url) : $out;
