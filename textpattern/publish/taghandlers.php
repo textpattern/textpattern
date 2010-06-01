@@ -2758,14 +2758,10 @@ $LastChangedRevision$
 			$out = array();
 			while ($a = nextRow($rs)) {
 				extract($a);
-				// TODO: substitute getimagesize() w/ txp_image.thumb_w/txp_image.thumb_h for dimensions
-				$impath = $img_dir.'/'.$id.'t'.$ext;
-				$imginfo = getimagesize($path_to_site.'/'.$impath);
-				$dims = (!empty($imginfo[3])) ? ' '.$imginfo[3] : '';
+				$dims = ($thumb_h ? " height=\"$thumb_h\"" : '') . ($thumb_w ? " width=\"$thumb_w\"" : '');
 				$url = pagelinkurl(array('c'=>$c, 'context'=>'image', 's'=>$s, 'p'=>$id));
 				$out[] = '<a href="'.$url.'">'.
 					'<img src="'.imagesrcurl($id, $ext, true).'"'.$dims.' alt="'.$alt.'" />'.'</a>';
-
 			}
 			if (count($out)) {
 				return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
