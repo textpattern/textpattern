@@ -1495,7 +1495,7 @@ $LastChangedRevision$
 
 	function newer($atts, $thing = NULL)
 	{
-		global $thispage, $pretext, $permlink_mode;
+		global $thispage, $pretext, $permlink_mode, $m;
 
 		extract(lAtts(array(
 			'showalways'	=> 0,
@@ -1524,6 +1524,7 @@ $LastChangedRevision$
 				'c'       => @$pretext['c'],
 				'context' => @$pretext['context'],
 				'q'       => @$pretext['q'],
+				'm'       => @$m,
 				'author'  => $author
 			));
 
@@ -1549,7 +1550,7 @@ $LastChangedRevision$
 
 	function older($atts, $thing = NULL)
 	{
-		global $thispage, $pretext, $permlink_mode;
+		global $thispage, $pretext, $permlink_mode, $m;
 
 		extract(lAtts(array(
 			'showalways'	=> 0,
@@ -1578,6 +1579,7 @@ $LastChangedRevision$
 				'c'       => @$pretext['c'],
 				'context' => @$pretext['context'],
 				'q'       => @$pretext['q'],
+				'm'       => @$m,
 				'author'  => $author
 			));
 
