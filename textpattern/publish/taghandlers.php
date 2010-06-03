@@ -1495,7 +1495,7 @@ $LastChangedRevision$
 
 	function newer($atts, $thing = NULL)
 	{
-		global $thispage, $pretext, $permlink_mode, $m;
+		global $thispage, $pretext, $m;
 
 		extract(lAtts(array(
 			'showalways'	=> 0,
@@ -1550,7 +1550,7 @@ $LastChangedRevision$
 
 	function older($atts, $thing = NULL)
 	{
-		global $thispage, $pretext, $permlink_mode, $m;
+		global $thispage, $pretext, $m;
 
 		extract(lAtts(array(
 			'showalways'	=> 0,
@@ -4070,7 +4070,7 @@ $LastChangedRevision$
 
 	function file_download_link($atts, $thing = NULL)
 	{
-		global $thisfile, $permlink_mode;
+		global $thisfile;
 
 		extract(lAtts(array(
 			'filename' => '',
