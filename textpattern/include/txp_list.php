@@ -103,15 +103,15 @@ $LastChangedRevision$
 
 		if ($search_method and $crit)
 		{
-			$crit_escaped = doSlash(preg_quote($crit));
+			$crit_escaped = doSlash(str_replace(array('\\','%','_','\''), array('\\\\','\\%','\\_', '\\\''), $crit));
 			$critsql = array(
 				'id'         => "ID in ('" .join("','", do_list($crit_escaped)). "')",
-				'title_body_excerpt' => "Title rlike '$crit_escaped' or Body rlike '$crit_escaped' or Excerpt rlike '$crit_escaped'",
-				'section'    => "Section rlike '$crit_escaped'",
+				'title_body_excerpt' => "Title like '%$crit_escaped%' or Body like '%$crit_escaped%' or Excerpt like '%$crit_escaped%'",
+				'section'    => "Section like '%$crit_escaped%'",
 				'keywords'   => "FIND_IN_SET('".$crit_escaped."',Keywords)",
-				'categories' => "Category1 rlike '$crit_escaped' or Category2 rlike '$crit_escaped'",
+				'categories' => "Category1 like '%$crit_escaped%' or Category2 like '%$crit_escaped%'",
 				'status'     => "Status = '".(@$sesutats[gTxt($crit_escaped)])."'",
-				'author'     => "AuthorID rlike '$crit_escaped'",
+				'author'     => "AuthorID like '%$crit_escaped%'",
 				'article_image' => "Image in ('" .join("','", do_list($crit_escaped)). "')",
 				'posted'     => "Posted like '$crit_escaped%'",
 				'lastmod'    => "LastMod like '$crit_escaped%'"
