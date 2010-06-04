@@ -120,7 +120,7 @@ $LastChangedRevision$
 
 		if ($search_method and $crit)
 		{
-			$crit_escaped = doSlash($crit);
+			$crit_escaped = doSlash(str_replace(array('\\','%','_','\''), array('\\\\','\\%','\\_', '\\\''), $crit));
 
 			$critsql = array(
 				'id'          => "ID in ('" .join("','", do_list($crit_escaped)). "')",

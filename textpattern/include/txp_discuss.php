@@ -128,7 +128,7 @@ $LastChangedRevision$
 
 		if ($search_method and $crit)
 		{
-			$crit_escaped = doSlash($crit);
+			$crit_escaped = doSlash(str_replace(array('\\','%','_','\''), array('\\\\','\\%','\\_', '\\\''), $crit));
 
 			$critsql = array(
 				'id'      => "discussid = '$crit_escaped'",
