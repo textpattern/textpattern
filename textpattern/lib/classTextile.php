@@ -89,6 +89,12 @@ Block modifier syntax:
 	Consecutive paragraphs beginning with * are wrapped in unordered list tags.
 	Example: <ul><li>unordered list</li></ul>
 
+	Definition list:
+		Terms ;, ;;
+		Definitions :, ::
+	Consecutive paragraphs beginning with ; or : are wrapped in definition list tags.
+	Example: <dl><dt>term</dt><dd>definition</dd></dl>
+
 Phrase modifier syntax:
 
 		   _emphasis_	->	 <em>emphasis</em>
@@ -426,7 +432,7 @@ class Textile
 	function hasRawText($text)
 	{
 		// checks whether the text has text not already enclosed by a block tag
-		$r = trim(preg_replace('@<(p|blockquote|div|form|table|ul|ol|pre|h\d)[^>]*?>.*</\1>@s', '', trim($text)));
+		$r = trim(preg_replace('@<(p|blockquote|div|form|table|ul|ol|dl|pre|h\d)[^>]*?>.*</\1>@s', '', trim($text)));
 		$r = trim(preg_replace('@<(hr|br)[^>]*?/>@', '', $r));
 		return '' != $r;
 	}
@@ -473,50 +479,60 @@ class Textile
 // -------------------------------------------------------------
 	function lists($text)
 	{
-		return preg_replace_callback("/^([#*]+$this->c .*)$(?![^#*])/smU", array(&$this, "fList"), $text);
+		return preg_replace_callback("/^([#*;:]+$this->c .*)$(?![^#*;:])/smU", array(&$this, "fList"), $text);
 	}
 
 // -------------------------------------------------------------
 	function fList($m)
 	{
-		$text = preg_split('/\n(?=[*#])/m', $m[0]);
+		$text = preg_split('/\n(?=[*#;:])/m', $m[0]);
+		$pt = '';
 		foreach($text as $nr => $line) {
 			$nextline = isset($text[$nr+1]) ? $text[$nr+1] : false;
-			if (preg_match("/^([#*]+)($this->a$this->c) (.*)$/s", $line, $m)) {
+			if (preg_match("/^([#*;:]+)($this->a$this->c) (.*)$/s", $line, $m)) {
 				list(, $tl, $atts, $content) = $m;
 				$nl = '';
-				if (preg_match("/^([#*]+)\s.*/", $nextline, $nm))
+				$ltype = $this->lT($tl);
+				$litem = (strpos($tl, ';') !== false) ? 'dt' : ((strpos($tl, ':') !== false) ? 'dd' : 'li');
+
+				if (preg_match("/^([#*;:]+)\s.*/", $nextline, $nm))
 					$nl = $nm[1];
-				if (!isset($lists[$tl])) {
-					$lists[$tl] = true;
-					$atts = $this->pba($atts);
-					$line = "\t<" . $this->lT($tl) . "l$atts>\n\t\t<li>" . rtrim($content);
-				} else {
-					$line = "\t\t<li>" . rtrim($content);
+
+				if ((strpos($pt, ';') !== false) && (strpos($tl, ':') !== false)) {
+					$lists[$tl] = 2; // We're already in a <dl> so flag not to start another
 				}
 
-				if(strlen($nl) <= strlen($tl)) $line .= "</li>";
+				if (!isset($lists[$tl])) {
+					$lists[$tl] = 1;
+					$atts = $this->pba($atts);
+					$line = "\t<" . $ltype . "l$atts>\n\t\t<".$litem.">" . rtrim($content);
+				} else {
+					$line = "\t\t<".$litem.">" . rtrim($content);
+				}
+
+				if((strlen($nl) <= strlen($tl))) $line .= "</".$litem.">";
 				foreach(array_reverse($lists) as $k => $v) {
 					if(strlen($k) > strlen($nl)) {
-						$line .= "\n\t</" . $this->lT($k) . "l>";
-						if(strlen($k) > 1)
-							$line .= "</li>";
+						$line .= ($v==2) ? '' : "\n\t</" . $this->lT($k) . "l>";
+						if((strlen($k) > 1) && ($v != 2))
+							$line .= "</".$litem.">";
 						unset($lists[$k]);
 					}
 				}
+				$pt = $tl; // Remember the current Textile tag
 			}
 			else {
 				$line .= "\n";
 			}
 			$out[] = $line;
 		}
-		return $this->doTagBr('li', join("\n", $out));
+		return $this->doTagBr($litem, join("\n", $out));
 	}
 
 // -------------------------------------------------------------
 	function lT($in)
 	{
-		return preg_match("/^#+/", $in) ? 'o' : 'u';
+		return preg_match("/^#+/", $in) ? 'o' : ((preg_match("/^\*+/", $in)) ? 'u' : 'd');
 	}
 
 // -------------------------------------------------------------
@@ -535,7 +551,7 @@ class Textile
 // -------------------------------------------------------------
 	function doBr($m)
 	{
-		$content = preg_replace("@(.+)(?<!<br>|<br />)\n(?![#*\s|])@", '$1<br />', $m[3]);
+		$content = preg_replace("@(.+)(?<!<br>|<br />)\n(?![#*;:\s|])@", '$1<br />', $m[3]);
 		return '<'.$m[1].$m[2].'>'.$content.$m[4];
 	}
 
