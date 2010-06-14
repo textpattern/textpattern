@@ -3734,7 +3734,7 @@ begin tag builder functions
 
 			$url = ($permlink_mode == 'messy') ?
 				hu.'index.php?s=file_download'.($type == 'textile' ? '&' : a).'id='.$id:
-				hu.gTxt('file_download').'/'.$id.($filename ? '/'.$filename : '');
+				hu.gTxt('file_download').'/'.$id.($filename ? '/'.urlencode($filename) : '');
 
 			switch ($type)
 			{
