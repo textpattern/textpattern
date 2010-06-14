@@ -3385,36 +3385,34 @@ begin tag builder functions
 			{
 				case 'textile':
 					$alt = ($alt) ? ' ('.$alt.')' : '';
+					$modifiers = '';
 
-					if ($wraptag)
+					if ($class)
 					{
-						if ($class)
+						$modifiers .= '('.$class;
+
+						if ($html_id)
 						{
-							$wraptag .= '('.$class;
-
-							if ($html_id)
-							{
-								$wraptag .= '#'.$html_id;
-							}
-
-							$wraptag .= ')';
+							$modifiers .= '#'.$html_id;
 						}
 
-						elseif ($html_id)
-						{
-							$wraptag .= "(#$html_id)";
-						}
-
-						if ($style)
-						{
-							$wraptag .= '{'.$style.'}';
-						}
-
-						$wraptag .= '. ';
+						$modifiers .= ')';
 					}
 
+					elseif ($html_id)
+					{
+						$modifiers .= "(#$html_id)";
+					}
+
+					if ($style)
+					{
+						$modifiers .= '{'.$style.'}';
+					}
+
+					$wraptag = ($wraptag) ? $wraptag.$modifiers . '. ' : '';
+
 					$out .= tdb(
-						$wraptag.'!'.$url.$alt.'!'
+						( ($wraptag) ? $wraptag : '') . '!'. ( ($wraptag) ? '' : $modifiers ) .$url.$alt.'!'
 					);
 				break;
 
