@@ -620,6 +620,7 @@ $LastChangedRevision$
 		extract(lAtts(array(
 			'class'        => '',
 			'link'         => 0,
+			'title'        => 1,
 			'section'      => '',
 			'this_section' => '',
 			'wraptag'      => '',
@@ -628,11 +629,13 @@ $LastChangedRevision$
 		if ($thislink['author'])
 		{
 			$author_name = get_author_name($thislink['author']);
+			$display_name = ($title) ? $author_name : $thislink['author'];
+
 			$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
 
 			$author = ($link) ?
-				href($author_name, pagelinkurl(array('s' => $section, 'author' => $author_name, 'context' => 'link'))) :
-				$author_name;
+				href($display_name, pagelinkurl(array('s' => $section, 'author' => $author_name, 'context' => 'link'))) :
+				$display_name;
 
 			return ($wraptag) ? doTag($author, $wraptag, $class) : $author;
 		}
@@ -2168,17 +2171,19 @@ $LastChangedRevision$
 
 		extract(lAtts(array(
 			'link'         => '',
+			'title'        => 1,
 			'section'      => '',
 			'this_section' => 0,
 		), $atts));
 
 		$author_name = get_author_name($thisarticle['authorid']);
+		$display_name = ($title) ? $author_name : $thisarticle['authorid'];
 
 		$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
 
 		return ($link) ?
-			href($author_name, pagelinkurl(array('s' => $section, 'author' => $author_name))) :
-			$author_name;
+			href($display_name, pagelinkurl(array('s' => $section, 'author' => $author_name))) :
+			$display_name;
 	}
 
 // -------------------------------------------------------------
@@ -3063,6 +3068,7 @@ $LastChangedRevision$
 		extract(lAtts(array(
 			'class'        => '',
 			'link'         => 0,
+			'title'        => 1,
 			'section'      => '',
 			'this_section' => '',
 			'wraptag'      => '',
@@ -3071,11 +3077,13 @@ $LastChangedRevision$
 		if ($thisimage['author'])
 		{
 			$author_name = get_author_name($thisimage['author']);
+			$display_name = ($title) ? $author_name : $thisimage['author'];
+
 			$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
 
 			$author = ($link) ?
-				href($author_name, pagelinkurl(array('s' => $section, 'author' => $author_name, 'context' => 'image'))) :
-				$author_name;
+				href($display_name, pagelinkurl(array('s' => $section, 'author' => $author_name, 'context' => 'image'))) :
+				$display_name;
 
 			return ($wraptag) ? doTag($author, $wraptag, $class) : $author;
 		}
@@ -3186,12 +3194,20 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function meta_author()
+	function meta_author($atts)
 	{
 		global $id_author;
-		return ($id_author)
-		?	'<meta name="author" content="'.htmlspecialchars($id_author).'" />'
-		:	'';
+
+		extract(lAtts(array(
+			'title'  => 0,
+		), $atts));
+
+		if ($id_author)
+		{
+			$display_name = ($title) ? get_author_name($id_author) : $id_author;
+			return '<meta name="author" content="'.htmlspecialchars($display_name).'" />';
+		}
+		return '';
 	}
 
 // -------------------------------------------------------------
@@ -4347,6 +4363,7 @@ $LastChangedRevision$
 		extract(lAtts(array(
 			'class'        => '',
 			'link'         => 0,
+			'title'        => 1,
 			'section'      => '',
 			'this_section' => '',
 			'wraptag'      => '',
@@ -4355,11 +4372,13 @@ $LastChangedRevision$
 		if ($thisfile['author'])
 		{
 			$author_name = get_author_name($thisfile['author']);
+			$display_name = ($title) ? $author_name : $thisfile['author'];
+
 			$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
 
 			$author = ($link) ?
-				href($author_name, pagelinkurl(array('s' => $section, 'author' => $author_name, 'context' => 'file'))) :
-				$author_name;
+				href($display_name, pagelinkurl(array('s' => $section, 'author' => $author_name, 'context' => 'file'))) :
+				$display_name;
 
 			return ($wraptag) ? doTag($author, $wraptag, $class) : $author;
 		}
