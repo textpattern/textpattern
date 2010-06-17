@@ -629,7 +629,7 @@ $LastChangedRevision$
 		if ($thislink['author'])
 		{
 			$author_name = get_author_name($thislink['author']);
-			$display_name = ($title) ? $author_name : $thislink['author'];
+			$display_name = htmlspecialchars( ($title) ? $author_name : $thislink['author'] );
 
 			$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
 
@@ -2177,7 +2177,7 @@ $LastChangedRevision$
 		), $atts));
 
 		$author_name = get_author_name($thisarticle['authorid']);
-		$display_name = ($title) ? $author_name : $thisarticle['authorid'];
+		$display_name = htmlspecialchars( ($title) ? $author_name : $thisarticle['authorid'] );
 
 		$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
 
@@ -3077,7 +3077,7 @@ $LastChangedRevision$
 		if ($thisimage['author'])
 		{
 			$author_name = get_author_name($thisimage['author']);
-			$display_name = ($title) ? $author_name : $thisimage['author'];
+			$display_name = htmlspecialchars( ($title) ? $author_name : $thisimage['author'] );
 
 			$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
 
@@ -4372,7 +4372,7 @@ $LastChangedRevision$
 		if ($thisfile['author'])
 		{
 			$author_name = get_author_name($thisfile['author']);
-			$display_name = ($title) ? $author_name : $thisfile['author'];
+			$display_name = htmlspecialchars( ($title) ? $author_name : $thisfile['author'] );
 
 			$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
 
