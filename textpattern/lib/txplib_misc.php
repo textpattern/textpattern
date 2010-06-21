@@ -523,10 +523,13 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function pluginErrorHandler($errno, $errstr, $errfile, $errline)
 	{
+		global $production_status;
+
 		$error = array( E_WARNING => "Warning", E_NOTICE => "Notice", E_USER_ERROR => "User_Error",
 						E_USER_WARNING => "User_Warning", E_USER_NOTICE => "User_Notice");
 
 		if (!($errno & error_reporting())) return;
+		if ($production_status == 'live') return;
 
 		global $txp_current_plugin, $production_status;
 		printf ("<pre>".gTxt('plugin_load_error').' <b>%s</b> -> <b>%s: %s on line %s</b></pre>',
