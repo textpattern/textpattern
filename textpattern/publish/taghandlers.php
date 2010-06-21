@@ -470,7 +470,7 @@ $LastChangedRevision$
 			}
 		}
 
-		if (!$where && ($filters || $context_list))
+		if (!$where && $filters)
 		{
 			return ''; // If nothing matches, output nothing
 		}
@@ -2879,7 +2879,7 @@ $LastChangedRevision$
 			}
 		}
 
-		if (!$where && ($filters || $context_list))
+		if (!$where && $filters)
 		{
 			return ''; // If nothing matches, output nothing
 		}
@@ -3974,7 +3974,7 @@ $LastChangedRevision$
 			}
 		}
 
-		if (!$where && !$statwhere && ($filters || $context_list))
+		if (!$where && !$statwhere && $filters)
 		{
 			return ''; // If nothing matches, output nothing
 		}
