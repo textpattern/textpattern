@@ -533,7 +533,7 @@ $LastChangedRevision$
 			list($message, $id) = $img_result;
 			return image_edit($message, $id);
 		}else{
-			return image_list(array($img_result, E_ERROR));
+			return image_edit(array($img_result, E_ERROR), $id);
 		}
 	}
 
@@ -555,6 +555,12 @@ $LastChangedRevision$
 		$name = $_FILES['thefile']['name'];
 
 		$file = get_uploaded_file($file);
+
+		if (empty($file))
+		{
+			image_edit(array(upload_get_errormsg(UPLOAD_ERR_NO_FILE), E_ERROR), $id);
+			return;
+		}
 
 		list($w, $h, $extension) = getimagesize($file);
 
@@ -838,6 +844,11 @@ $LastChangedRevision$
 
 				return upload_get_errormsg(UPLOAD_ERR_FORM_SIZE);
 			}
+		}
+
+		if (empty($file))
+		{
+			return upload_get_errormsg(UPLOAD_ERR_NO_FILE);
 		}
 
 		list($w, $h, $extension) = getimagesize($file);
