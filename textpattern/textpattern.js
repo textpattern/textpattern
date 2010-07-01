@@ -1,3 +1,7 @@
+/*
+$HeadURL$
+$LastChangedRevision$
+*/
 
 // -------------------------------------------------------------
 // admin-side "cookies required" warning
