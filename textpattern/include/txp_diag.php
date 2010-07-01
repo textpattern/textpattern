@@ -73,6 +73,7 @@ $LastChangedRevision$
 		'/publish/taghandlers.php',
 		'/../rpc/index.php',
 		'/../rpc/TXP_RPCServer.php',
+		'/textpattern.js',
 		'/theme/classic/classic.php',
 		'/update/_to_1.0.0.php',
 		'/update/_to_4.0.2.php',
