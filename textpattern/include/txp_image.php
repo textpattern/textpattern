@@ -156,6 +156,8 @@ $LastChangedRevision$
 			"$criteria order by $sort_sql limit $offset, $limit
 		");
 
+		echo pluggable_ui('image_ui', 'extend_controls', '', $rs);
+
 		if ($rs)
 		{
 			$show_authors = !has_single_author('txp_image');
@@ -230,7 +232,9 @@ $LastChangedRevision$
 					, 75).
 
 					td(
+						pluggable_ui('image_ui', 'thumbnail',
 						($can_edit ? href($thumbnail, $edit_url) : $thumbnail)
+						, $a)
 					, 80).
 
 					td($tagbuilder, 85).
@@ -414,13 +418,15 @@ $LastChangedRevision$
 			echo startTable('list', '', 'edit-pane'),
 			tr(
 				td(
-					$img.br.
-					upload_form(gTxt('replace_image'), 'replace_image_form', 'image_replace', 'image', $id, $file_max_upload_size, 'image-replace', '')
+					pluggable_ui('image_ui', 'image_edit',
+						$img.br.
+						upload_form(gTxt('replace_image'), 'replace_image_form', 'image_replace', 'image', $id, $file_max_upload_size, 'image-replace', '')
+					, $rs)
 				)
 			),
 			tr(
 				td(
-					join('',
+					pluggable_ui('image_ui', 'thumbnail_edit', join('',
 						array(
 							($thumbnail)
 							? 	startTable('image-thumbnail').
@@ -433,12 +439,12 @@ $LastChangedRevision$
 							upload_form(gTxt('upload_thumbnail'),'upload_thumbnail',
 								'thumbnail_insert','image',$id,$file_max_upload_size, 'upload-thumbnail', '')
 						)
-					)
+					), $rs)
 				)
 			),
 
 			(check_gd($ext))
-			?	thumb_ui( $id )
+			?	thumb_ui( $id, $rs )
 			:	'',
 
 			tr(
@@ -649,6 +655,8 @@ $LastChangedRevision$
 
 			if ($rs)
 			{
+				callback_event('image', 'image_delete');
+
 				while ($a = nextRow($rs))
 				{
 					extract($a);
@@ -695,14 +703,14 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function thumb_ui($id)
+	function thumb_ui($id, $rs)
 	{
 		global $prefs, $sort, $dir, $page, $search_method, $crit;
 		extract($prefs);
 		return
 		tr(
 			td(
-				form(
+				pluggable_ui('image_ui', 'thumbnail_create', form(
 					graf(gTxt('create_thumbnail')) .
 					startTable('','left','',1) .
 						tr(
@@ -731,7 +739,7 @@ $LastChangedRevision$
 						n.hInput('crit', $crit).
 
 					endTable()
-				)
+				), $rs)
 			)
 		);
 	}
@@ -947,6 +955,8 @@ $LastChangedRevision$
 
 					$message = gTxt('image_uploaded', array('{name}' => $name));
 					update_lastmod();
+
+					callback_event('image', 'image_data');
 
 					return array($message, $id);
 				}
