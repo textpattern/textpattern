@@ -42,7 +42,7 @@ $LastChangedRevision$
 	{
 		pagetop(gTxt('edit_plugins'), $message);
 
-		echo n.n.startTable('edit').
+		echo n.n.startTable('edit', '', 'plugin-install').
 			tr(
 				tda(
 					plugin_form()
@@ -68,20 +68,34 @@ $LastChangedRevision$
 
 		if ($rs and numRows($rs) > 0)
 		{
-			echo '<form action="index.php" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
+			echo '<form action="index.php" id="plugin_form" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
 
-			startTable('list').
+			startTable('list', '', 'list').
+			n.'<thead>'.
 			tr(
-				column_head('plugin', 'name', 'plugin', true, $switch_dir, '', '', ('name' == $sort) ? $dir : '').
-				column_head('author', 'author', 'plugin', true, $switch_dir, '', '', ('author' == $sort) ? $dir : '').
-				column_head('version', 'version', 'plugin', true, $switch_dir, '', '', ('version' == $sort) ? $dir : '').
-				column_head('plugin_modified', 'modified', 'plugin', true, $switch_dir, '', '', ('modified' == $sort) ? $dir : '').
-				hCell(gTxt('description')).
-				column_head('active', 'status', 'plugin', true, $switch_dir, '', '', ('status' == $sort) ? $dir : '').
-				column_head('order', 'load_order', 'plugin', true, $switch_dir, '', '', ('load_order' == $sort) ? $dir : '').
-				hCell(gTxt('manage'), '',  ' class="manage"').
-				hCell(/* checkbox */)
-			);
+				column_head('plugin', 'name', 'plugin', true, $switch_dir, '', '', (('name' == $sort) ? "$dir " : '').'name').
+				column_head('author', 'author', 'plugin', true, $switch_dir, '', '', (('author' == $sort) ? "$dir " : '').'author').
+				column_head('version', 'version', 'plugin', true, $switch_dir, '', '', (('version' == $sort) ? "$dir " : '').'version').
+				column_head('plugin_modified', 'modified', 'plugin', true, $switch_dir, '', '', (('modified' == $sort) ? "$dir " : '').'modified').
+				hCell(gTxt('description'), '', ' class="description"').
+				column_head('active', 'status', 'plugin', true, $switch_dir, '', '', (('status' == $sort) ? "$dir " : '').'status').
+				column_head('order', 'load_order', 'plugin', true, $switch_dir, '', '', (('load_order' == $sort) ? "$dir " : '').'load-order').
+				hCell(gTxt('manage'), '',  ' class="manage actions"').
+				hCell('', '', ' class="multi-edit"')
+			).
+			n.'</thead>';
+
+			$tfoot = n.'<tfoot>'.tr(
+				tda(
+					select_buttons().
+					plugin_multiedit_form('', $sort, $dir, '', '')
+				, ' class="multi-edit" colspan="10" style="text-align: right; border: none;"')
+			).n.'</tfoot>';
+
+			echo $tfoot;
+			echo '<tbody>';
+
+			$ctr = 1;
 
 			while ($a = nextRow($rs))
 			{
@@ -96,50 +110,46 @@ $LastChangedRevision$
 											$description);
 
 				$help = !empty($help) ?
-					n.t.'<li><a href="?event=plugin'.a.'step=plugin_help'.a.'name='.urlencode($name).'">'.gTxt('help').'</a></li>' : '';
+					n.t.'<li class="action-view"><a href="?event=plugin'.a.'step=plugin_help'.a.'name='.urlencode($name).'">'.gTxt('help').'</a></li>' : '';
 
 				$plugin_prefs = ($flags & PLUGIN_HAS_PREFS) && $status ?
-					n.t.'<li><a href="?event=plugin_prefs.'.urlencode($name).'">'.gTxt('plugin_prefs').'</a></li>' : '';
+					n.t.'<li class="action-options"><a href="?event=plugin_prefs.'.urlencode($name).'">'.gTxt('plugin_prefs').'</a></li>' : '';
 
 				echo tr(
 
-					n.td($name).
+					n.td($name, '', 'name').
 
 					td(
 						href($author, $author_uri)
-					).
+					, '', 'author').
 
-					td($version, 10).
-					td($modified ? gTxt('yes') : '').
-					td($description, 260).
+					td($version, 10, 'version').
+					td(($modified ? gTxt('yes') : ''), '', 'modified').
+					td($description, 260, 'description').
 
 					td(
 						status_link($status, $name, yes_no($status))
-					,30).
+					,30, 'status').
 
-					td($load_order).
+					td($load_order, '', 'load-order').
 					td(
-						n.'<ul class="plugin_manage">'.
+						n.'<ul class="actions">'.
 						$help.
-						n.t.'<li>'.eLink('plugin', 'plugin_edit', 'name', $name, gTxt('edit')).'</li>'.
+						n.t.'<li class="action-edit">'.eLink('plugin', 'plugin_edit', 'name', $name, gTxt('edit')).'</li>'.
 						$plugin_prefs.
 						n.'</ul>'
-					).
+					,'', 'manage').
 					td(
 						fInput('checkbox', 'selected[]', $name)
-					,30)
+					,30, 'multi-edit')
+				, ' class="'.(($ctr%2 == 0) ? 'even' : 'odd').'"'
 				);
 
+				$ctr++;
 				unset($name, $page, $deletelink);
 			}
 
-			echo tr(
-				tda(
-					select_buttons().
-					plugin_multiedit_form('', $sort, $dir, '', '')
-				, ' colspan="10" style="text-align: right; border: none;"')
-			).
-
+			echo '</tbody>'.
 			n.endTable().
 			n.'</form>';
 		}
@@ -181,7 +191,7 @@ $LastChangedRevision$
 		pagetop(gTxt('plugin_help'));
 		$help = ($name) ? safe_field('help','txp_plugin',"name = '".doSlash($name)."'") : '';
 		echo
-		startTable('edit')
+		startTable('edit', '', 'plugin-help')
 		.	tr(tda($help,' width="600"'))
 		.	endTable();
 
@@ -198,11 +208,11 @@ $LastChangedRevision$
 		$textarea = '<textarea id="plugin-code" class="code" name="code" rows="28" cols="90">'.htmlspecialchars($thing).'</textarea>';
 
 		return
-		form(startTable('edit')
+		form(startTable('edit', '', 'edit-pane')
 		.	tr(td($textarea))
 		.	tr(td($sub))
 #		.	tr(td($help))
-		.	endTable().sInput('plugin_save').eInput('plugin').hInput('name',$name));
+		.	endTable().sInput('plugin_save').eInput('plugin').hInput('name',$name), '', '', 'post', 'edit-form', '', 'plugin_details');
 	}
 
 // -------------------------------------------------------------
@@ -311,7 +321,7 @@ $LastChangedRevision$
 						sInput('plugin_install').
 						eInput('plugin').
 						hInput('plugin64', $plugin_encoded)
-					, 'margin: 0 auto; width: 65%;');
+					, 'margin: 0 auto; width: 65%;', '', 'post', 'plugin-info', '', 'plugin_preview');
 					return;
 				}
 			}
@@ -445,7 +455,7 @@ $LastChangedRevision$
 				eInput('plugin').
 				sInput('plugin_verify')
 			)
-		, 'text-align: center;');
+		, 'text-align: center;', '', 'post', 'plugin-data', '', 'plugin_install_form');
 	}
 
 // -------------------------------------------------------------
@@ -454,8 +464,8 @@ $LastChangedRevision$
 	{
 		$methods = array(
 			'changestatus' => gTxt('changestatus'),
-			'changeorder' => gTxt('changeorder'),
-			'delete' => gTxt('delete')
+			'changeorder'  => gTxt('changeorder'),
+			'delete'       => gTxt('delete')
 		);
 
 		return event_multiedit_form('plugin', $methods, $page, $sort, $dir, $crit, $search_method);

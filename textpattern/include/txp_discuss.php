@@ -70,7 +70,7 @@ $LastChangedRevision$
 
 		echo graf(
 			'<a href="index.php?event=discuss'.a.'step=ipban_list">'.gTxt('list_banned_ips').'</a>'
-		, ' style="text-align: center;"');
+		, ' id="list_banned_ips" style="text-align: center;"');
 
 		extract(gpsa(array('sort', 'dir', 'page', 'crit', 'search_method')));
 		if ($sort === '') $sort = get_pref('discuss_sort_column', 'date');
@@ -210,24 +210,41 @@ $LastChangedRevision$
 
 		if ($rs)
 		{
-			echo n.n.'<form name="longform" method="post" action="index.php" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
+			echo n.n.'<form name="longform" id="discuss_form" method="post" action="index.php" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
 
-				n.startTable('list','','','','90%').
-
+				n.startTable('list','','list','','90%').
+				n.'<thead>'.
 				n.n.tr(
-					column_head('ID', 'id', 'discuss', true, $switch_dir, $crit, $search_method, ('id' == $sort) ? $dir : '').
-					column_head('date', 'date', 'discuss', true, $switch_dir, $crit, $search_method, ('date' == $sort) ? $dir : '').
-					column_head('name', 'name', 'discuss', true, $switch_dir, $crit, $search_method, ('name' == $sort) ? $dir : '').
-					column_head('message', 'message', 'discuss', true, $switch_dir, $crit, $search_method, ('message' == $sort) ? $dir : '').
-					column_head('email', 'email', 'discuss', true, $switch_dir, $crit, $search_method, (('email' == $sort) ? "$dir " : '').'discuss_detail').
-					column_head('website', 'website', 'discuss', true, $switch_dir, $crit, $search_method, (('website' == $sort) ? "$dir " : '').'discuss_detail').
-					column_head('IP', 'ip', 'discuss', true, $switch_dir, $crit, $search_method, (('ip' == $sort) ? "$dir " : '').'discuss_detail').
-					column_head('status', 'status', 'discuss', true, $switch_dir, $crit, $search_method, (('status' == $sort) ? "$dir " : '').'discuss_detail').
-					column_head('parent', 'parent', 'discuss', true, $switch_dir, $crit, $search_method, ('parent' == $sort) ? $dir : '').
-					hCell()
-				);
+					column_head('ID', 'id', 'discuss', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id').
+					column_head('date', 'date', 'discuss', true, $switch_dir, $crit, $search_method, (('date' == $sort) ? "$dir " : '').'date posted created').
+					column_head('name', 'name', 'discuss', true, $switch_dir, $crit, $search_method, (('name' == $sort) ? "$dir " : '').'name').
+					column_head('message', 'message', 'discuss', true, $switch_dir, $crit, $search_method, (('message' == $sort) ? "$dir " : 'message')).
+					column_head('email', 'email', 'discuss', true, $switch_dir, $crit, $search_method, (('email' == $sort) ? "$dir " : '').'discuss_detail email').
+					column_head('website', 'website', 'discuss', true, $switch_dir, $crit, $search_method, (('website' == $sort) ? "$dir " : '').'discuss_detail website').
+					column_head('IP', 'ip', 'discuss', true, $switch_dir, $crit, $search_method, (('ip' == $sort) ? "$dir " : '').'discuss_detail ip').
+					column_head('status', 'status', 'discuss', true, $switch_dir, $crit, $search_method, (('status' == $sort) ? "$dir " : '').'discuss_detail status').
+					column_head('parent', 'parent', 'discuss', true, $switch_dir, $crit, $search_method, (('parent' == $sort) ? "$dir " : '').'parent').
+					hCell('', '', ' class="multi-edit"')
+				).
+				n.'</thead>';
 
 			include_once txpath.'/publish/taghandlers.php';
+
+			$tfoot = n.'<tfoot>'.tr(
+				tda(
+					toggle_box('discuss_detail'),
+					' class="detail-toggle" colspan="2" style="text-align: left; border: none;"'
+				).
+				tda(
+					select_buttons().
+					discuss_multiedit_form($page, $sort, $dir, $crit, $search_method)
+				, ' class="multi-edit" colspan="9" style="text-align: right; border: none;"')
+			).n.'</tfoot>';
+
+			echo $tfoot;
+			echo '<tbody>';
+
+			$ctr = 1;
 
 			while ($a = nextRow($rs))
 			{
@@ -276,46 +293,37 @@ $LastChangedRevision$
 
 					if ($visible == VISIBLE and in_array($Status, array(4,5)))
 					{
-						$view = n.t.'<li><a href="'.permlinkurl($a).'#c'.$discussid.'">'.gTxt('view').'</a></li>';
+						$view = n.t.'<li class="action-view"><a href="'.permlinkurl($a).'#c'.$discussid.'">'.gTxt('view').'</a></li>';
 					}
 				}
 
 				echo n.n.tr(
 
-					n.td('<a href="'.$edit_url.'">'.$discussid.'</a>'.
-						n.'<ul class="discuss_detail">'.
-						n.t.'<li><a href="'.$edit_url.'">'.gTxt('edit').'</a></li>'.
+					n.td('<a class="action-edit" href="'.$edit_url.'">'.$discussid.'</a>'.
+						n.'<ul class="discuss_detail actions">'.
+						n.t.'<li class="action-edit"><a href="'.$edit_url.'">'.gTxt('edit').'</a></li>'.
 						$view.
 						n.'</ul>'
-					, 50).
+					, 50, 'id').
 
-					td(gTime($uPosted)).
-					td(htmlspecialchars(soft_wrap($name, 15))).
-					td(short_preview($dmessage)).
-					td(htmlspecialchars(soft_wrap($email, 15)), '', 'discuss_detail').
-					td(htmlspecialchars(soft_wrap($web, 15)), '', 'discuss_detail').
-					td($ip, '', 'discuss_detail').
-					td($comment_status, '', 'discuss_detail').
-					td($parent).
-					td(fInput('checkbox', 'selected[]', $discussid))
+					td(gTime($uPosted), '', 'date posted created').
+					td(htmlspecialchars(soft_wrap($name, 15)), '', 'name').
+					td(short_preview($dmessage), '', 'message').
+					td(htmlspecialchars(soft_wrap($email, 15)), '', 'discuss_detail email').
+					td(htmlspecialchars(soft_wrap($web, 15)), '', 'discuss_detail website').
+					td($ip, '', 'discuss_detail ip').
+					td($comment_status, '', 'discuss_detail status').
+					td($parent, '', 'parent').
+					td(fInput('checkbox', 'selected[]', $discussid), '', 'multi-edit')
+				, ' class="'.(($ctr%2 == 0) ? 'even' : 'odd').' '.$row_class.'"');
 
-				, ' class="'.$row_class.'"');
+				$ctr++;
 			}
 
 			if (empty($message))
 				echo tr(tda(gTxt('just_spam_results_found'),' colspan="9" style="text-align: left; border: none;"'));
 
-			echo tr(
-				tda(
-					toggle_box('discuss_detail'),
-					' colspan="2" style="text-align: left; border: none;"'
-				).
-				tda(
-					select_buttons().
-					discuss_multiedit_form($page, $sort, $dir, $crit, $search_method)
-				, ' colspan="9" style="text-align: right; border: none;"')
-			).
-
+			echo '</tbody>'.
 			endTable().
 			'</form>'.
 
@@ -332,13 +340,13 @@ $LastChangedRevision$
 	function discuss_search_form($crit, $method)
 	{
 		$methods =	array(
-			'id'			=> gTxt('ID'),
+			'id'      => gTxt('ID'),
 			'parent'  => gTxt('parent'),
-			'name'		=> gTxt('name'),
+			'name'    => gTxt('name'),
 			'message' => gTxt('message'),
-			'email'		=> gTxt('email'),
+			'email'   => gTxt('email'),
 			'website' => gTxt('website'),
-			'ip'			=> gTxt('IP')
+			'ip'      => gTxt('IP')
 		);
 
 		return search_form('discuss', 'list', $crit, $methods, $method, 'message');
@@ -374,7 +382,7 @@ $LastChangedRevision$
 				$ban_text = gTxt('ban');
 			}
 
-			$ban_link = '[<a href="?event=discuss'.a.'step='.$ban_step.a.'ip='.$ip.
+			$ban_link = '[<a class="action-ban" href="?event=discuss'.a.'step='.$ban_step.a.'ip='.$ip.
 				a.'name='.urlencode($name).a.'discussid='.$discussid.'">'.$ban_text.'</a>]';
 
 			echo form(
@@ -382,26 +390,26 @@ $LastChangedRevision$
 				stackRows(
 
 					fLabelCell('name').
-					fInputCell('name', $name),
+					fInputCell('name', $name, '', '', '', 'name'),
 
 					fLabelCell('IP').
-					td("$ip $ban_link"),
+					td("$ip $ban_link", '', 'ip'),
 
 					fLabelCell('email').
-					fInputCell('email', $email),
+					fInputCell('email', $email, '', '', '', 'email'),
 
 					fLabelCell('website').
-					fInputCell('web', $web),
+					fInputCell('web', $web, '', '', '', 'website'),
 
 					fLabelCell('date').
 					td(
 						safe_strftime('%d %b %Y %X', $uPosted)
-					),
+					, '', 'date posted created'),
 
 					tda(gTxt('message')).
 					td(
 						'<textarea name="message" cols="60" rows="15">'.$message.'</textarea>'
-					),
+					, '', 'comment message text'),
 
 					fLabelCell('status').
 					td(
@@ -410,7 +418,7 @@ $LastChangedRevision$
 							SPAM		 => gTxt('spam'),
 							MODERATE => gTxt('unmoderated')
 						), $visible, false)
-					),
+					, '', 'status'),
 
 					td().td(fInput('submit', 'step', gTxt('save'), 'publish')),
 
@@ -429,7 +437,7 @@ $LastChangedRevision$
 				).
 
 				endTable()
-			);
+			, '', '', 'post', 'edit-form', '', 'discuss_edit_form');
 		}
 
 		else
@@ -506,14 +514,19 @@ $LastChangedRevision$
 
 		if ($rs and numRows($rs) > 0)
 		{
-			echo startTable('list').
+			echo startTable('list', '', 'list').
+				n.'<thead>'.
 				tr(
-					hCell(gTxt('date_banned')).
-					hCell(gTxt('IP')).
-					hCell(gTxt('name_used')).
-					hCell(gTxt('banned_for')).
-					hCell()
-				);
+					hCell(gTxt('date_banned'), '', ' class="date banned"').
+					hCell(gTxt('IP'), '', ' class="ip"').
+					hCell(gTxt('name_used'), '', ' class="name"').
+					hCell(gTxt('banned_for'), '', ' class="id"').
+					hCell('', '', ' class="actions"')
+				).
+				n.'</thead>';
+
+			echo '<tbody>';
+			$ctr = 1;
 
 			while ($a = nextRow($rs))
 			{
@@ -522,28 +535,32 @@ $LastChangedRevision$
 				echo tr(
 					td(
 						safe_strftime('%d %b %Y %I:%M %p', $uBanned)
-					, 100).
+					, 100, 'date banned').
 
 					td(
 						$ip
-					, 100).
+					, 100, 'ip').
 
 					td(
 						$name_used
-					, 100).
+					, 100, 'name').
 
 					td(
 						'<a href="?event=discuss'.a.'step=discuss_edit'.a.'discussid='.$banned_on_message.'">'.
 							$banned_on_message.'</a>'
-					, 100).
+					, 100, 'id').
 
 					td(
-						'<a href="?event=discuss'.a.'step=ipban_unban'.a.'ip='.$ip.'">'.gTxt('unban').'</a>'
-					)
+						'<a class="action-ban" href="?event=discuss'.a.'step=ipban_unban'.a.'ip='.$ip.'">'.gTxt('unban').'</a>'
+					, '', 'actions')
+				, ' class="'.(($ctr%2 == 0) ? 'even' : 'odd').'"'
 				);
+
+				$ctr++;
 			}
 
-			echo endTable();
+			echo '</tbody>'.
+			endTable();
 		}
 
 		else

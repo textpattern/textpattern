@@ -17,10 +17,15 @@ $LastChangedRevision$
 	if ($event == 'page') {
 		require_privs('page');
 
-		if(!$step or !in_array($step, array('page_edit','page_save','page_delete','page_list'))){
-			$step = 'page_edit';
+		switch(strtolower($step)) {
+			case "":                page_edit();             break;
+			case "page_edit":       page_edit();             break;
+			case "page_list":       page_list();             break;
+			case "page_save":       page_save();             break;
+			case "page_delete":     page_delete();           break;
+			case "page_new":        page_new();              break;
+			case "save_pane_state": page_save_pane_state();  break;
 		}
-		$step();
 	}
 
 //-------------------------------------------------------------
@@ -30,49 +35,44 @@ $LastChangedRevision$
 
 		pagetop(gTxt('edit_pages'), $message);
 
-		extract(gpsa(array('name', 'newname', 'copy')));
+		extract(gpsa(array('name', 'newname', 'copy', 'savenew')));
 
 		if (!$name or $step == 'page_delete')
 		{
 			$name = safe_field('page', 'txp_section', "name = 'default'");
 		}
 
-		$name = ( $copy && trim(preg_replace('/[<>&"\']/', '', $newname)) ) ? $newname : $name;
+		$name = ( ( $copy || $savenew ) && trim(preg_replace('/[<>&"\']/', '', $newname)) ) ? $newname : $name;
+
+		$name = ( $step == 'page_new' ) ? '' : $name;
+
+		// Format of each entry is popTagLink -> array ( gTxt() string, class/ID)
+		$tagbuild_items = array(
+			'page_article' => array('page_article_hed', 'article-tags'),
+			'page_article_nav' => array('page_article_nav_hed', 'article-nav-tags'),
+			'page_nav' => array('page_nav_hed', 'nav-tags'),
+			'page_xml' => array('page_xml_hed', 'xml-tags'),
+			'page_misc' => array('page_misc_hed', 'misc-tags'),
+			'page_file' => array('page_file_hed', 'file-tags'),
+		);
+
+		$tagbuild_options = '';
+		foreach ($tagbuild_items as $tb => $item) {
+			$tagbuild_options .= n.n.'<div class="'.$item[1].'">'.hed('<a href="#'.$item[1].'">'.gTxt($item[0]).'</a>'
+					, 3, ' class="plain lever'.(get_pref('pane_page_'.$item[1].'_visible') ? ' expanded' : '').'"').
+						n.'<div id="'.$item[1].'" class="toggle" style="display:'.(get_pref('pane_page_'.$item[1].'_visible') ? 'block' : 'none').'">'.taglinks($tb).'</div></div>';
+		}
 
 		echo
-			startTable('edit').
+			startTable('edit', '', 'edit-pane').
 			tr(
 				tda(
 
-					n.hed(
+					'<div id="tagbuild_links">'.n.hed(
 						gTxt('tagbuilder')
 					, 2).
-
-					n.n.hed(
-						'<a href="#article-tags">'.gTxt('page_article_hed').'</a>'
-					, 3, ' class="plain lever expanded"').
-						n.'<div id="article-tags" class="toggle on" style="display:block">'.taglinks('page_article').'</div>'.
-
-					n.n.hed('<a href="#article-nav-tags">'.gTxt('page_article_nav_hed').'</a>'
-					, 3, ' class="plain lever"').
-						n.'<div id="article-nav-tags" class="toggle" style="display:none">'.taglinks('page_article_nav').'</div>'.
-
-					n.n.hed('<a href="#nav-tags">'.gTxt('page_nav_hed').'</a>'
-					, 3, ' class="plain lever"').
-						n.'<div id="nav-tags" class="toggle" style="display:none">'.taglinks('page_nav').'</div>'.
-
-					n.n.hed('<a href="#xml-tags">'.gTxt('page_xml_hed').'</a>'
-					, 3, ' class="plain lever"').
-						n.'<div id="xml-tags" class="toggle" style="display:none">'.taglinks('page_xml').'</div>'.
-
-					n.n.hed('<a href="#misc-tags">'.gTxt('page_misc_hed').'</a>'
-					, 3, ' class="plain lever"').
-						n.'<div id="misc-tags" class="toggle" style="display:none">'.taglinks('page_misc').'</div>'.
-
-					n.n.hed('<a href="#file-tags">'.gTxt('page_file_hed').'</a>'
-					, 3, ' class="plain lever"').
-						n.'<div id="file-tags" class="toggle" style="display:none">'.taglinks('page_file').'</div>'
-
+						$tagbuild_options.
+						n.'</div>'
 				,' class="column"').
 
 				tda(
@@ -80,8 +80,11 @@ $LastChangedRevision$
 				, ' class="column"').
 
 				tda(
+					'<div id="content_switcher">'.
 					hed(gTxt('all_pages'), 2).
-					page_list($name)
+					graf(sLink('page', 'page_new', gTxt('create_new_page')), ' class="action-create smallerbox"').
+					page_list($name).
+					'</div>'
 				, ' class="column"')
 			).
 
@@ -92,20 +95,38 @@ $LastChangedRevision$
 	function page_edit_form($name)
 	{
 		global $step;
-		$html = safe_field('user_html','txp_page',"name='".doSlash($name)."'");
+		if ($name) {
+			$html = safe_field('user_html','txp_page',"name='".doSlash($name)."'");
+		} else {
+			$html = '';
+		}
 
-		$out[] = '<p>'.gTxt('you_are_editing_page').sp.strong($name).br.
+		if ($step=='page_new')
+		{
+			$buttons = '<div class="edit-title">'.
+			gTxt('name_for_this_page').': '
+			.fInput('text','newname','','edit','','',20).
+			hInput('savenew','savenew').
+			'</div>';
+		} else {
+			$buttons = '<div class="edit-title">'.gTxt('you_are_editing_page').sp.strong($name).'</div>';
+		}
+
+		$out[] = '<div id="main_content">'.$buttons.
 					'<textarea id="html" class="code" name="html" cols="84" rows="36">'.htmlspecialchars($html).'</textarea>'.br.
 					n.fInput('submit','save',gTxt('save'),'publish').
 					n.eInput('page').
 					n.sInput('page_save').
 					n.hInput('name',$name);
 
-		$out[] =
+		if ($step != 'page_new') {
+			$out[] =
 				n.'<label for="copy-page">'.gTxt('copy_page_as').'</label>'.sp.
 				n.fInput('text', 'newname', '', 'edit', '', '', '', '', 'copy-page').
-				n.fInput('submit','copy',gTxt('copy'),'smallerbox').'</p>';
-		return form(join('',$out));
+				n.fInput('submit','copy',gTxt('copy'),'smallerbox').'</div>';
+		}
+
+		return form(join('',$out), '', '', 'post', '', '', 'page_form');
 	}
 
 //-------------------------------------------------------------
@@ -116,19 +137,22 @@ $LastChangedRevision$
 
 		$rs = safe_rows_start('name', 'txp_page', "1 order by name asc");
 
+		$ctr = 1;
+
 		while ($a = nextRow($rs))
 		{
 			extract($a);
 
 			$link  = eLink('page', '', 'name', $name, $name);
 			$dlink = !in_array($name, $protected) ? dLink('page', 'page_delete', 'name', $name) : '';
-
+			$trcls = ' class="'.((($ctr==1) ? 'first ' : '').(($ctr%2 == 0) ? 'even' : 'odd')).'"';
 			$out[] = ($current == $name) ?
-				tr(td($name).td($dlink)) :
-				tr(td($link).td($dlink));
+				tr(td($name).td($dlink), $trcls) :
+				tr(td($link).td($dlink), $trcls);
+			$ctr++;
 		}
 
-		return startTable('list').join(n, $out).endTable();
+		return startTable('list', '', 'list').join(n, $out).endTable();
 	}
 
 //-------------------------------------------------------------
@@ -162,9 +186,9 @@ $LastChangedRevision$
 
 	function page_save()
 	{
-		extract(doSlash(gpsa(array('name', 'html', 'copy'))));
+		extract(doSlash(gpsa(array('name', 'savenew', 'html', 'copy'))));
 
-		if ($copy)
+		if ($savenew or $copy)
 		{
 			$newname = doSlash(trim(preg_replace('/[<>&"\']/', '', gps('newname'))));
 
@@ -199,9 +223,31 @@ $LastChangedRevision$
 		}
 	}
 
+// -------------------------------------------------------------
+
+	function page_new()
+	{
+		page_edit();
+	}
 //-------------------------------------------------------------
 	function taglinks($type)
 	{
 		return popTagLinks($type);
 	}
+
+// -------------------------------------------------------------
+	function page_save_pane_state()
+	{
+		global $event;
+		$panes = array('article-tags', 'article-nav-tags', 'nav-tags', 'xml-tags', 'misc-tags', 'file-tags');
+		$pane = gps('pane');
+		if (in_array($pane, $panes))
+		{
+			set_pref("pane_page_{$pane}_visible", (gps('visible') == 'true' ? '1' : '0'), $event, PREF_HIDDEN, 'yesnoradio', 0, PREF_PRIVATE);
+			send_xml_response();
+		} else {
+			send_xml_response(array('http-status' => '400 Bad Request'));
+		}
+	}
+
 ?>

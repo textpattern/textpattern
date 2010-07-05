@@ -147,20 +147,38 @@ $LastChangedRevision$
 
 		if ($rs)
 		{
-			echo n.n.'<form action="index.php" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
+			echo n.n.'<form action="index.php" id="log_form" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
 
-				startTable('list','','','','90%').
-
+				startTable('list','','list','','90%').
+				n.'<thead>'.
 				n.tr(
-					n.column_head('time', 'time', 'log', true, $switch_dir, $crit, $search_method, ('time' == $sort) ? $dir : '').
-					column_head('IP', 'ip', 'log', true, $switch_dir, $crit, $search_method, (('ip' == $sort) ? "$dir " : '').'log_detail').
-					column_head('host', 'host', 'log', true, $switch_dir, $crit, $search_method, ('host' == $sort) ? $dir : '').
-					column_head('page', 'page', 'log', true, $switch_dir, $crit, $search_method, ('page' == $sort) ? $dir : '').
-					column_head('referrer', 'refer', 'log', true, $switch_dir, $crit, $search_method, ('refer' == $sort) ? $dir : '').
-					column_head('method', 'method', 'log', true, $switch_dir, $crit, $search_method, (('method' == $sort) ? "$dir " : '').'log_detail').
-					column_head('status', 'status', 'log', true, $switch_dir, $crit, $search_method, (('status' == $sort) ? "$dir " : '').'log_detail').
-					hCell()
-				);
+					n.column_head('time', 'time', 'log', true, $switch_dir, $crit, $search_method, (('time' == $sort) ? "$dir " : '').'date time').
+					column_head('IP', 'ip', 'log', true, $switch_dir, $crit, $search_method, (('ip' == $sort) ? "$dir " : '').'log_detail ip').
+					column_head('host', 'host', 'log', true, $switch_dir, $crit, $search_method, (('host' == $sort) ? "$dir " : '').'host').
+					column_head('page', 'page', 'log', true, $switch_dir, $crit, $search_method, (('page' == $sort) ? "$dir " : '').'page').
+					column_head('referrer', 'refer', 'log', true, $switch_dir, $crit, $search_method, (('refer' == $sort) ? "$dir " : '').'refer').
+					column_head('method', 'method', 'log', true, $switch_dir, $crit, $search_method, (('method' == $sort) ? "$dir " : '').'log_detail method').
+					column_head('status', 'status', 'log', true, $switch_dir, $crit, $search_method, (('status' == $sort) ? "$dir " : '').'log_detail status').
+					hCell('', '', ' class="multi-edit"')
+			).
+			n.'</thead>';
+
+			$tfoot = n.'<tfoot>'.tr(
+				tda(
+					toggle_box('log_detail'),
+					' class="detail-toggle" colspan="2" style="text-align: left; border: none;"'
+				).
+				tda(
+					select_buttons().
+					log_multiedit_form($page, $sort, $dir, $crit, $search_method)
+				, ' class="multi-edit" colspan="6" style="text-align: right; border: none;"')
+			).n.'</tfoot>';
+
+
+			echo $tfoot;
+			echo '<tbody>';
+
+			$ctr = 1;
 
 			while ($a = nextRow($rs))
 			{
@@ -190,37 +208,29 @@ $LastChangedRevision$
 
 					n.td(
 						gTime($log_uTime)
-					, 85).
+					, 85, 'date time').
 
-					td($log_ip, 20, 'log_detail').
+					td($log_ip, 20, 'log_detail ip').
 
-					td(soft_wrap($log_host, 30)).
+					td(soft_wrap($log_host, 30), '', 'host').
 
-					td($log_page).
-					td($log_refer).
-					td(htmlspecialchars($log_method), 60, 'log_detail').
-					td($log_status, 60, 'log_detail').
+					td($log_page, '', 'page').
+					td($log_refer, '', 'refer').
+					td(htmlspecialchars($log_method), 60, 'log_detail method').
+					td($log_status, 60, 'log_detail status').
 
 					td(
 						fInput('checkbox', 'selected[]', $log_id)
-					)
-
+					, '', 'multi-edit')
+				, ' class="'.(($ctr%2 == 0) ? 'even' : 'odd').'"'
 				);
+
+				$ctr++;
 			}
 
-			echo n.n.tr(
-				tda(
-					toggle_box('log_detail'),
-					' colspan="2" style="text-align: left; border: none;"'
-				).
-				tda(
-					select_buttons().
-					log_multiedit_form($page, $sort, $dir, $crit, $search_method)
-				, ' colspan="6" style="text-align: right; border: none;"')
-			).
-
+			echo '</tbody>'.
 			n.endTable().
-			'</form>'.
+			n.'</form>'.
 
 			n.nav_form('log', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
 
@@ -234,9 +244,9 @@ $LastChangedRevision$
 	{
 		$methods =	array(
 			'ip'     => gTxt('IP'),
-			'host'	 => gTxt('host'),
+			'host'   => gTxt('host'),
 			'page'   => gTxt('page'),
-			'refer'	 => gTxt('referrer'),
+			'refer'  => gTxt('referrer'),
 			'method' => gTxt('method'),
 			'status' => gTxt('status')
 		);

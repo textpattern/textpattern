@@ -149,20 +149,33 @@ $LastChangedRevision$
 		{
 			$show_authors = !has_single_author('txp_link');
 
-			echo n.n.'<form action="index.php" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">',
+			echo n.n.'<form action="index.php" id="links_form" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">',
 
-				startTable('list').
-
+				startTable('list', '', 'list').
+				n.'<thead>'.
 				n.tr(
-					column_head('ID', 'id', 'link', true, $switch_dir, $crit, $search_method, ('id' == $sort) ? $dir : '').
-					hCell().
-					column_head('link_name', 'name', 'link', true, $switch_dir, $crit, $search_method, ('name' == $sort) ? $dir : '').
-					column_head('description', 'description', 'link', true, $switch_dir, $crit, $search_method, ('description' == $sort) ? $dir : '').
-					column_head('link_category', 'category', 'link', true, $switch_dir, $crit, $search_method, ('category' == $sort) ? $dir : '').
-					column_head('date', 'date', 'link', true, $switch_dir, $crit, $search_method, ('date' == $sort) ? $dir : '').
-					($show_authors ? column_head('author', 'author', 'link', true, $switch_dir, $crit, $search_method, ('author' == $sort) ? $dir : '') : '').
-					hCell()
-				);
+					column_head('ID', 'id', 'link', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id').
+					hCell('', '', ' class="actions"').
+					column_head('link_name', 'name', 'link', true, $switch_dir, $crit, $search_method, (('name' == $sort) ? "$dir " : '').'name').
+					column_head('description', 'description', 'link', true, $switch_dir, $crit, $search_method, (('description' == $sort) ? "$dir " : '').'description').
+					column_head('link_category', 'category', 'link', true, $switch_dir, $crit, $search_method, (('category' == $sort) ? "$dir " : '').'category').
+					column_head('date', 'date', 'link', true, $switch_dir, $crit, $search_method, (('date' == $sort) ? "$dir " : '').'date created').
+					($show_authors ? column_head('author', 'author', 'link', true, $switch_dir, $crit, $search_method, (('author' == $sort) ? "$dir " : '').'author') : '').
+					hCell('', '', ' class="multi-edit"')
+				).
+				n.'</thead>';
+
+				$tfoot = n.'<tfoot>'.tr(
+					tda(
+						select_buttons().
+						link_multiedit_form($page, $sort, $dir, $crit, $search_method)
+					, ' class="multi-edit" colspan="'.($show_authors ? '8' : '7').'" style="text-align: right; border: none;"')
+				).n.'</tfoot>';
+
+				echo $tfoot;
+				echo '<tbody>';
+
+				$ctr = 1;
 
 				while ($a = nextRow($rs))
 				{
@@ -175,50 +188,47 @@ $LastChangedRevision$
 
 					echo tr(
 
-						n.td($id, 20).
+						n.td($id, 20, 'id').
 
 						td(
 							n.'<ul>'.
-							($can_edit ? n.t.'<li>'.href(gTxt('edit'), $edit_url).'</li>' : '').
-							n.t.'<li>'.href(gTxt('view'), $url).'</li>'.
+							($can_edit ? n.t.'<li class="action-edit">'.href(gTxt('edit'), $edit_url).'</li>' : '').
+							n.t.'<li class="action-view">'.href(gTxt('view'), $url).'</li>'.
 							n.'</ul>'
-						, 35).
+						, 35, 'actions').
 
 						td(
 							($can_edit ? href($linkname, $edit_url) : $linkname)
-						, 125).
+						, 125, 'name').
 
 						td(
 							htmlspecialchars($description)
-						, 150).
+						, 150, 'description').
 
 						td(
 							'<span title="'.htmlspecialchars(fetch_category_title($category, 'link')).'">'.$category.'</span>'
-						, 125).
+						, 125, 'category').
 
 						td(
 							gTime($uDate)
-						, 75).
+						, 75, 'date created').
 
 						($show_authors ? td(
 							'<span title="'.htmlspecialchars(get_author_name($author)).'">'.htmlspecialchars($author).'</span>'
-						) : '').
+						, '', 'author') : '').
 
 						td(
 							fInput('checkbox', 'selected[]', $id)
-						)
+						, '', 'multi-edit')
+					, ' class="'.(($ctr%2 == 0) ? 'even' : 'odd').'"'
 					);
+
+					$ctr++;
 				}
 
-			echo n.n.tr(
-				tda(
-					select_buttons().
-					link_multiedit_form($page, $sort, $dir, $crit, $search_method)
-				, ' colspan="'.($show_authors ? '8' : '7').'" style="text-align: right; border: none;"')
-			).
-
-			endTable().
-			'</form>'.
+			echo '</tbody>'.
+			n.endTable().
+			n.'</form>'.
 
 			n.nav_form('link', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
 
@@ -231,11 +241,11 @@ $LastChangedRevision$
 	function link_search_form($crit, $method)
 	{
 		$methods =	array(
-			'id'			=> gTxt('ID'),
-			'name'			=> gTxt('link_name'),
-			'description' 	=> gTxt('description'),
-			'category'		=> gTxt('link_category'),
-			'author'		=> gTxt('author')
+			'id'          => gTxt('ID'),
+			'name'        => gTxt('link_name'),
+			'description' => gTxt('description'),
+			'category'    => gTxt('link_category'),
+			'author'      => gTxt('author')
 		);
 
 		return search_form('link', 'link_edit', $crit, $methods, $method, 'name');
@@ -284,17 +294,17 @@ $LastChangedRevision$
 				tr(
 					fLabelCell('title', '', 'link-title').
 					fInputCell('linkname', $linkname, 1, 30, '', 'link-title')
-				).
+				, ' class="name"').
 
 				tr(
 					fLabelCell('sort_value', '', 'link-sort').
 					fInputCell('linksort', $linksort, 2, 15, '', 'link-sort')
-				).
+				, ' class="sort"').
 
 				tr(
 					fLabelCell('url', 'link_url', 'link-url').
 					fInputCell('url', $url, 3, 30, '', 'link-url')
-				).
+				, ' class="url"').
 
 				tr(
 					fLabelCell('link_category', 'link_category', 'link-category').
@@ -302,7 +312,7 @@ $LastChangedRevision$
 					td(
 						linkcategory_popup($category).' ['.eLink('category', 'list', '', '', gTxt('edit')).']'
 					)
-				) .
+				, ' class="category"') .
 
 				tr(
 					tda(
@@ -312,7 +322,7 @@ $LastChangedRevision$
 					td(
 						'<textarea id="link-description" name="description" cols="40" rows="7" tabindex="4">'.htmlspecialchars($description).'</textarea>'
 					)
-				).
+				, ' class="description text"').
 
 				pluggable_ui('link_ui', 'extend_detail_form', '', $rs).
 
@@ -331,7 +341,7 @@ $LastChangedRevision$
 
 				hInput('search_method', gps('search_method')).
 				hInput('crit', gps('crit'))
-			, 'margin-bottom: 25px;');
+			, 'margin-bottom: 25px;', '', 'post', 'edit-form', '', 'link_details');
 
 		}
 		link_list();

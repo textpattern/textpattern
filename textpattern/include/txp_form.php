@@ -23,44 +23,65 @@ $LastChangedRevision$
 	if ($event == 'form') {
 		require_privs('form');
 
-		if(!$step or !in_array($step, array('form_list','form_create','form_delete','form_edit','form_multi_edit','form_save'))){
-			form_edit();
-		} else $step();
+
+		switch(strtolower($step)) {
+			case "":                form_edit();             break;
+			case "form_edit":       form_edit();             break;
+			case "form_list":       form_list();             break;
+			case "form_create":     form_create();           break;
+			case "form_delete":     form_delete();           break;
+			case "form_multi_edit": form_multi_edit();       break;
+			case "form_save":       form_save();             break;
+			case "save_pane_state": form_save_pane_state();  break;
+		}
 	}
 
 // -------------------------------------------------------------
 	function form_list($curname)
 	{
 		global $step,$essential_forms;
-		$out[] = startTable('list');
-		$out[] = tr(tda(sLink('form','form_create',gTxt('create_new_form')),' colspan="3" style="height:30px"'));
-
-		$out[] = assHead('form','type','');
+		$out[] = '<p class="action-create smallerbox">'.sLink('form','form_create',gTxt('create_new_form')).'</p>';
 
 		$methods = array('delete'=>gTxt('delete'));
-
 
 		$rs = safe_rows_start("*", "txp_form", "1 order by type asc, name asc");
 
 		if ($rs) {
+			$ctr = 1;
+			$prev_type = '';
 			while ($a = nextRow($rs)){
 				extract($a);
-					$editlink = ($curname!=$name)
+				$editlink = ($curname!=$name)
 					?	eLink('form','form_edit','name',$name,$name)
 					:	htmlspecialchars($name);
-					$modbox = (!in_array($name, $essential_forms))
+				$modbox = (!in_array($name, $essential_forms))
 					?	'<input type="checkbox" name="selected_forms[]" value="'.$name.'" />'
-					:	sp;
-				$out[] = tr(td($editlink).td(small($type)).td($modbox));
+					:	'';
+
+				if ($prev_type != $type) {
+					$visipref = 'pane_form_'.$type.'_visible';
+					//TODO: Add 'article', 'comment', 'misc' to rpc server for gTxt()
+					$group_start = '<div class="form-list-group '.$type.'"><h3 class="plain lever'.(get_pref($visipref) ? ' expanded' : '').'"><a href="#'.$type.'">'.ucfirst(gTxt($type)).'</a></h3>'.n.
+						'<div id="'.$type.'" class="toggle form-list" style="display:'.(get_pref($visipref) ? 'block' : 'none').'">'.n.
+						'<ul class="plain-list">'.n;
+					$group_end = ($ctr > 1) ? '</ul></div></div>'.n : '';
+				} else {
+					$group_start = $group_end = '';
+				}
+
+				$out[] = $group_end.$group_start;
+				$out[] = '<li class="'.(($ctr%2 == 0) ? 'even' : 'odd').'">'.n.'<span class="form-list-action">'.$modbox.'</span><span class="form-list-name">'.$editlink.'</span></li>';
+				$prev_type = $type;
+				$ctr++;
 			}
 
-			$out[] = endTable();
+			$out[] = '</ul></div></div>';
 			$out[] = eInput('form').sInput('form_multi_edit');
 			$out[] = graf(selectInput('edit_method',$methods,'',1).sp.gTxt('selected').sp.
 				fInput('submit','form_multi_edit',gTxt('go'),'smallerbox')
 				, ' align="right"');
 
-			return form( join('',$out),'',"verify('".gTxt('are_you_sure')."')" );
+			return form( join('',$out),'',"verify('".gTxt('are_you_sure')."')", 'post', '', '', 'allforms_form' );
 		}
 	}
 
@@ -131,50 +152,39 @@ $LastChangedRevision$
 		else
 			$changename = graf(gTxt('form_name').br.tag($name, 'em').hInput('name',$name));
 
+		// Generate the tagbuilder links
+		// Format of each entry is popTagLink -> array ( gTxt string, class/ID, popHelp ref )
+		$tagbuild_items = array(
+			'article' => array('articles', 'article-tags', 'form_articles'),
+			'link' => array('links', 'link-tags', 'form__place_link'),
+			'comment' => array('comments', 'comment-tags', 'form_comments'),
+			'comment_details' => array('comment_details', 'comment-detail-tags', 'form_comment_details'),
+			'comment_form' => array('comment_form', 'comment-form-tags', 'form_comment_form'),
+			'search_result' => array('search_results_form', 'search-result-tags', 'form_search_results'),
+			'file_download' => array('file_download_tags', 'file-tags', 'form_file_download_tags'),
+			'category' => array('category_tags', 'category-tags', 'form_category_tags'),
+			'section' => array('section_tags', 'section-tags', 'form_section_tags'),
+		);
+
+		$tagbuild_links = '';
+		foreach ($tagbuild_items as $tb => $item) {
+			$tagbuild_links .= '<div class="'.$item[1].'">'.hed('<a href="#'.$item[1].'">'.gTxt($item[0]).'</a>'.
+					sp.popHelp($item[2]), 3, ' class="plain lever'.(get_pref('pane_form_'.$item[1].'_visible') ? ' expanded' : '').'"').
+					'<div id="'.$item[1].'" class="toggle on" style="display:'.(get_pref('pane_form_'.$item[1].'_visible') ? 'block' : 'none').'">'.popTagLinks($tb).'</div></div>';
+		}
+
 		$out =
 			startTable('edit').
 			tr(
 				tdtl(
-					hed(gTxt('tagbuilder'), 2).
-
-					hed('<a href="#article-tags">'.gTxt('articles').'</a>'.
-						sp.popHelp('form_articles'), 3, ' class="plain lever expanded"').
-						'<div id="article-tags" class="toggle on" style="display:block">'.popTagLinks('article').'</div>'.
-
-					hed('<a href="#link-tags">'.gTxt('links').'</a>'.
-						sp.popHelp('form_place_link'), 3, ' class="plain lever"').
-						'<div id="link-tags" class="toggle" style="display:none">'.popTagLinks('link').'</div>'.
-
-					hed('<a href="#comment-tags">'.gTxt('comments').'</a>'.
-						sp.popHelp('form_comments'), 3, ' class="plain lever"').
-						'<div id="comment-tags" class="toggle" style="display:none">'.popTagLinks('comment').'</div>'.
-
-					hed('<a href="#comment-detail-tags">'.gTxt('comment_details').'</a>'.
-						sp.popHelp('form_comment_details'), 3, ' class="plain lever"').
-						'<div id="comment-detail-tags" class="toggle" style="display:none">'.popTagLinks('comment_details').'</div>'.
-
-					hed('<a href="#comment-form-tags">'.gTxt('comment_form').'</a>'.
-						sp.popHelp('form_comment_form'), 3, ' class="plain lever"').
-						'<div id="comment-form-tags" class="toggle" style="display:none">'.popTagLinks('comment_form').'</div>'.
-
-					hed('<a href="#search-result-tags">'.gTxt('search_results_form').'</a>'.
-						sp.popHelp('form_search_results'), 3, ' class="plain lever"').
-						'<div id="search-result-tags" class="toggle" style="display:none">'.popTagLinks('search_result').'</div>'.
-
-					hed('<a href="#file-tags">'.gTxt('file_download_tags').'</a>'.
-						sp.popHelp('form_file_download_tags'), 3, ' class="plain lever"').
-						'<div id="file-tags" class="toggle" style="display:none">'.popTagLinks('file_download').'</div>'.
-
-					hed('<a href="#category-tags">'.gTxt('category_tags').'</a>'.
-						sp.popHelp('form_category_tags'), 3, ' class="plain lever"').
-						'<div id="category-tags" class="toggle" style="display:none">'.popTagLinks('category').'</div>'.
-
-					hed('<a href="#section-tags">'.gTxt('section_tags').'</a>'.
-						sp.popHelp('form_section_tags'), 3, ' class="plain lever"').
-						'<div id="section-tags" class="toggle" style="display:none">'.popTagLinks('section').'</div>'
-						).
+					'<div id="tagbuild_links">'.hed(gTxt('tagbuilder'), 2).
+					$tagbuild_links.
+					'</div>'
+				, ' class="column"').
 				tdtl(
-					'<form action="index.php" method="post">'.
+					'<form action="index.php" method="post" id="form_form">'.
+						'<div id="main_content">'.
+						'<div class="edit-title">'.gTxt('you_are_editing_form').sp.strong(($name) ? $name : gTxt('untitled')).'</div>'.
 						'<textarea id="form" class="code" name="Form" cols="60" rows="20">'.htmlspecialchars($Form).'</textarea>'.
 
 					$changename.
@@ -184,12 +194,14 @@ $LastChangedRevision$
 					graf(gTxt('only_articles_can_be_previewed')).
 					fInput('submit','form_preview',gTxt('preview'),'smallbox').
 					graf($inputs).
-					'</form>'
+					'</div></form>'
 
-				).
+				, ' class="column"').
 				tdtl(
-					form_list($name)
-				)
+					'<div id="content_switcher" class="list">'.hed(gTxt('all_forms'), 2).
+					form_list($name).
+					'</div>'
+				, ' class="column"')
 			).endTable();
 
 		echo $out;
@@ -268,6 +280,21 @@ $LastChangedRevision$
 	 	$types = array(''=>'','article'=>'article','category'=>'category','comment'=>'comment',
 	 		'file'=>'file','link'=>'link','misc'=>'misc','section'=>'section');
 		return selectInput('type',$types,$type);
+	}
+
+// -------------------------------------------------------------
+	function form_save_pane_state()
+	{
+		global $event;
+		$panes = array('article', 'comment', 'file', 'link', 'misc', 'article-tags', 'link-tags', 'comment-tags', 'comment-detail-tags', 'comment-form-tags', 'search-result-tags', 'file-tags', 'category-tags', 'section-tags');
+		$pane = gps('pane');
+		if (in_array($pane, $panes))
+		{
+			set_pref("pane_form_{$pane}_visible", (gps('visible') == 'true' ? '1' : '0'), $event, PREF_HIDDEN, 'yesnoradio', 0, PREF_PRIVATE);
+			send_xml_response();
+		} else {
+			send_xml_response(array('http-status' => '400 Bad Request'));
+		}
 	}
 
 ?>

@@ -405,7 +405,6 @@ if (!empty($event) and $event == 'article') {
 		{
 			$textile_body = $use_textile;
 			$textile_excerpt = $use_textile;
-
 		}
 
 		if ($step!='create' && $sPosted) {
@@ -438,7 +437,7 @@ if (!empty($event) and $event == 'article') {
 			startTable('edit').
 
   		'<tr>'.n.
-				'<td id="article-col-1">';
+				'<td id="article-col-1"><div id="configuration_content">';
 
 		if ($view == 'text')
 		{
@@ -453,26 +452,31 @@ if (!empty($event) and $event == 'article') {
 
 		//-- advanced --------------
 
-			echo '<h3 class="plain lever'.(get_pref('pane_article_advanced_visible') ? ' expanded' : '').'"><a href="#advanced">'.gTxt('advanced_options').'</a></h3>'.
+			echo '<div id="advanced_group"><h3 class="plain lever'.(get_pref('pane_article_advanced_visible') ? ' expanded' : '').'"><a href="#advanced">'.gTxt('advanced_options').'</a></h3>'.
 				'<div id="advanced" class="toggle" style="display:'.(get_pref('pane_article_advanced_visible') ? 'block' : 'none').'">';
 
 			// markup selection
 			echo pluggable_ui('article_ui', 'markup',
 				n.graf('<label for="markup-body">'.gTxt('article_markup').'</label>'.br.
-					pref_text('textile_body', $textile_body, 'markup-body')).
+					pref_text('textile_body', $textile_body, 'markup-body'), ' class="markup markup-body"').
 				n.graf('<label for="markup-excerpt">'.gTxt('excerpt_markup').'</label>'.br.
-					pref_text('textile_excerpt', $textile_excerpt, 'markup-excerpt')),
+					pref_text('textile_excerpt', $textile_excerpt, 'markup-excerpt'), ' class="markup markup-excerpt"'),
 				$rs);
 
 			// form override
 			echo ($allow_form_override)
 				? pluggable_ui('article_ui', 'override', graf('<label for="override-form">'.gTxt('override_default_form').'</label>'.sp.popHelp('override_form').br.
-					form_pop($override_form, 'override-form')), $rs)
+					form_pop($override_form, 'override-form'), ' class="override-form"'), $rs)
 				: '';
+			echo '</div></div>'.n;
 
-			// custom fields, believe it or not
+		//-- custom fields --------------
+
 			$cf = '';
 			$cfs = getCustomFields();
+			echo '<div id="custom_field_group"'.(($cfs) ? '' : ' class="empty"').'"><h3 class="plain lever'.(get_pref('pane_article_custom_field_visible') ? ' expanded' : '').'"><a href="#custom_field">'.gTxt('custom').'</a></h3>'.
+				'<div id="custom_field" class="toggle" style="display:'.(get_pref('pane_article_custom_field_visible') ? 'block' : 'none').'">';
+
 			foreach($cfs as $i => $cf_name)
 			{
 				$custom_x_set = "custom_{$i}_set";
@@ -480,30 +484,41 @@ if (!empty($event) and $event == 'article') {
 				$cf .= ($$custom_x_set !== '' ? custField( $i, $$custom_x_set,  $$custom_x ): '');
 			}
 			echo pluggable_ui('article_ui', 'custom_fields', $cf, $rs);
+			echo '</div></div>'.n;
+
+		//-- article image --------------
+
+			echo '<div id="image_group"><h3 class="plain lever'.(get_pref('pane_article_image_visible') ? ' expanded' : '').'"><a href="#image">'.gTxt('article_image').'</a></h3>'.
+				'<div id="image" class="toggle" style="display:'.(get_pref('pane_article_image_visible') ? 'block' : 'none').'">';
+
+			echo pluggable_ui('article_ui', 'article_image',
+				n.graf('<label for="article-image">'.gTxt('article_image').'</label>'.sp.popHelp('article_image').br.
+					fInput('text', 'Image', $Image, 'edit', '', '', 22, '', 'article-image'), ' class="article-image"'),
+				$rs);
+			echo '</div></div>'.n;
+
+		//-- meta info --------------
+
+			echo '<div id="meta_group"><h3 class="plain lever'.(get_pref('pane_article_meta_visible') ? ' expanded' : '').'"><a href="#meta">'.gTxt('meta').'</a></h3>'.
+				'<div id="meta" class="toggle" style="display:'.(get_pref('pane_article_meta_visible') ? 'block' : 'none').'">';
 
 			// keywords
 			echo pluggable_ui('article_ui', 'keywords',
 				n.graf('<label for="keywords">'.gTxt('keywords').'</label>'.sp.popHelp('keywords').br.
-					n.'<textarea id="keywords" name="Keywords" cols="18" rows="5">'.htmlspecialchars(str_replace(',' ,', ', $Keywords)).'</textarea>'),
-				$rs);
-
-			// article image
-			echo pluggable_ui('article_ui', 'article_image',
-				n.graf('<label for="article-image">'.gTxt('article_image').'</label>'.sp.popHelp('article_image').br.
-					fInput('text', 'Image', $Image, 'edit', '', '', 22, '', 'article-image')),
+					n.'<textarea id="keywords" name="Keywords" cols="18" rows="5">'.htmlspecialchars(str_replace(',' ,', ', $Keywords)).'</textarea>', ' class="keywords"'),
 				$rs);
 
 			// url title
 			echo pluggable_ui('article_ui', 'url_title',
 				n.graf('<label for="url-title">'.gTxt('url_title').'</label>'.sp.popHelp('url_title').br.
-					fInput('text', 'url_title', $url_title, 'edit', '', '', 22, '', 'url-title')),
+					fInput('text', 'url_title', $url_title, 'edit', '', '', 22, '', 'url-title'), ' class="url-title"'),
 				$rs);
 
-			echo '</div>'.n;
+			echo '</div></div>'.n;
 
 		//-- recent articles --------------
 
-			echo '<h3 class="plain lever'.(get_pref('pane_article_recent_visible') ? ' expanded' : '').'"><a href="#recent">'.gTxt('recent_articles').'</a>'.'</h3>'.
+			echo '<div id="recent_group"><h3 class="plain lever'.(get_pref('pane_article_recent_visible') ? ' expanded' : '').'"><a href="#recent">'.gTxt('recent_articles').'</a>'.'</h3>'.
 				'<div id="recent" class="toggle" style="display:'.(get_pref('pane_article_recent_visible') ? 'block' : 'none').'">';
 
 			$recents = safe_rows_start("Title, ID",'textpattern',"1=1 order by LastMod desc limit 10");
@@ -511,7 +526,7 @@ if (!empty($event) and $event == 'article') {
 
 			if ($recents)
 			{
-				$ra = '<ul class="plain-list">';
+				$ra = '<ul class="recent plain-list">';
 
 				while($recent = nextRow($recents))
 				{
@@ -520,14 +535,14 @@ if (!empty($event) and $event == 'article') {
 						$recent['Title'] = gTxt('untitled').sp.$recent['ID'];
 					}
 
-					$ra .= n.t.'<li><a href="?event=article'.a.'step=edit'.a.'ID='.$recent['ID'].'">'.escape_title($recent['Title']).'</a></li>';
+					$ra .= n.t.'<li class="recent-article"><a href="?event=article'.a.'step=edit'.a.'ID='.$recent['ID'].'">'.escape_title($recent['Title']).'</a></li>';
 				}
 
 				$ra .= '</ul>';
 			}
 			echo pluggable_ui('article_ui', 'recent_articles', $ra, $rs);
 
-			echo '</div>';
+			echo '</div></div>';
 		}
 
 		else
@@ -535,24 +550,25 @@ if (!empty($event) and $event == 'article') {
 			echo sp;
 		}
 
-		echo '</td>'.n.'<td id="article-main">';
+		echo '</div></td>'.n.'<td id="article-main"><div id="main_content">';
 
 	//-- title input --------------
 
 		if ($view == 'preview')
 		{
-			echo hed(gTxt('preview'), 2).hed($Title, 1);
+			echo '<div class="preview">'.hed(gTxt('preview'), 2).hed($Title, 1, ' class="title"');
 		}
 
 		elseif ($view == 'html')
 		{
-			echo hed('XHTML', 2).hed($Title, 1);
+			echo '<div class="xhtml">'.hed('XHTML', 2).hed($Title, 1, ' class="title"');
 		}
 
 		elseif ($view == 'text')
 		{
-			echo  pluggable_ui('article_ui', 'title',
-				n.'<p><label for="title">'.gTxt('title').'</label>'.sp.popHelp('title').br.
+			echo '<div class="text">'.
+				pluggable_ui('article_ui', 'title',
+				n.'<p class="title"><label for="title">'.gTxt('title').'</label>'.sp.popHelp('title').br.
 				'<input type="text" id="title" name="Title" value="'.escape_title($Title).'" class="edit" size="40" tabindex="1" />',
 				$rs);
 
@@ -576,6 +592,7 @@ if (!empty($event) and $event == 'article') {
 
 		if ($view == 'preview')
 		{
+			echo '<div class="body">';
 			if ($textile_body == USE_TEXTILE)
 			{
 				echo $textile->TextileThis($Body);
@@ -590,6 +607,7 @@ if (!empty($event) and $event == 'article') {
 			{
 				echo $Body;
 			}
+			echo '</div>';
 		}
 
 		elseif ($view == 'html')
@@ -609,14 +627,14 @@ if (!empty($event) and $event == 'article') {
 				$bod = $Body;
 			}
 
-			echo tag(str_replace(array(n,t), array(br,sp.sp.sp.sp), htmlspecialchars($bod)), 'code');
+			echo tag(str_replace(array(n,t), array(br,sp.sp.sp.sp), htmlspecialchars($bod)), 'code', ' class="body"');
 		}
 
 		else
 		{
 			echo pluggable_ui('article_ui', 'body',
 				n.graf('<label for="body">'.gTxt('body').'</label>'.sp.popHelp('body').br.
-				'<textarea id="body" name="Body" cols="55" rows="31" tabindex="2">'.htmlspecialchars($Body).'</textarea>'),
+				'<textarea id="body" name="Body" cols="55" rows="31" tabindex="2">'.htmlspecialchars($Body).'</textarea>', ' class="body"'),
 				$rs);
 		}
 
@@ -628,7 +646,7 @@ if (!empty($event) and $event == 'article') {
 			{
 				echo pluggable_ui('article_ui', 'excerpt',
 					n.graf('<label for="excerpt">'.gTxt('excerpt').'</label>'.sp.popHelp('excerpt').br.
-					'<textarea id="excerpt" name="Excerpt" cols="55" rows="5" tabindex="3">'.htmlspecialchars($Excerpt).'</textarea>'),
+					'<textarea id="excerpt" name="Excerpt" cols="55" rows="5" tabindex="3">'.htmlspecialchars($Excerpt).'</textarea>', ' class="excerpt"'),
 					$rs);
 			}
 
@@ -636,54 +654,57 @@ if (!empty($event) and $event == 'article') {
 			{
 				echo n.'<hr width="50%" />';
 
+				echo '<div class="excerpt">';
 				echo ($textile_excerpt == USE_TEXTILE)
 				?	($view=='preview')
 					?	graf($textile->textileThis($Excerpt))
 					:	tag(str_replace(array(n,t),
 							array(br,sp.sp.sp.sp),htmlspecialchars(
-								$textile->TextileThis($Excerpt))),'code')
+								$textile->TextileThis($Excerpt))),'code', ' class="excerpt"')
 				:	graf($Excerpt);
+				echo '</div>';
 			}
 		}
 
 
 	//-- author --------------
 
-		if ($view=="text" && $step != "create") {
-			echo '<p class="small">'.gTxt('posted_by').': '.htmlspecialchars($AuthorID).' &#183; '.safe_strftime('%d %b %Y &#183; %X',$sPosted);
+		if ($view=="text" && $step != "create")
+		{
+			echo '<p class="author small">'.gTxt('posted_by').': '.htmlspecialchars($AuthorID).' &#183; '.safe_strftime('%d %b %Y &#183; %X',$sPosted);
 			if($sPosted != $sLastMod) {
 				echo br.gTxt('modified_by').': '.htmlspecialchars($LastModID).' &#183; '.safe_strftime('%d %b %Y &#183; %X',$sLastMod);
 			}
-				echo '</p>';
-			}
+			echo '</p>';
+		}
 
 		echo hInput('from_view',$view),
-		'</td>';
+		'</div></div></td>';
 
 	//-- layer tabs -------------------
 
-		echo '<td id="article-tabs">';
+		echo '<td id="article-tabs"><div id="view_modes">';
 
 		echo pluggable_ui('article_ui', 'view',
 			($use_textile == USE_TEXTILE || $textile_body == USE_TEXTILE)
 			? tag((tab('text',$view).tab('html',$view).tab('preview',$view)), 'ul')
 			: '&#160;',
 			$rs);
-		echo '</td>';
+		echo '</div></td>';
 
-		echo '<td id="article-col-2">';
+		echo '<td id="article-col-2"><div id="supporting_content">';
 
 		if ($view == 'text')
 		{
 			if ($step != 'create')
 			{
-				echo n.graf(href(gtxt('create_new'), 'index.php?event=article'));
+				echo n.graf(href(gtxt('create_new'), 'index.php?event=article'), ' class="action-create"');
 			}
 
 		//-- prev/next article links --
 
 			if ($step!='create' and ($prev_id or $next_id)) {
-				echo '<p>',
+				echo '<p class="article-nav">',
 				($prev_id)
 				?	prevnext_link('&#8249;'.gTxt('prev'),'article','edit',
 						$prev_id,gTxt('prev'))
@@ -711,11 +732,11 @@ if (!empty($event) and $event == 'article') {
 				n.'<legend>'.gTxt('sort_display').'</legend>'.
 
 				n.graf('<label for="category-1">'.gTxt('category1').'</label> '.
-					'<span class="small">['.eLink('category', '', '', '', gTxt('edit')).']</span>'.br.
-					n.category_popup('Category1', $Category1, 'category-1')).
+					'<span class="edit category-edit small">['.eLink('category', '', '', '', gTxt('edit')).']</span>'.br.
+					n.category_popup('Category1', $Category1, 'category-1'), ' class="category category-1"').
 
 				n.graf('<label for="category-2">'.gTxt('category2').'</label>'.br.
-					n.category_popup('Category2', $Category2, 'category-2')),
+					n.category_popup('Category2', $Category2, 'category-2'), ' class="category category-2"'),
 				$rs);
 
 		//-- section select --------------
@@ -724,13 +745,13 @@ if (!empty($event) and $event == 'article') {
 
 			echo pluggable_ui('article_ui', 'section',
 				n.graf('<label for="section">'.gTxt('section').'</label> '.
-				'<span class="small">['.eLink('section', '', '', '', gTxt('edit')).']</span>'.br.
-				section_popup($Section, 'section')).
+				'<span class="edit section-edit small">['.eLink('section', '', '', '', gTxt('edit')).']</span>'.br.
+				section_popup($Section, 'section'), ' class="section"').
 				n.'</fieldset>',
 				$rs);
 
 		//-- "More" section
-			echo n.n.'<h3 class="plain lever'.(get_pref('pane_article_more_visible') ? ' expanded' : '').'"><a href="#more">'.gTxt('more').'</a></h3>',
+			echo n.n.'<div id="more_group"><h3 class="plain lever'.(get_pref('pane_article_more_visible') ? ' expanded' : '').'"><a href="#more">'.gTxt('more').'</a></h3>',
 				'<div id="more" class="toggle" style="display:'.(get_pref('pane_article_more_visible') ? 'block' : 'none').'">';
 
 		//-- comments stuff --------------
@@ -761,19 +782,19 @@ if (!empty($event) and $event == 'article') {
 
 				if ($comments_expired)
 				{
-					$invite[] = n.n.graf(gTxt('expired'));
+					$invite[] = n.n.graf(gTxt('expired'), ' class="comment-annotate"');
 				}
 
 				else
 				{
 					$invite[] = n.n.graf(
 						onoffRadio('Annotate', $Annotate)
-					).
+					, ' class="comment-annotate"').
 
 					n.n.graf(
 						'<label for="comment-invite">'.gTxt('comment_invitation').'</label>'.br.
 						fInput('text', 'AnnotateInvite', $AnnotateInvite, 'edit', '', '', '', '', 'comment-invite')
-					);
+					, ' class="comment-invite"');
 				}
 
 				$invite[] = n.n.'</fieldset>';
@@ -794,20 +815,22 @@ if (!empty($event) and $event == 'article') {
 					n.n.'<fieldset id="write-timestamp">'.
 					n.'<legend>'.gTxt('timestamp').'</legend>'.
 
-					n.graf(checkbox('publish_now', '1', $publish_now, '', 'publish_now').'<label for="publish_now">'.gTxt('set_to_now').'</label>').
+					n.graf(checkbox('publish_now', '1', $publish_now, '', 'publish_now').'<label for="publish_now">'.gTxt('set_to_now').'</label>', ' class="publish-now"').
 
-					n.graf(gTxt('or_publish_at').sp.popHelp('timestamp')).
+					n.graf(gTxt('or_publish_at').sp.popHelp('timestamp'), ' class="publish-at"').
 
-					n.graf(gtxt('date').sp.
+					n.graf('<span class="label">'.gtxt('date').'</span>'.sp.
 						tsi('year', '%Y', $persist_timestamp).' / '.
 						tsi('month', '%m', $persist_timestamp).' / '.
 						tsi('day', '%d', $persist_timestamp)
+					, ' class="date posted created"'
 					).
 
-					n.graf(gTxt('time').sp.
+					n.graf('<span class="label">'.gTxt('time').'</span>'.sp.
 						tsi('hour', '%H', $persist_timestamp).' : '.
 						tsi('minute', '%M', $persist_timestamp).' : '.
 						tsi('second', '%S', $persist_timestamp)
+					, ' class="time posted created"'
 					).
 
 				n.'</fieldset>',
@@ -823,23 +846,25 @@ if (!empty($event) and $event == 'article') {
 					n.n.'<fieldset id="write-expires">'.
 					n.'<legend>'.gTxt('expires').'</legend>'.
 
-					n.graf(gtxt('date').sp.
+					n.graf('<span class="label">'.gtxt('date').'</span>'.sp.
 						tsi('exp_year', '%Y', $persist_timestamp).' / '.
 						tsi('exp_month', '%m', $persist_timestamp).' / '.
 						tsi('exp_day', '%d', $persist_timestamp)
+					, ' class="date expires"'
 					).
 
-					n.graf(gTxt('time').sp.
+					n.graf('<span class="label">'.gTxt('time').'</span>'.sp.
 						tsi('exp_hour', '%H', $persist_timestamp).' : '.
 						tsi('exp_minute', '%M', $persist_timestamp).' : '.
 						tsi('exp_second', '%S', $persist_timestamp)
+					, ' class="time expires"'
 					).
 
 				n.'</fieldset>',
 				$rs);
 
 				// end "More" section
-				echo n.n.'</div>';
+				echo n.n.'</div></div>';
 
 		//-- publish button --------------
 
@@ -862,20 +887,22 @@ if (!empty($event) and $event == 'article') {
 					n.n.'<fieldset id="write-timestamp">'.
 					n.'<legend>'.gTxt('timestamp').'</legend>'.
 
-					n.graf(checkbox('reset_time', '1', $reset_time, '', 'reset_time').'<label for="reset_time">'.gTxt('reset_time').'</label>').
+					n.graf(checkbox('reset_time', '1', $reset_time, '', 'reset_time').'<label for="reset_time">'.gTxt('reset_time').'</label>', ' class="reset-time"').
 
-					n.graf(gTxt('published_at').sp.popHelp('timestamp')).
+					n.graf(gTxt('published_at').sp.popHelp('timestamp'), ' class="publish-at"').
 
-					n.graf(gtxt('date').sp.
+					n.graf('<span class="label">'.gtxt('date').'</span>'.sp.
 						tsi('year', '%Y', $sPosted).' / '.
 						tsi('month', '%m', $sPosted).' / '.
 						tsi('day', '%d', $sPosted)
+					, ' class="date posted created"'
 					).
 
-					n.graf(gTxt('time').sp.
+					n.graf('<span class="label">'.gTxt('time').'</span>'.sp.
 						tsi('hour', '%H', $sPosted).' : ' .
 						tsi('minute', '%M', $sPosted).' : '.
 						tsi('second', '%S', $sPosted)
+					, ' class="time posted created"'
 					).
 
 					n.hInput('sPosted', $sPosted).
@@ -901,16 +928,18 @@ if (!empty($event) and $event == 'article') {
 					n.n.'<fieldset id="write-expires">'.
 					n.'<legend>'.gTxt('expires').'</legend>'.
 
-					n.graf(gtxt('date').sp.
+					n.graf('<span class="label">'.gtxt('date').'</span>'.sp.
 						tsi('exp_year', '%Y', $sExpires).' / '.
 						tsi('exp_month', '%m', $sExpires).' / '.
 						tsi('exp_day', '%d', $sExpires)
+					, ' class="date expires"'
 					).
 
-					n.graf(gTxt('time').sp.
+					n.graf('<span class="label">'.gTxt('time').'</span>'.sp.
 						tsi('exp_hour', '%H', $sExpires).' : '.
 						tsi('exp_minute', '%M', $sExpires).' : '.
 						tsi('exp_second', '%S', $sExpires)
+					, ' class="time expires"'
 					).
 					n.hInput('sExpires', $sExpires).
 
@@ -918,7 +947,7 @@ if (!empty($event) and $event == 'article') {
 				$rs);
 
 				// end "More" section
-				echo n.n.'</div>';
+				echo n.n.'</div></div>';
 
 		//-- save button --------------
 
@@ -930,7 +959,7 @@ if (!empty($event) and $event == 'article') {
 			}
 		}
 
-		echo '</td></tr></table></form>'.n;
+		echo '</div></td></tr></table></form>'.n;
 		// Assume users would not change the timestamp if they wanted to "publish now"/"reset time"
 		echo script_js( <<<EOS
 		$('#write-timestamp input.edit').change(
@@ -949,7 +978,7 @@ EOS
 	function custField($num, $field, $content)
 	{
 		return n.n.graf('<label for="custom-'.$num.'">'.$field.'</label>'.br.
-			n.fInput('text', 'custom_'.$num, $content, 'edit', '', '', 22, '', 'custom-'.$num));
+			n.fInput('text', 'custom_'.$num, $content, 'edit', '', '', 22, '', 'custom-'.$num), ' class="custom-field custom-'.$num.'"');
 	}
 
 // -------------------------------------------------------------
@@ -971,13 +1000,15 @@ EOS
 	{
 		if ($textile_body == USE_TEXTILE or $textile_excerpt == USE_TEXTILE)
 		{
-			return n.hed(
+			return n.
+				'<div id="textile_group">'.
+				hed(
 				'<a href="#textile_help">'.gTxt('textile_help').'</a>'
 			, 3, ' class="plain lever'.(get_pref('pane_article_textile_help_visible') ? ' expanded' : '').'"').
 
 				n.'<div id="textile_help" class="toggle" style="display:'.(get_pref('pane_article_textile_help_visible') ? 'block' : 'none').'">'.
 
-				n.'<ul class="plain-list small">'.
+				n.'<ul class="textile plain-list small">'.
 					n.t.'<li>'.gTxt('header').': <strong>h<em>n</em>.</strong>'.sp.
 						popHelpSubtle('header', 400, 400).'</li>'.
 					n.t.'<li>'.gTxt('blockquote').': <strong>bq.</strong>'.sp.
@@ -988,7 +1019,7 @@ EOS
 						popHelpSubtle('bulleted', 400, 400).'</li>'.
 				n.'</ul>'.
 
-				n.'<ul class="plain-list small">'.
+				n.'<ul class="textile plain-list small">'.
 					n.t.'<li>'.'_<em>'.gTxt('emphasis').'</em>_'.sp.
 						popHelpSubtle('italic', 400, 400).'</li>'.
 					n.t.'<li>'.'*<strong>'.gTxt('strong').'</strong>*'.sp.
@@ -1007,16 +1038,16 @@ EOS
 
 				n.graf(
 					'"'.gTxt('linktext').'":url'.sp.popHelpSubtle('link', 400, 500)
-				, ' class="small"').
+				, ' class="textile small"').
 
 				n.graf(
 					'!'.gTxt('imageurl').'!'.sp.popHelpSubtle('image', 500, 500)
-				, ' class="small"').
+				, ' class="textile small"').
 
 				n.graf(
 					'<a id="textile-docs-link" href="http://textpattern.com/textile-sandbox" target="_blank">'.gTxt('More').'</a>').
 
-				n.'</div>';
+				n.'</div></div>';
 		}
 	}
 
@@ -1030,11 +1061,11 @@ EOS
 
 		foreach ($statuses as $a => $b)
 		{
-			$out[] = n.t.'<li>'.radio('Status', $a, ($Status == $a) ? 1 : 0, 'status-'.$a).
+			$out[] = n.t.'<li class="status-'.$a.' '.$b.($Status == $a ? ' active' : '').'">'.radio('Status', $a, ($Status == $a) ? 1 : 0, 'status-'.$a).
 				'<label for="status-'.$a.'">'.$b.'</label></li>';
 		}
 
-		return '<ul class="plain-list">'.join('', $out).n.'</ul>';
+		return '<ul class="status plain-list">'.join('', $out).n.'</ul>';
 	}
 
 //--------------------------------------------------------------
@@ -1069,7 +1100,7 @@ EOS
 	function tab($tabevent,$view)
 	{
 		$state = ($view==$tabevent) ? 'up' : 'down';
-		$out = "<li id='tab-$tabevent$state'>";
+		$out = '<li class="view-mode '.$tabevent.'" id="tab-'.$tabevent.$state.'">';
 		$out.=($tabevent!=$view) ? '<a href="javascript:document.article.view.value=\''.$tabevent.'\';document.article.submit();">'.gTxt($tabevent).'</a>' : gTxt($tabevent);
 		$out.='</li>';
 		return $out;
@@ -1193,7 +1224,7 @@ EOS
 	function article_save_pane_state()
 	{
 		global $event;
-		$panes = array('textile_help', 'advanced', 'recent', 'more');
+		$panes = array('textile_help', 'advanced', 'custom_field', 'image', 'meta', 'recent', 'more');
 		$pane = gps('pane');
 		if (in_array($pane, $panes))
 		{

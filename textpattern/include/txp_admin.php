@@ -258,7 +258,7 @@ $LastChangedRevision$
 				eInput('admin').
 				sInput('change_pass')
 			,' style="text-align: center;"')
-		).'</div>';
+		, '', '', 'post', '', '', 'change_password').'</div>';
 	}
 
 // -------------------------------------------------------------
@@ -274,7 +274,7 @@ $LastChangedRevision$
 				eInput('admin').
 				sInput('change_email')
 			,' style="text-align: center;"')
-		).'</div>';
+		, '', '', 'post', '','', 'change_email').'</div>';
 	}
 
 // -------------------------------------------------------------
@@ -306,44 +306,54 @@ $LastChangedRevision$
 
 		if ($rs)
 		{
-			echo '<form action="index.php" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
+			echo '<form action="index.php" id="users_form" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
 
-			startTable('list').
+			startTable('list', '', 'list').
+			n.'<thead>'.
+			n.tr(
+				column_head('login_name', 'name', 'admin', true, $switch_dir, '', '', (('name' == $sort) ? "$dir " : '').'name login-name').
+				column_head('real_name', 'RealName', 'admin', true, $switch_dir, '', '', (('RealName' == $sort) ? "$dir " : '').'name real-name').
+				column_head('email', 'email', 'admin', true, $switch_dir, '', '', (('email' == $sort) ? "$dir " : '').'email').
+				column_head('privileges', 'privs', 'admin', true, $switch_dir, '', '', (('privs' == $sort) ? "$dir " : '').'privs').
+				column_head('last_login', 'last_login', 'admin', true, $switch_dir, '', '', (('last_login' == $sort) ? "$dir " : '').'date last-login modified').
+				hCell('', '', ' class="actions"').
+				hCell('', '', ' class="multi-edit"')
+			).
+			n.'</thead>';
 
-			tr(
-				column_head('login_name', 'name', 'admin', true, $switch_dir, '', '', ('name' == $sort) ? $dir : '').
-				column_head('real_name', 'RealName', 'admin', true, $switch_dir, '', '', ('RealName' == $sort) ? $dir : '').
-				column_head('email', 'email', 'admin', true, $switch_dir, '', '', ('email' == $sort) ? $dir : '').
-				column_head('privileges', 'privs', 'admin', true, $switch_dir, '', '', ('privs' == $sort) ? $dir : '').
-				column_head('last_login', 'last_login', 'admin', true, $switch_dir, '', '', ('last_login' == $sort) ? $dir : '').
-				hCell().
-				hCell()
-			);
+			$tfoot = n.'<tfoot>'.tr(
+				tda(
+					select_buttons().
+					author_multiedit_form($page, $sort, $dir, $crit, $search_method)
+				, ' class="multi-edit" colspan="7" style="text-align: right; border: none;"')
+			).n.'</tfoot>';
+
+			echo $tfoot;
+			echo '<tbody>';
+
+			$ctr = 1;
 
 			while ($a = nextRow($rs))
 			{
 				extract(doSpecial($a));
 
 				echo tr(
-					td($name).
-					td($RealName).
-					td('<a href="mailto:'.$email.'">'.$email.'</a>').
-					td(get_priv_level($privs)).
-					td($last_login ? safe_strftime('%b&#160;%Y', $last_login) : '').
-					td((has_privs('admin.edit')) ? eLink('admin', 'author_edit', 'user_id', $user_id, gTxt('edit')) : '').
-					td((has_privs('admin.edit') and $txp_user != $a['name']) ? fInput('checkbox', 'selected[]', $a['name']) : '')
+					td($name, '', 'name login-name').
+					td($RealName, '', 'name real-name').
+					td('<a href="mailto:'.$email.'">'.$email.'</a>', '', 'email').
+					td(get_priv_level($privs), '', 'privs').
+					td(($last_login ? safe_strftime('%b&#160;%Y', $last_login) : ''), '', 'date last-login modified').
+					td(((has_privs('admin.edit')) ? eLink('admin', 'author_edit', 'user_id', $user_id, gTxt('edit')) : ''), '', 'actions').
+					td(((has_privs('admin.edit') and $txp_user != $a['name']) ? fInput('checkbox', 'selected[]', $a['name'], 'checkbox') : ''), '', 'multi-edit')
+				, ' class="'.(($ctr%2 == 0) ? 'even' : 'odd').'"'
 				);
+
+				$ctr++;
 			}
 
-			echo n.n.tr(
-				tda(
-					select_buttons().
-					author_multiedit_form($page, $sort, $dir, $crit, $search_method)
-				, ' colspan="7" style="text-align: right; border: none;"')
-			).
-
-			endTable().
-			'</form>'.
+			echo '</tbody>'.
+			n.endTable().
+			n.'</form>'.
 
 			nav_form('admin', $page, $numPages, $sort, $dir, $crit, $search_method).
 
@@ -385,22 +395,22 @@ $LastChangedRevision$
 			startTable('edit', '', 'edit-pane').
 
 			tr(
-				fLabelCell('login_name').
+				fLabelCell('login_name', '', 'name').
 				($user_id && $step == 'author_edit' ? td(strong($name)) : fInputCell('name', $name))
-			).
+			, ' class="name login-name"').
 
 			tr(
-				fLabelCell('real_name').
+				fLabelCell('real_name', '', 'RealName').
 				fInputCell('RealName', $RealName)
-			).
+			, ' class="name real-name"').
 
 			tr(
-				fLabelCell('email').
+				fLabelCell('email', '', 'email').
 				fInputCell('email', $email)
-			).
+			, ' class="email"').
 
 			tr(
-				fLabelCell('privileges').
+				fLabelCell('privileges', '', 'privs').
 				td(
 					($txp_user != $name
 						? privs($privs)
@@ -408,7 +418,7 @@ $LastChangedRevision$
 					)
 					.sp.popHelp('about_privileges')
 				)
-			).
+			, ' class="privs"').
 
 			pluggable_ui('author_ui', 'extend_detail_form', '', $rs).
 
@@ -423,7 +433,7 @@ $LastChangedRevision$
 
 			eInput('admin').
 			($user_id ? hInput('user_id', $user_id).sInput('author_save') : sInput('author_save_new'))
-		);
+		, '', '', 'post', 'edit-form', '', 'user_edit');
 	}
 
 // -------------------------------------------------------------

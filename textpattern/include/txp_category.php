@@ -45,12 +45,12 @@ if ($event == 'category') {
 	function cat_category_list($message="")
 	{
 		pagetop(gTxt('categories'),$message);
-		$out = array('<table cellspacing="20" align="center">',
+		$out = array('<table class="category-list" cellspacing="20" align="center">',
 		'<tr>',
-			tdtl(cat_article_list(),' class="categories"'),
-			tdtl(cat_link_list(),' class="categories"'),
-			tdtl(cat_image_list(),' class="categories"'),
-			tdtl(cat_file_list(),' class="categories"'),
+			tdtl('<div id="categories_article">'.cat_article_list().'</div>',' class="categories article"'),
+			tdtl('<div id="categories_link">'.cat_link_list().'</div>',' class="categories link"'),
+			tdtl('<div id="categories_image">'.cat_image_list().'</div>',' class="categories image"'),
+			tdtl('<div id="categories_file">'.cat_file_list().'</div>',' class="categories file"'),
 		'</tr>',
 		endTable());
 		echo join(n,$out);
@@ -164,9 +164,12 @@ if ($event == 'category') {
 		form(
 			join('',$array).
 			eInput('category').sInput('cat_category_multiedit').hInput('type',$area).
-			small(gTxt('with_selected')).sp.selectInput('edit_method',$methods,'',1).sp.
-			fInput('submit','',gTxt('go'),'smallerbox')
-			,'margin-top:1em',"verify('".gTxt('are_you_sure')."')"
+			graf(
+				'<label for="withselected_'.$area.'" class="small">'.gTxt('with_selected').'</label>'.
+				sp.selectInput('edit_method',$methods,'',1, '', 'withselected_'.$area).sp.
+				fInput('submit','',gTxt('go'),'smallerbox')
+				, ' id="multi_edit_'.$area.'" class="multi-edit"')
+			,'margin-top:1em',"verify('".gTxt('are_you_sure')."')", 'post', '', '', 'category_'.$area.'_form'
 		);
 		} return;
 	}
@@ -231,7 +234,7 @@ if ($event == 'category') {
 				fInput('submit', '', gTxt('Create'), 'smallerbox').
 				eInput('category').
 				sInput('cat_'.$event.'_create')
-			);
+			,'', '', 'post', 'action-create '.$event);
 
 		$rs = getTree('root', $event);
 
@@ -298,6 +301,8 @@ if ($event == 'category') {
 
 			$items = array();
 
+			$ctr = 1;
+
 			foreach ($rs as $a)
 			{
 				extract($a);
@@ -332,7 +337,9 @@ if ($event == 'category') {
 
 				$items[] = graf(
 					checkbox('selected[]', $id, 0).sp.str_repeat(sp.sp, $level * 2).$edit_link.sp.small($count)
-				);
+				, ' class="'.(($ctr%2 == 0) ? 'even' : 'odd').' level-'.$level.'"');
+
+				$ctr++;
 			}
 
 			if ($items)
@@ -408,7 +415,7 @@ if ($event == 'category') {
 			);
 		}
 		$out.= eInput( 'category' ) . sInput( 'cat_'.$evname.'_save' ) . hInput( 'old_name',$name );
-		echo form( startTable( 'edit', '', 'edit-pane' ) . $out . endTable() );
+		echo form( startTable( 'edit', '', 'edit-pane' ) . $out . endTable(), '', '', 'post', 'edit-form' );
 	}
 
 //-------------------------------------------------------------

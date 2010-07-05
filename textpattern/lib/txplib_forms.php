@@ -13,7 +13,7 @@ $LastChangedRevision$
 
 		foreach ($vals as $a => $b)
 		{
-			$out[] = '<input type="radio" id="'.$id.'-'.$a.'" name="'.$field.'" value="'.$a.'" class="radio"';
+			$out[] = '<input type="radio" id="'.$id.'-'.$a.'" name="'.$field.'" value="'.$a.'" class="radio'.($a == $var ? ' active' : '').'"';
 			$out[] = ($a == $var) ? ' checked="checked"' : '';
 			$out[] = ($tabindex) ? ' tabindex="'.$tabindex.'"' : '';
 			$out[] = ' /><label for="'.$id.'-'.$a.'">'.$b.'</label> ';
@@ -191,7 +191,7 @@ $LastChangedRevision$
 		$o[] = ($id) ? ' id="'.$id.'"' : '';
 		$o[] = ($checked == '1') ? ' checked="checked"' : '';
 		$o[] = ($tabindex) ? ' tabindex="'.$tabindex.'"' : '';
-		$o[] = ' class="checkbox" />';
+		$o[] = ' class="checkbox'.($checked == '1' ? ' active' : '').'" />';
 
 		return join('', $o);
 	}
@@ -204,7 +204,7 @@ $LastChangedRevision$
 		$o[] = ($id) ? ' id="'.$id.'"' : '';
 		$o[] = ($value == '1') ? ' checked="checked"' : '';
 		$o[] = ($tabindex) ? ' tabindex="'.$tabindex.'"' : '';
-		$o[] = ' class="checkbox" />';
+		$o[] = ' class="checkbox'.($value == '1' ? ' active' : '').'" />';
 
 		return join('', $o);
 	}
@@ -217,16 +217,17 @@ $LastChangedRevision$
 		$o[] = ($id) ? ' id="'.$id.'"' : '';
 		$o[] = ($checked == '1') ? ' checked="checked"' : '';
 		$o[] = ($tabindex) ? ' tabindex="'.$tabindex.'"' : '';
-		$o[] = ' class="radio" />';
+		$o[] = ' class="radio'.($checked == '1' ? ' active' : '').'" />';
 
 		return join('', $o);
 	}
 
 //-------------------------------------------------------------
 
-	function form($contents, $style = '', $onsubmit = '', $method = 'post', $class = '', $fragment = '')
+	function form($contents, $style = '', $onsubmit = '', $method = 'post', $class = '', $fragment = '', $id = '')
 	{
 		return n.'<form method="'.$method.'" action="index.php'.($fragment ? '#'.$fragment.'"' : '"').
+			($id ? ' id="'.$id.'"' : '').
 			($class ? ' class="'.$class.'"' : '').
 			($style ? ' style="'.$style.'"' : '').
 			($onsubmit ? ' onsubmit="return '.$onsubmit.'"' : '').
@@ -271,11 +272,11 @@ $LastChangedRevision$
 		foreach ($values as $k => $v)
 		{
 			$id = $name.'-'.$k;
-			$out[] = n.t.'<li>'.radio($name, $k, ($current_val == $k) ? 1 : 0, $id).
+			$out[] = n.t.'<li class="status-'.$k.' '.$v.($hilight_val == $k ? ' active' : '').'">'.radio($name, $k, ($current_val == $k) ? 1 : 0, $id).
 				'<label for="'.$id.'">'.($hilight_val == $k ? strong($v) : $v).'</label></li>';
 		}
 
-		return '<ul class="plain-list">'.join('', $out).n.'</ul>';
+		return '<ul class="status plain-list">'.join('', $out).n.'</ul>';
 	}
 
 //--------------------------------------------------------------
@@ -285,6 +286,6 @@ $LastChangedRevision$
 		$s = ($time == 0)? '' : safe_strftime($datevar, $time);
 		return n.'<input type="text" name="'.$name.'" value="'.
 			$s
-		.'" size="'.$size.'" maxlength="'.$size.'" class="edit"'.(empty($tab) ? '' : ' tabindex="'.$tab.'"').' title="'.gTxt('article_'.$name).'" />';
+		.'" size="'.$size.'" maxlength="'.$size.'" class="edit '.$name.'"'.(empty($tab) ? '' : ' tabindex="'.$tab.'"').' title="'.gTxt('article_'.$name).'" />';
 	}
 ?>

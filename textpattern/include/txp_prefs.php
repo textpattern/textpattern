@@ -109,13 +109,13 @@ $LastChangedRevision$
 
 		$locale = setlocale(LC_ALL, $locale);
 
-		echo n.n.'<form method="post" action="index.php">'.
+		echo n.n.'<form method="post" class="prefs-form basic" action="index.php">'.
 
-			n.n.startTable('list').
+			n.n.startTable('list', '', 'list').
 
 			n.n.tr(
 				tdcs(
-					hed(gTxt('site_prefs'), 1)
+					hed(gTxt('site_prefs'), 2)
 				, 3)
 			).
 
@@ -124,7 +124,7 @@ $LastChangedRevision$
 					sLink('prefs', 'prefs_list', gTxt('site_prefs'), 'navlink-active').sp.
 					sLink('prefs', 'advanced_prefs', gTxt('advanced_preferences'), 'navlink').sp.
 					sLink('prefs', 'list_languages', gTxt('manage_languages'), 'navlink')
-				, '3')
+				, '3', '', 'nav-tertiary')
 			);
 
 		$evt_list = safe_column('event', 'txp_prefs', "type = 0 and prefs_id = 1 group by event order by event desc");
@@ -140,6 +140,7 @@ $LastChangedRevision$
 				if ($a['event'] != $cur_evt)
 				{
 					$cur_evt = $a['event'];
+					$ctr = 1;
 
 					if ($cur_evt == 'comments' && !$use_comments)
 					{
@@ -148,7 +149,7 @@ $LastChangedRevision$
 
 					echo n.n.tr(
 						tdcs(
-							hed(gTxt($a['event']), 2, ' class="pref-heading"')
+							hed(gTxt($a['event']), 3, ' class="pref-heading '.$a['event'].'"')
 						, 3)
 					);
 				}
@@ -168,23 +169,24 @@ $LastChangedRevision$
 					'<label for="'.$a['name'].'">'.gTxt($a['name']).'</label>' :
 					gTxt($a['name']);
 
-				$out = tda($label, ' style="text-align: right; vertical-align: middle;"');
+				$out = tda($label, ' style="text-align: right; vertical-align: middle;" class="pref-label"');
 
 				if ($a['html'] == 'text_input')
 				{
 					$out.= td(
 						pref_func('text_input', $a['name'], $a['val'], 20)
-					);
+					, '', 'pref-value');
 				}
 
 				else
 				{
-					$out.= td(pref_func($a['html'], $a['name'], $a['val']));
+					$out.= td(pref_func($a['html'], $a['name'], $a['val']), '', 'pref-value');
 				}
 
 				$out.= tda(popHelp($a['name']), ' style="vertical-align: middle;"');
 
-				echo tr($out, " id='prefs-{$a['name']}'");
+				echo tr($out, " id='prefs-{$a['name']}' class='{$a['event']} ".(($ctr%2 == 0) ? 'even' : 'odd')."'");
+				$ctr++;
 			}
 		}
 
@@ -391,7 +393,7 @@ EOS
 		asort($vals);
 		reset($vals);
 
-		$out = n.'<select id="'.$name.'" name="'.$name.'" class="list">';
+		$out = n.'<select id="'.$name.'" name="'.$name.'" class="list languages">';
 
 		foreach ($vals as $avalue => $alabel)
 		{
@@ -499,7 +501,7 @@ EOS
 			}
 		}
 
-		return n.'<select name="'.$name.'" class="list">'.
+		return n.'<select name="'.$name.'" class="list default-events">'.
 			join('', $out).
 			n.'</select>';
 	}
@@ -546,13 +548,13 @@ EOS
 	{
 		echo pagetop(gTxt('advanced_preferences'), $message).
 
-			n.n.'<form method="post" action="index.php">'.
+			n.n.'<form method="post" class="prefs-form advanced" action="index.php">'.
 
-			n.n.startTable('list').
+			n.n.startTable('list', '', 'list').
 
 			n.n.tr(
 				tdcs(
-					hed(gTxt('advanced_preferences'), 1)
+					hed(gTxt('advanced_preferences'), 2)
 				, 3)
 			).
 
@@ -561,7 +563,7 @@ EOS
 					sLink('prefs', 'prefs_list', gTxt('site_prefs'), 'navlink').sp.
 					sLink('prefs', 'advanced_prefs', gTxt('advanced_preferences'), 'navlink-active').sp.
 					sLink('prefs', 'list_languages', gTxt('manage_languages'), 'navlink')
-				, '3')
+				, '3', '', 'nav-tertiary')
 			);
 
 		$rs = safe_rows_start('*', 'txp_prefs', "type = 1 and prefs_id = 1 order by event, position");
@@ -574,9 +576,11 @@ EOS
 			{
 				$cur_evt = $a['event'];
 
+				$ctr = 1;
+
 				echo n.n.tr(
 					tdcs(
-						hed(gTxt($a['event']), 2, ' class="pref-heading"')
+						hed(gTxt($a['event']), 3, ' class="pref-heading"')
 					, 3)
 				);
 			}
@@ -585,7 +589,7 @@ EOS
 					'<label for="'.$a['name'].'">'.gTxt($a['name']).'</label>' :
 					gTxt($a['name']);
 
-			$out = tda($label, ' style="text-align: right; vertical-align: middle;"');
+			$out = tda($label, ' style="text-align: right; vertical-align: middle;" class="pref-label"');
 
 			if ($a['html'] == 'text_input')
 			{
@@ -604,12 +608,12 @@ EOS
 				{
 					$out.= td(
 						pref_func($a['html'], $a['name'], $a['val'])
-					);
+					, '', 'pref-value');
 				}
 
 				else
 				{
-					$out.= td($a['val']);
+					$out.= td($a['val'], '', 'pref-value');
 				}
 			}
 
@@ -617,7 +621,8 @@ EOS
 				popHelp($a['name'])
 			, ' style="vertical-align: middle;"');
 
-			echo n.n.tr($out, " id='prefs-{$a['name']}'");
+			echo n.n.tr($out, " id='prefs-{$a['name']}' class='{$a['event']} ".(($ctr%2 == 0) ? 'even' : 'odd')."'");
+			$ctr++;
 		}
 
 		echo n.n.tr(
@@ -772,6 +777,7 @@ EOS
 		}
 
 		$list = '';
+		$ctr = 1;
 		# Show the language table
 		foreach ($available_lang as $langname => $langdat)
 		{
@@ -808,7 +814,9 @@ EOS
 								, 'span', ($file_updated) ? ' style="color:#667;"' : ' style="color:#aaa;font-style:italic"' )
 							, ' class="langfile" style="text-align:center;vertical-align:middle"').n
 					: '')
+			, ' class="'.(($ctr%2 == 0) ? 'even' : 'odd').'"'
 			).n.n;
+			$ctr++;
 		}
 
 
@@ -817,11 +825,11 @@ EOS
 		if (isset($msg) && $msg)
 			echo tag ($msg,'p',' style="text-align:center;color:red;width:50%;margin: 2em auto"' );
 
-		echo startTable('list'),
+		echo startTable('list', '', 'list'),
 
 		tr(
 			tdcs(
-				hed(gTxt('manage_languages'), 1)
+				hed(gTxt('manage_languages'), 2)
 			, 3)
 		),
 
@@ -830,7 +838,7 @@ EOS
 				sLink('prefs', 'prefs_list', gTxt('site_prefs'), 'navlink').sp.
 				sLink('prefs','advanced_prefs',gTxt('advanced_preferences'),'navlink').sp.
 				sLink('prefs', 'list_languages', gTxt('manage_languages'), 'navlink-active')
-			, '3')
+			, '3', '', 'nav-tertiary')
 		),
 
 		tr(tda('&nbsp;',' colspan="3" style="font-size:0.25em"')),
@@ -851,7 +859,7 @@ EOS
 						graf(fInput('submit', 'install_new', gTxt('upload'), 'smallerbox')).
 						eInput('prefs').
 						sInput('get_textpack')
-					, '', '', 'post', 'text_uploader')
+					, '', '', 'post', 'edit-form', '', 'text_uploader')
 				,' colspan="3"')
 			);
 		}

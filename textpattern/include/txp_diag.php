@@ -433,10 +433,13 @@ $LastChangedRevision$
 
 	echo
 	pagetop(gTxt('tab_diagnostics'),''),
-	startTable('list'),
-	tr(td(hed(gTxt('preflight_check'),1)));
+	'<div id="pre_flight_check">',
+	startTable('list', '', 'list', '', '510px'),
+	'<thead>',
+	tr(td(hed(gTxt('preflight_check'),2))),
+	'</thead>';
 
-
+	echo '<tbody>';
 	if ($fail) {
 		foreach ($fail as $help => $message)
 			echo tr(tda(nl2br($message).sp.popHelp($help), ' class="not-ok"'));
@@ -444,9 +447,15 @@ $LastChangedRevision$
 	else {
 		echo tr(tda(gTxt('all_checks_passed'), ' class="ok"'));
 	}
+	echo '</tbody>',
+		endTable(),
+		'</div>';
 
-	echo tr(td(hed(gTxt('diagnostic_info'),1)));
-
+	echo '<div id="diagnostics">',
+		startTable('list', '', 'list'),
+		'<thead>',
+		tr(td(hed(gTxt('diagnostic_info'),2))),
+		'</thead>';
 
 	$fmt_date = '%Y-%m-%d %H:%M:%S';
 
@@ -592,9 +601,12 @@ $LastChangedRevision$
 			selectInput('step', $dets, $step, 0, 1)
 		);
 
-	echo tr(td(join('',$out))),
+	echo '<tbody>',
+		tr(td(join('',$out))),
+		'</tbody>',
+		endTable(),
+		'</div>';
 
-	endTable();
 	}
 
 ?>

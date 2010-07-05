@@ -42,19 +42,19 @@ $LastChangedRevision$
 
 			n.n.tr(
 				tda(
-					n.n.hed(gTxt('section_head').sp.popHelp('section_category'), 1).
+					n.n.hed(gTxt('section_head').sp.popHelp('section_category'), 2).
 
 					n.n.form(
 						fInput('text', 'name', '', 'edit', '', '', 10).
 						fInput('submit', '', gTxt('create'), 'smallerbox').
 						eInput('section').
 						sInput('section_create')
-					)
+					, '', '', 'post', 'edit-form', '', 'section_create')
 				, ' colspan="3"')
 			).
 
 			n.n.tr(
-				td(gTxt('default')).
+				td(gTxt('default'), '', 'label').
 
 				td(
 					form(
@@ -65,14 +65,14 @@ $LastChangedRevision$
 							td(
 								selectInput('page', $pages, $default['page']).sp.popHelp('section_uses_page')
 							, '', 'noline')
-						).
+						, ' class="uses-page"').
 
 						tr(
 							fLabelCell(gTxt('uses_style').':') .
 							td(
 								selectInput('css', $styles, $default['css']).sp.popHelp('section_uses_css')
 							, '', 'noline')
-						).
+						, ' class="uses-style"').
 
 						pluggable_ui('section_ui', 'extend_detail_form', '', $default).
 
@@ -90,18 +90,20 @@ $LastChangedRevision$
 				).
 
 				td()
-			);
+			, ' class="section default"');
 
 		$rs = safe_rows_start('*', 'txp_section', "name != 'default' order by name");
 
 		if ($rs)
 		{
+			$ctr = 1;
+
 			while ($a = nextRow($rs))
 			{
 				extract($a);
 
 				echo n.n.tr(
-					n.td($name).
+					n.td($name, '', 'label').
 
 					n.td(
 						form(
@@ -110,54 +112,54 @@ $LastChangedRevision$
 							n.n.tr(
 								fLabelCell(gTxt('section_name').':').
 								fInputCell('name', $name, 1, 20)
-							).
+							, ' class="name"').
 
 							n.n.tr(
 								fLabelCell(gTxt('section_longtitle').':').
 								fInputCell('title', $title, 1, 20)
-							).
+							, ' class="title"').
 
 							n.n.tr(
 								fLabelCell(gTxt('uses_page').':').
 								td(
 									selectInput('page', $pages, $page).sp.popHelp('section_uses_page')
 								, '', 'noline')
-							).
+							, ' class="uses-page"').
 
 							n.n.tr(
 								fLabelCell(gTxt('uses_style').':').
 								td(
 									selectInput('css', $styles, $css).sp.popHelp('section_uses_css')
 								, '', 'noline')
-							).
+							, ' class="uses-style"').
 
 							n.n.tr(
 								fLabelCell(gTxt('selected_by_default')).
 								td(
 									yesnoradio('is_default', $is_default, '', $name).sp.popHelp('section_is_default')
 								, '', 'noline')
-							).
+							, ' class="option is-default"').
 
 							n.n.tr(
 								fLabelCell(gTxt('on_front_page')).
 								td(
 									yesnoradio('on_frontpage', $on_frontpage, '', $name).sp.popHelp('section_on_frontpage')
 								, '', 'noline')
-							).
+							, ' class="option on-frontpage"').
 
 							n.n.tr(
 								fLabelCell(gTxt('syndicate')) .
 								td(
 									yesnoradio('in_rss', $in_rss, '', $name).sp.popHelp('section_syndicate')
 								, '', 'noline')
-							).
+							, ' class="option in-rss"').
 
 							n.n.tr(
 								fLabelCell(gTxt('include_in_search')).
 								td(
 									yesnoradio('searchable', $searchable, '', $name).sp.popHelp('section_searchable')
 								, '', 'noline')
-							).
+							, ' class="option is-searchable"').
 
 							pluggable_ui('section_ui', 'extend_detail_form', '', $a).
 
@@ -173,13 +175,14 @@ $LastChangedRevision$
 							endTable(),
 							'', '', 'post', '', 'section-'.$name
 						)
-					).
+					, '', 'main').
 
 					td(
 						dLink('section', 'section_delete', 'name', $name, '', 'type', 'section')
-					),
-					" id=\"section-$name\""
-				);
+					, '', 'actions')
+				,' id="section-'.$name.'" class="section '.(($ctr%2 == 0) ? 'even' : 'odd').'"');
+
+				$ctr++;
 			}
 		}
 

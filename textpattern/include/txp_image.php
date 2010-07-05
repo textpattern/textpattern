@@ -162,20 +162,33 @@ $LastChangedRevision$
 		{
 			$show_authors = !has_single_author('txp_image');
 
-			echo n.n.'<form name="longform" method="post" action="index.php" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
-
-			n.n.startTable('list').
+			echo n.n.'<form name="longform" id="images_form" method="post" action="index.php" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
+			n.n.startTable('list', '', 'list').
+				n.'<thead>'.
 				n.tr(
-					column_head('ID', 'id', 'image', true, $switch_dir, $crit, $search_method, ('id' == $sort) ? $dir : '').
-					hCell().
-					column_head('date', 'date', 'image', true, $switch_dir, $crit, $search_method, ('date' == $sort) ? $dir : '').
-					column_head('name', 'name', 'image', true, $switch_dir, $crit, $search_method, ('name' == $sort) ? $dir : '').
-					column_head('thumbnail', 'thumbnail', 'image', true, $switch_dir, $crit, $search_method, ('thumbnail' == $sort) ? $dir : '').
-					hCell(gTxt('tags')).
-					column_head('image_category', 'category', 'image', true, $switch_dir, $crit, $search_method, ('category' == $sort) ? $dir : '').
-					($show_authors ? column_head('author', 'author', 'image', true, $switch_dir, $crit, $search_method, ('author' == $sort) ? $dir : '') : '').
-					hCell()
-				);
+					column_head('ID', 'id', 'image', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id').
+					hCell('', '', ' class="actions"').
+					column_head('date', 'date', 'image', true, $switch_dir, $crit, $search_method, (('date' == $sort) ? "$dir " : '').'date created').
+					column_head('name', 'name', 'image', true, $switch_dir, $crit, $search_method, (('name' == $sort) ? "$dir " : '').'name').
+					column_head('thumbnail', 'thumbnail', 'image', true, $switch_dir, $crit, $search_method, (('thumbnail' == $sort) ? "$dir " : '').'thumbnail').
+					hCell(gTxt('tags'), '', ' class="tag-build"').
+					column_head('image_category', 'category', 'image', true, $switch_dir, $crit, $search_method, (('category' == $sort) ? "$dir " : '').'category').
+					($show_authors ? column_head('author', 'author', 'image', true, $switch_dir, $crit, $search_method, (('author' == $sort) ? "$dir " : '').'author') : '').
+					hCell('', '', ' class="multi-edit"')
+				).
+				n.'</thead>';
+
+			$tfoot = n.'<tfoot>'.tr(
+				tda(
+					select_buttons().
+					image_multiedit_form($page, $sort, $dir, $crit, $search_method)
+				,' class="multi-edit" colspan="'.($show_authors ? '9' : '8').'" style="text-align: right; border: none;"')
+			).n.'</tfoot>';
+
+			echo $tfoot;
+			echo '<tbody>';
+
+			$ctr = 1;
 
 			while ($a = nextRow($rs))
 			{
@@ -214,51 +227,48 @@ $LastChangedRevision$
 
 				echo n.n.tr(
 
-					n.td($id, 20).
+					n.td($id, 20, 'id').
 
 					td(
 						n.'<ul>'.
-						($can_edit ? n.t.'<li>'.href(gTxt('edit'), $edit_url).'</li>' : '').
-						n.t.'<li><a href="'.imagesrcurl($id, $ext).'">'.gTxt('view').'</a></li>'.
+						($can_edit ? n.t.'<li class="action-edit">'.href(gTxt('edit'), $edit_url).'</li>' : '').
+						n.t.'<li class="action-view"><a href="'.imagesrcurl($id, $ext).'">'.gTxt('view').'</a></li>'.
 						n.'</ul>'
-					, 35).
+					, 35, 'actions').
 
 					td(
 						gTime($uDate)
-					, 75).
+					, 75, 'date created').
 
 					td(
 						($can_edit ? href($name, $edit_url) : $name)
-					, 75).
+					, 75, 'name').
 
 					td(
 						pluggable_ui('image_ui', 'thumbnail',
 						($can_edit ? href($thumbnail, $edit_url) : $thumbnail)
 						, $a)
-					, 80).
+					, 80, 'image thumbnail').
 
-					td($tagbuilder, 85).
-					td($category, 75).
+					td($tagbuilder, 85, 'tag-build').
+					td($category, 75, 'category').
 
 					($show_authors ? td(
 						'<span title="'.htmlspecialchars(get_author_name($author)).'">'.htmlspecialchars($author).'</span>'
-					, 75) : '').
+					, 75, 'author') : '').
 
 					td(
 						fInput('checkbox', 'selected[]', $id)
-					, 10)
+					, 10, 'multi-edit')
+				, ' class="'.(($ctr%2 == 0) ? 'even' : 'odd').'"'
 				);
+
+				$ctr++;
 			}
 
-			echo n.n.tr(
-				tda(
-					select_buttons().
-					image_multiedit_form($page, $sort, $dir, $crit, $search_method)
-				,' colspan="'.($show_authors ? '9' : '8').'" style="text-align: right; border: none;"')
-			).
-
-			endTable().
-			'</form>'.
+			echo '</tbody>'.
+			n.endTable().
+			n.'</form>'.
 
 			nav_form('image', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
 
@@ -274,9 +284,9 @@ $LastChangedRevision$
 			'id'       	=> gTxt('ID'),
 			'name'     	=> gTxt('name'),
 			'category' 	=> gTxt('image_category'),
-			'author'	=> gTxt('author'),
-			'alt'	 	=> gTxt('alt_text'),
-			'caption'	=> gTxt('caption')
+			'author'    => gTxt('author'),
+			'alt'       => gTxt('alt_text'),
+			'caption'   => gTxt('caption')
 		);
 
 		return search_form('image', 'image_list', $crit, $methods, $method, 'name');
@@ -403,13 +413,14 @@ $LastChangedRevision$
 			$categories = getTree("root", "image");
 
 			if ($ext != '.swf') {
-				$img = '<img src="'.imagesrcurl($id, $ext)."?$uDate".'" height="'.$h.'" width="'.$w.'" alt="" title="'.$id.$ext.' ('.$w.' &#215; '.$h.')" id="image-fullsize" />';
+				$aspect = ($h == $w) ? ' square' : (($h > $w) ? ' portrait' : ' landscape');
+				$img = '<img class="image fullsize" src="'.imagesrcurl($id, $ext)."?$uDate".'" height="'.$h.'" width="'.$w.'" alt="" title="'.$id.$ext.' ('.$w.' &#215; '.$h.')" id="image-fullsize" />';
 			} else {
-				$img = '';
+				$img = $aspect = '';
 			}
 
 			if ($thumbnail and ($ext != '.swf')) {
-				$thumb = '<img src="'.imagesrcurl($id, $ext, true)."?$uDate".'" alt="" '.
+				$thumb = '<img class="image thumbnail" src="'.imagesrcurl($id, $ext, true)."?$uDate".'" alt="" '.
 							($thumb_w ? "width='$thumb_w' height='$thumb_h'" : ''). ' />';
 			} else {
 				$thumb = '';
@@ -420,28 +431,28 @@ $LastChangedRevision$
 				td(
 					pluggable_ui('image_ui', 'image_edit',
 						$img.br.
-						upload_form(gTxt('replace_image'), 'replace_image_form', 'image_replace', 'image', $id, $file_max_upload_size, 'image-replace', '')
+						upload_form(gTxt('replace_image'), 'replace_image_form', 'image_replace', 'image', $id, $file_max_upload_size, 'image-replace', 'image-replace')
 					, $rs)
 				)
-			),
+			, ' class="image-edit'.$aspect.'"'),
 			tr(
 				td(
 					pluggable_ui('image_ui', 'thumbnail_edit', join('',
 						array(
 							($thumbnail)
-							? 	startTable('image-thumbnail').
+							? 	startTable('image-thumbnail', '', 'image-thumbnail').
 									tr(
-										td($thumb).
+										td($thumb, '', 'thumbwrapper').
 										td(dLink('image','thumbnail_delete','id',$id, '', '', '', '', array($page, $sort, $dir, $crit, $search_method)))
 									).
 								endTable().br
 							: 	'',
 							upload_form(gTxt('upload_thumbnail'),'upload_thumbnail',
-								'thumbnail_insert','image',$id,$file_max_upload_size, 'upload-thumbnail', '')
+								'thumbnail_insert','image',$id,$file_max_upload_size, 'upload-thumbnail', 'thumbnail-upload')
 						)
 					), $rs)
 				)
-			),
+			, ' class="thumbnail-edit"'),
 
 			(check_gd($ext))
 			?	thumb_ui( $id, $rs )
@@ -451,16 +462,17 @@ $LastChangedRevision$
 				td(
 					form(
 						graf('<label for="image-name">'.gTxt('image_name').'</label>'.br.
-							fInput('text', 'name', $name, 'edit', '', '', '', '', 'image-name')).
+							fInput('text', 'name', $name, 'edit', '', '', '', '', 'image-name'), ' class="name"').
 
 						graf('<label for="image-category">'.gTxt('image_category').'</label>'.br.
-							treeSelectInput('category', $categories, $category, 'image-category')).
+							treeSelectInput('category', $categories, $category, 'image-category'), ' class="category"').
 
 						graf('<label for="alt-text">'.gTxt('alt_text').'</label>'.br.
-							fInput('text', 'alt', $alt, 'edit', '', '', 50, '', 'alt-text')).
+							fInput('text', 'alt', $alt, 'edit', '', '', 50, '', 'alt-text'), ' class="alt text"').
 
 						graf('<label for="caption">'.gTxt('caption').'</label>'.br.
-							text_area('caption', '100', '400', $caption, 'caption')).
+							'<textarea id="caption" name="caption">'.$caption.'</textarea>'
+							, ' class="caption description text"').
 
 						pluggable_ui('image_ui', 'extend_detail_form', '', $rs).
 
@@ -474,9 +486,9 @@ $LastChangedRevision$
 						n.hInput('page', $page).
 						n.hInput('search_method', $search_method).
 						n.hInput('crit', $crit)
-					)
+					, '', '', 'post', 'edit-form', '', 'image_details_form')
 				)
-			),
+			, ' class="image-detail"'),
 			endTable();
 		}
 	}
@@ -711,8 +723,8 @@ $LastChangedRevision$
 		tr(
 			td(
 				pluggable_ui('image_ui', 'thumbnail_create', form(
-					graf(gTxt('create_thumbnail')) .
-					startTable('','left','',1) .
+					graf(gTxt('create_thumbnail'), ' class="label"') .
+					startTable('thumbnail_alter','left','',1) .
 						tr(
 							fLabelCell(gTxt('thumb_width'), '', 'width') .
 							fInputCell('width', @$thumb_w, 1, 4, '', 'width').
@@ -726,7 +738,7 @@ $LastChangedRevision$
 							tda(
 								fInput('submit', '', gTxt('Create'), 'smallerbox')
 							, ' class="noline"')
-						).
+						, ' class="thumbnail-alter-controls"').
 
 						n.hInput('id', $id).
 						n.eInput('image').
@@ -739,9 +751,9 @@ $LastChangedRevision$
 						n.hInput('crit', $crit).
 
 					endTable()
-				), $rs)
+				, '', '', 'post', 'edit-form', '', 'thumbnail_alter_form'), $rs)
 			)
-		);
+		, ' class="thumbnail-alter"');
 	}
 
 // -------------------------------------------------------------

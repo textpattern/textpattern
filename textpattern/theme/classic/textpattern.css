@@ -74,6 +74,7 @@ a:link, a:visited, a:active {
 color: #963;
 background-color: transparent;
 text-decoration: none;
+outline:0;
 }
 
 a:hover, a:focus {
@@ -170,10 +171,24 @@ input.interbox, input.interbox2,
 input.navbox,
 input.preview,
 input.smallbox, input.smallerbox, input.smallerboxsp,
+p.smallerbox a,
 select {
 border-width: 1px;
 border-style: solid;
 border-color: #fff #999 #999 #fff;
+}
+
+p.smallerbox {
+margin-bottom:15px;
+}
+
+p.smallerbox a {
+color:#000;
+background-color: #ddd;
+}
+
+p.smallerbox a:hover {
+text-decoration:none;
 }
 
 input.cancel, input.delete,
@@ -198,7 +213,8 @@ background-color: #eee;
 }
 
 input.navbox,
-input.smallbox, input.smallerbox, input.smallerboxsp {
+input.smallbox, input.smallerbox, p.smallerbox a,
+input.smallerboxsp {
 padding: 3px 6px 4px 6px;
 }
 
@@ -474,6 +490,10 @@ text-align: center;
 margin: 4em;
 }
 
+.clear {
+clear:both;
+}
+
 /* setup
 ----------------------------------------------- */
 
@@ -589,6 +609,10 @@ td#article-tabs #tab-previewdown {
 background-image: url(previewdown.gif);
 }
 
+.empty {
+display:none;
+}
+
 /* comments
 ----------------------------------------------- */
 
@@ -633,12 +657,14 @@ height: 500px;
 }
 
 textarea#css {
-width: 500px;
+margin-top: 6px;
+width: 700px;
 height: 515px;
 }
 
 textarea#form {
-width: 500px;
+margin-top: 6px;
+width: 560px;
 height: 420px;
 }
 
@@ -657,6 +683,29 @@ height: 30px;
 
 #page-plugin .manage {
 width: 8em;
+}
+
+#allforms_form {
+width: 200px;
+}
+.form-list-action {
+float: right;
+padding: 0 0 0 10px;
+clear: both;
+}
+.form-list li {
+line-height:1.9em;
+border-bottom: 1px solid #ddd;
+height: 21px;
+}
+.form-list ul.plain-list {
+border-top: 1px solid #ddd;
+width: 200px;
+}
+.form-list-name {
+display: block;
+overflow: hidden;
+white-space: nowrap;
 }
 
 /* tagbuilder
@@ -679,7 +728,7 @@ text-align: center;
 /* preferences
 ----------------------------------------------- */
 
-h2.pref-heading {
+.pref-heading {
 margin: 20px 0 0 0;
 }
 
@@ -708,4 +757,9 @@ width: 100%;
 
 table#image-thumbnail td {
 border: none;
+}
+
+#image-name.edit, #caption, #alt-text.edit {
+width: 300px;
+padding: 5px;
 }

@@ -69,20 +69,20 @@ function showHideFields($sel)
 		$content.= tr(tdcs(hed(gTxt('txp_import'),3),2));
 		//Select tool
 		$content.= tr(
-			fLabelCell ('select_tool','import').
+			fLabelCell ('select_tool','import', 'from').
 			td(
 				tag(type_options($tools),
 				 'select',
 				 " name=\"import_tool\" onchange=\"showHideFields(this.value);\"")
-			)
-		);
+			, '', 'from')
+		, ' class="import-from"');
 
 
 		//Some data we collect
 		$content.= tr(
-			fLabelCell ('import_section','import_section').
-			td(import_section_popup(''))
-			);
+			fLabelCell ('import_section','import_section', 'section').
+			td(import_section_popup(''), '', 'section')
+			, ' class="import-section"');
 
 		$status_options = array(
 				4 => gTxt('live'),
@@ -92,50 +92,50 @@ function showHideFields($sel)
 			);
 
 		$content.= tr(
-			fLabelCell ('import_status','import_status').
-			td(type_select($status_options))
-		);
+			fLabelCell ('import_status','import_status', 'status').
+			td(type_select($status_options), '', 'status')
+		, ' class="import-status"');
 
 		$content.= tr(
-			fLabelCell ('import_invite','import_invite').
-			td(fInput('text','comments_invite', gTxt('comments'),'edit'))
-		);
+			fLabelCell ('import_invite','import_invite', 'comment-invite').
+			td(fInput('text','comments_invite', gTxt('comments'),'edit'), '', 'comment-invite')
+		, ' class="import-comment"');
 
 		//DataBase imports only
 
 		$databased =
 		tr(tdcs(hed(gTxt('database_stuff'),3),2)).
 		tr(
-			fLabelCell ('import_database','import_database').
-			td(fInput('text','importdb', '','edit'))
-		).
+			fLabelCell ('import_database','import_database', 'database').
+			td(fInput('text','importdb', '','edit'), '', 'database')
+		, ' class="import-database"').
 		tr(
-			fLabelCell ('import_login','import_login').
-			td(fInput('text','importdblogin', '','edit'))
-		).
+			fLabelCell ('import_login','import_login', 'login').
+			td(fInput('text','importdblogin', '','edit'), '', 'login')
+		, ' class="import-login"').
 		tr(
-			fLabelCell ('import_password','import_password').
-			td(fInput('text','importdbpass', '','edit'))
-		).
+			fLabelCell ('import_password','import_password', 'password').
+			td(fInput('text','importdbpass', '','edit'), '', 'password')
+		, ' class="import-password"').
 		tr(
-			fLabelCell ('import_host','import_host').
-			td(fInput('text','importdbhost', '','edit'))
-		);
+			fLabelCell ('import_host','import_host', 'host').
+			td(fInput('text','importdbhost', '','edit'), '', 'host')
+		, ' class="import-host"');
 
 		//Ugly, but a way to present a clean screen with only required fields
 		//while we keep JavaScript code at minimum
 		$content.= tr(tda(tag($databased, 'table', ' id="databased" style="display: none; border: none;"'),' colspan="2"'));
 		//MT-DB Specific
 		$mtblogid = tr(
-			fLabelCell ('import_blogid','import_blogid').
-			td(fInput('text','blog_id','','edit'))
-		);
+			fLabelCell ('import_blogid','import_blogid', 'blog-id').
+			td(fInput('text','blog_id','','edit'), '', 'blog-id')
+		, ' class="import-blog-id"');
 		$content.= tr(tda(tag($mtblogid, 'table', ' id="mtblogid" style="display: none;  border: none;"'),' colspan="2"'));
 		//WordPress specific option
 		$wponly = tr(
-			fLabelCell ('import_wpprefix','import_wpprefix').
-			td(fInput('text','wpdbprefix', 'wp_','edit'))
-		);
+			fLabelCell ('import_wpprefix','import_wpprefix', 'wp-prefix').
+			td(fInput('text','wpdbprefix', 'wp_','edit'), '', 'wp-prefix')
+		, ' class="import-wp-prefix"');
 		$content.= tr(tda(tag($wponly, 'table', ' id="wponly" style="display: none;  border: none;"'),' colspan="2"'));
 
 		$content.= endTable();

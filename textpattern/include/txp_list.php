@@ -185,25 +185,44 @@ $LastChangedRevision$
 				}
 			}
 
-			echo n.n.'<form name="longform" method="post" action="index.php" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
+			echo n.n.'<form name="longform" id="articles_form" method="post" action="index.php" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
 
-				n.startTable('list','','','','90%').
+				n.startTable('list','','list','','90%').
+				n.'<thead>'.
 				n.tr(
-					n.column_head('ID', 'id', 'list', true, $switch_dir, $crit, $search_method, ('id' == $sort) ? $dir : '').
-					column_head('posted', 'posted', 'list', true, $switch_dir, $crit, $search_method, ('posted' == $sort) ? $dir : '').
-					column_head('article_modified', 'lastmod', 'list', true, $switch_dir, $crit, $search_method, (('lastmod' == $sort) ? "$dir " : '').'articles_detail').
-					column_head('expires', 'expires', 'list', true, $switch_dir, $crit, $search_method, (('expires' == $sort) ? "$dir " : '').'articles_detail').
-					column_head('title', 'title', 'list', true, $switch_dir, $crit, $search_method, ('title' == $sort) ? $dir : '').
-					column_head('section', 'section', 'list', true, $switch_dir, $crit, $search_method, ('section' == $sort) ? $dir : '').
-					column_head('category1', 'category1', 'list', true, $switch_dir, $crit, $search_method, (('category1' == $sort) ? "$dir " : '').'articles_detail').
-					column_head('category2', 'category2', 'list', true, $switch_dir, $crit, $search_method, (('category2' == $sort) ? "$dir " : '').'articles_detail').
-					column_head('status', 'status', 'list', true, $switch_dir, $crit, $search_method, ('status' == $sort) ? $dir : '').
-					($show_authors ? column_head('author', 'author', 'list', true, $switch_dir, $crit, $search_method, ('author' == $sort) ? $dir : '') : '').
-					column_head('comments', 'comments', 'list', true, $switch_dir, $crit, $search_method, (('comments' == $sort) ? "$dir " : '').'articles_detail').
-					hCell()
-				);
+					n.column_head('ID', 'id', 'list', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id actions').
+					column_head('posted', 'posted', 'list', true, $switch_dir, $crit, $search_method, (('posted' == $sort) ? "$dir " : '').'date posted created').
+					column_head('article_modified', 'lastmod', 'list', true, $switch_dir, $crit, $search_method, (('lastmod' == $sort) ? "$dir " : '').'articles_detail date modified').
+					column_head('expires', 'expires', 'list', true, $switch_dir, $crit, $search_method, (('expires' == $sort) ? "$dir " : '').'articles_detail date expires').
+					column_head('title', 'title', 'list', true, $switch_dir, $crit, $search_method, (('title' == $sort) ? "$dir " : '').'title').
+					column_head('section', 'section', 'list', true, $switch_dir, $crit, $search_method, (('section' == $sort) ? "$dir " : '').'section').
+					column_head('category1', 'category1', 'list', true, $switch_dir, $crit, $search_method, (('category1' == $sort) ? "$dir " : '').'articles_detail category category1').
+					column_head('category2', 'category2', 'list', true, $switch_dir, $crit, $search_method, (('category2' == $sort) ? "$dir " : '').'articles_detail category category2').
+					column_head('status', 'status', 'list', true, $switch_dir, $crit, $search_method, (('status' == $sort) ? "$dir " : '').'status').
+					($show_authors ? column_head('author', 'author', 'list', true, $switch_dir, $crit, $search_method, (('author' == $sort) ? "$dir " : '').'author') : '').
+					column_head('comments', 'comments', 'list', true, $switch_dir, $crit, $search_method, (('comments' == $sort) ? "$dir " : '').'articles_detail comments').
+					hCell('', '', ' class="multi-edit"')
+				).
+				n.'</thead>';
 
 			include_once txpath.'/publish/taghandlers.php';
+
+			$tfoot = n.'<tfoot>'.tr(
+				tda(
+					toggle_box('articles_detail'),
+					' class="detail-toggle" colspan="2" style="text-align: left; border: none;"'
+				).
+
+				tda(
+					select_buttons().
+					list_multiedit_form($page, $sort, $dir, $crit, $search_method)
+				,' class="multi-edit" colspan="'.($show_authors ? '10' : '9').'" style="text-align: right; border: none;"')
+			).n.'</tfoot>';
+
+			echo $tfoot;
+			echo '<tbody>';
+
+			$ctr = 1;
 
 			while ($a = nextRow($rs))
 			{
@@ -229,9 +248,9 @@ $LastChangedRevision$
 					$view_url .= (strpos($view_url, '?') === FALSE ? '?' : '&amp;') . 'txpreview='.intval($ID).'.'.time();
 				}
 
-				$manage = n.'<ul class="articles_detail">'.
-						n.t.'<li>'.eLink('article', 'edit', 'ID', $ID, gTxt('edit')).'</li>'.
-						n.t.'<li><a href="'.$view_url.'" class="article-view">'.gTxt('view').'</a></li>'.
+				$manage = n.'<ul class="articles_detail actions">'.
+						n.t.'<li class="action-edit">'.eLink('article', 'edit', 'ID', $ID, gTxt('edit')).'</li>'.
+						n.t.'<li class="action-view"><a href="'.$view_url.'" class="article-view">'.gTxt('view').'</a></li>'.
 						n.'</ul>';
 
 				$Status = !empty($Status) ? $statuses[$Status] : '';
@@ -258,41 +277,42 @@ $LastChangedRevision$
 				}
 
 				$comments = n.'<ul>'.
-					n.t.'<li>'.$comment_status.'</li>'.
-					n.t.'<li>'.$comments.'</li>'.
+					n.t.'<li class="comments-status">'.$comment_status.'</li>'.
+					n.t.'<li class="comments-manage">'.$comments.'</li>'.
 					n.'</ul>';
 
 				echo n.n.tr(
 
-					n.td(eLink('article', 'edit', 'ID', $ID, $ID).$manage).
+					n.td(eLink('article', 'edit', 'ID', $ID, $ID).$manage, '', 'id').
 
 					td(
-						gTime($posted), '', $posted < time() ? '' : 'unpublished'
+						gTime($posted), '', ($posted < time() ? '' : 'unpublished ').'date posted created'
 					).
 
 					td(
-						gTime($lastmod), '', "articles_detail"
+						gTime($lastmod), '', "articles_detail date modified"
 					).
 
 					td(
-						($expires ? gTime($expires) : ''), '' ,'articles_detail'
+						($expires ? gTime($expires) : ''), '' ,'articles_detail date expires'
 					).
 
-					td($Title).
+					td($Title, '', 'title').
 
 					td(
 						'<span title="'.htmlspecialchars(fetch_section_title($Section)).'">'.$Section.'</span>'
-					, 75).
+					, 75, 'section').
 
-					td($Category1, 100, "articles_detail").
-					td($Category2, 100, "articles_detail").
-					td(($a['Status'] < 4 ? $Status : '<a href="'.permlinkurl($a).'">'.$Status.'</a>'), 50).
+					td($Category1, 100, "articles_detail category category1").
+					td($Category2, 100, "articles_detail category category2").
+					td(($a['Status'] < 4 ? $Status : '<a href="'.permlinkurl($a).'">'.$Status.'</a>'), 50, 'status').
 
 					($show_authors ? td(
 						'<span title="'.htmlspecialchars(get_author_name($AuthorID)).'">'.htmlspecialchars($AuthorID).'</span>'
+						, '', 'author'
 					) : '').
 
-					td($comments, 50, "articles_detail").
+					td($comments, 50, "articles_detail comments").
 
 					td((
 						(  ($a['Status'] >= 4 and has_privs('article.edit.published'))
@@ -301,24 +321,16 @@ $LastChangedRevision$
 						or ($a['Status'] < 4 and has_privs('article.edit'))
 						or ($a['Status'] < 4 and $AuthorID == $txp_user and has_privs('article.edit.own'))
 						)
-						? fInput('checkbox', 'selected[]', $ID)
+						? fInput('checkbox', 'selected[]', $ID, 'checkbox')
 						: '&nbsp;'
-					))
+					), '', 'multi-edit')
+				, ' class="'.(($ctr%2 == 0) ? 'even' : 'odd').'"'
 				);
+
+				$ctr++;
 			}
 
-			echo n.n.tr(
-				tda(
-					toggle_box('articles_detail'),
-					' colspan="2" style="text-align: left; border: none;"'
-				).
-
-				tda(
-					select_buttons().
-					list_multiedit_form($page, $sort, $dir, $crit, $search_method)
-				,' colspan="'.($show_authors ? '10' : '9').'" style="text-align: right; border: none;"')
-			).
-
+			echo '</tbody>'.
 			n.endTable().
 			n.'</form>'.
 
@@ -340,16 +352,16 @@ $LastChangedRevision$
 	function list_search_form($crit, $method)
 	{
 		$methods =	array(
-			'id'				 => gTxt('ID'),
+			'id'                 => gTxt('ID'),
 			'title_body_excerpt' => gTxt('title_body_excerpt'),
-			'section'	 => gTxt('section'),
-			'categories' => gTxt('categories'),
-			'keywords'	 => gTxt('keywords'),
-			'status'	 => gTxt('status'),
-			'author'	 => gTxt('author'),
-			'article_image' => gTxt('article_image'),
-			'posted'	 => gTxt('posted'),
-			'lastmod'	 => gTxt('article_modified')
+			'section'            => gTxt('section'),
+			'categories'         => gTxt('categories'),
+			'keywords'           => gTxt('keywords'),
+			'status'             => gTxt('status'),
+			'author'             => gTxt('author'),
+			'article_image'      => gTxt('article_image'),
+			'posted'             => gTxt('posted'),
+			'lastmod'            => gTxt('article_modified')
 		);
 
 		return search_form('list', 'list', $crit, $methods, $method, 'title_body_excerpt');

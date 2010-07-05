@@ -23,17 +23,20 @@ $LastChangedRevision$
 
 //-------------------------------------------------------------
 	function css_list($current, $default) {
-		$out[] = startTable('list', 'left');
+		$out[] = startTable('list', 'left', 'list');
 
 		$rs = safe_rows_start('name', 'txp_css', "1=1");
+
+		$ctr = 1;
 
 		if ($rs) {
 			while ($a = nextRow($rs)) {
 				extract($a);
 				$edit = ($current != $name) ?	eLink('css', '', 'name', $name, $name) : htmlspecialchars($name);
 				$delete = ($name != $default) ? dLink('css', 'css_delete', 'name', $name) : '';
-
-				$out[] = tr(td($edit).td($delete));
+				$trcls = ' class="'.((($ctr==1) ? 'first ' : '').(($ctr%2 == 0) ? 'even' : 'odd')).'"';
+				$out[] = tr(td($edit).td($delete), $trcls);
+				$ctr++;
 			}
 
 			$out[] =  endTable();
@@ -65,52 +68,50 @@ $LastChangedRevision$
 
 		if ($step=='pour')
 		{
-			$buttons =
+			$buttons = '<div class="edit-title">'.
 			gTxt('name_for_this_style').': '
 			.fInput('text','newname','','edit','','',20).
-			hInput('savenew','savenew');
+			hInput('savenew','savenew').
+			'</div>';
 			$thecss = '';
 
 		} else {
-			$buttons = '';
+			$buttons = '<div class="edit-title">'.gTxt('you_are_editing_css').sp.strong(htmlspecialchars($name)).'</div>';
 			$thecss = fetch("css",'txp_css','name',$name);
 		}
 
 		if ($step!='pour') {
-
-			$left = graf(gTxt('you_are_editing_css').br.strong(htmlspecialchars($name))).
-				graf(sLink('css', 'pour', gTxt('bulkload_existing_css')));
-
-			$copy = gTxt('copy_css_as').sp.fInput('text', 'newname', '', 'edit').sp.
-				fInput('submit', 'copy', gTxt('copy'), 'smallerbox');
+			$copy = '<div class="copy-as">'.gTxt('copy_css_as').sp.fInput('text', 'newname', '', 'edit').sp.
+				fInput('submit', 'copy', gTxt('copy'), 'smallerbox').'</div>';
 		} else {
-			$left = '&nbsp;';
 			$copy = '';
 		}
 
 		$right =
+		'<div id="content_switcher">'.
 		hed(gTxt('all_stylesheets'),2).
-		css_list($name, $default_name);
+		graf(sLink('css', 'pour', gTxt('create_new_css')), ' class="action-create smallerbox"').
+		css_list($name, $default_name).
+		'</div>';
 
 		echo
 		startTable('edit').
 		tr(
-			tdtl(
-				$left
-			).
 			td(
 				form(
-					graf($buttons).
+					'<div id="main_content">'.
+					$buttons.
 					'<textarea id="css" class="code" name="css" cols="78" rows="32">'.htmlspecialchars($thecss).'</textarea>'.br.
 					fInput('submit','',gTxt('save'),'publish').
 					eInput('css').sInput('css_save').
 					hInput('name',$name)
-					.$copy
-				)
-			).
+					.$copy.
+					'</div>'
+				, '', '', 'post', 'edit-form', '', 'style_form')
+			, '', 'column').
 			tdtl(
 				$right
-			)
+			, ' class="column"')
 		).
 		endTable();
 	}
@@ -196,3 +197,4 @@ $LastChangedRevision$
 		css_edit($message);
 	}
 
+?>

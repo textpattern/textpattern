@@ -177,7 +177,7 @@ $LastChangedRevision$
 	callback_event('admin_side', 'head_end');
 	?>
 	</head>
-	<body id="<?php echo $body_id; ?>">
+	<body id="<?php echo $body_id; ?>" class="<?php echo $area; ?>">
 	<?php callback_event('admin_side', 'pagetop');
 		$theme->set_state($area, $event, $bm, $message);
 		echo pluggable_ui('admin_side', 'header', $theme->header());

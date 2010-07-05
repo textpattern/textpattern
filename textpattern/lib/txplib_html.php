@@ -516,7 +516,7 @@ $LastChangedRevision$
 				sInput($event.'_change_pageby').
 				'<noscript> <input type="submit" value="'.gTxt('go').'" class="smallerbox" /></noscript>'.
 			'</div>'
-		);
+		, '', '', 'post', 'pageby');
 	}
 // -------------------------------------------------------------
 
