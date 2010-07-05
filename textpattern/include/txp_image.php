@@ -432,7 +432,7 @@ $LastChangedRevision$
 							? 	startTable('image-thumbnail').
 									tr(
 										td($thumb).
-										td(dLink('image','thumbnail_delete','id',$id))
+										td(dLink('image','thumbnail_delete','id',$id, '', '', '', '', array($page, $sort, $dir, $crit, $search_method)))
 									).
 								endTable().br
 							: 	'',

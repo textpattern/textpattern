@@ -524,6 +524,8 @@ $LastChangedRevision$
 	{
 		global $sort, $dir, $page, $search_method, $crit;
 
+		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
+
 		$class = ($class) ? ' class="'.$class.'"' : '';
 
 		$label_id = ($label_id) ? $label_id : $event.'-upload';
