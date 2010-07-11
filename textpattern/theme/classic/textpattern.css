@@ -46,6 +46,16 @@ h3.plain {
 font: 1em Verdana, Arial, sans-serif;
 }
 
+.lever {
+padding-left: 10px;
+background: #fff url(plus_minus.jpg) no-repeat 0 5px;
+}
+
+.expanded {
+padding-left: 10px;
+background: #fff url(plus_minus.jpg) no-repeat 0 -12px;
+}
+
 p {
 line-height: 1.4em;
 }

@@ -117,6 +117,16 @@ text-align: center;
 margin: 4em 0 0;
 }
 
+.lever {
+padding-left: 0;
+background: none;
+}
+
+.expanded {
+padding-left: 0;
+background: none;
+}
+
 .lever a {
 padding-right: 14px;
 text-decoration: none;
