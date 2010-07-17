@@ -34,7 +34,7 @@ $LastChangedRevision$
 
 	function log_list($message = '')
 	{
-		global $log_list_pageby, $expire_logs_after;
+		global $event, $log_list_pageby, $expire_logs_after;
 
 		pagetop(gTxt('visitor_logs'), $message);
 
@@ -120,17 +120,19 @@ $LastChangedRevision$
 
 		$total = safe_count('txp_log', "$criteria");
 
+		echo '<div id="'.$event.'_control" class="txp-control-panel">';
+
 		if ($total < 1)
 		{
 			if ($criteria != 1)
 			{
 				echo n.log_search_form($crit, $search_method).
-					n.graf(gTxt('no_results_found'), ' class="indicator"');
+					n.graf(gTxt('no_results_found'), ' class="indicator"').'</div>';
 			}
 
 			else
 			{
-				echo graf(gTxt('no_refers_recorded'), ' class="indicator"');
+				echo graf(gTxt('no_refers_recorded'), ' class="indicator"').'</div>';
 			}
 
 			return;
@@ -140,13 +142,14 @@ $LastChangedRevision$
 
 		list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-		echo n.log_search_form($crit, $search_method);
+		echo n.log_search_form($crit, $search_method).'</div>';
 
 		$rs = safe_rows_start('*, unix_timestamp(time) as uTime', 'txp_log',
 			"$criteria order by $sort_sql limit $offset, $limit");
 
 		if ($rs)
 		{
+			echo n.'<div id="'.$event.'_container" class="txp-container txp-list">';
 			echo n.n.'<form action="index.php" id="log_form" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
 
 				startTable('list','','list','','90%').
@@ -232,9 +235,11 @@ $LastChangedRevision$
 			n.endTable().
 			n.'</form>'.
 
+			n.'<div id="'.$event.'_navigation" class="txp-navigation">'.
 			n.nav_form('log', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
 
-			n.pageby_form('log', $log_list_pageby);
+			n.pageby_form('log', $log_list_pageby).
+			n.'</div>'.n.'</div>';
 		}
 	}
 

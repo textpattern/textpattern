@@ -45,7 +45,7 @@ $LastChangedRevision$
 // Select the tool we want to import from and provide required data
 	function switch_tool(){
 
-		global $vars,$step,$tools;
+		global $vars,$event,$step,$tools;
 		extract(gpsa($vars));
 		pagetop(gTxt('txp_import'), '');
 
@@ -141,7 +141,9 @@ function showHideFields($sel)
 		$content.= endTable();
 		$content.= tag(fInput('submit','choose',gTxt('continue'),'publish'),'p',' style="text-align:center"');
 		$content.= sInput('start_import').eInput('import');
-		echo tag($content, 'form', ' id="import" action="index.php" method="post"');
+		echo '<div id="'.$event.'_container" class="txp-container txp-edit">'.
+			tag($content, 'form', ' id="import" action="index.php" method="post"').
+			'</div>';
 	}
 
 
@@ -149,7 +151,7 @@ function showHideFields($sel)
 //Pre import tasks, then call the import funtion
 	function start_import()
 	{
-		global $vars;
+		global $event,$vars;
 		extract(psa($vars));
 
 		$insert_into_section = $Section;
@@ -196,10 +198,13 @@ function showHideFields($sel)
 
 		$out = tag('max_execution_time = '.ini_get('max_execution_time'),'p', ' style="color:red;"').$out;
 		pagetop(gTxt('txp_import'));
-		$content= startTable('list');
+
+		$content= '<div id="'.$event.'_container" class="txp-container txp-list">';
+		$content.= startTable('list');
 		$content.= tr(tdcs(hed(gTxt('txp_import'),3),2));
 		$content.= tr(td($out));
 		$content.= endTable();
+		$content.= '</div>';
 		echo $content;
 
 		$rs = safe_rows_start('parentid, count(*) as thecount','txp_discuss','visible=1 group by parentid');
@@ -238,7 +243,7 @@ function showHideFields($sel)
 // -----------------------------------------------------------------
 // Some cut and paste here
 //--------------------------------------------------------------
-// Display a popup of textpattern avaliable sections
+// Display a popup of textpattern available sections
 
 	function import_section_popup($Section)
 	{

@@ -131,7 +131,7 @@ $LastChangedRevision$
 
 	function doDiagnostics()
 	{
-		global $prefs, $files, $txpcfg, $step, $theme;
+		global $prefs, $files, $txpcfg, $event, $step, $theme;
 		extract(get_prefs());
 
 	$urlparts = parse_url(hu);
@@ -433,6 +433,7 @@ $LastChangedRevision$
 
 	echo
 	pagetop(gTxt('tab_diagnostics'),''),
+	'<div id="'.$event.'_container" class="txp-container txp-list">',
 	'<div id="pre_flight_check">',
 	startTable('list', '', 'list', '', '510px'),
 	'<thead>',
@@ -605,8 +606,8 @@ $LastChangedRevision$
 		tr(td(join('',$out))),
 		'</tbody>',
 		endTable(),
+		'</div>',
 		'</div>';
-
 	}
 
 ?>

@@ -55,7 +55,7 @@ $LastChangedRevision$
 
 //-------------------------------------------------------------
 	function css_edit_raw() {
-		global $step;
+		global $event, $step;
 
 		$name = gps('name');
 
@@ -95,6 +95,7 @@ $LastChangedRevision$
 		'</div>';
 
 		echo
+		'<div id="'.$event.'_container" class="txp-container txp-edit">'.
 		startTable('edit').
 		tr(
 			td(
@@ -113,7 +114,8 @@ $LastChangedRevision$
 				$right
 			, ' class="column"')
 		).
-		endTable();
+		endTable().
+		'</div>';
 	}
 
 // -------------------------------------------------------------

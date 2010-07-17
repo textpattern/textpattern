@@ -39,7 +39,7 @@ $LastChangedRevision$
 
 	function image_list($message = '')
 	{
-		global $txpcfg, $extensions, $img_dir, $file_max_upload_size, $image_list_pageby, $txp_user;
+		global $txpcfg, $extensions, $img_dir, $file_max_upload_size, $image_list_pageby, $txp_user, $event;
 
 		pagetop(gTxt('images'), $message);
 
@@ -49,6 +49,8 @@ $LastChangedRevision$
 		if ($sort === '') $sort = get_pref('image_sort_column', 'id');
 		if ($dir === '') $dir = get_pref('image_sort_dir', 'desc');
 		$dir = ($dir == 'asc') ? 'asc' : 'desc';
+
+		echo '<div id="'.$event.'_control" class="txp-control-panel">';
 
 		if (!is_dir(IMPATH) or !is_writeable(IMPATH))
 		{
@@ -135,12 +137,12 @@ $LastChangedRevision$
 			if ($criteria != 1)
 			{
 				echo n.image_search_form($crit, $search_method).
-					n.graf(gTxt('no_results_found'), ' class="indicator"');
+					n.graf(gTxt('no_results_found'), ' class="indicator"').'</div>';
 			}
 
 			else
 			{
-				echo n.graf(gTxt('no_images_recorded'), ' class="indicator"');
+				echo n.graf(gTxt('no_images_recorded'), ' class="indicator"').'</div>';
 			}
 
 			return;
@@ -157,11 +159,13 @@ $LastChangedRevision$
 		");
 
 		echo pluggable_ui('image_ui', 'extend_controls', '', $rs);
+		echo '</div>'; // end txp-control-panel
 
 		if ($rs)
 		{
 			$show_authors = !has_single_author('txp_image');
 
+			echo n.'<div id="'.$event.'_container" class="txp-container txp-list">';
 			echo n.n.'<form name="longform" id="images_form" method="post" action="index.php" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
 			n.n.startTable('list', '', 'list').
 				n.'<thead>'.
@@ -270,9 +274,11 @@ $LastChangedRevision$
 			n.endTable().
 			n.'</form>'.
 
+			n.'<div id="'.$event.'_navigation" class="txp-navigation">'.
 			nav_form('image', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
 
-			pageby_form('image', $image_list_pageby);
+			pageby_form('image', $image_list_pageby).
+			n.'</div>'.n.'</div>';
 		}
 	}
 
@@ -390,7 +396,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function image_edit($message='',$id='')
 	{
-		global $txpcfg,$img_dir,$file_max_upload_size,$txp_user;
+		global $txpcfg,$img_dir,$file_max_upload_size,$txp_user,$event;
 
 		if (!$id) $id = gps('id');
 		$id = assert_int($id);
@@ -426,6 +432,7 @@ $LastChangedRevision$
 				$thumb = '';
 			}
 
+			echo n.'<div id="'.$event.'_container" class="txp-container txp-edit">';
 			echo startTable('list', '', 'edit-pane'),
 			tr(
 				td(
@@ -489,7 +496,8 @@ $LastChangedRevision$
 					, '', '', 'post', 'edit-form', '', 'image_details_form')
 				)
 			, ' class="image-detail"'),
-			endTable();
+			endTable().
+			n.'</div>';
 		}
 	}
 

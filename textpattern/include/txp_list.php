@@ -35,7 +35,7 @@ $LastChangedRevision$
 
 	function list_list($message = '', $post = '')
 	{
-		global $statuses, $comments_disabled_after, $step, $txp_user, $article_list_pageby;
+		global $statuses, $comments_disabled_after, $step, $txp_user, $article_list_pageby, $event;
 
 		pagetop(gTxt('tab_list'), $message);
 
@@ -138,17 +138,19 @@ $LastChangedRevision$
 
 		$total = safe_count('textpattern', "$criteria");
 
+		echo '<div id="'.$event.'_control" class="txp-control-panel">';
+
 		if ($total < 1)
 		{
 			if ($criteria != 1)
 			{
 				echo n.list_search_form($crit, $search_method).
-					n.graf(gTxt('no_results_found'), ' class="indicator"');
+					n.graf(gTxt('no_results_found'), ' class="indicator"').'</div>';
 			}
 
 			else
 			{
-				echo graf(gTxt('no_articles_recorded'), ' class="indicator"');
+				echo graf(gTxt('no_articles_recorded'), ' class="indicator"').'</div>';
 			}
 
 			return;
@@ -158,7 +160,7 @@ $LastChangedRevision$
 
 		list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-		echo n.list_search_form($crit, $search_method);
+		echo n.list_search_form($crit, $search_method).'</div>';
 
 		$rs = safe_rows_start('*, unix_timestamp(Posted) as posted, unix_timestamp(LastMod) as lastmod, unix_timestamp(Expires) as expires', 'textpattern',
 			"$criteria order by $sort_sql limit $offset, $limit"
@@ -185,6 +187,7 @@ $LastChangedRevision$
 				}
 			}
 
+			echo n.'<div id="'.$event.'_container" class="txp-container txp-list">';
 			echo n.n.'<form name="longform" id="articles_form" method="post" action="index.php" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
 
 				n.startTable('list','','list','','90%').
@@ -334,9 +337,11 @@ $LastChangedRevision$
 			n.endTable().
 			n.'</form>'.
 
+			n.'<div id="'.$event.'_navigation" class="txp-navigation">'.
 			n.nav_form('list', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
 
-			n.pageby_form('list', $article_list_pageby);
+			n.pageby_form('list', $article_list_pageby).
+			n.'</div>'.n.'</div>';
 		}
 	}
 

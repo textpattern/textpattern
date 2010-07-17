@@ -45,14 +45,16 @@ if ($event == 'category') {
 	function cat_category_list($message="")
 	{
 		pagetop(gTxt('categories'),$message);
-		$out = array('<table class="category-list" cellspacing="20" align="center">',
+		$out = array('<div id="category_container" class="txp-container txp-list">',
+		'<table class="category-list" cellspacing="20" align="center">',
 		'<tr>',
 			tdtl('<div id="categories_article">'.cat_article_list().'</div>',' class="categories article"'),
 			tdtl('<div id="categories_link">'.cat_link_list().'</div>',' class="categories link"'),
 			tdtl('<div id="categories_image">'.cat_image_list().'</div>',' class="categories image"'),
 			tdtl('<div id="categories_file">'.cat_file_list().'</div>',' class="categories file"'),
 		'</tr>',
-		endTable());
+		endTable(),
+		'</div>');
 		echo join(n,$out);
 	}
 
@@ -415,7 +417,9 @@ if ($event == 'category') {
 			);
 		}
 		$out.= eInput( 'category' ) . sInput( 'cat_'.$evname.'_save' ) . hInput( 'old_name',$name );
-		echo form( startTable( 'edit', '', 'edit-pane' ) . $out . endTable(), '', '', 'post', 'edit-form' );
+		echo '<div id="category_container" class="txp-container txp-edit">'.
+			form( startTable( 'edit', '', 'edit-pane' ) . $out . endTable(), '', '', 'post', 'edit-form' ).
+			'</div>';
 	}
 
 //-------------------------------------------------------------

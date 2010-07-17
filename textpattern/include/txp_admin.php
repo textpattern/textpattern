@@ -66,9 +66,11 @@ $LastChangedRevision$
 
 		$email = fetch('email', 'txp_users', 'name', $txp_user);
 
+		echo n.'<div id="users_container" class="txp-container">';
+
 		if (has_privs('admin.edit'))
 		{
-			echo author_form();
+			echo n.'<div class="txp-edit">'.author_form().'</div>';
 		}
 
 		if (has_privs('admin.list'))
@@ -82,6 +84,7 @@ $LastChangedRevision$
 		{
 			echo change_email_form($email);
 		}
+		echo n.'</div>';
 	}
 
 // -------------------------------------------------------------
@@ -306,6 +309,7 @@ $LastChangedRevision$
 
 		if ($rs)
 		{
+			echo n.'<div class="txp-list">';
 			echo '<form action="index.php" id="users_form" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
 
 			startTable('list', '', 'list').
@@ -355,9 +359,11 @@ $LastChangedRevision$
 			n.endTable().
 			n.'</form>'.
 
+			n.'<div id="users_navigation" class="txp-navigation">'.
 			nav_form('admin', $page, $numPages, $sort, $dir, $crit, $search_method).
 
-			pageby_form('admin', $author_list_pageby);
+			pageby_form('admin', $author_list_pageby).
+			n.'</div>'.n.'</div>';
 		}
 	}
 

@@ -47,7 +47,7 @@ $LastChangedRevision$
 
 	function link_list($message = '')
 	{
-		global $step, $link_list_pageby, $txp_user;
+		global $event,$step, $link_list_pageby, $txp_user;
 
 		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
 		if ($sort === '') $sort = get_pref('link_sort_column', 'name');
@@ -121,17 +121,19 @@ $LastChangedRevision$
 
 		$total = getCount('txp_link', $criteria);
 
+		echo '<div id="'.$event.'_control" class="txp-control-panel">';
+
 		if ($total < 1)
 		{
 			if ($criteria != 1)
 			{
 				echo n.link_search_form($crit, $search_method).
-					n.graf(gTxt('no_results_found'), ' class="indicator"');
+					n.graf(gTxt('no_results_found'), ' class="indicator"').'</div>';
 			}
 
 			else
 			{
-				echo n.graf(gTxt('no_links_recorded'), ' class="indicator"');
+				echo n.graf(gTxt('no_links_recorded'), ' class="indicator"').'</div>';
 			}
 
 			return;
@@ -141,7 +143,7 @@ $LastChangedRevision$
 
 		list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-		echo link_search_form($crit, $search_method);
+		echo link_search_form($crit, $search_method).'</div>';
 
 		$rs = safe_rows_start('*, unix_timestamp(date) as uDate', 'txp_link', "$criteria order by $sort_sql limit $offset, $limit");
 
@@ -149,6 +151,7 @@ $LastChangedRevision$
 		{
 			$show_authors = !has_single_author('txp_link');
 
+			echo n.'<div class="txp-list">';
 			echo n.n.'<form action="index.php" id="links_form" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">',
 
 				startTable('list', '', 'list').
@@ -230,9 +233,11 @@ $LastChangedRevision$
 			n.endTable().
 			n.'</form>'.
 
+			n.'<div id="'.$event.'_navigation" class="txp-navigation">'.
 			n.nav_form('link', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
 
-			pageby_form('link', $link_list_pageby);
+			pageby_form('link', $link_list_pageby).
+			n.'</div>'.n.'</div>';
 		}
 	}
 
@@ -255,9 +260,11 @@ $LastChangedRevision$
 
 	function link_edit($message = '')
 	{
-		global $vars, $step, $txp_user;
+		global $vars, $event, $step, $txp_user;
 
 		pagetop(gTxt('edit_links'), $message);
+
+		echo '<div id="'.$event.'_container" class="txp-container">';
 
 		extract(gpsa($vars));
 
@@ -287,7 +294,8 @@ $LastChangedRevision$
 
 		if (has_privs('link.edit') || has_privs('link.edit.own'))
 		{
-			echo form(
+			echo '<div class="txp-edit">'.
+				form(
 
 				startTable('edit', '', 'edit-pane') .
 
@@ -341,10 +349,12 @@ $LastChangedRevision$
 
 				hInput('search_method', gps('search_method')).
 				hInput('crit', gps('crit'))
-			, 'margin-bottom: 25px;', '', 'post', 'edit-form', '', 'link_details');
+			, 'margin-bottom: 25px;', '', 'post', 'edit-form', '', 'link_details').'</div>';
 
 		}
 		link_list();
+
+		echo '</div>';
 	}
 
 //--------------------------------------------------------------

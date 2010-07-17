@@ -29,7 +29,7 @@ $LastChangedRevision$
 
 	function sec_section_list($message = '')
 	{
-		global $wlink;
+		global $wlink, $event;
 
 		pagetop(gTxt('sections'), $message);
 
@@ -38,18 +38,21 @@ $LastChangedRevision$
 		$pages = safe_column('name', 'txp_page', "1 = 1");
 		$styles = safe_column('name', 'txp_css', "1 = 1");
 
+		echo n.'<div id="'.$event.'_container" class="txp-container txp-list">';
 		echo n.n.startTable('list').
 
 			n.n.tr(
 				tda(
 					n.n.hed(gTxt('section_head').sp.popHelp('section_category'), 2).
+					n.'<div id="'.$event.'_control" class="txp-control-panel">'.
 
 					n.n.form(
 						fInput('text', 'name', '', 'edit', '', '', 10).
 						fInput('submit', '', gTxt('create'), 'smallerbox').
 						eInput('section').
 						sInput('section_create')
-					, '', '', 'post', 'edit-form', '', 'section_create')
+					, '', '', 'post', 'edit-form', '', 'section_create').
+					n.'</div>'
 				, ' colspan="3"')
 			).
 
@@ -186,7 +189,7 @@ $LastChangedRevision$
 			}
 		}
 
-		echo n.n.endTable();
+		echo n.n.endTable().'</div>';
 	}
 
 //-------------------------------------------------------------

@@ -40,15 +40,19 @@ $LastChangedRevision$
 
 	function plugin_list($message = '')
 	{
+		global $event;
+
 		pagetop(gTxt('edit_plugins'), $message);
 
+		echo '<div id="'.$event.'_control" class="txp-control-panel">';
 		echo n.n.startTable('edit', '', 'plugin-install').
 			tr(
 				tda(
 					plugin_form()
 				,' colspan="8" style="height: 30px; border: none;"')
 			).
-		endTable();
+		endTable().
+		'</div>';
 
 		extract(gpsa(array('sort', 'dir')));
 		if ($sort === '') $sort = get_pref('plugin_sort_column', 'name');
@@ -68,6 +72,7 @@ $LastChangedRevision$
 
 		if ($rs and numRows($rs) > 0)
 		{
+			echo n.'<div id="'.$event.'_container" class="txp-container txp-list">';
 			echo '<form action="index.php" id="plugin_form" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
 
 			startTable('list', '', 'list').
@@ -151,7 +156,8 @@ $LastChangedRevision$
 
 			echo '</tbody>'.
 			n.endTable().
-			n.'</form>';
+			n.'</form>'.
+			n.'</div>';
 		}
 	}
 
@@ -178,23 +184,31 @@ $LastChangedRevision$
 // -------------------------------------------------------------
   function plugin_edit()
   {
+  		global $event;
+
 		$name = gps('name');
 		pagetop(gTxt('edit_plugins'));
+
+		echo n.'<div id="'.$event.'_container" class="txp-container txp-edit">';
 		echo plugin_edit_form($name);
+		echo '</div>';
   }
 
 
 // -------------------------------------------------------------
 	function plugin_help()
 	{
+		global $event;
+
 		$name = gps('name');
 		pagetop(gTxt('plugin_help'));
 		$help = ($name) ? safe_field('help','txp_plugin',"name = '".doSlash($name)."'") : '';
 		echo
+		'<div id="'.$event.'_container" class="txp-container txp-view">'.
 		startTable('edit', '', 'plugin-help')
 		.	tr(tda($help,' width="600"'))
-		.	endTable();
-
+		.	endTable()
+		.  '</div>';
 	}
 
 // -------------------------------------------------------------
@@ -242,6 +256,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function plugin_verify()
 	{
+		global $event;
 
 		if (ps('txt_plugin')) {
 			$plugin = join("\n", file($_FILES['theplugin']['tmp_name']));
@@ -312,6 +327,7 @@ $LastChangedRevision$
 
 					pagetop(gTxt('edit_plugins'));
 					echo
+					'<div id="'.$event.'_container" class="txp-container txp-view">'.
 					form(
 						hed(gTxt('previewing_plugin'), 3).
 						tag($source, 'div', ' id="preview-plugin" class="code"').
@@ -321,7 +337,8 @@ $LastChangedRevision$
 						sInput('plugin_install').
 						eInput('plugin').
 						hInput('plugin64', $plugin_encoded)
-					, 'margin: 0 auto; width: 65%;', '', 'post', 'plugin-info', '', 'plugin_preview');
+					, 'margin: 0 auto; width: 65%;', '', 'post', 'plugin-info', '', 'plugin_preview').
+					'</div>';
 					return;
 				}
 			}

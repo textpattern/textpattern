@@ -44,7 +44,7 @@ $LastChangedRevision$
 
 	function file_list($message = '')
 	{
-		global $file_base_path, $file_statuses, $file_list_pageby, $txp_user;
+		global $file_base_path, $file_statuses, $file_list_pageby, $txp_user, $event;
 
 		pagetop(gTxt('file'), $message);
 
@@ -52,6 +52,8 @@ $LastChangedRevision$
 		if ($sort === '') $sort = get_pref('file_sort_column', 'filename');
 		if ($dir === '') $dir = get_pref('file_sort_dir', 'asc');
 		$dir = ($dir == 'desc') ? 'desc' : 'asc';
+
+		echo '<div id="'.$event.'_control" class="txp-control-panel">';
 
 		if (!is_dir($file_base_path) or !is_writeable($file_base_path))
 		{
@@ -157,12 +159,12 @@ $LastChangedRevision$
 			if ($criteria != 1)
 			{
 				echo n.file_search_form($crit, $search_method).
-					n.graf(gTxt('no_results_found'), ' class="indicator"');
+					n.graf(gTxt('no_results_found'), ' class="indicator"').'</div>';
 			}
 
 			else
 			{
-				echo n.graf(gTxt('no_files_recorded'), ' class="indicator"');
+				echo n.graf(gTxt('no_files_recorded'), ' class="indicator"').'</div>';
 			}
 
 			return;
@@ -172,7 +174,7 @@ $LastChangedRevision$
 
 		list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-		echo file_search_form($crit, $search_method);
+		echo file_search_form($crit, $search_method).'</div>';
 
 		$rs = safe_rows_start('*', 'txp_file', "$criteria order by $sort_sql limit $offset, $limit");
 
@@ -180,6 +182,7 @@ $LastChangedRevision$
 		{
 			$show_authors = !has_single_author('txp_file');
 
+			echo n.'<div id="'.$event.'_container" class="txp-container txp-list">';
 			echo '<form name="longform" id="files_form" method="post" action="index.php" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
 
 			startTable('list', '', 'list').
@@ -294,9 +297,11 @@ $LastChangedRevision$
 			n.endTable().
 			n.'</form>'.
 
+			n.'<div id="'.$event.'_navigation" class="txp-navigation">'.
 			nav_form('file', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
 
-			pageby_form('file', $file_list_pageby);
+			pageby_form('file', $file_list_pageby).
+			n.'</div>'.n.'</div>';
 		}
 	}
 
@@ -414,7 +419,7 @@ $LastChangedRevision$
 
 	function file_edit($message = '', $id = '')
 	{
-		global $file_base_path, $levels, $file_statuses, $txp_user;
+		global $file_base_path, $levels, $file_statuses, $txp_user, $event;
 
 		extract(gpsa(array('name', 'title', 'category', 'permissions', 'description', 'sort', 'dir', 'page', 'crit', 'search_method', 'publish_now')));
 
@@ -539,6 +544,8 @@ $LastChangedRevision$
 							)
 						, ' class="file-detail not-exists"');
 			}
+
+			echo n.'<div id="'.$event.'_container" class="txp-container txp-edit">';
 			echo startTable('list', '', 'edit-pane'),
 			tr(
 				td(
@@ -549,7 +556,8 @@ $LastChangedRevision$
 			, ' class="file-info"'),
 			$form,
 			$replace,
-			endTable();
+			endTable().
+			n.'</div>';
 		}
 	}
 

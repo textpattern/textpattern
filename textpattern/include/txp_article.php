@@ -326,7 +326,7 @@ if (!empty($event) and $event == 'article') {
 
 	function article_edit($message = '', $concurrent = FALSE)
 	{
-		global $vars, $txp_user, $comments_disabled_after, $txpcfg, $prefs;
+		global $vars, $txp_user, $comments_disabled_after, $txpcfg, $prefs, $event;
 
 		extract($prefs);
 
@@ -422,7 +422,8 @@ if (!empty($event) and $event == 'article') {
 
 		pagetop($page_title, $message);
 
-		echo n.n.'<form name="article" method="post" action="index.php">';
+		echo n.'<div id="'.$event.'_container" class="txp-container txp-edit">';
+		echo n.n.'<form id="article_form" name="article" method="post" action="index.php">';
 
 		if (!empty($store_out))
 		{
@@ -959,7 +960,7 @@ if (!empty($event) and $event == 'article') {
 			}
 		}
 
-		echo '</div></td></tr></table></form>'.n;
+		echo '</div></td></tr></table></form></div>'.n;
 		// Assume users would not change the timestamp if they wanted to "publish now"/"reset time"
 		echo script_js( <<<EOS
 		$('#write-timestamp input.edit').change(

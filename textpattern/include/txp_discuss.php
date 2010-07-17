@@ -64,7 +64,7 @@ $LastChangedRevision$
 
 	function discuss_list($message = '')
 	{
-		global $comment_list_pageby;
+		global $event, $comment_list_pageby;
 
 		pagetop(gTxt('list_discussions'), $message);
 
@@ -175,17 +175,19 @@ $LastChangedRevision$
 		// grand total comment count
 		$total = $count[SPAM] + $count[MODERATE] + $count[VISIBLE];
 
+		echo '<div id="'.$event.'_control" class="txp-control-panel">';
+
 		if ($total < 1)
 		{
 			if ($criteria != 1)
 			{
 				echo n.discuss_search_form($crit, $search_method).
-					n.graf(gTxt('no_results_found'), ' class="indicator"');
+					n.graf(gTxt('no_results_found'), ' class="indicator"').'</div>';
 			}
 
 			else
 			{
-				echo graf(gTxt('no_comments_recorded'), ' class="indicator"');
+				echo graf(gTxt('no_comments_recorded'), ' class="indicator"').'</div>';
 			}
 
 			return;
@@ -196,7 +198,7 @@ $LastChangedRevision$
 		$limit = max($comment_list_pageby, 15);
 		list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-		echo discuss_search_form($crit, $search_method);
+		echo discuss_search_form($crit, $search_method).'</div>';
 
 		$spamq = cs('toggle_show_spam') ? '1=1' : 'visible != '.intval(SPAM);
 
@@ -210,6 +212,7 @@ $LastChangedRevision$
 
 		if ($rs)
 		{
+			echo n.'<div id="'.$event.'_container" class="txp-container txp-list">';
 			echo n.n.'<form name="longform" id="discuss_form" method="post" action="index.php" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
 
 				n.startTable('list','','list','','90%').
@@ -329,9 +332,11 @@ $LastChangedRevision$
 
 			n.cookie_box('show_spam').
 
+			n.'<div id="'.$event.'_navigation" class="txp-navigation">'.
 			nav_form('discuss', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
 
-			pageby_form('discuss', $comment_list_pageby);
+			pageby_form('discuss', $comment_list_pageby).
+			n.'</div>'.n.'</div>';
 		}
 	}
 
@@ -356,6 +361,8 @@ $LastChangedRevision$
 
 	function discuss_edit()
 	{
+		global $event;
+
 		pagetop(gTxt('edit_comment'));
 
 		extract(gpsa(array('discussid', 'sort', 'dir', 'page', 'crit', 'search_method')));
@@ -385,7 +392,8 @@ $LastChangedRevision$
 			$ban_link = '[<a class="action-ban" href="?event=discuss'.a.'step='.$ban_step.a.'ip='.$ip.
 				a.'name='.urlencode($name).a.'discussid='.$discussid.'">'.$ban_text.'</a>]';
 
-			echo form(
+			echo '<div id="'.$event.'_container" class="txp-container txp-edit">'.
+				form(
 				startTable('edit', '', 'edit-pane').
 				stackRows(
 
@@ -437,7 +445,7 @@ $LastChangedRevision$
 				).
 
 				endTable()
-			, '', '', 'post', 'edit-form', '', 'discuss_edit_form');
+			, '', '', 'post', 'edit-form', '', 'discuss_edit_form'),'</div>';
 		}
 
 		else
@@ -507,6 +515,8 @@ $LastChangedRevision$
 
 	function ipban_list($message = '')
 	{
+		global $event;
+
 		pageTop(gTxt('list_banned_ips'), $message);
 
 		$rs = safe_rows_start('*, unix_timestamp(date_banned) as uBanned', 'txp_discuss_ipban',
@@ -514,7 +524,8 @@ $LastChangedRevision$
 
 		if ($rs and numRows($rs) > 0)
 		{
-			echo startTable('list', '', 'list').
+			echo '<div id="'.$event.'_ban_container" class="txp-container txp-list">'.
+				startTable('list', '', 'list').
 				n.'<thead>'.
 				tr(
 					hCell(gTxt('date_banned'), '', ' class="date banned"').
@@ -560,7 +571,8 @@ $LastChangedRevision$
 			}
 
 			echo '</tbody>'.
-			endTable();
+			endTable().
+			'</div>';
 		}
 
 		else

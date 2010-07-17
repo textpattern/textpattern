@@ -127,7 +127,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function form_edit($message='')
 	{
-		global $step,$essential_forms;
+		global $event,$step,$essential_forms;
 		pagetop(gTxt('edit_forms'),$message);
 
 		extract(gpsa(array('Form','name','type')));
@@ -174,6 +174,7 @@ $LastChangedRevision$
 		}
 
 		$out =
+			'<div id="'.$event.'_container" class="txp-container txp-edit">'.
 			startTable('edit').
 			tr(
 				tdtl(
@@ -202,7 +203,7 @@ $LastChangedRevision$
 					form_list($name).
 					'</div>'
 				, ' class="column"')
-			).endTable();
+			).endTable().'</div>';
 
 		echo $out;
 	}

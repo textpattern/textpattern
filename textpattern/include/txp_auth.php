@@ -76,6 +76,7 @@ function doAuth()
 
 		list($name) = explode(',', cs('txp_login'));
 
+		echo n.'<div id="login_container" class="txp-container txp-edit">';
 		echo form(
 			startTable('edit', '', 'login-pane').
 				n.n.tr(
@@ -119,7 +120,7 @@ function doAuth()
 			endTable().
 
 			(gps('event') ? eInput(gps('event')) : '')
-		).
+		, '', '', 'post', '', '', 'login_form').'</div>'.
 
 
 		n.'</body>'.n.'</html>';

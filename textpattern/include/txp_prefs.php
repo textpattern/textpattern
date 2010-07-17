@@ -109,7 +109,8 @@ $LastChangedRevision$
 
 		$locale = setlocale(LC_ALL, $locale);
 
-		echo n.n.'<form method="post" class="prefs-form basic" action="index.php">'.
+		echo n.'<div id="prefs_container" class="txp-container txp-list">'.
+			n.n.'<form method="post" class="prefs-form basic" action="index.php">'.
 
 			n.n.startTable('list', '', 'list').
 
@@ -201,9 +202,12 @@ $LastChangedRevision$
 
 		n.n.endTable().
 
-		n.n.'</form>';
+		n.n.'</form>'.
+		n.'</div>';
 
 		$check_updates = gps('check_updates');
+
+		echo '<div id="prefs_control" class="txp-control-panel">';
 
 		if ($check_updates)
 		{
@@ -238,6 +242,7 @@ $LastChangedRevision$
 				)
 			, 'text-align: center;');
 		}
+		echo '</div>';
 	}
 
 //-------------------------------------------------------------
@@ -548,6 +553,7 @@ EOS
 	{
 		echo pagetop(gTxt('advanced_preferences'), $message).
 
+			n.'<div id="prefs_container" class="txp-container txp-list">'.
 			n.n.'<form method="post" class="prefs-form advanced" action="index.php">'.
 
 			n.n.startTable('list', '', 'list').
@@ -636,7 +642,8 @@ EOS
 
 		n.n.endTable().
 
-		n.n.'</form>';
+		n.n.'</form>'.
+		n.'</div>';
 	}
 
 //-------------------------------------------------------------
@@ -718,11 +725,12 @@ EOS
 				$message = gTxt('preferences_saved');
 		}
 		$active_lang = safe_field('val','txp_prefs',"name='language'");
-		$lang_form = tda(  form(gTxt('active_language').'&nbsp;&nbsp;'.
+		$lang_form = tda('<div id="language_control" class="txp-control-panel">'.
+								form(gTxt('active_language').'&nbsp;&nbsp;'.
 								languages('language',$active_lang).'&nbsp;&nbsp;'.
 								fInput('submit','Submit',gTxt('save_button'),'').
 								eInput('prefs').sInput('list_languages')
-							,'display:inline;')
+							,'display:inline;').'</div>'
 						,' style="text-align:center" colspan="3"');
 
 
@@ -822,6 +830,9 @@ EOS
 
 		// Output Table + Content
 		pagetop(gTxt('update_languages'),$message);
+
+		echo n.'<div id="language_container" class="txp-container txp-list">';
+
 		if (isset($msg) && $msg)
 			echo tag ($msg,'p',' style="text-align:center;color:red;width:50%;margin: 2em auto"' );
 
@@ -883,7 +894,7 @@ EOS
 		if ( $install_langfile == 'install_langfile')
 			$install_langfile = 'To install new languages from file you can download them from <b><a href="'.RPC_SERVER.'/lang/">'.RPC_SERVER.'/lang/</a></b> and place them inside your ./textpattern/lang/ directory.';
 		echo tag( $install_langfile ,'p',' style="text-align:center;width:50%;margin: 2em auto"' );
-
+		echo '</div>'; // end language_container
 	}
 
 //-------------------------------------------------------------

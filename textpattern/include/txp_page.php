@@ -31,7 +31,7 @@ $LastChangedRevision$
 //-------------------------------------------------------------
 
 	function page_edit($message = '') {
-		global $step;
+		global $event,$step;
 
 		pagetop(gTxt('edit_pages'), $message);
 
@@ -64,6 +64,7 @@ $LastChangedRevision$
 		}
 
 		echo
+			'<div id="'.$event.'_container" class="txp-container txp-edit">'.
 			startTable('edit', '', 'edit-pane').
 			tr(
 				tda(
@@ -87,8 +88,7 @@ $LastChangedRevision$
 					'</div>'
 				, ' class="column"')
 			).
-
-			endTable();
+			endTable().'</div>';
 	}
 
 //-------------------------------------------------------------
