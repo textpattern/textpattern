@@ -84,13 +84,14 @@ $LastChangedRevision$
 		static $cache = array();
 
 		extract(lAtts(array(
-			'align'		=> '', // deprecated in 4.2.0
-			'class'		=> '',
-			'escape'	=> 'html',
+			'align'   => '', // deprecated in 4.2.0
+			'class'   => '',
+			'escape'  => 'html',
 			'html_id' => '',
-			'id'			=> '',
-			'name'		=> '',
-			'style'		=> '',
+			'id'      => '',
+			'name'    => '',
+			'size'    => '',
+			'style'   => '',
 			'wraptag' => '',
 		), $atts));
 
@@ -156,7 +157,14 @@ $LastChangedRevision$
 				$caption = htmlspecialchars($caption);
 			}
 
-			$out = '<img src="'.imagesrcurl($id, $ext).'" width="'.$w.'" height="'.$h.'" alt="'.$alt.'"'.
+			$dims = do_list($size);
+			$dims[1] = isset($dims[1]) ? $dims[1] : $dims[0];
+			$width = ($dims[0]=='') ? $w : $dims[0];
+			$height = ($dims[1] == '') ? $h : $dims[1];
+			$w_str = ($width) ? ' width="'.$width.'"' : '';
+			$h_str = ($height) ? ' height="'.$height.'"' : '';
+
+			$out = '<img src="'.imagesrcurl($id, $ext).'"' .$w_str.$h_str. ' alt="'.$alt.'"'.
 				($caption ? ' title="'.$caption.'"' : '').
 				( ($html_id and !$wraptag) ? ' id="'.$html_id.'"' : '' ).
 				( ($class and !$wraptag) ? ' class="'.$class.'"' : '' ).
@@ -2554,6 +2562,7 @@ $LastChangedRevision$
 			'escape'    => 'html',
 			'html_id'   => '',
 			'style'     => '',
+			'size'      => '',
 			'thumbnail' => 0,
 			'wraptag'   => '',
 		), $atts));
@@ -2577,6 +2586,13 @@ $LastChangedRevision$
 
 			if ($rs)
 			{
+				$dims = do_list($size);
+				$dims[1] = isset($dims[1]) ? $dims[1] : $dims[0];
+				$width = ($dims[0]=='') ? (($thumbnail) ? $rs['thumb_w'] : $rs['w']) : $dims[0];
+				$height = ($dims[1] == '') ? (($thumbnail) ? $rs['thumb_h'] : $rs['h']) : $dims[1];
+				$w_str = ($width) ? ' width="'.$width.'"' : '';
+				$h_str = ($height) ? ' height="'.$height.'"' : '';
+
 				if ($thumbnail)
 				{
 					if ($rs['thumbnail'])
@@ -2589,7 +2605,7 @@ $LastChangedRevision$
 							$caption = htmlspecialchars($caption);
 						}
 
-						$out = '<img src="'.imagesrcurl($id, $ext, true).'" alt="'.$alt.'"'.
+						$out = '<img src="'.imagesrcurl($id, $ext, true).'"' .$w_str.$h_str. ' alt="'.$alt.'"'.
 							($caption ? ' title="'.$caption.'"' : '').
 							( ($html_id and !$wraptag) ? ' id="'.$html_id.'"' : '' ).
 							( ($class and !$wraptag) ? ' class="'.$class.'"' : '' ).
@@ -2614,7 +2630,7 @@ $LastChangedRevision$
 						$caption = htmlspecialchars($caption);
 					}
 
-					$out = '<img src="'.imagesrcurl($id, $ext).'" width="'.$w.'" height="'.$h.'" alt="'.$alt.'"'.
+					$out = '<img src="'.imagesrcurl($id, $ext).'"' .$w_str.$h_str. ' alt="'.$alt.'"'.
 						($caption ? ' title="'.$caption.'"' : '').
 						( ($html_id and !$wraptag) ? ' id="'.$html_id.'"' : '' ).
 						( ($class and !$wraptag) ? ' class="'.$class.'"' : '' ).
