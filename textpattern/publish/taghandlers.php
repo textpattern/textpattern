@@ -90,7 +90,8 @@ $LastChangedRevision$
 			'html_id' => '',
 			'id'      => '',
 			'name'    => '',
-			'size'    => '',
+			'width'   => '',
+			'height'  => '',
 			'style'   => '',
 			'wraptag' => '',
 		), $atts));
@@ -157,19 +158,17 @@ $LastChangedRevision$
 				$caption = htmlspecialchars($caption);
 			}
 
-			$dims = do_list($size);
-			$dims[1] = isset($dims[1]) ? $dims[1] : $dims[0];
-			$width = ($dims[0]=='') ? $w : $dims[0];
-			$height = ($dims[1] == '') ? $h : $dims[1];
-			$w_str = ($width) ? ' width="'.$width.'"' : '';
-			$h_str = ($height) ? ' height="'.$height.'"' : '';
+			if ($width=='' && $w) $width = $w;
+			if ($height=='' && $h) $height = $h;
 
-			$out = '<img src="'.imagesrcurl($id, $ext).'"' .$w_str.$h_str. ' alt="'.$alt.'"'.
+			$out = '<img src="'.imagesrcurl($id, $ext).'" alt="'.$alt.'"'.
 				($caption ? ' title="'.$caption.'"' : '').
 				( ($html_id and !$wraptag) ? ' id="'.$html_id.'"' : '' ).
 				( ($class and !$wraptag) ? ' class="'.$class.'"' : '' ).
 				($style ? ' style="'.$style.'"' : '').
 				($align ? ' align="'.$align.'"' : '').
+				($width ? ' width="'.$width.'"' : '').
+				($height ? ' height="'.$height.'"' : '').
 				' />';
 
 			return ($wraptag) ? doTag($out, $wraptag, $class, '', $html_id) : $out;
@@ -2562,7 +2561,8 @@ $LastChangedRevision$
 			'escape'    => 'html',
 			'html_id'   => '',
 			'style'     => '',
-			'size'      => '',
+			'width'     => '',
+			'height'    => '',
 			'thumbnail' => 0,
 			'wraptag'   => '',
 		), $atts));
@@ -2586,12 +2586,8 @@ $LastChangedRevision$
 
 			if ($rs)
 			{
-				$dims = do_list($size);
-				$dims[1] = isset($dims[1]) ? $dims[1] : $dims[0];
-				$width = ($dims[0]=='') ? (($thumbnail) ? $rs['thumb_w'] : $rs['w']) : $dims[0];
-				$height = ($dims[1] == '') ? (($thumbnail) ? $rs['thumb_h'] : $rs['h']) : $dims[1];
-				$w_str = ($width) ? ' width="'.$width.'"' : '';
-				$h_str = ($height) ? ' height="'.$height.'"' : '';
+				$width = ($width=='') ? (($thumbnail) ? $rs['thumb_w'] : $rs['w']) : $width;
+				$height = ($height=='') ? (($thumbnail) ? $rs['thumb_h'] : $rs['h']) : $height;
 
 				if ($thumbnail)
 				{
@@ -2605,12 +2601,14 @@ $LastChangedRevision$
 							$caption = htmlspecialchars($caption);
 						}
 
-						$out = '<img src="'.imagesrcurl($id, $ext, true).'"' .$w_str.$h_str. ' alt="'.$alt.'"'.
+						$out = '<img src="'.imagesrcurl($id, $ext, true).'" alt="'.$alt.'"'.
 							($caption ? ' title="'.$caption.'"' : '').
 							( ($html_id and !$wraptag) ? ' id="'.$html_id.'"' : '' ).
 							( ($class and !$wraptag) ? ' class="'.$class.'"' : '' ).
 							($style ? ' style="'.$style.'"' : '').
 							($align ? ' align="'.$align.'"' : '').
+							($width ? ' width="'.$width.'"' : '').
+							($height ? ' height="'.$height.'"' : '').
 							' />';
 					}
 
@@ -2630,12 +2628,14 @@ $LastChangedRevision$
 						$caption = htmlspecialchars($caption);
 					}
 
-					$out = '<img src="'.imagesrcurl($id, $ext).'"' .$w_str.$h_str. ' alt="'.$alt.'"'.
+					$out = '<img src="'.imagesrcurl($id, $ext).'" alt="'.$alt.'"'.
 						($caption ? ' title="'.$caption.'"' : '').
 						( ($html_id and !$wraptag) ? ' id="'.$html_id.'"' : '' ).
 						( ($class and !$wraptag) ? ' class="'.$class.'"' : '' ).
 						($style ? ' style="'.$style.'"' : '').
 						($align ? ' align="'.$align.'"' : '').
+						($width ? ' width="'.$width.'"' : '').
+						($height ? ' height="'.$height.'"' : '').
 						' />';
 				}
 			}
@@ -2654,6 +2654,8 @@ $LastChangedRevision$
 				( ($class and !$wraptag) ? ' class="'.$class.'"' : '' ).
 				($style ? ' style="'.$style.'"' : '').
 				($align ? ' align="'.$align.'"' : '').
+				($width ? ' width="'.$width.'"' : '').
+				($height ? ' height="'.$height.'"' : '').
 				' />';
 		}
 
