@@ -37,14 +37,14 @@ $LastChangedRevision$
 
 		extract(gpsa(array('name', 'newname', 'copy', 'savenew')));
 
-		if (!$name or $step == 'page_delete')
+		if ($step == 'page_delete' || empty($name) && $step != 'page_new' && !$savenew)
 		{
 			$name = safe_field('page', 'txp_section', "name = 'default'");
 		}
-
-		$name = ( ( $copy || $savenew ) && trim(preg_replace('/[<>&"\']/', '', $newname)) ) ? $newname : $name;
-
-		$name = ( $step == 'page_new' ) ? '' : $name;
+		elseif( ( $copy || $savenew ) && trim(preg_replace('/[<>&"\']/', '', $newname)) )
+		{
+			$name = $newname;
+		}
 
 		// Format of each entry is popTagLink -> array ( gTxt() string, class/ID)
 		$tagbuild_items = array(
@@ -98,10 +98,10 @@ $LastChangedRevision$
 		if ($name) {
 			$html = safe_field('user_html','txp_page',"name='".doSlash($name)."'");
 		} else {
-			$html = '';
+			$html = gps('html');
 		}
 
-		if ($step=='page_new')
+		if (empty($name))
 		{
 			$buttons = '<div class="edit-title">'.
 			gTxt('name_for_this_page').': '
@@ -119,7 +119,7 @@ $LastChangedRevision$
 					n.sInput('page_save').
 					n.hInput('name',$name);
 
-		if ($step != 'page_new') {
+		if (!empty($name)) {
 			$out[] =
 				n.'<label for="copy-page">'.gTxt('copy_page_as').'</label>'.sp.
 				n.fInput('text', 'newname', '', 'edit', '', '', '', '', 'copy-page').
@@ -195,6 +195,10 @@ $LastChangedRevision$
 			if ($newname and safe_field('name', 'txp_page', "name = '$newname'"))
 			{
 				$message = array(gTxt('page_already_exists', array('{name}' => $newname)), E_ERROR);
+				if ($savenew)
+				{
+					$_POST['newname'] = '';
+				}
 			}
 			elseif ($newname)
 			{

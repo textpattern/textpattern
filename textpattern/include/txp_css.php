@@ -57,30 +57,33 @@ $LastChangedRevision$
 	function css_edit_raw() {
 		global $event, $step;
 
-		$name = gps('name');
-
 		$default_name = safe_field('css', 'txp_section', "name = 'default'");
+		extract(gpsa(array('name', 'newname', 'copy', 'savenew')));
 
-		$name = (!$name or $step == 'css_delete') ? $default_name : $name;
+		if ($step == 'css_delete' || empty($name) && $step != 'pour' && !$savenew)
+		{
+			$name = $default_name;
+		}
+		elseif (($copy || $savenew) && trim(preg_replace('/[<>&"\']/', '', $newname)) )
+		{
+			$name = $newname;
+		}
 
-		if ((gps('copy') || gps('savenew')) && trim(preg_replace('/[<>&"\']/', '', gps('newname'))) )
-			$name = gps('newname');
-
-		if ($step=='pour')
+		if (empty($name))
 		{
 			$buttons = '<div class="edit-title">'.
 			gTxt('name_for_this_style').': '
 			.fInput('text','newname','','edit','','',20).
 			hInput('savenew','savenew').
 			'</div>';
-			$thecss = '';
+			$thecss = gps('css');
 
 		} else {
 			$buttons = '<div class="edit-title">'.gTxt('you_are_editing_css').sp.strong(htmlspecialchars($name)).'</div>';
 			$thecss = fetch("css",'txp_css','name',$name);
 		}
 
-		if ($step!='pour') {
+		if (!empty($name)) {
 			$copy = '<div class="copy-as">'.gTxt('copy_css_as').sp.fInput('text', 'newname', '', 'edit').sp.
 				fInput('submit', 'copy', gTxt('copy'), 'smallerbox').'</div>';
 		} else {
@@ -144,7 +147,11 @@ $LastChangedRevision$
 
 			if ($newname and safe_field('name', 'txp_css', "name = '$newname'"))
 			{
-				$message = gTxt('css_already_exists', array('{name}' => $newname));
+				$message = gTxt('css_already_exists', array('{name}' => $newname), E_ERROR);
+				if ($savenew)
+				{
+					$_POST['newname'] = '';
+				}
 			}
 
 			elseif ($newname)
