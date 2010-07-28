@@ -71,8 +71,6 @@ $LastChangedRevision$
 		'/publish/rss.php',
 		'/publish/search.php',
 		'/publish/taghandlers.php',
-		'/../rpc/index.php',
-		'/../rpc/TXP_RPCServer.php',
 		'/textpattern.js',
 		'/theme/classic/classic.php',
 		'/update/_to_1.0.0.php',
@@ -86,6 +84,13 @@ $LastChangedRevision$
 		'/update/_to_4.2.0.php',
 		'/update/_update.php'
 	);
+
+	$files_rpc = array(
+		'/../rpc/index.php',
+		'/../rpc/TXP_RPCServer.php',
+	);
+
+	if ($prefs['enable_xmlrpc_server']) $files = array_merge($files, $files_rpc);
 
 	if ($event == 'diag') {
 		require_privs('diag');
