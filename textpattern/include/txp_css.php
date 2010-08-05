@@ -84,8 +84,8 @@ $LastChangedRevision$
 		}
 
 		if (!empty($name)) {
-			$copy = '<div class="copy-as">'.gTxt('copy_css_as').sp.fInput('text', 'newname', '', 'edit').sp.
-				fInput('submit', 'copy', gTxt('copy'), 'smallerbox').'</div>';
+			$copy = '<span class="copy-as"><label for="copy-css">'.gTxt('copy_css_as').'</label>'.sp.fInput('text', 'newname', '', 'edit', '', '', '', '', 'copy-css').sp.
+				fInput('submit', 'copy', gTxt('copy'), 'smallerbox').'</span>';
 		} else {
 			$copy = '';
 		}

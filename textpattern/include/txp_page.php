@@ -121,10 +121,11 @@ $LastChangedRevision$
 
 		if (!empty($name)) {
 			$out[] =
-				n.'<label for="copy-page">'.gTxt('copy_page_as').'</label>'.sp.
+				n.'<span class="copy-as"><label for="copy-page">'.gTxt('copy_page_as').'</label>'.sp.
 				n.fInput('text', 'newname', '', 'edit', '', '', '', '', 'copy-page').
-				n.fInput('submit','copy',gTxt('copy'),'smallerbox').'</div>';
+				n.fInput('submit','copy',gTxt('copy'),'smallerbox').'</span>';
 		}
+		$out[] = '</div>';
 
 		return form(join('',$out), '', '', 'post', '', '', 'page_form');
 	}
