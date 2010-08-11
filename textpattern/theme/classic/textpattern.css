@@ -47,13 +47,11 @@ font: 1em Verdana, Arial, sans-serif;
 }
 
 .lever {
-padding-left: 10px;
-background: #fff url(plus_minus.jpg) no-repeat 0 5px;
+background: #fff url(plus_minus.gif) no-repeat 0 5px;
 }
 
 .expanded {
-padding-left: 10px;
-background: #fff url(plus_minus.jpg) no-repeat 0 -12px;
+background: #fff url(plus_minus.gif) no-repeat 0 -92px;
 }
 
 p {
@@ -542,6 +540,14 @@ width: 20px;
 td#article-col-2 {
 padding-left: 10px;
 width: 200px;
+}
+
+#article-col-1 h3,
+#article-col-2 h3,
+#tagbuild_links h3,
+#content_switcher h3,
+.lever {
+padding-left: 10px;
 }
 
 td#article-col-2 fieldset {

@@ -117,13 +117,19 @@ text-align: center;
 margin: 4em 0 0;
 }
 
+#article-col-1 h3,
+#tagbuild_links h3,
+#content_switcher h3,
+#article-col-2 h3,
 .lever {
 padding-left: 0;
+}
+
+.lever {
 background: none;
 }
 
 .expanded {
-padding-left: 0;
 background: none;
 }
 
@@ -140,4 +146,3 @@ background: transparent url(../../txp_img/expandcollapse.gif) no-repeat right 5p
 background: #eee none;
 padding: 0 2px;
 }
-
