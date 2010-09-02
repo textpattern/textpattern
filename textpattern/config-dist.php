@@ -47,8 +47,9 @@
 
 	/**
 	 *  optional, advanced: http address of the site serving images
+	 *  @see http://forum.textpattern.com/viewtopic.php?id=34493
 	 */
 
-	# define('ihu', 'http://static.example.com/images/')
+	# define('ihu', 'http://static.example.com/');
 
 ?>
