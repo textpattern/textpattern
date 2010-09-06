@@ -287,7 +287,7 @@ $LastChangedRevision$
 	function form_save_pane_state()
 	{
 		global $event;
-		$panes = array('article', 'comment', 'file', 'link', 'misc', 'article-tags', 'link-tags', 'comment-tags', 'comment-detail-tags', 'comment-form-tags', 'search-result-tags', 'file-tags', 'category-tags', 'section-tags');
+		$panes = array('article', 'category', 'comment', 'file', 'link', 'misc', 'section', 'article-tags', 'link-tags', 'comment-tags', 'comment-detail-tags', 'comment-form-tags', 'search-result-tags', 'file-tags', 'category-tags', 'section-tags');
 		$pane = gps('pane');
 		if (in_array($pane, $panes))
 		{

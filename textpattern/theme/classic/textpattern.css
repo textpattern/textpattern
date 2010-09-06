@@ -47,11 +47,15 @@ font: 1em Verdana, Arial, sans-serif;
 }
 
 .lever {
-background: #fff url(plus_minus.gif) no-repeat 0 5px;
+background: #fff url(expand_collapse.gif) no-repeat 0 4px;
+}
+
+.lever:hover {
+background-position: 0 -91px;
 }
 
 .expanded {
-background: #fff url(plus_minus.gif) no-repeat 0 -92px;
+background: #fff url(expand_collapse.gif) no-repeat 0 -91px;
 }
 
 p {
