@@ -1827,9 +1827,19 @@ $LastChangedRevision$
 	}
 
 //-------------------------------------------------------------
-	function get_pref($thing, $default='') // checks $prefs for a named variable, or creates a default
+	function get_pref($thing, $default='', $from_db=0) // checks $prefs for a named variable, or creates a default
 	{
 		global $prefs;
+
+		if ($from_db)
+		{
+			$name = doSlash($thing);
+			$exists = getCount('txp_prefs', "name='$name'");
+			if ($exists)
+			{
+				$prefs[$thing] = safe_field('val', 'txp_prefs', "name='$name'");
+			}
+		}
 		return (isset($prefs[$thing])) ? $prefs[$thing] : $default;
 	}
 
