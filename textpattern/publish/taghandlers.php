@@ -724,6 +724,15 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
+	function link_format_info($link)
+	{
+		if (($unix_ts = @strtotime($link['date'])) > 0)
+			$link['date'] = $unix_ts;
+
+		return $link;
+	}
+
+// -------------------------------------------------------------
 	function eE($txt) // convert email address into unicode entities
 	{
 		for ($i=0;$i<strlen($txt);$i++) {

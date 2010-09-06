@@ -956,7 +956,7 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 // Keep all the article tag-related values in one place,
-// in order to do easy bugfix and easily the addition of
+// in order to do easy bugfix and ease the addition of
 // new article tags.
 	function populateArticleData($rs)
 	{
@@ -967,7 +967,7 @@ $LastChangedRevision$
 		$thisarticle['thisid']          = $ID;
 		$thisarticle['posted']          = $uPosted;
 		$thisarticle['expires']         = $uExpires;
-		$thisarticle['modified']		= $uLastMod;
+		$thisarticle['modified']        = $uLastMod;
 		$thisarticle['annotate']        = $Annotate;
 		$thisarticle['comments_invite'] = $AnnotateInvite;
 		$thisarticle['authorid']        = $AuthorID;
@@ -990,6 +990,17 @@ $LastChangedRevision$
 				$thisarticle[$name] = $rs['custom_' . $i];
 		}
 
+	}
+
+// -------------------------------------------------------------
+// Convenience for those who prefer "SELECT * FROM textpattern"
+	function article_format_info($rs)
+	{
+		$rs['uPosted'] = (($unix_ts = @strtotime($rs['Posted'])) > 0) ? $unix_ts : NULLDATETIME;
+		$rs['uLastMod'] = (($unix_ts = @strtotime($rs['LastMod'])) > 0) ? $unix_ts : NULLDATETIME;
+		$rs['uExpires'] = (($unix_ts = @strtotime($rs['Expires'])) > 0) ? $unix_ts : NULLDATETIME;
+
+		populateArticleData($rs);
 	}
 
 // -------------------------------------------------------------
