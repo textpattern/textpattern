@@ -230,4 +230,12 @@ $txp_permissions = array(
 	'tag'                         => '1,2,3,4,5,6',
 );
 
-?>
+$txp_groups = array(
+	1 => 'publisher',
+	2 => 'managing_editor',
+	3 => 'copy_editor',
+	4 => 'staff_writer',
+	5 => 'freelancer',
+	6 => 'designer',
+	0 => 'none'
+);

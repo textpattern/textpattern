@@ -317,6 +317,13 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
+	function get_groups()
+	{
+		global $txp_groups;
+		return doArray($txp_groups, 'gTxt');
+	}
+
+// -------------------------------------------------------------
 	function sizeImage($name)
 	{
 		$size = @getimagesize($name);

@@ -19,15 +19,7 @@ $LastChangedRevision$
 		die('txpinterface is undefined.');
 	}
 
-	$levels = array(
-		1 => gTxt('publisher'),
-		2 => gTxt('managing_editor'),
-		3 => gTxt('copy_editor'),
-		4 => gTxt('staff_writer'),
-		5 => gTxt('freelancer'),
-		6 => gTxt('designer'),
-		0 => gTxt('none')
-	);
+	$levels = get_groups();
 
 	if ($event == 'admin')
 	{
