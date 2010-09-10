@@ -170,42 +170,32 @@ class theme
 
 		// use legacy areas() for b/c
 		$areas = areas();
-
-		$tabs = array(
-			'content' => array(
-				'label' => gTxt('tab_content'),
-				'event' => 'article'
-				),
-			'presentation' => array(
-				'label' => gTxt('tab_presentation'),
-				'event' => 'page'
-				),
-			'admin' => array(
-				'label' => gTxt('tab_admin'),
-				'event' => 'admin'
-				),
+		$defaults = array(
+				'content' => 'article',
+				'presentation' => 'page',
+				'admin' => 'admin'
 		);
+
+		if(empty($areas['start']))
+		{
+			unset($areas['start']);
+		}
 
 		if(empty($areas['extensions']))
 		{
 			unset($areas['extensions']);
 		}
-		else
-		{
-			$tabs = $tabs +
-				array('extensions' => array(
-					'label' => gTxt('tab_extensions'),
-					'event' => reset($areas['extensions'])
-				));
-		}
 
 		foreach ($areas as $ar => $items)
 		{
+			$l_ = gTxt('tab_'.$ar);
+			$e_ = (array_key_exists($ar,$defaults)) ? $defaults[$ar] : reset($areas[$ar]);
+
 			if (has_privs('tab.'.$ar))
 			{
 				$this->menu[$ar] = array(
-					'label' => $tabs[$ar]['label'],
-					'event' => $tabs[$ar]['event'],
+					'label' => $l_,
+					'event' => $e_,
 					'active' => ($ar == $area)
 				);
 

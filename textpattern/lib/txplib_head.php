@@ -230,6 +230,9 @@ $LastChangedRevision$
 	{
 		global $privs, $plugin_areas;
 
+		$areas['start'] = array(
+		);
+
 		$areas['content'] = array(
 			gTxt('tab_organise') => 'category',
 			gTxt('tab_write')    => 'article',
