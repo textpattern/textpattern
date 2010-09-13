@@ -2102,12 +2102,16 @@ $LastChangedRevision$
 
 		if ($link)
 		{
-			$web      = str_replace('http://', '', $web);
+			if (!preg_match('|^https?://|', $web))
+			{
+				$web = 'http://'.$web;
+			}
+
 			$nofollow = (@$comment_nofollow ? ' rel="nofollow"' : '');
 
-			if ($web)
+			if (preg_match('|^https?://\S|', $web))
 			{
-				return '<a href="http://'.htmlspecialchars($web).'"'.$nofollow.'>'.$name.'</a>';
+				return '<a href="'.htmlspecialchars($web).'"'.$nofollow.'>'.$name.'</a>';
 			}
 
 			if ($email && !$never_display_email)
