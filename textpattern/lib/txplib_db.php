@@ -11,9 +11,13 @@ if (!defined('PFX')) {
 	} else define ("PFX",'');
 }
 
-if (get_magic_quotes_runtime())
+if (version_compare(PHP_VERSION, '5.3.0') < 0)
 {
-	set_magic_quotes_runtime(0);
+	 // We are deliberately using a deprecated function for PHP 4 compatibility
+	 if (get_magic_quotes_runtime())
+	{
+		set_magic_quotes_runtime(0);
+	}
 }
 
 class DB {
