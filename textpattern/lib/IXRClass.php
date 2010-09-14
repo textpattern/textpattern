@@ -38,13 +38,12 @@
  * @link       http://scripts.incutio.com/xmlrpc/ Site/manual
  */
 
-/**
- * Contains Textpatternish amendments.
- *
- * $HeadURL$
- * $LastChangedRevision$
- *
- */
+/*
+Contains Textpatternish amendments.
+
+$HeadURL$
+$LastChangedRevision$
+*/
 
 class IXR_Value
 {
