@@ -466,7 +466,7 @@ EOD;
 
     function output($xml)
     {
-        $xml = '<?xml version="1.0"?>'."\n".$xml;
+        $xml = '<?xml version="1.0" encoding="utf-8"?>'."\n".$xml;
 		if ( (@strpos($_SERVER["HTTP_ACCEPT_ENCODING"],'gzip') !== false) && extension_loaded('zlib') &&
 			ini_get("zlib.output_compression") == 0 && ini_get('output_handler') != 'ob_gzhandler' && !headers_sent())
 		{
