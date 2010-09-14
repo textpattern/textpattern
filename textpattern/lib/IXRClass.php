@@ -38,6 +38,13 @@
  * @link       http://scripts.incutio.com/xmlrpc/ Site/manual
  */
 
+/**
+ * Contains Textpatternish amendments.
+ *
+ * $HeadURL$
+ * $LastChangedRevision$
+ *
+ */
 
 class IXR_Value
 {
@@ -460,6 +467,12 @@ EOD;
     function output($xml)
     {
         $xml = '<?xml version="1.0"?>'."\n".$xml;
+		if ( (@strpos($_SERVER["HTTP_ACCEPT_ENCODING"],'gzip') !== false) && extension_loaded('zlib') &&
+			ini_get("zlib.output_compression") == 0 && ini_get('output_handler') != 'ob_gzhandler' && !headers_sent())
+		{
+			$xml = gzencode($xml,7,FORCE_GZIP);
+			header("Content-Encoding: gzip");
+		}
         $length = strlen($xml);
         header('Connection: close');
         header('Content-Length: '.$length);
@@ -601,7 +614,7 @@ class IXR_Client
     // Storage place for an error message
     var $error = false;
 
-    function IXR_Client($server, $path = false, $port = 80, $timeout = 15)
+    function IXR_Client($server, $path = false, $port = 80, $timeout = 45)
     {
         if (!$path) {
             // Assume we have been given a URL instead
@@ -639,6 +652,10 @@ class IXR_Client
         $this->headers['User-Agent']    = $this->useragent;
         $this->headers['Content-Length']= $length;
 
+		// Accept gzipped response if zlib and if php4.3+ (fgets turned binary safe)
+		if ( extension_loaded('zlib') && preg_match('#^(4\.[3-9])|([5-9])#',phpversion()) )
+        	$this->headers['Accept-Encoding']    = 'gzip';
+
         foreach( $this->headers as $header => $value ) {
             $request .= "{$header}: {$value}{$r}";
         }
@@ -652,12 +669,12 @@ class IXR_Client
         }
 
         if ($this->timeout) {
-            $fp = @fsockopen($this->server, $this->port, $errno, $errstr, $this->timeout);
+	        $fp = (!is_disabled('fsockopen')) ? fsockopen($this->server, $this->port, $errno, $errstr, $this->timeout) : false;
         } else {
-            $fp = @fsockopen($this->server, $this->port, $errno, $errstr);
+        	$fp = (!is_disabled('fsockopen')) ? fsockopen($this->server, $this->port, $errno, $errstr) : false;
         }
         if (!$fp) {
-            $this->error = new IXR_Error(-32300, 'transport error - could not open socket');
+            $this->error = new IXR_Error(-32300, 'transport error - could not open socket ('.$errstr.')');
             return false;
         }
         fputs($fp, $request);
@@ -665,6 +682,7 @@ class IXR_Client
         $debugContents = '';
         $gotFirstLine = false;
         $gettingHeaders = true;
+		$is_gzipped = false;
         while (!feof($fp)) {
             $line = fgets($fp, 4096);
             if (!$gotFirstLine) {
@@ -675,10 +693,15 @@ class IXR_Client
                 }
                 $gotFirstLine = true;
             }
-            if (trim($line) == '') {
+            if ($gettingHeaders && trim($line) == '') {
                 $gettingHeaders = false;
+				continue;
             }
             if (!$gettingHeaders) {
+		        // We do a binary comparison of the first two bytes, see
+		        // rfc1952, to check wether the content is gzipped.
+				if ( ($contents=='') && (strncmp($line,"\x1F\x8B",2)===0))
+					$is_gzipped = true;
             	// merged from WP #12559 - remove trim
                 $contents .= $line;
             }
@@ -686,6 +709,13 @@ class IXR_Client
             	$debugContents .= $line;
             }
         }
+		// if gzipped, strip the 10 byte header, and pass it to gzinflate (rfc1952)
+		if ($is_gzipped)
+		{
+			$contents = gzinflate(substr($contents, 10));
+			//simulate trim() for each line; don't know why, but it won't work otherwise
+			$contents = preg_replace('#^[\x20\x09\x0A\x0D\x00\x0B]*(.*)[\x20\x09\x0A\x0D\x00\x0B]*$#m','\\1',$contents);
+		}
         if ($this->debug) {
             echo '<pre class="ixr_response">'.htmlspecialchars($debugContents)."\n</pre>\n\n";
         }
