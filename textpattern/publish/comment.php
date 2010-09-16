@@ -482,7 +482,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function checkNonce($nonce)
 	{
-		if (!$nonce && !preg_match('#^[a-zA-Z0-9]*$#',$nonce))
+		if (!$nonce || !preg_match('#^[a-zA-Z0-9]*$#',$nonce))
 			return false;
 			// delete expired nonces
 		safe_delete("txp_discuss_nonce", "issue_time < date_sub(now(),interval 10 minute)");
