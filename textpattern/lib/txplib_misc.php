@@ -1962,8 +1962,16 @@ eod;
 	{
 		$qs = array();
 		foreach ($q as $k=>$v)
+		{
+			if (is_array($v))
+			{
+				$v = join(',', $v);
+			}
 			if ($v)
+			{
 				$qs[] = urlencode($k) . '=' . urlencode($v);
+			}
+		}
 
 		$str = join('&amp;', $qs);
 		return ($str ? '?'.$str : '');
