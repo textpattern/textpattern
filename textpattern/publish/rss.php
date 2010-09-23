@@ -20,13 +20,31 @@ $LastChangedRevision$
 		ob_clean();
 		extract($prefs);
 
-		extract(doSlash(gpsa(array('category','section','limit','area'))));
+		extract(doSlash(gpsa(array('limit','area'))));
 
-		$sitename .= ($section) ? ' - '.fetch_section_title($section) : '';
-		$sitename .= ($category) ? ' - '.fetch_category_title($category) : '';
+		// build filter criteria from a comma-separated list of sections and categories
+		$feed_filter_limit = get_pref('feed_filter_limit', 10);
+		$section = gps('section');
+		$section = ($section ? array_slice(array_unique(do_list($section)), 0, $feed_filter_limit) : array());
+		$category = gps('category');
+		$category = ($category ? array_slice(array_unique(do_list($category)), 0, $feed_filter_limit) : array());
+		$st = array();
+		foreach ($section as $s)
+		{
+			$st[] = fetch_section_title($s);
+		}
+		$ct = array();
+		foreach ($category as $c)
+		{
+			$ct[] = fetch_category_title($c);
+		}
+
+		$sitename .= ($section) ? ' - '.join(' - ', $st) : '';
+		$sitename .= ($category) ? ' - '.join(' - ', $ct) : '';
 		$dn = explode('/',$siteurl);
 		$mail_or_domain = ($use_mail_on_feeds_id)? eE($blog_mail_uid):$dn[0];
 
+		// feed header
 		$out[] = tag('http://textpattern.com/?v='.$version, 'generator');
 		$out[] = tag(doSpecial($sitename),'title');
 		$out[] = tag(hu,'link');
@@ -36,13 +54,15 @@ $LastChangedRevision$
 		$out[] = tag(safe_strftime('rfc822',$last),'pubDate');
 		$out[] = callback_event('rss_head');
 
+		// feed items
 		$articles = array();
+		$section = doSlash($section);
+		$category = doSlash($category);
 
 		if (!$area or $area=='article') {
 
-			$sfilter = ($section) ? "and Section = '".$section."'" : '';
-			$cfilter = ($category)
-				? "and (Category1='".$category."' or Category2='".$category."')":'';
+			$sfilter = (!empty($section)) ? "and Section in ('".join("','", $section)."')" : '';
+			$cfilter = (!empty($category))? "and (Category1 in ('".join("','", $category)."') or Category2 in ('".join("','", $category)."'))" : '';
 			$limit = ($limit) ? $limit : $rss_how_many;
 			$limit = intval(min($limit,max(100,$rss_how_many)));
 
@@ -132,7 +152,7 @@ $LastChangedRevision$
 
 		if (!$articles) {
 			if ($section) {
-				if (safe_field('name', 'txp_section', "name = '$section'") == false) {
+				if (safe_field('name', 'txp_section', "name in ('".join("','", $section)."')") == false) {
 					txp_die(gTxt('404_not_found'), '404');
 				}
 			} elseif ($category) {
@@ -145,7 +165,7 @@ $LastChangedRevision$
 
 					case 'article':
 					default:
-							if (safe_field('id', 'txp_category', "name = '$category' and type = 'article'") == false) {
+							if (safe_field('id', 'txp_category', "name in ('".join("','", $category)."') and type = 'article'") == false) {
 								txp_die(gTxt('404_not_found'), '404');
 							}
 					break;

@@ -27,30 +27,45 @@ $LastChangedRevision$
 		define("r_relalt",' rel="alternate"');
 		define("r_relself",' rel="self"');
 
-		extract(doSlash(gpsa(array('category','section','limit','area'))));
-
 		$last = fetch('unix_timestamp(val)','txp_prefs','name','lastmod');
 
-		$sitename .= ($section) ? ' - '.fetch_section_title($section) : '';
-		$sitename .= ($category) ? ' - '.fetch_category_title($category) : '';
+		extract(doSlash(gpsa(array('limit','area'))));
+
+		// build filter criteria from a comma-separated list of sections and categories
+		$feed_filter_limit = get_pref('feed_filter_limit', 10);
+		$section = gps('section');
+		$section = ($section ? array_slice(array_unique(do_list($section)), 0, $feed_filter_limit) : array());
+		$category = gps('category');
+		$category = ($category ? array_slice(array_unique(do_list($category)), 0, $feed_filter_limit) : array());
+		$st = array();
+		foreach ($section as $s)
+		{
+			$st[] = fetch_section_title($s);
+		}
+		$ct = array();
+		foreach ($category as $c)
+		{
+			$ct[] = fetch_category_title($c);
+		}
+
+		$sitename .= ($section) ? ' - '.join(' - ', $st) : '';
+		$sitename .= ($category) ? ' - '.join(' - ', $ct) : '';
 
 		$pub = safe_row("RealName, email", "txp_users", "privs=1");
 
+		// feed header
 		$out[] = tag(htmlspecialchars($sitename),'title',t_text);
 		$out[] = tag(htmlspecialchars($site_slogan),'subtitle',t_text);
 		$out[] = '<link'.r_relself.' href="'.pagelinkurl(array('atom'=>1,'area'=>$area,'section'=>$section,'category'=>$category,'limit'=>$limit)).'" />';
 		$out[] = '<link'.r_relalt.t_texthtml.' href="'.hu.'" />';
-		$articles = array();
 
 		//Atom feeds with mail or domain name
 		$dn = explode('/',$siteurl);
 		$mail_or_domain = ($use_mail_on_feeds_id)? eE($blog_mail_uid):$dn[0];
-		$out[] = tag('tag:'.$mail_or_domain.','.$blog_time_uid.':'.$blog_uid.(($section)? '/'.$section:'').(($category)? '/'.$category:''),'id');
+		$out[] = tag('tag:'.$mail_or_domain.','.$blog_time_uid.':'.$blog_uid.(($section)? '/'.join(',', $section):'').(($category)? '/'.join(',',$category):''),'id');
 
-		$out[] = tag('Textpattern','generator',
-			' uri="http://textpattern.com/" version="'.$version.'"');
+		$out[] = tag('Textpattern','generator',' uri="http://textpattern.com/" version="'.$version.'"');
 		$out[] = tag(safe_strftime("w3cdtf",$last),'updated');
-
 
 		$auth[] = tag($pub['RealName'],'name');
 		$auth[] = ($include_email_atom) ? tag(eE($pub['email']),'email') : '';
@@ -59,11 +74,15 @@ $LastChangedRevision$
 		$out[] = tag(n.t.t.join(n.t.t,$auth).n,'author');
 		$out[] = callback_event('atom_head');
 
+		// feed items
+		$articles = array();
+		$section = doSlash($section);
+		$category = doSlash($category);
+
 		if (!$area or $area=='article') {
 
-			$sfilter = ($section) ? "and Section = '".$section."'" : '';
-			$cfilter = ($category)
-				? "and (Category1='".$category."' or Category2='".$category."')":'';
+			$sfilter = (!empty($section)) ? "and Section in ('".join("','", $section)."')" : '';
+			$cfilter = (!empty($category))? "and (Category1 in ('".join("','", $category)."') or Category2 in ('".join("','", $category)."'))" : '';
 			$limit = ($limit) ? $limit : $rss_how_many;
 			$limit = intval(min($limit,max(100,$rss_how_many)));
 
@@ -173,7 +192,7 @@ $LastChangedRevision$
 
 		if (!$articles) {
 			if ($section) {
-				if (safe_field('name', 'txp_section', "name = '$section'") == false) {
+				if (safe_field('name', 'txp_section', "name in ('".join("','", $section)."')") == false) {
 					txp_die(gTxt('404_not_found'), '404');
 				}
 			} elseif ($category) {
@@ -186,7 +205,7 @@ $LastChangedRevision$
 
 					case 'article':
 					default:
-							if (safe_field('id', 'txp_category', "name = '$category' and type = 'article'") == false) {
+							if (safe_field('id', 'txp_category', "name in ('".join("','", $category)."') and type = 'article'") == false) {
 								txp_die(gTxt('404_not_found'), '404');
 							}
 					break;
