@@ -82,7 +82,8 @@ $LastChangedRevision$
 		'/update/_to_4.0.7.php',
 		'/update/_to_4.0.8.php',
 		'/update/_to_4.2.0.php',
-		'/update/_update.php'
+		'/update/_to_4.3.0.php',
+	'/update/_update.php'
 	);
 
 	$files_rpc = array(
