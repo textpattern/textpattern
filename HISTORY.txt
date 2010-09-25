@@ -1,3 +1,28 @@
+Changes in 4.3.0
+
+* New Textpattern logo by courtesy of Philipp Schilling (belipe, http://www.psgd.de). Happy retirement to The Carver!
+* Feature: Optional alternate URL for static image resources. Defined in constant "ihu".
+* New tags: <txp:image_list />, <txp:image_info />, <txp:image_url />, <txp:image_size />, <txp:image_date />, <txp:if_thumbnail />
+* New tags: <txp:link_author />, <txp:image_author />, <txp:image_author />, <txp:file_download_author />.
+* Changed: Verbose semantic admin-side markup.
+* Changed: Explicit "Create new $thing" button for pages and styles.
+* Changed: <txp:image /> and  <txp:article_image /> accept "width" and/or "height" attribute.
+* Changed: <txp:search_input /> accepts a "match" attribute. Possible values: "exact", "any" or "all" (default).
+* Changed: <txp:css /> accepts a "name" attribute. Attribute "n" is deprecated.
+* Changed: <txp:image_index /> accepts a "category" attribute. Attribute "c" is deprecated.
+* Changed: <txp:breadcrumb /> accepts a "separator" attribute. Attribute "sep" is deprecated.
+* Changed: <txp:if_custom_field /> accepts a "value" attribute. Attribute "val" is deprecated.
+* Changed: <txp:feed_link /> accepts a "class" attribute.
+* Changed: Use percent-encoding in URLs as a RFC-1738-compliant fallback for languages lacking a suitable transliteration array.
+* Changed: Silence E_STRICT warnings in "live" production mode.
+* Removed: "Friendly" CSS editor.
+* Developer: pluggable_ui() in the images tab.
+* Developer: Style sheets are stored as plain text in the database - no more base64-encoding.
+* Developer: Textpacks, a method to install i18n strings from uploaded text files and from plugins.
+* Textile 2.2 adds support for definition lists, thead, tbody, tfoot, table summary, table caption, table colgroup, glyphs for fractions, degrees and plusminus et cetera.
+* jQuery 1.4.2
+* Incutio XML-RPC Library 1.7.4
+
 Changes in 4.2.0
 
 * Feature: Extendable admin-side themes. "Classic" and "Remora" theme contained in the core package, user-contributed themes available from http://textgarden.org/layouts/?c=txp-admin
