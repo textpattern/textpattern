@@ -5,6 +5,7 @@ Changes in 4.3.0
 * Feature: /category and /author lists for all content types, with conditionals and pagination
 * Feature: Optional top-level 'Start' tab for dashboard plugins
 * Feature: File titles
+* Feature: Multiple categories/sections in feeds via http://example.com/rss/?category=foo,bar&section=baz,omg and http://example.com/atom/?category=foo,bar&section=baz,omg)
 * New tags: <txp:image_list />, <txp:image_info />, <txp:image_url />, <txp:image_date />, <txp:if_thumbnail />.
 * New tags: <txp:link_author />, <txp:image_author />, <txp:file_download_author />.
 * Changed: Verbose semantic admin-side markup.
