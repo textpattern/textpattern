@@ -125,7 +125,7 @@ $LastChangedRevision$
 
 		if(isset($textarray[strtolower($var)])) {
 			$out = $textarray[strtolower($var)];
-			return strtr($out, $atts);
+			if ($out !== '') return strtr($out, $atts);
 		}
 
 		if ($atts)
