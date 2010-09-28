@@ -534,7 +534,7 @@ $LastChangedRevision$
 		if ($prefs['allow_page_php_scripting']) $html = evalString($html);
 
 		// make sure the page has an article tag if necessary
-		if (!$has_article_tag and $production_status != 'live' and (!empty($pretext['id']) or !empty($pretext['c']) or !empty($pretext['q']) or !empty($pretext['pg'])))
+		if (!$has_article_tag and $production_status != 'live' and $pretext['context']=='article' and (!empty($pretext['id']) or !empty($pretext['c']) or !empty($pretext['q']) or !empty($pretext['pg'])))
 			trigger_error(gTxt('missing_article_tag', array('{page}' => $pretext['page'])));
 		restore_error_handler();
 
