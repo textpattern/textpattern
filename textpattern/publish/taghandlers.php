@@ -241,8 +241,8 @@ $LastChangedRevision$
 					$caption = htmlspecialchars($caption);
 				}
 
-				if (empty($width) && $thumb_w) $width = $thumb_w;
-				if (empty($height) && $thumb_h) $height = $thumb_h;
+				if ($width=='' && $thumb_w) $width = $thumb_w;
+				if ($height=='' && $thumb_h) $height = $thumb_h;
 
 				$out = '<img src="'.imagesrcurl($id, $ext, true).'" alt="'.$alt.'"'.
 					($caption ? ' title="'.$caption.'"' : '').
