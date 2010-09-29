@@ -1,5 +1,6 @@
 Changes in 4.3.0
 
+* Security: Fixed XSS vulnerability (thanks Jorge Hoya).
 * New Textpattern logo by courtesy of Philipp Schilling (belipe, http://www.psgd.de). Happy retirement to The Carver!
 * Feature: Optional alternate URL for static image resources. Defined in constant "ihu".
 * Feature: /category and /author lists for all content types, with conditionals and pagination
