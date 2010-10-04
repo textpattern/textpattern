@@ -150,7 +150,7 @@ $LastChangedRevision$
 
 					echo n.n.tr(
 						tdcs(
-							hed(gTxt($a['event']), 3, ' class="pref-heading '.$a['event'].'"')
+							hed(gTxt($a['event']), 3, ' class="pref-heading '.$a['event'].'-prefs"')
 						, 3)
 					);
 				}
@@ -186,7 +186,7 @@ $LastChangedRevision$
 
 				$out.= tda(popHelp($a['name']), ' style="vertical-align: middle;"');
 
-				echo tr($out, " id='prefs-{$a['name']}' class='{$a['event']} ".(($ctr%2 == 0) ? 'even' : 'odd')."'");
+				echo tr($out, " id='prefs-{$a['name']}' class='{$a['event']}-prefs ".(($ctr%2 == 0) ? 'even' : 'odd')."'");
 				$ctr++;
 			}
 		}
@@ -236,7 +236,7 @@ $LastChangedRevision$
 			echo form(
 				graf(
 					'<strong>'.gTxt('check_for_txp_updates').'</strong>'.sp.
-					n.'<input type="submit" name="check_updates" value="'.gTxt('go').'" class="publish" />'.
+					n.'<input type="submit" name="check_updates" value="'.gTxt('go').'" class="smallerbox" />'.
 					n.eInput('prefs').
 					n.sInput('prefs_list')
 				)
@@ -586,7 +586,7 @@ EOS
 
 				echo n.n.tr(
 					tdcs(
-						hed(gTxt($a['event']), 3, ' class="pref-heading"')
+						hed(gTxt($a['event']), 3, ' class="pref-heading '.$a['event'].'-prefs"')
 					, 3)
 				);
 			}
@@ -627,7 +627,7 @@ EOS
 				popHelp($a['name'])
 			, ' style="vertical-align: middle;"');
 
-			echo n.n.tr($out, " id='prefs-{$a['name']}' class='{$a['event']} ".(($ctr%2 == 0) ? 'even' : 'odd')."'");
+			echo n.n.tr($out, " id='prefs-{$a['name']}' class='{$a['event']}-prefs ".(($ctr%2 == 0) ? 'even' : 'odd')."'");
 			$ctr++;
 		}
 
