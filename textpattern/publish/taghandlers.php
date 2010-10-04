@@ -136,9 +136,7 @@ $LastChangedRevision$
 		elseif ($thisimage)
 		{
 			$id = (int) $thisimage['id'];
-
-			$rs = safe_row('*', 'txp_image', "id = $id limit 1");
-
+			$rs = $thisimage;
 			$cache['i'][$id] = $rs;
 		}
 
@@ -219,8 +217,7 @@ $LastChangedRevision$
 		elseif ($thisimage)
 		{
 			$id = (int) $thisimage['id'];
-
-			$rs = safe_row('*', 'txp_image', "id = $id limit 1");
+			$rs = $thisimage;
 		}
 
 		else
