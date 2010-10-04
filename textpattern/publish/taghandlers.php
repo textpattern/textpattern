@@ -3837,8 +3837,11 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
+	# DEPRECATED - provided only for backwards compatibility
 	function img($atts)
 	{
+		trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
+
 		extract(lAtts(array(
 			'src' => '',
 		), $atts));
