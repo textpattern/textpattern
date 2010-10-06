@@ -262,8 +262,10 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
+// deprecated in 4.3.0
 	function check_privs()
 	{
+		trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'require_privs')), E_USER_NOTICE);
 		global $txp_user;
 		$privs = safe_field("privs", "txp_users", "name='".doSlash($txp_user)."'");
 		$args = func_get_args();
