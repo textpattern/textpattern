@@ -385,6 +385,7 @@ $LastChangedRevision$
 			'label'    => '',
 			'title'    => gTxt('rss_feed_title'),
 			'wraptag'  => '',
+			'class'    => __FUNCTION__,
 		), $atts));
 
 		$url = pagelinkurl(array(
@@ -409,7 +410,7 @@ $LastChangedRevision$
 
 		$out = '<a href="'.$url.'" title="'.$title.'">'.$label.'</a>';
 
-		return ($wraptag) ? tag($out, $wraptag) : $out;
+		return ($wraptag) ? doTag($out, $wraptag, $class) : $out;
 	}
 
 // -------------------------------------------------------------
@@ -1034,6 +1035,7 @@ $LastChangedRevision$
 		extract(lAtts(array(
 			'label'        => gTxt('browse'),
 			'wraptag'      => '',
+			'class'        => '',
 			'section'      => '',
 			'this_section' => 0,
 			'type'         => 'c',
@@ -1089,7 +1091,7 @@ $LastChangedRevision$
 
 				if ($wraptag)
 				{
-					$out = tag($out, $wraptag);
+					$out = doTag($out, $wraptag, $class);
 				}
 
 				return '<form method="get" action="'.hu.'">'.
@@ -1321,6 +1323,7 @@ $LastChangedRevision$
 		extract(lAtts(array(
 			'form'    => 'search_input',
 			'wraptag' => 'p',
+			'class'   => __FUNCTION__,
 			'size'    => '15',
 			'html_id' => '',
 			'label'   => gTxt('search'),
@@ -1341,7 +1344,7 @@ $LastChangedRevision$
 		$out = fInput('text','q',$q,'','','',$size);
 		$out = (!empty($label)) ? $label.br.$out.$sub : $out.$sub;
 		$out = ($match === 'exact') ? $out : fInput('hidden','m',$match) . $out;
-		$out = ($wraptag) ? tag($out,$wraptag) : $out;
+		$out = ($wraptag) ? doTag($out,$wraptag, $class) : $out;
 
 		if (!$section) {
 			return '<form method="get" action="'.hu.'"'.$id.'>'.

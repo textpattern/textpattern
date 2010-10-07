@@ -17,7 +17,7 @@ Changes in 4.3.0
 * Changed: <txp:image_index /> accepts a "category" attribute. Attribute "c" is deprecated.
 * Changed: <txp:breadcrumb /> accepts a "separator" attribute. Attribute "sep" is deprecated.
 * Changed: <txp:if_custom_field /> accepts a "value" attribute. Attribute "val" is deprecated. Added attributes "match" and "separator"
-* Changed: <txp:feed_link /> accepts a "class" attribute.
+* Changed: <txp:feed_link />, <txp:link_feed_link />, <txp:popup />, <txp:search_input /> accept a "class" attribute.
 * Changed: Use percent-encoding in URLs as a RFC-1738-compliant fallback for languages lacking a suitable transliteration array.
 * Changed: Silence E_STRICT warnings in "live" production mode.
 * Removed: "Friendly" CSS editor.
