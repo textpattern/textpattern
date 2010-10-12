@@ -2835,7 +2835,7 @@ $LastChangedRevision$
 			'category'    => '',
 			'author'      => '',
 			'realname'    => '',
-			'ext'         => '',
+			'extension'   => '',
 			'thumbnail'   => '',
 			'auto_detect' => 'article, category, author',
 			'label'       => '',
@@ -2870,7 +2870,7 @@ $LastChangedRevision$
 			$where[] = "author IN ('".join("','", doSlash($authorlist))."')";
 		}
 
-		if ($ext) $where[] = "ext IN ('".join("','", doSlash(do_list($ext)))."')";
+		if ($extension) $where[] = "ext IN ('".join("','", doSlash(do_list($extension)))."')";
 		if ($thumbnail === '0' || $thumbnail === '1') $where[] = "thumbnail = $thumbnail";
 
 		// If no images are selected, try...
