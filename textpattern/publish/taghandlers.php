@@ -2593,7 +2593,7 @@ $LastChangedRevision$
 			return;
 		}
 
-		if (is_numeric($image))
+		if (intval($image))
 		{
 			$rs = safe_row('*', 'txp_image', 'id = '.intval($image));
 
@@ -2884,10 +2884,18 @@ $LastChangedRevision$
 						if ($thisarticle && !empty($thisarticle['article_image']))
 						{
 							$items = do_list($thisarticle['article_image']);
-							if (is_numeric($items[0]))
+							foreach ($items as &$item)
 							{
-								$where[] = "id IN ('".join("','", doSlash($items))."')";
+								if (is_numeric($item))
+								{
+									$item = intval($item);
+								}
+								else
+								{
+									return article_image(compact('class', 'html_id', 'wraptag'));
+								}
 							}
+							$where[] = "id IN ('".join("','", doSlash($items))."')";
 						}
 						break;
 					case 'category':
