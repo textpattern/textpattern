@@ -52,18 +52,19 @@ $LastChangedRevision$
 		extract(lAtts(array(
 			'format' => 'url',
 			'media'  => 'screen',
-			'n'      => $css,
+			'n'      => $css, // deprecated in 4.3.0
 			'name'   => $css,
 			'rel'    => 'stylesheet',
 			'title'  => '',
 		), $atts));
 
-		if (isset($atts['name'])) {
-			$n = $name;
+		if (isset($atts['n'])) {
+			$name = $n;
+			trigger_error(gTxt('deprecated_attribute', array('{name}' => 'n')), E_USER_NOTICE);
 		}
 
-		if (empty($n)) $n = 'default';
-		$url = hu.'css.php?n='.$n;
+		if (empty($name)) $name = 'default';
+		$url = hu.'css.php?n='.$name;
 
 		if ($format == 'link') {
 			return '<link rel="'.$rel.'" type="text/css"'.
@@ -3502,7 +3503,7 @@ $LastChangedRevision$
 
 		extract(lAtts(array(
 			'wraptag' => 'p',
-			'sep' => '&#160;&#187;&#160;',
+			'sep' => '&#160;&#187;&#160;', // deprecated in 4.3.0
 			'separator' => '&#160;&#187;&#160;',
 			'link' => 1,
 			'label' => $sitename,
@@ -3778,7 +3779,7 @@ $LastChangedRevision$
 		extract(lAtts(array(
 			'name' => @$prefs['custom_1_set'],
 			'value' => NULL,
-			'val' => NULL,
+			'val' => NULL, // deprecated in 4.3.0
 			'match' => 'exact',
 			'separator' => '',
 		),$atts));
@@ -3940,10 +3941,16 @@ $LastChangedRevision$
 		global $plugins, $plugins_ver;
 		extract(lAtts(array(
 			'name'    => '',
-			'ver'     => '',
+			'ver'     => '', // deprecated in 4.3.0
+			'version' => '',
 		),$atts));
 
-		return parse(EvalElse($thing, @in_array($name, $plugins) and (!$ver or version_compare($plugins_ver[$name], $ver) >= 0)));
+		if (isset($atts['ver'])) {
+			$version = $ver;
+			trigger_error(gTxt('deprecated_attribute', array('{name}' => 'ver')), E_USER_NOTICE);
+		}
+
+		return parse(EvalElse($thing, @in_array($name, $plugins) and (!$version or version_compare($plugins_ver[$name], $version) >= 0)));
 	}
 
 //--------------------------------------------------------------------------
