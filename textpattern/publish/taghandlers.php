@@ -2853,7 +2853,7 @@ $LastChangedRevision$
 
 		$where = array();
 		$has_content = $thing || $form;
-		$filters = isset($atts['id']) || isset($atts['name']) || isset($atts['category']) || isset($atts['author']) || isset($atts['realname']) || isset($atts['ext']) || $thumbnail === '1' || $thumbnail === '0';
+		$filters = isset($atts['id']) || isset($atts['name']) || isset($atts['category']) || isset($atts['author']) || isset($atts['realname']) || isset($atts['extension']) || $thumbnail === '1' || $thumbnail === '0';
 		$context_list = (empty($auto_detect) || $filters) ? array() : do_list($auto_detect);
 		$pageby = ($pageby=='limit') ? $limit : $pageby;
 
