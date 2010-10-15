@@ -965,7 +965,7 @@ EOS
 	{
 		$textpack = ps('textpack');
 		$n = install_textpack($textpack, true);
-		return list_languages(gTxt('textpack_strings_installed', array('count' => $n)));
+		return list_languages(gTxt('textpack_strings_installed', array('{count}' => $n)));
 	}
 
 // ----------------------------------------------------------------------
