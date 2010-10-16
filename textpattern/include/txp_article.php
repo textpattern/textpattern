@@ -423,7 +423,7 @@ if (!empty($event) and $event == 'article') {
 		pagetop($page_title, $message);
 
 		echo n.'<div id="'.$event.'_container" class="txp-container txp-edit">';
-		echo n.n.'<form id="article_form" name="article" method="post" action="index.php">';
+		echo n.n.'<form id="article_form" name="article_form" method="post" action="index.php">';
 
 		if (!empty($store_out))
 		{
@@ -475,7 +475,7 @@ if (!empty($event) and $event == 'article') {
 
 			$cf = '';
 			$cfs = getCustomFields();
-			echo '<div id="custom_field_group"'.(($cfs) ? '' : ' class="empty"').'"><h3 class="plain lever'.(get_pref('pane_article_custom_field_visible') ? ' expanded' : '').'"><a href="#custom_field">'.gTxt('custom').'</a></h3>'.
+			echo '<div id="custom_field_group"'.(($cfs) ? '' : ' class="empty"').'><h3 class="plain lever'.(get_pref('pane_article_custom_field_visible') ? ' expanded' : '').'"><a href="#custom_field">'.gTxt('custom').'</a></h3>'.
 				'<div id="custom_field" class="toggle" style="display:'.(get_pref('pane_article_custom_field_visible') ? 'block' : 'none').'">';
 
 			foreach($cfs as $i => $cf_name)
