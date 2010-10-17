@@ -2002,9 +2002,15 @@ eod;
 			unset($keys['id']);
 		}
 
-		if (@$keys['s'] == 'default')
+		if (isset($keys['s']) && $keys['s'] == 'default')
 		{
 			unset($keys['s']);
+		}
+
+		// 'article' context is implicit, no need to add it to the page URL
+		if (isset($keys['context']) && $keys['context'] == 'article')
+		{
+			unset($keys['context']);
 		}
 
 		if ($permlink_mode == 'messy')
@@ -2040,7 +2046,7 @@ eod;
 
 			elseif (!empty($keys['author']))
 			{
-				$ct = (empty($keys['context']) || $keys['context'] == 'article') ? '' : strtolower(urlencode(gTxt($keys['context'].'_context'))).'/';
+				$ct = empty($keys['context']) ? '' : strtolower(urlencode(gTxt($keys['context'].'_context'))).'/';
 				$url = hu.strtolower(urlencode(gTxt('author'))).'/'.$ct.urlencode($keys['author']).'/';
 				unset($keys['author'], $keys['context']);
 				return $url.join_qs($keys);
@@ -2048,7 +2054,7 @@ eod;
 
 			elseif (!empty($keys['c']))
 			{
-				$ct = (empty($keys['context']) || $keys['context'] == 'article') ? '' : strtolower(urlencode(gTxt($keys['context'].'_context'))).'/';
+				$ct = empty($keys['context']) ? '' : strtolower(urlencode(gTxt($keys['context'].'_context'))).'/';
 				$url = hu.strtolower(urlencode(gTxt('category'))).'/'.$ct.urlencode($keys['c']).'/';
 				unset($keys['c'], $keys['context']);
 				return $url.join_qs($keys);
