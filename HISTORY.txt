@@ -27,7 +27,7 @@ Changes in 4.3.0
 * Developer: Textpacks, a method to install i18n strings from uploaded text files and from plugins.
 * Developer: article_format_info(), link_format_info(), and get_groups() convenience functions
 * Textile 2.2 adds support for note lists, definition lists, thead, tbody, tfoot, table summary, table caption, table colgroup, glyphs for fractions, degrees and plusminus et cetera.
-* jQuery 1.4.2
+* jQuery 1.4.3
 * Incutio XML-RPC Library 1.7.4
 
 Changes in 4.2.0
