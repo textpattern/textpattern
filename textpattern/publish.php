@@ -310,7 +310,8 @@ $LastChangedRevision$
 
 					case urldecode(strtolower(urlencode(gTxt('file_download')))):
 						$out['s'] = 'file_download';
-						$out['id'] = (!empty($u2)) ? $u2 : ''; break;
+						$out['id'] = (!empty($u2)) ? $u2 : '';
+						break;
 
 					default:
 						// then see if the prefs-defined permlink scheme is usable
@@ -387,11 +388,15 @@ $LastChangedRevision$
 									$is_404 = empty($out['s']);
 								}
 							break;
-
 						}
+						if (!$is_404) {
+							$out['context'] = 'article';
+						}
+						break; // prefs-defined permlink scheme case
 				}
 			} else {
 				$out['s'] = 'default';
+				$out['context'] = 'article';
 			}
 		}
 		else {
