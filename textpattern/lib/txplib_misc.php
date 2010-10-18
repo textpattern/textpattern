@@ -1856,13 +1856,19 @@ $LastChangedRevision$
 	function getCustomFields()
 	{
 		global $prefs;
-		$cfs = preg_grep('/^custom_\d+_set/', array_keys($prefs));
+		static $out = NULL;
 
-		$out = array();
-		foreach ($cfs as $name) {
-			preg_match('/(\d+)/', $name, $match);
-			if (!empty($prefs[$name])) {
-				$out[$match[1]] = strtolower($prefs[$name]);
+		// have cache?
+		if (!is_array($out))
+		{
+			$cfs = preg_grep('/^custom_\d+_set/', array_keys($prefs));
+
+			$out = array();
+			foreach ($cfs as $name) {
+				preg_match('/(\d+)/', $name, $match);
+				if (!empty($prefs[$name])) {
+					$out[$match[1]] = strtolower($prefs[$name]);
+				}
 			}
 		}
 		return $out;
