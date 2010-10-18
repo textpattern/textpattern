@@ -1102,7 +1102,7 @@ EOS
 	{
 		$state = ($view==$tabevent) ? 'up' : 'down';
 		$out = '<li class="view-mode '.$tabevent.'" id="tab-'.$tabevent.$state.'">';
-		$out.=($tabevent!=$view) ? '<a href="javascript:document.article.view.value=\''.$tabevent.'\';document.article.submit();">'.gTxt($tabevent).'</a>' : gTxt($tabevent);
+		$out.=($tabevent!=$view) ? '<a href="javascript:document.article_form.view.value=\''.$tabevent.'\';document.article_form.submit();">'.gTxt($tabevent).'</a>' : gTxt($tabevent);
 		$out.='</li>';
 		return $out;
 	}
