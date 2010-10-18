@@ -108,8 +108,8 @@ $LastChangedRevision$
 		//Initialize the current user
 	$txp_user = NULL;
 
-		//i18n: $textarray = load_lang('en-gb');
-	$textarray = load_lang(LANG);
+		//i18n
+	$textarray = (txpinterface == 'css') ? array() : load_lang(LANG);
 
 		// tidy up the site
 	janitor();
