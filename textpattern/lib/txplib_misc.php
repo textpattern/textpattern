@@ -123,8 +123,9 @@ $LastChangedRevision$
 			}
 		}
 
-		if(isset($textarray[strtolower($var)])) {
-			$out = $textarray[strtolower($var)];
+		$var = strtolower($var);
+		if(isset($textarray[$var])) {
+			$out = $textarray[$var];
 			if ($out !== '') return strtr($out, $atts);
 		}
 
@@ -1566,8 +1567,15 @@ $LastChangedRevision$
 	function EvalElse($thing, $condition)
 	{
 		global $txp_current_tag;
+		static $gTxtTrue = NULL, $gTxtFalse;
 
-		trace_add("[$txp_current_tag: ".($condition ? gTxt('true') : gTxt('false'))."]");
+		if (empty($gTxtTrue))
+		{
+			$gTxtTrue = gTxt('true');
+			$gTxtFalse = gTxt('false');
+		}
+
+		trace_add("[$txp_current_tag: ".($condition ? $gTxtTrue : $gTxtFalse)."]");
 
 		$els = strpos($thing, '<txp:else');
 
