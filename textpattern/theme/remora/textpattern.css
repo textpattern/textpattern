@@ -1,6 +1,8 @@
 /*
 Remora Theme for Textpattern CMS
 Suckerfish menu: @see http://htmldog.com/articles/suckerfish/dropdowns/
+$HeadURL$
+$LastChangedRevision$
 */
 
 @import url("../classic/textpattern.css");
@@ -22,7 +24,7 @@ list-style: none;
 }
 
 #nav a {
-display: inline-block;
+display: block;
 height: 2.5em;
 line-height: 2.5em;
 color: #630;
