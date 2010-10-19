@@ -123,9 +123,9 @@ $LastChangedRevision$
 			}
 		}
 
-		$var = strtolower($var);
-		if(isset($textarray[$var])) {
-			$out = $textarray[$var];
+		$v = strtolower($var);
+		if(isset($textarray[$v])) {
+			$out = $textarray[$v];
 			if ($out !== '') return strtr($out, $atts);
 		}
 
