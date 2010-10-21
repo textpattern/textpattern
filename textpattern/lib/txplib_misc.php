@@ -6,6 +6,18 @@ $LastChangedRevision$
 */
 
 // -------------------------------------------------------------
+	function deNull($in)
+	{
+		return strtr($in, array("\0" => ''));
+	}
+
+// -------------------------------------------------------------
+	function deCRLF($in)
+	{
+		return strtr($in, array("\n" => '', "\r" => ''));
+	}
+
+// -------------------------------------------------------------
 	function doArray($in,$function)
 	{
 		return is_array($in) ? array_map($function,$in) : $function($in);
@@ -336,20 +348,26 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function gps($thing) // checks GET and POST for a named variable, or creates it blank
 	{
+		$out = '';
 		if (isset($_GET[$thing])) {
 			if (MAGIC_QUOTES_GPC) {
-				return doStrip($_GET[$thing]);
+				$out = doStrip($_GET[$thing]);
 			} else {
-				return $_GET[$thing];
+				$out = $_GET[$thing];
 			}
+
+			$out = doArray( $out, 'deCRLF' ); # Remove CRLF from Get parameters
 		} elseif (isset($_POST[$thing])) {
 			if (MAGIC_QUOTES_GPC) {
-				return doStrip($_POST[$thing]);
+				$out = doStrip($_POST[$thing]);
 			} else {
-				return $_POST[$thing];
+				$out = $_POST[$thing]; # CRLF ok in posted vars
 			}
 		}
-		return '';
+
+		$out = doArray($out, 'deNull'); # Remove Nulls to avoid string truncations in C calls (ie. All the filesystem routines)
+
+		return $out;
 	}
 
 // -------------------------------------------------------------
@@ -368,14 +386,18 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function ps($thing) // checks POST for a named variable, or creates it blank
 	{
+		$out = '';
 		if (isset($_POST[$thing])) {
 			if (MAGIC_QUOTES_GPC) {
-				return doStrip($_POST[$thing]);
+				$out = doStrip($_POST[$thing]);
 			} else {
-				return $_POST[$thing];
+				$out = $_POST[$thing];
 			}
 		}
-		return '';
+
+		$out = doArray($out, 'deNull');
+
+		return $out;
 	}
 
 // -------------------------------------------------------------
