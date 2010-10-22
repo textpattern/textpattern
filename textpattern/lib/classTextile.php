@@ -1388,6 +1388,7 @@ class Textile
 	function fImage($m)
 	{
 		list(, $algn, $atts, $url) = $m;
+		$url = htmlspecialchars($url);
 		$atts  = $this->pba($atts);
 		$atts .= ($algn != '')	? ' align="' . $this->iAlign($algn) . '"' : '';
 		$atts .= (isset($m[4])) ? ' title="' . $m[4] . '"' : '';
