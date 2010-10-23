@@ -1062,7 +1062,7 @@ EOS
 
 		foreach ($statuses as $a => $b)
 		{
-			$out[] = n.t.'<li class="status-'.$a.' '.$b.($Status == $a ? ' active' : '').'">'.radio('Status', $a, ($Status == $a) ? 1 : 0, 'status-'.$a).
+			$out[] = n.t.'<li class="status-'.$a.' '.($Status == $a ? ' active' : '').'">'.radio('Status', $a, ($Status == $a) ? 1 : 0, 'status-'.$a).
 				'<label for="status-'.$a.'">'.$b.'</label></li>';
 		}
 
