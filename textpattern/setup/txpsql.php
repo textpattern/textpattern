@@ -16,7 +16,7 @@ mysql_connect($dhost,$duser,$dpass,false,$dclient_flags);
 mysql_select_db($ddb);
 
 $result = mysql_query("describe `".PFX."textpattern`");
-if ($result) die("Textpattern database table already exist. Can't run setup.");
+if ($result) die("Textpattern database table already exists. Can't run setup.");
 
 
 $version = mysql_get_server_info();
