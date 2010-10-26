@@ -650,7 +650,7 @@ $LastChangedRevision$
 
 	function image_delete($ids = array())
 	{
-		global $txp_user;
+		global $txp_user, $event;
 
 		$ids = $ids ? array_map('assert_int', $ids) : array(assert_int(ps('id')));
 		$message = '';
@@ -675,11 +675,12 @@ $LastChangedRevision$
 
 			if ($rs)
 			{
-				callback_event('image', 'image_delete');
-
 				while ($a = nextRow($rs))
 				{
 					extract($a);
+
+					// notify plugins of pending deletion, pass image's $id
+					callback_event('image_deleted', $event, false, $id);
 
 					$rsd = safe_delete('txp_image', "id = $id");
 
@@ -854,7 +855,7 @@ $LastChangedRevision$
 
 	function image_data($file , $meta = '', $id = '', $uploaded = true)
 	{
-		global $txpcfg, $extensions, $txp_user, $prefs, $file_max_upload_size;
+		global $txpcfg, $extensions, $txp_user, $prefs, $file_max_upload_size, $event;
 
 		extract($txpcfg);
 
@@ -976,7 +977,8 @@ $LastChangedRevision$
 					$message = gTxt('image_uploaded', array('{name}' => $name));
 					update_lastmod();
 
-					callback_event('image', 'image_data');
+					// call post-upload plugins with new image's $id
+					callback_event('image_uploaded', $event, false, $id);
 
 					return array($message, $id);
 				}
