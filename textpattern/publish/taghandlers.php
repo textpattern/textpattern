@@ -2825,7 +2825,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function image_list($atts, $thing = NULL)
+	function images($atts, $thing = NULL)
 	{
 		global $s, $c, $context, $p, $path_to_site, $thisimage, $thisarticle, $thispage, $pretext;
 
