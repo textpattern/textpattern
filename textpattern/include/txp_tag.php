@@ -3729,10 +3729,10 @@ begin tag builder functions
 		if ($step == 'build')
 		{
 			$description = str_replace('&', '&#38;', htmlspecialchars($description));
-
+			$urlinfo = parse_url(hu);
 			$url = ($permlink_mode == 'messy') ?
-				'/index.php?s=file_download'.($type == 'textile' ? '&' : a).'id='.$id:
-				'/'.gTxt('file_download').'/'.$id.($filename ? '/'.urlencode($filename) : '');
+				$urlinfo['path'].'index.php?s=file_download'.($type == 'textile' ? '&' : a).'id='.$id:
+				$urlinfo['path'].gTxt('file_download').'/'.$id.($filename ? '/'.urlencode($filename) : '');
 
 			switch ($type)
 			{
