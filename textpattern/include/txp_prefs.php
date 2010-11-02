@@ -795,17 +795,17 @@ EOS
 										? gTxt('update') : gTxt('install'),'updating',isset($langdat['db_lastmod']) )).
 								br.safe_strftime('%d %b %Y %X',@$langdat['rpc_lastmod'])
 							,(isset($langdat['db_lastmod']))
-								? ' style="color:red;text-align:center;background-color:#FFFFCC;"'
-								: ' style="color:#667;vertical-align:middle;text-align:center"');
+								? ' class="highlight" style="vertical-align:middle;text-align:center"'
+								: ' style="vertical-align:middle;text-align:center"');
 			$list.= tr (
 				# Lang-Name & Date
 				tda(gTxt($langname).
 					tag( ( isset($langdat['db_lastmod']) )
 							? br.'&nbsp;'.safe_strftime('%d %b %Y %X',$langdat['db_lastmod'])
 							: ''
-						, 'span',' style="color:#aaa;font-style:italic"')
+						, 'span',' class="date modified"')
 					, (isset($langdat['db_lastmod']) && $rpc_updated) #tda attribute
-							? ' nowrap="nowrap" style="color:red;background-color:#FFFFCC;"'
+							? ' nowrap="nowrap" class="highlight" style="vertical-align:middle"'
 							: ' nowrap="nowrap" style="vertical-align:middle"' ).n.
 				# RPC - Info
 				(  ($rpc_updated)
@@ -819,7 +819,7 @@ EOS
 									? eLink('prefs','get_language','lang_code',$langname,($file_updated) ? gTxt('update') : gTxt('install'),'force','file').
 											br.'&nbsp;'.safe_strftime($prefs['archive_dateformat'],$langdat['file_lastmod'])
 									: ' &nbsp; '  # No File available
-								, 'span', ($file_updated) ? ' style="color:#667;"' : ' style="color:#aaa;font-style:italic"' )
+								, 'span', ($file_updated) ? ' class="date created"' : ' class="date modified"' )
 							, ' class="langfile" style="text-align:center;vertical-align:middle"').n
 					: '')
 			, ' class="'.(($ctr%2 == 0) ? 'even' : 'odd').'"'
@@ -834,7 +834,7 @@ EOS
 		echo n.'<div id="language_container" class="txp-container txp-list">';
 
 		if (isset($msg) && $msg)
-			echo tag ($msg,'p',' style="text-align:center;color:red;width:50%;margin: 2em auto"' );
+			echo tag ($msg,'p',' class="not-ok" style="text-align:center;width:50%;margin:2em auto"' );
 
 		echo startTable('list', '', 'list'),
 
@@ -925,7 +925,7 @@ EOS
 					$install_langfile = 'To install new languages from file you can download them from <b><a href="'.RPC_SERVER.'/lang/">'.RPC_SERVER.'/lang/</a></b> and place them inside your ./textpattern/lang/ directory.';
 				pagetop(gTxt('installing_language'));
 				echo tag( gTxt('rpc_connect_error')."<!--".$client->getErrorCode().' '.$client->getErrorMessage()."-->"
-						,'p',' style="text-align:center;color:red;width:50%;margin: 2em auto"' );
+						,'p',' class="not-ok" style="text-align:center;width:50%;margin:2em auto"' );
 				echo tag( $install_langfile ,'p',' style="text-align:center;width:50%;margin: 2em auto"' );
 			}
 		}else {

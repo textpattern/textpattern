@@ -412,6 +412,19 @@ background-color: #fff4f4;
 border: 2px solid #fdd;
 }
 
+.highlight {
+background-color: #ffc;
+}
+
+.highlight a {
+color: red;
+}
+
+#language_container .modified {
+font-style: italic;
+color: #aaa;
+}
+
 /* global layout
 ----------------------------------------------- */
 
