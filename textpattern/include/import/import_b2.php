@@ -1,4 +1,9 @@
 <?php
+/*
+$HeadURL$
+$LastChangedRevision$
+*/
+
 	//Absolutely untested. Any volunteer with a b2 db dump to collaborate?
 
 	function doImportB2($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $insert_into_section, $insert_with_status, $default_comment_invite)

@@ -1,4 +1,9 @@
 <?php
+/*
+$HeadURL$
+$LastChangedRevision$
+*/
+
 
 	function doImportWP($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $wpdbprefix, $insert_into_section, $insert_with_status, $default_comment_invite)
 	{

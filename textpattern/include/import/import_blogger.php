@@ -1,4 +1,9 @@
 <?php
+/*
+$HeadURL$
+$LastChangedRevision$
+*/
+
 //Long live zem!
 
 //Time for 45KB: 0.9648-1.3698sec.
