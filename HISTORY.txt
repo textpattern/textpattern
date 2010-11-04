@@ -1,10 +1,10 @@
 Changes in 4.3.0
 
-* Security: Fixed XSS vulnerability (thanks Jorge Hoya).
+* Security: Fixed two XSS vulnerabilities (thanks Jorge Hoya and High-Tech Bridge). Updates are recommended.
 * New Textpattern logo by courtesy of Philipp Schilling (belipe, http://www.psgd.de). Happy retirement to The Carver!
 * Feature: Optional alternate URL for static image resources. Defined in constant "ihu".
 * Feature: /category and /author lists for all content types, with conditionals and pagination
-* Feature: Optional top-level 'Start' tab for dashboard plugins
+* Feature: Optional top-level 'Home' tab for dashboard plugins
 * Feature: File titles
 * Feature: Multiple categories/sections in feeds via http://example.com/rss/?category=foo,bar&section=baz,omg and http://example.com/atom/?category=foo,bar&section=baz,omg)
 * New tags: <txp:images />, <txp:image_info />, <txp:image_url />, <txp:image_date />, <txp:if_thumbnail />.
@@ -25,7 +25,8 @@ Changes in 4.3.0
 * Developer: pluggable_ui() in the images tab.
 * Developer: Style sheets are stored as plain text in the database - no more base64-encoding.
 * Developer: Textpacks, a method to install i18n strings from uploaded text files and from plugins.
-* Developer: article_format_info(), link_format_info(), and get_groups() convenience functions
+* Developer: article_format_info(), link_format_info(), and get_groups() convenience functions.
+* Developer: i18n strings are not loaded while Textpattern renders the public-side style sheet.
 * Textile 2.2 adds support for note lists, definition lists, thead, tbody, tfoot, table summary, table caption, table colgroup, glyphs for fractions, degrees and plusminus et cetera.
 * jQuery 1.4.3
 * Incutio XML-RPC Library 1.7.4
