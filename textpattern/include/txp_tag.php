@@ -437,7 +437,7 @@ begin generic functions
 				$vals[$name] = $name;
 			}
 
-			return ' '.selectInput('n', $vals, $val, true);
+			return ' '.selectInput('name', $vals, $val, true);
 		}
 
 		return false;
@@ -2176,7 +2176,7 @@ begin tag builder functions
 		$atts = gpsa(array(
 			'format',
 			'media',
-			'n',
+			'name',
 			'rel',
 			'title'
 		));
@@ -2192,8 +2192,8 @@ begin tag builder functions
 				, 2)
 			).
 
-			tagRow('n',
-				css_pop($n)).
+			tagRow('name',
+				css_pop($name)).
 
 			tagRow('format',
 				css_format_pop($format)).
@@ -3255,7 +3255,7 @@ begin tag builder functions
 			'label',
 			'link',
 			'linkclass',
-			'sep',
+			'separator',
 			'title',
 			'wraptag'
 		));
@@ -3272,7 +3272,7 @@ begin tag builder functions
 			).
 
 			tagRow('breadcrumb_separator',
-				fInput('text', 'sep', $sep, 'edit', '', '', 4)).
+				fInput('text', 'separator', $separator, 'edit', '', '', 4)).
 
 			tagRow('breadcrumb_linked',
 				yesno_pop('link', $link)).
