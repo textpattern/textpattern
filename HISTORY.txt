@@ -1,3 +1,7 @@
+Changes in 5.0.0
+
+* jQuery 1.4.4
+
 Changes in 4.3.0
 
 * Security: Fixed two XSS vulnerabilities (thanks Jorge Hoya and High-Tech Bridge). Updates are recommended.
