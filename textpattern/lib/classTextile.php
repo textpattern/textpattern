@@ -1391,8 +1391,13 @@ class Textile
 		$url = htmlspecialchars($url);
 		$atts  = $this->pba($atts);
 		$atts .= ($algn != '')	? ' align="' . $this->iAlign($algn) . '"' : '';
-		$atts .= (isset($m[4])) ? ' title="' . $m[4] . '"' : '';
-		$atts .= (isset($m[4])) ? ' alt="'	 . $m[4] . '"' : ' alt=""';
+		if (isset($m[4])) {
+			$m[4] = htmlspecialchars($m[4]);
+			$atts .= ' title="' . $m[4] . '" alt="'	 . $m[4] . '"';
+ 		} else {
+			$atts .= ' alt=""';
+ 		}
+
 		$size = false;
 		if ($this->isRelUrl($url))
 			$size = @getimagesize(realpath($this->doc_root.ltrim($url, $this->ds)));
