@@ -8,13 +8,13 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function deNull($in)
 	{
-		return strtr($in, array("\0" => ''));
+		return (is_array($in) ? doArray($in, 'deNull') : strtr($in, array("\0" => '')));
 	}
 
 // -------------------------------------------------------------
 	function deCRLF($in)
 	{
-		return strtr($in, array("\n" => '', "\r" => ''));
+		return (is_array($in) ? doArray($in, 'deCRLF') : strtr($in, array("\n" => '', "\r" => '')));
 	}
 
 // -------------------------------------------------------------
