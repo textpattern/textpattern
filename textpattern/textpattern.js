@@ -297,10 +297,39 @@ function setClassRemember(className, force)
 
 //-------------------------------------------------------------
 // AJAX
-function sendAsyncEvent(data, fn)
+function sendAsyncEvent(data, fn, format)
 {
 	data.app_mode = 'async';
-	$.post('index.php', data, fn, 'xml');
+	format = format || 'xml';
+	$.post('index.php', data, fn, format);
+}
+
+function postForm()
+{
+	var form = $(this);
+	var data = {};
+	var elms = form.find('input');
+	$.merge(elms, form.find('textarea'));
+	$.merge(elms, form.find('select'));
+	$(elms).each(function(index) {
+		var name = $(this).attr('name') || '-txp-bogus-' + index;
+		var type = $(this).attr('type');
+		switch(type) {
+			case 'checkbox':
+			case 'radio':
+				if ($(this).attr('checked')) {
+					data[name] = $(this).attr('value');
+				}
+				break;
+			default:
+				data[name] = $(this).attr('value') || '';
+				break;
+		}
+	});
+	//console.log(data);
+	form.addClass('updating');
+	sendAsyncEvent(data, function(){form.removeClass('updating');}, 'script');
+	return false;
 }
 
 //-------------------------------------------------------------
@@ -310,4 +339,6 @@ $(document).ready(function() {
 	if(jQuery.browser.mozilla){$(".code").attr("spellcheck", false)};
 	// attach toggle behaviour
 	$('.lever a[class!=pophelp]').click(toggleDisplayHref);
+	// attach AJAX form handler
+	$('form.ajaxified').submit(postForm); //FIXME find final class name
 });
