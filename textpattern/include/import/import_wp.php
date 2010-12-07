@@ -18,6 +18,11 @@ $LastChangedRevision$
 
 		mysql_select_db($b2db, $b2link);
 
+		if (!mysql_query('SET NAMES utf8', $b2link))
+		{
+			return 'WordPress database does not support the UTF8 character set. Aborting.';
+		}
+
 
 		// Keep some response on some part
 		$results = array();
@@ -147,7 +152,7 @@ $LastChangedRevision$
 
 
 		/*
-		export articles
+		export articles - do not export post revisions from WP 2.6+
 		*/
 
 		$article_query = mysql_query("
@@ -164,6 +169,7 @@ $LastChangedRevision$
 				u.user_login as AuthorID
 			from ".$wpdbprefix."posts as p left join ".$wpdbprefix."users as u
 				on u.ID = p.post_author
+			where p.post_type <> 'revision'
 			order by p.ID asc
 		", $b2link) or $errors[] = mysql_error();
 
