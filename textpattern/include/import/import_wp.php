@@ -48,7 +48,7 @@ $LastChangedRevision$
 				select
 					meta_value
 				from ".$wpdbprefix."usermeta
-				where user_id = ".$user['user_id']." and meta_key = 'capabilities'
+				where user_id = ".$user['user_id']." and meta_key = '".$wpdbprefix."capabilities'
 			", $b2link) or $errors[] = mysql_error();
 
 			$privs = unserialize(mysql_result($user_privs_query, 0));
