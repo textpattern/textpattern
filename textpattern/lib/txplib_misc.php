@@ -95,6 +95,19 @@ $LastChangedRevision$
 		);
 	}
 
+/**
+ * Escape special string characters like \n or \\ for JavaScript.
+ *
+ * @param string $js JavaScript input
+ * @return	string	Escaped JavaScript
+ * @since 5.0
+ */
+
+function escape_js($js)
+{
+	return addcslashes($js, "\\\'\"\n\r");
+}
+
 // -------------------------------------------------------------
 // deprecated in 4.2.0
 	function escape_output($str)
@@ -2460,8 +2473,21 @@ eod;
 			}
 		}
 		$out[] = '</textpattern>';
-		echo(join(n, $out));
-		exit();
+		die(join(n, $out));
+	}
+
+/**
+ * Send a text/javascript response
+ *
+ * @param string $out
+ * @since 5.0
+ */
+	function send_script_response($out = '')
+	{
+		ob_clean();
+		header('Content-Type: text/javascript');
+		txp_status_header('200 OK');
+		die($out);
 	}
 
 // -------------------------------------------------------------
