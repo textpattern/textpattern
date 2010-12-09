@@ -315,12 +315,11 @@ function sendAsyncEvent(data, fn, format)
  *
  * @return boolean Continue with browser's default form handling
  */
-function postForm()
+function postForm(form)
 {
+	form = $(form);
 	try {
-		var form = $(this);
 		var data = {};
-
 		// Gather all form entry elements
 		var elms = form.find('input');
 		$.merge(elms, form.find('textarea'));
@@ -348,7 +347,7 @@ function postForm()
 		// Send form data to application, process response as script.
 		sendAsyncEvent(
 			data,
-			null, // function() {},
+			function(){form.removeClass('processing');},
 			'script'
 		);
 		return false;
@@ -365,6 +364,4 @@ $(document).ready(function() {
 	if(jQuery.browser.mozilla){$(".code").attr("spellcheck", false);}
 	// attach toggle behaviour
 	$('.lever a[class!=pophelp]').click(toggleDisplayHref);
-	// attach AJAX form handler
-	$('form.async').submit(postForm);
 });

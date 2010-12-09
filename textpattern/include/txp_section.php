@@ -168,9 +168,13 @@ $LastChangedRevision$
 			if (safe_field('name', 'txp_section', "name='$name'"))
 			{
 				$message = array(gTxt('section_name_already_exists', array('{name}' => $name)), E_ERROR);
-
-				sec_section_list($message); // TODO: async response?
-				return;
+				if ($app_mode == 'async') {
+					// TODO: Better/themeable popup
+					send_script_response('window.alert("'.escape_js(strip_tags(gTxt('section_name_already_exists', array('{name}' => $name)))).'")');
+				} else {
+					sec_section_list($message);
+					return;
+				}
 			}
 		}
 
@@ -180,7 +184,6 @@ $LastChangedRevision$
 
 			update_lastmod();
 		}
-
 		else
 		{
 			extract(array_map('assert_int',psa(array('is_default','on_frontpage','in_rss','searchable'))));
@@ -217,10 +220,7 @@ $LastChangedRevision$
 			// Caveat: Use unslashed params for DTO
 			$s = psa(array('name', 'title', 'page', 'css')) + compact('is_default', 'on_frontpage', 'in_rss', 'searchable');
 			$s = section_detail_partial($s);
-			// TODO: display $message eventually?
-			// TODO: re-attach submit handler to newly inserted form element
 			send_script_response($prequel.'$("#section-form-'.$name.'").replaceWith("'.escape_js($s).'");'.$sequel);
-			return;
 		} else {
 			sec_section_list($message);
 		}
@@ -247,6 +247,8 @@ $LastChangedRevision$
 
 		sec_section_list($message);
 	}
+
+// -------------------------------------------------------------
 
 	function section_detail_partial($thesection)
 	{
@@ -327,6 +329,6 @@ $LastChangedRevision$
 
 			endTable();
 
-			return form($out,'', '', 'post', 'async', 'section-'.$name, 'section-form-'.$name);
+			return form($out,'', 'postForm(this);', 'post', 'async', 'section-'.$name, 'section-form-'.$name);
 	}
 ?>
