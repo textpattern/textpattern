@@ -274,6 +274,10 @@ padding: 2px;
 background-color: #ddd;
 }
 
+.processing input, .processing textarea, .processing select, .processing td, .processing label {
+	color: #888;
+}
+
 /* table elements
 ----------------------------------------------- */
 

@@ -295,8 +295,14 @@ function setClassRemember(className, force)
 	setClassDisplay(className+'_neg', 1-v);
 }
 
-//-------------------------------------------------------------
-// AJAX
+/**
+ * Send/receive AJAX posts
+ *
+ * @param data 	POST payload
+ * @param fn 	success handler
+ * @param format response data format ['xml']
+ * @see http://api.jquery.com/jQuery.post/
+ */
 function sendAsyncEvent(data, fn, format)
 {
 	data.app_mode = 'async';
@@ -304,41 +310,61 @@ function sendAsyncEvent(data, fn, format)
 	$.post('index.php', data, fn, format);
 }
 
+/**
+ * Submit event handler. Sends a form's entry elements as AJAX data and processes the response javascript.
+ *
+ * @return boolean Continue with browser's default form handling
+ */
 function postForm()
 {
-	var form = $(this);
-	var data = {};
-	var elms = form.find('input');
-	$.merge(elms, form.find('textarea'));
-	$.merge(elms, form.find('select'));
-	$(elms).each(function(index) {
-		var name = $(this).attr('name') || '-txp-bogus-' + index;
-		var type = $(this).attr('type');
-		switch(type) {
-			case 'checkbox':
-			case 'radio':
-				if ($(this).attr('checked')) {
-					data[name] = $(this).attr('value');
-				}
-				break;
-			default:
-				data[name] = $(this).attr('value') || '';
-				break;
-		}
-	});
-	//console.log(data);
-	form.addClass('updating');
-	sendAsyncEvent(data, function(){form.removeClass('updating');}, 'script');
-	return false;
+	try {
+		var form = $(this);
+		var data = {};
+
+		// Gather all form entry elements
+		var elms = form.find('input');
+		$.merge(elms, form.find('textarea'));
+		$.merge(elms, form.find('select'));
+		$(elms).each(function(index) {
+			// Build request data object
+			var name = $(this).attr('name') || '-txp-bogus-' + index;
+			switch($(this).attr('type')) {
+				case 'checkbox':
+				case 'radio':
+					if ($(this).attr('checked')) {
+						data[name] = $(this).attr('value');
+					}
+					break;
+				case 'file':
+					throw('postForm: input-type "file" not supported');
+					break;
+				default:
+					data[name] = $(this).attr('value') || '';
+					break;
+			}
+		});
+		// Show feedback while processing
+		form.addClass('processing');
+		// Send form data to application, process response as script.
+		sendAsyncEvent(
+			data,
+			null, // function() {},
+			'script'
+		);
+		return false;
+	} catch(e) {
+		// Perform regular form action on any hiccups
+		return true;
+	}
 }
 
 //-------------------------------------------------------------
 // global admin-side behaviour
 $(document).ready(function() {
 	// disable spellchecking on all elements of type "code" in capable browsers
-	if(jQuery.browser.mozilla){$(".code").attr("spellcheck", false)};
+	if(jQuery.browser.mozilla){$(".code").attr("spellcheck", false);}
 	// attach toggle behaviour
 	$('.lever a[class!=pophelp]').click(toggleDisplayHref);
 	// attach AJAX form handler
-	$('form.ajaxified').submit(postForm); //FIXME find final class name
+	$('form.async').submit(postForm);
 });

@@ -33,10 +33,8 @@ $LastChangedRevision$
 
 		pagetop(gTxt('sections'), $message);
 
-		$default = safe_row('page, css', 'txp_section', "name = 'default'");
+		$default = safe_row('page, css, name', 'txp_section', "name = 'default'");
 
-		$pages = safe_column('name', 'txp_page', "1 = 1");
-		$styles = safe_column('name', 'txp_css', "1 = 1");
 
 		echo n.'<div id="'.$event.'_container" class="txp-container txp-list">';
 		echo n.n.startTable('list').
@@ -57,41 +55,8 @@ $LastChangedRevision$
 			).
 
 			n.n.tr(
-				td(gTxt('default'), '', 'label').
-
-				td(
-					form(
-						'<table>'.
-
-						tr(
-							fLabelCell(gTxt('uses_page').':').
-							td(
-								selectInput('page', $pages, $default['page']).sp.popHelp('section_uses_page')
-							, '', 'noline')
-						, ' class="uses-page"').
-
-						tr(
-							fLabelCell(gTxt('uses_style').':') .
-							td(
-								selectInput('css', $styles, $default['css']).sp.popHelp('section_uses_css')
-							, '', 'noline')
-						, ' class="uses-style"').
-
-						pluggable_ui('section_ui', 'extend_detail_form', '', $default).
-
-						tr(
-							tda(
-								fInput('submit', '', gTxt('save_button'), 'smallerbox').
-								eInput('section').
-								sInput('section_save').
-								hInput('name','default')
-							, ' colspan="2" class="noline"')
-						).
-
-						endTable()
-					)
-				).
-
+				td(gTxt('default'), '', 'label').n.
+				td(section_detail_partial($default)).n.
 				td()
 			, ' class="section default"');
 
@@ -107,79 +72,7 @@ $LastChangedRevision$
 
 				echo n.n.tr(
 					n.td($name, '', 'label').
-
-					n.td(
-						form(
-							'<table>'.
-
-							n.n.tr(
-								fLabelCell(gTxt('section_name').':').
-								fInputCell('name', $name, 1, 20)
-							, ' class="name"').
-
-							n.n.tr(
-								fLabelCell(gTxt('section_longtitle').':').
-								fInputCell('title', $title, 1, 20)
-							, ' class="title"').
-
-							n.n.tr(
-								fLabelCell(gTxt('uses_page').':').
-								td(
-									selectInput('page', $pages, $page).sp.popHelp('section_uses_page')
-								, '', 'noline')
-							, ' class="uses-page"').
-
-							n.n.tr(
-								fLabelCell(gTxt('uses_style').':').
-								td(
-									selectInput('css', $styles, $css).sp.popHelp('section_uses_css')
-								, '', 'noline')
-							, ' class="uses-style"').
-
-							n.n.tr(
-								fLabelCell(gTxt('selected_by_default')).
-								td(
-									yesnoradio('is_default', $is_default, '', $name).sp.popHelp('section_is_default')
-								, '', 'noline')
-							, ' class="option is-default"').
-
-							n.n.tr(
-								fLabelCell(gTxt('on_front_page')).
-								td(
-									yesnoradio('on_frontpage', $on_frontpage, '', $name).sp.popHelp('section_on_frontpage')
-								, '', 'noline')
-							, ' class="option on-frontpage"').
-
-							n.n.tr(
-								fLabelCell(gTxt('syndicate')) .
-								td(
-									yesnoradio('in_rss', $in_rss, '', $name).sp.popHelp('section_syndicate')
-								, '', 'noline')
-							, ' class="option in-rss"').
-
-							n.n.tr(
-								fLabelCell(gTxt('include_in_search')).
-								td(
-									yesnoradio('searchable', $searchable, '', $name).sp.popHelp('section_searchable')
-								, '', 'noline')
-							, ' class="option is-searchable"').
-
-							pluggable_ui('section_ui', 'extend_detail_form', '', $a).
-
-							n.n.tr(
-								tda(
-									fInput('submit', '', gTxt('save_button'), 'smallerbox').
-									eInput('section').
-									sInput('section_save').
-									hInput('old_name', $name)
-								, ' colspan="2" class="noline"')
-							).
-
-							endTable(),
-							'', '', 'post', '', 'section-'.$name
-						)
-					, '', 'main').
-
+					n.td(section_detail_partial($a), '', 'main').
 					td(
 						dLink('section', 'section_delete', 'name', $name, '', 'type', 'section')
 					, '', 'actions')
@@ -251,10 +144,12 @@ $LastChangedRevision$
 
 	function section_save()
 	{
-		global $txpcfg;
+		global $txpcfg, $app_mode;
 
 		extract(doSlash(psa(array('page','css','old_name'))));
 		extract(psa(array('name', 'title')));
+		$prequel = '';
+		$sequel = '';
 
 		if (empty($title))
 		{
@@ -274,7 +169,7 @@ $LastChangedRevision$
 			{
 				$message = array(gTxt('section_name_already_exists', array('{name}' => $name)), E_ERROR);
 
-				sec_section_list($message);
+				sec_section_list($message); // TODO: async response?
 				return;
 			}
 		}
@@ -293,6 +188,11 @@ $LastChangedRevision$
 			if ($is_default)
 			{
 				safe_update("txp_section", "is_default = 0", "name != '$old_name'");
+				// switch off $is_default for all sections in async app_mode
+				if ($app_mode == 'async') {
+					$prequel = 	'$("input[name=\"is_default\"][value=\"1\"]").attr("checked", false);'.
+								'$("input[name=\"is_default\"][value=\"0\"]").attr("checked", true);';
+				}
 			}
 
 			safe_update('txp_section', "
@@ -313,7 +213,17 @@ $LastChangedRevision$
 
 		$message = gTxt('section_updated', array('{name}' => $name));
 
-		sec_section_list($message);
+		if ($app_mode == 'async') {
+			// Caveat: Use unslashed params for DTO
+			$s = psa(array('name', 'title', 'page', 'css')) + compact('is_default', 'on_frontpage', 'in_rss', 'searchable');
+			$s = section_detail_partial($s);
+			// TODO: display $message eventually?
+			// TODO: re-attach submit handler to newly inserted form element
+			send_script_response($prequel.'$("#section-form-'.$name.'").replaceWith("'.escape_js($s).'");'.$sequel);
+			return;
+		} else {
+			sec_section_list($message);
+		}
 	}
 
 // -------------------------------------------------------------
@@ -338,4 +248,85 @@ $LastChangedRevision$
 		sec_section_list($message);
 	}
 
+	function section_detail_partial($thesection)
+	{
+		static $pages, $styles;
+		if (empty($pages)) {
+			$pages = safe_column('name', 'txp_page', "1 = 1");
+			$styles = safe_column('name', 'txp_css', "1 = 1");
+		}
+
+		extract($thesection);
+
+		$default_section = ($name == 'default');
+
+		$out = '<table>'.
+
+			($default_section ? '' : n.n.tr(
+				fLabelCell(gTxt('section_name').':').
+				fInputCell('name', $name, 1, 20)
+			, ' class="name"')).
+
+			($default_section ? '' : n.n.tr(
+				fLabelCell(gTxt('section_longtitle').':').
+				fInputCell('title', $title, 1, 20)
+			, ' class="title"')).
+
+			n.n.tr(
+				fLabelCell(gTxt('uses_page').':').
+				td(
+					selectInput('page', $pages, $page).sp.popHelp('section_uses_page')
+				, '', 'noline')
+			, ' class="uses-page"').
+
+			n.n.tr(
+				fLabelCell(gTxt('uses_style').':').
+				td(
+					selectInput('css', $styles, $css).sp.popHelp('section_uses_css')
+				, '', 'noline')
+			, ' class="uses-style"').
+
+			($default_section ? '' : n.n.tr(
+				fLabelCell(gTxt('selected_by_default')).
+				td(
+					yesnoradio('is_default', $is_default, '', $name).sp.popHelp('section_is_default')
+				, '', 'noline')
+			, ' class="option is-default"')).
+
+			($default_section ? '' : n.n.tr(
+				fLabelCell(gTxt('on_front_page')).
+				td(
+					yesnoradio('on_frontpage', $on_frontpage, '', $name).sp.popHelp('section_on_frontpage')
+				, '', 'noline')
+			, ' class="option on-frontpage"')).
+
+			($default_section ? '' : n.n.tr(
+				fLabelCell(gTxt('syndicate')) .
+				td(
+					yesnoradio('in_rss', $in_rss, '', $name).sp.popHelp('section_syndicate')
+				, '', 'noline')
+			, ' class="option in-rss"')).
+
+			($default_section ? '' : n.n.tr(
+				fLabelCell(gTxt('include_in_search')).
+				td(
+					yesnoradio('searchable', $searchable, '', $name).sp.popHelp('section_searchable')
+				, '', 'noline')
+			, ' class="option is-searchable"')).
+
+			pluggable_ui('section_ui', 'extend_detail_form', '', $thesection).
+
+			n.n.tr(
+				tda(
+					fInput('submit', '', gTxt('save_button'), 'smallerbox').
+					eInput('section').
+					sInput('section_save').
+					($default_section ? hInput('name', $name) : hInput('old_name', $name))
+				, ' colspan="2" class="noline"')
+			).
+
+			endTable();
+
+			return form($out,'', '', 'post', 'async', 'section-'.$name, 'section-form-'.$name);
+	}
 ?>
