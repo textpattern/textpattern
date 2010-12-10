@@ -145,12 +145,14 @@ $LastChangedRevision$
 		callback_event($event, $step, 0);
 
 		$microdiff = (getmicrotime() - $microstart);
-		echo n.comment(gTxt('runtime').': '.substr($microdiff,0,6));
 
 		end_page();
-
+		echo n.comment(gTxt('runtime').': '.substr($microdiff,0,6));
+		if (is_callable('memory_get_peak_usage')) {
+			echo n.comment(sprintf('Memory: %sKb', ceil(memory_get_peak_usage(true)/1024)));
+		}
 	} else {
-		txp_die('DB-Connect was succesful, but the textpattern-table was not found.',
+		txp_die('DB-Connect was successful, but the textpattern-table was not found.',
 				'503 Service Unavailable');
 	}
 ?>
