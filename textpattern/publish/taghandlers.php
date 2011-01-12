@@ -4498,7 +4498,7 @@ $LastChangedRevision$
 			return;
 		}
 
-		if (!isset($atts['value']) and empty($thing))
+		if (!isset($atts['value']) && is_null($thing))
 		{
 			return $variable[$name];
 		}
