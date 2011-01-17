@@ -221,7 +221,9 @@ function escape_js($js)
 		{
 			while ($a = nextRow($rs))
 			{
-				$out[$a['name']] = $a['data'];
+				if (!empty($a['name'])) {
+					$out[$a['name']] = $a['data'];
+				}
 			}
 		}else{
 			#backward compatibility stuff. Remove when necessary.
@@ -269,7 +271,7 @@ function escape_js($js)
 		global $txpcfg;
 		$lang = LANG;
 
-		$installed = safe_field('name', 'txp_lang',"lang='".doSlash($lang)."' limit 1");
+		$installed = (false !== safe_field('name', 'txp_lang',"lang='".doSlash($lang)."' limit 1"));
 
 		$lang_code = ($installed)? $lang : 'en-gb';
 
