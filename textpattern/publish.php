@@ -1203,7 +1203,10 @@ $LastChangedRevision$
 	{
 		global $prefs;
 		$in = serverset('REQUEST_URI');
-		if (!empty($prefs['max_url_len']) and strlen($in) > $prefs['max_url_len']) exit('Nice try.');
+		if (!empty($prefs['max_url_len']) and strlen($in) > $prefs['max_url_len']) {
+			txp_status_header('503 Service Unavailable');
+			exit('Nice try.');
+		}
 	}
 
 // -------------------------------------------------------------
