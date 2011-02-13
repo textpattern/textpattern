@@ -319,6 +319,8 @@ Applying Attributes:
 @define('txt_ellipsis',           '&#8230;');
 @define('txt_emdash',             '&#8212;');
 @define('txt_endash',             '&#8211;');
+@define('txt_emspace',            '&#8195;');
+@define('txt_enspace',            '&#8194;');
 @define('txt_dimension',          '&#215;');
 @define('txt_trademark',          '&#8482;');
 @define('txt_registered',         '&#174;');
@@ -414,6 +416,7 @@ class Textile
 			'/([^.]?)\.{3}/',                       // ellipsis
 			'/(\s?)--(\s?)/',                       // em dash
 			'/\s-(?:\s|$)/',                        // en dash
+			'/(\s?)\ \ (\s?)/',                     // em space
 			'/(\d+)( ?)x( ?)(?=\d+)/',              // dimension sign
 			'/(\b ?|\s|^)[([]TM[])]/i',             // trademark
 			'/(\b ?|\s|^)[([]R[])]/i',              // registered
@@ -437,6 +440,7 @@ class Textile
 			'$1'.txt_ellipsis,                     // ellipsis
 			'$1'.txt_emdash.'$2',                  // em dash
 			' '.txt_endash.' ',                    // en dash
+			'$1'.txt_emspace.'$2',                 // em space
 			'$1$2'.txt_dimension.'$3',             // dimension sign
 			'$1'.txt_trademark,                    // trademark
 			'$1'.txt_registered,                   // registered
@@ -614,7 +618,7 @@ class Textile
 			$o = '';
 			if( $style ) {
 				foreach($style as $s) {
-					$parts = split(';', $s);
+					$parts = explode(';', $s);
 					foreach( $parts as $p ) {
 						$p = trim($p, '; ');
 						if( !empty( $p ) )
