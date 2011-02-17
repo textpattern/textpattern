@@ -2452,7 +2452,7 @@ eod;
 		// backfill default response properties
 		$response = $response + $default_response;
 
-		header('Content-Type: text/xml');
+		header('Content-Type: text/xml; charset=utf-8');
 		txp_status_header($response['http-status']);
 		$out[] = '<?xml version="1.0" encoding="utf-8" standalone="yes"?>';
 		$out[] = '<textpattern>';
@@ -2487,7 +2487,7 @@ eod;
 	function send_script_response($out = '')
 	{
 		ob_clean();
-		header('Content-Type: text/javascript');
+		header('Content-Type: text/javascript; charset=utf-8');
 		txp_status_header('200 OK');
 		die($out);
 	}
