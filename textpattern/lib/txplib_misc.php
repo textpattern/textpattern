@@ -1883,15 +1883,22 @@ function escape_js($js)
 //-------------------------------------------------------------
 	function get_pref($thing, $default='', $from_db=0) // checks $prefs for a named variable, or creates a default
 	{
-		global $prefs;
+		global $prefs, $txp_user;
 
 		if ($from_db)
 		{
 			$name = doSlash($thing);
-			$exists = getCount('txp_prefs', "name='$name'");
+			$exists = safe_column('user_name', 'txp_prefs', "name='$name'");
 			if ($exists)
 			{
-				$prefs[$thing] = safe_field('val', 'txp_prefs', "name='$name'");
+				if (!empty($txp_user) && in_array($txp_user, $exists))
+				{
+					$prefs[$thing] = safe_field('val', 'txp_prefs', "name='$name' AND user_name = '".doSlash($txp_user)."'");
+				}
+				else if (in_array('', $exists))
+				{
+					$prefs[$thing] = safe_field('val', 'txp_prefs', "name='$name' AND user_name = ''");
+				}
 			}
 		}
 		return (isset($prefs[$thing])) ? $prefs[$thing] : $default;
