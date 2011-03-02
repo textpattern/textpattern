@@ -1891,13 +1891,13 @@ function escape_js($js)
 			$exists = safe_column('user_name', 'txp_prefs', "name='$name'");
 			if ($exists)
 			{
-				if (!empty($txp_user) && in_array($txp_user, $exists))
-				{
-					$prefs[$thing] = safe_field('val', 'txp_prefs', "name='$name' AND user_name = '".doSlash($txp_user)."'");
-				}
-				else if (in_array('', $exists))
+				if (in_array('', $exists))
 				{
 					$prefs[$thing] = safe_field('val', 'txp_prefs', "name='$name' AND user_name = ''");
+				}
+				else if (!empty($txp_user) && in_array($txp_user, $exists))
+				{
+					$prefs[$thing] = safe_field('val', 'txp_prefs', "name='$name' AND user_name = '".doSlash($txp_user)."'");
 				}
 			}
 		}
