@@ -3417,7 +3417,7 @@ begin tag builder functions
 				break;
 
 				case 'xhtml':
-					$alt     = ($alt)     ? ' alt="'.$alt.'"' : '';
+					$alt     = ' alt="'.$alt.'"';
 					$caption = ($caption) ? ' title="'.$caption.'"' : '';
 					$class   = ($class)   ? ' class="'.$class.'"' : '';
 					$html_id = ($html_id) ? ' id="'.$html_id.'"' : '';
