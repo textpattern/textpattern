@@ -122,6 +122,8 @@ if (!empty($event) and $event == 'article') {
 			}
 		}
 
+		$user = doSlash($txp_user);
+
 		if ($Title or $Body or $Excerpt) {
 
 			if (!has_privs('article.publish') && $Status>=4) $Status = 3;
@@ -148,9 +150,9 @@ if (!empty($event) and $event == 'article') {
 				Status          =  $Status,
 				Posted          =  $when,
 				Expires         =  $whenexpires,
-				AuthorID        = '$txp_user',
+				AuthorID        = '$user',
 				LastMod         =  $when,
-				LastModID       = '$txp_user',
+				LastModID       = '$user',
 				Section         = '$Section',
 				Category1       = '$Category1',
 				Category2       = '$Category2',
@@ -274,6 +276,8 @@ if (!empty($event) and $event == 'article') {
 
 		$Keywords = doSlash(trim(preg_replace('/( ?[\r\n\t,])+ ?/s', ',', preg_replace('/ +/', ' ', ps('Keywords'))), ', '));
 
+		$user = doSlash($txp_user);
+
 		$cfq = array();
 		$cfs = getCustomFields();
 		foreach($cfs as $i => $cf_name)
@@ -293,7 +297,7 @@ if (!empty($event) and $event == 'article') {
 			Image           = '$Image',
 			Status          =  $Status,
 			LastMod         =  now(),
-			LastModID       = '$txp_user',
+			LastModID       = '$user',
 			Section         = '$Section',
 			Category1       = '$Category1',
 			Category2       = '$Category2',

@@ -905,7 +905,7 @@ $LastChangedRevision$
 				caption = '$caption',
 				category = '$category',
 				date = now(),
-				author = '$txp_user'
+				author = '".doSlash($txp_user)."'
 			";
 
 			if (empty($id))

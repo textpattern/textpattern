@@ -1,0 +1,238 @@
+
+[2008-07-28T18:01:01Z]
+finder
+array (
+  0 => 'bad credit',
+  1 => 'cialis',
+  2 => 'consolidation',
+  3 => 'consolidate',
+  4 => '​flowers',
+  5 => 'credit card',
+  6 => 'credit repair',
+  7 => 'debt',
+  8 => 'insurance',
+  9 => 'interest',
+  10 => 'loans',
+  11 => 'mortgage',
+  12 => 'payday loan',
+  13 => 'porn',
+  14 => 'refinance',
+  15 => 'sex',
+  16 => 'viagra',
+  17 => 'xxx',
+)
+
+[2008-07-28T18:01:01Z]
+checking
+all 32432 those flowers
+
+[2008-07-28T18:01:01Z]
+x
+bad credit
+
+[2008-07-28T18:01:01Z]
+found
+
+
+[2008-07-28T18:01:01Z]
+x
+cialis
+
+[2008-07-28T18:01:01Z]
+found
+
+
+[2008-07-28T18:01:01Z]
+x
+consolidation
+
+[2008-07-28T18:01:01Z]
+found
+
+
+[2008-07-28T18:01:01Z]
+x
+consolidate
+
+[2008-07-28T18:01:01Z]
+found
+
+
+[2008-07-28T18:01:01Z]
+x
+​flowers
+
+[2008-07-28T18:01:01Z]
+found
+
+
+[2008-07-28T18:01:01Z]
+x
+credit card
+
+[2008-07-28T18:01:01Z]
+found
+
+
+[2008-07-28T18:01:01Z]
+x
+credit repair
+
+[2008-07-28T18:01:01Z]
+found
+
+
+[2008-07-28T18:01:01Z]
+x
+debt
+
+[2008-07-28T18:01:01Z]
+found
+
+
+[2008-07-28T18:01:01Z]
+x
+insurance
+
+[2008-07-28T18:01:01Z]
+found
+
+
+[2008-07-28T18:01:01Z]
+x
+interest
+
+[2008-07-28T18:01:01Z]
+found
+
+
+[2008-07-28T18:01:01Z]
+x
+loans
+
+[2008-07-28T18:01:01Z]
+found
+
+
+[2008-07-28T18:01:01Z]
+x
+mortgage
+
+[2008-07-28T18:01:01Z]
+found
+
+
+[2008-07-28T18:01:01Z]
+x
+payday loan
+
+[2008-07-28T18:01:01Z]
+found
+
+
+[2008-07-28T18:01:01Z]
+x
+porn
+
+[2008-07-28T18:01:01Z]
+found
+
+
+[2008-07-28T18:01:01Z]
+x
+refinance
+
+[2008-07-28T18:01:01Z]
+found
+
+
+[2008-07-28T18:01:01Z]
+x
+sex
+
+[2008-07-28T18:01:01Z]
+found
+
+
+[2008-07-28T18:01:01Z]
+x
+viagra
+
+[2008-07-28T18:01:01Z]
+found
+
+
+[2008-07-28T18:01:01Z]
+x
+xxx
+
+[2008-07-28T18:01:01Z]
+found
+
+
+[2008-07-28T18:01:58Z]
+finder
+array (
+  0 => 'bad credit',
+  1 => 'cialis',
+  2 => 'consolidation',
+  3 => 'consolidate',
+  4 => 'flowers',
+  5 => 'credit card',
+  6 => 'credit repair',
+  7 => 'debt',
+  8 => 'insurance',
+  9 => 'interest',
+  10 => 'loans',
+  11 => 'mortgage',
+  12 => 'payday loan',
+  13 => 'porn',
+  14 => 'refinance',
+  15 => 'sex',
+  16 => 'viagra',
+  17 => 'xxx',
+)
+
+[2008-07-28T18:01:58Z]
+checking
+sdfdsf flowers
+
+[2008-07-28T18:01:58Z]
+x
+bad credit
+
+[2008-07-28T18:01:58Z]
+found
+
+
+[2008-07-28T18:01:58Z]
+x
+cialis
+
+[2008-07-28T18:01:58Z]
+found
+
+
+[2008-07-28T18:01:58Z]
+x
+consolidation
+
+[2008-07-28T18:01:58Z]
+found
+
+
+[2008-07-28T18:01:58Z]
+x
+consolidate
+
+[2008-07-28T18:01:58Z]
+found
+
+
+[2008-07-28T18:01:58Z]
+x
+flowers
+
+[2008-07-28T18:01:58Z]
+found
+flowers

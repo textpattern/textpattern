@@ -574,7 +574,7 @@ $LastChangedRevision$
 			 size = '$size',
 			 created = now(),
 			 modified = now(),
-			 author = '$txp_user'
+			 author = '".doSlash($txp_user)."'
 		");
 
 		if ($rs) {
@@ -826,7 +826,7 @@ $LastChangedRevision$
 			status = '$status',
 			size = '$size',
 			modified = now(),
-			author = '$txp_user'"
+			author = '".doSlash($txp_user)."'"
 			.($created ? ", created = $created" : '')
 		, "id = $id");
 

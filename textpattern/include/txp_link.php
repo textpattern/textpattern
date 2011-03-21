@@ -394,7 +394,7 @@ $LastChangedRevision$
 			linkname    = '$linkname',
 			linksort    = '$linksort',
 			description = '$description',
-			author		= '$txp_user'"
+			author		= '".doSlash($txp_user)."'"
 		);
 
 		$GLOBALS['ID'] = mysql_insert_id( );
@@ -404,7 +404,7 @@ $LastChangedRevision$
 			//update lastmod due to link feeds
 			update_lastmod();
 
-			$message = gTxt('link_created', array('{name}' => $linkname));
+			$message = gTxt('link_created', array('{name}' => doStrip($linkname)));
 
 			link_edit($message);
 		}
@@ -442,7 +442,7 @@ $LastChangedRevision$
 			linkname    = '$linkname',
 			linksort    = '$linksort',
 			description = '$description',
-			author 		= '$txp_user'",
+			author 		= '".doSlash($txp_user)."'",
 		   "id = $id"
 		);
 

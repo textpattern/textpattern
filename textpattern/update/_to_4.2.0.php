@@ -79,7 +79,7 @@ $LastChangedRevision$
 	 	if (!in_array('author', $cols))
 	 	{
 			safe_alter($table, "ADD author varchar(255) NOT NULL default '', ADD INDEX author_idx (author)");
-			safe_update($table, "author='$txp_user'",'1=1');
+			safe_update($table, "author='".doSlash($txp_user)."'",'1=1');
 	 	}
 	}
 
