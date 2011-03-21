@@ -35,13 +35,15 @@ $LastChangedRevision$
 
 		pagetop(gTxt('edit_pages'), $message);
 
-		extract(gpsa(array('name', 'newname', 'copy', 'savenew')));
+		extract(gpsa(array('copy', 'savenew')));
+		$name = sanitizeForPage(gps('name'));
+		$newname = sanitizeForPage(gps('newname'));
 
 		if ($step == 'page_delete' || empty($name) && $step != 'page_new' && !$savenew)
 		{
 			$name = safe_field('page', 'txp_section', "name = 'default'");
 		}
-		elseif( ( $copy || $savenew ) && trim(preg_replace('/[<>&"\']/', '', $newname)) )
+		elseif( ( $copy || $savenew ) && $newname )
 		{
 			$name = $newname;
 		}
@@ -109,7 +111,7 @@ $LastChangedRevision$
 			hInput('savenew','savenew').
 			'</div>';
 		} else {
-			$buttons = '<div class="edit-title">'.gTxt('you_are_editing_page').sp.strong($name).'</div>';
+			$buttons = '<div class="edit-title">'.gTxt('you_are_editing_page').sp.strong(htmlspecialchars($name)).'</div>';
 		}
 
 		$out[] = '<div id="main_content">'.$buttons.
@@ -187,11 +189,12 @@ $LastChangedRevision$
 
 	function page_save()
 	{
-		extract(doSlash(gpsa(array('name', 'savenew', 'html', 'copy'))));
+		extract(doSlash(gpsa(array('savenew', 'html', 'copy'))));
+		$name = sanitizeForPage(gps('name'));
 
 		if ($savenew or $copy)
 		{
-			$newname = doSlash(trim(preg_replace('/[<>&"\']/', '', gps('newname'))));
+			$newname = doSlash(sanitizeForPage(gps('newname')));
 
 			if ($newname and safe_field('name', 'txp_page', "name = '$newname'"))
 			{

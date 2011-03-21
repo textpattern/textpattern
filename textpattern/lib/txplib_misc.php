@@ -827,6 +827,16 @@ function escape_js($js)
 	}
 
 // -------------------------------------------------------------
+	function sanitizeForPage($text)
+	{
+		// any overrides?
+		$out = callback_event('sanitize_for_page', '', 0, $text);
+		if ($out !== '') return $out;
+
+		return trim(preg_replace('/[<>&"\']/', '', $text));
+	}
+
+// -------------------------------------------------------------
 	function dumbDown($str, $lang=LANG)
 	{
 		static $array;
