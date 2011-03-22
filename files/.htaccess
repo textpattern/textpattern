@@ -1,0 +1,4 @@
+# $HeadURL$
+# $LastChangedRevision$
+Options -Indexes
+RedirectMatch 403 .*
