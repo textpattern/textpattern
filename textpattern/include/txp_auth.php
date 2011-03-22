@@ -45,7 +45,11 @@ function doAuth()
 
 		// check post-4.3-style passwords
 		if ($phpass->CheckPassword($password, $hash)) {
-			$name = $user;
+			if ($log) {
+				$name = safe_field("name", "txp_users",	"name = '$safe_user' and privs > 0");
+			} else {
+				$name = $user;
+			}
 		} else {
 			// no good password: check 4.3-style passwords
 			$passwords = array();
