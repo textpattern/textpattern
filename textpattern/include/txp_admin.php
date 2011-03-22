@@ -140,7 +140,7 @@ $LastChangedRevision$
 	{
 		global $txp_user;
 
-		extract(doSlash(psa(array('new_pass', 'mail_password'))));
+		extract(psa(array('new_pass', 'mail_password')));
 
 		if (empty($new_pass))
 		{
@@ -148,7 +148,8 @@ $LastChangedRevision$
 			return;
 		}
 
-		$rs = safe_update('txp_users', "pass = password(lower('$new_pass'))", "name = '".doSlash($txp_user)."'");
+		$hash = doSlash(txp_hash_password($new_pass));
+		$rs = safe_update('txp_users', "pass = '$hash'", "name = '".doSlash($txp_user)."'");
 
 		if ($rs)
 		{
@@ -195,8 +196,9 @@ $LastChangedRevision$
 				return;
 			}
 
-			$password = doSlash(generate_password(6));
-			$nonce    = doSlash(md5(uniqid(mt_rand(), TRUE)));
+			$password = generate_password(6);
+			$hash	= doSlash(txp_hash_password($password));
+			$nonce	= doSlash(md5(uniqid(mt_rand(), TRUE)));
 
 			$rs = safe_insert('txp_users', "
 				privs    = $privs,
@@ -204,7 +206,7 @@ $LastChangedRevision$
 				email    = '$email',
 				RealName = '$RealName',
 				nonce    = '$nonce',
-				pass     = password(lower('$password'))
+				pass     = '$hash'
 			");
 
 			if ($rs)
@@ -542,8 +544,9 @@ $LastChangedRevision$
 				foreach ($names as $name)
 				{
 					$passwd = generate_password(6);
+					$hash 	= doSlash(txp_hash_password($passwd));
 
-					if (safe_update('txp_users', "pass = password(lower('".doSlash($passwd)."'))", "name = '".doSlash($name)."'"));
+					if (safe_update('txp_users', "pass = '$hash'", "name = '".doSlash($name)."'"));
 					{
 						$email = safe_field('email', 'txp_users', "name = '".doSlash($name)."'");
 

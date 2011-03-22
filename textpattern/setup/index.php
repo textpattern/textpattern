@@ -26,6 +26,7 @@ include_once txpath.'/lib/constants.php';
 include_once txpath.'/lib/txplib_html.php';
 include_once txpath.'/lib/txplib_forms.php';
 include_once txpath.'/lib/txplib_misc.php';
+include_once txpath.'/include/txp_auth.php';
 
 header("Content-type: text/html; charset=utf-8");
 
@@ -369,10 +370,11 @@ eod;
 		// This has to come after txpsql.php, because otherwise we can't call mysql_real_escape_string
 		extract(doSlash(psa(array('name','pass','RealName','email'))));
 
- 		$nonce = md5( uniqid( rand(), true ) );
+ 		$nonce 	= md5( uniqid( rand(), true ) );
+		$hash 	= doSlash(txp_hash_password($pass));
 
 		mysql_query("INSERT INTO `".PFX."txp_users` VALUES
-			(1,'$name',password(lower('$pass')),'$RealName','$email',1,now(),'$nonce')");
+			(1,'$name','$hash','$RealName','$email',1,now(),'$nonce')");
 
 		mysql_query("update `".PFX."txp_prefs` set val = '".doSlash($siteurl)."' where `name`='siteurl'");
 		mysql_query("update `".PFX."txp_prefs` set val = '".LANG."' where `name`='language'");

@@ -362,7 +362,7 @@ $LastChangedRevision$
 					$rs = mysql_query("
 						insert into ".safe_pfx('txp_users')." set
 							name     = '".doSlash($name)."',
-							pass     = '".doSlash($pass)."',
+							pass     = 'import_wp_unknown',
 							email    = '".doSlash($email)."',
 							RealName = '".doSlash($RealName)."',
 							privs    = ".$privs.",

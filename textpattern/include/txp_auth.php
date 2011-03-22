@@ -16,6 +16,8 @@ $LastChangedRevision$
 
 if (!defined('txpinterface')) die('txpinterface is undefined.');
 
+include_once txpath.'/lib/PasswordHash.php';
+
 function doAuth()
 {
 	global $txp_user;
@@ -36,29 +38,52 @@ function doAuth()
 	function txp_validate($user,$password)
 	{
 		$safe_user = doSlash($user);
-		$passwords = array();
+		$name = FALSE;
 
-		$passwords[] = "password(lower('".doSlash($password)."'))";
-		$passwords[] = "password('".doSlash($password)."')";
+		$hash = safe_field('pass', 'txp_users', "name = '$safe_user'");
+		$phpass = new PasswordHash(PASSWORD_COMPLEXITY, PASSWORD_PORTABILITY);
 
-		if (version_compare(mysql_get_server_info(), '4.1.0', '>='))
-		{
-			$passwords[] = "old_password(lower('".doSlash($password)."'))";
-			$passwords[] = "old_password('".doSlash($password)."')";
+		// check post-4.3-style passwords
+		if ($phpass->CheckPassword($password, $hash)) {
+			$name = $user;
+		} else {
+			// no good password: check 4.3-style passwords
+			$passwords = array();
+
+			$passwords[] = "password(lower('".doSlash($password)."'))";
+			$passwords[] = "password('".doSlash($password)."')";
+
+			if (version_compare(mysql_get_server_info(), '4.1.0', '>='))
+			{
+				$passwords[] = "old_password(lower('".doSlash($password)."'))";
+				$passwords[] = "old_password('".doSlash($password)."')";
+			}
+
+			$name = safe_field("name", "txp_users",
+				"name = '$safe_user' and (pass = ".join(' or pass = ', $passwords).") and privs > 0");
+
+			// old password is good: migrate password to phpass
+			if ($name !== FALSE) {
+				safe_update("txp_users", "pass = '".doSlash($phpass->HashPassword($password))."'", "name = '$safe_user'");
+			}
 		}
-
-		$name = safe_field("name", "txp_users",
-			"name = '$safe_user' and (pass = ".join(' or pass = ', $passwords).") and privs > 0");
 
 		if ($name !== FALSE)
 		{
 			// update the last access time
 			safe_update("txp_users", "last_access = now()", "name = '$safe_user'");
-			return $name;
-
 		}
+		return $name;
+	}
 
-		return false;
+// -------------------------------------------------------------
+	function txp_hash_password($password)
+	{
+		static $phpass = NULL;
+		if (!$phpass) {
+			$phpass = new PasswordHash(PASSWORD_COMPLEXITY, PASSWORD_PORTABILITY);
+		}
+		return $phpass->HashPassword($password);
 	}
 
 // -------------------------------------------------------------

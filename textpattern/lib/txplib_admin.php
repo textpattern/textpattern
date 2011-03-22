@@ -104,9 +104,11 @@ $LastChangedRevision$
 	function reset_author_pass($name)
 	{
 		$email = safe_field('email', 'txp_users', "name = '".doSlash($name)."'");
-		$new_pass = doSlash(generate_password(6));
 
-		$rs = safe_update('txp_users', "pass = password(lower('$new_pass'))", "name = '".doSlash($name)."'");
+		$new_pass = generate_password(6);
+		$hash = doSlash(txp_hash_password($new_pass));
+
+		$rs = safe_update('txp_users', "pass = '$hash'", "name = '".doSlash($name)."'");
 
 		if ($rs)
 		{

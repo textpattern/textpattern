@@ -128,7 +128,7 @@ $LastChangedRevision$
 					$q = safe_insert("txp_users","
 						name     = '".doSlash($RealName)."',
 						email    = '".doSlash($email)."',
-						pass     = '".doSlash($pass)."',
+						pass     = '".doSlash(txp_hash_password($pass))."',
 						RealName = '".doSlash($RealName)."',
 						privs='1'"
 					);
