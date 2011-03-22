@@ -145,7 +145,8 @@ $LastChangedRevision$
 		callback_event('file_download');
 		if (!isset($file_error)) {
 
-				$fullpath = build_file_path($file_base_path,$filename);
+			$filename = sanitizeForFile($filename);
+			$fullpath = build_file_path($file_base_path,$filename);
 
 				if (is_file($fullpath)) {
 
@@ -154,7 +155,7 @@ $LastChangedRevision$
 					$filesize = filesize($fullpath); $sent = 0;
 					header('Content-Description: File Download');
 					header('Content-Type: application/octet-stream');
-					header('Content-Disposition: attachment; filename="' . basename($filename) . '"; size = "'.$filesize.'"');
+					header('Content-Disposition: attachment; filename="'.$filename.'"; size = "'.$filesize.'"');
 					// Fix for lame IE 6 pdf bug on servers configured to send cache headers
 					header('Cache-Control: private');
 					@ini_set("zlib.output_compression", "Off");

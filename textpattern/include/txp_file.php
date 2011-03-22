@@ -219,6 +219,7 @@ $LastChangedRevision$
 			while ($a = nextRow($rs))
 			{
 				extract($a);
+				$filename = sanitizeForFile($filename);
 
 				$edit_url = '?event=file'.a.'step=file_edit'.a.'id='.$id.a.'sort='.$sort.
 					a.'dir='.$dir.a.'page='.$page.a.'search_method='.$search_method.a.'crit='.$crit;
@@ -436,6 +437,7 @@ $LastChangedRevision$
 		if ($rs)
 		{
 			extract($rs);
+			$filename = sanitizeForFile($filename);
 
 			if (!has_privs('file.edit') && !($author == $txp_user && has_privs('file.edit.own')))
 			{
@@ -512,32 +514,32 @@ $LastChangedRevision$
 						, ' class="file-detail exists"');
 			} else {
 
+				$ef_select = empty($existing_files) ? '' : gTxt('existing_file').' '.selectInput('filename',$existing_files,"",1);
 				$form =	tr(
 							tda(
 								hed(gTxt('file_relink'),3).
 								file_upload_form(gTxt('upload_file'),'file_reassign','file_replace',$id,'file-reassign').
 								form(
-									graf(gTxt('existing_file').' '.
-									selectInput('filename',$existing_files,"",1).
-									pluggable_ui('file_ui', 'extend_detail_form', '', $rs).
-									fInput('submit','',gTxt('Save'),'smallerbox').
+									graf(
+										$ef_select.
+										pluggable_ui('file_ui', 'extend_detail_form', '', $rs).
+										fInput('submit','',gTxt('Save'),'smallerbox').
 
-									eInput('file').
-									sInput('file_save').
+										eInput('file').
+										sInput('file_save').
 
-									hInput('id',$id).
-									hInput('category',$category).
-									hInput('perms',($permissions=='-1') ? '' : $permissions).
-									hInput('title',$title).
-									hInput('description',$description).
-									hInput('status',$status).
+										hInput('id',$id).
+										hInput('category',$category).
+										hInput('perms',($permissions=='-1') ? '' : $permissions).
+										hInput('title',$title).
+										hInput('description',$description).
+										hInput('status',$status).
 
-									hInput('sort', $sort).
-									hInput('dir', $dir).
-									hInput('page', $page).
-									hInput('crit', $crit).
-									hInput('search_method', $search_method)
-
+										hInput('sort', $sort).
+										hInput('dir', $dir).
+										hInput('page', $page).
+										hInput('crit', $crit).
+										hInput('search_method', $search_method)
 									)
 								, '', '', 'post', 'edit-form', '', 'assign_file'),
 								' colspan="4" style="border:0"'
@@ -597,6 +599,7 @@ $LastChangedRevision$
 		}
 
 		extract(doSlash(gpsa(array('filename','title','category','permissions','description'))));
+		$filename = sanitizeForFile($filename);
 
 		$size = filesize(build_file_path($file_base_path,$filename));
 		$id = file_db_add($filename,$category,$permissions,$description,$size,$title);
@@ -604,7 +607,7 @@ $LastChangedRevision$
 		if($id === false){
 			file_list(array(gTxt('file_upload_failed').' (db_add)', E_ERROR));
 		} else {
-			$newpath = build_file_path($file_base_path,trim($filename));
+			$newpath = build_file_path($file_base_path, $filename);
 
 			if (is_file($newpath)) {
 				file_set_perm($newpath);
@@ -696,6 +699,7 @@ $LastChangedRevision$
 		}
 
 		extract($rs);
+		$filename = sanitizeForFile($filename);
 
 		if (!has_privs('file.edit') && !($author == $txp_user && has_privs('file.edit.own')))
 		{
@@ -770,7 +774,12 @@ $LastChangedRevision$
 		global $file_base_path, $txp_user;
 
 		extract(doSlash(gpsa(array('id', 'category', 'title', 'description', 'status', 'publish_now', 'year', 'month', 'day', 'hour', 'minute', 'second'))));
-		$filename = gps('filename');
+		$filename = sanitizeForFile(gps('filename'));
+
+		if ($filename == '') {
+			$message = gTxt('file_not_updated', array('{name}' => $filename));
+			return file_list($message);
+		}
 
 		$id = assert_int($id);
 
@@ -789,7 +798,7 @@ $LastChangedRevision$
 			return;
 		}
 
-		$old_filename = $rs['filename'];
+		$old_filename = sanitizeForFile($rs['filename']);
 		if ($old_filename != false && strcmp($old_filename, $filename) != 0)
 		{
 			$old_path = build_file_path($file_base_path,$old_filename);
