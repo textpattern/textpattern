@@ -261,8 +261,7 @@ $LastChangedRevision$
 						'<span title="'.htmlspecialchars(get_author_name($author)).'">'.htmlspecialchars($author).'</span>'
 					, 75, 'author') : '').
 
-					td(
-						fInput('checkbox', 'selected[]', $id)
+					td($can_edit ? fInput('checkbox', 'selected[]', $id) : '&nbsp;'
 					, 10, 'multi-edit')
 				, ' class="'.(($ctr%2 == 0) ? 'even' : 'odd').'"'
 				);
