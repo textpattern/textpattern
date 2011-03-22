@@ -35,7 +35,7 @@ function doAuth()
 }
 
 // -------------------------------------------------------------
-	function txp_validate($user,$password)
+	function txp_validate($user,$password,$log=TRUE)
 	{
 		$safe_user = doSlash($user);
 		$name = FALSE;
@@ -68,7 +68,7 @@ function doAuth()
 			}
 		}
 
-		if ($name !== FALSE)
+		if ($name !== FALSE && $log)
 		{
 			// update the last access time
 			safe_update("txp_users", "last_access = now()", "name = '$safe_user'");
