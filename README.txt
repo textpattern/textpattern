@@ -1,4 +1,4 @@
-Textpattern 4.3.0
+Textpattern 4.4.0
 
 Released under the GNU General Public License. See textpattern/license.txt
 for terms and conditions.

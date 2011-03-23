@@ -1,5 +1,13 @@
 Changes in 4.4.0
 
+* Passwords are case-sensitive.
+* Hotlink protection for files: Downloads from a web-accessible "/files" directory are inhibited. The "/file_download/$id/example.foo" route is the only valid way to access downloadable files. Requires an Apache webserver.
+* Empty <txp:variable></txp:variable> container sets a variable's value to "".
+* WordPress import tool fixed for WP 3.x.
+* Developer: txp_validate() accepts a '$log' parameter to discern between "real user login" vs. "just validating credentials" usage.
+* Developer: sendAsyncEvent() accepts parameter $format.
+* Developer: Introducing escape_js() and send_script_response().
+* Developer: phpass 0.3 / genuine for password portability, hashing, stretching, and salting. Old-style passwords will be migrated upon a user's first login. Persistent hash values in database are incompatible with previous versions.
 * jQuery 1.5.1
 
 Changes in 4.3.0

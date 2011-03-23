@@ -100,7 +100,7 @@ $LastChangedRevision$
  *
  * @param string $js JavaScript input
  * @return	string	Escaped JavaScript
- * @since 5.0
+ * @since 4.4
  */
 
 function escape_js($js)
@@ -2499,7 +2499,7 @@ eod;
  * Send a text/javascript response
  *
  * @param string $out
- * @since 5.0
+ * @since 4.4
  */
 	function send_script_response($out = '')
 	{
