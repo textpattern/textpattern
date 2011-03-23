@@ -35,11 +35,6 @@ $LastChangedRevision$
 	} else ob_end_clean();
 
 	header("Content-type: text/html; charset=utf-8");
-	if (isset($_POST['form_preview'])) {
-		include txpath.'/publish.php';
-		textpattern();
-		exit;
-	}
 
 	error_reporting(E_ALL);
 	@ini_set("display_errors","1");
@@ -114,6 +109,13 @@ $LastChangedRevision$
 		}
 
 		janitor();
+
+		// article form preview
+		if (isset($_POST['form_preview'])) {
+			include txpath.'/publish.php';
+			textpattern();
+			exit;
+		}
 
 		if (!empty($admin_side_plugins) and gps('event') != 'plugin')
 			load_plugins(1);

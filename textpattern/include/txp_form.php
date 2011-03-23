@@ -192,8 +192,8 @@ $LastChangedRevision$
 
 					graf(gTxt('form_type').br.
 						formtypes($type)).
-					graf(gTxt('only_articles_can_be_previewed')).
-					fInput('submit','form_preview',gTxt('preview'),'smallbox').
+					(empty($type) ? graf(gTxt('only_articles_can_be_previewed')) : '').
+					(empty($type) || $type == 'article' ? fInput('submit','form_preview',gTxt('preview'),'smallbox') : '' ).
 					graf($inputs).
 					'</div></form>'
 

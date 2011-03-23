@@ -828,7 +828,13 @@ $LastChangedRevision$
 				$thisarticle['is_first'] = ($count == 1);
 				$thisarticle['is_last'] = ($count == $last);
 
-				if (@constant('txpinterface') === 'admin' and gps('Form')) {
+				// article form preview
+				if (txpinterface === 'admin' && ps('Form')) {
+					doAuth();
+					if (!has_privs('form'))	 {
+						txp_status_header('401 Unauthorized');
+						exit(hed('401 Unauthorized',1).graf(gTxt('restricted_area')));
+					}
 					$articles[] = parse(gps('Form'));
 				}
 				elseif ($allowoverride and $a['override_form']) {
