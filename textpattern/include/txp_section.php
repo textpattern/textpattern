@@ -329,6 +329,8 @@ $LastChangedRevision$
 
 			endTable();
 
-			return form($out,'', 'postForm(this);', 'post', 'async', 'section-'.$name, 'section-form-'.$name);
-	}
+// TODO: AJAX form submission
+//			return form($out,'', 'postForm(this);', 'post', 'async', 'section-'.$name, 'section-form-'.$name);
+			return form($out,'', '', 'post', '', 'section-'.$name, 'section-form-'.$name);
+}
 ?>
