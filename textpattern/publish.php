@@ -1221,6 +1221,7 @@ $LastChangedRevision$
 		global $prefs;
 		if (strpos($html, chr(60).'?php') !== false) {
 			trigger_error(gTxt('raw_php_deprecated'), E_USER_WARNING);
+			if (assert_array($prefs) === FALSE) return $html;
 			if (!empty($prefs['allow_raw_php_scripting']))
 				$html = eval(' ?'.chr(62).$html.chr(60).'?php ');
 			else
