@@ -2388,6 +2388,28 @@ eod;
 	}
 
 //-------------------------------------------------------------
+	function assert_array($myvar) {
+		global $production_status;
+
+		if (is_array($myvar)) {
+			return ($myvar);
+		}
+
+		if (($production_status == 'debug') || (txpinterface == 'admin'))
+		{
+			trigger_error("<pre>Error: '".htmlspecialchars($myvar)."' is not an array</pre>".
+				n.'<pre style="padding-left: 2em;" class="backtrace"><code>'.
+				htmlspecialchars(join(n, get_caller(5,1))).'</code></pre>', E_USER_ERROR);
+		}
+		else
+		{
+			trigger_error("'".htmlspecialchars($myvar)."' is not an array.", E_USER_ERROR);
+		}
+
+		return false;
+	}
+
+//-------------------------------------------------------------
 	function replace_relative_urls($html, $permalink='') {
 
 		global $siteurl;

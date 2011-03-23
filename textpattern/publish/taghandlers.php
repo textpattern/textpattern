@@ -3731,6 +3731,8 @@ $LastChangedRevision$
 	{
 		global $is_article_body, $thisarticle, $prefs;
 
+		if (assert_array($prefs) === FALSE) return '';
+
 		ob_start();
 		if (empty($is_article_body)) {
 			if (!empty($prefs['allow_page_php_scripting']))
