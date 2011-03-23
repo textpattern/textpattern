@@ -1,6 +1,6 @@
-Changes in 5.0.0
+Changes in 4.4.0
 
-* jQuery 1.4.4
+* jQuery 1.5.1
 
 Changes in 4.3.0
 
