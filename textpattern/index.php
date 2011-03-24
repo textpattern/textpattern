@@ -110,8 +110,8 @@ $LastChangedRevision$
 
 		janitor();
 
-		// article form preview
-		if (isset($_POST['form_preview'])) {
+		// article or form preview
+		if (isset($_POST['form_preview']) || isset($_GET['txpreview'])) {
 			include txpath.'/publish.php';
 			textpattern();
 			exit;

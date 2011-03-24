@@ -579,12 +579,14 @@ if (!empty($event) and $event == 'article') {
 
 			if ($step != 'create')
 			{
-				include_once txpath.'/publish/taghandlers.php';
-				$url = permlinkurl_id($ID);
-
 				if ($Status != 4 and $Status != 5)
 				{
-					$url .= (strpos($url, '?') === FALSE ? '?' : '&amp;') . 'txpreview='.intval($ID).'.'.time();
+					$url = '?txpreview='.intval($ID).'.'.time(); // article ID plus cachebuster
+				}
+				else
+				{
+					include_once txpath.'/publish/taghandlers.php';
+					$url = permlinkurl_id($ID);
 				}
 
 				echo sp.sp.'<a href="'.$url.'" class="article-view">'.gTxt('view').'</a>';

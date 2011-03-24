@@ -429,14 +429,20 @@ $LastChangedRevision$
 		}
 
 		// allow article preview
-		if (gps('txpreview') and is_logged_in())
+		if (gps('txpreview'))
 		{
+			doAuth();
+			if (!has_privs('article.preview')) {
+				txp_status_header('401 Unauthorized');
+				exit(hed('401 Unauthorized',1).graf(gTxt('restricted_area')));
+			}
+
 			global $nolog;
 
 			$nolog = true;
 			$rs = safe_row("ID as id,Section as s",'textpattern','ID = '.intval(gps('txpreview')).' limit 1');
 
-			if ($rs and $is_404)
+			if ($rs)
 			{
 				$is_404 = false;
 				$out = array_merge($out, $rs);
