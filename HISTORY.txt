@@ -4,6 +4,8 @@ Changes in 4.4.0
 * Hotlink protection for files: Downloads from a web-accessible "/files" directory are inhibited. The "/file_download/$id/example.foo" route is the only valid way to access downloadable files. Requires an Apache webserver.
 * Empty <txp:variable></txp:variable> container sets a variable's value to "".
 * WordPress import tool fixed for WP 3.x.
+* Context bug in messy mode fixed
+* get_pref() now honours per-user prefs in all cases
 * Developer: txp_validate() accepts a '$log' parameter to discern between "real user login" vs. "just validating credentials" usage.
 * Developer: sendAsyncEvent() accepts parameter $format.
 * Developer: Introducing escape_js() and send_script_response().

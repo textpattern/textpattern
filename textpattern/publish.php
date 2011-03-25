@@ -263,8 +263,6 @@ $LastChangedRevision$
 				//first we sniff out some of the preset url schemes
 			if (strlen($u1)) {
 
-				$validTypes = array('article' => gTxt('article_context'), 'image' => gTxt('image_context'), 'file' => gTxt('file_context'), 'link' => gTxt('link_context'));
-
 				switch($u1) {
 
 					case 'atom':
@@ -282,13 +280,12 @@ $LastChangedRevision$
 
 					case urldecode(strtolower(urlencode(gTxt('category')))):
 						if ($u3) {
-							$theType = in_array($u2, $validTypes) ? $u2 : gTxt('article_context');
+							$typecode = validContext($u2);
 							$theCat = $u3;
 						} else {
-							$theType = gTxt('article_context');
+							$typecode = 'article';
 							$theCat = $u2;
 						}
-						$typecode = array_search($theType, $validTypes);
 						$out['context'] = $typecode;
 						$out['c'] = (ckCat($typecode,$theCat)) ? $theCat : '';
 						$is_404 = empty($out['c']);
@@ -296,13 +293,12 @@ $LastChangedRevision$
 
 					case urldecode(strtolower(urlencode(gTxt('author')))):
 						if ($u3) {
-							$theType = in_array($u2, $validTypes) ? $u2 : gTxt('article_context');
+							$typecode = validContext($u2);
 							$theAuthor = $u3;
 						} else {
-							$theType = gTxt('article_context');
+							$typecode = 'article';
 							$theAuthor = $u2;
 						}
-						$typecode = array_search($theType, $validTypes);
 						$out['context'] = $typecode;
 						$out['author'] = (!empty($theAuthor)) ? $theAuthor : '';
 						break;
@@ -407,6 +403,7 @@ $LastChangedRevision$
 				$out['s'] = (!empty($rs['Section'])) ? $rs['Section'] : '';
 				$is_404 = (empty($out['s']) or empty($out['id']));
 			}
+			$out['context'] = validContext($out['context']);
 		}
 
 		// Resolve AuthorID from Authorname
@@ -1338,4 +1335,13 @@ $LastChangedRevision$
 		return $o;
 	}
 
+// -------------------------------------------------------------
+	function validContext($context)
+	{
+		foreach (array('article', 'image', 'file', 'link') as $type)
+		{
+			$valid[gTxt($type . '_context')] = $type;
+		}
+		return isset($valid[$context]) ? $valid[$context] : 'article';
+	}
 ?>
