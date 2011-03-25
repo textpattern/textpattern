@@ -43,6 +43,12 @@ Includes contributions licensed under the New BSD License.
 * In-Depth Documentation and tag-index is available in the TextBook project
   at http://textbook.textpattern.net/
 * You can get support in our forums at http://forum.textpattern.com/
+* If you are running an Apache web server, rename the @.htaccess-dist@ file
+  in the "/files" directory to ".htaccess" to prohibit direct URL access to
+  your files. Thus the only route to these files becomes through "/file_download".
+  We recommend you consider employing this feature or that you move
+  your "/files" directory out of a web-accessible location. Once moved, you
+  can tell Textpattern of your new directory location from Advanced Prefs.
 
 * IMPORTANT: Regularly check back at textpattern.com to see if updates are
   available. 4.x is in maintenance mode which means updates are as painless
