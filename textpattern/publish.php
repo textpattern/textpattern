@@ -1148,7 +1148,17 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
+	function maybe_tag($tag)
+	{
+		static $tags = NULL;
+		if ($tags == NULL) {
+			$tags = get_defined_functions();
+			$tags = array_flip($tags['user']);
+		}
+		return isset($tags[$tag]);
+	}
 
+// -------------------------------------------------------------
 	function processTags($tag, $atts, $thing = NULL)
 	{
 		global $production_status, $txptrace, $txptracelevel, $txp_current_tag;
@@ -1173,7 +1183,7 @@ $LastChangedRevision$
 			$tag = 'tpt_'.$tag;
 		}
 
-		if (function_exists($tag))
+		if (maybe_tag($tag))
 		{
 			$out = $tag(splat($atts), $thing);
 		}
