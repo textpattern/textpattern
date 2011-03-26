@@ -63,7 +63,6 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function insert_logit($in)
 	{
-		global $DB;
 		$in = doSlash($in);
 		extract($in);
 		safe_insert("txp_log", "`time`=now(),page='$uri',ip='$ip',host='$host',refer='$ref',status='$status',method='$method'");
