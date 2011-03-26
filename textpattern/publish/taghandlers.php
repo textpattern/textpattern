@@ -3380,6 +3380,8 @@ $LastChangedRevision$
 	function permlinkurl($article_array)
 	{
 		global $permlink_mode, $prefs, $permlinks;
+		// TODO: A bit hackish. lAtts() might serve us better.
+		unset($article_array['permlink_mode'], $article_array['prefs'], $article_array['permlinks']);
 
 		if (isset($prefs['custom_url_func'])
 		    and is_callable($prefs['custom_url_func'])
@@ -4350,7 +4352,10 @@ $LastChangedRevision$
 	{
 		global $prefs;
 
-		extract($params);
+		extract(lAtts(array(
+			'ftime' => '',
+			'format' => ''
+		), $params));
 
 		if (!empty($ftime))
 		{
