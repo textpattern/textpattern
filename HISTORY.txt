@@ -1,5 +1,6 @@
 Changes in 4.4.0
 
+* Security: Fix several vulnerabilites. Updates are *absolutely* recommended for sites running any older version. Thanks, Neal Poole.
 * Passwords are case-sensitive.
 * Hotlink protection for files: Downloads from a web-accessible "/files" directory are inhibited. The "/file_download/$id/example.foo" route is the only valid way to access downloadable files. Requires an Apache webserver and usage of the sample .htaccess file.
 * Empty <txp:variable></txp:variable> container sets a variable's value to "".
