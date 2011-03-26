@@ -1,4 +1,4 @@
-#@version 4.3.0;1288873923
+#@version 4.4.0;1289949161
 #@admin
 add_new_author => Add New Author
 and_mailed_to => and mailed to
@@ -331,7 +331,7 @@ mod_rewrite_missing => Apache module mod_rewrite is not installed
 old_files => Some Textpattern files are out of date
 old_placeholder => Old placeholder file is in the way
 os_version => Server OS
-path_not_doc_root =>
+path_not_doc_root => 
 path_to_site_inacc => $path_to_site is inaccessible.
 php_extensions => PHP extensions
 php_sapi_mode => PHP Server API
@@ -510,6 +510,7 @@ create_new_page => Create new page
 delete_page_confirmation => confirm page deletion
 edit_page => edit page
 edit_pages => Page Templates
+name_for_this_page => Name for this page
 page_already_exists => Page <strong>{name}</strong> already exists.
 page_article_hed => Article Output
 page_article_nav_hed => Article Navigation
@@ -864,7 +865,7 @@ strong => strong
 submit => Submit
 subscript => subscript
 superscript => superscript
-tag_error => Tag error:
+tag_error => Tag error: 
 textile_help => Textile Help
 textile_lite_help => Textile Lite Help
 text_conversion => Text conversion

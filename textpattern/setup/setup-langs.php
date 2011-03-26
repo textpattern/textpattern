@@ -1,6 +1,6 @@
 <?php
 
-// Generated: 04 Nov 2010, 12:33:27 GMT
+// Generated: 26 Mar 2011, 06:25:56 GMT
 
 $langs = array(
 	'ar-dz' => array(
@@ -821,8 +821,7 @@ $langs = array(
 		'choose_password' => 'Pilihlah sandi lewat',
 		'confirm_site_path' => 'Harap konfirmasi <em>path</em> berikut',
 		'create_config' => 'Buat berkas bernama <code>config.php</code> di direktori <code>/textpattern/</code> dan salin kode berikut di dalamnya:',
-		'db_cant_connect' => 'Tidak dapat terhubung ke basis data
-',
+		'db_cant_connect' => 'Tidak dapat terhubung ke basis data',
 		'db_connected' => 'Terhubung',
 		'db_doesnt_exist' => 'Basis data {dbname} tidak ada atau pengguna yang Anda tetapkan tidak memiliki izin untuk mengaksesnya.',
 		'db_must_exist' => 'Perlu diketahui bahwa basis data yang ditentukan harus ada, Textpattern tidak akan menciptakannya.',
@@ -951,8 +950,7 @@ $langs = array(
 		'checking_database' => '데이터베이스 연결을 확인중…',
 		'choose_password' => '비밀번호 선택',
 		'confirm_site_path' => '다음 경로가 맞는지 확인',
-		'create_config' => '<code>/textpattern/</code>안에 <code>config.php</code>라 불리는 파일을 만들어서 다음 안에 붙여넣기 해야 합니다.
-',
+		'create_config' => '<code>/textpattern/</code>안에 <code>config.php</code>라 불리는 파일을 만들어서 다음 안에 붙여넣기 해야 합니다.',
 		'database_engine' => '데이터베이스 엔진',
 		'db_cant_connect' => '데이터베이스에 연결할 수 없습니다.',
 		'db_connected' => '연결했습니다.',
@@ -1074,7 +1072,7 @@ $langs = array(
 		'thanks_for_interest' => 'Paldies par jūsu interesi par Textpattern.',
 		'that_went_well' => 'Instalācija ir pabeigta. Datubāzes tabulas tika veiksmīgi izveidotas un aizpildītas.',
 		'using_db' => 'Izvēlētā datubāze {dbname}',
-		'warn_mail_unavailable' => 'Jūsu php instalācijā iztrūkst mail() funkcija, tādējādi e-pasta ziņas netiks nosūtītas, kas ierobežo zināmu funkcionalitāti.',
+		'warn_mail_unavailable' => 'Jūsu PHP instalācijā iztrūkst mail() funkcija, tādējādi e-pasta ziņas netiks nosūtītas, kas ierobežo zināmu funkcionalitāti.',
 		'welcome_to_textpattern' => 'Laipni lūgti Textpattern',
 		'your_email' => 'Jūsu e-pasta adrese',
 		'your_full_name' => 'Jūsu pilnais vārds',

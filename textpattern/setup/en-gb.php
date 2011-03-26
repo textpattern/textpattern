@@ -525,6 +525,7 @@ $en_gb_lang = array(
 		'delete_page_confirmation' => 'confirm page deletion',
 		'edit_page' => 'edit page',
 		'edit_pages' => 'Page Templates',
+		'name_for_this_page' => 'Name for this page',
 		'page_already_exists' => 'Page <strong>{name}</strong> already exists.',
 		'page_article_hed' => 'Article Output',
 		'page_article_nav_hed' => 'Article Navigation',
@@ -1163,5 +1164,5 @@ $en_gb_lang = array(
 		'wraptag' => 'Wrap tag',
 	)
 );
-$lastmod = gmdate('Y-m-d H:m:s',1288873923);
+$lastmod = gmdate('Y-m-d H:m:s',1289949161);
 ?>
