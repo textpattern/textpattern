@@ -1,4 +1,4 @@
-Textpattern 4.4.0
+Textpattern CMS 4.4.0
 
 Released under the GNU General Public License. See textpattern/license.txt
 for terms and conditions.
@@ -19,7 +19,9 @@ Includes contributions licensed under the New BSD License.
 
 == Upgrading ==
 
-* Simply replace the three files in your main installation directory
+* Log out of the admin-side.
+* Verify the existence of a working database and file backup.
+* Replace the three files in your main installation directory
   (index.php, css.php and .htaccess), everything in your /rpc/ directory and
   everything in your /textpattern/ directory (except config.php)
   with the corresponding files in this distribution. css.php and /rpc/
@@ -40,8 +42,8 @@ Includes contributions licensed under the New BSD License.
 == Getting Started ==
 
 * FAQ is available at http://textpattern.com/faq/
-* In-Depth Documentation and tag-index is available in the TextBook project
-  at http://textbook.textpattern.net/
+* In-Depth Documentation and tag-index is available in the
+  Textpattern documentation at http://textpattern.net/
 * You can get support in our forums at http://forum.textpattern.com/
 * If you are running an Apache web server, rename the @.htaccess-dist@ file
   in the "/files" directory to ".htaccess" to prohibit direct URL access to
