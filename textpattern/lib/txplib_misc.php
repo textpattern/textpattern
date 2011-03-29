@@ -2712,7 +2712,7 @@ eod;
 			$out = $is_dst;
 			if ($auto_dst && $timezone_key && timezone::is_supported())
 			{
-				$server_tz = date_default_timezone_get();
+				$server_tz = @date_default_timezone_get();
 				if ($server_tz)
 				{
 					// switch to client time zone
