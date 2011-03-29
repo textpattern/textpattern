@@ -2592,7 +2592,7 @@ eod;
 				$continents = array('Africa', 'America', 'Antarctica', 'Arctic', 'Asia',
 					'Atlantic', 'Australia', 'Europe', 'Indian', 'Pacific');
 
-				$server_tz = date_default_timezone_get();
+				$server_tz = @date_default_timezone_get();
 				$tzlist = timezone_abbreviations_list();
 				foreach ($tzlist as $abbr => $timezones)
 				{
