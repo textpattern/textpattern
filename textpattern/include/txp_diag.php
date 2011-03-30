@@ -49,7 +49,6 @@ $LastChangedRevision$
 		'/include/txp_page.php',
 		'/include/txp_plugin.php',
 		'/include/txp_prefs.php',
-		'/include/txp_preview.php',
 		'/include/txp_section.php',
 		'/include/txp_tag.php',
 		'/index.php',
