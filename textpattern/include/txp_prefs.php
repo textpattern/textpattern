@@ -860,13 +860,13 @@ EOS
 
 		if (gps('force')!='file')
 		{
-			echo n.
-			tr(
+			echo
+			tr(tda('&nbsp;',' colspan="3" style="font-size:0.25em"'))
+			. tr(
 				tda(
-					form(
-						tag(gTxt('install_textpack'), 'label', ' for="textpack-install"').n.
+					strong(gTxt('install_textpack')).sp.sp.tag(popHelp('get_textpack'), 'span')
+					.br.form(
 						'<textarea id="textpack-install" class="code" name="textpack" cols="45" rows="5"></textarea>'.n.
-						tag(popHelp('get_textpack'), 'span', ' style="vertical-align: top;"').
 						graf(fInput('submit', 'install_new', gTxt('upload'), 'smallerbox')).
 						eInput('prefs').
 						sInput('get_textpack')
