@@ -360,8 +360,9 @@ function postForm(form)
 //-------------------------------------------------------------
 // global admin-side behaviour
 $(document).ready(function() {
-	// disable spellchecking on all elements of type "code" in capable browsers
-	if(jQuery.browser.mozilla){$(".code").prop("spellcheck", false);}
+	// disable spellchecking on all elements of class "code" in capable browsers
+	var c = $(".code")[0];
+	if(c && "spellcheck" in c) {$(".code").prop("spellcheck", false);}
 	// attach toggle behaviour
 	$('.lever a[class!=pophelp]').click(toggleDisplayHref);
 });
