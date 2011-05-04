@@ -361,7 +361,7 @@ function postForm(form)
 // global admin-side behaviour
 $(document).ready(function() {
 	// disable spellchecking on all elements of type "code" in capable browsers
-	if(jQuery.browser.mozilla){$(".code").attr("spellcheck", false);}
+	if(jQuery.browser.mozilla){$(".code").prop("spellcheck", false);}
 	// attach toggle behaviour
 	$('.lever a[class!=pophelp]').click(toggleDisplayHref);
 });

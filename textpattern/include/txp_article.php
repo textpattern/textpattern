@@ -971,8 +971,8 @@ if (!empty($event) and $event == 'article') {
 		echo script_js( <<<EOS
 		$('#write-timestamp input.edit').change(
 			function() {
-				$('#publish_now').attr('checked', false);
-				$('#reset_time').attr('checked', false);
+				$('#publish_now').prop('checked', false);
+				$('#reset_time').prop('checked', false);
 			});
 EOS
 );
