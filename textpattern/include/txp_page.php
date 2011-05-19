@@ -17,10 +17,18 @@ $LastChangedRevision$
 	if ($event == 'page') {
 		require_privs('page');
 
+		bouncer($step,
+			array(
+				'page_edit' => false,
+				'page_save' => true,
+				'page_delete' => true,
+				'save_pane_state' => false, // TODO: AJAX token
+			)
+		);
+
 		switch(strtolower($step)) {
 			case "":                page_edit();             break;
 			case "page_edit":       page_edit();             break;
-			case "page_list":       page_list();             break;
 			case "page_save":       page_save();             break;
 			case "page_delete":     page_delete();           break;
 			case "page_new":        page_new();              break;
