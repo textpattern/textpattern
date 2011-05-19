@@ -184,6 +184,12 @@ $LastChangedRevision$
 	}
 
 //-------------------------------------------------------------
+	function tInput()				// hidden form token input
+	{
+		return hInput('_txp_token', form_token());
+	}
+
+//-------------------------------------------------------------
 
 	function checkbox($name, $value, $checked = '1', $tabindex = '', $id = '')
 	{
@@ -231,7 +237,9 @@ $LastChangedRevision$
 			($class ? ' class="'.$class.'"' : '').
 			($style ? ' style="'.$style.'"' : '').
 			($onsubmit ? ' onsubmit="return '.$onsubmit.'"' : '').
-			'>'.$contents.'</form>'.n;
+			'>'.$contents.n.
+			tInput().n.
+			'</form>'.n;
 	}
 
 // -------------------------------------------------------------
