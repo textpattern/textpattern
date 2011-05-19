@@ -20,20 +20,19 @@ $LastChangedRevision$
 		require_privs('plugin');
 
 		$available_steps = array(
-			'plugin_edit',
-			'plugin_help',
-			'plugin_list',
-			'plugin_install',
-			'plugin_save',
-			'plugin_verify',
-			'switch_status',
-			'plugin_multi_edit'
+			'plugin_edit'	=> false,
+			'plugin_help'	=> false,
+			'plugin_list'	=> false,
+			'plugin_install'	=> true,
+			'plugin_save'	=> true,
+			'plugin_verify'	=> true,
+			'switch_status'	=> true,
+			'plugin_multi_edit'	=> true
 		);
 
-		if(!$step or !in_array($step, $available_steps)){
-			$step = 'plugin_list';
-		}
-		$step();
+		if(!$step or !bouncer($step, $available_steps)){
+			plugin_list();
+		} else $step();
 	}
 
 // -------------------------------------------------------------
@@ -156,6 +155,7 @@ $LastChangedRevision$
 
 			echo '</tbody>'.
 			n.endTable().
+			n.tInput().
 			n.'</form>'.
 			n.'</div>';
 		}
@@ -248,7 +248,7 @@ $LastChangedRevision$
 	{
 		$out = '<a href="index.php?';
 		$out .= 'event=plugin&#38;step=switch_status&#38;status='.
-			$status.'&#38;name='.urlencode($name).'"';
+			$status.'&#38;name='.urlencode($name).'&#38;_txp_token='.form_token().'"';
 		$out .= '>'.$linktext.'</a>';
 		return $out;
 	}
