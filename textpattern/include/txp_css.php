@@ -10,6 +10,17 @@ $LastChangedRevision$
 	if ($event == 'css') {
 		require_privs('css');
 
+		bouncer($step,
+			array(
+				'css_edit_raw' 	=> false,
+				'pour' 			=> false,
+				'css_save' 		=> true,
+				'css_copy' 		=> true,
+				'css_delete' 	=> true,
+				'css_edit' 		=> false,
+			)
+		);
+
 		switch ($step) {
 			case '': css_edit(); break;
 			case 'css_edit_raw': css_edit();    break;
