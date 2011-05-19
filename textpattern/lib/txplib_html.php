@@ -237,7 +237,8 @@ $LastChangedRevision$
 			 ($remember) ? hInput('dir', $dir) : '',
 			 ($remember) ? hInput('crit', $crit) : '',
 			 ($remember) ? hInput('search_method', $search_method) : '',
-			'</form>'
+			 n.tInput(),
+			 '</form>'
 		));
 	}
 
@@ -375,7 +376,8 @@ $LastChangedRevision$
 				( $sort ? n.hInput('sort', $sort).n.hInput('dir', $dir) : '' ).
 				( $crit ? n.hInput('crit', $crit).n.hInput('search_method', $search_method) : '' ).
 				join('', $nav).
-				'</form>';
+				n.tInput().
+				n.'</form>';
 		}
 		else
 		{
@@ -908,6 +910,7 @@ $LastChangedRevision$
 			).
 
 			n.'</div>'.
+			n.tInput().
 			n.'</form>',
 			$argv);
 	}
@@ -1057,7 +1060,7 @@ EOF;
 
 		if ($form) {
 			$args = empty($_SERVER['QUERY_STRING']) ? '' : '?'.htmlspecialchars($_SERVER['QUERY_STRING']);
-			return '<form class="'.$name.'" method="post" action="index.php'.$args.'">'.$i.eInput(gps('event')).n.'<noscript><div><input type="submit" value="'.gTxt('go').'" /></div></noscript></form>';
+			return '<form class="'.$name.'" method="post" action="index.php'.$args.'">'.$i.eInput(gps('event')).n.'<noscript><div><input type="submit" value="'.gTxt('go').'" /></div></noscript>'.tInput().'</form>';
 		} else {
 			return n.$i;
 		}
