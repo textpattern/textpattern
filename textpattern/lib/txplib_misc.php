@@ -2802,4 +2802,55 @@ eod;
 		}
 		return $done;
 	}
+
+/**
+ * Generate a ciphered token.
+ *
+ * The token is reproducable, unique among sites and users, expires later.
+ *
+ * @return	string	The token.
+ */
+//-------------------------------------------------------------
+	function form_token()
+	{
+		static $token;
+		global $txp_user;
+
+		// Generate a ciphered token from the current user's nonce (thus valid for login time plus 30 days)
+		// and a pinch of salt from the blog UID.
+		if (empty($token)) {
+			$nonce = safe_field('nonce', 'txp_users', "name='".doSlash($txp_user)."'");
+			$token = md5($nonce . get_pref('blog_uid'));
+		}
+		return $token;
+	}
+
+/**
+ * Validate admin steps. Protect against CSRF attempts.
+ *
+ * @param	array	$step	Requested admin step.
+ * @param	array	$steps	An array of valid steps with flag indicating CSRF needs, e.g. array('savething' => true, 'listthings' => false)
+ * @return	boolean	HTML
+ */
+//-------------------------------------------------------------
+	function bouncer($step, $steps)
+	{
+		// Validate step
+		if (!array_key_exists($step, $steps)) {
+			return false;
+		}
+
+		// Does this step require a token?
+		if (!$steps[$step]) {
+			return true;
+		}
+
+		// Validate token
+		if (ps('_txp_token') == form_token()) {
+			return true;
+		}
+
+		// This place ain't no good for you, son.
+		die(gTxt('get_off_my_lawn'));
+	}
 ?>
