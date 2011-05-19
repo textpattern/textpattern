@@ -25,7 +25,7 @@ $LastChangedRevision$
 	if ($event=='list') {
 		require_privs('article');
 
-		if(!$step or !in_array($step, array('list_list','list_change_pageby','list_multi_edit'))){
+		if(!$step or !bouncer($step, array('list_list' => false, 'list_change_pageby' => true, 'list_multi_edit' => true))){
 			$step = 'list_list';
 		}
 		$step();
@@ -335,6 +335,7 @@ $LastChangedRevision$
 
 			echo '</tbody>'.
 			n.endTable().
+			n.tInput().
 			n.'</form>'.
 
 			n.'<div id="'.$event.'_navigation" class="txp-navigation">'.
