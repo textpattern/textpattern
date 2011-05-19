@@ -23,6 +23,17 @@ $LastChangedRevision$
 	if ($event == 'form') {
 		require_privs('form');
 
+		bouncer($step,
+			array(
+				'form_edit' 	=> false,
+				'form_list' 	=> false,
+				'form_create' 	=> false,
+				'form_delete' 	=> true,
+				'form_multi_edit' => true,
+				'form_save' 	=> true,
+				'save_pane_state' => true // TODO: AJAX token
+			)
+		);
 
 		switch(strtolower($step)) {
 			case "":                form_edit();             break;
@@ -34,6 +45,7 @@ $LastChangedRevision$
 			case "form_save":       form_save();             break;
 			case "save_pane_state": form_save_pane_state();  break;
 		}
+
 	}
 
 // -------------------------------------------------------------
@@ -195,7 +207,9 @@ $LastChangedRevision$
 					(empty($type) ? graf(gTxt('only_articles_can_be_previewed')) : '').
 					(empty($type) || $type == 'article' ? fInput('submit','form_preview',gTxt('preview'),'smallbox') : '' ).
 					graf($inputs).
-					'</div></form>'
+					'</div>'.
+					n.tInput().
+					n.'</form>'
 
 				, ' class="column"').
 				tdtl(
