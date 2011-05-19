@@ -2830,7 +2830,7 @@ eod;
  *
  * @param	array	$step	Requested admin step.
  * @param	array	$steps	An array of valid steps with flag indicating CSRF needs, e.g. array('savething' => true, 'listthings' => false)
- * @return	boolean	HTML
+ * @return	boolean	$step is valid, proceed. Dies on CSRF attempt.
  */
 //-------------------------------------------------------------
 	function bouncer($step, $steps)
