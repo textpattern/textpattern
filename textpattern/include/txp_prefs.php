@@ -23,16 +23,16 @@ $LastChangedRevision$
 		require_privs('prefs');
 
 		$available_steps = array(
-			'advanced_prefs',
-			'prefs_save',
-			'advanced_prefs_save',
-			'get_language',
-			'get_textpack',
-			'list_languages',
-			'prefs_list'
+			'advanced_prefs' 	=> false,
+			'prefs_save'		=> true,
+			'advanced_prefs_save'	=> true,
+			'get_language'		=> true,
+			'get_textpack'		=> true,
+			'list_languages' 	=> false,
+			'prefs_list'		=> false
 		);
 
-		if(!$step or !in_array($step, $available_steps)){
+		if(!$step or !bouncer($step, $available_steps)){
 			$step = 'prefs_list';
 		}
 		$step();
@@ -202,6 +202,7 @@ $LastChangedRevision$
 
 		n.n.endTable().
 
+		n.tInput().
 		n.n.'</form>'.
 		n.'</div>';
 
