@@ -7,7 +7,7 @@
 	www.textpattern.com
 	All rights reserved
 
-	Use of this software indicates acceptance ofthe Textpattern license agreement
+	Use of this software indicates acceptance of the Textpattern license agreement
 
 $HeadURL$
 $LastChangedRevision$
@@ -19,23 +19,23 @@ if ($event == 'category') {
 	require_privs('category');
 
 	$available_steps = array(
-		'cat_category_list',
-		'cat_category_multiedit',
-		'cat_article_create',
-		'cat_image_create',
-		'cat_file_create',
-		'cat_link_create',
-		'cat_article_save',
-		'cat_image_save',
-		'cat_file_save',
-		'cat_link_save',
-		'cat_article_edit',
-		'cat_image_edit',
-		'cat_file_edit',
-		'cat_link_edit'
+		'cat_category_list' 	=> false,
+		'cat_category_multiedit' => true,
+		'cat_article_create' 	=> true,
+		'cat_image_create' 		=> true,
+		'cat_file_create' 		=> true,
+		'cat_link_create' 		=> true,
+		'cat_article_save' 		=> true,
+		'cat_image_save' 		=> true,
+		'cat_file_save' 		=> true,
+		'cat_link_save' 		=> true,
+		'cat_article_edit' 		=> false,
+		'cat_image_edit' 		=> false,
+		'cat_file_edit' 		=> false,
+		'cat_link_edit' 		=> false
 	);
 
-	if(!$step or !in_array($step, $available_steps)){
+	if(!$step or !bouncer($step, $available_steps)){
 		$step = 'cat_category_list';
 	}
 	$step();
