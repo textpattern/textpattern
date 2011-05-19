@@ -26,7 +26,6 @@ $LastChangedRevision$
 		bouncer($step,
 			array(
 				'form_edit' 	=> false,
-				'form_list' 	=> false,
 				'form_create' 	=> false,
 				'form_delete' 	=> true,
 				'form_multi_edit' => true,
@@ -38,7 +37,6 @@ $LastChangedRevision$
 		switch(strtolower($step)) {
 			case "":                form_edit();             break;
 			case "form_edit":       form_edit();             break;
-			case "form_list":       form_list();             break;
 			case "form_create":     form_create();           break;
 			case "form_delete":     form_delete();           break;
 			case "form_multi_edit": form_multi_edit();       break;
