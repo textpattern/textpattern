@@ -23,7 +23,13 @@ $LastChangedRevision$
 	{
 		require_privs('log');
 
-		if (!$step or !in_array($step, array('log_list', 'log_change_pageby', 'log_multi_edit'))){
+		$available_steps = array(
+			'log_list' 			=> false,
+			'log_change_pageby'	=> false,
+			'log_multi_edit' 	=> true
+		);
+
+		if (!$step or !bouncer($step, $available_steps)){
 			$step = 'log_list';
 		}
 		$step();
@@ -233,6 +239,7 @@ $LastChangedRevision$
 
 			echo '</tbody>'.
 			n.endTable().
+			tInput().
 			n.'</form>'.
 
 			n.'<div id="'.$event.'_navigation" class="txp-navigation">'.
