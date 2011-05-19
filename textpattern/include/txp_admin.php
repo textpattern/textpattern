@@ -353,6 +353,7 @@ $LastChangedRevision$
 
 			echo '</tbody>'.
 			n.endTable().
+			n.tInput().
 			n.'</form>'.
 
 			n.'<div id="users_navigation" class="txp-navigation">'.
