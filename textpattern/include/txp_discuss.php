@@ -19,7 +19,19 @@ $LastChangedRevision$
 	if ($event == 'discuss') {
 		require_privs('discuss');
 
-		if(!$step or !in_array($step, array('discuss_delete','discuss_save','discuss_list','discuss_edit','ipban_add','discuss_multi_edit','ipban_list','ipban_unban','discuss_change_pageby'))){
+		$available_steps = array(
+			'discuss_delete' 	=> true,
+			'discuss_save' 	=> true,
+			'discuss_list' 	=> false,
+			'discuss_edit' 	=> false,
+			'ipban_add' 	=> true,
+			'discuss_multi_edit' 	=> true,
+			'ipban_list' 	=> false,
+			'ipban_unban' 	=> true,
+			'discuss_change_pageby' 	=> true
+		);
+
+		if(!$step or !bouncer($step, $available_steps)){
 			discuss_list();
 		} else $step();
 	}
@@ -327,8 +339,9 @@ $LastChangedRevision$
 				echo tr(tda(gTxt('just_spam_results_found'),' colspan="9" style="text-align: left; border: none;"'));
 
 			echo '</tbody>'.
-			endTable().
-			'</form>'.
+			n.endTable().
+			n.tInput().
+			n.'</form>'.
 
 			n.cookie_box('show_spam').
 
@@ -390,7 +403,7 @@ $LastChangedRevision$
 			}
 
 			$ban_link = '[<a class="action-ban" href="?event=discuss'.a.'step='.$ban_step.a.'ip='.$ip.
-				a.'name='.urlencode($name).a.'discussid='.$discussid.'">'.$ban_text.'</a>]';
+				a.'name='.urlencode($name).a.'discussid='.$discussid.a.'_txp_token='.form_token().'">'.$ban_text.'</a>]';
 
 			echo '<div id="'.$event.'_container" class="txp-container txp-edit">'.
 				form(
@@ -428,24 +441,24 @@ $LastChangedRevision$
 						), $visible, false)
 					, '', 'status'),
 
-					td().td(fInput('submit', 'step', gTxt('save'), 'publish')),
+					td().td(fInput('submit', 'step', gTxt('save'), 'publish'))
 
-					hInput('sort', $sort).
-					hInput('dir', $dir).
-					hInput('page', $page).
-					hInput('crit', $crit).
-					hInput('search_method', $search_method).
-
-					hInput('discussid', $discussid).
-					hInput('parentid', $parentid).
-					hInput('ip', $ip).
-
-					eInput('discuss').
-					sInput('discuss_save')
 				).
 
-				endTable()
-			, '', '', 'post', 'edit-form', '', 'discuss_edit_form'),'</div>';
+				endTable().
+				hInput('sort', $sort).
+				hInput('dir', $dir).
+				hInput('page', $page).
+				hInput('crit', $crit).
+				hInput('search_method', $search_method).
+
+				hInput('discussid', $discussid).
+				hInput('parentid', $parentid).
+				hInput('ip', $ip).
+
+				eInput('discuss').
+				sInput('discuss_save')
+				, '', '', 'post', 'edit-form', '', 'discuss_edit_form'),'</div>';
 		}
 
 		else
@@ -562,7 +575,7 @@ $LastChangedRevision$
 					, 100, 'id').
 
 					td(
-						'<a class="action-ban" href="?event=discuss'.a.'step=ipban_unban'.a.'ip='.$ip.'">'.gTxt('unban').'</a>'
+						'<a class="action-ban" href="?event=discuss'.a.'step=ipban_unban'.a.'ip='.$ip.a.'_txp_token='.form_token().'">'.gTxt('unban').'</a>'
 					, '', 'actions')
 				, ' class="'.(($ctr%2 == 0) ? 'even' : 'odd').'"'
 				);
