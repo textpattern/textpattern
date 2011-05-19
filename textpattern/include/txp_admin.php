@@ -28,16 +28,16 @@ $LastChangedRevision$
 		include_once txpath.'/lib/txplib_admin.php';
 
 		$available_steps = array(
-			'admin_multi_edit',
-			'admin_change_pageby',
-			'author_edit',
-			'author_save',
-			'author_save_new',
-			'change_email',
-			'change_pass'
+			'admin_multi_edit' 	=> true,
+			'admin_change_pageby' => true,
+			'author_edit' 		=> false,
+			'author_save' 		=> true,
+			'author_save_new' 	=> true,
+			'change_email' 		=> true,
+			'change_pass' 		=> true
 		);
 
-		if (!$step or !in_array($step, $available_steps)) {
+		if (!$step or !bouncer($step, $available_steps)) {
 			$step = 'author_edit';
 		}
 		$step();
