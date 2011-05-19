@@ -47,6 +47,16 @@ if (!empty($event) and $event == 'article') {
 	$publish = gps('publish');
 	if ($publish) $step = 'publish';
 
+	bouncer($step,
+		array(
+			'create' 	=> true,
+			'publish' 	=> true,
+			'edit' 		=> false,
+			'save' 		=> true,
+			'save_pane_state' => false // TODO: AJAX token
+		)
+	);
+
 	switch(strtolower($step)) {
 		case "":         article_edit();    break;
 		case "create":   article_edit();    break;
@@ -966,7 +976,9 @@ if (!empty($event) and $event == 'article') {
 			}
 		}
 
-		echo '</div></td></tr></table></form></div>'.n;
+		echo '</div></td></tr></table>'.n.
+			tInput().n.
+			'</form></div>'.n;
 		// Assume users would not change the timestamp if they wanted to "publish now"/"reset time"
 		echo script_js( <<<EOS
 		$('#write-timestamp input.edit').change(
