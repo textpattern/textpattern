@@ -36,7 +36,7 @@ $LastChangedRevision$
 			);
 
 
- 	if(!$step or !in_array($step, array('switch_tool','start_import'))){
+ 	if(!$step or !bouncer($step, array('switch_tool' => false, 'start_import' => true))){
 		$step = 'switch_tool';
 	}
 	$step();
@@ -140,7 +140,7 @@ function showHideFields($sel)
 
 		$content.= endTable();
 		$content.= tag(fInput('submit','choose',gTxt('continue'),'publish'),'p',' style="text-align:center"');
-		$content.= sInput('start_import').eInput('import');
+		$content.= sInput('start_import').eInput('import').tInput();
 		echo '<div id="'.$event.'_container" class="txp-container txp-edit">'.
 			tag($content, 'form', ' id="import" action="index.php" method="post"').
 			'</div>';
