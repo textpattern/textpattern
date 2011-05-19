@@ -25,7 +25,7 @@ $LastChangedRevision$
 
 		$available_steps = array(
 			'log_list' 			=> false,
-			'log_change_pageby'	=> false,
+			'log_change_pageby'	=> true,
 			'log_multi_edit' 	=> true
 		);
 
@@ -239,7 +239,7 @@ $LastChangedRevision$
 
 			echo '</tbody>'.
 			n.endTable().
-			tInput().
+			n.tInput().
 			n.'</form>'.
 
 			n.'<div id="'.$event.'_navigation" class="txp-navigation">'.
