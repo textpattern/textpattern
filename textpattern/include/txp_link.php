@@ -28,16 +28,16 @@ $LastChangedRevision$
 		$vars = array('category', 'url', 'linkname', 'linksort', 'description', 'id');
 
 		$available_steps = array(
-			'link_list',
-			'link_edit',
-			'link_post',
-			'link_save',
-			'link_delete',
-			'link_change_pageby',
-			'link_multi_edit'
+			'link_list' 	=> false,
+			'link_edit' 	=> false,
+			'link_post' 	=> true,
+			'link_save' 	=> true,
+			'link_delete' 	=> true,
+			'link_change_pageby' => true,
+			'link_multi_edit' => true
 		);
 
-		if (!$step or !in_array($step, $available_steps)){
+		if (!$step or !bouncer($step, $available_steps)){
 			$step = 'link_edit';
 		}
 		$step();
@@ -231,6 +231,7 @@ $LastChangedRevision$
 
 			echo '</tbody>'.
 			n.endTable().
+			n.tInput().
 			n.'</form>'.
 
 			n.'<div id="'.$event.'_navigation" class="txp-navigation">'.
