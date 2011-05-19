@@ -2835,6 +2835,8 @@ eod;
 //-------------------------------------------------------------
 	function bouncer($step, $steps)
 	{
+		if (empty($step)) return true;
+
 		// Validate step
 		if (!array_key_exists($step, $steps)) {
 			return false;
@@ -2846,7 +2848,7 @@ eod;
 		}
 
 		// Validate token
-		if (ps('_txp_token') == form_token()) {
+		if (gps('_txp_token') == form_token()) {
 			return true;
 		}
 
