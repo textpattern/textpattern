@@ -35,7 +35,19 @@ $LastChangedRevision$
 	if ($event == 'file') {
 		require_privs('file');
 
-		if(!$step or !in_array($step, array('file_change_pageby','file_multi_edit','file_edit','file_insert','file_list','file_replace','file_save','file_reset_count','file_create'))){
+		$available_steps = array(
+			'file_change_pageby'=> true,
+			'file_multi_edit'	=> true,
+			'file_edit'			=> false,
+			'file_insert'		=> true,
+			'file_list'			=> false,
+			'file_replace'		=> true,
+			'file_save'			=> true,
+			'file_reset_count'	=> true,
+			'file_create'		=> true
+		);
+
+		if(!$step or !bouncer($step, $available_steps)){
 			file_list();
 		} else $step();
 	}
@@ -296,6 +308,7 @@ $LastChangedRevision$
 
 			echo '</tbody>'.
 			n.endTable().
+			n.tInput().
 			n.'</form>'.
 
 			n.'<div id="'.$event.'_navigation" class="txp-navigation">'.
