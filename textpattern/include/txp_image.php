@@ -25,14 +25,22 @@ $LastChangedRevision$
 	{
 		require_privs('image');
 
-		if(!$step or !in_array($step, array('image_list','image_edit','image_insert','image_replace','image_save','thumbnail_insert','image_change_pageby','thumbnail_create','thumbnail_delete','image_multi_edit')))
-		{
+		$available_steps = array(
+			'image_list'	=> false,
+			'image_edit'	=> false,
+			'image_insert'	=> true,
+			'image_replace'	=> true,
+			'image_save'	=> true,
+			'thumbnail_insert'	=> true,
+			'image_change_pageby'	=> true,
+			'thumbnail_create'	=> true,
+			'thumbnail_delete'	=> true,
+			'image_multi_edit'	=> true
+		);
+
+		if(!$step or !bouncer($step, $available_steps)) {
 			image_list();
-		}
-		else
-		{
-			$step();
-		}
+		} else $step();
 	}
 
 // -------------------------------------------------------------
@@ -271,6 +279,7 @@ $LastChangedRevision$
 
 			echo '</tbody>'.
 			n.endTable().
+			n.tInput().
 			n.'</form>'.
 
 			n.'<div id="'.$event.'_navigation" class="txp-navigation">'.
