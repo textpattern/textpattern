@@ -643,6 +643,7 @@ EOS
 
 		n.n.endTable().
 
+		n.tInput().
 		n.n.'</form>'.
 		n.'</div>';
 	}
