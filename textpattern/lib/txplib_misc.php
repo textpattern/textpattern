@@ -2828,13 +2828,15 @@ eod;
 /**
  * Validate admin steps. Protect against CSRF attempts.
  *
- * @param	array	$step	Requested admin step.
+ * @param	string	$step	Requested admin step.
  * @param	array	$steps	An array of valid steps with flag indicating CSRF needs, e.g. array('savething' => true, 'listthings' => false)
  * @return	boolean	$step is valid, proceed. Dies on CSRF attempt.
  */
 //-------------------------------------------------------------
 	function bouncer($step, $steps)
 	{
+		global $event;
+
 		if (empty($step)) return true;
 
 		// Validate step
@@ -2853,6 +2855,6 @@ eod;
 		}
 
 		// This place ain't no good for you, son.
-		die(gTxt('get_off_my_lawn'));
+		die(gTxt('get_off_my_lawn', array('{event}' => $event, '{step}' => $step)));
 	}
 ?>
