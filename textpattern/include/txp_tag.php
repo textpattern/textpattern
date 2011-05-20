@@ -28,7 +28,7 @@ if (!defined('txpinterface'))
 	<title>Txp &#8250; <?php echo gTxt('build'); ?></title>
 	<script type="text/javascript" src="jquery.js"></script>
 	<?php echo script_js(
-		"var textpattern = {event: '$event', step: '$step'};"
+		'var textpattern = {event: "'.htmlspecialchars($event).'", step: "'.htmlspecialchars($step).'"};'
 	); ?>
 	<?php echo $theme->html_head(); ?>
 	</head>
