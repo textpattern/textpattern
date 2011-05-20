@@ -140,9 +140,9 @@ function showHideFields($sel)
 
 		$content.= endTable();
 		$content.= tag(fInput('submit','choose',gTxt('continue'),'publish'),'p',' style="text-align:center"');
-		$content.= sInput('start_import').eInput('import').tInput();
+		$content.= sInput('start_import').eInput('import');
 		echo '<div id="'.$event.'_container" class="txp-container txp-edit">'.
-			tag($content, 'form', ' id="import" action="index.php" method="post"').
+			form($content, '', '', 'post', '', '', 'import').
 			'</div>';
 	}
 
