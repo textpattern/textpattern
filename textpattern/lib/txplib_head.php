@@ -47,6 +47,8 @@ $LastChangedRevision$
 			$body_id = 'page-'.htmlspecialchars($event);
 		}
 
+		header(pluggable_ui('admin_side', 'x_frame_options', 'X-Frame-Options: SAMEORIGIN'));
+
 	?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 	<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo LANG; ?>" lang="<?php echo LANG; ?>" dir="<?php echo gTxt('lang_dir'); ?>">
 	<head>
