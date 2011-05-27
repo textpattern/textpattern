@@ -209,6 +209,7 @@ $txp_permissions = array(
 	'file.publish'                => '1,2,3,4,  6',
 	'form'                        => '1,2,3,    6',
 	'image'                       => '1,2,3,4,  6',
+	'image.create.trusted'        => '1,2,3,	6',
 	'image.edit'                  => '1,2,3,    6',
 	'image.edit.own'              => '1,2,3,4,  6',
 	'image.delete'                => '1,2',
