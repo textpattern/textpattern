@@ -306,6 +306,7 @@ function setClassRemember(className, force)
 function sendAsyncEvent(data, fn, format)
 {
 	data.app_mode = 'async';
+	data._txp_token = textpattern._txp_token;
 	format = format || 'xml';
 	$.post('index.php', data, fn, format);
 }

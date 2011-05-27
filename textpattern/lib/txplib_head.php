@@ -57,7 +57,7 @@ $LastChangedRevision$
 	<title>Txp &#8250; <?php echo htmlspecialchars($sitename) ?> &#8250; <?php echo escape_title($pagetitle) ?></title>
 	<script src="jquery.js" type="text/javascript"></script>
 	<?php echo script_js(
-		'var textpattern = {event: "'.htmlspecialchars($event).'", step: "'.htmlspecialchars($step).'"};'
+		'var textpattern = {event: "'.htmlspecialchars($event).'", step: "'.htmlspecialchars($step).'", _txp_token: "'.htmlspecialchars(form_token()).'"};'
 	); ?>
 	<script type="text/javascript" src="textpattern.js"></script>
 	<script type="text/javascript">

@@ -30,7 +30,7 @@ $LastChangedRevision$
 				'form_delete' 	=> true,
 				'form_multi_edit' => true,
 				'form_save' 	=> true,
-				'save_pane_state' => true // TODO: AJAX token
+				'save_pane_state' => true
 			)
 		);
 

@@ -22,7 +22,7 @@ $LastChangedRevision$
 				'page_edit' => false,
 				'page_save' => true,
 				'page_delete' => true,
-				'save_pane_state' => false, // TODO: AJAX token
+				'save_pane_state' => true
 			)
 		);
 

@@ -53,7 +53,7 @@ if (!empty($event) and $event == 'article') {
 			'publish' 	=> true,
 			'edit' 		=> false,
 			'save' 		=> true,
-			'save_pane_state' => false // TODO: AJAX token
+			'save_pane_state' => true
 		)
 	);
 
