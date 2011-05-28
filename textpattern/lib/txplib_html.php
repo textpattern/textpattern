@@ -162,6 +162,7 @@ $LastChangedRevision$
 			($step) ? a.'step='.$step : '',
 			($thing) ? a.''.$thing.'='.urlencode($value) : '',
 			($thing2) ? a.''.$thing2.'='.urlencode($val2) : '',
+			a.'_txp_token='.form_token(),
 			'">'.escape_title($linktext).'</a>'
 		));
 	}
@@ -183,6 +184,7 @@ $LastChangedRevision$
 			'<a href="index.php?event='.$event,
 			($step) ? a.'step='.$step : '',
 			($thing) ? a.''.$thing.'='.urlencode($value) : '',
+			a.'_txp_token='.form_token(),
 			'" class="dlink">'.sp.'!'.sp.'</a>'
 		));
 	}
@@ -208,7 +210,7 @@ $LastChangedRevision$
 		}
 
 		if ($get) {
-			$url = '?event='.$event.a.'step='.$step.a.$thing.'='.urlencode($value);
+			$url = '?event='.$event.a.'step='.$step.a.$thing.'='.urlencode($value).a.'_txp_token='.form_token();
 
 			if ($thing2) {
 				$url .= a.$thing2.'='.urlencode($thing2val);
@@ -257,7 +259,7 @@ $LastChangedRevision$
 
 	function aLink($event,$step,$thing,$value,$thing2,$value2)
 	{
-		$o = '<a href="?event='.$event.a.'step='.$step.
+		$o = '<a href="?event='.$event.a.'step='.$step.a.'_txp_token='.form_token().
 			a.$thing.'='.urlencode($value).a.$thing2.'='.urlencode($value2).'"';
 		$o.= ' class="alink">+</a>';
 		return $o;
