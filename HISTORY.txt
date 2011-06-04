@@ -1,3 +1,12 @@
+Changes in 4.4.1
+
+* Security: Add admin-side CSRF protection measures. Updates are highly recommended. Thanks, Neal Poole.
+* Upload of SWF images requires 'image.create.trusted' privilege (applies to publisher, managing editor, copy editor, and designer roles).
+* Developer: CSRF protection API in bouncer(), form_token() and tInput().
+* Developer: CSRF token included in output from form(), aLink(), eLink(), dLink(), and wLink() functions.
+* phpass 0.4 / genuine
+* jQuery 1.6.1
+
 Changes in 4.4.0
 
 * Security: Fix several vulnerabilites. Updates are *absolutely* recommended for sites running any older version. Thanks, Neal Poole.
