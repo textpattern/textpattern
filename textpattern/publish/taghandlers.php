@@ -2203,7 +2203,7 @@ $LastChangedRevision$
 		$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
 
 		return ($link) ?
-			href($display_name, pagelinkurl(array('s' => $section, 'author' => $author_name))) :
+			href($display_name, pagelinkurl(array('s' => $section, 'author' => $author_name)), ' rel="author"') :
 			$display_name;
 	}
 
