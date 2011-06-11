@@ -2,6 +2,7 @@ Changes in 4.4.1
 
 * Security: Add admin-side CSRF protection measures. Updates are highly recommended. Thanks, Neal Poole.
 * Upload of SWF images requires 'image.create.trusted' privilege (applies to publisher, managing editor, copy editor, and designer roles).
+* <txp:file_download_size /> improved from both i18n and l10n viewpoints
 * Developer: CSRF protection API in bouncer(), form_token() and tInput().
 * Developer: CSRF token included in output from form(), aLink(), eLink(), dLink(), and wLink() functions.
 * phpass 0.4 / genuine
