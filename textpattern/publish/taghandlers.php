@@ -4226,7 +4226,6 @@ $LastChangedRevision$
 		{
 			$decimals = intval($decimals);
 		}
-
 		else
 		{
 			$decimals = 2;
@@ -4234,72 +4233,28 @@ $LastChangedRevision$
 
 		if (@$thisfile['size'])
 		{
-			$size = $thisfile['size'];
+			$bytes = $thisfile['size'];
+			$units = array('b', 'k', 'm', 'g', 't', 'p', 'e', 'z', 'y');
+			$format_unit = strtolower(substr($format, 0, 1)); // use first char for b/c
 
-			if (!in_array($format, array('B','KB','MB','GB','PB')))
+			if (in_array($format_unit, $units))
 			{
-				$divs = 0;
-
-				while ($size >= 1024)
-				{
-					$size /= 1024;
-					$divs++;
-				}
-
-				switch ($divs)
-				{
-					case 1:
-						$format = 'KB';
-					break;
-
-					case 2:
-						$format = 'MB';
-					break;
-
-					case 3:
-						$format = 'GB';
-					break;
-
-					case 4:
-						$format = 'PB';
-					break;
-
-					case 0:
-					default:
-						$format = 'B';
-					break;
-				}
+				$pow = array_search($format_unit, $units);
+			}
+			else
+			{
+				$pow = floor(($bytes ? log($bytes) : 0) / log(1024));
+				$pow = min($pow, count($units) - 1);
 			}
 
-			$size = $thisfile['size'];
+			$bytes /= pow(1024, $pow);
 
-			switch ($format)
-			{
-				case 'KB':
-					$size /= 1024;
-				break;
+			$separators = localeconv();
+			$sep_dec = isset($separators['decimal_point']) ? $separators['decimal_point'] : '.';
+			$sep_thous = isset($separators['thousands_sep']) ? $separators['thousands_sep'] : ',';
 
-				case 'MB':
-					$size /= (1024*1024);
-				break;
-
-				case 'GB':
-					$size /= (1024*1024*1024);
-				break;
-
-				case 'PB':
-					$size /= (1024*1024*1024*1024);
-				break;
-
-				case 'B':
-				default:
-					// do nothing
-				break;
-			}
-
-			return number_format($size, $decimals).$format;
+			return number_format($bytes, $decimals, $sep_dec, $sep_thous) . gTxt('units_' . $units[$pow]);
 		}
-
 		else
 		{
 			return '';
