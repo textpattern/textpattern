@@ -614,7 +614,7 @@ class Textile
 			$o = '';
 			if( $style ) {
 				foreach($style as $s) {
-					$parts = split(';', $s);
+					$parts = explode(';', $s);
 					foreach( $parts as $p ) {
 						$p = trim($p, '; ');
 						if( !empty( $p ) )
