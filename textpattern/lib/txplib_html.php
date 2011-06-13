@@ -75,13 +75,13 @@ $LastChangedRevision$
 		{
 			if (empty($item)) continue;
 			extract(lAtts(array(
-				'value'		=> '',
-				'sort'		=> '',
-				'event'		=> '',
-				'is_link'	=> '',
-				'dir'		=> '',
-				'crit'		=> '',
-				'method'	=> '',
+				'value'   => '',
+				'sort'    => '',
+				'event'   => '',
+				'is_link' => '',
+				'dir'     => '',
+				'crit'    => '',
+				'method'  => '',
 			),$item));
 
 			$o .= ($first_item) ? '' : ', '; $first_item = false;
@@ -93,7 +93,7 @@ $LastChangedRevision$
 				$o .= ($event) ? a."event=$event" : '';
 				$o .= ($sort) ? a."sort=$sort" : '';
 				$o .= ($dir) ? a."dir=$dir" : '';
-				$o .= ($crit) ? a."crit=$crit" : '';
+				$o .= ($crit != '') ? a."crit=$crit" : '';
 				$o .= ($method) ? a."search_method=$method" : '';
 
 				$o .= '">';
@@ -302,7 +302,7 @@ $LastChangedRevision$
 		return '<a href="?event='.$event.a.'step=list'.a.'page='.$page.
 			($sort ? a.'sort='.$sort : '').
 			($dir ? a.'dir='.$dir : '').
-			($crit ? a.'crit='.$crit : '').
+			(($crit != '') ? a.'crit='.$crit : '').
 			($search_method ? a.'search_method='.$search_method : '').
 			'" class="navlink">'.
 			($type == 'prev' ? '&#8249;'.sp.$label : $label.sp.'&#8250;').
@@ -328,7 +328,7 @@ $LastChangedRevision$
 	function nav_form($event, $page, $numPages, $sort, $dir, $crit, $search_method, $total=0, $limit=0)
 	{
 		global $theme;
-		if ($crit && $total > 1)
+		if ($crit != '' && $total > 1)
 		{
 			$out[] = $theme->announce(
 				gTxt('showing_search_results',
@@ -376,7 +376,7 @@ $LastChangedRevision$
 			$out[] = '<form class="prev-next" method="get" action="index.php">'.
 				n.eInput($event).
 				( $sort ? n.hInput('sort', $sort).n.hInput('dir', $dir) : '' ).
-				( $crit ? n.hInput('crit', $crit).n.hInput('search_method', $search_method) : '' ).
+				( ($crit != '') ? n.hInput('crit', $crit).n.hInput('search_method', $search_method) : '' ).
 				join('', $nav).
 				n.tInput().
 				n.'</form>';

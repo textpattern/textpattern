@@ -132,7 +132,7 @@ $LastChangedRevision$
 
 		$criteria = 1;
 
-		if ($search_method and $crit)
+		if ($search_method and $crit != '')
 		{
 			$crit_escaped = doSlash(str_replace(array('\\','%','_','\''), array('\\\\','\\%','\\_', '\\\''), $crit));
 

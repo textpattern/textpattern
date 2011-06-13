@@ -1273,7 +1273,7 @@ function escape_js($js)
 			n.sInput($name.'_multi_edit').
 			n.hInput('page', $page).
 			( $sort ? n.hInput('sort', $sort).n.hInput('dir', $dir) : '' ).
-			( $crit ? n.hInput('crit', $crit).n.hInput('search_method', $search_method) : '' ).
+			( ($crit != '') ? n.hInput('crit', $crit).n.hInput('search_method', $search_method) : '' ).
 			n.fInput('submit', '', gTxt('go'), 'smallerbox');
 	}
 
