@@ -547,7 +547,7 @@ $LastChangedRevision$
 					$passwd = generate_password(6);
 					$hash 	= doSlash(txp_hash_password($passwd));
 
-					if (safe_update('txp_users', "pass = '$hash'", "name = '".doSlash($name)."'"));
+					if (safe_update('txp_users', "pass = '$hash'", "name = '".doSlash($name)."'"))
 					{
 						$email = safe_field('email', 'txp_users', "name = '".doSlash($name)."'");
 
