@@ -184,14 +184,29 @@ function doAuth()
 			setcookie('txp_login', '', time()-3600);
 			setcookie('txp_login_public', '', time()-3600, $pub_path);
 		}
-		elseif ($c_userid and strlen($c_hash) == 32) // cookie exists
+
+		if ($c_userid and strlen($c_hash) == 32) // cookie exists
 		{
 			$nonce = safe_field('nonce', 'txp_users', "name='".doSlash($c_userid)."' AND last_access > DATE_SUB(NOW(), INTERVAL 30 DAY)");
 
 			if ($nonce and $nonce === md5($c_userid.pack('H*', $c_hash)))
 			{
-				// cookie is good, create $txp_user
-				$txp_user = $c_userid;
+				// cookie is good
+
+				if ($logout)
+				{
+					// destroy nonce
+					safe_update(
+						'txp_users',
+						"nonce = '".doSlash(md5(uniqid(mt_rand(), TRUE)))."'",
+						"name = '".doSlash($c_userid)."'"
+					);
+				}
+				else
+				{
+					// create $txp_user
+					$txp_user = $c_userid;
+				}
 				return '';
 			}
 			else
