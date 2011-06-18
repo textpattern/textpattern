@@ -1,4 +1,4 @@
-#@version 4.4.0;1289949161
+#@version 4.4.1;1308376007
 #@admin
 add_new_author => Add New Author
 and_mailed_to => and mailed to
@@ -43,7 +43,7 @@ real_name => Real Name
 resetpassword => Reset password
 reset_author_password => Reset author password
 site_administration => Users
-staff_writer => Staff writer
+staff_writer => Staff Writer
 unknown_author => Unknown author: {name}
 writer => Writer
 your_login_info => Your login info
@@ -79,7 +79,7 @@ expires => Expires
 meta => Meta
 no_articles_recorded => No articles recorded.
 or_publish_at => &#8230;or publish at
-override_default_form => Override form
+override_default_form => Override Form
 pending => Pending
 reset_time => Reset time to now&#8230;
 set_to_now => Set timestamp to now&#8230;
@@ -171,6 +171,7 @@ form_not_found => Form not found
 form_not_specified => Form not specified.
 fr-fr => Français
 gd_unavailable => unavailable
+get_off_my_lawn => I&#8217;m sorry. I&#8217;m afraid I can&#8217;t do that. I think <code>{event}</code> <code>{step}</code> is no safe operation at this time.
 gl-gz => Galego
 greeting => Dear
 he-il => עברית
@@ -251,6 +252,15 @@ txt_quote_double_open => “
 txt_quote_single_close => ’
 txt_quote_single_open => ‘
 uk-ua => Українська
+units_b => B
+units_e => EB
+units_g => GB
+units_k => KB
+units_m => MB
+units_p => PB
+units_t => TB
+units_y => YB
+units_z => ZB
 upload_err_cant_write => Failed to write file to disk
 upload_err_extension => File upload stopped by PHP extension
 upload_err_form_size => File exceeds the maximum size specified in Textpattern’s preferences
