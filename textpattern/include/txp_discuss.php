@@ -558,15 +558,15 @@ $LastChangedRevision$
 
 				echo tr(
 					td(
-						safe_strftime('%d %b %Y %I:%M %p', $uBanned)
+						gTime($uBanned)
 					, 100, 'date banned').
 
 					td(
-						$ip
+						htmlspecialchars($ip)
 					, 100, 'ip').
 
 					td(
-						$name_used
+						htmlspecialchars($name_used)
 					, 100, 'name').
 
 					td(
