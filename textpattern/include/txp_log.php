@@ -219,9 +219,9 @@ $LastChangedRevision$
 						gTime($log_uTime)
 					, 85, 'date time').
 
-					td($log_ip, 20, 'log_detail ip').
+					td(htmlspecialchars($log_ip), 20, 'log_detail ip').
 
-					td(soft_wrap($log_host, 30), '', 'host').
+					td(htmlspecialchars(soft_wrap($log_host, 30)), '', 'host').
 
 					td($log_page, '', 'page').
 					td($log_refer, '', 'refer').
