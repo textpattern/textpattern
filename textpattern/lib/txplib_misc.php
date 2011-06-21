@@ -1246,6 +1246,7 @@ function escape_js($js)
 	{
 		global $event;
 		$qty = gps('qty');
+		assert_int($qty);
 		$pageby = $name.'_list_pageby';
 		$GLOBALS[$pageby] = $qty;
 
