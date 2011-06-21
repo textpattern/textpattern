@@ -575,7 +575,7 @@ $LastChangedRevision$
 					, 100, 'id').
 
 					td(
-						'<a class="action-ban" href="?event=discuss'.a.'step=ipban_unban'.a.'ip='.$ip.a.'_txp_token='.form_token().'">'.gTxt('unban').'</a>'
+						'<a class="action-ban" href="?event=discuss'.a.'step=ipban_unban'.a.'ip='.htmlspecialchars($ip).a.'_txp_token='.form_token().'">'.gTxt('unban').'</a>'
 					, '', 'actions')
 				, ' class="'.(($ctr%2 == 0) ? 'even' : 'odd').'"'
 				);
