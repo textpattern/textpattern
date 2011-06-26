@@ -244,11 +244,13 @@ $LastChangedRevision$
 				$Category1 = ($Category1) ? '<span title="'.htmlspecialchars(fetch_category_title($Category1)).'">'.$Category1.'</span>' : '';
 				$Category2 = ($Category2) ? '<span title="'.htmlspecialchars(fetch_category_title($Category2)).'">'.$Category2.'</span>' : '';
 
-				$view_url = permlinkurl($a);
-
 				if ($Status != 4 and $Status != 5)
 				{
-					$view_url .= (strpos($view_url, '?') === FALSE ? '?' : '&amp;') . 'txpreview='.intval($ID).'.'.time();
+					$view_url = '?txpreview='.intval($ID).'.'.time();
+				}
+				else
+				{
+					$view_url = permlinkurl($a);
 				}
 
 				$manage = n.'<ul class="articles_detail actions">'.
