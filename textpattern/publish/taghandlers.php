@@ -1762,8 +1762,12 @@ $LastChangedRevision$
 
 	function if_expired($atts, $thing)
 	{
-		global $thisarticle;
+		global $thisarticle, $publish_expired_articles, $production_status;
 		assert_article();
+
+		if (!$publish_expired_articles && $production_status != 'live')
+			trigger_error(gTxt('publish_expired_articles_prefs_off'), E_USER_NOTICE);
+
 		return parse(EvalElse($thing,
 			$thisarticle['expires'] && ($thisarticle['expires'] <= time() )));
 	}
