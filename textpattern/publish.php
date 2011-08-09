@@ -1018,18 +1018,19 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function getNeighbour($Posted, $s, $type)
+	function getNeighbour($threshold, $s, $type, $col = 'Posted')
 	{
 		global $prefs;
 		extract($prefs);
 		$expired = ($publish_expired_articles) ? '' : ' and (now() <= Expires or Expires = '.NULLDATETIME.')';
 		$type = ($type == '>') ? '>' : '<';
 		$safe_name = safe_pfx('textpattern');
+		$col = doSlash($col);
 		$q = array(
 			"select ID, Title, url_title, unix_timestamp(Posted) as uposted
-			from ".$safe_name." where Posted $type '".doSlash($Posted)."'",
+			from ".$safe_name." where $col $type '".doSlash($threshold)."'",
 			($s!='' && $s!='default') ? "and Section = '".doSlash($s)."'" : filterFrontPage(),
-			'and Status=4 and Posted < now()'.$expired.' order by Posted',
+			'and Status=4 and Posted < now()'.$expired.' order by '.$col,
 			($type=='<') ? 'desc' : 'asc',
 			'limit 1'
 		);
@@ -1039,21 +1040,21 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function getNextPrev($id, $Posted, $s)
+	function getNextPrev($id, $threshold, $s, $col = 'Posted')
 	{
 		static $next, $cache;
 
 		if (@isset($cache[$next[$id]]))
 			$thenext = $cache[$next[$id]];
 		else
-			$thenext            = getNeighbour($Posted,$s,'>');
+			$thenext = getNeighbour($threshold, $s, '>', $col);
 
 		$out['next_id']     = ($thenext) ? $thenext['ID'] : '';
 		$out['next_title']  = ($thenext) ? $thenext['Title'] : '';
 		$out['next_utitle'] = ($thenext) ? $thenext['url_title'] : '';
 		$out['next_posted'] = ($thenext) ? $thenext['uposted'] : '';
 
-		$theprev            = getNeighbour($Posted,$s,'<');
+		$theprev            = getNeighbour($threshold, $s, '<', $col);
 		$out['prev_id']     = ($theprev) ? $theprev['ID'] : '';
 		$out['prev_title']  = ($theprev) ? $theprev['Title'] : '';
 		$out['prev_utitle'] = ($theprev) ? $theprev['url_title'] : '';
