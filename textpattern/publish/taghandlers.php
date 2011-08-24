@@ -428,6 +428,7 @@ $LastChangedRevision$
 			'auto_detect' => 'category, author',
 			'class'       => __FUNCTION__,
 			'form'        => 'plainlinks',
+			'id'          => '',
 			'label'       => '',
 			'labeltag'    => '',
 			'pageby'      => '',
@@ -443,6 +444,7 @@ $LastChangedRevision$
 		$pageby = ($pageby=='limit') ? $limit : $pageby;
 
 		if ($category) $where[] = "category IN ('".join("','", doSlash(do_list($category)))."')";
+		if ($id) $where[] = "id IN ('".join("','", doSlash(do_list($id)))."')";
 		if ($author) $where[] = "author IN ('".join("','", doSlash(do_list($author)))."')";
 		if ($realname) {
 			$authorlist = safe_column('name', 'txp_users', "RealName IN ('". join("','", doArray(doSlash(do_list($realname)), 'urldecode')) ."')" );
