@@ -1697,12 +1697,12 @@ $LastChangedRevision$
 		{
 			if ($id or $c or $pg)
 			{
-				$out = safe_strftime($archive_dateformat, $thisarticle['posted']);
+				$out = safe_strftime($archive_dateformat, $thisarticle['posted'], $gmt, $lang);
 			}
 
 			else
 			{
-				$out = safe_strftime($dateformat, $thisarticle['posted']);
+				$out = safe_strftime($dateformat, $thisarticle['posted'], $gmt, $lang);
 			}
 		}
 
@@ -1739,12 +1739,12 @@ $LastChangedRevision$
 		{
 			if ($id or $c or $pg)
 			{
-				$out = safe_strftime($archive_dateformat, $thisarticle['expires']);
+				$out = safe_strftime($archive_dateformat, $thisarticle['expires'], $gmt, $lang);
 			}
 
 			else
 			{
-				$out = safe_strftime($dateformat, $thisarticle['expires']);
+				$out = safe_strftime($dateformat, $thisarticle['expires'], $gmt, $lang);
 			}
 		}
 
@@ -1783,28 +1783,32 @@ $LastChangedRevision$
 		assert_article();
 
 		extract(lAtts(array(
+			'class'   => '',
 			'format'  => '',
 			'gmt'     => '',
-			'lang'    => ''
+			'lang'    => '',
+			'wraptag' => ''
 		), $atts));
 
 		if ($format)
 		{
-			return safe_strftime($format, $thisarticle['modified'], $gmt, $lang);
+			$out = safe_strftime($format, $thisarticle['modified'], $gmt, $lang);
 		}
 
 		else
 		{
 			if ($id or $c or $pg)
 			{
-				return safe_strftime($archive_dateformat, $thisarticle['modified']);
+				$out = safe_strftime($archive_dateformat, $thisarticle['modified'], $gmt, $lang);
 			}
 
 			else
 			{
-				return safe_strftime($dateformat, $thisarticle['modified']);
+				$out = safe_strftime($dateformat, $thisarticle['modified'], $gmt, $lang);
 			}
 		}
+
+		return ($wraptag) ? doTag($out, $wraptag, $class) : $out;
 	}
 
 // -------------------------------------------------------------
