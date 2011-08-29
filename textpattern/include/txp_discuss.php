@@ -639,7 +639,7 @@ $LastChangedRevision$
 				$parentids[] = $parentid;
 
 				if ($method == 'delete') {
-					// Delete and if succesful update commnet count
+					// Delete and if successful update comment count
 					if (safe_delete('txp_discuss', "discussid = $id"))
 						$done[] = $id;
 				}
