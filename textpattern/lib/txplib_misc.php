@@ -1605,6 +1605,19 @@ function escape_js($js)
 	}
 
 // --------------------------------------------------------------
+	function get_author_email($name)
+	{
+		static $authors = array();
+
+		if (isset($authors[$name]))
+			return $authors[$name];
+
+		$email = fetch('email','txp_users','name',doSlash($name));
+		$authors[$name] = $email;
+		return $email;
+	}
+
+// --------------------------------------------------------------
 	function has_single_author($table, $col='author')
 	{
 		return (safe_field('COUNT(name)', 'txp_users', '1=1') <= 1) &&

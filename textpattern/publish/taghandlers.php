@@ -2218,6 +2218,23 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
+	function author_email($atts)
+	{
+		global $thisarticle;
+
+		assert_article();
+
+		extract(lAtts(array(
+			'escape' => 'html',
+			'link' 	=> ''
+		), $atts));
+
+		$author_email = get_author_email($thisarticle['authorid']);
+		$display_email = ($escape == 'html' ? htmlspecialchars($author_email) : $author_email);
+		return ($link) ? email(array('email' => $author_email, 'linktext' => $display_email)) : $display_email;
+	}
+
+// -------------------------------------------------------------
 
 	function if_author($atts, $thing)
 	{
