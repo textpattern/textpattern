@@ -186,6 +186,8 @@ class theme
 			unset($areas['extensions']);
 		}
 
+		$dflt_tab = get_pref('default_event', '');
+
 		foreach ($areas as $ar => $items)
 		{
 			$l_ = gTxt('tab_'.$ar);
@@ -203,6 +205,11 @@ class theme
 				{
 					if (has_privs($b))
 					{
+						if ($b == $dflt_tab)
+						{
+							$this->menu[$ar]['event'] = $dflt_tab;
+						}
+
 						$this->menu[$ar]['items'][] = array('label' => $a, 'event' => $b, 'active' => ($b == $event));
 					}
 				}
