@@ -2084,7 +2084,7 @@ eod;
 			unset($keys['id']);
 		}
 
-		if (isset($keys['s']) && $keys['s'] == 'default')
+		if (isset($keys['s']) && ($keys['s'] == 'default' || $keys['s'] == 'home'))
 		{
 			unset($keys['s']);
 		}
@@ -2531,6 +2531,164 @@ eod;
 		die(join(n, $out));
 	}
 
+	// --------------------------------------------------------------
+		function fetch_section_description($name)
+		{
+			
+		static $secdescs = array();
+		global $thissection;
+
+		// try cache
+		if (isset($secdescs[$name]))
+			return $secdescs[$name];
+
+		// try global set by section_list()
+		if(!empty($thissection['descr']) && $thissection['name'] == $name)
+		{
+			$sectitles[$name] = $thissection['descr'];
+			return $thissection['descr'];
+		}
+
+		if($name == 'default' or empty($name))
+			return '';
+
+		$f = safe_field('descr','txp_section',"name='".doSlash($name)."'");
+		$sectitles[$name] = $f;
+		return $f;
+	
+		}
+
+// --------------------------------------------------------------
+		function fetch_section_key($name)
+		{
+			
+		static $seckeys = array();
+		global $thissection;
+
+		// try cache
+		if (isset($seckeys[$name]))
+			return $seckeys[$name];
+
+		// try global set by section_list()
+		if(!empty($thissection['metakey']) && $thissection['name'] == $name)
+		{
+			$seckeys[$name] = $thissection['metakey'];
+			return $thissection['metakey'];
+		}
+
+		$f = safe_field('metakey','txp_section',"name='".doSlash($name)."'");
+		$seckeys[$name] = $f;
+		return $f;
+	
+		}
+
+// --------------------------------------------------------------
+		function fetch_section_metadesc($name)
+		{
+			
+		static $secdescs = array();
+		global $thissection;
+
+		// try cache
+		if (isset($secdescs[$name]))
+			return $secdescs[$name];
+
+		// try global set by section_list()
+		if(!empty($thissection['metadesc']) && $thissection['name'] == $name)
+		{
+			$sectitles[$name] = $thissection['metadesc'];
+			return $thissection['metadesc'];
+		}
+
+		$f = safe_field('metadesc','txp_section',"name='".doSlash($name)."'");
+		$sectitles[$name] = $f;
+		return $f;
+	
+		}
+
+	// --------------------------------------------------------------
+		function parse_section_description($name)
+		{
+			static $stack = array();
+
+			$f = fetch_section_description($name);
+			if ($f) {
+				$out = parse($f);
+				return $out;
+			}
+		}
+		
+	// --------------------------------------------------------------
+		function fetch_category_description($name, $type='article')
+		{
+			static $catdescs = array();
+			global $thiscategory;
+
+			if (isset($catdescs[$type][$name]))
+				return $catdescs[$type][$name];
+
+			if(!empty($thiscategory['descr']) && $thiscategory['name'] == $name && $thiscategory['type'] == $type)
+			{
+				$catdescs[$type][$name] = $thiscategory['descr'];
+				return $thiscategory['descr'];
+			}
+
+			$f = safe_field('descr','txp_category',"name='".doSlash($name)."' and type='".doSlash($type)."'");
+			$catdescs[$type][$name] = $f;
+			return $f;
+		}
+	
+	// --------------------------------------------------------------
+		function fetch_category_metadesc($name, $type='article')
+		{
+			static $catdescs = array();
+			global $thiscategory;
+
+			if (isset($catdescs[$type][$name]))
+				return $catdescs[$type][$name];
+
+			if(!empty($thiscategory['metadesc']) && $thiscategory['name'] == $name && $thiscategory['type'] == $type)
+			{
+				$catdescs[$type][$name] = $thiscategory['metadesc'];
+				return $thiscategory['metadesc'];
+			}
+
+			$f = safe_field('metadesc','txp_category',"name='".doSlash($name)."' and type='".doSlash($type)."'");
+			$catdescs[$type][$name] = $f;
+			return $f;
+		}
+	
+	// --------------------------------------------------------------
+		function fetch_category_key($name, $type='article')
+		{
+			static $catkeys = array();
+			global $thiscategory;
+
+			if (isset($catkeys[$type][$name]))
+				return $catkeys[$type][$name];
+
+			if(!empty($thiscategory['metakey']) && $thiscategory['name'] == $name && $thiscategory['type'] == $type)
+			{
+				$catkeys[$type][$name] = $thiscategory['metakey'];
+				return $thiscategory['metakey'];
+			}
+
+			$f = safe_field('metakey','txp_category',"name='".doSlash($name)."' and type='".doSlash($type)."'");
+			$catkeys[$type][$name] = $f;
+			return $f;
+		}
+	
+	// --------------------------------------------------------------
+		function parse_category_description($name)
+		{
+			static $stack = array();
+
+			$f = fetch_category_description($name);
+			if ($f) {
+				$out = parse($f);
+				return $out;
+			}
+		}
 /**
  * Send a text/javascript response
  *

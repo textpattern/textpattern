@@ -40,7 +40,8 @@ $LastChangedRevision$
 
 		pagetop(gTxt('sections'), $message);
 
-		$default = safe_row('page, css, name', 'txp_section', "name = 'default'");
+		$default = safe_row('page, css, name, descr, metakey, metadesc', 'txp_section', "name = 'default'");
+		$home = safe_row('page, css, name, descr, metakey, metadesc', 'txp_section', "name = 'home'");
 
 
 		echo n.'<div id="'.$event.'_container" class="txp-container txp-list">';
@@ -60,14 +61,24 @@ $LastChangedRevision$
 					n.'</div>'
 				, ' colspan="3"')
 			).
+			
+			n.n.tr(
+				td(
+					'<a href="#section_home_content">'.gTxt('home').'</a>', '', 'label'
+				).n.
+				td(section_detail_partial($home), '', '', 'section_home_content').n.
+				td()
+			, ' class="section home lever"').
 
 			n.n.tr(
-				td(gTxt('default'), '', 'label').n.
-				td(section_detail_partial($default)).n.
+				td(
+					'<a href="#section_default_content">'.gTxt('default').'</a>', '', 'label'
+				).n.
+				td(section_detail_partial($default), '', '', 'section_default_content').n.
 				td()
-			, ' class="section default"');
+			, ' class="section default lever"');
 
-		$rs = safe_rows_start('*', 'txp_section', "name != 'default' order by name");
+		$rs = safe_rows_start('*', 'txp_section', "name != 'default' AND name != 'home' order by name");
 
 		if ($rs)
 		{
@@ -78,12 +89,13 @@ $LastChangedRevision$
 				extract($a);
 
 				echo n.n.tr(
-					n.td($name, '', 'label').
-					n.td(section_detail_partial($a), '', 'main').
+					n.td(
+						'<a href="#section_'.$name.'_content">'.$name.'</a>', '', 'label').
+					n.td(section_detail_partial($a), '', 'main" id="section_'.$name.'_content').
 					td(
 						dLink('section', 'section_delete', 'name', $name, '', 'type', 'section')
 					, '', 'actions')
-				,' id="section-'.$name.'" class="section '.(($ctr%2 == 0) ? 'even' : 'odd').'"');
+				,' id="section-'.$name.'" class="lever section '.(($ctr%2 == 0) ? 'even' : 'odd').'" ');
 
 				$ctr++;
 			}
@@ -118,6 +130,9 @@ $LastChangedRevision$
 					title        = '".doSlash($title)."',
 					page         = '".$default['page']."',
 					css          = '".$default['css']."',
+					descr				 = '',
+					metakey			 = '',
+					metadesc		 = '',
 					is_default   = 0,
 					in_rss       = 1,
 					on_frontpage = 1"
@@ -154,7 +169,7 @@ $LastChangedRevision$
 		global $txpcfg, $app_mode;
 
 		extract(doSlash(psa(array('page','css','old_name'))));
-		extract(psa(array('name', 'title')));
+		extract(psa(array('name', 'title', 'descr', 'metakey', 'metadesc')));
 		$prequel = '';
 		$sequel = '';
 
@@ -185,9 +200,9 @@ $LastChangedRevision$
 			}
 		}
 
-		if ($name == 'default')
+		if ($name == 'default' or $name == 'home')
 		{
-			safe_update('txp_section', "page = '$page', css = '$css'", "name = 'default'");
+			safe_update('txp_section', "page = '$page', css = '$css', descr = '$descr', metakey = '$metakey', metadesc = '$metadesc'", "name = '$name'");
 
 			update_lastmod();
 		}
@@ -213,7 +228,10 @@ $LastChangedRevision$
 				is_default   = $is_default,
 				on_frontpage = $on_frontpage,
 				in_rss       = $in_rss,
-				searchable   = $searchable
+				searchable   = $searchable,
+				descr				 = '$descr',
+				metakey      = '$metakey',
+				metadesc     = '$metadesc' 
 			", "name = '$old_name'");
 
 			safe_update('textpattern', "Section = '$name'", "Section = '$old_name'");
@@ -267,7 +285,7 @@ $LastChangedRevision$
 
 		extract($thesection);
 
-		$default_section = ($name == 'default');
+		$default_section = ($name == 'default' || $name == 'home');
 
 		$out = '<table>'.
 
@@ -322,6 +340,21 @@ $LastChangedRevision$
 					yesnoradio('searchable', $searchable, '', $name).sp.popHelp('section_searchable')
 				, '', 'noline')
 			, ' class="option is-searchable"')).
+			
+			n.n.tr(
+				fLabelCell(gTxt('section_descr').':').
+				fTextCell('descr', $descr, 1, 4, 20)
+			).
+							
+			n.n.tr(
+				fLabelCell(gTxt('section_metakey').':').
+				fInputCell('metakey', $metakey, 1, 20)
+			).
+				
+			n.n.tr(
+				fLabelCell(gTxt('section_metadesc').':').
+				fTextCell('metadesc', $metadesc, 1, 4, 20)
+			).
 
 			pluggable_ui('section_ui', 'extend_detail_form', '', $thesection).
 

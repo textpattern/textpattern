@@ -198,7 +198,7 @@ begin generic functions
 	{
 		$vals = array();
 
-		$rs = safe_rows_start('name, title', 'txp_section', "name != 'default' order by name");
+		$rs = safe_rows_start('name, title', 'txp_section', "name != 'default' and name != 'home' order by name");
 
 		if ($rs and numRows($rs) > 0)
 		{
