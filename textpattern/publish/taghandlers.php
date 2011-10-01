@@ -32,7 +32,7 @@ $LastChangedRevision$
 			$out .= gTxt('search_results').htmlspecialchars($separator.$q);
 		} elseif ($c) {
 			$out .= htmlspecialchars(fetch_category_title($c, $context));
-		} elseif ($s and $s != 'default') {
+		} elseif ($s and $s != 'default' and $s != 'home') {
 			$out .= htmlspecialchars(fetch_section_title($s));
 		} elseif ($pg) {
 			$out .= gTxt('page').' '.$pg;
@@ -1046,7 +1046,7 @@ $LastChangedRevision$
 
 		if ($type == 's')
 		{
-			$rs = safe_rows_start('name, title', 'txp_section', "name != 'default' order by name");
+			$rs = safe_rows_start('name, title', 'txp_section', "name != 'default' and name != 'home' order by name");
 		}
 
 		else
@@ -1080,7 +1080,7 @@ $LastChangedRevision$
 
 			if ($out)
 			{
-				$section = ($this_section) ? ( $s == 'default' ? '' : $s) : $section;
+				$section = ($this_section) ? ( ($s == 'default' || $s == 'home') ? '' : $s) : $section;
 
 				$out = n.'<select name="'.$type.'" onchange="submit(this.form);">'.
 					n.t.'<option value=""'.($selected ? '' : ' selected="selected"').'>&nbsp;</option>'.
@@ -1172,13 +1172,15 @@ $LastChangedRevision$
 					extract($qs);
 
 					$rs = safe_rows_start('name, title', 'txp_category',
-						"(lft between $lft and $rgt) and type = '".doSlash($type)."' and name != 'default' $exclude $shallow order by ".($sort ? $sort : 'lft ASC'));
+					// "(lft between $lft and $rgt) and type = '".doSlash($type)."' and name != 'default' and name != 'home' $exclude $shallow order by ".($sort ? $sort : 'lft ASC'));	
+					"(lft between $lft and $rgt) and type = '".doSlash($type)."' and name != 'default' $exclude $shallow order by ".($sort ? $sort : 'lft ASC')); //check for home section maybe
 				}
 			}
 
 			else
 			{
 				$rs = safe_rows_start('name, title', 'txp_category',
+					// "type = '".doSlash($type)."' and name not in('default','home','root') $exclude $shallow order by ".($sort ? $sort : 'name ASC'));
 					"type = '".doSlash($type)."' and name not in('default','root') $exclude $shallow order by ".($sort ? $sort : 'name ASC'));
 			}
 		}
@@ -1197,7 +1199,7 @@ $LastChangedRevision$
 
 				if ($name)
 				{
-					$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
+					$section = ($this_section) ? ( ($s == 'default' || $s == 'home') ? '' : $s ) : $section;
 
 					if (empty($form) && empty($thing))
 					{
@@ -1271,11 +1273,12 @@ $LastChangedRevision$
 				$exclude = "and name not in('$exclude')";
 			}
 
-			$rs = safe_rows('name, title', 'txp_section', "name != 'default' $exclude order by ".($sort ? $sort : 'name ASC'));
+			$rs = safe_rows('name, title', 'txp_section', "name != 'default' and name != 'home' $exclude order by ".($sort ? $sort : 'name ASC'));
 		}
 
 		if ($include_default)
 		{
+			// array_unshift($rs, array('name' => 'default', 'title' => $default_title, 'name' => 'home', 'title' => $default_title)); // TODO check this point			
 			array_unshift($rs, array('name' => 'default', 'title' => $default_title));
 		}
 
@@ -1302,6 +1305,7 @@ $LastChangedRevision$
 				}
 				else
 				{
+					// $thissection = array('name' => $name, 'title' => ($name == 'default' or $name == 'home') ? $default_title : $title); //fixme add home title
 					$thissection = array('name' => $name, 'title' => ($name == 'default') ? $default_title : $title);
 					$thissection['is_first'] = ($count == 1);
 					$thissection['is_last'] = ($count == $last);
@@ -2210,6 +2214,7 @@ $LastChangedRevision$
 		$author_name = get_author_name($thisarticle['authorid']);
 		$display_name = htmlspecialchars( ($title) ? $author_name : $thisarticle['authorid'] );
 
+		// $thissection = array('name' => $name, 'title' => ($name == 'default' or $name == 'home') ? $default_title : $title); //fixme add home title
 		$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
 
 		return ($link) ?
@@ -2336,6 +2341,7 @@ $LastChangedRevision$
 
 		if ($thisarticle['category1'])
 		{
+			// $section = ($this_section) ? ( ($s == 'default' || $s == 'home') ? '' : $s ) : $section;
 			$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
 			$category = $thisarticle['category1'];
 
@@ -2386,6 +2392,7 @@ $LastChangedRevision$
 
 		if ($thisarticle['category2'])
 		{
+			// $section = ($this_section) ? ( ($s == 'default' || $s == 'home') ? '' : $s ) : $section;
 			$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
 			$category = $thisarticle['category2'];
 
@@ -2453,6 +2460,7 @@ $LastChangedRevision$
 
 		if ($category)
 		{
+			// $section = ($this_section) ? ( ($s == 'default' || $s == 'home') ? '' : $s ) : $section;
 			$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
 			$label = htmlspecialchars( ($title) ? fetch_category_title($category, $type) : $category );
 
@@ -3254,12 +3262,41 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
+	# DEPRECATED - provided only for backwards compatibility
 	function meta_keywords()
 	{
-		global $id_keywords;
-		return ($id_keywords)
-		?	'<meta name="keywords" content="'.htmlspecialchars($id_keywords).'" />'
-		:	'';
+		trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
+		
+		return meta();
+	}
+	
+	function meta()
+	{
+		global $id_keywords, $thisarticle, $c, $s;
+
+		if ($thisarticle['title']) {
+			$key = htmlspecialchars($id_keywords);
+			$desc = $thisarticle['metadesc'];
+		} elseif ($c) {
+			$key = htmlspecialchars(fetch_category_key($c));
+			$desc = htmlspecialchars(fetch_category_metadesc($c));
+		} elseif ($s) {
+			$key = htmlspecialchars(fetch_section_key($s));
+			$desc = htmlspecialchars(fetch_section_metadesc($s));
+		} else {
+			$key = '';
+			$desc = '';
+		}
+
+		if ($key != '')	{
+			$key = '<meta name="keywords" content="'.$key.'" />';
+		} 
+		
+		if ($desc != '') {
+			$desc = '<meta name="description" content="'.$desc.'" />';
+		}
+		
+		return $key.$desc;
 	}
 
 // -------------------------------------------------------------
@@ -3561,7 +3598,7 @@ $LastChangedRevision$
 
 		$content = array();
 		extract($pretext);
-		if(!empty($s) && $s!= 'default')
+		if(!empty($s) && $s!= 'default' && $s!= 'home')
 		{
 			$section_title = ($title) ? fetch_section_title($s) : $s;
 			$section_title_html = escape_title($section_title);
@@ -3715,12 +3752,12 @@ $LastChangedRevision$
 			'name' => FALSE,
 		),$atts));
 
-		$section = ($s == 'default' ? '' : $s);
+		$section = (($s == 'default' || $s == 'home') ? '' : $s);
 
 		if ($section)
 			return parse(EvalElse($thing, $name === FALSE or in_list($section, $name)));
 		else
-			return parse(EvalElse($thing, $name !== FALSE and (in_list('', $name) or in_list('default', $name))));
+			return parse(EvalElse($thing, $name !== FALSE and (in_list('', $name) or in_list('default', $name) or in_list('home', $name))));
 
 	}
 
@@ -4532,4 +4569,95 @@ $LastChangedRevision$
 
 		return parse(EvalElse($thing, $x));
 	}
+	// -------------------------------------------------------------
+	// import in core funtion the if data plugin	
+	function if_data ($atts, $thing = NULL ) {
+		    $atts = lAtts(array('debug' => 0,'ignore' => 0), $atts);
+
+		    $f = '/<txp:(\S+)\b(.*)(?:(?<!br )(\/))?'.chr(62).'(?(3)|(.+)<\/txp:\1>)/sU';
+		    $iftext = EvalElse($thing, true);
+		    $thresh = 1 + strlen(preg_replace($f, '', $iftext));
+
+		    $parsed = parse($iftext);
+		    if ($atts['ignore']) $parsed = trim($parsed);
+		    $parsed_len = strlen($parsed);
+
+		    $empty = 'Data';
+		    if (strlen($parsed) < $thresh) { #or !preg_match('/\S/', $parsed)) {
+		        $parsed = parse(EvalElse($thing, false));
+		        $empty = 'No Data';
+		    }
+		    return $atts['debug']
+		           ? "<!-- $empty -- Threshhold: $thresh Length: $parsed_len -->" . $parsed
+		           : $parsed;
+		}
+		
+		function	section_description($atts, $thing = NULL ) 
+		{
+			global $thisarticle, $s, $thissection;
+			
+			extract(lAtts(array(
+				'class'   => 'section_description',
+				'name'		=> '',
+				'wraptag' => 'p',
+			), $atts));
+			
+			if ($name)
+			{
+				$sec = $name;
+			}
+
+			elseif (!empty($thissection['name']))
+			{
+				$sec = $thissection['name'];
+			}
+
+			elseif (!empty($thisarticle['section']))
+			{
+				$sec = $thisarticle['section'];
+			}
+
+			else
+			{
+				$sec = $s;
+			}
+			
+			return doTag(parse_section_description($sec), $wraptag, $class);
+			
+		}
+		
+		function	category_description($atts, $thing = NULL ) 
+		{
+			global $thisarticle, $c, $thiscategory;
+			
+			extract(lAtts(array(
+				'class'   => 'category_description',
+				'name'		=> '',
+				'wraptag' => 'p',
+			), $atts));
+			
+			if ($name)
+			{
+				$cat = $name;
+			}
+
+			elseif (!empty($thiscategory['name']))
+			{
+				$cat = $thiscategory['name'];
+			}
+
+			elseif (!empty($thisarticle['category']))
+			{
+				$cat = $thisarticle['category'];
+			}
+
+			else
+			{
+				$cat = $c;
+			}
+			
+			return doTag(parse_category_description($cat), $wraptag, $class);
+			
+		}
+		
 ?>

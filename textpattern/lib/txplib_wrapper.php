@@ -241,7 +241,7 @@ class TXP_Wrapper
 	{
 		if ($this->loggedin && has_privs('article', $this->txp_user))
 		{
-			return safe_rows('*', 'txp_section',"name!='default'");
+			return safe_rows('*', 'txp_section',"name!='default' and name!='home'");
 		}
 		return false;
 	}

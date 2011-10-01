@@ -228,6 +228,19 @@ $LastChangedRevision$
 		return join('', $o);
 	}
 
+//------------
+
+	function option($name, $value, $label, $selected = '1', $id = '', $tabindex = '')
+	{
+		$o[] = '<option name="'.$name.'" value="'.$value.'"';
+		$o[] = ($id) ? ' id="'.$id.'"' : '';
+		$o[] = ($selected == '1') ? ' selected="selected"' : '';
+		$o[] = ($tabindex) ? ' tabindex="'.$tabindex.'"' : '';
+		$o[] = ' >'.$label.'</option>';
+
+		return join('', $o);
+	}
+
 //-------------------------------------------------------------
 
 	function form($contents, $style = '', $onsubmit = '', $method = 'post', $class = '', $fragment = '', $id = '')
@@ -251,10 +264,10 @@ $LastChangedRevision$
 
 //-------------------------------------------------------------
 
-	function text_area($name, $h, $w, $thing = '', $id = '')
+	function text_area($name, $h, $w, $thing = '', $id = '', $cols = '40', $rows = '5', $tabindex = '' )
 	{
 		$id = ($id) ? ' id="'.$id.'"' : '';
-		return '<textarea'.$id.' name="'.$name.'" cols="40" rows="5" style="width:'.$w.'px; height:'.$h.'px;">'.htmlspecialchars($thing).'</textarea>';
+		return '<textarea'.$id.' name="'.$name.'" tabindex="'.$tabindex.'" cols="'.$cols.'" rows="'.$rows.'" style="width:'.$w.'px; height:'.$h.'px;">'.htmlspecialchars($thing).'</textarea>';
 	}
 
 //-------------------------------------------------------------

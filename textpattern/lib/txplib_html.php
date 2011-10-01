@@ -598,6 +598,27 @@ $LastChangedRevision$
 		,' class="noline"');
 	}
 
+/**
+ * Render a form input inside a table cell.
+ *
+ * @param	string	$name	HTML name attribute
+ * @param	string	$var	Input value ['']
+ * @param	integer	$tabindex	HTML tabindex attribute ['']
+ * @param	integer	$rows	HTML rows attribute ['']
+ * @param	integer	$cols	HTML cols attribute ['']
+ * @param	string	$help	Help text ['']
+ * @param	string	$id	HTML id attribute
+ * @return		string	HTML
+ */
+
+	function fTextCell($name, $var = '', $tabindex = '', $rows = '', $cols = '', $help = '', $id = '')
+	{
+		$pop = ($help) ? sp.popHelp($name) : '';
+
+		return tda(
+			text_area($name, '', '', $var, $id, $cols, $rows, $tabindex ).$pop
+		,' class="noline"');
+	}
 
 /**
  * Render anything as a XML element.

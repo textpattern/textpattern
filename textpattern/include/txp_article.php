@@ -17,7 +17,7 @@ global $vars, $statuses;
 
 $vars = array(
 	'ID','Title','Title_html','Body','Body_html','Excerpt','textile_excerpt','Image',
-	'textile_body', 'Keywords','Status','Posted','Expires','Section','Category1','Category2',
+	'textile_body','Keywords','Metadesc','Status','Posted','Expires','Section','Category1','Category2',
 	'Annotate','AnnotateInvite','publish_now','reset_time','AuthorID','sPosted',
 	'LastModID','sLastMod','override_form','from_view','year','month','day','hour',
 	'minute','second','url_title','exp_year','exp_month','exp_day','exp_hour',
@@ -108,6 +108,7 @@ if (!empty($event) and $event == 'article') {
 		}
 
 		$Keywords = doSlash(trim(preg_replace('/( ?[\r\n\t,])+ ?/s', ',', preg_replace('/ +/', ' ', ps('Keywords'))), ', '));
+		$Metadesc = ps('Metadesc');
 
 		if (empty($exp_year)) {
 			$expires = 0;
@@ -157,6 +158,7 @@ if (!empty($event) and $event == 'article') {
 				Excerpt_html    = '$Excerpt_html',
 				Image           = '$Image',
 				Keywords        = '$Keywords',
+				Metadesc				= '$Metadesc',
 				Status          =  $Status,
 				Posted          =  $when,
 				Expires         =  $whenexpires,
@@ -285,6 +287,7 @@ if (!empty($event) and $event == 'article') {
 		}
 
 		$Keywords = doSlash(trim(preg_replace('/( ?[\r\n\t,])+ ?/s', ',', preg_replace('/ +/', ' ', ps('Keywords'))), ', '));
+		$Metadesc = ps('Metadesc');
 
 		$user = doSlash($txp_user);
 
@@ -304,6 +307,7 @@ if (!empty($event) and $event == 'article') {
 			Excerpt         = '$Excerpt',
 			Excerpt_html    = '$Excerpt_html',
 			Keywords        = '$Keywords',
+			Metadesc				= '$Metadesc',
 			Image           = '$Image',
 			Status          =  $Status,
 			LastMod         =  now(),
@@ -522,6 +526,13 @@ if (!empty($event) and $event == 'article') {
 				n.graf('<label for="keywords">'.gTxt('keywords').'</label>'.sp.popHelp('keywords').br.
 					n.'<textarea id="keywords" name="Keywords" cols="18" rows="5">'.htmlspecialchars(str_replace(',' ,', ', $Keywords)).'</textarea>', ' class="keywords"'),
 				$rs);
+				
+			//meta description
+			
+			echo pluggable_ui('article_ui', 'metadesc',
+				n.graf('<label for="metadesc">'.gTxt('metadescription').'</label>'.sp.popHelp('metadesc').br.
+					n.'<textarea id="metadescription" name="Metadesc" cols="18" rows="5">'.htmlspecialchars($Metadesc).'</textarea>', ' class="metadesc"'),
+				$rs);
 
 			// url title
 			echo pluggable_ui('article_ui', 'url_title',
@@ -738,7 +749,7 @@ if (!empty($event) and $event == 'article') {
 			echo pluggable_ui('article_ui', 'status',
 				n.n.'<fieldset id="write-status">'.
 				n.'<legend>'.gTxt('status').'</legend>'.
-				n.status_radio($Status).
+				n.status_option($Status).
 				n.'</fieldset>',
 				$rs);
 
@@ -1072,20 +1083,19 @@ EOS
 
 //--------------------------------------------------------------
 
-	function status_radio($Status)
-	{
-		global $statuses;
+	function status_option($Status)
+		{
+			global $statuses;
 
 		$Status = (!$Status) ? 4 : $Status;
 
-		foreach ($statuses as $a => $b)
-		{
-			$out[] = n.t.'<li class="status-'.$a.($Status == $a ? ' active' : '').'">'.radio('Status', $a, ($Status == $a) ? 1 : 0, 'status-'.$a).
-				'<label for="status-'.$a.'">'.$b.'</label></li>';
-		}
+			foreach ($statuses as $a => $b)
+			{
+				$out[] = n.t.'<li>'.option('', $a, $b, ($Status == $a) ? 1 : 0, 'status-'.$a);
+			}
 
-		return '<ul class="status plain-list">'.join('', $out).n.'</ul>';
-	}
+			return '<select class="list" name="Status">'.join('', $out).n.'</select>';
+		}
 
 //--------------------------------------------------------------
 
@@ -1105,7 +1115,7 @@ EOS
 
 	function section_popup($Section, $id)
 	{
-		$rs = safe_column('name', 'txp_section', "name != 'default'");
+		$rs = safe_column('name', 'txp_section', "name != 'default' and name != 'home'");
 
 		if ($rs)
 		{

@@ -75,7 +75,7 @@ $LastChangedRevision$
 
 	if ($event == 'list')
 	{
-		$rs = safe_column('name', 'txp_section', "name != 'default'");
+		$rs = safe_column('name', 'txp_section', "name != 'default' and name != 'home'");
 
 		$edit['section'] = $rs ? selectInput('Section', $rs, '', true) : '';
 
