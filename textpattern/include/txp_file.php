@@ -612,22 +612,26 @@ $LastChangedRevision$
 		}
 
 		extract(doSlash(gpsa(array('filename','title','category','permissions','description'))));
-		$filename = sanitizeForFile($filename);
+		$safe_filename = sanitizeForFile($filename);
+		if ($safe_filename != $filename) {
+			file_list(array(gTxt('invalid_filename'), E_ERROR));
+			return;
+		}
 
-		$size = filesize(build_file_path($file_base_path,$filename));
-		$id = file_db_add($filename,$category,$permissions,$description,$size,$title);
+		$size = filesize(build_file_path($file_base_path,$safe_filename));
+		$id = file_db_add($safe_filename,$category,$permissions,$description,$size,$title);
 
 		if($id === false){
 			file_list(array(gTxt('file_upload_failed').' (db_add)', E_ERROR));
 		} else {
-			$newpath = build_file_path($file_base_path, $filename);
+			$newpath = build_file_path($file_base_path, $safe_filename);
 
 			if (is_file($newpath)) {
 				file_set_perm($newpath);
 				update_lastmod();
-				file_list(gTxt('linked_to_file').' '.$filename);
+				file_list(gTxt('linked_to_file').' '.$safe_filename);
 			} else {
-				file_list(gTxt('file_not_found').' '.$filename);
+				file_list(gTxt('file_not_found').' '.$safe_filename);
 			}
 		}
 	}
