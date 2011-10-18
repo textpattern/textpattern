@@ -624,6 +624,7 @@ $LastChangedRevision$
 
 			if (is_file($newpath)) {
 				file_set_perm($newpath);
+				update_lastmod();
 				file_list(gTxt('linked_to_file').' '.$filename);
 			} else {
 				file_list(gTxt('file_not_found').' '.$filename);
@@ -681,6 +682,7 @@ $LastChangedRevision$
 					// clean up file
 				} else {
 					file_set_perm($newpath);
+					update_lastmod();
 
 					$message = gTxt('file_uploaded', array('{name}' => htmlspecialchars($newname)));
 
@@ -749,6 +751,7 @@ $LastChangedRevision$
 				unlink($file);
 			} else {
 				file_set_perm($newpath);
+				update_lastmod();
 				if ($size = filesize($newpath))
 					safe_update('txp_file', 'size = '.$size.', modified = now()', 'id = '.$id);
 
@@ -870,6 +873,7 @@ $LastChangedRevision$
 			}
 		}
 
+		update_lastmod();
 		$message = gTxt('file_updated', array('{name}' => $filename));
 
 		file_list($message);
