@@ -2511,19 +2511,20 @@ eod;
 		$out[] = '<textpattern>';
 		foreach ($response as $element => $value)
 		{
-			// element *names* must not contain <>&, *values* may.
-			$value = doSpecial($value);
 			if (is_array($value))
 			{
 				$out[] = t."<$element>".n;
 				foreach ($value as $e => $v)
 				{
+					// Character escaping in values; @see http://www.w3.org/TR/2000/WD-xml-c14n-20000119.html#charescaping
+					$v = str_replace(array("\t", "\n", "\r"), array("&#x9;", "&#xA;", "&#xD;"), htmlspecialchars($v));
 					$out[] = t.t."<$e value='$v' />".n;
 				}
 				$out[] = t."</$element>".n;
 			}
 			else
 			{
+				$value = str_replace(array("\t", "\n", "\r"), array("&#x9;", "&#xA;", "&#xD;"), htmlspecialchars($value));
 				$out[] = t."<$element value='$value' />".n;
 			}
 		}
