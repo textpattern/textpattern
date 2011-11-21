@@ -4258,7 +4258,7 @@ $LastChangedRevision$
 			$decimals = 2;
 		}
 
-		if (@$thisfile['size'])
+		if (isset($thisfile['size']))
 		{
 			$bytes = $thisfile['size'];
 			$units = array('b', 'k', 'm', 'g', 't', 'p', 'e', 'z', 'y');
