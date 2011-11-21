@@ -4120,7 +4120,7 @@ $LastChangedRevision$
 
 //--------------------------------------------------------------------------
 
-	function file_download($atts)
+	function file_download($atts, $thing = NULL)
 	{
 		global $thisfile;
 
@@ -4151,7 +4151,7 @@ $LastChangedRevision$
 
 		if ($thisfile)
 		{
-			$out = parse_form($form);
+			$out = ($thing) ? parse($thing) : parse_form($form);
 
 			// cleanup: this wasn't called from a form,
 			// so we don't want this value remaining
