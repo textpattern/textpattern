@@ -246,32 +246,17 @@ if ($event == 'category') {
 
 			if ($event == 'article')
 			{
-				$rs2 = safe_rows_start('Category1, count(*) as num', 'textpattern', "1 = 1 group by Category1");
+				// Count distinct articles for both categories, avoid duplicates
+				$rs2 = getRows(
+				    'select category, count(*) as num from ('.
+						'select ID, Category1 as category from '.safe_pfx('textpattern').
+						' union '.
+						'select ID, Category2 as category from '.safe_pfx('textpattern').
+					') as t where category != "" group by category');
 
-				while ($a = nextRow($rs2))
+				foreach ($rs2 as $a)
 				{
-					$name = $a['Category1'];
-					$num = $a['num'];
-
-					$total_count[$name] = $num;
-				}
-
-				$rs2 = safe_rows_start('Category2, count(*) as num', 'textpattern', "1 = 1 group by Category2");
-
-				while ($a = nextRow($rs2))
-				{
-					$name = $a['Category2'];
-					$num = $a['num'];
-
-					if (isset($total_count[$name]))
-					{
-						$total_count[$name] += $num;
-					}
-
-					else
-					{
-						$total_count[$name] = $num;
-					}
+					$total_count[$a['category']] = $a['num'];
 				}
 			}
 
