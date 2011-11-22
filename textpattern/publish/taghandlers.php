@@ -2878,6 +2878,7 @@ $LastChangedRevision$
 			'sort'        => 'name ASC',
 		),$atts));
 
+		$safe_sort = doSlash($sort);
 		$where = array();
 		$has_content = $thing || $form;
 		$filters = isset($atts['id']) || isset($atts['name']) || isset($atts['category']) || isset($atts['author']) || isset($atts['realname']) || isset($atts['extension']) || $thumbnail === '1' || $thumbnail === '0';
@@ -2925,7 +2926,11 @@ $LastChangedRevision$
 								}
 								$i++;
 							}
-							$where[] = "id IN ('".join("','", doSlash($items))."')";
+							$items = join(",", $items);
+							// NB: This clause will squash duplicate ids
+							$where[] = "id IN ($items)";
+							// order of ids in article image field overrides 'sort' attribute
+							$safe_sort = "field(id, $items)";
 						}
 						break;
 					case 'category':
@@ -2984,7 +2989,7 @@ $LastChangedRevision$
 
 		$qparts = array(
 			$where,
-			'order by '.doSlash($sort),
+			'order by '.$safe_sort,
 			($limit) ? 'limit '.intval($pgoffset).', '.intval($limit) : ''
 		);
 
