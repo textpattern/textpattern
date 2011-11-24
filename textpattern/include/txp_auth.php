@@ -152,6 +152,21 @@ function doAuth()
 		, '', '', 'post', '', '', 'login_form').'</div>'.
 
 
+		n.script_js(<<<EOSCR
+// Focus on either username or password when empty
+$(document).ready(
+	function() {
+		var has_name = $("#name").val().length;
+		var has_password = $("#password").val().length;
+		if (!has_name) {
+			$("#name").focus();
+		} else if (!has_password) {
+		 	$("#password").focus();
+		}
+	}
+);
+EOSCR
+		).
 		n.'</body>'.n.'</html>';
 
 		exit(0);
