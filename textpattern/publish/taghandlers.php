@@ -2929,8 +2929,11 @@ $LastChangedRevision$
 							$items = join(",", $items);
 							// NB: This clause will squash duplicate ids
 							$where[] = "id IN ($items)";
-							// order of ids in article image field overrides 'sort' attribute
-							$safe_sort = "field(id, $items)";
+							// order of ids in article image field overrides default 'sort' attribute
+							if (empty($atts['sort']))
+							{
+								$safe_sort = "field(id, $items)";
+							}
 						}
 						break;
 					case 'category':
