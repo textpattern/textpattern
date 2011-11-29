@@ -4029,7 +4029,8 @@ $LastChangedRevision$
 		$pageby = ($pageby=='limit') ? $limit : $pageby;
 
 		if ($category) $where[] = "category IN ('".join("','", doSlash(do_list($category)))."')";
-		if ($id) $where[] = "id IN ('".join("','", doSlash(do_list($id)))."')";
+		$ids = array_map('intval', do_list($id));
+		if ($id) $where[] = "id IN ('".join("','", $ids)."')";
 		if ($status) $statwhere[] = "status = '".doSlash($status)."'";
 		if ($author) $where[] = "author IN ('".join("','", doSlash(do_list($author)))."')";
 		if ($realname) {
@@ -4098,8 +4099,18 @@ $LastChangedRevision$
 			$pgoffset = $offset;
 		}
 
+		// preserve order of custom file ids unless 'sort' attribute is set
+		if (!empty($atts['id']) && empty($atts['sort']))
+		{
+			$safe_sort = 'field(id, '.join(',', $ids).')';
+		}
+		else
+		{
+			$safe_sort = doSlash($sort);
+		}
+
 		$qparts = array(
-			'order by '.doSlash($sort),
+			'order by '.$safe_sort,
 			($limit) ? 'limit '.intval($pgoffset).', '.intval($limit) : '',
 		);
 

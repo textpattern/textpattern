@@ -741,7 +741,8 @@ $LastChangedRevision$
 		$excerpted = ($excerpted=='y')  ? " and Excerpt !=''" : '';
 		$author    = (!$author)    ? '' : " and AuthorID IN ('".join("','", doSlash(do_list($author)))."')";
 		$month     = (!$month)     ? '' : " and Posted like '".doSlash($month)."%'";
-		$id        = (!$id)        ? '' : " and ID IN (".join(',', array_map('intval', do_list($id))).")";
+		$ids = array_map('intval', do_list($id));
+		$id        = (!$id)        ? '' : " and ID IN (".join(',', $ids).")";
 		switch ($time) {
 			case 'any':
 				$time = ""; break;
@@ -811,8 +812,18 @@ $LastChangedRevision$
 			$pgoffset = $offset;
 		}
 
+		// preserve order of custom article ids unless 'sort' attribute is set
+		if (!empty($atts['id']) && empty($atts['sort']))
+		{
+			$safe_sort = 'field(id, '.join(',', $ids).')';
+		}
+		else
+		{
+			$safe_sort = doSlash($sort);
+		}
+
 		$rs = safe_rows_start("*, unix_timestamp(Posted) as uPosted, unix_timestamp(Expires) as uExpires, unix_timestamp(LastMod) as uLastMod".$match, 'textpattern',
-		$where.' order by '.doSlash($sort).' limit '.intval($pgoffset).', '.intval($limit));
+		$where.' order by '.$safe_sort.' limit '.intval($pgoffset).', '.intval($limit));
 		// get the form name
 		if ($q and !$iscustom and !$issticky)
 			$fname = ($searchform ? $searchform : 'search_results');
