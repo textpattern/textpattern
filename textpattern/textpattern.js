@@ -364,6 +364,9 @@ $(document).ready(function() {
 	// disable spellchecking on all elements of class "code" in capable browsers
 	var c = $(".code")[0];
 	if(c && "spellcheck" in c) {$(".code").prop("spellcheck", false);}
+	// enable spellcheck for all elements mentioned in textpattern.do_spellcheck
+	c = $(textpattern.do_spellcheck)[0];
+	if(c && "spellcheck" in c) {$(textpattern.do_spellcheck).prop("spellcheck", true);}
 	// attach toggle behaviour
 	$('.lever a[class!=pophelp]').click(toggleDisplayHref);
 });
