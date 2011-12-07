@@ -209,17 +209,17 @@ function escape_js($js)
 		foreach(array($lang, 'en-gb') as $lang_code)
 		{
 			$rs = (txpinterface == 'admin')
-				? safe_rows_start('name, data','txp_lang',"lang='".doSlash($lang_code)."'")
-				: safe_rows_start('name, data','txp_lang',"lang='".doSlash($lang_code)."' AND ( event='public' OR event='common')");
+				? safe_rows('name, data','txp_lang',"lang='".doSlash($lang_code)."'")
+				: safe_rows('name, data','txp_lang',"lang='".doSlash($lang_code)."' AND ( event='public' OR event='common')");
 
-			if (mysql_num_rows($rs)) break;
+			if (!empty($rs)) break;
 		}
 
 		$out = array();
 
-		if ($rs && mysql_num_rows($rs) > 0)
+		if (!empty($rs))
 		{
-			while ($a = nextRow($rs))
+			foreach ($rs as $a)
 			{
 				if (!empty($a['name'])) {
 					$out[$a['name']] = $a['data'];
