@@ -3793,7 +3793,7 @@ $LastChangedRevision$
 //--------------------------------------------------------------------------
 	function custom_field($atts)
 	{
-		global $thisarticle, $prefs;
+		global $is_article_body, $thisarticle, $prefs;
 		assert_article();
 
 		extract(lAtts(array(
@@ -3808,7 +3808,10 @@ $LastChangedRevision$
 		else
 			$out = $default;
 
-		return ($escape == 'html' ? htmlspecialchars($out) : $out);
+		$is_article_body = 1;
+		$out = ($escape == 'html' ? htmlspecialchars($out) : parse($out));
+		$is_article_body = 0;
+		return $out;
 	}
 
 //--------------------------------------------------------------------------
