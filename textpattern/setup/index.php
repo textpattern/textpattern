@@ -218,7 +218,7 @@ eod;
 		{
 			exit(graf(
 				gTxt('prefix_bad_characters', array(
-					'{dbprefix}' => strong($dprefix)
+					'{dbprefix}' => strong(htmlspecialchars($dprefix))
 				), 'raw')
 			));
 		}
@@ -227,7 +227,7 @@ eod;
 		{
 			exit(graf(
 				gTxt('db_doesnt_exist', array(
-					'{dbname}' => strong($ddb)
+					'{dbname}' => strong(htmlspecialchars($ddb))
 				), 'raw')
 			));
 		}
@@ -252,11 +252,11 @@ eod;
 		}
 
 		echo graf(
-			gTxt('using_db', array('{dbname}' => strong($ddb)), 'raw')
+			gTxt('using_db', array('{dbname}' => strong(htmlspecialchars($ddb))), 'raw')
 			.' ('. $carry['dbcharset'] .')'
 		),
 		graf(
-			strong(gTxt('before_you_proceed')).', '.gTxt('create_config', array('{txpath}' => txpath))
+			strong(gTxt('before_you_proceed')).', '.gTxt('create_config', array('{txpath}' => htmlspecialchars(txpath)))
 		),
 
 		'<textarea name="config" cols="40" rows="5" style="width: 400px; height: 200px">',
@@ -288,7 +288,7 @@ eod;
 			echo graf(
 				strong(gTxt('before_you_proceed')).', '.
 				gTxt('create_config', array(
-					'{txpath}' => txpath
+					'{txpath}' => htmlspecialchars(txpath)
 				))
 			),
 
@@ -392,6 +392,7 @@ eod;
 		define("m","'] = '");
 		$open = chr(60).'?php';
 		$close = '?'.chr(62);
+		$ar = doSpecial($ar);
 		extract($ar);
 		return
 		$open."\n"
@@ -512,9 +513,9 @@ eod;
 
 		foreach ($langs as $a => $b)
 		{
-			$out .= n.t.'<option value="'.$a.'"'.
+			$out .= n.t.'<option value="'.htmlspecialchars($a).'"'.
 				( ($a == $default) ? ' selected="selected"' : '').
-				'>'.$b.'</option>';
+				'>'.htmlspecialchars($b).'</option>';
 		}
 
 		$out .= n.'</select>';
