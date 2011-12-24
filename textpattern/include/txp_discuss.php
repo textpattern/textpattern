@@ -41,6 +41,7 @@ $LastChangedRevision$
 	{
 		extract(doSlash(gpsa(array('email','name','web','message','ip'))));
 		extract(array_map('assert_int',gpsa(array('discussid','visible','parentid'))));
+		$message = preg_replace('#<(/?txp:.+?)>#', '&lt;$1&gt;', $message);
 		safe_update("txp_discuss",
 			"email   = '$email',
 			 name    = '$name',
