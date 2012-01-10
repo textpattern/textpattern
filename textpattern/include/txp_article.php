@@ -382,7 +382,7 @@ if (!empty($event) and $event == 'article') {
 			);
 
 			extract($rs);
-			$reset_time = $publish_now = ($Status < 4) && ($sPosted <= time());
+			$reset_time = $publish_now = false;
 
 		} else {
 
