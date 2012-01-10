@@ -650,6 +650,19 @@ background-image: url(previewdown.gif);
 display:none;
 }
 
+#write-timestamp .edit.month, #write-timestamp .edit.day,
+#write-timestamp .edit.hour, #write-timestamp .edit.minute, #write-timestamp .edit.second,
+#write-expires .edit.exp_month, #write-expires .edit.exp_day,
+#write-expires .edit.exp_hour, #write-expires .edit.exp_minute, #write-expires .edit.exp_second {
+	width: 3ex;
+	text-align: center;
+}
+
+#write-timestamp .edit.year, #write-expires .edit.exp_year {
+	width: 5ex;
+	text-align: center;
+}
+
 /* comments
 ----------------------------------------------- */
 
