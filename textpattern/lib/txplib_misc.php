@@ -1912,17 +1912,13 @@ function escape_js($js)
 		if ($from_db)
 		{
 			$name = doSlash($thing);
-			$exists = safe_column('user_name', 'txp_prefs', "name='$name'");
-			if ($exists)
+			$user_name = doSlash($txp_user);
+			// prefer system prefs over user's prefs
+			$field = safe_field('val', 'txp_prefs',
+								"name='$name' AND (user_name='' OR user_name='$user_name') order by user_name limit 1");
+			if ($field !== false)
 			{
-				if (in_array('', $exists))
-				{
-					$prefs[$thing] = safe_field('val', 'txp_prefs', "name='$name' AND user_name = ''");
-				}
-				else if (!empty($txp_user) && in_array($txp_user, $exists))
-				{
-					$prefs[$thing] = safe_field('val', 'txp_prefs', "name='$name' AND user_name = '".doSlash($txp_user)."'");
-				}
+				$prefs[$thing] = $field;
 			}
 		}
 		return (isset($prefs[$thing])) ? $prefs[$thing] : $default;
