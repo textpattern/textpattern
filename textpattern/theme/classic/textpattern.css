@@ -274,8 +274,9 @@ padding: 2px;
 background-color: #ddd;
 }
 
-.processing input, .processing textarea, .processing select, .processing td, .processing label {
-	color: #888;
+form.busy input[type='submit'] {
+background-color: #f0f0f0;
+color: #999999;
 }
 
 /* table elements

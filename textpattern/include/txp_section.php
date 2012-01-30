@@ -41,7 +41,7 @@ $LastChangedRevision$
 		pagetop(gTxt('sections'), $message);
 
 		$default = safe_row('page, css, name', 'txp_section', "name = 'default'");
-
+		$default['old_name'] = 'default';
 
 		echo n.'<div id="'.$event.'_container" class="txp-container txp-list">';
 		echo n.n.startTable('list').
@@ -65,7 +65,7 @@ $LastChangedRevision$
 				td(gTxt('default'), '', 'label').n.
 				td(section_detail_partial($default)).n.
 				td()
-			, ' class="section default"');
+			, ' id="section-default" class="section default"');
 
 		$rs = safe_rows_start('*', 'txp_section', "name != 'default' order by name");
 
@@ -76,6 +76,7 @@ $LastChangedRevision$
 			while ($a = nextRow($rs))
 			{
 				extract($a);
+				$a['old_name'] = $name;
 
 				echo n.n.tr(
 					n.td($name, '', 'label').
@@ -153,81 +154,90 @@ $LastChangedRevision$
 	{
 		global $txpcfg, $app_mode;
 
-		extract(doSlash(psa(array('page','css','old_name'))));
-		extract(psa(array('name', 'title')));
-		$prequel = '';
-		$sequel = '';
-
-		if (empty($title))
+		$in = psa(array('name', 'title', 'old_name', 'page', 'css'));
+		if (empty($in['title']))
 		{
-			$title = $name;
+			$in['title'] = $in['name'];
 		}
 
 		// Prevent non url chars on section names
 		include_once txpath.'/lib/classTextile.php';
 
 		$textile = new Textile();
-		$title = doSlash($textile->TextileThis($title,1));
-		$name  = doSlash(sanitizeForUrl($name));
+		$in['title'] = $textile->TextileThis($in['title'],1);
+		$in['name']  = sanitizeForUrl($in['name']);
 
-		if ($old_name && (strtolower($name) != strtolower($old_name)))
+		extract($in);
+
+		$in = doSlash($in);
+		extract($in, EXTR_PREFIX_ALL, 'safe');
+
+		if (strtolower($name) != strtolower($old_name))
 		{
-			if (safe_field('name', 'txp_section', "name='$name'"))
+			if (safe_field('name', 'txp_section', "name='$safe_name'"))
 			{
 				$message = array(gTxt('section_name_already_exists', array('{name}' => $name)), E_ERROR);
-				if ($app_mode == 'async') {
-					// TODO: Better/themeable popup
-					send_script_response('window.alert("'.escape_js(strip_tags(gTxt('section_name_already_exists', array('{name}' => $name)))).'")');
-				} else {
-					sec_section_list($message);
-					return;
-				}
+				modal_response($message);
+				sec_section_list($message);
+				return;
 			}
 		}
 
 		if ($name == 'default')
 		{
-			safe_update('txp_section', "page = '$page', css = '$css'", "name = 'default'");
-
-			update_lastmod();
+			safe_update('txp_section', "page = '$safe_page', css = '$safe_css'", "name = 'default'");
 		}
 		else
 		{
-			extract(array_map('assert_int',psa(array('is_default','on_frontpage','in_rss','searchable'))));
+			extract(array_map('assert_int', psa(array('is_default','on_frontpage','in_rss','searchable'))));
 			// note this means 'selected by default' not 'default page'
 			if ($is_default)
 			{
-				safe_update("txp_section", "is_default = 0", "name != '$old_name'");
+				safe_update("txp_section", "is_default = 0", "name != '$safe_old_name'");
 				// switch off $is_default for all sections in async app_mode
 				if ($app_mode == 'async') {
-					$prequel = 	'$("input[name=\"is_default\"][value=\"1\"]").attr("checked", false);'.
+					$response[] =  '$("input[name=\"is_default\"][value=\"1\"]").attr("checked", false);'.
 								'$("input[name=\"is_default\"][value=\"0\"]").attr("checked", true);';
 				}
 			}
 
 			safe_update('txp_section', "
-				name         = '$name',
-				title        = '$title',
-				page         = '$page',
-				css          = '$css',
+				name         = '$safe_name',
+				title        = '$safe_title',
+				page         = '$safe_page',
+				css          = '$safe_css',
 				is_default   = $is_default,
 				on_frontpage = $on_frontpage,
 				in_rss       = $in_rss,
 				searchable   = $searchable
-			", "name = '$old_name'");
+			", "name = '$safe_old_name'");
 
-			safe_update('textpattern', "Section = '$name'", "Section = '$old_name'");
+			safe_update('textpattern', "Section = '$safe_name'", "Section = '$safe_old_name'");
 
-			update_lastmod();
 		}
 
+		update_lastmod();
 		$message = gTxt('section_updated', array('{name}' => $name));
 
 		if ($app_mode == 'async') {
-			// Caveat: Use unslashed params for DTO
-			$s = psa(array('name', 'title', 'page', 'css')) + compact('is_default', 'on_frontpage', 'in_rss', 'searchable');
-			$s = section_detail_partial($s);
-			send_script_response($prequel.'$("#section-form-'.$name.'").replaceWith("'.escape_js($s).'");'.$sequel);
+
+			// Keep old name around to mangle existing HTML
+			$on = $old_name;
+			// Old became new as we have saved this section
+			$old_name = $name;
+
+			$s = compact('name', 'old_name', 'title', 'page', 'css', 'is_default', 'on_frontpage', 'in_rss', 'searchable');
+			$form = section_detail_partial($s);
+
+			$s = doSpecial($s);
+			extract($s);
+
+			// Update form with current data
+			$response[] = '$("#section-form-'.$on.'").replaceWith("'.escape_js($form).'")';
+			// Reflect new section name on id and row label
+			$label = ($name == 'default' ? gTxt('default') : $name);
+			$response[] = '$("tr#section-'.$on.'").attr("id", "section-'.$name.'").find(".label").html("'.$label.'")';
+			send_script_response(join(";\n", $response).';');
 		} else {
 			sec_section_list($message);
 		}
@@ -330,14 +340,13 @@ $LastChangedRevision$
 					fInput('submit', '', gTxt('save_button'), 'smallerbox').
 					eInput('section').
 					sInput('section_save').
-					($default_section ? hInput('name', $name) : hInput('old_name', $name))
+					($default_section ? hInput('name', $name) : '').
+					hInput('old_name', $old_name)
 				, ' colspan="2" class="noline"')
 			).
 
 			endTable();
 
-// TODO: AJAX form submission
-//			return form($out,'', 'postForm(this);', 'post', 'async', 'section-'.$name, 'section-form-'.$name);
-			return form($out,'', '', 'post', '', 'section-'.$name, 'section-form-'.$name);
+			return form($out,'', 'postForm(this);', 'post', 'async', 'section-'.$name, 'section-form-'.$name);
 }
 ?>

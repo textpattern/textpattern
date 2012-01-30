@@ -2542,6 +2542,27 @@ eod;
 		die($out);
 	}
 
+/**
+ * Display a modal client message in response to an AJAX request
+ *
+ * @param array $message $message[0] is the message's text; $message[1] is the message's type (one of E_ERROR or E_WARNING, anything else meaning "success"; not used)
+ * @since 4.5
+ */
+function modal_response($thing)
+{
+	global $app_mode;
+	if ($app_mode == 'async')
+	{
+		// @see theme::announce() for message format
+		if (!is_array($thing) || !isset($thing[1]))
+ 		{
+ 			$thing = array($thing, 0);
+ 		}
+ 		// TODO: Better/themeable popup
+		send_script_response('window.alert("'.escape_js(strip_tags($thing[0])).'")');
+	}
+}
+
 // -------------------------------------------------------------
 // Perform regular housekeeping.
 // Might evolve into some kind of pseudo-cron later...

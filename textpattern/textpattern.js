@@ -305,8 +305,13 @@ function setClassRemember(className, force)
  */
 function sendAsyncEvent(data, fn, format)
 {
-	data.app_mode = 'async';
-	data._txp_token = textpattern._txp_token;
+	if($.type(data) === 'string' && data.length > 0) {
+		// Got serialized data
+		data = data + '&app_mode=async&_txp_token=' + textpattern._txp_token;
+	} else {
+		data.app_mode = 'async';
+		data._txp_token = textpattern._txp_token;
+	}
 	format = format || 'xml';
 	$.post('index.php', data, fn, format);
 }
@@ -318,37 +323,18 @@ function sendAsyncEvent(data, fn, format)
  */
 function postForm(form)
 {
-	form = $(form);
+	var form = $(form);
 	try {
-		var data = {};
-		// Gather all form entry elements
-		var elms = form.find('input');
-		$.merge(elms, form.find('textarea'));
-		$.merge(elms, form.find('select'));
-		$(elms).each(function(index) {
-			// Build request data object
-			var name = $(this).attr('name') || '-txp-bogus-' + index;
-			switch($(this).attr('type')) {
-				case 'checkbox':
-				case 'radio':
-					if ($(this).attr('checked')) {
-						data[name] = $(this).attr('value');
-					}
-					break;
-				case 'file':
-					throw('postForm: input-type "file" not supported');
-					break;
-				default:
-					data[name] = $(this).attr('value') || '';
-					break;
-			}
-		});
 		// Show feedback while processing
-		form.addClass('processing');
+		form.addClass('busy');
+		$('body').addClass('busy');
 		// Send form data to application, process response as script.
 		sendAsyncEvent(
-			data,
-			function(){form.removeClass('processing');},
+			form.serialize(),
+			function() {
+				form.removeClass('busy');
+				$('body').removeClass('busy');
+			},
 			'script'
 		);
 		return false;
@@ -369,4 +355,8 @@ $(document).ready(function() {
 	if(c && "spellcheck" in c) {$(textpattern.do_spellcheck).prop("spellcheck", true);}
 	// attach toggle behaviour
 	$('.lever a[class!=pophelp]').click(toggleDisplayHref);
+	// establish AJAX timeout from prefs
+	if($.ajaxSetup().timeout === undefined) {
+		$.ajaxSetup( {timeout : textpattern.ajax_timeout} );
+	}
 });
