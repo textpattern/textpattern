@@ -146,12 +146,17 @@ $LastChangedRevision$
 
 		callback_event($event, $step, 0);
 
-		$microdiff = (getmicrotime() - $microstart);
-
 		end_page();
-		echo n.comment(gTxt('runtime').': '.substr($microdiff,0,6));
-		if (is_callable('memory_get_peak_usage')) {
-			echo n.comment(sprintf('Memory: %sKb', ceil(memory_get_peak_usage(true)/1024)));
+
+		$microdiff = substr(getmicrotime() - $microstart,0,6);
+		$memory_peak = is_callable('memory_get_peak_usage') ? ceil(memory_get_peak_usage(true)/1024) : '-';
+
+		if ($app_mode != 'async') {
+			echo n.comment(gTxt('runtime').': '.$microdiff);
+			echo n.comment(sprintf('Memory: %sKb', $memory_peak));
+		} else {
+			header("X-Textpattern-Runtime: $microdiff");
+			header("X-Textpattern-Memory: $memory_peak");
 		}
 	} else {
 		txp_die('DB-Connect was successful, but the textpattern-table was not found.',

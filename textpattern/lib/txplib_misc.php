@@ -2493,7 +2493,15 @@ eod;
 // supports one level of nested arrays at most.
 	function send_xml_response($response=array())
 	{
-		ob_clean();
+		static $headers_sent = false;
+
+		if (!$headers_sent) {
+			ob_clean();
+			header('Content-Type: text/xml; charset=utf-8');
+			$out[] = '<?xml version="1.0" encoding="utf-8" standalone="yes"?>';
+			$headers_sent = true;
+		}
+
 		$default_response = array (
 			'http-status' => '200 OK',
 		);
@@ -2501,9 +2509,7 @@ eod;
 		// backfill default response properties
 		$response = $response + $default_response;
 
-		header('Content-Type: text/xml; charset=utf-8');
 		txp_status_header($response['http-status']);
-		$out[] = '<?xml version="1.0" encoding="utf-8" standalone="yes"?>';
 		$out[] = '<textpattern>';
 		foreach ($response as $element => $value)
 		{
@@ -2525,7 +2531,7 @@ eod;
 			}
 		}
 		$out[] = '</textpattern>';
-		die(join(n, $out));
+		echo join(n, $out);
 	}
 
 /**
@@ -2536,19 +2542,23 @@ eod;
  */
 	function send_script_response($out = '')
 	{
-		ob_clean();
-		header('Content-Type: text/javascript; charset=utf-8');
-		txp_status_header('200 OK');
-		die($out);
+		static $headers_sent = false;
+		if (!$headers_sent) {
+			ob_clean();
+			header('Content-Type: text/javascript; charset=utf-8');
+			txp_status_header('200 OK');
+			$headers_sent = true;
+		}
+		echo ";\n".$out.";\n";
 	}
 
 /**
- * Display a modal client message in response to an AJAX request
+ * Display a modal client message in response to an AJAX request and halt execution.
  *
  * @param array $message $message[0] is the message's text; $message[1] is the message's type (one of E_ERROR or E_WARNING, anything else meaning "success"; not used)
  * @since 4.5
  */
-function modal_response($thing)
+function modal_halt($thing)
 {
 	global $app_mode;
 	if ($app_mode == 'async')
@@ -2560,6 +2570,7 @@ function modal_response($thing)
  		}
  		// TODO: Better/themeable popup
 		send_script_response('window.alert("'.escape_js(strip_tags($thing[0])).'")');
+		die();
 	}
 }
 
