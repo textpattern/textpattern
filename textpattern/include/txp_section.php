@@ -176,10 +176,9 @@ $LastChangedRevision$
 		{
 			if (safe_field('name', 'txp_section', "name='$safe_name'"))
 			{
+				// Invalid input. Halt all further processing (e.g. plugin event handlers).
 				$message = array(gTxt('section_name_already_exists', array('{name}' => $name)), E_ERROR);
-				modal_response($message);
-				sec_section_list($message);
-				return;
+				modal_halt($message);
 			}
 		}
 
@@ -213,34 +212,27 @@ $LastChangedRevision$
 			", "name = '$safe_old_name'");
 
 			safe_update('textpattern', "Section = '$safe_name'", "Section = '$safe_old_name'");
-
 		}
 
 		update_lastmod();
-		$message = gTxt('section_updated', array('{name}' => $name));
 
-		if ($app_mode == 'async') {
+		// Keep old name around to mangle existing HTML
+		$on = $old_name;
+		// Old became new as we have saved this section
+		$old_name = $name;
 
-			// Keep old name around to mangle existing HTML
-			$on = $old_name;
-			// Old became new as we have saved this section
-			$old_name = $name;
+		$s = compact('name', 'old_name', 'title', 'page', 'css', 'is_default', 'on_frontpage', 'in_rss', 'searchable');
+		$form = section_detail_partial($s);
 
-			$s = compact('name', 'old_name', 'title', 'page', 'css', 'is_default', 'on_frontpage', 'in_rss', 'searchable');
-			$form = section_detail_partial($s);
+		$s = doSpecial($s);
+		extract($s);
 
-			$s = doSpecial($s);
-			extract($s);
-
-			// Update form with current data
-			$response[] = '$("#section-form-'.$on.'").replaceWith("'.escape_js($form).'")';
-			// Reflect new section name on id and row label
-			$label = ($name == 'default' ? gTxt('default') : $name);
-			$response[] = '$("tr#section-'.$on.'").attr("id", "section-'.$name.'").find(".label").html("'.$label.'")';
-			send_script_response(join(";\n", $response).';');
-		} else {
-			sec_section_list($message);
-		}
+		// Update form with current data
+		$response[] = '$("#section-form-'.$on.'").replaceWith("'.escape_js($form).'")';
+		// Reflect new section name on id and row label
+		$label = ($name == 'default' ? gTxt('default') : $name);
+		$response[] = '$("tr#section-'.$on.'").attr("id", "section-'.$name.'").find(".label").html("'.$label.'")';
+		send_script_response(join(";\n", $response));
 	}
 
 // -------------------------------------------------------------
