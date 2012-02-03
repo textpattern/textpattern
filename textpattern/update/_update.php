@@ -111,6 +111,19 @@ $LastChangedRevision$
 			$dbversion = '4.4.1';
 	}
 
+	// Invite optional third parties to the update experience
+	// Convention: Put custom code into file(s) at textpattern/update/custom/post-update-abc-foo.php
+	// where 'abc' is the third party's reserved prefix (@see http://textpattern.net/wiki/index.php?title=Reserved_Plugin_Prefixes)
+	// and 'foo' is whatever. The execution order among all files is undefined.
+	$files = glob(txpath.'/update/custom/post-update*.php');
+	if (is_array($files))
+	{
+		foreach ($files as $f)
+		{
+			include $f;
+		}
+	}
+
 	// keep track of updates for svn users
 	safe_delete('txp_prefs',"name = 'dbupdatetime'");
 	safe_insert('txp_prefs', "prefs_id=1, name='dbupdatetime',val='".max(newest_file(),time())."', type='2'");
