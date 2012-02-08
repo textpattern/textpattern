@@ -15,4 +15,4 @@ $LastChangedRevision$
 	{
 		safe_insert('txp_prefs', "prefs_id = 1, name = 'doctype', val = 'xhtml', type = '0', event = 'publish', html = 'doctypes', position = '190'");
 	}
- ?>
+?>
