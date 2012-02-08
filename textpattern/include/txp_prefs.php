@@ -549,6 +549,18 @@ EOS
 		return pluggable_ui('prefs_ui', 'theme_name',
 			selectInput($name, $vals, $val, '', '', $name));
 	}
+
+//-------------------------------------------------------------
+	function doctypes($name, $val)
+	{
+		$vals = array(
+			'xhtml' => gTxt('XHTML'),
+			'html5' => gTxt('HTML5')
+		);
+
+		return selectInput($name, $vals, $val, '', '', $name);
+	}
+
 //-------------------------------------------------------------
 	function advanced_prefs($message = '')
 	{

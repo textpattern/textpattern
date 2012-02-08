@@ -57,6 +57,8 @@ $LastChangedRevision$
 		global $prefs;
 		extract($prefs);
 
+		$h5 = ($doctype == 'html5');
+
 		extract(lAtts(array(
 			'isize'	  => '25',
 			'msgrows'   => '5',
@@ -145,11 +147,13 @@ $LastChangedRevision$
 
 		$Form = fetch('Form', 'txp_form', 'name', $form);
 
+		$required = ($h5) ? ' required' : '';
+
 		$msgstyle = ($msgstyle ? ' style="'.$msgstyle.'"' : '');
 		$msgrows = ($msgrows and is_numeric($msgrows)) ? ' rows="'.intval($msgrows).'"' : '';
 		$msgcols = ($msgcols and is_numeric($msgcols)) ? ' cols="'.intval($msgcols).'"' : '';
 
-		$textarea = '<textarea id="message" name="'.$n_message.'"'.$msgcols.$msgrows.$msgstyle.
+		$textarea = '<textarea id="message" name="'.$n_message.'"'.$msgcols.$msgrows.$msgstyle.$required.
 			' class="txpCommentInputMessage'.(($commentwarn) ? ' comments_error"' : '"').
 			'>'.htmlspecialchars(substr(trim($message), 0, 65535)).'</textarea>';
 
@@ -186,9 +190,9 @@ $LastChangedRevision$
 		$checkbox .= ' '.hInput('checkbox_type', $checkbox_type);
 
 		$vals = array(
-			'comment_name_input'		=> fInput('text', 'name', htmlspecialchars($name), 'comment_name_input'.($namewarn ? ' comments_error' : ''), '', '', $isize, '', 'name'),
-			'comment_email_input'		=> fInput('text', 'email', htmlspecialchars($email), 'comment_email_input'.($emailwarn ? ' comments_error' : ''), '', '', $isize, '', 'email'),
-			'comment_web_input'			=> fInput('text', 'web', htmlspecialchars($web)	, 'comment_web_input', '', '', $isize, '', 'web'),
+			'comment_name_input'		=> fInput('text', 'name', htmlspecialchars($name), 'comment_name_input'.($namewarn ? ' comments_error' : ''), '', '', $isize, '', 'name', false, $h5 && $comments_require_name),
+			'comment_email_input'		=> fInput($h5 ? 'email' : 'text', 'email', htmlspecialchars($email), 'comment_email_input'.($emailwarn ? ' comments_error' : ''), '', '', $isize, '', 'email', false, $h5 && $comments_require_email),
+			'comment_web_input'			=> fInput($h5 ? 'url' : 'text', 'web', htmlspecialchars($web)	, 'comment_web_input', '', '', $isize, '', 'web', false, true),
 			'comment_message_input' 	=> $textarea.'<!-- plugin-place-holder -->',
 			'comment_remember'			=> $checkbox,
 			'comment_preview'			=> fInput('submit', 'preview', gTxt('preview'), 'button', '', '', '', '', 'txpCommentPreview', false),

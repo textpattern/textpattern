@@ -141,7 +141,8 @@ $LastChangedRevision$
 					$size='',
 					$tab='',
 					$id='',
-					$disabled = false)
+					$disabled = false,
+					$required = false)
 	{
 		$o  = '<input type="'.$type.'"';
 		$o .= ' value="'.htmlspecialchars($value).'"';
@@ -153,6 +154,7 @@ $LastChangedRevision$
 		$o .= ($tab)      ? ' tabindex="'.$tab.'"' : '';
 		$o .= ($id)       ? ' id="'.$id.'"' : '';
 		$o .= ($disabled) ? ' disabled="disabled"' : '';
+		$o .= ($required) ? ' required' : '';
 		$o .= " />";
 		return $o;
 	}

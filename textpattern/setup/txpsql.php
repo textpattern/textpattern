@@ -381,6 +381,7 @@ $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'production_status', 
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'comments_auto_append', '0', 0, 'comments', 'yesnoradio', 211, '')";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'dbupdatetime', '1122194504', 2, 'publish', 'text_input', 0, '')";
 $create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'version', '1.0rc4', 2, 'publish', 'text_input', 0, '')";
+$create_sql[] = "INSERT INTO `".PFX."txp_prefs` VALUES (1, 'doctype', 'html5', 0, 'publish', 'doctypes', 190, '')";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_section` (
   `name` varchar(128) NOT NULL,

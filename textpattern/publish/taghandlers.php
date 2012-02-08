@@ -1322,7 +1322,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function search_input($atts) // input form for search queries
 	{
-		global $q, $permlink_mode;
+		global $q, $permlink_mode, $doctype;
 		extract(lAtts(array(
 			'form'    => 'search_input',
 			'wraptag' => 'p',
@@ -1342,9 +1342,10 @@ $LastChangedRevision$
 			}
 		}
 
+		$h5 = ($doctype == 'html5');
 		$sub = (!empty($button)) ? '<input type="submit" value="'.$button.'" />' : '';
 		$id =  (!empty($html_id)) ? ' id="'.$html_id.'"' : '';
-		$out = fInput('text','q',$q,'','','',$size);
+		$out = fInput( $h5 ? 'search' : 'text','q',$q,'','','',$size,'','',false, $h5);
 		$out = (!empty($label)) ? $label.br.$out.$sub : $out.$sub;
 		$out = ($match === 'exact') ? $out : fInput('hidden','m',$match) . $out;
 		$out = ($wraptag) ? doTag($out,$wraptag, $class) : $out;
