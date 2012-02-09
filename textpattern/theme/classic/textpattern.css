@@ -279,6 +279,14 @@ background-color: #f0f0f0;
 color: #999999;
 }
 
+form.busy span.spinner:after {
+content: url("../../txp_img/spinner.gif");
+display: inline-block;
+height: 16px;
+margin-left: 5px;
+vertical-align: middle;
+}
+
 /* table elements
 ----------------------------------------------- */
 

@@ -359,4 +359,8 @@ $(document).ready(function() {
 	if($.ajaxSetup().timeout === undefined) {
 		$.ajaxSetup( {timeout : textpattern.ajax_timeout} );
 	}
+	// add spinner markup for submit buttons on async forms
+	$(document).on('click', 'form.async input[type="submit"]', function() {
+		$(this).after('<span class="spinner"></span>');
+	});
 });
