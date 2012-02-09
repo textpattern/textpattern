@@ -1809,7 +1809,7 @@ function escape_js($js)
 
 		include_once txpath.'/lib/classTextile.php';
 
-		$textile = new Textile();
+		$textile = new Textile($prefs['doctype']);
 
 		return $textile->TextileRestricted($msg, $lite, $disallow_images, $rel);
 	}

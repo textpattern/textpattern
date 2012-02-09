@@ -354,7 +354,7 @@ if (!empty($event) and $event == 'article') {
 		}
 
 		include_once txpath.'/lib/classTextile.php';
-		$textile = new Textile();
+		$textile = new Textile($doctype);
 
 		// switch to 'text' view upon page load and after article post
 		if(!$view || gps('save') || gps('publish')) {
@@ -1180,10 +1180,10 @@ EOS
 // -------------------------------------------------------------
 	function textile_main_fields($incoming, $use_textile)
 	{
-		global $txpcfg;
+		global $txpcfg, $prefs;
 
 		include_once txpath.'/lib/classTextile.php';
-		$textile = new Textile();
+		$textile = new Textile($prefs['doctype']);
 
 		$incoming['Title_plain'] = $incoming['Title'];
 
