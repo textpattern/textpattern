@@ -1576,7 +1576,7 @@ function escape_js($js)
 
 		if (!isset($disabled))
 		{
-			$disabled = explode(',', ini_get('disable_functions'));
+			$disabled = do_list(ini_get('disable_functions'));
 		}
 
 		return in_array($function, $disabled);
