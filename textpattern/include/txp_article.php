@@ -72,14 +72,14 @@ if (!empty($event) and $event == 'article') {
 
 	function article_post()
 	{
-		global $txp_user, $vars, $txpcfg, $prefs;
+		global $txp_user, $vars, $prefs;
 
 		extract($prefs);
 
 		$incoming = psa($vars);
 		$message='';
 
-		$incoming = textile_main_fields($incoming, $use_textile);
+		$incoming = textile_main_fields($incoming);
 
 		extract(doSlash($incoming));
 
@@ -196,7 +196,7 @@ if (!empty($event) and $event == 'article') {
 
 	function article_save()
 	{
-		global $txp_user, $vars, $txpcfg, $prefs;
+		global $txp_user, $vars, $prefs;
 
 		extract($prefs);
 
@@ -221,7 +221,7 @@ if (!empty($event) and $event == 'article') {
 			return;
 		}
 
-		$incoming = textile_main_fields($incoming, $use_textile);
+		$incoming = textile_main_fields($incoming);
 
 		extract(doSlash($incoming));
 		extract(array_map('assert_int', psa(array('ID', 'Status', 'textile_body', 'textile_excerpt'))));
@@ -340,7 +340,7 @@ if (!empty($event) and $event == 'article') {
 
 	function article_edit($message = '', $concurrent = FALSE)
 	{
-		global $vars, $txp_user, $comments_disabled_after, $txpcfg, $prefs, $event;
+		global $vars, $txp_user, $comments_disabled_after, $prefs, $event;
 
 		extract($prefs);
 
@@ -1178,9 +1178,9 @@ EOS
 		}
 	}
 // -------------------------------------------------------------
-	function textile_main_fields($incoming, $use_textile)
+	function textile_main_fields($incoming)
 	{
-		global $txpcfg, $prefs;
+		global $prefs;
 
 		include_once txpath.'/lib/classTextile.php';
 		$textile = new Textile($prefs['doctype']);
@@ -1219,7 +1219,7 @@ EOS
 // -------------------------------------------------------------
 	function do_pings()
 	{
-		global $txpcfg, $prefs, $production_status;
+		global $prefs, $production_status;
 
 		# only ping for Live sites
 		if ($production_status !== 'live')
