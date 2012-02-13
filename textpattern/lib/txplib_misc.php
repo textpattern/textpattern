@@ -1958,13 +1958,13 @@ function escape_js($js)
 	}
 
 // -------------------------------------------------------------
-	function txp_die($msg, $status='503')
+	function txp_die($msg, $status='503', $url='')
 	{
 		// 503 status might discourage search engines from indexing or caching the error message
 
 		//Make it possible to call this function as a tag, e.g. in an article <txp:txp_die status="410" />
 		if (is_array($msg))
-			extract(lAtts(array('msg' => '', 'status' => '503'),$msg));
+			extract(lAtts(array('msg' => '', 'status' => '503', 'url' => ''),$msg));
 
 		// Intentionally incomplete - just the ones we're likely to use
 		$codes = array(
@@ -1996,6 +1996,13 @@ function escape_js($js)
 		}
 
 		callback_event('txp_die', $code);
+
+		// redirect with status
+		if ($url && in_array($code, array(301, 302, 307))) {
+			ob_end_clean();
+			header("Location: $url", true, $code);
+			die('<html><head><meta http-equiv="refresh" content="0;URL='.htmlspecialchars($url).'"></head><body></body></html>');
+		}
 
 		if (@$GLOBALS['connected']) {
 			$out = safe_field('user_html','txp_page',"name='error_".doSlash($code)."'");
