@@ -330,6 +330,14 @@ text-align: left;
 border-bottom: 1px solid #ddd;
 }
 
+table#list tbody tr:hover {
+    background-color: #ffc;
+}
+
+table#list tbody tr:hover a {
+    color: #630;
+}
+
 table#list td.noline {
 height: 30px;
 }
