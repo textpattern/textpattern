@@ -202,7 +202,11 @@ if (!empty($event) and $event == 'article') {
 
 		$incoming = psa($vars);
 
-		$oldArticle = safe_row('Status, url_title, Title, unix_timestamp(LastMod) as sLastMod, LastModID','textpattern','ID = '.(int)$incoming['ID']);
+		$oldArticle = safe_row('Status, url_title, Title, '.
+			'unix_timestamp(LastMod) as sLastMod, LastModID, '.
+			'unix_timestamp(Posted) as sPosted, '.
+			'unix_timestamp(Expires) as sExpires',
+			'textpattern', 'ID = '.(int)$incoming['ID']);
 
 		if (! (    ($oldArticle['Status'] >= 4 and has_privs('article.edit.published'))
 				or ($oldArticle['Status'] >= 4 and $incoming['AuthorID']==$txp_user and has_privs('article.edit.own.published'))
@@ -230,29 +234,30 @@ if (!empty($event) and $event == 'article') {
 
 		if (!has_privs('article.publish') && $Status>=4) $Status = 3;
 
-		if($reset_time) {
+		// set and validate article timestamp
+		if ($reset_time) {
 			$whenposted = "Posted=now()";
 			$when_ts = time();
 		} else {
 			if (!is_numeric($year) || !is_numeric($month) || !is_numeric($day) || !is_numeric($hour)  || !is_numeric($minute) || !is_numeric($second) ) {
-				article_edit(array(gTxt('invalid_postdate'), E_ERROR));
-				return;
+				$ts = false;
+			} else {
+				$ts = strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second);
 			}
 
-			$ts = strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second);
-
-			if ($ts === false || $ts === -1) {
-				article_edit(array(gTxt('invalid_postdate'), E_ERROR));
-				return;
+			if ($ts === false || $ts < 0) {
+				$when = $when_ts = $oldArticle['sPosted'];
+				$msg = array(gTxt('invalid_postdate'), E_ERROR);
+			} else {
+				$when = $when_ts = $ts - tz_offset($ts);
 			}
 
-			$when = $when_ts = $ts - tz_offset($ts);
 			$whenposted = "Posted=from_unixtime($when)";
 		}
 
+		// set and validate expiry timestamp
 		if (empty($exp_year)) {
 			$expires = 0;
-			$whenexpires = "Expires=".NULLDATETIME;
 		} else {
 			if(empty($exp_month)) $exp_month=1;
 			if(empty($exp_day)) $exp_day=1;
@@ -261,15 +266,23 @@ if (!empty($event) and $event == 'article') {
 			if(empty($exp_second)) $exp_second=0;
 
 			$ts = strtotime($exp_year.'-'.$exp_month.'-'.$exp_day.' '.$exp_hour.':'.$exp_minute.':'.$exp_second);
-			$expires = $ts - tz_offset($ts);
-			$whenexpires = "Expires=from_unixtime($expires)";
+			if ($ts === false || $ts < 0) {
+				$expires = $oldArticle['sExpires'];
+				$msg = array(gTxt('invalid_expirydate'), E_ERROR);
+			} else {
+				$expires = $ts - tz_offset($ts);
+			}
+		}
+
+		if ($expires && ($expires <= $when_ts)) {
+			$expires = $oldArticle['sExpires'];
+			$msg = array(gTxt('article_expires_before_postdate'), E_ERROR);
 		}
 
 		if ($expires) {
-			if ($expires <= $when_ts) {
-				article_edit(array(gTxt('article_expires_before_postdate'), E_ERROR));
-				return;
-			}
+			$whenexpires = "Expires=from_unixtime($expires)";
+		} else {
+			$whenexpires = "Expires=".NULLDATETIME;
 		}
 
 		//Auto-Update custom-titles according to Title, as long as unpublished and NOT customized
@@ -330,10 +343,11 @@ if (!empty($event) and $event == 'article') {
 			update_lastmod();
 		}
 
-		$s = check_url_title($url_title);
-		article_edit(
-			array(get_status_message($Status).' '.$s, ($s ? E_WARNING : 0))
-		);
+		if (empty($msg)) {
+			$s = check_url_title($url_title);
+			$msg = array(get_status_message($Status).' '.$s, $s ? E_WARNING : 0);
+		}
+		article_edit($msg);
 	}
 
 //--------------------------------------------------------------
