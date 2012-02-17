@@ -107,8 +107,10 @@ $LastChangedRevision$
 
 
 	function apache_module($m) {
-		$modules = apache_get_modules();
-		return in_array($m, $modules);
+		$modules = @apache_get_modules();
+		if (is_array($modules)) {
+			return in_array($m, $modules);
+		}
 	}
 
 	function test_tempdir($dir) {
