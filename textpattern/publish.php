@@ -605,34 +605,35 @@ $LastChangedRevision$
 
 		//getting attributes
 		$theAtts = lAtts(array(
-			'form'      => 'default',
-			'listform'  => '',
-			'searchform'=> '',
-			'limit'     => 10,
-			'pageby'    => '',
-			'category'  => '',
-			'section'   => '',
-			'excerpted' => '',
-			'author'    => '',
-			'sort'      => '',
-			'sortby'    => '', // deprecated in 4.0.4
-			'sortdir'   => '', // deprecated in 4.0.4
-			'month'     => '',
-			'keywords'  => '',
-			'frontpage' => '',
-			'id'        => '',
-			'time'      => 'past',
-			'status'    => '4',
-			'pgonly'    => 0,
-			'searchall' => 1,
-			'searchsticky' => 0,
+			'form'          => 'default',
+			'listform'      => '',
+			'searchform'    => '',
+			'limit'         => 10,
+			'pageby'        => '',
+			'category'      => '',
+			'section'       => '',
+			'excerpted'     => '',
+			'author'        => '',
+			'sort'          => '',
+			'sortby'        => '', // deprecated in 4.0.4
+			'sortdir'       => '', // deprecated in 4.0.4
+			'month'         => '',
+			'keywords'      => '',
+			'expired'       => $publish_expired_articles,
+			'frontpage'     => '',
+			'id'            => '',
+			'time'          => 'past',
+			'status'        => '4',
+			'pgonly'        => 0,
+			'searchall'     => 1,
+			'searchsticky'  => 0,
 			'allowoverride' => (!$q and !$iscustom),
-			'offset'    => 0,
-			'wraptag'	=> '',
-			'break'		=> '',
-			'label'		=> '',
-			'labeltag'	=> '',
-			'class'		=> ''
+			'offset'        => 0,
+			'wraptag'       => '',
+			'break'         => '',
+			'label'         => '',
+			'labeltag'      => '',
+			'class'         => ''
 		)+$customlAtts,$atts);
 
 		// if an article ID is specified, treat it as a custom list
@@ -753,7 +754,7 @@ $LastChangedRevision$
 			default:
 				$time = " and Posted <= now()";
 		}
-		if (!$publish_expired_articles) {
+		if (!$expired) {
 			$time .= " and (now() <= Expires or Expires = ".NULLDATETIME.")";
 		}
 
