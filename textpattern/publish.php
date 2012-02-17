@@ -1285,13 +1285,13 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function ckEx($table,$val,$debug='')
 	{
-		return safe_field("name",'txp_'.$table,"`name` like '".doSlash($val)."' limit 1",$debug);
+		return safe_field("name",'txp_'.$table,"`name` = '".doSlash($val)."' limit 1",$debug);
 	}
 
 // -------------------------------------------------------------
 	function ckCat($type,$val,$debug='')
 	{
-		return safe_field("name",'txp_category',"`name` like '".doSlash($val)."' AND type = '".doSlash($type)."' limit 1",$debug);
+		return safe_field("name",'txp_category',"`name` = '".doSlash($val)."' AND type = '".doSlash($type)."' limit 1",$debug);
 	}
 
 // -------------------------------------------------------------
@@ -1303,12 +1303,12 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function lookupByTitle($val,$debug='')
 	{
-		return safe_row("ID,Section",'textpattern',"url_title like '".doSlash($val)."' and Status >= 4 limit 1",$debug);
+		return safe_row("ID,Section",'textpattern',"url_title = '".doSlash($val)."' and Status >= 4 limit 1",$debug);
 	}
 // -------------------------------------------------------------
 	function lookupByTitleSection($val,$section,$debug='')
 	{
-		return safe_row("ID,Section",'textpattern',"url_title like '".doSlash($val)."' AND Section='".doSlash($section)."' and Status >= 4 limit 1",$debug);
+		return safe_row("ID,Section",'textpattern',"url_title = '".doSlash($val)."' AND Section='".doSlash($section)."' and Status >= 4 limit 1",$debug);
 	}
 
 // -------------------------------------------------------------
