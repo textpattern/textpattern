@@ -52,6 +52,8 @@ define('PLUGIN_RESERVED_FLAGS', 0x0fff); // reserved bits for use by Textpattern
 define('PASSWORD_COMPLEXITY', 8); // log(2) of stretching iteration count
 define('PASSWORD_PORTABILITY', TRUE);
 
+defined('AJAX_TIMEOUT') || define('AJAX_TIMEOUT', max(30000, 1000 * @ini_get('max_execution_time')));
+
 error_reporting($old_level);
 unset($old_level);
 

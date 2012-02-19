@@ -61,7 +61,7 @@ $LastChangedRevision$
 		event: "'.htmlspecialchars($event).'",
 		step: "'.htmlspecialchars($step).'",
 		_txp_token: "'.htmlspecialchars(form_token()).'",
-		ajax_timeout: '.htmlspecialchars(get_pref('ajax_timeout', max(30000, 1000 * @ini_get('max_execution_time')))).',
+		ajax_timeout: '.htmlspecialchars(AJAX_TIMEOUT).',
 		do_spellcheck: "'.htmlspecialchars(
 							get_pref('do_spellcheck', '#page-article #body, #page-article #title,'.
 													'#page-image #alt-text, #page-image #caption,'.
