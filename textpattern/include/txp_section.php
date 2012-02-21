@@ -179,6 +179,9 @@ $LastChangedRevision$
 				// Invalid input. Halt all further processing (e.g. plugin event handlers).
 				$message = array(gTxt('section_name_already_exists', array('{name}' => $name)), E_ERROR);
 				modal_halt($message);
+				// TODO: Deprecate non-AJAX alternative code path in next version
+				sec_section_list($message);
+				return;
 			}
 		}
 
@@ -194,7 +197,7 @@ $LastChangedRevision$
 			{
 				safe_update("txp_section", "is_default = 0", "name != '$safe_old_name'");
 				// switch off $is_default for all sections in async app_mode
-				if ($app_mode == 'async') {
+				if (!AJAXALLY_CHALLENGED) {
 					$response[] =  '$("input[name=\"is_default\"][value=\"1\"]").attr("checked", false);'.
 								'$("input[name=\"is_default\"][value=\"0\"]").attr("checked", true);';
 				}
@@ -216,23 +219,28 @@ $LastChangedRevision$
 
 		update_lastmod();
 
-		// Keep old name around to mangle existing HTML
-		$on = $old_name;
-		// Old became new as we have saved this section
-		$old_name = $name;
+		if (!AJAXALLY_CHALLENGED) {
+			// Keep old name around to mangle existing HTML
+			$on = $old_name;
+			// Old became new as we have saved this section
+			$old_name = $name;
 
-		$s = compact('name', 'old_name', 'title', 'page', 'css', 'is_default', 'on_frontpage', 'in_rss', 'searchable');
-		$form = section_detail_partial($s);
+			$s = compact('name', 'old_name', 'title', 'page', 'css', 'is_default', 'on_frontpage', 'in_rss', 'searchable');
+			$form = section_detail_partial($s);
 
-		$s = doSpecial($s);
-		extract($s);
+			$s = doSpecial($s);
+			extract($s);
 
-		// Update form with current data
-		$response[] = '$("#section-form-'.$on.'").replaceWith("'.escape_js($form).'")';
-		// Reflect new section name on id and row label
-		$label = ($name == 'default' ? gTxt('default') : $name);
-		$response[] = '$("tr#section-'.$on.'").attr("id", "section-'.$name.'").find(".label").html("'.$label.'")';
-		send_script_response(join(";\n", $response));
+			// Update form with current data
+			$response[] = '$("#section-form-'.$on.'").replaceWith("'.escape_js($form).'")';
+			// Reflect new section name on id and row label
+			$label = ($name == 'default' ? gTxt('default') : $name);
+			$response[] = '$("tr#section-'.$on.'").attr("id", "section-'.$name.'").find(".label").html("'.$label.'")';
+			send_script_response(join(";\n", $response));
+		} else {
+			// TODO: Deprecate non-AJAX alternative code path in future version
+			sec_section_list(gTxt('section_updated', array('{name}' => $name)));
+		}
 	}
 
 // -------------------------------------------------------------
@@ -339,6 +347,6 @@ $LastChangedRevision$
 
 			endTable();
 
-			return form($out,'', 'postForm(this);', 'post', 'async', 'section-'.$name, 'section-form-'.$name);
+			return form($out,'', '', 'post', 'async', 'section-'.$name, 'section-form-'.$name);
 }
 ?>
