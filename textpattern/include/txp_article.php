@@ -218,7 +218,7 @@ if (!empty($event) and $event == 'article') {
 
 		if ($oldArticle['sLastMod'] != $incoming['sLastMod'])
 		{
-			article_edit(array(gTxt('concurrent_edit_by', array('{author}' => htmlspecialchars($oldArticle['LastModID']))), E_ERROR), TRUE);
+			article_edit(array(gTxt('concurrent_edit_by', array('{author}' => htmlspecialchars($oldArticle['LastModID']))), E_ERROR), TRUE , !AJAXALLY_CHALLENGED );
 			return;
 		}
 
@@ -344,16 +344,35 @@ if (!empty($event) and $event == 'article') {
 			$s = check_url_title($url_title);
 			$msg = array(get_status_message($Status).' '.$s, $s ? E_WARNING : 0);
 		}
-		article_edit($msg);
+		article_edit($msg, FALSE, !AJAXALLY_CHALLENGED);
 	}
 
 //--------------------------------------------------------------
 
-	function article_edit($message = '', $concurrent = FALSE)
+	function article_edit($message = '', $concurrent = FALSE, $refresh_partials = FALSE)
 	{
 		global $vars, $txp_user, $comments_disabled_after, $prefs, $event;
 
 		extract($prefs);
+
+		$partials = array(
+			'custom_fields' => array('html' => PARTIAL_VOLATILE,    'selector' => '#custom_field_group'),
+			'image'         => array('html' => PARTIAL_VOLATILE,    'selector' => '#image_group'),
+			'keywords'      => array('html' => PARTIAL_VOLATILE,    'selector' => '#meta_group .keywords'),
+			'url_title'     => array('html' => PARTIAL_VOLATILE,    'selector' => '#meta_group .url-title'),
+			'recent_articles'=> array('html' => PARTIAL_VOLATILE,   'selector' => '#recent_group .recent'),
+			'title'         => array('html' => PARTIAL_STATIC,      'selector' => false),
+			'article_view'  => array('html' => PARTIAL_VOLATILE,    'selector' => '#article_partial_article_view'),
+			'body'          => array('html' => PARTIAL_STATIC,      'selector' => false),
+			'excerpt'       => array('html' => PARTIAL_STATIC,      'selector' => false),
+			'author'        => array('html' => PARTIAL_VOLATILE,    'selector' => 'p.author'),
+			'article_nav'   => array('html' => PARTIAL_VOLATILE,    'selector' => 'p.article-nav'),
+			'status'        => array('html' => PARTIAL_VOLATILE,    'selector' => '#write-status'),
+			'categories'    => array('html' => PARTIAL_STATIC,      'selector' => false),
+			'section'       => array('html' => PARTIAL_STATIC,      'selector' => false),
+			'posted'        => array('html' => PARTIAL_VOLATILE,    'selector' => '#write-timestamp'),
+			'expires'       => array('html' => PARTIAL_VOLATILE,    'selector' => '#write-expires'),
+		);
 
 		extract(gpsa(array('view','from_view','step')));
 
@@ -392,8 +411,7 @@ if (!empty($event) and $event == 'article') {
 				"ID=$ID"
 			);
 
-			extract($rs);
-			$reset_time = $publish_now = false;
+			$rs['reset_time'] = $rs['publish_now'] = false;
 
 		} else {
 
@@ -421,8 +439,29 @@ if (!empty($event) and $event == 'article') {
 			}
 
 			$rs = $store_out;
-			extract($store_out);
+
+			if (!empty($rs['exp_year']))
+			{
+				if(empty($rs['exp_month'])) $rs['exp_month']=1;
+				if(empty($rs['exp_day'])) $rs['exp_day']=1;
+				if(empty($rs['exp_hour'])) $rs['exp_hour']=0;
+				if(empty($rs['exp_minute'])) $rs['exp_minute']=0;
+				if(empty($rs['exp_second'])) $rs['exp_second']=0;
+				$rs['sExpires'] = safe_strtotime($rs['exp_year'].'-'.$rs['exp_month'].'-'.$rs['exp_day'].' '.
+					$rs['exp_hour'].':'.$rs['exp_minute'].':'.$rs['exp_second']);
+			}
+
+			if (!empty($rs['year'])) {
+				$rs['sPosted'] = safe_strtotime($rs['year'].'-'.$rs['month'].'-'.$rs['day'].' '.
+					$rs['hour'].':'.$rs['minute'].':'.$rs['second']);
+			}
 		}
+
+		if (!$from_view && !$pull) {
+			$rs['Section'] = getDefaultSection();
+		}
+
+		extract($rs);
 
 		$GLOBALS['step'] = $step;
 
@@ -435,12 +474,46 @@ if (!empty($event) and $event == 'article') {
 		if ($step!='create' && $sPosted) {
 
 			// Previous record?
-			$prev_id = checkIfNeighbour('prev',$sPosted);
+			$rs['prev_id'] = checkIfNeighbour('prev',$sPosted);
 
 			// Next record?
-			$next_id = checkIfNeighbour('next',$sPosted);
+			$rs['next_id'] = checkIfNeighbour('next',$sPosted);
 		} else {
-			$prev_id = $next_id = 0;
+			$rs['prev_id'] = $rs['next_id'] = 0;
+		}
+
+		// get content for volatile partials
+		foreach ($partials as $key => $value) {
+			if ($value['html'] == PARTIAL_VOLATILE) {
+				$f = "article_partial_$key";
+				$partials[$key]['html'] = $f($rs);
+			}
+		}
+
+		if ($refresh_partials) {
+
+//			TODO: Themeable asynchronous message display
+//			global $theme;
+//			$response[] = $theme->announce($message);
+
+			// Update the volatile partials
+			$response[] = '$("[name=sLastMod]").val("'.$sLastMod.'")';
+			$response[] = '$("[name=sPosted]").val("'.$sPosted.'")';
+
+			foreach ($partials as $p) {
+				if ($p['selector']) {
+					$response[] = '$("'.$p['selector'].'").replaceWith("'.escape_js($p['html']).'")';
+				}
+			}
+			send_script_response(join(";\n", $response));
+			return;
+		}
+
+		foreach ($partials as $key => $value) {
+			if ($value['html'] == PARTIAL_STATIC) {
+				$f = "article_partial_$key";
+				$partials[$key]['html'] = $f($rs);
+			}
 		}
 
 		$page_title = ($Title) ? $Title : gTxt('write');
@@ -448,7 +521,7 @@ if (!empty($event) and $event == 'article') {
 		pagetop($page_title, $message);
 
 		echo n.'<div id="'.$event.'_container" class="txp-container txp-edit">';
-		echo n.n.'<form id="article_form" name="article_form" method="post" action="index.php">';
+		echo n.n.'<form id="article_form" name="article_form" method="post" action="index.php" '. ($step=='create' ? '>' : ' class="async">');
 
 		if (!empty($store_out))
 		{
@@ -498,76 +571,27 @@ if (!empty($event) and $event == 'article') {
 
 		//-- custom fields --------------
 
-			$cf = '';
-			$cfs = getCustomFields();
-			echo '<div id="custom_field_group"'.(($cfs) ? '' : ' class="empty"').'><h3 class="plain lever'.(get_pref('pane_article_custom_field_visible') ? ' expanded' : '').'"><a href="#custom_field">'.gTxt('custom').'</a></h3>'.
-				'<div id="custom_field" class="toggle" style="display:'.(get_pref('pane_article_custom_field_visible') ? 'block' : 'none').'">';
-
-			foreach($cfs as $i => $cf_name)
-			{
-				$custom_x_set = "custom_{$i}_set";
-				$custom_x = "custom_{$i}";
-				$cf .= ($$custom_x_set !== '' ? custField( $i, $$custom_x_set,  $$custom_x ): '');
-			}
-			echo pluggable_ui('article_ui', 'custom_fields', $cf, $rs);
-			echo '</div></div>'.n;
+			echo $partials['custom_fields']['html'];
 
 		//-- article image --------------
 
-			echo '<div id="image_group"><h3 class="plain lever'.(get_pref('pane_article_image_visible') ? ' expanded' : '').'"><a href="#image">'.gTxt('article_image').'</a></h3>'.
-				'<div id="image" class="toggle" style="display:'.(get_pref('pane_article_image_visible') ? 'block' : 'none').'">';
-
-			echo pluggable_ui('article_ui', 'article_image',
-				n.graf('<label for="article-image">'.gTxt('article_image').'</label>'.sp.popHelp('article_image').br.
-					fInput('text', 'Image', $Image, 'edit', '', '', 22, '', 'article-image'), ' class="article-image"'),
-				$rs);
-			echo '</div></div>'.n;
+			echo $partials['image']['html'];
 
 		//-- meta info --------------
 
 			echo '<div id="meta_group"><h3 class="plain lever'.(get_pref('pane_article_meta_visible') ? ' expanded' : '').'"><a href="#meta">'.gTxt('meta').'</a></h3>'.
 				'<div id="meta" class="toggle" style="display:'.(get_pref('pane_article_meta_visible') ? 'block' : 'none').'">';
-
 			// keywords
-			echo pluggable_ui('article_ui', 'keywords',
-				n.graf('<label for="keywords">'.gTxt('keywords').'</label>'.sp.popHelp('keywords').br.
-					n.'<textarea id="keywords" name="Keywords" cols="18" rows="5">'.htmlspecialchars(str_replace(',' ,', ', $Keywords)).'</textarea>', ' class="keywords"'),
-				$rs);
-
+			echo $partials['keywords']['html'];
 			// url title
-			echo pluggable_ui('article_ui', 'url_title',
-				n.graf('<label for="url-title">'.gTxt('url_title').'</label>'.sp.popHelp('url_title').br.
-					fInput('text', 'url_title', $url_title, 'edit', '', '', 22, '', 'url-title'), ' class="url-title"'),
-				$rs);
-
+			echo $partials['url_title']['html'];
 			echo '</div></div>'.n;
 
 		//-- recent articles --------------
 
 			echo '<div id="recent_group"><h3 class="plain lever'.(get_pref('pane_article_recent_visible') ? ' expanded' : '').'"><a href="#recent">'.gTxt('recent_articles').'</a>'.'</h3>'.
 				'<div id="recent" class="toggle" style="display:'.(get_pref('pane_article_recent_visible') ? 'block' : 'none').'">';
-
-			$recents = safe_rows_start("Title, ID",'textpattern',"1=1 order by LastMod desc limit 10");
-			$ra = '';
-
-			if ($recents)
-			{
-				$ra = '<ul class="recent plain-list">';
-
-				while($recent = nextRow($recents))
-				{
-					if (!$recent['Title'])
-					{
-						$recent['Title'] = gTxt('untitled').sp.$recent['ID'];
-					}
-
-					$ra .= n.t.'<li class="recent-article"><a href="?event=article'.a.'step=edit'.a.'ID='.$recent['ID'].'">'.escape_title($recent['Title']).'</a></li>';
-				}
-
-				$ra .= '</ul>';
-			}
-			echo pluggable_ui('article_ui', 'recent_articles', $ra, $rs);
-
+			echo $partials['recent_articles']['html'];
 			echo '</div></div>';
 		}
 
@@ -592,25 +616,12 @@ if (!empty($event) and $event == 'article') {
 
 		elseif ($view == 'text')
 		{
-			echo '<div class="text">'.
-				pluggable_ui('article_ui', 'title',
-				n.'<p class="title"><label for="title">'.gTxt('title').'</label>'.sp.popHelp('title').br.
-				'<input type="text" id="title" name="Title" value="'.escape_title($Title).'" class="edit" size="40" tabindex="1" />',
-				$rs);
+			echo '<div class="text">'.n.
+				'<p class="title">'.$partials['title']['html'];
 
 			if ($step != 'create')
 			{
-				if ($Status != 4 and $Status != 5)
-				{
-					$url = '?txpreview='.intval($ID).'.'.time(); // article ID plus cachebuster
-				}
-				else
-				{
-					include_once txpath.'/publish/taghandlers.php';
-					$url = permlinkurl_id($ID);
-				}
-
-				echo sp.sp.'<a href="'.$url.'" class="article-view">'.gTxt('view').'</a>';
+				echo $partials['article_view']['html'];
 			}
 
 			echo '</p>';
@@ -660,10 +671,7 @@ if (!empty($event) and $event == 'article') {
 
 		else
 		{
-			echo pluggable_ui('article_ui', 'body',
-				n.graf('<label for="body">'.gTxt('body').'</label>'.sp.popHelp('body').br.
-				'<textarea id="body" name="Body" cols="55" rows="31" tabindex="2">'.htmlspecialchars($Body).'</textarea>', ' class="body"'),
-				$rs);
+			echo $partials['body']['html'];
 		}
 
 	//-- excerpt --------------------
@@ -672,10 +680,7 @@ if (!empty($event) and $event == 'article') {
 		{
 			if ($view == 'text')
 			{
-				echo pluggable_ui('article_ui', 'excerpt',
-					n.graf('<label for="excerpt">'.gTxt('excerpt').'</label>'.sp.popHelp('excerpt').br.
-					'<textarea id="excerpt" name="Excerpt" cols="55" rows="5" tabindex="3">'.htmlspecialchars($Excerpt).'</textarea>', ' class="excerpt"'),
-					$rs);
+				echo $partials['excerpt']['html'];
 			}
 
 			else
@@ -699,11 +704,7 @@ if (!empty($event) and $event == 'article') {
 
 		if ($view=="text" && $step != "create")
 		{
-			echo '<p class="author small">'.gTxt('posted_by').': '.htmlspecialchars($AuthorID).' &#183; '.safe_strftime('%d %b %Y &#183; %X',$sPosted);
-			if($sPosted != $sLastMod) {
-				echo br.gTxt('modified_by').': '.htmlspecialchars($LastModID).' &#183; '.safe_strftime('%d %b %Y &#183; %X',$sLastMod);
-			}
-			echo '</p>';
+			echo $partials['author']['html'];
 		}
 
 		echo hInput('from_view',$view),
@@ -731,52 +732,21 @@ if (!empty($event) and $event == 'article') {
 
 		//-- prev/next article links --
 
-			if ($step!='create' and ($prev_id or $next_id)) {
-				echo '<p class="article-nav">',
-				($prev_id)
-				?	prevnext_link('&#8249;'.gTxt('prev'),'article','edit',
-						$prev_id,gTxt('prev'))
-				:	'',
-				($next_id)
-				?	prevnext_link(gTxt('next').'&#8250;','article','edit',
-						$next_id,gTxt('next'))
-				:	'',
-				'</p>';
+			if ($step!='create' and ($rs['prev_id'] or $rs['next_id'])) {
+				echo $partials['article_nav']['html'];
 			}
 
 		//-- status radios --------------
 
-			echo pluggable_ui('article_ui', 'status',
-				n.n.'<fieldset id="write-status">'.
-				n.'<legend>'.gTxt('status').'</legend>'.
-				n.status_radio($Status).
-				n.'</fieldset>',
-				$rs);
+			echo $partials['status']['html'];
 
 		//-- category selects -----------
 
-			echo pluggable_ui('article_ui', 'categories',
-				n.n.'<fieldset id="write-sort">'.
-				n.'<legend>'.gTxt('sort_display').'</legend>'.
-
-				n.graf('<label for="category-1">'.gTxt('category1').'</label> '.
-					'<span class="edit category-edit small">['.eLink('category', '', '', '', gTxt('edit')).']</span>'.br.
-					n.category_popup('Category1', $Category1, 'category-1'), ' class="category category-1"').
-
-				n.graf('<label for="category-2">'.gTxt('category2').'</label>'.br.
-					n.category_popup('Category2', $Category2, 'category-2'), ' class="category category-2"'),
-				$rs);
+			echo $partials['categories']['html'];
 
 		//-- section select --------------
 
-			if(!$from_view && !$pull) $Section = getDefaultSection();
-
-			echo pluggable_ui('article_ui', 'section',
-				n.graf('<label for="section">'.gTxt('section').'</label> '.
-				'<span class="edit section-edit small">['.eLink('section', '', '', '', gTxt('edit')).']</span>'.br.
-				section_popup($Section, 'section'), ' class="section"').
-				n.'</fieldset>',
-				$rs);
+			echo $partials['section']['html'];
 
 		//-- "More" section
 			echo n.n.'<div id="more_group"><h3 class="plain lever'.(get_pref('pane_article_more_visible') ? ' expanded' : '').'"><a href="#more">'.gTxt('more').'</a></h3>',
@@ -907,72 +877,11 @@ if (!empty($event) and $event == 'article') {
 
 			//-- timestamp -------------------
 
-				if (!empty($year)) {
-					$sPosted = safe_strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second);
-				}
-
-				echo pluggable_ui('article_ui', 'timestamp',
-					n.n.'<fieldset id="write-timestamp">'.
-					n.'<legend>'.gTxt('timestamp').'</legend>'.
-
-					n.graf(checkbox('reset_time', '1', $reset_time, '', 'reset_time').'<label for="reset_time">'.gTxt('reset_time').'</label>', ' class="reset-time"').
-
-					n.graf(gTxt('published_at').sp.popHelp('timestamp'), ' class="publish-at"').
-
-					n.graf('<span class="label">'.gtxt('date').'</span>'.sp.
-						tsi('year', '%Y', $sPosted).' / '.
-						tsi('month', '%m', $sPosted).' / '.
-						tsi('day', '%d', $sPosted)
-					, ' class="date posted created"'
-					).
-
-					n.graf('<span class="label">'.gTxt('time').'</span>'.sp.
-						tsi('hour', '%H', $sPosted).' : ' .
-						tsi('minute', '%M', $sPosted).' : '.
-						tsi('second', '%S', $sPosted)
-					, ' class="time posted created"'
-					).
-
-					n.hInput('sPosted', $sPosted).
-					n.hInput('sLastMod', $sLastMod).
-					n.hInput('AuthorID', $AuthorID).
-					n.hInput('LastModID', $LastModID).
-
-				n.'</fieldset>',
-				$rs);
+				echo $partials['posted']['html'];
 
 			//-- expires -------------------
-				if (!empty($exp_year))
-				{
-					if(empty($exp_month)) $exp_month=1;
-					if(empty($exp_day)) $exp_day=1;
-					if(empty($exp_hour)) $exp_hour=0;
-					if(empty($exp_minute)) $exp_minute=0;
-					if(empty($exp_second)) $exp_second=0;
-					$sExpires = safe_strtotime($exp_year.'-'.$exp_month.'-'.$exp_day.' '.$exp_hour.':'.$exp_minute.':'.$exp_second);
-				}
 
-				echo pluggable_ui('article_ui', 'expires',
-					n.n.'<fieldset id="write-expires">'.
-					n.'<legend>'.gTxt('expires').'</legend>'.
-
-					n.graf('<span class="label">'.gtxt('date').'</span>'.sp.
-						tsi('exp_year', '%Y', $sExpires).' / '.
-						tsi('exp_month', '%m', $sExpires).' / '.
-						tsi('exp_day', '%d', $sExpires)
-					, ' class="date expires"'
-					).
-
-					n.graf('<span class="label">'.gTxt('time').'</span>'.sp.
-						tsi('exp_hour', '%H', $sExpires).' : '.
-						tsi('exp_minute', '%M', $sExpires).' : '.
-						tsi('exp_second', '%S', $sExpires)
-					, ' class="time expires"'
-					).
-					n.hInput('sExpires', $sExpires).
-
-				n.'</fieldset>',
-				$rs);
+				echo $partials['expires']['html'];;
 
 				// end "More" section
 				echo n.n.'</div></div>';
@@ -1250,6 +1159,7 @@ EOS
 			$wl_client->query('weblogUpdates.ping', $prefs['sitename'], hu);
 		}
 	}
+
 // -------------------------------------------------------------
 	function article_save_pane_state()
 	{
@@ -1263,5 +1173,252 @@ EOS
 		} else {
 			send_xml_response(array('http-status' => '400 Bad Request'));
 		}
+	}
+
+// -------------------------------------------------------------
+	function article_partial_title($rs)
+	{
+		return pluggable_ui('article_ui', 'title',
+			'<label for="title">'.gTxt('title').'</label>'.sp.popHelp('title').br.
+				'<input type="text" id="title" name="Title" value="'.escape_title($rs['Title']).'" class="edit" size="40" tabindex="1" />',
+			$rs);
+	}
+
+// -------------------------------------------------------------
+	function article_partial_author($rs)
+	{
+		extract($rs);
+		$out = '<p class="author small">'.gTxt('posted_by').': '.htmlspecialchars($AuthorID).' &#183; '.safe_strftime('%d %b %Y &#183; %X',$sPosted);
+		if($sPosted != $sLastMod) {
+			$out .= br.gTxt('modified_by').': '.htmlspecialchars($LastModID).' &#183; '.safe_strftime('%d %b %Y &#183; %X',$sLastMod);
+		}
+		return $out.'</p>';
+	}
+
+// -------------------------------------------------------------
+	function article_partial_custom_fields($rs)
+	{
+		global $prefs;
+		extract ($prefs);
+		extract($rs);
+		$cf = '';
+		$cfs = getCustomFields();
+		$out = '<div id="custom_field_group"'.(($cfs) ? '' : ' class="empty"').'><h3 class="plain lever'.(get_pref('pane_article_custom_field_visible') ? ' expanded' : '').'"><a href="#custom_field">'.gTxt('custom').'</a></h3>'.
+			'<div id="custom_field" class="toggle" style="display:'.(get_pref('pane_article_custom_field_visible') ? 'block' : 'none').'">';
+
+		foreach($cfs as $i => $cf_name)
+		{
+			$custom_x_set = "custom_{$i}_set";
+			$custom_x = "custom_{$i}";
+			$cf .= ($$custom_x_set !== '' ? custField( $i, $$custom_x_set,  $$custom_x ): '');
+		}
+		$out .= pluggable_ui('article_ui', 'custom_fields', $cf, $rs);
+		return $out.'</div></div>'.n;
+
+	}
+
+// -------------------------------------------------------------
+	function article_partial_image($rs)
+	{
+		$out = '<div id="image_group"><h3 class="plain lever'.(get_pref('pane_article_image_visible') ? ' expanded' : '').'"><a href="#image">'.gTxt('article_image').'</a></h3>'.
+			'<div id="image" class="toggle" style="display:'.(get_pref('pane_article_image_visible') ? 'block' : 'none').'">';
+
+		$out .= pluggable_ui('article_ui', 'article_image',
+			n.graf('<label for="article-image">'.gTxt('article_image').'</label>'.sp.popHelp('article_image').br.
+				fInput('text', 'Image', $rs['Image'], 'edit', '', '', 22, '', 'article-image'), ' class="article-image"'),
+			$rs);
+		return $out.'</div></div>'.n;
+	}
+
+// -------------------------------------------------------------
+	function article_partial_keywords($rs)
+	{
+		return pluggable_ui('article_ui', 'keywords',
+			n.graf('<label for="keywords">'.gTxt('keywords').'</label>'.sp.popHelp('keywords').br.
+				n.'<textarea id="keywords" name="Keywords" cols="18" rows="5">'.htmlspecialchars(str_replace(',' ,', ', $rs['Keywords'])).'</textarea>', ' class="keywords"'),
+			$rs);
+	}
+
+// -------------------------------------------------------------
+	function article_partial_url_title($rs)
+	{
+		return pluggable_ui('article_ui', 'url_title',
+			n.graf('<label for="url-title">'.gTxt('url_title').'</label>'.sp.popHelp('url_title').br.
+				fInput('text', 'url_title', $rs['url_title'], 'edit', '', '', 22, '', 'url-title'), ' class="url-title"'),
+			$rs);
+	}
+
+// -------------------------------------------------------------
+	function article_partial_recent_articles($rs)
+	{
+		$recents = safe_rows_start("Title, ID",'textpattern',"1=1 order by LastMod desc limit 10");
+		$ra = '';
+
+		if ($recents)
+		{
+			$ra = '<ul class="recent plain-list">';
+
+			while($recent = nextRow($recents))
+			{
+				if (!$recent['Title'])
+				{
+					$recent['Title'] = gTxt('untitled').sp.$recent['ID'];
+				}
+
+				$ra .= n.t.'<li class="recent-article"><a href="?event=article'.a.'step=edit'.a.'ID='.$recent['ID'].'">'.escape_title($recent['Title']).'</a></li>';
+			}
+
+			$ra .= '</ul>';
+		}
+		return pluggable_ui('article_ui', 'recent_articles', $ra, $rs);
+	}
+
+// -------------------------------------------------------------
+	function article_partial_article_view($rs)
+	{
+		extract($rs);
+		if ($Status != 4 and $Status != 5)
+		{
+			$url = '?txpreview='.intval($ID).'.'.time(); // article ID plus cachebuster
+		}
+		else
+		{
+			include_once txpath.'/publish/taghandlers.php';
+			$url = permlinkurl_id($ID);
+		}
+		return '<span id="article_partial_article_view">'.sp.sp.'<a href="'.$url.'" class="article-view">'.gTxt('view').'</a></span>';
+	}
+
+// -------------------------------------------------------------
+	function article_partial_body($rs)
+	{
+		return pluggable_ui('article_ui', 'body',
+			n.graf('<label for="body">'.gTxt('body').'</label>'.sp.popHelp('body').br.
+				'<textarea id="body" name="Body" cols="55" rows="31" tabindex="2">'.htmlspecialchars($rs['Body']).'</textarea>', ' class="body"'),
+			$rs);
+	}
+
+// -------------------------------------------------------------
+	function article_partial_excerpt($rs)
+	{
+		return pluggable_ui('article_ui', 'excerpt',
+			n.graf('<label for="excerpt">'.gTxt('excerpt').'</label>'.sp.popHelp('excerpt').br.
+				'<textarea id="excerpt" name="Excerpt" cols="55" rows="5" tabindex="3">'.htmlspecialchars($rs['Excerpt']).'</textarea>', ' class="excerpt"'),
+			$rs);
+	}
+
+// -------------------------------------------------------------
+	function article_partial_article_nav($rs)
+	{
+		return '<p class="article-nav">'.
+		($rs['prev_id']
+			?	prevnext_link('&#8249;'.gTxt('prev'),'article','edit',
+				$rs['prev_id'],gTxt('prev'))
+			:	'').n.
+		($rs['next_id']
+			?	prevnext_link(gTxt('next').'&#8250;','article','edit',
+				$rs['next_id'],gTxt('next'))
+			:	'').n.
+		'</p>';
+	}
+
+// -------------------------------------------------------------
+	function article_partial_status($rs)
+	{
+		return pluggable_ui('article_ui', 'status',
+			n.n.'<fieldset id="write-status">'.
+				n.'<legend>'.gTxt('status').'</legend>'.
+				n.status_radio($rs['Status']).
+				n.'</fieldset>',
+			$rs);
+	}
+
+// -------------------------------------------------------------
+	function article_partial_categories($rs)
+	{
+		return pluggable_ui('article_ui', 'categories',
+		n.n.'<fieldset id="write-sort">'.
+			n.'<legend>'.gTxt('sort_display').'</legend>'.
+
+			n.graf('<label for="category-1">'.gTxt('category1').'</label> '.
+			'<span class="edit category-edit small">['.eLink('category', '', '', '', gTxt('edit')).']</span>'.br.
+			n.category_popup('Category1', $rs['Category1'], 'category-1'), ' class="category category-1"').
+
+			n.graf('<label for="category-2">'.gTxt('category2').'</label>'.br.
+			n.category_popup('Category2', $rs['Category2'], 'category-2'), ' class="category category-2"'),
+		$rs);
+	}
+
+// -------------------------------------------------------------
+	function article_partial_section($rs)
+	{
+		return pluggable_ui('article_ui', 'section',
+			n.graf('<label for="section">'.gTxt('section').'</label> '.
+				'<span class="edit section-edit small">['.eLink('section', '', '', '', gTxt('edit')).']</span>'.br.
+				section_popup($rs['Section'], 'section'), ' class="section"').
+				n.'</fieldset>',
+			$rs);
+	}
+
+// -------------------------------------------------------------
+	function article_partial_posted($rs)
+	{
+		extract($rs);
+		return pluggable_ui('article_ui', 'timestamp',
+			n.n.'<fieldset id="write-timestamp">'.
+				n.'<legend>'.gTxt('timestamp').'</legend>'.
+
+				n.graf(checkbox('reset_time', '1', $reset_time, '', 'reset_time').'<label for="reset_time">'.gTxt('reset_time').'</label>', ' class="reset-time"').
+
+				n.graf(gTxt('published_at').sp.popHelp('timestamp'), ' class="publish-at"').
+
+				n.graf('<span class="label">'.gtxt('date').'</span>'.sp.
+					tsi('year', '%Y', $sPosted).' / '.
+					tsi('month', '%m', $sPosted).' / '.
+					tsi('day', '%d', $sPosted)
+				, ' class="date posted created"'
+			).
+
+				n.graf('<span class="label">'.gTxt('time').'</span>'.sp.
+					tsi('hour', '%H', $sPosted).' : ' .
+					tsi('minute', '%M', $sPosted).' : '.
+					tsi('second', '%S', $sPosted)
+				, ' class="time posted created"'
+			).
+
+				n.hInput('sPosted', $sPosted).
+				n.hInput('sLastMod', $sLastMod).
+				n.hInput('AuthorID', $AuthorID).
+				n.hInput('LastModID', $LastModID).
+
+				n.'</fieldset>',
+			$rs);
+	}
+
+// -------------------------------------------------------------
+	function article_partial_expires($rs)
+	{
+		extract($rs);
+		return pluggable_ui('article_ui', 'expires',
+			n.n.'<fieldset id="write-expires">'.
+				n.'<legend>'.gTxt('expires').'</legend>'.
+
+				n.graf('<span class="label">'.gtxt('date').'</span>'.sp.
+					tsi('exp_year', '%Y', $sExpires).' / '.
+					tsi('exp_month', '%m', $sExpires).' / '.
+					tsi('exp_day', '%d', $sExpires)
+				, ' class="date expires"'
+			).
+
+				n.graf('<span class="label">'.gTxt('time').'</span>'.sp.
+					tsi('exp_hour', '%H', $sExpires).' : '.
+					tsi('exp_minute', '%M', $sExpires).' : '.
+					tsi('exp_second', '%S', $sExpires)
+				, ' class="time expires"'
+			).
+				n.hInput('sExpires', $sExpires).
+
+				n.'</fieldset>',
+			$rs);
 	}
 ?>

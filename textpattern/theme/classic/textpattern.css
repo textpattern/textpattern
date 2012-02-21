@@ -276,6 +276,7 @@ background-color: #ddd;
 
 form.busy input[type='submit'] {
 background-color: #f0f0f0;
+border-color: #f0f0f0;
 color: #999999;
 }
 
