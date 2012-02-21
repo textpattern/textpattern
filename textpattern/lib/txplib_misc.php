@@ -622,7 +622,7 @@ function escape_js($js)
 // -------------------------------------------------------------
 	function load_plugins($type=0)
 	{
-		global $prefs, $plugins, $plugins_ver;
+		global $prefs, $plugins, $plugins_ver, $app_mode;
 
 		if (!is_array($plugins)) $plugins = array();
 
@@ -640,7 +640,8 @@ function escape_js($js)
 			}
 		}
 
-		$where = 'status = 1 AND type IN ('.($type ? '1,3' : '0,1').')';
+		$admin = ($app_mode == 'async' && !AJAXALLY_CHALLENGED ? '4' : '3,4');
+		$where = 'status = 1 AND type IN ('.($type ? '1,'.$admin : '0,1').')';
 
 		$rs = safe_rows("name, code, version", "txp_plugin", $where.' order by load_order');
 		if ($rs) {
