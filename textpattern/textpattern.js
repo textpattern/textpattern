@@ -317,23 +317,41 @@ function sendAsyncEvent(data, fn, format)
 }
 
 /**
- * Submit event handler. Sends a form's entry elements as AJAX data and processes the response javascript.
- *
+ * Send a form as AJAX data.
+ * onsubmit() handler shell for txpPostForm().
+ * @param form
  * @return boolean Continue with browser's default form handling
+ * @since 4.4.0
  */
 function postForm(form)
 {
-	var form = $(form);
-	try {
+    return $(form).txpPostForm();
+}
+
+/**
+ * jQuery plugin to submit a form. Sends a form's entry elements as AJAX data and processes the response javascript.
+ *
+ * @return boolean Continue with browser's default form handling
+ * @since 4.5.0
+ */
+jQuery.fn.txpPostForm = function ()
+{
+	var form = this;
+    try {
 		// Show feedback while processing
 		form.addClass('busy');
 		$('body').addClass('busy');
-		// Send form data to application, process response as script.
+        s = form.find('input[type="submit"]');
+        // add spinner markup
+        s.after('<span class="spinner"></span>')
+        // Send form data to application, process response as script.
 		sendAsyncEvent(
-			form.serialize(),
+			form.serialize() + '&' + s.attr('name') + '=' + s.val(),
 			function() {
+                // remove feedback elements
 				form.removeClass('busy');
 				$('body').removeClass('busy');
+                $('span.spinner').remove();
 			},
 			'script'
 		);
@@ -359,8 +377,11 @@ $(document).ready(function() {
 	if($.ajaxSetup().timeout === undefined) {
 		$.ajaxSetup( {timeout : textpattern.ajax_timeout} );
 	}
-	// add spinner markup for submit buttons on async forms
-	$(document).on('click', 'form.async input[type="submit"]', function() {
-		$(this).after('<span class="spinner"></span>');
-	});
+	// submit async forms
+	if(!textpattern.ajaxally_challenged) {
+        $(document).on('click', 'form.async input[type="submit"]', function() {
+            // send 'em up
+            return $(this).parents('form.async').txpPostForm();
+        });
+    }
 });

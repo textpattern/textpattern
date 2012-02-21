@@ -62,6 +62,7 @@ $LastChangedRevision$
 		step: "'.htmlspecialchars($step).'",
 		_txp_token: "'.htmlspecialchars(form_token()).'",
 		ajax_timeout: '.htmlspecialchars(AJAX_TIMEOUT).',
+		ajaxally_challenged: '.(AJAXALLY_CHALLENGED ? 'true' : 'false').',
 		do_spellcheck: "'.htmlspecialchars(
 							get_pref('do_spellcheck', '#page-article #body, #page-article #title,'.
 													'#page-image #alt-text, #page-image #caption,'.
