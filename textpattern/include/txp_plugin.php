@@ -372,7 +372,7 @@ $LastChangedRevision$
 
 					extract($plugin);
 
-					$type  = empty($type)  ? 0 : min(max(intval($type), 0), 3);
+					$type  = empty($type)  ? 0 : min(max(intval($type), 0), 5);
 					$order = empty($order) ? 5 : min(max(intval($order), 1), 9);
 					$flags = empty($flags) ? 0 : intval($flags);
 

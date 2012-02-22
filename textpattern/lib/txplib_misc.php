@@ -640,8 +640,8 @@ function escape_js($js)
 			}
 		}
 
-		$admin = ($app_mode == 'async' && !AJAXALLY_CHALLENGED ? '4' : '3,4');
-		$where = 'status = 1 AND type IN ('.($type ? '1,'.$admin : '0,1').')';
+		$admin = ($app_mode == 'async' && !AJAXALLY_CHALLENGED ? '4,5' : '1,3,4,5');
+		$where = 'status = 1 AND type IN ('.($type ? $admin : '0,1,5').')';
 
 		$rs = safe_rows("name, code, version", "txp_plugin", $where.' order by load_order');
 		if ($rs) {
