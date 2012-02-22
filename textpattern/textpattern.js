@@ -346,7 +346,7 @@ jQuery.fn.txpPostForm = function ()
         s.after('<span class="spinner"></span>')
         // Send form data to application, process response as script.
 		sendAsyncEvent(
-			form.serialize() + '&' + s.attr('name') + '=' + s.val(),
+			form.serialize() + '&' + (s.attr('name') || '_txp_submit') + '=' + s.val(),
 			function() {
                 // remove feedback elements
 				form.removeClass('busy');
