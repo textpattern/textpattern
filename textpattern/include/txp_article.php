@@ -356,8 +356,8 @@ if (!empty($event) and $event == 'article') {
 		extract($prefs);
 
 		$partials = array(
-			'custom_fields' => array('html' => PARTIAL_VOLATILE,    'selector' => '#custom_field_group'),
-			'image'         => array('html' => PARTIAL_VOLATILE,    'selector' => '#image_group'),
+			'custom_fields' => array('html' => PARTIAL_STATIC,      'selector' => false),
+			'image'         => array('html' => PARTIAL_STATIC,      'selector' => false),
 			'keywords'      => array('html' => PARTIAL_VOLATILE,    'selector' => '#meta_group .keywords'),
 			'url_title'     => array('html' => PARTIAL_VOLATILE,    'selector' => '#meta_group .url-title'),
 			'recent_articles'=> array('html' => PARTIAL_VOLATILE,   'selector' => '#recent_group .recent'),
@@ -373,6 +373,8 @@ if (!empty($event) and $event == 'article') {
 			'posted'        => array('html' => PARTIAL_VOLATILE,    'selector' => '#write-timestamp'),
 			'expires'       => array('html' => PARTIAL_VOLATILE,    'selector' => '#write-expires'),
 		);
+
+		// TODO: let plugin callbacks change $partials' members
 
 		extract(gpsa(array('view','from_view','step')));
 
@@ -491,10 +493,8 @@ if (!empty($event) and $event == 'article') {
 		}
 
 		if ($refresh_partials) {
-
-//			TODO: Themeable asynchronous message display
-//			global $theme;
-//			$response[] = $theme->announce($message);
+			global $theme;
+			$response[] = $theme->announce_async($message);
 
 			// Update the volatile partials
 			$response[] = '$("[name=sLastMod]").val("'.$sLastMod.'")';
@@ -506,6 +506,8 @@ if (!empty($event) and $event == 'article') {
 				}
 			}
 			send_script_response(join(";\n", $response));
+
+			// bail out
 			return;
 		}
 
