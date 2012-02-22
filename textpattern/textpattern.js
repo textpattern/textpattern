@@ -331,17 +331,18 @@ function postForm(form)
 /**
  * jQuery plugin to submit a form. Sends a form's entry elements as AJAX data and processes the response javascript.
  *
- * @return boolean Continue with browser's default form handling
- * @since 4.5.0
+ * @param   object  event-object|undefined
+ * @return  boolean Continue with browser's default form handling
+ * @since   4.5.0
  */
-jQuery.fn.txpPostForm = function ()
+jQuery.fn.txpPostForm = function(event)
 {
 	var form = this;
     try {
 		// Show feedback while processing
 		form.addClass('busy');
 		$('body').addClass('busy');
-        s = form.find('input[type="submit"]');
+        s = $(event.currentTarget) || form.find('input[type="submit"]');
         // add spinner markup
         s.after('<span class="spinner"></span>')
         // Send form data to application, process response as script.
@@ -379,9 +380,9 @@ $(document).ready(function() {
 	}
 	// submit async forms
 	if(!textpattern.ajaxally_challenged) {
-        $(document).on('click', 'form.async input[type="submit"]', function() {
+        $(document).on('click', 'form.async input[type="submit"]', function(e) {
             // send 'em up
-            return $(this).parents('form.async').txpPostForm();
+            return $(this).parents('form.async').txpPostForm(e);
         });
     }
 });
