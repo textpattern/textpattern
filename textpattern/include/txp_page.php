@@ -75,7 +75,7 @@ $LastChangedRevision$
 
 		echo
 			'<div id="'.$event.'_container" class="txp-container txp-edit">'.
-			startTable('edit', '', 'edit-pane').
+			startTable('edit').
 			tr(
 				tda(
 
