@@ -220,6 +220,7 @@ $LastChangedRevision$
 		update_lastmod();
 
 		if (!AJAXALLY_CHALLENGED) {
+			global $theme;
 			// Keep old name around to mangle existing HTML
 			$on = $old_name;
 			// Old became new as we have saved this section
@@ -236,6 +237,7 @@ $LastChangedRevision$
 			// Reflect new section name on id and row label
 			$label = ($name == 'default' ? gTxt('default') : $name);
 			$response[] = '$("tr#section-'.$on.'").attr("id", "section-'.$name.'").find(".label").html("'.$label.'")';
+			$response[] = $theme->announce_async(gTxt('section_updated', array('{name}' => $name)));
 			send_script_response(join(";\n", $response));
 		} else {
 			// TODO: Deprecate non-AJAX alternative code path in future version
