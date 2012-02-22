@@ -73,41 +73,61 @@ class classic_theme extends theme
 		return join(n, $out);;
 	}
 
-	function announce($thing)
+	function announce($thing, $modal = false)
 	{
- 		// $thing[0]: message text
- 		// $thing[1]: message type, defaults to "success" unless empty or a different flag is set
+		return $this->_announce($thing, false, $modal);
+	}
+
+	function announce_async($thing, $modal = false)
+	{
+		return $this->_announce($thing, true, $modal);
+	}
+
+	/* private */
+	function _announce($thing, $async, $modal)
+	{
+		// $thing[0]: message text
+		// $thing[1]: message type, defaults to "success" unless empty or a different flag is set
 
 		if ($thing === '') return '';
 
-		if (!is_array($thing) || !isset($thing[1]))
- 		{
- 			$thing = array($thing, 0);
- 		}
+		if (!is_array($thing) || !isset($thing[1]))	{
+			$thing = array($thing, 0);
+		}
 
- 		switch ($thing[1])
- 		{
- 			case E_ERROR:
- 				$class = 'error';
- 				break;
- 			case E_WARNING:
- 				$class = 'warning';
- 				break;
- 			default:
- 				$class = 'success';
- 				break;
- 		}
- 		$html = "<span id='message' class='$class'>".gTxt($thing[0]).'</span>';
- 		// Try to inject $html into the message pane no matter when announce()'s output is printed
- 		$js = addslashes($html);
- 		$js = <<< EOS
- 		$(document).ready( function(){
-	 		$("#messagepane").html("{$js}");
-			$('#messagepane #message.error').fadeOut(800).fadeIn(800);
-			$('#messagepane #message.warning').fadeOut(800).fadeIn(800);
-		} )
+		switch ($thing[1]) {
+			case E_ERROR:
+				$class = 'error';
+				break;
+			case E_WARNING:
+				$class = 'warning';
+				break;
+			default:
+				$class = 'success';
+				break;
+		}
+
+		if ($modal) {
+			$html = ''; // TODO: Say what?
+			$js = 'window.alert("'.escape_js(strip_tags($thing[0])).'")';
+		} else {
+			$html = "<span id='message' class='$class'>".gTxt($thing[0]).'</span>';
+			// Try to inject $html into the message pane no matter when _announce()'s output is printed
+			$js = escape_js($html);
+			$js = <<< EOS
+		        $(document).ready( function(){
+			        $("#messagepane").html("{$js}");
+					$('#messagepane #message.error').fadeOut(800).fadeIn(800);
+					$('#messagepane #message.warning').fadeOut(800).fadeIn(800);
+				});
 EOS;
- 		return script_js(str_replace('</', '<\/', $js), $html);
+		}
+		if ($async) {
+			return $js;
+		} else {
+			return script_js(str_replace('</', '<\/', $js), $html);
+		}
+
 	}
 
 	function manifest()
