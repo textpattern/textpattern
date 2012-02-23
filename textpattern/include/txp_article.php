@@ -16,7 +16,7 @@ if (!defined('txpinterface')) die('txpinterface is undefined.');
 global $vars, $statuses;
 
 $vars = array(
-	'ID','Title','Title_html','Body','Body_html','Excerpt','textile_excerpt','Image',
+	'ID','Title','Title_html','Body','Body_html','Excerpt','Excerpt_html','textile_excerpt','Image',
 	'textile_body', 'Keywords','Status','Posted','Expires','Section','Category1','Category2',
 	'Annotate','AnnotateInvite','publish_now','reset_time','AuthorID','sPosted',
 	'LastModID','sLastMod','override_form','from_view','year','month','day','hour',
@@ -1194,7 +1194,7 @@ EOS
 		if($sPosted != $sLastMod) {
 			$out .= br.gTxt('modified_by').': '.htmlspecialchars($LastModID).' &#183; '.safe_strftime('%d %b %Y &#183; %X',$sLastMod);
 		}
-		return $out.'</p>';
+		return pluggable_ui('article_ui', 'author', $out.'</p>', $rs);
 	}
 
 // -------------------------------------------------------------
