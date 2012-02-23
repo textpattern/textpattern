@@ -88,6 +88,8 @@ $LastChangedRevision$
 		'/update/_to_4.2.0.php',
 		'/update/_to_4.3.0.php',
 		'/update/_to_4.4.0.php',
+		'/update/_to_4.4.1.php',
+		'/update/_to_4.5.0.php',
 		'/update/_update.php'
 	);
 
