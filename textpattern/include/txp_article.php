@@ -78,8 +78,9 @@ if (!empty($event) and $event == 'article') {
 
 		$incoming = doSlash(textile_main_fields(psa($vars)));
 		extract($incoming);
-		extract(array_map('assert_int', psa(array( 'Status', 'textile_body', 'textile_excerpt', 'Annotate'))));
-
+		extract(array_map('assert_int', psa(array( 'Status', 'textile_body', 'textile_excerpt'))));
+		// comments my be on, off, or disabled.
+		$Annotate = (int) $Annotate;
 		// set and validate article timestamp
 		if ($publish_now == 1) {
 			$when = 'now()';
@@ -226,7 +227,7 @@ if (!empty($event) and $event == 'article') {
 
 		extract(doSlash($incoming));
 		extract(array_map('assert_int', psa(array('ID', 'Status', 'textile_body', 'textile_excerpt'))));
-
+		// comments my be on, off, or disabled.
 		$Annotate = (int) $Annotate;
 
 		if (!has_privs('article.publish') && $Status>=4) $Status = 3;
