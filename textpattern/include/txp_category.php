@@ -254,9 +254,12 @@ if ($event == 'category') {
 						'select ID, Category2 as category from '.safe_pfx('textpattern').
 					') as t where category != "" group by category');
 
-				foreach ($rs2 as $a)
+				if ($rs2 !== false)
 				{
-					$total_count[$a['category']] = $a['num'];
+					foreach ($rs2 as $a)
+					{
+						$total_count[$a['category']] = $a['num'];
+					}
 				}
 			}
 
