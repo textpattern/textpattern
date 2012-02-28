@@ -47,7 +47,7 @@ $LastChangedRevision$
 
 	function css($atts)
 	{
-		global $css;
+		global $css, $doctype;
 
 		extract(lAtts(array(
 			'format' => 'url',
@@ -67,7 +67,8 @@ $LastChangedRevision$
 		$url = hu.'css.php?n='.$name;
 
 		if ($format == 'link') {
-			return '<link rel="'.$rel.'" type="text/css"'.
+			return '<link rel="'.$rel.
+				($doctype != 'html5' ? '" type="text/css"': '"').
 				($media ? ' media="'.$media.'"' : '').
 				($title ? ' title="'.$title.'"' : '').
 				' href="'.$url.'" />';
