@@ -353,7 +353,6 @@ class Textile
 	var $pnct;
 	var $rel;
 	var $fn;
-	var $h5;
 
 	var $shelf = array();
 	var $restricted = false;
@@ -401,8 +400,6 @@ class Textile
 		$pnc = '[[:punct:]]';
 
 		$this->url_schemes = array('http','https','ftp','mailto');
-
-		$this->h5 = ($doctype == 'html5');
 
 		$this->btag = array('bq', 'bc', 'notextile', 'pre', 'h[1-6]', 'fn\d+', 'p', '###' );
 
