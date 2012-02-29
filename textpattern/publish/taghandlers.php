@@ -2115,16 +2115,12 @@ $LastChangedRevision$
 
 		if ($link)
 		{
-			if (!preg_match('|^https?://|', $web))
-			{
-				$web = 'http://'.$web;
-			}
-
+			$web = comment_web();
 			$nofollow = (@$comment_nofollow ? ' rel="nofollow"' : '');
 
-			if (preg_match('|^https?://\S|', $web))
+			if (!empty($web))
 			{
-				return '<a href="'.htmlspecialchars($web).'"'.$nofollow.'>'.$name.'</a>';
+				return '<a href="'.$web.'"'.$nofollow.'>'.$name.'</a>';
 			}
 
 			if ($email && !$never_display_email)
@@ -2153,7 +2149,15 @@ $LastChangedRevision$
 
 		assert_comment();
 
-		return htmlspecialchars($thiscomment['web']);
+		if (preg_match('/^\S/', $thiscomment['web']))
+		{
+			if (!preg_match('|^https?://|', $thiscomment['web']))
+			{
+				$thiscomment['web'] = 'http://'.$thiscomment['web'];
+			}
+			return htmlspecialchars($thiscomment['web']);
+		}
+		return '';
 	}
 
 // -------------------------------------------------------------
