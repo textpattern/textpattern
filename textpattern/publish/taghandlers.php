@@ -2151,7 +2151,8 @@ $LastChangedRevision$
 
 		if (preg_match('/^\S/', $thiscomment['web']))
 		{
-			if (!preg_match('|^https?://|', $thiscomment['web']))
+			// Prepend default protocol 'http' for all non-local URLs
+			if (!preg_match('!^https?://|^#|^/[^/]!', $thiscomment['web']))
 			{
 				$thiscomment['web'] = 'http://'.$thiscomment['web'];
 			}
