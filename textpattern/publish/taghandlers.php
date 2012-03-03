@@ -2739,13 +2739,13 @@ $LastChangedRevision$
 
 		if ($quoted || empty($m) || $m === 'exact')
 		{
-			$regex_search = '/(?:\G|\s).{0,50}'.preg_quote($q).'.{0,50}(?:\s|$)/iu';
-			$regex_hilite = '/('.preg_quote($q).')/i';
+			$regex_search = '/(?:\G|\s).{0,50}'.preg_quote($q, '/').'.{0,50}(?:\s|$)/iu';
+			$regex_hilite = '/('.preg_quote($q, '/').')/i';
 		}
 		else
 		{
-			$regex_search = '/(?:\G|\s).{0,50}('.preg_replace('/\s+/', '|', preg_quote($q)).').{0,50}(?:\s|$)/iu';
-			$regex_hilite = '/('.preg_replace('/\s+/', '|', preg_quote($q)).')/i';
+			$regex_search = '/(?:\G|\s).{0,50}('.preg_replace('/\s+/', '|', preg_quote($q, '/')).').{0,50}(?:\s|$)/iu';
+			$regex_hilite = '/('.preg_replace('/\s+/', '|', preg_quote($q, '/')).')/i';
 		}
 
 		preg_match_all($regex_search, $result, $concat);
