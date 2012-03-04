@@ -87,8 +87,9 @@ begin generic functions
 
 		foreach ($atts_list as $att => $val)
 		{
-			if ($val or $val === '0')
+			if ($val or $val === '0' or $val === '{att_empty}')
 			{
+				$val = str_replace('{att_empty}', '', $val);
 				$atts[] = ' '.$att.'="'.$val.'"';
 			}
 		}
@@ -246,7 +247,7 @@ begin generic functions
 	function feed_format_pop($val)
 	{
 		$vals = array(
-			'a'		 => '<a href...',
+			'a'    => '<a href...',
 			'link' => '<link rel...',
 		);
 
@@ -310,6 +311,19 @@ begin generic functions
 
 //--------------------------------------------------------------
 
+	function search_opts_pop($val)
+	{
+		$vals = array(
+			'exact' => gTxt('exact'),
+			'any'   => gTxt('any'),
+			'all'   => gTxt('all'),
+		);
+
+		return ' '.selectInput('match', $vals, $val, false);
+	}
+
+//--------------------------------------------------------------
+
 	function author_pop($val)
 	{
 		$vals = array();
@@ -369,6 +383,8 @@ begin generic functions
 
 		return ' '.selectInput('sort', $vals, $val, true);
 	}
+
+//--------------------------------------------------------------
 
 	function list_sort_pop($val)
 	{
@@ -462,10 +478,11 @@ begin generic functions
 	function escape_pop($val)
 	{
 		$vals = array(
-			'html' => 'html',
+			'{att_empty}' => '',
+			'html'        => 'html',
 		);
 
-		return ' '.selectInput('escape', $vals, $val, true);
+		return ' '.selectInput('escape', $vals, $val, false);
 	}
 
 //--------------------------------------------------------------
@@ -564,20 +581,26 @@ begin tag builder functions
 		$atts = gpsa(array(
 			'allowoverride',
 			'author',
+			'break',
 			'category',
+			'class',
 			'excerpted',
+			'expired',
 			'form',
 			'id',
 			'keywords',
+			'label',
+			'labeltag',
 			'limit',
-			'listform',
 			'month',
 			'offset',
+			'pageby',
 			'pgonly',
 			'section',
 			'sort',
 			'status',
-			'time'
+			'time',
+			'wraptag',
 		));
 
 		extract($atts);
@@ -615,6 +638,9 @@ begin tag builder functions
 			tagRow('has_excerpt',
 				yesno_pop('excerpted', $excerpted)).
 
+			tagRow('expired',
+				yesno_pop('expired', $expired)).
+
 			tagRow('author',
 				author_pop($author)).
 
@@ -632,6 +658,21 @@ begin tag builder functions
 
 			tagRow('allowoverride',
 				yesno_pop('allowoverride', $allowoverride)).
+
+			tagRow('label',
+				fInput('text', 'label', $label, 'edit', '', '', 20)).
+
+			tagRow('labeltag',
+				input_tag('labeltag', $labeltag)).
+
+			tagRow('wraptag',
+				input_tag('wraptag', $wraptag)).
+
+			tagRow('class',
+				fInput('text', 'class', $class, 'edit', '', '', 14)).
+
+			tagRow('break',
+				input_tag('break', $break)).
 
 			tagRow('form',
 				form_pop('form', 'article', $form)).
@@ -1190,6 +1231,7 @@ begin tag builder functions
 		global $step, $endform, $tag_name;
 
 		$atts = gpsa(array(
+			'class',
 			'label',
 			'section',
 			'this_section',
@@ -1227,6 +1269,9 @@ begin tag builder functions
 
 			tagRow('wraptag',
 				input_tag('wraptag', $wraptag)).
+
+			tagRow('class',
+				fInput('text', 'class', $class, 'edit', '', '', 25)).
 
 			$endform
 		);
@@ -1286,8 +1331,10 @@ begin tag builder functions
 
 		$atts = gpsa(array(
 			'button',
+			'class',
 			'form',
 			'label',
+			'match',
 			'section',
 			'size',
 			'wraptag'
@@ -1304,6 +1351,9 @@ begin tag builder functions
 				, 2)
 			).
 
+			tagRow('match_type',
+				search_opts_pop($match)).
+
 			tagRow('section',
 				section_pop('section', $section)).
 
@@ -1318,6 +1368,9 @@ begin tag builder functions
 
 			tagRow('wraptag',
 				input_tag('wraptag', $wraptag)).
+
+			tagRow('class',
+				fInput('text', 'class', $class, 'edit', '', '', 25)).
 
 			tagRow('form',
 				form_pop('form', 'misc', $form)).
@@ -1794,6 +1847,7 @@ begin tag builder functions
 
 		$atts = gpsa(array(
 			'category',
+			'class',
 			'flavor',
 			'format',
 			'label',
@@ -1840,6 +1894,9 @@ begin tag builder functions
 			tagRow('wraptag',
 				input_tag('wraptag', $wraptag)).
 
+			tagRow('class',
+				fInput('text', 'class', $class, 'edit', '', '', 25)).
+
 			$endform
 		);
 
@@ -1859,6 +1916,7 @@ begin tag builder functions
 
 		$atts = gpsa(array(
 			'category',
+			'class',
 			'flavor',
 			'format',
 			'label',
@@ -1900,6 +1958,9 @@ begin tag builder functions
 
 			tagRow('wraptag',
 				input_tag('wraptag', $wraptag)).
+
+			tagRow('class',
+				fInput('text', 'class', $class, 'edit', '', '', 25)).
 
 			$endform
 		);
@@ -2117,12 +2178,13 @@ begin tag builder functions
 		global $step, $endform, $tag_name;
 
 		$atts = gpsa(array(
-			'align',
 			'class',
 			'escape',
+			'height',
 			'html_id',
 			'style',
 			'thumbnail',
+			'width',
 			'wraptag',
 		));
 
@@ -2151,9 +2213,6 @@ begin tag builder functions
 
 			tagRow('inline_style',
 				fInput('text', 'style', $style, 'edit', '', '', 25)).
-
-			tagRow('align',
-				fInput('text', 'align', $align, 'edit', '', '', 25)).
 
 			tagRow('wraptag',
 				fInput('text', 'wraptag', $wraptag, 'edit', '', '', 25)).
@@ -3437,6 +3496,7 @@ begin tag builder functions
 
 					$atts = array(
 						'class'   => $class,
+						'escape'  => $escape,
 						'html_id' => $html_id,
 						'id'      => $id,
 						'style'   => $style,
