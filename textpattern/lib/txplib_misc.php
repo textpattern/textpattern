@@ -596,15 +596,18 @@ function escape_js($js)
 		if (!($errno & error_reporting())) return;
 		if ($production_status == 'live') return;
 
-		global $txp_current_tag;
-		$errline = ($errstr === 'unknown_tag') ? '' : " on line $errline";
+		global $txp_current_tag, $txp_current_form, $pretext;
+		$page = (empty($pretext['page']) ? gTxt('none') : $pretext['page']);
+		if (!isset($txp_current_form)) $txp_current_form = gTxt('none');
+		$locus = gTxt('while_parsing_page_form', array('{page}' => htmlspecialchars($page), '{form}' => htmlspecialchars($txp_current_form)));
+
 		printf ("<pre>".gTxt('tag_error').' <b>%s</b> -> <b> %s: %s %s</b></pre>',
-				htmlspecialchars($txp_current_tag), $error[$errno], $errstr, $errline );
+				htmlspecialchars($txp_current_tag), $error[$errno], $errstr, $locus );
 		if ($production_status == 'debug')
 			{
 			print "\n<pre style=\"padding-left: 2em;\" class=\"backtrace\"><code>".htmlspecialchars(join("\n", get_caller(10)))."</code></pre>";
 
-			$trace_msg = gTxt('tag_error').' '.$txp_current_tag.' -> '.$error[$errno].': '.$errstr.' '.$errline;
+			$trace_msg = gTxt('tag_error').' '.$txp_current_tag.' -> '.$error[$errno].': '.$errstr.' '.$locus;
 			trace_add( $trace_msg );
 			}
 	}
@@ -1709,6 +1712,7 @@ function escape_js($js)
 // --------------------------------------------------------------
 	function parse_form($name)
 	{
+		global $txp_current_form;
 		static $stack = array();
 
 		$f = fetch_form($name);
@@ -1717,8 +1721,10 @@ function escape_js($js)
 				trigger_error(gTxt('form_circular_reference', array('{name}' => $name)));
 				return;
 			}
-			array_push($stack, $name);
+			$old_form = $txp_current_form;
+			$txp_current_form = $stack[] = $name;
 			$out = parse($f);
+			$txp_current_form = $old_form;
 			array_pop($stack);
 			return $out;
 		}
