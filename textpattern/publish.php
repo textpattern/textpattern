@@ -568,14 +568,19 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function output_css($s='',$n='')
 	{
+		$order = '';
 		if ($n) {
-			$cssname = $n;
+			$n = do_list($n);
+			$cssname = join("','", doSlash($n));
+			if (count($n) > 1) $order  = " order by field(name,'$cssname')";
 		} elseif ($s) {
 			$cssname = safe_field('css','txp_section',"name='".doSlash($s)."'");
 		}
 
-		if (isset($cssname)) $css = safe_field('css','txp_css',"name='".doSlash($cssname)."'");
-		if (isset($css)) echo $css;
+		if (isset($cssname)) {
+			$css = join(n, safe_column('css','txp_css',"name in ('$cssname')".$order));
+			if (isset($css)) echo $css;
+		}
 	}
 
 //	article() is called when parse() finds a <txp:article /> tag.
