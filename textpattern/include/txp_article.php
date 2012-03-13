@@ -869,10 +869,11 @@ if (!empty($event) and $event == 'article') {
 
 		//-- publish button --------------
 
-				echo
-				(has_privs('article.publish')) ?
-				fInput('submit','publish',gTxt('publish'),"publish", '', '', '', 4) :
-				fInput('submit','publish',gTxt('save'),"publish", '', '', '', 4);
+				echo graf(
+					(has_privs('article.publish')) ?
+					fInput('submit','publish',gTxt('publish'),"publish", '', '', '', 4) :
+					fInput('submit','publish',gTxt('save'),"publish", '', '', '', 4)
+				, ' id="write-publish"');
 			}
 
 			else
@@ -895,7 +896,7 @@ if (!empty($event) and $event == 'article') {
 					or ($Status >= 4 and $AuthorID==$txp_user and has_privs('article.edit.own.published'))
 				    or ($Status <  4 and has_privs('article.edit'))
 					or ($Status <  4 and $AuthorID==$txp_user and has_privs('article.edit.own')))
-					echo fInput('submit','save',gTxt('save'),"publish", '', '', '', 4);
+					echo graf(fInput('submit','save',gTxt('save'),"publish", '', '', '', 4), ' id="write-save"');
 			}
 		}
 
