@@ -246,7 +246,7 @@ $LastChangedRevision$
 	{
 		return '<div style="margin: 3em auto auto auto; text-align: center;">'.
 		form(
-			tag(gTxt('change_password'), 'h3').
+			tag(gTxt('change_password'), 'h2').
 
 			graf('<label for="new_pass">'.gTxt('new_password').'</label> '.
 				fInput('password', 'new_pass', '', 'edit', '', '', '20', '1', 'new_pass').
@@ -264,7 +264,7 @@ $LastChangedRevision$
 	{
 		return '<div style="margin: 3em auto auto auto; text-align: center;">'.
 		form(
-			tag(gTxt('change_email_address'), 'h3').
+			tag(gTxt('change_email_address'), 'h2').
 			graf('<label for="new_email">'.gTxt('new_email').'</label> '.
 				fInput('text', 'new_email', $email, 'edit', '', '', '20', '2', 'new_email').
 				fInput('submit', 'change_email', gTxt('submit'), 'smallerbox').
@@ -393,7 +393,7 @@ $LastChangedRevision$
 
 		return form(
 
-			hed($caption, 3,' style="text-align: center;"').
+			hed($caption, 2,' style="text-align: center;"').
 
 			startTable('edit', '', 'edit-pane').
 

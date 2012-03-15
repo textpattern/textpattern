@@ -140,6 +140,9 @@ font-weight: normal;
 color: #00f;
 background-color: #eee;
 }
+h2 a.pophelp {
+font-size: 0.76923076923077em;
+}
 
 /* form elements
 ----------------------------------------------- */

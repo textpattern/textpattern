@@ -530,7 +530,7 @@ $LastChangedRevision$
 				$ef_select = empty($existing_files) ? '' : gTxt('existing_file').' '.selectInput('filename',$existing_files,"",1);
 				$form =	tr(
 							tda(
-								hed(gTxt('file_relink'),3).
+								hed(gTxt('file_relink'),2).
 								file_upload_form(gTxt('upload_file'),'file_reassign','file_replace',$id,'file-reassign').
 								form(
 									graf(

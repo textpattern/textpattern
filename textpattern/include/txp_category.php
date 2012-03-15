@@ -229,7 +229,7 @@ if ($event == 'category') {
 
 	function cat_event_category_list($event)
 	{
-		$out = n.n.hed(gTxt($event.'_head').sp.popHelp($event.'_category'), 3).
+		$out = n.n.hed(gTxt($event.'_head').sp.popHelp($event.'_category'), 2).
 
 			form(
 				fInput('text', 'title', '', 'edit', '', '', 20).

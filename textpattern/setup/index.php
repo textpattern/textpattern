@@ -83,7 +83,7 @@ eod;
 	  	'<table id="setup" cellpadding="0" cellspacing="0" border="0">',
 		tr(
 			tda(
-				hed('Welcome to Textpattern',3).
+				hed('Welcome to Textpattern',1).
 				graf('Please choose a language:').
 				langs().
 				graf(fInput('submit','Submit','Submit','publish')).
@@ -126,9 +126,9 @@ eod;
 			'<table id="setup" cellpadding="0" cellspacing="0" border="0">',
 		tr(
 			tda(
-			  hed(gTxt('welcome_to_textpattern'),3).
+			  hed(gTxt('welcome_to_textpattern'),1).
 			  graf(gTxt('need_details'),' style="margin-bottom:3em"').
-			  hed('MySQL',3).
+			  hed('MySQL',2).
 			  graf(gTxt('db_must_exist'))
 			,' width="400" height="50" colspan="4" align="left"')
 		),
@@ -147,7 +147,7 @@ eod;
 		tr(tdcs('&nbsp;',4)),
 		tr(
 			tdcs(
-				hed(gTxt('site_url'),3).
+				hed(gTxt('site_url'),2).
 				graf(gTxt('please_enter_url')),4)
 		),
 		tr(

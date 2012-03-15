@@ -330,9 +330,9 @@ $LastChangedRevision$
 					echo
 					'<div id="'.$event.'_container" class="txp-container txp-view">'.
 					form(
-						hed(gTxt('previewing_plugin'), 3).
+						hed(gTxt('previewing_plugin'), 2).
 						tag($source, 'div', ' id="preview-plugin" class="code"').
-						hed(gTxt('plugin_help').':', 3).
+						hed(gTxt('plugin_help').':', 2).
 						tag($help_source, 'div', ' id="preview-help" class="code"').
 						$sub.
 						sInput('plugin_install').

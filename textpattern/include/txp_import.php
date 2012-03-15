@@ -66,7 +66,7 @@ function showHideFields($sel)
 
 <?php
 		$content= startTable('edit');
-		$content.= tr(tdcs(hed(gTxt('txp_import'),3),2));
+		$content.= tr(tdcs(hed(gTxt('txp_import'),2),2));
 		//Select tool
 		$content.= tr(
 			fLabelCell ('select_tool','import', 'from').
@@ -104,7 +104,7 @@ function showHideFields($sel)
 		//DataBase imports only
 
 		$databased =
-		tr(tdcs(hed(gTxt('database_stuff'),3),2)).
+		tr(tdcs(hed(gTxt('database_stuff'),2),2)).
 		tr(
 			fLabelCell ('import_database','import_database', 'database').
 			td(fInput('text','importdb', '','edit'), '', 'database')
@@ -200,7 +200,7 @@ function showHideFields($sel)
 
 		$content= '<div id="'.$event.'_container" class="txp-container txp-list">';
 		$content.= startTable('list');
-		$content.= tr(tdcs(hed(gTxt('txp_import'),3),2));
+		$content.= tr(tdcs(hed(gTxt('txp_import'),2),2));
 		$content.= tr(td($out));
 		$content.= endTable();
 		$content.= '</div>';
