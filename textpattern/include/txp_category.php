@@ -401,7 +401,7 @@ if ($event == 'category') {
 				fLabelCell($evname.'_category_title') . fInputCell('title', $title, 1, 30),
 				pluggable_ui('category_ui', 'extend_detail_form', '', $row),
 				hInput('id',$id),
-				tdcs(fInput('submit', '', gTxt('save_button'),'smallerbox'), 2)
+				tdcs(fInput('submit', '', gTxt('save'), 'publish'), 2)
 			);
 		}
 		$out.= eInput( 'category' ) . sInput( 'cat_'.$evname.'_save' ) . hInput( 'old_name',$name );

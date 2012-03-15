@@ -336,10 +336,7 @@ $LastChangedRevision$
 				pluggable_ui('link_ui', 'extend_detail_form', '', $rs).
 
 				tr(
-					td().
-					td(
-						fInput('submit', '', gTxt('save'), 'publish')
-					)
+					tdcs(fInput('submit', '', gTxt('save'), 'publish'), 2)
 				).
 
 				endTable().

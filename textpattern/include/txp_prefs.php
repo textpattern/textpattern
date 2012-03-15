@@ -23,13 +23,13 @@ $LastChangedRevision$
 		require_privs('prefs');
 
 		$available_steps = array(
-			'advanced_prefs' 	=> false,
-			'prefs_save'		=> true,
-			'advanced_prefs_save'	=> true,
-			'get_language'		=> true,
-			'get_textpack'		=> true,
-			'list_languages' 	=> false,
-			'prefs_list'		=> false
+			'advanced_prefs'      => false,
+			'prefs_save'          => true,
+			'advanced_prefs_save' => true,
+			'get_language'        => true,
+			'get_textpack'        => true,
+			'list_languages'      => false,
+			'prefs_list'          => false
 		);
 
 		if (!$step or !bouncer($step, $available_steps)){
@@ -193,7 +193,7 @@ $LastChangedRevision$
 
 		echo n.n.tr(
 			tda(
-				fInput('submit', 'Submit', gTxt('save_button'), 'publish').
+				fInput('submit', 'Submit', gTxt('save'), 'publish').
 				n.sInput('prefs_save').
 				n.eInput('prefs').
 				n.hInput('prefs_id', '1')
@@ -646,7 +646,7 @@ EOS
 
 		echo n.n.tr(
 			tda(
-				fInput('submit', 'Submit', gTxt('save_button'), 'publish').
+				fInput('submit', 'Submit', gTxt('save'), 'publish').
 				sInput('advanced_prefs_save').
 				eInput('prefs').
 				hInput('prefs_id', '1')
@@ -742,7 +742,7 @@ EOS
 		$lang_form = tda('<div id="language_control" class="txp-control-panel">'.
 								form(gTxt('active_language').'&nbsp;&nbsp;'.
 								languages('language',$active_lang).'&nbsp;&nbsp;'.
-								fInput('submit','Submit',gTxt('save_button'),'').
+								fInput('submit','Submit',gTxt('save'),'publish').
 								eInput('prefs').sInput('list_languages')
 							,'display:inline;').'</div>'
 						,' style="text-align:center" colspan="3"');

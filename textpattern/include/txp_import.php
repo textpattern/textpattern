@@ -137,9 +137,8 @@ function showHideFields($sel)
 			td(fInput('text','wpdbprefix', 'wp_','edit'), '', 'wp-prefix')
 		, ' class="import-wp-prefix"');
 		$content.= tr(tda(tag($wponly, 'table', ' id="wponly" style="display: none;  border: none;"'),' colspan="2"'));
-
+		$content.= tr(tdcs(fInput('submit','choose',gTxt('continue'),'publish'), 2));
 		$content.= endTable();
-		$content.= tag(fInput('submit','choose',gTxt('continue'),'publish'),'p',' style="text-align:center"');
 		$content.= sInput('start_import').eInput('import');
 		echo '<div id="'.$event.'_container" class="txp-container txp-edit">'.
 			form($content, '', '', 'post', '', '', 'import').

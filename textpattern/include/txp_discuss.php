@@ -442,7 +442,7 @@ $LastChangedRevision$
 						), $visible, false)
 					, '', 'status'),
 
-					td().td(fInput('submit', 'step', gTxt('save'), 'publish'))
+					tdcs(fInput('submit', 'step', gTxt('save'), 'publish'), 2)
 
 				).
 

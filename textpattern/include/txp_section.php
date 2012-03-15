@@ -339,7 +339,7 @@ $LastChangedRevision$
 
 			n.n.tr(
 				tda(
-					fInput('submit', '', gTxt('save_button'), 'smallerbox').
+					fInput('submit', '', gTxt('save'), 'publish').
 					eInput('section').
 					sInput('section_save').
 					($default_section ? hInput('name', $name) : '').

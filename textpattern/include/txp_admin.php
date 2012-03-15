@@ -426,10 +426,7 @@ $LastChangedRevision$
 			pluggable_ui('author_ui', 'extend_detail_form', '', $rs).
 
 			tr(
-				td().
-				td(
-					fInput('submit', '', gTxt('save'), 'publish').($user_id ? '' : sp.popHelp('add_new_author'))
-				)
+				tdcs(fInput('submit', '', gTxt('save'), 'publish').($user_id ? '' : popHelp('add_new_author')), 2)
 			).
 
 			endTable().
