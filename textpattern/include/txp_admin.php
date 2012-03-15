@@ -244,7 +244,7 @@ $LastChangedRevision$
 
 	function new_pass_form()
 	{
-		return '<div style="margin: 3em auto auto auto; text-align: center;">'.
+		return '<div class="txp-alter">'.
 		form(
 			tag(gTxt('change_password'), 'h2').
 
@@ -254,7 +254,7 @@ $LastChangedRevision$
 				fInput('submit', 'change_pass', gTxt('submit'), 'smallerbox').
 				eInput('admin').
 				sInput('change_pass')
-			,' style="text-align: center;"')
+			)
 		, '', '', 'post', '', '', 'change_password').'</div>';
 	}
 
@@ -262,7 +262,7 @@ $LastChangedRevision$
 
 	function change_email_form($email)
 	{
-		return '<div style="margin: 3em auto auto auto; text-align: center;">'.
+		return '<div class="txp-alter">'.
 		form(
 			tag(gTxt('change_email_address'), 'h2').
 			graf('<label for="new_email">'.gTxt('new_email').'</label> '.
@@ -270,7 +270,7 @@ $LastChangedRevision$
 				fInput('submit', 'change_email', gTxt('submit'), 'smallerbox').
 				eInput('admin').
 				sInput('change_email')
-			,' style="text-align: center;"')
+			)
 		, '', '', 'post', '','', 'change_email').'</div>';
 	}
 
@@ -325,7 +325,7 @@ $LastChangedRevision$
 						? select_buttons().
 						author_multiedit_form($page, $sort, $dir, $crit, $search_method)
 						: '')
-				, ' class="multi-edit" colspan="7" style="text-align: right; border: none;"')
+				, ' class="multi-edit" colspan="7"')
 			).n.'</tfoot>';
 
 			echo $tfoot;
@@ -393,7 +393,7 @@ $LastChangedRevision$
 
 		return form(
 
-			hed($caption, 2,' style="text-align: center;"').
+			hed($caption, 2,' class="txp-heading"').
 
 			startTable('edit', '', 'edit-pane').
 

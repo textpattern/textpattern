@@ -213,13 +213,13 @@ $LastChangedRevision$
 			$tfoot = n.'<tfoot>'.tr(
 				tda(
 					toggle_box('articles_detail'),
-					' class="detail-toggle" colspan="2" style="text-align: left; border: none;"'
+					' class="detail-toggle" colspan="2"'
 				).
 
 				tda(
 					select_buttons().
 					list_multiedit_form($page, $sort, $dir, $crit, $search_method)
-				,' class="multi-edit" colspan="'.($show_authors ? '10' : '9').'" style="text-align: right; border: none;"')
+				,' class="multi-edit" colspan="'.($show_authors ? '10' : '9').'"')
 			).n.'</tfoot>';
 
 			echo $tfoot;

@@ -58,7 +58,7 @@ print <<<eod
 	<title>Textpattern &#8250; setup</title>
 	<link rel="stylesheet" href="$rel_txpurl/theme/classic/textpattern.css" type="text/css" />
 	</head>
-	<body style="border-top:15px solid #FC3">
+	<body id="page-setup">
 	<div align="center">
 eod;
 

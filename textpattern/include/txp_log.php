@@ -175,12 +175,12 @@ $LastChangedRevision$
 			$tfoot = n.'<tfoot>'.tr(
 				tda(
 					toggle_box('log_detail'),
-					' class="detail-toggle" colspan="2" style="text-align: left; border: none;"'
+					' class="detail-toggle" colspan="2"'
 				).
 				tda(
 					select_buttons().
 					log_multiedit_form($page, $sort, $dir, $crit, $search_method)
-				, ' class="multi-edit" colspan="6" style="text-align: right; border: none;"')
+				, ' class="multi-edit" colspan="6"')
 			).n.'</tfoot>';
 
 

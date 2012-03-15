@@ -496,7 +496,7 @@ $LastChangedRevision$
 
 	function tdtl($content,$atts='')
 	{
-		return tag($content,'td',' style="vertical-align:top;text-align:left;padding:8px"'.$atts);
+		return tag($content,'td',$atts);
 	}
 
 
@@ -573,7 +573,7 @@ $LastChangedRevision$
 			$cell = '<label for="'.$label_id.'">'.$cell.'</label>';
 		}
 
-		return tda($cell,' class="noline" style="text-align: right; vertical-align: middle;"');
+		return tda($cell,' class="noline cell-label"');
 	}
 
 
@@ -857,7 +857,7 @@ $LastChangedRevision$
 		$page = str_replace('{page}', $select_page, gTxt('view_per_page'));
 
 		return form(
-			'<div style="margin: auto; text-align: center;">'.
+			'<div>'.
 				$page.
 				eInput($event).
 				sInput($event.'_change_pageby').

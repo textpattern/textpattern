@@ -47,9 +47,7 @@ $LastChangedRevision$
 		echo '<div id="'.$event.'_control" class="txp-control-panel">';
 		echo n.n.startTable('edit', '', 'plugin-install').
 			tr(
-				tda(
-					plugin_form()
-				,' colspan="8" style="height: 30px; border: none;"')
+				tda(plugin_form())
 			).
 		endTable().
 		'</div>';
@@ -94,7 +92,7 @@ $LastChangedRevision$
 				tda(
 					select_buttons().
 					plugin_multiedit_form('', $sort, $dir, '', '')
-				, ' class="multi-edit" colspan="10" style="text-align: right; border: none;"')
+				, ' class="multi-edit" colspan="10"')
 			).n.'</tfoot>';
 
 			echo $tfoot;
@@ -460,20 +458,18 @@ $LastChangedRevision$
 	function plugin_form()
 	{
 		return n.n.form(
-			graf(
-			tag(gTxt('install_plugin'), 'span', ' style="vertical-align: top;"').sp.
+			tag(gTxt('install_plugin'), 'label', ' for="plugin-install"').sp.
 
 			'<textarea id="plugin-install" class="code" name="plugin" cols="62" rows="1"></textarea>'.sp.
 
 			tag(
 				popHelp('install_plugin').sp.
 				fInput('submit', 'install_new', gTxt('upload'), 'smallerbox')
-		   , 'span', ' style="vertical-align: 6px;"').
+		   , 'span').
 
 				eInput('plugin').
 				sInput('plugin_verify')
-			)
-		, 'text-align: center;', '', 'post', 'plugin-data', '', 'plugin_install_form');
+		, '', '', 'post', 'plugin-data', '', 'plugin_install_form');
 	}
 
 // -------------------------------------------------------------

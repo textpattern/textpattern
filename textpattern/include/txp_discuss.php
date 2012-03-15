@@ -83,7 +83,7 @@ $LastChangedRevision$
 
 		echo graf(
 			'<a href="index.php?event=discuss'.a.'step=ipban_list">'.gTxt('list_banned_ips').'</a>'
-		, ' id="list_banned_ips" style="text-align: center;"');
+		, ' id="list_banned_ips"');
 
 		extract(gpsa(array('sort', 'dir', 'page', 'crit', 'search_method')));
 		if ($sort === '') $sort = get_pref('discuss_sort_column', 'date');
@@ -249,12 +249,12 @@ $LastChangedRevision$
 			$tfoot = n.'<tfoot>'.tr(
 				tda(
 					toggle_box('discuss_detail'),
-					' class="detail-toggle" colspan="2" style="text-align: left; border: none;"'
+					' class="detail-toggle" colspan="2"'
 				).
 				tda(
 					select_buttons().
 					discuss_multiedit_form($page, $sort, $dir, $crit, $search_method)
-				, ' class="multi-edit" colspan="9" style="text-align: right; border: none;"')
+				, ' class="multi-edit" colspan="9"')
 			).n.'</tfoot>';
 
 			echo $tfoot;

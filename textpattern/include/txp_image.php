@@ -197,7 +197,7 @@ $LastChangedRevision$
 				tda(
 					select_buttons().
 					image_multiedit_form($page, $sort, $dir, $crit, $search_method)
-				,' class="multi-edit" colspan="'.($show_authors ? '9' : '8').'" style="text-align: right; border: none;"')
+				,' class="multi-edit" colspan="'.($show_authors ? '9' : '8').'"')
 			).n.'</tfoot>';
 
 			echo $tfoot;

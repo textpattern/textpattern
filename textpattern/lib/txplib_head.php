@@ -326,6 +326,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
+	# DEPRECATED?? Has this ever been used?
 	function button($label,$link)
 	{
 		return '<span style="margin-right:2em"><a href="?event='.$link.'" class="plain">'.$label.'</a></span>';

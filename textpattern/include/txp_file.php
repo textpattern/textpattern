@@ -220,7 +220,7 @@ $LastChangedRevision$
 				tda(
 					select_buttons().
 					file_multiedit_form($page, $sort, $dir, $crit, $search_method)
-				,' class="multi-edit" colspan="'.($show_authors ? '12' : '11').'" style="text-align: right; border: none;"')
+				,' class="multi-edit" colspan="'.($show_authors ? '12' : '11').'"')
 			).n.'</tfoot>';
 
 			echo $tfoot;
@@ -555,7 +555,7 @@ $LastChangedRevision$
 										hInput('search_method', $search_method)
 									)
 								, '', '', 'post', 'edit-form', '', 'assign_file'),
-								' colspan="4" style="border:0"'
+								' colspan="4"'
 							)
 						, ' class="file-detail not-exists"');
 			}

@@ -124,19 +124,19 @@ function showHideFields($sel)
 
 		//Ugly, but a way to present a clean screen with only required fields
 		//while we keep JavaScript code at minimum
-		$content.= tr(tda(tag($databased, 'table', ' id="databased" style="display: none; border: none;"'),' colspan="2"'));
+		$content.= tr(tda(tag($databased, 'table', ' id="databased" style="display: none;"'),' colspan="2"'));
 		//MT-DB Specific
 		$mtblogid = tr(
 			fLabelCell ('import_blogid','import_blogid', 'blog-id').
 			td(fInput('text','blog_id','','edit'), '', 'blog-id')
 		, ' class="import-blog-id"');
-		$content.= tr(tda(tag($mtblogid, 'table', ' id="mtblogid" style="display: none;  border: none;"'),' colspan="2"'));
+		$content.= tr(tda(tag($mtblogid, 'table', ' id="mtblogid" style="display: none;"'),' colspan="2"'));
 		//WordPress specific option
 		$wponly = tr(
 			fLabelCell ('import_wpprefix','import_wpprefix', 'wp-prefix').
 			td(fInput('text','wpdbprefix', 'wp_','edit'), '', 'wp-prefix')
 		, ' class="import-wp-prefix"');
-		$content.= tr(tda(tag($wponly, 'table', ' id="wponly" style="display: none;  border: none;"'),' colspan="2"'));
+		$content.= tr(tda(tag($wponly, 'table', ' id="wponly" style="display: none;"'),' colspan="2"'));
 		$content.= tr(tdcs(fInput('submit','choose',gTxt('continue'),'publish'), 2));
 		$content.= endTable();
 		$content.= sInput('start_import').eInput('import');
@@ -195,7 +195,7 @@ function showHideFields($sel)
 			break;
 		}
 
-		$out = tag('max_execution_time = '.ini_get('max_execution_time'),'p', ' style="color:red;"').$out;
+		$out = tag('max_execution_time = '.ini_get('max_execution_time'),'p', ' class="highlight"').$out;
 		pagetop(gTxt('txp_import'));
 
 		$content= '<div id="'.$event.'_container" class="txp-container txp-list">';

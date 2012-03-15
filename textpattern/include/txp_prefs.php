@@ -170,7 +170,7 @@ $LastChangedRevision$
 					'<label for="'.$a['name'].'">'.gTxt($a['name']).'</label>' :
 					gTxt($a['name']);
 
-				$out = tda($label, ' style="text-align: right; vertical-align: middle;" class="pref-label"');
+				$out = tda($label, ' class="pref-label cell-label"');
 
 				if ($a['html'] == 'text_input')
 				{
@@ -184,7 +184,7 @@ $LastChangedRevision$
 					$out.= td(pref_func($a['html'], $a['name'], $a['val']), '', 'pref-value');
 				}
 
-				$out.= tda(popHelp($a['name']), ' style="vertical-align: middle;"');
+				$out.= tda(popHelp($a['name']), ' class="list-item"');
 
 				echo tr($out, " id='prefs-{$a['name']}' class='{$a['event']}-prefs ".(($ctr%2 == 0) ? 'even' : 'odd')."'");
 				$ctr++;
@@ -608,7 +608,7 @@ EOS
 					'<label for="'.$a['name'].'">'.gTxt($a['name']).'</label>' :
 					gTxt($a['name']);
 
-			$out = tda($label, ' style="text-align: right; vertical-align: middle;" class="pref-label"');
+			$out = tda($label, ' class="pref-label cell-label"');
 
 			if ($a['html'] == 'text_input')
 			{
@@ -638,7 +638,7 @@ EOS
 
 			$out .= tda(
 				popHelp($a['name'])
-			, ' style="vertical-align: middle;"');
+			, ' class="list-item"');
 
 			echo n.n.tr($out, " id='prefs-{$a['name']}' class='{$a['event']}-prefs ".(($ctr%2 == 0) ? 'even' : 'odd')."'");
 			$ctr++;
@@ -745,7 +745,7 @@ EOS
 								fInput('submit','Submit',gTxt('save'),'publish').
 								eInput('prefs').sInput('list_languages')
 							,'display:inline;').'</div>'
-						,' style="text-align:center" colspan="3"');
+						,' class="install-item" colspan="3"');
 
 
 		$client = new IXR_Client(RPC_SERVER);
@@ -809,8 +809,8 @@ EOS
 										? gTxt('update') : gTxt('install'),'updating',isset($langdat['db_lastmod']) )).
 								br.safe_strftime('%d %b %Y %X',@$langdat['rpc_lastmod'])
 							,(isset($langdat['db_lastmod']))
-								? ' class="highlight" style="vertical-align:middle;text-align:center"'
-								: ' style="vertical-align:middle;text-align:center"');
+								? ' class="highlight list-item install-item"'
+								: ' class="list-item install-item"');
 			$list.= tr (
 				# Lang-Name & Date
 				tda(gTxt($langname).
@@ -819,13 +819,13 @@ EOS
 							: ''
 						, 'span',' class="date modified"')
 					, (isset($langdat['db_lastmod']) && $rpc_updated) #tda attribute
-							? ' nowrap="nowrap" class="highlight" style="vertical-align:middle"'
-							: ' nowrap="nowrap" style="vertical-align:middle"' ).n.
+							? ' nowrap="nowrap" class="highlight list-item"'
+							: ' nowrap="nowrap" class="list-item"' ).n.
 				# RPC - Info
 				(  ($rpc_updated)
 					? $rpc_install
 					: tda( (isset($langdat['rpc_lastmod'])) ? gTxt('updated') : '-'
-						,' style="vertical-align:middle;text-align:center"')
+						,' class="list-item install-item"')
 				).n.
 				# File - Info
 				( ($show_files)
@@ -834,7 +834,7 @@ EOS
 											br.'&nbsp;'.safe_strftime($prefs['archive_dateformat'],$langdat['file_lastmod'])
 									: ' &nbsp; '  # No File available
 								, 'span', ($file_updated) ? ' class="date created"' : ' class="date modified"' )
-							, ' class="langfile" style="text-align:center;vertical-align:middle"').n
+							, ' class="langfile list-item install-item"').n
 					: '')
 			, ' class="'.(($ctr%2 == 0) ? 'even' : 'odd').'"'
 			).n.n;
@@ -866,17 +866,14 @@ EOS
 			, '3', '', 'nav-tertiary')
 		),
 
-		tr(tda('&nbsp;',' colspan="3" style="font-size:0.25em"')),
 		tr( $lang_form ),
-		tr(tda('&nbsp;',' colspan="3" style="font-size:0.25em"')),
-		tr(tda(gTxt('language')).tda(gTxt('from_server')).( ($show_files) ? tda(gTxt('from_file')) : '' ), ' style="font-weight:bold"');
+		tr(hCell(gTxt('language')).hCell(gTxt('from_server')).( ($show_files) ? hCell(gTxt('from_file')) : '' ));
 		echo $list;
 
 		if (gps('force')!='file')
 		{
 			echo
-			tr(tda('&nbsp;',' colspan="3" style="font-size:0.25em"'))
-			. tr(
+			tr(
 				tda(
 					strong(gTxt('install_textpack')).sp.sp.tag(popHelp('get_textpack'), 'span')
 					.br.form(
@@ -892,11 +889,9 @@ EOS
 		if (!$show_files)
 		{
 			$linktext =  gTxt('from_file').' ('.gTxt('experts_only').')';
-			echo tr(tda('&nbsp;',' colspan="3" style="font-size:0.25em"')).
-				tr(tda(strong(eLink('prefs','list_languages','force','file',$linktext)),' colspan="3" style="text-align:center"') );
+			echo tr(tda(strong(eLink('prefs','list_languages','force','file',$linktext)),' colspan="3" class="install-item"') );
 		} elseif (gps('force')=='file') {
-			echo tr(tda('&nbsp;',' colspan="3" style="font-size:0.25em"')).
-				tr(tda(sLink('prefs','list_languages',strong(gTxt('from_server'))),' colspan="3" style="text-align:center"') );
+			echo tr(tda(sLink('prefs','list_languages',strong(gTxt('from_server'))),' colspan="3" class="install-item"') );
 		}
 		echo endTable();
 

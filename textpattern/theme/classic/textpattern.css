@@ -328,6 +328,12 @@ vertical-align: middle;
 border: none;
 }
 
+table#edit .cell-label,
+table#list .cell-label	{
+vertical-align: middle;
+text-align: right;
+}
+
 table#list th, table#list td {
 padding: 3px 5px;
 text-align: left;
@@ -340,6 +346,10 @@ height: 30px;
 
 table#list td.unpublished {
 color: #ccc;
+}
+
+table#list td.detail-toggle {
+border: none;
 }
 
 table#list th {
@@ -371,6 +381,19 @@ table#list li {
 margin: 0 0 2px 0;
 }
 
+table#list tfoot .multi-edit {
+text-align: right;
+border: none;
+}
+
+table#list .list-item {
+vertical-align:middle;
+}
+
+table#list .install-item {
+text-align:center;
+}
+
 /* other element overrides
 ----------------------------------------------- */
 
@@ -385,6 +408,11 @@ color: #C40000;
 .prev-next {
 margin: 15px 0;
 font-size: 0.9em;
+text-align: center;
+}
+
+.pageby {
+margin: auto;
 text-align: center;
 }
 
@@ -442,8 +470,22 @@ font-style: italic;
 color: #aaa;
 }
 
+.txp-heading {
+text-align: center;
+}
+
 /* global layout
 ----------------------------------------------- */
+
+.txp-list {
+margin: 1em auto auto;
+}
+
+.txp-message,
+.txp-alter {
+margin: 3em auto auto;
+text-align: center;
+}
 
 h1#textpattern {
 font-size: 15px;
@@ -538,6 +580,10 @@ clear:both;
 
 /* setup
 ----------------------------------------------- */
+
+#page-setup {
+border-top: 15px solid #fc3;
+}
 
 table#setup td {
 padding: 3px;
@@ -679,6 +725,10 @@ display:none;
 /* comments
 ----------------------------------------------- */
 
+#list_banned_ips {
+text-align: center;
+}
+
 tr.spam td,
 tr.spam a {
 color: #666;
@@ -739,9 +789,22 @@ overflow: auto;
 background-color: #efefef;
 }
 
+#plugin_install_form label {
+vertical-align: top;
+}
+
+#plugin_install_form span {
+vertical-align: bottom;
+}
+
 textarea#plugin-install {
 width: 400px;
 height: 30px;
+}
+
+textarea#diagnostics-detail {
+width: 500px;
+height: 300px;
 }
 
 #page-plugin .manage {
