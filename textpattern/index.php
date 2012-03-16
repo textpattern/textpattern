@@ -36,7 +36,9 @@ $LastChangedRevision$
 
 	header("Content-type: text/html; charset=utf-8");
 
-	error_reporting(E_ALL);
+	// We need to violate/disable E_STRICT for PHP 4.x compatibility
+	// E_STRICT bitmask calculation stems from the variations for E_ALL in PHP 4.x, 5.3, and 5.4
+	error_reporting(E_ALL & ~(defined('E_STRICT') ? E_STRICT : 0));
 	@ini_set("display_errors","1");
 
 	include_once txpath.'/lib/constants.php';
