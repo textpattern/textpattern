@@ -456,7 +456,7 @@ function escape_js($js)
 	function remote_addr()
 	{
 		$ip = serverSet('REMOTE_ADDR');
-		if (($ip == '127.0.0.1' || $ip == serverSet('SERVER_ADDR')) && serverSet('HTTP_X_FORWARDED_FOR')) {
+		if (($ip == '127.0.0.1' || $i == '::1' || $ip = '::ffff:127.0.0.1' || $ip == serverSet('SERVER_ADDR')) && serverSet('HTTP_X_FORWARDED_FOR')) {
 			$ips = explode(', ', serverSet('HTTP_X_FORWARDED_FOR'));
 			$ip = $ips[0];
 		}
