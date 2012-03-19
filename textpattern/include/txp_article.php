@@ -634,7 +634,7 @@ if (!empty($event) and $event == 'article') {
 
 		if ($view == 'preview')
 		{
-			echo '<div class="body">foo'.$Body_html.'</div>';
+			echo '<div class="body">'.$Body_html.'</div>';
 		}
 
 		elseif ($view == 'html')
