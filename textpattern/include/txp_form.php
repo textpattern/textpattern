@@ -18,7 +18,7 @@ $LastChangedRevision$
 
 	global $vars;
 	$vars = array('Form','type','name','savenew','oldname');
-	$essential_forms = array('comments','comments_display','comment_form','default','Links','files');
+	$essential_forms = array('comments','comments_display','comment_form','default','plainlinks','files');
 
 	if ($event == 'form') {
 		require_privs('form');
