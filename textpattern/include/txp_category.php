@@ -171,7 +171,7 @@ if ($event == 'category') {
 				sp.selectInput('edit_method',$methods,'',1, '', 'withselected_'.$area).sp.
 				fInput('submit','',gTxt('go'),'smallerbox')
 				, ' id="multi_edit_'.$area.'" class="multi-edit"')
-			,'margin-top:1em',"verify('".gTxt('are_you_sure')."')", 'post', '', '', 'category_'.$area.'_form'
+			,'',"verify('".gTxt('are_you_sure')."')", 'post', 'category-tree', '', 'category_'.$area.'_form'
 		);
 		} return;
 	}

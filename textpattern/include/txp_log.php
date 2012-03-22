@@ -158,7 +158,7 @@ $LastChangedRevision$
 			echo n.'<div id="'.$event.'_container" class="txp-container txp-list">';
 			echo n.n.'<form action="index.php" id="log_form" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
 
-				startTable('list','','list','','90%').
+				startTable('list','','list').
 				n.'<thead>'.
 				n.tr(
 					n.column_head('time', 'time', 'log', true, $switch_dir, $crit, $search_method, (('time' == $sort) ? "$dir " : '').'date time').

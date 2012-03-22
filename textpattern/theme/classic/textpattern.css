@@ -140,6 +140,7 @@ font-weight: normal;
 color: #00f;
 background-color: #eee;
 }
+
 h2 a.pophelp {
 font-size: 0.76923076923077em;
 }
@@ -170,15 +171,6 @@ background-color: #eee;
 select {
 font-size: 0.9em;
 background-color: #eee;
-}
-
-form.search-form {
-margin: auto;
-text-align: center;
-}
-
-form.upload-form {
-text-align: center;
 }
 
 input.cancel, input.delete,
@@ -323,13 +315,13 @@ font-size: 0.9em;
 }
 
 table#edit td.noline,
-table#list td.noline	{
+table#list td.noline {
 vertical-align: middle;
 border: none;
 }
 
 table#edit .cell-label,
-table#list .cell-label	{
+table#list .cell-label {
 vertical-align: middle;
 text-align: right;
 }
@@ -394,6 +386,12 @@ table#list .install-item {
 text-align:center;
 }
 
+#articles_form table#list,
+#discuss_form table#list,
+#log_form table#list {
+width: 90%;
+}
+
 /* other element overrides
 ----------------------------------------------- */
 
@@ -436,10 +434,6 @@ padding: 10px;
 background-color: #ffc;
 }
 
-p.indicator {
-text-align: center;
-}
-
 ul.plain-list {
 list-style-type: none;
 }
@@ -470,19 +464,38 @@ font-style: italic;
 color: #aaa;
 }
 
-.txp-heading {
+.lang-msg {
 text-align: center;
+max-width: 50%;
+margin: 2em auto
+}
+
+#change_password,
+#change_email {
+margin-top: 3em;
 }
 
 /* global layout
 ----------------------------------------------- */
 
-.txp-list {
-margin: 1em auto auto;
+.txp-control-panel {
+text-align:center;
 }
 
-.txp-message,
-.txp-alter {
+#section_control.txp-control-panel {
+text-align:left;
+}
+
+.txp-list {
+margin: 1em auto auto;
+max-width:90%;
+}
+
+.txp-edit {
+margin: auto auto 1em;
+}
+
+.restricted-area {
 margin: 3em auto auto;
 text-align: center;
 }
@@ -600,6 +613,10 @@ line-height: 1.6em;
 border-top: 1px solid #ddd;
 }
 
+.category-tree {
+margin-top:1em
+}
+
 /* write
 ----------------------------------------------- */
 
@@ -648,6 +665,10 @@ textarea#excerpt {
 width: 500px;
 height: 100px;
 line-height: 1.6em;
+}
+
+textarea#description {
+width: 400px;
 }
 
 textarea#keywords {
@@ -713,21 +734,17 @@ display:none;
 #write-timestamp .edit.hour, #write-timestamp .edit.minute, #write-timestamp .edit.second,
 #write-expires .edit.exp_month, #write-expires .edit.exp_day,
 #write-expires .edit.exp_hour, #write-expires .edit.exp_minute, #write-expires .edit.exp_second {
-	width: 3ex;
-	text-align: center;
+width: 3ex;
+text-align: center;
 }
 
 #write-timestamp .edit.year, #write-expires .edit.exp_year {
-	width: 5ex;
-	text-align: center;
+width: 5ex;
+text-align: center;
 }
 
 /* comments
 ----------------------------------------------- */
-
-#list_banned_ips {
-text-align: center;
-}
 
 tr.spam td,
 tr.spam a {
@@ -748,7 +765,7 @@ font-weight: bold;
 form.cb_show_spam {
 margin: 0 auto;
 padding: 0 0 0 10px;
-width: 90%;
+max-width:90%;
 }
 
 /* pages, forms, style, plugins
@@ -781,8 +798,13 @@ width: 560px;
 height: 420px;
 }
 
+#plugin_preview {
+margin: 0 auto;
+max-width:65%;
+}
+
 div#preview-plugin, div#preview-help {
-margin: 0 auto 10px auto;
+margin-bottom:10px;
 padding: 3px;
 height: 300px;
 overflow: auto;
@@ -805,6 +827,10 @@ height: 30px;
 textarea#diagnostics-detail {
 width: 500px;
 height: 300px;
+}
+
+#pre_flight_check table {
+width: 510px;
 }
 
 #page-plugin .manage {
@@ -862,7 +888,7 @@ margin: 20px 0 0 0;
 margin-top: 10px;
 }
 
-#page-prefs .text_uploader .smallerbox{
+#page-prefs .text_uploader .smallerbox {
 margin-top: 5px;
 }
 

@@ -336,7 +336,7 @@ $LastChangedRevision$
 						sInput('plugin_install').
 						eInput('plugin').
 						hInput('plugin64', $plugin_encoded)
-					, 'margin: 0 auto; width: 65%;', '', 'post', 'plugin-info', '', 'plugin_preview').
+					, '', '', 'post', 'plugin-info', '', 'plugin_preview').
 					'</div>';
 					return;
 				}

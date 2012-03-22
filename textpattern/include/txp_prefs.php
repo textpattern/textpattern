@@ -241,7 +241,7 @@ $LastChangedRevision$
 					n.eInput('prefs').
 					n.sInput('prefs_list')
 				)
-			, 'text-align: center;');
+			);
 		}
 		echo '</div>';
 	}
@@ -618,7 +618,7 @@ EOS
 
 				$out.= td(
 					pref_func('text_input', $a['name'], $a['val'], $size)
-				);
+				, '', 'pref-value');
 			}
 
 			else
@@ -848,7 +848,7 @@ EOS
 		echo n.'<div id="language_container" class="txp-container txp-list">';
 
 		if (isset($msg) && $msg)
-			echo tag ($msg,'p',' class="not-ok" style="text-align:center;width:50%;margin:2em auto"' );
+			echo tag ($msg,'p',' class="not-ok lang-msg"' );
 
 		echo startTable('list', '', 'list'),
 
@@ -902,7 +902,7 @@ EOS
 
 		if ( $install_langfile == 'install_langfile')
 			$install_langfile = 'To install new languages from file you can download them from <b><a href="'.RPC_SERVER.'/lang/">'.RPC_SERVER.'/lang/</a></b> and place them inside your ./textpattern/lang/ directory.';
-		echo tag( $install_langfile ,'p',' style="text-align:center;width:50%;margin: 2em auto"' );
+		echo tag( $install_langfile ,'p',' class="lang-msg"' );
 		echo '</div>'; // end language_container
 	}
 
@@ -934,8 +934,8 @@ EOS
 					$install_langfile = 'To install new languages from file you can download them from <b><a href="'.RPC_SERVER.'/lang/">'.RPC_SERVER.'/lang/</a></b> and place them inside your ./textpattern/lang/ directory.';
 				pagetop(gTxt('installing_language'));
 				echo tag( gTxt('rpc_connect_error')."<!--".$client->getErrorCode().' '.$client->getErrorMessage()."-->"
-						,'p',' class="not-ok" style="text-align:center;width:50%;margin:2em auto"' );
-				echo tag( $install_langfile ,'p',' style="text-align:center;width:50%;margin: 2em auto"' );
+						,'p',' class="not-ok lang-msg"' );
+				echo tag( $install_langfile ,'p',' class="lang-msg"' );
 			}
 		}else {
 			$response = $client->getResponse();

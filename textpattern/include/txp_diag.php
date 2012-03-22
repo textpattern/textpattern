@@ -450,7 +450,7 @@ $LastChangedRevision$
 	pagetop(gTxt('tab_diagnostics'),''),
 	'<div id="'.$event.'_container" class="txp-container txp-list">',
 	'<div id="pre_flight_check">',
-	startTable('list', '', 'list', '', '510px'),
+	startTable('list', '', 'list'),
 	'<thead>',
 	tr(td(hed(gTxt('preflight_check'),2))),
 	'</thead>';

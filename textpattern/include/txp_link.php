@@ -295,10 +295,14 @@ $LastChangedRevision$
 
 		if (has_privs('link.edit') || has_privs('link.edit.own'))
 		{
+			$caption = gTxt(($id && $step == 'link_edit') ? 'edit_link' : 'add_new_link');
+
 			echo '<div class="txp-edit">'.
 				form(
 
 				startTable('edit', '', 'edit-pane') .
+
+				tr (tdcs(hed($caption, 2), 2)).
 
 				tr(
 					fLabelCell('title', '', 'link-title').
@@ -347,7 +351,7 @@ $LastChangedRevision$
 
 				hInput('search_method', gps('search_method')).
 				hInput('crit', gps('crit'))
-			, 'margin-bottom: 25px;', '', 'post', 'edit-form', '', 'link_details').'</div>';
+			, '', '', 'post', 'edit-form', '', 'link_details').'</div>';
 
 		}
 		link_list();

@@ -81,10 +81,6 @@ $LastChangedRevision$
 
 		pagetop(gTxt('list_discussions'), $message);
 
-		echo graf(
-			'<a href="index.php?event=discuss'.a.'step=ipban_list">'.gTxt('list_banned_ips').'</a>'
-		, ' id="list_banned_ips"');
-
 		extract(gpsa(array('sort', 'dir', 'page', 'crit', 'search_method')));
 		if ($sort === '') $sort = get_pref('discuss_sort_column', 'date');
 		if ($dir === '') $dir = get_pref('discuss_sort_dir', 'desc');
@@ -189,6 +185,7 @@ $LastChangedRevision$
 		$total = $count[SPAM] + $count[MODERATE] + $count[VISIBLE];
 
 		echo '<div id="'.$event.'_control" class="txp-control-panel">';
+		echo '<a href="index.php?event=discuss'.a.'step=ipban_list">'.gTxt('list_banned_ips').'</a>';
 
 		if ($total < 1)
 		{
@@ -228,7 +225,7 @@ $LastChangedRevision$
 			echo n.'<div id="'.$event.'_container" class="txp-container txp-list">';
 			echo n.n.'<form name="longform" id="discuss_form" method="post" action="index.php" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
 
-				n.startTable('list','','list','','90%').
+				n.startTable('list','','list').
 				n.'<thead>'.
 				n.n.tr(
 					column_head('ID', 'id', 'discuss', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id').

@@ -87,7 +87,7 @@ $LastChangedRevision$
 					graf('<label for="file-existing">'.gTxt('existing_file').'</label>'.sp.selectInput('filename', $existing_files, '', 1, '', 'file-existing').sp.
 						fInput('submit', '', gTxt('Create'), 'smallerbox'), ' class="existing-file"')
 
-				, 'text-align: center;', '', 'post', '', '', 'assign_file');
+				, '', '', 'post', '', '', 'assign_file');
 			}
 
 			echo file_upload_form(gTxt('upload_file'), 'upload', 'file_insert');
@@ -505,7 +505,7 @@ $LastChangedRevision$
 									graf('<label for="category">'.gTxt('file_category').'</label>'.br.treeSelectInput('category',
 									 		$categories,$category), ' class="category"') .
 //									graf(gTxt('permissions').br.selectInput('perms',$levels,$permissions)).
-									graf('<label for="description">'.gTxt('description').'</label>'.br.text_area('description','100','400',$description, 'description'), ' class="description text"') .
+									graf('<label for="description">'.gTxt('description').'</label>'.br.text_area('description','','',$description, 'description'), ' class="description text"') .
 									fieldset(radio_list('status', $file_statuses, $status, 4), gTxt('status'), 'file-status').
 									fieldset($created, gTxt('timestamp'), 'file-created').
 									pluggable_ui('file_ui', 'extend_detail_form', '', $rs).

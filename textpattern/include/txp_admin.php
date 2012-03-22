@@ -244,7 +244,7 @@ $LastChangedRevision$
 
 	function new_pass_form()
 	{
-		return '<div class="txp-alter">'.
+		return '<div class="txp-control-panel">'.
 		form(
 			tag(gTxt('change_password'), 'h2').
 
@@ -262,7 +262,7 @@ $LastChangedRevision$
 
 	function change_email_form($email)
 	{
-		return '<div class="txp-alter">'.
+		return '<div class="txp-control-panel">'.
 		form(
 			tag(gTxt('change_email_address'), 'h2').
 			graf('<label for="new_email">'.gTxt('new_email').'</label> '.
@@ -393,9 +393,9 @@ $LastChangedRevision$
 
 		return form(
 
-			hed($caption, 2,' class="txp-heading"').
-
 			startTable('edit', '', 'edit-pane').
+
+			tr (tdcs(hed($caption, 2), 2)).
 
 			tr(
 				fLabelCell('login_name', '', 'name').

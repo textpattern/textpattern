@@ -342,7 +342,7 @@ function escape_js($js)
 	function require_privs($res, $user='')
 	{
 		if (!has_privs($res, $user))
-			exit(pageTop('Restricted').'<p class="txp-message">'.
+			exit(pageTop('Restricted').'<p class="restricted-area">'.
 				gTxt('restricted_area').'</p>');
 	}
 

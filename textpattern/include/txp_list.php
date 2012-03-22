@@ -190,7 +190,7 @@ $LastChangedRevision$
 			echo n.'<div id="'.$event.'_container" class="txp-container txp-list">';
 			echo n.n.'<form name="longform" id="articles_form" method="post" action="index.php" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
 
-				n.startTable('list','','list','','90%').
+				n.startTable('list','','list').
 				n.'<thead>'.
 				n.tr(
 					n.column_head('ID', 'id', 'list', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id actions').
