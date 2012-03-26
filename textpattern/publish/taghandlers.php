@@ -2203,9 +2203,7 @@ $LastChangedRevision$
 
 	function author($atts)
 	{
-		global $thisarticle, $s;
-
-		assert_article();
+		global $thisarticle, $s, $author;
 
 		extract(lAtts(array(
 			'link'         => '',
@@ -2214,8 +2212,19 @@ $LastChangedRevision$
 			'this_section' => 0,
 		), $atts));
 
-		$author_name = get_author_name($thisarticle['authorid']);
-		$display_name = htmlspecialchars( ($title) ? $author_name : $thisarticle['authorid'] );
+		if (!empty($author))
+		{
+			$theAuthor = $author;
+		}
+
+		else
+		{
+			assert_article();
+			$theAuthor = $thisarticle['authorid'];
+		}
+
+		$author_name = get_author_name($theAuthor);
+		$display_name = htmlspecialchars( ($title) ? $author_name : $theAuthor );
 
 		$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
 
