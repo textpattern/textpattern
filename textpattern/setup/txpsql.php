@@ -38,8 +38,8 @@ if ( isset($dbcharset) && (intval($version[0]) >= 5 || preg_match('#^4\.[1-9]#',
 $permlink_mode = 'section_id_title';
 if (is_callable('apache_get_modules'))
 {
-	$modules = apache_get_modules();
-	if (!in_array('mod_rewrite', $modules))
+	$modules = @apache_get_modules();
+	if (is_array($modules) && !in_array('mod_rewrite', $modules))
 		$permlink_mode = 'messy';
 }
 else

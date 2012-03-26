@@ -516,7 +516,7 @@ $LastChangedRevision$
 
 		(isset($_SERVER['SERVER_SOFTWARE'])) ? gTxt('server').cs.$_SERVER['SERVER_SOFTWARE'].n : '',
 
-		(is_callable('apache_get_version')) ? gTxt('apache_version').cs.apache_get_version().n : '',
+		(is_callable('apache_get_version')) ? gTxt('apache_version').cs.@apache_get_version().n : '',
 
 		gTxt('php_sapi_mode').cs.PHP_SAPI.n,
 
