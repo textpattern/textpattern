@@ -769,7 +769,7 @@ $LastChangedRevision$
 			' onclick="popWin(this.href'.
 			($width ? ', '.$width : '').
 			($height ? ', '.$height : '').
-			'); return false;">?</a>';
+			'); return false;" class="pophelpsubtle">?</a>';
 	}
 
 /**
