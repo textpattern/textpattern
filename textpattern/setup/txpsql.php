@@ -39,7 +39,7 @@ $permlink_mode = 'section_id_title';
 if (is_callable('apache_get_modules'))
 {
 	$modules = @apache_get_modules();
-	if (is_array($modules) && !in_array('mod_rewrite', $modules))
+	if (!is_array($modules) || !in_array('mod_rewrite', $modules))
 		$permlink_mode = 'messy';
 }
 else
