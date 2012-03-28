@@ -444,7 +444,7 @@ $LastChangedRevision$
 			}
 
 			echo n.'<div id="'.$event.'_container" class="txp-container txp-edit">';
-			echo startTable('list', '', 'edit-pane'),
+			echo startTable('edit', '', 'edit-pane'),
 			tr(
 				td(
 					pluggable_ui('image_ui', 'image_edit',
