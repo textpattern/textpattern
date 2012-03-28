@@ -450,28 +450,19 @@ $LastChangedRevision$
 	pagetop(gTxt('tab_diagnostics'),''),
 	'<div id="'.$event.'_container" class="txp-container txp-list">',
 	'<div id="pre_flight_check">',
-	startTable('list', '', 'list'),
-	'<thead>',
-	tr(td(hed(gTxt('preflight_check'),2))),
-	'</thead>';
+	hed(gTxt('preflight_check'),2);
 
-	echo '<tbody>';
 	if ($fail) {
 		foreach ($fail as $help => $message)
-			echo tr(tda(nl2br($message).sp.popHelp($help), ' class="not-ok"'));
+			echo graf(nl2br($message).sp.popHelp($help), ' class="not-ok"');
 	}
 	else {
-		echo tr(tda(gTxt('all_checks_passed'), ' class="ok"'));
+		echo graf(gTxt('all_checks_passed'), ' class="ok"');
 	}
-	echo '</tbody>',
-		endTable(),
-		'</div>';
+	echo '</div>';
 
 	echo '<div id="diagnostics">',
-		startTable('list', '', 'list'),
-		'<thead>',
-		tr(td(hed(gTxt('diagnostic_info'),2))),
-		'</thead>';
+		hed(gTxt('diagnostic_info'),2);
 
 	$fmt_date = '%Y-%m-%d %H:%M:%S';
 
@@ -617,10 +608,7 @@ $LastChangedRevision$
 			selectInput('step', $dets, $step, 0, 1)
 		);
 
-	echo '<tbody>',
-		tr(td(join('',$out))),
-		'</tbody>',
-		endTable(),
+	echo join('',$out),
 		'</div>',
 		'</div>';
 	}
