@@ -282,7 +282,7 @@ $LastChangedRevision$
 						n.'<ul>'.
 						n.t.'<li><a target="_blank" href="'.$tag_url.a.'type=textile" onclick="popWin(this.href, 400, 250); return false;">Textile</a></li>'.
 						n.t.'<li><a target="_blank" href="'.$tag_url.a.'type=textpattern" onclick="popWin(this.href, 400, 250); return false;">Textpattern</a></li>'.
-						n.t.'<li><a target="_blank" href="'.$tag_url.a.'type=xhtml" onclick="popWin(this.href, 400, 250); return false;">XHTML</a></li>'.
+						n.t.'<li><a target="_blank" href="'.$tag_url.a.'type=html" onclick="popWin(this.href, 400, 250); return false;">HTML</a></li>'.
 						n.'</ul>'
 					, 75, 'tag-build').
 

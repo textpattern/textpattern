@@ -231,7 +231,7 @@ $LastChangedRevision$
 					$tagbuilder = '<ul>'.
 							'<li><a target="_blank" href="'.$tag_url.a.'type=textile" onclick="popWin(this.href); return false;">Textile</a></li>'.
 							'<li><a target="_blank" href="'.$tag_url.a.'type=textpattern" onclick="popWin(this.href); return false;">Textpattern</a></li>'.
-							'<li><a target="_blank" href="'.$tag_url.a.'type=xhtml" onclick="popWin(this.href); return false;">XHTML</a></li>'.
+							'<li><a target="_blank" href="'.$tag_url.a.'type=html" onclick="popWin(this.href); return false;">HTML</a></li>'.
 							'</ul>';
 				} else {
 					$tagbuilder = sp;

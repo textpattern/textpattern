@@ -614,7 +614,7 @@ if (!empty($event) and $event == 'article') {
 
 		elseif ($view == 'html')
 		{
-			echo '<div class="xhtml">'.hed('XHTML', 2).hed($Title, 1, ' class="title"');
+			echo '<div class="html">'.hed('HTML', 2).hed($Title, 1, ' class="title"');
 		}
 
 		elseif ($view == 'text')

@@ -3390,9 +3390,9 @@ begin tag builder functions
 		$type = gps('type');
 
 		$types = array(
-			'textile'			=> 'Textile',
+			'textile'     => 'Textile',
 			'textpattern' => 'Textpattern',
-			'xhtml'				=> 'XHTML'
+			'html'        => 'HTML'
 		);
 
 		$out = form(
@@ -3477,7 +3477,7 @@ begin tag builder functions
 					);
 				break;
 
-				case 'xhtml':
+				case 'html':
 					$alt     = ' alt="'.$alt.'"';
 					$caption = ($caption) ? ' title="'.$caption.'"' : '';
 					$class   = ($class)   ? ' class="'.$class.'"' : '';
@@ -3756,9 +3756,9 @@ begin tag builder functions
 		$description = gps('description');
 
 		$types = array(
-			'textile'			=> 'Textile',
+			'textile'     => 'Textile',
 			'textpattern' => 'Textpattern',
-			'xhtml'				=> 'XHTML'
+			'html'        => 'HTML'
 		);
 
 		$out = form(
@@ -3805,7 +3805,7 @@ begin tag builder functions
 					$out .= tdb('"'.$thing.$description.'":'.$url);
 				break;
 
-				case 'xhtml':
+				case 'html':
 					$thing = ($thing) ? $thing : $filename;
 					$description = ($description) ? ' title="'.$description.'"' : '';
 
