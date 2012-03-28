@@ -285,12 +285,12 @@ $LastChangedRevision$
 
 			($default_section ? '' : n.n.tr(
 				fLabelCell(gTxt('section_name').':').
-				fInputCell('name', $name, 1, 20)
+				fInputCell('name', $name, '', 20)
 			, ' class="name"')).
 
 			($default_section ? '' : n.n.tr(
 				fLabelCell(gTxt('section_longtitle').':').
-				fInputCell('title', $title, 1, 20)
+				fInputCell('title', $title, '', 20)
 			, ' class="title"')).
 
 			n.n.tr(

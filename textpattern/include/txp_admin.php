@@ -249,7 +249,7 @@ $LastChangedRevision$
 			tag(gTxt('change_password'), 'h2').
 
 			graf('<label for="new_pass">'.gTxt('new_password').'</label> '.
-				fInput('password', 'new_pass', '', 'edit', '', '', '20', '1', 'new_pass').
+				fInput('password', 'new_pass', '', 'edit', '', '', '20', '', 'new_pass').
 				checkbox('mail_password', '1', true, '', 'mail_password').'<label for="mail_password">'.gTxt('mail_it').'</label> '.
 				fInput('submit', 'change_pass', gTxt('submit'), 'smallerbox').
 				eInput('admin').

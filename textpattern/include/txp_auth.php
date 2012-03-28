@@ -115,14 +115,14 @@ function doAuth()
 
 				n.n.tr(
 					n.fLabelCell('name', '', 'name').
-					n.fInputCell('p_userid', $name, 1, '', '', 'name')
+					n.fInputCell('p_userid', $name, '', '', '', 'name')
 				).
 
 				($reset ? '' :
 					n.n.tr(
 						n.fLabelCell('password', '', 'password').
 						n.td(
-						  	fInput('password', 'p_password', '', 'edit', '', '', '', 2, 'password')
+						  	fInput('password', 'p_password', '', 'edit', '', '', '', '', 'password')
 						)
 					)
 				).
@@ -131,7 +131,7 @@ function doAuth()
 					n.n.tr(
 						n.td().
 						td(
-							graf(checkbox('stay', 1, $stay, 3, 'stay').'<label for="stay">'.gTxt('stay_logged_in').'</label>'.
+							graf(checkbox('stay', 1, $stay, '', 'stay').'<label for="stay">'.gTxt('stay_logged_in').'</label>'.
 							sp.popHelp('remember_login'))
 						)
 					)
@@ -141,7 +141,7 @@ function doAuth()
 					n.td().
 					td(
 						($reset ? hInput('p_reset', 1) : '').
-						fInput('submit', '', gTxt($reset ? 'password_reset_button' : 'log_in_button'), 'publish', '', '', '', 4).
+						fInput('submit', '', gTxt($reset ? 'password_reset_button' : 'log_in_button'), 'publish', '', '', '').
 						($reset ? graf('<a href="index.php">'.gTxt('login_to_textpattern').'</a>') : graf('<a href="?reset=1">'.gTxt('password_forgotten').'</a>'))
 					)
 				).

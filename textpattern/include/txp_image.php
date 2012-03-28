@@ -747,10 +747,10 @@ $LastChangedRevision$
 					startTable('thumbnail_alter','left','',1) .
 						tr(
 							fLabelCell(gTxt('thumb_width'), '', 'width') .
-							fInputCell('width', @$thumb_w, 1, 4, '', 'width').
+							fInputCell('width', @$thumb_w, '', 4, '', 'width').
 
 							fLabelCell(gTxt('thumb_height'), '', 'height') .
-							fInputCell('height', @$thumb_h, 1, 4, '', 'height').
+							fInputCell('height', @$thumb_h, '', 4, '', 'height').
 
 							fLabelCell(gTxt('keep_square_pixels'), '', 'crop') .
 							tda(checkbox('crop', 1, @$thumb_crop, '', 'crop'), ' class="noline"').
