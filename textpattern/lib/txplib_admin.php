@@ -85,6 +85,7 @@ $LastChangedRevision$
 	{
 		$pass = '';
 		$chars = '23456789abcdefghijkmnopqrstuvwxyz';
+		$length = min(strlen($chars), $length);
 		$i = 0;
 
 		while ($i < $length)
