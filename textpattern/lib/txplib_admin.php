@@ -73,7 +73,9 @@ $LastChangedRevision$
 
 		else
 		{
-			return gTxt('unknown_author', array('{name}' => htmlspecialchars($name)));
+			// Though 'unknown_author' could be thrown, send generic 'request_sent' message
+			// instead so that (non-)existence of account names are not leaked
+			return gTxt('password_reset_confirmation_request_sent');
 		}
 	}
 
@@ -105,7 +107,7 @@ $LastChangedRevision$
 	{
 		$email = safe_field('email', 'txp_users', "name = '".doSlash($name)."'");
 
-		$new_pass = generate_password(6);
+		$new_pass = generate_password(PASSWORD_LENGTH);
 		$hash = doSlash(txp_hash_password($new_pass));
 
 		$rs = safe_update('txp_users', "pass = '$hash'", "name = '".doSlash($name)."'");

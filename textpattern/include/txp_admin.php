@@ -196,7 +196,7 @@ $LastChangedRevision$
 				return;
 			}
 
-			$password = generate_password(6);
+			$password = generate_password(PASSWORD_LENGTH);
 			$hash	= doSlash(txp_hash_password($password));
 			$nonce	= doSlash(md5(uniqid(mt_rand(), TRUE)));
 
@@ -541,7 +541,7 @@ $LastChangedRevision$
 
 				foreach ($names as $name)
 				{
-					$passwd = generate_password(6);
+					$passwd = generate_password(PASSWORD_LENGTH);
 					$hash 	= doSlash(txp_hash_password($passwd));
 
 					if (safe_update('txp_users', "pass = '$hash'", "name = '".doSlash($name)."'"))

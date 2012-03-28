@@ -142,7 +142,7 @@ function doAuth()
 					td(
 						($reset ? hInput('p_reset', 1) : '').
 						fInput('submit', '', gTxt($reset ? 'password_reset_button' : 'log_in_button'), 'publish', '', '', '', 4).
-						($reset ? '' : graf('<a href="?reset=1">'.gTxt('password_forgotten').'</a>'))
+						($reset ? graf('<a href="index.php">'.gTxt('login_to_textpattern').'</a>') : graf('<a href="?reset=1">'.gTxt('password_forgotten').'</a>'))
 					)
 				).
 
@@ -157,7 +157,8 @@ function doAuth()
 $(document).ready(
 	function() {
 		var has_name = $("#name").val().length;
-		var has_password = $("#password").val().length;
+		var password_box = $("#password").val();
+		var has_password = (password_box) ? password_box.length : 0;
 		if (!has_name) {
 			$("#name").focus();
 		} else if (!has_password) {
@@ -222,7 +223,7 @@ EOSCR
 					// create $txp_user
 					$txp_user = $c_userid;
 				}
-				return '';
+				return $message;
 			}
 			else
 			{

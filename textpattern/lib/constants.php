@@ -49,6 +49,7 @@ define('PLUGIN_HAS_PREFS', 0x0001);
 define('PLUGIN_LIFECYCLE_NOTIFY', 0x0002);
 define('PLUGIN_RESERVED_FLAGS', 0x0fff); // reserved bits for use by Textpattern core
 
+define('PASSWORD_LENGTH', 10); // password default length, in characters
 define('PASSWORD_COMPLEXITY', 8); // log(2) of stretching iteration count
 define('PASSWORD_PORTABILITY', TRUE);
 
