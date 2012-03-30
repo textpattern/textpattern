@@ -343,13 +343,21 @@ jQuery.fn.txpPostForm = function(event)
 		form.addClass('busy');
 		$('body').addClass('busy');
         var s = form.find('input[type="submit"]:focus');
-        s.after('<span class="spinner"></span>');
+        if (s.length == 0) {
+        	// WebKit does not set :focus on button-click: use first submit input as a fallback
+        	s = form.find('input[type="submit"]');
+        }
+        if (s.length > 0) {
+	        s = s.slice(0,1);
+	        s.attr('disabled', true).after('<span class="spinner"></span>');
+        }
         // Send form data to application, process response as script.
 		sendAsyncEvent(
-			form.serialize() + '&' + (s.attr('name') || '_txp_submit') + '=' + s.val(),
+			form.serialize() + '&' + (s.attr('name') || '_txp_submit') + '=' + (s.val() || '_txp_submit'),
 			function() {
                 // remove feedback elements
 				form.removeClass('busy');
+				s.removeAttr('disabled');
 				$('body').removeClass('busy');
                 $('span.spinner').remove();
 			},
