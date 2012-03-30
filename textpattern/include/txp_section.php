@@ -63,7 +63,7 @@ $LastChangedRevision$
 
 			n.n.tr(
 				td(gTxt('default'), '', 'label').n.
-				td(section_detail_partial($default)).n.
+				td(form(section_detail_partial($default), '', '', 'post', 'async', 'section-default', 'section-form-default')).n.
 				td()
 			, ' id="section-default" class="section default"');
 
@@ -80,7 +80,7 @@ $LastChangedRevision$
 
 				echo n.n.tr(
 					n.td($name, '', 'label').
-					n.td(section_detail_partial($a), '', 'main').
+					n.td(form(section_detail_partial($a), '', '', 'post', 'async', 'section-'.$name, 'section-form-'.$name), '', 'main').
 					td(
 						dLink('section', 'section_delete', 'name', $name, '', 'type', 'section')
 					, '', 'actions')
@@ -233,7 +233,7 @@ $LastChangedRevision$
 			extract($s);
 
 			// Update form with current data
-			$response[] = '$("#section-form-'.$on.'").replaceWith("'.escape_js($form).'")';
+			$response[] = '$("#section-form-'.$on.'").html("'.escape_js($form).'")';
 			// Reflect new section name on id and row label
 			$label = ($name == 'default' ? gTxt('default') : $name);
 			$response[] = '$("tr#section-'.$on.'").attr("id", "section-'.$name.'").find(".label").html("'.$label.'")';
@@ -281,7 +281,7 @@ $LastChangedRevision$
 
 		$default_section = ($name == 'default');
 
-		$out = '<table>'.
+		return '<table>'.
 
 			($default_section ? '' : n.n.tr(
 				fLabelCell(gTxt('section_name').':').
@@ -348,7 +348,5 @@ $LastChangedRevision$
 			).
 
 			endTable();
-
-			return form($out,'', '', 'post', 'async', 'section-'.$name, 'section-form-'.$name);
-}
+	}
 ?>

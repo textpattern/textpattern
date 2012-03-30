@@ -342,9 +342,8 @@ jQuery.fn.txpPostForm = function(event)
 		// Show feedback while processing
 		form.addClass('busy');
 		$('body').addClass('busy');
-        s = $(event.currentTarget) || form.find('input[type="submit"]');
-        // add spinner markup
-        s.after('<span class="spinner"></span>')
+        var s = form.find('input[type="submit"]:focus');
+        s.after('<span class="spinner"></span>');
         // Send form data to application, process response as script.
 		sendAsyncEvent(
 			form.serialize() + '&' + (s.attr('name') || '_txp_submit') + '=' + s.val(),
@@ -361,7 +360,7 @@ jQuery.fn.txpPostForm = function(event)
 		// Perform regular form action on any hiccups
 		return true;
 	}
-}
+};
 
 //-------------------------------------------------------------
 // global admin-side behaviour
@@ -380,9 +379,8 @@ $(document).ready(function() {
 	}
 	// submit async forms
 	if(!textpattern.ajaxally_challenged) {
-        $(document).on('click', 'form.async input[type="submit"]', function(e) {
-            // send 'em up
-            return $(this).parents('form.async').txpPostForm(e);
+        $('form.async').submit(function(e) {
+            return $(this).txpPostForm(e);
         });
     }
 });
