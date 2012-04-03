@@ -713,13 +713,18 @@ if (!empty($event) and $event == 'article') {
 
 			echo $partials['status']['html'];
 
-		//-- category selects -----------
+		//-- sort and display  -----------
 
-			echo $partials['categories']['html'];
-
-		//-- section select --------------
-
-			echo $partials['section']['html'];
+			echo pluggable_ui('article_ui', 'sort_display',
+				n.n.tag(
+					n.'<legend>'.gTxt('sort_display').'</legend>'.
+					//-- category selects -----------
+					$partials['categories']['html'].
+					//-- section select --------------
+					$partials['section']['html'].
+					n,
+					'fieldset', ' id="write-sort"'),
+				$rs);
 
 		//-- "More" section
 			echo n.n.'<div id="more_group"><h3 class="plain lever'.(get_pref('pane_article_more_visible') ? ' expanded' : '').'"><a href="#more">'.gTxt('more').'</a></h3>',
@@ -1312,9 +1317,6 @@ EOS
 	function article_partial_categories($rs)
 	{
 		return pluggable_ui('article_ui', 'categories',
-		n.n.'<fieldset id="write-sort">'.
-			n.'<legend>'.gTxt('sort_display').'</legend>'.
-
 			n.graf('<label for="category-1">'.gTxt('category1').'</label> '.
 			'<span class="edit category-edit small">['.eLink('category', '', '', '', gTxt('edit')).']</span>'.br.
 			n.category_popup('Category1', $rs['Category1'], 'category-1'), ' class="category category-1"').
@@ -1330,8 +1332,7 @@ EOS
 		return pluggable_ui('article_ui', 'section',
 			n.graf('<label for="section">'.gTxt('section').'</label> '.
 				'<span class="edit section-edit small">['.eLink('section', '', '', '', gTxt('edit')).']</span>'.br.
-				section_popup($rs['Section'], 'section'), ' class="section"').
-				n.'</fieldset>',
+				section_popup($rs['Section'], 'section'), ' class="section"'),
 			$rs);
 	}
 
