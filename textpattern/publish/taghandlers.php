@@ -64,13 +64,13 @@ $LastChangedRevision$
 		}
 
 		if (empty($name)) $name = 'default';
-		$url = hu.'css.php?n='.$name;
+		$url = hu.'css.php?n='.htmlspecialchars($name);
 
 		if ($format == 'link') {
-			return '<link rel="'.$rel.
+			return '<link rel="'.htmlspecialchars($rel).
 				($doctype != 'html5' ? '" type="text/css"': '"').
-				($media ? ' media="'.$media.'"' : '').
-				($title ? ' title="'.$title.'"' : '').
+				($media ? ' media="'.htmlspecialchars($media).'"' : '').
+				($title ? ' title="'.htmlspecialchars($title).'"' : '').
 				' href="'.$url.'" />';
 		}
 
@@ -86,7 +86,6 @@ $LastChangedRevision$
 		static $cache = array();
 
 		extract(lAtts(array(
-			'align'   => '', // deprecated in 4.2.0
 			'class'   => '',
 			'escape'  => 'html',
 			'html_id' => '',
@@ -97,9 +96,6 @@ $LastChangedRevision$
 			'style'   => '',
 			'wraptag' => '',
 		), $atts));
-
-		if ($align)
-			trigger_error(gTxt('deprecated_attribute', array('{name}' => 'align')), E_USER_NOTICE);
 
 		if ($name)
 		{
@@ -163,12 +159,11 @@ $LastChangedRevision$
 
 			$out = '<img src="'.imagesrcurl($id, $ext).'" alt="'.$alt.'"'.
 				($caption ? ' title="'.$caption.'"' : '').
-				( ($html_id and !$wraptag) ? ' id="'.$html_id.'"' : '' ).
-				( ($class and !$wraptag) ? ' class="'.$class.'"' : '' ).
-				($style ? ' style="'.$style.'"' : '').
-				($align ? ' align="'.$align.'"' : '').
-				($width ? ' width="'.$width.'"' : '').
-				($height ? ' height="'.$height.'"' : '').
+				( ($html_id and !$wraptag) ? ' id="'.htmlspecialchars($html_id).'"' : '' ).
+				( ($class and !$wraptag) ? ' class="'.htmlspecialchars($class).'"' : '' ).
+				($style ? ' style="'.htmlspecialchars($style).'"' : '').
+				($width ? ' width="'.(int)$width.'"' : '').
+				($height ? ' height="'.(int)$height.'"' : '').
 				' />';
 
 			return ($wraptag) ? doTag($out, $wraptag, $class, '', $html_id) : $out;
@@ -184,7 +179,6 @@ $LastChangedRevision$
 		global $thisimage;
 
 		extract(lAtts(array(
-			'align'     => '', // deprecated in 4.2.0
 			'class'     => '',
 			'escape'    => 'html',
 			'html_id'   => '',
@@ -198,9 +192,6 @@ $LastChangedRevision$
 			'wraptag'   => '',
 			'width'   	=> ''
 		), $atts));
-
-		if ($align)
-			trigger_error(gTxt('deprecated_attribute', array('{name}' => 'align')), E_USER_NOTICE);
 
 		if ($name)
 		{
@@ -245,17 +236,16 @@ $LastChangedRevision$
 
 				$out = '<img src="'.imagesrcurl($id, $ext, true).'" alt="'.$alt.'"'.
 					($caption ? ' title="'.$caption.'"' : '').
-					( ($html_id and !$wraptag) ? ' id="'.$html_id.'"' : '' ).
-					( ($class and !$wraptag) ? ' class="'.$class.'"' : '' ).
-					($style ? ' style="'.$style.'"' : '').
-					($align ? ' align="'.$align.'"' : '').
-					($width ? ' width="'.$width.'"' : '').
-					($height ? ' height="'.$height.'"' : '').
+					( ($html_id and !$wraptag) ? ' id="'.htmlspecialchars($html_id).'"' : '' ).
+					( ($class and !$wraptag) ? ' class="'.htmlspecialchars($class).'"' : '' ).
+					($style ? ' style="'.htmlspecialchars($style).'"' : '').
+					($width ? ' width="'.(int)$width.'"' : '').
+					($height ? ' height="'.(int)$height.'"' : '').
 					' />';
 
 				if ($link)
 				{
-					$out = href($out, imagesrcurl($id, $ext), (!empty($link_rel) ? " rel='$link_rel'" : '')." title='$caption'");
+					$out = href($out, imagesrcurl($id, $ext), (!empty($link_rel) ? " rel='".htmlspecialchars($link_rel)."'" : '')." title='$caption'");
 				}
 
 				elseif ($poplink)
@@ -566,7 +556,7 @@ $LastChangedRevision$
 
 		return tag(
 			htmlspecialchars($thislink['linkname']), 'a',
-			($rel ? ' rel="'.$rel.'"' : '').
+			($rel ? ' rel="'.htmlspecialchars($rel).'"' : '').
 			' href="'.doSpecial($thislink['url']).'"'
 		);
 	}
@@ -588,7 +578,7 @@ $LastChangedRevision$
 
 		return tag(
 			htmlspecialchars($thislink['linkname']), 'a',
-			($rel ? ' rel="'.$rel.'"' : '').
+			($rel ? ' rel="'.htmlspecialchars($rel).'"' : '').
 			' href="'.doSpecial($thislink['url']).'"'.$description
 		);
 	}
@@ -757,8 +747,8 @@ $LastChangedRevision$
 			// obfuscate link text?
 			if (is_valid_email($linktext)) $linktext = eE($linktext);
 
-			return '<a href="'.eE('mailto:'.$email).'"'.
-				($title ? ' title="'.$title.'"' : '').">$linktext</a>";
+			return '<a href="'.eE('mailto:'.htmlspecialchars($email)).'"'.
+				($title ? ' title="'.htmlspecialchars($title).'"' : '').">$linktext</a>";
 		}
 		return '';
 	}
@@ -1083,7 +1073,7 @@ $LastChangedRevision$
 			{
 				$section = ($this_section) ? ( $s == 'default' ? '' : $s) : $section;
 
-				$out = n.'<select name="'.$type.'" onchange="submit(this.form);">'.
+				$out = n.'<select name="'.htmlspecialchars($type).'" onchange="submit(this.form);">'.
 					n.t.'<option value=""'.($selected ? '' : ' selected="selected"').'>&nbsp;</option>'.
 					n.t.join(n.t, $out).
 					n.'</select>';
@@ -1203,7 +1193,7 @@ $LastChangedRevision$
 					if (empty($form) && empty($thing))
 					{
 						$out[] = tag(htmlspecialchars($title), 'a',
-							( ($active_class and (0 == strcasecmp($c, $name))) ? ' class="'.$active_class.'"' : '' ).
+							( ($active_class and (0 == strcasecmp($c, $name))) ? ' class="'.htmlspecialchars($active_class).'"' : '' ).
 							' href="'.pagelinkurl(array('s' => $section, 'c' => $name, 'context' => $type)).'"'
 						);
 					}
@@ -1297,7 +1287,7 @@ $LastChangedRevision$
 					$url = pagelinkurl(array('s' => $name));
 
 					$out[] = tag(htmlspecialchars($title), 'a',
-						( ($active_class and (0 == strcasecmp($s, $name))) ? ' class="'.$active_class.'"' : '' ).
+						( ($active_class and (0 == strcasecmp($s, $name))) ? ' class="'.htmlspecialchars($active_class).'"' : '' ).
 						' href="'.$url.'"'
 					);
 				}
@@ -1333,7 +1323,7 @@ $LastChangedRevision$
 			'label'   => gTxt('search'),
 			'button'  => '',
 			'section' => '',
-			'match' => 'exact',
+			'match'   => 'exact',
 		),$atts));
 
 		if ($form) {
@@ -1344,11 +1334,11 @@ $LastChangedRevision$
 		}
 
 		$h5 = ($doctype == 'html5');
-		$sub = (!empty($button)) ? '<input type="submit" value="'.$button.'" />' : '';
-		$id =  (!empty($html_id)) ? ' id="'.$html_id.'"' : '';
+		$sub = (!empty($button)) ? '<input type="submit" value="'.htmlspecialchars($button).'" />' : '';
+		$id =  (!empty($html_id)) ? ' id="'.htmlspecialchars($html_id).'"' : '';
 		$out = fInput( $h5 ? 'search' : 'text','q',$q,'','','',$size,'','',false, $h5);
-		$out = (!empty($label)) ? $label.br.$out.$sub : $out.$sub;
-		$out = ($match === 'exact') ? $out : fInput('hidden','m',$match) . $out;
+		$out = (!empty($label)) ? htmlspecialchars($label).br.$out.$sub : $out.$sub;
+		$out = ($match === 'exact') ? $out : fInput('hidden','m',htmlspecialchars($match)) . $out;
 		$out = ($wraptag) ? doTag($out,$wraptag, $class) : $out;
 
 		if (!$section) {
@@ -1508,7 +1498,7 @@ $LastChangedRevision$
 
 		if ($thing)
 		{
-			$class = ($class) ? ' class="'.$class.'"' : '';
+			$class = ($class) ? ' class="'.htmlspecialchars($class).'"' : '';
 			return '<a rel="home" href="'.hu.'"'.$class.'>'.parse($thing).'</a>';
 		}
 
@@ -1856,7 +1846,7 @@ $LastChangedRevision$
 				if (!$comments_mode) {
 					$invite_return = doTag($comments_invite, 'a', $class, ' href="'.permlinkurl($thisarticle).'#'.gTxt('comment').'" '). $ccount;
 				} else {
-					$invite_return = "<a href=\"".hu."?parentid=$thisid\" onclick=\"window.open(this.href, 'popupwindow', 'width=500,height=500,scrollbars,resizable,status'); return false;\"".(($class) ? ' class="'.$class.'"' : '').'>'.$comments_invite.'</a> '.$ccount;
+					$invite_return = "<a href=\"".hu."?parentid=$thisid\" onclick=\"window.open(this.href, 'popupwindow', 'width=500,height=500,scrollbars,resizable,status'); return false;\"".(($class) ? ' class="'.htmlspecialchars($class).'"' : '').'>'.$comments_invite.'</a> '.$ccount;
 				}
 			}
 			if ($wraptag) $invite_return = doTag($invite_return, $wraptag, $class);
@@ -2077,11 +2067,11 @@ $LastChangedRevision$
 			'anchor' => empty($thiscomment['has_anchor_tag']),
 		),$atts));
 
-		$dlink = permlinkurl($thisarticle).'#c'.$discussid;
+		$dlink = permlinkurl($thisarticle).'#c'.(int)$discussid;
 
 		$thing = parse($thing);
 
-		$name = ($anchor ? ' id="c'.$discussid.'"' : '');
+		$name = ($anchor ? ' id="c'.(int)$discussid.'"' : '');
 
 		return tag($thing,'a',' href="'.$dlink.'"'.$name);
 	}
@@ -2300,9 +2290,10 @@ $LastChangedRevision$
 		global $thisarticle, $is_article_body;
 		assert_article();
 
+		$was_article_body = $is_article_body;
 		$is_article_body = 1;
 		$out = parse($thisarticle['body']);
-		$is_article_body = 0;
+		$is_article_body = $was_article_body;
 		return $out;
 	}
 
@@ -2327,9 +2318,10 @@ $LastChangedRevision$
 		global $thisarticle, $is_article_body;
 		assert_article();
 
+		$was_article_body = $is_article_body;
 		$is_article_body = 1;
 		$out = parse($thisarticle['excerpt']);
-		$is_article_body = 0;
+		$is_article_body = $was_article_body;
 		return $out;
 	}
 
@@ -2361,7 +2353,7 @@ $LastChangedRevision$
 			{
 				$out = '<a'.
 					($permlink_mode != 'messy' ? ' rel="tag"' : '').
-					( ($class and !$wraptag) ? ' class="'.$class.'"' : '' ).
+					( ($class and !$wraptag) ? ' class="'.htmlspecialchars($class).'"' : '' ).
 					' href="'.pagelinkurl(array('s' => $section, 'c' => $category)).'"'.
 					($title ? ' title="'.$label.'"' : '').
 					'>'.parse($thing).'</a>';
@@ -2411,7 +2403,7 @@ $LastChangedRevision$
 			{
 				$out = '<a'.
 					($permlink_mode != 'messy' ? ' rel="tag"' : '').
-					( ($class and !$wraptag) ? ' class="'.$class.'"' : '' ).
+					( ($class and !$wraptag) ? ' class="'.htmlspecialchars($class).'"' : '' ).
 					' href="'.pagelinkurl(array('s' => $section, 'c' => $category)).'"'.
 					($title ? ' title="'.$label.'"' : '').
 					'>'.parse($thing).'</a>';
@@ -2477,14 +2469,14 @@ $LastChangedRevision$
 			if ($thing)
 			{
 				$out = '<a href="'.$href.'"'.
-					( ($class and !$wraptag) ? ' class="'.$class.'"' : '' ).
+					( ($class and !$wraptag) ? ' class="'.htmlspecialchars($class).'"' : '' ).
 					($title ? ' title="'.$label.'"' : '').
 					'>'.parse($thing).'</a>';
 			}
 
 			elseif ($link)
 			{
-				$out = href($label, $href, ($class and !$wraptag) ? ' class="'.$class.'"' : '');
+				$out = href($label, $href, ($class and !$wraptag) ? ' class="'.htmlspecialchars($class).'"' : '');
 			}
 
 			elseif ($url)
@@ -2509,10 +2501,10 @@ $LastChangedRevision$
 
 		extract(lAtts(array(
 			'class'   => '',
-			'link'		=> 0,
-			'name'		=> '',
-			'title'		=> 0,
-			'url'		=> 0,
+			'link'    => 0,
+			'name'    => '',
+			'title'   => 0,
+			'url'     => 0,
 			'wraptag' => '',
 		), $atts));
 
@@ -2545,14 +2537,14 @@ $LastChangedRevision$
 			if ($thing)
 			{
 				$out = '<a href="'.$href.'"'.
-					( ($class and !$wraptag) ? ' class="'.$class.'"' : '' ).
+					( ($class and !$wraptag) ? ' class="'.htmlspecialchars($class).'"' : '' ).
 					($title ? ' title="'.$label.'"' : '').
 					'>'.parse($thing).'</a>';
 			}
 
 			elseif ($link)
 			{
-				$out = href($label, $href, ($class and !$wraptag) ? ' class="'.$class.'"' : '');
+				$out = href($label, $href, ($class and !$wraptag) ? ' class="'.htmlspecialchars($class).'"' : '');
 			}
 
 			elseif ($url)
@@ -2613,7 +2605,6 @@ $LastChangedRevision$
 		assert_article();
 
 		extract(lAtts(array(
-			'align'     => '', // deprecated in 4.2.0
 			'class'     => '',
 			'escape'    => 'html',
 			'html_id'   => '',
@@ -2623,9 +2614,6 @@ $LastChangedRevision$
 			'thumbnail' => 0,
 			'wraptag'   => '',
 		), $atts));
-
-		if ($align)
-			trigger_error(gTxt('deprecated_attribute', array('{name}' => 'align')), E_USER_NOTICE);
 
 		if ($thisarticle['article_image'])
 		{
@@ -2660,12 +2648,11 @@ $LastChangedRevision$
 
 						$out = '<img src="'.imagesrcurl($id, $ext, true).'" alt="'.$alt.'"'.
 							($caption ? ' title="'.$caption.'"' : '').
-							( ($html_id and !$wraptag) ? ' id="'.$html_id.'"' : '' ).
-							( ($class and !$wraptag) ? ' class="'.$class.'"' : '' ).
-							($style ? ' style="'.$style.'"' : '').
-							($align ? ' align="'.$align.'"' : '').
-							($width ? ' width="'.$width.'"' : '').
-							($height ? ' height="'.$height.'"' : '').
+							( ($html_id and !$wraptag) ? ' id="'.htmlspecialchars($html_id).'"' : '' ).
+							( ($class and !$wraptag) ? ' class="'.htmlspecialchars($class).'"' : '' ).
+							($style ? ' style="'.htmlspecialchars($style).'"' : '').
+							($width ? ' width="'.(int)$width.'"' : '').
+							($height ? ' height="'.(int)$height.'"' : '').
 							' />';
 					}
 
@@ -2687,12 +2674,11 @@ $LastChangedRevision$
 
 					$out = '<img src="'.imagesrcurl($id, $ext).'" alt="'.$alt.'"'.
 						($caption ? ' title="'.$caption.'"' : '').
-						( ($html_id and !$wraptag) ? ' id="'.$html_id.'"' : '' ).
-						( ($class and !$wraptag) ? ' class="'.$class.'"' : '' ).
-						($style ? ' style="'.$style.'"' : '').
-						($align ? ' align="'.$align.'"' : '').
-						($width ? ' width="'.$width.'"' : '').
-						($height ? ' height="'.$height.'"' : '').
+						( ($html_id and !$wraptag) ? ' id="'.htmlspecialchars($html_id).'"' : '' ).
+						( ($class and !$wraptag) ? ' class="'.htmlspecialchars($class).'"' : '' ).
+						($style ? ' style="'.htmlspecialchars($style).'"' : '').
+						($width ? ' width="'.(int)$width.'"' : '').
+						($height ? ' height="'.(int)$height.'"' : '').
 						' />';
 				}
 			}
@@ -2707,12 +2693,11 @@ $LastChangedRevision$
 		else
 		{
 			$out = '<img src="'.$image.'" alt=""'.
-				( ($html_id and !$wraptag) ? ' id="'.$html_id.'"' : '' ).
-				( ($class and !$wraptag) ? ' class="'.$class.'"' : '' ).
-				($style ? ' style="'.$style.'"' : '').
-				($align ? ' align="'.$align.'"' : '').
-				($width ? ' width="'.$width.'"' : '').
-				($height ? ' height="'.$height.'"' : '').
+				( ($html_id and !$wraptag) ? ' id="'.htmlspecialchars($html_id).'"' : '' ).
+				( ($class and !$wraptag) ? ' class="'.htmlspecialchars($class).'"' : '' ).
+				($style ? ' style="'.htmlspecialchars($style).'"' : '').
+				($width ? ' width="'.(int)$width.'"' : '').
+				($height ? ' height="'.(int)$height.'"' : '').
 				' />';
 		}
 
@@ -2843,7 +2828,7 @@ $LastChangedRevision$
 				$dims = ($thumb_h ? " height=\"$thumb_h\"" : '') . ($thumb_w ? " width=\"$thumb_w\"" : '');
 				$url = pagelinkurl(array('c'=>$c, 'context'=>'image', 's'=>$s, 'p'=>$id));
 				$out[] = '<a href="'.$url.'">'.
-					'<img src="'.imagesrcurl($id, $ext, true).'"'.$dims.' alt="'.$alt.'" />'.'</a>';
+					'<img src="'.imagesrcurl($id, $ext, true).'"'.$dims.' alt="'.htmlspecialchars($alt).'" />'.'</a>';
 			}
 			if (count($out)) {
 				return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
@@ -2862,7 +2847,7 @@ $LastChangedRevision$
 			if ($rs) {
 				extract($rs);
 				return '<img src="'.imagesrcurl($id, $ext).
-					'" style="height:'.$h.'px;width:'.$w.'px" alt="'.$alt.'" />';
+					'" style="height:'.$h.'px;width:'.$w.'px" alt="'.htmlspecialchars($alt).'" />';
 			}
 		}
 	}
@@ -2929,7 +2914,7 @@ $LastChangedRevision$
 						if ($thisarticle && !empty($thisarticle['article_image']))
 						{
 							$items = do_list($thisarticle['article_image']);
-							$i = 0; // TODO: Indexed array access required for PHP 4 compat. Replace with &$item in TXP5. @see [r3435].
+							$i = 0; // TODO: Indexed array access required for PHP 4 compat. Replace with &$item in TXP5? @see [r3435].
 							foreach ($items as $item)
 							{
 								if (is_numeric($item))
@@ -3028,7 +3013,7 @@ $LastChangedRevision$
 					$url = pagelinkurl(array('c'=>$thisimage['category'], 'context'=>'image', 's'=>$s, 'p'=>$thisimage['id']));
 					$src = image_url(array('thumbnail' => '1'));
 					$thing = '<a href="'.$url.'">'.
-						'<img src="'. $src .'" alt="'.$thisimage['alt'].'" />'.'</a>'.n;
+						'<img src="'. $src .'" alt="'.htmlspecialchars($thisimage['alt']).'" />'.'</a>'.n;
 				}
 				$out[] = ($thing) ? parse($thing) : parse_form($form);
 			}
@@ -3314,17 +3299,17 @@ $LastChangedRevision$
 
 		if ($id)
 		{
-			$atts .= ' id="'.$id.'"';
+			$atts .= ' id="'.htmlspecialchars($id).'"';
 		}
 
 		if ($class)
 		{
-			$atts .= ' class="'.$class.'"';
+			$atts .= ' class="'.htmlspecialchars($class).'"';
 		}
 
 		if ($breakclass)
 		{
-			$breakatts.= ' class="'.$breakclass.'"';
+			$breakatts.= ' class="'.htmlspecialchars($breakclass).'"';
 		}
 
 		// non-enclosing breaks
@@ -3349,12 +3334,12 @@ $LastChangedRevision$
 	{
 		if ($id)
 		{
-			$atts .= ' id="'.$id.'"';
+			$atts .= ' id="'.htmlspecialchars($id).'"';
 		}
 
 		if ($class)
 		{
-			$atts .= ' class="'.$class.'"';
+			$atts .= ' class="'.htmlspecialchars($class).'"';
 		}
 
 		if (!$tag)
@@ -3382,7 +3367,7 @@ $LastChangedRevision$
 
 		extract(lAtts(array(
 			'class' => '',
-			'id'		=> '',
+			'id'    => '',
 			'style' => '',
 			'title' => '',
 		), $atts));
@@ -3402,9 +3387,9 @@ $LastChangedRevision$
 			}
 
 			return tag(parse($thing), 'a', ' rel="bookmark" href="'.$url.'"'.
-				($title ? ' title="'.$title.'"' : '').
-				($style ? ' style="'.$style.'"' : '').
-				($class ? ' class="'.$class.'"' : '')
+				($title ? ' title="'.htmlspecialchars($title).'"' : '').
+				($style ? ' style="'.htmlspecialchars($style).'"' : '').
+				($class ? ' class="'.htmlspecialchars($class).'"' : '')
 			);
 		}
 	}
@@ -3824,9 +3809,10 @@ $LastChangedRevision$
 		else
 			$out = $default;
 
+		$was_article_body = $is_article_body;
 		$is_article_body = 1;
 		$out = ($escape == 'html' ? htmlspecialchars($out) : parse($out));
-		$is_article_body = 0;
+		$is_article_body = $was_article_body;
 		return $out;
 	}
 
@@ -3903,23 +3889,6 @@ $LastChangedRevision$
 	function site_url()
 	{
 		return hu;
-	}
-
-// -------------------------------------------------------------
-	# DEPRECATED - provided only for backwards compatibility
-	function img($atts)
-	{
-		trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
-
-		extract(lAtts(array(
-			'src' => '',
-		), $atts));
-
-		$img = rtrim(hu, '/').'/'.ltrim($src, '/');
-
-		$out = '<img src="'.$img.'" />';
-
-		return $out;
 	}
 
 // -------------------------------------------------------------
