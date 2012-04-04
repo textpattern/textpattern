@@ -413,6 +413,7 @@ if (!empty($event) and $event == 'article') {
 				"textpattern",
 				"ID=$ID"
 			);
+			if (empty($rs)) return;
 
 			$rs['reset_time'] = $rs['publish_now'] = false;
 
@@ -474,7 +475,7 @@ if (!empty($event) and $event == 'article') {
 			$textile_excerpt = $use_textile;
 		}
 
-		if ($step!='create' && $sPosted) {
+		if ($step != 'create' && isset($sPosted)) {
 
 			// Previous record?
 			$rs['prev_id'] = checkIfNeighbour('prev',$sPosted);
