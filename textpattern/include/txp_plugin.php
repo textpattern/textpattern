@@ -202,12 +202,8 @@ $LastChangedRevision$
 		$name = gps('name');
 		pagetop(gTxt('plugin_help'));
 		$help = ($name) ? safe_field('help','txp_plugin',"name = '".doSlash($name)."'") : '';
-		echo
-		'<div id="'.$event.'_container" class="txp-container txp-view">'.
-		startTable('edit', '', 'plugin-help')
-		.	tr(tda($help,' width="600"'))
-		.	endTable()
-		.  '</div>';
+		echo '<div id="'.$event.'_container" class="txp-container txp-view">'
+			.'<div class="plugin-help">' . $help . '</div>';
 	}
 
 // -------------------------------------------------------------

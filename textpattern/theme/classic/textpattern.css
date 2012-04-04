@@ -824,6 +824,11 @@ width: 400px;
 height: 30px;
 }
 
+.plugin-help {
+margin: 0 auto;
+max-width: 600px;
+}
+
 textarea#diagnostics-detail {
 width: 500px;
 height: 300px;
