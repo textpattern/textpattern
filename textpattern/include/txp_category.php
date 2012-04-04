@@ -393,7 +393,7 @@ if ($event == 'category') {
 		$parent = doSlash(gps('parent'));
 
 		$row = safe_row("*", "txp_category", "id=$id");
-		if($row){
+		if ($row) {
 			extract($row);
 			$out = stackRows(
 				fLabelCell($evname.'_category_name') . fInputCell('name', $name, '', 20),
@@ -403,11 +403,13 @@ if ($event == 'category') {
 				hInput('id',$id),
 				tdcs(fInput('submit', '', gTxt('save'), 'publish'), 2)
 			);
+			$out.= eInput( 'category' ) . sInput( 'cat_'.$evname.'_save' ) . hInput( 'old_name',$name );
+			echo '<div id="category_container" class="txp-container txp-edit">'.
+				form( startTable( 'edit', '', 'edit-pane' ) . $out . endTable(), '', '', 'post', 'edit-form' ).
+				'</div>';
+		} else {
+			echo graf(gTxt('category_not_found'),' class="indicator"');
 		}
-		$out.= eInput( 'category' ) . sInput( 'cat_'.$evname.'_save' ) . hInput( 'old_name',$name );
-		echo '<div id="category_container" class="txp-container txp-edit">'.
-			form( startTable( 'edit', '', 'edit-pane' ) . $out . endTable(), '', '', 'post', 'edit-form' ).
-			'</div>';
 	}
 
 //-------------------------------------------------------------
