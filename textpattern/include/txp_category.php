@@ -189,16 +189,15 @@ if ($event == 'category') {
 
 			if ($type === 'article')
 			{
-				$cat1 = safe_column('DISTINCT category1', 'textpattern', '1=1');
-				$cat2 = safe_column('DISTINCT category2', 'textpattern', '1=1');
-				$used = array_unique($cat1 + $cat2);
+				$used = 'name NOT IN(SELECT category1 FROM '.safe_pfx('textpattern').')'.
+					' AND name NOT IN(SELECT category2 FROM '.safe_pfx('textpattern').')';
 			}
 			else
 			{
-				$used = safe_column('DISTINCT category', 'txp_'.$type, '1=1');
+				$used = 'name NOT IN(SELECT category FROM '.safe_pfx('txp_'.$type).')';
 			}
 
-			$rs = safe_rows('id, name', 'txp_category', "id IN (".join(',', $things).") AND type='".$type."' AND rgt - lft = 1 AND name NOT IN ('".join("','", doSlash($used))."')");
+			$rs = safe_rows('id, name', 'txp_category', "id IN (".join(',', $things).") AND type='".$type."' AND rgt - lft = 1 AND ".$used);
 
 			if ($rs)
 			{
