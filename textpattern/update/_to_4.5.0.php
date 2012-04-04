@@ -16,6 +16,12 @@ $LastChangedRevision$
 		safe_insert('txp_prefs', "prefs_id = 1, name = 'doctype', val = 'xhtml', type = '0', event = 'publish', html = 'doctypes', position = '190'");
 	}
 
+	// goodbye raw ?php support
+	if (safe_field('name', 'txp_prefs', "name = 'allow_raw_php_scripting'"))
+	{
+		safe_delete('txp_prefs', "name = 'allow_raw_php_scripting'");
+	}
+
 	$has_idx = 0;
 	$rs = getRows('show index from `'.PFX.'textpattern`');
 	foreach ($rs as $row) {

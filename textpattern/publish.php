@@ -541,7 +541,6 @@ $LastChangedRevision$
 		$pretext['secondpass'] = true;
 		trace_add('[ ~~~ '.gTxt('secondpass').' ~~~ ]');
 		$html = parse($html); // the function so nice, he ran it twice
-		if ($prefs['allow_page_php_scripting']) $html = evalString($html);
 
 		// make sure the page has an article tag if necessary
 		if (!$has_article_tag and $production_status != 'live' and $pretext['context']=='article' and (!empty($pretext['id']) or !empty($pretext['c']) or !empty($pretext['q']) or !empty($pretext['pg'])))
@@ -1246,21 +1245,6 @@ $LastChangedRevision$
 			txp_status_header('503 Service Unavailable');
 			exit('Nice try.');
 		}
-	}
-
-// -------------------------------------------------------------
-	function evalString($html)
-	{
-		global $prefs;
-		if (strpos($html, chr(60).'?php') !== false) {
-			trigger_error(gTxt('raw_php_deprecated'), E_USER_WARNING);
-			if (assert_array($prefs) === FALSE) return $html;
-			if (!empty($prefs['allow_raw_php_scripting']))
-				$html = eval(' ?'.chr(62).$html.chr(60).'?php ');
-			else
-				trigger_error(gTxt('raw_php_disabled'), E_USER_WARNING);
-		}
-		return $html;
 	}
 
 // -------------------------------------------------------------
