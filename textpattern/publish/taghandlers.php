@@ -1838,6 +1838,7 @@ $LastChangedRevision$
 		$invite_return = '';
 		if (($annotate or $comments_count) && ($showalways or $is_article_list) ) {
 
+			$comments_invite = htmlspecialchars($comments_invite);
 			$ccount = ($comments_count && $showcount) ?  ' ['.$comments_count.']' : '';
 			if ($textonly)
 				$invite_return = $comments_invite.$ccount;
