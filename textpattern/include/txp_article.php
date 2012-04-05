@@ -194,7 +194,7 @@ if (!empty($event) and $event == 'article') {
 
 	function article_save()
 	{
-		global $txp_user, $vars, $prefs;
+		global $txp_user, $vars, $prefs, $statuses;
 
 		extract($prefs);
 
@@ -308,42 +308,55 @@ if (!empty($event) and $event == 'article') {
 		}
 		$cfq = join(', ', $cfq);
 
-		safe_update("textpattern",
-		   "Title           = '$Title',
-			Body            = '$Body',
-			Body_html       = '$Body_html',
-			Excerpt         = '$Excerpt',
-			Excerpt_html    = '$Excerpt_html',
-			Keywords        = '$Keywords',
-			Image           = '$Image',
-			Status          =  $Status,
-			LastMod         =  now(),
-			LastModID       = '$user',
-			Section         = '$Section',
-			Category1       = '$Category1',
-			Category2       = '$Category2',
-			Annotate        =  $Annotate,
-			textile_body    =  $textile_body,
-			textile_excerpt =  $textile_excerpt,
-			override_form   = '$override_form',
-			url_title       = '$url_title',
-			AnnotateInvite  = '$AnnotateInvite',"
-			.(($cfs) ? $cfq.',' : '').
-			"$whenposted,
-			$whenexpires",
-			"ID = $ID"
-		);
+		$validator = new Validator(array(
+			new ChoiceConstraint($Status, array('choices' => array_keys($statuses), 'message' => 'invalid_status')),
+			new SectionConstraint($Section),
+			new ArticleCategoryConstraint($Category1),
+			new ArticleCategoryConstraint($Category2),
+		));
 
-		if($Status >= 4) {
-			if ($oldArticle['Status'] < 4) {
-				do_pings();
+		if ($validator->validate()) {
+			safe_update("textpattern",
+			   "Title           = '$Title',
+				Body            = '$Body',
+				Body_html       = '$Body_html',
+				Excerpt         = '$Excerpt',
+				Excerpt_html    = '$Excerpt_html',
+				Keywords        = '$Keywords',
+				Image           = '$Image',
+				Status          =  $Status,
+				LastMod         =  now(),
+				LastModID       = '$user',
+				Section         = '$Section',
+				Category1       = '$Category1',
+				Category2       = '$Category2',
+				Annotate        =  $Annotate,
+				textile_body    =  $textile_body,
+				textile_excerpt =  $textile_excerpt,
+				override_form   = '$override_form',
+				url_title       = '$url_title',
+				AnnotateInvite  = '$AnnotateInvite',"
+				.(($cfs) ? $cfq.',' : '').
+				"$whenposted,
+				$whenexpires",
+				"ID = $ID"
+			);
+
+			if($Status >= 4) {
+				if ($oldArticle['Status'] < 4) {
+					do_pings();
+				}
+				update_lastmod();
 			}
-			update_lastmod();
-		}
 
-		if (empty($msg)) {
-			$s = check_url_title($url_title);
-			$msg = array(get_status_message($Status).' '.$s, $s ? E_WARNING : 0);
+			if (empty($msg)) {
+				$s = check_url_title($url_title);
+				$msg = array(get_status_message($Status).' '.$s, $s ? E_WARNING : 0);
+			}
+
+		} else {
+			$msg = doArray($validator->getMessages(), 'gTxt');
+			$msg = array(join(', ', $msg), E_ERROR);
 		}
 		article_edit($msg, FALSE, !AJAXALLY_CHALLENGED);
 	}
