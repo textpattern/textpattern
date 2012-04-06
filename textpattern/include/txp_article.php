@@ -308,12 +308,15 @@ if (!empty($event) and $event == 'article') {
 		}
 		$cfq = join(', ', $cfq);
 
-		$validator = new Validator(array(
-			new ChoiceConstraint($Status, array('choices' => array_keys($statuses), 'message' => 'invalid_status')),
-			new SectionConstraint($Section),
-			new ArticleCategoryConstraint($Category1),
-			new ArticleCategoryConstraint($Category2),
-		));
+		$constraints = array(
+					'Status' => new ChoiceConstraint($Status, array('choices' => array_keys($statuses), 'message' => 'invalid_status')),
+					'Section' => new SectionConstraint($Section),
+					'Category1' => new ArticleCategoryConstraint($Category1),
+					'Category2' => new ArticleCategoryConstraint($Category2),
+		);
+
+		callback_event_ref('article_ui', 'validate_save', 0, compact($vars), $constraints);
+		$validator = new Validator($constraints);
 
 		if ($validator->validate()) {
 			safe_update("textpattern",
@@ -387,8 +390,6 @@ if (!empty($event) and $event == 'article') {
 			'posted'        => array('html' => PARTIAL_VOLATILE,    'selector' => '#write-timestamp'),
 			'expires'       => array('html' => PARTIAL_VOLATILE,    'selector' => '#write-expires'),
 		);
-
-		// TODO: let plugin callbacks change $partials' members
 
 		extract(gpsa(array('view','from_view','step')));
 
@@ -499,6 +500,7 @@ if (!empty($event) and $event == 'article') {
 			$rs['prev_id'] = $rs['next_id'] = 0;
 		}
 
+		// TODO: let plugin callbacks change $partials' members
 		// get content for volatile partials
 		foreach ($partials as $key => $value) {
 			if ($value['html'] == PARTIAL_VOLATILE) {
