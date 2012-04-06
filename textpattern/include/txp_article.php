@@ -500,7 +500,9 @@ if (!empty($event) and $event == 'article') {
 			$rs['prev_id'] = $rs['next_id'] = 0;
 		}
 
-		// TODO: let plugin callbacks change $partials' members
+		// let plugins chime in on partials
+		callback_event_ref('article_ui', 'partials_meta', 0, $rs, $partials);
+
 		// get content for volatile partials
 		foreach ($partials as $key => $value) {
 			if ($value['html'] == PARTIAL_VOLATILE) {
