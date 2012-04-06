@@ -705,6 +705,41 @@ function escape_js($js)
 		return $return_value;
 	}
 
+
+// -------------------------------------------------------------
+/**
+ * Call an event's callback with two optional byref parameters
+ * @param string $event
+ * @param string $step
+ * @param boolean $pre 0|1
+ * @param mixed $data optional arguments for event handlers
+ * @param mixed $options optional arguments for event handlers
+ * @return array collection of return values from event handlers
+ * @since 4.5.0
+ */
+ 	function callback_event_ref($event, $step='', $pre=0, &$data=null, &$options=null)
+	{
+		global $plugin_callback, $production_status;
+
+		if (!is_array($plugin_callback))
+			return array();
+
+		$return_value = array();
+
+		foreach ($plugin_callback as $c) {
+			if ($c['event'] == $event and (empty($c['step']) or $c['step'] == $step) and $c['pre'] == $pre) {
+				if (is_callable($c['function'])) {
+					// cannot call event handler via call_user_func() as this would dereference all arguments.
+					// side effect: callback handler *must* be ordinary functions, *must not* be class methods
+					$return_value[] = $c['function']($event, $step, $data, $options);
+				} elseif ($production_status == 'debug') {
+					trigger_error(gTxt('unknown_callback_function', array('function' => $c['function'])), E_USER_WARNING);
+				}
+			}
+		}
+		return $return_value;
+	}
+
 // -------------------------------------------------------------
 	function register_tab($area, $event, $title)
 	{
@@ -3059,7 +3094,6 @@ class ArticleCategoryConstraint extends ChoiceConstraint
 		$options['message'] = 'unknown_article_category';
 		parent::ChoiceConstraint($value, $options);
 	}
-
 }
 
 ?>
