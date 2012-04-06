@@ -203,7 +203,8 @@ $LastChangedRevision$
 		pagetop(gTxt('plugin_help'));
 		$help = ($name) ? safe_field('help','txp_plugin',"name = '".doSlash($name)."'") : '';
 		echo '<div id="'.$event.'_container" class="txp-container txp-view">'
-			.'<div class="plugin-help">' . $help . '</div>';
+			.'<div class="plugin-help">' . $help . '</div>'
+			.'</div>';
 	}
 
 // -------------------------------------------------------------
