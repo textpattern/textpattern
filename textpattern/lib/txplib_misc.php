@@ -730,7 +730,7 @@ function escape_js($js)
 			if ($c['event'] == $event and (empty($c['step']) or $c['step'] == $step) and $c['pre'] == $pre) {
 				if (is_callable($c['function'])) {
 					// cannot call event handler via call_user_func() as this would dereference all arguments.
-					// side effect: callback handler *must* be ordinary functions, *must not* be class methods
+					// side effect: callback handler *must* be ordinary function, *must not* be class method in PHP <5.4 (@see https://bugs.php.net/bug.php?id=47160)
 					$return_value[] = $c['function']($event, $step, $data, $options);
 				} elseif ($production_status == 'debug') {
 					trigger_error(gTxt('unknown_callback_function', array('function' => $c['function'])), E_USER_WARNING);
@@ -2048,7 +2048,7 @@ function escape_js($js)
 			die('<html><head><meta http-equiv="refresh" content="0;URL='.htmlspecialchars($url).'"></head><body></body></html>');
 		}
 
-		if (@$GLOBALS['connected']) {
+		if (@$GLOBALS['connected'] && @txpinterface == 'public') {
 			$out = safe_field('user_html','txp_page',"name='error_".doSlash($code)."'");
 			if (empty($out))
 				$out = safe_field('user_html','txp_page',"name='error_default'");
