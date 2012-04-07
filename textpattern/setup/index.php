@@ -133,15 +133,15 @@ eod;
 			,' width="400" height="50" colspan="4" align="left"')
 		),
 		tr(
-			fLabelCell(gTxt('mysql_login')).fInputCell('duser','',1).
-			fLabelCell(gTxt('mysql_password')).fInputCell('dpass','',2)
+			fLabelCell(gTxt('mysql_login')).fInputCell('duser','','').
+			fLabelCell(gTxt('mysql_password')).fInputCell('dpass','','')
 		),
 		tr(
-			fLabelCell(gTxt('mysql_server')).fInputCell('dhost','localhost',3).
-			fLabelCell(gTxt('mysql_database')).fInputCell('ddb','',4)
+			fLabelCell(gTxt('mysql_server')).fInputCell('dhost','localhost','').
+			fLabelCell(gTxt('mysql_database')).fInputCell('ddb','','')
 		),
 		tr(
-			fLabelCell(gTxt('table_prefix')).fInputCell('dprefix','',5).
+			fLabelCell(gTxt('table_prefix')).fInputCell('dprefix','','').
 			tdcs(small(gTxt('prefix_warning')),2)
 		),
 		tr(tdcs('&nbsp;',4)),

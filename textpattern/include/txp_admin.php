@@ -266,7 +266,7 @@ $LastChangedRevision$
 		form(
 			tag(gTxt('change_email_address'), 'h2').
 			graf('<label for="new_email">'.gTxt('new_email').'</label> '.
-				fInput('text', 'new_email', $email, 'edit', '', '', '20', '2', 'new_email').
+				fInput('text', 'new_email', $email, 'edit', '', '', '20', '', 'new_email').
 				fInput('submit', 'change_email', gTxt('submit'), 'smallerbox').
 				eInput('admin').
 				sInput('change_email')
