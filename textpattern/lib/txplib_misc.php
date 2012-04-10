@@ -2914,6 +2914,18 @@ function modal_halt($thing)
 	}
 
 /**
+ * Assert system requirements
+ */
+//-------------------------------------------------------------
+	function assert_system_requirements()
+	{
+		if (version_compare(REQUIRED_PHP_VERSION, PHP_VERSION) > 0) {
+			txp_die('This server runs PHP version '.PHP_VERSION.'. Textpattern needs PHP version '. REQUIRED_PHP_VERSION. ' or better.');
+		}
+	}
+
+
+/**
  * Validate admin steps. Protect against CSRF attempts.
  *
  * @param	string	$step	Requested admin step.

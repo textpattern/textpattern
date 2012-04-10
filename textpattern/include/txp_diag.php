@@ -163,9 +163,9 @@ $LastChangedRevision$
 
 	$fail = array(
 
-		'php_version_4_3_0_required' =>
-		(!is_callable('version_compare') or version_compare(PHP_VERSION, '4.3.0', '<'))
-		? gTxt('php_version_4_3_0_required')
+		'php_version_required' =>
+		(!is_callable('version_compare') or version_compare(PHP_VERSION, REQUIRED_PHP_VERSION, '<'))
+		? gTxt('php_version_required')
 		: '',
 
 		'path_to_site_missing' =>

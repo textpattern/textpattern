@@ -28,6 +28,8 @@ include_once txpath.'/lib/txplib_forms.php';
 include_once txpath.'/lib/txplib_misc.php';
 include_once txpath.'/include/txp_auth.php';
 
+assert_system_requirements();
+
 header("Content-type: text/html; charset=utf-8");
 
 // drop trailing cruft

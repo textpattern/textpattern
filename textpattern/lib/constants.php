@@ -59,6 +59,8 @@ defined('AJAXALLY_CHALLENGED') || define('AJAXALLY_CHALLENGED', false); // TODO:
 define('PARTIAL_STATIC', false);
 define('PARTIAL_VOLATILE', true);
 
+define('REQUIRED_PHP_VERSION', '5.2');
+
 error_reporting($old_level);
 unset($old_level);
 
