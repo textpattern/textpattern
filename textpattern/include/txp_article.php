@@ -309,10 +309,10 @@ if (!empty($event) and $event == 'article') {
 		$cfq = join(', ', $cfq);
 
 		$constraints = array(
-					'Status' => new ChoiceConstraint($Status, array('choices' => array_keys($statuses), 'message' => 'invalid_status')),
-					'Section' => new SectionConstraint($Section),
-					'Category1' => new ArticleCategoryConstraint($Category1),
-					'Category2' => new ArticleCategoryConstraint($Category2),
+			'Status' => new ChoiceConstraint($Status, array('choices' => array_keys($statuses), 'message' => 'invalid_status')),
+			'Section' => new SectionConstraint($Section),
+			'Category1' => new ArticleCategoryConstraint($Category1),
+			'Category2' => new ArticleCategoryConstraint($Category2),
 		);
 
 		callback_event_ref('article_ui', 'validate_save', 0, compact($vars), $constraints);
