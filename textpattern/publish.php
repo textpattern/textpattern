@@ -307,6 +307,7 @@ $LastChangedRevision$
 					case urldecode(strtolower(urlencode(gTxt('file_download')))):
 						$out['s'] = 'file_download';
 						$out['id'] = (!empty($u2)) ? $u2 : '';
+						$out['filename'] = (!empty($u3)) ? $u3 : '';
 						break;
 
 					default:
@@ -453,15 +454,10 @@ $LastChangedRevision$
 		$out['id'] = is_numeric($out['id']) ? intval($out['id']) : '';
 
 		if ($out['s'] == 'file_download') {
-			// get id of potential filename
-			if (!is_numeric($out['id'])) {
-				$rs = safe_row("*", "txp_file", "filename='".doSlash($out['id'])."' and status = 4");
-			} else {
-				$rs = safe_row("*", "txp_file", 'id='.intval($out['id']).' and status = 4');
+			if (is_numeric($out['id']) && $out['filename'] !== '') {
+				$rs = safe_row('*', 'txp_file', 'id='.intval($out['id']).' and status = 4 and filename = \''.doSlash($out['filename']).'\'');
 			}
-
-			$out = ($rs)? array_merge($out, $rs) : array('s'=>'file_download','file_error'=> 404);
-			return $out;
+			return (!empty($rs)) ? array_merge($out, $rs) : array('s' => 'file_download', 'file_error' => 404);
 		}
 
 		if (!$is_404)
