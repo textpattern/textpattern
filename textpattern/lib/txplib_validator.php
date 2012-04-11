@@ -13,14 +13,14 @@ $LastChangedRevision$
  */
 class Validator
 {
-	var $constraints;
-	var $messages;
+	protected $constraints;
+    protected $messages;
 
 	/**
 	 * Construct a validator
 	 * @param array $constraints Array of constraint objects to validate over
 	 */
-	function Validator($constraints)
+	function __construct($constraints)
 	{
 		$this->constraints = $constraints;
 		$this->messages = array();
@@ -57,15 +57,15 @@ class Validator
  */
 class Constraint
 {
-	var $value;
-	var $options;
+    protected $value;
+    protected $options;
 
 	/**
 	 * Construct a constraint
 	 * @param mixed $value	The validee
 	 * @param array $options Key/value pairs of class-specific options
 	 */
-	function Constraint($value, $options = array())
+	function __construct($value, $options = array())
 	{
 		if (empty($options['message'])) {
 			$options['message'] = 'undefined_constraint_violation';
@@ -100,10 +100,10 @@ class Constraint
  */
 class ChoiceConstraint extends Constraint
 {
-	function ChoiceConstraint($value, $options = array())
+	function __construct($value, $options = array())
 	{
 		$options = lAtts(array('choices' => array(), 'allow_blank' => false, 'message' => 'unknown_choice'), $options);
-		parent::Constraint($value, $options);
+		parent::__construct($value, $options);
 	}
 
 	function validate()
@@ -121,7 +121,7 @@ class ChoiceConstraint extends Constraint
  */
 class SectionConstraint extends ChoiceConstraint
 {
-	function SectionConstraint($value, $options = array())
+	function __construct($value, $options = array())
 	{
 		static $choices = null;
 		if (null === $choices) {
@@ -129,7 +129,7 @@ class SectionConstraint extends ChoiceConstraint
 		}
 		$options['choices'] = $choices;
 		$options['message'] = 'unknown_section';
-		parent::ChoiceConstraint($value, $options);
+        parent::__construct($value, $options);
 	}
 }
 
@@ -141,7 +141,7 @@ class SectionConstraint extends ChoiceConstraint
  */
 class ArticleCategoryConstraint extends ChoiceConstraint
 {
-	function ArticleCategoryConstraint($value, $options = array())
+	function __construct($value, $options = array())
 	{
 		static $choices = null;
 		if (null === $choices) {
@@ -150,7 +150,7 @@ class ArticleCategoryConstraint extends ChoiceConstraint
 		$options['choices'] = $choices;
 		$options['allow_blank'] = true;
 		$options['message'] = 'unknown_article_category';
-		parent::ChoiceConstraint($value, $options);
+        parent::__construct($value, $options);
 	}
 }
 ?>
