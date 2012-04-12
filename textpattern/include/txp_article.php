@@ -377,10 +377,13 @@ if (!empty($event) and $event == 'article') {
 			'sPosted'       => array('mode' => PARTIAL_VOLATILE_VALUE,  'selector' => '[name=sPosted]'),
 			'custom_fields' => array('mode' => PARTIAL_STATIC,      'selector' => false),
 			'image'         => array('mode' => PARTIAL_STATIC,      'selector' => false),
-			'keywords'      => array('mode' => PARTIAL_VOLATILE,    'selector' => '#meta_group .keywords'),
-			'url_title'     => array('mode' => PARTIAL_VOLATILE,    'selector' => '#meta_group .url-title'),
+			'keywords'      => array('mode' => PARTIAL_STATIC,      'selector' => false),
+			'keywords_value'    => array('mode' => PARTIAL_VOLATILE_VALUE,    'selector' => '#keywords'),
+			'url_title'     => array('mode' => PARTIAL_STATIC,      'selector' => false),
+			'url_title_value'   => array('mode' => PARTIAL_VOLATILE_VALUE,    'selector' => '#url-title'),
 			'recent_articles'=> array('mode' => PARTIAL_VOLATILE,   'selector' => '#recent_group .recent'),
 			'title'         => array('mode' => PARTIAL_STATIC,      'selector' => false),
+			'title_value'   => array('mode' => PARTIAL_VOLATILE_VALUE,      'selector' => '#title'),
 			'article_view'  => array('mode' => PARTIAL_VOLATILE,    'selector' => '#article_partial_article_view'),
 			'body'          => array('mode' => PARTIAL_STATIC,      'selector' => false),
 			'excerpt'       => array('mode' => PARTIAL_STATIC,      'selector' => false),
@@ -1183,8 +1186,14 @@ EOS
 	{
 		return pluggable_ui('article_ui', 'title',
 			'<label for="title">'.gTxt('title').'</label>'.sp.popHelp('title').br.
-				'<input type="text" id="title" name="Title" value="'.escape_title($rs['Title']).'" class="edit" size="40" tabindex="1" />',
+				'<input type="text" id="title" name="Title" value="'.escape_title(article_partial_title_value($rs)).'" class="edit" size="40" tabindex="1" />',
 			$rs);
+	}
+
+// -------------------------------------------------------------
+	function article_partial_title_value($rs)
+	{
+		return $rs['Title'];
 	}
 
 // -------------------------------------------------------------
@@ -1238,8 +1247,14 @@ EOS
 	{
 		return pluggable_ui('article_ui', 'keywords',
 			n.graf('<label for="keywords">'.gTxt('keywords').'</label>'.sp.popHelp('keywords').br.
-				n.'<textarea id="keywords" name="Keywords" cols="18" rows="5">'.htmlspecialchars(str_replace(',' ,', ', $rs['Keywords'])).'</textarea>', ' class="keywords"'),
+				n.'<textarea id="keywords" name="Keywords" cols="18" rows="5">'.htmlspecialchars(article_partial_keywords_value($rs)).'</textarea>', ' class="keywords"'),
 			$rs);
+	}
+
+// -------------------------------------------------------------
+	function article_partial_keywords_value($rs)
+	{
+		return str_replace(',', ', ', $rs['Keywords']);
 	}
 
 // -------------------------------------------------------------
@@ -1247,8 +1262,14 @@ EOS
 	{
 		return pluggable_ui('article_ui', 'url_title',
 			n.graf('<label for="url-title">'.gTxt('url_title').'</label>'.sp.popHelp('url_title').br.
-				fInput('text', 'url_title', $rs['url_title'], 'edit', '', '', 22, '', 'url-title'), ' class="url-title"'),
+				fInput('text', 'url_title', article_partial_url_title_value($rs), 'edit', '', '', 22, '', 'url-title'), ' class="url-title"'),
 			$rs);
+	}
+
+// -------------------------------------------------------------
+	function article_partial_url_title_value($rs)
+	{
+		return $rs['url_title'];
 	}
 
 // -------------------------------------------------------------
