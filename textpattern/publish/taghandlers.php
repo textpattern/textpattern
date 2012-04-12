@@ -2693,7 +2693,7 @@ $LastChangedRevision$
 
 		else
 		{
-			$out = '<img src="'.$image.'" alt=""'.
+			$out = '<img src="'.htmlspecialchars($image).'" alt=""'.
 				( ($html_id and !$wraptag) ? ' id="'.htmlspecialchars($html_id).'"' : '' ).
 				( ($class and !$wraptag) ? ' class="'.htmlspecialchars($class).'"' : '' ).
 				($style ? ' style="'.htmlspecialchars($style).'"' : '').
