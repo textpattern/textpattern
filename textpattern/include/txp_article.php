@@ -315,6 +315,15 @@ if (!empty($event) and $event == 'article') {
 			'Category2' => new ArticleCategoryConstraint($Category2),
 		);
 
+		if (!$articles_use_excerpts) {
+			$constraints['excerpt_blank'] = new BlankConstraint($Excerpt, array('message' => 'excerpt_not_blank'));
+		}
+
+		if (!$use_comments) {
+			$constraints['annotate_invite_blank'] = new BlankConstraint($AnnotateInvite, array('message' => 'invite_not_blank'));
+			$constraints['annotate_false'] = new FalseConstraint($Annotate, array('message' => 'comments_are_on'));
+		}
+
 		callback_event_ref('article_ui', 'validate_save', 0, compact($vars), $constraints);
 		$validator = new Validator($constraints);
 
