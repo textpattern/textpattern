@@ -56,8 +56,9 @@ define('PASSWORD_PORTABILITY', TRUE);
 defined('AJAX_TIMEOUT') || define('AJAX_TIMEOUT', max(30000, 1000 * @ini_get('max_execution_time')));
 defined('AJAXALLY_CHALLENGED') || define('AJAXALLY_CHALLENGED', false); // TODO: @since 4.5.0; Wait for plugins to catch up, then lose this at a future release
 
-define('PARTIAL_STATIC', false);
-define('PARTIAL_VOLATILE', true);
+define('PARTIAL_STATIC', 0);
+define('PARTIAL_VOLATILE', 1);
+define('PARTIAL_VOLATILE_VALUE', 2);
 
 define('REQUIRED_PHP_VERSION', '5.2');
 
