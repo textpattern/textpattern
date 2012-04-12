@@ -1,6 +1,14 @@
 <?php
 
 /*
+This is Textpattern
+
+Copyright 2012 The Textpattern Development Team
+textpattern.com
+All rights reserved.
+
+Use of this software indicates acceptance of the Textpattern license agreement
+
 $HeadURL$
 $LastChangedRevision$
 */
@@ -14,7 +22,7 @@ $LastChangedRevision$
 class Validator
 {
 	protected $constraints;
-    protected $messages;
+	protected $messages;
 
 	/**
 	 * Construct a validator
@@ -151,6 +159,66 @@ class ArticleCategoryConstraint extends ChoiceConstraint
 		$options['allow_blank'] = true;
 		$options['message'] = 'unknown_article_category';
         parent::__construct($value, $options);
+	}
+}
+
+/**
+ * BlankConstraint
+ *
+ * Validates that a value is blank, defined as equal to a blank string or equal to null.
+ * @since 4.5.0
+ */
+class BlankConstraint extends Constraint
+{
+	function __construct($value, $options = array())
+	{
+		$options = lAtts(array('message' => 'should_be_blank'), $options);
+		parent::__construct($value, $options);
+	}
+
+	function validate()
+	{
+		return $this->value === '' || $this->value === null;
+	}
+}
+
+/**
+ * TrueConstraint
+ *
+ * Validates that a value is true.
+ * @since 4.5.0
+ */
+class TrueConstraint extends Constraint
+{
+	function __construct($value, $options = array())
+	{
+		$options = lAtts(array('message' => 'should_be_true'), $options);
+		parent::__construct($value, $options);
+	}
+
+	function validate()
+	{
+		return (boolean)$this->value;
+	}
+}
+
+/**
+ * FalseConstraint
+ *
+ * Validates that a value is false.
+ * @since 4.5.0
+ */
+class FalseConstraint extends Constraint
+{
+	function __construct($value, $options = array())
+	{
+		$options = lAtts(array('message' => 'should_be_false'), $options);
+		parent::__construct($value, $options);
+	}
+
+	function validate()
+	{
+		return !(boolean)$this->value;
 	}
 }
 ?>
