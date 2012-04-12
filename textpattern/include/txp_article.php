@@ -373,22 +373,24 @@ if (!empty($event) and $event == 'article') {
 		extract($prefs);
 
 		$partials = array(
-			'custom_fields' => array('html' => PARTIAL_STATIC,      'selector' => false),
-			'image'         => array('html' => PARTIAL_STATIC,      'selector' => false),
-			'keywords'      => array('html' => PARTIAL_VOLATILE,    'selector' => '#meta_group .keywords'),
-			'url_title'     => array('html' => PARTIAL_VOLATILE,    'selector' => '#meta_group .url-title'),
-			'recent_articles'=> array('html' => PARTIAL_VOLATILE,   'selector' => '#recent_group .recent'),
-			'title'         => array('html' => PARTIAL_STATIC,      'selector' => false),
-			'article_view'  => array('html' => PARTIAL_VOLATILE,    'selector' => '#article_partial_article_view'),
-			'body'          => array('html' => PARTIAL_STATIC,      'selector' => false),
-			'excerpt'       => array('html' => PARTIAL_STATIC,      'selector' => false),
-			'author'        => array('html' => PARTIAL_VOLATILE,    'selector' => 'p.author'),
-			'article_nav'   => array('html' => PARTIAL_VOLATILE,    'selector' => 'p.article-nav'),
-			'status'        => array('html' => PARTIAL_VOLATILE,    'selector' => '#write-status'),
-			'categories'    => array('html' => PARTIAL_STATIC,      'selector' => false),
-			'section'       => array('html' => PARTIAL_STATIC,      'selector' => false),
-			'posted'        => array('html' => PARTIAL_VOLATILE,    'selector' => '#write-timestamp'),
-			'expires'       => array('html' => PARTIAL_VOLATILE,    'selector' => '#write-expires'),
+			'sLastMod'      => array('mode' => PARTIAL_VOLATILE_VALUE,  'selector' => '[name=sLastMod]'),
+			'sPosted'       => array('mode' => PARTIAL_VOLATILE_VALUE,  'selector' => '[name=sPosted]'),
+			'custom_fields' => array('mode' => PARTIAL_STATIC,      'selector' => false),
+			'image'         => array('mode' => PARTIAL_STATIC,      'selector' => false),
+			'keywords'      => array('mode' => PARTIAL_VOLATILE,    'selector' => '#meta_group .keywords'),
+			'url_title'     => array('mode' => PARTIAL_VOLATILE,    'selector' => '#meta_group .url-title'),
+			'recent_articles'=> array('mode' => PARTIAL_VOLATILE,   'selector' => '#recent_group .recent'),
+			'title'         => array('mode' => PARTIAL_STATIC,      'selector' => false),
+			'article_view'  => array('mode' => PARTIAL_VOLATILE,    'selector' => '#article_partial_article_view'),
+			'body'          => array('mode' => PARTIAL_STATIC,      'selector' => false),
+			'excerpt'       => array('mode' => PARTIAL_STATIC,      'selector' => false),
+			'author'        => array('mode' => PARTIAL_VOLATILE,    'selector' => 'p.author'),
+			'article_nav'   => array('mode' => PARTIAL_VOLATILE,    'selector' => 'p.article-nav'),
+			'status'        => array('mode' => PARTIAL_VOLATILE,    'selector' => '#write-status'),
+			'categories'    => array('mode' => PARTIAL_STATIC,      'selector' => false),
+			'section'       => array('mode' => PARTIAL_STATIC,      'selector' => false),
+			'posted'        => array('mode' => PARTIAL_VOLATILE,    'selector' => '#write-timestamp'),
+			'expires'       => array('mode' => PARTIAL_VOLATILE,    'selector' => '#write-expires'),
 		);
 
 		extract(gpsa(array('view','from_view','step')));
@@ -505,7 +507,7 @@ if (!empty($event) and $event == 'article') {
 
 		// get content for volatile partials
 		foreach ($partials as $key => $value) {
-			if ($value['html'] == PARTIAL_VOLATILE) {
+			if ($value['mode'] == PARTIAL_VOLATILE || $value['mode'] == PARTIAL_VOLATILE_VALUE) {
 				$f = "article_partial_$key";
 				$partials[$key]['html'] = $f($rs);
 			}
@@ -516,12 +518,11 @@ if (!empty($event) and $event == 'article') {
 			$response[] = $theme->announce_async($message);
 
 			// Update the volatile partials
-			$response[] = '$("[name=sLastMod]").val("'.$sLastMod.'")';
-			$response[] = '$("[name=sPosted]").val("'.$sPosted.'")';
-
 			foreach ($partials as $p) {
-				if ($p['selector']) {
+				if ($p['mode'] == PARTIAL_VOLATILE) {
 					$response[] = '$("'.$p['selector'].'").replaceWith("'.escape_js($p['html']).'")';
+				} elseif ($p['mode'] == PARTIAL_VOLATILE_VALUE) {
+					$response[] = '$("'.$p['selector'].'").val("'.escape_js($p['html']).'")';
 				}
 			}
 			send_script_response(join(";\n", $response));
@@ -531,7 +532,7 @@ if (!empty($event) and $event == 'article') {
 		}
 
 		foreach ($partials as $key => $value) {
-			if ($value['html'] == PARTIAL_STATIC) {
+			if ($value['mode'] == PARTIAL_STATIC) {
 				$f = "article_partial_$key";
 				$partials[$key]['html'] = $f($rs);
 			}
@@ -550,8 +551,12 @@ if (!empty($event) and $event == 'article') {
 		}
 
 		echo hInput('ID', $ID).
-			eInput('article').
-			sInput($step).
+			n.eInput('article').
+			n.sInput($step).
+			n.hInput('sPosted', $sPosted).
+			n.hInput('sLastMod', $sLastMod).
+			n.hInput('AuthorID', $AuthorID).
+			n.hInput('LastModID', $LastModID).
 			'<input type="hidden" name="view" />'.
 
 			startTable('edit').
@@ -1379,13 +1384,7 @@ EOS
 					tsi('second', '%S', $sPosted)
 				, ' class="time posted created"'
 			).
-
-				n.hInput('sPosted', $sPosted).
-				n.hInput('sLastMod', $sLastMod).
-				n.hInput('AuthorID', $AuthorID).
-				n.hInput('LastModID', $LastModID).
-
-				n.'</fieldset>',
+			n.'</fieldset>',
 			$rs);
 	}
 
@@ -1414,5 +1413,17 @@ EOS
 
 				n.'</fieldset>',
 			$rs);
+	}
+
+// -------------------------------------------------------------
+	function article_partial_sLastMod($rs)
+	{
+		return($rs['sLastMod']);
+	}
+
+// -------------------------------------------------------------
+	function article_partial_sPosted($rs)
+	{
+		return($rs['sPosted']);
 	}
 ?>
