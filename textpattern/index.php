@@ -60,8 +60,10 @@ $LastChangedRevision$
 		$prefs = get_prefs();
 		extract($prefs);
 
-		if (empty($siteurl))
-			$siteurl = $_SERVER['HTTP_HOST'] . rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'])), '/');
+		if (empty($siteurl)) {
+			$httphost = preg_replace('/[^-_a-zA-Z0-9.:]/', '', $_SERVER['HTTP_HOST']);
+			$prefs['siteurl'] = $siteurl = $httphost . rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'])), '/');
+		}
 		if (empty($path_to_site))
 			updateSitePath(dirname(dirname(__FILE__)));
 
