@@ -76,7 +76,7 @@ if (!empty($event) and $event == 'article') {
 
 		extract($prefs);
 
-		$incoming = doSlash(textile_main_fields(psa($vars)));
+		$incoming = doSlash(textile_main_fields(array_map('assert_string', psa($vars))));
 		extract($incoming);
 		extract(array_map('assert_int', psa(array( 'Status', 'textile_body', 'textile_excerpt'))));
 		// comments my be on, off, or disabled.
@@ -198,7 +198,7 @@ if (!empty($event) and $event == 'article') {
 
 		extract($prefs);
 
-		$incoming = psa($vars);
+		$incoming = array_map('assert_string', psa($vars));
 
 		$oldArticle = safe_row('Status, url_title, Title, '.
 			'unix_timestamp(LastMod) as sLastMod, LastModID, '.
@@ -328,7 +328,7 @@ if (!empty($event) and $event == 'article') {
 		$validator = new Validator($constraints);
 
 		if ($validator->validate()) {
-			safe_update("textpattern",
+			if (safe_update("textpattern",
 			   "Title           = '$Title',
 				Body            = '$Body',
 				Body_html       = '$Body_html',
@@ -352,20 +352,21 @@ if (!empty($event) and $event == 'article') {
 				"$whenposted,
 				$whenexpires",
 				"ID = $ID"
-			);
-
-			if($Status >= 4) {
-				if ($oldArticle['Status'] < 4) {
-					do_pings();
+			)) {
+				if ($Status >= 4) {
+					if ($oldArticle['Status'] < 4) {
+						do_pings();
+					}
+					update_lastmod();
 				}
-				update_lastmod();
-			}
 
-			if (empty($msg)) {
-				$s = check_url_title($url_title);
-				$msg = array(get_status_message($Status).' '.$s, $s ? E_WARNING : 0);
+				if (empty($msg)) {
+					$s = check_url_title($url_title);
+					$msg = array(get_status_message($Status).' '.$s, $s ? E_WARNING : 0);
+				}
+			} else {
+				$msg = array(gTxt('article_save_error'), E_ERROR);
 			}
-
 		} else {
 			$msg = doArray($validator->getMessages(), 'gTxt');
 			$msg = array(join(', ', $msg), E_ERROR);
