@@ -13,6 +13,7 @@ $HeadURL$
 $LastChangedRevision$
 
 */
+
 	if (@ini_get('register_globals'))
 		foreach ( $_REQUEST as $name => $value )
 			unset($$name);
@@ -50,6 +51,7 @@ $LastChangedRevision$
 	include txpath.'/lib/txplib_validator.php';
 	include txpath.'/lib/admin_config.php';
 
+	set_error_handler('adminErrorHandler', error_reporting());
 	$microstart = getmicrotime();
 
 	 if ($connected && safe_query("describe `".PFX."textpattern`")) {

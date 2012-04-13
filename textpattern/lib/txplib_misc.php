@@ -623,6 +623,48 @@ function escape_js($js)
 	}
 
 // -------------------------------------------------------------
+	function adminErrorHandler($errno, $errstr, $errfile, $errline)
+	{
+		global $production_status, $theme;
+		if (!error_reporting())
+			return;
+
+		$backtrace = '';
+		$msg = gTxt('internal_error');
+
+		if (has_privs('debug.verbose')) {
+			$msg .= ' "'.$errstr.'"';
+		};
+
+		if (($production_status == 'debug')) {
+			if (has_privs('debug.backtrace')) {
+				$msg .= n."in $errfile at line $errline";
+				$backtrace = join(n, get_caller(5,1));
+			}
+		}
+
+		if (http_accept_format('html')) {
+			if (!empty($backtrace)) {
+				echo "<pre>$msg.</pre>".
+					n.'<pre style="padding-left: 2em;" class="backtrace"><code>'.
+					htmlspecialchars($backtrace).'</code></pre>';
+			} elseif (is_object($theme)) {
+				echo $theme->announce(array($msg, E_ERROR), true);
+			} else {
+				echo "<pre>$msg.</pre>";
+			}
+		} elseif (http_accept_format('js')) {
+			if (is_object($theme)) {
+				send_script_response ($theme->announce_async(array($msg.n.$backtrace, E_ERROR), true));
+			} else {
+				send_script_response ('/*'.$msg.".\n".$backtrace.'*/');
+			}
+		} else {
+			txp_die($msg, 500);
+		}
+	}
+
+// -------------------------------------------------------------
 	function load_plugins($type=0)
 	{
 		global $prefs, $plugins, $plugins_ver, $app_mode;
@@ -2433,18 +2475,18 @@ eod;
 		if (is_numeric($myvar) and $myvar == intval($myvar)) {
 			return (int) $myvar;
 		}
+		trigger_error("'".htmlspecialchars($myvar)."' is not an integer", E_USER_ERROR);
+		return false;
+	}
 
-		if (($production_status == 'debug') || (txpinterface == 'admin'))
-		{
-			trigger_error("<pre>Error: '".htmlspecialchars($myvar)."' is not an integer</pre>".
-				n.'<pre style="padding-left: 2em;" class="backtrace"><code>'.
-				htmlspecialchars(join(n, get_caller(5,1))).'</code></pre>', E_USER_ERROR);
-		}
-		else
-		{
-			trigger_error("'".htmlspecialchars($myvar)."' is not an integer.", E_USER_ERROR);
-		}
+//-------------------------------------------------------------
+	function assert_string($myvar) {
+		global $production_status;
 
+		if (is_string($myvar)) {
+			return $myvar;
+		}
+		trigger_error("'".htmlspecialchars(gettype($myvar))."' is not a string", E_USER_ERROR);
 		return false;
 	}
 
@@ -2453,20 +2495,9 @@ eod;
 		global $production_status;
 
 		if (is_array($myvar)) {
-			return ($myvar);
+			return $myvar;
 		}
-
-		if (($production_status == 'debug') || (txpinterface == 'admin'))
-		{
-			trigger_error("<pre>Error: '".htmlspecialchars($myvar)."' is not an array</pre>".
-				n.'<pre style="padding-left: 2em;" class="backtrace"><code>'.
-				htmlspecialchars(join(n, get_caller(5,1))).'</code></pre>', E_USER_ERROR);
-		}
-		else
-		{
-			trigger_error("'".htmlspecialchars($myvar)."' is not an array.", E_USER_ERROR);
-		}
-
+		trigger_error("'".htmlspecialchars(gettype($myvar))."' is not an array", E_USER_ERROR);
 		return false;
 	}
 
@@ -2957,4 +2988,42 @@ function modal_halt($thing)
 		// This place ain't no good for you, son.
 		die(gTxt('get_off_my_lawn', array('{event}' => $event, '{step}' => $step)));
 	}
+
+/**
+ * Test whether the client accepts a certain response format
+ * @param   string  $format One of 'html', 'txt', 'js', 'css', 'json', 'xml', 'rdf', 'atom', or 'rss'
+ * @return  boolean $format is accepted
+ * @since 4.5.0
+ */
+function http_accept_format($format)
+{
+	static $formats = array(
+		'html' => array('text/html', 'application/xhtml+xml'),
+		'txt'  => array('text/plain'),
+		'js'   => array('application/javascript', 'application/x-javascript', 'text/javascript', 'application/ecmascript', 'application/x-ecmascript'),
+		'css'  => array('text/css'),
+		'json' => array('application/json', 'application/x-json'),
+		'xml'  => array('text/xml', 'application/xml', 'application/x-xml'),
+		'rdf'  => array('application/rdf+xml'),
+		'atom' => array('application/atom+xml'),
+		'rss'  => array('application/rss+xml'),
+	);
+	static $accepts = array();
+//	static $q = array(); // nice to have
+
+	if (empty($accepts)) {
+		// build cache of accepted formats
+		$accepts = preg_split('/\s*,\s*/', serverSet('HTTP_ACCEPT'), null, PREG_SPLIT_NO_EMPTY);
+		foreach ($accepts as &$a) {
+			// sniff out quality factors if present
+			if (preg_match('/(.*)\s*;\s*q=([.0-9]*)/', $a, $m)) {
+				$a = $m[1];
+//				$q[$a] = floatval($m[2]);
+//			} else {
+//				$q[$a] = 1.0;
+			}
+		}
+	}
+	return isset($formats[$format]) ? count(array_intersect($formats[$format], $accepts)) > 0 : false;
+}
 ?>
