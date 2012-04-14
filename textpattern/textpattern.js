@@ -368,7 +368,7 @@ jQuery.fn.txpAsyncForm = function(opts)
 			);
 			event.preventDefault();
 	    } catch(e) {}
-    });
+	});
 	return form;
 };
 
