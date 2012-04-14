@@ -317,57 +317,59 @@ function sendAsyncEvent(data, fn, format)
 }
 
 /**
- * Send a form as AJAX data.
- * onsubmit() handler shell for txpPostForm().
- * @param form
- * @return boolean Continue with browser's default form handling
- * @since 4.4.0
- */
-function postForm(form)
-{
-    return $(form).txpPostForm();
-}
-
-/**
- * jQuery plugin to submit a form. Sends a form's entry elements as AJAX data and processes the response javascript.
+ * txpAsyncForm jQuery plugin. Sends a form's entry elements as AJAX data and processes the response javascript.
  *
- * @param   object  event-object|undefined
- * @return  boolean Continue with browser's default form handling
+ * @param   object  options-object {dataType, error: function error_callback(){}, success: function success_callback(){}} | undefined
+ * @return  object this form
  * @since   4.5.0
  */
-jQuery.fn.txpPostForm = function(event)
+jQuery.fn.txpAsyncForm = function(opts)
 {
 	var form = this;
-    try {
-		// Show feedback while processing
-		form.addClass('busy');
-		$('body').addClass('busy');
-        var s = form.find('input[type="submit"]:focus');
-        if (s.length == 0) {
-        	// WebKit does not set :focus on button-click: use first submit input as a fallback
-        	s = form.find('input[type="submit"]');
-        }
-        if (s.length > 0) {
-	        s = s.slice(0,1);
-	        s.attr('disabled', true).after('<span class="spinner"></span>');
-        }
-        // Send form data to application, process response as script.
-		sendAsyncEvent(
-			form.serialize() + '&' + (s.attr('name') || '_txp_submit') + '=' + (s.val() || '_txp_submit'),
-			function() {
-                // remove feedback elements
-				form.removeClass('busy');
-				s.removeAttr('disabled');
-				$('body').removeClass('busy');
-                $('span.spinner').remove();
-			},
-			'script'
-		);
-		return false;
-	} catch(e) {
-		// Perform regular form action on any hiccups
-		return true;
+	var options = opts;
+	var s = form.find('input[type="submit"]:focus');
+
+	if (s.length == 0) {
+		// WebKit does not set :focus on button-click: use first submit input as a fallback
+		s = form.find('input[type="submit"]');
 	}
+	if (s.length > 0) {
+		s = s.slice(0,1);
+	}
+
+	// error handler
+	form.ajaxError(function(event, jqXHR, ajaxSettings, thrownError) {
+	    // remove feedback elements
+	    form.removeClass('busy');
+	    s.removeAttr('disabled');
+	    $('body').removeClass('busy');
+	    $('span.spinner').remove();
+	    !options.error || options.error(form, event, jqXHR, ajaxSettings, thrownError);
+    });
+
+    // Send form data to application, process response as script.
+    form.submit(function(event) {
+	    try {
+		    // Show feedback while processing
+		    form.addClass('busy');
+		    $('body').addClass('busy');
+		    s.attr('disabled', true).after('<span class="spinner"></span>');
+		    sendAsyncEvent(
+				form.serialize() + '&' + (s.attr('name') || '_txp_submit') + '=' + (s.val() || '_txp_submit'),
+				function(data, textStatus, jqXHR) {
+	                // remove feedback elements
+					form.removeClass('busy');
+					s.removeAttr('disabled');
+					$('body').removeClass('busy');
+	                $('span.spinner').remove();
+					!options.success || options.success(form, event, data, textStatus, jqXHR);
+				},
+				options.dataType || 'script'
+			);
+			event.preventDefault();
+	    } catch(e) {}
+    });
+	return form;
 };
 
 //-------------------------------------------------------------
@@ -385,10 +387,10 @@ $(document).ready(function() {
 	if($.ajaxSetup().timeout === undefined) {
 		$.ajaxSetup( {timeout : textpattern.ajax_timeout} );
 	}
-	// submit async forms
+	// setup and submit async forms
 	if(!textpattern.ajaxally_challenged) {
-        $('form.async').submit(function(e) {
-            return $(this).txpPostForm(e);
-        });
+		$('form.async').txpAsyncForm({
+			error: function() {window.alert(textpattern.gTxt.form_submission_error);}
+		});
     }
 });
