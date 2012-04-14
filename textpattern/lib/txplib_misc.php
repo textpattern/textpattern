@@ -659,6 +659,9 @@ function escape_js($js)
 			} else {
 				send_script_response ('/*'.$msg.".\n".$backtrace.'*/');
 			}
+		} elseif (http_accept_format('xml')) {
+			send_xml_response (array('http-status' => '500', 'internal_error' => $msg.".\n".$backtrace));
+			die();
 		} else {
 			txp_die($msg, 500);
 		}
@@ -2601,14 +2604,14 @@ eod;
 				foreach ($value as $e => $v)
 				{
 					// Character escaping in values; @see http://www.w3.org/TR/2000/WD-xml-c14n-20000119.html#charescaping
-					$v = str_replace(array("\t", "\n", "\r"), array("&#x9;", "&#xA;", "&#xD;"), htmlspecialchars($v));
+					$v = str_replace(array("\t", "\n", "\r"), array("&#x9;", "&#xA;", "&#xD;"), htmlentities($v, ENT_QUOTES, 'UTF-8'));
 					$out[] = t.t."<$e value='$v' />".n;
 				}
 				$out[] = t."</$element>".n;
 			}
 			else
 			{
-				$value = str_replace(array("\t", "\n", "\r"), array("&#x9;", "&#xA;", "&#xD;"), htmlspecialchars($value));
+				$value = str_replace(array("\t", "\n", "\r"), array("&#x9;", "&#xA;", "&#xD;"), htmlentities($value, ENT_QUOTES, 'UTF-8'));
 				$out[] = t."<$element value='$value' />".n;
 			}
 		}
