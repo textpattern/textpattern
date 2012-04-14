@@ -343,7 +343,7 @@ class txp_thumb extends wet_thumb {
         if ( !isset($this->m_ext) ) return false;
 
         if ( parent::write ( IMPATH.$this->m_id.$this->m_ext, IMPATH.$this->m_id.'t'.$this->m_ext ) ) {
-		    safe_update('txp_image', "thumbnail = 1, thumb_w = $this->width, thumb_h = $this->height", 'id = '.$this->m_id);
+		    safe_update('txp_image', "thumbnail = 1, thumb_w = $this->width, thumb_h = $this->height, date = now()", 'id = '.$this->m_id);
 		    chmod(IMPATH.$this->m_id.'t'.$this->m_ext, 0644);
 		    return true;
 		}

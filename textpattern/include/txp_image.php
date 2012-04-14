@@ -609,7 +609,7 @@ $LastChangedRevision$
 				image_list(array($newpath.sp.gTxt('upload_dir_perms'), E_ERROR));
 			} else {
 				chmod($newpath, 0644);
-				safe_update("txp_image", "thumbnail = 1, thumb_w = $w, thumb_h = $h", "id = $id");
+				safe_update("txp_image", "thumbnail = 1, thumb_w = $w, thumb_h = $h, date = now()", "id = $id");
 
 				$message = gTxt('image_uploaded', array('{name}' => $name));
 				update_lastmod();
@@ -855,6 +855,7 @@ $LastChangedRevision$
 		$t = new txp_thumb($id);
 		if ($t->delete()) {
 			image_edit(gTxt('thumbnail_deleted'),$id);
+			update_lastmod();
 		} else {
 			image_edit(array(gTxt('thumbnail_delete_failed'), E_ERROR),$id);
 		}
