@@ -327,16 +327,6 @@ jQuery.fn.txpAsyncForm = function(opts)
 {
 	var form = this;
 	var options = opts;
-	var s = form.find('input[type="submit"]:focus');
-
-	if (s.length == 0) {
-		// WebKit does not set :focus on button-click: use first submit input as a fallback
-		s = form.find('input[type="submit"]');
-	}
-	if (s.length > 0) {
-		s = s.slice(0,1);
-	}
-
 	// error handler
 	form.ajaxError(function(event, jqXHR, ajaxSettings, thrownError) {
 	    // remove feedback elements
@@ -351,8 +341,19 @@ jQuery.fn.txpAsyncForm = function(opts)
     form.submit(function(event) {
 	    try {
 		    // Show feedback while processing
+		    form = $(this);
 		    form.addClass('busy');
 		    $('body').addClass('busy');
+
+		    var s = form.find('input[type="submit"]:focus');
+		    if (s.length == 0) {
+			    // WebKit does not set :focus on button-click: use first submit input as a fallback
+			    s = form.find('input[type="submit"]');
+		    }
+		    if (s.length > 0) {
+			    s = s.slice(0,1);
+		    }
+
 		    s.attr('disabled', true).after('<span class="spinner"></span>');
 		    sendAsyncEvent(
 				form.serialize() + '&' + (s.attr('name') || '_txp_submit') + '=' + (s.val() || '_txp_submit'),
