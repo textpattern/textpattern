@@ -383,6 +383,63 @@ jQuery.fn.txpAsyncForm = function(options)
 	return this;
 };
 
+/**
+ * Returns a l18n string.
+ * @param string l18n The l18n string to output
+ * @param object atts Replacement map
+ * @param boolean escape Escape HTML. Default TRUE
+ * @return string
+ */
+
+function gTxt(l18n, atts, escape)
+{
+	var tags = atts || {};
+	var string = l18n;
+	var name = string.toLowerCase();
+
+	if ($.type(textpattern.textarray[name]) !== 'undefined') {
+		string = textpattern.textarray[name];
+	}
+
+	if (escape !== false) {
+		string = $('<div/>').text(string).html();
+
+		$.each(tags, function(key, value) {
+			tags[key] = $('<div/>').text(value).html();
+		});
+	}
+
+	$.each(tags, function(key, value) {
+		string = string.replace(key, value);
+	});
+
+	return string;
+}
+
+/**
+ * jQuery plugin for gTxt. Sets HTML contents of each matched element.
+ * @param object options-object {string, tags : {}, escape : TRUE} | string The l18n string
+ * @param object|undefined tags Replacement tags
+ * @param boolean|undefined escape Escape HTML
+ * @return object this
+ */
+
+jQuery.fn.gTxt = function(opts, tags, escape)
+{
+	var options = opts;
+
+	if ($.type(options) !== 'object') {
+		options = {
+			string : opts,
+			tags : tags,
+			escape : escape
+		};
+	}
+
+	$(this).html(gTxt(options.string, options.tags, options.escape));
+	return this;
+};
+
 //-------------------------------------------------------------
 // global admin-side behaviour
 $(document).ready(function() {
@@ -401,7 +458,7 @@ $(document).ready(function() {
 	// setup and submit async forms
 	if(!textpattern.ajaxally_challenged) {
 		$('form.async').txpAsyncForm({
-			error: function() {window.alert(textpattern.gTxt.form_submission_error);}
+			error: function() {window.alert(gTxt('form_submission_error'));}
 		});
     }
 });

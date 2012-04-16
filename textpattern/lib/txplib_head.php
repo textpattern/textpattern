@@ -63,8 +63,8 @@ $LastChangedRevision$
 		_txp_token: "'.htmlspecialchars(form_token()).'",
 		ajax_timeout: '.htmlspecialchars(AJAX_TIMEOUT).',
 		ajaxally_challenged: '.(AJAXALLY_CHALLENGED ? 'true' : 'false').',
-		gTxt: {
-			form_submission_error : "'.htmlspecialchars(gTxt('form_submission_error')).'"'.n.
+		textarray: {'.n.
+			'form_submission_error : "'.htmlspecialchars(gTxt('form_submission_error')).'"'.n.
 		'},
 		do_spellcheck: "'.htmlspecialchars(
 							get_pref('do_spellcheck', '#page-article #body, #page-article #title,'.
