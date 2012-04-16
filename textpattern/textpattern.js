@@ -323,29 +323,25 @@ function sendAsyncEvent(data, fn, format)
  * @return  object this form
  * @since   4.5.0
  */
-jQuery.fn.txpAsyncForm = function(opts)
+jQuery.fn.txpAsyncForm = function(options)
 {
-	var form = this;
-	var options = opts;
-	// error handler
-	form.ajaxError(function(event, jqXHR, ajaxSettings, thrownError) {
-	    // remove feedback elements
-	    form.removeClass('busy');
-	    s.removeAttr('disabled');
-	    $('body').removeClass('busy');
-	    $('span.spinner').remove();
-	    !options.error || options.error(form, event, jqXHR, ajaxSettings, thrownError);
-    });
+	options = $.extend({
+		dataType: 'script',
+		success: null,
+		error: null
+	}, options);
 
     // Send form data to application, process response as script.
-    form.submit(function(event) {
+    this.submit(function(event) {
 	    try {
+		    var form = $(this);
+		    var s;
+
 		    // Show feedback while processing
-		    form = $(this);
 		    form.addClass('busy');
 		    $('body').addClass('busy');
 
-		    var s = form.find('input[type="submit"]:focus');
+		    s = form.find('input[type="submit"]:focus');
 		    if (s.length == 0) {
 			    // WebKit does not set :focus on button-click: use first submit input as a fallback
 			    s = form.find('input[type="submit"]');
@@ -355,6 +351,19 @@ jQuery.fn.txpAsyncForm = function(opts)
 		    }
 
 		    s.attr('disabled', true).after('<span class="spinner"></span>');
+
+		    // error handler
+		    form.ajaxError(function(event, jqXHR, ajaxSettings, thrownError) {
+			    // do not pile up error handlers upon repeat submissions
+			    $(this).off('ajaxError');
+			    // remove feedback elements
+			    form.removeClass('busy');
+			    s.removeAttr('disabled');
+			    $('body').removeClass('busy');
+			    $('span.spinner').remove();
+			    if (options.error) options.error(form, event, jqXHR, ajaxSettings, thrownError);
+		    });
+
 		    sendAsyncEvent(
 				form.serialize() + '&' + (s.attr('name') || '_txp_submit') + '=' + (s.val() || '_txp_submit'),
 				function(data, textStatus, jqXHR) {
@@ -363,14 +372,15 @@ jQuery.fn.txpAsyncForm = function(opts)
 					s.removeAttr('disabled');
 					$('body').removeClass('busy');
 	                $('span.spinner').remove();
-					!options.success || options.success(form, event, data, textStatus, jqXHR);
+					form.ajaxError = null;
+					if (options.success) options.success(form, event, data, textStatus, jqXHR);
 				},
-				options.dataType || 'script'
+				options.dataType
 			);
 			event.preventDefault();
 	    } catch(e) {}
 	});
-	return form;
+	return this;
 };
 
 //-------------------------------------------------------------
