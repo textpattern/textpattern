@@ -164,7 +164,7 @@ $LastChangedRevision$
 
 	function switch_status()
 	{
-		extract(gpsa(array('name', 'status')));
+		extract(array_map('assert_string', gpsa(array('name', 'status'))));
 
 		$change = ($status) ? 0 : 1;
 
@@ -210,6 +210,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function plugin_edit_form($name='')
 	{
+		assert_string($name);
 		$sub = fInput('submit','',gTxt('save'),'publish');
 		$code = ($name) ? fetch('code','txp_plugin','name',$name) : '';
 		$thing = ($code)
@@ -229,7 +230,7 @@ $LastChangedRevision$
 
 	function plugin_save()
 	{
-		extract(doSlash(gpsa(array('name', 'code'))));
+		extract(doSlash(array_map('assert_string', gpsa(array('name', 'code')))));
 
 		safe_update('txp_plugin', "code = '$code'", "name = '$name'");
 
@@ -257,7 +258,7 @@ $LastChangedRevision$
 		if (ps('txt_plugin')) {
 			$plugin = join("\n", file($_FILES['theplugin']['tmp_name']));
 		} else {
-			$plugin = ps('plugin');
+			$plugin = assert_string(ps('plugin'));
 		}
 
 		// pre-4.0 style plugin?
@@ -347,7 +348,7 @@ $LastChangedRevision$
 	function plugin_install()
 	{
 
-		$plugin = ps('plugin64');
+		$plugin = assert_string(ps('plugin64'));
 		if (strpos($plugin, '$plugin=\'') !== false) {
 			@ini_set('pcre.backtrack_limit', '1000000');
 			$plugin = preg_replace('@.*\$plugin=\'([\w=+/]+)\'.*@s', '$1', $plugin);
@@ -487,7 +488,7 @@ $LastChangedRevision$
 	function plugin_multi_edit()
 	{
 		$selected = ps('selected');
-		$method   = ps('edit_method');
+		$method   = assert_string(ps('edit_method'));
 
 		if (!$selected or !is_array($selected))
 		{

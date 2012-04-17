@@ -133,6 +133,7 @@ if (!empty($event) and $event == 'article') {
 
 		$user = doSlash($txp_user);
 		$Keywords = doSlash(trim(preg_replace('/( ?[\r\n\t,])+ ?/s', ',', preg_replace('/ +/', ' ', ps('Keywords'))), ', '));
+		$msg = '';
 
 		if ($Title or $Body or $Excerpt) {
 
@@ -148,7 +149,7 @@ if (!empty($event) and $event == 'article') {
 			}
 			$cfq = join(', ', $cfq);
 
-			safe_insert(
+			if (safe_insert(
 			   "textpattern",
 			   "Title           = '$Title',
 				Body            = '$Body',
@@ -175,19 +176,22 @@ if (!empty($event) and $event == 'article') {
 				.(($cfs) ? $cfq.',' : '').
 				"uid             = '".md5(uniqid(rand(),true))."',
 				feed_time       = now()"
-			);
+			)) {
 
-			$GLOBALS['ID'] = mysql_insert_id();
+				$GLOBALS['ID'] = mysql_insert_id();
 
-			if ($Status>=4) {
-				do_pings();
-				update_lastmod();
+				if ($Status>=4) {
+					do_pings();
+					update_lastmod();
+				}
+				$s = check_url_title($url_title);
+				$msg = array(get_status_message($Status).' '.$s, ($s ? E_WARNING : 0));
+			} else {
+				unset($GLOBALS['ID']);
+				$msg = array(gTxt('article_save_error'), E_ERROR);
 			}
-			$s = check_url_title($url_title);
-			article_edit(
-				array(get_status_message($Status).' '.$s, ($s ? E_WARNING : 0))
-			);
-		} else article_edit();
+		}
+		article_edit($msg);
 	}
 
 //--------------------------------------------------------------

@@ -381,6 +381,10 @@ if ($event == 'category') {
 
 			cat_category_list($message);
 		}
+		else
+		{
+			cat_category_list(array(gTxt('category_save_failed'), E_ERROR));
+		}
 	}
 
 //-------------------------------------------------------------
@@ -417,7 +421,7 @@ if ($event == 'category') {
 	{
 		global $txpcfg;
 
-		extract(doSlash(psa(array('id', 'name', 'old_name', 'parent', 'title'))));
+		extract(doSlash(array_map('assert_string', psa(array('id', 'name', 'old_name', 'parent', 'title')))));
 		$id = assert_int($id);
 
 		$name = sanitizeForUrl($name);
@@ -442,26 +446,28 @@ if ($event == 'category') {
 
 		$parent = ($parent) ? $parent : 'root';
 
-		if (safe_update('txp_category', "name = '$name', parent = '$parent', title = '$title'", "id = $id"))
+		$message = array(gTxt('category_save_failed'), E_ERROR);
+		if (safe_update('txp_category', "name = '$name', parent = '$parent', title = '$title'", "id = $id") &&
+			safe_update('txp_category', "parent = '$name'", "parent = '$old_name'"))
 		{
-			safe_update('txp_category', "parent = '$name'", "parent = '$old_name'");
+			rebuild_tree_full($event);
+
+			if ($event == 'article')
+			{
+				if (safe_update('textpattern', "Category1 = '$name'", "Category1 = '$old_name'") &&
+					safe_update('textpattern', "Category2 = '$name'", "Category2 = '$old_name'"))
+				{
+					$message = gTxt($event.'_category_updated', array('{name}' => doStrip($name)));
+				}
+			}
+			else
+			{
+				if (safe_update($table_name, "category = '$name'", "category = '$old_name'"))
+				{
+					$message = gTxt($event.'_category_updated', array('{name}' => doStrip($name)));
+				}
+			}
 		}
-
-		rebuild_tree_full($event);
-
-		if ($event == 'article')
-		{
-			safe_update('textpattern', "Category1 = '$name'", "Category1 = '$old_name'");
-			safe_update('textpattern', "Category2 = '$name'", "Category2 = '$old_name'");
-		}
-
-		else
-		{
-			safe_update($table_name, "category = '$name'", "category = '$old_name'");
-		}
-
-		$message = gTxt($event.'_category_updated', array('{name}' => doStrip($name)));
-
 		cat_category_list($message);
 	}
 

@@ -149,7 +149,7 @@ $LastChangedRevision$
 //-------------------------------------------------------------
 	function css_save()
 	{
-		extract(gpsa(array('name','css','savenew','newname','copy')));
+		extract(array_map('assert_string', gpsa(array('name','css','savenew','newname','copy'))));
 		$css = doSlash($css);
 
 		if ($savenew or $copy)
@@ -167,14 +167,16 @@ $LastChangedRevision$
 
 			elseif ($newname)
 			{
-				safe_insert('txp_css', "name = '".$newname."', css = '$css'");
-
-				// update site last mod time
-				update_lastmod();
-
-				$message = gTxt('css_created', array('{name}' => $newname));
+				if (safe_insert('txp_css', "name = '".$newname."', css = '$css'"))
+				{
+					update_lastmod();
+					$message = gTxt('css_created', array('{name}' => $newname));
+				}
+				else
+				{
+					$message = array(gTxt('css_save_failed'), E_ERROR);
+				}
 			}
-
 			else
 			{
 				$message = array(gTxt('css_name_required'), E_ERROR);
@@ -182,16 +184,17 @@ $LastChangedRevision$
 
 			css_edit($message);
 		}
-
 		else
 		{
-			safe_update('txp_css', "css = '$css'", "name = '".doSlash($name)."'");
-
-			// update site last mod time
-			update_lastmod();
-
-			$message = gTxt('css_updated', array('{name}' => $name));
-
+			if (safe_update('txp_css', "css = '$css'", "name = '".doSlash($name)."'"))
+			{
+				update_lastmod();
+				$message = gTxt('css_updated', array('{name}' => $name));
+			}
+			else
+			{
+				$message = array(gTxt('css_save_failed'), E_ERROR);
+			}
 			css_edit($message);
 		}
 	}
@@ -206,15 +209,13 @@ $LastChangedRevision$
 		{
 			$message = gTxt('css_used_by_section', array('{name}' => $name, '{count}' => $count));
 		}
-
 		else
 		{
-			safe_delete('txp_css', "name = '".doSlash($name)."'");
-
-			$message = gTxt('css_deleted', array('{name}' => $name));
+			if (safe_delete('txp_css', "name = '".doSlash($name)."'"))
+			{
+				$message = gTxt('css_deleted', array('{name}' => $name));
+			}
 		}
-
 		css_edit($message);
 	}
-
 ?>

@@ -226,7 +226,7 @@ $LastChangedRevision$
 	{
 		global $vars, $step, $essential_forms;
 
-		extract(doSlash(gpsa($vars)));
+		extract(doSlash(array_map('assert_string', gpsa($vars))));
 		$name = doSlash(trim(preg_replace('/[<>&"\']/', '', gps('name'))));
 
 		if (!$name)
@@ -254,24 +254,31 @@ $LastChangedRevision$
 				$step = 'form_create';
 				$message = gTxt('form_already_exists', array('{name}' => $name));
 
-			return form_edit(array($message, E_ERROR));
+				return form_edit(array($message, E_ERROR));
 			}
 
-			safe_insert('txp_form', "Form = '$Form', type = '$type', name = '$name'");
-
-			update_lastmod();
-
-			$message = gTxt('form_created', array('{name}' => $name));
+			if (safe_insert('txp_form', "Form = '$Form', type = '$type', name = '$name'"))
+			{
+				update_lastmod();
+				$message = gTxt('form_created', array('{name}' => $name));
+			}
+			else
+			{
+				$message = array(gTxt('form_save_failed'), E_ERROR);
+			};
 
 			return form_edit($message);
 		}
 
-		safe_update('txp_form', "Form = '$Form', type = '$type', name = '$name'", "name = '$oldname'");
-
-		update_lastmod();
-
-		$message = gTxt('form_updated', array('{name}' => $name));
-
+		if (safe_update('txp_form', "Form = '$Form', type = '$type', name = '$name'", "name = '$oldname'"))
+		{
+			update_lastmod();
+			$message = gTxt('form_updated', array('{name}' => $name));
+		}
+		else
+		{
+			$message = array(gTxt('form_save_failed'), E_ERROR);
+		}
 		form_edit($message);
 	}
 
@@ -281,10 +288,7 @@ $LastChangedRevision$
 		global $essential_forms;
 		if (in_array($name, $essential_forms)) return false;
 		$name = doSlash($name);
-		if (safe_delete("txp_form","name='$name'")) {
-			return true;
-		}
-		return false;
+		return safe_delete("txp_form","name='$name'");
 	}
 
 // -------------------------------------------------------------

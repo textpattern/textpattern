@@ -97,7 +97,7 @@ $LastChangedRevision$
 	function section_create()
 	{
 		global $txpcfg;
-		$name = ps('name');
+		$name = assert_string(ps('name'));
 
 		//Prevent non url chars on section names
 		include_once txpath.'/lib/classTextile.php';
@@ -132,6 +132,10 @@ $LastChangedRevision$
 
 					sec_section_list($message);
 				}
+				else
+				{
+					sec_section_list(array(gTxt('section_save_failed'), E_ERROR));
+				}
 			}
 
 			else
@@ -154,7 +158,7 @@ $LastChangedRevision$
 	{
 		global $txpcfg, $app_mode;
 
-		$in = psa(array('name', 'title', 'old_name', 'page', 'css'));
+		$in = array_map('assert_string', psa(array('name', 'title', 'old_name', 'page', 'css')));
 		if (empty($in['title']))
 		{
 			$in['title'] = $in['name'];
@@ -185,9 +189,10 @@ $LastChangedRevision$
 			}
 		}
 
+		$ok = true;
 		if ($name == 'default')
 		{
-			safe_update('txp_section', "page = '$safe_page', css = '$safe_css'", "name = 'default'");
+			$ok = safe_update('txp_section', "page = '$safe_page', css = '$safe_css'", "name = 'default'");
 		}
 		else
 		{
@@ -195,7 +200,7 @@ $LastChangedRevision$
 			// note this means 'selected by default' not 'default page'
 			if ($is_default)
 			{
-				safe_update("txp_section", "is_default = 0", "name != '$safe_old_name'");
+				$ok = safe_update("txp_section", "is_default = 0", "name != '$safe_old_name'");
 				// switch off $is_default for all sections in async app_mode
 				if (!AJAXALLY_CHALLENGED) {
 					$response[] =  '$("input[name=\"is_default\"][value=\"1\"]").attr("checked", false);'.
@@ -203,45 +208,62 @@ $LastChangedRevision$
 				}
 			}
 
-			safe_update('txp_section', "
-				name         = '$safe_name',
-				title        = '$safe_title',
-				page         = '$safe_page',
-				css          = '$safe_css',
-				is_default   = $is_default,
-				on_frontpage = $on_frontpage,
-				in_rss       = $in_rss,
-				searchable   = $searchable
-			", "name = '$safe_old_name'");
+			if ($ok )
+			{
+				$ok = safe_update('txp_section', "
+					name         = '$safe_name',
+					title        = '$safe_title',
+					page         = '$safe_page',
+					css          = '$safe_css',
+					is_default   = $is_default,
+					on_frontpage = $on_frontpage,
+					in_rss       = $in_rss,
+					searchable   = $searchable
+					", "name = '$safe_old_name'");
+			}
 
-			safe_update('textpattern', "Section = '$safe_name'", "Section = '$safe_old_name'");
+			if ($ok)
+			{
+				$ok = safe_update('textpattern', "Section = '$safe_name'", "Section = '$safe_old_name'");
+			}
 		}
 
-		update_lastmod();
+		if ($ok)
+		{
+			update_lastmod();
+		}
 
 		if (!AJAXALLY_CHALLENGED) {
-			global $theme;
-			// Keep old name around to mangle existing HTML
-			$on = $old_name;
-			// Old became new as we have saved this section
-			$old_name = $name;
+			if ($ok) {
+				global $theme;
+				// Keep old name around to mangle existing HTML
+				$on = $old_name;
+				// Old became new as we have saved this section
+				$old_name = $name;
 
-			$s = compact('name', 'old_name', 'title', 'page', 'css', 'is_default', 'on_frontpage', 'in_rss', 'searchable');
-			$form = section_detail_partial($s);
+				$s = compact('name', 'old_name', 'title', 'page', 'css', 'is_default', 'on_frontpage', 'in_rss', 'searchable');
+				$form = section_detail_partial($s);
 
-			$s = doSpecial($s);
-			extract($s);
+				$s = doSpecial($s);
+				extract($s);
 
-			// Update form with current data
-			$response[] = '$("#section-form-'.$on.'").html("'.escape_js($form).'")';
-			// Reflect new section name on id and row label
-			$label = ($name == 'default' ? gTxt('default') : $name);
-			$response[] = '$("tr#section-'.$on.'").attr("id", "section-'.$name.'").find(".label").html("'.$label.'")';
-			$response[] = $theme->announce_async(gTxt('section_updated', array('{name}' => $name)));
+				// Update form with current data
+				$response[] = '$("#section-form-'.$on.'").html("'.escape_js($form).'")';
+				// Reflect new section name on id and row label
+				$label = ($name == 'default' ? gTxt('default') : $name);
+				$response[] = '$("tr#section-'.$on.'").attr("id", "section-'.$name.'").find(".label").html("'.$label.'")';
+				$response[] = $theme->announce_async(gTxt('section_updated', array('{name}' => $name)));
+			} else {
+				$response[] =  $theme->announce_async(array(gTxt('section_save_failed'), E_ERROR));
+			}
 			send_script_response(join(";\n", $response));
 		} else {
 			// TODO: Deprecate non-AJAX alternative code path in future version
-			sec_section_list(gTxt('section_updated', array('{name}' => $name)));
+			if ($ok) {
+				sec_section_list(gTxt('section_updated', array('{name}' => $name)));
+			} else {
+				sec_section_list(array(gTxt('section_save_failed'), E_ERROR));
+			}
 		}
 	}
 

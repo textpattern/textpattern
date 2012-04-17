@@ -267,7 +267,7 @@ $LastChangedRevision$
 
 		echo '<div id="'.$event.'_container" class="txp-container">';
 
-		extract(gpsa($vars));
+		extract(array_map('assert_string', gpsa($vars)));
 
 		$rs = array();
 		if ($id && $step == 'link_edit')
@@ -371,7 +371,7 @@ $LastChangedRevision$
 	{
 		global $txpcfg, $vars, $txp_user;
 
-		$varray = gpsa($vars);
+		$varray = array_map('assert_string', gpsa($vars));
 
 		extract(doSlash($varray));
 
@@ -417,7 +417,7 @@ $LastChangedRevision$
 	{
 		global $txpcfg, $vars, $txp_user;
 
-		$varray = gpsa($vars);
+		$varray = array_map('assert_string', gpsa($vars));
 
 		extract(doSlash($varray));
 

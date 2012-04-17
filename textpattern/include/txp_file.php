@@ -603,7 +603,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function file_create()
 	{
-		global $txp_user,$file_base_path;
+		global $txp_user, $file_base_path;
 
 		if (!has_privs('file.edit.own'))
 		{
@@ -611,7 +611,7 @@ $LastChangedRevision$
 			return;
 		}
 
-		extract(doSlash(gpsa(array('filename','title','category','permissions','description'))));
+		extract(doSlash(array_map('assert_string', gpsa(array('filename','title','category','permissions','description')))));
 		$safe_filename = sanitizeForFile($filename);
 		if ($safe_filename != $filename) {
 			file_list(array(gTxt('invalid_filename'), E_ERROR));
@@ -647,7 +647,7 @@ $LastChangedRevision$
 			return;
 		}
 
-		extract(doSlash(gpsa(array('category','title','permissions','description'))));
+		extract(doSlash(array_map('assert_string', gpsa(array('category','title','permissions','description')))));
 
 		$name = file_get_uploaded_name();
 		$file = file_get_uploaded();
@@ -793,7 +793,8 @@ $LastChangedRevision$
 	{
 		global $file_base_path, $txp_user;
 
-		extract(doSlash(gpsa(array('id', 'category', 'title', 'description', 'status', 'publish_now', 'year', 'month', 'day', 'hour', 'minute', 'second'))));
+		extract(doSlash(array_map('assert_string',
+			gpsa(array('id', 'category', 'title', 'description', 'status', 'publish_now', 'year', 'month', 'day', 'hour', 'minute', 'second')))));
 		$filename = sanitizeForFile(gps('filename'));
 
 		if ($filename == '') {

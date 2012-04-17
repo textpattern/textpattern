@@ -43,9 +43,9 @@ $LastChangedRevision$
 
 		pagetop(gTxt('edit_pages'), $message);
 
-		extract(gpsa(array('copy', 'savenew')));
-		$name = sanitizeForPage(gps('name'));
-		$newname = sanitizeForPage(gps('newname'));
+		extract(array_map('assert_string', gpsa(array('copy', 'savenew'))));
+		$name = sanitizeForPage(assert_string(gps('name')));
+		$newname = sanitizeForPage(assert_string(gps('newname')));
 
 		if ($step == 'page_delete' || empty($name) && $step != 'page_new' && !$savenew)
 		{
@@ -197,12 +197,12 @@ $LastChangedRevision$
 
 	function page_save()
 	{
-		extract(doSlash(gpsa(array('savenew', 'html', 'copy'))));
-		$name = sanitizeForPage(gps('name'));
+		extract(doSlash(array_map('assert_string', gpsa(array('savenew', 'html', 'copy')))));
+		$name = sanitizeForPage(assert_string(gps('name')));
 
 		if ($savenew or $copy)
 		{
-			$newname = doSlash(sanitizeForPage(gps('newname')));
+			$newname = doSlash(sanitizeForPage(assert_string(gps('newname'))));
 
 			if ($newname and safe_field('name', 'txp_page', "name = '$newname'"))
 			{
@@ -214,10 +214,15 @@ $LastChangedRevision$
 			}
 			elseif ($newname)
 			{
-				safe_insert('txp_page', "name = '$newname', user_html = '$html'");
-				update_lastmod();
-
-				$message = gTxt('page_created', array('{name}' => $newname));
+				if (safe_insert('txp_page', "name = '$newname', user_html = '$html'"))
+				{
+					update_lastmod();
+					$message = gTxt('page_created', array('{name}' => $newname));
+				}
+				else
+				{
+					$message = array(gTxt('page_save_failed'), E_ERROR);
+				}
 			}
 			else
 			{
@@ -229,11 +234,15 @@ $LastChangedRevision$
 
 		else
 		{
-			safe_update('txp_page', "user_html = '$html'", "name = '$name'");
-
-			update_lastmod();
-
-			$message = gTxt('page_updated', array('{name}' => $name));
+			if (safe_update('txp_page', "user_html = '$html'", "name = '$name'"))
+			{
+				update_lastmod();
+				$message = gTxt('page_updated', array('{name}' => $name));
+			}
+			else
+			{
+				$message = array(gTxt('page_save_failed'), E_ERROR);
+			}
 
 			page_edit($message);
 		}

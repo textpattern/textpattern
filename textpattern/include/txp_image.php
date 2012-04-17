@@ -630,8 +630,8 @@ $LastChangedRevision$
 	{
 		global $txp_user;
 
-		extract(doSlash(gpsa(array('id','category','caption','alt'))));
-		$name = gps('name');
+		extract(doSlash(array_map('assert_string', gpsa(array('id','category','caption','alt')))));
+		$name = assert_string(gps('name'));
 		$safename = doSlash($name);
 		$id = assert_int($id);
 
@@ -642,17 +642,22 @@ $LastChangedRevision$
 			return;
 		}
 
-		safe_update(
+		if (safe_update(
 			"txp_image",
 			"name     = '$safename',
 			category = '$category',
 			alt      = '$alt',
 			caption  = '$caption'",
 			"id = $id"
-		);
-
-		$message = gTxt('image_updated', array('{name}' => $name));
-		update_lastmod();
+		))
+		{
+			$message = gTxt('image_updated', array('{name}' => $name));
+			update_lastmod();
+		}
+		else
+		{
+			$message = array(gTxt('image_save_failed'), E_ERROR);
+		}
 
 		image_list($message);
 	}
@@ -923,10 +928,11 @@ $LastChangedRevision$
 			if (empty($id))
 			{
 				$rs = safe_insert('txp_image', $q);
-
-				$id = $GLOBALS['ID'] = mysql_insert_id();
+				if ($rs)
+				{
+					$id = $GLOBALS['ID'] = mysql_insert_id();
+				}
 			}
-
 			else
 			{
 				$id = assert_int($id);

@@ -39,20 +39,26 @@ $LastChangedRevision$
 //-------------------------------------------------------------
 	function discuss_save()
 	{
-		extract(doSlash(gpsa(array('email','name','web','message','ip'))));
+		extract(doSlash(array_map('assert_string', gpsa(array('email','name','web','message','ip')))));
 		extract(array_map('assert_int',gpsa(array('discussid','visible','parentid'))));
 		$message = preg_replace('#<(/?txp:.+?)>#', '&lt;$1&gt;', $message);
-		safe_update("txp_discuss",
+		if (safe_update("txp_discuss",
 			"email   = '$email',
 			 name    = '$name',
 			 web     = '$web',
 			 message = '$message',
 			 visible = $visible",
-			"discussid = $discussid");
-		update_comments_count($parentid);
-		update_lastmod();
+			"discussid = $discussid"))
+		{
+			update_comments_count($parentid);
+			update_lastmod();
 
-		$message = gTxt('comment_updated', array('{id}' => $discussid));
+			$message = gTxt('comment_updated', array('{id}' => $discussid));
+		}
+		else
+		{
+			$message = array(gTxt('comment_save_failed'), E_ERROR);
+		}
 
 		discuss_list($message);
 	}
@@ -704,5 +710,4 @@ $LastChangedRevision$
 
 		return discuss_list();
 	}
-
 ?>
