@@ -625,7 +625,7 @@ function escape_js($js)
 // -------------------------------------------------------------
 	function adminErrorHandler($errno, $errstr, $errfile, $errline)
 	{
-		global $production_status, $theme;
+		global $production_status, $theme, $event, $step;
 		if (!error_reporting())
 			return;
 
@@ -653,17 +653,22 @@ function escape_js($js)
 			} else {
 				echo "<pre>$msg.</pre>";
 			}
+			$c = array('in' => '', 'out' => '');
 		} elseif (http_accept_format('js')) {
 			if (is_object($theme)) {
 				send_script_response ($theme->announce_async(array($msg.n.$backtrace, E_ERROR), true));
 			} else {
 				send_script_response ('/*'.$msg.".\n".$backtrace.'*/');
 			}
+			$c = array('in' => '/* ', 'out' => ' */');
 		} elseif (http_accept_format('xml')) {
 			send_xml_response (array('http-status' => '500', 'internal_error' => $msg.".\n".$backtrace));
-			die();
+			$c = array('in' => '<!-- ', 'out' => ' -->');
 		} else {
 			txp_die($msg, 500);
+		}
+		if (in_array($errno, array(E_ERROR, E_USER_ERROR))) {
+			die($c['in'].gTxt('get_off_my_lawn', array('{event}' => $event, '{step}' => $step)).$c['out']);
 		}
 	}
 
