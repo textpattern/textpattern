@@ -746,11 +746,9 @@ if (!empty($event) and $event == 'article') {
 					'fieldset', ' id="write-sort"'),
 				$rs);
 
-		//-- "More" section
-			echo n.n.'<div id="more_group"><h3 class="plain lever'.(get_pref('pane_article_more_visible') ? ' expanded' : '').'"><a href="#more">'.gTxt('more').'</a></h3>',
-				'<div id="more" class="toggle" style="display:'.(get_pref('pane_article_more_visible') ? 'block' : 'none').'">';
-
-		//-- comments stuff --------------
+		//-- "Comments" section
+			echo n.n.'<div id="comments_group"'.(($use_comments==1) ? '' : ' class="empty"').'><h3 class="plain lever'.(get_pref('pane_article_comments_visible') ? ' expanded' : '').'"><a href="#comments">'.gTxt('comment_settings').'</a></h3>',
+				'<div id="comments" class="toggle" style="display:'.(get_pref('pane_article_comments_visible') ? 'block' : 'none').'">';
 
 			if($step=="create") {
 				//Avoiding invite disappear when previewing
@@ -797,6 +795,13 @@ if (!empty($event) and $event == 'article') {
 				echo pluggable_ui('article_ui', 'annotate_invite', join('', $invite), $rs);
 
 			}
+
+			// end "Comments" section
+			echo '</div></div>';
+
+		//-- "Dates" section
+			echo n.n.'<div id="dates_group"><h3 class="plain lever'.(get_pref('pane_article_dates_visible') ? ' expanded' : '').'"><a href="#dates">'.gTxt('date_settings').'</a></h3>',
+				'<div id="dates" class="toggle" style="display:'.(get_pref('pane_article_dates_visible') ? 'block' : 'none').'">';
 
 			if ($step == "create" and empty($GLOBALS['ID']))
 			{
@@ -859,7 +864,7 @@ if (!empty($event) and $event == 'article') {
 				n.'</fieldset>',
 				$rs);
 
-				// end "More" section
+				// end "Dates" section
 				echo n.n.'</div></div>';
 
 		//-- publish button --------------
@@ -882,7 +887,7 @@ if (!empty($event) and $event == 'article') {
 
 				echo $partials['expires']['html'];;
 
-				// end "More" section
+				// end "Dates" section
 				echo n.n.'</div></div>';
 
 		//-- save button --------------
@@ -1164,7 +1169,7 @@ EOS
 	function article_save_pane_state()
 	{
 		global $event;
-		$panes = array('textile_help', 'advanced', 'custom_field', 'image', 'meta', 'recent', 'more');
+		$panes = array('textile_help', 'advanced', 'custom_field', 'image', 'meta', 'recent', 'comments', 'dates');
 		$pane = gps('pane');
 		if (in_array($pane, $panes))
 		{
