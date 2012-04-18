@@ -198,6 +198,31 @@ $DB = new DB;
 	}
 
 // -------------------------------------------------------------
+/**
+ * Fetch a column as an numeric array
+ *
+ * @param string $thing     field name
+ * @param string $table     table name
+ * @param string $where     where clause
+ * @param bool $debug       dump query
+ * @return array    numeric array of column values
+ * @since 4.5.0
+ */
+	function safe_column_num($thing, $table, $where, $debug='')
+	{
+		$q = "select $thing from ".safe_pfx_j($table)." where $where";
+		$rs = getRows($q,$debug);
+		if ($rs) {
+			foreach($rs as $a) {
+				$v = array_shift($a);
+				$out[] = $v;
+			}
+			return $out;
+		};
+		return array();
+	}
+
+// -------------------------------------------------------------
 	function safe_row($things, $table, $where, $debug='')
 	{
 		$q = "select $things from ".safe_pfx_j($table)." where $where";
