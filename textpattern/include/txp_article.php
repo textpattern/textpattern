@@ -149,46 +149,48 @@ if (!empty($event) and $event == 'article') {
 			}
 			$cfq = join(', ', $cfq);
 
-			if (safe_insert(
-			   "textpattern",
-			   "Title           = '$Title',
-				Body            = '$Body',
-				Body_html       = '$Body_html',
-				Excerpt         = '$Excerpt',
-				Excerpt_html    = '$Excerpt_html',
-				Image           = '$Image',
-				Keywords        = '$Keywords',
-				Status          =  $Status,
-				Posted          =  $when,
-				Expires         =  $whenexpires,
-				AuthorID        = '$user',
-				LastMod         =  $when,
-				LastModID       = '$user',
-				Section         = '$Section',
-				Category1       = '$Category1',
-				Category2       = '$Category2',
-				textile_body    =  $textile_body,
-				textile_excerpt =  $textile_excerpt,
-				Annotate        =  $Annotate,
-				override_form   = '$override_form',
-				url_title       = '$url_title',
-				AnnotateInvite  = '$AnnotateInvite',"
-				.(($cfs) ? $cfq.',' : '').
-				"uid             = '".md5(uniqid(rand(),true))."',
-				feed_time       = now()"
-			)) {
+			if (article_validate(compact($vars), $msg)) {
+				if (safe_insert(
+				   "textpattern",
+				   "Title           = '$Title',
+					Body            = '$Body',
+					Body_html       = '$Body_html',
+					Excerpt         = '$Excerpt',
+					Excerpt_html    = '$Excerpt_html',
+					Image           = '$Image',
+					Keywords        = '$Keywords',
+					Status          =  $Status,
+					Posted          =  $when,
+					Expires         =  $whenexpires,
+					AuthorID        = '$user',
+					LastMod         =  $when,
+					LastModID       = '$user',
+					Section         = '$Section',
+					Category1       = '$Category1',
+					Category2       = '$Category2',
+					textile_body    =  $textile_body,
+					textile_excerpt =  $textile_excerpt,
+					Annotate        =  $Annotate,
+					override_form   = '$override_form',
+					url_title       = '$url_title',
+					AnnotateInvite  = '$AnnotateInvite',"
+					.(($cfs) ? $cfq.',' : '').
+					"uid             = '".md5(uniqid(rand(),true))."',
+					feed_time       = now()"
+				)) {
 
-				$GLOBALS['ID'] = mysql_insert_id();
+					$GLOBALS['ID'] = mysql_insert_id();
 
-				if ($Status>=4) {
-					do_pings();
-					update_lastmod();
+					if ($Status>=4) {
+						do_pings();
+						update_lastmod();
+					}
+					$s = check_url_title($url_title);
+					$msg = array(get_status_message($Status).' '.$s, ($s ? E_WARNING : 0));
+				} else {
+					unset($GLOBALS['ID']);
+					$msg = array(gTxt('article_save_error'), E_ERROR);
 				}
-				$s = check_url_title($url_title);
-				$msg = array(get_status_message($Status).' '.$s, ($s ? E_WARNING : 0));
-			} else {
-				unset($GLOBALS['ID']);
-				$msg = array(gTxt('article_save_error'), E_ERROR);
 			}
 		}
 		article_edit($msg);
@@ -312,26 +314,7 @@ if (!empty($event) and $event == 'article') {
 		}
 		$cfq = join(', ', $cfq);
 
-		$constraints = array(
-			'Status' => new ChoiceConstraint($Status, array('choices' => array_keys($statuses), 'message' => 'invalid_status')),
-			'Section' => new SectionConstraint($Section),
-			'Category1' => new ArticleCategoryConstraint($Category1),
-			'Category2' => new ArticleCategoryConstraint($Category2),
-		);
-
-		if (!$articles_use_excerpts) {
-			$constraints['excerpt_blank'] = new BlankConstraint($Excerpt, array('message' => 'excerpt_not_blank'));
-		}
-
-		if (!$use_comments) {
-			$constraints['annotate_invite_blank'] = new BlankConstraint($AnnotateInvite, array('message' => 'invite_not_blank'));
-			$constraints['annotate_false'] = new FalseConstraint($Annotate, array('message' => 'comments_are_on'));
-		}
-
-		callback_event_ref('article_ui', 'validate_save', 0, compact($vars), $constraints);
-		$validator = new Validator($constraints);
-
-		if ($validator->validate()) {
+		if (article_validate(compact($vars), $msg)) {
 			if (safe_update("textpattern",
 			   "Title           = '$Title',
 				Body            = '$Body',
@@ -371,9 +354,6 @@ if (!empty($event) and $event == 'article') {
 			} else {
 				$msg = array(gTxt('article_save_error'), E_ERROR);
 			}
-		} else {
-			$msg = doArray($validator->getMessages(), 'gTxt');
-			$msg = array(join(', ', $msg), E_ERROR);
 		}
 		article_edit($msg, FALSE, !AJAXALLY_CHALLENGED);
 	}
@@ -1460,5 +1440,45 @@ EOS
 	function article_partial_sPosted($rs)
 	{
 		return($rs['sPosted']);
+	}
+
+// -------------------------------------------------------------
+	function article_validate($rs, &$msg)
+	{
+		global $prefs, $step, $statuses;
+
+		$constraints = array(
+			'Status' => new ChoiceConstraint($rs['Status'], array('choices' => array_keys($statuses), 'message' => 'invalid_status')),
+			'Section' => new SectionConstraint($rs['Section']),
+			'Category1' => new CategoryConstraint($rs['Category1'], array('type' => 'article')),
+			'Category2' => new CategoryConstraint($rs['Category2'], array('type' => 'article')),
+		);
+
+		if (!$prefs['articles_use_excerpts']) {
+			$constraints['excerpt_blank'] = new BlankConstraint($rs['Excerpt'], array('message' => 'excerpt_not_blank'));
+		}
+
+		if (!$prefs['use_comments']) {
+			$constraints['annotate_invite_blank'] = new BlankConstraint($rs['AnnotateInvite'], array('message' => 'invite_not_blank'));
+			$constraints['annotate_false'] = new FalseConstraint($rs['Annotate'], array('message' => 'comments_are_on'));
+		}
+
+		if ($prefs['allow_form_override']) {
+			$constraints['override_form'] = new FormConstraint($rs['override_form'], array('type' => 'article'));
+		} else {
+			$constraints['override_form'] = new BlankConstraint($rs['override_form'], array('message' => 'override_form_not_blank'));
+		}
+
+		callback_event_ref('article_ui', "validate_$step", 0, $rs, $constraints);
+
+		$validator = new Validator($constraints);
+		if ($validator->validate()) {
+			$msg = '';
+			return true;
+		} else {
+			$msg = doArray($validator->getMessages(), 'gTxt');
+			$msg = array(join(', ', $msg), E_ERROR);
+			return false;
+		}
 	}
 ?>
