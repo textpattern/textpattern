@@ -575,7 +575,7 @@ $LastChangedRevision$
 		}
 
 		if (isset($cssname)) {
-			$css = join(n, safe_column('css','txp_css',"name in ('$cssname')".$order));
+			$css = join(n, safe_column_num('css','txp_css',"name in ('$cssname')".$order));
 			if (isset($css)) echo $css;
 		}
 	}
