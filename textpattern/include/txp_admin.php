@@ -306,7 +306,8 @@ $LastChangedRevision$
 			echo n.'<div class="txp-list">';
 			echo '<form action="index.php" id="users_form" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
 
-			startTable('list', '', 'list').
+			n.'<div class="txp-listtables">'.
+			n.startTable('list', '', 'list').
 			n.'<thead>'.
 			n.tr(
 				column_head('login_name', 'name', 'admin', true, $switch_dir, '', '', (('name' == $sort) ? "$dir " : '').'name login-name').
@@ -353,6 +354,7 @@ $LastChangedRevision$
 
 			echo '</tbody>'.
 			n.endTable().
+			n.'</div>'.
 			n.tInput().
 			n.'</form>'.
 
