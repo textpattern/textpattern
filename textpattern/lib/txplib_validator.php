@@ -110,7 +110,7 @@ class ChoiceConstraint extends Constraint
 {
 	function __construct($value, $options = array())
 	{
-		$options = lAtts(array('choices' => array(), 'allow_blank' => false, 'message' => 'unknown_choice'), $options);
+		$options = lAtts(array('choices' => array(), 'allow_blank' => false, 'message' => 'unknown_choice'), $options, false);
 		parent::__construct($value, $options);
 	}
 
@@ -142,23 +142,43 @@ class SectionConstraint extends ChoiceConstraint
 }
 
 /**
- * ArticleCategoryConstraint
+ * CategoryConstraint
  *
  * Tests against existing or a blank category names
  * @since 4.5.0
  */
-class ArticleCategoryConstraint extends ChoiceConstraint
+class CategoryConstraint extends ChoiceConstraint
 {
 	function __construct($value, $options = array())
 	{
 		static $choices = null;
+		$options = lAtts(array('allow_blank' => true, 'type' => '', 'message' => 'unknown_category'), $options, false);
 		if (null === $choices) {
-			$choices = safe_column('name', 'txp_category', 'type=\'article\'');
+			$choices = safe_column('name', 'txp_category', $options['type'] !== '' ? 'type=\''.doSlash($options['type']).'\'' : '1=1');
 		}
 		$options['choices'] = $choices;
-		$options['allow_blank'] = true;
-		$options['message'] = 'unknown_article_category';
         parent::__construct($value, $options);
+	}
+}
+
+/**
+ * FormConstraint
+ *
+ * Tests against existing form names
+ * @since 4.5.0
+ */
+class FormConstraint extends ChoiceConstraint
+{
+	function __construct($value, $options = array())
+	{
+		static $choices = null;
+		$options = lAtts(array('allow_blank' => true, 'type' => '', 'message' => 'unknown_form'), $options, false);
+
+		if (null === $choices) {
+			$choices = safe_column('name', 'txp_form', $options['type'] !== '' ? 'type=\''.doSlash($options['type']).'\'' : '1=1');
+		}
+		$options['choices'] = $choices;
+		parent::__construct($value, $options);
 	}
 }
 
@@ -172,7 +192,7 @@ class BlankConstraint extends Constraint
 {
 	function __construct($value, $options = array())
 	{
-		$options = lAtts(array('message' => 'should_be_blank'), $options);
+		$options = lAtts(array('message' => 'should_be_blank'), $options, false);
 		parent::__construct($value, $options);
 	}
 
@@ -192,7 +212,7 @@ class TrueConstraint extends Constraint
 {
 	function __construct($value, $options = array())
 	{
-		$options = lAtts(array('message' => 'should_be_true'), $options);
+		$options = lAtts(array('message' => 'should_be_true'), $options, false);
 		parent::__construct($value, $options);
 	}
 
@@ -212,7 +232,7 @@ class FalseConstraint extends Constraint
 {
 	function __construct($value, $options = array())
 	{
-		$options = lAtts(array('message' => 'should_be_false'), $options);
+		$options = lAtts(array('message' => 'should_be_false'), $options, false);
 		parent::__construct($value, $options);
 	}
 
