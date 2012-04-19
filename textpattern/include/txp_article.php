@@ -758,9 +758,6 @@ if (!empty($event) and $event == 'article') {
 
 			if ($use_comments == 1)
 			{
-				$invite[] = n.n.'<fieldset id="write-comments">'.
-					n.'<legend>'.gTxt('comments').'</legend>';
-
 				$comments_expired = false;
 
 				if ($step != 'create' && $comments_disabled_after)
@@ -791,7 +788,6 @@ if (!empty($event) and $event == 'article') {
 					, ' class="comment-invite"');
 				}
 
-				$invite[] = n.n.'</fieldset>';
 				echo pluggable_ui('article_ui', 'annotate_invite', join('', $invite), $rs);
 
 			}
