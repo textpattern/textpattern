@@ -235,7 +235,7 @@ if ($event == 'category') {
 		$out = n.n.hed(gTxt($event.'_head').sp.popHelp($event.'_category'), 2).
 			form(
 				fInput('text', 'title', '', 'edit', '', '', 20).
-				(($rs) ? '<div class="parent"><label for="parent_cat">' . gTxt('parent') . '</label>' . treeSelectInput('parent_cat', $rs, $parent) . '</div>' : '').
+				(($rs) ? '<div class="parent"><label>' . gTxt('parent') . '</label>' . treeSelectInput('parent_cat', $rs, $parent) . '</div>' : '').
 				fInput('submit', '', gTxt('Create'), 'smallerbox').
 				eInput('category').
 				sInput('cat_'.$event.'_create')
