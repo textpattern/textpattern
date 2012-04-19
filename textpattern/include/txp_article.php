@@ -189,7 +189,7 @@ if (!empty($event) and $event == 'article') {
 					$msg = array(get_status_message($Status).' '.$s, ($s ? E_WARNING : 0));
 				} else {
 					unset($GLOBALS['ID']);
-					$msg = array(gTxt('article_save_error'), E_ERROR);
+					$msg = array(gTxt('article_save_failed'), E_ERROR);
 				}
 			}
 		}
@@ -352,7 +352,7 @@ if (!empty($event) and $event == 'article') {
 					$msg = array(get_status_message($Status).' '.$s, $s ? E_WARNING : 0);
 				}
 			} else {
-				$msg = array(gTxt('article_save_error'), E_ERROR);
+				$msg = array(gTxt('article_save_failed'), E_ERROR);
 			}
 		}
 		article_edit($msg, FALSE, !AJAXALLY_CHALLENGED);
