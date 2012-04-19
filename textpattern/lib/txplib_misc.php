@@ -673,6 +673,24 @@ function escape_js($js)
 	}
 
 // -------------------------------------------------------------
+	function publicErrorHandler($errno, $errstr, $errfile, $errline)
+	{
+		global $production_status;
+
+		$error = array( E_WARNING => "Warning", E_NOTICE => "Notice", E_USER_ERROR => "Textpattern Error",
+		                E_USER_WARNING => "Textpattern Warning", E_USER_NOTICE => "Textpattern Notice");
+
+		if (!($errno & error_reporting())) return;
+		if ($production_status == 'live') return;
+
+		global $production_status;
+		printf ("<pre>".gTxt('general_error').' <b>%s: %s on line %s</b></pre>',
+			$error[$errno], $errstr, $errline);
+		if ($production_status == 'debug')
+			print "\n<pre style=\"padding-left: 2em;\" class=\"backtrace\"><code>".htmlspecialchars(join("\n", get_caller(10)))."</code></pre>";
+	}
+
+// -------------------------------------------------------------
 	function load_plugins($type=0)
 	{
 		global $prefs, $plugins, $plugins_ver, $app_mode;

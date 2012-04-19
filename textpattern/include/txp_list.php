@@ -190,6 +190,7 @@ $LastChangedRevision$
 			echo n.'<div id="'.$event.'_container" class="txp-container txp-list">';
 			echo n.n.'<form name="longform" id="articles_form" method="post" action="index.php" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
 
+				n.'<div class="txp-listtables">'.
 				n.startTable('list','','list').
 				n.'<thead>'.
 				n.tr(
@@ -337,6 +338,7 @@ $LastChangedRevision$
 
 			echo '</tbody>'.
 			n.endTable().
+			n.'</div>'.
 			n.tInput().
 			n.'</form>'.
 

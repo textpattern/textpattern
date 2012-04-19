@@ -84,9 +84,8 @@ $DB = new DB;
 		$time = getmicrotime() - $start;
 		@$qtime += $time;
 		@$qcount++;
-		if ($result === false and (txpinterface === 'admin' or @$production_status == 'debug' or @$production_status == 'testing')) {
-			$caller = ($production_status == 'debug') ? n . join("\n", get_caller()) : '';
-			trigger_error(mysql_error() . n . $q . $caller, E_USER_WARNING);
+		if ($result === false) {
+			trigger_error(mysql_error(), E_USER_ERROR);
 		}
 
 		trace_add("[SQL ($time): $q]");

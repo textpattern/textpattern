@@ -36,7 +36,7 @@ $LastChangedRevision$
 	include_once txpath.'/publish/log.php';
 	include_once txpath.'/publish/comment.php';
 
-//	set_error_handler('myErrorHandler');
+	set_error_handler('publicErrorHandler', error_reporting());
 
 	ob_start();
 

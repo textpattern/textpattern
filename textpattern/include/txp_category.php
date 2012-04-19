@@ -228,16 +228,18 @@ if ($event == 'category') {
 
 	function cat_event_category_list($event)
 	{
-		$out = n.n.hed(gTxt($event.'_head').sp.popHelp($event.'_category'), 2).
+		$rs = getTree('root', $event);
 
+		$parent = ps('parent_cat');
+
+		$out = n.n.hed(gTxt($event.'_head').sp.popHelp($event.'_category'), 2).
 			form(
 				fInput('text', 'title', '', 'edit', '', '', 20).
+				(($rs) ? '<div class="parent"><label for="parent_cat">' . gTxt('parent') . '</label>' . treeSelectInput('parent_cat', $rs, $parent) . '</div>' : '').
 				fInput('submit', '', gTxt('Create'), 'smallerbox').
 				eInput('category').
 				sInput('cat_'.$event.'_create')
 			,'', '', 'post', 'action-create '.$event);
-
-		$rs = getTree('root', $event);
 
 		if ($rs)
 		{
@@ -371,7 +373,11 @@ if ($event == 'category') {
 			return cat_category_list($message);
 		}
 
-		$q = safe_insert('txp_category', "name = '".doSlash($name)."', title = '".doSlash($title)."', type = '".doSlash($event)."', parent = 'root'");
+		$parent = strtolower(sanitizeForUrl(ps('parent_cat')));
+		$parent_exists = safe_field('name', 'txp_category', "name = '".doSlash($parent)."' and type = '".doSlash($event)."'");
+		$parent = ($parent_exists) ? $parent_exists : 'root';
+
+		$q = safe_insert('txp_category', "name = '".doSlash($name)."', title = '".doSlash($title)."', type = '".doSlash($event)."', parent = '".$parent."'");
 
 		if ($q)
 		{

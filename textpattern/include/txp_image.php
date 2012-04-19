@@ -178,7 +178,9 @@ $LastChangedRevision$
 
 			echo n.'<div id="'.$event.'_container" class="txp-container txp-list">';
 			echo n.n.'<form name="longform" id="images_form" method="post" action="index.php" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
-			n.n.startTable('list', '', 'list').
+
+				n.'<div class="txp-listtables">'.
+				n.startTable('list', '', 'list').
 				n.'<thead>'.
 				n.tr(
 					column_head('ID', 'id', 'image', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id').
@@ -282,6 +284,7 @@ $LastChangedRevision$
 
 			echo '</tbody>'.
 			n.endTable().
+			n.'</div>'.
 			n.tInput().
 			n.'</form>'.
 

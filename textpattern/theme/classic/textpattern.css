@@ -617,6 +617,14 @@ border-top: 1px solid #ddd;
 margin-top:1em
 }
 
+#category_container .parent {
+margin:0.2em 0 0.5em;
+}
+
+#category_container .action-create label {
+display:block;
+}
+
 /* write
 ----------------------------------------------- */
 

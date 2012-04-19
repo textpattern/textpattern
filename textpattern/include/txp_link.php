@@ -154,7 +154,8 @@ $LastChangedRevision$
 			echo n.'<div class="txp-list">';
 			echo n.n.'<form action="index.php" id="links_form" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">',
 
-				startTable('list', '', 'list').
+				n.'<div class="txp-listtables">'.
+				n.startTable('list', '', 'list').
 				n.'<thead>'.
 				n.tr(
 					column_head('ID', 'id', 'link', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id').
@@ -231,6 +232,7 @@ $LastChangedRevision$
 
 			echo '</tbody>'.
 			n.endTable().
+			n.'</div>'.
 			n.tInput().
 			n.'</form>'.
 
