@@ -572,8 +572,8 @@ function escape_js($js)
 	{
 		global $production_status;
 
-		$error = array( E_WARNING => "Warning", E_NOTICE => "Notice", E_USER_ERROR => "User_Error",
-						E_USER_WARNING => "User_Warning", E_USER_NOTICE => "User_Notice");
+		$error = array( E_WARNING => "Warning", E_NOTICE => "Notice", E_RECOVERABLE_ERROR => "Catchable fatal error",
+                        E_USER_ERROR => "User_Error", E_USER_WARNING => "User_Warning", E_USER_NOTICE => "User_Notice");
 
 		if (!($errno & error_reporting())) return;
 		if ($production_status == 'live') return;
@@ -590,8 +590,8 @@ function escape_js($js)
 	{
 		global $production_status;
 
-		$error = array( E_WARNING => "Warning", E_NOTICE => "Notice", E_USER_ERROR => "Textpattern Error",
-						E_USER_WARNING => "Textpattern Warning", E_USER_NOTICE => "Textpattern Notice");
+		$error = array( E_WARNING => "Warning", E_NOTICE => "Notice", E_RECOVERABLE_ERROR => "Textpattern Catchable fatal error",
+                        E_USER_ERROR => "Textpattern Error", E_USER_WARNING => "Textpattern Warning", E_USER_NOTICE => "Textpattern Notice");
 
 		if (!($errno & error_reporting())) return;
 		if ($production_status == 'live') return;
@@ -2501,7 +2501,7 @@ eod;
 		if (is_numeric($myvar) and $myvar == intval($myvar)) {
 			return (int) $myvar;
 		}
-		trigger_error("'".htmlspecialchars($myvar)."' is not an integer", E_USER_ERROR);
+		trigger_error("'".htmlspecialchars((string)$myvar)."' is not an integer", E_USER_ERROR);
 		return false;
 	}
 
@@ -2512,7 +2512,7 @@ eod;
 		if (is_string($myvar)) {
 			return $myvar;
 		}
-		trigger_error("'".htmlspecialchars(gettype($myvar))."' is not a string", E_USER_ERROR);
+		trigger_error("'".htmlspecialchars((string)$myvar)."' is not a string", E_USER_ERROR);
 		return false;
 	}
 
@@ -2523,7 +2523,7 @@ eod;
 		if (is_array($myvar)) {
 			return $myvar;
 		}
-		trigger_error("'".htmlspecialchars(gettype($myvar))."' is not an array", E_USER_ERROR);
+		trigger_error("'".htmlspecialchars((string)$myvar)."' is not an array", E_USER_ERROR);
 		return false;
 	}
 
