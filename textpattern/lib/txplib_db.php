@@ -71,6 +71,13 @@ $DB = new DB;
 		return join(', ', $ts);
 	}
 
+// -------------------------------------------------------------
+	function safe_escape($in='')
+	{
+		global $DB;
+		return mysql_real_escape_string($in, $DB->link);
+	}
+
 //-------------------------------------------------------------
 	function safe_query($q='',$debug='',$unbuf='')
 	{

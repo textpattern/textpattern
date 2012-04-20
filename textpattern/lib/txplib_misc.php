@@ -62,7 +62,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function doSlash($in)
 	{
-		return doArray($in,'mysql_real_escape_string');
+		return doArray($in,'safe_escape');
 	}
 
 // -------------------------------------------------------------
