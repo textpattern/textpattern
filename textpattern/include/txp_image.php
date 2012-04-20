@@ -441,7 +441,7 @@ $LastChangedRevision$
 
 			if ($thumbnail and ($ext != '.swf')) {
 				$thumb = '<img class="image thumbnail" src="'.imagesrcurl($id, $ext, true)."?$uDate".'" alt="" '.
-							($thumb_w ? "width='$thumb_w' height='$thumb_h'" : ''). ' />';
+							($thumb_w ? "width='$thumb_w' height='$thumb_h' title='$thumb_w &#215; $thumb_h'" : ''). ' />';
 			} else {
 				$thumb = '';
 			}
