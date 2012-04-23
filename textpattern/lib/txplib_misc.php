@@ -2696,7 +2696,7 @@ function modal_halt($thing)
 		}
 
         // deprecation nags
-        if (defined('AJAXALLY_CHALLENGED'))
+        if (true == AJAXALLY_CHALLENGED)
         {
             trigger_error(gTxt('deprecated_constant', array('{name}', 'AJAXALLY_CHALLENGED')), E_USER_WARNING);
         }
