@@ -397,10 +397,9 @@ $LastChangedRevision$
 				$out['s'] = 'default';
 				$out['context'] = 'article';
 			}
-		}
-		else {
+		} else {
 			// Messy mode, but prevent to get the id for file_downloads
-			if ($out['id'] && !$out['s']) {
+			if ($out['id'] && $out['s'] != 'file_download') {
 				$rs = lookupByID($out['id']);
 				$out['id'] = (!empty($rs['ID'])) ? $rs['ID'] : '';
 				$out['s'] = (!empty($rs['Section'])) ? $rs['Section'] : '';
@@ -456,8 +455,9 @@ $LastChangedRevision$
 		$out['id'] = is_numeric($out['id']) ? intval($out['id']) : '';
 
 		if ($out['s'] == 'file_download') {
-			if (is_numeric($out['id']) && $out['filename'] !== '') {
-				$rs = safe_row('*', 'txp_file', 'id='.intval($out['id']).' and status = 4 and filename = \''.doSlash($out['filename']).'\'');
+			if (is_numeric($out['id'])) {
+                $fn = empty($out['filename']) ? '' : ' and filename = \''.doSlash($out['filename']).'\'';
+				$rs = safe_row('*', 'txp_file', 'id='.intval($out['id']).' and status = 4'.$fn);
 			}
 			return (!empty($rs)) ? array_merge($out, $rs) : array('s' => 'file_download', 'file_error' => 404);
 		}
