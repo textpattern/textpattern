@@ -633,10 +633,9 @@ $LastChangedRevision$
 	{
 		global $txp_user;
 
-		extract(doSlash(array_map('assert_string', gpsa(array('id','category','caption','alt')))));
-		$name = assert_string(gps('name'));
-		$safename = doSlash($name);
-		$id = assert_int($id);
+		$varray = array_map('assert_string', gpsa(array('id', 'name', 'category', 'caption', 'alt')));
+		extract(doSlash($varray));
+		$id = $varray['id'] = assert_int($id);
 
 		$author = fetch('author', 'txp_image', 'id', $id);
 		if (!has_privs('image.edit') && !($author == $txp_user && has_privs('image.edit.own')))
@@ -645,16 +644,22 @@ $LastChangedRevision$
 			return;
 		}
 
-		if (safe_update(
+		$constraints = array(
+            'category' => new CategoryConstraint(gps('category'), array('type' => 'image')),
+        );
+        callback_event_ref('image_ui', 'validate_save', 0, $varray, $constraints);
+        $validator = new Validator($constraints);
+
+        if ($validator->validate() && safe_update(
 			"txp_image",
-			"name     = '$safename',
+			"name     = '$name',
 			category = '$category',
 			alt      = '$alt',
 			caption  = '$caption'",
 			"id = $id"
 		))
 		{
-			$message = gTxt('image_updated', array('{name}' => $name));
+			$message = gTxt('image_updated', array('{name}' => doStrip($name)));
 			update_lastmod();
 		}
 		else

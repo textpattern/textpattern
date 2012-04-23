@@ -39,10 +39,19 @@ $LastChangedRevision$
 //-------------------------------------------------------------
 	function discuss_save()
 	{
-		extract(doSlash(array_map('assert_string', gpsa(array('email','name','web','message','ip')))));
-		extract(array_map('assert_int',gpsa(array('discussid','visible','parentid'))));
-		$message = preg_replace('#<(/?txp:.+?)>#', '&lt;$1&gt;', $message);
-		if (safe_update("txp_discuss",
+		$varray = array_map('assert_string', gpsa(array('email', 'name', 'web', 'message', 'ip')));
+        $varray = $varray + array_map('assert_int', gpsa(array('discussid', 'visible', 'parentid')));
+        extract(doSlash($varray));
+
+		$message = $varray['message'] = preg_replace('#<(/?txp:.+?)>#', '&lt;$1&gt;', $message);
+
+        $constraints = array(
+            'status' => new ChoiceConstraint($visible, array('choices' => array(SPAM, MODERATE, VISIBLE), 'message' =>  'invalid_status'))
+        );
+        callback_event_ref('discuss_ui', 'validate_save', 0, $varray, $constraints);
+        $validator = new Validator($constraints);
+
+        if ($validator->validate() && safe_update("txp_discuss",
 			"email   = '$email',
 			 name    = '$name',
 			 web     = '$web',
@@ -52,7 +61,6 @@ $LastChangedRevision$
 		{
 			update_comments_count($parentid);
 			update_lastmod();
-
 			$message = gTxt('comment_updated', array('{id}' => $discussid));
 		}
 		else

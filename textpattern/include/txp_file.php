@@ -795,23 +795,24 @@ $LastChangedRevision$
 	{
 		global $file_base_path, $txp_user;
 
-		extract(doSlash(array_map('assert_string',
-			gpsa(array('id', 'category', 'title', 'description', 'status', 'publish_now', 'year', 'month', 'day', 'hour', 'minute', 'second')))));
-		$filename = sanitizeForFile(gps('filename'));
+	    $varray = array_map('assert_string',
+			gpsa(array('id', 'category', 'title', 'description', 'status', 'publish_now', 'year', 'month', 'day', 'hour', 'minute', 'second')));
+        extract(doSlash($varray));
+		$filename = $varray['filename'] = sanitizeForFile(gps('filename'));
 
 		if ($filename == '') {
 			$message = gTxt('file_not_updated', array('{name}' => $filename));
 			return file_list($message);
 		}
 
-		$id = assert_int($id);
+		$id = $varray['id'] = assert_int($id);
 
 		$permissions = gps('perms');
 		if (is_array($permissions)) {
 			asort($permissions);
 			$permissions = implode(",",$permissions);
 		}
-
+        $varray['permissions'] = $permissions;
 		$perms = doSlash($permissions);
 
 		$rs = safe_row('filename, author', 'txp_file', "id=$id");
@@ -821,7 +822,7 @@ $LastChangedRevision$
 			return;
 		}
 
-		$old_filename = sanitizeForFile($rs['filename']);
+		$old_filename = $varray['old_filename'] = sanitizeForFile($rs['filename']);
 		if ($old_filename != false && strcmp($old_filename, $filename) != 0)
 		{
 			$old_path = build_file_path($file_base_path,$old_filename);
@@ -849,7 +850,15 @@ $LastChangedRevision$
 			$created = '';
 
 		$size = filesize(build_file_path($file_base_path,$filename));
-		$rs = safe_update('txp_file', "
+
+        $constraints = array(
+            'category' => new CategoryConstraint(gps('category'), array('type' => 'file')),
+            'status' => new ChoiceConstraint(gps('status'), array('choices' => array(2, 3, 4), 'message' => 'invalid_status'))
+        );
+        callback_event_ref('file_ui', 'validate_save', 0, $varray, $constraints);
+        $validator = new Validator($constraints);
+
+        $rs = $validator->validate() && safe_update('txp_file', "
 			filename = '".doSlash($filename)."',
 			title = '$title',
 			category = '$category',
@@ -865,17 +874,15 @@ $LastChangedRevision$
 		if (!$rs)
 		{
 			// update failed, rollback name
-			if (shift_uploaded_file($new_path, $old_path) === false)
+			if (isset($old_path) && shift_uploaded_file($new_path, $old_path) === false)
 			{
 				$message = gTxt('file_unsynchronized', array('{name}' => $filename));
-
 				return file_list($message);
 			}
 
 			else
 			{
 				$message = gTxt('file_not_updated', array('{name}' => $filename));
-
 				return file_list($message);
 			}
 		}

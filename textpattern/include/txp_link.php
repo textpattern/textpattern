@@ -420,10 +420,8 @@ $LastChangedRevision$
 		global $txpcfg, $vars, $txp_user;
 
 		$varray = array_map('assert_string', gpsa($vars));
-
 		extract(doSlash($varray));
-
-		$id = assert_int($id);
+		$id = $varray['id'] = assert_int($id);
 
 		if ($linkname === '' && $url === '' && $description === '')
 		{
@@ -440,7 +438,14 @@ $LastChangedRevision$
 
 		if (!$linksort) $linksort = $linkname;
 
-		$rs = safe_update("txp_link",
+        $constraints = array(
+            'category' => new CategoryConstraint($varray['category'], array('type' => 'link'))
+        );
+
+        callback_event_ref('link_ui', 'validate_save', 0, $varray, $constraints);
+        $validator = new Validator($constraints);
+
+        if ($validator->validate() && safe_update("txp_link",
 		   "category    = '$category',
 			url         = '".trim($url)."',
 			linkname    = '$linkname',
@@ -448,17 +453,18 @@ $LastChangedRevision$
 			description = '$description',
 			author 		= '".doSlash($txp_user)."'",
 		   "id = $id"
-		);
-
-		if ($rs)
+		))
 		{
 			update_lastmod();
-
 			$message = gTxt('link_updated', array('{name}' => doStrip($linkname)));
-
-			link_edit($message);
 		}
-	}
+        else
+        {
+            $message = array(gTxt('link_save_failed'), E_ERROR);
+        }
+
+        link_edit($message);
+    }
 
 // -------------------------------------------------------------
 	function link_change_pageby()
