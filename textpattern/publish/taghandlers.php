@@ -1368,8 +1368,8 @@ $LastChangedRevision$
 		extract(lAtts(array(
 			'escape' => 'html'
 		),$atts));
-
-		return ($escape == 'html' ? htmlspecialchars($q) : $q);
+        trigger_error(gTxt('deprecated_attribute', array('{name}' => 'escape')), E_USER_NOTICE);
+        return ($escape == 'html' ? htmlspecialchars($q) : $q);
 	}
 
 // -------------------------------------------------------------
