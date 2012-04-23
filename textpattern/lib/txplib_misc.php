@@ -626,7 +626,7 @@ function escape_js($js)
 	function adminErrorHandler($errno, $errstr, $errfile, $errline)
 	{
 		global $production_status, $theme, $event, $step;
-		if (!error_reporting())
+		if ($production_status == 'live' || !error_reporting())
 			return;
 
 		$backtrace = '';
@@ -2694,6 +2694,12 @@ function modal_halt($thing)
 				set_pref('is_dst', $is_dst, 'publish', 2);
 			}
 		}
+
+        // deprecation nags
+        if (defined('AJAXALLY_CHALLENGED'))
+        {
+            trigger_error(gTxt('deprecated_constant', array('{name}', 'AJAXALLY_CHALLENGED')), E_USER_WARNING);
+        }
 	}
 
 // -------------------------------------------------------------
