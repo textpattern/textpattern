@@ -463,4 +463,11 @@ else
 
 mysql_query("FLUSH TABLE `".PFX."txp_lang`");
 
+/**
+ * Stub replacement for txplib_db.php/safe_escape()
+ */
+function safe_escape($in='')
+{
+	return mysql_real_escape_string($in);
+}
 ?>
