@@ -626,22 +626,28 @@ function escape_js($js)
 	function adminErrorHandler($errno, $errstr, $errfile, $errline)
 	{
 		global $production_status, $theme, $event, $step;
-		if ($production_status == 'live' || !error_reporting())
-			return;
 
-		$backtrace = '';
-		$msg = gTxt('internal_error');
+		if (!error_reporting()) return;
 
-		if (has_privs('debug.verbose')) {
-			$msg .= ' "'.$errstr.'"';
-		};
+		if ($production_status == 'live') {
+			$backtrace = $msg = '';
+		} else {
+			$backtrace = '';
+			$msg = gTxt('internal_error');
 
-		if (($production_status == 'debug')) {
-			if (has_privs('debug.backtrace')) {
-				$msg .= n."in $errfile at line $errline";
-				$backtrace = join(n, get_caller(5,1));
+			if (has_privs('debug.verbose')) {
+				$msg .= ' "'.$errstr.'"';
+			};
+
+			if (($production_status == 'debug')) {
+				if (has_privs('debug.backtrace')) {
+					$msg .= n."in $errfile at line $errline";
+					$backtrace = join(n, get_caller(5,1));
+				}
 			}
 		}
+
+		$httpstatus = in_array($errno, array(E_ERROR, E_USER_ERROR)) ? '500' : '200';
 
 		if (http_accept_format('html')) {
 			if (!empty($backtrace)) {
@@ -656,18 +662,19 @@ function escape_js($js)
 			$c = array('in' => '', 'out' => '');
 		} elseif (http_accept_format('js')) {
 			if (is_object($theme)) {
-				send_script_response ($theme->announce_async(array($msg.n.$backtrace, E_ERROR), true));
+				send_script_response($theme->announce_async(array($msg.n.$backtrace, E_ERROR), true));
 			} else {
-				send_script_response ('/*'.$msg.".\n".$backtrace.'*/');
+				send_script_response('/*'.$msg.".\n".$backtrace.'*/');
 			}
 			$c = array('in' => '/* ', 'out' => ' */');
 		} elseif (http_accept_format('xml')) {
-			send_xml_response (array('http-status' => '500', 'internal_error' => $msg.".\n".$backtrace));
+			send_xml_response(array('http-status' => $httpstatus, 'internal_error' => $msg.".\n".$backtrace));
 			$c = array('in' => '<!-- ', 'out' => ' -->');
 		} else {
 			txp_die($msg, 500);
 		}
-		if (in_array($errno, array(E_ERROR, E_USER_ERROR))) {
+
+		if ($production_status != 'live' && in_array($errno, array(E_ERROR, E_USER_ERROR))) {
 			die($c['in'].gTxt('get_off_my_lawn', array('{event}' => $event, '{step}' => $step)).$c['out']);
 		}
 	}

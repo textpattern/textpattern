@@ -1172,7 +1172,7 @@ EOS
 			set_pref("pane_{$event}_{$pane}_visible", (gps('visible') == 'true' ? '1' : '0'), $event, PREF_HIDDEN, 'yesnoradio', 0, PREF_PRIVATE);
 			send_xml_response();
 		} else {
-			send_xml_response(array('http-status' => '400 Bad Request'));
+			trigger_error('invalid_pane', E_USER_WARNING);
 		}
 	}
 

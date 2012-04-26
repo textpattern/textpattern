@@ -89,11 +89,12 @@ class classic_theme extends theme
 		// $thing[0]: message text
 		// $thing[1]: message type, defaults to "success" unless empty or a different flag is set
 
-		if ($thing === '') return '';
-
 		if (!is_array($thing) || !isset($thing[1]))	{
 			$thing = array($thing, 0);
 		}
+
+		// still nothing to say?
+		if (trim($thing[0]) === '') return '';
 
 		switch ($thing[1]) {
 			case E_ERROR:
