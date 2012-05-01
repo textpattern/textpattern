@@ -22,6 +22,8 @@ $LastChangedRevision$
 		safe_delete('txp_prefs', "name = 'allow_raw_php_scripting'");
 	}
 
+	safe_alter('txp_users', "MODIFY RealName VARCHAR(255) NOT NULL default '', MODIFY email VARCHAR(254) NOT NULL default ''");
+
 	$has_idx = 0;
 	$rs = getRows('show index from `'.PFX.'textpattern`');
 	foreach ($rs as $row) {
