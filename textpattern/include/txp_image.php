@@ -218,7 +218,7 @@ $LastChangedRevision$
 
 				if ($thumbnail) {
 					if ($ext != '.swf') {
-						$thumbnail = '<img src="'.imagesrcurl($id, $ext, true)."?$uDate".'" alt="" '.
+						$thumbnail = '<img class="content-image" src="'.imagesrcurl($id, $ext, true)."?$uDate".'" alt="" '.
 											"title='$id$ext ($w &#215; $h)'".
 											($thumb_w ? "width='$thumb_w' height='$thumb_h'" : ''). ' />';
 					} else {
@@ -265,7 +265,7 @@ $LastChangedRevision$
 						pluggable_ui('image_ui', 'thumbnail',
 						($can_edit ? href($thumbnail, $edit_url) : $thumbnail)
 						, $a)
-					, 80, 'image thumbnail').
+					, 80, 'thumbnail').
 
 					td($tagbuilder, 85, 'tag-build').
 					td($category, 75, 'category').
@@ -434,13 +434,13 @@ $LastChangedRevision$
 
 			if ($ext != '.swf') {
 				$aspect = ($h == $w) ? ' square' : (($h > $w) ? ' portrait' : ' landscape');
-				$img = '<img class="image fullsize" src="'.imagesrcurl($id, $ext)."?$uDate".'" height="'.$h.'" width="'.$w.'" alt="" title="'.$id.$ext.' ('.$w.' &#215; '.$h.')" id="image-fullsize" />';
+				$img = '<img class="content-image fullsize" src="'.imagesrcurl($id, $ext)."?$uDate".'" height="'.$h.'" width="'.$w.'" alt="" title="'.$id.$ext.' ('.$w.' &#215; '.$h.')" id="image-fullsize" />';
 			} else {
 				$img = $aspect = '';
 			}
 
 			if ($thumbnail and ($ext != '.swf')) {
-				$thumb = '<img class="image thumbnail" src="'.imagesrcurl($id, $ext, true)."?$uDate".'" alt="" '.
+				$thumb = '<img class="content-image" src="'.imagesrcurl($id, $ext, true)."?$uDate".'" alt="" '.
 							($thumb_w ? "width='$thumb_w' height='$thumb_h' title='$thumb_w &#215; $thumb_h'" : ''). ' />';
 			} else {
 				$thumb = '';
