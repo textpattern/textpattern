@@ -956,6 +956,8 @@ EOS
 						popHelpSubtle('numeric', 400, 400).'</li>'.
 					n.t.'<li>'.gTxt('bulleted_list').': <strong>*</strong>'.sp.
 						popHelpSubtle('bulleted', 400, 400).'</li>'.
+					n.t.'<li>'.gTxt('definition_list').': <strong>; :</strong>'.sp.
+						popHelpSubtle('definition', 400, 400).'</li>'.
 				n.'</ul>'.
 
 				n.'<ul class="textile plain-list small">'.
