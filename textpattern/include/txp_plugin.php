@@ -73,7 +73,8 @@ $LastChangedRevision$
 			echo n.'<div id="'.$event.'_container" class="txp-container txp-list">';
 			echo '<form action="index.php" id="plugin_form" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
 
-			startTable('list', '', 'list').
+			n.'<div class="txp-listtables">'.
+			n. startTable('list', '', 'list').
 			n.'<thead>'.
 			tr(
 				column_head('plugin', 'name', 'plugin', true, $switch_dir, '', '', (('name' == $sort) ? "$dir " : '').'name').
@@ -154,6 +155,7 @@ $LastChangedRevision$
 
 			echo '</tbody>'.
 			n.endTable().
+			n.'</div>'.
 			n.tInput().
 			n.'</form>'.
 			n.'</div>';
