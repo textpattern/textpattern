@@ -890,6 +890,16 @@ margin-top: 10px;
 text-align: center;
 }
 
+p#tagbuilder-output textarea {
+width: 300px;
+height: 100px;
+}
+
+table#tagbuilder textarea {
+width: 120px;
+height: 50px;
+}
+
 /* preferences
 ----------------------------------------------- */
 

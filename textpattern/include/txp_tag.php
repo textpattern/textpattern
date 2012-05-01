@@ -112,14 +112,14 @@ begin generic functions
 
 	function tdb($thing)
 	{
-		return n.graf(text_area('tag', '100', '300', $thing), ' id="tagbuilder-output"');
+		return n.graf(text_area('tag', '', '', $thing), ' id="tagbuilder-output"');
 	}
 
 //--------------------------------------------------------------
 
 	function key_input($name, $var)
 	{
-		return '<textarea name="'.$name.'" style="width: 120px; height: 50px;">'.$var.'</textarea>';
+		return '<textarea name="'.$name.'">'.$var.'</textarea>';
 	}
 
 //--------------------------------------------------------------
