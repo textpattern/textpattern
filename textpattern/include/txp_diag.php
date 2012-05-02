@@ -162,7 +162,21 @@ $LastChangedRevision$
 	// ini_get() returns string values passed via php_value as a string, not boolean
 	$is_register_globals = ( (strcasecmp(ini_get('register_globals'),'on')===0) or (ini_get('register_globals')==='1'));
 
+	// Check for Textpattern updates, at most once every 24 hours
+	$now = time();
+	$updateInfo = unserialize(get_pref('last_update_check', ''));
+
+	if (!$updateInfo || ( $now > ($updateInfo['when'] + (60*60*24)) ))
+	{
+		$updates = checkUpdates();
+		$updateInfo['msg'] = ($updates) ? gTxt($updates['msg'], array('{version}' => $updates['version'])) : '';
+		$updateInfo['when'] = $now;
+		set_pref('last_update_check', serialize($updateInfo), 'publish', PREF_HIDDEN, 'text_input');
+	}
+
 	$fail = array(
+
+		'textpattern_version_update' => $updateInfo['msg'],
 
 		'php_version_required' =>
 		(!is_callable('version_compare') or version_compare(PHP_VERSION, REQUIRED_PHP_VERSION, '<'))
@@ -612,6 +626,41 @@ $LastChangedRevision$
 	echo join('',$out),
 		'</div>',
 		'</div>';
+	}
+
+	//-------------------------------------------------------------
+	// check for updates through xml-rpc
+	function checkUpdates()
+	{
+		require_once txpath.'/lib/IXRClass.php';
+		$client = new IXR_Client('http://rpc.textpattern.com');
+		$uid = safe_field('val','txp_prefs',"name='blog_uid'");
+		if (!$client->query('tups.getTXPVersion',$uid))
+		{
+			return array('version' => 0, 'msg' => 'problem_connecting_rpc_server');
+		}
+
+		else
+		{
+			$out = array();
+			$response = $client->getResponse();
+			if (is_array($response))
+			{
+				ksort($response);
+				$version = get_pref('version');
+
+				// Go through each available branch (x.y), but only return the _highest_ version
+				foreach ($response as $key => $val)
+				{
+					if (version_compare($version, $val) < 0)
+					{
+						$out = array('version' => $val, 'msg' => 'textpattern_update_available');
+					}
+				}
+
+				return $out;
+			}
+		}
 	}
 
 ?>

@@ -78,49 +78,4 @@ function install_language_from_file($lang)
 	return false;
 }
 
-//-------------------------------------------------------------
-# check for updates through xml-rpc
-function checkUpdates()
-{
-	require_once txpath.'/lib/IXRClass.php';
-	$client = new IXR_Client('http://rpc.textpattern.com');
-	$uid = safe_field('val','txp_prefs',"name='blog_uid'");
-	if (!$client->query('tups.getTXPVersion',$uid))
-	{
-		return gTxt('problem_connecting_rpc_server');
-	}else{
-		$msg = array();
-		$response = $client->getResponse();
-		if (is_array($response))
-		{
-			ksort($response);
-			$version = safe_field('val','txp_prefs',"name='version'");
-			$lversion = explode('.',$version);
-
-			$branch = substr($version,0,3);
-			foreach ($response as $key => $val)
-			{
-				$rversion = explode('.',$val);
-
-				if ($key == 'txp_current_version_'.$branch)
-				{
-					if (isset($lversion[2]) && isset($rversion[2]) && (intval($rversion[2])>intval($lversion[2])))
-					{
-						$msg[]= gTxt('updated_branch_version_available');
-					}else{
-						$msg[]= gTxt('your_branch_is_updated');
-					}
-				}else{
-					if (intval($rversion[0])>intval($lversion[0]) || intval($rversion[1])>intval($lversion[1]))
-					{
-						$msg[]= gTxt('new_textpattern_version_available').': '.$val;
-					}
-				}
-			}
-			return $msg;
-		}
-	}
-}
-
-
 ?>

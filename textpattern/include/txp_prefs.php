@@ -205,45 +205,6 @@ $LastChangedRevision$
 		n.tInput().
 		n.n.'</form>'.
 		n.'</div>';
-
-		$check_updates = gps('check_updates');
-
-		echo '<div id="prefs_control" class="txp-control-panel">';
-
-		if ($check_updates)
-		{
-			$updates = checkUpdates();
-
-			if (is_array($updates))
-			{
-				$out = join(br, $updates);
-			}
-
-			else{
-				$out = $updates;
-			}
-
-			echo n.n.startTable('edit').
-
-				n.n.tr(
-					tda($out)
-				).
-
-				n.n.endTable();
-		}
-
-		else
-		{
-			echo form(
-				graf(
-					'<strong>'.gTxt('check_for_txp_updates').'</strong>'.sp.
-					n.'<input type="submit" name="check_updates" value="'.gTxt('go').'" class="smallerbox" />'.
-					n.eInput('prefs').
-					n.sInput('prefs_list')
-				)
-			);
-		}
-		echo '</div>';
 	}
 
 //-------------------------------------------------------------
