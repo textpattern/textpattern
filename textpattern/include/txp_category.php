@@ -396,13 +396,12 @@ if ($event == 'category') {
 //-------------------------------------------------------------
 	function cat_event_category_edit($evname)
 	{
-		pagetop(gTxt('categories'));
-
 		$id     = assert_int(gps('id'));
 		$parent = doSlash(gps('parent'));
 
 		$row = safe_row("*", "txp_category", "id=$id");
 		if ($row) {
+			pagetop(gTxt('categories'));
 			extract($row);
 			$out = stackRows(
 				fLabelCell($evname.'_category_name') . fInputCell('name', $name, '', 20),
@@ -417,7 +416,7 @@ if ($event == 'category') {
 				form( startTable( 'edit', '', 'edit-pane' ) . $out . endTable(), '', '', 'post', 'edit-form' ).
 				'</div>';
 		} else {
-			echo graf(gTxt('category_not_found'),' class="indicator"');
+			cat_category_list(array(gTxt('category_not_found'), E_ERROR));
 		}
 	}
 
