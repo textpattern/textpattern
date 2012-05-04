@@ -138,19 +138,11 @@ $LastChangedRevision$
 
 		include txpath.'/lib/txplib_head.php';
 
-		// ugly hack, for the people that don't update their admin_config.php
-		// Get rid of this when we completely remove admin_config and move privs to db
-		if ($event == 'list')
-			require_privs('article');
-		else
-			require_privs($event);
-
+		require_privs($event);
 		callback_event($event, $step, 1);
-
 		$inc = txpath . '/include/txp_'.$event.'.php';
 		if (is_readable($inc))
 			include($inc);
-
 		callback_event($event, $step, 0);
 
 		end_page();
