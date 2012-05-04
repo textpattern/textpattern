@@ -47,9 +47,11 @@ if (!empty($event) and $event == 'article') {
 	$publish = gps('publish');
 	if ($publish) $step = 'publish';
 
+	if (empty($step)) $step = 'create';
+
 	bouncer($step,
 		array(
-			'create' 	=> true,
+			'create' 	=> false,
 			'publish' 	=> true,
 			'edit' 		=> false,
 			'save' 		=> true,
@@ -58,13 +60,11 @@ if (!empty($event) and $event == 'article') {
 	);
 
 	switch(strtolower($step)) {
-		case "":         article_edit();    break;
 		case "create":   article_edit();    break;
 		case "publish":  article_post();    break;
 		case "edit":     article_edit();    break;
 		case "save":     article_save();    break;
 		case "save_pane_state":     article_save_pane_state();    break;
-		default:         article_edit();    break;
 	}
 }
 
