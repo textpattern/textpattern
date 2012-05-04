@@ -474,7 +474,10 @@ if (!empty($event) and $event == 'article') {
 			}
 		}
 
-		if (!$from_view && !$pull) {
+		$validator = new Validator(array(
+			new SectionConstraint($rs['Section'])
+		));
+		if (!$validator->validate()) {
 			$rs['Section'] = getDefaultSection();
 		}
 
