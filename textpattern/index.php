@@ -105,9 +105,9 @@ $LastChangedRevision$
 		$prefs = get_prefs();
 		extract($prefs);
 
-		$event = (gps('event') ? gps('event') : (!empty($default_event) && has_privs($default_event) ? $default_event : 'article'));
-		$step = gps('step');
-		$app_mode = gps('app_mode');
+		$event = (gps('event') ? trim(gps('event')) : (!empty($default_event) && has_privs($default_event) ? $default_event : 'article'));
+		$step = trim(gps('step'));
+		$app_mode = trim(gps('app_mode'));
 
 		if (!$dbversion or ($dbversion != $thisversion) or $txp_using_svn)
 		{
