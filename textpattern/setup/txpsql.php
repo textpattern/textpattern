@@ -111,7 +111,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_category` (
   `rgt` int(6) NOT NULL default '0',
   `title` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`id`)
-) $tabletype PACK_KEYS=1 AUTO_INCREMENT=10 ";
+) $tabletype PACK_KEYS=1";
 
 $create_sql[] = "INSERT INTO `".PFX."txp_category` VALUES (1, 'root', 'article', '', 1, 8, 'root')";
 $create_sql[] = "INSERT INTO `".PFX."txp_category` VALUES (2, 'root', 'link', '', 1, 4, 'root')";
@@ -121,7 +121,6 @@ $create_sql[] = "INSERT INTO `".PFX."txp_category` VALUES (5, 'hope-for-the-futu
 $create_sql[] = "INSERT INTO `".PFX."txp_category` VALUES (6, 'meaningful-labor', 'article', 'root', 4, 5, 'Meaningful Labor')";
 $create_sql[] = "INSERT INTO `".PFX."txp_category` VALUES (7, 'reciprocal-affection', 'article', 'root', 6, 7, 'Reciprocal Affection')";
 $create_sql[] = "INSERT INTO `".PFX."txp_category` VALUES (8, 'textpattern', 'link', 'root', 2, 3, 'Textpattern')";
-$create_sql[] = "INSERT INTO `".PFX."txp_category` VALUES (9, 'site-design', 'image', 'root', 2, 3, 'Site Design')";
 
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_css` (
@@ -206,10 +205,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_image` (
   `author` varchar(255) NOT NULL default '',
   `thumbnail` int(2) NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) $tabletype PACK_KEYS=0 AUTO_INCREMENT=2 ";
-
-$create_sql[] = "INSERT INTO `".PFX."txp_image` VALUES (1, 'divider.gif', 'site-design', '.gif', 400, 1, '---', '', '2005-07-22 16:37:11', '".doSlash($name)."', 0)";
-$create_sql[] = "INSERT INTO `".PFX."txp_image` VALUES (2, 'txp_slug105x45.gif', 'site-design', '.gif', 105, 45, 'Textpattern CMS', '', '1977-12-24 13:20:42', '".doSlash($name)."', 0)";
+) $tabletype PACK_KEYS=0";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_lang` (
   `id` int(9) NOT NULL auto_increment,
