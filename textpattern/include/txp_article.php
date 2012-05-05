@@ -59,7 +59,7 @@ if (!empty($event) and $event == 'article') {
 		)
 	);
 
-	switch(strtolower($step)) {
+	switch($step) {
 		case "create":   article_edit();    break;
 		case "publish":  article_post();    break;
 		case "edit":     article_edit();    break;
