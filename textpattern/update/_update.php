@@ -38,6 +38,11 @@ $LastChangedRevision$
 		$tabletype .= " CHARACTER SET = ". $txpcfg['dbcharset'] ." ";
 	}
 
+	// Wipe out the last update check setting so the next visit to Diagnostics forces an update check,
+	// which resets the message. Without this, people who upgrade in future may still see a "new
+	// version available" message for some time after upgrading
+	safe_delete('txp_prefs', 'name="last_update_check"');
+
 	// Update to 4.0
 	if (( $dbversion == '' ) ||
 		( strpos($dbversion, 'g1'   ) === 0) ||

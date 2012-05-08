@@ -24,11 +24,6 @@ $LastChangedRevision$
 
 	safe_alter('txp_users', "MODIFY RealName VARCHAR(255) NOT NULL default '', MODIFY email VARCHAR(254) NOT NULL default ''");
 
-	// Wipe out the last update check setting so the next visit to Diagnostics forces an update check,
-	// which resets the message. Without this, people who upgrade in future may still see a "new
-	// version available" message for some time after upgrading
-	safe_delete('txp_prefs', 'name="last_update_check"');
-
 	$has_idx = 0;
 	$rs = getRows('show index from `'.PFX.'textpattern`');
 	foreach ($rs as $row) {
