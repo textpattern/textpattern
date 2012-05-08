@@ -20,7 +20,7 @@ T E X T I L E
 
 A Humane Web Text Generator
 
-Version 2.3.2
+Version 2.4.0
 
 Copyright (c) 2003-2004, Dean Allen <dean@textism.com>
 All rights reserved.
@@ -98,6 +98,11 @@ Block modifier syntax:
 		Definitions :, ::
 	Consecutive paragraphs beginning with ; or : are wrapped in definition list tags.
 	Example: <dl><dt>term</dt><dd>definition</dd></dl>
+
+	Redcloth-style Definition list:
+		- Term1 := Definition1
+		- Term2 := Extended
+		  definition =:
 
 Phrase modifier syntax:
 
@@ -314,6 +319,18 @@ Applying Attributes:
 		It goes like this, %{color:red}the fourth the fifth%
 			  -> It goes like this, <span style="color:red">the fourth the fifth</span>
 
+Ordered List Start & Continuation:
+
+	You can control the start attribute of an ordered list like so;
+
+		#5 Item 5
+		# Item 6
+
+	You can resume numbering list items after some intervening anonymous block like so...
+
+		#_ Item 7
+		# Item 8
+
 */
 
 // define these before including this file to override the standard glyphs
@@ -337,6 +354,9 @@ Applying Attributes:
 @define('txt_degrees',            '&#176;');
 @define('txt_plusminus',          '&#177;');
 @define('txt_has_unicode',        @preg_match('/\pL/u', 'a')); // Detect if Unicode is compiled into PCRE
+@define('txt_fn_ref_pattern',     '<sup{atts}>{marker}</sup>');
+@define('txt_fn_foot_pattern',    '<sup{atts}>{marker}</sup>');
+@define('txt_nl_ref_pattern',     '<sup{atts}>{marker}</sup>');
 
 class Textile
 {
@@ -363,7 +383,7 @@ class Textile
 	var $hu = '';
 	var $max_span_depth = 5;
 
-	var $ver = '2.3.2';
+	var $ver = '2.4.0';
 	var $rev = '$Rev$';
 
 	var $doc_root;
@@ -426,7 +446,7 @@ class Textile
 		$this->urlch = '['.$wrd.'"$\-_.+!*\'(),";\/?:@=&%#{}|\\^~\[\]`]';
 
 		$this->glyph_search = array(
-			'/('.$wrd.')\'('.$wrd.')/'.$mod,        // I'm an apostrophe
+			'/('.$wrd.'|\))\'('.$wrd.')/'.$mod,     // I'm an apostrophe
 			'/(\s)\'(\d+'.$wrd.'?)\b(?![.]?['.$wrd.']*?\')/'.$mod,	// back in '88/the '90s but not in his '90s', '1', '1.' '10m' or '5.png'
 			'/(\S)\'(?=\s|'.$pnc.'|<|$)/',          // single closing
 			'/\'/',                                 // single opening
@@ -506,6 +526,7 @@ class Textile
 			return $text;
 		} else {
 			if(!$strict) {
+				$text = $this->prePadLists($text);
 				$text = $this->cleanWhiteSpace($text);
 			}
 
@@ -544,7 +565,7 @@ class Textile
 
 		// escape any raw html
 		$text = $this->encode_html($text, 0);
-
+		$text = $this->prePadLists($text);
 		$text = $this->cleanWhiteSpace($text);
 
 		if($lite) {
@@ -779,6 +800,7 @@ class Textile
 
 			$cells = array();
 			$cellctr = 0;
+			$row = strtr( $row, array( "\n" => '<br />' ) );
 			foreach(explode("|", $row) as $cell) {
 				$ctyp = "d";
 				if (preg_match("/^_/", $cell)) $ctyp = "h";
@@ -804,9 +826,76 @@ class Textile
 	}
 
 // -------------------------------------------------------------
+	function redcloth_lists($text)
+	{
+		return preg_replace_callback("/^([-]+$this->lc[ .].*:=.*)$(?![^-])/smU", array(&$this, "fRCList"), $text);
+	}
+
+// -------------------------------------------------------------
+	function fRCList($m)
+	{
+		$out = array();
+		$text = preg_split('/\n(?=[-])/m', $m[0]);
+		foreach($text as $nr => $line) {
+			if (preg_match("/^[-]+($this->lc)[ .](.*)$/s", $line, $m)) {
+				list(, $atts, $content) = $m;
+				$content = trim($content);
+				$atts = $this->pba($atts);
+
+				preg_match( "/^(.*?)[\s]*:=(.*?)[\s]*(=:|:=)?[\s]*$/s", $content, $xm );
+				list( , $term, $def, ) = $xm;
+				$term = trim( $term );
+				$def  = trim( $def, ' ' );
+
+				if( empty( $out ) ) {
+					if(''==$def)
+						$out[] = "<dl$atts>";
+					else
+						$out[] = '<dl>';
+				}
+
+				if( '' != $def && '' != $term )
+				{
+					$pos = strpos( $def, "\n" );
+					$def = str_replace( "\n", "<br />", trim($def) );
+					if( 0 === $pos )
+						$def  = '<p>' . $def . '</p>';
+
+					$term = $this->graf($term);
+					$def  = $this->graf($def);
+
+					$out[] = "\t<dt$atts>$term</dt>";
+					$out[] = "\t<dd>$def</dd>";
+				}
+			}
+		}
+		$out[] = '</dl>';
+		return implode("\n", $out);
+	}
+
+// -------------------------------------------------------------
+	function prePadLists($text)
+	{
+		$list_item       = "[#*;:]+(?:_|[\d]+)?$this->lc[ .].*\n";
+		$non_blank_lines = ".+\n";
+		$text = preg_replace_callback(
+			"/^(?:$list_item)(?:$non_blank_lines)*\n/m",
+			array(&$this, "fPrePadLists"),
+			$text."\n\n"
+		);
+		return $text;
+	}
+
+// -------------------------------------------------------------
+	function fPrePadLists($m)
+	{
+		return "\n".$m[0];
+	}
+
+// -------------------------------------------------------------
 	function lists($text)
 	{
-		return preg_replace_callback("/^([#*;:]+$this->lc[ .].*)$(?![^#*;:])/smU", array(&$this, "fList"), $text);
+		return preg_replace_callback("/^([#*;:]+(?:_|[\d]+)?$this->lc[ .].*)$(?![^#*;:])/smU", array(&$this, "fList"), $text);
 	}
 
 // -------------------------------------------------------------
@@ -816,15 +905,36 @@ class Textile
 		$pt = '';
 		foreach($text as $nr => $line) {
 			$nextline = isset($text[$nr+1]) ? $text[$nr+1] : false;
-			if (preg_match("/^([#*;:]+)($this->lc)[ .](.*)$/s", $line, $m)) {
-				list(, $tl, $atts, $content) = $m;
+			if (preg_match("/^([#*;:]+)(_|[\d]+)?($this->lc)[ .](.*)$/s", $line, $m)) {
+				list(, $tl, $st, $atts, $content) = $m;
 				$content = trim($content);
 				$nl = '';
 				$ltype = $this->lT($tl);
 				$litem = (strpos($tl, ';') !== false) ? 'dt' : ((strpos($tl, ':') !== false) ? 'dd' : 'li');
 				$showitem = (strlen($content) > 0);
 
-				if (preg_match("/^([#*;:]+)($this->lc)[ .].*/", $nextline, $nm))
+				if( 'o' === $ltype ) {					// handle list continuation/start attribute on ordered lists...
+					if( !isset($this->olstarts[$tl]) )
+						$this->olstarts[$tl] = 1;
+
+					if( strlen($tl) > strlen($pt) ) {			// first line of this level of ol -- has a start attribute?
+						if( '' == $st )
+							$this->olstarts[$tl] = 1;			// no => reset count to 1.
+						elseif( '_' !== $st )
+							$this->olstarts[$tl] = (int)$st;	// yes, and numeric => reset to given.
+																// TRICKY: the '_' continuation marker just means
+																// output the count so don't need to do anything
+																// here.
+					}
+
+					if( (strlen($tl) > strlen($pt)) && '' !== $st)		// output the start attribute if needed...
+						$st = ' start="' . $this->olstarts[$tl] . '"';
+
+					if( $showitem ) 							// TRICKY: Only increment the count for list items; not when a list definition line is encountered.
+						$this->olstarts[$tl] += 1;
+				}
+
+				if (preg_match("/^([#*;:]+)(_|[\d]+)?($this->lc)[ .].*/", $nextline, $nm))
 					$nl = $nm[1];
 
 				if ((strpos($pt, ';') !== false) && (strpos($tl, ':') !== false)) {
@@ -834,7 +944,7 @@ class Textile
 				$atts = $this->pba($atts);
 				if (!isset($lists[$tl])) {
 					$lists[$tl] = 1;
-					$line = "\t<" . $ltype . "l$atts>" . (($showitem) ? "\n\t\t<$litem>" . $content : '');
+					$line = "\t<" . $ltype . "l$atts$st>" . (($showitem) ? "\n\t\t<$litem>" . $content : '');
 				} else {
 					$line = ($showitem) ? "\t\t<$litem$atts>" . $content : '';
 				}
@@ -961,6 +1071,22 @@ class Textile
 	}
 
 // -------------------------------------------------------------
+	function formatFootnote( $marker, $atts='', $anchor=true )
+	{
+		$pattern = ($anchor) ? txt_fn_foot_pattern : txt_fn_ref_pattern;
+		return $this->replaceMarkers( $pattern, array( 'atts' => $atts, 'marker' => $marker ) );
+	}
+
+// -------------------------------------------------------------
+	function replaceMarkers( $text, $replacements )
+	{
+		if( !empty( $replacements ) )
+			foreach( $replacements as $k => $r )
+				$text = str_replace( '{'.$k.'}', $r, $text );
+		return $text;
+	}
+
+// -------------------------------------------------------------
 	function fBlock($m)
 	{
 		extract($this->regex_snippets);
@@ -974,10 +1100,11 @@ class Textile
 			# Is this an anonymous block with a note definition?
 			$notedef = preg_replace_callback("/
 					^note\#               #  start of note def marker
-					([^%<*!@#^([{.]+)     # !label
+					([^%<*!@#^([{ \s.]+)  # !label
 					([*!^]?)              # !link
 					({$this->c})          # !att
-					\.[\s]+               #  end of def marker
+					\.?                   #  optional period.
+					[\s]+                 #  whitespace ends def marker
 					(.*)$                 # !content
 				/x$mod", array(&$this, "fParseNoteDefs"), $content);
 
@@ -999,8 +1126,7 @@ class Textile
 			if (strpos($atts, 'class=') === false)
 				$atts .= ' class="footnote"';
 
-			$backlink = (strpos($att, '^') === false) ? $fns[1] : '<a href="#fnrev' . $fnid . '">'.$fns[1].'</a>';
-			$sup = "<sup$supp_id>$backlink</sup>";
+			$sup = (strpos($att, '^') === false) ? $this->formatFootnote($fns[1], $supp_id) : $this->formatFootnote('<a href="#fnrev' . $fnid . '">'.$fns[1] .'</a>', $supp_id);
 
 			$content = $sup . ' ' . $content;
 		}
@@ -1045,6 +1171,28 @@ class Textile
 	}
 
 // -------------------------------------------------------------
+	function fParseHTMLComments($m)
+	{
+		list( , $content ) = $m;
+		if( $this->restricted )
+			$content = $this->shelve($this->r_encode_html($content));
+		else
+			$content = $this->shelve($content);
+		return "<!--$content-->";
+	}
+
+
+	function getHTMLComments($text)
+	{
+		$text = preg_replace_callback("/
+			\<!--    #  start
+			(.*?)    # !content
+			-->      #  end
+		/sx", array(&$this, "fParseHTMLComments"), $text);
+		return $text;
+	}
+
+// -------------------------------------------------------------
 	function graf($text)
 	{
 		// handle normal paragraph text
@@ -1053,6 +1201,7 @@ class Textile
 			$text = $this->code($text);
 		}
 
+		$text = $this->getHTMLComments($text);
 		$text = $this->getRefs($text);
 		$text = $this->links($text);
 		if (!$this->noimage)
@@ -1060,6 +1209,7 @@ class Textile
 
 		if (!$this->lite) {
 			$text = $this->table($text);
+			$text = $this->redcloth_lists($text);
 			$text = $this->lists($text);
 		}
 
@@ -1191,7 +1341,7 @@ class Textile
 		}
 
 		# Replace list markers...
-		$text = preg_replace_callback("@<p>notelist({$this->c})(?:\:([$wrd|{$this->syms}]))?([\^!]?)(\+?)\.[\s]*</p>@U$mod", array(&$this, "fNoteLists"), $text );
+		$text = preg_replace_callback("@<p>notelist({$this->c})(?:\:([$wrd|{$this->syms}]))?([\^!]?)(\+?)\.?[\s]*</p>@U$mod", array(&$this, "fNoteLists"), $text );
 
 		return $text;
 	}
@@ -1209,6 +1359,7 @@ class Textile
 			if( !empty($this->notes)) {
 				foreach($this->notes as $seq=>$info) {
 					$links = $this->makeBackrefLink($info, $g_links, $start_char );
+					$atts = '';
 					if( !empty($info['def'])) {
 						$id = $info['id'];
 						extract($info['def']);
@@ -1274,7 +1425,6 @@ class Textile
 	function fParseNoteDefs($m)
 	{
 		list(, $label, $link, $att, $content) = $m;
-
 		# Assign an id if the note reference parse hasn't found the label yet.
 		$id = @$this->notes[$label]['id'];
 		if( !$id )
@@ -1336,7 +1486,7 @@ class Textile
 			$_ = '<a href="#note'.$id.'">'.$_.'</a>';
 
 		# Build the reference...
-		$_ = '<sup'.$atts.'>'.$_.'</sup>';
+		$_ = $this->replaceMarkers( txt_nl_ref_pattern, array( 'atts' => $atts, 'marker' => $_ ) );
 
 		return $_;
 	}
@@ -1477,7 +1627,7 @@ class Textile
 // -------------------------------------------------------------
 	function getRefs($text)
 	{
-		return preg_replace_callback("/^\[(.+)\]((?:http:\/\/|\/)\S+)(?=\s|$)/Um",
+		return preg_replace_callback("/^\[(.+)\]((?:http:\/\/|https:\/\/|\/)\S+)(?=\s|$)/Um",
 			array(&$this, "refs"), $text);
 	}
 
@@ -1485,6 +1635,9 @@ class Textile
 	function refs($m)
 	{
 		list(, $flag, $url) = $m;
+		$uri_parts = array();
+		$this->parseURI( $url, $uri_parts );
+		$url = ltrim( $this->rebuildURI( $uri_parts ) ); // encodes URL if needed.
 		$this->urlrefs[$flag] = $url;
 		return '';
 	}
@@ -1722,16 +1875,18 @@ class Textile
 // -------------------------------------------------------------
 	function footnoteID($id, $nolink, $t)
 	{
-		$backref = '';
+		$backref = ' ';
 		if (empty($this->fn[$id])) {
 			$this->fn[$id] = $a = uniqid(rand());
-			$backref = 'id="fnrev'.$a.'" ';
+			$backref = ' id="fnrev'.$a.'" ';
 		}
 
 		$fnid = $this->fn[$id];
 
 		$footref = ( '!' == $nolink ) ? $id : '<a href="#fn'.$fnid.'">'.$id.'</a>';
-		$footref = '<sup '.$backref.'class="footnote">'.$footref.'</sup>';
+		$backref .= 'class="footnote"';
+
+		$footref = $this->formatFootnote( $footref, $backref, false );
 
 		return $footref;
 	}
