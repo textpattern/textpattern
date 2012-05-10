@@ -2125,11 +2125,11 @@ function escape_js($js)
 
 		if (@$GLOBALS['connected'] && @txpinterface == 'public') {
 			$out = safe_field('user_html','txp_page',"name='error_".doSlash($code)."'");
-			if (empty($out))
+			if ($out === false)
 				$out = safe_field('user_html','txp_page',"name='error_default'");
 		}
 
-		if (empty($out))
+		if (!isset($out))
 			$out = <<<eod
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
