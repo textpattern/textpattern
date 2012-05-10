@@ -317,12 +317,43 @@ function sendAsyncEvent(data, fn, format)
 }
 
 /**
+ * A pub/sub hub for client side events
+ * @since   4.5.0
+ */
+textpattern.Relay =
+{
+    /**
+     * Publish an event to all registered subscribers
+     * @param   event string
+     * @param   data object
+     * @return  the Relay object
+     */
+    callback: function(event, data)
+    {
+        return $(this).trigger(event, data);
+        return this;
+    },
+    /**
+     * Subscribe to an event
+     * @param   event string
+     * @param   fn callback(event, data); // see individual events for details on data members
+     * @return  the Relay object
+     */
+    register: function(event, fn)
+    {
+        $(this).bind(event, fn);
+        return this;
+    }
+};
+
+/**
  * txpAsyncForm jQuery plugin. Sends a form's entry elements as AJAX data and processes the response javascript.
  *
  * @param   object  options-object {dataType, error: function error_callback(){}, success: function success_callback(){}} | undefined
  * @return  object this form
  * @since   4.5.0
  */
+
 jQuery.fn.txpAsyncForm = function(options)
 {
 	options = $.extend({
@@ -362,9 +393,10 @@ jQuery.fn.txpAsyncForm = function(options)
 			    $('body').removeClass('busy');
 			    $('span.spinner').remove();
 			    if (options.error) options.error(form, event, jqXHR, ajaxSettings, thrownError);
-		    });
+                textpattern.Relay.callback('txpAsyncForm.error', {'form': form, 'event': event, 'jqXHR': jqXHR, 'ajaxSettings': ajaxSettings, 'thronwError': thrownError});
+            });
 
-		    sendAsyncEvent(
+            sendAsyncEvent(
 				form.serialize() + '&' + (s.attr('name') || '_txp_submit') + '=' + (s.val() || '_txp_submit'),
 				function(data, textStatus, jqXHR) {
 	                // remove feedback elements
@@ -374,6 +406,7 @@ jQuery.fn.txpAsyncForm = function(options)
 	                $('span.spinner').remove();
 					form.ajaxError = null;
 					if (options.success) options.success(form, event, data, textStatus, jqXHR);
+                    textpattern.Relay.callback('txpAsyncForm.success', {'form': form, 'event': event, 'data': data, 'textStatus': textStatus, 'jqXHR': jqXHR});
 				},
 				options.dataType
 			);
@@ -391,7 +424,7 @@ jQuery.fn.txpAsyncForm = function(options)
  * @return string
  */
 
-function gTxt(l18n, atts, escape)
+textpattern.gTxt = function(l18n, atts, escape)
 {
 	var tags = atts || {};
 	var string = l18n;
@@ -417,7 +450,7 @@ function gTxt(l18n, atts, escape)
 }
 
 /**
- * jQuery plugin for gTxt. Sets HTML contents of each matched element.
+ * jQuery plugin for textpattern.gTxt. Sets HTML contents of each matched element.
  * @param object options-object {string, tags : {}, escape : TRUE} | string The l18n string
  * @param object|undefined tags Replacement tags
  * @param boolean|undefined escape Escape HTML
@@ -436,7 +469,7 @@ jQuery.fn.gTxt = function(opts, tags, escape)
 		};
 	}
 
-	$(this).html(gTxt(options.string, options.tags, options.escape));
+	$(this).html(textpattern.gTxt(options.string, options.tags, options.escape));
 	return this;
 };
 
@@ -458,7 +491,7 @@ $(document).ready(function() {
 	// setup and submit async forms
 	if(!textpattern.ajaxally_challenged) {
 		$('form.async').txpAsyncForm({
-			error: function() {window.alert(gTxt('form_submission_error'));}
+			error: function() {window.alert(textpattern.gTxt('form_submission_error'));}
 		});
     }
 });
