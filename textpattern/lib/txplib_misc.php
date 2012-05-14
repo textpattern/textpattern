@@ -140,7 +140,11 @@ function escape_js($js)
 	{
 		global $textarray;
 
-		if($escape == 'html')
+		if (!is_array($atts)) {
+			$atts = array();
+		}
+
+		if ($escape == 'html')
 		{
 			foreach ($atts as $key => $value)
 			{
@@ -149,7 +153,7 @@ function escape_js($js)
 		}
 
 		$v = strtolower($var);
-		if(isset($textarray[$v])) {
+		if (isset($textarray[$v])) {
 			$out = $textarray[$v];
 			if ($out !== '') return strtr($out, $atts);
 		}
@@ -157,6 +161,26 @@ function escape_js($js)
 		if ($atts)
 			return $var.': '.join(', ', $atts);
 		return $var;
+	}
+
+//-------------------------------------------------------------
+/**
+ * Localize client scripts
+ *
+ * @param string|array $var scalar or array of string keys
+ * @param array $atts array or array of arrays of variable substitution pairs
+ * @since 4.5.0
+ */
+	function gTxtScript($var, $atts = array())
+	{
+		global $textarray_script;
+
+		if (!is_array($textarray_script)) {
+			$textarray_script = array();
+		}
+
+		$data = (is_array($var) ? array_map('gTxt', $var, $atts) : (array)gTxt($var, $atts));
+		$textarray_script = $textarray_script + array_combine((array)$var, $data);
 	}
 
 //-------------------------------------------------------------

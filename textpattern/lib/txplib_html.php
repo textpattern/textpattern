@@ -18,15 +18,15 @@ $LastChangedRevision$
  */
 	function end_page()
 	{
-		global $txp_user, $event, $app_mode, $theme;
+		global $txp_user, $event, $app_mode, $theme, $textarray_script;
 
 		if ($app_mode != 'async' && $event != 'tag') {
 			echo pluggable_ui('admin_side', 'footer', $theme->footer());
 			callback_event('admin_side', 'body_end');
-			echo n.'</body>'.n.'</html>';
+			echo n.script_js('textpattern.textarray = '.json_encode($textarray_script)).n.
+			'</body>'.n.'</html>';
 		}
 	}
-
 
 /**
  * Render the user interface for one head cell of columnar data.

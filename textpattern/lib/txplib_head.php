@@ -56,23 +56,24 @@ $LastChangedRevision$
 	<meta name="robots" content="noindex, nofollow" />
 	<title>Txp &#8250; <?php echo htmlspecialchars($sitename) ?> &#8250; <?php echo escape_title($pagetitle) ?></title>
 	<script src="jquery.js" type="text/javascript"></script>
-	<?php echo script_js(
+	<?php
+	echo script_js(
 		'var textpattern = {
 		event: "'.htmlspecialchars($event).'",
 		step: "'.htmlspecialchars($step).'",
 		_txp_token: "'.htmlspecialchars(form_token()).'",
 		ajax_timeout: '.htmlspecialchars(AJAX_TIMEOUT).',
 		ajaxally_challenged: '.(AJAXALLY_CHALLENGED ? 'true' : 'false').',
-		textarray: {'.n.
-			'form_submission_error : "'.htmlspecialchars(gTxt('form_submission_error')).'"'.n.
-		'},
+		textarray: {},
 		do_spellcheck: "'.htmlspecialchars(
 							get_pref('do_spellcheck', '#page-article #body, #page-article #title,'.
 													'#page-image #alt-text, #page-image #caption,'.
 													'#page-file #description,'.
 													'#page-link #link-title, #page-link #link-description')
 							).'"};'
-	); ?>
+	);
+	gTxtScript('form_submission_error');
+	?>
 	<script type="text/javascript" src="textpattern.js"></script>
 	<script type="text/javascript">
 	<!--
