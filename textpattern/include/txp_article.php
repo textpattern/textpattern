@@ -1254,7 +1254,8 @@ EOS
 // -------------------------------------------------------------
 	function article_partial_keywords_value($rs)
 	{
-		return str_replace(',', ', ', $rs['Keywords']);
+		// separate keywords by a comma plus at least one space
+		return preg_replace('/,(\S)/', ', $1', $rs['Keywords']);
 	}
 
 // -------------------------------------------------------------
