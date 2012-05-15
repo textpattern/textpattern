@@ -672,27 +672,26 @@ function escape_js($js)
 		}
 
 		$httpstatus = in_array($errno, array(E_ERROR, E_USER_ERROR)) ? '500' : '200';
+		$out = "$msg.\n$backtrace";
 
 		if (http_accept_format('html')) {
 			if (!empty($backtrace)) {
 				echo "<pre>$msg.</pre>".
 					n.'<pre style="padding-left: 2em;" class="backtrace"><code>'.
 					htmlspecialchars($backtrace).'</code></pre>';
-			} elseif (is_object($theme)) {
-				echo $theme->announce(array($msg, E_ERROR), true);
-			} else {
-				echo "<pre>$msg.</pre>";
+			} elseif (!empty($msg)) {
+				echo is_object($theme) ? $theme->announce(array($out, E_ERROR), true) : "<pre>$out</pre>";
 			}
 			$c = array('in' => '', 'out' => '');
 		} elseif (http_accept_format('js')) {
-			if (is_object($theme)) {
-				send_script_response($theme->announce_async(array($msg.n.$backtrace, E_ERROR), true));
-			} else {
-				send_script_response('/*'.$msg.".\n".$backtrace.'*/');
-			}
+			send_script_response(
+				is_object($theme) && !empty($msg) ?
+				$theme->announce_async(array($out, E_ERROR), true) :
+				"/* $out */"
+			);
 			$c = array('in' => '/* ', 'out' => ' */');
 		} elseif (http_accept_format('xml')) {
-			send_xml_response(array('http-status' => $httpstatus, 'internal_error' => $msg.".\n".$backtrace));
+			send_xml_response(array('http-status' => $httpstatus, 'internal_error' => "$out"));
 			$c = array('in' => '<!-- ', 'out' => ' -->');
 		} else {
 			txp_die($msg, 500);
@@ -3061,15 +3060,15 @@ function modal_halt($thing)
 function http_accept_format($format)
 {
 	static $formats = array(
-		'html' => array('text/html', 'application/xhtml+xml'),
-		'txt'  => array('text/plain'),
-		'js'   => array('application/javascript', 'application/x-javascript', 'text/javascript', 'application/ecmascript', 'application/x-ecmascript'),
-		'css'  => array('text/css'),
-		'json' => array('application/json', 'application/x-json'),
-		'xml'  => array('text/xml', 'application/xml', 'application/x-xml'),
-		'rdf'  => array('application/rdf+xml'),
-		'atom' => array('application/atom+xml'),
-		'rss'  => array('application/rss+xml'),
+		'html' => array('text/html', 'application/xhtml+xml', '*/*'),
+		'txt'  => array('text/plain', '*/*'),
+		'js'   => array('application/javascript', 'application/x-javascript', 'text/javascript', 'application/ecmascript', 'application/x-ecmascript', '*/*'),
+		'css'  => array('text/css', '*/*'),
+		'json' => array('application/json', 'application/x-json', '*/*'),
+		'xml'  => array('text/xml', 'application/xml', 'application/x-xml', '*/*'),
+		'rdf'  => array('application/rdf+xml', '*/*'),
+		'atom' => array('application/atom+xml', '*/*'),
+		'rss'  => array('application/rss+xml', '*/*'),
 	);
 	static $accepts = array();
 //	static $q = array(); // nice to have
