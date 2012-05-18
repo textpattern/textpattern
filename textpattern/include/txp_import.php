@@ -19,7 +19,7 @@ $LastChangedRevision$
 
 	require_privs('import');
 
- 	$vars = array('import_tool', 'Section','type','comments_invite','blog_id','importdb','importdblogin','importdbpass','importdbhost','wpdbprefix');
+ 	$vars = array('import_tool', 'Section','type','comments_invite','blog_id','importdb','importdblogin','importdbpass','importdbhost','wpdbprefix','wpdbcharset');
 
  	// Add new tools here.
  	// First: Array key must be the end of the import tool file name;
@@ -135,7 +135,11 @@ function showHideFields($sel)
 		$wponly = tr(
 			fLabelCell ('import_wpprefix','import_wpprefix', 'wp-prefix').
 			td(fInput('text','wpdbprefix', 'wp_','edit'), '', 'wp-prefix')
-		, ' class="import-wp-prefix"');
+		, ' class="import-wp-prefix"').
+			tr(
+			fLabelCell ('import_wpdbcharset','import_wpdbcharset', 'wpdbcharset').
+			td(selectInput('wpdbcharset', array('utf8' => gTxt('utf8'), 'latin1' => gTxt('latin1')), 'utf8','','','wpdbcharset'), '', 'wp-dbcharset')
+		, ' class="import-wp-dbcharset"');
 		$content.= tr(tda(tag($wponly, 'table', ' id="wponly" style="display: none;"'),' colspan="2"'));
 		$content.= tr(tdcs(fInput('submit','choose',gTxt('continue'),'publish'), 2));
 		$content.= endTable();
@@ -182,7 +186,7 @@ function showHideFields($sel)
 				$out = doImportB2($importdblogin, $importdb, $importdbpass, $importdbhost, $insert_into_section, $insert_with_status, $default_comment_invite);
 			break;
 			case 'wp':
-				$out = doImportWP($importdblogin, $importdb, $importdbpass, $importdbhost, $wpdbprefix, $insert_into_section, $insert_with_status, $default_comment_invite);
+				$out = doImportWP($importdblogin, $importdb, $importdbpass, $importdbhost, $wpdbprefix, $insert_into_section, $insert_with_status, $default_comment_invite, $wpdbcharset);
 				rebuild_tree('root',1,'article');
 			break;
 			case 'blogger':

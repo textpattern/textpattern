@@ -5,7 +5,7 @@ $LastChangedRevision$
 */
 
 
-	function doImportWP($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $wpdbprefix, $insert_into_section, $insert_with_status, $default_comment_invite)
+	function doImportWP($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $wpdbprefix, $insert_into_section, $insert_with_status, $default_comment_invite, $wpdbcharset)
 	{
 		global $txpcfg;
 
@@ -18,9 +18,9 @@ $LastChangedRevision$
 
 		mysql_select_db($b2db, $b2link);
 
-		if (!mysql_query('SET NAMES utf8', $b2link))
+		if (!mysql_query('SET NAMES '.doslash($wpdbcharset), $b2link))
 		{
-			return 'WordPress database does not support the UTF8 character set. Aborting.';
+			return 'WordPress database does not support the requested character set. Aborting.';
 		}
 
 
