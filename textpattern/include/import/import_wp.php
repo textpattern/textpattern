@@ -169,7 +169,7 @@ $LastChangedRevision$
 				u.user_login as AuthorID
 			from ".$wpdbprefix."posts as p left join ".$wpdbprefix."users as u
 				on u.ID = p.post_author
-			where p.post_type <> 'revision'
+			where p.post_type = 'post'
 			order by p.ID asc
 		", $b2link) or $errors[] = mysql_error();
 
@@ -264,6 +264,25 @@ $LastChangedRevision$
 			$article['Category1'] = !empty($article_categories[0]) ? $article_categories[0]['name'] : '';
 			$article['Category2'] = !empty($article_categories[1]) ? $article_categories[1]['name'] : '';
 
+
+			// article images
+			$article_images = array();
+
+			$article_image_query = mysql_query("
+			select
+				guid
+			from ".$wpdbprefix."posts
+			where post_type = 'attachment' and post_mime_type like 'image/%' and post_parent=".$article['ID']
+			, $b2link) or $errors[] = mysql_error();
+
+			while ($image = mysql_fetch_array($article_image_query))
+			{
+				$article_images[] = $image['guid'];
+			}
+
+			// Comma-separated image urls preserve multiple attachments.
+			// Attn: If more than one image is attached, <txp:article_image /> will not work out of the box.
+			$article['Image'] = join(',', $article_images);
 
 			$articles[] = $article;
 		}
@@ -440,16 +459,17 @@ $LastChangedRevision$
 				// can not use array slash due to way on which comments are selected
 				$rs = mysql_query("
 					insert into ".safe_pfx('textpattern')." set
-						Posted		     = '".doSlash($Posted)."',
-						LastMod		     = '".doSlash($LastMod)."',
-						Title			     = '".doSlash($textile->TextileThis($Title, 1))."',
-						url_title      = '".doSlash($url_title)."',
-						Body			     = '".doSlash($Body)."',
-						Body_html      = '".doSlash($Body_html)."',
-						AuthorID	     = '".doSlash($AuthorID)."',
-						Category1      = '".doSlash($Category1)."',
-						Category2      = '".doSlash($Category2)."',
-						Section		     = '$insert_into_section',
+						Posted		    = '".doSlash($Posted)."',
+						LastMod		    = '".doSlash($LastMod)."',
+						Title			= '".doSlash($textile->TextileThis($Title, 1))."',
+						url_title      	= '".doSlash($url_title)."',
+						Body			= '".doSlash($Body)."',
+						Body_html      	= '".doSlash($Body_html)."',
+						Image			= '".doSlash($Image)."',
+						AuthorID	    = '".doSlash($AuthorID)."',
+						Category1     	= '".doSlash($Category1)."',
+						Category2      	= '".doSlash($Category2)."',
+						Section		    = '$insert_into_section',
 						uid            = '".md5(uniqid(rand(), true))."',
 						feed_time      = '".substr($Posted, 0, 10)."',
 						Annotate       = '".doSlash($Annotate)."',
