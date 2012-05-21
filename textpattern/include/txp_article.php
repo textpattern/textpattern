@@ -149,7 +149,8 @@ if (!empty($event) and $event == 'article') {
 			}
 			$cfq = join(', ', $cfq);
 
-			if (article_validate(compact($vars), $msg)) {
+			$rs = compact($vars);
+			if (article_validate($rs, $msg)) {
 				if (safe_insert(
 				   "textpattern",
 				   "Title           = '$Title',
@@ -185,6 +186,8 @@ if (!empty($event) and $event == 'article') {
 						do_pings();
 						update_lastmod();
 					}
+					callback_event('article_posted', '', false, $rs);
+
 					$s = check_url_title($url_title);
 					$msg = array(get_status_message($Status).' '.$s, ($s ? E_WARNING : 0));
 				} else {
@@ -314,7 +317,8 @@ if (!empty($event) and $event == 'article') {
 		}
 		$cfq = join(', ', $cfq);
 
-		if (article_validate(compact($vars), $msg)) {
+		$rs = compact($vars);
+		if (article_validate($rs, $msg)) {
 			if (safe_update("textpattern",
 			   "Title           = '$Title',
 				Body            = '$Body',
@@ -346,6 +350,7 @@ if (!empty($event) and $event == 'article') {
 					}
 					update_lastmod();
 				}
+				callback_event('article_saved', '', false, $rs);
 
 				if (empty($msg)) {
 					$s = check_url_title($url_title);
