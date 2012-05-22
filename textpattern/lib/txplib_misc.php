@@ -600,7 +600,7 @@ function escape_js($js)
                         E_USER_ERROR => "User_Error", E_USER_WARNING => "User_Warning", E_USER_NOTICE => "User_Notice");
 
 		if (!($errno & error_reporting())) return;
-		if ($production_status == 'live') return;
+		if ($production_status == 'live' || ($production_status != 'debug' && $errno == E_USER_NOTICE)) return;
 
 		global $txp_current_plugin, $production_status;
 		printf ("<pre>".gTxt('plugin_load_error').' <b>%s</b> -> <b>%s: %s on line %s</b></pre>',
@@ -711,7 +711,7 @@ function escape_js($js)
 		                E_USER_WARNING => "Textpattern Warning", E_USER_NOTICE => "Textpattern Notice");
 
 		if (!($errno & error_reporting())) return;
-		if ($production_status == 'live') return;
+		if ($production_status == 'live' || ($production_status != 'debug' && $errno == E_USER_NOTICE)) return;
 
 		global $production_status;
 		printf ("<pre>".gTxt('general_error').' <b>%s: %s on line %s</b></pre>',
