@@ -4501,7 +4501,12 @@ $LastChangedRevision$
 
 		if (!isset($atts['value']) && is_null($thing))
 		{
-			return $variable[$name];
+			if (isset($variable[$name])) {
+				return $variable[$name];
+			} else {
+				trace_add("[<txp:variable>: Unknown variable '$name']");
+				return '';
+			}
 		}
 		else
 		{
