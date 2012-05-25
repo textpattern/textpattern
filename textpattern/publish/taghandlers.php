@@ -1024,7 +1024,7 @@ $LastChangedRevision$
 
 	function popup($atts)
 	{
-		global $s, $c;
+		global $s, $c, $permlink_mode;
 
 		extract(lAtts(array(
 			'label'        => gTxt('browse'),
@@ -1088,9 +1088,18 @@ $LastChangedRevision$
 					$out = doTag($out, $wraptag, $class);
 				}
 
-				return '<form method="get" action="'.hu.'">'.
+				if (($type == 's' || $permlink_mode == 'messy')) {
+					$action = hu;
+					$his = ($section !== '') ? n.hInput('s', $section) : '';
+				} else {
+					// Clean urls for category popup
+					$action = pagelinkurl(array('s' => $section));
+					$his = '';
+				}
+
+				return '<form method="get" action="'.$action.'">'.
 					'<div>'.
-					( ($type != 's' and $section and $s) ? n.hInput('s', $section) : '').
+					$his.
 					n.$out.
 					n.'<noscript><div><input type="submit" value="'.gTxt('go').'" /></div></noscript>'.
 					n.'</div>'.
