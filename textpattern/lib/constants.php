@@ -52,6 +52,8 @@ define('PLUGIN_RESERVED_FLAGS', 0x0fff); // reserved bits for use by Textpattern
 define('PASSWORD_LENGTH', 10); // password default length, in characters
 define('PASSWORD_COMPLEXITY', 8); // log(2) of stretching iteration count
 define('PASSWORD_PORTABILITY', TRUE);
+defined('LOGIN_COOKIE_HTTP_ONLY') || define('LOGIN_COOKIE_HTTP_ONLY', true);
+defined('X_FRAME_OPTIONS') || define('X_FRAME_OPTIONS', 'SAMEORIGIN');
 
 defined('AJAX_TIMEOUT') || define('AJAX_TIMEOUT', max(30000, 1000 * @ini_get('max_execution_time')));
 defined('AJAXALLY_CHALLENGED') || define('AJAXALLY_CHALLENGED', false); // TODO: @since 4.5.0; Wait for plugins to catch up, then lose this at a future release
@@ -64,5 +66,4 @@ define('REQUIRED_PHP_VERSION', '5.2');
 
 error_reporting($old_level);
 unset($old_level);
-
 ?>

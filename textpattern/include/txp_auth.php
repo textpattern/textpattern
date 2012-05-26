@@ -251,7 +251,11 @@ EOSCR
 				setcookie(
 					'txp_login',
 					$name.','.$c_hash,
-					($stay ? time()+3600*24*365 : 0)
+					($stay ? time()+3600*24*365 : 0),
+					null,
+					null,
+					null,
+					LOGIN_COOKIE_HTTP_ONLY
 				);
 
 				setcookie(
