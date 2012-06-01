@@ -105,9 +105,9 @@ function doAuth()
 
 		list($name) = explode(',', cs('txp_login'));
 
-		echo n.'<div id="login_container" class="txp-container txp-edit">';
+		echo n.'<div id="login_container" class="txp-container">';
 		echo form(
-			startTable('edit', '', 'login-pane').
+			startTable('', '', 'login-pane').
 				n.n.tr(
 					n.td().
 					td(graf($message))
@@ -122,7 +122,7 @@ function doAuth()
 					n.n.tr(
 						n.fLabelCell('password', '', 'password').
 						n.td(
-						  	fInput('password', 'p_password', '', 'edit', '', '', '', '', 'password')
+						  	fInput('password', 'p_password', '', '', '', '', '', '', 'password')
 						)
 					)
 				).
@@ -168,7 +168,7 @@ $(document).ready(
 );
 EOSCR
 		).
-		n.'</body>'.n.'</html>';
+		n.'</div><!-- /txp-body -->'.n.'</body>'.n.'</html>';
 
 		exit(0);
 	}

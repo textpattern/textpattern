@@ -387,7 +387,7 @@ if (!empty($event) and $event == 'article') {
 			'body'          => array('mode' => PARTIAL_STATIC,      'selector' => false),
 			'excerpt'       => array('mode' => PARTIAL_STATIC,      'selector' => false),
 			'author'        => array('mode' => PARTIAL_VOLATILE,    'selector' => 'p.author'),
-			'article_nav'   => array('mode' => PARTIAL_VOLATILE,    'selector' => 'p.article-nav'),
+			'article_nav'   => array('mode' => PARTIAL_VOLATILE,    'selector' => 'p.nav-tertiary'),
 			'status'        => array('mode' => PARTIAL_VOLATILE,    'selector' => '#write-status'),
 			'categories'    => array('mode' => PARTIAL_STATIC,      'selector' => false),
 			'section'       => array('mode' => PARTIAL_STATIC,      'selector' => false),
@@ -547,7 +547,7 @@ if (!empty($event) and $event == 'article') {
 
 		pagetop($page_title, $message);
 
-		echo n.'<div id="'.$event.'_container" class="txp-container txp-edit">';
+		echo n.'<div id="'.$event.'_container" class="txp-container">';
 		echo n.n.'<form id="article_form" name="article_form" method="post" action="index.php" '. ($step=='create' ? '>' : ' class="async">');
 
 		if (!empty($store_out))
@@ -564,7 +564,7 @@ if (!empty($event) and $event == 'article') {
 			n.hInput('LastModID', $LastModID).
 			'<input type="hidden" name="view" />'.
 
-			startTable('edit').
+			startTable('', '', 'txp-wrap').
 
   		'<tr>'.n.
 				'<td id="article-col-1"><div id="configuration_content">';
@@ -686,7 +686,7 @@ if (!empty($event) and $event == 'article') {
 
 			else
 			{
-				echo n.'<hr width="50%" />';
+				echo n.'<hr />';
 
 				echo '<div class="excerpt">';
 				echo ($textile_excerpt == USE_TEXTILE)
@@ -792,7 +792,7 @@ if (!empty($event) and $event == 'article') {
 
 					n.n.graf(
 						'<label for="comment-invite">'.gTxt('comment_invitation').'</label>'.br.
-						fInput('text', 'AnnotateInvite', $AnnotateInvite, 'edit', '', '', '', '', 'comment-invite')
+						fInput('text', 'AnnotateInvite', $AnnotateInvite, '', '', '', '', '', 'comment-invite')
 					, ' class="comment-invite"');
 				}
 
@@ -925,7 +925,7 @@ EOS
 	function custField($num, $field, $content)
 	{
 		return n.n.graf('<label for="custom-'.$num.'">'.$field.'</label>'.br.
-			n.fInput('text', 'custom_'.$num, $content, 'edit', '', '', 22, '', 'custom-'.$num), ' class="custom-field custom-'.$num.'"');
+			n.fInput('text', 'custom_'.$num, $content, '', '', '', 22, '', 'custom-'.$num), ' class="custom-field custom-'.$num.'"');
 	}
 
 // -------------------------------------------------------------
@@ -955,7 +955,7 @@ EOS
 
 				n.'<div id="textile_help" class="toggle" style="display:'.(get_pref('pane_article_textile_help_visible') ? 'block' : 'none').'">'.
 
-				n.'<ul class="textile plain-list small">'.
+				n.'<ul class="textile plain-list">'.
 					n.t.'<li>'.gTxt('header').': <strong>h<em>n</em>.</strong>'.sp.
 						popHelpSubtle('header', 400, 400).'</li>'.
 					n.t.'<li>'.gTxt('blockquote').': <strong>bq.</strong>'.sp.
@@ -968,7 +968,7 @@ EOS
 						popHelpSubtle('definition', 400, 400).'</li>'.
 				n.'</ul>'.
 
-				n.'<ul class="textile plain-list small">'.
+				n.'<ul class="textile plain-list">'.
 					n.t.'<li>'.'_<em>'.gTxt('emphasis').'</em>_'.sp.
 						popHelpSubtle('italic', 400, 400).'</li>'.
 					n.t.'<li>'.'*<strong>'.gTxt('strong').'</strong>*'.sp.
@@ -987,11 +987,11 @@ EOS
 
 				n.graf(
 					'"'.gTxt('linktext').'":url'.sp.popHelpSubtle('link', 400, 500)
-				, ' class="textile small"').
+				, ' class="textile"').
 
 				n.graf(
 					'!'.gTxt('imageurl').'!'.sp.popHelpSubtle('image', 500, 500)
-				, ' class="textile small"').
+				, ' class="textile"').
 
 				n.graf(
 					'<a id="textile-docs-link" href="http://textpattern.com/textile-sandbox" target="_blank">'.gTxt('More').'</a>').
@@ -1191,7 +1191,7 @@ EOS
 	{
 		return pluggable_ui('article_ui', 'title',
 			'<label for="title">'.gTxt('title').'</label>'.sp.popHelp('title').br.
-				'<input type="text" id="title" name="Title" value="'.escape_title(article_partial_title_value($rs)).'" class="edit" size="40" tabindex="1" />',
+				'<input type="text" id="title" name="Title" value="'.escape_title(article_partial_title_value($rs)).'" size="40" tabindex="1" />',
 			$rs);
 	}
 
@@ -1205,11 +1205,12 @@ EOS
 	function article_partial_author($rs)
 	{
 		extract($rs);
-		$out = '<p class="author small">'.gTxt('posted_by').': '.htmlspecialchars($AuthorID).' &#183; '.safe_strftime('%d %b %Y &#183; %X',$sPosted);
+		$out = '<p class="author"><small>'.gTxt('posted_by').': '.htmlspecialchars($AuthorID).' &#183; '.safe_strftime('%d %b %Y &#183; %X',$sPosted);
 		if($sPosted != $sLastMod) {
 			$out .= br.gTxt('modified_by').': '.htmlspecialchars($LastModID).' &#183; '.safe_strftime('%d %b %Y &#183; %X',$sLastMod);
 		}
-		return pluggable_ui('article_ui', 'author', $out.'</p>', $rs);
+		$out .= '</small></p>';
+		return pluggable_ui('article_ui', 'author', $out, $rs);
 	}
 
 // -------------------------------------------------------------
@@ -1242,7 +1243,7 @@ EOS
 
 		$out .= pluggable_ui('article_ui', 'article_image',
 			n.graf('<label for="article-image">'.gTxt('article_image').'</label>'.sp.popHelp('article_image').br.
-				fInput('text', 'Image', $rs['Image'], 'edit', '', '', 22, '', 'article-image'), ' class="article-image"'),
+				fInput('text', 'Image', $rs['Image'], '', '', '', 22, '', 'article-image'), ' class="article-image"'),
 			$rs);
 		return $out.'</div></div>'.n;
 	}
@@ -1268,7 +1269,7 @@ EOS
 	{
 		return pluggable_ui('article_ui', 'url_title',
 			n.graf('<label for="url-title">'.gTxt('url_title').'</label>'.sp.popHelp('url_title').br.
-				fInput('text', 'url_title', article_partial_url_title_value($rs), 'edit', '', '', 22, '', 'url-title'), ' class="url-title"'),
+				fInput('text', 'url_title', article_partial_url_title_value($rs), '', '', '', 22, '', 'url-title'), ' class="url-title"'),
 			$rs);
 	}
 
@@ -1316,7 +1317,7 @@ EOS
 			include_once txpath.'/publish/taghandlers.php';
 			$url = permlinkurl_id($ID);
 		}
-		return '<span id="article_partial_article_view">'.sp.sp.'<a href="'.$url.'" class="article-view">'.gTxt('view').'</a></span>';
+		return '<span id="article_partial_article_view"><a href="'.$url.'" class="article-view">'.gTxt('view').'</a></span>';
 	}
 
 // -------------------------------------------------------------
@@ -1340,14 +1341,14 @@ EOS
 // -------------------------------------------------------------
 	function article_partial_article_nav($rs)
 	{
-		return '<p class="article-nav">'.
+		return '<p class="nav-tertiary">'.
 		($rs['prev_id']
-			?	prevnext_link('&#8249;'.gTxt('prev'),'article','edit',
-				$rs['prev_id'],gTxt('prev'))
-			:	'').n.
+			?	prevnext_link('&#8592;'.sp.gTxt('prev'),'article','edit',
+				$rs['prev_id'],'', 'prev')
+			:	'').
 		($rs['next_id']
-			?	prevnext_link(gTxt('next').'&#8250;','article','edit',
-				$rs['next_id'],gTxt('next'))
+			?	prevnext_link(gTxt('next').sp.'&#8594;','article','edit',
+				$rs['next_id'],'', 'next')
 			:	'').n.
 		'</p>';
 	}
@@ -1368,7 +1369,7 @@ EOS
 	{
 		return pluggable_ui('article_ui', 'categories',
 			n.graf('<label for="category-1">'.gTxt('category1').'</label> '.
-			'<span class="edit category-edit small">['.eLink('category', '', '', '', gTxt('edit')).']</span>'.br.
+			'<span class="category-edit">['.eLink('category', '', '', '', gTxt('edit')).']</span>'.br.
 			n.category_popup('Category1', $rs['Category1'], 'category-1'), ' class="category category-1"').
 
 			n.graf('<label for="category-2">'.gTxt('category2').'</label>'.br.
@@ -1381,7 +1382,7 @@ EOS
 	{
 		return pluggable_ui('article_ui', 'section',
 			n.graf('<label for="section">'.gTxt('section').'</label> '.
-				'<span class="edit section-edit small">['.eLink('section', '', '', '', gTxt('edit')).']</span>'.br.
+				'<span class="section-edit">['.eLink('section', '', '', '', gTxt('edit')).']</span>'.br.
 				section_popup($rs['Section'], 'section'), ' class="section"'),
 			$rs);
 	}

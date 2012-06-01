@@ -151,11 +151,10 @@ $LastChangedRevision$
 		{
 			$show_authors = !has_single_author('txp_link');
 
-			echo n.'<div class="txp-list">';
 			echo n.n.'<form action="index.php" id="links_form" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">',
 
 				n.'<div class="txp-listtables">'.
-				n.startTable('list', '', 'list').
+				n.startTable('', '', 'txp-list').
 				n.'<thead>'.
 				n.tr(
 					column_head('ID', 'id', 'link', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id').
@@ -240,7 +239,7 @@ $LastChangedRevision$
 			n.nav_form('link', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
 
 			pageby_form('link', $link_list_pageby).
-			n.'</div>'.n.'</div>';
+			n.'</div>';
 		}
 	}
 
@@ -299,10 +298,9 @@ $LastChangedRevision$
 		{
 			$caption = gTxt(($id && $step == 'link_edit') ? 'edit_link' : 'add_new_link');
 
-			echo '<div class="txp-edit">'.
-				form(
+			echo form(
 
-				startTable('edit', '', 'edit-pane') .
+				startTable('', '', 'txp-edit') .
 
 				tr (tdcs(hed($caption, 2), 2)).
 
@@ -353,7 +351,7 @@ $LastChangedRevision$
 
 				hInput('search_method', gps('search_method')).
 				hInput('crit', gps('crit'))
-			, '', '', 'post', 'edit-form', '', 'link_details').'</div>';
+			, '', '', 'post', 'edit-form', '', 'link_details');
 
 		}
 		link_list();

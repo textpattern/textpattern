@@ -199,7 +199,7 @@ $LastChangedRevision$
 		$total = $count[SPAM] + $count[MODERATE] + $count[VISIBLE];
 
 		echo '<div id="'.$event.'_control" class="txp-control-panel">';
-		echo '<a href="index.php?event=discuss'.a.'step=ipban_list">'.gTxt('list_banned_ips').'</a>';
+		echo '<a id="list_banned_ips" href="index.php?event=discuss'.a.'step=ipban_list">'.gTxt('list_banned_ips').'</a>';
 
 		if ($total < 1)
 		{
@@ -236,11 +236,11 @@ $LastChangedRevision$
 
 		if ($rs)
 		{
-			echo n.'<div id="'.$event.'_container" class="txp-container txp-list">';
+			echo n.'<div id="'.$event.'_container" class="txp-container">';
 			echo n.n.'<form name="longform" id="discuss_form" method="post" action="index.php" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
 
 				n.'<div class="txp-listtables">'.
-				n.startTable('list','','list').
+				n.startTable('', '', 'txp-list').
 				n.'<thead>'.
 				n.n.tr(
 					column_head('ID', 'id', 'discuss', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id').
@@ -349,7 +349,7 @@ $LastChangedRevision$
 			}
 
 			if (empty($message))
-				echo tr(tda(gTxt('just_spam_results_found'),' colspan="9" style="text-align: left; border: none;"'));
+				echo tr(tda(gTxt('just_spam_results_found'),' colspan="9"'));
 
 			echo '</tbody>'.
 			n.endTable().
@@ -419,9 +419,9 @@ $LastChangedRevision$
 			$ban_link = '[<a class="action-ban" href="?event=discuss'.a.'step='.$ban_step.a.'ip='.$ip.
 				a.'name='.urlencode($name).a.'discussid='.$discussid.a.'_txp_token='.form_token().'">'.$ban_text.'</a>]';
 
-			echo '<div id="'.$event.'_container" class="txp-container txp-edit">'.
+			echo '<div id="'.$event.'_container" class="txp-container">'.
 				form(
-				startTable('edit', '', 'edit-pane').
+				startTable('', '', 'txp-edit').
 				stackRows(
 
 					fLabelCell('name').
@@ -551,8 +551,8 @@ $LastChangedRevision$
 
 		if ($rs and numRows($rs) > 0)
 		{
-			echo '<div id="'.$event.'_ban_container" class="txp-container txp-list">'.
-				startTable('list', '', 'list').
+			echo '<div id="'.$event.'_ban_container" class="txp-container">'.
+				startTable('', '', 'txp-list').
 				n.'<thead>'.
 				tr(
 					hCell(gTxt('date_banned'), '', ' class="date banned"').

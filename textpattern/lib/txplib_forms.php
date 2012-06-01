@@ -76,7 +76,7 @@ $LastChangedRevision$
 			$out[] = n.t.'<option value="'.htmlspecialchars($avalue).'"'.$sel.'>'.htmlspecialchars($alabel).'</option>';
 		}
 
-		return '<select'.( $select_id ? ' id="'.$select_id.'"' : '' ).' name="'.$name.'" class="list"'.
+		return '<select'.( $select_id ? ' id="'.$select_id.'"' : '' ).' name="'.$name.'"'.
 			($onchange == 1 ? ' onchange="submit(this.form);"' : $onchange).
 			'>'.
 			($blank_first ? n.t.'<option value=""'.($selected == false ? ' selected="selected"' : '').'></option>' : '').
@@ -125,7 +125,7 @@ $LastChangedRevision$
 			$out[] = n.t.'<option value="'.htmlspecialchars($name).'"'.$htmltitle.$sel.'>'.$sp.htmlspecialchars($title).$hellip.'</option>';
 		}
 
-		return n.'<select'.( $select_id ? ' id="'.$select_id.'" ' : '' ).' name="'.$select_name.'" class="list">'.
+		return n.'<select'.( $select_id ? ' id="'.$select_id.'" ' : '' ).' name="'.$select_name.'">'.
 			n.t.'<option value=""'.($selected == false ? ' selected="selected"' : '').'>&nbsp;</option>'.
 			( $out ? join('', $out) : '').
 			n.'</select>';
@@ -301,6 +301,6 @@ $LastChangedRevision$
 		$s = ($time == 0)? '' : safe_strftime($datevar, $time);
 		return n.'<input type="text" name="'.$name.'" value="'.
 			$s
-		.'" size="'.$size.'" maxlength="'.$size.'" class="edit '.$name.'"'.(empty($tab) ? '' : ' tabindex="'.$tab.'"').' title="'.gTxt('article_'.$name).'" />';
+		.'" size="'.$size.'" maxlength="'.$size.'" class="'.$name.'"'.(empty($tab) ? '' : ' tabindex="'.$tab.'"').' title="'.gTxt('article_'.$name).'" />';
 	}
 ?>

@@ -28,13 +28,13 @@ $LastChangedRevision$
 		include_once txpath.'/lib/txplib_admin.php';
 
 		$available_steps = array(
-			'admin_multi_edit' 	=> true,
+			'admin_multi_edit'    => true,
 			'admin_change_pageby' => true,
-			'author_edit' 		=> false,
-			'author_save' 		=> true,
-			'author_save_new' 	=> true,
-			'change_email' 		=> true,
-			'change_pass' 		=> true
+			'author_edit'         => false,
+			'author_save'         => true,
+			'author_save_new'     => true,
+			'change_email'        => true,
+			'change_pass'         => true
 		);
 
 		if (!$step or !bouncer($step, $available_steps)) {
@@ -62,19 +62,19 @@ $LastChangedRevision$
 
 		if (has_privs('admin.edit'))
 		{
-			echo n.'<div class="txp-edit">'.author_form().'</div>';
+			echo n.author_form();
 		}
 
 		if (has_privs('admin.list'))
 		{
-			echo author_list();
+			echo n.author_list();
 		}
 
-		echo new_pass_form();
+		echo n.new_pass_form();
 
 		if (!has_privs('admin.edit'))
 		{
-			echo change_email_form($email);
+			echo n.change_email_form($email);
 		}
 		echo n.'</div>';
 	}
@@ -229,7 +229,7 @@ $LastChangedRevision$
 	function privs($priv = '')
 	{
 		global $levels;
-		return selectInput('privs', $levels, $priv);
+		return selectInput('privs', $levels, $priv, '', '', 'privs');
 	}
 
 // -------------------------------------------------------------
@@ -249,9 +249,9 @@ $LastChangedRevision$
 			tag(gTxt('change_password'), 'h2').
 
 			graf('<label for="new_pass">'.gTxt('new_password').'</label> '.
-				fInput('password', 'new_pass', '', 'edit', '', '', '20', '', 'new_pass').
+				fInput('password', 'new_pass', '', '', '', '', '20', '', 'new_pass').
 				checkbox('mail_password', '1', true, '', 'mail_password').'<label for="mail_password">'.gTxt('mail_it').'</label> '.
-				fInput('submit', 'change_pass', gTxt('submit'), 'smallerbox').
+				fInput('submit', 'change_pass', gTxt('submit')).
 				eInput('admin').
 				sInput('change_pass')
 			)
@@ -266,8 +266,8 @@ $LastChangedRevision$
 		form(
 			tag(gTxt('change_email_address'), 'h2').
 			graf('<label for="new_email">'.gTxt('new_email').'</label> '.
-				fInput('text', 'new_email', $email, 'edit', '', '', '20', '', 'new_email').
-				fInput('submit', 'change_email', gTxt('submit'), 'smallerbox').
+				fInput('text', 'new_email', $email, '', '', '', '20', '', 'new_email').
+				fInput('submit', 'change_email', gTxt('submit')).
 				eInput('admin').
 				sInput('change_email')
 			)
@@ -303,11 +303,10 @@ $LastChangedRevision$
 
 		if ($rs)
 		{
-			echo n.'<div class="txp-list">';
 			echo '<form action="index.php" id="users_form" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
 
 			n.'<div class="txp-listtables">'.
-			n.startTable('list', '', 'list').
+			n.startTable('', '', 'txp-list').
 			n.'<thead>'.
 			n.tr(
 				column_head('login_name', 'name', 'admin', true, $switch_dir, '', '', (('name' == $sort) ? "$dir " : '').'name login-name').
@@ -362,7 +361,7 @@ $LastChangedRevision$
 			nav_form('admin', $page, $numPages, $sort, $dir, $crit, $search_method).
 
 			pageby_form('admin', $author_list_pageby).
-			n.'</div>'.n.'</div>';
+			n.'</div>';
 		}
 	}
 
@@ -395,40 +394,39 @@ $LastChangedRevision$
 
 		return form(
 
-			startTable('edit', '', 'edit-pane').
+			startTable('', '', 'txp-edit').
 
 			tr (tdcs(hed($caption, 2), 2)).
 
 			tr(
-				fLabelCell('login_name', '', 'name').
-				($user_id && $step == 'author_edit' ? td(strong($name)) : fInputCell('name', $name))
+				fLabelCell('login_name', ($user_id ? '' : 'add_new_author'), 'name').
+				($user_id && $step == 'author_edit' ? td(strong($name)) : fInputCell('name', $name, '', '', '', 'name'))
 			, ' class="name login-name"').
 
 			tr(
 				fLabelCell('real_name', '', 'RealName').
-				fInputCell('RealName', $RealName)
+				fInputCell('RealName', $RealName, '', '', '', 'RealName')
 			, ' class="name real-name"').
 
 			tr(
 				fLabelCell('email', '', 'email').
-				fInputCell('email', $email)
+				fInputCell('email', $email, '', '', '', 'email')
 			, ' class="email"').
 
 			tr(
-				fLabelCell('privileges', '', 'privs').
+				fLabelCell('privileges', 'about_privileges', 'privs').
 				td(
 					($txp_user != $name
 						? privs($privs)
 						: hInput('privs', $privs).strong(get_priv_level($privs))
 					)
-					.sp.popHelp('about_privileges')
 				)
 			, ' class="privs"').
 
 			pluggable_ui('author_ui', 'extend_detail_form', '', $rs).
 
 			tr(
-				tdcs(fInput('submit', '', gTxt('save'), 'publish').($user_id ? '' : popHelp('add_new_author')), 2)
+				tdcs(fInput('submit', '', gTxt('save'), 'publish'), 2)
 			).
 
 			endTable().

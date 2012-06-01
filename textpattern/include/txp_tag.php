@@ -46,7 +46,7 @@ header(pluggable_ui('admin_side', 'x_frame_options', 'X-Frame-Options: SAMEORIGI
 		$endform = n.tr(
 			td().
 			td(
-				fInput('submit', '', gTxt('build'), 'smallerbox')
+				fInput('submit', '', gTxt('build'))
 			)
 		).
 		n.endTable().
@@ -126,7 +126,7 @@ begin generic functions
 
 	function input_id($id)
 	{
-		return fInput('text', 'id', $id, 'edit', '', '', 6);
+		return fInput('text', 'id', $id, '', '', '', 6);
 	}
 
 //--------------------------------------------------------------
@@ -146,21 +146,21 @@ begin generic functions
 
 	function input_limit($limit)
 	{
-		return fInput('text', 'limit', $limit, 'edit', '', '', 2);
+		return fInput('text', 'limit', $limit, '', '', '', 2);
 	}
 
 //--------------------------------------------------------------
 
 	function input_offset($offset)
 	{
-		return fInput('text', 'offset', $offset, 'edit', '', '', 2);
+		return fInput('text', 'offset', $offset, '', '', '', 2);
 	}
 
 //--------------------------------------------------------------
 
 	function input_tag($name, $val)
 	{
-		return fInput('text', $name, $val, 'edit', '', '', 6);
+		return fInput('text', $name, $val, '', '', '', 6);
 	}
 
 //--------------------------------------------------------------
@@ -544,7 +544,7 @@ begin tag builder functions
 				input_offset($offset)).
 
 			tagRow('pageby',
-				fInput('text', 'pageby', $pageby, 'edit', '', '', 2)).
+				fInput('text', 'pageby', $pageby, '', '', '', 2)).
 
 			tagRow('sort',
 				sort_pop($sort)).
@@ -630,7 +630,7 @@ begin tag builder functions
 				time_pop($time)).
 
 			tagRow('month',
-				fInput('text', 'month', $month, 'edit', '', '', 7). ' ('.gTxt('yyyy-mm').')') .
+				fInput('text', 'month', $month, '', '', '', 7). ' ('.gTxt('yyyy-mm').')') .
 
 			tagRow('keywords',
 				key_input('keywords', $keywords)).
@@ -660,7 +660,7 @@ begin tag builder functions
 				yesno_pop('allowoverride', $allowoverride)).
 
 			tagRow('label',
-				fInput('text', 'label', $label, 'edit', '', '', 20)).
+				fInput('text', 'label', $label, '', '', '', 20)).
 
 			tagRow('labeltag',
 				input_tag('labeltag', $labeltag)).
@@ -669,7 +669,7 @@ begin tag builder functions
 				input_tag('wraptag', $wraptag)).
 
 			tagRow('class',
-				fInput('text', 'class', $class, 'edit', '', '', 14)).
+				fInput('text', 'class', $class, '', '', '', 14)).
 
 			tagRow('break',
 				input_tag('break', $break)).
@@ -711,13 +711,13 @@ begin tag builder functions
 			).
 
 			tagRow('email_address',
-				fInput('text', 'email', $email, 'edit', '', '', 20)).
+				fInput('text', 'email', $email, '', '', '', 20)).
 
 			tagRow('tooltip',
-				fInput('text', 'title', $title, 'edit', '', '', 20)).
+				fInput('text', 'title', $title, '', '', '', 20)).
 
 			tagRow('link_text',
-				fInput('text', 'linktext', $linktext, 'edit', '', '', 20)).
+				fInput('text', 'linktext', $linktext, '', '', '', 20)).
 
 			$endform
 		);
@@ -750,7 +750,7 @@ begin tag builder functions
 			).
 
 			tagRow('title_separator',
-				fInput('text', 'separator', $separator, 'edit', '', '', 4)).
+				fInput('text', 'separator', $separator, '', '', '', 4)).
 
 			$endform
 		);
@@ -814,7 +814,7 @@ begin tag builder functions
 				' '.selectInput('sort', $sorts, $sort)).
 
 			tagRow('label',
-				fInput('text', 'label', $label, 'edit', '', '', 20)).
+				fInput('text', 'label', $label, '', '', '', 20)).
 
 			tagRow('labeltag',
 				input_tag('labeltag', $labeltag)).
@@ -877,16 +877,16 @@ begin tag builder functions
 				list_sort_pop($sort)).
 
 			tagRow('default_title',
-				fInput('text', 'default_title', $default_title, 'edit', '', '', 20)).
+				fInput('text', 'default_title', $default_title, '', '', '', 20)).
 
 			tagRow('sections',
-				fInput('text', 'sections', $sections, 'edit', '', '', 20)).
+				fInput('text', 'sections', $sections, '', '', '', 20)).
 
 			tagRow('exclude',
-				fInput('text', 'exclude', $exclude, 'edit', '', '', 20)).
+				fInput('text', 'exclude', $exclude, '', '', '', 20)).
 
 			tagRow('label',
-				fInput('text', 'label', $label, 'edit', '', '', 20)).
+				fInput('text', 'label', $label, '', '', '', 20)).
 
 			tagRow('labeltag',
 				input_tag('labeltag', $labeltag)).
@@ -895,10 +895,10 @@ begin tag builder functions
 				input_tag('wraptag', $wraptag)).
 
 			tagRow('class',
-				fInput('text', 'class', $class, 'edit', '', '', 14)).
+				fInput('text', 'class', $class, '', '', '', 14)).
 
 			tagRow('active_class',
-				fInput('text', 'active_class', $active_class, 'edit', '', '', 14)).
+				fInput('text', 'active_class', $active_class, '', '', '', 14)).
 
 			tagRow('break',
 				input_tag('break', $break)).
@@ -952,13 +952,13 @@ begin tag builder functions
 				type_pop($type)).
 
 			tagRow('parent',
-				fInput('text', 'parent', $parent, 'edit', '', '', 20)).
+				fInput('text', 'parent', $parent, '', '', '', 20)).
 
 			tagRow('categories',
-				fInput('text', 'categories', $categories, 'edit', '', '', 20)).
+				fInput('text', 'categories', $categories, '', '', '', 20)).
 
 			tagRow('exclude',
-				fInput('text', 'exclude', $exclude, 'edit', '', '', 20)).
+				fInput('text', 'exclude', $exclude, '', '', '', 20)).
 
 			tagRow('this_section',
 				yesno_pop('this_section', $this_section)).
@@ -970,7 +970,7 @@ begin tag builder functions
 				list_sort_pop($sort)).
 
 			tagRow('label',
-				fInput('text', 'label', ($label ? $label : gTxt('categories')), 'edit', '', '', 20)).
+				fInput('text', 'label', ($label ? $label : gTxt('categories')), '', '', '', 20)).
 
 			tagRow('labeltag',
 				input_tag('labeltag', $labeltag)).
@@ -979,10 +979,10 @@ begin tag builder functions
 				input_tag('wraptag', $wraptag)).
 
 			tagRow('class',
-				fInput('text', 'class', $class, 'edit', '', '', 14)).
+				fInput('text', 'class', $class, '', '', '', 14)).
 
 			tagRow('active_class',
-				fInput('text', 'active_class', $active_class, 'edit', '', '', 14)).
+				fInput('text', 'active_class', $active_class, '', '', '', 14)).
 
 			tagRow('break',
 				input_tag('break', $break)).
@@ -1036,10 +1036,10 @@ begin tag builder functions
 				sort_pop($sort)).
 
 			tagRow('limit',
-				fInput('text', 'limit', $limit, 'edit', '', '', 2)).
+				fInput('text', 'limit', $limit, '', '', '', 2)).
 
 			tagRow('label',
-				fInput('text', 'label', ($label ? $label : gTxt('recent_articles')), 'edit', '', '', 20)).
+				fInput('text', 'label', ($label ? $label : gTxt('recent_articles')), '', '', '', 20)).
 
 			tagRow('labeltag',
 				input_tag('labeltag', $labeltag)).
@@ -1102,10 +1102,10 @@ begin tag builder functions
 				sort_pop($sort)).
 
 			tagRow('limit',
-				fInput('text', 'limit', $limit, 'edit', '', '', 2)).
+				fInput('text', 'limit', $limit, '', '', '', 2)).
 
 			tagRow('label',
-				fInput('text', 'label', $label, 'edit', '', '', 20)).
+				fInput('text', 'label', $label, '', '', '', 20)).
 
 			tagRow('labeltag',
 				input_tag('labeltag', $labeltag)).
@@ -1114,7 +1114,7 @@ begin tag builder functions
 				input_tag('wraptag', $wraptag)).
 
 			tagRow('class',
-				fInput('text', 'class', $class, 'edit', '', '', 20)).
+				fInput('text', 'class', $class, '', '', '', 20)).
 
 			tagRow('break',
 				input_tag('break', $break)).
@@ -1161,10 +1161,10 @@ begin tag builder functions
 				discuss_sort_pop($sort)).
 
 			tagRow('limit',
-				fInput('text', 'limit', $limit, 'edit', '', '', 2)).
+				fInput('text', 'limit', $limit, '', '', '', 2)).
 
 			tagRow('label',
-				fInput('text', 'label', ($label ? $label : gTxt('recent_comments')), 'edit', '', '', 20)).
+				fInput('text', 'label', ($label ? $label : gTxt('recent_comments')), '', '', '', 20)).
 
 			tagRow('labeltag',
 				input_tag('labeltag', $labeltag)).
@@ -1173,7 +1173,7 @@ begin tag builder functions
 				input_tag('wraptag', $wraptag)).
 
 			tagRow('class',
-				fInput('text', 'class', $class, 'edit', '', '', 5)).
+				fInput('text', 'class', $class, '', '', '', 5)).
 
 			tagRow('break',
 				input_tag('break', $break)).
@@ -1265,13 +1265,13 @@ begin tag builder functions
 				yesno_pop('this_section', $this_section)).
 
 			tagRow('label',
-				fInput('text', 'label', ($label ? $label : gTxt('browse')), 'edit', '', '', 25)).
+				fInput('text', 'label', ($label ? $label : gTxt('browse')), '', '', '', 25)).
 
 			tagRow('wraptag',
 				input_tag('wraptag', $wraptag)).
 
 			tagRow('class',
-				fInput('text', 'class', $class, 'edit', '', '', 25)).
+				fInput('text', 'class', $class, '', '', '', 25)).
 
 			$endform
 		);
@@ -1307,10 +1307,10 @@ begin tag builder functions
 			).
 
 			tagRow('login',
-				fInput('text', 'login', $login, 'edit', '', '', 25)).
+				fInput('text', 'login', $login, '', '', '', 25)).
 
 			tagRow('password',
-				fInput('text', 'pass', $pass, 'edit', '', '', 25)).
+				fInput('text', 'pass', $pass, '', '', '', 25)).
 
 			$endform
 		);
@@ -1358,19 +1358,19 @@ begin tag builder functions
 				section_pop('section', $section)).
 
 			tagRow('button_text',
-				fInput('text', 'button', $button, 'edit', '', '', 25)).
+				fInput('text', 'button', $button, '', '', '', 25)).
 
 			tagRow('input_size',
-				fInput('text', 'size', $size, 'edit', '', '', 2)).
+				fInput('text', 'size', $size, '', '', '', 2)).
 
 			tagRow('label',
-				fInput('text', 'label', ($label ? $label : gTxt('search')), 'edit', '', '', 25)).
+				fInput('text', 'label', ($label ? $label : gTxt('search')), '', '', '', 25)).
 
 			tagRow('wraptag',
 				input_tag('wraptag', $wraptag)).
 
 			tagRow('class',
-				fInput('text', 'class', $class, 'edit', '', '', 25)).
+				fInput('text', 'class', $class, '', '', '', 25)).
 
 			tagRow('form',
 				form_pop('form', 'misc', $form)).
@@ -1427,7 +1427,7 @@ begin tag builder functions
 				input_tag('wraptag', $wraptag)).
 
 			tagRow('class',
-				fInput('text', 'class', $class, 'edit', '', '', 25)).
+				fInput('text', 'class', $class, '', '', '', 25)).
 
 			$endform
 		);
@@ -1481,7 +1481,7 @@ begin tag builder functions
 				input_tag('wraptag', $wraptag)).
 
 			tagRow('class',
-				fInput('text', 'class', $class, 'edit', '', '', 25)).
+				fInput('text', 'class', $class, '', '', '', 25)).
 
 			$endform
 		);
@@ -1523,7 +1523,7 @@ begin tag builder functions
 			).
 
 			tagRow('name',
-				fInput('text', 'name', $name, 'edit', '', '', 25)).
+				fInput('text', 'name', $name, '', '', '', 25)).
 
 			tagRow('link_to_this_category',
 				yesno_pop('link', $link)).
@@ -1541,7 +1541,7 @@ begin tag builder functions
 				input_tag('wraptag', $wraptag)).
 
 			tagRow('class',
-				fInput('text', 'class', $class, 'edit', '', '', 25)).
+				fInput('text', 'class', $class, '', '', '', 25)).
 
 			$endform
 		);
@@ -1576,7 +1576,7 @@ begin tag builder functions
 			).
 
 			tagRow('name',
-				fInput('text', 'name', $name, 'edit', '', '', 25)).
+				fInput('text', 'name', $name, '', '', '', 25)).
 
 			$endform
 		);
@@ -1628,7 +1628,7 @@ begin tag builder functions
 				input_tag('wraptag', $wraptag)).
 
 			tagRow('class',
-				fInput('text', 'class', $class, 'edit', '', '', 25)).
+				fInput('text', 'class', $class, '', '', '', 25)).
 
 			$endform
 		);
@@ -1743,10 +1743,10 @@ begin tag builder functions
 			).
 
 			tagRow('link_text',
-				fInput('text', 'thing', ($thing ? $thing : gTxt('tag_home')), 'edit', '', '', 25)).
+				fInput('text', 'thing', ($thing ? $thing : gTxt('tag_home')), '', '', '', 25)).
 
 			tagRow('class',
-				fInput('text', 'class', $class, 'edit', '', '', 25)).
+				fInput('text', 'class', $class, '', '', '', 25)).
 
 			$endform
 		);
@@ -1783,7 +1783,7 @@ begin tag builder functions
 			).
 
 			tagRow('link_text',
-				fInput('text', 'thing', ($thing ? $thing : '<txp:prev_title />'), 'edit', '', '', 25)).
+				fInput('text', 'thing', ($thing ? $thing : '<txp:prev_title />'), '', '', '', 25)).
 
 			tagRow('showalways',
 				yesno_pop('showalways', $showalways)).
@@ -1823,7 +1823,7 @@ begin tag builder functions
 			).
 
 			tagRow('link_text',
-				fInput('text', 'thing', ($thing ? $thing : '<txp:next_title />'), 'edit', '', '', 25)).
+				fInput('text', 'thing', ($thing ? $thing : '<txp:next_title />'), '', '', '', 25)).
 
 			tagRow('showalways',
 				yesno_pop('showalways', $showalways)).
@@ -1886,16 +1886,16 @@ begin tag builder functions
 				input_limit($limit)).
 
 			tagRow('label',
-				fInput('text', 'label', $label, 'edit', '', '', 25)).
+				fInput('text', 'label', $label, '', '', '', 25)).
 
 			tagRow('title',
-				fInput('text', 'title', $title, 'edit', '', '', 25)).
+				fInput('text', 'title', $title, '', '', '', 25)).
 
 			tagRow('wraptag',
 				input_tag('wraptag', $wraptag)).
 
 			tagRow('class',
-				fInput('text', 'class', $class, 'edit', '', '', 25)).
+				fInput('text', 'class', $class, '', '', '', 25)).
 
 			$endform
 		);
@@ -1948,19 +1948,19 @@ begin tag builder functions
 				link_category_pop($category)).
 
 			tagRow('limit',
-				fInput('text', 'limit', $limit, 'edit', '', '', 2)).
+				fInput('text', 'limit', $limit, '', '', '', 2)).
 
 			tagRow('label',
-				fInput('text', 'label', $label, 'edit', '', '', 25)).
+				fInput('text', 'label', $label, '', '', '', 25)).
 
 			tagRow('title',
-				fInput('text', 'title', $title, 'edit', '', '', 25)).
+				fInput('text', 'title', $title, '', '', '', 25)).
 
 			tagRow('wraptag',
 				input_tag('wraptag', $wraptag)).
 
 			tagRow('class',
-				fInput('text', 'class', $class, 'edit', '', '', 25)).
+				fInput('text', 'class', $class, '', '', '', 25)).
 
 			$endform
 		);
@@ -2003,16 +2003,16 @@ begin tag builder functions
 				input_id($id)).
 
 			tagRow('link_text',
-				fInput('text', 'thing', ($thing ? $thing : '<txp:title />'), 'edit', '', '', 25)).
+				fInput('text', 'thing', ($thing ? $thing : '<txp:title />'), '', '', '', 25)).
 
 			tagRow('title',
-				fInput('text', 'title', $title, 'edit', '', '', 25)).
+				fInput('text', 'title', $title, '', '', '', 25)).
 
 			tagRow('class',
-				fInput('text', 'class', $class, 'edit', '', '', 25)).
+				fInput('text', 'class', $class, '', '', '', 25)).
 
 			tagRow('inline_style',
-				fInput('text', 'style', $style, 'edit', '', '', 25)).
+				fInput('text', 'style', $style, '', '', '', 25)).
 
 			$endform
 		);
@@ -2043,7 +2043,7 @@ begin tag builder functions
 			).
 
 			tagRow('link_text',
-				fInput('text', 'thing', ($thing ? $thing : '<txp:text item="newer" />'), 'edit', '', '', 25)).
+				fInput('text', 'thing', ($thing ? $thing : '<txp:text item="newer" />'), '', '', '', 25)).
 
 			$endform
 		);
@@ -2074,7 +2074,7 @@ begin tag builder functions
 			).
 
 			tagRow('link_text',
-				fInput('text', 'thing', ($thing ? $thing : '<txp:text item="older" />'), 'edit', '', '', 25)).
+				fInput('text', 'thing', ($thing ? $thing : '<txp:text item="older" />'), '', '', '', 25)).
 
 			$endform
 		);
@@ -2206,16 +2206,16 @@ begin tag builder functions
 				escape_pop($escape)).
 
 			tagRow('html_id',
-				fInput('text', 'html_id', $html_id, 'edit', '', '', 25)).
+				fInput('text', 'html_id', $html_id, '', '', '', 25)).
 
 			tagRow('class',
-				fInput('text', 'class', $class, 'edit', '', '', 25)).
+				fInput('text', 'class', $class, '', '', '', 25)).
 
 			tagRow('inline_style',
-				fInput('text', 'style', $style, 'edit', '', '', 25)).
+				fInput('text', 'style', $style, '', '', '', 25)).
 
 			tagRow('wraptag',
-				fInput('text', 'wraptag', $wraptag, 'edit', '', '', 25)).
+				fInput('text', 'wraptag', $wraptag, '', '', '', 25)).
 
 			$endform
 		);
@@ -2260,13 +2260,13 @@ begin tag builder functions
 				css_format_pop($format)).
 
 			tagRow('media',
-				fInput('text', 'media', $media, 'edit', '', '', 25)).
+				fInput('text', 'media', $media, '', '', '', 25)).
 
 			tagRow('rel',
-				fInput('text', 'rel', $rel, 'edit', '', '', 25)).
+				fInput('text', 'rel', $rel, '', '', '', 25)).
 
 			tagRow('title',
-				fInput('text', 'title', $title, 'edit', '', '', 25)).
+				fInput('text', 'title', $title, '', '', '', 25)).
 
 			$endform
 		);
@@ -2364,7 +2364,7 @@ begin tag builder functions
 			).
 
 			tagRow('rel',
-				fInput('text', 'rel', $rel, 'edit', '', '', 25)).
+				fInput('text', 'rel', $rel, '', '', '', 25)).
 
 			$endform
 		);
@@ -2399,7 +2399,7 @@ begin tag builder functions
 			).
 
 			tagRow('rel',
-				fInput('text', 'rel', $rel, 'edit', '', '', 25)).
+				fInput('text', 'rel', $rel, '', '', '', 25)).
 
 			$endform
 		);
@@ -2441,7 +2441,7 @@ begin tag builder functions
 				escape_pop($escape)).
 
 			tagRow('label',
-				fInput('text', 'label', $label, 'edit', '', '', 25)).
+				fInput('text', 'label', $label, '', '', '', 25)).
 
 			tagRow('labeltag',
 				input_tag('labeltag', $labeltag)).
@@ -2450,7 +2450,7 @@ begin tag builder functions
 				input_tag('wraptag', $wraptag)).
 
 			tagRow('class',
-				fInput('text', 'class', $class, 'edit', '', '', 25)).
+				fInput('text', 'class', $class, '', '', '', 25)).
 
 			$endform
 		);
@@ -2527,7 +2527,7 @@ begin tag builder functions
 				yesno_pop('title', $title)).
 
 			tagRow('label',
-				fInput('text', 'label', $label, 'edit', '', '', 25)).
+				fInput('text', 'label', $label, '', '', '', 25)).
 
 			tagRow('labeltag',
 				input_tag('labeltag', $labeltag)).
@@ -2536,7 +2536,7 @@ begin tag builder functions
 				input_tag('wraptag', $wraptag)).
 
 			tagRow('class',
-				fInput('text', 'class', $class, 'edit', '', '', 25)).
+				fInput('text', 'class', $class, '', '', '', 25)).
 
 			$endform
 		);
@@ -2573,13 +2573,13 @@ begin tag builder functions
 			).
 
 			tagRow('time_format',
-				fInput('text', 'format', $format, 'edit', '', '', 25)).
+				fInput('text', 'format', $format, '', '', '', 25)).
 
 			tagRow('gmt',
 				yesno_pop('gmt', $gmt)).
 
 			tagRow('locale',
-				fInput('text', 'lang', $lang, 'edit', '', '', 25)).
+				fInput('text', 'lang', $lang, '', '', '', 25)).
 
 			$endform
 		);
@@ -2616,13 +2616,13 @@ begin tag builder functions
 			).
 
 			tagRow('time_format',
-				fInput('text', 'format', $format, 'edit', '', '', 25)).
+				fInput('text', 'format', $format, '', '', '', 25)).
 
 			tagRow('gmt',
 				yesno_pop('gmt', $gmt)).
 
 			tagRow('locale',
-				fInput('text', 'lang', $lang, 'edit', '', '', 25)).
+				fInput('text', 'lang', $lang, '', '', '', 25)).
 
 			$endform
 		);
@@ -2669,7 +2669,7 @@ begin tag builder functions
 				input_tag('wraptag', $wraptag)).
 
 			tagRow('class',
-				fInput('text', 'class', $class, 'edit', '', '', 25)).
+				fInput('text', 'class', $class, '', '', '', 25)).
 
 			$endform
 		);
@@ -2727,13 +2727,13 @@ begin tag builder functions
 			).
 
 			tagRow('time_format',
-				fInput('text', 'format', $format, 'edit', '', '', 25)).
+				fInput('text', 'format', $format, '', '', '', 25)).
 
 			tagRow('gmt',
 				yesno_pop('gmt', $gmt)).
 
 			tagRow('locale',
-				fInput('text', 'lang', $lang, 'edit', '', '', 25)).
+				fInput('text', 'lang', $lang, '', '', '', 25)).
 
 			$endform
 		);
@@ -3035,13 +3035,13 @@ begin tag builder functions
 				input_tag('wraptag', $wraptag)).
 
 			tagRow('class',
-				fInput('text', 'class', $class, 'edit', '', '', 25)).
+				fInput('text', 'class', $class, '', '', '', 25)).
 
 			tagRow('break',
 				input_tag('break', $break)).
 
 			tagRow('breakclass',
-				fInput('text', 'breakclass', $breakclass, 'edit', '', '', 25)).
+				fInput('text', 'breakclass', $breakclass, '', '', '', 25)).
 
 			$endform
 		);
@@ -3085,13 +3085,13 @@ begin tag builder functions
 				input_id($id)).
 
 			tagRow('isize',
-				fInput('text', 'isize', $isize, 'edit', '', '', 2)).
+				fInput('text', 'isize', $isize, '', '', '', 2)).
 
 			tagRow('msgcols',
-				fInput('text', 'msgcols', $msgcols, 'edit', '', '', 2)).
+				fInput('text', 'msgcols', $msgcols, '', '', '', 2)).
 
 			tagRow('msgrows',
-				fInput('text', 'msgrows', $msgrows, 'edit', '', '', 2)).
+				fInput('text', 'msgrows', $msgrows, '', '', '', 2)).
 
 			tagRow('form',
 				form_pop('form', 'comment', $form)).
@@ -3100,7 +3100,7 @@ begin tag builder functions
 				input_tag('wraptag', $wraptag)).
 
 			tagRow('class',
-				fInput('text', 'class', $class, 'edit', '', '', 25)).
+				fInput('text', 'class', $class, '', '', '', 25)).
 
 			$endform
 		);
@@ -3147,7 +3147,7 @@ begin tag builder functions
 				input_tag('wraptag', $wraptag)).
 
 			tagRow('class',
-				fInput('text', 'class', $class, 'edit', '', '', 25)).
+				fInput('text', 'class', $class, '', '', '', 25)).
 
 			$endform
 		);
@@ -3265,13 +3265,13 @@ begin tag builder functions
 			).
 
 			tagRow('time_format',
-				fInput('text', 'format', $format, 'edit', '', '', 25)).
+				fInput('text', 'format', $format, '', '', '', 25)).
 
 			tagRow('gmt',
 				yesno_pop('gmt', $gmt)).
 
 			tagRow('locale',
-				fInput('text', 'lang', $lang, 'edit', '', '', 25)).
+				fInput('text', 'lang', $lang, '', '', '', 25)).
 
 			$endform
 		);
@@ -3333,25 +3333,25 @@ begin tag builder functions
 			).
 
 			tagRow('breadcrumb_separator',
-				fInput('text', 'separator', $separator, 'edit', '', '', 4)).
+				fInput('text', 'separator', $separator, '', '', '', 4)).
 
 			tagRow('breadcrumb_linked',
 				yesno_pop('link', $link)).
 
 			tagRow('linkclass',
-				fInput('text', 'linkclass', $linkclass, 'edit', '', '', 25)).
+				fInput('text', 'linkclass', $linkclass, '', '', '', 25)).
 
 			tagRow('label',
-				fInput('text', 'label', $label, 'edit', '', '', 25)).
+				fInput('text', 'label', $label, '', '', '', 25)).
 
 			tagRow('title',
-				fInput('text', 'title', $title, 'edit', '', '', 25)).
+				fInput('text', 'title', $title, '', '', '', 25)).
 
 			tagRow('wraptag',
 				input_tag('wraptag', $wraptag)).
 
 			tagRow('class',
-				fInput('text', 'class', $class, 'edit', '', '', 25)).
+				fInput('text', 'class', $class, '', '', '', 25)).
 
 			$endform
 		);
@@ -3411,16 +3411,16 @@ begin tag builder functions
 				escape_pop($escape)).
 
 			tagRow('html_id',
-				fInput('text', 'html_id', $html_id, 'edit', '', '', 25)).
+				fInput('text', 'html_id', $html_id, '', '', '', 25)).
 
 			tagRow('class',
-				fInput('text', 'class', $class, 'edit', '', '', 25)).
+				fInput('text', 'class', $class, '', '', '', 25)).
 
 			tagRow('inline_style',
-				fInput('text', 'style', $style, 'edit', '', '', 25)).
+				fInput('text', 'style', $style, '', '', '', 25)).
 
 			tagRow('wraptag',
-				fInput('text', 'wraptag', $wraptag, 'edit', '', '', 25)).
+				fInput('text', 'wraptag', $wraptag, '', '', '', 25)).
 
 			hInput('id', $id).
 			hInput('ext', $ext).
@@ -3595,7 +3595,7 @@ begin tag builder functions
 				input_limit($limit)).
 
 			tagRow('label',
-				fInput('text', 'label', $label, 'edit', '', '', 25)).
+				fInput('text', 'label', $label, '', '', '', 25)).
 
 			tagRow('labeltag',
 				input_tag('labeltag', $labeltag)).
@@ -3642,7 +3642,7 @@ begin tag builder functions
 			).
 
 			tagRow('time_format',
-				fInput('text', 'format', $format, 'edit', '', '', 15)).
+				fInput('text', 'format', $format, '', '', '', 15)).
 
 			$endform
 		);
@@ -3677,7 +3677,7 @@ begin tag builder functions
 			).
 
 			tagRow('time_format',
-				fInput('text', 'format', $format, 'edit', '', '', 15)).
+				fInput('text', 'format', $format, '', '', '', 15)).
 
 			$endform
 		);
@@ -3724,7 +3724,7 @@ begin tag builder functions
 				' '.selectInput('format', $formats, $format, true)).
 
 			tagRow('decimals',
-				fInput('text', 'decimals', $decimals, 'edit', '', '', 4)).
+				fInput('text', 'decimals', $decimals, '', '', '', 4)).
 
 			$endform
 		);
@@ -3777,10 +3777,10 @@ begin tag builder functions
 				input_id($id)).
 
 			tagRow('filename',
-				fInput('text', 'filename', $filename, 'edit', '', '', 25)).
+				fInput('text', 'filename', $filename, '', '', '', 25)).
 
 			tagRow('link_text',
-				fInput('text', 'thing', ($thing ? $thing : $filename), 'edit', '', '', 25)).
+				fInput('text', 'thing', ($thing ? $thing : $filename), '', '', '', 25)).
 
 			tagRow('description',
 				'<textarea name="description" cols="22" rows="3">'.$description.'</textarea>').
@@ -3897,7 +3897,7 @@ begin tag builder functions
 				input_tag('wraptag', $wraptag)).
 
 			tagRow('class',
-				fInput('text', 'class', $class, 'edit', '', '', 25)).
+				fInput('text', 'class', $class, '', '', '', 25)).
 
 			$endform
 		);
@@ -3940,7 +3940,7 @@ begin tag builder functions
 				input_tag('wraptag', $wraptag)).
 
 			tagRow('class',
-				fInput('text', 'class', $class, 'edit', '', '', 25)).
+				fInput('text', 'class', $class, '', '', '', 25)).
 
 			$endform
 		);

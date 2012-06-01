@@ -903,10 +903,10 @@ function escape_js($js)
 	function select_buttons()
 	{
 		return
-		gTxt('select').': '.
-		fInput('button','selall',gTxt('all'),'smallerboxsp','select all','selectall();').
-		fInput('button','selnone',gTxt('none'),'smallerboxsp','select none','deselectall();').
-		fInput('button','selrange',gTxt('range'),'smallerboxsp','select range','selectrange();');
+		gTxt('select').
+		n.fInput('button','selall',gTxt('all'),'','select all','selectall();').
+		n.fInput('button','selnone',gTxt('none'),'','select none','deselectall();').
+		n.fInput('button','selrange',gTxt('range'),'','select range','selectrange();');
 	}
 
 // -------------------------------------------------------------
@@ -1405,14 +1405,14 @@ function escape_js($js)
 			);
 		}
 
-		return '<label for="withselected">'.gTxt('with_selected').'</label>'.sp.
-			selectInput('edit_method', $methods, $method, 1, ' id="withselected" onchange="poweredit(this); return false;"').
+		return '<label for="withselected">'.gTxt('with_selected').'</label>'.
+			n.selectInput('edit_method', $methods, $method, 1, ' id="withselected" onchange="poweredit(this); return false;"').
 			n.eInput($name).
 			n.sInput($name.'_multi_edit').
 			n.hInput('page', $page).
 			( $sort ? n.hInput('sort', $sort).n.hInput('dir', $dir) : '' ).
 			( ($crit != '') ? n.hInput('crit', $crit).n.hInput('search_method', $search_method) : '' ).
-			n.fInput('submit', '', gTxt('go'), 'smallerbox');
+			n.fInput('submit', '', gTxt('go'));
 	}
 
 // -------------------------------------------------------------
@@ -2849,7 +2849,7 @@ function modal_halt($thing)
 					$out[] = n.t.t.'<option value="'.htmlspecialchars($timezone_id).'"'.($value == $timezone_id ? ' selected="selected"' : '').'>'.$where.'</option>';
 				}
 				$out[] = n.t.'</optgroup>';
-				return n.'<select'.( $select_id ? ' id="'.$select_id.'"' : '' ).' name="'.$name.'" class="list"'.
+				return n.'<select'.( $select_id ? ' id="'.$select_id.'"' : '' ).' name="'.$name.'"'.
 					($onchange == 1 ? ' onchange="submit(this.form);"' : $onchange).
 					'>'.
 					($blank_first ? n.t.'<option value=""'.($selected == false ? ' selected="selected"' : '').'></option>' : '').

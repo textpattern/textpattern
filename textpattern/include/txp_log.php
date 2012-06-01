@@ -155,11 +155,11 @@ $LastChangedRevision$
 
 		if ($rs)
 		{
-			echo n.'<div id="'.$event.'_container" class="txp-container txp-list">';
+			echo n.'<div id="'.$event.'_container" class="txp-container">';
 			echo n.n.'<form action="index.php" id="log_form" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
 
 				n.'<div class="txp-listtables">'.
-				n.startTable('list','','list').
+				n.startTable('', '', 'txp-list').
 				n.'<thead>'.
 				n.tr(
 					n.column_head('time', 'time', 'log', true, $switch_dir, $crit, $search_method, (('time' == $sort) ? "$dir " : '').'date time').

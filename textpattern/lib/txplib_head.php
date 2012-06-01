@@ -195,10 +195,12 @@ $LastChangedRevision$
 	?>
 	</head>
 	<body id="<?php echo $body_id; ?>" class="<?php echo $area; ?>">
+	<div class="txp-head">
 	<?php callback_event('admin_side', 'pagetop');
 		$theme->set_state($area, $event, $bm, $message);
 		echo pluggable_ui('admin_side', 'header', $theme->header());
 		callback_event('admin_side', 'pagetop_end');
+		echo '</div><!-- /txp-head --><div class="txp-body">';
 	}
 
 // -------------------------------------------------------------

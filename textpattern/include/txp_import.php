@@ -65,7 +65,7 @@ function showHideFields($sel)
 </script>
 
 <?php
-		$content= startTable('edit');
+		$content= startTable('', '', 'txp-edit');
 		$content.= tr(tdcs(hed(gTxt('txp_import'),2),2));
 		//Select tool
 		$content.= tr(
@@ -98,7 +98,7 @@ function showHideFields($sel)
 
 		$content.= tr(
 			fLabelCell ('import_invite','import_invite', 'comment-invite').
-			td(fInput('text','comments_invite', gTxt('comments'),'edit'), '', 'comment-invite')
+			td(fInput('text','comments_invite', gTxt('comments'),''), '', 'comment-invite')
 		, ' class="import-comment"');
 
 		//DataBase imports only
@@ -107,19 +107,19 @@ function showHideFields($sel)
 		tr(tdcs(hed(gTxt('database_stuff'),2),2)).
 		tr(
 			fLabelCell ('import_database','import_database', 'database').
-			td(fInput('text','importdb', '','edit'), '', 'database')
+			td(fInput('text','importdb', '',''), '', 'database')
 		, ' class="import-database"').
 		tr(
 			fLabelCell ('import_login','import_login', 'login').
-			td(fInput('text','importdblogin', '','edit'), '', 'login')
+			td(fInput('text','importdblogin', '',''), '', 'login')
 		, ' class="import-login"').
 		tr(
 			fLabelCell ('import_password','import_password', 'password').
-			td(fInput('text','importdbpass', '','edit'), '', 'password')
+			td(fInput('text','importdbpass', '',''), '', 'password')
 		, ' class="import-password"').
 		tr(
 			fLabelCell ('import_host','import_host', 'host').
-			td(fInput('text','importdbhost', '','edit'), '', 'host')
+			td(fInput('text','importdbhost', '',''), '', 'host')
 		, ' class="import-host"');
 
 		//Ugly, but a way to present a clean screen with only required fields
@@ -128,13 +128,13 @@ function showHideFields($sel)
 		//MT-DB Specific
 		$mtblogid = tr(
 			fLabelCell ('import_blogid','import_blogid', 'blog-id').
-			td(fInput('text','blog_id','','edit'), '', 'blog-id')
+			td(fInput('text','blog_id','',''), '', 'blog-id')
 		, ' class="import-blog-id"');
 		$content.= tr(tda(tag($mtblogid, 'table', ' id="mtblogid" style="display: none;"'),' colspan="2"'));
 		//WordPress specific option
 		$wponly = tr(
 			fLabelCell ('import_wpprefix','import_wpprefix', 'wp-prefix').
-			td(fInput('text','wpdbprefix', 'wp_','edit'), '', 'wp-prefix')
+			td(fInput('text','wpdbprefix', 'wp_',''), '', 'wp-prefix')
 		, ' class="import-wp-prefix"').
 			tr(
 			fLabelCell ('import_wpdbcharset','import_wpdbcharset', 'wpdbcharset').
@@ -144,7 +144,7 @@ function showHideFields($sel)
 		$content.= tr(tdcs(fInput('submit','choose',gTxt('continue'),'publish'), 2));
 		$content.= endTable();
 		$content.= sInput('start_import').eInput('import');
-		echo '<div id="'.$event.'_container" class="txp-container txp-edit">'.
+		echo '<div id="'.$event.'_container" class="txp-container">'.
 			form($content, '', '', 'post', '', '', 'import').
 			'</div>';
 	}
@@ -202,8 +202,8 @@ function showHideFields($sel)
 		$out = tag('max_execution_time = '.ini_get('max_execution_time'),'p', ' class="highlight"').$out;
 		pagetop(gTxt('txp_import'));
 
-		$content= '<div id="'.$event.'_container" class="txp-container txp-list">';
-		$content.= startTable('list');
+		$content= '<div id="'.$event.'_container" class="txp-container">';
+		$content.= startTable('', '', 'txp-list');
 		$content.= tr(tdcs(hed(gTxt('txp_import'),2),2));
 		$content.= tr(td($out));
 		$content.= endTable();

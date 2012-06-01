@@ -45,7 +45,7 @@ $LastChangedRevision$
 		pagetop(gTxt('edit_plugins'), $message);
 
 		echo '<div id="'.$event.'_control" class="txp-control-panel">';
-		echo n.n.startTable('edit', '', 'plugin-install').
+		echo n.n.startTable('', '', 'plugin-install').
 			tr(
 				tda(plugin_form())
 			).
@@ -70,11 +70,11 @@ $LastChangedRevision$
 
 		if ($rs and numRows($rs) > 0)
 		{
-			echo n.'<div id="'.$event.'_container" class="txp-container txp-list">';
+			echo n.'<div id="'.$event.'_container" class="txp-container">';
 			echo '<form action="index.php" id="plugin_form" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
 
 			n.'<div class="txp-listtables">'.
-			n. startTable('list', '', 'list').
+			n. startTable('', '', 'txp-list').
 			n.'<thead>'.
 			tr(
 				column_head('plugin', 'name', 'plugin', true, $switch_dir, '', '', (('name' == $sort) ? "$dir " : '').'name').
@@ -190,7 +190,7 @@ $LastChangedRevision$
 		$name = gps('name');
 		pagetop(gTxt('edit_plugins'));
 
-		echo n.'<div id="'.$event.'_container" class="txp-container txp-edit">';
+		echo n.'<div id="'.$event.'_container" class="txp-container">';
 		echo plugin_edit_form($name);
 		echo '</div>';
   }
@@ -221,7 +221,7 @@ $LastChangedRevision$
 		$textarea = '<textarea id="plugin-code" class="code" name="code" rows="28" cols="90">'.htmlspecialchars($thing).'</textarea>';
 
 		return
-		form(startTable('edit', '', 'edit-pane')
+		form(startTable('', '', 'txp-edit')
 		.	tr(td($textarea))
 		.	tr(td($sub))
 #		.	tr(td($help))
@@ -464,7 +464,7 @@ $LastChangedRevision$
 
 			tag(
 				popHelp('install_plugin').sp.
-				fInput('submit', 'install_new', gTxt('upload'), 'smallerbox')
+				fInput('submit', 'install_new', gTxt('upload'))
 		   , 'span').
 
 				eInput('plugin').

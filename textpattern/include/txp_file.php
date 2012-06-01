@@ -85,7 +85,7 @@ $LastChangedRevision$
 					sInput('file_create').
 
 					graf('<label for="file-existing">'.gTxt('existing_file').'</label>'.sp.selectInput('filename', $existing_files, '', 1, '', 'file-existing').sp.
-						fInput('submit', '', gTxt('Create'), 'smallerbox'), ' class="existing-file"')
+						fInput('submit', '', gTxt('Create')), ' class="existing-file"')
 
 				, '', '', 'post', '', '', 'assign_file');
 			}
@@ -194,11 +194,11 @@ $LastChangedRevision$
 		{
 			$show_authors = !has_single_author('txp_file');
 
-			echo n.'<div id="'.$event.'_container" class="txp-container txp-list">';
+			echo n.'<div id="'.$event.'_container" class="txp-container">';
 			echo '<form name="longform" id="files_form" method="post" action="index.php" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
 
 				n.'<div class="txp-listtables">'.
-				n.startTable('list', '', 'list').
+				n.startTable('', '', 'txp-list').
 				n.'<thead>'.
 				tr(
 					column_head('ID', 'id', 'file', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id').
@@ -538,7 +538,7 @@ $LastChangedRevision$
 									graf(
 										$ef_select.
 										pluggable_ui('file_ui', 'extend_detail_form', '', $rs).
-										fInput('submit','',gTxt('Save'),'smallerbox').
+										fInput('submit','',gTxt('Save')).
 
 										eInput('file').
 										sInput('file_save').
@@ -562,8 +562,8 @@ $LastChangedRevision$
 						, ' class="file-detail not-exists"');
 			}
 
-			echo n.'<div id="'.$event.'_container" class="txp-container txp-edit">';
-			echo startTable('edit', '', 'edit-pane'),
+			echo n.'<div id="'.$event.'_container" class="txp-container">';
+			echo startTable('', '', 'txp-edit'),
 			tr(
 				td(
 					graf(gTxt('file_status').': '.$condition, ' class="condition"') .

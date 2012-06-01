@@ -74,8 +74,8 @@ $LastChangedRevision$
 		}
 
 		echo
-			'<div id="'.$event.'_container" class="txp-container txp-edit">'.
-			startTable('edit').
+			'<div id="'.$event.'_container" class="txp-container">'.
+			startTable('', '', 'txp-wrap').
 			tr(
 				tda(
 
@@ -93,7 +93,7 @@ $LastChangedRevision$
 				tda(
 					'<div id="content_switcher">'.
 					hed(gTxt('all_pages'), 2).
-					graf(sLink('page', 'page_new', gTxt('create_new_page')), ' class="action-create smallerbox"').
+					graf(sLink('page', 'page_new', gTxt('create_new_page')), ' class="action-create"').
 					page_list($name).
 					'</div>'
 				, ' class="column"')
@@ -115,7 +115,7 @@ $LastChangedRevision$
 		{
 			$buttons = '<div class="edit-title">'.
 			gTxt('name_for_this_page').': '
-			.fInput('text','newname','','edit','','',20).
+			.fInput('text','newname','','','','',20).
 			hInput('savenew','savenew').
 			'</div>';
 		} else {
@@ -131,9 +131,9 @@ $LastChangedRevision$
 
 		if (!empty($name)) {
 			$out[] =
-				n.'<span class="copy-as"><label for="copy-page">'.gTxt('copy_page_as').'</label>'.sp.
-				n.fInput('text', 'newname', '', 'edit', '', '', '', '', 'copy-page').
-				n.fInput('submit','copy',gTxt('copy'),'smallerbox').'</span>';
+				n.'<span class="copy-as"><label for="copy-page">'.gTxt('copy_page_as').'</label>'.
+				n.fInput('text', 'newname', '', '', '', '', '', '', 'copy-page').
+				n.fInput('submit','copy',gTxt('copy')).'</span>';
 		}
 		$out[] = '</div>';
 
@@ -163,7 +163,7 @@ $LastChangedRevision$
 			$ctr++;
 		}
 
-		return startTable('list', '', 'list').join(n, $out).endTable();
+		return startTable('', '', 'txp-list').join(n, $out).endTable();
 	}
 
 //-------------------------------------------------------------

@@ -176,11 +176,11 @@ $LastChangedRevision$
 		{
 			$show_authors = !has_single_author('txp_image');
 
-			echo n.'<div id="'.$event.'_container" class="txp-container txp-list">';
+			echo n.'<div id="'.$event.'_container" class="txp-container">';
 			echo n.n.'<form name="longform" id="images_form" method="post" action="index.php" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
 
 				n.'<div class="txp-listtables">'.
-				n.startTable('list', '', 'list').
+				n.startTable('', '', 'txp-list').
 				n.'<thead>'.
 				n.tr(
 					column_head('ID', 'id', 'image', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id').
@@ -446,8 +446,8 @@ $LastChangedRevision$
 				$thumb = '';
 			}
 
-			echo n.'<div id="'.$event.'_container" class="txp-container txp-edit">';
-			echo startTable('edit', '', 'edit-pane'),
+			echo n.'<div id="'.$event.'_container" class="txp-container">';
+			echo startTable('', '', 'txp-edit'),
 			tr(
 				td(
 					pluggable_ui('image_ui', 'image_edit',
@@ -466,7 +466,7 @@ $LastChangedRevision$
 										td($thumb, '', 'thumbwrapper').
 										td(dLink('image','thumbnail_delete','id',$id, '', '', '', '', array($page, $sort, $dir, $crit, $search_method)))
 									).
-								endTable().br
+								endTable()
 							: 	'',
 							upload_form(gTxt('upload_thumbnail'),'upload_thumbnail',
 								'thumbnail_insert','image',$id,$file_max_upload_size, 'upload-thumbnail', 'thumbnail-upload')
@@ -483,13 +483,13 @@ $LastChangedRevision$
 				td(
 					form(
 						graf('<label for="image-name">'.gTxt('image_name').'</label>'.br.
-							fInput('text', 'name', $name, 'edit', '', '', '', '', 'image-name'), ' class="name"').
+							fInput('text', 'name', $name, '', '', '', '', '', 'image-name'), ' class="name"').
 
 						graf('<label for="image-category">'.gTxt('image_category').'</label>'.br.
 							treeSelectInput('category', $categories, $category, 'image-category'), ' class="category"').
 
 						graf('<label for="alt-text">'.gTxt('alt_text').'</label>'.br.
-							fInput('text', 'alt', $alt, 'edit', '', '', 50, '', 'alt-text'), ' class="alt text"').
+							fInput('text', 'alt', $alt, '', '', '', 50, '', 'alt-text'), ' class="alt text"').
 
 						graf('<label for="caption">'.gTxt('caption').'</label>'.br.
 							'<textarea id="caption" name="caption">'.$caption.'</textarea>'
@@ -757,7 +757,7 @@ $LastChangedRevision$
 			td(
 				pluggable_ui('image_ui', 'thumbnail_create', form(
 					graf(gTxt('create_thumbnail'), ' class="label"') .
-					startTable('thumbnail_alter','left','',1) .
+					startTable('thumbnail_alter') .
 						tr(
 							fLabelCell(gTxt('thumb_width'), '', 'width') .
 							fInputCell('width', @$thumb_w, '', 4, '', 'width').
@@ -766,11 +766,9 @@ $LastChangedRevision$
 							fInputCell('height', @$thumb_h, '', 4, '', 'height').
 
 							fLabelCell(gTxt('keep_square_pixels'), '', 'crop') .
-							tda(checkbox('crop', 1, @$thumb_crop, '', 'crop'), ' class="noline"').
+							tda(checkbox('crop', 1, @$thumb_crop, '', 'crop')).
 
-							tda(
-								fInput('submit', '', gTxt('Create'), 'smallerbox')
-							, ' class="noline"')
+							tda(fInput('submit', '', gTxt('Create')))
 						, ' class="thumbnail-alter-controls"').
 
 						n.hInput('id', $id).

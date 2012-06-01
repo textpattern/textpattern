@@ -21,10 +21,11 @@ $LastChangedRevision$
 		global $txp_user, $event, $app_mode, $theme, $textarray_script;
 
 		if ($app_mode != 'async' && $event != 'tag') {
+			echo '</div><!-- /txp-body --><div class="txp-foot">';
 			echo pluggable_ui('admin_side', 'footer', $theme->footer());
 			callback_event('admin_side', 'body_end');
 			echo n.script_js('textpattern.textarray = '.json_encode($textarray_script)).n.
-			'</body>'.n.'</html>';
+			'</div><!-- /txp-foot --></body>'.n.'</html>';
 		}
 	}
 
@@ -179,7 +180,7 @@ $LastChangedRevision$
  */
 	function wLink($event,$step='',$thing='',$value='')
 	{
-		// TODO: Why index.php? while we don't need this in eLinkj etc.
+		// TODO: Why index.php? while we don't need this in eLink etc.
 		return join('',array(
 			'<a href="index.php?event='.$event,
 			($step) ? a.'step='.$step : '',
@@ -221,7 +222,7 @@ $LastChangedRevision$
 			}
 
 			return join('', array(
-				'<a href="'.$url.'" class="dlink" onclick="return verify(\'',
+				'<a href="'.$url.'" class="dlink destroy" onclick="return verify(\'',
 				($verify) ? gTxt($verify) : gTxt('confirm_delete_popup'),
 				'\')">×</a>'
 			));
@@ -229,7 +230,7 @@ $LastChangedRevision$
 
 		return join('', array(
 			'<form method="post" action="index.php" onsubmit="return confirm(\''.gTxt('confirm_delete_popup').'\');">',
-			 fInput('submit', '', '×', 'smallerbox'),
+			 fInput('submit', '', '×', 'destroy'),
 			 eInput($event).
 			 sInput($step),
 			 hInput($thing, $value),
@@ -274,13 +275,14 @@ $LastChangedRevision$
  * @param	string	$step	Step
  * @param	integer	$id	ID of target Textpattern object (article,...)
  * @param	string	$titling	HTML title attribute
+ * @param	string	$rel	HTML rel attribute
  * @return	string	HTML
  */
 
-	function prevnext_link($name,$event,$step,$id,$titling='')
+	function prevnext_link($name,$event,$step,$id,$titling='',$rel='')
 	{
 		return '<a href="?event='.$event.a.'step='.$step.a.'ID='.$id.
-			'" class="navlink" title="'.$titling.'">'.$name.'</a> ';
+			'" class="navlink" title="'.$titling.'"'.($rel ? ' rel="'.$rel.'"' : '').'>'.$name.'</a> ';
 	}
 
 
@@ -304,8 +306,8 @@ $LastChangedRevision$
 			($dir ? a.'dir='.$dir : '').
 			(($crit != '') ? a.'crit='.$crit : '').
 			($search_method ? a.'search_method='.$search_method : '').
-			'" class="navlink">'.
-			($type == 'prev' ? '&#8249;'.sp.$label : $label.sp.'&#8250;').
+			'" class="navlink" rel="'.$type.'">'.
+			($type == 'prev' ? '&#8592;'.sp.$label : $label.sp.'&#8594;').
 			'</a>';
 	}
 
@@ -362,23 +364,25 @@ $LastChangedRevision$
 
 			$nav[] = ($page > 1) ?
 				PrevNextLink($event, $page - 1, gTxt('prev'), 'prev', $sort, $dir, $crit, $search_method).sp :
-				tag('&#8249; '.gTxt('prev'), 'span', ' class="navlink-disabled"').sp;
+				tag('&#8592;'.sp.gTxt('prev'), 'span', ' class="navlink-disabled"').sp;
 
-			$nav[] = '<select name="page" class="list" onchange="submit(this.form);">';
+			$nav[] = '<select name="page" onchange="submit(this.form);">';
 			$nav[] = n.join(n, $option_list);
 			$nav[] = n.'</select>';
-			$nav[] = '<noscript> <input type="submit" value="'.gTxt('go').'" class="smallerbox" /></noscript>';
+			$nav[] = '<noscript> <input type="submit" value="'.gTxt('go').'" /></noscript>';
 
 			$nav[] = ($page != $numPages) ?
 				sp.PrevNextLink($event, $page + 1, gTxt('next'), 'next', $sort, $dir, $crit, $search_method) :
-				sp.tag(gTxt('next').' &#8250;', 'span', ' class="navlink-disabled"');
+				sp.tag(gTxt('next').sp.'&#8594;', 'span', ' class="navlink-disabled"');
 
-			$out[] = '<form class="prev-next" method="get" action="index.php">'.
+			$out[] = '<form class="nav-form" method="get" action="index.php">'.
+				'<p class="prev-next">'.
 				n.eInput($event).
 				( $sort ? n.hInput('sort', $sort).n.hInput('dir', $dir) : '' ).
 				( ($crit != '') ? n.hInput('crit', $crit).n.hInput('search_method', $search_method) : '' ).
 				join('', $nav).
 				n.tInput().
+				'</p>'.
 				n.'</form>';
 		}
 		else
@@ -407,22 +411,22 @@ $LastChangedRevision$
 /**
  * Render start of a layout &lt;table&gt; element.
  *
- * @param	string	$type	Layout view type, either "edit" or "list"
- * @param	string	$align	HTML align attribute ['center']
+ * @param	string	$type	HTML id attribute
+ * @param	string	$align	HTML align attribute ['']
  * @param	string	$class	HTML class attribute ['']
  * @param	integer	$p	HTML cellpadding attribute
  * @param	integer	$w	HTML width atttribute
  * @return		string	HTML
  */
 
-	function startTable($type,$align='',$class='',$p='',$w='')
+	function startTable($id='',$align='',$class='',$p='',$w='')
 	{
-		if ('' === $p) $p = ($type=='edit') ? 3 : 0;
-		$align = (!$align) ? 'center' : $align;
+		$id = ($id) ? ' id="'.$id.'"' : '';
+		$align = ($align) ? ' align="'.$align.'"' : '';
 		$class = ($class) ? ' class="'.$class.'"' : '';
 		$width = ($w) ? ' width="'.$w.'"' : '';
-		return '<table cellpadding="'.$p.'" cellspacing="0" border="0" id="'.
-			$type.'" align="'.$align.'"'.$class.$width.'>'.n;
+		$padding = ($p) ? ' cellpadding="'.$p.'"' : '';
+		return '<table'.$id.$class.$width.$padding.$align.'>'.n;
 	}
 
 
@@ -527,7 +531,7 @@ $LastChangedRevision$
 	function tdcs($content,$span,$width="",$class='')
 	{
 		return join('',array(
-			t.'<td align="left" valign="top" colspan="'.$span.'"',
+			t.'<td colspan="'.$span.'"',
 			($width) ? ' width="'.$width.'"' : '',
 			($class) ? ' class="'.$class.'"' : '',
 			">$content</td>\n"
@@ -547,7 +551,7 @@ $LastChangedRevision$
 	function tdrs($content,$span,$width="")
 	{
 		return join('',array(
-			t.'<td align="left" valign="top" rowspan="'.$span.'"',
+			t.'<td rowspan="'.$span.'"',
 			($width) ? ' width="'.$width.'"' : '',">$content</td>".n
 		));
 	}
@@ -573,7 +577,7 @@ $LastChangedRevision$
 			$cell = '<label for="'.$label_id.'">'.$cell.'</label>';
 		}
 
-		return tda($cell,' class="noline cell-label"');
+		return tda($cell,' class="cell-label"');
 	}
 
 
@@ -593,9 +597,7 @@ $LastChangedRevision$
 	{
 		$pop = ($help) ? sp.popHelp($name) : '';
 
-		return tda(
-			fInput('text', $name, $var, 'edit', '', '', $size, $tabindex, $id).$pop
-		,' class="noline"');
+		return tda(fInput('text', $name, $var, '', '', '', $size, $tabindex, $id).$pop);
 	}
 
 
@@ -746,7 +748,7 @@ $LastChangedRevision$
  */
 	function popHelp($help_var, $width = '', $height = '')
 	{
-		return '<a target="_blank"'.
+		return '<a rel="help" target="_blank"'.
 			' href="http://rpc.textpattern.com/help/?item='.$help_var.a.'language='.LANG.'"'.
 			' onclick="popWin(this.href'.
 			($width ? ', '.$width : '').
@@ -764,7 +766,7 @@ $LastChangedRevision$
  */
 	function popHelpSubtle($help_var, $width = '', $height = '')
 	{
-		return '<a target="_blank"'.
+		return '<a rel="help" target="_blank"'.
 			' href="http://rpc.textpattern.com/help/?item='.$help_var.a.'language='.LANG.'"'.
 			' onclick="popWin(this.href'.
 			($width ? ', '.$width : '').
@@ -809,7 +811,7 @@ $LastChangedRevision$
 
 		$out = array();
 
-		$out[] = n.'<ul class="plain-list small">';
+		$out[] = n.'<ul class="plain-list">';
 
 		foreach ($$arname as $a)
 		{
@@ -857,12 +859,12 @@ $LastChangedRevision$
 		$page = str_replace('{page}', $select_page, gTxt('view_per_page'));
 
 		return form(
-			'<div>'.
+			'<p>'.
 				$page.
 				eInput($event).
 				sInput($event.'_change_pageby').
-				'<noscript> <input type="submit" value="'.gTxt('go').'" class="smallerbox" /></noscript>'.
-			'</div>'
+				'<noscript> <input type="submit" value="'.gTxt('go').'" /></noscript>'.
+			'</p>'
 		, '', '', 'post', 'pageby');
 	}
 
@@ -907,8 +909,8 @@ $LastChangedRevision$
 
 			n.graf(
 				'<label for="'.$label_id.'">'.$label.'</label>'.sp.popHelp($pophelp).sp.
-					fInput('file', 'thefile', '', 'edit', '', '', '', '', $label_id).sp.
-					fInput('submit', '', gTxt('upload'), 'smallerbox')
+					fInput('file', 'thefile', '', '', '', '', '', '', $label_id).sp.
+					fInput('submit', '', gTxt('upload'))
 			).
 
 			n.'</div>'.
@@ -935,12 +937,12 @@ $LastChangedRevision$
 
 		return n.n.form(
 			graf(
-				'<label for="'.$event.'-search">'.gTxt('search').'</label>'.sp.
-				selectInput('search_method', $methods, $method, '', '', $event.'-search').sp.
-				fInput('text', 'crit', $crit, 'edit', '', '', '15').
-				eInput($event).
-				sInput($step).
-				fInput('submit', 'search', gTxt('go'), 'smallerbox')
+				'<label for="'.$event.'-search">'.gTxt('search').'</label>'.
+				n.selectInput('search_method', $methods, $method, '', '', $event.'-search').
+				n.fInput('text', 'crit', $crit, '', '', '', '15').
+				n.eInput($event).
+				n.sInput($step).
+				n.fInput('submit', 'search', gTxt('go'))
 			)
 		, '', '', 'get', 'search-form');
 	}

@@ -50,7 +50,7 @@ $LastChangedRevision$
 	function form_list($curname)
 	{
 		global $step,$essential_forms;
-		$out[] = '<p class="action-create smallerbox">'.sLink('form','form_create',gTxt('create_new_form')).'</p>';
+		$out[] = '<p class="action-create">'.sLink('form','form_create',gTxt('create_new_form')).'</p>';
 
 		$methods = array('delete'=>gTxt('delete'));
 
@@ -88,8 +88,8 @@ $LastChangedRevision$
 			$out[] = '</ul></div></div>';
 			$out[] = eInput('form').sInput('form_multi_edit');
 			$out[] = graf(selectInput('edit_method',$methods,'',1).sp.gTxt('selected').sp.
-				fInput('submit','form_multi_edit',gTxt('go'),'smallerbox')
-				, ' align="right"');
+				fInput('submit','form_multi_edit',gTxt('go'))
+				);
 
 			return form( join('',$out),'',"verify('".gTxt('are_you_sure')."')", 'post', '', '', 'allforms_form' );
 		}
@@ -163,29 +163,29 @@ $LastChangedRevision$
 			$changename = graf(gTxt('form_name').br.tag($name, 'em').hInput('name',$name));
 
 		// Generate the tagbuilder links
-		// Format of each entry is popTagLink -> array ( gTxt string, class/ID, popHelp ref )
+		// Format of each entry is popTagLink -> array ( gTxt string, class/ID )
 		$tagbuild_items = array(
-			'article' => array('articles', 'article-tags', 'form_articles'),
-			'link' => array('links', 'link-tags', 'form__place_link'),
-			'comment' => array('comments', 'comment-tags', 'form_comments'),
-			'comment_details' => array('comment_details', 'comment-detail-tags', 'form_comment_details'),
-			'comment_form' => array('comment_form', 'comment-form-tags', 'form_comment_form'),
-			'search_result' => array('search_results_form', 'search-result-tags', 'form_search_results'),
-			'file_download' => array('file_download_tags', 'file-tags', 'form_file_download_tags'),
-			'category' => array('category_tags', 'category-tags', 'form_category_tags'),
-			'section' => array('section_tags', 'section-tags', 'form_section_tags'),
+			'article'         => array('articles', 'article-tags'),
+			'link'            => array('links', 'link-tags'),
+			'comment'         => array('comments', 'comment-tags'),
+			'comment_details' => array('comment_details', 'comment-detail-tags'),
+			'comment_form'    => array('comment_form', 'comment-form-tags'),
+			'search_result'   => array('search_results_form', 'search-result-tags'),
+			'file_download'   => array('file_download_tags', 'file-tags'),
+			'category'        => array('category_tags', 'category-tags'),
+			'section'         => array('section_tags', 'section-tags'),
 		);
 
 		$tagbuild_links = '';
 		foreach ($tagbuild_items as $tb => $item) {
-			$tagbuild_links .= '<div class="'.$item[1].'">'.hed('<a href="#'.$item[1].'">'.gTxt($item[0]).'</a>'.
-					sp.popHelp($item[2]), 3, ' class="plain lever'.(get_pref('pane_form_'.$item[1].'_visible') ? ' expanded' : '').'"').
+			$tagbuild_links .= '<div class="'.$item[1].'">'.hed('<a href="#'.$item[1].'">'.gTxt($item[0]).'</a>'
+					, 3, ' class="plain lever'.(get_pref('pane_form_'.$item[1].'_visible') ? ' expanded' : '').'"').
 					'<div id="'.$item[1].'" class="toggle on" style="display:'.(get_pref('pane_form_'.$item[1].'_visible') ? 'block' : 'none').'">'.popTagLinks($tb).'</div></div>';
 		}
 
 		$out =
-			'<div id="'.$event.'_container" class="txp-container txp-edit">'.
-			startTable('edit').
+			'<div id="'.$event.'_container" class="txp-container">'.
+			startTable('', '', 'txp-wrap').
 			tr(
 				tdtl(
 					'<div id="tagbuild_links">'.hed(gTxt('tagbuilder'), 2).
@@ -203,7 +203,7 @@ $LastChangedRevision$
 					graf(gTxt('form_type').br.
 						formtypes($type)).
 					(empty($type) ? graf(gTxt('only_articles_can_be_previewed')) : '').
-					(empty($type) || $type == 'article' ? fInput('submit','form_preview',gTxt('preview'),'smallbox') : '' ).
+					(empty($type) || $type == 'article' ? fInput('submit','form_preview',gTxt('preview')) : '' ).
 					graf($inputs).
 					'</div>'.
 					n.tInput().
@@ -211,7 +211,7 @@ $LastChangedRevision$
 
 				, ' class="column"').
 				tdtl(
-					'<div id="content_switcher" class="list">'.hed(gTxt('all_forms'), 2).
+					'<div id="content_switcher">'.hed(gTxt('all_forms'), 2).
 					form_list($name).
 					'</div>'
 				, ' class="column"')

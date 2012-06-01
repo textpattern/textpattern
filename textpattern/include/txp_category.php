@@ -45,8 +45,8 @@ if ($event == 'category') {
 	function cat_category_list($message="")
 	{
 		pagetop(gTxt('categories'),$message);
-		$out = array('<div id="category_container" class="txp-container txp-list">',
-		'<table class="category-list" cellspacing="20" align="center">',
+		$out = array('<div id="category_container" class="txp-container">',
+		'<table class="category-list">',
 		'<tr>',
 			tdtl('<div id="categories_article">'.cat_article_list().'</div>',' class="categories article"'),
 			tdtl('<div id="categories_link">'.cat_link_list().'</div>',' class="categories link"'),
@@ -167,9 +167,9 @@ if ($event == 'category') {
 			join('',$array).
 			eInput('category').sInput('cat_category_multiedit').hInput('type',$area).
 			graf(
-				'<label for="withselected_'.$area.'" class="small">'.gTxt('with_selected').'</label>'.
-				sp.selectInput('edit_method',$methods,'',1, '', 'withselected_'.$area).sp.
-				fInput('submit','',gTxt('go'),'smallerbox')
+				'<label for="withselected_'.$area.'">'.gTxt('with_selected').'</label>'.
+				n.selectInput('edit_method',$methods,'',1, '', 'withselected_'.$area).
+				n.fInput('submit','',gTxt('go'))
 				, ' id="multi_edit_'.$area.'" class="multi-edit"')
 			,'',"verify('".gTxt('are_you_sure')."')", 'post', 'category-tree', '', 'category_'.$area.'_form'
 		);
@@ -234,11 +234,11 @@ if ($event == 'category') {
 
 		$out = n.n.hed(gTxt($event.'_head').sp.popHelp($event.'_category'), 2).
 			form(
-				fInput('text', 'title', '', 'edit', '', '', 20).
+				fInput('text', 'title', '', '', '', '', 20).
 				(($rs) ? '<div class="parent"><label>' . gTxt('parent') . '</label>' . treeSelectInput('parent_cat', $rs, $parent) . '</div>' : '').
-				fInput('submit', '', gTxt('Create'), 'smallerbox').
-				eInput('category').
-				sInput('cat_'.$event.'_create')
+				n.fInput('submit', '', gTxt('Create')).
+				n.eInput('category').
+				n.sInput('cat_'.$event.'_create')
 			,'', '', 'post', 'action-create '.$event);
 
 		if ($rs)
@@ -412,8 +412,8 @@ if ($event == 'category') {
 				tdcs(fInput('submit', '', gTxt('save'), 'publish'), 2)
 			);
 			$out.= eInput( 'category' ) . sInput( 'cat_'.$evname.'_save' ) . hInput( 'old_name',$name );
-			echo '<div id="category_container" class="txp-container txp-edit">'.
-				form( startTable( 'edit', '', 'edit-pane' ) . $out . endTable(), '', '', 'post', 'edit-form' ).
+			echo '<div id="category_container" class="txp-container">'.
+				form( startTable( '', '', 'txp-edit' ) . $out . endTable(), '', '', 'post', 'edit-form' ).
 				'</div>';
 		} else {
 			cat_category_list(array(gTxt('category_not_found'), E_ERROR));

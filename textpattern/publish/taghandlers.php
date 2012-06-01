@@ -3563,7 +3563,7 @@ $LastChangedRevision$
 			'label' => $sitename,
 			'title' => '',
 			'class' => '',
-			'linkclass' => 'noline',
+			'linkclass' => '',
 		),$atts));
 
 		if (isset($atts['sep'])) {

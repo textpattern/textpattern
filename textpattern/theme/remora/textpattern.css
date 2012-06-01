@@ -1,150 +1,128 @@
-/*
-Remora Theme for Textpattern CMS
-Suckerfish menu: @see http://htmldog.com/articles/suckerfish/dropdowns/
-$HeadURL$
-$LastChangedRevision$
-*/
+/* Extends Classic theme
+========================================================================== */
 
 @import url("../classic/textpattern.css");
 
 #masthead {
-background: #FFCC33 url(dropshadow.gif) repeat-x left top;
+	text-align: center;
+	border-bottom: 1px solid #e2a005;
+	background-color: #ffda44;
+	/* Konqueror */
+	background-image: -khtml-gradient(linear, left top, left bottom, from(#ffda44), to(#fabc2b));
+	/* Safari4+, Chrome */
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#ffda44), to(#fabc2b));
+	/* Safari5.1+, Chrome10+ */
+	background-image: -webkit-linear-gradient(#ffda44, #fabc2b);
+	/* Firefox3.6 */
+	background-image:    -moz-linear-gradient(#ffda44, #fabc2b);
+	/* IE10 */
+	background-image:     -ms-linear-gradient(#ffda44, #fabc2b);
+	/* Opera11.10+ */
+	background-image:      -o-linear-gradient(#ffda44, #fabc2b);
+	/* CSS3 Compliant */
+	background-image:         linear-gradient(#ffda44, #fabc2b);
+	-webkit-box-shadow: 0 .25em .4em rgba(0, 0, 0, .15);
+	        box-shadow: 0 .25em .4em rgba(0, 0, 0, .15);
 }
 
 #nav {
-background: transparent url(../classic/textpattern.gif) no-repeat -60px center;
-overflow: auto;
-padding: 0 0 0 300px;
-margin: 0 auto;
-width: 685px;
+	display: -moz-inline-box;
+	-moz-box-orient: vertical;
+	display: inline-block;
+	text-align: left;
+    margin: 0 auto;
+	padding: 0 0 0 124px;
+	background: url("textpattern.png") no-repeat left center;
+	/* display and zoom IE7 fix for display:inline-block */
+	*display: inline;
+	*zoom: 1;
 }
 
-#nav, #nav ul {
-list-style: none;
-}
-
-#nav a {
-display: block;
-height: 2.5em;
-line-height: 2.5em;
-color: #630;
-padding: 0 10px;
-}
-
-* html #nav .sfhover a {
-display: block;
-width: 10em;
-}
-
-#nav a:hover {
-text-decoration: none;
-background-color: #FFF;
+#nav,
+#nav ul {
+	list-style: none;
 }
 
 #nav li {
-float: left;
-margin: 0 -1px 0 -1px;
-line-height: 2.5em;
-height: 2.5em;
+	float: left;
 }
 
-#nav li.active {
-font-weight: bold;
+#nav > li.active {
+	background: rgb(252, 220, 127); /* fallback no RGBa support */
+	background: rgba(255, 255, 255, .25);
 }
 
-#nav li.active li {
-font-weight: normal;
+#nav a {
+	padding: 0 1em;
+	display: block;
+	height: 2.5em;
+	line-height: 2.5em;
+	color: #630;
 }
 
-#nav li li.active {
-font-weight: bold;
+#nav a:hover {
+	text-decoration: none;
 }
 
 #nav li ul {
-padding: 0 0 0.5em 0;
-position: absolute;
-width: 160px;
-left: -999em;
-background-color: white;
-border-width: 0 1px 1px 1px;
-border-style: solid;
-border-color: #FFF #666 #666 #CCC;
-margin: 0 -1px;
+	position: absolute;;
+	left: -9999px;
+	margin: 0 -1px;
+	border: 1px solid;
+	border-color: #e2a005 #999 #999 #ccc;
+	padding: 0;
+	width: 15em;
+	background-color: #fff;
+	-webkit-box-shadow: 0 .25em .4em rgba(0, 0, 0, .15);
+	        box-shadow: 0 .25em .4em rgba(0, 0, 0, .15);
 }
 
-#nav li:hover, #nav li.sfhover {
-position: static;
-background-color: white;
-border-right: 1px solid #666;
-border-left: 1px solid #CCC;
-margin: 0 -2px;
+#nav li:hover,
+#nav li.sfhover {
+	background: rgb(254, 237, 148); /* fallback no RGBa support */
+	background: rgba(255, 255, 255, .4);
 }
 
-#nav li:hover ul, #nav li.sfhover ul {
-left: auto;
+#nav li:hover ul,
+#nav li.sfhover ul {
+	left: auto;
 }
 
-#nav li ul li {
-height: 2em;
-width: 140px;
-padding: 0;
+#nav li li.active {
+	font-weight: bold;
 }
 
-#nav li ul li:hover, #nav li ul li.sfhover  {
-border: none;
-margin: 0 -1px;
+#nav li li a {
+	width: 13em;
+	height: 2em;
+	line-height: 2em;
 }
 
-#nav li ul li a {
-padding: 0 10px;
-width: 140px;
-margin: 0;
-}
-
-#nav li ul li a:hover {
-background-color: #FFFFCC;
-border-left: 1px solid #CCC;
-padding-left: 9px;
+#nav li li a:hover {
+	background-color: #ffc;
 }
 
 #messagepane {
-background: white url(dropshadow.gif) repeat-x left -60px;
-height: 2em;
-line-height: 2em;
-text-align: center;
-}
-
-div#end_page {
-text-align: center;
-margin: 4em 0 0;
-}
-
-#article-col-1 h3,
-#tagbuild_links h3,
-#content_switcher h3,
-#article-col-2 h3,
-.lever {
-padding-left: 0;
+	height: 2em;
+	line-height: 2em;
+	text-align: center;
 }
 
 .lever {
-background: none;
+	background: none;
+	padding: 0;
 }
 
 .expanded {
-background: none;
+	background: none;
 }
 
 .lever a {
-padding-right: 14px;
-text-decoration: none;
+	padding-right: 14px;
+	text-decoration: none;
 }
 
-.lever a:hover, .lever.expanded a {
-background: transparent url(../../txp_img/expandcollapse.gif) no-repeat right 5px;
-}
-
-.lever a.pophelp, .lever a.pophelp:hover {
-background: #eee none;
-padding: 0 2px;
+.lever a:hover,
+.lever.expanded a {
+	background: url("../../txp_img/expandcollapse.gif") no-repeat right 5px;
 }

@@ -24,18 +24,18 @@ SF;
 	function header()
 	{
 		global $txp_user;
-		$out[] = '<div id="masthead"><ul id="nav">';
+		$out[] = '<div id="masthead">'.n.'<ul id="nav">';
 		foreach ($this->menu as $tab)
 		{
-			$class = ($tab['active']) ? 'tabup active' : 'tabdown inactive';
-			$out[] = "<li class='primary {$class}'><a href='?event={$tab['event']}'>{$tab['label']}</a>";
+			$class = ($tab['active']) ? 'active' : 'inactive';
+			$out[] = '<li class="primary '.$class.'"><a href="?event='.$tab["event"].'">'.$tab["label"].'</a>';
 			if (!empty($tab['items']))
 			{
 				$out[] = '<ul>';
 				foreach ($tab['items'] as $item)
 				{
-					$class = ($item['active']) ? 'tabup active' : 'tabdown2 inactive';
-					$out[] = "<li class='secondary {$class}'><a href='?event={$item['event']}'>{$item['label']}</a></li>";
+					$class = ($item['active']) ? 'active' : 'inactive';
+					$out[] = '<li class="secondary '.$class.'"><a href="?event='.$item["event"].'">'.$item["label"].'</a></li>';
 				}
 				$out[] = '</ul>';
 
@@ -44,16 +44,14 @@ SF;
 		}
 		$out[] = '<li id="view-site" class="primary tabdown inactive"><a href="'.hu.'" target="_blank">'.gTxt('tab_view_site').'</a></li>';
 		if ($txp_user) $out[] = '<li id="logout" class="primary tabdown inactive"><a href="index.php?logout=1" onclick="return verify(\''.gTxt('are_you_sure').'\')">'.gTxt('logout').'</a></li>';
-		$out[] = '</ul></div>';
+		$out[] = '</ul>'.n.'</div>';
 		$out[] = '<div id="messagepane">'.$this->announce($this->message).'</div>';
 		return join(n, $out);
 	}
 
 	function footer()
 	{
-		return '<div id="end_page">'.n.
-			'<a href="http://textpattern.com/" id="mothership"><img src="theme/classic/carver.gif" width="60" height="48" border="0" alt="" /></a>'.n.
-			graf('Textpattern &#183; '.txp_version).n.'</div>';
+		return graf('<a href="http://textpattern.com/" title="'.gTxt('go_txp_com').'" rel="external">Textpattern CMS</a> &#183; '.txp_version);
 	}
 
 	function manifest()

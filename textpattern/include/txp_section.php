@@ -36,6 +36,7 @@ $LastChangedRevision$
 
 	function sec_section_list($message = '')
 	{
+		// TODO: what is $wlink? Remove it?
 		global $wlink, $event;
 
 		pagetop(gTxt('sections'), $message);
@@ -43,8 +44,8 @@ $LastChangedRevision$
 		$default = safe_row('page, css, name', 'txp_section', "name = 'default'");
 		$default['old_name'] = 'default';
 
-		echo n.'<div id="'.$event.'_container" class="txp-container txp-list">';
-		echo n.n.startTable('list').
+		echo n.'<div id="'.$event.'_container" class="txp-container">';
+		echo n.n.startTable('', '', 'txp-wrap').
 
 			n.n.tr(
 				tda(
@@ -52,8 +53,8 @@ $LastChangedRevision$
 					n.'<div id="'.$event.'_control" class="txp-control-panel">'.
 
 					n.n.form(
-						fInput('text', 'name', '', 'edit', '', '', 10).
-						fInput('submit', '', gTxt('create'), 'smallerbox').
+						fInput('text', 'name', '', '', '', '', 10).
+						fInput('submit', '', gTxt('create')).
 						eInput('section').
 						sInput('section_create')
 					, '', '', 'post', 'edit-form', '', 'section_create').
@@ -319,42 +320,42 @@ $LastChangedRevision$
 				fLabelCell(gTxt('uses_page').':').
 				td(
 					selectInput('page', $pages, $page).sp.popHelp('section_uses_page')
-				, '', 'noline')
+				, '')
 			, ' class="uses-page"').
 
 			n.n.tr(
 				fLabelCell(gTxt('uses_style').':').
 				td(
 					selectInput('css', $styles, $css).sp.popHelp('section_uses_css')
-				, '', 'noline')
+				, '')
 			, ' class="uses-style"').
 
 			($default_section ? '' : n.n.tr(
 				fLabelCell(gTxt('selected_by_default')).
 				td(
 					yesnoradio('is_default', $is_default, '', $name).sp.popHelp('section_is_default')
-				, '', 'noline')
+				, '')
 			, ' class="option is-default"')).
 
 			($default_section ? '' : n.n.tr(
 				fLabelCell(gTxt('on_front_page')).
 				td(
 					yesnoradio('on_frontpage', $on_frontpage, '', $name).sp.popHelp('section_on_frontpage')
-				, '', 'noline')
+				, '')
 			, ' class="option on-frontpage"')).
 
 			($default_section ? '' : n.n.tr(
 				fLabelCell(gTxt('syndicate')) .
 				td(
 					yesnoradio('in_rss', $in_rss, '', $name).sp.popHelp('section_syndicate')
-				, '', 'noline')
+				, '')
 			, ' class="option in-rss"')).
 
 			($default_section ? '' : n.n.tr(
 				fLabelCell(gTxt('include_in_search')).
 				td(
 					yesnoradio('searchable', $searchable, '', $name).sp.popHelp('section_searchable')
-				, '', 'noline')
+				, '')
 			, ' class="option is-searchable"')).
 
 			pluggable_ui('section_ui', 'extend_detail_form', '', $thesection).
@@ -366,7 +367,7 @@ $LastChangedRevision$
 					sInput('section_save').
 					($default_section ? hInput('name', $name) : '').
 					hInput('old_name', $old_name)
-				, ' colspan="2" class="noline"')
+				, ' colspan="2"')
 			).
 
 			endTable();

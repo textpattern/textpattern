@@ -34,7 +34,7 @@ $LastChangedRevision$
 
 //-------------------------------------------------------------
 	function css_list($current, $default) {
-		$out[] = startTable('list', 'left', 'list');
+		$out[] = startTable('', '', 'txp-list');
 
 		$rs = safe_rows_start('name', 'txp_css', "1=1");
 
@@ -84,7 +84,7 @@ $LastChangedRevision$
 		{
 			$buttons = '<div class="edit-title">'.
 			gTxt('name_for_this_style').': '
-			.fInput('text','newname','','edit','','',20).
+			.fInput('text','newname','','','','',20).
 			hInput('savenew','savenew').
 			'</div>';
 			$thecss = gps('css');
@@ -95,8 +95,10 @@ $LastChangedRevision$
 		}
 
 		if (!empty($name)) {
-			$copy = '<span class="copy-as"><label for="copy-css">'.gTxt('copy_css_as').'</label>'.sp.fInput('text', 'newname', '', 'edit', '', '', '', '', 'copy-css').sp.
-				fInput('submit', 'copy', gTxt('copy'), 'smallerbox').'</span>';
+			$copy =
+				n.'<span class="copy-as"><label for="copy-css">'.gTxt('copy_css_as').'</label>'.
+				n.fInput('text', 'newname', '', '', '', '', '', '', 'copy-css').
+				n.fInput('submit', 'copy', gTxt('copy')).'</span>';
 		} else {
 			$copy = '';
 		}
@@ -104,13 +106,13 @@ $LastChangedRevision$
 		$right =
 		'<div id="content_switcher">'.
 		hed(gTxt('all_stylesheets'),2).
-		graf(sLink('css', 'pour', gTxt('create_new_css')), ' class="action-create smallerbox"').
+		graf(sLink('css', 'pour', gTxt('create_new_css')), ' class="action-create"').
 		css_list($name, $default_name).
 		'</div>';
 
 		echo
-		'<div id="'.$event.'_container" class="txp-container txp-edit">'.
-		startTable('edit').
+		'<div id="'.$event.'_container" class="txp-container">'.
+		startTable('', '', 'txp-wrap').
 		tr(
 			td(
 				form(

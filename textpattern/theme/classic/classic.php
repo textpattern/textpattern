@@ -58,17 +58,14 @@ class classic_theme extends theme
 	{
 		global $txp_user;
 
-		$out[] = '<div id="end_page">'.n.
-			'<a href="http://textpattern.com/" id="mothership"><img src="'.$this->url.'carver.gif" width="60" height="48" border="0" alt="" /></a>'.n.
-			graf('Textpattern &#183; '.txp_version);
+		$out[] = '<a id="mothership" href="http://textpattern.com/" title="'.gTxt('go_txp_com').'" rel="external"><img src="'.$this->url.'carver.png" width="40" height="40" border="0" alt="Textpattern" /></a>'.n.
+			graf('Textpattern CMS &#183; '.txp_version);
 
 		if ($txp_user)
 		{
 			$out[] = graf(gTxt('logged_in_as').' '.span(htmlspecialchars($txp_user)).br.
 				'<a href="index.php?logout=1">'.gTxt('logout').'</a>', ' id="moniker"');
 		}
-
-		$out[] = '</div>';
 
 		return join(n, $out);;
 	}

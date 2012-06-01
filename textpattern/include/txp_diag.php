@@ -463,7 +463,7 @@ $LastChangedRevision$
 
 	echo
 	pagetop(gTxt('tab_diagnostics'),''),
-	'<div id="'.$event.'_container" class="txp-container txp-list">',
+	'<div id="'.$event.'_container" class="txp-container">',
 	'<div id="pre_flight_check">',
 	hed(gTxt('preflight_check'),2);
 
@@ -482,7 +482,7 @@ $LastChangedRevision$
 	$fmt_date = '%Y-%m-%d %H:%M:%S';
 
 	$out = array(
-		'<textarea id="diagnostics-detail" cols="78" rows="18" readonly="readonly">',
+		'<p><textarea id="diagnostics-detail" cols="78" rows="18" readonly="readonly">',
 
 		gTxt('txp_version').cs.txp_version.' ('.($rev ? 'r'.$rev : 'unknown revision').')'.n,
 
@@ -612,15 +612,17 @@ $LastChangedRevision$
 	}
 
 	$out[] = callback_event('diag_results', $step).n;
-	$out[] = '</textarea>'.br;
+	$out[] = '</textarea></p>';
 
 	$dets = array('low'=>gTxt('low'),'high'=>gTxt('high'));
 
 	$out[] =
 		form(
-			eInput('diag').n.
-			gTxt('detail').cs.
-			selectInput('step', $dets, $step, 0, 1)
+			graf(
+				eInput('diag').n.
+				'<label>'.gTxt('detail').'</label>'.n.
+				selectInput('step', $dets, $step, 0, 1)
+			)
 		);
 
 	echo join('',$out),
