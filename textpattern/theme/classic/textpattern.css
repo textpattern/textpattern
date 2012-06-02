@@ -592,7 +592,7 @@ ul.plain-list,
 }
 
 .lang-msg {
-	margin: 2em auto
+	margin: 2em auto;
 	max-width: 50%;
 	text-align: center;
 }

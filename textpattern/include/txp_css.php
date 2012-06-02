@@ -112,7 +112,7 @@ $LastChangedRevision$
 
 		echo
 		'<div id="'.$event.'_container" class="txp-container">'.
-		startTable('', '', 'txp-wrap').
+		startTable('', '', 'txp-columntable').
 		tr(
 			td(
 				form(

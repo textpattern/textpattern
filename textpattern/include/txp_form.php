@@ -185,7 +185,7 @@ $LastChangedRevision$
 
 		$out =
 			'<div id="'.$event.'_container" class="txp-container">'.
-			startTable('', '', 'txp-wrap').
+			startTable('', '', 'txp-columntable').
 			tr(
 				tdtl(
 					'<div id="tagbuild_links">'.hed(gTxt('tagbuilder'), 2).

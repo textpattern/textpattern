@@ -564,7 +564,7 @@ if (!empty($event) and $event == 'article') {
 			n.hInput('LastModID', $LastModID).
 			'<input type="hidden" name="view" />'.
 
-			startTable('', '', 'txp-wrap').
+			startTable('', '', 'txp-columntable').
 
   		'<tr>'.n.
 				'<td id="article-col-1"><div id="configuration_content">';

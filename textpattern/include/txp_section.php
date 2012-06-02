@@ -45,7 +45,7 @@ $LastChangedRevision$
 		$default['old_name'] = 'default';
 
 		echo n.'<div id="'.$event.'_container" class="txp-container">';
-		echo n.n.startTable('', '', 'txp-wrap').
+		echo n.n.startTable('', '', 'txp-columntable').
 
 			n.n.tr(
 				tda(
