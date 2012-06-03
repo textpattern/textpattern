@@ -33,8 +33,7 @@ class theme
 	 * @param	string	$name	Theme name
 	 * @return	string	Source file path for named theme
 	 */
-	/* static */
-	function path($name)
+	static function path($name)
 	{
 		return txpath.DS.THEME.$name.DS.$name.'.php';
 	}
@@ -44,8 +43,7 @@ class theme
 	 * @param	string	$name	Theme name
 	 * @return	object|boolean	An initialised theme object, or false on failure
 	 */
-	/* static */
-	function factory($name)
+	static function factory($name)
 	{
 		$path = theme::path($name);
 		if (is_readable($path))
@@ -73,8 +71,7 @@ class theme
 	 * @param	string 	$name 	Theme name
 	 * @return	object	A valid theme object
 	 */
-	/* static */
-	function init($name = '')
+	static function init($name = '')
 	{
 		static $instance;
 
@@ -106,8 +103,7 @@ class theme
 	 * Get a list of all theme names
 	 * @return array Alphabetically sorted array of all available theme names
 	 */
-	/* static */
-	function names()
+	static function names()
 	{
 		$dirs = glob(txpath.DS.THEME.'*');
 		if (is_array($dirs))
@@ -136,8 +132,7 @@ class theme
 	 * @param	string	$name	Name of ancestor theme
 	 * @return	boolean	True on success, false on unavailable/invalid ancestor theme
 	 */
-	/* static */
-	function based_on($name)
+	static function based_on($name)
 	{
 		global $production_status;
 		$theme = theme::factory($name);

@@ -2736,16 +2736,11 @@ function modal_halt($thing)
 // Dealing with timezones.
 	class timezone
 	{
-		/* private */
-		var $_details;
-		var $_offsets;
+		private $_details;
+		private $_offsets;
 
-		/**
-		 * Constructor
-		 */
-		function timezone()
+		function __construct()
 		{
-			// are we riding a dinosaur?
 			if (!timezone::is_supported())
             {
             	// Standard time zones as compiled by H.M. Nautical Almanac Office, June 2004
@@ -2886,7 +2881,7 @@ function modal_halt($thing)
 		 * @param	string 	$timezone_key Where?
 		 * @return	boolean	Yes, they are saving time, actually.
 		 */
-		function is_dst($timestamp, $timezone_key)
+		static function is_dst($timestamp, $timezone_key)
 		{
 			global $is_dst, $auto_dst;
 
@@ -2910,13 +2905,11 @@ function modal_halt($thing)
 
 		/**
 		 * Check for run-time timezone support
-		 * @return	boolean	All required timezone features are present in this PHP
+		 * @return	boolean	Timezone feature is enabled
 		 */
-		function is_supported()
+		static function is_supported()
 		{
-			return is_callable('date_default_timezone_set') && is_callable('timezone_abbreviations_list') && is_callable('date_create') &&
-				is_callable('array_intersect_key') &&
-				!defined('NO_TIMEZONE_SUPPORT');	// user-definable emergency brake
+			return !defined('NO_TIMEZONE_SUPPORT');	// user-definable emergency brake
 		}
 	}
 
