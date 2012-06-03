@@ -57,7 +57,7 @@ pre code,
 .code code {
 	font-size: 1em;
 	border: 0;
-	background-color: none;
+	background-color: transparent;
 }
 
 var {
