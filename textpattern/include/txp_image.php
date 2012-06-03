@@ -206,6 +206,7 @@ $LastChangedRevision$
 			echo '<tbody>';
 
 			$ctr = 1;
+			$validator = new Validator();
 
 			while ($a = nextRow($rs))
 			{
@@ -239,7 +240,10 @@ $LastChangedRevision$
 					$tagbuilder = sp;
 				}
 
+				$validator->setConstraints(array(new CategoryConstraint($category, array('type' => 'image'))));
+				$vc = $validator->validate() ? '' : ' not-ok';
 				$category = ($category) ? '<span title="'.htmlspecialchars(fetch_category_title($category, 'image')).'">'.$category.'</span>' : '';
+
 				$can_edit = has_privs('image.edit') || ($author == $txp_user && has_privs('image.edit.own'));
 
 				echo n.n.tr(
@@ -268,7 +272,7 @@ $LastChangedRevision$
 					, 80, 'thumbnail').
 
 					td($tagbuilder, 85, 'tag-build').
-					td($category, 75, 'category').
+					td($category, 75, 'category'.$vc).
 
 					($show_authors ? td(
 						'<span title="'.htmlspecialchars(get_author_name($author)).'">'.htmlspecialchars($author).'</span>'

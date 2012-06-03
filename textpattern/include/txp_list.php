@@ -227,6 +227,7 @@ $LastChangedRevision$
 			echo '<tbody>';
 
 			$ctr = 1;
+			$validator = new Validator();
 
 			while ($a = nextRow($rs))
 			{
@@ -241,6 +242,16 @@ $LastChangedRevision$
 				{
 					$Title = eLink('article', 'edit', 'ID', $ID, $Title);
 				}
+
+				// Valid section and categories?
+				$validator->setConstraints(array(new SectionConstraint($Section)));
+				$vs = $validator->validate() ? '' : ' not-ok';
+
+				$validator->setConstraints(array(new CategoryConstraint($Category1, array('type' => 'article'))));
+				$vc[1] = $validator->validate() ? '' : ' not-ok';
+
+				$validator->setConstraints(array(new CategoryConstraint($Category2, array('type' => 'article'))));
+				$vc[2] = $validator->validate() ? '' : ' not-ok';
 
 				$Category1 = ($Category1) ? '<span title="'.htmlspecialchars(fetch_category_title($Category1)).'">'.$Category1.'</span>' : '';
 				$Category2 = ($Category2) ? '<span title="'.htmlspecialchars(fetch_category_title($Category2)).'">'.$Category2.'</span>' : '';
@@ -307,10 +318,10 @@ $LastChangedRevision$
 
 					td(
 						'<span title="'.htmlspecialchars(fetch_section_title($Section)).'">'.$Section.'</span>'
-					, 75, 'section').
+					, 75, 'section'.$vs).
 
-					td($Category1, 100, "articles_detail category category1").
-					td($Category2, 100, "articles_detail category category2").
+					td($Category1, 100, "articles_detail category category1".$vc[1]).
+					td($Category2, 100, "articles_detail category category2".$vc[2]).
 					td(($a['Status'] < 4 ? $Status : '<a href="'.permlinkurl($a).'">'.$Status.'</a>'), 50, 'status').
 
 					($show_authors ? td(

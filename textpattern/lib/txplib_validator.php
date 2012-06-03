@@ -28,10 +28,9 @@ class Validator
 	 * Construct a validator
 	 * @param array $constraints Array of constraint objects to validate over
 	 */
-	function __construct($constraints)
+	function __construct($constraints = array())
 	{
-		$this->constraints = $constraints;
-		$this->messages = array();
+		$this->setConstraints($constraints);
 	}
 
 	/**
@@ -54,6 +53,15 @@ class Validator
 	function getMessages()
 	{
 		return $this->messages;
+	}
+
+	/**
+	 * Set new constraints
+	 */
+	function setConstraints($constraints)
+	{
+		$this->constraints = $constraints;
+		$this->messages = array();
 	}
 }
 

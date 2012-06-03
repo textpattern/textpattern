@@ -228,6 +228,7 @@ $LastChangedRevision$
 			echo '<tbody>';
 
 			$ctr = 1;
+			$validator = new Validator();
 
 			while ($a = nextRow($rs))
 			{
@@ -241,6 +242,8 @@ $LastChangedRevision$
 
 				$download_link = ($file_exists) ? '<li class="action-view">'.make_download_link($id, '', $filename).'</li>' : '';
 
+				$validator->setConstraints(array(new CategoryConstraint($category, array('type' => 'file'))));
+				$vc = $validator->validate() ? '' : ' not-ok';
 				$category = ($category) ? '<span title="'.htmlspecialchars(fetch_category_title($category, 'file')).'">'.$category.'</span>' : '';
 
 				$tag_url = '?event=tag'.a.'tag_name=file_download_link'.a.'id='.$id.a.'description='.urlencode($description).
@@ -271,7 +274,7 @@ $LastChangedRevision$
 
 					td(htmlspecialchars($title), 90, 'title').
 					td(htmlspecialchars($description), 150, 'description').
-					td($category, 90, 'category').
+					td($category, 90, 'category'.$vc).
 
 					/*
 					td(

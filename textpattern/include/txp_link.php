@@ -168,24 +168,28 @@ $LastChangedRevision$
 				).
 				n.'</thead>';
 
-				$tfoot = n.'<tfoot>'.tr(
-					tda(
-						select_buttons().
-						link_multiedit_form($page, $sort, $dir, $crit, $search_method)
-					, ' class="multi-edit" colspan="'.($show_authors ? '8' : '7').'"')
-				).n.'</tfoot>';
+			$tfoot = n.'<tfoot>'.tr(
+				tda(
+					select_buttons().
+					link_multiedit_form($page, $sort, $dir, $crit, $search_method)
+				, ' class="multi-edit" colspan="'.($show_authors ? '8' : '7').'"')
+			).n.'</tfoot>';
 
-				echo $tfoot;
-				echo '<tbody>';
+			echo $tfoot;
+			echo '<tbody>';
 
-				$ctr = 1;
+			$ctr = 1;
+			$validator = new Validator();
 
-				while ($a = nextRow($rs))
+			while ($a = nextRow($rs))
 				{
 					extract($a);
 
 					$edit_url = '?event=link'.a.'step=link_edit'.a.'id='.$id.a.'sort='.$sort.
 						a.'dir='.$dir.a.'page='.$page.a.'search_method='.$search_method.a.'crit='.$crit;
+
+					$validator->setConstraints(array(new CategoryConstraint($category, array('type' => 'link'))));
+					$vc = $validator->validate() ? '' : ' not-ok';
 
 					$can_edit = has_privs('link.edit') || ($author == $txp_user && has_privs('link.edit.own'));
 
@@ -210,7 +214,7 @@ $LastChangedRevision$
 
 						td(
 							'<span title="'.htmlspecialchars(fetch_category_title($category, 'link')).'">'.$category.'</span>'
-						, 125, 'category').
+						, 125, 'category'.$vc).
 
 						td(
 							gTime($uDate)
