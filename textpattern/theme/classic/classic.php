@@ -70,18 +70,17 @@ class classic_theme extends theme
 		return join(n, $out);;
 	}
 
-	function announce($thing, $modal = false)
+	function announce($thing=array('', 0), $modal = false)
 	{
 		return $this->_announce($thing, false, $modal);
 	}
 
-	function announce_async($thing, $modal = false)
+	function announce_async($thing=array('', 0), $modal = false)
 	{
 		return $this->_announce($thing, true, $modal);
 	}
 
-	/* private */
-	function _announce($thing, $async, $modal)
+	private function _announce($thing, $async, $modal)
 	{
 		// $thing[0]: message text
 		// $thing[1]: message type, defaults to "success" unless empty or a different flag is set
