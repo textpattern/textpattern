@@ -41,6 +41,12 @@ $LastChangedRevision$
 		exit('config.php is missing or corrupt.  To install Textpattern, visit <a href="./textpattern/setup/">textpattern/setup/</a>');
 	}
 
+	// custom caches et cetera?
+	if (isset($txpcfg['pre_publish_script']))
+	{
+		require $txpcfg['pre_publish_script'];
+	}
+
 	include txpath.'/publish.php';
 	textpattern();
 
