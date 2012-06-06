@@ -355,7 +355,7 @@ $LastChangedRevision$
 			$visible = $evaluator->get_result();
 			if ($visible != RELOAD) {
 				$parentid = assert_int($parentid);
-				$rs = safe_insert(
+				$commentid = safe_insert(
 					"txp_discuss",
 					"parentid  = $parentid,
 					 name		  = '$name',
@@ -366,12 +366,13 @@ $LastChangedRevision$
 					 visible   = ".intval($visible).",
 					 posted	  = now()"
 				);
-				if ($rs) {
+				if ($commentid) {
 					safe_update("txp_discuss_nonce", "used = 1", "nonce='".doSlash($nonce)."'");
 					if ($prefs['comment_means_site_updated']) {
 						update_lastmod();
 					}
-					mail_comment($message, $name, $email, $web, $parentid, $rs);
+					callback_event('comment.saved', '', false, compact('message', 'name', 'email', 'web', 'parentid', 'commentid', 'ip', 'visible'));
+					mail_comment($message, $name, $email, $web, $parentid, $commentid);
 
 					$updated = update_comments_count($parentid);
 
@@ -388,7 +389,7 @@ $LastChangedRevision$
 					if($comments_moderate){
 						header('Location: '.$backpage.'#txpCommentInputForm');
 					}else{
-						header('Location: '.$backpage.'#c'.sprintf("%06s",$rs));
+						header('Location: '.$backpage.'#c'.sprintf("%06s",$commentid));
 					}
 					log_hit('302');
 					$evaluator->write_trace();
