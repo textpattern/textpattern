@@ -673,7 +673,7 @@ $LastChangedRevision$
 		$newname = sanitizeForFile($name);
 		$newpath = build_file_path($file_base_path, $newname);
 
-		if (!is_file($newname)) {
+		if (!is_file($newpath)) {
 
 			$id = file_db_add(doSlash($newname),$category,$permissions,$description,$size,$title);
 
