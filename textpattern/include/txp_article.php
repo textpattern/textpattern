@@ -391,6 +391,7 @@ if (!empty($event) and $event == 'article') {
 			'status'        => array('mode' => PARTIAL_VOLATILE,    'selector' => '#write-status'),
 			'categories'    => array('mode' => PARTIAL_STATIC,      'selector' => false),
 			'section'       => array('mode' => PARTIAL_STATIC,      'selector' => false),
+			'comments'      => array('mode' => PARTIAL_VOLATILE,	'selector' => '#write-comments'),
 			'posted'        => array('mode' => PARTIAL_VOLATILE,    'selector' => '#write-timestamp'),
 			'expires'       => array('mode' => PARTIAL_VOLATILE,    'selector' => '#write-expires'),
 		);
@@ -758,47 +759,7 @@ if (!empty($event) and $event == 'article') {
 			echo n.n.'<div id="comments_group"'.(($use_comments==1) ? '' : ' class="empty"').'><h3 class="plain lever'.(get_pref('pane_article_comments_visible') ? ' expanded' : '').'"><a href="#comments">'.gTxt('comment_settings').'</a></h3>',
 				'<div id="comments" class="toggle" style="display:'.(get_pref('pane_article_comments_visible') ? 'block' : 'none').'">';
 
-			if($step=="create") {
-				//Avoiding invite disappear when previewing
-				$AnnotateInvite = (!empty($store_out['AnnotateInvite']))? $store_out['AnnotateInvite'] : $comments_default_invite;
-				if ($comments_on_default==1) { $Annotate = 1; }
-			}
-
-			if ($use_comments == 1)
-			{
-				$comments_expired = false;
-
-				if ($step != 'create' && $comments_disabled_after)
-				{
-					$lifespan = $comments_disabled_after * 86400;
-					$time_since = time() - $sPosted;
-
-					if ($time_since > $lifespan)
-					{
-						$comments_expired = true;
-					}
-				}
-
-				if ($comments_expired)
-				{
-					$invite[] = n.n.graf(gTxt('expired'), ' class="comment-annotate"');
-				}
-
-				else
-				{
-					$invite[] = n.n.graf(
-						onoffRadio('Annotate', $Annotate)
-					, ' class="comment-annotate"').
-
-					n.n.graf(
-						'<label for="comment-invite">'.gTxt('comment_invitation').'</label>'.br.
-						fInput('text', 'AnnotateInvite', $AnnotateInvite, '', '', '', '', '', 'comment-invite')
-					, ' class="comment-invite"');
-				}
-
-				echo pluggable_ui('article_ui', 'annotate_invite', join('', $invite), $rs);
-
-			}
+			echo $partials['comments']['html'];
 
 			// end "Comments" section
 			echo '</div></div>';
@@ -1385,6 +1346,57 @@ EOS
 				'<span class="section-edit">['.eLink('section', '', '', '', gTxt('edit')).']</span>'.br.
 				section_popup($rs['Section'], 'section'), ' class="section"'),
 			$rs);
+	}
+
+// -------------------------------------------------------------
+	function article_partial_comments($rs)
+	{
+		global $step, $use_comments, $comments_disabled_after, $comments_default_invite, $comments_on_default;
+
+		extract($rs);
+
+		if ($step == "create")
+		{
+			//Avoiding invite disappear when previewing
+			$AnnotateInvite = (!empty($store_out['AnnotateInvite']))? $store_out['AnnotateInvite'] : $comments_default_invite;
+			if ($comments_on_default==1) { $Annotate = 1; }
+		}
+
+		if ($use_comments == 1)
+		{
+			$comments_expired = false;
+
+			if ($step != 'create' && $comments_disabled_after)
+			{
+				$lifespan = $comments_disabled_after * 86400;
+				$time_since = time() - $sPosted;
+
+				if ($time_since > $lifespan)
+				{
+					$comments_expired = true;
+				}
+			}
+
+			if ($comments_expired)
+			{
+				$invite = n.n.graf(gTxt('expired'), ' class="comment-annotate" id="write-comments"');
+			}
+			else
+			{
+				$invite = n.n.'<div id="write-comments">'.
+					n.n.graf(
+					onoffRadio('Annotate', $Annotate)
+					, ' class="comment-annotate"').
+
+					n.n.graf(
+					'<label for="comment-invite">'.gTxt('comment_invitation').'</label>'.br.
+						fInput('text', 'AnnotateInvite', $AnnotateInvite, '', '', '', '', '', 'comment-invite')
+					, ' class="comment-invite"').
+					n.n.'</div>';
+			}
+
+			return pluggable_ui('article_ui', 'annotate_invite', $invite, $rs);
+		}
 	}
 
 // -------------------------------------------------------------
