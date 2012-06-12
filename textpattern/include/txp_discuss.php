@@ -251,7 +251,7 @@ $LastChangedRevision$
 					column_head('email', 'email', 'discuss', true, $switch_dir, $crit, $search_method, (('email' == $sort) ? "$dir " : '').'discuss_detail email').
 					column_head('website', 'website', 'discuss', true, $switch_dir, $crit, $search_method, (('website' == $sort) ? "$dir " : '').'discuss_detail website').
 					column_head('IP', 'ip', 'discuss', true, $switch_dir, $crit, $search_method, (('ip' == $sort) ? "$dir " : '').'discuss_detail ip').
-					column_head('status', 'status', 'discuss', true, $switch_dir, $crit, $search_method, (('status' == $sort) ? "$dir " : '').'discuss_detail status').
+					column_head('status', 'status', 'discuss', true, $switch_dir, $crit, $search_method, (('status' == $sort) ? "$dir " : '').'status').
 					column_head('parent', 'parent', 'discuss', true, $switch_dir, $crit, $search_method, (('parent' == $sort) ? "$dir " : '').'parent').
 					hCell('', '', ' class="multi-edit"')
 				).
@@ -345,7 +345,7 @@ $LastChangedRevision$
 			}
 
 			if (empty($message))
-				echo tr(tda(gTxt('just_spam_results_found'),' colspan="9"'));
+				echo tr(tda(gTxt('just_spam_results_found'),' colspan="10"'));
 
 			echo '</tbody>'.
 			n.endTable().
@@ -439,7 +439,7 @@ $LastChangedRevision$
 
 					tda(gTxt('message')).
 					td(
-						'<textarea id="message" name="message" cols="60" rows="15">'.$message.'</textarea>'
+						'<textarea id="commentmessage" name="message" cols="60" rows="15">'.$message.'</textarea>'
 					, '', 'comment message text'),
 
 					fLabelCell('status').
