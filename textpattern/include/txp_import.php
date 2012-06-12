@@ -48,6 +48,7 @@ $LastChangedRevision$
 		global $vars,$event,$step,$tools;
 		extract(gpsa($vars));
 		pagetop(gTxt('txp_import'), '');
+		echo '<h1 class="txp-heading">'.gTxt('tab_import').'</h1>';
 
 ?>
 

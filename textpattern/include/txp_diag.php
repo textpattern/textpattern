@@ -463,16 +463,17 @@ $LastChangedRevision$
 
 	echo
 	pagetop(gTxt('tab_diagnostics'),''),
+	'<h1 class="txp-heading">'.gTxt('tab_diagnostics').'</h1>',
 	'<div id="'.$event.'_container" class="txp-container">',
 	'<div id="pre_flight_check">',
 	hed(gTxt('preflight_check'),2);
 
 	if ($fail) {
 		foreach ($fail as $help => $message)
-			echo graf(nl2br($message).sp.popHelp($help), ' class="not-ok"');
+			echo graf(nl2br($message).sp.popHelp($help), ' class="error"');
 	}
 	else {
-		echo graf(gTxt('all_checks_passed'), ' class="ok"');
+		echo graf(gTxt('all_checks_passed'), ' class="success"');
 	}
 	echo '</div>';
 

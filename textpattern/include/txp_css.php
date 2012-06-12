@@ -96,9 +96,9 @@ $LastChangedRevision$
 
 		if (!empty($name)) {
 			$copy =
-				n.'<span class="copy-as"><label for="copy-css">'.gTxt('copy_css_as').'</label>'.
+				n.'<p class="copy-as"><label for="copy-css">'.gTxt('copy_css_as').'</label>'.
 				n.fInput('text', 'newname', '', '', '', '', '', '', 'copy-css').
-				n.fInput('submit', 'copy', gTxt('copy')).'</span>';
+				n.fInput('submit', 'copy', gTxt('copy')).'</p>';
 		} else {
 			$copy = '';
 		}
@@ -111,6 +111,7 @@ $LastChangedRevision$
 		'</div>';
 
 		echo
+		'<h1 class="txp-heading">'.gTxt('tab_style').'</h1>'.
 		'<div id="'.$event.'_container" class="txp-container">'.
 		startTable('', '', 'txp-columntable').
 		tr(
@@ -118,10 +119,10 @@ $LastChangedRevision$
 				form(
 					'<div id="main_content">'.
 					$buttons.
-					'<textarea id="css" class="code" name="css" cols="78" rows="32">'.htmlspecialchars($thecss).'</textarea>'.br.
-					fInput('submit','',gTxt('save'),'publish').
+					'<textarea id="css" class="code" name="css" cols="78" rows="32">'.htmlspecialchars($thecss).'</textarea>'.
+					'<p>'.fInput('submit','',gTxt('save'),'publish').
 					eInput('css').sInput('css_save').
-					hInput('name',$name)
+					hInput('name',$name).'</p>'
 					.$copy.
 					'</div>'
 				, '', '', 'post', 'edit-form', '', 'style_form')

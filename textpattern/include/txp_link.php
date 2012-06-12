@@ -158,7 +158,6 @@ $LastChangedRevision$
 				n.'<thead>'.
 				n.tr(
 					column_head('ID', 'id', 'link', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id').
-					hCell('', '', ' class="actions"').
 					column_head('link_name', 'name', 'link', true, $switch_dir, $crit, $search_method, (('name' == $sort) ? "$dir " : '').'name').
 					column_head('description', 'description', 'link', true, $switch_dir, $crit, $search_method, (('description' == $sort) ? "$dir " : '').'description').
 					column_head('link_category', 'category', 'link', true, $switch_dir, $crit, $search_method, (('category' == $sort) ? "$dir " : '').'category').
@@ -170,9 +169,9 @@ $LastChangedRevision$
 
 			$tfoot = n.'<tfoot>'.tr(
 				tda(
-					select_buttons().
+					select_buttons().n.
 					link_multiedit_form($page, $sort, $dir, $crit, $search_method)
-				, ' class="multi-edit" colspan="'.($show_authors ? '8' : '7').'"')
+				, ' class="multi-edit" colspan="'.($show_authors ? '7' : '6').'"')
 			).n.'</tfoot>';
 
 			echo $tfoot;
@@ -189,36 +188,32 @@ $LastChangedRevision$
 						a.'dir='.$dir.a.'page='.$page.a.'search_method='.$search_method.a.'crit='.$crit;
 
 					$validator->setConstraints(array(new CategoryConstraint($category, array('type' => 'link'))));
-					$vc = $validator->validate() ? '' : ' not-ok';
+					$vc = $validator->validate() ? '' : ' error';
 
 					$can_edit = has_privs('link.edit') || ($author == $txp_user && has_privs('link.edit.own'));
 
 					echo tr(
 
-						n.td($id, 20, 'id').
+						n.td(
+							($can_edit ? href($id, $edit_url, ' title="'.gTxt('edit').'"') : $id)
+						, '', 'id').
 
 						td(
-							n.'<ul>'.
-							($can_edit ? n.t.'<li class="action-edit">'.href(gTxt('edit'), $edit_url).'</li>' : '').
-							n.t.'<li class="action-view">'.href(gTxt('view'), $url).'</li>'.
-							n.'</ul>'
-						, 35, 'actions').
-
-						td(
-							($can_edit ? href(htmlspecialchars($linkname), $edit_url) : htmlspecialchars($linkname))
-						, 125, 'name').
+							($can_edit ? href(htmlspecialchars($linkname), $edit_url, ' title="'.gTxt('edit').'"') : htmlspecialchars($linkname)).n.
+							'[<a href="'.$url.'">'.gTxt('view').'</a>]'
+						, '', 'name').
 
 						td(
 							htmlspecialchars($description)
-						, 150, 'description').
+						, '', 'description').
 
 						td(
 							'<span title="'.htmlspecialchars(fetch_category_title($category, 'link')).'">'.$category.'</span>'
-						, 125, 'category'.$vc).
+						, '', 'category'.$vc).
 
 						td(
 							gTime($uDate)
-						, 75, 'date created').
+						, '', 'date created').
 
 						($show_authors ? td(
 							'<span title="'.htmlspecialchars(get_author_name($author)).'">'.htmlspecialchars($author).'</span>'
@@ -268,8 +263,9 @@ $LastChangedRevision$
 	{
 		global $vars, $event, $step, $txp_user;
 
-		pagetop(gTxt('edit_links'), $message);
+		pagetop(gTxt('tab_link'), $message);
 
+		echo '<h1 class="txp-heading">'.gTxt('tab_link').'</h1>';
 		echo '<div id="'.$event.'_container" class="txp-container">';
 
 		extract(array_map('assert_string', gpsa($vars)));

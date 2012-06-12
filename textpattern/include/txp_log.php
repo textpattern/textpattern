@@ -42,7 +42,7 @@ $LastChangedRevision$
 	{
 		global $event, $log_list_pageby, $expire_logs_after;
 
-		pagetop(gTxt('visitor_logs'), $message);
+		pagetop(gTxt('tab_logs'), $message);
 
 		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
 		if ($sort === '') $sort = get_pref('log_sort_column', 'time');
@@ -126,6 +126,7 @@ $LastChangedRevision$
 
 		$total = safe_count('txp_log', "$criteria");
 
+		echo '<h1 class="txp-heading">'.gTxt('tab_logs').'</h1>';
 		echo '<div id="'.$event.'_control" class="txp-control-panel">';
 
 		if ($total < 1)
@@ -179,7 +180,7 @@ $LastChangedRevision$
 					' class="detail-toggle" colspan="2"'
 				).
 				tda(
-					select_buttons().
+					select_buttons().n.
 					log_multiedit_form($page, $sort, $dir, $crit, $search_method)
 				, ' class="multi-edit" colspan="6"')
 			).n.'</tfoot>';
@@ -218,16 +219,16 @@ $LastChangedRevision$
 
 					n.td(
 						gTime($log_uTime)
-					, 85, 'date time').
+					, '', 'date time').
 
-					td(htmlspecialchars($log_ip), 20, 'log_detail ip').
+					td(htmlspecialchars($log_ip), '', 'log_detail ip').
 
 					td(htmlspecialchars(soft_wrap($log_host, 30)), '', 'host').
 
 					td($log_page, '', 'page').
 					td($log_refer, '', 'refer').
-					td(htmlspecialchars($log_method), 60, 'log_detail method').
-					td($log_status, 60, 'log_detail status').
+					td(htmlspecialchars($log_method), '', 'log_detail method').
+					td($log_status, '', 'log_detail status').
 
 					td(
 						fInput('checkbox', 'selected[]', $log_id)

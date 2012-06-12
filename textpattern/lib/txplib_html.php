@@ -21,11 +21,11 @@ $LastChangedRevision$
 		global $txp_user, $event, $app_mode, $theme, $textarray_script;
 
 		if ($app_mode != 'async' && $event != 'tag') {
-			echo '</div><!-- /txp-body --><div class="txp-foot">';
+			echo '</div><!-- /txp-body --><div class="txp-footer">';
 			echo pluggable_ui('admin_side', 'footer', $theme->footer());
 			callback_event('admin_side', 'body_end');
 			echo n.script_js('textpattern.textarray = '.json_encode($textarray_script)).n.
-			'</div><!-- /txp-foot --></body>'.n.'</html>';
+			'</div><!-- /txp-footer --></body>'.n.'</html>';
 		}
 	}
 
@@ -154,9 +154,10 @@ $LastChangedRevision$
  * @param	string	$linktext	Link text
  * @param	string	$thing2	URL parameter key #2 ['']
  * @param	string	$val2	URL parameter value #2 ['']
+ * @param	string	$title	Anchor title ['edit']
  * @return	string	HTML
  */
-	function eLink($event,$step='',$thing='',$value='',$linktext,$thing2='',$val2='')
+	function eLink($event,$step='',$thing='',$value='',$linktext,$thing2='',$val2='',$title='edit')
 	{
 		return join('',array(
 			'<a href="?event='.$event,
@@ -164,7 +165,7 @@ $LastChangedRevision$
 			($thing) ? a.''.$thing.'='.urlencode($value) : '',
 			($thing2) ? a.''.$thing2.'='.urlencode($val2) : '',
 			a.'_txp_token='.form_token(),
-			'">'.escape_title($linktext).'</a>'
+			'"'.(($title) ? ' title="'.gTxt($title).'"' : '') .'>'.escape_title($linktext).'</a>'
 		));
 	}
 

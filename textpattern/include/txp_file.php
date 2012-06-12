@@ -58,13 +58,14 @@ $LastChangedRevision$
 	{
 		global $file_base_path, $file_statuses, $file_list_pageby, $txp_user, $event;
 
-		pagetop(gTxt('file'), $message);
+		pagetop(gTxt('tab_file'), $message);
 
 		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
 		if ($sort === '') $sort = get_pref('file_sort_column', 'filename');
 		if ($dir === '') $dir = get_pref('file_sort_dir', 'asc');
 		$dir = ($dir == 'desc') ? 'desc' : 'asc';
 
+		echo '<h1 class="txp-heading">'.gTxt('tab_file').'</h1>';
 		echo '<div id="'.$event.'_control" class="txp-control-panel">';
 
 		if (!is_dir($file_base_path) or !is_writeable($file_base_path))
@@ -202,7 +203,6 @@ $LastChangedRevision$
 				n.'<thead>'.
 				tr(
 					column_head('ID', 'id', 'file', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id').
-					hCell('', '', ' class="actions"').
 					column_head('file_name', 'filename', 'file', true, $switch_dir, $crit, $search_method, (('filename' == $sort) ? "$dir " : '').'name').
 					column_head('title', 'title', 'file', true, $switch_dir, $crit, $search_method, (('title' == $sort) ? "$dir " : '').'title').
 					column_head('description', 'description', 'file', true, $switch_dir, $crit, $search_method, (('description' == $sort) ? "$dir " : '').'description').
@@ -219,9 +219,9 @@ $LastChangedRevision$
 
 			$tfoot = n.'<tfoot>'.tr(
 				tda(
-					select_buttons().
+					select_buttons().n.
 					file_multiedit_form($page, $sort, $dir, $crit, $search_method)
-				,' class="multi-edit" colspan="'.($show_authors ? '12' : '11').'"')
+				,' class="multi-edit" colspan="'.($show_authors ? '11' : '10').'"')
 			).n.'</tfoot>';
 
 			echo $tfoot;
@@ -240,17 +240,17 @@ $LastChangedRevision$
 
 				$file_exists = file_exists(build_file_path($file_base_path, $filename));
 
-				$download_link = ($file_exists) ? '<li class="action-view">'.make_download_link($id, '', $filename).'</li>' : '';
+				$download_link = ($file_exists) ? make_download_link($id, $downloads, $filename) : '';
 
 				$validator->setConstraints(array(new CategoryConstraint($category, array('type' => 'file'))));
-				$vc = $validator->validate() ? '' : ' not-ok';
+				$vc = $validator->validate() ? '' : ' error';
 				$category = ($category) ? '<span title="'.htmlspecialchars(fetch_category_title($category, 'file')).'">'.$category.'</span>' : '';
 
 				$tag_url = '?event=tag'.a.'tag_name=file_download_link'.a.'id='.$id.a.'description='.urlencode($description).
 					a.'filename='.urlencode($filename);
 
 				$condition = '<span class="';
-				$condition .= ($file_exists) ? 'ok' : 'not-ok';
+				$condition .= ($file_exists) ? 'success' : 'error';
 				$condition .= '">';
 				$condition .= ($file_exists) ? gTxt('file_status_ok') : gTxt('file_status_missing');
 				$condition .= '</span>';
@@ -259,51 +259,42 @@ $LastChangedRevision$
 
 				echo tr(
 
-					n.td($id, '', 'id').
+					n.td(
+						($can_edit ? href($id, $edit_url, ' title="'.gTxt('edit').'"') : $id)
+					, '', 'id').
 
 					td(
-						'<ul>'.
-						($can_edit ? '<li class="action-edit">'.href(gTxt('edit'), $edit_url).'</li>' : '').
-						$download_link.
-						'</ul>'
-					, 65, 'actions').
+						($can_edit ? href(htmlspecialchars($filename), $edit_url, ' title="'.gTxt('edit').'"') : htmlspecialchars($filename))
+					, '', 'name').
 
-					td(
-						($can_edit ? href(htmlspecialchars($filename), $edit_url) : htmlspecialchars($filename))
-					, 125, 'name').
-
-					td(htmlspecialchars($title), 90, 'title').
-					td(htmlspecialchars($description), 150, 'description').
-					td($category, 90, 'category'.$vc).
+					td(htmlspecialchars($title), '', 'title').
+					td(htmlspecialchars($description), '', 'description').
+					td($category, '', 'category'.$vc).
 
 					/*
 					td(
 						($permissions == '1') ? gTxt('private') : gTxt('public')
-					,80).
+					).
 					*/
 
 					td(
-						n.'<ul>'.
-						n.t.'<li><a target="_blank" href="'.$tag_url.a.'type=textile" onclick="popWin(this.href, 400, 250); return false;">Textile</a></li>'.
-						n.t.'<li><a target="_blank" href="'.$tag_url.a.'type=textpattern" onclick="popWin(this.href, 400, 250); return false;">Textpattern</a></li>'.
-						n.t.'<li><a target="_blank" href="'.$tag_url.a.'type=html" onclick="popWin(this.href, 400, 250); return false;">HTML</a></li>'.
-						n.'</ul>'
-					, 75, 'tag-build').
+						n.'<a target="_blank" href="'.$tag_url.a.'type=textile" onclick="popWin(this.href, 400, 250); return false;">Textile</a>'.sp.
+						'&#124;'.sp.'<a target="_blank" href="'.$tag_url.a.'type=textpattern" onclick="popWin(this.href, 400, 250); return false;">Textpattern</a>'.sp.
+						'&#124;'.sp.'<a target="_blank" href="'.$tag_url.a.'type=html" onclick="popWin(this.href, 400, 250); return false;">HTML</a>'
+					, '', 'tag-build').
 
-					td(in_array($status, array_keys($file_statuses)) ? $file_statuses[$status] : '<span class="not-ok">'.gTxt('none').'</span>', 45, 'status').
+					td(in_array($status, array_keys($file_statuses)) ? $file_statuses[$status] : '<span class="error">'.gTxt('none').'</span>', '', 'status').
 
-					td($condition, 45, 'condition').
+					td($condition, '', 'condition').
 
-					td(
-						($downloads == '0' ? gTxt('none') : $downloads)
-					, 25, 'downloads').
+					td($download_link, '', 'downloads').
 
 					($show_authors ? td(
 						'<span title="'.htmlspecialchars(get_author_name($author)).'">'.htmlspecialchars($author).'</span>'
 					, '', 'author') : '').
 
 					td($can_edit ? fInput('checkbox', 'selected[]', $id) : '&nbsp;'
-					, 10, 'multi-edit')
+					, '', 'multi-edit')
 				, ' class="'.(($ctr%2 == 0) ? 'even' : 'odd').'"'
 				);
 
@@ -474,7 +465,7 @@ $LastChangedRevision$
 			$existing_files = get_filenames();
 
 			$condition = '<span class="';
-			$condition .= ($file_exists) ? 'ok' : 'not-ok';
+			$condition .= ($file_exists) ? 'success' : 'error';
 			$condition .= '">';
 			$condition .= ($file_exists)?gTxt('file_status_ok'):gTxt('file_status_missing');
 			$condition .= '</span>';
@@ -1003,9 +994,9 @@ $LastChangedRevision$
 
 	function make_download_link($id, $label = '', $filename = '')
 	{
-		$label = ($label) ? $label : gTxt('download');
+		$label = ($label != '') ? $label : gTxt('download');
 		$url = filedownloadurl($id, $filename);
-		return '<a href="'.$url.'">'.$label.'</a>';
+		return '<a title="'.gTxt('download').'" href="'.$url.'">'.$label.'</a>';
 	}
 
 // -------------------------------------------------------------

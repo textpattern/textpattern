@@ -198,6 +198,7 @@ $LastChangedRevision$
 		// grand total comment count
 		$total = $count[SPAM] + $count[MODERATE] + $count[VISIBLE];
 
+		echo '<h1 class="txp-heading">'.gTxt('list_discussions').'</h1>';
 		echo '<div id="'.$event.'_control" class="txp-control-panel">';
 		echo '<a id="list_banned_ips" href="index.php?event=discuss'.a.'step=ipban_list">'.gTxt('list_banned_ips').'</a>';
 
@@ -264,7 +265,7 @@ $LastChangedRevision$
 					' class="detail-toggle" colspan="2"'
 				).
 				tda(
-					select_buttons().
+					select_buttons().n.
 					discuss_multiedit_form($page, $sort, $dir, $crit, $search_method)
 				, ' class="multi-edit" colspan="9"')
 			).n.'</tfoot>';
@@ -317,22 +318,17 @@ $LastChangedRevision$
 
 					$parent = href($parent_title, '?event=article'.a.'step=edit'.a.'ID='.$parentid);
 
-					$view = '';
+					$view = $comment_status;
 
 					if ($visible == VISIBLE and in_array($Status, array(4,5)))
 					{
-						$view = n.t.'<li class="action-view"><a href="'.permlinkurl($a).'#c'.$discussid.'">'.gTxt('view').'</a></li>';
+						$view = n.'<a title="'.gTxt('view').'" href="'.permlinkurl($a).'#c'.(int)$discussid.'">'.$comment_status.'</a>';
 					}
 				}
 
 				echo n.n.tr(
 
-					n.td('<a class="action-edit" href="'.$edit_url.'">'.$discussid.'</a>'.
-						n.'<ul class="discuss_detail actions">'.
-						n.t.'<li class="action-edit"><a href="'.$edit_url.'">'.gTxt('edit').'</a></li>'.
-						$view.
-						n.'</ul>'
-					, 50, 'id').
+					n.td('<a title="'.gTxt('edit').'" href="'.$edit_url.'">'.$discussid.'</a>', '', 'id').
 
 					td(gTime($uPosted), '', 'date posted created').
 					td(htmlspecialchars(soft_wrap($name, 15)), '', 'name').
@@ -340,7 +336,7 @@ $LastChangedRevision$
 					td(htmlspecialchars(soft_wrap($email, 15)), '', 'discuss_detail email').
 					td(htmlspecialchars(soft_wrap($web, 15)), '', 'discuss_detail website').
 					td($ip, '', 'discuss_detail ip').
-					td($comment_status, '', 'discuss_detail status').
+					td($view, '', 'status').
 					td($parent, '', 'parent').
 					td(fInput('checkbox', 'selected[]', $discussid), '', 'multi-edit')
 				, ' class="'.(($ctr%2 == 0) ? 'even' : 'odd').' '.$row_class.'"');
@@ -443,7 +439,7 @@ $LastChangedRevision$
 
 					tda(gTxt('message')).
 					td(
-						'<textarea name="message" cols="60" rows="15">'.$message.'</textarea>'
+						'<textarea id="message" name="message" cols="60" rows="15">'.$message.'</textarea>'
 					, '', 'comment message text'),
 
 					fLabelCell('status').
@@ -558,8 +554,7 @@ $LastChangedRevision$
 					hCell(gTxt('date_banned'), '', ' class="date banned"').
 					hCell(gTxt('IP'), '', ' class="ip"').
 					hCell(gTxt('name_used'), '', ' class="name"').
-					hCell(gTxt('banned_for'), '', ' class="id"').
-					hCell('', '', ' class="actions"')
+					hCell(gTxt('banned_for'), '', ' class="id"')
 				).
 				n.'</thead>';
 
@@ -573,24 +568,22 @@ $LastChangedRevision$
 				echo tr(
 					td(
 						gTime($uBanned)
-					, 100, 'date banned').
+					, '', 'date banned').
 
 					td(
-						htmlspecialchars($ip)
-					, 100, 'ip').
+						htmlspecialchars($ip).n.
+						'[<a class="action-ban" href="?event=discuss'.a.'step=ipban_unban'.a.'ip='.htmlspecialchars($ip).a.'_txp_token='.form_token().'">'.gTxt('unban').'</a>]'
+					, '', 'ip').
 
 					td(
 						htmlspecialchars($name_used)
-					, 100, 'name').
+					, '', 'name').
 
 					td(
 						'<a href="?event=discuss'.a.'step=discuss_edit'.a.'discussid='.$banned_on_message.'">'.
 							$banned_on_message.'</a>'
-					, 100, 'id').
+					, '', 'id')
 
-					td(
-						'<a class="action-ban" href="?event=discuss'.a.'step=ipban_unban'.a.'ip='.htmlspecialchars($ip).a.'_txp_token='.form_token().'">'.gTxt('unban').'</a>'
-					, '', 'actions')
 				, ' class="'.(($ctr%2 == 0) ? 'even' : 'odd').'"'
 				);
 

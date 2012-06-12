@@ -52,12 +52,12 @@ $LastChangedRevision$
 				$sort_sql = 'ID '.$dir;
 			break;
 
-			case 'expires':
-				$sort_sql = 'Expires '.$dir;
-			break;
-
 			case 'title':
 				$sort_sql = 'Title '.$dir.', Posted desc';
+			break;
+
+			case 'expires':
+				$sort_sql = 'Expires '.$dir;
 			break;
 
 			case 'section':
@@ -138,6 +138,7 @@ $LastChangedRevision$
 
 		$total = safe_count('textpattern', "$criteria");
 
+		echo '<h1 class="txp-heading">'.gTxt('tab_list').'</h1>';
 		echo '<div id="'.$event.'_control" class="txp-control-panel">';
 
 		if ($total < 1)
@@ -195,10 +196,10 @@ $LastChangedRevision$
 				n.'<thead>'.
 				n.tr(
 					n.column_head('ID', 'id', 'list', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id actions').
+					column_head('title', 'title', 'list', true, $switch_dir, $crit, $search_method, (('title' == $sort) ? "$dir " : '').'title').
 					column_head('posted', 'posted', 'list', true, $switch_dir, $crit, $search_method, (('posted' == $sort) ? "$dir " : '').'date posted created').
 					column_head('article_modified', 'lastmod', 'list', true, $switch_dir, $crit, $search_method, (('lastmod' == $sort) ? "$dir " : '').'articles_detail date modified').
 					column_head('expires', 'expires', 'list', true, $switch_dir, $crit, $search_method, (('expires' == $sort) ? "$dir " : '').'articles_detail date expires').
-					column_head('title', 'title', 'list', true, $switch_dir, $crit, $search_method, (('title' == $sort) ? "$dir " : '').'title').
 					column_head('section', 'section', 'list', true, $switch_dir, $crit, $search_method, (('section' == $sort) ? "$dir " : '').'section').
 					column_head('category1', 'category1', 'list', true, $switch_dir, $crit, $search_method, (('category1' == $sort) ? "$dir " : '').'articles_detail category category1').
 					column_head('category2', 'category2', 'list', true, $switch_dir, $crit, $search_method, (('category2' == $sort) ? "$dir " : '').'articles_detail category category2').
@@ -218,7 +219,7 @@ $LastChangedRevision$
 				).
 
 				tda(
-					select_buttons().
+					select_buttons().n.
 					list_multiedit_form($page, $sort, $dir, $crit, $search_method)
 				,' class="multi-edit" colspan="'.($show_authors ? '10' : '9').'"')
 			).n.'</tfoot>';
@@ -245,13 +246,13 @@ $LastChangedRevision$
 
 				// Valid section and categories?
 				$validator->setConstraints(array(new SectionConstraint($Section)));
-				$vs = $validator->validate() ? '' : ' not-ok';
+				$vs = $validator->validate() ? '' : ' error';
 
 				$validator->setConstraints(array(new CategoryConstraint($Category1, array('type' => 'article'))));
-				$vc[1] = $validator->validate() ? '' : ' not-ok';
+				$vc[1] = $validator->validate() ? '' : ' error';
 
 				$validator->setConstraints(array(new CategoryConstraint($Category2, array('type' => 'article'))));
-				$vc[2] = $validator->validate() ? '' : ' not-ok';
+				$vc[2] = $validator->validate() ? '' : ' error';
 
 				$Category1 = ($Category1) ? '<span title="'.htmlspecialchars(fetch_category_title($Category1)).'">'.$Category1.'</span>' : '';
 				$Category2 = ($Category2) ? '<span title="'.htmlspecialchars(fetch_category_title($Category2)).'">'.$Category2.'</span>' : '';
@@ -265,19 +266,13 @@ $LastChangedRevision$
 					$view_url = permlinkurl($a);
 				}
 
-				$manage = n.'<ul class="articles_detail actions">'.
-						n.t.'<li class="action-edit">'.eLink('article', 'edit', 'ID', $ID, gTxt('edit')).'</li>'.
-						n.t.'<li class="action-view"><a href="'.$view_url.'" class="article-view">'.gTxt('view').'</a></li>'.
-						n.'</ul>';
-
 				$Status = !empty($Status) ? $statuses[$Status] : '';
 
-				$comments = gTxt('none');
+				$comments = '(0)';
 
 				if (isset($total_comments[$ID]) and $total_comments[$ID] > 0)
 				{
-					$comments = href(gTxt('manage'), 'index.php?event=discuss'.a.'step=list'.a.'search_method=parent'.a.'crit='.$ID).
-						' ('.$total_comments[$ID].')';
+					$comments = href('('.$total_comments[$ID].')', 'index.php?event=discuss'.a.'step=list'.a.'search_method=parent'.a.'crit='.$ID, ' title="'.gTxt('manage').'"');
 				}
 
 				$comment_status = ($Annotate) ? gTxt('on') : gTxt('off');
@@ -293,14 +288,13 @@ $LastChangedRevision$
 					}
 				}
 
-				$comments = n.'<ul>'.
-					n.t.'<li class="comments-status">'.$comment_status.'</li>'.
-					n.t.'<li class="comments-manage">'.$comments.'</li>'.
-					n.'</ul>';
+				$comments = n.'<span class="comments-status">'.$comment_status.'</span> <span class="comments-manage">'.$comments.'</span>';
 
 				echo n.n.tr(
 
-					n.td(eLink('article', 'edit', 'ID', $ID, $ID).$manage, '', 'id').
+					n.td(eLink('article', 'edit', 'ID', $ID, $ID), '', 'id').
+
+					td($Title, '', 'title').
 
 					td(
 						gTime($posted), '', ($posted < time() ? '' : 'unpublished ').'date posted created'
@@ -314,22 +308,20 @@ $LastChangedRevision$
 						($expires ? gTime($expires) : ''), '' ,'articles_detail date expires'
 					).
 
-					td($Title, '', 'title').
-
 					td(
 						'<span title="'.htmlspecialchars(fetch_section_title($Section)).'">'.$Section.'</span>'
-					, 75, 'section'.$vs).
+					, '', 'section'.$vs).
 
-					td($Category1, 100, "articles_detail category category1".$vc[1]).
-					td($Category2, 100, "articles_detail category category2".$vc[2]).
-					td(($a['Status'] < 4 ? $Status : '<a href="'.permlinkurl($a).'">'.$Status.'</a>'), 50, 'status').
+					td($Category1, '', "articles_detail category category1".$vc[1]).
+					td($Category2, '', "articles_detail category category2".$vc[2]).
+					td('<a href="'.$view_url.'" title="'.gTxt('view').'">'.$Status.'</a>', '', 'status').
 
 					($show_authors ? td(
 						'<span title="'.htmlspecialchars(get_author_name($AuthorID)).'">'.htmlspecialchars($AuthorID).'</span>'
 						, '', 'author'
 					) : '').
 
-					td($comments, 50, "articles_detail comments").
+					td($comments, '', "articles_detail comments").
 
 					td((
 						(  ($a['Status'] >= 4 and has_privs('article.edit.published'))

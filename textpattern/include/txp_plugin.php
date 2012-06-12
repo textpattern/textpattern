@@ -20,7 +20,7 @@ $LastChangedRevision$
 		require_privs('plugin');
 
 		$available_steps = array(
-			'plugin_edit'	=> false,
+			'plugin_edit'	=> true,
 			'plugin_help'	=> false,
 			'plugin_list'	=> false,
 			'plugin_install'	=> true,
@@ -42,15 +42,12 @@ $LastChangedRevision$
 	{
 		global $event;
 
-		pagetop(gTxt('edit_plugins'), $message);
+		pagetop(gTxt('tab_plugins'), $message);
 
+		echo '<h1 class="txp-heading">'.gTxt('tab_plugins').'</h1>';
 		echo '<div id="'.$event.'_control" class="txp-control-panel">';
-		echo n.n.startTable('', '', 'plugin-install').
-			tr(
-				tda(plugin_form())
-			).
-		endTable().
-		'</div>';
+		echo n.plugin_form().
+			n.'</div>';
 
 		extract(gpsa(array('sort', 'dir')));
 		if ($sort === '') $sort = get_pref('plugin_sort_column', 'name');
@@ -91,7 +88,7 @@ $LastChangedRevision$
 
 			$tfoot = n.'<tfoot>'.tr(
 				tda(
-					select_buttons().
+					select_buttons().n.
 					plugin_multiedit_form('', $sort, $dir, '', '')
 				, ' class="multi-edit" colspan="10"')
 			).n.'</tfoot>';
@@ -114,38 +111,46 @@ $LastChangedRevision$
 											$description);
 
 				$help = !empty($help) ?
-					n.t.'<li class="action-view"><a href="?event=plugin'.a.'step=plugin_help'.a.'name='.urlencode($name).'">'.gTxt('help').'</a></li>' : '';
+					'<a href="?event=plugin'.a.'step=plugin_help'.a.'name='.urlencode($name).'">'.gTxt('help').'</a>' : '';
 
 				$plugin_prefs = ($flags & PLUGIN_HAS_PREFS) && $status ?
-					n.t.'<li class="action-options"><a href="?event=plugin_prefs.'.urlencode($name).'">'.gTxt('plugin_prefs').'</a></li>' : '';
+					'<a href="?event=plugin_prefs.'.urlencode($name).'">'.gTxt('plugin_prefs').'</a>' : '';
+
+				$manage = array();
+
+				if ($help)
+				{
+					$manage[] = $help;
+				}
+				if ($plugin_prefs)
+				{
+					$manage[] = $plugin_prefs;
+				}
+
+				$manage_items = ($manage) ? join(sp.'&#124;'.sp, $manage) : '-';
+				$edit_url = eLink('plugin', 'plugin_edit', 'name', $name, $name);
 
 				echo tr(
 
-					n.td($name, '', 'name').
+					n.td($edit_url, '', 'name').
 
 					td(
 						href($author, $author_uri)
 					, '', 'author').
 
-					td($version, 10, 'version').
-					td(($modified ? gTxt('yes') : ''), '', 'modified').
-					td($description, 260, 'description').
+					td($version, '', 'version').
+					td(($modified ? '<span class="warning">'.gTxt('yes').'</span>' : ''), '', 'modified').
+					td($description, '', 'description').
 
 					td(
 						status_link($status, $name, yes_no($status))
-					,30, 'status').
+					, '', 'status').
 
 					td($load_order, '', 'load-order').
-					td(
-						n.'<ul class="actions">'.
-						$help.
-						n.t.'<li class="action-edit">'.eLink('plugin', 'plugin_edit', 'name', $name, gTxt('edit')).'</li>'.
-						$plugin_prefs.
-						n.'</ul>'
-					,'', 'manage').
+					td($manage_items, '', 'manage').
 					td(
 						fInput('checkbox', 'selected[]', $name)
-					,30, 'multi-edit')
+					,'', 'multi-edit')
 				, ' class="'.(($ctr%2 == 0) ? 'even' : 'odd').'"'
 				);
 
@@ -248,7 +253,7 @@ $LastChangedRevision$
 		$out = '<a href="index.php?';
 		$out .= 'event=plugin&#38;step=switch_status&#38;status='.
 			$status.'&#38;name='.urlencode($name).'&#38;_txp_token='.form_token().'"';
-		$out .= '>'.$linktext.'</a>';
+		$out .= ' title="'.($status==1 ? gTxt('disable') : gTxt('enable')).'">'.$linktext.'</a>';
 		return $out;
 	}
 
@@ -458,17 +463,13 @@ $LastChangedRevision$
 	function plugin_form()
 	{
 		return n.n.form(
-			tag(gTxt('install_plugin'), 'label', ' for="plugin-install"').sp.
-
-			'<textarea id="plugin-install" class="code" name="plugin" cols="62" rows="1"></textarea>'.sp.
-
-			tag(
-				popHelp('install_plugin').sp.
-				fInput('submit', 'install_new', gTxt('upload'))
-		   , 'span').
-
-				eInput('plugin').
-				sInput('plugin_verify')
+			'<p>'.
+			tag(gTxt('install_plugin'), 'label', ' for="plugin-install"').sp.popHelp('install_plugin').n.
+			'<textarea id="plugin-install" class="code" name="plugin" cols="62" rows="1"></textarea>'.n.
+			fInput('submit', 'install_new', gTxt('upload')).
+			eInput('plugin').
+			sInput('plugin_verify').
+			'</p>'
 		, '', '', 'post', 'plugin-data', '', 'plugin_install_form');
 	}
 

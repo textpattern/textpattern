@@ -52,7 +52,7 @@ $LastChangedRevision$
 	{
 		global $txpcfg, $extensions, $img_dir, $file_max_upload_size, $image_list_pageby, $txp_user, $event;
 
-		pagetop(gTxt('images'), $message);
+		pagetop(gTxt('tab_image'), $message);
 
 		extract($txpcfg);
 
@@ -61,6 +61,7 @@ $LastChangedRevision$
 		if ($dir === '') $dir = get_pref('image_sort_dir', 'desc');
 		$dir = ($dir == 'asc') ? 'asc' : 'desc';
 
+		echo '<h1 class="txp-heading">'.gTxt('tab_image').'</h1>';
 		echo '<div id="'.$event.'_control" class="txp-control-panel">';
 
 		if (!is_dir(IMPATH) or !is_writeable(IMPATH))
@@ -184,9 +185,8 @@ $LastChangedRevision$
 				n.'<thead>'.
 				n.tr(
 					column_head('ID', 'id', 'image', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id').
-					hCell('', '', ' class="actions"').
-					column_head('date', 'date', 'image', true, $switch_dir, $crit, $search_method, (('date' == $sort) ? "$dir " : '').'date created').
 					column_head('name', 'name', 'image', true, $switch_dir, $crit, $search_method, (('name' == $sort) ? "$dir " : '').'name').
+					column_head('date', 'date', 'image', true, $switch_dir, $crit, $search_method, (('date' == $sort) ? "$dir " : '').'date created').
 					column_head('thumbnail', 'thumbnail', 'image', true, $switch_dir, $crit, $search_method, (('thumbnail' == $sort) ? "$dir " : '').'thumbnail').
 					hCell(gTxt('tags'), '', ' class="tag-build"').
 					column_head('image_category', 'category', 'image', true, $switch_dir, $crit, $search_method, (('category' == $sort) ? "$dir " : '').'category').
@@ -197,9 +197,9 @@ $LastChangedRevision$
 
 			$tfoot = n.'<tfoot>'.tr(
 				tda(
-					select_buttons().
+					select_buttons().n.
 					image_multiedit_form($page, $sort, $dir, $crit, $search_method)
-				,' class="multi-edit" colspan="'.($show_authors ? '9' : '8').'"')
+				,' class="multi-edit" colspan="'.($show_authors ? '8' : '7').'"')
 			).n.'</tfoot>';
 
 			echo $tfoot;
@@ -231,55 +231,49 @@ $LastChangedRevision$
 
 				if ($ext != '.swf') {
 					$tag_url = '?event=tag'.a.'tag_name=image'.a.'id='.$id.a.'ext='.$ext.a.'w='.$w.a.'h='.$h.a.'alt='.urlencode($alt).a.'caption='.urlencode($caption);
-					$tagbuilder = '<ul>'.
-							'<li><a target="_blank" href="'.$tag_url.a.'type=textile" onclick="popWin(this.href); return false;">Textile</a></li>'.
-							'<li><a target="_blank" href="'.$tag_url.a.'type=textpattern" onclick="popWin(this.href); return false;">Textpattern</a></li>'.
-							'<li><a target="_blank" href="'.$tag_url.a.'type=html" onclick="popWin(this.href); return false;">HTML</a></li>'.
-							'</ul>';
+					$tagbuilder = '<a target="_blank" href="'.$tag_url.a.'type=textile" onclick="popWin(this.href); return false;">Textile</a>'.sp.
+							'&#124;'.sp.'<a target="_blank" href="'.$tag_url.a.'type=textpattern" onclick="popWin(this.href); return false;">Textpattern</a>'.sp.
+							'&#124;'.sp.'<a target="_blank" href="'.$tag_url.a.'type=html" onclick="popWin(this.href); return false;">HTML</a>';
 				} else {
 					$tagbuilder = sp;
 				}
 
 				$validator->setConstraints(array(new CategoryConstraint($category, array('type' => 'image'))));
-				$vc = $validator->validate() ? '' : ' not-ok';
+				$vc = $validator->validate() ? '' : ' error';
 				$category = ($category) ? '<span title="'.htmlspecialchars(fetch_category_title($category, 'image')).'">'.$category.'</span>' : '';
 
 				$can_edit = has_privs('image.edit') || ($author == $txp_user && has_privs('image.edit.own'));
 
 				echo n.n.tr(
 
-					n.td($id, 20, 'id').
+					n.td(
+						($can_edit ? href($id, $edit_url, ' title="'.gTxt('edit').'"') : $id)
+					, '', 'id').
 
 					td(
-						n.'<ul>'.
-						($can_edit ? n.t.'<li class="action-edit">'.href(gTxt('edit'), $edit_url).'</li>' : '').
-						n.t.'<li class="action-view"><a href="'.imagesrcurl($id, $ext).'">'.gTxt('view').'</a></li>'.
-						n.'</ul>'
-					, 35, 'actions').
+						($can_edit ? href($name, $edit_url, ' title="'.gTxt('edit').'"') : $name).n.
+						'[<a href="'.imagesrcurl($id, $ext).'">'.gTxt('view').'</a>]'
+					, '', 'name').
 
 					td(
 						gTime($uDate)
-					, 75, 'date created').
-
-					td(
-						($can_edit ? href($name, $edit_url) : $name)
-					, 75, 'name').
+					, '', 'date created').
 
 					td(
 						pluggable_ui('image_ui', 'thumbnail',
 						($can_edit ? href($thumbnail, $edit_url) : $thumbnail)
 						, $a)
-					, 80, 'thumbnail').
+					, '', 'thumbnail').
 
-					td($tagbuilder, 85, 'tag-build').
-					td($category, 75, 'category'.$vc).
+					td($tagbuilder, '', 'tag-build').
+					td($category, '', 'category'.$vc).
 
 					($show_authors ? td(
 						'<span title="'.htmlspecialchars(get_author_name($author)).'">'.htmlspecialchars($author).'</span>'
-					, 75, 'author') : '').
+					, '', 'author') : '').
 
 					td($can_edit ? fInput('checkbox', 'selected[]', $id) : '&nbsp;'
-					, 10, 'multi-edit')
+					, '', 'multi-edit')
 				, ' class="'.(($ctr%2 == 0) ? 'even' : 'odd').'"'
 				);
 

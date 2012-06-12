@@ -106,13 +106,13 @@ $LastChangedRevision$
 		// Read real DB value instead of potentially 'stale' $prefs array when value has just changed
 		$use_comments = safe_field('val', 'txp_prefs', "name='use_comments'");
 
-		echo pagetop(gTxt('edit_preferences'), $message);
+		echo pagetop(gTxt('tab_preferences'), $message);
 
 		$locale = setlocale(LC_ALL, $locale);
 
+		echo '<h1 class="txp-heading">'.gTxt('tab_preferences').'</h1>';
 		echo n.'<div id="prefs_container" class="txp-container">'.
 			n.n.'<form method="post" class="prefs-form basic" action="index.php">'.
-			n.hed(gTxt('site_prefs'), 2).
 
 			n.'<p class="nav-tertiary">'.
 				sLink('prefs', 'prefs_list', gTxt('site_prefs'), 'navlink-active').
@@ -516,10 +516,9 @@ EOS
 	{
 		echo pagetop(gTxt('advanced_preferences'), $message).
 
+			n.'<h1 class="txp-heading">'.gTxt('tab_preferences').'</h1>'.
 			n.'<div id="prefs_container" class="txp-container">'.
 			n.n.'<form method="post" class="prefs-form advanced" action="index.php">'.
-
-			n.hed(gTxt('advanced_preferences'), 2).
 
 			n.'<p class="nav-tertiary">'.
 				sLink('prefs', 'prefs_list', gTxt('site_prefs'), 'navlink').
@@ -764,7 +763,8 @@ EOS
 												: gTxt('install')
 											),
 											'updating',
-											isset($langdat['db_lastmod'])
+											isset($langdat['db_lastmod']),
+											''
 										)
 									).
 									n.'<span class="date modified">'.safe_strftime('%d %b %Y %X',@$langdat['rpc_lastmod']).'</span>'
@@ -797,13 +797,14 @@ EOS
 											: gTxt('install')
 										),
 										'force',
-										'file'
+										'file',
+										''
 									)
 								).
 								n.'<span class="date '.($file_updated ? 'created' : 'modified').'">'.safe_strftime($prefs['archive_dateformat'],$langdat['file_lastmod']).'</span>'
 
 								: '-'
-							, ' class="langfile pref-value languages_detail"'
+							, ' class="langfile pref-value languages_detail'.((isset($langdat['db_lastmod']) && $rpc_updated) ? ' highlight' : '').'"'
 							);
 			$list .= tr (
 				// Lang-Name & Date
@@ -813,7 +814,7 @@ EOS
 							: ' class="pref-label"' ).n.
 				$rpc_install.n.
 				$lang_file.n.
-				tda( (in_array($langname, $installed_lang) ? dLink('prefs', 'remove_language', 'lang_code', $langname, 1) : '-'), ' class="languages_detail"')
+				tda( (in_array($langname, $installed_lang) ? dLink('prefs', 'remove_language', 'lang_code', $langname, 1) : '-'), ' class="languages_detail'.((isset($langdat['db_lastmod']) && $rpc_updated) ? ' highlight' : '').'"')
 			, ' class="'.(($ctr%2 == 0) ? 'even' : 'odd').'"'
 			).n.n;
 			$ctr++;
@@ -823,14 +824,14 @@ EOS
 		// Output Table + Content
 		pagetop(gTxt('update_languages'),$message);
 
+		//TODO: tab_languages when this panel is moved to its own tab
+		echo '<h1 class="txp-heading">'.gTxt('update_languages').'</h1>';
 		echo n.'<div id="language_container" class="txp-container">';
 
 		if (isset($msg) && $msg)
-			echo tag ($msg,'p',' class="not-ok lang-msg"' );
+			echo tag ($msg,'p',' class="error lang-msg"' );
 
-		echo hed(gTxt('manage_languages'), 2).
-
-			n.'<p class="nav-tertiary">'.
+		echo n.'<p class="nav-tertiary">'.
 				sLink('prefs', 'prefs_list', gTxt('site_prefs'), 'navlink').
 				sLink('prefs', 'advanced_prefs', gTxt('advanced_preferences'), 'navlink').
 				sLink('prefs', 'list_languages', gTxt('manage_languages'), 'navlink-active').
@@ -852,7 +853,7 @@ EOS
 		echo n.'<tfoot>'.tr(
 				tda(
 					toggle_box('languages_detail'),
-					' class="detail-toggle" colspan="2"'
+					' class="detail-toggle" colspan="4"'
 				)
 			).n.'</tfoot>';
 
@@ -900,7 +901,7 @@ EOS
 			{
 				pagetop(gTxt('installing_language'));
 				echo tag( gTxt('rpc_connect_error')."<!--".$client->getErrorCode().' '.$client->getErrorMessage()."-->"
-						,'p',' class="not-ok lang-msg"' );
+						,'p',' class="error lang-msg"' );
 			}
 		}
 		else

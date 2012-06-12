@@ -26,8 +26,6 @@
 }
 
 #nav {
-	display: -moz-inline-box;
-	-moz-box-orient: vertical;
 	display: inline-block;
 	text-align: left;
     margin: 0 auto;

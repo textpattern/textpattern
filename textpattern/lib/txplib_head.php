@@ -54,7 +54,7 @@ $LastChangedRevision$
 	<head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<meta name="robots" content="noindex, nofollow" />
-	<title>Txp &#8250; <?php echo htmlspecialchars($sitename) ?> &#8250; <?php echo escape_title($pagetitle) ?></title>
+	<title><?php echo escape_title($pagetitle) ?> - <?php echo htmlspecialchars($sitename) ?> &#124; Textpattern CMS</title>
 	<script src="jquery.js" type="text/javascript"></script>
 	<?php
 	echo script_js(
@@ -195,12 +195,12 @@ $LastChangedRevision$
 	?>
 	</head>
 	<body id="<?php echo $body_id; ?>" class="<?php echo $area; ?>">
-	<div class="txp-head">
+	<div class="txp-header">
 	<?php callback_event('admin_side', 'pagetop');
 		$theme->set_state($area, $event, $bm, $message);
 		echo pluggable_ui('admin_side', 'header', $theme->header());
 		callback_event('admin_side', 'pagetop_end');
-		echo '</div><!-- /txp-head --><div class="txp-body">';
+		echo '</div><!-- /txp-header --><div class="txp-body">';
 	}
 
 // -------------------------------------------------------------

@@ -49,7 +49,7 @@ $LastChangedRevision$
 	{
 		global $txp_user;
 
-		pagetop(gTxt('site_administration'), $message);
+		pagetop(gTxt('tab_site_admin'), $message);
 
 		if (is_disabled('mail'))
 		{
@@ -58,6 +58,7 @@ $LastChangedRevision$
 
 		$email = fetch('email', 'txp_users', 'name', $txp_user);
 
+		echo '<h1 class="txp-heading">'.gTxt('tab_site_admin').'</h1>';
 		echo n.'<div id="users_container" class="txp-container">';
 
 		if (has_privs('admin.edit'))
@@ -322,7 +323,7 @@ $LastChangedRevision$
 			$tfoot = n.'<tfoot>'.tr(
 				tda(
 					((has_privs('admin.edit'))
-						? select_buttons().
+						? select_buttons().n.
 						author_multiedit_form($page, $sort, $dir, $crit, $search_method)
 						: '')
 				, ' class="multi-edit" colspan="7"')

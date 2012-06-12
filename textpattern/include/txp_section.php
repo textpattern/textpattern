@@ -39,22 +39,22 @@ $LastChangedRevision$
 		// TODO: what is $wlink? Remove it?
 		global $wlink, $event;
 
-		pagetop(gTxt('sections'), $message);
+		pagetop(gTxt('tab_sections'), $message);
 
 		$default = safe_row('page, css, name', 'txp_section', "name = 'default'");
 		$default['old_name'] = 'default';
 
+		echo '<h1 class="txp-heading">'.gTxt('tab_sections').'</h1>';
 		echo n.'<div id="'.$event.'_container" class="txp-container">';
 		echo n.n.startTable('', '', 'txp-columntable').
 
 			n.n.tr(
 				tda(
-					n.n.hed(gTxt('section_head').sp.popHelp('section_category'), 2).
 					n.'<div id="'.$event.'_control" class="txp-control-panel">'.
 
 					n.n.form(
-						fInput('text', 'name', '', '', '', '', 10).
-						fInput('submit', '', gTxt('create')).
+						fInput('text', 'name', '', '', '', '', 10).n.
+						fInput('submit', '', gTxt('create')).sp.popHelp('section_category').
 						eInput('section').
 						sInput('section_create')
 					, '', '', 'post', 'edit-form', '', 'section_create').
@@ -320,42 +320,42 @@ $LastChangedRevision$
 				fLabelCell(gTxt('uses_page').':').
 				td(
 					selectInput('page', $pages, $page).sp.popHelp('section_uses_page')
-				, '')
+				)
 			, ' class="uses-page"').
 
 			n.n.tr(
 				fLabelCell(gTxt('uses_style').':').
 				td(
 					selectInput('css', $styles, $css).sp.popHelp('section_uses_css')
-				, '')
+				)
 			, ' class="uses-style"').
 
 			($default_section ? '' : n.n.tr(
 				fLabelCell(gTxt('selected_by_default')).
 				td(
 					yesnoradio('is_default', $is_default, '', $name).sp.popHelp('section_is_default')
-				, '')
+				)
 			, ' class="option is-default"')).
 
 			($default_section ? '' : n.n.tr(
 				fLabelCell(gTxt('on_front_page')).
 				td(
 					yesnoradio('on_frontpage', $on_frontpage, '', $name).sp.popHelp('section_on_frontpage')
-				, '')
+				)
 			, ' class="option on-frontpage"')).
 
 			($default_section ? '' : n.n.tr(
 				fLabelCell(gTxt('syndicate')) .
 				td(
 					yesnoradio('in_rss', $in_rss, '', $name).sp.popHelp('section_syndicate')
-				, '')
+				)
 			, ' class="option in-rss"')).
 
 			($default_section ? '' : n.n.tr(
 				fLabelCell(gTxt('include_in_search')).
 				td(
 					yesnoradio('searchable', $searchable, '', $name).sp.popHelp('section_searchable')
-				, '')
+				)
 			, ' class="option is-searchable"')).
 
 			pluggable_ui('section_ui', 'extend_detail_form', '', $thesection).

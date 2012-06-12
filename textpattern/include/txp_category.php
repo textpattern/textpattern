@@ -45,7 +45,8 @@ if ($event == 'category') {
 	function cat_category_list($message="")
 	{
 		pagetop(gTxt('categories'),$message);
-		$out = array('<div id="category_container" class="txp-container">',
+		$out = array('<h1 class="txp-heading">'.gTxt('tab_organise').'</h1>',
+		'<div id="category_container" class="txp-container">',
 		'<table class="category-list">',
 		'<tr>',
 			tdtl('<div id="categories_article">'.cat_article_list().'</div>',' class="categories article"'),
@@ -232,7 +233,9 @@ if ($event == 'category') {
 
 		$parent = ps('parent_cat');
 
-		$out = n.n.hed(gTxt($event.'_head').sp.popHelp($event.'_category'), 2).
+		$heading = 'tab_' . ($event == 'article' ? 'list' : $event);
+
+		$out = n.n.hed(gTxt($heading).sp.popHelp($event.'_category'), 2).
 			form(
 				fInput('text', 'title', '', '', '', '', 20).
 				(($rs) ? '<div class="parent"><label>' . gTxt('parent') . '</label>' . treeSelectInput('parent_cat', $rs, $parent) . '</div>' : '').
@@ -318,7 +321,7 @@ if ($event == 'category') {
 					break;
 				}
 
-				$count = isset($total_count[$name]) ? '('.href($total_count[$name], $url).')' : '(0)';
+				$count = isset($total_count[$name]) ? href('('.$total_count[$name].')', $url) : '(0)';
 
 				if (empty($title)) {
 					$edit_link = '<em>'.eLink('category', 'cat_'.$event.'_edit', 'id', $id, gTxt('untitled')).'</em>';
@@ -327,7 +330,7 @@ if ($event == 'category') {
 				}
 
 				$items[] = graf(
-					checkbox('selected[]', $id, 0).sp.str_repeat(sp.sp, $level * 2).$edit_link.sp.small($count)
+					checkbox('selected[]', $id, 0).sp.str_repeat(sp.sp, $level * 2).$edit_link.sp.$count
 				, ' class="'.(($ctr%2 == 0) ? 'even' : 'odd').' level-'.$level.'"');
 
 				$ctr++;

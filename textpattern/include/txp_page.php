@@ -74,6 +74,7 @@ $LastChangedRevision$
 		}
 
 		echo
+			'<h1 class="txp-heading">'.gTxt('tab_pages').'</h1>'.
 			'<div id="'.$event.'_container" class="txp-container">'.
 			startTable('', '', 'txp-columntable').
 			tr(
@@ -123,17 +124,17 @@ $LastChangedRevision$
 		}
 
 		$out[] = '<div id="main_content">'.$buttons.
-					'<textarea id="html" class="code" name="html" cols="84" rows="36">'.htmlspecialchars($html).'</textarea>'.br.
-					n.fInput('submit','save',gTxt('save'),'publish').
+					'<textarea id="html" class="code" name="html" cols="84" rows="36">'.htmlspecialchars($html).'</textarea>'.
+					n.'<p>'.fInput('submit','save',gTxt('save'),'publish').
 					n.eInput('page').
 					n.sInput('page_save').
-					n.hInput('name',$name);
+					n.hInput('name',$name).'</p>';
 
 		if (!empty($name)) {
 			$out[] =
-				n.'<span class="copy-as"><label for="copy-page">'.gTxt('copy_page_as').'</label>'.
+				n.'<p class="copy-as"><label for="copy-page">'.gTxt('copy_page_as').'</label>'.
 				n.fInput('text', 'newname', '', '', '', '', '', '', 'copy-page').
-				n.fInput('submit','copy',gTxt('copy')).'</span>';
+				n.fInput('submit','copy',gTxt('copy')).'</p>';
 		}
 		$out[] = '</div>';
 
