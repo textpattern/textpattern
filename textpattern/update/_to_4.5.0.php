@@ -16,6 +16,11 @@ $LastChangedRevision$
 		safe_insert('txp_prefs', "prefs_id = 1, name = 'doctype', val = 'xhtml', type = '0', event = 'publish', html = 'doctypes', position = '190'");
 	}
 
+	// publisher's email address
+	if (!safe_field('name', 'txp_prefs', "name = 'publisher_email'"))
+	{
+		safe_insert('txp_prefs', "prefs_id = 1, name = 'publisher_email', val = '', type = 1, event = 'admin', position = 115");
+	}
 	// goodbye raw ?php support
 	if (safe_field('name', 'txp_prefs', "name = 'allow_raw_php_scripting'"))
 	{
@@ -34,4 +39,5 @@ $LastChangedRevision$
 	if (!$has_idx) {
 		safe_query('alter ignore table `'.PFX.'textpattern` add index url_title_idx(`url_title`)');
 	}
+
 ?>

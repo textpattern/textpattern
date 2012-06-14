@@ -1260,7 +1260,14 @@ function escape_js($js)
 		// Likely sending passwords
 		if (isset($txp_user))
 		{
-			extract(safe_row('RealName, email', 'txp_users', "name = '".doSlash($txp_user)."'"));
+			if (is_valid_email($prefs['publisher_email'])) {
+				// explicit publisher email address preferred
+				$RealName = safe_field('RealName', 'txp_users', "name = '".doSlash($txp_user)."'");
+				$email = $prefs['publisher_email'];
+			} else {
+				// default: current user invites new users using her personal email address
+				extract(safe_row('RealName, email', 'txp_users', "name = '".doSlash($txp_user)."'"));
+			}
 		}
 
 		// Likely sending comments -> "to" equals "from"
