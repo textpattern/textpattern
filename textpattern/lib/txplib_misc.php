@@ -2088,6 +2088,29 @@ function escape_js($js)
 		return $out;
 	}
 
+/**
+ * Build a query qualifier to filter non-matching custom fields from the result set
+ *
+ * @param array $custom 	An array of 'custom_field_name' => field_number tupels
+ * @param array $pairs 		Filter criteria: An array of 'name' => value tupels
+ * @return bool|string 		A SQL qualifier for a querys 'WHERE' part
+ */
+// -------------------------------------------------------------
+	function buildCustomSql($custom,$pairs)
+	{
+		if ($pairs) {
+			$pairs = doSlash($pairs);
+			foreach($pairs as $k => $v) {
+				if(in_array($k,$custom)) {
+					$no = array_keys($custom,$k);
+					# nb - use 'like' here to allow substring matches
+					$out[] = "and custom_".$no[0]." like '$v'";
+				}
+			}
+		}
+		return (!empty($out)) ? ' '.join(' ',$out).' ' : false;
+	}
+
 // -------------------------------------------------------------
 	function txp_status_header($status='200 OK')
 	{
@@ -3081,4 +3104,19 @@ function http_accept_format($format)
 	}
 	return isset($formats[$format]) ? count(array_intersect($formats[$format], $accepts)) > 0 : false;
 }
+
+/**
+ * Translate article status names into numerical status codes
+ *
+ * @param string $name 	Named status {'draft', 'hidden', 'pending', 'live', 'sticky'}
+ * @return int 			Numerical status [1..5]
+ */
+function getStatusNum($name)
+{
+	$labels = array('draft' => 1, 'hidden' => 2, 'pending' => 3, 'live' => 4, 'sticky' => 5);
+	$status = strtolower($name);
+	$num = empty($labels[$status]) ? 4 : $labels[$status];
+	return $num;
+}
+
 ?>

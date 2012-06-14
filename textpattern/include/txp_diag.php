@@ -65,6 +65,7 @@ $LastChangedRevision$
 		'/lib/txplib_head.php',
 		'/lib/txplib_html.php',
 		'/lib/txplib_misc.php',
+		'/lib/txplib_publish.php',
 		'/lib/txplib_theme.php',
 		'/lib/txplib_update.php',
 		'/lib/txplib_validator.php',
