@@ -292,7 +292,7 @@ $LastChangedRevision$
 
 				echo n.n.tr(
 
-					n.td(eLink('article', 'edit', 'ID', $ID, $ID), '', 'id').
+					n.td(eLink('article', 'edit', 'ID', $ID, $ID) .sp. '<span class="articles_detail">[<a href="'.$view_url.'">'.gTxt('view').'</a>]</span>', '', 'id').
 
 					td($Title, '', 'title').
 

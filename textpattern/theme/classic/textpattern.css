@@ -471,14 +471,17 @@ td {
 	vertical-align: middle;
 }
 
+.txp-list tfoot .multi-edit {
+	text-align: right;
+}
+
 .txp-list td.unpublished {
 	color: #ccc;
 }
 
-.txp-list .multi-edit {
-	text-align: right;
+.txp-list td.id {
+	white-space: nowrap;
 }
-
 
 /* Edit panes
 ========================================================================== */

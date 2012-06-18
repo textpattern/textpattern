@@ -329,7 +329,7 @@ $LastChangedRevision$
 					$source.= highlight_string('<?php'.$plugin['code'].'?>', true);
 					$sub = fInput('submit','',gTxt('install'),'publish');
 
-					pagetop(gTxt('edit_plugins'));
+					pagetop(gTxt('verify_plugin'));
 					echo
 					'<div id="'.$event.'_container" class="txp-container txp-view">'.
 					form(

@@ -404,7 +404,7 @@ if ($event == 'category') {
 
 		$row = safe_row("*", "txp_category", "id=$id");
 		if ($row) {
-			pagetop(gTxt('categories'));
+			pagetop(gTxt('edit_category'));
 			extract($row);
 			$out = stackRows(
 				fLabelCell($evname.'_category_name') . fInputCell('name', $name, '', 20),

@@ -76,7 +76,7 @@ $LastChangedRevision$
 	function short_preview($message)
 	{
 		$message = strip_tags($message);
-		$offset = min(150, strlen($message));
+		$offset = min(120, strlen($message));
 
 		if (strpos($message, ' ', $offset) !== false)
 		{

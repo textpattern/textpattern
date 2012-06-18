@@ -264,6 +264,11 @@ function setClassDisplay(className, value)
 			type = (is_ie ? 'inline' : 'table-cell');
 		}
 
+		if (tagname == 'span')
+		{
+			type = 'inline';
+		}
+
 		elements[i].style.display = (value== 1 ? type : 'none');
 	}
 }

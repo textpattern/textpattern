@@ -283,7 +283,7 @@ $LastChangedRevision$
 	function prevnext_link($name,$event,$step,$id,$titling='',$rel='')
 	{
 		return '<a href="?event='.$event.a.'step='.$step.a.'ID='.$id.
-			'" class="navlink" title="'.$titling.'"'.($rel ? ' rel="'.$rel.'"' : '').'>'.$name.'</a> ';
+			'" class="navlink" title="'.$titling.'"'.($rel ? ' rel="'.$rel.'"' : '').'>'.$name.'</a>';
 	}
 
 

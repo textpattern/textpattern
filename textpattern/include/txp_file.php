@@ -205,10 +205,10 @@ $LastChangedRevision$
 					column_head('ID', 'id', 'file', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id').
 					column_head('file_name', 'filename', 'file', true, $switch_dir, $crit, $search_method, (('filename' == $sort) ? "$dir " : '').'name').
 					column_head('title', 'title', 'file', true, $switch_dir, $crit, $search_method, (('title' == $sort) ? "$dir " : '').'title').
-					column_head('description', 'description', 'file', true, $switch_dir, $crit, $search_method, (('description' == $sort) ? "$dir " : '').'description').
+					column_head('description', 'description', 'file', true, $switch_dir, $crit, $search_method, (('description' == $sort) ? "$dir " : '').'files_detail description').
 					column_head('file_category', 'category', 'file', true, $switch_dir, $crit, $search_method, (('category' == $sort) ? "$dir " : '').'category').
 					// column_head('permissions', 'permissions', 'file', true, $switch_dir, $crit, $search_method).
-					hCell(gTxt('tags'), '', ' class="tag-build"').
+					hCell(gTxt('tags'), '', ' class="files_detail tag-build"').
 					hCell(gTxt('status'), '', ' class="status"').
 					hCell(gTxt('condition'), '', ' class="condition"').
 					column_head('downloads', 'downloads', 'file', true, $switch_dir, $crit, $search_method, (('downloads' == $sort) ? "$dir " : '').'downloads').
@@ -219,9 +219,13 @@ $LastChangedRevision$
 
 			$tfoot = n.'<tfoot>'.tr(
 				tda(
+					toggle_box('files_detail'),
+					' class="detail-toggle" colspan="2"'
+				).
+				tda(
 					select_buttons().n.
 					file_multiedit_form($page, $sort, $dir, $crit, $search_method)
-				,' class="multi-edit" colspan="'.($show_authors ? '11' : '10').'"')
+				,' class="multi-edit" colspan="'.($show_authors ? '9' : '8').'"')
 			).n.'</tfoot>';
 
 			echo $tfoot;
@@ -260,7 +264,8 @@ $LastChangedRevision$
 				echo tr(
 
 					n.td(
-						($can_edit ? href($id, $edit_url, ' title="'.gTxt('edit').'"') : $id)
+						($can_edit ? href($id, $edit_url, ' title="'.gTxt('edit').'"') : $id).
+						(($file_exists) ? sp.'<span class="files_detail">['.make_download_link($id, gTxt('download'), $filename).']</span>' : '')
 					, '', 'id').
 
 					td(
@@ -268,7 +273,7 @@ $LastChangedRevision$
 					, '', 'name').
 
 					td(htmlspecialchars($title), '', 'title').
-					td(htmlspecialchars($description), '', 'description').
+					td(htmlspecialchars($description), '', 'files_detail description').
 					td($category, '', 'category'.$vc).
 
 					/*
@@ -281,7 +286,7 @@ $LastChangedRevision$
 						n.'<a target="_blank" href="'.$tag_url.a.'type=textile" onclick="popWin(this.href, 400, 250); return false;">Textile</a>'.sp.
 						'&#124;'.sp.'<a target="_blank" href="'.$tag_url.a.'type=textpattern" onclick="popWin(this.href, 400, 250); return false;">Textpattern</a>'.sp.
 						'&#124;'.sp.'<a target="_blank" href="'.$tag_url.a.'type=html" onclick="popWin(this.href, 400, 250); return false;">HTML</a>'
-					, '', 'tag-build').
+					, '', 'files_detail tag-build').
 
 					td(in_array($status, array_keys($file_statuses)) ? $file_statuses[$status] : '<span class="error">'.gTxt('none').'</span>', '', 'status').
 
@@ -454,7 +459,7 @@ $LastChangedRevision$
 				return;
 			}
 
-			pagetop(gTxt('file'), $message);
+			pagetop(gTxt('edit_file'), $message);
 
 			if ($permissions=='') $permissions='-1';
 			if (!has_privs('file.publish') && $status >= 4) $status = 3;

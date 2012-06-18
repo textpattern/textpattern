@@ -186,9 +186,9 @@ $LastChangedRevision$
 				n.tr(
 					column_head('ID', 'id', 'image', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id').
 					column_head('name', 'name', 'image', true, $switch_dir, $crit, $search_method, (('name' == $sort) ? "$dir " : '').'name').
-					column_head('date', 'date', 'image', true, $switch_dir, $crit, $search_method, (('date' == $sort) ? "$dir " : '').'date created').
+					column_head('date', 'date', 'image', true, $switch_dir, $crit, $search_method, (('date' == $sort) ? "$dir " : '').'images_detail date created').
 					column_head('thumbnail', 'thumbnail', 'image', true, $switch_dir, $crit, $search_method, (('thumbnail' == $sort) ? "$dir " : '').'thumbnail').
-					hCell(gTxt('tags'), '', ' class="tag-build"').
+					hCell(gTxt('tags'), '', ' class="images_detail tag-build"').
 					column_head('image_category', 'category', 'image', true, $switch_dir, $crit, $search_method, (('category' == $sort) ? "$dir " : '').'category').
 					($show_authors ? column_head('author', 'author', 'image', true, $switch_dir, $crit, $search_method, (('author' == $sort) ? "$dir " : '').'author') : '').
 					hCell('', '', ' class="multi-edit"')
@@ -197,9 +197,13 @@ $LastChangedRevision$
 
 			$tfoot = n.'<tfoot>'.tr(
 				tda(
+					toggle_box('images_detail'),
+					' class="detail-toggle" colspan="2"'
+				).
+				tda(
 					select_buttons().n.
 					image_multiedit_form($page, $sort, $dir, $crit, $search_method)
-				,' class="multi-edit" colspan="'.($show_authors ? '8' : '7').'"')
+				,' class="multi-edit" colspan="'.($show_authors ? '6' : '5').'"')
 			).n.'</tfoot>';
 
 			echo $tfoot;
@@ -247,17 +251,17 @@ $LastChangedRevision$
 				echo n.n.tr(
 
 					n.td(
-						($can_edit ? href($id, $edit_url, ' title="'.gTxt('edit').'"') : $id)
+						($can_edit ? href($id, $edit_url, ' title="'.gTxt('edit').'"') : $id).sp.
+						'<span class="images_detail">[<a href="'.imagesrcurl($id, $ext).'">'.gTxt('view').'</a>]</span>'
 					, '', 'id').
 
 					td(
-						($can_edit ? href($name, $edit_url, ' title="'.gTxt('edit').'"') : $name).n.
-						'[<a href="'.imagesrcurl($id, $ext).'">'.gTxt('view').'</a>]'
+						($can_edit ? href($name, $edit_url, ' title="'.gTxt('edit').'"') : $name)
 					, '', 'name').
 
 					td(
 						gTime($uDate)
-					, '', 'date created').
+					, '', 'images_detail date created').
 
 					td(
 						pluggable_ui('image_ui', 'thumbnail',
@@ -265,7 +269,7 @@ $LastChangedRevision$
 						, $a)
 					, '', 'thumbnail').
 
-					td($tagbuilder, '', 'tag-build').
+					td($tagbuilder, '', 'images_detail tag-build').
 					td($category, '', 'category'.$vc).
 
 					($show_authors ? td(
