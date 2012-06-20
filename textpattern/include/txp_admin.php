@@ -556,7 +556,7 @@ $LastChangedRevision$
 						}
 						else
 						{
-							return author_edit(array(gTxt('could_not_mail').' '.htmlspecialchars($name), E_ERROR));
+							return author_edit(array(gTxt('could_not_mail').' '.txpspecialchars($name), E_ERROR));
 						}
 					}
 				}
@@ -566,7 +566,7 @@ $LastChangedRevision$
 
 		if ($changed)
 		{
-			return author_edit(gTxt($msg, array('{name}' => htmlspecialchars(join(', ', $changed)))));
+			return author_edit(gTxt($msg, array('{name}' => txpspecialchars(join(', ', $changed)))));
 		}
 
 		author_edit($msg);

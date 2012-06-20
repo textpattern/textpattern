@@ -399,7 +399,7 @@ $LastChangedRevision$
 			if ($pretext_data) {
 				$pretext_req = trim(@$pretext_data[0]);
 				if ($pretext_req != md5('/'.$s.'/?txpcleantest=1'))
-					$fail['clean_url_data_failed'] = gTxt('clean_url_data_failed').cs.htmlspecialchars($pretext_req);
+					$fail['clean_url_data_failed'] = gTxt('clean_url_data_failed').cs.txpspecialchars($pretext_req);
 			}
 			else
 				$fail['clean_url_test_failed'] = gTxt('clean_url_test_failed');
@@ -541,7 +541,7 @@ $LastChangedRevision$
 		: '',
 
 		(is_readable($path_to_site.'/.htaccess'))
-		?	n.gTxt('htaccess_contents').cs.n.ln.htmlspecialchars(join('',file($path_to_site.'/.htaccess'))).n.ln
+		?	n.gTxt('htaccess_contents').cs.n.ln.txpspecialchars(join('',file($path_to_site.'/.htaccess'))).n.ln
 		:	''
 	);
 
@@ -597,7 +597,7 @@ $LastChangedRevision$
 			$out[] = n.gTxt('apache_modules').cs.join(', ', apache_get_modules()).n;
 
 		if (@is_array($pretext_data) and count($pretext_data) > 1) {
-			$out[] = n.gTxt('pretext_data').cs.htmlspecialchars(join('', array_slice($pretext_data, 1, 20))).n;
+			$out[] = n.gTxt('pretext_data').cs.txpspecialchars(join('', array_slice($pretext_data, 1, 20))).n;
 		}
 
 		$out[] = n;

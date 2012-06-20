@@ -101,7 +101,7 @@ $LastChangedRevision$
 			while ($a = nextRow($rs))
 			{
 				foreach ($a as $key => $value) {
-					$$key = htmlspecialchars($value);
+					$$key = txpspecialchars($value);
 				}
 				// Fix up the description for clean cases
 				$description = preg_replace(array('#&lt;br /&gt;#',
@@ -223,7 +223,7 @@ $LastChangedRevision$
 		$thing = ($code)
 		?	$code
 		:	'';
-		$textarea = '<textarea id="plugin-code" class="code" name="code" rows="28" cols="90">'.htmlspecialchars($thing).'</textarea>';
+		$textarea = '<textarea id="plugin-code" class="code" name="code" rows="28" cols="90">'.txpspecialchars($thing).'</textarea>';
 
 		return
 		form(startTable('', '', 'txp-edit')

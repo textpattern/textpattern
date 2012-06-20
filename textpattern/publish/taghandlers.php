@@ -21,7 +21,7 @@ $LastChangedRevision$
 			'separator' => ': ',
 		), $atts));
 
-		$out = htmlspecialchars($sitename.$separator);
+		$out = txpspecialchars($sitename.$separator);
 
 		if ($parentid) {
 			$parent_id = (int) $parent_id;
@@ -29,15 +29,15 @@ $LastChangedRevision$
 		} elseif ($thisarticle['title']) {
 			$out .= escape_title($thisarticle['title']);
 		} elseif ($q) {
-			$out .= gTxt('search_results').htmlspecialchars($separator.$q);
+			$out .= gTxt('search_results').txpspecialchars($separator.$q);
 		} elseif ($c) {
-			$out .= htmlspecialchars(fetch_category_title($c, $context));
+			$out .= txpspecialchars(fetch_category_title($c, $context));
 		} elseif ($s and $s != 'default') {
-			$out .= htmlspecialchars(fetch_section_title($s));
+			$out .= txpspecialchars(fetch_section_title($s));
 		} elseif ($pg) {
 			$out .= gTxt('page').' '.$pg;
 		} else {
-			$out = htmlspecialchars($sitename);
+			$out = txpspecialchars($sitename);
 		}
 
 		return $out;
@@ -64,13 +64,13 @@ $LastChangedRevision$
 		}
 
 		if (empty($name)) $name = 'default';
-		$url = hu.'css.php?n='.htmlspecialchars($name);
+		$url = hu.'css.php?n='.txpspecialchars($name);
 
 		if ($format == 'link') {
-			return '<link rel="'.htmlspecialchars($rel).
+			return '<link rel="'.txpspecialchars($rel).
 				($doctype != 'html5' ? '" type="text/css"': '"').
-				($media ? ' media="'.htmlspecialchars($media).'"' : '').
-				($title ? ' title="'.htmlspecialchars($title).'"' : '').
+				($media ? ' media="'.txpspecialchars($media).'"' : '').
+				($title ? ' title="'.txpspecialchars($title).'"' : '').
 				' href="'.$url.'" />';
 		}
 
@@ -150,8 +150,8 @@ $LastChangedRevision$
 
 			if ($escape == 'html')
 			{
-				$alt = htmlspecialchars($alt);
-				$caption = htmlspecialchars($caption);
+				$alt = txpspecialchars($alt);
+				$caption = txpspecialchars($caption);
 			}
 
 			if ($width=='' && $w) $width = $w;
@@ -159,9 +159,9 @@ $LastChangedRevision$
 
 			$out = '<img src="'.imagesrcurl($id, $ext).'" alt="'.$alt.'"'.
 				($caption ? ' title="'.$caption.'"' : '').
-				( ($html_id and !$wraptag) ? ' id="'.htmlspecialchars($html_id).'"' : '' ).
-				( ($class and !$wraptag) ? ' class="'.htmlspecialchars($class).'"' : '' ).
-				($style ? ' style="'.htmlspecialchars($style).'"' : '').
+				( ($html_id and !$wraptag) ? ' id="'.txpspecialchars($html_id).'"' : '' ).
+				( ($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '' ).
+				($style ? ' style="'.txpspecialchars($style).'"' : '').
 				($width ? ' width="'.(int)$width.'"' : '').
 				($height ? ' height="'.(int)$height.'"' : '').
 				' />';
@@ -227,8 +227,8 @@ $LastChangedRevision$
 			{
 				if ($escape == 'html')
 				{
-					$alt = htmlspecialchars($alt);
-					$caption = htmlspecialchars($caption);
+					$alt = txpspecialchars($alt);
+					$caption = txpspecialchars($caption);
 				}
 
 				if ($width=='' && $thumb_w) $width = $thumb_w;
@@ -236,16 +236,16 @@ $LastChangedRevision$
 
 				$out = '<img src="'.imagesrcurl($id, $ext, true).'" alt="'.$alt.'"'.
 					($caption ? ' title="'.$caption.'"' : '').
-					( ($html_id and !$wraptag) ? ' id="'.htmlspecialchars($html_id).'"' : '' ).
-					( ($class and !$wraptag) ? ' class="'.htmlspecialchars($class).'"' : '' ).
-					($style ? ' style="'.htmlspecialchars($style).'"' : '').
+					( ($html_id and !$wraptag) ? ' id="'.txpspecialchars($html_id).'"' : '' ).
+					( ($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '' ).
+					($style ? ' style="'.txpspecialchars($style).'"' : '').
 					($width ? ' width="'.(int)$width.'"' : '').
 					($height ? ' height="'.(int)$height.'"' : '').
 					' />';
 
 				if ($link)
 				{
-					$out = href($out, imagesrcurl($id, $ext), (!empty($link_rel) ? " rel='".htmlspecialchars($link_rel)."'" : '')." title='$caption'");
+					$out = href($out, imagesrcurl($id, $ext), (!empty($link_rel) ? " rel='".txpspecialchars($link_rel)."'" : '')." title='$caption'");
 				}
 
 				elseif ($poplink)
@@ -349,7 +349,7 @@ $LastChangedRevision$
 			$title = ($title == gTxt('rss_feed_title')) ? gTxt('atom_feed_title') : $title;
 		}
 
-		$title = htmlspecialchars($title);
+		$title = txpspecialchars($title);
 
 		if ($format == 'link')
 		{
@@ -391,7 +391,7 @@ $LastChangedRevision$
 			$title = ($title == gTxt('rss_feed_title')) ? gTxt('atom_feed_title') : $title;
 		}
 
-		$title = htmlspecialchars($title);
+		$title = txpspecialchars($title);
 
 		if ($format == 'link')
 		{
@@ -555,8 +555,8 @@ $LastChangedRevision$
 		), $atts));
 
 		return tag(
-			htmlspecialchars($thislink['linkname']), 'a',
-			($rel ? ' rel="'.htmlspecialchars($rel).'"' : '').
+			txpspecialchars($thislink['linkname']), 'a',
+			($rel ? ' rel="'.txpspecialchars($rel).'"' : '').
 			' href="'.doSpecial($thislink['url']).'"'
 		);
 	}
@@ -573,12 +573,12 @@ $LastChangedRevision$
 		), $atts));
 
 		$description = ($thislink['description']) ?
-			' title="'.htmlspecialchars($thislink['description']).'"' :
+			' title="'.txpspecialchars($thislink['description']).'"' :
 			'';
 
 		return tag(
-			htmlspecialchars($thislink['linkname']), 'a',
-			($rel ? ' rel="'.htmlspecialchars($rel).'"' : '').
+			txpspecialchars($thislink['linkname']), 'a',
+			($rel ? ' rel="'.txpspecialchars($rel).'"' : '').
 			' href="'.doSpecial($thislink['url']).'"'.$description
 		);
 	}
@@ -595,7 +595,7 @@ $LastChangedRevision$
 		), $atts));
 
 		return ($escape == 'html') ?
-			htmlspecialchars($thislink['linkname']) :
+			txpspecialchars($thislink['linkname']) :
 			$thislink['linkname'];
 	}
 
@@ -628,7 +628,7 @@ $LastChangedRevision$
 		if ($thislink['author'])
 		{
 			$author_name = get_author_name($thislink['author']);
-			$display_name = htmlspecialchars( ($title) ? $author_name : $thislink['author'] );
+			$display_name = txpspecialchars( ($title) ? $author_name : $thislink['author'] );
 
 			$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
 
@@ -658,7 +658,7 @@ $LastChangedRevision$
 		if ($thislink['description'])
 		{
 			$description = ($escape == 'html') ?
-				htmlspecialchars($thislink['description']) :
+				txpspecialchars($thislink['description']) :
 				$thislink['description'];
 
 			return doLabel($label, $labeltag).doTag($description, $wraptag, $class);
@@ -747,8 +747,8 @@ $LastChangedRevision$
 			// obfuscate link text?
 			if (is_valid_email($linktext)) $linktext = eE($linktext);
 
-			return '<a href="'.eE('mailto:'.htmlspecialchars($email)).'"'.
-				($title ? ' title="'.htmlspecialchars($title).'"' : '').">$linktext</a>";
+			return '<a href="'.eE('mailto:'.txpspecialchars($email)).'"'.
+				($title ? ' title="'.txpspecialchars($title).'"' : '').">$linktext</a>";
 		}
 		return '';
 	}
@@ -884,7 +884,7 @@ $LastChangedRevision$
 				if (empty($form) && empty($thing))
 				{
 					$out[] = href(
-						htmlspecialchars($c['name']).' ('.escape_title($c['title']).')',
+						txpspecialchars($c['name']).' ('.escape_title($c['title']).')',
 						permlinkurl($c).'#c'.$c['discussid']
 					);
 				}
@@ -1064,7 +1064,7 @@ $LastChangedRevision$
 					$selected = true;
 				}
 
-				$out[] = '<option value="'.$name.'"'.$sel.'>'.htmlspecialchars($title).'</option>';
+				$out[] = '<option value="'.$name.'"'.$sel.'>'.txpspecialchars($title).'</option>';
 
 				$sel = '';
 			}
@@ -1073,7 +1073,7 @@ $LastChangedRevision$
 			{
 				$section = ($this_section) ? ( $s == 'default' ? '' : $s) : $section;
 
-				$out = n.'<select name="'.htmlspecialchars($type).'" onchange="submit(this.form);">'.
+				$out = n.'<select name="'.txpspecialchars($type).'" onchange="submit(this.form);">'.
 					n.t.'<option value=""'.($selected ? '' : ' selected="selected"').'>&nbsp;</option>'.
 					n.t.join(n.t, $out).
 					n.'</select>';
@@ -1201,8 +1201,8 @@ $LastChangedRevision$
 
 					if (empty($form) && empty($thing))
 					{
-						$out[] = tag(htmlspecialchars($title), 'a',
-							( ($active_class and (0 == strcasecmp($c, $name))) ? ' class="'.htmlspecialchars($active_class).'"' : '' ).
+						$out[] = tag(txpspecialchars($title), 'a',
+							( ($active_class and (0 == strcasecmp($c, $name))) ? ' class="'.txpspecialchars($active_class).'"' : '' ).
 							' href="'.pagelinkurl(array('s' => $section, 'c' => $name, 'context' => $type)).'"'
 						);
 					}
@@ -1295,8 +1295,8 @@ $LastChangedRevision$
 				{
 					$url = pagelinkurl(array('s' => $name));
 
-					$out[] = tag(htmlspecialchars($title), 'a',
-						( ($active_class and (0 == strcasecmp($s, $name))) ? ' class="'.htmlspecialchars($active_class).'"' : '' ).
+					$out[] = tag(txpspecialchars($title), 'a',
+						( ($active_class and (0 == strcasecmp($s, $name))) ? ' class="'.txpspecialchars($active_class).'"' : '' ).
 						' href="'.$url.'"'
 					);
 				}
@@ -1343,11 +1343,11 @@ $LastChangedRevision$
 		}
 
 		$h5 = ($doctype == 'html5');
-		$sub = (!empty($button)) ? '<input type="submit" value="'.htmlspecialchars($button).'" />' : '';
-		$id =  (!empty($html_id)) ? ' id="'.htmlspecialchars($html_id).'"' : '';
+		$sub = (!empty($button)) ? '<input type="submit" value="'.txpspecialchars($button).'" />' : '';
+		$id =  (!empty($html_id)) ? ' id="'.txpspecialchars($html_id).'"' : '';
 		$out = fInput( $h5 ? 'search' : 'text','q',$q,'','','',$size,'','',false, $h5);
-		$out = (!empty($label)) ? htmlspecialchars($label).br.$out.$sub : $out.$sub;
-		$out = ($match === 'exact') ? $out : fInput('hidden','m',htmlspecialchars($match)) . $out;
+		$out = (!empty($label)) ? txpspecialchars($label).br.$out.$sub : $out.$sub;
+		$out = ($match === 'exact') ? $out : fInput('hidden','m',txpspecialchars($match)) . $out;
 		$out = ($wraptag) ? doTag($out,$wraptag, $class) : $out;
 
 		if (!$section) {
@@ -1382,7 +1382,7 @@ $LastChangedRevision$
 			trigger_error(gTxt('deprecated_attribute', array('{name}' => 'escape')), E_USER_NOTICE);
 		}
 		// TODO: Remove deprecated attribute 'escape'
-        return ($escape == 'html' ? htmlspecialchars($q) : $q);
+        return ($escape == 'html' ? txpspecialchars($q) : $q);
 	}
 
 // -------------------------------------------------------------
@@ -1491,14 +1491,14 @@ $LastChangedRevision$
 
 	function site_name()
 	{
-		return htmlspecialchars($GLOBALS['sitename']);
+		return txpspecialchars($GLOBALS['sitename']);
 	}
 
 // -------------------------------------------------------------
 
 	function site_slogan()
 	{
-		return htmlspecialchars($GLOBALS['site_slogan']);
+		return txpspecialchars($GLOBALS['site_slogan']);
 	}
 
 // -------------------------------------------------------------
@@ -1511,7 +1511,7 @@ $LastChangedRevision$
 
 		if ($thing)
 		{
-			$class = ($class) ? ' class="'.htmlspecialchars($class).'"' : '';
+			$class = ($class) ? ' class="'.txpspecialchars($class).'"' : '';
 			return '<a rel="home" href="'.hu.'"'.$class.'>'.parse($thing).'</a>';
 		}
 
@@ -1851,7 +1851,7 @@ $LastChangedRevision$
 		$invite_return = '';
 		if (($annotate or $comments_count) && ($showalways or $is_article_list) ) {
 
-			$comments_invite = htmlspecialchars($comments_invite);
+			$comments_invite = txpspecialchars($comments_invite);
 			$ccount = ($comments_count && $showcount) ?  ' ['.$comments_count.']' : '';
 			if ($textonly)
 				$invite_return = $comments_invite.$ccount;
@@ -1860,7 +1860,7 @@ $LastChangedRevision$
 				if (!$comments_mode) {
 					$invite_return = doTag($comments_invite, 'a', $class, ' href="'.permlinkurl($thisarticle).'#'.gTxt('comment').'" '). $ccount;
 				} else {
-					$invite_return = "<a href=\"".hu."?parentid=$thisid\" onclick=\"window.open(this.href, 'popupwindow', 'width=500,height=500,scrollbars,resizable,status'); return false;\"".(($class) ? ' class="'.htmlspecialchars($class).'"' : '').'>'.$comments_invite.'</a> '.$ccount;
+					$invite_return = "<a href=\"".hu."?parentid=$thisid\" onclick=\"window.open(this.href, 'popupwindow', 'width=500,height=500,scrollbars,resizable,status'); return false;\"".(($class) ? ' class="'.txpspecialchars($class).'"' : '').'>'.$comments_invite.'</a> '.$ccount;
 				}
 			}
 			if ($wraptag) $invite_return = doTag($invite_return, $wraptag, $class);
@@ -2115,7 +2115,7 @@ $LastChangedRevision$
 			'link' => 1,
 		), $atts));
 
-		$name = htmlspecialchars($name);
+		$name = txpspecialchars($name);
 
 		if ($link)
 		{
@@ -2143,7 +2143,7 @@ $LastChangedRevision$
 
 		assert_comment();
 
-		return htmlspecialchars($thiscomment['email']);
+		return txpspecialchars($thiscomment['email']);
 	}
 
 // -------------------------------------------------------------
@@ -2160,7 +2160,7 @@ $LastChangedRevision$
 			{
 				$thiscomment['web'] = 'http://'.$thiscomment['web'];
 			}
-			return htmlspecialchars($thiscomment['web']);
+			return txpspecialchars($thiscomment['web']);
 		}
 		return '';
 	}
@@ -2228,7 +2228,7 @@ $LastChangedRevision$
 		}
 
 		$author_name = get_author_name($theAuthor);
-		$display_name = htmlspecialchars( ($title) ? $author_name : $theAuthor );
+		$display_name = txpspecialchars( ($title) ? $author_name : $theAuthor );
 
 		$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
 
@@ -2250,7 +2250,7 @@ $LastChangedRevision$
 		), $atts));
 
 		$author_email = get_author_email($thisarticle['authorid']);
-		$display_email = ($escape == 'html' ? htmlspecialchars($author_email) : $author_email);
+		$display_email = ($escape == 'html' ? txpspecialchars($author_email) : $author_email);
 		return ($link) ? email(array('email' => $author_email, 'linktext' => $display_email)) : $display_email;
 	}
 
@@ -2361,13 +2361,13 @@ $LastChangedRevision$
 			$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
 			$category = $thisarticle['category1'];
 
-			$label = htmlspecialchars(($title) ? fetch_category_title($category) : $category);
+			$label = txpspecialchars(($title) ? fetch_category_title($category) : $category);
 
 			if ($thing)
 			{
 				$out = '<a'.
 					($permlink_mode != 'messy' ? ' rel="tag"' : '').
-					( ($class and !$wraptag) ? ' class="'.htmlspecialchars($class).'"' : '' ).
+					( ($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '' ).
 					' href="'.pagelinkurl(array('s' => $section, 'c' => $category)).'"'.
 					($title ? ' title="'.$label.'"' : '').
 					'>'.parse($thing).'</a>';
@@ -2411,13 +2411,13 @@ $LastChangedRevision$
 			$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
 			$category = $thisarticle['category2'];
 
-			$label = htmlspecialchars(($title) ? fetch_category_title($category) : $category);
+			$label = txpspecialchars(($title) ? fetch_category_title($category) : $category);
 
 			if ($thing)
 			{
 				$out = '<a'.
 					($permlink_mode != 'messy' ? ' rel="tag"' : '').
-					( ($class and !$wraptag) ? ' class="'.htmlspecialchars($class).'"' : '' ).
+					( ($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '' ).
 					' href="'.pagelinkurl(array('s' => $section, 'c' => $category)).'"'.
 					($title ? ' title="'.$label.'"' : '').
 					'>'.parse($thing).'</a>';
@@ -2476,21 +2476,21 @@ $LastChangedRevision$
 		if ($category)
 		{
 			$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
-			$label = htmlspecialchars( ($title) ? fetch_category_title($category, $type) : $category );
+			$label = txpspecialchars( ($title) ? fetch_category_title($category, $type) : $category );
 
 			$href = pagelinkurl(array('s' => $section, 'c' => $category, 'context' => $type));
 
 			if ($thing)
 			{
 				$out = '<a href="'.$href.'"'.
-					( ($class and !$wraptag) ? ' class="'.htmlspecialchars($class).'"' : '' ).
+					( ($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '' ).
 					($title ? ' title="'.$label.'"' : '').
 					'>'.parse($thing).'</a>';
 			}
 
 			elseif ($link)
 			{
-				$out = href($label, $href, ($class and !$wraptag) ? ' class="'.htmlspecialchars($class).'"' : '');
+				$out = href($label, $href, ($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '');
 			}
 
 			elseif ($url)
@@ -2544,21 +2544,21 @@ $LastChangedRevision$
 
 		if ($sec)
 		{
-			$label = htmlspecialchars( ($title) ? fetch_section_title($sec) : $sec );
+			$label = txpspecialchars( ($title) ? fetch_section_title($sec) : $sec );
 
 			$href = pagelinkurl(array('s' => $sec));
 
 			if ($thing)
 			{
 				$out = '<a href="'.$href.'"'.
-					( ($class and !$wraptag) ? ' class="'.htmlspecialchars($class).'"' : '' ).
+					( ($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '' ).
 					($title ? ' title="'.$label.'"' : '').
 					'>'.parse($thing).'</a>';
 			}
 
 			elseif ($link)
 			{
-				$out = href($label, $href, ($class and !$wraptag) ? ' class="'.htmlspecialchars($class).'"' : '');
+				$out = href($label, $href, ($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '');
 			}
 
 			elseif ($url)
@@ -2581,7 +2581,7 @@ $LastChangedRevision$
 		global $thisarticle;
 		assert_article();
 
-		return htmlspecialchars($thisarticle['keywords']);
+		return txpspecialchars($thisarticle['keywords']);
 	}
 
 // -------------------------------------------------------------
@@ -2656,15 +2656,15 @@ $LastChangedRevision$
 
 						if ($escape == 'html')
 						{
-							$alt = htmlspecialchars($alt);
-							$caption = htmlspecialchars($caption);
+							$alt = txpspecialchars($alt);
+							$caption = txpspecialchars($caption);
 						}
 
 						$out = '<img src="'.imagesrcurl($id, $ext, true).'" alt="'.$alt.'"'.
 							($caption ? ' title="'.$caption.'"' : '').
-							( ($html_id and !$wraptag) ? ' id="'.htmlspecialchars($html_id).'"' : '' ).
-							( ($class and !$wraptag) ? ' class="'.htmlspecialchars($class).'"' : '' ).
-							($style ? ' style="'.htmlspecialchars($style).'"' : '').
+							( ($html_id and !$wraptag) ? ' id="'.txpspecialchars($html_id).'"' : '' ).
+							( ($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '' ).
+							($style ? ' style="'.txpspecialchars($style).'"' : '').
 							($width ? ' width="'.(int)$width.'"' : '').
 							($height ? ' height="'.(int)$height.'"' : '').
 							' />';
@@ -2682,15 +2682,15 @@ $LastChangedRevision$
 
 					if ($escape == 'html')
 					{
-						$alt = htmlspecialchars($alt);
-						$caption = htmlspecialchars($caption);
+						$alt = txpspecialchars($alt);
+						$caption = txpspecialchars($caption);
 					}
 
 					$out = '<img src="'.imagesrcurl($id, $ext).'" alt="'.$alt.'"'.
 						($caption ? ' title="'.$caption.'"' : '').
-						( ($html_id and !$wraptag) ? ' id="'.htmlspecialchars($html_id).'"' : '' ).
-						( ($class and !$wraptag) ? ' class="'.htmlspecialchars($class).'"' : '' ).
-						($style ? ' style="'.htmlspecialchars($style).'"' : '').
+						( ($html_id and !$wraptag) ? ' id="'.txpspecialchars($html_id).'"' : '' ).
+						( ($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '' ).
+						($style ? ' style="'.txpspecialchars($style).'"' : '').
 						($width ? ' width="'.(int)$width.'"' : '').
 						($height ? ' height="'.(int)$height.'"' : '').
 						' />';
@@ -2706,10 +2706,10 @@ $LastChangedRevision$
 
 		else
 		{
-			$out = '<img src="'.htmlspecialchars($image).'" alt=""'.
-				( ($html_id and !$wraptag) ? ' id="'.htmlspecialchars($html_id).'"' : '' ).
-				( ($class and !$wraptag) ? ' class="'.htmlspecialchars($class).'"' : '' ).
-				($style ? ' style="'.htmlspecialchars($style).'"' : '').
+			$out = '<img src="'.txpspecialchars($image).'" alt=""'.
+				( ($html_id and !$wraptag) ? ' id="'.txpspecialchars($html_id).'"' : '' ).
+				( ($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '' ).
+				($style ? ' style="'.txpspecialchars($style).'"' : '').
 				($width ? ' width="'.(int)$width.'"' : '').
 				($height ? ' height="'.(int)$height.'"' : '').
 				' />';
@@ -2842,7 +2842,7 @@ $LastChangedRevision$
 				$dims = ($thumb_h ? " height=\"$thumb_h\"" : '') . ($thumb_w ? " width=\"$thumb_w\"" : '');
 				$url = pagelinkurl(array('c'=>$c, 'context'=>'image', 's'=>$s, 'p'=>$id));
 				$out[] = '<a href="'.$url.'">'.
-					'<img src="'.imagesrcurl($id, $ext, true).'"'.$dims.' alt="'.htmlspecialchars($alt).'" />'.'</a>';
+					'<img src="'.imagesrcurl($id, $ext, true).'"'.$dims.' alt="'.txpspecialchars($alt).'" />'.'</a>';
 			}
 			if (count($out)) {
 				return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
@@ -2861,7 +2861,7 @@ $LastChangedRevision$
 			if ($rs) {
 				extract($rs);
 				return '<img src="'.imagesrcurl($id, $ext).
-					'" style="height:'.$h.'px;width:'.$w.'px" alt="'.htmlspecialchars($alt).'" />';
+					'" style="height:'.$h.'px;width:'.$w.'px" alt="'.txpspecialchars($alt).'" />';
 			}
 		}
 	}
@@ -3027,7 +3027,7 @@ $LastChangedRevision$
 					$url = pagelinkurl(array('c'=>$thisimage['category'], 'context'=>'image', 's'=>$s, 'p'=>$thisimage['id']));
 					$src = image_url(array('thumbnail' => '1'));
 					$thing = '<a href="'.$url.'">'.
-						'<img src="'. $src .'" alt="'.htmlspecialchars($thisimage['alt']).'" />'.'</a>'.n;
+						'<img src="'. $src .'" alt="'.txpspecialchars($thisimage['alt']).'" />'.'</a>'.n;
 				}
 				$out[] = ($thing) ? parse($thing) : parse_form($form);
 			}
@@ -3090,7 +3090,7 @@ $LastChangedRevision$
 					if (isset($thisimage[$item]))
 					{
 						$out[] = ($escape == 'html') ?
-							htmlspecialchars($thisimage[$item]) : $thisimage[$item];
+							txpspecialchars($thisimage[$item]) : $thisimage[$item];
 					}
 				}
 			}
@@ -3169,7 +3169,7 @@ $LastChangedRevision$
 		if ($thisimage['author'])
 		{
 			$author_name = get_author_name($thisimage['author']);
-			$display_name = htmlspecialchars( ($title) ? $author_name : $thisimage['author'] );
+			$display_name = txpspecialchars( ($title) ? $author_name : $thisimage['author'] );
 
 			$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
 
@@ -3281,7 +3281,7 @@ $LastChangedRevision$
 	{
 		global $id_keywords;
 		return ($id_keywords)
-		?	'<meta name="keywords" content="'.htmlspecialchars($id_keywords).'" />'
+		?	'<meta name="keywords" content="'.txpspecialchars($id_keywords).'" />'
 		:	'';
 	}
 
@@ -3297,7 +3297,7 @@ $LastChangedRevision$
 		if ($id_author)
 		{
 			$display_name = ($title) ? get_author_name($id_author) : $id_author;
-			return '<meta name="author" content="'.htmlspecialchars($display_name).'" />';
+			return '<meta name="author" content="'.txpspecialchars($display_name).'" />';
 		}
 		return '';
 	}
@@ -3313,17 +3313,17 @@ $LastChangedRevision$
 
 		if ($id)
 		{
-			$atts .= ' id="'.htmlspecialchars($id).'"';
+			$atts .= ' id="'.txpspecialchars($id).'"';
 		}
 
 		if ($class)
 		{
-			$atts .= ' class="'.htmlspecialchars($class).'"';
+			$atts .= ' class="'.txpspecialchars($class).'"';
 		}
 
 		if ($breakclass)
 		{
-			$breakatts.= ' class="'.htmlspecialchars($breakclass).'"';
+			$breakatts.= ' class="'.txpspecialchars($breakclass).'"';
 		}
 
 		// non-enclosing breaks
@@ -3348,12 +3348,12 @@ $LastChangedRevision$
 	{
 		if ($id)
 		{
-			$atts .= ' id="'.htmlspecialchars($id).'"';
+			$atts .= ' id="'.txpspecialchars($id).'"';
 		}
 
 		if ($class)
 		{
-			$atts .= ' class="'.htmlspecialchars($class).'"';
+			$atts .= ' class="'.txpspecialchars($class).'"';
 		}
 
 		if (!$tag)
@@ -3401,9 +3401,9 @@ $LastChangedRevision$
 			}
 
 			return tag(parse($thing), 'a', ' rel="bookmark" href="'.$url.'"'.
-				($title ? ' title="'.htmlspecialchars($title).'"' : '').
-				($style ? ' style="'.htmlspecialchars($style).'"' : '').
-				($class ? ' class="'.htmlspecialchars($class).'"' : '')
+				($title ? ' title="'.txpspecialchars($title).'"' : '').
+				($style ? ' style="'.txpspecialchars($style).'"' : '').
+				($class ? ' class="'.txpspecialchars($class).'"' : '')
 			);
 		}
 	}
@@ -3580,6 +3580,7 @@ $LastChangedRevision$
 			$linked = $link;
 		}
 
+		$label = txpspecialchars($label);
 		if ($linked) $label = doTag($label,'a',$linkclass,' href="'.hu.'"');
 
 		$content = array();
@@ -3825,7 +3826,7 @@ $LastChangedRevision$
 
 		$was_article_body = $is_article_body;
 		$is_article_body = 1;
-		$out = ($escape == 'html' ? htmlspecialchars($out) : parse($out));
+		$out = ($escape == 'html' ? txpspecialchars($out) : parse($out));
 		$is_article_body = $was_article_body;
 		return $out;
 	}
@@ -3942,7 +3943,7 @@ $LastChangedRevision$
 			'type' => 'request_uri',
 		), $atts));
 
-		return @htmlspecialchars($pretext[$type]);
+		return @txpspecialchars($pretext[$type]);
 	}
 
 // -------------------------------------------------------------
@@ -4433,7 +4434,7 @@ $LastChangedRevision$
 		if ($thisfile['author'])
 		{
 			$author_name = get_author_name($thisfile['author']);
-			$display_name = htmlspecialchars( ($title) ? $author_name : $thisfile['author'] );
+			$display_name = txpspecialchars( ($title) ? $author_name : $thisfile['author'] );
 
 			$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
 
@@ -4470,7 +4471,7 @@ $LastChangedRevision$
 		if ($thisfile['description'])
 		{
 			$description = ($escape == 'html') ?
-				htmlspecialchars($thisfile['description']) : $thisfile['description'];
+				txpspecialchars($thisfile['description']) : $thisfile['description'];
 
 			return ($wraptag) ? doTag($description, $wraptag, $class) : $description;
 		}

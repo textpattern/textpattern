@@ -128,7 +128,7 @@ $LastChangedRevision$
 
 		else
 		{
-			return(gTxt('could_not_update_author').' '.htmlspecialchars($name));
+			return(gTxt('could_not_update_author').' '.txpspecialchars($name));
 		}
 	}
 ?>

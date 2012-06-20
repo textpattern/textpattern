@@ -314,7 +314,7 @@ function processTags($tag, $atts, $thing = NULL)
 	// deprecated, remove in crockery
 	elseif (isset($GLOBALS['pretext'][$tag]))
 	{
-		$out = htmlspecialchars($pretext[$tag]);
+		$out = txpspecialchars($pretext[$tag]);
 
 		trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
 	}

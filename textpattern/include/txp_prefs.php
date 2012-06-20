@@ -357,7 +357,7 @@ EOS
 				' selected="selected"' :
 				'';
 
-			$out .= n.t.'<option value="'.htmlspecialchars($avalue).'"'.$selected.'>'.htmlspecialchars($alabel).'</option>'.n;
+			$out .= n.t.'<option value="'.txpspecialchars($avalue).'"'.$selected.'>'.txpspecialchars($alabel).'</option>'.n;
 		}
 
 		$out .= n.'</select>';

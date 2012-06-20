@@ -331,10 +331,10 @@ $LastChangedRevision$
 					n.td('<a title="'.gTxt('edit').'" href="'.$edit_url.'">'.$discussid.'</a>', '', 'id').
 
 					td(gTime($uPosted), '', 'date posted created').
-					td(htmlspecialchars(soft_wrap($name, 15)), '', 'name').
+					td(txpspecialchars(soft_wrap($name, 15)), '', 'name').
 					td(short_preview($dmessage), '', 'message').
-					td(htmlspecialchars(soft_wrap($email, 15)), '', 'discuss_detail email').
-					td(htmlspecialchars(soft_wrap($web, 15)), '', 'discuss_detail website').
+					td(txpspecialchars(soft_wrap($email, 15)), '', 'discuss_detail email').
+					td(txpspecialchars(soft_wrap($web, 15)), '', 'discuss_detail website').
 					td($ip, '', 'discuss_detail ip').
 					td($view, '', 'status').
 					td($parent, '', 'parent').
@@ -398,7 +398,7 @@ $LastChangedRevision$
 		{
 			extract($rs);
 
-			$message = htmlspecialchars($message);
+			$message = txpspecialchars($message);
 
 			if (fetch('ip', 'txp_discuss_ipban', 'ip', $ip))
 			{
@@ -571,12 +571,12 @@ $LastChangedRevision$
 					, '', 'date banned').
 
 					td(
-						htmlspecialchars($ip).n.
-						'[<a class="action-ban" href="?event=discuss'.a.'step=ipban_unban'.a.'ip='.htmlspecialchars($ip).a.'_txp_token='.form_token().'">'.gTxt('unban').'</a>]'
+						txpspecialchars($ip).n.
+						'[<a class="action-ban" href="?event=discuss'.a.'step=ipban_unban'.a.'ip='.txpspecialchars($ip).a.'_txp_token='.form_token().'">'.gTxt('unban').'</a>]'
 					, '', 'ip').
 
 					td(
-						htmlspecialchars($name_used)
+						txpspecialchars($name_used)
 					, '', 'name').
 
 					td(

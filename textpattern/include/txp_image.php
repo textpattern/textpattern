@@ -219,7 +219,7 @@ $LastChangedRevision$
 				$edit_url = '?event=image'.a.'step=image_edit'.a.'id='.$id.a.'sort='.$sort.
 					a.'dir='.$dir.a.'page='.$page.a.'search_method='.$search_method.a.'crit='.$crit;
 
-				$name = empty($name) ? gTxt('unnamed') : htmlspecialchars($name);
+				$name = empty($name) ? gTxt('unnamed') : txpspecialchars($name);
 
 				if ($thumbnail) {
 					if ($ext != '.swf') {
@@ -244,7 +244,7 @@ $LastChangedRevision$
 
 				$validator->setConstraints(array(new CategoryConstraint($category, array('type' => 'image'))));
 				$vc = $validator->validate() ? '' : ' error';
-				$category = ($category) ? '<span title="'.htmlspecialchars(fetch_category_title($category, 'image')).'">'.$category.'</span>' : '';
+				$category = ($category) ? '<span title="'.txpspecialchars(fetch_category_title($category, 'image')).'">'.$category.'</span>' : '';
 
 				$can_edit = has_privs('image.edit') || ($author == $txp_user && has_privs('image.edit.own'));
 
@@ -273,7 +273,7 @@ $LastChangedRevision$
 					td($category, '', 'category'.$vc).
 
 					($show_authors ? td(
-						'<span title="'.htmlspecialchars(get_author_name($author)).'">'.htmlspecialchars($author).'</span>'
+						'<span title="'.txpspecialchars(get_author_name($author)).'">'.txpspecialchars($author).'</span>'
 					, '', 'author') : '').
 
 					td($can_edit ? fInput('checkbox', 'selected[]', $id) : '&nbsp;'

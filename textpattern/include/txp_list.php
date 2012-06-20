@@ -254,8 +254,8 @@ $LastChangedRevision$
 				$validator->setConstraints(array(new CategoryConstraint($Category2, array('type' => 'article'))));
 				$vc[2] = $validator->validate() ? '' : ' error';
 
-				$Category1 = ($Category1) ? '<span title="'.htmlspecialchars(fetch_category_title($Category1)).'">'.$Category1.'</span>' : '';
-				$Category2 = ($Category2) ? '<span title="'.htmlspecialchars(fetch_category_title($Category2)).'">'.$Category2.'</span>' : '';
+				$Category1 = ($Category1) ? '<span title="'.txpspecialchars(fetch_category_title($Category1)).'">'.$Category1.'</span>' : '';
+				$Category2 = ($Category2) ? '<span title="'.txpspecialchars(fetch_category_title($Category2)).'">'.$Category2.'</span>' : '';
 
 				if ($Status != 4 and $Status != 5)
 				{
@@ -309,7 +309,7 @@ $LastChangedRevision$
 					).
 
 					td(
-						'<span title="'.htmlspecialchars(fetch_section_title($Section)).'">'.$Section.'</span>'
+						'<span title="'.txpspecialchars(fetch_section_title($Section)).'">'.$Section.'</span>'
 					, '', 'section'.$vs).
 
 					td($Category1, '', "articles_detail category category1".$vc[1]).
@@ -317,7 +317,7 @@ $LastChangedRevision$
 					td('<a href="'.$view_url.'" title="'.gTxt('view').'">'.$Status.'</a>', '', 'status').
 
 					($show_authors ? td(
-						'<span title="'.htmlspecialchars(get_author_name($AuthorID)).'">'.htmlspecialchars($AuthorID).'</span>'
+						'<span title="'.txpspecialchars(get_author_name($AuthorID)).'">'.txpspecialchars($AuthorID).'</span>'
 						, '', 'author'
 					) : '').
 

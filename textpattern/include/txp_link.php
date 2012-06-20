@@ -199,16 +199,16 @@ $LastChangedRevision$
 						, '', 'id').
 
 						td(
-							($can_edit ? href(htmlspecialchars($linkname), $edit_url, ' title="'.gTxt('edit').'"') : htmlspecialchars($linkname)).n.
+							($can_edit ? href(txpspecialchars($linkname), $edit_url, ' title="'.gTxt('edit').'"') : txpspecialchars($linkname)).n.
 							'[<a href="'.$url.'">'.gTxt('view').'</a>]'
 						, '', 'name').
 
 						td(
-							htmlspecialchars($description)
+							txpspecialchars($description)
 						, '', 'description').
 
 						td(
-							'<span title="'.htmlspecialchars(fetch_category_title($category, 'link')).'">'.$category.'</span>'
+							'<span title="'.txpspecialchars(fetch_category_title($category, 'link')).'">'.$category.'</span>'
 						, '', 'category'.$vc).
 
 						td(
@@ -216,7 +216,7 @@ $LastChangedRevision$
 						, '', 'date created').
 
 						($show_authors ? td(
-							'<span title="'.htmlspecialchars(get_author_name($author)).'">'.htmlspecialchars($author).'</span>'
+							'<span title="'.txpspecialchars(get_author_name($author)).'">'.txpspecialchars($author).'</span>'
 						, '', 'author') : '').
 
 						td(
@@ -333,7 +333,7 @@ $LastChangedRevision$
 					).
 
 					td(
-						'<textarea id="link-description" name="description" cols="40" rows="7">'.htmlspecialchars($description).'</textarea>'
+						'<textarea id="link-description" name="description" cols="40" rows="7">'.txpspecialchars($description).'</textarea>'
 					)
 				, ' class="description text"').
 

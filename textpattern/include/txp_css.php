@@ -43,7 +43,7 @@ $LastChangedRevision$
 		if ($rs) {
 			while ($a = nextRow($rs)) {
 				extract($a);
-				$edit = ($current != $name) ?	eLink('css', '', 'name', $name, $name) : htmlspecialchars($name);
+				$edit = ($current != $name) ?	eLink('css', '', 'name', $name, $name) : txpspecialchars($name);
 				$delete = ($name != $default) ? dLink('css', 'css_delete', 'name', $name) : '';
 				$trcls = ' class="'.((($ctr==1) ? 'first ' : '').(($ctr%2 == 0) ? 'even' : 'odd')).'"';
 				$out[] = tr(td($edit).td($delete), $trcls);
@@ -90,7 +90,7 @@ $LastChangedRevision$
 			$thecss = gps('css');
 
 		} else {
-			$buttons = '<div class="edit-title">'.gTxt('you_are_editing_css').sp.strong(htmlspecialchars($name)).'</div>';
+			$buttons = '<div class="edit-title">'.gTxt('you_are_editing_css').sp.strong(txpspecialchars($name)).'</div>';
 			$thecss = fetch("css",'txp_css','name',$name);
 		}
 
@@ -119,7 +119,7 @@ $LastChangedRevision$
 				form(
 					'<div id="main_content">'.
 					$buttons.
-					'<textarea id="css" class="code" name="css" cols="78" rows="32">'.htmlspecialchars($thecss).'</textarea>'.
+					'<textarea id="css" class="code" name="css" cols="78" rows="32">'.txpspecialchars($thecss).'</textarea>'.
 					'<p>'.fInput('submit','',gTxt('save'),'publish').
 					eInput('css').sInput('css_save').
 					hInput('name',$name).'</p>'

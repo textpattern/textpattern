@@ -65,10 +65,38 @@ $LastChangedRevision$
 		return doArray($in,'safe_escape');
 	}
 
+	/**
+	 * A shell for htmlspecialchars() with $flags defaulting to ENT_QUOTES
+	 *
+	 * @param string $string 	The string being converted.
+	 * @param int $flags 		A bitmask of one or more flags. The default is ENT_QUOTES
+	 * @param string $encoding 	Defines encoding used in conversion. The default is UTF-8.
+	 * @param bool $double_encode When double_encode is turned off PHP will not encode existing html entities, the default is to convert everything.
+	 * @return string
+	 * @see http://www.php.net/manual/function.htmlspecialchars.php
+	 * @since 4.5.0
+	 */
+	function txpspecialchars($string, $flags = ENT_QUOTES, $encoding = 'UTF-8', $double_encode = true)
+	{
+//		Ignore ENT_HTML5 and ENT_XHTML for now.
+//		ENT_HTML5 and ENT_XHTML are defined in PHP 5.4+ but we consistently encode single quotes as &#039; in any doctype.
+//		global $prefs;
+//		static $h5 = null;
+//		if (defined(ENT_HTML5)) {
+//			if ($h5 === null) {
+//				$h5 = ($prefs['doctype'] == 'html5' && txpinterface == 'public');
+//			}
+//			if ($h5) {
+//				$flags = ($flags | ENT_HTML5) & ~ENT_HTML401;
+//			}
+//		}
+		return htmlspecialchars($string, $flags, $encoding, $double_encode);
+	}
+
 // -------------------------------------------------------------
 	function doSpecial($in)
 	{
-		return doArray($in,'htmlspecialchars');
+		return doArray($in,'txpspecialchars');
 	}
 
 // -------------------------------------------------------------
@@ -112,8 +140,8 @@ function escape_js($js)
 // deprecated in 4.2.0
 	function escape_output($str)
 	{
-		trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'htmlspecialchars')), E_USER_NOTICE);
-		return htmlspecialchars($str);
+		trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'txpspecialchars')), E_USER_NOTICE);
+		return txpspecialchars($str);
 	}
 
 // -------------------------------------------------------------
@@ -148,7 +176,7 @@ function escape_js($js)
 		{
 			foreach ($atts as $key => $value)
 			{
-				$atts[$key] = htmlspecialchars($value);
+				$atts[$key] = txpspecialchars($value);
 			}
 		}
 
@@ -218,7 +246,7 @@ function escape_js($js)
 			}
 			else
 			{
-				echo htmlspecialchars($out), n;
+				echo txpspecialchars($out), n;
 			}
 		}
 
@@ -606,7 +634,7 @@ function escape_js($js)
 		printf ("<pre>".gTxt('plugin_load_error').' <b>%s</b> -> <b>%s: %s on line %s</b></pre>',
 				$txp_current_plugin, $error[$errno], $errstr, $errline);
 		if ($production_status == 'debug')
-			print "\n<pre style=\"padding-left: 2em;\" class=\"backtrace\"><code>".htmlspecialchars(join("\n", get_caller(10)))."</code></pre>";
+			print "\n<pre style=\"padding-left: 2em;\" class=\"backtrace\"><code>".txpspecialchars(join("\n", get_caller(10)))."</code></pre>";
 	}
 
 // -------------------------------------------------------------
@@ -623,13 +651,13 @@ function escape_js($js)
 		global $txp_current_tag, $txp_current_form, $pretext;
 		$page = (empty($pretext['page']) ? gTxt('none') : $pretext['page']);
 		if (!isset($txp_current_form)) $txp_current_form = gTxt('none');
-		$locus = gTxt('while_parsing_page_form', array('{page}' => htmlspecialchars($page), '{form}' => htmlspecialchars($txp_current_form)));
+		$locus = gTxt('while_parsing_page_form', array('{page}' => txpspecialchars($page), '{form}' => txpspecialchars($txp_current_form)));
 
 		printf ("<pre>".gTxt('tag_error').' <b>%s</b> -> <b> %s: %s %s</b></pre>',
-				htmlspecialchars($txp_current_tag), $error[$errno], $errstr, $locus );
+				txpspecialchars($txp_current_tag), $error[$errno], $errstr, $locus );
 		if ($production_status == 'debug')
 			{
-			print "\n<pre style=\"padding-left: 2em;\" class=\"backtrace\"><code>".htmlspecialchars(join("\n", get_caller(10)))."</code></pre>";
+			print "\n<pre style=\"padding-left: 2em;\" class=\"backtrace\"><code>".txpspecialchars(join("\n", get_caller(10)))."</code></pre>";
 
 			$trace_msg = gTxt('tag_error').' '.$txp_current_tag.' -> '.$error[$errno].': '.$errstr.' '.$locus;
 			trace_add( $trace_msg );
@@ -678,7 +706,7 @@ function escape_js($js)
 			if (!empty($backtrace)) {
 				echo "<pre>$msg.</pre>".
 					n.'<pre style="padding-left: 2em;" class="backtrace"><code>'.
-					htmlspecialchars($backtrace).'</code></pre>';
+					txpspecialchars($backtrace).'</code></pre>';
 			} elseif (!empty($msg)) {
 				echo is_object($theme) ? $theme->announce(array($out, E_ERROR), true) : "<pre>$out</pre>";
 			}
@@ -717,7 +745,7 @@ function escape_js($js)
 		printf ("<pre>".gTxt('general_error').' <b>%s: %s on line %s</b></pre>',
 			$error[$errno], $errstr, $errline);
 		if ($production_status == 'debug')
-			print "\n<pre style=\"padding-left: 2em;\" class=\"backtrace\"><code>".htmlspecialchars(join("\n", get_caller(10)))."</code></pre>";
+			print "\n<pre style=\"padding-left: 2em;\" class=\"backtrace\"><code>".txpspecialchars(join("\n", get_caller(10)))."</code></pre>";
 	}
 
 // -------------------------------------------------------------
@@ -2173,7 +2201,7 @@ function escape_js($js)
 		if ($url && in_array($code, array(301, 302, 307))) {
 			ob_end_clean();
 			header("Location: $url", true, $code);
-			die('<html><head><meta http-equiv="refresh" content="0;URL='.htmlspecialchars($url).'"></head><body></body></html>');
+			die('<html><head><meta http-equiv="refresh" content="0;URL='.txpspecialchars($url).'"></head><body></body></html>');
 		}
 
 		if (@$GLOBALS['connected'] && @txpinterface == 'public') {
@@ -2561,7 +2589,7 @@ eod;
 		if (is_numeric($myvar) and $myvar == intval($myvar)) {
 			return (int) $myvar;
 		}
-		trigger_error("'".htmlspecialchars((string)$myvar)."' is not an integer", E_USER_ERROR);
+		trigger_error("'".txpspecialchars((string)$myvar)."' is not an integer", E_USER_ERROR);
 		return false;
 	}
 
@@ -2572,7 +2600,7 @@ eod;
 		if (is_string($myvar)) {
 			return $myvar;
 		}
-		trigger_error("'".htmlspecialchars((string)$myvar)."' is not a string", E_USER_ERROR);
+		trigger_error("'".txpspecialchars((string)$myvar)."' is not a string", E_USER_ERROR);
 		return false;
 	}
 
@@ -2583,7 +2611,7 @@ eod;
 		if (is_array($myvar)) {
 			return $myvar;
 		}
-		trigger_error("'".htmlspecialchars((string)$myvar)."' is not an array", E_USER_ERROR);
+		trigger_error("'".txpspecialchars((string)$myvar)."' is not an array", E_USER_ERROR);
 		return false;
 	}
 
@@ -2871,7 +2899,7 @@ function modal_halt($thing)
 					$where = gTxt(str_replace('_', ' ', $city))
 								.(!empty($subcity) ? '/'.gTxt(str_replace('_', ' ', $subcity)) : '').t
 								/*."($abbr)"*/;
-					$out[] = n.t.t.'<option value="'.htmlspecialchars($timezone_id).'"'.($value == $timezone_id ? ' selected="selected"' : '').'>'.$where.'</option>';
+					$out[] = n.t.t.'<option value="'.txpspecialchars($timezone_id).'"'.($value == $timezone_id ? ' selected="selected"' : '').'>'.$where.'</option>';
 				}
 				$out[] = n.t.'</optgroup>';
 				return n.'<select'.( $select_id ? ' id="'.$select_id.'"' : '' ).' name="'.$name.'"'.

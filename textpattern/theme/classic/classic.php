@@ -63,7 +63,7 @@ class classic_theme extends theme
 
 		if ($txp_user)
 		{
-			$out[] = graf(gTxt('logged_in_as').' '.span(htmlspecialchars($txp_user)).br.
+			$out[] = graf(gTxt('logged_in_as').' '.span(txpspecialchars($txp_user)).br.
 				'<a href="index.php?logout=1">'.gTxt('logout').'</a>', ' id="moniker"');
 		}
 

@@ -44,28 +44,28 @@ $LastChangedRevision$
 
 		else
 		{
-			$body_id = 'page-'.htmlspecialchars($event);
+			$body_id = 'page-'.txpspecialchars($event);
 		}
 
 		header('X-Frame-Options: '.X_FRAME_OPTIONS);
 
 	?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-	<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo LANG; ?>" lang="<?php echo LANG; ?>" dir="<?php echo htmlspecialchars(gTxt('lang_dir')); ?>">
+	<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo LANG; ?>" lang="<?php echo LANG; ?>" dir="<?php echo txpspecialchars(gTxt('lang_dir')); ?>">
 	<head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<meta name="robots" content="noindex, nofollow" />
-	<title><?php echo escape_title($pagetitle) ?> - <?php echo htmlspecialchars($sitename) ?> &#124; Textpattern CMS</title>
+	<title><?php echo escape_title($pagetitle) ?> - <?php echo txpspecialchars($sitename) ?> &#124; Textpattern CMS</title>
 	<script src="jquery.js" type="text/javascript"></script>
 	<?php
 	echo script_js(
 		'var textpattern = {
-		event: "'.htmlspecialchars($event).'",
-		step: "'.htmlspecialchars($step).'",
-		_txp_token: "'.htmlspecialchars(form_token()).'",
-		ajax_timeout: '.htmlspecialchars(AJAX_TIMEOUT).',
+		event: "'.txpspecialchars($event).'",
+		step: "'.txpspecialchars($step).'",
+		_txp_token: "'.txpspecialchars(form_token()).'",
+		ajax_timeout: '.txpspecialchars(AJAX_TIMEOUT).',
 		ajaxally_challenged: '.(AJAXALLY_CHALLENGED ? 'true' : 'false').',
 		textarray: {},
-		do_spellcheck: "'.htmlspecialchars(
+		do_spellcheck: "'.txpspecialchars(
 							get_pref('do_spellcheck', '#page-article #body, #page-article #title,'.
 													'#page-image #alt-text, #page-image #caption,'.
 													'#page-file #description,'.

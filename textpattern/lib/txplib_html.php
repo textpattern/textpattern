@@ -1064,7 +1064,7 @@ EOF;
 			' <label for="'.$name.'">'.gTxt($classname).'</label> ';
 
 		if ($form) {
-			$args = empty($_SERVER['QUERY_STRING']) ? '' : '?'.htmlspecialchars($_SERVER['QUERY_STRING']);
+			$args = empty($_SERVER['QUERY_STRING']) ? '' : '?'.txpspecialchars($_SERVER['QUERY_STRING']);
 			return '<form class="'.$name.'" method="post" action="index.php'.$args.'">'.$i.eInput(gps('event')).n.'<noscript><div><input type="submit" value="'.gTxt('go').'" /></div></noscript>'.tInput().'</form>';
 		} else {
 			return n.$i;

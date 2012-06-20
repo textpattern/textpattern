@@ -228,7 +228,7 @@ if (!empty($event) and $event == 'article') {
 
 		if ($oldArticle['sLastMod'] != $incoming['sLastMod'])
 		{
-			article_edit(array(gTxt('concurrent_edit_by', array('{author}' => htmlspecialchars($oldArticle['LastModID']))), E_ERROR), TRUE , !AJAXALLY_CHALLENGED );
+			article_edit(array(gTxt('concurrent_edit_by', array('{author}' => txpspecialchars($oldArticle['LastModID']))), E_ERROR), TRUE , !AJAXALLY_CHALLENGED );
 			return;
 		}
 
@@ -668,7 +668,7 @@ if (!empty($event) and $event == 'article') {
 
 		elseif ($view == 'html')
 		{
-			echo tag(str_replace(array(n,t), array(br,sp.sp.sp.sp), htmlspecialchars($Body_html)), 'code', ' class="body"');
+			echo tag(str_replace(array(n,t), array(br,sp.sp.sp.sp), txpspecialchars($Body_html)), 'code', ' class="body"');
 		}
 
 		else
@@ -694,7 +694,7 @@ if (!empty($event) and $event == 'article') {
 				?	($view=='preview')
 					?	graf($textile->textileThis($Excerpt))
 					:	tag(str_replace(array(n,t),
-							array(br,sp.sp.sp.sp),htmlspecialchars(
+							array(br,sp.sp.sp.sp),txpspecialchars(
 								$textile->TextileThis($Excerpt))),'code', ' class="excerpt"')
 				:	graf($Excerpt);
 				echo '</div>';
@@ -1166,9 +1166,9 @@ EOS
 	function article_partial_author($rs)
 	{
 		extract($rs);
-		$out = '<p class="author"><small>'.gTxt('posted_by').': '.htmlspecialchars($AuthorID).' &#183; '.safe_strftime('%d %b %Y &#183; %X',$sPosted);
+		$out = '<p class="author"><small>'.gTxt('posted_by').': '.txpspecialchars($AuthorID).' &#183; '.safe_strftime('%d %b %Y &#183; %X',$sPosted);
 		if($sPosted != $sLastMod) {
-			$out .= br.gTxt('modified_by').': '.htmlspecialchars($LastModID).' &#183; '.safe_strftime('%d %b %Y &#183; %X',$sLastMod);
+			$out .= br.gTxt('modified_by').': '.txpspecialchars($LastModID).' &#183; '.safe_strftime('%d %b %Y &#183; %X',$sLastMod);
 		}
 		$out .= '</small></p>';
 		return pluggable_ui('article_ui', 'author', $out, $rs);
@@ -1214,7 +1214,7 @@ EOS
 	{
 		return pluggable_ui('article_ui', 'keywords',
 			n.graf('<label for="keywords">'.gTxt('keywords').'</label>'.sp.popHelp('keywords').br.
-				n.'<textarea id="keywords" name="Keywords" cols="18" rows="5">'.htmlspecialchars(article_partial_keywords_value($rs)).'</textarea>', ' class="keywords"'),
+				n.'<textarea id="keywords" name="Keywords" cols="18" rows="5">'.txpspecialchars(article_partial_keywords_value($rs)).'</textarea>', ' class="keywords"'),
 			$rs);
 	}
 
@@ -1286,7 +1286,7 @@ EOS
 	{
 		return pluggable_ui('article_ui', 'body',
 			n.graf('<label for="body">'.gTxt('body').'</label>'.sp.popHelp('body').br.
-				'<textarea id="body" name="Body" cols="55" rows="31" tabindex="2">'.htmlspecialchars($rs['Body']).'</textarea>', ' class="body"'),
+				'<textarea id="body" name="Body" cols="55" rows="31" tabindex="2">'.txpspecialchars($rs['Body']).'</textarea>', ' class="body"'),
 			$rs);
 	}
 
@@ -1295,7 +1295,7 @@ EOS
 	{
 		return pluggable_ui('article_ui', 'excerpt',
 			n.graf('<label for="excerpt">'.gTxt('excerpt').'</label>'.sp.popHelp('excerpt').br.
-				'<textarea id="excerpt" name="Excerpt" cols="55" rows="5" tabindex="3">'.htmlspecialchars($rs['Excerpt']).'</textarea>', ' class="excerpt"'),
+				'<textarea id="excerpt" name="Excerpt" cols="55" rows="5" tabindex="3">'.txpspecialchars($rs['Excerpt']).'</textarea>', ' class="excerpt"'),
 			$rs);
 	}
 

@@ -199,7 +199,7 @@ $LastChangedRevision$
 				{
 					$log_refer = 'http://'.$log_refer;
 
-					$log_refer = '<a href="'.htmlspecialchars($log_refer).'" target="_blank">'.htmlspecialchars(soft_wrap($log_refer, 30)).'</a>';
+					$log_refer = '<a href="'.txpspecialchars($log_refer).'" target="_blank">'.txpspecialchars(soft_wrap($log_refer, 30)).'</a>';
 				}
 
 				if ($log_page)
@@ -207,7 +207,7 @@ $LastChangedRevision$
 					$log_anchor = preg_replace('/\/$/','',$log_page);
 					$log_anchor = soft_wrap(substr($log_anchor,1), 30);
 
-					$log_page = '<a href="'.htmlspecialchars($log_page).'" target="_blank">'.htmlspecialchars($log_anchor).'</a>';
+					$log_page = '<a href="'.txpspecialchars($log_page).'" target="_blank">'.txpspecialchars($log_anchor).'</a>';
 
 					if ($log_method == 'POST')
 					{
@@ -221,13 +221,13 @@ $LastChangedRevision$
 						gTime($log_uTime)
 					, '', 'date time').
 
-					td(htmlspecialchars($log_ip), '', 'log_detail ip').
+					td(txpspecialchars($log_ip), '', 'log_detail ip').
 
-					td(htmlspecialchars(soft_wrap($log_host, 30)), '', 'host').
+					td(txpspecialchars(soft_wrap($log_host, 30)), '', 'host').
 
 					td($log_page, '', 'page').
 					td($log_refer, '', 'refer').
-					td(htmlspecialchars($log_method), '', 'log_detail method').
+					td(txpspecialchars($log_method), '', 'log_detail method').
 					td($log_status, '', 'log_detail status').
 
 					td(

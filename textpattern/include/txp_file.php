@@ -248,7 +248,7 @@ $LastChangedRevision$
 
 				$validator->setConstraints(array(new CategoryConstraint($category, array('type' => 'file'))));
 				$vc = $validator->validate() ? '' : ' error';
-				$category = ($category) ? '<span title="'.htmlspecialchars(fetch_category_title($category, 'file')).'">'.$category.'</span>' : '';
+				$category = ($category) ? '<span title="'.txpspecialchars(fetch_category_title($category, 'file')).'">'.$category.'</span>' : '';
 
 				$tag_url = '?event=tag'.a.'tag_name=file_download_link'.a.'id='.$id.a.'description='.urlencode($description).
 					a.'filename='.urlencode($filename);
@@ -269,11 +269,11 @@ $LastChangedRevision$
 					, '', 'id').
 
 					td(
-						($can_edit ? href(htmlspecialchars($filename), $edit_url, ' title="'.gTxt('edit').'"') : htmlspecialchars($filename))
+						($can_edit ? href(txpspecialchars($filename), $edit_url, ' title="'.gTxt('edit').'"') : txpspecialchars($filename))
 					, '', 'name').
 
-					td(htmlspecialchars($title), '', 'title').
-					td(htmlspecialchars($description), '', 'files_detail description').
+					td(txpspecialchars($title), '', 'title').
+					td(txpspecialchars($description), '', 'files_detail description').
 					td($category, '', 'category'.$vc).
 
 					/*
@@ -295,7 +295,7 @@ $LastChangedRevision$
 					td($download_link, '', 'downloads').
 
 					($show_authors ? td(
-						'<span title="'.htmlspecialchars(get_author_name($author)).'">'.htmlspecialchars($author).'</span>'
+						'<span title="'.txpspecialchars(get_author_name($author)).'">'.txpspecialchars($author).'</span>'
 					, '', 'author') : '').
 
 					td($can_edit ? fInput('checkbox', 'selected[]', $id) : '&nbsp;'
@@ -475,7 +475,7 @@ $LastChangedRevision$
 			$condition .= ($file_exists)?gTxt('file_status_ok'):gTxt('file_status_missing');
 			$condition .= '</span>';
 
-			$downloadlink = ($file_exists)?make_download_link($id, htmlspecialchars($filename),$filename):htmlspecialchars($filename);
+			$downloadlink = ($file_exists)?make_download_link($id, txpspecialchars($filename),$filename):txpspecialchars($filename);
 
 			$created =
 					n.graf(checkbox('publish_now', '1', $publish_now, '', 'publish_now').'<label for="publish_now">'.gTxt('set_to_now').'</label>', ' class="publish-now"').
@@ -689,7 +689,7 @@ $LastChangedRevision$
 					file_set_perm($newpath);
 					update_lastmod();
 
-					$message = gTxt('file_uploaded', array('{name}' => htmlspecialchars($newname)));
+					$message = gTxt('file_uploaded', array('{name}' => txpspecialchars($newname)));
 
 					file_edit($message, $id);
 				}
@@ -760,7 +760,7 @@ $LastChangedRevision$
 				if ($size = filesize($newpath))
 					safe_update('txp_file', 'size = '.$size.', modified = now()', 'id = '.$id);
 
-				$message = gTxt('file_uploaded', array('{name}' => htmlspecialchars($name)));
+				$message = gTxt('file_uploaded', array('{name}' => txpspecialchars($name)));
 
 				file_edit($message, $id);
 				// clean up old

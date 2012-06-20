@@ -63,7 +63,7 @@ $LastChangedRevision$
 				extract($a);
 				$editlink = ($curname!=$name)
 					?	eLink('form','form_edit','name',$name,$name)
-					:	htmlspecialchars($name);
+					:	txpspecialchars($name);
 				$modbox = (!in_array($name, $essential_forms))
 					?	'<input type="checkbox" name="selected_forms[]" value="'.$name.'" />'
 					:	'';
@@ -197,7 +197,7 @@ $LastChangedRevision$
 					'<form action="index.php" method="post" id="form_form">'.
 						'<div id="main_content">'.
 						'<div class="edit-title">'.gTxt('you_are_editing_form').sp.strong(($name) ? $name : gTxt('untitled')).'</div>'.
-						'<textarea id="form" class="code" name="Form" cols="60" rows="20">'.htmlspecialchars($Form).'</textarea>'.
+						'<textarea id="form" class="code" name="Form" cols="60" rows="20">'.txpspecialchars($Form).'</textarea>'.
 
 					$changename.
 

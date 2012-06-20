@@ -120,11 +120,11 @@ $LastChangedRevision$
 			hInput('savenew','savenew').
 			'</div>';
 		} else {
-			$buttons = '<div class="edit-title">'.gTxt('you_are_editing_page').sp.strong(htmlspecialchars($name)).'</div>';
+			$buttons = '<div class="edit-title">'.gTxt('you_are_editing_page').sp.strong(txpspecialchars($name)).'</div>';
 		}
 
 		$out[] = '<div id="main_content">'.$buttons.
-					'<textarea id="html" class="code" name="html" cols="84" rows="36">'.htmlspecialchars($html).'</textarea>'.
+					'<textarea id="html" class="code" name="html" cols="84" rows="36">'.txpspecialchars($html).'</textarea>'.
 					n.'<p>'.fInput('submit','save',gTxt('save'),'publish').
 					n.eInput('page').
 					n.sInput('page_save').

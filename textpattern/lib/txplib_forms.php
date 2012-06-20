@@ -73,7 +73,7 @@ $LastChangedRevision$
 				}
 			}
 
-			$out[] = n.t.'<option value="'.htmlspecialchars($avalue).'"'.$sel.'>'.htmlspecialchars($alabel).'</option>';
+			$out[] = n.t.'<option value="'.txpspecialchars($avalue).'"'.$sel.'>'.txpspecialchars($alabel).'</option>';
 		}
 
 		return '<select'.( $select_id ? ' id="'.$select_id.'"' : '' ).' name="'.$name.'"'.
@@ -115,14 +115,14 @@ $LastChangedRevision$
 			$sp = str_repeat(sp.sp, $level);
 
 			if (($truncate > 3) && (strlen(utf8_decode($title)) > $truncate)) {
-				$htmltitle = ' title="'.htmlspecialchars($title).'"';
+				$htmltitle = ' title="'.txpspecialchars($title).'"';
 				$title = preg_replace('/^(.{0,'.($truncate - 3).'}).*$/su','$1',$title);
 				$hellip = '&#8230;';
 			} else {
 				$htmltitle = $hellip = '';
 			}
 
-			$out[] = n.t.'<option value="'.htmlspecialchars($name).'"'.$htmltitle.$sel.'>'.$sp.htmlspecialchars($title).$hellip.'</option>';
+			$out[] = n.t.'<option value="'.txpspecialchars($name).'"'.$htmltitle.$sel.'>'.$sp.txpspecialchars($title).$hellip.'</option>';
 		}
 
 		return n.'<select'.( $select_id ? ' id="'.$select_id.'" ' : '' ).' name="'.$select_name.'">'.
@@ -145,7 +145,7 @@ $LastChangedRevision$
 					$required = false)
 	{
 		$o  = '<input type="'.$type.'"';
-		$o .= ' value="'.htmlspecialchars($value).'"';
+		$o .= ' value="'.txpspecialchars($value).'"';
 		$o .= strlen($name)? ' name="'.$name.'"' : '';
 		$o .= ($size)     ? ' size="'.$size.'"' : '';
 		$o .= ($class)    ? ' class="'.$class.'"' : '';
@@ -248,7 +248,7 @@ $LastChangedRevision$
 	function fetch_editable($name,$event,$identifier,$id)
 	{
 		$q = fetch($name,'txp_'.$event,$identifier,$id);
-		return htmlspecialchars($q);
+		return txpspecialchars($q);
 	}
 
 //-------------------------------------------------------------
@@ -261,7 +261,7 @@ $LastChangedRevision$
 		$width = ($w) ? 'width:'.$w.'px;' : '';
 		$height = ($h) ? 'height:'.$h.'px;' : '';
 		$style = ($width || $height) ? ' style="'.$width.$height.'"' : '';
-		return '<textarea'.$id.' name="'.$name.'"'.$rows.$cols.$style.'>'.htmlspecialchars($thing).'</textarea>';
+		return '<textarea'.$id.' name="'.$name.'"'.$rows.$cols.$style.'>'.txpspecialchars($thing).'</textarea>';
 	}
 
 //-------------------------------------------------------------

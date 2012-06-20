@@ -220,7 +220,7 @@ eod;
 		{
 			exit(graf(
 				gTxt('prefix_bad_characters', array(
-					'{dbprefix}' => strong(htmlspecialchars($dprefix))
+					'{dbprefix}' => strong(txpspecialchars($dprefix))
 				), 'raw')
 			));
 		}
@@ -229,7 +229,7 @@ eod;
 		{
 			exit(graf(
 				gTxt('db_doesnt_exist', array(
-					'{dbname}' => strong(htmlspecialchars($ddb))
+					'{dbname}' => strong(txpspecialchars($ddb))
 				), 'raw')
 			));
 		}
@@ -254,11 +254,11 @@ eod;
 		}
 
 		echo graf(
-			gTxt('using_db', array('{dbname}' => strong(htmlspecialchars($ddb))), 'raw')
+			gTxt('using_db', array('{dbname}' => strong(txpspecialchars($ddb))), 'raw')
 			.' ('. $carry['dbcharset'] .')'
 		),
 		graf(
-			strong(gTxt('before_you_proceed')).', '.gTxt('create_config', array('{txpath}' => htmlspecialchars(txpath)))
+			strong(gTxt('before_you_proceed')).', '.gTxt('create_config', array('{txpath}' => txpspecialchars(txpath)))
 		),
 
 		'<textarea name="config" cols="40" rows="5" style="width: 400px; height: 200px">',
@@ -290,7 +290,7 @@ eod;
 			echo graf(
 				strong(gTxt('before_you_proceed')).', '.
 				gTxt('create_config', array(
-					'{txpath}' => htmlspecialchars(txpath)
+					'{txpath}' => txpspecialchars(txpath)
 				))
 			),
 
@@ -329,8 +329,8 @@ eod;
 		),
 		endTable(),
 		sInput('createTxp'),
-		hInput('lang', htmlspecialchars($lang)),
-		hInput('siteurl', htmlspecialchars($siteurl)),
+		hInput('lang', txpspecialchars($lang)),
+		hInput('siteurl', txpspecialchars($siteurl)),
 		'</form>';
 	}
 
@@ -515,9 +515,9 @@ eod;
 
 		foreach ($langs as $a => $b)
 		{
-			$out .= n.t.'<option value="'.htmlspecialchars($a).'"'.
+			$out .= n.t.'<option value="'.txpspecialchars($a).'"'.
 				( ($a == $default) ? ' selected="selected"' : '').
-				'>'.htmlspecialchars($b).'</option>';
+				'>'.txpspecialchars($b).'</option>';
 		}
 
 		$out .= n.'</select>';
