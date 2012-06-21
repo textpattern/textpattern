@@ -20,15 +20,15 @@ $LastChangedRevision$
 		require_privs('discuss');
 
 		$available_steps = array(
-			'discuss_delete' 	=> true,
-			'discuss_save' 	=> true,
-			'discuss_list' 	=> false,
-			'discuss_edit' 	=> false,
-			'ipban_add' 	=> true,
-			'discuss_multi_edit' 	=> true,
-			'ipban_list' 	=> false,
-			'ipban_unban' 	=> true,
-			'discuss_change_pageby' 	=> true
+			'discuss_delete'        => true,
+			'discuss_save'          => true,
+			'discuss_list'          => false,
+			'discuss_edit'          => false,
+			'ipban_add'             => true,
+			'discuss_multi_edit'    => true,
+			'ipban_list'            => true,
+			'ipban_unban'           => true,
+			'discuss_change_pageby' => true
 		);
 
 		if(!$step or !bouncer($step, $available_steps)){
@@ -40,18 +40,19 @@ $LastChangedRevision$
 	function discuss_save()
 	{
 		$varray = array_map('assert_string', gpsa(array('email', 'name', 'web', 'message', 'ip')));
-        $varray = $varray + array_map('assert_int', gpsa(array('discussid', 'visible', 'parentid')));
-        extract(doSlash($varray));
+		$varray = $varray + array_map('assert_int', gpsa(array('discussid', 'visible', 'parentid')));
+		extract(doSlash($varray));
 
 		$message = $varray['message'] = preg_replace('#<(/?txp:.+?)>#', '&lt;$1&gt;', $message);
 
-        $constraints = array(
-            'status' => new ChoiceConstraint($visible, array('choices' => array(SPAM, MODERATE, VISIBLE), 'message' =>  'invalid_status'))
-        );
-        callback_event_ref('discuss_ui', 'validate_save', 0, $varray, $constraints);
-        $validator = new Validator($constraints);
+		$constraints = array(
+			'status' => new ChoiceConstraint($visible, array('choices' => array(SPAM, MODERATE, VISIBLE), 'message' =>  'invalid_status'))
+		);
 
-        if ($validator->validate() && safe_update("txp_discuss",
+		callback_event_ref('discuss_ui', 'validate_save', 0, $varray, $constraints);
+		$validator = new Validator($constraints);
+
+		if ($validator->validate() && safe_update("txp_discuss",
 			"email   = '$email',
 			 name    = '$name',
 			 web     = '$web',
@@ -200,7 +201,15 @@ $LastChangedRevision$
 
 		echo '<h1 class="txp-heading">'.gTxt('list_discussions').'</h1>';
 		echo '<div id="'.$event.'_control" class="txp-control-panel">';
-		echo '<a id="list_banned_ips" href="index.php?event=discuss'.a.'step=ipban_list">'.gTxt('list_banned_ips').'</a>';
+		echo '<div class="txp-buttons">';
+		echo n.form(
+			graf(
+				fInput('submit', '', gTxt('list_banned_ips')).
+				eInput('discuss').
+				sInput('ipban_list')
+			)
+			, '', '', 'post', '', '', 'change_password');
+		echo '</div>';
 
 		if ($total < 1)
 		{
@@ -415,59 +424,42 @@ $LastChangedRevision$
 			$ban_link = '[<a class="action-ban" href="?event=discuss'.a.'step='.$ban_step.a.'ip='.$ip.
 				a.'name='.urlencode($name).a.'discussid='.$discussid.a.'_txp_token='.form_token().'">'.$ban_text.'</a>]';
 
+			$status_list = selectInput(
+				'visible',
+				array(
+					VISIBLE	 => gTxt('visible'),
+					SPAM		 => gTxt('spam'),
+					MODERATE => gTxt('unmoderated')
+				),
+				$visible,
+				false);
+
 			echo '<div id="'.$event.'_container" class="txp-container">'.
 				form(
-				startTable('', '', 'txp-edit').
-				stackRows(
+					'<div class="txp-edit">'.n.
+					hed(gTxt('edit_comment'), 2).n.
+					inputLabel('status', $status_list, 'status').n.
+					inputLabel('name', fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'name'), 'name').n.
+					inputLabel('ip', $ip.' '.$ban_link, 'IP').n.
+					inputLabel('email', fInput('email', 'email', $email, '', '', '', INPUT_REGULAR, '', 'email'), 'email').n.
+					inputLabel('website', fInput('text', 'web', $web, '', '', '', INPUT_REGULAR, '', 'web'), 'website').n.
+					inputLabel('date', safe_strftime('%d %b %Y %X', $uPosted), 'date').n.
+					inputLabel('message', '<textarea id="commentmessage" name="message" cols="60" rows="15">'.$message.'</textarea>', 'message', '', '', '').n.
+					graf(fInput('submit', 'step', gTxt('save'), 'publish')).
 
-					fLabelCell('name').
-					fInputCell('name', $name, '', '', '', 'name'),
-
-					fLabelCell('IP').
-					td("$ip $ban_link", '', 'ip'),
-
-					fLabelCell('email').
-					fInputCell('email', $email, '', '', '', 'email'),
-
-					fLabelCell('website').
-					fInputCell('web', $web, '', '', '', 'website'),
-
-					fLabelCell('date').
-					td(
-						safe_strftime('%d %b %Y %X', $uPosted)
-					, '', 'date posted created'),
-
-					tda(gTxt('message')).
-					td(
-						'<textarea id="commentmessage" name="message" cols="60" rows="15">'.$message.'</textarea>'
-					, '', 'comment message text'),
-
-					fLabelCell('status').
-					td(
-						selectInput('visible', array(
-							VISIBLE	 => gTxt('visible'),
-							SPAM		 => gTxt('spam'),
-							MODERATE => gTxt('unmoderated')
-						), $visible, false)
-					, '', 'status'),
-
-					tdcs(fInput('submit', 'step', gTxt('save'), 'publish'), 2)
-
-				).
-
-				endTable().
-				hInput('sort', $sort).
-				hInput('dir', $dir).
-				hInput('page', $page).
-				hInput('crit', $crit).
-				hInput('search_method', $search_method).
-
-				hInput('discussid', $discussid).
-				hInput('parentid', $parentid).
-				hInput('ip', $ip).
-
-				eInput('discuss').
-				sInput('discuss_save')
+					hInput('sort', $sort).
+					hInput('dir', $dir).
+					hInput('page', $page).
+					hInput('crit', $crit).
+					hInput('search_method', $search_method).
+	
+					hInput('discussid', $discussid).
+					hInput('parentid', $parentid).
+					hInput('ip', $ip).
+	
+					eInput('discuss').
+					sInput('discuss_save').
+					'</div>'
 				, '', '', 'post', 'edit-form', '', 'discuss_edit_form'),'</div>';
 		}
 

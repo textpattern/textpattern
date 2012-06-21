@@ -23,7 +23,7 @@ class classic_theme extends theme
  		if (!$this->is_popup)
  		{
  			$out[] = '<table cellpadding="0" cellspacing="0" align="center">'.n.
-			'<tr><td id="messagepane">&nbsp;'.$this->announce($this->message).'</td>';
+			'<tr><td id="messagepane">&#160;'.$this->announce($this->message).'</td>';
 
  			$secondary = '';
  			foreach ($this->menu as $tab)

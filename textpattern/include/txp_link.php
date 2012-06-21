@@ -28,17 +28,17 @@ $LastChangedRevision$
 		$vars = array('category', 'url', 'linkname', 'linksort', 'description', 'id');
 
 		$available_steps = array(
-			'link_list' 	=> false,
-			'link_edit' 	=> false,
-			'link_post' 	=> true,
-			'link_save' 	=> true,
-			'link_delete' 	=> true,
+			'link_list'          => false,
+			'link_edit'          => true,
+			'link_post'          => true,
+			'link_save'          => true,
+			'link_delete'        => true,
 			'link_change_pageby' => true,
-			'link_multi_edit' => true
+			'link_multi_edit'    => true
 		);
 
 		if (!$step or !bouncer($step, $available_steps)){
-			$step = 'link_edit';
+			$step = 'link_list';
 		}
 		$step();
 	}
@@ -48,6 +48,8 @@ $LastChangedRevision$
 	function link_list($message = '')
 	{
 		global $event,$step, $link_list_pageby, $txp_user;
+
+		pagetop(gTxt('tab_link'), $message);
 
 		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
 		if ($sort === '') $sort = get_pref('link_sort_column', 'name');
@@ -62,6 +64,10 @@ $LastChangedRevision$
 
 			case 'description':
 				$sort_sql = 'description '.$dir.', id asc';
+			break;
+
+			case 'url':
+				$sort_sql = 'url '.$dir.', id asc';
 			break;
 
 			case 'category':
@@ -94,11 +100,12 @@ $LastChangedRevision$
 			$crit_escaped = doSlash(str_replace(array('\\','%','_','\''), array('\\\\','\\%','\\_', '\\\''), $crit));
 
 			$critsql = array(
-				'id'         	=> "ID in ('" .join("','", do_list($crit_escaped)). "')",
-				'name'			=> "linkname like '%$crit_escaped%'",
-				'description'	=> "description like '%$crit_escaped%'",
-				'category'		=> "category like '%$crit_escaped%'",
-				'author'		=> "author like '%$crit_escaped%'"
+				'id'          => "ID in ('" .join("','", do_list($crit_escaped)). "')",
+				'name'        => "linkname like '%$crit_escaped%'",
+				'description' => "description like '%$crit_escaped%'",
+				'url'         => "url like '%$crit_escaped%'",
+				'category'    => "category like '%$crit_escaped%'",
+				'author'      => "author like '%$crit_escaped%'"
 			);
 
 			if (array_key_exists($search_method, $critsql))
@@ -121,7 +128,17 @@ $LastChangedRevision$
 
 		$total = getCount('txp_link', $criteria);
 
+		echo '<h1 class="txp-heading">'.gTxt('tab_link').'</h1>';
 		echo '<div id="'.$event.'_control" class="txp-control-panel">';
+		echo n.form(
+			graf(
+				'<label>'.gTxt('add_new_link').'</label>'.n.
+				fInput('text', 'url', '', '', '', '', INPUT_REGULAR).n.
+				fInput('submit', '', gTxt('create')).
+				eInput('link').
+				sInput('link_post')
+			)
+			, '', '', 'post', 'edit-form', '', 'link_create');
 
 		if ($total < 1)
 		{
@@ -151,27 +168,33 @@ $LastChangedRevision$
 		{
 			$show_authors = !has_single_author('txp_link');
 
+			echo n.'<div id="'.$event.'_container" class="txp-container">';
 			echo n.n.'<form action="index.php" id="links_form" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">',
 
 				n.'<div class="txp-listtables">'.
 				n.startTable('', '', 'txp-list').
 				n.'<thead>'.
 				n.tr(
-					column_head('ID', 'id', 'link', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id').
-					column_head('link_name', 'name', 'link', true, $switch_dir, $crit, $search_method, (('name' == $sort) ? "$dir " : '').'name').
-					column_head('description', 'description', 'link', true, $switch_dir, $crit, $search_method, (('description' == $sort) ? "$dir " : '').'description').
-					column_head('link_category', 'category', 'link', true, $switch_dir, $crit, $search_method, (('category' == $sort) ? "$dir " : '').'category').
-					column_head('date', 'date', 'link', true, $switch_dir, $crit, $search_method, (('date' == $sort) ? "$dir " : '').'date created').
-					($show_authors ? column_head('author', 'author', 'link', true, $switch_dir, $crit, $search_method, (('author' == $sort) ? "$dir " : '').'author') : '').
-					hCell('', '', ' class="multi-edit"')
+					n.column_head('ID', 'id', 'link', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id').
+					n.column_head('link_name', 'name', 'link', true, $switch_dir, $crit, $search_method, (('name' == $sort) ? "$dir " : '').'name').
+					n.column_head('description', 'description', 'link', true, $switch_dir, $crit, $search_method, (('description' == $sort) ? "$dir " : '').'links_detail description').
+					n.column_head('link_category', 'category', 'link', true, $switch_dir, $crit, $search_method, (('category' == $sort) ? "$dir " : '').'category').
+					n.column_head('url', 'url', 'link', true, $switch_dir, $crit, $search_method, (('url' == $sort) ? "$dir " : '').'url').
+					n.column_head('date', 'date', 'link', true, $switch_dir, $crit, $search_method, (('date' == $sort) ? "$dir " : '').'links_detail date created').
+					($show_authors ? n.column_head('author', 'author', 'link', true, $switch_dir, $crit, $search_method, (('author' == $sort) ? "$dir " : '').'author') : '').
+					n.hCell('', '', ' class="multi-edit"')
 				).
 				n.'</thead>';
 
 			$tfoot = n.'<tfoot>'.tr(
 				tda(
+					toggle_box('links_detail'),
+					' class="detail-toggle" colspan="2"'
+				).
+				tda(
 					select_buttons().n.
 					link_multiedit_form($page, $sort, $dir, $crit, $search_method)
-				, ' class="multi-edit" colspan="'.($show_authors ? '7' : '6').'"')
+				, ' class="multi-edit" colspan="'.($show_authors ? '6' : '5').'"')
 			).n.'</tfoot>';
 
 			echo $tfoot;
@@ -181,52 +204,56 @@ $LastChangedRevision$
 			$validator = new Validator();
 
 			while ($a = nextRow($rs))
-				{
-					extract($a);
+			{
+				extract($a, EXTR_PREFIX_ALL, 'link');
 
-					$edit_url = '?event=link'.a.'step=link_edit'.a.'id='.$id.a.'sort='.$sort.
-						a.'dir='.$dir.a.'page='.$page.a.'search_method='.$search_method.a.'crit='.$crit;
+				$edit_url = '?event=link'.a.'step=link_edit'.a.'id='.$link_id.a.'sort='.$sort.
+					a.'dir='.$dir.a.'page='.$page.a.'search_method='.$search_method.a.'crit='.$crit.a.'_txp_token='.form_token();
 
-					$validator->setConstraints(array(new CategoryConstraint($category, array('type' => 'link'))));
-					$vc = $validator->validate() ? '' : ' error';
+				$validator->setConstraints(array(new CategoryConstraint($link_category, array('type' => 'link'))));
+				$vc = $validator->validate() ? '' : ' error';
 
-					$can_edit = has_privs('link.edit') || ($author == $txp_user && has_privs('link.edit.own'));
+				$can_edit = has_privs('link.edit') || ($link_author == $txp_user && has_privs('link.edit.own'));
+				$view_url = txpspecialchars($link_url);
 
-					echo tr(
+				echo tr(
 
-						n.td(
-							($can_edit ? href($id, $edit_url, ' title="'.gTxt('edit').'"') : $id)
-						, '', 'id').
+					n.td(
+						($can_edit ? href($link_id, $edit_url, ' title="'.gTxt('edit').'"') : $link_id)
+					, '', 'id').
 
-						td(
-							($can_edit ? href(txpspecialchars($linkname), $edit_url, ' title="'.gTxt('edit').'"') : txpspecialchars($linkname)).n.
-							'[<a href="'.$url.'">'.gTxt('view').'</a>]'
-						, '', 'name').
+					td(
+						($can_edit ? href(txpspecialchars($link_linkname), $edit_url, ' title="'.gTxt('edit').'"') : txpspecialchars($link_linkname))
+					, '', 'name').
 
-						td(
-							txpspecialchars($description)
-						, '', 'description').
+					td(
+						txpspecialchars($link_description)
+					, '', 'links_detail description').
 
-						td(
-							'<span title="'.txpspecialchars(fetch_category_title($category, 'link')).'">'.$category.'</span>'
-						, '', 'category'.$vc).
+					td(
+						'<span title="'.txpspecialchars(fetch_category_title($link_category, 'link')).'">'.$link_category.'</span>'
+					, '', 'category'.$vc).
 
-						td(
-							gTime($uDate)
-						, '', 'date created').
+					td(
+						'<a rel="external" target="_blank" href="'.$view_url.'">'.$view_url.'</a>'
+					, '', 'url').
 
-						($show_authors ? td(
-							'<span title="'.txpspecialchars(get_author_name($author)).'">'.txpspecialchars($author).'</span>'
-						, '', 'author') : '').
+					td(
+						gTime($link_uDate)
+					, '', 'links_detail date created').
 
-						td(
-							fInput('checkbox', 'selected[]', $id)
-						, '', 'multi-edit')
-					, ' class="'.(($ctr%2 == 0) ? 'even' : 'odd').'"'
-					);
+					($show_authors ? td(
+						'<span title="'.txpspecialchars(get_author_name($link_author)).'">'.txpspecialchars($link_author).'</span>'
+					, '', 'author') : '').
 
-					$ctr++;
-				}
+					td(
+						fInput('checkbox', 'selected[]', $link_id)
+					, '', 'multi-edit')
+				, ' class="'.(($ctr%2 == 0) ? 'even' : 'odd').'"'
+				);
+
+				$ctr++;
+			}
 
 			echo '</tbody>'.
 			n.endTable().
@@ -238,7 +265,7 @@ $LastChangedRevision$
 			n.nav_form('link', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
 
 			pageby_form('link', $link_list_pageby).
-			n.'</div>';
+			n.'</div>'.n.'</div>';
 		}
 	}
 
@@ -250,11 +277,12 @@ $LastChangedRevision$
 			'id'          => gTxt('ID'),
 			'name'        => gTxt('link_name'),
 			'description' => gTxt('description'),
+			'url'         => gTxt('url'),
 			'category'    => gTxt('link_category'),
 			'author'      => gTxt('author')
 		);
 
-		return search_form('link', 'link_edit', $crit, $methods, $method, 'name');
+		return search_form('link', 'link_list', $crit, $methods, $method, 'name');
 	}
 
 // -------------------------------------------------------------
@@ -265,7 +293,6 @@ $LastChangedRevision$
 
 		pagetop(gTxt('tab_link'), $message);
 
-		echo '<h1 class="txp-heading">'.gTxt('tab_link').'</h1>';
 		echo '<div id="'.$event.'_container" class="txp-container">';
 
 		extract(array_map('assert_string', gpsa($vars)));
@@ -286,75 +313,28 @@ $LastChangedRevision$
 			}
 		}
 
-		if ($step == 'link_save' or $step == 'link_post')
-		{
-			foreach ($vars as $var)
-			{
-				$$var = '';
-			}
-		}
-
 		if (has_privs('link.edit') || has_privs('link.edit.own'))
 		{
 			$caption = gTxt(($id && $step == 'link_edit') ? 'edit_link' : 'add_new_link');
 
 			echo form(
-
-				startTable('', '', 'txp-edit') .
-
-				tr (tdcs(hed($caption, 2), 2)).
-
-				tr(
-					fLabelCell('title', '', 'link-title').
-					fInputCell('linkname', $linkname, '', 30, '', 'link-title')
-				, ' class="name"').
-
-				tr(
-					fLabelCell('sort_value', '', 'link-sort').
-					fInputCell('linksort', $linksort, '', 15, '', 'link-sort')
-				, ' class="sort"').
-
-				tr(
-					fLabelCell('url', 'link_url', 'link-url').
-					fInputCell('url', $url, '', 30, '', 'link-url')
-				, ' class="url"').
-
-				tr(
-					fLabelCell('link_category', 'link_category', 'link-category').
-
-					td(
-						linkcategory_popup($category).' ['.eLink('category', 'list', '', '', gTxt('edit')).']'
-					)
-				, ' class="category"') .
-
-				tr(
-					tda(
-						'<label for="link-description">'.gTxt('description').'</label>'.sp.popHelp('link_description')
-					).
-
-					td(
-						'<textarea id="link-description" name="description" cols="40" rows="7">'.txpspecialchars($description).'</textarea>'
-					)
-				, ' class="description text"').
-
-				pluggable_ui('link_ui', 'extend_detail_form', '', $rs).
-
-				tr(
-					tdcs(fInput('submit', '', gTxt('save'), 'publish'), 2)
-				).
-
-				endTable().
-
+				'<div class="txp-edit">'.n.
+				hed($caption, 2).n.
+				inputLabel('linkname', fInput('text', 'linkname', $linkname, '', '', '', INPUT_REGULAR, '', 'linkname'), 'title').n.
+				inputLabel('linksort', fInput('text', 'linksort', $linksort, '', '', '', INPUT_REGULAR, '', 'linksort'), 'sort_value', 'link_sort').n.
+				inputLabel('url', fInput('text', 'url', $url, '', '', '', INPUT_REGULAR, '', 'url'), 'url', 'link_url', 'edit-link-url').n. /* TODO: type = 'url' once browsers are less strict and we use HTML5 doctype */
+				inputLabel('link_category', linkcategory_popup($category).' ['.eLink('category', 'list', '', '', gTxt('edit')).']', 'link_category', 'link_category').n.
+				inputLabel('link_description', '<textarea id="link_description" name="description" cols="'.INPUT_LARGE.'" rows="7">'.txpspecialchars($description).'</textarea>', 'description', 'link_description', '', '').n.
+				pluggable_ui('link_ui', 'extend_detail_form', '', $rs).n.
+				graf(fInput('submit', '', gTxt('save'), 'publish')).
 				eInput('link').
-
-				($id ? sInput('link_save').hInput('id', $id) : sInput('link_post')).
-
+				sInput('link_save').
+				hInput('id', $id).
 				hInput('search_method', gps('search_method')).
-				hInput('crit', gps('crit'))
+				hInput('crit', gps('crit')).
+				'</div>'
 			, '', '', 'post', 'edit-form', '', 'link_details');
-
-		}
-		link_list();
+		};
 
 		echo '</div>';
 	}
@@ -363,7 +343,7 @@ $LastChangedRevision$
 
 	function linkcategory_popup($cat = '')
 	{
-		return event_category_popup('link', $cat, 'link-category');
+		return event_category_popup('link', $cat, 'link_category');
 	}
 
 // -------------------------------------------------------------
@@ -375,31 +355,29 @@ $LastChangedRevision$
 
 		extract(doSlash($varray));
 
-		if ($linkname === '' && $url === '' && $description === '')
+		if ($url === '')
 		{
-			link_edit();
+			link_list(array(gTxt('link_empty'), E_ERROR));
 			return;
 		}
 
 		if (!has_privs('link.edit.own'))
 		{
-			link_edit(gTxt('restricted_area'));
+			link_list(gTxt('restricted_area'));
 			return;
 		}
 
-		if (!$linksort) $linksort = $linkname;
-
 		$q = safe_insert("txp_link",
-		   "category    = '$category',
+		   "category    = '',
 			date        = now(),
 			url         = '".trim($url)."',
-			linkname    = '$linkname',
-			linksort    = '$linksort',
-			description = '$description',
+			linkname    = '',
+			linksort    = '',
+			description = '',
 			author		= '".doSlash($txp_user)."'"
 		);
 
-		$GLOBALS['ID'] = mysql_insert_id( );
+		$GLOBALS['ID'] = $_POST['id'] = mysql_insert_id( );
 
 		if ($q)
 		{
@@ -423,14 +401,14 @@ $LastChangedRevision$
 
 		if ($linkname === '' && $url === '' && $description === '')
 		{
-			link_edit();
+			link_list();
 			return;
 		}
 
 		$author = fetch('author', 'txp_link', 'id', $id);
 		if (!has_privs('link.edit') && !($author == $txp_user && has_privs('link.edit.own')))
 		{
-			link_edit(gTxt('restricted_area'));
+			link_list(gTxt('restricted_area'));
 			return;
 		}
 
@@ -461,14 +439,14 @@ $LastChangedRevision$
             $message = array(gTxt('link_save_failed'), E_ERROR);
         }
 
-        link_edit($message);
+        link_list($message);
     }
 
 // -------------------------------------------------------------
 	function link_change_pageby()
 	{
 		event_change_pageby('link');
-		link_edit();
+		link_list();
 	}
 
 // -------------------------------------------------------------
@@ -504,7 +482,7 @@ $LastChangedRevision$
 
 		if (!$selected or !is_array($selected))
 		{
-			link_edit();
+			link_list();
 			return;
 		}
 
@@ -567,13 +545,13 @@ $LastChangedRevision$
 		{
 			update_lastmod();
 
-			link_edit(gTxt(
+			link_list(gTxt(
 				($method == 'delete' ? 'links_deleted' : 'link_updated'),
 				array(($method == 'delete' ? '{list}' : '{name}') => join(', ', $changed))));
 			return;
 		}
 
-		link_edit();
+		link_list();
 	}
 
 ?>

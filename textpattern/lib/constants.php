@@ -62,6 +62,19 @@ define('PARTIAL_STATIC', 0);
 define('PARTIAL_VOLATILE', 1);
 define('PARTIAL_VOLATILE_VALUE', 2);
 
+define('STATUS_DRAFT', 1);
+define('STATUS_HIDDEN', 2);
+define('STATUS_PENDING', 3);
+define('STATUS_LIVE', 4);
+define('STATUS_STICKY', 5);
+
+define('INPUT_LARGE', 64);
+define('INPUT_REGULAR', 32);
+define('INPUT_MEDIUM', 16);
+define('INPUT_SMALL', 8);
+define('INPUT_XSMALL', 4);
+define('INPUT_TINY', 2);
+
 define('REQUIRED_PHP_VERSION', '5.2');
 
 error_reporting($old_level);

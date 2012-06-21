@@ -126,7 +126,7 @@ $LastChangedRevision$
 		}
 
 		return n.'<select'.( $select_id ? ' id="'.$select_id.'" ' : '' ).' name="'.$select_name.'">'.
-			n.t.'<option value=""'.($selected == false ? ' selected="selected"' : '').'>&nbsp;</option>'.
+			n.t.'<option value=""'.($selected == false ? ' selected="selected"' : '').'>&#160;</option>'.
 			( $out ? join('', $out) : '').
 			n.'</select>';
 	}
@@ -297,7 +297,7 @@ $LastChangedRevision$
 //--------------------------------------------------------------
 	function tsi($name,$datevar,$time,$tab='')
 	{
-		$size = ($name=='year' or $name=='exp_year') ? 4 : 2;
+		$size = ($name=='year' or $name=='exp_year') ? INPUT_XSMALL : INPUT_TINY;
 		$s = ($time == 0)? '' : safe_strftime($datevar, $time);
 		return n.'<input type="text" name="'.$name.'" value="'.
 			$s

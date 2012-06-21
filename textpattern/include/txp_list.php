@@ -331,7 +331,7 @@ $LastChangedRevision$
 						or ($a['Status'] < 4 and $AuthorID == $txp_user and has_privs('article.edit.own'))
 						)
 						? fInput('checkbox', 'selected[]', $ID, 'checkbox')
-						: '&nbsp;'
+						: '&#160;'
 					), '', 'multi-edit')
 				, ' class="'.(($ctr%2 == 0) ? 'even' : 'odd').'"'
 				);

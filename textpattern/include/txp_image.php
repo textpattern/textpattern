@@ -29,16 +29,16 @@ $LastChangedRevision$
 		require_privs('image');
 
 		$available_steps = array(
-			'image_list'	=> false,
-			'image_edit'	=> false,
-			'image_insert'	=> true,
-			'image_replace'	=> true,
-			'image_save'	=> true,
-			'thumbnail_insert'	=> true,
-			'image_change_pageby'	=> true,
-			'thumbnail_create'	=> true,
-			'thumbnail_delete'	=> true,
-			'image_multi_edit'	=> true
+			'image_list'          => false,
+			'image_edit'          => false,
+			'image_insert'        => true,
+			'image_replace'       => true,
+			'image_save'          => true,
+			'thumbnail_insert'    => true,
+			'image_change_pageby' => true,
+			'thumbnail_create'    => true,
+			'thumbnail_delete'    => true,
+			'image_multi_edit'    => true
 		);
 
 		if(!$step or !bouncer($step, $available_steps)) {
@@ -276,7 +276,7 @@ $LastChangedRevision$
 						'<span title="'.txpspecialchars(get_author_name($author)).'">'.txpspecialchars($author).'</span>'
 					, '', 'author') : '').
 
-					td($can_edit ? fInput('checkbox', 'selected[]', $id) : '&nbsp;'
+					td($can_edit ? fInput('checkbox', 'selected[]', $id) : '&#160;'
 					, '', 'multi-edit')
 				, ' class="'.(($ctr%2 == 0) ? 'even' : 'odd').'"'
 				);
@@ -436,84 +436,118 @@ $LastChangedRevision$
 
 			if ($ext != '.swf') {
 				$aspect = ($h == $w) ? ' square' : (($h > $w) ? ' portrait' : ' landscape');
-				$img = '<img class="content-image fullsize" src="'.imagesrcurl($id, $ext)."?$uDate".'" height="'.$h.'" width="'.$w.'" alt="" title="'.$id.$ext.' ('.$w.' &#215; '.$h.')" id="image-fullsize" />';
+				$img_info = $id.$ext.' ('.$w.' &#215; '.$h.')';
+				$img = '<div class="fullsize-image"><img class="content-image" src="'.imagesrcurl($id, $ext)."?$uDate".'" height="'.$h.'" width="'.$w.'" alt="'.$img_info.'" title="'.$img_info.'" /></div>';
 			} else {
 				$img = $aspect = '';
 			}
 
 			if ($thumbnail and ($ext != '.swf')) {
-				$thumb = '<img class="content-image" src="'.imagesrcurl($id, $ext, true)."?$uDate".'" alt="" '.
-							($thumb_w ? "width='$thumb_w' height='$thumb_h' title='$thumb_w &#215; $thumb_h'" : ''). ' />';
+				$thumb_info = $id.'t'.$ext.' ('.$thumb_w.' &#215; '.$thumb_h.')';
+				$thumb = '<img class="content-image" src="'.imagesrcurl($id, $ext, true)."?$uDate".'" alt="'.$thumb_info.'" '.
+							($thumb_w ? 'width="'.$thumb_w.'" height="'.$thumb_h.'" title="'.$thumb_info.'"' : ''). ' />';
 			} else {
 				$thumb = '';
 			}
 
 			echo n.'<div id="'.$event.'_container" class="txp-container">';
-			echo startTable('', '', 'txp-edit'),
-			tr(
-				td(
-					pluggable_ui('image_ui', 'image_edit',
-						$img.br.
-						upload_form(gTxt('replace_image'), 'replace_image_form', 'image_replace', 'image', $id, $file_max_upload_size, 'image-replace', 'image-replace')
-					, $rs)
-				)
-			, ' class="image-edit'.$aspect.'"'),
-			tr(
-				td(
-					pluggable_ui('image_ui', 'thumbnail_edit', join('',
-						array(
-							($thumbnail)
-							? 	startTable('image-thumbnail', '', 'image-thumbnail').
-									tr(
-										td($thumb, '', 'thumbwrapper').
-										td(dLink('image','thumbnail_delete','id',$id, '', '', '', '', array($page, $sort, $dir, $crit, $search_method)))
-									).
-								endTable()
-							: 	'',
-							upload_form(gTxt('upload_thumbnail'),'upload_thumbnail',
-								'thumbnail_insert','image',$id,$file_max_upload_size, 'upload-thumbnail', 'thumbnail-upload')
-						)
-					), $rs)
-				)
-			, ' class="thumbnail-edit"'),
+			echo
+				pluggable_ui(
+					'image_ui',
+					'fullsize',
+					$img,
+					$rs
+				),
 
-			(check_gd($ext))
-			?	thumb_ui( $id, $rs )
-			:	'',
+				'<div class="txp-edit">',
+				hed('edit_image', 2),
 
-			tr(
-				td(
+				pluggable_ui(
+					'image_ui',
+					'image_edit',
+					'<fieldset class="replace-image">'.n.
+						'<legend>'.n.
+							gTxt('replace_image').sp.popHelp('replace_image_form').n.
+						'</legend>'.n.
+						upload_form('', '', 'image_replace', 'image', $id, $file_max_upload_size, 'image_replace', 'image-replace').n.
+					'</fieldset>',
+					$rs
+				),
+
+				pluggable_ui(
+					'image_ui',
+					'thumbnail',
+					'<div class="thumbnail-edit">'.
+					(($thumbnail)
+						? $thumb.n.dLink('image','thumbnail_delete','id',$id, '', '', '', '', array($page, $sort, $dir, $crit, $search_method))
+						: 	'').
+					'</div>',
+					$rs
+				),
+
+				pluggable_ui(
+					'image_ui',
+					'thumbnail_edit',
+					'<fieldset class="thumbnail-upload">'.n.
+						'<legend>'.n.
+							gTxt('upload_thumbnail').sp.popHelp('upload_thumbnail').n.
+						'</legend>'.n.
+						upload_form('', '', 'thumbnail_insert','image', $id, $file_max_upload_size, 'upload_thumbnail', 'thumbnail-upload').n.
+					'</fieldset>',
+					$rs
+				),
+
+				(check_gd($ext))
+				? pluggable_ui(
+					'image_ui',
+					'thumbnail_create',
+					'<fieldset class="thumbnail-alter">'.n.
+						'<legend>'.n.
+							gTxt('create_thumbnail').sp.popHelp('create_thumbnail').n.
+						'</legend>'.n.
+						form(
+							graf(
+								'<label for="width">'.gTxt('thumb_width').'</label>'.n.
+								fInput('text', 'width', @$thumb_w, 'input-xsmall', '', '', 4, '', 'width').n.
+								'<label for="height">'.gTxt('thumb_height').'</label>'.n.
+								fInput('text', 'height', @$thumb_h, 'input-xsmall', '', '', 4, '', 'height').n.
+								'<label for="crop">'.gTxt('keep_square_pixels').'</label>'.n.
+								checkbox('crop', 1, @$thumb_crop, '', 'crop').n.
+								fInput('submit', '', gTxt('Create'))
+							, ' class="edit-alter-thumbnail"').n.
+							n.hInput('id', $id).n.
+							n.eInput('image').n.
+							n.sInput('thumbnail_create').n.
+							n.hInput('sort', $sort).n.
+							n.hInput('dir', $dir).n.
+							n.hInput('page', $page).n.
+							n.hInput('search_method', $search_method).n.
+							n.hInput('crit', $crit)
+						, '', '', 'post', 'edit-form', '', 'thumbnail_alter_form').n.
+					'</fieldset>',
+					$rs
+				)
+				: '',
+
+				'<div class="image-detail">',
 					form(
-						graf('<label for="image-name">'.gTxt('image_name').'</label>'.br.
-							fInput('text', 'name', $name, '', '', '', '', '', 'image-name'), ' class="name"').
-
-						graf('<label for="image-category">'.gTxt('image_category').'</label>'.br.
-							treeSelectInput('category', $categories, $category, 'image-category'), ' class="category"').
-
-						graf('<label for="alt-text">'.gTxt('alt_text').'</label>'.br.
-							fInput('text', 'alt', $alt, '', '', '', 50, '', 'alt-text'), ' class="alt text"').
-
-						graf('<label for="caption">'.gTxt('caption').'</label>'.br.
-							'<textarea id="caption" name="caption">'.$caption.'</textarea>'
-							, ' class="caption description text"').
-
-						pluggable_ui('image_ui', 'extend_detail_form', '', $rs).
-
-						n.graf(fInput('submit', '', gTxt('save'), 'publish')).
+						inputLabel('image_name', fInput('text', 'image_name', $name, '', '', '', INPUT_REGULAR, '', 'image_name'), 'image_name').n.
+						inputLabel('image_category', treeSelectInput('image_category', $categories, $category, 'image_category'), 'image_category').n.
+						inputLabel('image_alt_text', fInput('text', 'image_alt_text', $alt, '', '', '', INPUT_REGULAR, '', 'image_alt_text'), 'alt_text').n.
+						inputLabel('image_caption', '<textarea id="image_caption" name="image_caption" rows="4" cols="'.INPUT_LARGE.'">'.$caption.'</textarea>', 'caption', '', '', '').n.
+						pluggable_ui('image_ui', 'extend_detail_form', '', $rs).n.
+						graf(fInput('submit', '', gTxt('save'), 'publish')).
 						n.hInput('id', $id).
 						n.eInput('image').
 						n.sInput('image_save').
-
 						n.hInput('sort', $sort).
 						n.hInput('dir', $dir).
 						n.hInput('page', $page).
 						n.hInput('search_method', $search_method).
 						n.hInput('crit', $crit)
-					, '', '', 'post', 'edit-form', '', 'image_details_form')
-				)
-			, ' class="image-detail"'),
-			endTable().
-			n.'</div>';
+					, '', '', 'post', 'edit-form', '', 'image_details_form'),
+				'</div>',
+			'</div>'.n.'</div>';
 		}
 	}
 
@@ -635,7 +669,7 @@ $LastChangedRevision$
 	{
 		global $txp_user;
 
-		$varray = array_map('assert_string', gpsa(array('id', 'name', 'category', 'caption', 'alt')));
+		$varray = array_map('assert_string', gpsa(array('id', 'image_name', 'image_category', 'image_caption', 'image_alt_text')));
 		extract(doSlash($varray));
 		$id = $varray['id'] = assert_int($id);
 
@@ -647,21 +681,21 @@ $LastChangedRevision$
 		}
 
 		$constraints = array(
-            'category' => new CategoryConstraint(gps('category'), array('type' => 'image')),
-        );
-        callback_event_ref('image_ui', 'validate_save', 0, $varray, $constraints);
-        $validator = new Validator($constraints);
+			'category' => new CategoryConstraint(gps('image_category'), array('type' => 'image')),
+		);
+		callback_event_ref('image_ui', 'validate_save', 0, $varray, $constraints);
+		$validator = new Validator($constraints);
 
-        if ($validator->validate() && safe_update(
+		if ($validator->validate() && safe_update(
 			"txp_image",
-			"name     = '$name',
-			category = '$category',
-			alt      = '$alt',
-			caption  = '$caption'",
+			"name    = '$image_name',
+			category = '$image_category',
+			alt      = '$image_alt_text',
+			caption  = '$image_caption'",
 			"id = $id"
 		))
 		{
-			$message = gTxt('image_updated', array('{name}' => doStrip($name)));
+			$message = gTxt('image_updated', array('{name}' => doStrip($image_name)));
 			update_lastmod();
 		}
 		else
@@ -747,46 +781,6 @@ $LastChangedRevision$
 	{
 		event_change_pageby('image');
 		image_list();
-	}
-
-// -------------------------------------------------------------
-	function thumb_ui($id, $rs)
-	{
-		global $prefs, $sort, $dir, $page, $search_method, $crit;
-		extract($prefs);
-		return
-		tr(
-			td(
-				pluggable_ui('image_ui', 'thumbnail_create', form(
-					graf(gTxt('create_thumbnail'), ' class="label"') .
-					startTable('thumbnail_alter') .
-						tr(
-							fLabelCell(gTxt('thumb_width'), '', 'width') .
-							fInputCell('width', @$thumb_w, '', 4, '', 'width').
-
-							fLabelCell(gTxt('thumb_height'), '', 'height') .
-							fInputCell('height', @$thumb_h, '', 4, '', 'height').
-
-							fLabelCell(gTxt('keep_square_pixels'), '', 'crop') .
-							tda(checkbox('crop', 1, @$thumb_crop, '', 'crop')).
-
-							tda(fInput('submit', '', gTxt('Create')))
-						, ' class="thumbnail-alter-controls"').
-
-						n.hInput('id', $id).
-						n.eInput('image').
-						n.sInput('thumbnail_create').
-
-						n.hInput('sort', $sort).
-						n.hInput('dir', $dir).
-						n.hInput('page', $page).
-						n.hInput('search_method', $search_method).
-						n.hInput('crit', $crit).
-
-					endTable()
-				, '', '', 'post', 'edit-form', '', 'thumbnail_alter_form'), $rs)
-			)
-		, ' class="thumbnail-alter"');
 	}
 
 // -------------------------------------------------------------

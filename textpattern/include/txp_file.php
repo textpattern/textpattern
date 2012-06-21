@@ -36,15 +36,14 @@ $LastChangedRevision$
 		require_privs('file');
 
 		$available_steps = array(
-			'file_change_pageby'=> true,
-			'file_multi_edit'	=> true,
-			'file_edit'			=> false,
-			'file_insert'		=> true,
-			'file_list'			=> false,
-			'file_replace'		=> true,
-			'file_save'			=> true,
-			'file_reset_count'	=> true,
-			'file_create'		=> true
+			'file_change_pageby' => true,
+			'file_multi_edit'    => true,
+			'file_edit'          => false,
+			'file_insert'        => true,
+			'file_list'          => false,
+			'file_replace'       => true,
+			'file_save'          => true,
+			'file_create'        => true,
 		);
 
 		if(!$step or !bouncer($step, $available_steps)){
@@ -244,7 +243,7 @@ $LastChangedRevision$
 
 				$file_exists = file_exists(build_file_path($file_base_path, $filename));
 
-				$download_link = ($file_exists) ? make_download_link($id, $downloads, $filename) : '';
+				$download_link = ($file_exists) ? make_download_link($id, $downloads, $filename) : $downloads;
 
 				$validator->setConstraints(array(new CategoryConstraint($category, array('type' => 'file'))));
 				$vc = $validator->validate() ? '' : ' error';
@@ -298,7 +297,7 @@ $LastChangedRevision$
 						'<span title="'.txpspecialchars(get_author_name($author)).'">'.txpspecialchars($author).'</span>'
 					, '', 'author') : '').
 
-					td($can_edit ? fInput('checkbox', 'selected[]', $id) : '&nbsp;'
+					td($can_edit ? fInput('checkbox', 'selected[]', $id) : '&#160;'
 					, '', 'multi-edit')
 				, ' class="'.(($ctr%2 == 0) ? 'even' : 'odd').'"'
 				);
@@ -343,6 +342,7 @@ $LastChangedRevision$
 		$methods = array(
 			'changecategory' => gTxt('changecategory'),
 			'changeauthor'   => gTxt('changeauthor'),
+			'changecount'    => gTxt('reset_download_count'),
 			'delete'         => gTxt('delete'),
 		);
 
@@ -391,6 +391,10 @@ $LastChangedRevision$
 				$val = ps('author');
 				break;
 
+			case 'changecount':
+				$key = 'downloads';
+				$val = 0;
+				break;
 			default:
 				$key = '';
 				$val = '';
@@ -465,115 +469,91 @@ $LastChangedRevision$
 			if (!has_privs('file.publish') && $status >= 4) $status = 3;
 
 			$file_exists = file_exists(build_file_path($file_base_path,$filename));
-			$replace = ($file_exists) ? tr(td(file_upload_form(gTxt('replace_file'),'file_replace','file_replace',$id,'file-replace')), ' class="replace-file"') : '';
-
 			$existing_files = get_filenames();
 
-			$condition = '<span class="';
-			$condition .= ($file_exists) ? 'success' : 'error';
-			$condition .= '">';
-			$condition .= ($file_exists)?gTxt('file_status_ok'):gTxt('file_status_missing');
-			$condition .= '</span>';
+			$replace = ($file_exists)
+				? '<fieldset class="replace-file">'.n.
+					'<legend>'.n.
+						gTxt('replace_file').sp.popHelp('replace_file').n.
+					'</legend>'.n.
+					file_upload_form('', '', 'file_replace', $id, 'file_replace').n.
+					'</fieldset>'
+				: '<fieldset class="upload-file">'.n.
+					'<legend>'.n.
+						gTxt('file_relink').sp.popHelp('file_reassign').n.
+					'</legend>'.n.
+					file_upload_form('', '', 'file_replace', $id, 'file_reassign').n.
+					'</fieldset>';
 
-			$downloadlink = ($file_exists)?make_download_link($id, txpspecialchars($filename),$filename):txpspecialchars($filename);
+			$condition = '<span class="'.(($file_exists) ? 'success' : 'error').'">'.
+				(($file_exists) ? gTxt('file_status_ok') : gTxt('file_status_missing')).
+				'</span>';
+
+			$downloadlink = ($file_exists) ? make_download_link($id, txpspecialchars($filename),$filename) : txpspecialchars($filename);
 
 			$created =
-					n.graf(checkbox('publish_now', '1', $publish_now, '', 'publish_now').'<label for="publish_now">'.gTxt('set_to_now').'</label>', ' class="publish-now"').
-
-					n.graf(gTxt('or_publish_at').sp.popHelp('timestamp'), ' class="publish-at"').
-
-					n.graf('<span class="label">'.gtxt('date').'</span>'.sp.
-						tsi('year', '%Y', $rs['created']).' / '.
-						tsi('month', '%m', $rs['created']).' / '.
+					graf(checkbox('publish_now', '1', $publish_now, '', 'publish_now') . '<label for="publish_now">'.gTxt('set_to_now').'</label>', ' class="edit-file-publish-now"').n.
+					graf(gTxt('or_publish_at').sp.popHelp('timestamp'), ' class="edit-file-publish-at"').n.
+					graf('<span class="label">'.gtxt('date').'</span>'.n.
+						tsi('year', '%Y', $rs['created']).' / '.n.
+						tsi('month', '%m', $rs['created']).' / '.n.
 						tsi('day', '%d', $rs['created'])
-					, ' class="date posted created"'
-					).
-
-					n.graf('<span class="label">'.gTxt('time').'</span>'.sp.
-						tsi('hour', '%H', $rs['created']).' : '.
-						tsi('minute', '%M', $rs['created']).' : '.
+					, ' class="edit-file-published"'
+					).n.
+					graf('<span class="label">'.gTxt('time').'</span>'.n.
+						tsi('hour', '%H', $rs['created']).' : '.n.
+						tsi('minute', '%M', $rs['created']).' : '.n.
 						tsi('second', '%S', $rs['created'])
-					, ' class="time posted created"'
+					, ' class="edit-file-created"'
 					);
 
-			$form = '';
-
-			if ($file_exists) {
-				$form =	tr(
-							td(
-								form(
-									graf('<label for="file_title">'.gTxt('title').'</label>: '.fInput('text','title',$title,'','','',40,'','file_title'), ' class="title"') .
-									graf('<label for="category">'.gTxt('file_category').'</label>'.br.treeSelectInput('category',
-									 		$categories,$category), ' class="category"') .
-//									graf(gTxt('permissions').br.selectInput('perms',$levels,$permissions)).
-									graf('<label for="description">'.gTxt('description').'</label>'.br.text_area('description','','',$description, 'description'), ' class="description text"') .
-									fieldset(radio_list('status', $file_statuses, $status, 4), gTxt('status'), 'file-status').
-									fieldset($created, gTxt('timestamp'), 'file-created').
-									pluggable_ui('file_ui', 'extend_detail_form', '', $rs).
-									graf(fInput('submit','',gTxt('save'),'publish')).
-
-									eInput('file') .
-									sInput('file_save').
-
-									hInput('filename', $filename).
-									hInput('id', $id) .
-
-									hInput('sort', $sort).
-									hInput('dir', $dir).
-									hInput('page', $page).
-									hInput('crit', $crit).
-									hInput('search_method', $search_method)
-								, '', '', 'post', 'edit-form', '', 'file_details')
-							)
-						, ' class="file-detail exists"');
-			} else {
-
-				$ef_select = empty($existing_files) ? '' : gTxt('existing_file').' '.selectInput('filename',$existing_files,"",1);
-				$form =	tr(
-							tda(
-								hed(gTxt('file_relink'),2).
-								file_upload_form(gTxt('upload_file'),'file_reassign','file_replace',$id,'file-reassign').
-								form(
-									graf(
-										$ef_select.
-										pluggable_ui('file_ui', 'extend_detail_form', '', $rs).
-										fInput('submit','',gTxt('Save')).
-
-										eInput('file').
-										sInput('file_save').
-
-										hInput('id',$id).
-										hInput('category',$category).
-										hInput('perms',($permissions=='-1') ? '' : $permissions).
-										hInput('title',$title).
-										hInput('description',$description).
-										hInput('status',$status).
-
-										hInput('sort', $sort).
-										hInput('dir', $dir).
-										hInput('page', $page).
-										hInput('crit', $crit).
-										hInput('search_method', $search_method)
-									)
-								, '', '', 'post', 'edit-form', '', 'assign_file'),
-								' colspan="4"'
-							)
-						, ' class="file-detail not-exists"');
-			}
-
 			echo n.'<div id="'.$event.'_container" class="txp-container">';
-			echo startTable('', '', 'txp-edit'),
-			tr(
-				td(
-					graf(gTxt('file_status').': '.$condition, ' class="condition"') .
-					graf(gTxt('file_name').': '.$downloadlink, ' class="name"') .
-					graf(gTxt('file_download_count').': '.$downloads, ' class="downloads"')
-				)
-			, ' class="file-info"'),
-			$form,
-			$replace,
-			endTable().
-			n.'</div>';
+			echo '<div class="txp-edit">',
+				hed('edit_file', 2),
+				inputLabel('condition', $condition).n,
+				inputLabel('name', $downloadlink).n,
+				inputLabel('download_count', $downloads).n,
+				$replace.n,
+				'<div class="file-detail '.($file_exists ? '' : 'not-').'exists">'.n,
+				form(
+					(($file_exists)
+					? inputLabel('file_status', radioSet($file_statuses, 'file_status', $status)).n.
+						inputLabel('file_title', fInput('text', 'file_title', $title, '', '', '', INPUT_REGULAR, '', 'file_title'), 'title').n.
+						inputLabel('file_category', treeSelectInput('file_category', $categories, $category, 'file_category'), 'file_category').n.
+//						inputLabel('perms', selectInput('perms', $levels, $permissions), 'permissions').n.
+						inputLabel('file_description', '<textarea id="file_description" name="file_description" rows="4" cols="'.INPUT_LARGE.'">'.$description.'</textarea>', 'description', '', '', '').n.
+						'<fieldset class="file-created">'.n.
+							'<legend>'.n.
+								gTxt('timestamp').n.
+							'</legend>'.n.
+							$created.n.
+						'</fieldset>'.n.
+						pluggable_ui('file_ui', 'extend_detail_form', '', $rs).
+						graf(fInput('submit', '', gTxt('Save'), 'publish')).n.
+						hInput('filename', $filename)
+					: (empty($existing_files)
+							? ''
+							: gTxt('existing_file').n.selectInput('filename', $existing_files, '', 1)
+						).n.
+						pluggable_ui('file_ui', 'extend_detail_form', '', $rs).n.
+						graf(fInput('submit', '', gTxt('Save'), 'publish')).n.
+						hInput('file_category', $category).n.
+						hInput('perms', ($permissions=='-1') ? '' : $permissions).n.
+						hInput('file_title', $title).n.
+						hInput('file_description', $description).n.
+						hInput('file_status', $status)
+					).
+					eInput('file').n.
+					sInput('file_save').n.
+					hInput('id',$id).n.
+					hInput('sort', $sort).n.
+					hInput('dir', $dir).n.
+					hInput('page', $page).n.
+					hInput('crit', $crit).n.
+					hInput('search_method', $search_method)
+				, '', '', 'post', 'edit-form', '', (($file_exists) ? 'file_details' : 'assign_file')),
+				'</div>'.n,
+				'</div>'.n.'</div>';
 		}
 	}
 
@@ -770,24 +750,6 @@ $LastChangedRevision$
 		}
 	}
 
-
-// -------------------------------------------------------------
-	function file_reset_count()
-	{
-		// TODO: accompanying user interface
-
-		extract(doSlash(gpsa(array('id','filename','category','description'))));
-
-		if ($id) {
-			$id = assert_int($id);
-			if (safe_update('txp_file','downloads = 0',"id = $id")) {
-				file_edit(gTxt('reset_file_count_success'),$id);
-			}
-		} else {
-			file_list(gTxt('reset_file_count_failure'));
-		}
-	}
-
 // -------------------------------------------------------------
 
 	function file_save()
@@ -795,7 +757,7 @@ $LastChangedRevision$
 		global $file_base_path, $txp_user;
 
 	    $varray = array_map('assert_string',
-			gpsa(array('id', 'category', 'title', 'description', 'status', 'publish_now', 'year', 'month', 'day', 'hour', 'minute', 'second')));
+			gpsa(array('id', 'file_category', 'file_title', 'file_description', 'file_status', 'publish_now', 'year', 'month', 'day', 'hour', 'minute', 'second')));
         extract(doSlash($varray));
 		$filename = $varray['filename'] = sanitizeForFile(gps('filename'));
 
@@ -850,20 +812,20 @@ $LastChangedRevision$
 
 		$size = filesize(build_file_path($file_base_path,$filename));
 
-        $constraints = array(
-            'category' => new CategoryConstraint(gps('category'), array('type' => 'file')),
-            'status' => new ChoiceConstraint(gps('status'), array('choices' => array(2, 3, 4), 'message' => 'invalid_status'))
-        );
-        callback_event_ref('file_ui', 'validate_save', 0, $varray, $constraints);
-        $validator = new Validator($constraints);
+		$constraints = array(
+			'category' => new CategoryConstraint(gps('file_category'), array('type' => 'file')),
+			'status' => new ChoiceConstraint(gps('file_status'), array('choices' => array(2, 3, 4), 'message' => 'invalid_status'))
+		);
+		callback_event_ref('file_ui', 'validate_save', 0, $varray, $constraints);
+		$validator = new Validator($constraints);
 
-        $rs = $validator->validate() && safe_update('txp_file', "
+		$rs = $validator->validate() && safe_update('txp_file', "
 			filename = '".doSlash($filename)."',
-			title = '$title',
-			category = '$category',
+			title = '$file_title',
+			category = '$file_category',
 			permissions = '$perms',
-			description = '$description',
-			status = '$status',
+			description = '$file_description',
+			status = '$file_status',
 			size = '$size',
 			modified = now(),
 			author = '".doSlash($txp_user)."'"

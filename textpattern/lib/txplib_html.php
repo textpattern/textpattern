@@ -603,6 +603,34 @@ $LastChangedRevision$
 
 
 /**
+ * Render a name-value input control with label
+ *
+ * @param	string	$name	HTML id / name attribute
+ * @param	string	$input	complete input control widget (result of fInput(), yesnoRadio(), etc)
+ * @param	string	$label	Label ['']
+ * @param	string	$help	pophelp text item ['']
+ * @param	string	$class	CSS class name to apply to wrapper ['edit-' + $name with underscores replaced with hyphens]
+ * @param	string	$wraptag_val	Tag to wrap the value in. If set to '', no wrapper is used (useful for textareas) ['span']
+ * @return		string	HTML
+ */
+
+	function inputLabel($name, $input, $label = '', $help = '', $class = '', $wraptag_val='span')
+	{
+		$help = ($help) ? sp.popHelp($help) : '';
+		$class = ($class) ? $class : 'edit-'.str_replace('_', '-', $name);
+		$label_open = ($label) ? '<label for="'.$name.'">' : '';
+		$label_close = ($label) ? '</label>' : '';
+		$label = ($label) ? $label : $name;
+		$wrapval_open = ($wraptag_val) ? '<'.$wraptag_val.' class="edit-value">' : '';
+		$wrapval_close = ($wraptag_val) ? '</'.$wraptag_val.'>' : '';
+
+		return graf(
+			'<span class="edit-label">'.$label_open.gTxt($label).$label_close.$help.'</span>'.n.
+			$wrapval_open.$input.$wrapval_close
+		, ' class="'.$class.'"');
+	}
+
+/**
  * Render anything as a XML element.
  *
  * @param	string	$content	Enclosed content
@@ -872,8 +900,8 @@ $LastChangedRevision$
 /**
  * Render a file upload form via the "$event_ui" > "upload_form" pluggable UI.
  *
- * @param	string	$label	File name label
- * @param	string	$pophelp	Help item
+ * @param	string	$label	File name label. May be empty
+ * @param	string	$pophelp	Help item ['']
  * @param	string	$step	Step
  * @param	string	$event	Event
  * @param	string	$id	File id
@@ -882,20 +910,19 @@ $LastChangedRevision$
  * @param	string	$class	HTML class attribute for the form element
  */
 
-	function upload_form($label, $pophelp, $step, $event, $id = '', $max_file_size = '1000000', $label_id = '', $class = 'upload-form')
+	function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_size = '1000000', $label_id = '', $class = 'upload-form')
 	{
 		global $sort, $dir, $page, $search_method, $crit;
 
 		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
 
 		$class = ($class) ? ' class="'.$class.'"' : '';
-
+		$p_class = 'edit-'. (($label_id) ? str_replace('_', '-', $label_id) : $event.'-upload');
 		$label_id = ($label_id) ? $label_id : $event.'-upload';
 
 		$argv = func_get_args();
 		return pluggable_ui($event.'_ui', 'upload_form',
 			n.n.'<form'.$class.' method="post" enctype="multipart/form-data" action="index.php">'.
-			n.'<div>'.
 
 			(!empty($max_file_size)? n.hInput('MAX_FILE_SIZE', $max_file_size): '').
 			n.eInput($event).
@@ -909,12 +936,11 @@ $LastChangedRevision$
 			n.hInput('crit', $crit).
 
 			n.graf(
-				'<label for="'.$label_id.'">'.$label.'</label>'.sp.popHelp($pophelp).sp.
+				(($label) ? '<label for="'.$label_id.'">'.$label.'</label>' : '').(($pophelp) ? sp.popHelp($pophelp) : '').sp.
 					fInput('file', 'thefile', '', '', '', '', '', '', $label_id).sp.
 					fInput('submit', '', gTxt('upload'))
-			).
+			, ' class="'.$p_class.'"').
 
-			n.'</div>'.
 			n.tInput().
 			n.'</form>',
 			$argv);

@@ -146,7 +146,7 @@ eod;
 			fLabelCell(gTxt('table_prefix')).fInputCell('dprefix','','').
 			tdcs(small(gTxt('prefix_warning')),2)
 		),
-		tr(tdcs('&nbsp;',4)),
+		tr(tdcs('&#160;',4)),
 		tr(
 			tdcs(
 				hed(gTxt('site_url'),2).

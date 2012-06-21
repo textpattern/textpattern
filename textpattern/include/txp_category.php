@@ -103,7 +103,7 @@ if ($event == 'category') {
 
 		if ($rs)
 		{
-			return treeSelectInput('parent', $rs, $name);
+			return treeSelectInput('category_parent', $rs, $name, 'category_parent');
 		}
 
 		return gTxt('no_other_categories_exist');
@@ -397,26 +397,30 @@ if ($event == 'category') {
 	}
 
 //-------------------------------------------------------------
+
 	function cat_event_category_edit($evname)
 	{
 		$id     = assert_int(gps('id'));
 		$parent = doSlash(gps('parent'));
 
-		$row = safe_row("*", "txp_category", "id=$id");
+		$row = safe_row('*', 'txp_category', "id=$id");
 		if ($row) {
 			pagetop(gTxt('edit_category'));
 			extract($row);
-			$out = stackRows(
-				fLabelCell($evname.'_category_name') . fInputCell('name', $name, '', 20),
-				fLabelCell('parent') . td(cat_parent_pop($parent,$evname,$id)),
-				fLabelCell($evname.'_category_title') . fInputCell('title', $title, '', 30),
-				pluggable_ui('category_ui', 'extend_detail_form', '', $row),
-				hInput('id',$id),
-				tdcs(fInput('submit', '', gTxt('save'), 'publish'), 2)
-			);
-			$out.= eInput( 'category' ) . sInput( 'cat_'.$evname.'_save' ) . hInput( 'old_name',$name );
+			$out = '<div class="txp-edit">'.n.
+				hed('edit_category', 2).n.
+				inputLabel('category_name', fInput('text', 'category_name', $name, '', '', '', INPUT_REGULAR, '', 'category_name'), $evname.'_category_name').n.
+				inputLabel('category_parent', cat_parent_pop($parent,$evname,$id), 'parent').n.
+				inputLabel('category_title', fInput('text', 'category_title', $title, '', '', '', INPUT_REGULAR, '', 'category_title'), $evname.'_category_title').n.
+				pluggable_ui('category_ui', 'extend_detail_form', '', $row).n.
+				hInput('id',$id).
+				graf(fInput('submit', '', gTxt('save'), 'publish')).
+				eInput('category').
+				sInput('cat_'.$evname.'_save').
+				hInput('old_name',$name).
+				'</div>';
 			echo '<div id="category_container" class="txp-container">'.
-				form( startTable( '', '', 'txp-edit' ) . $out . endTable(), '', '', 'post', 'edit-form' ).
+				form(  $out, '', '', 'post', 'edit-form' ).
 				'</div>';
 		} else {
 			cat_category_list(array(gTxt('category_not_found'), E_ERROR));
@@ -429,10 +433,10 @@ if ($event == 'category') {
 	{
 		global $txpcfg;
 
-		extract(doSlash(array_map('assert_string', psa(array('id', 'name', 'old_name', 'parent', 'title')))));
+		extract(doSlash(array_map('assert_string', psa(array('id', 'category_name', 'old_name', 'category_parent', 'category_title')))));
 		$id = assert_int($id);
 
-		$name = sanitizeForUrl($name);
+		$name = sanitizeForUrl($category_name);
 
 		// make sure the name is valid
 		if (!$name)
@@ -452,10 +456,10 @@ if ($event == 'category') {
 			return cat_category_list($message);
 		}
 
-		$parent = ($parent) ? $parent : 'root';
+		$parent = ($category_parent) ? $category_parent : 'root';
 
 		$message = array(gTxt('category_save_failed'), E_ERROR);
-		if (safe_update('txp_category', "name = '$name', parent = '$parent', title = '$title'", "id = $id") &&
+		if (safe_update('txp_category', "name = '$name', parent = '$parent', title = '$category_title'", "id = $id") &&
 			safe_update('txp_category', "parent = '$name'", "parent = '$old_name'"))
 		{
 			rebuild_tree_full($event);

@@ -1,5 +1,26 @@
+/* Clearfix
+   ========================================================================== */
+
+.clearfix:before,
+.txp-edit p:before,
+.clearfix:after,
+.txp-edit p:after {
+	content: "";
+	display: table;
+}
+.clearfix:after, 
+.txp-edit p:after {
+	clear: both;
+}
+/* zoom IE7 fix */
+.clearfix,
+.txp-edit p {
+	*zoom: 1;
+}
+
+
 /* Base
-========================================================================== */
+   ========================================================================== */
 
 body,
 input,
@@ -148,7 +169,7 @@ ol ol {
 
 
 /* Links
-========================================================================== */
+   ========================================================================== */
 
 h3 a {
 	font-weight: bold;
@@ -216,7 +237,7 @@ a.plain:active {
 
 
 /* Forms
-========================================================================== */
+   ========================================================================== */
 
 fieldset {
 	margin: 0 0 1em 0;
@@ -230,8 +251,8 @@ legend {
 
 input[type="text"],
 input[type="password"],
-textarea,
-select {
+textarea {
+	-webkit-appearance: none;
 	-webkit-background-clip: padding;
 	 -khtml-background-clip: padding-box;
 	   -moz-background-clip: padding;
@@ -240,7 +261,10 @@ select {
 	        background-clip: padding-box;
 	margin: 0;
 	border: 1px solid;
-	padding: .25em;
+	border-color: #bbb #ddd #ddd #bbb;
+	border-radius: 0;
+	padding: .18181818181818em;
+	width: 100%;
 	background-color: #f5f5f5;
 	-webkit-box-sizing: border-box;
 	   -moz-box-sizing: border-box;
@@ -252,15 +276,6 @@ select {
 	*padding-top: 1px;
 	*padding-bottom: 4px;
 	*height: auto;
-}
-
-input[type="text"],
-input[type="password"],
-textarea {
-	-webkit-appearance: none;
-	border-color: #bbb #ddd #ddd #bbb;
-	border-radius: 0;
-	width: 100%;
 }
 
 input[type="text"],
@@ -278,8 +293,13 @@ input.input-small {
 	max-width: 5.5em;
 }
 
+input.input-xsmall {
+	width: 18%;
+	max-width: 3.5em;
+}
+
 textarea {
-	height: 5.18181818181818em;
+	min-height: 5.18181818181818em;
 	resize: vertical;
 	/* removes default vertical scrollbar in IE7-9 */
 	overflow: auto;
@@ -288,7 +308,26 @@ textarea {
 }
 
 select {
+	-webkit-background-clip: padding;
+	 -khtml-background-clip: padding-box;
+	   -moz-background-clip: padding;
+	    -ms-background-clip: padding-box;
+	     -o-background-clip: padding-box;
+	        background-clip: padding-box;
+	margin: 0;
+	border: 1px solid;
 	border-color: #ddd #bbb #bbb #ddd;
+	background-color: #f5f5f5;
+	-webkit-box-sizing: border-box;
+	   -moz-box-sizing: border-box;
+			box-sizing: border-box;
+	/* IE7 box-sizing workaround */
+	*padding-right: 0;
+	*padding-left: 0;
+	/* IE7 vertical alignment fix */
+	*padding-top: 1px;
+	*padding-bottom: 4px;
+	*height: auto;
 }
 
 button,
@@ -310,7 +349,7 @@ input[type="button"] {
 	border-color: #ddd #bbb #bbb #ddd;
 	-moz-border-radius: .4em;
 	     border-radius: .4em;
-	padding: .25em .5em;
+	padding: .18181818181818em .5em;
 	width: auto;
 	text-decoration: none;
 	background-color: #ddd;
@@ -393,6 +432,17 @@ textarea[disabled] {
 	        user-select: none;
 }
 
+.txp-buttons form {
+	display: inline-block;
+	/* display and zoom IE7 fix for display:inline-block */
+	*display: inline;
+	*zoom: 1;
+}
+
+.txp-buttons p {
+	margin: 0;
+}
+
 /* AJAX spinner */
 span.spinner {
 	display: inline-block;
@@ -405,9 +455,16 @@ span.spinner {
     *zoom: 1;
 }
 
+.edit-image-replace input[type="submit"],
+.edit-upload-thumbnail input[type="submit"],
+.edit-alter-thumbnail input[type="submit"],
+.edit-file-replace input[type="submit"] {
+	float: right;
+}
+
 
 /* Tables
-========================================================================== */
+   ========================================================================== */
 
 table {
 	border-collapse: collapse;
@@ -483,46 +540,43 @@ td {
 	white-space: nowrap;
 }
 
+
 /* Edit panes
-========================================================================== */
+   ========================================================================== */
 
 .txp-edit {
-	margin: 0 auto 1.5em;
+	margin: 0 auto 1em;
 	border: 1px solid #e5e5e5;
-	width: 38em;
+	padding: 1em 1em 1px 1em;
+	width: 40em;
 }
 
-.txp-edit > tbody > tr > td {
-	padding: .3em;
+.edit-label {
+	display: inline-block;
+	float: left;
+	width: 45%;
+	/* display and zoom IE7 fix for display:inline-block */
+	*display: inline;
+	*zoom: 1;
 }
 
-.txp-edit > tbody > tr:first-child > td {
-	padding-top: 1em;
+.edit-value {
+	display: inline-block;
+	float: right;
+	width: 55%;
+	/* display and zoom IE7 fix for display:inline-block */
+	*display: inline;
+	*zoom: 1;
 }
 
-.txp-edit > tbody > tr > td:first-child {
-	padding-left: 1em;
-}
-
-.txp-edit > tbody > tr > td:last-child {
-	padding-right: 1em;
-}
-
-.txp-edit > tbody > tr > td.cell-label {
-	width: 39%;
-}
-
-.txp-edit h2 {
-	margin-bottom: 0;
-}
-
-.txp-edit .publish {
-	margin-bottom: 1em;
+.edit-value input {
+	margin-top: -.27272727272727em;
+	margin-bottom: -.27272727272727em;
 }
 
 
 /* Login panes
-========================================================================== */
+   ========================================================================== */
 
 .login-pane {
 	margin: 0 auto 1.5em;
@@ -548,7 +602,7 @@ td {
 
 
 /* Other element overrides
-========================================================================== */
+   ========================================================================== */
 
 .prev-next,
 .pageby {
@@ -596,14 +650,9 @@ ul.plain-list,
 	text-align: center;
 }
 
-#change_password,
-#change_email {
-	margin-top: 3em;
-}
-
 
 /* Global messages
-========================================================================== */
+   ========================================================================== */
 
 #warning {
 	margin: 0 auto 1em auto;
@@ -613,7 +662,6 @@ ul.plain-list,
 	background-color: #fff4f4;
 }
 
-.ok, /* .ok deprecated in v4.5, use .success instead */
 .success {
 	color: #008000;
 }
@@ -622,7 +670,6 @@ ul.plain-list,
 	color: #c90;
 }
 
-.not-ok, /* .not-ok deprecated in v4.5, use .error instead */
 .error {
 	color: #c40000;
 }
@@ -642,7 +689,7 @@ tr.spam td {
 
 
 /* Global layout
-========================================================================== */
+   ========================================================================== */
 
 .txp-header {
 	min-width: 86em;
@@ -783,7 +830,7 @@ td#messagepane {
 
 
 /* Setup pages
-========================================================================== */
+   ========================================================================== */
 
 #page-setup {
 	border-top: 15px solid #fc3;
@@ -796,7 +843,7 @@ table#setup td {
 
 
 /* Tagbuilder pages
-========================================================================== */
+   ========================================================================== */
 
 #tag-event {
 	border-top: .5em solid #fc3;
@@ -815,13 +862,9 @@ table#setup td {
 	margin: 2em .3em 0 .3em;
 }
 
-#tagbuilder-output textarea {
-	height: 8.27272727272727em;
-}
-
 
 /* Categories pages
-========================================================================== */
+   ========================================================================== */
 
 .category-list {
 	width: 100%;
@@ -863,7 +906,7 @@ td.categories p {
 
 
 /* Write page
-========================================================================== */
+   ========================================================================== */
 
 td#article-col-1 {
 	padding-right: 35px;
@@ -888,14 +931,6 @@ td#article-col-2 {
 
 textarea#body {
 	height: 37.6363636363636em;
-}
-
-textarea#excerpt {
-	height: 8.27272727272727em;
-}
-
-textarea#description {
-	width: 400px;
 }
 
 input#title {
@@ -981,28 +1016,45 @@ input.exp_year {
 }
 
 
-/* Images pages
-========================================================================== */
+/* Content -> Images page
+   ========================================================================== */
 
-table#thumbnail_alter td {
-	vertical-align: middle;
+.fullsize-image {
+	text-align: center;
+	margin-bottom: 1em;
+}
+
+.fullsize-image img {
+	max-width: 100%;
+	height: auto;
+}
+
+.thumbnail-edit {
+	overflow-x: auto;
+	margin-bottom: 1em;
+	/* IE7 */
+	*overflow-y: hidden;
+}
+
+.thumbnail-edit form {
+ 	vertical-align: top;
+ 	display: inline-block;
+	/* display and zoom IE7 fix for display:inline-block */
+ 	*display: inline;
+ 	*zoom: 1;
 }
 
 
 /* Comments pages
-========================================================================== */
+   ========================================================================== */
 
 form.cb_show_spam {
 	margin-left: .5em;
 }
 
-textarea#commentmessage {
-	height: 23.7272727272727em;
-}
-
 
 /* Pages, forms, styles pages
-========================================================================== */
+   ========================================================================== */
 
 td.column:last-child {
 	padding-left: 35px;
@@ -1051,7 +1103,7 @@ textarea#form {
 
 
 /* Diagnostics page
-========================================================================== */
+   ========================================================================== */
 
 textarea#diagnostics-detail {
 	height: 24.3333333333333em;
@@ -1059,7 +1111,7 @@ textarea#diagnostics-detail {
 
 
 /* Preferences pages
-========================================================================== */
+   ========================================================================== */
 
 #page-prefs .txp-list th,
 #page-prefs .txp-list td {
@@ -1067,13 +1119,13 @@ textarea#diagnostics-detail {
 	vertical-align: middle;
 }
 
-#page-prefs #textpack-install {
+textarea#textpack-install {
 	width: 32em;
 }
 
 
 /* Plugins pages
-========================================================================== */
+   ========================================================================== */
 
 #plugin_preview {
 	margin: 0 auto;
