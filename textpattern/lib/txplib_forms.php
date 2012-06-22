@@ -9,14 +9,14 @@ $LastChangedRevision$
 
 	function radioSet($vals, $field, $var, $tabindex = '', $id = '')
 	{
-		$id = ($id) ? $id.'-'.$field : $field;
+		$id = ($id) ? $id.'_'.$field : $field;
 
 		foreach ($vals as $a => $b)
 		{
-			$out[] = '<input type="radio" id="'.$id.'-'.$a.'" name="'.$field.'" value="'.$a.'" class="radio'.($a == $var ? ' active' : '').'"';
+			$out[] = '<input type="radio" id="'.$id.'_'.$a.'" name="'.$field.'" value="'.$a.'" class="radio'.($a == $var ? ' active' : '').'"';
 			$out[] = ($a == $var) ? ' checked="checked"' : '';
 			$out[] = ($tabindex) ? ' tabindex="'.$tabindex.'"' : '';
-			$out[] = ' /><label for="'.$id.'-'.$a.'">'.$b.'</label> ';
+			$out[] = ' /><label for="'.$id.'_'.$a.'">'.$b.'</label> ';
 		}
 
 		return join('', $out);
@@ -286,7 +286,7 @@ $LastChangedRevision$
 		// $values is an array of value => label pairs
 		foreach ($values as $k => $v)
 		{
-			$id = $name.'-'.$k;
+			$id = $name.'_'.$k;
 			$out[] = n.t.'<li class="status-'.$k.' '.$v.($hilight_val == $k ? ' active' : '').'">'.radio($name, $k, ($current_val == $k) ? 1 : 0, $id).
 				'<label for="'.$id.'">'.($hilight_val == $k ? strong($v) : $v).'</label></li>';
 		}

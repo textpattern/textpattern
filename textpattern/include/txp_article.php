@@ -1019,7 +1019,7 @@ EOS
 //--------------------------------------------------------------
 	function getDefaultSection()
 	{
-		return safe_field("name", "txp_section","is_default=1");
+		return get_pref('default_section');
 	}
 
 // -------------------------------------------------------------
