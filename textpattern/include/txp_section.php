@@ -50,6 +50,9 @@ $LastChangedRevision$
 		if ($dir === '') $dir = get_pref('section_sort_dir', 'desc');
 		$dir = ($dir == 'asc') ? 'asc' : 'desc';
 
+		gTxtScript('yes');
+		gTxtScript('no');
+
 		switch ($sort)
 		{
 			case 'title':
@@ -255,7 +258,7 @@ $LastChangedRevision$
 					value: val
 				}, function(data) {
 					var newval = $(data).find('section_toggle_val').attr('value');
-					obj.text(newval);
+					obj.text(textpattern.textarray[newval]);
 				});
 			});
 
@@ -270,77 +273,7 @@ $LastChangedRevision$
 			});
 EOS
 			);
-
 		}
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-
-		$default = safe_row('page, css, name', 'txp_section', "name = 'default'");
-		$default['old_name'] = 'default';
-
-		echo '<h1 class="txp-heading">'.gTxt('tab_sections').'</h1>';
-		echo n.'<div id="'.$event.'_container" class="txp-container">';
-		echo n.n.startTable('', '', 'txp-columntable').
-
-			n.n.tr(
-				tda(
-					n.'<div id="'.$event.'_control" class="txp-control-panel">'.
-
-					n.n.form(
-						fInput('text', 'name', '', '', '', '', 10).n.
-						fInput('submit', '', gTxt('create')).sp.popHelp('section_category').
-						eInput('section').
-						sInput('section_create')
-					, '', '', 'post', 'edit-form', '', 'section_create').
-					n.'</div>'
-				, ' colspan="3"')
-			).
-
-			n.n.tr(
-				td(gTxt('default'), '', 'label').n.
-				td(form(section_detail_partial($default), '', '', 'post', 'async', 'section-default', 'section-form-default')).n.
-				td()
-			, ' id="section-default" class="section default"');
-
-		$rs = safe_rows_start('*', 'txp_section', "name != 'default' order by name");
-
-		if ($rs)
-		{
-			$ctr = 1;
-
-			while ($a = nextRow($rs))
-			{
-				extract($a);
-				$a['old_name'] = $name;
-
-				echo n.n.tr(
-					n.td($name, '', 'label').
-					n.td(form(section_detail_partial($a), '', '', 'post', 'async', 'section-'.$name, 'section-form-'.$name), '', 'main').
-					td(
-						dLink('section', 'section_delete', 'name', $name, '', 'type', 'section')
-					, '', 'actions')
-				,' id="section-'.$name.'" class="section '.(($ctr%2 == 0) ? 'even' : 'odd').'"');
-
-				$ctr++;
-			}
-		}
-
-		echo n.n.endTable().'</div>';
-
-*/
-
 	}
 
 //-------------------------------------------------------------
@@ -619,7 +552,7 @@ EOS
 		$column = ps('column');
 		$value = strtolower(ps('value'));
 		$name = ps('name');
-		$newval = ($value == 'yes') ? '0' : '1';
+		$newval = ($value == strtolower(gTxt('yes'))) ? '0' : '1';
 		$ret = false;
 		switch($column)
 		{
@@ -636,7 +569,8 @@ EOS
 
 		if ($ret)
 		{
-			send_xml_response(array('section_toggle_val' => ($newval == '1' ? gTxt('yes') : gTxt('no'))));
+			// Send gTxt strings which are translated client side
+			send_xml_response(array('section_toggle_val' => ($newval == '1' ? 'yes' : 'no')));
 		}
 		exit;
 	}
