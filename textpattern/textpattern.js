@@ -52,57 +52,69 @@ function verify(msg)
 	return confirm(msg);
 }
 
-// -------------------------------------------------------------
-// multi-edit checkbox utils
+/**
+ * Selects all multi-edit checkboxes
+ */
 
 function selectall()
 {
-	var elem = window.document.longform.elements;
-	var cnt = elem.length;
-
-	for (var i = 0; i < cnt; i++)
-	{
-		if (elem[i].name == 'selected[]')
-		{
-			elem[i].checked = true;
-		}
-	}
+	$('form[name=longform] input[type=checkbox][name="selected[]"]').prop('checked', true);
 }
+
+/**
+ * De-selects all multi-edit checkboxes
+ */
 
 function deselectall()
 {
-	var elem = window.document.longform.elements;
-	var cnt = elem.length;
-
-	for (var i = 0; i < cnt; i++)
-	{
-		if (elem[i].name == 'selected[]')
-		{
-			elem[i].checked = false;
-		}
-	}
+	$('form[name=longform] input[type=checkbox][name="selected[]"]').prop('checked', false);
 }
+
+/**
+ * Selects a range of multi-edit checkboxes
+ */
 
 function selectrange()
 {
 	var inrange = false;
-	var elem = window.document.longform.elements;
-	var cnt = elem.length;
 
-	for (var i = 0; i < cnt; i++)
-	{
-		if (elem[i].name == 'selected[]')
+	$('form[name=longform] input[type=checkbox][name="selected[]"]').each(function() {
+		var $this = $(this);
+
+		if ($this.is(':checked'))
 		{
-			if (elem[i].checked == true)
-			{
-				inrange = (!inrange) ? true : false;
-			}
-
-			if (inrange)
-			{
-				elem[i].checked = true;
-			}
+			inrange = (!inrange) ? true : false;
 		}
+
+		if (inrange)
+		{
+			$this.prop('checked', true);
+		}
+	});
+}
+
+/**
+ * Toggles the current selection of multi-edit checkboxes
+ */
+
+function selecttoggle()
+{
+	$('form[name="longform"] input[name="selected[]"]').each(function() {
+		$(this).prop('checked', !$(this).prop('checked'));
+	});
+}
+
+/**
+ * Toggles the entire column of multi-edit checkboxes
+ */
+
+function toggleAll()
+{
+	if ($('#selected_toggle').prop('checked')) {
+		selectall();
+	}
+	else {
+		deselectall();
 	}
 }
 
@@ -221,7 +233,7 @@ function toggleDisplay(id)
 				event: textpattern.event,
 				step: 'save_pane_state',
 				pane: $(obj).attr('id'),
-				visible: ($(obj).css('display') == 'block')
+				visible: ($(obj).is(':visible'))
 			}
 		);
 	}
@@ -246,30 +258,23 @@ function toggleDisplayHref()
 	return false;
 }
 
-// -------------------------------------------------------------
-// show/hide matching elements
+/**
+ * Shows/hides matching elements
+ * @param className string Targeted element's class
+ * @param show bool|int 1 to display, 0 to hide
+ */
 
-function setClassDisplay(className, value)
+function setClassDisplay(className, show)
 {
-	var elements = getElementsByClass(className);
-	var is_ie = (navigator.appName == 'Microsoft Internet Explorer');
-
-	for (var i = 0; i < elements.length; i++)
+	var obj = $('.'+className);
+	
+	if (show == 1)
 	{
-		var tagname = elements[i].nodeName.toLowerCase();
-		var type = 'block';
-
-		if (tagname == 'td' || tagname == 'th')
-		{
-			type = (is_ie ? 'inline' : 'table-cell');
-		}
-
-		if (tagname == 'span')
-		{
-			type = 'inline';
-		}
-
-		elements[i].style.display = (value== 1 ? type : 'none');
+		obj.show();
+	}
+	else
+	{
+		obj.hide();
 	}
 }
 
@@ -487,8 +492,9 @@ $(document).ready(function() {
 	// enable spellcheck for all elements mentioned in textpattern.do_spellcheck
 	c = $(textpattern.do_spellcheck)[0];
 	if(c && "spellcheck" in c) {$(textpattern.do_spellcheck).prop("spellcheck", true);}
-	// attach toggle behaviour
+	// attach toggle behaviours
 	$('.lever a[class!=pophelp]').click(toggleDisplayHref);
+	$('#selected_toggle').click(toggleAll);
 	// establish AJAX timeout from prefs
 	if($.ajaxSetup().timeout === undefined) {
 		$.ajaxSetup( {timeout : textpattern.ajax_timeout} );
