@@ -46,7 +46,7 @@ $LastChangedRevision$
 			'file_create'        => true,
 		);
 
-		if(!$step or !bouncer($step, $available_steps)){
+		if(!$step or !bouncer($step, $available_steps)) {
 			file_list();
 		} else $step();
 	}
@@ -472,18 +472,18 @@ $LastChangedRevision$
 			$existing_files = get_filenames();
 
 			$replace = ($file_exists)
-				? '<fieldset class="replace-file">'.n.
-					'<legend>'.n.
-						gTxt('replace_file').sp.popHelp('replace_file').n.
-					'</legend>'.n.
-					file_upload_form('', '', 'file_replace', $id, 'file_replace').n.
-					'</fieldset>'
-				: '<fieldset class="upload-file">'.n.
-					'<legend>'.n.
-						gTxt('file_relink').sp.popHelp('file_reassign').n.
-					'</legend>'.n.
-					file_upload_form('', '', 'file_replace', $id, 'file_reassign').n.
-					'</fieldset>';
+				? '<div class="summary-details replace-file">'.n.
+						'<h3 class="plain">'.gTxt('replace_file').sp.popHelp('replace_file').'</h3>'.n.
+						'<div>'.n.
+							file_upload_form('', '', 'file_replace', $id, 'file_replace').n.
+						'</div>'.n.
+					'</div>'.n
+				: '<div class="summary-details upload-file">'.n.
+						'<h3 class="plain">'.gTxt('file_relink').sp.popHelp('file_reassign').'</h3>'.n.
+						'<div>'.n.
+							file_upload_form('', '', 'file_replace', $id, 'file_reassign').n.
+						'</div>'.n.
+					'</div>'.n;
 
 			$condition = '<span class="'.(($file_exists) ? 'success' : 'error').'">'.
 				(($file_exists) ? gTxt('file_status_ok') : gTxt('file_status_missing')).
@@ -998,5 +998,4 @@ $LastChangedRevision$
 
 		return array_diff($dirlist,$files);
 	}
-
 ?>

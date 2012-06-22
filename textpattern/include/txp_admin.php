@@ -76,8 +76,8 @@ $LastChangedRevision$
 	{
 		require_privs('admin.edit');
 
-		extract(doSlash(psa(array('login_privileges', 'user_id', 'real_name', 'login_email'))));
-		$privs   = assert_int($login_privileges);
+		extract(doSlash(psa(array('privileges', 'user_id', 'real_name', 'login_email'))));
+		$privs   = assert_int($privileges);
 		$user_id = assert_int($user_id);
 
 		if (!is_valid_email($login_email))
@@ -148,9 +148,9 @@ $LastChangedRevision$
 	{
 		require_privs('admin.edit');
 
-		extract(doSlash(psa(array('login_privileges', 'login_name', 'login_email', 'real_name'))));
+		extract(doSlash(psa(array('privileges', 'login_name', 'login_email', 'real_name'))));
 
-		$privs  = assert_int($login_privileges);
+		$privs  = assert_int($privileges);
 		$length = function_exists('mb_strlen') ? mb_strlen($login_name, '8bit') : strlen($login_name);
 
 		if ($login_name and $length <= 64 and is_valid_email($login_email))
@@ -196,7 +196,7 @@ $LastChangedRevision$
 	function privs($priv = '')
 	{
 		global $levels;
-		return selectInput('login_privileges', $levels, $priv, '', '', 'login_privileges');
+		return selectInput('privileges', $levels, $priv, '', '', 'privileges');
 	}
 
 // -------------------------------------------------------------
@@ -217,9 +217,9 @@ $LastChangedRevision$
 
 		echo form(
 			'<div class="txp-edit">'.
-			hed(gTxt('change_password'), 2).
+			hed(gTxt('change_password'), 2).n.
 			inputLabel('new_pass', fInput('password', 'new_pass', '', '', '', '', INPUT_REGULAR, '', 'new_pass'), 'new_password').n.
-			graf(checkbox('mail_password', '1', true, '', 'mail_password') . '<label for="mail_password">'.gTxt('mail_it').'</label>', ' class="edit-mail-password"').n.
+			graf(checkbox('mail_password', '1', true, '', 'mail_password') .n. '<label for="mail_password">'.gTxt('mail_it').'</label>', ' class="edit-mail-password"').n.
 			graf(fInput('submit', 'change_pass', gTxt('submit'), 'publish')).
 			eInput('admin').
 			sInput('change_pass').
@@ -239,7 +239,7 @@ $LastChangedRevision$
 
 		echo form(
 			'<div class="txp-edit">'.
-			hed(gTxt('change_email_address'), 2).
+			hed(gTxt('change_email_address'), 2).n.
 			inputLabel('new_email', fInput('text', 'new_email', $email, '', '', '', INPUT_REGULAR, '', 'new_email'), 'new_email').n.
 			graf(fInput('submit', 'change_email', gTxt('submit'), 'publish')).
 			eInput('admin').
@@ -464,22 +464,25 @@ $LastChangedRevision$
 		$rs = array();
 
 		extract(gpsa($vars));
-		if ($user_id && $step == 'author_edit')
+
+		$is_edit = ($user_id && $step == 'author_edit');
+
+		if ($is_edit)
 		{
 			$user_id = assert_int($user_id);
 			$rs = safe_row('*', 'txp_users', "user_id = $user_id");
 			extract($rs);
 		}
 
-		$caption = gTxt(($user_id && $step == 'author_edit') ? 'edit_author' : 'add_new_author');
+		$caption = gTxt(($is_edit) ? 'edit_author' : 'add_new_author');
 
 		echo form(
 			'<div class="txp-edit">'.n.
 			hed($caption, 2).n.
-			inputLabel('login_name', ($user_id && $step == 'author_edit' ? strong($name) : fInput('text', 'login_name', $name, '', '', '', INPUT_REGULAR, '', 'login_name')), 'login_name', 'add_new_author').n.
+			inputLabel('login_name', ($is_edit ? strong($name) : fInput('text', 'login_name', $name, '', '', '', INPUT_REGULAR, '', 'login_name')), ($is_edit ? '': 'login_name'), 'add_new_author').n.
 			inputLabel('real_name', fInput('text', 'real_name', $RealName, '', '', '', INPUT_REGULAR, '', 'real_name'), 'real_name').n.
 			inputLabel('login_email', fInput('text', 'login_email', $email, '', '', '', INPUT_REGULAR, '', 'login_email'), 'email').n.
-			inputLabel('login_privileges', (($txp_user != $name) ? privs($privs) : hInput('login_privileges', $privs).strong(get_priv_level($privs))), 'privileges', 'about_privileges').n.
+			inputLabel('privileges', (($txp_user != $name) ? privs($privs) : hInput('privileges', $privs).strong(get_priv_level($privs))), ($is_edit ? '' : 'privileges'), 'about_privileges').n.
 			pluggable_ui('author_ui', 'extend_detail_form', '', $rs).n.
 			graf(fInput('submit', '', gTxt('save'), 'publish')).
 			eInput('admin').
@@ -575,7 +578,7 @@ $LastChangedRevision$
 
 				global $levels;
 
-				$privilege = ps('login_privileges');
+				$privilege = ps('privileges');
 
 				if (!isset($levels[$privilege])) return author_list();
 

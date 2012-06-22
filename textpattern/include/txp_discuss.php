@@ -208,7 +208,7 @@ $LastChangedRevision$
 				eInput('discuss').
 				sInput('ipban_list')
 			)
-			, '', '', 'post', '', '', 'change_password');
+			, '', '', 'post', '', '', 'list_banned_ips');
 		echo '</div>';
 
 		if ($total < 1)
@@ -432,7 +432,9 @@ $LastChangedRevision$
 					MODERATE => gTxt('unmoderated')
 				),
 				$visible,
-				false);
+				false,
+				'',
+				'status');
 
 			echo '<div id="'.$event.'_container" class="txp-container">'.
 				form(
@@ -440,11 +442,11 @@ $LastChangedRevision$
 					hed(gTxt('edit_comment'), 2).n.
 					inputLabel('status', $status_list, 'status').n.
 					inputLabel('name', fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'name'), 'name').n.
-					inputLabel('ip', $ip.' '.$ban_link, 'IP').n.
-					inputLabel('email', fInput('email', 'email', $email, '', '', '', INPUT_REGULAR, '', 'email'), 'email').n.
-					inputLabel('website', fInput('text', 'web', $web, '', '', '', INPUT_REGULAR, '', 'web'), 'website').n.
-					inputLabel('date', safe_strftime('%d %b %Y %X', $uPosted), 'date').n.
-					inputLabel('message', '<textarea id="commentmessage" name="message" cols="60" rows="15">'.$message.'</textarea>', 'message', '', '', '').n.
+					inputLabel('IP', $ip.n.$ban_link, '').n.
+					inputLabel('email', fInput('text', 'email', $email, '', '', '', INPUT_REGULAR, '', 'email'), 'email').n.
+					inputLabel('website', fInput('text', 'web', $web, '', '', '', INPUT_REGULAR, '', 'website'), 'website').n.
+					inputLabel('date', safe_strftime('%d %b %Y %X', $uPosted), '').n.
+					inputLabel('commentmessage', '<textarea id="commentmessage" name="message" cols="60" rows="15">'.$message.'</textarea>', 'message', '', '', '').n.
 					graf(fInput('submit', 'step', gTxt('save'), 'publish')).
 
 					hInput('sort', $sort).

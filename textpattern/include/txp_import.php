@@ -15,28 +15,38 @@ $LastChangedRevision$
 
 	//Keep error display until we add an error handler for this
 	error_reporting(E_ALL);
-  	@ini_set("display_errors","1");
+	@ini_set("display_errors","1");
 
 	require_privs('import');
 
- 	$vars = array('import_tool', 'Section','type','comments_invite','blog_id','importdb','importdblogin','importdbpass','importdbhost','wpdbprefix','wpdbcharset');
+	$vars = array(
+		'import_tool',
+		'import_section',
+		'import_status',
+		'import_comments_invite',
+		'import_blog_id',
+		'importdb',
+		'importdblogin',
+		'importdbpass',
+		'importdbhost',
+		'wpdbprefix',
+		'wpdbcharset'
+	);
 
- 	// Add new tools here.
- 	// First: Array key must be the end of the import tool file name;
- 	// that is import_[key].php.
- 	// Then: Add the specific tool call on start_import switch statement
+	// Add new tools here.
+	// First: Array key must be the end of the import tool file name;
+	// that is import_[key].php.
+	// Then: Add the specific tool call on start_import switch statement
+	$tools = array(
+		''=>'',
+		'mt'=>'Movable Type (File)',
+		'mtdb'=>'Movable Type (MySQL DB)',
+		'blogger'=>'Blogger',
+		'b2' => 'b2',
+		'wp'=>'WordPress'
+	);
 
- 	$tools = array(
-				''=>'',
- 				'mt'=>'Movable Type (File)',
- 				'mtdb'=>'Movable Type (MySQL DB)',
-				'blogger'=>'Blogger',
-				'b2' => 'b2',
-				'wp'=>'WordPress'
-			);
-
-
- 	if(!$step or !bouncer($step, array('switch_tool' => false, 'start_import' => true))){
+	if(!$step or !bouncer($step, array('switch_tool' => false, 'start_import' => true))) {
 		$step = 'switch_tool';
 	}
 	$step();
@@ -66,85 +76,47 @@ function showHideFields($sel)
 </script>
 
 <?php
-		$content= startTable('', '', 'txp-edit');
-		$content.= tr(tdcs(hed(gTxt('txp_import'),2),2));
-		//Select tool
-		$content.= tr(
-			fLabelCell ('select_tool','import', 'from').
-			td(
-				tag(type_options($tools),
-				 'select',
-				 " name=\"import_tool\" onchange=\"showHideFields(this.value);\"")
-			, '', 'from')
-		, ' class="import-from"');
+		$content = '<div class="txp-edit">';
+		$content.= hed(gTxt('txp_import'), 2);
 
+		//Select tool
+		$content.= inputLabel('import_from', tag(type_options($tools), 'select', ' id="import_from" name="import_tool" onchange="showHideFields(this.value);"'), 'select_tool', 'import');
 
 		//Some data we collect
-		$content.= tr(
-			fLabelCell ('import_section','import_section', 'section').
-			td(import_section_popup(''), '', 'section')
-			, ' class="import-section"');
+		$content.= inputLabel('import_section', import_section_popup(''), 'import_section', 'import_section');
 
 		$status_options = array(
-				4 => gTxt('live'),
-				1 => gTxt('draft'),
-				2 => gTxt('hidden'),
-				3 => gTxt('pending')
-			);
+			STATUS_LIVE => gTxt('live'),
+			STATUS_DRAFT => gTxt('draft'),
+			STATUS_HIDDEN => gTxt('hidden'),
+			STATUS_PENDING => gTxt('pending')
+		);
 
-		$content.= tr(
-			fLabelCell ('import_status','import_status', 'status').
-			td(type_select($status_options), '', 'status')
-		, ' class="import-status"');
-
-		$content.= tr(
-			fLabelCell ('import_invite','import_invite', 'comment-invite').
-			td(fInput('text','comments_invite', gTxt('comments'),''), '', 'comment-invite')
-		, ' class="import-comment"');
+		$content.= inputLabel('import_status', tag(type_options($status_options), 'select', ' id="import_status"'), 'import_status', 'import_status');
+		$content.= inputLabel('import_comment', fInput('text', 'import_comments_invite', gTxt('comments'), '', '', '', INPUT_REGULAR, '', 'import_comment'), 'import_invite', 'import_invite');
 
 		//DataBase imports only
-
 		$databased =
-		tr(tdcs(hed(gTxt('database_stuff'),2),2)).
-		tr(
-			fLabelCell ('import_database','import_database', 'database').
-			td(fInput('text','importdb', '',''), '', 'database')
-		, ' class="import-database"').
-		tr(
-			fLabelCell ('import_login','import_login', 'login').
-			td(fInput('text','importdblogin', '',''), '', 'login')
-		, ' class="import-login"').
-		tr(
-			fLabelCell ('import_password','import_password', 'password').
-			td(fInput('text','importdbpass', '',''), '', 'password')
-		, ' class="import-password"').
-		tr(
-			fLabelCell ('import_host','import_host', 'host').
-			td(fInput('text','importdbhost', '',''), '', 'host')
-		, ' class="import-host"');
+			hed(gTxt('database_stuff'), 2).
+			inputLabel('import_database', fInput('text', 'importdb', '', '', '', '', INPUT_REGULAR, '', 'import_database'), 'import_database', 'import_database').
+			inputLabel('import_login', fInput('text', 'importdblogin', '', '', '', '', INPUT_REGULAR, '', 'import_login'), 'import_login', 'import_login').
+			inputLabel('import_password', fInput('text', 'importdbpass', '', '', '', '', INPUT_REGULAR, '', 'import_password'), 'import_password', 'import_password').
+			inputLabel('import_host', fInput('text', 'importdbhost', '', '', '', '', INPUT_REGULAR, '', 'import_host'), 'import_host', 'import_host');
 
-		//Ugly, but a way to present a clean screen with only required fields
-		//while we keep JavaScript code at minimum
-		$content.= tr(tda(tag($databased, 'table', ' id="databased" style="display: none;"'),' colspan="2"'));
+		$content.= tag($databased, 'div', ' id="databased" style="display: none;"');
+
 		//MT-DB Specific
-		$mtblogid = tr(
-			fLabelCell ('import_blogid','import_blogid', 'blog-id').
-			td(fInput('text','blog_id','',''), '', 'blog-id')
-		, ' class="import-blog-id"');
-		$content.= tr(tda(tag($mtblogid, 'table', ' id="mtblogid" style="display: none;"'),' colspan="2"'));
+		$mtblogid = inputLabel('import_blogid', fInput('text', 'import_blog_id', '', '', '', '', INPUT_REGULAR, '', 'import_blogid'), 'import_blogid', 'import_blogid');
+		$content.= tag($mtblogid, 'div', ' id="mtblogid" style="display: none;"');
+
 		//WordPress specific option
-		$wponly = tr(
-			fLabelCell ('import_wpprefix','import_wpprefix', 'wp-prefix').
-			td(fInput('text','wpdbprefix', 'wp_',''), '', 'wp-prefix')
-		, ' class="import-wp-prefix"').
-			tr(
-			fLabelCell ('import_wpdbcharset','import_wpdbcharset', 'wpdbcharset').
-			td(selectInput('wpdbcharset', array('utf8' => gTxt('utf8'), 'latin1' => gTxt('latin1')), 'utf8','','','wpdbcharset'), '', 'wp-dbcharset')
-		, ' class="import-wp-dbcharset"');
-		$content.= tr(tda(tag($wponly, 'table', ' id="wponly" style="display: none;"'),' colspan="2"'));
-		$content.= tr(tdcs(fInput('submit','choose',gTxt('continue'),'publish'), 2));
-		$content.= endTable();
+		$wponly = inputLabel('import_wpprefix', fInput('text', 'wpdbprefix', 'wp_', '', '', '', INPUT_REGULAR, '', 'import_wpprefix'), 'import_wpprefix', 'import_wpprefix').
+			inputLabel('import_wpdbcharset', selectInput('wpdbcharset', array('utf8' => gTxt('utf8'), 'latin1' => gTxt('latin1')), 'utf8', '', '', 'import_wpdbcharset'), 'import_wpdbcharset', 'import_wpdbcharset');
+
+		$content.= tag($wponly, 'div', ' id="wponly" style="display: none;"');
+		$content.= graf(fInput('submit', 'choose', gTxt('continue'), 'publish'));
 		$content.= sInput('start_import').eInput('import');
+		$content.= '</div>';
 		echo '<div id="'.$event.'_container" class="txp-container">'.
 			form($content, '', '', 'post', '', '', 'import').
 			'</div>';
@@ -158,9 +130,9 @@ function showHideFields($sel)
 		global $event,$vars;
 		extract(psa($vars));
 
-		$insert_into_section = $Section;
-		$insert_with_status = $type;
-		$default_comment_invite = $comments_invite;
+		$insert_into_section = $import_section;
+		$insert_with_status = $import_status;
+		$default_comment_invite = $import_comments_invite;
 		include_once txpath.'/include/import/import_'.$import_tool.'.php';
 
 		$ini_time = ini_get('max_execution_time');
@@ -170,13 +142,13 @@ function showHideFields($sel)
 		switch ($import_tool)
 		{
 			case 'mtdb':
-				$out = doImportMTDB($importdblogin, $importdb, $importdbpass, $importdbhost, $blog_id, $insert_into_section, $insert_with_status, $default_comment_invite);
+				$out = doImportMTDB($importdblogin, $importdb, $importdbpass, $importdbhost, $import_blog_id, $insert_into_section, $insert_with_status, $default_comment_invite);
 				rebuild_tree('root',1,'article');
 			break;
 			case 'mt':
 				$file = check_import_file();
 				if (!empty($file)){
-					$out = doImportMT($file, $insert_into_section, $insert_with_status, $comments_invite);
+					$out = doImportMT($file, $insert_into_section, $insert_with_status, $import_comments_invite);
 					//Rebuilding category tree
 					rebuild_tree('root',1,'article');
 				}else{
@@ -193,7 +165,7 @@ function showHideFields($sel)
 			case 'blogger':
 				$file = check_import_file();
 				if (!empty($file)){
-					$out = doImportBLOGGER($file, $insert_into_section, $insert_with_status, $comments_invite);
+					$out = doImportBLOGGER($file, $insert_into_section, $insert_with_status, $import_comments_invite);
 				}else{
 					$out = gTxt('import_file_not_found');
 				}
@@ -253,7 +225,7 @@ function showHideFields($sel)
 	{
 		$rs = safe_column("name", "txp_section", "name!='default'");
 		if ($rs) {
-			return selectInput("Section", $rs, $Section, 1);
+			return selectInput("import_section", $rs, $Section, 1, '', 'import_section');
 		}
 		return false;
 	}

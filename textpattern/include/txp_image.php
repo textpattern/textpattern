@@ -38,7 +38,7 @@ $LastChangedRevision$
 			'image_change_pageby' => true,
 			'thumbnail_create'    => true,
 			'thumbnail_delete'    => true,
-			'image_multi_edit'    => true
+			'image_multi_edit'    => true,
 		);
 
 		if(!$step or !bouncer($step, $available_steps)) {
@@ -437,7 +437,7 @@ $LastChangedRevision$
 			if ($ext != '.swf') {
 				$aspect = ($h == $w) ? ' square' : (($h > $w) ? ' portrait' : ' landscape');
 				$img_info = $id.$ext.' ('.$w.' &#215; '.$h.')';
-				$img = '<div class="fullsize-image"><img class="content-image" src="'.imagesrcurl($id, $ext)."?$uDate".'" height="'.$h.'" width="'.$w.'" alt="'.$img_info.'" title="'.$img_info.'" /></div>';
+				$img = '<div class="fullsize-image"><img class="content-image" src="'.imagesrcurl($id, $ext)."?$uDate".'" alt="'.$img_info.'" title="'.$img_info.'" /></div>';
 			} else {
 				$img = $aspect = '';
 			}
@@ -465,12 +465,12 @@ $LastChangedRevision$
 				pluggable_ui(
 					'image_ui',
 					'image_edit',
-					'<fieldset class="replace-image">'.n.
-						'<legend>'.n.
-							gTxt('replace_image').sp.popHelp('replace_image_form').n.
-						'</legend>'.n.
-						upload_form('', '', 'image_replace', 'image', $id, $file_max_upload_size, 'image_replace', 'image-replace').n.
-					'</fieldset>',
+					'<div class="summary-details replace-image">'.n.
+						'<h3 class="plain">'.gTxt('replace_image').sp.popHelp('replace_image_form').'</h3>'.n.
+						'<div>'.n.
+							upload_form('', '', 'image_replace', 'image', $id, $file_max_upload_size, 'image_replace', 'image-replace').n.
+						'</div>'.n.
+					'</div>'.n,
 					$rs
 				),
 
@@ -488,12 +488,12 @@ $LastChangedRevision$
 				pluggable_ui(
 					'image_ui',
 					'thumbnail_edit',
-					'<fieldset class="thumbnail-upload">'.n.
-						'<legend>'.n.
-							gTxt('upload_thumbnail').sp.popHelp('upload_thumbnail').n.
-						'</legend>'.n.
-						upload_form('', '', 'thumbnail_insert','image', $id, $file_max_upload_size, 'upload_thumbnail', 'thumbnail-upload').n.
-					'</fieldset>',
+					'<div class="summary-details thumbnail-upload">'.n.
+						'<h3 class="plain">'.gTxt('upload_thumbnail').sp.popHelp('upload_thumbnail').'</h3>'.n.
+						'<div>'.n.
+							upload_form('', '', 'thumbnail_insert','image', $id, $file_max_upload_size, 'upload_thumbnail', 'thumbnail-upload').n.
+						'</div>'.n.
+					'</div>'.n,
 					$rs
 				),
 
@@ -501,30 +501,30 @@ $LastChangedRevision$
 				? pluggable_ui(
 					'image_ui',
 					'thumbnail_create',
-					'<fieldset class="thumbnail-alter">'.n.
-						'<legend>'.n.
-							gTxt('create_thumbnail').sp.popHelp('create_thumbnail').n.
-						'</legend>'.n.
-						form(
-							graf(
-								'<label for="width">'.gTxt('thumb_width').'</label>'.n.
-								fInput('text', 'width', @$thumb_w, 'input-xsmall', '', '', 4, '', 'width').n.
-								'<label for="height">'.gTxt('thumb_height').'</label>'.n.
-								fInput('text', 'height', @$thumb_h, 'input-xsmall', '', '', 4, '', 'height').n.
-								'<label for="crop">'.gTxt('keep_square_pixels').'</label>'.n.
-								checkbox('crop', 1, @$thumb_crop, '', 'crop').n.
-								fInput('submit', '', gTxt('Create'))
-							, ' class="edit-alter-thumbnail"').n.
-							n.hInput('id', $id).n.
-							n.eInput('image').n.
-							n.sInput('thumbnail_create').n.
-							n.hInput('sort', $sort).n.
-							n.hInput('dir', $dir).n.
-							n.hInput('page', $page).n.
-							n.hInput('search_method', $search_method).n.
-							n.hInput('crit', $crit)
-						, '', '', 'post', 'edit-form', '', 'thumbnail_alter_form').n.
-					'</fieldset>',
+					'<div class="summary-details thumbnail-alter">'.n.
+						'<h3 class="plain">'.gTxt('create_thumbnail').sp.popHelp('create_thumbnail').'</h3>'.n.
+						'<div>'.n.
+							form(
+								graf(
+									'<label for="width">'.gTxt('thumb_width').'</label>'.n.
+									fInput('text', 'width', @$thumb_w, 'input-xsmall', '', '', 4, '', 'width').n.
+									'<label for="height">'.gTxt('thumb_height').'</label>'.n.
+									fInput('text', 'height', @$thumb_h, 'input-xsmall', '', '', 4, '', 'height').n.
+									'<label for="crop">'.gTxt('keep_square_pixels').'</label>'.n.
+									checkbox('crop', 1, @$thumb_crop, '', 'crop').n.
+									fInput('submit', '', gTxt('Create'))
+								, ' class="edit-alter-thumbnail"').n.
+								n.hInput('id', $id).n.
+								n.eInput('image').n.
+								n.sInput('thumbnail_create').n.
+								n.hInput('sort', $sort).n.
+								n.hInput('dir', $dir).n.
+								n.hInput('page', $page).n.
+								n.hInput('search_method', $search_method).n.
+								n.hInput('crit', $crit)
+							, '', '', 'post', 'edit-form', '', 'thumbnail_alter_form').n.
+						'</div>'.n.
+					'</div>'.n,
 					$rs
 				)
 				: '',

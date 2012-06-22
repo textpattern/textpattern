@@ -135,7 +135,7 @@ $LastChangedRevision$
 					n.td($edit_url, '', 'name').
 
 					td(
-						href($author, $author_uri)
+						href($author, $author_uri, ' rel="external"')
 					, '', 'author').
 
 					td($version, '', 'version').

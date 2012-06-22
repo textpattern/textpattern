@@ -936,8 +936,8 @@ $LastChangedRevision$
 			n.hInput('crit', $crit).
 
 			n.graf(
-				(($label) ? '<label for="'.$label_id.'">'.$label.'</label>' : '').(($pophelp) ? sp.popHelp($pophelp) : '').sp.
-					fInput('file', 'thefile', '', '', '', '', '', '', $label_id).sp.
+				(($label) ? '<label for="'.$label_id.'">'.$label.'</label>' : '').(($pophelp) ? sp.popHelp($pophelp) : '').n.
+					fInput('file', 'thefile', '', '', '', '', '', '', $label_id).n.
 					fInput('submit', '', gTxt('upload'))
 			, ' class="'.$p_class.'"').
 
@@ -966,7 +966,7 @@ $LastChangedRevision$
 			graf(
 				'<label for="'.$event.'-search">'.gTxt('search').'</label>'.
 				n.selectInput('search_method', $methods, $method, '', '', $event.'-search').
-				n.fInput('text', 'crit', $crit, '', '', '', '15').
+				n.fInput('text', 'crit', $crit, '', '', '', INPUT_MEDIUM).
 				n.eInput($event).
 				n.sInput($step).
 				n.fInput('submit', 'search', gTxt('go'))
