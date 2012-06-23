@@ -78,6 +78,10 @@ $LastChangedRevision$
 				$sort_sql = 'searchable '.$dir;
 			break;
 
+			case 'article_count':
+				$sort_sql = 'article_count '.$dir;
+			break;
+
 			default:
 				$sort_sql = 'name '.$dir;
 			break;
@@ -161,8 +165,8 @@ $LastChangedRevision$
 
 		echo n.section_search_form($crit, $search_method).'</div>';
 
-		$rs = safe_rows_start('*', 'txp_section',
-			"$criteria order by $sort_sql limit $offset, $limit");
+		$rs = safe_rows_start('*, (SELECT count(*) FROM '.safe_pfx('textpattern').' articles WHERE articles.Section = txp_section.name) AS article_count', 'txp_section',
+			"$criteria order by $sort_sql limit $offset, $limit" );
 
 		if ($rs)
 		{
@@ -180,7 +184,8 @@ $LastChangedRevision$
 					n.column_head('css', 'css', 'section', true, $switch_dir, $crit, $search_method, (('css' == $sort) ? "$dir " : '').'style').
 					n.column_head('on_front_page', 'on_frontpage', 'section', true, $switch_dir, $crit, $search_method, (('on_frontpage' == $sort) ? "$dir " : '').'section_detail frontpage').
 					n.column_head('syndicate', 'in_rss', 'section', true, $switch_dir, $crit, $search_method, (('in_rss' == $sort) ? "$dir " : '').'section_detail syndicate').
-					n.column_head('include_in_search', 'searchable', 'section', true, $switch_dir, $crit, $search_method, (('searchable' == $sort) ? "$dir " : '').'section_detail searchable')
+					n.column_head('include_in_search', 'searchable', 'section', true, $switch_dir, $crit, $search_method, (('searchable' == $sort) ? "$dir " : '').'section_detail searchable').
+					n.column_head('article', 'article_count', 'section', true, $switch_dir, $crit, $search_method, (('article_count' == $sort) ? "$dir " : '').'section_detail article_count')
 			).
 			n.'</thead>';
 
@@ -190,13 +195,17 @@ $LastChangedRevision$
 			{
 				extract($a, EXTR_PREFIX_ALL, 'sec');
 
+				$is_default_section = ($sec_name == 'default');
+
 				$edit_url = '?event=section'.a.'step=section_edit'.a.'name='.$sec_name.a.'sort='.$sort.
 					a.'dir='.$dir.a.'page='.$page.a.'search_method='.$search_method.a.'crit='.$crit;
 				$page_url = '?event=page'.a.'name='.$sec_page;
 				$style_url = '?event=css'.a.'name='.$sec_css;
-				$article_count = safe_count('textpattern', "Section = '".doSlash($sec_name)."'");
-//				$can_delete = ($sec_name == 'default' || $article_count > 0) ? false : true;
-				$is_default_section = ($sec_name == 'default');
+				$articles = ($sec_article_count > 0
+					? href($sec_article_count, '?event=list'.a.'search_method=section'.a.'crit='.txpspecialchars($sec_name),
+						' title="'.gTxt('article_count', array('{num}' => $sec_article_count)).'"')
+					: ($is_default_section ? '' : '0'));
+//				$can_delete = ($sec_name != 'default' && $sec_article_count == 0);
 
 				echo tr(
 
@@ -206,15 +215,12 @@ $LastChangedRevision$
 
 					td('<a href="'.$edit_url.'" title="'.gTxt('edit').'">'.$sec_name.'</a>' .n. '<span class="section_detail">[<a href="'.hu.$sec_name.'">'.gTxt('view').'</a>]</span>', '', 'name').
 					td(txpspecialchars($sec_title), '', 'name').
-					td(
-						'<a href="'.$page_url.'" title="'.gTxt('edit').'">'.$sec_page.'</a>'.n.
-						( ($article_count > 0) ? '<a title="'.gTxt('article_count', array('{num}' => $article_count)).'" href="?event=list'.a.'search_method=section'.a.'crit='.htmlspecialchars($sec_name).'">('.$article_count.')</a>' : ($is_default_section ? '' : '(0)') )
-					, '', 'page').
-
+					td('<a href="'.$page_url.'" title="'.gTxt('edit').'">'.$sec_page.'</a>', '', 'page').
 					td('<a href="'.$style_url.'" title="'.gTxt('edit').'">'.$sec_css.'</a>', '', 'style').
 					td($is_default_section ? '-' : '<a href="#" id="txp_column_'.$sec_name.'_on_frontpage" class="section_toggle_option">'.($sec_on_frontpage ? gTxt('yes') : gTxt('no')).'</a>', '', 'section_detail frontpage').
 					td($is_default_section ? '-' : '<a href="#" id="txp_column_'.$sec_name.'_in_rss" class="section_toggle_option">'.($sec_in_rss ? gTxt('yes') : gTxt('no')).'</a>', '', 'section_detail syndicate').
-					td($is_default_section ? '-' : '<a href="#" id="txp_column_'.$sec_name.'_searchable" class="section_toggle_option">'.($sec_searchable ? gTxt('yes') : gTxt('no')).'</a>', '', 'section_detail searchable')
+					td($is_default_section ? '-' : '<a href="#" id="txp_column_'.$sec_name.'_searchable" class="section_toggle_option">'.($sec_searchable ? gTxt('yes') : gTxt('no')).'</a>', '', 'section_detail searchable').
+					td($is_default_section ? '' : $articles, '', 'section_detail article_count')
 				, ' id="txp_section_'.$sec_name.'"'
 				);
 			}
