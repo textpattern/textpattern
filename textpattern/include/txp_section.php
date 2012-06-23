@@ -258,7 +258,7 @@ $LastChangedRevision$
 					value: val
 				}, function(data) {
 					var newval = $(data).find('section_toggle_val').attr('value');
-					obj.text(textpattern.textarray[newval]);
+					obj.gTxt(newval);
 				});
 			});
 
