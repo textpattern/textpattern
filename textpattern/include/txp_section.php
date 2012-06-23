@@ -25,7 +25,7 @@ $LastChangedRevision$
 			'section_create'        => true,
 			'section_delete'        => true,
 			'section_save'          => true,
-			'section_edit'          => true,
+			'section_edit'          => false,
 			'section_multi_edit'    => true,
 			'section_set_default'   => true,
 			'section_toggle_option' => true,
