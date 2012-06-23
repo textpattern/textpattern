@@ -208,7 +208,7 @@ $LastChangedRevision$
 					td(txpspecialchars($sec_title), '', 'name').
 					td(
 						'<a href="'.$page_url.'" title="'.gTxt('edit').'">'.$sec_page.'</a>'.n.
-						( ($article_count > 0) ? '<a title="'.gTxt('article_count', array('{num}' => $article_count)).'" href="?event=list'.a.'step=list'.a.'search=Go'.a.'search_method=section'.a.'crit='.htmlspecialchars($sec_name).'">('.$article_count.')</a>' : ($is_default_section ? '' : '(0)') )
+						( ($article_count > 0) ? '<a title="'.gTxt('article_count', array('{num}' => $article_count)).'" href="?event=list'.a.'search_method=section'.a.'crit='.htmlspecialchars($sec_name).'">('.$article_count.')</a>' : ($is_default_section ? '' : '(0)') )
 					, '', 'page').
 
 					td('<a href="'.$style_url.'" title="'.gTxt('edit').'">'.$sec_css.'</a>', '', 'style').
