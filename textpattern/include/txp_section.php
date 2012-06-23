@@ -139,7 +139,9 @@ $LastChangedRevision$
 		echo n.'<form id="default_section_form" name="default_section_form" method="post" action="index.php" class="async">';
 		echo graf(
 				'<label>'.gTxt('default_write_section').'</label>'.sp.popHelp('section_default').n.section_select_list()
-			);
+			).
+			eInput('section').
+			sInput('section_set_default');
 		echo '</form>';
 
 		if ($total < 1)
@@ -262,13 +264,7 @@ $LastChangedRevision$
 			});
 
 			$('#default_section').change(function() {
-				var def_sec = $(this).val();
-				sendAsyncEvent(
-				{
-					event: textpattern.event,
-					step: 'section_set_default',
-					name: def_sec
-				});
+				var form = $('#default_section_form').submit();
 			});
 EOS
 			);
@@ -577,10 +573,8 @@ EOS
 // -------------------------------------------------------------
 	function section_set_default()
 	{
-		$name = ps('name');
-		set_pref('default_section', $name, 'section', PREF_HIDDEN, '', 0);
-		send_xml_response();
-		exit;
+		set_pref('default_section', ps('default_section'), 'section', PREF_HIDDEN, '', 0);
+		send_script_response();
 	}
 
 //-------------------------------------------------------------
