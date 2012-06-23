@@ -264,7 +264,7 @@ $LastChangedRevision$
 			});
 
 			$('#default_section').change(function() {
-				var form = $('#default_section_form').submit();
+				$('#default_section_form').submit();
 			});
 EOS
 			);
