@@ -191,9 +191,9 @@ $LastChangedRevision$
 				extract($a, EXTR_PREFIX_ALL, 'sec');
 
 				$edit_url = '?event=section'.a.'step=section_edit'.a.'name='.$sec_name.a.'sort='.$sort.
-					a.'dir='.$dir.a.'page='.$page.a.'search_method='.$search_method.a.'crit='.$crit.a.'_txp_token='.form_token();
-				$page_url = '?event=page'.a.'name='.$sec_page.a.'_txp_token='.form_token();
-				$style_url = '?event=css'.a.'name='.$sec_css.a.'_txp_token='.form_token();
+					a.'dir='.$dir.a.'page='.$page.a.'search_method='.$search_method.a.'crit='.$crit;
+				$page_url = '?event=page'.a.'name='.$sec_page;
+				$style_url = '?event=css'.a.'name='.$sec_css;
 				$article_count = safe_count('textpattern', "Section = '".doSlash($sec_name)."'");
 //				$can_delete = ($sec_name == 'default' || $article_count > 0) ? false : true;
 				$is_default_section = ($sec_name == 'default');
@@ -208,7 +208,7 @@ $LastChangedRevision$
 					td(txpspecialchars($sec_title), '', 'name').
 					td(
 						'<a href="'.$page_url.'" title="'.gTxt('edit').'">'.$sec_page.'</a>'.n.
-						( ($article_count > 0) ? '<a title="'.gTxt('article_count', array('{num}' => $article_count)).'" href="?event=list'.a.'step=list'.a.'search=Go'.a.'search_method=section'.a.'crit='.htmlspecialchars($sec_name).a.'_txp_token='.form_token().'">('.$article_count.')</a>' : ($is_default_section ? '' : '(0)') )
+						( ($article_count > 0) ? '<a title="'.gTxt('article_count', array('{num}' => $article_count)).'" href="?event=list'.a.'step=list'.a.'search=Go'.a.'search_method=section'.a.'crit='.htmlspecialchars($sec_name).'">('.$article_count.')</a>' : ($is_default_section ? '' : '(0)') )
 					, '', 'page').
 
 					td('<a href="'.$style_url.'" title="'.gTxt('edit').'">'.$sec_css.'</a>', '', 'style').
