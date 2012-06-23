@@ -205,7 +205,7 @@ $LastChangedRevision$
 					, '', 'multi-edit').
 
 					td('<a href="'.$edit_url.'" title="'.gTxt('edit').'">'.$sec_name.'</a>' .n. '<span class="section_detail">[<a href="'.hu.$sec_name.'">'.gTxt('view').'</a>]</span>', '', 'name').
-					td($sec_title, '', 'name').
+					td(txpspecialchars($sec_title), '', 'name').
 					td(
 						'<a href="'.$page_url.'" title="'.gTxt('edit').'">'.$sec_page.'</a>'.n.
 						( ($article_count > 0) ? '<a title="'.gTxt('article_count', array('{num}' => $article_count)).'" href="?event=list'.a.'step=list'.a.'search=Go'.a.'search_method=section'.a.'crit='.htmlspecialchars($sec_name).a.'_txp_token='.form_token().'">('.$article_count.')</a>' : ($is_default_section ? '' : '(0)') )
