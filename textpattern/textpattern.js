@@ -403,7 +403,7 @@ jQuery.fn.txpAsyncForm = function(options)
 			    $('body').removeClass('busy');
 			    $('span.spinner').remove();
 			    if (options.error) options.error(form, event, jqXHR, ajaxSettings, thrownError);
-                textpattern.Relay.callback('txpAsyncForm.error', {'form': form, 'event': event, 'jqXHR': jqXHR, 'ajaxSettings': ajaxSettings, 'thronwError': thrownError});
+                textpattern.Relay.callback('txpAsyncForm.error', {'this': form, 'event': event, 'jqXHR': jqXHR, 'ajaxSettings': ajaxSettings, 'thronwError': thrownError});
             });
 
             sendAsyncEvent(
@@ -416,7 +416,7 @@ jQuery.fn.txpAsyncForm = function(options)
 	                $('span.spinner').remove();
 					form.ajaxError = null;
 					if (options.success) options.success(form, event, data, textStatus, jqXHR);
-                    textpattern.Relay.callback('txpAsyncForm.success', {'form': form, 'event': event, 'data': data, 'textStatus': textStatus, 'jqXHR': jqXHR});
+                    textpattern.Relay.callback('txpAsyncForm.success', {'this': form, 'event': event, 'data': data, 'textStatus': textStatus, 'jqXHR': jqXHR});
 				},
 				options.dataType
 			);
@@ -441,10 +441,10 @@ jQuery.fn.txpAsyncHref = function(options) {
             sendAsyncEvent(
                 // query string contains request params
                 this.search.replace('?', '') + '&value=' + value,
-                function(data) {
+                function(data, textStatus, jqXHR) {
                     obj.html(data);
                     if (options.success) options.success(obj, event, data, textStatus, jqXHR);
-                    textpattern.Relay.callback('txpAsyncHref.success', {'a': obj, 'event': event, 'data': data, 'textStatus': textStatus, 'jqXHR': jqXHR});
+                    textpattern.Relay.callback('txpAsyncHref.success', {'this': obj, 'event': event, 'data': data, 'textStatus': textStatus, 'jqXHR': jqXHR});
                 },
                 options.dataType
             );
