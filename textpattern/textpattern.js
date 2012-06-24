@@ -426,6 +426,34 @@ jQuery.fn.txpAsyncForm = function(options)
 	return this;
 };
 
+jQuery.fn.txpAsyncHref = function(options) {
+    options = $.extend({
+        dataType: 'text',
+        success: null,
+        error: null
+    }, options);
+
+    this.click(function(event) {
+        try {
+            event.preventDefault();
+            var obj = $(this);
+            var value = obj.text();
+            sendAsyncEvent(
+                // query string contains request params
+                this.search.replace('?', '') + '&value=' + value,
+                function(data) {
+                    obj.html(data);
+                    if (options.success) options.success(obj, event, data, textStatus, jqXHR);
+                    textpattern.Relay.callback('txpAsyncHref.success', {'a': obj, 'event': event, 'data': data, 'textStatus': textStatus, 'jqXHR': jqXHR});
+                },
+                options.dataType
+            );
+        } catch(e){}
+
+    });
+    return this;
+}
+
 /**
  * Returns a l18n string.
  * @param string l18n The l18n string to output
@@ -501,8 +529,11 @@ $(document).ready(function() {
 	}
 	// setup and submit async forms
 	if(!textpattern.ajaxally_challenged) {
-		$('form.async').txpAsyncForm({
-			error: function() {window.alert(textpattern.gTxt('form_submission_error'));}
-		});
+        $('form.async').txpAsyncForm({
+            error: function() {window.alert(textpattern.gTxt('form_submission_error'));}
+        });
+        $('a.async').txpAsyncHref({
+            error: function() {window.alert(textpattern.gTxt('form_submission_error'));}
+        });
     }
 });

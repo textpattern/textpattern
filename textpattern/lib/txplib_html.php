@@ -1112,4 +1112,27 @@ EOF;
 		return tag(trim(tag($legend, 'legend').n.$content), 'fieldset', $a_id);
 	}
 
+/**
+ * Render a link element to hook up txpAsyncHref() with request parameters
+ *
+ * @param 	string 	$item	Link text
+ * @param 	array	$parms	Request parameters; array keys are 'event', 'step', 'thing', 'property'
+ * @param 	string 	$atts	HTML attributes
+ * @return 	string 	HTML
+ * @since 4.5.0
+ * @see textpattern.js: txpAsyncHref
+ */
+	function asyncHref($item,$parms,$atts='')
+	{
+		extract(doSpecial(lAtts(array(
+			'event' => $GLOBALS['event'],
+			'step' => $GLOBALS['step'],
+			'thing' => '',
+			'property' => '',
+		), $parms)));
+
+		$class = "$step async";
+		$href = "?event=$event&amp;step=$step&amp;thing=$thing&amp;property=$property";
+		return href($item, $href, $atts." class=\"$class\"");
+	}
 ?>
