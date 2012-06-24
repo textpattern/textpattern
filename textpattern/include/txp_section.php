@@ -207,6 +207,10 @@ $LastChangedRevision$
 					: ($is_default_section ? '' : '0'));
 //				$can_delete = ($sec_name != 'default' && $sec_article_count == 0);
 
+				$parms = array(
+					'step' => 'section_toggle_option',
+					'thing' => $sec_name
+				);
 				echo tr(
 
 					td(
@@ -217,9 +221,9 @@ $LastChangedRevision$
 					td(txpspecialchars($sec_title), '', 'name').
 					td('<a href="'.$page_url.'" title="'.gTxt('edit').'">'.$sec_page.'</a>', '', 'page').
 					td('<a href="'.$style_url.'" title="'.gTxt('edit').'">'.$sec_css.'</a>', '', 'style').
-					td($is_default_section ? '-' : '<a href="#" id="txp_column_'.$sec_name.'_on_frontpage" class="section_toggle_option">'.($sec_on_frontpage ? gTxt('yes') : gTxt('no')).'</a>', '', 'section_detail frontpage').
-					td($is_default_section ? '-' : '<a href="#" id="txp_column_'.$sec_name.'_in_rss" class="section_toggle_option">'.($sec_in_rss ? gTxt('yes') : gTxt('no')).'</a>', '', 'section_detail syndicate').
-					td($is_default_section ? '-' : '<a href="#" id="txp_column_'.$sec_name.'_searchable" class="section_toggle_option">'.($sec_searchable ? gTxt('yes') : gTxt('no')).'</a>', '', 'section_detail searchable').
+					td($is_default_section ? '-' : asyncHref($sec_on_frontpage ? gTxt('yes') : gTxt('no'), $parms + array('property' => 'on_frontpage')), '', 'section_detail frontpage').
+					td($is_default_section ? '-' : asyncHref($sec_in_rss ? gTxt('yes') : gTxt('no'), $parms + array('property' => 'in_rss')), '', 'section_detail syndicate').
+					td($is_default_section ? '-' : asyncHref($sec_searchable ? gTxt('yes') : gTxt('no'), $parms + array('property' => 'searchable')), '', 'section_detail searchable').
 					td($is_default_section ? '' : $articles, '', 'section_detail article_count')
 				, ' id="txp_section_'.$sec_name.'"'
 				);
@@ -248,27 +252,7 @@ $LastChangedRevision$
 			n.pageby_form('section', $section_list_pageby).
 			n.'</div>'.n.'</div>';
 
-			// Come the HTML 5 revolution, we can use data-txp-column="on_frontpage" in the anchors and use var col = obj.data('txp-column') instead of abusing IDs
 			echo script_js( <<<EOS
-			$('a.section_toggle_option').click(function(ev) {
-				ev.preventDefault();
-				var obj = $(this);
-				var secname = obj.parent().parent().attr('id').replace('txp_section_', '');
-				var col = obj.attr('id').replace('txp_column_'+secname+'_', '');
-				var val = obj.text();
-				sendAsyncEvent(
-				{
-					event: textpattern.event,
-					step: 'section_toggle_option',
-					name: secname,
-					column: col,
-					value: val
-				}, function(data) {
-					var newval = $(data).find('section_toggle_val').attr('value');
-					obj.gTxt(newval);
-				});
-			});
-
 			$('#default_section').change(function() {
 				$('#default_section_form').submit();
 			});
@@ -550,30 +534,24 @@ EOS
  */
 	function section_toggle_option()
 	{
-		$column = ps('column');
-		$value = strtolower(ps('value'));
-		$name = ps('name');
-		$newval = ($value == strtolower(gTxt('yes'))) ? '0' : '1';
+		$column = ps('property');
+		$value = ps('value');
+		$name = ps('thing');
+		$newval = ($value == gTxt('yes')) ? '0' : '1';
 		$ret = false;
-		switch($column)
+		if (in_array($column, array('on_frontpage', 'in_rss', 'searchable')))
 		{
-			case 'on_frontpage':
-				$ret = safe_update('txp_section', "on_frontpage='".$newval."'", "name='".doSlash($name)."'");
-			break;
-			case 'in_rss':
-				$ret = safe_update('txp_section', "in_rss='".$newval."'", "name='".doSlash($name)."'");
-			break;
-			case 'searchable':
-				$ret = safe_update('txp_section', "searchable='".$newval."'", "name='".doSlash($name)."'");
-			break;
+			$ret = safe_update('txp_section', "$column='$newval'", "name='".doSlash($name)."'");
 		}
 
 		if ($ret)
 		{
-			// Send gTxt strings which are translated client side
-			send_xml_response(array('section_toggle_val' => ($newval == '1' ? 'yes' : 'no')));
+			echo gTxt($newval ? 'yes' : 'no');
 		}
-		exit;
+		else
+		{
+			trigger_error(gTxt('section_save_failed'), E_USER_ERROR);
+		}
 	}
 
 // -------------------------------------------------------------
