@@ -129,7 +129,7 @@ $LastChangedRevision$
 		echo '<h1 class="txp-heading">'.gTxt('tab_sections').sp.popHelp('section_category').'</h1>';
 		echo '<div id="'.$event.'_control" class="txp-control-panel">';
 		echo graf(
-			href(gTxt('create_section'), '?event=section'.a.'step=section_edit')
+			sLink('section', 'section_edit', gTxt('create_section'))
 			, ' class="txp-buttons"');
 
 		echo n.'<form id="default_section_form" name="default_section_form" method="post" action="index.php" class="async">';

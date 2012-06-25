@@ -31,13 +31,13 @@ $LastChangedRevision$
 			'admin_multi_edit'    => true,
 			'admin_change_pageby' => true,
 			'author_list'         => false,
-			'author_edit'         => true,
+			'author_edit'         => false,
 			'author_save'         => true,
 			'author_save_new'     => true,
 			'change_email'        => true,
-			'change_email_form'   => true,
+			'change_email_form'   => false,
 			'change_pass'         => true,
-			'new_pass_form'       => true,
+			'new_pass_form'       => false,
 		);
 
 		if (!$step or !bouncer($step, $available_steps)) {
@@ -265,25 +265,13 @@ $LastChangedRevision$
 		echo '<div id="users_control" class="txp-control-panel">';
 
 		// Change password button
-		echo '<div class="txp-buttons">';
-		echo n.form(
-			graf(
-				fInput('submit', '', gTxt('change_password')).
-				eInput('admin').
-				sInput('new_pass_form')
-			)
-			, '', '', 'post', '', '', 'change_password');
+		echo '<p class="txp-buttons">';
+		echo sLink('admin', 'new_pass_form', gTxt('change_password'));
 
 		// Change email address button
 		if (!has_privs('admin.edit'))
 		{
-			echo n.form(
-				graf(
-					fInput('submit', '', gTxt('change_email_address')).
-					eInput('admin').
-					sInput('change_email_form')
-				)
-				, '', '', 'post', '', '', 'change_email_address');
+			echo sLink('admin', 'change_email_form', gTxt('change_email_address'));
 		}
 
 		// User list
@@ -337,17 +325,13 @@ $LastChangedRevision$
 
 			$total = getCount('txp_users', $criteria);
 
+			// New author button
 			if (has_privs('admin.edit'))
 			{
-				echo n.form(
-					graf(
-						fInput('submit', '', gTxt('add_new_author')).
-						eInput('admin').
-						sInput('author_edit')
-					)
-					, '', '', 'post', '', '', 'author_create');
+				echo sLink('admin', 'author_edit', gTxt('add_new_author'));
 			}
-			echo '</div>'; // end buttons
+
+			echo '</p>'; // end txp-buttons
 
 			if ($total < 1)
 			{
