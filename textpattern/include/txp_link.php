@@ -29,8 +29,7 @@ $LastChangedRevision$
 
 		$available_steps = array(
 			'link_list'          => false,
-			'link_edit'          => true,
-			'link_post'          => true,
+			'link_edit'          => false,
 			'link_save'          => true,
 			'link_delete'        => true,
 			'link_change_pageby' => true,
@@ -130,15 +129,12 @@ $LastChangedRevision$
 
 		echo '<h1 class="txp-heading">'.gTxt('tab_link').'</h1>';
 		echo '<div id="'.$event.'_control" class="txp-control-panel">';
-		echo n.form(
-			graf(
-				'<label>'.gTxt('add_new_link').'</label>'.n.
-				fInput('text', 'url', '', '', '', '', INPUT_REGULAR).n.
-				fInput('submit', '', gTxt('create')).
-				eInput('link').
-				sInput('link_post')
-			)
-			, '', '', 'post', 'edit-form', '', 'link_create');
+		if (has_privs('link.edit'))
+		{
+			echo graf(
+				sLink('link', 'link_edit', gTxt('add_new_link'))
+				, ' class="txp-buttons"');
+		}
 
 		if ($total < 1)
 		{
@@ -208,7 +204,7 @@ $LastChangedRevision$
 				extract($a, EXTR_PREFIX_ALL, 'link');
 
 				$edit_url = '?event=link'.a.'step=link_edit'.a.'id='.$link_id.a.'sort='.$sort.
-					a.'dir='.$dir.a.'page='.$page.a.'search_method='.$search_method.a.'crit='.$crit.a.'_txp_token='.form_token();
+					a.'dir='.$dir.a.'page='.$page.a.'search_method='.$search_method.a.'crit='.$crit;
 
 				$validator->setConstraints(array(new CategoryConstraint($link_category, array('type' => 'link'))));
 				$vc = $validator->validate() ? '' : ' error';
@@ -297,8 +293,10 @@ $LastChangedRevision$
 
 		extract(array_map('assert_string', gpsa($vars)));
 
+		$is_edit = ($id && $step == 'link_edit');
+
 		$rs = array();
-		if ($id && $step == 'link_edit')
+		if ($is_edit)
 		{
 			$id = assert_int($id);
 			$rs = safe_row('*', 'txp_link', "id = $id");
@@ -315,7 +313,7 @@ $LastChangedRevision$
 
 		if (has_privs('link.edit') || has_privs('link.edit.own'))
 		{
-			$caption = gTxt(($id && $step == 'link_edit') ? 'edit_link' : 'add_new_link');
+			$caption = gTxt(($is_edit) ? 'edit_link' : 'add_new_link');
 
 			echo form(
 				'<div class="txp-edit">'.n.
@@ -347,61 +345,21 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function link_post()
-	{
-		global $txpcfg, $vars, $txp_user;
-
-		$varray = array_map('assert_string', gpsa($vars));
-
-		extract(doSlash($varray));
-
-		if ($url === '')
-		{
-			link_list(array(gTxt('link_empty'), E_ERROR));
-			return;
-		}
-
-		if (!has_privs('link.edit.own'))
-		{
-			link_list(gTxt('restricted_area'));
-			return;
-		}
-
-		$q = safe_insert("txp_link",
-		   "category    = '',
-			date        = now(),
-			url         = '".trim($url)."',
-			linkname    = '',
-			linksort    = '',
-			description = '',
-			author		= '".doSlash($txp_user)."'"
-		);
-
-		$GLOBALS['ID'] = $_POST['id'] = mysql_insert_id( );
-
-		if ($q)
-		{
-			//update lastmod due to link feeds
-			update_lastmod();
-
-			$message = gTxt('link_created', array('{name}' => doStrip($linkname)));
-
-			link_edit($message);
-		}
-	}
-
-// -------------------------------------------------------------
 	function link_save()
 	{
 		global $txpcfg, $vars, $txp_user;
 
 		$varray = array_map('assert_string', gpsa($vars));
 		extract(doSlash($varray));
-		$id = $varray['id'] = assert_int($id);
+
+		if ($id)
+		{
+			$id = $varray['id'] = assert_int($id);
+		}
 
 		if ($linkname === '' && $url === '' && $description === '')
 		{
-			link_list();
+			link_list(array(gTxt('link_empty'), E_ERROR));
 			return;
 		}
 
@@ -414,33 +372,57 @@ $LastChangedRevision$
 
 		if (!$linksort) $linksort = $linkname;
 
-        $constraints = array(
-            'category' => new CategoryConstraint($varray['category'], array('type' => 'link'))
-        );
+		$constraints = array(
+			'category' => new CategoryConstraint($varray['category'], array('type' => 'link'))
+		);
 
-        callback_event_ref('link_ui', 'validate_save', 0, $varray, $constraints);
-        $validator = new Validator($constraints);
+		callback_event_ref('link_ui', 'validate_save', 0, $varray, $constraints);
+		$validator = new Validator($constraints);
 
-        if ($validator->validate() && safe_update("txp_link",
-		   "category    = '$category',
-			url         = '".trim($url)."',
-			linkname    = '$linkname',
-			linksort    = '$linksort',
-			description = '$description',
-			author 		= '".doSlash($txp_user)."'",
-		   "id = $id"
-		))
-		{
-			update_lastmod();
-			$message = gTxt('link_updated', array('{name}' => doStrip($linkname)));
+		if ($validator->validate()) {
+			if ($id)
+			{
+				$ok = safe_update('txp_link',
+					"category   = '$category',
+					url         = '".trim($url)."',
+					linkname    = '$linkname',
+					linksort    = '$linksort',
+					description = '$description',
+					author 		= '".doSlash($txp_user)."'",
+					"id = $id"
+				);
+			}
+			else
+			{
+				$ok = safe_insert('txp_link',
+				   "category   = '$category',
+					date        = now(),
+					url         = '".trim($url)."',
+					linkname    = '$linkname',
+					linksort    = '$linksort',
+					description = '$description',
+					author		= '".doSlash($txp_user)."'"
+				);
+				$GLOBALS['ID'] = $_POST['id'] = mysql_insert_id( );
+			}
+
+			if ($ok) {
+				// update lastmod due to link feeds
+				update_lastmod();
+				$message = gTxt(($id ? 'link_updated' : 'link_created'), array('{name}' => doStrip($linkname)));
+			}
+			else
+			{
+				$message = array(gTxt('link_save_failed'), E_ERROR);
+			}
 		}
-        else
-        {
-            $message = array(gTxt('link_save_failed'), E_ERROR);
-        }
+		else
+		{
+			$message = array(gTxt('link_save_failed'), E_ERROR);
+		}
 
-        link_list($message);
-    }
+		link_list($message);
+	}
 
 // -------------------------------------------------------------
 	function link_change_pageby()
