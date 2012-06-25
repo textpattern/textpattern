@@ -26,7 +26,7 @@ $LastChangedRevision$
 			'discuss_edit'          => false,
 			'ipban_add'             => true,
 			'discuss_multi_edit'    => true,
-			'ipban_list'            => true,
+			'ipban_list'            => false,
 			'ipban_unban'           => true,
 			'discuss_change_pageby' => true
 		);
@@ -201,15 +201,9 @@ $LastChangedRevision$
 
 		echo '<h1 class="txp-heading">'.gTxt('list_discussions').'</h1>';
 		echo '<div id="'.$event.'_control" class="txp-control-panel">';
-		echo '<div class="txp-buttons">';
-		echo n.form(
-			graf(
-				fInput('submit', '', gTxt('list_banned_ips')).
-				eInput('discuss').
-				sInput('ipban_list')
-			)
-			, '', '', 'post', '', '', 'list_banned_ips');
-		echo '</div>';
+		echo graf(
+			sLink('discuss', 'ipban_list', gTxt('list_banned_ips'))
+			, ' class="txp-buttons"');
 
 		if ($total < 1)
 		{
