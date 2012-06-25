@@ -196,7 +196,6 @@ $LastChangedRevision$
 			echo $tfoot;
 			echo '<tbody>';
 
-			$ctr = 1;
 			$validator = new Validator();
 
 			while ($a = nextRow($rs))
@@ -245,10 +244,7 @@ $LastChangedRevision$
 					td(
 						fInput('checkbox', 'selected[]', $link_id)
 					, '', 'multi-edit')
-				, ' class="'.(($ctr%2 == 0) ? 'even' : 'odd').'"'
 				);
-
-				$ctr++;
 			}
 
 			echo '</tbody>'.

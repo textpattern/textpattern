@@ -136,7 +136,6 @@ $LastChangedRevision$
 				if ($a['event'] != $cur_evt)
 				{
 					$cur_evt = $a['event'];
-					$ctr = 1;
 
 					if ($cur_evt == 'comments' && !$use_comments)
 					{
@@ -162,8 +161,7 @@ $LastChangedRevision$
 				$out = tda($label.n.popHelp($a['name']), ' class="pref-label"');
 				$out.= td(pref_func($a['html'], $a['name'], $a['val']), ($a['html'] == 'text_input' ? 20 : ''), 'pref-value');
 
-				echo tr($out, " id='prefs-{$a['name']}' class='{$a['event']}-prefs ".(($ctr%2 == 0) ? 'even' : 'odd')."'");
-				$ctr++;
+				echo tr($out, " id='prefs-{$a['name']}' class='{$a['event']}-prefs'");
 			}
 		}
 
@@ -528,8 +526,6 @@ EOS
 			{
 				$cur_evt = $a['event'];
 
-				$ctr = 1;
-
 				echo n.n.tr(
 					tdcs(
 						hed(gTxt($a['event']), 3, ' class="pref-heading '.$a['event'].'-prefs"')
@@ -561,8 +557,7 @@ EOS
 				, '', 'pref-value');
 			}
 
-			echo n.n.tr($out, " id='prefs-{$a['name']}' class='{$a['event']}-prefs ".(($ctr%2 == 0) ? 'even' : 'odd')."'");
-			$ctr++;
+			echo n.n.tr($out, " id='prefs-{$a['name']}' class='{$a['event']}-prefs'");
 		}
 
 		echo n.'</tbody>'.n.endTable().
@@ -723,7 +718,6 @@ EOS
 		}
 
 		$list = '';
-		$ctr = 1;
 
 		// Show the language table
 		foreach ($available_lang as $langname => $langdat)
@@ -796,9 +790,7 @@ EOS
 				$rpc_install.n.
 				$lang_file.n.
 				tda( (in_array($langname, $installed_lang) ? dLink('prefs', 'remove_language', 'lang_code', $langname, 1) : '-'), ' class="languages_detail'.((isset($langdat['db_lastmod']) && $rpc_updated) ? ' highlight' : '').'"')
-			, ' class="'.(($ctr%2 == 0) ? 'even' : 'odd').'"'
 			).n.n;
-			$ctr++;
 		}
 
 

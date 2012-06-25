@@ -45,7 +45,7 @@ $LastChangedRevision$
 				extract($a);
 				$edit = ($current != $name) ?	eLink('css', '', 'name', $name, $name) : txpspecialchars($name);
 				$delete = ($name != $default) ? dLink('css', 'css_delete', 'name', $name) : '';
-				$trcls = ' class="'.((($ctr==1) ? 'first ' : '').(($ctr%2 == 0) ? 'even' : 'odd')).'"';
+				$trcls = ' class="'.(($ctr==1) ? 'first ' : '').'"';
 				$out[] = tr(td($edit).td($delete), $trcls);
 				$ctr++;
 			}

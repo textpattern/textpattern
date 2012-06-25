@@ -189,8 +189,6 @@ $LastChangedRevision$
 			echo $tfoot;
 			echo '<tbody>';
 
-			$ctr = 1;
-
 			while ($a = nextRow($rs))
 			{
 				extract($a, EXTR_PREFIX_ALL, 'log');
@@ -233,10 +231,7 @@ $LastChangedRevision$
 					td(
 						fInput('checkbox', 'selected[]', $log_id)
 					, '', 'multi-edit')
-				, ' class="'.(($ctr%2 == 0) ? 'even' : 'odd').'"'
 				);
-
-				$ctr++;
 			}
 
 			echo '</tbody>'.

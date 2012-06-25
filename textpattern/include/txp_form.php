@@ -80,7 +80,7 @@ $LastChangedRevision$
 				}
 
 				$out[] = $group_end.$group_start;
-				$out[] = '<li class="'.(($ctr%2 == 0) ? 'even' : 'odd').'">'.n.'<span class="form-list-action">'.$modbox.'</span><span class="form-list-name">'.$editlink.'</span></li>';
+				$out[] = '<li>'.n.'<span class="form-list-action">'.$modbox.'</span><span class="form-list-name">'.$editlink.'</span></li>';
 				$prev_type = $type;
 				$ctr++;
 			}

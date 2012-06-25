@@ -96,8 +96,6 @@ $LastChangedRevision$
 			echo $tfoot;
 			echo '<tbody>';
 
-			$ctr = 1;
-
 			while ($a = nextRow($rs))
 			{
 				foreach ($a as $key => $value) {
@@ -151,10 +149,8 @@ $LastChangedRevision$
 					td(
 						fInput('checkbox', 'selected[]', $name)
 					,'', 'multi-edit')
-				, ' class="'.(($ctr%2 == 0) ? 'even' : 'odd').'"'
 				);
 
-				$ctr++;
 				unset($name, $page, $deletelink);
 			}
 

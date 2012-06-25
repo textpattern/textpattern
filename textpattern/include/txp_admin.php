@@ -382,8 +382,6 @@ $LastChangedRevision$
 				echo $tfoot;
 				echo '<tbody>';
 
-				$ctr = 1;
-
 				while ($a = nextRow($rs))
 				{
 					extract(doSpecial($a));
@@ -395,10 +393,7 @@ $LastChangedRevision$
 						td(get_priv_level($privs), '', 'privs').
 						td(($last_login ? safe_strftime('%b&#160;%Y', $last_login) : ''), '', 'date last-login modified').
 						td(((has_privs('admin.edit') and $txp_user != $a['name']) ? fInput('checkbox', 'selected[]', $a['name'], 'checkbox') : ''), '', 'multi-edit')
-					, ' class="'.(($ctr%2 == 0) ? 'even' : 'odd').'"'
 					);
-
-					$ctr++;
 				}
 
 				echo '</tbody>'.

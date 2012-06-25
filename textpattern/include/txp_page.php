@@ -157,7 +157,7 @@ $LastChangedRevision$
 
 			$link  = eLink('page', '', 'name', $name, $name);
 			$dlink = !in_array($name, $protected) ? dLink('page', 'page_delete', 'name', $name) : '';
-			$trcls = ' class="'.((($ctr==1) ? 'first ' : '').(($ctr%2 == 0) ? 'even' : 'odd')).'"';
+			$trcls = ' class="'.(($ctr==1) ? 'first ' : '').'"';
 			$out[] = ($current == $name) ?
 				tr(td($name).td($dlink), $trcls) :
 				tr(td($link).td($dlink), $trcls);

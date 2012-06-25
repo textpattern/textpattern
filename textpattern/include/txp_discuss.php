@@ -276,8 +276,6 @@ $LastChangedRevision$
 			echo $tfoot;
 			echo '<tbody>';
 
-			$ctr = 1;
-
 			while ($a = nextRow($rs))
 			{
 				extract($a);
@@ -342,9 +340,7 @@ $LastChangedRevision$
 					td($view, '', 'status').
 					td($parent, '', 'parent').
 					td(fInput('checkbox', 'selected[]', $discussid), '', 'multi-edit')
-				, ' class="'.(($ctr%2 == 0) ? 'even' : 'odd').' '.$row_class.'"');
-
-				$ctr++;
+				, ' class="'.$row_class.'"');
 			}
 
 			if (empty($message))
@@ -547,7 +543,6 @@ $LastChangedRevision$
 				n.'</thead>';
 
 			echo '<tbody>';
-			$ctr = 1;
 
 			while ($a = nextRow($rs))
 			{
@@ -571,11 +566,7 @@ $LastChangedRevision$
 						'<a href="?event=discuss'.a.'step=discuss_edit'.a.'discussid='.$banned_on_message.'">'.
 							$banned_on_message.'</a>'
 					, '', 'id')
-
-				, ' class="'.(($ctr%2 == 0) ? 'even' : 'odd').'"'
 				);
-
-				$ctr++;
 			}
 
 			echo '</tbody>'.

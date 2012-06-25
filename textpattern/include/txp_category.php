@@ -295,8 +295,6 @@ if ($event == 'category') {
 
 			$items = array();
 
-			$ctr = 1;
-
 			foreach ($rs as $a)
 			{
 				extract($a);
@@ -331,9 +329,7 @@ if ($event == 'category') {
 
 				$items[] = graf(
 					checkbox('selected[]', $id, 0).sp.str_repeat(sp.sp, $level * 2).$edit_link.sp.$count
-				, ' class="'.(($ctr%2 == 0) ? 'even' : 'odd').' level-'.$level.'"');
-
-				$ctr++;
+				, ' class="level-'.$level.'"');
 			}
 
 			if ($items)
