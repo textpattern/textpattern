@@ -50,8 +50,6 @@ $LastChangedRevision$
 		if ($dir === '') $dir = get_pref('section_sort_dir', 'desc');
 		$dir = ($dir == 'asc') ? 'asc' : 'desc';
 
-		gTxtScript(array('yes', 'no'));
-
 		switch ($sort)
 		{
 			case 'title':
