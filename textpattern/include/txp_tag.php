@@ -3372,7 +3372,6 @@ begin tag builder functions
 
 		$atts = gpsa(array(
 			'class',
-			'escape',
 			'html_id',
 			'style',
 			'wraptag',
@@ -3407,9 +3406,6 @@ begin tag builder functions
 			tagRow('type',
 				''.selectInput('type', $types, ($type ? $type : 'textpattern'), true)).
 
-			tagRow('escape',
-				escape_pop($escape)).
-
 			tagRow('html_id',
 				fInput('text', 'html_id', $html_id, '', '', '', 25)).
 
@@ -3434,12 +3430,6 @@ begin tag builder functions
 
 		if ($step == 'build')
 		{
-			if ($escape == 'html')
-			{
-				$alt = str_replace('&', '&#38;', txpspecialchars($alt));
-				$caption = str_replace('&', '&#38;', txpspecialchars($caption));
-			}
-
 			$url = imagesrcurl($id, $ext);
 
 			switch ($type)
@@ -3478,8 +3468,8 @@ begin tag builder functions
 				break;
 
 				case 'html':
-					$alt     = ' alt="'.$alt.'"';
-					$caption = ($caption) ? ' title="'.$caption.'"' : '';
+					$alt     = ' alt="'.txpspecialchars($alt).'"';
+					$caption = ($caption) ? ' title="'.txpspecialchars($caption).'"' : '';
 					$class   = ($class)   ? ' class="'.$class.'"' : '';
 					$html_id = ($html_id) ? ' id="'.$html_id.'"' : '';
 					$style   = ($style)   ? ' style="'.$style.'"' : '';
@@ -3496,7 +3486,6 @@ begin tag builder functions
 
 					$atts = array(
 						'class'   => $class,
-						'escape'  => $escape,
 						'html_id' => $html_id,
 						'id'      => $id,
 						'style'   => $style,
