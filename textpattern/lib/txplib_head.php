@@ -217,11 +217,12 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
+// Is this used any more?
 	function areatab($label,$event,$tarea,$area)
 	{
 		$tc = ($area == $event) ? 'tabup' : 'tabdown';
 		$atts=' class="'.$tc.'"';
-		$hatts=' href="?event='.$tarea.'" class="plain"';
+		$hatts=' href="?event='.$tarea.'"';
       	return tda(tag($label,'a',$hatts),$atts);
 	}
 
@@ -229,7 +230,7 @@ $LastChangedRevision$
 	function tabber($label,$tabevent,$event)
 	{
 		$tc = ($event==$tabevent) ? 'tabup' : 'tabdown2';
-		$out = '<td class="'.$tc.'"><a href="?event='.$tabevent.'" class="plain">'.$label.'</a></td>';
+		$out = '<td class="'.$tc.'"><a href="?event='.$tabevent.'">'.$label.'</a></td>';
 		return $out;
 	}
 
@@ -348,6 +349,6 @@ $LastChangedRevision$
 	# DEPRECATED?? Has this ever been used?
 	function button($label,$link)
 	{
-		return '<span style="margin-right:2em"><a href="?event='.$link.'" class="plain">'.$label.'</a></span>';
+		return '<span style="margin-right:2em"><a href="?event='.$link.'">'.$label.'</a></span>';
 	}
 ?>

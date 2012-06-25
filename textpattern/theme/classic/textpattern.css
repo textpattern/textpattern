@@ -119,16 +119,19 @@ h3 {
 	margin: 0 0 .8em 0;
 }
 
-h3.plain {
+.plain { /* deprecated in Textpattern 4.5 */
 	font-size: 1em;
 	font-family: Verdana, Arial, sans-serif;
 	margin: 1em 0;
 }
 
 .lever {
+	font-size: 1em;
+	font-family: Verdana, Arial, sans-serif;
+	margin: 1em 0;
+	padding-left: 1em;
 	color: #000;
 	background: url("expand_collapse.gif") no-repeat 0 4px;
-	padding-left: 1em;
 }
 
 .lever:hover {

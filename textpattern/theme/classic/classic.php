@@ -30,7 +30,7 @@ class classic_theme extends theme
  			{
 				$tc = ($tab['active']) ? 'tabup' : 'tabdown';
 				$atts=' class="'.$tc.'"';
-				$hatts=' href="?event='.$tab['event'].'" class="plain"';
+				$hatts=' href="?event='.$tab['event'].'"';
       			$out[] = tda(tag($tab['label'], 'a', $hatts), $atts);
 
       			if ($tab['active'] && !empty($tab['items']))
@@ -41,12 +41,12 @@ class classic_theme extends theme
 					foreach ($tab['items'] as $item)
 					{
 						$tc = ($item['active']) ? 'tabup' : 'tabdown2';
-						$secondary .= '<td class="'.$tc.'"><a href="?event='.$item['event'].'" class="plain">'.$item['label'].'</a></td>';
+						$secondary .= '<td class="'.$tc.'"><a href="?event='.$item['event'].'">'.$item['label'].'</a></td>';
 					}
 					$secondary .= '</tr></table>';
 				}
 			}
-			$out[] = '<td id="view-site" class="tabdown"><a href="'.hu.'" class="plain" target="_blank">'.gTxt('tab_view_site').'</a></td>';
+			$out[] = '<td id="view-site" class="tabdown"><a href="'.hu.'" target="_blank">'.gTxt('tab_view_site').'</a></td>';
 			$out[] = '</tr></table>';
 	 		$out[] = $secondary;
  		}

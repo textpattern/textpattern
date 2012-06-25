@@ -583,7 +583,7 @@ if (!empty($event) and $event == 'article') {
 
 		//-- advanced --------------
 
-			echo '<div id="advanced_group"><h3 class="plain lever'.(get_pref('pane_article_advanced_visible') ? ' expanded' : '').'"><a href="#advanced">'.gTxt('advanced_options').'</a></h3>'.
+			echo '<div id="advanced_group"><h3 class="lever'.(get_pref('pane_article_advanced_visible') ? ' expanded' : '').'"><a href="#advanced">'.gTxt('advanced_options').'</a></h3>'.
 				'<div id="advanced" class="toggle" style="display:'.(get_pref('pane_article_advanced_visible') ? 'block' : 'none').'">';
 
 			// markup selection
@@ -611,7 +611,7 @@ if (!empty($event) and $event == 'article') {
 
 		//-- meta info --------------
 
-			echo '<div id="meta_group"><h3 class="plain lever'.(get_pref('pane_article_meta_visible') ? ' expanded' : '').'"><a href="#meta">'.gTxt('meta').'</a></h3>'.
+			echo '<div id="meta_group"><h3 class="lever'.(get_pref('pane_article_meta_visible') ? ' expanded' : '').'"><a href="#meta">'.gTxt('meta').'</a></h3>'.
 				'<div id="meta" class="toggle" style="display:'.(get_pref('pane_article_meta_visible') ? 'block' : 'none').'">';
 			// keywords
 			echo $partials['keywords']['html'];
@@ -621,7 +621,7 @@ if (!empty($event) and $event == 'article') {
 
 		//-- recent articles --------------
 
-			echo '<div id="recent_group"><h3 class="plain lever'.(get_pref('pane_article_recent_visible') ? ' expanded' : '').'"><a href="#recent">'.gTxt('recent_articles').'</a>'.'</h3>'.
+			echo '<div id="recent_group"><h3 class="lever'.(get_pref('pane_article_recent_visible') ? ' expanded' : '').'"><a href="#recent">'.gTxt('recent_articles').'</a>'.'</h3>'.
 				'<div id="recent" class="toggle" style="display:'.(get_pref('pane_article_recent_visible') ? 'block' : 'none').'">';
 			echo $partials['recent_articles']['html'];
 			echo '</div></div>';
@@ -756,7 +756,7 @@ if (!empty($event) and $event == 'article') {
 				$rs);
 
 		//-- "Comments" section
-			echo n.n.'<div id="comments_group"'.(($use_comments==1) ? '' : ' class="empty"').'><h3 class="plain lever'.(get_pref('pane_article_comments_visible') ? ' expanded' : '').'"><a href="#comments">'.gTxt('comment_settings').'</a></h3>',
+			echo n.n.'<div id="comments_group"'.(($use_comments==1) ? '' : ' class="empty"').'><h3 class="lever'.(get_pref('pane_article_comments_visible') ? ' expanded' : '').'"><a href="#comments">'.gTxt('comment_settings').'</a></h3>',
 				'<div id="comments" class="toggle" style="display:'.(get_pref('pane_article_comments_visible') ? 'block' : 'none').'">';
 
 			echo $partials['comments']['html'];
@@ -765,7 +765,7 @@ if (!empty($event) and $event == 'article') {
 			echo '</div></div>';
 
 		//-- "Dates" section
-			echo n.n.'<div id="dates_group"><h3 class="plain lever'.(get_pref('pane_article_dates_visible') ? ' expanded' : '').'"><a href="#dates">'.gTxt('date_settings').'</a></h3>',
+			echo n.n.'<div id="dates_group"><h3 class="lever'.(get_pref('pane_article_dates_visible') ? ' expanded' : '').'"><a href="#dates">'.gTxt('date_settings').'</a></h3>',
 				'<div id="dates" class="toggle" style="display:'.(get_pref('pane_article_dates_visible') ? 'block' : 'none').'">';
 
 			if ($step == "create" and empty($GLOBALS['ID']))
@@ -912,7 +912,7 @@ EOS
 				'<div id="textile_group">'.
 				hed(
 				'<a href="#textile_help">'.gTxt('textile_help').'</a>'
-			, 3, ' class="plain lever'.(get_pref('pane_article_textile_help_visible') ? ' expanded' : '').'"').
+			, 3, ' class="lever'.(get_pref('pane_article_textile_help_visible') ? ' expanded' : '').'"').
 
 				n.'<div id="textile_help" class="toggle" style="display:'.(get_pref('pane_article_textile_help_visible') ? 'block' : 'none').'">'.
 
@@ -1182,7 +1182,7 @@ EOS
 		extract($rs);
 		$cf = '';
 		$cfs = getCustomFields();
-		$out = '<div id="custom_field_group"'.(($cfs) ? '' : ' class="empty"').'><h3 class="plain lever'.(get_pref('pane_article_custom_field_visible') ? ' expanded' : '').'"><a href="#custom_field">'.gTxt('custom').'</a></h3>'.
+		$out = '<div id="custom_field_group"'.(($cfs) ? '' : ' class="empty"').'><h3 class="lever'.(get_pref('pane_article_custom_field_visible') ? ' expanded' : '').'"><a href="#custom_field">'.gTxt('custom').'</a></h3>'.
 			'<div id="custom_field" class="toggle" style="display:'.(get_pref('pane_article_custom_field_visible') ? 'block' : 'none').'">';
 
 		foreach($cfs as $i => $cf_name)
@@ -1199,7 +1199,7 @@ EOS
 // -------------------------------------------------------------
 	function article_partial_image($rs)
 	{
-		$out = '<div id="image_group"><h3 class="plain lever'.(get_pref('pane_article_image_visible') ? ' expanded' : '').'"><a href="#image">'.gTxt('article_image').'</a></h3>'.
+		$out = '<div id="image_group"><h3 class="lever'.(get_pref('pane_article_image_visible') ? ' expanded' : '').'"><a href="#image">'.gTxt('article_image').'</a></h3>'.
 			'<div id="image" class="toggle" style="display:'.(get_pref('pane_article_image_visible') ? 'block' : 'none').'">';
 
 		$out .= pluggable_ui('article_ui', 'article_image',

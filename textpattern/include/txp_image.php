@@ -466,7 +466,7 @@ $LastChangedRevision$
 					'image_ui',
 					'image_edit',
 					'<div class="summary-details replace-image">'.n.
-						'<h3 class="plain">'.gTxt('replace_image').sp.popHelp('replace_image_form').'</h3>'.n.
+						'<h3>'.gTxt('replace_image').sp.popHelp('replace_image_form').'</h3>'.n.
 						'<div>'.n.
 							upload_form('', '', 'image_replace', 'image', $id, $file_max_upload_size, 'image_replace', 'image-replace').n.
 						'</div>'.n.
@@ -489,7 +489,7 @@ $LastChangedRevision$
 					'image_ui',
 					'thumbnail_edit',
 					'<div class="summary-details thumbnail-upload">'.n.
-						'<h3 class="plain">'.gTxt('upload_thumbnail').sp.popHelp('upload_thumbnail').'</h3>'.n.
+						'<h3>'.gTxt('upload_thumbnail').sp.popHelp('upload_thumbnail').'</h3>'.n.
 						'<div>'.n.
 							upload_form('', '', 'thumbnail_insert','image', $id, $file_max_upload_size, 'upload_thumbnail', 'thumbnail-upload').n.
 						'</div>'.n.
@@ -502,7 +502,7 @@ $LastChangedRevision$
 					'image_ui',
 					'thumbnail_create',
 					'<div class="summary-details thumbnail-alter">'.n.
-						'<h3 class="plain">'.gTxt('create_thumbnail').sp.popHelp('create_thumbnail').'</h3>'.n.
+						'<h3>'.gTxt('create_thumbnail').sp.popHelp('create_thumbnail').'</h3>'.n.
 						'<div>'.n.
 							form(
 								graf(

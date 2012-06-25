@@ -71,7 +71,7 @@ $LastChangedRevision$
 				if ($prev_type != $type) {
 					$visipref = 'pane_form_'.$type.'_visible';
 					//TODO: Add 'article', 'comment', 'misc' to rpc server for gTxt()
-					$group_start = '<div class="form-list-group '.$type.'"><h3 class="plain lever'.(get_pref($visipref) ? ' expanded' : '').'"><a href="#'.$type.'">'.ucfirst(gTxt($type)).'</a></h3>'.n.
+					$group_start = '<div class="form-list-group '.$type.'"><h3 class="lever'.(get_pref($visipref) ? ' expanded' : '').'"><a href="#'.$type.'">'.ucfirst(gTxt($type)).'</a></h3>'.n.
 						'<div id="'.$type.'" class="toggle form-list" style="display:'.(get_pref($visipref) ? 'block' : 'none').'">'.n.
 						'<ul class="plain-list">'.n;
 					$group_end = ($ctr > 1) ? '</ul></div></div>'.n : '';
@@ -179,7 +179,7 @@ $LastChangedRevision$
 		$tagbuild_links = '';
 		foreach ($tagbuild_items as $tb => $item) {
 			$tagbuild_links .= '<div class="'.$item[1].'">'.hed('<a href="#'.$item[1].'">'.gTxt($item[0]).'</a>'
-					, 3, ' class="plain lever'.(get_pref('pane_form_'.$item[1].'_visible') ? ' expanded' : '').'"').
+					, 3, ' class="lever'.(get_pref('pane_form_'.$item[1].'_visible') ? ' expanded' : '').'"').
 					'<div id="'.$item[1].'" class="toggle on" style="display:'.(get_pref('pane_form_'.$item[1].'_visible') ? 'block' : 'none').'">'.popTagLinks($tb).'</div></div>';
 		}
 
