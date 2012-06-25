@@ -155,29 +155,12 @@ $LastChangedRevision$
 					continue;
 				}
 
-				// Skip old settings that don't have an input type
-				if (!is_callable($a['html']))
-				{
-					continue;
-				}
-
 				$label = (!in_array($a['html'], array('yesnoradio', 'is_dst'))) ?
 					'<label for="'.$a['name'].'">'.gTxt($a['name']).'</label>' :
 					gTxt($a['name']);
 
 				$out = tda($label.n.popHelp($a['name']), ' class="pref-label"');
-
-				if ($a['html'] == 'text_input')
-				{
-					$out.= td(
-						pref_func('text_input', $a['name'], $a['val'], 20)
-					, '', 'pref-value');
-				}
-
-				else
-				{
-					$out.= td(pref_func($a['html'], $a['name'], $a['val']), '', 'pref-value');
-				}
+				$out.= td(pref_func($a['html'], $a['name'], $a['val']), ($a['html'] == 'text_input' ? 20 : ''), 'pref-value');
 
 				echo tr($out, " id='prefs-{$a['name']}' class='{$a['event']}-prefs ".(($ctr%2 == 0) ? 'even' : 'odd')."'");
 				$ctr++;
@@ -200,8 +183,7 @@ $LastChangedRevision$
 
 	function pref_func($func, $name, $val, $size = '')
 	{
-		$func = (is_callable('pref_'.$func) ? 'pref_'.$func : $func);
-
+		$func = (is_callable('pref_'.$func) ? 'pref_'.$func : (is_callable($func) ? $func : 'text_input'));
 		return call_user_func($func, $name, $val, $size);
 	}
 
@@ -210,6 +192,13 @@ $LastChangedRevision$
 	function text_input($name, $val, $size = '')
 	{
 		return fInput('text', $name, $val, '', '', '', $size, '', $name);
+	}
+
+//-------------------------------------------------------------
+
+	function pref_longtext_input($name, $val, $size = '')
+	{
+		return text_area($name, '', '', $val, '', $size);
 	}
 
 //-------------------------------------------------------------
@@ -567,17 +556,9 @@ EOS
 
 			else
 			{
-				if (is_callable($a['html']))
-				{
-					$out.= td(
-						pref_func($a['html'], $a['name'], $a['val'])
-					, '', 'pref-value');
-				}
-
-				else
-				{
-					$out.= td($a['val'], '', 'pref-value');
-				}
+				$out.= td(
+					pref_func($a['html'], $a['name'], $a['val'])
+				, '', 'pref-value');
 			}
 
 			echo n.n.tr($out, " id='prefs-{$a['name']}' class='{$a['event']}-prefs ".(($ctr%2 == 0) ? 'even' : 'odd')."'");
