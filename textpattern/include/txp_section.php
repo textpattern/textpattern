@@ -22,7 +22,6 @@ $LastChangedRevision$
 		$available_steps = array(
 			'section_change_pageby' => true,
 			'sec_section_list'      => false,
-			'section_create'        => true,
 			'section_delete'        => true,
 			'section_save'          => true,
 			'section_edit'          => false,
@@ -127,17 +126,12 @@ $LastChangedRevision$
 
 		$total = safe_count('txp_section', "$criteria");
 
-		echo '<h1>' . gTxt('tab_sections') . '</h1>';
+		echo '<h1 class="txp-heading">'.gTxt('tab_sections').sp.popHelp('section_category').'</h1>';
 		echo '<div id="'.$event.'_control" class="txp-control-panel">';
-		echo n.form(
-			graf(
-				'<label>'.gTxt('create_section').'</label>'.sp.popHelp('section_category').n.
-				fInput('text', 'name', '', '', '', '', 32).n.
-				fInput('submit', '', gTxt('create')).
-				eInput('section').
-				sInput('section_create')
-			)
-			, '', '', 'post', 'edit-form', '', 'section_create');
+		echo graf(
+			href(gTxt('create_section'), '?event=section'.a.'step=section_edit')
+			, ' class="txp-buttons"');
+
 		echo n.'<form id="default_section_form" name="default_section_form" method="post" action="index.php" class="async">';
 		echo graf(
 				'<label>'.gTxt('default_write_section').'</label>'.sp.popHelp('section_default').n.section_select_list()
@@ -265,16 +259,19 @@ EOS
 		global $event, $step, $txp_user;
 
 		$name = gps('name');
-		$name = assert_string($name);
 
-		$is_default_section = ($name == 'default');
+		$is_edit = ($name && $step == 'section_edit');
 
-		$rs = safe_row('*', 'txp_section', "name = '".doSlash($name)."'");
+		if ($is_edit)
+		{
+			$name = assert_string($name);
+			$rs = safe_row('*', 'txp_section', "name = '".doSlash($name)."'");
+		} else {
+			$rs = array_flip(getThings('describe `'.PFX.'txp_section`'));
+		}
 
 		if ($rs)
 		{
-			extract($rs, EXTR_PREFIX_ALL, 'sec');
-
 			if (!has_privs('section.edit'))
 			{
 				sec_section_list(gTxt('restricted_area'));
@@ -283,14 +280,30 @@ EOS
 
 			pagetop(gTxt('tab_sections'));
 
+			extract($rs, EXTR_PREFIX_ALL, 'sec');
 			extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
 
-			echo '<div id="'.$event.'_container" class="txp-container">';
-
-			$caption = ($is_default_section) ? gTxt('edit_default_section') : gTxt('edit_section');
+			$is_default_section = ($is_edit && $sec_name == 'default');
+			$caption = gTxt(($is_default_section) ? 'edit_default_section' : ($is_edit ? 'edit_section' : 'create_section'));
 			$pages = safe_column('name', 'txp_page', "1=1");
 			$styles = safe_column('name', 'txp_css', "1=1");
 
+			if (!$is_edit)
+			{
+				// Pulling out the radio items from the default entry might seem pointless since they can't be directly
+				// edited, but they will take on either:
+				//  a) the default (SQL) values as defined at table creation time, or
+				//  b) the values set when a multi-edit was performed that included the default section (because the values are silently updated then)
+				$default = doSlash(safe_row('page, css, on_frontpage, in_rss, searchable', 'txp_section', "name = 'default'"));
+				$sec_name = $sec_title = '';
+				$sec_page = $default['page'];
+				$sec_css = $default['css'];
+				$sec_on_frontpage = $default['on_frontpage'];
+				$sec_in_rss = $default['in_rss'];
+				$sec_searchable = $default['searchable'];
+			}
+
+			echo '<div id="'.$event.'_container" class="txp-container">';
 			echo form(
 
 				'<div class="txp-edit">'.
@@ -330,8 +343,6 @@ EOS
 					fInput('submit', '', gTxt('save'), 'publish')
 				).
 
-				'</div>'.
-
 				eInput('section').
 				sInput('section_save').
 				hInput('old_name', $sec_name).
@@ -339,66 +350,10 @@ EOS
 				hInput('crit', $crit).
 				hInput('page', $page).
 				hInput('sort', $sort).
-				hInput('dir', $dir)
+				hInput('dir', $dir).
+				'</div>'
 			, '', '', 'post', 'edit-form', '', 'section_details');
 			echo '</div>';
-		}
-	}
-
-//-------------------------------------------------------------
-	function section_create()
-	{
-		$name = assert_string(ps('name'));
-
-		//Prevent non url chars on section names
-		include_once txpath.'/lib/classTextile.php';
-		$textile = new Textile();
-		$title = $textile->TextileThis($name,1);
-		$name = strtolower(sanitizeForUrl($name));
-
-		$chk = fetch('name','txp_section','name',$name);
-
-		if (!$chk)
-		{
-			if ($name)
-			{
-				$default = doSlash(safe_row('page, css', 'txp_section', "name = 'default'"));
-
-				$rs = safe_insert(
-				   "txp_section",
-				   "name         = '".doSlash($name) ."',
-					title        = '".doSlash($title)."',
-					page         = '".$default['page']."',
-					css          = '".$default['css']."',
-					in_rss       = 1,
-					on_frontpage = 1"
-				);
-
-				if ($rs)
-				{
-					update_lastmod();
-
-					$message = gTxt('section_created', array('{name}' => $name));
-
-					sec_section_list($message);
-				}
-				else
-				{
-					sec_section_list(array(gTxt('section_save_failed'), E_ERROR));
-				}
-			}
-
-			else
-			{
-				sec_section_list();
-			}
-		}
-
-		else
-		{
-			$message = array(gTxt('section_name_already_exists', array('{name}' => $name)), E_ERROR);
-
-			sec_section_list($message);
 		}
 	}
 
@@ -418,14 +373,14 @@ EOS
 
 		$textile = new Textile();
 		$in['section_title'] = $textile->TextileThis($in['section_title'],1);
-		$in['section_name']  = sanitizeForUrl($in['section_name']);
+		$in['section_name']  = strtolower(sanitizeForUrl($in['section_name']));
 
 		extract($in);
 
 		$in = doSlash($in);
 		extract($in, EXTR_PREFIX_ALL, 'safe');
 
-		if (strtolower($section_name) != strtolower($old_name))
+		if ($section_name != strtolower($old_name))
 		{
 			if (safe_field('name', 'txp_section', "name='$safe_section_name'"))
 			{
@@ -437,16 +392,16 @@ EOS
 			}
 		}
 
-		$ok = true;
+		$ok = false;
 		if ($section_name == 'default')
 		{
 			$ok = safe_update('txp_section', "page = '$safe_section_page', css = '$safe_section_css'", "name = 'default'");
 		}
-		else
+		else if ($section_name)
 		{
 			extract(array_map('assert_int', psa(array('on_front_page','syndicate','include_in_search'))));
 
-			if ($ok )
+			if ($safe_old_name)
 			{
 				$ok = safe_update('txp_section', "
 					name         = '$safe_section_name',
@@ -457,12 +412,23 @@ EOS
 					in_rss       = $syndicate,
 					searchable   = $include_in_search
 					", "name = '$safe_old_name'");
-			}
 
-			// Manually maintain referential integrity
-			if ($ok)
+				// Manually maintain referential integrity
+				if ($ok)
+				{
+					$ok = safe_update('textpattern', "Section = '$safe_section_name'", "Section = '$safe_old_name'");
+				}
+			}
+			else
 			{
-				$ok = safe_update('textpattern', "Section = '$safe_section_name'", "Section = '$safe_old_name'");
+				$ok = safe_insert('txp_section', "
+					name         = '$safe_section_name',
+					title        = '$safe_section_title',
+					page         = '$safe_section_page',
+					css          = '$safe_section_css',
+					on_frontpage = $on_front_page,
+					in_rss       = $syndicate,
+					searchable   = $include_in_search");
 			}
 		}
 
@@ -471,9 +437,12 @@ EOS
 			update_lastmod();
 		}
 
-		if ($ok) {
-			sec_section_list(gTxt('section_updated', array('{name}' => $section_name)));
-		} else {
+		if ($ok)
+		{
+			sec_section_list(gTxt(($safe_old_name ? 'section_updated': 'section_created'), array('{name}' => $section_name)));
+		}
+		else
+		{
 			sec_section_list(array(gTxt('section_save_failed'), E_ERROR));
 		}
 

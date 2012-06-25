@@ -126,6 +126,7 @@ h3.plain {
 }
 
 .lever {
+	color: #000;
 	background: url("expand_collapse.gif") no-repeat 0 4px;
 	padding-left: 1em;
 }
@@ -176,16 +177,13 @@ h3 a {
 }
 
 a img {
-	border: none;
+	border: 0;
 }
 
-a:link,
-a:visited,
-a:active {
+a {
 	text-decoration: none;
 	outline: 0;
 	color: #963;
-	background-color: transparent;
 }
 
 a:hover,
@@ -201,6 +199,10 @@ a.pophelp {
 	padding: 0 2px;
 	font-weight: normal;
 	background-color: #f5f5f5;
+}
+
+h1 a.pophelp {
+	font-size: .5em;
 }
 
 a.pophelp:hover {
@@ -226,13 +228,6 @@ a.navlink-active {
 	border-left: 1px solid #f1f1f1;
 	padding: 3px;
 	color: #000;
-}
-
-a.plain,
-a.plain:visited,
-a.plain:active {
-	color: #000;
-	background-color: transparent;
 }
 
 
@@ -333,7 +328,8 @@ select {
 button,
 input[type="reset"],
 input[type="submit"],
-input[type="button"] {
+input[type="button"],
+.txp-buttons a {
 	display: inline-block;
 	-webkit-appearance: none;
 	-webkit-background-clip: padding;
@@ -352,6 +348,7 @@ input[type="button"] {
 	padding: .18181818181818em .5em;
 	width: auto;
 	text-decoration: none;
+	color: #000;
 	background-color: #ddd;
 	-webkit-box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, .3);
 	        box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, .3);
@@ -373,14 +370,16 @@ button {
 button:hover,
 input[type="reset"]:hover,
 input[type="submit"]:hover,
-input[type="button"]:hover {
+input[type="button"]:hover,
+.txp-buttons a:hover {
 	background-color: #eee;
 }
 
 button:active,
 input[type="reset"]:active,
 input[type="submit"]:active,
-input[type="button"]:active {
+input[type="button"]:active,
+.txp-buttons a:active {
 	background-color: #ccc;
 }
 
@@ -432,15 +431,11 @@ textarea[disabled] {
 	        user-select: none;
 }
 
-.txp-buttons form {
-	display: inline-block;
-	/* display and zoom IE7 fix for display:inline-block */
-	*display: inline;
-	*zoom: 1;
-}
-
-.txp-buttons p {
-	margin: 0;
+.edit-image-replace input[type="submit"],
+.edit-upload-thumbnail input[type="submit"],
+.edit-alter-thumbnail input[type="submit"],
+.edit-file-replace input[type="submit"] {
+	float: right;
 }
 
 /* AJAX spinner */
@@ -453,13 +448,6 @@ span.spinner {
 	/* display and zoom IE7 fix for display:inline-block */
     *display: inline;
     *zoom: 1;
-}
-
-.edit-image-replace input[type="submit"],
-.edit-upload-thumbnail input[type="submit"],
-.edit-alter-thumbnail input[type="submit"],
-.edit-file-replace input[type="submit"] {
-	float: right;
 }
 
 
@@ -758,12 +746,7 @@ td.tabup2 a,
 td.tabdown2 a {
 	display: block;
 	width: 100%;
-}
-
-td.tabdown a {
-	border: 0;
 	color: #000;
-	background-color: transparent;
 }
 
 td.tabs {
