@@ -412,7 +412,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function image_edit($message='',$id='')
 	{
-		global $txpcfg,$img_dir,$file_max_upload_size,$txp_user,$event;
+		global $prefs,$file_max_upload_size,$txp_user,$event;
 
 		if (!$id) $id = gps('id');
 		$id = assert_int($id);
@@ -511,7 +511,7 @@ $LastChangedRevision$
 									'<label for="height">'.gTxt('thumb_height').'</label>'.n.
 									fInput('text', 'height', @$thumb_h, 'input-xsmall', '', '', 4, '', 'height').n.
 									'<label for="crop">'.gTxt('keep_square_pixels').'</label>'.n.
-									checkbox('crop', 1, @$thumb_crop, '', 'crop').n.
+									checkbox('crop', 1, @$prefs['thumb_crop'], '', 'crop').n.
 									fInput('submit', '', gTxt('Create'))
 								, ' class="edit-alter-thumbnail"').n.
 								n.hInput('id', $id).n.
