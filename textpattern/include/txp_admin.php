@@ -271,7 +271,7 @@ $LastChangedRevision$
 		// Change email address button
 		if (!has_privs('admin.edit'))
 		{
-			echo sLink('admin', 'change_email_form', gTxt('change_email_address'));
+			echo n.sLink('admin', 'change_email_form', gTxt('change_email_address'));
 		}
 
 		// User list
@@ -328,7 +328,7 @@ $LastChangedRevision$
 			// New author button
 			if (has_privs('admin.edit'))
 			{
-				echo sLink('admin', 'author_edit', gTxt('add_new_author'));
+				echo n.sLink('admin', 'author_edit', gTxt('add_new_author'));
 			}
 
 			echo '</p>'; // end txp-buttons
