@@ -491,9 +491,6 @@ $LastChangedRevision$
                 if ($uExpires and time() > $uExpires and !$publish_expired_articles) {
                     $out['status'] = '410';
                 }
-
-                if ($np = getNextPrev($id, $Posted, $s))
-                    $out = array_merge($out, $np);
             }
         }
 
@@ -744,7 +741,7 @@ $LastChangedRevision$
 		$category  = join("','", doSlash(do_list($category)));
 		$category  = (!$category)  ? '' : " and (Category1 IN ('".$category."') or Category2 IN ('".$category."'))";
 		$section   = (!$section)   ? '' : " and Section IN ('".join("','", doSlash(do_list($section)))."')";
-		$excerpted = ($excerpted=='y')  ? " and Excerpt !=''" : '';
+		$excerpted = ($excerpted=='y' || $excerpted=='1')  ? " and Excerpt !=''" : '';
 		$author    = (!$author)    ? '' : " and AuthorID IN ('".join("','", doSlash(do_list($author)))."')";
 		$month     = (!$month)     ? '' : " and Posted like '".doSlash($month)."%'";
 		$ids = array_map('intval', do_list($id));
@@ -847,6 +844,7 @@ $LastChangedRevision$
 				global $thisarticle, $uPosted, $limit;
 				$thisarticle['is_first'] = ($count == 1);
 				$thisarticle['is_last'] = ($count == $last);
+				filterAtts($theAtts);
 
 				// article form preview
 				if (txpinterface === 'admin' && ps('Form')) {
@@ -883,11 +881,17 @@ $LastChangedRevision$
 
 		extract(gpsa(array('parentid', 'preview')));
 
-		extract(lAtts(array(
+		$theAtts = lAtts(array(
 			'allowoverride' => '1',
 			'form'          => 'default',
 			'status'        => '4',
-		),$atts, 0));
+			'pgonly'		=> 0
+		), $atts, 0);
+		extract($theAtts);
+
+		filterAtts($atts); // save *all* atts to get hold of the current article filter criteria
+
+		if ($pgonly) return ''; // no output required
 
 		// if a form is specified, $thing is for doArticles() - hence ignore $thing here.
 		if (!empty($atts['form'])) $thing = '';
@@ -899,12 +903,13 @@ $LastChangedRevision$
 
 		if (empty($thisarticle) or $thisarticle['thisid'] != $id)
 		{
+			$id = assert_int($id);
 			$thisarticle = NULL;
 
 			$q_status = ($status ? 'and Status = '.intval($status) : 'and Status in (4,5)');
 
 			$rs = safe_row("*, unix_timestamp(Posted) as uPosted, unix_timestamp(Expires) as uExpires, unix_timestamp(LastMod) as uLastMod",
-					"textpattern", 'ID = '.intval($id)." $q_status limit 1");
+					"textpattern", 'ID = '.$id." $q_status limit 1");
 
 			if ($rs) {
 				extract($rs);
@@ -949,7 +954,7 @@ $LastChangedRevision$
 	{
 		global $pretext, $is_article_list;
 		$old_ial = $is_article_list;
-		$is_article_list = ($pretext['id'] && !$iscustom)? false : true;
+		$is_article_list = empty($pretext['id']) || $iscustom;
 		article_push();
 		$r = ($is_article_list)? doArticles($atts, $iscustom, $thing) : doArticle($atts, $thing);
 		article_pop();

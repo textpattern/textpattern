@@ -1390,23 +1390,19 @@ $LastChangedRevision$
 
 	function link_to_next($atts, $thing = NULL)
 	{
-		global $id, $next_id, $next_title;
+		global /** @noinspection PhpUnusedLocalVariableInspection */
+		$thisarticle, $next_id, $next_title, $prev_id, $prev_title;
 
 		extract(lAtts(array(
 			'showalways' => 0,
 		), $atts));
 
-		if (intval($id) == 0)
+		assert_article();
+		if (!isset($thisarticle['next_id']))
 		{
-			global $thisarticle, $s;
-
-			assert_article();
-
-			extract(getNextPrev(
-				@$thisarticle['thisid'],
-				@strftime('%Y-%m-%d %H:%M:%S', $thisarticle['posted']),
-				@$s
-			));
+			$np = getNextPrev();
+			$thisarticle = $thisarticle + $np;
+			extract($np);
 		}
 
 		if ($next_id)
@@ -1430,27 +1426,23 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-// link to next article, if it exists
+// link to previous article, if it exists
 
 	function link_to_prev($atts, $thing = NULL)
 	{
-		global $id, $prev_id, $prev_title;
+		global /** @noinspection PhpUnusedLocalVariableInspection */
+		$thisarticle, $next_id, $next_title, $prev_id, $prev_title;
 
 		extract(lAtts(array(
 			'showalways' => 0,
 		), $atts));
 
-		if (intval($id) == 0)
+		assert_article();
+		if (!isset($thisarticle['prev_id']))
 		{
-			global $thisarticle, $s;
-
-			assert_article();
-
-			extract(getNextPrev(
-				$thisarticle['thisid'],
-				@strftime('%Y-%m-%d %H:%M:%S', $thisarticle['posted']),
-				@$s
-			));
+			$np = getNextPrev();
+			$thisarticle = $thisarticle + $np;
+			extract($np);
 		}
 
 		if ($prev_id)

@@ -57,35 +57,11 @@ function filterFrontPage()
 function populateArticleData($rs)
 {
 	global $thisarticle;
-	extract($rs);
 
-	trace_add("[".gTxt('Article')." $ID]");
-	$thisarticle['thisid']          = $ID;
-	$thisarticle['posted']          = $uPosted;
-	$thisarticle['expires']         = $uExpires;
-	$thisarticle['modified']        = $uLastMod;
-	$thisarticle['annotate']        = $Annotate;
-	$thisarticle['comments_invite'] = $AnnotateInvite;
-	$thisarticle['authorid']        = $AuthorID;
-	$thisarticle['title']           = $Title;
-	$thisarticle['url_title']       = $url_title;
-	$thisarticle['category1']       = $Category1;
-	$thisarticle['category2']       = $Category2;
-	$thisarticle['section']         = $Section;
-	$thisarticle['keywords']        = $Keywords;
-	$thisarticle['article_image']   = $Image;
-	$thisarticle['comments_count']  = $comments_count;
-	$thisarticle['body']            = $Body_html;
-	$thisarticle['excerpt']         = $Excerpt_html;
-	$thisarticle['override_form']   = $override_form;
-	$thisarticle['status']          = $Status;
-
-	$custom = getCustomFields();
-	if ($custom) {
-		foreach ($custom as $i => $name)
-			$thisarticle[$name] = $rs['custom_' . $i];
+	trace_add("[".gTxt('Article')." {$rs['ID']}]");
+	foreach (article_column_map() as $key => $column) {
+		$thisarticle[$key] = $rs[$column];
 	}
-
 }
 
 /**
@@ -103,69 +79,186 @@ function article_format_info($rs)
 }
 
 /**
+ * @return array
+ */
+function article_column_map()
+{
+	$custom = getCustomFields();
+	if ($custom) {
+		foreach ($custom as $i => $name)
+			$custom_map[$name] ='custom_' . $i;
+	}
+
+	return array(
+		'thisid' => 'ID',
+		'posted' => 'uPosted',		// calculated value!
+		'expires' => 'uExpires',	// calculated value!
+		'modified' => 'uLastMod',	// calculated value!
+		'annotate' => 'Annotate',
+		'comments_invite' => 'AnnotateInvite',
+		'authorid' => 'AuthorID',
+		'title' => 'Title',
+		'url_title' => 'url_title',
+		'category1' => 'Category1',
+		'category2' => 'Category2',
+		'section' => 'Section',
+		'keywords' => 'Keywords',
+		'article_image' => 'Image',
+		'comments_count' => 'comments_count',
+		'body' => 'Body_html',
+		'excerpt' => 'Excerpt_html',
+		'override_form' => 'override_form',
+		'status' => 'Status',
+	) + $custom_map;
+}
+
+/**
  * Find an adjacent article relative to a provided threshold level
  *
  * @param scalar $threshold The value to compare against
  * @param string $s string Optional section restriction
- * @param string $type string Find lesser or greater neighbour? Possible values: '<' (default) or '>'
- * @param string $col Comparison criteria TODO
+ * @param string $type string Find lesser or greater neighbour? Possible values: '<' (previous, default) or '>' (next)
+ * @param array $atts Attribute of article at threshold
  * @return array|string An array populated with article data, or the empty string in case of no matches
  */
-function getNeighbour($threshold, $s, $type, $col = 'Posted')
+function getNeighbour($threshold, $s, $type, $atts = array())
 {
 	global $prefs;
-	extract($prefs);
-	$expired = ($publish_expired_articles) ? '' : ' and (now() <= Expires or Expires = '.NULLDATETIME.')';
-	$type = ($type == '>') ? '>' : '<';
+	static $cache = array();
+
+	$key = md5($threshold.$s.$type.join(n, $atts));
+	if (isset($cache[$key])) {
+		return $cache[$key];
+	}
+
+	extract($atts);
+	$expired = ($expired && ($prefs['publish_expired_articles']));
+	$customFields = getCustomFields();
+
+	//Building query parts
+	// lifted from publish.php. This is somewhat embarrassing, isn't it?
+	$ids = array_map('intval', do_list($id));
+	$id        = (!$id)        ? '' : " and ID IN (".join(',', $ids).")";
+	switch ($time) {
+		case 'any':
+			$time = ""; break;
+		case 'future':
+			$time = " and Posted > now()"; break;
+		default:
+			$time = " and Posted <= now()";
+	}
+	if (!$expired) {
+		$time .= " and (now() <= Expires or Expires = ".NULLDATETIME.")";
+	}
+
+	$custom = '';
+
+	if ($customFields) {
+		foreach($customFields as $cField) {
+			if (isset($atts[$cField]))
+				$customPairs[$cField] = $atts[$cField];
+		}
+		if(!empty($customPairs)) {
+			$custom = buildCustomSql($customFields,$customPairs);
+		}
+	}
+
+	if ($keywords) {
+		$keys = doSlash(do_list($keywords));
+		foreach ($keys as $key) {
+			$keyparts[] = "FIND_IN_SET('".$key."',Keywords)";
+		}
+		$keywords = " and (" . join(' or ',$keyparts) . ")";
+	}
+
+	// invert $type for ascending sortdir
+	$types = array(
+		'>' => array('desc' => '>', 'asc' => '<'),
+		'<' => array('desc' => '<', 'asc' => '>'),
+	);
+	$type = ($type == '>') ? $types['>'][$sortdir] : $types['<'][$sortdir];
+
 	$safe_name = safe_pfx('textpattern');
-	$col = doSlash($col);
 	$q = array(
 		"select ID, Title, url_title, unix_timestamp(Posted) as uposted
-			from ".$safe_name." where $col $type '".doSlash($threshold)."'",
+			from ".$safe_name." where $sortby $type '".doSlash($threshold)."'",
 		($s!='' && $s!='default') ? "and Section = '".doSlash($s)."'" : filterFrontPage(),
-		'and Status=4 and Posted < now()'.$expired.' order by '.$col,
+		$id,
+		$time,
+		$custom,
+		$keywords,
+		'and Status=4',
+		'order by '.$sortby,
 		($type=='<') ? 'desc' : 'asc',
 		'limit 1'
 	);
 
-	$out = getRow(join(' ',$q));
-	return (is_array($out)) ? $out : '';
+	$cache[$key] = getRow(join(n.' ',$q));
+	return (is_array($cache[$key])) ? $cache[$key] : '';
 }
 
 /**
  * Find next and previous articles relative to a provided threshold level
  *
- * @param int $id The "pivot" article's id
- * @param scalar $threshold The value to compare against
- * @param string $s string Optional section restriction
- * @param string $col Comparison criteria TODO
+ * @param int $id The "pivot" article's id; use zero (0) to indicate $thisarticle
+ * @param scalar $threshold The value to compare against if $id != 0
+ * @param string $s string Optional section restriction if $id != 0
  * @return array An array populated with article data from the next and previous article
  */
-function getNextPrev($id, $threshold, $s, $col = 'Posted')
+function getNextPrev($id = 0, $threshold = null, $s = '')
 {
-	static $next, $cache;
+	if ($id !== 0) {
+		// Pivot is specific article by ID: In lack of further information, revert to default sort order 'Posted desc'
+		$atts = filterAtts(array('sortby' => 'Posted', 'sortdir' => 'desc'));
+	} else {
+		// Pivot is $thisarticle: Use article attributes to find its neighbours
+		$atts = filterAtts();
 
-	if (@isset($cache[$next[$id]]))
-		$thenext = $cache[$next[$id]];
-	else
-		$thenext = getNeighbour($threshold, $s, '>', $col);
+		$m = preg_split('/\s+/', $atts['sort']);
+		if (empty($m[0]) || count($m) > 2 || preg_match('/[),]/', $m[0])) {
+			// Either no explicit sort order or a complex clause, e.g. 'foo asc, bar desc' or 'FUNC(foo,bar) asc'
+			// Fall back to chronologically descending order
+			$atts['sortby'] = 'Posted';
+			$atts['sortdir']= 'desc';
+		} else {
+			// sort is like 'foo asc'
+			$atts['sortby'] = $m[0];
+			$atts['sortdir'] = (isset($m[1]) && strtolower($m[1]) == 'desc' ? 'desc' : 'asc');
+		}
 
+		global $thisarticle;
+
+		// atts w/ special treatment
+		switch($atts['sortby']) {
+			case 'Posted':
+				$threshold = strftime('%Y-%m-%d %H:%M:%S', $thisarticle['posted']);
+				break;
+			case 'Expires':
+				$threshold = strftime('%Y-%m-%d %H:%M:%S', $thisarticle['expires']);
+				break;
+			case 'LastMod':
+				$threshold = strftime('%Y-%m-%d %H:%M:%S', $thisarticle['modified']);
+				break;
+			default:
+				// retrieve current threshold value per sort column from $thisarticle
+				$acm = array_flip(article_column_map());
+				$key = $acm[$atts['sortby']];
+				$threshold = $thisarticle[$key];
+				break;
+		}
+	}
+
+	$thenext 			= getNeighbour($threshold, $s, '>', $atts);
 	$out['next_id']     = ($thenext) ? $thenext['ID'] : '';
 	$out['next_title']  = ($thenext) ? $thenext['Title'] : '';
 	$out['next_utitle'] = ($thenext) ? $thenext['url_title'] : '';
 	$out['next_posted'] = ($thenext) ? $thenext['uposted'] : '';
 
-	$theprev            = getNeighbour($threshold, $s, '<', $col);
+	$theprev            = getNeighbour($threshold, $s, '<', $atts);
 	$out['prev_id']     = ($theprev) ? $theprev['ID'] : '';
 	$out['prev_title']  = ($theprev) ? $theprev['Title'] : '';
 	$out['prev_utitle'] = ($theprev) ? $theprev['url_title'] : '';
 	$out['prev_posted'] = ($theprev) ? $theprev['uposted'] : '';
-
-	if ($theprev) {
-		$cache[$theprev['ID']] = $theprev;
-		$next[$theprev['ID']] = $id;
-	}
-
 	return $out;
 }
 
@@ -479,5 +572,43 @@ function chopUrl($req)
 	$o['u4'] = (isset($r[4])) ? $r[4] : '';
 
 	return $o;
+}
+
+/**
+ * Save and retrieve the individual article's attributes plus article list attributes for next/prev tags
+ *
+ * @param array $atts
+ * @return array
+ * @since 4.5.0
+ */
+function filterAtts($atts = null)
+{
+	global $prefs;
+	static $out = array();
+
+	$valid = array(
+		'sort'          => 'Posted desc',
+		'sortby'		=> '',
+		'sortdir'		=> '',
+		'keywords'      => '',
+		'expired'       => $prefs['publish_expired_articles'],
+		'id'            => '',
+		'time'          => 'past',
+	);
+
+	if (is_array($atts)) {
+		if (empty($out)) {
+			$out = $atts;
+			trace_add('[filterAtts accepted]');
+		} else {
+			// TODO: deal w/ nested txp:article[_custom] tags
+			trace_add('[filterAtts ignored]');
+		}
+	}
+
+	if (empty($out)) {
+		trace_add('[filterAtts not set]');
+	}
+	return lAtts($valid, $out, 0);
 }
 ?>
