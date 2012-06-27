@@ -531,6 +531,10 @@ td {
 	white-space: nowrap;
 }
 
+.selected {
+	background-color: #f3f3f3;
+}
+
 /* Edit panes
    ========================================================================== */
 

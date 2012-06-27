@@ -135,19 +135,6 @@ $LastChangedRevision$
 		$edit_assign_assets = $rs ? selectInput('assign_assets', $rs, '', true) : '';
 	}
 
-	if ($event == 'section')
-	{
-		$rs = safe_column('name', 'txp_page', "1=1");
-		$edit['page'] = $rs ? selectInput('page', $rs, '', false) : '';
-
-		$rs = safe_column('name', 'txp_css', "1=1");
-		$edit['css'] = $rs ? selectInput('css', $rs, '', false) : '';
-
-		$edit['onfrontpage'] = yesnoRadio('on_front_page', 1);
-		$edit['syndicate'] = yesnoRadio('in_rss', 1);
-		$edit['searchable'] = yesnoRadio('searchable', 1);
-	}
-
 	// output JavaScript
 ?>
 		function poweredit(elm)

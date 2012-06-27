@@ -866,6 +866,68 @@ $LastChangedRevision$
 	}
 
 /**
+ * Render a multi-edit form listing editing methods
+ *
+ * @param  array   $options array('value' => array( 'label' => '', 'html' => '' ),...)
+ * @param  string  $event Event
+ * @param  string  $step Step
+ * @param  integer $page Page number
+ * @param  string  $sort Column sorted by
+ * @param  string  $dir Sorting direction
+ * @param  string  $crit Search criterion
+ * @parma  string  $search_method Search method
+ * @return string  HTML
+ */
+
+	function multi_edit($options, $event=null, $step=null, $page='', $sort='', $dir='', $crit='', $search_method='')
+	{
+		$method = ps('edit_method');
+		$html = $methods = array();
+		$methods[''] = gTxt('with_selected_option');
+
+		if ($event === null)
+		{
+			global $event;
+		}
+
+		if ($step === null)
+		{
+			$step = $event.'_multi_edit';
+		}
+
+		callback_event_ref($event.'_ui', 'multi_edit_options', 0, $options);
+
+		foreach($options as $value => $option)
+		{
+			if (is_array($option))
+			{
+				$methods[$value] = $option['label'];
+
+				if (isset($option['html']))
+				{
+					$html[$value] = '<div class="multi-option" id="multi-option-'.
+						txpspecialchars($value).'">'.$option['html'].'</div>';
+				}
+			}
+			else
+			{
+				$methods[$value] = $option;
+			}
+		}
+
+		return '<div class="multi-edit">'.
+			n.selectInput('edit_method', $methods, $method).
+			n.eInput($event).
+			n.sInput($step).
+			n.hInput('page', $page).
+			($sort ? n.hInput('sort', $sort).n.hInput('dir', $dir) : '' ).
+			($crit !== '' ? n.hInput('crit', $crit).n.hInput('search_method', $search_method) : '').
+			n.implode('', $html).
+			n.fInput('submit', '', gTxt('go')).
+			n.'</div>';
+	}
+
+/**
  * Render a form to select various amounts to page lists by.
  *
  * @param	string	$event	Event

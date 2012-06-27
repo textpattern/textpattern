@@ -163,13 +163,13 @@ $LastChangedRevision$
 		if ($rs)
 		{
 			echo n.'<div id="'.$event.'_container" class="txp-container">';
-			echo n.n.'<form action="index.php" id="section_form" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
+			echo n.n.'<form action="index.php" id="section_form" class="multi_edit_form" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
 
 				n.'<div class="txp-listtables">'.n.
 				n.startTable('', '', 'txp-list').
 				n.'<thead>'.
 				n.tr(
-					n.hCell(fInput('checkbox', 'selected_toggle', 0, '', '', '', '', '', 'selected_toggle'), '', ' title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
+					n.hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
 					n.column_head('name', 'name', 'section', true, $switch_dir, $crit, $search_method, (('name' == $sort) ? "$dir " : '').'name').
 					n.column_head('title', 'title', 'section', true, $switch_dir, $crit, $search_method, (('title' == $sort) ? "$dir " : '').'name').
 					n.column_head('page', 'page', 'section', true, $switch_dir, $crit, $search_method, (('page' == $sort) ? "$dir " : '').'page').
@@ -224,10 +224,7 @@ $LastChangedRevision$
 			echo '</tbody>'.
 			n.endTable().
 
-			n.graf(
-				select_buttons().n.
-				section_multiedit_form($page, $sort, $dir, $crit, $search_method)
-			, ' class="multi-edit"').
+			n.section_multiedit_form($page, $sort, $dir, $crit, $search_method).
 
 			n.'</div>'.
 			n.tInput().
@@ -603,16 +600,19 @@ EOS
 
 	function section_multiedit_form($page, $sort, $dir, $crit, $search_method)
 	{
+		$pages = safe_column('name', 'txp_page', '1=1');
+		$styles = safe_column('name', 'txp_css', '1=1');
+
 		$methods = array(
-			'changepage'        => gTxt('uses_page'),
-			'changecss'         => gTxt('uses_style'),
-			'changeonfrontpage' => gTxt('on_front_page'),
-			'changesyndicate'   => gTxt('syndicate'),
-			'changesearchable'  => gTxt('include_in_search'),
+			'changepage'        => array('label' => gTxt('uses_page'), 'html' => selectInput('page', $pages, '', false)),
+			'changecss'         => array('label' => gTxt('uses_style'), 'html' => selectInput('css', $styles, '', false)),
+			'changeonfrontpage' => array('label' => gTxt('on_front_page'), 'html' => yesnoRadio('on_front_page', 1)),
+			'changesyndicate'   => array('label' => gTxt('syndicate'), 'html' => yesnoRadio('in_rss', 1)),
+			'changesearchable'  => array('label' => gTxt('include_in_search'), 'html' => yesnoRadio('searchable', 1)),
 			'delete'            => gTxt('delete'),
 		);
 
-		return event_multiedit_form('section', $methods, $page, $sort, $dir, $crit, $search_method);
+		return multi_edit($methods, 'section', 'section_multi_edit', $page, $sort, $dir, $crit, $search_method);
 	}
 
 // -------------------------------------------------------------
