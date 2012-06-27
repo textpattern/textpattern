@@ -158,7 +158,7 @@ $LastChangedRevision$
 		}
 
 		if (!in_array($name, $essential_forms))
-			$changename = graf(gTxt('form_name').br.fInput('text','name',$name,'edit','','',15));
+			$changename = graf(gTxt('form_name').br.fInput('text','name',$name,'edit','','',INPUT_REGULAR));
 		else
 			$changename = graf(gTxt('form_name').br.tag($name, 'em').hInput('name',$name));
 
@@ -197,7 +197,7 @@ $LastChangedRevision$
 					'<form action="index.php" method="post" id="form_form">'.
 						'<div id="main_content">'.
 						'<div class="edit-title">'.gTxt('you_are_editing_form').sp.strong(($name) ? $name : gTxt('untitled')).'</div>'.
-						'<textarea id="form" class="code" name="Form" cols="60" rows="20">'.txpspecialchars($Form).'</textarea>'.
+						'<textarea id="form" class="code" name="Form" cols="'.INPUT_LARGE.'" rows="'.INPUT_MEDIUM.'">'.txpspecialchars($Form).'</textarea>'.
 
 					$changename.
 

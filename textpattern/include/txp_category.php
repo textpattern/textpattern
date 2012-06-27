@@ -237,7 +237,7 @@ if ($event == 'category') {
 
 		$out = n.n.hed(gTxt($heading).sp.popHelp($event.'_category'), 2).
 			form(
-				fInput('text', 'title', '', '', '', '', 20).
+				fInput('text', 'title', '', '', '', '', INPUT_REGULAR).
 				(($rs) ? '<div class="parent"><label>' . gTxt('parent') . '</label>' . treeSelectInput('parent_cat', $rs, $parent) . '</div>' : '').
 				n.fInput('submit', '', gTxt('Create')).
 				n.eInput('category').

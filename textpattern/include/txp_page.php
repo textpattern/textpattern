@@ -116,7 +116,7 @@ $LastChangedRevision$
 		{
 			$buttons = '<div class="edit-title">'.
 			gTxt('name_for_this_page').': '
-			.fInput('text','newname','','','','',20).
+			.fInput('text','newname','','','','',INPUT_REGULAR).
 			hInput('savenew','savenew').
 			'</div>';
 		} else {
@@ -124,7 +124,7 @@ $LastChangedRevision$
 		}
 
 		$out[] = '<div id="main_content">'.$buttons.
-					'<textarea id="html" class="code" name="html" cols="84" rows="36">'.txpspecialchars($html).'</textarea>'.
+					'<textarea id="html" class="code" name="html" cols="'.INPUT_LARGE.'" rows="'.INPUT_REGULAR.'">'.txpspecialchars($html).'</textarea>'.
 					n.'<p>'.fInput('submit','save',gTxt('save'),'publish').
 					n.eInput('page').
 					n.sInput('page_save').

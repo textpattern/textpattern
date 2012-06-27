@@ -886,7 +886,7 @@ EOS
 	function custField($num, $field, $content)
 	{
 		return n.n.graf('<label for="custom-'.$num.'">'.$field.'</label>'.br.
-			n.fInput('text', 'custom_'.$num, $content, '', '', '', 22, '', 'custom-'.$num), ' class="custom-field custom-'.$num.'"');
+			n.fInput('text', 'custom_'.$num, $content, '', '', '', INPUT_REGULAR, '', 'custom-'.$num), ' class="custom-field custom-'.$num.'"');
 	}
 
 // -------------------------------------------------------------
@@ -1204,7 +1204,7 @@ EOS
 
 		$out .= pluggable_ui('article_ui', 'article_image',
 			n.graf('<label for="article-image">'.gTxt('article_image').'</label>'.sp.popHelp('article_image').br.
-				fInput('text', 'Image', $rs['Image'], '', '', '', 22, '', 'article-image'), ' class="article-image"'),
+				fInput('text', 'Image', $rs['Image'], '', '', '', INPUT_REGULAR, '', 'article-image'), ' class="article-image"'),
 			$rs);
 		return $out.'</div></div>'.n;
 	}
@@ -1214,7 +1214,7 @@ EOS
 	{
 		return pluggable_ui('article_ui', 'keywords',
 			n.graf('<label for="keywords">'.gTxt('keywords').'</label>'.sp.popHelp('keywords').br.
-				n.'<textarea id="keywords" name="Keywords" cols="18" rows="5">'.txpspecialchars(article_partial_keywords_value($rs)).'</textarea>', ' class="keywords"'),
+				n.'<textarea id="keywords" name="Keywords" cols="'.INPUT_MEDIUM.'" rows="'.INPUT_XSMALL.'">'.txpspecialchars(article_partial_keywords_value($rs)).'</textarea>', ' class="keywords"'),
 			$rs);
 	}
 
@@ -1230,7 +1230,7 @@ EOS
 	{
 		return pluggable_ui('article_ui', 'url_title',
 			n.graf('<label for="url-title">'.gTxt('url_title').'</label>'.sp.popHelp('url_title').br.
-				fInput('text', 'url_title', article_partial_url_title_value($rs), '', '', '', 22, '', 'url-title'), ' class="url-title"'),
+				fInput('text', 'url_title', article_partial_url_title_value($rs), '', '', '', INPUT_REGULAR, '', 'url-title'), ' class="url-title"'),
 			$rs);
 	}
 
@@ -1286,7 +1286,7 @@ EOS
 	{
 		return pluggable_ui('article_ui', 'body',
 			n.graf('<label for="body">'.gTxt('body').'</label>'.sp.popHelp('body').br.
-				'<textarea id="body" name="Body" cols="55" rows="31" tabindex="2">'.txpspecialchars($rs['Body']).'</textarea>', ' class="body"'),
+				'<textarea id="body" name="Body" cols="'.INPUT_LARGE.'" rows="'.INPUT_REGULAR.'" tabindex="2">'.txpspecialchars($rs['Body']).'</textarea>', ' class="body"'),
 			$rs);
 	}
 
@@ -1295,7 +1295,7 @@ EOS
 	{
 		return pluggable_ui('article_ui', 'excerpt',
 			n.graf('<label for="excerpt">'.gTxt('excerpt').'</label>'.sp.popHelp('excerpt').br.
-				'<textarea id="excerpt" name="Excerpt" cols="55" rows="5" tabindex="3">'.txpspecialchars($rs['Excerpt']).'</textarea>', ' class="excerpt"'),
+				'<textarea id="excerpt" name="Excerpt" cols="'.INPUT_LARGE.'" rows="'.INPUT_SMALL.'" tabindex="3">'.txpspecialchars($rs['Excerpt']).'</textarea>', ' class="excerpt"'),
 			$rs);
 	}
 

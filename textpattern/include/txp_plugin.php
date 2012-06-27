@@ -460,7 +460,7 @@ $LastChangedRevision$
 		return n.n.form(
 			'<p>'.
 			tag(gTxt('install_plugin'), 'label', ' for="plugin-install"').sp.popHelp('install_plugin').n.
-			'<textarea id="plugin-install" class="code" name="plugin" cols="62" rows="1"></textarea>'.n.
+			'<textarea id="plugin-install" class="code" name="plugin" cols="'.INPUT_LARGE.'" rows="'.INPUT_TINY.'"></textarea>'.n.
 			fInput('submit', 'install_new', gTxt('upload')).
 			eInput('plugin').
 			sInput('plugin_verify').

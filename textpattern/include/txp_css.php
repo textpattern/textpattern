@@ -84,7 +84,7 @@ $LastChangedRevision$
 		{
 			$buttons = '<div class="edit-title">'.
 			gTxt('name_for_this_style').': '
-			.fInput('text','newname','','','','',20).
+			.fInput('text','newname','','','','',INPUT_REGULAR).
 			hInput('savenew','savenew').
 			'</div>';
 			$thecss = gps('css');
@@ -119,7 +119,7 @@ $LastChangedRevision$
 				form(
 					'<div id="main_content">'.
 					$buttons.
-					'<textarea id="css" class="code" name="css" cols="78" rows="32">'.txpspecialchars($thecss).'</textarea>'.
+					'<textarea id="css" class="code" name="css" cols="'.INPUT_LARGE.'" rows="'.INPUT_REGULAR.'">'.txpspecialchars($thecss).'</textarea>'.
 					'<p>'.fInput('submit','',gTxt('save'),'publish').
 					eInput('css').sInput('css_save').
 					hInput('name',$name).'</p>'

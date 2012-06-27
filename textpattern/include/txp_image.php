@@ -503,9 +503,9 @@ $LastChangedRevision$
 							form(
 								graf(
 									'<label for="width">'.gTxt('thumb_width').'</label>'.n.
-									fInput('text', 'width', @$thumb_w, 'input-xsmall', '', '', 4, '', 'width').n.
+									fInput('text', 'width', @$thumb_w, 'input-xsmall', '', '', INPUT_XSMALL, '', 'width').n.
 									'<label for="height">'.gTxt('thumb_height').'</label>'.n.
-									fInput('text', 'height', @$thumb_h, 'input-xsmall', '', '', 4, '', 'height').n.
+									fInput('text', 'height', @$thumb_h, 'input-xsmall', '', '', INPUT_XSMALL, '', 'height').n.
 									'<label for="crop">'.gTxt('keep_square_pixels').'</label>'.n.
 									checkbox('crop', 1, @$prefs['thumb_crop'], '', 'crop').n.
 									fInput('submit', '', gTxt('Create'))
@@ -530,7 +530,7 @@ $LastChangedRevision$
 						inputLabel('image_name', fInput('text', 'image_name', $name, '', '', '', INPUT_REGULAR, '', 'image_name'), 'image_name').n.
 						inputLabel('image_category', treeSelectInput('image_category', $categories, $category, 'image_category'), 'image_category').n.
 						inputLabel('image_alt_text', fInput('text', 'image_alt_text', $alt, '', '', '', INPUT_REGULAR, '', 'image_alt_text'), 'alt_text').n.
-						inputLabel('image_caption', '<textarea id="image_caption" name="image_caption" rows="4" cols="'.INPUT_LARGE.'">'.$caption.'</textarea>', 'caption', '', '', '').n.
+						inputLabel('image_caption', '<textarea id="image_caption" name="image_caption" rows="'.INPUT_XSMALL.'" cols="'.INPUT_LARGE.'">'.$caption.'</textarea>', 'caption', '', '', '').n.
 						pluggable_ui('image_ui', 'extend_detail_form', '', $rs).n.
 						graf(fInput('submit', '', gTxt('save'), 'publish')).
 						n.hInput('id', $id).

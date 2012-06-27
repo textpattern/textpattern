@@ -517,7 +517,7 @@ $LastChangedRevision$
 						inputLabel('file_title', fInput('text', 'file_title', $title, '', '', '', INPUT_REGULAR, '', 'file_title'), 'title').n.
 						inputLabel('file_category', treeSelectInput('file_category', $categories, $category, 'file_category'), 'file_category').n.
 //						inputLabel('perms', selectInput('perms', $levels, $permissions), 'permissions').n.
-						inputLabel('file_description', '<textarea id="file_description" name="file_description" rows="4" cols="'.INPUT_LARGE.'">'.$description.'</textarea>', 'description', '', '', '').n.
+						inputLabel('file_description', '<textarea id="file_description" name="file_description" rows="'.INPUT_XSMALL.'" cols="'.INPUT_LARGE.'">'.$description.'</textarea>', 'description', '', '', '').n.
 						'<fieldset class="file-created">'.n.
 							'<legend>'.n.
 								gTxt('timestamp').n.

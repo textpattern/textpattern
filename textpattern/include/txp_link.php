@@ -318,7 +318,7 @@ $LastChangedRevision$
 				inputLabel('linksort', fInput('text', 'linksort', $linksort, '', '', '', INPUT_REGULAR, '', 'linksort'), 'sort_value', 'link_sort').n.
 				inputLabel('url', fInput('text', 'url', $url, '', '', '', INPUT_REGULAR, '', 'url'), 'url', 'link_url', 'edit-link-url').n. /* TODO: type = 'url' once browsers are less strict and we use HTML5 doctype */
 				inputLabel('link_category', linkcategory_popup($category).' ['.eLink('category', 'list', '', '', gTxt('edit')).']', 'link_category', 'link_category').n.
-				inputLabel('link_description', '<textarea id="link_description" name="description" cols="'.INPUT_LARGE.'" rows="7">'.txpspecialchars($description).'</textarea>', 'description', 'link_description', '', '').n.
+				inputLabel('link_description', '<textarea id="link_description" name="description" cols="'.INPUT_LARGE.'" rows="'.INPUT_SMALL.'">'.txpspecialchars($description).'</textarea>', 'description', 'link_description', '', '').n.
 				pluggable_ui('link_ui', 'extend_detail_form', '', $rs).n.
 				graf(fInput('submit', '', gTxt('save'), 'publish')).
 				eInput('link').

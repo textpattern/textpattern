@@ -159,7 +159,7 @@ $LastChangedRevision$
 					gTxt($a['name']);
 
 				$out = tda($label.n.popHelp($a['name']), ' class="pref-label"');
-				$out.= td(pref_func($a['html'], $a['name'], $a['val']), ($a['html'] == 'text_input' ? 20 : ''), 'pref-value');
+				$out.= td(pref_func($a['html'], $a['name'], $a['val']), ($a['html'] == 'text_input' ? INPUT_REGULAR : ''), 'pref-value');
 
 				echo tr($out, " id='prefs-{$a['name']}' class='{$a['event']}-prefs'");
 			}
@@ -189,7 +189,13 @@ $LastChangedRevision$
 
 	function text_input($name, $val, $size = '')
 	{
-		return fInput('text', $name, $val, '', '', '', $size, '', $name);
+		$class = '';
+		switch ($size) {
+			case INPUT_MEDIUM: $class = 'input-medium'; break;
+			case INPUT_SMALL: $class = 'input-small'; break;
+			case INPUT_XSMALL: $class = 'input-xsmall'; break;
+		}
+		return fInput('text', $name, $val, $class, '', '', $size, '', $name);
 	}
 
 //-------------------------------------------------------------
@@ -464,7 +470,7 @@ EOS
 //-------------------------------------------------------------
 	function custom_set($name, $val)
 	{
-		return pluggable_ui('prefs_ui', 'custom_set', text_input($name, $val, 20), $name, $val);
+		return pluggable_ui('prefs_ui', 'custom_set', text_input($name, $val, INPUT_REGULAR), $name, $val);
 	}
 
 //-------------------------------------------------------------
@@ -543,7 +549,7 @@ EOS
 			{
 				$look_for = array('expire_logs_after', 'max_url_len', 'time_offset', 'rss_how_many', 'logs_expire');
 
-				$size = in_array($a['name'], $look_for) ? 3 : 20;
+				$size = in_array($a['name'], $look_for) ? INPUT_XSMALL : INPUT_REGULAR;
 
 				$out.= td(
 					pref_func('text_input', $a['name'], $a['val'], $size)
@@ -840,7 +846,7 @@ EOS
 					graf(
 						'<label for="textpack-install">'.gTxt('install_textpack').'</label>'.n.
 						popHelp('get_textpack').n.
-						'<textarea id="textpack-install" class="code" name="textpack" cols="45" rows="5"></textarea>'.n.
+						'<textarea id="textpack-install" class="code" name="textpack" cols="'.INPUT_LARGE.'" rows="'.INPUT_XSMALL.'"></textarea>'.n.
 						fInput('submit', 'install_new', gTxt('upload')).
 						eInput('prefs').
 						sInput('get_textpack')

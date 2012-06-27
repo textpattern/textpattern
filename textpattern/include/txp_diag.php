@@ -484,7 +484,7 @@ $LastChangedRevision$
 	$fmt_date = '%Y-%m-%d %H:%M:%S';
 
 	$out = array(
-		'<p><textarea id="diagnostics-detail" cols="78" rows="18" readonly="readonly">',
+		'<p><textarea id="diagnostics-detail" cols="'.INPUT_LARGE.'" rows="'.INPUT_MEDIUM.'" readonly="readonly">',
 
 		gTxt('txp_version').cs.txp_version.' ('.($rev ? 'r'.$rev : 'unknown revision').')'.n,
 
