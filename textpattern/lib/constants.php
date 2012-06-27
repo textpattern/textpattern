@@ -68,6 +68,7 @@ define('STATUS_PENDING', 3);
 define('STATUS_LIVE', 4);
 define('STATUS_STICKY', 5);
 
+define('INPUT_XLARGE', 96);
 define('INPUT_LARGE', 64);
 define('INPUT_REGULAR', 32);
 define('INPUT_MEDIUM', 16);

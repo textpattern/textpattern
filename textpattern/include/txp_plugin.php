@@ -20,14 +20,14 @@ $LastChangedRevision$
 		require_privs('plugin');
 
 		$available_steps = array(
-			'plugin_edit'	=> true,
-			'plugin_help'	=> false,
-			'plugin_list'	=> false,
-			'plugin_install'	=> true,
-			'plugin_save'	=> true,
-			'plugin_verify'	=> true,
-			'switch_status'	=> true,
-			'plugin_multi_edit'	=> true
+			'plugin_edit'       => true,
+			'plugin_help'       => false,
+			'plugin_list'       => false,
+			'plugin_install'    => true,
+			'plugin_save'       => true,
+			'plugin_verify'     => true,
+			'switch_status'     => true,
+			'plugin_multi_edit' => true
 		);
 
 		if (!$step or !bouncer($step, $available_steps)) {
@@ -214,19 +214,18 @@ $LastChangedRevision$
 	function plugin_edit_form($name='')
 	{
 		assert_string($name);
-		$sub = fInput('submit','',gTxt('save'),'publish');
 		$code = ($name) ? fetch('code','txp_plugin','name',$name) : '';
-		$thing = ($code)
-		?	$code
-		:	'';
-		$textarea = '<textarea id="plugin-code" class="code" name="code" rows="28" cols="90">'.txpspecialchars($thing).'</textarea>';
+		$thing = ($code) ? $code : '';
 
 		return
-		form(startTable('', '', 'txp-edit')
-		.	tr(td($textarea))
-		.	tr(td($sub))
-#		.	tr(td($help))
-		.	endTable().sInput('plugin_save').eInput('plugin').hInput('name',$name), '', '', 'post', 'edit-form', '', 'plugin_details');
+			form(
+				hed(gTxt('edit_plugin', array('{name}' => $name)), 2).n.
+				graf('<textarea id="plugin_code" name="code" class="code" cols="'.INPUT_XLARGE.'" rows="'.INPUT_REGULAR.'">'.txpspecialchars($thing).'</textarea>', ' class="edit-plugin-code"').n.
+				graf(fInput('submit', '', gTxt('Save'), 'publish')).n.
+				eInput('plugin').n.
+				sInput('plugin_save').n.
+				hInput('name',$name)
+			, '', '', 'post', 'edit-form', '', 'plugin_details');
 	}
 
 // -------------------------------------------------------------
