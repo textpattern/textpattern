@@ -348,6 +348,8 @@ $LastChangedRevision$
 
 			list($page, $offset, $numPages) = pager($total, $limit, $page);
 
+			$use_multi_edit = ( has_privs('admin.edit') && (safe_count('txp_users', '1=1') > 1) );
+
 			echo author_search_form($crit, $search_method).'</div>';
 
 			$rs = safe_rows_start('*, unix_timestamp(last_access) as last_login', 'txp_users', "$criteria order by $sort_sql limit $offset, $limit");
@@ -355,31 +357,24 @@ $LastChangedRevision$
 			if ($rs)
 			{
 				echo n.'<div id="users_container" class="txp-container">';
-				echo '<form action="index.php" id="users_form" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
+				echo '<form action="index.php" id="users_form" class="multi_edit_form" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
 
 				n.'<div class="txp-listtables">'.
 				n.startTable('', '', 'txp-list').
 				n.'<thead>'.
 				n.tr(
-					column_head('login_name', 'name', 'admin', true, $switch_dir, '', '', (('name' == $sort) ? "$dir " : '').'name login-name').
-					column_head('real_name', 'RealName', 'admin', true, $switch_dir, '', '', (('RealName' == $sort) ? "$dir " : '').'name real-name').
-					column_head('email', 'email', 'admin', true, $switch_dir, '', '', (('email' == $sort) ? "$dir " : '').'email').
-					column_head('privileges', 'privs', 'admin', true, $switch_dir, '', '', (('privs' == $sort) ? "$dir " : '').'privs').
-					column_head('last_login', 'last_login', 'admin', true, $switch_dir, '', '', (('last_login' == $sort) ? "$dir " : '').'date last-login modified').
-					hCell('', '', ' class="multi-edit"')
+					n. (($use_multi_edit)
+						? hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' title="'.gTxt('toggle_all_selected').'" class="multi-edit"')
+						: hCell('', '', ' class="multi-edit"')
+					).
+					n.column_head('login_name', 'name', 'admin', true, $switch_dir, '', '', (('name' == $sort) ? "$dir " : '').'name login-name').
+					n.column_head('real_name', 'RealName', 'admin', true, $switch_dir, '', '', (('RealName' == $sort) ? "$dir " : '').'name real-name').
+					n.column_head('email', 'email', 'admin', true, $switch_dir, '', '', (('email' == $sort) ? "$dir " : '').'email').
+					n.column_head('privileges', 'privs', 'admin', true, $switch_dir, '', '', (('privs' == $sort) ? "$dir " : '').'privs').
+					n.column_head('last_login', 'last_login', 'admin', true, $switch_dir, '', '', (('last_login' == $sort) ? "$dir " : '').'date last-login modified')
 				).
 				n.'</thead>';
 
-				$tfoot = n.'<tfoot>'.tr(
-					tda(
-						((has_privs('admin.edit'))
-							? select_buttons().n.
-							author_multiedit_form($page, $sort, $dir, $crit, $search_method)
-							: '')
-					, ' class="multi-edit" colspan="6"')
-				).n.'</tfoot>';
-
-				echo $tfoot;
 				echo '<tbody>';
 
 				while ($a = nextRow($rs))
@@ -387,17 +382,20 @@ $LastChangedRevision$
 					extract(doSpecial($a));
 
 					echo tr(
+						td(((has_privs('admin.edit') and $txp_user != $a['name']) ? fInput('checkbox', 'selected[]', $a['name'], 'checkbox') : ''), '', 'multi-edit').
 						td(((has_privs('admin.edit')) ? eLink('admin', 'author_edit', 'user_id', $user_id, $name) : $name), '', 'name login-name').
 						td($RealName, '', 'name real-name').
 						td('<a href="mailto:'.$email.'">'.$email.'</a>', '', 'email').
 						td(get_priv_level($privs), '', 'privs').
-						td(($last_login ? safe_strftime('%b&#160;%Y', $last_login) : ''), '', 'date last-login modified').
-						td(((has_privs('admin.edit') and $txp_user != $a['name']) ? fInput('checkbox', 'selected[]', $a['name'], 'checkbox') : ''), '', 'multi-edit')
+						td(($last_login ? safe_strftime('%b&#160;%Y', $last_login) : ''), '', 'date last-login modified')
 					);
 				}
 
 				echo '</tbody>'.
 				n.endTable().
+
+				n.(($use_multi_edit) ? author_multiedit_form($page, $sort, $dir, $crit, $search_method) : '').
+
 				n.'</div>'.
 				n.tInput().
 				n.'</form>'.
@@ -482,15 +480,19 @@ $LastChangedRevision$
 
 	function author_multiedit_form($page, $sort, $dir, $crit, $search_method)
 	{
+		$privileges = privs();
+		$rs = safe_column('name', 'txp_users', '1=1');
+		$assign_assets = $rs ? '<label for="assign_assets">'.gTxt('assign_assets_to').'</label>'.n.selectInput('assign_assets', $rs, '', true, '', 'assign_assets') : '';
+
 		$methods = array(
-			'changeprivilege' => gTxt('changeprivilege'),
-			'resetpassword' => gTxt('resetpassword'),
-			'delete' => gTxt('delete')
+			'changeprivilege' => array('label' => gTxt('changeprivilege'), 'html' => $privileges),
+			'resetpassword'   => gTxt('resetpassword'),
+			'delete'          => array('label' => gTxt('delete'), 'html' => $assign_assets),
 		);
 
 		if (safe_count('txp_users', '1=1') <= 1) unset($methods['delete']); // Sorry guy, you're last.
 
-		return event_multiedit_form('admin', $methods, $page, $sort, $dir, $crit, $search_method);
+		return multi_edit($methods, 'admin', 'admin_multi_edit', $page, $sort, $dir, $crit, $search_method);
 	}
 
 // -------------------------------------------------------------

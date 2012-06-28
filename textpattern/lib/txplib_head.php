@@ -93,13 +93,6 @@ $LastChangedRevision$
 		$edit['order'] = selectInput('order', array(1=>1, 2=>2, 3=>3, 4=>4, 5=>5, 6=>6, 7=>7, 8=>8, 9=>9), 5, false);
 	}
 
-	if ($event == 'admin')
-	{
-		$edit['privilege'] = privs();
-		$rs = safe_column('name', 'txp_users', '1=1');
-		$edit_assign_assets = $rs ? selectInput('assign_assets', $rs, '', true) : '';
-	}
-
 	// output JavaScript
 ?>
 		function poweredit(elm)
@@ -134,12 +127,6 @@ $LastChangedRevision$
 			echo "case 'change".$key."':".n.
 				t."pjs.innerHTML = '<span>".str_replace(array("\n", '-'), array('', '&#45;'), str_replace('</', '<\/', addslashes($val)))."<\/span>';".n.
 				t.'break;'.n.n;
-		}
-		if (isset($edit_assign_assets))
-		{
-			echo "case 'delete':".n.
-					t."pjs.innerHTML = '<label for=\"assign_assets\">".addslashes(gTxt('assign_assets_to'))."</label><span>".str_replace(array("\n", '-'), array('', '&#45;'), str_replace('</', '<\/', addslashes($edit_assign_assets)))."<\/span>';".n.
-					t.'break;'.n.n;
 		}
 ?>
 					default:
