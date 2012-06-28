@@ -88,15 +88,6 @@ $LastChangedRevision$
 <?php
 	$edit = array();
 
-	if (in_array($event, array('image', 'file', 'link')))
-	{
-		$rs = getTree('root', $event);
-		$edit['category'] = $rs ? treeSelectInput('category', $rs, '') : '';
-
-		$rs = safe_column('name', 'txp_users', "privs not in(0,6) order by name asc");
-		$edit['author'] = $rs ? selectInput('author', $rs, '', true) : '';
-	}
-
 	if ($event == 'plugin')
 	{
 		$edit['order'] = selectInput('order', array(1=>1, 2=>2, 3=>3, 4=>4, 5=>5, 6=>6, 7=>7, 8=>8, 9=>9), 5, false);
