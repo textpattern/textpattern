@@ -68,32 +68,24 @@ $LastChangedRevision$
 		if ($rs and numRows($rs) > 0)
 		{
 			echo n.'<div id="'.$event.'_container" class="txp-container">';
-			echo '<form action="index.php" id="plugin_form" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
+			echo '<form action="index.php" id="plugin_form" class="multi_edit_form" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
 
 			n.'<div class="txp-listtables">'.
 			n. startTable('', '', 'txp-list').
 			n.'<thead>'.
 			tr(
-				column_head('plugin', 'name', 'plugin', true, $switch_dir, '', '', (('name' == $sort) ? "$dir " : '').'name').
-				column_head('author', 'author', 'plugin', true, $switch_dir, '', '', (('author' == $sort) ? "$dir " : '').'author').
-				column_head('version', 'version', 'plugin', true, $switch_dir, '', '', (('version' == $sort) ? "$dir " : '').'version').
-				column_head('plugin_modified', 'modified', 'plugin', true, $switch_dir, '', '', (('modified' == $sort) ? "$dir " : '').'modified').
-				hCell(gTxt('description'), '', ' class="description"').
-				column_head('active', 'status', 'plugin', true, $switch_dir, '', '', (('status' == $sort) ? "$dir " : '').'status').
-				column_head('order', 'load_order', 'plugin', true, $switch_dir, '', '', (('load_order' == $sort) ? "$dir " : '').'load-order').
-				hCell(gTxt('manage'), '',  ' class="manage actions"').
-				hCell('', '', ' class="multi-edit"')
+				n.hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
+				n.column_head('plugin', 'name', 'plugin', true, $switch_dir, '', '', (('name' == $sort) ? "$dir " : '').'name').
+				n.column_head('author', 'author', 'plugin', true, $switch_dir, '', '', (('author' == $sort) ? "$dir " : '').'author').
+				n.column_head('version', 'version', 'plugin', true, $switch_dir, '', '', (('version' == $sort) ? "$dir " : '').'version').
+				n.column_head('plugin_modified', 'modified', 'plugin', true, $switch_dir, '', '', (('modified' == $sort) ? "$dir " : '').'modified').
+				n.hCell(gTxt('description'), '', ' class="description"').
+				n.column_head('active', 'status', 'plugin', true, $switch_dir, '', '', (('status' == $sort) ? "$dir " : '').'status').
+				n.column_head('order', 'load_order', 'plugin', true, $switch_dir, '', '', (('load_order' == $sort) ? "$dir " : '').'load-order').
+				n.hCell(gTxt('manage'), '',  ' class="manage actions"')
 			).
 			n.'</thead>';
 
-			$tfoot = n.'<tfoot>'.tr(
-				tda(
-					select_buttons().n.
-					plugin_multiedit_form('', $sort, $dir, '', '')
-				, ' class="multi-edit" colspan="10"')
-			).n.'</tfoot>';
-
-			echo $tfoot;
 			echo '<tbody>';
 
 			while ($a = nextRow($rs))
@@ -129,8 +121,11 @@ $LastChangedRevision$
 				$edit_url = eLink('plugin', 'plugin_edit', 'name', $name, $name);
 
 				echo tr(
+					n.td(
+						fInput('checkbox', 'selected[]', $name)
+					,'', 'multi-edit').
 
-					n.td($edit_url, '', 'name').
+					td($edit_url, '', 'name').
 
 					td(
 						href($author, $author_uri, ' rel="external"')
@@ -145,10 +140,7 @@ $LastChangedRevision$
 					, '', 'status').
 
 					td($load_order, '', 'load-order').
-					td($manage_items, '', 'manage').
-					td(
-						fInput('checkbox', 'selected[]', $name)
-					,'', 'multi-edit')
+					td($manage_items, '', 'manage')
 				);
 
 				unset($name, $page, $deletelink);
@@ -156,6 +148,9 @@ $LastChangedRevision$
 
 			echo '</tbody>'.
 			n.endTable().
+
+			n.plugin_multiedit_form('', $sort, $dir, '', '').
+
 			n.'</div>'.
 			n.tInput().
 			n.'</form>'.
@@ -472,13 +467,15 @@ $LastChangedRevision$
 
 	function plugin_multiedit_form($page, $sort, $dir, $crit, $search_method)
 	{
+		$orders = selectInput('order', array(1=>1, 2=>2, 3=>3, 4=>4, 5=>5, 6=>6, 7=>7, 8=>8, 9=>9), 5, false);
+
 		$methods = array(
 			'changestatus' => gTxt('changestatus'),
-			'changeorder'  => gTxt('changeorder'),
+			'changeorder'  => array('label' => gTxt('changeorder'), 'html' => $orders),
 			'delete'       => gTxt('delete')
 		);
 
-		return event_multiedit_form('plugin', $methods, $page, $sort, $dir, $crit, $search_method);
+		return multi_edit($methods, 'plugin', 'plugin_multi_edit', $page, $sort, $dir, $crit, $search_method);
 	}
 
 // -------------------------------------------------------------

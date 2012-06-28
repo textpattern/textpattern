@@ -1429,7 +1429,7 @@ function escape_js($js)
 	}
 
 // -------------------------------------------------------------
-
+// DEPRECATED in v4.5.0: use multi_edit() instead
 	function event_multiedit_form($name, $methods = null, $page, $sort, $dir, $crit, $search_method)
 	{
 		$method = ps('edit_method');

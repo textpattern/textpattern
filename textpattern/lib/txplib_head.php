@@ -85,16 +85,6 @@ $LastChangedRevision$
 			confirm('<?php echo trim(gTxt('cookies_must_be_enabled')); ?>');
 		}
 
-<?php
-	$edit = array();
-
-	if ($event == 'plugin')
-	{
-		$edit['order'] = selectInput('order', array(1=>1, 2=>2, 3=>3, 4=>4, 5=>5, 6=>6, 7=>7, 8=>8, 9=>9), 5, false);
-	}
-
-	// output JavaScript
-?>
 		function poweredit(elm)
 		{
 			var something = elm.options[elm.selectedIndex].value;
@@ -121,14 +111,6 @@ $LastChangedRevision$
 			{
 				switch (something)
 				{
-<?php
-		foreach($edit as $key => $val)
-		{
-			echo "case 'change".$key."':".n.
-				t."pjs.innerHTML = '<span>".str_replace(array("\n", '-'), array('', '&#45;'), str_replace('</', '<\/', addslashes($val)))."<\/span>';".n.
-				t.'break;'.n.n;
-		}
-?>
 					default:
 						pjs.style.display = 'none';
 						break;
