@@ -435,7 +435,7 @@ jQuery.fn.txpMultiEditForm = function(method, options)
 		{
 			form.button.hide();
 
-			form.editMethod.change(function(e) {
+			form.editMethod.val('').change(function(e) {
 				var selected = $(this).find('option:selected');
 				$this.find('.multi-step').remove();
 

@@ -881,7 +881,6 @@ $LastChangedRevision$
 
 	function multi_edit($options, $event=null, $step=null, $page='', $sort='', $dir='', $crit='', $search_method='')
 	{
-		$method = ps('edit_method');
 		$html = $methods = array();
 		$methods[''] = gTxt('with_selected_option');
 
@@ -916,7 +915,7 @@ $LastChangedRevision$
 		}
 
 		return '<div class="multi-edit">'.
-			n.selectInput('edit_method', $methods, $method).
+			n.selectInput('edit_method', $methods, '').
 			n.eInput($event).
 			n.sInput($step).
 			n.hInput('page', $page).
