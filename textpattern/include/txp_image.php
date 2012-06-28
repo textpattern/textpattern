@@ -178,35 +178,23 @@ $LastChangedRevision$
 			$show_authors = !has_single_author('txp_image');
 
 			echo n.'<div id="'.$event.'_container" class="txp-container">';
-			echo n.n.'<form name="longform" id="images_form" method="post" action="index.php" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
+			echo n.n.'<form name="longform" id="images_form" class="multi_edit_form" method="post" action="index.php" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
 
 				n.'<div class="txp-listtables">'.
 				n.startTable('', '', 'txp-list').
 				n.'<thead>'.
 				n.tr(
-					column_head('ID', 'id', 'image', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id').
-					column_head('name', 'name', 'image', true, $switch_dir, $crit, $search_method, (('name' == $sort) ? "$dir " : '').'name').
-					column_head('date', 'date', 'image', true, $switch_dir, $crit, $search_method, (('date' == $sort) ? "$dir " : '').'images_detail date created').
-					column_head('thumbnail', 'thumbnail', 'image', true, $switch_dir, $crit, $search_method, (('thumbnail' == $sort) ? "$dir " : '').'thumbnail').
-					hCell(gTxt('tags'), '', ' class="images_detail tag-build"').
-					column_head('image_category', 'category', 'image', true, $switch_dir, $crit, $search_method, (('category' == $sort) ? "$dir " : '').'category').
-					($show_authors ? column_head('author', 'author', 'image', true, $switch_dir, $crit, $search_method, (('author' == $sort) ? "$dir " : '').'author') : '').
-					hCell('', '', ' class="multi-edit"')
+					n.hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
+					n.column_head('ID', 'id', 'image', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id').
+					n.column_head('name', 'name', 'image', true, $switch_dir, $crit, $search_method, (('name' == $sort) ? "$dir " : '').'name').
+					n.column_head('date', 'date', 'image', true, $switch_dir, $crit, $search_method, (('date' == $sort) ? "$dir " : '').'images_detail date created').
+					n.column_head('thumbnail', 'thumbnail', 'image', true, $switch_dir, $crit, $search_method, (('thumbnail' == $sort) ? "$dir " : '').'thumbnail').
+					n.hCell(gTxt('tags'), '', ' class="images_detail tag-build"').
+					n.column_head('image_category', 'category', 'image', true, $switch_dir, $crit, $search_method, (('category' == $sort) ? "$dir " : '').'category').
+					($show_authors ? n.column_head('author', 'author', 'image', true, $switch_dir, $crit, $search_method, (('author' == $sort) ? "$dir " : '').'author') : '')
 				).
 				n.'</thead>';
 
-			$tfoot = n.'<tfoot>'.tr(
-				tda(
-					toggle_box('images_detail'),
-					' class="detail-toggle" colspan="2"'
-				).
-				tda(
-					select_buttons().n.
-					image_multiedit_form($page, $sort, $dir, $crit, $search_method)
-				,' class="multi-edit" colspan="'.($show_authors ? '6' : '5').'"')
-			).n.'</tfoot>';
-
-			echo $tfoot;
 			echo '<tbody>';
 
 			$validator = new Validator();
@@ -248,6 +236,8 @@ $LastChangedRevision$
 				$can_edit = has_privs('image.edit') || ($author == $txp_user && has_privs('image.edit.own'));
 
 				echo n.n.tr(
+					n.td($can_edit ? fInput('checkbox', 'selected[]', $id) : '&#160;'
+					, '', 'multi-edit').
 
 					n.td(
 						($can_edit ? href($id, $edit_url, ' title="'.gTxt('edit').'"') : $id).sp.
@@ -273,18 +263,23 @@ $LastChangedRevision$
 
 					($show_authors ? td(
 						'<span title="'.txpspecialchars(get_author_name($author)).'">'.txpspecialchars($author).'</span>'
-					, '', 'author') : '').
-
-					td($can_edit ? fInput('checkbox', 'selected[]', $id) : '&#160;'
-					, '', 'multi-edit')
+					, '', 'author') : '')
 				);
 			}
 
 			echo '</tbody>'.
 			n.endTable().
+
+			n.image_multiedit_form($page, $sort, $dir, $crit, $search_method).
+
 			n.'</div>'.
 			n.tInput().
 			n.'</form>'.
+
+			n.graf(
+				toggle_box('images_detail'),
+				' class="detail-toggle"'
+			).
 
 			n.'<div id="'.$event.'_navigation" class="txp-navigation">'.
 			nav_form('image', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
@@ -314,10 +309,16 @@ $LastChangedRevision$
 
 	function image_multiedit_form($page, $sort, $dir, $crit, $search_method)
 	{
+		$rs = getTree('root', 'image');
+		$categories = $rs ? treeSelectInput('category', $rs, '') : '';
+
+		$rs = safe_column('name', 'txp_users', "privs not in(0,6) order by name asc");
+		$authors = $rs ? selectInput('author', $rs, '', true) : '';
+
 		$methods = array(
-			'changecategory'  => gTxt('changecategory'),
-			'changeauthor'    => gTxt('changeauthor'),
-			'delete'          => gTxt('delete'),
+			'changecategory' => array('label' => gTxt('changecategory'), 'html' => $categories),
+			'changeauthor'   => array('label' => gTxt('changeauthor'), 'html' => $authors),
+			'delete'         => gTxt('delete'),
 		);
 
 		if (has_single_author('txp_image'))
@@ -330,7 +331,7 @@ $LastChangedRevision$
 			unset($methods['delete']);
 		}
 
-		return event_multiedit_form('image', $methods, $page, $sort, $dir, $crit, $search_method);
+		return multi_edit($methods, 'image', 'image_multi_edit', $page, $sort, $dir, $crit, $search_method);
 	}
 
 // -------------------------------------------------------------
