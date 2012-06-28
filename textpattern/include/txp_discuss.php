@@ -241,39 +241,27 @@ $LastChangedRevision$
 		if ($rs)
 		{
 			echo n.'<div id="'.$event.'_container" class="txp-container">';
-			echo n.n.'<form name="longform" id="discuss_form" method="post" action="index.php" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
+			echo n.n.'<form name="longform" id="discuss_form" class="multi_edit_form" method="post" action="index.php" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
 
 				n.'<div class="txp-listtables">'.
 				n.startTable('', '', 'txp-list').
 				n.'<thead>'.
 				n.n.tr(
-					column_head('ID', 'id', 'discuss', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id').
-					column_head('date', 'date', 'discuss', true, $switch_dir, $crit, $search_method, (('date' == $sort) ? "$dir " : '').'date posted created').
-					column_head('name', 'name', 'discuss', true, $switch_dir, $crit, $search_method, (('name' == $sort) ? "$dir " : '').'name').
-					column_head('message', 'message', 'discuss', true, $switch_dir, $crit, $search_method, (('message' == $sort) ? "$dir " : 'message')).
-					column_head('email', 'email', 'discuss', true, $switch_dir, $crit, $search_method, (('email' == $sort) ? "$dir " : '').'discuss_detail email').
-					column_head('website', 'website', 'discuss', true, $switch_dir, $crit, $search_method, (('website' == $sort) ? "$dir " : '').'discuss_detail website').
-					column_head('IP', 'ip', 'discuss', true, $switch_dir, $crit, $search_method, (('ip' == $sort) ? "$dir " : '').'discuss_detail ip').
-					column_head('status', 'status', 'discuss', true, $switch_dir, $crit, $search_method, (('status' == $sort) ? "$dir " : '').'status').
-					column_head('parent', 'parent', 'discuss', true, $switch_dir, $crit, $search_method, (('parent' == $sort) ? "$dir " : '').'parent').
-					hCell('', '', ' class="multi-edit"')
+					n.hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
+					n.column_head('ID', 'id', 'discuss', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id').
+					n.column_head('date', 'date', 'discuss', true, $switch_dir, $crit, $search_method, (('date' == $sort) ? "$dir " : '').'date posted created').
+					n.column_head('name', 'name', 'discuss', true, $switch_dir, $crit, $search_method, (('name' == $sort) ? "$dir " : '').'name').
+					n.column_head('message', 'message', 'discuss', true, $switch_dir, $crit, $search_method, (('message' == $sort) ? "$dir " : 'message')).
+					n.column_head('email', 'email', 'discuss', true, $switch_dir, $crit, $search_method, (('email' == $sort) ? "$dir " : '').'discuss_detail email').
+					n.column_head('website', 'website', 'discuss', true, $switch_dir, $crit, $search_method, (('website' == $sort) ? "$dir " : '').'discuss_detail website').
+					n.column_head('IP', 'ip', 'discuss', true, $switch_dir, $crit, $search_method, (('ip' == $sort) ? "$dir " : '').'discuss_detail ip').
+					n.column_head('status', 'status', 'discuss', true, $switch_dir, $crit, $search_method, (('status' == $sort) ? "$dir " : '').'status').
+					n.column_head('parent', 'parent', 'discuss', true, $switch_dir, $crit, $search_method, (('parent' == $sort) ? "$dir " : '').'parent')
 				).
 				n.'</thead>';
 
 			include_once txpath.'/publish/taghandlers.php';
 
-			$tfoot = n.'<tfoot>'.tr(
-				tda(
-					toggle_box('discuss_detail'),
-					' class="detail-toggle" colspan="2"'
-				).
-				tda(
-					select_buttons().n.
-					discuss_multiedit_form($page, $sort, $dir, $crit, $search_method)
-				, ' class="multi-edit" colspan="9"')
-			).n.'</tfoot>';
-
-			echo $tfoot;
 			echo '<tbody>';
 
 			while ($a = nextRow($rs))
@@ -328,9 +316,8 @@ $LastChangedRevision$
 				}
 
 				echo n.n.tr(
-
-					n.td('<a title="'.gTxt('edit').'" href="'.$edit_url.'">'.$discussid.'</a>', '', 'id').
-
+					n.td(fInput('checkbox', 'selected[]', $discussid), '', 'multi-edit').
+					td('<a title="'.gTxt('edit').'" href="'.$edit_url.'">'.$discussid.'</a>', '', 'id').
 					td(gTime($uPosted), '', 'date posted created').
 					td(txpspecialchars(soft_wrap($name, 15)), '', 'name').
 					td(short_preview($dmessage), '', 'message').
@@ -338,8 +325,7 @@ $LastChangedRevision$
 					td(txpspecialchars(soft_wrap($web, 15)), '', 'discuss_detail website').
 					td($ip, '', 'discuss_detail ip').
 					td($view, '', 'status').
-					td($parent, '', 'parent').
-					td(fInput('checkbox', 'selected[]', $discussid), '', 'multi-edit')
+					td($parent, '', 'parent')
 				, ' class="'.$row_class.'"');
 			}
 
@@ -348,9 +334,17 @@ $LastChangedRevision$
 
 			echo '</tbody>'.
 			n.endTable().
+
+			n.discuss_multiedit_form($page, $sort, $dir, $crit, $search_method).
+
 			n.'</div>'.
 			n.tInput().
 			n.'</form>'.
+
+			n.graf(
+				toggle_box('discuss_detail'),
+				' class="detail-toggle"'
+			).
 
 			n.cookie_box('show_spam').
 
@@ -599,7 +593,7 @@ $LastChangedRevision$
 			'delete'      => gTxt('delete'),
 		);
 
-		return event_multiedit_form('discuss', $methods, $page, $sort, $dir, $crit, $search_method);
+		return multi_edit($methods, 'discuss', 'discuss_multi_edit', $page, $sort, $dir, $crit, $search_method);
 	}
 
 // -------------------------------------------------------------
