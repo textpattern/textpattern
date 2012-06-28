@@ -27,9 +27,9 @@ $LastChangedRevision$
 
 	global $file_statuses;
 	$file_statuses = array(
-			2 => gTxt('hidden'),
-			3 => gTxt('pending'),
-			4 => gTxt('live'),
+			STATUS_HIDDEN  => gTxt('hidden'),
+			STATUS_PENDING => gTxt('pending'),
+			STATUS_LIVE    => gTxt('live'),
 	);
 
 	if ($event == 'file') {
@@ -195,39 +195,27 @@ $LastChangedRevision$
 			$show_authors = !has_single_author('txp_file');
 
 			echo n.'<div id="'.$event.'_container" class="txp-container">';
-			echo '<form name="longform" id="files_form" method="post" action="index.php" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
+			echo '<form name="longform" id="files_form" class="multi_edit_form" method="post" action="index.php" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
 
 				n.'<div class="txp-listtables">'.
 				n.startTable('', '', 'txp-list').
 				n.'<thead>'.
 				tr(
-					column_head('ID', 'id', 'file', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id').
-					column_head('file_name', 'filename', 'file', true, $switch_dir, $crit, $search_method, (('filename' == $sort) ? "$dir " : '').'name').
-					column_head('title', 'title', 'file', true, $switch_dir, $crit, $search_method, (('title' == $sort) ? "$dir " : '').'title').
-					column_head('description', 'description', 'file', true, $switch_dir, $crit, $search_method, (('description' == $sort) ? "$dir " : '').'files_detail description').
-					column_head('file_category', 'category', 'file', true, $switch_dir, $crit, $search_method, (('category' == $sort) ? "$dir " : '').'category').
+					n.hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
+					n.column_head('ID', 'id', 'file', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id').
+					n.column_head('file_name', 'filename', 'file', true, $switch_dir, $crit, $search_method, (('filename' == $sort) ? "$dir " : '').'name').
+					n.column_head('title', 'title', 'file', true, $switch_dir, $crit, $search_method, (('title' == $sort) ? "$dir " : '').'title').
+					n.column_head('description', 'description', 'file', true, $switch_dir, $crit, $search_method, (('description' == $sort) ? "$dir " : '').'files_detail description').
+					n.column_head('file_category', 'category', 'file', true, $switch_dir, $crit, $search_method, (('category' == $sort) ? "$dir " : '').'category').
 					// column_head('permissions', 'permissions', 'file', true, $switch_dir, $crit, $search_method).
-					hCell(gTxt('tags'), '', ' class="files_detail tag-build"').
-					hCell(gTxt('status'), '', ' class="status"').
-					hCell(gTxt('condition'), '', ' class="condition"').
-					column_head('downloads', 'downloads', 'file', true, $switch_dir, $crit, $search_method, (('downloads' == $sort) ? "$dir " : '').'downloads').
-					($show_authors ? column_head('author', 'author', 'file', true, $switch_dir, $crit, $search_method, (('author' == $sort) ? "$dir " : '').'author') : '').
-					hCell('', '', ' class="multi-edit"')
+					n.hCell(gTxt('tags'), '', ' class="files_detail tag-build"').
+					n.hCell(gTxt('status'), '', ' class="status"').
+					n.hCell(gTxt('condition'), '', ' class="condition"').
+					n.column_head('downloads', 'downloads', 'file', true, $switch_dir, $crit, $search_method, (('downloads' == $sort) ? "$dir " : '').'downloads').
+					($show_authors ? n.column_head('author', 'author', 'file', true, $switch_dir, $crit, $search_method, (('author' == $sort) ? "$dir " : '').'author') : '')
 				).
 				n.'</thead>';
 
-			$tfoot = n.'<tfoot>'.tr(
-				tda(
-					toggle_box('files_detail'),
-					' class="detail-toggle" colspan="2"'
-				).
-				tda(
-					select_buttons().n.
-					file_multiedit_form($page, $sort, $dir, $crit, $search_method)
-				,' class="multi-edit" colspan="'.($show_authors ? '9' : '8').'"')
-			).n.'</tfoot>';
-
-			echo $tfoot;
 			echo '<tbody>';
 
 			$validator = new Validator();
@@ -260,6 +248,8 @@ $LastChangedRevision$
 				$can_edit = has_privs('file.edit') || ($author == $txp_user && has_privs('file.edit.own'));
 
 				echo tr(
+					n.td($can_edit ? fInput('checkbox', 'selected[]', $id) : '&#160;'
+					, '', 'multi-edit').
 
 					n.td(
 						($can_edit ? href($id, $edit_url, ' title="'.gTxt('edit').'"') : $id).
@@ -294,18 +284,23 @@ $LastChangedRevision$
 
 					($show_authors ? td(
 						'<span title="'.txpspecialchars(get_author_name($author)).'">'.txpspecialchars($author).'</span>'
-					, '', 'author') : '').
-
-					td($can_edit ? fInput('checkbox', 'selected[]', $id) : '&#160;'
-					, '', 'multi-edit')
+					, '', 'author') : '')
 				);
 			}
 
 			echo '</tbody>'.
 			n.endTable().
+
+			n.file_multiedit_form($page, $sort, $dir, $crit, $search_method).
+
 			n.'</div>'.
 			n.tInput().
 			n.'</form>'.
+
+			n.graf(
+				toggle_box('files_detail'),
+				' class="detail-toggle"'
+			).
 
 			n.'<div id="'.$event.'_navigation" class="txp-navigation">'.
 			nav_form('file', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
@@ -335,10 +330,21 @@ $LastChangedRevision$
 
 	function file_multiedit_form($page, $sort, $dir, $crit, $search_method)
 	{
+		global $file_statuses;
+
+		$rs = getTree('root', 'file');
+		$categories = $rs ? treeSelectInput('category', $rs, '') : '';
+
+		$rs = safe_column('name', 'txp_users', "privs not in(0,6) order by name asc");
+		$authors = $rs ? selectInput('author', $rs, '', true) : '';
+
+		$status = selectInput('status', $file_statuses, '', true);
+
 		$methods = array(
-			'changecategory' => gTxt('changecategory'),
-			'changeauthor'   => gTxt('changeauthor'),
-			'changecount'    => gTxt('reset_download_count'),
+			'changecategory' => array('label' => gTxt('changecategory'), 'html' => $categories),
+			'changeauthor'   => array('label' => gTxt('changeauthor'), 'html' => $authors),
+			'changestatus'   => array('label' => gTxt('changestatus'), 'html' => $status),
+			'changecount'    => array('label' => gTxt('reset_download_count')),
 			'delete'         => gTxt('delete'),
 		);
 
@@ -352,7 +358,7 @@ $LastChangedRevision$
 			unset($methods['delete']);
 		}
 
-		return event_multiedit_form('file', $methods, $page, $sort, $dir, $crit, $search_method);
+		return multi_edit($methods, 'file', 'file_multi_edit', $page, $sort, $dir, $crit, $search_method);
 	}
 
 // -------------------------------------------------------------
@@ -391,6 +397,18 @@ $LastChangedRevision$
 				$key = 'downloads';
 				$val = 0;
 				break;
+
+			case 'changestatus':
+				$key = 'status';
+				$val = ps('status');
+
+				// do not allow to be set to an empty value
+				if (!$val)
+				{
+					$selected = array();
+				}
+				break;
+
 			default:
 				$key = '';
 				$val = '';
