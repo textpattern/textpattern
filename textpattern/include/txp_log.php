@@ -157,36 +157,23 @@ $LastChangedRevision$
 		if ($rs)
 		{
 			echo n.'<div id="'.$event.'_container" class="txp-container">';
-			echo n.n.'<form action="index.php" id="log_form" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
+			echo n.n.'<form action="index.php" id="log_form" class="multi_edit_form" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
 
 				n.'<div class="txp-listtables">'.
 				n.startTable('', '', 'txp-list').
 				n.'<thead>'.
 				n.tr(
+					n.hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
 					n.column_head('time', 'time', 'log', true, $switch_dir, $crit, $search_method, (('time' == $sort) ? "$dir " : '').'date time').
-					column_head('IP', 'ip', 'log', true, $switch_dir, $crit, $search_method, (('ip' == $sort) ? "$dir " : '').'log_detail ip').
-					column_head('host', 'host', 'log', true, $switch_dir, $crit, $search_method, (('host' == $sort) ? "$dir " : '').'host').
-					column_head('page', 'page', 'log', true, $switch_dir, $crit, $search_method, (('page' == $sort) ? "$dir " : '').'page').
-					column_head('referrer', 'refer', 'log', true, $switch_dir, $crit, $search_method, (('refer' == $sort) ? "$dir " : '').'refer').
-					column_head('method', 'method', 'log', true, $switch_dir, $crit, $search_method, (('method' == $sort) ? "$dir " : '').'log_detail method').
-					column_head('status', 'status', 'log', true, $switch_dir, $crit, $search_method, (('status' == $sort) ? "$dir " : '').'log_detail status').
-					hCell('', '', ' class="multi-edit"')
+					n.column_head('IP', 'ip', 'log', true, $switch_dir, $crit, $search_method, (('ip' == $sort) ? "$dir " : '').'log_detail ip').
+					n.column_head('host', 'host', 'log', true, $switch_dir, $crit, $search_method, (('host' == $sort) ? "$dir " : '').'host').
+					n.column_head('page', 'page', 'log', true, $switch_dir, $crit, $search_method, (('page' == $sort) ? "$dir " : '').'page').
+					n.column_head('referrer', 'refer', 'log', true, $switch_dir, $crit, $search_method, (('refer' == $sort) ? "$dir " : '').'refer').
+					n.column_head('method', 'method', 'log', true, $switch_dir, $crit, $search_method, (('method' == $sort) ? "$dir " : '').'log_detail method').
+					n.column_head('status', 'status', 'log', true, $switch_dir, $crit, $search_method, (('status' == $sort) ? "$dir " : '').'log_detail status')
 			).
 			n.'</thead>';
 
-			$tfoot = n.'<tfoot>'.tr(
-				tda(
-					toggle_box('log_detail'),
-					' class="detail-toggle" colspan="2"'
-				).
-				tda(
-					select_buttons().n.
-					log_multiedit_form($page, $sort, $dir, $crit, $search_method)
-				, ' class="multi-edit" colspan="6"')
-			).n.'</tfoot>';
-
-
-			echo $tfoot;
 			echo '<tbody>';
 
 			while ($a = nextRow($rs))
@@ -214,8 +201,11 @@ $LastChangedRevision$
 				}
 
 				echo tr(
-
 					n.td(
+						fInput('checkbox', 'selected[]', $log_id)
+					, '', 'multi-edit').
+
+					td(
 						gTime($log_uTime)
 					, '', 'date time').
 
@@ -226,19 +216,23 @@ $LastChangedRevision$
 					td($log_page, '', 'page').
 					td($log_refer, '', 'refer').
 					td(txpspecialchars($log_method), '', 'log_detail method').
-					td($log_status, '', 'log_detail status').
-
-					td(
-						fInput('checkbox', 'selected[]', $log_id)
-					, '', 'multi-edit')
+					td($log_status, '', 'log_detail status')
 				);
 			}
 
 			echo '</tbody>'.
 			n.endTable().
+
+			n.log_multiedit_form($page, $sort, $dir, $crit, $search_method).
+
 			n.'</div>'.
 			n.tInput().
 			n.'</form>'.
+
+			n.graf(
+				toggle_box('log_detail'),
+				' class="detail-toggle"'
+			).
 
 			n.'<div id="'.$event.'_navigation" class="txp-navigation">'.
 			n.nav_form('log', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
@@ -280,7 +274,7 @@ $LastChangedRevision$
 			'delete' => gTxt('delete')
 		);
 
-		return event_multiedit_form('log', $methods, $page, $sort, $dir, $crit, $search_method);
+		return multi_edit($methods, 'log', 'log_multi_edit', $page, $sort, $dir, $crit, $search_method);
 	}
 
 // -------------------------------------------------------------
