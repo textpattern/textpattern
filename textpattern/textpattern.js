@@ -157,7 +157,8 @@ jQuery.fn.txpMultiEditForm = function(method, options)
 		'row' : 'tr, p, div',
 		'selectedClass' : 'selected',
 		'actions' : 'select[name=edit_method]',
-		'selectAll' : 'input[name="select_all"][type=checkbox]',
+		'submitButton' : '.multi-edit input[type=submit]',
+		'selectAll' : 'input[name=select_all][type=checkbox]',
 		'rowClick' : true,
 		'altClick' : true
 	};
@@ -191,6 +192,8 @@ jQuery.fn.txpMultiEditForm = function(method, options)
 			form.editMethod = $this.find(opt.actions);
 			form.lastCheck = null;
 			form.opt = opt;
+			form.selectAll = $this.find(opt.selectAll);
+			form.button = $this.find(opt.submitButton);
 		}
 
 		/**
@@ -412,10 +415,12 @@ jQuery.fn.txpMultiEditForm = function(method, options)
 				if (box.prop('checked'))
 				{
 					$(this).parents('tr').addClass(opt.selectedClass);
+					form.selectAll.prop('checked', form.boxes.filter(':checked').length === form.boxes.length);
 				}
 				else
 				{
 					$(this).parents('tr').removeClass(opt.selectedClass);
+					form.selectAll.prop('checked', false);
 				}
 			});
 			
@@ -428,19 +433,19 @@ jQuery.fn.txpMultiEditForm = function(method, options)
 		
 		private.changeMethod = function()
 		{
-			var button = $('.multi-edit input[type="submit"], .multi-edit button[type="submit"]').hide();
-			
+			form.button.hide();
+
 			form.editMethod.change(function(e) {
 				var selected = $(this).find('option:selected');
 				$this.find('.multi-step').remove();
 
 				if (selected.length < 1 || selected.val() === '')
 				{
-					button.hide();
+					form.button.hide();
 					return private;
 				}
 
-				button.show();
+				form.button.show();
 
 				if (selected.data('method'))
 				{
@@ -467,7 +472,7 @@ jQuery.fn.txpMultiEditForm = function(method, options)
 				});
 			}).remove();
 
-			$this.find(opt.selectAll).live('change', function(e) {
+			form.selectAll.live('change', function(e) {
 				public.select({
 					'checked' : $(this).prop('checked')
 				});
