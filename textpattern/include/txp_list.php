@@ -15,11 +15,11 @@ $LastChangedRevision$
 
 	global $statuses;
 	$statuses = array(
-		1 => gTxt('draft'),
-		2 => gTxt('hidden'),
-		3 => gTxt('pending'),
-		4 => gTxt('live'),
-		5 => gTxt('sticky'),
+		STATUS_DRAFT   => gTxt('draft'),
+		STATUS_HIDDEN  => gTxt('hidden'),
+		STATUS_PENDING => gTxt('pending'),
+		STATUS_LIVE    => gTxt('live'),
+		STATUS_STICKY  => gTxt('sticky'),
 	);
 
 	if ($event=='list') {
@@ -189,12 +189,13 @@ $LastChangedRevision$
 			}
 
 			echo n.'<div id="'.$event.'_container" class="txp-container">';
-			echo n.n.'<form name="longform" id="articles_form" method="post" action="index.php" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
+			echo n.n.'<form name="longform" id="articles_form" class="multi_edit_form" method="post" action="index.php" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
 
 				n.'<div class="txp-listtables">'.
 				n.startTable('', '', 'txp-list').
 				n.'<thead>'.
 				n.tr(
+					n.hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
 					n.column_head('ID', 'id', 'list', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id actions').
 					column_head('title', 'title', 'list', true, $switch_dir, $crit, $search_method, (('title' == $sort) ? "$dir " : '').'title').
 					column_head('posted', 'posted', 'list', true, $switch_dir, $crit, $search_method, (('posted' == $sort) ? "$dir " : '').'date posted created').
@@ -205,26 +206,12 @@ $LastChangedRevision$
 					column_head('category2', 'category2', 'list', true, $switch_dir, $crit, $search_method, (('category2' == $sort) ? "$dir " : '').'articles_detail category category2').
 					column_head('status', 'status', 'list', true, $switch_dir, $crit, $search_method, (('status' == $sort) ? "$dir " : '').'status').
 					($show_authors ? column_head('author', 'author', 'list', true, $switch_dir, $crit, $search_method, (('author' == $sort) ? "$dir " : '').'author') : '').
-					column_head('comments', 'comments', 'list', true, $switch_dir, $crit, $search_method, (('comments' == $sort) ? "$dir " : '').'articles_detail comments').
-					hCell('', '', ' class="multi-edit"')
+					column_head('comments', 'comments', 'list', true, $switch_dir, $crit, $search_method, (('comments' == $sort) ? "$dir " : '').'articles_detail comments')
 				).
 				n.'</thead>';
 
 			include_once txpath.'/publish/taghandlers.php';
 
-			$tfoot = n.'<tfoot>'.tr(
-				tda(
-					toggle_box('articles_detail'),
-					' class="detail-toggle" colspan="2"'
-				).
-
-				tda(
-					select_buttons().n.
-					list_multiedit_form($page, $sort, $dir, $crit, $search_method)
-				,' class="multi-edit" colspan="'.($show_authors ? '10' : '9').'"')
-			).n.'</tfoot>';
-
-			echo $tfoot;
 			echo '<tbody>';
 
 			$validator = new Validator();
@@ -256,7 +243,7 @@ $LastChangedRevision$
 				$Category1 = ($Category1) ? '<span title="'.txpspecialchars(fetch_category_title($Category1)).'">'.$Category1.'</span>' : '';
 				$Category2 = ($Category2) ? '<span title="'.txpspecialchars(fetch_category_title($Category2)).'">'.$Category2.'</span>' : '';
 
-				if ($Status != 4 and $Status != 5)
+				if ($Status != STATUS_LIVE and $Status != STATUS_STICKY)
 				{
 					$view_url = '?txpreview='.intval($ID).'.'.time();
 				}
@@ -291,6 +278,17 @@ $LastChangedRevision$
 
 				echo n.n.tr(
 
+					n.td((
+						(  ($a['Status'] >= STATUS_LIVE and has_privs('article.edit.published'))
+						or ($a['Status'] >= STATUS_LIVE and $AuthorID == $txp_user
+											     and has_privs('article.edit.own.published'))
+						or ($a['Status'] < STATUS_LIVE and has_privs('article.edit'))
+						or ($a['Status'] < STATUS_LIVE and $AuthorID == $txp_user and has_privs('article.edit.own'))
+						)
+						? fInput('checkbox', 'selected[]', $ID, 'checkbox')
+						: '&#160;'
+					), '', 'multi-edit').
+
 					n.td(eLink('article', 'edit', 'ID', $ID, $ID) .sp. '<span class="articles_detail">[<a href="'.$view_url.'">'.gTxt('view').'</a>]</span>', '', 'id').
 
 					td($Title, '', 'title').
@@ -320,26 +318,23 @@ $LastChangedRevision$
 						, '', 'author'
 					) : '').
 
-					td($comments, '', "articles_detail comments").
-
-					td((
-						(  ($a['Status'] >= 4 and has_privs('article.edit.published'))
-						or ($a['Status'] >= 4 and $AuthorID == $txp_user
-											     and has_privs('article.edit.own.published'))
-						or ($a['Status'] < 4 and has_privs('article.edit'))
-						or ($a['Status'] < 4 and $AuthorID == $txp_user and has_privs('article.edit.own'))
-						)
-						? fInput('checkbox', 'selected[]', $ID, 'checkbox')
-						: '&#160;'
-					), '', 'multi-edit')
+					td($comments, '', "articles_detail comments")
 				);
 			}
 
 			echo '</tbody>'.
 			n.endTable().
+
+			n.list_multiedit_form($page, $sort, $dir, $crit, $search_method).
+
 			n.'</div>'.
 			n.tInput().
 			n.'</form>'.
+
+			n.graf(
+				toggle_box('articles_detail'),
+				' class="detail-toggle"'
+			).
 
 			n.'<div id="'.$event.'_navigation" class="txp-navigation">'.
 			n.nav_form('list', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
@@ -380,13 +375,29 @@ $LastChangedRevision$
 
 	function list_multiedit_form($page, $sort, $dir, $crit, $search_method)
 	{
+		global $statuses;
+
+		$rs = safe_column('name', 'txp_section', "name != 'default'");
+		$sections = $rs ? selectInput('Section', $rs, '', true) : '';
+
+		$rs = getTree('root', 'article');
+		$category1 = $rs ? treeSelectInput('Category1', $rs, '') : '';
+		$category2 = $rs ? treeSelectInput('Category2', $rs, '') : '';
+
+		$comments = onoffRadio('Annotate', get_pref('comments_on_default'));
+
+		$status = selectInput('Status', $statuses, '', true);
+
+		$rs = safe_column('name', 'txp_users', "privs not in(0,6) order by name asc");
+		$authors = $rs ? selectInput('AuthorID', $rs, '', true) : '';
+
 		$methods = array(
-			'changesection'   => gTxt('changesection'),
-			'changecategory1' => gTxt('changecategory1'),
-			'changecategory2' => gTxt('changecategory2'),
-			'changestatus'    => gTxt('changestatus'),
-			'changecomments'  => gTxt('changecomments'),
-			'changeauthor'    => gTxt('changeauthor'),
+			'changesection'   => array('label' => gTxt('changesection'), 'html' => $sections),
+			'changecategory1' => array('label' => gTxt('changecategory1'), 'html' => $category1),
+			'changecategory2' => array('label' => gTxt('changecategory2'), 'html' => $category2),
+			'changestatus'    => array('label' => gTxt('changestatus'), 'html' => $status),
+			'changecomments'  => array('label' => gTxt('changecomments'), 'html' => $comments),
+			'changeauthor'    => array('label' => gTxt('changeauthor'), 'html' => $authors),
 			'delete'          => gTxt('delete'),
 		);
 
@@ -400,7 +411,7 @@ $LastChangedRevision$
 			unset($methods['delete']);
 		}
 
-		return event_multiedit_form('list', $methods, $page, $sort, $dir, $crit, $search_method);
+		return multi_edit($methods, 'list', 'list_multi_edit', $page, $sort, $dir, $crit, $search_method);
 	}
 
 // -------------------------------------------------------------
@@ -468,10 +479,10 @@ $LastChangedRevision$
 			$allowed = array();
 			foreach ($selected as $item)
 			{
-				if ( ($item['Status'] >= 4 and has_privs('article.edit.published'))
-				  or ($item['Status'] >= 4 and $item['AuthorID'] == $txp_user and has_privs('article.edit.own.published'))
-				  or ($item['Status'] < 4 and has_privs('article.edit'))
-				  or ($item['Status'] < 4 and $item['AuthorID'] == $txp_user and has_privs('article.edit.own')))
+				if ( ($item['Status'] >= STATUS_LIVE and has_privs('article.edit.published'))
+				  or ($item['Status'] >= STATUS_LIVE and $item['AuthorID'] == $txp_user and has_privs('article.edit.own.published'))
+				  or ($item['Status'] < STATUS_LIVE and has_privs('article.edit'))
+				  or ($item['Status'] < STATUS_LIVE and $item['AuthorID'] == $txp_user and has_privs('article.edit.own')))
 				{
 					$allowed[] = $item['ID'];
 				}
@@ -533,7 +544,7 @@ $LastChangedRevision$
 
 					$key = 'Status';
 					$val = ps('Status');
-					if (!has_privs('article.publish') && $val>=4) $val = 3;
+					if (!has_privs('article.publish') && $val>=STATUS_LIVE) $val = STATUS_PENDING;
 
 					// do not allow to be set to an empty value
 					if (!$val)

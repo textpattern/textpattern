@@ -88,32 +88,6 @@ $LastChangedRevision$
 <?php
 	$edit = array();
 
-	if ($event == 'list')
-	{
-		$rs = safe_column('name', 'txp_section', "name != 'default'");
-
-		$edit['section'] = $rs ? selectInput('Section', $rs, '', true) : '';
-
-		$rs = getTree('root', 'article');
-
-		$edit['category1'] = $rs ? treeSelectInput('Category1', $rs, '') : '';
-		$edit['category2'] = $rs ? treeSelectInput('Category2', $rs, '') : '';
-
-		$edit['comments'] = onoffRadio('Annotate', safe_field('val', 'txp_prefs', "name = 'comments_on_default'"));
-
-		$edit['status'] = selectInput('Status', array(
-			1 => gTxt('draft'),
-			2 => gTxt('hidden'),
-			3 => gTxt('pending'),
-			4 => gTxt('live'),
-			5 => gTxt('sticky'),
-		), '', true);
-
-		$rs = safe_column('name', 'txp_users', "privs not in(0,6) order by name asc");
-
-		$edit['author'] = $rs ? selectInput('AuthorID', $rs, '', true) : '';
-	}
-
 	if (in_array($event, array('image', 'file', 'link')))
 	{
 		$rs = getTree('root', $event);
