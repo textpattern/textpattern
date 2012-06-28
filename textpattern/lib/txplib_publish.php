@@ -84,6 +84,7 @@ function article_format_info($rs)
 function article_column_map()
 {
 	$custom = getCustomFields();
+	$custom_map = array();
 	if ($custom) {
 		foreach ($custom as $i => $name)
 			$custom_map[$name] ='custom_' . $i;
