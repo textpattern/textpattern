@@ -162,20 +162,24 @@ $LastChangedRevision$
 
 	function switch_status()
 	{
-		extract(array_map('assert_string', gpsa(array('name', 'status'))));
+		extract(array_map('assert_string', gpsa(array('thing', 'value'))));
+		$change = ($value == gTxt('yes')) ? 0 : 1;
 
-		$change = ($status) ? 0 : 1;
+		safe_update('txp_plugin', "status = $change", "name = '".doSlash($thing)."'");
 
-		safe_update('txp_plugin', "status = $change", "name = '".doSlash($name)."'");
-
-		if (safe_field('flags', 'txp_plugin', "name ='".doSlash($name)."'") & PLUGIN_LIFECYCLE_NOTIFY)
+		if (safe_field('flags', 'txp_plugin', "name ='".doSlash($thing)."'") & PLUGIN_LIFECYCLE_NOTIFY)
 		{
-			load_plugin($name, true);
-			$message = callback_event("plugin_lifecycle.$name", $status ? 'disabled' : 'enabled');
+			load_plugin($thing, true);
+			$message = callback_event("plugin_lifecycle.$name", $property ? 'disabled' : 'enabled');
 		}
-		if (empty($message)) $message = gTxt('plugin_updated', array('{name}' => $name));
 
-		plugin_list($message);
+		// TODO: Remove non-AJAX alternative code path in future version
+		if (!AJAXALLY_CHALLENGED) {
+			echo gTxt($change ? 'yes' : 'no');
+		} else {
+			if (empty($message)) $message = gTxt('plugin_updated', array('{name}' => $thing));
+			plugin_list($message);
+		}
 	}
 
 // -------------------------------------------------------------
@@ -240,11 +244,7 @@ $LastChangedRevision$
 
 	function status_link($status,$name,$linktext)
 	{
-		$out = '<a href="index.php?';
-		$out .= 'event=plugin&#38;step=switch_status&#38;status='.
-			$status.'&#38;name='.urlencode($name).'&#38;_txp_token='.form_token().'"';
-		$out .= ' title="'.($status==1 ? gTxt('disable') : gTxt('enable')).'">'.$linktext.'</a>';
-		return $out;
+		return asyncHref($linktext, array('step' => 'switch_status', 'thing' => $name),' title="'.($status==1 ? gTxt('disable') : gTxt('enable')).'"' );
 	}
 
 // -------------------------------------------------------------
@@ -381,8 +381,7 @@ $LastChangedRevision$
 					if ($exists) {
 						$rs = safe_update(
 						   "txp_plugin",
-							"status      = 0,
-							type         = $type,
+							"type        = $type,
 							author       = '".doSlash($author)."',
 							author_uri   = '".doSlash($author_uri)."',
 							version      = '".doSlash($version)."',
