@@ -442,42 +442,6 @@ EOS
 		{
 			sec_section_list(array(gTxt('section_save_failed'), E_ERROR));
 		}
-
-/*
-		if (!AJAXALLY_CHALLENGED) {
-			if ($ok) {
-				global $theme;
-				// Keep old name around to mangle existing HTML
-				$on = $old_name;
-				// Old became new as we have saved this section
-				$old_name = $name;
-
-				$s = compact('name', 'old_name', 'title', 'page', 'css', 'on_frontpage', 'in_rss', 'searchable');
-				$form = section_detail_partial($s);
-
-				$s = doSpecial($s);
-				extract($s);
-
-				// Update form with current data
-				$response[] = '$("#section-form-'.$on.'").html("'.escape_js($form).'")';
-				// Reflect new section name on id and row label
-				$label = ($name == 'default' ? gTxt('default') : $name);
-				$response[] = '$("tr#section-'.$on.'").attr("id", "section-'.$name.'").find(".label").html("'.$label.'")';
-				$response[] = $theme->announce_async(gTxt('section_updated', array('{name}' => $name)));
-			} else {
-				$response[] =  $theme->announce_async(array(gTxt('section_save_failed'), E_ERROR));
-			}
-			send_script_response(join(";\n", $response));
-		} else {
-			// TODO: Deprecate non-AJAX alternative code path in future version
-			if ($ok) {
-				sec_section_list(gTxt('section_updated', array('{name}' => $name)));
-			} else {
-				sec_section_list(array(gTxt('section_save_failed'), E_ERROR));
-			}
-		}
-*/
-
 	}
 
 // -------------------------------------------------------------
@@ -494,13 +458,13 @@ EOS
  * ($_POST) $column	string	Database column name to alter: on_frontpage | in_rss | searchable
  * ($_POST) $value	string	The current Yes/No value of the control
  * ($_POST) $name	string	Section name to be altered
- * Returns an XML response comprising the new displayable value for the toggled parameter
+ * @return  string a text/plain response comprising the new displayable value for the toggled parameter
  */
 	function section_toggle_option()
 	{
-		$column = ps('property');
-		$value = ps('value');
-		$name = ps('thing');
+		$column = gps('property');
+		$value = gps('value');
+		$name = gps('thing');
 		$newval = ($value == gTxt('yes')) ? '0' : '1';
 		$ret = false;
 		if (in_array($column, array('on_frontpage', 'in_rss', 'searchable')))
@@ -510,7 +474,12 @@ EOS
 
 		if ($ret)
 		{
-			echo gTxt($newval ? 'yes' : 'no');
+			// TODO: Remove non-AJAX alternative code path in future version
+			if (!AJAXALLY_CHALLENGED) {
+				echo gTxt($newval ? 'yes' : 'no');
+			} else {
+				sec_section_list(gTxt('section_updated', array('{name}' => $name)));
+			}
 		}
 		else
 		{
@@ -681,81 +650,5 @@ EOS
 		}
 
 		return sec_section_list(gTxt('section_updated', array('{name}' => join(', ', $changed))));
-	}
-
-// -------------------------------------------------------------
-// TODO: Is this needed any more?
-	function section_detail_partial($thesection)
-	{
-		static $pages, $styles;
-		if (empty($pages)) {
-			$pages = safe_column('name', 'txp_page', "1 = 1");
-			$styles = safe_column('name', 'txp_css', "1 = 1");
-		}
-
-		extract($thesection);
-
-		$default_section = ($name == 'default');
-
-		return '<table>'.
-
-			($default_section ? '' : n.n.tr(
-				fLabelCell(gTxt('section_name').':').
-				fInputCell('name', $name, '', 32)
-			, ' class="name"')).
-
-			($default_section ? '' : n.n.tr(
-				fLabelCell(gTxt('section_longtitle').':').
-				fInputCell('title', $title, '', 32)
-			, ' class="title"')).
-
-			n.n.tr(
-				fLabelCell(gTxt('uses_page').':').
-				td(
-					selectInput('page', $pages, $page).sp.popHelp('section_uses_page')
-				)
-			, ' class="uses-page"').
-
-			n.n.tr(
-				fLabelCell(gTxt('uses_style').':').
-				td(
-					selectInput('css', $styles, $css).sp.popHelp('section_uses_css')
-				)
-			, ' class="uses-style"').
-
-			($default_section ? '' : n.n.tr(
-				fLabelCell(gTxt('on_front_page')).
-				td(
-					yesnoradio('on_frontpage', $on_frontpage, '', $name).sp.popHelp('section_on_frontpage')
-				)
-			, ' class="option on-frontpage"')).
-
-			($default_section ? '' : n.n.tr(
-				fLabelCell(gTxt('syndicate')) .
-				td(
-					yesnoradio('in_rss', $in_rss, '', $name).sp.popHelp('section_syndicate')
-				)
-			, ' class="option in-rss"')).
-
-			($default_section ? '' : n.n.tr(
-				fLabelCell(gTxt('include_in_search')).
-				td(
-					yesnoradio('searchable', $searchable, '', $name).sp.popHelp('section_searchable')
-				)
-			, ' class="option is-searchable"')).
-
-			pluggable_ui('section_ui', 'extend_detail_form', '', $thesection).
-
-			n.n.tr(
-				tda(
-					fInput('submit', '', gTxt('save'), 'publish').
-					eInput('section').
-					sInput('section_save').
-					($default_section ? hInput('name', $name) : '').
-					hInput('old_name', $old_name)
-				, ' colspan="2"')
-			).
-
-			endTable();
 	}
 ?>
