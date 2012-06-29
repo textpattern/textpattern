@@ -175,6 +175,7 @@ EOS
 
 		$methods = array(
 			'changeparent' => array('label' => gTxt('changeparent'), 'html' => $categories),
+			'deleteforce'  => gTxt('deleteforce'),
 			'delete'       => gTxt('delete'),
 		);
 
@@ -201,7 +202,7 @@ EOS
 		{
 			$things = array_map('assert_int', $things);
 
-			if ($method == 'delete')
+			if ($method == 'delete' || $method == 'deleteforce')
 			{
 				if ($type === 'article')
 				{
@@ -213,18 +214,36 @@ EOS
 					$used = 'name NOT IN(SELECT category FROM '.safe_pfx('txp_'.$type).')';
 				}
 
-				$rs = safe_rows('id, name', 'txp_category', "id IN (".join(',', $things).") AND type='".$type."' AND rgt - lft = 1 AND ".$used);
+				$rs = safe_rows('id, name', 'txp_category', "id IN (".join(',', $things).") AND type='".$type."'" . (($method == 'deleteforce') ? '' : " AND rgt - lft = 1 AND ".$used));
 
 				if ($rs)
 				{
 					foreach($rs as $cat)
 					{
 						$catid[] = $cat['id'];
-						$names[] = $cat['name'];
+						$names[] = doSlash($cat['name']);
 					}
 
-					if (safe_delete('txp_category','id IN ('.join(',', $catid).') AND rgt - lft = 1'))
+					if (safe_delete('txp_category','id IN ('.join(',', $catid).')'.(($method == 'deleteforce') ? '' : ' AND rgt - lft = 1')))
 					{
+						if ($method == 'deleteforce')
+						{
+							// Clear the deleted category names from assets
+							$affected = join("','", $names);
+							if($type === 'article')
+							{
+								safe_update('textpattern', "category1 = ''", "category1 IN ('$affected')");
+								safe_update('textpattern', "category2 = ''", "category2 IN ('$affected')");
+							}
+							else
+							{
+								safe_update('txp_'.$type, "category = ''", "category IN ('$affected')");
+							}
+
+							// Promote subcats of deleted cats to root
+							safe_update('txp_category', "parent='root'", "parent IN ('$affected')");
+						}
+
 						rebuild_tree_full($type);
 
 						$message = gTxt($type.'_categories_deleted', array('{list}' => join(', ',$catid)));
