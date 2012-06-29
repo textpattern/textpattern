@@ -887,37 +887,43 @@ EOS
 		{
 			$response = $client->getResponse();
 			$lang_struct = unserialize($response);
-			function install_lang_key(&$value, $key)
-			{
-				extract(gpsa(array('lang_code','updating')));
-				$exists = safe_field('name','txp_lang',"name='".doSlash($value['name'])."' AND lang='".doSlash($lang_code)."'");
-				$q = "name='".doSlash($value['name'])."', event='".doSlash($value['event'])."', data='".doSlash($value['data'])."', lastmod='".doSlash(strftime('%Y%m%d%H%M%S',$value['uLastmod']))."'";
+			if ($lang_struct === false) {
+				$errors = $size = 1;
+			} else {
+				function install_lang_key(&$value, $key)
+				{
+					extract(gpsa(array('lang_code','updating')));
+					$exists = safe_field('name','txp_lang',"name='".doSlash($value['name'])."' AND lang='".doSlash($lang_code)."'");
+					$q = "name='".doSlash($value['name'])."', event='".doSlash($value['event'])."', data='".doSlash($value['data'])."', lastmod='".doSlash(strftime('%Y%m%d%H%M%S',$value['uLastmod']))."'";
 
-				if ($exists)
-				{
-					$value['ok'] = safe_update('txp_lang',$q,"lang='".doSlash($lang_code)."' AND name='".doSlash($value['name'])."'");
+					if ($exists)
+					{
+						$value['ok'] = safe_update('txp_lang',$q,"lang='".doSlash($lang_code)."' AND name='".doSlash($value['name'])."'");
+					}
+					else
+					{
+						$value['ok'] = safe_insert('txp_lang',$q.", lang='".doSlash($lang_code)."'");
+					}
 				}
-				else
+
+				array_walk($lang_struct,'install_lang_key');
+				$size = count($lang_struct);
+				$errors = 0;
+				for($i=0; $i < $size ; $i++)
 				{
-					$value['ok'] = safe_insert('txp_lang',$q.", lang='".doSlash($lang_code)."'");
+					$errors += ( !$lang_struct[$i]['ok'] );
+				}
+
+				if (defined('LANG')) {
+					$textarray = load_lang(LANG);
 				}
 			}
-
-			array_walk($lang_struct,'install_lang_key');
-			$size = count($lang_struct);
-			$errors = 0;
-			for($i=0; $i < $size ; $i++)
-			{
-				$errors += ( !$lang_struct[$i]['ok'] );
-			}
-
-			if (defined('LANG'))
-				$textarray = load_lang(LANG);
 
 			$msg = gTxt($lang_code).sp.gTxt('updated');
 
-			if ($errors > 0)
-				$msg .= sprintf(" (%s errors, %s ok)",$errors, ($size-$errors));
+			if ($errors > 0) {
+				$msg = array($msg.sprintf(" (%s errors, %s ok)",$errors, ($size-$errors)), E_ERROR);
+			}
 
 			return list_languages($msg);
 		}
