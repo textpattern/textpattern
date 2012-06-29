@@ -168,7 +168,13 @@ EOS
 // -------------------------------------------------------------
 	function cat_article_multiedit_form($area, $array)
 	{
-		$methods = array('delete'=>gTxt('delete'));
+		$rs = getTree('root', $area);
+		$categories = $rs ? treeSelectInput('new_parent', $rs, '') : '';
+
+		$methods = array(
+			'changeparent' => array('label' => gTxt('changeparent'), 'html' => $categories),
+			'delete'       => gTxt('delete'),
+		);
 
 		if ($array) {
 			return
@@ -189,37 +195,75 @@ EOS
 		$method = ps('edit_method');
 		$things = ps('selected');
 
-		if ($method == 'delete' and is_array($things) and $things and in_array($type, array('article','image','link','file')))
+		if (is_array($things) and $things and in_array($type, array('article','image','link','file')))
 		{
 			$things = array_map('assert_int', $things);
 
-			if ($type === 'article')
+			if ($method == 'delete')
 			{
-				$used = 'name NOT IN(SELECT category1 FROM '.safe_pfx('textpattern').')'.
-					' AND name NOT IN(SELECT category2 FROM '.safe_pfx('textpattern').')';
-			}
-			else
-			{
-				$used = 'name NOT IN(SELECT category FROM '.safe_pfx('txp_'.$type).')';
-			}
-
-			$rs = safe_rows('id, name', 'txp_category', "id IN (".join(',', $things).") AND type='".$type."' AND rgt - lft = 1 AND ".$used);
-
-			if ($rs)
-			{
-				foreach($rs as $cat)
+				if ($type === 'article')
 				{
-					$catid[] = $cat['id'];
-					$names[] = $cat['name'];
+					$used = 'name NOT IN(SELECT category1 FROM '.safe_pfx('textpattern').')'.
+						' AND name NOT IN(SELECT category2 FROM '.safe_pfx('textpattern').')';
+				}
+				else
+				{
+					$used = 'name NOT IN(SELECT category FROM '.safe_pfx('txp_'.$type).')';
 				}
 
-				if (safe_delete('txp_category','id IN ('.join(',', $catid).') AND rgt - lft = 1'))
+				$rs = safe_rows('id, name', 'txp_category', "id IN (".join(',', $things).") AND type='".$type."' AND rgt - lft = 1 AND ".$used);
+
+				if ($rs)
 				{
-					rebuild_tree_full($type);
+					foreach($rs as $cat)
+					{
+						$catid[] = $cat['id'];
+						$names[] = $cat['name'];
+					}
 
-					$message = gTxt($type.'_categories_deleted', array('{list}' => join(', ',$catid)));
+					if (safe_delete('txp_category','id IN ('.join(',', $catid).') AND rgt - lft = 1'))
+					{
+						rebuild_tree_full($type);
 
-					return cat_category_list($message);
+						$message = gTxt($type.'_categories_deleted', array('{list}' => join(', ',$catid)));
+
+						return cat_category_list($message);
+					}
+				}
+			}
+
+			else if ($method == 'changeparent')
+			{
+				$new_parent = ps('new_parent');
+
+				$rs = safe_rows('id, name', 'txp_category', "id IN (".join(',', $things).") AND type='".$type."'");
+
+				if ($rs)
+				{
+					$exists = safe_field('name', 'txp_category', "name = '".doSlash($new_parent)."' AND type='$type'");
+					$parent = ($exists == '') ? 'root' : $exists;
+					$to_change = $affected = array();
+
+					foreach($rs as $cat)
+					{
+						// Cannot assign parent to itself
+						if ($cat['name'] != $new_parent)
+						{
+							$to_change[] = doSlash($cat['name']);
+							$affected[] = $cat['name'];
+						}
+					}
+
+					$ret = safe_update('txp_category', "parent='".doSlash($parent)."'", "name IN ('".join("','", $to_change)."') AND type='".$type."'");
+
+					if ($ret)
+					{
+						rebuild_tree_full($type);
+
+						$message = gTxt('categories_set_parent', array('{type}' => $type, '{parent}' => $parent, '{list}' => join(', ',$affected)));
+
+						return cat_category_list($message);
+					}
 				}
 			}
 		}
