@@ -50,9 +50,15 @@ $LastChangedRevision$
 	function form_list($curname)
 	{
 		global $step,$essential_forms;
-		$out[] = '<p class="action-create">'.sLink('form','form_create',gTxt('create_new_form')).'</p>';
 
-		$methods = array('delete'=>gTxt('delete'));
+		$types = formTypes('', false);
+
+		$methods = array(
+			'changetype' => array('label' => gTxt('changetype'), 'html' => $types),
+			'delete'     => gTxt('delete'),
+		);
+
+		$out[] = '<p class="action-create">'.sLink('form','form_create',gTxt('create_new_form')).'</p>';
 
 		$rs = safe_rows_start("*", "txp_form", "1 order by type asc, name asc");
 
@@ -86,12 +92,17 @@ $LastChangedRevision$
 			}
 
 			$out[] = '</ul></div></div>';
-			$out[] = eInput('form').sInput('form_multi_edit');
-			$out[] = graf(selectInput('edit_method',$methods,'',1).sp.gTxt('selected').sp.
-				fInput('submit','form_multi_edit',gTxt('go'))
-				);
+			$out[] = multi_edit($methods, 'form', 'form_multi_edit');
 
-			return form( join('',$out),'',"verify('".gTxt('are_you_sure')."')", 'post', '', '', 'allforms_form' );
+			return form( join('',$out),'',"verify('".gTxt('are_you_sure')."')", 'post', '', '', 'allforms_form' ).
+				script_js( <<<EOS
+				$('#allforms_form').txpMultiEditForm({
+					'checkbox' : 'input[name="selected_forms[]"][type=checkbox]',
+					'row' : '.plain-list li, .form-list-name',
+					'highlighted' : '.plain-list li'
+				});
+EOS
+				);
 		}
 	}
 
@@ -103,6 +114,7 @@ $LastChangedRevision$
 
 		$method = ps('edit_method');
 		$forms = ps('selected_forms');
+		$affected = array();
 
 		if ($forms and is_array($forms))
 		{
@@ -112,14 +124,32 @@ $LastChangedRevision$
 				{
 					if (!in_array($name, $essential_forms) && form_delete($name))
 					{
-						$deleted[] = $name;
+						$affected[] = $name;
 					}
 				}
 
-				$message = gTxt('forms_deleted', array('{list}' => join(', ', $deleted)));
+				$message = gTxt('forms_deleted', array('{list}' => join(', ', $affected)));
 
 				form_edit($message);
 			}
+
+			if ($method == 'changetype')
+			{
+				$new_type = ps('type');
+
+				foreach ($forms as $name)
+				{
+					if (!in_array($name, $essential_forms) && form_set_type($name, $new_type))
+					{
+						$affected[] = $name;
+					}
+				}
+
+				$message = gTxt('forms_updated', array('{list}' => join(', ', $affected)));
+
+				form_edit($message);
+			}
+
 		}
 
 		else
@@ -293,10 +323,26 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
-	function formTypes($type)
+	function form_set_type($name, $type)
+	{
+		global $essential_forms;
+		if (in_array($name, $essential_forms)) return false;
+		$name = doSlash($name);
+		$type = doSlash($type);
+		return safe_update('txp_form', "type='$type'", "name='$name'");
+	}
+
+// -------------------------------------------------------------
+	function formTypes($type, $blank_first = true)
 	{
 	 	$types = array(''=>'','article'=>'article','category'=>'category','comment'=>'comment',
 	 		'file'=>'file','link'=>'link','misc'=>'misc','section'=>'section');
+
+		if (!$blank_first)
+		{
+			array_shift($types);
+		}
+
 		return selectInput('type',$types,$type);
 	}
 
