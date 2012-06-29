@@ -68,7 +68,7 @@ $LastChangedRevision$
 		if ($rs and numRows($rs) > 0)
 		{
 			echo n.'<div id="'.$event.'_container" class="txp-container">';
-			echo '<form action="index.php" id="plugin_form" class="multi_edit_form" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
+			echo '<form action="index.php" id="plugin_form" class="multi_edit_form" method="post" name="longform">'.
 
 			n.'<div class="txp-listtables">'.
 			n. startTable('', '', 'txp-list').

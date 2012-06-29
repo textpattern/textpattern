@@ -94,12 +94,14 @@ $LastChangedRevision$
 			$out[] = '</ul></div></div>';
 			$out[] = multi_edit($methods, 'form', 'form_multi_edit');
 
-			return form( join('',$out),'',"verify('".gTxt('are_you_sure')."')", 'post', '', '', 'allforms_form' ).
+			return form( join('',$out),'','', 'post', '', '', 'allforms_form' ).
 				script_js( <<<EOS
-				$('#allforms_form').txpMultiEditForm({
-					'checkbox' : 'input[name="selected_forms[]"][type=checkbox]',
-					'row' : '.plain-list li, .form-list-name',
-					'highlighted' : '.plain-list li'
+				$(document).ready(function() {
+					$('#allforms_form').txpMultiEditForm({
+						'checkbox' : 'input[name="selected_forms[]"][type=checkbox]',
+						'row' : '.plain-list li, .form-list-name',
+						'highlighted' : '.plain-list li'
+					});
 				});
 EOS
 				);

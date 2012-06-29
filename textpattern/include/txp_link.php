@@ -165,7 +165,7 @@ $LastChangedRevision$
 			$show_authors = !has_single_author('txp_link');
 
 			echo n.'<div id="'.$event.'_container" class="txp-container">';
-			echo n.n.'<form action="index.php" id="links_form" class="multi_edit_form" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">',
+			echo n.n.'<form action="index.php" id="links_form" class="multi_edit_form" method="post" name="longform">',
 
 				n.'<div class="txp-listtables">'.
 				n.startTable('', '', 'txp-list').

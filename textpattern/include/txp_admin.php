@@ -357,7 +357,7 @@ $LastChangedRevision$
 			if ($rs)
 			{
 				echo n.'<div id="users_container" class="txp-container">';
-				echo '<form action="index.php" id="users_form" class="multi_edit_form" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
+				echo '<form action="index.php" id="users_form" class="multi_edit_form" method="post" name="longform">'.
 
 				n.'<div class="txp-listtables">'.
 				n.startTable('', '', 'txp-list').

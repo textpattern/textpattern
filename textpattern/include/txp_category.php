@@ -57,9 +57,11 @@ if ($event == 'category') {
 		endTable(),
 		'</div>',
 		script_js( <<<EOS
-			$('.category-tree').txpMultiEditForm({
-				'row' : 'p',
-				'highlighted' : 'p'
+			$(document).ready(function() {
+				$('.category-tree').txpMultiEditForm({
+					'row' : 'p',
+					'highlighted' : 'p'
+				});
 			});
 EOS
 		));
@@ -182,7 +184,7 @@ EOS
 					join('',$array).
 					hInput('type',$area).
 					n.multi_edit($methods, 'category', 'cat_category_multiedit')
-					,'',"verify('".gTxt('are_you_sure')."')", 'post', 'category-tree', '', 'category_'.$area.'_form'
+					,'', '', 'post', 'category-tree', '', 'category_'.$area.'_form'
 				);
 		}
 		return;

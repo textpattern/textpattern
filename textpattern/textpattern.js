@@ -160,7 +160,8 @@ jQuery.fn.txpMultiEditForm = function(method, options)
 		'submitButton' : '.multi-edit input[type=submit]',
 		'selectAll' : 'input[name=select_all][type=checkbox]',
 		'rowClick' : true,
-		'altClick' : true
+		'altClick' : true,
+		'confirmation' : textpattern.gTxt('are_you_sure')
 	};
 
 	if ($.type(method) !== 'string')
@@ -445,24 +446,41 @@ jQuery.fn.txpMultiEditForm = function(method, options)
 					return private;
 				}
 
-				form.button.show();
-
 				if (selected.data('method'))
 				{
 					$(this).after($('<div />').attr('class', 'multi-step multi-option').html(selected.data('method')));
+					form.button.show();
 				}
 				else 
 				{
+					form.button.hide();
 					$(this).parents('form').submit();
 				}
 			});
 
 			return private;
 		};
-		
+
+		/**
+		 * Handles sending
+		 */
+
+		private.sendForm = function()
+		{
+			$this.submit(function() {
+				if (opt.confirmation !== false && verify(opt.confirmation) === false)
+				{
+					form.editMethod.val('').change();
+					return false;
+				}
+			});
+
+			return private;
+		};
+
 		if(!$this.data('_txpMultiEdit'))
 		{
-			private.bindRows().highlight().extendedClick().checked().changeMethod();
+			private.bindRows().highlight().extendedClick().checked().changeMethod().sendForm();
 
 			$this.find('.multi-option:not(.multi-step)').each(function() {
 				public.addOption({

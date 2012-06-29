@@ -72,7 +72,7 @@ $LastChangedRevision$
 													'#page-link #link-title, #page-link #link-description')
 							).'"};'
 	);
-	gTxtScript('form_submission_error');
+	gTxtScript(array('form_submission_error', 'are_you_sure'));
 	?>
 	<script type="text/javascript" src="textpattern.js"></script>
 	<script type="text/javascript">

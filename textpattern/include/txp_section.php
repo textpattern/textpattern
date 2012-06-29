@@ -163,7 +163,7 @@ $LastChangedRevision$
 		if ($rs)
 		{
 			echo n.'<div id="'.$event.'_container" class="txp-container">';
-			echo n.n.'<form action="index.php" id="section_form" class="multi_edit_form" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">'.
+			echo n.n.'<form action="index.php" id="section_form" class="multi_edit_form" method="post" name="longform">'.
 
 				n.'<div class="txp-listtables">'.n.
 				n.startTable('', '', 'txp-list').
