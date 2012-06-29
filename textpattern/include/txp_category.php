@@ -55,7 +55,14 @@ if ($event == 'category') {
 			tdtl('<div id="categories_file">'.cat_file_list().'</div>',' class="categories file"'),
 		'</tr>',
 		endTable(),
-		'</div>');
+		'</div>',
+		script_js( <<<EOS
+			$('.category-tree').txpMultiEditForm({
+				'row' : 'p',
+				'highlighted' : 'p'
+			});
+EOS
+		));
 		echo join(n,$out);
 	}
 
@@ -162,19 +169,17 @@ if ($event == 'category') {
 	function cat_article_multiedit_form($area, $array)
 	{
 		$methods = array('delete'=>gTxt('delete'));
+
 		if ($array) {
-		return
-		form(
-			join('',$array).
-			eInput('category').sInput('cat_category_multiedit').hInput('type',$area).
-			graf(
-				'<label for="withselected_'.$area.'">'.gTxt('with_selected').'</label>'.
-				n.selectInput('edit_method',$methods,'',1, '', 'withselected_'.$area).
-				n.fInput('submit','',gTxt('go'))
-				, ' id="multi_edit_'.$area.'" class="multi-edit"')
-			,'',"verify('".gTxt('are_you_sure')."')", 'post', 'category-tree', '', 'category_'.$area.'_form'
-		);
-		} return;
+			return
+				form(
+					join('',$array).
+					hInput('type',$area).
+					n.multi_edit($methods, 'category', 'cat_category_multiedit')
+					,'',"verify('".gTxt('are_you_sure')."')", 'post', 'category-tree', '', 'category_'.$area.'_form'
+				);
+		}
+		return;
 	}
 
 // -------------------------------------------------------------
