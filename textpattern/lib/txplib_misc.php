@@ -26,13 +26,13 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function doStrip($in)
 	{
-		return doArray($in,'stripslashes');
+		return is_array($in) ? doArray($in, 'doStrip') : doArray($in, 'stripslashes');
 	}
 
 // -------------------------------------------------------------
 	function doStripTags($in)
 	{
-		return doArray($in,'strip_tags');
+		return is_array($in) ? doArray($in, 'doStripTags') : doArray($in,'strip_tags');
 	}
 
 // -------------------------------------------------------------
@@ -480,7 +480,7 @@ function escape_js($js)
 	function psas($array) // same as above, but does strip_tags on post values
 	{
 		foreach($array as $a) {
-			$out[$a] = strip_tags(ps($a));
+			$out[$a] = doStripTags(ps($a));
 		}
 		return $out;
 	}

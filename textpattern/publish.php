@@ -251,7 +251,7 @@ $LastChangedRevision$
 		$out['subpath'] = $subpath = preg_quote(preg_replace("/https?:\/\/.*(\/.*)/Ui","$1",hu),"/");
 		$out['req'] = $req = preg_replace("/^$subpath/i","/",$out['request_uri']);
 
-		$is_404 = 0;
+		$is_404 = ($out['status'] == '404');
 
 			// if messy vars exist, bypass url parsing
 		if (!$out['id'] && !$out['s'] && !(txpinterface=='css') &&! ( txpinterface=='admin') ) {
@@ -565,10 +565,16 @@ $LastChangedRevision$
 	{
 		$order = '';
 		if ($n) {
+			if (!is_scalar($n)) {
+				txp_die('Not Found', 404);
+			}
 			$n = do_list($n);
 			$cssname = join("','", doSlash($n));
 			if (count($n) > 1) $order  = " order by field(name,'$cssname')";
 		} elseif ($s) {
+			if (!is_scalar($s)) {
+				txp_die('Not Found', 404);
+			}
 			$cssname = safe_field('css','txp_section',"name='".doSlash($s)."'");
 		}
 
@@ -965,8 +971,15 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function makeOut()
 	{
+		$array['status'] = '200';
 		foreach(func_get_args() as $a) {
-			$array[$a] = strval(gps($a));
+			$in = gps($a);
+			if (is_scalar($in)) {
+				$array[$a] = strval($in);
+			} else {
+				$array[$a] = '';
+				$array['status'] = '404';
+			}
 		}
 		return $array;
 	}

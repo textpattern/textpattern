@@ -34,8 +34,12 @@ $LastChangedRevision$
 		// build filter criteria from a comma-separated list of sections and categories
 		$feed_filter_limit = get_pref('feed_filter_limit', 10);
 		$section = gps('section');
-		$section = ($section ? array_slice(array_unique(do_list($section)), 0, $feed_filter_limit) : array());
 		$category = gps('category');
+		if (!is_scalar($section) || !is_scalar($category)) {
+			txp_die('Not Found', 404);
+		}
+
+		$section = ($section ? array_slice(array_unique(do_list($section)), 0, $feed_filter_limit) : array());
 		$category = ($category ? array_slice(array_unique(do_list($category)), 0, $feed_filter_limit) : array());
 		$st = array();
 		foreach ($section as $s)
