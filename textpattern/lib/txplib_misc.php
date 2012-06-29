@@ -20,7 +20,17 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function doArray($in,$function)
 	{
-		return is_array($in) ? array_map($function,$in) : $function($in);
+		if(is_array($in))
+		{
+			return array_map($function, $in);
+		}
+		
+		if(is_array($function))
+		{
+			return call_user_func($function, $in);
+		}
+		
+		return $function($in);
 	}
 
 // -------------------------------------------------------------
