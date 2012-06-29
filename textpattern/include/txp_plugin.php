@@ -170,7 +170,7 @@ $LastChangedRevision$
 		if (safe_field('flags', 'txp_plugin', "name ='".doSlash($thing)."'") & PLUGIN_LIFECYCLE_NOTIFY)
 		{
 			load_plugin($thing, true);
-			$message = callback_event("plugin_lifecycle.$name", $property ? 'disabled' : 'enabled');
+			$message = callback_event("plugin_lifecycle.$thing", $change ? 'enabled' : 'disabled');
 		}
 
 		// TODO: Remove non-AJAX alternative code path in future version
