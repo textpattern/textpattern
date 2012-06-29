@@ -409,6 +409,14 @@ $LastChangedRevision$
 			$out['context'] = validContext($out['context']);
 		}
 
+		// Existing category in messy or clean URL?
+		if (!empty($out['c'])) {
+			if (!ckCat($out['context'], $out['c'])) {
+				$is_404 = true;
+				$out['c'] = '';
+			}
+		}
+
 		// Resolve AuthorID from Authorname
 		if ($out['author'])
 		{
