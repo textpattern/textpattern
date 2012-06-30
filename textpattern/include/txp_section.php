@@ -573,7 +573,7 @@ EOS
 		$styles = safe_column('name', 'txp_css', '1=1');
 
 		$methods = array(
-			'changepage'        => array('label' => gTxt('uses_page'), 'html' => selectInput('page', $pages, '', false)),
+			'changepage'        => array('label' => gTxt('uses_page'), 'html' => selectInput('uses_page', $pages, '', false)),
 			'changecss'         => array('label' => gTxt('uses_style'), 'html' => selectInput('css', $styles, '', false)),
 			'changeonfrontpage' => array('label' => gTxt('on_front_page'), 'html' => yesnoRadio('on_front_page', 1)),
 			'changesyndicate'   => array('label' => gTxt('syndicate'), 'html' => yesnoRadio('in_rss', 1)),
@@ -607,7 +607,7 @@ EOS
 
 			case 'changepage':
 				$key = 'page';
-				$val = ps('page');
+				$val = ps('uses_page');
 				break;
 
 			case 'changecss';
