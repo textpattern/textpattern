@@ -353,7 +353,7 @@ $LastChangedRevision$
 
 		switch ($method)
 		{
-			case 'delete';
+			case 'delete':
 				return image_delete($selected);
 				break;
 
@@ -362,7 +362,7 @@ $LastChangedRevision$
 				$val = ps('category');
 				break;
 
-			case 'changeauthor';
+			case 'changeauthor':
 				$key = 'author';
 				$val = ps('author');
 				break;

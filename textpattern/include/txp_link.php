@@ -471,7 +471,7 @@ $LastChangedRevision$
 
 		switch ($method)
 		{
-			case 'delete';
+			case 'delete':
 				if (!has_privs('link.delete'))
 				{
 					if (has_privs('link.delete.own'))
@@ -498,7 +498,7 @@ $LastChangedRevision$
 				$val = ps('category');
 				break;
 
-			case 'changeauthor';
+			case 'changeauthor':
 				$key = 'author';
 				$val = ps('author');
 				break;
