@@ -1195,7 +1195,7 @@ EOF;
 		$class = "$step async";
 		$href = "?event=$event&amp;step=$step&amp;thing=$thing&amp;property=$property";
 		if (AJAXALLY_CHALLENGED) {
-			$href .= '&amp;_txp_token='.form_token();
+			$href .= '&amp;value='.txpspecialchars($item).'&amp;_txp_token='.form_token();
 		}
 		return href($item, $href, $atts." class=\"$class\"");
 	}

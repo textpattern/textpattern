@@ -233,6 +233,9 @@ a.navlink-active {
 	color: #000;
 }
 
+a.async.busy {
+    visibility: hidden;
+}
 
 /* Forms
    ========================================================================== */
