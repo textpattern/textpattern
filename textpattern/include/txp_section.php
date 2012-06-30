@@ -17,6 +17,8 @@ $LastChangedRevision$
 	if (!defined('txpinterface')) die('txpinterface is undefined.');
 
 	if ($event == 'section') {
+		global $all_pages, $all_styles;
+
 		require_privs('section');
 
 		$available_steps = array(
@@ -33,6 +35,10 @@ $LastChangedRevision$
 		if (!$step or !bouncer($step, $available_steps)){
 			$step ='sec_section_list';
 		}
+
+		$all_pages = safe_column('name', 'txp_page', "1=1");
+		$all_styles = safe_column('name', 'txp_css', "1=1");
+
 		$step();
 	}
 
@@ -253,7 +259,7 @@ EOS
 //-------------------------------------------------------------
 	function section_edit()
 	{
-		global $event, $step, $txp_user;
+		global $event, $step, $txp_user, $all_pages, $all_styles;
 
 		$name = gps('name');
 
@@ -282,8 +288,6 @@ EOS
 
 			$is_default_section = ($is_edit && $sec_name == 'default');
 			$caption = gTxt(($is_default_section) ? 'edit_default_section' : ($is_edit ? 'edit_section' : 'create_section'));
-			$pages = safe_column('name', 'txp_page', "1=1");
-			$styles = safe_column('name', 'txp_css', "1=1");
 
 			if (!$is_edit)
 			{
@@ -316,8 +320,8 @@ EOS
 				: inputLabel('section_title', fInput('text', 'section_title', $sec_title, '', '', '', INPUT_REGULAR, '', 'section_title'), 'section_longtitle')
 				).
 
-				inputLabel('section_page', selectInput('section_page', $pages, $sec_page, '', '', 'section_page'), 'uses_page', 'section_uses_page').
-				inputLabel('section_css', selectInput('section_css', $styles, $sec_css, '', '', 'section_css'), 'uses_style', 'section_uses_css').
+				inputLabel('section_page', selectInput('section_page', $all_pages, $sec_page, '', '', 'section_page'), 'uses_page', 'section_uses_page').
+				inputLabel('section_css', selectInput('section_css', $all_styles, $sec_css, '', '', 'section_css'), 'uses_style', 'section_uses_css').
 
 				(($is_default_section)
 				? ''
@@ -512,7 +516,7 @@ EOS
 	function section_delete()
 	{
 		$selected  = ps('selected');
-		$with_articles = safe_rows('Section, Count(*) AS count', 'textpattern', "Section in ('".join("','", $selected)."') GROUP BY Section");
+		$with_articles = safe_rows('Section, Count(*) AS count', 'textpattern', "Section in ('".join("','", doSlash($selected))."') GROUP BY Section");
 		$protected[] = 'default';
 		$del['success'] = $del['error'] = array();
 
@@ -569,12 +573,11 @@ EOS
 
 	function section_multiedit_form($page, $sort, $dir, $crit, $search_method)
 	{
-		$pages = safe_column('name', 'txp_page', '1=1');
-		$styles = safe_column('name', 'txp_css', '1=1');
+		global $all_pages, $all_styles;
 
 		$methods = array(
-			'changepage'        => array('label' => gTxt('uses_page'), 'html' => selectInput('uses_page', $pages, '', false)),
-			'changecss'         => array('label' => gTxt('uses_style'), 'html' => selectInput('css', $styles, '', false)),
+			'changepage'        => array('label' => gTxt('uses_page'), 'html' => selectInput('uses_page', $all_pages, '', false)),
+			'changecss'         => array('label' => gTxt('uses_style'), 'html' => selectInput('css', $all_styles, '', false)),
 			'changeonfrontpage' => array('label' => gTxt('on_front_page'), 'html' => yesnoRadio('on_front_page', 1)),
 			'changesyndicate'   => array('label' => gTxt('syndicate'), 'html' => yesnoRadio('in_rss', 1)),
 			'changesearchable'  => array('label' => gTxt('include_in_search'), 'html' => yesnoRadio('searchable', 1)),
@@ -588,7 +591,7 @@ EOS
 
 	function section_multi_edit()
 	{
-		global $txp_user;
+		global $txp_user, $all_pages, $all_styles;
 		$selected = ps('selected');
 
 		if (!$selected or !is_array($selected))
@@ -598,36 +601,51 @@ EOS
 
 		$method   = ps('edit_method');
 		$changed  = array();
+		$key = $msg = '';
 
 		switch ($method)
 		{
-			case 'delete';
+			case 'delete':
 				return section_delete($selected);
 				break;
 
 			case 'changepage':
-				$key = 'page';
 				$val = ps('uses_page');
+				if (in_array($val, $all_pages))
+				{
+					$key = 'page';
+				}
+				else
+				{
+					$val = '';
+				}
 				break;
 
-			case 'changecss';
-				$key = 'css';
+			case 'changecss':
 				$val = ps('css');
+				if (in_array($val, $all_styles))
+				{
+					$key = 'css';
+				}
+				else
+				{
+					$val = '';
+				}
 				break;
 
-			case 'changeonfrontpage';
+			case 'changeonfrontpage':
 				$key = 'on_frontpage';
-				$val = ps('on_front_page');
+				$val = (int) ps('on_front_page');
 				break;
 
-			case 'changesyndicate';
+			case 'changesyndicate':
 				$key = 'in_rss';
-				$val = ps('in_rss');
+				$val = (int) ps('in_rss');
 				break;
 
-			case 'changesearchable';
+			case 'changesearchable':
 				$key = 'searchable';
-				$val = ps('searchable');
+				$val = (int) ps('searchable');
 				break;
 
 			default:
@@ -636,19 +654,20 @@ EOS
 				break;
 		}
 
-		$selected = safe_column('name', 'txp_section', "name IN ('".join("','", $selected)."')");
+		$selected = safe_column('name', 'txp_section', "name IN ('".join("','", doSlash($selected))."')");
 
 		if ($selected and $key)
 		{
 			foreach ($selected as $id)
 			{
-				if (safe_update('txp_section', "$key = '".doSlash($val)."'", "name = '$id'"))
+				if (safe_update('txp_section', "$key = '".doSlash($val)."'", "name = '".doSlash($id)."'"))
 				{
 					$changed[] = $id;
 				}
 			}
+			$msg = gTxt('section_updated', array('{name}' => join(', ', $changed)));
 		}
 
-		return sec_section_list(gTxt('section_updated', array('{name}' => join(', ', $changed))));
+		return sec_section_list($msg);
 	}
 ?>
