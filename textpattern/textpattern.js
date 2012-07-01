@@ -143,13 +143,13 @@ function cleanSelects()
 /**
  * Multi-edit functions
  * @param string|obj method
- * @param obj options
+ * @param obj opt
  * @since 4.5.0
  */
 
-jQuery.fn.txpMultiEditForm = function(method, options)
+jQuery.fn.txpMultiEditForm = function(method, opt)
 {
-	var args = {}, opt;
+	var args = {};
 
 	var defaults = {
 		'checkbox' : 'input[name="selected[]"][type=checkbox]',
@@ -166,26 +166,23 @@ jQuery.fn.txpMultiEditForm = function(method, options)
 
 	if ($.type(method) !== 'string')
 	{
-		options = method;
+		opt = method;
 		method = null;
 	}
 	else
 	{
-		args = options;
+		args = opt;
 	}
-
-	opt = options;
 
 	this.closest('form').each(function() {
 
 		var $this = $(this), form = {}, public = {}, private = {};
-		
+
 		if ($this.data('_txpMultiEdit'))
 		{
 			form = $this.data('_txpMultiEdit');
 			opt = $.extend(form.opt, opt);
 		}
-		
 		else
 		{
 			opt = $.extend(defaults, opt);
@@ -212,6 +209,11 @@ jQuery.fn.txpMultiEditForm = function(method, options)
 				'value' : null,
 				'html' : null
 			}, options);
+			
+			if (!settings.value)
+			{
+				return public;
+			}
 
 			var option = form.editMethod.find('option').filter(function() {
 				return $(this).attr('value') === settings.value;
@@ -247,7 +249,7 @@ jQuery.fn.txpMultiEditForm = function(method, options)
 			
 			return public;
 		};
-		
+
 		/**
 		 * Selects rows based on supplied arguments. Only one of the filters applies at time.
 		 * @param array index Select based on row's index.
@@ -255,7 +257,7 @@ jQuery.fn.txpMultiEditForm = function(method, options)
 		 * @param array value [value1, value2, value3, ...]
 		 * @param bool checked Set matched checked or unchecked. FALSE to uncheck.
 		 */
-		
+
 		public.select = function(options)
 		{
 			var settings = $.extend({
@@ -264,58 +266,58 @@ jQuery.fn.txpMultiEditForm = function(method, options)
 				'value' : null,
 				'checked' : true
 			}, options);
-			
+
 			var obj = $this.find(form.pattern);
-			
+
 			if (settings.value !== null)
 			{
 				obj = obj.filter(function() {
 					return $.inArray($(this).attr('value'), settings.value) !== -1;
 				});
 			}
-			
+
 			else if (settings.index !== null)
 			{
 				obj = obj.filter(function(index) {
 					return $.inArray(index, settings.index) !== -1;
 				});
 			}
-			
+
 			else if (settings.range !== null)
 			{
 				obj = obj.slice(settings.range[0], settings.range[1]);
 			}
-		
+
 			obj.prop('checked', settings.checked).change();
 			return public;
 		};
-		
+
 		/**
 		 * Binds checkboxes
 		 */
-		
+
 		private.bindRows = function()
 		{
 			form.rows = $this.find(opt.row);
 			form.boxes = $this.find(form.pattern);
 			return private;
 		};
-		
+
 		/**
 		 * Highlights selected rows
 		 */
-		
+
 		private.highlight = function()
 		{
 			form.boxes.filter(':checked').closest(opt.highlighted).addClass(opt.selectedClass);
 			form.boxes.filter(':not(:checked)').closest(opt.highlighted).removeClass(opt.selectedClass);
 			return private;
 		};
-		
+
 		/**
 		 * Extends click region to whole row
 		 */
-		
+
 		private.extendedClick = function()
 		{
 			if (opt.rowClick)
@@ -328,9 +330,9 @@ jQuery.fn.txpMultiEditForm = function(method, options)
 			}
 
 			obj.live('click', function(e) {
-			
+
 				var self = ($(e.target).is(form.pattern) || $(this).is(form.pattern));
-	
+
 				if (!self && (e.target != this || $(this).is('a, :input') || $(e.target).is('a, :input')))
 				{
 					return;
@@ -347,72 +349,53 @@ jQuery.fn.txpMultiEditForm = function(method, options)
 				{
 					return;
 				}
-				
+
 				private.bindRows();
-				
+
 				var checked = box.prop('checked');
-					
+
 				if (self)
 				{
 					checked = !checked;
 				}
-					
-				if (form.lastCheck)
+
+				if (e.shiftKey && form.lastCheck)
 				{
+					var start = form.boxes.index(box);
 					var end = form.boxes.index(form.lastCheck);
+
+					public.select({
+						'range' : [Math.min(start, end), Math.max(start, end)+1],
+						'checked' : !checked
+					});
 				}
-					
+				else if (!self)
+				{
+					box.prop('checked', !checked).change();
+				}
+
 				if (checked === false)
 				{
-					if (e.shiftKey && form.lastCheck)
-					{
-						var start = form.boxes.index(box);
-						
-						public.select({
-							'range' : [Math.min(start, end), Math.max(start, end)+1]
-						});
-					}
-					
-					else if (!self)
-					{
-						box.prop('checked', true).change();
-					}
-					
 					form.lastCheck = box;
 				}
-				
 				else
 				{
-					if (e.shiftKey && form.lastCheck)
-					{
-						var start = form.boxes.index(box);
-						
-						public.select({
-							'range' : [Math.min(start, end), Math.max(start, end)+1],
-							'checked' : false
-						});
-					}
-					else if (!self)
-					{
-						box.prop('checked', false).change();
-					}
-				
 					form.lastCheck = null;
 				}
 			});
-			
+
 			return private;
 		};
-		
+
 		/**
 		 * Tracks row checks
 		 */
-		
+
 		private.checked = function()
 		{
 			form.boxes.live('change', function(e) {
 				var box = $(this);
-				
+
 				if (box.prop('checked'))
 				{
 					$(this).closest(opt.highlighted).addClass(opt.selectedClass);
@@ -424,14 +407,14 @@ jQuery.fn.txpMultiEditForm = function(method, options)
 					form.selectAll.prop('checked', false);
 				}
 			});
-			
+
 			return private;
 		};
-		
+
 		/**
 		 * Handles edit method selecting
 		 */
-		
+
 		private.changeMethod = function()
 		{
 			form.button.hide();
@@ -482,13 +465,28 @@ jQuery.fn.txpMultiEditForm = function(method, options)
 		{
 			private.bindRows().highlight().extendedClick().checked().changeMethod().sendForm();
 
-			$this.find('.multi-option:not(.multi-step)').each(function() {
-				public.addOption({
-					'label' : null,
-					'html' : $(this).contents(),
-					'value' : $(this).attr('id').substring(13)
+			(function() {
+				var multiOptions = $this.find('.multi-option:not(.multi-step)');
+
+				form.editMethod.find('option[value!=""]').each(function() {
+					var value = $(this).val();
+
+					var option = multiOptions.filter(function() {
+						return $(this).hasClass('multi-option-'+value);
+					});
+
+					if (option.length > 0)
+					{
+						public.addOption({
+							'label' : null,
+							'html' : option.eq(0).contents(),
+							'value' : $(this).val()
+						});
+					}
 				});
-			}).remove();
+
+				multiOptions.remove();
+			})();
 
 			form.selectAll.live('change', function(e) {
 				public.select({
