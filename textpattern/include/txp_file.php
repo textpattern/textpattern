@@ -33,6 +33,8 @@ $LastChangedRevision$
 	);
 
 	if ($event == 'file') {
+		global $all_file_cats, $all_file_authors;
+
 		require_privs('file');
 
 		$available_steps = array(
@@ -47,8 +49,13 @@ $LastChangedRevision$
 		);
 
 		if(!$step or !bouncer($step, $available_steps)) {
-			file_list();
-		} else $step();
+			$step = 'file_list';
+		}
+
+		$all_file_cats = getTree('root', 'file');
+		$all_file_authors = the_privileged('file.edit.own');
+
+		$step();
 	}
 
 // -------------------------------------------------------------
@@ -330,14 +337,10 @@ $LastChangedRevision$
 
 	function file_multiedit_form($page, $sort, $dir, $crit, $search_method)
 	{
-		global $file_statuses;
+		global $file_statuses, $all_file_cats, $all_file_authors;
 
-		$rs = getTree('root', 'file');
-		$categories = $rs ? treeSelectInput('category', $rs, '') : '';
-
-		$rs = safe_column('name', 'txp_users', "privs not in(0,6) order by name asc");
-		$authors = $rs ? selectInput('author', $rs, '', true) : '';
-
+		$categories = $all_file_cats ? treeSelectInput('category', $all_file_cats, '') : '';
+		$authors = $all_file_authors ? selectInput('author', $all_file_authors, '', true) : '';
 		$status = selectInput('status', $file_statuses, '', true);
 
 		$methods = array(
@@ -347,6 +350,11 @@ $LastChangedRevision$
 			'changecount'    => array('label' => gTxt('reset_download_count')),
 			'delete'         => gTxt('delete'),
 		);
+
+		if (!$categories)
+		{
+			unset($methods['changecategory']);
+		}
 
 		if (has_single_author('txp_file'))
 		{
@@ -365,7 +373,15 @@ $LastChangedRevision$
 
 	function file_multi_edit()
 	{
-		global $txp_user;
+		global $txp_user, $all_file_cats, $all_file_authors;
+
+		// Empty entry to permit clearing the category
+		$categories = array('');
+
+		foreach ($all_file_cats as $row) {
+			$categories[] = $row['name'];
+		}
+
 		$selected = ps('selected');
 
 		if (!$selected or !is_array($selected))
@@ -376,6 +392,7 @@ $LastChangedRevision$
 		$selected = array_map('assert_int', $selected);
 		$method   = ps('edit_method');
 		$changed  = array();
+		$key = '';
 
 		switch ($method)
 		{
@@ -384,13 +401,19 @@ $LastChangedRevision$
 				break;
 
 			case 'changecategory':
-				$key = 'category';
 				$val = ps('category');
+				if (in_array($val, $categories))
+				{
+					$key = 'category';
+				}
 				break;
 
 			case 'changeauthor':
-				$key = 'author';
 				$val = ps('author');
+				if (in_array($val, $all_file_authors))
+				{
+					$key = 'author';
+				}
 				break;
 
 			case 'changecount':
@@ -452,7 +475,7 @@ $LastChangedRevision$
 
 	function file_edit($message = '', $id = '')
 	{
-		global $file_base_path, $levels, $file_statuses, $txp_user, $event;
+		global $file_base_path, $levels, $file_statuses, $txp_user, $event, $all_file_cats;
 
 		extract(gpsa(array('name', 'title', 'category', 'permissions', 'description', 'sort', 'dir', 'page', 'crit', 'search_method', 'publish_now')));
 
@@ -461,8 +484,6 @@ $LastChangedRevision$
 			$id = gps('id');
 		}
 		$id = assert_int($id);
-
-		$categories = getTree('root', 'file');
 
 		$rs = safe_row('*, unix_timestamp(created) as created, unix_timestamp(modified) as modified', 'txp_file', "id = $id");
 
@@ -533,7 +554,7 @@ $LastChangedRevision$
 					(($file_exists)
 					? inputLabel('file_status', radioSet($file_statuses, 'file_status', $status)).n.
 						inputLabel('file_title', fInput('text', 'file_title', $title, '', '', '', INPUT_REGULAR, '', 'file_title'), 'title').n.
-						inputLabel('file_category', treeSelectInput('file_category', $categories, $category, 'file_category'), 'file_category').n.
+						inputLabel('file_category', treeSelectInput('file_category', $all_file_cats, $category, 'file_category'), 'file_category').n.
 //						inputLabel('perms', selectInput('perms', $levels, $permissions), 'permissions').n.
 						inputLabel('file_description', '<textarea id="file_description" name="file_description" rows="'.INPUT_XSMALL.'" cols="'.INPUT_LARGE.'">'.$description.'</textarea>', 'description', '', '', '').n.
 						'<fieldset class="file-created">'.n.
