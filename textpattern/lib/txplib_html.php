@@ -875,11 +875,12 @@ $LastChangedRevision$
  * @param  string  $sort Column sorted by
  * @param  string  $dir Sorting direction
  * @param  string  $crit Search criterion
- * @parma  string  $search_method Search method
+ * @param  string  $search_method Search method
+ * @param  string  $id_suffix Added to the HTML id attribute; useful if more than one similar control placed per page
  * @return string  HTML
  */
 
-	function multi_edit($options, $event=null, $step=null, $page='', $sort='', $dir='', $crit='', $search_method='')
+	function multi_edit($options, $event=null, $step=null, $page='', $sort='', $dir='', $crit='', $search_method='', $id_suffix='')
 	{
 		$html = $methods = array();
 		$methods[''] = gTxt('with_selected_option');
@@ -905,7 +906,7 @@ $LastChangedRevision$
 				if (isset($option['html']))
 				{
 					$html[$value] = '<div class="multi-option" id="multi-option-'.
-						txpspecialchars($value).'">'.$option['html'].'</div>';
+						txpspecialchars($value).($id_suffix ? '-'.txpspecialchars($id_suffix) : '').'">'.$option['html'].'</div>';
 				}
 			}
 			else

@@ -19,20 +19,20 @@ if ($event == 'category') {
 	require_privs('category');
 
 	$available_steps = array(
-		'cat_category_list' 	=> false,
+		'cat_category_list'      => false,
 		'cat_category_multiedit' => true,
-		'cat_article_create' 	=> true,
-		'cat_image_create' 		=> true,
-		'cat_file_create' 		=> true,
-		'cat_link_create' 		=> true,
-		'cat_article_save' 		=> true,
-		'cat_image_save' 		=> true,
-		'cat_file_save' 		=> true,
-		'cat_link_save' 		=> true,
-		'cat_article_edit' 		=> false,
-		'cat_image_edit' 		=> false,
-		'cat_file_edit' 		=> false,
-		'cat_link_edit' 		=> false
+		'cat_article_create'     => true,
+		'cat_image_create'       => true,
+		'cat_file_create'        => true,
+		'cat_link_create'        => true,
+		'cat_article_save'       => true,
+		'cat_image_save'         => true,
+		'cat_file_save'          => true,
+		'cat_link_save'          => true,
+		'cat_article_edit'       => false,
+		'cat_image_edit'         => false,
+		'cat_file_edit'          => false,
+		'cat_link_edit'          => false,
 	);
 
 	if(!$step or !bouncer($step, $available_steps)){
@@ -184,7 +184,7 @@ EOS
 				form(
 					join('',$array).
 					hInput('type',$area).
-					n.multi_edit($methods, 'category', 'cat_category_multiedit')
+					n.multi_edit($methods, 'category', 'cat_category_multiedit', '', '', '', '', '', $area)
 					,'', '', 'post', 'category-tree', '', 'category_'.$area.'_form'
 				);
 		}
