@@ -23,6 +23,8 @@ $LastChangedRevision$
 
 	if ($event == 'link')
 	{
+		global $all_link_cats, $all_link_authors;
+
 		require_privs('link');
 
 		$vars = array('category', 'url', 'linkname', 'linksort', 'description', 'id');
@@ -39,6 +41,10 @@ $LastChangedRevision$
 		if (!$step or !bouncer($step, $available_steps)){
 			$step = 'link_list';
 		}
+
+		$all_link_cats = getTree('root', 'link');
+		$all_link_authors = the_privileged('link.edit.own');
+
 		$step();
 	}
 
@@ -426,17 +432,21 @@ $LastChangedRevision$
 
 	function link_multiedit_form($page, $sort, $dir, $crit, $search_method)
 	{
-		$rs = getTree('root', 'link');
-		$categories = $rs ? treeSelectInput('category', $rs, '') : '';
+		global $all_link_cats, $all_link_authors;
 
-		$rs = safe_column('name', 'txp_users', "privs not in(0,6) order by name asc");
-		$authors = $rs ? selectInput('author', $rs, '', true) : '';
+		$categories = $all_link_cats ? treeSelectInput('category', $all_link_cats, '') : '';
+		$authors = $all_link_authors ? selectInput('author', $all_link_authors, '', true) : '';
 
 		$methods = array(
 			'changecategory' => array('label' => gTxt('changecategory'), 'html' => $categories),
 			'changeauthor'   => array('label' => gTxt('changeauthor'), 'html' => $authors),
 			'delete'         => gTxt('delete'),
 		);
+
+		if (!$categories)
+		{
+			unset($methods['changecategory']);
+		}
 
 		if (has_single_author('txp_link'))
 		{
@@ -455,7 +465,14 @@ $LastChangedRevision$
 
 	function link_multi_edit()
 	{
-		global $txp_user;
+		global $txp_user, $all_link_cats, $all_link_authors;
+
+		// Empty entry to permit clearing the category
+		$categories = array('');
+
+		foreach ($all_link_cats as $row) {
+			$categories[] = $row['name'];
+		}
 
 		$selected = ps('selected');
 
@@ -468,6 +485,7 @@ $LastChangedRevision$
 		$selected = array_map('assert_int', $selected);
 		$method   = ps('edit_method');
 		$changed  = array();
+		$key = '';
 
 		switch ($method)
 		{
@@ -494,13 +512,19 @@ $LastChangedRevision$
 				break;
 
 			case 'changecategory':
-				$key = 'category';
 				$val = ps('category');
+				if (in_array($val, $categories))
+				{
+					$key = 'category';
+				}
 				break;
 
 			case 'changeauthor':
-				$key = 'author';
 				$val = ps('author');
+				if (in_array($val, $all_link_authors))
+				{
+					$key = 'author';
+				}
 				break;
 
 			default:
