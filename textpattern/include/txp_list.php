@@ -13,21 +13,33 @@ $LastChangedRevision$
 
 	if (!defined('txpinterface')) die('txpinterface is undefined.');
 
-	global $statuses;
-	$statuses = array(
-		STATUS_DRAFT   => gTxt('draft'),
-		STATUS_HIDDEN  => gTxt('hidden'),
-		STATUS_PENDING => gTxt('pending'),
-		STATUS_LIVE    => gTxt('live'),
-		STATUS_STICKY  => gTxt('sticky'),
-	);
+	if ($event == 'list') {
+		global $statuses, $all_cats, $all_authors, $all_sections;
 
-	if ($event=='list') {
 		require_privs('article');
 
-		if(!$step or !bouncer($step, array('list_list' => false, 'list_change_pageby' => true, 'list_multi_edit' => true))){
+		$statuses = array(
+			STATUS_DRAFT   => gTxt('draft'),
+			STATUS_HIDDEN  => gTxt('hidden'),
+			STATUS_PENDING => gTxt('pending'),
+			STATUS_LIVE    => gTxt('live'),
+			STATUS_STICKY  => gTxt('sticky'),
+		);
+
+		$available_steps = array(
+			'list_list'          => false,
+			'list_change_pageby' => true,
+			'list_multi_edit'    => true,
+		);
+
+		if(!$step or !bouncer($step, $available_steps)) {
 			$step = 'list_list';
 		}
+
+		$all_cats = getTree('root', 'article');
+		$all_authors = the_privileged('article.edit.own');
+		$all_sections = safe_column('name', 'txp_section', "name != 'default'");
+
 		$step();
 	}
 
@@ -375,21 +387,21 @@ $LastChangedRevision$
 
 	function list_multiedit_form($page, $sort, $dir, $crit, $search_method)
 	{
-		global $statuses;
+		global $statuses, $all_cats, $all_authors, $all_sections;
 
-		$rs = safe_column('name', 'txp_section', "name != 'default'");
-		$sections = $rs ? selectInput('Section', $rs, '', true) : '';
+		if ($all_cats) {
+			$category1 = treeSelectInput('Category1', $all_cats, '');
+			$category2 = treeSelectInput('Category2', $all_cats, '');
+		}
+		else
+		{
+			$category1 = $category2 = '';
+		}
 
-		$rs = getTree('root', 'article');
-		$category1 = $rs ? treeSelectInput('Category1', $rs, '') : '';
-		$category2 = $rs ? treeSelectInput('Category2', $rs, '') : '';
-
+		$sections = $all_sections ? selectInput('Section', $all_sections, '', true) : '';
 		$comments = onoffRadio('Annotate', get_pref('comments_on_default'));
-
 		$status = selectInput('Status', $statuses, '', true);
-
-		$rs = safe_column('name', 'txp_users', "privs not in(0,6) order by name asc");
-		$authors = $rs ? selectInput('AuthorID', $rs, '', true) : '';
+		$authors = $all_authors ? selectInput('AuthorID', $all_authors, '', true) : '';
 
 		$methods = array(
 			'changesection'   => array('label' => gTxt('changesection'), 'html' => $sections),
@@ -400,6 +412,11 @@ $LastChangedRevision$
 			'changeauthor'    => array('label' => gTxt('changeauthor'), 'html' => $authors),
 			'delete'          => gTxt('delete'),
 		);
+
+		if (!$all_cats)
+		{
+			unset($methods['changecategory1'], $methods['changecategory2']);
+		}
 
 		if (has_single_author('textpattern', 'AuthorID'))
 		{
@@ -418,7 +435,14 @@ $LastChangedRevision$
 
 	function list_multi_edit()
 	{
-		global $txp_user;
+		global $txp_user, $statuses, $all_cats, $all_authors, $all_sections;
+
+		// Empty entry to permit clearing the categories
+		$categories = array('');
+
+		foreach ($all_cats as $row) {
+			$categories[] = $row['name'];
+		}
 
 		$selected = ps('selected');
 
@@ -431,6 +455,7 @@ $LastChangedRevision$
 		$method   = ps('edit_method');
 		$changed  = false;
 		$ids      = array();
+		$key      = '';
 
 		if ($method == 'delete')
 		{
@@ -472,7 +497,6 @@ $LastChangedRevision$
 
 		else
 		{
-			$selected = array_map('assert_int', $selected);
 			$selected = safe_rows('ID, AuthorID, Status', 'textpattern',
 									  'ID in ('. implode(',',$selected) .')');
 
@@ -495,28 +519,29 @@ $LastChangedRevision$
 			{
 				// change author
 				case 'changeauthor':
-
-					$key = 'AuthorID';
 					$val = has_privs('article.edit') ? ps('AuthorID') : '';
-
-					// do not allow to be set to an empty value
-					if (!$val)
+					if (in_array($val, $all_authors))
 					{
-						$selected = array();
+						$key = 'AuthorID';
 					}
-
 				break;
 
 				// change category1
 				case 'changecategory1':
-					$key = 'Category1';
 					$val = ps('Category1');
+					if (in_array($val, $categories))
+					{
+						$key = 'Category1';
+					}
 				break;
 
 				// change category2
 				case 'changecategory2':
-					$key = 'Category2';
 					$val = ps('Category2');
+					if (in_array($val, $categories))
+					{
+						$key = 'Category2';
+					}
 				break;
 
 				// change comments
@@ -527,31 +552,25 @@ $LastChangedRevision$
 
 				// change section
 				case 'changesection':
-
-					$key = 'Section';
 					$val = ps('Section');
-
-					// do not allow to be set to an empty value
-					if (!$val)
+					if (in_array($val, $all_sections))
 					{
-						$selected = array();
+						$key = 'Section';
 					}
-
 				break;
 
 				// change status
 				case 'changestatus':
-
-					$key = 'Status';
-					$val = ps('Status');
-					if (!has_privs('article.publish') && $val>=STATUS_LIVE) $val = STATUS_PENDING;
-
-					// do not allow to be set to an empty value
-					if (!$val)
+					$val = (int) ps('Status');
+					if (array_key_exists($val, $statuses))
 					{
-						$selected = array();
+						$key = 'Status';
 					}
 
+					if (!has_privs('article.publish') && $val >= STATUS_LIVE)
+					{
+						$val = STATUS_PENDING;
+					}
 				break;
 
 				default:
