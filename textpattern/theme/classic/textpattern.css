@@ -106,11 +106,13 @@ h3 {
 
 h1 {
 	font-size: 2em;
+	line-height: 1.27272727272727;
 	margin: 0 0 .5em 0;
 }
 
 h2 {
 	font-size: 1.54545454545455em;
+	line-height: 1.41176470588235;
 	margin: 0 0 .66666666666667em 0;
 }
 
@@ -511,19 +513,12 @@ td {
 	border-bottom: 1px solid #ddd;
 }
 
-.txp-list thead .multi-edit,
-.txp-list tbody .multi-edit {
+.txp-list .multi-edit {
 	width: 18px;
 }
 
-.txp-list tfoot th,
-.txp-list tfoot td,
 .cell-label {
 	vertical-align: middle;
-}
-
-.txp-list tfoot .multi-edit {
-	text-align: right;
 }
 
 .txp-list td.unpublished {
@@ -537,6 +532,23 @@ td {
 .selected {
 	background-color: #f3f3f3;
 }
+
+div.multi-edit {
+	margin: 1em 0;
+}
+
+.multi-option {
+	display: none;
+}
+
+.multi-step {
+	display: inline-block;
+	margin-left: .4em;
+	/* display and zoom IE7 fix for display:inline-block */
+	*display: inline;
+	*zoom: 1;
+}
+
 
 /* Edit panes
    ========================================================================== */
@@ -879,8 +891,12 @@ table#setup td {
 
 td.categories p {
 	margin: 0;
-	border-top: 1px solid #ddd;
+	border-bottom: 1px solid #ddd;
 	padding: .3em 0;
+}
+
+td.categories p:first-child {
+	border-top: 1px solid #ddd;
 }
 
 #category_container .action-create {
@@ -1034,14 +1050,6 @@ input.exp_year {
 	/* display and zoom IE7 fix for display:inline-block */
  	*display: inline;
  	*zoom: 1;
-}
-
-
-/* Comments pages
-   ========================================================================== */
-
-form.cb_show_spam {
-	margin-left: .5em;
 }
 
 
