@@ -26,6 +26,8 @@ $LastChangedRevision$
 
 	if ($event == 'image')
 	{
+		global $all_image_cats, $all_image_authors;
+
 		require_privs('image');
 
 		$available_steps = array(
@@ -42,8 +44,13 @@ $LastChangedRevision$
 		);
 
 		if(!$step or !bouncer($step, $available_steps)) {
-			image_list();
-		} else $step();
+			$step = 'image_list';
+		}
+
+		$all_image_cats = getTree('root', 'image');
+		$all_image_authors = the_privileged('image.edit.own');
+
+		$step();
 	}
 
 // -------------------------------------------------------------
@@ -309,17 +316,21 @@ $LastChangedRevision$
 
 	function image_multiedit_form($page, $sort, $dir, $crit, $search_method)
 	{
-		$rs = getTree('root', 'image');
-		$categories = $rs ? treeSelectInput('category', $rs, '') : '';
+		global $all_image_cats, $all_image_authors;
 
-		$rs = safe_column('name', 'txp_users', "privs not in(0,6) order by name asc");
-		$authors = $rs ? selectInput('author', $rs, '', true) : '';
+		$categories = $all_image_cats ? treeSelectInput('category', $all_image_cats, '') : '';
+		$authors = $all_image_authors ? selectInput('author', $all_image_authors, '', true) : '';
 
 		$methods = array(
 			'changecategory' => array('label' => gTxt('changecategory'), 'html' => $categories),
 			'changeauthor'   => array('label' => gTxt('changeauthor'), 'html' => $authors),
 			'delete'         => gTxt('delete'),
 		);
+
+		if (!$categories)
+		{
+			unset($methods['changecategory']);
+		}
 
 		if (has_single_author('txp_image'))
 		{
@@ -338,7 +349,14 @@ $LastChangedRevision$
 
 	function image_multi_edit()
 	{
-		global $txp_user;
+		global $txp_user, $all_image_cats, $all_image_authors;
+
+		// Empty entry to permit clearing the category
+		$categories = array('');
+
+		foreach ($all_image_cats as $row) {
+			$categories[] = $row['name'];
+		}
 
 		$selected = ps('selected');
 
@@ -350,6 +368,7 @@ $LastChangedRevision$
 		$selected = array_map('assert_int', $selected);
 		$method   = ps('edit_method');
 		$changed  = array();
+		$key = '';
 
 		switch ($method)
 		{
@@ -358,13 +377,19 @@ $LastChangedRevision$
 				break;
 
 			case 'changecategory':
-				$key = 'category';
 				$val = ps('category');
+				if (in_array($val, $categories))
+				{
+					$key = 'category';
+				}
 				break;
 
 			case 'changeauthor':
-				$key = 'author';
 				$val = ps('author');
+				if (in_array($val, $all_image_authors))
+				{
+					$key = 'author';
+				}
 				break;
 
 			default:
@@ -409,7 +434,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function image_edit($message='',$id='')
 	{
-		global $prefs,$file_max_upload_size,$txp_user,$event;
+		global $prefs, $file_max_upload_size, $txp_user, $event, $all_image_cats;
 
 		if (!$id) $id = gps('id');
 		$id = assert_int($id);
@@ -428,8 +453,6 @@ $LastChangedRevision$
 			pagetop(gTxt('edit_image'),$message);
 
 			extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
-
-			$categories = getTree("root", "image");
 
 			if ($ext != '.swf') {
 				$aspect = ($h == $w) ? ' square' : (($h > $w) ? ' portrait' : ' landscape');
@@ -529,7 +552,7 @@ $LastChangedRevision$
 				'<div class="image-detail">',
 					form(
 						inputLabel('image_name', fInput('text', 'image_name', $name, '', '', '', INPUT_REGULAR, '', 'image_name'), 'image_name').n.
-						inputLabel('image_category', treeSelectInput('image_category', $categories, $category, 'image_category'), 'image_category').n.
+						inputLabel('image_category', treeSelectInput('image_category', $all_image_cats, $category, 'image_category'), 'image_category').n.
 						inputLabel('image_alt_text', fInput('text', 'image_alt_text', $alt, '', '', '', INPUT_REGULAR, '', 'image_alt_text'), 'alt_text').n.
 						inputLabel('image_caption', '<textarea id="image_caption" name="image_caption" rows="'.INPUT_XSMALL.'" cols="'.INPUT_LARGE.'">'.$caption.'</textarea>', 'caption', '', '', '').n.
 						pluggable_ui('image_ui', 'extend_detail_form', '', $rs).n.

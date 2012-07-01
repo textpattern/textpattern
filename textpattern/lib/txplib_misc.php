@@ -408,6 +408,23 @@ function escape_js($js)
 				gTxt('restricted_area').'</p>');
 	}
 
+	/**
+	 * Get list of users having access to a resource
+	 *
+	 * @param string $res	resource, e.g. 'article.edit.published'
+	 * @return array
+	 * @since 4.5.0
+	 */
+	function the_privileged($res)
+	{
+		global $txp_permissions;
+		if (isset($txp_permissions[$res])) {
+			return safe_column('name', 'txp_users', "FIND_IN_SET(privs, '{$txp_permissions[$res]}') order by name asc");
+		} else {
+			return array();
+		}
+	}
+
 // -------------------------------------------------------------
 	function get_groups()
 	{

@@ -615,10 +615,6 @@ EOS
 				{
 					$key = 'page';
 				}
-				else
-				{
-					$val = '';
-				}
 				break;
 
 			case 'changecss':
@@ -626,10 +622,6 @@ EOS
 				if (in_array($val, $all_styles))
 				{
 					$key = 'css';
-				}
-				else
-				{
-					$val = '';
 				}
 				break;
 
