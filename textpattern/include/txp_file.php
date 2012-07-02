@@ -560,11 +560,11 @@ $LastChangedRevision$
 				'<div class="file-detail '.($file_exists ? '' : 'not-').'exists">'.n,
 				form(
 					(($file_exists)
-					? inputLabel('file_status', radioSet($file_statuses, 'file_status', $status)).n.
-						inputLabel('file_title', fInput('text', 'file_title', $title, '', '', '', INPUT_REGULAR, '', 'file_title'), 'title').n.
-						inputLabel('file_category', treeSelectInput('file_category', $all_file_cats, $category, 'file_category'), 'file_category').n.
+					? inputLabel('file_status', radioSet($file_statuses, 'status', $status)).n.
+						inputLabel('file_title', fInput('text', 'title', $title, '', '', '', INPUT_REGULAR, '', 'file_title'), 'title').n.
+						inputLabel('file_category', treeSelectInput('category', $all_file_cats, $category, 'file_category'), 'file_category').n.
 //						inputLabel('perms', selectInput('perms', $levels, $permissions), 'permissions').n.
-						inputLabel('file_description', '<textarea id="file_description" name="file_description" rows="'.INPUT_XSMALL.'" cols="'.INPUT_LARGE.'">'.$description.'</textarea>', 'description', '', '', '').n.
+						inputLabel('file_description', '<textarea id="file_description" name="description" rows="'.INPUT_XSMALL.'" cols="'.INPUT_LARGE.'">'.$description.'</textarea>', 'description', '', '', '').n.
 						'<fieldset class="file-created">'.n.
 							'<legend>'.n.
 								gTxt('timestamp').n.
@@ -580,11 +580,11 @@ $LastChangedRevision$
 						).n.
 						pluggable_ui('file_ui', 'extend_detail_form', '', $rs).n.
 						graf(fInput('submit', '', gTxt('Save'), 'publish')).n.
-						hInput('file_category', $category).n.
+						hInput('category', $category).n.
 						hInput('perms', ($permissions=='-1') ? '' : $permissions).n.
-						hInput('file_title', $title).n.
-						hInput('file_description', $description).n.
-						hInput('file_status', $status)
+						hInput('title', $title).n.
+						hInput('description', $description).n.
+						hInput('status', $status)
 					).
 					eInput('file').n.
 					sInput('file_save').n.
@@ -799,9 +799,9 @@ $LastChangedRevision$
 	{
 		global $file_base_path, $txp_user;
 
-	    $varray = array_map('assert_string',
-			gpsa(array('id', 'file_category', 'file_title', 'file_description', 'file_status', 'publish_now', 'year', 'month', 'day', 'hour', 'minute', 'second')));
-        extract(doSlash($varray));
+		$varray = array_map('assert_string',
+			gpsa(array('id', 'category', 'title', 'description', 'status', 'publish_now', 'year', 'month', 'day', 'hour', 'minute', 'second')));
+		extract(doSlash($varray));
 		$filename = $varray['filename'] = sanitizeForFile(gps('filename'));
 
 		if ($filename == '') {
@@ -816,7 +816,7 @@ $LastChangedRevision$
 			asort($permissions);
 			$permissions = implode(",",$permissions);
 		}
-        $varray['permissions'] = $permissions;
+		$varray['permissions'] = $permissions;
 		$perms = doSlash($permissions);
 
 		$rs = safe_row('filename, author', 'txp_file', "id=$id");
@@ -856,19 +856,19 @@ $LastChangedRevision$
 		$size = filesize(build_file_path($file_base_path,$filename));
 
 		$constraints = array(
-			'category' => new CategoryConstraint(gps('file_category'), array('type' => 'file')),
-			'status' => new ChoiceConstraint(gps('file_status'), array('choices' => array(2, 3, 4), 'message' => 'invalid_status'))
+			'category' => new CategoryConstraint(gps('category'), array('type' => 'file')),
+			'status' => new ChoiceConstraint(gps('status'), array('choices' => array(STATUS_HIDDEN, STATUS_PENDING, STATUS_LIVE), 'message' => 'invalid_status'))
 		);
 		callback_event_ref('file_ui', 'validate_save', 0, $varray, $constraints);
 		$validator = new Validator($constraints);
 
 		$rs = $validator->validate() && safe_update('txp_file', "
 			filename = '".doSlash($filename)."',
-			title = '$file_title',
-			category = '$file_category',
+			title = '$title',
+			category = '$category',
 			permissions = '$perms',
-			description = '$file_description',
-			status = '$file_status',
+			description = '$description',
+			status = '$status',
 			size = '$size',
 			modified = now(),
 			author = '".doSlash($txp_user)."'"
