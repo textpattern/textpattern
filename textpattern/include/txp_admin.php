@@ -76,11 +76,11 @@ $LastChangedRevision$
 	{
 		require_privs('admin.edit');
 
-		extract(doSlash(psa(array('privileges', 'user_id', 'real_name', 'login_email'))));
-		$privs   = assert_int($privileges);
+		extract(doSlash(psa(array('privs', 'user_id', 'RealName', 'email'))));
+		$privs   = assert_int($privs);
 		$user_id = assert_int($user_id);
 
-		if (!is_valid_email($login_email))
+		if (!is_valid_email($email))
 		{
 			author_list(array(gTxt('email_required'), E_ERROR));
 			return;
@@ -88,15 +88,15 @@ $LastChangedRevision$
 
 		$rs = safe_update('txp_users', "
 			privs    = $privs,
-			RealName = '$real_name',
-			email    = '$login_email'",
+			RealName = '$RealName',
+			email    = '$email'",
 			"user_id = $user_id"
 		);
 
 		if ($rs)
 		{
 			author_list(
-				gTxt('author_updated', array('{name}' => $real_name))
+				gTxt('author_updated', array('{name}' => $RealName))
 			);
 		}
 	}
@@ -148,18 +148,18 @@ $LastChangedRevision$
 	{
 		require_privs('admin.edit');
 
-		extract(doSlash(psa(array('privileges', 'login_name', 'login_email', 'real_name'))));
+		extract(doSlash(psa(array('privs', 'name', 'email', 'RealName'))));
 
-		$privs  = assert_int($privileges);
-		$length = function_exists('mb_strlen') ? mb_strlen($login_name, '8bit') : strlen($login_name);
+		$privs  = assert_int($privs);
+		$length = function_exists('mb_strlen') ? mb_strlen($name, '8bit') : strlen($name);
 
-		if ($login_name and $length <= 64 and is_valid_email($login_email))
+		if ($name and $length <= 64 and is_valid_email($email))
 		{
-			$exists = safe_field('name', 'txp_users', "name = '" .$login_name. "'");
+			$exists = safe_field('name', 'txp_users', "name = '" .$name. "'");
 
 			if ($exists)
 			{
-				author_list(array(gTxt('author_already_exists', array('{name}' => $login_name)), E_ERROR));
+				author_list(array(gTxt('author_already_exists', array('{name}' => $name)), E_ERROR));
 				return;
 			}
 
@@ -169,19 +169,19 @@ $LastChangedRevision$
 
 			$rs = safe_insert('txp_users', "
 				privs    = $privs,
-				name     = '$login_name',
-				email    = '$login_email',
-				RealName = '$real_name',
+				name     = '$name',
+				email    = '$email',
+				RealName = '$RealName',
 				nonce    = '$nonce',
 				pass     = '$hash'
 			");
 
 			if ($rs)
 			{
-				send_password($real_name, $login_name, $login_email, $password);
+				send_password($RealName, $name, $email, $password);
 
 				author_list(
-					gTxt('password_sent_to').sp.$login_email
+					gTxt('password_sent_to').sp.$email
 				);
 
 				return;
@@ -196,7 +196,7 @@ $LastChangedRevision$
 	function privs($priv = '')
 	{
 		global $levels;
-		return selectInput('privileges', $levels, $priv, '', '', 'privileges');
+		return selectInput('privs', $levels, $priv, '', '', 'privileges');
 	}
 
 // -------------------------------------------------------------
@@ -456,10 +456,10 @@ $LastChangedRevision$
 		echo form(
 			'<div class="txp-edit">'.n.
 			hed($caption, 2).n.
-			inputLabel('login_name', ($is_edit ? strong($name) : fInput('text', 'login_name', $name, '', '', '', INPUT_REGULAR, '', 'login_name')), ($is_edit ? '': 'login_name'), 'add_new_author').n.
-			inputLabel('real_name', fInput('text', 'real_name', $RealName, '', '', '', INPUT_REGULAR, '', 'real_name'), 'real_name').n.
-			inputLabel('login_email', fInput('text', 'login_email', $email, '', '', '', INPUT_REGULAR, '', 'login_email'), 'email').n.
-			inputLabel('privileges', (($txp_user != $name) ? privs($privs) : hInput('privileges', $privs).strong(get_priv_level($privs))), ($is_edit ? '' : 'privileges'), 'about_privileges').n.
+			inputLabel('login_name', ($is_edit ? strong($name) : fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'login_name')), ($is_edit ? '' : 'login_name'), ($is_edit ? '' : 'add_new_author')).n.
+			inputLabel('real_name', fInput('text', 'RealName', $RealName, '', '', '', INPUT_REGULAR, '', 'real_name'), 'real_name').n.
+			inputLabel('login_email', fInput('text', 'email', $email, '', '', '', INPUT_REGULAR, '', 'login_email'), 'email').n.
+			inputLabel('privileges', (($txp_user != $name) ? privs($privs) : hInput('privs', $privs).strong(get_priv_level($privs))), ($is_edit ? '' : 'privileges'), 'about_privileges').n.
 			pluggable_ui('author_ui', 'extend_detail_form', '', $rs).n.
 			graf(fInput('submit', '', gTxt('save'), 'publish')).
 			eInput('admin').
@@ -559,7 +559,7 @@ $LastChangedRevision$
 
 				global $levels;
 
-				$privilege = ps('privileges');
+				$privilege = ps('privs');
 
 				if (!isset($levels[$privilege])) return author_list();
 
