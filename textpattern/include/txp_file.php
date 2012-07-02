@@ -132,8 +132,8 @@ $LastChangedRevision$
 			break;
 		}
 
-		set_pref('file_sort_column', $sort, 'file', 2, '', 0, PREF_PRIVATE);
-		set_pref('file_sort_dir', $dir, 'file', 2, '', 0, PREF_PRIVATE);
+		set_pref('file_sort_column', $sort, 'file', PREF_HIDDEN, '', 0, PREF_PRIVATE);
+		set_pref('file_sort_dir', $dir, 'file', PREF_HIDDEN, '', 0, PREF_PRIVATE);
 
 		$switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
@@ -509,7 +509,7 @@ $LastChangedRevision$
 			pagetop(gTxt('edit_file'), $message);
 
 			if ($permissions=='') $permissions='-1';
-			if (!has_privs('file.publish') && $status >= 4) $status = 3;
+			if (!has_privs('file.publish') && $status >= STATUS_LIVE) $status = STATUS_PENDING;
 
 			$file_exists = file_exists(build_file_path($file_base_path,$filename));
 			$existing_files = get_filenames();
