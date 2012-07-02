@@ -242,5 +242,5 @@ $txp_groups = array(
 	4 => 'staff_writer',
 	5 => 'freelancer',
 	6 => 'designer',
-	0 => 'none'
+	0 => 'privs_none'
 );
