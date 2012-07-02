@@ -101,10 +101,10 @@ $LastChangedRevision$
 											$description);
 
 				$help = !empty($help) ?
-					'<a href="?event=plugin'.a.'step=plugin_help'.a.'name='.urlencode($name).'">'.gTxt('help').'</a>' : '';
+					'<a class="plugin-help" href="?event=plugin'.a.'step=plugin_help'.a.'name='.urlencode($name).'">'.gTxt('help').'</a>' : '';
 
-				$plugin_prefs = ($flags & PLUGIN_HAS_PREFS) && $status ?
-					'<a href="?event=plugin_prefs.'.urlencode($name).'">'.gTxt('plugin_prefs').'</a>' : '';
+				$plugin_prefs = ($flags & PLUGIN_HAS_PREFS) ?
+					'<a class="plugin-prefs" href="?event=plugin_prefs.'.urlencode($name).'">'.gTxt('plugin_prefs').'</a>' : '';
 
 				$manage = array();
 
@@ -117,7 +117,7 @@ $LastChangedRevision$
 					$manage[] = $plugin_prefs;
 				}
 
-				$manage_items = ($manage) ? join(sp.'&#124;'.sp, $manage) : '-';
+				$manage_items = ($manage) ? join(tag(sp.'&#124;'.sp, 'span'), $manage) : '-';
 				$edit_url = eLink('plugin', 'plugin_edit', 'name', $name, $name);
 
 				echo tr(
@@ -141,7 +141,7 @@ $LastChangedRevision$
 
 					td($load_order, '', 'load-order').
 					td($manage_items, '', 'manage')
-				);
+				, $status ? ' class="active"' : '');
 
 				unset($name, $page, $deletelink);
 			}
@@ -155,6 +155,14 @@ $LastChangedRevision$
 			n.tInput().
 			n.'</form>'.
 			n.'</div>';
+
+			// Show/hide "Options" link by setting the appropriate class on the plugins TR
+			echo script_js(<<<EOS
+textpattern.Relay.register('txpAsyncHref.success', function(event, data) {
+	$(data.this).closest('tr').toggleClass('active');
+});
+EOS
+			);
 		}
 	}
 

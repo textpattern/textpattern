@@ -1149,3 +1149,11 @@ textarea#plugin-install {
 	margin: 0 auto;
 	max-width: 600px;
 }
+
+tr .manage span, tr .plugin-prefs {
+    visibility: hidden;
+}
+
+tr.active .manage span, tr.active .plugin-prefs {
+    visibility: visible;
+}
