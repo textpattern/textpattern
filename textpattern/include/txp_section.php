@@ -177,7 +177,7 @@ $LastChangedRevision$
 				n.tr(
 					n.hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
 					n.column_head('name', 'name', 'section', true, $switch_dir, $crit, $search_method, (('name' == $sort) ? "$dir " : '').'name').
-					n.column_head('title', 'title', 'section', true, $switch_dir, $crit, $search_method, (('title' == $sort) ? "$dir " : '').'name').
+					n.column_head('title', 'title', 'section', true, $switch_dir, $crit, $search_method, (('title' == $sort) ? "$dir " : '').'title').
 					n.column_head('page', 'page', 'section', true, $switch_dir, $crit, $search_method, (('page' == $sort) ? "$dir " : '').'page').
 					n.column_head('css', 'css', 'section', true, $switch_dir, $crit, $search_method, (('css' == $sort) ? "$dir " : '').'style').
 					n.column_head('on_front_page', 'on_frontpage', 'section', true, $switch_dir, $crit, $search_method, (('on_frontpage' == $sort) ? "$dir " : '').'section_detail frontpage').
@@ -216,7 +216,7 @@ $LastChangedRevision$
 					, '', 'multi-edit').
 
 					td('<a href="'.$edit_url.'" title="'.gTxt('edit').'">'.$sec_name.'</a>' .n. '<span class="section_detail">[<a href="'.hu.$sec_name.'">'.gTxt('view').'</a>]</span>', '', 'name').
-					td(txpspecialchars($sec_title), '', 'name').
+					td(txpspecialchars($sec_title), '', 'title').
 					td('<a href="'.$page_url.'" title="'.gTxt('edit').'">'.$sec_page.'</a>', '', 'page').
 					td('<a href="'.$style_url.'" title="'.gTxt('edit').'">'.$sec_css.'</a>', '', 'style').
 					td($is_default_section ? '-' : asyncHref($sec_on_frontpage ? gTxt('yes') : gTxt('no'), $parms + array('property' => 'on_frontpage')), '', 'section_detail frontpage').
@@ -311,31 +311,31 @@ EOS
 				hed($caption, 2).
 
 				(($is_default_section)
-				? hInput('section_name', 'default')
-				: inputLabel('section_name', fInput('text', 'section_name', $sec_name, '', '', '', INPUT_REGULAR, '', 'section_name'), 'section_name')
+				? hInput('name', 'default')
+				: inputLabel('section_name', fInput('text', 'name', $sec_name, '', '', '', INPUT_REGULAR, '', 'section_name'), 'section_name')
 				).
 
 				(($is_default_section)
 				? ''
-				: inputLabel('section_title', fInput('text', 'section_title', $sec_title, '', '', '', INPUT_REGULAR, '', 'section_title'), 'section_longtitle')
+				: inputLabel('section_title', fInput('text', 'title', $sec_title, '', '', '', INPUT_REGULAR, '', 'section_title'), 'section_longtitle')
 				).
 
 				inputLabel('section_page', selectInput('section_page', $all_pages, $sec_page, '', '', 'section_page'), 'uses_page', 'section_uses_page').
-				inputLabel('section_css', selectInput('section_css', $all_styles, $sec_css, '', '', 'section_css'), 'uses_style', 'section_uses_css').
+				inputLabel('section_css', selectInput('css', $all_styles, $sec_css, '', '', 'section_css'), 'uses_style', 'section_uses_css').
 
 				(($is_default_section)
 				? ''
-				: inputLabel('on_front_page', yesnoradio('on_front_page', $sec_on_frontpage, '', $sec_name), '', 'section_on_frontpage')
+				: inputLabel('on_front_page', yesnoradio('on_frontpage', $sec_on_frontpage, '', $sec_name), '', 'section_on_frontpage')
 				).
 
 				(($is_default_section)
 				? ''
-				: inputLabel('syndicate', yesnoradio('syndicate', $sec_in_rss, '', $sec_name), '', 'section_syndicate')
+				: inputLabel('syndicate', yesnoradio('in_rss', $sec_in_rss, '', $sec_name), '', 'section_syndicate')
 				).
 
 				(($is_default_section)
 				? ''
-				: inputLabel('include_in_search', yesnoradio('include_in_search', $sec_searchable, '', $sec_name), '', 'section_searchable')
+				: inputLabel('include_in_search', yesnoradio('searchable', $sec_searchable, '', $sec_name), '', 'section_searchable')
 				).
 
 				pluggable_ui('section_ui', 'extend_detail_form', '', $rs).
@@ -363,30 +363,30 @@ EOS
 	{
 		global $app_mode;
 
-		$in = array_map('assert_string', psa(array('section_name', 'section_title', 'old_name', 'section_page', 'section_css')));
-		if (empty($in['section_title']))
+		$in = array_map('assert_string', psa(array('name', 'title', 'old_name', 'section_page', 'css')));
+		if (empty($in['title']))
 		{
-			$in['section_title'] = $in['section_name'];
+			$in['title'] = $in['name'];
 		}
 
 		// Prevent non url chars on section names
 		include_once txpath.'/lib/classTextile.php';
 
 		$textile = new Textile();
-		$in['section_title'] = $textile->TextileThis($in['section_title'],1);
-		$in['section_name']  = strtolower(sanitizeForUrl($in['section_name']));
+		$in['title'] = $textile->TextileThis($in['title'],1);
+		$in['name']  = strtolower(sanitizeForUrl($in['name']));
 
 		extract($in);
 
 		$in = doSlash($in);
 		extract($in, EXTR_PREFIX_ALL, 'safe');
 
-		if ($section_name != strtolower($old_name))
+		if ($name != strtolower($old_name))
 		{
-			if (safe_field('name', 'txp_section', "name='$safe_section_name'"))
+			if (safe_field('name', 'txp_section', "name='$safe_name'"))
 			{
 				// Invalid input. Halt all further processing (e.g. plugin event handlers).
-				$message = array(gTxt('section_name_already_exists', array('{name}' => $section_name)), E_ERROR);
+				$message = array(gTxt('section_name_already_exists', array('{name}' => $name)), E_ERROR);
 //				modal_halt($message);
 				sec_section_list($message);
 				return;
@@ -394,42 +394,42 @@ EOS
 		}
 
 		$ok = false;
-		if ($section_name == 'default')
+		if ($name == 'default')
 		{
-			$ok = safe_update('txp_section', "page = '$safe_section_page', css = '$safe_section_css'", "name = 'default'");
+			$ok = safe_update('txp_section', "page = '$safe_section_page', css = '$safe_css'", "name = 'default'");
 		}
-		else if ($section_name)
+		else if ($name)
 		{
-			extract(array_map('assert_int', psa(array('on_front_page','syndicate','include_in_search'))));
+			extract(array_map('assert_int', psa(array('on_frontpage','in_rss','searchable'))));
 
 			if ($safe_old_name)
 			{
 				$ok = safe_update('txp_section', "
-					name         = '$safe_section_name',
-					title        = '$safe_section_title',
+					name         = '$safe_name',
+					title        = '$safe_title',
 					page         = '$safe_section_page',
-					css          = '$safe_section_css',
-					on_frontpage = $on_front_page,
-					in_rss       = $syndicate,
-					searchable   = $include_in_search
+					css          = '$safe_css',
+					on_frontpage = $on_frontpage,
+					in_rss       = $in_rss,
+					searchable   = $searchable
 					", "name = '$safe_old_name'");
 
 				// Manually maintain referential integrity
 				if ($ok)
 				{
-					$ok = safe_update('textpattern', "Section = '$safe_section_name'", "Section = '$safe_old_name'");
+					$ok = safe_update('textpattern', "Section = '$safe_name'", "Section = '$safe_old_name'");
 				}
 			}
 			else
 			{
 				$ok = safe_insert('txp_section', "
-					name         = '$safe_section_name',
-					title        = '$safe_section_title',
+					name         = '$safe_name',
+					title        = '$safe_title',
 					page         = '$safe_section_page',
-					css          = '$safe_section_css',
-					on_frontpage = $on_front_page,
-					in_rss       = $syndicate,
-					searchable   = $include_in_search");
+					css          = '$safe_css',
+					on_frontpage = $on_frontpage,
+					in_rss       = $in_rss,
+					searchable   = $searchable");
 			}
 		}
 
@@ -440,7 +440,7 @@ EOS
 
 		if ($ok)
 		{
-			sec_section_list(gTxt(($safe_old_name ? 'section_updated': 'section_created'), array('{name}' => $section_name)));
+			sec_section_list(gTxt(($safe_old_name ? 'section_updated': 'section_created'), array('{name}' => $name)));
 		}
 		else
 		{
@@ -578,7 +578,7 @@ EOS
 		$methods = array(
 			'changepage'        => array('label' => gTxt('uses_page'), 'html' => selectInput('uses_page', $all_pages, '', false)),
 			'changecss'         => array('label' => gTxt('uses_style'), 'html' => selectInput('css', $all_styles, '', false)),
-			'changeonfrontpage' => array('label' => gTxt('on_front_page'), 'html' => yesnoRadio('on_front_page', 1)),
+			'changeonfrontpage' => array('label' => gTxt('on_front_page'), 'html' => yesnoRadio('on_frontpage', 1)),
 			'changesyndicate'   => array('label' => gTxt('syndicate'), 'html' => yesnoRadio('in_rss', 1)),
 			'changesearchable'  => array('label' => gTxt('include_in_search'), 'html' => yesnoRadio('searchable', 1)),
 			'delete'            => gTxt('delete'),
@@ -627,7 +627,7 @@ EOS
 
 			case 'changeonfrontpage':
 				$key = 'on_frontpage';
-				$val = (int) ps('on_front_page');
+				$val = (int) ps('on_frontpage');
 				break;
 
 			case 'changesyndicate':
