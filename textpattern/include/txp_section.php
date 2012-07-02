@@ -99,17 +99,26 @@ $LastChangedRevision$
 
 		if ($search_method and $crit != '')
 		{
-			$crit_escaped = doSlash(str_replace(array('\\','%','_','\''), array('\\\\','\\%','\\_', '\\\''), $crit));
-
-			$critsql = array(
-				'name'         => "name like '%$crit_escaped%'",
-				'title'        => "title like '%$crit_escaped%'",
-				'page'         => "page like '%$crit_escaped%'",
-				'css'          => "css like '%$crit_escaped%'",
-				'in_rss'       => "in_rss = '$crit_escaped'",
-				'on_frontpage' => "on_frontpage = '$crit_escaped'",
-				'searchable'   => "searchable = '$crit_escaped'"
-			);
+			$verbatim = preg_match('/^"(.*)"$/', $crit, $m);
+			$crit_escaped = doSlash($verbatim ? $m[1] : str_replace(array('\\','%','_','\''), array('\\\\','\\%','\\_', '\\\''), $crit));
+			$critsql = $verbatim ?
+				array(
+					'name'         => "name = '$crit_escaped'",
+					'title'        => "title = '$crit_escaped'",
+					'page'         => "page = '$crit_escaped'",
+					'css'          => "css = '$crit_escaped'",
+					'in_rss'       => "in_rss = '$crit_escaped'",
+					'on_frontpage' => "on_frontpage = '$crit_escaped'",
+					'searchable'   => "searchable = '$crit_escaped'"
+				) : array(
+					'name'         => "name like '%$crit_escaped%'",
+					'title'        => "title like '%$crit_escaped%'",
+					'page'         => "page like '%$crit_escaped%'",
+					'css'          => "css like '%$crit_escaped%'",
+					'in_rss'       => "in_rss = '$crit_escaped'",
+					'on_frontpage' => "on_frontpage = '$crit_escaped'",
+					'searchable'   => "searchable = '$crit_escaped'"
+				);
 
 			if (array_key_exists($search_method, $critsql))
 			{
@@ -200,7 +209,7 @@ $LastChangedRevision$
 				$page_url = '?event=page'.a.'name='.$sec_page;
 				$style_url = '?event=css'.a.'name='.$sec_css;
 				$articles = ($sec_article_count > 0
-					? href($sec_article_count, '?event=list'.a.'search_method=section'.a.'crit='.txpspecialchars($sec_name),
+					? href($sec_article_count, '?event=list'.a.'search_method=section'.a.'crit=&quot;'.txpspecialchars($sec_name).'&quot;',
 						' title="'.gTxt('article_count', array('{num}' => $sec_article_count)).'"')
 					: ($is_default_section ? '' : '0'));
 //				$can_delete = ($sec_name != 'default' && $sec_article_count == 0);

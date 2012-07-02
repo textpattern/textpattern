@@ -94,16 +94,24 @@ $LastChangedRevision$
 
 		if ($search_method and $crit != '')
 		{
-			$crit_escaped = doSlash(str_replace(array('\\','%','_','\''), array('\\\\','\\%','\\_', '\\\''), $crit));
-
-			$critsql = array(
-				'ip'     => "ip like '%$crit_escaped%'",
-				'host'   => "host like '%$crit_escaped%'",
-				'page'   => "page like '%$crit_escaped%'",
-				'refer'  => "refer like '%$crit_escaped%'",
-				'method' => "method like '%$crit_escaped%'",
-				'status' => "status like '%$crit_escaped%'"
-			);
+			$verbatim = preg_match('/^"(.*)"$/', $crit, $m);
+			$crit_escaped = doSlash($verbatim ? $m[1] : str_replace(array('\\','%','_','\''), array('\\\\','\\%','\\_', '\\\''), $crit));
+			$critsql = $verbatim ?
+				array(
+					'ip'     => "ip = '$crit_escaped'",
+					'host'   => "host = '$crit_escaped'",
+					'page'   => "page = '$crit_escaped'",
+					'refer'  => "refer = '$crit_escaped'",
+					'method' => "method = '$crit_escaped'",
+					'status' => "status = '$crit_escaped'"
+				) : array(
+					'ip'     => "ip like '%$crit_escaped%'",
+					'host'   => "host like '%$crit_escaped%'",
+					'page'   => "page like '%$crit_escaped%'",
+					'refer'  => "refer like '%$crit_escaped%'",
+					'method' => "method like '%$crit_escaped%'",
+					'status' => "status like '%$crit_escaped%'"
+				);
 
 			if (array_key_exists($search_method, $critsql))
 			{

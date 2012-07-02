@@ -102,16 +102,24 @@ $LastChangedRevision$
 
 		if ($search_method and $crit != '')
 		{
-			$crit_escaped = doSlash(str_replace(array('\\','%','_','\''), array('\\\\','\\%','\\_', '\\\''), $crit));
-
-			$critsql = array(
-				'id'          => "ID in ('" .join("','", do_list($crit_escaped)). "')",
-				'name'        => "linkname like '%$crit_escaped%'",
-				'description' => "description like '%$crit_escaped%'",
-				'url'         => "url like '%$crit_escaped%'",
-				'category'    => "category like '%$crit_escaped%'",
-				'author'      => "author like '%$crit_escaped%'"
-			);
+			$verbatim = preg_match('/^"(.*)"$/', $crit, $m);
+			$crit_escaped = doSlash($verbatim ? $m[1] : str_replace(array('\\','%','_','\''), array('\\\\','\\%','\\_', '\\\''), $crit));
+			$critsql = $verbatim ?
+				array(
+					'id'          => "ID in ('" .join("','", do_list($crit_escaped)). "')",
+					'name'        => "linkname = '$crit_escaped'",
+					'description' => "description = '$crit_escaped'",
+					'url'         => "url = '$crit_escaped'",
+					'category'    => "category = '$crit_escaped'",
+					'author'      => "author = '$crit_escaped'"
+				) : array(
+					'id'          => "ID in ('" .join("','", do_list($crit_escaped)). "')",
+					'name'        => "linkname like '%$crit_escaped%'",
+					'description' => "description like '%$crit_escaped%'",
+					'url'         => "url like '%$crit_escaped%'",
+					'category'    => "category like '%$crit_escaped%'",
+					'author'      => "author like '%$crit_escaped%'"
+				);
 
 			if (array_key_exists($search_method, $critsql))
 			{

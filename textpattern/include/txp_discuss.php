@@ -152,17 +152,26 @@ $LastChangedRevision$
 
 		if ($search_method and $crit != '')
 		{
-			$crit_escaped = doSlash(str_replace(array('\\','%','_','\''), array('\\\\','\\%','\\_', '\\\''), $crit));
-
-			$critsql = array(
-				'id'      => "discussid = '$crit_escaped'",
-				'parent'  => "parentid = '$crit_escaped'".(intval($crit_escaped) ? '' : " OR title like '%$crit_escaped%'"),
-				'name'    => "name like '%$crit_escaped%'",
-				'message' => "message like '%$crit_escaped%'",
-				'email'   => "email like '%$crit_escaped%'",
-				'website' => "web like '%$crit_escaped%'",
-				'ip'      => "ip like '%$crit_escaped%'",
-			);
+			$verbatim = preg_match('/^"(.*)"$/', $crit, $m);
+			$crit_escaped = doSlash($verbatim ? $m[1] : str_replace(array('\\','%','_','\''), array('\\\\','\\%','\\_', '\\\''), $crit));
+			$critsql = $verbatim ?
+				array(
+					'id'      => "discussid = '$crit_escaped'",
+					'parent'  => "parentid = '$crit_escaped'".(intval($crit_escaped) ? '' : " OR title = '$crit_escaped'"),
+					'name'    => "name = '$crit_escaped'",
+					'message' => "message = '$crit_escaped'",
+					'email'   => "email = '$crit_escaped'",
+					'website' => "web = '$crit_escaped'",
+					'ip'      => "ip = '$crit_escaped'",
+				) : array(
+					'id'      => "discussid = '$crit_escaped'",
+					'parent'  => "parentid = '$crit_escaped'".(intval($crit_escaped) ? '' : " OR title like '%$crit_escaped%'"),
+					'name'    => "name like '%$crit_escaped%'",
+					'message' => "message like '%$crit_escaped%'",
+					'email'   => "email like '%$crit_escaped%'",
+					'website' => "web like '%$crit_escaped%'",
+					'ip'      => "ip like '%$crit_escaped%'",
+				);
 
 			if (array_key_exists($search_method, $critsql))
 			{

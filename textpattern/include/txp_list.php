@@ -115,19 +115,32 @@ $LastChangedRevision$
 
 		if ($search_method and $crit != '')
 		{
-			$crit_escaped = doSlash(str_replace(array('\\','%','_','\''), array('\\\\','\\%','\\_', '\\\''), $crit));
-			$critsql = array(
-				'id'         => "ID in ('" .join("','", do_list($crit_escaped)). "')",
-				'title_body_excerpt' => "Title like '%$crit_escaped%' or Body like '%$crit_escaped%' or Excerpt like '%$crit_escaped%'",
-				'section'    => "Section like '%$crit_escaped%'",
-				'keywords'   => "FIND_IN_SET('".$crit_escaped."',Keywords)",
-				'categories' => "Category1 like '%$crit_escaped%' or Category2 like '%$crit_escaped%'",
-				'status'     => "Status = '".(@$sesutats[gTxt($crit_escaped)])."'",
-				'author'     => "AuthorID like '%$crit_escaped%'",
-				'article_image' => "Image in ('" .join("','", do_list($crit_escaped)). "')",
-				'posted'     => "Posted like '$crit_escaped%'",
-				'lastmod'    => "LastMod like '$crit_escaped%'"
-			);
+			$verbatim = preg_match('/^"(.*)"$/', $crit, $m);
+			$crit_escaped = doSlash($verbatim ? $m[1] : str_replace(array('\\','%','_','\''), array('\\\\','\\%','\\_', '\\\''), $crit));
+			$critsql = $verbatim ?
+				array(
+					'id'         => "ID in ('" .join("','", do_list($crit_escaped)). "')",
+					'title_body_excerpt' => "Title = '$crit_escaped' or Body = '$crit_escaped' or Excerpt = '$crit_escaped'",
+					'section'    => "Section = '$crit_escaped'",
+					'keywords'   => "FIND_IN_SET('".$crit_escaped."',Keywords)",
+					'categories' => "Category1 = '$crit_escaped' or Category2 = '$crit_escaped'",
+					'status'     => "Status = '".(@$sesutats[gTxt($crit_escaped)])."'",
+					'author'     => "AuthorID = '$crit_escaped'",
+					'article_image' => "Image in ('" .join("','", do_list($crit_escaped)). "')",
+					'posted'     => "Posted = '$crit_escaped'",
+					'lastmod'    => "LastMod = '$crit_escaped'"
+				) : array(
+					'id'         => "ID in ('" .join("','", do_list($crit_escaped)). "')",
+					'title_body_excerpt' => "Title like '%$crit_escaped%' or Body like '%$crit_escaped%' or Excerpt like '%$crit_escaped%'",
+					'section'    => "Section like '%$crit_escaped%'",
+					'keywords'   => "FIND_IN_SET('".$crit_escaped."',Keywords)",
+					'categories' => "Category1 like '%$crit_escaped%' or Category2 like '%$crit_escaped%'",
+					'status'     => "Status = '".(@$sesutats[gTxt($crit_escaped)])."'",
+					'author'     => "AuthorID like '%$crit_escaped%'",
+					'article_image' => "Image in ('" .join("','", do_list($crit_escaped)). "')",
+					'posted'     => "Posted like '$crit_escaped%'",
+					'lastmod'    => "LastMod like '$crit_escaped%'"
+				);
 
 			if (array_key_exists($search_method, $critsql))
 			{
