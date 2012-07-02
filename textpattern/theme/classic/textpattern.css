@@ -320,36 +320,25 @@ select[multiple] {
 
 select[size="0"],
 select[size="1"] {
-  height: 1.8em;
-  /* IE7 */
-  *height: auto;
-}
-
-optgroup {
-  font-family: Arial, Helvetica, sans-serif;
-  font-style: normal;
-  font-weight: normal;
-  color: #333333;
-}
-optgroup::-moz-focus-inner {
-  border: 0;
-  padding: 0;
+	height: 2.09090909090909em; /* 23px / 11px */
+	/* IE7 */
+	*height: auto;
 }
 
 /* fixes for Safari, Chrome */
 @media (-webkit-min-device-pixel-ratio: 0) {
-  select,
-  select[size="0"],
-  select[size="1"] {
-    background: #f5f5f5 url("select_arrow.svg") no-repeat right center;
-    padding-right: 16px;
-  }
-  select[size],
-  select[multiple],
-  select[multiple][size] {
-    background-image: none;
-    padding-right: .36363636363636em;
-  }
+	select,
+	select[size="0"],
+	select[size="1"] {
+		background: #f5f5f5 url("select_arrow.svg") no-repeat right center;
+		padding-right: 16px;
+	}
+	select[size],
+	select[multiple],
+	select[multiple][size] {
+		background-image: none;
+		padding-right: .36363636363636em;
+	}
 }
 
 
@@ -1070,11 +1059,11 @@ input.exp_year {
 }
 
 .thumbnail-edit form {
- 	vertical-align: top;
+	vertical-align: top;
  	display: inline-block;
 	/* display and zoom IE7 fix for display:inline-block */
- 	*display: inline;
- 	*zoom: 1;
+	*display: inline;
+	*zoom: 1;
 }
 
 
