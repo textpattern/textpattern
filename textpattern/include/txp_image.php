@@ -559,10 +559,10 @@ $LastChangedRevision$
 
 				'<div class="image-detail">',
 					form(
-						inputLabel('image_name', fInput('text', 'image_name', $name, '', '', '', INPUT_REGULAR, '', 'image_name'), 'image_name').n.
-						inputLabel('image_category', treeSelectInput('image_category', $all_image_cats, $category, 'image_category'), 'image_category').n.
-						inputLabel('image_alt_text', fInput('text', 'image_alt_text', $alt, '', '', '', INPUT_REGULAR, '', 'image_alt_text'), 'alt_text').n.
-						inputLabel('image_caption', '<textarea id="image_caption" name="image_caption" rows="'.INPUT_XSMALL.'" cols="'.INPUT_LARGE.'">'.$caption.'</textarea>', 'caption', '', '', '').n.
+						inputLabel('image_name', fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'image_name'), 'image_name').n.
+						inputLabel('image_category', treeSelectInput('category', $all_image_cats, $category, 'image_category'), 'image_category').n.
+						inputLabel('image_alt_text', fInput('text', 'alt', $alt, '', '', '', INPUT_REGULAR, '', 'image_alt_text'), 'alt_text').n.
+						inputLabel('image_caption', '<textarea id="image_caption" name="caption" rows="'.INPUT_XSMALL.'" cols="'.INPUT_LARGE.'">'.$caption.'</textarea>', 'caption', '', '', '').n.
 						pluggable_ui('image_ui', 'extend_detail_form', '', $rs).n.
 						graf(fInput('submit', '', gTxt('save'), 'publish')).
 						n.hInput('id', $id).
@@ -697,7 +697,7 @@ $LastChangedRevision$
 	{
 		global $txp_user;
 
-		$varray = array_map('assert_string', gpsa(array('id', 'image_name', 'image_category', 'image_caption', 'image_alt_text')));
+		$varray = array_map('assert_string', gpsa(array('id', 'name', 'category', 'caption', 'alt')));
 		extract(doSlash($varray));
 		$id = $varray['id'] = assert_int($id);
 
@@ -709,21 +709,21 @@ $LastChangedRevision$
 		}
 
 		$constraints = array(
-			'category' => new CategoryConstraint(gps('image_category'), array('type' => 'image')),
+			'category' => new CategoryConstraint(gps('category'), array('type' => 'image')),
 		);
 		callback_event_ref('image_ui', 'validate_save', 0, $varray, $constraints);
 		$validator = new Validator($constraints);
 
 		if ($validator->validate() && safe_update(
 			"txp_image",
-			"name    = '$image_name',
-			category = '$image_category',
-			alt      = '$image_alt_text',
-			caption  = '$image_caption'",
+			"name    = '$name',
+			category = '$category',
+			alt      = '$alt',
+			caption  = '$caption'",
 			"id = $id"
 		))
 		{
-			$message = gTxt('image_updated', array('{name}' => doStrip($image_name)));
+			$message = gTxt('image_updated', array('{name}' => doStrip($name)));
 			update_lastmod();
 		}
 		else
