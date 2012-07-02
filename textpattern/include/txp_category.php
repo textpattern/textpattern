@@ -112,7 +112,7 @@ EOS
 
 		if ($rs)
 		{
-			return treeSelectInput('category_parent', $rs, $name, 'category_parent');
+			return treeSelectInput('parent', $rs, $name, 'category_parent');
 		}
 
 		return gTxt('no_other_categories_exist');
@@ -475,9 +475,9 @@ EOS
 			extract($row);
 			$out = '<div class="txp-edit">'.n.
 				hed('edit_category', 2).n.
-				inputLabel('category_name', fInput('text', 'category_name', $name, '', '', '', INPUT_REGULAR, '', 'category_name'), $evname.'_category_name').n.
+				inputLabel('category_name', fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'category_name'), $evname.'_category_name').n.
 				inputLabel('category_parent', cat_parent_pop($parent,$evname,$id), 'parent').n.
-				inputLabel('category_title', fInput('text', 'category_title', $title, '', '', '', INPUT_REGULAR, '', 'category_title'), $evname.'_category_title').n.
+				inputLabel('category_title', fInput('text', 'title', $title, '', '', '', INPUT_REGULAR, '', 'category_title'), $evname.'_category_title').n.
 				pluggable_ui('category_ui', 'extend_detail_form', '', $row).n.
 				hInput('id',$id).
 				graf(fInput('submit', '', gTxt('save'), 'publish')).
@@ -499,10 +499,10 @@ EOS
 	{
 		global $txpcfg;
 
-		extract(doSlash(array_map('assert_string', psa(array('id', 'category_name', 'old_name', 'category_parent', 'category_title')))));
+		extract(doSlash(array_map('assert_string', psa(array('id', 'name', 'old_name', 'parent', 'title')))));
 		$id = assert_int($id);
 
-		$name = sanitizeForUrl($category_name);
+		$name = sanitizeForUrl($name);
 
 		// make sure the name is valid
 		if (!$name)
@@ -522,10 +522,11 @@ EOS
 			return cat_category_list($message);
 		}
 
-		$parent = ($category_parent) ? $category_parent : 'root';
+		//TODO: validate parent?
+		$parent = ($parent) ? $parent : 'root';
 
 		$message = array(gTxt('category_save_failed'), E_ERROR);
-		if (safe_update('txp_category', "name = '$name', parent = '$parent', title = '$category_title'", "id = $id") &&
+		if (safe_update('txp_category', "name = '$name', parent = '$parent', title = '$title'", "id = $id") &&
 			safe_update('txp_category', "parent = '$name'", "parent = '$old_name'"))
 		{
 			rebuild_tree_full($event);
