@@ -617,7 +617,7 @@ $LastChangedRevision$
 		");
 
 		if ($rs) {
-			$GLOBALS['ID'] = mysql_insert_id( );
+			$GLOBALS['ID'] = $rs;
 			return $GLOBALS['ID'];
 		}
 

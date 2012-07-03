@@ -960,7 +960,7 @@ $LastChangedRevision$
 				$rs = safe_insert('txp_image', $q);
 				if ($rs)
 				{
-					$id = $GLOBALS['ID'] = mysql_insert_id();
+					$id = $GLOBALS['ID'] = $rs;
 				}
 			}
 			else

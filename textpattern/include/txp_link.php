@@ -408,7 +408,9 @@ $LastChangedRevision$
 					description = '$description',
 					author		= '".doSlash($txp_user)."'"
 				);
-				$GLOBALS['ID'] = $_POST['id'] = mysql_insert_id( );
+				if ($ok) {
+					$GLOBALS['ID'] = $_POST['id'] = $ok;
+				}
 			}
 
 			if ($ok) {

@@ -123,7 +123,7 @@ function import_blogger_item($item, $section, $status, $invite) {
 
 
 	if (!safe_field("ID", "textpattern", "Title = '".doSlash($title)."' AND Posted = '".doSlash($date)."'")) {
-		safe_insert('textpattern',
+		$ok = safe_insert('textpattern',
 			"Posted='".doSlash($date)."',".
 			"LastMod='".doSlash($date)."',".
 			"AuthorID='".doSlash($item['AUTHOR'])."',".
@@ -139,28 +139,30 @@ function import_blogger_item($item, $section, $status, $invite) {
 			"url_title='".doSlash($url_title)."'");
 
 
-		$parentid = mysql_insert_id();
+		if ($ok) {
+			$parentid = $ok;
 
-		if (!empty($item['COMMENT'])) {
-			foreach ($item['COMMENT'] as $comment) {
-				$comment_date = date('Y-m-d H:i:s', strtotime(@$comment['DATE']));
-				$comment_content = $textile->TextileThis(nl2br(@$comment['content']),1);
-				//Check for Comments authors
-				if (preg_match('/<a href="(.*)">(.*)<\/a>/', @$comment['AUTHOR'], $match)) {
-					@$comment['URL'] = $match[1];
-					@$comment['AUTHOR'] = $match[2];
-				}
-				if (!safe_field("discussid","txp_discuss","posted = '".doSlash($comment_date)."' AND message = '".doSlash($comment_content)."'")) {
-					safe_insert('txp_discuss',
-						"parentid='".doSlash($parentid)."',".
-						//blogger places the link to user profile page as comment author
-						"name='".doSlash(strip_tags(@$comment['AUTHOR']))."',".
-//						"email='".doSlash(@$item['EMAIL'])."',".
-						"web='".doSlash(@$comment['URL'])."',".
-//						"ip='".doSlash(@$item['IP'])."',".
-						"posted='".doSlash($comment_date)."',".
-						"message='".doSlash($comment_content)."',".
-						"visible='1'");
+			if (!empty($item['COMMENT'])) {
+				foreach ($item['COMMENT'] as $comment) {
+					$comment_date = date('Y-m-d H:i:s', strtotime(@$comment['DATE']));
+					$comment_content = $textile->TextileThis(nl2br(@$comment['content']),1);
+					//Check for Comments authors
+					if (preg_match('/<a href="(.*)">(.*)<\/a>/', @$comment['AUTHOR'], $match)) {
+						@$comment['URL'] = $match[1];
+						@$comment['AUTHOR'] = $match[2];
+					}
+					if (!safe_field("discussid","txp_discuss","posted = '".doSlash($comment_date)."' AND message = '".doSlash($comment_content)."'")) {
+						safe_insert('txp_discuss',
+							"parentid='".doSlash($parentid)."',".
+							//blogger places the link to user profile page as comment author
+							"name='".doSlash(strip_tags(@$comment['AUTHOR']))."',".
+	//						"email='".doSlash(@$item['EMAIL'])."',".
+							"web='".doSlash(@$comment['URL'])."',".
+	//						"ip='".doSlash(@$item['IP'])."',".
+							"posted='".doSlash($comment_date)."',".
+							"message='".doSlash($comment_content)."',".
+							"visible='1'");
+					}
 				}
 			}
 		}

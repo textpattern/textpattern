@@ -151,7 +151,7 @@ if (!empty($event) and $event == 'article') {
 
 			$rs = compact($vars);
 			if (article_validate($rs, $msg)) {
-				if (safe_insert(
+				$ok = safe_insert(
 				   "textpattern",
 				   "Title           = '$Title',
 					Body            = '$Body',
@@ -178,9 +178,11 @@ if (!empty($event) and $event == 'article') {
 					.(($cfs) ? $cfq.',' : '').
 					"uid             = '".md5(uniqid(rand(),true))."',
 					feed_time       = now()"
-				)) {
+				);
 
-					$GLOBALS['ID'] = mysql_insert_id();
+				if ($ok) {
+
+					$GLOBALS['ID'] = $ok;
 
 					if ($Status>=4) {
 						do_pings();
