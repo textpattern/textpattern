@@ -1875,6 +1875,10 @@ $LastChangedRevision$
 			'msgstyle'     => '',
 			'show_preview' => empty($has_comments_preview),
 			'wraptag'      => '',
+			'previewlabel'	=> gTxt('preview'),
+			'submitlabel'	=> gTxt('submit'),
+			'rememberlabel'	=> gTxt('remember'),
+			'forgetlabel'	=> gTxt('forget')
 		), $atts));
 
 		assert_article();

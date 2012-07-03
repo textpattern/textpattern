@@ -65,6 +65,10 @@ $LastChangedRevision$
 			'msgcols'   => '25',
 			'msgstyle'  => '',
 			'form'   => 'comment_form',
+			'previewlabel'	=> gTxt('preview'),
+			'submitlabel'	=> gTxt('submit'),
+			'rememberlabel'	=> gTxt('remember'),
+			'forgetlabel'	=> gTxt('forget')
 		),$atts, 0));
 
 		$namewarn = false;
@@ -158,11 +162,11 @@ $LastChangedRevision$
 			'>'.txpspecialchars(substr(trim($message), 0, 65535)).'</textarea>';
 
 		// by default, the submit button is visible but disabled
-		$comment_submit_button = fInput('submit', 'submit', gTxt('submit'), 'button disabled', '', '', '', '', 'txpCommentSubmit', true);
+		$comment_submit_button = fInput('submit', 'submit', $submitlabel, 'button disabled', '', '', '', '', 'txpCommentSubmit', true);
 
 		// if all fields checkout, the submit button is active/clickable
 		if ($preview) {
-			$comment_submit_button = fInput('submit', 'submit', gTxt('submit'), 'button', '', '', '', '', 'txpCommentSubmit', false);
+			$comment_submit_button = fInput('submit', 'submit', $submitlabel, 'button', '', '', '', '', 'txpCommentSubmit', false);
 		}
 
 		if ($checkbox_type == 'forget')
@@ -173,7 +177,7 @@ $LastChangedRevision$
 				destroyCookies();
 			}
 
-			$checkbox = checkbox('forget', 1, $forget, '', 'forget').' '.tag(gTxt('forget'), 'label', ' for="forget"');
+			$checkbox = checkbox('forget', 1, $forget, '', 'forget').' '.tag(txpspecialchars($forgetlabel), 'label', ' for="forget"');
 		}
 
 		else
@@ -184,7 +188,7 @@ $LastChangedRevision$
 				destroyCookies();
 			}
 
-			$checkbox = checkbox('remember', 1, $remember, '', 'remember').' '.tag(gTxt('remember'), 'label', ' for="remember"');
+			$checkbox = checkbox('remember', 1, $remember, '', 'remember').' '.tag(txpspecialchars($rememberlabel), 'label', ' for="remember"');
 		}
 
 		$checkbox .= ' '.hInput('checkbox_type', $checkbox_type);
@@ -195,7 +199,7 @@ $LastChangedRevision$
 			'comment_web_input'			=> fInput($h5 ? 'text' /* TODO: type = 'url' once browsers are less strict */ : 'text', 'web', txpspecialchars($web)	, 'comment_web_input', '', '', $isize, '', 'web', false, false),
 			'comment_message_input' 	=> $textarea.'<!-- plugin-place-holder -->',
 			'comment_remember'			=> $checkbox,
-			'comment_preview'			=> fInput('submit', 'preview', gTxt('preview'), 'button', '', '', '', '', 'txpCommentPreview', false),
+			'comment_preview'			=> fInput('submit', 'preview', $previewlabel, 'button', '', '', '', '', 'txpCommentPreview', false),
 			'comment_submit'			=> $comment_submit_button
 		);
 
