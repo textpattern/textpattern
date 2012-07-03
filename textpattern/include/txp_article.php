@@ -749,10 +749,10 @@ if (!empty($event) and $event == 'article') {
 			echo pluggable_ui('article_ui', 'sort_display',
 				n.n.tag(
 					n.'<legend>'.gTxt('sort_display').'</legend>'.
-					//-- category selects -----------
-					$partials['categories']['html'].
 					//-- section select --------------
 					$partials['section']['html'].
+					//-- category selects -----------
+					$partials['categories']['html'].
 					n,
 					'fieldset', ' id="write-sort"'),
 				$rs);
