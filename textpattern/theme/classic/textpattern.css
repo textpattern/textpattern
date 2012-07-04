@@ -3,18 +3,22 @@
 
 .clearfix:before,
 .txp-edit p:before,
+.txp-login p:before,
 .clearfix:after,
-.txp-edit p:after {
+.txp-edit p:after,
+.txp-login p:after {
 	content: "";
 	display: table;
 }
 .clearfix:after, 
-.txp-edit p:after {
+.txp-edit p:after,
+.txp-login p:after {
 	clear: both;
 }
 /* zoom IE7 fix */
 .clearfix,
-.txp-edit p {
+.txp-edit p,
+.txp-login p {
 	*zoom: 1;
 }
 
@@ -573,63 +577,62 @@ tr.spam td {
 }
 
 
-/* Edit panes
+/* Edit and login panes
    ========================================================================== */
 
-.txp-edit {
+.txp-edit,
+.txp-login {
 	margin: 0 auto 1em;
 	border: 1px solid #e5e5e5;
 	padding: 1em 1em 1px 1em;
+}
+
+.txp-edit {
 	width: 40em;
 }
 
-.edit-label {
+.txp-login {
+	width: 32em;
+}
+
+.edit-label,
+.login-label {
 	display: inline-block;
 	float: left;
+	/* display and zoom IE7 fix for display:inline-block */
+	*display: inline;
+	*zoom: 1;
+}
+
+.edit-label {
 	width: 45%;
+}
+
+.login-label {
+	width: 31%;
+}
+
+.edit-value,
+.login-value {
+	display: inline-block;
+	float: right;
 	/* display and zoom IE7 fix for display:inline-block */
 	*display: inline;
 	*zoom: 1;
 }
 
 .edit-value {
-	display: inline-block;
-	float: right;
 	width: 55%;
-	/* display and zoom IE7 fix for display:inline-block */
-	*display: inline;
-	*zoom: 1;
 }
 
-.edit-value input {
+.login-value {
+	width: 69%;
+}
+
+.edit-value input,
+.login-value input {
 	margin-top: -.27272727272727em;
 	margin-bottom: -.27272727272727em;
-}
-
-
-/* Login panes
-   ========================================================================== */
-
-.login-pane {
-	margin: 0 auto 1.5em;
-	border: 1px solid #e5e5e5;
-	width: 33em;
-}
-
-.login-pane > tbody > tr > td {
-	padding: .3em;
-}
-
-.login-pane > tbody > tr > td:first-child {
-	padding-left: 1em;
-}
-
-.login-pane > tbody > tr > td:last-child {
-	padding-right: 1em;
-}
-
-.login-pane > tbody > tr > td.cell-label {
-	width: 29.5%;
 }
 
 

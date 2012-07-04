@@ -98,7 +98,7 @@ function doAuth()
 
 		include txpath.'/lib/txplib_head.php';
 
-		pagetop(gTxt('login'));
+		pagetop(gTxt('login'), $message);
 
 		$stay  = (cs('txp_login') and !gps('logout') ? 1 : 0);
 		$reset = gps('reset');
@@ -107,48 +107,42 @@ function doAuth()
 
 		echo n.'<div id="login_container" class="txp-container">';
 		echo form(
-			startTable('', '', 'login-pane').
-				n.n.tr(
-					n.td().
-					td(graf($message))
-				).
+			'<div class="txp-login">'.
+			n.hed(gTxt($reset ? 'password_reset' : 'login_to_textpattern'), 2).
 
-				n.n.tr(
-					n.fLabelCell('name', '', 'name').
-					n.fInputCell('p_userid', $name, '', '', '', 'name')
-				).
+			n.graf(
+				'<span class="login-label"><label for="login_name">'.gTxt('name').'</label></span>'.
+				n.'<span class="login-value">'.fInput('text', 'p_userid', $name, '', '', '', INPUT_REGULAR, '', 'login_name').'</span>'
+			, ' class="login-name"').
 
-				($reset ? '' :
-					n.n.tr(
-						n.fLabelCell('password', '', 'password').
-						n.td(
-						  	fInput('password', 'p_password', '', '', '', '', '', '', 'password')
-						)
-					)
-				).
+			($reset
+				? ''
+				: n.graf(
+					'<span class="login-label"><label for="login_password">'.gTxt('password').'</label></span>'.
+					n.'<span class="login-value">'.fInput('password', 'p_password', '', '', '', '', INPUT_REGULAR, '', 'login_password').'</span>'
+				, ' class="login-password"')
+			).
 
-				($reset ? '' :
-					n.n.tr(
-						n.td().
-						td(
-							graf(checkbox('stay', 1, $stay, '', 'stay').'<label for="stay">'.gTxt('stay_logged_in').'</label>'.
-							sp.popHelp('remember_login'))
-						)
-					)
-				).
+			($reset
+				? ''
+				: graf(
+					checkbox('stay', 1, $stay, '', 'login_stay').n.'<label for="login_stay">'.gTxt('stay_logged_in').'</label>'.sp.popHelp('remember_login')
+					, ' class="login-stay"')
+			).
 
-				n.n.tr(
-					n.td().
-					td(
-						($reset ? hInput('p_reset', 1) : '').
-						fInput('submit', '', gTxt($reset ? 'password_reset_button' : 'log_in_button'), 'publish', '', '', '').
-						($reset ? graf('<a href="index.php">'.gTxt('login_to_textpattern').'</a>') : graf('<a href="?reset=1">'.gTxt('password_forgotten').'</a>'))
-					)
-				).
+			($reset ? n.hInput('p_reset', 1) : '').
 
-			endTable().
-
-			(gps('event') ? eInput(gps('event')) : '')
+			n.graf(
+				fInput('submit', '', gTxt($reset ? 'password_reset_button' : 'log_in_button'), 'publish')
+			).
+			n.(
+				($reset
+					? graf('<a href="index.php">'.gTxt('back_to_textpattern').'</a>', ' class="login-return"')
+					: graf('<a href="?reset=1">'.gTxt('password_forgotten').'</a>', ' class="login-forgot"')
+				)
+			).
+			(gps('event') ? eInput(gps('event')) : '').
+			'</div>'
 		, '', '', 'post', '', '', 'login_form').'</div>'.
 
 
@@ -156,13 +150,13 @@ function doAuth()
 // Focus on either username or password when empty
 $(document).ready(
 	function() {
-		var has_name = $("#name").val().length;
-		var password_box = $("#password").val();
+		var has_name = $("#login_name").val().length;
+		var password_box = $("#login_password").val();
 		var has_password = (password_box) ? password_box.length : 0;
 		if (!has_name) {
-			$("#name").focus();
+			$("#login_name").focus();
 		} else if (!has_password) {
-		 	$("#password").focus();
+		 	$("#login_password").focus();
 		}
 	}
 );
@@ -182,7 +176,7 @@ EOSCR
 		$p_reset    = ps('p_reset');
 		$stay       = ps('stay');
 		$logout     = gps('logout');
-		$message    = gTxt('login_to_textpattern');
+		$message    = '';
 		$pub_path   = preg_replace('|//$|','/', rhu.'/');
 
 		if (cs('txp_login') and strpos(cs('txp_login'), ','))
@@ -229,7 +223,7 @@ EOSCR
 			{
 				setcookie('txp_login', $c_userid, time()+3600*24*365);
 				setcookie('txp_login_public', '', time()-3600, $pub_path);
-				$message = gTxt('bad_cookie');
+				$message = array(gTxt('bad_cookie'), E_ERROR);
 			}
 
 		}
@@ -272,7 +266,7 @@ EOSCR
 			else
 			{
 				sleep(3);
-				$message = gTxt('could_not_log_in');
+				$message = array(gTxt('could_not_log_in'), E_ERROR);
 			}
 		}
 		elseif ($p_reset) // reset request
@@ -285,7 +279,7 @@ EOSCR
 		}
 		elseif (gps('reset'))
 		{
-			$message = gTxt('password_reset');
+			$message = '';
 		}
 		elseif (gps('confirm'))
 		{
