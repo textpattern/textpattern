@@ -40,13 +40,14 @@ $LastChangedRevision$
  * @param	string	$crit	Search criterion ['']
  * @param	string	$method	Search method ['']
  * @param	string	$class	HTML "class" attribute applied to the resulting element ['']
+ * @param	string	$step	Step name
  * @return 	string	HTML
  */
 
-	function column_head($value, $sort = '', $event = '', $is_link = '', $dir = '', $crit = '', $method = '', $class = '')
+	function column_head($value, $sort = '', $event = '', $is_link = '', $dir = '', $crit = '', $method = '', $class = '', $step = 'list')
 	{
 		return column_multi_head( array(
-					array ('value' => $value, 'sort' => $sort, 'event' => $event, 'is_link' => $is_link,
+					array ('value' => $value, 'sort' => $sort, 'event' => $event, 'step' => $step, 'is_link' => $is_link,
 						   'dir' => $dir, 'crit' => $crit, 'method' => $method)
 				), $class);
 	}
@@ -79,6 +80,7 @@ $LastChangedRevision$
 				'value'   => '',
 				'sort'    => '',
 				'event'   => '',
+				'step'    => 'list',
 				'is_link' => '',
 				'dir'     => '',
 				'crit'    => '',
@@ -89,7 +91,7 @@ $LastChangedRevision$
 
 			if ($is_link)
 			{
-				$o .= '<a href="index.php?step=list';
+				$o .= '<a href="index.php?step='.$step;
 
 				$o .= ($event) ? a."event=$event" : '';
 				$o .= ($sort) ? a."sort=$sort" : '';
@@ -298,11 +300,12 @@ $LastChangedRevision$
  * @param	string	$dir	Sort direction, either "asc" or "desc" ['']
  * @param	string	$crit	Search criterion ['']
  * @param	string	$search_method	Search method ['']
+ * @param	string	$step	Step
  */
 
-	function PrevNextLink($event, $page, $label, $type, $sort = '', $dir = '', $crit = '', $search_method = '')
+	function PrevNextLink($event, $page, $label, $type, $sort = '', $dir = '', $crit = '', $search_method = '', $step = 'list')
 	{
-		return '<a href="?event='.$event.a.'step=list'.a.'page='.$page.
+		return '<a href="?event='.$event.a.'step='.$step.a.'page='.$page.
 			($sort ? a.'sort='.$sort : '').
 			($dir ? a.'dir='.$dir : '').
 			(($crit != '') ? a.'crit='.$crit : '').
@@ -325,10 +328,11 @@ $LastChangedRevision$
  * @param	string	$search_method	Search method
  * @param	integer	$total	Total search term hit count [0]
  * @param	integer	$limit	First visible search term hit number [0]
+ * @param	string	$step	Step
  * @return	string	HTML
  */
 
-	function nav_form($event, $page, $numPages, $sort, $dir, $crit, $search_method, $total=0, $limit=0)
+	function nav_form($event, $page, $numPages, $sort, $dir, $crit, $search_method, $total=0, $limit=0, $step='list')
 	{
 		global $theme;
 		if ($crit != '' && $total > 1)
@@ -364,7 +368,7 @@ $LastChangedRevision$
 			$nav = array();
 
 			$nav[] = ($page > 1) ?
-				PrevNextLink($event, $page - 1, gTxt('prev'), 'prev', $sort, $dir, $crit, $search_method).sp :
+				PrevNextLink($event, $page - 1, gTxt('prev'), 'prev', $sort, $dir, $crit, $search_method, $step).sp :
 				tag('&#8592;'.sp.gTxt('prev'), 'span', ' class="navlink-disabled"').sp;
 
 			$nav[] = '<select name="page" onchange="submit(this.form);">';
@@ -373,12 +377,13 @@ $LastChangedRevision$
 			$nav[] = '<noscript> <input type="submit" value="'.gTxt('go').'" /></noscript>';
 
 			$nav[] = ($page != $numPages) ?
-				sp.PrevNextLink($event, $page + 1, gTxt('next'), 'next', $sort, $dir, $crit, $search_method) :
+				sp.PrevNextLink($event, $page + 1, gTxt('next'), 'next', $sort, $dir, $crit, $search_method, $step) :
 				sp.tag(gTxt('next').sp.'&#8594;', 'span', ' class="navlink-disabled"');
 
 			$out[] = '<form class="nav-form" method="get" action="index.php">'.
 				'<p class="prev-next">'.
 				n.eInput($event).
+				n.sInput($step).
 				( $sort ? n.hInput('sort', $sort).n.hInput('dir', $dir) : '' ).
 				( ($crit != '') ? n.hInput('crit', $crit).n.hInput('search_method', $search_method) : '' ).
 				join('', $nav).
