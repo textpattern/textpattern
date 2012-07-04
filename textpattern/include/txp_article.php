@@ -30,11 +30,11 @@ foreach($cfs as $i => $cf_name)
 }
 
 $statuses = array(
-		1 => gTxt('draft'),
-		2 => gTxt('hidden'),
-		3 => gTxt('pending'),
-		4 => strong(gTxt('live')),
-		5 => gTxt('sticky'),
+		STATUS_DRAFT   => gTxt('draft'),
+		STATUS_HIDDEN  => gTxt('hidden'),
+		STATUS_PENDING => gTxt('pending'),
+		STATUS_LIVE    => strong(gTxt('live')),
+		STATUS_STICKY  => gTxt('sticky'),
 );
 
 if (!empty($event) and $event == 'article') {
@@ -137,7 +137,7 @@ if (!empty($event) and $event == 'article') {
 
 		if ($Title or $Body or $Excerpt) {
 
-			if (!has_privs('article.publish') && $Status>=4) $Status = 3;
+			if (!has_privs('article.publish') && $Status >= STATUS_LIVE) $Status = STATUS_PENDING;
 			if (empty($url_title)) $url_title = stripSpace($Title_plain, 1);
 
 			$cfq = array();
@@ -184,7 +184,7 @@ if (!empty($event) and $event == 'article') {
 
 					$GLOBALS['ID'] = $ok;
 
-					if ($Status>=4) {
+					if ($Status >= STATUS_LIVE) {
 						do_pings();
 						update_lastmod();
 					}
@@ -217,10 +217,10 @@ if (!empty($event) and $event == 'article') {
 			'unix_timestamp(Expires) as sExpires',
 			'textpattern', 'ID = '.(int)$incoming['ID']);
 
-		if (! (    ($oldArticle['Status'] >= 4 and has_privs('article.edit.published'))
-				or ($oldArticle['Status'] >= 4 and $incoming['AuthorID']==$txp_user and has_privs('article.edit.own.published'))
-		    	or ($oldArticle['Status'] < 4 and has_privs('article.edit'))
-				or ($oldArticle['Status'] < 4 and $incoming['AuthorID']==$txp_user and has_privs('article.edit.own'))))
+		if (! (    ($oldArticle['Status'] >= STATUS_LIVE and has_privs('article.edit.published'))
+				or ($oldArticle['Status'] >= STATUS_LIVE and $incoming['AuthorID']==$txp_user and has_privs('article.edit.own.published'))
+				or ($oldArticle['Status'] < STATUS_LIVE and has_privs('article.edit'))
+				or ($oldArticle['Status'] < STATUS_LIVE and $incoming['AuthorID']==$txp_user and has_privs('article.edit.own'))))
 		{
 				// Not allowed, you silly rabbit, you shouldn't even be here.
 				// Show default editing screen.
@@ -241,7 +241,7 @@ if (!empty($event) and $event == 'article') {
 		// comments my be on, off, or disabled.
 		$Annotate = (int) $Annotate;
 
-		if (!has_privs('article.publish') && $Status>=4) $Status = 3;
+		if (!has_privs('article.publish') && $Status >= STATUS_LIVE) $Status = STATUS_PENDING;
 
 		// set and validate article timestamp
 		if ($reset_time) {
@@ -296,7 +296,7 @@ if (!empty($event) and $event == 'article') {
 
 		//Auto-Update custom-titles according to Title, as long as unpublished and NOT customized
 		if ( empty($url_title)
-			  || ( ($oldArticle['Status'] < 4)
+			  || ( ($oldArticle['Status'] < STATUS_LIVE)
 					&& ($oldArticle['url_title'] == $url_title )
 					&& ($oldArticle['url_title'] == stripSpace($oldArticle['Title'],1))
 					&& ($oldArticle['Title'] != $Title)
@@ -346,8 +346,8 @@ if (!empty($event) and $event == 'article') {
 				$whenexpires",
 				"ID = $ID"
 			)) {
-				if ($Status >= 4) {
-					if ($oldArticle['Status'] < 4) {
+				if ($Status >= STATUS_LIVE) {
+					if ($oldArticle['Status'] < STATUS_LIVE) {
 						do_pings();
 					}
 					update_lastmod();
@@ -875,11 +875,11 @@ if (!empty($event) and $event == 'article') {
 
 		//-- save button --------------
 
-				if (   ($Status >= 4 and has_privs('article.edit.published'))
-					or ($Status >= 4 and $AuthorID==$txp_user and has_privs('article.edit.own.published'))
-				    or ($Status <  4 and has_privs('article.edit'))
-					or ($Status <  4 and $AuthorID==$txp_user and has_privs('article.edit.own')))
-					echo graf(fInput('submit','save',gTxt('save'),"publish", '', '', '', 4), ' id="write-save"');
+				if (   ($Status >= STATUS_LIVE and has_privs('article.edit.published'))
+					or ($Status >= STATUS_LIVE and $AuthorID==$txp_user and has_privs('article.edit.own.published'))
+					or ($Status < STATUS_LIVE and has_privs('article.edit'))
+					or ($Status < STATUS_LIVE and $AuthorID==$txp_user and has_privs('article.edit.own')))
+						echo graf(fInput('submit','save',gTxt('save'),"publish", '', '', '', 4), ' id="write-save"');
 			}
 		}
 
@@ -985,7 +985,7 @@ EOS
 	{
 		global $statuses;
 
-		$Status = (!$Status) ? 4 : $Status;
+		$Status = (!$Status) ? STATUS_LIVE : $Status;
 
 		foreach ($statuses as $a => $b)
 		{
@@ -1080,9 +1080,9 @@ EOS
 	function get_status_message($Status)
 	{
 		switch ($Status){
-			case 3: return gTxt("article_saved_pending");
-			case 2: return gTxt("article_saved_hidden");
-			case 1: return gTxt("article_saved_draft");
+			case STATUS_PENDING: return gTxt("article_saved_pending");
+			case STATUS_HIDDEN: return gTxt("article_saved_hidden");
+			case STATUS_DRAFT: return gTxt("article_saved_draft");
 			default: return gTxt('article_posted');
 		}
 	}
@@ -1298,7 +1298,7 @@ EOS
 	function article_partial_article_view($rs)
 	{
 		extract($rs);
-		if ($Status != 4 and $Status != 5)
+		if ($Status != STATUS_LIVE and $Status != STATUS_STICKY)
 		{
 			$url = '?txpreview='.intval($ID).'.'.time(); // article ID plus cachebuster
 		}
