@@ -137,7 +137,7 @@ function doAuth()
 			).
 			n.(
 				($reset
-					? graf('<a href="index.php">'.gTxt('back_to_textpattern').'</a>', ' class="login-return"')
+					? graf('<a href="index.php">'.gTxt('back_to_login').'</a>', ' class="login-return"')
 					: graf('<a href="?reset=1">'.gTxt('password_forgotten').'</a>', ' class="login-forgot"')
 				)
 			).
