@@ -369,34 +369,50 @@ if (!empty($event) and $event == 'article') {
 
 	function article_edit($message = '', $concurrent = FALSE, $refresh_partials = FALSE)
 	{
-		global $vars, $txp_user, $comments_disabled_after, $prefs, $event;
+		global $vars, $txp_user, $prefs, $event;
 
 		extract($prefs);
 
+		/*
+		$partials is an array of:
+		$key => array (
+			'mode' => {PARTIAL_STATIC | PARTIAL_VOLATILE | PARTIAL_VOLATILE_VALUE},
+			'selector' => $DOM_selector,
+		 	'cb' => $callback_function,
+		 	'html' => $return_value_of_callback_function (need not be intialized here)
+		)
+		*/
 		$partials = array(
-			'sLastMod'      => array('mode' => PARTIAL_VOLATILE_VALUE,  'selector' => '[name=sLastMod]'),
-			'sPosted'       => array('mode' => PARTIAL_VOLATILE_VALUE,  'selector' => '[name=sPosted]'),
-			'custom_fields' => array('mode' => PARTIAL_STATIC,      'selector' => false),
-			'image'         => array('mode' => PARTIAL_STATIC,      'selector' => false),
-			'keywords'      => array('mode' => PARTIAL_STATIC,      'selector' => false),
-			'keywords_value'    => array('mode' => PARTIAL_VOLATILE_VALUE,    'selector' => '#keywords'),
-			'url_title'     => array('mode' => PARTIAL_STATIC,      'selector' => false),
-			'url_title_value'   => array('mode' => PARTIAL_VOLATILE_VALUE,    'selector' => '#url-title'),
-			'recent_articles'=> array('mode' => PARTIAL_VOLATILE,   'selector' => '#recent_group .recent'),
-			'title'         => array('mode' => PARTIAL_STATIC,      'selector' => false),
-			'title_value'   => array('mode' => PARTIAL_VOLATILE_VALUE,      'selector' => '#title'),
-			'article_view'  => array('mode' => PARTIAL_VOLATILE,    'selector' => '#article_partial_article_view'),
-			'body'          => array('mode' => PARTIAL_STATIC,      'selector' => false),
-			'excerpt'       => array('mode' => PARTIAL_STATIC,      'selector' => false),
-			'author'        => array('mode' => PARTIAL_VOLATILE,    'selector' => 'p.author'),
-			'article_nav'   => array('mode' => PARTIAL_VOLATILE,    'selector' => 'p.nav-tertiary'),
-			'status'        => array('mode' => PARTIAL_VOLATILE,    'selector' => '#write-status'),
-			'categories'    => array('mode' => PARTIAL_STATIC,      'selector' => false),
-			'section'       => array('mode' => PARTIAL_STATIC,      'selector' => false),
-			'comments'      => array('mode' => PARTIAL_VOLATILE,	'selector' => '#write-comments'),
-			'posted'        => array('mode' => PARTIAL_VOLATILE,    'selector' => '#write-timestamp'),
-			'expires'       => array('mode' => PARTIAL_VOLATILE,    'selector' => '#write-expires'),
+			'sLastMod'      => array('mode' => PARTIAL_VOLATILE_VALUE,  'selector' => '[name=sLastMod]', 'cb' => 'article_partial_value'),
+			'sPosted'       => array('mode' => PARTIAL_VOLATILE_VALUE,  'selector' => '[name=sPosted]', 'cb' => 'article_partial_value'),
+			'custom_fields' => array('mode' => PARTIAL_STATIC,      'selector' => '#custom_field_group', 'cb' => 'article_partial_custom_fields'),
+			'image'         => array('mode' => PARTIAL_STATIC,      'selector' => '#image_group', 'cb' => 'article_partial_image'),
+			'keywords'      => array('mode' => PARTIAL_STATIC,      'selector' => 'p.keywords', 'cb' => 'article_partial_keywords'),
+			'keywords_value'    => array('mode' => PARTIAL_VOLATILE_VALUE,    'selector' => '#keywords', 'cb' => 'article_partial_keywords_value'),
+			'url_title'     => array('mode' => PARTIAL_STATIC,      'selector' => 'p.url-title', 'cb' => 'article_partial_url_title'),
+			'url_title_value'   => array('mode' => PARTIAL_VOLATILE_VALUE,    'selector' => '#url-title', 'cb' => 'article_partial_url_title_value'),
+			'recent_articles'=> array('mode' => PARTIAL_VOLATILE,   'selector' => '#recent_group .recent', 'cb' => 'article_partial_recent_articles'),
+			'title'         => array('mode' => PARTIAL_STATIC,      'selector' => 'p.title', 'cb' => 'article_partial_title'),
+			'title_value'   => array('mode' => PARTIAL_VOLATILE_VALUE,      'selector' => '#title', 'cb' => 'article_partial_title_value'),
+			'article_view'  => array('mode' => PARTIAL_VOLATILE,    'selector' => '#article_partial_article_view', 'cb' => 'article_partial_article_view'),
+			'body'          => array('mode' => PARTIAL_STATIC,      'selector' => 'p.body', 'cb' => 'article_partial_body'),
+			'excerpt'       => array('mode' => PARTIAL_STATIC,      'selector' => 'p.excerpt', 'cb' => 'article_partial_excerpt'),
+			'author'        => array('mode' => PARTIAL_VOLATILE,    'selector' => 'p.author', 'cb' => 'article_partial_author'),
+			'article_nav'   => array('mode' => PARTIAL_VOLATILE,    'selector' => 'p.nav-tertiary', 'cb' => 'article_partial_article_nav'),
+			'status'        => array('mode' => PARTIAL_VOLATILE,    'selector' => '#write-status', 'cb' => 'article_partial_status'),
+			'categories'    => array('mode' => PARTIAL_STATIC,      'selector' => '#categories_group', 'cb' => 'article_partial_categories'),
+			'section'       => array('mode' => PARTIAL_STATIC,      'selector' => 'p.section', 'cb' => 'article_partial_section'),
+			'comments'      => array('mode' => PARTIAL_VOLATILE,	'selector' => '#write-comments', 'cb' => 'article_partial_comments'),
+			'posted'        => array('mode' => PARTIAL_VOLATILE,    'selector' => '#write-timestamp', 'cb' => 'article_partial_posted'),
+			'expires'       => array('mode' => PARTIAL_VOLATILE,    'selector' => '#write-expires', 'cb' => 'article_partial_expires'),
 		);
+
+		// add partials for custom fields (and their values which is redundant by design, for plugins)
+		global $cfs;
+		foreach ($cfs as $k => $v) {
+			$partials["custom_field_{$k}"] = array('mode' => PARTIAL_STATIC, 'selector' => "p.custom-field.custom-{$k}", 'cb' => 'article_partial_custom_field');
+			$partials["custom_{$k}"] = array('mode' => PARTIAL_STATIC, 'selector' => "#custom-{$k}", 'cb' => 'article_partial_value');
+		}
 
 		extract(gpsa(array('view','from_view','step')));
 
@@ -514,10 +530,10 @@ if (!empty($event) and $event == 'article') {
 		callback_event_ref('article_ui', 'partials_meta', 0, $rs, $partials);
 
 		// get content for volatile partials
-		foreach ($partials as $key => $value) {
-			if ($value['mode'] == PARTIAL_VOLATILE || $value['mode'] == PARTIAL_VOLATILE_VALUE) {
-				$f = "article_partial_$key";
-				$partials[$key]['html'] = $f($rs);
+		foreach ($partials as $k => $p) {
+			if ($p['mode'] == PARTIAL_VOLATILE || $p['mode'] == PARTIAL_VOLATILE_VALUE) {
+				$cb = $p['cb'];
+				$partials[$k]['html'] = (is_array($cb) ? call_user_func($cb, $rs, $k): $cb($rs, $k));
 			}
 		}
 
@@ -525,12 +541,20 @@ if (!empty($event) and $event == 'article') {
 			global $theme;
 			$response[] = $theme->announce_async($message);
 
-			// Update the volatile partials
-			foreach ($partials as $p) {
-				if ($p['mode'] == PARTIAL_VOLATILE) {
-					$response[] = '$("'.$p['selector'].'").replaceWith("'.escape_js($p['html']).'")';
-				} elseif ($p['mode'] == PARTIAL_VOLATILE_VALUE) {
-					$response[] = '$("'.$p['selector'].'").val("'.escape_js($p['html']).'")';
+			// update the volatile partials
+			foreach ($partials as $k => $p) {
+				// volatile partials need a target DOM selector
+				if (empty($p['selector']) && $p['mode'] != PARTIAL_STATIC) {
+					trigger_error("Empty selector for partial '$k'", E_USER_ERROR);
+				} else {
+					// build response script
+					if ($p['mode'] == PARTIAL_VOLATILE) {
+						// volatile partials replace *all* of the existing HTML fragment for their selector
+						$response[] = '$("'.$p['selector'].'").replaceWith("'.escape_js($p['html']).'")';
+					} elseif ($p['mode'] == PARTIAL_VOLATILE_VALUE) {
+						// volatile partial values replace the *value* of elements matching their selector
+						$response[] = '$("'.$p['selector'].'").val("'.escape_js($p['html']).'")';
+					}
 				}
 			}
 			send_script_response(join(";\n", $response));
@@ -539,10 +563,10 @@ if (!empty($event) and $event == 'article') {
 			return;
 		}
 
-		foreach ($partials as $key => $value) {
-			if ($value['mode'] == PARTIAL_STATIC) {
-				$f = "article_partial_$key";
-				$partials[$key]['html'] = $f($rs);
+		foreach ($partials as $k => $p) {
+			if ($p['mode'] == PARTIAL_STATIC) {
+				$cb = $p['cb'];
+				$partials[$k]['html'] = (is_array($cb) ? call_user_func($cb, $rs, $k): $cb($rs, $k));
 			}
 		}
 
@@ -650,15 +674,7 @@ if (!empty($event) and $event == 'article') {
 
 		elseif ($view == 'text')
 		{
-			echo '<div class="text">'.n.
-				'<p class="title">'.$partials['title']['html'];
-
-			if ($step != 'create')
-			{
-				echo $partials['article_view']['html'];
-			}
-
-			echo '</p>';
+			echo '<div class="text">'.n.$partials['title']['html'];
 		}
 
 	//-- body --------------------
@@ -1152,9 +1168,12 @@ EOS
 // -------------------------------------------------------------
 	function article_partial_title($rs)
 	{
+		global $step;
 		return pluggable_ui('article_ui', 'title',
-			'<label for="title">'.gTxt('title').'</label>'.sp.popHelp('title').br.
-				'<input type="text" id="title" name="Title" value="'.escape_title(article_partial_title_value($rs)).'" size="40" tabindex="1" />',
+			graf('<label for="title">'.gTxt('title').'</label>'.sp.popHelp('title').br.
+				'<input type="text" id="title" name="Title" value="'.escape_title(article_partial_title_value($rs)).'" size="40" tabindex="1" />'.
+				($step != 'create' ?  article_partial_article_view($rs) : '')
+				, ' class="title"'),
 			$rs);
 	}
 
@@ -1179,23 +1198,31 @@ EOS
 // -------------------------------------------------------------
 	function article_partial_custom_fields($rs)
 	{
-		global $prefs;
-		extract ($prefs);
-		extract($rs);
+		global $cfs;
+
 		$cf = '';
-		$cfs = getCustomFields();
 		$out = '<div id="custom_field_group"'.(($cfs) ? '' : ' class="empty"').'><h3 class="lever'.(get_pref('pane_article_custom_field_visible') ? ' expanded' : '').'"><a href="#custom_field">'.gTxt('custom').'</a></h3>'.
 			'<div id="custom_field" class="toggle" style="display:'.(get_pref('pane_article_custom_field_visible') ? 'block' : 'none').'">';
 
-		foreach($cfs as $i => $cf_name)
+		foreach($cfs as $k => $v)
 		{
-			$custom_x_set = "custom_{$i}_set";
-			$custom_x = "custom_{$i}";
-			$cf .= ($$custom_x_set !== '' ? custField( $i, $$custom_x_set,  $$custom_x ): '');
+			$cf .= article_partial_custom_field($rs, "custom_field_{$k}");
 		}
 		$out .= pluggable_ui('article_ui', 'custom_fields', $cf, $rs);
 		return $out.'</div></div>'.n;
 
+	}
+
+// -------------------------------------------------------------
+	function article_partial_custom_field($rs, $key)
+	{
+		global $prefs;
+		extract ($prefs);
+
+		preg_match('/custom_field_([0-9+])/', $key, $m);
+		$custom_x_set = "custom_{$m[1]}_set";
+		$custom_x = "custom_{$m[1]}";
+		return ($$custom_x_set !== '' ? custField($m[1], $$custom_x_set,  $rs[$custom_x]) : '');
 	}
 
 // -------------------------------------------------------------
@@ -1331,12 +1358,14 @@ EOS
 	function article_partial_categories($rs)
 	{
 		return pluggable_ui('article_ui', 'categories',
+			n.'<div id="categories_group">'.
 			n.graf('<label for="category-1">'.gTxt('category1').'</label> '.
 			'<span class="category-edit">['.eLink('category', '', '', '', gTxt('edit')).']</span>'.br.
 			n.category_popup('Category1', $rs['Category1'], 'category-1'), ' class="category category-1"').
 
 			n.graf('<label for="category-2">'.gTxt('category2').'</label>'.br.
-			n.category_popup('Category2', $rs['Category2'], 'category-2'), ' class="category category-2"'),
+			n.category_popup('Category2', $rs['Category2'], 'category-2'), ' class="category category-2"').
+			n.'</div>',
 		$rs);
 	}
 
@@ -1458,15 +1487,9 @@ EOS
 	}
 
 // -------------------------------------------------------------
-	function article_partial_sLastMod($rs)
+	function article_partial_value($rs, $key)
 	{
-		return($rs['sLastMod']);
-	}
-
-// -------------------------------------------------------------
-	function article_partial_sPosted($rs)
-	{
-		return($rs['sPosted']);
+		return($rs[$key]);
 	}
 
 // -------------------------------------------------------------
