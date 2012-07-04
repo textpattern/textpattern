@@ -311,7 +311,7 @@ $LastChangedRevision$
 			(($crit != '') ? a.'crit='.$crit : '').
 			($search_method ? a.'search_method='.$search_method : '').
 			'" class="navlink" rel="'.$type.'">'.
-			($type == 'prev' ? '&#8592;'.sp.$label : $label.sp.'&#8594;').
+			$label.
 			'</a>';
 	}
 
@@ -369,7 +369,7 @@ $LastChangedRevision$
 
 			$nav[] = ($page > 1) ?
 				PrevNextLink($event, $page - 1, gTxt('prev'), 'prev', $sort, $dir, $crit, $search_method, $step).sp :
-				tag('&#8592;'.sp.gTxt('prev'), 'span', ' class="navlink-disabled"').sp;
+				tag(gTxt('prev'), 'span', ' class="navlink-disabled"').sp;
 
 			$nav[] = '<select name="page" onchange="submit(this.form);">';
 			$nav[] = n.join(n, $option_list);
@@ -378,7 +378,7 @@ $LastChangedRevision$
 
 			$nav[] = ($page != $numPages) ?
 				sp.PrevNextLink($event, $page + 1, gTxt('next'), 'next', $sort, $dir, $crit, $search_method, $step) :
-				sp.tag(gTxt('next').sp.'&#8594;', 'span', ' class="navlink-disabled"');
+				sp.tag(gTxt('next'), 'span', ' class="navlink-disabled"');
 
 			$out[] = '<form class="nav-form" method="get" action="index.php">'.
 				'<p class="prev-next">'.
