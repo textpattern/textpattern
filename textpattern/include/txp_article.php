@@ -1219,7 +1219,7 @@ EOS
 		global $prefs;
 		extract ($prefs);
 
-		preg_match('/custom_field_([0-9+])/', $key, $m);
+		preg_match('/custom_field_([0-9]+)/', $key, $m);
 		$custom_x_set = "custom_{$m[1]}_set";
 		$custom_x = "custom_{$m[1]}";
 		return ($$custom_x_set !== '' ? custField($m[1], $$custom_x_set,  $rs[$custom_x]) : '');
