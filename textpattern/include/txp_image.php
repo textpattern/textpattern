@@ -482,7 +482,7 @@ $LastChangedRevision$
 			echo
 				pluggable_ui(
 					'image_ui',
-					'fullsize',
+					'fullsize_image',
 					$img,
 					$rs
 				),
@@ -504,7 +504,7 @@ $LastChangedRevision$
 
 				pluggable_ui(
 					'image_ui',
-					'thumbnail',
+					'thumbnail_image',
 					'<div class="thumbnail-edit">'.
 					(($thumbnail)
 						? $thumb.n.dLink('image','thumbnail_delete','id',$id, '', '', '', '', array($page, $sort, $dir, $crit, $search_method))
