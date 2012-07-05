@@ -23,7 +23,7 @@ Changes in 4.5.0
 * <txp:linklist /> accepts a comma-separated list of link ids in the new 'id' attribute
 * Developer: Introduce gTxtScript() to help with the l10n of client-side strings
 * Developer: Introduce txpspecialchars() as a recommended HTML5-safe alternative to htmlspecialchars()
-* Developer: New events 'article_saved', 'article_posted', 'comment.saved', 'article_ui'.'partials_meta', 'article_ui'.'validate_save'
+* Developer: New events 'article_saved', 'article_posted', 'comment.saved', 'article_ui'.'partials_meta', 'article_ui'.'validate_save', 'image_ui'.'fullsize_image', 'image_ui'.'thumbnail_image' (NB: 'image_ui'.'image_edit' and 'image_ui'.'thumbnail_edit' changed)
 * Developer: Introduce textpattern.Relay, a pub/sub hub for client-side events
 * Developer: Introduce txpAsyncForm (a jQuery plugin for asynchronous posts from forms) and txpAsynHref (a jQuery plugin for asynchronous posts from links)
 * Developer: Introduce safe_escape(), Constraint() and Validator() classes plus their descendents, callback_event_ref(), theme::announce_async()
