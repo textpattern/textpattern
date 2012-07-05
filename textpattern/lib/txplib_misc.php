@@ -851,7 +851,7 @@ function escape_js($js)
 				if (is_callable($c['function'])) {
 					$return_value .= call_user_func_array($c['function'], array('event' => $event, 'step' => $step) + $argv);
 				} elseif ($production_status == 'debug') {
-					trigger_error(gTxt('unknown_callback_function', array('function' => callback_tostring($c['function']))), E_USER_WARNING);
+					trigger_error(gTxt('unknown_callback_function', array('{function}' => callback_tostring($c['function']))), E_USER_WARNING);
 				}
 			}
 		}
@@ -886,7 +886,7 @@ function escape_js($js)
 					// side effect: callback handler *must* be ordinary function, *must not* be class method in PHP <5.4 (@see https://bugs.php.net/bug.php?id=47160)
 					$return_value[] = $c['function']($event, $step, $data, $options);
 				} elseif ($production_status == 'debug') {
-					trigger_error(gTxt('unknown_callback_function', array('function' => callback_tostring($c['function']))), E_USER_WARNING);
+					trigger_error(gTxt('unknown_callback_function', array('{function}' => callback_tostring($c['function']))), E_USER_WARNING);
 				}
 			}
 		}
