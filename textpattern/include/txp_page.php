@@ -149,19 +149,15 @@ $LastChangedRevision$
 
 		$rs = safe_rows_start('name', 'txp_page', "1 order by name asc");
 
-		$ctr = 1;
-
 		while ($a = nextRow($rs))
 		{
 			extract($a);
 
 			$link  = eLink('page', '', 'name', $name, $name);
 			$dlink = !in_array($name, $protected) ? dLink('page', 'page_delete', 'name', $name) : '';
-			$trcls = ' class="'.(($ctr==1) ? 'first ' : '').'"';
 			$out[] = ($current == $name) ?
-				tr(td($name).td($dlink), $trcls) :
-				tr(td($link).td($dlink), $trcls);
-			$ctr++;
+				tr(td($name).td($dlink)) :
+				tr(td($link).td($dlink));
 		}
 
 		return startTable('', '', 'txp-list').join(n, $out).endTable();
