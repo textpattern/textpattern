@@ -529,6 +529,13 @@ $LastChangedRevision$
 
 		pageTop(gTxt('list_banned_ips'), $message);
 
+		echo '<h1 class="txp-heading">'.gTxt('banned_ips').'</h1>';
+		echo '<div id="'.$event.'_banned_control" class="txp-control-panel">';
+		echo graf(
+			sLink('discuss', 'discuss_list', gTxt('list_discussions'))
+			, ' class="txp-buttons"');
+		echo '</div>';
+
 		$rs = safe_rows_start('*, unix_timestamp(date_banned) as uBanned', 'txp_discuss_ipban',
 			"1 = 1 order by date_banned desc");
 
