@@ -517,17 +517,9 @@ $LastChangedRevision$
 
 			while ($a = nextRow($rs))
 			{
-				extract($a);
-
-				$thislink = array(
-					'id'          => $id,
-					'linkname'    => $linkname,
-					'url'         => $url,
-					'description' => $description,
-					'date'        => $uDate,
-					'category'    => $category,
-					'author'      => $author,
-				);
+				$thislink = $a;
+				$thislink['date'] = $thislink['uDate'];
+				unset($thislink['uDate']);
 
 				$out[] = ($thing) ? parse($thing) : parse_form($form);
 
