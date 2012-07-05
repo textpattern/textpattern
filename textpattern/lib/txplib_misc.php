@@ -971,14 +971,14 @@ function escape_js($js)
 	}
 
 // -------------------------------------------------------------
+	// deprecated in 4.5.0
 	function select_buttons()
 	{
 		return
 		gTxt('select').
 		n.fInput('button','selall',gTxt('all'),'','select all','selectall();').
 		n.fInput('button','selnone',gTxt('none'),'','select none','deselectall();').
-		n.fInput('button','selrange',gTxt('range'),'','select range','selectrange();').
-		n.fInput('button','seltoggle',gTxt('toggle'),'','select toggle','selecttoggle();');
+		n.fInput('button','selrange',gTxt('range'),'','select range','selectrange();');
 	}
 
 // -------------------------------------------------------------

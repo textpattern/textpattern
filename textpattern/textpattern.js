@@ -99,33 +99,6 @@ function selectrange()
 }
 
 /**
- * Toggles the current selection of multi-edit checkboxes
- * @deprecated
- */
-
-function selecttoggle()
-{
-	$('form[name="longform"] input[name="selected[]"]').each(function() {
-		$(this).prop('checked', !$(this).prop('checked'));
-	});
-}
-
-/**
- * Toggles the entire column of multi-edit checkboxes
- * @deprecated
- */
-
-function toggleAll()
-{
-	if ($('#selected_toggle').prop('checked')) {
-		selectall();
-	}
-	else {
-		deselectall();
-	}
-}
-
-/**
  * ?
  * @deprecated
  */
