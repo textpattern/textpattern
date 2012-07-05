@@ -373,7 +373,6 @@ $LastChangedRevision$
 			$nav[] = '<select name="page" onchange="submit(this.form);">';
 			$nav[] = n.join(n, $option_list);
 			$nav[] = n.'</select>';
-			$nav[] = '<noscript> <input type="submit" value="'.gTxt('go').'" /></noscript>';
 
 			$nav[] = ($page != $numPages) ?
 				sp.PrevNextLink($event, $page + 1, gTxt('next'), 'next', $sort, $dir, $crit, $search_method, $step) :
@@ -956,7 +955,6 @@ $LastChangedRevision$
 				$page.
 				eInput($event).
 				sInput($event.'_change_pageby').
-				'<noscript> <input type="submit" value="'.gTxt('go').'" /></noscript>'.
 			'</p>'
 		, '', '', 'post', 'pageby');
 	}
@@ -1155,7 +1153,7 @@ EOF;
 
 		if ($form) {
 			$args = empty($_SERVER['QUERY_STRING']) ? '' : '?'.txpspecialchars($_SERVER['QUERY_STRING']);
-			return '<form class="'.$name.'" method="post" action="index.php'.$args.'">'.$i.eInput(gps('event')).n.'<noscript><div><input type="submit" value="'.gTxt('go').'" /></div></noscript>'.tInput().'</form>';
+			return '<form class="'.$name.'" method="post" action="index.php'.$args.'">'.$i.eInput(gps('event')).n.tInput().'</form>';
 		} else {
 			return n.$i;
 		}

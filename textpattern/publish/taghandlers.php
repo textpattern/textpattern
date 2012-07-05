@@ -1093,7 +1093,6 @@ $LastChangedRevision$
 					'<div>'.
 					$his.
 					n.$out.
-					n.'<noscript><div><input type="submit" value="'.gTxt('go').'" /></div></noscript>'.
 					n.'</div>'.
 					n.'</form>';
 			}
