@@ -14,9 +14,37 @@ $LastChangedRevision$
 
 */
 
-	if (@ini_get('register_globals'))
-		foreach ( $_REQUEST as $name => $value )
-			unset($$name);
+	if (@ini_get('register_globals')) {
+		if (isset($_REQUEST['GLOBALS']) || isset($_FILES['GLOBALS'])) {
+			die('GLOBALS overwrite attempt detected. Please consider turning register_globals off.');
+		}
+
+		foreach (
+			array_merge(
+				isset($_SESSION) ? (array) $_SESSION : array(),
+				(array) $_ENV,
+				(array) $_GET,
+				(array) $_POST,
+				(array) $_COOKIE,
+				(array) $_FILES,
+				(array) $_SERVER
+			) as $name => $value
+		) {
+			if (!in_array($name, array(
+				'GLOBALS',
+				'_SERVER',
+				'_GET',
+				'_POST',
+				'_FILES',
+				'_COOKIE',
+				'_SESSION',
+				'_REQUEST',
+				'_ENV',
+			))) {
+				unset($GLOBALS[$name], $$name);
+			}
+		}
+	}
 
 	if (!defined('txpath'))
 	{
