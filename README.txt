@@ -53,5 +53,5 @@ Includes contributions licensed under the New BSD License.
   can tell Textpattern of your new directory location from Advanced Prefs.
 
 * IMPORTANT: Regularly check back at textpattern.com to see if updates are
-  available. 4.x is in maintenance mode which means updates are as painless
-  as possible, and often fix important bugs or security-related issues.
+  available. Updates are as painless as possible, and often fix important
+  bugs or security-related issues.
