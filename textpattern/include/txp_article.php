@@ -346,12 +346,13 @@ if (!empty($event) and $event == 'article') {
 				$whenexpires",
 				"ID = $ID"
 			)) {
-				if ($Status >= STATUS_LIVE) {
-					if ($oldArticle['Status'] < STATUS_LIVE) {
-						do_pings();
-					}
+				if ($Status >= STATUS_LIVE && $oldArticle['Status'] < STATUS_LIVE) {
+					do_pings();
+				}
+				if ($Status >= STATUS_LIVE || $oldArticle['Status'] >= STATUS_LIVE) {
 					update_lastmod();
 				}
+
 				callback_event('article_saved', '', false, $rs);
 
 				if (empty($msg)) {
