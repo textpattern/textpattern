@@ -630,7 +630,9 @@ tr.spam td {
 }
 
 .edit-value input,
-.login-value input {
+.edit-value select,
+.login-value input,
+.login-value select {
 	margin-top: -.27272727272727em;
 	margin-bottom: -.27272727272727em;
 }
