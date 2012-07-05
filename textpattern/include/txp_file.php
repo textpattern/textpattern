@@ -552,7 +552,7 @@ $LastChangedRevision$
 
 			echo n.'<div id="'.$event.'_container" class="txp-container">';
 			echo '<div class="txp-edit">',
-				hed('edit_file', 2),
+				hed(gTxt('edit_file'), 2),
 				inputLabel('condition', $condition).n,
 				inputLabel('name', $downloadlink).n,
 				inputLabel('download_count', $downloads).n,

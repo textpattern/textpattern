@@ -474,7 +474,7 @@ EOS
 			pagetop(gTxt('edit_category'));
 			extract($row);
 			$out = '<div class="txp-edit">'.n.
-				hed('edit_category', 2).n.
+				hed(gTxt('edit_category'), 2).n.
 				inputLabel('category_name', fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'category_name'), $evname.'_category_name').n.
 				inputLabel('category_parent', cat_parent_pop($parent,$evname,$id), 'parent').n.
 				inputLabel('category_title', fInput('text', 'title', $title, '', '', '', INPUT_REGULAR, '', 'category_title'), $evname.'_category_title').n.

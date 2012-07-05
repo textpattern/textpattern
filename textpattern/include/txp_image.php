@@ -488,7 +488,7 @@ $LastChangedRevision$
 				),
 
 				'<div class="txp-edit">',
-				hed('edit_image', 2),
+				hed(gTxt('edit_image'), 2),
 
 				pluggable_ui(
 					'image_ui',
