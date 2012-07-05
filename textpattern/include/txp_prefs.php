@@ -450,7 +450,7 @@ EOS
 			}
 		}
 
-		return n.'<select id="default-events" name="'.$name.'" class="default-events">'.
+		return n.'<select id="default_event" name="'.$name.'" class="default-events">'.
 			join('', $out).
 			n.'</select>';
 	}
