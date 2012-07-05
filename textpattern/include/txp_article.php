@@ -1335,11 +1335,11 @@ EOS
 		return '<p class="nav-tertiary">'.
 		($rs['prev_id']
 			?	prevnext_link(gTxt('prev'),'article','edit',
-				$rs['prev_id'],'', 'prev')
+				$rs['prev_id'],'prev')
 			:	'<span class="navlink-disabled">'.gTxt('prev').'</span>').
 		($rs['next_id']
 			?	prevnext_link(gTxt('next'),'article','edit',
-				$rs['next_id'],'', 'next')
+				$rs['next_id'],'next')
 			:	'<span class="navlink-disabled">'.gTxt('next').'</span>').n.
 		'</p>';
 	}

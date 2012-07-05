@@ -277,15 +277,14 @@ $LastChangedRevision$
  * @param	string	$event	Event
  * @param	string	$step	Step
  * @param	integer	$id	ID of target Textpattern object (article,...)
- * @param	string	$titling	HTML title attribute
  * @param	string	$rel	HTML rel attribute
  * @return	string	HTML
  */
 
-	function prevnext_link($name,$event,$step,$id,$titling='',$rel='')
+	function prevnext_link($name,$event,$step,$id,$rel='')
 	{
 		return '<a href="?event='.$event.a.'step='.$step.a.'ID='.$id.
-			'" class="navlink" title="'.$titling.'"'.($rel ? ' rel="'.$rel.'"' : '').'>'.$name.'</a>';
+			'" class="navlink"'.($rel ? ' rel="'.$rel.'"' : '').'>'.$name.'</a>';
 	}
 
 
