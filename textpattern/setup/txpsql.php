@@ -235,9 +235,12 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_link` (
   PRIMARY KEY  (`id`)
 ) $tabletype PACK_KEYS=1 AUTO_INCREMENT=4 ";
 
-$create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (1, '2005-07-20 12:54:26', 'textpattern', 'http://textpattern.com/', 'Textpattern', 'Textpattern', '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (2, '2005-07-20 12:54:41', 'textpattern', 'http://textpattern.net/', 'User Documentation', 'User Documentation', '')";
-$create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (3, '2005-07-20 12:55:04', 'textpattern', 'http://textpattern.org/', 'Txp Resources', 'Txp Resources', '')";
+$create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (1, '2005-07-20 12:54:26', 'textpattern', 'http://textpattern.com/', 'Textpattern', '10', '')";
+$create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (2, '2005-07-20 12:54:41', 'textpattern', 'http://textpattern.net/', 'User Documentation', '20', '')";
+$create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (3, '2005-07-20 12:55:04', 'textpattern', 'http://textpattern.org/', 'Txp Resources', '30', '')";
+$create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (4, '2012-06-01 08:15:42', 'textpattern', 'http://textpattern.com/@textpattern', '@textpattern', '40', '')";
+$create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (5, '2012-06-01 08:15:42', 'textpattern', 'http://textpattern.com/+', '+Textpattern CMS', '50', '')";
+$create_sql[] = "INSERT INTO `".PFX."txp_link` VALUES (6, '2012-06-01 08:15:42', 'textpattern', 'http://textpattern.com/facebook', 'Textpattern Facebook Group ', '60', '')";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_log` (
   `id` int(12) NOT NULL auto_increment,
