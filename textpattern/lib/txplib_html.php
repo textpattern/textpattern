@@ -16,6 +16,7 @@ $LastChangedRevision$
  * Render the admin-side theme's footer partial via the "admin_side" > "footer" pluggable UI.
  * and send the "admin_side" > "body_end" event.
  */
+
 	function end_page()
 	{
 		global $txp_user, $event, $app_mode, $theme, $textarray_script;
@@ -28,6 +29,7 @@ $LastChangedRevision$
 			'</div><!-- /txp-footer --></body>'.n.'</html>';
 		}
 	}
+
 
 /**
  * Render the user interface for one head cell of columnar data.
@@ -123,6 +125,7 @@ $LastChangedRevision$
  * @param	string	$atts	HTML attributes  ['']
  * @return	string	HTML
  */
+
 	function hCell($text='',$caption='',$atts='')
 	{
 		$text = ('' === $text) ? sp : $text;
@@ -139,6 +142,7 @@ $LastChangedRevision$
  * @param	string	$class	HTML class attribute for link
  * @return	string	HTML
  */
+
 	function sLink($event,$step,$linktext,$class='')
 	{
 		$c = ($class) ? ' class="'.$class.'"' : '';
@@ -159,6 +163,7 @@ $LastChangedRevision$
  * @param	string	$title	Anchor title ['edit']
  * @return	string	HTML
  */
+
 	function eLink($event,$step='',$thing='',$value='',$linktext,$thing2='',$val2='',$title='edit')
 	{
 		return join('',array(
@@ -181,6 +186,7 @@ $LastChangedRevision$
  * @param	string	$value	URL parameter value
  * @return			string 	HTML
  */
+
 	function wLink($event,$step='',$thing='',$value='')
 	{
 		// TODO: Why index.php? while we don't need this in eLink etc.
@@ -277,14 +283,15 @@ $LastChangedRevision$
  * @param	string	$event	Event
  * @param	string	$step	Step
  * @param	integer	$id	ID of target Textpattern object (article,...)
+ * @param	string	$titling	HTML title attribute
  * @param	string	$rel	HTML rel attribute
  * @return	string	HTML
  */
 
-	function prevnext_link($name,$event,$step,$id,$rel='')
+	function prevnext_link($name,$event,$step,$id,$titling='',$rel='')
 	{
 		return '<a href="?event='.$event.a.'step='.$step.a.'ID='.$id.
-			'" class="navlink"'.($rel ? ' rel="'.$rel.'"' : '').'>'.$name.'</a>';
+			'" class="navlink"'.($titling ? ' title="'.$titling.'"' : '').($rel ? ' rel="'.$rel.'"' : '').'>'.$name.'</a>';
 	}
 
 
@@ -339,9 +346,9 @@ $LastChangedRevision$
 			$out[] = $theme->announce(
 				gTxt('showing_search_results',
 					array(
-						'{from}'	=> (($page - 1) * $limit) + 1,
-						'{to}' 		=> min($total, $page * $limit),
-						'{total}' 	=> $total
+						'{from}'    => (($page - 1) * $limit) + 1,
+						'{to}'      => min($total, $page * $limit),
+						'{total}'   => $total
 						)
 					)
 				);
@@ -633,6 +640,7 @@ $LastChangedRevision$
 		, ' class="'.$class.'"');
 	}
 
+
 /**
  * Render anything as a XML element.
  *
@@ -676,6 +684,7 @@ $LastChangedRevision$
 		return tag($item,'h'.$level,$atts);
 	}
 
+
 /**
  * Render an &lt;a&gt; element.
  *
@@ -684,10 +693,12 @@ $LastChangedRevision$
  * @param	string	$atts	HTML attributes ['']
  * @return	string	HTML
  */
+
 	function href($item,$href,$atts='')
 	{
 		return tag($item,'a',$atts.' href="'.$href.'"');
 	}
+
 
 /**
  * Render a &lt;strong&gt; element.
@@ -695,10 +706,12 @@ $LastChangedRevision$
  * @param	string	$item	Enclosed content
  * @return		string	HTML
  */
+
 	function strong($item)
 	{
 		return tag($item,'strong');
 	}
+
 
 /**
  * Render a &lt;span&gt; element.
@@ -706,10 +719,12 @@ $LastChangedRevision$
  * @param	string	$item	Enclosed content
  * @return	string	HTML
  */
- 	function span($item)
+
+	function span($item)
 	{
 		return tag($item,'span');
 	}
+
 
 /**
  * Render a &lt;pre&gt; element.
@@ -717,10 +732,12 @@ $LastChangedRevision$
  * @param	string	$item	Enclosed content
  * @return	string	HTML
  */
+
 	function htmlPre($item)
 	{
 		return '<pre>'.tag($item,'code').'</pre>';
 	}
+
 
 /**
  * Render a HTML comment (&lt;!-- --&gt;) element.
@@ -728,10 +745,12 @@ $LastChangedRevision$
  * @param	string	$item	Enclosed content
  * @return	string	HTML
  */
+
 	function comment($item)
 	{
 		return '<!-- '.$item.' -->';
 	}
+
 
 /**
  * Render a &lt;small&gt element.
@@ -739,10 +758,12 @@ $LastChangedRevision$
  * @param	string	$item	Enclosed content
  * @return	string	HTML
  */
+
 	function small($item)
 	{
 		return tag($item,'small');
 	}
+
 
 /**
  * Render a table data row from an array of content => width pairs.
@@ -751,11 +772,13 @@ $LastChangedRevision$
  * @param	string	$atts	Table row atrributes
  * @return	string	HTML
  */
+
 	function assRow($array, $atts ='')
 	{
 		foreach($array as $a => $b) $o[] = tda($a,' width="'.$b.'"');
 		return tr(join(n.t,$o), $atts);
 	}
+
 
 /**
  * Render a table head row from an array of strings.
@@ -763,12 +786,14 @@ $LastChangedRevision$
  * @param	array	$value,...	Array of head text strings. L10n is applied to the strings.
  * @return	string	HTML
  */
+
 	function assHead()
 	{
 		$array = func_get_args();
 		foreach($array as $a) $o[] = hCell(gTxt($a));
 		return tr(join('',$o));
 	}
+
 
 /**
  * Render the ubiquitious popup help button.
@@ -778,6 +803,7 @@ $LastChangedRevision$
  * @param	integer	$height	Popup window height
  * @return	string	HTML
  */
+
 	function popHelp($help_var, $width = '', $height = '')
 	{
 		return '<a rel="help" target="_blank"'.
@@ -788,6 +814,7 @@ $LastChangedRevision$
 			'); return false;" class="pophelp">?</a>';
 	}
 
+
 /**
  * Render the ubiquitious popup help button with a little less visual noise.
  *
@@ -796,6 +823,7 @@ $LastChangedRevision$
  * @param	integer	$height	Popup window height ['']
  * @return	string	HTML
  */
+
 	function popHelpSubtle($help_var, $width = '', $height = '')
 	{
 		return '<a rel="help" target="_blank"'.
@@ -805,6 +833,7 @@ $LastChangedRevision$
 			($height ? ', '.$height : '').
 			'); return false;" class="pophelpsubtle">?</a>';
 	}
+
 
 /**
  * Popup tag help window.
@@ -825,6 +854,7 @@ $LastChangedRevision$
 			($height ? ', '.$height : '').
 			'); return false;">'.$text.'</a>';
 	}
+
 
 /**
  * Render tag builder links.
@@ -855,6 +885,7 @@ $LastChangedRevision$
 		return join('', $out);
 	}
 
+
 /**
  * Render admin-side message text.
  *
@@ -863,10 +894,12 @@ $LastChangedRevision$
  * @param	string	$action	Object
  * @return	string	HTML
  */
+
 	function messenger($thing, $thething='', $action='')
 	{
 		return gTxt($thing).' '.strong($thething).' '.gTxt($action);
 	}
+
 
 /**
  * Render a multi-edit form listing editing methods
@@ -928,6 +961,7 @@ $LastChangedRevision$
 			n.'</div>';
 	}
 
+
 /**
  * Render a form to select various amounts to page lists by.
  *
@@ -958,6 +992,7 @@ $LastChangedRevision$
 			'</p>'
 		, '', '', 'post', 'pageby');
 	}
+
 
 /**
  * Render a file upload form via the "$event_ui" > "upload_form" pluggable UI.
@@ -1008,6 +1043,7 @@ $LastChangedRevision$
 			$argv);
 	}
 
+
 /**
  * Render a admin-side search form.
  *
@@ -1057,6 +1093,7 @@ $LastChangedRevision$
 
 		return selectInput($name, $vals, $val, '', '', $id);
 	}
+
 
 /**
  * Attach a HTML fragment to a DOM node.
@@ -1132,6 +1169,7 @@ EOF;
 			return n.$i;
 	}
 
+
 /**
  * Render a checkbox to set/unset a browser cookie.
  *
@@ -1174,6 +1212,7 @@ EOF;
 		return tag(trim(tag($legend, 'legend').n.$content), 'fieldset', $a_id);
 	}
 
+
 /**
  * Render a link element to hook up txpAsyncHref() with request parameters
  *
@@ -1184,12 +1223,13 @@ EOF;
  * @since 4.5.0
  * @see textpattern.js: txpAsyncHref
  */
+
 	function asyncHref($item,$parms,$atts='')
 	{
 		extract(doSpecial(lAtts(array(
-			'event' => $GLOBALS['event'],
-			'step' => $GLOBALS['step'],
-			'thing' => '',
+			'event'    => $GLOBALS['event'],
+			'step'     => $GLOBALS['step'],
+			'thing'    => '',
 			'property' => '',
 		), $parms)));
 
@@ -1200,4 +1240,5 @@ EOF;
 		}
 		return href($item, $href, $atts." class=\"$class\"");
 	}
+
 ?>
