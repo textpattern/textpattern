@@ -159,7 +159,7 @@ $LastChangedRevision$
 					gTxt($a['name']);
 
 				$out = tda($label.n.popHelp($a['name']), ' class="pref-label"');
-				$out.= td(pref_func($a['html'], $a['name'], $a['val'], ($a['html'] == 'text_input' ? INPUT_REGULAR : '')), 'pref-value');
+				$out.= td(pref_func($a['html'], $a['name'], $a['val'], ($a['html'] == 'text_input' ? INPUT_REGULAR : '')), '', 'pref-value');
 
 				echo tr($out, " id='prefs-{$a['name']}' class='{$a['event']}-prefs'");
 			}
