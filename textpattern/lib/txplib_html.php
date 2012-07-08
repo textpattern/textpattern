@@ -386,14 +386,15 @@ $LastChangedRevision$
 				sp.tag(gTxt('next'), 'span', ' class="navlink-disabled"');
 
 			$out[] = '<form class="nav-form" method="get" action="index.php">'.
-				'<p class="prev-next">'.
+
 				n.eInput($event).
 				n.sInput($step).
 				( $sort ? n.hInput('sort', $sort).n.hInput('dir', $dir) : '' ).
 				( ($crit != '') ? n.hInput('crit', $crit).n.hInput('search_method', $search_method) : '' ).
+				'<p class="prev-next">'.
 				join('', $nav).
-				n.tInput().
 				'</p>'.
+				n.tInput().
 				n.'</form>';
 		}
 		else
