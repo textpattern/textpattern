@@ -1,4 +1,4 @@
-Textpattern CMS 4.4.1
+Textpattern CMS 4.5.0
 
 Released under the GNU General Public License. See textpattern/license.txt
 for terms and conditions.
@@ -44,7 +44,11 @@ Includes contributions licensed under the New BSD License.
 * FAQ is available at http://textpattern.com/faq/
 * In-Depth Documentation and tag-index is available in the
   Textpattern documentation at http://textpattern.net/
-* You can get support in our forums at http://forum.textpattern.com/
+* You can get support and information via:
+   Forum:    http://forum.textpattern.com/
+   Twitter:  http://textpattern.com/@textpattern
+   Google+:  http://textpattern.com/+
+   Facebook: http://textpattern.com/facebook
 * If you are running an Apache web server, rename the @.htaccess-dist@ file
   in the "/files" directory to ".htaccess" to prohibit direct URL access to
   your files. Thus the only route to these files becomes through "/file_download".
