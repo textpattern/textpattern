@@ -386,7 +386,6 @@ $LastChangedRevision$
 				sp.tag(gTxt('next'), 'span', ' class="navlink-disabled"');
 
 			$out[] = '<form class="nav-form" method="get" action="index.php">'.
-
 				n.eInput($event).
 				n.sInput($step).
 				( $sort ? n.hInput('sort', $sort).n.hInput('dir', $dir) : '' ).
