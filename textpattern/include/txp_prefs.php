@@ -144,9 +144,9 @@ $LastChangedRevision$
 
 					echo n.n.tr(
 						tdcs(
-							hed(gTxt($a['event']), 3, ' class="pref-heading '.$a['event'].'-prefs"')
+							hed(gTxt($a['event']), 3, ' class="'.$a['event'].'-prefs"')
 						, 2)
-					);
+					, ' class="pref-heading"');
 				}
 
 				if ($cur_evt == 'comments' && !$use_comments)
@@ -534,9 +534,9 @@ EOS
 
 				echo n.n.tr(
 					tdcs(
-						hed(gTxt($a['event']), 3, ' class="pref-heading '.$a['event'].'-prefs"')
+						hed(gTxt($a['event']), 3, ' class="'.$a['event'].'-prefs"')
 					, 2)
-				);
+				, ' class="pref-heading"');
 			}
 
 				$label = (!in_array($a['html'], array('yesnoradio', 'is_dst'))) ?

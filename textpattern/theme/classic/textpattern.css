@@ -1135,6 +1135,14 @@ textarea#form {
 	width: 66%;
 }
 
+.pref-heading {
+	background-color: #ffc;
+}
+
+.pref-heading h3 {
+	margin: 0;
+}
+
 textarea#textpack-install {
 	width: 32em;
 }
