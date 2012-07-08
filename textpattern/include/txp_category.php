@@ -420,8 +420,6 @@ EOS
 
 	function cat_event_category_create($event)
 	{
-		global $txpcfg;
-
 		$title = ps('title');
 
 		$name = strtolower(sanitizeForUrl($title));
@@ -497,8 +495,6 @@ EOS
 
 	function cat_event_category_save($event, $table_name)
 	{
-		global $txpcfg;
-
 		extract(doSlash(array_map('assert_string', psa(array('id', 'name', 'old_name', 'parent', 'title')))));
 		$id = assert_int($id);
 

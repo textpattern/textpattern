@@ -8,7 +8,6 @@ $LastChangedRevision$
 // ----------------------------------------------------------------
 	function doImportMTDB($mt_dblogin, $mt_db, $mt_dbpass, $mt_dbhost, $blog_id, $insert_into_section, $insert_with_status, $default_comment_invite)
 	{
-		global $txpcfg;
 		//Keep some response on some part
 		$results = array();
 

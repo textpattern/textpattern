@@ -306,7 +306,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function saveComment()
 	{
-		global $siteurl,$comments_moderate,$comments_sendmail,$txpcfg,
+		global $siteurl,$comments_moderate,$comments_sendmail,
 			$comments_disallow_images,$prefs;
 
 		$ref = serverset('HTTP_REFERRER');

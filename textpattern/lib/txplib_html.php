@@ -865,8 +865,6 @@ $LastChangedRevision$
 
 	function popTagLinks($type)
 	{
-		global $txpcfg;
-
 		include txpath.'/lib/taglib.php';
 
 		$arname = $type.'_tags';

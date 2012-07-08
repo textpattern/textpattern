@@ -266,8 +266,6 @@ function escape_js($js)
 // -------------------------------------------------------------
 	function load_lang($lang)
 	{
-		global $txpcfg;
-
 		foreach(array($lang, 'en-gb') as $lang_code)
 		{
 			$rs = (txpinterface == 'admin')
@@ -311,7 +309,6 @@ function escape_js($js)
 // -------------------------------------------------------------
 	function load_lang_dates($lang)
 	{
-		global $txpcfg;
 		$filename = is_file(txpath.'/lang/'.$lang.'_dates.txt')?
 			txpath.'/lang/'.$lang.'_dates.txt':
 			txpath.'/lang/en-gb_dates.txt';
@@ -330,7 +327,6 @@ function escape_js($js)
 
 	function load_lang_event($event)
 	{
-		global $txpcfg;
 		$lang = LANG;
 
 		$installed = (false !== safe_field('name', 'txp_lang',"lang='".doSlash($lang)."' limit 1"));

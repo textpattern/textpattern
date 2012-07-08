@@ -643,7 +643,7 @@ EOS
 // install/update/remove languages
 	function list_languages($message='')
 	{
-		global $prefs, $locale, $txpcfg, $textarray;
+		global $prefs, $locale, $textarray;
 		require_once txpath.'/lib/IXRClass.php';
 
 		// Select and save active language
@@ -859,7 +859,7 @@ EOS
 //-------------------------------------------------------------
 	function get_language()
 	{
-		global $prefs, $txpcfg, $textarray;
+		global $prefs, $textarray;
 		require_once txpath.'/lib/IXRClass.php';
 		$lang_code = gps('lang_code');
 

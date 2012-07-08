@@ -352,7 +352,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function link_save()
 	{
-		global $txpcfg, $vars, $txp_user;
+		global $vars, $txp_user;
 
 		$varray = array_map('assert_string', gpsa($vars));
 		extract(doSlash($varray));
