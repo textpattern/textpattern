@@ -94,8 +94,6 @@ function doAuth()
 
 	function doLoginForm($message)
 	{
-		global $txpcfg;
-
 		include txpath.'/lib/txplib_head.php';
 
 		pagetop(gTxt('login'), $message);
@@ -170,7 +168,7 @@ EOSCR
 // -------------------------------------------------------------
 	function doTxpValidate()
 	{
-		global $logout,$txpcfg, $txp_user;
+		global $logout, $txp_user;
 		$p_userid   = ps('p_userid');
 		$p_password = ps('p_password');
 		$p_reset    = ps('p_reset');
@@ -275,7 +273,7 @@ EOSCR
 
 			include_once txpath.'/lib/txplib_admin.php';
 
-			$message = send_reset_confirmation_request($p_userid);
+			$message = ($p_userid) ? send_reset_confirmation_request($p_userid) : '';
 		}
 		elseif (gps('reset'))
 		{
