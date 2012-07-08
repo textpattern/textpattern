@@ -1130,6 +1130,11 @@ textarea#form {
 	vertical-align: middle;
 }
 
+#page-prefs .basic .pref-value,
+#page-prefs .advanced .pref-value {
+	width: 66%;
+}
+
 textarea#textpack-install {
 	width: 32em;
 }
