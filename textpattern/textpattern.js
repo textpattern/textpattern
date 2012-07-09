@@ -811,17 +811,17 @@ jQuery.fn.txpAsyncHref = function(options) {
 }
 
 /**
- * Returns a l18n string.
- * @param string l18n The l18n string to output
+ * Returns a i18n string.
+ * @param string i18n The i18n string to output
  * @param object atts Replacement map
  * @param boolean escape Escape HTML. Default TRUE
  * @return string
  */
 
-textpattern.gTxt = function(l18n, atts, escape)
+textpattern.gTxt = function(i18n, atts, escape)
 {
 	var tags = atts || {};
-	var string = l18n;
+	var string = i18n;
 	var name = string.toLowerCase();
 
 	if ($.type(textpattern.textarray[name]) !== 'undefined') {
@@ -845,7 +845,7 @@ textpattern.gTxt = function(l18n, atts, escape)
 
 /**
  * jQuery plugin for textpattern.gTxt. Sets HTML contents of each matched element.
- * @param object options-object {string, tags : {}, escape : TRUE} | string The l18n string
+ * @param object options-object {string, tags : {}, escape : TRUE} | string The i18n string
  * @param object|undefined tags Replacement tags
  * @param boolean|undefined escape Escape HTML
  * @return object this
@@ -853,17 +853,13 @@ textpattern.gTxt = function(l18n, atts, escape)
 
 jQuery.fn.gTxt = function(opts, tags, escape)
 {
-	var options = opts;
+	var options = $.extend({
+		'string' : opts,
+		'tags' : tags,
+		'escape' : escape
+	}, opts);
 
-	if ($.type(options) !== 'object') {
-		options = {
-			string : opts,
-			tags : tags,
-			escape : escape
-		};
-	}
-
-	$(this).html(textpattern.gTxt(options.string, options.tags, options.escape));
+	this.html(textpattern.gTxt(options.string, options.tags, options.escape));
 	return this;
 };
 
