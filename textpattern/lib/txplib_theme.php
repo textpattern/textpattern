@@ -187,26 +187,42 @@ class theme
 		{
 			$l_ = gTxt('tab_'.$ar);
 			$e_ = (array_key_exists($ar,$defaults)) ? $defaults[$ar] : reset($areas[$ar]);
+			$i_ = array();
 
 			if (has_privs('tab.'.$ar))
 			{
-				$this->menu[$ar] = array(
-					'label' => $l_,
-					'event' => $e_,
-					'active' => ($ar == $area)
-				);
+			
+				if (!has_privs($e_)) 
+				{
+					$e_ = '';
+				}
 
 				foreach ($items as $a => $b)
 				{
 					if (has_privs($b))
 					{
+						
+						if ($e_ === '') {
+							$e_ = $b;
+						}
+						
 						if ($b == $dflt_tab)
 						{
 							$this->menu[$ar]['event'] = $dflt_tab;
 						}
 
-						$this->menu[$ar]['items'][] = array('label' => $a, 'event' => $b, 'active' => ($b == $event));
+						$i_[] = array('label' => $a, 'event' => $b, 'active' => ($b == $event));
 					}
+				}
+				
+				if ($e_)
+				{
+					$this->menu[$ar] = array(
+						'label' => $l_,
+						'event' => $e_,
+						'active' => ($ar == $area),
+						'items' => $i_,
+					);
 				}
 			}
 		}
