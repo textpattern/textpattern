@@ -820,9 +820,6 @@ tr#branding {
 	background-image: -o-linear-gradient(#ffda44, #fabc2b);
 	/* CSS3 Compliant */
 	background-image: linear-gradient(#ffda44, #fabc2b);
-	-webkit-box-shadow: 0 .25em .4em rgba(0, 0, 0, .15);
-	-moz-box-shadow: 0 .25em .4em rgba(0, 0, 0, .15);
-	box-shadow: 0 .25em .4em rgba(0, 0, 0, .15);
 }
 
 h1#textpattern {

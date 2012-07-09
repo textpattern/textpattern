@@ -29,7 +29,7 @@
 	text-align: left;
 	margin: 0 auto;
 	padding: 0 0 0 124px;
-	background: url("textpattern.png") no-repeat left center;
+	background: url("../classic/textpattern.png") no-repeat left center;
 	/* display and zoom IE7 fix for display:inline-block */
 	*display: inline;
 	*zoom: 1;
