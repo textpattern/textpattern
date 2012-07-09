@@ -760,8 +760,8 @@ EOS
 										)
 									)
 								,(isset($langdat['db_lastmod']) && $rpc_updated)
-									? ' class="highlight pref-value"'
-									: ' class="pref-value"'
+									? ' class="highlight lang-value"'
+									: ' class="lang-value"'
 								);
 
 			$lang_file = tda(
@@ -785,14 +785,14 @@ EOS
 								n.'<span class="date '.($file_updated ? 'created' : 'modified').'">'.safe_strftime($prefs['archive_dateformat'],$langdat['file_lastmod']).'</span>'
 
 								: '-'
-							, ' class="langfile pref-value languages_detail'.((isset($langdat['db_lastmod']) && $rpc_updated) ? ' highlight' : '').'"'
+							, ' class="lang-value languages_detail'.((isset($langdat['db_lastmod']) && $rpc_updated) ? ' highlight' : '').'"'
 							);
 			$list .= tr (
 				// Lang-Name & Date
 				tda(gTxt($langname)
 					, (isset($langdat['db_lastmod']) && $rpc_updated)
-							? ' class="highlight pref-label"'
-							: ' class="pref-label"' ).n.
+							? ' class="highlight lang-label"'
+							: ' class="lang-label"' ).n.
 				$rpc_install.n.
 				$lang_file.n.
 				tda( (in_array($langname, $installed_lang) ? dLink('prefs', 'remove_language', 'lang_code', $langname, 1) : '-'), ' class="languages_detail'.((isset($langdat['db_lastmod']) && $rpc_updated) ? ' highlight' : '').'"')
