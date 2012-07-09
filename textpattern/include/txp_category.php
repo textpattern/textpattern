@@ -112,10 +112,10 @@ EOS
 
 		if ($rs)
 		{
-			return treeSelectInput('parent', $rs, $name, 'category_parent');
+			return array(treeSelectInput('parent', $rs, $name, 'category_parent'), true);
 		}
 
-		return gTxt('no_other_categories_exist');
+		return array(gTxt('no_other_categories_exist'), false);
 	}
 
 // -------------------------------------------------------------
@@ -304,11 +304,12 @@ EOS
 		$parent = ps('parent_cat');
 
 		$heading = 'tab_' . ($event == 'article' ? 'list' : $event);
+		$for = $rs ? ' for="'.$event.'_category_parent"' : '';
 
 		$out = n.n.hed(gTxt($heading).sp.popHelp($event.'_category'), 2).
 			form(
 				fInput('text', 'title', '', '', '', '', INPUT_REGULAR).
-				(($rs) ? '<div class="parent"><label>' . gTxt('parent') . '</label>' . treeSelectInput('parent_cat', $rs, $parent) . '</div>' : '').
+				(($rs) ? '<div class="parent"><label'.$for.'>' . gTxt('parent') . '</label>' . treeSelectInput('parent_cat', $rs, $parent, $event.'_category_parent') . '</div>' : '').
 				n.fInput('submit', '', gTxt('Create')).
 				n.eInput('category').
 				n.sInput('cat_'.$event.'_create')
@@ -471,10 +472,11 @@ EOS
 		if ($row) {
 			pagetop(gTxt('edit_category'));
 			extract($row);
+			list($parent_widget, $has_parent) = cat_parent_pop($parent,$evname,$id);
 			$out = '<div class="txp-edit">'.n.
 				hed(gTxt('edit_category'), 2).n.
 				inputLabel('category_name', fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'category_name'), $evname.'_category_name').n.
-				inputLabel('category_parent', cat_parent_pop($parent,$evname,$id), 'parent').n.
+				($has_parent ? inputLabel('category_parent', $parent_widget, 'parent') : graf('<span class="edit-label">'.gTxt('parent').'</span><span class="edit-value">'.$parent_widget.'</span>')).n.
 				inputLabel('category_title', fInput('text', 'title', $title, '', '', '', INPUT_REGULAR, '', 'category_title'), $evname.'_category_title').n.
 				pluggable_ui('category_ui', 'extend_detail_form', '', $row).n.
 				hInput('id',$id).
