@@ -247,6 +247,7 @@ function getNextPrev($id = 0, $threshold = null, $s = '')
 				$threshold = $thisarticle[$key];
 				break;
 		}
+		$s = $thisarticle['section'];
 	}
 
 	$thenext 			= getNeighbour($threshold, $s, '>', $atts);
