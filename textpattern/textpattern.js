@@ -671,7 +671,7 @@ function sendAsyncEvent(data, fn, format)
 		data._txp_token = textpattern._txp_token;
 	}
 	format = format || 'xml';
-	$.post('index.php', data, fn, format);
+	return $.post('index.php', data, fn, format);
 }
 
 /**
