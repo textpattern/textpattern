@@ -58,11 +58,11 @@ SF;
 	{
 		global $prefs;
 		return array(
-			'author' 		=> 'Team Textpattern',
-			'author_uri' 	=> 'http://textpattern.com/',
-			'version' 		=> $prefs['version'],
-			'description' 	=> 'Textpattern Remora Theme',
-			'help' 			=> 'http://textpattern.com/admin-theme-help',
+			'author'      => 'Team Textpattern',
+			'author_uri'  => 'http://textpattern.com/',
+			'version'     => $prefs['version'],
+			'description' => 'Textpattern Remora Theme',
+			'help'        => 'http://textpattern.com/admin-theme-help',
 		);
 	}
 }

@@ -17,23 +17,23 @@ class classic_theme extends theme
 	function header()
 	{
 		$out[] = '<table id="pagetop" cellpadding="0" cellspacing="0">'.n.
-		  '<tr id="branding"><td><h1 id="textpattern">Textpattern</h1></td><td id="navpop">'.navPop(1).'</td></tr>'.n.
-		  '<tr id="nav-primary"><td align="center" class="tabs" colspan="2">';
+			'<tr id="branding"><td><h1 id="textpattern">Textpattern</h1></td><td id="navpop">'.navPop(1).'</td></tr>'.n.
+			'<tr id="nav-primary"><td align="center" class="tabs" colspan="2">';
 
- 		if (!$this->is_popup)
- 		{
- 			$out[] = '<table cellpadding="0" cellspacing="0" align="center">'.n.
+		if (!$this->is_popup)
+		{
+			$out[] = '<table cellpadding="0" cellspacing="0" align="center">'.n.
 			'<tr><td id="messagepane">&#160;'.$this->announce($this->message).'</td>';
 
- 			$secondary = '';
- 			foreach ($this->menu as $tab)
- 			{
+			$secondary = '';
+			foreach ($this->menu as $tab)
+			{
 				$tc = ($tab['active']) ? 'tabup' : 'tabdown';
 				$atts=' class="'.$tc.'"';
 				$hatts=' href="?event='.$tab['event'].'"';
-      			$out[] = tda(tag($tab['label'], 'a', $hatts), $atts);
+				$out[] = tda(tag($tab['label'], 'a', $hatts), $atts);
 
-      			if ($tab['active'] && !empty($tab['items']))
+				if ($tab['active'] && !empty($tab['items']))
 				{
 					$secondary = '</td></tr><tr id="nav-secondary"><td align="center" class="tabs" colspan="2">'.n.
 					'<table cellpadding="0" cellspacing="0" align="center">'.n.
@@ -48,17 +48,17 @@ class classic_theme extends theme
 			}
 			$out[] = '<td id="view-site" class="tabdown"><a href="'.hu.'" target="_blank">'.gTxt('tab_view_site').'</a></td>';
 			$out[] = '</tr></table>';
-	 		$out[] = $secondary;
- 		}
+			$out[] = $secondary;
+		}
 		$out[] = '</td></tr></table>';
- 		return join(n, $out);
+		return join(n, $out);
 	}
 
 	function footer()
 	{
 		global $txp_user;
 
-		$out[] = '<a id="mothership" href="http://textpattern.com/" title="'.gTxt('go_txp_com').'" rel="external"><img src="'.$this->url.'carver.png" width="40" height="40" border="0" alt="Textpattern" /></a>'.n.
+		$out[] = '<a id="mothership" href="http://textpattern.com/" title="'.gTxt('go_txp_com').'" rel="external"><img src="'.$this->url.'carver.png" width="40" height="40" alt="Textpattern" /></a>'.n.
 			graf('Textpattern CMS &#183; '.txp_version);
 
 		if ($txp_user)
@@ -112,8 +112,8 @@ class classic_theme extends theme
 			// Try to inject $html into the message pane no matter when _announce()'s output is printed
 			$js = escape_js($html);
 			$js = <<< EOS
-		        $(document).ready( function(){
-			        $("#messagepane").html("{$js}");
+				$(document).ready( function(){
+					$("#messagepane").html("{$js}");
 					$('#messagepane #message.error').fadeOut(800).fadeIn(800);
 					$('#messagepane #message.warning').fadeOut(800).fadeIn(800);
 				});
@@ -131,11 +131,11 @@ EOS;
 	{
 		global $prefs;
 		return array(
-			'author' 		=> 'Team Textpattern',
-			'author_uri' 	=> 'http://textpattern.com/',
-			'version' 		=> $prefs['version'],
-			'description' 	=> 'Textpattern Classic Theme',
-			'help' 			=> 'http://textpattern.com/admin-theme-help',
+			'author'      => 'Team Textpattern',
+			'author_uri'  => 'http://textpattern.com/',
+			'version'     => $prefs['version'],
+			'description' => 'Textpattern Classic Theme',
+			'help'        => 'http://textpattern.com/admin-theme-help',
 		);
 	}
 }
