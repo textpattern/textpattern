@@ -1461,14 +1461,32 @@ $LastChangedRevision$
 
 	function next_title()
 	{
-		return escape_title($GLOBALS['next_title']);
+		global /** @noinspection PhpUnusedLocalVariableInspection */
+		$thisarticle, $prev_title, $next_title;
+
+		if (!isset($thisarticle['next_title']))
+		{
+			$np = getNextPrev();
+			$thisarticle = $thisarticle + $np;
+			extract($np);
+		}
+		return escape_title($next_title);
 	}
 
 // -------------------------------------------------------------
 
 	function prev_title()
 	{
-		return escape_title($GLOBALS['prev_title']);
+		global /** @noinspection PhpUnusedLocalVariableInspection */
+		$thisarticle, $prev_title, $next_title;
+
+		if (!isset($thisarticle['prev_title']))
+		{
+			$np = getNextPrev();
+			$thisarticle = $thisarticle + $np;
+			extract($np);
+		}
+		return escape_title($prev_title);
 	}
 
 // -------------------------------------------------------------
