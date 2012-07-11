@@ -1,0 +1,2 @@
+/* Remove Textpattern branding */
+.txp-header h1 {background:none !important;padding-left:0 !important;} .txp-header h1 a {margin-left:0 !important;}

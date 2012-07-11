@@ -1,0 +1,70 @@
+h1. Hive admin-side theme for Textpattern CMS v4.5
+
+You are free to modify this theme, reuse code herein, and distribute all its supporting files as long as licences are respected (see below) - go wild!
+
+h2. Installation instructions
+
+# Upload the directory 'hive' into your Textpattern installation -> theme directory.
+# Log in to your Textpattern admin area. Navigate to admin -> preferences -> advanced.
+# Select 'Hive' from the 'Admin-side theme' dropdown list. Save the preferences.
+# You can also install the theme easily using the "smd_admin_themes":http://stefdawson.com/sw/plugins/smd_admin_themes plugin.
+
+h2. Custom CSS toggles
+
+Options are provided to hide certain sections/fields/features from displaying in the admin pages. To use them simply add any of the rules below to your textpattern -> config.php file, before the closing @?>@ line.
+
+*Hide Textpattern branding:*
+
+@define('hive_theme_hide_branding', true);@
+
+*Hide page headings:*
+
+@define('hive_theme_hide_headings', true);@
+
+*Hide preview tabs group (write/edit page):*
+
+@define('hive_theme_hide_preview_tabs_group', true);@
+
+*Hide Textile group (write/edit page):*
+
+@define('hive_theme_hide_textile_group', true);@
+
+*Hide advanced group (write/edit page):*
+
+@define('hive_theme_hide_advanced_group', true);@
+
+*Hide recent articles group (write/edit page):*
+
+@define('hive_theme_hide_recent_articles_group', true);@
+
+*Hide keywords field (write/edit page):*
+
+@define('hive_theme_hide_keywords_field', true);@
+
+*Hide comments group (write/edit page):*
+
+@define('hive_theme_hide_comments_group', true);@
+
+*Hide expires fields (write/edit page):*
+
+@define('hive_theme_hide_expires_field', true);@
+
+*Hide tag builder column (pages and forms pages):*
+
+@define('hive_theme_hide_tag_builder_column', true);@
+
+*Hide form preview button (forms page):*
+
+@define('hive_theme_hide_form_preview', true);@
+
+h2. License
+
+Major components:
+
+* Modernizr: MIT/BSD
+* Selectivizr: MIT
+* Formalize: MIT/GPL
+
+Everything else:
+
+Released under the GNU General Public License, see license.txt for terms and conditions.

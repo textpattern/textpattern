@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg>
+<svg version="1.1" baseProfile="full" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+    x="0px" y="0px" width="44px" height="44px" viewBox="0 0 44 44" enable-background="new 0 0 44 44" xml:space="preserve">
+<path fill="#333333" d="M6,22c0-2,7-10,16-10s16,8,16,10c0,2-7,10-16,10S6,24,6,22z M22,15c-4,0-7,3-7,7s3,7,7,7s7-3,7-7S26,15,22,15z"/>
+<circle fill="#333333" cx="22" cy="22" r="3"/>
+</svg>
