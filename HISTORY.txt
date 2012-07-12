@@ -5,6 +5,7 @@ Changes in 4.5.0
 * Choice of HTML5 or XHTML document type as a preference
 * Textile 2.4. See full changelog at http://textpattern.com/textile-changelog
 * User interface realignment and clean-up
+* Additional admin theme (Hive)
 * Write panel and plugin panel save changes without page refreshes (AJAX)
 * WordPress import tool imports image media attachemnts as article images, can use 'utf8' or 'latin1' source databases
 * New advanced preference "Login info email address" allows to define a 'From:' address from which  a new user's login info is sent
