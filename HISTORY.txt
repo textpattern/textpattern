@@ -3,7 +3,7 @@ Changes in 4.5.0
 * Minimum system requirement: PHP 5.2
 * Modern default site theme (responsive, HTML5, CSS3)
 * Choice of HTML5 or XHTML document type as a preference
-* Textile 2.4
+* Textile 2.4. See full changelog at http://textpattern.com/textile-changelog
 * User interface realignment and clean-up
 * Write panel and plugin panel save changes without page refreshes (AJAX)
 * WordPress import tool imports image media attachemnts as article images, can use 'utf8' or 'latin1' source databases
@@ -21,6 +21,7 @@ Changes in 4.5.0
 * <txp:file_download> may be used as a container tag
 * New <txp:author_email> tag
 * <txp:linklist /> accepts a comma-separated list of link ids in the new 'id' attribute
+* <txp:images /> uses the sort order of images from the 'id' attribute if present.
 * Developer: Introduce gTxtScript() to help with the l10n of client-side strings
 * Developer: Introduce txpspecialchars() as a recommended HTML5-safe alternative to htmlspecialchars()
 * Developer: New events 'article_saved', 'article_posted', 'comment.saved', 'article_ui'.'partials_meta', 'article_ui'.'validate_save', 'image_ui'.'fullsize_image', 'image_ui'.'thumbnail_image' (NB: 'image_ui'.'image_edit' and 'image_ui'.'thumbnail_edit' changed)

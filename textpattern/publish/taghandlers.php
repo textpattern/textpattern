@@ -2977,6 +2977,13 @@ $LastChangedRevision$
 			}
 		}
 
+		// order of ids in 'id' attribute overrides default 'sort' attribute
+		if (empty($atts['sort']) && $id !== '')
+		{
+			$safe_sort = 'field(id, '.join(',', doSlash(do_list($id))).')';
+		}
+
+
 		if (!$where && $filters)
 		{
 			return ''; // If nothing matches, output nothing
