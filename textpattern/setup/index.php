@@ -57,13 +57,21 @@ $bodyclass = ($step=='') ? ' class="welcome"' : '';
 
 print <<<eod
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-	<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-	<head>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta name="robots" content="noindex, nofollow" />
 	<title>Setup &#124; Textpattern CMS</title>
+	<script type="text/javascript" src="$rel_txpurl/jquery.js"></script>
+	<script type="text/javascript">var textpattern = { do_spellcheck: "", textarray: {} };</script>
+	<script type="text/javascript" src="$rel_txpurl/textpattern.js"></script>
 	<link rel="stylesheet" href="$rel_txpurl/theme/hive/css/textpattern.css" type="text/css" />
-	</head>
-	<body id="page-setup"{$bodyclass}>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+	<script type="text/javascript" src="$rel_txpurl/theme/hive/js/modernizr.js"></script>
+	<script type="text/javascript" src="$rel_txpurl/theme/hive/js/jquery.formalize.min.js"></script>
+	<!--[if lt IE 9]><script type="text/javascript" src="$rel_txpurl/theme/hive/js/selectivizr.min.js"></script><![endif]-->
+</head>
+<body id="page-setup"{$bodyclass}>
 	<div class="txp-body">
 eod;
 
@@ -133,7 +141,6 @@ eod;
 		echo n.'<div id="setup_container" class="txp-container">',
 			txp_setup_progress_meter(1),
 			n.'<div class="txp-setup">';
-
 
 		if (!isset($txpcfg['db']))
 		{
@@ -248,20 +255,16 @@ eod;
 
 		echo hed(setup_gTxt("checking_database"), 2);
 
-		// Put a container to house any errors
-		echo '<p>';
-
 		if (($mylink = mysql_connect($dhost, $duser, $dpass)))
 		{
- 			$carry['dclient_flags'] = 0;
+			$carry['dclient_flags'] = 0;
 		}
 		elseif (($mylink = mysql_connect($dhost, $duser, $dpass, false, MYSQL_CLIENT_SSL)))
 		{
- 			$carry['dclient_flags'] = 'MYSQL_CLIENT_SSL';
+			$carry['dclient_flags'] = 'MYSQL_CLIENT_SSL';
 		}
 		else
 		{
-			echo '</p>'; // Close error message container
 			echo graf(
 					'<span class="error">'.setup_gTxt('db_cant_connect').'</span>'
 				).
@@ -270,8 +273,6 @@ eod;
 				n.'</div>';
 			exit;
 		}
-
-		echo '</p>'; // Close error message container
 
 		echo graf(
 			'<span class="success">'.setup_gTxt('db_connected').'</span>'
@@ -494,12 +495,12 @@ eod;
 		define('TXP_INSTALL', 1);
 
 		include_once txpath.'/lib/txplib_update.php';
- 		include txpath.'/setup/txpsql.php';
+		include txpath.'/setup/txpsql.php';
 
 		// This has to come after txpsql.php, because otherwise we can't call mysql_real_escape_string
 		extract(doSlash(psa(array('name','pass','RealName','email', 'theme'))));
 
- 		$nonce = md5( uniqid( rand(), true ) );
+		$nonce = md5( uniqid( rand(), true ) );
 		$hash  = doSlash(txp_hash_password($pass));
 
 		mysql_query("INSERT INTO `".PFX."txp_users` VALUES
@@ -515,7 +516,7 @@ eod;
 		$theme = $theme ? $theme : 'classic';
 		mysql_query("insert `".PFX."txp_prefs` set prefs_id = 1, name = 'theme_name', val = '".doSlash($theme)."', type = '1', event = 'admin', html = 'themename', position = '160'");
 
- 		echo fbCreate();
+		echo fbCreate();
 	}
 
 // -------------------------------------------------------------
@@ -558,7 +559,6 @@ eod;
 				n.'</div>'.
 				n.'</div>';
 		}
-
 		else
 		{
 			$warnings = @find_temp_dir() ? '' : n.graf('<span class="warning">'.setup_gTxt('set_temp_dir_prefs').'</span>');
@@ -592,7 +592,7 @@ eod;
 	{
 		return hed(setup_gTxt('creating_config'), 2).
 			graf(
-				strong(setup_gTxt('before_you_proceed')).', '.setup_gTxt('create_config', array('{txpath}' => txpspecialchars(txpath)))
+				strong(setup_gTxt('before_you_proceed')).' '.setup_gTxt('create_config', array('{txpath}' => txpspecialchars(txpath)))
 			).
 
 		'<textarea class="code" readonly="readonly" name="config" cols="'.INPUT_LARGE.'" rows="'.INPUT_MEDIUM.'">'.
