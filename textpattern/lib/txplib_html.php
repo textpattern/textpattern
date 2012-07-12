@@ -807,7 +807,7 @@ $LastChangedRevision$
 	function popHelp($help_var, $width = '', $height = '')
 	{
 		return '<a rel="help" target="_blank"'.
-			' href="http://rpc.textpattern.com/help/?item='.$help_var.a.'language='.LANG.'"'.
+			' href="'.HELP_URL.'?item='.$help_var.a.'language='.LANG.'"'.
 			' onclick="popWin(this.href'.
 			($width ? ', '.$width : '').
 			($height ? ', '.$height : '').
