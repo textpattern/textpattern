@@ -304,6 +304,20 @@ eod;
 			exit;
 		}
 
+		$tables_exist = mysql_query("describe `".$dprefix."textpattern`");
+		if ($tables_exist)
+		{
+			echo graf(
+					'<span class="error">'.setup_gTxt('tables_exist', array(
+						'{dbname}' => strong(txpspecialchars($ddb))
+					), 'raw').'</span>'
+				).
+				n.setup_back_button().
+				n.'</div>'.
+				n.'</div>';
+			exit;
+		}
+
 		// On 4.1 or greater use utf8-tables
 		$version = mysql_get_server_info();
 

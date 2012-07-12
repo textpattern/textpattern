@@ -366,6 +366,7 @@ $langs = array(
 		'site_path' => 'Site path',
 		'site_url' => 'Site URL',
 		'table_prefix' => 'Table prefix (optional)',
+		'tables_exist' => 'It appears the tables in <strong>{dbname}</strong> already exist. If you wish to continue setup, either delete the existing tables, or choose a different table prefix.',
 		'thanks_for_interest' => 'Thank you for your interest in Textpattern.',
 		'that_went_well' => 'That went well!',
 		'using_db' => 'Using {dbname}',
