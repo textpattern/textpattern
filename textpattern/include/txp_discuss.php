@@ -31,9 +31,11 @@ $LastChangedRevision$
 			'discuss_change_pageby' => true
 		);
 
-		if(!$step or !bouncer($step, $available_steps)){
+		if ($step && bouncer($step, $available_steps)){
+			$step();
+		} else {
 			discuss_list();
-		} else $step();
+		}
 	}
 
 //-------------------------------------------------------------

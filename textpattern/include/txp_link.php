@@ -14,20 +14,18 @@ $LastChangedRevision$
 
 */
 
-	if (!defined('txpinterface'))
-	{
-		die('txpinterface is undefined.');
-	}
-
-	global $vars;
+	if (!defined('txpinterface')) die('txpinterface is undefined.');
 
 	if ($event == 'link')
 	{
-		global $all_link_cats, $all_link_authors;
-
 		require_privs('link');
 
+		global $vars;
 		$vars = array('category', 'url', 'linkname', 'linksort', 'description', 'id');
+
+		global $all_link_cats, $all_link_authors;
+		$all_link_cats = getTree('root', 'link');
+		$all_link_authors = the_privileged('link.edit.own');
 
 		$available_steps = array(
 			'link_list'          => false,
@@ -38,14 +36,11 @@ $LastChangedRevision$
 			'link_multi_edit'    => true
 		);
 
-		if (!$step or !bouncer($step, $available_steps)){
-			$step = 'link_list';
+		if ($step && bouncer($step, $available_steps)) {
+			$step();
+		} else {
+			link_list();
 		}
-
-		$all_link_cats = getTree('root', 'link');
-		$all_link_authors = the_privileged('link.edit.own');
-
-		$step();
 	}
 
 // -------------------------------------------------------------

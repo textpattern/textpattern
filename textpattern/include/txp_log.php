@@ -14,10 +14,7 @@ $HeadURL$
 $LastChangedRevision$
 
 */
-	if (!defined('txpinterface'))
-	{
-		die('txpinterface is undefined.');
-	}
+	if (!defined('txpinterface')) die('txpinterface is undefined.');
 
 	if ($event == 'log')
 	{
@@ -29,10 +26,11 @@ $LastChangedRevision$
 			'log_multi_edit' 	=> true
 		);
 
-		if (!$step or !bouncer($step, $available_steps)){
-			$step = 'log_list';
+		if ($step && bouncer($step, $available_steps)) {
+			$step();
+		} else {
+			log_list();
 		}
-		$step();
 	}
 
 

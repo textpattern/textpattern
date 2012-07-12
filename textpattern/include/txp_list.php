@@ -26,21 +26,21 @@ $LastChangedRevision$
 			STATUS_STICKY  => gTxt('sticky'),
 		);
 
+		$all_cats = getTree('root', 'article');
+		$all_authors = the_privileged('article.edit.own');
+		$all_sections = safe_column('name', 'txp_section', "name != 'default'");
+
 		$available_steps = array(
 			'list_list'          => false,
 			'list_change_pageby' => true,
 			'list_multi_edit'    => true,
 		);
 
-		if(!$step or !bouncer($step, $available_steps)) {
-			$step = 'list_list';
+		if ($step && bouncer($step, $available_steps)) {
+			$step();
+		} else {
+			list_list();
 		}
-
-		$all_cats = getTree('root', 'article');
-		$all_authors = the_privileged('article.edit.own');
-		$all_sections = safe_column('name', 'txp_section', "name != 'default'");
-
-		$step();
 	}
 
 //--------------------------------------------------------------

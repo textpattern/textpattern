@@ -17,9 +17,11 @@ $LastChangedRevision$
 	if (!defined('txpinterface')) die('txpinterface is undefined.');
 
 	if ($event == 'section') {
-		global $all_pages, $all_styles;
-
 		require_privs('section');
+
+		global $all_pages, $all_styles;
+		$all_pages = safe_column('name', 'txp_page', "1=1");
+		$all_styles = safe_column('name', 'txp_css', "1=1");
 
 		$available_steps = array(
 			'section_change_pageby' => true,
@@ -32,14 +34,11 @@ $LastChangedRevision$
 			'section_toggle_option' => true,
 		);
 
-		if (!$step or !bouncer($step, $available_steps)){
-			$step ='sec_section_list';
+		if ($step && bouncer($step, $available_steps)) {
+			$step();
+		} else {
+			sec_section_list();
 		}
-
-		$all_pages = safe_column('name', 'txp_page', "1=1");
-		$all_styles = safe_column('name', 'txp_css', "1=1");
-
-		$step();
 	}
 
 // -------------------------------------------------------------

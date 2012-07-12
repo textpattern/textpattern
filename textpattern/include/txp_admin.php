@@ -40,10 +40,11 @@ $LastChangedRevision$
 			'new_pass_form'       => false,
 		);
 
-		if (!$step or !bouncer($step, $available_steps)) {
-			$step = 'author_list';
+		if ($step && bouncer($step, $available_steps)) {
+			$step();
+		} else {
+			author_list();
 		}
-		$step();
 	}
 
 // -------------------------------------------------------------

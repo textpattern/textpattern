@@ -33,9 +33,11 @@ $LastChangedRevision$
 	);
 
 	if ($event == 'file') {
-		global $all_file_cats, $all_file_authors;
-
 		require_privs('file');
+
+		global $all_file_cats, $all_file_authors;
+		$all_file_cats = getTree('root', 'file');
+		$all_file_authors = the_privileged('file.edit.own');
 
 		$available_steps = array(
 			'file_change_pageby' => true,
@@ -48,14 +50,11 @@ $LastChangedRevision$
 			'file_create'        => true,
 		);
 
-		if(!$step or !bouncer($step, $available_steps)) {
-			$step = 'file_list';
+		if ($step && bouncer($step, $available_steps)) {
+			$step();
+		} else {
+			file_list();
 		}
-
-		$all_file_cats = getTree('root', 'file');
-		$all_file_authors = the_privileged('file.edit.own');
-
-		$step();
 	}
 
 // -------------------------------------------------------------

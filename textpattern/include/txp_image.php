@@ -26,9 +26,11 @@ $LastChangedRevision$
 
 	if ($event == 'image')
 	{
-		global $all_image_cats, $all_image_authors;
-
 		require_privs('image');
+
+		global $all_image_cats, $all_image_authors;
+		$all_image_cats = getTree('root', 'image');
+		$all_image_authors = the_privileged('image.edit.own');
 
 		$available_steps = array(
 			'image_list'          => false,
@@ -43,14 +45,11 @@ $LastChangedRevision$
 			'image_multi_edit'    => true,
 		);
 
-		if(!$step or !bouncer($step, $available_steps)) {
-			$step = 'image_list';
+		if ($step && bouncer($step, $available_steps)) {
+			$step();
+		} else {
+			image_list();
 		}
-
-		$all_image_cats = getTree('root', 'image');
-		$all_image_authors = the_privileged('image.edit.own');
-
-		$step();
 	}
 
 // -------------------------------------------------------------

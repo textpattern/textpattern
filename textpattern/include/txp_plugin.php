@@ -30,10 +30,11 @@ $LastChangedRevision$
 			'plugin_multi_edit' => true
 		);
 
-		if (!$step or !bouncer($step, $available_steps)) {
-			$step = 'plugin_list';
+		if ($step && bouncer($step, $available_steps)) {
+			$step();
+		} else {
+			plugin_list();
 		}
-		$step();
 	}
 
 // -------------------------------------------------------------

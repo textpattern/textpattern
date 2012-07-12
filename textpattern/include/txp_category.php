@@ -35,10 +35,11 @@ if ($event == 'category') {
 		'cat_link_edit'          => false,
 	);
 
-	if(!$step or !bouncer($step, $available_steps)){
-		$step = 'cat_category_list';
+	if ($step && bouncer($step, $available_steps)){
+		$step();
+	} else {
+		cat_category_list();
 	}
-	$step();
 }
 
 //-------------------------------------------------------------

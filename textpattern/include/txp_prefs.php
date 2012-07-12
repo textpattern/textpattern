@@ -33,10 +33,11 @@ $LastChangedRevision$
 			'prefs_list'          => false
 		);
 
-		if (!$step or !bouncer($step, $available_steps)){
-			$step = 'prefs_list';
+		if ($step && bouncer($step, $available_steps)) {
+			$step();
+		} else {
+			prefs_list();
 		}
-		$step();
 	}
 
 // -------------------------------------------------------------
