@@ -26,6 +26,7 @@ include_once txpath.'/lib/constants.php';
 include_once txpath.'/lib/txplib_html.php';
 include_once txpath.'/lib/txplib_forms.php';
 include_once txpath.'/lib/txplib_misc.php';
+include_once txpath.'/lib/txplib_theme.php';
 include_once txpath.'/include/txp_auth.php';
 
 assert_system_requirements();
@@ -49,22 +50,23 @@ else
 	$txpdir = '/';
 }
 
+$step = ps('step');
 $rel_siteurl = preg_replace("#^(.*?)($txpdir)?/setup.*$#i",'$1',$_SERVER['PHP_SELF']);
 $rel_txpurl = rtrim(dirname(dirname($_SERVER['PHP_SELF'])), '/\\');
+$bodyclass = ($step=='') ? ' class="welcome"' : '';
+
 print <<<eod
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-			"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 	<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 	<head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-	<title>Textpattern &#8250; setup</title>
-	<link rel="stylesheet" href="$rel_txpurl/theme/classic/textpattern.css" type="text/css" />
+	<title>Setup &#124; Textpattern CMS</title>
+	<link rel="stylesheet" href="$rel_txpurl/theme/hive/css/textpattern.css" type="text/css" />
 	</head>
-	<body id="page-setup">
-	<div align="center">
+	<body id="page-setup"{$bodyclass}>
+	<div class="txp-body">
 eod;
 
-	$step = ps('step');
 	switch ($step) {
 		case "": chooseLang(); break;
 		case "getDbInfo": getDbInfo(); break;
@@ -81,18 +83,44 @@ eod;
 // -------------------------------------------------------------
 	function chooseLang()
 	{
-	  echo '<form action="'.$_SERVER['PHP_SELF'].'" method="post">',
-	  	'<table id="setup" cellpadding="0" cellspacing="0" border="0">',
-		tr(
-			tda(
-				hed('Welcome to Textpattern',1).
-				graf('Please choose a language:').
-				langs().
-				graf(fInput('submit','Submit','Submit','publish')).
-				sInput('getDbInfo')
-			,' width="400" height="50" colspan="4" align="left"')
-		),
-		'</table></form>';
+		echo n.'<div id="setup_container" class="txp-container">',
+			n.'<div class="txp-setup">',
+			n.hed('Welcome to Textpattern',1),
+			n.'<form action="'.$_SERVER['PHP_SELF'].'" method="post">',
+			n.langs(),
+			n.graf(fInput('submit','Submit','Submit','publish')),
+			n.sInput('getDbInfo'),
+			n.'</form>',
+			n.'</div>',
+			n.'</div>';
+	}
+
+// -------------------------------------------------------------
+	function txp_setup_progress_meter($stage=1) {
+
+		$stages = array(
+			1 => setup_gTxt('set_db_details'),
+			2 => setup_gTxt('add_config_file'),
+			3 => setup_gTxt('populate_db'),
+			4 => setup_gTxt('go'),
+		);
+
+		$out = array();
+
+		$out[] = n.'<div class="progress-meter">'.
+			n.'<ol>';
+
+		foreach ($stages as $idx => $phase)
+		{
+			$active = ($idx == $stage);
+			$sel = $active ? ' class="active"' : '';
+			$out[] = n.'<li'.$sel.'>'.($active ? strong($phase) : $phase).'</li>';
+		}
+
+		$out[] = n.'</ol>'.
+			n.'</div>';
+
+		return join('', $out);
 	}
 
 // -------------------------------------------------------------
@@ -102,6 +130,11 @@ eod;
 
 		global $txpcfg;
 
+		echo n.'<div id="setup_container" class="txp-container">',
+			txp_setup_progress_meter(1),
+			n.'<div class="txp-setup">';
+
+
 		if (!isset($txpcfg['db']))
 		{
 			@include txpath.'/config.php';
@@ -109,9 +142,13 @@ eod;
 
 		if (!empty($txpcfg['db']))
 		{
-			exit(graf(
-				gTxt('already_installed', array('{txpath}' => txpath))
-			));
+			echo graf(
+					'<span class="warning">'.setup_gTxt('already_installed', array('{txpath}' => txpath)).'</span>'
+				).
+				n.setup_back_button().
+				n.'</div>'.
+				n.'</div>';
+			exit;
 		}
 
 		if (@$_SERVER['SCRIPT_NAME'] && (@$_SERVER['SERVER_NAME'] || @$_SERVER['HTTP_HOST']))
@@ -124,54 +161,59 @@ eod;
 			$guess_siteurl = 'mysite.com';
 		}
 
-		echo '<form action="'.$_SERVER['PHP_SELF'].'" method="post">',
-			'<table id="setup" cellpadding="0" cellspacing="0" border="0">',
-		tr(
-			tda(
-			  hed(gTxt('welcome_to_textpattern'),1).
-			  graf(gTxt('need_details'),' style="margin-bottom:3em"').
-			  hed('MySQL',2).
-			  graf(gTxt('db_must_exist'))
-			,' width="400" height="50" colspan="4" align="left"')
-		),
-		tr(
-			fLabelCell(gTxt('mysql_login')).fInputCell('duser','','').
-			fLabelCell(gTxt('mysql_password')).fInputCell('dpass','','')
-		),
-		tr(
-			fLabelCell(gTxt('mysql_server')).fInputCell('dhost','localhost','').
-			fLabelCell(gTxt('mysql_database')).fInputCell('ddb','','')
-		),
-		tr(
-			fLabelCell(gTxt('table_prefix')).fInputCell('dprefix','','').
-			tdcs(small(gTxt('prefix_warning')),2)
-		),
-		tr(tdcs('&#160;',4)),
-		tr(
-			tdcs(
-				hed(gTxt('site_url'),2).
-				graf(gTxt('please_enter_url')),4)
-		),
-		tr(
-			fLabelCell('http://').
-				tdcs(fInput('text','siteurl',$guess_siteurl,'edit','','',40).
-				popHelp('siteurl'),3)
-		);
+		echo '<form action="'.$_SERVER['PHP_SELF'].'" method="post">'.
+			n.hed(setup_gTxt('need_details'),1).
+			n.hed('MySQL',2).
+			n.graf(setup_gTxt('db_must_exist')).
+
+			n.graf(
+				'<span class="edit-label"><label for="setup_mysql_login">'.setup_gTxt('mysql_login').'</label></span>'.
+				n.'<span class="edit-value">'.fInput('text', 'duser', '', '', '', '', INPUT_REGULAR, '', 'setup_mysql_login').'</span>'
+			).
+
+			n.graf(
+				'<span class="edit-label"><label for="setup_mysql_pass">'.setup_gTxt('mysql_password').'</label></span>'.
+				n.'<span class="edit-value">'.fInput('text', 'dpass', '', '', '', '', INPUT_REGULAR, '', 'setup_mysql_pass').'</span>'
+			).
+
+			n.graf(
+				'<span class="edit-label"><label for="setup_mysql_server">'.setup_gTxt('mysql_server').'</label></span>'.
+				n.'<span class="edit-value">'.fInput('text', 'dhost', 'localhost', '', '', '', INPUT_REGULAR, '', 'setup_mysql_server').'</span>'
+			).
+
+			n.graf(
+				'<span class="edit-label"><label for="setup_mysql_db">'.setup_gTxt('mysql_database').'</label></span>'.
+				n.'<span class="edit-value">'.fInput('text', 'ddb', '', '', '', '', INPUT_REGULAR, '', 'setup_mysql_db').'</span>'
+			).
+
+			n.graf(
+				'<span class="edit-label"><label for="setup_table_prefix">'.setup_gTxt('table_prefix').'</label>'.sp.popHelp('table_prefix').'</span>'.
+				n.'<span class="edit-value">'.fInput('text', 'dprefix', '', '', '', '', INPUT_REGULAR, '', 'setup_table_prefix').'</span>'
+			).
+
+			n.hed(setup_gTxt('site_url'),2).
+			n.graf(setup_gTxt('please_enter_url')).
+			n.graf(
+				'<span class="edit-label"><label for="setup_site_url">http://</label>'.sp.popHelp('siteurl').'</span>'.
+				n.'<span class="edit-value">'.fInput('text', 'siteurl', $guess_siteurl, '', '', '', INPUT_REGULAR, '', 'setup_site_url').'</span>'
+			);
 
 		if (is_disabled('mail'))
 		{
-			echo tr(
-				tdcs(gTxt('warn_mail_unavailable'),3,null,'" style="color:red;text-align:center')
+			echo n.graf(
+				'<span class="warning">'.setup_gTxt('warn_mail_unavailable').'</span>'
 			);
 		}
 
-		echo tr(
-			td().td(fInput('submit','Submit',gTxt('next'),'publish')).td().td()
+		echo n.graf(
+			fInput('submit','Submit',setup_gTxt('next', '', 'raw'),'publish')
 		);
-		echo endTable(),
-		hInput('lang', LANG),
-		sInput('printConfig'),
-		'</form>';
+
+		echo n.hInput('lang', LANG),
+			n.sInput('printConfig'),
+			n.'</form>'.
+			n.'</div>'.
+			n.'</div>';
 	}
 
 // -------------------------------------------------------------
@@ -184,6 +226,10 @@ eod;
 
 		global $txpcfg;
 
+		echo n.'<div id="setup_container" class="txp-container">'.
+			txp_setup_progress_meter(2).
+			n.'<div class="txp-setup">';
+
 		if (!isset($txpcfg['db']))
 		{
 			@include txpath.'/config.php';
@@ -191,47 +237,70 @@ eod;
 
 		if (!empty($txpcfg['db']))
 		{
-			exit(graf(
-				gTxt('already_installed', array(
-					'{txpath}' => txpath
-				))
-			));
+			echo graf(
+					'<span class="warning">'.setup_gTxt('already_installed', array('{txpath}' => txpath)).'</span>'
+				).
+				n.setup_back_button().
+				n.'</div>'.
+				n.'</div>';
+			exit;
 		}
 
-		// FIXME, remove when all languages are updated with this string
-		if (!isset($GLOBALS['textarray']['prefix_bad_characters']))
-			$GLOBALS['textarray']['prefix_bad_characters'] =
-				'The Table prefix {dbprefix} contains characters that are not allowed.<br />'.
-				'The first character must match one of <b>a-zA-Z_</b> and all following
-				 characters must match one of <b>a-zA-Z0-9_</b>';
+		echo hed(setup_gTxt("checking_database"), 2);
 
-		echo graf(gTxt("checking_database"));
+		// Put a container to house any errors
+		echo '<p>';
 
 		if (($mylink = mysql_connect($dhost, $duser, $dpass)))
+		{
  			$carry['dclient_flags'] = 0;
+		}
 		elseif (($mylink = mysql_connect($dhost, $duser, $dpass, false, MYSQL_CLIENT_SSL)))
+		{
  			$carry['dclient_flags'] = 'MYSQL_CLIENT_SSL';
+		}
 		else
-			exit(graf(gTxt('db_cant_connect')));
+		{
+			echo '</p>'; // Close error message container
+			echo graf(
+					'<span class="error">'.setup_gTxt('db_cant_connect').'</span>'
+				).
+				n.setup_back_button().
+				n.'</div>'.
+				n.'</div>';
+			exit;
+		}
 
-		echo graf(gTxt('db_connected'));
+		echo '</p>'; // Close error message container
+
+		echo graf(
+			'<span class="success">'.setup_gTxt('db_connected').'</span>'
+			);
 
 		if (! ($dprefix == '' || preg_match('#^[a-zA-Z_][a-zA-Z0-9_]*$#', $dprefix)) )
 		{
-			exit(graf(
-				gTxt('prefix_bad_characters', array(
-					'{dbprefix}' => strong(txpspecialchars($dprefix))
-				), 'raw')
-			));
+			echo graf(
+					'<span class="error">'.setup_gTxt('prefix_bad_characters', array(
+						'{dbprefix}' => strong(txpspecialchars($dprefix))
+					), 'raw').'</span>'
+				).
+				n.setup_back_button().
+				n.'</div>'.
+				n.'</div>';
+			exit;
 		}
 
 		if (!$mydb = mysql_select_db($ddb))
 		{
-			exit(graf(
-				gTxt('db_doesnt_exist', array(
-					'{dbname}' => strong(txpspecialchars($ddb))
-				), 'raw')
-			));
+			echo graf(
+					'<span class="error">'.setup_gTxt('db_doesnt_exist', array(
+						'{dbname}' => strong(txpspecialchars($ddb))
+					), 'raw').'</span>'
+				).
+				n.setup_back_button().
+				n.'</div>'.
+				n.'</div>';
+			exit;
 		}
 
 		// On 4.1 or greater use utf8-tables
@@ -254,31 +323,27 @@ eod;
 		}
 
 		echo graf(
-			gTxt('using_db', array('{dbname}' => strong(txpspecialchars($ddb))), 'raw')
-			.' ('. $carry['dbcharset'] .')'
-		),
-		graf(
-			strong(gTxt('before_you_proceed')).', '.gTxt('create_config', array('{txpath}' => txpspecialchars(txpath)))
-		),
+			'<span class="success">'.setup_gTxt('using_db', array('{dbname}' => strong(txpspecialchars($ddb))), 'raw')
+			.' ('. $carry['dbcharset'] .')</span>'
+		);
 
-		'<textarea name="config" cols="40" rows="5" style="width: 400px; height: 200px">',
-		makeConfig($carry),
-		'</textarea>',
-		'<form action="'.$_SERVER['PHP_SELF'].'" method="post">',
-		fInput('submit','submit',gTxt('did_it'),'smallbox'),
-		sInput('getTxpLogin'),hInput('carry',postEncode($carry)),
-		'</form>';
+		echo setup_config_contents($carry).
+			n.'</div>'.
+			n.'</div>';
 	}
 
 // -------------------------------------------------------------
 	function getTxpLogin()
 	{
 		$carry = postDecode(ps('carry'));
+
 		extract($carry);
 
 		$GLOBALS['textarray'] = setup_load_lang($lang);
 
 		global $txpcfg;
+
+		echo n.'<div id="setup_container" class="txp-container">';
 
 		if (!isset($txpcfg['db']))
 		{
@@ -287,51 +352,76 @@ eod;
 
 		if (!isset($txpcfg) || ($txpcfg['db'] != $ddb) || ($txpcfg['table_prefix'] != $dprefix))
 		{
-			echo graf(
-				strong(gTxt('before_you_proceed')).', '.
-				gTxt('create_config', array(
-					'{txpath}' => txpspecialchars(txpath)
-				))
-			),
-
-			'<textarea style="width:400px;height:200px" name="config" rows="1" cols="1">',
-			makeConfig($carry),
-			'</textarea>',
-			'<form action="'.$_SERVER['PHP_SELF'].'" method="post">',
-			fInput('submit','submit',gTxt('did_it'),'smallbox'),
-			sInput('getTxpLogin'),hInput('carry',postEncode($carry)),
-			'</form>';
-			return;
+			echo txp_setup_progress_meter(2).
+				n.'<div class="txp-setup">'.
+				n.setup_config_contents($carry).
+				n.'</div>'.
+				n.'</div>';
+			exit;
 		}
 
-		echo '<form action="'.$_SERVER['PHP_SELF'].'" method="post">',
-	  	startTable('edit'),
-		tr(
-			tda(
-				graf(gTxt('thanks')).
-				graf(gTxt('about_to_create'))
-			,' width="400" colspan="2" align="center"')
-		),
-		tr(
-			fLabelCell(gTxt('your_full_name')).fInputCell('RealName')
-		),
-		tr(
-			fLabelCell(gTxt('setup_login')).fInputCell('name')
-		),
-		tr(
-			fLabelCell(gTxt('choose_password')).fInputCell('pass')
-		),
-		tr(
-			fLabelCell(gTxt('your_email')).fInputCell('email')
-		),
-		tr(
-			td().td(fInput('submit','Submit',gTxt('next'),'publish'))
-		),
-		endTable(),
-		sInput('createTxp'),
-		hInput('lang', txpspecialchars($lang)),
-		hInput('siteurl', txpspecialchars($siteurl)),
-		'</form>';
+		// Default theme selector
+		$core_themes = array('classic', 'remora', 'hive');
+
+		$themes = theme::names();
+		foreach ($themes as $t)
+		{
+			$theme = theme::factory($t);
+			if ($theme) {
+				$m = $theme->manifest();
+				$title = empty($m['title']) ? ucwords($theme->name) : $m['title'];
+				$vals[$t] = (in_array($t, $core_themes) ? setup_gTxt('core_theme', array('{theme}' => $title)) : $title);
+				unset($theme);
+			}
+		}
+		asort($vals, SORT_STRING);
+
+		$theme_chooser = selectInput('theme', $vals, 'classic', '', '', '', 'setup_admin_theme');
+
+		echo txp_setup_progress_meter(3).
+			n.'<div class="txp-setup">';
+
+		echo '<form action="'.$_SERVER['PHP_SELF'].'" method="post">'.
+			n.hed(setup_gTxt('creating_db_tables'),2).
+			n.graf(setup_gTxt('about_to_create')).
+
+			n.graf(
+				'<span class="edit-label"><label for="setup_user_realname">'.setup_gTxt('your_full_name').'</label></span>'.
+				n.'<span class="edit-value">'.fInput('text', 'RealName', '', '', '', '', INPUT_REGULAR, '', 'setup_user_realname').'</span>'
+			).
+
+			n.graf(
+				'<span class="edit-label"><label for="setup_user_login">'.setup_gTxt('setup_login').'</label>'.sp.popHelp('setup_user_login').'</span>'.
+				n.'<span class="edit-value">'.fInput('text', 'name', '', '', '', '', INPUT_REGULAR, '', 'setup_user_login').'</span>'
+			).
+
+			n.graf(
+				'<span class="edit-label"><label for="setup_user_pass">'.setup_gTxt('choose_password').'</label>'.sp.popHelp('setup_user_pass').'</span>'.
+				n.'<span class="edit-value">'.fInput('text', 'pass', '', '', '', '', INPUT_REGULAR, '', 'setup_user_pass').'</span>'
+			).
+
+			n.graf(
+				'<span class="edit-label"><label for="setup_user_email">'.setup_gTxt('your_email').'</label></span>'.
+				n.'<span class="edit-value">'.fInput('text', 'email', '', '', '', '', INPUT_REGULAR, '', 'setup_user_email').'</span>'
+			).
+
+			n.hed(setup_gTxt('site_config'),2).
+
+			n.graf(
+				'<span class="edit-label"><label for="setup_admin_theme">'.setup_gTxt('admin_theme').'</label>'.sp.popHelp('theme_name').'</span>'.
+				n.'<span class="edit-value">'.$theme_chooser.'</span>'
+			).
+
+			n.graf(
+				fInput('submit','Submit',setup_gTxt('next'),'publish')
+			).
+
+			n.sInput('createTxp'),
+			n.hInput('lang', txpspecialchars($lang)),
+			n.hInput('siteurl', txpspecialchars($siteurl)),
+			n.'</form>'.
+			n.'</div>'.
+			n.'</div>';
 	}
 
 // -------------------------------------------------------------
@@ -339,9 +429,46 @@ eod;
 	{
 		$GLOBALS['textarray'] = setup_load_lang(ps('lang'));
 
+		if (ps('name') == '')
+		{
+			echo n.'<div id="setup_container" class="txp-container">'.
+				txp_setup_progress_meter(3).
+				n.'<div class="txp-setup">'.
+				n.graf(
+					'<span class="error">'.setup_gTxt('name_required').'</span>'
+				).
+				n.setup_back_button().
+				n.'</div>'.
+				n.'</div>';
+			exit;
+		}
+
+		if (!ps('pass'))
+		{
+			echo n.'<div id="setup_container" class="txp-container">'.
+				txp_setup_progress_meter(3).
+				n.'<div class="txp-setup">'.
+				n.graf(
+					'<span class="error">'.setup_gTxt('pass_required').'</span>'
+				).
+				n.setup_back_button().
+				n.'</div>'.
+				n.'</div>';
+			exit;
+		}
+
 		if (!is_valid_email(ps('email')))
 		{
-			exit(graf(gTxt('email_required')));
+			echo n.'<div id="setup_container" class="txp-container">'.
+				txp_setup_progress_meter(3).
+				n.'<div class="txp-setup">'.
+				n.graf(
+					'<span class="error">'.setup_gTxt('email_required').'</span>'
+				).
+				n.setup_back_button().
+				n.'</div>'.
+				n.'</div>';
+			exit;
 		}
 
 		global $txpcfg;
@@ -370,10 +497,10 @@ eod;
  		include txpath.'/setup/txpsql.php';
 
 		// This has to come after txpsql.php, because otherwise we can't call mysql_real_escape_string
-		extract(doSlash(psa(array('name','pass','RealName','email'))));
+		extract(doSlash(psa(array('name','pass','RealName','email', 'theme'))));
 
- 		$nonce 	= md5( uniqid( rand(), true ) );
-		$hash 	= doSlash(txp_hash_password($pass));
+ 		$nonce = md5( uniqid( rand(), true ) );
+		$hash  = doSlash(txp_hash_password($pass));
 
 		mysql_query("INSERT INTO `".PFX."txp_users` VALUES
 			(1,'$name','$hash','$RealName','$email',1,now(),'$nonce')");
@@ -382,6 +509,11 @@ eod;
 		mysql_query("update `".PFX."txp_prefs` set val = '".LANG."' where `name`='language'");
 		mysql_query("update `".PFX."txp_prefs` set val = '".getlocale(LANG)."' where `name`='locale'");
 		mysql_query("update `".PFX."textpattern` set Body = replace(Body, 'siteurl', '".doSlash($urlpath)."'), Body_html = replace(Body_html, 'siteurl', '".doSlash($urlpath)."') WHERE ID = 1");
+
+		// cf. update/_to_4.2.0.php.
+		// TODO: Position might need altering when prefs panel layout is altered
+		$theme = $theme ? $theme : 'classic';
+		mysql_query("insert `".PFX."txp_prefs` set prefs_id = 1, name = 'theme_name', val = '".doSlash($theme)."', type = '1', event = 'admin', html = 'themename', position = '160'");
 
  		echo fbCreate();
 	}
@@ -404,7 +536,7 @@ eod;
 		.o.'host'         .m.$dhost.nl
 		.($dclient_flags ? o.'client_flags'."'] = ".$dclient_flags.";\n" : '')
 		.o.'table_prefix' .m.$dprefix.nl
-		.o.'txpath'       .m.txpath.nl   // remove in crockery
+		.o.'txpath'       .m.txpath.nl
 		.o.'dbcharset'    .m.$dbcharset.nl
 		.$close;
 	}
@@ -412,39 +544,65 @@ eod;
 // -------------------------------------------------------------
 	function fbCreate()
 	{
+		echo n.'<div id="setup_container" class="txp-container">'.
+			txp_setup_progress_meter(4).
+			n.'<div class="txp-setup">';
+
 		if ($GLOBALS['txp_install_successful'] === false)
 		{
-			return '<div width="450" valign="top" style="margin-right: auto; margin-left: auto;">'.
-				graf(
-					gTxt('errors_during_install', array(
+			return n.graf(
+					'<span class="error">'.setup_gTxt('errors_during_install', array(
 						'{num}' => $GLOBALS['txp_err_count']
-					))
-				,' style="margin-top: 3em;"').
-				'</div>';
+					)).'</span>'
+				).
+				n.'</div>'.
+				n.'</div>';
 		}
 
 		else
 		{
-			$warnings = @find_temp_dir() ? '' : graf(gTxt('set_temp_dir_prefs'));
+			$warnings = @find_temp_dir() ? '' : n.graf('<span class="warning">'.setup_gTxt('set_temp_dir_prefs').'</span>');
+			$login_url = $GLOBALS['rel_txpurl'].'/index.php';
 
-			return '<div width="450" valign="top" style="margin-right: auto; margin-left: auto;">'.
+			return n.hed(setup_gTxt('that_went_well'),1).
 
+				$warnings.
+
+				n.graf(
+					setup_gTxt('you_can_access', array(
+						'index.php' => $login_url,
+					))
+				).
+
+				n.graf(
+					setup_gTxt('installation_postamble')
+				).
+
+				n.hed(setup_gTxt('thanks_for_interest'), 3).
+
+				n.graf('<a href="'.$login_url.'" class="navlink publish">'.setup_gTxt('go_to_login').'</a>');
+
+				n.'</div>'.
+				n.'</div>';
+		}
+	}
+
+// -------------------------------------------------------------
+	function setup_config_contents($carry)
+	{
+		return hed(setup_gTxt('creating_config'), 2).
 			graf(
-				gTxt('that_went_well')
-			,' style="margin-top:3em"').
-
-			$warnings.
-
-			graf(
-				gTxt('you_can_access', array(
-					'index.php' => $GLOBALS['rel_txpurl'].'/index.php',
-				))
+				strong(setup_gTxt('before_you_proceed')).', '.setup_gTxt('create_config', array('{txpath}' => txpspecialchars(txpath)))
 			).
 
-			graf(gTxt('thanks_for_interest')).
-
-			'</div>';
-		}
+		'<textarea class="code" readonly="readonly" name="config" cols="'.INPUT_LARGE.'" rows="'.INPUT_MEDIUM.'">'.
+		makeConfig($carry).
+		'</textarea>'.
+		'<form action="'.$_SERVER['PHP_SELF'].'" method="post">'.
+		graf(fInput('submit','submit',setup_gTxt('did_it'),'publish')).
+		sInput('getTxpLogin').
+		hInput('carry',postEncode($carry)).
+		'</form>';
 	}
 
 // -------------------------------------------------------------
@@ -457,6 +615,17 @@ eod;
 	function postDecode($thing)
 	{
 		return unserialize(base64_decode($thing));
+	}
+
+// -------------------------------------------------------------
+	function setup_back_button()
+	{
+		return graf(
+			setup_gTxt('please_go_back')
+		).
+		n.graf(
+			'<a class="navlink" href="javascript:history.back()">'.setup_gTxt('back').'</a>'
+		);
 	}
 
 // -------------------------------------------------------------
@@ -511,7 +680,8 @@ eod;
 
 		$default = 'en-gb';
 
-		$out = n.'<select name="lang">';
+		$out = n.'<p><label for="setup_language">Please choose a language</label>'.
+			br.'<select name="lang" id="setup_language">';
 
 		foreach ($langs as $a => $b)
 		{
@@ -520,7 +690,7 @@ eod;
 				'>'.txpspecialchars($b).'</option>';
 		}
 
-		$out .= n.'</select>';
+		$out .= n.'</select></p>';
 
 		return $out;
 	}
@@ -528,10 +698,52 @@ eod;
 // -------------------------------------------------------------
 	function setup_load_lang($lang)
 	{
+		global $en_gb_strings;
+
 		require_once txpath.'/setup/setup-langs.php';
+		$en_gb_strings = $langs['en-gb'];
 		$lang = (isset($langs[$lang]) && !empty($langs[$lang]))? $lang : 'en-gb';
 		define('LANG', $lang);
 		return $langs[LANG];
+	}
+
+// -------------------------------------------------------------
+	function setup_gTxt($var, $atts=array(), $escape='html')
+	{
+		global $en_gb_strings;
+
+		// Try to translate the string in chosen native language
+		$xlate = gTxt($var, $atts, $escape);
+
+		if (!is_array($atts)) {
+			$atts = array();
+		}
+
+		if ($escape == 'html')
+		{
+			foreach ($atts as $key => $value)
+			{
+				$atts[$key] = txpspecialchars($value);
+			}
+		}
+
+		$v = strtolower($var);
+
+		// Find out if the translated string is the same as the $var input
+		if ($atts)
+		{
+			$compare = ($xlate == $v.': '.join(', ', $atts));
+		}
+		else
+		{
+			$compare = ($xlate == $v);
+		}
+		if ($compare) {
+			// No translation string available, so grab an english string we know exists as fallback
+			$xlate = strtr($en_gb_strings[$v], $atts);
+		}
+
+		return $xlate;
 	}
 
 ?>
