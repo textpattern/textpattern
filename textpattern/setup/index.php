@@ -412,7 +412,7 @@ eod;
 
 			n.graf(
 				'<span class="edit-label"><label for="setup_user_pass">'.setup_gTxt('choose_password').'</label>'.sp.popHelp('setup_user_pass').'</span>'.
-				n.'<span class="edit-value">'.fInput('text', 'pass', '', '', '', '', INPUT_REGULAR, '', 'setup_user_pass').'</span>'
+				n.'<span class="edit-value">'.fInput('password', 'pass', '', '', '', '', INPUT_REGULAR, '', 'setup_user_pass').'</span>'
 			).
 
 			n.graf(
