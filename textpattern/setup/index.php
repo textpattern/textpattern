@@ -541,8 +541,14 @@ eod;
 		define("m","'] = '");
 		$open = chr(60).'?php';
 		$close = '?'.chr(62);
+
+		// Escape single quotes, double quotes and backslashes in literal PHP strings
+		foreach ($ar as $k => $v) {
+			$ar[$k] = addcslashes($ar[$k], "'\"\\");
+		}
 		$ar = doSpecial($ar);
 		extract($ar);
+
 		return
 		$open."\n"
 		.o.'db'           .m.$ddb.nl
