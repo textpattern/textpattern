@@ -74,7 +74,7 @@ $LastChangedRevision$
 		{
 			echo graf(
 				gTxt('img_dir_not_writeable', array('{imgdir}' => IMPATH))
-			,' id="warning"');
+			,' class="alert-block warning"');
 		}
 
 		elseif (has_privs('image.edit.own'))
@@ -123,19 +123,19 @@ $LastChangedRevision$
 			$crit_escaped = doSlash($verbatim ? $m[1] : str_replace(array('\\','%','_','\''), array('\\\\','\\%','\\_', '\\\''), $crit));
 			$critsql = $verbatim ?
 				array(
-					'id'		=> "ID in ('" .join("','", do_list($crit_escaped)). "')",
-					'name'		=> "name = '$crit_escaped'",
-					'category' 	=> "category = '$crit_escaped'",
-					'author'	=> "author = '$crit_escaped'",
-					'alt'		=> "alt = '$crit_escaped'",
-					'caption'	=> "caption = '$crit_escaped'"
+					'id'       => "ID in ('" .join("','", do_list($crit_escaped)). "')",
+					'name'     => "name = '$crit_escaped'",
+					'category' => "category = '$crit_escaped'",
+					'author'   => "author = '$crit_escaped'",
+					'alt'      => "alt = '$crit_escaped'",
+					'caption'  => "caption = '$crit_escaped'"
 				) : array(
-					'id'		=> "ID in ('" .join("','", do_list($crit_escaped)). "')",
-					'name'		=> "name like '%$crit_escaped%'",
-					'category' 	=> "category like '%$crit_escaped%'",
-					'author'	=> "author like '%$crit_escaped%'",
-					'alt'		=> "alt like '%$crit_escaped%'",
-					'caption'	=> "caption like '%$crit_escaped%'"
+					'id'       => "ID in ('" .join("','", do_list($crit_escaped)). "')",
+					'name'     => "name like '%$crit_escaped%'",
+					'category' => "category like '%$crit_escaped%'",
+					'author'   => "author like '%$crit_escaped%'",
+					'alt'      => "alt like '%$crit_escaped%'",
+					'caption'  => "caption like '%$crit_escaped%'"
 				);
 
 			if (array_key_exists($search_method, $critsql))
@@ -308,9 +308,9 @@ $LastChangedRevision$
 	function image_search_form($crit, $method)
 	{
 		$methods =	array(
-			'id'       	=> gTxt('ID'),
-			'name'     	=> gTxt('name'),
-			'category' 	=> gTxt('image_category'),
+			'id'        => gTxt('ID'),
+			'name'      => gTxt('name'),
+			'category'  => gTxt('image_category'),
 			'author'    => gTxt('author'),
 			'alt'       => gTxt('alt_text'),
 			'caption'   => gTxt('caption')

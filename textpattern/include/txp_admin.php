@@ -259,7 +259,7 @@ $LastChangedRevision$
 
 		if (is_disabled('mail'))
 		{
-			echo tag(gTxt('warn_mail_unavailable'), 'p',' id="warning" ');
+			echo tag(gTxt('warn_mail_unavailable'), 'p',' class="alert-block warning" ');
 		}
 
 		echo '<h1 class="txp-heading">'.gTxt('tab_site_admin').'</h1>';

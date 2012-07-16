@@ -713,20 +713,12 @@ ul.plain-list,
 /* Global messages
    ========================================================================== */
 
-#warning {
-	margin: 0 auto 1em auto;
-	border: 2px solid #fdd;
-	padding: .5em 1em;
-	text-align: center;
-	background-color: #fff4f4;
-}
-
 .success {
 	color: #008000;
 }
 
 .warning {
-	color: #c90;
+	color: #cb8f02;
 }
 
 .error {
@@ -735,6 +727,33 @@ ul.plain-list,
 
 .information {
 	color: #3a87ad;
+}
+
+.alert-block {
+	margin: 0 auto 1em auto;
+	border: 2px solid;
+	padding: .5em 1em;
+	text-align: center;
+}
+
+.alert-block.success {
+	border-color: #a3d48e;
+	background: #dff0d8;
+}
+
+.alert-block.warning {
+	border-color: #ffe16d;
+	background: #fff6d3;
+}
+
+.alert-block.error {
+	border-color: #e1b2b2;
+	background: #f2dede;
+}
+
+.alert-block.information {
+	border-color: #b1e2f5;
+	background: #e7f6fc;
 }
 
 

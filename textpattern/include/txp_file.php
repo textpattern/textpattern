@@ -77,7 +77,7 @@ $LastChangedRevision$
 		{
 			echo graf(
 				gTxt('file_dir_not_writeable', array('{filedir}' => $file_base_path))
-			, ' id="warning"');
+			, ' class="alert-block warning"');
 		}
 
 		elseif (has_privs('file.edit.own'))

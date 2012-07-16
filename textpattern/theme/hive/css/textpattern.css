@@ -224,13 +224,23 @@ a:hover .content-image {
   background: #fff6d3;
 }
 
-#warning {
-  border: 1px solid #ffe16d;
+.alert-block {
+  border: 1px solid;
   padding: .53846153846154em 2.84615384615385em;
   line-height: 1.38461538461538;
   text-align: center;
-  color: #cb8f02;
-  background: #fff6d3;
+}
+.alert-block.success {
+  border-color: #a3d48e;
+}
+.alert-block.warning {
+  border-color: #ffe16d;
+}
+.alert-block.error {
+  border-color: #e1b2b2;
+}
+.alert-block.information {
+  border-color: #b1e2f5;
 }
 
 /* alert boxes */
