@@ -360,15 +360,26 @@ eod;
 
 		echo n.'<div id="setup_container" class="txp-container">';
 
+		$problems = array();
+
 		if (!isset($txpcfg['db']))
 		{
-			@include txpath.'/config.php';
+			if (!is_readable(txpath.'/config.php'))
+			{
+				$problems[] = graf('<span class="error">'.setup_gTxt('config_php_not_found', array('{file}' => txpspecialchars(txpath.'/config.php')), 'raw').'</span>');
+			}
+			else
+			{
+				@include txpath.'/config.php';
+			}
 		}
 
 		if (!isset($txpcfg) || ($txpcfg['db'] != $ddb) || ($txpcfg['table_prefix'] != $dprefix))
 		{
+			$problems[] = graf('<span class="error">'.setup_gTxt('config_php_does_not_match_input', 'raw').'</span>');
 			echo txp_setup_progress_meter(2).
 				n.'<div class="txp-setup">'.
+				n.join(n, $problems).
 				n.setup_config_contents($carry).
 				n.'</div>'.
 				n.'</div>';
