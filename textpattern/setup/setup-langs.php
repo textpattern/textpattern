@@ -1,6 +1,6 @@
 <?php
 
-// Generated: 16 Jul 2012, 08:10:57 GMT
+// Generated: 16 Jul 2012, 09:49:17 GMT
 
 $langs = array(
 	'ar-dz' => array(
@@ -206,6 +206,7 @@ $langs = array(
 		'did_it' => 'Habe ich gemacht!',
 		'email_required' => 'Bitte geben Sie eine gültige E-Mail-Adresse an.',
 		'errors_during_install' => 'Während der Installation sind {num} Fehler aufgetreten. Unterstützung und Hilfe erhalten Sie in den Textpattern-Foren.',
+		'get_started' => 'Los',
 		'go_to_login' => 'Jetzt anmelden',
 		'installation_postamble' => 'Sie sollten nun das Verzeichnis <code>setup</code> von Ihrer Textpattern-Site löschen. Bitte überprüfen Sie von Zeit zu Zeit, ob eine neue Version von Textpattern erschienen ist.',
 		'mysql_database' => 'MySQL-Datenbank',
@@ -216,7 +217,7 @@ $langs = array(
 		'my_slogan' => 'Mein trefflicher Titel',
 		'name_required' => 'Bitte geben Sie einen gültigen Benutzernamen ein.',
 		'need_details' => 'Zuerst brauchen wir ein paar Informationen.',
-		'next' => 'Weiter →',
+		'next_step' => 'Weiter →',
 		'pass_required' => 'Bitte geben Sie ein Passwort ein.',
 		'please_enter_url' => 'Bitte die vollständige Webadresse der Seite angeben',
 		'please_go_back' => 'Bitte kehren Sie zum vorigen Schritt zurück, um fehlerhafte Details zu korrigieren. Versuchen Sie dann diesen Schritt erneut.',
@@ -299,7 +300,7 @@ $langs = array(
 		'did_it' => 'I did it →',
 		'email_required' => 'Please provide a valid e-mail address.',
 		'errors_during_install' => 'There were {num} errors during the installation. You can ask for help in the <a href="http://forum.textpattern.com/" rel="external">Textpattern CMS Support Forum</a>.',
-		'go' => 'Go!',
+		'get_started' => 'Go!',
 		'go_to_login' => 'Login now',
 		'installation_postamble' => 'For security, you should now remove the <code>setup</code> folder from your Textpattern site. Please check the Admin → Diagnostics panel from time-to-time for update announcements or troubleshooting hints.',
 		'mysql_database' => 'MySQL database',
@@ -310,7 +311,7 @@ $langs = array(
 		'my_slogan' => 'My pithy slogan',
 		'name_required' => 'Please provide a valid login name.',
 		'need_details' => 'Inevitably, we need a few details…',
-		'next' => 'Next →',
+		'next_step' => 'Next →',
 		'pass_required' => 'Please provide a strong password.',
 		'please_enter_url' => 'Please enter the web-reachable address of your site.',
 		'please_go_back' => 'Please go back, rectify any incorrect details and try this process again.',
@@ -356,7 +357,7 @@ $langs = array(
 		'did_it' => 'I did it →',
 		'email_required' => 'Please provide a valid e-mail address.',
 		'errors_during_install' => 'There were {num} errors during the installation. You can ask for help in the <a href="http://forum.textpattern.com/" rel="external">Textpattern CMS Support Forum</a>.',
-		'go' => 'Go!',
+		'get_started' => 'Go!',
 		'go_to_login' => 'Login now',
 		'installation_postamble' => 'For security, you should now remove the <code>setup</code> folder from your Textpattern site. Please check the Admin → Diagnostics panel from time-to-time for update announcements or troubleshooting hints.',
 		'mysql_database' => 'MySQL database',
@@ -367,7 +368,7 @@ $langs = array(
 		'my_slogan' => 'My pithy slogan',
 		'name_required' => 'Please provide a valid login name.',
 		'need_details' => 'Inevitably, we need a few details…',
-		'next' => 'Next →',
+		'next_step' => 'Next →',
 		'pass_required' => 'Please provide a strong password.',
 		'please_enter_url' => 'Please enter the web-reachable address of your site.',
 		'please_go_back' => 'Please go back, rectify any incorrect details and try this process again.',
@@ -549,6 +550,8 @@ $langs = array(
 		'before_you_proceed' => 'Avant de commencer',
 		'checking_database' => 'Vérification de la connexion à la base de données...',
 		'choose_password' => 'Veuillez choisir un mot de passe – non-utilisé ailleurs et impossible à deviner',
+		'config_php_does_not_match_input' => 'Le contenu du fichier <code>config.php</code> ne correspond pas aux valeurs saisies. Veuillez copier intégralement le texte ci-dessous.',
+		'config_php_not_found' => 'Le fichier de configuration n\'a pas été trouvé à l\'emplacement attendu : <strong>{file}</strong>. Veuillez vérifier son existence.',
 		'core_theme' => 'Core : {theme}',
 		'create_config' => 'Créez un fichier nommé <code>config.php</code> dans le répertoire <code>/textpattern/</code> ; et copiez dedans ce qui suit :',
 		'creating_config' => 'Création du fichier config.php',
@@ -560,7 +563,7 @@ $langs = array(
 		'did_it' => 'C’est fait',
 		'email_required' => 'Merci de fournir une adresse email valide',
 		'errors_during_install' => 'Il s’est malheureusement produit {num} erreurs durant l’installation. Vous pouvez demander de l’aide dans les <a href="http://forum.textpattern.com/viewforum.php?id=16">forums Textpattern</a>.',
-		'go' => 'Go !',
+		'get_started' => 'Go !',
 		'go_to_login' => 'Connectez-vous',
 		'installation_postamble' => 'Pour plus de sécurité, vous devriez supprimer, sur votre serveur, le dossier <code>setup</code> de votre installation de Textpattern. Veuillez consulter régulièrement la page Administration → Diagnostics pour connaître les offres de  mises à jour ',
 		'mysql_database' => 'Base de données MySQL',
@@ -571,7 +574,7 @@ $langs = array(
 		'my_slogan' => 'Mon p’tit slogan',
 		'name_required' => 'Veuillez renseigner un nom d\'utilisateur valide.',
 		'need_details' => 'Quelques détails sont nécessaires...',
-		'next' => 'Suivant →',
+		'next_step' => 'Suivant →',
 		'pass_required' => 'Veuillez renseigner un mot de passe sécurisé.',
 		'please_enter_url' => 'Merci d’indiquer l’URL à laquelle votre site sera accessible',
 		'please_go_back' => 'Veuillez revenir à l\'étape antérieure afin de corriger les informations incorrectes et vous permettre de poursuivre ce processus.',

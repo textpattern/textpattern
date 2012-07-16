@@ -110,7 +110,7 @@ eod;
 			1 => setup_gTxt('set_db_details'),
 			2 => setup_gTxt('add_config_file'),
 			3 => setup_gTxt('populate_db'),
-			4 => setup_gTxt('go'),
+			4 => setup_gTxt('get_started'),
 		);
 
 		$out = array();
@@ -213,7 +213,7 @@ eod;
 		}
 
 		echo n.graf(
-			fInput('submit','Submit',setup_gTxt('next', '', 'raw'),'publish')
+			fInput('submit','Submit',setup_gTxt('next_step', '', 'raw'),'publish')
 		);
 
 		echo n.hInput('lang', LANG),
@@ -439,7 +439,7 @@ eod;
 			).
 
 			n.graf(
-				fInput('submit','Submit',setup_gTxt('next'),'publish')
+				fInput('submit','Submit',setup_gTxt('next_step'),'publish')
 			).
 
 			n.sInput('createTxp'),
