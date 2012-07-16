@@ -101,7 +101,7 @@ function doAuth()
 		$stay  = (cs('txp_login') and !gps('logout') ? 1 : 0);
 		$reset = gps('reset');
 
-		list($name) = explode(',', cs('txp_login'));
+		$name = join(',', array_slice(explode(',', cs('txp_login')), 0, -1));
 
 		echo n.'<div id="login_container" class="txp-container">';
 		echo form(
@@ -179,7 +179,9 @@ EOSCR
 
 		if (cs('txp_login') and strpos(cs('txp_login'), ','))
 		{
-			list($c_userid, $c_hash) = explode(',', cs('txp_login'));
+			$txp_login = explode(',', cs('txp_login'));
+			$c_hash = end($txp_login);
+			$c_userid = join(',', array_slice($txp_login, 0, -1));
 		}
 		else
 		{
