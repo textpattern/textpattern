@@ -222,23 +222,6 @@ h2 .pophelp {
 	font-size: .64705882352941em;
 }
 
-a.navlink {
-	border-right: 1px solid #ddd;
-	border-bottom: 1px solid #ddd;
-	border-left: 1px solid #f1f1f1;
-	padding: 3px;
-	color: #000;
-	background-color: #ffc;
-}
-
-a.navlink-active {
-	border-right: 1px solid #ddd;
-	border-bottom: 1px solid #ddd;
-	border-left: 1px solid #f1f1f1;
-	padding: 3px;
-	color: #000;
-}
-
 a.async.busy {
 	visibility: hidden;
 }
@@ -353,8 +336,10 @@ button,
 input[type="reset"],
 input[type="submit"],
 input[type="button"],
-.txp-buttons a,
-.action-create a {
+.action-create a,
+.navlink,
+.navlink-active,
+.txp-buttons a {
 	display: inline-block;
 	-webkit-appearance: none;
 	-webkit-background-clip: padding;
@@ -395,8 +380,11 @@ button:hover,
 input[type="reset"]:hover,
 input[type="submit"]:hover,
 input[type="button"]:hover,
-.txp-buttons a:hover,
-.action-create a:hover {
+.action-create a:hover,
+.navlink:hover,
+.navlink-active:hover,
+.txp-buttons a:hover {
+	text-decoration: none;
 	background-color: #eee;
 }
 
@@ -404,9 +392,26 @@ button:active,
 input[type="reset"]:active,
 input[type="submit"]:active,
 input[type="button"]:active,
-.txp-buttons a:active,
-.action-create a:active {
+.action-create a:active,
+.navlink:active,
+.navlink-active:active,
+.txp-buttons a:active {
 	background-color: #ccc;
+}
+
+.navlink-disabled {
+	border: 1px solid;
+	-moz-border-radius: .4em;
+	border-radius: .4em;
+	padding: .18181818181818em .5em;
+	display: inline-block;
+	/* display and zoom IE7 fix for display:inline-block */
+	*display: inline;
+	*zoom: 1;
+}
+
+.nav-tertiary .navlink-active {
+	background-color: #eee;
 }
 
 input[type="submit"].publish,
@@ -446,7 +451,8 @@ input[disabled],
 select[disabled],
 select[disabled] option,
 select[disabled] optgroup,
-textarea[disabled] {
+textarea[disabled],
+.navlink-disabled {
 	border-color: #e5e5e5 !important;
 	color: #bbb !important;
 	background-color: #fafafa !important;
@@ -462,6 +468,31 @@ textarea[disabled] {
 .edit-alter-thumbnail input[type="submit"],
 .edit-file-replace input[type="submit"] {
 	float: right;
+}
+
+/* button sets */
+.nav-tertiary a,
+.nav-tertiary .navlink-disabled,
+.prev-next a,
+.prev-next .navlink-disabled {
+	-moz-border-radius: 0;
+	border-radius: 0;
+}
+
+.nav-tertiary > :first-child,
+.prev-next > :first-child {
+	-moz-border-radius-topleft: .4em;
+	border-top-left-radius: .4em;
+	-moz-border-radius-bottomleft: .4em;
+	border-bottom-left-radius: .4em;
+}
+
+.nav-tertiary > :last-child,
+.prev-next > :last-child {
+	-moz-border-radius-topright: .4em;
+	border-top-right-radius: .4em;
+	-moz-border-radius-bottomright: .4em;
+	border-bottom-right-radius: .4em;
 }
 
 /* AJAX spinner */
@@ -644,15 +675,6 @@ tr.spam td {
 .prev-next,
 .pageby {
 	text-align: center;
-}
-
-span.navlink-disabled {
-	border-right: 1px solid #ddd;
-	border-bottom: 1px solid #ddd;
-	border-left: 1px solid #f1f1f1;
-	padding: 3px;
-	color: #bbb;
-	background-color: #f5f5f5;
 }
 
 p#js { /* TBC */
