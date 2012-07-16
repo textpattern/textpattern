@@ -1462,7 +1462,7 @@ $LastChangedRevision$
 	function next_title()
 	{
 		global /** @noinspection PhpUnusedLocalVariableInspection */
-		$thisarticle, $prev_title, $next_title;
+		$thisarticle, $next_id, $next_title, $prev_id, $prev_title;
 
 		if (!isset($thisarticle['next_title']))
 		{
@@ -1478,7 +1478,7 @@ $LastChangedRevision$
 	function prev_title()
 	{
 		global /** @noinspection PhpUnusedLocalVariableInspection */
-		$thisarticle, $prev_title, $next_title;
+		$thisarticle, $next_id, $next_title, $prev_id, $prev_title;
 
 		if (!isset($thisarticle['prev_title']))
 		{
