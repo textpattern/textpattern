@@ -1270,6 +1270,13 @@ div.multi-edit {
   display: none;
 }
 
+.disabled {
+  opacity: .33;
+  /* transparency support for IE < 9 */
+  filter: alpha(opacity=33);
+  *zoom: 1;
+}
+
 /* list navigators on list pages */
 .txp-navigation .pageby {
   float: left;

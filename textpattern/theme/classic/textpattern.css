@@ -709,6 +709,17 @@ ul.plain-list,
 	text-align: center;
 }
 
+.disabled {
+	opacity: .33;
+	/* transparency support for IE < 9 */
+	filter: alpha(opacity=33);
+	*zoom: 1;
+}
+
+.empty {
+	display: none;
+}
+
 
 /* Global messages
    ========================================================================== */
@@ -1075,10 +1086,6 @@ td#article-tabs #tab-previewup {
 
 td#article-tabs #tab-previewdown {
 	background-image: url("previewdown.gif");
-}
-
-.empty {
-	display: none;
 }
 
 input.month,
