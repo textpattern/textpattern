@@ -51,4 +51,6 @@ $LastChangedRevision$
  	{
 		safe_alter('txp_section', "DROP `is_default`");
  	}
+
+	safe_alter('txp_css', 'MODIFY css MEDIUMTEXT NOT NULL');
 ?>
