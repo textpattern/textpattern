@@ -222,7 +222,7 @@ h2 .pophelp {
 	font-size: .64705882352941em;
 }
 
-a.async.busy {
+a.busy {
 	visibility: hidden;
 }
 
