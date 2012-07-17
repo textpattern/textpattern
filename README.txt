@@ -56,9 +56,12 @@ Includes contributions licensed under the New BSD License.
   that you move your "/files" directory out of a web-accessible location.
   Once moved, you can tell Textpattern of your new directory location from
   the Advanced Preferences.
+* There are additional resources for the default front-side theme, such as
+  Sass preprocessor files and extra feature modules, available at:
+    http://textpattern.com/default-theme/tree/master/
 
 == IMPORTANT ==
 
-* Regularly check back at textpattern.com to see if updates are available.
-  Updates are as painless as possible, and often fix important bugs or
-  security-related issues.
+* Check back regularly at http://textpattern.com to see if updates are
+  available. Updates are as painless as possible, and often fix important bugs
+  or security-related issues.
