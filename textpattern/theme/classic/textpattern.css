@@ -4,21 +4,25 @@
 .clearfix:before,
 .txp-edit p:before,
 .txp-login p:before,
+.plugin-column p:before,
 .clearfix:after,
 .txp-edit p:after,
-.txp-login p:after {
+.txp-login p:after,
+.plugin-column p:after {
 	content: "";
 	display: table;
 }
 .clearfix:after, 
 .txp-edit p:after,
-.txp-login p:after {
+.txp-login p:after,
+.plugin-column p:after {
 	clear: both;
 }
 /* zoom IE7 fix */
 .clearfix,
 .txp-edit p,
-.txp-login p {
+.txp-login p,
+.plugin-column p {
 	*zoom: 1;
 }
 
@@ -1242,4 +1246,9 @@ tr .plugin-prefs {
 tr.active .manage span,
 tr.active .plugin-prefs {
 	visibility: visible;
+}
+
+.plugin-column {
+	margin: 0 auto;
+	max-width: 600px;
 }
