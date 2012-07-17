@@ -787,6 +787,11 @@ ul.plain-list,
 	width: 100%;
 }
 
+.text-column {
+	margin: 0 auto;
+	max-width: 600px;
+}
+
 .restricted-area {
 	margin: 3em auto auto;
 	text-align: center;
@@ -1221,11 +1226,6 @@ div#preview-help {
 
 textarea#plugin-install {
 	width: 32em;
-}
-
-.plugin-help {
-	margin: 0 auto;
-	max-width: 600px;
 }
 
 tr .manage span,

@@ -1251,8 +1251,7 @@ div.multi-edit {
   width: 100%;
 }
 
-div.plugin-help,
-div.text-column {
+.text-column {
   margin: 0 auto;
   max-width: 56em;
 }
@@ -2011,8 +2010,7 @@ div.code {
     float: none;
   }
 
-  div.plugin-help,
-  div.text-column {
+  .text-column {
     width: 100%;
   }
 

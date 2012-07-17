@@ -192,9 +192,9 @@ EOS
 	}
 
 // -------------------------------------------------------------
-  function plugin_edit()
-  {
-  		global $event;
+	function plugin_edit()
+	{
+		global $event;
 
 		$name = gps('name');
 		pagetop(gTxt('edit_plugins'));
@@ -214,7 +214,7 @@ EOS
 		pagetop(gTxt('plugin_help'));
 		$help = ($name) ? safe_field('help','txp_plugin',"name = '".doSlash($name)."'") : '';
 		echo '<div id="'.$event.'_container" class="txp-container txp-view">'
-			.'<div class="plugin-help">' . $help . '</div>'
+			.'<div class="text-column">' . $help . '</div>'
 			.'</div>';
 	}
 
@@ -399,7 +399,7 @@ EOS
 							code         = '".doSlash($code)."',
 							code_restore = '".doSlash($code)."',
 							code_md5     = '".doSlash($md5)."',
-							flags     	 = $flags",
+							flags        = $flags",
 							"name        = '".doSlash($name)."'"
 						);
 
@@ -419,7 +419,7 @@ EOS
 							code_restore = '".doSlash($code)."',
 							code_md5     = '".doSlash($md5)."',
 							load_order   = '".$order."',
-							flags   	 = $flags"
+							flags        = $flags"
 						);
 					}
 
