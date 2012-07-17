@@ -1290,15 +1290,14 @@ span.spinner {
   display: inline-block;
   *display: inline;
   *zoom: 1;
-  width: 15px;
-  height: 15px;
-  margin-left: .5em;
+  width: 13px;
+  height: 13px;
   background-image: url("../img/spinner.gif");
 }
 @media (-webkit-min-device-pixel-ratio: 2) {
   span.spinner {
     background-image: url("../img/hidpi/spinner@2x.gif") !important;
-    -webkit-background-size: 15px 15px;
+    -webkit-background-size: 13px 13px;
   }
 }
 

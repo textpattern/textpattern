@@ -498,9 +498,8 @@ textarea[disabled],
 /* AJAX spinner */
 span.spinner {
 	display: inline-block;
-	margin-left: .5em;
-	width: 16px;
-	height: 16px;
+	width: 13px;
+	height: 13px;
 	background-image: url("../../txp_img/spinner.gif");
 	/* display and zoom IE7 fix for display:inline-block */
 	*display: inline;
