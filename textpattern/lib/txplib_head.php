@@ -123,6 +123,15 @@ $LastChangedRevision$
 		addEvent(window, 'load', cleanSelects);
 	-->
 	</script>
+	<?php // Mandatory un-themable Textpattern core styles ?>
+	<style type="text/css">
+		form.async input[type="submit"], a.async {
+			visibility: hidden;
+		}
+		form.async.armed input[type="submit"], a.async.armed {
+			visibility: visible;
+		}
+	</style>
 	<?php
 	echo $theme->html_head();
 	callback_event('admin_side', 'head_end');

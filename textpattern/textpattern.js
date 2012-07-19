@@ -889,13 +889,13 @@ $(document).ready(function() {
 	if($.ajaxSetup().timeout === undefined) {
 		$.ajaxSetup( {timeout : textpattern.ajax_timeout} );
 	}
-	// setup and submit async forms
+	// setup async forms/hrefs, then arm UI
 	if(!textpattern.ajaxally_challenged) {
 		$('form.async').txpAsyncForm({
 			error: function() {window.alert(textpattern.gTxt('form_submission_error'));}
-		});
+		}).addClass('armed');
 		$('a.async').txpAsyncHref({
 			error: function() {window.alert(textpattern.gTxt('form_submission_error'));}
-		});
+		}).addClass('armed');
 	}
 });
