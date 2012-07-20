@@ -78,64 +78,69 @@ if (!empty($event) and $event == 'article') {
 
 		$incoming = doSlash(textile_main_fields(array_map('assert_string', psa($vars))));
 		extract($incoming);
-		extract(array_map('assert_int', psa(array( 'Status', 'textile_body', 'textile_excerpt'))));
-		// comments my be on, off, or disabled.
-		$Annotate = (int) $Annotate;
-		// set and validate article timestamp
-		if ($publish_now == 1) {
-			$when = 'now()';
-			$when_ts = time();
-		} else {
-			if (!is_numeric($year) || !is_numeric($month) || !is_numeric($day) || !is_numeric($hour)  || !is_numeric($minute) || !is_numeric($second) ) {
-				$ts = false;
-			} else {
-				$ts = strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second);
-			}
 
-			if ($ts === false || $ts < 0) { // Tracking the PHP meanders on how to return an error
-				article_edit(array(gTxt('invalid_postdate'), E_ERROR));
-				return;
-			}
-
-			$when_ts = $ts - tz_offset($ts);
-			$when = "from_unixtime($when_ts)";
-		}
-
-		// set and validate expiry timestamp
-		if (empty($exp_year)) {
-			$expires = 0;
-		} else {
-			if(empty($exp_month)) $exp_month=1;
-			if(empty($exp_day)) $exp_day=1;
-			if(empty($exp_hour)) $exp_hour=0;
-			if(empty($exp_minute)) $exp_minute=0;
-			if(empty($exp_second)) $exp_second=0;
-
-			$ts = strtotime($exp_year.'-'.$exp_month.'-'.$exp_day.' '.$exp_hour.':'.$exp_minute.':'.$exp_second);
-			if ($ts === false || $ts < 0) {
-				article_edit(array(gTxt('invalid_expirydate'), E_ERROR));
-				return;
-			} else {
-				$expires = $ts - tz_offset($ts);
-			}
-		}
-
-		if ($expires && ($expires <= $when_ts)) {
-			article_edit(array(gTxt('article_expires_before_postdate'), E_ERROR));
-			return;
-		}
-
-		if ($expires) {
-			$whenexpires = "Expires=from_unixtime($expires)";
-		} else {
-			$whenexpires = "Expires=".NULLDATETIME;
-		}
-
-		$user = doSlash($txp_user);
-		$Keywords = doSlash(trim(preg_replace('/( ?[\r\n\t,])+ ?/s', ',', preg_replace('/ +/', ' ', ps('Keywords'))), ', '));
 		$msg = '';
-
 		if ($Title or $Body or $Excerpt) {
+
+			extract(array_map('assert_int', psa(array( 'Status', 'textile_body', 'textile_excerpt'))));
+			// comments my be on, off, or disabled.
+			$Annotate = (int) $Annotate;
+			// set and validate article timestamp
+			if ($publish_now == 1) {
+				$when = 'now()';
+				$when_ts = time();
+			} else {
+				if (!is_numeric($year) || !is_numeric($month) || !is_numeric($day) || !is_numeric($hour)  || !is_numeric($minute) || !is_numeric($second) ) {
+					$ts = false;
+				} else {
+					$ts = strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second);
+				}
+
+				if ($ts === false || $ts < 0) { // Tracking the PHP meanders on how to return an error
+					article_edit(array(gTxt('invalid_postdate'), E_ERROR));
+					return;
+				}
+
+				$when_ts = $ts - tz_offset($ts);
+				$when = "from_unixtime($when_ts)";
+			}
+
+			// Force a reasonable 'last modified' date for future articles, keep recent articles list in order
+			$lastmod = ($when_ts > time() ? 'now()' : $when);
+
+			// set and validate expiry timestamp
+			if (empty($exp_year)) {
+				$expires = 0;
+			} else {
+				if(empty($exp_month)) $exp_month=1;
+				if(empty($exp_day)) $exp_day=1;
+				if(empty($exp_hour)) $exp_hour=0;
+				if(empty($exp_minute)) $exp_minute=0;
+				if(empty($exp_second)) $exp_second=0;
+
+				$ts = strtotime($exp_year.'-'.$exp_month.'-'.$exp_day.' '.$exp_hour.':'.$exp_minute.':'.$exp_second);
+				if ($ts === false || $ts < 0) {
+					article_edit(array(gTxt('invalid_expirydate'), E_ERROR));
+					return;
+				} else {
+					$expires = $ts - tz_offset($ts);
+				}
+			}
+
+			if ($expires && ($expires <= $when_ts)) {
+				article_edit(array(gTxt('article_expires_before_postdate'), E_ERROR));
+				return;
+			}
+
+			if ($expires) {
+				$whenexpires = "Expires=from_unixtime($expires)";
+			} else {
+				$whenexpires = "Expires=".NULLDATETIME;
+			}
+
+			$user = doSlash($txp_user);
+			$Keywords = doSlash(trim(preg_replace('/( ?[\r\n\t,])+ ?/s', ',', preg_replace('/ +/', ' ', ps('Keywords'))), ', '));
+			$msg = '';
 
 			if (!has_privs('article.publish') && $Status >= STATUS_LIVE) $Status = STATUS_PENDING;
 			if (empty($url_title)) $url_title = stripSpace($Title_plain, 1);
@@ -164,7 +169,7 @@ if (!empty($event) and $event == 'article') {
 					Posted          =  $when,
 					Expires         =  $whenexpires,
 					AuthorID        = '$user',
-					LastMod         =  $when,
+					LastMod         =  $lastmod,
 					LastModID       = '$user',
 					Section         = '$Section',
 					Category1       = '$Category1',
