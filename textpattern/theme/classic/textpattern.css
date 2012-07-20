@@ -26,6 +26,10 @@
 	*zoom: 1;
 }
 
+.clear {
+	clear: both;
+}
+
 
 /* Base
    ========================================================================== */
@@ -228,6 +232,37 @@ h2 .pophelp {
 
 a.busy {
 	visibility: hidden;
+}
+
+
+/* Images
+   ========================================================================== */
+
+.content-image {
+	border: solid 1px #cccccc;
+	-moz-border-radius: .5em;
+	border-radius: .5em;
+	padding: 4px;
+	background: #fff;
+}
+
+a:hover .content-image {
+	border: solid 1px #963;
+}
+
+.align-left {
+	float: left;
+	margin: 1em 1em 1em 0;
+}
+
+.align-right {
+	float: right;
+	margin: 1em 0 1em 1em;
+}
+
+.align-center {
+	display: block;
+	margin: 1em auto;
 }
 
 
@@ -903,25 +938,6 @@ td#navpop select {
 td#messagepane {
 	width: 368px;
 	text-align: center;
-}
-
-.align-left {
-	float: left;
-	margin: 1em 1em 1em 0;
-}
-
-.align-right {
-	float: right;
-	margin: 1em 0 1em 1em;
-}
-
-.align-center {
-	display: block;
-	margin: 1em auto;
-}
-
-.clear {
-	clear: both;
 }
 
 
