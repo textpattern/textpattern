@@ -383,7 +383,7 @@ $LastChangedRevision$
 		$url = pagelinkurl(array(
 			$flavor => '1',
 			'area'  =>'link',
-			'c'     => $category
+			'category' => $category
 		));
 
 		if ($flavor == 'atom')

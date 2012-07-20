@@ -164,7 +164,7 @@ $LastChangedRevision$
 			}
 		} elseif ($area=='link') {
 
-			$cfilter = ($category) ? "category='".$category."'" : '1';
+			$cfilter = ($category) ? "category in ('".join("','", $category)."')" : '1';
 			$limit = ($limit) ? $limit : $rss_how_many;
 			$limit = intval(min($limit,max(100,$rss_how_many)));
 
