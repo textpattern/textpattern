@@ -1203,6 +1203,7 @@ $LastChangedRevision$
 						$thiscategory = array('name' => $name, 'title' => $title, 'type' => $type);
 						$thiscategory['is_first'] = ($count == 1);
 						$thiscategory['is_last'] = ($count == $last);
+						if (isset($atts['section'])) $thiscategory['section'] = $section;
 						$out[] = ($thing) ? parse($thing) : parse_form($form);
 					}
 				}
@@ -2455,7 +2456,7 @@ $LastChangedRevision$
 			'class'        => '',
 			'link'         => 0,
 			'name'         => '',
-			'section'      => $s, // fixme in crockery
+			'section'      => $s,
 			'this_section' => 0,
 			'title'        => 0,
 			'type'         => 'article',
@@ -2481,7 +2482,15 @@ $LastChangedRevision$
 
 		if ($category)
 		{
-			$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
+			if ($this_section)
+			{
+				$section = ($s == 'default' ? '' : $s);
+			}
+			elseif (isset($thiscategory['section']))
+			{
+				$section = $thiscategory['section'];
+			}
+
 			$label = txpspecialchars( ($title) ? fetch_category_title($category, $type) : $category );
 
 			$href = pagelinkurl(array('s' => $section, 'c' => $category, 'context' => $type));
