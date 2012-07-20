@@ -711,7 +711,7 @@ $LastChangedRevision$
 					file_set_perm($newpath);
 					update_lastmod();
 
-					$message = gTxt('file_uploaded', array('{name}' => txpspecialchars($newname)));
+					$message = gTxt('file_uploaded', array('{name}' => $newname));
 
 					file_edit($message, $id);
 				}
