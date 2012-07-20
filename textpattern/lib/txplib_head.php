@@ -125,11 +125,8 @@ $LastChangedRevision$
 	</script>
 	<?php // Mandatory un-themable Textpattern core styles ?>
 	<style type="text/css">
-		form.async input[type="submit"], a.async {
+		.not-ready .doc-ready, .not-ready form.async input[type="submit"], .not-ready a.async {
 			visibility: hidden;
-		}
-		form.async.armed input[type="submit"], a.async.armed {
-			visibility: visible;
 		}
 	</style>
 	<?php
@@ -137,7 +134,7 @@ $LastChangedRevision$
 	callback_event('admin_side', 'head_end');
 	?>
 	</head>
-	<body id="<?php echo $body_id; ?>" class="<?php echo $area; ?>">
+	<body id="<?php echo $body_id; ?>" class="not-ready <?php echo $area; ?>">
 	<div class="txp-header">
 	<?php callback_event('admin_side', 'pagetop');
 		$theme->set_state($area, $event, $bm, $message);

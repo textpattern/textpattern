@@ -253,6 +253,18 @@ eod;
 			exit;
 		}
 
+// TODO, @see http://forum.textpattern.com/viewtopic.php?pid=263205#p263205
+//		if ('' === $dhost || '' === $duser || '' === $ddb)
+//		{
+//			echo graf(
+//				'<span class="war">'.setup_gTxt('missing_db_details').'</span>'
+//			).
+//				n.setup_back_button().
+//				n.'</div>'.
+//				n.'</div>';
+//			exit;
+//		}
+
 		echo hed(setup_gTxt("checking_database"), 2);
 
 		if (($mylink = mysql_connect($dhost, $duser, $dpass)))

@@ -889,13 +889,15 @@ $(document).ready(function() {
 	if($.ajaxSetup().timeout === undefined) {
 		$.ajaxSetup( {timeout : textpattern.ajax_timeout} );
 	}
-	// setup async forms/hrefs, then arm UI
+	// setup async forms/hrefs
 	if(!textpattern.ajaxally_challenged) {
 		$('form.async').txpAsyncForm({
 			error: function() {window.alert(textpattern.gTxt('form_submission_error'));}
-		}).addClass('armed');
+		});
 		$('a.async').txpAsyncHref({
 			error: function() {window.alert(textpattern.gTxt('form_submission_error'));}
-		}).addClass('armed');
+		});
 	}
+    // arm UI
+    $('body').removeClass('not-ready');
 });
