@@ -133,6 +133,10 @@ h3 {
 	margin: 0 0 .8em 0;
 }
 
+.txp-grid-cell h3 {
+	margin-top: .8em;
+}
+
 .plain { /* deprecated in Textpattern 4.5 */
 	font-size: 1em;
 	font-family: Verdana, Arial, sans-serif;
@@ -938,6 +942,29 @@ td#navpop select {
 td#messagepane {
 	width: 368px;
 	text-align: center;
+}
+
+/* grids */
+
+.txp-grid {
+	text-align: center;
+	margin-bottom: .63636363636364em;
+}
+
+.txp-grid-cell {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	text-align: left;
+	max-width: 26em;
+	vertical-align: top;
+	margin: 0 .18181818181818em .36363636363636em;
+	border: 1px solid #ccc;
+	padding: 0 1em;
+	display: inline-block;
+	/* display and zoom IE7 fix for display:inline-block */
+	*display: inline;
+	*zoom: 1;
 }
 
 

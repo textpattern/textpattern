@@ -4,22 +4,18 @@
    ========================================================================== */
 /* Clearfix
    ========================================================================== */
-.clearfix, .txp-footer, .txp-edit p,
-.txp-login p, .txp-navigation, .txp-setup p, .plugin-column p,
-.progress-meter ol {
+.clearfix, .progress-meter ol, .txp-footer, .txp-edit p,
+.txp-login p, .txp-navigation, .txp-setup p, .plugin-column p {
   *zoom: 1;
 }
-.clearfix:before, .txp-footer:before, .txp-edit p:before,
-.txp-login p:before, .txp-navigation:before, .txp-setup p:before, .plugin-column p:before, .clearfix:after, .txp-footer:after, .txp-edit p:after,
-.txp-login p:after, .txp-navigation:after, .txp-setup p:after, .plugin-column p:after,
-.progress-meter ol:before,
-.progress-meter ol:after {
+.clearfix:before, .progress-meter ol:before, .txp-footer:before, .txp-edit p:before,
+.txp-login p:before, .txp-navigation:before, .txp-setup p:before, .plugin-column p:before, .clearfix:after, .progress-meter ol:after, .txp-footer:after, .txp-edit p:after,
+.txp-login p:after, .txp-navigation:after, .txp-setup p:after, .plugin-column p:after {
   content: "";
   display: table;
 }
-.clearfix:after, .txp-footer:after, .txp-edit p:after,
-.txp-login p:after, .txp-navigation:after, .txp-setup p:after, .plugin-column p:after,
-.progress-meter ol:after {
+.clearfix:after, .progress-meter ol:after, .txp-footer:after, .txp-edit p:after,
+.txp-login p:after, .txp-navigation:after, .txp-setup p:after, .plugin-column p:after {
   clear: both;
 }
 
@@ -61,6 +57,9 @@ h2 .pophelp {
 h3 {
   font-size: 1.15384615384615em;
   margin: 0 0 .86666666666667em;
+}
+.txp-grid-cell h3 {
+  margin-top: .86666666666667em;
 }
 
 h4,
@@ -375,7 +374,7 @@ span#message.error {
   animation: messageflash 1s;
 }
 
-/* Twistees
+/* Twisties
    ========================================================================== */
 h3.lever,
 .summary-details > h3 {
@@ -1259,6 +1258,27 @@ div.multi-edit {
 .text-section {
   padding-top: 5em;
   background: url("../img/separator.gif") repeat-x 0 2.154em;
+}
+
+/* grids */
+.txp-grid {
+  text-align: center;
+  margin-bottom: .69230769230769em;
+}
+
+.txp-grid-cell {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  text-align: left;
+  max-width: 22.6153846153846em;
+  vertical-align: top;
+  margin: 0 .15384615384615em .30769230769231em;
+  border: 1px solid #cccccc;
+  padding: 0 1em;
 }
 
 .restricted-area {
