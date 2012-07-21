@@ -114,9 +114,7 @@ class classic_theme extends theme
 			$js = <<< EOS
 				$(document).ready( function(){
 					$("#messagepane").html("{$js}");
-					$('#message.success').fadeOut('fast').fadeIn('fast');
-					$('#message.error').fadeOut('fast').fadeIn('fast');
-					$('#message.warning').fadeOut('fast').fadeIn('fast');
+					$('#message.success, #message.warning, #message.error').fadeOut('fast').fadeIn('fast');
 					$(".close").click(function() {
 						$(this).parent().remove();
 					});
