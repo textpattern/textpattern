@@ -5,23 +5,6 @@
 
 #masthead {
 	text-align: center;
-	border-bottom: 1px solid #e2a005;
-	background-color: #ffda44;
-	/* Konqueror */
-	background-image: -khtml-gradient(linear, left top, left bottom, from(#ffda44), to(#fabc2b));
-	/* Safari4+, Chrome */
-	background-image: -webkit-gradient(linear, left top, left bottom, from(#ffda44), to(#fabc2b));
-	/* Safari5.1+, Chrome10+ */
-	background-image: -webkit-linear-gradient(#ffda44, #fabc2b);
-	/* Firefox3.6 */
-	background-image: -moz-linear-gradient(#ffda44, #fabc2b);
-	/* Opera11.10+ */
-	background-image: -o-linear-gradient(#ffda44, #fabc2b);
-	/* CSS3 Compliant */
-	background-image: linear-gradient(#ffda44, #fabc2b);
-	-webkit-box-shadow: 0 .25em .4em rgba(0, 0, 0, .15);
-	-moz-box-shadow: 0 .25em .4em rgba(0, 0, 0, .15);
-	box-shadow: 0 .25em .4em rgba(0, 0, 0, .15);
 }
 
 #nav {
@@ -52,8 +35,8 @@
 #nav a {
 	padding: 0 1em;
 	display: block;
-	height: 2.5em;
-	line-height: 2.5em;
+	height: 2.63636363636364em;
+	line-height: 2.63636363636364;
 	color: #630;
 }
 
@@ -98,12 +81,6 @@
 
 #nav li li a:hover {
 	background-color: #ffc;
-}
-
-#messagepane {
-	height: 2em;
-	line-height: 2em;
-	text-align: center;
 }
 
 .lever {

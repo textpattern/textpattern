@@ -11,46 +11,46 @@ class classic_theme extends theme
 {
 	function html_head()
 	{
-		return '<link href="'.$this->url.'textpattern.css" rel="stylesheet" type="text/css" />'.n;
+		return '<link type="text/css" href="'.$this->url.'textpattern.css" rel="stylesheet" />'.n;
 	}
 
 	function header()
 	{
-		$out[] = '<table id="pagetop" cellpadding="0" cellspacing="0">'.n.
-			'<tr id="branding"><td><h1 id="textpattern">Textpattern</h1></td><td id="navpop">'.navPop(1).'</td></tr>'.n.
-			'<tr id="nav-primary"><td align="center" class="tabs" colspan="2">';
+		$out[] = '<div id="masthead">'.
+			n.'<div id="navpop">'.n.navPop(1).n.'</div>'.
+			n.'<h1 id="branding">Textpattern</h1>'.
+			n.'</div>';
 
 		if (!$this->is_popup)
 		{
-			$out[] = '<table cellpadding="0" cellspacing="0" align="center">'.n.
-			'<tr><td id="messagepane">&#160;'.$this->announce($this->message).'</td>';
+			$out[] = '<div id="nav-primary" class="nav-tabs">'.
+				n.'<ul>';
 
 			$secondary = '';
 			foreach ($this->menu as $tab)
 			{
 				$tc = ($tab['active']) ? 'tabup' : 'tabdown';
-				$atts=' class="'.$tc.'"';
-				$hatts=' href="?event='.$tab['event'].'"';
-				$out[] = tda(tag($tab['label'], 'a', $hatts), $atts);
+				$out[] = '<li><a class="'.$tc.'" href="?event='.$tab["event"].'">'.$tab["label"].'</a></li>';
 
 				if ($tab['active'] && !empty($tab['items']))
 				{
-					$secondary = '</td></tr><tr id="nav-secondary"><td align="center" class="tabs" colspan="2">'.n.
-					'<table cellpadding="0" cellspacing="0" align="center">'.n.
-					'<tr>';
+					$secondary = '<div id="nav-secondary" class="nav-tabs">'.
+						n.'<ul>';
 					foreach ($tab['items'] as $item)
 					{
-						$tc = ($item['active']) ? 'tabup' : 'tabdown2';
-						$secondary .= '<td class="'.$tc.'"><a href="?event='.$item['event'].'">'.$item['label'].'</a></td>';
+						$tc = ($item['active']) ? 'tabup' : 'tabdown';
+						$secondary .= n.'<li><a class="'.$tc.'" href="?event='.$item['event'].'">'.$item['label'].'</a></li>';
 					}
-					$secondary .= '</tr></table>';
+					$secondary .= n.'</ul>'.
+						n.'</div>';
 				}
 			}
-			$out[] = '<td id="view-site" class="tabdown"><a href="'.hu.'" target="_blank">'.gTxt('tab_view_site').'</a></td>';
-			$out[] = '</tr></table>';
+			$out[] = '<li id="view-site"><a class="tabdown" href="'.hu.'" target="_blank">'.gTxt('tab_view_site').'</a></li>';
+			$out[] = '</ul>';
+			$out[] = '</div>';
 			$out[] = $secondary;
 		}
-		$out[] = '</td></tr></table>';
+		$out[] = '<div id="messagepane">'.$this->announce($this->message).'</div>'.n;
 		return join(n, $out);
 	}
 

@@ -55,7 +55,7 @@ $LastChangedRevision$
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<meta name="robots" content="noindex, nofollow" />
 	<title><?php echo escape_title($pagetitle) ?> - <?php echo txpspecialchars($sitename) ?> &#124; Textpattern CMS</title>
-	<script src="jquery.js" type="text/javascript"></script>
+	<script type="text/javascript" src="jquery.js"></script>
 	<?php
 	echo script_js(
 		'var textpattern = {
@@ -77,7 +77,6 @@ $LastChangedRevision$
 	<script type="text/javascript" src="textpattern.js"></script>
 	<script type="text/javascript">
 	<!--
-
 		var cookieEnabled = checkCookies();
 
 		if (!cookieEnabled)
@@ -150,7 +149,7 @@ $LastChangedRevision$
 		$tc = ($area == $event) ? 'tabup' : 'tabdown';
 		$atts=' class="'.$tc.'"';
 		$hatts=' href="?event='.$tarea.'"';
-      	return tda(tag($label,'a',$hatts),$atts);
+		return tda(tag($label,'a',$hatts),$atts);
 	}
 
 // -------------------------------------------------------------
@@ -196,9 +195,9 @@ $LastChangedRevision$
 		$areas['content'] = array(
 			gTxt('tab_organise') => 'category',
 			gTxt('tab_write')    => 'article',
-			gTxt('tab_list')    =>  'list',
+			gTxt('tab_list')     =>  'list',
 			gTxt('tab_image')    => 'image',
-			gTxt('tab_file')	 => 'file',
+			gTxt('tab_file')     => 'file',
 			gTxt('tab_link')     => 'link',
 			gTxt('tab_comments') => 'discuss'
 		);
@@ -261,9 +260,7 @@ $LastChangedRevision$
 
 		if ($out)
 		{
-			$style = ($inline) ? ' style="display: inline;"': '';
-
-			return '<form method="get" action="index.php" class="navpop"'.$style.'>'.
+			return '<form method="get" action="index.php" class="navpop">'.
 				n.'<select name="event" onchange="submit(this.form);">'.
 				n.t.'<option>'.gTxt('go').'&#8230;</option>'.
 				join('', $out).
