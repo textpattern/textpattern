@@ -108,14 +108,23 @@ class classic_theme extends theme
 			$html = ''; // TODO: Say what?
 			$js = 'window.alert("'.escape_js(strip_tags($thing[0])).'")';
 		} else {
-			$html = "<span id='message' class='$class'>".gTxt($thing[0]).'</span>';
+			$html = '<span id="message" class="'.$class.'">'.gTxt($thing[0]).' <a class="close">&times;</a></span>';
 			// Try to inject $html into the message pane no matter when _announce()'s output is printed
 			$js = escape_js($html);
 			$js = <<< EOS
 				$(document).ready( function(){
 					$("#messagepane").html("{$js}");
-					$('#messagepane #message.error').fadeOut(800).fadeIn(800);
-					$('#messagepane #message.warning').fadeOut(800).fadeIn(800);
+					$('#message.success').fadeOut('fast').fadeIn('fast');
+					$('#message.error').fadeOut('fast').fadeIn('fast');
+					$('#message.warning').fadeOut('fast').fadeIn('fast');
+					$(".close").click(function() {
+						$(this).parent().remove();
+					});
+				});
+				$(document).keyup(function(e) {
+					if (e.keyCode == 27) {
+						$(".close").parent().remove();
+					}
 				});
 EOS;
 		}

@@ -45,7 +45,7 @@ button {
 }
 
 body {
-	margin: 0 0 2em 0;
+	margin: 0 0 3.5em 0;
 	padding: 0;
 	color: #000;
 	background-color: #fff;
@@ -766,6 +766,24 @@ ul.plain-list,
 /* Global messages
    ========================================================================== */
 
+#messagepane {
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	z-index: 9999;
+}
+
+#messagepane span {
+	position: relative;
+	display: block;
+	padding: .5em 2em;
+	text-align: center;
+	-webkit-box-shadow: 0 -.25em .4em rgba(0, 0, 0, .15);
+	-moz-box-shadow: 0 -.25em .4em rgba(0, 0, 0, .15);
+	box-shadow: 0 -.25em .4em rgba(0, 0, 0, .15);
+}
+
 .success {
 	color: #008000;
 }
@@ -789,24 +807,47 @@ ul.plain-list,
 	text-align: center;
 }
 
-.alert-block.success {
+.alert-block.success,
+#messagepane span.success {
 	border-color: #a3d48e;
 	background: #dff0d8;
 }
 
-.alert-block.warning {
+.alert-block.warning,
+#messagepane span.warning {
 	border-color: #ffe16d;
 	background: #fff6d3;
 }
 
-.alert-block.error {
+.alert-block.error,
+#messagepane span.error {
 	border-color: #e1b2b2;
 	background: #f2dede;
 }
 
-.alert-block.information {
+.alert-block.information,
+#messagepane span.information {
 	border-color: #b1e2f5;
 	background: #e7f6fc;
+}
+
+/* close icon */
+.close {
+	position: absolute;
+	top: .21428571428571em;
+	right: .75em;
+	font-size: 1.27272727272727em;
+	text-decoration: none;
+	color: #333333;
+	color: rgba(51, 51, 51, 0.4);
+	font-weight: bold;
+}
+
+.close:hover {
+	text-decoration: none;
+	color: #333333;
+	color: rgba(51, 51, 51, 0.6);
+	cursor: pointer;
 }
 
 
@@ -815,6 +856,7 @@ ul.plain-list,
 
 .txp-header {
 	min-width: 86em;
+	margin-bottom: 1.5em;
 }
 
 .txp-body {
@@ -915,12 +957,6 @@ ul.plain-list,
 	-moz-box-shadow: 0 -.15em .15em rgba(0, 0, 0, .10);
 	box-shadow: 0 -.15em .15em rgba(0, 0, 0, .10);
 	cursor: default;
-}
-
-#messagepane {
-	height: 2em;
-	line-height: 2em;
-	text-align: center;
 }
 
 .txp-control-panel {
