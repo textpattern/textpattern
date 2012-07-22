@@ -616,16 +616,6 @@ input[type="checkbox"] {
   margin-right: .5em;
 }
 
-input[type="text"],
-input[type="password"] {
-  width: 100%;
-  max-width: 23.2307692307692em;
-}
-
-.search-form input[type="text"] {
-  max-width: 16.9230769230769em;
-}
-
 input.year, input.exp_year {
   width: 3.30769230769231em;
 }
@@ -634,8 +624,13 @@ input.month, input.exp_month, input.day, input.exp_day, input.hour, input.exp_ho
 }
 
 /* additional input field widths */
+input[size="32"] {
+  width: 100%;
+  max-width: 23.2307692307692em;
+}
+
 input.input-large {
-  max-width: 100%;
+  width: 100%;
 }
 
 input.input-medium {
@@ -1513,9 +1508,8 @@ body#page-setup {
   margin-bottom: 1em;
 }
 
-#article-main .title input {
+#article-main #title {
   width: 75%;
-  max-width: 75%;
 }
 #article-main #body {
   height: 34.4615384615385em;
