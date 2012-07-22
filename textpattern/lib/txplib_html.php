@@ -346,9 +346,9 @@ $LastChangedRevision$
 			$out[] = $theme->announce(
 				gTxt('showing_search_results',
 					array(
-						'{from}'    => (($page - 1) * $limit) + 1,
-						'{to}'      => min($total, $page * $limit),
-						'{total}'   => $total
+						'{from}'  => (($page - 1) * $limit) + 1,
+						'{to}'    => min($total, $page * $limit),
+						'{total}' => $total
 						)
 					)
 				);
@@ -1062,7 +1062,7 @@ $LastChangedRevision$
 			graf(
 				'<label for="'.$event.'-search">'.gTxt('search').'</label>'.
 				n.selectInput('search_method', $methods, $method, '', '', $event.'-search').
-				n.fInput('text', 'crit', $crit, '', '', '', INPUT_MEDIUM).
+				n.fInput('text', 'crit', $crit, 'input-medium', '', '', INPUT_MEDIUM).
 				n.eInput($event).
 				n.sInput($step).
 				n.fInput('submit', 'search', gTxt('go'))
