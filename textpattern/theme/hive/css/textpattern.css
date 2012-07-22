@@ -1649,11 +1649,7 @@ body#page-setup {
 }
 
 .copy-as {
-  max-width: 23.2307692307692em;
-}
-
-.copy-as input[type="submit"] {
-  margin-top: .38461538461538em;
+  line-height: 2;
 }
 
 #content_switcher .form-list-action,

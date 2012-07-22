@@ -12,12 +12,12 @@ $LastChangedRevision$
 
 		bouncer($step,
 			array(
-				'css_edit_raw' 	=> false,
-				'pour' 			=> false,
-				'css_save' 		=> true,
-				'css_copy' 		=> true,
-				'css_delete' 	=> true,
-				'css_edit' 		=> false,
+				'css_edit_raw' => false,
+				'pour'         => false,
+				'css_save'     => true,
+				'css_copy'     => true,
+				'css_delete'   => true,
+				'css_edit'     => false,
 			)
 		);
 
@@ -32,7 +32,8 @@ $LastChangedRevision$
 		}
 	}
 
-//-------------------------------------------------------------
+// -------------------------------------------------------------
+
 	function css_list($current, $default) {
 		$out[] = startTable('', '', 'txp-list');
 
@@ -52,7 +53,8 @@ $LastChangedRevision$
 		}
 	}
 
-//-------------------------------------------------------------
+// -------------------------------------------------------------
+
 	function css_edit($message='')
 	{
 		pagetop(gTxt("edit_css"),$message);
@@ -60,7 +62,8 @@ $LastChangedRevision$
 		css_edit_raw();
 	}
 
-//-------------------------------------------------------------
+// -------------------------------------------------------------
+
 	function css_edit_raw() {
 		global $event, $step;
 
@@ -93,7 +96,7 @@ $LastChangedRevision$
 		if (!empty($name)) {
 			$copy =
 				n.'<p class="copy-as"><label for="copy-css">'.gTxt('copy_css_as').'</label>'.
-				n.fInput('text', 'newname', '', '', '', '', '', '', 'copy-css').
+				n.fInput('text','newname','','input-medium','','',INPUT_MEDIUM,'','copy-css').
 				n.fInput('submit', 'copy', gTxt('copy')).'</p>';
 		} else {
 			$copy = '';
@@ -132,6 +135,7 @@ $LastChangedRevision$
 	}
 
 // -------------------------------------------------------------
+
 	function css_copy()
 	{
 		extract(gpsa(array('oldname', 'newname')));
@@ -145,7 +149,8 @@ $LastChangedRevision$
 		);
 	}
 
-//-------------------------------------------------------------
+// -------------------------------------------------------------
+
 	function css_save()
 	{
 		extract(array_map('assert_string', gpsa(array('name','css','savenew','newname','copy'))));
@@ -198,7 +203,8 @@ $LastChangedRevision$
 		}
 	}
 
-//-------------------------------------------------------------
+// -------------------------------------------------------------
+
 	function css_delete()
 	{
 		$name  = ps('name');
@@ -217,4 +223,5 @@ $LastChangedRevision$
 		}
 		css_edit($message);
 	}
+
 ?>

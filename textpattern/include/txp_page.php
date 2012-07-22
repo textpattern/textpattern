@@ -19,9 +19,9 @@ $LastChangedRevision$
 
 		bouncer($step,
 			array(
-				'page_edit' => false,
-				'page_save' => true,
-				'page_delete' => true,
+				'page_edit'       => false,
+				'page_save'       => true,
+				'page_delete'     => true,
 				'save_pane_state' => true
 			)
 		);
@@ -36,7 +36,7 @@ $LastChangedRevision$
 		}
 	}
 
-//-------------------------------------------------------------
+// -------------------------------------------------------------
 
 	function page_edit($message = '') {
 		global $event,$step;
@@ -58,12 +58,12 @@ $LastChangedRevision$
 
 		// Format of each entry is popTagLink -> array ( gTxt() string, class/ID)
 		$tagbuild_items = array(
-			'page_article' => array('page_article_hed', 'article-tags'),
+			'page_article'     => array('page_article_hed', 'article-tags'),
 			'page_article_nav' => array('page_article_nav_hed', 'article-nav-tags'),
-			'page_nav' => array('page_nav_hed', 'nav-tags'),
-			'page_xml' => array('page_xml_hed', 'xml-tags'),
-			'page_misc' => array('page_misc_hed', 'misc-tags'),
-			'page_file' => array('page_file_hed', 'file-tags'),
+			'page_nav'         => array('page_nav_hed', 'nav-tags'),
+			'page_xml'         => array('page_xml_hed', 'xml-tags'),
+			'page_misc'        => array('page_misc_hed', 'misc-tags'),
+			'page_file'        => array('page_file_hed', 'file-tags'),
 		);
 
 		$tagbuild_options = '';
@@ -102,7 +102,8 @@ $LastChangedRevision$
 			endTable().'</div>';
 	}
 
-//-------------------------------------------------------------
+// -------------------------------------------------------------
+
 	function page_edit_form($name)
 	{
 		global $step;
@@ -133,7 +134,7 @@ $LastChangedRevision$
 		if (!empty($name)) {
 			$out[] =
 				n.'<p class="copy-as"><label for="copy-page">'.gTxt('copy_page_as').'</label>'.
-				n.fInput('text', 'newname', '', '', '', '', '', '', 'copy-page').
+				n.fInput('text','newname','','input-medium','','',INPUT_MEDIUM,'','copy-page').
 				n.fInput('submit','copy',gTxt('copy')).'</p>';
 		}
 		$out[] = '</div>';
@@ -141,7 +142,7 @@ $LastChangedRevision$
 		return form(join('',$out), '', '', 'post', '', '', 'page_form');
 	}
 
-//-------------------------------------------------------------
+// -------------------------------------------------------------
 
 	function page_list($current)
 	{
@@ -163,7 +164,7 @@ $LastChangedRevision$
 		return startTable('', '', 'txp-list').join(n, $out).endTable();
 	}
 
-//-------------------------------------------------------------
+// -------------------------------------------------------------
 
 	function page_delete()
 	{
@@ -226,7 +227,7 @@ $LastChangedRevision$
 				$message = array(gTxt('page_name_invalid'), E_ERROR);
 			}
 
- 			page_edit($message);
+			page_edit($message);
 		}
 
 		else
@@ -251,13 +252,16 @@ $LastChangedRevision$
 	{
 		page_edit();
 	}
-//-------------------------------------------------------------
+
+// -------------------------------------------------------------
+
 	function taglinks($type)
 	{
 		return popTagLinks($type);
 	}
 
 // -------------------------------------------------------------
+
 	function page_save_pane_state()
 	{
 		global $event;
