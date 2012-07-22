@@ -73,9 +73,11 @@ pre {
 	font-size: 1.1em;
 	border: 1px solid #e5e5e5;
 	padding: 1em;
-	overflow-x: auto;
 	background: #f5f5f5;
 	tab-size: 4; /* set tab size to 4 spaces */
+	overflow-x: auto;
+	/* IE7 */
+	*overflow-y: hidden;
 }
 
 .code {
@@ -915,9 +917,13 @@ ul.plain-list,
 
 .nav-tabs {
 	text-align: center;
+	overflow-x: auto;
+	/* IE7 */
+	*overflow-y: hidden;
 }
 
 .nav-tabs ul {
+	white-space: nowrap;
 	list-style: none;
 	margin: .75em 0 0;
 	border-bottom: 1px solid #ccc;
