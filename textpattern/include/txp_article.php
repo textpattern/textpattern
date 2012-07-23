@@ -187,7 +187,7 @@ if (!empty($event) and $event == 'article') {
 
 				if ($ok) {
 
-					$GLOBALS['ID'] = $ok;
+					$rs['ID'] = $GLOBALS['ID'] = $ok;
 
 					if ($Status >= STATUS_LIVE) {
 						do_pings();
