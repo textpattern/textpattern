@@ -86,9 +86,9 @@ function showHideFields($sel)
 		$content.= inputLabel('import_section', import_section_popup(''), 'import_section', 'import_section');
 
 		$status_options = array(
-			STATUS_LIVE => gTxt('live'),
-			STATUS_DRAFT => gTxt('draft'),
-			STATUS_HIDDEN => gTxt('hidden'),
+			STATUS_LIVE    => gTxt('live'),
+			STATUS_DRAFT   => gTxt('draft'),
+			STATUS_HIDDEN  => gTxt('hidden'),
 			STATUS_PENDING => gTxt('pending')
 		);
 

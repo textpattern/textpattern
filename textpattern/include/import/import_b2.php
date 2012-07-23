@@ -22,11 +22,11 @@ $LastChangedRevision$
 		mysql_select_db($b2db,$b2link);
 		$results[]='connected to b2 database. Importing Data';
 
-        // Copy & Paste your table-definitions from b2config.php
-        $tableposts = 'b2posts';
-        $tableusers = 'b2users';
-        $tablecategories = 'b2categories';
-        $tablecomments = 'b2comments';
+		// Copy & Paste your table-definitions from b2config.php
+		$tableposts = 'b2posts';
+		$tableusers = 'b2users';
+		$tablecategories = 'b2categories';
+		$tablecomments = 'b2comments';
 
 
 		$a = mysql_query("
@@ -42,7 +42,7 @@ $LastChangedRevision$
 				".$tablecategories.".cat_ID = ".$tableposts.".post_category
 			left join ".$tableusers." on
 				".$tableusers.".ID = ".$tableposts.".post_author
-            ORDER BY post_date DESC
+			ORDER BY post_date DESC
 		",$b2link) or $results[]= mysql_error();
 
 		while($b=mysql_fetch_array($a)) {
@@ -92,42 +92,42 @@ $LastChangedRevision$
 		if (!empty($articles)) {
 			foreach($articles as $a){
 				if (is_callable('utf8_encode'))
-                {
-                    // Also fixing break-tags for users with b2s Auto-BR
+				{
+					// Also fixing break-tags for users with b2s Auto-BR
 					$a['Body'] = utf8_encode(str_replace("<br />\n","\n",stripslashes($a['Body'])));
 					$a['Title'] = utf8_encode(stripslashes($a['Title']));
-            		$a['Title'] = $textile->TextileThis($a['Title'],'',1);
-                }
-                // b2 uses the magic word "<!--more-->" to generate excerpts
-                if (strpos($a['Body'],'<!--more-->'))
-                {
-                    //Everything that is before "more" can be treated as the excerpt.
-                    $pos = strpos($a['Body'],'<!--more-->');
-                    $a['Excerpt'] = substr($a['Body'],0,$pos);
-                    $a['Excerpt_html'] = $textile->textileThis($a['Excerpt']);
-                    $a['Body'] = str_replace('<!--more-->','',$a['Body']);
-                }
-                else
-                {
-                    $a['Excerpt'] = '';
-                    $a['Excerpt_html'] = '';
-                }
-                $a['url_title'] = stripSpace($a['Title'],1);
+					$a['Title'] = $textile->TextileThis($a['Title'],'',1);
+				}
+				// b2 uses the magic word "<!--more-->" to generate excerpts
+				if (strpos($a['Body'],'<!--more-->'))
+				{
+					//Everything that is before "more" can be treated as the excerpt.
+					$pos = strpos($a['Body'],'<!--more-->');
+					$a['Excerpt'] = substr($a['Body'],0,$pos);
+					$a['Excerpt_html'] = $textile->textileThis($a['Excerpt']);
+					$a['Body'] = str_replace('<!--more-->','',$a['Body']);
+				}
+				else
+				{
+					$a['Excerpt'] = '';
+					$a['Excerpt_html'] = '';
+				}
+				$a['url_title'] = stripSpace($a['Title'],1);
 				$a['Body_html'] = $textile->textileThis($a['Body']);
 				extract(array_slash($a));
 				$q = mysql_query("
 					insert into `".PFX."textpattern` set
-					ID        = '$ID',
-					Posted    = '$Posted',
-					Title     = '$Title',
-                    url_title = '$url_title',
-					Body      = '$Body',
-					Body_html = '$Body_html',
-					Excerpt   = '$Excerpt',
+					ID           = '$ID',
+					Posted       = '$Posted',
+					Title        = '$Title',
+					url_title    = '$url_title',
+					Body         = '$Body',
+					Body_html    = '$Body_html',
+					Excerpt      = '$Excerpt',
 					Excerpt_html = '$Excerpt_html',
-					Category1 = '$Category1',
-					AuthorID  = '$AuthorID',
-					Section   = '$insert_into_section',
+					Category1    = '$Category1',
+					AuthorID     = '$AuthorID',
+					Section      = '$insert_into_section',
 					AnnotateInvite = '$default_comment_invite',
 					uid='".md5(uniqid(rand(),true))."',
 					feed_time='".substr($Posted,0,10)."',

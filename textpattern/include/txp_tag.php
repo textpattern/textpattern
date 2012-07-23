@@ -301,9 +301,9 @@ begin generic functions
 	function match_pop($val)
 	{
 		$vals = array(
-			'Category1,Category2'	=> gTxt('category1').' '.gTxt('and').' '.gTxt('category2'),
-			'Category1'						=> gTxt('category1'),
-			'Category2'						=> gTxt('category2')
+			'Category1,Category2' => gTxt('category1').' '.gTxt('and').' '.gTxt('category2'),
+			'Category1'           => gTxt('category1'),
+			'Category2'           => gTxt('category2')
 		);
 
 		return ' '.selectInput('match', $vals, $val, true);
@@ -351,19 +351,19 @@ begin generic functions
 		$desc = ' ('.gTxt('descending').')';
 
 		$vals = array(
-			'Title asc'			 => gTxt('tag_title').$asc,
-			'Title desc'		 => gTxt('tag_title').$desc,
-			'Posted asc'		 => gTxt('tag_posted').$asc,
-			'Posted desc'		 => gTxt('tag_posted').$desc,
-			'LastMod asc'		 => gTxt('last_modification').$asc,
-			'LastMod desc'	 => gTxt('last_modification').$desc,
-			'Section asc'		 => gTxt('section').$asc,
-			'Section desc'	 => gTxt('section').$desc,
-			'Category1 asc'	 => gTxt('category1').$asc,
+			'Title asc'      => gTxt('tag_title').$asc,
+			'Title desc'     => gTxt('tag_title').$desc,
+			'Posted asc'     => gTxt('tag_posted').$asc,
+			'Posted desc'    => gTxt('tag_posted').$desc,
+			'LastMod asc'    => gTxt('last_modification').$asc,
+			'LastMod desc'   => gTxt('last_modification').$desc,
+			'Section asc'    => gTxt('section').$asc,
+			'Section desc'   => gTxt('section').$desc,
+			'Category1 asc'  => gTxt('category1').$asc,
 			'Category1 desc' => gTxt('category1').$desc,
-			'Category2 asc'	 => gTxt('category2').$asc,
+			'Category2 asc'  => gTxt('category2').$asc,
 			'Category2 desc' => gTxt('category2').$desc,
-			'rand()'				 => gTxt('random')
+			'rand()'         => gTxt('random')
 		);
 
 		return ' '.selectInput('sort', $vals, $val, true);
@@ -377,8 +377,8 @@ begin generic functions
 		$desc = ' ('.gTxt('descending').')';
 
 		$vals = array(
-			'posted asc'	=> gTxt('posted').$asc,
-			'posted desc'	=> gTxt('posted').$desc,
+			'posted asc'  => gTxt('posted').$asc,
+			'posted desc' => gTxt('posted').$desc,
 		);
 
 		return ' '.selectInput('sort', $vals, $val, true);
@@ -392,10 +392,10 @@ begin generic functions
 		$desc = ' ('.gTxt('descending').')';
 
 		$vals = array(
-			'title asc'		=> gTxt('tag_title').$asc,
-			'title desc'	=> gTxt('tag_title').$desc,
-			'name asc'		=> gTxt('name').$asc,
-			'name desc'		=> gTxt('name').$desc,
+			'title asc'  => gTxt('tag_title').$asc,
+			'title desc' => gTxt('tag_title').$desc,
+			'name asc'   => gTxt('name').$asc,
+			'name desc'  => gTxt('name').$desc,
 		);
 
 		return ' '.selectInput('sort', $vals, $val, true);
@@ -467,7 +467,7 @@ begin generic functions
 	{
 		$vals = array(
 			'link' => '<link rel...',
-			'url'	 => 'css.php?...'
+			'url'  => 'css.php?...'
 		);
 
 		return ' '.selectInput('format', $vals, $val, true);
@@ -784,13 +784,13 @@ begin tag builder functions
 		$desc = ' ('.gTxt('descending').')';
 
 		$sorts = array(
-			'linksort asc'	=> gTxt('name').$asc,
+			'linksort asc'  => gTxt('name').$asc,
 			'linksort desc' => gTxt('name').$desc,
-			'category asc'	=> gTxt('category').$asc,
+			'category asc'  => gTxt('category').$asc,
 			'category desc' => gTxt('category').$desc,
-			'date asc'			=> gTxt('date').$asc,
-			'date desc'			=> gTxt('date').$desc,
-			'rand()'				=> gTxt('random')
+			'date asc'      => gTxt('date').$asc,
+			'date desc'     => gTxt('date').$desc,
+			'rand()'        => gTxt('random')
 		);
 
 		extract($atts);
@@ -3560,11 +3560,11 @@ begin tag builder functions
 		$desc = ' ('.gTxt('descending').')';
 
 		$sorts = array(
-			'filename asc'	 => gTxt('file_name').$asc,
-			'filename desc'	 => gTxt('file_name').$desc,
-			'downloads asc'	 => gTxt('downloads').$asc,
+			'filename asc'   => gTxt('file_name').$asc,
+			'filename desc'  => gTxt('file_name').$desc,
+			'downloads asc'  => gTxt('downloads').$asc,
 			'downloads desc' => gTxt('downloads').$desc,
-			'rand()'				 => 'Random'
+			'rand()'         => 'Random'
 		);
 
 		extract($atts);
@@ -3691,7 +3691,7 @@ begin tag builder functions
 		));
 
 		$formats = array(
-			'b'	 => 'Bytes',
+			'b'  => 'Bytes',
 			'kb' => 'Kilobytes',
 			'mb' => 'Megabytes',
 			'gb' => 'Gigabytes',

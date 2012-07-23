@@ -25,11 +25,11 @@ $LastChangedRevision$
 
 		bouncer($step,
 			array(
-				'form_edit' 	=> false,
-				'form_create' 	=> false,
-				'form_delete' 	=> true,
+				'form_edit'       => false,
+				'form_create'     => false,
+				'form_delete'     => true,
 				'form_multi_edit' => true,
-				'form_save' 	=> true,
+				'form_save'       => true,
 				'save_pane_state' => true
 			)
 		);

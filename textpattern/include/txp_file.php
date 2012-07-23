@@ -856,7 +856,7 @@ $LastChangedRevision$
 
 		$constraints = array(
 			'category' => new CategoryConstraint(gps('category'), array('type' => 'file')),
-			'status' => new ChoiceConstraint(gps('status'), array('choices' => array(STATUS_HIDDEN, STATUS_PENDING, STATUS_LIVE), 'message' => 'invalid_status'))
+			'status'   => new ChoiceConstraint(gps('status'), array('choices' => array(STATUS_HIDDEN, STATUS_PENDING, STATUS_LIVE), 'message' => 'invalid_status'))
 		);
 		callback_event_ref('file_ui', 'validate_save', 0, $varray, $constraints);
 		$validator = new Validator($constraints);
@@ -1040,4 +1040,5 @@ $LastChangedRevision$
 
 		return array_diff($dirlist,$files);
 	}
+
 ?>

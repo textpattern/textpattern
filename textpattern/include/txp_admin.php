@@ -543,9 +543,9 @@ $LastChangedRevision$
 					// assign dangling assets to their new owner
 					$reassign = array(
 						'textpattern' => 'AuthorID',
-						'txp_file' 	=> 'author',
-						'txp_image' => 'author',
-						'txp_link' 	=> 'author',
+						'txp_file'    => 'author',
+						'txp_image'   => 'author',
+						'txp_link'    => 'author',
 					);
 					foreach ($reassign as $table => $col)
 					{

@@ -21,9 +21,9 @@ $LastChangedRevision$
 		require_privs('log');
 
 		$available_steps = array(
-			'log_list' 			=> false,
-			'log_change_pageby'	=> true,
-			'log_multi_edit' 	=> true
+			'log_list'          => false,
+			'log_change_pageby' => true,
+			'log_multi_edit'    => true
 		);
 
 		if ($step && bouncer($step, $available_steps)) {
@@ -252,7 +252,7 @@ $LastChangedRevision$
 
 	function log_search_form($crit, $method)
 	{
-		$methods =	array(
+		$methods = array(
 			'ip'     => gTxt('IP'),
 			'host'   => gTxt('host'),
 			'page'   => gTxt('page'),

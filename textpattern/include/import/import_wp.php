@@ -344,10 +344,10 @@ $LastChangedRevision$
 		// keep a handy copy of txpdb values, and do not alter Dean code
 		// for now! ;-)
 
-		$txpdb			= $txpcfg['db'];
+		$txpdb      = $txpcfg['db'];
 		$txpdblogin = $txpcfg['user'];
-		$txpdbpass	= $txpcfg['pass'];
-		$txpdbhost	= $txpcfg['host'];
+		$txpdbpass  = $txpcfg['pass'];
+		$txpdbhost  = $txpcfg['host'];
 
 		// Yes, we have to make a new connection
 		// otherwise doArray complains
@@ -459,22 +459,22 @@ $LastChangedRevision$
 				// can not use array slash due to way on which comments are selected
 				$rs = mysql_query("
 					insert into ".safe_pfx('textpattern')." set
-						Posted		    = '".doSlash($Posted)."',
-						LastMod		    = '".doSlash($LastMod)."',
-						Title			= '".doSlash($textile->TextileThis($Title, 1))."',
-						url_title      	= '".doSlash($url_title)."',
-						Body			= '".doSlash($Body)."',
-						Body_html      	= '".doSlash($Body_html)."',
-						Image			= '".doSlash($Image)."',
-						AuthorID	    = '".doSlash($AuthorID)."',
-						Category1     	= '".doSlash($Category1)."',
-						Category2      	= '".doSlash($Category2)."',
-						Section		    = '$insert_into_section',
+						Posted         = '".doSlash($Posted)."',
+						LastMod        = '".doSlash($LastMod)."',
+						Title          = '".doSlash($textile->TextileThis($Title, 1))."',
+						url_title      = '".doSlash($url_title)."',
+						Body           = '".doSlash($Body)."',
+						Body_html      = '".doSlash($Body_html)."',
+						Image          = '".doSlash($Image)."',
+						AuthorID       = '".doSlash($AuthorID)."',
+						Category1      = '".doSlash($Category1)."',
+						Category2      = '".doSlash($Category2)."',
+						Section        = '$insert_into_section',
 						uid            = '".md5(uniqid(rand(), true))."',
 						feed_time      = '".substr($Posted, 0, 10)."',
 						Annotate       = '".doSlash($Annotate)."',
 						AnnotateInvite = '$default_comment_invite',
-						Status		     = '".doSlash($Status)."'
+						Status         = '".doSlash($Status)."'
 				", $txplink) or $errors[] = mysql_error();
 
 				if ((int)$insert_id = mysql_insert_id($txplink))

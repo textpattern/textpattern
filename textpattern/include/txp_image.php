@@ -308,12 +308,12 @@ $LastChangedRevision$
 	function image_search_form($crit, $method)
 	{
 		$methods =	array(
-			'id'        => gTxt('ID'),
-			'name'      => gTxt('name'),
-			'category'  => gTxt('image_category'),
-			'author'    => gTxt('author'),
-			'alt'       => gTxt('alt_text'),
-			'caption'   => gTxt('caption')
+			'id'       => gTxt('ID'),
+			'name'     => gTxt('name'),
+			'category' => gTxt('image_category'),
+			'author'   => gTxt('author'),
+			'alt'      => gTxt('alt_text'),
+			'caption'  => gTxt('caption')
 		);
 
 		return search_form('image', 'image_list', $crit, $methods, $method, 'name');

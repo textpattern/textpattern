@@ -181,7 +181,7 @@ if (!empty($event) and $event == 'article') {
 					url_title       = '$url_title',
 					AnnotateInvite  = '$AnnotateInvite',"
 					.(($cfs) ? $cfq.',' : '').
-					"uid             = '".md5(uniqid(rand(),true))."',
+					"uid            = '".md5(uniqid(rand(),true))."',
 					feed_time       = now()"
 				);
 

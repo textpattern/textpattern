@@ -388,20 +388,20 @@ $LastChangedRevision$
 					linkname    = '$linkname',
 					linksort    = '$linksort',
 					description = '$description',
-					author 		= '".doSlash($txp_user)."'",
+					author      = '".doSlash($txp_user)."'",
 					"id = $id"
 				);
 			}
 			else
 			{
 				$ok = safe_insert('txp_link',
-				   "category   = '$category',
+					"category   = '$category',
 					date        = now(),
 					url         = '".trim($url)."',
 					linkname    = '$linkname',
 					linksort    = '$linksort',
 					description = '$description',
-					author		= '".doSlash($txp_user)."'"
+					author      = '".doSlash($txp_user)."'"
 				);
 				if ($ok) {
 					$GLOBALS['ID'] = $_POST['id'] = $ok;

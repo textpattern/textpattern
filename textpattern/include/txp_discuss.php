@@ -689,11 +689,11 @@ $LastChangedRevision$
 				clean_comment_counts($parentids);
 
 				$messages = array(
-					'delete'			=> gTxt('comments_deleted', array('{list}' => $done)),
-					'ban'					=> gTxt('ips_banned', array('{list}' => $done)),
-					'spam'				=> gTxt('comments_marked_spam', array('{list}' => $done)),
+					'delete'      => gTxt('comments_deleted', array('{list}' => $done)),
+					'ban'         => gTxt('ips_banned', array('{list}' => $done)),
+					'spam'        => gTxt('comments_marked_spam', array('{list}' => $done)),
 					'unmoderated' => gTxt('comments_marked_unmoderated', array('{list}' => $done)),
-					'visible'			=> gTxt('comments_marked_visible', array('{list}' => $done))
+					'visible'     => gTxt('comments_marked_visible', array('{list}' => $done))
 				);
 
 				update_lastmod();
@@ -704,4 +704,5 @@ $LastChangedRevision$
 
 		return discuss_list();
 	}
+
 ?>
