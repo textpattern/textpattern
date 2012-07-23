@@ -169,7 +169,7 @@ ol {
 }
 
 ul {
-	list-style-type: circle;
+	list-style: circle;
 }
 
 dl {
@@ -740,7 +740,7 @@ p#js span { /* TBC */
 
 ul.plain-list,
 .txp-list ul {
-	list-style-type: none;
+	list-style: none;
 	padding: 0;
 }
 
@@ -1129,54 +1129,53 @@ td#article-col-2 {
 	margin-left: 1em;
 }
 
-td#article-tabs {
-	padding-top: 5.45454545454545em;
-	width: 16px;
+#article-tabs {
+	width: 26px;
+	padding-left: 1em;
 }
 
-td#article-tabs ul {
-	list-style-type: none;
+#article-tabs ul {
+	list-style: none;
+	margin-top: .72727272727273em;
 	padding: 0;
 }
 
-td#article-tabs li {
-	margin: 0;
-	padding: 0;
-	width: 16px;
-	height: 100px;
+#article-tabs .text {
+	background-image: url("view-text.png");
+}
+
+#article-tabs .html {
+	background-image: url("view-html.png");
+}
+
+#article-tabs .preview {
+	background-image: url("view-preview.png");
+}
+
+.view-mode {
 	text-indent: -9999px;
-	background: no-repeat left top;
+	width: 24px;
+	height: 24px;
+	margin-bottom: 1em;
+	border: 1px solid #ccc;
+	-moz-border-radius: .4em;
+	border-radius: .4em;
+	background-color: #fff8dd;
+	background-repeat: no-repeat;
+	background-position: 50% 50%;
 }
 
-td#article-tabs a {
+.view-mode a {
 	display: block;
-	width: 16px;
-	height: 100px;
-	outline: none;
+	width: 24px;
+	height: 24px;
 }
 
-td#article-tabs #tab-textup {
-	background-image: url("textup.gif");
-}
-
-td#article-tabs #tab-textdown {
-	background-image: url("textdown.gif");
-}
-
-td#article-tabs #tab-htmlup {
-	background-image: url("htmlup.gif");
-}
-
-td#article-tabs #tab-htmldown {
-	background-image: url("htmldown.gif");
-}
-
-td#article-tabs #tab-previewup {
-	background-image: url("previewup.gif");
-}
-
-td#article-tabs #tab-previewdown {
-	background-image: url("previewdown.gif");
+.view-mode:hover,
+#tab-textup,
+#tab-htmlup,
+#tab-previewup {
+	background-color: #fff;
 }
 
 input.month,
