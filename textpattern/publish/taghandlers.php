@@ -1386,35 +1386,38 @@ $LastChangedRevision$
 		global /** @noinspection PhpUnusedLocalVariableInspection */
 		$thisarticle, $next_id, $next_title, $prev_id, $prev_title;
 
+		assert_article();
+
 		extract(lAtts(array(
 			'showalways' => 0,
 		), $atts));
 
-		assert_article();
-		if (!isset($thisarticle['next_id']))
+		if (is_array($thisarticle))
 		{
-			$np = getNextPrev();
-			$thisarticle = $thisarticle + $np;
-			extract($np);
-		}
-
-		if ($next_id)
-		{
-			$url = permlinkurl_id($next_id);
-
-			if ($thing)
+			if (!isset($thisarticle['next_id']))
 			{
-				$thing = parse($thing);
-				$next_title = escape_title($next_title);
-
-				return '<a rel="next" href="'.$url.'"'.
-					($next_title != $thing ? ' title="'.$next_title.'"' : '').
-					'>'.$thing.'</a>';
+				$np = getNextPrev();
+				$thisarticle = $thisarticle + $np;
+				extract($np);
 			}
 
-			return $url;
-		}
+			if ($next_id)
+			{
+				$url = permlinkurl_id($next_id);
 
+				if ($thing)
+				{
+					$thing = parse($thing);
+					$next_title = escape_title($next_title);
+
+					return '<a rel="next" href="'.$url.'"'.
+						($next_title != $thing ? ' title="'.$next_title.'"' : '').
+						'>'.$thing.'</a>';
+				}
+
+				return $url;
+			}
+		}
 		return ($showalways) ? parse($thing) : '';
 	}
 
@@ -1426,35 +1429,38 @@ $LastChangedRevision$
 		global /** @noinspection PhpUnusedLocalVariableInspection */
 		$thisarticle, $next_id, $next_title, $prev_id, $prev_title;
 
+		assert_article();
+
 		extract(lAtts(array(
 			'showalways' => 0,
 		), $atts));
 
-		assert_article();
-		if (!isset($thisarticle['prev_id']))
+		if (is_array($thisarticle))
 		{
-			$np = getNextPrev();
-			$thisarticle = $thisarticle + $np;
-			extract($np);
-		}
-
-		if ($prev_id)
-		{
-			$url = permlinkurl_id($prev_id);
-
-			if ($thing)
+			if (!isset($thisarticle['prev_id']))
 			{
-				$thing = parse($thing);
-				$prev_title = escape_title($prev_title);
-
-				return '<a rel="prev" href="'.$url.'"'.
-					($prev_title != $thing ? ' title="'.$prev_title.'"' : '').
-					'>'.$thing.'</a>';
+				$np = getNextPrev();
+				$thisarticle = $thisarticle + $np;
+				extract($np);
 			}
 
-			return $url;
-		}
+			if ($prev_id)
+			{
+				$url = permlinkurl_id($prev_id);
 
+				if ($thing)
+				{
+					$thing = parse($thing);
+					$prev_title = escape_title($prev_title);
+
+					return '<a rel="prev" href="'.$url.'"'.
+						($prev_title != $thing ? ' title="'.$prev_title.'"' : '').
+						'>'.$thing.'</a>';
+				}
+
+				return $url;
+			}
+		}
 		return ($showalways) ? parse($thing) : '';
 	}
 
@@ -1464,6 +1470,12 @@ $LastChangedRevision$
 	{
 		global /** @noinspection PhpUnusedLocalVariableInspection */
 		$thisarticle, $next_id, $next_title, $prev_id, $prev_title;
+
+		assert_article();
+		if (!is_array($thisarticle))
+		{
+			return '';
+		}
 
 		if (!isset($thisarticle['next_title']))
 		{
@@ -1480,6 +1492,12 @@ $LastChangedRevision$
 	{
 		global /** @noinspection PhpUnusedLocalVariableInspection */
 		$thisarticle, $next_id, $next_title, $prev_id, $prev_title;
+
+		assert_article();
+		if (!is_array($thisarticle))
+		{
+			return '';
+		}
 
 		if (!isset($thisarticle['prev_title']))
 		{
