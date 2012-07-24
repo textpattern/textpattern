@@ -213,6 +213,12 @@ function getNextPrev($id = 0, $threshold = null, $s = '')
 		$atts = filterAtts(array('sortby' => 'Posted', 'sortdir' => 'desc'));
 	} else {
 		// Pivot is $thisarticle: Use article attributes to find its neighbours
+		assert_article();
+		global $thisarticle;
+		if (!is_array($thisarticle)) {
+			return array();
+		}
+
 		$atts = filterAtts();
 
 		$m = preg_split('/\s+/', $atts['sort']);
@@ -227,9 +233,8 @@ function getNextPrev($id = 0, $threshold = null, $s = '')
 			$atts['sortdir'] = (isset($m[1]) && strtolower($m[1]) == 'desc' ? 'desc' : 'asc');
 		}
 
-		global $thisarticle;
 
-		// atts w/ special treatment
+			// atts w/ special treatment
 		switch($atts['sortby']) {
 			case 'Posted':
 				$threshold = strftime('%Y-%m-%d %H:%M:%S', $thisarticle['posted']);
