@@ -234,7 +234,7 @@ function getNextPrev($id = 0, $threshold = null, $s = '')
 		}
 
 
-			// atts w/ special treatment
+		// atts w/ special treatment
 		switch($atts['sortby']) {
 			case 'Posted':
 				$threshold = strftime('%Y-%m-%d %H:%M:%S', $thisarticle['posted']);
