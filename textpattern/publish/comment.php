@@ -194,9 +194,9 @@ $LastChangedRevision$
 		$checkbox .= ' '.hInput('checkbox_type', $checkbox_type);
 
 		$vals = array(
-			'comment_name_input'		=> fInput('text', 'name', txpspecialchars($name), 'comment_name_input'.($namewarn ? ' comments_error' : ''), '', '', $isize, '', 'name', false, $h5 && $comments_require_name),
-			'comment_email_input'		=> fInput($h5 ? 'email' : 'text', 'email', txpspecialchars($email), 'comment_email_input'.($emailwarn ? ' comments_error' : ''), '', '', $isize, '', 'email', false, $h5 && $comments_require_email),
-			'comment_web_input'			=> fInput($h5 ? 'text' /* TODO: type = 'url' once browsers are less strict */ : 'text', 'web', txpspecialchars($web)	, 'comment_web_input', '', '', $isize, '', 'web', false, false),
+			'comment_name_input'		=> fInput('text', 'name', $name, 'comment_name_input'.($namewarn ? ' comments_error' : ''), '', '', $isize, '', 'name', false, $h5 && $comments_require_name),
+			'comment_email_input'		=> fInput($h5 ? 'email' : 'text', 'email', $email, 'comment_email_input'.($emailwarn ? ' comments_error' : ''), '', '', $isize, '', 'email', false, $h5 && $comments_require_email),
+			'comment_web_input'			=> fInput($h5 ? 'text' /* TODO: type = 'url' once browsers are less strict */ : 'text', 'web', $web, 'comment_web_input', '', '', $isize, '', 'web', false, false),
 			'comment_message_input' 	=> $textarea.'<!-- plugin-place-holder -->',
 			'comment_remember'			=> $checkbox,
 			'comment_preview'			=> fInput('submit', 'preview', $previewlabel, 'button', '', '', '', '', 'txpCommentPreview', false),
@@ -218,8 +218,8 @@ $LastChangedRevision$
 		$out .= ($preview) ? n.hInput(substr($nonce, 0, $split), substr($nonce, $split)) : '';
 
 		$out .= (!$preview) ?
-			n.hInput('backpage', txpspecialchars($url)) :
-			n.hInput('backpage', txpspecialchars($backpage));
+			n.hInput('backpage', $url) :
+			n.hInput('backpage', $backpage);
 
 		$out = str_replace( '<!-- plugin-place-holder -->', callback_event('comment.form'), $out);
 
