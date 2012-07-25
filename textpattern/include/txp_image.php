@@ -475,6 +475,12 @@ $LastChangedRevision$
 							($thumb_w ? 'width="'.$thumb_w.'" height="'.$thumb_h.'" title="'.$thumb_info.'"' : ''). ' />';
 			} else {
 				$thumb = '';
+				if ($thumb_w == 0) {
+					$thumb_w = get_pref('thumb_w', 0);
+				}
+				if ($thumb_h == 0) {
+					$thumb_h = get_pref('thumb_h', 0);
+				}
 			}
 
 			echo n.'<div id="'.$event.'_container" class="txp-container">';
