@@ -283,27 +283,25 @@ $LastChangedRevision$
 
 					case urldecode(strtolower(urlencode(gTxt('category')))):
 						if ($u3) {
-							$typecode = validContext($u2);
-							$theCat = $u3;
+							$out['context'] = validContext($u2);
+							$out['c'] = $u3;
 						} else {
-							$typecode = 'article';
-							$theCat = $u2;
+							$out['context'] = 'article';
+							$out['c'] = $u2;
 						}
-						$out['context'] = $typecode;
-						$out['c'] = (ckCat($typecode,$theCat)) ? $theCat : '';
+						$out['c'] = (ckCat($out['context'], $out['c'])) ? $out['c'] : '';
 						$is_404 = empty($out['c']);
 						break;
 
 					case urldecode(strtolower(urlencode(gTxt('author')))):
 						if ($u3) {
-							$typecode = validContext($u2);
-							$theAuthor = $u3;
+							$out['context'] = validContext($u2);
+							$out['author'] = $u3;
 						} else {
-							$typecode = 'article';
-							$theAuthor = $u2;
+							$out['context'] = 'article';
+							$out['author'] = $u2;
 						}
-						$out['context'] = $typecode;
-						$out['author'] = (!empty($theAuthor)) ? $theAuthor : '';
+						$out['author'] = (!empty($out['author'])) ? $out['author'] : '';
 						break;
 						// AuthorID gets resolved from Name further down
 
@@ -390,23 +388,23 @@ $LastChangedRevision$
 							break;
 						}
 						if (!$is_404) {
-							$out['context'] = 'article';
+							$out['context'] = validContext($out['context']);
 						}
 						break; // prefs-defined permlink scheme case
 				}
 			} else {
 				$out['s'] = 'default';
-				$out['context'] = 'article';
+				$out['context'] = validContext($out['context']);
 			}
 		} else {
 			// Messy mode, but prevent to get the id for file_downloads
-			if ($out['id'] && $out['s'] != 'file_download') {
+			$out['context'] = validContext($out['context']);
+			if ($out['context'] == 'article' && $out['id'] && $out['s'] != 'file_download') {
 				$rs = lookupByID($out['id']);
 				$out['id'] = (!empty($rs['ID'])) ? $rs['ID'] : '';
 				$out['s'] = (!empty($rs['Section'])) ? $rs['Section'] : '';
 				$is_404 = (empty($out['s']) or empty($out['id']));
 			}
-			$out['context'] = validContext($out['context']);
 		}
 
 		// Existing category in messy or clean URL?
