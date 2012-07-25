@@ -2340,6 +2340,9 @@ eod;
 
 		if ($permlink_mode == 'messy')
 		{
+			if (!empty($keys['context'])) {
+				$keys['context'] = gTxt($keys['context'].'_context');
+			}
 			return hu.'index.php'.join_qs($keys);
 		}
 
@@ -2364,6 +2367,9 @@ eod;
 
 			elseif (!empty($keys['s']))
 			{
+				if (!empty($keys['context'])) {
+					$keys['context'] = gTxt($keys['context'].'_context');
+				}
 				$url = hu.urlencode($keys['s']).'/';
 				unset($keys['s']);
 				return $url.join_qs($keys);
