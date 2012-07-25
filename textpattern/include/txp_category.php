@@ -282,7 +282,7 @@ EOS
 					{
 						rebuild_tree_full($type);
 
-						$message = gTxt('categories_set_parent', array('{type}' => $type, '{parent}' => $parent, '{list}' => join(', ',$affected)));
+						$message = gTxt('categories_set_parent', array('{type}' => gTxt($type), '{parent}' => $parent, '{list}' => join(', ',$affected)));
 
 						return cat_category_list($message);
 					}
