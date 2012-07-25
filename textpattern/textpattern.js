@@ -898,6 +898,6 @@ $(document).ready(function() {
 			error: function() {window.alert(textpattern.gTxt('form_submission_error'));}
 		});
 	}
-    // arm UI
-    $('body').removeClass('not-ready');
+	// arm UI
+	$('body').removeClass('not-ready');
 });

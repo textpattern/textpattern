@@ -279,8 +279,8 @@ eod;
 		case 'tagalog':
 			$rs = safe_update("txp_prefs", "val= 'tl-tl'", 	"name='language' AND val= 'tagalog'");
 		break;
-	        case 'english':
-	        default:
+		case 'english':
+		default:
 			$rs = safe_update("txp_prefs", "val= 'en-gb'", "name='language' AND val= 'english'");
 		break;
 	}
@@ -427,8 +427,6 @@ eod;
 				safe_update('textpattern',"comments_count=".$a['thecount'],"ID=".$a['parentid']);
 			}
 		}
-
-
 
 	// 1.0: Human-friendly title for sections and categories, to solve i18n problems
 	if (!in_array('title',$txpsect)) {
@@ -580,7 +578,6 @@ EOF;
 		safe_insert('txp_form', "name='search_results', type='article', Form='$form'");
 	}
 
-
 	if (!safe_query("SELECT 1 FROM `".PFX."txp_lang` LIMIT 0")) {
 		// do install
 		safe_query("CREATE TABLE `".PFX."txp_lang` (
@@ -643,7 +640,6 @@ EOF;
 		safe_insert('txp_prefs',"name='override_emailcharset', val='0', prefs_id='1', type='1', event='admin', position='".doSlash($maxpos)."', html='yesnoradio'");
 	}
 
-
 	if (safe_field('val', 'txp_prefs', "name='comments_auto_append'") === false) {
 		safe_insert('txp_prefs',"val = '1', name = 'comments_auto_append' , prefs_id ='1', type='0', html='yesnoradio', event='comments', position='211'");
 
@@ -694,4 +690,5 @@ EOF;
 	// update version
 	safe_delete('txp_prefs',"name = 'version'");
 	safe_insert('txp_prefs', "prefs_id=1, name='version',val='4.0', type='2'");
+
 ?>

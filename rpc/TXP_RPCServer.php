@@ -32,7 +32,7 @@ class TXP_RPCServer extends IXR_IntrospectionServer
 				'blogger.newPost',
 				'this:blogger_newPost',
 				array('int', 'string', 'string', 'string', 'string', 'string', 'boolean'),
-                               	'makes a new post to a designated blog'
+				'makes a new post to a designated blog'
 			);
 			$this->addCallback(
 				'blogger.editPost',

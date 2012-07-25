@@ -10,7 +10,6 @@ $LastChangedRevision$
 		exit("Nothing here. You can't access this file directly.");
 	}
 
-
 	# replace deprecated tags with functionally equivalent, valid tags
 	$tags = array(
 		'sitename'    => 'site_name',

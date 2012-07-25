@@ -47,10 +47,11 @@ $LastChangedRevision$
 		safe_insert('txp_prefs', "prefs_id = 1, name = 'default_section', val = '$current_default_section', type = '2', event = 'section', html = 'text_input', position = '0'");
 	}
 	$cols = getThings('describe `'.PFX.'txp_section`');
- 	if (in_array('is_default', $cols))
- 	{
+	if (in_array('is_default', $cols))
+	{
 		safe_alter('txp_section', "DROP `is_default`");
- 	}
+	}
 
 	safe_alter('txp_css', 'MODIFY css MEDIUMTEXT NOT NULL');
+
 ?>

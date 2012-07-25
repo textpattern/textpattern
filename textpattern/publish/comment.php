@@ -60,15 +60,15 @@ $LastChangedRevision$
 		$h5 = ($doctype == 'html5');
 
 		extract(lAtts(array(
-			'isize'	  => '25',
-			'msgrows'   => '5',
-			'msgcols'   => '25',
-			'msgstyle'  => '',
-			'form'   => 'comment_form',
-			'previewlabel'	=> gTxt('preview'),
-			'submitlabel'	=> gTxt('submit'),
-			'rememberlabel'	=> gTxt('remember'),
-			'forgetlabel'	=> gTxt('forget')
+			'isize'         => '25',
+			'msgrows'       => '5',
+			'msgcols'       => '25',
+			'msgstyle'      => '',
+			'form'          => 'comment_form',
+			'previewlabel'  => gTxt('preview'),
+			'submitlabel'   => gTxt('submit'),
+			'rememberlabel' => gTxt('remember'),
+			'forgetlabel'   => gTxt('forget')
 		),$atts, 0));
 
 		$namewarn = false;
@@ -194,13 +194,13 @@ $LastChangedRevision$
 		$checkbox .= ' '.hInput('checkbox_type', $checkbox_type);
 
 		$vals = array(
-			'comment_name_input'		=> fInput('text', 'name', $name, 'comment_name_input'.($namewarn ? ' comments_error' : ''), '', '', $isize, '', 'name', false, $h5 && $comments_require_name),
-			'comment_email_input'		=> fInput($h5 ? 'email' : 'text', 'email', $email, 'comment_email_input'.($emailwarn ? ' comments_error' : ''), '', '', $isize, '', 'email', false, $h5 && $comments_require_email),
-			'comment_web_input'			=> fInput($h5 ? 'text' /* TODO: type = 'url' once browsers are less strict */ : 'text', 'web', $web, 'comment_web_input', '', '', $isize, '', 'web', false, false),
-			'comment_message_input' 	=> $textarea.'<!-- plugin-place-holder -->',
-			'comment_remember'			=> $checkbox,
-			'comment_preview'			=> fInput('submit', 'preview', $previewlabel, 'button', '', '', '', '', 'txpCommentPreview', false),
-			'comment_submit'			=> $comment_submit_button
+			'comment_name_input'    => fInput('text', 'name', $name, 'comment_name_input'.($namewarn ? ' comments_error' : ''), '', '', $isize, '', 'name', false, $h5 && $comments_require_name),
+			'comment_email_input'   => fInput($h5 ? 'email' : 'text', 'email', $email, 'comment_email_input'.($emailwarn ? ' comments_error' : ''), '', '', $isize, '', 'email', false, $h5 && $comments_require_email),
+			'comment_web_input'     => fInput($h5 ? 'text' /* TODO: type = 'url' once browsers are less strict */ : 'text', 'web', $web, 'comment_web_input', '', '', $isize, '', 'web', false, false),
+			'comment_message_input' => $textarea.'<!-- plugin-place-holder -->',
+			'comment_remember'      => $checkbox,
+			'comment_preview'       => fInput('submit', 'preview', $previewlabel, 'button', '', '', '', '', 'txpCommentPreview', false),
+			'comment_submit'        => $comment_submit_button
 		);
 
 		foreach ($vals as $a => $b)
@@ -240,7 +240,6 @@ $LastChangedRevision$
 		$out = str_replace("<txp:popup_comments />",$discuss,$out);
 
 		return $out;
-
 	}
 
 // -------------------------------------------------------------
@@ -361,14 +360,14 @@ $LastChangedRevision$
 				$parentid = assert_int($parentid);
 				$commentid = safe_insert(
 					"txp_discuss",
-					"parentid  = $parentid,
-					 name		  = '$name',
-					 email	  = '$email',
-					 web		  = '$web',
-					 ip		  = '".doSlash($ip)."',
-					 message   = '$message2db',
-					 visible   = ".intval($visible).",
-					 posted	  = now()"
+					"parentid = $parentid,
+					 name     = '$name',
+					 email    = '$email',
+					 web      = '$web',
+					 ip       = '".doSlash($ip)."',
+					 message  = '$message2db',
+					 visible  = ".intval($visible).",
+					 posted   = now()"
 				);
 				if ($commentid) {
 					safe_update("txp_discuss_nonce", "used = 1", "nonce='".doSlash($nonce)."'");
@@ -416,15 +415,15 @@ $LastChangedRevision$
 		function comment_evaluation() {
 			global $prefs;
 			extract(getComment());
-			$this->status = array( SPAM  => array(),
+			$this->status = array( SPAM     => array(),
 								   MODERATE => array(),
 								   VISIBLE  => array(),
-								   RELOAD  => array()
+								   RELOAD   => array()
 								);
 			$this->status_text = array(	SPAM => gTxt('spam'),
 									MODERATE => gTxt('unmoderated'),
 									VISIBLE  => gTxt('visible'),
-									RELOAD  => gTxt('reload')
+									RELOAD   => gTxt('reload')
 								);
 			$this->message = $this->status;
 			$this -> txpspamtrace[] = "Comment on $parentid by $name (".safe_strftime($prefs['archive_dateformat'],time()).")";
@@ -479,13 +478,13 @@ $LastChangedRevision$
 	}
 
 	function &get_comment_evaluator() {
-	    static $instance;
+		static $instance;
 
-	    // If the instance is not there, create one
-	    if(!isset($instance)) {
-	        $instance = new comment_evaluation();
-	    }
-	    return $instance;
+		// If the instance is not there, create one
+		if(!isset($instance)) {
+			$instance = new comment_evaluation();
+		}
+		return $instance;
 	}
 
 // -------------------------------------------------------------
@@ -579,6 +578,7 @@ $LastChangedRevision$
 
 		$success = txpMail($email, $subject, $out, $cemail);
 	}
+
 // -------------------------------------------------------------
 	# deprecated, use fInput instead
 	function input($type,$name,$val,$size='',$class='',$tab='',$chkd='')
@@ -594,4 +594,5 @@ $LastChangedRevision$
 		);
 		return join('',$o);
 	}
+
 ?>

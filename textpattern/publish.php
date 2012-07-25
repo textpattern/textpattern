@@ -474,33 +474,33 @@ $LastChangedRevision$
 		$s = $out['s'];
 		$id = $out['id'];
 
-        // hackish
-        global $is_article_list;
-        if (empty($id)) $is_article_list = true;
+		// hackish
+		global $is_article_list;
+		if (empty($id)) $is_article_list = true;
 
 		// by this point we should know the section, so grab its page and css
 		if (txpinterface != 'css') {
-            $rs = safe_row("page, css", "txp_section", "name = '".doSlash($s)."' limit 1");
-            $out['page'] = isset($rs['page']) ? $rs['page'] : '';
-            $out['css'] = isset($rs['css']) ? $rs['css'] : '';
+			$rs = safe_row("page, css", "txp_section", "name = '".doSlash($s)."' limit 1");
+			$out['page'] = isset($rs['page']) ? $rs['page'] : '';
+			$out['css'] = isset($rs['css']) ? $rs['css'] : '';
 		}
 
-        if (is_numeric($id) and !$is_404) {
-            $a = safe_row('*, unix_timestamp(Posted) as uPosted, unix_timestamp(Expires) as uExpires, unix_timestamp(LastMod) as uLastMod', 'textpattern', 'ID='.intval($id).(gps('txpreview') ? '' : ' and Status in (4,5)'));
-            if ($a) {
-                $Posted             = $a['Posted'];
-                $out['id_keywords'] = $a['Keywords'];
-                $out['id_author']   = $a['AuthorID'];
-                populateArticleData($a);
+		if (is_numeric($id) and !$is_404) {
+			$a = safe_row('*, unix_timestamp(Posted) as uPosted, unix_timestamp(Expires) as uExpires, unix_timestamp(LastMod) as uLastMod', 'textpattern', 'ID='.intval($id).(gps('txpreview') ? '' : ' and Status in (4,5)'));
+			if ($a) {
+				$Posted             = $a['Posted'];
+				$out['id_keywords'] = $a['Keywords'];
+				$out['id_author']   = $a['AuthorID'];
+				populateArticleData($a);
 
-                $uExpires = $a['uExpires'];
-                if ($uExpires and time() > $uExpires and !$publish_expired_articles) {
-                    $out['status'] = '410';
-                }
-            }
-        }
+				$uExpires = $a['uExpires'];
+				if ($uExpires and time() > $uExpires and !$publish_expired_articles) {
+					$out['status'] = '410';
+				}
+			}
+		}
 
-        $out['path_from_root'] = rhu; // these are deprecated as of 1.0
+		$out['path_from_root'] = rhu; // these are deprecated as of 1.0
 		$out['pfr']            = rhu; // leaving them here for plugin compat
 
 		$out['path_to_site']   = $path_to_site;
@@ -897,7 +897,7 @@ $LastChangedRevision$
 			'allowoverride' => '1',
 			'form'          => 'default',
 			'status'        => '4',
-			'pgonly'		=> 0
+			'pgonly'        => 0
 		), $atts, 0);
 		extract($theAtts);
 
@@ -999,4 +999,5 @@ $LastChangedRevision$
 		}
 		return isset($valid[$context]) ? $valid[$context] : 'article';
 	}
+
 ?>

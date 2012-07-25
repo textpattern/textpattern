@@ -272,8 +272,7 @@ $en_gb_lang = array(
 		'upload_err_ini_size' => 'File exceeds the upload_max_filesize directive in php.ini',
 		'upload_err_no_file' => 'No file was specified',
 		'upload_err_partial' => 'File was only partially uploaded',
-		'upload_err_tmp_dir' => 'Missing a temporary folder, used by PHP to store uploaded files. Please consult your webhost.
-',
+		'upload_err_tmp_dir' => 'Missing a temporary folder, used by PHP to store uploaded files. Please consult your webhost.',
 		'upload_file' => 'Upload file',
 		'use_textile' => 'Use Textile',
 		'vi-vn' => 'Tiếng Việt (Việt Nam)',

@@ -11,7 +11,7 @@ $LastChangedRevision$
 	}
 
 	$txpplugin = getThings('describe `'.PFX.'txp_plugin`');
- 	if (!in_array('load_order', $txpplugin)) {
+	if (!in_array('load_order', $txpplugin)) {
 		safe_alter('txp_plugin',
 			"ADD load_order TINYINT UNSIGNED NOT NULL DEFAULT 5");
 	}
@@ -58,4 +58,3 @@ $LastChangedRevision$
 		safe_insert('txp_prefs', "prefs_id = 1, name = 'searchable_article_fields', val = 'Title, Body', type = '2', event='publish', html='text_input', position='0'");
 	
 ?>
-

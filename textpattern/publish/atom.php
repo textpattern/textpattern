@@ -106,7 +106,7 @@ $LastChangedRevision$
 				unix_timestamp(LastMod) as uLastMod",
 				"textpattern",
 				"Status=4 and Posted <= now() $expired".join(' ',$query).
-					"order by Posted desc limit $limit"
+				"order by Posted desc limit $limit"
 			);
 			if ($rs) {
 				while ($a = nextRow($rs)) {
@@ -315,21 +315,19 @@ $LastChangedRevision$
 		return $str;
 	}
 
-  function fixup_for_feed($toFeed, $permalink) {
+	function fixup_for_feed($toFeed, $permalink) {
 
-	  // fix relative urls
-	  $txt = str_replace('href="/','href="'.hu.'/',$toFeed);
-	  $txt = preg_replace("/href=\\\"#(.*)\"/","href=\"".$permalink."#\\1\"",$txt);
-	 // This was removed as entities shouldn't be stripped in Atom feeds
-	 // when the content type is html. Leaving it commented out as a reminder.
-	  //$txt = safe_hed($txt);
+		// fix relative urls
+		$txt = str_replace('href="/','href="'.hu.'/',$toFeed);
+		$txt = preg_replace("/href=\\\"#(.*)\"/","href=\"".$permalink."#\\1\"",$txt);
+		// This was removed as entities shouldn't be stripped in Atom feeds
+		// when the content type is html. Leaving it commented out as a reminder.
+		//$txt = safe_hed($txt);
 
 		// encode and entify
 		$txt = preg_replace(array('/</','/>/',"/'/",'/"/'), array('&#60;','&#62;','&#039;','&#34;'), $txt);
 		$txt = preg_replace("/&(?![#0-9]+;)/i",'&amp;', $txt);
-	 return $txt;
-
-  }
-
+		return $txt;
+	}
 
 ?>

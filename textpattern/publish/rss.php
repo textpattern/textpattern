@@ -120,15 +120,12 @@ $LastChangedRevision$
 						tag('tag:'.$mail_or_domain.','.$feed_time.':'.$blog_uid.'/'.$uid,'guid', ' isPermaLink="false"').n.
 						$cb;
 
-
-
 					$articles[$ID] = tag($item,'item');
 
 					$etags[$ID] = strtoupper(dechex(crc32($articles[$ID])));
 					$dates[$ID] = $uPosted;
 
 				}
-
 			}
 		} elseif ($area=='link') {
 

@@ -1546,9 +1546,9 @@ $LastChangedRevision$
 		global $thispage, $pretext, $m;
 
 		extract(lAtts(array(
-			'showalways'	=> 0,
-			'title'			=> '',
-			'escape'		=> 'html'
+			'showalways' => 0,
+			'title'      => '',
+			'escape'     => 'html'
 		), $atts));
 
 		$numPages = $thispage['numPages'];
@@ -1601,9 +1601,9 @@ $LastChangedRevision$
 		global $thispage, $pretext, $m;
 
 		extract(lAtts(array(
-			'showalways'	=> 0,
-			'title'			=> '',
-			'escape'		=> 'html'
+			'showalways' => 0,
+			'title'      => '',
+			'escape'     => 'html'
 		), $atts));
 
 		$numPages = $thispage['numPages'];
@@ -1862,11 +1862,11 @@ $LastChangedRevision$
 			$comments_invite = @$GLOBALS['prefs']['comments_default_invite'];
 
 		extract(lAtts(array(
-			'class'		=> __FUNCTION__,
-			'showcount'	=> true,
-			'textonly'	=> false,
-			'showalways'=> false,  //FIXME in crockery. This is only for BC.
-			'wraptag'   => '',
+			'class'      => __FUNCTION__,
+			'showcount'  => true,
+			'textonly'   => false,
+			'showalways' => false,  //FIXME in crockery. This is only for BC.
+			'wraptag'    => '',
 		), $atts));
 
 		$invite_return = '';
@@ -1896,18 +1896,18 @@ $LastChangedRevision$
 		global $thisarticle, $has_comments_preview;
 
 		extract(lAtts(array(
-			'class'        => __FUNCTION__,
-			'form'         => 'comment_form',
-			'isize'        => '25',
-			'msgcols'      => '25',
-			'msgrows'      => '5',
-			'msgstyle'     => '',
-			'show_preview' => empty($has_comments_preview),
-			'wraptag'      => '',
-			'previewlabel'	=> gTxt('preview'),
-			'submitlabel'	=> gTxt('submit'),
-			'rememberlabel'	=> gTxt('remember'),
-			'forgetlabel'	=> gTxt('forget')
+			'class'         => __FUNCTION__,
+			'form'          => 'comment_form',
+			'isize'         => '25',
+			'msgcols'       => '25',
+			'msgrows'       => '5',
+			'msgstyle'      => '',
+			'show_preview'  => empty($has_comments_preview),
+			'wraptag'       => '',
+			'previewlabel'  => gTxt('preview'),
+			'submitlabel'   => gTxt('submit'),
+			'rememberlabel' => gTxt('remember'),
+			'forgetlabel'   => gTxt('forget')
 		), $atts));
 
 		assert_article();
@@ -1944,9 +1944,9 @@ $LastChangedRevision$
 	function comments_error($atts)
 	{
 		extract(lAtts(array(
-			'break'		=> 'br',
-			'class'		=> __FUNCTION__,
-			'wraptag'	=> 'div',
+			'break'   => 'br',
+			'class'   => __FUNCTION__,
+			'wraptag' => 'div',
 		), $atts));
 
 		$evaluator =& get_comment_evaluator();
@@ -1977,8 +1977,8 @@ $LastChangedRevision$
 		global $thisarticle, $pretext;
 
 		extract(lAtts(array(
-			'class'		=> __FUNCTION__,
-			'wraptag'	=> 'h3',
+			'class'   => __FUNCTION__,
+			'wraptag' => 'h3',
 		),$atts));
 
 		assert_article();
@@ -2055,9 +2055,9 @@ $LastChangedRevision$
 			return;
 
 		extract(lAtts(array(
-			'form'		=> 'comments',
-			'wraptag'	=> '',
-			'class'		=> __FUNCTION__,
+			'form'    => 'comments',
+			'wraptag' => '',
+			'class'   => __FUNCTION__,
 		),$atts));
 
 		assert_article();
@@ -3087,8 +3087,8 @@ $LastChangedRevision$
 		global $thisimage;
 
 		extract(lAtts(array(
-			'name'  => '',
-			'id'    => '',
+			'name'       => '',
+			'id'         => '',
 			'type'       => 'caption',
 			'escape'     => 'html',
 			'wraptag'    => '',
@@ -3227,8 +3227,8 @@ $LastChangedRevision$
 		global $thisimage;
 
 		extract(lAtts(array(
-			'name'  => '',
-			'id'    => '',
+			'name'   => '',
+			'id'     => '',
 			'format' => '',
 		), $atts));
 
@@ -3596,13 +3596,13 @@ $LastChangedRevision$
 		global $pretext,$sitename;
 
 		extract(lAtts(array(
-			'wraptag' => 'p',
-			'sep' => '&#160;&#187;&#160;', // deprecated in 4.3.0
+			'wraptag'   => 'p',
+			'sep'       => '&#160;&#187;&#160;', // deprecated in 4.3.0
 			'separator' => '&#160;&#187;&#160;',
-			'link' => 1,
-			'label' => $sitename,
-			'title' => '',
-			'class' => '',
+			'link'      => 1,
+			'label'     => $sitename,
+			'title'     => '',
+			'class'     => '',
 			'linkclass' => '',
 		),$atts));
 
@@ -3853,8 +3853,8 @@ $LastChangedRevision$
 		assert_article();
 
 		extract(lAtts(array(
-			'name' => @$prefs['custom_1_set'],
-			'escape' => 'html',
+			'name'    => @$prefs['custom_1_set'],
+			'escape'  => 'html',
 			'default' => '',
 		),$atts));
 
@@ -3878,10 +3878,10 @@ $LastChangedRevision$
 		assert_article();
 
 		extract(lAtts(array(
-			'name' => @$prefs['custom_1_set'],
-			'value' => NULL,
-			'val' => NULL, // deprecated in 4.3.0
-			'match' => 'exact',
+			'name'      => @$prefs['custom_1_set'],
+			'value'     => NULL,
+			'val'       => NULL, // deprecated in 4.3.0
+			'match'     => 'exact',
 			'separator' => '',
 		),$atts));
 
@@ -4397,7 +4397,7 @@ $LastChangedRevision$
 		global $prefs;
 
 		extract(lAtts(array(
-			'ftime' => '',
+			'ftime'  => '',
 			'format' => ''
 		), $params));
 
@@ -4539,8 +4539,8 @@ $LastChangedRevision$
 		global $variable;
 
 		extract(lAtts(array(
-			'name'	=> '',
-			'value'	=> parse($thing)
+			'name'  => '',
+			'value' => parse($thing)
 		), $atts));
 
 		if (empty($name))
@@ -4571,8 +4571,8 @@ $LastChangedRevision$
 		global $variable;
 
 		extract(lAtts(array(
-			'name'	=> '',
-			'value'	=> ''
+			'name'  => '',
+			'value' => ''
 		), $atts));
 
 		if (empty($name))
@@ -4599,4 +4599,5 @@ $LastChangedRevision$
 
 		return parse(EvalElse($thing, $x));
 	}
+
 ?>
