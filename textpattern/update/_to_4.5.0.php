@@ -29,6 +29,9 @@ $LastChangedRevision$
 
 	safe_alter('txp_users', "MODIFY RealName VARCHAR(255) NOT NULL default '', MODIFY email VARCHAR(254) NOT NULL default ''");
 
+	// Remove any setup strings from lang table
+	safe_delete('txp_lang', "event='setup'");
+
 	$has_idx = 0;
 	$rs = getRows('show index from `'.PFX.'textpattern`');
 	foreach ($rs as $row) {

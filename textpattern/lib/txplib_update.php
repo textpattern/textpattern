@@ -9,7 +9,7 @@ $LastChangedRevision$
 function install_language_from_file($lang)
 {
 	$lang_file = txpath.'/lang/'.$lang.'.txt';
-	# first attempt with local file
+
 	if (is_file($lang_file) && is_readable($lang_file))
 	{
 		$lang_file = txpath.'/lang/'.$lang.'.txt';
@@ -18,13 +18,13 @@ function install_language_from_file($lang)
 		if ($file) {
 			$lastmod = @filemtime($lang_file);
 			$lastmod = date('YmdHis',$lastmod);
-			$data = array();
+			$data = $core_events = array();
 			$event = '';
 
 			while (!feof($file)) {
 				$line = fgets($file, 4096);
-				# any line starting with #, not followed by @ is a simple comment
-				if($line[0]=='#' && $line[1]!='@' && $line[1]!='#') continue;
+				# ignore empty lines and simple comments (any line starting with #, not followed by @)
+				if(trim($line) === '' || ($line[0] == '#' && $line[1] != '@' && $line[1] != '#')) continue;
 				# if available use the lastmod time from the file
 				if (strpos($line,'#@version') === 0)
 				{	# Looks like: "#@version id;unixtimestamp"
@@ -32,9 +32,10 @@ function install_language_from_file($lang)
 					$lastmod = date("YmdHis",min($ftime, time()));
 				}
 				# each language section should be prefixed by #@
-				if($line[0]=='#' && $line[1]=='@')
+				if($line[0] == '#' && $line[1] == '@')
 				{
-					if (!empty($data)){
+					if (!empty($data))
+					{
 						foreach ($data as $name => $value)
 						{
 							$value = addslashes($value);
@@ -53,20 +54,29 @@ function install_language_from_file($lang)
 					$data = array();
 					$event = substr($line,2, (strlen($line)-2));
 					$event = rtrim($event);
+					if (strpos($event, 'version') === false) {
+						$core_events[] = $event;
+					}
 					continue;
 				}
 
-				@list($name,$val) = explode(' => ',trim($line));
-				$data[$name] = $val;
+				# Guard against setup strings being loaded.
+				# TODO: Setup strings will be removed from the .txt files at some point; this check can then be removed
+				if ($event !== 'setup')
+				{
+					@list($name,$val) = explode(' => ',trim($line));
+					$data[$name] = $val;
+				}
 			}
 			# remember to add the last one
-			if (!empty($data)){
+			if (!empty($data))
+			{
 				foreach ($data as $name => $value)
 				{
 					 mysql_query("INSERT DELAYED INTO `".PFX."txp_lang`  SET `lang`='".$lang."', `name`='$name', `lastmod`='$lastmod', `event`='$event', `data`='$value'");
 				}
 			}
-			mysql_query("DELETE FROM `".PFX."txp_lang`  WHERE `lang`='".$lang."' AND `lastmod`>$lastmod");
+			mysql_query("DELETE FROM `".PFX."txp_lang`  WHERE `lang`='".$lang."' AND `event` IN ('".join("','", array_unique($core_events))."') AND `lastmod`>$lastmod");
 			@fclose($filename);
 			#delete empty fields if any
 			mysql_query("DELETE FROM `".PFX."txp_lang` WHERE `data`=''");

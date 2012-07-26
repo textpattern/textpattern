@@ -802,6 +802,7 @@ EOS
 
 
 		// Output Table + Content
+		// TODO: tab_languages when this panel is moved to its own tab
 		pagetop(gTxt('update_languages'),$message);
 
 		//TODO: tab_languages when this panel is moved to its own tab
@@ -868,9 +869,9 @@ EOS
 //		$client->debug = true;
 
 		@set_time_limit(90);
-		if (gps('force')=='file' || !$client->query('tups.getLanguage',$prefs['blog_uid'],$lang_code))
+		if (gps('force') == 'file' || !$client->query('tups.getLanguage',$prefs['blog_uid'],$lang_code))
 		{
-			if ( (gps('force')=='file' || gps('updating')!=='1') && install_language_from_file($lang_code) )
+			if ( (gps('force') == 'file' || gps('updating') !== '1') && install_language_from_file($lang_code) )
 			{
 				if (defined('LANG'))
 					$textarray = load_lang(LANG);
