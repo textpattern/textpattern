@@ -2468,7 +2468,7 @@ $LastChangedRevision$
 
 	function category($atts, $thing = NULL)
 	{
-		global $s, $c, $thiscategory;
+		global $s, $c, $thiscategory, $context;
 
 		extract(lAtts(array(
 			'class'        => '',
