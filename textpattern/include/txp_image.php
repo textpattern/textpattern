@@ -156,6 +156,9 @@ $LastChangedRevision$
 			$search_method = '';
 			$crit = '';
 		}
+
+		$criteria .= callback_event('admin_criteria', 'image_list');
+
 		$total = safe_count('txp_image', "$criteria");
 
 		if ($total < 1)

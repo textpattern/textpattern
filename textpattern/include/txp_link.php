@@ -134,6 +134,8 @@ $LastChangedRevision$
 			$crit = '';
 		}
 
+		$criteria .= callback_event('admin_criteria', 'link_list');
+
 		$total = getCount('txp_link', $criteria);
 
 		echo '<h1 class="txp-heading">'.gTxt('tab_link').'</h1>';

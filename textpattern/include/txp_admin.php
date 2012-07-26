@@ -324,6 +324,8 @@ $LastChangedRevision$
 				$crit = '';
 			}
 
+			$criteria .= callback_event('admin_criteria', 'author_list');
+
 			$total = getCount('txp_users', $criteria);
 
 			// New author button

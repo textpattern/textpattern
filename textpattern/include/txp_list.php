@@ -161,6 +161,8 @@ $LastChangedRevision$
 			$crit = '';
 		}
 
+		$criteria .= callback_event('admin_criteria', 'list_list');
+
 		$total = safe_count('textpattern', "$criteria");
 
 		echo '<h1 class="txp-heading">'.gTxt('tab_list').'</h1>';

@@ -37,7 +37,9 @@ $LastChangedRevision$
 	function css_list($current, $default) {
 		$out[] = startTable('', '', 'txp-list');
 
-		$rs = safe_rows_start('name', 'txp_css', "1=1");
+		$criteria = '1' . callback_event('admin_criteria', 'css_list');
+
+		$rs = safe_rows_start('name', 'txp_css', $criteria);
 
 		if ($rs) {
 			while ($a = nextRow($rs)) {

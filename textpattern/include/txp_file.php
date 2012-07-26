@@ -178,6 +178,8 @@ $LastChangedRevision$
 			$crit = '';
 		}
 
+		$criteria .= callback_event('admin_criteria', 'file_list');
+
 		$total = safe_count('txp_file', "$criteria");
 
 		if ($total < 1)

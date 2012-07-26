@@ -130,6 +130,8 @@ $LastChangedRevision$
 			$crit = '';
 		}
 
+		$criteria .= callback_event('admin_criteria', 'log_list');
+
 		$total = safe_count('txp_log', "$criteria");
 
 		echo '<h1 class="txp-heading">'.gTxt('tab_logs').'</h1>';

@@ -138,6 +138,8 @@ $LastChangedRevision$
 			$crit = '';
 		}
 
+		$criteria .= callback_event('admin_criteria', 'section_list');
+
 		$total = safe_count('txp_section', "$criteria");
 
 		echo '<h1 class="txp-heading">'.gTxt('tab_sections').sp.popHelp('section_category').'</h1>';

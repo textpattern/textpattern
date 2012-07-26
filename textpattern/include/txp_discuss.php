@@ -194,6 +194,8 @@ $LastChangedRevision$
 			$crit = '';
 		}
 
+		$criteria .= callback_event('admin_criteria', 'discuss_list');
+
 		$counts = getRows(
 			'SELECT visible, COUNT(*) AS c'.
 			' FROM '.safe_pfx_j('txp_discuss').' LEFT JOIN '.safe_pfx_j('textpattern').' ON txp_discuss.parentid = textpattern.ID'.
