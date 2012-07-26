@@ -2486,16 +2486,18 @@ $LastChangedRevision$
 		{
 			$category = $name;
 		}
-
 		elseif (!empty($thiscategory['name']))
 		{
 			$category = $thiscategory['name'];
 			$type = $thiscategory['type'];
 		}
-
 		else
 		{
 			$category = $c;
+			if (!isset($atts['type']))
+			{
+				$type = $context;
+			}
 		}
 
 		if ($category)
