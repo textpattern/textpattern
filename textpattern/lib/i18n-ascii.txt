@@ -561,6 +561,16 @@
 þ = "th"
 Þ = "TH"
 
+; Ukrainian
+Ї = "YI"
+ї = "YI"
+І = "I"
+і = "I"
+Ѓ = "GJ"
+ѓ = "GJ"
+Є = "IE"
+є = "IE"
+
 ; Georgian
 ა = "a"
 ბ = "b"
