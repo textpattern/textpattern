@@ -488,7 +488,6 @@ $LastChangedRevision$
 		if (is_numeric($id) and !$is_404) {
 			$a = safe_row('*, unix_timestamp(Posted) as uPosted, unix_timestamp(Expires) as uExpires, unix_timestamp(LastMod) as uLastMod', 'textpattern', 'ID='.intval($id).(gps('txpreview') ? '' : ' and Status in (4,5)'));
 			if ($a) {
-				$Posted             = $a['Posted'];
 				$out['id_keywords'] = $a['Keywords'];
 				$out['id_author']   = $a['AuthorID'];
 				populateArticleData($a);
@@ -508,7 +507,6 @@ $LastChangedRevision$
 		$out['sitename']       = $sitename;
 
 		return $out;
-
 	}
 
 //	textpattern() is the function that assembles a page, based on
