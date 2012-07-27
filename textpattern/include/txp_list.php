@@ -161,7 +161,7 @@ $LastChangedRevision$
 			$crit = '';
 		}
 
-		$criteria .= callback_event('admin_criteria', 'list_list');
+		$criteria .= callback_event('admin_criteria', 'list_list', 0, $criteria);
 
 		$total = safe_count('textpattern', "$criteria");
 

@@ -157,7 +157,7 @@ $LastChangedRevision$
 			$crit = '';
 		}
 
-		$criteria .= callback_event('admin_criteria', 'image_list');
+		$criteria .= callback_event('admin_criteria', 'image_list', 0, $criteria);
 
 		$total = safe_count('txp_image', "$criteria");
 

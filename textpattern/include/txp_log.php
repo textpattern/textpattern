@@ -130,7 +130,7 @@ $LastChangedRevision$
 			$crit = '';
 		}
 
-		$criteria .= callback_event('admin_criteria', 'log_list');
+		$criteria .= callback_event('admin_criteria', 'log_list', 0, $criteria);
 
 		$total = safe_count('txp_log', "$criteria");
 

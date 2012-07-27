@@ -194,7 +194,7 @@ $LastChangedRevision$
 			$crit = '';
 		}
 
-		$criteria .= callback_event('admin_criteria', 'discuss_list');
+		$criteria .= callback_event('admin_criteria', 'discuss_list', 0, $criteria);
 
 		$counts = getRows(
 			'SELECT visible, COUNT(*) AS c'.

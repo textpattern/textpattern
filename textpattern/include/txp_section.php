@@ -138,7 +138,7 @@ $LastChangedRevision$
 			$crit = '';
 		}
 
-		$criteria .= callback_event('admin_criteria', 'section_list');
+		$criteria .= callback_event('admin_criteria', 'section_list', 0, $criteria);
 
 		$total = safe_count('txp_section', "$criteria");
 

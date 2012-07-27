@@ -324,7 +324,7 @@ $LastChangedRevision$
 				$crit = '';
 			}
 
-			$criteria .= callback_event('admin_criteria', 'author_list');
+			$criteria .= callback_event('admin_criteria', 'author_list', 0, $criteria);
 
 			$total = getCount('txp_users', $criteria);
 

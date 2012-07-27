@@ -60,7 +60,8 @@ $LastChangedRevision$
 
 		$out[] = '<p class="action-create">'.sLink('form','form_create',gTxt('create_new_form')).'</p>';
 
-		$criteria = '1' . callback_event('admin_criteria', 'form_list');
+		$criteria = 1;
+		$criteria .= callback_event('admin_criteria', 'form_list', 0, $criteria);
 
 		$rs = safe_rows_start("*", "txp_form", "$criteria order by type asc, name asc");
 

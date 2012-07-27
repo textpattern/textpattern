@@ -148,7 +148,8 @@ $LastChangedRevision$
 	{
 		$protected = safe_column('DISTINCT page', 'txp_section', '1=1') + array('error_default');
 
-		$criteria = '1' . callback_event('admin_criteria', 'page_list');
+		$criteria = 1;
+		$criteria .= callback_event('admin_criteria', 'page_list', 0, $criteria);
 
 		$rs = safe_rows_start('name', 'txp_page', "$criteria order by name asc");
 

@@ -134,7 +134,7 @@ $LastChangedRevision$
 			$crit = '';
 		}
 
-		$criteria .= callback_event('admin_criteria', 'link_list');
+		$criteria .= callback_event('admin_criteria', 'link_list', 0, $criteria);
 
 		$total = getCount('txp_link', $criteria);
 
