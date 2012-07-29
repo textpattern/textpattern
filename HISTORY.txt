@@ -6,6 +6,7 @@ Changes in 4.5.0
 * Textile 2.4. See full changelog at http://textpattern.com/textile-changelog
 * User interface realignment and clean-up
 * Additional admin theme (Hive)
+* Beautified setup process
 * Write panel and plugin panel save changes without page refreshes (AJAX)
 * WordPress import tool imports image media attachemnts as article images, can use 'utf8' or 'latin1' source databases
 * New advanced preference "Login info email address" allows to define a 'From:' address from which  a new user's login info is sent
@@ -25,7 +26,7 @@ Changes in 4.5.0
 * <txp:images /> uses the sort order of images from the 'id' attribute if present.
 * Developer: Introduce gTxtScript() to help with the l10n of client-side strings
 * Developer: Introduce txpspecialchars() as a recommended HTML5-safe alternative to htmlspecialchars()
-* Developer: New events 'article_saved', 'article_posted', 'comment.saved', 'article_ui'.'partials_meta', 'article_ui'.'validate_save', 'image_ui'.'fullsize_image', 'image_ui'.'thumbnail_image' (NB: 'image_ui'.'image_edit' and 'image_ui'.'thumbnail_edit' changed)
+* Developer: New events 'article_saved', 'article_posted', 'comment.saved', 'article_ui'.'partials_meta', 'article_ui'.'validate_save', 'image_ui'.'fullsize_image', 'image_ui'.'thumbnail_image', 'admin_criteria'.'author_list', 'admin_criteria'.'author_list', 'admin_criteria'.'css_list', 'admin_criteria'.'discuss_list', 'admin_criteria'.'file_list', 'admin_criteria'.'form_list', 'admin_criteria'.'image_list', 'admin_criteria'.'link_list', 'admin_criteria'.'list_list', 'admin_criteria'.'log_list', 'admin_criteria'.'page_list', 'admin_criteria'.'section_list' (NB: 'image_ui'.'image_edit' and 'image_ui'.'thumbnail_edit' changed)
 * Developer: Introduce textpattern.Relay, a pub/sub hub for client-side events
 * Developer: Introduce txpAsyncForm (a jQuery plugin for asynchronous posts from forms) and txpAsynHref (a jQuery plugin for asynchronous posts from links)
 * Developer: Introduce safe_escape(), Constraint() and Validator() classes plus their descendents, callback_event_ref(), theme::announce_async()
