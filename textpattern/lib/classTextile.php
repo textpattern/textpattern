@@ -529,7 +529,6 @@ class Textile
 			return $text;
 		} else {
 			if(!$strict) {
-				$text = $this->prePadLists($text);
 				$text = $this->cleanWhiteSpace($text);
 			}
 
@@ -570,7 +569,6 @@ class Textile
 
 		// escape any raw html
 		$text = $this->encode_html($text, 0);
-		$text = $this->prePadLists($text);
 		$text = $this->cleanWhiteSpace($text);
 
 		if($lite) {
@@ -878,29 +876,11 @@ class Textile
 		return implode("\n", $out);
 	}
 
-// -------------------------------------------------------------
-	function prePadLists($text)
-	{
-		$list_item       = "[#*;:]+(?:_|[\d]+)?$this->lc[ .].*\n";
-		$non_blank_lines = ".+\n";
-		$text = preg_replace_callback(
-			"/^(?:$list_item)(?:$non_blank_lines)*\n/m",
-			array(&$this, "fPrePadLists"),
-			$text."\n\n"
-		);
-		return $text;
-	}
-
-// -------------------------------------------------------------
-	function fPrePadLists($m)
-	{
-		return "\n".$m[0];
-	}
 
 // -------------------------------------------------------------
 	function lists($text)
 	{
-		return preg_replace_callback("/^([#*;:]+(?:_|[\d]+)?$this->lc[ .].*)$(?![^#*;:])/smU", array(&$this, "fList"), $text);
+		return preg_replace_callback("/^((?:[*;:]+|[*;:#]*#(?:_|\d+)?)$this->lc[ .].*)$(?![^#*;:])/smU", array(&$this, "fList"), $text);
 	}
 
 // -------------------------------------------------------------
@@ -910,7 +890,7 @@ class Textile
 		$pt = '';
 		foreach($text as $nr => $line) {
 			$nextline = isset($text[$nr+1]) ? $text[$nr+1] : false;
-			if (preg_match("/^([#*;:]+)(_|[\d]+)?($this->lc)[ .](.*)$/s", $line, $m)) {
+			if (preg_match("/^([#*;:]+)(_|\d+)?($this->lc)[ .](.*)$/s", $line, $m)) {
 				list(, $tl, $st, $atts, $content) = $m;
 				$content = trim($content);
 				$nl = '';
@@ -2060,3 +2040,4 @@ class Textile
 
 
 } // end class
+
