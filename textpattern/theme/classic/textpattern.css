@@ -504,6 +504,7 @@ select[disabled] option,
 select[disabled] optgroup,
 textarea[disabled],
 .navlink-disabled {
+	opacity: 1; /* overrides iOS opacity setting */
 	border-color: #e5e5e5 !important;
 	color: #bbb !important;
 	background-color: #fafafa !important;
