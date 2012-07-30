@@ -21,8 +21,8 @@ html {
 /* addresses margins handled incorrectly in IE7 */
 body {
   margin: 0;
-  font-size: 0.813em;
-  line-height: 1.385;
+  font-size: 0.8125em;
+  line-height: 1.38462;
 }
 
 /* Links
@@ -85,7 +85,7 @@ samp {
 /* prevents sub and sup affecting line-height in all browsers - gist.github.com/413930 */
 sub,
 sup {
-  font-size: 0.846em;
+  font-size: 0.84615em;
   line-height: 0;
   position: relative;
   vertical-align: baseline;
@@ -197,8 +197,8 @@ input[type="button"],
 .navlink-active,
 .txp-buttons a {
   -webkit-appearance: none;
-  -moz-border-radius: 0.385em;
-  border-radius: 0.385em;
+  -moz-border-radius: 0.38462em;
+  border-radius: 0.38462em;
   -webkit-background-clip: padding;
   -khtml-background-clip: padding-box;
   -moz-background-clip: padding;
@@ -288,9 +288,15 @@ input[type="button"]:active,
   background-image: linear-gradient(#c5c5c5, #f8f8f8);
 }
 
+input[type="reset"],
+input[type="submit"],
+input[type="button"] {
+  height: 2em;
+}
+
 .navlink-disabled {
-  -moz-border-radius: 0.385em;
-  border-radius: 0.385em;
+  -moz-border-radius: 0.38462em;
+  border-radius: 0.38462em;
   font-size: .92307692307692em;
   line-height: 1.33333333333333em;
   border: 1px solid;
@@ -335,7 +341,7 @@ input[type="text"] {
   background-clip: padding-box;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 1em;
-  line-height: 1.38461538461538;
+  line-height: 1.46153846153846;
   color: #333333;
   background-color: white;
   margin: 0;
@@ -383,6 +389,7 @@ select[disabled] option,
 select[disabled] optgroup,
 textarea[disabled],
 .navlink-disabled {
+  opacity: 1;
   border-color: #dddddd !important;
   background-color: #eee !important;
   text-shadow: none !important;
