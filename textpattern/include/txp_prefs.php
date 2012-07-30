@@ -529,22 +529,24 @@ EOS
 
 		while ($a = nextRow($rs))
 		{
+			$headingPopHelp = (strpos($a['name'], 'custom_') !== false);
+
 			if ($a['event']!= $cur_evt)
 			{
 				$cur_evt = $a['event'];
 
 				echo n.n.tr(
 					tdcs(
-						hed(gTxt($a['event']), 3, ' class="'.$a['event'].'-prefs"')
+						hed(gTxt($a['event']) . ($headingPopHelp ? n.popHelp($a['name']) : ''), 3, ' class="'.$a['event'].'-prefs"')
 					, 2)
 				, ' class="pref-heading"');
 			}
 
-				$label = (!in_array($a['html'], array('yesnoradio', 'is_dst'))) ?
-					'<label for="'.$a['name'].'">'.gTxt($a['name']).'</label>' :
-					gTxt($a['name']);
+			$label = (!in_array($a['html'], array('yesnoradio', 'is_dst')))
+				? '<label for="'.$a['name'].'">'.gTxt($a['name']).'</label>'
+				: gTxt($a['name']);
 
-			$out = tda($label.n.popHelp($a['name']), ' class="pref-label"');
+			$out = tda($label. (($headingPopHelp) ? '' : n.popHelp($a['name'])), ' class="pref-label"');
 
 			if ($a['html'] == 'text_input')
 			{

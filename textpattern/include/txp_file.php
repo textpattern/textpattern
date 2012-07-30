@@ -517,7 +517,7 @@ $LastChangedRevision$
 
 			$replace = ($file_exists)
 				? '<div class="summary-details replace-file">'.n.
-						'<h3>'.gTxt('replace_file').sp.popHelp('replace_file').'</h3>'.n.
+						'<h3>'.gTxt('replace_file').sp.popHelp('file_replace').'</h3>'.n.
 						'<div>'.n.
 							file_upload_form('', '', 'file_replace', $id, 'file_replace').n.
 						'</div>'.n.
