@@ -930,8 +930,6 @@ ul.plain-list,
 }
 
 .nav-tabs li {
-	position: relative;
-	bottom: -1px;
 	display: inline-block;
 	/* display and zoom IE7 fix for display:inline-block */
 	*display: inline;
@@ -940,7 +938,10 @@ ul.plain-list,
 
 .nav-tabs a {
 	display: block;
+	position: relative;
+	bottom: -1px;
 	border: 1px solid #ddd;
+	border-bottom: 0;
 	-moz-border-radius-topright: .75em 2em;
 	border-top-right-radius: .75em 2em;
 	-moz-border-radius-topleft: .75em 2em;
@@ -949,9 +950,9 @@ ul.plain-list,
 	text-decoration: none;
 	color: #000;
 	background-color: #fff8dd;
-	-webkit-box-shadow: inset 0 -.25em .4em rgba(219, 203, 141, .35), 0 -.15em .15em rgba(0, 0, 0, .1);
-	-moz-box-shadow: inset 0 -.25em .4em rgba(219, 203, 141, .35), 0 -.15em .15em rgba(0, 0, 0, .1);
-	box-shadow: inset 0 -.25em .4em rgba(219, 203, 141, .35), 0 -.15em .15em rgba(0, 0, 0, .1);
+	-webkit-box-shadow: inset 0 -.2em .4em rgba(219, 203, 141, .5), 0 -.15em .15em rgba(0, 0, 0, .1);
+	-moz-box-shadow: inset 0 -.2em .4em rgba(219, 203, 141, .5), 0 -.15em .15em rgba(0, 0, 0, .1);
+	box-shadow: inset 0 -.2em .4em rgba(219, 203, 141, .5), 0 -.15em .15em rgba(0, 0, 0, .1);
 }
 
 .nav-tabs a:hover {
@@ -959,7 +960,6 @@ ul.plain-list,
 }
 
 .nav-tabs a.tabup {
-	border-bottom: 1px solid #fff;
 	background-color: #fff;
 	-webkit-box-shadow: 0 -.15em .15em rgba(0, 0, 0, .1);
 	-moz-box-shadow: 0 -.15em .15em rgba(0, 0, 0, .1);
