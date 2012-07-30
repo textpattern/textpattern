@@ -4324,27 +4324,8 @@ $LastChangedRevision$
 
 		if (isset($thisfile['size']))
 		{
-			$bytes = $thisfile['size'];
-			$units = array('b', 'k', 'm', 'g', 't', 'p', 'e', 'z', 'y');
-			$format_unit = strtolower(substr($format, 0, 1)); // use first char for b/c
-
-			if (in_array($format_unit, $units))
-			{
-				$pow = array_search($format_unit, $units);
-			}
-			else
-			{
-				$pow = floor(($bytes ? log($bytes) : 0) / log(1024));
-				$pow = min($pow, count($units) - 1);
-			}
-
-			$bytes /= pow(1024, $pow);
-
-			$separators = localeconv();
-			$sep_dec = isset($separators['decimal_point']) ? $separators['decimal_point'] : '.';
-			$sep_thous = isset($separators['thousands_sep']) ? $separators['thousands_sep'] : ',';
-
-			return number_format($bytes, $decimals, $sep_dec, $sep_thous) . gTxt('units_' . $units[$pow]);
+			$format_unit = strtolower(substr($format, 0, 1));
+			return format_filesize($thisfile['size'], $decimals, $format_unit);
 		}
 		else
 		{

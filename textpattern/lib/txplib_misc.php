@@ -1763,6 +1763,38 @@ function escape_js($js)
 		return $msg;
 	}
 
+/**
+ * Formats a file size
+ *
+ * @param	int		$bytes		Size in bytes
+ * @param	int		$decimals	Number of decimals
+ * @param	string	$format		The format the size is represented
+ * @return	string				Formatted file size
+ */
+
+	function format_filesize($bytes, $decimals=2, $format='')
+	{
+		$units = array('b', 'k', 'm', 'g', 't', 'p', 'e', 'z', 'y');
+
+		if (in_array($format, $units))
+		{
+			$pow = array_search($format, $units);
+		}
+		else
+		{
+			$pow = floor(($bytes ? log($bytes) : 0) / log(1024));
+			$pow = min($pow, count($units) - 1);
+		}
+
+		$bytes /= pow(1024, $pow);
+
+		$separators = localeconv();
+		$sep_dec = isset($separators['decimal_point']) ? $separators['decimal_point'] : '.';
+		$sep_thous = isset($separators['thousands_sep']) ? $separators['thousands_sep'] : ',';
+
+		return number_format($bytes, $decimals, $sep_dec, $sep_thous) . gTxt('units_' . $units[$pow]);
+	}
+
 // -------------------------------------------------------------
 	// for b/c only
 	function is_windows()
