@@ -185,7 +185,7 @@ $LastChangedRevision$
 
 			'php_version_required' =>
 			(!is_callable('version_compare') or version_compare(PHP_VERSION, REQUIRED_PHP_VERSION, '<'))
-			? diag_msg_wrap(gTxt('php_version_required'))
+			? diag_msg_wrap(gTxt('php_version_required', array('{version}' => REQUIRED_PHP_VERSION)))
 			: '',
 
 			'path_to_site_missing' =>
