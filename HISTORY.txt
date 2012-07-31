@@ -32,6 +32,7 @@ Changes in 4.5.0
 * Developer: Introduce safe_escape(), Constraint() and Validator() classes plus their descendents, callback_event_ref(), theme::announce_async()
 * Developer: Restrict plugin type '3' to load only at non-AJAX requests. Introduce plugin type '4' to be loaded on the admin side for both AJAX and non-AJAX requests. Introduce plugin type '5' to be loaded on the public side and on the admin side for both AJAX and non-AJAX requests.
 * Developer: Run custom post-update code from txpath.'/update/custom/post-update*.php' if this glob() exists
+* Developer: Include custom code like page-caches before the page is assembled by setting $txpcfg['pre_publish_script'] to a valid filename.
 * Bug and security fixes
 * jQuery 1.7.2
 
