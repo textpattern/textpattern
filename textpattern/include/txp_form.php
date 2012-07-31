@@ -219,7 +219,7 @@ EOS
 		}
 
 		$out =
-			'<h1 class="txp-heading">'.gTxt('tab_forms').'</h1>'.
+			'<h1 class="txp-heading">'.gTxt('tab_forms').sp.popHelp('forms_overview').'</h1>'.
 			'<div id="'.$event.'_container" class="txp-container">'.
 			startTable('', '', 'txp-columntable').
 			tr(
