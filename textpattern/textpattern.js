@@ -875,6 +875,13 @@ jQuery.fn.gTxt = function(opts, tags, escape)
 
 //-------------------------------------------------------------
 // global admin-side behaviour
+$(document).keyup(function(e) {
+	if (e.keyCode == 27)
+	{
+		$('.close').parent().remove();
+	}
+});
+
 $(document).ready(function() {
 	// disable spellchecking on all elements of class "code" in capable browsers
 	var c = $(".code")[0];
@@ -898,6 +905,10 @@ $(document).ready(function() {
 			error: function() {window.alert(textpattern.gTxt('form_submission_error'));}
 		});
 	}
+	$('.close').live('click', function(e) {
+		e.preventDefault();
+		$(this).parent().remove();
+	});
 	// arm UI
 	$('body').removeClass('not-ready');
 });

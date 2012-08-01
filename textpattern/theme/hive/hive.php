@@ -161,16 +161,8 @@ class hive_theme extends theme
 			// Try to inject $html into the message pane no matter when _announce()'s output is printed
 			$js = escape_js($html);
 			$js = <<< EOS
-				$(document).ready( function(){
+				$(document).ready(function() {
 					$("#messagepane").html("{$js}");
-					$(".close").click(function() {
-						$(this).parent().remove();
-					});
-				});
-				$(document).keyup(function(e) {
-					if (e.keyCode == 27) {
-						$(".close").parent().remove();
-					}
 				});
 EOS;
 		}
@@ -188,7 +180,7 @@ EOS;
 		return array(
 			'author'      => 'Team Textpattern',
 			'author_uri'  => 'http://textpattern.com/',
-			'version'     => '4.5beta1',
+			'version'     => '4.5beta2',
 			'description' => 'Textpattern Hive Theme',
 			'help'        => 'https://github.com/philwareham/txp-hive-admin-theme',
 		);
