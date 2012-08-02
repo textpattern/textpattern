@@ -1165,6 +1165,8 @@ $LastChangedRevision$
 
 					$rs = safe_rows_start('name, title', 'txp_category',
 						"(lft between $lft and $rgt) and type = '".doSlash($type)."' and name != 'default' $exclude $shallow order by ".($sort ? $sort : 'lft ASC'));
+				} else {
+					$rs = array();
 				}
 			}
 
