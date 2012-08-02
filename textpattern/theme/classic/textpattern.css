@@ -795,24 +795,6 @@ ul.plain-list,
 /* Global messages
    ========================================================================== */
 
-#messagepane {
-	position: fixed;
-	bottom: 0;
-	right: 0;
-	left: 0;
-	z-index: 9999;
-}
-
-#messagepane span {
-	position: relative;
-	display: block;
-	padding: .5em 2em;
-	text-align: center;
-	-webkit-box-shadow: 0 -.25em .4em rgba(0, 0, 0, .15);
-	-moz-box-shadow: 0 -.25em .4em rgba(0, 0, 0, .15);
-	box-shadow: 0 -.25em .4em rgba(0, 0, 0, .15);
-}
-
 .success {
 	color: #008000;
 }
@@ -856,8 +838,23 @@ ul.plain-list,
 	background: #e7f6fc;
 }
 
+#messagepane {
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	z-index: 9999;
+}
+
 #messagepane span {
+	position: relative;
+	display: block;
+	padding: .5em 2em;
 	color: #fff;
+	text-align: center;
+	-webkit-box-shadow: 0 -.25em .4em rgba(0, 0, 0, .15);
+	-moz-box-shadow: 0 -.25em .4em rgba(0, 0, 0, .15);
+	box-shadow: 0 -.25em .4em rgba(0, 0, 0, .15);
 }
 
 #messagepane span.success {
@@ -870,16 +867,6 @@ ul.plain-list,
 
 #messagepane span.error {
 	background: #c40000;
-}
-
-#messagepane span.warning {
-	border-color: #ffe16d;
-	background: #fff6d3;
-}
-
-#messagepane span.error {
-	border-color: #e1b2b2;
-	background: #f2dede;
 }
 
 /* close icon */
