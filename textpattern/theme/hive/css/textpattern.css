@@ -278,22 +278,20 @@ span#message {
   -moz-border-radius: 0.38462em 0.38462em 0 0;
   border-radius: 0.38462em 0.38462em 0 0;
   margin: 0 auto;
-  border: 1px solid;
-  border-bottom: 0;
   padding: .53846153846154em 2.84615384615385em .53846153846154em 1em;
   max-width: 38.15385em;
-  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.4);
+  color: #fff;
   -webkit-box-shadow: 0 0 0.46154em rgba(0, 0, 0, 0.2);
   box-shadow: 0 0 0.46154em rgba(0, 0, 0, 0.2);
 }
 span#message.success {
-  border-color: #a3d48e;
+  background: #238c23;
 }
 span#message.warning {
-  border-color: #ffe16d;
+  background: #cb8f02;
 }
 span#message.error {
-  border-color: #e1b2b2;
+  background: #9d261d;
 }
 
 /* close icon */
@@ -302,16 +300,21 @@ span#message.error {
   top: .27777777777778em;
   right: .72222222222222em;
   text-decoration: none;
-  color: rgba(51, 51, 51, 0.4);
+  color: #ccc;
   font-size: 1.38461538461538em;
   font-weight: bold;
-  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.25);
+}
+.rgba .close {
+  color: rgba(255, 255, 255, 0.6);
 }
 .close:hover {
   color: #333333;
   text-decoration: none;
-  color: rgba(51, 51, 51, 0.6);
+  color: #fff;
   cursor: pointer;
+}
+.rgba .close:hover {
+  color: rgba(255, 255, 255, 0.8);
 }
 
 /* flash the alert */
