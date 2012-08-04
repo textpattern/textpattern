@@ -33,6 +33,10 @@ Changes in 4.5.0
 * Developer: Restrict plugin type '3' to load only at non-AJAX requests. Introduce plugin type '4' to be loaded on the admin side for both AJAX and non-AJAX requests. Introduce plugin type '5' to be loaded on the public side and on the admin side for both AJAX and non-AJAX requests.
 * Developer: Run custom post-update code from txpath.'/update/custom/post-update*.php' if this glob() exists
 * Developer: Include custom code like page-caches before the page is assembled by setting $txpcfg['pre_publish_script'] to a valid filename.
+* Developer: Modified plugin type '1': Load only on non-AJAX requests on the admin-side.
+* Developer: Additional plugin types '4' (admin-side, only for AJAX requests), and '5' (public side; admin-side, only for AJAX requests).
+* Security: Admin-side disallows framing, sends "X-Frame-Options: SAMEORIGIN" header.
+* Security: The 'txp_login' cookie is set with a 'HttpOnly' attribute.
 * Bug and security fixes
 * jQuery 1.7.2
 
