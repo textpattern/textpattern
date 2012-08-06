@@ -429,9 +429,6 @@ if (!empty($event) and $event == 'article') {
 			$ID = gps('ID');
 		}
 
-		include_once txpath.'/lib/classTextile.php';
-		$textile = new Textile($doctype);
-
 		// switch to 'text' view upon page load and after article post
 		if(!$view || gps('save') || gps('publish')) {
 			$view = 'text';
@@ -704,27 +701,21 @@ if (!empty($event) and $event == 'article') {
 
 		if ($articles_use_excerpts)
 		{
-			if ($view == 'text')
+			if ($view == 'preview')
 			{
-				echo $partials['excerpt']['html'];
+				echo n.'<hr /><div class="excerpt">'.$Excerpt_html.'</div>';
+			}
+
+			elseif ($view == 'html')
+			{
+				echo n.'<hr />'.tag(str_replace(array(n,t), array(br,sp.sp.sp.sp), txpspecialchars($Excerpt_html)), 'code', ' class="excerpt"');
 			}
 
 			else
 			{
-				echo n.'<hr />';
-
-				echo '<div class="excerpt">';
-				echo ($textile_excerpt == USE_TEXTILE)
-				?	($view=='preview')
-					?	graf($textile->textileThis($Excerpt))
-					:	tag(str_replace(array(n,t),
-							array(br,sp.sp.sp.sp),txpspecialchars(
-								$textile->TextileThis($Excerpt))),'code', ' class="excerpt"')
-				:	graf($Excerpt);
-				echo '</div>';
+				echo $partials['excerpt']['html'];
 			}
 		}
-
 
 	//-- author --------------
 
