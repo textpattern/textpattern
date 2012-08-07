@@ -21,12 +21,12 @@ $LastChangedRevision$
 	$essential_forms = array('comments','comments_display','comment_form','default','plainlinks','files');
 	$form_types = array(
 		'article'  => gTxt('article'),
-		'category' => gTxt('category'),
+		'misc'     => gTxt('misc'),
 		'comment'  => gTxt('comment'),
+		'category' => gTxt('category'),
 		'file'     => gTxt('file'),
 		'link'     => gTxt('link'),
-		'misc'     => gTxt('misc'),
-		'section'  => gTxt('section')
+		'section'  => gTxt('section'),
 	);
 
 	if ($event == 'form') {
@@ -72,7 +72,7 @@ $LastChangedRevision$
 		$criteria = 1;
 		$criteria .= callback_event('admin_criteria', 'form_list', 0, $criteria);
 
-		$rs = safe_rows_start("*", "txp_form", "$criteria order by type asc, name asc");
+		$rs = safe_rows_start("*", "txp_form", "$criteria order by field(type,'" . join("','", array_keys($form_types)) . "') asc, name asc");
 
 		if ($rs) {
 			$ctr = 1;
