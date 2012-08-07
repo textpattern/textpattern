@@ -19,6 +19,15 @@ $LastChangedRevision$
 	global $vars;
 	$vars = array('Form','type','name','savenew','oldname');
 	$essential_forms = array('comments','comments_display','comment_form','default','plainlinks','files');
+	$form_types = array(
+		'article'  => gTxt('article'),
+		'category' => gTxt('category'),
+		'comment'  => gTxt('comment'),
+		'file'     => gTxt('file'),
+		'link'     => gTxt('link'),
+		'misc'     => gTxt('misc'),
+		'section'  => gTxt('section')
+	);
 
 	if ($event == 'form') {
 		require_privs('form');
@@ -49,7 +58,7 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function form_list($curname)
 	{
-		global $step,$essential_forms;
+		global $step,$essential_forms,$form_types;
 
 		$types = formTypes('', false);
 
@@ -80,7 +89,7 @@ $LastChangedRevision$
 				if ($prev_type != $type) {
 					$visipref = 'pane_form_'.$type.'_visible';
 					//TODO: Add 'article', 'comment', 'misc' to rpc server for gTxt()
-					$group_start = '<div class="form-list-group '.$type.'"><h3 class="lever'.(get_pref($visipref) ? ' expanded' : '').'"><a href="#'.$type.'">'.ucfirst(gTxt($type)).'</a></h3>'.n.
+					$group_start = '<div class="form-list-group '.$type.'"><h3 class="lever'.(get_pref($visipref) ? ' expanded' : '').'"><a href="#'.$type.'">'.$form_types[$type].'</a></h3>'.n.
 						'<div id="'.$type.'" class="toggle form-list" style="display:'.(get_pref($visipref) ? 'block' : 'none').'">'.n.
 						'<ul class="plain-list">'.n;
 					$group_end = ($ctr > 1) ? '</ul></div></div>'.n : '';
@@ -127,7 +136,7 @@ EOS
 			{
 				foreach ($forms as $name)
 				{
-					if (!in_array($name, $essential_forms) && form_delete($name))
+					if (form_delete($name))
 					{
 						$affected[] = $name;
 					}
@@ -144,7 +153,7 @@ EOS
 
 				foreach ($forms as $name)
 				{
-					if (!in_array($name, $essential_forms) && form_set_type($name, $new_type))
+					if (form_set_type($name, $new_type))
 					{
 						$affected[] = $name;
 					}
@@ -260,7 +269,7 @@ EOS
 
 	function form_save()
 	{
-		global $vars, $step, $essential_forms;
+		global $vars, $step, $essential_forms, $form_types;
 
 		extract(doSlash(array_map('assert_string', gpsa($vars))));
 		$name = doSlash(trim(preg_replace('/[<>&"\']/', '', gps('name'))));
@@ -273,7 +282,7 @@ EOS
 			return form_edit(array($message, E_ERROR));
 		}
 
-		if (!in_array($type, array('article','category','comment','file','link','misc','section')))
+		if (!isset($form_types[$type]))
 		{
 			$step = 'form_create';
 			$message = gTxt('form_type_missing');
@@ -330,8 +339,8 @@ EOS
 // -------------------------------------------------------------
 	function form_set_type($name, $type)
 	{
-		global $essential_forms;
-		if (in_array($name, $essential_forms)) return false;
+		global $essential_forms, $form_types;
+		if (in_array($name, $essential_forms) || !isset($form_types[$form])) return false;
 		$name = doSlash($name);
 		$type = doSlash($type);
 		return safe_update('txp_form', "type='$type'", "name='$name'");
@@ -340,15 +349,8 @@ EOS
 // -------------------------------------------------------------
 	function formTypes($type, $blank_first = true)
 	{
-	 	$types = array(''=>'','article'=>'article','category'=>'category','comment'=>'comment',
-	 		'file'=>'file','link'=>'link','misc'=>'misc','section'=>'section');
-
-		if (!$blank_first)
-		{
-			array_shift($types);
-		}
-
-		return selectInput('type',$types,$type);
+	 	global $form_types;
+	 	return selectInput('type', $form_types, $type, $blank_first);
 	}
 
 // -------------------------------------------------------------
