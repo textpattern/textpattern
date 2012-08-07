@@ -88,7 +88,6 @@ $LastChangedRevision$
 
 				if ($prev_type != $type) {
 					$visipref = 'pane_form_'.$type.'_visible';
-					//TODO: Add 'article', 'comment', 'misc' to rpc server for gTxt()
 					$group_start = '<div class="form-list-group '.$type.'"><h3 class="lever'.(get_pref($visipref) ? ' expanded' : '').'"><a href="#'.$type.'">'.$form_types[$type].'</a></h3>'.n.
 						'<div id="'.$type.'" class="toggle form-list" style="display:'.(get_pref($visipref) ? 'block' : 'none').'">'.n.
 						'<ul class="plain-list">'.n;
