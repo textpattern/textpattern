@@ -215,23 +215,27 @@ html[lang="zh-tw"] {
 /* Links
    ========================================================================== */
 
-h3 a {
-	font-weight: bold;
+a {
+	-webkit-tap-highlight-color: rgba(0, 102, 255, 0.5);
+	color: #963;
+	text-decoration: none;
+}
+
+a:focus {
+	outline: thin dotted #0066ff;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:hover,
+a:active {
+	outline: 0;
 }
 
 a img {
 	border: 0;
-}
-
-a {
-	text-decoration: none;
-	outline: 0;
-	color: #963;
-}
-
-a:hover,
-a:focus {
-	text-decoration: underline;
 }
 
 a.pophelp {
@@ -248,12 +252,12 @@ h1 a.pophelp {
 	font-size: .5em;
 }
 
-a.pophelp:hover {
-	text-decoration: none;
-}
-
 h2 .pophelp {
 	font-size: .64705882352941em;
+}
+
+h3 a {
+	font-weight: bold;
 }
 
 a.busy {
@@ -418,7 +422,6 @@ input[type="button"],
 	-moz-background-clip: padding;
 	background-clip: padding-box;
 	cursor: pointer;
-	outline: 0;
 	margin: 0;
 	border: 1px solid;
 	border-color: #ddd #bbb #bbb #ddd;
