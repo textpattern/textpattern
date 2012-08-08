@@ -264,14 +264,11 @@ a:hover .content-image {
 #messagepane {
   position: fixed;
   bottom: 0;
-  right: 0;
-  left: 0;
+  z-index: 20000;
   text-align: center;
 }
 
 span#message {
-  position: relative;
-  z-index: 20000;
   display: inline-block;
   *display: inline;
   *zoom: 1;
@@ -929,8 +926,6 @@ body {
 }
 
 .txp-body {
-  position: relative;
-  z-index: 1;
   max-width: 110em;
   margin: 0 auto;
 }
@@ -1141,11 +1136,6 @@ body {
 
 /* Footer
    ========================================================================== */
-.txp-footer {
-  position: relative;
-  z-index: 1;
-}
-
 .mothership {
   float: left;
 }
@@ -1538,7 +1528,6 @@ body#page-setup {
   height: 34.4615384615385em;
 }
 #article-main .author {
-  font-size: 0.84615em;
   color: #999999;
 }
 

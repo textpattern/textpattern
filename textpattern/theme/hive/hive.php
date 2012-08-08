@@ -163,6 +163,12 @@ class hive_theme extends theme
 			$js = <<< EOS
 				$(document).ready(function() {
 					$("#messagepane").html("{$js}");
+					$(window).resize(function() {
+						$("#messagepane").css({
+							left: ($(window).width() - $("#messagepane").outerWidth()) / 2
+						});
+					});
+					$(window).resize();
 				});
 EOS;
 		}
