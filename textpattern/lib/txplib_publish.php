@@ -139,7 +139,7 @@ function getNeighbour($threshold, $s, $type, $atts = array())
 	//Building query parts
 	// lifted from publish.php. This is somewhat embarrassing, isn't it?
 	$ids = array_map('intval', do_list($id));
-	$id        = (!$id)        ? '' : " and ID IN (".join(',', $ids).")";
+	$id = (!$id) ? '' : " and ID IN (".join(',', $ids).")";
 	switch ($time) {
 		case 'any':
 			$time = ""; break;
