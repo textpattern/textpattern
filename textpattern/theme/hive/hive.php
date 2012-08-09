@@ -157,7 +157,7 @@ class hive_theme extends theme
 			$html = ''; // TODO: Say what?
 			$js = 'window.alert("'.escape_js(strip_tags($thing[0])).'")';
 		} else {
-			$html = '<span id="message" class="messageflash '.$class.'">'.gTxt($thing[0]).' <a class="close">&times;</a></span>';
+			$html = '<span id="message" class="messageflash '.$class.'">'.gTxt($thing[0]).' <a href="#close" class="close">&times;</a></span>';
 			// Try to inject $html into the message pane no matter when _announce()'s output is printed
 			$js = escape_js($html);
 			$js = <<< EOS
