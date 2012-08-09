@@ -159,7 +159,7 @@ jQuery.fn.txpMultiEditForm = function(method, opt)
 		else
 		{
 			opt = $.extend(defaults, opt);
-			form.pattern = opt.checkbox;
+			form.boxes = opt.checkbox;
 			form.editMethod = $this.find(opt.actions);
 			form.lastCheck = null;
 			form.opt = opt;
@@ -240,7 +240,7 @@ jQuery.fn.txpMultiEditForm = function(method, opt)
 				'checked' : true
 			}, options);
 
-			var obj = $this.find(form.pattern);
+			var obj = $this.find(form.boxes);
 
 			if (settings.value !== null)
 			{
@@ -266,24 +266,14 @@ jQuery.fn.txpMultiEditForm = function(method, opt)
 		};
 
 		/**
-		 * Binds checkboxes
-		 */
-
-		private.bindRows = function()
-		{
-			form.rows = $this.find(opt.row);
-			form.boxes = $this.find(form.pattern);
-			return private;
-		};
-
-		/**
 		 * Highlights selected rows
 		 */
 
 		private.highlight = function()
 		{
-			form.boxes.filter(':checked').closest(opt.highlighted).addClass(opt.selectedClass);
-			form.boxes.filter(':not(:checked)').closest(opt.highlighted).removeClass(opt.selectedClass);
+			var element = $this.find(form.boxes);
+			element.filter(':checked').closest(opt.highlighted).addClass(opt.selectedClass);
+			element.filter(':not(:checked)').closest(opt.highlighted).removeClass(opt.selectedClass);
 			return private;
 		};
 
@@ -295,16 +285,16 @@ jQuery.fn.txpMultiEditForm = function(method, opt)
 		{
 			if (opt.rowClick)
 			{
-				var obj = form.rows;
+				var selector = opt.row;
 			}
 			else
 			{
-				var obj = form.boxes;
+				var selector = form.boxes;
 			}
 
-			obj.live('click', function(e) {
+			$this.on('click', selector, function(e) {
 
-				var self = ($(e.target).is(form.pattern) || $(this).is(form.pattern));
+				var self = ($(e.target).is(form.boxes) || $(this).is(form.boxes));
 
 				if (!self && (e.target != this || $(this).is('a, :input') || $(e.target).is('a, :input')))
 				{
@@ -316,14 +306,12 @@ jQuery.fn.txpMultiEditForm = function(method, opt)
 					return;
 				}
 
-				var box = $(this).closest(opt.highlighted).find(form.pattern);
+				var box = $(this).closest(opt.highlighted).find(form.boxes);
 
 				if (box.length < 1)
 				{
 					return;
 				}
-
-				private.bindRows();
 
 				var checked = box.prop('checked');
 
@@ -334,8 +322,9 @@ jQuery.fn.txpMultiEditForm = function(method, opt)
 
 				if (e.shiftKey && form.lastCheck)
 				{
-					var start = form.boxes.index(box);
-					var end = form.boxes.index(form.lastCheck);
+					var boxes = $this.find(form.boxes);
+					var start = boxes.index(box);
+					var end = boxes.index(form.lastCheck);
 
 					public.select({
 						'range' : [Math.min(start, end), Math.max(start, end)+1],
@@ -366,18 +355,19 @@ jQuery.fn.txpMultiEditForm = function(method, opt)
 
 		private.checked = function()
 		{
-			form.boxes.live('change', function(e) {
+			$this.on('change', form.boxes, function(e) {
 				var box = $(this);
+				var boxes = $this.find(form.boxes);
 
 				if (box.prop('checked'))
 				{
 					$(this).closest(opt.highlighted).addClass(opt.selectedClass);
-					form.selectAll.prop('checked', form.boxes.filter(':checked').length === form.boxes.length);
+					$this.find(opt.selectAll).prop('checked', boxes.filter(':checked').length === boxes.length);
 				}
 				else
 				{
 					$(this).closest(opt.highlighted).removeClass(opt.selectedClass);
-					form.selectAll.prop('checked', false);
+					$this.find(opt.selectAll).prop('checked', false);
 				}
 			});
 
@@ -436,7 +426,7 @@ jQuery.fn.txpMultiEditForm = function(method, opt)
 
 		if(!$this.data('_txpMultiEdit'))
 		{
-			private.bindRows().highlight().extendedClick().checked().changeMethod().sendForm();
+			private.highlight().extendedClick().checked().changeMethod().sendForm();
 
 			(function() {
 				var multiOptions = $this.find('.multi-option:not(.multi-step)');
@@ -461,7 +451,7 @@ jQuery.fn.txpMultiEditForm = function(method, opt)
 				multiOptions.remove();
 			})();
 
-			form.selectAll.live('change', function(e) {
+			$this.on('change', opt.selectAll, function(e) {
 				public.select({
 					'checked' : $(this).prop('checked')
 				});
