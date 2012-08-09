@@ -905,7 +905,7 @@ $(document).ready(function() {
 			error: function() {window.alert(textpattern.gTxt('form_submission_error'));}
 		});
 	}
-	$('.close').live('click', function(e) {
+	$(document).on('click', '.close', function(e) {
 		e.preventDefault();
 		$(this).parent().remove();
 	});
