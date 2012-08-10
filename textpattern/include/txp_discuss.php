@@ -324,7 +324,7 @@ $LastChangedRevision$
 
 					if ($visible == VISIBLE and in_array($Status, array(4,5)))
 					{
-						$view = n.'<a title="'.gTxt('view').'" href="'.permlinkurl($a).'#c'.(int)$discussid.'">'.$comment_status.'</a>';
+						$view = n.'<a title="'.gTxt('view').'" href="'.permlinkurl($a).'#c'.$discussid.'">'.$comment_status.'</a>';
 					}
 				}
 

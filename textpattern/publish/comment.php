@@ -392,7 +392,7 @@ $LastChangedRevision$
 					if($comments_moderate){
 						header('Location: '.$backpage.'#txpCommentInputForm');
 					}else{
-						header('Location: '.$backpage.'#c'.$commentid);
+						header('Location: '.$backpage.'#c'.sprintf("%06s",$commentid));
 					}
 					log_hit('302');
 					$evaluator->write_trace();

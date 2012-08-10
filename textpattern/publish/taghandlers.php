@@ -2108,11 +2108,11 @@ $LastChangedRevision$
 			'anchor' => empty($thiscomment['has_anchor_tag']),
 		),$atts));
 
-		$dlink = permlinkurl($thisarticle).'#c'.(int)$discussid;
+		$dlink = permlinkurl($thisarticle).'#c'.$discussid;
 
 		$thing = parse($thing);
 
-		$name = ($anchor ? ' id="c'.(int)$discussid.'"' : '');
+		$name = ($anchor ? ' id="c'.$discussid.'"' : '');
 
 		return tag($thing,'a',' href="'.$dlink.'"'.$name);
 	}
