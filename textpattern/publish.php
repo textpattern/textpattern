@@ -463,7 +463,11 @@ $LastChangedRevision$
 
 		if ($out['s'] == 'file_download') {
 			if (is_numeric($out['id'])) {
-                $fn = empty($out['filename']) ? '' : ' and filename = \''.doSlash($out['filename']).'\'';
+				// undo the double-encoding workaround for .gz files; @see filedownloadurl()
+				if (!empty($out['filename'])) {
+					$out['filename'] = preg_replace('/gz&$/i', 'gz', $out['filename']);
+				}
+				$fn = empty($out['filename']) ? '' : ' and filename = \''.doSlash($out['filename']).'\'';
 				$rs = safe_row('*', 'txp_file', 'id='.intval($out['id']).' and status = 4'.$fn);
 			}
 			return (!empty($rs)) ? array_merge($out, $rs) : array('s' => 'file_download', 'file_error' => 404);

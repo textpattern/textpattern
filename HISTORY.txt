@@ -21,6 +21,7 @@ Changes in 4.5.0
 * <txp:article_custom>, <txp:file_download_list> preserve sorting order from 'id' attribute
 * <txp:images /> preserves sorting order from article image ids
 * <txp:file_download> may be used as a container tag
+* <txp:comment_form />: New attributes 'previewlabel', 'submitlabel', 'rememberlabel', 'forgetlabel'
 * New <txp:author_email> tag
 * <txp:linklist /> accepts a comma-separated list of link ids in the new 'id' attribute
 * <txp:images /> uses the sort order of images from the 'id' attribute if present.
