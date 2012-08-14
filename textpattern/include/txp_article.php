@@ -1168,7 +1168,7 @@ EOS
 		global $step;
 		return pluggable_ui('article_ui', 'title',
 			graf('<label for="title">'.gTxt('title').'</label>'.sp.popHelp('title').br.
-				'<input type="text" id="title" name="Title" value="'.escape_title(article_partial_title_value($rs)).'" size="40" tabindex="1" />'.
+				'<input type="text" id="title" name="Title" value="'.escape_title($rs['Title']).'" size="40" tabindex="1" />'.
 				($step != 'create' ?  article_partial_article_view($rs) : '')
 				, ' class="title"'),
 			$rs);
@@ -1177,7 +1177,7 @@ EOS
 // -------------------------------------------------------------
 	function article_partial_title_value($rs)
 	{
-		return $rs['Title'];
+		return html_entity_decode($rs['Title'], ENT_QUOTES, 'UTF-8');
 	}
 
 // -------------------------------------------------------------
