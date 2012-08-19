@@ -1322,7 +1322,7 @@ span.spinner {
   height: 13px;
   background-image: url("../img/spinner.gif");
 }
-@media (-webkit-min-device-pixel-ratio: 2) {
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 144dpi) {
   span.spinner {
     background-image: url("../img/hidpi/spinner@2x.gif") !important;
     -webkit-background-size: 13px 13px;
