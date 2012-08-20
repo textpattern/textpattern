@@ -147,15 +147,13 @@ $LastChangedRevision$
 				unset($name, $page, $deletelink);
 			}
 
-			echo '</tbody>'.
-			n.endTable().
-
-			n.plugin_multiedit_form('', $sort, $dir, '', '').
-
-			n.'</div>'.
-			n.tInput().
-			n.'</form>'.
-			n.'</div>';
+			echo '</tbody>',
+				n, endTable(),
+				n, '</div>',
+				n, plugin_multiedit_form('', $sort, $dir, '', ''),
+				n, tInput(),
+				n, '</form>',
+				n, '</div>';
 
 			// Show/hide "Options" link by setting the appropriate class on the plugins TR
 			echo script_js(<<<EOS

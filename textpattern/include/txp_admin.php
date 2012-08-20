@@ -394,20 +394,17 @@ $LastChangedRevision$
 					);
 				}
 
-				echo '</tbody>'.
-				n.endTable().
-
-				n.(($use_multi_edit) ? author_multiedit_form($page, $sort, $dir, $crit, $search_method) : '').
-
-				n.'</div>'.
-				n.tInput().
-				n.'</form>'.
-
-				n.'<div id="users_navigation" class="txp-navigation">'.
-				nav_form('admin', $page, $numPages, $sort, $dir, $crit, $search_method).
-
-				pageby_form('admin', $author_list_pageby).
-				n.'</div>'.n.'</div>';
+				echo '</tbody>',
+					n, endTable(),
+					n, '</div>',
+					n, (($use_multi_edit) ? author_multiedit_form($page, $sort, $dir, $crit, $search_method) : ''),
+					n, tInput(),
+					n, '</form>',
+					n, '<div id="users_navigation" class="txp-navigation">',
+					n, nav_form('admin', $page, $numPages, $sort, $dir, $crit, $search_method),
+					n, pageby_form('admin', $author_list_pageby),
+					n, '</div>',
+					n, '</div>';
 			}
 		}
 

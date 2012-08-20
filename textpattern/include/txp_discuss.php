@@ -345,27 +345,22 @@ $LastChangedRevision$
 			if (empty($message))
 				echo tr(tda(gTxt('just_spam_results_found'),' colspan="10"'));
 
-			echo '</tbody>'.
-			n.endTable().
-
-			n.discuss_multiedit_form($page, $sort, $dir, $crit, $search_method).
-
-			n.'</div>'.
-			n.tInput().
-			n.'</form>'.
-
-			n.graf(
-				toggle_box('discuss_detail'),
-				' class="detail-toggle"'
-			).
-
-			n.cookie_box('show_spam').
-
-			n.'<div id="'.$event.'_navigation" class="txp-navigation">'.
-			nav_form('discuss', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
-
-			pageby_form('discuss', $comment_list_pageby).
-			n.'</div>'.n.'</div>';
+			echo '</tbody>',
+				n, endTable(),
+				n, '</div>',
+				n, discuss_multiedit_form($page, $sort, $dir, $crit, $search_method),
+				n, tInput(),
+				n, '</form>',
+				n, graf(
+					toggle_box('discuss_detail'),
+					' class="detail-toggle"'
+				),
+				n, cookie_box('show_spam'),
+				n, '<div id="'.$event.'_navigation" class="txp-navigation">',
+				n, nav_form('discuss', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit),
+				n, pageby_form('discuss', $comment_list_pageby),
+				n, '</div>',
+				n, '</div>';
 		}
 	}
 

@@ -822,7 +822,7 @@ EOS
 
 		echo $lang_form;
 
-		echo n.'<div class="txp-listtables">',
+		echo n, '<div class="txp-listtables">',
 			startTable('', '', 'txp-list'),
 			'<thead>',
 			tr(
@@ -833,16 +833,15 @@ EOS
 			),
 			'</thead>';
 
-		echo n.'<tfoot>'.tr(
-				tda(
-					toggle_box('languages_detail'),
-					' class="detail-toggle" colspan="4"'
-				)
-			).n.'</tfoot>';
-
 		echo '<tbody>'.$list.'</tbody>',
 			endTable(),
-			n.'</div>';
+			n, '</div>';
+
+		echo
+			graf(
+				toggle_box('languages_detail'),
+				' class="detail-toggle"'
+			);
 
 		echo
 			hed(gTxt('install_from_textpack'), 3).n

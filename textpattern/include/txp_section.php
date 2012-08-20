@@ -237,25 +237,21 @@ $LastChangedRevision$
 				);
 			}
 
-			echo '</tbody>'.
-			n.endTable().
-
-			n.section_multiedit_form($page, $sort, $dir, $crit, $search_method).
-
-			n.'</div>'.
-			n.tInput().
-			n.'</form>'.
-
-			n.graf(
-				toggle_box('section_detail'),
-				' class="detail-toggle"'
-			).
-
-			n.'<div id="'.$event.'_navigation" class="txp-navigation">'.
-			n.nav_form('section', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
-
-			n.pageby_form('section', $section_list_pageby).
-			n.'</div>'.n.'</div>';
+			echo '</tbody>',
+				n, endTable(),
+				n, '</div>',
+				n, section_multiedit_form($page, $sort, $dir, $crit, $search_method),
+				n, tInput(),
+				n, '</form>',
+				n, graf(
+					toggle_box('section_detail'),
+					' class="detail-toggle"'
+				),
+				n, '<div id="'.$event.'_navigation" class="txp-navigation">',
+				n, nav_form('section', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit),
+				n, pageby_form('section', $section_list_pageby),
+				n, '</div>',
+				n, '</div>';
 
 			echo script_js( <<<EOS
 			$('#default_section').change(function() {

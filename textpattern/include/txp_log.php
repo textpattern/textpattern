@@ -228,25 +228,21 @@ $LastChangedRevision$
 				);
 			}
 
-			echo '</tbody>'.
-			n.endTable().
-
-			n.log_multiedit_form($page, $sort, $dir, $crit, $search_method).
-
-			n.'</div>'.
-			n.tInput().
-			n.'</form>'.
-
-			n.graf(
-				toggle_box('log_detail'),
-				' class="detail-toggle"'
-			).
-
-			n.'<div id="'.$event.'_navigation" class="txp-navigation">'.
-			n.nav_form('log', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
-
-			n.pageby_form('log', $log_list_pageby).
-			n.'</div>'.n.'</div>';
+			echo '</tbody>',
+				n, endTable(),
+				n, '</div>',
+				n, log_multiedit_form($page, $sort, $dir, $crit, $search_method),
+				n, tInput(),
+				n, '</form>',
+				n, graf(
+					toggle_box('log_detail'),
+					' class="detail-toggle"'
+				),
+				n, '<div id="'.$event.'_navigation" class="txp-navigation">',
+				n, nav_form('log', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit),
+				n, pageby_form('log', $log_list_pageby),
+				n, '</div>',
+				n, '</div>';
 		}
 	}
 
