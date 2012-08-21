@@ -1326,6 +1326,7 @@ span.spinner {
   span.spinner {
     background-image: url("../img/hidpi/spinner@2x.gif") !important;
     -webkit-background-size: 13px 13px;
+    background-size: 13px 13px;
   }
 }
 
