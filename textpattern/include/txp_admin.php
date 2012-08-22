@@ -435,6 +435,8 @@ $LastChangedRevision$
 	{
 		global $step, $txp_user;
 
+		require_privs('admin.edit');
+
 		pagetop(gTxt('tab_site_admin'), '');
 
 		$vars = array('user_id', 'name', 'RealName', 'email', 'privs');
