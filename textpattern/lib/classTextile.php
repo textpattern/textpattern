@@ -20,7 +20,7 @@ T E X T I L E
 
 A Humane Web Text Generator
 
-Version 2.4.0
+Version 2.4.1
 
 Copyright (c) 2003-2004, Dean Allen <dean@textism.com>
 All rights reserved.
@@ -383,7 +383,7 @@ class Textile
 	var $hu = '';
 	var $max_span_depth = 5;
 
-	var $ver = '2.4.0';
+	var $ver = '2.4.1';
 	var $rev = '$Rev$';
 
 	var $doc_root;
@@ -803,7 +803,6 @@ class Textile
 
 			$cells = array();
 			$cellctr = 0;
-			$row = strtr( $row, array( "\n" => '<br />' ) );
 			foreach(explode("|", $row) as $cell) {
 				$ctyp = "d";
 				if (preg_match("/^_/", $cell)) $ctyp = "h";
@@ -812,7 +811,10 @@ class Textile
 					$cell = $cmtch[2];
 				} else $catts = '';
 
-				$cell = $this->graf($cell);
+				if (!$this->lite) {
+					$cell = $this->redcloth_lists($cell);
+					$cell = $this->lists($cell);
+				}
 
 				if ($cellctr>0) // Ignore first 'cell': it precedes the opening pipe
 					$cells[] = $this->doTagBr("t$ctyp", "\t\t\t<t$ctyp$catts>$cell</t$ctyp>");
@@ -1401,8 +1403,6 @@ class Textile
 			$_ = join( ' ', $_ );
 			return $_;
 		}
-
-		return '';
 	}
 
 
@@ -1999,8 +1999,6 @@ class Textile
 	function textile_popup_help($name, $helpvar, $windowW, $windowH)
 	{
 		return ' <a target="_blank" href="http://www.textpattern.com/help/?item=' . $helpvar . '" onclick="window.open(this.href, \'popupwindow\', \'width=' . $windowW . ',height=' . $windowH . ',scrollbars,resizable\'); return false;">' . $name . '</a><br />';
-
-		return $out;
 	}
 
 // -------------------------------------------------------------
