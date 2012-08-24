@@ -2662,8 +2662,6 @@ eod;
 
 //-------------------------------------------------------------
 	function assert_int($myvar) {
-		global $production_status;
-
 		if (is_numeric($myvar) and $myvar == intval($myvar)) {
 			return (int) $myvar;
 		}
@@ -2673,8 +2671,6 @@ eod;
 
 //-------------------------------------------------------------
 	function assert_string($myvar) {
-		global $production_status;
-
 		if (is_string($myvar)) {
 			return $myvar;
 		}
@@ -2684,8 +2680,6 @@ eod;
 
 //-------------------------------------------------------------
 	function assert_array($myvar) {
-		global $production_status;
-
 		if (is_array($myvar)) {
 			return $myvar;
 		}
