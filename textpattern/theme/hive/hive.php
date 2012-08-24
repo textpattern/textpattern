@@ -186,7 +186,7 @@ EOS;
 		return array(
 			'author'      => 'Team Textpattern',
 			'author_uri'  => 'http://textpattern.com/',
-			'version'     => '4.5beta2',
+			'version'     => $prefs['version'],
 			'description' => 'Textpattern Hive Theme',
 			'help'        => 'https://github.com/philwareham/txp-hive-admin-theme',
 		);
