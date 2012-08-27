@@ -3,7 +3,7 @@ Changes in 4.5.0
 * Minimum system requirement: PHP 5.2
 * Modern default site theme (responsive, HTML5, CSS3)
 * Choice of HTML5 or XHTML document type as a preference
-* Textile 2.4. See full changelog at http://textpattern.com/textile-changelog
+* Textile 2.4.1. See full changelog at http://textpattern.com/textile-changelog
 * User interface realignment and clean-up
 * Additional admin theme (Hive)
 * Beautified setup process
@@ -38,6 +38,9 @@ Changes in 4.5.0
 * Developer: Additional plugin types '4' (admin-side, only for AJAX requests), and '5' (public side; admin-side, only for AJAX requests).
 * Security: Admin-side disallows framing, sends "X-Frame-Options: SAMEORIGIN" header.
 * Security: The 'txp_login' cookie is set with a 'HttpOnly' attribute.
+* Security: Fixed a persistent XSS vulnerability in Textile discovered by Mauro Gentile.
+* Security: Fixed a XSS vulnerability in the setup process discovered by Jonathan Claudius of Trustwave SpiderLabs.
+* Security: Fixed a persistent XSS vulnerability in the access log panel discovered by Sasha Zivojinovic.
 * Bug and security fixes
 * jQuery 1.7.2
 

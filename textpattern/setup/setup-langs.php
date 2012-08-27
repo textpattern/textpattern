@@ -1,6 +1,6 @@
 <?php
 
-// Generated: 23 Aug 2012, 11:54:03 GMT
+// Generated: 27 Aug 2012, 04:27:32 GMT
 
 $langs = array(
 	'ar-dz' => array(
@@ -590,7 +590,7 @@ $langs = array(
 		'choose_password' => 'Veuillez choisir un mot de passe – non-utilisé ailleurs et impossible à deviner',
 		'config_php_does_not_match_input' => 'Le contenu du fichier <code>config.php</code> ne correspond pas aux valeurs saisies. Veuillez copier intégralement le texte ci-dessous.',
 		'config_php_not_found' => 'Le fichier de configuration n\'a pas été trouvé à l\'emplacement attendu : <strong>{file}</strong>. Veuillez vérifier son existence.',
-		'core_theme' => 'Officielle : {theme}',
+		'core_theme' => 'Officiel : {theme}',
 		'create_config' => 'Créez un fichier nommé <code>config.php</code> dans le répertoire <code>/textpattern/</code> et copiez dedans ce qui suit :',
 		'creating_config' => 'Création du fichier config.php',
 		'creating_db_tables' => 'Création des tables de la base de données',
