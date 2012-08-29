@@ -476,15 +476,7 @@ $LastChangedRevision$
 
 				if (has_privs('article.delete.own'))
 				{
-					foreach ($selected as $id)
-					{
-						$author = safe_field('AuthorID', 'textpattern', "ID = $id");
-
-						if ($author == $txp_user)
-						{
-							$allowed[] = $id;
-						}
-					}
+					$allowed = safe_column_num('ID', 'textpattern', 'ID in('.join(',',$selected).') and AuthorID=\''.doSlash($txp_user).'\'');
 				}
 
 				$selected = $allowed;
