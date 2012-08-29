@@ -20,7 +20,6 @@ $LastChangedRevision$
 		require_privs('discuss');
 
 		$available_steps = array(
-			'discuss_delete'        => true,
 			'discuss_save'          => true,
 			'discuss_list'          => false,
 			'discuss_edit'          => false,
@@ -637,6 +636,8 @@ $LastChangedRevision$
 					// Delete and if successful update comment count
 					if (safe_delete('txp_discuss', "discussid = $id"))
 						$done[] = $id;
+
+					callback_event('discuss_deleted', '', 0, $done);
 				}
 				elseif ($method == 'ban') {
 					// Ban the IP and hide all messages by that IP

@@ -221,6 +221,7 @@ $LastChangedRevision$
 		{
 			if (safe_delete('txp_css', "name = '".doSlash($name)."'"))
 			{
+				callback_event('css_deleted', '', 0, $name);
 				$message = gTxt('css_deleted', array('{name}' => $name));
 			}
 		}

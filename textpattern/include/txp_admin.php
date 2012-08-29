@@ -552,6 +552,9 @@ $LastChangedRevision$
 					{
 						safe_update($table, "$col='$assign_assets'", "$col IN ('$names')");
 					}
+
+					callback_event('authors_deleted', '', 0, $changed);
+
 					$msg = 'author_deleted';
 				}
 

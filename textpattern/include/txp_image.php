@@ -893,8 +893,9 @@ $LastChangedRevision$
 
 		$t = new txp_thumb($id);
 		if ($t->delete()) {
-			image_edit(gTxt('thumbnail_deleted'),$id);
+			callback_event('thumbnail_deleted', '', false, $id);
 			update_lastmod();
+			image_edit(gTxt('thumbnail_deleted'),$id);
 		} else {
 			image_edit(array(gTxt('thumbnail_delete_failed'), E_ERROR),$id);
 		}

@@ -495,6 +495,7 @@ $LastChangedRevision$
 			if ($changed)
 			{
 				safe_update('txp_discuss', "visible = ".MODERATE, "parentid in($changed)");
+				callback_event('articles_deleted', '', 0, $ids);
 			}
 		}
 

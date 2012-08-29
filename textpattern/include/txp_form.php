@@ -141,6 +141,8 @@ EOS
 					}
 				}
 
+				callback_event('forms_deleted', '', 0, $affected);
+
 				$message = gTxt('forms_deleted', array('{list}' => join(', ', $affected)));
 
 				form_edit($message);

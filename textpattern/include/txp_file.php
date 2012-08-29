@@ -929,6 +929,9 @@ $LastChangedRevision$
 
 					$filepath = build_file_path($file_base_path, $filename);
 
+					// Notify plugins of pending deletion, pass file's id and path
+					callback_event('file_deleted', '', false, $id, $filepath);
+
 					$rsd = safe_delete('txp_file', "id = $id");
 					$ul  = false;
 

@@ -553,6 +553,11 @@ EOS
 			}
 		}
 
+		if ($del['success'])
+		{
+			callback_event('sections_deleted', '', 0, $del['success']);
+		}
+
 		$message = ($del['success']) ? gTxt('section_deleted', array('{name}' => join(', ', $del['success']))) : '';
 
 		sec_section_list($message);

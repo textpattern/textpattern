@@ -187,6 +187,7 @@ $LastChangedRevision$
 		else
 		{
 			safe_delete('txp_page', "name = '".doSlash($name)."'");
+			callback_event('page_deleted', '', 0, $name);
 
 			$message = gTxt('page_deleted', array('{name}' => $name));
 		}

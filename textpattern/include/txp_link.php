@@ -31,7 +31,6 @@ $LastChangedRevision$
 			'link_list'          => false,
 			'link_edit'          => false,
 			'link_save'          => true,
-			'link_delete'        => true,
 			'link_change_pageby' => true,
 			'link_multi_edit'    => true
 		);
@@ -511,6 +510,12 @@ $LastChangedRevision$
 						$changed[] = $id;
 					}
 				}
+
+				if ($changed)
+				{
+					callback_event('links_deleted', '', 0, $changed);
+				}
+
 				$key = '';
 				break;
 

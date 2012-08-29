@@ -246,6 +246,7 @@ EOS
 						}
 
 						rebuild_tree_full($type);
+						callback_event('categories_deleted', $type, 0, $catid);
 
 						$message = gTxt($type.'_categories_deleted', array('{list}' => join(', ',$catid)));
 
