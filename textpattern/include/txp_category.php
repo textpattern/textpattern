@@ -225,7 +225,7 @@ EOS
 						$names[] = doSlash($cat['name']);
 					}
 
-					if (safe_delete('txp_category','id IN ('.join(',', $catid).')'.(($method == 'deleteforce') ? '' : ' AND rgt - lft = 1')))
+					if (safe_delete('txp_category','id IN ('.join(',', $catid).')'))
 					{
 						if ($method == 'deleteforce')
 						{
