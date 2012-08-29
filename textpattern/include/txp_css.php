@@ -37,6 +37,8 @@ $LastChangedRevision$
 	function css_list($current, $default) {
 		$out[] = startTable('', '', 'txp-list');
 
+		$protected = safe_column('DISTINCT css', 'txp_section', '1=1');
+
 		$criteria = 1;
 		$criteria .= callback_event('admin_criteria', 'css_list', 0, $criteria);
 
@@ -46,7 +48,7 @@ $LastChangedRevision$
 			while ($a = nextRow($rs)) {
 				extract($a);
 				$edit = ($current != $name) ?	eLink('css', '', 'name', $name, $name) : txpspecialchars($name);
-				$delete = ($name != $default) ? dLink('css', 'css_delete', 'name', $name) : '';
+				$delete = (!array_key_exists($name, $protected)) ? dLink('css', 'css_delete', 'name', $name) : '';
 				$out[] = tr(td($edit).td($delete));
 			}
 
@@ -215,7 +217,7 @@ $LastChangedRevision$
 
 		if ($count)
 		{
-			$message = gTxt('css_used_by_section', array('{name}' => $name, '{count}' => $count));
+			$message = array(gTxt('css_used_by_section', array('{name}' => $name, '{count}' => $count)), E_ERROR);
 		}
 		else
 		{
