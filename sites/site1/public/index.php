@@ -8,9 +8,42 @@ $LastChangedRevision: 3238 $
 	error_reporting(E_ALL);
 	@ini_set("display_errors","1");
 
-	if (@ini_get('register_globals'))
-		foreach ( $_REQUEST as $name => $value )
-			unset($$name);
+	if (@ini_get('register_globals')) {
+		if (isset($_REQUEST['GLOBALS']) || isset($_FILES['GLOBALS'])) {
+			die('GLOBALS overwrite attempt detected. Please consider turning register_globals off.');
+		}
+
+		// Collect and unset all registered variables from globals
+		$_txpg = array_merge(
+			isset($_SESSION) ? (array) $_SESSION : array(),
+			(array) $_ENV,
+			(array) $_GET,
+			(array) $_POST,
+			(array) $_COOKIE,
+			(array) $_FILES,
+			(array) $_SERVER);
+
+		// As the deliberately awkward-named local variable $_txpfoo MUST NOT be unset to avoid notices further down
+		// we must remove any potentially identical-named global from the list of global names here.
+		unset($_txpg['_txpfoo']);
+		foreach ($_txpg as $_txpfoo => $value
+		) {
+			if (!in_array($_txpfoo, array(
+				'GLOBALS',
+				'_SERVER',
+				'_GET',
+				'_POST',
+				'_FILES',
+				'_COOKIE',
+				'_SESSION',
+				'_REQUEST',
+				'_ENV',
+			))) {
+				unset($GLOBALS[$_txpfoo], $$_txpfoo);
+			}
+		}
+	}
+
 	define("txpinterface", "public");
 
 	// save server path to site root
