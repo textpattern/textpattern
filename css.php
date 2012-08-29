@@ -22,8 +22,7 @@ if (@ini_get('register_globals')) {
 	// As the deliberately awkward-named local variable $_txpfoo MUST NOT be unset to avoid notices further down
 	// we must remove any potentially identical-named global from the list of global names here.
 	unset($_txpg['_txpfoo']);
-	foreach ($_txpg as $_txpfoo => $value
-	) {
+	foreach ($_txpg as $_txpfoo => $value) {
 		if (!in_array($_txpfoo, array(
 			'GLOBALS',
 			'_SERVER',
