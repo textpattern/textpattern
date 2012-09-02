@@ -704,6 +704,12 @@ function escape_js($js)
 
 		if (!error_reporting()) return;
 
+		// When even a minimum environment is missing...
+		if (!isset($production_status)) {
+			echo '<pre>'.gTxt('internal_error').' "'.$errstr.'"'.n."in $errfile at line $errline".'</pre>';
+			return;
+		}
+
 		if ($production_status == 'live' || ($production_status != 'debug' && $errno == E_USER_NOTICE)) {
 			$backtrace = $msg = '';
 		} else {
