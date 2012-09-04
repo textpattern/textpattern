@@ -62,13 +62,7 @@ $LastChangedRevision$
 		}
 
 		$rs = safe_update('txp_users', "email = '".doSlash($new_email)."'", "name = '".doSlash($txp_user)."'");
-
-		if ($rs)
-		{
-			author_list(
-				gTxt('email_changed', array('{email}' => $new_email))
-			);
-		}
+		author_list($rs ? gTxt('email_changed', array('{email}' => $new_email)) : gTxt(array('author_save_failed', E_ERROR)));
 	}
 
 // -------------------------------------------------------------
@@ -93,13 +87,7 @@ $LastChangedRevision$
 			email    = '$email'",
 			"user_id = $user_id"
 		);
-
-		if ($rs)
-		{
-			author_list(
-				gTxt('author_updated', array('{name}' => $RealName))
-			);
-		}
+		author_list($rs ? gTxt('author_updated', array('{name}' => $RealName)) : gTxt(array('author_save_failed', E_ERROR)));
 	}
 
 // -------------------------------------------------------------
