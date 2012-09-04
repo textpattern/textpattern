@@ -3696,7 +3696,10 @@ begin tag builder functions
 			'mb' => 'Megabytes',
 			'gb' => 'Gigabytes',
 			'tb' => 'Terabytes',
-			'pb' => 'Petabytes'
+			'pb' => 'Petabytes',
+			'eb' => 'Exabytes',
+			'zb' => 'Zettabytes',
+			'yb' => 'Yottabytes'
 		);
 
 		extract($atts);
