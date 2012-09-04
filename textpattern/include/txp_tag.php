@@ -3691,15 +3691,15 @@ begin tag builder functions
 		));
 
 		$formats = array(
-			'b'  => 'Bytes',
-			'kb' => 'Kilobytes',
-			'mb' => 'Megabytes',
-			'gb' => 'Gigabytes',
-			'tb' => 'Terabytes',
-			'pb' => 'Petabytes',
-			'eb' => 'Exabytes',
-			'zb' => 'Zettabytes',
-			'yb' => 'Yottabytes'
+			'b' => 'Bytes',
+			'k' => 'Kilobytes',
+			'm' => 'Megabytes',
+			'g' => 'Gigabytes',
+			't' => 'Terabytes',
+			'p' => 'Petabytes',
+			'e' => 'Exabytes',
+			'z' => 'Zettabytes',
+			'y' => 'Yottabytes'
 		);
 
 		extract($atts);
