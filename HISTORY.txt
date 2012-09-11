@@ -1,15 +1,3 @@
-Changes in 4.5.1
-
-* Maintenance release with bug fixes, no security implications
-* Default front-side template: Remove duplicate search input field
-* Textile: Use 'named groups' syntax '?P<group>' for b/c with older PCRE libary versions
-* Hive admin-side theme: Modernizr v2.6.2
-* Prevent fatal aborts from error-handling during version upgrades
-* Unregister all globals in multi-site setups
-* Prevent deletion of used stylesheets from UI
-* Offer all supported units in the tag builder for <txp:file_download_size />
-* Developer: New events 'authors_deleted', 'categories_deleted', 'css_deleted', 'discuss_deleted', 'file_deleted', 'forms_deleted', 'thumbnail_deleted', 'links_deleted', 'articles_deleted', 'page_deleted', 'sections_deleted'
-
 Changes in 4.5.0
 
 * Minimum system requirement: PHP 5.2
