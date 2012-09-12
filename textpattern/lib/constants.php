@@ -4,7 +4,7 @@ $HeadURL$
 $LastChangedRevision$
 */
 
-$old_level = error_reporting(E_ALL ^ (E_NOTICE));
+$old_level = error_reporting((E_ALL | E_STRICT) ^ E_NOTICE);
 
 define('TXP_DEBUG', 0);
 

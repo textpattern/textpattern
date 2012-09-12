@@ -1711,22 +1711,17 @@ function escape_js($js)
 	{
 
 		if ($level == 'debug') {
-			// We need to violate/disable E_STRICT for PHP 4.x compatibility
-			// E_STRICT bitmask calculation stems from the variations for E_ALL in PHP 4.x, 5.{0,1,2,3}, and 5.4+
-			// E_STRICT is defined since PHP 5.x and is set in E_ALL in PHP 5.4
-			error_reporting(E_ALL & ~(defined('E_STRICT') ? E_STRICT : 0));
+			error_reporting(E_ALL | E_STRICT);
 		}
 		elseif ($level == 'live') {
 			// don't show errors on screen
-			$suppress = E_WARNING | E_NOTICE;
-			if (defined('E_STRICT') && (E_ALL & E_STRICT)) $suppress |= E_STRICT;
-			if (defined('E_DEPRECATED')) $suppress |= E_DEPRECATED;
+			$suppress = E_NOTICE | E_USER_NOTICE | E_WARNING | E_STRICT | (defined('E_DEPRECATED') ? E_DEPRECATED : 0);
 			error_reporting(E_ALL ^ $suppress);
 			@ini_set("display_errors","1");
 		}
 		else {
-			// default is 'testing': display everything except notices and strict
-			error_reporting((E_ALL ^ E_NOTICE) & ~(defined('E_STRICT') ? E_STRICT : 0));
+			// default is 'testing': display everything except notices
+			error_reporting((E_ALL | E_STRICT) ^ (E_NOTICE | E_USER_NOTICE));
 		}
 	}
 
