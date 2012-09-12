@@ -2965,18 +2965,16 @@ $LastChangedRevision$
 						if ($thisarticle && !empty($thisarticle['article_image']))
 						{
 							$items = do_list($thisarticle['article_image']);
-							$i = 0; // TODO: Indexed array access required for PHP 4 compat. Replace with &$item in TXP5? @see [r3435].
-							foreach ($items as $item)
+							foreach ($items as &$item)
 							{
 								if (is_numeric($item))
 								{
-									$items[$i] = intval($item);
+									$item = intval($item);
 								}
 								else
 								{
 									return article_image(compact('class', 'html_id', 'wraptag'));
 								}
-								$i++;
 							}
 							$items = join(",", $items);
 							// NB: This clause will squash duplicate ids
