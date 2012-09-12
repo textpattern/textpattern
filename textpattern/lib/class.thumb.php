@@ -338,7 +338,7 @@ class txp_thumb extends wet_thumb {
      * create thumbnail image from source image
      * @return	boolean, true indicates success
      */
-    function write( ) {
+    function write( $dummy1='', $dummy2='' ) {
         if ( !isset($this->m_ext) ) return false;
 
         if ( parent::write ( IMPATH.$this->m_id.$this->m_ext, IMPATH.$this->m_id.'t'.$this->m_ext ) ) {
