@@ -151,7 +151,7 @@ $LastChangedRevision$
 	safe_insert('txp_prefs', "prefs_id=1, name='version',val='$dbversion', type='2'");
 	// updated, baby. So let's get the fresh prefs and send them to languages
 	define('TXP_UPDATE_DONE', 1);
-	$event = 'prefs';
+	$event = 'lang';
 	$step = 'list_languages';
 
 	$prefs = get_prefs();

@@ -43,6 +43,7 @@ $LastChangedRevision$
 		'/include/txp_form.php',
 		'/include/txp_image.php',
 		'/include/txp_import.php',
+		'/include/txp_lang.php',
 		'/include/txp_link.php',
 		'/include/txp_list.php',
 		'/include/txp_log.php',

@@ -195,7 +195,7 @@ $LastChangedRevision$
 		$areas['content'] = array(
 			gTxt('tab_organise') => 'category',
 			gTxt('tab_write')    => 'article',
-			gTxt('tab_list')     =>  'list',
+			gTxt('tab_list')     => 'list',
 			gTxt('tab_image')    => 'image',
 			gTxt('tab_file')     => 'file',
 			gTxt('tab_link')     => 'link',
@@ -212,6 +212,7 @@ $LastChangedRevision$
 		$areas['admin'] = array(
 			gTxt('tab_diagnostics') => 'diag',
 			gTxt('tab_preferences') => 'prefs',
+			gTxt('tab_languages')   => 'lang',
 			gTxt('tab_site_admin')  => 'admin',
 			gTxt('tab_logs')        => 'log',
 			gTxt('tab_plugins')     => 'plugin',
