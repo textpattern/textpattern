@@ -155,12 +155,11 @@ class wet_thumb {
 
 	// make sure we have enough memory if the image is large
 	if (max($this->_SRC['width'], $this->_SRC['height']) > 1024) {
-		$shorthand = array('/K/i','/M/i','/G/i');
+		$shorthand = array('K','M','G');
 		$tens = array('000','000000', '000000000'); // A good enough decimal approximation of K, M, and G
 
 		// Do not *decrease* memory_limit
-		// TODO: Try str_ireplace instead of preg_replace once we are on PHP5
-		list($ml, $extra) = preg_replace($shorthand, $tens, array(ini_get('memory_limit'), EXTRA_MEMORY));
+		list($ml, $extra) = str_ireplace($shorthand, $tens, array(ini_get('memory_limit'), EXTRA_MEMORY));
 		if ($ml < $extra) {
 			// this won't work on all servers but it's worth a try
 			ini_set('memory_limit', EXTRA_MEMORY);
