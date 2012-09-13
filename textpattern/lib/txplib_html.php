@@ -1082,13 +1082,7 @@ $LastChangedRevision$
 	function pref_text($name, $val, $id = '')
 	{
 		$id = ($id) ? $id : $name;
-
-		$vals = array(
-			USE_TEXTILE          => gTxt('use_textile'),
-			CONVERT_LINEBREAKS   => gTxt('convert_linebreaks'),
-			LEAVE_TEXT_UNTOUCHED => gTxt('leave_text_untouched')
-		);
-
+		$vals = TextfilterSet::map();
 		return selectInput($name, $vals, $val, '', '', $id);
 	}
 
@@ -1096,7 +1090,7 @@ $LastChangedRevision$
 /**
  * Attach a HTML fragment to a DOM node.
  *
- * @param	string	$id	Target DMO node's id
+ * @param	string	$id	Target DOM node's id
  * @param	string	$content	HTML fragment
  * @param	string	$noscript	noscript alternative	fragment ['']
  * @param	string	$wraptag	Wrapping HTML element

@@ -78,6 +78,7 @@ $LastChangedRevision$
 	include txpath.'/lib/txplib_html.php';
 	include txpath.'/lib/txplib_theme.php';
 	include txpath.'/lib/txplib_validator.php';
+	include txpath.'/lib/txplib_textfilter.php';
 	include txpath.'/lib/admin_config.php';
 
 	set_error_handler('adminErrorHandler', error_reporting());

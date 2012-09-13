@@ -880,7 +880,7 @@ $(document).ready(function() {
 	c = $(textpattern.do_spellcheck)[0];
 	if(c && "spellcheck" in c) {$(textpattern.do_spellcheck).prop("spellcheck", true);}
 	// attach toggle behaviours
-	$('.lever a[class!=pophelp]').click(toggleDisplayHref);
+    $(document).on('click', '.lever a[class!=pophelp]', toggleDisplayHref);
 	$('.multi_edit_form').txpMultiEditForm();
 	// establish AJAX timeout from prefs
 	if($.ajaxSetup().timeout === undefined) {

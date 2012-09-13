@@ -81,8 +81,7 @@ if (!empty($event) and $event == 'article') {
 
 		$msg = '';
 		if ($Title or $Body or $Excerpt) {
-
-			extract(array_map('assert_int', psa(array( 'Status', 'textile_body', 'textile_excerpt'))));
+			$Status = assert_int(ps('Status'));
 			// comments my be on, off, or disabled.
 			$Annotate = (int) $Annotate;
 			// set and validate article timestamp
@@ -174,8 +173,8 @@ if (!empty($event) and $event == 'article') {
 					Section         = '$Section',
 					Category1       = '$Category1',
 					Category2       = '$Category2',
-					textile_body    =  $textile_body,
-					textile_excerpt =  $textile_excerpt,
+					textile_body    = '$textile_body',
+					textile_excerpt = '$textile_excerpt',
 					Annotate        =  $Annotate,
 					override_form   = '$override_form',
 					url_title       = '$url_title',
@@ -242,7 +241,7 @@ if (!empty($event) and $event == 'article') {
 		$incoming = textile_main_fields($incoming);
 
 		extract(doSlash($incoming));
-		extract(array_map('assert_int', psa(array('ID', 'Status', 'textile_body', 'textile_excerpt'))));
+		extract(array_map('assert_int', psa(array('ID', 'Status'))));
 		// comments my be on, off, or disabled.
 		$Annotate = (int) $Annotate;
 
@@ -341,8 +340,8 @@ if (!empty($event) and $event == 'article') {
 				Category1       = '$Category1',
 				Category2       = '$Category2',
 				Annotate        =  $Annotate,
-				textile_body    =  $textile_body,
-				textile_excerpt =  $textile_excerpt,
+				textile_body    = '$textile_body',
+				textile_excerpt = '$textile_excerpt',
 				override_form   = '$override_form',
 				url_title       = '$url_title',
 				AnnotateInvite  = '$AnnotateInvite',"
@@ -391,6 +390,7 @@ if (!empty($event) and $event == 'article') {
 		$partials = array(
 			'sLastMod'        => array('mode' => PARTIAL_VOLATILE_VALUE, 'selector' => '[name=sLastMod]', 'cb' => 'article_partial_value'),
 			'sPosted'         => array('mode' => PARTIAL_VOLATILE_VALUE, 'selector' => '[name=sPosted]', 'cb' => 'article_partial_value'),
+			'sidehelp'   	  => array('mode' => PARTIAL_VOLATILE,       'selector' => '#textfilter_group', 'cb' => 'article_partial_sidehelp'),
 			'custom_fields'   => array('mode' => PARTIAL_STATIC,         'selector' => '#custom_field_group', 'cb' => 'article_partial_custom_fields'),
 			'image'           => array('mode' => PARTIAL_STATIC,         'selector' => '#image_group', 'cb' => 'article_partial_image'),
 			'keywords'        => array('mode' => PARTIAL_STATIC,         'selector' => 'p.keywords', 'cb' => 'article_partial_keywords'),
@@ -404,6 +404,7 @@ if (!empty($event) and $event == 'article') {
 			'body'            => array('mode' => PARTIAL_STATIC,         'selector' => 'p.body', 'cb' => 'article_partial_body'),
 			'excerpt'         => array('mode' => PARTIAL_STATIC,         'selector' => 'p.excerpt', 'cb' => 'article_partial_excerpt'),
 			'author'          => array('mode' => PARTIAL_VOLATILE,       'selector' => 'p.author', 'cb' => 'article_partial_author'),
+			'view_modes'      => array('mode' => PARTIAL_VOLATILE,       'selector' => '#view_modes', 'cb' => 'article_partial_view_modes'),
 			'article_nav'     => array('mode' => PARTIAL_VOLATILE,       'selector' => 'p.nav-tertiary', 'cb' => 'article_partial_article_nav'),
 			'status'          => array('mode' => PARTIAL_VOLATILE,       'selector' => '#write-status', 'cb' => 'article_partial_status'),
 			'categories'      => array('mode' => PARTIAL_STATIC,         'selector' => '#categories_group', 'cb' => 'article_partial_categories'),
@@ -482,6 +483,12 @@ if (!empty($event) and $event == 'article') {
 				}
 			}
 
+			if ($step == 'create')
+			{
+				$store_out['textile_body'] = $use_textile;
+				$store_out['textile_excerpt'] = $use_textile;
+			}
+
 			$rs = textile_main_fields($store_out);
 
 			if (!empty($rs['exp_year']))
@@ -511,12 +518,6 @@ if (!empty($event) and $event == 'article') {
 		extract($rs);
 
 		$GLOBALS['step'] = $step;
-
-		if ($step == 'create')
-		{
-			$textile_body = $use_textile;
-			$textile_excerpt = $use_textile;
-		}
 
 		if ($step != 'create' && isset($sPosted)) {
 
@@ -604,7 +605,7 @@ if (!empty($event) and $event == 'article') {
 
 		//-- markup help --------------
 
-			echo pluggable_ui('article_ui', 'sidehelp', side_help($textile_body, $textile_excerpt), $rs);
+			echo $partials['sidehelp']['html'];
 
 		//-- custom menu entries --------------
 
@@ -729,14 +730,9 @@ if (!empty($event) and $event == 'article') {
 
 	//-- layer tabs -------------------
 
-		echo '<td id="article-tabs"><div id="view_modes">';
-
-		echo pluggable_ui('article_ui', 'view',
-			($use_textile == USE_TEXTILE || $textile_body == USE_TEXTILE)
-			? tag((tab('text',$view).tab('html',$view).tab('preview',$view)), 'ul')
-			: '&#160;',
-			$rs);
-		echo '</div></td>';
+		echo '<td id="article-tabs">';
+		echo $partials['view_modes']['html'];
+		echo '</td>';
 
 		echo '<td id="article-col-2"><div id="supporting_content">';
 
@@ -916,67 +912,6 @@ EOS
 	}
 
 //--------------------------------------------------------------
-// remember to show markup help for both body and excerpt
-// if they are different
-
-	function side_help($textile_body, $textile_excerpt)
-	{
-		if ($textile_body == USE_TEXTILE or $textile_excerpt == USE_TEXTILE)
-		{
-			return n.
-				'<div id="textile_group">'.
-				hed(
-				'<a href="#textile_help">'.gTxt('textile_help').'</a>'
-			, 3, ' class="lever'.(get_pref('pane_article_textile_help_visible') ? ' expanded' : '').'"').
-
-				n.'<div id="textile_help" class="toggle" style="display:'.(get_pref('pane_article_textile_help_visible') ? 'block' : 'none').'">'.
-
-				n.'<ul class="textile plain-list">'.
-					n.t.'<li>'.gTxt('header').': <strong>h<em>n</em>.</strong>'.sp.
-						popHelpSubtle('header', 400, 400).'</li>'.
-					n.t.'<li>'.gTxt('blockquote').': <strong>bq.</strong>'.sp.
-						popHelpSubtle('blockquote',400,400).'</li>'.
-					n.t.'<li>'.gTxt('numeric_list').': <strong>#</strong>'.sp.
-						popHelpSubtle('numeric', 400, 400).'</li>'.
-					n.t.'<li>'.gTxt('bulleted_list').': <strong>*</strong>'.sp.
-						popHelpSubtle('bulleted', 400, 400).'</li>'.
-					n.t.'<li>'.gTxt('definition_list').': <strong>; :</strong>'.sp.
-						popHelpSubtle('definition', 400, 400).'</li>'.
-				n.'</ul>'.
-
-				n.'<ul class="textile plain-list">'.
-					n.t.'<li>'.'_<em>'.gTxt('emphasis').'</em>_'.sp.
-						popHelpSubtle('italic', 400, 400).'</li>'.
-					n.t.'<li>'.'*<strong>'.gTxt('strong').'</strong>*'.sp.
-						popHelpSubtle('bold', 400, 400).'</li>'.
-					n.t.'<li>'.'??<cite>'.gTxt('citation').'</cite>??'.sp.
-						popHelpSubtle('cite', 500, 300).'</li>'.
-					n.t.'<li>'.'-'.gTxt('deleted_text').'-'.sp.
-						popHelpSubtle('delete', 400, 300).'</li>'.
-					n.t.'<li>'.'+'.gTxt('inserted_text').'+'.sp.
-						popHelpSubtle('insert', 400, 300).'</li>'.
-					n.t.'<li>'.'^'.gTxt('superscript').'^'.sp.
-						popHelpSubtle('super', 400, 300).'</li>'.
-					n.t.'<li>'.'~'.gTxt('subscript').'~'.sp.
-						popHelpSubtle('subscript', 400, 400).'</li>'.
-				n.'</ul>'.
-
-				n.graf(
-					'"'.gTxt('linktext').'":url'.sp.popHelpSubtle('link', 400, 500)
-				, ' class="textile"').
-
-				n.graf(
-					'!'.gTxt('imageurl').'!'.sp.popHelpSubtle('image', 500, 500)
-				, ' class="textile"').
-
-				n.graf(
-					'<a id="textile-docs-link" href="http://textpattern.com/textile-sandbox" target="_blank">'.gTxt('More').'</a>').
-
-				n.'</div></div>';
-		}
-	}
-
-//--------------------------------------------------------------
 
 	function status_radio($Status)
 	{
@@ -1093,34 +1028,9 @@ EOS
 
 		$incoming['Title_plain'] = $incoming['Title'];
 		$incoming['Title_html'] = ''; // not used
-
-		if ($incoming['textile_body'] == LEAVE_TEXT_UNTOUCHED) {
-
-			$incoming['Body_html'] = trim($incoming['Body']);
-
-		}elseif ($incoming['textile_body'] == USE_TEXTILE){
-
-			$incoming['Body_html'] = $textile->TextileThis($incoming['Body']);
-			$incoming['Title'] = $textile->TextileThis($incoming['Title'],'',1);
-
-		}elseif ($incoming['textile_body'] == CONVERT_LINEBREAKS){
-
-			$incoming['Body_html'] = nl2br(trim($incoming['Body']));
-		}
-
-		if ($incoming['textile_excerpt'] == LEAVE_TEXT_UNTOUCHED) {
-
-			$incoming['Excerpt_html'] = trim($incoming['Excerpt']);
-
-		}elseif ($incoming['textile_excerpt'] == USE_TEXTILE){
-
-			$incoming['Excerpt_html'] = $textile->TextileThis($incoming['Excerpt']);
-
-		}elseif ($incoming['textile_excerpt'] == CONVERT_LINEBREAKS){
-
-			$incoming['Excerpt_html'] = nl2br(trim($incoming['Excerpt']));
-		}
-
+		$incoming['Title'] = $textile->TextileThis($incoming['Title'],'',1);
+		$incoming['Body_html'] = TextfilterSet::filter($incoming['textile_body'], $incoming['Body'], array('field' => 'Body', 'options' => array('lite' => false), 'data' => $incoming));
+		$incoming['Excerpt_html'] = TextfilterSet::filter($incoming['textile_excerpt'], $incoming['Excerpt'], array('field' => 'Excerpt', 'options' => array('lite' => false), 'data' => $incoming));
 		return $incoming;
 	}
 // -------------------------------------------------------------
@@ -1151,7 +1061,7 @@ EOS
 	function article_save_pane_state()
 	{
 		global $event;
-		$panes = array('textile_help', 'advanced', 'custom_field', 'image', 'meta', 'recent', 'comments', 'dates');
+		$panes = array('textfilter_help', 'advanced', 'custom_field', 'image', 'meta', 'recent', 'comments', 'dates');
 		$pane = gps('pane');
 		if (in_array($pane, $panes))
 		{
@@ -1160,6 +1070,25 @@ EOS
 		} else {
 			trigger_error('invalid_pane', E_USER_WARNING);
 		}
+	}
+
+// -------------------------------------------------------------
+	function article_partial_sidehelp($rs)
+	{
+		// show markup help for both body and excerpt if they are different
+		$help = TextfilterSet::help($rs['textile_body']);
+		if ($rs['textile_body'] != $rs['textile_excerpt']) $help .=  TextfilterSet::help($rs['textile_excerpt']);
+
+		$out[] = '<div id="textfilter_group">';
+		if ($help) {
+			$out[] =  hed('<a href="#textfilter_help">'.gTxt('textfilter_help').'</a>', 3,
+					' class="lever'.(get_pref('pane_article_textfilter_help_visible') ? ' expanded' : '').'"').
+				n.'<div id="textfilter_help" class="toggle" style="display:'.(get_pref('pane_article_textfilter_help_visible') ? 'block' : 'none').'">'.
+				$help.
+				n.'</div>';
+		}
+		$out[] = '</div>';
+		return pluggable_ui('article_ui', 'sidehelp', join(n, $out), $rs);
 	}
 
 // -------------------------------------------------------------
@@ -1325,6 +1254,23 @@ EOS
 			$rs);
 	}
 
+// -------------------------------------------------------------
+	function article_partial_view_modes($rs)
+	{
+		global $step, $view, $use_textile;
+		if ($step == "create") {
+			$hasfilter = ($use_textile !== LEAVE_TEXT_UNTOUCHED);
+		} else {
+			$hasfilter = ($rs['textile_body'] !== LEAVE_TEXT_UNTOUCHED || $rs['textile_excerpt'] !== LEAVE_TEXT_UNTOUCHED);
+		}
+
+		return '<div id="view_modes">'.
+			pluggable_ui('article_ui', 'view',
+			$hasfilter ? tag((tab('text',$view).tab('html',$view).tab('preview',$view)), 'ul') : '&#160;',
+			$rs).
+			'</div>';
+
+	}
 // -------------------------------------------------------------
 	function article_partial_article_nav($rs)
 	{

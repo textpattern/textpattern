@@ -16,9 +16,9 @@ define('RELOAD', -99);
 define('RPC_SERVER', 'http://rpc.textpattern.com');
 defined('HELP_URL') || define('HELP_URL', 'http://rpc.textpattern.com/help/');
 
-define('LEAVE_TEXT_UNTOUCHED', 0);
-define('USE_TEXTILE', 1);
-define('CONVERT_LINEBREAKS', 2);
+define('LEAVE_TEXT_UNTOUCHED', '0');
+define('USE_TEXTILE', '1');
+define('CONVERT_LINEBREAKS', '2');
 define('IS_WIN', strtoupper(substr(PHP_OS, 0, 3)) === 'WIN');
 
 if (defined('DIRECTORY_SEPARATOR'))
