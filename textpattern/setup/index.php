@@ -550,7 +550,7 @@ eod;
 
 		// cf. update/_to_4.2.0.php.
 		// TODO: Position might need altering when prefs panel layout is altered
-		$theme = $theme ? $theme : 'classic';
+		$theme = $theme ? $theme : 'hive';
 		mysql_query("insert `".PFX."txp_prefs` set prefs_id = 1, name = 'theme_name', val = '".doSlash($theme)."', type = '1', event = 'admin', html = 'themename', position = '160'");
 
 		echo fbCreate();
