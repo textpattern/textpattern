@@ -414,7 +414,7 @@ eod;
 		}
 		asort($vals, SORT_STRING);
 
-		$theme_chooser = selectInput('theme', $vals, 'classic', '', '', '', 'setup_admin_theme');
+		$theme_chooser = selectInput('theme', $vals, 'hive', '', '', '', 'setup_admin_theme');
 
 		echo txp_setup_progress_meter(3).
 			n.'<div class="txp-setup">';
