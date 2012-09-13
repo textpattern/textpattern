@@ -881,7 +881,7 @@ if (!empty($event) and $event == 'article') {
 			'</form></div>'.n;
 		// Assume users would not change the timestamp if they wanted to "publish now"/"reset time"
 		echo script_js( <<<EOS
-		$('#write-timestamp input.edit').change(
+		$('#write-timestamp input.year,#write-timestamp input.month,#write-timestamp input.day').change(
 			function() {
 				$('#publish_now').prop('checked', false);
 				$('#reset_time').prop('checked', false);
