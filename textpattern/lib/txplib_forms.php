@@ -65,6 +65,11 @@ $LastChangedRevision$
 			}
 
 			else {
+				// coerce type of array members into incoming value's type
+				// otherwise ('foo' == 0) === true
+				settype($avalue, gettype($value));
+				settype($alabel, gettype($value));
+
 				if ($avalue == $value || $alabel == $value) {
 					$sel = ' selected="selected"';
 					$selected = true;
