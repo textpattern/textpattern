@@ -56,11 +56,19 @@ class Validator
 	}
 
 	/**
-	 * Set new constraints
+	 * Set new constraint(s)
+	 *
+	 * @param $constraints Single or array-of Constraint object(s)
 	 */
+
 	function setConstraints($constraints)
 	{
-		$this->constraints = $constraints;
+		if (is_array($constraints)) {
+			$in = $constraints;
+		} else {
+			$in[] = $constraints;
+		}
+		$this->constraints = $in;
 		$this->messages = array();
 	}
 }
@@ -88,6 +96,31 @@ class Constraint
 		}
 		$this->value = $value;
 		$this->options = $options;
+	}
+
+	/**
+	 * Set validee's value
+	 *
+	 * @param $value mixed Validee
+	 */
+	function setValue($value)
+	{
+		$this->value = $value;
+	}
+
+	/**
+	 * Set option(s)
+	 *
+	 * @param $options Scalar or array of options
+	 * @param null $key Key for scalar option
+	 */
+	function setOptions($options, $key=null)
+	{
+		if ($key === null) {
+			$this->options = $options;
+		} else {
+			$this->options[$key] = $options;
+		}
 	}
 
 	/**
