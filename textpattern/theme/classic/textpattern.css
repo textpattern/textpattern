@@ -18,13 +18,6 @@
 .plugin-column p:after {
 	clear: both;
 }
-/* zoom IE7 fix */
-.clearfix,
-.txp-edit p,
-.txp-login p,
-.plugin-column p {
-	*zoom: 1;
-}
 
 .clear {
 	clear: both;
@@ -76,8 +69,6 @@ pre {
 	background: #f5f5f5;
 	tab-size: 4; /* set tab size to 4 spaces */
 	overflow-x: auto;
-	/* IE7 */
-	*overflow-y: hidden;
 }
 
 .code {
@@ -329,13 +320,6 @@ select {
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
-	/* IE7 box-sizing workaround */
-	*padding-right: 0;
-	*padding-left: 0;
-	/* IE7 vertical alignment fix */
-	*padding-top: 1px;
-	*padding-bottom: 4px;
-	*height: auto;
 }
 
 /* additional input field widths */
@@ -368,7 +352,7 @@ textarea {
 	width: 100%;
 	min-height: 5.18181818181818em;
 	resize: vertical;
-	/* removes default vertical scrollbar in IE7-9 */
+	/* removes default vertical scrollbar in IE8-9 */
 	overflow: auto;
 	/* improves readability and alignment in all browsers */
 	vertical-align: top;
@@ -383,8 +367,6 @@ select[multiple] {
 select[size="0"],
 select[size="1"] {
 	height: 2.09090909090909em; /* 23px / 11px */
-	/* IE7 */
-	*height: auto;
 }
 
 /* fixes for Safari, Chrome */
@@ -435,19 +417,6 @@ input[type="button"],
 	-webkit-box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, .3);
 	-moz-box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, .3);
 	box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, .3);
-	/* display and zoom IE7 fix for display:inline-block */
-	*display: inline;
-	*zoom: 1;
-	/* IE7 vertical alignment fix */
-	*padding-top: 2px;
-	*padding-bottom: 0;
-	*overflow: visible;
-}
-
-/* IE7 button fixes */
-button {
-	*padding-top: 1px;
-	*padding-bottom: 1px;
 }
 
 button:hover,
@@ -479,9 +448,6 @@ input[type="button"]:active,
 	border-radius: .4em;
 	padding: .18181818181818em .5em;
 	display: inline-block;
-	/* display and zoom IE7 fix for display:inline-block */
-	*display: inline;
-	*zoom: 1;
 }
 
 .nav-tertiary .navlink-active {
@@ -576,9 +542,6 @@ span.spinner {
 	width: 13px;
 	height: 13px;
 	background-image: url("../../txp_img/spinner.gif");
-	/* display and zoom IE7 fix for display:inline-block */
-	*display: inline;
-	*zoom: 1;
 }
 
 
@@ -659,9 +622,6 @@ div.multi-edit {
 .multi-step {
 	display: inline-block;
 	margin-left: .4em;
-	/* display and zoom IE7 fix for display:inline-block */
-	*display: inline;
-	*zoom: 1;
 }
 
 .selected {
@@ -704,9 +664,6 @@ tr.spam td {
 .login-label {
 	display: inline-block;
 	float: left;
-	/* display and zoom IE7 fix for display:inline-block */
-	*display: inline;
-	*zoom: 1;
 }
 
 .edit-label {
@@ -721,9 +678,6 @@ tr.spam td {
 .login-value {
 	display: inline-block;
 	float: right;
-	/* display and zoom IE7 fix for display:inline-block */
-	*display: inline;
-	*zoom: 1;
 }
 
 .edit-value {
@@ -785,9 +739,8 @@ ul.plain-list,
 
 .disabled {
 	opacity: .33;
-	/* transparency support for IE < 9 */
+	/* transparency support for IE8 */
 	filter: alpha(opacity=33);
-	*zoom: 1;
 }
 
 .empty {
@@ -963,9 +916,6 @@ ul.plain-list,
 
 .nav-tabs li {
 	display: inline-block;
-	/* display and zoom IE7 fix for display:inline-block */
-	*display: inline;
-	*zoom: 1;
 }
 
 .nav-tabs a {
@@ -1035,9 +985,6 @@ ul.plain-list,
 	border: 1px solid #ccc;
 	padding: 0 1em;
 	display: inline-block;
-	/* display and zoom IE7 fix for display:inline-block */
-	*display: inline;
-	*zoom: 1;
 }
 
 
@@ -1243,16 +1190,11 @@ input.exp_year {
 .thumbnail-edit {
 	overflow-x: auto;
 	margin-bottom: 1em;
-	/* IE7 */
-	*overflow-y: hidden;
 }
 
 .thumbnail-edit form {
 	vertical-align: top;
  	display: inline-block;
-	/* display and zoom IE7 fix for display:inline-block */
-	*display: inline;
-	*zoom: 1;
 }
 
 
