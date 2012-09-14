@@ -384,7 +384,7 @@ function maybe_tag($tag)
  */
 function processTags($tag, $atts, $thing = NULL)
 {
-	global $production_status, $txptrace, $txptracelevel, $txp_current_tag;
+	global $production_status, $txptrace, $txptracelevel, $txp_current_tag, $txp_current_form;
 
 	if ($production_status !== 'live')
 	{
@@ -397,7 +397,7 @@ function processTags($tag, $atts, $thing = NULL)
 
 		if ($production_status === 'debug')
 		{
-			maxMemUsage($txp_current_tag);
+			maxMemUsage("Form='$txp_current_form', Tag='$txp_current_tag'");
 		}
 	}
 
