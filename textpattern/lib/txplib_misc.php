@@ -793,6 +793,7 @@ function escape_js($js)
 			if ($files) {
 				natsort($files);
 				foreach ($files as $f) {
+					trace_add("[Loading plugin from cache dir '$f']");
 					load_plugin(basename($f, '.php'));
 				}
 			}
@@ -809,6 +810,7 @@ function escape_js($js)
 					$plugins[] = $a['name'];
 					$plugins_ver[$a['name']] = $a['version'];
 					$GLOBALS['txp_current_plugin'] = $a['name'];
+					trace_add("[Loading plugin '{$a['name']}' version '{$a['version']}']");
 					$eval_ok = eval($a['code']);
 					if ($eval_ok === FALSE)
 						echo gTxt('plugin_load_error_above').strong($a['name']).n.br;
