@@ -264,9 +264,11 @@ class TextfilterSet implements ArrayAccess, IteratorAggregate
 	 */
 	static function map()
 	{
-		$out = array();
-		foreach (self::getInstance() as $f) {
-			$out[$f->getKey()] = $f->title;
+		static $out = array();
+		if (empty($out)) {
+			foreach (self::getInstance() as $f) {
+				$out[$f->getKey()] = $f->title;
+			}
 		}
 		return $out;
 	}
@@ -344,5 +346,13 @@ class TextfilterSet implements ArrayAccess, IteratorAggregate
 	function getIterator()
 	{
 		return new ArrayIterator($this->filters);
+	}
+}
+
+class TextfilterConstraint extends Constraint
+{
+	function validate()
+	{
+		return array_key_exists($this->value, TextfilterSet::map());
 	}
 }

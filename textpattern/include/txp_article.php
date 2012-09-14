@@ -483,10 +483,15 @@ if (!empty($event) and $event == 'article') {
 				}
 			}
 
-			if ($step == 'create')
-			{
-				$store_out['textile_body'] = $use_textile;
-				$store_out['textile_excerpt'] = $use_textile;
+			// Use preferred textfilter as default and fallback
+			$hasfilter = new TextfilterConstraint(null);
+			$validator = new Validator();
+			foreach (array('textile_body', 'textile_excerpt') as $k) {
+				$hasfilter->setValue($store_out[$k]);
+				$validator->setConstraints($hasfilter);
+				if (!$validator->validate()) {
+					$store_out[$k] = $use_textile;
+				}
 			}
 
 			$rs = textile_main_fields($store_out);
@@ -508,9 +513,7 @@ if (!empty($event) and $event == 'article') {
 			}
 		}
 
-		$validator = new Validator(array(
-			new SectionConstraint($rs['Section'])
-		));
+		$validator = new Validator(new SectionConstraint($rs['Section']));
 		if (!$validator->validate()) {
 			$rs['Section'] = getDefaultSection();
 		}
@@ -1445,6 +1448,8 @@ EOS
 			'Section'   => new SectionConstraint($rs['Section']),
 			'Category1' => new CategoryConstraint($rs['Category1'], array('type' => 'article')),
 			'Category2' => new CategoryConstraint($rs['Category2'], array('type' => 'article')),
+			'textile_body' 		=> new TextfilterConstraint($rs['textile_body'], array('message' => 'invalid_textfilter_body')),
+			'textile_excerpt' 	=> new TextfilterConstraint($rs['textile_excerpt'], array('message' => 'invalid_textfilter_excerpt')),
 		);
 
 		if (!$prefs['articles_use_excerpts']) {
