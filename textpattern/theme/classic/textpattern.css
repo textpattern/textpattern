@@ -27,6 +27,26 @@
 /* Base
    ========================================================================== */
 
+/* corrects block display not defined in IE8-9 */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+nav,
+section,
+summary {
+	display: block;
+}
+
+/* addresses styling for 'hidden' attribute not present in IE8-9 */
+[hidden] {
+	display: none;
+}
+
 body,
 input,
 textarea,
@@ -96,10 +116,6 @@ abbr[title],
 dfn[title] {
 	border-bottom: 1px dotted;
 	cursor: help;
-}
-
-p {
-	margin: 1em 0;
 }
 
 h1,
