@@ -11,7 +11,11 @@ class classic_theme extends theme
 {
 	function html_head()
 	{
-		return '<link rel="stylesheet" href="'.$this->url.'textpattern.css">'.n;
+		$out[] = '<link rel="stylesheet" href="'.$this->url.'textpattern.css">';
+		$out[] = '<meta name="generator" content="Textpattern CMS">';
+		$out[] = '<script src="modernizr.js"></script>';
+
+		return join(n, $out);
 	}
 
 	function header()
