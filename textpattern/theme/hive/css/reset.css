@@ -1,19 +1,35 @@
 /* ==========================================================================
-   Hive theme for Textpattern CMS (v4.5)
+   Hive theme for Textpattern CMS (v4.6alpha1)
    ========================================================================== */
 /* combined and abridged version of Normalize and Formalize
    Normalize original authors: Nicolas Gallagher and Jonathan Neal - http://necolas.github.com/normalize.css/
    Formalize original author: Nathan Smith - http://formalize.me/ */
 /* Base
    ========================================================================== */
-/* 1. corrects text resizing oddly in IE7 when body font-size is set using em units
-   2. prevents iOS text size adjust after orientation change, without disabling user zoom
-      www.456bereastreet.com/archive/201012/controlling_text_size_in_safari_for_ios_without_disabling_user_zoom/ */
+/* corrects block display not defined in IE8-9 */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+nav,
+section,
+summary {
+  display: block;
+}
+
+/* addresses styling for 'hidden' attribute not present in IE8-9 */
+[hidden] {
+  display: none;
+}
+
+/* prevents iOS text size adjust after orientation change, without disabling user zoom
+   www.456bereastreet.com/archive/201012/controlling_text_size_in_safari_for_ios_without_disabling_user_zoom/ */
 html {
-  /* 1 */
-  font-size: 100%;
   font-family: Arial, Helvetica, sans-serif;
-  /* 2 */
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
 }
@@ -36,13 +52,7 @@ a:hover, a:active {
 
 /* Typography
    ========================================================================== */
-/* addresses margins set differently in IE7 */
-p,
-pre {
-  margin: 1em 0;
-}
-
-/* addresses styling not present in IE7-9, Safari5, Chrome */
+/* addresses styling not present in IE8-9, Safari5, Chrome */
 abbr[title],
 dfn[title] {
   border-bottom: 1px dotted;
@@ -163,23 +173,14 @@ td {
 
 /* Forms
    ========================================================================== */
-/* corrects margin displayed oddly in IE7 */
-form {
-  margin: 0;
-}
-
-/* 1. corrects color not being inherited in IE7-9
-   2. corrects text not wrapping in FF3 
-   3. corrects alignment displayed oddly in IE7 */
+/* 1. corrects color not being inherited in IE8-9
+   2. corrects text not wrapping in FF3 */
 legend {
   /* 1 */
   border: 0;
   padding: 0;
   /* 2 */
   white-space: normal;
-  /* 3 */
-  *margin-right: 7px;
-  *margin-left: -7px;
 }
 
 /* added via JS to <textarea> and class="input_full" (applies only to IE7, other browsers don't need it) */
@@ -235,12 +236,6 @@ input[type="button"],
   /* CSS3 Compliant */
   background-image: linear-gradient(#eeeeee, #bbbbbb);
   display: inline-block;
-  *display: inline;
-  *zoom: 1;
-  /* IE7 vertical alignment fix */
-  *padding-top: 2px;
-  *padding-bottom: 0;
-  *overflow: visible;
 }
 button:hover,
 input[type="reset"]:hover,
@@ -313,8 +308,6 @@ input[type="button"] {
   padding: .30769230769231em .75em;
   height: 2em;
   display: inline-block;
-  *display: inline;
-  *zoom: 1;
 }
 
 .nav-tertiary .navlink-active {
@@ -331,12 +324,6 @@ input[type="button"] {
   background-image: -o-linear-gradient(#c5c5c5, #f8f8f8);
   /* CSS3 Compliant */
   background-image: linear-gradient(#c5c5c5, #f8f8f8);
-}
-
-/* IE7 button fixes */
-button {
-  *padding-top: 1px;
-  *padding-bottom: 1px;
 }
 
 textarea,
@@ -363,13 +350,6 @@ input[type="text"] {
   padding: .15384615384615em .38461538461538em;
   height: 1.84615384615385em;
   max-width: 100%;
-  /* IE7 box-sizing workaround */
-  *padding-right: 0;
-  *padding-left: 0;
-  /* IE7 vertical alignment fix */
-  *padding-top: 1px;
-  *padding-bottom: 4px;
-  *height: auto;
 }
 
 .boxshadow button:focus,
@@ -432,7 +412,7 @@ textarea {
   min-height: 4.38461538461538em;
   resize: vertical;
   width: 100%;
-  /* removes default vertical scrollbar in IE7-9 */
+  /* removes default vertical scrollbar in IE8-9 */
   overflow: auto;
   /* improves readability and alignment in all browsers */
   vertical-align: top;
@@ -447,8 +427,6 @@ select[multiple] {
 select[size="0"],
 select[size="1"] {
   height: 1.8em;
-  /* IE7 */
-  *height: auto;
 }
 
 optgroup {
@@ -480,17 +458,13 @@ optgroup::-moz-focus-inner {
     background-size: 1em .30769230769231em;
   }
 }
-/* addresses box sizing set to content-box and excess padding in IE7-9 */
+/* addresses box sizing set to content-box and excess padding in IE8-9 */
 input[type="checkbox"],
 input[type="radio"] {
   padding: 0;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  *height: 1em;
-  *width: 1em;
-  *position: relative;
-  *top: -3px;
 }
 
 /* suppress red glow that Firefox adds to form fields by default, even when user is still typing

@@ -1,13 +1,9 @@
 @import url("reset.css");
 /* ==========================================================================
-   Hive theme for Textpattern CMS (v4.5)
+   Hive theme for Textpattern CMS (v4.6alpha1)
    ========================================================================== */
 /* Clearfix
    ========================================================================== */
-.clearfix, .progress-meter ol, .txp-footer, .txp-edit p,
-.txp-login p, .txp-navigation, .txp-setup p, .plugin-column p {
-  *zoom: 1;
-}
 .clearfix:before, .progress-meter ol:before, .txp-footer:before, .txp-edit p:before,
 .txp-login p:before, .txp-navigation:before, .txp-setup p:before, .plugin-column p:before, .clearfix:after, .progress-meter ol:after, .txp-footer:after, .txp-edit p:after,
 .txp-login p:after, .txp-navigation:after, .txp-setup p:after, .plugin-column p:after {
@@ -115,8 +111,6 @@ pre {
   border-radius: 0.38462em;
   background: #f7f7f7;
   tab-size: 4;
-  /* IE7 */
-  *overflow-y: hidden;
 }
 
 pre code,
@@ -270,8 +264,6 @@ a:hover .content-image {
 
 span#message {
   display: inline-block;
-  *display: inline;
-  *zoom: 1;
   -moz-border-radius: 0.38462em 0.38462em 0 0;
   border-radius: 0.38462em 0.38462em 0 0;
   margin: 0 auto;
@@ -440,8 +432,6 @@ h3.lever a:after {
   width: 0;
   height: 0;
   display: inline-block;
-  *display: inline;
-  *zoom: 1;
   vertical-align: top;
   opacity: .5;
   border-left: 0.30769em solid #333333;
@@ -481,8 +471,6 @@ h3.lever.expanded a:after {
 }
 .progress-meter ol {
   display: inline-block;
-  *display: inline;
-  *zoom: 1;
   list-style: none;
   margin-bottom: 0;
   padding: 0;
@@ -515,8 +503,6 @@ h3.lever.expanded a:after {
   background-image: linear-gradient(#eeeeee, #dddddd);
   border-right: 1px solid #e3e3e3;
   border-left: 1px solid #e3e3e3;
-  /* IE7 padding fix for lack of ':before' support */
-  *padding: 1em;
 }
 .progress-meter li.active {
   border-top: 1px solid #fabc2b;
@@ -579,8 +565,6 @@ fieldset {
   border-top: 0;
   padding: 2.07692307692308em 0 0 0;
   background: #f7f7f7;
-  /* corrects padding inconsistency in IE7 */
-  *padding-top: 3em;
 }
 
 fieldset > * {
@@ -621,12 +605,6 @@ legend {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  /* corrects alignment displayed oddly in IE7 */
-  *margin-right: 7px;
-  *margin-left: -7px;
-  *right: 0;
-  *left: 0;
-  *width: auto;
 }
 
 input[type="radio"],
@@ -878,8 +856,6 @@ button.destroy:active {
   width: 0;
   height: 0;
   display: inline-block;
-  *display: inline;
-  *zoom: 1;
   vertical-align: top;
   opacity: .5;
   text-indent: 110%;
@@ -911,8 +887,6 @@ button.destroy:active {
 .txp-listtables {
   margin-bottom: 1em;
   overflow-x: auto;
-  /* IE7 */
-  *overflow-y: hidden;
 }
 
 /* Container
@@ -1173,8 +1147,6 @@ body {
 .edit-label,
 .login-label {
   display: inline-block;
-  *display: inline;
-  *zoom: 1;
   float: left;
 }
 
@@ -1189,8 +1161,6 @@ body {
 .edit-value,
 .login-value {
   display: inline-block;
-  *display: inline;
-  *zoom: 1;
   float: right;
 }
 .edit-value input,
@@ -1231,6 +1201,10 @@ body {
 
 /* Miscellaneous/shared layout
    ========================================================================== */
+.txp-accessibility {
+  display: none;
+}
+
 .txp-control-panel {
   text-align: center;
   line-height: 2;
@@ -1250,8 +1224,6 @@ div.multi-edit {
 .multi-step {
   margin-left: .30769230769231em;
   display: inline-block;
-  *display: inline;
-  *zoom: 1;
 }
 
 .txp-columntable {
@@ -1279,8 +1251,6 @@ div.multi-edit {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   display: inline-block;
-  *display: inline;
-  *zoom: 1;
   text-align: left;
   max-width: 22.6153846153846em;
   vertical-align: top;
@@ -1316,8 +1286,6 @@ div.multi-edit {
 /* AJAX spinner */
 span.spinner {
   display: inline-block;
-  *display: inline;
-  *zoom: 1;
   width: 13px;
   height: 13px;
   background-image: url("../img/spinner.gif");
@@ -1618,13 +1586,9 @@ body#page-setup {
 .thumbnail-edit {
   overflow-x: auto;
   margin-bottom: 1em;
-  /* IE7 */
-  *overflow-y: hidden;
 }
 .thumbnail-edit form {
   display: inline-block;
-  *display: inline;
-  *zoom: 1;
   vertical-align: top;
   margin-top: 5px;
 }
@@ -1779,9 +1743,6 @@ div.code {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  /* IE7 box-sizing workaround */
-  *padding-right: 0;
-  *padding-left: 0;
 }
 
 .plugin-column {
