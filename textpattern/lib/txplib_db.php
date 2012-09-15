@@ -518,16 +518,15 @@ $DB = new DB;
 		txp_status_header('503 Service Unavailable');
 		$error = mysql_error();
 		return <<<eod
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!doctype html>
+<html lang="en">
 <head>
-	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-	<title>Untitled</title>
+	<meta charset="utf-8">
+	<title>Database unavailable</title>
 </head>
 <body>
-<p align="center" style="margin-top:4em">Database unavailable.</p>
-<!-- $error -->
+	<p>Database unavailable.</p>
+	<!-- $error -->
 </body>
 </html>
 eod;

@@ -56,10 +56,10 @@ $rel_txpurl = rtrim(dirname(dirname($_SERVER['PHP_SELF'])), '/\\');
 $bodyclass = ($step=='') ? ' class="welcome"' : '';
 
 print <<<eod
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!doctype html>
+<html lang="en">
 <head>
-	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta charset="utf-8">
 	<meta name="robots" content="noindex, nofollow" />
 	<title>Setup &#124; Textpattern CMS</title>
 	<script type="text/javascript" src="$rel_txpurl/jquery.js"></script>
