@@ -1,7 +1,40 @@
-@import url("reset.css");
 /* ==========================================================================
    Hive theme for Textpattern CMS (v4.6alpha1)
    ========================================================================== */
+/* Base
+   ========================================================================== */
+/* corrects block display not defined in IE8-9 */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+nav,
+section,
+summary {
+  display: block;
+}
+
+/* addresses styling for 'hidden' attribute not present in IE8-9 */
+[hidden] {
+  display: none;
+}
+
+html {
+  /* prevents iOS text size adjust after orientation change, without disabling user zoom -
+     http://www.456bereastreet.com/archive/201012/controlling_text_size_in_safari_for_ios_without_disabling_user_zoom/ */
+  -webkit-text-size-adjust: 100%;
+  /* as above, for Windows Phone */
+  -ms-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+}
+
 /* Clearfix
    ========================================================================== */
 .clearfix:before, .progress-meter ol:before, .txp-footer:before, .txp-edit p:before,
@@ -22,17 +55,28 @@ a {
   color: #114eb1;
   text-decoration: none;
 }
+a:focus {
+  outline: thin dotted #0066ff;
+}
+a:hover, a:active {
+  outline: 0;
+}
 a:hover {
   color: #0066ff;
   text-decoration: underline;
 }
-
 a.busy {
   visibility: hidden;
 }
 
 /* Typography
    ========================================================================== */
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.8125em;
+  line-height: 1.38462;
+}
+
 h1 {
   font-size: 2em;
   line-height: 1.23076923076923;
@@ -65,9 +109,14 @@ h6 {
   margin: 0 0 1em;
 }
 
-small,
-.txp-footer {
-  font-size: 0.84615em;
+/* addresses style set to 'bolder' in Firefox3-4, Safari4-5, Chrome */
+b,
+strong {
+  font-weight: bold;
+}
+
+blockquote {
+  margin: 1em 2em;
 }
 
 dfn,
@@ -77,11 +126,41 @@ var {
   background: #fff6d3;
 }
 
+/* addresses styling not present in Safari5, Chrome */
+dfn {
+  font-style: italic;
+}
+
+/* addresses CSS quotes not supported in IE7, addresses quote property not supported in Safari4 */
+q {
+  quotes: none;
+}
+q:before, q:after {
+  content: "";
+  content: none;
+}
+
 var {
   padding: 0 .23076923076923em;
   -moz-border-radius: 0.23077em;
   border-radius: 0.23077em;
   font-weight: bold;
+}
+
+/* addresses styling not present in IE8-9, Safari5, Chrome */
+abbr[title],
+dfn[title] {
+  border-bottom: 1px dotted;
+  cursor: help;
+}
+
+/* corrects font family set oddly in Safari4-5, Chrome - en.wikipedia.org/wiki/User:Davidgothberg/Test59 */
+pre,
+code,
+kbd,
+samp {
+  font-family: monospace, monospace;
+  font-size: 1em;
 }
 
 pre,
@@ -120,6 +199,28 @@ code.excerpt {
   border: 0;
   padding: 0;
   background: transparent;
+}
+
+/* prevents sub and sup affecting line-height in all browsers */
+sub,
+sup {
+  font-size: 0.84615em;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sup {
+  top: -0.5em;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+small,
+.txp-footer {
+  font-size: 0.84615em;
 }
 
 hr {
@@ -165,8 +266,22 @@ html[lang="zh-tw"] {
   font-family: PMingLiU, sans-serif;
 }
 
-/* Images
+/* Embedded content
    ========================================================================== */
+/* 1. removes border when inside 'a' element in IE7-9, Firefox3
+   2. improves image quality when scaled in IE7 */
+img {
+  /* 1 */
+  border: 0;
+  /* 2 */
+  -ms-interpolation-mode: bicubic;
+}
+
+/* corrects overflow displayed oddly in IE9 */
+svg:not(:root) {
+  overflow: hidden;
+}
+
 .content-image {
   border: solid 1px #cccccc;
   -moz-border-radius: 0.38462em;
@@ -580,6 +695,7 @@ legend {
   position: absolute;
   top: 0;
   margin: 0;
+  border: 0;
   padding: 0 1em;
   width: 100%;
   font-weight: bold;
@@ -607,16 +723,162 @@ legend {
   box-sizing: border-box;
 }
 
-input[type="radio"],
-input[type="checkbox"] {
-  margin-right: .5em;
+textarea,
+select,
+input[type="password"],
+input[type="text"] {
+  -webkit-appearance: none;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  -webkit-background-clip: padding;
+  -khtml-background-clip: padding-box;
+  -moz-background-clip: padding;
+  background-clip: padding-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1em;
+  line-height: 1.46153846153846;
+  color: #333333;
+  background-color: white;
+  margin: 0;
+  border: 1px solid #cccccc;
+  padding: .15384615384615em .38461538461538em;
+  height: 1.84615384615385em;
+  max-width: 100%;
 }
 
-input.year, input.exp_year {
-  width: 3.30769230769231em;
+input[type="color"] {
+  padding: 0;
+  height: 1.8em;
 }
-input.month, input.exp_month, input.day, input.exp_day, input.hour, input.exp_hour, input.minute, input.exp_minute, input.second, input.exp_second {
-  width: 2.30769230769231em;
+
+/* addresses box sizing set to content-box and excess padding in IE8-9 */
+input[type="checkbox"],
+input[type="radio"] {
+  margin-right: .5em;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+textarea {
+  min-height: 4.38461538461538em;
+  resize: vertical;
+  width: 100%;
+  /* removes default vertical scrollbar in IE8-9 */
+  overflow: auto;
+  /* improves readability and alignment in all browsers */
+  vertical-align: top;
+}
+
+textarea,
+select[size],
+select[multiple] {
+  height: auto;
+}
+
+select[size="0"],
+select[size="1"] {
+  height: 1.8em;
+}
+
+/* tweaks for Safari, Chrome */
+@media (-webkit-min-device-pixel-ratio: 0) {
+  select[size],
+  select[multiple],
+  select[multiple][size] {
+    background-image: none;
+    padding-right: .23076923076923em;
+  }
+
+  select,
+  select[size="0"],
+  select[size="1"] {
+    background: white url("../img/svg/select_arrow.svg") no-repeat right center;
+    padding-right: 2em;
+    -webkit-background-size: 1em .30769230769231em;
+    background-size: 1em .30769230769231em;
+  }
+}
+optgroup {
+  font-family: Arial, Helvetica, sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  color: #333333;
+}
+optgroup::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+
+button[disabled],
+input[disabled],
+select[disabled],
+select[disabled] option,
+select[disabled] optgroup,
+textarea[disabled],
+.navlink-disabled {
+  opacity: 1;
+  border-color: #dddddd !important;
+  background: #eee !important;
+  text-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: -moz-none;
+  user-select: none;
+  color: #999999 !important;
+  cursor: default;
+}
+
+.boxshadow button:focus,
+.boxshadow input[type="button"]:focus,
+.boxshadow input[type="password"]:focus,
+.boxshadow input[type="reset"]:focus,
+.boxshadow input[type="submit"]:focus,
+.boxshadow input[type="text"]:focus,
+.boxshadow select:focus,
+.boxshadow textarea:focus,
+.boxshadow .txp-logout a:focus,
+.boxshadow .action-create a:focus,
+.boxshadow .navlink:focus,
+.boxshadow .navlink-active:focus,
+.boxshadow .txp-buttons a:focus {
+  outline: 0;
+  -webkit-box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.25), 0 0 7px #0066ff;
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.25), 0 0 7px #0066ff;
+  /* Opera */
+  z-index: 1;
+}
+
+input[type="file"]:focus, input[type="file"]:active,
+input[type="radio"]:focus,
+input[type="radio"]:active,
+input[type="checkbox"]:focus,
+input[type="checkbox"]:active {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+/* suppress red glow that Firefox adds to form fields by default, even when user is still typing
+   and kill phantom spacing and dotted border that appears in Firefox */
+input:invalid,
+button:invalid,
+select:invalid,
+textarea:invalid {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+input::-moz-focus-inner,
+button::-moz-focus-inner,
+select::-moz-focus-inner,
+textarea::-moz-focus-inner {
+  border: 0;
+  padding: 0;
 }
 
 /* additional input field widths */
@@ -644,8 +906,137 @@ input.input-xsmall {
   max-width: 3.46153846153846em;
 }
 
+input.year, input.exp_year {
+  width: 3.30769230769231em;
+}
+input.month, input.exp_month, input.day, input.exp_day, input.hour, input.exp_hour, input.minute, input.exp_minute, input.second, input.exp_second {
+  width: 2.30769230769231em;
+}
+
 /* Specific buttons
    ========================================================================== */
+button,
+input[type="reset"],
+input[type="submit"],
+input[type="button"],
+.txp-logout a,
+.action-create a,
+.navlink,
+.navlink-active,
+.txp-buttons a {
+  -webkit-appearance: none;
+  -moz-border-radius: 0.38462em;
+  border-radius: 0.38462em;
+  -webkit-background-clip: padding;
+  -khtml-background-clip: padding-box;
+  -moz-background-clip: padding;
+  background-clip: padding-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  cursor: pointer;
+  color: #333333;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: .92307692307692em;
+  line-height: 1.33333333333333;
+  text-decoration: none;
+  margin: 0;
+  padding: .25em .75em;
+  -webkit-box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.25);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.25);
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.4);
+  width: auto;
+  height: 2em;
+  border: 1px solid #bbb;
+  border-bottom-color: #a2a2a2;
+  background-color: #eeeeee;
+  /* Konqueror */
+  background-image: -khtml-gradient(linear, left top, left bottom, from(#eeeeee), to(#bbbbbb));
+  /* Safari4+, Chrome */
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#eeeeee), to(#bbbbbb));
+  /* Safari5.1+, Chrome10+ */
+  background-image: -webkit-linear-gradient(#eeeeee, #bbbbbb);
+  /* Firefox3.6 */
+  background-image: -moz-linear-gradient(#eeeeee, #bbbbbb);
+  /* Opera11.10+ */
+  background-image: -o-linear-gradient(#eeeeee, #bbbbbb);
+  /* CSS3 Compliant */
+  background-image: linear-gradient(#eeeeee, #bbbbbb);
+  display: inline-block;
+}
+button:hover,
+input[type="reset"]:hover,
+input[type="submit"]:hover,
+input[type="button"]:hover,
+.txp-logout a:hover,
+.action-create a:hover,
+.navlink:hover,
+.navlink-active:hover,
+.txp-buttons a:hover {
+  color: #333333;
+  text-decoration: none;
+  background-color: #f8f8f8;
+  /* Konqueror */
+  background-image: -khtml-gradient(linear, left top, left bottom, from(#f8f8f8), to(#c5c5c5));
+  /* Safari4+, Chrome */
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#f8f8f8), to(#c5c5c5));
+  /* Safari5.1+, Chrome10+ */
+  background-image: -webkit-linear-gradient(#f8f8f8, #c5c5c5);
+  /* Firefox3.6 */
+  background-image: -moz-linear-gradient(#f8f8f8, #c5c5c5);
+  /* Opera11.10+ */
+  background-image: -o-linear-gradient(#f8f8f8, #c5c5c5);
+  /* CSS3 Compliant */
+  background-image: linear-gradient(#f8f8f8, #c5c5c5);
+}
+button:active,
+input[type="reset"]:active,
+input[type="submit"]:active,
+input[type="button"]:active,
+.txp-logout a:active,
+.action-create a:active,
+.navlink:active,
+.navlink-active:active,
+.txp-buttons a:active {
+  background-color: #c5c5c5;
+  /* Konqueror */
+  background-image: -khtml-gradient(linear, left top, left bottom, from(#c5c5c5), to(#f8f8f8));
+  /* Safari4+, Chrome */
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#c5c5c5), to(#f8f8f8));
+  /* Safari5.1+, Chrome10+ */
+  background-image: -webkit-linear-gradient(#c5c5c5, #f8f8f8);
+  /* Firefox3.6 */
+  background-image: -moz-linear-gradient(#c5c5c5, #f8f8f8);
+  /* Opera11.10+ */
+  background-image: -o-linear-gradient(#c5c5c5, #f8f8f8);
+  /* CSS3 Compliant */
+  background-image: linear-gradient(#c5c5c5, #f8f8f8);
+}
+
+input[type="reset"],
+input[type="submit"],
+input[type="button"] {
+  height: 2em;
+}
+
+.navlink-disabled {
+  -moz-border-radius: 0.38462em;
+  border-radius: 0.38462em;
+  -webkit-background-clip: padding;
+  -khtml-background-clip: padding-box;
+  -moz-background-clip: padding;
+  background-clip: padding-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  font-size: .92307692307692em;
+  line-height: 1.33333333333333;
+  border: 1px solid;
+  padding: .30769230769231em .75em;
+  height: 2em;
+  display: inline-block;
+}
+
 /* primary buttons */
 input[type="submit"].publish,
 button.publish,
@@ -788,8 +1179,46 @@ button.destroy:active {
   border-bottom-right-radius: 0.38462em;
 }
 
+.nav-tertiary .navlink-active {
+  background-color: #c5c5c5;
+  /* Konqueror */
+  background-image: -khtml-gradient(linear, left top, left bottom, from(#c5c5c5), to(#f8f8f8));
+  /* Safari4+, Chrome */
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#c5c5c5), to(#f8f8f8));
+  /* Safari5.1+, Chrome10+ */
+  background-image: -webkit-linear-gradient(#c5c5c5, #f8f8f8);
+  /* Firefox3.6 */
+  background-image: -moz-linear-gradient(#c5c5c5, #f8f8f8);
+  /* Opera11.10+ */
+  background-image: -o-linear-gradient(#c5c5c5, #f8f8f8);
+  /* CSS3 Compliant */
+  background-image: linear-gradient(#c5c5c5, #f8f8f8);
+}
+
 /* Lists
    ========================================================================== */
+/* addresses paddings set differently */
+menu,
+ol,
+ul {
+  padding: 0 0 0 2em;
+}
+
+/* remove margins from nested lists */
+ul ul,
+ol ol,
+dl dl {
+  margin: 0;
+}
+
+dd {
+  margin: 0 0 0 2em;
+}
+
+dt {
+  font-style: bold;
+}
+
 .plain-list {
   list-style: none;
   padding-left: 0;
@@ -797,6 +1226,25 @@ button.destroy:active {
 
 /* Tables
    ========================================================================== */
+/* consistent tables */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+caption {
+  text-align: left;
+  margin-bottom: .5em;
+}
+
+/* make table cells align top and left by default, remove any cellpadding */
+th,
+td {
+  vertical-align: top;
+  text-align: left;
+  padding: 0;
+}
+
 .txp-list {
   width: 100%;
 }
