@@ -22,11 +22,11 @@ $LastChangedRevision$
 		global $txp_user, $event, $app_mode, $theme, $textarray_script;
 
 		if ($app_mode != 'async' && $event != 'tag') {
-			echo '</div><!-- /txp-body --><div class="txp-footer">';
+			echo '</div><!-- /txp-body --><footer role="contentinfo" class="txp-footer">';
 			echo pluggable_ui('admin_side', 'footer', $theme->footer());
 			callback_event('admin_side', 'body_end');
 			echo n.script_js('textpattern.textarray = '.json_encode($textarray_script)).n.
-			'</div><!-- /txp-footer --></body>'.n.'</html>';
+			'</footer><!-- /txp-footer --></body>'.n.'</html>';
 		}
 	}
 

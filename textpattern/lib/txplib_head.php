@@ -134,12 +134,12 @@ $LastChangedRevision$
 	?>
 	</head>
 	<body id="<?php echo $body_id; ?>" class="not-ready <?php echo $area; ?>">
-	<div class="txp-header">
+	<header role="banner" class="txp-header">
 	<?php callback_event('admin_side', 'pagetop');
 		$theme->set_state($area, $event, $bm, $message);
 		echo pluggable_ui('admin_side', 'header', $theme->header());
 		callback_event('admin_side', 'pagetop_end');
-		echo '</div><!-- /txp-header --><div class="txp-body">';
+		echo '</header><!-- /txp-header --><div role="main" id="txp-main" class="txp-body">';
 	}
 
 // -------------------------------------------------------------
