@@ -11,7 +11,7 @@ class classic_theme extends theme
 {
 	function html_head()
 	{
-		return '<link type="text/css" href="'.$this->url.'textpattern.css" rel="stylesheet" />'.n;
+		return '<link rel="stylesheet" href="'.$this->url.'textpattern.css">'.n;
 	}
 
 	function header()

@@ -55,7 +55,7 @@ $LastChangedRevision$
 	<meta charset="utf-8">
 	<meta name="robots" content="noindex, nofollow">
 	<title><?php echo escape_title($pagetitle) ?> - <?php echo txpspecialchars($sitename) ?> &#124; Textpattern CMS</title>
-	<script type="text/javascript" src="jquery.js"></script>
+	<script src="jquery.js"></script>
 	<?php
 	echo script_js(
 		'var textpattern = {
@@ -74,8 +74,8 @@ $LastChangedRevision$
 	);
 	gTxtScript(array('form_submission_error', 'are_you_sure'));
 	?>
-	<script type="text/javascript" src="textpattern.js"></script>
-	<script type="text/javascript">
+	<script src="textpattern.js"></script>
+	<script>
 	<!--
 		var cookieEnabled = checkCookies();
 
@@ -123,7 +123,7 @@ $LastChangedRevision$
 	-->
 	</script>
 	<?php // Mandatory un-themable Textpattern core styles ?>
-	<style type="text/css">
+	<style>
 		.not-ready .doc-ready, .not-ready form.async input[type="submit"], .not-ready a.async {
 			visibility: hidden;
 		}

@@ -28,7 +28,7 @@ header(pluggable_ui('admin_side', 'x_frame_options', 'X-Frame-Options: SAMEORIGI
 <head>
 	<meta charset="utf-8">
 	<title><?php echo gTxt('build'); ?> &#124; Textpattern CMS</title>
-	<script type="text/javascript" src="jquery.js"></script>
+	<script src="jquery.js"></script>
 	<?php echo script_js(
 		'var textpattern = {event: "'.txpspecialchars($event).'", step: "'.txpspecialchars($step).'", _txp_token: "'.txpspecialchars(form_token()).'"};'
 	); ?>

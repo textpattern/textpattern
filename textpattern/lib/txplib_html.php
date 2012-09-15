@@ -1125,7 +1125,7 @@ EOF;
 
 	function script_js($js, $noscript='')
 	{
-		$out = '<script type="text/javascript">'.n.
+		$out = '<script>'.n.
 			'<!--'.n.
 			trim($js).n.
 			'// -->'.n.

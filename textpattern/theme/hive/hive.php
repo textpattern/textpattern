@@ -8,58 +8,58 @@ class hive_theme extends theme
 
 	function html_head()
 	{
-		$out[] = '<link href="'.$this->url.'css/textpattern.css" rel="stylesheet" type="text/css" />';
+		$out[] = '<link rel="stylesheet" href="'.$this->url.'css/textpattern.css">';
 		// start of custom CSS toggles (see README.textile for usage instructions)
 		if(defined('hive_theme_hide_branding')) {
-			$out[] = '<link href="'.$this->url.'css/custom/hide_branding.css" rel="stylesheet" type="text/css" />';
+			$out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_branding.css">';
 		}
 		if(defined('hive_theme_hide_headings')) {
-			$out[] = '<link href="'.$this->url.'css/custom/hide_headings.css" rel="stylesheet" type="text/css" />';
+			$out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_headings.css">';
 		}
 		if(defined('hive_theme_hide_preview_tabs_group')) {
-			$out[] = '<link href="'.$this->url.'css/custom/hide_preview_tabs.css" rel="stylesheet" type="text/css" />';
+			$out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_preview_tabs.css">';
 		}
 		if(defined('hive_theme_hide_textile_group')) {
-			$out[] = '<link href="'.$this->url.'css/custom/hide_textile_group.css" rel="stylesheet" type="text/css" />';
+			$out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_textile_group.css">';
 		}
 		if(defined('hive_theme_hide_advanced_group')) {
-			$out[] = '<link href="'.$this->url.'css/custom/hide_advanced_group.css" rel="stylesheet" type="text/css" />';
+			$out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_advanced_group.css">';
 		}
 		if(defined('hive_theme_hide_custom_field_group')) {
-			$out[] = '<link href="'.$this->url.'css/custom/hide_custom_field_group.css" rel="stylesheet" type="text/css" />';
+			$out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_custom_field_group.css">';
 		}
 		if(defined('hive_theme_hide_image_group')) {
-			$out[] = '<link href="'.$this->url.'css/custom/hide_image_group.css" rel="stylesheet" type="text/css" />';
+			$out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_image_group.css">';
 		}
 		if(defined('hive_theme_hide_keywords_field')) {
-			$out[] = '<link href="'.$this->url.'css/custom/hide_keywords_field.css" rel="stylesheet" type="text/css" />';
+			$out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_keywords_field.css">';
 		}
 		if(defined('hive_theme_hide_recent_articles_group')) {
-			$out[] = '<link href="'.$this->url.'css/custom/hide_recent_articles_group.css" rel="stylesheet" type="text/css" />';
+			$out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_recent_articles_group.css">';
 		}
 		if(defined('hive_theme_hide_comments_group')) {
-			$out[] = '<link href="'.$this->url.'css/custom/hide_comments_group.css" rel="stylesheet" type="text/css" />';
+			$out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_comments_group.css">';
 		}
 		if(defined('hive_theme_hide_expires_field')) {
-			$out[] = '<link href="'.$this->url.'css/custom/hide_expires_field.css" rel="stylesheet" type="text/css" />';
+			$out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_expires_field.css">';
 		}
 		if(defined('hive_theme_hide_tag_builder_column')) {
-			$out[] = '<link href="'.$this->url.'css/custom/hide_tag_builder_column.css" rel="stylesheet" type="text/css" />';
+			$out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_tag_builder_column.css">';
 		}
 		if(defined('hive_theme_hide_copy_as')) {
-			$out[] = '<link href="'.$this->url.'css/custom/hide_copy_as.css" rel="stylesheet" type="text/css" />';
+			$out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_copy_as.css">';
 		}
 		if(defined('hive_theme_hide_form_preview')) {
-			$out[] = '<link href="'.$this->url.'css/custom/hide_form_preview.css" rel="stylesheet" type="text/css" />';
+			$out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_form_preview.css">';
 		}
 		// end of custom CSS toggles
-		$out[] = '<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />';
-		$out[] = '<meta name="apple-mobile-web-app-capable" content="yes" />';
-		$out[] = '<meta name="generator" content="Textpattern CMS" />';
-		$out[] = '<script type="text/javascript" src="'.$this->url.'js/modernizr.js"></script>';
-		$out[] = '<script type="text/javascript" src="'.$this->url.'js/jquery.formalize.min.js"></script>';
-		$out[] = '<!--[if lt IE 9]><script type="text/javascript" src="'.$this->url.'js/selectivizr.min.js"></script><![endif]-->';
-		$out[] = '<script type="text/javascript" src="'.$this->url.'js/scripts.js"></script>';
+		$out[] = '<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">';
+		$out[] = '<meta name="apple-mobile-web-app-capable" content="yes">';
+		$out[] = '<meta name="generator" content="Textpattern CMS">';
+		$out[] = '<script src="'.$this->url.'js/modernizr.js"></script>';
+		$out[] = '<script src="'.$this->url.'js/jquery.formalize.min.js"></script>';
+		$out[] = '<!--[if lt IE 9]><script src="'.$this->url.'js/selectivizr.min.js"></script><![endif]-->';
+		$out[] = '<script src="'.$this->url.'js/scripts.js"></script>';
 
 		return join(n, $out);
 	}
