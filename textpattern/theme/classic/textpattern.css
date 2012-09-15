@@ -863,6 +863,10 @@ ul.plain-list,
 /* Global layout
    ========================================================================== */
 
+.txp-accessibility {
+	display: none;
+}
+
 .txp-header {
 	min-width: 86em;
 	margin-bottom: 1.5em;
