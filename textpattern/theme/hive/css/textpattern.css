@@ -69,6 +69,25 @@ a.busy {
   visibility: hidden;
 }
 
+.pophelp,
+.pophelpsubtle {
+  border: 1px solid #fff;
+  padding: 0 .23076923076923em;
+  font-weight: normal;
+  background: #e5e5e5;
+  -moz-border-radius: 0.53846em;
+  border-radius: 0.53846em;
+}
+
+.txp-list thead th a.pophelp {
+  display: inline;
+  color: #114eb1;
+}
+.txp-list thead th a.pophelp:hover {
+  color: #0066ff;
+  text-decoration: underline;
+}
+
 /* Typography
    ========================================================================== */
 body {
@@ -109,42 +128,28 @@ h6 {
   margin: 0 0 1em;
 }
 
-/* addresses style set to 'bolder' in Firefox3-4, Safari4-5, Chrome */
+/* addresses style set to `bolder` in Firefox4+, Safari5, and Chrome */
 b,
 strong {
   font-weight: bold;
+}
+
+address {
+  margin: 1em 0;
 }
 
 blockquote {
   margin: 1em 2em;
 }
 
-dfn,
-q,
-var {
-  font-style: italic;
-  background: #fff6d3;
+/* sets consistent quote types */
+q {
+  quotes: "\201C" "\201D" "\2018" "\2019";
 }
 
-/* addresses styling not present in Safari5, Chrome */
+/* addresses styling not present in Safari5 and Chrome */
 dfn {
   font-style: italic;
-}
-
-/* addresses CSS quotes not supported in IE7, addresses quote property not supported in Safari4 */
-q {
-  quotes: none;
-}
-q:before, q:after {
-  content: "";
-  content: none;
-}
-
-var {
-  padding: 0 .23076923076923em;
-  -moz-border-radius: 0.23077em;
-  border-radius: 0.23077em;
-  font-weight: bold;
 }
 
 /* addresses styling not present in IE8-9, Safari5, Chrome */
@@ -154,12 +159,20 @@ dfn[title] {
   cursor: help;
 }
 
-/* corrects font family set oddly in Safari4-5, Chrome - en.wikipedia.org/wiki/User:Davidgothberg/Test59 */
+mark,
+var {
+  padding: 0 .23076923076923em;
+  -moz-border-radius: 0.23077em;
+  border-radius: 0.23077em;
+  color: #333333;
+  background: #fff6d3;
+}
+
+/* corrects font size set oddly in Safari5 and Chrome */
 pre,
 code,
 kbd,
 samp {
-  font-family: monospace, monospace;
   font-size: 1em;
 }
 
@@ -198,7 +211,7 @@ code.body,
 code.excerpt {
   border: 0;
   padding: 0;
-  background: transparent;
+  background: none;
 }
 
 /* prevents sub and sup affecting line-height in all browsers */
@@ -219,6 +232,7 @@ sub {
 }
 
 small,
+figcaption,
 .txp-footer {
   font-size: 0.84615em;
 }
@@ -227,25 +241,6 @@ hr {
   margin: 1.5em 0;
   border-color: #cccccc;
   border-style: solid;
-}
-
-.pophelp,
-.pophelpsubtle {
-  border: 1px solid #fff;
-  padding: 0 .23076923076923em;
-  font-weight: normal;
-  background: #e5e5e5;
-  -moz-border-radius: 0.53846em;
-  border-radius: 0.53846em;
-}
-
-.txp-list thead th a.pophelp {
-  display: inline;
-  color: #114eb1;
-}
-.txp-list thead th a.pophelp:hover {
-  color: #0066ff;
-  text-decoration: underline;
 }
 
 /* Support for non-latin languages
@@ -268,13 +263,27 @@ html[lang="zh-tw"] {
 
 /* Embedded content
    ========================================================================== */
-/* 1. removes border when inside 'a' element in IE7-9, Firefox3
-   2. improves image quality when scaled in IE7 */
+/* image alignemnts */
 img {
-  /* 1 */
+  /* removes border when inside 'a' element in IE8-9 */
   border: 0;
-  /* 2 */
-  -ms-interpolation-mode: bicubic;
+}
+img.align-left {
+  float: left;
+  margin: 1em 1em 1em 0;
+}
+img.align-right {
+  float: right;
+  margin: 1em 0 1em 1em;
+}
+img.align-center {
+  display: block;
+  margin: 1em auto;
+}
+
+/* addresses margin not present in IE 8-9 and Safari 5 */
+figure {
+  margin: 0;
 }
 
 /* corrects overflow displayed oddly in IE9 */
@@ -291,27 +300,10 @@ svg:not(:root) {
   -webkit-box-shadow: 0 0 0.46154em rgba(0, 0, 0, 0.2);
   box-shadow: 0 0 0.46154em rgba(0, 0, 0, 0.2);
 }
-
 a:hover .content-image {
   border: solid 1px #0066ff;
   -webkit-box-shadow: 0 0 0.46154em rgba(0, 102, 255, 0.4);
   box-shadow: 0 0 0.46154em rgba(0, 102, 255, 0.4);
-}
-
-/* image alignments */
-.align-left {
-  float: left;
-  margin: 1em 1em 1em 0;
-}
-
-.align-right {
-  float: right;
-  margin: 1em 0 1em 1em;
-}
-
-.align-center {
-  display: block;
-  margin: 1em auto;
 }
 
 /* Messages
@@ -723,12 +715,100 @@ legend {
   box-sizing: border-box;
 }
 
-textarea,
-select,
+/* colour placeholder text (Webkit and Mozilla only, so far) */
+input::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder {
+  color: #999999;
+}
+
+input:-moz-placeholder,
+textarea:-moz-placeholder {
+  color: #999999;
+}
+
+/* colour placeholder text when using polyfill */
+span.placeholder {
+  color: #999999;
+}
+
+/* suppress red glow that Firefox adds to form fields by default, even when user is still typing
+   and kill phantom spacing and dotted border that appears in Firefox */
+input:invalid,
+button:invalid,
+select:invalid,
+textarea:invalid {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+input::-moz-focus-inner,
+button::-moz-focus-inner,
+select::-moz-focus-inner,
+textarea::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+
+/* better focus glows, if box-shadow is supported */
+.boxshadow input[type="color"]:focus,
+.boxshadow input[type="date"]:focus,
+.boxshadow input[type="datetime"]:focus,
+.boxshadow input[type="datetime-local"]:focus,
+.boxshadow input[type="email"]:focus,
+.boxshadow input[type="month"]:focus,
+.boxshadow input[type="number"]:focus,
+.boxshadow input[type="password"]:focus,
+.boxshadow input[type="search"]:focus,
+.boxshadow input[type="tel"]:focus,
+.boxshadow input[type="text"]:focus,
+.boxshadow input[type="time"]:focus,
+.boxshadow input[type="url"]:focus,
+.boxshadow input[type="week"]:focus,
+.boxshadow select:focus,
+.boxshadow textarea:focus {
+  outline: 0;
+  -webkit-box-shadow: 0 0 7px #0066ff;
+  box-shadow: 0 0 7px #0066ff;
+  /* Opera */
+  z-index: 1;
+}
+.boxshadow button:focus,
+.boxshadow input[type="button"]:focus,
+.boxshadow input[type="reset"]:focus,
+.boxshadow input[type="submit"]:focus,
+.boxshadow .txp-logout a:focus,
+.boxshadow .action-create a:focus,
+.boxshadow .navlink:focus,
+.boxshadow .navlink-active:focus,
+.boxshadow .txp-buttons a:focus {
+  outline: 0;
+  -webkit-box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.25), 0 0 7px #0066ff;
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.25), 0 0 7px #0066ff;
+  /* Opera */
+  z-index: 1;
+}
+
+/* removes inner padding and search cancel button in Safari 5+ and Chrome on OS X */
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}
+
+input[type="color"],
+input[type="date"],
+input[type="datetime"],
+input[type="datetime-local"],
 input[type="email"],
+input[type="month"],
+input[type="number"],
 input[type="password"],
+input[type="search"],
+input[type="tel"],
 input[type="text"],
-input[type="url"] {
+input[type="time"],
+input[type="url"],
+input[type="week"],
+select,
+textarea {
   -webkit-appearance: none;
   -moz-border-radius: 0;
   border-radius: 0;
@@ -753,17 +833,7 @@ input[type="url"] {
 
 input[type="color"] {
   padding: 0;
-  height: 1.8em;
-}
-
-/* addresses box sizing set to content-box and excess padding in IE8-9 */
-input[type="checkbox"],
-input[type="radio"] {
-  margin-right: .5em;
-  padding: 0;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
+  height: 1.84615384615385em;
 }
 
 textarea {
@@ -784,10 +854,10 @@ select[multiple] {
 
 select[size="0"],
 select[size="1"] {
-  height: 1.8em;
+  height: 1.84615384615385em;
 }
 
-/* tweaks for Safari, Chrome */
+/* addresses select alignment in Safari/Chrome */
 @media (-webkit-min-device-pixel-ratio: 0) {
   select[size],
   select[multiple],
@@ -816,8 +886,22 @@ optgroup::-moz-focus-inner {
   padding: 0;
 }
 
+/* addresses box sizing set to content-box and excess padding in IE8-9 */
+input[type="checkbox"],
+input[type="radio"] {
+  margin-right: .5em;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+/* make sure disable elements really are disabled */
 button[disabled],
 input[disabled],
+input[type="button"][disabled],
+input[type="reset"][disabled],
+input[type="submit"][disabled],
 select[disabled],
 select[disabled] option,
 select[disabled] optgroup,
@@ -835,54 +919,6 @@ textarea[disabled],
   user-select: none;
   color: #999999 !important;
   cursor: default;
-}
-
-.boxshadow button:focus,
-.boxshadow input[type="button"]:focus,
-.boxshadow input[type="email"]:focus,
-.boxshadow input[type="password"]:focus,
-.boxshadow input[type="reset"]:focus,
-.boxshadow input[type="submit"]:focus,
-.boxshadow input[type="text"]:focus,
-.boxshadow input[type="url"]:focus,
-.boxshadow select:focus,
-.boxshadow textarea:focus,
-.boxshadow .txp-logout a:focus,
-.boxshadow .action-create a:focus,
-.boxshadow .navlink:focus,
-.boxshadow .navlink-active:focus,
-.boxshadow .txp-buttons a:focus {
-  outline: 0;
-  -webkit-box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.25), 0 0 7px #0066ff;
-  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.25), 0 0 7px #0066ff;
-  /* Opera */
-  z-index: 1;
-}
-
-input[type="file"]:focus, input[type="file"]:active,
-input[type="radio"]:focus,
-input[type="radio"]:active,
-input[type="checkbox"]:focus,
-input[type="checkbox"]:active {
-  -webkit-box-shadow: none;
-  box-shadow: none;
-}
-
-/* suppress red glow that Firefox adds to form fields by default, even when user is still typing
-   and kill phantom spacing and dotted border that appears in Firefox */
-input:invalid,
-button:invalid,
-select:invalid,
-textarea:invalid {
-  -webkit-box-shadow: none;
-  box-shadow: none;
-}
-input::-moz-focus-inner,
-button::-moz-focus-inner,
-select::-moz-focus-inner,
-textarea::-moz-focus-inner {
-  border: 0;
-  padding: 0;
 }
 
 /* additional input field widths */
@@ -929,8 +965,6 @@ input[type="button"],
 .navlink-active,
 .txp-buttons a {
   -webkit-appearance: none;
-  -moz-border-radius: 0.38462em;
-  border-radius: 0.38462em;
   -webkit-background-clip: padding;
   -khtml-background-clip: padding-box;
   -moz-background-clip: padding;
@@ -938,21 +972,25 @@ input[type="button"],
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  cursor: pointer;
-  color: #333333;
+  width: auto;
+  height: 2em;
+  overflow: visible;
   font-family: Arial, Helvetica, sans-serif;
   font-size: .92307692307692em;
   line-height: 1.33333333333333;
   text-decoration: none;
-  margin: 0;
-  padding: .25em .75em;
-  -webkit-box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.25);
-  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.25);
   text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.4);
-  width: auto;
-  height: 2em;
+  cursor: pointer;
+  margin: 0;
   border: 1px solid #bbb;
   border-bottom-color: #a2a2a2;
+  -moz-border-radius: 0.38462em;
+  border-radius: 0.38462em;
+  padding: .25em .75em;
+  display: inline-block;
+  color: #333333;
+  -webkit-box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.25);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.25);
   background-color: #eeeeee;
   /* Konqueror */
   background-image: -khtml-gradient(linear, left top, left bottom, from(#eeeeee), to(#bbbbbb));
@@ -966,7 +1004,6 @@ input[type="button"],
   background-image: -o-linear-gradient(#eeeeee, #bbbbbb);
   /* CSS3 Compliant */
   background-image: linear-gradient(#eeeeee, #bbbbbb);
-  display: inline-block;
 }
 button:hover,
 input[type="reset"]:hover,
@@ -1017,15 +1054,7 @@ input[type="button"]:active,
   background-image: linear-gradient(#c5c5c5, #f8f8f8);
 }
 
-input[type="reset"],
-input[type="submit"],
-input[type="button"] {
-  height: 2em;
-}
-
 .navlink-disabled {
-  -moz-border-radius: 0.38462em;
-  border-radius: 0.38462em;
   -webkit-background-clip: padding;
   -khtml-background-clip: padding-box;
   -moz-background-clip: padding;
@@ -1033,11 +1062,13 @@ input[type="button"] {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+  height: 2em;
   font-size: .92307692307692em;
   line-height: 1.33333333333333;
   border: 1px solid;
+  -moz-border-radius: 0.38462em;
+  border-radius: 0.38462em;
   padding: .30769230769231em .75em;
-  height: 2em;
   display: inline-block;
 }
 
@@ -1045,11 +1076,11 @@ input[type="button"] {
 input[type="submit"].publish,
 button.publish,
 a.publish {
+  height: 3em;
   font-weight: bold;
   border: 1px solid #f2ab05;
   border-bottom-color: #c08804;
   padding: .75em;
-  height: 3em;
   background-color: #ffda44;
   /* Konqueror */
   background-image: -khtml-gradient(linear, left top, left bottom, from(#ffda44), to(#f2ab05));
@@ -1102,10 +1133,10 @@ a.publish:active {
 /* delete buttons */
 input[type="submit"].destroy,
 button.destroy {
-  padding: 0 .33333333333333em;
   height: 1.5em;
-  color: #f9e0df;
+  padding: 0 .33333333333333em;
   text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.25);
+  color: #f9e0df;
   border-top: 1px solid #9d261d;
   border-bottom: 1px solid #691913;
   background-color: #dc4e44;
