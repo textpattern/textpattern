@@ -711,7 +711,7 @@ begin tag builder functions
 			).
 
 			tagRow('email_address',
-				fInput('text', 'email', $email, '', '', '', 20)).
+				fInput('email', 'email', $email, '', '', '', 20)).
 
 			tagRow('tooltip',
 				fInput('text', 'title', $title, '', '', '', 20)).

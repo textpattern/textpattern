@@ -725,8 +725,10 @@ legend {
 
 textarea,
 select,
+input[type="email"],
 input[type="password"],
-input[type="text"] {
+input[type="text"],
+input[type="url"] {
   -webkit-appearance: none;
   -moz-border-radius: 0;
   border-radius: 0;
@@ -837,10 +839,12 @@ textarea[disabled],
 
 .boxshadow button:focus,
 .boxshadow input[type="button"]:focus,
+.boxshadow input[type="email"]:focus,
 .boxshadow input[type="password"]:focus,
 .boxshadow input[type="reset"]:focus,
 .boxshadow input[type="submit"]:focus,
 .boxshadow input[type="text"]:focus,
+.boxshadow input[type="url"]:focus,
 .boxshadow select:focus,
 .boxshadow textarea:focus,
 .boxshadow .txp-logout a:focus,

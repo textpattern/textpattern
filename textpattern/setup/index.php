@@ -202,7 +202,7 @@ eod;
 			n.graf(setup_gTxt('please_enter_url')).
 			n.graf(
 				'<span class="edit-label"><label for="setup_site_url">http://</label>'.sp.popHelp('siteurl').'</span>'.
-				n.'<span class="edit-value">'.fInput('text', 'siteurl', $guess_siteurl, '', '', '', INPUT_REGULAR, '', 'setup_site_url').'</span>'
+				n.'<span class="edit-value">'.fInput('url', 'siteurl', $guess_siteurl, '', '', '', INPUT_REGULAR, '', 'setup_site_url').'</span>'
 			);
 
 		if (is_disabled('mail'))
@@ -440,7 +440,7 @@ eod;
 
 			n.graf(
 				'<span class="edit-label"><label for="setup_user_email">'.setup_gTxt('your_email').'</label></span>'.
-				n.'<span class="edit-value">'.fInput('text', 'email', '', '', '', '', INPUT_REGULAR, '', 'setup_user_email').'</span>'
+				n.'<span class="edit-value">'.fInput('email', 'email', '', '', '', '', INPUT_REGULAR, '', 'setup_user_email').'</span>'
 			).
 
 			n.hed(setup_gTxt('site_config'),2).

@@ -316,8 +316,10 @@ legend {
 	padding: 0;
 }
 
-input[type="text"],
+input[type="email"],
 input[type="password"],
+input[type="text"],
+input[type="url"],
 textarea,
 select {
 	-webkit-appearance: none;
