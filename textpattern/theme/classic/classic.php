@@ -20,15 +20,18 @@ class classic_theme extends theme
 
 	function header()
 	{
-		$out[] = '<div id="masthead">'.
-			n.'<div id="navpop">'.n.navPop(1).n.'</div>'.
-			n.'<h1 id="branding">Textpattern</h1>'.
-			n.'</div>';
+		$out[] = '<h1 class="txp-accessibility">'.htmlspecialchars($GLOBALS["prefs"]["sitename"]).'</h1>';
+		$out[] = '<div id="masthead">';
+		$out[] = '<div id="navpop">'.n.navPop(1).n.'</div>';
+		$out[] = '<h1 id="branding">Textpattern</h1>';
+		$out[] = '</div>';
 
 		if (!$this->is_popup)
 		{
-			$out[] = '<div id="nav-primary" class="nav-tabs">'.
-				n.'<ul>';
+			$out[] = '<nav role="navigation">';
+			$out[] = '<h2 class="txp-accessibility">'.gTxt('navigation').'</h2>';
+			$out[] = '<div id="nav-primary" class="nav-tabs">';
+			$out[] = '<ul>';
 
 			$secondary = '';
 			foreach ($this->menu as $tab)
@@ -49,11 +52,14 @@ class classic_theme extends theme
 						n.'</div>';
 				}
 			}
+
 			$out[] = '<li id="view-site"><a class="tabdown" href="'.hu.'" target="_blank">'.gTxt('tab_view_site').'</a></li>';
 			$out[] = '</ul>';
 			$out[] = '</div>';
 			$out[] = $secondary;
+			$out[] = '</nav>';
 		}
+
 		$out[] = '<div id="messagepane">'.$this->announce($this->message).'</div>'.n;
 		return join(n, $out);
 	}

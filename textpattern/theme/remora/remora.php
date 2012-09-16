@@ -24,28 +24,35 @@ SF;
 	function header()
 	{
 		global $txp_user;
-		$out[] = '<div id="masthead">'.n.'<ul id="nav">';
+		$out[] = '<h1 class="txp-accessibility">'.htmlspecialchars($GLOBALS["prefs"]["sitename"]).'</h1>';
+		$out[] = '<nav role="navigation" id="masthead">';
+		$out[] = '<ul id="nav">';
+
 		foreach ($this->menu as $tab)
 		{
 			$class = ($tab['active']) ? 'active' : 'inactive';
 			$out[] = '<li class="primary '.$class.'"><a href="?event='.$tab["event"].'">'.$tab["label"].'</a>';
+
 			if (!empty($tab['items']))
 			{
 				$out[] = '<ul>';
+
 				foreach ($tab['items'] as $item)
 				{
 					$class = ($item['active']) ? 'active' : 'inactive';
 					$out[] = '<li class="secondary '.$class.'"><a href="?event='.$item["event"].'">'.$item["label"].'</a></li>';
 				}
-				$out[] = '</ul>';
 
+				$out[] = '</ul>';
 			}
+
 			$out[] = '</li>';
 		}
+
 		$out[] = '<li id="view-site" class="primary tabdown inactive"><a href="'.hu.'" target="_blank">'.gTxt('tab_view_site').'</a></li>';
 		if ($txp_user) $out[] = '<li id="logout" class="primary tabdown inactive"><a href="index.php?logout=1" onclick="return verify(\''.gTxt('are_you_sure').'\')">'.gTxt('logout').'</a></li>';
 		$out[] = '</ul>';
-		$out[] = '</div>';
+		$out[] = '</nav>';
 		$out[] = '<div id="messagepane">'.$this->announce($this->message).'</div>'.n;
 		return join(n, $out);
 	}
