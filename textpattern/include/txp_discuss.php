@@ -435,7 +435,7 @@ $LastChangedRevision$
 					inputLabel('name', fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'name'), 'name').n.
 					inputLabel('IP', $ip.n.$ban_link, '').n.
 					inputLabel('email', fInput('email', 'email', $email, '', '', '', INPUT_REGULAR, '', 'email'), 'email').n.
-					inputLabel('website', fInput('url', 'web', $web, '', '', '', INPUT_REGULAR, '', 'website'), 'website').n.
+					inputLabel('website', fInput('text', 'web', $web, '', '', '', INPUT_REGULAR, '', 'website'), 'website').n.
 					inputLabel('date', safe_strftime('%d %b %Y %X', $uPosted), '').n.
 					inputLabel('commentmessage', '<textarea id="commentmessage" name="message" cols="'.INPUT_LARGE.'" rows="'.INPUT_MEDIUM.'">'.$message.'</textarea>', 'message', '', '', '').n.
 					graf(fInput('submit', 'step', gTxt('save'), 'publish')).
