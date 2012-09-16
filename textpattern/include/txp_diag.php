@@ -469,6 +469,10 @@ $LastChangedRevision$
 			$fail['tmp_plugin_paths_match'] = diag_msg_wrap(gTxt('tmp_plugin_paths_match'));
 		}
 
+		// db server time
+		extract(doSpecial(getRow('select @@global.time_zone as db_global_timezone, @@session.time_zone as db_session_timezone, now() as db_server_time, unix_timestamp(now()) as db_server_timestamp')));
+		$db_server_timeoffset = $db_server_timestamp - $now;
+
 		echo
 		pagetop(gTxt('tab_diagnostics'),''),
 		'<h1 class="txp-heading">'.gTxt('tab_diagnostics').'</h1>',
@@ -526,6 +530,10 @@ $LastChangedRevision$
 			strip_tags(gTxt('gmtoffset')).cs.$timezone_key.sp."($gmtoffset)".n,
 
 			'MySQL'.cs.mysql_get_server_info().n,
+			gTxt('db_server_time').cs.$db_server_time.n,
+			gTxt('db_server_timeoffset').cs.$db_server_timeoffset.' s'.n,
+			gTxt('db_global_timezone').cs.$db_global_timezone.n,
+			gTxt('db_session_timezone').cs.$db_session_timezone.n,
 
 			gTxt('locale').cs.$locale.n,
 
