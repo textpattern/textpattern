@@ -3,9 +3,40 @@
 
 @import url("../classic/textpattern.css");
 
+
+/* Twisties
+   ========================================================================== */
+
+.lever {
+	background: none;
+	padding: 0;
+}
+
+.expanded {
+	background: none;
+}
+
+.lever a {
+	padding-right: 14px;
+	text-decoration: none;
+}
+
+.lever a:hover,
+.lever.expanded a {
+	background: url("../../txp_img/expandcollapse.gif") no-repeat right 5px;
+}
+
+
+/* Header
+   ========================================================================== */
+
 #masthead {
 	text-align: center;
 }
+
+
+/* Navigation
+   ========================================================================== */
 
 #nav {
 	display: inline-block;
@@ -78,23 +109,4 @@
 
 #nav li li a:hover {
 	background-color: #ffc;
-}
-
-.lever {
-	background: none;
-	padding: 0;
-}
-
-.expanded {
-	background: none;
-}
-
-.lever a {
-	padding-right: 14px;
-	text-decoration: none;
-}
-
-.lever a:hover,
-.lever.expanded a {
-	background: url("../../txp_img/expandcollapse.gif") no-repeat right 5px;
 }
