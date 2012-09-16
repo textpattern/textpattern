@@ -581,6 +581,7 @@ if (!empty($event) and $event == 'article') {
 
 		pagetop($page_title, $message);
 
+		echo n.'<h1 class="txp-heading txp-accessibility">'.gTxt('tab_write').'</h1>';
 		echo n.'<div id="'.$event.'_container" class="txp-container">';
 		echo n.n.'<form id="article_form" name="article_form" method="post" action="index.php" '. ($step=='create' ? '>' : ' class="async">');
 
