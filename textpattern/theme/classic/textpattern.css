@@ -910,10 +910,6 @@ body {
 	height: 2.63636363636364em;
 	border-bottom: 1px solid #e2a005;
 	background-color: #ffda44;
-	/* Konqueror */
-	background-image: -khtml-gradient(linear, left top, left bottom, from(#ffda44), to(#fabc2b));
-	/* Safari4+, Chrome */
-	background-image: -webkit-gradient(linear, left top, left bottom, from(#ffda44), to(#fabc2b));
 	/* Safari5.1+, Chrome10+ */
 	background-image: -webkit-linear-gradient(#ffda44, #fabc2b);
 	/* Firefox3.6 */

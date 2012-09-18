@@ -506,10 +506,6 @@ h3.lever,
   border-top: 1px solid #dddddd;
   border-bottom: 1px solid #bebebe;
   background-color: #eeeeee;
-  /* Konqueror */
-  background-image: -khtml-gradient(linear, left top, left bottom, from(#eeeeee), to(#dddddd));
-  /* Safari4+, Chrome */
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#eeeeee), to(#dddddd));
   /* Safari5.1+, Chrome10+ */
   background-image: -webkit-linear-gradient(#eeeeee, #dddddd);
   /* Firefox3.6 */
@@ -594,10 +590,6 @@ h3.lever.expanded a:after {
   border-top: 1px solid #dddddd;
   border-bottom: 1px solid #bebebe;
   background-color: #eeeeee;
-  /* Konqueror */
-  background-image: -khtml-gradient(linear, left top, left bottom, from(#eeeeee), to(#dddddd));
-  /* Safari4+, Chrome */
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#eeeeee), to(#dddddd));
   /* Safari5.1+, Chrome10+ */
   background-image: -webkit-linear-gradient(#eeeeee, #dddddd);
   /* Firefox3.6 */
@@ -613,10 +605,6 @@ h3.lever.expanded a:after {
   border-top: 1px solid #fabc2b;
   border-bottom: 1px solid #e2a005;
   background-color: #ffda44;
-  /* Konqueror */
-  background-image: -khtml-gradient(linear, left top, left bottom, from(#ffda44), to(#fabc2b));
-  /* Safari4+, Chrome */
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#ffda44), to(#fabc2b));
   /* Safari5.1+, Chrome10+ */
   background-image: -webkit-linear-gradient(#ffda44, #fabc2b);
   /* Firefox3.6 */
@@ -696,10 +684,6 @@ legend {
   border-top: 1px solid #dddddd;
   border-bottom: 1px solid #bebebe;
   background-color: #eeeeee;
-  /* Konqueror */
-  background-image: -khtml-gradient(linear, left top, left bottom, from(#eeeeee), to(#dddddd));
-  /* Safari4+, Chrome */
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#eeeeee), to(#dddddd));
   /* Safari5.1+, Chrome10+ */
   background-image: -webkit-linear-gradient(#eeeeee, #dddddd);
   /* Firefox3.6 */
@@ -721,11 +705,6 @@ textarea::-webkit-input-placeholder {
 
 input:-moz-placeholder,
 textarea:-moz-placeholder {
-  color: #999999;
-}
-
-/* colour placeholder text when using polyfill */
-span.placeholder {
   color: #999999;
 }
 
@@ -978,10 +957,6 @@ input[type="button"],
   -webkit-box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.25);
   box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.25);
   background-color: #eeeeee;
-  /* Konqueror */
-  background-image: -khtml-gradient(linear, left top, left bottom, from(#eeeeee), to(#bbbbbb));
-  /* Safari4+, Chrome */
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#eeeeee), to(#bbbbbb));
   /* Safari5.1+, Chrome10+ */
   background-image: -webkit-linear-gradient(#eeeeee, #bbbbbb);
   /* Firefox3.6 */
@@ -1003,10 +978,6 @@ input[type="button"]:hover,
   color: #333333;
   text-decoration: none;
   background-color: #f8f8f8;
-  /* Konqueror */
-  background-image: -khtml-gradient(linear, left top, left bottom, from(#f8f8f8), to(#c5c5c5));
-  /* Safari4+, Chrome */
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#f8f8f8), to(#c5c5c5));
   /* Safari5.1+, Chrome10+ */
   background-image: -webkit-linear-gradient(#f8f8f8, #c5c5c5);
   /* Firefox3.6 */
@@ -1026,10 +997,6 @@ input[type="button"]:active,
 .navlink-active:active,
 .txp-buttons a:active {
   background-color: #c5c5c5;
-  /* Konqueror */
-  background-image: -khtml-gradient(linear, left top, left bottom, from(#c5c5c5), to(#f8f8f8));
-  /* Safari4+, Chrome */
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#c5c5c5), to(#f8f8f8));
   /* Safari5.1+, Chrome10+ */
   background-image: -webkit-linear-gradient(#c5c5c5, #f8f8f8);
   /* Firefox3.6 */
@@ -1068,10 +1035,6 @@ a.publish {
   border-bottom-color: #c08804;
   padding: .75em;
   background-color: #ffda44;
-  /* Konqueror */
-  background-image: -khtml-gradient(linear, left top, left bottom, from(#ffda44), to(#f2ab05));
-  /* Safari4+, Chrome */
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#ffda44), to(#f2ab05));
   /* Safari5.1+, Chrome10+ */
   background-image: -webkit-linear-gradient(#ffda44, #f2ab05);
   /* Firefox3.6 */
@@ -1085,10 +1048,6 @@ input[type="submit"].publish:hover,
 button.publish:hover,
 a.publish:hover {
   background-color: #ffe477;
-  /* Konqueror */
-  background-image: -khtml-gradient(linear, left top, left bottom, from(#ffe477), to(#fbbe2f));
-  /* Safari4+, Chrome */
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#ffe477), to(#fbbe2f));
   /* Safari5.1+, Chrome10+ */
   background-image: -webkit-linear-gradient(#ffe477, #fbbe2f);
   /* Firefox3.6 */
@@ -1102,10 +1061,6 @@ input[type="submit"].publish:active,
 button.publish:active,
 a.publish:active {
   background-color: #fbbe2f;
-  /* Konqueror */
-  background-image: -khtml-gradient(linear, left top, left bottom, from(#fbbe2f), to(#ffe477));
-  /* Safari4+, Chrome */
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#fbbe2f), to(#ffe477));
   /* Safari5.1+, Chrome10+ */
   background-image: -webkit-linear-gradient(#fbbe2f, #ffe477);
   /* Firefox3.6 */
@@ -1126,10 +1081,6 @@ button.destroy {
   border-top: 1px solid #9d261d;
   border-bottom: 1px solid #691913;
   background-color: #dc4e44;
-  /* Konqueror */
-  background-image: -khtml-gradient(linear, left top, left bottom, from(#dc4e44), to(#9d261d));
-  /* Safari4+, Chrome */
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#dc4e44), to(#9d261d));
   /* Safari5.1+, Chrome10+ */
   background-image: -webkit-linear-gradient(#dc4e44, #9d261d);
   /* Firefox3.6 */
@@ -1145,10 +1096,6 @@ button.destroy:hover {
   border-top: 1px solid #c83025;
   border-bottom: 1px solid #94241b;
   background-color: #e36f66;
-  /* Konqueror */
-  background-image: -khtml-gradient(linear, left top, left bottom, from(#e36f66), to(#c83025));
-  /* Safari4+, Chrome */
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#e36f66), to(#c83025));
   /* Safari5.1+, Chrome10+ */
   background-image: -webkit-linear-gradient(#e36f66, #c83025);
   /* Firefox3.6 */
@@ -1163,10 +1110,6 @@ button.destroy:active {
   border-top: 1px solid #e36f66;
   border-bottom: 1px solid #d93e32;
   background-color: #c83025;
-  /* Konqueror */
-  background-image: -khtml-gradient(linear, left top, left bottom, from(#c83025), to(#e36f66));
-  /* Safari4+, Chrome */
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#c83025), to(#e36f66));
   /* Safari5.1+, Chrome10+ */
   background-image: -webkit-linear-gradient(#c83025, #e36f66);
   /* Firefox3.6 */
@@ -1202,10 +1145,6 @@ button.destroy:active {
 
 .nav-tertiary .navlink-active {
   background-color: #c5c5c5;
-  /* Konqueror */
-  background-image: -khtml-gradient(linear, left top, left bottom, from(#c5c5c5), to(#f8f8f8));
-  /* Safari4+, Chrome */
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#c5c5c5), to(#f8f8f8));
   /* Safari5.1+, Chrome10+ */
   background-image: -webkit-linear-gradient(#c5c5c5, #f8f8f8);
   /* Firefox3.6 */
@@ -1288,10 +1227,6 @@ td {
 .txp-list thead th {
   text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.4);
   background-color: #eeeeee;
-  /* Konqueror */
-  background-image: -khtml-gradient(linear, left top, left bottom, from(#eeeeee), to(#dddddd));
-  /* Safari4+, Chrome */
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#eeeeee), to(#dddddd));
   /* Safari5.1+, Chrome10+ */
   background-image: -webkit-linear-gradient(#eeeeee, #dddddd);
   /* Firefox3.6 */
@@ -1390,10 +1325,6 @@ body {
   border-top: 1px solid #fabc2b;
   border-bottom: 1px solid #e2a005;
   background-color: #ffda44;
-  /* Konqueror */
-  background-image: -khtml-gradient(linear, left top, left bottom, from(#ffda44), to(#fabc2b));
-  /* Safari4+, Chrome */
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#ffda44), to(#fabc2b));
   /* Safari5.1+, Chrome10+ */
   background-image: -webkit-linear-gradient(#ffda44, #fabc2b);
   /* Firefox3.6 */
@@ -1820,10 +1751,6 @@ body#page-setup {
   border-top: 1px solid #fabc2b;
   border-bottom: 1px solid #e2a005;
   background-color: #ffda44;
-  /* Konqueror */
-  background-image: -khtml-gradient(linear, left top, left bottom, from(#ffda44), to(#fabc2b));
-  /* Safari4+, Chrome */
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#ffda44), to(#fabc2b));
   /* Safari5.1+, Chrome10+ */
   background-image: -webkit-linear-gradient(#ffda44, #fabc2b);
   /* Firefox3.6 */
@@ -2150,10 +2077,6 @@ body#page-setup {
 #page-prefs .txp-list .pref-heading td {
   text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.4);
   background-color: #eeeeee;
-  /* Konqueror */
-  background-image: -khtml-gradient(linear, left top, left bottom, from(#eeeeee), to(#dddddd));
-  /* Safari4+, Chrome */
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#eeeeee), to(#dddddd));
   /* Safari5.1+, Chrome10+ */
   background-image: -webkit-linear-gradient(#eeeeee, #dddddd);
   /* Firefox3.6 */
