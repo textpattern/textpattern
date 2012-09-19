@@ -836,7 +836,7 @@ select[size="1"] {
   select,
   select[size="0"],
   select[size="1"] {
-    background: white url("../img/svg/select_arrow.svg") no-repeat right center;
+    background: white url("data:image/svg+xml,<svg version='1.1' baseProfile='full' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' width='13px' height='4px' viewBox='0 0 13 4' enable-background='new 0 0 13 4' xml:space='preserve'><polygon fill='#333333' points='3.5,4 0,0 7,0'/></svg>") no-repeat right center;
     padding-right: 2em;
     -webkit-background-size: 1em .30769230769231em;
     background-size: 1em .30769230769231em;
