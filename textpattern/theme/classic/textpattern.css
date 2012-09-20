@@ -620,7 +620,8 @@ input.input-xsmall {
 
 input.year,
 input.exp_year {
-	width: 3.7em;
+	padding: .18181818181818em; /* 2px / 11px */
+	width: 4em;; /* 44px / 11px */
 	text-align: center;
 }
 
@@ -634,7 +635,8 @@ input.minute,
 input.exp_minute,
 input.second,
 input.exp_second {
-	width: 2.4em;
+	padding: .18181818181818em; /* 2px / 11px */
+	width: 2.72727272727273em; /* 30px / 11px */
 	text-align: center;
 }
 

@@ -912,10 +912,14 @@ input.input-xsmall {
 }
 
 input.year, input.exp_year {
-  width: 3.30769230769231em;
+  text-align: center;
+  padding: .15384615384615em .23076923076923em;
+  width: 3.53846153846154em;
 }
 input.month, input.exp_month, input.day, input.exp_day, input.hour, input.exp_hour, input.minute, input.exp_minute, input.second, input.exp_second {
-  width: 2.30769230769231em;
+  text-align: center;
+  padding: .15384615384615em .23076923076923em;
+  width: 2.46153846153846em;
 }
 
 /* Buttons

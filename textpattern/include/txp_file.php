@@ -535,15 +535,15 @@ $LastChangedRevision$
 					graf(checkbox('publish_now', '1', $publish_now, '', 'publish_now') . '<label for="publish_now">'.gTxt('set_to_now').'</label>', ' class="edit-file-publish-now"').n.
 					graf(gTxt('or_publish_at').sp.popHelp('timestamp'), ' class="edit-file-publish-at"').n.
 					graf('<span class="label">'.gtxt('date').'</span>'.n.
-						tsi('year', '%Y', $rs['created']).' / '.n.
-						tsi('month', '%m', $rs['created']).' / '.n.
-						tsi('day', '%d', $rs['created'])
+						tsi('year', '%Y', $rs['created'], '', 'yyyy').' / '.n.
+						tsi('month', '%m', $rs['created'], '', 'mm').' / '.n.
+						tsi('day', '%d', $rs['created'], '', 'dd')
 					, ' class="edit-file-published"'
 					).n.
 					graf('<span class="label">'.gTxt('time').'</span>'.n.
-						tsi('hour', '%H', $rs['created']).' : '.n.
-						tsi('minute', '%M', $rs['created']).' : '.n.
-						tsi('second', '%S', $rs['created'])
+						tsi('hour', '%H', $rs['created'], '', 'hh').' : '.n.
+						tsi('minute', '%M', $rs['created'], '', 'mm').' : '.n.
+						tsi('second', '%S', $rs['created'], '', 'ss')
 					, ' class="edit-file-created"'
 					);
 
