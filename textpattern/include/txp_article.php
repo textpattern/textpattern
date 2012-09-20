@@ -801,16 +801,16 @@ if (!empty($event) and $event == 'article') {
 					n.graf(gTxt('or_publish_at').sp.popHelp('timestamp'), ' class="publish-at"').
 
 					n.graf('<span class="label">'.gtxt('date').'</span>'.sp.
-						tsi('year', '%Y', $persist_timestamp, '', 'yyyy').' / '.
-						tsi('month', '%m', $persist_timestamp, '', 'mm').' / '.
-						tsi('day', '%d', $persist_timestamp, '', 'dd')
+						tsi('year', '%Y', $persist_timestamp, '', gTxt('yyyy')).' / '.
+						tsi('month', '%m', $persist_timestamp, '', gTxt('mm')).' / '.
+						tsi('day', '%d', $persist_timestamp, '', gTxt('dd'))
 					, ' class="date posted created"'
 					).
 
 					n.graf('<span class="label">'.gTxt('time').'</span>'.sp.
-						tsi('hour', '%H', $persist_timestamp, '', 'hh').' : '.
-						tsi('minute', '%M', $persist_timestamp, '', 'mm').' : '.
-						tsi('second', '%S', $persist_timestamp, '', 'ss')
+						tsi('hour', '%H', $persist_timestamp, '', gTxt('hh')).' : '.
+						tsi('minute', '%M', $persist_timestamp, '', gTxt('mm')).' : '.
+						tsi('second', '%S', $persist_timestamp, '', gTxt('ss'))
 					, ' class="time posted created"'
 					).
 
