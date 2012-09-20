@@ -341,7 +341,7 @@ EOS
 	function form_set_type($name, $type)
 	{
 		global $essential_forms, $form_types;
-		if (in_array($name, $essential_forms) || !isset($form_types[$form])) return false;
+		if (in_array($name, $essential_forms) || !isset($form_types[$type])) return false;
 		$name = doSlash($name);
 		$type = doSlash($type);
 		return safe_update('txp_form', "type='$type'", "name='$name'");
