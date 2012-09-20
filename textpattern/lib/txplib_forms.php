@@ -147,19 +147,21 @@ $LastChangedRevision$
 					$tab='',
 					$id='',
 					$disabled = false,
-					$required = false)
+					$required = false,
+					$placeholder='')
 	{
 		$o  = '<input type="'.$type.'"';
 		$o .= ' value="'.txpspecialchars($value).'"';
-		$o .= strlen($name)? ' name="'.$name.'"' : '';
-		$o .= ($size)     ? ' size="'.$size.'"' : '';
-		$o .= ($class)    ? ' class="'.$class.'"' : '';
-		$o .= ($title)    ? ' title="'.$title.'"' : '';
-		$o .= ($onClick)  ? ' onclick="'.$onClick.'"' : '';
-		$o .= ($tab)      ? ' tabindex="'.$tab.'"' : '';
-		$o .= ($id)       ? ' id="'.$id.'"' : '';
-		$o .= ($disabled) ? ' disabled="disabled"' : '';
-		$o .= ($required) ? ' required' : '';
+		$o .= strlen($name) ? ' name="'.$name.'"' : '';
+		$o .= ($size)       ? ' size="'.$size.'"' : '';
+		$o .= ($class)      ? ' class="'.$class.'"' : '';
+		$o .= ($title)      ? ' title="'.$title.'"' : '';
+		$o .= ($onClick)    ? ' onclick="'.$onClick.'"' : '';
+		$o .= ($tab)        ? ' tabindex="'.$tab.'"' : '';
+		$o .= ($id)         ? ' id="'.$id.'"' : '';
+		$o .= ($disabled)   ? ' disabled="disabled"' : '';
+		$o .= ($required)   ? ' required' : '';
+		$o .= ($placeholder)? ' placeholder="'.txpspecialchars($placeholder).'"' : '';
 		$o .= " />";
 		return $o;
 	}
@@ -258,7 +260,7 @@ $LastChangedRevision$
 
 //-------------------------------------------------------------
 
-	function text_area($name, $h='', $w='', $thing = '', $id = '', $rows='5', $cols='40')
+	function text_area($name, $h='', $w='', $thing = '', $id = '', $rows='5', $cols='40', $placeholder='')
 	{
 		$id = ($id) ? ' id="'.$id.'"' : '';
 		$rows = ' rows="' . ( ($rows && is_numeric($rows)) ? $rows : '5') . '"';
@@ -266,7 +268,7 @@ $LastChangedRevision$
 		$width = ($w) ? 'width:'.$w.'px;' : '';
 		$height = ($h) ? 'height:'.$h.'px;' : '';
 		$style = ($width || $height) ? ' style="'.$width.$height.'"' : '';
-		return '<textarea'.$id.' name="'.$name.'"'.$rows.$cols.$style.'>'.txpspecialchars($thing).'</textarea>';
+		return '<textarea'.$id.' name="'.$name.'"'.$rows.$cols.$style.($placeholder == '' ? '' : ' placeholder="'.txpspecialchars($placeholder).'"').'>'.txpspecialchars($thing).'</textarea>';
 	}
 
 //-------------------------------------------------------------
@@ -300,12 +302,12 @@ $LastChangedRevision$
 	}
 
 //--------------------------------------------------------------
-	function tsi($name,$datevar,$time,$tab='')
+	function tsi($name, $datevar, $time, $tab='', $placeholder='')
 	{
 		$size = ($name=='year' or $name=='exp_year') ? INPUT_XSMALL : INPUT_TINY;
 		$s = ($time == 0)? '' : safe_strftime($datevar, $time);
 		return n.'<input type="text" name="'.$name.'" value="'.
 			$s
-		.'" size="'.$size.'" maxlength="'.$size.'" class="'.$name.'"'.(empty($tab) ? '' : ' tabindex="'.$tab.'"').' title="'.gTxt('article_'.$name).'" />';
+		.'" size="'.$size.'" maxlength="'.$size.'" class="'.$name.'"'.(empty($tab) ? '' : ' tabindex="'.$tab.'"').' title="'.gTxt('article_'.$name).'"'.($placeholder == '' ? '' : ' placeholder="'.txpspecialchars($placeholder).'"').' />';
 	}
 ?>
