@@ -120,9 +120,10 @@ function article_column_map()
  * @param string $s string Optional section restriction
  * @param string $type string Find lesser or greater neighbour? Possible values: '<' (previous, default) or '>' (next)
  * @param array $atts Attribute of article at threshold
+ * @param string $threshold_type 'cooked': Use $threshold as SQL clause; 'raw': Use $threshold as an escapable scalar
  * @return array|string An array populated with article data, or the empty string in case of no matches
  */
-function getNeighbour($threshold, $s, $type, $atts = array())
+function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 'raw')
 {
 	global $prefs;
 	static $cache = array();
@@ -179,10 +180,15 @@ function getNeighbour($threshold, $s, $type, $atts = array())
 	);
 	$type = ($type == '>') ? $types['>'][$sortdir] : $types['<'][$sortdir];
 
+	// escape threshold and treat it as a string unless explicitly told otherwise
+	if ($threshold_type != 'cooked') {
+		$threshold = "'".doSlash($threshold)."'";
+	}
+
 	$safe_name = safe_pfx('textpattern');
 	$q = array(
 		"select ID, Title, url_title, unix_timestamp(Posted) as uposted
-			from ".$safe_name." where $sortby $type '".doSlash($threshold)."'",
+			from ".$safe_name." where $sortby $type ".$threshold,
 		($s!='' && $s!='default') ? "and Section = '".doSlash($s)."'" : filterFrontPage(),
 		$id,
 		$time,
@@ -237,31 +243,35 @@ function getNextPrev($id = 0, $threshold = null, $s = '')
 		// atts w/ special treatment
 		switch($atts['sortby']) {
 			case 'Posted':
-				$threshold = strftime('%Y-%m-%d %H:%M:%S', $thisarticle['posted']);
+				$threshold = 'from_unixtime('.doSlash($thisarticle['posted']).')';
+				$threshold_type = 'cooked';
 				break;
 			case 'Expires':
-				$threshold = strftime('%Y-%m-%d %H:%M:%S', $thisarticle['expires']);
+				$threshold = 'from_unixtime('.doSlash($thisarticle['expires']).')';
+				$threshold_type = 'cooked';
 				break;
 			case 'LastMod':
-				$threshold = strftime('%Y-%m-%d %H:%M:%S', $thisarticle['modified']);
+				$threshold = 'from_unixtime('.doSlash($thisarticle['modified']).')';
+				$threshold_type = 'cooked';
 				break;
 			default:
 				// retrieve current threshold value per sort column from $thisarticle
 				$acm = array_flip(article_column_map());
 				$key = $acm[$atts['sortby']];
 				$threshold = $thisarticle[$key];
+				$threshold_type = 'raw';
 				break;
 		}
 		$s = $thisarticle['section'];
 	}
 
-	$thenext 			= getNeighbour($threshold, $s, '>', $atts);
+	$thenext 			= getNeighbour($threshold, $s, '>', $atts, $threshold_type);
 	$out['next_id']     = ($thenext) ? $thenext['ID'] : '';
 	$out['next_title']  = ($thenext) ? $thenext['Title'] : '';
 	$out['next_utitle'] = ($thenext) ? $thenext['url_title'] : '';
 	$out['next_posted'] = ($thenext) ? $thenext['uposted'] : '';
 
-	$theprev            = getNeighbour($threshold, $s, '<', $atts);
+	$theprev            = getNeighbour($threshold, $s, '<', $atts, $threshold_type);
 	$out['prev_id']     = ($theprev) ? $theprev['ID'] : '';
 	$out['prev_title']  = ($theprev) ? $theprev['Title'] : '';
 	$out['prev_utitle'] = ($theprev) ? $theprev['url_title'] : '';
