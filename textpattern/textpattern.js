@@ -584,7 +584,7 @@ function toggleDisplay(id)
 function toggleDisplayHref()
 {
 	var href = $(this).attr('href');
-	var lever = $(this).parent('.lever');
+	var lever = $(this).parent('.txp-summary');
 	if (href) toggleDisplay(href.substr(1));
 	if (lever) {
 		if ($(href+':visible').length) {
@@ -880,7 +880,7 @@ $(document).ready(function() {
 	c = $(textpattern.do_spellcheck)[0];
 	if(c && "spellcheck" in c) {$(textpattern.do_spellcheck).prop("spellcheck", true);}
 	// attach toggle behaviours
-    $(document).on('click', '.lever a[class!=pophelp]', toggleDisplayHref);
+    $(document).on('click', '.txp-summary a[class!=pophelp]', toggleDisplayHref);
 	$('.multi_edit_form').txpMultiEditForm();
 	// establish AJAX timeout from prefs
 	if($.ajaxSetup().timeout === undefined) {

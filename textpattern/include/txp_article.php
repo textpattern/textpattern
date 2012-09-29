@@ -617,8 +617,9 @@ if (!empty($event) and $event == 'article') {
 
 		//-- advanced --------------
 
-			echo '<div id="advanced_group"><h3 class="lever'.(get_pref('pane_article_advanced_visible') ? ' expanded' : '').'"><a href="#advanced">'.gTxt('advanced_options').'</a></h3>'.
-				'<div id="advanced" class="toggle" style="display:'.(get_pref('pane_article_advanced_visible') ? 'block' : 'none').'">';
+			echo n.n.'<div id="advanced_group" class="txp-details">'.
+				n.'<h3 class="txp-summary'.(get_pref('pane_article_advanced_visible') ? ' expanded' : '').'"><a href="#advanced">'.gTxt('advanced_options').'</a></h3>'.
+				n.'<div id="advanced" class="toggle" style="display:'.(get_pref('pane_article_advanced_visible') ? 'block' : 'none').'">';
 
 			// markup selection
 			echo pluggable_ui('article_ui', 'markup',
@@ -633,7 +634,7 @@ if (!empty($event) and $event == 'article') {
 				? pluggable_ui('article_ui', 'override', graf('<label for="override-form">'.gTxt('override_default_form').'</label>'.sp.popHelp('override_form').br.
 					form_pop($override_form, 'override-form'), ' class="override-form"'), $rs)
 				: '';
-			echo '</div></div>'.n;
+			echo n.'</div>'.n.'</div>';
 
 		//-- custom fields --------------
 
@@ -645,20 +646,22 @@ if (!empty($event) and $event == 'article') {
 
 		//-- meta info --------------
 
-			echo '<div id="meta_group"><h3 class="lever'.(get_pref('pane_article_meta_visible') ? ' expanded' : '').'"><a href="#meta">'.gTxt('meta').'</a></h3>'.
-				'<div id="meta" class="toggle" style="display:'.(get_pref('pane_article_meta_visible') ? 'block' : 'none').'">';
+			echo n.n.'<div id="meta_group" class="txp-details">'.
+				n.'<h3 class="txp-summary'.(get_pref('pane_article_meta_visible') ? ' expanded' : '').'"><a href="#meta">'.gTxt('meta').'</a></h3>'.
+				n.'<div id="meta" class="toggle" style="display:'.(get_pref('pane_article_meta_visible') ? 'block' : 'none').'">';
 			// keywords
 			echo $partials['keywords']['html'];
 			// url title
 			echo $partials['url_title']['html'];
-			echo '</div></div>'.n;
+			echo n.'</div>'.n.'</div>';
 
 		//-- recent articles --------------
 
-			echo '<div id="recent_group"><h3 class="lever'.(get_pref('pane_article_recent_visible') ? ' expanded' : '').'"><a href="#recent">'.gTxt('recent_articles').'</a>'.'</h3>'.
-				'<div id="recent" class="toggle" style="display:'.(get_pref('pane_article_recent_visible') ? 'block' : 'none').'">';
+			echo n.n.'<div id="recent_group" class="txp-details">'.
+				n.'<h3 class="txp-summary'.(get_pref('pane_article_recent_visible') ? ' expanded' : '').'"><a href="#recent">'.gTxt('recent_articles').'</a>'.'</h3>'.
+				n.'<div id="recent" class="toggle" style="display:'.(get_pref('pane_article_recent_visible') ? 'block' : 'none').'">';
 			echo $partials['recent_articles']['html'];
-			echo '</div></div>';
+			echo n.'</div>'.n.'</div>';
 		}
 
 		else
@@ -666,7 +669,7 @@ if (!empty($event) and $event == 'article') {
 			echo sp;
 		}
 
-		echo '</div></td>'.n.'<td id="article-main"><div id="main_content">';
+		echo n.n.'</div>'.n.'</td>'.n.'<td id="article-main"><div id="main_content">';
 
 	//-- title input --------------
 
@@ -771,17 +774,19 @@ if (!empty($event) and $event == 'article') {
 				$rs);
 
 		//-- "Comments" section
-			echo n.n.'<div id="comments_group"'.(($use_comments==1) ? '' : ' class="empty"').'><h3 class="lever'.(get_pref('pane_article_comments_visible') ? ' expanded' : '').'"><a href="#comments">'.gTxt('comment_settings').'</a></h3>',
-				'<div id="comments" class="toggle" style="display:'.(get_pref('pane_article_comments_visible') ? 'block' : 'none').'">';
+			echo n.n.'<div id="comments_group" class="txp-details'.(($use_comments==1) ? '' : ' empty').'">'.
+				n.'<h3 class="txp-summary'.(get_pref('pane_article_comments_visible') ? ' expanded' : '').'"><a href="#comments">'.gTxt('comment_settings').'</a></h3>'.
+				n.'<div id="comments" class="toggle" style="display:'.(get_pref('pane_article_comments_visible') ? 'block' : 'none').'">';
 
 			echo $partials['comments']['html'];
 
 			// end "Comments" section
-			echo '</div></div>';
+			echo '</div>'.n.'</div>';
 
 		//-- "Dates" section
-			echo n.n.'<div id="dates_group"><h3 class="lever'.(get_pref('pane_article_dates_visible') ? ' expanded' : '').'"><a href="#dates">'.gTxt('date_settings').'</a></h3>',
-				'<div id="dates" class="toggle" style="display:'.(get_pref('pane_article_dates_visible') ? 'block' : 'none').'">';
+			echo n.n.'<div id="dates_group" class="txp-details">'.
+				n.'<h3 class="txp-summary'.(get_pref('pane_article_dates_visible') ? ' expanded' : '').'"><a href="#dates">'.gTxt('date_settings').'</a></h3>'.
+				n.'<div id="dates" class="toggle" style="display:'.(get_pref('pane_article_dates_visible') ? 'block' : 'none').'">';
 
 			if ($step == "create" and empty($GLOBALS['ID']))
 			{
@@ -845,7 +850,7 @@ if (!empty($event) and $event == 'article') {
 				$rs);
 
 				// end "Dates" section
-				echo n.n.'</div></div>';
+				echo n.n.'</div>'.n.'</div>';
 
 		//-- publish button --------------
 
@@ -868,7 +873,7 @@ if (!empty($event) and $event == 'article') {
 				echo $partials['expires']['html'];;
 
 				// end "Dates" section
-				echo n.n.'</div></div>';
+				echo n.n.'</div>'.n.'</div>';
 
 		//-- save button --------------
 
@@ -1083,10 +1088,10 @@ EOS
 		$help = TextfilterSet::help($rs['textile_body']);
 		if ($rs['textile_body'] != $rs['textile_excerpt']) $help .=  TextfilterSet::help($rs['textile_excerpt']);
 
-		$out[] = '<div id="textfilter_group">';
+		$out[] = '<div id="textfilter_group" class="txp-details">';
 		if ($help) {
 			$out[] =  hed('<a href="#textfilter_help">'.gTxt('textfilter_help').'</a>', 3,
-					' class="lever'.(get_pref('pane_article_textfilter_help_visible') ? ' expanded' : '').'"').
+					' class="txp-summary'.(get_pref('pane_article_textfilter_help_visible') ? ' expanded' : '').'"').
 				n.'<div id="textfilter_help" class="toggle" style="display:'.(get_pref('pane_article_textfilter_help_visible') ? 'block' : 'none').'">'.
 				$help.
 				n.'</div>';
@@ -1131,15 +1136,15 @@ EOS
 		global $cfs;
 
 		$cf = '';
-		$out = '<div id="custom_field_group"'.(($cfs) ? '' : ' class="empty"').'><h3 class="lever'.(get_pref('pane_article_custom_field_visible') ? ' expanded' : '').'"><a href="#custom_field">'.gTxt('custom').'</a></h3>'.
-			'<div id="custom_field" class="toggle" style="display:'.(get_pref('pane_article_custom_field_visible') ? 'block' : 'none').'">';
+		$out = n.n.'<div id="custom_field_group" class="txp-details'.(($cfs) ? '' : ' empty').'">'.n.'<h3 class="txp-summary'.(get_pref('pane_article_custom_field_visible') ? ' expanded' : '').'"><a href="#custom_field">'.gTxt('custom').'</a></h3>'.
+			n.'<div id="custom_field" class="toggle" style="display:'.(get_pref('pane_article_custom_field_visible') ? 'block' : 'none').'">';
 
 		foreach($cfs as $k => $v)
 		{
 			$cf .= article_partial_custom_field($rs, "custom_field_{$k}");
 		}
 		$out .= pluggable_ui('article_ui', 'custom_fields', $cf, $rs);
-		return $out.'</div></div>'.n;
+		return $out.n.'</div>'.n.'</div>';
 
 	}
 
@@ -1158,14 +1163,15 @@ EOS
 // -------------------------------------------------------------
 	function article_partial_image($rs)
 	{
-		$out = '<div id="image_group"><h3 class="lever'.(get_pref('pane_article_image_visible') ? ' expanded' : '').'"><a href="#image">'.gTxt('article_image').'</a></h3>'.
-			'<div id="image" class="toggle" style="display:'.(get_pref('pane_article_image_visible') ? 'block' : 'none').'">';
+		$out = n.n.'<div id="image_group" class="txp-details">'.
+			n.'<h3 class="txp-summary'.(get_pref('pane_article_image_visible') ? ' expanded' : '').'"><a href="#image">'.gTxt('article_image').'</a></h3>'.
+			n.'<div id="image" class="toggle" style="display:'.(get_pref('pane_article_image_visible') ? 'block' : 'none').'">';
 
 		$out .= pluggable_ui('article_ui', 'article_image',
 			n.graf('<label for="article-image">'.gTxt('article_image').'</label>'.sp.popHelp('article_image').br.
 				fInput('text', 'Image', $rs['Image'], '', '', '', INPUT_REGULAR, '', 'article-image'), ' class="article-image"'),
 			$rs);
-		return $out.'</div></div>'.n;
+		return $out.n.'</div>'.n.'</div>';
 	}
 
 // -------------------------------------------------------------

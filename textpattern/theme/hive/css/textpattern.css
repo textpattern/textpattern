@@ -491,8 +491,8 @@ span#message.error {
 
 /* Twisties
    ========================================================================== */
-h3.lever,
-.summary-details > h3 {
+h3.txp-summary,
+.txp-details > h3 {
   position: relative;
   font-size: 1em;
   font-weight: bold;
@@ -516,15 +516,15 @@ h3.lever,
   background-image: linear-gradient(#eeeeee, #dddddd);
 }
 
-h3.lever a {
+h3.txp-summary a {
   display: block;
   color: #333333;
 }
-h3.lever a:hover {
+h3.txp-summary a:hover {
   color: #333333;
   text-decoration: none;
 }
-h3.lever a:after {
+h3.txp-summary a:after {
   position: absolute;
   content: "&#8594;";
   top: .69230769230769em;
@@ -543,11 +543,11 @@ h3.lever a:after {
   white-space: nowrap;
   overflow: hidden;
 }
-h3.lever a:hover:after {
+h3.txp-summary a:hover:after {
   opacity: 1;
 }
 
-h3.lever.expanded a:after {
+h3.txp-summary.expanded a:after {
   content: "&#8595;";
   top: .84615384615385em;
   right: .69230769230769em;
@@ -558,7 +558,7 @@ h3.lever.expanded a:after {
 }
 
 .toggle,
-.summary-details > div {
+.txp-details > div {
   padding: 0 1em;
 }
 
@@ -1913,9 +1913,7 @@ body#page-setup {
   margin-right: 1em;
 }
 
-#configuration_content > div,
-#tagbuild_links > div,
-.summary-details {
+.txp-details {
   border: 1px solid #e3e3e3;
   border-top: 0;
   background: #f7f7f7;
@@ -2035,22 +2033,15 @@ body#page-setup {
   margin-left: 1em;
 }
 
-.form-list-group {
-  margin-bottom: 1em;
-  border-bottom: 1px solid #dddddd;
-}
-
 .form-list .plain-list {
   margin: 0 -1em;
-  border-right: 1px solid #dddddd;
-  border-left: 1px solid #dddddd;
 }
 .form-list .plain-list li {
   border-top: 1px solid #dddddd;
   padding: .38461538461538em .5em .38461538461538em 1em;
 }
-.form-list .plain-list li.even {
-  background: #f7f7f7;
+.form-list .plain-list li:nth-child(odd) {
+  background: #fff;
 }
 .form-list .plain-list li:first-child {
   border-top: 0;

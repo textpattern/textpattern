@@ -414,7 +414,7 @@ a:hover .content-image {
 /* Twisties
    ========================================================================== */
 
-.lever {
+.txp-summary {
 	font-size: 1em;
 	font-family: Verdana, Arial, sans-serif;
 	margin: 1em 0;
@@ -423,7 +423,7 @@ a:hover .content-image {
 	background: url("expand_collapse.gif") no-repeat 0 4px;
 }
 
-.lever:hover {
+.txp-summary:hover {
 	background-position: 0 -91px;
 }
 

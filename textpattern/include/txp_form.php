@@ -88,9 +88,10 @@ $LastChangedRevision$
 
 				if ($prev_type != $type) {
 					$visipref = 'pane_form_'.$type.'_visible';
-					$group_start = '<div class="form-list-group '.$type.'"><h3 class="lever'.(get_pref($visipref) ? ' expanded' : '').'"><a href="#'.$type.'">'.$form_types[$type].'</a></h3>'.n.
-						'<div id="'.$type.'" class="toggle form-list" style="display:'.(get_pref($visipref) ? 'block' : 'none').'">'.n.
-						'<ul class="plain-list">'.n;
+					$group_start = n.'<div id="'.$type.'_forms_group" class="txp-details">'.
+						n.'<h3 class="txp-summary'.(get_pref($visipref) ? ' expanded' : '').'"><a href="#'.$type.'_forms">'.$form_types[$type].'</a></h3>'.
+						n.'<div id="'.$type.'_forms" class="toggle form-list" style="display:'.(get_pref($visipref) ? 'block' : 'none').'">'.
+						n.'<ul class="plain-list">'.n;
 					$group_end = ($ctr > 1) ? '</ul></div></div>'.n : '';
 				} else {
 					$group_start = $group_end = '';
@@ -223,8 +224,8 @@ EOS
 
 		$tagbuild_links = '';
 		foreach ($tagbuild_items as $tb => $item) {
-			$tagbuild_links .= '<div class="'.$item[1].'">'.hed('<a href="#'.$item[1].'">'.gTxt($item[0]).'</a>'
-					, 3, ' class="lever'.(get_pref('pane_form_'.$item[1].'_visible') ? ' expanded' : '').'"').
+			$tagbuild_links .= '<div id="'.$item[1].'_group" class="txp-details">'.hed('<a href="#'.$item[1].'">'.gTxt($item[0]).'</a>'
+					, 3, ' class="txp-summary'.(get_pref('pane_form_'.$item[1].'_visible') ? ' expanded' : '').'"').
 					'<div id="'.$item[1].'" class="toggle on" style="display:'.(get_pref('pane_form_'.$item[1].'_visible') ? 'block' : 'none').'">'.popTagLinks($tb).'</div></div>';
 		}
 

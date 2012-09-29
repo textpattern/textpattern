@@ -512,13 +512,13 @@ $LastChangedRevision$
 			$existing_files = get_filenames();
 
 			$replace = ($file_exists)
-				? '<div class="summary-details replace-file">'.n.
+				? '<div class="txp-details replace-file">'.n.
 						'<h3>'.gTxt('replace_file').sp.popHelp('file_replace').'</h3>'.n.
 						'<div>'.n.
 							file_upload_form('', '', 'file_replace', $id, 'file_replace').n.
 						'</div>'.n.
 					'</div>'.n
-				: '<div class="summary-details upload-file">'.n.
+				: '<div class="txp-details upload-file">'.n.
 						'<h3>'.gTxt('file_relink').sp.popHelp('file_reassign').'</h3>'.n.
 						'<div>'.n.
 							file_upload_form('', '', 'file_replace', $id, 'file_reassign').n.

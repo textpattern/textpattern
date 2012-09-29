@@ -7,7 +7,7 @@
 /* Twisties
    ========================================================================== */
 
-.lever {
+.txp-summary {
 	background: none;
 	padding: 0;
 }
@@ -16,13 +16,13 @@
 	background: none;
 }
 
-.lever a {
+.txp-summary a {
 	padding-right: 14px;
 	text-decoration: none;
 }
 
-.lever a:hover,
-.lever.expanded a {
+.txp-summary a:hover,
+.txp-summary.expanded a {
 	background: url("../../txp_img/expandcollapse.gif") no-repeat right 5px;
 }
 
