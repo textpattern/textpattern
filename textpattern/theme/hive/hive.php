@@ -19,8 +19,8 @@ class hive_theme extends theme
 		if(defined('hive_theme_hide_preview_tabs_group')) {
 			$out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_preview_tabs.css">';
 		}
-		if(defined('hive_theme_hide_textile_group')) {
-			$out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_textile_group.css">';
+		if(defined('hive_theme_hide_textfilter_group')) {
+			$out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_textfilter_group.css">';
 		}
 		if(defined('hive_theme_hide_advanced_group')) {
 			$out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_advanced_group.css">';
