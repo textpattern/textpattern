@@ -491,6 +491,13 @@ span#message.error {
 
 /* Twisties
    ========================================================================== */
+.txp-details {
+  border: 1px solid #e3e3e3;
+  border-top: 0;
+  background: #f7f7f7;
+  margin-bottom: 1em;
+}
+
 h3.txp-summary,
 .txp-details > h3 {
   position: relative;
@@ -1228,6 +1235,9 @@ td {
 .txp-list tbody tr.selected {
   background: #e3edfc;
 }
+.txp-list tbody th {
+  font-weight: normal;
+}
 .txp-list thead th {
   text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.4);
   background-color: #eeeeee;
@@ -1913,13 +1923,6 @@ body#page-setup {
   margin-right: 1em;
 }
 
-.txp-details {
-  border: 1px solid #e3e3e3;
-  border-top: 0;
-  background: #f7f7f7;
-  margin-bottom: 1em;
-}
-
 #supporting_content,
 #content_switcher {
   margin-left: 1em;
@@ -2041,7 +2044,7 @@ body#page-setup {
   padding: .38461538461538em .5em .38461538461538em 1em;
 }
 .form-list .plain-list li:nth-child(odd) {
-  background: #fff;
+  background: white;
 }
 .form-list .plain-list li:first-child {
   border-top: 0;
@@ -2055,42 +2058,16 @@ body#page-setup {
 
 /* Admin -> Preferences page
    ========================================================================== */
-#page-prefs .txp-list tr td,
-#page-prefs .txp-list tr.even td {
+/* Admin -> Preferences page
+   ========================================================================== */
+#page-lang .txp-list tr td,
+#page-lang .txp-list tr.even td {
   height: 1.84615384615385em;
   vertical-align: middle;
 }
-#page-prefs .txp-list .modified {
+#page-lang .txp-list .modified {
   color: #999999;
   margin-left: .6em;
-}
-#page-prefs .txp-list .pref-heading {
-  border-top: 1px solid #dddddd;
-  border-right: 1px solid #d0d0d0;
-  border-bottom: 1px solid #c4c4c4;
-}
-#page-prefs .txp-list .pref-heading td {
-  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.4);
-  background-color: #eeeeee;
-  /* Safari5.1+, Chrome10+ */
-  background-image: -webkit-linear-gradient(#eeeeee, #dddddd);
-  /* Firefox3.6 */
-  background-image: -moz-linear-gradient(#eeeeee, #dddddd);
-  /* Opera11.10+ */
-  background-image: -o-linear-gradient(#eeeeee, #dddddd);
-  /* CSS3 Compliant */
-  background-image: linear-gradient(#eeeeee, #dddddd);
-  height: auto;
-}
-
-#page-prefs .basic .pref-value,
-#page-prefs .advanced .pref-value {
-  width: 66%;
-}
-
-.pref-heading h3 {
-  font-size: 1em;
-  margin: 0;
 }
 
 #language_control {

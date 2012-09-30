@@ -870,6 +870,10 @@ td {
 	border-bottom: 1px solid #ddd;
 }
 
+.txp-list tbody th {
+	font-weight: normal;
+}
+
 .txp-list tbody tr.selected {
 	background: #f3f3f3;
 }
