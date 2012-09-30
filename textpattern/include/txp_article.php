@@ -618,7 +618,7 @@ if (!empty($event) and $event == 'article') {
 		//-- advanced --------------
 
 			echo n.n.'<div id="advanced_group" class="txp-details">'.
-				n.'<h3 class="txp-summary'.(get_pref('pane_article_advanced_visible') ? ' expanded' : '').'"><a href="#advanced">'.gTxt('advanced_options').'</a></h3>'.
+				n.'<h3 class="txp-summary'.(get_pref('pane_article_advanced_visible') ? ' expanded' : '').'"><a href="#advanced" role="button">'.gTxt('advanced_options').'</a></h3>'.
 				n.'<div id="advanced" class="toggle" style="display:'.(get_pref('pane_article_advanced_visible') ? 'block' : 'none').'">';
 
 			// markup selection
@@ -647,7 +647,7 @@ if (!empty($event) and $event == 'article') {
 		//-- meta info --------------
 
 			echo n.n.'<div id="meta_group" class="txp-details">'.
-				n.'<h3 class="txp-summary'.(get_pref('pane_article_meta_visible') ? ' expanded' : '').'"><a href="#meta">'.gTxt('meta').'</a></h3>'.
+				n.'<h3 class="txp-summary'.(get_pref('pane_article_meta_visible') ? ' expanded' : '').'"><a href="#meta" role="button">'.gTxt('meta').'</a></h3>'.
 				n.'<div id="meta" class="toggle" style="display:'.(get_pref('pane_article_meta_visible') ? 'block' : 'none').'">';
 			// keywords
 			echo $partials['keywords']['html'];
@@ -658,7 +658,7 @@ if (!empty($event) and $event == 'article') {
 		//-- recent articles --------------
 
 			echo n.n.'<div id="recent_group" class="txp-details">'.
-				n.'<h3 class="txp-summary'.(get_pref('pane_article_recent_visible') ? ' expanded' : '').'"><a href="#recent">'.gTxt('recent_articles').'</a>'.'</h3>'.
+				n.'<h3 class="txp-summary'.(get_pref('pane_article_recent_visible') ? ' expanded' : '').'"><a href="#recent" role="button">'.gTxt('recent_articles').'</a>'.'</h3>'.
 				n.'<div id="recent" class="toggle" style="display:'.(get_pref('pane_article_recent_visible') ? 'block' : 'none').'">';
 			echo $partials['recent_articles']['html'];
 			echo n.'</div>'.n.'</div>';
@@ -775,7 +775,7 @@ if (!empty($event) and $event == 'article') {
 
 		//-- "Comments" section
 			echo n.n.'<div id="comments_group" class="txp-details'.(($use_comments==1) ? '' : ' empty').'">'.
-				n.'<h3 class="txp-summary'.(get_pref('pane_article_comments_visible') ? ' expanded' : '').'"><a href="#comments">'.gTxt('comment_settings').'</a></h3>'.
+				n.'<h3 class="txp-summary'.(get_pref('pane_article_comments_visible') ? ' expanded' : '').'"><a href="#comments" role="button">'.gTxt('comment_settings').'</a></h3>'.
 				n.'<div id="comments" class="toggle" style="display:'.(get_pref('pane_article_comments_visible') ? 'block' : 'none').'">';
 
 			echo $partials['comments']['html'];
@@ -785,7 +785,7 @@ if (!empty($event) and $event == 'article') {
 
 		//-- "Dates" section
 			echo n.n.'<div id="dates_group" class="txp-details">'.
-				n.'<h3 class="txp-summary'.(get_pref('pane_article_dates_visible') ? ' expanded' : '').'"><a href="#dates">'.gTxt('date_settings').'</a></h3>'.
+				n.'<h3 class="txp-summary'.(get_pref('pane_article_dates_visible') ? ' expanded' : '').'"><a href="#dates" role="button">'.gTxt('date_settings').'</a></h3>'.
 				n.'<div id="dates" class="toggle" style="display:'.(get_pref('pane_article_dates_visible') ? 'block' : 'none').'">';
 
 			if ($step == "create" and empty($GLOBALS['ID']))
@@ -1090,7 +1090,7 @@ EOS
 
 		$out[] = '<div id="textfilter_group" class="txp-details">';
 		if ($help) {
-			$out[] =  hed('<a href="#textfilter_help">'.gTxt('textfilter_help').'</a>', 3,
+			$out[] =  hed('<a href="#textfilter_help" role="button">'.gTxt('textfilter_help').'</a>', 3,
 					' class="txp-summary'.(get_pref('pane_article_textfilter_help_visible') ? ' expanded' : '').'"').
 				n.'<div id="textfilter_help" class="toggle" style="display:'.(get_pref('pane_article_textfilter_help_visible') ? 'block' : 'none').'">'.
 				$help.
@@ -1136,7 +1136,7 @@ EOS
 		global $cfs;
 
 		$cf = '';
-		$out = n.n.'<div id="custom_field_group" class="txp-details'.(($cfs) ? '' : ' empty').'">'.n.'<h3 class="txp-summary'.(get_pref('pane_article_custom_field_visible') ? ' expanded' : '').'"><a href="#custom_field">'.gTxt('custom').'</a></h3>'.
+		$out = n.n.'<div id="custom_field_group" class="txp-details'.(($cfs) ? '' : ' empty').'">'.n.'<h3 class="txp-summary'.(get_pref('pane_article_custom_field_visible') ? ' expanded' : '').'"><a href="#custom_field" role="button">'.gTxt('custom').'</a></h3>'.
 			n.'<div id="custom_field" class="toggle" style="display:'.(get_pref('pane_article_custom_field_visible') ? 'block' : 'none').'">';
 
 		foreach($cfs as $k => $v)
@@ -1164,7 +1164,7 @@ EOS
 	function article_partial_image($rs)
 	{
 		$out = n.n.'<div id="image_group" class="txp-details">'.
-			n.'<h3 class="txp-summary'.(get_pref('pane_article_image_visible') ? ' expanded' : '').'"><a href="#image">'.gTxt('article_image').'</a></h3>'.
+			n.'<h3 class="txp-summary'.(get_pref('pane_article_image_visible') ? ' expanded' : '').'"><a href="#image" role="button">'.gTxt('article_image').'</a></h3>'.
 			n.'<div id="image" class="toggle" style="display:'.(get_pref('pane_article_image_visible') ? 'block' : 'none').'">';
 
 		$out .= pluggable_ui('article_ui', 'article_image',

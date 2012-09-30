@@ -68,7 +68,7 @@ $LastChangedRevision$
 
 		$tagbuild_options = '';
 		foreach ($tagbuild_items as $tb => $item) {
-			$tagbuild_options .= n.n.'<div id="'.$item[1].'_group" class="txp-details">'.hed('<a href="#'.$item[1].'">'.gTxt($item[0]).'</a>'
+			$tagbuild_options .= n.n.'<div id="'.$item[1].'_group" class="txp-details">'.hed('<a href="#'.$item[1].'" role="button">'.gTxt($item[0]).'</a>'
 					, 3, ' class="txp-summary'.(get_pref('pane_page_'.$item[1].'_visible') ? ' expanded' : '').'"').
 						n.'<div id="'.$item[1].'" class="toggle" style="display:'.(get_pref('pane_page_'.$item[1].'_visible') ? 'block' : 'none').'">'.taglinks($tb).'</div></div>';
 		}
