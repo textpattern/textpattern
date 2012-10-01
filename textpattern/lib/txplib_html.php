@@ -1096,15 +1096,12 @@ $LastChangedRevision$
 
 	function dom_attach($id, $content, $noscript='', $wraptag='div', $wraptagid='')
 	{
+		$content = escape_js($content);
 
-		$c = addcslashes($content, "\r\n\"\'");
-		$c = preg_replace('@<(/?)script@', '\\x3c$1script', $c);
 		$js = <<<EOF
-var e = document.getElementById('{$id}');
-var n = document.createElement('{$wraptag}');
-n.innerHTML = '{$c}';
-n.setAttribute('id','{$wraptagid}');
-e.appendChild(n);
+			$(document).ready(function() {
+				$('#{$id}').append($('<{$wraptag} />').attr('id', '{$wraptagid}').html('{$content}'));
+			});
 EOF;
 
 		return script_js($js, $noscript);
@@ -1121,10 +1118,10 @@ EOF;
 
 	function script_js($js, $noscript='')
 	{
+		$js = preg_replace('#<(/?)script#', '\\x3c$1script', $js);
+
 		$out = '<script>'.n.
-			'<!--'.n.
 			trim($js).n.
-			'// -->'.n.
 			'</script>'.n;
 		if ($noscript)
 			$out .= '<noscript>'.n.
