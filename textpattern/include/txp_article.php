@@ -657,7 +657,7 @@ if (!empty($event) and $event == 'article') {
 
 		//-- recent articles --------------
 
-			echo n.n.'<div id="recent_group" class="txp-details">'.
+			echo n.n.'<div role="navigation" id="recent_group" class="txp-details">'.
 				n.'<h3 class="txp-summary'.(get_pref('pane_article_recent_visible') ? ' expanded' : '').'"><a href="#recent" role="button">'.gTxt('recent_articles').'</a>'.'</h3>'.
 				n.'<div id="recent" class="toggle" style="display:'.(get_pref('pane_article_recent_visible') ? 'block' : 'none').'">';
 			echo $partials['recent_articles']['html'];
@@ -1284,7 +1284,7 @@ EOS
 // -------------------------------------------------------------
 	function article_partial_article_nav($rs)
 	{
-		return '<p class="nav-tertiary">'.
+		return '<p role="navigation" class="nav-tertiary">'.
 		($rs['prev_id']
 			?	prevnext_link(gTxt('prev'),'article','edit',
 				$rs['prev_id'],'', 'prev')
