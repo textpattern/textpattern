@@ -366,8 +366,7 @@ a:hover .content-image {
   z-index: 20000;
   text-align: center;
 }
-
-span#message {
+#messagepane span.success, #messagepane span.warning, #messagepane span.error {
   display: inline-block;
   -moz-border-radius: 0.38462em 0.38462em 0 0;
   border-radius: 0.38462em 0.38462em 0 0;
@@ -378,13 +377,13 @@ span#message {
   -webkit-box-shadow: 0 0 0.46154em rgba(0, 0, 0, 0.2);
   box-shadow: 0 0 0.46154em rgba(0, 0, 0, 0.2);
 }
-span#message.success {
+#messagepane span.success {
   background: #238c23;
 }
-span#message.warning {
+#messagepane span.warning {
   background: #cb8f02;
 }
-span#message.error {
+#messagepane span.error {
   background: #9d261d;
 }
 
