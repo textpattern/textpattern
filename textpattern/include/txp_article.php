@@ -234,7 +234,7 @@ if (!empty($event) and $event == 'article') {
 
 		if ($oldArticle['sLastMod'] != $incoming['sLastMod'])
 		{
-			article_edit(array(gTxt('concurrent_edit_by', array('{author}' => txpspecialchars($oldArticle['LastModID']))), E_ERROR), TRUE , !AJAXALLY_CHALLENGED );
+			article_edit(array(gTxt('concurrent_edit_by', array('{author}' => txpspecialchars($oldArticle['LastModID']))), E_ERROR), TRUE, TRUE );
 			return;
 		}
 
@@ -367,7 +367,7 @@ if (!empty($event) and $event == 'article') {
 				$msg = array(gTxt('article_save_failed'), E_ERROR);
 			}
 		}
-		article_edit($msg, FALSE, !AJAXALLY_CHALLENGED);
+		article_edit($msg, FALSE, TRUE);
 	}
 
 //--------------------------------------------------------------

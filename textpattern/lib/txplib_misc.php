@@ -799,7 +799,7 @@ function escape_js($js)
 			}
 		}
 
-		$admin = ($app_mode == 'async' && !AJAXALLY_CHALLENGED ? '4,5' : '1,3,4,5');
+		$admin = ($app_mode == 'async' ? '4,5' : '1,3,4,5');
 		$where = 'status = 1 AND type IN ('.($type ? $admin : '0,1,5').')';
 
 		$rs = safe_rows("name, code, version", "txp_plugin", $where.' order by load_order');
@@ -2856,12 +2856,6 @@ function modal_halt($thing)
 				set_pref('is_dst', $is_dst, 'publish', 2);
 			}
 		}
-
-        // deprecation nags
-        if (AJAXALLY_CHALLENGED)
-        {
-            trigger_error(gTxt('deprecated_configuration', array('{name}' => 'AJAXALLY_CHALLENGED')), E_USER_NOTICE);
-        }
 	}
 
 // -------------------------------------------------------------

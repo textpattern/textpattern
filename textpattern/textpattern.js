@@ -887,14 +887,12 @@ $(document).ready(function() {
 		$.ajaxSetup( {timeout : textpattern.ajax_timeout} );
 	}
 	// setup async forms/hrefs
-	if(!textpattern.ajaxally_challenged) {
-		$('form.async').txpAsyncForm({
-			error: function() {window.alert(textpattern.gTxt('form_submission_error'));}
-		});
-		$('a.async').txpAsyncHref({
-			error: function() {window.alert(textpattern.gTxt('form_submission_error'));}
-		});
-	}
+    $('form.async').txpAsyncForm({
+        error: function() {window.alert(textpattern.gTxt('form_submission_error'));}
+    });
+    $('a.async').txpAsyncHref({
+        error: function() {window.alert(textpattern.gTxt('form_submission_error'));}
+    });
     // close button on announce pane
 	$(document).on('click', '.close', function(e) {
 		e.preventDefault();

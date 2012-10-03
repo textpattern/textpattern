@@ -484,12 +484,7 @@ EOS
 
 		if ($ret)
 		{
-			// TODO: Remove non-AJAX alternative code path in future version
-			if (!AJAXALLY_CHALLENGED) {
-				echo gTxt($newval ? 'yes' : 'no');
-			} else {
-				sec_section_list(gTxt('section_updated', array('{name}' => $name)));
-			}
+			echo gTxt($newval ? 'yes' : 'no');
 		}
 		else
 		{

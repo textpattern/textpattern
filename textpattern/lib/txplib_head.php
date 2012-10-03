@@ -63,7 +63,6 @@ $LastChangedRevision$
 		step: "'.txpspecialchars($step).'",
 		_txp_token: "'.txpspecialchars(form_token()).'",
 		ajax_timeout: '.txpspecialchars(AJAX_TIMEOUT).',
-		ajaxally_challenged: '.(AJAXALLY_CHALLENGED ? 'true' : 'false').',
 		textarray: {},
 		do_spellcheck: "'.txpspecialchars(
 							get_pref('do_spellcheck', '#page-article #body, #page-article #title,'.

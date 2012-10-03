@@ -179,14 +179,7 @@ EOS
 			load_plugin($thing, true);
 			$message = callback_event("plugin_lifecycle.$thing", $change ? 'enabled' : 'disabled');
 		}
-
-		// TODO: Remove non-AJAX alternative code path in future version
-		if (!AJAXALLY_CHALLENGED) {
-			echo gTxt($change ? 'yes' : 'no');
-		} else {
-			if (empty($message)) $message = gTxt('plugin_updated', array('{name}' => $thing));
-			plugin_list($message);
-		}
+		echo gTxt($change ? 'yes' : 'no');
 	}
 
 // -------------------------------------------------------------
