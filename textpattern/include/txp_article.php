@@ -374,7 +374,7 @@ if (!empty($event) and $event == 'article') {
 
 	function article_edit($message = '', $concurrent = FALSE, $refresh_partials = FALSE)
 	{
-		global $vars, $txp_user, $prefs, $event;
+		global $vars, $txp_user, $prefs, $event, $view;
 
 		extract($prefs);
 
@@ -968,11 +968,11 @@ EOS
 //--------------------------------------------------------------
 	function tab($tabevent,$view)
 	{
-		$state = ($view==$tabevent) ? 'up' : 'down';
-		$out = '<li class="view-mode '.$tabevent.'" id="tab-'.$tabevent.$state.'" title="'.gTxt('view_'.$tabevent).'">';
-		$out.= ($tabevent!=$view) ? '<a href="javascript:document.article_form.view.value=\''.$tabevent.'\';document.article_form.submit();">'.gTxt($tabevent).'</a>' : gTxt($tabevent);
-		$out.='</li>';
-		return $out;
+		$state = ($view == $tabevent) ? 'up' : 'down';
+		$pressed = ($view == $tabevent) ? 'true' : 'false';
+		return '<li class="view-mode '.$tabevent.'" id="tab-'.$tabevent.$state.'" title="'.gTxt('view_'.$tabevent).'">'.
+			'<a href="javascript:document.article_form.view.value=\''.$tabevent.'\';document.article_form.submit();" role="button" aria-pressed="'.$pressed.'">'.gTxt($tabevent).'</a>'.
+			'</li>'.n;
 	}
 
 //--------------------------------------------------------------
@@ -1274,9 +1274,9 @@ EOS
 			$hasfilter = ($rs['textile_body'] !== LEAVE_TEXT_UNTOUCHED || $rs['textile_excerpt'] !== LEAVE_TEXT_UNTOUCHED);
 		}
 
-		return '<div id="view_modes">'.
+		return n.'<div id="view_modes">'.
 			pluggable_ui('article_ui', 'view',
-			$hasfilter ? tag((tab('text',$view).tab('html',$view).tab('preview',$view)), 'ul') : '&#160;',
+			$hasfilter ? n.tag((tab('text',$view).tab('html',$view).tab('preview',$view)), 'ul').n : '&#160;',
 			$rs).
 			'</div>';
 

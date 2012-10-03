@@ -588,10 +588,10 @@ function toggleDisplayHref()
 	if (href) toggleDisplay(href.substr(1));
 	if (lever) {
 		if ($(href+':visible').length) {
-			lever.addClass('expanded');
+			lever.addClass('expanded').attr('aria-pressed', 'true');
 		} else {
-			lever.removeClass('expanded');
-		}
+			lever.removeClass('expanded').attr('aria-pressed', 'false');
+        }
 	}
 	return false;
 }
@@ -895,10 +895,15 @@ $(document).ready(function() {
 			error: function() {window.alert(textpattern.gTxt('form_submission_error'));}
 		});
 	}
+    // close button on announce pane
 	$(document).on('click', '.close', function(e) {
 		e.preventDefault();
 		$(this).parent().remove();
 	});
+    // initialise dynamic WAI-ARIA attributes
+    $('.txp-summary.expanded').attr('aria-pressed', 'true');
+    $('.txp-summary[aria-pressed!="true"]').attr('aria-pressed', 'false');
+
 	// arm UI
 	$('body').removeClass('not-ready');
 });
