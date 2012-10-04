@@ -583,15 +583,13 @@ function toggleDisplay(id)
 
 function toggleDisplayHref()
 {
-	var href = $(this).attr('href');
-	var lever = $(this).parent('.txp-summary');
+	var $this = $(this), href = $this.attr('href'), lever = $this.parent('.txp-summary');
 	if (href) toggleDisplay(href.substr(1));
 	if (lever) {
-		if ($(href+':visible').length) {
-			lever.addClass('expanded').attr('aria-pressed', 'true');
-		} else {
-			lever.removeClass('expanded').attr('aria-pressed', 'false');
-        }
+		var vis = $(href+':visible').length > 0;
+        lever.toggleClass('expanded', vis);
+        $this.attr('aria-pressed', vis.toString());
+        $(href).attr('aria-expanded', vis.toString());
 	}
 	return false;
 }
@@ -899,8 +897,15 @@ $(document).ready(function() {
 		$(this).parent().remove();
 	});
     // initialise dynamic WAI-ARIA attributes
-    $('.txp-summary.expanded').attr('aria-pressed', 'true');
-    $('.txp-summary[aria-pressed!="true"]').attr('aria-pressed', 'false');
+    $('.txp-summary a').each(function(i, elm) {
+        // get id of toggled <div> region
+        var region = $(elm).attr('href');
+        if (region) {
+            var $region = $(region), vis = $region.is(':visible').toString();
+            $(elm).attr('aria-control', region.substr(1)).attr('aria-pressed', vis);
+            $region.attr('role', 'region').attr('aria-expanded', vis);
+        }
+    });
 
 	// arm UI
 	$('body').removeClass('not-ready');
