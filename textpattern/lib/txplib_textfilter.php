@@ -15,6 +15,7 @@ $LastChangedRevision$
 */
 
 require_once txpath.'/lib/classTextile.php';
+require_once txpath.'/lib/txplib_validator.php';
 
 interface ITextfilter
 {

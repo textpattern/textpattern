@@ -1033,6 +1033,8 @@ EOS
 		global $prefs;
 
 		include_once txpath.'/lib/classTextile.php';
+		include_once txpath.'/lib/txplib_textfilter.php';
+
 		$textile = new Textile($prefs['doctype']);
 
 		$incoming['Title_plain'] = $incoming['Title'];
