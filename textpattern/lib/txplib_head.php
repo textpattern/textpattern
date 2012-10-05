@@ -139,7 +139,7 @@ $LastChangedRevision$
 		$theme->set_state($area, $event, $bm, $message);
 		echo pluggable_ui('admin_side', 'header', $theme->header());
 		callback_event('admin_side', 'pagetop_end');
-		echo '</header><!-- /txp-header --><div role="main" id="txp-main" class="txp-body">';
+		echo '</header><!-- /txp-header -->'.n.'<div role="main" id="txp-main" class="txp-body" aria-label="'.gTxt('main_content').'">';
 	}
 
 // -------------------------------------------------------------

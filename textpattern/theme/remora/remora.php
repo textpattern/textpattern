@@ -25,7 +25,7 @@ SF;
 	{
 		global $txp_user;
 		$out[] = '<h1 class="txp-accessibility">'.htmlspecialchars($GLOBALS["prefs"]["sitename"]).'</h1>';
-		$out[] = '<nav role="navigation" id="masthead">';
+		$out[] = '<nav role="navigation" id="masthead" aria-label="'.gTxt('navigation').'">';
 		$out[] = '<ul id="nav">';
 
 		foreach ($this->menu as $tab)

@@ -28,8 +28,7 @@ class classic_theme extends theme
 
 		if (!$this->is_popup)
 		{
-			$out[] = '<nav role="navigation">';
-			$out[] = '<h2 class="txp-accessibility">'.gTxt('navigation').'</h2>';
+			$out[] = '<nav role="navigation" aria-label="'.gTxt('navigation').'">';
 			$out[] = '<div id="nav-primary" class="nav-tabs">';
 			$out[] = '<ul>';
 

@@ -70,8 +70,7 @@ class hive_theme extends theme
 		if ($txp_user)
 		{
 			$out[] = '<p class="txp-logout"><a href="index.php?logout=1" onclick="return verify(\''.gTxt('are_you_sure').'\')">'.gTxt('logout').'</a></p>';
-			$out[] = '<nav role="navigation">';
-			$out[] = '<h2 class="txp-accessibility">'.gTxt('navigation').'</h2>';
+			$out[] = '<nav role="navigation" aria-label="'.gTxt('navigation').'">';
 			$out[] = '<div class="txp-nav">';
 			$out[] = '<ul class="data-dropdown">';
 			foreach ($this->menu as $tab)
