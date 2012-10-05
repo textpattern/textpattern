@@ -140,15 +140,15 @@ $LastChangedRevision$
 	function fInput($type, 		          // generic form input
 					$name,
 					$value,
-					$class='',
-					$title='',
-					$onClick='',
-					$size='',
-					$tab='',
-					$id='',
+					$class = '',
+					$title = '',
+					$onClick = '',
+					$size = '',
+					$tab = '',
+					$id = '',
 					$disabled = false,
 					$required = false,
-					$placeholder='')
+					$placeholder = '')
 	{
 		$o  = '<input type="'.$type.'"';
 		$o .= ' value="'.txpspecialchars($value).'"';
@@ -159,7 +159,7 @@ $LastChangedRevision$
 		$o .= ($onClick)    ? ' onclick="'.$onClick.'"' : '';
 		$o .= ($tab)        ? ' tabindex="'.$tab.'"' : '';
 		$o .= ($id)         ? ' id="'.$id.'"' : '';
-		$o .= ($disabled)   ? ' disabled="disabled"' : '';
+		$o .= ($disabled)   ? ' disabled' : '';
 		$o .= ($required)   ? ' required' : '';
 		$o .= ($placeholder)? ' placeholder="'.txpspecialchars($placeholder).'"' : '';
 		$o .= " />";
