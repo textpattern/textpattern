@@ -302,12 +302,22 @@ $LastChangedRevision$
 	}
 
 //--------------------------------------------------------------
-	function tsi($name, $datevar, $time, $tab='', $placeholder='')
+	function tsi($name, $datevar, $time, $tab='')
 	{
+		static $placeholders = array(
+			'%Y' => 'yyyy',
+			'%m' => 'mm',
+			'%d' => 'dd',
+			'%H' => 'hh',
+			'%M' => 'mn',
+			'%S' => 'ss',
+		);
+
 		$size = ($name=='year' or $name=='exp_year') ? INPUT_XSMALL : INPUT_TINY;
 		$s = ($time == 0)? '' : safe_strftime($datevar, $time);
 		return n.'<input type="text" name="'.$name.'" value="'.
 			$s
-		.'" size="'.$size.'" maxlength="'.$size.'" class="'.$name.'"'.(empty($tab) ? '' : ' tabindex="'.$tab.'"').' title="'.gTxt('article_'.$name).'"'.($placeholder == '' ? '' : ' placeholder="'.txpspecialchars($placeholder).'"').' />';
+			.'" size="'.$size.'" maxlength="'.$size.'" class="'.$name.'"'.(empty($tab) ? '' : ' tabindex="'.$tab.'"').' title="'.gTxt('article_'.$name)
+			.'"'.(isset($placeholders[$datevar]) ? ' placeholder="'.txpspecialchars(gTxt($placeholders[$datevar])).'"' : '').' />';
 	}
 ?>

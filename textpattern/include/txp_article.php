@@ -806,16 +806,16 @@ if (!empty($event) and $event == 'article') {
 					n.graf(gTxt('or_publish_at').sp.popHelp('timestamp'), ' class="publish-at"').
 
 					n.graf('<span class="label">'.gtxt('date').'</span>'.sp.
-						tsi('year', '%Y', $persist_timestamp, '', gTxt('yyyy')).' / '.
-						tsi('month', '%m', $persist_timestamp, '', gTxt('mm')).' / '.
-						tsi('day', '%d', $persist_timestamp, '', gTxt('dd'))
+						tsi('year', '%Y', $persist_timestamp, '').' / '.
+						tsi('month', '%m', $persist_timestamp, '').' / '.
+						tsi('day', '%d', $persist_timestamp, '')
 					, ' class="date posted created"'
 					).
 
 					n.graf('<span class="label">'.gTxt('time').'</span>'.sp.
-						tsi('hour', '%H', $persist_timestamp, '', gTxt('hh')).' : '.
-						tsi('minute', '%M', $persist_timestamp, '', gTxt('mm')).' : '.
-						tsi('second', '%S', $persist_timestamp, '', gTxt('ss'))
+						tsi('hour', '%H', $persist_timestamp, '').' : '.
+						tsi('minute', '%M', $persist_timestamp, '').' : '.
+						tsi('second', '%S', $persist_timestamp, '')
 					, ' class="time posted created"'
 					).
 
@@ -833,16 +833,16 @@ if (!empty($event) and $event == 'article') {
 					n.'<legend>'.gTxt('expires').'</legend>'.
 
 					n.graf('<span class="label">'.gtxt('date').'</span>'.sp.
-						tsi('exp_year', '%Y', $persist_timestamp, '', 'yyyy').' / '.
-						tsi('exp_month', '%m', $persist_timestamp, '', 'mm').' / '.
-						tsi('exp_day', '%d', $persist_timestamp, '', 'dd')
+						tsi('exp_year', '%Y', $persist_timestamp, '').' / '.
+						tsi('exp_month', '%m', $persist_timestamp, '').' / '.
+						tsi('exp_day', '%d', $persist_timestamp, '')
 					, ' class="date expires"'
 					).
 
 					n.graf('<span class="label">'.gTxt('time').'</span>'.sp.
-						tsi('exp_hour', '%H', $persist_timestamp, '', 'hh').' : '.
-						tsi('exp_minute', '%M', $persist_timestamp, '', 'mm').' : '.
-						tsi('exp_second', '%S', $persist_timestamp, '', 'ss')
+						tsi('exp_hour', '%H', $persist_timestamp, '').' : '.
+						tsi('exp_minute', '%M', $persist_timestamp, '').' : '.
+						tsi('exp_second', '%S', $persist_timestamp, '')
 					, ' class="time expires"'
 					).
 
