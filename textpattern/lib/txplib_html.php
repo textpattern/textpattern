@@ -375,7 +375,7 @@ $LastChangedRevision$
 
 			$nav[] = ($page > 1) ?
 				PrevNextLink($event, $page - 1, gTxt('prev'), 'prev', $sort, $dir, $crit, $search_method, $step).sp :
-				tag(gTxt('prev'), 'span', ' class="navlink-disabled"').sp;
+				tag(gTxt('prev'), 'span', ' class="navlink-disabled" aria-disabled="true"').sp;
 
 			$nav[] = '<select name="page" onchange="submit(this.form);">';
 			$nav[] = n.join(n, $option_list);
@@ -383,7 +383,7 @@ $LastChangedRevision$
 
 			$nav[] = ($page != $numPages) ?
 				sp.PrevNextLink($event, $page + 1, gTxt('next'), 'next', $sort, $dir, $crit, $search_method, $step) :
-				sp.tag(gTxt('next'), 'span', ' class="navlink-disabled"');
+				sp.tag(gTxt('next'), 'span', ' class="navlink-disabled" aria-disabled="true"');
 
 			$out[] = '<form class="nav-form" method="get" action="index.php">'.
 				n.eInput($event).
