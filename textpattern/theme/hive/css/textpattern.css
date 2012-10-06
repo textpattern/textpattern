@@ -1534,8 +1534,13 @@ body {
 
 /* Miscellaneous/shared layout
    ========================================================================== */
+/* Hide text but still allow screen reader access */
 .txp-accessibility {
-  display: none;
+  position: absolute;
+  left: -1000em;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
 }
 
 .txp-control-panel {
