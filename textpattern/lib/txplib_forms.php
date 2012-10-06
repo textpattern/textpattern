@@ -159,8 +159,8 @@ $LastChangedRevision$
 		$o .= ($onClick)    ? ' onclick="'.$onClick.'"' : '';
 		$o .= ($tab)        ? ' tabindex="'.$tab.'"' : '';
 		$o .= ($id)         ? ' id="'.$id.'"' : '';
-		$o .= ($disabled)   ? ' disabled' : '';
-		$o .= ($required)   ? ' required' : '';
+		$o .= ($disabled)   ? ' disabled="disabled"' : '';
+		$o .= ($required)   ? ' required="required"' : '';
 		$o .= ($placeholder)? ' placeholder="'.txpspecialchars($placeholder).'"' : '';
 		$o .= " />";
 		return $o;
