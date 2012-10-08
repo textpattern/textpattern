@@ -2062,13 +2062,6 @@ body#page-setup {
 
 /* Admin -> Preferences page
    ========================================================================== */
-/* Admin -> Preferences page
-   ========================================================================== */
-#page-lang .txp-list tr td,
-#page-lang .txp-list tr.even td {
-  height: 1.84615384615385em;
-  vertical-align: middle;
-}
 #page-lang .txp-list .modified {
   color: #999999;
   margin-left: .6em;
