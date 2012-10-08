@@ -1625,11 +1625,11 @@ span.spinner {
   display: inline-block;
   width: 13px;
   height: 13px;
-  background-image: url("../img/spinner.gif");
+  background-image: url("../../../txp_img/spinner.gif");
 }
 @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 144dpi) {
   span.spinner {
-    background-image: url("../img/hidpi/spinner@2x.gif") !important;
+    background-image: url("../../../txp_img/spinner@2x.gif") !important;
     -webkit-background-size: 13px 13px;
     background-size: 13px 13px;
   }
