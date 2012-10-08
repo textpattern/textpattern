@@ -2000,11 +2000,11 @@ body#page-setup {
 
 /* Content -> Comments page
    ========================================================================== */
-#page-discuss .txp-list tr.spam td {
+#page-discuss .txp-list tr.spam {
   background: #f5e5e5;
 }
 
-#page-discuss .txp-list tr.moderate td {
+#page-discuss .txp-list tr.moderate {
   background: #fff8dd;
 }
 

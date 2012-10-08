@@ -1361,11 +1361,11 @@ td#article-col-2 {
 /* Content -> Comments page
    ========================================================================== */
 
-tr.spam td {
+tr.spam {
 	background: #fff4f4;
 }
 
-tr.moderate td {
+tr.moderate {
 	background: #fff8dd;
 }
 
