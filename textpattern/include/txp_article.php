@@ -533,8 +533,9 @@ if (!empty($event) and $event == 'article') {
 			$rs['prev_id'] = $rs['next_id'] = 0;
 		}
 
-		// let plugins chime in on partials
+		// let plugins chime in on partials meta data
 		callback_event_ref('article_ui', 'partials_meta', 0, $rs, $partials);
+		$rs['partials_meta'] = &$partials;
 
 		// get content for volatile partials
 		foreach ($partials as $k => $p) {
@@ -1106,10 +1107,11 @@ EOS
 	function article_partial_title($rs)
 	{
 		global $step;
+		$av_cb = $rs['partials_meta']['article_view']['cb'];
 		return pluggable_ui('article_ui', 'title',
 			graf('<label for="title">'.gTxt('title').'</label>'.sp.popHelp('title').br.
 				'<input type="text" id="title" name="Title" value="'.escape_title($rs['Title']).'" size="40" tabindex="1" />'.
-				($step != 'create' ?  article_partial_article_view($rs) : '')
+				($step != 'create' ?  $av_cb($rs) : '')
 				, ' class="title"'),
 			$rs);
 	}
