@@ -171,7 +171,7 @@ $LastChangedRevision$
 				n.startTable('', '', 'txp-list').
 				n.'<thead>'.
 				n.tr(
-					n.hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
+					n.hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
 					n.column_head('time', 'time', 'log', true, $switch_dir, $crit, $search_method, (('time' == $sort) ? "$dir " : '').'date time').
 					n.column_head('IP', 'ip', 'log', true, $switch_dir, $crit, $search_method, (('ip' == $sort) ? "$dir " : '').'log_detail ip').
 					n.column_head('host', 'host', 'log', true, $switch_dir, $crit, $search_method, (('host' == $sort) ? "$dir " : '').'host').
@@ -213,9 +213,9 @@ $LastChangedRevision$
 						fInput('checkbox', 'selected[]', $log_id)
 					, '', 'multi-edit').
 
-					td(
+					hCell(
 						gTime($log_uTime)
-					, '', 'date time').
+					, '', ' scope="row" class="date time"').
 
 					td(txpspecialchars($log_ip), '', 'log_detail ip').
 

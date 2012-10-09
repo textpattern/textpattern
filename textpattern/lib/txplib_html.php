@@ -73,7 +73,7 @@ $LastChangedRevision$
 
 	function column_multi_head($head_items, $class='')
 	{
-		$o = n.t.'<th'.($class ? ' class="'.$class.'"' : '').'>';
+		$o = n.t.'<th scope="col"'.($class ? ' class="'.$class.'"' : '').'>';
 		$first_item = true;
 		foreach ($head_items as $item)
 		{
@@ -790,7 +790,7 @@ $LastChangedRevision$
 	function assHead()
 	{
 		$array = func_get_args();
-		foreach($array as $a) $o[] = hCell(gTxt($a));
+		foreach($array as $a) $o[] = hCell(gTxt($a), '', ' scope="col"');
 		return tr(join('',$o));
 	}
 

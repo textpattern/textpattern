@@ -217,16 +217,16 @@ $LastChangedRevision$
 				n.startTable('', '', 'txp-list').
 				n.'<thead>'.
 				tr(
-					n.hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
+					n.hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
 					n.column_head('ID', 'id', 'file', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id').
 					n.column_head('file_name', 'filename', 'file', true, $switch_dir, $crit, $search_method, (('filename' == $sort) ? "$dir " : '').'name').
 					n.column_head('title', 'title', 'file', true, $switch_dir, $crit, $search_method, (('title' == $sort) ? "$dir " : '').'title').
 					n.column_head('description', 'description', 'file', true, $switch_dir, $crit, $search_method, (('description' == $sort) ? "$dir " : '').'files_detail description').
 					n.column_head('file_category', 'category', 'file', true, $switch_dir, $crit, $search_method, (('category' == $sort) ? "$dir " : '').'category').
 					// column_head('permissions', 'permissions', 'file', true, $switch_dir, $crit, $search_method).
-					n.hCell(gTxt('tags'), '', ' class="files_detail tag-build"').
-					n.hCell(gTxt('status'), '', ' class="status"').
-					n.hCell(gTxt('condition'), '', ' class="condition"').
+					n.hCell(gTxt('tags'), '', ' scope="col" class="files_detail tag-build"').
+					n.hCell(gTxt('status'), '', ' scope="col" class="status"').
+					n.hCell(gTxt('condition'), '', ' scope="col" class="condition"').
 					n.column_head('downloads', 'downloads', 'file', true, $switch_dir, $crit, $search_method, (('downloads' == $sort) ? "$dir " : '').'downloads').
 					($show_authors ? n.column_head('author', 'author', 'file', true, $switch_dir, $crit, $search_method, (('author' == $sort) ? "$dir " : '').'author') : '')
 				).
@@ -267,10 +267,10 @@ $LastChangedRevision$
 					n.td($can_edit ? fInput('checkbox', 'selected[]', $id) : '&#160;'
 					, '', 'multi-edit').
 
-					n.td(
+					n.hCell(
 						($can_edit ? href($id, $edit_url, ' title="'.gTxt('edit').'"') : $id).
 						(($file_exists) ? sp.'<span class="files_detail">['.make_download_link($id, gTxt('download'), $filename).']</span>' : '')
-					, '', 'id').
+					, '', ' scope="row" class="id"').
 
 					td(
 						($can_edit ? href(txpspecialchars($filename), $edit_url, ' title="'.gTxt('edit').'"') : txpspecialchars($filename))

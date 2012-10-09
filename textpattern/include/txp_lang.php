@@ -240,11 +240,12 @@ function list_languages($message='')
 
 		$list .= tr(
 			// Lang-Name & Date
-			tda(
+			hCell(
 				gTxt($langname)
-				, (isset($langdat['db_lastmod']) && $rpc_updated)
-						? ' class="highlight lang-label"'
-						: ' class="lang-label"'
+				, ''
+				,(isset($langdat['db_lastmod']) && $rpc_updated)
+						? ' scope="row" class="highlight lang-label"'
+						: ' scope="row" class="lang-label"'
 				).n.
 			$rpc_install.n.
 			$lang_file.n.
@@ -268,10 +269,10 @@ function list_languages($message='')
 		n, startTable('', '', 'txp-list'),
 		n, '<thead>',
 		n, tr(
-			hCell(gTxt('language')).
-			hCell(gTxt('from_server').n.popHelp('install_lang_from_server')).
-			hCell(gTxt('from_file').n.popHelp('install_lang_from_file'), '', ' class="languages_detail"').
-			hCell(gTxt('remove_lang').n.popHelp('remove_lang'), '', ' class="languages_detail"')
+			hCell(gTxt('language'), '', ' scope="col"').
+			hCell(gTxt('from_server').n.popHelp('install_lang_from_server'), '', ' scope="col"').
+			hCell(gTxt('from_file').n.popHelp('install_lang_from_file'), '', ' scope="col" class="languages_detail"').
+			hCell(gTxt('remove_lang').n.popHelp('remove_lang'), '', ' scope="col" class="languages_detail"')
 		),
 		n, '</thead>',
 

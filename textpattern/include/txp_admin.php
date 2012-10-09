@@ -355,8 +355,8 @@ $LastChangedRevision$
 				n.'<thead>'.
 				n.tr(
 					n. (($use_multi_edit)
-						? hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' title="'.gTxt('toggle_all_selected').'" class="multi-edit"')
-						: hCell('', '', ' class="multi-edit"')
+						? hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="multi-edit"')
+						: hCell('', '', ' scope="col" class="multi-edit"')
 					).
 					n.column_head('login_name', 'name', 'admin', true, $switch_dir, '', '', (('name' == $sort) ? "$dir " : '').'name login-name').
 					n.column_head('real_name', 'RealName', 'admin', true, $switch_dir, '', '', (('RealName' == $sort) ? "$dir " : '').'name real-name').
@@ -374,7 +374,7 @@ $LastChangedRevision$
 
 					echo tr(
 						td(((has_privs('admin.edit') and $txp_user != $a['name']) ? fInput('checkbox', 'selected[]', $a['name'], 'checkbox') : ''), '', 'multi-edit').
-						td(((has_privs('admin.edit')) ? eLink('admin', 'author_edit', 'user_id', $user_id, $name) : $name), '', 'name login-name').
+						hCell(((has_privs('admin.edit')) ? eLink('admin', 'author_edit', 'user_id', $user_id, $name) : $name), '', ' scope="row" class="name login-name"').
 						td($RealName, '', 'name real-name').
 						td('<a href="mailto:'.$email.'">'.$email.'</a>', '', 'email').
 						td(get_priv_level($privs), '', 'privs').

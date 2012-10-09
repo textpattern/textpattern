@@ -222,7 +222,7 @@ $LastChangedRevision$
 				n.startTable('', '', 'txp-list').
 				n.'<thead>'.
 				n.tr(
-					n.hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
+					n.hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
 					n.column_head('ID', 'id', 'list', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id actions').
 					column_head('title', 'title', 'list', true, $switch_dir, $crit, $search_method, (('title' == $sort) ? "$dir " : '').'title').
 					column_head('posted', 'posted', 'list', true, $switch_dir, $crit, $search_method, (('posted' == $sort) ? "$dir " : '').'date posted created').
@@ -316,7 +316,7 @@ $LastChangedRevision$
 						: '&#160;'
 					), '', 'multi-edit').
 
-					n.td(eLink('article', 'edit', 'ID', $ID, $ID) .sp. '<span class="articles_detail">[<a href="'.$view_url.'">'.gTxt('view').'</a>]</span>', '', 'id').
+					n.hCell(eLink('article', 'edit', 'ID', $ID, $ID) .sp. '<span class="articles_detail">[<a href="'.$view_url.'">'.gTxt('view').'</a>]</span>', '', ' scope="row" class="id"').
 
 					td($Title, '', 'title').
 

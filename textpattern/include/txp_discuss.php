@@ -259,7 +259,7 @@ $LastChangedRevision$
 				n.startTable('', '', 'txp-list').
 				n.'<thead>'.
 				n.n.tr(
-					n.hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
+					n.hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
 					n.column_head('ID', 'id', 'discuss', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id').
 					n.column_head('date', 'date', 'discuss', true, $switch_dir, $crit, $search_method, (('date' == $sort) ? "$dir " : '').'date posted created').
 					n.column_head('name', 'name', 'discuss', true, $switch_dir, $crit, $search_method, (('name' == $sort) ? "$dir " : '').'name').
@@ -329,7 +329,7 @@ $LastChangedRevision$
 
 				echo n.n.tr(
 					n.td(fInput('checkbox', 'selected[]', $discussid), '', 'multi-edit').
-					td('<a title="'.gTxt('edit').'" href="'.$edit_url.'">'.$discussid.'</a>', '', 'id').
+					hCell('<a title="'.gTxt('edit').'" href="'.$edit_url.'">'.$discussid.'</a>', '', ' scope="row" class="id"').
 					td(gTime($uPosted), '', 'date posted created').
 					td(txpspecialchars(soft_wrap($name, 15)), '', 'name').
 					td(short_preview($dmessage), '', 'message').
@@ -543,10 +543,10 @@ $LastChangedRevision$
 				startTable('', '', 'txp-list').
 				n.'<thead>'.
 				tr(
-					hCell(gTxt('date_banned'), '', ' class="date banned"').
-					hCell(gTxt('IP'), '', ' class="ip"').
-					hCell(gTxt('name_used'), '', ' class="name"').
-					hCell(gTxt('banned_for'), '', ' class="id"')
+					hCell(gTxt('date_banned'), '', ' scope="col" class="date banned"').
+					hCell(gTxt('IP'), '', ' scope="col" class="ip"').
+					hCell(gTxt('name_used'), '', ' scope="col" class="name"').
+					hCell(gTxt('banned_for'), '', ' scope="col" class="id"')
 				).
 				n.'</thead>';
 
@@ -557,9 +557,9 @@ $LastChangedRevision$
 				extract($a);
 
 				echo tr(
-					td(
+					hCell(
 						gTime($uBanned)
-					, '', 'date banned').
+					, '', ' scope="row" class="date banned"').
 
 					td(
 						txpspecialchars($ip).n.

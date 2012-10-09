@@ -201,12 +201,12 @@ $LastChangedRevision$
 				n.startTable('', '', 'txp-list').
 				n.'<thead>'.
 				n.tr(
-					n.hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
+					n.hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
 					n.column_head('ID', 'id', 'image', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id').
 					n.column_head('name', 'name', 'image', true, $switch_dir, $crit, $search_method, (('name' == $sort) ? "$dir " : '').'name').
 					n.column_head('date', 'date', 'image', true, $switch_dir, $crit, $search_method, (('date' == $sort) ? "$dir " : '').'images_detail date created').
 					n.column_head('thumbnail', 'thumbnail', 'image', true, $switch_dir, $crit, $search_method, (('thumbnail' == $sort) ? "$dir " : '').'thumbnail').
-					n.hCell(gTxt('tags'), '', ' class="images_detail tag-build"').
+					n.hCell(gTxt('tags'), '', ' scope="col" class="images_detail tag-build"').
 					n.column_head('image_category', 'category', 'image', true, $switch_dir, $crit, $search_method, (('category' == $sort) ? "$dir " : '').'category').
 					($show_authors ? n.column_head('author', 'author', 'image', true, $switch_dir, $crit, $search_method, (('author' == $sort) ? "$dir " : '').'author') : '')
 				).
@@ -256,10 +256,10 @@ $LastChangedRevision$
 					n.td($can_edit ? fInput('checkbox', 'selected[]', $id) : '&#160;'
 					, '', 'multi-edit').
 
-					n.td(
+					n.hCell(
 						($can_edit ? href($id, $edit_url, ' title="'.gTxt('edit').'"') : $id).sp.
 						'<span class="images_detail">[<a href="'.imagesrcurl($id, $ext).'">'.gTxt('view').'</a>]</span>'
-					, '', 'id').
+					, '', ' scope="row" class="id"').
 
 					td(
 						($can_edit ? href($name, $edit_url, ' title="'.gTxt('edit').'"') : $name)
