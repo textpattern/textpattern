@@ -56,7 +56,7 @@ $LastChangedRevision$
 
 	define("txpinterface", "admin");
 
-	$thisversion = '4.5.1';
+	$thisversion = '4.6-dev';
 	$txp_using_svn = true; // set false for releases
 
 	ob_start(NULL, 2048);
