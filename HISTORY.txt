@@ -1,3 +1,11 @@
+Changes in 4.5.2
+
+* Maintenance release with bug fixes, no security implications
+* Fix <txp:link_to_prev>, <txp:link_to_next>, <txp:prev_title>, and <txp:next_title> tags for setups with web server and database server in different time zones.
+* Avoid "undefined variable" error while bulk-editing form types.
+* Developer: Use actual callback instead of hard-coded function to render 'View'link.  Pass reference to partials meta data into partial callbacks as $rs['partials_meta'].
+* Developer: Escape '<script>' tags in script_js(). Use jQuery in dom_attach().
+
 Changes in 4.5.1
 
 * Maintenance release with bug fixes, no security implications
