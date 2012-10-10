@@ -67,8 +67,7 @@ class classic_theme extends theme
 	{
 		global $txp_user;
 
-		$out[] = '<a id="mothership" href="http://textpattern.com/" title="'.gTxt('go_txp_com').'" rel="external"><img src="'.$this->url.'carver.png" width="40" height="40" alt="Textpattern" /></a>'.n.
-			graf('Textpattern CMS &#183; '.txp_version);
+		$out[] = '<a href="http://textpattern.com/" title="'.gTxt('go_txp_com').'" rel="external">Textpattern CMS</a> <span role="separator">&#183;</span> '.txp_version;
 
 		if ($txp_user)
 		{

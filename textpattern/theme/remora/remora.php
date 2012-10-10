@@ -59,7 +59,7 @@ SF;
 
 	function footer()
 	{
-		return graf('<a href="http://textpattern.com/" title="'.gTxt('go_txp_com').'" rel="external">Textpattern CMS</a> &#183; '.txp_version);
+		return graf('<a href="http://textpattern.com/" title="'.gTxt('go_txp_com').'" rel="external">Textpattern CMS</a> <span role="separator">&#183;</span> '.txp_version);
 	}
 
 	function manifest()

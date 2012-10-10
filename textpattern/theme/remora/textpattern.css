@@ -12,18 +12,27 @@
 	padding: 0;
 }
 
+.svg .txp-summary {
+	background: none;
+}
+
 .expanded {
 	background: none;
 }
 
 .txp-summary a {
-	padding-right: 14px;
+	padding-right: 12px;
 	text-decoration: none;
+	background: url("img/expand-collapse.gif") no-repeat right -91px;
+}
+
+.svg .txp-summary a {
+	background-image: url("img/expand-collapse.svg");
 }
 
 .txp-summary a:hover,
 .txp-summary.expanded a {
-	background: url("../../txp_img/expandcollapse.gif") no-repeat right 5px;
+	background-position: right 5px;
 }
 
 
@@ -42,8 +51,18 @@
 	display: inline-block;
 	text-align: left;
 	margin: 0 auto;
-	padding: 0 0 0 124px;
-	background: url("../classic/textpattern.png") no-repeat left center;
+	padding: 0 0 0 11em;
+	background-image: url("../classic/img/textpattern.png");
+	background-repeat: no-repeat;
+	background-position: 0 50%;
+}
+
+.svg #nav {
+	background-image: url("../classic/img/textpattern.svg");
+	-webkit-background-size: 9em 2em;
+	-moz-background-size: 9em 2em;
+	-o-background-size: 9em 2em;
+	background-size: 9em 2em;
 }
 
 #nav,

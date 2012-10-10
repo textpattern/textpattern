@@ -420,15 +420,15 @@ a:hover .content-image {
 	margin: 1em 0;
 	padding-left: 1em;
 	color: #000;
-	background: url("expand_collapse.gif") no-repeat 0 4px;
+	background: url("img/expand-collapse.gif") no-repeat 0 5px;
 }
 
-.txp-summary:hover {
-	background-position: 0 -91px;
+.svg .txp-summary {
+	background-image: url("img/expand-collapse.svg");
 }
 
 .expanded {
-	background: url("expand_collapse.gif") no-repeat 0 -91px;
+	background-position: 0 -90px;
 }
 
 
@@ -849,16 +849,24 @@ td {
 	margin-right: 14px;
 }
 
-.txp-list thead .asc a {
-	margin-right: 0;
-	padding-right: 14px;
-	background: url("../../txp_img/arrowupdn.gif") no-repeat right 2px;
-}
-
+.txp-list thead .asc a,
 .txp-list thead .desc a {
 	margin-right: 0;
 	padding-right: 14px;
-	background: url("../../txp_img/arrowupdn.gif") no-repeat right -18px;
+	background: url("img/arrow-up-down.gif") no-repeat;
+}
+
+.svg .txp-list thead .asc a,
+.svg .txp-list thead .desc a {
+	background-image: url("img/arrow-up-down.svg");
+}
+
+.txp-list thead .asc a {
+	background-position: right 2px;
+}
+
+.txp-list thead .desc a {
+	background-position: right -36px;
 }
 
 .txp-list tbody {
@@ -929,12 +937,20 @@ body {
 
 #branding {
 	font-size: 1em;
-	margin: 0;
-	width: 300px;
+	margin: 0 0 0 2em;
+	width: 9em;
 	height: 2.63636363636364em;
 	line-height: 2.63636363636364;
 	text-indent: -9999px;
-	background: url("textpattern.png") no-repeat 2em 50%;
+	background: url("img/textpattern.png") no-repeat 0 50%;
+}
+
+.svg #branding {
+	background-image: url("img/textpattern.svg");
+	-webkit-background-size: 9em 2em;
+	-moz-background-size: 9em 2em;
+	-o-background-size: 9em 2em;
+	background-size: 9em 2em;
 }
 
 
@@ -1091,11 +1107,11 @@ span.spinner {
 	display: inline-block;
 	width: 13px;
 	height: 13px;
-	background-image: url("../../txp_img/spinner.gif");
+	background-image: url("img/spinner.gif");
 }
 @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 144dpi) {
 	span.spinner {
-		background-image: url("../../txp_img/spinner@2x.gif") !important;
+		background-image: url("img/spinner@2x.gif") !important;
 		-webkit-background-size: 13px 13px;
 		background-size: 13px 13px;
 	}
@@ -1284,16 +1300,28 @@ td#article-col-2 {
 	padding: 0;
 }
 
-#article-tabs .text {
-	background-image: url("view-text.png");
+#article-tabs .text a {
+	background-image: url("img/view-text.png");
 }
 
-#article-tabs .html {
-	background-image: url("view-html.png");
+.svg #view_modes .text a {
+	background-image: url("img/view-text.svg");
 }
 
-#article-tabs .preview {
-	background-image: url("view-preview.png");
+#article-tabs .html a {
+	background-image: url("img/view-html.png");
+}
+
+.svg #view_modes .html a {
+	background-image: url("img/view-html.svg");
+}
+
+#article-tabs .preview a {
+	background-image: url("img/view-preview.png");
+}
+
+.svg #view_modes .preview a {
+	background-image: url("img/view-preview.svg");
 }
 
 .view-mode {
@@ -1305,14 +1333,20 @@ td#article-col-2 {
 	-moz-border-radius: .4em;
 	border-radius: .4em;
 	background-color: #fff8dd;
-	background-repeat: no-repeat;
-	background-position: 50% 50%;
 }
 
 .view-mode a {
 	display: block;
 	width: 24px;
 	height: 24px;
+	background: no-repeat 50% 50%;
+}
+
+.svg .view-mode a {
+	-webkit-background-size: 22px 22px;
+	-moz-background-size: 22px 22px;
+	-o-background-size: 22px 22px;
+	background-size: 22px 22px;
 }
 
 .view-mode:hover,
