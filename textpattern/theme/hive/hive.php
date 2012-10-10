@@ -75,15 +75,15 @@ class hive_theme extends theme
 			$out[] = '<ul class="data-dropdown">';
 			foreach ($this->menu as $tab)
 			{
-				$class = ($tab['active']) ? 'active' : 'inactive';
-				$out[] = '<li class="dropdown '.$class.'"><a class="dropdown-toggle" href="?event='.$tab["event"].'">'.$tab["label"].'</a>';
+				$class = ($tab['active']) ? ' active' : '';
+				$out[] = '<li class="dropdown'.$class.'"><a class="dropdown-toggle" href="?event='.$tab["event"].'">'.$tab["label"].'</a>';
 				if (!empty($tab['items']))
 				{
 					$out[] = '<ul class="dropdown-menu">';
 					foreach ($tab['items'] as $item)
 					{
-						$class = ($item['active']) ? 'active' : 'inactive';
-						$out[] = '<li class="'.$class.'"><a href="?event='.$item["event"].'">'.$item["label"].'</a></li>';
+						$class = ($item['active']) ? ' class="active"' : '';
+						$out[] = '<li'.$class.'><a href="?event='.$item["event"].'">'.$item["label"].'</a></li>';
 					}
 					$out[] = '</ul>';
 				}

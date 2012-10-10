@@ -30,8 +30,8 @@ SF;
 
 		foreach ($this->menu as $tab)
 		{
-			$class = ($tab['active']) ? 'active' : 'inactive';
-			$out[] = '<li class="primary '.$class.'"><a href="?event='.$tab["event"].'">'.$tab["label"].'</a>';
+			$class = ($tab['active']) ? ' active' : '';
+			$out[] = '<li class="primary'.$class.'"><a href="?event='.$tab["event"].'">'.$tab["label"].'</a>';
 
 			if (!empty($tab['items']))
 			{
@@ -39,8 +39,8 @@ SF;
 
 				foreach ($tab['items'] as $item)
 				{
-					$class = ($item['active']) ? 'active' : 'inactive';
-					$out[] = '<li class="secondary '.$class.'"><a href="?event='.$item["event"].'">'.$item["label"].'</a></li>';
+					$class = ($item['active']) ? ' active' : '';
+					$out[] = '<li class="secondary'.$class.'"><a href="?event='.$item["event"].'">'.$item["label"].'</a></li>';
 				}
 
 				$out[] = '</ul>';
