@@ -118,16 +118,10 @@ $LastChangedRevision$
 			$dbversion = '4.4.1';
 	}
 
-	if (version_compare($dbversion, '4.5.0', '<'))
+	if (version_compare($dbversion, '4.5.2', '<'))
 	{
 		if ((include txpath.DS.'update'.DS.'_to_4.5.0.php') !== false)
-			$dbversion = '4.5.0';
-	}
-
-	if (version_compare($dbversion, '4.5.1', '<'))
-	{
-		if ((include txpath.DS.'update'.DS.'_to_4.5.1.php') !== false)
-			$dbversion = '4.5.1';
+			$dbversion = '4.5.2';
 	}
 
 	if (version_compare($dbversion, '4.6.0', '<'))
