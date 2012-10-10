@@ -22,5 +22,7 @@
 #php_value register_globals 0
 
 # SVG
-AddType image/svg+xml  svg svgz
-AddEncoding gzip       svgz
+<IfModule mod_mime.c>
+	AddType image/svg+xml  svg svgz
+	AddEncoding gzip       svgz
+</IfModule>
