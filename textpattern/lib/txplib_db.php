@@ -35,7 +35,63 @@ if (version_compare(PHP_VERSION, '5.3.0') < 0)
  * @package DB
  */
 
-class DB {
+class DB
+{
+	/**
+	 * The database server.
+	 *
+	 * @var string
+	 */
+
+	public $host;
+
+	/**
+	 * The database name.
+	 *
+	 * @var string
+	 */
+
+	public $db;
+
+	/**
+	 * The username.
+	 *
+	 * @var string
+	 */
+
+	public $user;
+
+	/**
+	 * The password.
+	 *
+	 * @var string
+	 */
+
+	public $pass;
+
+	/**
+	 * Database client flags.
+	 *
+	 * @var int
+	 */
+
+	public $client_flags;
+
+	/**
+	 * The database link identifier.
+	 *
+	 * @var resource
+	 */
+
+	public $link;
+
+	/**
+	 * Database server version.
+	 *
+	 * @var string
+	 */
+
+	public $version;
 
 	/**
 	 * Creates a new link.
