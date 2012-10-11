@@ -22,7 +22,7 @@ if (!defined('PFX'))
 
 if (version_compare(PHP_VERSION, '5.3.0') < 0)
 {
-	 // We are deliberately using a deprecated function for PHP 4 compatibility
+	 // We are deliberately using a deprecated function for PHP 4 compatibility.
 	 if (get_magic_quotes_runtime())
 	{
 		set_magic_quotes_runtime(0);
@@ -30,7 +30,7 @@ if (version_compare(PHP_VERSION, '5.3.0') < 0)
 }
 
 /**
- * Initializes a database connection.
+ * Initialises a database connection.
  *
  * @package DB
  */
@@ -118,7 +118,7 @@ class DB
 		@mysql_select_db($this->db) or die(db_down());
 
 		$version = $this->version;
-		// be backwardscompatible
+		// Be backwards compatible.
 		if ( isset($txpcfg['dbcharset']) && (intval($version[0]) >= 5 || preg_match('#^4\.[1-9]#',$version)) )
 			mysql_query("SET NAMES ". $txpcfg['dbcharset']);
 	}
@@ -136,7 +136,7 @@ $DB = new DB;
 /**
  * Prefixes a database table's name for use in a query.
  *
- * Textpattern can be installed to a shared database. This is
+ * Textpattern can be installed to a shared database, this is
  * achieved by prefixing database tables. This function
  * can be used to add those prefixes to a known
  * named table when building SQL statements.
@@ -382,7 +382,7 @@ $DB = new DB;
 	}
 
 /**
- * Optimizes a table.
+ * Optimises a table.
  *
  * @param  string $table The table
  * @param  bool   $debug Dump query
@@ -525,9 +525,9 @@ $DB = new DB;
 /**
  * Gets a list rows from a table as an associative array.
  *
- * When working with large result sets, remember that this function 
+ * When working with large result sets remember that this function, 
  * unlike safe_rows_start(), loads results to memory all at once.
- * To optimize performance in such situation, use safe_rows_start()
+ * To optimise performance in such situations, use safe_rows_start()
  * instead.
  *
  * @param  string $things The select clause
@@ -621,7 +621,7 @@ $DB = new DB;
  * Gets a field from a row.
  *
  * This function offers an alternative short-hand syntax to
- * safe_field(). Most notably this internally manages
+ * safe_field(). Most notably, this internally manages
  * value escaping.
  *
  * @param  string $col   The field to get
@@ -671,7 +671,7 @@ $DB = new DB;
  * Gets multiple rows as an associative array.
  *
  * If you need to run simple SELECT queries
- * that selects rows from a table, please see
+ * that select rows from a table, please see
  * safe_rows() and safe_rows_start() first.
  *
  * @param  string     $query The SQL statement to execute
@@ -779,7 +779,7 @@ $DB = new DB;
 	}
 
 /**
- * Return values of one column from multiple rows in an num indexed array.
+ * Return values of one column from multiple rows in a num indexed array.
  *
  * @param  string $query The SQL statement to execute
  * @param  bool   $debug Dump query
@@ -982,7 +982,7 @@ $DB = new DB;
  * This function shouldn't be used to retrieve selected preferences,
  * see get_pref() instead.
  *
- * If run on an authenticated admin-page, the results include current user's
+ * If run on an authenticated admin page, the results include current user's
  * private preferences. Any global preference overrides equally named user prefs.
  *
  * @return array
@@ -995,7 +995,7 @@ $DB = new DB;
 		global $txp_user;
 		$out = array();
 
-		// get current user's private prefs
+		// Get current user's private prefs.
 		if ($txp_user) {
 			$r = safe_rows_start('name, val', 'txp_prefs', 'prefs_id=1 AND user_name=\''.doSlash($txp_user).'\'');
 			if ($r) {
@@ -1005,7 +1005,7 @@ $DB = new DB;
 			}
 		}
 
-		// get global prefs, eventually override equally named user prefs.
+		// Get global prefs, eventually override equally named user prefs.
 		$r = safe_rows_start('name, val', 'txp_prefs', 'prefs_id=1 AND user_name=\'\'');
 		if ($r) {
 			while ($a = nextRow($r)) {
@@ -1027,7 +1027,7 @@ $DB = new DB;
 
 	function db_down()
 	{
-		// 503 status might discourage search engines from indexing or caching the error message
+		// 503 status might discourage search engines from indexing or caching the error message.
 		txp_status_header('503 Service Unavailable');
 		$error = mysql_error();
 		return <<<eod
