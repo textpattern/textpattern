@@ -3162,7 +3162,7 @@ function modal_halt($thing)
 		}
 
 		// Validate token
-		if (gps('_txp_token') == form_token()) {
+		if (gps('_txp_token') === form_token()) {
 			return true;
 		}
 
