@@ -238,7 +238,7 @@ $DB = new DB;
  * echo safe_query('SELECT * FROM table');
  */
 
-	function safe_query($q='',$debug='',$unbuf='')
+	function safe_query($q = '', $debug = false, $unbuf = false)
 	{
 		global $DB, $txpcfg, $qcount, $qtime, $production_status;
 		$method = (!$unbuf) ? 'mysql_query' : 'mysql_unbuffered_query';
@@ -276,7 +276,7 @@ $DB = new DB;
  * }
  */
 
-	function safe_delete($table, $where, $debug='')
+	function safe_delete($table, $where, $debug = false)
 	{
 		$q = "delete from ".safe_pfx($table)." where $where";
 		if ($r = safe_query($q,$debug)) {
@@ -302,7 +302,7 @@ $DB = new DB;
  * }
  */
 
-	function safe_update($table, $set, $where, $debug='')
+	function safe_update($table, $set, $where, $debug = false)
 	{
 		$q = "update ".safe_pfx($table)." set $set where $where";
 		if ($r = safe_query($q,$debug)) {
@@ -327,7 +327,7 @@ $DB = new DB;
  * }
  */
 
-	function safe_insert($table,$set,$debug='')
+	function safe_insert($table, $set, $debug = false)
 	{
 		global $DB;
 		$q = "insert into ".safe_pfx($table)." set $set";
@@ -348,7 +348,7 @@ $DB = new DB;
  * @return int|bool The last generated ID or FALSE on error. If the ID is 0, returns TRUE
  */
 
-	function safe_upsert($table,$set,$where,$debug='')
+	function safe_upsert($table, $set, $where, $debug = false)
 	{
 		// FIXME: lock the table so this is atomic?
 		$r = safe_update($table, $set, $where, $debug);
@@ -372,7 +372,7 @@ $DB = new DB;
  * }
  */
 
-	function safe_alter($table, $alter, $debug='')
+	function safe_alter($table, $alter, $debug = false)
 	{
 		$q = "alter table ".safe_pfx($table)." $alter";
 		if ($r = safe_query($q,$debug)) {
@@ -389,7 +389,7 @@ $DB = new DB;
  * @return bool   FALSE on error
  */
 
-	function safe_optimize($table, $debug='')
+	function safe_optimize($table, $debug = false)
 	{
 		$q = "optimize table ".safe_pfx($table)."";
 		if ($r = safe_query($q,$debug)) {
@@ -406,7 +406,7 @@ $DB = new DB;
  * @return bool
  */
 
-	function safe_repair($table, $debug='')
+	function safe_repair($table, $debug = false)
 	{
 		$q = "repair table ".safe_pfx($table)."";
 		if ($r = safe_query($q,$debug)) {
@@ -433,7 +433,7 @@ $DB = new DB;
  * }
  */
 
-	function safe_field($thing, $table, $where, $debug='')
+	function safe_field($thing, $table, $where, $debug = false)
 	{
 		$q = "select $thing from ".safe_pfx_j($table)." where $where";
 		$r = safe_query($q,$debug);
@@ -455,7 +455,7 @@ $DB = new DB;
  * @return array
  */
 
-	function safe_column($thing, $table, $where, $debug='')
+	function safe_column($thing, $table, $where, $debug = false)
 	{
 		$q = "select $thing from ".safe_pfx_j($table)." where $where";
 		$rs = getRows($q,$debug);
@@ -480,7 +480,7 @@ $DB = new DB;
  * @since  4.5.0
  */
 
-	function safe_column_num($thing, $table, $where, $debug='')
+	function safe_column_num($thing, $table, $where, $debug = false)
 	{
 		$q = "select $thing from ".safe_pfx_j($table)." where $where";
 		$rs = getRows($q,$debug);
@@ -512,7 +512,7 @@ $DB = new DB;
  * }
  */
 
-	function safe_row($things, $table, $where, $debug='')
+	function safe_row($things, $table, $where, $debug = false)
 	{
 		$q = "select $things from ".safe_pfx_j($table)." where $where";
 		$rs = getRow($q,$debug);
@@ -546,7 +546,7 @@ $DB = new DB;
  * }
  */
 
-	function safe_rows($things, $table, $where, $debug='')
+	function safe_rows($things, $table, $where, $debug = false)
 	{
 		$q = "select $things from ".safe_pfx_j($table)." where $where";
 		$rs = getRows($q,$debug);
@@ -576,7 +576,7 @@ $DB = new DB;
  * }
  */
 
-	function safe_rows_start($things, $table, $where, $debug='')
+	function safe_rows_start($things, $table, $where, $debug = false)
 	{
 		$q = "select $things from ".safe_pfx_j($table)." where $where";
 		return startRows($q,$debug);
@@ -591,7 +591,7 @@ $DB = new DB;
  * @return int|bool Number of rows or FALSE on error
  */
 
-	function safe_count($table, $where, $debug='')
+	function safe_count($table, $where, $debug = false)
 	{
 		return getThing("select count(*) from ".safe_pfx_j($table)." where $where",$debug);
 	}
@@ -607,7 +607,7 @@ $DB = new DB;
  * print_r(safe_show('columns', 'myTable'));
  */
 
-	function safe_show($thing, $table, $debug='')
+	function safe_show($thing, $table, $debug = false)
 	{
 		$q = "show $thing from ".safe_pfx($table)."";
 		$rs = getRows($q,$debug);
@@ -635,7 +635,7 @@ $DB = new DB;
  * echo fetch('name', 'myTable', 'id', 12);
  */
 
-	function fetch($col,$table,$key,$val,$debug='')
+	function fetch($col, $table, $key, $val, $debug = false)
 	{
 		$key = doSlash($key);
 		$val = (is_int($val)) ? $val : "'".doSlash($val)."'";
@@ -657,7 +657,7 @@ $DB = new DB;
  * @see    safe_row()
  */
 
-	function getRow($query,$debug='')
+	function getRow($query, $debug = false)
 	{
 		if ($r = safe_query($query,$debug)) {
 			$row = (mysql_num_rows($r) > 0) ? mysql_fetch_assoc($r) : false;
@@ -685,7 +685,7 @@ $DB = new DB;
  * }
  */
 
-	function getRows($query,$debug='')
+	function getRows($query, $debug = false)
 	{
 		if ($r = safe_query($query,$debug)) {
 			if (mysql_num_rows($r) > 0) {
@@ -710,7 +710,7 @@ $DB = new DB;
  * @access private
  */
 
-	function startRows($query,$debug='')
+	function startRows($query, $debug = false)
 	{
 		return safe_query($query,$debug);
 	}
@@ -768,7 +768,7 @@ $DB = new DB;
  * @return string|bool The contents, empty if no results were found or FALSE on error
  */
 
-	function getThing($query,$debug='')
+	function getThing($query, $debug = false)
 	{
 		if ($r = safe_query($query,$debug)) {
 			$thing = (mysql_num_rows($r) != 0) ? mysql_result($r,0) : '';
@@ -786,7 +786,7 @@ $DB = new DB;
  * @return array
  */
 
-	function getThings($query,$debug='')
+	function getThings($query, $debug = false)
 	{
 		$rs = getRows($query,$debug);
 		if ($rs) {
@@ -808,7 +808,7 @@ $DB = new DB;
  * @see    safe_count()
  */
 
-	function getCount($table,$where,$debug='')
+	function getCount($table, $where, $debug = false)
 	{
 		return getThing("select count(*) from ".safe_pfx_j($table)." where $where",$debug);
 	}
