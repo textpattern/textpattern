@@ -518,7 +518,7 @@ $DB = new DB;
 		txp_status_header('503 Service Unavailable');
 		$error = mysql_error();
 		return <<<eod
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="utf-8">

@@ -56,7 +56,7 @@ $rel_txpurl = rtrim(dirname(dirname($_SERVER['PHP_SELF'])), '/\\');
 $bodyclass = ($step=='') ? ' class="welcome"' : '';
 
 print <<<eod
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="utf-8">

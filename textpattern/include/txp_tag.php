@@ -23,7 +23,7 @@ if (!defined('txpinterface'))
 
 header(pluggable_ui('admin_side', 'x_frame_options', 'X-Frame-Options: SAMEORIGIN'));
 
-?><!doctype html>
+?><!DOCTYPE html>
 <html lang="<?php echo LANG; ?>" dir="<?php echo txpspecialchars(gTxt('lang_dir')); ?>">
 <head>
 	<meta charset="utf-8">

@@ -49,7 +49,7 @@ $LastChangedRevision$
 
 		header('X-Frame-Options: '.X_FRAME_OPTIONS);
 
-	?><!doctype html>
+	?><!DOCTYPE html>
 	<html lang="<?php echo LANG; ?>" dir="<?php echo txpspecialchars(gTxt('lang_dir')); ?>">
 	<head>
 	<meta charset="utf-8">

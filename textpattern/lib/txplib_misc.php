@@ -2287,7 +2287,7 @@ function escape_js($js)
 
 		if (!isset($out))
 			$out = <<<eod
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
    <meta charset="utf-8">
