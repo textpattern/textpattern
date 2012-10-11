@@ -94,6 +94,8 @@ function doAuth()
 
 	function doLoginForm($message)
 	{
+		global $textarray_script;
+
 		include txpath.'/lib/txplib_head.php';
 
 		pagetop(gTxt('login'), $message);
@@ -160,6 +162,7 @@ $(document).ready(
 );
 EOSCR
 		).
+		n.script_js('textpattern.textarray = '.json_encode($textarray_script)).
 		n.'</div><!-- /txp-body -->'.n.'</body>'.n.'</html>';
 
 		exit(0);
