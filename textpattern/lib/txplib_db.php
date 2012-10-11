@@ -41,7 +41,7 @@ class DB {
 	 * Creates a new link.
 	 */
 
-	function DB()
+	public function __construct()
 	{
 		global $txpcfg;
 
