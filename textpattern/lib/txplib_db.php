@@ -11,13 +11,13 @@ $LastChangedRevision$
  * @package DB
  */
 
-if (!defined('PFX')) {
-	if (!empty($txpcfg['table_prefix'])) {
-		/**
-		 * Database table prefix
-		 */
-		define ("PFX",$txpcfg['table_prefix']);
-	} else define ("PFX",'');
+if (!defined('PFX'))
+{
+	/**
+	 * Database table prefix.
+	 */
+
+	define('PFX', !empty($txpcfg['table_prefix']) ? $txpcfg['table_prefix'] : '');
 }
 
 if (version_compare(PHP_VERSION, '5.3.0') < 0)
