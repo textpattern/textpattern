@@ -72,7 +72,7 @@ $LastChangedRevision$
  * @return string HTML
  */
 
-	function column_multi_head($head_items, $class='')
+	function column_multi_head($head_items, $class = '')
 	{
 		$o = n.t.'<th scope="col"'.($class ? ' class="'.$class.'"' : '').'>';
 		$first_item = true;
@@ -126,7 +126,7 @@ $LastChangedRevision$
  * @return string HTML
  */
 
-	function hCell($text='',$caption='',$atts='')
+	function hCell($text = '', $caption = '', $atts = '')
 	{
 		$text = ('' === $text) ? sp : $text;
 		return tag($text,'th',$atts);
@@ -142,7 +142,7 @@ $LastChangedRevision$
  * @return string HTML
  */
 
-	function sLink($event,$step,$linktext,$class='')
+	function sLink($event, $step, $linktext, $class = '')
 	{
 		$c = ($class) ? ' class="'.$class.'"' : '';
 		return '<a href="?event='.$event.a.'step='.$step.'"'.$c.'>'.$linktext.'</a>';
@@ -165,7 +165,7 @@ $LastChangedRevision$
  * @return string HTML
  */
 
-	function eLink($event,$step='',$thing='',$value='',$linktext,$thing2='',$val2='',$title='edit')
+	function eLink($event, $step = '', $thing = '', $value = '', $linktext, $thing2 = '', $val2 = '', $title = 'edit')
 	{
 		return join('',array(
 			'<a href="?event='.$event,
@@ -190,7 +190,7 @@ $LastChangedRevision$
  * @return string HTML
  */
 
-	function wLink($event,$step='',$thing='',$value='')
+	function wLink($event, $step = '', $thing = '', $value = '')
 	{
 		// TODO: Why index.php? while we don't need this in eLink etc.
 		return join('',array(
@@ -275,7 +275,7 @@ $LastChangedRevision$
  * @return string HTML
  */
 
-	function aLink($event,$step,$thing,$value,$thing2,$value2)
+	function aLink($event, $step, $thing, $value, $thing2, $value2)
 	{
 		$o = '<a href="?event='.$event.a.'step='.$step.a.'_txp_token='.form_token().
 			a.$thing.'='.urlencode($value).a.$thing2.'='.urlencode($value2).'"';
@@ -295,7 +295,7 @@ $LastChangedRevision$
  * @return string HTML
  */
 
-	function prevnext_link($name,$event,$step,$id,$titling='',$rel='')
+	function prevnext_link($name, $event, $step, $id, $titling = '', $rel = '')
 	{
 		return '<a href="?event='.$event.a.'step='.$step.a.'ID='.$id.
 			'" class="navlink"'.($titling ? ' title="'.$titling.'"' : '').($rel ? ' rel="'.$rel.'"' : '').'>'.$name.'</a>';
@@ -344,7 +344,7 @@ $LastChangedRevision$
  * @return string HTML
  */
 
-	function nav_form($event, $page, $numPages, $sort, $dir, $crit, $search_method, $total=0, $limit=0, $step='list')
+	function nav_form($event, $page, $numPages, $sort, $dir, $crit, $search_method, $total = 0, $limit = 0, $step = 'list')
 	{
 		global $theme;
 		if ($crit != '' && $total > 1)
@@ -439,7 +439,7 @@ $LastChangedRevision$
  * endTable();
  */
 
-	function startTable($id='',$align='',$class='',$p='',$w='')
+	function startTable($id = '', $align = '', $class = '', $p = '', $w = '')
 	{
 		$id = ($id) ? ' id="'.$id.'"' : '';
 		$align = ($align) ? ' align="'.$align.'"' : '';
@@ -455,7 +455,7 @@ $LastChangedRevision$
  * @return string HTML
  */
 
-	function endTable ()
+	function endTable()
 	{
 		return n.'</table>'.n;
 	}
@@ -489,7 +489,7 @@ $LastChangedRevision$
  * @return string HTML
  */
 
-	function td($content='',$width='',$class='',$id='')
+	function td($content = '', $width = '', $class = '', $id = '')
 	{
 		$content = ('' === $content) ? '&#160;' : $content;
 		$atts[] = ($width)  ? ' width="'.$width.'"' : '';
@@ -506,7 +506,7 @@ $LastChangedRevision$
  * @return string HTML
  */
 
-	function tda($content,$atts='')
+	function tda($content, $atts = '')
 	{
 		return tag($content,'td',$atts);
 	}
@@ -519,7 +519,7 @@ $LastChangedRevision$
  * @return string HTML
  */
 
-	function tdtl($content,$atts='')
+	function tdtl($content, $atts = '')
 	{
 		return tag($content,'td',$atts);
 	}
@@ -532,7 +532,7 @@ $LastChangedRevision$
  * @return string HTML
  */
 
-	function tr($content,$atts='')
+	function tr($content, $atts = '')
 	{
 		return tag($content,'tr',$atts);
 	}
@@ -547,7 +547,7 @@ $LastChangedRevision$
  * @return string HTML
  */
 
-	function tdcs($content,$span,$width="",$class='')
+	function tdcs($content, $span, $width = "", $class = '')
 	{
 		return join('',array(
 			t.'<td colspan="'.$span.'"',
@@ -566,7 +566,7 @@ $LastChangedRevision$
  * @return string  HTML
  */
 
-	function tdrs($content,$span,$width="")
+	function tdrs($content, $span, $width = "")
 	{
 		return join('',array(
 			t.'<td rowspan="'.$span.'"',
@@ -628,7 +628,7 @@ $LastChangedRevision$
  * @return string HTML
  */
 
-	function inputLabel($name, $input, $label = '', $help = '', $class = '', $wraptag_val='span')
+	function inputLabel($name, $input, $label = '', $help = '', $class = '', $wraptag_val = 'span')
 	{
 		$help = ($help) ? sp.popHelp($help) : '';
 		$class = ($class) ? $class : 'edit-'.str_replace('_', '-', $name);
@@ -653,7 +653,7 @@ $LastChangedRevision$
  * @return string HTML
  */
 
-	function tag($content,$tag,$atts='')
+	function tag($content, $tag, $atts = '')
 	{
 		return ('' !== $content) ? '<'.$tag.$atts.'>'.$content.'</'.$tag.'>' : '';
 	}
@@ -666,7 +666,7 @@ $LastChangedRevision$
  * @return string HTML
  */
 
-	function graf ($item,$atts='')
+	function graf($item, $atts = '')
 	{
 		return tag($item,'p',$atts);
 	}
@@ -680,7 +680,7 @@ $LastChangedRevision$
  * @return string HTML
  */
 
-	function hed($item,$level,$atts='')
+	function hed($item, $level, $atts = '')
 	{
 		return tag($item,'h'.$level,$atts);
 	}
@@ -694,7 +694,7 @@ $LastChangedRevision$
  * @return string HTML
  */
 
-	function href($item,$href,$atts='')
+	function href($item, $href, $atts = '')
 	{
 		return tag($item,'a',$atts.' href="'.$href.'"');
 	}
@@ -798,7 +798,7 @@ $LastChangedRevision$
  * @return string HTML
  */
 
-	function popHelp($help_var, $width = '', $height = '', $class='pophelp')
+	function popHelp($help_var, $width = '', $height = '', $class = 'pophelp')
 	{
 		$ui = '<a rel="help" target="_blank"'.
 			' href="'.HELP_URL.'?item='.$help_var.a.'language='.LANG.'"'.
@@ -879,7 +879,7 @@ $LastChangedRevision$
  * @return string HTML
  */
 
-	function messenger($thing, $thething='', $action='')
+	function messenger($thing, $thething = '', $action = '')
 	{
 		return gTxt($thing).' '.strong($thething).' '.gTxt($action);
 	}
@@ -898,7 +898,7 @@ $LastChangedRevision$
  * @return string  HTML
  */
 
-	function multi_edit($options, $event=null, $step=null, $page='', $sort='', $dir='', $crit='', $search_method='')
+	function multi_edit($options, $event = null, $step = null, $page = '', $sort = '', $dir = '', $crit = '', $search_method = '')
 	{
 		$html = $methods = array();
 		$methods[''] = gTxt('with_selected_option');
@@ -1080,7 +1080,7 @@ $LastChangedRevision$
  * @return string HTML/JS
  */
 
-	function dom_attach($id, $content, $noscript='', $wraptag='div', $wraptagid='')
+	function dom_attach($id, $content, $noscript = '', $wraptag = 'div', $wraptagid = '')
 	{
 		$content = escape_js($content);
 
@@ -1101,7 +1101,7 @@ EOF;
  * @return string HTML with embedded script element
  */
 
-	function script_js($js, $noscript='')
+	function script_js($js, $noscript = '')
 	{
 		$js = preg_replace('#<(/?)script#', '\\x3c$1script', $js);
 
@@ -1123,7 +1123,7 @@ EOF;
  * @return string HTML
  */
 
-	function toggle_box($classname, $form=0) {
+	function toggle_box($classname, $form = 0) {
 
 		$name = 'cb_toggle_'.$classname;
 		$i =
@@ -1146,7 +1146,7 @@ EOF;
  * @return string HTML
  */
 
-	function cookie_box($classname, $form=1) {
+	function cookie_box($classname, $form = 1) {
 
 		$name = 'cb_'.$classname;
 		$val = cs('toggle_'.$classname) ? 1 : 0;
@@ -1174,7 +1174,7 @@ EOF;
  * @return string HTML
  */
 
-	function fieldset($content, $legend='', $id='') {
+	function fieldset($content, $legend = '', $id = '') {
 		$a_id = ($id ? ' id="'.$id.'"' : '');
 		return tag(trim(tag($legend, 'legend').n.$content), 'fieldset', $a_id);
 	}
@@ -1191,7 +1191,7 @@ EOF;
  * @since  4.5.0
  */
 
-	function asyncHref($item,$parms,$atts='')
+	function asyncHref($item, $parms, $atts = '')
 	{
 		extract(doSpecial(lAtts(array(
 			'event'    => $GLOBALS['event'],
