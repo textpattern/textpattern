@@ -422,7 +422,7 @@ $LastChangedRevision$
 /**
  * Render start of a layout &lt;table&gt; element.
  *
- * @param	string	$type	HTML id attribute
+ * @param	string	$id	HTML id attribute
  * @param	string	$align	HTML align attribute ['']
  * @param	string	$class	HTML class attribute ['']
  * @param	integer	$p	HTML cellpadding attribute
@@ -456,7 +456,6 @@ $LastChangedRevision$
 /**
  * Render &lt;tr&gt; elements from input parameters.
  *
- * @param	mixed,...	$rows	Row contents [null]
  * @return	string	HTML
  */
 
@@ -689,7 +688,7 @@ $LastChangedRevision$
  * Render an &lt;a&gt; element.
  *
  * @param	string	$item	Enclosed content
- * @param	integer	$level	Heading level 1...6
+ * @param	integer	$href	The URL
  * @param	string	$atts	HTML attributes ['']
  * @return	string	HTML
  */
@@ -783,7 +782,6 @@ $LastChangedRevision$
 /**
  * Render a table head row from an array of strings.
  *
- * @param	array	$value,...	Array of head text strings. L10n is applied to the strings.
  * @return	string	HTML
  */
 
@@ -801,6 +799,7 @@ $LastChangedRevision$
  * @param	string	$help_var	Help topic
  * @param	integer	$width	Popup window width
  * @param	integer	$height	Popup window height
+ * @param	string	$class	The HTML class
  * @return	string	HTML
  */
 
