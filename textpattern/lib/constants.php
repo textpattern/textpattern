@@ -469,6 +469,106 @@ define('INPUT_TINY', 2);
 
 define('REQUIRED_PHP_VERSION', '5.2');
 
+/**
+ * File integrity status good.
+ *
+ * @since   4.6.0
+ * @package Debug
+ * @see     check_file_integrity()
+ */
+
+define('INTEGRITY_GOOD', 1);
+
+/**
+ * File integrity status modified.
+ *
+ * @since   4.6.0
+ * @package Debug
+ * @see     check_file_integrity()
+ */
+
+define('INTEGRITY_MODIFIED', 2);
+
+/**
+ * File integrity not readable.
+ *
+ * @since   4.6.0
+ * @package Debug
+ * @see     check_file_integrity()
+ */
+
+define('INTEGRITY_NOT_READABLE', 3);
+
+/**
+ * File integrity file missing.
+ *
+ * @since   4.6.0
+ * @package Debug
+ * @see     check_file_integrity()
+ */
+
+define('INTEGRITY_MISSING', 4);
+
+/**
+ * File integrity not a file.
+ *
+ * @since   4.6.0
+ * @package Debug
+ * @see     check_file_integrity()
+ */
+
+define('INTEGRITY_NOT_FILE', 5);
+
+/**
+ * Return integrity status.
+ *
+ * @since   4.6.0
+ * @package Debug
+ * @see     check_file_integrity()
+ */
+
+define('INTEGRITY_STATUS', 0x1);
+
+/**
+ * Return integrity MD5 hashes.
+ *
+ * @since   4.6.0
+ * @package Debug
+ * @see     check_file_integrity()
+ */
+
+define('INTEGRITY_MD5', 0x2);
+
+/**
+ * Return full paths.
+ *
+ * @since   4.6.0
+ * @package Debug
+ * @see     check_file_integrity()
+ */
+ 
+define('INTEGRITY_REALPATH', 0x4);
+
+/**
+ * Return a digest.
+ *
+ * @since   4.6.0
+ * @package Debug
+ * @see     check_file_integrity()
+ */
+ 
+define('INTEGRITY_DIGEST', 0x8);
+
+/**
+ * Return a parsed checksum file's contents.
+ *
+ * @since   4.6.0
+ * @package Debug
+ * @see     check_file_integrity()
+ */
+
+define('INTEGRITY_TABLE', 0x10);
+
 error_reporting($old_level);
 unset($old_level);
 ?>

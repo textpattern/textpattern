@@ -3222,4 +3222,111 @@ function getStatusNum($name)
 	return $num;
 }
 
+/**
+ * Checks installs's file integrity and returns results.
+ *
+ * Depending on the given $flags this function will either return a
+ * an array of file statuses, checksums or the digest of the install.
+ * It can also return the parsed contents of the checksum file.
+ *
+ * @param   int        $flags Options are INTEGRITY_MD5 | INTEGRITY_STATUS | INTEGRITY_REALPATH | INTEGRITY_DIGEST
+ * @return  array|bool Array of files and status, or FALSE on error
+ * @package Debug
+ * @example
+ * print_r(
+ * 	check_file_integrity(INTEGRITY_MD5 | INTEGRITY_REALPATH)
+ * );
+ */
+
+	function check_file_integrity($flags = INTEGRITY_STATUS)
+	{
+		static $files = null, $files_md5 = array(), $checksum_table = array();
+
+		if ($files === null)
+		{
+			if ($cs = @file(txpath . '/checksums.txt'))
+			{
+				$files = array();
+
+				foreach ($cs as $c)
+				{
+					if (preg_match('@^(\S+):(?: r?(\S+) | )\(?(.{32})\)?$@', trim($c), $m))
+					{
+						list (,$relative, $r, $md5) = $m;
+						$file = realpath(txpath . $relative);
+						$checksum_table[$relative] = $md5;
+
+						if ($file === false)
+						{
+							$files[$relative] = INTEGRITY_MISSING;
+							$files_md5[$relative] = false;
+							continue;
+						}
+
+						if (!is_readable($file))
+						{
+							$files[$relative] = INTEGRITY_NOT_READABLE;
+							$files_md5[$relative] = false;
+							continue;
+						}
+
+						if (!is_file($file))
+						{
+							$files[$relative] = INTEGRITY_NOT_FILE;
+							$files_md5[$relative] = false;
+							continue;
+						}
+
+						$files_md5[$relative] = md5_file($file);
+
+						if ($files_md5[$relative] !== $md5)
+						{
+							$files[$relative] = INTEGRITY_MODIFIED;
+						}
+						else
+						{
+							$files[$relative] = INTEGRITY_GOOD;
+						}
+					}
+				}
+			}
+			else
+			{
+				$files_md5 = $files = false;
+			}
+		}
+
+		if ($flags & INTEGRITY_DIGEST)
+		{
+			return $files_md5 ? md5(implode(n, $files_md5)) : false;
+		}
+
+		if ($flags & INTEGRITY_TABLE)
+		{
+			return $checksum_table ? $checksum_table : false;
+		}
+
+		$return = $files;
+
+		if ($flags & INTEGRITY_MD5)
+		{
+			$return = $files_md5;
+		}
+
+		if ($return && $flags & INTEGRITY_REALPATH)
+		{
+			$relative = array();
+
+			foreach ($return as $path => $status)
+			{
+				$realpath = realpath(txpath.$path);
+				$relative[!$realpath ? $path : $realpath] = $status;
+			}
+
+			return $relative;
+		}
+
+		return $return;
+	}
+
 ?>
