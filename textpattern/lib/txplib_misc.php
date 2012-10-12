@@ -3223,9 +3223,9 @@ function getStatusNum($name)
 }
 
 /**
- * Checks installs's file integrity and returns results.
+ * Checks install's file integrity and returns results.
  *
- * Depending on the given $flags this function will either return a
+ * Depending on the given $flags this function will either return
  * an array of file statuses, checksums or the digest of the install.
  * It can also return the parsed contents of the checksum file.
  *
