@@ -66,8 +66,10 @@ class Validator
 
 	function validate()
 	{
-		foreach ($this->constraints as $c) {
-			if (!$c->validate()) {
+		foreach ($this->constraints as $c)
+		{
+			if (!$c->validate())
+			{
 				$this->messages[] = $c->getMessage();
 			}
 		}
@@ -99,9 +101,12 @@ class Validator
 
 	function setConstraints($constraints)
 	{
-		if (is_array($constraints)) {
+		if (is_array($constraints))
+		{
 			$in = $constraints;
-		} else {
+		}
+		else
+		{
 			$in[] = $constraints;
 		}
 		$this->constraints = $in;
@@ -145,7 +150,8 @@ class Constraint
 
 	function __construct($value, $options = array())
 	{
-		if (empty($options['message'])) {
+		if (empty($options['message']))
+		{
 			$options['message'] = 'undefined_constraint_violation';
 		}
 		$this->value = $value;
@@ -172,9 +178,12 @@ class Constraint
 
 	function setOptions($options, $key=null)
 	{
-		if ($key === null) {
+		if ($key === null)
+		{
 			$this->options = $options;
-		} else {
+		}
+		else
+		{
 			$this->options[$key] = $options;
 		}
 	}
@@ -256,7 +265,8 @@ class SectionConstraint extends ChoiceConstraint
 	function __construct($value, $options = array())
 	{
 		static $choices = null;
-		if (null === $choices) {
+		if (null === $choices)
+		{
 			$choices = safe_column('name', 'txp_section', '1=1');
 		}
 		$options['choices'] = $choices;
@@ -285,7 +295,8 @@ class CategoryConstraint extends ChoiceConstraint
 	{
 		static $choices = null;
 		$options = lAtts(array('allow_blank' => true, 'type' => '', 'message' => 'unknown_category'), $options, false);
-		if (null === $choices) {
+		if (null === $choices)
+		{
 			$choices = safe_column('name', 'txp_category', $options['type'] !== '' ? 'type=\''.doSlash($options['type']).'\'' : '1=1');
 		}
 		$options['choices'] = $choices;
@@ -314,7 +325,8 @@ class FormConstraint extends ChoiceConstraint
 		static $choices = null;
 		$options = lAtts(array('allow_blank' => true, 'type' => '', 'message' => 'unknown_form'), $options, false);
 
-		if (null === $choices) {
+		if (null === $choices)
+		{
 			$choices = safe_column('name', 'txp_form', $options['type'] !== '' ? 'type=\''.doSlash($options['type']).'\'' : '1=1');
 		}
 		$options['choices'] = $choices;
