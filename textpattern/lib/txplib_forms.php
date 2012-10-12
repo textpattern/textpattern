@@ -52,30 +52,18 @@ $LastChangedRevision$
 		$out = array();
 
 		$selected = false;
+		$value = (string) $value;
 
 		foreach ($array as $avalue => $alabel)
 		{
-			if ($check_type) {
-				if ($avalue === $value || $alabel === $value) {
-					$sel = ' selected="selected"';
-					$selected = true;
-				} else {
-					$sel = '';
-				}
+			if ($value === (string) $avalue || $value === (string) $alabel)
+			{
+				$sel = ' selected="selected"';
+				$selected = true;
 			}
-
-			else {
-				// coerce type of array members into incoming value's type
-				// otherwise ('foo' == 0) === true
-				settype($avalue, gettype($value));
-				settype($alabel, gettype($value));
-
-				if ($avalue == $value || $alabel == $value) {
-					$sel = ' selected="selected"';
-					$selected = true;
-				} else {
-					$sel = '';
-				}
+			else
+			{
+				$sel = '';
 			}
 
 			$out[] = n.t.'<option value="'.txpspecialchars($avalue).'"'.$sel.'>'.txpspecialchars($alabel).'</option>';
