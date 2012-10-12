@@ -322,7 +322,7 @@ if (!defined('X_FRAME_OPTIONS'))
 if (!defined('AJAX_TIMEOUT'))
 {
 	/**
-	 * Ajax timeout in seconds.
+	 * AJAX timeout in seconds.
 	 *
 	 * @package Ajax
 	 */
