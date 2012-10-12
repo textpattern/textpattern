@@ -213,8 +213,8 @@ $LastChangedRevision$
  * @param  string $thing     URL parameter key #1
  * @param  string $value     URL parameter value #1
  * @param  string $verify    Show an "Are you sure?" dialogue with this text ['confirm_delete_popup']
- * @param  string $thing2    URL parameter key #2 ['']
- * @param  string $thing2val URL parameter value #2 ['']
+ * @param  string $thing2    URL parameter key #2
+ * @param  string $thing2val URL parameter value #2
  * @param  bool   $get       Use GET request [false: Use POST request]
  * @param  array  $remember  Convey URL parameters for page state. Member sequence is $page, $sort, $dir, $crit, $search_method
  * @return string HTML
