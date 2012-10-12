@@ -212,7 +212,7 @@ $LastChangedRevision$
  * @param  string $step      Step
  * @param  string $thing     URL parameter key #1
  * @param  string $value     URL parameter value #1
- * @param  string $verify    Show an "Are you sure?" dialogue with this text ['confirm_delete_popup']
+ * @param  string $verify    Show an "Are you sure?" dialogue with this text
  * @param  string $thing2    URL parameter key #2
  * @param  string $thing2val URL parameter value #2
  * @param  bool   $get       Use GET request [false: Use POST request]
@@ -623,7 +623,7 @@ $LastChangedRevision$
  * @param  string $input       complete input control widget (result of fInput(), yesnoRadio(), etc)
  * @param  string $label       Label
  * @param  string $help        pophelp text item
- * @param  string $class       CSS class name to apply to wrapper ['edit-' + $name with underscores replaced with hyphens]
+ * @param  string $class       CSS class name to apply to wrapper
  * @param  string $wraptag_val Tag to wrap the value in. If set to '', no wrapper is used (useful for textareas)
  * @return string HTML
  */
