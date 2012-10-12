@@ -4,6 +4,14 @@ $HeadURL$
 $LastChangedRevision$
 */
 
+/**
+ * Constants.
+ */
+
+/**
+ * @ignore
+ */
+
 $old_level = error_reporting((E_ALL | E_STRICT) ^ E_NOTICE);
 
 if (!defined('TXP_DEBUG'))
