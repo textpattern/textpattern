@@ -25,6 +25,10 @@
 	{
 		$files = array();
 	}
+	else
+	{
+		$files = array_keys($files);
+	}
 
 	if ($event == 'diag') {
 		require_privs('diag');
