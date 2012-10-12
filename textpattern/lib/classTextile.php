@@ -9,8 +9,8 @@
  */
 
 /*
-$HeadURL$
-$LastChangedRevision$
+$HeadURL: https://jukka.m.svahn%40gmail.com@textpattern.googlecode.com/svn/development/4.x/textpattern/lib/classTextile.php $
+$LastChangedRevision: 4096 $
 */
 
 /*
@@ -384,7 +384,7 @@ class Textile
 	var $max_span_depth = 5;
 
 	var $ver = '2.4.1';
-	var $rev = '$Rev$';
+	var $rev = '$Rev: 4096 $';
 
 	var $doc_root;
 

@@ -6,8 +6,8 @@
 
 	Use of this software denotes acceptance of the Textpattern license agreement
 
-$HeadURL$
-$LastChangedRevision$
+$HeadURL: https://jukka.m.svahn%40gmail.com@textpattern.googlecode.com/svn/development/4.x/textpattern/publish/comment.php $
+$LastChangedRevision: 4142 $
 
 */
 

@@ -1,7 +1,7 @@
 <?php
 /*
-$HeadURL$
-$LastChangedRevision$
+$HeadURL: https://jukka.m.svahn%40gmail.com@textpattern.googlecode.com/svn/development/4.x/index.php $
+$LastChangedRevision: 4108 $
 */
 
 	// Make sure we display all errors that occur during initialization

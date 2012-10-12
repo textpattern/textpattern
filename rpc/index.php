@@ -4,8 +4,8 @@ XML-RPC Server for Textpattern 4.0.x
 http://txp.kusor.com/rpc-api
 (C)2005-2006 The Textpattern Development Team - http://textpattern.com
 @author Pedro Palazón - http://kusor.com
-$HeadURL$
-$LastChangedRevision$
+$HeadURL: https://jukka.m.svahn%40gmail.com@textpattern.googlecode.com/svn/development/4.x/rpc/index.php $
+$LastChangedRevision: 4086 $
 */
 
 #TODO: change error reporting to E_ALL, including E_NOTICE to detect subtle bugs?

@@ -1,8 +1,8 @@
 <?php
 
 /*
-$HeadURL$
-$LastChangedRevision$
+$HeadURL: https://jukka.m.svahn%40gmail.com@textpattern.googlecode.com/svn/development/4.x/textpattern/theme/classic/classic.php $
+$LastChangedRevision: 4202 $
 */
 
 if (!defined('txpinterface')) die('txpinterface is undefined.');

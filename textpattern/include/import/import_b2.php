@@ -1,7 +1,7 @@
 <?php
 /*
-$HeadURL$
-$LastChangedRevision$
+$HeadURL: https://jukka.m.svahn%40gmail.com@textpattern.googlecode.com/svn/development/4.x/textpattern/include/import/import_b2.php $
+$LastChangedRevision: 3997 $
 */
 
 	//Absolutely untested. Any volunteer with a b2 db dump to collaborate?

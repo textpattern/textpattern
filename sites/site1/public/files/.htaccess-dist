@@ -1,5 +1,5 @@
-# $HeadURL$
-# $LastChangedRevision$
+# $HeadURL: https://jukka.m.svahn%40gmail.com@textpattern.googlecode.com/svn/development/4.x/sites/site1/public/files/.htaccess-dist $
+# $LastChangedRevision: 3786 $
 # Inhibit directory listing
 Options -Indexes
 # Inhibit direct file downloads

@@ -4,8 +4,8 @@ XML-RPC Server for Textpattern 4.0.x
 http://txp.kusor.com/rpc-api
 (C)2005-2006 The Textpattern Development Team - http://textpattern.com
 @author Pedro Palazón - http://kusor.com
-$HeadURL$
-$LastChangedRevision$
+$HeadURL: https://jukka.m.svahn%40gmail.com@textpattern.googlecode.com/svn/development/4.x/rpc/TXP_RPCServer.php $
+$LastChangedRevision: 4011 $
  */
 
 if (!defined('txpath')) die('txpath is undefined.');

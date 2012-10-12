@@ -9,8 +9,8 @@ All rights reserved.
 
 Use of this software indicates acceptance of the Textpattern license agreement
 
-$HeadURL$
-$LastChangedRevision$
+$HeadURL: https://jukka.m.svahn%40gmail.com@textpattern.googlecode.com/svn/development/4.x/textpattern/lib/txplib_publish.php $
+$LastChangedRevision: 4154 $
 
 @since 4.5.0
 */
