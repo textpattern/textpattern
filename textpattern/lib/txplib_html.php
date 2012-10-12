@@ -32,7 +32,8 @@ $LastChangedRevision$
 	{
 		global $txp_user, $event, $app_mode, $theme, $textarray_script;
 
-		if ($app_mode != 'async' && $event != 'tag') {
+		if ($app_mode != 'async' && $event != 'tag')
+		{
 			echo '</div><!-- /txp-body --><footer role="contentinfo" class="txp-footer">';
 			echo pluggable_ui('admin_side', 'footer', $theme->footer());
 			callback_event('admin_side', 'body_end');
@@ -78,7 +79,10 @@ $LastChangedRevision$
 		$first_item = true;
 		foreach ($head_items as $item)
 		{
-			if (empty($item)) continue;
+			if (empty($item))
+			{
+				continue;
+			}
 			extract(lAtts(array(
 				'value'   => '',
 				'sort'    => '',
@@ -88,7 +92,7 @@ $LastChangedRevision$
 				'dir'     => '',
 				'crit'    => '',
 				'method'  => '',
-			),$item));
+			), $item));
 
 			$o .= ($first_item) ? '' : ', '; $first_item = false;
 
@@ -129,7 +133,7 @@ $LastChangedRevision$
 	function hCell($text = '', $caption = '', $atts = '')
 	{
 		$text = ('' === $text) ? sp : $text;
-		return tag($text,'th',$atts);
+		return tag($text, 'th', $atts);
 	}
 
 /**
@@ -220,19 +224,24 @@ $LastChangedRevision$
  * @return string HTML
  */
 
-	function dLink($event, $step, $thing, $value, $verify = '', $thing2 = '', $thing2val = '', $get = '', $remember = null) {
-		if ($remember) {
+	function dLink($event, $step, $thing, $value, $verify = '', $thing2 = '', $thing2val = '', $get = '', $remember = null)
+	{
+		if ($remember)
+		{
 			list($page, $sort, $dir, $crit, $search_method) = $remember;
 		}
 
-		if ($get) {
+		if ($get)
+		{
 			$url = '?event='.$event.a.'step='.$step.a.$thing.'='.urlencode($value).a.'_txp_token='.form_token();
 
-			if ($thing2) {
+			if ($thing2)
+			{
 				$url .= a.$thing2.'='.urlencode($thing2val);
 			}
 
-			if ($remember) {
+			if ($remember)
+			{
 				$url .= a.'page='.$page.a.'sort='.$sort.a.'dir='.$dir.a.'crit='.$crit.a.'search_method='.$search_method;
 			}
 
@@ -475,8 +484,11 @@ $LastChangedRevision$
 
 	function stackRows()
 	{
-		foreach(func_get_args() as $a) { $o[] = tr($a); }
-		return join('',$o);
+		foreach (func_get_args() as $a)
+		{
+			$o[] = tr($a);
+		}
+		return join('', $o);
 	}
 
 /**
@@ -495,7 +507,7 @@ $LastChangedRevision$
 		$atts[] = ($width)  ? ' width="'.$width.'"' : '';
 		$atts[] = ($class)  ? ' class="'.$class.'"' : '';
 		$atts[] = ($id)  ? ' id="'.$id.'"' : '';
-		return t.tag($content,'td',join('',$atts)).n;
+		return t.tag($content, 'td', join('', $atts)).n;
 	}
 
 /**
@@ -508,7 +520,7 @@ $LastChangedRevision$
 
 	function tda($content, $atts = '')
 	{
-		return tag($content,'td',$atts);
+		return tag($content, 'td', $atts);
 	}
 
 /**
@@ -521,7 +533,7 @@ $LastChangedRevision$
 
 	function tdtl($content, $atts = '')
 	{
-		return tag($content,'td',$atts);
+		return tag($content, 'td', $atts);
 	}
 
 /**
@@ -534,7 +546,7 @@ $LastChangedRevision$
 
 	function tr($content, $atts = '')
 	{
-		return tag($content,'tr',$atts);
+		return tag($content, 'tr', $atts);
 	}
 
 /**
@@ -594,7 +606,7 @@ $LastChangedRevision$
 			$cell = '<label for="'.$label_id.'">'.$cell.'</label>';
 		}
 
-		return tda($cell,' class="cell-label"');
+		return tda($cell, ' class="cell-label"');
 	}
 
 /**
@@ -668,7 +680,7 @@ $LastChangedRevision$
 
 	function graf($item, $atts = '')
 	{
-		return tag($item,'p',$atts);
+		return tag($item, 'p', $atts);
 	}
 
 /**
@@ -682,7 +694,7 @@ $LastChangedRevision$
 
 	function hed($item, $level, $atts = '')
 	{
-		return tag($item,'h'.$level,$atts);
+		return tag($item, 'h'.$level, $atts);
 	}
 
 /**
@@ -696,7 +708,7 @@ $LastChangedRevision$
 
 	function href($item, $href, $atts = '')
 	{
-		return tag($item,'a',$atts.' href="'.$href.'"');
+		return tag($item, 'a', $atts.' href="'.$href.'"');
 	}
 
 /**
@@ -708,7 +720,7 @@ $LastChangedRevision$
 
 	function strong($item)
 	{
-		return tag($item,'strong');
+		return tag($item, 'strong');
 	}
 
 /**
@@ -720,7 +732,7 @@ $LastChangedRevision$
 
 	function span($item)
 	{
-		return tag($item,'span');
+		return tag($item, 'span');
 	}
 
 /**
@@ -732,7 +744,7 @@ $LastChangedRevision$
 
 	function htmlPre($item)
 	{
-		return '<pre>'.tag($item,'code').'</pre>';
+		return '<pre>'.tag($item, 'code').'</pre>';
 	}
 
 /**
@@ -756,7 +768,7 @@ $LastChangedRevision$
 
 	function small($item)
 	{
-		return tag($item,'small');
+		return tag($item, 'small');
 	}
 
 /**
@@ -769,8 +781,11 @@ $LastChangedRevision$
 
 	function assRow($array, $atts ='')
 	{
-		foreach($array as $a => $b) $o[] = tda($a,' width="'.$b.'"');
-		return tr(join(n.t,$o), $atts);
+		foreach ($array as $a => $b)
+		{
+			$o[] = tda($a, ' width="'.$b.'"');
+		}
+		return tr(join(n.t, $o), $atts);
 	}
 
 /**
@@ -784,8 +799,11 @@ $LastChangedRevision$
 	function assHead()
 	{
 		$array = func_get_args();
-		foreach($array as $a) $o[] = hCell(gTxt($a), '', ' scope="col"');
-		return tr(join('',$o));
+		foreach ($array as $a)
+		{
+			$o[] = hCell(gTxt($a), '', ' scope="col"');
+		}
+		return tr(join('', $o));
 	}
 
 /**
@@ -915,7 +933,7 @@ $LastChangedRevision$
 
 		callback_event_ref($event.'_ui', 'multi_edit_options', 0, $options);
 
-		foreach($options as $value => $option)
+		foreach ($options as $value => $option)
 		{
 			if (is_array($option))
 			{
@@ -961,7 +979,7 @@ $LastChangedRevision$
 			100 => 100
 		);
 
-		$select_page = selectInput('qty', $vals, $val,'', 1);
+		$select_page = selectInput('qty', $vals, $val, '', 1);
 
 		// proper localisation
 		$page = str_replace('{page}', $select_page, gTxt('view_per_page'));
@@ -1123,8 +1141,8 @@ EOF;
  * @return string HTML
  */
 
-	function toggle_box($classname, $form = 0) {
-
+	function toggle_box($classname, $form = 0)
+	{
 		$name = 'cb_toggle_'.$classname;
 		$i =
 			'<input type="checkbox" name="'.$name.'" id="'.$name.'" value="1" '.
@@ -1133,9 +1151,13 @@ EOF;
 			' <label for="'.$name.'">'.gTxt('detail_toggle').'</label> '.
 			script_js("setClassRemember('".$classname."');addEvent(window, 'load', function(){setClassRemember('".$classname."');});");
 		if ($form)
+		{
 			return n.form($i);
+		}
 		else
+		{
 			return n.$i;
+		}
 	}
 
 /**
@@ -1146,8 +1168,8 @@ EOF;
  * @return string HTML
  */
 
-	function cookie_box($classname, $form = 1) {
-
+	function cookie_box($classname, $form = 1)
+	{
 		$name = 'cb_'.$classname;
 		$val = cs('toggle_'.$classname) ? 1 : 0;
 
@@ -1157,10 +1179,13 @@ EOF;
 			'class="checkbox" onclick="setClassRemember(\''.$classname.'\','.(1-$val).');submit(this.form);" />'.
 			' <label for="'.$name.'">'.gTxt($classname).'</label> ';
 
-		if ($form) {
+		if ($form)
+		{
 			$args = empty($_SERVER['QUERY_STRING']) ? '' : '?'.txpspecialchars($_SERVER['QUERY_STRING']);
 			return '<form class="'.$name.'" method="post" action="index.php'.$args.'">'.$i.eInput(gps('event')).n.tInput().'</form>';
-		} else {
+		}
+		else
+		{
 			return n.$i;
 		}
 	}
@@ -1174,7 +1199,8 @@ EOF;
  * @return string HTML
  */
 
-	function fieldset($content, $legend = '', $id = '') {
+	function fieldset($content, $legend = '', $id = '')
+	{
 		$a_id = ($id ? ' id="'.$id.'"' : '');
 		return tag(trim(tag($legend, 'legend').n.$content), 'fieldset', $a_id);
 	}
