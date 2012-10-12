@@ -108,19 +108,29 @@ class DB
 		$this->client_flags = isset($txpcfg['client_flags']) ? $txpcfg['client_flags'] : 0;
 
 		$this->link = @mysql_connect($this->host, $this->user, $this->pass, false, $this->client_flags);
-		if (!$this->link) die(db_down());
+		if (!$this->link)
+		{
+			die(db_down());
+		}
 
 		$this->version = mysql_get_server_info();
 
-		if (!$this->link) {
+		if (!$this->link)
+		{
 			$GLOBALS['connected'] = false;
-		} else $GLOBALS['connected'] = true;
+		}
+		else
+		{
+			$GLOBALS['connected'] = true;
+		}
 		@mysql_select_db($this->db) or die(db_down());
 
 		$version = $this->version;
 		// Be backwards compatible.
-		if ( isset($txpcfg['dbcharset']) && (intval($version[0]) >= 5 || preg_match('#^4\.[1-9]#',$version)) )
+		if (isset($txpcfg['dbcharset']) && (intval($version[0]) >= 5 || preg_match('#^4\.[1-9]#',$version)))
+		{
 			mysql_query("SET NAMES ". $txpcfg['dbcharset']);
+		}
 	}
 }
 
@@ -162,10 +172,13 @@ $DB = new DB;
  * }
  */
 
-	function safe_pfx($table) {
+	function safe_pfx($table)
+	{
 		$name = PFX.$table;
 		if (preg_match('@[^\w._$]@', $name))
+		{
 			return '`'.$name.'`';
+		}
 		return $name;
 	}
 
@@ -197,12 +210,17 @@ $DB = new DB;
 	function safe_pfx_j($table)
 	{
 		$ts = array();
-		foreach (explode(',', $table) as $t) {
+		foreach (explode(',', $table) as $t)
+		{
 			$name = PFX.trim($t);
 			if (preg_match('@[^\w._$]@', $name))
+			{
 				$ts[] = "`$name`".(PFX ? " as `$t`" : '');
+			}
 			else
+			{
 				$ts[] = "$name".(PFX ? " as $t" : '');
+			}
 		}
 		return join(', ', $ts);
 	}
@@ -242,21 +260,31 @@ $DB = new DB;
 	{
 		global $DB, $txpcfg, $qcount, $qtime, $production_status;
 		$method = (!$unbuf) ? 'mysql_query' : 'mysql_unbuffered_query';
-		if (!$q) return false;
-		if ($debug or TXP_DEBUG === 1) dmp($q);
+		if (!$q)
+		{
+			return false;
+		}
+		if ($debug or TXP_DEBUG === 1)
+		{
+			dmp($q);
+		}
 
 		$start = getmicrotime();
 		$result = $method($q,$DB->link);
 		$time = getmicrotime() - $start;
 		@$qtime += $time;
 		@$qcount++;
-		if ($result === false) {
+		if ($result === false)
+		{
 			trigger_error(mysql_error(), E_USER_ERROR);
 		}
 
 		trace_add("[SQL ($time): $q]");
 
-		if(!$result) return false;
+		if(!$result)
+		{
+			return false;
+		}
 		return $result;
 	}
 
@@ -279,7 +307,8 @@ $DB = new DB;
 	function safe_delete($table, $where, $debug = false)
 	{
 		$q = "delete from ".safe_pfx($table)." where $where";
-		if ($r = safe_query($q,$debug)) {
+		if ($r = safe_query($q, $debug))
+		{
 			return true;
 		}
 		return false;
@@ -305,7 +334,8 @@ $DB = new DB;
 	function safe_update($table, $set, $where, $debug = false)
 	{
 		$q = "update ".safe_pfx($table)." set $set where $where";
-		if ($r = safe_query($q,$debug)) {
+		if ($r = safe_query($q, $debug))
+		{
 			return true;
 		}
 		return false;
@@ -331,7 +361,8 @@ $DB = new DB;
 	{
 		global $DB;
 		$q = "insert into ".safe_pfx($table)." set $set";
-		if ($r = safe_query($q,$debug)) {
+		if ($r = safe_query($q, $debug))
+		{
 			$id = mysql_insert_id($DB->link);
 			return ($id === 0 ? true : $id);
 		}
@@ -353,9 +384,13 @@ $DB = new DB;
 		// FIXME: lock the table so this is atomic?
 		$r = safe_update($table, $set, $where, $debug);
 		if ($r and (mysql_affected_rows() or safe_count($table, $where, $debug)))
+		{
 			return $r;
+		}
 		else
+		{
 			return safe_insert($table, join(', ', array($where, $set)), $debug);
+		}
 	}
 
 /**
@@ -375,7 +410,8 @@ $DB = new DB;
 	function safe_alter($table, $alter, $debug = false)
 	{
 		$q = "alter table ".safe_pfx($table)." $alter";
-		if ($r = safe_query($q,$debug)) {
+		if ($r = safe_query($q, $debug))
+		{
 			return true;
 		}
 		return false;
@@ -392,7 +428,8 @@ $DB = new DB;
 	function safe_optimize($table, $debug = false)
 	{
 		$q = "optimize table ".safe_pfx($table)."";
-		if ($r = safe_query($q,$debug)) {
+		if ($r = safe_query($q, $debug))
+		{
 			return true;
 		}
 		return false;
@@ -409,7 +446,8 @@ $DB = new DB;
 	function safe_repair($table, $debug = false)
 	{
 		$q = "repair table ".safe_pfx($table)."";
-		if ($r = safe_query($q,$debug)) {
+		if ($r = safe_query($q, $debug))
+		{
 			return true;
 		}
 		return false;
@@ -437,8 +475,9 @@ $DB = new DB;
 	{
 		$q = "select $thing from ".safe_pfx_j($table)." where $where";
 		$r = safe_query($q,$debug);
-		if (@mysql_num_rows($r) > 0) {
-			$f = mysql_result($r,0);
+		if (@mysql_num_rows($r) > 0)
+		{
+			$f = mysql_result($r, 0);
 			mysql_free_result($r);
 			return $f;
 		}
@@ -459,8 +498,10 @@ $DB = new DB;
 	{
 		$q = "select $thing from ".safe_pfx_j($table)." where $where";
 		$rs = getRows($q,$debug);
-		if ($rs) {
-			foreach($rs as $a) {
+		if ($rs)
+		{
+			foreach ($rs as $a)
+			{
 				$v = array_shift($a);
 				$out[$v] = $v;
 			}
@@ -484,8 +525,10 @@ $DB = new DB;
 	{
 		$q = "select $thing from ".safe_pfx_j($table)." where $where";
 		$rs = getRows($q,$debug);
-		if ($rs) {
-			foreach($rs as $a) {
+		if ($rs)
+		{
+			foreach ($rs as $a)
+			{
 				$v = array_shift($a);
 				$out[] = $v;
 			}
@@ -516,7 +559,8 @@ $DB = new DB;
 	{
 		$q = "select $things from ".safe_pfx_j($table)." where $where";
 		$rs = getRow($q,$debug);
-		if ($rs) {
+		if ($rs)
+		{
 			return $rs;
 		}
 		return array();
@@ -550,7 +594,8 @@ $DB = new DB;
 	{
 		$q = "select $things from ".safe_pfx_j($table)." where $where";
 		$rs = getRows($q,$debug);
-		if ($rs) {
+		if ($rs)
+		{
 			return $rs;
 		}
 		return array();
@@ -611,7 +656,8 @@ $DB = new DB;
 	{
 		$q = "show $thing from ".safe_pfx($table)."";
 		$rs = getRows($q,$debug);
-		if ($rs) {
+		if ($rs)
+		{
 			return $rs;
 		}
 		return array();
@@ -640,7 +686,8 @@ $DB = new DB;
 		$key = doSlash($key);
 		$val = (is_int($val)) ? $val : "'".doSlash($val)."'";
 		$q = "select $col from ".safe_pfx($table)." where `$key` = $val limit 1";
-		if ($r = safe_query($q,$debug)) {
+		if ($r = safe_query($q, $debug))
+		{
 			$thing = (mysql_num_rows($r) > 0) ? mysql_result($r,0) : '';
 			mysql_free_result($r);
 			return $thing;
@@ -659,7 +706,8 @@ $DB = new DB;
 
 	function getRow($query, $debug = false)
 	{
-		if ($r = safe_query($query,$debug)) {
+		if ($r = safe_query($query,$debug))
+		{
 			$row = (mysql_num_rows($r) > 0) ? mysql_fetch_assoc($r) : false;
 			mysql_free_result($r);
 			return $row;
@@ -687,9 +735,14 @@ $DB = new DB;
 
 	function getRows($query, $debug = false)
 	{
-		if ($r = safe_query($query,$debug)) {
-			if (mysql_num_rows($r) > 0) {
-				while ($a = mysql_fetch_assoc($r)) $out[] = $a;
+		if ($r = safe_query($query, $debug))
+		{
+			if (mysql_num_rows($r) > 0)
+			{
+				while ($a = mysql_fetch_assoc($r))
+				{
+					$out[] = $a;
+				}
 				mysql_free_result($r);
 				return $out;
 			}
@@ -712,7 +765,7 @@ $DB = new DB;
 
 	function startRows($query, $debug = false)
 	{
-		return safe_query($query,$debug);
+		return safe_query($query, $debug);
 	}
 
 /**
@@ -738,7 +791,9 @@ $DB = new DB;
 	{
 		$row = mysql_fetch_assoc($r);
 		if ($row === false)
+		{
 			mysql_free_result($r);
+		}
 		return $row;
 	}
 
@@ -770,7 +825,8 @@ $DB = new DB;
 
 	function getThing($query, $debug = false)
 	{
-		if ($r = safe_query($query,$debug)) {
+		if ($r = safe_query($query, $debug))
+		{
 			$thing = (mysql_num_rows($r) != 0) ? mysql_result($r,0) : '';
 			mysql_free_result($r);
 			return $thing;
@@ -788,9 +844,13 @@ $DB = new DB;
 
 	function getThings($query, $debug = false)
 	{
-		$rs = getRows($query,$debug);
-		if ($rs) {
-			foreach($rs as $a) $out[] = array_shift($a);
+		$rs = getRows($query, $debug);
+		if ($rs)
+		{
+			foreach ($rs as $a)
+			{
+				$out[] = array_shift($a);
+			}
 			return $out;
 		}
 		return array();
@@ -837,7 +897,10 @@ $DB = new DB;
 			"name='$root' and type = '$type'"
 		);
 
-		if (!$rs) return array();
+		if (!$rs)
+		{
+			return array();
+		}
 		extract($rs);
 
 		$out = array();
@@ -849,9 +912,11 @@ $DB = new DB;
 			"lft between $l and $r and type = '$type' and name != 'root' and $where order by lft asc"
 		);
 
-		while ($rs and $row = nextRow($rs)) {
+		while ($rs and $row = nextRow($rs))
+		{
 			extract($row);
-			while (count($right) > 0 && $right[count($right)-1] < $rgt) {
+			while (count($right) > 0 && $right[count($right)-1] < $rgt)
+			{
 				array_pop($right);
 			}
 
@@ -867,7 +932,7 @@ $DB = new DB;
 
 			$right[] = $rgt;
 		}
-		return($out);
+		return $out;
 	}
 
 /**
@@ -889,7 +954,10 @@ $DB = new DB;
 			$tbl,
 			"name='".doSlash($target)."' and type = '".doSlash($type)."'"
 		);
-		if (!$rs) return array();
+		if (!$rs)
+		{
+			return array();
+		}
 		extract($rs);
 
 		$rs = safe_rows_start(
@@ -901,9 +969,11 @@ $DB = new DB;
 		$out = array();
 		$right = array();
 
-		while ($rs and $row = nextRow($rs)) {
+		while ($rs and $row = nextRow($rs))
+		{
 			extract($row);
-			while (count($right) > 0 && $right[count($right)-1] < $rgt) {
+			while (count($right) > 0 && $right[count($right)-1] < $rgt)
+			{
 				array_pop($right);
 			}
 
@@ -944,7 +1014,8 @@ $DB = new DB;
 		$result = safe_column("name", $tbl,
 			"parent='$parent' and type='$type' order by name");
 
-		foreach($result as $row) {
+		foreach ($result as $row)
+		{
 			$right = rebuild_tree($row, $right, $type, $tbl);
 		}
 
@@ -996,10 +1067,13 @@ $DB = new DB;
 		$out = array();
 
 		// Get current user's private prefs.
-		if ($txp_user) {
+		if ($txp_user)
+		{
 			$r = safe_rows_start('name, val', 'txp_prefs', 'prefs_id=1 AND user_name=\''.doSlash($txp_user).'\'');
-			if ($r) {
-				while ($a = nextRow($r)) {
+			if ($r)
+			{
+				while ($a = nextRow($r))
+				{
 					$out[$a['name']] = $a['val'];
 				}
 			}
@@ -1007,8 +1081,10 @@ $DB = new DB;
 
 		// Get global prefs, eventually override equally named user prefs.
 		$r = safe_rows_start('name, val', 'txp_prefs', 'prefs_id=1 AND user_name=\'\'');
-		if ($r) {
-			while ($a = nextRow($r)) {
+		if ($r)
+		{
+			while ($a = nextRow($r))
+			{
 				$out[$a['name']] = $a['val'];
 			}
 		}
