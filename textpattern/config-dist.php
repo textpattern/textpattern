@@ -77,7 +77,7 @@
  * @link   http://www.php.net/manual/function.mysql-connect.php
  */
 
-	#	$txpcfg['client_flags'] = MYSQL_CLIENT_SSL | MYSQL_CLIENT_COMPRESS;
+		$txpcfg['client_flags'] = 0;
 
 /*
  * optional, advanced: http address of the site serving images
