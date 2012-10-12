@@ -6,14 +6,21 @@ $LastChangedRevision$
 
 $old_level = error_reporting((E_ALL | E_STRICT) ^ E_NOTICE);
 
-define('TXP_DEBUG', 0);
+if (!defined('TXP_DEBUG'))
+{
+	define('TXP_DEBUG', 0);
+}
 
 define('SPAM', -1);
 define('MODERATE', 0);
 define('VISIBLE', 1);
 define('RELOAD', -99);
 
-define('RPC_SERVER', 'http://rpc.textpattern.com');
+if (!defined('RPC_SERVER'))
+{
+	define('RPC_SERVER', 'http://rpc.textpattern.com');
+}
+
 defined('HELP_URL') || define('HELP_URL', 'http://rpc.textpattern.com/help/');
 
 define('LEAVE_TEXT_UNTOUCHED', '0');
@@ -28,13 +35,20 @@ else
 
 define('MAGIC_QUOTES_GPC', get_magic_quotes_gpc());
 
-define('REGEXP_UTF8', @preg_match('@\pL@u', 'q'));
+if (!defined('REGEXP_UTF8'))
+{
+	define('REGEXP_UTF8', @preg_match('@\pL@u', 'q'));
+}
+
 define('NULLDATETIME', '\'0000-00-00 00:00:00\'');
 
 define('PERMLINKURL', 0);
 define('PAGELINKURL', 1);
 
-define('EXTRA_MEMORY', '32M');
+if (!defined('EXTRA_MEMORY'))
+{
+	define('EXTRA_MEMORY', '32M');
+}
 
 define('IS_CGI', substr(PHP_SAPI, 0, 3) == 'cgi' );
 define('IS_FASTCGI', IS_CGI and empty($_SERVER['FCGI_ROLE']) and empty($_ENV['FCGI_ROLE']) );
@@ -50,9 +64,21 @@ define('PLUGIN_HAS_PREFS', 0x0001);
 define('PLUGIN_LIFECYCLE_NOTIFY', 0x0002);
 define('PLUGIN_RESERVED_FLAGS', 0x0fff); // reserved bits for use by Textpattern core
 
-define('PASSWORD_LENGTH', 10); // password default length, in characters
-define('PASSWORD_COMPLEXITY', 8); // log(2) of stretching iteration count
-define('PASSWORD_PORTABILITY', TRUE);
+if (!defined('PASSWORD_LENGTH'))
+{
+	define('PASSWORD_LENGTH', 10); // password default length, in characters
+}
+
+if (!defined('PASSWORD_COMPLEXITY'))
+{
+	define('PASSWORD_COMPLEXITY', 8); // log(2) of stretching iteration count
+}
+
+if (!defined('PASSWORD_PORTABILITY'))
+{
+	define('PASSWORD_PORTABILITY', TRUE);
+}
+
 defined('LOGIN_COOKIE_HTTP_ONLY') || define('LOGIN_COOKIE_HTTP_ONLY', true);
 defined('X_FRAME_OPTIONS') || define('X_FRAME_OPTIONS', 'SAMEORIGIN');
 
