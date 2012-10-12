@@ -29,7 +29,7 @@ if (!defined('HELP_URL'))
 define('LEAVE_TEXT_UNTOUCHED', '0');
 define('USE_TEXTILE', '1');
 define('CONVERT_LINEBREAKS', '2');
-define('IS_WIN', strtoupper(substr(PHP_OS, 0, 3)) === 'WIN');
+define('IS_WIN', strpos(strtoupper(PHP_OS), 'WIN') === 0);
 
 if (defined('DIRECTORY_SEPARATOR'))
 {
@@ -57,9 +57,9 @@ if (!defined('EXTRA_MEMORY'))
 	define('EXTRA_MEMORY', '32M');
 }
 
-define('IS_CGI', substr(PHP_SAPI, 0, 3) == 'cgi' );
+define('IS_CGI', strpos(PHP_SAPI, 'cgi') === 0);
 define('IS_FASTCGI', IS_CGI and empty($_SERVER['FCGI_ROLE']) and empty($_ENV['FCGI_ROLE']) );
-define('IS_APACHE', !IS_CGI and substr(PHP_SAPI, 0, 6) == 'apache' );
+define('IS_APACHE', !IS_CGI and strpos(PHP_SAPI, 'apache') === 0);
 
 define('PREF_PRIVATE', true);
 define('PREF_GLOBAL', false);
