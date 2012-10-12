@@ -1848,7 +1848,7 @@ function escape_js($js)
 		if (isset($authors[$name]))
 			return $authors[$name];
 
-		$realname = fetch('RealName','txp_users','name',doSlash($name));
+		$realname = fetch('RealName','txp_users','name',$name);
 		$authors[$name] = $realname;
 		return ($realname) ? $realname : $name;
 	}
@@ -1861,7 +1861,7 @@ function escape_js($js)
 		if (isset($authors[$name]))
 			return $authors[$name];
 
-		$email = fetch('email','txp_users','name',doSlash($name));
+		$email = fetch('email','txp_users','name',$name);
 		$authors[$name] = $email;
 		return $email;
 	}
