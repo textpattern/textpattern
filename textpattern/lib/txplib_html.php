@@ -24,7 +24,7 @@ $LastChangedRevision$
 /**
  * Renders the admin-side footer.
  *
- * Theme's footer partial via the "admin_side" > "footer" pluggable UI.
+ * Theme's footer partial via the "admin_side" > "footer" pluggable UI
  * and send the "admin_side" > "body_end" event.
  */
 
@@ -1088,7 +1088,7 @@ $LastChangedRevision$
 	}
 
 /**
- * Attachs a HTML fragment to a DOM node.
+ * Attaches a HTML fragment to a DOM node.
  *
  * @param  string $id        Target DOM node's id
  * @param  string $content   HTML fragment
