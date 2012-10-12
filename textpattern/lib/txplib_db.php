@@ -22,8 +22,8 @@ if (!defined('PFX'))
 
 if (version_compare(PHP_VERSION, '5.3.0') < 0)
 {
-	 // We are deliberately using a deprecated function for PHP 4 compatibility.
-	 if (get_magic_quotes_runtime())
+	// We are deliberately using a deprecated function for PHP 4 compatibility.
+	if (get_magic_quotes_runtime())
 	{
 		set_magic_quotes_runtime(0);
 	}
@@ -221,7 +221,7 @@ $DB = new DB;
  * }
  */
 
-	function safe_escape($in='')
+	function safe_escape($in = '')
 	{
 		global $DB;
 		return mysql_real_escape_string($in, $DB->link);
@@ -825,7 +825,7 @@ $DB = new DB;
  * @return array
  */
 
-	function getTree($root, $type, $where='1=1', $tbl='txp_category')
+	function getTree($root, $type, $where = '1=1', $tbl = 'txp_category')
 	{
 
 		$root = doSlash($root);
@@ -881,7 +881,7 @@ $DB = new DB;
  * @return array
  */
 
-	function getTreePath($target, $type, $tbl='txp_category')
+	function getTreePath($target, $type, $tbl = 'txp_category')
 	{
 
 		$rs = safe_row(
@@ -933,7 +933,7 @@ $DB = new DB;
  * @return int    The next left ID
  */
 
-	function rebuild_tree($parent, $left, $type, $tbl='txp_category')
+	function rebuild_tree($parent, $left, $type, $tbl = 'txp_category')
 	{
 		$left  = assert_int($left);
 		$right = $left+1;
@@ -966,7 +966,7 @@ $DB = new DB;
  * @return int    The next left ID
  */
 
-	function rebuild_tree_full($type, $tbl='txp_category')
+	function rebuild_tree_full($type, $tbl = 'txp_category')
 	{
 		# fix circular references, otherwise rebuild_tree() could get stuck in a loop
 		safe_update($tbl, "parent=''", "type='".doSlash($type)."' and name='root'");
