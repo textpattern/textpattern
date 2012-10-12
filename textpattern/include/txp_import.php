@@ -1,10 +1,5 @@
 <?php
 
-/*
-$HeadURL: https://jukka.m.svahn%40gmail.com@textpattern.googlecode.com/svn/development/4.x/textpattern/include/txp_import.php $
-$LastChangedRevision: 4128 $
-*/
-
 	if (!defined('txpinterface')) die('txpinterface is undefined.');
 
 	// TO-DO:

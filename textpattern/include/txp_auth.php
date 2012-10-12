@@ -9,9 +9,6 @@ All rights reserved
 
 Use of this software indicates acceptance of the Textpattern license agreement
 
-$HeadURL: https://jukka.m.svahn%40gmail.com@textpattern.googlecode.com/svn/development/4.x/textpattern/include/txp_auth.php $
-$LastChangedRevision: 4207 $
-
 */
 
 if (!defined('txpinterface')) die('txpinterface is undefined.');

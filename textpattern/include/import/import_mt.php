@@ -1,9 +1,4 @@
 <?php
-/*
-$HeadURL: https://jukka.m.svahn%40gmail.com@textpattern.googlecode.com/svn/development/4.x/textpattern/include/import/import_mt.php $
-$LastChangedRevision: 3446 $
-*/
-
 //Long live zem!
 
 //Time for 45KB: 0.9648-1.3698sec.

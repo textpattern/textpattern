@@ -38,13 +38,6 @@
  * @link       http://scripts.incutio.com/xmlrpc/ Site/manual
  */
 
-/*
-Contains Textpatternish amendments.
-
-$HeadURL: https://jukka.m.svahn%40gmail.com@textpattern.googlecode.com/svn/development/4.x/textpattern/lib/IXRClass.php $
-$LastChangedRevision: 3394 $
-*/
-
 class IXR_Value
 {
     var $data;

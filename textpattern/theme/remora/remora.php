@@ -1,10 +1,5 @@
 <?php
 
-/*
-$HeadURL: https://jukka.m.svahn%40gmail.com@textpattern.googlecode.com/svn/development/4.x/textpattern/theme/remora/remora.php $
-$LastChangedRevision: 4204 $
-*/
-
 if (!defined('txpinterface')) die('txpinterface is undefined.');
 
 theme::based_on('classic');

@@ -1,8 +1,4 @@
 <?php
-/*
-$HeadURL: https://jukka.m.svahn%40gmail.com@textpattern.googlecode.com/svn/development/4.x/textpattern/lib/constants.php $
-$LastChangedRevision: 4247 $
-*/
 
 /**
  * Constants.

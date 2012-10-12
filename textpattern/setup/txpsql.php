@@ -1,10 +1,5 @@
 <?php
 
-/*
-$HeadURL: https://jukka.m.svahn%40gmail.com@textpattern.googlecode.com/svn/development/4.x/textpattern/setup/txpsql.php $
-$LastChangedRevision: 4206 $
-*/
-
 
 if (!defined('TXP_INSTALL'))
 	exit;

@@ -1,9 +1,5 @@
 <?php
 
-/*
-$HeadURL: https://jukka.m.svahn%40gmail.com@textpattern.googlecode.com/svn/development/4.x/textpattern/include/txp_css.php $
-$LastChangedRevision: 4090 $
-*/
 
 	if (!defined('txpinterface')) die('txpinterface is undefined.');
 

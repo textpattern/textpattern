@@ -1,8 +1,5 @@
 <?php
-/*
-$HeadURL: https://jukka.m.svahn%40gmail.com@textpattern.googlecode.com/svn/development/4.x/css.php $
-$LastChangedRevision: 4086 $
-*/
+
 
 if (@ini_get('register_globals')) {
 	if (isset($_REQUEST['GLOBALS']) || isset($_FILES['GLOBALS'])) {

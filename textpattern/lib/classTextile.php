@@ -9,11 +9,6 @@
  */
 
 /*
-$HeadURL: https://jukka.m.svahn%40gmail.com@textpattern.googlecode.com/svn/development/4.x/textpattern/lib/classTextile.php $
-$LastChangedRevision: 4096 $
-*/
-
-/*
 
 _____________
 T E X T I L E

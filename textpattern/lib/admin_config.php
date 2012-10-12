@@ -12,9 +12,6 @@
  *	Only the Permission-Settings at the bottom this file are still actively used,
 	and these will be moved to the db before the next release
 
-$HeadURL: https://jukka.m.svahn%40gmail.com@textpattern.googlecode.com/svn/development/4.x/textpattern/lib/admin_config.php $
-$LastChangedRevision: 4112 $
-
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 

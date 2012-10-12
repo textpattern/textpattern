@@ -1,9 +1,4 @@
 <?php
-/*
-$HeadURL: https://jukka.m.svahn%40gmail.com@textpattern.googlecode.com/svn/development/4.x/textpattern/include/import/import_wp.php $
-$LastChangedRevision: 3997 $
-*/
-
 
 	function doImportWP($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $wpdbprefix, $insert_into_section, $insert_with_status, $default_comment_invite, $wpdbcharset)
 	{

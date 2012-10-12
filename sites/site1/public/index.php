@@ -1,8 +1,4 @@
 <?php
-/*
-$HeadURL: https://textpattern.googlecode.com/svn/development/4.x/sites/site1/public/index.php $
-$LastChangedRevision: 3238 $
-*/
 
 	// Make sure we display all errors that occur during initialization
 	error_reporting(E_ALL | E_STRICT);

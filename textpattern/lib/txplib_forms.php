@@ -1,10 +1,5 @@
 <?php
 
-/*
-$HeadURL: https://jukka.m.svahn%40gmail.com@textpattern.googlecode.com/svn/development/4.x/textpattern/lib/txplib_forms.php $
-$LastChangedRevision: 4227 $
-*/
-
 //-------------------------------------------------------------
 
 	function radioSet($vals, $field, $var, $tabindex = '', $id = '')

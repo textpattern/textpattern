@@ -8,9 +8,6 @@
 
 	Use of this software indicates acceptance of the Textpattern license agreement
 
-$HeadURL: https://jukka.m.svahn%40gmail.com@textpattern.googlecode.com/svn/development/4.x/textpattern/include/txp_page.php $
-$LastChangedRevision: 4167 $
-
 */
 	if (!defined('txpinterface')) die('txpinterface is undefined.');
 
