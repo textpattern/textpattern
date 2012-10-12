@@ -593,7 +593,7 @@ $DB = new DB;
 
 	function safe_count($table, $where, $debug = false)
 	{
-		return getThing("select count(*) from ".safe_pfx_j($table)." where $where",$debug);
+		return getCount($table, $where, $debug);
 	}
 
 /**
