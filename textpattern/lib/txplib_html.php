@@ -5,15 +5,26 @@ $HeadURL$
 $LastChangedRevision$
 */
 
+/**
+ * Collection of HTML widgets.
+ *
+ * @package HTML
+ */
+
+/**
+ * @ignore
+ */
+
 	define("t","\t");
 	define("n","\n");
 	define("br","<br />");
 	define("sp","&#160;");
 	define("a","&#38;");
 
-
 /**
- * Render the admin-side theme's footer partial via the "admin_side" > "footer" pluggable UI.
+ * Renders the admin-side footer.
+ *
+ * Theme's footer partial via the "admin_side" > "footer" pluggable UI.
  * and send the "admin_side" > "body_end" event.
  */
 
@@ -30,20 +41,19 @@ $LastChangedRevision$
 		}
 	}
 
-
 /**
- * Render the user interface for one head cell of columnar data.
+ * Renders the user interface for one head cell of columnar data.
  *
- * @param	string	$value	Element text
- * @param	string	$sort	Sort criterion ['']
- * @param	string	$event	Event name ['']
- * @param	boolean	$is_link	Include link to admin action in user interface according to the other params [false]
- * @param	string	$dir	Sort direction, either "asc" or "desc" ['']
- * @param	string	$crit	Search criterion ['']
- * @param	string	$method	Search method ['']
- * @param	string	$class	HTML "class" attribute applied to the resulting element ['']
- * @param	string	$step	Step name
- * @return 	string	HTML
+ * @param  string $value   Element text
+ * @param  string $sort    Sort criterion
+ * @param  string $event   Event name
+ * @param  bool   $is_link Include link to admin action in user interface according to the other params
+ * @param  string $dir     Sort direction, either "asc" or "desc"
+ * @param  string $crit    Search criterion
+ * @param  string $method  Search method
+ * @param  string $class   HTML "class" attribute applied to the resulting element
+ * @param  string $step    Step name
+ * @return string HTML
  */
 
 	function column_head($value, $sort = '', $event = '', $is_link = '', $dir = '', $crit = '', $method = '', $class = '', $step = 'list')
@@ -54,21 +64,12 @@ $LastChangedRevision$
 				), $class);
 	}
 
-
 /**
- * Render the user interface for multiple head cells of columnar data.
+ * Renders the user interface for multiple head cells of columnar data.
  *
- * @param	array	$head_items	An array of hashed elements.
- * 								Valid keys:
- * 							 	'value'
- * 								'sort'
- * 								'event'
- * 								'is_link'
- * 								'dir'
- * 								'crit'
- * 								'method'
- * @param	string	$class	HTML "class" attribute applied to the resulting element
- * @return	string	HTML
+ * @param  array  $head_items An array of hashed elements. Valid keys: 'value', 'sort', 'event', 'is_link', 'dir', 'crit', 'method'
+ * @param  string $class      HTML "class" attribute applied to the resulting element
+ * @return string HTML
  */
 
 	function column_multi_head($head_items, $class='')
@@ -116,14 +117,13 @@ $LastChangedRevision$
 		return $o;
 	}
 
-
 /**
- * Render a <th> element.
+ * Renders a &lt;th&gt; element.
  *
- * @param	string	$text	Cell text [space]
- * @param	string	$caption	unused  ['']
- * @param	string	$atts	HTML attributes  ['']
- * @return	string	HTML
+ * @param  string $text    Cell text
+ * @param  string $caption Is not used
+ * @param  string $atts    HTML attributes
+ * @return string HTML
  */
 
 	function hCell($text='',$caption='',$atts='')
@@ -132,15 +132,14 @@ $LastChangedRevision$
 		return tag($text,'th',$atts);
 	}
 
-
 /**
- * Render a link invoking an admin-side action.
+ * Renders a link invoking an admin-side action.
  *
- * @param	string	$event	Event
- * @param	string	$step	Step
- * @param	string	$linktext	Link text
- * @param	string	$class	HTML class attribute for link
- * @return	string	HTML
+ * @param  string $event    Event
+ * @param  string $step     Step
+ * @param  string $linktext Link text
+ * @param  string $class    HTML class attribute for link
+ * @return string HTML
  */
 
 	function sLink($event,$step,$linktext,$class='')
@@ -149,19 +148,21 @@ $LastChangedRevision$
 		return '<a href="?event='.$event.a.'step='.$step.'"'.$c.'>'.$linktext.'</a>';
 	}
 
-
 /**
- * Render a link invoking an admin-side action while taking up to two additional URL parameters.
+ * Renders a link with two additional URL parameters.
  *
- * @param	string	$event	Event
- * @param	string	$step	Step ['']
- * @param	string	$thing	URL parameter key #1 ['']
- * @param	string	$value	URL parameter value #1 ['']
- * @param	string	$linktext	Link text
- * @param	string	$thing2	URL parameter key #2 ['']
- * @param	string	$val2	URL parameter value #2 ['']
- * @param	string	$title	Anchor title ['edit']
- * @return	string	HTML
+ * Renders a link invoking an admin-side action
+ * while taking up to two additional URL parameters.
+ *
+ * @param  string $event    Event
+ * @param  string $step     Step
+ * @param  string $thing    URL parameter key #1
+ * @param  string $value    URL parameter value #1
+ * @param  string $linktext Link text
+ * @param  string $thing2   URL parameter key #2
+ * @param  string $val2     URL parameter value #2
+ * @param  string $title    Anchor title
+ * @return string HTML
  */
 
 	function eLink($event,$step='',$thing='',$value='',$linktext,$thing2='',$val2='',$title='edit')
@@ -176,15 +177,17 @@ $LastChangedRevision$
 		));
 	}
 
-
 /**
- * Render a link invoking an admin-side action while taking up to one additional URL parameter.
+ * Renders a link with one additional URL parameter.
+ * 
+ * Renders an link invoking an admin-side action while
+ * taking up to one additional URL parameter.
  *
- * @param	string	$event	Event
- * @param	string	$step	Step
- * @param	string	$thing	URL parameter key
- * @param	string	$value	URL parameter value
- * @return			string 	HTML
+ * @param  string $event Event
+ * @param  string $step  Step
+ * @param  string $thing URL parameter key
+ * @param  string $value URL parameter value
+ * @return string HTML
  */
 
 	function wLink($event,$step='',$thing='',$value='')
@@ -199,19 +202,22 @@ $LastChangedRevision$
 		));
 	}
 
-
 /**
- * Render a link invoking an admin-side "delete" action while taking up to two additional URL parameters.
+ * Renders a delete link.
  *
- * @param	string	$event	Event
- * @param	string	$step	Step
- * @param	string	$thing	URL parameter key #1
- * @param	string	$value	URL parameter value #1
- * @param	string	$verify	Show an "Are you sure?" dialogue with this text ['confirm_delete_popup']
- * @param	string	$thing2	URL parameter key #2 ['']
- * @param	string	$thing2val	URL parameter value #2 ['']
- * @param	boolean	$get	Use GET request [false: Use POST request]
- * @param	array	$remember	Convey URL parameters for page state. Member sequence is $page, $sort, $dir, $crit, $search_method
+ * Renders a link invoking an admin-side "delete" action
+ * while taking up to two additional URL parameters.
+ *
+ * @param  string $event     Event
+ * @param  string $step      Step
+ * @param  string $thing     URL parameter key #1
+ * @param  string $value     URL parameter value #1
+ * @param  string $verify    Show an "Are you sure?" dialogue with this text ['confirm_delete_popup']
+ * @param  string $thing2    URL parameter key #2 ['']
+ * @param  string $thing2val URL parameter value #2 ['']
+ * @param  bool   $get       Use GET request [false: Use POST request]
+ * @param  array  $remember  Convey URL parameters for page state. Member sequence is $page, $sort, $dir, $crit, $search_method
+ * @return string HTML
  */
 
 	function dLink($event, $step, $thing, $value, $verify = '', $thing2 = '', $thing2val = '', $get = '', $remember = null) {
@@ -254,17 +260,19 @@ $LastChangedRevision$
 		));
 	}
 
-
 /**
- * Render a link invoking an admin-side "add" action while taking up to two additional URL parameters.
+ * Renders a link with two addition URL parameters.
  *
- * @param	string	$event	Event
- * @param	string	$step	Step
- * @param	string	$thing	URL parameter key #1
- * @param	string	$value	URL parameter value #1
- * @param	string	$thing2	URL parameter key #2
- * @param	string	$value2	URL parameter value #2
- * @return			string 	HTML
+ * This function can be used for invoking an admin-side "add" action
+ * while taking up to two additional URL parameters.
+ *
+ * @param  string $event  Event
+ * @param  string $step   Step
+ * @param  string $thing  URL parameter key #1
+ * @param  string $value  URL parameter value #1
+ * @param  string $thing2 URL parameter key #2
+ * @param  string $value2 URL parameter value #2
+ * @return string HTML
  */
 
 	function aLink($event,$step,$thing,$value,$thing2,$value2)
@@ -275,17 +283,16 @@ $LastChangedRevision$
 		return $o;
 	}
 
-
 /**
- * Render a link invoking an admin-side "previous/next article" action.
+ * Renders a link invoking an admin-side "previous/next article" action.
  *
- * @param	string	$name	Link text
- * @param	string	$event	Event
- * @param	string	$step	Step
- * @param	integer	$id	ID of target Textpattern object (article,...)
- * @param	string	$titling	HTML title attribute
- * @param	string	$rel	HTML rel attribute
- * @return	string	HTML
+ * @param  string $name    Link text
+ * @param  string $event   Event
+ * @param  string $step    Step
+ * @param  int    $id      ID of target Textpattern object (article,...)
+ * @param  string $titling HTML title attribute
+ * @param  string $rel     HTML rel attribute
+ * @return string HTML
  */
 
 	function prevnext_link($name,$event,$step,$id,$titling='',$rel='')
@@ -294,19 +301,19 @@ $LastChangedRevision$
 			'" class="navlink"'.($titling ? ' title="'.$titling.'"' : '').($rel ? ' rel="'.$rel.'"' : '').'>'.$name.'</a>';
 	}
 
-
 /**
- * Render a link invoking an admin-side "previous/next page" action.
+ * Renders a link invoking an admin-side "previous/next page" action.
  *
- * @param	string	$event	Event
- * @param	integer	$page	Target page number
- * @param	string	$label	Link text
- * @param	string	$type	Direction, either "prev" or "next" ['next']
- * @param	string	$sort	Sort field ['']
- * @param	string	$dir	Sort direction, either "asc" or "desc" ['']
- * @param	string	$crit	Search criterion ['']
- * @param	string	$search_method	Search method ['']
- * @param	string	$step	Step
+ * @param  string $event         Event
+ * @param  int    $page          Target page number
+ * @param  string $label         Link text
+ * @param  string $type          Direction, either "prev" or "next"
+ * @param  string $sort          Sort field
+ * @param  string $dir           Sort direction, either "asc" or "desc"
+ * @param  string $crit          Search criterion
+ * @param  string $search_method Search method
+ * @param  string $step          Step
+ * @return string HTML
  */
 
 	function PrevNextLink($event, $page, $label, $type, $sort = '', $dir = '', $crit = '', $search_method = '', $step = 'list')
@@ -321,21 +328,20 @@ $LastChangedRevision$
 			'</a>';
 	}
 
-
 /**
- * Render a page navigation form.
+ * Renders a page navigation form.
  *
- * @param	string	$event	Event
- * @param	integer	$page	Current page number
- * @param	integer	$numPages	Total pages
- * @param	string	$sort	Sort criterion
- * @param	string	$dir	Sort direction, either "asc" or "desc"
- * @param	string	$crit	Search criterion
- * @param	string	$search_method	Search method
- * @param	integer	$total	Total search term hit count [0]
- * @param	integer	$limit	First visible search term hit number [0]
- * @param	string	$step	Step
- * @return	string	HTML
+ * @param  string $event         Event
+ * @param  int    $page          Current page number
+ * @param  int    $numPages	     Total pages
+ * @param  string $sort          Sort criterion
+ * @param  string $dir           Sort direction, either "asc" or "desc"
+ * @param  string $crit          Search criterion
+ * @param  string $search_method Search method
+ * @param  int    $total	     Total search term hit count [0]
+ * @param  int    $limit	     First visible search term hit number [0]
+ * @param  string $step	         Step
+ * @return string HTML
  */
 
 	function nav_form($event, $page, $numPages, $sort, $dir, $crit, $search_method, $total=0, $limit=0, $step='list')
@@ -404,12 +410,11 @@ $LastChangedRevision$
 		return join(n, $out);
 	}
 
-
 /**
- * Render start of a layout &lt;table&gt; element.
+ * Renders start of a layout &lt;table&gt; element.
  *
- * @deprecated
- * @return	string	HTML
+ * @return string HTML
+ * @deprecated ?
  */
 
 	function startSkelTable()
@@ -418,16 +423,20 @@ $LastChangedRevision$
 		'<table width="300" cellpadding="0" cellspacing="0" style="border:1px #ccc solid">';
 	}
 
-
 /**
- * Render start of a layout &lt;table&gt; element.
+ * Renders start of a layout &lt;table&gt; element.
  *
- * @param	string	$id	HTML id attribute
- * @param	string	$align	HTML align attribute ['']
- * @param	string	$class	HTML class attribute ['']
- * @param	integer	$p	HTML cellpadding attribute
- * @param	integer	$w	HTML width atttribute
- * @return		string	HTML
+ * @param  string $id    HTML id attribute
+ * @param  string $align HTML align attribute
+ * @param  string $class HTML class attribute
+ * @param  int    $p     HTML cellpadding attribute
+ * @param  int    $w     HTML width atttribute
+ * @return string HTML
+ * @example
+ * startTable().
+ * tr(td('column') . td('column')).
+ * tr(td('column') . td('column')).
+ * endTable();
  */
 
 	function startTable($id='',$align='',$class='',$p='',$w='')
@@ -440,11 +449,10 @@ $LastChangedRevision$
 		return '<table'.$id.$class.$width.$padding.$align.'>'.n;
 	}
 
-
 /**
- * Render &lt;/table&gt; tag
+ * Renders closing &lt;/table&gt; tag.
  *
- * @return	string	HTML
+ * @return string HTML
  */
 
 	function endTable ()
@@ -452,11 +460,17 @@ $LastChangedRevision$
 		return n.'</table>'.n;
 	}
 
-
 /**
- * Render &lt;tr&gt; elements from input parameters.
+ * Renders &lt;tr&gt; elements from input parameters.
  *
- * @return	string	HTML
+ * Takes a list of arguments containing each making a row.
+ *
+ * @return string HTML
+ * @example
+ * stackRows(
+ * 	td('cell') . td('cell'),
+ *  td('cell') . td('cell')
+ * );
  */
 
 	function stackRows()
@@ -465,15 +479,14 @@ $LastChangedRevision$
 		return join('',$o);
 	}
 
-
 /**
- * Render a &lt;td&gt; element.
+ * Renders a &lt;td&gt; element.
  *
- * @param	string	$content	Cell content ['']
- * @param	integer	$width	HTML width attribute ['']
- * @param	string	$class	HTML class attribute ['']
- * @param	string	$id	HTML id attribute ['']
- * @return	string	HTML
+ * @param  string $content Cell content
+ * @param  int    $width   HTML width attribute
+ * @param  string $class   HTML class attribute
+ * @param  string $id      HTML id attribute
+ * @return string HTML
  */
 
 	function td($content='',$width='',$class='',$id='')
@@ -485,13 +498,12 @@ $LastChangedRevision$
 		return t.tag($content,'td',join('',$atts)).n;
 	}
 
-
 /**
- * Render a &lt;td&gt; element with attributes.
+ * Renders a &lt;td&gt; element with attributes.
  *
- * @param	string	$content	Cell content
- * @param	string	$atts	Cell attributes ['']
- * @return	string	HTML
+ * @param  string $content Cell content
+ * @param  string $atts    Cell attributes
+ * @return string HTML
  */
 
 	function tda($content,$atts='')
@@ -499,13 +511,12 @@ $LastChangedRevision$
 		return tag($content,'td',$atts);
 	}
 
-
 /**
- * Render a &lt;td&gt; element with top/left text orientation and other attributes.
+ * Renders a &lt;td&gt; element with top/left text orientation and other attributes.
  *
- * @param	string	$content	Cell content
- * @param	string	$atts	Cell attributes ['']
- * @return	string	HTML
+ * @param  string $content Cell content
+ * @param  string $atts    Cell attributes
+ * @return string HTML
  */
 
 	function tdtl($content,$atts='')
@@ -513,13 +524,12 @@ $LastChangedRevision$
 		return tag($content,'td',$atts);
 	}
 
-
 /**
- * Render a &lt;tr&gt; element with attributes.
+ * Renders a &lt;tr&gt; element with attributes.
  *
- * @param	string	$content	Cell content
- * @param	string	$atts	Cell attributes ['']
- * @return	string	HTML
+ * @param  string $content Cell content
+ * @param  string $atts    Cell attributes
+ * @return string HTML
  */
 
 	function tr($content,$atts='')
@@ -527,15 +537,14 @@ $LastChangedRevision$
 		return tag($content,'tr',$atts);
 	}
 
-
 /**
- * Render a &lt;td&gt; element with top/left text orientation, colspan and other attributes.
+ * Renders a &lt;td&gt; element with top/left text orientation, colspan and other attributes.
  *
- * @param	string	$content	Cell content
- * @param	integer	$span	Cell colspan attribute
- * @param	integer	$width	Cell width attribute ['']
- * @param	string	$class	Cell class attribute ['']
- * @return	string	HTML
+ * @param  string $content Cell content
+ * @param  int    $span    Cell colspan attribute
+ * @param  int    $width   Cell width attribute
+ * @param  string $class   Cell class attribute
+ * @return string HTML
  */
 
 	function tdcs($content,$span,$width="",$class='')
@@ -548,14 +557,13 @@ $LastChangedRevision$
 		));
 	}
 
-
 /**
- * Render a &lt;td&gt; element with top/left text orientation, rowspan and other attributes.
+ * Renders a &lt;td&gt; element with a rowspan attribute.
  *
- * @param	string	$content	Cell content
- * @param	integer	$span	Cell rowspan attribute
- * @param	integer	$width	Cell width attribute
- * @return	string	HTML
+ * @param  string  $content Cell content
+ * @param  int     $span    Cell rowspan attribute
+ * @param  int     $width   Cell width attribute
+ * @return string  HTML
  */
 
 	function tdrs($content,$span,$width="")
@@ -566,14 +574,13 @@ $LastChangedRevision$
 		));
 	}
 
-
 /**
- * Render a form label inside a table cell
+ * Renders a form label inside a table cell.
  *
- * @param	string	$text	Label text
- * @param	string	$help	Help text ['']
- * @param	string	$label_id	HTML "for" attribute, i.e. id of corresponding form element
- * @return	string	HTML
+ * @param  string $text     Label text
+ * @param  string $help     Help text
+ * @param  string $label_id HTML "for" attribute, i.e. id of corresponding form element
+ * @return string HTML
  */
 
 	function fLabelCell($text, $help = '', $label_id = '')
@@ -590,17 +597,16 @@ $LastChangedRevision$
 		return tda($cell,' class="cell-label"');
 	}
 
-
 /**
- * Render a form input inside a table cell.
+ * Renders a form input inside a table cell.
  *
- * @param	string	$name	HTML name attribute
- * @param	string	$var	Input value ['']
- * @param	integer	$tabindex	HTML tabindex attribute ['']
- * @param	integer	$size	HTML size attribute ['']
- * @param	string	$help	Help text ['']
- * @param	string	$id	HTML id attribute
- * @return		string	HTML
+ * @param  string $name     HTML name attribute
+ * @param  string $var      Input value
+ * @param  int    $tabindex HTML tabindex attribute
+ * @param  int    $size     HTML size attribute
+ * @param  string $help     Help text
+ * @param  string $id       HTML id attribute
+ * @return string HTML
  */
 
 	function fInputCell($name, $var = '', $tabindex = '', $size = '', $help = '', $id = '')
@@ -610,17 +616,16 @@ $LastChangedRevision$
 		return tda(fInput('text', $name, $var, '', '', '', $size, $tabindex, $id).$pop);
 	}
 
-
 /**
- * Render a name-value input control with label
+ * Renders a name-value input control with label.
  *
- * @param	string	$name	HTML id / name attribute
- * @param	string	$input	complete input control widget (result of fInput(), yesnoRadio(), etc)
- * @param	string	$label	Label ['']
- * @param	string	$help	pophelp text item ['']
- * @param	string	$class	CSS class name to apply to wrapper ['edit-' + $name with underscores replaced with hyphens]
- * @param	string	$wraptag_val	Tag to wrap the value in. If set to '', no wrapper is used (useful for textareas) ['span']
- * @return		string	HTML
+ * @param  string $name        HTML id / name attribute
+ * @param  string $input       complete input control widget (result of fInput(), yesnoRadio(), etc)
+ * @param  string $label       Label
+ * @param  string $help        pophelp text item
+ * @param  string $class       CSS class name to apply to wrapper ['edit-' + $name with underscores replaced with hyphens]
+ * @param  string $wraptag_val Tag to wrap the value in. If set to '', no wrapper is used (useful for textareas)
+ * @return string HTML
  */
 
 	function inputLabel($name, $input, $label = '', $help = '', $class = '', $wraptag_val='span')
@@ -639,14 +644,13 @@ $LastChangedRevision$
 		, ' class="'.$class.'"');
 	}
 
-
 /**
- * Render anything as a XML element.
+ * Renders anything as a XML element.
  *
- * @param	string	$content	Enclosed content
- * @param	string	$tag	The tag without brackets
- * @param	string	$atts	The element's HTML attributes ['']
- * @return	string	HTML
+ * @param  string $content Enclosed content
+ * @param  string $tag     The tag without brackets
+ * @param  string $atts    The element's HTML attributes
+ * @return string HTML
  */
 
 	function tag($content,$tag,$atts='')
@@ -654,13 +658,12 @@ $LastChangedRevision$
 		return ('' !== $content) ? '<'.$tag.$atts.'>'.$content.'</'.$tag.'>' : '';
 	}
 
-
 /**
- * Render a &lt;p&gt; element.
+ * Renders a &lt;p&gt; element.
  *
- * @param	string	$item	Enclosed content
- * @param	string	$atts	HTML attributes ['']
- * @return	string	HTML
+ * @param  string $item Enclosed content
+ * @param  string $atts HTML attributes
+ * @return string HTML
  */
 
 	function graf ($item,$atts='')
@@ -668,14 +671,13 @@ $LastChangedRevision$
 		return tag($item,'p',$atts);
 	}
 
-
 /**
- * Render a &lt;hx&gt; element.
+ * Renders a &lt;hx&gt; element.
  *
- * @param	string	$item	Enclosed content
- * @param	integer	$level	Heading level 1...6
- * @param	string	$atts	HTML attributes ['']
- * @return	string	HTML
+ * @param  string $item  The Enclosed content
+ * @param  int    $level Heading level 1...6
+ * @param  string $atts  List of HTML attributes
+ * @return string HTML
  */
 
 	function hed($item,$level,$atts='')
@@ -683,14 +685,13 @@ $LastChangedRevision$
 		return tag($item,'h'.$level,$atts);
 	}
 
-
 /**
- * Render an &lt;a&gt; element.
+ * Renders an &lt;a&gt; element.
  *
- * @param	string	$item	Enclosed content
- * @param	integer	$href	The URL
- * @param	string	$atts	HTML attributes ['']
- * @return	string	HTML
+ * @param  string $item Enclosed content
+ * @param  string $href The link target
+ * @param  string $atts HTML attributes
+ * @return string HTML
  */
 
 	function href($item,$href,$atts='')
@@ -698,12 +699,11 @@ $LastChangedRevision$
 		return tag($item,'a',$atts.' href="'.$href.'"');
 	}
 
-
 /**
- * Render a &lt;strong&gt; element.
+ * Renders a &lt;strong&gt; element.
  *
- * @param	string	$item	Enclosed content
- * @return		string	HTML
+ * @param  string $item Enclosed content
+ * @return string HTML
  */
 
 	function strong($item)
@@ -711,12 +711,11 @@ $LastChangedRevision$
 		return tag($item,'strong');
 	}
 
-
 /**
- * Render a &lt;span&gt; element.
+ * Renders a &lt;span&gt; element.
  *
- * @param	string	$item	Enclosed content
- * @return	string	HTML
+ * @param  string $item Enclosed content
+ * @return string HTML
  */
 
 	function span($item)
@@ -724,12 +723,11 @@ $LastChangedRevision$
 		return tag($item,'span');
 	}
 
-
 /**
- * Render a &lt;pre&gt; element.
+ * Renders a &lt;pre&gt; element.
  *
- * @param	string	$item	Enclosed content
- * @return	string	HTML
+ * @param  string $item The input string
+ * @return string HTML
  */
 
 	function htmlPre($item)
@@ -737,12 +735,11 @@ $LastChangedRevision$
 		return '<pre>'.tag($item,'code').'</pre>';
 	}
 
-
 /**
- * Render a HTML comment (&lt;!-- --&gt;) element.
+ * Renders a HTML comment (&lt;!-- --&gt;) element.
  *
- * @param	string	$item	Enclosed content
- * @return	string	HTML
+ * @param  string $item The input string
+ * @return string HTML
  */
 
 	function comment($item)
@@ -750,12 +747,11 @@ $LastChangedRevision$
 		return '<!-- '.$item.' -->';
 	}
 
-
 /**
- * Render a &lt;small&gt element.
+ * Renders a &lt;small&gt element.
  *
- * @param	string	$item	Enclosed content
- * @return	string	HTML
+ * @param  string $item The input string
+ * @return string HTML
  */
 
 	function small($item)
@@ -763,13 +759,12 @@ $LastChangedRevision$
 		return tag($item,'small');
 	}
 
-
 /**
- * Render a table data row from an array of content => width pairs.
+ * Renders a table data row from an array of content => width pairs.
  *
- * @param	array	$array	Array of content => width pairs
- * @param	string	$atts	Table row atrributes
- * @return	string	HTML
+ * @param  array  $array Array of content => width pairs
+ * @param  string $atts  Table row atrributes
+ * @return string A HTML table row
  */
 
 	function assRow($array, $atts ='')
@@ -778,11 +773,12 @@ $LastChangedRevision$
 		return tr(join(n.t,$o), $atts);
 	}
 
-
 /**
- * Render a table head row from an array of strings.
+ * Renders a table head row from an array of strings.
  *
- * @return	string	HTML
+ * Takes an argument list of head text strings. i18n is applied to the strings.
+ *
+ * @return string HTML
  */
 
 	function assHead()
@@ -792,15 +788,14 @@ $LastChangedRevision$
 		return tr(join('',$o));
 	}
 
-
 /**
- * Render the ubiquitious popup help button.
+ * Renders the ubiquitious popup help button.
  *
- * @param	string	$help_var	Help topic
- * @param	integer	$width	Popup window width
- * @param	integer	$height	Popup window height
- * @param	string	$class	The HTML class
- * @return	string	HTML
+ * @param  string $help_var Help topic
+ * @param  int    $width    Popup window width
+ * @param  int    $height   Popup window height
+ * @param  string $class    HTML class
+ * @return string HTML
  */
 
 	function popHelp($help_var, $width = '', $height = '', $class='pophelp')
@@ -814,14 +809,13 @@ $LastChangedRevision$
 		return pluggable_ui('admin_help', $help_var, $ui, compact('help_var', 'width', 'height', 'class'));
 	}
 
-
 /**
- * Render the ubiquitious popup help button with a little less visual noise.
+ * Renders the ubiquitious popup help button with a little less visual noise.
  *
- * @param	string	$help_var	Help topic
- * @param	integer	$width	Popup window width ['']
- * @param	integer	$height	Popup window height ['']
- * @return	string	HTML
+ * @param  string $help_var Help topic
+ * @param  int    $width    Popup window width
+ * @param  int    $height   Popup window height
+ * @return string HTML
  */
 
 	function popHelpSubtle($help_var, $width = '', $height = '')
@@ -829,15 +823,14 @@ $LastChangedRevision$
 		return popHelp($help_var, $width, $height, 'pophelpsubtle');
 	}
 
-
 /**
- * Popup tag help window.
+ * Renders a link that opens a popup tag help window.
  *
- * @param	string	$var	Tag name
- * @param	string	$text	Link text
- * @param	integer	$width	Popup window width
- * @param	integer	$height	Popup window height
- * @return	string	HTML
+ * @param  string $var    Tag name
+ * @param  string $text   Link text
+ * @param  int    $width  Popup window width
+ * @param  int    $height Popup window height
+ * @return string HTML
  */
 
 	function popTag($var, $text, $width = '', $height = '')
@@ -850,12 +843,11 @@ $LastChangedRevision$
 			'); return false;">'.$text.'</a>';
 	}
 
-
 /**
- * Render tag builder links.
+ * Renders a list of tag builder links.
  *
- * @param	string	$type	Tag type
- * @return	string	HTML
+ * @param  string $type Tag type
+ * @return string HTML
  */
 
 	function popTagLinks($type)
@@ -878,14 +870,13 @@ $LastChangedRevision$
 		return join('', $out);
 	}
 
-
 /**
- * Render admin-side message text.
+ * Renders an admin-side message text.
  *
- * @param	string	$thing	Subject
- * @param	string	$thething	Predicate (strong)
- * @param	string	$action	Object
- * @return	string	HTML
+ * @param  string $thing    Subject
+ * @param  string $thething Predicate (strong)
+ * @param  string $action   Object
+ * @return string HTML
  */
 
 	function messenger($thing, $thething='', $action='')
@@ -893,17 +884,16 @@ $LastChangedRevision$
 		return gTxt($thing).' '.strong($thething).' '.gTxt($action);
 	}
 
-
 /**
- * Render a multi-edit form listing editing methods
+ * Renders a multi-edit form listing editing methods.
  *
- * @param  array   $options array('value' => array( 'label' => '', 'html' => '' ),...)
- * @param  string  $event Event
- * @param  string  $step Step
- * @param  integer $page Page number
- * @param  string  $sort Column sorted by
- * @param  string  $dir Sorting direction
- * @param  string  $crit Search criterion
+ * @param  array   $options       array('value' => array( 'label' => '', 'html' => '' ),...)
+ * @param  string  $event         Event
+ * @param  string  $step          Step
+ * @param  int     $page          Page number
+ * @param  string  $sort          Column sorted by
+ * @param  string  $dir           Sorting direction
+ * @param  string  $crit          Search criterion
  * @param  string  $search_method Search method
  * @return string  HTML
  */
@@ -954,13 +944,12 @@ $LastChangedRevision$
 			n.'</div>';
 	}
 
-
 /**
- * Render a form to select various amounts to page lists by.
+ * Renders a form to select various amounts to page lists by.
  *
- * @param	string	$event	Event
- * @param	integer	$val	Current setting
- * @return	string	HTML
+ * @param  string $event Event
+ * @param  int    $val   Current setting
+ * @return string HTML
  */
 
 	function pageby_form($event, $val)
@@ -986,18 +975,18 @@ $LastChangedRevision$
 		, '', '', 'post', 'pageby');
 	}
 
-
 /**
- * Render a file upload form via the "$event_ui" > "upload_form" pluggable UI.
+ * Renders a file upload form via the "$event_ui" > "upload_form" pluggable UI.
  *
- * @param	string	$label	File name label. May be empty
- * @param	string	$pophelp	Help item ['']
- * @param	string	$step	Step
- * @param	string	$event	Event
- * @param	string	$id	File id
- * @param	integer	$max_file_size	Maximum allowed file size
- * @param	string	$label_id	HTML id attribute for the filename input element
- * @param	string	$class	HTML class attribute for the form element
+ * @param  string $label         File name label. May be empty
+ * @param  string $pophelp       Help item
+ * @param  string $step          Step
+ * @param  string $event         Event
+ * @param  string $id            File id
+ * @param  int    $max_file_size Maximum allowed file size
+ * @param  string $label_id      HTML id attribute for the filename input element
+ * @param  string $class         HTML class attribute for the form element
+ * @return string HTML
  */
 
 	function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_size = '1000000', $label_id = '', $class = 'upload-form')
@@ -1036,17 +1025,16 @@ $LastChangedRevision$
 			$argv);
 	}
 
-
 /**
- * Render a admin-side search form.
+ * Renders an admin-side search form.
  *
- * @param	string	$event	Event
- * @param	string	$step	Step
- * @param	string	$crit	Search criterion
- * @param	array	$methods	Valid search methods
- * @param	string	$method	Actual search method
- * @param	string	$default_method	Default search method
- * @return	string	HTML
+ * @param  string $event          Event
+ * @param  string $step           Step
+ * @param  string $crit           Search criterion
+ * @param  array  $methods        Valid search methods
+ * @param  string $method         Actual search method
+ * @param  string $default_method Default search method
+ * @return string HTML
  */
 
 	function search_form($event, $step, $crit, $methods, $method, $default_method)
@@ -1066,12 +1054,12 @@ $LastChangedRevision$
 	}
 
 /**
- * Render a dropdown for selecting text filter method preferences.
+ * Renders a dropdown for selecting text filter method preferences.
  *
- * @param	string	$name	Element name
- * @param	string	$val	Current value
- * @param	string	$id	HTML id attribute for the select input element
- * @return	string	HTML
+ * @param  string $name Element name
+ * @param  string $val  Current value
+ * @param  string $id   HTML id attribute for the select input element
+ * @return string HTML
  */
 
 	function pref_text($name, $val, $id = '')
@@ -1081,16 +1069,15 @@ $LastChangedRevision$
 		return selectInput($name, $vals, $val, '', '', $id);
 	}
 
-
 /**
- * Attach a HTML fragment to a DOM node.
+ * Attachs a HTML fragment to a DOM node.
  *
- * @param	string	$id	Target DOM node's id
- * @param	string	$content	HTML fragment
- * @param	string	$noscript	noscript alternative	fragment ['']
- * @param	string	$wraptag	Wrapping HTML element
- * @param	string	$wraptagid	Wrapping element's HTML id
- * @return	string	HTML/JS
+ * @param  string $id        Target DOM node's id
+ * @param  string $content   HTML fragment
+ * @param  string $noscript  Noscript alternative
+ * @param  string $wraptag   Wrapping HTML element
+ * @param  string $wraptagid Wrapping element's HTML id
+ * @return string HTML/JS
  */
 
 	function dom_attach($id, $content, $noscript='', $wraptag='div', $wraptagid='')
@@ -1106,13 +1093,12 @@ EOF;
 		return script_js($js, $noscript);
 	}
 
-
 /**
- * Render a &lt:script&gt; element.
+ * Renders a &lt:script&gt; element.
  *
- * @param	string	$js	JavaScript code
- * @param	string	$noscript	noscript alternative
- * @return	string	HTML with embedded script element
+ * @param  string $js       JavaScript code
+ * @param  string $noscript Noscript alternative
+ * @return string HTML with embedded script element
  */
 
 	function script_js($js, $noscript='')
@@ -1129,13 +1115,12 @@ EOF;
 		return $out;
 	}
 
-
 /**
- * Render a "Details" toggle checkbox.
+ * Renders a "Details" toggle checkbox.
  *
- * @param	string	$classname	Unique identfier. The cookie's name will be derived from this value.
- * @param	boolean	$form		Create as a stand-along &lt;form&gt; element [false]
- * @return	string	HTML
+ * @param  string $classname Unique identfier. The cookie's name will be derived from this value.
+ * @param  bool	  $form      Create as a stand-along &lt;form&gt; element [false]
+ * @return string HTML
  */
 
 	function toggle_box($classname, $form=0) {
@@ -1153,13 +1138,12 @@ EOF;
 			return n.$i;
 	}
 
-
 /**
- * Render a checkbox to set/unset a browser cookie.
+ * Renders a checkbox to set/unset a browser cookie.
  *
- * @param	string	$classname	Label text. The cookie's name will be derived from this value.
- * @param	boolean	$form		Create as a stand-along &lt;form&gt; element [true]
- * @return	string	HTML
+ * @param  string $classname Label text. The cookie's name will be derived from this value.
+ * @param  bool   $form      Create as a stand-along &lt;form&gt; element [true]
+ * @return string HTML
  */
 
 	function cookie_box($classname, $form=1) {
@@ -1181,14 +1165,13 @@ EOF;
 		}
 	}
 
-
 /**
- * Render a &lt;fieldset&gt; element.
+ * Renders a &lt;fieldset&gt; element.
  *
- * @param	string	$content	Enclosed content
- * @param	string	$legend	Legend text ['']
- * @param	string	$id		HTML id attribute ['']
- * @return	string	HTML
+ * @param  string $content Enclosed content
+ * @param  string $legend  Legend text
+ * @param  string $id      HTML id attribute
+ * @return string HTML
  */
 
 	function fieldset($content, $legend='', $id='') {
@@ -1196,16 +1179,16 @@ EOF;
 		return tag(trim(tag($legend, 'legend').n.$content), 'fieldset', $a_id);
 	}
 
-
 /**
- * Render a link element to hook up txpAsyncHref() with request parameters
+ * Renders a link element to hook up txpAsyncHref() with request parameters.
  *
- * @param 	string 	$item	Link text
- * @param 	array	$parms	Request parameters; array keys are 'event', 'step', 'thing', 'property'
- * @param 	string 	$atts	HTML attributes
- * @return 	string 	HTML
- * @since 4.5.0
- * @see textpattern.js: txpAsyncHref
+ * See this function's JavaScript companion, txpAsyncHref(), in textpattern.js.
+ *
+ * @param  string $item	 Link text
+ * @param  array  $parms Request parameters; array keys are 'event', 'step', 'thing', 'property'
+ * @param  string $atts  HTML attributes
+ * @return string HTML
+ * @since  4.5.0
  */
 
 	function asyncHref($item,$parms,$atts='')
