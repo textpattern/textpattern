@@ -21,25 +21,9 @@
 
 	$files = check_file_integrity();
 
-	$files_rpc = array(
-		'/../rpc/index.php',
-		'/../rpc/TXP_RPCServer.php',
-	);
-
 	if (!$files)
 	{
 		$files = array();
-	}
-	else
-	{
-		if (!$prefs['enable_xmlrpc_server'])
-		{
-			foreach ($files_rpc as $file_rpc)
-			{
-				unset($files[$file_rpc]);
-			}
-		}
-		$files = array_keys($files);
 	}
 
 	if ($event == 'diag') {

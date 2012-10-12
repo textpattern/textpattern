@@ -3284,6 +3284,16 @@ function getStatusNum($name)
 						}
 					}
 				}
+
+				if (!get_pref('enable_xmlrpc_server'))
+				{
+					unset(
+						$files_md5['/../rpc/index.php'],
+						$files_md5['/../rpc/TXP_RPCServer.php'],
+						$files['/../rpc/index.php'],
+						$files['/../rpc/TXP_RPCServer.php']
+					);
+				}
 			}
 			else
 			{
