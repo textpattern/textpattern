@@ -180,7 +180,7 @@ define('IS_CGI', strpos(PHP_SAPI, 'cgi') === 0);
  * @package System
  */
 
-define('IS_FASTCGI', IS_CGI and empty($_SERVER['FCGI_ROLE']) and empty($_ENV['FCGI_ROLE']) );
+define('IS_FASTCGI', IS_CGI and empty($_SERVER['FCGI_ROLE']) and empty($_ENV['FCGI_ROLE']));
 
 /**
  * PHP is run as Apache module.
@@ -283,7 +283,7 @@ if (!defined('PASSWORD_PORTABILITY'))
 	 * @package User
 	 */
 
-	define('PASSWORD_PORTABILITY', TRUE);
+	define('PASSWORD_PORTABILITY', true);
 }
 
 if (!defined('LOGIN_COOKIE_HTTP_ONLY'))
