@@ -21,7 +21,10 @@ if (!defined('RPC_SERVER'))
 	define('RPC_SERVER', 'http://rpc.textpattern.com');
 }
 
-defined('HELP_URL') || define('HELP_URL', 'http://rpc.textpattern.com/help/');
+if (!defined('HELP_URL'))
+{
+	define('HELP_URL', 'http://rpc.textpattern.com/help/');
+}
 
 define('LEAVE_TEXT_UNTOUCHED', '0');
 define('USE_TEXTILE', '1');
@@ -29,9 +32,13 @@ define('CONVERT_LINEBREAKS', '2');
 define('IS_WIN', strtoupper(substr(PHP_OS, 0, 3)) === 'WIN');
 
 if (defined('DIRECTORY_SEPARATOR'))
+{
 	define('DS', DIRECTORY_SEPARATOR);
+}
 else
-	define ('DS', (IS_WIN ? '\\' : '/'));
+{
+	define('DS', (IS_WIN ? '\\' : '/'));
+}
 
 define('MAGIC_QUOTES_GPC', get_magic_quotes_gpc());
 
@@ -79,10 +86,20 @@ if (!defined('PASSWORD_PORTABILITY'))
 	define('PASSWORD_PORTABILITY', TRUE);
 }
 
-defined('LOGIN_COOKIE_HTTP_ONLY') || define('LOGIN_COOKIE_HTTP_ONLY', true);
-defined('X_FRAME_OPTIONS') || define('X_FRAME_OPTIONS', 'SAMEORIGIN');
+if (!defined('LOGIN_COOKIE_HTTP_ONLY'))
+{
+	define('LOGIN_COOKIE_HTTP_ONLY', true);
+}
 
-defined('AJAX_TIMEOUT') || define('AJAX_TIMEOUT', max(30000, 1000 * @ini_get('max_execution_time')));
+if (!defined('X_FRAME_OPTIONS'))
+{
+	define('X_FRAME_OPTIONS', 'SAMEORIGIN');
+}
+
+if (!defined('AJAX_TIMEOUT'))
+{
+	define('AJAX_TIMEOUT', max(30000, 1000 * @ini_get('max_execution_time')));
+}
 
 define('PARTIAL_STATIC', 0);		// render on initial synchronous page load
 define('PARTIAL_VOLATILE', 1);		// render as HTML partial on every page load
