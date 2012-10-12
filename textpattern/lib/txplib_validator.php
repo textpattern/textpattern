@@ -234,7 +234,7 @@ class ChoiceConstraint extends Constraint
 	}
 
 	/**
-	 * Valites.
+	 * Validates.
 	 *
 	 * @return bool
 	 */
@@ -276,7 +276,7 @@ class SectionConstraint extends ChoiceConstraint
 }
 
 /**
- * Tests against existing or a blank category names.
+ * Tests against existing or blank category names.
  *
  * @since   4.5.0
  * @package Validator
