@@ -439,7 +439,7 @@ $LastChangedRevision$
  * endTable();
  */
 
-	function startTable($id = '', $align = '', $class = '', $p = '', $w = '')
+	function startTable($id = '', $align = '', $class = '', $p = 0, $w = 0)
 	{
 		$id = ($id) ? ' id="'.$id.'"' : '';
 		$align = ($align) ? ' align="'.$align.'"' : '';
@@ -489,7 +489,7 @@ $LastChangedRevision$
  * @return string HTML
  */
 
-	function td($content = '', $width = '', $class = '', $id = '')
+	function td($content = '', $width = 0, $class = '', $id = '')
 	{
 		$content = ('' === $content) ? '&#160;' : $content;
 		$atts[] = ($width)  ? ' width="'.$width.'"' : '';
@@ -547,7 +547,7 @@ $LastChangedRevision$
  * @return string HTML
  */
 
-	function tdcs($content, $span, $width = "", $class = '')
+	function tdcs($content, $span, $width = 0, $class = '')
 	{
 		return join('',array(
 			t.'<td colspan="'.$span.'"',
@@ -566,7 +566,7 @@ $LastChangedRevision$
  * @return string  HTML
  */
 
-	function tdrs($content, $span, $width = "")
+	function tdrs($content, $span, $width = 0)
 	{
 		return join('',array(
 			t.'<td rowspan="'.$span.'"',
@@ -609,7 +609,7 @@ $LastChangedRevision$
  * @return string HTML
  */
 
-	function fInputCell($name, $var = '', $tabindex = '', $size = '', $help = '', $id = '')
+	function fInputCell($name, $var = '', $tabindex = 0, $size = 0, $help = '', $id = '')
 	{
 		$pop = ($help) ? sp.popHelp($name) : '';
 
@@ -798,7 +798,7 @@ $LastChangedRevision$
  * @return string HTML
  */
 
-	function popHelp($help_var, $width = '', $height = '', $class = 'pophelp')
+	function popHelp($help_var, $width = 0, $height = 0, $class = 'pophelp')
 	{
 		$ui = '<a rel="help" target="_blank"'.
 			' href="'.HELP_URL.'?item='.$help_var.a.'language='.LANG.'"'.
@@ -818,7 +818,7 @@ $LastChangedRevision$
  * @return string HTML
  */
 
-	function popHelpSubtle($help_var, $width = '', $height = '')
+	function popHelpSubtle($help_var, $width = 0, $height = 0)
 	{
 		return popHelp($help_var, $width, $height, 'pophelpsubtle');
 	}
@@ -833,7 +833,7 @@ $LastChangedRevision$
  * @return string HTML
  */
 
-	function popTag($var, $text, $width = '', $height = '')
+	function popTag($var, $text, $width = 0, $height = 0)
 	{
 		return '<a target="_blank"'.
 			' href="?event=tag'.a.'tag_name='.$var.'"'.
@@ -989,7 +989,7 @@ $LastChangedRevision$
  * @return string HTML
  */
 
-	function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_size = '1000000', $label_id = '', $class = 'upload-form')
+	function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_size = 1000000, $label_id = '', $class = 'upload-form')
 	{
 		global $sort, $dir, $page, $search_method, $crit;
 
