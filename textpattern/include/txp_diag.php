@@ -23,86 +23,28 @@ $LastChangedRevision$
 
 	global $files;
 
-	$files = array(
-		'/../index.php',
-		'/../css.php',
-		'/css.php',
-		'/include/import/import_b2.php',
-		'/include/import/import_blogger.php',
-		'/include/import/import_mt.php',
-		'/include/import/import_mtdb.php',
-		'/include/import/import_wp.php',
-		'/include/txp_admin.php',
-		'/include/txp_article.php',
-		'/include/txp_auth.php',
-		'/include/txp_category.php',
-		'/include/txp_css.php',
-		'/include/txp_diag.php',
-		'/include/txp_discuss.php',
-		'/include/txp_file.php',
-		'/include/txp_form.php',
-		'/include/txp_image.php',
-		'/include/txp_import.php',
-		'/include/txp_lang.php',
-		'/include/txp_link.php',
-		'/include/txp_list.php',
-		'/include/txp_log.php',
-		'/include/txp_page.php',
-		'/include/txp_plugin.php',
-		'/include/txp_prefs.php',
-		'/include/txp_section.php',
-		'/include/txp_tag.php',
-		'/index.php',
-		'/jquery.js',
-		'/lib/IXRClass.php',
-		'/lib/admin_config.php',
-		'/lib/class.thumb.php',
-		'/lib/classTextile.php',
-		'/lib/constants.php',
-		'/lib/taglib.php',
-		'/lib/txplib_admin.php',
-		'/lib/txplib_db.php',
-		'/lib/txplib_forms.php',
-		'/lib/txplib_head.php',
-		'/lib/txplib_html.php',
-		'/lib/txplib_misc.php',
-		'/lib/txplib_publish.php',
-		'/lib/txplib_theme.php',
-		'/lib/txplib_textfilter.php',
-		'/lib/txplib_update.php',
-		'/lib/txplib_validator.php',
-		'/lib/txplib_wrapper.php',
-		'/publish.php',
-		'/publish/atom.php',
-		'/publish/comment.php',
-		'/publish/log.php',
-		'/publish/rss.php',
-		'/publish/search.php',
-		'/publish/taghandlers.php',
-		'/textpattern.js',
-		'/theme/classic/classic.php',
-		'/update/_to_1.0.0.php',
-		'/update/_to_4.0.2.php',
-		'/update/_to_4.0.3.php',
-		'/update/_to_4.0.4.php',
-		'/update/_to_4.0.5.php',
-		'/update/_to_4.0.6.php',
-		'/update/_to_4.0.7.php',
-		'/update/_to_4.0.8.php',
-		'/update/_to_4.2.0.php',
-		'/update/_to_4.3.0.php',
-		'/update/_to_4.4.0.php',
-		'/update/_to_4.4.1.php',
-		'/update/_to_4.5.0.php',
-		'/update/_update.php'
-	);
+	$files = check_file_integrity();
 
 	$files_rpc = array(
 		'/../rpc/index.php',
 		'/../rpc/TXP_RPCServer.php',
 	);
 
-	if ($prefs['enable_xmlrpc_server']) $files = array_merge($files, $files_rpc);
+	if (!$files)
+	{
+		$files = array();
+	}
+	else
+	{
+		if (!$prefs['enable_xmlrpc_server'])
+		{
+			foreach ($files_rpc as $file_rpc)
+			{
+				unset($files[$file_rpc]);
+			}
+		}
+		$files = array_keys($files);
+	}
 
 	if ($event == 'diag') {
 		require_privs('diag');
