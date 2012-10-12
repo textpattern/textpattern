@@ -41,7 +41,7 @@
 /**
  * Table prefix.
  *
- * Use only if you require multiple installs in one db.
+ * Use only if you require multiple installs in one database.
  *
  * @global string $txpcfg['table_prefix']
  */
