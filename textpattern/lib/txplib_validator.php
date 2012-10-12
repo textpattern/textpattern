@@ -126,7 +126,7 @@ class Constraint
 	 * @var mixed
 	 */
 
-    protected $value;
+	protected $value;
 
 	/**
 	 * An array of options.
@@ -134,7 +134,7 @@ class Constraint
 	 * @var array
 	 */
 
-    protected $options;
+	protected $options;
 
 	/**
 	 * Constructs a constraint.
@@ -261,7 +261,7 @@ class SectionConstraint extends ChoiceConstraint
 		}
 		$options['choices'] = $choices;
 		$options['message'] = 'unknown_section';
-        parent::__construct($value, $options);
+		parent::__construct($value, $options);
 	}
 }
 
@@ -289,7 +289,7 @@ class CategoryConstraint extends ChoiceConstraint
 			$choices = safe_column('name', 'txp_category', $options['type'] !== '' ? 'type=\''.doSlash($options['type']).'\'' : '1=1');
 		}
 		$options['choices'] = $choices;
-        parent::__construct($value, $options);
+		parent::__construct($value, $options);
 	}
 }
 
