@@ -537,16 +537,40 @@
 	function tpt_link($atts)
 	{
 		global $thislink;
-		assert_link();
 
 		extract(lAtts(array(
 			'rel' => '',
+			'id' => '',
+			'name' => '',
 		), $atts));
 
+		$rs = $thislink;
+		$sql = array();
+
+		if ($id)
+		{
+			$sql[] = 'id = '.intval($id);
+		}
+		else if($name)
+		{
+			$sql[] = "linkname = '".doSlash($name)."'";
+		}
+
+		if ($sql)
+		{
+			$rs = safe_row('linkname, url', 'txp_link', implode(' and ', $sql).' limit 1');
+		}
+
+		if (!$rs)
+		{
+			trigger_error(gTxt('unknown_link'));
+			return;
+		}
+
 		return tag(
-			txpspecialchars($thislink['linkname']), 'a',
+			txpspecialchars($rs['linkname']), 'a',
 			($rel ? ' rel="'.txpspecialchars($rel).'"' : '').
-			' href="'.doSpecial($thislink['url']).'"'
+			' href="'.txpspecialchars($rs['url']).'"'
 		);
 	}
 
