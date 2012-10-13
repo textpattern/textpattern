@@ -573,9 +573,6 @@ h3.txp-summary.expanded a:after {
 .progress-meter {
   text-align: center;
 }
-.progress-meter p {
-  display: none;
-}
 .progress-meter ol {
   display: inline-block;
   list-style: none;
