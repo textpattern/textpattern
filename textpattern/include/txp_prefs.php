@@ -46,8 +46,8 @@
 	{
 		global $prefs, $gmtoffset, $is_dst, $auto_dst, $timezone_key;
 
-		// Update custom fields count from database schema and cache it as a hidden pref
-		// TODO: Move this when CFs are refactored
+		// Update custom fields count from database schema and cache it as a hidden pref.
+		// TODO: move this when custom fields are refactored.
 		$max_custom_fields = count(preg_grep('/^custom_\d+/', getThings('describe `'.PFX.'textpattern`')));
 		set_pref('max_custom_fields', $max_custom_fields, 'publish', 2);
 
@@ -61,7 +61,7 @@
 		if (isset($post['file_max_upload_size']) && !empty($post['file_max_upload_size']))
 			$post['file_max_upload_size'] = real_max_upload_size($post['file_max_upload_size']);
 
-		// Forge $auto_dst for (in-)capable servers
+		// Forge $auto_dst for (in-)capable servers.
 		if (!timezone::is_supported())
 		{
 			$post['auto_dst'] = false;
@@ -77,7 +77,7 @@
 			}
 		}
 
-		// Forge $gmtoffset and $is_dst from $timezone_key if present
+		// Forge $gmtoffset and $is_dst from $timezone_key if present.
 		if (isset($post['timezone_key']))
 		{
 			$key = $post['timezone_key'];
@@ -131,7 +131,7 @@
 
 		extract($prefs);
 
-		// Fetch value from database in case it has recently changed
+		// Fetch value from database in case it has recently changed.
 		$use_comments = get_pref('use_comments', 1, 1);
 
 		echo pagetop(gTxt('tab_preferences'), $message);
@@ -143,7 +143,7 @@
 			n, '<form method="post" class="prefs-form" action="index.php">',
 			n, '<div class="plugin-column">';
 
-		// TODO: remove 'custom' when custom fields are refactored
+		// TODO: remove 'custom' when custom fields are refactored.
 		$core_events = array('site', 'admin', 'publish', 'feeds', 'custom', 'comments');
 		$joined_core = doQuote(join("','", $core_events));
 		$evt_list = has_privs('prefs.edit') ? safe_column('event', 'txp_prefs', "type = ".PREF_CORE." and prefs_id = 1 AND event IN (".$joined_core.") group by event order by field(event,".$joined_core.")") : array();
@@ -161,7 +161,7 @@
 
 			while ($a = nextRow($rs))
 			{
-				// TODO: remove this exception when custom fields move to meta store
+				// TODO: remove this exception when custom fields move to meta store.
 				$noPopHelp = (strpos($a['name'], 'custom_') !== false);
 
 				if ($a['event'] != $cur_evt)
@@ -190,7 +190,7 @@
 					'<label for="'.$a['name'].'">'.gTxt($a['name']).'</label>' :
 					gTxt($a['name']);
 
-				// TODO: remove $noPopHelp condition when custom fields move to meta store
+				// TODO: remove $noPopHelp condition when custom fields move to meta store.
 				echo n, graf(
 					n.'<span class="txp-label">'.$label.(($noPopHelp) ? '' : n.popHelp($a['name'])).'</span>'.
 					n.'<span class="txp-value">'.pref_func($a['html'], $a['name'], $a['val'], ($a['html'] == 'text_input' ? INPUT_REGULAR : '')).'</span>'
@@ -268,7 +268,7 @@
 	}
 
 /**
- * Renders a HTML select list of cities for timezone selection.
+ * Renders a HTML <select> list of cities for timezone selection.
  *
  * Can be altered by plugins.
  *
@@ -326,7 +326,7 @@ EOS
 	}
 
 /**
- * Renders a HTML select list of hit logging options.
+ * Renders a HTML <select> list of hit logging options.
  *
  * @param  string $name HTML name and id of the list
  * @param  string $val Initial (or current) selected item
@@ -345,7 +345,7 @@ EOS
 	}
 
 /**
- * Renders a HTML select list of supported permanent link URL formats.
+ * Renders a HTML <select> list of supported permanent link URL formats.
  *
  * @param  string $name HTML name and id of the list
  * @param  string $val Initial (or current) selected item
@@ -386,7 +386,7 @@ EOS
 	}
 
 /**
- * Renders a HTML select list of comment popup modes.
+ * Renders a HTML <select> list of comment popup modes.
  *
  * Can be altered by plugins.
  *
@@ -413,7 +413,7 @@ EOS
 	}
 
 /**
- * Renders a HTML select list of available ways to display the date.
+ * Renders a HTML <select> list of available ways to display the date.
  *
  * @param  string $name HTML name and id of the widget
  * @param  string $val Initial (or current) selected item
@@ -477,7 +477,7 @@ EOS
 	}
 
 /**
- * Renders a HTML select list of site production status.
+ * Renders a HTML <select> list of site production status.
  *
  * @param  string $name HTML name and id of the widget
  * @param  string $val Initial (or current) selected item
@@ -496,7 +496,7 @@ EOS
 	}
 
 /**
- * Renders a HTML select list of available panels to show immediately after login.
+ * Renders a HTML <select> list of available panels to show immediately after login.
  *
  * @param  string $name HTML name of the widget
  * @param  string $val Initial (or current) selected item
@@ -530,7 +530,7 @@ EOS
 	}
 
 /**
- * Renders a HTML select list of sendmail options.
+ * Renders a HTML <select> list of sendmail options.
  *
  * @param  string $name HTML name and id of the widget
  * @param  string $val Initial (or current) selected item
@@ -565,7 +565,7 @@ EOS
 	}
 
 /**
- * Renders a HTML select list of installed admin-side themes.
+ * Renders a HTML <select> list of installed admin-side themes.
  *
  * Can be altered by plugins.
  *
@@ -594,7 +594,7 @@ EOS
 	}
 
 /**
- * Renders a HTML select list of available public site markup schemes to adhere to.
+ * Renders a HTML <select> list of available public site markup schemes to adhere to.
  *
  * @param  string $name HTML name and id of the widget
  * @param  string $val Initial (or current) selected item
