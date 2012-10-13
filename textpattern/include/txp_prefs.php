@@ -122,7 +122,6 @@
  * controlled by using add_privs() on 'prefs.your-prefs-event-name'.
  *
  * @param  string $message The feedback / error string to display
- * @return string HTML
  */
 
 	function prefs_list($message = '')
@@ -233,7 +232,7 @@
 	}
 
 /**
- * Renders a HTML <input> element.
+ * Renders a HTML &lt;input&gt; element.
  *
  * @param  string $name HTML name and id of the text box
  * @param  string $val Initial (or current) content of the text box
@@ -254,7 +253,7 @@
 	}
 
 /**
- * Renders a HTML <textarea> element.
+ * Renders a HTML &lt;textarea&gt; element.
  *
  * @param  string $name HTML name of the textarea
  * @param  string $val Initial (or current) content of the textarea
@@ -268,7 +267,7 @@
 	}
 
 /**
- * Renders a HTML <select> list of cities for timezone selection.
+ * Renders a HTML &lt;select&gt; list of cities for timezone selection.
  *
  * Can be altered by plugins.
  *
@@ -326,7 +325,7 @@ EOS
 	}
 
 /**
- * Renders a HTML <select> list of hit logging options.
+ * Renders a HTML &lt;select&gt; list of hit logging options.
  *
  * @param  string $name HTML name and id of the list
  * @param  string $val Initial (or current) selected item
@@ -345,10 +344,10 @@ EOS
 	}
 
 /**
- * Renders a HTML <select> list of supported permanent link URL formats.
+ * Renders a HTML &lt;select&gt; list of supported permanent link URL formats.
  *
  * @param  string $name HTML name and id of the list
- * @param  string $val Initial (or current) selected item
+ * @param  string $val  Initial (or current) selected item
  * @return string HTML
  */
 
@@ -371,7 +370,7 @@ EOS
  * Renders a HTML choice of comment popup modes.
  *
  * @param  string $name HTML name and id of the widget
- * @param  string $val Initial (or current) selected item
+ * @param  string $val  Initial (or current) selected item
  * @return string HTML
  */
 
@@ -386,12 +385,12 @@ EOS
 	}
 
 /**
- * Renders a HTML <select> list of comment popup modes.
+ * Renders a HTML &lt;select&gt; list of comment popup modes.
  *
  * Can be altered by plugins.
  *
  * @param  string $name HTML name and id of the widget
- * @param  string $val Initial (or current) selected item
+ * @param  string $val  Initial (or current) selected item
  * @return string HTML
  */
 
@@ -413,10 +412,10 @@ EOS
 	}
 
 /**
- * Renders a HTML <select> list of available ways to display the date.
+ * Renders a HTML &lt;select&gt; list of available ways to display the date.
  *
  * @param  string $name HTML name and id of the widget
- * @param  string $val Initial (or current) selected item
+ * @param  string $val  Initial (or current) selected item
  * @return string HTML
  */
 
@@ -477,10 +476,10 @@ EOS
 	}
 
 /**
- * Renders a HTML <select> list of site production status.
+ * Renders a HTML &lt;select&gt; list of site production status.
  *
  * @param  string $name HTML name and id of the widget
- * @param  string $val Initial (or current) selected item
+ * @param  string $val  Initial (or current) selected item
  * @return string HTML
  */
 
@@ -496,10 +495,10 @@ EOS
 	}
 
 /**
- * Renders a HTML <select> list of available panels to show immediately after login.
+ * Renders a HTML &lt;select&gt; list of available panels to show immediately after login.
  *
  * @param  string $name HTML name of the widget
- * @param  string $val Initial (or current) selected item
+ * @param  string $val  Initial (or current) selected item
  * @return string HTML
  */
 
@@ -530,10 +529,10 @@ EOS
 	}
 
 /**
- * Renders a HTML <select> list of sendmail options.
+ * Renders a HTML &lt;select&gt; list of sendmail options.
  *
  * @param  string $name HTML name and id of the widget
- * @param  string $val Initial (or current) selected item
+ * @param  string $val  Initial (or current) selected item
  * @return string HTML
  */
 
@@ -554,9 +553,9 @@ EOS
  * Can be altered by plugins.
  *
  * @param  string $name HTML name of the widget
- * @param  string $val Initial (or current) content
- * @todo   deprecate or move this when CFs are migrated to the meta store
+ * @param  string $val  Initial (or current) content
  * @return string HTML
+ * @todo   deprecate or move this when CFs are migrated to the meta store
  */
 
 	function custom_set($name, $val)
@@ -565,12 +564,12 @@ EOS
 	}
 
 /**
- * Renders a HTML <select> list of installed admin-side themes.
+ * Renders a HTML &lt;select&gt; list of installed admin-side themes.
  *
  * Can be altered by plugins.
  *
  * @param  string $name HTML name and id of the widget
- * @param  string $val Initial (or current) selected item
+ * @param  string $val  Initial (or current) selected item
  * @return string HTML
  */
 
@@ -594,10 +593,10 @@ EOS
 	}
 
 /**
- * Renders a HTML <select> list of available public site markup schemes to adhere to.
+ * Renders a HTML &lt;select&gt; list of available public site markup schemes to adhere to.
  *
  * @param  string $name HTML name and id of the widget
- * @param  string $val Initial (or current) selected item
+ * @param  string $val  Initial (or current) selected item
  * @return string HTML
  */
 
@@ -612,6 +611,8 @@ EOS
 	}
 
 /**
+ * Gets the maximum allowed file upload size.
+ *
  * Computes the maximum acceptable file size to the application if the user-selected
  * value is larger than the maximum allowed by the current PHP configuration.
  *
@@ -649,7 +650,8 @@ EOS
 /**
  * Stores the open/closed state of the prefs group twisties.
  *
- * @return XML|error Response code on success | error message on failure
+ * Outputs response code on success. Triggers E_USER_WARNING on
+ * error.
  */
 
 	function prefs_save_pane_state()
