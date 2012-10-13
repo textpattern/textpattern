@@ -8,8 +8,27 @@
 
 */
 
+/**
+ * Log visitors.
+ *
+ * @package Log
+ */
 
-// -------------------------------------------------------------
+/**
+ * Adds a row to the visitor logs.
+ *
+ * This function follows the site's logging preferences.
+ * If $logging preference is set to 'refer', only referer
+ * hits are logged. If $logging is set to 'none' or '$nolog'
+ * global to TRUE, the function will ignore all hits.
+ *
+ * If the $status parameter is set to 404, the hit isn't logged.
+ *
+ * @param int $status HTTP status code
+ * @example
+ * log_hit(202);
+ */
+
 	function log_hit($status)
 	{
 		global $nolog, $logging;
@@ -23,7 +42,19 @@
 		}
 	}
 
-// -------------------------------------------------------------
+/**
+ * Writes a record to the visitor log using the current visitor's information.
+ *
+ * This function is used by log_hit(). See it before trying to use this one.
+ *
+ * The hit is ignore if $r is set to 'refer' and the HTTP REFERER header is empty.
+ *
+ * @param  string   $r      Type of record to write, e.g. refer
+ * @param  int      $status HTTP status code
+ * @access private
+ * @see    log_hit()
+ */
+
 	function logit($r='', $status='200')
 	{
 		global $siteurl, $prefs, $pretext;
@@ -57,7 +88,13 @@
 		} else insert_logit($out);
 	}
 
-// -------------------------------------------------------------
+/**
+ * Inserts a log record to the database.
+ *
+ * @param array $in Input array consisting 'uri', 'ip', 'host', 'ref', 'status', 'method'
+ * @see   log_hit()
+ */
+
 	function insert_logit($in)
 	{
 		$in = doSlash($in);
