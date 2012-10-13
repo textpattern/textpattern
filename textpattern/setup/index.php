@@ -113,6 +113,7 @@ eod;
 		$out = array();
 
 		$out[] = n.'<div class="progress-meter">'.
+			n.'<p class="txp-accessibility">'.setup_gTxt('progress_steps').'</p>'.
 			n.'<ol>';
 
 		foreach ($stages as $idx => $phase)
@@ -199,7 +200,7 @@ eod;
 			n.graf(setup_gTxt('please_enter_url')).
 			n.graf(
 				'<span class="edit-label"><label for="setup_site_url">http://</label>'.sp.popHelp('siteurl').'</span>'.
-				n.'<span class="edit-value">'.fInput('url', 'siteurl', $guess_siteurl, '', '', '', INPUT_REGULAR, '', 'setup_site_url', '', true).'</span>'
+				n.'<span class="edit-value">'.fInput('text', 'siteurl', $guess_siteurl, '', '', '', INPUT_REGULAR, '', 'setup_site_url', '', true).'</span>'
 			);
 
 		if (is_disabled('mail'))
