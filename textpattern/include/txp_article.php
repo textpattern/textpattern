@@ -129,9 +129,9 @@ if (!empty($event) and $event == 'article') {
 			}
 
 			if ($expires) {
-				$whenexpires = "Expires=from_unixtime($expires)";
+				$whenexpires = "from_unixtime($expires)";
 			} else {
-				$whenexpires = "Expires=".NULLDATETIME;
+				$whenexpires = NULLDATETIME;
 			}
 
 			$user = doSlash($txp_user);
