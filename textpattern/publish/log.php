@@ -18,7 +18,7 @@
  * Adds a row to the visitor logs.
  *
  * This function follows the site's logging preferences.
- * If $logging preference is set to 'refer', only referer
+ * If $logging preference is set to 'refer', only referrer
  * hits are logged. If $logging is set to 'none' or '$nolog'
  * global to TRUE, the function will ignore all hits.
  *
@@ -70,14 +70,14 @@
 
 		if (!empty($prefs['use_dns']))
 		{
-			// A crude rDNS cache
+			// A crude rDNS cache.
 			if ($h = safe_field('host', 'txp_log', "ip='".doSlash($ip)."' limit 1"))
 			{
 				$host = $h;
 			}
 			else
 			{
-				// Double-check the rDNS
+				// Double-check the rDNS.
 				$host = @gethostbyaddr($ip);
 				if ($host != $ip and @gethostbyname($host) != $ip)
 				{
@@ -110,7 +110,7 @@
 	}
 
 /**
- * Inserts a log record to the database.
+ * Inserts a log record into the database.
  *
  * @param array $in Input array consisting 'uri', 'ip', 'host', 'ref', 'status', 'method'
  * @see   log_hit()
