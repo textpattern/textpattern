@@ -12,9 +12,9 @@
 */
 
 /**
- * Prefs panel user interface and interaction.
+ * Preferences panel user interface and interaction.
  *
- * @package prefs
+ * @package Admin\Prefs
  */
 
 	if (!defined('txpinterface')) die('txpinterface is undefined.');
