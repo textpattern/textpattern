@@ -90,7 +90,7 @@ define('LEAVE_TEXT_UNTOUCHED', '0');
 define('USE_TEXTILE', '1');
 
 /**
- * Replace line breaks with HTML <br /> tag.
+ * Replace line breaks with HTML &lt;br /&gt; tag.
  *
  * @var     string
  * @package TextFilter
@@ -589,5 +589,4 @@ define('INTEGRITY_TABLE', 0x10);
 
 error_reporting($old_level);
 unset($old_level);
-
 ?>

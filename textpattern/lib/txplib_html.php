@@ -117,7 +117,7 @@
 	}
 
 /**
- * Renders a <th> element.
+ * Renders a &lt;th&gt; element.
  *
  * @param  string $text    Cell text
  * @param  string $caption Is not used
@@ -415,7 +415,7 @@
 	}
 
 /**
- * Renders start of a layout <table> element.
+ * Renders start of a layout &lt;table&gt; element.
  *
  * @return string HTML
  * @deprecated ?
@@ -428,7 +428,7 @@
 	}
 
 /**
- * Renders start of a layout <table> element.
+ * Renders start of a layout &lt;table&gt; element.
  *
  * @param  string $id    HTML id attribute
  * @param  string $align HTML align attribute
@@ -454,7 +454,7 @@
 	}
 
 /**
- * Renders closing </table> tag.
+ * Renders closing &lt;/table&gt; tag.
  *
  * @return string HTML
  */
@@ -465,7 +465,7 @@
 	}
 
 /**
- * Renders <tr> elements from input parameters.
+ * Renders &lt;tr&gt; elements from input parameters.
  *
  * Takes a list of arguments containing each making a row.
  *
@@ -487,7 +487,7 @@
 	}
 
 /**
- * Renders a <td> element.
+ * Renders a &lt;td&gt; element.
  *
  * @param  string $content Cell content
  * @param  int    $width   HTML width attribute
@@ -506,7 +506,7 @@
 	}
 
 /**
- * Renders a <td> element with attributes.
+ * Renders a &lt;td&gt; element with attributes.
  *
  * @param  string $content Cell content
  * @param  string $atts    Cell attributes
@@ -519,7 +519,7 @@
 	}
 
 /**
- * Renders a <td> element with top/left text orientation and other attributes.
+ * Renders a &lt;td&gt; element with top/left text orientation and other attributes.
  *
  * @param  string $content Cell content
  * @param  string $atts    Cell attributes
@@ -532,7 +532,7 @@
 	}
 
 /**
- * Renders a <tr> element with attributes.
+ * Renders a &lt;tr&gt; element with attributes.
  *
  * @param  string $content Cell content
  * @param  string $atts    Cell attributes
@@ -545,7 +545,7 @@
 	}
 
 /**
- * Renders a <td> element with top/left text orientation, colspan and other attributes.
+ * Renders a &lt;td&gt; element with top/left text orientation, colspan and other attributes.
  *
  * @param  string $content Cell content
  * @param  int    $span    Cell colspan attribute
@@ -565,7 +565,7 @@
 	}
 
 /**
- * Renders a <td> element with a rowspan attribute.
+ * Renders a &lt;td&gt; element with a rowspan attribute.
  *
  * @param  string  $content Cell content
  * @param  int     $span    Cell rowspan attribute
@@ -666,7 +666,7 @@
 	}
 
 /**
- * Renders a <p> element.
+ * Renders a &lt;p&gt; element.
  *
  * @param  string $item Enclosed content
  * @param  string $atts HTML attributes
@@ -679,7 +679,7 @@
 	}
 
 /**
- * Renders a <hx> (heading) element.
+ * Renders a &lt;hx&gt; element.
  *
  * @param  string $item  The Enclosed content
  * @param  int    $level Heading level 1...6
@@ -693,7 +693,7 @@
 	}
 
 /**
- * Renders an <a> element.
+ * Renders an &lt;a&gt; element.
  *
  * @param  string $item Enclosed content
  * @param  string $href The link target
@@ -707,7 +707,7 @@
 	}
 
 /**
- * Renders a <strong> element.
+ * Renders a &lt;strong&gt; element.
  *
  * @param  string $item Enclosed content
  * @return string HTML
@@ -719,7 +719,7 @@
 	}
 
 /**
- * Renders a <span> element.
+ * Renders a &lt;span&gt; element.
  *
  * @param  string $item Enclosed content
  * @return string HTML
@@ -731,7 +731,7 @@
 	}
 
 /**
- * Renders a <pre> element.
+ * Renders a &lt;pre&gt; element.
  *
  * @param  string $item The input string
  * @return string HTML
@@ -743,7 +743,7 @@
 	}
 
 /**
- * Renders a HTML comment (<!-- -->) element.
+ * Renders a HTML comment (&lt;!-- --&gt;) element.
  *
  * @param  string $item The input string
  * @return string HTML
@@ -755,7 +755,7 @@
 	}
 
 /**
- * Renders a <small> element.
+ * Renders a &lt;small&gt element.
  *
  * @param  string $item The input string
  * @return string HTML
@@ -1107,7 +1107,7 @@ EOF;
 	}
 
 /**
- * Renders a <script> element.
+ * Renders a &lt:script&gt; element.
  *
  * @param  string $js       JavaScript code
  * @param  string $noscript Noscript alternative
@@ -1132,7 +1132,7 @@ EOF;
  * Renders a "Details" toggle checkbox.
  *
  * @param  string $classname Unique identfier. The cookie's name will be derived from this value.
- * @param  bool	  $form      Create as a stand-along <form> element [false]
+ * @param  bool	  $form      Create as a stand-along &lt;form&gt; element [false]
  * @return string HTML
  */
 
@@ -1159,7 +1159,7 @@ EOF;
  * Renders a checkbox to set/unset a browser cookie.
  *
  * @param  string $classname Label text. The cookie's name will be derived from this value.
- * @param  bool   $form      Create as a stand-along <form> element [true]
+ * @param  bool   $form      Create as a stand-along &lt;form&gt; element [true]
  * @return string HTML
  */
 
@@ -1186,7 +1186,7 @@ EOF;
 	}
 
 /**
- * Renders a <fieldset> element.
+ * Renders a &lt;fieldset&gt; element.
  *
  * @param  string $content Enclosed content
  * @param  string $legend  Legend text
