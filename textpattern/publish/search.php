@@ -8,10 +8,22 @@
 
 */
 
+/**
+ * Tools for searching site contents.
+ *
+ * @package Search
+ */
 
-// -------------------------------------------------------------
-// DEPRECATED
-// this is now performed by doArticles()
+/**
+ * Performs searching and returns results.
+ *
+ * This is now performed by doArticles().
+ *
+ * @param      string $q
+ * @deprecated in 4.0.4
+ * @see        doArticles()
+ */
+
 	function search($q)
 	{
 		global $prefs;
@@ -76,7 +88,15 @@
 		return (is_array($results)) ? join('',$results) : '';
 	}
 
-// -------------------------------------------------------------
+/**
+ * Limits search to searchable sections.
+ *
+ * This function gets a list of searchable sections as a SQL where clause.
+ * The returned results can be then be used in or as a SQL query.
+ *
+ * @return string|bool SQL statement, or FALSE when all sections are included the search
+ */
+
 	function filterSearch()
 	{
 		$rs = safe_column("name", "txp_section", "searchable != '1'");
@@ -87,10 +107,16 @@
 		return false;
 	}
 
-// -------------------------------------------------------------
-// DEPRECATED
+/**
+ * Legacy search results form.
+ *
+ * This is no longer used.
+ *
+ * @deprecated in 4.0.4
+ */
+
 	function legacy_form()
-	{	// lose this eventually
+	{
 		return '<h2><txp:search_result_title /></h2>
 <p><txp:search_result_excerpt /><br/>
 <small><txp:search_result_url /> &middot; <txp:search_result_date /></small></p>';
