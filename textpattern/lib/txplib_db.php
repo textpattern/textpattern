@@ -222,7 +222,7 @@ $DB = new DB;
 	}
 
 /**
- * Escapes special characters in a string for use in an SQL statement.
+ * Escapes special characters in a string for use in a SQL statement.
  *
  * @param  string $in The input string
  * @return string
@@ -242,7 +242,7 @@ $DB = new DB;
 	}
 
 /**
- * Executes an SQL statement.
+ * Executes a SQL statement.
  *
  * @param  string $q     The SQL statement to execute
  * @param  bool   $debug Dump query
@@ -747,7 +747,7 @@ $DB = new DB;
 	}
 
 /**
- * Executes an SQL statement and returns results.
+ * Executes a SQL statement and returns results.
  *
  * This function is indentical to safe_query() apart
  * from the missing $unbuf argument.

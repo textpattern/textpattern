@@ -134,7 +134,7 @@ if (!defined('REGEXP_UTF8'))
 }
 
 /**
- * NULL datetime for use in an SQL statement.
+ * NULL datetime for use in a SQL statement.
  *
  * @package DB
  */

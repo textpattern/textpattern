@@ -91,8 +91,8 @@
 /**
  * Limits search to searchable sections.
  *
- * This function gets a list of searchable sections as an SQL where clause.
- * The returned results can be then be used in or as an SQL query.
+ * This function gets a list of searchable sections as a SQL where clause.
+ * The returned results can be then be used in or as a SQL query.
  *
  * @return string|bool SQL statement, or FALSE when all sections are included the search
  * @example

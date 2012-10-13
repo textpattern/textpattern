@@ -233,7 +233,7 @@
 	}
 
 /**
- * Renders an HTML <input> element.
+ * Renders a HTML <input> element.
  *
  * @param  string $name HTML name and id of the text box
  * @param  string $val Initial (or current) content of the text box
@@ -254,7 +254,7 @@
 	}
 
 /**
- * Renders an HTML <textarea> element.
+ * Renders a HTML <textarea> element.
  *
  * @param  string $name HTML name of the textarea
  * @param  string $val Initial (or current) content of the textarea
@@ -268,7 +268,7 @@
 	}
 
 /**
- * Renders an HTML select list of cities for timezone selection.
+ * Renders a HTML select list of cities for timezone selection.
  *
  * Can be altered by plugins.
  *
@@ -287,7 +287,7 @@
 	}
 
 /**
- * Renders an HTML choice for whether Daylight Savings Time is in effect.
+ * Renders a HTML choice for whether Daylight Savings Time is in effect.
  *
  * Can be altered by plugins.
  *
@@ -326,7 +326,7 @@ EOS
 	}
 
 /**
- * Renders an HTML select list of hit logging options.
+ * Renders a HTML select list of hit logging options.
  *
  * @param  string $name HTML name and id of the list
  * @param  string $val Initial (or current) selected item
@@ -345,7 +345,7 @@ EOS
 	}
 
 /**
- * Renders an HTML select list of supported permanent link URL formats.
+ * Renders a HTML select list of supported permanent link URL formats.
  *
  * @param  string $name HTML name and id of the list
  * @param  string $val Initial (or current) selected item
@@ -368,7 +368,7 @@ EOS
 	}
 
 /**
- * Renders an HTML choice of comment popup modes.
+ * Renders a HTML choice of comment popup modes.
  *
  * @param  string $name HTML name and id of the widget
  * @param  string $val Initial (or current) selected item
@@ -386,7 +386,7 @@ EOS
 	}
 
 /**
- * Renders an HTML select list of comment popup modes.
+ * Renders a HTML select list of comment popup modes.
  *
  * Can be altered by plugins.
  *
@@ -413,7 +413,7 @@ EOS
 	}
 
 /**
- * Renders an HTML select list of available ways to display the date.
+ * Renders a HTML select list of available ways to display the date.
  *
  * @param  string $name HTML name and id of the widget
  * @param  string $val Initial (or current) selected item
@@ -477,7 +477,7 @@ EOS
 	}
 
 /**
- * Renders an HTML select list of site production status.
+ * Renders a HTML select list of site production status.
  *
  * @param  string $name HTML name and id of the widget
  * @param  string $val Initial (or current) selected item
@@ -496,7 +496,7 @@ EOS
 	}
 
 /**
- * Renders an HTML select list of available panels to show immediately after login.
+ * Renders a HTML select list of available panels to show immediately after login.
  *
  * @param  string $name HTML name of the widget
  * @param  string $val Initial (or current) selected item
@@ -530,7 +530,7 @@ EOS
 	}
 
 /**
- * Renders an HTML select list of sendmail options.
+ * Renders a HTML select list of sendmail options.
  *
  * @param  string $name HTML name and id of the widget
  * @param  string $val Initial (or current) selected item
@@ -549,7 +549,7 @@ EOS
 	}
 
 /**
- * Renders an HTML custom field.
+ * Renders a HTML custom field.
  *
  * Can be altered by plugins.
  *
@@ -565,7 +565,7 @@ EOS
 	}
 
 /**
- * Renders an HTML select list of installed admin-side themes.
+ * Renders a HTML select list of installed admin-side themes.
  *
  * Can be altered by plugins.
  *
@@ -594,7 +594,7 @@ EOS
 	}
 
 /**
- * Renders an HTML select list of available public site markup schemes to adhere to.
+ * Renders a HTML select list of available public site markup schemes to adhere to.
  *
  * @param  string $name HTML name and id of the widget
  * @param  string $val Initial (or current) selected item
