@@ -215,20 +215,42 @@ define('PREF_GLOBAL', false);
 /**
  * Preference type is basic.
  *
- * @package Pref
- * @see     set_pref()
+ * @package    Pref
+ * @deprecated in 4.6.0
+ * @see        PREF_CORE
+ * @see        set_pref()
  */
 
 define('PREF_BASIC', 0);
 
 /**
- * Preference type is advanced.
+ * Preference type is a core setting.
  *
  * @package Pref
  * @see     set_pref()
  */
 
+define('PREF_CORE', 0);
+
+/**
+ * Preference type is advanced.
+ *
+ * @package    Pref
+ * @deprecated in 4.6.0
+ * @see        PREF_CORE for core prefs | PREF_PLUGIN for 3rd party prefs
+ * @see        set_pref()
+ */
+
 define('PREF_ADVANCED', 1);
+
+/**
+ * Preference type is a plugin or third party setting.
+ *
+ * @package Pref
+ * @see     set_pref()
+ */
+
+define('PREF_PLUGIN', 1);
 
 /**
  * Preference type is hidden.
@@ -271,7 +293,7 @@ if (!defined('PASSWORD_LENGTH'))
 if (!defined('PASSWORD_COMPLEXITY'))
 {
 	/**
-	 * Password iteration strenght count.
+	 * Password iteration strength count.
 	 *
 	 * @package User
 	 */

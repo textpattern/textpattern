@@ -10,46 +10,71 @@
 	Use of this software indicates acceptance of the Textpattern license agreement
 
 */
-	if (!defined('txpinterface')) die('txpinterface is undefined.');
 
-//-------------------------------------------------------------
+/**
+ * Prefs panel user interface and interaction.
+ *
+ * @package prefs
+ */
+
+	if (!defined('txpinterface')) die('txpinterface is undefined.');
 
 	if ($event == 'prefs') {
 		require_privs('prefs');
 
-		$available_steps = array(
-			'advanced_prefs'      => false,
-			'prefs_save'          => true,
-			'advanced_prefs_save' => true,
-			'prefs_list'          => false
+		bouncer($step,
+			array(
+				'prefs_save'      => true,
+				'prefs_list'      => false,
+				'save_pane_state' => true,
+			)
 		);
 
-		if ($step && bouncer($step, $available_steps)) {
-			$step();
-		} else {
-			prefs_list();
+		switch(strtolower($step)) {
+			case "":                prefs_list();            break;
+			case "prefs_list":      prefs_list();            break;
+			case "prefs_save":      prefs_save();            break;
+			case "save_pane_state": prefs_save_pane_state(); break;
 		}
 	}
 
-// -------------------------------------------------------------
+/**
+ * Commits prefs to the database.
+ */
+
 	function prefs_save()
 	{
 		global $prefs, $gmtoffset, $is_dst, $auto_dst, $timezone_key;
 
-		$prefnames = safe_column("name", "txp_prefs", "prefs_id = 1");
+		// Update custom fields count from database schema and cache it as a hidden pref
+		// TODO: Move this when CFs are refactored
+		$max_custom_fields = count(preg_grep('/^custom_\d+/', getThings('describe `'.PFX.'textpattern`')));
+		set_pref('max_custom_fields', $max_custom_fields, 'publish', 2);
+
+		$prefnames = safe_column("name", "txp_prefs", "prefs_id = 1" . (has_privs('prefs.edit') ? '' : " AND type = '" . PREF_PLUGIN . "'"));
 
 		$post = doSlash(stripPost());
+
+		if (!isset($post['tempdir']) || empty($post['tempdir']))
+			$post['tempdir'] = doSlash(find_temp_dir());
+
+		if (isset($post['file_max_upload_size']) && !empty($post['file_max_upload_size']))
+			$post['file_max_upload_size'] = real_max_upload_size($post['file_max_upload_size']);
 
 		// Forge $auto_dst for (in-)capable servers
 		if (!timezone::is_supported())
 		{
 			$post['auto_dst'] = false;
 		}
-		$prefs['auto_dst'] = $auto_dst = $post['auto_dst'];
 
-		if (!$post['auto_dst'])
+		if (isset($post['auto_dst']))
 		{
-			$is_dst = $post['is_dst'];
+			$prefs['auto_dst'] = $auto_dst = $post['auto_dst'];
+
+			if (isset($post['is_dst']) && !$post['auto_dst'])
+			{
+				$is_dst = $post['is_dst'];
+			}
 		}
 
 		// Forge $gmtoffset and $is_dst from $timezone_key if present
@@ -88,44 +113,60 @@
 		prefs_list(gTxt('preferences_saved'));
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders the list of preferences.
+ *
+ * Plugins may add their own prefs, for example by using plugin lifecycle events or
+ * raising a (pre) callback on event=admin / step=prefs_list so they are installed
+ * or updated when accessing the Preferences panel. Access to the prefs can be
+ * controlled by using add_privs() on 'prefs.your-prefs-event-name'.
+ *
+ * @param  string $message The feedback / error string to display
+ * @return string HTML
+ */
 
 	function prefs_list($message = '')
 	{
 		global $prefs;
+
 		extract($prefs);
 
-		// Read real DB value instead of potentially 'stale' $prefs array when value has just changed
-		$use_comments = safe_field('val', 'txp_prefs', "name='use_comments'");
+		// Fetch value from database in case it has recently changed
+		$use_comments = get_pref('use_comments', 1, 1);
 
 		echo pagetop(gTxt('tab_preferences'), $message);
 
 		$locale = setlocale(LC_ALL, $locale);
 
-		echo '<h1 class="txp-heading">'.gTxt('tab_preferences').'</h1>';
-		echo n.'<div id="prefs_container" class="txp-container">'.
-			n.n.'<form method="post" class="prefs-form basic" action="index.php">'.
+		echo n, '<h1 class="txp-heading">', gTxt('tab_preferences'), '</h1>',
+			n, '<div id="prefs_container" class="txp-container">',
+			n, '<form method="post" class="prefs-form" action="index.php">',
+			n, '<div class="plugin-column">';
 
-			n.'<p class="nav-tertiary">'.
-				sLink('prefs', 'prefs_list', gTxt('site_prefs'), 'navlink-active').
-				sLink('prefs', 'advanced_prefs', gTxt('advanced_preferences'), 'navlink').
-			n.'</p>'.
+		// TODO: remove 'custom' when custom fields are refactored
+		$core_events = array('site', 'admin', 'publish', 'feeds', 'custom', 'comments');
+		$joined_core = doQuote(join("','", $core_events));
+		$evt_list = has_privs('prefs.edit') ? safe_column('event', 'txp_prefs', "type = ".PREF_CORE." and prefs_id = 1 AND event IN (".$joined_core.") group by event order by field(event,".$joined_core.")") : array();
+		$plugin_evt_list = safe_column('event', 'txp_prefs', "type = ".PREF_PLUGIN." and prefs_id = 1 AND event NOT IN (".$joined_core.") group by event order by event asc");
 
-			n.n.startTable('', '', 'txp-list')
-			.'<tbody>';
-
-		$evt_list = safe_column('event', 'txp_prefs', "type = 0 and prefs_id = 1 group by event order by event desc");
+		$evt_list += $plugin_evt_list;
+		$cur_evt = '';
+		$group_count = 0;
 
 		foreach ($evt_list as $event)
 		{
-			$rs = safe_rows_start('*', 'txp_prefs', "type = 0 and prefs_id = 1 and event = '".doSlash($event)."' order by position");
+			$rs = safe_rows_start('*', 'txp_prefs', "(type = ".PREF_CORE." OR type = ".PREF_PLUGIN.") and prefs_id = 1 and event = '".doSlash($event)."' order by position");
 
-			$cur_evt = '';
+			if (in_array($event, $plugin_evt_list) && !has_privs('prefs.'.$event)) continue;
 
 			while ($a = nextRow($rs))
 			{
+				// TODO: remove this exception when custom fields move to meta store
+				$noPopHelp = (strpos($a['name'], 'custom_') !== false);
+
 				if ($a['event'] != $cur_evt)
 				{
+					echo ($cur_evt == '') ? '' : n.'</div></div><!-- /END OF '.$cur_evt.' -->';
 					$cur_evt = $a['event'];
 
 					if ($cur_evt == 'comments' && !$use_comments)
@@ -133,11 +174,11 @@
 						continue;
 					}
 
-					echo n.n.tr(
-						tdcs(
-							hed(gTxt($a['event']), 3, ' class="'.$a['event'].'-prefs"')
-						, 2)
-					, ' class="pref-heading"');
+					echo n, '<div role="group" id="prefs_group_', $a['event'], '" class="txp-details">',
+						n, '<h3 class="txp-summary', (get_pref('pane_prefs_'.$a['event'].'_visible') ? ' expanded' : ''), '">',
+						n, '<a href="#prefs_', $a['event'], '" role="button">', gTxt($a['event']), '</a>',
+						n, '</h3>',
+						n, '<div id="prefs_', $a['event'], '" class="toggle" style="display:', (get_pref('pane_prefs_'.$a['event'].'_visible') ? 'block' : 'none'), '">';
 				}
 
 				if ($cur_evt == 'comments' && !$use_comments)
@@ -149,26 +190,41 @@
 					'<label for="'.$a['name'].'">'.gTxt($a['name']).'</label>' :
 					gTxt($a['name']);
 
-				$out = tda($label.n.popHelp($a['name']), ' class="pref-label"');
-				$out.= td(pref_func($a['html'], $a['name'], $a['val'], ($a['html'] == 'text_input' ? INPUT_REGULAR : '')), '', 'pref-value');
-
-				echo tr($out, " id='prefs-{$a['name']}' class='{$a['event']}-prefs'");
+				// TODO: remove $noPopHelp condition when custom fields move to meta store
+				echo n, graf(
+					n.'<span class="txp-label">'.$label.(($noPopHelp) ? '' : n.popHelp($a['name'])).'</span>'.
+					n.'<span class="txp-value">'.pref_func($a['html'], $a['name'], $a['val'], ($a['html'] == 'text_input' ? INPUT_REGULAR : '')).'</span>'
+				, ' id="prefs-'.$a['name'].'"');
 			}
+			$group_count++;
 		}
 
-		echo n.'</tbody>'.n.endTable().
-			graf(
+		if (!$group_count)
+		{
+			echo graf(gTxt('no_preferences'));
+		}
+
+		echo n, '</div>', (($cur_evt == 'comments' && !$use_comments) ? '' : ($group_count ? '</div></div>' : '')),
+			n, graf(
 				fInput('submit', 'Submit', gTxt('save'), 'publish').
 				n.sInput('prefs_save').
 				n.eInput('prefs').
 				n.hInput('prefs_id', '1').
 				n.tInput()
-			).
-			n.n.'</form>'.
-			n.'</div>';
+			),
+			n, '</form>',
+			n, '</div>';
 	}
 
-//-------------------------------------------------------------
+/**
+ * Calls a core or custom function to render a preference input widget.
+ *
+ * @param  string $func Function name to call
+ * @param  string $name HTML name/id of the input control
+ * @param  string $val Initial (or current) value of the input control
+ * @param  int    $size Size of the input control (width or depth, dependent on control)
+ * @return string HTML
+ */
 
 	function pref_func($func, $name, $val, $size = '')
 	{
@@ -176,27 +232,50 @@
 		return call_user_func($func, $name, $val, $size);
 	}
 
-//-------------------------------------------------------------
+/**
+ * Renders an HTML <input> element.
+ *
+ * @param  string $name HTML name and id of the text box
+ * @param  string $val Initial (or current) content of the text box
+ * @param  int    $size Width of the textbox. Options are INPUT_MEDIUM | INPUT_SMALL | INPUT_XSMALL
+ * @see constants.php
+ * @return string HTML
+ */
 
 	function text_input($name, $val, $size = '')
 	{
 		$class = '';
 		switch ($size) {
 			case INPUT_MEDIUM: $class = 'input-medium'; break;
-			case INPUT_SMALL: $class = 'input-small'; break;
+			case INPUT_SMALL:  $class = 'input-small';  break;
 			case INPUT_XSMALL: $class = 'input-xsmall'; break;
 		}
 		return fInput('text', $name, $val, $class, '', '', $size, '', $name);
 	}
 
-//-------------------------------------------------------------
+/**
+ * Renders an HTML <textarea> element.
+ *
+ * @param  string $name HTML name of the textarea
+ * @param  string $val Initial (or current) content of the textarea
+ * @param  int    $size Number of rows the textarea has
+ * @return string HTML
+ */
 
 	function pref_longtext_input($name, $val, $size = '')
 	{
 		return text_area($name, '', '', $val, '', $size);
 	}
 
-//-------------------------------------------------------------
+/**
+ * Renders an HTML select list of cities for timezone selection.
+ *
+ * Can be altered by plugins.
+ *
+ * @param  string $name HTML name of the list
+ * @param  string $val Initial (or current) selected option
+ * @return string HTML
+ */
 
 	function gmtoffset_select($name, $val)
 	{
@@ -207,8 +286,15 @@
 		return pluggable_ui('prefs_ui', 'gmtoffset', $ui, $name, $val);
 	}
 
-
-//-------------------------------------------------------------
+/**
+ * Renders an HTML choice for whether Daylight Savings Time is in effect.
+ *
+ * Can be altered by plugins.
+ *
+ * @param  string $name HTML name of the widget
+ * @param  string $val Initial (or current) selected item
+ * @return string HTML
+ */
 
 	function is_dst($name, $val)
 	{
@@ -239,7 +325,13 @@ EOS
 		return pluggable_ui('prefs_ui', 'is_dst', $ui, $name, $val);
 	}
 
-//-------------------------------------------------------------
+/**
+ * Renders an HTML select list of hit logging options.
+ *
+ * @param  string $name HTML name and id of the list
+ * @param  string $val Initial (or current) selected item
+ * @return string HTML
+ */
 
 	function logging($name, $val)
 	{
@@ -252,7 +344,13 @@ EOS
 		return selectInput($name, $vals, $val, '', '', $name);
 	}
 
-//-------------------------------------------------------------
+/**
+ * Renders an HTML select list of supported permanent link URL formats.
+ *
+ * @param  string $name HTML name and id of the list
+ * @param  string $val Initial (or current) selected item
+ * @return string HTML
+ */
 
 	function permlinkmodes($name, $val)
 	{
@@ -269,19 +367,13 @@ EOS
 		return selectInput($name, $vals, $val, '', '', $name);
 	}
 
-//-------------------------------------------------------------
-// Deprecated; permlinkmodes is used instead now
-	function urlmodes($name, $val)
-	{
-		$vals = array(
-			'0' => gTxt('messy'),
-			'1' => gTxt('clean')
-		);
-
-		return selectInput($name, $vals, $val, '', '', $name);
-	}
-
-//-------------------------------------------------------------
+/**
+ * Renders an HTML choice of comment popup modes.
+ *
+ * @param  string $name HTML name and id of the widget
+ * @param  string $val Initial (or current) selected item
+ * @return string HTML
+ */
 
 	function commentmode($name, $val)
 	{
@@ -293,7 +385,15 @@ EOS
 		return selectInput($name, $vals, $val, '', '', $name);
 	}
 
-//-------------------------------------------------------------
+/**
+ * Renders an HTML select list of comment popup modes.
+ *
+ * Can be altered by plugins.
+ *
+ * @param  string $name HTML name and id of the widget
+ * @param  string $val Initial (or current) selected item
+ * @return string HTML
+ */
 
 	function weeks($name, $val)
 	{
@@ -312,7 +412,13 @@ EOS
 		return pluggable_ui('prefs_ui', 'weeks', selectInput($name, $vals, $val, '', '', $name), $name, $val);
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders an HTML select list of available ways to display the date.
+ *
+ * @param  string $name HTML name and id of the widget
+ * @param  string $val Initial (or current) selected item
+ * @return string HTML
+ */
 
 	function dateformats($name, $val)
 	{
@@ -369,7 +475,14 @@ EOS
 
 		return selectInput($name, array_unique($vals), $val, '', '', $name);
 	}
-//-------------------------------------------------------------
+
+/**
+ * Renders an HTML select list of site production status.
+ *
+ * @param  string $name HTML name and id of the widget
+ * @param  string $val Initial (or current) selected item
+ * @return string HTML
+ */
 
 	function prod_levels($name, $val)
 	{
@@ -382,7 +495,14 @@ EOS
 		return selectInput($name, $vals, $val, '', '', $name);
 	}
 
-//-------------------------------------------------------------
+/**
+ * Renders an HTML select list of available panels to show immediately after login.
+ *
+ * @param  string $name HTML name of the widget
+ * @param  string $val Initial (or current) selected item
+ * @return string HTML
+ */
+
 	function default_event($name, $val)
 	{
 		$vals = areas();
@@ -409,7 +529,14 @@ EOS
 			n.'</select>';
 	}
 
-//-------------------------------------------------------------
+/**
+ * Renders an HTML select list of sendmail options.
+ *
+ * @param  string $name HTML name and id of the widget
+ * @param  string $val Initial (or current) selected item
+ * @return string HTML
+ */
+
 	function commentsendmail($name, $val)
 	{
 		$vals = array(
@@ -421,13 +548,32 @@ EOS
 		return selectInput($name, $vals, $val, '', '', $name);
 	}
 
-//-------------------------------------------------------------
+/**
+ * Renders an HTML custom field.
+ *
+ * Can be altered by plugins.
+ *
+ * @param  string $name HTML name of the widget
+ * @param  string $val Initial (or current) content
+ * @todo   deprecate or move this when CFs are migrated to the meta store
+ * @return string HTML
+ */
+
 	function custom_set($name, $val)
 	{
 		return pluggable_ui('prefs_ui', 'custom_set', text_input($name, $val, INPUT_REGULAR), $name, $val);
 	}
 
-//-------------------------------------------------------------
+/**
+ * Renders an HTML select list of installed admin-side themes.
+ *
+ * Can be altered by plugins.
+ *
+ * @param  string $name HTML name and id of the widget
+ * @param  string $val Initial (or current) selected item
+ * @return string HTML
+ */
+
 	function themename($name, $val)
 	{
 		$themes = theme::names();
@@ -447,7 +593,14 @@ EOS
 			selectInput($name, $vals, $val, '', '', $name));
 	}
 
-//-------------------------------------------------------------
+/**
+ * Renders an HTML select list of available public site markup schemes to adhere to.
+ *
+ * @param  string $name HTML name and id of the widget
+ * @param  string $val Initial (or current) selected item
+ * @return string HTML
+ */
+
 	function doctypes($name, $val)
 	{
 		$vals = array(
@@ -458,82 +611,14 @@ EOS
 		return selectInput($name, $vals, $val, '', '', $name);
 	}
 
-//-------------------------------------------------------------
-	function advanced_prefs($message = '')
-	{
-		echo pagetop(gTxt('advanced_preferences'), $message).
+/**
+ * Computes the maximum acceptable file size to the application if the user-selected
+ * value is larger than the maximum allowed by the current PHP configuration.
+ *
+ * @param  int $user_max Desired upload size supplied by the administrator
+ * @return int Actual value; the lower of user-supplied value or system-defined value
+ */
 
-			n.'<h1 class="txp-heading">'.gTxt('tab_preferences').'</h1>'.
-			n.'<div id="prefs_container" class="txp-container">'.
-			n.n.'<form method="post" class="prefs-form advanced" action="index.php">'.
-
-			n.'<p class="nav-tertiary">'.
-				sLink('prefs', 'prefs_list', gTxt('site_prefs'), 'navlink').
-				sLink('prefs', 'advanced_prefs', gTxt('advanced_preferences'), 'navlink-active').
-			n.'</p>'.
-
-			n.n.startTable('', '', 'txp-list')
-			.'<tbody>';
-
-		$rs = safe_rows_start('*', 'txp_prefs', "type = 1 and prefs_id = 1 order by event, position");
-
-		$cur_evt = '';
-
-		while ($a = nextRow($rs))
-		{
-			$headingPopHelp = (strpos($a['name'], 'custom_') !== false);
-
-			if ($a['event']!= $cur_evt)
-			{
-				$cur_evt = $a['event'];
-
-				echo n.n.tr(
-					tdcs(
-						hed(gTxt($a['event']) . ($headingPopHelp ? n.popHelp($a['name']) : ''), 3, ' class="'.$a['event'].'-prefs"')
-					, 2)
-				, ' class="pref-heading"');
-			}
-
-			$label = (!in_array($a['html'], array('yesnoradio', 'is_dst')))
-				? '<label for="'.$a['name'].'">'.gTxt($a['name']).'</label>'
-				: gTxt($a['name']);
-
-			$out = tda($label. (($headingPopHelp) ? '' : n.popHelp($a['name'])), ' class="pref-label"');
-
-			if ($a['html'] == 'text_input')
-			{
-				$look_for = array('expire_logs_after', 'max_url_len', 'time_offset', 'rss_how_many', 'logs_expire');
-
-				$size = in_array($a['name'], $look_for) ? INPUT_XSMALL : INPUT_REGULAR;
-
-				$out.= td(
-					pref_func('text_input', $a['name'], $a['val'], $size)
-				, '', 'pref-value');
-			}
-
-			else
-			{
-				$out.= td(
-					pref_func($a['html'], $a['name'], $a['val'])
-				, '', 'pref-value');
-			}
-
-			echo n.n.tr($out, " id='prefs-{$a['name']}' class='{$a['event']}-prefs'");
-		}
-
-		echo n.'</tbody>'.n.endTable().
-			graf(
-				fInput('submit', 'Submit', gTxt('save'), 'publish').
-				n.sInput('advanced_prefs_save').
-				n.eInput('prefs').
-				n.hInput('prefs_id', '1').
-				n.tInput()
-			).
-			n.n.'</form>'.
-			n.'</div>';
-	}
-
-//-------------------------------------------------------------
 	function real_max_upload_size($user_max)
 	{
 		// The minimum of the candidates, is the real max. possible size
@@ -561,36 +646,24 @@ EOS
 		return $real_max;
 	}
 
-//-------------------------------------------------------------
-	function advanced_prefs_save()
+/**
+ * Stores the open/closed state of the prefs group twisties.
+ *
+ * @return XML|error Response code on success | error message on failure
+ */
+
+	function prefs_save_pane_state()
 	{
-		// update custom fields count from database schema and cache it as a hidden pref
-		$max_custom_fields = count(preg_grep('/^custom_\d+/', getThings('describe `'.PFX.'textpattern`')));
-		set_pref('max_custom_fields', $max_custom_fields, 'publish', 2);
+		global $event;
+		$pane = gps('pane');
 
-		// safe all regular advanced prefs
-		$prefnames = safe_column("name", "txp_prefs", "prefs_id = 1 AND type = 1");
-
-		$post = doSlash(stripPost());
-
-		if (empty($post['tempdir']))
-			$post['tempdir'] = doSlash(find_temp_dir());
-
-		if (!empty($post['file_max_upload_size']))
-			$post['file_max_upload_size'] = real_max_upload_size($post['file_max_upload_size']);
-
-		foreach($prefnames as $prefname) {
-			if (isset($post[$prefname])) {
-					safe_update(
-						"txp_prefs",
-						"val = '".$post[$prefname]."'",
-						"name = '".doSlash($prefname)."' and prefs_id = 1"
-					);
-			}
+		if (strpos($pane, 'prefs_') === 0)
+		{
+			set_pref("pane_{$pane}_visible", (gps('visible') == 'true' ? '1' : '0'), $event, PREF_HIDDEN, 'yesnoradio', 0, PREF_PRIVATE);
+			send_xml_response();
+		} else {
+			trigger_error('invalid_pane', E_USER_WARNING);
 		}
-
-		update_lastmod();
-
-		advanced_prefs(gTxt('preferences_saved'));
 	}
+
 ?>
