@@ -1,7 +1,12 @@
+/**
+ * Collection of client side tools.
+ */
 
-
-// -------------------------------------------------------------
-// admin-side "cookies required" warning
+/**
+ * Checks if HTTP cookies are enabled.
+ *
+ * @return {boolean}
+ */
 
 function checkCookies()
 {
@@ -20,8 +25,14 @@ function checkCookies()
 	return cookieEnabled;
 }
 
-// -------------------------------------------------------------
-// auto-centering popup windows
+/**
+ * Spawns a centered popup window.
+ *
+ * @param {string}  url     The location
+ * @param {integer} width   The width
+ * @parma {integer} height  The height
+ * @param {string}  options A list of options
+ */
 
 function popWin(url, width, height, options)
 {
@@ -41,9 +52,10 @@ function popWin(url, width, height, options)
 }
 
 /**
- * Basic confirmation for potentially powerful choice (like deletion, for example)
- * @param string msg
- * @return bool
+ * Basic confirmation for potentially powerful choice (like deletion, for example).
+ *
+ * @param  {string}  msg The message
+ * @return {boolean} TRUE if user confirmed the action
  */
 
 function verify(msg)
@@ -52,8 +64,9 @@ function verify(msg)
 }
 
 /**
- * Selects all multi-edit checkboxes
- * @deprecated
+ * Selects all multi-edit checkboxes.
+ *
+ * @deprecated in 4.5.0
  */
 
 function selectall()
@@ -62,8 +75,9 @@ function selectall()
 }
 
 /**
- * De-selects all multi-edit checkboxes
- * @deprecated
+ * De-selects all multi-edit checkboxes.
+ *
+ * @deprecated in 4.5.0
  */
 
 function deselectall()
@@ -72,8 +86,9 @@ function deselectall()
 }
 
 /**
- * Selects a range of multi-edit checkboxes
- * @deprecated
+ * Selects a range of multi-edit checkboxes.
+ *
+ * @deprecated in 4.5.0
  */
 
 function selectrange()
@@ -97,7 +112,8 @@ function selectrange()
 
 /**
  * ?
- * @deprecated
+ *
+ * @deprecated in 4.5.0
  */
 
 function cleanSelects()
@@ -111,10 +127,12 @@ function cleanSelects()
 }
 
 /**
- * Multi-edit functions
- * @param string|obj method
- * @param obj opt
- * @since 4.5.0
+ * Multi-edit functions.
+ *
+ * @param  {string|object} method Called method, or options
+ * @param  {object}        opt    Options if method is a method
+ * @return {object}        this
+ * @since  4.5.0
  */
 
 jQuery.fn.txpMultiEditForm = function(method, opt)
@@ -165,11 +183,13 @@ jQuery.fn.txpMultiEditForm = function(method, opt)
 		}
 
 		/**
-		 * Registers multi-edit options
-		 * @param string label
-		 * @param string value HTML Option's value
-		 * @param obj|string html Object or HTML markup used as for the action's second step. NULL to skip 2nd step.
-		 * @return obj this
+		 * Registers a multi-edit option.
+		 *
+		 * @param  {object} options
+		 * @param  {string} options.label The option's label
+		 * @param  {string} options.value The option's value
+		 * @param  {string} options.html  The second step HTML
+		 * @return {object} public
 		 */
 
 		public.addOption = function(options)
@@ -221,20 +241,25 @@ jQuery.fn.txpMultiEditForm = function(method, opt)
 		};
 
 		/**
-		 * Selects rows based on supplied arguments. Only one of the filters applies at time.
-		 * @param array index Select based on row's index.
-		 * @param array range [min, max] Select based on index range.
-		 * @param array value [value1, value2, value3, ...]
-		 * @param bool checked Set matched checked or unchecked. FALSE to uncheck.
+		 * Selects rows based on supplied arguments.
+		 *
+		 * Only one of the filters applies at time.
+		 *
+		 * @param  {object}  options
+		 * @param  {array}   options.index Indexes to select
+		 * @param  {array}   options.range Select index range, takes [min, max]
+		 * @param  {array}   options.value Values to select
+		 * @param  {boolean} TRUE to check, FALSE to uncheck
+		 * @return {object}  public
 		 */
 
 		public.select = function(options)
 		{
 			var settings = $.extend({
-				'index' : null,
-				'range' : null,
-				'value' : null,
-				'checked' : true
+				'index' : null,  // Select based on row's index.
+				'range' : null,  // Select based on index range.
+				'value' : null,  // Select based on values.
+				'checked' : true // Check or uncheck.
 			}, options);
 
 			var obj = $this.find(form.boxes);
@@ -263,7 +288,9 @@ jQuery.fn.txpMultiEditForm = function(method, opt)
 		};
 
 		/**
-		 * Highlights selected rows
+		 * Highlights selected rows.
+		 *
+		 * @return {object} private
 		 */
 
 		private.highlight = function()
@@ -275,7 +302,9 @@ jQuery.fn.txpMultiEditForm = function(method, opt)
 		};
 
 		/**
-		 * Extends click region to whole row
+		 * Extends click region to whole row.
+		 *
+		 * @return {object} private
 		 */
 
 		private.extendedClick = function()
@@ -347,7 +376,9 @@ jQuery.fn.txpMultiEditForm = function(method, opt)
 		};
 
 		/**
-		 * Tracks row checks
+		 * Tracks row checks.
+		 *
+		 * @return {object} private
 		 */
 
 		private.checked = function()
@@ -372,7 +403,9 @@ jQuery.fn.txpMultiEditForm = function(method, opt)
 		};
 
 		/**
-		 * Handles edit method selecting
+		 * Handles edit method selecting.
+		 *
+		 * @return {object} private
 		 */
 
 		private.changeMethod = function()
@@ -405,7 +438,9 @@ jQuery.fn.txpMultiEditForm = function(method, opt)
 		};
 
 		/**
-		 * Handles sending
+		 * Handles sending.
+		 *
+		 * @return {object} private
 		 */
 
 		private.sendForm = function()
@@ -466,9 +501,17 @@ jQuery.fn.txpMultiEditForm = function(method, opt)
 	return this;
 };
 
-// -------------------------------------------------------------
-// event handling
-// By S.Andrew -- http://www.scottandrew.com/
+/**
+ * Adds a event handler.
+ *
+ * See jQuery before trying to use this.
+ *
+ * @author S.Andrew http://www.scottandrew.com/
+ * @param  {object}  elm        The element to attach to
+ * @param  {string}  evType     The event
+ * @param  {object}  fn         The callback function
+ * @param  {boolean} useCapture Initiate capture
+ */
 
 function addEvent(elm, evType, fn, useCapture)
 {
@@ -490,8 +533,13 @@ function addEvent(elm, evType, fn, useCapture)
 	}
 }
 
-// -------------------------------------------------------------
-// cookie handling
+/**
+ * Sets a HTTP cookie.
+ *
+ * @param {string}  name  The name
+ * @param {string}  value The value
+ * @param {integer} days  Expires in
+ */
 
 function setCookie(name, value, days)
 {
@@ -511,6 +559,13 @@ function setCookie(name, value, days)
 
 	document.cookie = name + '=' + value + expires + '; path=/';
 }
+
+/**
+ * Gets a HTTP cookie's value.
+ *
+ * @param  {string} name The name
+ * @return {string} The cookie
+ */
 
 function getCookie(name)
 {
@@ -536,13 +591,28 @@ function getCookie(name)
 	return null;
 }
 
+/**
+ * Deletes a HTTP cookie.
+ *
+ * @param {string} name The cookie
+ */
+
 function deleteCookie(name)
 {
 	setCookie(name, '', -1);
 }
 
-// -------------------------------------------------------------
-// @see http://www.snook.ca/archives/javascript/your_favourite_1/
+/**
+ * Gets element by class.
+ *
+ * See jQuery before trying to use this.
+ *
+ * @param  {string} classname The HTML class
+ * @param  {object} node      The node, defaults to the document
+ * @return {object} Matching nodes
+ * @see    http://www.snook.ca/archives/javascript/your_favourite_1/
+ */
+
 function getElementsByClass(classname, node)
 {
 	var a = [];
@@ -554,8 +624,12 @@ function getElementsByClass(classname, node)
 	return a;
 }
 
-// -------------------------------------------------------------
-// direct show/hide
+/**
+ * Toggles panel's visibility and saves the state to the server.
+ *
+ * @param  {string}  id The element ID
+ * @return {boolean} Returns FALSE
+ */
 
 function toggleDisplay(id)
 {
@@ -575,8 +649,9 @@ function toggleDisplay(id)
 	return false;
 }
 
-// -------------------------------------------------------------
-// direct show/hide referred #segment; decorate parent lever
+/**
+ * Direct show/hide referred #segment; decorate parent lever.
+ */
 
 function toggleDisplayHref()
 {
@@ -592,9 +667,10 @@ function toggleDisplayHref()
 }
 
 /**
- * Shows/hides matching elements
- * @param className string Targeted element's class
- * @param show bool|int 1 to display, 0 to hide
+ * Shows/hides matching elements.
+ *
+ * @param {string}  className Targeted element's class
+ * @param {boolean} show      TRUE to display
  */
 
 function setClassDisplay(className, show)
@@ -611,8 +687,11 @@ function setClassDisplay(className, show)
 	}
 }
 
-// -------------------------------------------------------------
-// toggle show/hide matching elements, and set a cookie to remember
+/**
+ * Toggles panel's visibility and saves the state to a HTTP cookie.
+ *
+ * @param {string} classname The HTML class
+ */
 
 function toggleClassRemember(className)
 {
@@ -625,8 +704,12 @@ function toggleClassRemember(className)
 	setClassDisplay(className+'_neg', 1-v);
 }
 
-// -------------------------------------------------------------
-// show/hide matching elements based on cookie value
+/**
+ * Toggle visibility of matching elements based on a cookie value.
+ *
+ * @param {string}  className The HTML class
+ * @param {string}  force     The value
+ */
 
 function setClassRemember(className, force)
 {
@@ -639,13 +722,15 @@ function setClassRemember(className, force)
 }
 
 /**
- * Send/receive AJAX posts
+ * Load data from the server using a HTTP POST request.
  *
- * @param data 	POST payload
- * @param fn 	success handler
- * @param format response data format ['xml']
- * @see http://api.jquery.com/jQuery.post/
+ * @param  {object} data   POST payload
+ * @param  {object} fn     Success handler
+ * @param  {string} format Response data format, defaults to 'xml'
+ * @return {object} this
+ * @see    http://api.jquery.com/jQuery.post/
  */
+
 function sendAsyncEvent(data, fn, format)
 {
 	if($.type(data) === 'string' && data.length > 0) {
@@ -660,28 +745,44 @@ function sendAsyncEvent(data, fn, format)
 }
 
 /**
- * A pub/sub hub for client side events
- * @since   4.5.0
+ * A pub/sub hub for client side events.
+ *
+ * @since 4.5.0
  */
+
 textpattern.Relay =
 {
 	/**
-	 * Publish an event to all registered subscribers
-	 * @param   event string
-	 * @param   data object
-	 * @return  the Relay object
+	 * Publishes an event to all registered subscribers.
+	 *
+	 * @param  {string} event The event
+	 * @param  {object} data  The data passed to registered subscribers
+	 * @return {object} The Relay object
+	 * @example
+	 * textpattern.Relay.callback('newEvent', {'name1' : 'value1', 'name2' : 'value2'});
 	 */
+
 	callback: function(event, data)
 	{
 		return $(this).trigger(event, data);
 		return this;
 	},
+
 	/**
-	 * Subscribe to an event
-	 * @param   event string
-	 * @param   fn callback(event, data); // see individual events for details on data members
-	 * @return  the Relay object
+	 * Subscribes to an event.
+	 *
+	 * @param  {string} The event
+	 * @param  {object} fn  The callback function
+	 * @return {object} The Relay object
+	 * @example
+	 * textpattern.Relay.register('event',
+	 * 	function(event, data)
+	 * 	{
+	 * 		alert(data);
+	 * 	}
+	 * );
 	 */
+
 	register: function(event, fn)
 	{
 		$(this).bind(event, fn);
@@ -690,11 +791,14 @@ textpattern.Relay =
 };
 
 /**
- * txpAsyncForm jQuery plugin. Sends a form's entry elements as AJAX data and processes the response javascript.
+ * Sends a form using AJAX and processes the response.
  *
- * @param   object  options-object {dataType, error: function error_callback(){}, success: function success_callback(){}} | undefined
- * @return  object this form
- * @since   4.5.0
+ * @param  {object} options          Options
+ * @param  {string} options.dataType The response data type
+ * @param  {object} options.success  The success callback
+ * @param  {object} options.error    The error callback
+ * @return {object} this
+ * @since  4.5.0
  */
 
 jQuery.fn.txpAsyncForm = function(options)
@@ -759,6 +863,16 @@ jQuery.fn.txpAsyncForm = function(options)
 	return this;
 };
 
+/**
+ * Sends a link using AJAX and processes the plain text response.
+ *
+ * @param  {object} options          Options
+ * @param  {object} options.success  The success callback
+ * @param  {object} options.error    The error callback
+ * @return {object} this
+ * @since  4.5.0
+ */
+
 jQuery.fn.txpAsyncHref = function(options) {
 	options = $.extend({
 		success: null,
@@ -807,10 +921,13 @@ jQuery.fn.txpAsyncHref = function(options) {
 
 /**
  * Returns a i18n string.
- * @param string i18n The i18n string to output
- * @param object atts Replacement map
- * @param boolean escape Escape HTML. Default TRUE
- * @return string
+ *
+ * @param  {string}  i18n   The i18n string
+ * @param  {object}  atts   Replacement map
+ * @param  {boolean} escape TRUE to escape HTML in atts
+ * @return {string}  The string
+ * @example
+ * textpattern.gTxt('string', {'{name}' : 'example'}, true);
  */
 
 textpattern.gTxt = function(i18n, atts, escape)
@@ -839,11 +956,20 @@ textpattern.gTxt = function(i18n, atts, escape)
 }
 
 /**
- * jQuery plugin for textpattern.gTxt. Sets HTML contents of each matched element.
- * @param object options-object {string, tags : {}, escape : TRUE} | string The i18n string
- * @param object|undefined tags Replacement tags
- * @param boolean|undefined escape Escape HTML
- * @return object this
+ * Replaces HTML contents of each matched with i18n string.
+ *
+ * This is a jQuery plugin for textpattern.gTxt().
+ *
+ * @param  {object|string}  options        Options or the i18n string
+ * @param  {string}         options.string The i18n string
+ * @param  {object}         options.tags   Replacement map
+ * @param  {boolean}        options.escape TRUE to escape HTML in tags
+ * @param  {object}         tags           Replacement map
+ * @param  {boolean}        escape         TRUE to escape HTML in tags
+ * @return {object}         this
+ * @see    textpattern.gTxt()
+ * @example
+ * $('p').gTxt('string').class('alert-block warning');
  */
 
 jQuery.fn.gTxt = function(opts, tags, escape)
@@ -858,8 +984,8 @@ jQuery.fn.gTxt = function(opts, tags, escape)
 	return this;
 };
 
-//-------------------------------------------------------------
-// global admin-side behaviour
+// ESC button closes alert messages.
+
 $(document).keyup(function(e) {
 	if (e.keyCode == 27)
 	{
@@ -867,33 +993,35 @@ $(document).keyup(function(e) {
 	}
 });
 
+// Initialise JavaScript
+
 $(document).ready(function() {
-	// disable spellchecking on all elements of class "code" in capable browsers
+	// Disable spellchecking on all elements of class "code" in capable browsers
 	var c = $(".code")[0];
 	if(c && "spellcheck" in c) {$(".code").prop("spellcheck", false);}
-	// enable spellcheck for all elements mentioned in textpattern.do_spellcheck
+	// Enable spellcheck for all elements mentioned in textpattern.do_spellcheck.
 	c = $(textpattern.do_spellcheck)[0];
 	if(c && "spellcheck" in c) {$(textpattern.do_spellcheck).prop("spellcheck", true);}
-	// attach toggle behaviours
+	// Attach toggle behaviours.
     $(document).on('click', '.txp-summary a[class!=pophelp]', toggleDisplayHref);
 	$('.multi_edit_form').txpMultiEditForm();
-	// establish AJAX timeout from prefs
+	// Establish AJAX timeout from prefs.
 	if($.ajaxSetup().timeout === undefined) {
 		$.ajaxSetup( {timeout : textpattern.ajax_timeout} );
 	}
-	// setup async forms/hrefs
+	// Setup async forms/hrefs.
     $('form.async').txpAsyncForm({
         error: function() {window.alert(textpattern.gTxt('form_submission_error'));}
     });
     $('a.async').txpAsyncHref({
         error: function() {window.alert(textpattern.gTxt('form_submission_error'));}
     });
-    // close button on announce pane
+    // Close button on the announce pane.
 	$(document).on('click', '.close', function(e) {
 		e.preventDefault();
 		$(this).parent().remove();
 	});
-    // initialise dynamic WAI-ARIA attributes
+    // Initialise dynamic WAI-ARIA attributes.
     $('.txp-summary a').each(function(i, elm) {
         // get id of toggled <div> region
         var region = $(elm).attr('href');
@@ -904,6 +1032,6 @@ $(document).ready(function() {
         }
     });
 
-	// arm UI
+	// Arm UI.
 	$('body').removeClass('not-ready');
 });
