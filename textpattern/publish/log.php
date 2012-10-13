@@ -55,7 +55,7 @@
  * @see    log_hit()
  */
 
-	function logit($r='', $status='200')
+	function logit($r = '', $status = 200)
 	{
 		global $siteurl, $prefs, $pretext;
 		$mydomain = str_replace('www.','',preg_quote($siteurl,"/"));
