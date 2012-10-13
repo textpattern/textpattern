@@ -1,5 +1,5 @@
 /**
- * Collection of client side tools.
+ * Collection of client-side tools.
  */
 
 /**
@@ -26,7 +26,7 @@ function checkCookies()
 }
 
 /**
- * Spawns a centered popup window.
+ * Spawns a centred popup window.
  *
  * @param {string}  url     The location
  * @param {integer} width   The width
@@ -52,7 +52,7 @@ function popWin(url, width, height, options)
 }
 
 /**
- * Basic confirmation for potentially powerful choice (like deletion, for example).
+ * Basic confirmation for potentially powerful choices (like deletion, for example).
  *
  * @param  {string}  msg The message
  * @return {boolean} TRUE if user confirmed the action
@@ -243,7 +243,7 @@ jQuery.fn.txpMultiEditForm = function(method, opt)
 		/**
 		 * Selects rows based on supplied arguments.
 		 *
-		 * Only one of the filters applies at time.
+		 * Only one of the filters applies at a time.
 		 *
 		 * @param  {object}  options
 		 * @param  {array}   options.index Indexes to select
@@ -502,7 +502,7 @@ jQuery.fn.txpMultiEditForm = function(method, opt)
 };
 
 /**
- * Adds a event handler.
+ * Adds an event handler.
  *
  * See jQuery before trying to use this.
  *
@@ -645,7 +645,8 @@ function toggleDisplay(id)
 	if (obj)
 	{
 		obj.toggle();
-		// send state of toggle pane to server
+
+		// Send state of toggle pane to server.
 		sendAsyncEvent(
 			{
 				event: textpattern.event,
@@ -751,7 +752,7 @@ function sendAsyncEvent(data, fn, format)
 {
 	if($.type(data) === 'string' && data.length > 0)
 	{
-		// Got serialized data
+		// Got serialised data.
 		data = data + '&app_mode=async&_txp_token=' + textpattern._txp_token;
 	}
 	else
@@ -764,7 +765,7 @@ function sendAsyncEvent(data, fn, format)
 }
 
 /**
- * A pub/sub hub for client side events.
+ * A pub/sub hub for client-side events.
  *
  * @since 4.5.0
  */
@@ -835,14 +836,14 @@ jQuery.fn.txpAsyncForm = function(options)
 			var form = $(this);
 			var s;
 
-			// Show feedback while processing
+			// Show feedback while processing.
 			form.addClass('busy');
 			$('body').addClass('busy');
 
 			s = form.find('input[type="submit"]:focus');
 			if (s.length == 0)
 			{
-				// WebKit does not set :focus on button-click: use first submit input as a fallback
+				// WebKit does not set :focus on button-click: use first submit input as a fallback.
 				s = form.find('input[type="submit"]');
 			}
 			if (s.length > 0)
@@ -857,6 +858,7 @@ jQuery.fn.txpAsyncForm = function(options)
 			{
 				// Do not pile up error handlers upon repeat submissions.
 				$(this).off('ajaxError');
+
 				// Remove feedback elements.
 				form.removeClass('busy');
 				s.removeAttr('disabled');
@@ -929,16 +931,17 @@ jQuery.fn.txpAsyncHref = function(options)
 			event.preventDefault();
 			var obj = $(this);
 
-			// Show feedback while processing
+			// Show feedback while processing.
 			obj.addClass('busy');
 			$('body').addClass('busy');
 
-			// error handler
+			// Error handler.
 			obj.ajaxError(function(event, jqXHR, ajaxSettings, thrownError)
 			{
-				// do not pile up error handlers upon repeat submissions
+				// Do not pile up error handlers upon repeat submissions.
 				$(this).off('ajaxError');
-				// remove feedback elements
+
+				// Remove feedback elements.
 				obj.removeClass('busy');
 				$('body').removeClass('busy');
 				if (options.error)
@@ -955,12 +958,13 @@ jQuery.fn.txpAsyncHref = function(options)
 			});
 
 			sendAsyncEvent(
-				// query string contains request params
+				// Query string contains request params.
 				this.search.replace('?', '') + '&value=' + obj.text(),
 				function(data, textStatus, jqXHR)
 				{
 					obj.html(data);
-					// remove feedback elements
+
+					// Remove feedback elements.
 					obj.removeClass('busy');
 					$('body').removeClass('busy');
 					if (options.success) 
@@ -983,7 +987,7 @@ jQuery.fn.txpAsyncHref = function(options)
 }
 
 /**
- * Returns a i18n string.
+ * Returns an i18n string.
  *
  * @param  {string}  i18n   The i18n string
  * @param  {object}  atts   Replacement map
@@ -1058,11 +1062,10 @@ $(document).keyup(function(e) {
 	}
 });
 
-// Initialise JavaScript
+// Initialise JavaScript.
 
 $(document).ready(function() {
-	// Disable spellchecking on all elements of class "code" in capable browsers
-
+	// Disable spellchecking on all elements of class "code" in capable browsers.
 	var c = $(".code")[0];
 	if(c && "spellcheck" in c)
 	{
@@ -1070,7 +1073,6 @@ $(document).ready(function() {
 	}
 
 	// Enable spellcheck for all elements mentioned in textpattern.do_spellcheck.
-
 	c = $(textpattern.do_spellcheck)[0];
 	if(c && "spellcheck" in c)
 	{
@@ -1078,22 +1080,18 @@ $(document).ready(function() {
 	}
 
 	// Attach toggle behaviours.
-
 	$(document).on('click', '.txp-summary a[class!=pophelp]', toggleDisplayHref);
 
 	// Attach multi-edit form.
-
 	$('.multi_edit_form').txpMultiEditForm();
 
 	// Establish AJAX timeout from prefs.
-
 	if($.ajaxSetup().timeout === undefined)
 	{
 		$.ajaxSetup({timeout : textpattern.ajax_timeout});
 	}
 
 	// Set up synchronous links.
-
 	$('form.async').txpAsyncForm({
 		error: function() 
 		{
@@ -1102,7 +1100,6 @@ $(document).ready(function() {
 	});
 
 	// Set up synchronous forms.
-
 	$('a.async').txpAsyncHref({
 		error: function()
 		{
@@ -1111,16 +1108,15 @@ $(document).ready(function() {
 	});
 
 	// Close button on the announce pane.
-
 	$(document).on('click', '.close', function(e) {
 		e.preventDefault();
 		$(this).parent().remove();
 	});
 
 	// Initialise dynamic WAI-ARIA attributes.
-
 	$('.txp-summary a').each(function(i, elm) {
-		// get id of toggled <div> region
+
+		// Get id of toggled <div> region.
 		var region = $(elm).attr('href');
 		if (region)
 		{
@@ -1131,6 +1127,5 @@ $(document).ready(function() {
 	});
 
 	// Arm UI.
-
 	$('body').removeClass('not-ready');
 });
