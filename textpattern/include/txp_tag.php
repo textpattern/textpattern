@@ -2346,6 +2346,8 @@ begin tag builder functions
 		global $step, $endform, $tag_name;
 
 		$atts = gpsa(array(
+			'id',
+			'name',
 			'rel'
 		));
 
@@ -2360,6 +2362,10 @@ begin tag builder functions
 				, 2)
 			).
 
+			tagRow('id',
+				input_id($id)).
+			tagRow('name',
+				fInput('text', 'name', $name, '', '', '', INPUT_REGULAR)).
 			tagRow('rel',
 				fInput('text', 'rel', $rel, '', '', '', INPUT_REGULAR)).
 
