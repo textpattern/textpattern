@@ -95,6 +95,11 @@
  * The returned results can be then be used in or as a SQL query.
  *
  * @return string|bool SQL statement, or FALSE when all sections are included the search
+ * @example
+ * if ($r = safe_count('textpattern', "Title LIKE '%a%' " . filterSearch()))
+ * {
+ * 	echo 'Found {$r} articles with "a" in the title.';
+ * }
  */
 
 	function filterSearch()
