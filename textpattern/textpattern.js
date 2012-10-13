@@ -617,10 +617,18 @@ function getElementsByClass(classname, node)
 {
 	var a = [];
 	var re = new RegExp('(^|\\s)' + classname + '(\\s|$)');
-	if(node == null) node = document;
+	if(node == null)
+	{
+		node = document;
+	}
 	var els = node.getElementsByTagName("*");
 	for(var i=0,j=els.length; i<j; i++)
-		if(re.test(els[i].className)) a.push(els[i]);
+	{
+		if(re.test(els[i].className))
+		{
+			a.push(els[i]);
+		}
+	}
 	return a;
 }
 
@@ -634,7 +642,8 @@ function getElementsByClass(classname, node)
 function toggleDisplay(id)
 {
 	var obj = $('#' + id);
-	if (obj) {
+	if (obj)
+	{
 		obj.toggle();
 		// send state of toggle pane to server
 		sendAsyncEvent(
@@ -655,9 +664,16 @@ function toggleDisplay(id)
 
 function toggleDisplayHref()
 {
-	var $this = $(this), href = $this.attr('href'), lever = $this.parent('.txp-summary');
-	if (href) toggleDisplay(href.substr(1));
-	if (lever) {
+	var $this = $(this);
+	var href = $this.attr('href');
+	var lever = $this.parent('.txp-summary');
+
+	if (href)
+	{
+		toggleDisplay(href.substr(1));
+	}
+	if (lever)
+	{
 		var vis = $(href+':visible').length > 0;
         lever.toggleClass('expanded', vis);
         $this.attr('aria-pressed', vis.toString());
@@ -699,7 +715,6 @@ function toggleClassRemember(className)
 	v = (v == 1 ? 0 : 1);
 
 	setCookie('toggle_' + className, v, 365);
-
 	setClassDisplay(className, v);
 	setClassDisplay(className+'_neg', 1-v);
 }
@@ -714,9 +729,10 @@ function toggleClassRemember(className)
 function setClassRemember(className, force)
 {
 	if (typeof(force) != 'undefined')
+	{
 		setCookie('toggle_' + className, force, 365);
+	}
 	var v = getCookie('toggle_' + className);
-
 	setClassDisplay(className, v);
 	setClassDisplay(className+'_neg', 1-v);
 }
@@ -733,10 +749,13 @@ function setClassRemember(className, force)
 
 function sendAsyncEvent(data, fn, format)
 {
-	if($.type(data) === 'string' && data.length > 0) {
+	if($.type(data) === 'string' && data.length > 0)
+	{
 		// Got serialized data
 		data = data + '&app_mode=async&_txp_token=' + textpattern._txp_token;
-	} else {
+	}
+	else
+	{
 		data.app_mode = 'async';
 		data._txp_token = textpattern._txp_token;
 	}
@@ -811,7 +830,8 @@ jQuery.fn.txpAsyncForm = function(options)
 
 	// Send form data to application, process response as script.
 	this.submit(function(event) {
-		try {
+		try
+		{
 			var form = $(this);
 			var s;
 
@@ -820,40 +840,62 @@ jQuery.fn.txpAsyncForm = function(options)
 			$('body').addClass('busy');
 
 			s = form.find('input[type="submit"]:focus');
-			if (s.length == 0) {
+			if (s.length == 0)
+			{
 				// WebKit does not set :focus on button-click: use first submit input as a fallback
 				s = form.find('input[type="submit"]');
 			}
-			if (s.length > 0) {
+			if (s.length > 0)
+			{
 				s = s.slice(0,1);
 			}
 
 			s.attr('disabled', true).after(' <span class="spinner"></span>');
 
-			// error handler
-			form.ajaxError(function(event, jqXHR, ajaxSettings, thrownError) {
-				// do not pile up error handlers upon repeat submissions
+			// Error handler.
+			form.ajaxError(function(event, jqXHR, ajaxSettings, thrownError)
+			{
+				// Do not pile up error handlers upon repeat submissions.
 				$(this).off('ajaxError');
-				// remove feedback elements
+				// Remove feedback elements.
 				form.removeClass('busy');
 				s.removeAttr('disabled');
 				$('body').removeClass('busy');
 				$('span.spinner').remove();
-				if (options.error) options.error(form, event, jqXHR, ajaxSettings, thrownError);
-				textpattern.Relay.callback('txpAsyncForm.error', {'this': form, 'event': event, 'jqXHR': jqXHR, 'ajaxSettings': ajaxSettings, 'thrownError': thrownError});
+				if (options.error)
+				{
+					options.error(form, event, jqXHR, ajaxSettings, thrownError);
+				}
+				textpattern.Relay.callback('txpAsyncForm.error', {
+					'this': form,
+					'event': event,
+					'jqXHR': jqXHR,
+					'ajaxSettings': ajaxSettings,
+					'thrownError': thrownError
+				});
 			});
 
 			sendAsyncEvent(
 				form.serialize() + '&' + (s.attr('name') || '_txp_submit') + '=' + (s.val() || '_txp_submit'),
-				function(data, textStatus, jqXHR) {
-					// remove feedback elements
+				function(data, textStatus, jqXHR)
+				{
+					// Remove feedback elements.
 					form.removeClass('busy');
 					s.removeAttr('disabled');
 					$('body').removeClass('busy');
 					$('span.spinner').remove();
 					form.ajaxError = null;
-					if (options.success) options.success(form, event, data, textStatus, jqXHR);
-					textpattern.Relay.callback('txpAsyncForm.success', {'this': form, 'event': event, 'data': data, 'textStatus': textStatus, 'jqXHR': jqXHR});
+					if (options.success)
+					{
+						options.success(form, event, data, textStatus, jqXHR);
+					}
+					textpattern.Relay.callback('txpAsyncForm.success', {
+						'this': form,
+						'event': event,
+						'data': data,
+						'textStatus': textStatus,
+						'jqXHR': jqXHR
+					});
 				},
 				options.dataType
 			);
@@ -873,14 +915,17 @@ jQuery.fn.txpAsyncForm = function(options)
  * @since  4.5.0
  */
 
-jQuery.fn.txpAsyncHref = function(options) {
+jQuery.fn.txpAsyncHref = function(options)
+{
 	options = $.extend({
 		success: null,
 		error: null
 	}, options);
 
-	this.click(function(event) {
-		try {
+	this.click(function(event)
+	{
+		try
+		{
 			event.preventDefault();
 			var obj = $(this);
 
@@ -889,32 +934,50 @@ jQuery.fn.txpAsyncHref = function(options) {
 			$('body').addClass('busy');
 
 			// error handler
-			obj.ajaxError(function(event, jqXHR, ajaxSettings, thrownError) {
+			obj.ajaxError(function(event, jqXHR, ajaxSettings, thrownError)
+			{
 				// do not pile up error handlers upon repeat submissions
 				$(this).off('ajaxError');
 				// remove feedback elements
 				obj.removeClass('busy');
 				$('body').removeClass('busy');
-				if (options.error) options.error(obj, event, jqXHR, ajaxSettings, thrownError);
-				textpattern.Relay.callback('txpAsyncHref.error', {'this': obj, 'event': event, 'jqXHR': jqXHR, 'ajaxSettings': ajaxSettings, 'thrownError': thrownError});
+				if (options.error)
+				{
+					options.error(obj, event, jqXHR, ajaxSettings, thrownError);
+				}
+				textpattern.Relay.callback('txpAsyncHref.error', {
+					'this' : obj,
+					'event' : event,
+					'jqXHR' : jqXHR,
+					'ajaxSettings' : ajaxSettings,
+					'thrownError' : thrownError
+				});
 			});
 
 			sendAsyncEvent(
 				// query string contains request params
 				this.search.replace('?', '') + '&value=' + obj.text(),
-				function(data, textStatus, jqXHR) {
+				function(data, textStatus, jqXHR)
+				{
 					obj.html(data);
-
 					// remove feedback elements
 					obj.removeClass('busy');
 					$('body').removeClass('busy');
-					if (options.success) options.success(obj, event, data, textStatus, jqXHR);
-					textpattern.Relay.callback('txpAsyncHref.success', {'this': obj, 'event': event, 'data': data, 'textStatus': textStatus, 'jqXHR': jqXHR});
+					if (options.success) 
+					{
+						options.success(obj, event, data, textStatus, jqXHR);
+					}
+					textpattern.Relay.callback('txpAsyncHref.success', {
+						'this' : obj,
+						'event' : event,
+						'data' : data,
+						'textStatus' : textStatus,
+						'jqXHR': jqXHR
+					});
 				},
 				'text'
 			);
 		} catch(e){}
-
 	});
 	return this;
 }
@@ -936,11 +999,13 @@ textpattern.gTxt = function(i18n, atts, escape)
 	var string = i18n;
 	var name = string.toLowerCase();
 
-	if ($.type(textpattern.textarray[name]) !== 'undefined') {
+	if ($.type(textpattern.textarray[name]) !== 'undefined')
+	{
 		string = textpattern.textarray[name];
 	}
 
-	if (escape !== false) {
+	if (escape !== false)
+	{
 		string = $('<div/>').text(string).html();
 
 		$.each(tags, function(key, value) {
@@ -997,41 +1062,75 @@ $(document).keyup(function(e) {
 
 $(document).ready(function() {
 	// Disable spellchecking on all elements of class "code" in capable browsers
+
 	var c = $(".code")[0];
-	if(c && "spellcheck" in c) {$(".code").prop("spellcheck", false);}
-	// Enable spellcheck for all elements mentioned in textpattern.do_spellcheck.
-	c = $(textpattern.do_spellcheck)[0];
-	if(c && "spellcheck" in c) {$(textpattern.do_spellcheck).prop("spellcheck", true);}
-	// Attach toggle behaviours.
-    $(document).on('click', '.txp-summary a[class!=pophelp]', toggleDisplayHref);
-	$('.multi_edit_form').txpMultiEditForm();
-	// Establish AJAX timeout from prefs.
-	if($.ajaxSetup().timeout === undefined) {
-		$.ajaxSetup( {timeout : textpattern.ajax_timeout} );
+	if(c && "spellcheck" in c)
+	{
+		$(".code").prop("spellcheck", false);
 	}
-	// Setup async forms/hrefs.
-    $('form.async').txpAsyncForm({
-        error: function() {window.alert(textpattern.gTxt('form_submission_error'));}
-    });
-    $('a.async').txpAsyncHref({
-        error: function() {window.alert(textpattern.gTxt('form_submission_error'));}
-    });
-    // Close button on the announce pane.
+
+	// Enable spellcheck for all elements mentioned in textpattern.do_spellcheck.
+
+	c = $(textpattern.do_spellcheck)[0];
+	if(c && "spellcheck" in c)
+	{
+		$(textpattern.do_spellcheck).prop("spellcheck", true);
+	}
+
+	// Attach toggle behaviours.
+
+	$(document).on('click', '.txp-summary a[class!=pophelp]', toggleDisplayHref);
+
+	// Attach multi-edit form.
+
+	$('.multi_edit_form').txpMultiEditForm();
+
+	// Establish AJAX timeout from prefs.
+
+	if($.ajaxSetup().timeout === undefined)
+	{
+		$.ajaxSetup({timeout : textpattern.ajax_timeout});
+	}
+
+	// Set up synchronous links.
+
+	$('form.async').txpAsyncForm({
+		error: function() 
+		{
+			window.alert(textpattern.gTxt('form_submission_error'));
+		}
+	});
+
+	// Set up synchronous forms.
+
+	$('a.async').txpAsyncHref({
+		error: function()
+		{
+			window.alert(textpattern.gTxt('form_submission_error'));
+		}
+	});
+
+	// Close button on the announce pane.
+
 	$(document).on('click', '.close', function(e) {
 		e.preventDefault();
 		$(this).parent().remove();
 	});
-    // Initialise dynamic WAI-ARIA attributes.
-    $('.txp-summary a').each(function(i, elm) {
-        // get id of toggled <div> region
-        var region = $(elm).attr('href');
-        if (region) {
-            var $region = $(region), vis = $region.is(':visible').toString();
-            $(elm).attr('aria-control', region.substr(1)).attr('aria-pressed', vis);
-            $region.attr('role', 'region').attr('aria-expanded', vis);
-        }
-    });
+
+	// Initialise dynamic WAI-ARIA attributes.
+
+	$('.txp-summary a').each(function(i, elm) {
+		// get id of toggled <div> region
+		var region = $(elm).attr('href');
+		if (region)
+		{
+			var $region = $(region), vis = $region.is(':visible').toString();
+			$(elm).attr('aria-control', region.substr(1)).attr('aria-pressed', vis);
+			$region.attr('role', 'region').attr('aria-expanded', vis);
+		}
+	});
 
 	// Arm UI.
+
 	$('body').removeClass('not-ready');
 });
