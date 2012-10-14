@@ -13,9 +13,9 @@ Use of this software indicates acceptance of the Textpattern license agreement
 */
 
 /**
- * Build a query qualifier to remove non-frontpage articles from the result set
+ * Build a query qualifier to remove non-frontpage articles from the result set.
  *
- * @return string A SQL qualifier for a querys 'WHERE' part
+ * @return string SQL qualifier for a query's 'WHERE' part
  */
 function filterFrontPage()
 {

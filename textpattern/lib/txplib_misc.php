@@ -2198,7 +2198,7 @@ function escape_js($js)
  *
  * @param array $custom 	An array of 'custom_field_name' => field_number tupels
  * @param array $pairs 		Filter criteria: An array of 'name' => value tupels
- * @return bool|string 		A SQL qualifier for a querys 'WHERE' part
+ * @return bool|string 		SQL qualifier for a querys 'WHERE' part
  */
 // -------------------------------------------------------------
 	function buildCustomSql($custom,$pairs)
