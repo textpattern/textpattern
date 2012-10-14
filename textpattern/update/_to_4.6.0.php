@@ -11,7 +11,7 @@
 	// Rejig preferences panel.
 	$core_ev = doQuote(join("','", array('site', 'admin', 'publish', 'feeds', 'custom', 'comments')));
 	// 1) Increase event column size.
-	safe_alter('txp_prefs', "CHANGE COLUMN `event` `event` VARCHAR(32) NOT NULL DEFAULT 'publish'");
+	safe_alter('txp_prefs', "MODIFY event VARCHAR(255) NOT NULL default 'publish', MODIFY html VARCHAR(255) NOT NULL default 'text_input'");
 	// 2) Remove basic/advanced distinction.
 	safe_update('txp_prefs', "type = '".PREF_CORE."'", "type = '".PREF_PLUGIN."' AND event IN (".$core_ev.")");
 	// 3) Consolidate existing prefs into better groups.
