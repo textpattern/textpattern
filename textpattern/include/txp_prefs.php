@@ -17,24 +17,33 @@
  * @package Admin\Prefs
  */
 
-	if (!defined('txpinterface')) die('txpinterface is undefined.');
+	if (!defined('txpinterface'))
+	{
+		die('txpinterface is undefined.');
+	}
 
-	if ($event == 'prefs') {
+	if ($event == 'prefs')
+	{
 		require_privs('prefs');
 
-		bouncer($step,
-			array(
-				'prefs_save'      => true,
-				'prefs_list'      => false,
-				'save_pane_state' => true,
-			)
-		);
+		bouncer($step, array(
+			'prefs_save'      => true,
+			'prefs_list'      => false,
+			'save_pane_state' => true,
+		));
 
-		switch(strtolower($step)) {
-			case "":                prefs_list();            break;
-			case "prefs_list":      prefs_list();            break;
-			case "prefs_save":      prefs_save();            break;
-			case "save_pane_state": prefs_save_pane_state(); break;
+		switch (strtolower($step))
+		{
+			case "" :
+			case "prefs_list" :
+				prefs_list();
+				break;
+			case "prefs_save" :
+				prefs_save();
+				break;
+			case "save_pane_state" :
+				prefs_save_pane_state();
+				break;
 		}
 	}
 
@@ -56,10 +65,14 @@
 		$post = doSlash(stripPost());
 
 		if (!isset($post['tempdir']) || empty($post['tempdir']))
+		{
 			$post['tempdir'] = doSlash(find_temp_dir());
+		}
 
 		if (isset($post['file_max_upload_size']) && !empty($post['file_max_upload_size']))
+		{
 			$post['file_max_upload_size'] = real_max_upload_size($post['file_max_upload_size']);
+		}
 
 		// Forge $auto_dst for (in-)capable servers.
 		if (!timezone::is_supported())
@@ -89,11 +102,12 @@
 				$post['gmtoffset'] = $prefs['gmtoffset'] = $gmtoffset = $tzd[$key]['offset'];
 				$post['is_dst'] = $prefs['is_dst'] = $is_dst = timezone::is_dst(time(), $key);
 			}
-
 		}
 
-		foreach($prefnames as $prefname) {
-			if (isset($post[$prefname])) {
+		foreach ($prefnames as $prefname)
+		{
+			if (isset($post[$prefname]))
+			{
 				if ($prefname == 'siteurl')
 				{
 					$post[$prefname] = str_replace("http://",'',$post[$prefname]);
@@ -156,7 +170,10 @@
 		{
 			$rs = safe_rows_start('*', 'txp_prefs', "(type = ".PREF_CORE." OR type = ".PREF_PLUGIN.") and prefs_id = 1 and event = '".doSlash($event)."' order by position");
 
-			if (in_array($event, $plugin_evt_list) && !has_privs('prefs.'.$event)) continue;
+			if (in_array($event, $plugin_evt_list) && !has_privs('prefs.'.$event))
+			{
+				continue;
+			}
 
 			while ($a = nextRow($rs))
 			{
@@ -244,10 +261,17 @@
 	function text_input($name, $val, $size = '')
 	{
 		$class = '';
-		switch ($size) {
-			case INPUT_MEDIUM: $class = 'input-medium'; break;
-			case INPUT_SMALL:  $class = 'input-small';  break;
-			case INPUT_XSMALL: $class = 'input-xsmall'; break;
+		switch ($size)
+		{
+			case INPUT_MEDIUM :
+				$class = 'input-medium';
+				break;
+			case INPUT_SMALL : 
+				$class = 'input-small';
+				break;
+			case INPUT_XSMALL :
+				$class = 'input-xsmall';
+				break;
 		}
 		return fInput('text', $name, $val, $class, '', '', $size, '', $name);
 	}
@@ -579,7 +603,8 @@ EOS
 		foreach ($themes as $t)
 		{
 			$theme = theme::factory($t);
-			if ($theme) {
+			if ($theme)
+			{
 				$m = $theme->manifest();
 				$title = empty($m['title']) ? ucwords($theme->name) : $m['title'];
 				$vals[$t] = $title;
@@ -631,17 +656,26 @@ EOS
 		{
 			$val = trim($item);
 			$modifier = strtolower( substr($val, -1) );
-			switch($modifier) {
+			switch ($modifier)
+			{
 				// The 'G' modifier is available since PHP 5.1.0
-				case 'g': $val *= 1024;
-				case 'm': $val *= 1024;
-				case 'k': $val *= 1024;
+				case 'g' :
+					$val *= 1024;
+				case 'm' :
+					$val *= 1024;
+				case 'k' :
+					$val *= 1024;
 			}
-			if ($val > 1) {
+			if ($val > 1)
+			{
 				if (is_null($real_max))
+				{
 					$real_max = $val;
+				}
 				elseif ($val < $real_max)
+				{
 					$real_max = $val;
+				}
 			}
 		}
 		return $real_max;
@@ -663,7 +697,9 @@ EOS
 		{
 			set_pref("pane_{$pane}_visible", (gps('visible') == 'true' ? '1' : '0'), $event, PREF_HIDDEN, 'yesnoradio', 0, PREF_PRIVATE);
 			send_xml_response();
-		} else {
+		}
+		else
+		{
 			trigger_error('invalid_pane', E_USER_WARNING);
 		}
 	}
