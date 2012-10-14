@@ -698,7 +698,7 @@ EOS
 	function prefs_save_pane_state()
 	{
 		global $event;
-		$pane = gps('pane');
+		$pane = doSlash(gps('pane'));
 
 		if (strpos($pane, 'prefs_') === 0)
 		{
