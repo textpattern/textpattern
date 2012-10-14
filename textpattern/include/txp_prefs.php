@@ -266,7 +266,7 @@
  * @return string HTML
  */
 
-	function text_input($name, $val, $size = '')
+	function text_input($name, $val, $size = 0)
 	{
 		$class = '';
 		switch ($size)
