@@ -53,23 +53,38 @@
 
 	function prefs_save()
 	{
-		global $prefs, $gmtoffset, $is_dst, $auto_dst, $timezone_key;
+		global $prefs, $gmtoffset, $is_dst, $auto_dst, $timezone_key, $txp_user;
 
 		// Update custom fields count from database schema and cache it as a hidden pref.
 		// TODO: move this when custom fields are refactored.
 		$max_custom_fields = count(preg_grep('/^custom_\d+/', getThings('describe `'.PFX.'textpattern`')));
 		set_pref('max_custom_fields', $max_custom_fields, 'publish', 2);
 
-		$prefnames = safe_column("name", "txp_prefs", "prefs_id = 1" . (has_privs('prefs.edit') ? '' : " AND type = '" . PREF_PLUGIN . "'"));
+		$sql = array();
+		$sql[] = 'prefs_id = 1 and event != "" and type in('.PREF_CORE.', '.PREF_PLUGIN.', '.PREF_HIDDEN.')';
+		$sql[] = "(user_name = '' or (user_name='".doSlash($txp_user)."' and name not in(
+				select name from ".safe_pfx('txp_prefs')." where name = txp_prefs.name and user_name = ''
+			)))";
 
-		$post = doSlash(stripPost());
-
-		if (!isset($post['tempdir']) || empty($post['tempdir']))
+		if (!get_pref('use_comments', 1, 1))
 		{
-			$post['tempdir'] = doSlash(find_temp_dir());
+			$sql[] = "event != 'comments'";
 		}
 
-		if (isset($post['file_max_upload_size']) && !empty($post['file_max_upload_size']))
+		$prefnames = safe_rows_start(
+			"name, event, user_name",
+			'txp_prefs',
+			join(' and ', $sql)
+		);
+
+		$post = stripPost();
+
+		if (isset($post['tempdir']) && empty($post['tempdir']))
+		{
+			$post['tempdir'] = find_temp_dir();
+		}
+
+		if (!empty($post['file_max_upload_size']))
 		{
 			$post['file_max_upload_size'] = real_max_upload_size($post['file_max_upload_size']);
 		}
@@ -104,22 +119,25 @@
 			}
 		}
 
-		foreach ($prefnames as $prefname)
+		if (isset($post['siteurl']))
 		{
-			if (isset($post[$prefname]))
-			{
-				if ($prefname == 'siteurl')
-				{
-					$post[$prefname] = str_replace("http://",'',$post[$prefname]);
-					$post[$prefname] = rtrim($post[$prefname],"/ ");
-				}
+			$post['siteurl'] = rtrim(str_replace('http://', '', $post['siteurl']), '/ ');
+		}
 
-				safe_update(
-					"txp_prefs",
-					"val = '".$post[$prefname]."'",
-					"name = '".doSlash($prefname)."' and prefs_id = 1"
-				);
+		while ($a = nextRow($prefnames))
+		{
+			extract($a);
+
+			if (!isset($post[$name]) || !has_privs('prefs.'.$event))
+			{
+				continue;
 			}
+
+			safe_update(
+				"txp_prefs",
+				"val = '".doSlash($post[$name])."'",
+				"prefs_id = 1 and name = '".doSlash($name)."' and user_name='".doSlash($user_name)."'"
+			);
 		}
 
 		update_lastmod();
