@@ -144,9 +144,6 @@
 
 		extract($prefs);
 
-		// Fetch value from database in case it has recently changed.
-		$use_comments = get_pref('use_comments', 1, 1);
-
 		echo pagetop(gTxt('tab_preferences'), $message);
 
 		$locale = setlocale(LC_ALL, $locale);
@@ -157,38 +154,55 @@
 			n, '<div class="plugin-column">';
 
 		// TODO: remove 'custom' when custom fields are refactored.
-		$core_events = array('site', 'admin', 'publish', 'feeds', 'custom', 'comments');
-		$joined_core = doQuote(join("','", $core_events));
-		$evt_list = has_privs('prefs.edit') ? safe_column('event', 'txp_prefs', "type = ".PREF_CORE." and prefs_id = 1 AND event IN (".$joined_core.") group by event order by field(event,".$joined_core.")") : array();
-		$plugin_evt_list = safe_column('event', 'txp_prefs', "type = ".PREF_PLUGIN." and prefs_id = 1 AND event NOT IN (".$joined_core.") group by event order by event asc");
 
-		$evt_list += $plugin_evt_list;
-		$cur_evt = '';
-		$group_count = 0;
+		$core_events = array('site', 'admin', 'publish', 'feeds', 'custom');
 
-		foreach ($evt_list as $event)
+		if (get_pref('use_comments', 1, 1))
 		{
-			$rs = safe_rows_start('*', 'txp_prefs', "(type = ".PREF_CORE." OR type = ".PREF_PLUGIN.") and prefs_id = 1 and event = '".doSlash($event)."' order by position");
+			$core_events[] = 'comments';
+		}
 
-			if (in_array($event, $plugin_evt_list) && !has_privs('prefs.'.$event))
-			{
-				continue;
-			}
+		$joined_core = join(',', quote_list($core_events));
 
+		$sql = array();
+		$sql[] = 'prefs_id = 1';
+		$sql[] = 'type IN('.PREF_CORE.', '.PREF_PLUGIN.')';
+		$sql[] = 'event != ""';
+
+		if (!has_privs('prefs.edit'))
+		{
+			$sql[] = 'type != '.PREF_CORE.' and event NOT IN('.join(',', quote_list($core_events)).')';
+		}
+
+		$rs = safe_rows_start(
+			"*, FIELD(event,{$joined_core}) as sort_value",
+			'txp_prefs',
+			join(' and ', $sql). " ORDER BY sort_value = 0, sort_value, event ASC, position"
+		);
+
+		$current_event = null;
+
+		if (numRows($rs))
+		{
 			while ($a = nextRow($rs))
 			{
+				if (!in_array($a['event'], $core_events) && !has_privs('prefs.'.$a['event']))
+				{
+					continue;
+				}
+
 				// TODO: remove this exception when custom fields move to meta store.
+
 				$noPopHelp = (strpos($a['name'], 'custom_') !== false);
 
-				if ($a['event'] != $cur_evt)
+				if ($a['event'] !== $current_event)
 				{
-					echo ($cur_evt == '') ? '' : n.'</div></div><!-- /END OF '.$cur_evt.' -->';
-					$cur_evt = $a['event'];
-
-					if ($cur_evt == 'comments' && !$use_comments)
+					if ($current_event !== null)
 					{
-						continue;
+						echo '</div></div>'.n;
 					}
+
+					$current_event = $a['event'];
 
 					echo n, '<div role="group" id="prefs_group_', $a['event'], '" class="txp-details">',
 						n, '<h3 class="txp-summary', (get_pref('pane_prefs_'.$a['event'].'_visible') ? ' expanded' : ''), '">',
@@ -197,38 +211,40 @@
 						n, '<div id="prefs_', $a['event'], '" class="toggle" style="display:', (get_pref('pane_prefs_'.$a['event'].'_visible') ? 'block' : 'none'), '">';
 				}
 
-				if ($cur_evt == 'comments' && !$use_comments)
-				{
-					continue;
-				}
-
 				$label = (!in_array($a['html'], array('yesnoradio', 'is_dst'))) ?
 					'<label for="'.$a['name'].'">'.gTxt($a['name']).'</label>' :
-					gTxt($a['name']);
-
+						gTxt($a['name']);
+	
 				// TODO: remove $noPopHelp condition when custom fields move to meta store.
+	
 				echo n, graf(
-					n.'<span class="txp-label">'.$label.(($noPopHelp) ? '' : n.popHelp($a['name'])).'</span>'.
-					n.'<span class="txp-value">'.pref_func($a['html'], $a['name'], $a['val'], ($a['html'] == 'text_input' ? INPUT_REGULAR : '')).'</span>'
-				, ' id="prefs-'.$a['name'].'"');
+						n.'<span class="txp-label">'.$label.(($noPopHelp) ? '' : n.popHelp($a['name'])).'</span>'.
+						n.'<span class="txp-value">'.pref_func($a['html'], $a['name'], $a['val'], ($a['html'] == 'text_input' ? INPUT_REGULAR : '')).'</span>'
+					, ' id="prefs-'.$a['name'].'"');
 			}
-			$group_count++;
 		}
 
-		if (!$group_count)
+		if ($current_event === null)
 		{
 			echo graf(gTxt('no_preferences'));
 		}
+		else
+		{
+			echo '</div></div>';
+		}
 
-		echo n, '</div>', (($cur_evt == 'comments' && !$use_comments) ? '' : ($group_count ? '</div></div>' : '')),
-			n, graf(
-				fInput('submit', 'Submit', gTxt('save'), 'publish').
-				n.sInput('prefs_save').
-				n.eInput('prefs').
-				n.hInput('prefs_id', '1').
-				n.tInput()
-			),
-			n, '</form>',
+		echo n, '</div>'.
+			n.sInput('prefs_save').
+			n.eInput('prefs').
+			n.hInput('prefs_id', '1').
+			n.tInput();
+
+		if ($current_event !== null)
+		{
+			echo graf(fInput('submit', 'Submit', gTxt('save'), 'publish'));
+		}
+
+		echo n, '</form>',
 			n, '</div>';
 	}
 
