@@ -140,7 +140,7 @@
 
 	function prefs_list($message = '')
 	{
-		global $prefs;
+		global $prefs, $txp_user;
 
 		extract($prefs);
 
@@ -160,6 +160,7 @@
 
 		$sql = array();
 		$sql[] = 'prefs_id = 1 and event != "" and type IN('.PREF_CORE.', '.PREF_PLUGIN.')';
+		$sql[] = "user_name IN('', '".doSlash($txp_user)."')";
 
 		if (!get_pref('use_comments', 1, 1))
 		{
