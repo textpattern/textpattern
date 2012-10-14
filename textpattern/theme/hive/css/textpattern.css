@@ -1942,12 +1942,6 @@ body#page-setup {
 #dates .time .label {
   display: block;
 }
-#dates .date input.year,
-#dates .time input.hour,
-#dates .date input.exp_year,
-#dates .time input.exp_hour {
-  margin-left: -0.61538em;
-}
 
 .recent {
   list-style: decimal-leading-zero;

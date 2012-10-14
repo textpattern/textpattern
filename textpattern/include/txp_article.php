@@ -803,14 +803,14 @@ if (!empty($event) and $event == 'article') {
 
 					n.graf(gTxt('or_publish_at').sp.popHelp('timestamp'), ' class="publish-at"').
 
-					n.graf('<span class="label">'.gtxt('date').'</span>'.sp.
+					n.graf('<span class="label">'.gtxt('date').'</span>'.n.
 						tsi('year', '%Y', $persist_timestamp, '').' / '.
 						tsi('month', '%m', $persist_timestamp, '').' / '.
 						tsi('day', '%d', $persist_timestamp, '')
 					, ' class="date posted created"'
 					).
 
-					n.graf('<span class="label">'.gTxt('time').'</span>'.sp.
+					n.graf('<span class="label">'.gTxt('time').'</span>'.n.
 						tsi('hour', '%H', $persist_timestamp, '').' : '.
 						tsi('minute', '%M', $persist_timestamp, '').' : '.
 						tsi('second', '%S', $persist_timestamp, '')
@@ -830,14 +830,14 @@ if (!empty($event) and $event == 'article') {
 					n.n.'<fieldset id="write-expires">'.
 					n.'<legend>'.gTxt('expires').'</legend>'.
 
-					n.graf('<span class="label">'.gtxt('date').'</span>'.sp.
+					n.graf('<span class="label">'.gtxt('date').'</span>'.n.
 						tsi('exp_year', '%Y', $persist_timestamp, '').' / '.
 						tsi('exp_month', '%m', $persist_timestamp, '').' / '.
 						tsi('exp_day', '%d', $persist_timestamp, '')
 					, ' class="date expires"'
 					).
 
-					n.graf('<span class="label">'.gTxt('time').'</span>'.sp.
+					n.graf('<span class="label">'.gTxt('time').'</span>'.n.
 						tsi('exp_hour', '%H', $persist_timestamp, '').' : '.
 						tsi('exp_minute', '%M', $persist_timestamp, '').' : '.
 						tsi('exp_second', '%S', $persist_timestamp, '')
