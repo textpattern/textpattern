@@ -1646,7 +1646,7 @@ span.spinner {
 }
 
 .txp-edit {
-  width: 40em;
+  max-width: 40em;
 }
 
 .txp-login {
@@ -1716,7 +1716,7 @@ body#page-setup {
 
 .txp-setup {
   margin: 1em auto 2em;
-  width: 40em;
+  max-width: 40em;
 }
 
 /* rules specific to the very first page you'll see */
@@ -2311,12 +2311,6 @@ div.code {
     box-shadow: 0 0.15385em 0.23077em rgba(0, 0, 0, 0.15);
   }
 
-  .txp-edit,
-  .txp-login,
-  .txp-setup {
-    width: inherit;
-  }
-
   .edit-label,
   .edit-value,
   .login-label,
@@ -2356,11 +2350,6 @@ div.code {
   }
   .txp-navigation .prev-next {
     float: none;
-  }
-
-  .text-column,
-  .plugin-column {
-    width: 100%;
   }
 
   .progress-meter ol {
