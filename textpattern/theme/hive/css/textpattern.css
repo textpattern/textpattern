@@ -791,7 +791,7 @@ textarea {
   background-color: white;
   margin: 0;
   border: 1px solid #cccccc;
-  padding: .15384615384615em .38461538461538em;
+  padding: .15384615384615em .23076923076923em;
   height: 1.84615384615385em;
   max-width: 100%;
 }
@@ -887,7 +887,7 @@ textarea[disabled],
 /* additional input field widths */
 input[size="32"] {
   width: 100%;
-  max-width: 23.2307692307692em;
+  max-width: 28em;
 }
 
 input.input-large {
@@ -896,27 +896,25 @@ input.input-large {
 
 input.input-medium {
   width: 50%;
-  max-width: 11.6153846153846em;
+  max-width: 14.4em;
 }
 
 input.input-small {
   width: 25%;
-  max-width: 5.76923076923077em;
+  max-width: 7.6em;
 }
 
 input.input-xsmall {
-  width: 16.6666666666667%;
-  max-width: 3.46153846153846em;
+  width: 16%;
+  width: 4.2em;
 }
 
 input.year, input.exp_year {
   text-align: center;
-  padding: .15384615384615em .23076923076923em;
-  width: 3.53846153846154em;
+  width: 4.2em;
 }
 input.month, input.exp_month, input.day, input.exp_day, input.hour, input.exp_hour, input.minute, input.exp_minute, input.second, input.exp_second {
   text-align: center;
-  padding: .15384615384615em .23076923076923em;
   width: 2.46153846153846em;
 }
 
@@ -1638,13 +1636,6 @@ span.spinner {
   background: #f7f7f7;
 }
 
-.edit-image-replace input[type="submit"],
-.edit-upload-thumbnail input[type="submit"],
-.edit-alter-thumbnail input[type="submit"],
-.edit-file-replace input[type="submit"] {
-  float: right;
-}
-
 .txp-edit {
   max-width: 40em;
 }
@@ -1653,20 +1644,37 @@ span.spinner {
   max-width: 33.5384615384615em;
 }
 
+.txp-label,
+.txp-value {
+  display: inline-block;
+  float: left;
+  width: 50%;
+}
+
+.txp-value input,
+.txp-value select {
+  margin-top: -0.23077em;
+  margin-bottom: -0.23077em;
+}
+
+/* deprecated @ 4.6 */
 .edit-label,
 .login-label {
   display: inline-block;
   float: left;
 }
 
+/* deprecated @ 4.6 */
 .edit-label {
   width: 42%;
 }
 
+/* deprecated @ 4.6 */
 .login-label {
   width: 31%;
 }
 
+/* deprecated @ 4.6 */
 .edit-value,
 .login-value {
   display: inline-block;
@@ -1680,32 +1688,14 @@ span.spinner {
   margin-bottom: -0.23077em;
 }
 
+/* deprecated @ 4.6 */
 .edit-value {
   width: 58%;
 }
 
+/* deprecated @ 4.6 */
 .login-value {
   width: 69%;
-}
-
-/* TBC (for Textpattern v4.6 modals) */
-.txp-edit-action {
-  margin-right: -1em;
-  margin-left: -1em;
-  margin-bottom: 0;
-  border-top: 1px solid white;
-  -moz-border-radius-bottomright: 0.38462em;
-  border-bottom-right-radius: 0.38462em;
-  -moz-border-radius-bottomleft: 0.38462em;
-  border-bottom-left-radius: 0.38462em;
-  padding: 1em;
-  background: #efefef;
-}
-.txp-edit-action button {
-  margin-top: .5em;
-}
-.txp-edit-action input[type="submit"] {
-  float: right;
 }
 
 /* Setup pages
@@ -1982,6 +1972,18 @@ body#page-setup {
   display: inline-block;
   vertical-align: top;
   margin-top: 5px;
+}
+
+.edit-image-replace input[type="submit"],
+.edit-upload-thumbnail input[type="submit"],
+.edit-alter-thumbnail input[type="submit"] {
+  float: right;
+}
+
+/* Content -> Files page
+   ========================================================================== */
+.edit-file-replace input[type="submit"] {
+  float: right;
 }
 
 /* Content -> Comments page
@@ -2305,6 +2307,19 @@ div.code {
     box-shadow: 0 0.15385em 0.23077em rgba(0, 0, 0, 0.15);
   }
 
+  .txp-label,
+  .txp-value {
+    float: none;
+    width: 100%;
+  }
+
+  .txp-value input,
+  .txp-value select {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  /* Deprecated @ 4.6 */
   .edit-label,
   .edit-value,
   .login-label,
@@ -2313,6 +2328,7 @@ div.code {
     width: 100%;
   }
 
+  /* Deprecated @ 4.6 */
   .edit-value input,
   .edit-value select,
   .login-value input,
