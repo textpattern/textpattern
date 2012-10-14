@@ -570,21 +570,16 @@ h3.txp-summary.expanded a:after {
 
 /* Progress meter (only used in setup pages)
    ========================================================================== */
-.progress-meter {
-  text-align: center;
-}
 .progress-meter ol {
-  display: inline-block;
   list-style: none;
   margin-bottom: 0;
   padding: 0;
-  text-align: left;
+  text-align: center;
   counter-reset: step;
 }
 .progress-meter li {
   position: relative;
-  float: left;
-  display: block;
+  display: inline-block;
   margin: 0 1em 1em 0;
   padding: 1em 1em 1em 4em;
   text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.4);
@@ -2371,6 +2366,7 @@ div.code {
   .progress-meter ol {
     display: block;
     margin-bottom: 1em;
+    text-align: left;
   }
   .progress-meter li {
     float: none;
