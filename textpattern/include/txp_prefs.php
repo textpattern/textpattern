@@ -144,7 +144,7 @@
 
 		extract($prefs);
 
-		echo pagetop(gTxt('tab_preferences'), $message);
+		pagetop(gTxt('tab_preferences'), $message);
 
 		$locale = setlocale(LC_ALL, $locale);
 
