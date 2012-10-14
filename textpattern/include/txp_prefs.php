@@ -155,29 +155,21 @@
 
 		// TODO: remove 'custom' when custom fields are refactored.
 
-		$core_events = array('site', 'admin', 'publish', 'feeds', 'custom');
-
-		if (get_pref('use_comments', 1, 1))
-		{
-			$core_events[] = 'comments';
-		}
-
+		$core_events = array('site', 'admin', 'publish', 'feeds', 'custom', 'comments');
 		$joined_core = join(',', quote_list($core_events));
 
 		$sql = array();
-		$sql[] = 'prefs_id = 1';
-		$sql[] = 'type IN('.PREF_CORE.', '.PREF_PLUGIN.')';
-		$sql[] = 'event != ""';
+		$sql[] = 'prefs_id = 1 and event != "" and type IN('.PREF_CORE.', '.PREF_PLUGIN.')';
 
-		if (!has_privs('prefs.edit'))
+		if (!get_pref('use_comments', 1, 1))
 		{
-			$sql[] = 'type != '.PREF_CORE.' and event NOT IN('.join(',', quote_list($core_events)).')';
+			$sql[] = "event != 'comments'";
 		}
 
 		$rs = safe_rows_start(
 			"*, FIELD(event,{$joined_core}) as sort_value",
 			'txp_prefs',
-			join(' and ', $sql). " ORDER BY sort_value = 0, sort_value, event ASC, position"
+			join(' and ', $sql)." ORDER BY sort_value = 0, sort_value, event ASC, position"
 		);
 
 		$current_event = null;
@@ -186,7 +178,7 @@
 		{
 			while ($a = nextRow($rs))
 			{
-				if (!in_array($a['event'], $core_events) && !has_privs('prefs.'.$a['event']))
+				if (!has_privs('prefs.'.$a['event']))
 				{
 					continue;
 				}
