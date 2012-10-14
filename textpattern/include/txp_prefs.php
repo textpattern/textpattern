@@ -245,7 +245,7 @@
  *
  * @param  string $func Function name to call
  * @param  string $name HTML name/id of the input control
- * @param  string $val Initial (or current) value of the input control
+ * @param  string $val  Initial (or current) value of the input control
  * @param  int    $size Size of the input control (width or depth, dependent on control)
  * @return string HTML
  */
@@ -260,9 +260,8 @@
  * Renders a HTML &lt;input&gt; element.
  *
  * @param  string $name HTML name and id of the text box
- * @param  string $val Initial (or current) content of the text box
+ * @param  string $val  Initial (or current) content of the text box
  * @param  int    $size Width of the textbox. Options are INPUT_MEDIUM | INPUT_SMALL | INPUT_XSMALL
- * @see constants.php
  * @return string HTML
  */
 
@@ -288,7 +287,7 @@
  * Renders a HTML &lt;textarea&gt; element.
  *
  * @param  string $name HTML name of the textarea
- * @param  string $val Initial (or current) content of the textarea
+ * @param  string $val  Initial (or current) content of the textarea
  * @param  int    $size Number of rows the textarea has
  * @return string HTML
  */
@@ -304,7 +303,7 @@
  * Can be altered by plugins.
  *
  * @param  string $name HTML name of the list
- * @param  string $val Initial (or current) selected option
+ * @param  string $val  Initial (or current) selected option
  * @return string HTML
  */
 
@@ -323,7 +322,7 @@
  * Can be altered by plugins.
  *
  * @param  string $name HTML name of the widget
- * @param  string $val Initial (or current) selected item
+ * @param  string $val  Initial (or current) selected item
  * @return string HTML
  */
 
@@ -360,7 +359,7 @@ EOS
  * Renders a HTML &lt;select&gt; list of hit logging options.
  *
  * @param  string $name HTML name and id of the list
- * @param  string $val Initial (or current) selected item
+ * @param  string $val  Initial (or current) selected item
  * @return string HTML
  */
 
