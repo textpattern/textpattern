@@ -587,6 +587,16 @@ define('INTEGRITY_DIGEST', 0x8);
 
 define('INTEGRITY_TABLE', 0x10);
 
+/**
+ * Return a link to an external script.
+ *
+ * @since   4.6.0
+ * @package HTML
+ * @see     script_js();
+ */
+
+define('SCRIPT_URL', 0x1);
+
 error_reporting($old_level);
 unset($old_level);
 ?>

@@ -1103,27 +1103,37 @@
 			});
 EOF;
 
-		return script_js($js, $noscript);
+		return script_js($js, (string) $noscript);
 	}
 
 /**
  * Renders a &lt:script&gt; element.
  *
- * @param  string $js       JavaScript code
- * @param  string $noscript Noscript alternative
+ * @param  string     $js    JavaScript code
+ * @param  int|string $flags Flags SCRIPT_URL, or noscript alternative if a string.
  * @return string HTML with embedded script element
+ * @example
+ * script_js('/js/script.js', SCRIPT_URL);
  */
 
-	function script_js($js, $noscript = '')
+	function script_js($js, $flags = '')
 	{
+		if (is_int($flags))
+		{
+			if ($flags & SCRIPT_URL)
+			{
+				return '<script src="'.txpspecialchars($js).'"></script>';
+			}
+		}
+
 		$js = preg_replace('#<(/?)script#', '\\x3c$1script', $js);
 
 		$out = '<script>'.n.
 			trim($js).n.
 			'</script>'.n;
-		if ($noscript)
+		if ($flags)
 			$out .= '<noscript>'.n.
-				trim($noscript).n.
+				trim($flags).n.
 				'</noscript>'.n;
 		return $out;
 	}
