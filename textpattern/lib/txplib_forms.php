@@ -1,6 +1,21 @@
 <?php
 
-//-------------------------------------------------------------
+/**
+ * Collection of HTML form widgets.
+ *
+ * @package Form
+ */
+
+/**
+ * Generates a radio button toggle.
+ *
+ * @param  array  $vals     The values as an array
+ * @param  string $field    The field name
+ * @param  string $var      The selected option, takes a value from $vals
+ * @param  string $tabindex The HTML tabindex
+ * @param  string $id       The HTML id
+ * @return string A HTML radio button set
+ */
 
 	function radioSet($vals, $field, $var, $tabindex = '', $id = '')
 	{
@@ -17,7 +32,24 @@
 		return join('', $out);
 	}
 
-//-------------------------------------------------------------
+/**
+ * Generates a Yes/No radio button toggle.
+ *
+ * These buttons are booleans. 'Yes' will have a value of 1 and 
+ * 'No' is 0.
+ *
+ * @param  string $field    The field name
+ * @param  string $var      The selected button. Either '1', '0'
+ * @param  string $tabindex The HTML tabindex
+ * @param  string $id       The HTML id
+ * @return string HTML
+ * @see    radioSet()
+ * @example
+ * echo form(
+ * 	'Is this an example?'.
+ * 	yesnoRadio('is_example', 1)
+ * );
+ */
 
 	function yesnoRadio($field, $var, $tabindex = '', $id = '')
 	{
@@ -28,7 +60,16 @@
 		return radioSet ($vals, $field, $var, $tabindex, $id);
 	}
 
-//-------------------------------------------------------------
+/**
+ * Generates a On/Off radio button toggle.
+ *
+ * @param  string $field    The field name
+ * @param  string $var      The selected button. Either '1', '0'
+ * @param  string $tabindex The HTML tabindex
+ * @param  string $id       The HTML id
+ * @return string HTML
+ * @see    radioSet()
+ */
 
 	function onoffRadio($field, $var, $tabindex = '', $id = '')
 	{
@@ -40,7 +81,18 @@
 		return radioSet ($vals, $field, $var, $tabindex, $id);
 	}
 
-//-------------------------------------------------------------
+/**
+ * Generates a select field.
+ *
+ * @param  string $name        The field
+ * @param  array  $array       The values as an array array( 'value' => 'label' )
+ * @param  string $value       The selected option. Takes a value from $value
+ * @param  bool   $blank_first If TRUE, prepends an empty option to the list
+ * @param  mixed  $onchange    If TRUE submits the form when an option is changed. If a string, inserts it to the select tag
+ * @param  string $select_id   The HTML id
+ * @param  bool   $check_type  Type-agnostic comparison
+ * @return string HTML
+ */
 
 	function selectInput($name = '', $array = '', $value = '', $blank_first = '', $onchange = '', $select_id = '', $check_type = false)
 	{
@@ -72,7 +124,20 @@
 			n.'</select>';
 	}
 
-//-------------------------------------------------------------
+/**
+ * Generates a tree structured select field.
+ *
+ * This field takes a NSTREE structure as an associative
+ * array. This is mainly used for categories.
+ *
+ * @param  string $select_name The field
+ * @param  array  $array       The values as an array
+ * @param  string $value       The selected option. Takes a value from $value
+ * @param  string $select_id   The HTML id
+ * @param  int    $truncate    Truncate labels to certain lenght. Disabled if set <4.
+ * @return string HTML
+ * @see    getTree()
+ */
 
 	function treeSelectInput($select_name = '', $array = '', $value = '', $select_id = '', $truncate = 0)
 	{
@@ -119,8 +184,25 @@
 			n.'</select>';
 	}
 
-//-------------------------------------------------------------
-	function fInput($type, 		          // generic form input
+/**
+ * Generic form input.
+ *
+ * @param  string $type        The input type
+ * @param  string $name        The input name
+ * @param  string $value       The value
+ * @param  string $class       The HTML class
+ * @param  string $title       The tooltip
+ * @param  string $onClick     Inline JavaScript attached to the click event
+ * @param  int    $size        The input size
+ * @param  string $tab         The HTML tabindex
+ * @param  string $id          The HTML id
+ * @param  bool   $disabled    If TRUE renders the input disabled
+ * @param  bool   $required    If TRUE the field is marked as required
+ * @param  string $placeholder The placeholder value displayed when the field is empty
+ * @return string HTML input
+ */
+
+	function fInput($type,
 					$name,
 					$value,
 					$class = '',
@@ -149,39 +231,95 @@
 		return $o;
 	}
 
-// -------------------------------------------------------------
-	// deprecated in 4.2.0
+/**
+ * Sanitizes a page title.
+ *
+ * @param      string $text The input string
+ * @return     string
+ * @deprecated in 4.2.0
+ * @see        escape_title()
+ */
+
 	function cleanfInput($text)
 	{
 		trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'escape_title')), E_USER_NOTICE);
 		return escape_title($text);
 	}
 
-//-------------------------------------------------------------
-	function hInput($name,$value)		// hidden form input
+/**
+ * Hidden form input.
+ *
+ * @param  string $name  The name
+ * @param  string $value The value
+ * @return string HTML input
+ */
+
+	function hInput($name,$value)
 	{
 		return fInput('hidden',$name,$value);
 	}
 
-//-------------------------------------------------------------
-	function sInput($step)				// hidden step input
+/**
+ * Hidden step input.
+ *
+ * @param  string $step The step
+ * @return string HTML input
+ * @see    form()
+ * @see    eInput()
+ * @example
+ * echo form(
+ * 	eInput('event').
+ * 	sInput('step')
+ * );
+ */
+
+	function sInput($step)
 	{
 		return hInput('step',$step);
 	}
 
-//-------------------------------------------------------------
-	function eInput($event)				// hidden event input
+/**
+ * Hidden event input.
+ *
+ * @param  string $event The event
+ * @return string HTML input
+ * @see    form()
+ * @see    sInput()
+ * @example
+ * echo form(
+ * 	eInput('event').
+ * 	sInput('step')
+ * );
+ */
+
+	function eInput($event)
 	{
 		return hInput('event',$event);
 	}
 
-//-------------------------------------------------------------
-	function tInput()				// hidden form token input
+/**
+ * Hidden form token input.
+ *
+ * @return string A hidden HTML input containing a CSRF token
+ * @see    bouncer()
+ * @see    form_token()
+ */
+
+	function tInput()
 	{
 		return hInput('_txp_token', form_token());
 	}
 
-//-------------------------------------------------------------
+/**
+ * A checkbox.
+ *
+ * @param  string $name     The field
+ * @param  string $value    The value
+ * @param  bool   $checked  If TRUE the box is checked
+ * @param  int    $tabindex 
+ * @param  string $id
+ * @return string HTML input
+ */
 
 	function checkbox($name, $value, $checked = '1', $tabindex = '', $id = '')
 	{
@@ -194,7 +332,17 @@
 		return join('', $o);
 	}
 
-//-------------------------------------------------------------
+/**
+ * A checkbox without an option to set the value.
+ *
+ * @param  string $name     The field
+ * @param  bool   $value    If TRUE the box is checked
+ * @param  int    $tabindex The HTML tabindex
+ * @param  string $id       The HTML id
+ * @return string HTML input
+ * @access private
+ * @see    checkbox()
+ */
 
 	function checkbox2($name, $value, $tabindex = '', $id = '')
 	{
@@ -207,7 +355,16 @@
 		return join('', $o);
 	}
 
-//-------------------------------------------------------------
+/**
+ * A single radio button.
+ *
+ * @param  string $name     The field
+ * @param  string $value    The value
+ * @param  bool   $checked  If TRUE, the button is selected
+ * @param  string $id       The HTML id
+ * @param  int    $tabindex The HTML tabindex
+ * @return string HTML input
+ */
 
 	function radio($name, $value, $checked = '1', $id = '', $tabindex = '')
 	{
@@ -220,7 +377,21 @@
 		return join('', $o);
 	}
 
-//-------------------------------------------------------------
+/**
+ * Generates a form element.
+ *
+ * This form will contain a CSRF token if called on an authenticated
+ * page.
+ *
+ * @param  string $contents The form contents
+ * @param  string $style    Inline styles added to the form
+ * @param  string $onsubmit JavaScript run when the form is sent
+ * @param  string $method   The form method, e.g. "post", "get"
+ * @param  string $class    The HTML class
+ * @param  string $fragment A URL fragment added to the form target
+ * @param  string $id       The HTML id
+ * @return string HTML form element
+ */
 
 	function form($contents, $style = '', $onsubmit = '', $method = 'post', $class = '', $fragment = '', $id = '')
 	{
@@ -234,14 +405,36 @@
 			'</form>'.n;
 	}
 
-// -------------------------------------------------------------
+/**
+ * Gets and sanitizes a field from a prefixed core database table.
+ *
+ * @param  string $name       The field
+ * @param  string $event      The table
+ * @param  string $identifier The field used for selecting
+ * @param  string $id         The value used for selecting
+ * @access private
+ * @see    fetch()
+ * @see    txpspecialchars()
+ */
+
 	function fetch_editable($name,$event,$identifier,$id)
 	{
 		$q = fetch($name,'txp_'.$event,$identifier,$id);
 		return txpspecialchars($q);
 	}
 
-//-------------------------------------------------------------
+/**
+ * A textarea.
+ *
+ * @param  string $name        The field
+ * @param  int    $h           The field height in pixels
+ * @param  int    $w           The field width in pixels
+ * @param  string $thing       The value
+ * @param  string $id          The HTML id
+ * @param  int    $rows        Rows
+ * @param  int    $cols        Columns
+ * @param  string $placeholder The placeholder value displayed when the field is empty
+ */
 
 	function text_area($name, $h='', $w='', $thing = '', $id = '', $rows='5', $cols='40', $placeholder='')
 	{
@@ -254,13 +447,29 @@
 		return '<textarea'.$id.' name="'.$name.'"'.$rows.$cols.$style.($placeholder == '' ? '' : ' placeholder="'.txpspecialchars($placeholder).'"').'>'.txpspecialchars($thing).'</textarea>';
 	}
 
-//-------------------------------------------------------------
+/**
+ * Generates a select field with a name "type".
+ *
+ * @param  array $options 
+ * @return string
+ * @access private
+ * @see    selectInput()
+ */
+
 	function type_select($options)
 	{
 		return '<select name="type">'.n.type_options($options).'</select>'.n;
 	}
 
-//-------------------------------------------------------------
+/**
+ * Generates a list of options for use in a select field.
+ *
+ * @param  array $array
+ * @return string
+ * @access private
+ * @see    selectInput()
+ */
+
 	function type_options($array)
 	{
 		foreach($array as $a=>$b) {
@@ -269,11 +478,19 @@
 		return join('',$out);
 	}
 
+/**
+ * Generates a list of radio buttons wrapped in a unordered list.
+ *
+ * @param  string $name          The field
+ * @param  array  $values        The values as an array array( $value => $label )
+ * @param  string $current_val   The selected option. Takes a value from $value
+ * @param  string $hilight_val   The highlighted list item
+ * @return string HTML
+ * @access private
+ */
 
-//-------------------------------------------------------------
 	function radio_list($name, $values, $current_val='', $hilight_val='')
 	{
-		// $values is an array of value => label pairs
 		foreach ($values as $k => $v)
 		{
 			$id = $name.'-'.$k;
@@ -284,7 +501,17 @@
 		return '<ul class="status plain-list">'.join('', $out).n.'</ul>';
 	}
 
-//--------------------------------------------------------------
+/**
+ * Generates a field used to store and set a date.
+ *
+ * @param  string $name        The field
+ * @param  string $datevar     The strftime format the date is displayed 
+ * @param  int    $time        The displayed date as a UNIX timestamp
+ * @param  int    $tab         The HTML tabindex
+ * @return string HTML
+ * @access private
+ */
+
 	function tsi($name, $datevar, $time, $tab='')
 	{
 		static $placeholders = array(
