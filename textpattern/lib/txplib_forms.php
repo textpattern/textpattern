@@ -12,7 +12,7 @@
  * @param  array  $vals     The values as an array
  * @param  string $field    The field name
  * @param  string $var      The selected option, takes a value from $vals
- * @param  string $tabindex The HTML tabindex
+ * @param  int    $tabindex The HTML tabindex
  * @param  string $id       The HTML id
  * @return string A HTML radio button set
  */
@@ -40,7 +40,7 @@
  *
  * @param  string $field    The field name
  * @param  string $var      The selected button. Either '1', '0'
- * @param  string $tabindex The HTML tabindex
+ * @param  int    $tabindex The HTML tabindex
  * @param  string $id       The HTML id
  * @return string HTML
  * @see    radioSet()
@@ -65,7 +65,7 @@
  *
  * @param  string $field    The field name
  * @param  string $var      The selected button. Either '1', '0'
- * @param  string $tabindex The HTML tabindex
+ * @param  int    $tabindex The HTML tabindex
  * @param  string $id       The HTML id
  * @return string HTML
  * @see    radioSet()
