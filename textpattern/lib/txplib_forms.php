@@ -61,7 +61,7 @@
 	}
 
 /**
- * Generates a On/Off radio button toggle.
+ * Generates an On/Off radio button toggle.
  *
  * @param  string $field    The field name
  * @param  string $var      The selected button. Either '1', '0'
@@ -134,7 +134,7 @@
  * @param  array  $array       The values as an array
  * @param  string $value       The selected option. Takes a value from $value
  * @param  string $select_id   The HTML id
- * @param  int    $truncate    Truncate labels to certain lenght. Disabled if set <4.
+ * @param  int    $truncate    Truncate labels to certain length. Disabled if set <4.
  * @return string HTML
  * @see    getTree()
  */
@@ -224,7 +224,7 @@
 	}
 
 /**
- * Sanitizes a page title.
+ * Sanitises a page title.
  *
  * @param      string $text The input string
  * @return     string
@@ -392,7 +392,7 @@
 	}
 
 /**
- * Gets and sanitizes a field from a prefixed core database table.
+ * Gets and sanitises a field from a prefixed core database table.
  *
  * @param  string $name       The field
  * @param  string $event      The table
@@ -517,4 +517,5 @@
 			.'" size="'.$size.'" maxlength="'.$size.'" class="'.$name.'"'.(empty($tab) ? '' : ' tabindex="'.$tab.'"').' title="'.gTxt('article_'.$name)
 			.'"'.(isset($placeholders[$datevar]) ? ' placeholder="'.txpspecialchars(gTxt($placeholders[$datevar])).'"' : '').' />';
 	}
+
 ?>
