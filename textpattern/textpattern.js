@@ -1062,9 +1062,23 @@ $(document).keyup(function(e) {
 	}
 });
 
+/**
+ * Cookie status.
+ *
+ * @deprecated in 4.6.0
+ */
+
+var cookieEnabled = checkCookies();
+
 // Initialise JavaScript.
 
 $(document).ready(function() {
+	// Check cookies.
+	if (!cookieEnabled)
+	{
+		alert(textpattern.gTxt('cookies_must_be_enabled'));
+	}
+
 	// Disable spellchecking on all elements of class "code" in capable browsers.
 	var c = $(".code")[0];
 	if(c && "spellcheck" in c)

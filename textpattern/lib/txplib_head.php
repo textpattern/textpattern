@@ -69,17 +69,10 @@
 							).'"};'
 	).n.
 	script_js('textpattern.js', SCRIPT_URL);
-	gTxtScript(array('form_submission_error', 'are_you_sure'));
+	gTxtScript(array('form_submission_error', 'are_you_sure', 'cookies_must_be_enabled'));
 	?>
 	<script>
 	<!--
-		var cookieEnabled = checkCookies();
-
-		if (!cookieEnabled)
-		{
-			confirm('<?php echo trim(gTxt('cookies_must_be_enabled')); ?>');
-		}
-
 		function poweredit(elm)
 		{
 			var something = elm.options[elm.selectedIndex].value;
