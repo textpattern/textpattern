@@ -190,7 +190,7 @@
 		$rs = safe_rows_start(
 			"*, FIELD(event,{$joined_core}) as sort_value",
 			'txp_prefs',
-			join(' and ', $sql)." ORDER BY sort_value = 0, sort_value, event ASC, position"
+			join(' and ', $sql)." ORDER BY sort_value = 0, sort_value, event, position"
 		);
 
 		$current_event = null;
