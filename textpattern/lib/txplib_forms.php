@@ -197,7 +197,7 @@
  * @param  string $title       The tooltip
  * @param  string $onClick     Inline JavaScript attached to the click event
  * @param  int    $size        The input size
- * @param  string $tab         The HTML tabindex
+ * @param  int    $tab         The HTML tabindex
  * @param  string $id          The HTML id
  * @param  bool   $disabled    If TRUE renders the input disabled
  * @param  bool   $required    If TRUE the field is marked as required
@@ -205,7 +205,7 @@
  * @return string HTML input
  */
 
-	function fInput($type, $name, $value, $class = '', $title = '', $onClick = '', $size = '', $tab = '', $id = '', $disabled = false, $required = false, $placeholder = '')
+	function fInput($type, $name, $value, $class = '', $title = '', $onClick = '', $size = 0, $tab = 0, $id = '', $disabled = false, $required = false, $placeholder = '')
 	{
 		$o  = '<input type="'.$type.'"';
 		$o .= ' value="'.txpspecialchars($value).'"';
