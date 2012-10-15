@@ -17,7 +17,7 @@
  * @return string A HTML radio button set
  */
 
-	function radioSet($vals, $field, $var, $tabindex = '', $id = '')
+	function radioSet($vals, $field, $var, $tabindex = 0, $id = '')
 	{
 		$id = ($id) ? $id.'-'.$field : $field;
 
@@ -51,7 +51,7 @@
  * );
  */
 
-	function yesnoRadio($field, $var, $tabindex = '', $id = '')
+	function yesnoRadio($field, $var, $tabindex = 0, $id = '')
 	{
 		$vals = array(
 			'0' => gTxt('no'),
@@ -71,7 +71,7 @@
  * @see    radioSet()
  */
 
-	function onoffRadio($field, $var, $tabindex = '', $id = '')
+	function onoffRadio($field, $var, $tabindex = 0, $id = '')
 	{
 		$vals = array(
 			'0' => gTxt('off'),
@@ -321,13 +321,13 @@
  * @return string HTML input
  */
 
-	function checkbox($name, $value, $checked = '1', $tabindex = '', $id = '')
+	function checkbox($name, $value, $checked = true, $tabindex = 0, $id = '')
 	{
 		$o[] = '<input type="checkbox" name="'.$name.'" value="'.$value.'"';
 		$o[] = ($id) ? ' id="'.$id.'"' : '';
-		$o[] = ($checked == '1') ? ' checked="checked"' : '';
+		$o[] = ($checked == 1) ? ' checked="checked"' : '';
 		$o[] = ($tabindex) ? ' tabindex="'.$tabindex.'"' : '';
-		$o[] = ' class="checkbox'.($checked == '1' ? ' active' : '').'" />';
+		$o[] = ' class="checkbox'.($checked == 1 ? ' active' : '').'" />';
 
 		return join('', $o);
 	}
@@ -344,7 +344,7 @@
  * @see    checkbox()
  */
 
-	function checkbox2($name, $value, $tabindex = '', $id = '')
+	function checkbox2($name, $value, $tabindex = 0, $id = '')
 	{
 		$o[] = '<input type="checkbox" name="'.$name.'" value="1"';
 		$o[] = ($id) ? ' id="'.$id.'"' : '';
@@ -366,13 +366,13 @@
  * @return string HTML input
  */
 
-	function radio($name, $value, $checked = '1', $id = '', $tabindex = '')
+	function radio($name, $value, $checked = true, $id = '', $tabindex = 0)
 	{
 		$o[] = '<input type="radio" name="'.$name.'" value="'.$value.'"';
 		$o[] = ($id) ? ' id="'.$id.'"' : '';
-		$o[] = ($checked == '1') ? ' checked="checked"' : '';
+		$o[] = ($checked == 1) ? ' checked="checked"' : '';
 		$o[] = ($tabindex) ? ' tabindex="'.$tabindex.'"' : '';
-		$o[] = ' class="radio'.($checked == '1' ? ' active' : '').'" />';
+		$o[] = ' class="radio'.($checked == 1 ? ' active' : '').'" />';
 
 		return join('', $o);
 	}
