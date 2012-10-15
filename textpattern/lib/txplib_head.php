@@ -114,8 +114,6 @@
 
 			return false;
 		}
-
-		addEvent(window, 'load', cleanSelects);
 	-->
 	</script>
 	<?php // Mandatory un-themable Textpattern core styles ?>
