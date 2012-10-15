@@ -70,46 +70,7 @@
 	).n.
 	script_js('textpattern.js', SCRIPT_URL);
 	gTxtScript(array('form_submission_error', 'are_you_sure', 'cookies_must_be_enabled'));
-	?>
-	<script>
-	<!--
-		function poweredit(elm)
-		{
-			var something = elm.options[elm.selectedIndex].value;
-
-			// Add another chunk of HTML
-			var pjs = document.getElementById('js');
-
-			if (pjs == null)
-			{
-				var br = document.createElement('br');
-				elm.parentNode.appendChild(br);
-
-				pjs = document.createElement('P');
-				pjs.setAttribute('id','js');
-				elm.parentNode.appendChild(pjs);
-			}
-
-			if (pjs.style.display == 'none' || pjs.style.display == '')
-			{
-				pjs.style.display = 'block';
-			}
-
-			if (something != '')
-			{
-				switch (something)
-				{
-					default:
-						pjs.style.display = 'none';
-						break;
-				}
-			}
-
-			return false;
-		}
-	-->
-	</script>
-	<?php // Mandatory un-themable Textpattern core styles ?>
+	// Mandatory un-themable Textpattern core styles ?>
 	<style>
 		.not-ready .doc-ready, .not-ready form.async input[type="submit"], .not-ready a.async {
 			visibility: hidden;

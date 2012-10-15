@@ -52,6 +52,47 @@ function popWin(url, width, height, options)
 }
 
 /**
+ * Legacy multi-edit tool.
+ *
+ * @deprecated in 4.6.0
+ */
+
+function poweredit(elm)
+{
+	var something = elm.options[elm.selectedIndex].value;
+
+	// Add another chunk of HTML
+	var pjs = document.getElementById('js');
+
+	if (pjs == null)
+	{
+		var br = document.createElement('br');
+		elm.parentNode.appendChild(br);
+
+		pjs = document.createElement('P');
+		pjs.setAttribute('id','js');
+		elm.parentNode.appendChild(pjs);
+	}
+
+	if (pjs.style.display == 'none' || pjs.style.display == '')
+	{
+		pjs.style.display = 'block';
+	}
+
+	if (something != '')
+	{
+		switch (something)
+		{
+			default:
+				pjs.style.display = 'none';
+				break;
+		}
+	}
+
+	return false;
+}
+
+/**
  * Basic confirmation for potentially powerful choices (like deletion, for example).
  *
  * @param  {string}  msg The message
