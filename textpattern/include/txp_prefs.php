@@ -63,7 +63,7 @@
 		$sql = array();
 		$sql[] = 'prefs_id = 1 and event != "" and type in('.PREF_CORE.', '.PREF_PLUGIN.', '.PREF_HIDDEN.')';
 		$sql[] = "(user_name = '' or (user_name='".doSlash($txp_user)."' and name not in(
-				select name from ".safe_pfx('txp_prefs')." where name = txp_prefs.name and user_name = ''
+				select name from ".safe_pfx('txp_prefs')." where user_name = ''
 			)))";
 
 		if (!get_pref('use_comments', 1, 1))
@@ -179,7 +179,7 @@
 		$sql = array();
 		$sql[] = 'prefs_id = 1 and event != "" and type in('.PREF_CORE.', '.PREF_PLUGIN.')';
 		$sql[] = "(user_name = '' or (user_name='".doSlash($txp_user)."' and name not in(
-				select name from ".safe_pfx('txp_prefs')." where name = txp_prefs.name and user_name = ''
+				select name from ".safe_pfx('txp_prefs')." where user_name = ''
 			)))";
 
 		if (!get_pref('use_comments', 1, 1))
