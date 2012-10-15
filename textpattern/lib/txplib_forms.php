@@ -57,7 +57,7 @@
 			'0' => gTxt('no'),
 			'1' => gTxt('yes')
 		);
-		return radioSet ($vals, $field, $var, $tabindex, $id);
+		return radioSet($vals, $field, $var, $tabindex, $id);
 	}
 
 /**
@@ -78,7 +78,7 @@
 			'1' => gTxt('on')
 		);
 
-		return radioSet ($vals, $field, $var, $tabindex, $id);
+		return radioSet($vals, $field, $var, $tabindex, $id);
 	}
 
 /**
@@ -139,7 +139,7 @@
  * @see    getTree()
  */
 
-	function treeSelectInput($select_name = '', $array = '', $value = '', $select_id = '', $truncate = 0)
+	function treeSelectInput($select_name = '', $array = array(), $value = '', $select_id = '', $truncate = 0)
 	{
 		$out = array();
 
@@ -167,11 +167,14 @@
 
 			$sp = str_repeat(sp.sp, $level);
 
-			if (($truncate > 3) && (strlen(utf8_decode($title)) > $truncate)) {
+			if (($truncate > 3) && (strlen(utf8_decode($title)) > $truncate))
+			{
 				$htmltitle = ' title="'.txpspecialchars($title).'"';
 				$title = preg_replace('/^(.{0,'.($truncate - 3).'}).*$/su','$1',$title);
 				$hellip = '&#8230;';
-			} else {
+			}
+			else
+			{
 				$htmltitle = $hellip = '';
 			}
 
@@ -202,18 +205,7 @@
  * @return string HTML input
  */
 
-	function fInput($type,
-					$name,
-					$value,
-					$class = '',
-					$title = '',
-					$onClick = '',
-					$size = '',
-					$tab = '',
-					$id = '',
-					$disabled = false,
-					$required = false,
-					$placeholder = '')
+	function fInput($type, $name, $value, $class = '', $title = '', $onClick = '', $size = '', $tab = '', $id = '', $disabled = false, $required = false, $placeholder = '')
 	{
 		$o  = '<input type="'.$type.'"';
 		$o .= ' value="'.txpspecialchars($value).'"';
@@ -256,7 +248,7 @@
 
 	function hInput($name,$value)
 	{
-		return fInput('hidden',$name,$value);
+		return fInput('hidden', $name, $value);
 	}
 
 /**
@@ -275,7 +267,7 @@
 
 	function sInput($step)
 	{
-		return hInput('step',$step);
+		return hInput('step', $step);
 	}
 
 /**
@@ -294,7 +286,7 @@
 
 	function eInput($event)
 	{
-		return hInput('event',$event);
+		return hInput('event', $event);
 	}
 
 /**
@@ -348,9 +340,9 @@
 	{
 		$o[] = '<input type="checkbox" name="'.$name.'" value="1"';
 		$o[] = ($id) ? ' id="'.$id.'"' : '';
-		$o[] = ($value == '1') ? ' checked="checked"' : '';
+		$o[] = ($value == 1) ? ' checked="checked"' : '';
 		$o[] = ($tabindex) ? ' tabindex="'.$tabindex.'"' : '';
-		$o[] = ' class="checkbox'.($value == '1' ? ' active' : '').'" />';
+		$o[] = ' class="checkbox'.($value == 1 ? ' active' : '').'" />';
 
 		return join('', $o);
 	}
@@ -417,9 +409,9 @@
  * @see    txpspecialchars()
  */
 
-	function fetch_editable($name,$event,$identifier,$id)
+	function fetch_editable($name, $event, $identifier, $id)
 	{
-		$q = fetch($name,'txp_'.$event,$identifier,$id);
+		$q = fetch($name, 'txp_'.$event, $identifier, $id);
 		return txpspecialchars($q);
 	}
 
@@ -436,7 +428,7 @@
  * @param  string $placeholder The placeholder value displayed when the field is empty
  */
 
-	function text_area($name, $h='', $w='', $thing = '', $id = '', $rows='5', $cols='40', $placeholder='')
+	function text_area($name, $h = 0, $w = 0, $thing = '', $id = '', $rows = 5, $cols = 40, $placeholder='')
 	{
 		$id = ($id) ? ' id="'.$id.'"' : '';
 		$rows = ' rows="' . ( ($rows && is_numeric($rows)) ? $rows : '5') . '"';
@@ -472,10 +464,11 @@
 
 	function type_options($array)
 	{
-		foreach($array as $a=>$b) {
+		foreach ($array as $a => $b)
+		{
 			$out[] = t.'<option value="'.$a.'">'.gTxt($b).'</option>'.n;
 		}
-		return join('',$out);
+		return join('', $out);
 	}
 
 /**
@@ -489,7 +482,7 @@
  * @access private
  */
 
-	function radio_list($name, $values, $current_val='', $hilight_val='')
+	function radio_list($name, $values, $current_val = '', $hilight_val = '')
 	{
 		foreach ($values as $k => $v)
 		{
@@ -512,7 +505,7 @@
  * @access private
  */
 
-	function tsi($name, $datevar, $time, $tab='')
+	function tsi($name, $datevar, $time, $tab = 0)
 	{
 		static $placeholders = array(
 			'%Y' => 'yyyy',
@@ -524,7 +517,7 @@
 		);
 
 		$size = ($name=='year' or $name=='exp_year') ? INPUT_XSMALL : INPUT_TINY;
-		$s = ($time == 0)? '' : safe_strftime($datevar, $time);
+		$s = ($time == 0) ? '' : safe_strftime($datevar, $time);
 		return n.'<input type="text" name="'.$name.'" value="'.
 			$s
 			.'" size="'.$size.'" maxlength="'.$size.'" class="'.$name.'"'.(empty($tab) ? '' : ' tabindex="'.$tab.'"').' title="'.gTxt('article_'.$name)
