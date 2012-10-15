@@ -338,13 +338,7 @@
 
 	function checkbox2($name, $value, $tabindex = 0, $id = '')
 	{
-		$o[] = '<input type="checkbox" name="'.$name.'" value="1"';
-		$o[] = ($id) ? ' id="'.$id.'"' : '';
-		$o[] = ($value == 1) ? ' checked="checked"' : '';
-		$o[] = ($tabindex) ? ' tabindex="'.$tabindex.'"' : '';
-		$o[] = ' class="checkbox'.($value == 1 ? ' active' : '').'" />';
-
-		return join('', $o);
+		return checkbox($name, 1, $value, $tabindex, $id);
 	}
 
 /**
