@@ -588,11 +588,11 @@ define('INTEGRITY_DIGEST', 0x8);
 define('INTEGRITY_TABLE', 0x10);
 
 /**
- * Return a link to an external script.
+ * Link to an external script.
  *
  * @since   4.6.0
  * @package HTML
- * @see     script_js();
+ * @see     script_js()
  */
 
 define('SCRIPT_URL', 0x1);
