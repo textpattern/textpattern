@@ -1,7 +1,30 @@
 <?php
 
+/**
+ * Used for generating admin-side headers.
+ *
+ * @package HTML
+ */
 
-// -------------------------------------------------------------
+/**
+ * Creates and outputs an admin-side header.
+ *
+ * The output contains HTML &lt;head&gt; section and the main
+ * navigation. The results are echoed opposed to returned.
+ *
+ * This function offers a way to invoke modal activity messages
+ * and set the page's title.
+ *
+ * Output will automatically become silent on asynchronous
+ * script responses that do not want HTML headers.
+ *
+ * @param  string       $pagetitle The page title
+ * @param  string|array $message   A message show to the user
+ * @example
+ * pagetop('Title', array('My error message', E_ERROR));
+ * echo 'My page contents.';
+ */
+
 	function pagetop($pagetitle,$message="")
 	{
 		global $siteurl, $sitename, $txp_user, $event, $step, $app_mode, $theme;
@@ -91,8 +114,19 @@
 		echo '</header><!-- /txp-header -->'.n.'<div role="main" id="txp-main" class="txp-body" aria-label="'.gTxt('main_content').'">';
 	}
 
-// -------------------------------------------------------------
-// Is this used any more?
+/**
+ * Creates an area tab.
+ *
+ * This can be used to create table based navigation bars.
+ *
+ * @param      string $label
+ * @param      string $event
+ * @param      string $tarea
+ * @param      string $area
+ * @return     string HTML table column
+ * @deprecated in 4.6.0
+ */
+
 	function areatab($label,$event,$tarea,$area)
 	{
 		$tc = ($area == $event) ? 'tabup' : 'tabdown';
@@ -101,7 +135,18 @@
 		return tda(tag($label,'a',$hatts),$atts);
 	}
 
-// -------------------------------------------------------------
+/**
+ * Creates a secondary area tab.
+ *
+ * This can be used to create table based navigation bars.
+ *
+ * @param      string $label
+ * @param      string $tabevent
+ * @param      string $event
+ * @return     string HTML table column
+ * @deprecated in 4.6.0
+ */
+
 	function tabber($label,$tabevent,$event)
 	{
 		$tc = ($event==$tabevent) ? 'tabup' : 'tabdown2';
@@ -109,7 +154,16 @@
 		return $out;
 	}
 
-// -------------------------------------------------------------
+/**
+ * Creates a table based navigation bar row.
+ *
+ * This can be used to create table based navigation bars.
+ *
+ * @param      string $area
+ * @param      string $event
+ * @return     string HTML table columns
+ * @deprecated in 4.6.0
+ */
 
 	function tabsort($area, $event)
 	{
@@ -133,7 +187,16 @@
 		return '';
 	}
 
-// -------------------------------------------------------------
+/**
+ * Gets the main menu structure as an array.
+ *
+ * @return array
+ * @example
+ * print_r(
+ * 	areas()
+ * );
+ */
+
 	function areas()
 	{
 		global $privs, $plugin_areas;
@@ -177,7 +240,14 @@
 		return $areas;
 	}
 
-// -------------------------------------------------------------
+/**
+ * Creates an admin-side main menu as a &lt;select&gt; dropdown.
+ *
+ * @param  mixed  $inline Is not used.
+ * @return string A HTML form
+ * @example
+ * echo navPop();
+ */
 
 	function navPop($inline = '')
 	{
@@ -219,8 +289,14 @@
 		}
 	}
 
-// -------------------------------------------------------------
-	# DEPRECATED?? Has this ever been used?
+/**
+ * Generates a button link
+ *
+ * @param      string $label
+ * @param      string $link
+ * @deprecated in 4.6.0
+ */
+
 	function button($label,$link)
 	{
 		return '<span style="margin-right:2em"><a href="?event='.$link.'">'.$label.'</a></span>';
