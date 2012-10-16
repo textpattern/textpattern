@@ -8,8 +8,22 @@
 
 */
 
+/**
+ * Handles RSS feeds.
+ *
+ * @package XML
+ */
 
-// -------------------------------------------------------------
+/**
+ * Generates and returns a RSS feed.
+ *
+ * This function can only be called once on a page. It send HTTP
+ * headers and returns a RSS feed based on the requested URL parameters.
+ * Accepts HTTP GET parameters 'limit', 'area', 'section' and 'category'.
+ *
+ * @return string XML
+ */
+
 	function rss()
 	{
 		global $prefs,$thisarticle;
@@ -251,9 +265,14 @@
 			'</rss>';
 	}
 
+/**
+ * Converts HTML entities to UTF-8 characters.
+ *
+ * @param      string $toUnicode
+ * @return     string
+ * @deprecated in 4.0.4
+ */
 
-// DEPRECATED FUNCTIONS
-// included for backwards compatibility with older plugins only
 	function rss_safe_hed($toUnicode) {
 
 		if (version_compare(phpversion(), "5.0.0", ">=")) {
