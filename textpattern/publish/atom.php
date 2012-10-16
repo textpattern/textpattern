@@ -8,20 +8,67 @@
 
 */
 
+/**
+ * Handles Atom feeds.
+ *
+ * @package XML
+ */
 
-// -------------------------------------------------------------
+/**
+ * Generates and outputs a Atom feed.
+ *
+ * This function can only be called once on a page. It outputs
+ * an Atom feed based on the requested URL parameters. Accepts
+ * HTTP GET parameters 'limit', 'area', 'section' and 'category'.
+ */
+
 	function atom()
 	{
 		global $thisarticle;
 		set_error_handler('feedErrorHandler');
 		ob_clean();
 		extract($GLOBALS['prefs']);
+
+		/**
+		 * @ignore
+		 */
+
 		define("t_texthtml",' type="text/html"');
+
+		/**
+		 * @ignore
+		 */
+
 		define("t_text",' type="text"');
+
+		/**
+		 * @ignore
+		 */
+
 		define("t_html",' type="html"');
+
+		/**
+		 * @ignore
+		 */
+
 		define("t_xhtml",' type="xhtml"');
+
+		/**
+		 * @ignore
+		 */
+
 		define('t_appxhtml',' type="xhtml"');
+
+		/**
+		 * @ignore
+		 */
+
 		define("r_relalt",' rel="alternate"');
+
+		/**
+		 * @ignore
+		 */
+
 		define("r_relself",' rel="self"');
 
 		$last = fetch('unix_timestamp(val)','txp_prefs','name','lastmod');
@@ -293,10 +340,15 @@
 			'<feed xml:lang="'.$language.'" xmlns="http://www.w3.org/2005/Atom">'.join(n,$out).'</feed>';
 	}
 
-
-// DEPRECATED FUNCTIONS
-// these are included only for backwards compatibility with older plugins
-// see the above code for more appropriate ways of handling feed content
+/**
+ * Converts HTML entieties to UTF-8 characters.
+ *
+ * This is included only for backwards compatibility with older plugins.
+ *
+ * @param      string $toUnicode
+ * @return     string
+ * @deprecated in 4.0.4
+ */
 
 	function safe_hed($toUnicode) {
 
@@ -311,6 +363,19 @@
 		}
 		return $str;
 	}
+
+/**
+ * Sanitizes a string for use in a feed.
+ *
+ * Tries to resolve relative URLs and encode unescaped characters.
+ *
+ * This is included only for backwards compatibility with older plugins.
+ *
+ * @param      string $toFeed
+ * @param      string $permalink
+ * @return     string
+ * @deprecated in 4.0.4
+ */
 
 	function fixup_for_feed($toFeed, $permalink) {
 
