@@ -15,10 +15,10 @@
  */
 
 /**
- * Generates and returns a RSS feed.
+ * Generates and returns an RSS feed.
  *
  * This function can only be called once on a page. It send HTTP
- * headers and returns a RSS feed based on the requested URL parameters.
+ * headers and returns an RSS feed based on the requested URL parameters.
  * Accepts HTTP GET parameters 'limit', 'area', 'section' and 'category'.
  *
  * @return string XML
@@ -126,7 +126,7 @@
 					$content = trim(replace_relative_urls(parse($thisarticle['body']), $permlink));
 
 					if ($syndicate_body_or_excerpt) {
-						# short feed: use body as summary if there's no excerpt
+						// Short feed: use body as summary if there's no excerpt.
 						if (!trim($summary))
 							$summary = $content;
 						$content = '';
@@ -219,7 +219,7 @@
 		}
 		else
 		{
-			//turn on compression if we aren't using it already
+			// Turn on compression if we aren't using it already.
 			if (extension_loaded('zlib') && ini_get("zlib.output_compression") == 0 && 
 				ini_get('output_handler') != 'ob_gzhandler' && !headers_sent()
 			)
