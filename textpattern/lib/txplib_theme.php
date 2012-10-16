@@ -16,10 +16,46 @@ if (!defined ('THEME')) define('THEME', 'theme/');
 
 class theme
 {
+	/**
+	 * The theme name.
+	 *
+	 * @var string
+	 */
+
 	public $name;
+
+	/**
+	 * Stores a menu.
+	 *
+	 * @var array
+	 */
+
 	public $menu;
+
+	/**
+	 * Theme location.
+	 *
+	 * @var string
+	 */
+
 	public $url;
+
+	/**
+	 * Just a popup window
+	 *
+	 * @var bool
+	 */
+
 	public $is_popup;
+
+	/**
+	 * Stores an activity message.
+	 *
+	 * @var bool
+	 * @see theme::announce()
+	 * @see theme::announce_async()
+	 */
+
 	public $message;
 
 	/**
