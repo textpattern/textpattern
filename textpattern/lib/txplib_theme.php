@@ -16,7 +16,11 @@ if (!defined ('THEME')) define('THEME', 'theme/');
 
 class theme
 {
-	var $name, $menu, $url, $is_popup, $message;
+	public $name;
+	public $menu;
+	public $url;
+	public $is_popup;
+	public $message;
 
 	/**
 	 * Constructor.
