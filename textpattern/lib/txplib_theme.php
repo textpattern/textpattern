@@ -8,6 +8,10 @@
 
 if (!defined('THEME'))
 {
+	/**
+	 * Relative path to themes directory.
+	 */
+
 	define('THEME', 'theme/');
 }
 
@@ -44,7 +48,7 @@ class theme
 	public $url;
 
 	/**
-	 * Just a popup window
+	 * Just a popup window.
 	 *
 	 * @var bool
 	 */
@@ -331,6 +335,9 @@ class theme
 	 *
 	 * @param array $thing Message text and status flag
 	 * @param bool  $modal If TRUE, immediate user interaction suggested
+	 * @example
+	 * global $theme;
+	 * echo $theme->announce(array('my_message', E_ERROR));
 	 */
 
 	public function announce($thing = array('', 0), $modal = false)
@@ -344,6 +351,11 @@ class theme
 	 * @param array $thing Message text and status flag
 	 * @param bool  $modal If TRUE, immediate user interaction suggested
 	 * @since 4.5.0
+	 * @example
+	 * global $theme;
+	 * echo script_js(
+	 * 	$theme->announce_async(array('my_message', E_ERROR))
+	 * );
 	 */
 
 	public function announce_async($thing = array('', 0), $modal = false)
