@@ -170,11 +170,11 @@ class theme
 		{
 			foreach ($dirs as $d)
 			{
-				// extract trailing directory name
+				// Extract trailing directory name.
 				preg_match('#(.*)[\\/]+(.*)$#', $d, $m);
 				$name = $m[2];
 
-				// accept directories containing an equally named .php file
+				// Accept directories containing an equally named .php file.
 				if (is_dir($d) && ($d != '.') && ($d != '..') && isset($name) && is_file($d.DS.$name.'.php'))
 				{
 					$out[] = $name;
@@ -230,7 +230,7 @@ class theme
 			return $this;
 		}
 
-		// use legacy areas() for b/c
+		// Use legacy areas() for b/c.
 		$areas = areas();
 		$defaults = array(
 			'content' => 'article',
@@ -347,7 +347,7 @@ class theme
 	}
 
 	/**
-	 * Output notification message for asynchronous Javascript views.
+	 * Output notification message for asynchronous JavaScript views.
 	 *
 	 * @param  array  $thing Message text and status flag
 	 * @param  bool   $modal If TRUE, immediate user interaction suggested
@@ -376,7 +376,7 @@ class theme
 	public function manifest()
 	{
 		return array(
-			'title'        => '',// Human-readable title of this theme. No HTML, keep it short.
+			'title'        => '', // Human-readable title of this theme. No HTML, keep it short.
 			'author'       => '', // Name(s) of this theme's creator(s).
 			'author_uri'   => '', // URI of the theme's site. Decent vanity is accepted.
 			'version'      => '', // Version numbering. Mind version_compare().
