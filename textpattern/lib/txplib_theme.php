@@ -95,8 +95,8 @@ class theme
 	/**
 	 * Theme factory.
 	 *
-	 * @param  string      $name Theme name
-	 * @return object|bool An initialised theme object or FALSE on failure
+	 * @param  string   $name Theme name
+	 * @return obj|bool An initialised theme object or FALSE on failure
 	 */
 
 	static public function factory($name)
@@ -191,7 +191,7 @@ class theme
 	 * Inherit from an ancestor theme.
 	 *
 	 * @param  string  $name Name of ancestor theme
-	 * @return bool    True on success, false on unavailable/invalid ancestor theme
+	 * @return bool    TRUE on success, FALSE on unavailable/invalid ancestor theme
 	 */
 
 	static public function based_on($name)
@@ -297,8 +297,8 @@ class theme
 	/**
 	 * HTML &lt;head&gt; section.
 	 *
-	 * Outputs head element contents. Returned value is rendered
-	 * into the head element of all admin pages.
+	 * Returned value is rendered into the head element of
+	 * all admin pages.
 	 *
 	 * @return string
 	 */
@@ -333,8 +333,9 @@ class theme
 	/**
 	 * Output notification message for synchronous HTML views.
 	 *
-	 * @param array $thing Message text and status flag
-	 * @param bool  $modal If TRUE, immediate user interaction suggested
+	 * @param  array  $thing Message text and status flag
+	 * @param  bool   $modal If TRUE, immediate user interaction suggested
+	 * @return string HTML
 	 * @example
 	 * global $theme;
 	 * echo $theme->announce(array('my_message', E_ERROR));
@@ -348,8 +349,9 @@ class theme
 	/**
 	 * Output notification message for asynchronous Javascript views.
 	 *
-	 * @param array $thing Message text and status flag
-	 * @param bool  $modal If TRUE, immediate user interaction suggested
+	 * @param  array  $thing Message text and status flag
+	 * @param  bool   $modal If TRUE, immediate user interaction suggested
+	 * @return string JavaScript
 	 * @since 4.5.0
 	 * @example
 	 * global $theme;
@@ -364,7 +366,9 @@ class theme
 	}
 
 	/**
-	 * Define bureaucratic details of this theme. All returned items are optional.
+	 * Define bureaucratic details of this theme.
+	 *
+	 * All returned items are optional.
 	 *
 	 * @return array
 	 */
