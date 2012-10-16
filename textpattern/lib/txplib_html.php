@@ -1110,10 +1110,10 @@ EOF;
  * Renders a &lt:script&gt; element.
  *
  * @param  string     $js    JavaScript code
- * @param  int|string $flags Flags SCRIPT_URL, or noscript alternative if a string.
+ * @param  int|string $flags Flags SCRIPT_URL | SCRIPT_ATTACH_VERSION, or noscript alternative if a string.
  * @return string HTML with embedded script element
  * @example
- * script_js('/js/script.js', SCRIPT_URL);
+ * echo script_js('/js/script.js', SCRIPT_URL);
  */
 
 	function script_js($js, $flags = '')
@@ -1122,6 +1122,19 @@ EOF;
 		{
 			if ($flags & SCRIPT_URL)
 			{
+				if ($flags & SCRIPT_ATTACH_VERSION && strpos(txp_version, '-dev') === false)
+				{
+					$ext = pathinfo($js, PATHINFO_EXTENSION);
+
+					if ($ext)
+					{
+						$js = substr($js, 0, (strlen($ext)+1) * -1);
+						$ext = '.'.$ext;
+					}
+
+					$js .= '.v'.txp_version.$ext;
+				}
+
 				return '<script src="'.txpspecialchars($js).'"></script>';
 			}
 		}

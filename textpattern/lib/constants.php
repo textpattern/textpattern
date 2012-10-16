@@ -597,6 +597,19 @@ define('INTEGRITY_TABLE', 0x10);
 
 define('SCRIPT_URL', 0x1);
 
+/**
+ * Attach version number to script URL if stable.
+ *
+ * The intall is considered as a 'stable' if the version
+ * number doesn't contain a '-dev' tag.
+ *
+ * @since   4.6.0
+ * @package HTML
+ * @see     script_js()
+ */
+
+define('SCRIPT_ATTACH_VERSION', 0x2);
+
 error_reporting($old_level);
 unset($old_level);
 ?>
