@@ -25,11 +25,14 @@
  * echo 'My page contents.';
  */
 
-	function pagetop($pagetitle,$message="")
+	function pagetop($pagetitle, $message = '')
 	{
 		global $siteurl, $sitename, $txp_user, $event, $step, $app_mode, $theme;
 
-		if ($app_mode == 'async') return;
+		if ($app_mode == 'async')
+		{
+			return;
+		}
 
 		$area = gps('area');
 		$event = (!$event) ? 'article' : $event;
@@ -235,7 +238,9 @@
 		);
 
 		if (is_array($plugin_areas))
+		{
 			$areas = array_merge_recursive($areas, $plugin_areas);
+		}
 
 		return $areas;
 	}
