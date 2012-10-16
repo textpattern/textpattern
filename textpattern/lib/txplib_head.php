@@ -293,7 +293,7 @@
 	}
 
 /**
- * Generates a button link
+ * Generates a button link.
  *
  * @param      string $label
  * @param      string $link
