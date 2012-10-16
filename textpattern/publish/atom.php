@@ -118,14 +118,14 @@
 		$out[] = '<link'.r_relalt.t_texthtml.' href="'.hu.'" />';
 
 		// Atom feeds with mail or domain name.
-		$dn = explode('/',$siteurl);
-		$mail_or_domain = ($use_mail_on_feeds_id) ? eE($blog_mail_uid):$dn[0];
-		$out[] = tag('tag:'.$mail_or_domain.','.$blog_time_uid.':'.$blog_uid.(($section) ? '/'.join(',', $section) : '').(($category)? '/'.join(',', $category):''), 'id');
+		$dn = explode('/', $siteurl);
+		$mail_or_domain = ($use_mail_on_feeds_id) ? eE($blog_mail_uid) : $dn[0];
+		$out[] = tag('tag:'.$mail_or_domain.','.$blog_time_uid.':'.$blog_uid.(($section) ? '/'.join(',', $section) : '').(($category)? '/'.join(',', $category) : ''), 'id');
 
 		$out[] = tag('Textpattern', 'generator', ' uri="http://textpattern.com/" version="'.$version.'"');
 		$out[] = tag(safe_strftime("w3cdtf", $last), 'updated');
 
-		$auth[] = tag($pub['RealName'],'name');
+		$auth[] = tag($pub['RealName'], 'name');
 		$auth[] = ($include_email_atom) ? tag(eE($pub['email']), 'email') : '';
 		$auth[] = tag(hu, 'uri');
 
@@ -162,7 +162,7 @@
 				unix_timestamp(Expires) as uExpires,
 				unix_timestamp(LastMod) as uLastMod",
 				"textpattern",
-				"Status=4 and Posted <= now() $expired".join(' ',$query).
+				"Status=4 and Posted <= now() $expired".join(' ', $query).
 				"order by Posted desc limit $limit"
 			);
 			if ($rs)
@@ -233,11 +233,11 @@
 				}
 			}
 		}
-		elseif ($area=='link')
+		elseif ($area == 'link')
 		{
 			$cfilter = ($category) ? "category in ('".join("','", $category)."')" : '1';
 			$limit = ($limit) ? $limit : $rss_how_many;
-			$limit = intval(min($limit,max(100,$rss_how_many)));
+			$limit = intval(min($limit, max(100, $rss_how_many)));
 
 			$rs = safe_rows_start("*", "txp_link", "$cfilter order by date desc, id desc limit $limit");
 
@@ -247,18 +247,18 @@
 				{
 					extract($a);
 
-					$e['title'] = tag(htmlspecialchars($linkname),'title',t_html);
-					$e['content'] = tag(n.htmlspecialchars($description).n,'content',t_html);
+					$e['title'] = tag(htmlspecialchars($linkname), 'title', t_html);
+					$e['content'] = tag(n.htmlspecialchars($description).n, 'content', t_html);
 
-					$url = (preg_replace("/^\/(.*)/","https?://$siteurl/$1",$url));
-					$url = preg_replace("/&((?U).*)=/","&amp;\\1=",$url);
+					$url = (preg_replace("/^\/(.*)/","https?://$siteurl/$1", $url));
+					$url = preg_replace("/&((?U).*)=/","&amp;\\1=", $url);
 					$e['link'] = '<link'.r_relalt.t_texthtml.' href="'.$url.'" />';
 
-					$e['issued'] = tag(safe_strftime('w3cdtf', strtotime($date)),'published');
-					$e['modified'] = tag(gmdate('Y-m-d\TH:i:s\Z',strtotime($date)),'updated');
-					$e['id'] = tag('tag:'.$mail_or_domain.','.safe_strftime( '%Y-%m-%d', strtotime( $date)).':'.$blog_uid.'/'.$id,'id');
+					$e['issued'] = tag(safe_strftime('w3cdtf', strtotime($date)), 'published');
+					$e['modified'] = tag(gmdate('Y-m-d\TH:i:s\Z',strtotime($date)), 'updated');
+					$e['id'] = tag('tag:'.$mail_or_domain.','.safe_strftime('%Y-%m-%d', strtotime($date)).':'.$blog_uid.'/'.$id, 'id');
 
-					$articles[$id] = tag(n.t.t.join(n.t.t,$e).n,'entry');
+					$articles[$id] = tag(n.t.t.join(n.t.t, $e).n, 'entry');
 
 					$etags[$id] = strtoupper(dechex(crc32($articles[$id])));
 					$dates[$id] = $date;
@@ -399,7 +399,7 @@
 
 		header('Content-type: application/atom+xml; charset=utf-8');
 		return chr(60).'?xml version="1.0" encoding="UTF-8"?'.chr(62).n.
-			'<feed xml:lang="'.$language.'" xmlns="http://www.w3.org/2005/Atom">'.join(n,$out).'</feed>';
+			'<feed xml:lang="'.$language.'" xmlns="http://www.w3.org/2005/Atom">'.join(n, $out).'</feed>';
 	}
 
 /**
