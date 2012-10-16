@@ -28,7 +28,7 @@ class theme
 	 * @param string $name Theme name
 	 */
 
-	function theme($name)
+	public function __construct($name)
 	{
 		$this->name = $name;
 		$this->menu = array();
@@ -44,7 +44,7 @@ class theme
 	 * @return string Source file path for named theme
 	 */
 
-	static function path($name)
+	static public function path($name)
 	{
 		return txpath.DS.THEME.$name.DS.$name.'.php';
 	}
@@ -56,7 +56,7 @@ class theme
 	 * @return object|bool An initialised theme object or FALSE on failure
 	 */
 
-	static function factory($name)
+	static public function factory($name)
 	{
 		$path = theme::path($name);
 		if (is_readable($path))
@@ -86,7 +86,7 @@ class theme
 	 * @return obj    A valid theme object
 	 */
 
-	static function init($name = '')
+	static public function init($name = '')
 	{
 		static $instance;
 
@@ -120,7 +120,7 @@ class theme
 	 * @return array Alphabetically sorted array of all available theme names
 	 */
 
-	static function names()
+	static public function names()
 	{
 		$dirs = glob(txpath.DS.THEME.'*');
 		if (is_array($dirs))
@@ -151,7 +151,7 @@ class theme
 	 * @return bool    True on success, false on unavailable/invalid ancestor theme
 	 */
 
-	static function based_on($name)
+	static public function based_on($name)
 	{
 		global $production_status;
 		$theme = theme::factory($name);
@@ -177,7 +177,7 @@ class theme
 	 * @return obj    This theme object
 	 */
 
-	function set_state($area, $event, $is_popup, $message)
+	public function set_state($area, $event, $is_popup, $message)
 	{
 		$this->is_popup = $is_popup;
 		$this->message = $message;
@@ -259,7 +259,7 @@ class theme
 	 * @return string
 	 */
 
-	function html_head()
+	public function html_head()
 	{
 		trigger_error(__FUNCTION__.' is abstract.', E_USER_ERROR);
 	}
@@ -270,7 +270,7 @@ class theme
 	 * @return string
 	 */
 
-	function header()
+	public function header()
 	{
 		trigger_error(__FUNCTION__.' is abstract.', E_USER_ERROR);
 	}
@@ -281,7 +281,7 @@ class theme
 	 * @return string
 	 */
 
-	function footer()
+	public function footer()
 	{
 		trigger_error(__FUNCTION__.' is abstract.', E_USER_ERROR);
 	}
@@ -293,7 +293,7 @@ class theme
 	 * @param bool  $modal If TRUE, immediate user interaction suggested
 	 */
 
-	function announce($thing=array('', 0), $modal = false)
+	public function announce($thing=array('', 0), $modal = false)
 	{
 		trigger_error(__FUNCTION__.' is abstract.', E_USER_ERROR);
 	}
@@ -306,7 +306,7 @@ class theme
 	 * @since 4.5.0
 	 */
 
-	function announce_async($thing=array('', 0), $modal = false)
+	public function announce_async($thing=array('', 0), $modal = false)
 	{
 		trigger_error(__FUNCTION__.' is abstract.', E_USER_ERROR);
 	}
@@ -317,7 +317,7 @@ class theme
 	 * @return array
 	 */
 
-	function manifest()
+	public function manifest()
 	{
 		return array(
 			'title'			=> '',	// Human-readable title of this theme. No HTML, keep it short.
