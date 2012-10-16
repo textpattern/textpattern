@@ -10,10 +10,10 @@
  * Creates and outputs an admin-side header.
  *
  * The output contains HTML &lt;head&gt; section and the main
- * navigation. The results are echoed opposed to returned.
+ * navigation. The results are echoed as opposed to returned.
  *
  * This function offers a way to invoke modal activity messages
- * and set the page's title.
+ * and set the page title.
  *
  * Output will automatically become silent on asynchronous
  * script responses that do not want HTML headers.
@@ -304,4 +304,5 @@
 	{
 		return '<span style="margin-right:2em"><a href="?event='.$link.'">'.$label.'</a></span>';
 	}
+
 ?>
