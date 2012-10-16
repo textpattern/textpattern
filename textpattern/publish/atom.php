@@ -15,7 +15,7 @@
  */
 
 /**
- * Generates and outputs a Atom feed.
+ * Generates and outputs an Atom feed.
  *
  * This function can only be called once on a page. It outputs
  * an Atom feed based on the requested URL parameters. Accepts
@@ -303,8 +303,7 @@
 				ini_get('output_handler') != 'ob_gzhandler' && !headers_sent()
 			)
 			{
-				// Make sure notices/warnings/errors don't fudge up the feed
-				// when compression is used.
+				// Make sure notices/warnings/errors don't fudge up the feed when compression is used.
 				$buf = '';
 				while ($b = @ob_get_clean())
 				{
@@ -427,7 +426,7 @@
 	}
 
 /**
- * Sanitizes a string for use in a feed.
+ * Sanitises a string for use in a feed.
  *
  * Tries to resolve relative URLs and encode unescaped characters.
  *
@@ -441,14 +440,14 @@
 
 	function fixup_for_feed($toFeed, $permalink) {
 
-		// fix relative urls
+		// Fix relative urls.
 		$txt = str_replace('href="/','href="'.hu.'/',$toFeed);
 		$txt = preg_replace("/href=\\\"#(.*)\"/","href=\"".$permalink."#\\1\"",$txt);
-		// This was removed as entities shouldn't be stripped in Atom feeds
-		// when the content type is html. Leaving it commented out as a reminder.
+		// This was removed as entities shouldn't be stripped in Atom feeds when the content type is HTML.
+		// Leaving it commented out as a reminder.
 		//$txt = safe_hed($txt);
 
-		// encode and entify
+		// Encode and entify.
 		$txt = preg_replace(array('/</','/>/',"/'/",'/"/'), array('&#60;','&#62;','&#039;','&#34;'), $txt);
 		$txt = preg_replace("/&(?![#0-9]+;)/i",'&amp;', $txt);
 		return $txt;
