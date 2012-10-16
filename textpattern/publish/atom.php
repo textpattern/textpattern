@@ -78,7 +78,7 @@
 			'area'
 		))));
 
-		// build filter criteria from a comma-separated list of sections and categories
+		// Build filter criteria from a comma-separated list of sections and categories.
 		$feed_filter_limit = get_pref('feed_filter_limit', 10);
 		$section = gps('section');
 		$category = gps('category');
@@ -105,7 +105,7 @@
 
 		$pub = safe_row("RealName, email", "txp_users", "privs=1");
 
-		// feed header
+		// Feed header.
 		$out[] = tag(htmlspecialchars($sitename),'title', t_text);
 		$out[] = tag(htmlspecialchars($site_slogan),'subtitle', t_text);
 		$out[] = '<link'.r_relself.' href="'.pagelinkurl(array(
@@ -117,7 +117,7 @@
 		)).'" />';
 		$out[] = '<link'.r_relalt.t_texthtml.' href="'.hu.'" />';
 
-		//Atom feeds with mail or domain name
+		// Atom feeds with mail or domain name.
 		$dn = explode('/',$siteurl);
 		$mail_or_domain = ($use_mail_on_feeds_id) ? eE($blog_mail_uid):$dn[0];
 		$out[] = tag('tag:'.$mail_or_domain.','.$blog_time_uid.':'.$blog_uid.(($section) ? '/'.join(',', $section) : '').(($category)? '/'.join(',', $category):''), 'id');
@@ -132,7 +132,7 @@
 		$out[] = tag(n.t.t.join(n.t.t, $auth).n, 'author');
 		$out[] = callback_event('atom_head');
 
-		// feed items
+		// Feed items.
 		$articles = array();
 		$section = doSlash($section);
 		$category = doSlash($category);
@@ -208,7 +208,7 @@
 
 					if ($syndicate_body_or_excerpt)
 					{
-						# short feed: use body as summary if there's no excerpt
+						// Short feed: use body as summary if there's no excerpt.
 						if (!trim($summary))
 						{
 							$summary = $content;
@@ -298,13 +298,13 @@
 		}
 		else
 		{
-			//turn on compression if we aren't using it already
+			// Turn on compression if we aren't using it already.
 			if (extension_loaded('zlib') && ini_get("zlib.output_compression") == 0 && 
 				ini_get('output_handler') != 'ob_gzhandler' && !headers_sent()
 			)
 			{
-				// make sure notices/warnings/errors don't fudge up the feed
-				// when compression is used
+				// Make sure notices/warnings/errors don't fudge up the feed
+				// when compression is used.
 				$buf = '';
 				while ($b = @ob_get_clean())
 				{
@@ -387,9 +387,9 @@
 
 			if ($cutarticles)
 			{
-				//header("HTTP/1.1 226 IM Used");
-				//This should be used as opposed to 200, but Apache doesn't like it.
-				//http://intertwingly.net/blog/2004/09/11/Vary-ETag/ says that the status code should be 200.
+				// header("HTTP/1.1 226 IM Used");
+				// This should be used as opposed to 200, but Apache doesn't like it.
+				// http://intertwingly.net/blog/2004/09/11/Vary-ETag/ says that the status code should be 200.
 				header("Cache-Control: no-store, im");
 				header("IM: feed");
 			}
