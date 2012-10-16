@@ -24,10 +24,10 @@
 
 	function atom()
 	{
-		global $thisarticle;
+		global $thisarticle, $prefs;
 		set_error_handler('feedErrorHandler');
 		ob_clean();
-		extract($GLOBALS['prefs']);
+		extract($prefs);
 
 		/**
 		 * @ignore
