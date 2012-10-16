@@ -27,7 +27,7 @@
 
 	function pagetop($pagetitle, $message = '')
 	{
-		global $siteurl, $sitename, $txp_user, $event, $step, $app_mode, $theme;
+		global $siteurl, $sitename, $txp_user, $event, $step, $app_mode, $theme, $privs;
 
 		if ($app_mode == 'async')
 		{
@@ -39,8 +39,6 @@
 		$bm = gps('bm');
 
 		$privs = safe_field("privs", "txp_users", "name = '".doSlash($txp_user)."'");
-
-		$GLOBALS['privs'] = $privs;
 
 		$areas = areas();
 		$area = false;
