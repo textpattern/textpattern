@@ -71,15 +71,19 @@
 
 		define("r_relself",' rel="self"');
 
-		$last = fetch('unix_timestamp(val)','txp_prefs','name','lastmod');
+		$last = fetch('unix_timestamp(val)', 'txp_prefs', 'name', 'lastmod');
 
-		extract(doSlash(gpsa(array('limit','area'))));
+		extract(doSlash(gpsa(array(
+			'limit',
+			'area'
+		))));
 
 		// build filter criteria from a comma-separated list of sections and categories
 		$feed_filter_limit = get_pref('feed_filter_limit', 10);
 		$section = gps('section');
 		$category = gps('category');
-		if (!is_scalar($section) || !is_scalar($category)) {
+		if (!is_scalar($section) || !is_scalar($category))
+		{
 			txp_die('Not Found', 404);
 		}
 
@@ -102,24 +106,30 @@
 		$pub = safe_row("RealName, email", "txp_users", "privs=1");
 
 		// feed header
-		$out[] = tag(htmlspecialchars($sitename),'title',t_text);
-		$out[] = tag(htmlspecialchars($site_slogan),'subtitle',t_text);
-		$out[] = '<link'.r_relself.' href="'.pagelinkurl(array('atom'=>1,'area'=>$area,'section'=>$section,'category'=>$category,'limit'=>$limit)).'" />';
+		$out[] = tag(htmlspecialchars($sitename),'title', t_text);
+		$out[] = tag(htmlspecialchars($site_slogan),'subtitle', t_text);
+		$out[] = '<link'.r_relself.' href="'.pagelinkurl(array(
+			'atom' => 1,
+			'area' => $area,
+			'section' => $section,
+			'category'=> $category,
+			'limit' => $limit
+		)).'" />';
 		$out[] = '<link'.r_relalt.t_texthtml.' href="'.hu.'" />';
 
 		//Atom feeds with mail or domain name
 		$dn = explode('/',$siteurl);
-		$mail_or_domain = ($use_mail_on_feeds_id)? eE($blog_mail_uid):$dn[0];
-		$out[] = tag('tag:'.$mail_or_domain.','.$blog_time_uid.':'.$blog_uid.(($section)? '/'.join(',', $section):'').(($category)? '/'.join(',',$category):''),'id');
+		$mail_or_domain = ($use_mail_on_feeds_id) ? eE($blog_mail_uid):$dn[0];
+		$out[] = tag('tag:'.$mail_or_domain.','.$blog_time_uid.':'.$blog_uid.(($section) ? '/'.join(',', $section) : '').(($category)? '/'.join(',', $category):''), 'id');
 
-		$out[] = tag('Textpattern','generator',' uri="http://textpattern.com/" version="'.$version.'"');
-		$out[] = tag(safe_strftime("w3cdtf",$last),'updated');
+		$out[] = tag('Textpattern', 'generator', ' uri="http://textpattern.com/" version="'.$version.'"');
+		$out[] = tag(safe_strftime("w3cdtf", $last), 'updated');
 
 		$auth[] = tag($pub['RealName'],'name');
-		$auth[] = ($include_email_atom) ? tag(eE($pub['email']),'email') : '';
-		$auth[] = tag(hu,'uri');
+		$auth[] = ($include_email_atom) ? tag(eE($pub['email']), 'email') : '';
+		$auth[] = tag(hu, 'uri');
 
-		$out[] = tag(n.t.t.join(n.t.t,$auth).n,'author');
+		$out[] = tag(n.t.t.join(n.t.t, $auth).n, 'author');
 		$out[] = callback_event('atom_head');
 
 		// feed items
@@ -127,17 +137,20 @@
 		$section = doSlash($section);
 		$category = doSlash($category);
 
-		if (!$area or $area=='article') {
-
+		if (!$area or $area == 'article')
+		{
 			$sfilter = (!empty($section)) ? "and Section in ('".join("','", $section)."')" : '';
 			$cfilter = (!empty($category))? "and (Category1 in ('".join("','", $category)."') or Category2 in ('".join("','", $category)."'))" : '';
 			$limit = ($limit) ? $limit : $rss_how_many;
-			$limit = intval(min($limit,max(100,$rss_how_many)));
+			$limit = intval(min($limit, max(100, $rss_how_many)));
 
 			$frs = safe_column("name", "txp_section", "in_rss != '1'");
 
 			$query = array();
-			foreach($frs as $f) $query[] = "and Section != '".doSlash($f)."'";
+			foreach ($frs as $f)
+			{
+				$query[] = "and Section != '".doSlash($f)."'";
+			}
 			$query[] = $sfilter;
 			$query[] = $cfilter;
 
@@ -152,9 +165,10 @@
 				"Status=4 and Posted <= now() $expired".join(' ',$query).
 				"order by Posted desc limit $limit"
 			);
-			if ($rs) {
-				while ($a = nextRow($rs)) {
-
+			if ($rs)
+			{
+				while ($a = nextRow($rs))
+				{
 					extract($a);
 					populateArticleData($a);
 					$cb = callback_event('atom_entry');
@@ -163,23 +177,28 @@
 					$a['posted'] = $uPosted;
 
 					if ($show_comment_count_in_feed)
+					{
 						$count = ($comments_count > 0) ? ' ['.$comments_count.']' : '';
-					else $count = '';
+					}
+					else
+					{
+						$count = '';
+					}
 
 					$thisauthor = get_author_name($AuthorID);
 
-					$e['thisauthor'] = tag(n.t.t.t.tag(htmlspecialchars($thisauthor),'name').n.t.t,'author');
+					$e['thisauthor'] = tag(n.t.t.t.tag(htmlspecialchars($thisauthor), 'name').n.t.t, 'author');
 
-					$e['issued'] = tag(safe_strftime('w3cdtf',$uPosted),'published');
-					$e['modified'] = tag(safe_strftime('w3cdtf',$uLastMod),'updated');
+					$e['issued'] = tag(safe_strftime('w3cdtf', $uPosted), 'published');
+					$e['modified'] = tag(safe_strftime('w3cdtf', $uLastMod), 'updated');
 
 					$escaped_title = htmlspecialchars($Title);
-					$e['title'] = tag($escaped_title.$count,'title',t_html);
+					$e['title'] = tag($escaped_title.$count, 'title', t_html);
 
 					$permlink = permlinkurl($a);
 					$e['link'] = '<link'.r_relalt.t_texthtml.' href="'.$permlink.'" />';
 
-					$e['id'] = tag('tag:'.$mail_or_domain.','.$feed_time.':'.$blog_uid.'/'.$uid,'id');
+					$e['id'] = tag('tag:'.$mail_or_domain.','.$feed_time.':'.$blog_uid.'/'.$uid, 'id');
 
 					$e['category1'] = (trim($Category1) ? '<category term="'.htmlspecialchars($Category1).'" />' : '');
 					$e['category2'] = (trim($Category2) ? '<category term="'.htmlspecialchars($Category2).'" />' : '');
@@ -187,35 +206,45 @@
 					$summary = trim(replace_relative_urls(parse($thisarticle['excerpt']), $permlink));
 					$content = trim(replace_relative_urls(parse($thisarticle['body']), $permlink));
 
-					if ($syndicate_body_or_excerpt) {
+					if ($syndicate_body_or_excerpt)
+					{
 						# short feed: use body as summary if there's no excerpt
 						if (!trim($summary))
+						{
 							$summary = $content;
+						}
 						$content = '';
 					}
 
 					if (trim($content))
-						$e['content'] = tag(n.escape_cdata($content).n,'content',t_html);
+					{
+						$e['content'] = tag(n.escape_cdata($content).n, 'content', t_html);
+					}
 
 					if (trim($summary))
-						$e['summary'] = tag(n.escape_cdata($summary).n,'summary',t_html);
+					{
+						$e['summary'] = tag(n.escape_cdata($summary).n, 'summary', t_html);
+					}
 
-					$articles[$ID] = tag(n.t.t.join(n.t.t,$e).n.$cb,'entry');
+					$articles[$ID] = tag(n.t.t.join(n.t.t, $e).n.$cb, 'entry');
 
 					$etags[$ID] = strtoupper(dechex(crc32($articles[$ID])));
 					$dates[$ID] = $uLastMod;
 				}
 			}
-		} elseif ($area=='link') {
-
+		}
+		elseif ($area=='link')
+		{
 			$cfilter = ($category) ? "category in ('".join("','", $category)."')" : '1';
 			$limit = ($limit) ? $limit : $rss_how_many;
 			$limit = intval(min($limit,max(100,$rss_how_many)));
 
 			$rs = safe_rows_start("*", "txp_link", "$cfilter order by date desc, id desc limit $limit");
 
-			if ($rs) {
-				while ($a = nextRow($rs)) {
+			if ($rs)
+			{
+				while ($a = nextRow($rs))
+				{
 					extract($a);
 
 					$e['title'] = tag(htmlspecialchars($linkname),'title',t_html);
@@ -238,35 +267,49 @@
 			}
 		}
 
-		if (!$articles) {
-			if ($section) {
-				if (safe_field('name', 'txp_section', "name in ('".join("','", $section)."')") == false) {
+		if (!$articles)
+		{
+			if ($section)
+			{
+				if (safe_field('name', 'txp_section', "name in ('".join("','", $section)."')") == false)
+				{
 					txp_die(gTxt('404_not_found'), '404');
 				}
-			} elseif ($category) {
-				switch ($area) {
-					case 'link':
-							if (safe_field('id', 'txp_category', "name = '$category' and type = 'link'") == false) {
-								txp_die(gTxt('404_not_found'), '404');
-							}
-					break;
-
-					case 'article':
-					default:
-							if (safe_field('id', 'txp_category', "name in ('".join("','", $category)."') and type = 'article'") == false) {
-								txp_die(gTxt('404_not_found'), '404');
-							}
-					break;
+			}
+			elseif ($category)
+			{
+				switch ($area)
+				{
+					case 'link' :
+						if (safe_field('id', 'txp_category', "name = '$category' and type = 'link'") == false)
+						{
+							txp_die(gTxt('404_not_found'), '404');
+						}
+						break;
+					case 'article' :
+					default :
+						if (safe_field('id', 'txp_category', "name in ('".join("','", $category)."') and type = 'article'") == false)
+						{
+							txp_die(gTxt('404_not_found'), '404');
+						}
+						break;
 				}
 			}
-		} else {
+		}
+		else
+		{
 			//turn on compression if we aren't using it already
-			if (extension_loaded('zlib') && ini_get("zlib.output_compression") == 0 && ini_get('output_handler') != 'ob_gzhandler' && !headers_sent()) {
+			if (extension_loaded('zlib') && ini_get("zlib.output_compression") == 0 && 
+				ini_get('output_handler') != 'ob_gzhandler' && !headers_sent()
+			)
+			{
 				// make sure notices/warnings/errors don't fudge up the feed
 				// when compression is used
 				$buf = '';
 				while ($b = @ob_get_clean())
+				{
 					$buf .= $b;
+				}
 				@ob_start('ob_gzhandler');
 				echo $buf;
 			}
@@ -275,14 +318,20 @@
 			$hims = serverset('HTTP_IF_MODIFIED_SINCE');
 			$imsd = ($hims) ? strtotime($hims) : 0;
 
-			if (is_callable('apache_request_headers')) {
+			if (is_callable('apache_request_headers'))
+			{
 				$headers = apache_request_headers();
-				if (isset($headers["A-IM"])) {
+				if (isset($headers["A-IM"]))
+				{
 					$canaim = strpos($headers["A-IM"], "feed");
-				} else {
+				}
+				else
+				{
 					$canaim = false;
 				}
-			} else {
+			}
+			else
+			{
 				$canaim = false;
 			}
 
@@ -290,15 +339,19 @@
 
 			$cutarticles = false;
 
-			if ($canaim !== false) {
-				foreach($articles as $id=>$thing) {
-					if (strpos($hinm, $etags[$id])) {
+			if ($canaim !== false)
+			{
+				foreach($articles as $id => $thing)
+				{
+					if (strpos($hinm, $etags[$id]))
+					{
 						unset($articles[$id]);
 						$cutarticles = true;
 						$cut_etag = true;
 					}
 
-					if ($dates[$id] < $imsd) {
+					if ($dates[$id] < $imsd)
+					{
 						unset($articles[$id]);
 						$cutarticles = true;
 						$cut_time = true;
@@ -306,31 +359,40 @@
 				}
 			}
 
-			if (isset($cut_etag) && isset($cut_time)) {
+			if (isset($cut_etag) && isset($cut_time))
+			{
 				header("Vary: If-None-Match, If-Modified-Since");
-			} else if (isset($cut_etag)) {
+			}
+			else if (isset($cut_etag))
+			{
 				header("Vary: If-None-Match");
-			} else if (isset($cut_time)) {
+			}
+			else if (isset($cut_time))
+			{
 				header("Vary: If-Modified-Since");
 			}
 
-			$etag = @join("-",$etags);
+			$etag = @join("-", $etags);
 
-			if (strstr($hinm, $etag)) {
+			if (strstr($hinm, $etag))
+			{
 				txp_status_header('304 Not Modified');
 				exit(0);
 			}
 
-			if ($etag) header('ETag: "'.$etag.'"');
+			if ($etag)
+			{
+				header('ETag: "'.$etag.'"');
+			}
 
-			if ($cutarticles) {
+			if ($cutarticles)
+			{
 				//header("HTTP/1.1 226 IM Used");
 				//This should be used as opposed to 200, but Apache doesn't like it.
 				//http://intertwingly.net/blog/2004/09/11/Vary-ETag/ says that the status code should be 200.
 				header("Cache-Control: no-store, im");
 				header("IM: feed");
 			}
-
 		}
 
 		$out = array_merge($out, $articles);
