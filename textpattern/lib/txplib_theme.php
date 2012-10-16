@@ -6,7 +6,10 @@
  * @package Theme
  */
 
-if (!defined ('THEME')) define('THEME', 'theme/');
+if (!defined('THEME'))
+{
+	define('THEME', 'theme/');
+}
 
 /**
  * Admin-side theme.
@@ -176,8 +179,8 @@ class theme
 			sort($out, SORT_STRING);
 			return $out;
 		}
-		else
-			return array();
+
+		return array();
 	}
 
 	/**
@@ -218,22 +221,25 @@ class theme
 		$this->is_popup = $is_popup;
 		$this->message = $message;
 
-		if ($is_popup) return $this;
+		if ($is_popup)
+		{
+			return $this;
+		}
 
 		// use legacy areas() for b/c
 		$areas = areas();
 		$defaults = array(
-				'content' => 'article',
-				'presentation' => 'page',
-				'admin' => 'admin'
+			'content' => 'article',
+			'presentation' => 'page',
+			'admin' => 'admin'
 		);
 
-		if(empty($areas['start']))
+		if (empty($areas['start']))
 		{
 			unset($areas['start']);
 		}
 
-		if(empty($areas['extensions']))
+		if (empty($areas['extensions']))
 		{
 			unset($areas['extensions']);
 		}
@@ -243,12 +249,11 @@ class theme
 		foreach ($areas as $ar => $items)
 		{
 			$l_ = gTxt('tab_'.$ar);
-			$e_ = (array_key_exists($ar,$defaults)) ? $defaults[$ar] : reset($areas[$ar]);
+			$e_ = (array_key_exists($ar, $defaults)) ? $defaults[$ar] : reset($areas[$ar]);
 			$i_ = array();
 
 			if (has_privs('tab.'.$ar))
 			{
-			
 				if (!has_privs($e_)) 
 				{
 					$e_ = '';
@@ -258,11 +263,10 @@ class theme
 				{
 					if (has_privs($b))
 					{
-						
 						if ($e_ === '') {
 							$e_ = $b;
 						}
-						
+
 						if ($b == $dflt_tab)
 						{
 							$this->menu[$ar]['event'] = $dflt_tab;
@@ -271,7 +275,7 @@ class theme
 						$i_[] = array('label' => $a, 'event' => $b, 'active' => ($b == $event));
 					}
 				}
-				
+
 				if ($e_)
 				{
 					$this->menu[$ar] = array(
@@ -329,7 +333,7 @@ class theme
 	 * @param bool  $modal If TRUE, immediate user interaction suggested
 	 */
 
-	public function announce($thing=array('', 0), $modal = false)
+	public function announce($thing = array('', 0), $modal = false)
 	{
 		trigger_error(__FUNCTION__.' is abstract.', E_USER_ERROR);
 	}
@@ -342,7 +346,7 @@ class theme
 	 * @since 4.5.0
 	 */
 
-	public function announce_async($thing=array('', 0), $modal = false)
+	public function announce_async($thing = array('', 0), $modal = false)
 	{
 		trigger_error(__FUNCTION__.' is abstract.', E_USER_ERROR);
 	}
@@ -356,12 +360,12 @@ class theme
 	public function manifest()
 	{
 		return array(
-			'title'			=> '',	// Human-readable title of this theme. No HTML, keep it short.
-			'author' 		=> '',	// Name(s) of this theme's creator(s).
-			'author_uri' 	=> '',	// URI of the theme's site. Decent vanity is accepted.
-			'version' 		=> '',	// Version numbering. Mind version_compare().
-			'description' 	=> '',	// Human readable short description. No HTML.
-			'help' 			=> '',	// URI of the theme's help and docs. Strictly optional.
+			'title'        => '',// Human-readable title of this theme. No HTML, keep it short.
+			'author'       => '', // Name(s) of this theme's creator(s).
+			'author_uri'   => '', // URI of the theme's site. Decent vanity is accepted.
+			'version'      => '', // Version numbering. Mind version_compare().
+			'description'  => '', // Human readable short description. No HTML.
+			'help'         => '', // URI of the theme's help and docs. Strictly optional.
 		);
 	}
 }
