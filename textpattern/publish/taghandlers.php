@@ -1159,12 +1159,17 @@
 
 		else
 		{
+			if ($parent)
+			{
+				$parents = join(',', quote_list(do_list($parent)));
+			}
+
 			if ($children)
 			{
 				$shallow = '';
 			} else {
 				// descend only one level from either 'parent' or 'root', plus parent category
-				$shallow = ($parent) ? "and (parent = '".doSlash($parent)."' or name = '".doSlash($parent)."')" : "and parent = 'root'" ;
+				$shallow = ($parent) ? "and (parent in($parents) or name in($parents))" : "and parent = 'root'" ;
 			}
 
 			if ($exclude)
@@ -1178,14 +1183,20 @@
 
 			if ($parent)
 			{
-				$qs = safe_row('lft, rgt', 'txp_category', "type = '".doSlash($type)."' and name = '".doSlash($parent)."'");
+				$qs = safe_rows('lft, rgt', 'txp_category', "type = '".doSlash($type)."' and name in($parents)");
 
 				if ($qs)
 				{
-					extract($qs);
+					$between = array();
+
+					foreach ($qs as $a)
+					{
+						extract($a);
+						$between[] = "(lft between $lft and $rgt)";
+					}
 
 					$rs = safe_rows_start('name, title', 'txp_category',
-						"(lft between $lft and $rgt) and type = '".doSlash($type)."' and name != 'default' $exclude $shallow order by ".($sort ? $sort : 'lft ASC'));
+						"(".join(' or ', $between).") and type = '".doSlash($type)."' and name != 'default' $exclude $shallow order by ".($sort ? $sort : 'lft ASC'));
 				} else {
 					$rs = array();
 				}
