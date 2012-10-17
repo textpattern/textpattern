@@ -26,7 +26,7 @@ function checkCookies()
 }
 
 /**
- * Spawns a centred popup window.
+ * Spawns a centered popup window.
  *
  * @param {string}  url     The location
  * @param {integer} width   The width
@@ -54,6 +54,7 @@ function popWin(url, width, height, options)
 /**
  * Legacy multi-edit tool.
  *
+ * @param      {object} elm
  * @deprecated in 4.6.0
  */
 
