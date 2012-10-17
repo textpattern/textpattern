@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Outputs CSS files.
+ *
+ * @since 4.2.0
+ */
 
 if (@ini_get('register_globals')) {
 	if (isset($_REQUEST['GLOBALS']) || isset($_FILES['GLOBALS'])) {
@@ -40,6 +45,9 @@ header('Content-type: text/css');
 
 if (!defined("txpath"))
 {
+	/**
+	 * @ignore
+	 */
 	define("txpath", dirname(__FILE__).'/textpattern');
 }
 
