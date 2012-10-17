@@ -12,6 +12,9 @@
 
 if (!defined("txpath"))
 {
+	/**
+	 * @ignore
+	 */
 	define("txpath", dirname(__FILE__));
 }
 
