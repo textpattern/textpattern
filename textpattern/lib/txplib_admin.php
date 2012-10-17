@@ -68,7 +68,10 @@
 	{
 		global $txp_user, $sitename;
 
-		if ( empty( $name)) $name = $txp_user;
+		if (empty($name))
+		{
+			$name = $txp_user;
+		}
 
 		$message = gTxt('greeting').' '.$name.','.
 
@@ -125,7 +128,7 @@
 		else
 		{
 			// Though 'unknown_author' could be thrown, send generic 'request_sent' message
-			// instead so that (non-)existence of account names are not leaked
+			// instead so that (non-)existence of account names are not leaked.
 			return gTxt('password_reset_confirmation_request_sent');
 		}
 	}
