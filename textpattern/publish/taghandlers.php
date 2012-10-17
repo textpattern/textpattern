@@ -1144,9 +1144,17 @@
 			'this_section' => 0,
 			'type'         => 'article',
 			'wraptag'      => '',
+			'limit'        => null,
+			'offset'       => null,
 		), $atts));
 
 		$sort = doSlash($sort);
+		$sql_limit = '';
+
+		if ($limit !== null || $offset !== null)
+		{
+			$sql_limit = ' limit '.intval($offset).', '.($limit === null ? 9999 : intval($limit));
+		}
 
 		if ($categories)
 		{
@@ -1154,7 +1162,7 @@
 			$categories = join("','", doSlash($categories));
 
 			$rs = safe_rows_start('name, title', 'txp_category',
-				"type = '".doSlash($type)."' and name in ('$categories') order by ".($sort ? $sort : "field(name, '$categories')"));
+				"type = '".doSlash($type)."' and name in ('$categories') order by ".($sort ? $sort : "field(name, '$categories')").$sql_limit);
 		}
 
 		else
@@ -1196,7 +1204,7 @@
 					}
 
 					$rs = safe_rows_start('name, title', 'txp_category',
-						"(".join(' or ', $between).") and type = '".doSlash($type)."' and name != 'default' $exclude $shallow order by ".($sort ? $sort : 'lft ASC'));
+						"(".join(' or ', $between).") and type = '".doSlash($type)."' and name != 'default' $exclude $shallow order by ".($sort ? $sort : 'lft ASC').$sql_limit);
 				} else {
 					$rs = array();
 				}
@@ -1205,7 +1213,7 @@
 			else
 			{
 				$rs = safe_rows_start('name, title', 'txp_category',
-					"type = '".doSlash($type)."' and name not in('default','root') $exclude $shallow order by ".($sort ? $sort : 'name ASC'));
+					"type = '".doSlash($type)."' and name not in('default','root') $exclude $shallow order by ".($sort ? $sort : 'name ASC').$sql_limit);
 			}
 		}
 
