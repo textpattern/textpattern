@@ -35,7 +35,7 @@ if ($event == 'lang') {
 }
 
 /**
- * Generate a select list of installed languages
+ * Generate a &lt;select&gt; element of installed languages
  *
  * @param  string $name The HTML name and ID to assign to the select control
  * @param  string $val  The currently active language identifier (en-gb, fr-fr, ...)
@@ -354,11 +354,11 @@ function get_language()
 
 				if ($exists)
 				{
-					$value['ok'] = safe_update('txp_lang',$q,"lang='".doSlash($lang_code)."' AND name='".doSlash($value['name'])."'");
+					$value['ok'] = safe_update('txp_lang', $q, "owner = '".doSlash(LANG_OWNER_SYSTEM)."' AND lang='".doSlash($lang_code)."' AND name='".doSlash($value['name'])."'");
 				}
 				else
 				{
-					$value['ok'] = safe_insert('txp_lang',$q.", lang='".doSlash($lang_code)."'");
+					$value['ok'] = safe_insert('txp_lang', $q.", lang='".doSlash($lang_code)."'");
 				}
 			}
 

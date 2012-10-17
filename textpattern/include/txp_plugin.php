@@ -415,8 +415,10 @@ EOS
 					{
 						if (!empty($textpack))
 						{
+							// Plugins tag their textpack by plugin name.
+							// The ownership may be overridden in the textpack itself.
+							$textpack = "#@owner {$name}".n.$textpack;
 							install_textpack($textpack, false);
-							// TODO: How do we get rid of stale Textpacks once a plugin is uninstalled?
 						}
 
 						if ($flags & PLUGIN_LIFECYCLE_NOTIFY)
@@ -500,7 +502,10 @@ EOS
 						callback_event("plugin_lifecycle.$name", 'deleted');
 					}
 				}
+				// Remove plugins...
 				safe_delete('txp_plugin', $where);
+				// ...and their l10n strings.
+				safe_delete('txp_lang', "owner IN ('".join("','", doSlash($selected))."')");
 				break;
 
 			case 'changestatus':

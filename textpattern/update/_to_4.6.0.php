@@ -35,4 +35,13 @@
 
 	// Store IPv6 properly in logs.
 	safe_alter('txp_log', "MODIFY ip VARCHAR(45) NOT NULL default ''");
+
+	// Support for l10n string owners.
+	$cols = getThings('describe `'.PFX.'txp_lang`');
+	if (!in_array('owner', $cols))
+	{
+		safe_alter('txp_lang',
+			"ADD owner VARCHAR(64) NOT NULL DEFAULT '' AFTER event, ADD INDEX owner (owner)");
+	}
+
 ?>

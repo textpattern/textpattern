@@ -610,7 +610,28 @@ define('SCRIPT_URL', 0x1);
 
 define('SCRIPT_ATTACH_VERSION', 0x2);
 
+/**
+ * The localised string is owned by the core system.
+ *
+ * The string will be updated from the remote language server.
+ *
+ * @since   4.6.0
+ * @package L10n
+ */
+
+define('LANG_OWNER_SYSTEM', '');
+
+/**
+ * The localised string is owned by the individual site.
+ *
+ * The string will not be updated from the remote language server.
+ *
+ * @since   4.6.0
+ * @package L10n
+ */
+
+define('LANG_OWNER_SITE', 'site');
+
 error_reporting($old_level);
 unset($old_level);
-
 ?>

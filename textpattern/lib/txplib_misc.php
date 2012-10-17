@@ -3037,13 +3037,12 @@ function modal_halt($thing)
 //-------------------------------------------------------------
 	function install_textpack($textpack, $add_new_langs = false)
 	{
-		global $prefs;
-
 		$textpack = explode(n, $textpack);
 		if (empty($textpack)) return 0;
 
-		// presume site language equals textpack language
+		// Presume site language equals textpack language, string owner is LANG_OWNER_SITE.
 		$language = get_pref('language', 'en-gb');
+		$owner = doSlash(LANG_OWNER_SITE);
 
 		$installed_langs = safe_column('lang', 'txp_lang', "1 = 1 group by lang");
 		$doit = true;
@@ -3067,6 +3066,13 @@ function modal_halt($thing)
 				continue;
 			}
 
+			// A line matching "#@owner xxxx" establishes the designated owner for all subsequent lines
+			if (preg_match('/^#@owner\s+(.+)$/', $line, $m))
+			{
+				$owner = doSlash($m[1]);
+				continue;
+			}
+
 			// A line matching "#@event_name" establishes the event value for all subsequent lines
 			if (preg_match('/^#@([a-zA-Z0-9_-]+)$/', $line, $m))
 			{
@@ -3085,11 +3091,11 @@ function modal_halt($thing)
 					// Store text; do *not* tamper with last modification date from RPC but use a well-known date in the past
 					if (safe_count('txp_lang', $where))
 					{
-						safe_update('txp_lang',	"lastmod='2005-08-14', data='$value', event='$event'", $where);
+						safe_update('txp_lang',	"lastmod='2005-08-14', data='$value', event='$event', owner='$owner'", $where);
 					}
 					else
 					{
-						safe_insert('txp_lang',	"lastmod='2005-08-14', data='$value', event='$event', lang='$language', name='$name'");
+						safe_insert('txp_lang',	"lastmod='2005-08-14', data='$value', event='$event', owner='$owner', lang='$language', name='$name'");
 					}
 					++$done;
 				}
