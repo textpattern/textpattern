@@ -26,7 +26,7 @@ function checkCookies()
 }
 
 /**
- * Spawns a centered popup window.
+ * Spawns a centred popup window.
  *
  * @param {string}  url     The location
  * @param {integer} width   The width
