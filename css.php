@@ -48,6 +48,7 @@ if (!defined("txpath"))
 	/**
 	 * @ignore
 	 */
+
 	define("txpath", dirname(__FILE__).'/textpattern');
 }
 
@@ -59,6 +60,11 @@ if (!isset($txpcfg['table_prefix']))
 }
 
 $nolog = 1;
+
+/**
+ * @ignore
+ */
+
 define("txpinterface", "css");
 include txpath.'/publish.php';
 $s = gps('s');
