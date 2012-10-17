@@ -1,22 +1,20 @@
 <?php
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-                (M O S T L Y)  D E P R E C A T E D  AS  OF  1.0RC4
+/**
+ * Collection of user configuration options.
+ *
+ * @package User
+ */
 
- *	IMPORTANT:  Most settings in this file  (all that is in  $txpac)  have moved
-	into the  Database. This file remains here  mainly for  not breaking updates
- *	for people that are coming from older revisions (up to and including 1.0RC3)!
-	If you would like to change any of these settings, you can do so in Advanced
- *	Preferences	of your Textpattern admin panel.
+/**
+ * Textpattern admin options.
+ *
+ * These have been moved to the database.
+ *
+ * @global     array $txpac
+ * @deprecated in 1.0.0
+ */
 
- *	Only the Permission-Settings at the bottom this file are still actively used,
-	and these will be moved to the db before the next release
-
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
-
-// Textpattern admin options
-// unless stated otherwise, 0 = false, 1 = true
 $txpac = array(
 // -------------------------------------------------------------
 // bypass the Txp CSS editor entirely
@@ -177,7 +175,11 @@ $txpac = array(
 
 );
 
-// -------------------------------------------------------------
+/**
+ * Sets permissions.
+ *
+ * @global array $txp_permissions
+ */
 
 $txp_permissions = array(
 	'admin'                       => '1,2,3,4,5,6',
@@ -239,6 +241,12 @@ $txp_permissions = array(
 	'tab.presentation'            => '1,2,3,    6',
 	'tag'                         => '1,2,3,4,5,6',
 );
+
+/**
+ * List of user groups.
+ *
+ * @global array $txp_groups
+ */
 
 $txp_groups = array(
 	1 => 'publisher',
