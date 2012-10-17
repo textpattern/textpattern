@@ -79,7 +79,7 @@
 	function generate_password($length = 10)
 	{
 		$pass = '';
-		$chars = '23456789abcdefghijkmnopqrstuvwxyz';
+		$chars = PASSWORD_SYMBOLS;
 		$length = min(strlen($chars), $length);
 		$i = 0;
 

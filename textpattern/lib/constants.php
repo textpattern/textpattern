@@ -312,6 +312,19 @@ if (!defined('PASSWORD_PORTABILITY'))
 	define('PASSWORD_PORTABILITY', true);
 }
 
+if (!defined('PASSWORD_SYMBOLS'))
+{
+	/**
+	 * Symbols used in auto-generated passwords.
+	 *
+	 * @package User
+	 * @since   4.6.0
+	 * @see     generate_password()
+	 */
+
+	define('PASSWORD_SYMBOLS', '23456789abcdefghijkmnopqrstuvwxyz');
+}
+
 if (!defined('LOGIN_COOKIE_HTTP_ONLY'))
 {
 	/**
