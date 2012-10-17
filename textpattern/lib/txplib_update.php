@@ -1,6 +1,26 @@
 <?php
 
-//-------------------------------------------------------------
+/**
+ * Collection of update tools.
+ *
+ * @package Update
+ */
+
+/**
+ * Installs language strings from a file.
+ *
+ * This function imports language strings to the database
+ * from a file placed to the ../lang directory.
+ *
+ * Running this function will delete any missing strings of any
+ * language specific event that were included in the file. Empty
+ * strings are also stripped from database.
+ *
+ * @param   string $lang The language code
+ * @return  bool   TRUE on success
+ * @package i18n
+ */
+
 function install_language_from_file($lang)
 {
 	$lang_file = txpath.'/lang/'.$lang.'.txt';
