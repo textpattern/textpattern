@@ -18,7 +18,7 @@
  *
  * @param   string $lang The language code
  * @return  bool   TRUE on success
- * @package i18n
+ * @package L10n
  */
 
 function install_language_from_file($lang)
