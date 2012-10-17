@@ -82,14 +82,17 @@
 		$chars = PASSWORD_SYMBOLS;
 		$length = min(strlen($chars), $length);
 		$i = 0;
+		$max = strlen($chars)-1;
+		$used = array();
 
 		while ($i < $length)
 		{
-			$char = substr($chars, mt_rand(0, strlen($chars)-1), 1);
+			$offset = mt_rand(0, $max);
 
-			if (!strstr($pass, $char))
+			if (!in_array($offset, $used))
 			{
-				$pass .= $char;
+				$pass .= substr($chars, $offset, 1);
+				$used[] = $offset;
 				$i++;
 			}
 		}
