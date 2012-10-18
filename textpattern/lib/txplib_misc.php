@@ -15,7 +15,7 @@
 
 	function deNull($in)
 	{
-		return (is_array($in) ? doArray($in, 'deNull') : strtr($in, array("\0" => '')));
+		return is_array($in) ? doArray($in, 'deNull') : strtr($in, array("\0" => ''));
 	}
 
 /**
@@ -27,7 +27,7 @@
 
 	function deCRLF($in)
 	{
-		return (is_array($in) ? doArray($in, 'deCRLF') : strtr($in, array("\n" => '', "\r" => '')));
+		return is_array($in) ? doArray($in, 'deCRLF') : strtr($in, array("\n" => '', "\r" => ''));
 	}
 
 /**
@@ -40,18 +40,18 @@
  * echo doArray(array('value1', 'value2'), 'intval');
  */
 
-	function doArray($in,$function)
+	function doArray($in, $function)
 	{
-		if(is_array($in))
+		if (is_array($in))
 		{
 			return array_map($function, $in);
 		}
-		
-		if(is_array($function))
+
+		if (is_array($function))
 		{
 			return call_user_func($function, $in);
 		}
-		
+
 		return $function($in);
 	}
 
@@ -78,7 +78,7 @@
 
 	function doStripTags($in)
 	{
-		return is_array($in) ? doArray($in, 'doStripTags') : doArray($in,'strip_tags');
+		return is_array($in) ? doArray($in, 'doStripTags') : doArray($in, 'strip_tags');
 	}
 
 /**
@@ -90,7 +90,7 @@
 
 	function doDeEnt($in)
 	{
-		return doArray($in,'deEntBrackets');
+		return doArray($in, 'deEntBrackets');
 	}
 
 /**
@@ -111,9 +111,11 @@
 			'&#x3E;' => '>'
 		);
 
-		foreach($array as $k=>$v){
-			$in = preg_replace("/".preg_quote($k)."/i",$v, $in);
+		foreach ($array as $k => $v)
+		{
+			$in = preg_replace("/".preg_quote($k)."/i", $v, $in);
 		}
+
 		return $in;
 	}
 
@@ -134,7 +136,7 @@
 
 	function doSlash($in)
 	{
-		return doArray($in,'safe_escape');
+		return doArray($in, 'safe_escape');
 	}
 
 /**
@@ -176,7 +178,7 @@
 
 	function doSpecial($in)
 	{
-		return doArray($in,'txpspecialchars');
+		return doArray($in, 'txpspecialchars');
 	}
 
 /**
@@ -239,10 +241,10 @@
  * @package Filter
  */
 
-function escape_js($js)
-{
-	return addcslashes($js, "\\\'\"\n\r");
-}
+	function escape_js($js)
+	{
+		return addcslashes($js, "\\\'\"\n\r");
+	}
 
 /**
  * A shell for htmlspecialchars() with $flags defaulting to ENT_QUOTES.
@@ -304,11 +306,12 @@ function escape_js($js)
  * @package L10n
  */
 
-	function gTxt($var, $atts=array(), $escape='html')
+	function gTxt($var, $atts = array(), $escape = 'html')
 	{
 		global $textarray;
 
-		if (!is_array($atts)) {
+		if (!is_array($atts))
+		{
 			$atts = array();
 		}
 
@@ -321,13 +324,20 @@ function escape_js($js)
 		}
 
 		$v = strtolower($var);
-		if (isset($textarray[$v])) {
+		if (isset($textarray[$v]))
+		{
 			$out = $textarray[$v];
-			if ($out !== '') return strtr($out, $atts);
+			if ($out !== '')
+			{
+				return strtr($out, $atts);
+			}
 		}
 
 		if ($atts)
+		{
 			return $var.': '.join(', ', $atts);
+		}
+
 		return $var;
 	}
 
@@ -351,12 +361,13 @@ function escape_js($js)
 	{
 		global $textarray_script;
 
-		if (!is_array($textarray_script)) {
+		if (!is_array($textarray_script))
+		{
 			$textarray_script = array();
 		}
 
-		$data = (is_array($var) ? array_map('gTxt', $var, $atts) : (array)gTxt($var, $atts));
-		$textarray_script = $textarray_script + array_combine((array)$var, $data);
+		$data = is_array($var) ? array_map('gTxt', $var, $atts) : (array) gTxt($var, $atts);
+		$textarray_script = $textarray_script + array_combine((array) $var, $data);
 	}
 
 /**
@@ -384,13 +395,16 @@ function escape_js($js)
 
 	function dmp()
 	{
-		static $f = FALSE;
+		static $f = false;
 
-		if(defined('txpdmpfile'))
+		if (defined('txpdmpfile'))
 		{
 			global $prefs;
 
-			if(!$f) $f = fopen($prefs['tempdir'].'/'.txpdmpfile, 'a');
+			if(!$f)
+			{
+				$f = fopen($prefs['tempdir'].'/'.txpdmpfile, 'a');
+			}
 
 			$stack = get_caller();
 			fwrite($f, "\n[".$stack[0].t.safe_strftime('iso8601')."]\n");
@@ -398,7 +412,10 @@ function escape_js($js)
 
 		$a = func_get_args();
 
-		if(!$f) echo "<pre>".n;
+		if (!$f)
+		{
+			echo "<pre>".n;
+		}
 
 		foreach ($a as $thing)
 		{
@@ -406,15 +423,18 @@ function escape_js($js)
 
 			if ($f)
 			{
-				fwrite($f, $out."\n");
+				fwrite($f, $out.n);
 			}
 			else
 			{
-				echo txpspecialchars($out), n;
+				echo txpspecialchars($out).n;
 			}
 		}
 
-		if(!$f) echo "</pre>".n;
+		if (!$f)
+		{
+			echo "</pre>".n;
+		}
 	}
 
 /**
@@ -437,10 +457,13 @@ function escape_js($js)
 		foreach(array($lang, 'en-gb') as $lang_code)
 		{
 			$rs = (txpinterface == 'admin')
-				? safe_rows('name, data','txp_lang',"lang='".doSlash($lang_code)."'")
-				: safe_rows('name, data','txp_lang',"lang='".doSlash($lang_code)."' AND ( event='public' OR event='common')");
+				? safe_rows('name, data', 'txp_lang', "lang='".doSlash($lang_code)."'")
+				: safe_rows('name, data', 'txp_lang', "lang='".doSlash($lang_code)."' AND ( event='public' OR event='common')");
 
-			if (!empty($rs)) break;
+			if (!empty($rs))
+			{
+				break;
+			}
 		}
 
 		$out = array();
@@ -449,24 +472,32 @@ function escape_js($js)
 		{
 			foreach ($rs as $a)
 			{
-				if (!empty($a['name'])) {
+				if (!empty($a['name']))
+				{
 					$out[$a['name']] = $a['data'];
 				}
 			}
-		}else{
-			#backward compatibility stuff. Remove when necessary.
+		}
+		else
+		{
+			// Backward compatibility stuff. Remove when necessary.
 			$filename = is_file(txpath.'/lang/'.$lang.'.txt')
-			?	txpath.'/lang/'.$lang.'.txt'
-			:	txpath.'/lang/en-gb.txt';
+				? txpath.'/lang/'.$lang.'.txt'
+				: txpath.'/lang/en-gb.txt';
 
 			$file = @fopen($filename, "r");
-			if ($file) {
-				while (!feof($file)) {
+			if ($file)
+			{
+				while (!feof($file))
+				{
 					$line = fgets($file, 4096);
-				if($line[0]=='#') continue;
-				@list($name,$val) = explode(' => ',trim($line));
-				$out[$name] = $val;
-			 }
+					if ($line[0] == '#')
+					{
+						continue;
+					}
+					@list($name, $val) = explode(' => ', trim($line));
+					$out[$name] = $val;
+				}
 				@fclose($filename);
 			}
 		}
@@ -487,10 +518,15 @@ function escape_js($js)
 		$filename = is_file(txpath.'/lang/'.$lang.'_dates.txt')?
 			txpath.'/lang/'.$lang.'_dates.txt':
 			txpath.'/lang/en-gb_dates.txt';
-		$file = @file(txpath.'/lang/'.$lang.'_dates.txt','r');
-		if(is_array($file)) {
-			foreach($file as $line) {
-				if($line[0]=='#' || strlen($line) < 2) continue;
+		$file = @file(txpath.'/lang/'.$lang.'_dates.txt', 'r');
+		if (is_array($file))
+		{
+			foreach ($file as $line)
+			{
+				if ($line[0] == '#' || strlen($line) < 2)
+				{
+					continue;
+				}
 				list($name,$val) = explode('=>',$line,2);
 				$out[trim($name)] = trim($val);
 			}
@@ -504,7 +540,7 @@ function escape_js($js)
  *
  * @param   string       $event The event to get, e.g. "common", "admin", "public"
  * @return  array|string Array of string on success, or an empty string when no strings were found
- * @package i18n
+ * @package L10n
  */
 
 	function load_lang_event($event)
@@ -513,9 +549,9 @@ function escape_js($js)
 
 		$installed = (false !== safe_field('name', 'txp_lang',"lang='".doSlash($lang)."' limit 1"));
 
-		$lang_code = ($installed)? $lang : 'en-gb';
+		$lang_code = ($installed) ? $lang : 'en-gb';
 
-		$rs = safe_rows_start('name, data','txp_lang',"lang='".doSlash($lang_code)."' AND event='".doSlash($event)."'");
+		$rs = safe_rows_start('name, data', 'txp_lang', "lang='".doSlash($lang_code)."' AND event='".doSlash($event)."'");
 
 		$out = array();
 
@@ -526,6 +562,7 @@ function escape_js($js)
 				$out[$a['name']] = $a['data'];
 			}
 		}
+
 		return ($out) ? $out : '';
 	}
 
@@ -566,7 +603,9 @@ function escape_js($js)
 		global $txp_permissions;
 
 		if (!isset($txp_permissions[$res]))
+		{
 			$txp_permissions[$res] = $perm;
+		}
 	}
 
 /**
@@ -578,13 +617,15 @@ function escape_js($js)
  * @package User
  */
 
-	function has_privs($res, $user='')
+	function has_privs($res, $user = '')
 	{
 		global $txp_user, $txp_permissions;
 		static $privs;
 
 		if (empty($user))
+		{
 			$user = $txp_user;
+		}
 
 		if (!isset($privs[$user]))
 		{
@@ -612,11 +653,13 @@ function escape_js($js)
  * @package User
  */
 
-	function require_privs($res, $user='')
+	function require_privs($res, $user = '')
 	{
 		if (!has_privs($res, $user))
+		{
 			exit(pageTop('Restricted').'<p class="restricted-area">'.
 				gTxt('restricted_area').'</p>');
+		}
 	}
 
 /**
@@ -631,9 +674,13 @@ function escape_js($js)
 	function the_privileged($res)
 	{
 		global $txp_permissions;
-		if (isset($txp_permissions[$res])) {
+
+		if (isset($txp_permissions[$res]))
+		{
 			return safe_column('name', 'txp_users', "FIND_IN_SET(privs, '{$txp_permissions[$res]}') order by name asc");
-		} else {
+		}
+		else
+		{
 			return array();
 		}
 	}
@@ -667,7 +714,7 @@ function escape_js($js)
 	function sizeImage($name)
 	{
 		$size = @getimagesize($name);
-		return(is_array($size)) ? $size[3] : false;
+		return is_array($size) ? $size[3] : false;
 	}
 
 /**
@@ -684,23 +731,32 @@ function escape_js($js)
 	function gps($thing)
 	{
 		$out = '';
-		if (isset($_GET[$thing])) {
-			if (MAGIC_QUOTES_GPC) {
+		if (isset($_GET[$thing]))
+		{
+			if (MAGIC_QUOTES_GPC)
+			{
 				$out = doStrip($_GET[$thing]);
-			} else {
+			}
+			else
+			{
 				$out = $_GET[$thing];
 			}
 
-			$out = doArray( $out, 'deCRLF' ); # Remove CRLF from Get parameters
-		} elseif (isset($_POST[$thing])) {
-			if (MAGIC_QUOTES_GPC) {
+			$out = doArray($out, 'deCRLF');
+		}
+		elseif (isset($_POST[$thing]))
+		{
+			if (MAGIC_QUOTES_GPC)
+			{
 				$out = doStrip($_POST[$thing]);
-			} else {
-				$out = $_POST[$thing]; # CRLF ok in posted vars
+			}
+			else
+			{
+				$out = $_POST[$thing];
 			}
 		}
 
-		$out = doArray($out, 'deNull'); # Remove Nulls to avoid string truncations in C calls (ie. All the filesystem routines)
+		$out = doArray($out, 'deNull');
 
 		return $out;
 	}
@@ -721,13 +777,16 @@ function escape_js($js)
 
 	function gpsa($array)
 	{
-		if(is_array($array)) {
+		if (is_array($array))
+		{
 			$out = array();
-			foreach($array as $a) {
+			foreach ($array as $a)
+			{
 				$out[$a] = gps($a);
 			}
 			return $out;
 		}
+
 		return false;
 	}
 
@@ -745,10 +804,14 @@ function escape_js($js)
 	function ps($thing)
 	{
 		$out = '';
-		if (isset($_POST[$thing])) {
-			if (MAGIC_QUOTES_GPC) {
+		if (isset($_POST[$thing]))
+		{
+			if (MAGIC_QUOTES_GPC)
+			{
 				$out = doStrip($_POST[$thing]);
-			} else {
+			}
+			else
+			{
 				$out = $_POST[$thing];
 			}
 		}
@@ -768,7 +831,8 @@ function escape_js($js)
 
 	function psa($array)
 	{
-		foreach($array as $a) {
+		foreach($array as $a)
+		{
 			$out[$a] = ps($a);
 		}
 		return $out;
@@ -784,7 +848,8 @@ function escape_js($js)
 
 	function psas($array)
 	{
-		foreach($array as $a) {
+		foreach($array as $a)
+		{
 			$out[$a] = doStripTags(ps($a));
 		}
 		return $out;
@@ -799,10 +864,14 @@ function escape_js($js)
 
 	function stripPost()
 	{
-		if (isset($_POST)) {
-			if (MAGIC_QUOTES_GPC) {
+		if (isset($_POST))
+		{
+			if (MAGIC_QUOTES_GPC)
+			{
 				return doStrip($_POST);
-			} else {
+			}
+			else
+			{
 				return $_POST;
 			}
 		}
@@ -840,7 +909,8 @@ function escape_js($js)
 	function remote_addr()
 	{
 		$ip = serverSet('REMOTE_ADDR');
-		if (($ip == '127.0.0.1' || $ip == '::1' || $ip == '::ffff:127.0.0.1' || $ip == serverSet('SERVER_ADDR')) && serverSet('HTTP_X_FORWARDED_FOR')) {
+		if (($ip == '127.0.0.1' || $ip == '::1' || $ip == '::ffff:127.0.0.1' || $ip == serverSet('SERVER_ADDR')) && serverSet('HTTP_X_FORWARDED_FOR'))
+		{
 			$ips = explode(', ', serverSet('HTTP_X_FORWARDED_FOR'));
 			$ip = $ips[0];
 		}
@@ -866,14 +936,27 @@ function escape_js($js)
 
  	function pcs($thing)
 	{
-		if (isset($_COOKIE["txp_".$thing])) {
-			if (MAGIC_QUOTES_GPC) {
+		if (isset($_COOKIE["txp_".$thing]))
+		{
+			if (MAGIC_QUOTES_GPC)
+			{
 				return doStrip($_COOKIE["txp_".$thing]);
-			} else return $_COOKIE["txp_".$thing];
-		} elseif (isset($_POST[$thing])) {
-			if (MAGIC_QUOTES_GPC) {
+			}
+			else
+			{
+				return $_COOKIE["txp_".$thing];
+			}
+		}
+		elseif (isset($_POST[$thing]))
+		{
+			if (MAGIC_QUOTES_GPC)
+			{
 				return doStrip($_POST[$thing]);
-			} else return $_POST[$thing];
+			}
+			else
+			{
+				return $_POST[$thing];
+			}
 		}
 		return '';
 	}
@@ -890,10 +973,16 @@ function escape_js($js)
 
  	function cs($thing)
 	{
-		if (isset($_COOKIE[$thing])) {
-			if (MAGIC_QUOTES_GPC) {
+		if (isset($_COOKIE[$thing]))
+		{
+			if (MAGIC_QUOTES_GPC)
+			{
 				return doStrip($_COOKIE[$thing]);
-			} else return $_COOKIE[$thing];
+			}
+			else
+			{
+				return $_COOKIE[$thing];
+			}
 		}
 		return '';
 	}
@@ -910,7 +999,7 @@ function escape_js($js)
 
 	function yes_no($status)
 	{
-		return ($status==0) ? (gTxt('no')) : (gTxt('yes'));
+		return ($status == 0) ? gTxt('no') : gTxt('yes');
 	}
 
 /**
@@ -922,8 +1011,8 @@ function escape_js($js)
 
 	function getmicrotime()
 	{
-		list($usec, $sec) = explode(" ",microtime());
-		return ((float)$usec + (float)$sec);
+		list($usec, $sec) = explode(" ", microtime());
+		return ((float) $usec + (float) $sec);
 	}
 
 /**
@@ -943,38 +1032,50 @@ function escape_js($js)
 	{
 		global $plugins, $plugins_ver, $prefs, $txp_current_plugin;
 
-		if (is_array($plugins) and in_array($name,$plugins)) {
+		if (is_array($plugins) and in_array($name, $plugins))
+		{
 			return true;
 		}
 
-		if (!empty($prefs['plugin_cache_dir'])) {
+		if (!empty($prefs['plugin_cache_dir']))
+		{
 			$dir = rtrim($prefs['plugin_cache_dir'], '/') . '/';
-			# in case it's a relative path
+			// In case it's a relative path.
 			if (!is_dir($dir))
+			{
 				$dir = rtrim(realpath(txpath.'/'.$dir), '/') . '/';
-			if (is_file($dir . $name . '.php')) {
+			}
+			if (is_file($dir . $name . '.php'))
+			{
 				$plugins[] = $name;
 				set_error_handler("pluginErrorHandler");
-				if (isset($txp_current_plugin)) $txp_parent_plugin = $txp_current_plugin;
+				if (isset($txp_current_plugin))
+				{
+					$txp_parent_plugin = $txp_current_plugin;
+				}
 				$txp_current_plugin = $name;
 				include($dir . $name . '.php');
-				$txp_current_plugin = (isset($txp_parent_plugin) ? $txp_parent_plugin : NULL);
+				$txp_current_plugin = isset($txp_parent_plugin) ? $txp_parent_plugin : null;
 				$plugins_ver[$name] = @$plugin['version'];
 				restore_error_handler();
 				return true;
 			}
 		}
 
-		$rs = safe_row("name,code,version","txp_plugin", ($force ? '' : 'status = 1 AND '). "name='".doSlash($name)."'");
-		if ($rs) {
+		$rs = safe_row("name, code, version", "txp_plugin", ($force ? '' : 'status = 1 AND '). "name='".doSlash($name)."'");
+		if ($rs)
+		{
 			$plugins[] = $rs['name'];
 			$plugins_ver[$rs['name']] = $rs['version'];
 
 			set_error_handler("pluginErrorHandler");
-			if (isset($txp_current_plugin)) $txp_parent_plugin = $txp_current_plugin;
+			if (isset($txp_current_plugin))
+			{
+				$txp_parent_plugin = $txp_current_plugin;
+			}
 			$txp_current_plugin = $rs['name'];
 			eval($rs['code']);
-			$txp_current_plugin = (isset($txp_parent_plugin) ? $txp_parent_plugin : NULL);
+			$txp_current_plugin = isset($txp_parent_plugin) ? $txp_parent_plugin : null;
 			restore_error_handler();
 
 			return true;
@@ -995,7 +1096,8 @@ function escape_js($js)
 
 	function require_plugin($name)
 	{
-		if (!load_plugin($name)) {
+		if (!load_plugin($name))
+		{
 			trigger_error("Unable to include required plugin \"{$name}\"",E_USER_ERROR);
 			return false;
 		}
@@ -1014,7 +1116,8 @@ function escape_js($js)
 
 	function include_plugin($name)
 	{
-		if (!load_plugin($name)) {
+		if (!load_plugin($name))
+		{
 			trigger_error("Unable to include plugin \"{$name}\"",E_USER_WARNING);
 			return false;
 		}
@@ -1034,19 +1137,34 @@ function escape_js($js)
 
 	function pluginErrorHandler($errno, $errstr, $errfile, $errline)
 	{
-		global $production_status;
+		global $production_status, $txp_current_plugin;
 
-		$error = array( E_WARNING => "Warning", E_NOTICE => "Notice", E_RECOVERABLE_ERROR => "Catchable fatal error",
-                        E_USER_ERROR => "User_Error", E_USER_WARNING => "User_Warning", E_USER_NOTICE => "User_Notice");
+		$error = array(
+			E_WARNING => "Warning",
+			E_NOTICE => "Notice",
+			E_RECOVERABLE_ERROR => "Catchable fatal error",
+			E_USER_ERROR => "User_Error",
+			E_USER_WARNING => "User_Warning",
+			E_USER_NOTICE => "User_Notice"
+		);
 
-		if (!($errno & error_reporting())) return;
-		if ($production_status == 'live' || ($production_status != 'debug' && $errno == E_USER_NOTICE)) return;
+		if (!($errno & error_reporting()))
+		{
+			return;
+		}
 
-		global $txp_current_plugin, $production_status;
-		printf ("<pre>".gTxt('plugin_load_error').' <b>%s</b> -> <b>%s: %s on line %s</b></pre>',
+		if ($production_status == 'live' || ($production_status != 'debug' && $errno == E_USER_NOTICE))
+		{
+			return;
+		}
+
+		printf("<pre>".gTxt('plugin_load_error').' <b>%s</b> -> <b>%s: %s on line %s</b></pre>',
 				$txp_current_plugin, $error[$errno], $errstr, $errline);
+
 		if ($production_status == 'debug')
+		{
 			print "\n<pre style=\"padding-left: 2em;\" class=\"backtrace\"><code>".txpspecialchars(join("\n", get_caller(10)))."</code></pre>";
+		}
 	}
 
 /**
@@ -1062,28 +1180,49 @@ function escape_js($js)
 
 	function tagErrorHandler($errno, $errstr, $errfile, $errline)
 	{
-		global $production_status;
+		global $production_status, $txp_current_tag, $txp_current_form, $pretext;
 
-		$error = array( E_WARNING => "Warning", E_NOTICE => "Notice", E_RECOVERABLE_ERROR => "Textpattern Catchable fatal error",
-                        E_USER_ERROR => "Textpattern Error", E_USER_WARNING => "Textpattern Warning", E_USER_NOTICE => "Textpattern Notice");
+		$error = array(
+			E_WARNING => "Warning",
+			E_NOTICE => "Notice",
+			E_RECOVERABLE_ERROR => "Textpattern Catchable fatal error",
+			E_USER_ERROR => "Textpattern Error",
+			E_USER_WARNING => "Textpattern Warning",
+			E_USER_NOTICE => "Textpattern Notice"
+		);
 
-		if (!($errno & error_reporting())) return;
-		if ($production_status == 'live') return;
+		if (!($errno & error_reporting()))
+		{
+			return;
+		}
 
-		global $txp_current_tag, $txp_current_form, $pretext;
-		$page = (empty($pretext['page']) ? gTxt('none') : $pretext['page']);
-		if (!isset($txp_current_form)) $txp_current_form = gTxt('none');
-		$locus = gTxt('while_parsing_page_form', array('{page}' => txpspecialchars($page), '{form}' => txpspecialchars($txp_current_form)));
+		if ($production_status == 'live')
+		{
+			return;
+		}
 
-		printf ("<pre>".gTxt('tag_error').' <b>%s</b> -> <b> %s: %s %s</b></pre>',
-				txpspecialchars($txp_current_tag), $error[$errno], $errstr, $locus );
+		$page = empty($pretext['page']) ? gTxt('none') : $pretext['page'];
+
+		if (!isset($txp_current_form))
+		{
+			$txp_current_form = gTxt('none');
+		}
+
+		$locus = gTxt('while_parsing_page_form', array(
+			'{page}' => txpspecialchars($page),
+			'{form}' => txpspecialchars($txp_current_form)
+		));
+
+		printf("<pre>".gTxt('tag_error').' <b>%s</b> -> <b> %s: %s %s</b></pre>',
+				txpspecialchars($txp_current_tag), $error[$errno], $errstr, $locus);
+
 		if ($production_status == 'debug')
-			{
+		{
 			print "\n<pre style=\"padding-left: 2em;\" class=\"backtrace\"><code>".txpspecialchars(join("\n", get_caller(10)))."</code></pre>";
 
 			$trace_msg = gTxt('tag_error').' '.$txp_current_tag.' -> '.$error[$errno].': '.$errstr.' '.$locus;
-			trace_add( $trace_msg );
-			}
+			trace_add($trace_msg);
+		}
 	}
 
 /**
@@ -1101,7 +1240,10 @@ function escape_js($js)
 	{
 		global $production_status;
 
-		if ($production_status != 'debug') return;
+		if ($production_status != 'debug')
+		{
+			return;
+		}
 
 		return tagErrorHandler($errno, $errstr, $errfile, $errline);
 	}
@@ -1121,28 +1263,39 @@ function escape_js($js)
 	{
 		global $production_status, $theme, $event, $step;
 
-		if (!error_reporting()) return;
+		if (!error_reporting())
+		{
+			return;
+		}
 
-		// When even a minimum environment is missing...
-		if (!isset($production_status)) {
+		// When even a minimum environment is missing.
+
+		if (!isset($production_status))
+		{
 			echo '<pre>'.gTxt('internal_error').' "'.$errstr.'"'.n."in $errfile at line $errline".'</pre>';
 			return;
 		}
 
-		if ($production_status == 'live' || ($production_status != 'debug' && $errno == E_USER_NOTICE)) {
+		if ($production_status == 'live' || ($production_status != 'debug' && $errno == E_USER_NOTICE))
+		{
 			$backtrace = $msg = '';
-		} else {
+		}
+		else
+		{
 			$backtrace = '';
 			$msg = gTxt('internal_error');
 
-			if (has_privs('debug.verbose')) {
+			if (has_privs('debug.verbose'))
+			{
 				$msg .= ' "'.$errstr.'"';
-			};
+			}
 
-			if (($production_status == 'debug')) {
-				if (has_privs('debug.backtrace')) {
+			if ($production_status == 'debug')
+			{
+				if (has_privs('debug.backtrace'))
+				{
 					$msg .= n."in $errfile at line $errline";
-					$backtrace = join(n, get_caller(5,1));
+					$backtrace = join(n, get_caller(5, 1));
 				}
 			}
 		}
@@ -1150,31 +1303,45 @@ function escape_js($js)
 		$httpstatus = in_array($errno, array(E_ERROR, E_USER_ERROR)) ? '500' : '200';
 		$out = "$msg.\n$backtrace";
 
-		if (http_accept_format('html')) {
-			if (!empty($backtrace)) {
+		if (http_accept_format('html'))
+		{
+			if (!empty($backtrace))
+			{
 				echo "<pre>$msg.</pre>".
 					n.'<pre style="padding-left: 2em;" class="backtrace"><code>'.
 					txpspecialchars($backtrace).'</code></pre>';
-			} elseif (!empty($msg)) {
+			}
+			elseif (!empty($msg))
+			{
 				echo is_object($theme) ? $theme->announce(array($out, E_ERROR), true) : "<pre>$out</pre>";
 			}
 			$c = array('in' => '', 'out' => '');
-		} elseif (http_accept_format('js')) {
+		}
+		elseif (http_accept_format('js'))
+		{
 			send_script_response(
 				is_object($theme) && !empty($msg) ?
 				$theme->announce_async(array($out, E_ERROR), true) :
 				"/* $out */"
 			);
 			$c = array('in' => '/* ', 'out' => ' */');
-		} elseif (http_accept_format('xml')) {
+		}
+		elseif (http_accept_format('xml'))
+		{
 			send_xml_response(array('http-status' => $httpstatus, 'internal_error' => "$out"));
 			$c = array('in' => '<!-- ', 'out' => ' -->');
-		} else {
+		}
+		else
+		{
 			txp_die($msg, 500);
 		}
 
-		if ($production_status != 'live' && in_array($errno, array(E_ERROR, E_USER_ERROR))) {
-			die($c['in'].gTxt('get_off_my_lawn', array('{event}' => $event, '{step}' => $step)).$c['out']);
+		if ($production_status != 'live' && in_array($errno, array(E_ERROR, E_USER_ERROR)))
+		{
+			die($c['in'].gTxt('get_off_my_lawn', array(
+				'{event}' => $event,
+				'{step}' => $step
+			)).$c['out']);
 		}
 	}
 
@@ -1193,17 +1360,30 @@ function escape_js($js)
 	{
 		global $production_status;
 
-		$error = array( E_WARNING => "Warning", E_NOTICE => "Notice", E_USER_ERROR => "Textpattern Error",
-		                E_USER_WARNING => "Textpattern Warning", E_USER_NOTICE => "Textpattern Notice");
+		$error = array(
+			E_WARNING => "Warning",
+			E_NOTICE => "Notice",
+			E_USER_ERROR => "Textpattern Error",
+			E_USER_WARNING => "Textpattern Warning",
+			E_USER_NOTICE => "Textpattern Notice"
+		);
 
-		if (!($errno & error_reporting())) return;
-		if ($production_status == 'live' || ($production_status != 'debug' && $errno == E_USER_NOTICE)) return;
+		if (!($errno & error_reporting()))
+		{
+			return;
+		}
+		if ($production_status == 'live' || ($production_status != 'debug' && $errno == E_USER_NOTICE))
+		{
+			return;
+		}
 
-		global $production_status;
 		printf ("<pre>".gTxt('general_error').' <b>%s: %s on line %s</b></pre>',
 			$error[$errno], $errstr, $errline);
+
 		if ($production_status == 'debug')
+		{
 			print "\n<pre style=\"padding-left: 2em;\" class=\"backtrace\"><code>".txpspecialchars(join("\n", get_caller(10)))."</code></pre>";
+		}
 	}
 
 /**
@@ -1212,21 +1392,29 @@ function escape_js($js)
  * @param bool $type If TRUE loads admin-side plugins, otherwise public
  */
 
-	function load_plugins($type=0)
+	function load_plugins($type = false)
 	{
 		global $prefs, $plugins, $plugins_ver, $app_mode;
 
-		if (!is_array($plugins)) $plugins = array();
+		if (!is_array($plugins))
+		{
+			$plugins = array();
+		}
 
-		if (!empty($prefs['plugin_cache_dir'])) {
+		if (!empty($prefs['plugin_cache_dir']))
+		{
 			$dir = rtrim($prefs['plugin_cache_dir'], '/') . '/';
-			// in case it's a relative path
+			// In case it's a relative path.
 			if (!is_dir($dir))
+			{
 				$dir = rtrim(realpath(txpath.'/'.$dir), '/') . '/';
+			}
 			$files = glob($dir.'*.php');
-			if ($files) {
+			if ($files)
+			{
 				natsort($files);
-				foreach ($files as $f) {
+				foreach ($files as $f)
+				{
 					trace_add("[Loading plugin from cache dir '$f']");
 					load_plugin(basename($f, '.php'));
 				}
@@ -1237,17 +1425,22 @@ function escape_js($js)
 		$where = 'status = 1 AND type IN ('.($type ? $admin : '0,1,5').')';
 
 		$rs = safe_rows("name, code, version", "txp_plugin", $where.' order by load_order');
-		if ($rs) {
+		if ($rs)
+		{
 			$old_error_handler = set_error_handler("pluginErrorHandler");
-			foreach($rs as $a) {
-				if (!in_array($a['name'],$plugins)) {
+			foreach ($rs as $a)
+			{
+				if (!in_array($a['name'], $plugins))
+				{
 					$plugins[] = $a['name'];
 					$plugins_ver[$a['name']] = $a['version'];
 					$GLOBALS['txp_current_plugin'] = $a['name'];
 					trace_add("[Loading plugin '{$a['name']}' version '{$a['version']}']");
 					$eval_ok = eval($a['code']);
 					if ($eval_ok === FALSE)
+					{
 						echo gTxt('plugin_load_error_above').strong($a['name']).n.br;
+					}
 					unset($GLOBALS['txp_current_plugin']);
 				}
 			}
@@ -1265,10 +1458,9 @@ function escape_js($js)
  * @package Callback
  */
 
-	function register_callback($func, $event, $step='', $pre=0)
+	function register_callback($func, $event, $step = '', $pre = 0)
 	{
 		global $plugin_callback;
-
 		$plugin_callback[] = array('function'=>$func, 'event'=>$event, 'step'=>$step, 'pre'=>$pre);
 	}
 
@@ -1286,7 +1478,7 @@ function escape_js($js)
  * @package Callback
  */
 
-	function register_page_extension($func, $event, $step='', $top=0)
+	function register_page_extension($func, $event, $step = '', $top = 0)
 	{
 		register_callback($func, $event, $step, $top);
 	}
@@ -1301,28 +1493,36 @@ function escape_js($js)
  * @package Callback
  */
 
-	function callback_event($event, $step='', $pre=0)
+	function callback_event($event, $step = '', $pre = 0)
 	{
 		global $plugin_callback, $production_status;
 
 		if (!is_array($plugin_callback))
+		{
 			return '';
+		}
 
 		$return_value = '';
 
-		// any payload parameters?
+		// Any payload parameters?
 		$argv = func_get_args();
 		$argv = (count($argv) > 3) ? array_slice($argv, 3) : array();
 
-		foreach ($plugin_callback as $c) {
-			if ($c['event'] == $event and (empty($c['step']) or $c['step'] == $step) and $c['pre'] == $pre) {
-				if (is_callable($c['function'])) {
+		foreach ($plugin_callback as $c)
+		{
+			if ($c['event'] == $event and (empty($c['step']) or $c['step'] == $step) and $c['pre'] == $pre)
+			{
+				if (is_callable($c['function']))
+				{
 					$return_value .= call_user_func_array($c['function'], array('event' => $event, 'step' => $step) + $argv);
-				} elseif ($production_status == 'debug') {
+				}
+				elseif ($production_status == 'debug')
+				{
 					trigger_error(gTxt('unknown_callback_function', array('{function}' => callback_tostring($c['function']))), E_USER_WARNING);
 				}
 			}
 		}
+
 		return $return_value;
 	}
 
@@ -1339,22 +1539,30 @@ function escape_js($js)
  * @package Callback
  */
 
- 	function callback_event_ref($event, $step='', $pre=0, &$data=null, &$options=null)
+ 	function callback_event_ref($event, $step = '', $pre = 0, &$data = null, &$options = null)
 	{
 		global $plugin_callback, $production_status;
 
 		if (!is_array($plugin_callback))
+		{
 			return array();
+		}
 
 		$return_value = array();
 
-		foreach ($plugin_callback as $c) {
-			if ($c['event'] == $event and (empty($c['step']) or $c['step'] == $step) and $c['pre'] == $pre) {
-				if (is_callable($c['function'])) {
-					// cannot call event handler via call_user_func() as this would dereference all arguments.
-					// side effect: callback handler *must* be ordinary function, *must not* be class method in PHP <5.4 (@see https://bugs.php.net/bug.php?id=47160)
+		foreach ($plugin_callback as $c)
+		{
+			if ($c['event'] == $event and (empty($c['step']) or $c['step'] == $step) and $c['pre'] == $pre)
+			{
+				if (is_callable($c['function']))
+				{
+					// Cannot call event handler via call_user_func() as this would dereference all arguments.
+					// side effect: callback handler *must* be ordinary function, *must not* be class method in PHP <5.4
+					// see https://bugs.php.net/bug.php?id=47160
 					$return_value[] = $c['function']($event, $step, $data, $options);
-				} elseif ($production_status == 'debug') {
+				}
+				elseif ($production_status == 'debug')
+				{
 					trigger_error(gTxt('unknown_callback_function', array('{function}' => callback_tostring($c['function']))), E_USER_WARNING);
 				}
 			}
@@ -1373,10 +1581,12 @@ function escape_js($js)
 
 	function callback_tostring($callback)
 	{
-		if (is_array($callback)) {
+		if (is_array($callback))
+		{
 			return join('::', array_filter($callback, 'is_scalar'));
 		}
-		elseif (!is_scalar($callback)) {
+		elseif (!is_scalar($callback))
+		{
 			return '';
 		}
 		return $callback;
@@ -1415,7 +1625,7 @@ function escape_js($js)
  * @package Callback
  */
 
-	function pluggable_ui($event, $element, $default='')
+	function pluggable_ui($event, $element, $default = '')
 	{
 		$argv = func_get_args();
 		$argv = array_slice($argv, 2);
@@ -1424,7 +1634,7 @@ function escape_js($js)
 		// string my_called_func(string $event, string $step, string $default_markup[, mixed $context_data...])
 		$ui = call_user_func_array('callback_event', array('event' => $event, 'step' => $element, 'pre' => 0) + $argv);
 		// either plugins provided a user interface, or we render our own
-		return ($ui === '')? $default : $ui;
+		return ($ui === '') ? $default : $ui;
 	}
 
 /**
@@ -1473,11 +1683,11 @@ function escape_js($js)
  * @package TagParser
  */
 
-	function lAtts($pairs, $atts, $warn=1)
+	function lAtts($pairs, $atts, $warn = true)
 	{
 		global $production_status;
 
-		foreach($atts as $name => $value)
+		foreach ($atts as $name => $value)
 		{
 			if (array_key_exists($name, $pairs))
 			{
@@ -1519,16 +1729,19 @@ function escape_js($js)
  * @package URL
  */
 
-	function stripSpace($text, $force=0)
+	function stripSpace($text, $force = false)
 	{
 		global $prefs;
 		if ($force or !empty($prefs['attach_titles_to_permalinks']))
 		{
 			$text = trim(sanitizeForUrl($text), '-');
-			if ($prefs['permalink_title_format']) {
+			if ($prefs['permalink_title_format'])
+			{
 				return (function_exists('mb_strtolower') ? mb_strtolower($text, 'UTF-8') : strtolower($text));
-			} else {
-				return str_replace('-','',$text);
+			}
+			else
+			{
+				return str_replace('-', '', $text);
 			}
 		}
 	}
@@ -1545,7 +1758,10 @@ function escape_js($js)
 	{
 		// any overrides?
 		$out = callback_event('sanitize_for_url', '', 0, $text);
-		if ($out !== '') return $out;
+		if ($out !== '')
+		{
+			return $out;
+		}
 
 		$in = $text;
 		// Remove names entities and tags
