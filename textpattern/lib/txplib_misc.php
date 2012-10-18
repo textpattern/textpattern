@@ -1756,7 +1756,6 @@
 
 	function sanitizeForUrl($text)
 	{
-		// any overrides?
 		$out = callback_event('sanitize_for_url', '', 0, $text);
 		if ($out !== '')
 		{
@@ -1765,13 +1764,13 @@
 
 		$in = $text;
 		// Remove names entities and tags
-		$text = preg_replace("/(^|&\S+;)|(<[^>]*>)/U","",dumbDown($text));
+		$text = preg_replace("/(^|&\S+;)|(<[^>]*>)/U", "", dumbDown($text));
 		// Dashify high-order chars leftover from dumbDown()
-		$text = preg_replace("/[\x80-\xff]/","-",$text);
+		$text = preg_replace("/[\x80-\xff]/", "-", $text);
 		// Collapse spaces, minuses, (back-)slashes and non-words
 		$text = preg_replace('/[\s\-\/\\\\]+/', '-', trim(preg_replace('/[^\w\s\-\/\\\\]/', '', $text)));
 		// Remove all non-whitelisted characters
-		$text = preg_replace("/[^A-Za-z0-9\-_]/","",$text);
+		$text = preg_replace("/[^A-Za-z0-9\-_]/", "", $text);
 		// Sanitizing shouldn't leave us with plain nothing to show.
 		// Fall back on percent-encoded URLs as a last resort for RFC 1738 conformance.
 		if (empty($text) || $text == '-')
@@ -1791,9 +1790,11 @@
 
 	function sanitizeForFile($text)
 	{
-		// any overrides?
 		$out = callback_event('sanitize_for_file', '', 0, $text);
-		if ($out !== '') return $out;
+		if ($out !== '')
+		{
+			return $out;
+		}
 
 		// Remove control characters and " * \ : < > ? / |
 		$text = preg_replace('/[\x00-\x1f\x22\x2a\x2f\x3a\x3c\x3e\x3f\x5c\x7c\x7f]+/', '', $text);
@@ -1813,9 +1814,11 @@
 
 	function sanitizeForPage($text)
 	{
-		// any overrides?
 		$out = callback_event('sanitize_for_page', '', 0, $text);
-		if ($out !== '') return $out;
+		if ($out !== '')
+		{
+			return $out;
+		}
 
 		return trim(preg_replace('/[<>&"\']/', '', $text));
 	}
@@ -1831,10 +1834,11 @@
  * @package i18n
  */
 
-	function dumbDown($str, $lang=LANG)
+	function dumbDown($str, $lang = LANG)
 	{
 		static $array;
-		if (empty($array[$lang])) {
+		if (empty($array[$lang]))
+		{
 			$array[$lang] = array( // nasty, huh?.
 				'&#192;'=>'A','&Agrave;'=>'A','&#193;'=>'A','&Aacute;'=>'A','&#194;'=>'A','&Acirc;'=>'A',
 				'&#195;'=>'A','&Atilde;'=>'A','&#196;'=>'Ae','&Auml;'=>'A','&#197;'=>'A','&Aring;'=>'A',
@@ -1915,23 +1919,32 @@
 			);
 
 
-			if (is_file(txpath.'/lib/i18n-ascii.txt')) {
+			if (is_file(txpath.'/lib/i18n-ascii.txt'))
+			{
 				$i18n = parse_ini_file(txpath.'/lib/i18n-ascii.txt', true);
-				# load the global map
-				if (isset($i18n['default']) && is_array($i18n['default'])) {
+				// Load the global map.
+				if (isset($i18n['default']) && is_array($i18n['default']))
+				{
 					$array[$lang] = array_merge($array[$lang], $i18n['default']);
-					# base language overrides: 'de-AT' applies the 'de' section
-					if (preg_match('/([a-zA-Z]+)-.+/', $lang, $m)) {
+					// Base language overrides: 'de-AT' applies the 'de' section.
+					if (preg_match('/([a-zA-Z]+)-.+/', $lang, $m))
+					{
 						if (isset($i18n[$m[1]]) && is_array($i18n[$m[1]]))
+						{
 							$array[$lang] = array_merge($array[$lang], $i18n[$m[1]]);
-					};
-					# regional language overrides: 'de-AT' applies the 'de-AT' section
+						}
+					}
+					// Regional language overrides: 'de-AT' applies the 'de-AT' section.
 					if (isset($i18n[$lang]) && is_array($i18n[$lang]))
+					{
 						$array[$lang] = array_merge($array[$lang], $i18n[$lang]);
+					}
 				}
-				# load an old file (no sections) just in case
+				// Load an old file (no sections) just in case.
 				else
+				{
 					$array[$lang] = array_merge($array[$lang], $i18n);
+				}
 			}
 		}
 
@@ -1949,7 +1962,7 @@
 
 	function clean_url($url)
 	{
-		return preg_replace("/\"|'|(?:\s.*$)/",'',$url);
+		return preg_replace("/\"|'|(?:\s.*$)/", '', $url);
 	}
 
 /**
@@ -1962,7 +1975,9 @@
 	function noWidow($str)
 	{
 		if (REGEXP_UTF8 == 1)
+		{
 			return preg_replace('@[ ]+([[:punct:]]?[\p{L}\p{N}\p{Pc}]+[[:punct:]]?)$@u', '&#160;$1', rtrim($str));
+		}
 		return preg_replace('@[ ]+([[:punct:]]?\w+[[:punct:]]?)$@', '&#160;$1', rtrim($str));
 	}
 
@@ -2029,7 +2044,7 @@
 
 		if (!strlen($name) or strlen($user) and $user !== $name)
 		{
-			return FALSE;
+			return false;
 		}
 
 		$rs = safe_row('nonce, name, RealName, email, privs', 'txp_users', "name = '".doSlash($name)."'");
@@ -2041,7 +2056,7 @@
 		}
 		else
 		{
-			return FALSE;
+			return false;
 		}
 	}
 
@@ -2056,11 +2071,15 @@
 	function updateSitePath($here)
 	{
 		$here = doSlash($here);
-		$rs = safe_field ("name",'txp_prefs',"name = 'path_to_site'");
-		if (!$rs) {
-			safe_insert("txp_prefs","prefs_id=1,name='path_to_site',val='$here'");
-		} else {
-			safe_update('txp_prefs',"val='$here'","name='path_to_site'");
+		$rs = safe_field("name", 'txp_prefs', "name = 'path_to_site'");
+
+		if (!$rs)
+		{
+			safe_insert("txp_prefs", "prefs_id=1, name='path_to_site', val='$here'");
+		}
+		else
+		{
+			safe_update('txp_prefs', "val='$here'", "name='path_to_site'");
 		}
 	}
 
@@ -2119,7 +2138,7 @@
  * @package Debug
  */
 
-	function maxMemUsage($message = 'none', $returnit = 0)
+	function maxMemUsage($message = 'none', $returnit = false)
 	{
 		static $memory_top = 0;
 		static $memory_message;
@@ -2134,13 +2153,17 @@
 			}
 		}
 
-		if ($returnit != 0)
+		if ($returnit)
 		{
 			if (is_callable('memory_get_usage'))
+			{
 				return n.comment(sprintf('Memory: %sKb, %s',
 					ceil($memory_top/1024),$memory_message));
+			}
 			else
+			{
 				return n.comment('Memory: no info available');
+			}
 		}
 	}
 
@@ -2185,20 +2208,23 @@
 	{
 		global $txp_user, $prefs;
 
-		// if mailing isn't possible, don't even try
+		// if mailing isn't possible, don't even try.
 		if (is_disabled('mail'))
 		{
 			return false;
 		}
 
-		// Likely sending passwords
+		// Likely sending passwords.
 		if (isset($txp_user))
 		{
-			if (is_valid_email($prefs['publisher_email'])) {
+			if (is_valid_email($prefs['publisher_email']))
+			{
 				// explicit publisher email address preferred
 				$RealName = safe_field('RealName', 'txp_users', "name = '".doSlash($txp_user)."'");
 				$email = $prefs['publisher_email'];
-			} else {
+			}
+			else
+			{
 				// default: current user invites new users using her personal email address
 				extract(safe_row('RealName, email', 'txp_users', "name = '".doSlash($txp_user)."'"));
 			}
@@ -2273,25 +2299,33 @@
 	function encode_mailheader($string, $type)
 	{
 		global $prefs;
-		if (!strstr($string,'=?') and !preg_match('/[\x00-\x1F\x7F-\xFF]/', $string)) {
-			if ("phrase" == $type) {
-				if (preg_match('/[][()<>@,;:".\x5C]/', $string)) {
+		if (!strstr($string,'=?') and !preg_match('/[\x00-\x1F\x7F-\xFF]/', $string))
+		{
+			if ("phrase" == $type)
+			{
+				if (preg_match('/[][()<>@,;:".\x5C]/', $string))
+				{
 					$string = '"'. strtr($string, array("\\" => "\\\\", '"' => '\"')) . '"';
 				}
 			}
-			elseif ( "text" != $type) {
+			elseif ("text" != $type)
+			{
 				trigger_error( 'Unknown encode_mailheader type', E_USER_WARNING);
 			}
 			return $string;
 		}
-		if ($prefs['override_emailcharset'] and is_callable('utf8_decode')) {
+
+		if ($prefs['override_emailcharset'] and is_callable('utf8_decode'))
+		{
 			$start = '=?ISO-8859-1?B?';
 			$pcre  = '/.{1,42}/s';
 		}
-		else {
+		else
+		{
 			$start = '=?UTF-8?B?';
 			$pcre  = '/.{1,45}(?=[\x00-\x7F\xC0-\xFF]|$)/s';
 		}
+
 		$end = '?=';
 		$sep = IS_WIN ? "\r\n" : "\n";
 		preg_match_all($pcre, $string, $matches);
@@ -2440,20 +2474,23 @@
 	function since($stamp)
 	{
 		$diff = (time() - $stamp);
-		if ($diff <= 3600) {
+
+		if ($diff <= 3600)
+		{
 			$mins = round($diff / 60);
-			$since = ($mins <= 1)
-			?	($mins==1)
-				?	'1 '.gTxt('minute')
-				:	gTxt('a_few_seconds')
-			:	"$mins ".gTxt('minutes');
-		} else if (($diff <= 86400) && ($diff > 3600)) {
+			$since = ($mins <= 1) ? ($mins==1) ? '1 '.gTxt('minute') : gTxt('a_few_seconds') : "$mins ".gTxt('minutes');
+		}
+		else if (($diff <= 86400) && ($diff > 3600))
+		{
 			$hours = round($diff / 3600);
 			$since = ($hours <= 1) ? '1 '.gTxt('hour') : "$hours ".gTxt('hours');
-		} else if ($diff >= 86400) {
+		}
+		else if ($diff >= 86400)
+		{
 			$days = round($diff / 86400);
 			$since = ($days <= 1) ? "1 ".gTxt('day') : "$days ".gTxt('days');
 		}
+
 		return $since.' '.gTxt('ago'); // sorry, this needs to be hacked until a truly multilingual version is done
 	}
 
@@ -2472,10 +2509,13 @@
 	{
 		global $gmtoffset, $timezone_key;
 
-		if (is_null($timestamp)) $timestamp = time();
+		if (is_null($timestamp))
+		{
+			$timestamp = time();
+		}
 
 		extract(getdate($timestamp));
-		$serveroffset = gmmktime($hours,$minutes,0,$mon,$mday,$year) - mktime($hours,$minutes,0,$mon,$mday,$year);
+		$serveroffset = gmmktime($hours, $minutes, 0, $mon, $mday, $year) - mktime($hours, $minutes, 0, $mon, $mday, $year);
 
 		$real_dst = timezone::is_dst($timestamp, $timezone_key);
 		return $gmtoffset - $serveroffset + ($real_dst ? 3600 : 0);
@@ -2495,56 +2535,81 @@
  * @package DateTime
  */
 
-	function safe_strftime($format, $time='', $gmt=0, $override_locale='')
+	function safe_strftime($format, $time = '', $gmt = false, $override_locale = '')
 	{
 		global $locale;
 		$old_locale = $locale;
 
 		if (!$time)
+		{
 			$time = time();
+		}
 
 		// We could add some other formats here.
-		if ($format == 'iso8601' or $format == 'w3cdtf') {
+		if ($format == 'iso8601' or $format == 'w3cdtf')
+		{
 			$format = '%Y-%m-%dT%H:%M:%SZ';
-			$gmt = 1;
+			$gmt = true;
 		}
-		elseif ($format == 'rfc822') {
+		elseif ($format == 'rfc822')
+		{
 			$format = '%a, %d %b %Y %H:%M:%S GMT';
-			$gmt = 1;
+			$gmt = true;
 			$override_locale = 'en-gb';
 		}
 
 		if ($override_locale)
+		{
 			getlocale($override_locale);
+		}
 
 		if ($format == 'since')
+		{
 			$str = since($time);
+		}
 		elseif ($gmt)
+		{
 			$str = gmstrftime($format, $time);
+		}
 		else
+		{
 			$str = strftime($format, $time + tz_offset($time));
+		}
 
 		@list($lang, $charset) = explode('.', $locale);
-		if (empty($charset))
-			$charset = 'ISO-8859-1';
-		elseif (IS_WIN and is_numeric($charset))
-			// Score -1 for consistent naming conventions.
-			$charset = 'Windows-'.$charset;
 
-		if ($charset != 'UTF-8' and $format != 'since') {
+		if (empty($charset))
+		{
+			$charset = 'ISO-8859-1';
+		}
+		elseif (IS_WIN and is_numeric($charset))
+		{
+			$charset = 'Windows-'.$charset;
+		}
+
+		if ($charset != 'UTF-8' and $format != 'since')
+		{
 			$new = '';
 			if (is_callable('iconv'))
+			{
 				$new = @iconv($charset, 'UTF-8', $str);
+			}
 
 			if ($new)
+			{
 				$str = $new;
+			}
 			elseif (is_callable('utf8_encode'))
+			{
 				$str = utf8_encode($str);
+			}
 		}
 
 		// Revert to the old locale.
 		if ($override_locale)
+		{
 			$locale = setlocale(LC_ALL, $old_locale);
+		}
 
 		return $str;
 	}
@@ -2576,29 +2641,49 @@
 
 	function myErrorHandler($errno, $errstr, $errfile, $errline)
 	{
-		# error_reporting() returns 0 when the '@' suppression
-		# operator is used
 		if (!error_reporting())
+		{
 			return;
+		}
 
 		echo '<pre>'.n.n."$errno: $errstr in $errfile at line $errline\n";
-		# Requires PHP 4.3
-		if (is_callable('debug_backtrace')) {
+
+		if (is_callable('debug_backtrace'))
+		{
 			echo "Backtrace:\n";
 			$trace = debug_backtrace();
-			foreach($trace as $ent) {
-				if(isset($ent['file'])) echo $ent['file'].':';
-				if(isset($ent['function'])) {
+
+			foreach ($trace as $ent)
+			{
+				if (isset($ent['file']))
+				{
+					echo $ent['file'].':';
+				}
+
+				if (isset($ent['function']))
+				{
 					echo $ent['function'].'(';
-					if(isset($ent['args'])) {
+					if (isset($ent['args']))
+					{
 						$args='';
-						foreach($ent['args'] as $arg) { $args.=$arg.','; }
+						foreach ($ent['args'] as $arg)
+						{
+							$args.=$arg.',';
+						}
 						echo rtrim($args,',');
 					}
 					echo ') ';
 				}
-				if(isset($ent['line'])) echo 'at line '.$ent['line'].' ';
-				if(isset($ent['file'])) echo 'in '.$ent['file'];
+
+				if(isset($ent['line']))
+				{
+					echo 'at line '.$ent['line'].' ';
+				}
+
+				if(isset($ent['file']))
+				{
+					echo 'in '.$ent['file'];
+				}
 				echo "\n";
 			}
 		}
@@ -2619,18 +2704,44 @@
 	{
 		global $path_to_site, $img_dir;
 
-		if (IS_WIN) {
-			$guess = array(txpath.DS.'tmp', getenv('TMP'), getenv('TEMP'), getenv('SystemRoot').DS.'Temp', 'C:'.DS.'Temp', $path_to_site.DS.$img_dir);
-			foreach ($guess as $k=>$v)
-				if (empty($v)) unset($guess[$k]);
+		if (IS_WIN)
+		{
+			$guess = array(
+				txpath.DS.'tmp',
+				getenv('TMP'),
+				getenv('TEMP'),
+				getenv('SystemRoot').DS.'Temp',
+				'C:'.DS.'Temp',
+				$path_to_site.DS.$img_dir
+			);
+
+			foreach ($guess as $k => $v)
+			{
+				if (empty($v))
+				{
+					unset($guess[$k]);
+				}
+			}
 		}
 		else
-			$guess = array(txpath.DS.'tmp', '', DS.'tmp', $path_to_site.DS.$img_dir);
+		{
+			$guess = array(
+				txpath.DS.'tmp',
+				'',
+				DS.'tmp',
+				$path_to_site.DS.$img_dir
+			);
+		}
 
-		foreach ($guess as $dir) {
+		foreach ($guess as $dir)
+		{
 			$tf = @tempnam($dir, 'txp_');
-			if ($tf) $tf = realpath($tf);
-			if ($tf and file_exists($tf)) {
+			if ($tf)
+			{
+				$tf = realpath($tf);
+			}
+			if ($tf and file_exists($tf))
+			{
 				unlink($tf);
 				return dirname($tf);
 			}
@@ -2653,20 +2764,28 @@
 		global $tempdir;
 
 		if (!is_uploaded_file($f))
+		{
 			return false;
+		}
 
-		if ($dest) {
+		if ($dest)
+		{
 			$newfile = $dest;
 		}
-		else {
+		else
+		{
 			$newfile = tempnam($tempdir, 'txp_');
 			if (!$newfile)
+			{
 				return false;
+			}
 		}
 
 		// $newfile is created by tempnam(), but move_uploaded_file will overwrite it.
 		if (move_uploaded_file($f, $newfile))
+		{
 			return $newfile;
+		}
 	}
 
 /**
@@ -2678,18 +2797,20 @@
 
 	function set_error_level($level)
 	{
-
-		if ($level == 'debug') {
+		if ($level == 'debug')
+		{
 			error_reporting(E_ALL | E_STRICT);
 		}
-		elseif ($level == 'live') {
-			// don't show errors on screen
+		elseif ($level == 'live')
+		{
+			// Don't show errors on screen.
 			$suppress = E_NOTICE | E_USER_NOTICE | E_WARNING | E_STRICT | (defined('E_DEPRECATED') ? E_DEPRECATED : 0);
 			error_reporting(E_ALL ^ $suppress);
 			@ini_set("display_errors","1");
 		}
-		else {
-			// default is 'testing': display everything except notices
+		else
+		{
+			// Default is 'testing': display everything except notices.
 			error_reporting((E_ALL | E_STRICT) ^ (E_NOTICE | E_USER_NOTICE));
 		}
 	}
@@ -2706,9 +2827,12 @@
 	function shift_uploaded_file($f, $dest)
 	{
 		if (@rename($f, $dest))
+		{
 			return true;
+		}
 
-		if (@copy($f, $dest)) {
+		if (@copy($f, $dest))
+		{
 			unlink($f);
 			return true;
 		}
@@ -2727,22 +2851,38 @@
 		$msg = '';
 		switch ($err_code)
 		{
-				// Value: 0; There is no error, the file uploaded with success.
-			case UPLOAD_ERR_OK         : $msg = '';break;
-				// Value: 1; The uploaded file exceeds the upload_max_filesize directive in php.ini.
-			case UPLOAD_ERR_INI_SIZE   : $msg = gTxt('upload_err_ini_size');break;
-				// Value: 2; The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.
-			case UPLOAD_ERR_FORM_SIZE  : $msg = gTxt('upload_err_form_size');break;
-				// Value: 3; The uploaded file was only partially uploaded.
-			case UPLOAD_ERR_PARTIAL    : $msg = gTxt('upload_err_partial');break;
-				// Value: 4; No file was uploaded.
-			case UPLOAD_ERR_NO_FILE    : $msg = gTxt('upload_err_no_file');break;
-				// Value: 6; Missing a temporary folder. Introduced in PHP 4.3.10 and PHP 5.0.3.
-			case UPLOAD_ERR_NO_TMP_DIR : $msg = gTxt('upload_err_tmp_dir');break;
-				// Value: 7; Failed to write file to disk. Introduced in PHP 5.1.0.
-			case UPLOAD_ERR_CANT_WRITE : $msg = gTxt('upload_err_cant_write');break;
-				// Value: 8; File upload stopped by extension. Introduced in PHP 5.2.0.
-			case UPLOAD_ERR_EXTENSION  : $msg = gTxt('upload_err_extension');break;
+			// Value: 0; There is no error, the file uploaded with success.
+			case UPLOAD_ERR_OK :
+				$msg = '';
+				break;
+			// Value: 1; The uploaded file exceeds the upload_max_filesize directive in php.ini.
+			case UPLOAD_ERR_INI_SIZE :
+				$msg = gTxt('upload_err_ini_size');
+				break;
+			// Value: 2; The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.
+			case UPLOAD_ERR_FORM_SIZE  :
+				$msg = gTxt('upload_err_form_size');
+				break;
+			// Value: 3; The uploaded file was only partially uploaded.
+			case UPLOAD_ERR_PARTIAL :
+				$msg = gTxt('upload_err_partial');
+				break;
+			// Value: 4; No file was uploaded.
+			case UPLOAD_ERR_NO_FILE :
+				$msg = gTxt('upload_err_no_file');
+				break;
+			// Value: 6; Missing a temporary folder. Introduced in PHP 4.3.10 and PHP 5.0.3.
+			case UPLOAD_ERR_NO_TMP_DIR :
+				$msg = gTxt('upload_err_tmp_dir');
+				break;
+			// Value: 7; Failed to write file to disk. Introduced in PHP 5.1.0.
+			case UPLOAD_ERR_CANT_WRITE :
+				$msg = gTxt('upload_err_cant_write');
+				break;
+			// Value: 8; File upload stopped by extension. Introduced in PHP 5.2.0.
+			case UPLOAD_ERR_EXTENSION :
+				$msg = gTxt('upload_err_extension');
+				break;
 		}
 		return $msg;
 	}
@@ -2757,7 +2897,7 @@
  * @package File
  */
 
-	function format_filesize($bytes, $decimals=2, $format='')
+	function format_filesize($bytes, $decimals = 2, $format = '')
 	{
 		$units = array('b', 'k', 'm', 'g', 't', 'p', 'e', 'z', 'y');
 
@@ -2859,8 +2999,8 @@
 
 	function build_file_path($base,$path)
 	{
-		$base = rtrim($base,'/\\');
-		$path = ltrim($path,'/\\');
+		$base = rtrim($base, '/\\');
+		$path = ltrim($path, '/\\');
 
 		return $base.DIRECTORY_SEPARATOR.$path;
 	}
@@ -2878,9 +3018,11 @@
 		static $authors = array();
 
 		if (isset($authors[$name]))
+		{
 			return $authors[$name];
+		}
 
-		$realname = fetch('RealName','txp_users','name',$name);
+		$realname = fetch('RealName', 'txp_users', 'name', $name);
 		$authors[$name] = $realname;
 		return ($realname) ? $realname : $name;
 	}
@@ -2898,9 +3040,11 @@
 		static $authors = array();
 
 		if (isset($authors[$name]))
+		{
 			return $authors[$name];
+		}
 
-		$email = fetch('email','txp_users','name',$name);
+		$email = fetch('email', 'txp_users', 'name', $name);
 		$authors[$name] = $email;
 		return $email;
 	}
@@ -2914,7 +3058,7 @@
  * @package User
  */
 
-	function has_single_author($table, $col='author')
+	function has_single_author($table, $col = 'author')
 	{
 		return (safe_field('COUNT(name)', 'txp_users', '1=1') <= 1) &&
 			(safe_field('COUNT(DISTINCT('.doSlash($col).'))', doSlash($table), '1=1') <= 1);
@@ -2932,7 +3076,7 @@
 	function EvalElse($thing, $condition)
 	{
 		global $txp_current_tag;
-		static $gTxtTrue = NULL, $gTxtFalse;
+		static $gTxtTrue = null, $gTxtFalse;
 
 		if (empty($gTxtTrue))
 		{
@@ -2944,7 +3088,7 @@
 
 		$els = strpos($thing, '<txp:else');
 
-		if ($els === FALSE)
+		if ($els === false)
 		{
 			return $condition ? $thing : '';
 		}
@@ -2955,7 +3099,7 @@
 				: substr($thing, strpos($thing, '>', $els) + 1);
 		}
 
-		$tag    = FALSE;
+		$tag    = false;
 		$level  = 0;
 		$str    = '';
 		$regex  = '@(</?txp:\w+(?:\s+\w+\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))*\s*/?'.chr(62).')@s';
@@ -3001,10 +3145,14 @@
 		static $forms = array();
 
 		if (isset($forms[$name]))
+		{
 			$f = $forms[$name];
-		else {
+		}
+		else
+		{
 			$row = safe_row('Form', 'txp_form',"name='".doSlash($name)."'");
-			if (!$row) {
+			if (!$row)
+			{
 				trigger_error(gTxt('form_not_found').': '.$name);
 				return;
 			}
@@ -3030,8 +3178,10 @@
 		static $stack = array();
 
 		$f = fetch_form($name);
-		if ($f) {
-			if (in_array($name, $stack)) {
+		if ($f)
+		{
+			if (in_array($name, $stack))
+			{
 				trigger_error(gTxt('form_circular_reference', array('{name}' => $name)));
 				return;
 			}
@@ -3058,7 +3208,9 @@
 		global $thiscategory;
 
 		if (isset($cattitles[$type][$name]))
+		{
 			return $cattitles[$type][$name];
+		}
 
 		if(!empty($thiscategory['title']) && $thiscategory['name'] == $name && $thiscategory['type'] == $type)
 		{
@@ -3085,7 +3237,9 @@
 
 		// Try cache.
 		if (isset($sectitles[$name]))
+		{
 			return $sectitles[$name];
+		}
 
 		// Try global set by section_list().
 		if(!empty($thissection['title']) && $thissection['name'] == $name)
@@ -3095,9 +3249,11 @@
 		}
 
 		if($name == 'default' or empty($name))
+		{
 			return '';
+		}
 
-		$f = safe_field('title','txp_section',"name='".doSlash($name)."'");
+		$f = safe_field('title', 'txp_section', "name='".doSlash($name)."'");
 		$sectitles[$name] = $f;
 		return $f;
 	}
