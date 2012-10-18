@@ -8,6 +8,12 @@
 
 */
 
+/**
+ * Write panel.
+ *
+ * @package Admin\Article
+ */
+
 if (!defined('txpinterface')) die('txpinterface is undefined.');
 
 global $vars, $statuses;
@@ -65,7 +71,9 @@ if (!empty($event) and $event == 'article') {
 	}
 }
 
-//--------------------------------------------------------------
+/**
+ * Processes sent forms and saves new articles.
+ */
 
 	function article_post()
 	{
@@ -202,7 +210,9 @@ if (!empty($event) and $event == 'article') {
 		article_edit($msg);
 	}
 
-//--------------------------------------------------------------
+/**
+ * Processes sent forms and updates existing articles.
+ */
 
 	function article_save()
 	{
@@ -367,7 +377,13 @@ if (!empty($event) and $event == 'article') {
 		article_edit($msg, FALSE, TRUE);
 	}
 
-//--------------------------------------------------------------
+/**
+ * Renders article editor form.
+ *
+ * @param string|array $message          The activity message
+ * @param bool         $concurrent       Treat as a concurrent save
+ * @param bool         $refresh_partials Whether refresh partial contents
+ */
 
 	function article_edit($message = '', $concurrent = FALSE, $refresh_partials = FALSE)
 	{
@@ -899,7 +915,14 @@ EOS
 
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders a custom field.
+ *
+ * @param  int    $num     The custom field number
+ * @param  string $field   The label
+ * @param  string $content The field contents
+ * @return string HTML form field
+ */
 
 	function custField($num, $field, $content)
 	{
@@ -907,7 +930,14 @@ EOS
 			n.fInput('text', 'custom_'.$num, $content, '', '', '', INPUT_REGULAR, '', 'custom-'.$num), ' class="custom-field custom-'.$num.'"');
 	}
 
-// -------------------------------------------------------------
+/**
+ * Gets the ID of the next or the previous article.
+ *
+ * @param  string $whichway Either '&lt;' or '&gt;'
+ * @param  int    Unix timestamp
+ * @return int
+ */
+
 	function checkIfNeighbour($whichway,$sPosted)
 	{
 		$sPosted = assert_int($sPosted);
@@ -918,7 +948,12 @@ EOS
 			"Posted $dir from_unixtime($sPosted) order by Posted $ord limit 1");
 	}
 
-//--------------------------------------------------------------
+/**
+ * Renders a article status field.
+ *
+ * @param  int    $Status Selected status
+ * @return string HTML
+ */
 
 	function status_radio($Status)
 	{
@@ -935,7 +970,14 @@ EOS
 		return '<ul class="status plain-list">'.join('', $out).n.'</ul>';
 	}
 
-//--------------------------------------------------------------
+/**
+ * Renders a category field.
+ *
+ * @param  string $name The Name of the field
+ * @param  string $val  The selected option
+ * @param  string $id   The HTML id
+ * @return string HTML &lt;select&gt; input
+ */
 
 	function category_popup($name, $val, $id)
 	{
@@ -949,7 +991,13 @@ EOS
 		return false;
 	}
 
-//--------------------------------------------------------------
+/**
+ * Renders a section field.
+ *
+ * @param  string $Section The selected section
+ * @param  string $id      The HTML id
+ * @return string HTML &lt;select&gt; input
+ */
 
 	function section_popup($Section, $id)
 	{
@@ -963,7 +1011,14 @@ EOS
 		return false;
 	}
 
-//--------------------------------------------------------------
+/**
+ * Renders a view tab.
+ *
+ * @param  string $tabevent Target view
+ * @param  string $view     The current view
+ * @return string HTML
+ */
+
 	function tab($tabevent,$view)
 	{
 		$state = ($view == $tabevent) ? 'up' : 'down';
@@ -973,13 +1028,24 @@ EOS
 			'</li>'.n;
 	}
 
-//--------------------------------------------------------------
+/**
+ * Gets the name of the default section.
+ *
+ * @return string The section
+ */
+
 	function getDefaultSection()
 	{
 		return get_pref('default_section');
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders 'override form' field.
+ *
+ * @param  string $form The selected form
+ * @param  string $id   The HTML id
+ * @return string HTML &lt;select&gt; input
+ */
 
 	function form_pop($form, $id)
 	{
@@ -993,7 +1059,12 @@ EOS
 		}
 	}
 
-// -------------------------------------------------------------
+/**
+ * Checks URL title for duplicates.
+ *
+ * @param  string $url_title The URL title
+ * @return string Localised feedback message, or an empty string
+ */
 
 	function check_url_title($url_title)
 	{
@@ -1015,7 +1086,16 @@ EOS
 
 		return '';
 	}
-// -------------------------------------------------------------
+
+/**
+ * Translates a status ID to a feedback message.
+ *
+ * This message is displayed when an article is saved.
+ *
+ * @param  int    $Status The status
+ * @return string The status message
+ */
+
 	function get_status_message($Status)
 	{
 		switch ($Status){
@@ -1025,7 +1105,14 @@ EOS
 			default: return gTxt('article_posted');
 		}
 	}
-// -------------------------------------------------------------
+
+/**
+ * Parses article fields using Textile.
+ *
+ * @param  array $incoming 
+ * @return array
+ */
+
 	function textile_main_fields($incoming)
 	{
 		global $prefs;
@@ -1042,7 +1129,11 @@ EOS
 		$incoming['Excerpt_html'] = TextfilterSet::filter($incoming['textile_excerpt'], $incoming['Excerpt'], array('field' => 'Excerpt', 'options' => array('lite' => false), 'data' => $incoming));
 		return $incoming;
 	}
-// -------------------------------------------------------------
+
+/**
+ * Pings home when an article is saved.
+ */
+
 	function do_pings()
 	{
 		global $prefs, $production_status;
