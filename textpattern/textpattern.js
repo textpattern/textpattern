@@ -1110,14 +1110,15 @@ $(document).keyup(function(e) {
  * @deprecated in 4.6.0
  */
 
-var cookieEnabled = checkCookies();
+var cookieEnabled = true;
 
 // Initialise JavaScript.
 
 $(document).ready(function() {
 	// Check cookies.
-	if (!cookieEnabled)
+	if (textpattern.event == 'login' && !checkCookies())
 	{
+		cookieEnabled = false;
 		alert(textpattern.gTxt('cookies_must_be_enabled'));
 	}
 
