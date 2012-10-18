@@ -91,9 +91,19 @@ function doAuth()
 
 	function doLoginForm($message)
 	{
-		global $textarray_script;
+		global $textarray_script, $event, $step;
 
 		include txpath.'/lib/txplib_head.php';
+		$event = 'login';
+
+		if (gps('logout'))
+		{
+			$step = 'logout';
+		}
+		else if(gps('reset'))
+		{
+			$step = 'reset';
+		}
 
 		pagetop(gTxt('login'), $message);
 
