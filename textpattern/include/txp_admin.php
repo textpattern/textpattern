@@ -11,6 +11,12 @@
 
 */
 
+/**
+ * Users panel.
+ *
+ * @package Admin\Admin
+ */
+
 	if (!defined('txpinterface'))
 	{
 		die('txpinterface is undefined.');
@@ -44,7 +50,9 @@
 		}
 	}
 
-// -------------------------------------------------------------
+/**
+ * Changes an email address.
+ */
 
 	function change_email()
 	{
@@ -62,7 +70,9 @@
 		author_list($rs ? gTxt('email_changed', array('{email}' => $new_email)) : gTxt(array('author_save_failed', E_ERROR)));
 	}
 
-// -------------------------------------------------------------
+/**
+ * Updates an user.
+ */
 
 	function author_save()
 	{
@@ -87,7 +97,9 @@
 		author_list($rs ? gTxt('author_updated', array('{name}' => $RealName)) : gTxt(array('author_save_failed', E_ERROR)));
 	}
 
-// -------------------------------------------------------------
+/**
+ * Changes current user's password.
+ */
 
 	function change_pass()
 	{
@@ -128,7 +140,9 @@
 		}
 	}
 
-// -------------------------------------------------------------
+/**
+ * Creates a new user.
+ */
 
 	function author_save_new()
 	{
@@ -177,7 +191,12 @@
 		author_list(array(gTxt('error_adding_new_author'), E_ERROR));
 	}
 
-// -------------------------------------------------------------
+/**
+ * Lists user groups as a &lt;select&gt; input.
+ *
+ * @param  int $priv Selected option
+ * @return string HTML
+ */
 
 	function privs($priv = '')
 	{
@@ -185,7 +204,12 @@
 		return selectInput('privs', $levels, $priv, '', '', 'privileges');
 	}
 
-// -------------------------------------------------------------
+/**
+ * Translates a numeric ID to a human-readable user group.
+ *
+ * @param  int $priv The group
+ * @return string
+ */
 
 	function get_priv_level($priv)
 	{
@@ -193,7 +217,9 @@
 		return $levels[$priv];
 	}
 
-// -------------------------------------------------------------
+/**
+ * Password changing form.
+ */
 
 	function new_pass_form()
 	{
@@ -213,7 +239,9 @@
 		, '', '', 'post', '', '', 'change_password');
 	}
 
-// -------------------------------------------------------------
+/**
+ * Email changing form.
+ */
 
 	function change_email_form()
 	{
@@ -234,7 +262,11 @@
 		, '', '', 'post', '','', 'change_email');
 	}
 
-// -------------------------------------------------------------
+/**
+ * The main author list.
+ *
+ * @param string|array $message The activity message
+ */
 
 	function author_list($message = '')
 	{
@@ -399,7 +431,12 @@
 		}
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders a user search form.
+ *
+ * @param string $crit   Current search criteria
+ * @param string $method Selected search method
+ */
 
 	function author_search_form($crit, $method)
 	{
@@ -414,7 +451,11 @@
 		return search_form('admin', 'author_list', $crit, $methods, $method, 'login');
 	}
 
-// -------------------------------------------------------------
+/**
+ * User editor panel.
+ *
+ * Accessing requires 'admin.edit' privileges.
+ */
 
 	function author_edit()
 	{
@@ -455,7 +496,9 @@
 		, '', '', 'post', 'edit-form', '', 'user_edit');
 	}
 
-// -------------------------------------------------------------
+/**
+ * Updates pageby value.
+ */
 
 	function admin_change_pageby()
 	{
@@ -463,7 +506,16 @@
 		author_list();
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders multi-edit form.
+ *
+ * @param  int    $page          The page
+ * @param  string $sort          The sorting value
+ * @param  string $dir           The sorting direction
+ * @param  string $crit          The search string
+ * @param  string $search_method The search method
+ * @return string HTML
+ */
 
 	function author_multiedit_form($page, $sort, $dir, $crit, $search_method)
 	{
@@ -482,7 +534,11 @@
 		return multi_edit($methods, 'admin', 'admin_multi_edit', $page, $sort, $dir, $crit, $search_method);
 	}
 
-// -------------------------------------------------------------
+/**
+ * Processes multi-edit actions.
+ *
+ * Accessing requires 'admin.edit' privileges.
+ */
 
 	function admin_multi_edit()
 	{
@@ -596,8 +652,14 @@
 
 		author_list($msg);
 	}
-// -------------------------------------------------------------
-//	@deprecated
+
+/**
+ * Legacy panel.
+ *
+ * @param      string|array $message
+ * @deprecated in 4.2.0
+ */
+
 	function admin($message = '')
 	{
 		author_list($message);
