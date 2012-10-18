@@ -1554,14 +1554,16 @@
 
 	function site_name()
 	{
-		return txpspecialchars($GLOBALS['sitename']);
+		global $sitename;
+		return txpspecialchars($sitename);
 	}
 
 // -------------------------------------------------------------
 
 	function site_slogan()
 	{
-		return txpspecialchars($GLOBALS['site_slogan']);
+		global $site_slogan;
+		return txpspecialchars($site_slogan);
 	}
 
 // -------------------------------------------------------------
@@ -1920,7 +1922,7 @@
 		global $comments_mode;
 
 		if (!$comments_invite)
-			$comments_invite = @$GLOBALS['prefs']['comments_default_invite'];
+			$comments_invite = get_pref('comments_default_invite');
 
 		extract(lAtts(array(
 			'class'      => __FUNCTION__,
@@ -4010,26 +4012,28 @@
 // -------------------------------------------------------------
 	function error_message()
 	{
-		return @$GLOBALS['txp_error_message'];
+		global $txp_error_message;
+		return $txp_error_message;
 	}
 
 // -------------------------------------------------------------
 	function error_status()
 	{
-		return @$GLOBALS['txp_error_status'];
+		global $txp_error_status;
+		return $txp_error_status;
 	}
 
 // -------------------------------------------------------------
 	function if_status($atts, $thing)
 	{
-		global $pretext;
+		global $pretext, $txp_error_code;
 
 		extract(lAtts(array(
 			'status' => '200',
 		), $atts));
 
-		$page_status = !empty($GLOBALS['txp_error_code'])
-			? $GLOBALS['txp_error_code']
+		$page_status = $txp_error_code
+			? $txp_error_code
 			: $pretext['status'];
 
 		return parse(EvalElse($thing, $status == $page_status));
