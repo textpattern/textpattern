@@ -401,7 +401,7 @@
 		{
 			global $prefs;
 
-			if(!$f)
+			if (!$f)
 			{
 				$f = fopen($prefs['tempdir'].'/'.txpdmpfile, 'a');
 			}
@@ -527,7 +527,7 @@
 				{
 					continue;
 				}
-				list($name,$val) = explode('=>',$line,2);
+				list($name, $val) = explode('=>', $line, 2);
 				$out[trim($name)] = trim($val);
 			}
 			return $out;
@@ -2158,7 +2158,7 @@
 			if (is_callable('memory_get_usage'))
 			{
 				return n.comment(sprintf('Memory: %sKb, %s',
-					ceil($memory_top/1024),$memory_message));
+					ceil($memory_top/1024), $memory_message));
 			}
 			else
 			{
@@ -2299,7 +2299,7 @@
 	function encode_mailheader($string, $type)
 	{
 		global $prefs;
-		if (!strstr($string,'=?') and !preg_match('/[\x00-\x1F\x7F-\xFF]/', $string))
+		if (!strstr($string, '=?') and !preg_match('/[\x00-\x1F\x7F-\xFF]/', $string))
 		{
 			if ("phrase" == $type)
 			{
@@ -2329,7 +2329,7 @@
 		$end = '?=';
 		$sep = IS_WIN ? "\r\n" : "\n";
 		preg_match_all($pcre, $string, $matches);
-		return $start . join($end.$sep.' '.$start, array_map('base64_encode',$matches[0])) . $end;
+		return $start . join($end.$sep.' '.$start, array_map('base64_encode', $matches[0])) . $end;
 	}
 
 /**
@@ -2341,7 +2341,7 @@
 
 	function stripPHP($in)
 	{
-		return preg_replace("/".chr(60)."\?(?:php)?|\?".chr(62)."/i",'',$in);
+		return preg_replace("/".chr(60)."\?(?:php)?|\?".chr(62)."/i", '', $in);
 	}
 
 /**
@@ -2675,12 +2675,12 @@
 					echo ') ';
 				}
 
-				if(isset($ent['line']))
+				if (isset($ent['line']))
 				{
 					echo 'at line '.$ent['line'].' ';
 				}
 
-				if(isset($ent['file']))
+				if (isset($ent['file']))
 				{
 					echo 'in '.$ent['file'];
 				}
@@ -2759,7 +2759,7 @@
  * @package File
  */
 
-	function get_uploaded_file($f, $dest='')
+	function get_uploaded_file($f, $dest = '')
 	{
 		global $tempdir;
 
@@ -2997,7 +2997,7 @@
  * @package File
  */
 
-	function build_file_path($base,$path)
+	function build_file_path($base, $path)
 	{
 		$base = rtrim($base, '/\\');
 		$path = ltrim($path, '/\\');
@@ -3202,7 +3202,7 @@
  * @return string|bool The title or FALSE on error
  */
 
-	function fetch_category_title($name, $type='article')
+	function fetch_category_title($name, $type = 'article')
 	{
 		static $cattitles = array();
 		global $thiscategory;
@@ -3212,13 +3212,13 @@
 			return $cattitles[$type][$name];
 		}
 
-		if(!empty($thiscategory['title']) && $thiscategory['name'] == $name && $thiscategory['type'] == $type)
+		if (!empty($thiscategory['title']) && $thiscategory['name'] == $name && $thiscategory['type'] == $type)
 		{
 			$cattitles[$type][$name] = $thiscategory['title'];
 			return $thiscategory['title'];
 		}
 
-		$f = safe_field('title','txp_category',"name='".doSlash($name)."' and type='".doSlash($type)."'");
+		$f = safe_field('title', 'txp_category', "name='".doSlash($name)."' and type='".doSlash($type)."'");
 		$cattitles[$type][$name] = $f;
 		return $f;
 	}
@@ -3242,13 +3242,13 @@
 		}
 
 		// Try global set by section_list().
-		if(!empty($thissection['title']) && $thissection['name'] == $name)
+		if (!empty($thissection['title']) && $thissection['name'] == $name)
 		{
 			$sectitles[$name] = $thissection['title'];
 			return $thissection['title'];
 		}
 
-		if($name == 'default' or empty($name))
+		if ($name == 'default' or empty($name))
 		{
 			return '';
 		}
@@ -3269,9 +3269,9 @@
 	function update_comments_count($id)
 	{
 		$id = assert_int($id);
-		$thecount = safe_field('count(*)','txp_discuss','parentid='.$id.' and visible='.VISIBLE);
+		$thecount = safe_field('count(*)', 'txp_discuss', 'parentid='.$id.' and visible='.VISIBLE);
 		$thecount = assert_int($thecount);
-		$updated = safe_update('textpattern','comments_count='.$thecount,'ID='.$id);
+		$updated = safe_update('textpattern', 'comments_count='.$thecount, 'ID='.$id);
 		return ($updated) ? true : false;
 	}
 
@@ -3284,19 +3284,26 @@
 
 	function clean_comment_counts($parentids)
 	{
-		$parentids = array_map('assert_int',$parentids);
-		$rs = safe_rows_start('parentid, count(*) as thecount','txp_discuss','parentid IN ('.implode(',',$parentids).') AND visible='.VISIBLE.' group by parentid');
-		if (!$rs) return;
+		$parentids = array_map('assert_int', $parentids);
+		$rs = safe_rows_start('parentid, count(*) as thecount', 'txp_discuss', 'parentid IN ('.implode(',', $parentids).') AND visible='.VISIBLE.' group by parentid');
+
+		if (!$rs)
+		{
+			return;
+		}
 
 		$updated = array();
-		while($a = nextRow($rs)) {
-			safe_update('textpattern',"comments_count=".$a['thecount'],"ID=".$a['parentid']);
+		while ($a = nextRow($rs))
+		{
+			safe_update('textpattern', "comments_count=".$a['thecount'], "ID=".$a['parentid']);
 			$updated[] = $a['parentid'];
 		}
 		// We still need to update all those, that have zero comments left.
 		$leftover = array_diff($parentids, $updated);
 		if ($leftover)
-			safe_update('textpattern',"comments_count=0","ID IN (".implode(',',$leftover).")");
+		{
+			safe_update('textpattern', "comments_count=0","ID IN (".implode(',', $leftover).")");
+		}
 	}
 
 /**
@@ -3331,7 +3338,8 @@
  * update_lastmod();
  */
 
-	function update_lastmod() {
+	function update_lastmod()
+	{
 		safe_upsert("txp_prefs", "val = now()", "name = 'lastmod'");
 	}
 
@@ -3343,14 +3351,18 @@
  * @package Pref
  */
 
-	function get_lastmod($unix_ts=NULL) {
+	function get_lastmod($unix_ts = NULL)
+	{
 		global $prefs;
 
 		if ($unix_ts === NULL)
+		{
 			$unix_ts = @strtotime($prefs['lastmod']);
+		}
 
 		// Check for future articles that are now visible.
-		if ($max_article = safe_field('unix_timestamp(Posted)', 'textpattern', "Posted <= now() and Status >= 4 order by Posted desc limit 1")) {
+		if ($max_article = safe_field('unix_timestamp(Posted)', 'textpattern', "Posted <= now() and Status >= 4 order by Posted desc limit 1"))
+		{
 			$unix_ts = max($unix_ts, $max_article);
 		}
 
@@ -3366,16 +3378,18 @@
  * @package Pref
  */
 
-	function handle_lastmod($unix_ts=NULL, $exit=1) {
+	function handle_lastmod($unix_ts=NULL, $exit=1)
+	{
 		global $prefs;
 		extract($prefs);
 
-		if($send_lastmod and $production_status == 'live') {
+		if ($send_lastmod and $production_status == 'live')
+		{
 			$unix_ts = get_lastmod($unix_ts);
 
-			# make sure lastmod isn't in the future
+			// Make sure lastmod isn't in the future.
 			$unix_ts = min($unix_ts, time());
-			# or too far in the past (7 days)
+			// Or too far in the past (7 days).
 			$unix_ts = max($unix_ts, time() - 3600*24*7);
 
 			$last = safe_strftime('rfc822', $unix_ts, 1);
@@ -3383,24 +3397,31 @@
 			header('Cache-Control: no-cache');
 
 			$hims = serverset('HTTP_IF_MODIFIED_SINCE');
-			if ($hims and @strtotime($hims) >= $unix_ts) {
+			if ($hims and @strtotime($hims) >= $unix_ts)
+			{
 				log_hit('304');
 				if (!$exit)
+				{
 					return array('304', $last);
+				}
 				txp_status_header('304 Not Modified');
-				# some mod_deflate versions have a bug that breaks subsequent
-				# requests when keepalive is used.  dropping the connection
-				# is the only reliable way to fix this.
+				// Some mod_deflate versions have a bug that breaks subsequent
+				// requests when keepalive is used.  dropping the connection
+				// is the only reliable way to fix this.
 				if (empty($lastmod_keepalive))
+				{
 					header('Connection: close');
+				}
 				header('Content-Length: 0');
-				# discard all output
+				// Discard all output.
 				while (@ob_end_clean());
 				exit;
 			}
 
 			if (!$exit)
+			{
 				return array('200', $last);
+			}
 		}
 	}
 
@@ -3418,20 +3439,25 @@
  * @package Pref
  */
 
-	function set_pref($name, $val, $event='publish',  $type=0, $html='text_input', $position=0, $is_private=PREF_GLOBAL)
+	function set_pref($name, $val, $event = 'publish',  $type = 0, $html = 'text_input', $position = 0, $is_private = PREF_GLOBAL)
 	{
 		global $txp_user;
 		extract(doSlash(func_get_args()));
 
 		$user_name = '';
-		if ($is_private == PREF_PRIVATE) {
+
+		if ($is_private == PREF_PRIVATE)
+		{
 			if (empty($txp_user))
+			{
 				return false;
+			}
 
 			$user_name = 'user_name = \''.doSlash($txp_user).'\'';
 		}
 
-		if (!safe_row('name', 'txp_prefs', "name = '$name'" . ($user_name ? " AND $user_name" : ''))) {
+		if (!safe_row('name', 'txp_prefs', "name = '$name'" . ($user_name ? " AND $user_name" : '')))
+		{
 			$user_name = ($user_name ? "$user_name," : '');
 			return safe_insert('txp_prefs', "
 				name  = '$name',
@@ -3443,8 +3469,10 @@
 				$user_name
 				prefs_id = 1"
 			);
-    	} else {
-        	return safe_update('txp_prefs', "val = '$val'","name like '$name'" . ($user_name ? " AND $user_name" : ''));
+    	}
+    	else
+    	{
+        	return safe_update('txp_prefs', "val = '$val'", "name like '$name'" . ($user_name ? " AND $user_name" : ''));
     	}
 	}
 
@@ -3458,7 +3486,7 @@
  * @package Pref
  */
 
-	function get_pref($thing, $default='', $from_db=0)
+	function get_pref($thing, $default = '', $from_db = false)
 	{
 		global $prefs, $txp_user;
 
@@ -3466,14 +3494,14 @@
 		{
 			$name = doSlash($thing);
 			$user_name = doSlash($txp_user);
-			// prefer system prefs over user's prefs
-			$field = safe_field('val', 'txp_prefs',
-								"name='$name' AND (user_name='' OR user_name='$user_name') order by user_name limit 1");
+			// Prefer system prefs over user's prefs.
+			$field = safe_field('val', 'txp_prefs', "name='$name' AND (user_name='' OR user_name='$user_name') order by user_name limit 1");
 			if ($field !== false)
 			{
 				$prefs[$thing] = $field;
 			}
 		}
+
 		return (isset($prefs[$thing])) ? $prefs[$thing] : $default;
 	}
 
@@ -3495,13 +3523,16 @@
 			$cfs = preg_grep('/^custom_\d+_set/', array_keys($prefs));
 
 			$out = array();
-			foreach ($cfs as $name) {
+			foreach ($cfs as $name)
+			{
 				preg_match('/(\d+)/', $name, $match);
-				if (!empty($prefs[$name])) {
+				if (!empty($prefs[$name]))
+				{
 					$out[$match[1]] = strtolower($prefs[$name]);
 				}
 			}
 		}
+
 		return $out;
 	}
 
@@ -3514,19 +3545,22 @@
  * @package CustomField
  */
 
-	function buildCustomSql($custom,$pairs)
+	function buildCustomSql($custom, $pairs)
 	{
-		if ($pairs) {
+		if ($pairs)
+		{
 			$pairs = doSlash($pairs);
-			foreach($pairs as $k => $v) {
-				if(in_array($k,$custom)) {
-					$no = array_keys($custom,$k);
-					# nb - use 'like' here to allow substring matches
+			foreach ($pairs as $k => $v)
+			{
+				if (in_array($k, $custom))
+				{
+					$no = array_keys($custom, $k);
 					$out[] = "and custom_".$no[0]." like '$v'";
 				}
 			}
 		}
-		return (!empty($out)) ? ' '.join(' ',$out).' ' : false;
+
+		return !empty($out) ? ' '.join(' ', $out).' ' : false;
 	}
 
 /**
@@ -3536,14 +3570,20 @@
  * @package Network
  */
 
-	function txp_status_header($status='200 OK')
+	function txp_status_header($status = '200 OK')
 	{
 		if (IS_FASTCGI)
+		{
 			header("Status: $status");
+		}
 		elseif ($_SERVER['SERVER_PROTOCOL'] == 'HTTP/1.0')
+		{
 			header("HTTP/1.0 $status");
+		}
 		else
+		{
 			header("HTTP/1.1 $status");
+		}
 	}
 
 /**
@@ -3555,12 +3595,17 @@
  * @package Tag
  */
 
-	function txp_die($msg, $status='503', $url='')
+	function txp_die($msg, $status = '503', $url = '')
 	{
-
 		//Make it possible to call this function as a tag, e.g. in an article <txp:txp_die status="410" />.
 		if (is_array($msg))
-			extract(lAtts(array('msg' => '', 'status' => '503', 'url' => ''),$msg));
+		{
+			extract(lAtts(array(
+				'msg' => '',
+				'status' => '503',
+				'url' => ''
+			), $msg));
+		}
 
 		// Intentionally incomplete - just the ones we're likely to use.
 		$codes = array(
@@ -3579,34 +3624,43 @@
 			'503' => 'Service Unavailable',
 		);
 
-		if ($status) {
+		if ($status)
+		{
 			if (isset($codes[strval($status)]))
+			{
 				$status = strval($status) . ' ' . $codes[$status];
+			}
 
 			txp_status_header($status);
 		}
 
 		$code = '';
-		if ($status and $parts = @explode(' ', $status, 2)) {
+		if ($status and $parts = @explode(' ', $status, 2))
+		{
 			$code = @$parts[0];
 		}
 
 		callback_event('txp_die', $code);
 
 		// Redirect with status.
-		if ($url && in_array($code, array(301, 302, 307))) {
+		if ($url && in_array($code, array(301, 302, 307)))
+		{
 			ob_end_clean();
 			header("Location: $url", true, $code);
 			die('<html><head><meta http-equiv="refresh" content="0;URL='.txpspecialchars($url).'"></head><body></body></html>');
 		}
 
-		if (@$GLOBALS['connected'] && @txpinterface == 'public') {
-			$out = safe_field('user_html','txp_page',"name='error_".doSlash($code)."'");
+		if (@$GLOBALS['connected'] && @txpinterface == 'public')
+		{
+			$out = safe_field('user_html', 'txp_page', "name='error_".doSlash($code)."'");
 			if ($out === false)
-				$out = safe_field('user_html','txp_page',"name='error_default'");
+			{
+				$out = safe_field('user_html', 'txp_page', "name='error_default'");
+			}
 		}
 
 		if (!isset($out))
+		{
 			$out = <<<eod
 <!DOCTYPE html>
 <html lang="en">
@@ -3619,22 +3673,24 @@
 </body>
 </html>
 eod;
-
+		}
 		header("Content-type: text/html; charset=utf-8");
 
-		if (is_callable('parse')) {
-
+		if (is_callable('parse'))
+		{
 			$GLOBALS['txp_error_message'] = $msg;
 			$GLOBALS['txp_error_status'] = $status;
 			$GLOBALS['txp_error_code'] = $code;
-
 			set_error_handler("tagErrorHandler");
 			die(parse($out));
 		}
-		else {
-			$out = preg_replace(array('@<txp:error_status[^>]*/>@', '@<txp:error_message[^>]*/>@'),
+		else
+		{
+			$out = preg_replace(
+				array('@<txp:error_status[^>]*/>@', '@<txp:error_message[^>]*/>@'),
 				array($status, $msg),
-				$out);
+				$out
+			);
 			die($out);
 		}
 	}
@@ -3717,7 +3773,8 @@ eod;
 
 		if ($permlink_mode == 'messy')
 		{
-			if (!empty($keys['context'])) {
+			if (!empty($keys['context']))
+			{
 				$keys['context'] = gTxt($keys['context'].'_context');
 			}
 			return hu.'index.php'.join_qs($keys);
@@ -3744,7 +3801,8 @@ eod;
 
 			elseif (!empty($keys['s']))
 			{
-				if (!empty($keys['context'])) {
+				if (!empty($keys['context']))
+				{
 					$keys['context'] = gTxt($keys['context'].'_context');
 				}
 				$url = hu.urlencode($keys['s']).'/';
@@ -3781,15 +3839,17 @@ eod;
  * @package File
  */
 
-	function filedownloadurl($id, $filename='')
+	function filedownloadurl($id, $filename = '')
 	{
 		global $permlink_mode;
 
 		$filename = urlencode($filename);
-		#FIXME: work around yet another mod_deflate problem (double compression)
-		# http://blogs.msdn.com/wndp/archive/2006/08/21/Content-Encoding-not-equal-Content-Type.aspx
+		// FIXME: work around yet another mod_deflate problem (double compression)
+		// http://blogs.msdn.com/wndp/archive/2006/08/21/Content-Encoding-not-equal-Content-Type.aspx
 		if (preg_match('/gz$/i', $filename))
+		{
 			$filename .= a;
+		}
 		return ($permlink_mode == 'messy') ?
 			hu.'index.php?s=file_download'.a.'id='.$id :
 			hu.gTxt('file_download').'/'.$id.($filename ? '/'.$filename : '');
@@ -3808,7 +3868,7 @@ eod;
 	function imagesrcurl($id, $ext, $thumbnail = false)
 	{
 		global $img_dir;
-		$thumbnail = ($thumbnail ? 't' : '');
+		$thumbnail = $thumbnail ? 't' : '';
 		return ihu.$img_dir.'/'.$id.$thumbnail.$ext;
 	}
 
@@ -3885,12 +3945,10 @@ eod;
 
 	function trace_add($msg)
 	{
-		global $production_status;
+		global $production_status, $txptrace, $txptracelevel;
 
 		if ($production_status === 'debug')
 		{
-			global $txptrace,$txptracelevel;
-
 			$txptrace[] = str_repeat("\t", $txptracelevel).$msg;
 		}
 	}
@@ -3902,9 +3960,10 @@ eod;
  * current $thisarticle.
  */
 
-	function article_push() {
+	function article_push()
+	{
 		global $thisarticle, $stack_article;
-		$stack_article[] = @$thisarticle;
+		$stack_article[] = $thisarticle;
 	}
 
 /**
@@ -3914,7 +3973,8 @@ eod;
  * last article form the stack stored in $stack_article.
  */
 
-	function article_pop() {
+	function article_pop()
+	{
 		global $thisarticle, $stack_article;
 		$thisarticle = array_pop($stack_article);
 	}
@@ -3928,10 +3988,13 @@ eod;
  * @package File
  */
 
-	function relative_path($path, $pfx=NULL)
+	function relative_path($path, $pfx = null)
 	{
-		if ($pfx === NULL)
+		if ($pfx === null)
+		{
 			$pfx = dirname(txpath);
+		}
+
 		return preg_replace('@^/'.preg_quote(ltrim($pfx, '/'), '@').'/?@', '', $path);
 	}
 
@@ -3944,32 +4007,46 @@ eod;
  * @package Debug
  */
 
-	function get_caller($num=1,$start=2)
+	function get_caller($num = 1, $start = 2)
 	{
 		$out = array();
+
 		if (!is_callable('debug_backtrace'))
+		{
 			return $out;
+		}
 
 		$bt = debug_backtrace();
-		for ($i=$start; $i< $num+$start; $i++) {
-			if (!empty($bt[$i])) {
+		for ($i = $start; $i < $num+$start; $i++)
+		{
+			if (!empty($bt[$i]))
+			{
 				$t = '';
 				if (!empty($bt[$i]['file']))
+				{
 					$t .= relative_path($bt[$i]['file']);
-				if (!empty($bt[$i]['line']))
-					$t .= ':'.$bt[$i]['line'];
-				if ($t)
-					$t .= ' ';
-				if (!empty($bt[$i]['class']))
-					$t .= $bt[$i]['class'];
-				if (!empty($bt[$i]['type']))
-					$t .= $bt[$i]['type'];
-				if (!empty($bt[$i]['function'])) {
-					$t .= $bt[$i]['function'];
-
-				$t .= '()';
 				}
-
+				if (!empty($bt[$i]['line']))
+				{
+					$t .= ':'.$bt[$i]['line'];
+				}
+				if ($t)
+				{
+					$t .= ' ';
+				}
+				if (!empty($bt[$i]['class']))
+				{
+					$t .= $bt[$i]['class'];
+				}
+				if (!empty($bt[$i]['type']))
+				{
+					$t .= $bt[$i]['type'];
+				}
+				if (!empty($bt[$i]['function']))
+				{
+					$t .= $bt[$i]['function'];
+					$t .= '()';
+				}
 
 				$out[] = $t;
 			}
@@ -3987,11 +4064,14 @@ eod;
  * @package i18n
  */
 
-	function getlocale($lang) {
+	function getlocale($lang)
+	{
 		global $locale;
 
 		if (empty($locale))
+		{
 			$locale = @setlocale(LC_TIME, '0');
+		}
 
 		// Locale identifiers vary from system to system.  The
 		// following code will attempt to discover which identifiers
@@ -4039,10 +4119,13 @@ eod;
 			'zh-tw' => array('zh_TW.UTF-8', 'zh_TW'),
 		);
 
-		if (!empty($guesses[$lang])) {
+		if (!empty($guesses[$lang]))
+		{
 			$l = @setlocale(LC_TIME, $guesses[$lang]);
 			if ($l !== false)
+			{
 				$locale = $l;
+			}
 		}
 		@setlocale(LC_TIME, $locale);
 
@@ -4053,70 +4136,91 @@ eod;
  * Assert article context error.
  */
 
-	function assert_article() {
+	function assert_article()
+	{
 		global $thisarticle;
 		if (empty($thisarticle))
+		{
 			trigger_error(gTxt('error_article_context'));
+		}
 	}
 
 /**
  * Assert comment context error.
  */
 
-	function assert_comment() {
+	function assert_comment()
+	{
 		global $thiscomment;
 		if (empty($thiscomment))
+		{
 			trigger_error(gTxt('error_comment_context'));
+		}
 	}
 
 /**
  * Assert file context error.
  */
 
-	function assert_file() {
+	function assert_file()
+	{
 		global $thisfile;
 		if (empty($thisfile))
+		{
 			trigger_error(gTxt('error_file_context'));
+		}
 	}
 
 /**
  * Assert image context error.
  */
 
-	function assert_image() {
+	function assert_image()
+	{
 		global $thisimage;
 		if (empty($thisimage))
+		{
 			trigger_error(gTxt('error_image_context'));
+		}
 	}
 
 /**
  * Assert link context error.
  */
 
-	function assert_link() {
+	function assert_link()
+	{
 		global $thislink;
 		if (empty($thislink))
+		{
 			trigger_error(gTxt('error_link_context'));
+		}
 	}
 
 /**
  * Assert section context error.
  */
 
-	function assert_section() {
+	function assert_section()
+	{
 		global $thissection;
 		if (empty($thissection))
+		{
 			trigger_error(gTxt('error_section_context'));
+		}
 	}
 
 /**
  * Assert category context error.
  */
 
-	function assert_category() {
+	function assert_category()
+	{
 		global $thiscategory;
 		if (empty($thiscategory))
+		{
 			trigger_error(gTxt('error_category_context'));
+		}
 	}
 
 /**
@@ -4126,11 +4230,13 @@ eod;
  * @return int|bool The variable or FALSE on error
  */
 
-	function assert_int($myvar) {
-		if (is_numeric($myvar) and $myvar == intval($myvar)) {
+	function assert_int($myvar)
+	{
+		if (is_numeric($myvar) and $myvar == intval($myvar))
+		{
 			return (int) $myvar;
 		}
-		trigger_error("'".txpspecialchars((string)$myvar)."' is not an integer", E_USER_ERROR);
+		trigger_error("'".txpspecialchars((string) $myvar)."' is not an integer", E_USER_ERROR);
 		return false;
 	}
 
@@ -4141,8 +4247,10 @@ eod;
  * @return string|bool The variable or FALSE on error
  */
 
-	function assert_string($myvar) {
-		if (is_string($myvar)) {
+	function assert_string($myvar)
+	{
+		if (is_string($myvar))
+		{
 			return $myvar;
 		}
 		trigger_error("'".txpspecialchars((string)$myvar)."' is not a string", E_USER_ERROR);
@@ -4156,11 +4264,13 @@ eod;
  * @return array|bool The variable or FALSE on error
  */
 
-	function assert_array($myvar) {
-		if (is_array($myvar)) {
+	function assert_array($myvar)
+	{
+		if (is_array($myvar))
+		{
 			return $myvar;
 		}
-		trigger_error("'".txpspecialchars((string)$myvar)."' is not an array", E_USER_ERROR);
+		trigger_error("'".txpspecialchars((string) $myvar)."' is not an array", E_USER_ERROR);
 		return false;
 	}
 
@@ -4173,22 +4283,26 @@ eod;
  * @package URL
  */
 
-	function replace_relative_urls($html, $permalink='') {
-
+	function replace_relative_urls($html, $permalink = '')
+	{
 		global $siteurl;
 
-		# urls like "/foo/bar" - relative to the domain
-		if (serverSet('HTTP_HOST')) {
-			$html = preg_replace('@(<a[^>]+href=")/@','$1'.PROTOCOL.serverSet('HTTP_HOST').'/',$html);
-			$html = preg_replace('@(<img[^>]+src=")/@','$1'.PROTOCOL.serverSet('HTTP_HOST').'/',$html);
+		// urls like "/foo/bar" - relative to the domain
+		if (serverSet('HTTP_HOST'))
+		{
+			$html = preg_replace('@(<a[^>]+href=")/@', '$1'.PROTOCOL.serverSet('HTTP_HOST').'/', $html);
+			$html = preg_replace('@(<img[^>]+src=")/@', '$1'.PROTOCOL.serverSet('HTTP_HOST').'/', $html);
 		}
-		# "foo/bar" - relative to the textpattern root
-		# leave "http:", "mailto:" et al. as absolute urls
-		$html = preg_replace('@(<a[^>]+href=")(?!\w+:)@','$1'.PROTOCOL.$siteurl.'/$2',$html);
-		$html = preg_replace('@(<img[^>]+src=")(?!\w+:)@','$1'.PROTOCOL.$siteurl.'/$2',$html);
+		// "foo/bar" - relative to the textpattern root
+		// leave "http:", "mailto:" et al. as absolute urls
+		$html = preg_replace('@(<a[^>]+href=")(?!\w+:)@', '$1'.PROTOCOL.$siteurl.'/$2', $html);
+		$html = preg_replace('@(<img[^>]+src=")(?!\w+:)@', '$1'.PROTOCOL.$siteurl.'/$2', $html);
 
 		if ($permalink)
-			$html = preg_replace("/href=\\\"#(.*)\"/","href=\"".$permalink."#\\1\"",$html);
+		{
+			$html = preg_replace("/href=\\\"#(.*)\"/", "href=\"".$permalink."#\\1\"", $html);
+		}
+
 		return ($html);
 	}
 
@@ -4199,7 +4313,8 @@ eod;
  * @access private
  */
 
-	function show_clean_test($pretext) {
+	function show_clean_test($pretext)
+	{
 		echo md5(@$pretext['req']).n;
 		if (serverSet('SERVER_ADDR') == serverSet('REMOTE_ADDR'))
 		{
@@ -4220,7 +4335,8 @@ eod;
  * @return array Array of page, offset and number of pages.
  */
 
-	function pager($total, $limit, $page) {
+	function pager($total, $limit, $page)
+	{
 		$total = (int) $total;
 		$limit = (int) $limit;
 		$page = (int) $page;
@@ -4243,16 +4359,21 @@ eod;
  * @return string
  */
 
-	function soft_wrap($text, $width, $break='&#8203;')
+	function soft_wrap($text, $width, $break = '&#8203;')
 	{
 		$wbr = chr(226).chr(128).chr(139);
 		$words = explode(' ', $text);
-		foreach($words as $wordnr => $word) {
+		foreach($words as $wordnr => $word)
+		{
 			$word = preg_replace('|([,./\\>?!:;@-]+)(?=.)|', '$1 ', $word);
 			$parts = explode(' ', $word);
-			foreach($parts as $partnr => $part) {
+			foreach($parts as $partnr => $part)
+			{
 				$len = strlen(utf8_decode($part));
-				if (!$len) continue;
+				if (!$len)
+				{
+					continue;
+				}
 				$parts[$partnr] = preg_replace('/(.{'.ceil($len/ceil($len/$width)).'})(?=.)/u', '$1'.$wbr, $part);
 			}
 			$words[$wordnr] = join($wbr, $parts);
@@ -4268,7 +4389,8 @@ eod;
  * @return string
  */
 
-	function strip_prefix($str, $pfx) {
+	function strip_prefix($str, $pfx)
+	{
 		return preg_replace('/^'.preg_quote($pfx, '/').'/', '', $str);
 	}
 
@@ -4283,18 +4405,19 @@ eod;
  * @package XML
  */
 
-	function send_xml_response($response=array())
+	function send_xml_response($response = array())
 	{
 		static $headers_sent = false;
 
-		if (!$headers_sent) {
+		if (!$headers_sent)
+		{
 			ob_clean();
 			header('Content-Type: text/xml; charset=utf-8');
 			$out[] = '<?xml version="1.0" encoding="utf-8" standalone="yes"?>';
 			$headers_sent = true;
 		}
 
-		$default_response = array (
+		$default_response = array(
 			'http-status' => '200 OK',
 		);
 
@@ -4337,7 +4460,8 @@ eod;
 	function send_script_response($out = '')
 	{
 		static $headers_sent = false;
-		if (!$headers_sent) {
+		if (!$headers_sent)
+		{
 			ob_clean();
 			header('Content-Type: text/javascript; charset=utf-8');
 			txp_status_header('200 OK');
@@ -4354,15 +4478,15 @@ eod;
  * @package Ajax
  */
 
-function modal_halt($thing)
-{
-	global $app_mode, $theme;
-	if ($app_mode == 'async')
+	function modal_halt($thing)
 	{
-		send_script_response($theme->announce_async($thing, true));
-		die();
+		global $app_mode, $theme;
+		if ($app_mode == 'async')
+		{
+			send_script_response($theme->announce_async($thing, true));
+			die();
+		}
 	}
-}
 
 /**
  * Performs regular housekeeping.
@@ -4372,10 +4496,9 @@ function modal_halt($thing)
 
 	function janitor()
 	{
-		global $prefs;
+		global $prefs, $auto_dst, $timezone_key, $is_dst;
 
-		// update DST setting
-		global $auto_dst, $timezone_key, $is_dst;
+		// Update DST setting.
 		if ($auto_dst && $timezone_key)
 		{
 			$is_dst = timezone::is_dst(time(), $timezone_key);
@@ -4508,10 +4631,16 @@ function modal_halt($thing)
 				foreach ($this->_details as $timezone_id => $tz)
 				{
 					extract($tz);
-					if ($value == $timezone_id) $selected = true;
+					if ($value == $timezone_id)
+					{
+						$selected = true;
+					}
 					if ($continent !== $thiscontinent)
 					{
-						if ($thiscontinent !== '') $out[] = n.t.'</optgroup>';
+						if ($thiscontinent !== '')
+						{
+							$out[] = n.t.'</optgroup>';
+						}
 						$out[] = n.t.'<optgroup label="'.gTxt($continent).'">';
 						$thiscontinent = $continent;
 					}
@@ -4576,11 +4705,11 @@ function modal_halt($thing)
 				$server_tz = @date_default_timezone_get();
 				if ($server_tz)
 				{
-					// switch to client time zone
+					// Switch to client time zone.
 					if (date_default_timezone_set($timezone_key))
 					{
 						$out = date('I', $timestamp);
-						// restore server time zone
+						// Restore server time zone.
 						date_default_timezone_set($server_tz);
 					}
 				}
@@ -4612,7 +4741,10 @@ function modal_halt($thing)
 	function install_textpack($textpack, $add_new_langs = false)
 	{
 		$textpack = explode(n, $textpack);
-		if (empty($textpack)) return 0;
+		if (empty($textpack))
+		{
+			return 0;
+		}
 
 		// Presume site language equals textpack language, string owner is LANG_OWNER_SITE.
 		$language = get_pref('language', 'en-gb');
@@ -4695,7 +4827,8 @@ function modal_halt($thing)
 
 		// Generate a ciphered token from the current user's nonce (thus valid for login time plus 30 days)
 		// and a pinch of salt from the blog UID.
-		if (empty($token)) {
+		if (empty($token))
+		{
 			$nonce = safe_field('nonce', 'txp_users', "name='".doSlash($txp_user)."'");
 			$token = md5($nonce . get_pref('blog_uid'));
 		}
@@ -4710,7 +4843,8 @@ function modal_halt($thing)
 
 	function assert_system_requirements()
 	{
-		if (version_compare(REQUIRED_PHP_VERSION, PHP_VERSION) > 0) {
+		if (version_compare(REQUIRED_PHP_VERSION, PHP_VERSION) > 0)
+		{
 			txp_die('This server runs PHP version '.PHP_VERSION.'. Textpattern needs PHP version '. REQUIRED_PHP_VERSION. ' or better.');
 		}
 	}
@@ -4737,24 +4871,29 @@ function modal_halt($thing)
 	{
 		global $event;
 
-		if (empty($step)) return true;
+		if (empty($step))
+		{
+			return true;
+		}
 
 		// Validate step.
-		if (!array_key_exists($step, $steps)) {
+		if (!array_key_exists($step, $steps))
+		{
 			return false;
 		}
 
 		// Does this step require a token?
-		if (!$steps[$step]) {
+		if (!$steps[$step])
+		{
 			return true;
 		}
 
-		// Validate token
-		if (gps('_txp_token') === form_token()) {
+		// Validate token.
+		if (gps('_txp_token') === form_token())
+		{
 			return true;
 		}
 
-		// This place ain't no good for you, son.
 		die(gTxt('get_off_my_lawn', array('{event}' => $event, '{step}' => $step)));
 	}
 
@@ -4767,37 +4906,40 @@ function modal_halt($thing)
  * @package Network
  */
 
-function http_accept_format($format)
-{
-	static $formats = array(
-		'html' => array('text/html', 'application/xhtml+xml', '*/*'),
-		'txt'  => array('text/plain', '*/*'),
-		'js'   => array('application/javascript', 'application/x-javascript', 'text/javascript', 'application/ecmascript', 'application/x-ecmascript', '*/*'),
-		'css'  => array('text/css', '*/*'),
-		'json' => array('application/json', 'application/x-json', '*/*'),
-		'xml'  => array('text/xml', 'application/xml', 'application/x-xml', '*/*'),
-		'rdf'  => array('application/rdf+xml', '*/*'),
-		'atom' => array('application/atom+xml', '*/*'),
-		'rss'  => array('application/rss+xml', '*/*'),
-	);
-	static $accepts = array();
+	function http_accept_format($format)
+	{
+		static $formats = array(
+			'html' => array('text/html', 'application/xhtml+xml', '*/*'),
+			'txt'  => array('text/plain', '*/*'),
+			'js'   => array('application/javascript', 'application/x-javascript', 'text/javascript', 'application/ecmascript', 'application/x-ecmascript', '*/*'),
+			'css'  => array('text/css', '*/*'),
+			'json' => array('application/json', 'application/x-json', '*/*'),
+			'xml'  => array('text/xml', 'application/xml', 'application/x-xml', '*/*'),
+			'rdf'  => array('application/rdf+xml', '*/*'),
+			'atom' => array('application/atom+xml', '*/*'),
+			'rss'  => array('application/rss+xml', '*/*'),
+		);
+		static $accepts = array();
 //	static $q = array(); // nice to have
 
-	if (empty($accepts)) {
-		// build cache of accepted formats
-		$accepts = preg_split('/\s*,\s*/', serverSet('HTTP_ACCEPT'), null, PREG_SPLIT_NO_EMPTY);
-		foreach ($accepts as &$a) {
-			// sniff out quality factors if present
-			if (preg_match('/(.*)\s*;\s*q=([.0-9]*)/', $a, $m)) {
-				$a = $m[1];
+		if (empty($accepts))
+		{
+			// build cache of accepted formats
+			$accepts = preg_split('/\s*,\s*/', serverSet('HTTP_ACCEPT'), null, PREG_SPLIT_NO_EMPTY);
+			foreach ($accepts as &$a)
+			{
+				// sniff out quality factors if present
+				if (preg_match('/(.*)\s*;\s*q=([.0-9]*)/', $a, $m))
+				{
+					$a = $m[1];
 //				$q[$a] = floatval($m[2]);
 //			} else {
 //				$q[$a] = 1.0;
+				}
 			}
 		}
+		return isset($formats[$format]) ? count(array_intersect($formats[$format], $accepts)) > 0 : false;
 	}
-	return isset($formats[$format]) ? count(array_intersect($formats[$format], $accepts)) > 0 : false;
-}
 
 /**
  * Translates article status names into numerical status codes.
@@ -4806,13 +4948,19 @@ function http_accept_format($format)
  * @return int    Numerical status [1..5]
  */
 
-function getStatusNum($name)
-{
-	$labels = array('draft' => 1, 'hidden' => 2, 'pending' => 3, 'live' => 4, 'sticky' => 5);
-	$status = strtolower($name);
-	$num = empty($labels[$status]) ? 4 : $labels[$status];
-	return $num;
-}
+	function getStatusNum($name)
+	{
+		$labels = array(
+			'draft' => 1,
+			'hidden' => 2,
+			'pending' => 3,
+			'live' => 4,
+			'sticky' => 5
+		);
+		$status = strtolower($name);
+		$num = empty($labels[$status]) ? 4 : $labels[$status];
+		return $num;
+	}
 
 /**
  * Checks install's file integrity and returns results.
@@ -4844,7 +4992,7 @@ function getStatusNum($name)
 				{
 					if (preg_match('@^(\S+):(?: r?(\S+) | )\(?(.{32})\)?$@', trim($c), $m))
 					{
-						list (,$relative, $r, $md5) = $m;
+						list (, $relative, $r, $md5) = $m;
 						$file = realpath(txpath . $relative);
 						$checksum_table[$relative] = $md5;
 
