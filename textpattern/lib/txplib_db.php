@@ -465,6 +465,33 @@ $DB = new DB;
 	}
 
 /**
+ * Truncates a table.
+ *
+ * Running this function empties a table completely, resets
+ * indexes and the auto increment value.
+ *
+ * @param  string $table The table
+ * @param  bool   $debug Dump query
+ * @return bool
+ * @see    safe_delete()
+ * @example
+ * if (safe_truncate('myTable'))
+ * {
+ * 	echo "myTable emptied successfully.";
+ * }
+ */
+
+	function safe_truncate($table, $debug = false)
+	{
+		$q = "truncate table ".safe_pfx($table);
+		if (safe_query($q, $debug))
+		{
+			return true;
+		}
+		return false;
+	}
+
+/**
  * Gets a field from a row.
  *
  * If the query results in multiple matches, the first
