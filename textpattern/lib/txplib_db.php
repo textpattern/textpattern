@@ -294,9 +294,9 @@ $DB = new DB;
  * @see    safe_update()
  * @see    safe_insert()
  * @example
- * if (safe_delete('table', "name='test'"))
+ * if (safe_delete('myTable', "name='test'"))
  * {
- * 	echo '"test" removed';
+ * 	echo "'test' removed from 'myTable'.";
  * }
  */
 
@@ -323,7 +323,7 @@ $DB = new DB;
  * @example
  * if (safe_update('myTable', "myField='newValue'", "name='test'"))
  * {
- * 	echo '"test" updated, "myField" set to "newValue"';
+ * 	echo "'test' updated, 'myField' set to 'newValue'";
  * }
  */
 
@@ -347,9 +347,9 @@ $DB = new DB;
  * @see    safe_update()
  * @see    safe_delete()
  * @example
- * if (safe_insert('myTable', "name='test', myField='newValue'"))
+ * if ($id = safe_insert('myTable', "name='test', myField='newValue'"))
  * {
- * 	echo 'Created a row to "myTable" with the name "test".';
+ * 	echo "Created a row to 'myTable' with the name 'test'. It has ID of {$id}.";
  * }
  */
 
@@ -373,6 +373,11 @@ $DB = new DB;
  * @param  string   $where The where clause
  * @param  bool     $debug Dump query
  * @return int|bool The last generated ID or FALSE on error. If the ID is 0, returns TRUE
+ * @example
+ * if ($r = safe_upsert('myTable', "data='foobar'", "name='example'"))
+ * {
+ * 	echo "Inserted new row to 'myTable', or updated 'example'.";
+ * }
  */
 
 	function safe_upsert($table, $set, $where, $debug = false)
@@ -399,7 +404,7 @@ $DB = new DB;
  * @example 
  * if (safe_alter('myTable', 'ADD myColumn TINYINT(1)'))
  * {
- * 	echo 'myColumn added to myTable';
+ * 	echo "'myColumn' added to 'myTable'";
  * }
  */
 
@@ -419,6 +424,11 @@ $DB = new DB;
  * @param  string $table The table
  * @param  bool   $debug Dump query
  * @return bool   FALSE on error
+ * @example
+ * if (safe_optimize('myTable'))
+ * {
+ * 	echo "myTable optimised successfully.";
+ * }
  */
 
 	function safe_optimize($table, $debug = false)
@@ -437,6 +447,11 @@ $DB = new DB;
  * @param  string $table The table
  * @param  bool   $debug Dump query
  * @return bool
+ * @example
+ * if (safe_repair('myTable'))
+ * {
+ * 	echo "myTable repaired successfully.";
+ * }
  */
 
 	function safe_repair($table, $debug = false)
@@ -630,6 +645,11 @@ $DB = new DB;
  * @param  string   $where The where clause
  * @param  bool     $debug Dump query
  * @return int|bool Number of rows or FALSE on error
+ * @example
+ * if (($count = safe_count('myTable', '1=1')) !== false)
+ * {
+ * 	echo "myTable contains {$count} rows.";
+ * }
  */
 
 	function safe_count($table, $where, $debug = false)
