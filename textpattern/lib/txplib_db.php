@@ -88,6 +88,14 @@ class DB
 	 */
 
 	public $version;
+	
+	/**
+	 * Default table options definition.
+	 *
+	 * @var array
+	 */
+
+	public $table_options = array();
 
 	/**
 	 * Creates a new link.
@@ -102,6 +110,8 @@ class DB
 		$this->user = $txpcfg['user'];
 		$this->pass = $txpcfg['pass'];
 		$this->client_flags = isset($txpcfg['client_flags']) ? $txpcfg['client_flags'] : 0;
+		$this->table_options['charset'] = 'utf8';
+		$this->table_options['type'] = 'MyISAM';
 
 		$this->link = @mysql_connect($this->host, $this->user, $this->pass, false, $this->client_flags);
 		if (!$this->link)
@@ -126,6 +136,14 @@ class DB
 		if (isset($txpcfg['dbcharset']) && (intval($version[0]) >= 5 || preg_match('#^4\.[1-9]#',$version)))
 		{
 			mysql_query("SET NAMES ". $txpcfg['dbcharset']);
+			$this->table_options['charset'] = $txpcfg['dbcharset'];
+		}
+
+		// Use "ENGINE" if version of MySQL > (4.0.18 or 4.1.2).
+		if (intval($version[0]) >= 5 || preg_match('#^4\.(0\.[2-9]|(1[89]))|(1\.[2-9])#', $version))
+		{
+			$this->table_options['engine'] = 'MyISAM';
+			unset($this->table_options['type']);
 		}
 	}
 }
@@ -516,6 +534,45 @@ $DB = new DB;
 		{
 			return true;
 		}
+		return false;
+	}
+
+/**
+ * Creates a table.
+ *
+ * Creates a table with the given name. This table
+ * will be created with identical properties to
+ * core tables, ensuring the best possible compatibility.
+ *
+ * @param  string $table      The table
+ * @param  string $definition The create definition
+ * @param  string $options    Table options
+ * @return bool   TRUE if table exists
+ * @since  4.6.0
+ * @example
+ * if (safe_create('myTable', 'id int(11)'))
+ * {
+ * 	echo "'myTable' exists.";
+ * }
+ */
+
+	function safe_create($table, $definition, $options = '', $debug = false)
+	{
+		global $DB;
+
+		foreach ($DB->table_options as $name => $value)
+		{
+			$options .= ' '.$name.' = '.$value;
+		}
+
+		$q = 'create table if not exists '.safe_pfx($table).' ('.
+			$definition.') '.$options.' AUTO_INCREMENT = 1 PACK_KEYS = 1';
+
+		if (safe_query($q, $debug))
+		{
+			return true;
+		}
+
 		return false;
 	}
 
