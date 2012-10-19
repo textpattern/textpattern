@@ -1131,7 +1131,7 @@ EOS
 	}
 
 /**
- * Pings home when an article is saved.
+ * Pings home when an article is published.
  */
 
 	function do_pings()
@@ -1157,7 +1157,10 @@ EOS
 		}
 	}
 
-// -------------------------------------------------------------
+/**
+ * Save an editor pane state to the server.
+ */
+
 	function article_save_pane_state()
 	{
 		global $event;
@@ -1172,7 +1175,12 @@ EOS
 		}
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders article formatting tips.
+ *
+ * @param array $rs Article data
+ */
+
 	function article_partial_sidehelp($rs)
 	{
 		// show markup help for both body and excerpt if they are different
@@ -1191,7 +1199,12 @@ EOS
 		return pluggable_ui('article_ui', 'sidehelp', join(n, $out), $rs);
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders article title partial.
+ *
+ * @param array $rs Article data
+ */
+
 	function article_partial_title($rs)
 	{
 		global $step;
@@ -1204,13 +1217,25 @@ EOS
 			$rs);
 	}
 
-// -------------------------------------------------------------
+/**
+ * Gets article's title from the given article data set.
+ *
+ * @param  array  $rs Article data
+ * @return string
+ */
+
 	function article_partial_title_value($rs)
 	{
 		return html_entity_decode($rs['Title'], ENT_QUOTES, 'UTF-8');
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders author partial.
+ *
+ * @param  array  $rs Article data
+ * @return string HTML
+ */
+
 	function article_partial_author($rs)
 	{
 		extract($rs);
@@ -1222,7 +1247,13 @@ EOS
 		return pluggable_ui('article_ui', 'author', $out, $rs);
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders all custom fields in one partial.
+ *
+ * @param  array  $rs Article data
+ * @return string HTML
+ */
+
 	function article_partial_custom_fields($rs)
 	{
 		global $cfs;
@@ -1240,7 +1271,13 @@ EOS
 
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders custom field partial.
+ *
+ * @param  array  $rs Article data
+ * @return string HTML
+ */
+
 	function article_partial_custom_field($rs, $key)
 	{
 		global $prefs;
@@ -1252,7 +1289,13 @@ EOS
 		return ($$custom_x_set !== '' ? custField($m[1], $$custom_x_set,  $rs[$custom_x]) : '');
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders article image partial.
+ *
+ * @param  array $rs Article data
+ * @return string HTML
+ */
+
 	function article_partial_image($rs)
 	{
 		$out = n.n.'<div role="group" id="image_group" class="txp-details">'.
@@ -1266,7 +1309,13 @@ EOS
 		return $out.n.'</div>'.n.'</div>';
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders keywords partial.
+ *
+ * @param  array  $rs Article data
+ * @return string HTML
+ */
+
 	function article_partial_keywords($rs)
 	{
 		return pluggable_ui('article_ui', 'keywords',
@@ -1275,14 +1324,26 @@ EOS
 			$rs);
 	}
 
-// -------------------------------------------------------------
+/**
+ * Gets keywords from the given article data set.
+ *
+ * @param  array  $rs Article data
+ * @return string
+ */
+
 	function article_partial_keywords_value($rs)
 	{
 		// separate keywords by a comma plus at least one space
 		return preg_replace('/,(\S)/', ', $1', $rs['Keywords']);
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders URL title partial.
+ *
+ * @param  array  $rs Article data
+ * @return string HTML
+ */
+
 	function article_partial_url_title($rs)
 	{
 		return pluggable_ui('article_ui', 'url_title',
@@ -1291,13 +1352,25 @@ EOS
 			$rs);
 	}
 
-// -------------------------------------------------------------
+/**
+ * Gets URL title from the given article data set.
+ *
+ * @param  array  $rs Article data
+ * @return string HTML
+ */
+
 	function article_partial_url_title_value($rs)
 	{
 		return $rs['url_title'];
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders &lt;ul&gt; list of recent articles.
+ *
+ * @param  array  $rs Article data
+ * @return string HTML
+ */
+
 	function article_partial_recent_articles($rs)
 	{
 		$recents = safe_rows_start("Title, ID",'textpattern',"1=1 order by LastMod desc limit 10");
@@ -1322,7 +1395,13 @@ EOS
 		return pluggable_ui('article_ui', 'recent_articles', $ra, $rs);
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders article view link.
+ *
+ * @param  array  $rs Article data
+ * @return string HTML
+ */
+
 	function article_partial_article_view($rs)
 	{
 		extract($rs);
@@ -1338,7 +1417,13 @@ EOS
 		return '<span id="article_partial_article_view"><a href="'.$url.'" class="article-view">'.gTxt('view').'</a></span>';
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders article body field.
+ *
+ * @param  array  $rs Article data
+ * @return string HTML
+ */
+
 	function article_partial_body($rs)
 	{
 		return pluggable_ui('article_ui', 'body',
@@ -1347,7 +1432,13 @@ EOS
 			$rs);
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders article excerpt field.
+ *
+ * @param  array  $rs Article data
+ * @return string HTML
+ */
+
 	function article_partial_excerpt($rs)
 	{
 		return pluggable_ui('article_ui', 'excerpt',
@@ -1356,7 +1447,13 @@ EOS
 			$rs);
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders list of view modes.
+ *
+ * @param  array  $rs Article data
+ * @return string HTML
+ */
+
 	function article_partial_view_modes($rs)
 	{
 		global $step, $view, $use_textile;
@@ -1373,7 +1470,14 @@ EOS
 			'</div>';
 
 	}
-// -------------------------------------------------------------
+
+/**
+ * Renders next/prev links.
+ *
+ * @param  array  $rs Article data
+ * @return string HTML
+ */
+
 	function article_partial_article_nav($rs)
 	{
 		return '<p role="navigation" class="nav-tertiary">'.
@@ -1388,7 +1492,13 @@ EOS
 		'</p>';
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders article status partial.
+ *
+ * @param  array  $rs Article data
+ * @return string HTML
+ */
+
 	function article_partial_status($rs)
 	{
 		return pluggable_ui('article_ui', 'status',
@@ -1399,7 +1509,13 @@ EOS
 			$rs);
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders article categories partial.
+ *
+ * @param  array  $rs Article data
+ * @return string HTML
+ */
+
 	function article_partial_categories($rs)
 	{
 		return pluggable_ui('article_ui', 'categories',
@@ -1414,7 +1530,13 @@ EOS
 		$rs);
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders article section partial.
+ *
+ * @param  array  $rs Article data
+ * @return string HTML
+ */
+
 	function article_partial_section($rs)
 	{
 		return pluggable_ui('article_ui', 'section',
@@ -1424,7 +1546,13 @@ EOS
 			$rs);
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders comment options partial.
+ *
+ * @param  array  $rs Article data
+ * @return string HTML
+ */
+
 	function article_partial_comments($rs)
 	{
 		global $step, $use_comments, $comments_disabled_after, $comments_default_invite, $comments_on_default;
@@ -1475,7 +1603,13 @@ EOS
 		}
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders timestamp partial.
+ *
+ * @param  array  $rs Article data
+ * @return string HTML
+ */
+
 	function article_partial_posted($rs)
 	{
 		extract($rs);
@@ -1504,7 +1638,13 @@ EOS
 			$rs);
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders expiration date partial.
+ *
+ * @param  array  $rs Article data
+ * @return string HTML
+ */
+
 	function article_partial_expires($rs)
 	{
 		extract($rs);
@@ -1531,13 +1671,27 @@ EOS
 			$rs);
 	}
 
-// -------------------------------------------------------------
+/**
+ * Gets a partial value from the given article data set.
+ *
+ * @param  array  $rs  Article data
+ * @param  string $key The value to get
+ * @return string HTML
+ */
+
 	function article_partial_value($rs, $key)
 	{
 		return($rs[$key]);
 	}
 
-// -------------------------------------------------------------
+/**
+ * Validates article data.
+ *
+ * @param  array        $rs  Article data
+ * @param  string|array $msg Initial message
+ * @return string HTML
+ */
+
 	function article_validate($rs, &$msg)
 	{
 		global $prefs, $step, $statuses;
