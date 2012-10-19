@@ -492,6 +492,32 @@ $DB = new DB;
 	}
 
 /**
+ * Removes a table.
+ *
+ * This function removes all data and
+ * definitions associated with a table.
+ *
+ * @param  string $table The table
+ * @param  bool   $debug Dump query
+ * @return bool   TRUE if the table no longer exists
+ * @example
+ * if (safe_drop('myTable'))
+ * {
+ * 	echo "'myTable' no longer exists.";
+ * }
+ */
+
+	function safe_drop($table, $debug = false)
+	{
+		$q = 'drop table if exists '.safe_pfx($table);
+		if (safe_query($q, $debug))
+		{
+			return true;
+		}
+		return false;
+	}
+
+/**
  * Gets a field from a row.
  *
  * If the query results in multiple matches, the first
