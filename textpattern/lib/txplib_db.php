@@ -437,6 +437,120 @@ $DB = new DB;
 	}
 
 /**
+ * Gets an array of information about an index.
+ *
+ * @param  string $table The table
+ * @param  string $index The index
+ * @param  bool   $debug Dump the query
+ * @return array|bool Array of information about the index, or FALSE on error
+ * @since  4.6.0
+ * @example
+ * if ($index = safe_index('myTable', 'myIndex'))
+ * {
+ * 	echo "'myIndex' found in 'myTable' with the type of {$index['Index_type']}.";
+ * }
+ */
+
+	function safe_index($table, $index, $debug = false)
+	{
+		$index = strtolower($index);
+
+		if($r = safe_show('index', $table, $debug))
+		{
+			foreach ($r as $a)
+			{
+				if (strtolower($a['Key_name']) === $index)
+				{
+					return $a;
+				}
+			}
+		}
+
+		return false;
+	}
+
+/**
+ * Creates an index.
+ *
+ * @param  string $table   The table
+ * @param  string $columns Indexed columns
+ * @param  string $name    The name
+ * @param  string $index   The index. Either 'unique', 'fulltext', 'spatial'
+ * @param  string $type    The index type
+ * @param  bool   $debug   Dump the query
+ * @return bool   TRUE if index exists
+ * @since  4.6.0
+ * @example
+ * if (safe_create_index('myTable', 'col1(11), col2(11)', 'myIndex'))
+ * {
+ * 	echo "'myIndex' exists in 'myTable'.";
+ * }
+ */
+
+	function safe_create_index($table, $columns, $name, $index = 'fulltext', $type = '', $debug = false)
+	{
+		if (safe_index($table, $name, $debug))
+		{
+			return true;
+		}
+
+		if (strtolower($name) == 'primary')
+		{
+			$q = 'alter table '.safe_pfx($table).' add primary key('.$columns.')';
+		}
+		else
+		{
+			$q = 'create '.$index.' index `'.$name.'` on '.safe_pfx($table).' ('.$columns.')'. ($type ? ' using '.$type : '');
+		}
+
+		if (safe_query($q, $debug))
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+/**
+ * Removes an index.
+ *
+ * @param  string $table The table
+ * @param  string $index The index
+ * @param  bool   $debug Dump the query
+ * @return bool   TRUE if the index no longer exists
+ * @since  4.6.0
+ * @example
+ * if (safe_drop_index('myTable', 'primary'))
+ * {
+ * 	echo "Primary key no longer exists in 'myTable'.";
+ * }
+ */
+
+	function safe_drop_index($table, $index, $debug = false)
+	{
+		if (!safe_index($table, $index, $debug))
+		{
+			return true;
+		}
+
+		if (strtolower($index) === 'primary')
+		{
+			$q = 'alter table '.safe_pfx($table).' drop primary key';
+		}
+		else
+		{
+			$q = 'drop index `'.$index.'` on '.safe_pfx($table);
+		}
+
+		if (safe_query($q, $debug))
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+/**
  * Optimises a table.
  *
  * @param  string $table The table
@@ -547,6 +661,7 @@ $DB = new DB;
  * @param  string $table      The table
  * @param  string $definition The create definition
  * @param  string $options    Table options
+ * @param  bool   $debug      Dump the query
  * @return bool   TRUE if table exists
  * @since  4.6.0
  * @example
@@ -567,6 +682,27 @@ $DB = new DB;
 
 		$q = 'create table if not exists '.safe_pfx($table).' ('.
 			$definition.') '.$options.' AUTO_INCREMENT = 1 PACK_KEYS = 1';
+
+		if (safe_query($q, $debug))
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+/**
+ * Renames a table.
+ *
+ * @param  string $table   The table
+ * @param  string $newname The new name
+ * @param  bool   $debug   Dump the query
+ * @return bool   FALSE on error
+ */
+
+	function safe_rename($table, $newname, $debug = false)
+	{
+		$q = 'rename table '.safe_pfx($table).' to '.safe_pfx($newname);
 
 		if (safe_query($q, $debug))
 		{
