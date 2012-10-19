@@ -474,6 +474,7 @@ $DB = new DB;
  * @param  bool   $debug Dump query
  * @return bool
  * @see    safe_delete()
+ * @since  4.6.0
  * @example
  * if (safe_truncate('myTable'))
  * {
@@ -500,6 +501,7 @@ $DB = new DB;
  * @param  string $table The table
  * @param  bool   $debug Dump query
  * @return bool   TRUE if the table no longer exists
+ * @since  4.6.0
  * @example
  * if (safe_drop('myTable'))
  * {
