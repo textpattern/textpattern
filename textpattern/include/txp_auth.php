@@ -11,9 +11,25 @@ Use of this software indicates acceptance of the Textpattern license agreement
 
 */
 
+/**
+ * Login panel.
+ *
+ * @package Admin\Login
+ */
+
 if (!defined('txpinterface')) die('txpinterface is undefined.');
 
 include_once txpath.'/lib/PasswordHash.php';
+
+/**
+ * Renders a login panel if necessary.
+ *
+ * If the current visitor isn't authenticated,
+ * terminates the script and instead renders
+ * a login page.
+ *
+ * @access private
+ */
 
 function doAuth()
 {
@@ -31,7 +47,20 @@ function doAuth()
 	ob_start();
 }
 
-// -------------------------------------------------------------
+/**
+ * Validates the given user credentials.
+ *
+ * This function validates a given login and a password combination.
+ * If the combination is correct, the user's login name is returned,
+ * FALSE otherwise.
+ *
+ * @param   string      $user     The login
+ * @param   string      $password The password
+ * @param   bool        $log      If TRUE, updates the user's last access time
+ * @return  string|bool The user's login name or FALSE on error
+ * @package User
+ */
+
 	function txp_validate($user,$password,$log=TRUE)
 	{
 		$safe_user = doSlash($user);
@@ -77,7 +106,16 @@ function doAuth()
 		return $name;
 	}
 
-// -------------------------------------------------------------
+/**
+ * Calculates a password hash.
+ *
+ * @param   string $password The password
+ * @return  string A hash
+ * @see     PASSWORD_COMPLEXITY
+ * @see     PASSWORD_PORTABILITY
+ * @package User
+ */
+
 	function txp_hash_password($password)
 	{
 		static $phpass = NULL;
@@ -87,7 +125,14 @@ function doAuth()
 		return $phpass->HashPassword($password);
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders and outputs a login form.
+ *
+ * This function outputs a full HTML document,
+ * including &lt;head&gt; and footer.
+ *
+ * @param string|array $message The activity message
+ */
 
 	function doLoginForm($message)
 	{
@@ -175,7 +220,13 @@ EOSCR
 		exit(0);
 	}
 
-// -------------------------------------------------------------
+/**
+ * Validates the sent login form and creates a session.
+ *
+ * @return string A localised feedback message
+ * @see    doLoginForm()
+ */
+
 	function doTxpValidate()
 	{
 		global $logout, $txp_user;
