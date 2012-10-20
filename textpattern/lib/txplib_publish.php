@@ -138,9 +138,9 @@ Use of this software indicates acceptance of the Textpattern license agreement
 
 		return array(
 			'thisid' => 'ID',
-			'posted' => 'uPosted',    // calculated value!
-			'expires' => 'uExpires',  // calculated value!
-			'modified' => 'uLastMod', // calculated value!
+			'posted' => 'uPosted',    // Calculated value!
+			'expires' => 'uExpires',  // Calculated value!
+			'modified' => 'uLastMod', // Calculated value!
 			'annotate' => 'Annotate',
 			'comments_invite' => 'AnnotateInvite',
 			'authorid' => 'AuthorID',
@@ -535,7 +535,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
 /**
  * Protection from those who'd bomb the site by GET.
  *
- * Origin of the infamous 'Nice try' message and an even more useful '503' http status.
+ * Origin of the infamous 'Nice try' message and an even more useful '503' HTTP status.
  */
 
 	function bombShelter()
@@ -573,7 +573,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
 	}
 
 /**
- * Checks if the given category exist.
+ * Checks if the given category exists.
  *
  * @param   string      $type  The category type, either 'article', 'file', 'link', 'image'
  * @param   string      $val   The category name to look for
@@ -597,7 +597,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
  * Lookup an article by ID.
  *
  * This function takes an article's ID, and checks if it's
- * been published. If it is, returns the section and the ID
+ * been published. If it has, returns the section and the ID
  * as an array. FALSE otherwise.
  *
  * @param   int        $val   The article ID
@@ -620,7 +620,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
  * Lookup an article by URL title.
  *
  * This function takes an article's URL title, and checks if the article
- * has been published. If it is, returns the section and the ID
+ * has been published. If it has, returns the section and the ID
  * as an array. FALSE otherwise.
  *
  * @param   string     $val   The URL title
@@ -643,7 +643,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
  * Lookup a published article by URL title and section.
  *
  * This function takes an article's URL title, and checks if the article
- * has been published. If it is, returns the section and the ID
+ * has been published. If it has, returns the section and the ID
  * as an array. FALSE otherwise.
  *
  * @param   string     $val     The URL title
@@ -771,7 +771,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
 			}
 			else
 			{
-				// TODO: deal w/ nested txp:article[_custom] tags
+				// TODO: deal w/ nested txp:article[_custom] tags.
 				trace_add('[filterAtts ignored]');
 			}
 		}
@@ -782,4 +782,5 @@ Use of this software indicates acceptance of the Textpattern license agreement
 		}
 		return lAtts($valid, $out, 0);
 	}
+
 ?>

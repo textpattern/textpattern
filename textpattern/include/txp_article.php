@@ -87,9 +87,9 @@ if (!empty($event) and $event == 'article') {
 		$msg = '';
 		if ($Title or $Body or $Excerpt) {
 			$Status = assert_int(ps('Status'));
-			// comments my be on, off, or disabled.
+			// Comments my be on, off, or disabled.
 			$Annotate = (int) $Annotate;
-			// set and validate article timestamp
+			// Set and validate article timestamp.
 			if ($publish_now == 1) {
 				$when = 'now()';
 				$when_ts = time();
@@ -100,7 +100,7 @@ if (!empty($event) and $event == 'article') {
 					$ts = strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second);
 				}
 
-				if ($ts === false || $ts < 0) { // Tracking the PHP meanders on how to return an error
+				if ($ts === false || $ts < 0) { // Tracking the PHP meanders on how to return an error.
 					article_edit(array(gTxt('invalid_postdate'), E_ERROR));
 					return;
 				}
@@ -109,10 +109,10 @@ if (!empty($event) and $event == 'article') {
 				$when = "from_unixtime($when_ts)";
 			}
 
-			// Force a reasonable 'last modified' date for future articles, keep recent articles list in order
+			// Force a reasonable 'last modified' date for future articles, keep recent articles list in order.
 			$lastmod = ($when_ts > time() ? 'now()' : $when);
 
-			// set and validate expiry timestamp
+			// Set and validate expiry timestamp.
 			if (empty($exp_year)) {
 				$expires = 0;
 			} else {
@@ -249,12 +249,12 @@ if (!empty($event) and $event == 'article') {
 
 		extract(doSlash($incoming));
 		extract(array_map('assert_int', psa(array('ID', 'Status'))));
-		// comments my be on, off, or disabled.
+		// Comments may be on, off, or disabled.
 		$Annotate = (int) $Annotate;
 
 		if (!has_privs('article.publish') && $Status >= STATUS_LIVE) $Status = STATUS_PENDING;
 
-		// set and validate article timestamp
+		// Set and validate article timestamp.
 		if ($reset_time) {
 			$whenposted = "Posted=now()";
 			$when_ts = time();
@@ -275,7 +275,7 @@ if (!empty($event) and $event == 'article') {
 			$whenposted = "Posted=from_unixtime($when)";
 		}
 
-		// set and validate expiry timestamp
+		// Set and validate expiry timestamp.
 		if (empty($exp_year)) {
 			$expires = 0;
 		} else {
@@ -305,7 +305,7 @@ if (!empty($event) and $event == 'article') {
 			$whenexpires = "Expires=".NULLDATETIME;
 		}
 
-		//Auto-Update custom-titles according to Title, as long as unpublished and NOT customized
+		// Auto-update custom-titles according to Title, as long as unpublished and NOT customised.
 		if ( empty($url_title)
 			  || ( ($oldArticle['Status'] < STATUS_LIVE)
 					&& ($oldArticle['url_title'] == $url_title )
@@ -397,7 +397,7 @@ if (!empty($event) and $event == 'article') {
 			'mode' => {PARTIAL_STATIC | PARTIAL_VOLATILE | PARTIAL_VOLATILE_VALUE},
 			'selector' => $DOM_selector,
 		 	'cb' => $callback_function,
-		 	'html' => $return_value_of_callback_function (need not be intialized here)
+		 	'html' => $return_value_of_callback_function (need not be intialised here)
 		)
 		*/
 		$partials = array(
@@ -427,7 +427,7 @@ if (!empty($event) and $event == 'article') {
 			'expires'         => array('mode' => PARTIAL_VOLATILE,       'selector' => '#write-expires', 'cb' => 'article_partial_expires'),
 		);
 
-		// add partials for custom fields (and their values which is redundant by design, for plugins)
+		// Add partials for custom fields (and their values which is redundant by design, for plugins).
 		global $cfs;
 		foreach ($cfs as $k => $v) {
 			$partials["custom_field_{$k}"] = array('mode' => PARTIAL_STATIC, 'selector' => "p.custom-field.custom-{$k}", 'cb' => 'article_partial_custom_field');
@@ -436,14 +436,14 @@ if (!empty($event) and $event == 'article') {
 
 		extract(gpsa(array('view','from_view','step')));
 
-		if(!empty($GLOBALS['ID'])) { // newly-saved article
+		if(!empty($GLOBALS['ID'])) { // Newly-saved article.
 			$ID = $GLOBALS['ID'];
 			$step = 'edit';
 		} else {
 			$ID = gps('ID');
 		}
 
-		// switch to 'text' view upon page load and after article post
+		// Switch to 'text' view upon page load and after article post.
 		if(!$view || gps('save') || gps('publish')) {
 			$view = 'text';
 		}
@@ -457,7 +457,7 @@ if (!empty($event) and $event == 'article') {
 			&& $from_view != 'html'
 			&& !$concurrent)
 		{
-			$pull = true;          //-- it's an existing article - off we go to the db
+			$pull = true; // It's an existing article - off we go to the database.
 			$ID = assert_int($ID);
 
 			$rs = safe_row(
@@ -473,7 +473,7 @@ if (!empty($event) and $event == 'article') {
 
 		} else {
 
-			$pull = false;         //-- assume they came from post
+			$pull = false; // Assume they came from post.
 
 			if ($from_view=='preview' or $from_view=='html')
 			{
@@ -496,7 +496,7 @@ if (!empty($event) and $event == 'article') {
 				}
 			}
 
-			// Use preferred textfilter as default and fallback
+			// Use preferred textfilter as default and fallback.
 			$hasfilter = new TextfilterConstraint(null);
 			$validator = new Validator();
 			foreach (array('textile_body', 'textile_excerpt') as $k) {
@@ -546,11 +546,11 @@ if (!empty($event) and $event == 'article') {
 			$rs['prev_id'] = $rs['next_id'] = 0;
 		}
 
-		// let plugins chime in on partials meta data
+		// Let plugins chime in on partials meta data.
 		callback_event_ref('article_ui', 'partials_meta', 0, $rs, $partials);
 		$rs['partials_meta'] = &$partials;
 
-		// get content for volatile partials
+		// Get content for volatile partials.
 		foreach ($partials as $k => $p) {
 			if ($p['mode'] == PARTIAL_VOLATILE || $p['mode'] == PARTIAL_VOLATILE_VALUE) {
 				$cb = $p['cb'];
@@ -562,25 +562,25 @@ if (!empty($event) and $event == 'article') {
 			global $theme;
 			$response[] = $theme->announce_async($message);
 
-			// update the volatile partials
+			// Update the volatile partials.
 			foreach ($partials as $k => $p) {
-				// volatile partials need a target DOM selector
+				// Volatile partials need a target DOM selector.
 				if (empty($p['selector']) && $p['mode'] != PARTIAL_STATIC) {
 					trigger_error("Empty selector for partial '$k'", E_USER_ERROR);
 				} else {
-					// build response script
+					// Build response script.
 					if ($p['mode'] == PARTIAL_VOLATILE) {
-						// volatile partials replace *all* of the existing HTML fragment for their selector
+						// Volatile partials replace *all* of the existing HTML fragment for their selector.
 						$response[] = '$("'.$p['selector'].'").replaceWith("'.escape_js($p['html']).'")';
 					} elseif ($p['mode'] == PARTIAL_VOLATILE_VALUE) {
-						// volatile partial values replace the *value* of elements matching their selector
+						// Volatile partial values replace the *value* of elements matching their selector.
 						$response[] = '$("'.$p['selector'].'").val("'.escape_js($p['html']).'")';
 					}
 				}
 			}
 			send_script_response(join(";\n", $response));
 
-			// bail out
+			// Bail out.
 			return;
 		}
 
@@ -621,21 +621,21 @@ if (!empty($event) and $event == 'article') {
 		if ($view == 'text')
 		{
 
-		//-- markup help --------------
+		// Markup help.
 
 			echo $partials['sidehelp']['html'];
 
-		//-- custom menu entries --------------
+		// Custom menu entries.
 
 			echo pluggable_ui('article_ui', 'extend_col_1', '', $rs);
 
-		//-- advanced --------------
+		// Advanced.
 
 			echo n.n.'<div role="group" id="advanced_group" class="txp-details">'.
 				n.'<h3 class="txp-summary'.(get_pref('pane_article_advanced_visible') ? ' expanded' : '').'"><a href="#advanced" role="button">'.gTxt('advanced_options').'</a></h3>'.
 				n.'<div id="advanced" class="toggle" style="display:'.(get_pref('pane_article_advanced_visible') ? 'block' : 'none').'">';
 
-			// markup selection
+			// Markup selection.
 			echo pluggable_ui('article_ui', 'markup',
 				n.graf('<label for="markup-body">'.gTxt('article_markup').'</label>'.br.
 					pref_text('textile_body', $textile_body, 'markup-body'), ' class="markup markup-body"').
@@ -643,22 +643,22 @@ if (!empty($event) and $event == 'article') {
 					pref_text('textile_excerpt', $textile_excerpt, 'markup-excerpt'), ' class="markup markup-excerpt"'),
 				$rs);
 
-			// form override
+			// Form override.
 			echo ($allow_form_override)
 				? pluggable_ui('article_ui', 'override', graf('<label for="override-form">'.gTxt('override_default_form').'</label>'.sp.popHelp('override_form').br.
 					form_pop($override_form, 'override-form'), ' class="override-form"'), $rs)
 				: '';
 			echo n.'</div>'.n.'</div>';
 
-		//-- custom fields --------------
+		// Custom fields.
 
 			echo $partials['custom_fields']['html'];
 
-		//-- article image --------------
+		// Article image.
 
 			echo $partials['image']['html'];
 
-		//-- meta info --------------
+		// Meta info.
 
 			echo n.n.'<div role="group" id="meta_group" class="txp-details">'.
 				n.'<h3 class="txp-summary'.(get_pref('pane_article_meta_visible') ? ' expanded' : '').'"><a href="#meta" role="button">'.gTxt('meta').'</a></h3>'.
@@ -669,7 +669,7 @@ if (!empty($event) and $event == 'article') {
 			echo $partials['url_title']['html'];
 			echo n.'</div>'.n.'</div>';
 
-		//-- recent articles --------------
+		// Recent articles.
 
 			echo n.n.'<div role="navigation" id="recent_group" class="txp-details">'.
 				n.'<h3 class="txp-summary'.(get_pref('pane_article_recent_visible') ? ' expanded' : '').'"><a href="#recent" role="button">'.gTxt('recent_articles').'</a>'.'</h3>'.
@@ -685,7 +685,7 @@ if (!empty($event) and $event == 'article') {
 
 		echo n.n.'</div>'.n.'</td>'.n.'<td id="article-main"><div id="main_content">';
 
-	//-- title input --------------
+	// Title input.
 
 		if ($view == 'preview')
 		{
@@ -702,7 +702,7 @@ if (!empty($event) and $event == 'article') {
 			echo '<div class="text">'.n.$partials['title']['html'];
 		}
 
-	//-- body --------------------
+	// Body.
 
 		if ($view == 'preview')
 		{
@@ -719,7 +719,7 @@ if (!empty($event) and $event == 'article') {
 			echo $partials['body']['html'];
 		}
 
-	//-- excerpt --------------------
+	// Excerpt.
 
 		if ($articles_use_excerpts)
 		{
@@ -739,7 +739,7 @@ if (!empty($event) and $event == 'article') {
 			}
 		}
 
-	//-- author --------------
+	// Author.
 
 		if ($view=="text" && $step != "create")
 		{
@@ -749,7 +749,7 @@ if (!empty($event) and $event == 'article') {
 		echo hInput('from_view',$view),
 		'</div></div></td>';
 
-	//-- layer tabs -------------------
+	// Layer tabs.
 
 		echo '<td id="article-tabs">';
 		echo $partials['view_modes']['html'];
@@ -764,17 +764,17 @@ if (!empty($event) and $event == 'article') {
 				echo n.graf(href(gtxt('create_new'), 'index.php?event=article'), ' class="action-create"');
 			}
 
-		//-- prev/next article links --
+		// Prev/next article links.
 
 			if ($step!='create' and ($rs['prev_id'] or $rs['next_id'])) {
 				echo $partials['article_nav']['html'];
 			}
 
-		//-- status radios --------------
+		// Status radios.
 
 			echo $partials['status']['html'];
 
-		//-- sort and display  -----------
+		// Sort and display.
 
 			echo pluggable_ui('article_ui', 'sort_display',
 				n.n.tag(
@@ -787,26 +787,27 @@ if (!empty($event) and $event == 'article') {
 					'fieldset', ' id="write-sort"'),
 				$rs);
 
-		//-- "Comments" section
+		// "Comments" section.
 			echo n.n.'<div role="group" id="comments_group" class="txp-details'.(($use_comments==1) ? '' : ' empty').'">'.
 				n.'<h3 class="txp-summary'.(get_pref('pane_article_comments_visible') ? ' expanded' : '').'"><a href="#comments" role="button">'.gTxt('comment_settings').'</a></h3>'.
 				n.'<div id="comments" class="toggle" style="display:'.(get_pref('pane_article_comments_visible') ? 'block' : 'none').'">';
 
 			echo $partials['comments']['html'];
 
-			// end "Comments" section
+			// End "Comments" section.
 			echo '</div>'.n.'</div>';
 
-		//-- "Dates" section
+		// "Dates" section.
 			echo n.n.'<div role="group" id="dates_group" class="txp-details">'.
 				n.'<h3 class="txp-summary'.(get_pref('pane_article_dates_visible') ? ' expanded' : '').'"><a href="#dates" role="button">'.gTxt('date_settings').'</a></h3>'.
 				n.'<div id="dates" class="toggle" style="display:'.(get_pref('pane_article_dates_visible') ? 'block' : 'none').'">';
 
 			if ($step == "create" and empty($GLOBALS['ID']))
 			{
-		//-- timestamp -------------------
 
-				//Avoiding modified date to disappear
+		// Timestamp.
+
+				// Avoiding modified date to disappear.
 				$persist_timestamp = (!empty($store_out['year']))?
 					safe_strtotime($store_out['year'].'-'.$store_out['month'].'-'.$store_out['day'].' '.$store_out['hour'].':'.$store_out['minute'].':'.$store_out['second'])
 					: time();
@@ -836,7 +837,7 @@ if (!empty($event) and $event == 'article') {
 				n.'</fieldset>',
 				array('sPosted' => $persist_timestamp) + $rs);
 
-		//-- expires -------------------
+		// Expires.
 
 				$persist_timestamp = (!empty($store_out['exp_year']))?
 					safe_strtotime($store_out['exp_year'].'-'.$store_out['exp_month'].'-'.$store_out['exp_day'].' '.$store_out['exp_hour'].':'.$store_out['exp_minute'].':'.$store_out['second'])
@@ -863,10 +864,10 @@ if (!empty($event) and $event == 'article') {
 				n.'</fieldset>',
 				$rs);
 
-				// end "Dates" section
+				// End "Dates" section.
 				echo n.n.'</div>'.n.'</div>';
 
-		//-- publish button --------------
+		// Publish button.
 
 				echo graf(
 					(has_privs('article.publish')) ?
@@ -878,18 +879,18 @@ if (!empty($event) and $event == 'article') {
 			else
 			{
 
-			//-- timestamp -------------------
+			// Timestamp.
 
 				echo $partials['posted']['html'];
 
-			//-- expires -------------------
+			// Expires.
 
 				echo $partials['expires']['html'];;
 
-				// end "Dates" section
+				// End "Dates" section.
 				echo n.n.'</div>'.n.'</div>';
 
-		//-- save button --------------
+		// Save button.
 
 				if (   ($Status >= STATUS_LIVE and has_privs('article.edit.published'))
 					or ($Status >= STATUS_LIVE and $AuthorID==$txp_user and has_privs('article.edit.own.published'))
@@ -902,7 +903,7 @@ if (!empty($event) and $event == 'article') {
 		echo '</div></td></tr></table>'.n.
 			tInput().n.
 			'</form></div>'.n;
-		// Assume users would not change the timestamp if they wanted to "publish now"/"reset time"
+		// Assume users would not change the timestamp if they wanted to "publish now"/"reset time".
 		echo script_js( <<<EOS
 		$('#write-timestamp input.year,#write-timestamp input.month,#write-timestamp input.day,#write-timestamp input.hour,#write-timestamp input.minute,#write-timestamp input.second').change(
 			function() {
@@ -949,7 +950,7 @@ EOS
 	}
 
 /**
- * Renders a article status field.
+ * Renders an article status field.
  *
  * @param  int    $Status Selected status
  * @return string HTML
@@ -1068,7 +1069,7 @@ EOS
 
 	function check_url_title($url_title)
 	{
-		// Check for blank or previously used identical url-titles
+		// Check for blank or previously used identical url-titles.
 		if (strlen($url_title) === 0)
 		{
 			return gTxt('url_title_is_blank');
@@ -1138,7 +1139,7 @@ EOS
 	{
 		global $prefs, $production_status;
 
-		# only ping for Live sites
+		# Only ping for Live sites.
 		if ($production_status !== 'live')
 			return;
 
@@ -1158,7 +1159,7 @@ EOS
 	}
 
 /**
- * Save an editor pane state to the server.
+ * Saves an editor pane state to the server.
  */
 
 	function article_save_pane_state()
@@ -1183,7 +1184,7 @@ EOS
 
 	function article_partial_sidehelp($rs)
 	{
-		// show markup help for both body and excerpt if they are different
+		// Show markup help for both body and excerpt if they are different.
 		$help = TextfilterSet::help($rs['textile_body']);
 		if ($rs['textile_body'] != $rs['textile_excerpt']) $help .=  TextfilterSet::help($rs['textile_excerpt']);
 
@@ -1333,7 +1334,7 @@ EOS
 
 	function article_partial_keywords_value($rs)
 	{
-		// separate keywords by a comma plus at least one space
+		// Separate keywords by a comma plus at least one space.
 		return preg_replace('/,(\S)/', ', $1', $rs['Keywords']);
 	}
 
@@ -1407,7 +1408,7 @@ EOS
 		extract($rs);
 		if ($Status != STATUS_LIVE and $Status != STATUS_STICKY)
 		{
-			$url = '?txpreview='.intval($ID).'.'.time(); // article ID plus cachebuster
+			$url = '?txpreview='.intval($ID).'.'.time(); // Article ID plus cachebuster.
 		}
 		else
 		{
@@ -1561,7 +1562,7 @@ EOS
 
 		if ($step == "create")
 		{
-			//Avoiding invite disappear when previewing
+			// Avoid invite disappearing when previewing.
 			$AnnotateInvite = (!empty($store_out['AnnotateInvite']))? $store_out['AnnotateInvite'] : $comments_default_invite;
 			if ($comments_on_default==1) { $Annotate = 1; }
 		}

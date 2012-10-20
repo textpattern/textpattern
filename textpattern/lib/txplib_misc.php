@@ -145,7 +145,7 @@
  * @param  string $string The string being converted
  * @param  int    $flags A bitmask of one or more flags. The default is ENT_QUOTES
  * @param  string $encoding Defines encoding used in conversion. The default is UTF-8
- * @param  bool   $double_encode When double_encode is turned off PHP will not encode existing html entities, the default is to convert everything
+ * @param  bool   $double_encode When double_encode is turned off PHP will not encode existing HTML entities, the default is to convert everything
  * @return string
  * @see    http://www.php.net/manual/function.htmlspecialchars.php
  * @since  4.5.0
@@ -284,7 +284,7 @@
 	}
 
 /**
- * Escapes CDATA section for a XML document.
+ * Escapes CDATA section for an XML document.
  *
  * @param   string $str The string
  * @return  string XML representation wrapped in CDATA tags
@@ -297,12 +297,12 @@
 	}
 
 /**
- * Returns a localization string.
+ * Returns a localisation string.
  *
  * @param   string $var    String name
  * @param   array  $atts   Replacement pairs
  * @param   string $escape Convert special characters to HTML entities. Either "html" or ""
- * @return  string A localization string
+ * @return  string A localisation string
  * @package L10n
  */
 
@@ -793,7 +793,7 @@
 /**
  * Gets a HTTP POST parameter.
  *
- * This function internally handles and normalizes MAGIC_QUOTES_GPC,
+ * This function internally handles and normalises MAGIC_QUOTES_GPC,
  * and removes NULL bytes.
  *
  * @param   string       $thing	The parameter to get
@@ -964,7 +964,7 @@
 /**
  * Gets a HTTP cookie.
  *
- * This function internally normalizes MAGIC_QUOTES_GPC.
+ * This function internally normalises MAGIC_QUOTES_GPC.
  *
  * @param   string $thing The cookie
  * @return  string The cookie or an empty string
@@ -988,7 +988,7 @@
 	}
 
 /**
- * Converts a boolean to a localized "Yes" or "No" string.
+ * Converts a boolean to a localised "Yes" or "No" string.
  *
  * @param   bool   $status The boolean. Ignores type and as such can also take a string or an integer
  * @return  string No if FALSE, Yes otherwise
@@ -1003,7 +1003,7 @@
 	}
 
 /**
- * Gets Unix timestamp with microseconds.
+ * Gets UNIX timestamp with microseconds.
  *
  * @return  float
  * @package DateTime
@@ -1269,7 +1269,6 @@
 		}
 
 		// When even a minimum environment is missing.
-
 		if (!isset($production_status))
 		{
 			echo '<pre>'.gTxt('internal_error').' "'.$errstr.'"'.n."in $errfile at line $errline".'</pre>';
@@ -1557,7 +1556,7 @@
 				if (is_callable($c['function']))
 				{
 					// Cannot call event handler via call_user_func() as this would dereference all arguments.
-					// side effect: callback handler *must* be ordinary function, *must not* be class method in PHP <5.4
+					// Side effect: callback handler *must* be ordinary function, *must not* be class method in PHP <5.4
 					// see https://bugs.php.net/bug.php?id=47160
 					$return_value[] = $c['function']($event, $step, $data, $options);
 				}
@@ -1629,11 +1628,11 @@
 	{
 		$argv = func_get_args();
 		$argv = array_slice($argv, 2);
-		// custom user interface, anyone?
-		// signature for called functions:
+		// Custom user interface, anyone?
+		// Signature for called functions:
 		// string my_called_func(string $event, string $step, string $default_markup[, mixed $context_data...])
 		$ui = call_user_func_array('callback_event', array('event' => $event, 'step' => $element, 'pre' => 0) + $argv);
-		// either plugins provided a user interface, or we render our own
+		// Either plugins provided a user interface, or we render our own.
 		return ($ui === '') ? $default : $ui;
 	}
 
@@ -1724,7 +1723,7 @@
  * Sanitises a string for use in an article's URL title.
  *
  * @param   string $text  The title or an URL
- * @param   bool   $force Force sanitization
+ * @param   bool   $force Force sanitisation
  * @return  string|null
  * @package URL
  */
@@ -1763,15 +1762,15 @@
 		}
 
 		$in = $text;
-		// Remove names entities and tags
+		// Remove names entities and tags.
 		$text = preg_replace("/(^|&\S+;)|(<[^>]*>)/U", "", dumbDown($text));
-		// Dashify high-order chars leftover from dumbDown()
+		// Dashify high-order chars leftover from dumbDown().
 		$text = preg_replace("/[\x80-\xff]/", "-", $text);
-		// Collapse spaces, minuses, (back-)slashes and non-words
+		// Collapse spaces, minuses, (back-)slashes and non-words.
 		$text = preg_replace('/[\s\-\/\\\\]+/', '-', trim(preg_replace('/[^\w\s\-\/\\\\]/', '', $text)));
 		// Remove all non-whitelisted characters
 		$text = preg_replace("/[^A-Za-z0-9\-_]/", "", $text);
-		// Sanitizing shouldn't leave us with plain nothing to show.
+		// Sanitising shouldn't leave us with plain nothing to show.
 		// Fall back on percent-encoded URLs as a last resort for RFC 1738 conformance.
 		if (empty($text) || $text == '-')
 		{
@@ -1798,7 +1797,7 @@
 
 		// Remove control characters and " * \ : < > ? / |
 		$text = preg_replace('/[\x00-\x1f\x22\x2a\x2f\x3a\x3c\x3e\x3f\x5c\x7c\x7f]+/', '', $text);
-		// Remove duplicate dots and any leading or trailing dots/spaces
+		// Remove duplicate dots and any leading or trailing dots/spaces.
 		$text = preg_replace('/[.]{2,}/', '.', trim($text, '. '));
 		return $text;
 	}
@@ -1839,7 +1838,7 @@
 		static $array;
 		if (empty($array[$lang]))
 		{
-			$array[$lang] = array( // nasty, huh?.
+			$array[$lang] = array( // Nasty, huh?
 				'&#192;'=>'A','&Agrave;'=>'A','&#193;'=>'A','&Aacute;'=>'A','&#194;'=>'A','&Acirc;'=>'A',
 				'&#195;'=>'A','&Atilde;'=>'A','&#196;'=>'Ae','&Auml;'=>'A','&#197;'=>'A','&Aring;'=>'A',
 				'&#198;'=>'Ae','&AElig;'=>'AE',
@@ -2208,7 +2207,7 @@
 	{
 		global $txp_user, $prefs;
 
-		// if mailing isn't possible, don't even try.
+		// If mailing isn't possible, don't even try.
 		if (is_disabled('mail'))
 		{
 			return false;
@@ -2219,18 +2218,18 @@
 		{
 			if (is_valid_email($prefs['publisher_email']))
 			{
-				// explicit publisher email address preferred
+				// Explicit publisher email address preferred.
 				$RealName = safe_field('RealName', 'txp_users', "name = '".doSlash($txp_user)."'");
 				$email = $prefs['publisher_email'];
 			}
 			else
 			{
-				// default: current user invites new users using her personal email address
+				// Default: current user invites new users using her personal email address.
 				extract(safe_row('RealName, email', 'txp_users', "name = '".doSlash($txp_user)."'"));
 			}
 		}
 
-		// Likely sending comments -> "to" equals "from"
+		// Likely sending comments -> "to" equals "from".
 		else
 		{
 			extract(safe_row('RealName, email', 'txp_users', "email = '".doSlash($to_address)."'"));
@@ -2426,9 +2425,9 @@
 	}
 
 /**
- * Generic multi edit form's edit handler shared across panels.
+ * Generic multi-edit form's edit handler shared across panels.
  *
- * Receives an action from a multi edit form and runs it
+ * Receives an action from a multi-edit form and runs it
  * in the given database table.
  *
  * @param  string $table  The database table
@@ -3541,7 +3540,7 @@
  *
  * @param   array       $custom An array of 'custom_field_name' => field_number tupels
  * @param   array       $pairs  Filter criteria: An array of 'name' => value tupels
- * @return  bool|string A SQL qualifier for a querys 'WHERE' part
+ * @return  bool|string An SQL qualifier for a query's 'WHERE' part
  * @package CustomField
  */
 
@@ -3597,7 +3596,7 @@
 
 	function txp_die($msg, $status = '503', $url = '')
 	{
-		//Make it possible to call this function as a tag, e.g. in an article <txp:txp_die status="410" />.
+		// Make it possible to call this function as a tag, e.g. in an article <txp:txp_die status="410" />.
 		if (is_array($msg))
 		{
 			extract(lAtts(array(
@@ -4277,7 +4276,7 @@ eod;
 /**
  * Converts relative links in HTML markup to absolute.
  *
- * @param   string $html      The html to check
+ * @param   string $html      The HTML to check
  * @param   string $permalink Optional URL part appended to the links
  * @return  string HTML
  * @package URL
@@ -4287,7 +4286,7 @@ eod;
 	{
 		global $siteurl;
 
-		// urls like "/foo/bar" - relative to the domain
+		// URLs like "/foo/bar" - relative to the domain
 		if (serverSet('HTTP_HOST'))
 		{
 			$html = preg_replace('@(<a[^>]+href=")/@', '$1'.PROTOCOL.serverSet('HTTP_HOST').'/', $html);
@@ -4421,7 +4420,7 @@ eod;
 			'http-status' => '200 OK',
 		);
 
-		// backfill default response properties
+		// Backfill default response properties.
 		$response = $response + $default_response;
 
 		txp_status_header($response['http-status']);
@@ -4542,7 +4541,7 @@ eod;
 		{
 			if (!timezone::is_supported())
             {
-            	// Standard time zones as compiled by H.M. Nautical Almanac Office, June 2004
+            	// Standard timezones as compiled by H.M. Nautical Almanac Office, June 2004
 	            // http://aa.usno.navy.mil/faq/docs/world_tzones.html
 	            $timezones = array(
 	                -12, -11, -10, -9.5, -9, -8.5, -8, -7, -6, -5, -4, -3.5, -3, -2, -1,
@@ -4705,11 +4704,11 @@ eod;
 				$server_tz = @date_default_timezone_get();
 				if ($server_tz)
 				{
-					// Switch to client time zone.
+					// Switch to client timezone.
 					if (date_default_timezone_set($timezone_key))
 					{
 						$out = date('I', $timestamp);
-						// Restore server time zone.
+						// Restore server timezone.
 						date_default_timezone_set($server_tz);
 					}
 				}
@@ -4746,7 +4745,7 @@ eod;
 			return 0;
 		}
 
-		// Presume site language equals textpack language, string owner is LANG_OWNER_SITE.
+		// Presume site language equals Textpack language, string owner is LANG_OWNER_SITE.
 		$language = get_pref('language', 'en-gb');
 		$owner = doSlash(LANG_OWNER_SITE);
 
@@ -4757,13 +4756,13 @@ eod;
 		foreach ($textpack as $line)
 		{
 			$line = trim($line);
-			// A line starting with #, not followed by @ is a simple comment
+			// A line starting with #, not followed by @ is a simple comment.
 			if (preg_match('/^#[^@]/', $line, $m))
 			{
 				continue;
 			}
 
-			// A line matching "#@language xx-xx" establishes the designated language for all subsequent lines
+			// A line matching "#@language xx-xx" establishes the designated language for all subsequent lines.
 			if (preg_match('/^#@language\s+(.+)$/', $line, $m))
 			{
 				$language = doSlash($m[1]);
@@ -4772,14 +4771,14 @@ eod;
 				continue;
 			}
 
-			// A line matching "#@owner xxxx" establishes the designated owner for all subsequent lines
+			// A line matching "#@owner xxxx" establishes the designated owner for all subsequent lines.
 			if (preg_match('/^#@owner\s+(.+)$/', $line, $m))
 			{
 				$owner = doSlash($m[1]);
 				continue;
 			}
 
-			// A line matching "#@event_name" establishes the event value for all subsequent lines
+			// A line matching "#@event_name" establishes the event value for all subsequent lines.
 			if (preg_match('/^#@([a-zA-Z0-9_-]+)$/', $line, $m))
 			{
 				$event = doSlash($m[1]);
@@ -4794,7 +4793,7 @@ eod;
 					$name = doSlash($m[1]);
 					$value = doSlash($m[2]);
 					$where = "lang='$language' AND name='$name'";
-					// Store text; do *not* tamper with last modification date from RPC but use a well-known date in the past
+					// Store text; do *not* tamper with last modification date from RPC but use a well-known date in the past.
 					if (safe_count('txp_lang', $where))
 					{
 						safe_update('txp_lang',	"lastmod='2005-08-14', data='$value', event='$event', owner='$owner'", $where);
@@ -4852,7 +4851,7 @@ eod;
 /**
  * Validate admin steps. Protect against CSRF attempts.
  *
- * @param   string  $step  Requested admin step.
+ * @param   string  $step  Requested admin step
  * @param   array   $steps An array of valid steps with flag indicating CSRF needs, e.g. array('savething' => true, 'listthings' => false)
  * @return  boolean If the $step is valid, proceeds. Dies on CSRF attempt.
  * @see     form_token()
@@ -4924,11 +4923,11 @@ eod;
 
 		if (empty($accepts))
 		{
-			// build cache of accepted formats
+			// Build cache of accepted formats.
 			$accepts = preg_split('/\s*,\s*/', serverSet('HTTP_ACCEPT'), null, PREG_SPLIT_NO_EMPTY);
 			foreach ($accepts as &$a)
 			{
-				// sniff out quality factors if present
+				// Sniff out quality factors if present.
 				if (preg_match('/(.*)\s*;\s*q=([.0-9]*)/', $a, $m))
 				{
 					$a = $m[1];

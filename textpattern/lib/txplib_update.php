@@ -10,11 +10,11 @@
  * Installs language strings from a file.
  *
  * This function imports language strings to the database
- * from a file placed to the ../lang directory.
+ * from a file placed in the ../lang directory.
  *
  * Running this function will delete any missing strings of any
  * language specific event that were included in the file. Empty
- * strings are also stripped from database.
+ * strings are also stripped from the database.
  *
  * @param   string $lang The language code
  * @return  bool   TRUE on success
@@ -36,19 +36,22 @@ function install_language_from_file($lang)
 			$data = $core_events = array();
 			$event = '';
 
-			// TODO: General overhaul: Try install_textpack() to replace this parser; use safe_* db functions
-
+			// TODO: General overhaul: Try install_textpack() to replace this parser; use safe_* db functions.
 			while (!feof($file)) {
 				$line = fgets($file, 4096);
-				# ignore empty lines and simple comments (any line starting with #, not followed by @)
+
+				// Ignore empty lines and simple comments (any line starting with #, not followed by @).
 				if(trim($line) === '' || ($line[0] == '#' && $line[1] != '@' && $line[1] != '#')) continue;
-				# if available use the lastmod time from the file
+
+				// If available use the lastmod time from the file.
 				if (strpos($line,'#@version') === 0)
-				{	# Looks like: "#@version id;unixtimestamp"
+				{
+					// Looks like: "#@version id;unixtimestamp".
 					@list($fversion,$ftime) = explode(';',trim(substr($line,strpos($line,' ',1))));
 					$lastmod = date("YmdHis",min($ftime, time()));
 				}
-				# each language section should be prefixed by #@
+
+				// Each language section should be prefixed by #@.
 				if($line[0] == '#' && $line[1] == '@')
 				{
 					if (!empty($data))
@@ -67,7 +70,8 @@ function install_language_from_file($lang)
 								echo mysql_error();
 						}
 					}
-					# reset
+
+					// Reset.
 					$data = array();
 					$event = substr($line,2, (strlen($line)-2));
 					$event = rtrim($event);
@@ -77,15 +81,16 @@ function install_language_from_file($lang)
 					continue;
 				}
 
-				# Guard against setup strings being loaded.
-				# TODO: Setup strings will be removed from the .txt files at some point; this check can then be removed
+				// Guard against setup strings being loaded.
+				// TODO: Setup strings will be removed from the .txt files at some point; this check can then be removed.
 				if ($event !== 'setup')
 				{
 					@list($name,$val) = explode(' => ',trim($line));
 					$data[$name] = $val;
 				}
 			}
-			# remember to add the last one
+
+			// Remember to add the last one.
 			if (!empty($data))
 			{
 				foreach ($data as $name => $value)
@@ -95,7 +100,8 @@ function install_language_from_file($lang)
 			}
 			mysql_query("DELETE FROM `".PFX."txp_lang` WHERE owner = '' AND `lang`='".$lang."' AND `event` IN ('".join("','", array_unique($core_events))."') AND `lastmod`>$lastmod");
 			@fclose($filename);
-			#delete empty fields if any
+
+			// Delete empty fields if any.
 			mysql_query("DELETE FROM `".PFX."txp_lang` WHERE `data`=''");
 			mysql_query("FLUSH TABLE `".PFX."txp_lang`");
 

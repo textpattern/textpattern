@@ -71,7 +71,7 @@
 	}
 
 /**
- * Updates an user.
+ * Updates a user.
  */
 
 	function author_save()
@@ -282,17 +282,17 @@
 		echo '<h1 class="txp-heading">'.gTxt('tab_site_admin').'</h1>';
 		echo '<div id="users_control" class="txp-control-panel">';
 
-		// Change password button
+		// Change password button.
 		echo '<p class="txp-buttons">';
 		echo sLink('admin', 'new_pass_form', gTxt('change_password'));
 
-		// Change email address button
+		// Change email address button.
 		if (!has_privs('admin.edit'))
 		{
 			echo n.sLink('admin', 'change_email_form', gTxt('change_email_address'));
 		}
 
-		// User list
+		// User list.
 		if (has_privs('admin.list'))
 		{
 			extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
@@ -345,13 +345,13 @@
 
 			$total = getCount('txp_users', $criteria);
 
-			// New author button
+			// New author button.
 			if (has_privs('admin.edit'))
 			{
 				echo n.sLink('admin', 'author_edit', gTxt('add_new_author'));
 			}
 
-			echo '</p>'; // end txp-buttons
+			echo '</p>'; // End txp-buttons.
 
 			if ($total < 1)
 			{
@@ -579,10 +579,10 @@
 					$assign_assets = doSlash($assign_assets);
 					$names = join("','", doSlash($names));
 
-					// delete private prefs
+					// Delete private prefs.
 					safe_delete('txp_prefs', "user_name IN ('$names')");
 
-					// assign dangling assets to their new owner
+					// Assign dangling assets to their new owner.
 					$reassign = array(
 						'textpattern' => 'AuthorID',
 						'txp_file'    => 'author',

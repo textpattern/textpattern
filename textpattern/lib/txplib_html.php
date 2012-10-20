@@ -652,7 +652,7 @@
 	}
 
 /**
- * Renders anything as a XML element.
+ * Renders anything as an XML element.
  *
  * @param  string $content Enclosed content
  * @param  string $tag     The tag without brackets

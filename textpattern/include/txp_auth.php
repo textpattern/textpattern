@@ -101,7 +101,6 @@ Use of this software indicates acceptance of the Textpattern license agreement
 				"name = '$safe_user' and (pass = ".join(' or pass = ', $passwords).") and privs > 0");
 
 			// Old password is good: migrate password to phpass.
-
 			if ($name !== false)
 			{
 				safe_update("txp_users", "pass = '".doSlash($phpass->HashPassword($password))."'", "name = '$safe_user'");
@@ -110,7 +109,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
 
 		if ($name !== false && $log)
 		{
-			// update the last access time
+			// Update the last access time.
 			safe_update("txp_users", "last_access = now()", "name = '$safe_user'");
 		}
 
@@ -268,17 +267,17 @@ EOSCR
 			setcookie('txp_login_public', '', time()-3600, $pub_path);
 		}
 
-		if ($c_userid and strlen($c_hash) == 32) // cookie exists
+		if ($c_userid and strlen($c_hash) == 32) // Cookie exists.
 		{
 			$nonce = safe_field('nonce', 'txp_users', "name='".doSlash($c_userid)."' AND last_access > DATE_SUB(NOW(), INTERVAL 30 DAY)");
 
 			if ($nonce and $nonce === md5($c_userid.pack('H*', $c_hash)))
 			{
-				// cookie is good
+				// Cookie is good.
 
 				if ($logout)
 				{
-					// destroy nonce
+					// Destroy nonce.
 					safe_update(
 						'txp_users',
 						"nonce = '".doSlash(md5(uniqid(mt_rand(), TRUE)))."'",
@@ -287,7 +286,7 @@ EOSCR
 				}
 				else
 				{
-					// create $txp_user
+					// Create $txp_user.
 					$txp_user = $c_userid;
 				}
 				return $message;
@@ -300,7 +299,7 @@ EOSCR
 			}
 
 		}
-		elseif ($p_userid and $p_password) // incoming login vars
+		elseif ($p_userid and $p_password) // Incoming login vars.
 		{
 			$name = txp_validate($p_userid,$p_password);
 
@@ -332,7 +331,7 @@ EOSCR
 					$pub_path
 				);
 
-				// login is good, create $txp_user
+				// Login is good, create $txp_user.
 				$txp_user = $name;
 				return '';
 			}
@@ -342,7 +341,7 @@ EOSCR
 				$message = array(gTxt('could_not_log_in'), E_ERROR);
 			}
 		}
-		elseif ($p_reset) // reset request
+		elseif ($p_reset) // Reset request.
 		{
 			sleep(3);
 
@@ -373,4 +372,5 @@ EOSCR
 		$txp_user = '';
 		return $message;
 	}
+
 ?>

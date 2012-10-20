@@ -285,7 +285,7 @@ EOS
 					{
 						if ($method == 'deleteforce')
 						{
-							// Clear the deleted category names from assets
+							// Clear the deleted category names from assets.
 							$affected = join("','", $names);
 							if($type === 'article')
 							{
@@ -297,7 +297,7 @@ EOS
 								safe_update('txp_'.$type, "category = ''", "category IN ('$affected')");
 							}
 
-							// Promote subcats of deleted cats to root
+							// Promote subcatagories of deleted catagories to root.
 							safe_update('txp_category', "parent='root'", "parent IN ('$affected')");
 						}
 
@@ -325,7 +325,7 @@ EOS
 
 					foreach($rs as $cat)
 					{
-						// Cannot assign parent to itself
+						// Cannot assign parent to itself.
 						if ($cat['name'] != $new_parent)
 						{
 							$to_change[] = doSlash($cat['name']);
@@ -430,7 +430,7 @@ EOS
 			{
 				extract($a);
 
-				// format count
+				// Format count.
 				switch ($event)
 				{
 					case 'article':
@@ -575,7 +575,7 @@ EOS
 
 		$name = sanitizeForUrl($name);
 
-		// make sure the name is valid
+		// Make sure the name is valid.
 		if (!$name)
 		{
 			$message = array(gTxt($event.'_category_invalid', array('{name}' => $name)), E_ERROR);
@@ -583,7 +583,7 @@ EOS
 			return cat_category_list($message);
 		}
 
-		// don't allow rename to clobber an existing category
+		// Don't allow rename to clobber an existing category.
 		$existing_id = safe_field('id', 'txp_category', "name = '$name' and type = '$event'");
 
 		if ($existing_id and $existing_id != $id)
@@ -593,7 +593,7 @@ EOS
 			return cat_category_list($message);
 		}
 
-		//TODO: validate parent?
+		// TODO: validate parent?
 		$parent = ($parent) ? $parent : 'root';
 
 		$message = array(gTxt('category_save_failed'), E_ERROR);
@@ -656,6 +656,5 @@ EOS
 	{
 		return cat_event_category_save('file','txp_file');
 	}
-
 
 ?>

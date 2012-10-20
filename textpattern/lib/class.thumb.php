@@ -121,7 +121,7 @@ class wet_thumb {
 	public $sharpen;
 
 	/**
-	 * If set to FALSE the image will not have a lens-icon.
+	 * If set to FALSE the image will not have a lens icon.
 	 *
 	 * @var bool
 	 */
@@ -129,7 +129,7 @@ class wet_thumb {
 	public $hint;
 
 	/**
-	 * Set to FALSE to get no lightgrey bottombar.
+	 * Set to FALSE to get no lightgrey bottom bar.
 	 *
 	 * @var bool
 	 */
@@ -311,9 +311,9 @@ class wet_thumb {
 		if (max($this->_SRC['width'], $this->_SRC['height']) > 1024)
 		{
 			$shorthand = array('K', 'M', 'G');
-			$tens = array('000', '000000', '000000000'); // A good enough decimal approximation of K, M, and G
+			$tens = array('000', '000000', '000000000'); // A good enough decimal approximation of K, M, and G.
 
-			// Do not *decrease* memory_limit
+			// Do not *decrease* memory_limit.
 
 			list($ml, $extra) = str_ireplace($shorthand, $tens, array(ini_get('memory_limit'), EXTRA_MEMORY));
 			if ($ml < $extra)
@@ -518,7 +518,7 @@ class wet_thumb {
 	}
 
 	/**
-	 * Return a reference to the the thumbnailimage as a HTML a or img tag.
+	 * Return a reference to the the thumbnail image as a HTML a or img tag.
 	 *
 	 * @param  bool   $aslink  Return an anchor tag to the source image
 	 * @param  bool   $aspopup Open the link in new window
@@ -643,10 +643,10 @@ class txp_thumb extends wet_thumb
 }
 
 /**
- * Unsharpen mask.
+ * Unsharp mask.
  *
  * Unsharp mask algorithm by Torstein Hønsi 2003 (thoensi_at_netcom_dot_no)
- * Christoph Erdmann: changed it a little, cause i could not reproduce the
+ * Christoph Erdmann: changed it a little, because I could not reproduce the
  * darker blurred image, now it is up to 15% faster with same results
  *
  * @author Torstein Hønsi
