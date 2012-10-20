@@ -65,7 +65,7 @@ class wet_thumb {
 	 * @var int
 	 */
 
-	var $width;
+	public $width;
 
 	/**
 	 * The height of your thumbnail. The width (if not set) will
@@ -74,28 +74,28 @@ class wet_thumb {
 	 * @var int
 	 */
 
-	var $height;
+	public $height;
 
 	/**
 	 * Set the longest side of the image if width, height and
 	 * shortside is not set.
 	 */
 
-	var $longside;
+	public $longside;
 
 	/**
 	 * Set the shortest side of the image if width, height and
 	 * longside is not set.
 	 */
 
-	var $shortside;
+	public $shortside;
 
 	/**
 	 * Set to 'false' if your source image is smaller than the calculated
 	 * thumb and you do not want the image to get extrapolated.
 	 */
 
-	var $extrapolate;
+	public $extrapolate;
 
 	/**
 	 * Crops the image.
@@ -107,7 +107,7 @@ class wet_thumb {
 	 * @var bool
 	 */
 
-	var $crop;
+	public $crop;
 
 	/**
 	 * Applies unsharpen mask.
@@ -118,7 +118,7 @@ class wet_thumb {
 	 * @var bool
 	 */
 
-	var $sharpen;
+	public $sharpen;
 
 	/**
 	 * If set to FALSE the image will not have a lens-icon.
@@ -126,7 +126,7 @@ class wet_thumb {
 	 * @var bool
 	 */
 
-	var $hint;
+	public $hint;
 
 	/**
 	 * Set to FALSE to get no lightgrey bottombar.
@@ -134,7 +134,7 @@ class wet_thumb {
 	 * @var bool
 	 */
 
-	var $addgreytohint;
+	public $addgreytohint;
 
 	/**
 	 * JPEG image quality (0...100, defaults to 80).
@@ -142,7 +142,7 @@ class wet_thumb {
 	 * @var int
 	 */
 
-	var $quality;
+	public $quality;
 
 	/**
 	 * Set to your target URL (a href="linkurl").
@@ -150,7 +150,7 @@ class wet_thumb {
 	 * @var string
 	 */
 
-	var $linkurl;
+	public $linkurl;
 
 	/**
 	 * Will be inserted in the image-tag.
@@ -158,7 +158,7 @@ class wet_thumb {
 	 * @var string
 	 */
 
-	var $html;
+	public $html;
 
 	/**
 	 * An array of accepted image formats.
@@ -166,7 +166,7 @@ class wet_thumb {
 	 * @var array
 	 */
 
-	var $types = array('','.gif','.jpg','.png');
+	public $types = array('','.gif','.jpg','.png');
 
 	/**
 	 * Source.
@@ -174,7 +174,7 @@ class wet_thumb {
 	 * @var array
 	 */
 
-	var $_SRC;
+	public $_SRC;
 
 	/**
 	 * Destination.
@@ -182,13 +182,13 @@ class wet_thumb {
 	 * @var array
 	 */
 
-	var $_DST;
+	public $_DST;
 
 	/**
 	 * Constructor.
 	 */
 
-	function wet_thumb()
+	public function __construct()
 	{
 		$this->extrapolate = false;
 		$this->crop = true;
@@ -208,7 +208,7 @@ class wet_thumb {
 	 * @return bool   TRUE on success
 	 */
 
-	function write($infile, $outfile)
+	public function write($infile, $outfile)
 	{
 		global $verbose;
 
@@ -525,7 +525,7 @@ class wet_thumb {
 	 * @return string HTML markup
 	 */
 
-	function asTag($aslink = true, $aspopup = false)
+	public function asTag($aslink = true, $aspopup = false)
 	{
 		$imgtag = '<img src="'.$this->_DST['file'].'" '.$this->html.' width="'.$this->width.'" height="'.$this->height.'" />';
 
@@ -554,7 +554,7 @@ class txp_thumb extends wet_thumb
 	 * @var string
 	 */
 
-	var $m_ext;
+	public $m_ext;
 
 	/**
 	 * Image ID.
@@ -562,7 +562,7 @@ class txp_thumb extends wet_thumb
 	 * @var int
 	 */
 
-	var $m_id;
+	public $m_id;
 
 	/**
 	 * Constructor.
@@ -570,7 +570,7 @@ class txp_thumb extends wet_thumb
 	 * @param int $id The Image id.
 	 */
 
-	function txp_thumb($id)
+	public function __construct($id)
 	{
 		$id = assert_int($id);
 		$rs = safe_row('*', 'txp_image', 'id = '.$id.' limit 1');
@@ -580,7 +580,7 @@ class txp_thumb extends wet_thumb
 			$this->m_ext = $ext;
 			$this->m_id = $id;
 		}
-		$this->wet_thumb();
+		parent::__construct();
     }
 
 	/**
@@ -591,7 +591,7 @@ class txp_thumb extends wet_thumb
 	 * @return bool   TRUE on success
 	 */
 
-	function write($dummy1 = '', $dummy2 = '')
+	public function write($dummy1 = '', $dummy2 = '')
 	{
 		if (!isset($this->m_ext))
 		{
@@ -625,7 +625,7 @@ class txp_thumb extends wet_thumb
 	 * @return bool TRUE on success
 	 */
 
-	function delete()
+	public function delete()
 	{
 		if (!isset($this->m_ext))
 		{
