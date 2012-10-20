@@ -14,7 +14,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
 /**
  * Login panel.
  *
- * @package Admin\Login
+ * @package Admin\Auth
  */
 
 	if (!defined('txpinterface'))
