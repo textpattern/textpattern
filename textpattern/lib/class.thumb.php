@@ -1,61 +1,191 @@
 <?php
+
 /**
- * class wet_thumb
- * @author	C. Erdmann
- * @see		<a href="http://www.cerdmann.de/thumb">http://www.cerdmann.de/thumb</a>
- * @author	Robert Wetzlmayr
+ * Tools for creating thumbnails.
  *
- * refactored from function.thumb.php by C. Erdmann, which contained the following credit & licensing terms:
- * ===
+ * @package Image
+ * @author  C. Erdmann
+ * @link    http://www.cerdmann.de/thumb
+ * @author  Robert Wetzlmayr
+ *
+ * Refactored from function.thumb.php by C. Erdmann, which contained
+ * the following credit and licensing terms:
+ *
  * Smarty plugin "Thumb"
  * Purpose: creates cached thumbnails
  * Home: http://www.cerdmann.com/thumb/
  * Copyright (C) 2005 Christoph Erdmann
  *
- * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option) any later version.
+ * This library is free software; you can redistribute it and/or 
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU Lesser General Public License along with this library; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110, USA
- * -------------------------------------------------------------
- * Author:   Christoph Erdmann (CE) <smarty@cerdmann.com>
- * Internet: http://www.cerdmann.com
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110, USA
  *
- * Author: Benjamin Fleckenstein (BF)
- * Internet: http://www.benjaminfleckenstein.de
+ * @author Christoph Erdmann (CE) <smarty@cerdmann.com>
+ * @link   http://www.cerdmann.com
  *
- * Author: Marcus Gueldenmeister (MG)
- * Internet: http://www.gueldenmeister.de/marcus/
+ * @author Benjamin Fleckenstein (BF)
+ * @link http://www.benjaminfleckenstein.de
  *
- * Author: Andreas Bösch (AB)
+ * @author Marcus Gueldenmeister (MG)
+ * @link http://www.gueldenmeister.de/marcus/
  *
+ * @author Andreas Bösch (AB)
+ */
+
+/**
+ * @ignore
  */
 
 $verbose = false;
 
+/**
+ * Creates thumbnails for larger images.
+ *
+ * @package Image
+ */
 
 class wet_thumb {
-    var $width;      // The width of your thumbnail. The height (if not set) will be automatically calculated.
-    var $height;	// The height of your thumbnail. The width (if not set) will be automatically calculated.
-    var $longside;	// Set the longest side of the image if width, height and shortside is not set.
-    var $shortside;	// Set the shortest side of the image if width, height and longside is not set.
-    var $extrapolate;  // Set to 'false' if your source image is smaller than the calculated thumb and you do not want the image to get extrapolated.
-    var $crop;	// If set to 'true', image will be cropped in the center to destination width and height params, while keeping aspect ratio. Otherwise the image will get resized.
-    var $sharpen;	// Set to 'false' if you don't want to use the Unsharp-Mask. Thumbnail creation will be faster, but quality is reduced.
-    var $hint; 	// If set to 'false' the image will not have a lens-icon.
-    var $addgreytohint; // Set to 'false' to get no lightgrey bottombar.
-    var $quality;	// JPEG image quality (0...100, defaults to 80).
-    // link related params
-    var $linkurl;    // Set to your target URL (a href="linkurl")
-    var $html;       // Will be inserted in the image-tag
+
+	/**
+	 * The width of your thumbnail. The height (if not set) will
+	 * be automatically calculated.
+	 *
+	 * @var int
+	 */
+
+    var $width;
+
+	/**
+	 * The height of your thumbnail. The width (if not set) will
+	 * be automatically calculated.
+	 *
+	 * @var int
+	 */
+
+    var $height;
+
+	/**
+	 * Set the longest side of the image if width, height and
+	 * shortside is not set.
+	 */
+
+    var $longside;
+
+	/**
+	 * Set the shortest side of the image if width, height and
+	 * longside is not set.
+	 */
+
+    var $shortside;
+
+	/**
+	 * Set to 'false' if your source image is smaller than the calculated
+	 * thumb and you do not want the image to get extrapolated.
+	 */
+
+    var $extrapolate;
+
+	/**
+	 * Crops the image.
+	 *
+	 * If set to TRUE, image will be cropped in the center to destination width
+	 * and height params, while keeping aspect ratio. Otherwise the image will
+	 * get resized.
+	 *
+	 * @var bool
+	 */
+
+    var $crop;
+
+	/**
+	 * Applies unsharpen mask.
+	 *
+	 * Set to FALSE if you don't want to use the Unsharp-Mask.
+	 * Thumbnail creation will be faster, but quality is reduced.
+	 *
+	 * @var bool
+	 */
+
+    var $sharpen;
+
+	/**
+	 * If set to FALSE the image will not have a lens-icon.
+	 *
+	 * @var bool
+	 */
+
+    var $hint;
+
+	/**
+	 * Set to FALSE to get no lightgrey bottombar.
+	 *
+	 * @var bool
+	 */
+
+    var $addgreytohint;
+
+	/**
+	 * JPEG image quality (0...100, defaults to 80).
+	 *
+	 * @var int
+	 */
+
+    var $quality;
+
+	/**
+	 * Set to your target URL (a href="linkurl").
+	 *
+	 * @var string
+	 */
+
+    var $linkurl;
+
+	/**
+	 * Will be inserted in the image-tag.
+	 *
+	 * @var string
+	 */
+
+    var $html;
+
+	/**
+	 * An array of accepted image formats.
+	 *
+	 * @var array
+	 */
 
     var $types = array('','.gif','.jpg','.png');
+
+	/**
+	 * Source.
+	 *
+	 * @var array
+	 */
+
     var $_SRC;
+
+	/**
+	 * Destination.
+	 *
+	 * @var array
+	 */
+
     var $_DST;
 
-    /**
-     * constructor
-     */
+	/**
+	 * Constructor.
+	 */
+
     function wet_thumb(  ) {
 	$this->extrapolate = false;
 	$this->crop = true;
@@ -67,12 +197,14 @@ class wet_thumb {
 	$this->link = true;
     }
 
-    /**
-     * write thumbnail file
-     * @param	infile	image file name
-     * @param	outfile	array of thumb file names (1...n)
-     * @return	boolean, true indicates success
-     */
+	/**
+	 * Writes a thumbnail file.
+	 *
+	 * @param  string $infile  Image file name.
+	 * @param  array  $outfile Array of thumb file names (1...n)
+	 * @return bool   TRUE on success
+	 */
+
     function write( $infile, $outfile ) {
         global $verbose;
 
@@ -281,12 +413,14 @@ class wet_thumb {
 	return true;
     }
 
-    /**
-     * return a reference to the the thumbnailimage as a HTML <a> or <img> tag
-     * @param	aslink	return an anchor tag to the source image
-     * @param	aspopup	open link in new window
-     * @return	string with suitable HTML markup
-     */
+	/**
+	 * Return a reference to the the thumbnailimage as a HTML a or img tag.
+	 *
+	 * @param  bool   $aslink  Return an anchor tag to the source image
+	 * @param  bool   $aspopup Open the link in new window
+	 * @return string HTML markup
+	 */
+
     function asTag( $aslink = true, $aspopup = false  )
     {
         $imgtag = "<img src=\"" . $this->_DST['file']. "\" " .
@@ -306,18 +440,37 @@ class wet_thumb {
         }
     }
 }
+
 /**
- * class txp_thumb: wrapper for wet_thumb interfacing the TxP repository
+ * Wrapper for wet_thumb interfacing Textpattern.
+ *
+ * @package Image
  */
+
 class txp_thumb extends wet_thumb {
 
+	/**
+	 * File extension.
+	 *
+	 * @var string
+	 */
+
     var $m_ext;
+
+	/**
+	 * Image ID.
+	 *
+	 * @var int
+	 */
+
     var $m_id;
 
-    /***
-     * constructor
-     * @param	$id	image id
-     */
+	/**
+	 * Constructor.
+	 *
+	 * @param int $id The Image id.
+	 */
+
     function txp_thumb ($id) {
         $id = assert_int($id);
         $rs = safe_row('*', 'txp_image', 'id = '.$id.' limit 1');
@@ -329,10 +482,14 @@ class txp_thumb extends wet_thumb {
         $this->wet_thumb(); // construct base class instance
     }
 
-    /**
-     * create thumbnail image from source image
-     * @return	boolean, true indicates success
-     */
+	/**
+	 * Creates a thumbnail image from a source image.
+	 *
+	 * @param  string $dummy1 Isn't used.
+	 * @param  string $dummy2 Isn't used.
+	 * @return bool   TRUE on success
+	 */
+
     function write( $dummy1='', $dummy2='' ) {
         if ( !isset($this->m_ext) ) return false;
 
@@ -344,10 +501,12 @@ class txp_thumb extends wet_thumb {
 		return false;
     }
 
-     /**
-     * delete thumbnail
-     * @return	boolean, true indicates success
-     */
+	/**
+	 * Deletes a thumbnail.
+	 *
+	 * @return bool TRUE on success
+	 */
+
     function delete( ) {
         if (!isset($this->m_ext)) return false;
 
@@ -361,18 +520,26 @@ class txp_thumb extends wet_thumb {
 }
 
 /**
+ * Unsharpen mask.
+ *
  * Unsharp mask algorithm by Torstein Hønsi 2003 (thoensi_at_netcom_dot_no)
  * Christoph Erdmann: changed it a little, cause i could not reproduce the
  * darker blurred image, now it is up to 15% faster with same results
- * @param   img     image as a ressource
- * @param   amount  filter parameter
- * @param   radius  filter parameter
- * @param   treshold    filter parameter
- * @return  sharpened image as a ressource
+ *
+ * @author Torstein Hønsi
+ * @author Christoph Erdmann
+ * @param  resource $img       Image as a resource
+ * @param  int      $amount    Filter parameter
+ * @param  int      $radius    Filter parameter
+ * @param  int      $threshold Filter parameter
+ * @return resource Sharpened image as a resource.
  *
  *
- * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option) any later version.
-*/
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
+ * (at your option) any later version.
+ */
 
 function UnsharpMask($img, $amount, $radius, $threshold)    {
     // Attempt to calibrate the parameters to Photoshop:
