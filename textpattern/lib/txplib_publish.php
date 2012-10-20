@@ -9,14 +9,20 @@ All rights reserved.
 
 Use of this software indicates acceptance of the Textpattern license agreement
 
-@since 4.5.0
 */
 
 /**
- * Build a query qualifier to remove non-frontpage articles from the result set.
+ * Tools for page routing and handling article data.
  *
- * @return string SQL qualifier for a query's 'WHERE' part
+ * @since   4.5.0
  */
+
+/**
+ * Build a query qualifier to remove non-frontpage articles from the result set
+ *
+ * @return string A SQL qualifier for a querys 'WHERE' part
+ */
+
 function filterFrontPage()
 {
 	static $filterFrontPage;
@@ -43,14 +49,33 @@ function filterFrontPage()
 }
 
 /**
- * Fill members of $thisarticle from a DB row assoc.
+ * Populates the current article data.
  *
- * Keep all the article tag-related values in one place,
- * in order to do easy bugfix and ease the addition of
+ * Fills members of $thisarticle global from a database row.
+ *
+ * Keeps all article tag-related values in one place,
+ * in order to do easy bugfixing and ease the addition of
  * new article tags.
  *
- * @param array $rs An assoc w/ one article's data from the DB
+ * @param array $rs An article as an assocative array
+ * @example
+ * if ($rs = safe_rows_start('*,
+ * 	unix_timestamp(Posted) as uPosted,
+ * 	unix_timestamp(Expires) as uExpires,
+ * 	unix_timestamp(LastMod) as uLastMod',
+ * 	'textpattern',
+ * 	'1=1'
+ * ))
+ * {
+ * 	global $thisarticle;
+ * 	while ($row = nextRow($rs))
+ * 	{
+ * 		populateArticleData($row);
+ * 		echo $thisarticle['title'];
+ * 	}
+ * }
  */
+
 function populateArticleData($rs)
 {
 	global $thisarticle;
@@ -62,10 +87,21 @@ function populateArticleData($rs)
 }
 
 /**
- * Convenience for those who prefer "SELECT * FROM textpattern"
+ * Formats article info and populates the current article data.
  *
- * @param array $rs An assoc w/ one article's data from the DB
+ * Fills members of $thisarticle global from a database row.
+ *
+ * Basically just converts an article's date values to UNIX timestamps.
+ * Convenience for those who prefer doing conversion in application
+ * end instead of in the SQL statement.
+ *
+ * @param array $rs An article as an assocative array
+ * @example
+ * article_format_info(
+ * 	safe_row('*', 'textpattern', 'Status = 4 limit 1')
+ * )
  */
+
 function article_format_info($rs)
 {
 	$rs['uPosted'] = (($unix_ts = @strtotime($rs['Posted'])) > 0) ? $unix_ts : NULLDATETIME;
@@ -76,8 +112,14 @@ function article_format_info($rs)
 }
 
 /**
+ * Maps 'textpattern' table's columns to article data values.
+ *
+ * This function returns an array of 'data-value' => 'column'
+ * pairs.
+ *
  * @return array
  */
+
 function article_column_map()
 {
 	$custom = getCustomFields();
@@ -111,15 +153,16 @@ function article_column_map()
 }
 
 /**
- * Find an adjacent article relative to a provided threshold level
+ * Find an adjacent article relative to a provided threshold level.
  *
- * @param scalar $threshold The value to compare against
- * @param string $s string Optional section restriction
- * @param string $type string Find lesser or greater neighbour? Possible values: '<' (previous, default) or '>' (next)
- * @param array $atts Attribute of article at threshold
- * @param string $threshold_type 'cooked': Use $threshold as SQL clause; 'raw': Use $threshold as an escapable scalar
+ * @param  scalar       $threshold      The value to compare against
+ * @param  string       $s              Optional section restriction
+ * @param  string       $type           Lesser or greater neighbour? Either '<' (previous) or '>' (next)
+ * @param  array        $atts           Attribute of article at threshold
+ * @param  string       $threshold_type 'cooked': Use $threshold as SQL clause; 'raw': Use $threshold as an escapable scalar
  * @return array|string An array populated with article data, or the empty string in case of no matches
  */
+
 function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 'raw')
 {
 	global $prefs;
@@ -202,13 +245,14 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
 }
 
 /**
- * Find next and previous articles relative to a provided threshold level
+ * Find next and previous articles relative to a provided threshold level.
  *
- * @param int $id The "pivot" article's id; use zero (0) to indicate $thisarticle
- * @param scalar $threshold The value to compare against if $id != 0
- * @param string $s string Optional section restriction if $id != 0
- * @return array An array populated with article data from the next and previous article
+ * @param  int    $id        The "pivot" article's id; use zero (0) to indicate $thisarticle
+ * @param  scalar $threshold The value to compare against if $id != 0
+ * @param  string $s         Optional section restriction if $id != 0
+ * @return array  An array populated with article data from the next and previous article
  */
+
 function getNextPrev($id = 0, $threshold = null, $s = '')
 {
 	if ($id !== 0) {
@@ -277,10 +321,12 @@ function getNextPrev($id = 0, $threshold = null, $s = '')
 }
 
 /**
- * Date of the site's last modification
+ * Gets the site last modification date.
  *
- * @return string
+ * @return  string
+ * @package Pref
  */
+
 function lastMod()
 {
 	$last = safe_field("unix_timestamp(val)", "txp_prefs", "`name`='lastmod' and prefs_id=1");
@@ -290,9 +336,11 @@ function lastMod()
 /**
  * Parse a string and replace any Textpattern tags with their actual value
  *
- * @param string $thing The raw string
- * @return string The parsed string
+ * @param   string $thing The raw string
+ * @return  string The parsed string
+ * @package TagParser
  */
+
 function parse($thing)
 {
 	$f = '@(</?txp:\w+(?:\s+\w+\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))*\s*/?'.chr(62).')@s';
@@ -368,9 +416,11 @@ function parse($thing)
 /**
  * Guesstimate whether a given function name may be a valid tag handler.
  *
- * @param string $tag function name
- * @return bool False if the function name is not a valid tag handler
+ * @param   string $tag function name
+ * @return  bool   FALSE if the function name is not a valid tag handler
+ * @package TagParser
  */
+
 function maybe_tag($tag)
 {
 	static $tags = NULL;
@@ -384,11 +434,13 @@ function maybe_tag($tag)
 /**
  * Parse a tag for attributes and hand over to the tag handler function.
  *
- * @param string $tag The tag name without '<txp:'
- * @param string $atts The attribute string
- * @param string|null $thing The tag's content in case of container tags (optional)
- * @return string Parsed tag result
+ * @param  string      $tag   The tag name
+ * @param  string      $atts  The attribute string
+ * @param  string|null $thing The tag's content in case of container tags
+ * @return string      Parsed tag result
+ * @package TagParser
  */
+
 function processTags($tag, $atts, $thing = NULL)
 {
 	global $production_status, $txptrace, $txptracelevel, $txp_current_tag, $txp_current_form;
@@ -452,6 +504,7 @@ function processTags($tag, $atts, $thing = NULL)
  *
  * Origin of the infamous 'Nice try' message and an even more useful '503' http status.
  */
+
 function bombShelter()
 {
 	global $prefs;
@@ -463,76 +516,129 @@ function bombShelter()
 }
 
 /**
- * Check a named item's existence in DB table
+ * Checks a named item's existence in a database table.
  *
- * @param string $table	DB table name
- * @param string $val The name to look for
- * @param string $debug
- * @return bool|string
+ * The given database table is prefixed with 'txp_'. As such
+ * this function can only be used with core database tables.
+ *
+ * @param   string      $table The database table name
+ * @param   string      $val   The name to look for
+ * @param   bool        $debug Dump the query
+ * @return  bool|string The item's name, or FALSE when it doesn't exist
+ * @package Filter
+ * @example
+ * if ($r = ckEx('section', 'about'))
+ * {
+ * 	echo "Section '{$r}' exists.";
+ * }
  */
+
 function ckEx($table,$val,$debug='')
 {
 	return safe_field("name",'txp_'.$table,"`name` = '".doSlash($val)."' limit 1",$debug);
 }
 
 /**
- * Check category existence
+ * Checks if the given category exist.
  *
- * @param string $type Category type {'article', 'file', 'link', 'image'}
- * @param string $val The category name to look for
- * @param string $debug
- * @return bool|string
+ * @param   string      $type  The category type, either 'article', 'file', 'link', 'image'
+ * @param   string      $val   The category name to look for
+ * @param   bool        $debug Dump the query
+ * @return  bool|string The category's name, or FALSE when it doesn't exist
+ * @package Filter
+ * @see     ckEx()
+ * @example
+ * if ($r = ckCat('article', 'development'))
+ * {
+ * 	echo "Category '{$r}' exists.";
+ * }
  */
+
 function ckCat($type,$val,$debug='')
 {
 	return safe_field("name",'txp_category',"`name` = '".doSlash($val)."' AND type = '".doSlash($type)."' limit 1",$debug);
 }
 
 /**
- * Lookup article by ID
+ * Lookup an article by ID.
  *
- * @param int $val Article ID
- * @param string $debug
- * @return array|bool
+ * This function takes an article's ID, and checks if it's
+ * been published. If it is, returns the section and the ID
+ * as an array. FALSE otherwise.
+ *
+ * @param   int        $val   The article ID
+ * @param   bool       $debug Dump the query
+ * @return  array|bool Array of ID and section on success, FALSE otherwise
+ * @package Filter
+ * @example
+ * if ($r = ckExID(36))
+ * {
+ * 	echo "Article #{$r['id']} is published, and belongs to the section {$r['section']}.";
+ * }
  */
+
 function ckExID($val,$debug='')
 {
 	return safe_row("ID,Section",'textpattern','ID = '.intval($val).' and Status >= 4 limit 1',$debug);
 }
 
 /**
- * Lookup article by URL title
+ * Lookup an article by URL title.
  *
- * @param string $val	URL title
- * @param string $debug
- * @return array|bool
+ * This function takes an article's URL title, and checks if the article
+ * has been published. If it is, returns the section and the ID
+ * as an array. FALSE otherwise.
+ *
+ * @param   string     $val   The URL title
+ * @param   bool       $debug Dump the query
+ * @return  array|bool Array of ID and section on success, FALSE otherwise
+ * @package Filter
+ * @example
+ * if ($r = ckExID('my-article-title'))
+ * {
+ * 	echo "Article #{$r['id']} is published, and belongs to the section {$r['section']}.";
+ * }
  */
+
 function lookupByTitle($val,$debug='')
 {
 	return safe_row("ID,Section",'textpattern',"url_title = '".doSlash($val)."' and Status >= 4 limit 1",$debug);
 }
 
 /**
- * Lookup live article by URL title and section
+ * Lookup a published article by URL title and section.
  *
- * @param string $val		URL title
- * @param string $section	Section name
- * @param string $debug
- * @return array|bool
+ * This function takes an article's URL title, and checks if the article
+ * has been published. If it is, returns the section and the ID
+ * as an array. FALSE otherwise.
+ *
+ * @param   string     $val     The URL title
+ * @param   string     $section The section name
+ * @param   bool       $debug   Dump the query
+ * @return  array|bool Array of ID and section on success, FALSE otherwise
+ * @package Filter
+ * @example
+ * if ($r = ckExID('my-article-title', 'my-section'))
+ * {
+ * 	echo "Article #{$r['id']} is published, and belongs to the section {$r['section']}.";
+ * }
  */
+
 function lookupByTitleSection($val,$section,$debug='')
 {
 	return safe_row("ID,Section",'textpattern',"url_title = '".doSlash($val)."' AND Section='".doSlash($section)."' and Status >= 4 limit 1",$debug);
 }
 
 /**
- * Lookup live article by ID and section
+ * Lookup live article by ID and section.
  *
- * @param int $id 			Article ID
- * @param string $section	Section name
- * @param string $debug
- * @return array|bool
+ * @param   int    $id      Article ID
+ * @param   string $section Section name
+ * @param   bool   $debug
+ * @return  array|bool
+ * @package Filter
  */
+
 function lookupByIDSection($id, $section, $debug = '')
 {
 	return safe_row('ID, Section', 'textpattern',
@@ -540,25 +646,29 @@ function lookupByIDSection($id, $section, $debug = '')
 }
 
 /**
- * Lookup live article by ID
+ * Lookup live article by ID.
  *
- * @param int $id 			Article ID
- * @param string $debug
- * @return array|bool
+ * @param   int       $id    Article ID
+ * @param   bool      $debug
+ * @return  array|bool
+ * @package Filter
  */
+
 function lookupByID($id,$debug='')
 {
 	return safe_row("ID,Section",'textpattern','ID = '.intval($id).' and Status >= 4 limit 1',$debug);
 }
 
 /**
- * Lookup live article by date and URL title
+ * Lookup live article by date and URL title.
  *
- * @param string $when	date wildcard
- * @param string $title	URL title
- * @param string $debug
- * @return array|bool
+ * @param   string     $when  date wildcard
+ * @param   string     $title URL title
+ * @param   bool       $debug
+ * @return  array|bool
+ * @package Filter
  */
+
 function lookupByDateTitle($when,$title,$debug='')
 {
 	return safe_row("ID,Section","textpattern",
@@ -566,11 +676,13 @@ function lookupByDateTitle($when,$title,$debug='')
 }
 
 /**
- * Chop a request string into URL-decoded path parts
+ * Chops a request string into URL-decoded path parts.
  *
- * @param string $req Request string
- * @return array
+ * @param   string $req Request string
+ * @return  array
+ * @package URL
  */
+
 function chopUrl($req)
 {
 	$req = strtolower($req);
@@ -589,12 +701,15 @@ function chopUrl($req)
 }
 
 /**
- * Save and retrieve the individual article's attributes plus article list attributes for next/prev tags
+ * Save and retrieve the individual article's attributes
+ * plus article list attributes for next/prev tags
  *
- * @param array $atts
- * @return array
- * @since 4.5.0
+ * @param   array $atts
+ * @return  array
+ * @since   4.5.0
+ * @package TagParser
  */
+
 function filterAtts($atts = null)
 {
 	global $prefs;
