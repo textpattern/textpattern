@@ -17,9 +17,12 @@ Use of this software indicates acceptance of the Textpattern license agreement
  * @package Admin\Login
  */
 
-if (!defined('txpinterface')) die('txpinterface is undefined.');
+	if (!defined('txpinterface'))
+	{
+		die('txpinterface is undefined.');
+	}
 
-include_once txpath.'/lib/PasswordHash.php';
+	include_once txpath.'/lib/PasswordHash.php';
 
 /**
  * Renders a login panel if necessary.
@@ -31,21 +34,21 @@ include_once txpath.'/lib/PasswordHash.php';
  * @access private
  */
 
-function doAuth()
-{
-	global $txp_user;
-
-	$txp_user = NULL;
-
-	$message = doTxpValidate();
-
-	if(!$txp_user)
+	function doAuth()
 	{
-		doLoginForm($message);
-	}
+		global $txp_user;
 
-	ob_start();
-}
+		$txp_user = null;
+
+		$message = doTxpValidate();
+
+		if(!$txp_user)
+		{
+			doLoginForm($message);
+		}
+
+		ob_start();
+	}
 
 /**
  * Validates the given user credentials.
@@ -61,25 +64,30 @@ function doAuth()
  * @package User
  */
 
-	function txp_validate($user,$password,$log=TRUE)
+	function txp_validate($user, $password, $log = true)
 	{
 		$safe_user = doSlash($user);
-		$name = FALSE;
+		$name = false;
 
 		$hash = safe_field('pass', 'txp_users', "name = '$safe_user'");
 		$phpass = new PasswordHash(PASSWORD_COMPLEXITY, PASSWORD_PORTABILITY);
 
-		// check post-4.3-style passwords
-		if ($phpass->CheckPassword($password, $hash)) {
-			if ($log) {
+		// Check post-4.3-style passwords.
+		if ($phpass->CheckPassword($password, $hash))
+		{
+			if ($log)
+			{
 				$name = safe_field("name", "txp_users",	"name = '$safe_user' and privs > 0");
-			} else {
+			}
+			else
+			{
 				$name = $user;
 			}
-		} else {
-			// no good password: check 4.3-style passwords
+		}
+		else
+		{
+			// No good password: check 4.3-style passwords.
 			$passwords = array();
-
 			$passwords[] = "password(lower('".doSlash($password)."'))";
 			$passwords[] = "password('".doSlash($password)."')";
 
@@ -92,17 +100,20 @@ function doAuth()
 			$name = safe_field("name", "txp_users",
 				"name = '$safe_user' and (pass = ".join(' or pass = ', $passwords).") and privs > 0");
 
-			// old password is good: migrate password to phpass
-			if ($name !== FALSE) {
+			// Old password is good: migrate password to phpass.
+
+			if ($name !== false)
+			{
 				safe_update("txp_users", "pass = '".doSlash($phpass->HashPassword($password))."'", "name = '$safe_user'");
 			}
 		}
 
-		if ($name !== FALSE && $log)
+		if ($name !== false && $log)
 		{
 			// update the last access time
 			safe_update("txp_users", "last_access = now()", "name = '$safe_user'");
 		}
+
 		return $name;
 	}
 
@@ -118,8 +129,9 @@ function doAuth()
 
 	function txp_hash_password($password)
 	{
-		static $phpass = NULL;
-		if (!$phpass) {
+		static $phpass = null;
+		if (!$phpass)
+		{
 			$phpass = new PasswordHash(PASSWORD_COMPLEXITY, PASSWORD_PORTABILITY);
 		}
 		return $phpass->HashPassword($password);
@@ -292,9 +304,9 @@ EOSCR
 		{
 			$name = txp_validate($p_userid,$p_password);
 
-			if ($name !== FALSE)
+			if ($name !== false)
 			{
-				$c_hash = md5(uniqid(mt_rand(), TRUE));
+				$c_hash = md5(uniqid(mt_rand(), true));
 				$nonce  = md5($name.pack('H*',$c_hash));
 
 				safe_update(
