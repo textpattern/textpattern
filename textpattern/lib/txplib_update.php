@@ -36,6 +36,8 @@ function install_language_from_file($lang)
 			$data = $core_events = array();
 			$event = '';
 
+			// TODO: General overhaul: Try install_textpack() to replace this parser; use safe_* db functions
+
 			while (!feof($file)) {
 				$line = fgets($file, 4096);
 				# ignore empty lines and simple comments (any line starting with #, not followed by @)
@@ -58,7 +60,7 @@ function install_language_from_file($lang)
 							if ($exists) $exists = mysql_fetch_row($exists);
 							if ($exists[1])
 							{
-								mysql_query("UPDATE `".PFX."txp_lang` SET `lastmod`='$lastmod', `data`='$value' WHERE `lang`='".$lang."' AND `name`='$name' AND `event`='$event'");
+								mysql_query("UPDATE `".PFX."txp_lang` SET `lastmod`='$lastmod', `data`='$value' WHERE owner = ''".doSlash(LANG_OWNER_SYSTEM)." AND `lang`='".$lang."' AND `name`='$name' AND `event`='$event'");
 								echo mysql_error();
 							} else
 								mysql_query("INSERT DELAYED INTO `".PFX."txp_lang`  SET	`lang`='".$lang."', `name`='$name', `lastmod`='$lastmod', `event`='$event', `data`='$value'");
@@ -91,7 +93,7 @@ function install_language_from_file($lang)
 					 mysql_query("INSERT DELAYED INTO `".PFX."txp_lang`  SET `lang`='".$lang."', `name`='$name', `lastmod`='$lastmod', `event`='$event', `data`='$value'");
 				}
 			}
-			mysql_query("DELETE FROM `".PFX."txp_lang`  WHERE `lang`='".$lang."' AND `event` IN ('".join("','", array_unique($core_events))."') AND `lastmod`>$lastmod");
+			mysql_query("DELETE FROM `".PFX."txp_lang` WHERE owner = '' AND `lang`='".$lang."' AND `event` IN ('".join("','", array_unique($core_events))."') AND `lastmod`>$lastmod");
 			@fclose($filename);
 			#delete empty fields if any
 			mysql_query("DELETE FROM `".PFX."txp_lang` WHERE `data`=''");
