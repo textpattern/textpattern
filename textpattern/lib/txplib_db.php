@@ -437,6 +437,56 @@ $DB = new DB;
 	}
 
 /**
+ * Locks a table.
+ *
+ * The $table argument accepts comma-separated
+ * list of table names, if you need to lock
+ * multiple tables at once.
+ *
+ * @param  string $table The table
+ * @param  string $type  The lock type
+ * @param  bool   $debug Dump the query
+ * @return bool   TRUE if the tables are locked
+ * @example
+ * if (safe_lock('myTable'))
+ * {
+ * 	echo "'myTable' is 'write' locked.";
+ * }
+ */
+
+	function safe_lock($table, $type = 'write', $debug = false)
+	{
+		$q = 'lock tables ' . join(' '.$type.', ', doArray(do_list($table), 'safe_pfx')).' '.$type;
+		if (safe_query($q, $debug))
+		{
+			return true;
+		}
+		return false;
+	}
+
+/**
+ * Unlocks tables.
+ *
+ * @param  bool $debug Dump the query
+ * @return bool TRUE if tables aren't locked
+ * @example
+ * if (safe_unlock())
+ * {
+ * 	echo 'Tables are unlocked.';
+ * }
+ */
+
+	function safe_unlock($debug = false)
+	{
+		$q = 'unlock tables';
+		if (safe_query($q, $debug))
+		{
+			return true;
+		}
+		return false;
+	}
+
+/**
  * Gets an array of information about an index.
  *
  * @param  string $table The table
