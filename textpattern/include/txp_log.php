@@ -10,6 +10,13 @@
 	Use of this software indicates acceptance of
 	the Textpattern license agreement
 */
+
+/**
+ * Visitor logs panel.
+ *
+ * @package Admin\Log
+ */
+
 	if (!defined('txpinterface')) die('txpinterface is undefined.');
 
 	if ($event == 'log')
@@ -29,8 +36,11 @@
 		}
 	}
 
-
-//-------------------------------------------------------------
+/**
+ * The main panel listing all log hits.
+ *
+ * @param string|array $message The activity message
+ */
 
 	function log_list($message = '')
 	{
@@ -242,8 +252,14 @@
 		}
 	}
 
-//-------------------------------------------------------------
-
+/**
+ * Renders a search form for logs.
+ *
+ * @param  string $crit   The current search criteria
+ * @param  string $method The selected search method
+ * @retrun string HTML
+ */
+ 
 	function log_search_form($crit, $method)
 	{
 		$methods = array(
@@ -258,7 +274,9 @@
 		return search_form('log', 'log_list', $crit, $methods, $method, 'page');
 	}
 
-//-------------------------------------------------------------
+/**
+ * Saves a new pageby value to the server.
+ */
 
 	function log_change_pageby()
 	{
@@ -266,7 +284,9 @@
 		log_list();
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders a multi-edit widget.
+ */
 
 	function log_multiedit_form($page, $sort, $dir, $crit, $search_method)
 	{
@@ -277,7 +297,9 @@
 		return multi_edit($methods, 'log', 'log_multi_edit', $page, $sort, $dir, $crit, $search_method);
 	}
 
-// -------------------------------------------------------------
+/**
+ * Processes multi-edit actions.
+ */
 
 	function log_multi_edit()
 	{
