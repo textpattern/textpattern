@@ -10,6 +10,12 @@
 	Use of this software indicates acceptance of the Textpattern license agreement
 */
 
+/**
+ * Category panel.
+ *
+ * @package Admin\Category
+ */
+
 if (!defined('txpinterface')) die('txpinterface is undefined.');
 
 if ($event == 'category') {
@@ -39,7 +45,12 @@ if ($event == 'category') {
 	}
 }
 
-//-------------------------------------------------------------
+/**
+ * Outputs the main panel listing all categories.
+ *
+ * @param string|array $message The activity message
+ */
+
 	function cat_category_list($message="")
 	{
 		pagetop(gTxt('categories'),$message);
@@ -66,32 +77,47 @@ EOS
 		echo join(n,$out);
 	}
 
+/**
+ * Renders a list of article categories.
+ */
 
-//-------------------------------------------------------------
 	function cat_article_list()
 	{
 		return cat_event_category_list('article');
 	}
 
-//-------------------------------------------------------------
+/**
+ * Processes a saved editor form and creates an article category.
+ */
+
 	function cat_article_create()
 	{
 		return cat_event_category_create('article');
 	}
 
-//-------------------------------------------------------------
+/**
+ * Renders an editor form for article categories.
+ */
+
 	function cat_article_edit()
 	{
 		return cat_event_category_edit('article');
 	}
 
-//-------------------------------------------------------------
+/**
+ * Saves an article category.
+ */
+
 	function cat_article_save()
 	{
 		return cat_event_category_save('article', 'textpattern');
 	}
 
-//--------------------------------------------------------------
+/**
+ * Renders a list of parent category options.
+ *
+ * @return string HTML &lt;select&gt; input
+ */
 
 	function cat_parent_pop($name, $type, $id)
 	{
@@ -116,56 +142,86 @@ EOS
 		return array(gTxt('no_other_categories_exist'), false);
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders a list of link categories.
+ */
+
 	function cat_link_list()
 	{
 		return cat_event_category_list('link');
 	}
 
-//-------------------------------------------------------------
+/**
+ * Processes a saved editor form and creates a link category.
+ */
+
 	function cat_link_create()
 	{
 		return cat_event_category_create('link');
 	}
 
-//-------------------------------------------------------------
+/**
+ * Renders an editor form for link categories.
+ */
+
 	function cat_link_edit()
 	{
 		return cat_event_category_edit('link');
 	}
 
-//-------------------------------------------------------------
+/**
+ * Saves a link category.
+ */
+
 	function cat_link_save()
 	{
 		return cat_event_category_save('link', 'txp_link');
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders a list of image categories.
+ */
+
 	function cat_image_list()
 	{
 		return cat_event_category_list('image');
 	}
 
-//-------------------------------------------------------------
+/**
+ * Processes a saved editor form and creates an image category.
+ */
+
 	function cat_image_create()
 	{
 		return cat_event_category_create('image');
 	}
 
-//-------------------------------------------------------------
+/**
+ * Renders an editor form for image categories.
+ */
+
 	function cat_image_edit()
 	{
 		return cat_event_category_edit('image');
 	}
 
-//-------------------------------------------------------------
+/**
+ * Saves an image category.
+ */
+
 	function cat_image_save()
 	{
 		return cat_event_category_save('image', 'txp_image');
 	}
 
+/**
+ * Renders a multi-edit form.
+ *
+ * @param  string $area  Type of category
+ * @param  array  $array Additional HTML added to the form
+ * @return string HTML
+ */
 
-// -------------------------------------------------------------
 	function cat_article_multiedit_form($area, $array)
 	{
 		$rs = getTree('root', $area);
@@ -189,7 +245,10 @@ EOS
 		return;
 	}
 
-// -------------------------------------------------------------
+/**
+ * Processes multi-edit actions.
+ */
+
 	function cat_category_multiedit()
 	{
 		$type = ps('type');
@@ -291,10 +350,12 @@ EOS
 		return cat_category_list();
 	}
 
-//Refactoring: Functions are more or less the same for all event types
-// so, merge them. Addition of new event categories is easiest now.
-
-//-------------------------------------------------------------
+/**
+ * Renders a list of categories.
+ *
+ * @param  string $event Type of category
+ * @return string HTML
+ */
 
 	function cat_event_category_list($event)
 	{
@@ -416,7 +477,11 @@ EOS
 		return $out;
 	}
 
-//-------------------------------------------------------------
+/**
+ * Creates a new category.
+ *
+ * @param string $event The type of category
+ */
 
 	function cat_event_category_create($event)
 	{
@@ -460,7 +525,11 @@ EOS
 		}
 	}
 
-//-------------------------------------------------------------
+/**
+ * Renders and outputs a category editor.
+ *
+ * @param string $evname Type of category
+ */
 
 	function cat_event_category_edit($evname)
 	{
@@ -492,7 +561,12 @@ EOS
 		}
 	}
 
-//-------------------------------------------------------------
+/**
+ * Saves a category from HTTP POST data.
+ *
+ * @param string $event Type of category
+ * @param string $table Affected database table
+ */
 
 	function cat_event_category_save($event, $table_name)
 	{
@@ -547,27 +621,37 @@ EOS
 		cat_category_list($message);
 	}
 
-// --------------------------------------------------------------
-// Non image file upload. Have I mentioned how much I love this file refactoring?
-// -------------------------------------------------------------
+/**
+ * Renders a list of file categories.
+ */
+
 	function cat_file_list()
 	{
 		return cat_event_category_list('file');
 	}
 
-//-------------------------------------------------------------
+/**
+ * Processes a saved editor form and creates a file category.
+ */
+
 	function cat_file_create()
 	{
 		return cat_event_category_create('file');
 	}
 
-//-------------------------------------------------------------
+/**
+ * Renders an editor form for file categories.
+ */
+
 	function cat_file_edit()
 	{
 		return cat_event_category_edit('file');
 	}
 
-//-------------------------------------------------------------
+/**
+ * Saves a file category.
+ */
+
 	function cat_file_save()
 	{
 		return cat_event_category_save('file','txp_file');
