@@ -15,6 +15,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
  * Tools for page routing and handling article data.
  *
  * @since   4.5.0
+ * @package Routing
  */
 
 /**
