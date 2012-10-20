@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Used for tag builder.
+ *
+ * Populates the tag selector.
+ *
+ * @ignore
+ */
+
 $article_tags = array(
 	'permlink',
 	'posted',
