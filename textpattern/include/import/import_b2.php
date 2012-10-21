@@ -1,6 +1,25 @@
 <?php
 
-	//Absolutely untested. Any volunteer with a b2 db dump to collaborate?
+	/**
+	 * Imports from b2.
+	 *
+	 * @package Admin\Import
+	 */
+
+	/**
+	 * Imports articles from b2 database.
+	 *
+	 * Absolutely untested. Any volunteer with a b2 db dump to collaborate?
+	 *
+	 * @param  string $b2dblogin              The user
+	 * @param  string $b2db                   The database
+	 * @param  string $b2dbpass               The password
+	 * @param  string $b2dbhost               The hostname
+	 * @param  string $insert_into_section    Article section
+	 * @param  int    $insert_with_status     Article status
+	 * @param  string $default_comment_invite Article comments invite
+	 * @return string HTML
+	 */
 
 	function doImportB2($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $insert_into_section, $insert_with_status, $default_comment_invite)
 	{
