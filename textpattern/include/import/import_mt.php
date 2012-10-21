@@ -16,7 +16,7 @@
  * This function supports importing comments and articles
  * from MovableType.
  *
- * Returns results as a HTML formatted list.
+ * Returns results as an HTML formatted list.
  *
  * @param  string $file    Path to the dump file
  * @param  string $section The article section

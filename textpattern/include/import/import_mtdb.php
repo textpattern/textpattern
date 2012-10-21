@@ -1,7 +1,30 @@
 <?php
 
+/**
+ * Imports from MovableType database
+ *
+ * @package Admin\Import
+ */
 
-// ----------------------------------------------------------------
+/**
+ * Imports a MovableType database.
+ *
+ * This function imports users, categories and articles
+ * from a MovableType installation.
+ *
+ * Returns results as an HTML formatted list.
+ *
+ * @param  string $mt_dblogin             The user
+ * @param  string $mt_db                  The database
+ * @param  string $mt_dbpass              The password
+ * @param  string $mt_dbhost              The hostname
+ * @param  string $blog_id                The MovableType blog ID
+ * @param  string $insert_into_section    Article section
+ * @param  int    $insert_with_status     Article status
+ * @param  string $default_comment_invite Article comments invite
+ * @return string HTML
+ */
+ 
 	function doImportMTDB($mt_dblogin, $mt_db, $mt_dbpass, $mt_dbhost, $blog_id, $insert_into_section, $insert_with_status, $default_comment_invite)
 	{
 		//Keep some response on some part

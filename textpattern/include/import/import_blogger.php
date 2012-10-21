@@ -17,7 +17,7 @@
  * from Blogger. Things as statuses, sections, categories or keywords
  * do not carry over. Just body content and titles basically.
  *
- * Returns results as a HTML formatted list.
+ * Returns results as an HTML formatted list.
  *
  * @param  string $file    Path to the dump file
  * @param  string $section The article section
