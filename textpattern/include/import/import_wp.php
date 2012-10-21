@@ -12,7 +12,7 @@
  * This function imports users, categories, articles and 
  * links from a WordPress installation.
  *
- * Returns results as an &lt;ul&gt; list.
+ * Returns results as a &lt;ul&gt; list.
  *
  * @param  string $b2dblogin              The user
  * @param  string $b2db                   The database
@@ -45,7 +45,7 @@
 		}
 
 
-		// Keep some response on some part
+		// Keep some response on some part.
 		$results = array();
 		$errors = array();
 
@@ -81,31 +81,30 @@
 
 			foreach ($privs as $key => $val)
 			{
-				// convert the built-in WordPress roles
-				// to their Txp equivalent
+				// Convert the built-in WordPress roles to their Textpattern equivalent.
 				switch ($key)
 				{
-					// publisher
+					// Publisher.
 					case 'administrator':
 						$user['privs'] = 1;
 					break;
 
-					// managing editor
+					// Managing editor.
 					case 'editor':
 						$user['privs'] = 2;
 					break;
 
-					// staff writer
+					// Staff writer.
 					case 'author':
 						$user['privs'] = 4;
 					break;
 
-					// freelancer
+					// Freelancer.
 					case 'contributor':
 						$user['privs'] = 5;
 					break;
 
-					// none
+					// None.
 					case 'subscriber':
 					default:
 						$user['privs'] = 0;
@@ -173,7 +172,7 @@
 
 
 		/*
-		export articles - do not export post revisions from WP 2.6+
+		export articles - do not export post revisions from WordPress 2.6+
 		*/
 
 		$article_query = mysql_query("
@@ -196,14 +195,14 @@
 
 		while ($article = mysql_fetch_array($article_query))
 		{
-			// convert WP article status to Txp equivalent
+			// Convert WordPress article status to Textpattern equivalent.
 			switch ($article['Status'])
 			{
 				case 'draft':
 					$article['Status'] = 1;
 				break;
 
-				// hidden
+				// Hidden.
 				case 'private':
 					$article['Status'] = 2;
 				break;
@@ -212,7 +211,7 @@
 					$article['Status'] = 3;
 				break;
 
-				// live
+				// Live.
 				case 'publish':
 					$article['Status'] = 4;
 				break;
@@ -222,22 +221,22 @@
 				break;
 			}
 
-			// convert WP comment status to Txp equivalent
+			// Convert WordPress comment status to Textpattern equivalent.
 			switch ($article['Annotate'])
 			{
-				// on
+				// On.
 				case 'open':
 					$article['Annotate'] = 1;
 				break;
 
-				// off
+				// Off.
 				case 'closed':
 				case 'registered_only':
 					$article['Annotate'] = 0;
 				break;
 			}
 
-			// article commments
+			// Article commments.
 			$comments = array();
 
 			$comment_query = mysql_query("
@@ -261,7 +260,7 @@
 			$article['comments'] = $comments;
 
 
-			// article categories
+			// Article categories.
 			$article_categories = array();
 
 			$article_category_query = mysql_query("
@@ -286,7 +285,7 @@
 			$article['Category2'] = !empty($article_categories[1]) ? $article_categories[1]['name'] : '';
 
 
-			// article images
+			// Article images.
 			$article_images = array();
 
 			$article_image_query = mysql_query("
@@ -301,8 +300,8 @@
 				$article_images[] = $image['guid'];
 			}
 
-			// Comma-separated image urls preserve multiple attachments.
-			// Attn: If more than one image is attached, <txp:article_image /> will not work out of the box.
+			// Comma-separated image URLs preserve multiple attachments.
+			// Note: If more than one image is attached, <txp:article_image /> will not work out of the box.
 			$article['Image'] = join(',', $article_images);
 
 			$articles[] = $article;
@@ -328,7 +327,7 @@
 
 		while ($link = mysql_fetch_array($link_query))
 		{
-			// link categories
+			// Link categories.
 			$link_categories = array();
 
 			$link_category_query = mysql_query("
@@ -473,11 +472,11 @@
 			{
 				extract($article);
 
-				// Ugly, really ugly way to workaround the slashes WP gotcha
+				// Ugly, really ugly way to workaround the slashes WordPress gotcha.
 				$Body = str_replace('<!--more-->', '', $Body);
 				$Body_html = $textile->textileThis($Body);
 
-				// can not use array slash due to way on which comments are selected
+				// Can not use array slash due to way on which comments are selected.
 				$rs = mysql_query("
 					insert into ".safe_pfx('textpattern')." set
 						Posted         = '".doSlash($Posted)."',
@@ -510,7 +509,7 @@
 						{
 							extract(array_slash($comment));
 
-							// The ugly workaroud again
+							// The ugly workaround again.
 							$message = nl2br($message);
 
 							$rs = mysql_query("

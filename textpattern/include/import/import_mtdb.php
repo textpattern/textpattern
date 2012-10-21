@@ -12,7 +12,7 @@
  * This function imports users, categories and articles
  * from a MovableType installation.
  *
- * Returns results as an HTML formatted list.
+ * Returns results as a HTML formatted list.
  *
  * @param  string $mt_dblogin             The user
  * @param  string $mt_db                  The database

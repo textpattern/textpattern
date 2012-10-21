@@ -10,13 +10,13 @@
  * Imports articles and comments from a Movable Type dump file.
  *
  * This function parses a file in the 'MovableType Import Format'.
- * The data isn't interpret at all, just parsed into a 
+ * The data isn't interpreted at all, just parsed into a 
  * structure.
  *
  * This function supports importing comments and articles
  * from MovableType.
  *
- * Returns results as an HTML formatted list.
+ * Returns results as a HTML formatted list.
  *
  * @param  string $file    Path to the dump file
  * @param  string $section The article section

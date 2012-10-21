@@ -38,7 +38,7 @@
  *
  * @param  string $current The active style
  * @param  string $default Not used
- * @return string An HTML &lt;table&gt;
+ * @return string A HTML &lt;table&gt;
  */
 
 	function css_list($current, $default) {
