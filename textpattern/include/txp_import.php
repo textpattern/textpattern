@@ -67,7 +67,7 @@
 /**
  * Renders a panel for selecting the import tool.
  *
- * Let's users to select the tool and provide required
+ * Lets users select the tool and provide required
  * configuration options.
  */
 
@@ -81,7 +81,6 @@
 ?>
 
 <script>
-<!--//
 function showHideFields($sel)
 {
 	if(document.getElementById){
@@ -90,7 +89,6 @@ function showHideFields($sel)
 		document.getElementById('databased').style.display = ($sel=='wp' || $sel=='mtdb' || $sel=='b2')? 'block':'none';
 	}
 }
-//-->
 </script>
 
 <?php
