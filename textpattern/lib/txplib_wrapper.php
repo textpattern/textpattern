@@ -7,8 +7,8 @@
  * any code which needs to have access to the textpattern articles data,
  * like XML-RPC, Atom, Moblogging or other external implementations.
  *
- * @link http://txp.kusor.com/wrapper
- * @author Pedro Palazon - http://kusor.net/
+ * @link      http://txp.kusor.com/wrapper
+ * @author    Pedro Palazon - http://kusor.net/
  * @copyright 2005-2008 The Textpattern Development Team - http://textpattern.com
  */
 
@@ -22,21 +22,39 @@ if (!defined('LEAVE_TEXT_UNTOUCHED')) define('LEAVE_TEXT_UNTOUCHED', 0);
 if (!defined('USE_TEXTILE')) define('USE_TEXTILE', 1);
 if (!defined('CONVERT_LINEBREAKS')) define('CONVERT_LINEBREAKS', 2);
 
+/**
+ * Wrapper for Textpattern.
+ *
+ * @package Wrapper
+ */
+
 class TXP_Wrapper
 {
 	/**
-	 * @var string The current user
+	 * The current user.
 	 *
-	 * Remeber to use allways $this->txp_user when checking for permissions with this class
+	 * Remember to use allways $this->txp_user when checking
+	 * for permissions with this class.
+	 *
+	 * @var string 
 	 */
+
 	var $txp_user = null;
+
 	/**
-	 * @var boolean Is the user authenticated
+	 * Authenticated connection.
+	 *
+	 * @var boolean
 	 */
+
 	var $loggedin = false;
+
 	/**
-	 * @var array Predefined Textpattern vars to be populated
+	 * Predefined Textpattern variables to be populated.
+	 *
+	 * @var array 
 	 */
+
 	var $vars = array(
 		'ID','Title','Title_html','Body','Body_html','Excerpt','Excerpt_html','textile_excerpt','Image',
 		'textile_body', 'Keywords','Status','Posted','Section','Category1','Category2',
@@ -45,14 +63,18 @@ class TXP_Wrapper
 		'custom_6','custom_7','custom_8','custom_9','custom_10'
 	);
 
-	//Class constructor
 	/**
-	 * Class constructor
-	 * @param string $txp_user the user login name
-	 * @param strign $txpass user password
+	 * Constructor.
 	 *
-	 * @see _validate
+	 * This is used to pass user credentials
+	 * to the wrapper.
+	 *
+	 * @param string $txp_user The user login name
+	 * @param strign $txpass   User password
+	 * @example
+	 * $wrapper = new TXP_wrapper('username', 'password');
 	 */
+
 	function TXP_Wrapper($txp_user, $txpass = NULL)
 	{
 		if ($this->_validate($txp_user, $txpass))
@@ -62,12 +84,13 @@ class TXP_Wrapper
 		}
 	}
 
-	//Delete the article given the id
 	/**
-	 * Delete the article given the id
-	 * @param mixed(string|integer) $article_id the ID of the article to delete
-	 * @return boolean true on success deletion
+	 * Deletes an article with the given ID.
+	 *
+	 * @param  int  $article_id The article
+	 * @return bool TRUE on success
 	 */
+
 	function deleteArticleID($article_id)
 	{
 		$article_id = assert_int($article_id);
@@ -85,16 +108,24 @@ class TXP_Wrapper
 		return false;
 	}
 
-	//Retrieves a list of articles matching the given criteria
 	/**
-	 * Retrieves a list of articles matching the given criteria
-	 * @param string $what SQL column names to retrieve
-	 * @param string $where SQL condition to match
-	 * @param string $offset SQL offset
-	 * @param string $limit SQL limit
-	 * @param boolean $slash escape SQL column names and condition
-	 * @return mixed array on success, false on failure
+	 * Retrieves a list of articles matching the given criteria.
+	 *
+	 * This method forms an SQL query from the given arguments
+	 * and returns an array of resulting articles.
+	 *
+	 * This method requires authentication and at least 'article.edit.own'
+	 * privileges. If the user doesn't have 'article.edit' privileges,
+	 * only the user's own articles can be accessed.
+	 *
+	 * @param  string     $what   The select clause
+	 * @param  string     $where  The where clause
+	 * @param  int        $offset The offset
+	 * @param  int        $limit  The limit
+	 * @param  bool       $slash  If TRUE, escapes $where and $what
+	 * @return array|bool Array of artilces, or FALSE on failure
 	 */
+
 	function getArticleList($what='*', $where='1', $offset='0', $limit='10', $slash=true)
 	{
 
@@ -126,14 +157,29 @@ class TXP_Wrapper
 		return false;
 	}
 
-	//Retrieves an article matching the given criteria
 	/**
-	 * Retrieves an article matching the given criteria
-	 * @param string $what SQL column names to retrieve
-	 * @param string $where SQL condition to match
-	 * @param boolean $slash escape SQL column names and condition
-	 * @return mixed array on success, false on failure
+	 * Retrieves an article matching the given criteria.
+	 *
+	 * This method forms an SQL query from the given arguments
+	 * and returns an article as an assocative array.
+	 *
+	 * This method requires authentication and at least 'article.edit.own'
+	 * privileges. If the user doesn't have 'article.edit' privileges,
+	 * only the user's own articles can be accessed.
+	 *
+	 * @param  string     $what  Select clause
+	 * @param  string     $where Where clause
+	 * @param  bool       $slash If TRUE, escapes $where and $what
+	 * @return array|bool An article, or FALSE on failure
+	 * @see    TXP_Wrapper::getArticleList()
+	 * @example
+	 * $wrapper = new TXP_wrapper('username', 'password');
+	 * if ($r = $wrapper->getArticle())
+	 * {
+	 * 	echo "Returned an article by the title '{$r['Title']}'.";
+	 * }
 	 */
+
 	function getArticle($what='*', $where='1', $slash=true)
 	{
 		if ($this->loggedin && has_privs('article.edit.own', $this->txp_user))
@@ -153,13 +199,23 @@ class TXP_Wrapper
 		return false;
 	}
 
-	//Same thing, but handy shortcut known the ID
 	/**
-	 * Same thing, but handy shortcut known the ID
-	 * @param mixed(string|integer) $article_id the ID of the article
-	 * @param string $what SQL column names to retrieve
-	 * @return mixed array on success, false on failure
+	 * Gets an article with the given ID.
+	 *
+	 * This method is an shortcut for TXP_Wrapper::getArticle().
+	 *
+	 * @param  int        $article_id The article
+	 * @param  string     $what       The SQL select clause
+	 * @return array|bool The article, or FALSE on failure
+	 * @see    TXP_Wrapper::getArticle()
+	 * @example
+	 * $wrapper = new TXP_wrapper('username', 'password');
+	 * if ($r = $wrapper->getArticleID(11))
+	 * {
+	 * 	echo "Returned an article by the ID of '{$r['ID']}'.";
+	 * }
 	 */
+
 	function getArticleID($article_id, $what='*')
 	{
 		if ($this->loggedin && has_privs('article.edit.own', $this->txp_user))
@@ -174,14 +230,27 @@ class TXP_Wrapper
 		return false;
 	}
 
-	//Updates an existing article
 	/**
-	 * Updates an existing article
-	 * @param array $params the article fields to update
-	 * @param mixed(string|integer) $article_id the ID of the article to update
-	 * @return mixed integer article id on success, false on failure
-	 * @see _setArticle
+	 * Updates an existing article.
+	 *
+	 * This method takes an array of article fields, and
+	 * updates an article with the given ID. Supplied values are
+	 * sanitised and prepared internally.
+	 *
+	 * @param  int      $article_id The article
+	 * @param  array    $params     The article fields to update
+	 * @return int|bool The article id, or FALSE on failure
+	 * @example
+	 * $wrapper = new TXP_wrapper('username', 'password');
+	 * if (($id = $wrapper->updateArticleID(11, array(
+	 * 	'Title' => 'New title',
+	 * 	'Body'  => 'Body text.',
+	 * )) !== false)
+	 * {
+	 * 	echo "Updated article '{$id}'.";
+	 * }
 	 */
+
 	function updateArticleID($article_id, $params)
 	{
 		$article_id = assert_int($article_id);
@@ -205,13 +274,22 @@ class TXP_Wrapper
 		return false;
 	}
 
-	//Creates a new article
 	/**
-	 * Creates a new article
-	 * @param array $params the article fields
-	 * @return mixed integer article id on success, false on failure
-	 * @see _setArticle
+	 * Creates a new article.
+	 *
+	 * @param  array    $params The article fields
+	 * @return int|bool Article ID, or FALSE on failure
+	 * @example
+	 * $wrapper = new TXP_wrapper('username', 'password');
+	 * if (($id = $wrapper->newArticle(array(
+	 * 	'Title' => 'My article',
+	 * 	'Body'  => 'My body text',
+	 * )) !== false)
+	 * {
+	 * 	echo "Created a new article with the ID of '{$id}'.";
+	 * }
 	 */
+
 	function newArticle($params)
 	{
 		if ($this->loggedin && has_privs('article', $this->txp_user))
@@ -227,11 +305,23 @@ class TXP_Wrapper
 		return false;
 	}
 
-	//Get full sections information
 	/**
-	 * Get full sections information
-	 * @return mixed array on success, false on failure
+	 * Gets a list of sections as an assocative array.
+	 *
+	 * This method requires authentication and 'article' privileges.
+	 *
+	 * @return array|bool FALSE on failure
+	 * @example
+	 * $wrapper = new TXP_wrapper('username', 'password');
+	 * if ($sections = $wrapper->getSectionsList())
+	 * {
+	 * 	foreach($sections as $section)
+	 * 	{
+	 * 		echo $section['title'];
+	 * 	}
+	 * }
 	 */
+
 	function getSectionsList()
 	{
 		if ($this->loggedin && has_privs('article', $this->txp_user))
@@ -241,12 +331,21 @@ class TXP_Wrapper
 		return false;
 	}
 
-	//Get one section
 	/**
-	 * Get one section
-	 * @param string $name the section name
-	 * @return mixed array on success, false on failure
+	 * Gets a section as an assocative array.
+	 *
+	 * This method requires authentication and 'article' privileges.
+	 *
+	 * @param  string     $name The section name
+	 * @return array|bool FALSE on failure
+	 * @example
+	 * $wrapper = new TXP_wrapper('username', 'password');
+	 * if ($section = $wrapper->getSection('my-section'))
+	 * {
+	 * 	echo $section['title'];
+	 * }
 	 */
+
 	function getSection($name)
 	{
 		if ($this->loggedin && has_privs('article', $this->txp_user))
@@ -257,11 +356,23 @@ class TXP_Wrapper
 		return false;
 	}
 
-	//Get full categories information
 	/**
-	 * Get full categories information
-	 * @return mixed array on success, false on failure
+	 * Gets a list of categories as an assocative array.
+	 *
+	 * This method requires authentication and 'article' privileges.
+	 *
+	 * @return array|bool FALSE on failure
+	 * @example
+	 * $wrapper = new TXP_wrapper('username', 'password');
+	 * if ($categories = $wrapper->getCategoryList())
+	 * {
+	 * 	foreach($categories as $category)
+	 * 	{
+	 * 		echo $category['title'];
+	 * 	}
+	 * }
 	 */
+
 	function getCategoryList()
 	{
 		if ($this->loggedin && has_privs('article', $this->txp_user))
@@ -270,11 +381,22 @@ class TXP_Wrapper
 		}
 		return false;
 	}
+
 	/**
-	 * Get one category by category name
-	 * @param string $name the category name
-	 * @return mixed array on success, false on failure
+	 * Gets a category as an assocative array.
+	 *
+	 * This method requires authentication and 'article' privileges.
+	 *
+	 * @param  string     $name The category name
+	 * @return array|bool FALSE on failure
+	 * @example
+	 * $wrapper = new TXP_wrapper('username', 'password');
+	 * if ($category = $wrapper->getCategory('my-category'))
+	 * {
+	 * 	echo $category['title'];
+	 * }
 	 */
+
 	function getCategory($name)
 	{
 		if ($this->loggedin && has_privs('article', $this->txp_user))
@@ -284,11 +406,18 @@ class TXP_Wrapper
 		}
 		return false;
 	}
+
 	/**
-	 * Get one category by category id
-	 * @param mixed(string|integer) $id category id
-	 * @return mixed array on success, false on failure
+	 * Gets a category as an assocative array by ID.
+	 *
+	 * This method is an alternative to TXP_wrapper::getCategory().
+	 *
+	 * This method requires authentication and 'article' privileges.
+	 *
+	 * @param  string     $id The category ID
+	 * @return array|bool FALSE on failure
 	 */
+
 	function getCategoryID($id)
 	{
 		if ($this->loggedin && has_privs('article', $this->txp_user))
@@ -298,11 +427,18 @@ class TXP_Wrapper
 		}
 		return false;
 	}
+
 	/**
-	 * Get one category by category title
-	 * @param string $title the category title
-	 * @return mixed array on success, false on failure
+	 * Gets a category as an assocative array by title.
+	 *
+	 * This method is an alternative to TXP_wrapper::getCategory().
+	 *
+	 * This method requires authentication and 'article' privileges.
+	 *
+	 * @param  string     $title The category title
+	 * @return array|bool FALSE on failure
 	 */
+
 	function getCategoryTitle($title)
 	{
 		if ($this->loggedin && has_privs('article', $this->txp_user))
@@ -312,11 +448,22 @@ class TXP_Wrapper
 		}
 		return false;
 	}
-	//Get full information for current user
+
 	/**
-	 * Get full information for current user
-	 * @return mixed array on success, false on failure
+	 * Gets an array of information about the current user.
+	 *
+	 * This method requires authentication. Resulting array
+	 * contains all columns from 'txp_users' database table.
+	 *
+	 * @return array|bool FALSE on failure
+	 * @example
+	 * $wrapper = new TXP_wrapper('username', 'password');
+	 * if ($user = $wrapper->getUser())
+	 * {
+	 * 	echo $user['RealName'] . ' ' . $user['email'];
+	 * }
 	 */
+
 	function getUser()
 	{
 		if ($this->loggedin)
@@ -326,11 +473,16 @@ class TXP_Wrapper
 		return false;
 	}
 
-	//Retrieves a template with the given name
 	/**
-	 * Retrieves a template with the given name
-	 * @param string $name the template name
+	 * Retrieves a page template contents with the given name.
+	 *
+	 * This method requires authentication and 'page'
+	 * privileges.
+	 *
+	 * @param  string      $name The template
+	 * @return string|bool The template, or FALSE on failure
 	 */
+
 	function getTemplate($name)
 	{
 		if ($this->loggedin && has_privs('page', $this->txp_user))
@@ -340,13 +492,24 @@ class TXP_Wrapper
 		}
 		return false;
 	}
-	//Updates a template with the given name
+
 	/**
-	 * Updates a template with the given name
-	 * @param string $name the template name
-	 * @param string $html the template contents
-	 * @return boolean true on success
+	 * Updates a page template with the given name.
+	 *
+	 * This method requires authentication and 'page'
+	 * privileges.
+	 *
+	 * @param  string $name The template name
+	 * @param  string $html The template contents
+	 * @return bool   TRUE on success
+	 * @example
+	 * $wrapper = new TXP_wrapper('username', 'password');
+	 * if ($wrapper->setTemplate('default', '&lt;txp:site_name /&gt;'))
+	 * {
+	 * 	echo "Page template updated.";
+	 * }
 	 */
+
 	function setTemplate($name, $html)
 	{
 		if ($this->loggedin && has_privs('page', $this->txp_user))
@@ -358,15 +521,24 @@ class TXP_Wrapper
 		return false;
 	}
 
-	// Intended to update article non content fields, like categories
-	// section or Keywords
 	/**
-	 * Intended to update article non content fields, like categories, section or Keywords
-	 * @param mixed(string|integer) $article_id the ID of the article to update
-	 * @param string $field the name of the field to update
-	 * @param mixed $value desired value for that field
-	 * @return boolean true on success
+	 * Intended for updating an article's non-content fields, like categories, sections or Keywords.
+	 *
+	 * This method requires authentication and 'article.edit' privileges.
+	 *
+	 * @param  int    $article_id The article
+	 * @param  string $field      The field to update
+	 * @param  mixed  $value      The new value
+	 * @return bool   TRUE on success
+	 * @see    TXP_wrapper::updateArticleID()
+	 * @example
+	 * $wrapper = new TXP_wrapper('username', 'password');
+	 * if ($wrapper->updateArticleField(11, 'Section', 'new-section'))
+	 * {
+	 * 	echo "Section updated.";
+	 * }
 	 */
+
 	function updateArticleField($article_id, $field, $value)
 	{
 		$disallow = array('Body','Body_html','Title','Title_html','Excerpt',
@@ -401,16 +573,17 @@ class TXP_Wrapper
 		return false;
 	}
 
-// -------------------------------------------------------------
-// Private. Real action takes place here.
-// -------------------------------------------------------------
 	/**
-	 * Executes the real action for @see udpateArticleId and @see newArticle
-	 * @param array $incoming containing the desired article fields
-	 * @param mixed(string|integer) $article_id the ID of the article to update
-	 * @return mixed integer article id on success, false otherwise
+	 * Creates and updates articles.
+	 *
+	 * @param  array    $incoming   The article fields
+	 * @param  int      $article_id The ID of the article to update
+	 * @return int|bool The article ID on success, or FALSE on failure
 	 * @access private
+	 * @see    TXP_wrapper::udpateArticleId()
+	 * @see    TXP_wrapper::newArticle()
 	 */
+
 	function _setArticle($incoming, $article_id = null)
 	{
 		global $txpcfg;
@@ -436,8 +609,8 @@ class TXP_Wrapper
 		}
 
 
-		//All validation rules assumed to be passed before this point.
-		//Do content processing here
+		// All validation rules assumed to be passed before this point.
+		// Do content processing here
 
 
 		$incoming_with_markup = $this->textile_main_fields($incoming, $use_textile);
@@ -461,7 +634,7 @@ class TXP_Wrapper
 				$when = (!$article_id)? 'now()': '';
 				$incoming['Posted'] = $when;
 			}else{
-				# do not override post time for existing articles unless Posted is present
+				// Do not override post time for existing articles unless Posted is present.
 				unset($incoming['Posted']);
 			}
 		} else {
@@ -471,10 +644,10 @@ class TXP_Wrapper
 
 
 		if ($incoming['Title'] || $incoming['Body'] || $incoming['Excerpt']) {
-			//Build SQL then and run query
+			// Build SQL then and run query
 
-			//Prevent data erase if not defined on the update action
-			//but it was on the DB from a previous creation/edition time
+			// Prevent data erase if not defined on the update action
+			// but it was on the DB from a previous creation/edition time
 			if ($article_id){
 
 				$old = safe_row('*','textpattern', "ID = $article_id");
@@ -487,7 +660,7 @@ class TXP_Wrapper
 				}
 
 			}else{
-				//Status should be defined previously. Be sure of that.
+				// Status should be defined previously. Be sure of that.
 				if (!has_privs('article.publish', $this->txp_user) && $incoming['Status']==4) $incoming['Status'] = 3;
 			}
 
@@ -507,7 +680,7 @@ class TXP_Wrapper
 				)
 			);
 
-			//Build the SQL query
+			// Build the SQL query.
 			$sql = array();
 
 			foreach ($incoming as $key => $val)
@@ -554,18 +727,15 @@ class TXP_Wrapper
 		return false;
 	}
 
-// -------------------------------------------------------------
-// Private
-// -------------------------------------------------------------
-
 	/**
-	 * Attemp to validates the user with the provided password
-	 * or takes it from the global scope, assuming the user is logged in
-	 * @param string $user login name of the user to validate
-	 * @param string(optional) $password for that user
+	 * Validates the given user credentials.
+	 *
+	 * @param  string $user     The username
+	 * @param  string $password The password
+	 * @return bool   TRUE on success
 	 * @access private
-	 * @return boolean, true if user is logged in
 	 */
+
 	function _validate($user,$password = NULL) {
 
 		if ($password!==NULL)
@@ -583,10 +753,13 @@ class TXP_Wrapper
 		return false;
 	}
 
-// -------------------------------------------------------------
-// Keep this apart for now. Maybe future changes ob this?
-// -------------------------------------------------------------
-// This is duplicated code from txp_article.php too
+	/**
+	 * Ping services.
+	 *
+	 * This is duplicated code from txp_article.php.
+	 *
+	 * @access private
+	 */
 
 	function _sendPings()
 	{
@@ -607,16 +780,20 @@ class TXP_Wrapper
 	}
 
 	/**
-	 * Check if the given parameters are the appropiated ones for the articles
+	 * Validates and filters the given article fields.
+	 *
+	 * Checks if the given parameters are appropriate for the article.
+	 *
+	 * @param  array $incoming The incoming associative array
+	 * @param  array $default  An associative array containing default values for the desired keys
+	 * @return array Filtered data array
 	 * @access private
-	 * @param $incoming array the incoming associative array
-	 * @param $default associative array containing default values for the desired keys
-	 * @return array properly striped off the fields which don't match the defined ones.
 	 */
+
 	function _check_keys($incoming, $default = array())
 	{
 		$out = array();
-		# strip off unsuited keys
+		// Strip off unsuited keys.
 		foreach ($incoming as $key => $val)
 		{
 			if (in_array($key, $this->vars))
@@ -627,12 +804,12 @@ class TXP_Wrapper
 
 		foreach ($this->vars as $def_key)
 		{
-			# Add those ones inexistent in the incoming array
+			// Add those ones inexistent in the incoming array.
 			if (!array_key_exists($def_key,$out))
 			{
 				$out[$def_key] = '';
 			}
-			# setup the provided default value, if any, only when the incoming value is empty
+			// Setup the provided default value, if any, only when the incoming value is empty.
 			if (array_key_exists($def_key, $default) && empty($out[$def_key]))
 			{
 				$out[$def_key] = $default[$def_key];
@@ -642,11 +819,14 @@ class TXP_Wrapper
 	}
 
 	/**
-	 * Apply textile to the main article fields
-	 * (duplicated from txp_article.php!)
-	 * @param array containing the $incoming vars array
-	 * @param global use_textile preference
-	 * @return array the same one containing the formatted fields
+	 * Apply textile to the main article fields.
+	 *
+	 * This is duplicated from txp_article.php.
+	 *
+	 * @param  array $incoming    The incoming fields
+	 * @param  bool  $use_textile Use textile or not
+	 * @return array The $incoming array formatted
+	 * @access private
 	 */
 
 	function textile_main_fields($incoming, $use_textile = 1)
@@ -675,14 +855,14 @@ class TXP_Wrapper
 		return $incoming;
 	}
 
-	# Try to avoid code duplication when formating fields.
 	/**
-	 * Apply markup to a given fields
+	 * Formats a article field according to the given options.
 	 *
-	 * @param string $field raw field contents
-	 * @param integer $format format type to apply
-	 * @param object $textile instance
-	 * @return string html formated field
+	 * @param  string  $field   The field contents
+	 * @param  int     $format  Either LEAVE_TEXT_UNTOUCHED, CONVERT_LINEBREAKS, USE_TEXTILE
+	 * @param  Textile An instance of Textile
+	 * @return string  HTML formatted field
+	 * @access private
 	 */
 
 	function format_field($field, $format,$textile)
