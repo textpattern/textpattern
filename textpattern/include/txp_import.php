@@ -14,7 +14,7 @@
 	// * Provide an Export option
 	// * Write best help
 
-	//Keep error display until we add an error handler for this
+	// Keep error display until we add an error handler for this.
 	error_reporting(E_ALL);
 	@ini_set("display_errors","1");
 
@@ -97,10 +97,10 @@ function showHideFields($sel)
 		$content = '<div class="txp-edit">';
 		$content.= hed(gTxt('txp_import'), 2);
 
-		//Select tool
+		// Select tool.
 		$content.= inputLabel('import_from', tag(type_options($tools), 'select', ' id="import_from" name="import_tool" onchange="showHideFields(this.value);"'), 'select_tool', 'import');
 
-		//Some data we collect
+		// Some data we collect.
 		$content.= inputLabel('import_section', import_section_popup(''), 'import_section', 'import_section');
 
 		$status_options = array(
@@ -113,7 +113,7 @@ function showHideFields($sel)
 		$content.= inputLabel('import_status', tag(type_options($status_options), 'select', ' id="import_status"'), 'import_status', 'import_status');
 		$content.= inputLabel('import_comment', fInput('text', 'import_comments_invite', gTxt('comments'), '', '', '', INPUT_REGULAR, '', 'import_comment'), 'import_invite', 'import_invite');
 
-		//DataBase imports only
+		// Database imports only.
 		$databased =
 			hed(gTxt('database_stuff'), 2).
 			inputLabel('import_database', fInput('text', 'importdb', '', '', '', '', INPUT_REGULAR, '', 'import_database'), 'import_database', 'import_database').
@@ -123,11 +123,11 @@ function showHideFields($sel)
 
 		$content.= tag($databased, 'div', ' id="databased" style="display: none;"');
 
-		//MT-DB Specific
+		// Movable Type (MySQL DB) specific.
 		$mtblogid = inputLabel('import_blogid', fInput('text', 'import_blog_id', '', '', '', '', INPUT_REGULAR, '', 'import_blogid'), 'import_blogid', 'import_blogid');
 		$content.= tag($mtblogid, 'div', ' id="mtblogid" style="display: none;"');
 
-		//WordPress specific option
+		// WordPress specific.
 		$wponly = inputLabel('import_wpprefix', fInput('text', 'wpdbprefix', 'wp_', '', '', '', INPUT_REGULAR, '', 'import_wpprefix'), 'import_wpprefix', 'import_wpprefix').
 			inputLabel('import_wpdbcharset', selectInput('wpdbcharset', array('utf8' => gTxt('utf8'), 'latin1' => gTxt('latin1')), 'utf8', '', '', 'import_wpdbcharset'), 'import_wpdbcharset', 'import_wpdbcharset');
 
@@ -170,7 +170,7 @@ function showHideFields($sel)
 				$file = check_import_file();
 				if (!empty($file)){
 					$out = doImportMT($file, $insert_into_section, $insert_with_status, $import_comments_invite);
-					//Rebuilding category tree
+					// Rebuilding category tree.
 					rebuild_tree('root',1,'article');
 				}else{
 					$out = 'Import file not found';
@@ -213,15 +213,15 @@ function showHideFields($sel)
 /**
  * Checks the existence of a file called 'import.txt' in the 'import' directory.
  *
- * This function is used when importing from a file
+ * This function is used when importing from a file.
  *
  * @return string Path to the file, or an empty string
  */
 
 	function check_import_file()
 	{
-		//Check here file size too. And explain how to split the file if
-		//size is too long and time_limit can not be altered
+		// Check file size here too, and explain how to split the file if
+		// size is too long and time_limit can not be altered.
 
 		$import_file = txpath.'/include/import/import.txt';
 		if (!is_file($import_file)) {
