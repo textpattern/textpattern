@@ -51,7 +51,7 @@ interface ITextfilter
 	public function filter($thing, $options);
 
 	/**
-	 * Gets filter-spefic help.
+	 * Gets filter-specific help.
 	 *
 	 * Help can be used to set and offer HTML formatted instructions,
 	 * examples and formatting tips. These instructions will be
@@ -179,7 +179,7 @@ class Textfilter implements ITextfilter
 	}
 
 	/**
-	 * Get's this filter's help.
+	 * Gets this filter's help.
 	 *
 	 * @return string
 	 */
@@ -449,7 +449,7 @@ class TextfilterSet implements ArrayAccess, IteratorAggregate
 	}
 
 	/**
-	 * Private singleton instance access
+	 * Private singleton instance access.
 	 *
 	 * @return TextfilterSet
 	 */
@@ -566,7 +566,7 @@ class TextfilterSet implements ArrayAccess, IteratorAggregate
 	}
 
 	/**
-	 * Whether a offset exists.
+	 * Whether an offset exists.
 	 *
 	 * @param  string $key
 	 * @return bool
