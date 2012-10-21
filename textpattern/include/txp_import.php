@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Import panel.
+ *
+ * @package Admin\Import
+ */
+
 	if (!defined('txpinterface')) die('txpinterface is undefined.');
 
 	// TO-DO:
@@ -13,6 +19,14 @@
 	@ini_set("display_errors","1");
 
 	require_privs('import');
+
+	/**
+	 * Configuration variables.
+	 *
+	 * A list of HTTP POST variables.
+	 *
+	 * @global array $vars
+	 */
 
 	$vars = array(
 		'import_tool',
@@ -28,10 +42,14 @@
 		'wpdbcharset'
 	);
 
-	// Add new tools here.
-	// First: Array key must be the end of the import tool file name;
-	// that is import_[key].php.
-	// Then: Add the specific tool call on start_import switch statement
+	/**
+	 * Importing options.
+	 *
+	 * These are named after the files in ./import directory.
+	 *
+	 * @global array $tools
+	 */
+
 	$tools = array(
 		''=>'',
 		'mt'=>'Movable Type (File)',
@@ -46,8 +64,13 @@
 	}
 	$step();
 
-// -------------------------------------------------------------
-// Select the tool we want to import from and provide required data
+/**
+ * Renders a panel for selecting the import tool.
+ *
+ * Let's users to select the tool and provide required
+ * configuration options.
+ */
+
 	function switch_tool(){
 
 		global $vars,$event,$step,$tools;
@@ -117,9 +140,12 @@ function showHideFields($sel)
 			'</div>';
 	}
 
+/**
+ * Processes the selected import tool action.
+ *
+ * Basically does the importing.
+ */
 
-// ------------------------------------------------------------
-//Pre import tasks, then call the import funtion
 	function start_import()
 	{
 		global $event,$vars;
@@ -184,10 +210,14 @@ function showHideFields($sel)
                 safe_update('textpattern',"comments_count=".$a['thecount'],"ID=".$a['parentid']);
 	}
 
+/**
+ * Checks the existence of a file called 'import.txt' in the 'import' directory.
+ *
+ * This function is used when importing from a file
+ *
+ * @return string Path to the file, or an empty string
+ */
 
-// -------------------------------------------------------------
-//checks the existence of a file called import.txt on the import dir.
-// Used when importing from a file
 	function check_import_file()
 	{
 		//Check here file size too. And explain how to split the file if
@@ -201,20 +231,30 @@ function showHideFields($sel)
 		return $import_file;
 	}
 
-// -------------------------------------------------------------
-// from Dean import
-// add slashes to $in, no matter if is a single
+/**
+ * Quotes a string or an array of values with slashes.
+ *
+ * Returns the input value with backslashes added before
+ * any ' or " characters.
+ *
+ * @param  array|string $in The input value
+ * @return mixed
+ * @access private
+ * @see    addslashes()
+ */
 
 	function array_slash($in)
 	{
 		return is_array($in) ? array_map('addslashes',$in) : addslashes($in);
 	}
 
-
-// -----------------------------------------------------------------
-// Some cut and paste here
-//--------------------------------------------------------------
-// Display a popup of textpattern available sections
+/**
+ * Renders a &lt;select&gt; input containing all available sections.
+ *
+ * @param  string $Section The selected option
+ * @return string HTML
+ * @access private
+ */
 
 	function import_section_popup($Section)
 	{
