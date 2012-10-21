@@ -50,7 +50,7 @@ class Validator
 	 * @param array $constraints Array of constraint objects to validate over
 	 */
 
-	function __construct($constraints = array())
+	public function __construct($constraints = array())
 	{
 		$this->setConstraints($constraints);
 	}
@@ -61,7 +61,7 @@ class Validator
 	 * @return bool If TRUE, the value obeys constraints
 	 */
 
-	function validate()
+	public function validate()
 	{
 		foreach ($this->constraints as $c)
 		{
@@ -82,7 +82,7 @@ class Validator
 	 * @return array An array of messages
 	 */
  
-	function getMessages()
+	public function getMessages()
 	{
 		return $this->messages;
 	}
@@ -96,7 +96,7 @@ class Validator
 	 * @param obj|array $constraints Single or array-of Constraint object(s)
 	 */
 
-	function setConstraints($constraints)
+	public function setConstraints($constraints)
 	{
 		if (is_array($constraints))
 		{
@@ -145,7 +145,7 @@ class Constraint
 	 * @param array $options Key/value pairs of class-specific options
 	 */
 
-	function __construct($value, $options = array())
+	public function __construct($value, $options = array())
 	{
 		if (empty($options['message']))
 		{
@@ -161,7 +161,7 @@ class Constraint
 	 * @param $value mixed Validee
 	 */
 
-	function setValue($value)
+	public function setValue($value)
 	{
 		$this->value = $value;
 	}
@@ -173,7 +173,7 @@ class Constraint
 	 * @param null $key Key for scalar option
 	 */
 
-	function setOptions($options, $key=null)
+	public function setOptions($options, $key=null)
 	{
 		if ($key === null)
 		{
@@ -191,7 +191,7 @@ class Constraint
 	 * @return bool If TRUE, the value obeys constraint
 	 */
 
-	function validate()
+	public function validate()
 	{
 		return true;
 	}
@@ -202,7 +202,7 @@ class Constraint
 	 * @return string
 	 */
 
-	function getMessage()
+	public function getMessage()
 	{
 		return $this->options['message'];
 	}
@@ -224,7 +224,7 @@ class ChoiceConstraint extends Constraint
 	 * @param array $options
 	 */
 
-	function __construct($value, $options = array())
+	public function __construct($value, $options = array())
 	{
 		$options = lAtts(array('choices' => array(), 'allow_blank' => false, 'message' => 'unknown_choice'), $options, false);
 		parent::__construct($value, $options);
@@ -236,7 +236,7 @@ class ChoiceConstraint extends Constraint
 	 * @return bool
 	 */
 
-	function validate()
+	public function validate()
 	{
 		return ($this->options['allow_blank'] && ('' === $this->value)) ||
 		in_array($this->value, $this->options['choices']);
@@ -259,7 +259,7 @@ class SectionConstraint extends ChoiceConstraint
 	 * @param array $options
 	 */
 
-	function __construct($value, $options = array())
+	public function __construct($value, $options = array())
 	{
 		static $choices = null;
 		if (null === $choices)
@@ -288,7 +288,7 @@ class CategoryConstraint extends ChoiceConstraint
 	 * @param array $options
 	 */
 
-	function __construct($value, $options = array())
+	public function __construct($value, $options = array())
 	{
 		static $choices = null;
 		$options = lAtts(array('allow_blank' => true, 'type' => '', 'message' => 'unknown_category'), $options, false);
@@ -317,7 +317,7 @@ class FormConstraint extends ChoiceConstraint
 	 * @param array $options
 	 */
 
-	function __construct($value, $options = array())
+	public function __construct($value, $options = array())
 	{
 		static $choices = null;
 		$options = lAtts(array('allow_blank' => true, 'type' => '', 'message' => 'unknown_form'), $options, false);
@@ -347,7 +347,7 @@ class BlankConstraint extends Constraint
 	 * @param array $options
 	 */
 
-	function __construct($value, $options = array())
+	public function __construct($value, $options = array())
 	{
 		$options = lAtts(array('message' => 'should_be_blank'), $options, false);
 		parent::__construct($value, $options);
@@ -359,7 +359,7 @@ class BlankConstraint extends Constraint
 	 * @return bool
 	 */
 
-	function validate()
+	public function validate()
 	{
 		return $this->value === '' || $this->value === null;
 	}
@@ -381,7 +381,7 @@ class TrueConstraint extends Constraint
 	 * @param array $options
 	 */
 
-	function __construct($value, $options = array())
+	public function __construct($value, $options = array())
 	{
 		$options = lAtts(array('message' => 'should_be_true'), $options, false);
 		parent::__construct($value, $options);
@@ -393,7 +393,7 @@ class TrueConstraint extends Constraint
 	 * @return bool
 	 */
 
-	function validate()
+	public function validate()
 	{
 		return (boolean)$this->value;
 	}
@@ -415,7 +415,7 @@ class FalseConstraint extends Constraint
 	 * @param array $options
 	 */
 
-	function __construct($value, $options = array())
+	public function __construct($value, $options = array())
 	{
 		$options = lAtts(array('message' => 'should_be_false'), $options, false);
 		parent::__construct($value, $options);
@@ -427,7 +427,7 @@ class FalseConstraint extends Constraint
 	 * @return bool
 	 */
 
-	function validate()
+	public function validate()
 	{
 		return !(boolean)$this->value;
 	}
