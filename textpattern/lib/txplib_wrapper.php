@@ -220,7 +220,7 @@ class TXP_Wrapper
 				$what  = doSlash($what);
 				$where = doSlash($where);
 			}
-			// Higer user groups should be able to edit any article.
+			// Higher user groups should be able to edit any article.
 			if (has_privs('article.edit', $this->txp_user))
 			{
 				return safe_row($what, 'textpattern', $where);
