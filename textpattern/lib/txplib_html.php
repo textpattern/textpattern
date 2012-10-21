@@ -241,7 +241,7 @@
 			}
 
 			return join('', array(
-				'<a href="'.$url.'" class="dlink destroy" onclick="return verify(\'',
+				'<a href="'.$url.'" class="dlink destroy" title="'.gTxt('delete').'" onclick="return verify(\'',
 				($verify) ? gTxt($verify) : gTxt('confirm_delete_popup'),
 				'\')">×</a>'
 			));
@@ -249,7 +249,7 @@
 
 		return join('', array(
 			'<form method="post" action="index.php" onsubmit="return confirm(\''.gTxt('confirm_delete_popup').'\');">',
-			 fInput('submit', '', '×', 'destroy'),
+			 fInput('submit', '', '×', 'destroy', gTxt('delete')),
 			 eInput($event).
 			 sInput($step),
 			 hInput($thing, $value),
