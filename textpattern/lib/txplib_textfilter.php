@@ -80,9 +80,36 @@ interface ITextfilter
 
 class Textfilter implements ITextfilter
 {
+	/**
+	 * The filter's title.
+	 *
+	 * @var string
+	 */
+
 	public $title;
+
+	/**
+	 * The filter's version.
+	 *
+	 * @var string
+	 */
+
 	public $version;
+
+	/**
+	 * The filter's identifier.
+	 *
+	 * @var string
+	 */
+
 	protected $key;
+
+	/**
+	 * The filter's options.
+	 *
+	 * @var array
+	 */
+
 	protected $options;
 
 	/**
@@ -363,7 +390,6 @@ class TextileTextfilter extends Textfilter implements ITextfilter
  *
  * @since   4.6.0
  * @package Textfilter
- * @access  private
  */
 
 class TextfilterSet implements ArrayAccess, IteratorAggregate
