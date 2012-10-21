@@ -64,8 +64,7 @@ print <<<eod
 	<script src="$rel_txpurl/textpattern.js"></script>
 	<link rel="stylesheet" href="$rel_txpurl/theme/hive/css/textpattern.css">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-	<script src="$rel_txpurl/theme/hive/js/modernizr.js"></script>
-	<script src="$rel_txpurl/theme/hive/js/jquery.formalize.min.js"></script>
+	<script src="$rel_txpurl/modernizr.js"></script>
 	<!--[if lt IE 9]><script src="$rel_txpurl/theme/hive/js/selectivizr.min.js"></script><![endif]-->
 </head>
 <body id="page-setup"{$bodyclass}>
