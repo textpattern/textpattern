@@ -19,7 +19,7 @@
  *
  * Returns results as a HTML formatted list.
  *
- * @param  string $file Path to the dump file
+ * @param  string $file    Path to the dump file
  * @param  string $section The article section
  * @param  string $status  The article status
  * @param  string $invite  The comments invite
