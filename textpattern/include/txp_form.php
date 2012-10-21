@@ -85,8 +85,8 @@
 
 				if ($prev_type != $type) {
 					$visipref = 'pane_form_'.$type.'_visible';
-					$group_start = n.'<div role="group" id="'.$type.'_forms_group" class="txp-details">'.
-						n.'<h3 class="txp-summary'.(get_pref($visipref) ? ' expanded' : '').'"><a href="#'.$type.'_forms" role="button">'.$form_types[$type].'</a></h3>'.
+					$group_start = n.'<div role="region" id="'.$type.'_forms_group" class="txp-details" aria-labelledby="'.$type.'_forms_group-label">'.
+						n.'<h3 id="'.$type.'_forms_group-label" class="txp-summary'.(get_pref($visipref) ? ' expanded' : '').'"><a href="#'.$type.'_forms" role="button">'.$form_types[$type].'</a></h3>'.
 						n.'<div id="'.$type.'_forms" class="toggle form-list" style="display:'.(get_pref($visipref) ? 'block' : 'none').'">'.
 						n.'<ul class="plain-list">'.n;
 					$group_end = ($ctr > 1) ? '</ul></div></div>'.n : '';
@@ -221,9 +221,10 @@ EOS
 
 		$tagbuild_links = '';
 		foreach ($tagbuild_items as $tb => $item) {
-			$tagbuild_links .= '<div role="group" id="'.$item[1].'_group" class="txp-details">'.hed('<a href="#'.$item[1].'" role="button">'.gTxt($item[0]).'</a>'
-					, 3, ' class="txp-summary'.(get_pref('pane_form_'.$item[1].'_visible') ? ' expanded' : '').'"').
-					'<div id="'.$item[1].'" class="toggle on" style="display:'.(get_pref('pane_form_'.$item[1].'_visible') ? 'block' : 'none').'">'.popTagLinks($tb).'</div></div>';
+			$tagbuild_links .= '<div role="region" id="'.$item[1].'_group" class="txp-details" aria-labelledby="'.$item[1].'_group-label">'.
+						n.hed('<a href="#'.$item[1].'" role="button">'.gTxt($item[0]).'</a>'
+					, 3, ' id="'.$item[1].'_group-label" class="txp-summary'.(get_pref('pane_form_'.$item[1].'_visible') ? ' expanded' : '').'"').
+						n.'<div id="'.$item[1].'" class="toggle on" style="display:'.(get_pref('pane_form_'.$item[1].'_visible') ? 'block' : 'none').'">'.popTagLinks($tb).'</div></div>';
 		}
 
 		$out =

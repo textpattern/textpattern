@@ -631,8 +631,8 @@ if (!empty($event) and $event == 'article') {
 
 		// Advanced.
 
-			echo n.n.'<div role="group" id="advanced_group" class="txp-details">'.
-				n.'<h3 class="txp-summary'.(get_pref('pane_article_advanced_visible') ? ' expanded' : '').'"><a href="#advanced" role="button">'.gTxt('advanced_options').'</a></h3>'.
+			echo n.n.'<div role="region" id="advanced_group" class="txp-details" aria-labelledby="advanced_group-label">'.
+				n.'<h3 id="advanced_group-label" class="txp-summary'.(get_pref('pane_article_advanced_visible') ? ' expanded' : '').'"><a href="#advanced" role="button">'.gTxt('advanced_options').'</a></h3>'.
 				n.'<div id="advanced" class="toggle" style="display:'.(get_pref('pane_article_advanced_visible') ? 'block' : 'none').'">';
 
 			// Markup selection.
@@ -660,8 +660,8 @@ if (!empty($event) and $event == 'article') {
 
 		// Meta info.
 
-			echo n.n.'<div role="group" id="meta_group" class="txp-details">'.
-				n.'<h3 class="txp-summary'.(get_pref('pane_article_meta_visible') ? ' expanded' : '').'"><a href="#meta" role="button">'.gTxt('meta').'</a></h3>'.
+			echo n.n.'<div role="region" id="meta_group" class="txp-details" aria-labelledby="meta_group-label">'.
+				n.'<h3 id="meta_group-label" class="txp-summary'.(get_pref('pane_article_meta_visible') ? ' expanded' : '').'"><a href="#meta" role="button">'.gTxt('meta').'</a></h3>'.
 				n.'<div id="meta" class="toggle" style="display:'.(get_pref('pane_article_meta_visible') ? 'block' : 'none').'">';
 			// keywords
 			echo $partials['keywords']['html'];
@@ -671,8 +671,8 @@ if (!empty($event) and $event == 'article') {
 
 		// Recent articles.
 
-			echo n.n.'<div role="navigation" id="recent_group" class="txp-details">'.
-				n.'<h3 class="txp-summary'.(get_pref('pane_article_recent_visible') ? ' expanded' : '').'"><a href="#recent" role="button">'.gTxt('recent_articles').'</a>'.'</h3>'.
+			echo n.n.'<div role="region" id="recent_group" class="txp-details" aria-labelledby="recent_group-label">'.
+				n.'<h3 id="recent_group-label" class="txp-summary'.(get_pref('pane_article_recent_visible') ? ' expanded' : '').'"><a href="#recent" role="button">'.gTxt('recent_articles').'</a>'.'</h3>'.
 				n.'<div id="recent" class="toggle" style="display:'.(get_pref('pane_article_recent_visible') ? 'block' : 'none').'">';
 			echo $partials['recent_articles']['html'];
 			echo n.'</div>'.n.'</div>';
@@ -788,8 +788,8 @@ if (!empty($event) and $event == 'article') {
 				$rs);
 
 		// "Comments" section.
-			echo n.n.'<div role="group" id="comments_group" class="txp-details'.(($use_comments==1) ? '' : ' empty').'">'.
-				n.'<h3 class="txp-summary'.(get_pref('pane_article_comments_visible') ? ' expanded' : '').'"><a href="#comments" role="button">'.gTxt('comment_settings').'</a></h3>'.
+			echo n.n.'<div role="region" id="comments_group" class="txp-details'.(($use_comments==1) ? '' : ' empty').'" aria-labelledby="comments_group-label">'.
+				n.'<h3 id="comments_group-label" class="txp-summary'.(get_pref('pane_article_comments_visible') ? ' expanded' : '').'"><a href="#comments" role="button">'.gTxt('comment_settings').'</a></h3>'.
 				n.'<div id="comments" class="toggle" style="display:'.(get_pref('pane_article_comments_visible') ? 'block' : 'none').'">';
 
 			echo $partials['comments']['html'];
@@ -798,8 +798,8 @@ if (!empty($event) and $event == 'article') {
 			echo '</div>'.n.'</div>';
 
 		// "Dates" section.
-			echo n.n.'<div role="group" id="dates_group" class="txp-details">'.
-				n.'<h3 class="txp-summary'.(get_pref('pane_article_dates_visible') ? ' expanded' : '').'"><a href="#dates" role="button">'.gTxt('date_settings').'</a></h3>'.
+			echo n.n.'<div role="region" id="dates_group" class="txp-details" aria-labelledby="dates_group-label">'.
+				n.'<h3 id="dates_group-label" class="txp-summary'.(get_pref('pane_article_dates_visible') ? ' expanded' : '').'"><a href="#dates" role="button">'.gTxt('date_settings').'</a></h3>'.
 				n.'<div id="dates" class="toggle" style="display:'.(get_pref('pane_article_dates_visible') ? 'block' : 'none').'">';
 
 			if ($step == "create" and empty($GLOBALS['ID']))
@@ -1188,10 +1188,10 @@ EOS
 		$help = TextfilterSet::help($rs['textile_body']);
 		if ($rs['textile_body'] != $rs['textile_excerpt']) $help .=  TextfilterSet::help($rs['textile_excerpt']);
 
-		$out[] = '<div role="group" id="textfilter_group" class="txp-details">';
+		$out[] = '<div role="region" id="textfilter_group" class="txp-details" aria-labelledby="textfilter_group-label">';
 		if ($help) {
 			$out[] =  hed('<a href="#textfilter_help" role="button">'.gTxt('textfilter_help').'</a>', 3,
-					' class="txp-summary'.(get_pref('pane_article_textfilter_help_visible') ? ' expanded' : '').'"').
+					' id="textfilter_group-label" class="txp-summary'.(get_pref('pane_article_textfilter_help_visible') ? ' expanded' : '').'"').
 				n.'<div id="textfilter_help" class="toggle" style="display:'.(get_pref('pane_article_textfilter_help_visible') ? 'block' : 'none').'">'.
 				$help.
 				n.'</div>';
@@ -1260,7 +1260,8 @@ EOS
 		global $cfs;
 
 		$cf = '';
-		$out = n.n.'<div role="group" id="custom_field_group" class="txp-details'.(($cfs) ? '' : ' empty').'">'.n.'<h3 class="txp-summary'.(get_pref('pane_article_custom_field_visible') ? ' expanded' : '').'"><a href="#custom_field" role="button">'.gTxt('custom').'</a></h3>'.
+		$out = n.n.'<div role="region" id="custom_field_group" class="txp-details'.(($cfs) ? '' : ' empty').'" aria-labelledby="custom_field_group-label">'.
+			n.'<h3 id="custom_field_group-label" class="txp-summary'.(get_pref('pane_article_custom_field_visible') ? ' expanded' : '').'"><a href="#custom_field" role="button">'.gTxt('custom').'</a></h3>'.
 			n.'<div id="custom_field" class="toggle" style="display:'.(get_pref('pane_article_custom_field_visible') ? 'block' : 'none').'">';
 
 		foreach($cfs as $k => $v)
@@ -1299,8 +1300,8 @@ EOS
 
 	function article_partial_image($rs)
 	{
-		$out = n.n.'<div role="group" id="image_group" class="txp-details">'.
-			n.'<h3 class="txp-summary'.(get_pref('pane_article_image_visible') ? ' expanded' : '').'"><a href="#image" role="button">'.gTxt('article_image').'</a></h3>'.
+		$out = n.n.'<div role="region" id="image_group" class="txp-details" aria-labelledby="image_group-label">'.
+			n.'<h3 id="image_group-label" class="txp-summary'.(get_pref('pane_article_image_visible') ? ' expanded' : '').'"><a href="#image" role="button">'.gTxt('article_image').'</a></h3>'.
 			n.'<div id="image" class="toggle" style="display:'.(get_pref('pane_article_image_visible') ? 'block' : 'none').'">';
 
 		$out .= pluggable_ui('article_ui', 'article_image',

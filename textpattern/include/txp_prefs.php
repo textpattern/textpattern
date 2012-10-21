@@ -217,11 +217,11 @@
 
 					$current_event = $a['event'];
 
-					echo n, '<div role="group" id="prefs_group_', $a['event'], '" class="txp-details">',
-						n, '<h3 class="txp-summary', (get_pref('pane_prefs_'.$a['event'].'_visible') ? ' expanded' : ''), '">',
-						n, '<a href="#prefs_', $a['event'], '" role="button">', gTxt($a['event']), '</a>',
-						n, '</h3>',
-						n, '<div id="prefs_', $a['event'], '" class="toggle" style="display:', (get_pref('pane_prefs_'.$a['event'].'_visible') ? 'block' : 'none'), '">';
+					echo n.'<div role="region" id="prefs_group_', $a['event'], '" class="txp-details" aria-labelledby="prefs_group_', $a['event'], '-label">'.
+						n.'<h3 id="prefs_group_', $a['event'], '-label" class="txp-summary', (get_pref('pane_prefs_'.$a['event'].'_visible') ? ' expanded' : ''), '">'.
+						n.'<a href="#prefs_', $a['event'], '" role="button">', gTxt($a['event']), '</a>'.
+						n.'</h3>'.
+						n.'<div id="prefs_', $a['event'], '" class="toggle" style="display:', (get_pref('pane_prefs_'.$a['event'].'_visible') ? 'block' : 'none'), '">';
 				}
 
 				$label = (!in_array($a['html'], array('yesnoradio', 'is_dst'))) ?
