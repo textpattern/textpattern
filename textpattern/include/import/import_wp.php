@@ -1,5 +1,31 @@
 <?php
 
+/**
+ * Import from WordPress.
+ *
+ * @package Admin\Import
+ */
+
+/**
+ * Imports a WordPress database.
+ *
+ * This function imports users, categories, articles and 
+ * links from a WordPress installation.
+ *
+ * Returns results as an &lt;ul&gt; list.
+ *
+ * @param  string $b2dblogin              The user
+ * @param  string $b2db                   The database
+ * @param  string $b2dbpass               The password
+ * @param  string $b2dbhost               The hostname
+ * @param  string $wpdbprefix             The WordPress table prefix
+ * @param  string $insert_into_section    Article section
+ * @param  int    $insert_with_status     Article status
+ * @param  string $default_comment_invite Article comments invite
+ * @param  string $wpdbcharset            WordPress database charset
+ * @return string HTML
+ */
+
 	function doImportWP($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $wpdbprefix, $insert_into_section, $insert_with_status, $default_comment_invite, $wpdbcharset)
 	{
 		global $txpcfg;
@@ -565,6 +591,16 @@
 
 		return join(n, $results);
 	}
+
+/**
+ * Unquotes a string or an array of values.
+ *
+ * @param  string|array $in The input value
+ * @return mixed
+ * @access private
+ * @see    stripslashes()
+ * @see    doArray()
+ */
 
 	function undoSlash($in)
 	{
