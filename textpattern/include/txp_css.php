@@ -178,7 +178,7 @@
 
 	function css_save()
 	{
-		extract(array_map('assert_string', gpsa(array('name','css','savenew','newname','copy'))));
+		extract(array_map('assert_string', psa(array('name','css','savenew','newname','copy'))));
 		$css = doSlash($css);
 
 		if ($savenew or $copy)
