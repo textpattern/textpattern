@@ -161,7 +161,7 @@
 
 	function css_copy()
 	{
-		extract(gpsa(array('oldname', 'newname')));
+		extract(psa(array('oldname', 'newname')));
 
 		$css = doSlash(fetch('css', 'txp_css', 'name', $oldname));
 
@@ -183,7 +183,7 @@
 
 		if ($savenew or $copy)
 		{
-			$newname = doSlash(trim(preg_replace('/[<>&"\']/', '', gps('newname'))));
+			$newname = doSlash(trim(preg_replace('/[<>&"\']/', '', ps('newname'))));
 
 			if ($newname and safe_field('name', 'txp_css', "name = '$newname'"))
 			{
