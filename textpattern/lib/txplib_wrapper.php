@@ -66,15 +66,15 @@ class TXP_Wrapper
 	 * @var string 
 	 */
 
-	var $txp_user = null;
+	public $txp_user = null;
 
 	/**
 	 * Authenticated connection.
 	 *
-	 * @var boolean
+	 * @var bool
 	 */
 
-	var $loggedin = false;
+	public $loggedin = false;
 
 	/**
 	 * Predefined Textpattern variables to be populated.
@@ -82,7 +82,7 @@ class TXP_Wrapper
 	 * @var array 
 	 */
 
-	var $vars = array(
+	public $vars = array(
 		'ID','Title','Title_html','Body','Body_html','Excerpt','Excerpt_html','textile_excerpt','Image',
 		'textile_body', 'Keywords','Status','Posted','Section','Category1','Category2',
 		'Annotate','AnnotateInvite','AuthorID','Posted','override_form',
@@ -102,7 +102,7 @@ class TXP_Wrapper
 	 * $wrapper = new TXP_wrapper('username', 'password');
 	 */
 
-	function TXP_Wrapper($txp_user, $txpass = NULL)
+	public function __construct($txp_user, $txpass = NULL)
 	{
 		if ($this->_validate($txp_user, $txpass))
 		{
@@ -118,7 +118,7 @@ class TXP_Wrapper
 	 * @return bool TRUE on success
 	 */
 
-	function deleteArticleID($article_id)
+	public function deleteArticleID($article_id)
 	{
 		$article_id = assert_int($article_id);
 		if ($this->loggedin && has_privs('article.delete', $this->txp_user))
@@ -154,7 +154,7 @@ class TXP_Wrapper
 	 * @return array|bool Array of artilces, or FALSE on failure
 	 */
 
-	function getArticleList($what = '*', $where = '1', $offset = 0, $limit = 10, $slash = true)
+	public function getArticleList($what = '*', $where = '1', $offset = 0, $limit = 10, $slash = true)
 	{
 		if ($this->loggedin && has_privs('article.edit.own', $this->txp_user))
 		{
@@ -211,7 +211,7 @@ class TXP_Wrapper
 	 * }
 	 */
 
-	function getArticle($what = '*', $where = '1', $slash = true)
+	public function getArticle($what = '*', $where = '1', $slash = true)
 	{
 		if ($this->loggedin && has_privs('article.edit.own', $this->txp_user))
 		{
@@ -251,7 +251,7 @@ class TXP_Wrapper
 	 * }
 	 */
 
-	function getArticleID($article_id, $what = '*')
+	public function getArticleID($article_id, $what = '*')
 	{
 		if ($this->loggedin && has_privs('article.edit.own', $this->txp_user))
 		{
@@ -289,7 +289,7 @@ class TXP_Wrapper
 	 * }
 	 */
 
-	function updateArticleID($article_id, $params)
+	public function updateArticleID($article_id, $params)
 	{
 		$article_id = assert_int($article_id);
 		$r = safe_field('ID', 'textpattern', "AuthorID='".doSlash($this->txp_user)."' AND ID = $article_id");
@@ -331,7 +331,7 @@ class TXP_Wrapper
 	 * }
 	 */
 
-	function newArticle($params)
+	public function newArticle($params)
 	{
 		if ($this->loggedin && has_privs('article', $this->txp_user))
 		{
@@ -362,7 +362,7 @@ class TXP_Wrapper
 	 * }
 	 */
 
-	function getSectionsList()
+	public function getSectionsList()
 	{
 		if ($this->loggedin && has_privs('article', $this->txp_user))
 		{
@@ -386,7 +386,7 @@ class TXP_Wrapper
 	 * }
 	 */
 
-	function getSection($name)
+	public function getSection($name)
 	{
 		if ($this->loggedin && has_privs('article', $this->txp_user))
 		{
@@ -413,7 +413,7 @@ class TXP_Wrapper
 	 * }
 	 */
 
-	function getCategoryList()
+	public function getCategoryList()
 	{
 		if ($this->loggedin && has_privs('article', $this->txp_user))
 		{
@@ -437,7 +437,7 @@ class TXP_Wrapper
 	 * }
 	 */
 
-	function getCategory($name)
+	public function getCategory($name)
 	{
 		if ($this->loggedin && has_privs('article', $this->txp_user))
 		{
@@ -458,7 +458,7 @@ class TXP_Wrapper
 	 * @return array|bool FALSE on failure
 	 */
 
-	function getCategoryID($id)
+	public function getCategoryID($id)
 	{
 		if ($this->loggedin && has_privs('article', $this->txp_user))
 		{
@@ -479,7 +479,7 @@ class TXP_Wrapper
 	 * @return array|bool FALSE on failure
 	 */
 
-	function getCategoryTitle($title)
+	public function getCategoryTitle($title)
 	{
 		if ($this->loggedin && has_privs('article', $this->txp_user))
 		{
@@ -504,7 +504,7 @@ class TXP_Wrapper
 	 * }
 	 */
 
-	function getUser()
+	public function getUser()
 	{
 		if ($this->loggedin)
 		{
@@ -523,7 +523,7 @@ class TXP_Wrapper
 	 * @return string|bool The template, or FALSE on failure
 	 */
 
-	function getTemplate($name)
+	public function getTemplate($name)
 	{
 		if ($this->loggedin && has_privs('page', $this->txp_user))
 		{
@@ -550,7 +550,7 @@ class TXP_Wrapper
 	 * }
 	 */
 
-	function setTemplate($name, $html)
+	public function setTemplate($name, $html)
 	{
 		if ($this->loggedin && has_privs('page', $this->txp_user))
 		{
@@ -579,7 +579,7 @@ class TXP_Wrapper
 	 * }
 	 */
 
-	function updateArticleField($article_id, $field, $value)
+	public function updateArticleField($article_id, $field, $value)
 	{
 		$disallow = array('Body','Body_html','Title','Title_html','Excerpt',
 					'Excerpt_html','textile_excerpt','textile_body','LastMod',
@@ -629,7 +629,7 @@ class TXP_Wrapper
 	 * @see    TXP_wrapper::newArticle()
 	 */
 
-	function _setArticle($incoming, $article_id = null)
+	public function _setArticle($incoming, $article_id = null)
 	{
 		global $txpcfg;
 
@@ -807,7 +807,7 @@ class TXP_Wrapper
 	 * @access private
 	 */
 
-	function _validate($user, $password = NULL)
+	public function _validate($user, $password = NULL)
 	{
 		if ($password !== NULL)
     	{
@@ -835,7 +835,7 @@ class TXP_Wrapper
 	 * @access private
 	 */
 
-	function _sendPings()
+	public function _sendPings()
 	{
 		global $prefs, $txpcfg;
 		extract($prefs);
@@ -866,7 +866,7 @@ class TXP_Wrapper
 	 * @access private
 	 */
 
-	function _check_keys($incoming, $default = array())
+	public function _check_keys($incoming, $default = array())
 	{
 		$out = array();
 		// Strip off unsuited keys.
@@ -905,7 +905,7 @@ class TXP_Wrapper
 	 * @access private
 	 */
 
-	function textile_main_fields($incoming, $use_textile = 1)
+	public function textile_main_fields($incoming, $use_textile = 1)
 	{
 		global $txpcfg;
 
@@ -941,7 +941,7 @@ class TXP_Wrapper
 	 * @access private
 	 */
 
-	function format_field($field, $format,$textile)
+	public function format_field($field, $format, $textile)
 	{
 		switch ($format)
 		{
