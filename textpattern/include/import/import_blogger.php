@@ -1,14 +1,33 @@
 <?php
 
-//Long live zem!
+/**
+ * Imports from Blogger.
+ *
+ * @package Admin\Import
+ */
 
-//Time for 45KB: 0.9648-1.3698sec.
+/**
+ * Imports from a Blogger dump file.
+ *
+ * This function parses a file in the 'MovableType Import Format'.
+ * The data isn't interpret at all, just parsed into a 
+ * structure.
+ *
+ * This function supports importing comments and articles
+ * from Blogger. Things as statuses, sections, categories or keywords
+ * do not carry over. Just body content and titles basically.
+ *
+ * Returns results as a HTML formatted list.
+ *
+ * @param  string $file Path to the dump file
+ * @param  string $section The article section
+ * @param  string $status  The article status
+ * @param  string $invite  The comments invite
+ * @return string HTML
+ * @see    http://www.movabletype.org/docs/mtimport.html
+ */
+
 function doImportBLOGGER($file, $section, $status, $invite) {
-
-	# Parse a file in the MT Import Format, as described here:
-	# http://www.movabletype.org/docs/mtimport.html
-	# This doesn't interpret the data at all, just parse it into
-	# a structure.
 
 	$fp = fopen($file, 'r');
 	if (!$fp)
@@ -83,13 +102,21 @@ function doImportBLOGGER($file, $section, $status, $invite) {
 	fclose($fp);
 	return join('<br />', $results);
 }
-//Some \n chars on empty fields should be removed from body_extended and excerpt
-//What about the new title_html field?
 
-//Fields that are on MT format, but have not sense for blogger are commented
+/**
+ * Inserts a parsed item to the database.
+ *
+ * This import code is untested.
+ *
+ * @param  array  $item
+ * @param  string $section
+ * @param  int    $status
+ * @param  string $invite
+ * @return string A feedback message
+ * @access private
+ */
+
 function import_blogger_item($item, $section, $status, $invite) {
-
-	# Untested import code follows
 
 	if (empty($item)) return;
 
