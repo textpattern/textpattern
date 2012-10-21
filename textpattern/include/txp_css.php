@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Styles panel.
+ *
+ * @package Admin\CSS
+ */
 
 	if (!defined('txpinterface')) die('txpinterface is undefined.');
 
@@ -28,7 +33,13 @@
 		}
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders a list of styles.
+ *
+ * @param  string $current The active style
+ * @param  string $default Not used
+ * @return string An HTML &lt;table&gt;
+ */
 
 	function css_list($current, $default) {
 		$out[] = startTable('', '', 'txp-list');
@@ -54,7 +65,12 @@
 		}
 	}
 
-// -------------------------------------------------------------
+/**
+ * The main editor panel as a complete HTML document.
+ *
+ * @param string|array $message The activity message
+ * @see   css_edit_raw()
+ */
 
 	function css_edit($message='')
 	{
@@ -63,7 +79,11 @@
 		css_edit_raw();
 	}
 
-// -------------------------------------------------------------
+/**
+ * The main editor without a header.
+ *
+ * @see css_edit()
+ */
 
 	function css_edit_raw() {
 		global $event, $step;
@@ -135,7 +155,9 @@
 		'</div>';
 	}
 
-// -------------------------------------------------------------
+/**
+ * Copies an existing style.
+ */
 
 	function css_copy()
 	{
@@ -150,7 +172,9 @@
 		);
 	}
 
-// -------------------------------------------------------------
+/**
+ * Saves a style.
+ */
 
 	function css_save()
 	{
@@ -204,7 +228,9 @@
 		}
 	}
 
-// -------------------------------------------------------------
+/**
+ * Removes a style.
+ */
 
 	function css_delete()
 	{
