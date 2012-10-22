@@ -428,12 +428,24 @@ define('STATUS_LIVE', 4);
 
 define('STATUS_STICKY', 5);
 
+if (!defined('WRITE_RECENT_ARTICLES_COUNT'))
+{
+	/**
+	 * 'Recent articles' count on the write panel.
+	 *
+	 * @package Article
+	 */
+
+	define('WRITE_RECENT_ARTICLES_COUNT', 10);
+}
+
 /**
  * Input size extra large.
  *
  * @since   4.5.0
  * @package Form
  */
+
 
 define('INPUT_XLARGE', 96);
 

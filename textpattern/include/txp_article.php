@@ -1375,7 +1375,7 @@ EOS
 
 	function article_partial_recent_articles($rs)
 	{
-		$recents = safe_rows_start("Title, ID",'textpattern',"1=1 order by LastMod desc limit 10");
+		$recents = safe_rows_start('Title, ID','textpattern','1=1 order by LastMod desc limit '.(int)WRITE_RECENT_ARTICLES_COUNT);
 		$ra = '';
 
 		if ($recents)
