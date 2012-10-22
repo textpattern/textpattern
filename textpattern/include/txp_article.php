@@ -784,7 +784,7 @@ if (!empty($event) and $event == 'article') {
 					//-- category selects -----------
 					$partials['categories']['html'].
 					n,
-					'fieldset', ' id="write-sort" aria-labelledby="write-sort-label"'),
+					'fieldset', ' role="region" id="write-sort" aria-labelledby="write-sort-label"'),
 				$rs);
 
 		// "Comments" section.
@@ -1504,7 +1504,7 @@ EOS
 	function article_partial_status($rs)
 	{
 		return pluggable_ui('article_ui', 'status',
-			n.n.'<fieldset id="write-status" aria-labelledby="write-status-label">'.
+			n.n.'<fieldset role="region" id="write-status" aria-labelledby="write-status-label">'.
 				n.'<legend id="write-status-label">'.gTxt('status').'</legend>'.
 				n.status_radio($rs['Status']).
 				n.'</fieldset>',
