@@ -683,7 +683,7 @@ if (!empty($event) and $event == 'article') {
 			echo sp;
 		}
 
-		echo n.n.'</div>'.n.'</td>'.n.'<td id="article-main"><div id="main_content">';
+		echo n.n.'</div>'.n.'</td>'.n.'<td id="article-main">'.n.'<div role="region" id="main_content">';
 
 	// Title input.
 
@@ -871,8 +871,8 @@ if (!empty($event) and $event == 'article') {
 
 				echo graf(
 					(has_privs('article.publish')) ?
-					fInput('submit','publish',gTxt('publish'),"publish", '', '', '', 4) :
-					fInput('submit','publish',gTxt('save'),"publish", '', '', '', 4)
+					fInput('submit','publish',gTxt('publish'),"publish") :
+					fInput('submit','publish',gTxt('save'),"publish")
 				, ' id="write-publish"');
 			}
 
@@ -1212,7 +1212,7 @@ EOS
 		$av_cb = $rs['partials_meta']['article_view']['cb'];
 		return pluggable_ui('article_ui', 'title',
 			graf('<label for="title">'.gTxt('title').'</label>'.sp.popHelp('title').br.
-				'<input type="text" id="title" name="Title" value="'.escape_title($rs['Title']).'" size="40" tabindex="1" />'.
+				'<input type="text" id="title" name="Title" value="'.escape_title($rs['Title']).'" size="40" />'.
 				($step != 'create' ?  $av_cb($rs) : '')
 				, ' class="title"'),
 			$rs);
@@ -1416,7 +1416,7 @@ EOS
 			include_once txpath.'/publish/taghandlers.php';
 			$url = permlinkurl_id($ID);
 		}
-		return '<span id="article_partial_article_view"><a href="'.$url.'" class="article-view">'.gTxt('view').'</a></span>';
+		return ' <span id="article_partial_article_view"><a href="'.$url.'" class="article-view">'.gTxt('view').'</a></span>';
 	}
 
 /**
@@ -1430,7 +1430,7 @@ EOS
 	{
 		return pluggable_ui('article_ui', 'body',
 			n.graf('<label for="body">'.gTxt('body').'</label>'.sp.popHelp('body').br.
-				'<textarea id="body" name="Body" cols="'.INPUT_LARGE.'" rows="'.INPUT_REGULAR.'" tabindex="2">'.txpspecialchars($rs['Body']).'</textarea>', ' class="body"'),
+				'<textarea id="body" name="Body" cols="'.INPUT_LARGE.'" rows="'.INPUT_REGULAR.'">'.txpspecialchars($rs['Body']).'</textarea>', ' class="body"'),
 			$rs);
 	}
 
@@ -1445,7 +1445,7 @@ EOS
 	{
 		return pluggable_ui('article_ui', 'excerpt',
 			n.graf('<label for="excerpt">'.gTxt('excerpt').'</label>'.sp.popHelp('excerpt').br.
-				'<textarea id="excerpt" name="Excerpt" cols="'.INPUT_LARGE.'" rows="'.INPUT_SMALL.'" tabindex="3">'.txpspecialchars($rs['Excerpt']).'</textarea>', ' class="excerpt"'),
+				'<textarea id="excerpt" name="Excerpt" cols="'.INPUT_LARGE.'" rows="'.INPUT_SMALL.'">'.txpspecialchars($rs['Excerpt']).'</textarea>', ' class="excerpt"'),
 			$rs);
 	}
 
