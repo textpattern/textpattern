@@ -778,13 +778,13 @@ if (!empty($event) and $event == 'article') {
 
 			echo pluggable_ui('article_ui', 'sort_display',
 				n.n.tag(
-					n.'<legend>'.gTxt('sort_display').'</legend>'.
+					n.'<legend id="write-sort-label">'.gTxt('sort_display').'</legend>'.
 					//-- section select --------------
 					$partials['section']['html'].
 					//-- category selects -----------
 					$partials['categories']['html'].
 					n,
-					'fieldset', ' id="write-sort"'),
+					'fieldset', ' id="write-sort" aria-labelledby="write-sort-label"'),
 				$rs);
 
 		// "Comments" section.
@@ -1504,8 +1504,8 @@ EOS
 	function article_partial_status($rs)
 	{
 		return pluggable_ui('article_ui', 'status',
-			n.n.'<fieldset id="write-status">'.
-				n.'<legend>'.gTxt('status').'</legend>'.
+			n.n.'<fieldset id="write-status" aria-labelledby="write-status-label">'.
+				n.'<legend id="write-status-label">'.gTxt('status').'</legend>'.
 				n.status_radio($rs['Status']).
 				n.'</fieldset>',
 			$rs);
