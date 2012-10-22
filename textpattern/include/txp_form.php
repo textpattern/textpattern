@@ -11,11 +11,31 @@
 
 */
 
+/**
+ * Forms panel.
+ *
+ * @package Admin\Form
+ */
+
 	if (!defined('txpinterface')) die('txpinterface is undefined.');
 
 	global $vars;
 	$vars = array('Form','type','name','savenew','oldname');
+
+/**
+ * List of essential forms.
+ *
+ * @global array $essential_forms
+ */
+
 	$essential_forms = array('comments','comments_display','comment_form','default','plainlinks','files');
+
+/**
+ * List of form types.
+ *
+ * @global array $form_types
+ */
+
 	$form_types = array(
 		'article'  => gTxt('article'),
 		'misc'     => gTxt('misc'),
@@ -52,7 +72,16 @@
 
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders a list of form templates.
+ *
+ * This function returns a list of form templates,
+ * wrapped in a multi-edit form widget.
+ *
+ * @param  string $curname The selected form
+ * @return string HTML
+ */
+
 	function form_list($curname)
 	{
 		global $step,$essential_forms,$form_types;
@@ -117,7 +146,9 @@ EOS
 		}
 	}
 
-// -------------------------------------------------------------
+/**
+ * Processes multi-edit actions.
+ */
 
 	function form_multi_edit()
 	{
@@ -171,13 +202,24 @@ EOS
 		}
 	}
 
-// -------------------------------------------------------------
+/**
+ * Creates a new form.
+ *
+ * Directs requests back to the main editor panel,
+ * armed with a 'form_create' step.
+ */
+
 	function form_create()
 	{
 		form_edit();
 	}
 
-// -------------------------------------------------------------
+/**
+ * The main editor panel.
+ *
+ * @param string|array $message The activity message
+ */
+
 	function form_edit($message='')
 	{
 		global $event,$step,$essential_forms;
@@ -265,7 +307,9 @@ EOS
 		echo $out;
 	}
 
-// -------------------------------------------------------------
+/**
+ * Saves a form template.
+ */
 
 	function form_save()
 	{
@@ -327,7 +371,13 @@ EOS
 		form_edit($message);
 	}
 
-// -------------------------------------------------------------
+/**
+ * Deletes a form template with the given name.
+ *
+ * @param  string $name The form template
+ * @return bool   FALSE on error
+ */
+
 	function form_delete($name)
 	{
 		global $essential_forms;
@@ -336,7 +386,14 @@ EOS
 		return safe_delete("txp_form","name='$name'");
 	}
 
-// -------------------------------------------------------------
+/**
+ * Changes a form template's type.
+ *
+ * @param  string $name The form template
+ * @param  string $type The new type
+ * @return bool   FALSE on error
+ */
+
 	function form_set_type($name, $type)
 	{
 		global $essential_forms, $form_types;
@@ -346,14 +403,25 @@ EOS
 		return safe_update('txp_form', "type='$type'", "name='$name'");
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders a &lt;select&gt; input listing all form types.
+ *
+ * @param  string $type        The selected option
+ * @param  bool   $blank_first If TRUE, the list defaults to an empty selection
+ * @return string HTML
+ * @access private
+ */
+
 	function formTypes($type, $blank_first = true)
 	{
 	 	global $form_types;
 	 	return selectInput('type', $form_types, $type, $blank_first);
 	}
 
-// -------------------------------------------------------------
+/**
+ * Saves a pane visibility state on the server.
+ */
+
 	function form_save_pane_state()
 	{
 		global $event;
