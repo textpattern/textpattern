@@ -110,7 +110,6 @@ class DB
 		$this->user = $txpcfg['user'];
 		$this->pass = $txpcfg['pass'];
 		$this->client_flags = isset($txpcfg['client_flags']) ? $txpcfg['client_flags'] : 0;
-		$this->table_options['charset'] = 'utf8';
 		$this->table_options['type'] = 'MyISAM';
 
 		$this->link = @mysql_connect($this->host, $this->user, $this->pass, false, $this->client_flags);
