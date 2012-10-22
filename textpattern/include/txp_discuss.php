@@ -409,8 +409,8 @@
 				$ban_text = gTxt('ban');
 			}
 
-			$ban_link = '[<a class="action-ban" href="?event=discuss'.a.'step='.$ban_step.a.'ip='.$ip.
-				a.'name='.urlencode($name).a.'discussid='.$discussid.a.'_txp_token='.form_token().'">'.$ban_text.'</a>]';
+			$ban_link = '<span role="presentation">[</span><a class="action-ban" href="?event=discuss'.a.'step='.$ban_step.a.'ip='.$ip.
+				a.'name='.urlencode($name).a.'discussid='.$discussid.a.'_txp_token='.form_token().'">'.$ban_text.'</a><span role="presentation">]</span>';
 
 			$status_list = selectInput(
 				'visible',
@@ -560,7 +560,7 @@
 
 					td(
 						txpspecialchars($ip).n.
-						'[<a class="action-ban" href="?event=discuss'.a.'step=ipban_unban'.a.'ip='.txpspecialchars($ip).a.'_txp_token='.form_token().'">'.gTxt('unban').'</a>]'
+						'<span role="presentation">[</span><a class="action-ban" href="?event=discuss'.a.'step=ipban_unban'.a.'ip='.txpspecialchars($ip).a.'_txp_token='.form_token().'">'.gTxt('unban').'</a><span role="presentation">]</span>'
 					, '', 'ip').
 
 					td(

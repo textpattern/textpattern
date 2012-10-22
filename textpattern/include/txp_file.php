@@ -266,7 +266,7 @@
 
 					n.hCell(
 						($can_edit ? href($id, $edit_url, ' title="'.gTxt('edit').'"') : $id).
-						(($file_exists) ? sp.'<span class="files_detail">['.make_download_link($id, gTxt('download'), $filename).']</span>' : '')
+						(($file_exists) ? sp.'<span class="files_detail"><span role="presentation">[</span>'.make_download_link($id, gTxt('download'), $filename).'<span role="presentation">]</span></span>' : '')
 					, '', ' scope="row" class="id"').
 
 					td(

@@ -313,7 +313,7 @@
 						: '&#160;'
 					), '', 'multi-edit').
 
-					n.hCell(eLink('article', 'edit', 'ID', $ID, $ID) .sp. '<span class="articles_detail">[<a href="'.$view_url.'">'.gTxt('view').'</a>]</span>', '', ' scope="row" class="id"').
+					n.hCell(eLink('article', 'edit', 'ID', $ID, $ID) .sp. '<span class="articles_detail"><span role="presentation">[</span><a href="'.$view_url.'">'.gTxt('view').'</a><span role="presentation">]</span></span>', '', ' scope="row" class="id"').
 
 					td($Title, '', 'title').
 

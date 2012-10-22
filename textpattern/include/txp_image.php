@@ -255,7 +255,7 @@
 
 					n.hCell(
 						($can_edit ? href($id, $edit_url, ' title="'.gTxt('edit').'"') : $id).sp.
-						'<span class="images_detail">[<a href="'.imagesrcurl($id, $ext).'">'.gTxt('view').'</a>]</span>'
+						'<span class="images_detail"><span role="presentation">[</span><a href="'.imagesrcurl($id, $ext).'">'.gTxt('view').'</a><span role="presentation">]</span></span>'
 					, '', ' scope="row" class="id"').
 
 					td(

@@ -1523,7 +1523,7 @@ EOS
 		return pluggable_ui('article_ui', 'categories',
 			n.'<div id="categories_group">'.
 			n.graf('<label for="category-1">'.gTxt('category1').'</label> '.
-			'<span class="category-edit">['.eLink('category', '', '', '', gTxt('edit')).']</span>'.br.
+			'<span class="category-edit"><span role="presentation">[</span>'.eLink('category', '', '', '', gTxt('edit')).'<span role="presentation">]</span></span>'.br.
 			n.category_popup('Category1', $rs['Category1'], 'category-1'), ' class="category category-1"').
 
 			n.graf('<label for="category-2">'.gTxt('category2').'</label>'.br.
@@ -1543,7 +1543,7 @@ EOS
 	{
 		return pluggable_ui('article_ui', 'section',
 			n.graf('<label for="section">'.gTxt('section').'</label> '.
-				'<span class="section-edit">['.eLink('section', '', '', '', gTxt('edit')).']</span>'.br.
+				'<span class="section-edit"><span role="presentation">[</span>'.eLink('section', '', '', '', gTxt('edit')).'<span role="presentation">]</span></span>'.br.
 				section_popup($rs['Section'], 'section'), ' class="section"'),
 			$rs);
 	}
