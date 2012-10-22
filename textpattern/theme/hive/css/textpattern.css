@@ -1896,10 +1896,6 @@ body#page-setup {
   color: #999999;
 }
 
-#article_partial_article_view {
-  margin-left: 1em;
-}
-
 #main_content > div:first-of-type > p:first-of-type {
   margin-top: 0;
 }
