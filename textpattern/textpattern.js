@@ -1179,7 +1179,7 @@ $(document).ready(function() {
 		{
 			var $region = $(region), vis = $region.is(':visible').toString();
 			$(elm).attr('aria-control', region.substr(1)).attr('aria-pressed', vis);
-			$region.attr('role', 'region').attr('aria-expanded', vis);
+			$region.attr('aria-expanded', vis);
 		}
 	});
 

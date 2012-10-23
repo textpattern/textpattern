@@ -434,7 +434,7 @@
 		$heading = gTxt($label);
 		$help_link = ($help) ? n.popHelp($help) : '';
 
-		$class = ($class) ? ' '.$class : '';
+		$class = ($class) ? ' '.trim($class) : '';
 		$role = ($role) ? ' role="'.$role.'"' : '';
 		$pane_ref = $heading_class = $display_state = '';
 
@@ -442,7 +442,7 @@
 		{
 			$pane_ref = get_pref('pane_'.$pane.'_visible');
 			$heading_class = ' class="txp-summary' . ($pane_ref ? ' expanded' : '') . '"';
-			$display_state = ' id="'.$anchor_id.'" class="toggle" style="display:' . ($pane_ref ? 'block' : 'none') . '"';
+			$display_state = ' role="group" id="'.$anchor_id.'" class="toggle" style="display:' . ($pane_ref ? 'block' : 'none') . '"';
 			$heading = '<a href="#'.$anchor_id.'" role="button">' . $heading . '</a>';
 			$help_link = '';
 		}
