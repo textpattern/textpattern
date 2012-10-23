@@ -726,6 +726,8 @@
  * @param  string $tag     The tag without brackets
  * @param  string $atts    The element's HTML attributes
  * @return string HTML
+ * @example
+ * echo tag('Link text', 'a', 'href="#" class="warning"');
  */
 
 	function tag($content, $tag, $atts = '')
@@ -758,6 +760,8 @@
  * @param  int    $level Heading level 1...6
  * @param  string $atts  List of HTML attributes
  * @return string HTML
+ * @example
+ * echo hed('Heading', 2);
  */
 
 	function hed($item, $level, $atts = '')
@@ -808,6 +812,8 @@
  *
  * @param  string $item The input string
  * @return string HTML
+ * @example
+ * echo htmlPre('&lt;?php echo "Hello World"; ?&gt;');
  */
 
 	function htmlPre($item)
