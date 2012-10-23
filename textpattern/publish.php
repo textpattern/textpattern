@@ -558,7 +558,7 @@
 			echo n,comment('Queries: '.$qcount);
 			echo maxMemUsage('end of textpattern()',1);
 			if (!empty($txptrace) and is_array($txptrace))
-				echo n, comment('txp tag trace: '.n.str_replace('--','&shy;&shy;',join(n, $txptrace)).n);
+				echo n, comment('txp tag trace: '.n.join(n, $txptrace).n);
 				// '&shy;&shy;' is *no* tribute to Kajagoogoo, but an attempt to avoid prematurely terminating HTML comments
 		}
 

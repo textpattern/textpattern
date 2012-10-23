@@ -830,7 +830,7 @@
 
 	function comment($item)
 	{
-		return '<!-- '.$item.' -->';
+		return '<!-- '.str_replace('--', '&shy;&shy;', $item).' -->';
 	}
 
 /**
