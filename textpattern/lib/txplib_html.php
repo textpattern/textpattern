@@ -420,7 +420,7 @@
  * @param  string $id        HTML id attribute for the region wrapper and ARIA label
  * @param  string $content   Content to wrap. If empty, only the outer wrapper will be rendered
  * @param  string $anchor_id HTML id attribute for the collapsible wrapper
- * @param  string $label     i18n label name
+ * @param  string $label     L10n label name
  * @param  string $pane      Pane reference for maintaining toggle state in prefs. Prefixed with 'pane_', suffixed with '_visible'
  * @param  string $class     CSS class name to apply to wrapper
  * @param  string $role      ARIA role name
@@ -428,7 +428,7 @@
  * @return string HTML
  */
 
-	function wrapRegion($id, $content='', $anchor_id='', $label = '', $pane = '', $class = '', $role='region', $help='')
+	function wrapRegion($id, $content = '', $anchor_id = '', $label = '', $pane = '', $class = '', $role = 'region', $help = '')
 	{
 		$heading = gTxt($label);
 		$help_link = ($help) ? n.popHelp($help) : '';
@@ -437,13 +437,12 @@
 		$role = ($role) ? ' role="'.$role.'"' : '';
 		$pane_ref = $heading_class = $display_state = '';
 
-		if ($anchor_id && $pane) {
+		if ($anchor_id && $pane)
+		{
 			$pane_ref = get_pref('pane_'.$pane.'_visible');
 			$heading_class = ' class="txp-summary' . ($pane_ref ? ' expanded' : '') . '"';
 			$display_state = ' id="'.$anchor_id.'" class="toggle" style="display:' . ($pane_ref ? 'block' : 'none') . '"';
 			$heading = '<a href="#'.$anchor_id.'" role="button">' . $heading . '</a>';
-
-			// Help is not permitted inside a collapsible group heading (would render anchor-in-an-anchor)
 			$help_link = '';
 		}
 
@@ -451,7 +450,8 @@
 
 		$out[] = '<div'.$role.' id="'.$id.'" class="txp-details'.$class.'"' . ($content ? ' aria-labelledby="'.$id.'-label"' : '' ) . '>';
 
-		if ($content) {
+		if ($content)
+		{
 			$out[] = hed($heading.$help_link, 3, ' id="'.$id.'-label"'.$heading_class);
 			$out[] = '<div'.$display_state.'>';
 			$out[] = $content;
@@ -468,7 +468,7 @@
  *
  * @param  string $name    HTML id attribute for the group wrapper and ARIA label
  * @param  string $content Content to wrap
- * @param  string $label   i18n label name
+ * @param  string $label   L10n label name
  * @param  string $class   CSS class name to apply to wrapper
  * @param  string $help    Help text item
  * @return string HTML
