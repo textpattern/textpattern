@@ -193,7 +193,7 @@
 		);
 
 		$last_event = null;
-		$out = '';
+		$out = array();
 
 		if (numRows($rs))
 		{
@@ -215,7 +215,7 @@
 					}
 
 					$last_event = $a['event'];
-					$out = '';
+					$out = array();
 				}
 
 				$label = (!in_array($a['html'], array('yesnoradio', 'is_dst'))) ?
