@@ -494,12 +494,7 @@
 				pluggable_ui(
 					'image_ui',
 					'image_edit',
-					'<div role="group" class="txp-details replace-image">'.n.
-						'<h3>'.gTxt('replace_image').sp.popHelp('replace_image_form').'</h3>'.n.
-						'<div>'.n.
-							upload_form('', '', 'image_replace', 'image', $id, $file_max_upload_size, 'image_replace', 'image-replace').n.
-						'</div>'.n.
-					'</div>'.n,
+					wrapGroup('image_edit_group', upload_form('', '', 'image_replace', 'image', $id, $file_max_upload_size, 'image_replace', 'image-replace'), 'replace_image', 'replace-image', 'replace_image_form'),
 					$rs
 				),
 
@@ -517,12 +512,7 @@
 				pluggable_ui(
 					'image_ui',
 					'thumbnail_edit',
-					'<div role="group" class="txp-details thumbnail-upload">'.n.
-						'<h3>'.gTxt('upload_thumbnail').sp.popHelp('upload_thumbnail').'</h3>'.n.
-						'<div>'.n.
-							upload_form('', '', 'thumbnail_insert','image', $id, $file_max_upload_size, 'upload_thumbnail', 'thumbnail-upload').n.
-						'</div>'.n.
-					'</div>'.n,
+					wrapGroup('thumbnail_edit_group', upload_form('', '', 'thumbnail_insert','image', $id, $file_max_upload_size, 'upload_thumbnail', 'thumbnail-upload'), 'upload_thumbnail', 'thumbnail-upload', 'upload_thumbnail'),
 					$rs
 				),
 
@@ -530,30 +520,31 @@
 				? pluggable_ui(
 					'image_ui',
 					'thumbnail_create',
-					'<div role="group" class="txp-details thumbnail-alter">'.n.
-						'<h3>'.gTxt('create_thumbnail').sp.popHelp('create_thumbnail').'</h3>'.n.
-						'<div>'.n.
-							form(
-								graf(
-									'<label for="width">'.gTxt('thumb_width').'</label>'.n.
-									fInput('text', 'width', @$thumb_w, 'input-xsmall', '', '', INPUT_XSMALL, '', 'width').n.
-									'<label for="height">'.gTxt('thumb_height').'</label>'.n.
-									fInput('text', 'height', @$thumb_h, 'input-xsmall', '', '', INPUT_XSMALL, '', 'height').n.
-									'<label for="crop">'.gTxt('keep_square_pixels').'</label>'.n.
-									checkbox('crop', 1, @$prefs['thumb_crop'], '', 'crop').n.
-									fInput('submit', '', gTxt('Create'))
-								, ' class="edit-alter-thumbnail"').n.
-								n.hInput('id', $id).n.
-								n.eInput('image').n.
-								n.sInput('thumbnail_create').n.
-								n.hInput('sort', $sort).n.
-								n.hInput('dir', $dir).n.
-								n.hInput('page', $page).n.
-								n.hInput('search_method', $search_method).n.
-								n.hInput('crit', $crit)
-							, '', '', 'post', 'edit-form', '', 'thumbnail_alter_form').n.
-						'</div>'.n.
-					'</div>'.n,
+					wrapGroup(
+						'thumbnail_create_group',
+						form(
+							graf(
+								'<label for="width">'.gTxt('thumb_width').'</label>'.n.
+								fInput('text', 'width', @$thumb_w, 'input-xsmall', '', '', INPUT_XSMALL, '', 'width').n.
+								'<label for="height">'.gTxt('thumb_height').'</label>'.n.
+								fInput('text', 'height', @$thumb_h, 'input-xsmall', '', '', INPUT_XSMALL, '', 'height').n.
+								'<label for="crop">'.gTxt('keep_square_pixels').'</label>'.n.
+								checkbox('crop', 1, @$prefs['thumb_crop'], '', 'crop').n.
+								fInput('submit', '', gTxt('Create'))
+							, ' class="edit-alter-thumbnail"').n.
+							n.hInput('id', $id).n.
+							n.eInput('image').n.
+							n.sInput('thumbnail_create').n.
+							n.hInput('sort', $sort).n.
+							n.hInput('dir', $dir).n.
+							n.hInput('page', $page).n.
+							n.hInput('search_method', $search_method).n.
+							n.hInput('crit', $crit)
+						, '', '', 'post', 'edit-form', '', 'thumbnail_alter_form'),
+						'create_thumbnail',
+						'thumbnail-alter',
+						'create_thumbnail'
+						),
 					$rs
 				)
 				: '',

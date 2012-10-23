@@ -166,13 +166,12 @@
 
 		$locale = setlocale(LC_ALL, $locale);
 
-		echo n, '<h1 class="txp-heading">', gTxt('tab_preferences'), '</h1>',
-			n, '<div id="prefs_container" class="txp-container">',
-			n, '<form method="post" class="prefs-form" action="index.php">',
-			n, '<div class="plugin-column">';
+		echo n.'<h1 class="txp-heading">'. gTxt('tab_preferences'). '</h1>'.
+			n.'<div id="prefs_container" class="txp-container">'.
+			n.'<form method="post" class="prefs-form" action="index.php">'.
+			n.'<div class="plugin-column">';
 
 		// TODO: remove 'custom' when custom fields are refactored.
-
 		$core_events = array('site', 'admin', 'publish', 'feeds', 'custom', 'comments');
 		$joined_core = join(',', quote_list($core_events));
 
@@ -193,7 +192,8 @@
 			join(' and ', $sql)." ORDER BY sort_value = 0, sort_value, event, position"
 		);
 
-		$current_event = null;
+		$last_event = null;
+		$out = '';
 
 		if (numRows($rs))
 		{
@@ -204,24 +204,18 @@
 					continue;
 				}
 
-				// TODO: remove this exception when custom fields move to meta store.
-
+				// TODO: remove $noPopHelp exception when custom fields move to meta store.
 				$noPopHelp = (strpos($a['name'], 'custom_') !== false);
 
-				if ($a['event'] !== $current_event)
+				if ($a['event'] !== $last_event)
 				{
-					if ($current_event !== null)
+					if ($last_event !== null)
 					{
-						echo '</div></div>'.n;
+						echo wrapRegion('prefs_group_'.$last_event, join(n, $out), 'prefs_'.$last_event, $last_event, 'prefs_'.$last_event);
 					}
 
-					$current_event = $a['event'];
-
-					echo n.'<div role="region" id="prefs_group_', $a['event'], '" class="txp-details" aria-labelledby="prefs_group_', $a['event'], '-label">'.
-						n.'<h3 id="prefs_group_', $a['event'], '-label" class="txp-summary', (get_pref('pane_prefs_'.$a['event'].'_visible') ? ' expanded' : ''), '">'.
-						n.'<a href="#prefs_', $a['event'], '" role="button">', gTxt($a['event']), '</a>'.
-						n.'</h3>'.
-						n.'<div id="prefs_', $a['event'], '" class="toggle" style="display:', (get_pref('pane_prefs_'.$a['event'].'_visible') ? 'block' : 'none'), '">';
+					$last_event = $a['event'];
+					$out = '';
 				}
 
 				$label = (!in_array($a['html'], array('yesnoradio', 'is_dst'))) ?
@@ -229,36 +223,35 @@
 						gTxt($a['name']);
 	
 				// TODO: remove $noPopHelp condition when custom fields move to meta store.
-	
-				echo n, graf(
+				$out[] = graf(
 						n.'<span class="txp-label">'.$label.(($noPopHelp) ? '' : n.popHelp($a['name'])).'</span>'.
 						n.'<span class="txp-value">'.pref_func($a['html'], $a['name'], $a['val'], ($a['html'] == 'text_input' ? INPUT_REGULAR : '')).'</span>'
 					, ' id="prefs-'.$a['name'].'"');
 			}
 		}
 
-		if ($current_event === null)
+		if ($last_event === null)
 		{
 			echo graf(gTxt('no_preferences'));
 		}
 		else
 		{
-			echo '</div></div>';
+			echo wrapRegion('prefs_group_'.$last_event, join(n, $out), 'prefs_'.$last_event, $last_event, 'prefs_'.$last_event);
 		}
 
-		echo n, '</div>'.
+		echo n.'</div>'.
 			n.sInput('prefs_save').
 			n.eInput('prefs').
 			n.hInput('prefs_id', '1').
 			n.tInput();
 
-		if ($current_event !== null)
+		if ($last_event !== null)
 		{
 			echo graf(fInput('submit', 'Submit', gTxt('save'), 'publish'));
 		}
 
-		echo n, '</form>',
-			n, '</div>';
+		echo n.'</form>'.
+			n.'</div>';
 	}
 
 /**

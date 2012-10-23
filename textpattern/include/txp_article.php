@@ -631,12 +631,8 @@ if (!empty($event) and $event == 'article') {
 
 		// Advanced.
 
-			echo n.n.'<div role="region" id="advanced_group" class="txp-details" aria-labelledby="advanced_group-label">'.
-				n.'<h3 id="advanced_group-label" class="txp-summary'.(get_pref('pane_article_advanced_visible') ? ' expanded' : '').'"><a href="#advanced" role="button">'.gTxt('advanced_options').'</a></h3>'.
-				n.'<div id="advanced" class="toggle" style="display:'.(get_pref('pane_article_advanced_visible') ? 'block' : 'none').'">';
-
 			// Markup selection.
-			echo pluggable_ui('article_ui', 'markup',
+			$html_markup = pluggable_ui('article_ui', 'markup',
 				n.graf('<label for="markup-body">'.gTxt('article_markup').'</label>'.br.
 					pref_text('textile_body', $textile_body, 'markup-body'), ' class="markup markup-body"').
 				n.graf('<label for="markup-excerpt">'.gTxt('excerpt_markup').'</label>'.br.
@@ -644,11 +640,12 @@ if (!empty($event) and $event == 'article') {
 				$rs);
 
 			// Form override.
-			echo ($allow_form_override)
-				? pluggable_ui('article_ui', 'override', graf('<label for="override-form">'.gTxt('override_default_form').'</label>'.sp.popHelp('override_form').br.
+			$html_override = ($allow_form_override)
+				? pluggable_ui('article_ui', 'override', graf('<label for="override-form">'.gTxt('override_default_form').'</label>'.n.popHelp('override_form').br.
 					form_pop($override_form, 'override-form'), ' class="override-form"'), $rs)
 				: '';
-			echo n.'</div>'.n.'</div>';
+
+			echo wrapRegion('advanced_group', $html_markup.$html_override, 'advanced', 'advanced_options', 'article_advanced');
 
 		// Custom fields.
 
@@ -659,23 +656,15 @@ if (!empty($event) and $event == 'article') {
 			echo $partials['image']['html'];
 
 		// Meta info.
-
-			echo n.n.'<div role="region" id="meta_group" class="txp-details" aria-labelledby="meta_group-label">'.
-				n.'<h3 id="meta_group-label" class="txp-summary'.(get_pref('pane_article_meta_visible') ? ' expanded' : '').'"><a href="#meta" role="button">'.gTxt('meta').'</a></h3>'.
-				n.'<div id="meta" class="toggle" style="display:'.(get_pref('pane_article_meta_visible') ? 'block' : 'none').'">';
 			// keywords
-			echo $partials['keywords']['html'];
+			$html_keywords = $partials['keywords']['html'];
 			// url title
-			echo $partials['url_title']['html'];
-			echo n.'</div>'.n.'</div>';
+			$html_url_title = $partials['url_title']['html'];
+			echo wrapRegion('meta_group', $html_keywords.$html_url_title, 'meta', 'meta', 'article_meta');
 
 		// Recent articles.
+			echo wrapRegion('recent_group', $partials['recent_articles']['html'], 'recent', 'recent_articles', 'article_recent');
 
-			echo n.n.'<div role="region" id="recent_group" class="txp-details" aria-labelledby="recent_group-label">'.
-				n.'<h3 id="recent_group-label" class="txp-summary'.(get_pref('pane_article_recent_visible') ? ' expanded' : '').'"><a href="#recent" role="button">'.gTxt('recent_articles').'</a>'.'</h3>'.
-				n.'<div id="recent" class="toggle" style="display:'.(get_pref('pane_article_recent_visible') ? 'block' : 'none').'">';
-			echo $partials['recent_articles']['html'];
-			echo n.'</div>'.n.'</div>';
 		}
 
 		else
@@ -788,37 +777,27 @@ if (!empty($event) and $event == 'article') {
 				$rs);
 
 		// "Comments" section.
-			echo n.n.'<div role="region" id="comments_group" class="txp-details'.(($use_comments==1) ? '' : ' empty').'" aria-labelledby="comments_group-label">'.
-				n.'<h3 id="comments_group-label" class="txp-summary'.(get_pref('pane_article_comments_visible') ? ' expanded' : '').'"><a href="#comments" role="button">'.gTxt('comment_settings').'</a></h3>'.
-				n.'<div id="comments" class="toggle" style="display:'.(get_pref('pane_article_comments_visible') ? 'block' : 'none').'">';
-
-			echo $partials['comments']['html'];
-
-			// End "Comments" section.
-			echo '</div>'.n.'</div>';
+			echo wrapRegion('comments_group', $partials['comments']['html'], 'comments', 'comment_settings', 'article_comments', (($use_comments==1) ? '' : 'empty'));
 
 		// "Dates" section.
-			echo n.n.'<div role="region" id="dates_group" class="txp-details" aria-labelledby="dates_group-label">'.
-				n.'<h3 id="dates_group-label" class="txp-summary'.(get_pref('pane_article_dates_visible') ? ' expanded' : '').'"><a href="#dates" role="button">'.gTxt('date_settings').'</a></h3>'.
-				n.'<div id="dates" class="toggle" style="display:'.(get_pref('pane_article_dates_visible') ? 'block' : 'none').'">';
+			$push_button = '';
 
 			if ($step == "create" and empty($GLOBALS['ID']))
 			{
-
-		// Timestamp.
+			// Timestamp.
 
 				// Avoiding modified date to disappear.
 				$persist_timestamp = (!empty($store_out['year']))?
 					safe_strtotime($store_out['year'].'-'.$store_out['month'].'-'.$store_out['day'].' '.$store_out['hour'].':'.$store_out['minute'].':'.$store_out['second'])
 					: time();
 
-				echo pluggable_ui('article_ui', 'timestamp',
+				$posted_block = pluggable_ui('article_ui', 'timestamp',
 					n.n.'<fieldset id="write-timestamp">'.
 					n.'<legend>'.gTxt('timestamp').'</legend>'.
 
 					n.graf(checkbox('publish_now', '1', $publish_now, '', 'publish_now').'<label for="publish_now">'.gTxt('set_to_now').'</label>', ' class="publish-now"').
 
-					n.graf(gTxt('or_publish_at').sp.popHelp('timestamp'), ' class="publish-at"').
+					n.graf(gTxt('or_publish_at').n.popHelp('timestamp'), ' class="publish-at"').
 
 					n.graf('<span class="label">'.gtxt('date').'</span>'.n.
 						tsi('year', '%Y', $persist_timestamp, '').' / '.
@@ -837,13 +816,13 @@ if (!empty($event) and $event == 'article') {
 				n.'</fieldset>',
 				array('sPosted' => $persist_timestamp) + $rs);
 
-		// Expires.
+			// Expires.
 
 				$persist_timestamp = (!empty($store_out['exp_year']))?
 					safe_strtotime($store_out['exp_year'].'-'.$store_out['exp_month'].'-'.$store_out['exp_day'].' '.$store_out['exp_hour'].':'.$store_out['exp_minute'].':'.$store_out['second'])
 					: NULLDATETIME;
 
-				echo pluggable_ui('article_ui', 'expires',
+				$expires_block = pluggable_ui('article_ui', 'expires',
 					n.n.'<fieldset id="write-expires">'.
 					n.'<legend>'.gTxt('expires').'</legend>'.
 
@@ -864,12 +843,9 @@ if (!empty($event) and $event == 'article') {
 				n.'</fieldset>',
 				$rs);
 
-				// End "Dates" section.
-				echo n.n.'</div>'.n.'</div>';
+			// Publish button.
 
-		// Publish button.
-
-				echo graf(
+				$push_button = graf(
 					(has_privs('article.publish')) ?
 					fInput('submit','publish',gTxt('publish'),"publish") :
 					fInput('submit','publish',gTxt('save'),"publish")
@@ -880,24 +856,25 @@ if (!empty($event) and $event == 'article') {
 			{
 
 			// Timestamp.
-
-				echo $partials['posted']['html'];
+				$posted_block = $partials['posted']['html'];
 
 			// Expires.
+				$expires_block = $partials['expires']['html'];;
 
-				echo $partials['expires']['html'];;
 
-				// End "Dates" section.
-				echo n.n.'</div>'.n.'</div>';
+			// Save button.
 
-		// Save button.
-
-				if (   ($Status >= STATUS_LIVE and has_privs('article.edit.published'))
+				if (	($Status >= STATUS_LIVE and has_privs('article.edit.published'))
 					or ($Status >= STATUS_LIVE and $AuthorID==$txp_user and has_privs('article.edit.own.published'))
 					or ($Status < STATUS_LIVE and has_privs('article.edit'))
 					or ($Status < STATUS_LIVE and $AuthorID==$txp_user and has_privs('article.edit.own')))
-						echo graf(fInput('submit','save',gTxt('save'),"publish", '', '', '', 4), ' id="write-save"');
+					{
+						$push_button = graf(fInput('submit','save',gTxt('save'),"publish", '', '', '', 4), ' id="write-save"');
+					}
 			}
+
+			echo wrapRegion('dates_group', $posted_block.$expires_block, 'dates', 'date_settings', 'article_dates');
+			echo $push_button;
 		}
 
 		echo '</div></td></tr></table>'.n.
@@ -1186,18 +1163,14 @@ EOS
 	{
 		// Show markup help for both body and excerpt if they are different.
 		$help = TextfilterSet::help($rs['textile_body']);
-		if ($rs['textile_body'] != $rs['textile_excerpt']) $help .=  TextfilterSet::help($rs['textile_excerpt']);
-
-		$out[] = '<div role="region" id="textfilter_group" class="txp-details" aria-labelledby="textfilter_group-label">';
-		if ($help) {
-			$out[] =  hed('<a href="#textfilter_help" role="button">'.gTxt('textfilter_help').'</a>', 3,
-					' id="textfilter_group-label" class="txp-summary'.(get_pref('pane_article_textfilter_help_visible') ? ' expanded' : '').'"').
-				n.'<div id="textfilter_help" class="toggle" style="display:'.(get_pref('pane_article_textfilter_help_visible') ? 'block' : 'none').'">'.
-				$help.
-				n.'</div>';
+		if ($rs['textile_body'] != $rs['textile_excerpt'])
+		{
+			$help .=  TextfilterSet::help($rs['textile_excerpt']);
 		}
-		$out[] = '</div>';
-		return pluggable_ui('article_ui', 'sidehelp', join(n, $out), $rs);
+
+		$out = wrapRegion('textfilter_group', $help, 'textfilter_help', 'textfilter_help', 'article_textfilter_help');
+
+		return pluggable_ui('article_ui', 'sidehelp', $out, $rs);
 	}
 
 /**
@@ -1211,7 +1184,7 @@ EOS
 		global $step;
 		$av_cb = $rs['partials_meta']['article_view']['cb'];
 		return pluggable_ui('article_ui', 'title',
-			graf('<label for="title">'.gTxt('title').'</label>'.sp.popHelp('title').br.
+			graf('<label for="title">'.gTxt('title').'</label>'.n.popHelp('title').br.
 				'<input type="text" id="title" name="Title" value="'.escape_title($rs['Title']).'" size="40" />'.
 				($step != 'create' ?  $av_cb($rs) : '')
 				, ' class="title"'),
@@ -1260,17 +1233,13 @@ EOS
 		global $cfs;
 
 		$cf = '';
-		$out = n.n.'<div role="region" id="custom_field_group" class="txp-details'.(($cfs) ? '' : ' empty').'" aria-labelledby="custom_field_group-label">'.
-			n.'<h3 id="custom_field_group-label" class="txp-summary'.(get_pref('pane_article_custom_field_visible') ? ' expanded' : '').'"><a href="#custom_field" role="button">'.gTxt('custom').'</a></h3>'.
-			n.'<div id="custom_field" class="toggle" style="display:'.(get_pref('pane_article_custom_field_visible') ? 'block' : 'none').'">';
 
 		foreach($cfs as $k => $v)
 		{
 			$cf .= article_partial_custom_field($rs, "custom_field_{$k}");
 		}
-		$out .= pluggable_ui('article_ui', 'custom_fields', $cf, $rs);
-		return $out.n.'</div>'.n.'</div>';
 
+		return wrapRegion('custom_field_group', pluggable_ui('article_ui', 'custom_fields', $cf, $rs), 'custom_field', 'custom', 'article_custom_field', (($cfs) ? '' : 'empty'));
 	}
 
 /**
@@ -1300,15 +1269,12 @@ EOS
 
 	function article_partial_image($rs)
 	{
-		$out = n.n.'<div role="region" id="image_group" class="txp-details" aria-labelledby="image_group-label">'.
-			n.'<h3 id="image_group-label" class="txp-summary'.(get_pref('pane_article_image_visible') ? ' expanded' : '').'"><a href="#image" role="button">'.gTxt('article_image').'</a></h3>'.
-			n.'<div id="image" class="toggle" style="display:'.(get_pref('pane_article_image_visible') ? 'block' : 'none').'">';
+		$default = n.graf(
+			'<label for="article-image">'.gTxt('article_image').'</label>'.n.popHelp('article_image').br.
+				fInput('text', 'Image', $rs['Image'], '', '', '', INPUT_REGULAR, '', 'article-image')
+			, ' class="article-image"');
 
-		$out .= pluggable_ui('article_ui', 'article_image',
-			n.graf('<label for="article-image">'.gTxt('article_image').'</label>'.sp.popHelp('article_image').br.
-				fInput('text', 'Image', $rs['Image'], '', '', '', INPUT_REGULAR, '', 'article-image'), ' class="article-image"'),
-			$rs);
-		return $out.n.'</div>'.n.'</div>';
+		return wrapRegion('image_group', pluggable_ui('article_ui', 'article_image', $default, $rs), 'image', 'article_image', 'article_image');
 	}
 
 /**
@@ -1321,7 +1287,7 @@ EOS
 	function article_partial_keywords($rs)
 	{
 		return pluggable_ui('article_ui', 'keywords',
-			n.graf('<label for="keywords">'.gTxt('keywords').'</label>'.sp.popHelp('keywords').br.
+			n.graf('<label for="keywords">'.gTxt('keywords').'</label>'.n.popHelp('keywords').br.
 				n.'<textarea id="keywords" name="Keywords" cols="'.INPUT_MEDIUM.'" rows="'.INPUT_XSMALL.'">'.txpspecialchars(article_partial_keywords_value($rs)).'</textarea>', ' class="keywords"'),
 			$rs);
 	}
@@ -1349,7 +1315,7 @@ EOS
 	function article_partial_url_title($rs)
 	{
 		return pluggable_ui('article_ui', 'url_title',
-			n.graf('<label for="url-title">'.gTxt('url_title').'</label>'.sp.popHelp('url_title').br.
+			n.graf('<label for="url-title">'.gTxt('url_title').'</label>'.n.popHelp('url_title').br.
 				fInput('text', 'url_title', article_partial_url_title_value($rs), '', '', '', INPUT_REGULAR, '', 'url-title'), ' class="url-title"'),
 			$rs);
 	}
@@ -1429,7 +1395,7 @@ EOS
 	function article_partial_body($rs)
 	{
 		return pluggable_ui('article_ui', 'body',
-			n.graf('<label for="body">'.gTxt('body').'</label>'.sp.popHelp('body').br.
+			n.graf('<label for="body">'.gTxt('body').'</label>'.n.popHelp('body').br.
 				'<textarea id="body" name="Body" cols="'.INPUT_LARGE.'" rows="'.INPUT_REGULAR.'">'.txpspecialchars($rs['Body']).'</textarea>', ' class="body"'),
 			$rs);
 	}
@@ -1444,7 +1410,7 @@ EOS
 	function article_partial_excerpt($rs)
 	{
 		return pluggable_ui('article_ui', 'excerpt',
-			n.graf('<label for="excerpt">'.gTxt('excerpt').'</label>'.sp.popHelp('excerpt').br.
+			n.graf('<label for="excerpt">'.gTxt('excerpt').'</label>'.n.popHelp('excerpt').br.
 				'<textarea id="excerpt" name="Excerpt" cols="'.INPUT_LARGE.'" rows="'.INPUT_SMALL.'">'.txpspecialchars($rs['Excerpt']).'</textarea>', ' class="excerpt"'),
 			$rs);
 	}
@@ -1621,7 +1587,7 @@ EOS
 
 				n.graf(checkbox('reset_time', '1', $reset_time, '', 'reset_time').'<label for="reset_time">'.gTxt('reset_time').'</label>', ' class="reset-time"').
 
-				n.graf(gTxt('published_at').sp.popHelp('timestamp'), ' class="publish-at"').
+				n.graf(gTxt('published_at').n.popHelp('timestamp'), ' class="publish-at"').
 
 				n.graf('<span class="label">'.gtxt('date').'</span>'.sp.
 					tsi('year', '%Y', $sPosted).' / '.

@@ -263,10 +263,7 @@ EOS
 
 		$tagbuild_links = '';
 		foreach ($tagbuild_items as $tb => $item) {
-			$tagbuild_links .= '<div role="region" id="'.$item[1].'_group" class="txp-details" aria-labelledby="'.$item[1].'_group-label">'.
-						n.hed('<a href="#'.$item[1].'" role="button">'.gTxt($item[0]).'</a>'
-					, 3, ' id="'.$item[1].'_group-label" class="txp-summary'.(get_pref('pane_form_'.$item[1].'_visible') ? ' expanded' : '').'"').
-						n.'<div id="'.$item[1].'" class="toggle on" style="display:'.(get_pref('pane_form_'.$item[1].'_visible') ? 'block' : 'none').'">'.popTagLinks($tb).'</div></div>';
+			$tagbuild_links .= wrapRegion($item[1].'_group', popTagLinks($tb), $item[1], $item[0], 'form_'.$item[1]);
 		}
 
 		$out =

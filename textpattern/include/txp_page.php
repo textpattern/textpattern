@@ -63,12 +63,9 @@
 			'page_file'        => array('page_file_hed', 'file-tags'),
 		);
 
-		$tagbuild_options = '';
+		$tagbuild_links = '';
 		foreach ($tagbuild_items as $tb => $item) {
-			$tagbuild_options .= n.n.'<div role="region" id="'.$item[1].'_group" class="txp-details" aria-labelledby="'.$item[1].'_group-label">'.
-						n.hed('<a href="#'.$item[1].'" role="button">'.gTxt($item[0]).'</a>'
-					, 3, ' id="'.$item[1].'_group-label" class="txp-summary'.(get_pref('pane_page_'.$item[1].'_visible') ? ' expanded' : '').'"').
-						n.'<div id="'.$item[1].'" class="toggle" style="display:'.(get_pref('pane_page_'.$item[1].'_visible') ? 'block' : 'none').'">'.taglinks($tb).'</div></div>';
+			$tagbuild_links .= wrapRegion($item[1].'_group', taglinks($tb), $item[1], $item[0], 'page_'.$item[1]);
 		}
 
 		echo
@@ -81,7 +78,7 @@
 					'<div id="tagbuild_links">'.n.hed(
 						gTxt('tagbuilder')
 					, 2).
-						$tagbuild_options.
+						$tagbuild_links.
 						n.'</div>'
 				,' class="column"').
 

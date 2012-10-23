@@ -509,18 +509,8 @@
 			$existing_files = get_filenames();
 
 			$replace = ($file_exists)
-				? '<div role="group" class="txp-details replace-file">'.n.
-						'<h3>'.gTxt('replace_file').sp.popHelp('file_replace').'</h3>'.n.
-						'<div>'.n.
-							file_upload_form('', '', 'file_replace', $id, 'file_replace').n.
-						'</div>'.n.
-					'</div>'.n
-				: '<div role="group" class="txp-details upload-file">'.n.
-						'<h3>'.gTxt('file_relink').sp.popHelp('file_reassign').'</h3>'.n.
-						'<div>'.n.
-							file_upload_form('', '', 'file_replace', $id, 'file_reassign').n.
-						'</div>'.n.
-					'</div>'.n;
+				? wrapGroup('file_upload_group', file_upload_form('', '', 'file_replace', $id, 'file_replace'), 'replace_file', 'replace-file', 'file_replace')
+				: wrapGroup('file_upload_group', file_upload_form('', '', 'file_replace', $id, 'file_reassign'), 'file_relink', 'upload-file', 'file_reassign');
 
 			$condition = '<span class="'.(($file_exists) ? 'success' : 'error').'">'.
 				(($file_exists) ? gTxt('file_status_ok') : gTxt('file_status_missing')).
