@@ -426,6 +426,7 @@
  * @param  string $role      ARIA role name
  * @param  string $help      Help text item
  * @return string HTML
+ * @since  4.6.0
  */
 
 	function wrapRegion($id, $content = '', $anchor_id = '', $label = '', $pane = '', $class = '', $role = 'region', $help = '')
@@ -473,6 +474,7 @@
  * @param  string $help    Help text item
  * @return string HTML
  * @see    wrapRegion()
+ * @since  4.6.0
  */
 
 	function wrapGroup($id, $content, $label, $class = '', $help = '')
