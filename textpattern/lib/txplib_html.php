@@ -730,6 +730,11 @@
 
 	function tag($content, $tag, $atts = '')
 	{
+		if ($atts)
+		{
+			$atts = ' ' . trim($atts);
+		}
+
 		return ('' !== $content) ? '<'.$tag.$atts.'>'.$content.'</'.$tag.'>' : '';
 	}
 
