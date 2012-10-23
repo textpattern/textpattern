@@ -208,7 +208,7 @@
 	function fInput($type, $name, $value, $class = '', $title = '', $onClick = '', $size = 0, $tab = 0, $id = '', $disabled = false, $required = false, $placeholder = '')
 	{
 		$o  = '<input type="'.$type.'"';
-		$o .= ' value="'.txpspecialchars($value).'"';
+		$o .= ($type == 'file' || $type == 'image') ? '' : ' value="'.txpspecialchars($value).'"';
 		$o .= strlen($name) ? ' name="'.$name.'"' : '';
 		$o .= ($size)       ? ' size="'.$size.'"' : '';
 		$o .= ($class)      ? ' class="'.$class.'"' : '';
