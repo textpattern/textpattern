@@ -446,6 +446,7 @@ $DB = new DB;
  * @param  string $type  The lock type
  * @param  bool   $debug Dump the query
  * @return bool   TRUE if the tables are locked
+ * @since  4.6.0
  * @example
  * if (safe_lock('myTable'))
  * {
@@ -468,6 +469,7 @@ $DB = new DB;
  *
  * @param  bool $debug Dump the query
  * @return bool TRUE if tables aren't locked
+ * @since  4.6.0
  * @example
  * if (safe_unlock())
  * {
@@ -747,6 +749,7 @@ $DB = new DB;
  * @param  string $newname The new name
  * @param  bool   $debug   Dump the query
  * @return bool   FALSE on error
+ * @since  4.6.0
  */
 
 	function safe_rename($table, $newname, $debug = false)
