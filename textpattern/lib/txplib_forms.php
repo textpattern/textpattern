@@ -398,6 +398,7 @@
  * @param  string $event      The table
  * @param  string $identifier The field used for selecting
  * @param  string $id         The value used for selecting
+ * @return string HTML
  * @access private
  * @see    fetch()
  * @see    txpspecialchars()
@@ -420,6 +421,7 @@
  * @param  int    $rows        Rows
  * @param  int    $cols        Columns
  * @param  string $placeholder The placeholder value displayed when the field is empty
+ * @return string HTML
  */
 
 	function text_area($name, $h = 0, $w = 0, $thing = '', $id = '', $rows = 5, $cols = 40, $placeholder='')
