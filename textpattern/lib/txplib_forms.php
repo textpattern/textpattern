@@ -92,6 +92,11 @@
  * @param  string $select_id   The HTML id
  * @param  bool   $check_type  Type-agnostic comparison
  * @return string HTML
+ * @example
+ * echo selectInput('myInput', array(
+ * 	'value1' => 'Label1',
+ * 	'value2' => 'Label2',
+ * ));
  */
 
 	function selectInput($name = '', $array = '', $value = '', $blank_first = '', $onchange = '', $select_id = '', $check_type = false)
@@ -203,6 +208,8 @@
  * @param  bool   $required    If TRUE the field is marked as required
  * @param  string $placeholder The placeholder value displayed when the field is empty
  * @return string HTML input
+ * @example
+ * echo fInput('text', 'myInput', 'My example value');
  */
 
 	function fInput($type, $name, $value, $class = '', $title = '', $onClick = '', $size = 0, $tab = 0, $id = '', $disabled = false, $required = false, $placeholder = '')
@@ -244,6 +251,8 @@
  * @param  string $name  The name
  * @param  string $value The value
  * @return string HTML input
+ * @example
+ * echo hInput('myInput', 'hidden value');
  */
 
 	function hInput($name,$value)
