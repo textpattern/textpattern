@@ -559,7 +559,6 @@
 			echo maxMemUsage('end of textpattern()',1);
 			if (!empty($txptrace) and is_array($txptrace))
 				echo n, comment('txp tag trace: '.n.join(n, $txptrace).n);
-				// '&shy;&shy;' is *no* tribute to Kajagoogoo, but an attempt to avoid prematurely terminating HTML comments
 		}
 
 		callback_event('textpattern_end');
