@@ -247,8 +247,8 @@ EOS
 		else
 			$changename = graf(gTxt('form_name').br.tag($name, 'em').hInput('name',$name));
 
-		// Generate the tagbuilder links
-		// Format of each entry is popTagLink -> array ( gTxt string, class/ID )
+		// Generate the tagbuilder links.
+		// Format of each entry is popTagLink -> array ( gTxt string, class/ID ).
 		$tagbuild_items = array(
 			'article'         => array('articles', 'article-tags'),
 			'link'            => array('links', 'link-tags'),

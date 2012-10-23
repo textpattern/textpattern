@@ -158,10 +158,10 @@
 					   or (is_callable('apache_get_version'));
 		$real_doc_root = (isset($_SERVER['DOCUMENT_ROOT'])) ? realpath($_SERVER['DOCUMENT_ROOT']) : '';
 
-		// ini_get() returns string values passed via php_value as a string, not boolean
+		// ini_get() returns string values passed via php_value as a string, not boolean.
 		$is_register_globals = ( (strcasecmp(ini_get('register_globals'),'on')===0) or (ini_get('register_globals')==='1'));
 
-		// Check for Textpattern updates, at most once every 24 hours
+		// Check for Textpattern updates, at most once every 24 hours.
 		$now = time();
 		$updateInfo = unserialize(get_pref('last_update_check', ''));
 
@@ -283,21 +283,18 @@
 		}
 
 		// Files that don't match their checksums.
-
 		if ($modified_files = array_keys($cs, INTEGRITY_MODIFIED))
 		{
 			$fail['modified_files'] = diag_msg_wrap(gTxt('modified_files').cs.n.t.join(', '.n.t, $modified_files), 'warning');
 		}
 
 		// Running development code in live mode is not recommended.
-
 		if (preg_match('/-dev$/', txp_version) and $production_status == 'live')
 		{
 			$fail['dev_version_live'] = diag_msg_wrap(gTxt('dev_version_live'), 'warning');
 		}
 
 		// Missing files.
-
 		if ($missing = array_merge(
 			array_keys($cs, INTEGRITY_MISSING),
 			array_keys($cs, INTEGRITY_NOT_FILE),
@@ -307,10 +304,10 @@
 			$fail['missing_files'] = diag_msg_wrap(gTxt('missing_files').cs.n.t.join(', '.n.t, $missing));
 		}
 
-		# anything might break if arbitrary functions are disabled
+		// Anything might break if arbitrary functions are disabled.
 		if (ini_get('disable_functions')) {
 			$disabled_funcs = array_map('trim', explode(',', ini_get('disable_functions')));
-			# commonly disabled functions that we don't need
+			// Commonly disabled functions that we don't need.
 			$disabled_funcs = array_diff($disabled_funcs, array(
 				'imagefilltoborder',
 				'exec',
@@ -334,7 +331,7 @@
 		if ($siteurl and strip_prefix($siteurl, 'www.') != strip_prefix($guess_site_url, 'www.'))
 			$fail['site_url_mismatch'] = diag_msg_wrap(gTxt('site_url_mismatch').cs.$guess_site_url, 'warning');
 
-		# test clean URL server vars
+		// Test clean URL server vars.
 		if (hu) {
 			if (ini_get('allow_url_fopen') and ($permlink_mode != 'messy')) {
 				$s = md5(uniqid(rand(), true));
@@ -368,7 +365,7 @@
 
 		$theme_manifest = $theme->manifest();
 
-		// check GD info
+		// Check GD info.
 		if (function_exists('gd_info')) {
 			$gd_info = gd_info();
 
@@ -406,7 +403,7 @@
 			$fail['tmp_plugin_paths_match'] = diag_msg_wrap(gTxt('tmp_plugin_paths_match'));
 		}
 
-		// db server time
+		// Database server time.
 		extract(doSpecial(getRow('select @@global.time_zone as db_global_timezone, @@session.time_zone as db_session_timezone, now() as db_server_time, unix_timestamp(now()) as db_server_timestamp')));
 		$db_server_timeoffset = $db_server_timestamp - $now;
 
@@ -587,11 +584,11 @@
 /**
  * Checks for Textpattern updates.
  *
- * This function uses XML-RPC to do a active remote connection to
+ * This function uses XML-RPC to do an active remote connection to
  * rpc.textpattern.com. Created connections are not cached, scheduled or
  * delayed, and each subsequent call to the function creates a new connection.
  *
- * These connections do not transmit any identifiable information. Just a
+ * These connections do not transmit any identifiable information. Just an
  * anonymous UID assigned for the installation on the first run.
  *
  * @return  array|null When updates are found returns an array consisting keys 'version', 'msg'
@@ -621,7 +618,7 @@
 				ksort($response);
 				$version = get_pref('version');
 
-				// Go through each available branch (x.y), but only return the _highest_ version
+				// Go through each available branch (x.y), but only return the _highest_ version.
 				foreach ($response as $key => $val)
 				{
 					if (version_compare($version, $val) < 0)
