@@ -16,27 +16,42 @@
  * @package Admin\Page
  */
 
-	if (!defined('txpinterface')) die('txpinterface is undefined.');
+	if (!defined('txpinterface'))
+	{
+		die('txpinterface is undefined.');
+	}
 
-	if ($event == 'page') {
+	if ($event == 'page')
+	{
 		require_privs('page');
 
-		bouncer($step,
-			array(
-				'page_edit'       => false,
-				'page_save'       => true,
-				'page_delete'     => true,
-				'save_pane_state' => true
-			)
-		);
+		bouncer($step, array(
+			'page_edit'       => false,
+			'page_save'       => true,
+			'page_delete'     => true,
+			'save_pane_state' => true,
+		));
 
-		switch(strtolower($step)) {
-			case "":                page_edit();             break;
-			case "page_edit":       page_edit();             break;
-			case "page_save":       page_save();             break;
-			case "page_delete":     page_delete();           break;
-			case "page_new":        page_new();              break;
-			case "save_pane_state": page_save_pane_state();  break;
+		switch(strtolower($step))
+		{
+			case "":
+				page_edit();
+				break;
+			case "page_edit":
+				page_edit();
+				break;
+			case "page_save":
+				page_save();
+				break;
+			case "page_delete":
+				page_delete();
+				break;
+			case "page_new":
+				page_new();
+				break;
+			case "save_pane_state":
+				page_save_pane_state();
+				break;
 		}
 	}
 
@@ -46,12 +61,17 @@
  * @param string|array $message The activity message
  */
 
-	function page_edit($message = '') {
-		global $event,$step;
+	function page_edit($message = '')
+	{
+		global $event, $step;
 
 		pagetop(gTxt('edit_pages'), $message);
 
-		extract(array_map('assert_string', gpsa(array('copy', 'savenew'))));
+		extract(array_map('assert_string', gpsa(array(
+			'copy',
+			'savenew',
+		))));
+
 		$name = sanitizeForPage(assert_string(gps('name')));
 		$newname = sanitizeForPage(assert_string(gps('newname')));
 
@@ -59,12 +79,12 @@
 		{
 			$name = safe_field('page', 'txp_section', "name = 'default'");
 		}
-		elseif( ( $copy || $savenew ) && $newname )
+		elseif(($copy || $savenew) && $newname)
 		{
 			$name = $newname;
 		}
 
-		// Format of each entry is popTagLink -> array ( gTxt() string, class/ID)
+		// Format of each entry is popTagLink -> array ( gTxt() string, class/ID).
 		$tagbuild_items = array(
 			'page_article'     => array('page_article_hed', 'article-tags'),
 			'page_article_nav' => array('page_article_nav_hed', 'article-nav-tags'),
@@ -75,7 +95,8 @@
 		);
 
 		$tagbuild_links = '';
-		foreach ($tagbuild_items as $tb => $item) {
+		foreach ($tagbuild_items as $tb => $item)
+		{
 			$tagbuild_links .= wrapRegion($item[1].'_group', taglinks($tb), $item[1], $item[0], 'page_'.$item[1]);
 		}
 
@@ -118,9 +139,13 @@
 	function page_edit_form($name)
 	{
 		global $step;
-		if ($name) {
-			$html = safe_field('user_html','txp_page',"name='".doSlash($name)."'");
-		} else {
+
+		if ($name)
+		{
+			$html = safe_field('user_html', 'txp_page', "name='".doSlash($name)."'");
+		}
+		else
+		{
 			$html = gps('html');
 		}
 
@@ -128,26 +153,30 @@
 		{
 			$buttons = '<div class="edit-title">'.
 			gTxt('name_for_this_page').': '
-			.fInput('text','newname','','','','',INPUT_REGULAR).
-			hInput('savenew','savenew').
+			.fInput('text', 'newname', '', '', '', '', INPUT_REGULAR).
+			hInput('savenew', 'savenew').
 			'</div>';
-		} else {
+		}
+		else
+		{
 			$buttons = '<div class="edit-title">'.gTxt('you_are_editing_page').sp.strong(txpspecialchars($name)).'</div>';
 		}
 
 		$out[] = '<div id="main_content">'.$buttons.
 					'<textarea id="html" class="code" name="html" cols="'.INPUT_LARGE.'" rows="'.INPUT_REGULAR.'">'.txpspecialchars($html).'</textarea>'.
-					n.'<p>'.fInput('submit','save',gTxt('save'),'publish').
+					n.'<p>'.fInput('submit', 'save', gTxt('save'), 'publish').
 					n.eInput('page').
 					n.sInput('page_save').
-					n.hInput('name',$name).'</p>';
+					n.hInput('name', $name).'</p>';
 
-		if (!empty($name)) {
+		if (!empty($name))
+		{
 			$out[] =
 				n.'<p class="copy-as"><label for="copy-page">'.gTxt('copy_page_as').'</label>'.
 				n.fInput('text','newname','','input-medium','','',INPUT_MEDIUM,'','copy-page').
 				n.fInput('submit','copy',gTxt('copy')).'</p>';
 		}
+
 		$out[] = '</div>';
 
 		return form(join('',$out), '', '', 'post', '', '', 'page_form');
@@ -219,7 +248,12 @@
 
 	function page_save()
 	{
-		extract(doSlash(array_map('assert_string', psa(array('savenew', 'html', 'copy')))));
+		extract(doSlash(array_map('assert_string', psa(array(
+			'savenew',
+			'html',
+			'copy',
+		)))));
+
 		$name = sanitizeForPage(assert_string(ps('name')));
 
 		if ($savenew or $copy)
@@ -308,7 +342,9 @@
 		{
 			set_pref("pane_page_{$pane}_visible", (gps('visible') == 'true' ? '1' : '0'), $event, PREF_HIDDEN, 'yesnoradio', 0, PREF_PRIVATE);
 			send_xml_response();
-		} else {
+		}
+		else
+		{
 			trigger_error('invalid_pane', E_USER_WARNING);
 		}
 	}
