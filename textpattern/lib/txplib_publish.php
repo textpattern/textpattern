@@ -185,7 +185,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
 		$expired = ($expired && ($prefs['publish_expired_articles']));
 		$customFields = getCustomFields();
 
-		// Building query parts.
+		// Building query parts; lifted from publish.php.
 		$ids = array_map('intval', do_list($id));
 		$id = (!$id) ? '' : " and ID IN (".join(',', $ids).")";
 		switch ($time)
