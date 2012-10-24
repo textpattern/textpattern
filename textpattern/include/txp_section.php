@@ -11,6 +11,12 @@
 
 */
 
+/**
+ * Sections panel.
+ *
+ * @package Admin\Section
+ */
+
 	if (!defined('txpinterface')) die('txpinterface is undefined.');
 
 	if ($event == 'section') {
@@ -38,8 +44,14 @@
 		}
 	}
 
-// -------------------------------------------------------------
-// So-named to avoid clashing with the <txp:section_list /> tag
+/**
+ * The main panel listing all sections.
+ *
+ * So-named to avoid clashing with the &lt;txp:section_list /&gt; tag.
+ *
+ * @param string|array $message The activity message
+ */
+
 	function sec_section_list($message = '')
 	{
 		global $event, $section_list_pageby;
@@ -259,7 +271,10 @@ EOS
 		}
 	}
 
-//-------------------------------------------------------------
+/**
+ * The editor for sections.
+ */
+
 	function section_edit()
 	{
 		global $event, $step, $txp_user, $all_pages, $all_styles;
@@ -361,7 +376,10 @@ EOS
 		}
 	}
 
-//-------------------------------------------------------------
+/**
+ * Saves a section.
+ */
+
 	function section_save()
 	{
 		global $app_mode;
@@ -451,7 +469,10 @@ EOS
 		}
 	}
 
-// -------------------------------------------------------------
+/**
+ * Changes and saves the pageby value.
+ */
+
 	function section_change_pageby()
 	{
 		event_change_pageby('section');
@@ -459,14 +480,17 @@ EOS
 	}
 
 /**
- * Toggle section yes/no parameters.
+ * Toggles section yes/no parameters.
  *
- * Requires:
- * ($_POST) $column	string	Database column name to alter: on_frontpage | in_rss | searchable
- * ($_POST) $value	string	The current Yes/No value of the control
- * ($_POST) $name	string	Section name to be altered
- * @return  string a text/plain response comprising the new displayable value for the toggled parameter
+ * This function requires three HTTP POST parameters: 'column', 'value' and 
+ * 'name'. The 'value' is the new value, localised 'Yes' or 'No',
+ * 'name' is the section and the 'column' is the altered setting,
+ * either 'on_frontpage', 'in_rss' or 'searchable'.
+ *
+ * Outputs a text/plain response comprising the new displayable
+ * value for the toggled parameter.
  */
+
 	function section_toggle_option()
 	{
 		$column = gps('property');
@@ -489,14 +513,24 @@ EOS
 		}
 	}
 
-// -------------------------------------------------------------
+/**
+ * Sets a section as the default.
+ */
+
 	function section_set_default()
 	{
 		set_pref('default_section', ps('default_section'), 'section', PREF_HIDDEN, '', 0);
 		send_script_response();
 	}
 
-//-------------------------------------------------------------
+/**
+ * Renders a 'default_section' &lt;select&gt; input listing all sections.
+ *
+ * Used for changing the default section.
+ *
+ * @return string HTML
+ */
+
 	function section_select_list()
 	{
 		$val = get_pref('default_section');
@@ -510,7 +544,10 @@ EOS
 		return selectInput('default_section', $vals, $val, '', '', 'default_section');
 	}
 
-// -------------------------------------------------------------
+/**
+ * Processes delete actions sent using the multi-edit form.
+ */
+
 	function section_delete()
 	{
 		$selected  = ps('selected');
@@ -555,7 +592,13 @@ EOS
 		sec_section_list($message);
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders a search form for sections.
+ *
+ * @param  string $crit   The current search criteria
+ * @param  string $method The selected search method
+ * @return HTML
+ */
 
 	function section_search_form($crit, $method)
 	{
@@ -572,7 +615,16 @@ EOS
 		return search_form('section', 'sec_section_list', $crit, $methods, $method, 'name');
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders a multi-edit form widget.
+ *
+ * @param  int    $page          The page number
+ * @param  string $sort          The current sorting value
+ * @param  string $dir           The current sorting direction
+ * @param  string $crit          The current search criteria
+ * @param  string $search_method The current search method
+ * @return string HTML
+ */
 
 	function section_multiedit_form($page, $sort, $dir, $crit, $search_method)
 	{
@@ -590,7 +642,9 @@ EOS
 		return multi_edit($methods, 'section', 'section_multi_edit', $page, $sort, $dir, $crit, $search_method);
 	}
 
-// -------------------------------------------------------------
+/**
+ * Processes multi-edit actions.
+ */
 
 	function section_multi_edit()
 	{
