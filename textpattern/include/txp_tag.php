@@ -11,6 +11,12 @@
 
 */
 
+/**
+ * Tag builder.
+ *
+ * @package Admin\Tag
+ */
+
 if (!defined('txpinterface'))
 {
 	die('txpinterface is undefined.');
