@@ -272,6 +272,8 @@
 
 /**
  * Directs requests to page_edit() armed with a 'page_new' step.
+ *
+ * @see page_edit()
  */
 
 	function page_new()
@@ -284,6 +286,8 @@
  *
  * @param  string $type
  * @return HTML
+ * @access private
+ * @see    popTagLinks()
  */
 
 	function taglinks($type)
