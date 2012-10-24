@@ -752,21 +752,19 @@ Use of this software indicates acceptance of the Textpattern license agreement
 		global $prefs;
 		static $out = array();
 
-		$valid = array(
-			'sort'          => 'Posted desc',
-			'sortby'		=> '',
-			'sortdir'		=> '',
-			'keywords'      => '',
-			'expired'       => $prefs['publish_expired_articles'],
-			'id'            => '',
-			'time'          => 'past',
-		);
-
 		if (is_array($atts))
 		{
 			if (empty($out))
 			{
-				$out = $atts;
+				$out = lAtts(array(
+					'sort'          => 'Posted desc',
+					'sortby'		=> '',
+					'sortdir'		=> '',
+					'keywords'      => '',
+					'expired'       => $prefs['publish_expired_articles'],
+					'id'            => '',
+					'time'          => 'past',
+				), $atts, 0);
 				trace_add('[filterAtts accepted]');
 			}
 			else
@@ -780,7 +778,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
 		{
 			trace_add('[filterAtts not set]');
 		}
-		return lAtts($valid, $out, 0);
+		return $out;
 	}
 
 ?>
