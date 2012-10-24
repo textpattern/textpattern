@@ -103,7 +103,7 @@ class DB
 
 	public function __construct()
 	{
-		global $txpcfg;
+		global $txpcfg, $connected;
 
 		$this->host = $txpcfg['host'];
 		$this->db   = $txpcfg['db'];
@@ -120,16 +120,7 @@ class DB
 		}
 
 		$this->version = mysql_get_server_info();
-
-		if (!$this->link)
-		{
-			$GLOBALS['connected'] = false;
-		}
-		else
-		{
-			$GLOBALS['connected'] = true;
-		}
-
+		$connected = true;
 		@mysql_select_db($this->db) or die(db_down());
 
 		$version = $this->version;
