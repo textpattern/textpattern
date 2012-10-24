@@ -392,7 +392,7 @@ function get_language()
 			$msg = array($msg.sprintf(" (%s errors, %s ok)",$errors, ($size-$errors)), E_ERROR);
 		}
 
-		return list_languages($msg);
+		list_languages($msg);
 	}
 }
 
@@ -408,7 +408,7 @@ function get_textpack()
 {
 	$textpack = ps('textpack');
 	$n = install_textpack($textpack, true);
-	return list_languages(gTxt('textpack_strings_installed', array('{count}' => $n)));
+	list_languages(gTxt('textpack_strings_installed', array('{count}' => $n)));
 }
 
 /**
@@ -431,7 +431,7 @@ function remove_language()
 		$msg = gTxt('cannot_delete', array('{thing}' => $lang_code));
 	}
 
-	return list_languages($msg);
+	list_languages($msg);
 }
 
 /**
