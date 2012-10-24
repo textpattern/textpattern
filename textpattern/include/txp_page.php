@@ -9,6 +9,13 @@
 	Use of this software indicates acceptance of the Textpattern license agreement
 
 */
+
+/**
+ * Pages panel.
+ *
+ * @package Admin\Page
+ */
+
 	if (!defined('txpinterface')) die('txpinterface is undefined.');
 
 	if ($event == 'page') {
@@ -33,7 +40,11 @@
 		}
 	}
 
-// -------------------------------------------------------------
+/**
+ * The main editor panel.
+ *
+ * @param string|array $message The activity message
+ */
 
 	function page_edit($message = '') {
 		global $event,$step;
@@ -97,7 +108,12 @@
 			endTable().'</div>';
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders an editor for page templates.
+ *
+ * @param  string $name The presented template
+ * @return string HTML
+ */
 
 	function page_edit_form($name)
 	{
@@ -137,7 +153,12 @@
 		return form(join('',$out), '', '', 'post', '', '', 'page_form');
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders a list of page templates as a &lt;table&gt;.
+ *
+ * @param  string $current The selected template
+ * @return string HTML
+ */
 
 	function page_list($current)
 	{
@@ -162,7 +183,9 @@
 		return startTable('', '', 'txp-list').join(n, $out).endTable();
 	}
 
-// -------------------------------------------------------------
+/**
+ * Deletes a page template.
+ */
 
 	function page_delete()
 	{
@@ -190,7 +213,9 @@
 		page_edit($message);
 	}
 
-// -------------------------------------------------------------
+/**
+ * Saves a page template.
+ */
 
 	function page_save()
 	{
@@ -245,21 +270,30 @@
 		}
 	}
 
-// -------------------------------------------------------------
+/**
+ * Directs requests to page_edit() armed with a 'page_new' step.
+ */
 
 	function page_new()
 	{
 		page_edit();
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders a list of tag builder options.
+ *
+ * @param  string $type
+ * @return HTML
+ */
 
 	function taglinks($type)
 	{
 		return popTagLinks($type);
 	}
 
-// -------------------------------------------------------------
+/**
+ * Saves the pane visibility state on the server.
+ */
 
 	function page_save_pane_state()
 	{
