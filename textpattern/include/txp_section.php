@@ -500,7 +500,7 @@ EOS
 	function section_select_list()
 	{
 		$val = get_pref('default_section');
-		$sections = safe_rows('name, title', 'txp_section', "name != 'default' ORDER BY name");
+		$sections = safe_rows('name, title', 'txp_section', "name != 'default' ORDER BY title, name");
 		$vals = array();
 		foreach($sections as $row)
 		{
