@@ -9,9 +9,14 @@ All rights reserved.
 
 Use of this software indicates acceptance of the Textpattern license agreement
 
-
-@since 4.6.0
 */
+
+/**
+ * Languages panel.
+ *
+ * @package Admin\Lang
+ * @since   4.6.0
+ */
 
 if (!defined('txpinterface')) die('txpinterface is undefined.');
 
@@ -35,7 +40,7 @@ if ($event == 'lang') {
 }
 
 /**
- * Generate a &lt;select&gt; element of installed languages
+ * Generate a &lt;select&gt; element of installed languages.
  *
  * @param  string $name The HTML name and ID to assign to the select control
  * @param  string $val  The currently active language identifier (en-gb, fr-fr, ...)
@@ -77,12 +82,14 @@ function languages($name, $val)
 }
 
 /**
- * Generate a table of every language that Textpattern supports
+ * Generates a &lt;table&gt; of every language that Textpattern supports.
  *
- * @param string $message The feedback message to display as a result of user interaction
- * Optional:
- * ($_POST) $force string Displays RPC connection errors if set to anything other than 'file'
+ * If requested with HTTP POST parameter 'force' set anything other than 'file',
+ * outputs any errors in RPC server connection.
+ *
+ * @param string|array $message The activity message
  */
+
 function list_languages($message='')
 {
 	global $prefs, $locale, $textarray;
@@ -299,15 +306,17 @@ function list_languages($message='')
 }
 
 /**
- * Fetch language strings for the given lang code from the RPC server or file
+ * Installs a language from the RPC server or a file.
  *
- * Requires:
- * ($_POST) $lang_code string Language designator (en-gb, de-de, ...)
- * Optional:
- * ($_POST) $force    string Whether to fetch the data from 'file'
- * ($_POST) $updating bool   Whether the current action is an update (1) or install (0/omitted)
- * @return HTML Language table
+ * This function fetches language strings for the given language code from either
+ * the RPC server or a file.
+ *
+ * Action is taken based on three HTTP POST parameters: 'lang_code', 'force' and 'updating'.
+ * The 'lang_code' is the installed langauge, e.g. 'en-gb', 'fi-fi'. The 'force' when set
+ * to 'file' can be used force an installation from a local file. The 'updating' specifies
+ * whether only to install (0) or to update (1).
  */
+
 function get_language()
 {
 	global $prefs, $textarray;
@@ -388,13 +397,13 @@ function get_language()
 }
 
 /**
- * Install Textpack strings
+ * Installs a Textpack.
  *
- * Requires:
- * ($_POST) $textpack string One or more concatenated Textpack blocks
- * @return string HTML Language table
- * @see txplib_misc.php: install_textpack
+ * The Textpack is feeded by a 'textpack' HTTP POST parameter.
+ *
+ * @see install_textpack()
  */
+
 function get_textpack()
 {
 	$textpack = ps('textpack');
@@ -405,10 +414,10 @@ function get_textpack()
 /**
  * Remove all language strings for the given lang code
  *
- * Requires:
- * ($_POST) $lang_code string Language designator (en-gb, fi-fi, ...)
- * @return HTML Language table
+ * Removed language code is specified with 'lang_code' HTTP POST
+ * parameter.
  */
+
 function remove_language()
 {
 	$lang_code = ps('lang_code');
@@ -426,10 +435,11 @@ function remove_language()
 }
 
 /**
- * Fetch language files available in the filesystem
+ * Lists all language files in the 'lang' directory.
  *
- * @return array available language filenames
+ * @return array Available language filenames
  */
+
 function get_lang_files()
 {
 	$lang_dir = txpath.DS.'lang'.DS;
