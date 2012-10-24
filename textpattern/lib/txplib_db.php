@@ -119,15 +119,15 @@ class DB
 			die(db_down());
 		}
 
-		$this->version = mysql_get_server_info();
-		$connected = true;
-		@mysql_select_db($this->db) or die(db_down());
+		@mysql_select_db($this->db, $this->link) or die(db_down());
 
-		$version = $this->version;
+		$version = $this->version = mysql_get_server_info($this->link);
+		$connected = true;
+
 		// Be backwards compatible.
 		if (isset($txpcfg['dbcharset']) && (intval($version[0]) >= 5 || preg_match('#^4\.[1-9]#', $version)))
 		{
-			mysql_query("SET NAMES ". $txpcfg['dbcharset']);
+			mysql_query("SET NAMES ". $txpcfg['dbcharset'], $this->link);
 			$this->table_options['charset'] = $txpcfg['dbcharset'];
 		}
 
