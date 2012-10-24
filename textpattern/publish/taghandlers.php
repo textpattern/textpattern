@@ -1604,7 +1604,7 @@
 
 			// author urls should use RealName, rather than username
 			if (!empty($pretext['author'])) {
-				$author = safe_field('RealName', 'txp_users', "name = '".doSlash($pretext['author'])."'");
+				$author = get_author_name($pretext['author']);
 			} else {
 				$author = '';
 			}
@@ -1659,7 +1659,7 @@
 
 			// author urls should use RealName, rather than username
 			if (!empty($pretext['author'])) {
-				$author = safe_field('RealName', 'txp_users', "name = '".doSlash($pretext['author'])."'");
+				$author = get_author_name($pretext['author']);
 			} else {
 				$author = '';
 			}
