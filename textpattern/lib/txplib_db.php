@@ -106,13 +106,14 @@ class DB
 		global $txpcfg;
 
 		$this->host = $txpcfg['host'];
-		$this->db	= $txpcfg['db'];
+		$this->db   = $txpcfg['db'];
 		$this->user = $txpcfg['user'];
 		$this->pass = $txpcfg['pass'];
 		$this->client_flags = isset($txpcfg['client_flags']) ? $txpcfg['client_flags'] : 0;
 		$this->table_options['type'] = 'MyISAM';
 
 		$this->link = @mysql_connect($this->host, $this->user, $this->pass, false, $this->client_flags);
+
 		if (!$this->link)
 		{
 			die(db_down());
@@ -128,11 +129,12 @@ class DB
 		{
 			$GLOBALS['connected'] = true;
 		}
+
 		@mysql_select_db($this->db) or die(db_down());
 
 		$version = $this->version;
 		// Be backwards compatible.
-		if (isset($txpcfg['dbcharset']) && (intval($version[0]) >= 5 || preg_match('#^4\.[1-9]#',$version)))
+		if (isset($txpcfg['dbcharset']) && (intval($version[0]) >= 5 || preg_match('#^4\.[1-9]#', $version)))
 		{
 			mysql_query("SET NAMES ". $txpcfg['dbcharset']);
 			$this->table_options['charset'] = $txpcfg['dbcharset'];
@@ -283,7 +285,7 @@ $DB = new DB;
 		}
 
 		$start = getmicrotime();
-		$result = $method($q,$DB->link);
+		$result = $method($q, $DB->link);
 		$time = getmicrotime() - $start;
 		@$qtime += $time;
 		@$qcount++;
@@ -785,7 +787,7 @@ $DB = new DB;
 	function safe_field($thing, $table, $where, $debug = false)
 	{
 		$q = "select $thing from ".safe_pfx_j($table)." where $where";
-		$r = safe_query($q,$debug);
+		$r = safe_query($q, $debug);
 		if (@mysql_num_rows($r) > 0)
 		{
 			$f = mysql_result($r, 0);
@@ -808,7 +810,7 @@ $DB = new DB;
 	function safe_column($thing, $table, $where, $debug = false)
 	{
 		$q = "select $thing from ".safe_pfx_j($table)." where $where";
-		$rs = getRows($q,$debug);
+		$rs = getRows($q, $debug);
 		if ($rs)
 		{
 			foreach ($rs as $a)
@@ -835,7 +837,7 @@ $DB = new DB;
 	function safe_column_num($thing, $table, $where, $debug = false)
 	{
 		$q = "select $thing from ".safe_pfx_j($table)." where $where";
-		$rs = getRows($q,$debug);
+		$rs = getRows($q, $debug);
 		if ($rs)
 		{
 			foreach ($rs as $a)
@@ -869,7 +871,7 @@ $DB = new DB;
 	function safe_row($things, $table, $where, $debug = false)
 	{
 		$q = "select $things from ".safe_pfx_j($table)." where $where";
-		$rs = getRow($q,$debug);
+		$rs = getRow($q, $debug);
 		if ($rs)
 		{
 			return $rs;
@@ -904,7 +906,7 @@ $DB = new DB;
 	function safe_rows($things, $table, $where, $debug = false)
 	{
 		$q = "select $things from ".safe_pfx_j($table)." where $where";
-		$rs = getRows($q,$debug);
+		$rs = getRows($q, $debug);
 		if ($rs)
 		{
 			return $rs;
@@ -935,7 +937,7 @@ $DB = new DB;
 	function safe_rows_start($things, $table, $where, $debug = false)
 	{
 		$q = "select $things from ".safe_pfx_j($table)." where $where";
-		return startRows($q,$debug);
+		return startRows($q, $debug);
 	}
 
 /**
@@ -971,7 +973,7 @@ $DB = new DB;
 	function safe_show($thing, $table, $debug = false)
 	{
 		$q = "show $thing from ".safe_pfx($table)."";
-		$rs = getRows($q,$debug);
+		$rs = getRows($q, $debug);
 		if ($rs)
 		{
 			return $rs;
@@ -1022,7 +1024,7 @@ $DB = new DB;
 
 	function getRow($query, $debug = false)
 	{
-		if ($r = safe_query($query,$debug))
+		if ($r = safe_query($query, $debug))
 		{
 			$row = (mysql_num_rows($r) > 0) ? mysql_fetch_assoc($r) : false;
 			mysql_free_result($r);
@@ -1186,7 +1188,7 @@ $DB = new DB;
 
 	function getCount($table, $where, $debug = false)
 	{
-		return getThing("select count(*) from ".safe_pfx_j($table)." where $where",$debug);
+		return getThing("select count(*) from ".safe_pfx_j($table)." where $where", $debug);
 	}
 
 /**
@@ -1279,7 +1281,7 @@ $DB = new DB;
 		$rs = safe_rows_start(
 			"*",
 			$tbl,
-				"lft <= $l and rgt >= $r and type = '".doSlash($type)."' order by lft asc"
+			"lft <= $l and rgt >= $r and type = '".doSlash($type)."' order by lft asc"
 		);
 
 		$out = array();
@@ -1288,6 +1290,7 @@ $DB = new DB;
 		while ($rs and $row = nextRow($rs))
 		{
 			extract($row);
+
 			while (count($right) > 0 && $right[count($right)-1] < $rgt)
 			{
 				array_pop($right);
@@ -1355,10 +1358,9 @@ $DB = new DB;
 
 	function rebuild_tree_full($type, $tbl = 'txp_category')
 	{
-		# fix circular references, otherwise rebuild_tree() could get stuck in a loop
+		// Fix circular references, otherwise rebuild_tree() could get stuck in a loop.
 		safe_update($tbl, "parent=''", "type='".doSlash($type)."' and name='root'");
 		safe_update($tbl, "parent='root'", "type='".doSlash($type)."' and parent=name");
-
 		rebuild_tree('root', 1, $type, $tbl);
 	}
 
