@@ -355,22 +355,6 @@ function get_language()
 		}
 		else
 		{
-			function install_lang_key(&$value, $key)
-			{
-				extract(gpsa(array('lang_code','updating')));
-				$exists = safe_field('name','txp_lang',"name='".doSlash($value['name'])."' AND lang='".doSlash($lang_code)."'");
-				$q = "name='".doSlash($value['name'])."', event='".doSlash($value['event'])."', data='".doSlash($value['data'])."', lastmod='".doSlash(strftime('%Y%m%d%H%M%S',$value['uLastmod']))."'";
-
-				if ($exists)
-				{
-					$value['ok'] = safe_update('txp_lang', $q, "owner = '".doSlash(LANG_OWNER_SYSTEM)."' AND lang='".doSlash($lang_code)."' AND name='".doSlash($value['name'])."'");
-				}
-				else
-				{
-					$value['ok'] = safe_insert('txp_lang', $q.", lang='".doSlash($lang_code)."'");
-				}
-			}
-
 			array_walk($lang_struct,'install_lang_key');
 			$size = count($lang_struct);
 			$errors = 0;
@@ -395,6 +379,34 @@ function get_language()
 		list_languages($msg);
 	}
 }
+
+/**
+ * Writes a new language string to the database.
+ *
+ * The language is taken from a 'lang_code' HTTP POST or GET parameter.
+ *
+ * The '$value' argument takes a string as an array. This array consists of keys
+ * 'name', 'event', 'data', 'uLastmod'.
+ *
+ * @param array $value  The string
+ * @param int   $key    Not used
+ */
+
+	function install_lang_key(&$value, $key)
+	{
+		extract(gpsa(array('lang_code','updating')));
+		$exists = safe_field('name','txp_lang',"name='".doSlash($value['name'])."' AND lang='".doSlash($lang_code)."'");
+		$q = "name='".doSlash($value['name'])."', event='".doSlash($value['event'])."', data='".doSlash($value['data'])."', lastmod='".doSlash(strftime('%Y%m%d%H%M%S',$value['uLastmod']))."'";
+
+		if ($exists)
+		{
+			$value['ok'] = safe_update('txp_lang', $q, "owner = '".doSlash(LANG_OWNER_SYSTEM)."' AND lang='".doSlash($lang_code)."' AND name='".doSlash($value['name'])."'");
+		}
+		else
+		{
+			$value['ok'] = safe_insert('txp_lang', $q.", lang='".doSlash($lang_code)."'");
+		}
+	}
 
 /**
  * Installs a Textpack.
