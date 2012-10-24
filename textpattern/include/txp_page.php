@@ -219,12 +219,12 @@
 
 	function page_save()
 	{
-		extract(doSlash(array_map('assert_string', gpsa(array('savenew', 'html', 'copy')))));
-		$name = sanitizeForPage(assert_string(gps('name')));
+		extract(doSlash(array_map('assert_string', psa(array('savenew', 'html', 'copy')))));
+		$name = sanitizeForPage(assert_string(ps('name')));
 
 		if ($savenew or $copy)
 		{
-			$newname = doSlash(sanitizeForPage(assert_string(gps('newname'))));
+			$newname = doSlash(sanitizeForPage(assert_string(ps('newname'))));
 
 			if ($newname and safe_field('name', 'txp_page', "name = '$newname'"))
 			{
