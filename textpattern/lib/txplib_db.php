@@ -459,9 +459,9 @@ $DB = new DB;
 /**
  * Gets an array of information about an index.
  *
- * @param  string $table The table
- * @param  string $index The index
- * @param  bool   $debug Dump the query
+ * @param  string     $table The table
+ * @param  string     $index The index
+ * @param  bool       $debug Dump the query
  * @return array|bool Array of information about the index, or FALSE on error
  * @since  4.6.0
  * @example
@@ -583,7 +583,7 @@ $DB = new DB;
  *
  * @param  string $table The table
  * @param  bool   $debug Dump query
- * @return bool
+ * @return bool   FALSE on error
  * @example
  * if (safe_repair('myTable'))
  * {
@@ -604,7 +604,7 @@ $DB = new DB;
  *
  * @param  string $table The table
  * @param  bool   $debug Dump query
- * @return bool
+ * @return bool   TRUE if the table is empty
  * @see    safe_delete()
  * @since  4.6.0
  * @example
@@ -1340,7 +1340,7 @@ $DB = new DB;
  * This function is used to return a bailout page when resolving database connections fails.
  * Sends a HTTP 503 error status and displays the last logged MySQL error message.
  *
- * @return string HTML HTML5 document
+ * @return string HTML5 document
  * @access private
  */
 
