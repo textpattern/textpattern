@@ -97,7 +97,7 @@ class TXP_Wrapper
 	 * to the wrapper.
 	 *
 	 * @param string $txp_user The user login name
-	 * @param strign $txpass   User password
+	 * @param string $txpass   User password
 	 * @example
 	 * $wrapper = new TXP_wrapper('username', 'password');
 	 */
