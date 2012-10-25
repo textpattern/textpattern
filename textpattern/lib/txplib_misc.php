@@ -142,13 +142,14 @@
 /**
  * A shell for htmlspecialchars() with $flags defaulting to ENT_QUOTES.
  *
- * @param  string $string The string being converted
- * @param  int    $flags A bitmask of one or more flags. The default is ENT_QUOTES
- * @param  string $encoding Defines encoding used in conversion. The default is UTF-8
- * @param  bool   $double_encode When double_encode is turned off PHP will not encode existing HTML entities, the default is to convert everything
- * @return string
- * @see    http://www.php.net/manual/function.htmlspecialchars.php
- * @since  4.5.0
+ * @param   string $string The string being converted
+ * @param   int    $flags A bitmask of one or more flags. The default is ENT_QUOTES
+ * @param   string $encoding Defines encoding used in conversion. The default is UTF-8
+ * @param   bool   $double_encode When double_encode is turned off PHP will not encode existing HTML entities, the default is to convert everything
+ * @return  string
+ * @see     http://www.php.net/manual/function.htmlspecialchars.php
+ * @since   4.5.0
+ * @package Filter
  */
 
 	function txpspecialchars($string, $flags = ENT_QUOTES, $encoding = 'UTF-8', $double_encode = true)
@@ -450,6 +451,11 @@
  * @param   string $lang The language code
  * @return  array
  * @package L10n
+ * @see     load_lang_event()
+ * @example
+ * print_r(
+ * 	load_lang('en-gb')
+ * );
  */
 
 	function load_lang($lang)
@@ -541,6 +547,11 @@
  * @param   string       $event The event to get, e.g. "common", "admin", "public"
  * @return  array|string Array of string on success, or an empty string when no strings were found
  * @package L10n
+ * @see     load_lang()
+ * @example
+ * print_r(
+ * 	load_lang_event('common')
+ * );
  */
 
 	function load_lang_event($event)
@@ -615,6 +626,12 @@
  * @param   string $user The user. If no user name is supplied, assume the current logged in user
  * @return  bool
  * @package User
+ * @example
+ * add_privs('my_privilege_resource', '1,2,3');
+ * if (has_privs('my_privilege_resource', 'username'))
+ * {
+ * 	echo "'username' has privileges to 'my_privilege_resource'.";
+ * }
  */
 
 	function has_privs($res, $user = '')
@@ -651,6 +668,8 @@
  * @param   string $res  The resource
  * @param   string $user The user. If no user name is supplied, assume the current logged in user
  * @package User
+ * @example
+ * require_privs('article.edit');
  */
 
 	function require_privs($res, $user = '')
@@ -690,6 +709,10 @@
  *
  * @return  array
  * @package User
+ * @example
+ * print_r(
+ * 	get_groups()
+ * );
  */
 
 	function get_groups()
@@ -726,6 +749,11 @@
  * @param   string       $thing The parameter to get
  * @return  string|array The value of $thing, or an empty string
  * @package Network
+ * @example
+ * if (gps('sky') == 'blue' && gps('roses') == 'red')
+ * {
+ * 	echo 'Roses are red, sky is blue.';
+ * }
  */
 
 	function gps($thing)
@@ -799,6 +827,11 @@
  * @param   string       $thing	The parameter to get
  * @return  string|array The value of $thing, or an empty string
  * @package Network
+ * @example
+ * if (ps('sky') == 'blue' && ps('roses') == 'red')
+ * {
+ * 	echo 'Roses are red, sky is blue.';
+ * }
  */
 
 	function ps($thing)
@@ -827,6 +860,12 @@
  * @param   array $array The parameters to extract
  * @return  array
  * @package Network
+ * @example
+ * extract(psa(array('sky', 'roses'));
+ * if ($sky == 'blue' && $roses == 'red')
+ * {
+ * 	echo 'Roses are red, sky is blue.';
+ * }
  */
 
 	function psa($array)
@@ -884,6 +923,8 @@
  * @param   mixed $thing The variable
  * @return  mixed The variable, or an empty string on error
  * @package System
+ * @example
+ * echo serverSet('HTTP_USER_AGENT');
  */
 
 	function serverSet($thing)
@@ -969,6 +1010,11 @@
  * @param   string $thing The cookie
  * @return  string The cookie or an empty string
  * @package Network
+ * @example
+ * if ($cs = cs('myVariable'))
+ * {
+ * 	echo "'myVariable' cookie contained: '{$cs}'.";
+ * }
  */
 
  	function cs($thing)
@@ -1007,6 +1053,8 @@
  *
  * @return  float
  * @package DateTime
+ * @example
+ * echo getmicrotime();
  */
 
 	function getmicrotime()
@@ -1830,7 +1878,7 @@
  * @param   string $str  The string to convert
  * @param   string $lang The language which translation table is used
  * @see     sanitizeForUrl()
- * @package i18n
+ * @package L10n
  */
 
 	function dumbDown($str, $lang = LANG)
@@ -4060,7 +4108,7 @@ eod;
  *
  * @param   string $lang
  * @return  string Current locale
- * @package i18n
+ * @package L10n
  */
 
 	function getlocale($lang)
@@ -4734,7 +4782,7 @@ eod;
  * @param   string $textpack      The Textpack to install
  * @param   bool   $add_new_langs If TRUE, installs strings for any included language
  * @return  int    Number of installed strings
- * @package i18n
+ * @package L10n
  */
 
 	function install_textpack($textpack, $add_new_langs = false)
