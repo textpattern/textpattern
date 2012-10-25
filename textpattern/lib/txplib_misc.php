@@ -5017,6 +5017,7 @@ eod;
  *
  * @param   int        $flags Options are INTEGRITY_MD5 | INTEGRITY_STATUS | INTEGRITY_REALPATH | INTEGRITY_DIGEST
  * @return  array|bool Array of files and status, or FALSE on error
+ * @since   4.6.0
  * @package Debug
  * @example
  * print_r(
