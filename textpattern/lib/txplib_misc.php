@@ -542,7 +542,7 @@
 	}
 
 /**
- * Gets the current language's strings for the given event.
+ * Gets language strings for the given event.
  *
  * @param   string       $event The event to get, e.g. "common", "admin", "public"
  * @param   string       $lang  The language code
