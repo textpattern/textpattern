@@ -282,7 +282,7 @@ $DB = new DB;
 		@$qcount++;
 		if ($result === false)
 		{
-			trigger_error(mysql_error(), E_USER_ERROR);
+			trigger_error(mysql_error($DB->link), E_USER_ERROR);
 		}
 
 		trace_add("[SQL ($time): $q]");
@@ -392,9 +392,10 @@ $DB = new DB;
 
 	function safe_upsert($table, $set, $where, $debug = false)
 	{
+		global $DB;
 		// FIXME: lock the table so this is atomic?
 		$r = safe_update($table, $set, $where, $debug);
-		if ($r and (mysql_affected_rows() or safe_count($table, $where, $debug)))
+		if ($r and (mysql_affected_rows($DB->link) or safe_count($table, $where, $debug)))
 		{
 			return $r;
 		}
