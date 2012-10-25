@@ -380,10 +380,10 @@
  * @see     safe_stftime()
  * @package DateTime
  * @example
- * echo gTime(time());
+ * echo gTime();
  */
 
-	function gTime($timestamp)
+	function gTime($timestamp = 0)
 	{
 		return safe_strftime('%d&#160;%b&#160;%Y %X', $timestamp);
 	}
