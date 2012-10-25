@@ -4896,21 +4896,35 @@ eod;
 	}
 
 /**
- * Validate admin steps. Protect against CSRF attempts.
+ * Validates admin steps and protects against CSRF attempts using tokens.
+ *
+ * This function takes an admin step and validates its against an array of valid steps.
+ * The valid steps array indicates the step's token based session riding protection
+ * needs.
+ *
+ * If the step requires CSRF token protection, and the request doesn't come with valid
+ * token, the request is terminated, defeating any CSRF attempts.
+ *
+ * If the $step isn't in valid steps, this function returns FALSE, but the request
+ * isn't terminated. If the $step is valid and passes CSRF validation, returns
+ * TRUE.
  *
  * @param   string  $step  Requested admin step
  * @param   array   $steps An array of valid steps with flag indicating CSRF needs, e.g. array('savething' => true, 'listthings' => false)
- * @return  boolean If the $step is valid, proceeds. Dies on CSRF attempt.
+ * @return  bool    If the $step is valid, proceeds and returns TRUE. Dies on CSRF attempt.
  * @see     form_token()
  * @package CSRF
  * @example
  * global $step;
- * bouncer($step, array(
+ * if (bouncer($step, array(
  * 	'browse'     => false,
  * 	'edit'       => false,
  * 	'save'       => true,
  * 	'multi_edit' => true,
- * ));
+ * )))
+ * {
+ * 	echo "The '{$step}' is valid.";
+ * }
  */
 
 	function bouncer($step, $steps)
