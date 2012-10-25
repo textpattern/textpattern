@@ -84,7 +84,7 @@
 
 	function form_list($curname)
 	{
-		global $step,$essential_forms,$form_types;
+		global $step, $essential_forms, $form_types;
 
 		$types = formTypes('', false);
 
@@ -93,46 +93,51 @@
 			'delete'     => gTxt('delete'),
 		);
 
-		$out[] = '<p class="action-create">'.sLink('form','form_create',gTxt('create_new_form')).'</p>';
+		$out[] = '<p class="action-create">'.sLink('form', 'form_create', gTxt('create_new_form')).'</p>';
 
 		$criteria = 1;
 		$criteria .= callback_event('admin_criteria', 'form_list', 0, $criteria);
 
-		$rs = safe_rows_start("*", "txp_form", "$criteria order by field(type,'" . join("','", array_keys($form_types)) . "') asc, name asc");
+		$rs = safe_rows_start('*', 'txp_form', "$criteria order by field(type,'" . join("','", array_keys($form_types)) . "') asc, name asc");
 
-		if ($rs) {
-			$ctr = 1;
-			$prev_type = '';
-			while ($a = nextRow($rs)){
+		if ($rs)
+		{
+			$prev_type = null;
+			$group_out = array();
+
+			while ($a = nextRow($rs))
+			{
 				extract($a);
-				$editlink = ($curname!=$name)
-					?	eLink('form','form_edit','name',$name,$name)
+				$editlink = ($curname != $name)
+					?	eLink('form', 'form_edit', 'name', $name, $name)
 					:	txpspecialchars($name);
 				$modbox = (!in_array($name, $essential_forms))
 					?	'<input type="checkbox" name="selected_forms[]" value="'.$name.'" />'
 					:	'';
 
-				if ($prev_type != $type) {
-					$visipref = 'pane_form_'.$type.'_visible';
-					$group_start = n.'<div role="region" id="'.$type.'_forms_group" class="txp-details" aria-labelledby="'.$type.'_forms_group-label">'.
-						n.'<h3 id="'.$type.'_forms_group-label" class="txp-summary'.(get_pref($visipref) ? ' expanded' : '').'"><a href="#'.$type.'_forms" role="button">'.$form_types[$type].'</a></h3>'.
-						n.'<div id="'.$type.'_forms" class="toggle form-list" style="display:'.(get_pref($visipref) ? 'block' : 'none').'">'.
-						n.'<ul class="plain-list">'.n;
-					$group_end = ($ctr > 1) ? '</ul></div></div>'.n : '';
-				} else {
-					$group_start = $group_end = '';
+				if ($prev_type != $type)
+				{
+					if ($prev_type !== null)
+					{
+						$group_out[] = '</ul>';
+						$out[] = wrapRegion($prev_type.'_forms_group', join(n, $group_out), 'form_'.$prev_type, $form_types[$prev_type], 'form_'.$prev_type, 'form-list');
+					}
+
+					$prev_type = $type;
+					$group_out = array('<ul class="plain-list">');
 				}
 
-				$out[] = $group_end.$group_start;
-				$out[] = '<li>'.n.'<span class="form-list-action">'.$modbox.'</span><span class="form-list-name">'.$editlink.'</span></li>';
-				$prev_type = $type;
-				$ctr++;
+				$group_out[] = '<li>'.n.'<span class="form-list-action">'.$modbox.'</span><span class="form-list-name">'.$editlink.'</span></li>';
 			}
 
-			$out[] = '</ul></div></div>';
+			if ($prev_type !== null)
+			{
+				$group_out[] = '</ul>';
+				$out[] = wrapRegion($prev_type.'_forms_group', join(n, $group_out), 'form_'.$prev_type, $form_types[$prev_type], 'form_'.$prev_type, 'form-list');
+			}
 			$out[] = multi_edit($methods, 'form', 'form_multi_edit');
 
-			return form( join('',$out),'','', 'post', '', '', 'allforms_form' ).
+			return form( join('', $out), '', '', 'post', '', '', 'allforms_form' ).
 				script_js( <<<EOS
 				$(document).ready(function() {
 					$('#allforms_form').txpMultiEditForm({
@@ -263,7 +268,7 @@ EOS
 
 		$tagbuild_links = '';
 		foreach ($tagbuild_items as $tb => $item) {
-			$tagbuild_links .= wrapRegion($item[1].'_group', popTagLinks($tb), $item[1], $item[0], 'form_'.$item[1]);
+			$tagbuild_links .= wrapRegion($item[1].'_group', popTagLinks($tb), $item[1], $item[0], $item[1]);
 		}
 
 		$out =
@@ -422,11 +427,11 @@ EOS
 	function form_save_pane_state()
 	{
 		global $event;
-		$panes = array('article', 'category', 'comment', 'file', 'link', 'misc', 'section', 'article-tags', 'link-tags', 'comment-tags', 'comment-detail-tags', 'comment-form-tags', 'search-result-tags', 'file-tags', 'category-tags', 'section-tags');
+		$panes = array('form_article', 'form_category', 'form_comment', 'form_file', 'form_link', 'form_misc', 'form_section', 'article-tags', 'link-tags', 'comment-tags', 'comment-detail-tags', 'comment-form-tags', 'search-result-tags', 'file-tags', 'category-tags', 'section-tags');
 		$pane = gps('pane');
 		if (in_array($pane, $panes))
 		{
-			set_pref("pane_form_{$pane}_visible", (gps('visible') == 'true' ? '1' : '0'), $event, PREF_HIDDEN, 'yesnoradio', 0, PREF_PRIVATE);
+			set_pref("pane_{$pane}_visible", (gps('visible') == 'true' ? '1' : '0'), $event, PREF_HIDDEN, 'yesnoradio', 0, PREF_PRIVATE);
 			send_xml_response();
 		} else {
 			trigger_error('invalid_pane', E_USER_WARNING);
