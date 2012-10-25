@@ -2034,6 +2034,11 @@
  * @param   string  $checks The checked lists. Defaults to $prefs['spam_blacklists']
  * @return  string|bool     The lists the IP is on or FALSE
  * @package Comment
+ * @example
+ * if (is_blacklisted('127.0.0.1'))
+ * {
+ * 	echo "'127.0.0.1' is blacklisted.";
+ * }
  */
 
 	function is_blacklisted($ip, $checks = '')
@@ -2232,6 +2237,11 @@
  * @param   string $address The email address
  * @return  bool
  * @package Email
+ * @example
+ * if (is_valid_email('john.doe@example.com'))
+ * {
+ * 	echo "'john.doe@example.com' validates.";
+ * }
  */
 
 	function is_valid_email($address)
@@ -2248,6 +2258,11 @@
  * @param   string $reply_to   The reply to address
  * @return  bool   Returns FALSE when sending failed
  * @package Email
+ * @example
+ * if (txpMail('john.doe@example.com', 'Subject', 'Some message'))
+ * {
+ * 	echo "Email sent to 'john.doe@example.com'.";
+ * }
  */
 
 	function txpMail($to_address, $subject, $body, $reply_to = null)
@@ -2579,6 +2594,8 @@
  * @param   string $override_locale Override the locale
  * @return  string Formatted date
  * @package DateTime
+ * @example
+ * echo safe_strftime('w3cdtf');
  */
 
 	function safe_strftime($format, $time = '', $gmt = false, $override_locale = '')
@@ -2941,6 +2958,8 @@
  * @param   string $format   The format the size is represented
  * @return  string Formatted file size
  * @package File
+ * @example
+ * echo format_filesize(168642);
  */
 
 	function format_filesize($bytes, $decimals = 2, $format = '')
@@ -3020,6 +3039,11 @@
  * @param   string $function The function name
  * @return  bool   TRUE if the function is disabled
  * @package System
+ * @example
+ * if (is_disabled('mail'))
+ * {
+ * 	echo "'mail' function is disabled.";
+ * }
  */
 
 	function is_disabled($function)
@@ -3102,6 +3126,11 @@
  * @param   string $col   The column
  * @return  bool
  * @package User
+ * @example
+ * if (has_single_author('textpattern', 'AuthorID'))
+ * {
+ * 	echo "'textpattern' table has only content from one author.";
+ * }
  */
 
 	function has_single_author($table, $col = 'author')
@@ -3117,6 +3146,8 @@
  * @param   bool    $condition TRUE to return if statement, FALSE to else
  * @return  string  Either if or else statement
  * @package TagParser
+ * @example
+ * echo parse(EvalElse('true &lt;txp:else /&gt; false', 1 === 1));
  */
 
 	function EvalElse($thing, $condition)
