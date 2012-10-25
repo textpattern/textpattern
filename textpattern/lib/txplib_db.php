@@ -312,12 +312,7 @@ $DB = new DB;
 
 	function safe_delete($table, $where, $debug = false)
 	{
-		$q = "delete from ".safe_pfx($table)." where $where";
-		if ($r = safe_query($q, $debug))
-		{
-			return true;
-		}
-		return false;
+		return (bool) safe_query("delete from ".safe_pfx($table)." where $where", $debug);
 	}
 
 /**
@@ -339,12 +334,7 @@ $DB = new DB;
 
 	function safe_update($table, $set, $where, $debug = false)
 	{
-		$q = "update ".safe_pfx($table)." set $set where $where";
-		if ($r = safe_query($q, $debug))
-		{
-			return true;
-		}
-		return false;
+		return (bool) safe_query("update ".safe_pfx($table)." set $set where $where", $debug);
 	}
 
 /**
@@ -421,12 +411,7 @@ $DB = new DB;
 
 	function safe_alter($table, $alter, $debug = false)
 	{
-		$q = "alter table ".safe_pfx($table)." $alter";
-		if ($r = safe_query($q, $debug))
-		{
-			return true;
-		}
-		return false;
+		return (bool) safe_query("alter table ".safe_pfx($table)." $alter", $debug);
 	}
 
 /**
@@ -450,12 +435,7 @@ $DB = new DB;
 
 	function safe_lock($table, $type = 'write', $debug = false)
 	{
-		$q = 'lock tables ' . join(' '.$type.', ', doArray(do_list($table), 'safe_pfx')).' '.$type;
-		if (safe_query($q, $debug))
-		{
-			return true;
-		}
-		return false;
+		return (bool) safe_query('lock tables ' . join(' '.$type.', ', doArray(do_list($table), 'safe_pfx')).' '.$type, $debug);
 	}
 
 /**
@@ -473,12 +453,7 @@ $DB = new DB;
 
 	function safe_unlock($debug = false)
 	{
-		$q = 'unlock tables';
-		if (safe_query($q, $debug))
-		{
-			return true;
-		}
-		return false;
+		return (bool) safe_query('unlock tables', $debug);
 	}
 
 /**
@@ -548,12 +523,7 @@ $DB = new DB;
 			$q = 'create '.$index.' index `'.$name.'` on '.safe_pfx($table).' ('.$columns.')'. ($type ? ' using '.$type : '');
 		}
 
-		if (safe_query($q, $debug))
-		{
-			return true;
-		}
-
-		return false;
+		return (bool) safe_query($q, $debug);
 	}
 
 /**
@@ -587,12 +557,7 @@ $DB = new DB;
 			$q = 'drop index `'.$index.'` on '.safe_pfx($table);
 		}
 
-		if (safe_query($q, $debug))
-		{
-			return true;
-		}
-
-		return false;
+		return (bool) safe_query($q, $debug);
 	}
 
 /**
@@ -610,12 +575,7 @@ $DB = new DB;
 
 	function safe_optimize($table, $debug = false)
 	{
-		$q = "optimize table ".safe_pfx($table)."";
-		if ($r = safe_query($q, $debug))
-		{
-			return true;
-		}
-		return false;
+		return (bool) safe_query("optimize table ".safe_pfx($table), $debug);
 	}
 
 /**
@@ -633,12 +593,7 @@ $DB = new DB;
 
 	function safe_repair($table, $debug = false)
 	{
-		$q = "repair table ".safe_pfx($table)."";
-		if ($r = safe_query($q, $debug))
-		{
-			return true;
-		}
-		return false;
+		return (bool) safe_query("repair table ".safe_pfx($table), $debug);
 	}
 
 /**
@@ -661,12 +616,7 @@ $DB = new DB;
 
 	function safe_truncate($table, $debug = false)
 	{
-		$q = "truncate table ".safe_pfx($table);
-		if (safe_query($q, $debug))
-		{
-			return true;
-		}
-		return false;
+		return (bool) safe_query("truncate table ".safe_pfx($table), $debug);
 	}
 
 /**
@@ -688,12 +638,7 @@ $DB = new DB;
 
 	function safe_drop($table, $debug = false)
 	{
-		$q = 'drop table if exists '.safe_pfx($table);
-		if (safe_query($q, $debug))
-		{
-			return true;
-		}
-		return false;
+		return (bool) safe_query('drop table if exists '.safe_pfx($table), $debug);
 	}
 
 /**
@@ -728,12 +673,7 @@ $DB = new DB;
 		$q = 'create table if not exists '.safe_pfx($table).' ('.
 			$definition.') '.$options.' AUTO_INCREMENT = 1 PACK_KEYS = 1';
 
-		if (safe_query($q, $debug))
-		{
-			return true;
-		}
-
-		return false;
+		return (bool) safe_query($q, $debug);
 	}
 
 /**
@@ -748,14 +688,7 @@ $DB = new DB;
 
 	function safe_rename($table, $newname, $debug = false)
 	{
-		$q = 'rename table '.safe_pfx($table).' to '.safe_pfx($newname);
-
-		if (safe_query($q, $debug))
-		{
-			return true;
-		}
-
-		return false;
+		return (bool) safe_query('rename table '.safe_pfx($table).' to '.safe_pfx($newname), $debug);
 	}
 
 /**
