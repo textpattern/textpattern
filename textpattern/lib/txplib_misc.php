@@ -545,6 +545,7 @@
  * Gets the current language's strings for the given event.
  *
  * @param   string       $event The event to get, e.g. "common", "admin", "public"
+ * @param   string       $lang  The language code
  * @return  array|string Array of string on success, or an empty string when no strings were found
  * @package L10n
  * @see     load_lang()
@@ -554,10 +555,8 @@
  * );
  */
 
-	function load_lang_event($event)
+	function load_lang_event($event, $lang = LANG)
 	{
-		$lang = LANG;
-
 		$installed = (false !== safe_field('name', 'txp_lang',"lang='".doSlash($lang)."' limit 1"));
 
 		$lang_code = ($installed) ? $lang : 'en-gb';
