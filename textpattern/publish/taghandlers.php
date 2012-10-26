@@ -1144,16 +1144,16 @@
 			'this_section' => 0,
 			'type'         => 'article',
 			'wraptag'      => '',
-			'limit'        => null,
-			'offset'       => null,
+			'limit'        => '',
+			'offset'       => '',
 		), $atts));
 
 		$sort = doSlash($sort);
 		$sql_limit = '';
 
-		if ($limit !== null || $offset !== null)
+		if ($limit !== '' || $offset)
 		{
-			$sql_limit = ' limit '.intval($offset).', '.($limit === null ? PHP_INT_MAX : intval($limit));
+			$sql_limit = ' limit '.intval($offset).', '.($limit === '' ? PHP_INT_MAX : intval($limit));
 		}
 
 		if ($categories)
