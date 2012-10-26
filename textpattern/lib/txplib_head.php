@@ -79,20 +79,19 @@
 	echo
 		script_js('jquery.js', SCRIPT_URL).n.
 		script_js(
-		'var textpattern = {
-		event: "'.txpspecialchars($event).'",
-		step: "'.txpspecialchars($step).'",
-		_txp_token: "'.txpspecialchars(form_token()).'",
-		ajax_timeout: '.txpspecialchars(AJAX_TIMEOUT).',
-		textarray: {},
-		do_spellcheck: "'.txpspecialchars(
-							get_pref('do_spellcheck', '#page-article #body, #page-article #title,'.
-													'#page-image #alt-text, #page-image #caption,'.
-													'#page-file #description,'.
-													'#page-link #link-title, #page-link #link-description')
-							).'"};'
-	).n.
-	script_js('textpattern.js', SCRIPT_URL);
+			'var textpattern = ' . json_encode(array(
+				'event' => $event,
+				'step' => $step,
+				'_txp_token' => form_token(),
+				'ajax_timeout' => (int) AJAX_TIMEOUT,
+				'textarray' => (object) null,
+				'do_spellcheck' => get_pref('do_spellcheck',
+					'#page-article #body, #page-article #title,'.
+					'#page-image #alt-text, #page-image #caption,'.
+					'#page-file #description,'.
+					'#page-link #link-title, #page-link #link-description')
+		)).';').n.
+		script_js('textpattern.js', SCRIPT_URL);
 	gTxtScript(array('form_submission_error', 'are_you_sure', 'cookies_must_be_enabled'));
 	// Mandatory un-themable Textpattern core styles ?>
 	<style>
