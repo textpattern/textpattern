@@ -1495,13 +1495,19 @@
 	}
 
 /**
- * Attachs a function to a callback event.
+ * Attachs a handler to a callback event.
  *
  * @param   callback $func  The callback function
  * @param   string   $event The callback event
  * @param   string   $step  The callback step
  * @param   bool     $pre   Before or after. Works only with selected callback events
  * @package Callback
+ * @example
+ * register_callback('my_callback_function', 'article.updated');
+ * function my_callback_function($event)
+ * {
+ * 	return "'$event' fired.";
+ * }
  */
 
 	function register_callback($func, $event, $step = '', $pre = 0)
@@ -1513,7 +1519,7 @@
 /**
  * Registers an admin-side extension page.
  *
- * For now this just does the same as register_callback()
+ * For now this just does the same as register_callback().
  *
  * @param   callback $func  The callback function
  * @param   string   $event The callback event
@@ -1532,11 +1538,34 @@
 /**
  * Call an event's callback.
  *
+ * This function executes all callback handlers attached to the
+ * matched event and step.
+ *
+ * When this function is called, any event handlers attached with
+ * register_callback() to the matching event, step and pre will be called.
+ * The handlers, callback functions, will be executed in the same order they
+ * were registered.
+ *
+ * Any extra arguments will be passed to the callback handlers in the same
+ * argument position. This allows passing any type of data to the attached
+ * handlers. Callback handlers will also receive the event and the step.
+ *
+ * This function returns a compined value of all values returned by the callback
+ * handlers.
+ *
  * @param   string $event The callback event
  * @param   string $step  Additional callback step
  * @param   bool   $pre   Allows two callbacks, a prepending and an appending, with same event and step
  * @return  mixed  The value returned by the attached callback functions, or an empty string
  * @package Callback
+ * @see     register_callback()
+ * @example
+ * register_callback('my_callback_function', 'my_custom_event');
+ * function my_callback_function($event, $step, $extra)
+ * {
+ * 	return "Passed '$extra' on '$event'.";
+ * }
+ * echo callback_event('my_custom_event', '', 0, 'myExtraValue');
  */
 
 	function callback_event($event, $step = '', $pre = 0)
@@ -1623,6 +1652,8 @@
  * @return  string   The $callback as a human-readable string
  * @since   4.5.0
  * @package Callback
+ * @example
+ * echo callback_tostring(array('class', 'method'));
  */
 
 	function callback_tostring($callback)
