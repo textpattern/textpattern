@@ -1153,7 +1153,7 @@
 
 		if ($limit !== null || $offset !== null)
 		{
-			$sql_limit = ' limit '.intval($offset).', '.($limit === null ? 9999 : intval($limit));
+			$sql_limit = ' limit '.intval($offset).', '.($limit === null ? PHP_INT_MAX : intval($limit));
 		}
 
 		if ($categories)
