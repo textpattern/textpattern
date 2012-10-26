@@ -746,6 +746,8 @@
  * @param  string $item Enclosed content
  * @param  string $atts HTML attributes
  * @return string HTML
+ * @example
+ * echo graf('This a paragraph.');
  */
 
 	function graf($item, $atts = '')
@@ -826,6 +828,8 @@
  *
  * @param  string $item The input string
  * @return string HTML
+ * @example
+ * echo comment('Some HTML comment.');
  */
 
 	function comment($item)
@@ -988,6 +992,13 @@
  * @param  string  $crit          Search criterion
  * @param  string  $search_method Search method
  * @return string  HTML
+ * @example
+ * echo form(
+ * 	multi_edit(array(
+ * 		'feature' => array('label' => 'Feature', 'html' => yesnoRadio('is_featured', 1)),
+ * 		'delete'  => array('label' => 'Delete'),
+ * 	))
+ * );
  */
 
 	function multi_edit($options, $event = null, $step = null, $page = '', $sort = '', $dir = '', $crit = '', $search_method = '')
