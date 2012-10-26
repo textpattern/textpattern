@@ -15,7 +15,11 @@ if (!defined('TXP_DEBUG'))
 	/**
 	 * If set to "1", dumps debug log to the temp directory.
 	 *
+	 * This constant can be overridden from the config.php. 
+	 *
 	 * @package Debug
+	 * @example
+	 * define('TXP_DEBUG', 1);
 	 */
 
 	define('TXP_DEBUG', 0);
@@ -56,7 +60,12 @@ define('RELOAD', -99);
 if (!defined('RPC_SERVER'))
 {
 	/**
-	 * Sets RPC server location.
+	 * RPC server location.
+	 *
+	 * This constant can be overridden from the config.php.
+	 *
+	 * @example
+	 * define('RPC_SERVER', 'http://rpc.example.com');
 	 */
 
 	define('RPC_SERVER', 'http://rpc.textpattern.com');
@@ -65,7 +74,12 @@ if (!defined('RPC_SERVER'))
 if (!defined('HELP_URL'))
 {
 	/**
-	 * Sets location where help documentation is fetched.
+	 * The location where help documentation is fetched.
+	 *
+	 * This constant can be overridden from the config.php.
+	 *
+	 * @example
+	 * define('HELP_URL', 'http://rpc.example.com/help/');
 	 */
 
 	define('HELP_URL', 'http://rpc.textpattern.com/help/');
@@ -127,7 +141,12 @@ if (!defined('REGEXP_UTF8'))
 	/**
 	 * TRUE if the system supports UTF-8 regex patterns.
 	 *
+	 * This constant can be overridden from the config.php
+	 * in case UTF-8 regex patterns cause issues.
+	 *
 	 * @package System
+	 * @example
+	 * define('REGEXP_UTF8', false);
 	 */
 
 	define('REGEXP_UTF8', @preg_match('@\pL@u', 'q'));
@@ -165,6 +184,12 @@ if (!defined('EXTRA_MEMORY'))
 	 * Allocated extra memory.
 	 *
 	 * Used when creating thumbnails for instance.
+	 *
+	 * This constant can be overridden from the config.php.
+	 *
+	 * @package System
+	 * @example
+	 * define('EXTRA_MEMORY', '64M');
 	 */
 
 	define('EXTRA_MEMORY', '32M');
@@ -284,7 +309,11 @@ if (!defined('PASSWORD_LENGTH'))
 	/**
 	 * Password default length, in characters.
 	 *
+	 * This constant can be overridden from the config.php.
+	 *
 	 * @package User
+	 * @example
+	 * define('PASSWORD_LENGTH', 14);
 	 */
 
 	define('PASSWORD_LENGTH', 10);
@@ -295,7 +324,11 @@ if (!defined('PASSWORD_COMPLEXITY'))
 	/**
 	 * Password iteration strength count.
 	 *
+	 * This constant can be overridden from the config.php.
+	 *
 	 * @package User
+	 * @example
+	 * define('PASSWORD_COMPLEXITY', 2);
 	 */
 
 	define('PASSWORD_COMPLEXITY', 8);
@@ -306,7 +339,11 @@ if (!defined('PASSWORD_PORTABILITY'))
 	/**
 	 * Passwords are created portable if TRUE.
 	 *
+	 * This constant can be overridden from the config.php.
+	 *
 	 * @package User
+	 * @example
+	 * define('PASSWORD_PORTABILITY', false);
 	 */
 
 	define('PASSWORD_PORTABILITY', true);
@@ -317,9 +354,13 @@ if (!defined('PASSWORD_SYMBOLS'))
 	/**
 	 * Symbols used in auto-generated passwords.
 	 *
+	 * This constant can be overridden from the config.php.
+	 *
 	 * @package User
 	 * @since   4.6.0
 	 * @see     generate_password()
+	 * @example
+	 * define('PASSWORD_SYMBOLS', '23456789ABCDEFGHJKLMNPQRSTUYXZabcdefghijkmnopqrstuvwxyz_?!-');
 	 */
 
 	define('PASSWORD_SYMBOLS', '23456789abcdefghijkmnopqrstuvwxyz');
@@ -330,7 +371,11 @@ if (!defined('LOGIN_COOKIE_HTTP_ONLY'))
 	/**
 	 * If TRUE, login cookie is set just for HTTP.
 	 *
+	 * This constant can be overridden from the config.php.
+	 *
 	 * @package CSRF
+	 * @example
+	 * define('LOGIN_COOKIE_HTTP_ONLY', false);
 	 */
 
 	define('LOGIN_COOKIE_HTTP_ONLY', true);
@@ -339,12 +384,16 @@ if (!defined('LOGIN_COOKIE_HTTP_ONLY'))
 if (!defined('X_FRAME_OPTIONS'))
 {
 	/**
-	 * Sets X-Frame-Options header's value.
+	 * Sets X-Frame-Options HTTP header's value.
 	 *
 	 * This is used to prevent framing of authenticated
 	 * pages.
 	 *
+	 * This constant can be overridden from the config.php.
+	 *
 	 * @package CSRF
+	 * @example
+	 * define('X_FRAME_OPTIONS', 'DENY');
 	 */
 
 	define('X_FRAME_OPTIONS', 'SAMEORIGIN');
@@ -355,7 +404,11 @@ if (!defined('AJAX_TIMEOUT'))
 	/**
 	 * AJAX timeout in seconds.
 	 *
+	 * This constant can be overridden from the config.php.
+	 *
 	 * @package Ajax
+	 * @example
+	 * define('AJAX_TIMEOUT', 10);
 	 */
 
 	define('AJAX_TIMEOUT', max(30000, 1000 * @ini_get('max_execution_time')));
@@ -431,9 +484,14 @@ define('STATUS_STICKY', 5);
 if (!defined('WRITE_RECENT_ARTICLES_COUNT'))
 {
 	/**
-	 * 'Recent articles' count on the write panel.
+	 * Number of recent articles displayed on the Write panel.
 	 *
-	 * @package Article
+	 * This constant can be overridden from the config.php.
+	 *
+	 * @package Admin\Article
+	 * @since   4.6.0
+	 * @example
+	 * define('WRITE_RECENT_ARTICLES_COUNT', 5);
 	 */
 
 	define('WRITE_RECENT_ARTICLES_COUNT', 10);
@@ -445,7 +503,6 @@ if (!defined('WRITE_RECENT_ARTICLES_COUNT'))
  * @since   4.5.0
  * @package Form
  */
-
 
 define('INPUT_XLARGE', 96);
 
