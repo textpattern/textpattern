@@ -1327,16 +1327,17 @@ EOF;
 
 	function asyncHref($item, $parms, $atts = '')
 	{
-		extract(doSpecial(lAtts(array(
-			'event'    => $GLOBALS['event'],
-			'step'     => $GLOBALS['step'],
+		global $event, $step;
+
+		$parms = lAtts(array(
+			'event'    => $event,
+			'step'     => $step,
 			'thing'    => '',
 			'property' => '',
-		), $parms)));
+		), $parms);
 
-		$class = "$step async";
-		$href = "?event=$event&amp;step=$step&amp;thing=$thing&amp;property=$property";
-		return href($item, $href, $atts." class=\"$class\"");
+		$atts .= ' class="'.txpspecialchars($parms['step']).' async"';
+		return href($item, join_qs($parms), $atts);
 	}
 
 ?>
