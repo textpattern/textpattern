@@ -56,7 +56,8 @@ $verbose = false;
  * @package Image
  */
 
-class wet_thumb {
+class wet_thumb
+{
 
 	/**
 	 * The width of your thumbnail. The height (if not set) will
