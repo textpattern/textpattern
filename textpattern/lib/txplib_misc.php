@@ -1673,7 +1673,7 @@
  * Registers a new admin-side panel and adds a navigation link to the menu.
  *
  * @param   string $area  The menu the panel appears in, e.g. "home", "content", "presentation", "admin", "extensions"
- * @param   string $event The panel's event
+ * @param   string $panel The panel's event
  * @param   string $title The menu item's label
  * @package Callback
  * @example
@@ -1682,13 +1682,13 @@
  * register_callback('abc_admin_function', 'abc_admin_event');
  */
 
-	function register_tab($area, $event, $title)
+	function register_tab($area, $panel, $title)
 	{
-		global $plugin_areas;
+		global $plugin_areas, $event;
 
-		if (!isset($GLOBALS['event']) || ($GLOBALS['event'] !== 'plugin'))
+		if ($event !== 'plugin')
 		{
-			$plugin_areas[$area][$title] = $event;
+			$plugin_areas[$area][$title] = $panel;
 		}
 	}
 
