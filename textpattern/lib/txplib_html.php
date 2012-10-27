@@ -119,10 +119,10 @@
 /**
  * Renders a &lt;th&gt; element.
  *
- * @param  string $text    Cell text
- * @param  string $caption Is not used
- * @param  string $atts    HTML attributes
- * @return string HTML
+ * @param  string       $text    Cell text
+ * @param  string       $caption Is not used
+ * @param  string|array $atts    HTML attributes
+ * @return string       HTML
  */
 
 	function hCell($text = '', $caption = '', $atts = '')
@@ -610,9 +610,9 @@
 /**
  * Renders a &lt;tr&gt; element with attributes.
  *
- * @param  string $content Cell content
- * @param  string $atts    Cell attributes
- * @return string HTML
+ * @param  string       $content Row content
+ * @param  string|array $atts    Row attributes
+ * @return string       HTML
  */
 
 	function tr($content, $atts = '')
@@ -757,9 +757,9 @@
 /**
  * Renders a &lt;p&gt; element.
  *
- * @param  string $item Enclosed content
- * @param  string $atts HTML attributes
- * @return string HTML
+ * @param  string       $item Enclosed content
+ * @param  string|array $atts HTML attributes
+ * @return string       HTML
  * @example
  * echo graf('This a paragraph.');
  */
@@ -772,10 +772,10 @@
 /**
  * Renders a &lt;hx&gt; element.
  *
- * @param  string $item  The Enclosed content
- * @param  int    $level Heading level 1...6
- * @param  string $atts  List of HTML attributes
- * @return string HTML
+ * @param  string       $item  The Enclosed content
+ * @param  int          $level Heading level 1...6
+ * @param  string|array $atts  HTML attributes
+ * @return string       HTML
  * @example
  * echo hed('Heading', 2);
  */
@@ -788,10 +788,10 @@
 /**
  * Renders an &lt;a&gt; element.
  *
- * @param  string $item Enclosed content
- * @param  string $href The link target
- * @param  string $atts HTML attributes
- * @return string HTML
+ * @param  string       $item Enclosed content
+ * @param  string       $href The link target
+ * @param  string|array $atts HTML attributes
+ * @return string       HTML
  */
 
 	function href($item, $href, $atts = '')
@@ -866,9 +866,9 @@
 /**
  * Renders a table data row from an array of content => width pairs.
  *
- * @param  array  $array Array of content => width pairs
- * @param  string $atts  Table row atrributes
- * @return string A HTML table row
+ * @param  array        $array Array of content => width pairs
+ * @param  string|array $atts  Table row atrributes
+ * @return string       A HTML table row
  */
 
 	function assRow($array, $atts ='')
