@@ -725,7 +725,7 @@
  * @param  string       $content Enclosed content
  * @param  string       $tag     The tag without brackets
  * @param  string|array $atts    The element's HTML attributes
- * @return string HTML
+ * @return string       HTML
  * @example
  * echo tag('Link text', 'a', 'href="#" class="warning"');
  */
