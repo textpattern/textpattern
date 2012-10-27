@@ -642,17 +642,19 @@
 /**
  * Renders a &lt;td&gt; element with a rowspan attribute.
  *
- * @param  string  $content Cell content
- * @param  int     $span    Cell rowspan attribute
- * @param  int     $width   Cell width attribute
- * @return string  HTML
+ * @param  string $content Cell content
+ * @param  int    $span    Cell rowspan attribute
+ * @param  int    $width   Cell width attribute
+ * @param  string $class   Cell class attribute 
+ * @return string HTML
  */
 
-	function tdrs($content, $span, $width = 0)
+	function tdrs($content, $span, $width = 0, $class = '')
 	{
 		return tda($content, array(
 			'rowspan' => (int) $span,
 			'width' => (int) $width,
+			'class' => $class,
 		));
 	}
 
