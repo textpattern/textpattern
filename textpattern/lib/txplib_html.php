@@ -513,12 +513,15 @@
 
 	function startTable($id = '', $align = '', $class = '', $p = 0, $w = 0)
 	{
-		$id = ($id) ? ' id="'.$id.'"' : '';
-		$align = ($align) ? ' align="'.$align.'"' : '';
-		$class = ($class) ? ' class="'.$class.'"' : '';
-		$width = ($w) ? ' width="'.$w.'"' : '';
-		$padding = ($p) ? ' cellpadding="'.$p.'"' : '';
-		return '<table'.$id.$class.$width.$padding.$align.'>'.n;
+		$atts = join_atts(array(
+			'id' => $id,
+			'align' => $align,
+			'class' => $class,
+			'cellpadding' => (int) $p,
+			'width' => (int) $w,
+		));
+
+		return '<table'.$atts.'>'.n;
 	}
 
 /**
