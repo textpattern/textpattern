@@ -569,7 +569,7 @@
 
 	function td($content = '', $width = 0, $class = '', $id = '')
 	{
-		$content = ('' === $content) ? '&#160;' : $content;
+		$content = ($content === '') ? sp : $content;
 		return t.tag($content, 'td', array(
 			'width' => (int) $width,
 			'class' => $class,
@@ -587,6 +587,7 @@
 
 	function tda($content, $atts = '')
 	{
+		$content = ($content === '') ? sp : $content;
 		return tag($content, 'td', $atts);
 	}
 
