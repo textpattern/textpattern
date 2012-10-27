@@ -3867,12 +3867,11 @@ eod;
 			{
 				if ($name == 'href' || $name == 'src')
 				{
-					$value = join_qs($value);
+					$list[] = $name.'="'.join_qs($value).'"';
+					continue;
 				}
-				else
-				{
-					$value = join(' ', doArray($value, 'trim'));
-				}
+
+				$value = join(' ', $value);
 			}
 
 			else if ($value === true)
