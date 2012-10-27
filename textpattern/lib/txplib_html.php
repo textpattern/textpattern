@@ -570,10 +570,11 @@
 	function td($content = '', $width = 0, $class = '', $id = '')
 	{
 		$content = ('' === $content) ? '&#160;' : $content;
-		$atts[] = ($width)  ? ' width="'.$width.'"' : '';
-		$atts[] = ($class)  ? ' class="'.$class.'"' : '';
-		$atts[] = ($id)  ? ' id="'.$id.'"' : '';
-		return t.tag($content, 'td', join('', $atts)).n;
+		return t.tag($content, 'td', array(
+			'width' => (int) $width,
+			'class' => $class,
+			'id' => $id,		
+		)).n;
 	}
 
 /**
