@@ -76,22 +76,18 @@
 		global $vars,$event,$step,$tools;
 		extract(gpsa($vars));
 		pagetop(gTxt('txp_import'), '');
-		echo '<h1 class="txp-heading">'.gTxt('tab_import').'</h1>';
-
-?>
-
-<script>
-function showHideFields($sel)
+		echo '<h1 class="txp-heading">'.gTxt('tab_import').'</h1>'.n.
+			script_js(<<<EOF
+function showHideFields(sel)
 {
 	if(document.getElementById){
-		document.getElementById('mtblogid').style.display = ($sel=='mtdb') ? 'block': 'none';
-		document.getElementById('wponly').style.display =  ($sel=='wp') ? 'block': 'none';
-		document.getElementById('databased').style.display = ($sel=='wp' || $sel=='mtdb' || $sel=='b2')? 'block':'none';
+		document.getElementById('mtblogid').style.display = (sel=='mtdb') ? 'block': 'none';
+		document.getElementById('wponly').style.display =  (sel=='wp') ? 'block': 'none';
+		document.getElementById('databased').style.display = (sel=='wp' || sel=='mtdb' || sel=='b2')? 'block':'none';
 	}
 }
-</script>
-
-<?php
+EOF
+);
 		$content = '<div class="txp-edit">';
 		$content.= hed(gTxt('txp_import'), 2);
 
