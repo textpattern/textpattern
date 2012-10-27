@@ -796,7 +796,16 @@
 
 	function href($item, $href, $atts = '')
 	{
-		return tag($item, 'a', $atts.' href="'.$href.'"');
+		if (is_array($atts))
+		{
+			$atts['href'] = $href;
+		}
+		else
+		{
+			$atts .= ' href="'.$href.'"';
+		}
+
+		return tag($item, 'a', $atts);
 	}
 
 /**
