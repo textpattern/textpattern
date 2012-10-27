@@ -593,14 +593,18 @@
 /**
  * Renders a &lt;td&gt; element with top/left text orientation and other attributes.
  *
+ * This function is identical to tda().
+ *
  * @param  string $content Cell content
  * @param  string $atts    Cell attributes
  * @return string HTML
+ * @access private
+ * @see    tda()
  */
 
 	function tdtl($content, $atts = '')
 	{
-		return tag($content, 'td', $atts);
+		return tda($content, $atts);
 	}
 
 /**
