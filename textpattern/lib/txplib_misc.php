@@ -3844,7 +3844,8 @@ eod;
  * added without a value. An array value is converted to a space-separated list,
  * or for 'href' and 'src' to URL encoded a query string.
  *
- * @param   array  $atts HTML attributes
+ * @param   array  $atts  HTML attributes
+ * @param   int    $flags ATTS_STRIP_EMPTY
  * @return  string HTML attribute list
  * @since   4.6.0
  * @package HTML
@@ -3852,13 +3853,13 @@ eod;
  * echo join_atts(array('class' => 'myClass', 'disabled' => true));
  */
 
-	function join_atts($atts)
+	function join_atts($atts, $flags = ATTS_STRIP_EMPTY)
 	{
 		$list = array();
 
 		foreach ($atts as $name => $value)
 		{
-			if ($value === false)
+			if (($flags & ATTS_STRIP_EMPTY && !$value) || $value === false)
 			{
 				continue;
 			}

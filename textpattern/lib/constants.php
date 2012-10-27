@@ -714,6 +714,16 @@ define('LANG_OWNER_SYSTEM', '');
 
 define('LANG_OWNER_SITE', 'site');
 
+/**
+ * Strip empty HTML attribute values.
+ *
+ * @since   4.6.0
+ * @package HTML
+ * @see     join_atts()
+ */
+
+define('ATTS_STRIP_EMPTY', 0x1);
+
 error_reporting($old_level);
 unset($old_level);
 ?>
