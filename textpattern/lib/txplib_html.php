@@ -722,9 +722,9 @@
 /**
  * Renders anything as an XML element.
  *
- * @param  string $content Enclosed content
- * @param  string $tag     The tag without brackets
- * @param  string $atts    The element's HTML attributes
+ * @param  string       $content Enclosed content
+ * @param  string       $tag     The tag without brackets
+ * @param  string|array $atts    The element's HTML attributes
  * @return string HTML
  * @example
  * echo tag('Link text', 'a', 'href="#" class="warning"');
@@ -732,7 +732,12 @@
 
 	function tag($content, $tag, $atts = '')
 	{
-		if ($atts)
+		if (is_array($atts))
+		{
+			$atts = join_atts($atts);
+		}
+
+		elseif ($atts)
 		{
 			$atts = ' ' . trim($atts);
 		}
