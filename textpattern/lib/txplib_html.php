@@ -811,25 +811,27 @@
 /**
  * Renders a &lt;strong&gt; element.
  *
- * @param  string $item Enclosed content
- * @return string HTML
+ * @param  string       $item Enclosed content
+ * @param  string|array $atts HTML attributes
+ * @return string       HTML
  */
 
-	function strong($item)
+	function strong($item, $atts = '')
 	{
-		return tag($item, 'strong');
+		return tag($item, 'strong', $atts);
 	}
 
 /**
  * Renders a &lt;span&gt; element.
  *
- * @param  string $item Enclosed content
- * @return string HTML
+ * @param  string       $item Enclosed content
+ * @param  string|array $atts HTML attributes
+ * @return string       HTML
  */
 
-	function span($item)
+	function span($item, $atts = '')
 	{
-		return tag($item, 'span');
+		return tag($item, 'span', $atts);
 	}
 
 /**
@@ -863,13 +865,14 @@
 /**
  * Renders a &lt;small&gt element.
  *
- * @param  string $item The input string
- * @return string HTML
+ * @param  string       $item The input string
+ * @param  string|array $atts HTML attributes
+ * @return string       HTML
  */
 
-	function small($item)
+	function small($item, $atts = '')
 	{
-		return tag($item, 'small');
+		return tag($item, 'small', $atts);
 	}
 
 /**
