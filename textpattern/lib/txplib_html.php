@@ -1332,9 +1332,9 @@ EOF;
  *
  * See this function's JavaScript companion, txpAsyncHref(), in textpattern.js.
  *
- * @param  string $item	 Link text
- * @param  array  $parms Request parameters; array keys are 'event', 'step', 'thing', 'property'
- * @param  string $atts  HTML attributes
+ * @param  string       $item  Link text
+ * @param  array        $parms Request parameters; array keys are 'event', 'step', 'thing', 'property'
+ * @param  string|array $atts  HTML attributes
  * @return string HTML
  * @since  4.5.0
  */
@@ -1350,7 +1350,17 @@ EOF;
 			'property' => '',
 		), $parms);
 
-		$atts .= ' class="'.txpspecialchars($parms['step']).' async"';
+		$class = $parms['step'].' async';
+
+		if (is_array($atts))
+		{
+			$atts['class'] = $class;
+		}
+		else
+		{
+			$atts .= ' class="'.txpspecialchars($class).'"';
+		}
+
 		return href($item, join_qs($parms), $atts);
 	}
 
