@@ -173,7 +173,7 @@
  * Converts special characters to HTML entities.
  *
  * @param   array|string $in The input value
- * @return  mixed        The array or string with HTML syntax characters escaped.
+ * @return  mixed        The array or string with HTML syntax characters escaped
  * @package Filter
  */
 
@@ -742,7 +742,7 @@
 /**
  * Gets a HTTP GET or POST parameter.
  *
- * This function internally handles and normalizes MAGIC_QUOTES_GPC,
+ * This function internally handles and normalises MAGIC_QUOTES_GPC,
  * strips CRLF from GET parameters and removes NULL bytes.
  *
  * @param   string       $thing The parameter to get
@@ -960,7 +960,7 @@
 /**
  * Gets a variable from HTTP POST or a prefixed cookie.
  *
- * This function gets either a HTTP COOKIE of the given
+ * This function gets either a HTTP cookie of the given
  * name prefixed with 'txp_', or a HTTP POST parameter
  * without a prefix.
  *
@@ -2043,7 +2043,7 @@
 	}
 
 /**
- * Replace the last space with a &#160;, non-breaking space.
+ * Replace the last space with a &#160; non-breaking space.
  *
  * @param   string $str The string
  * @return  string
@@ -2590,7 +2590,7 @@
  * Calculates a timezone offset.
  *
  * This function calculates the offset between the server local time
- * and the user's selected time zone at a given point in time.
+ * and the user's selected timezone at a given point in time.
  *
  * @param   int $timestamp The timestamp. Defaults to time()
  * @return  int The offset in seconds
@@ -2616,7 +2616,7 @@
 /**
  * Formats a time.
  *
- * This function respects the locale and local time zone,
+ * This function respects the locale and local timezone,
  * and makes sure the output string is encoded in UTF-8.
  *
  * @param   string $format          The date format
@@ -2709,7 +2709,7 @@
 	}
 
 /**
- * Converts a time string from the Textpattern time zone to GMT.
+ * Converts a time string from the Textpattern timezone to GMT.
  *
  * @param   string $time_str The time string
  * @return  int    UNIX timestamp
@@ -4455,14 +4455,14 @@ eod;
 	{
 		global $siteurl;
 
-		// URLs like "/foo/bar" - relative to the domain
+		// URLs like "/foo/bar" - relative to the domain.
 		if (serverSet('HTTP_HOST'))
 		{
 			$html = preg_replace('@(<a[^>]+href=")/@', '$1'.PROTOCOL.serverSet('HTTP_HOST').'/', $html);
 			$html = preg_replace('@(<img[^>]+src=")/@', '$1'.PROTOCOL.serverSet('HTTP_HOST').'/', $html);
 		}
-		// "foo/bar" - relative to the textpattern root
-		// leave "http:", "mailto:" et al. as absolute urls
+		// "foo/bar" - relative to the textpattern root,
+		// leave "http:", "mailto:" et al. as absolute URLs.
 		$html = preg_replace('@(<a[^>]+href=")(?!\w+:)@', '$1'.PROTOCOL.$siteurl.'/$2', $html);
 		$html = preg_replace('@(<img[^>]+src=")(?!\w+:)@', '$1'.PROTOCOL.$siteurl.'/$2', $html);
 
@@ -5020,12 +5020,12 @@ eod;
 /**
  * Validates admin steps and protects against CSRF attempts using tokens.
  *
- * This function takes an admin step and validates its against an array of valid steps.
+ * This function takes an admin step and validates it against an array of valid steps.
  * The valid steps array indicates the step's token based session riding protection
  * needs.
  *
- * If the step requires CSRF token protection, and the request doesn't come with valid
- * token, the request is terminated, defeating any CSRF attempts.
+ * If the step requires CSRF token protection, and the request doesn't come with a
+ * valid token, the request is terminated, defeating any CSRF attempts.
  *
  * If the $step isn't in valid steps, this function returns FALSE, but the request
  * isn't terminated. If the $step is valid and passes CSRF validation, returns
@@ -5133,11 +5133,11 @@ eod;
 	function getStatusNum($name)
 	{
 		$labels = array(
-			'draft' => 1,
-			'hidden' => 2,
+			'draft'   => 1,
+			'hidden'  => 2,
 			'pending' => 3,
-			'live' => 4,
-			'sticky' => 5
+			'live'    => 4,
+			'sticky'  => 5
 		);
 		$status = strtolower($name);
 		$num = empty($labels[$status]) ? 4 : $labels[$status];

@@ -124,7 +124,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
 		$rpc_connect = false;
 		$show_files = false;
 
-		// Get items from RPC
+		// Get items from RPC.
 		@set_time_limit(90); // TODO: 90 seconds: seriously?
 		if ($client->query('tups.listLanguages', $prefs['blog_uid']))
 		{
@@ -140,7 +140,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
 			$msg = gTxt('rpc_connect_error')."<!--".$client->getErrorCode().' '.$client->getErrorMessage()."-->";
 		}
 
-		// Get items from Filesystem
+		// Get items from Filesystem.
 		$files = get_lang_files();
 
 		if ( is_array($files) && !empty($files) )
@@ -167,8 +167,8 @@ Use of this software indicates acceptance of the Textpattern license agreement
 			}
 		}
 
-		// Get installed items from the database
-		// We need a value here for the language itself, not for each one of the rows
+		// Get installed items from the database.
+		// We need a value here for the language itself, not for each one of the rows.
 		$rows = safe_rows('lang, UNIX_TIMESTAMP(MAX(lastmod)) as lastmod','txp_lang',"1 GROUP BY lang ORDER BY lastmod DESC");
 		$installed_lang = array();
 		foreach ($rows as $language)
@@ -181,7 +181,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
 
 		$list = '';
 
-		// Create the language table components
+		// Create the language table components.
 		foreach ($available_lang as $langname => $langdat)
 		{
 			$file_updated = ( isset($langdat['db_lastmod']) && @$langdat['file_lastmod'] > $langdat['db_lastmod']);
@@ -245,7 +245,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
 						);
 
 			$list .= tr(
-			// Lang-Name & Date
+			// Lang-Name and Date.
 				hCell(
 					gTxt($langname)
 					, ''
@@ -259,7 +259,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
 			).n.n;
 		}
 
-		// Output table + content
+		// Output table and content.
 		pagetop(gTxt('tab_languages'), $message);
 
 		echo '<h1 class="txp-heading">', gTxt('tab_languages'), '</h1>',
@@ -307,7 +307,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
 	}
 
 /**
- * Installs a language from the RPC server or a file.
+ * Installs a language from the RPC server or from a file.
  *
  * This function fetches language strings for the given language code from either
  * the RPC server or a file.
@@ -425,7 +425,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
 	}
 
 /**
- * Remove all language strings for the given lang code
+ * Remove all language strings for the given lang code.
  *
  * Removed language code is specified with 'lang_code' HTTP POST
  * parameter.

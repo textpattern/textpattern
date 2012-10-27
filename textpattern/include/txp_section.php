@@ -390,7 +390,7 @@ EOS
 			$in['title'] = $in['name'];
 		}
 
-		// Prevent non url chars on section names
+		// Prevent non-URL characters on section names.
 		include_once txpath.'/lib/classTextile.php';
 
 		$textile = new Textile();
@@ -435,7 +435,7 @@ EOS
 					searchable   = $searchable
 					", "name = '$safe_old_name'");
 
-				// Manually maintain referential integrity
+				// Manually maintain referential integrity.
 				if ($ok)
 				{
 					$ok = safe_update('textpattern', "Section = '$safe_name'", "Section = '$safe_old_name'");

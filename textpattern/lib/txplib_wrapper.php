@@ -60,7 +60,7 @@ class TXP_Wrapper
 	/**
 	 * The current user.
 	 *
-	 * Remember to use allways $this->txp_user when checking
+	 * Remember to always use $this->txp_user when checking
 	 * for permissions with this class.
 	 *
 	 * @var string 
@@ -296,14 +296,14 @@ class TXP_Wrapper
 
 		if ($this->loggedin && $r && has_privs('article.edit.own', $this->txp_user))
 		{
-			// Unprivileged user, check if can edit published arts.
+			// Unprivileged user, check if they can edit published articles.
 			$r = assert_int($r);
 			$oldstatus = safe_field('Status', 'textpattern', "ID = $r");
 			if (($oldstatus == 4 || $oldstatus == 5) && !has_privs('article.edit.published', $this->txp_user))
 			{
 				return false;
 			}
-			// If can, let's go.
+			// If they can, let's go.
 			return $this->_setArticle($params, $article_id);
 		}
 		elseif ($this->loggedin && has_privs('article.edit', $this->txp_user))
@@ -562,7 +562,7 @@ class TXP_Wrapper
 	}
 
 	/**
-	 * Intended for updating an article's non-content fields, like categories, sections or Keywords.
+	 * Intended for updating an article's non-content fields, like categories, sections or keywords.
 	 *
 	 * This method requires authentication and 'article.edit' privileges.
 	 *

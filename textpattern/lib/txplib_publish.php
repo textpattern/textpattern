@@ -19,9 +19,9 @@ Use of this software indicates acceptance of the Textpattern license agreement
  */
 
 /**
- * Build a query qualifier to remove non-frontpage articles from the result set
+ * Build a query qualifier to remove non-frontpage articles from the result set.
  *
- * @return string A SQL qualifier for a querys 'WHERE' part
+ * @return string An SQL qualifier for a query's 'WHERE' part
  */
 
 	function filterFrontPage()
@@ -279,12 +279,12 @@ Use of this software indicates acceptance of the Textpattern license agreement
 	{
 		if ($id !== 0)
 		{
-			// Pivot is specific article by ID: In lack of further information, revert to default sort order 'Posted desc'
+			// Pivot is specific article by ID: In lack of further information, revert to default sort order 'Posted desc'.
 			$atts = filterAtts(array('sortby' => 'Posted', 'sortdir' => 'desc'));
 		}
 		else
 		{
-			// Pivot is $thisarticle: Use article attributes to find its neighbours
+			// Pivot is $thisarticle: Use article attributes to find its neighbours.
 			assert_article();
 			global $thisarticle;
 			if (!is_array($thisarticle))
@@ -363,7 +363,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
 	}
 
 /**
- * Parse a string and replace any Textpattern tags with their actual value
+ * Parse a string and replace any Textpattern tags with their actual value.
  *
  * @param   string $thing The raw string
  * @return  string The parsed string
@@ -739,7 +739,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
 
 /**
  * Save and retrieve the individual article's attributes
- * plus article list attributes for next/prev tags
+ * plus article list attributes for next/prev tags.
  *
  * @param   array $atts
  * @return  array
