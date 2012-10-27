@@ -569,20 +569,19 @@
 
 	function td($content = '', $width = 0, $class = '', $id = '')
 	{
-		$content = ($content === '') ? sp : $content;
-		return t.tag($content, 'td', array(
+		return tda($content, array(
 			'width' => (int) $width,
 			'class' => $class,
-			'id' => $id,		
-		)).n;
+			'id' => $id,
+		));
 	}
 
 /**
  * Renders a &lt;td&gt; element with attributes.
  *
- * @param  string $content Cell content
- * @param  string $atts    Cell attributes
- * @return string HTML
+ * @param  string       $content Cell content
+ * @param  string|array $atts    Cell attributes
+ * @return string       HTML
  */
 
 	function tda($content, $atts = '')
@@ -592,13 +591,13 @@
 	}
 
 /**
- * Renders a &lt;td&gt; element with top/left text orientation and other attributes.
+ * Renders a &lt;td&gt; element with attributes.
  *
  * This function is identical to tda().
  *
- * @param  string $content Cell content
- * @param  string $atts    Cell attributes
- * @return string HTML
+ * @param  string       $content Cell content
+ * @param  string|array $atts    Cell attributes
+ * @return string       HTML
  * @access private
  * @see    tda()
  */
@@ -633,11 +632,10 @@
 
 	function tdcs($content, $span, $width = 0, $class = '')
 	{
-		return join('',array(
-			t.'<td colspan="'.$span.'"',
-			($width) ? ' width="'.$width.'"' : '',
-			($class) ? ' class="'.$class.'"' : '',
-			">$content</td>\n"
+		return tda($content, array(
+			'colspan' => (int) $span,
+			'width' => (int) $width,
+			'class' => $class,
 		));
 	}
 
@@ -652,9 +650,9 @@
 
 	function tdrs($content, $span, $width = 0)
 	{
-		return join('',array(
-			t.'<td rowspan="'.$span.'"',
-			($width) ? ' width="'.$width.'"' : '',">$content</td>".n
+		return tda($content, array(
+			'rowspan' => (int) $span,
+			'width' => (int) $width,
 		));
 	}
 
