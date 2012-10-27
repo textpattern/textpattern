@@ -1700,5 +1700,3 @@ EOS
 			return false;
 		}
 	}
-
-?>

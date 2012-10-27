@@ -46,4 +46,3 @@
 	#	$txpcfg['client_flags'] = MYSQL_CLIENT_SSL | MYSQL_CLIENT_COMPRESS;
 
 	define('txpath', $txpcfg['txpath']);
-?>

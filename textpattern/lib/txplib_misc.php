@@ -5261,5 +5261,3 @@ eod;
 
 		return $return;
 	}
-
-?>

@@ -699,5 +699,3 @@
 
 		return discuss_list();
 	}
-
-?>

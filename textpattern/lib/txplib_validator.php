@@ -432,4 +432,3 @@ class FalseConstraint extends Constraint
 		return !(boolean)$this->value;
 	}
 }
-?>

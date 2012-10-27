@@ -785,5 +785,3 @@ eod;
 
 		return $xlate;
 	}
-
-?>

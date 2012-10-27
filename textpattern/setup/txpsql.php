@@ -471,4 +471,3 @@ function safe_escape($in='')
 {
 	return mysql_real_escape_string($in);
 }
-?>

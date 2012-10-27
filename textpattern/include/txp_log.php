@@ -314,5 +314,3 @@
 
 		return log_list();
 	}
-
-?>

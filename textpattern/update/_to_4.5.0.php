@@ -51,5 +51,3 @@
 	}
 
 	safe_alter('txp_css', 'MODIFY css MEDIUMTEXT NOT NULL');
-
-?>

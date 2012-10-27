@@ -437,5 +437,3 @@ EOS
 			trigger_error('invalid_pane', E_USER_WARNING);
 		}
 	}
-
-?>

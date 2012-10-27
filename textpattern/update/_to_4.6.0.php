@@ -43,5 +43,3 @@
 		safe_alter('txp_lang',
 			"ADD owner VARCHAR(64) NOT NULL DEFAULT '' AFTER event, ADD INDEX owner (owner)");
 	}
-
-?>

@@ -22,5 +22,3 @@
 	{
 		safe_alter('txp_file', "ADD `title` VARCHAR( 255 ) NULL AFTER `filename`");
 	}
-
-?>

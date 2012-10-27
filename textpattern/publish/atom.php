@@ -452,5 +452,3 @@
 		$txt = preg_replace("/&(?![#0-9]+;)/i",'&amp;', $txt);
 		return $txt;
 	}
-
-?>

@@ -193,5 +193,3 @@ function import_blogger_item($item, $section, $status, $invite) {
 	}
 	return $title.' already imported';
 }
-
-?>

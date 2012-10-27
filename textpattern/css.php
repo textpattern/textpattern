@@ -19,4 +19,3 @@ if (!defined("txpath"))
 }
 
 require_once txpath.'/../css.php';
-?>

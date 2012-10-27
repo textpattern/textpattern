@@ -26,5 +26,3 @@
 		}
 		safe_insert('txp_prefs', "prefs_id=1, name='textile_updated',val='1', type='2'");
 	}
-
-?>

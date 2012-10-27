@@ -998,5 +998,3 @@
 		}
 		return isset($valid[$context]) ? $valid[$context] : 'article';
 	}
-
-?>

@@ -130,5 +130,3 @@
 <p><txp:search_result_excerpt /><br/>
 <small><txp:search_result_url /> &middot; <txp:search_result_date /></small></p>';
 	}
-
-?>

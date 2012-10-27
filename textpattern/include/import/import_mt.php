@@ -232,5 +232,3 @@ function import_mt_utf8($str) {
 	}
 	return $str;
 }
-
-?>

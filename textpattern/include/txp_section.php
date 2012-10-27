@@ -719,5 +719,3 @@ EOS
 
 		return sec_section_list($msg);
 	}
-
-?>

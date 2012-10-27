@@ -780,5 +780,3 @@ Use of this software indicates acceptance of the Textpattern license agreement
 		}
 		return $out;
 	}
-
-?>

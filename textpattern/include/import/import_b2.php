@@ -175,5 +175,3 @@
 		}
 		return join('<br />', $results);
 	}
-
-?>

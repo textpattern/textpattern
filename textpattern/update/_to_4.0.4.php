@@ -34,5 +34,3 @@
 
 	if (!safe_field('name', 'txp_prefs', "name = 'title_no_widow'"))
 		safe_insert('txp_prefs', "prefs_id = 1, name = 'title_no_widow', val = '1', type = '1', html='yesnoradio'");
-
-?>

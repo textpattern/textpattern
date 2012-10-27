@@ -85,5 +85,3 @@
  */
 
 	// define('ihu', 'http://static.example.com/');
-
-?>

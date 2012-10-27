@@ -6,5 +6,3 @@ ob_start(NULL, 2048);
 ob_end_clean();
 
 include txpath.'/index.php';
-
-?>

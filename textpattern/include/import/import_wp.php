@@ -605,5 +605,3 @@
 	{
 		return doArray($in, 'stripslashes');
 	}
-
-?>

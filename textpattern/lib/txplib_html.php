@@ -1375,5 +1375,3 @@ EOF;
 
 		return href($item, join_qs($parms), $atts);
 	}
-
-?>

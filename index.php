@@ -77,5 +77,3 @@
 
 	include txpath.'/publish.php';
 	textpattern();
-
-?>

@@ -10,5 +10,3 @@ if (!defined('txpath')) {
 }
 
 include txpath.'/setup/index.php';
-
-?>

@@ -24,5 +24,3 @@
 			safe_update('txp_form', "Form = REPLACE(Form, '<txp:".$search.$end."', '<txp:".$replace.' '.trim($end)."')", '1=1');
 		}
 	}
-
-?>

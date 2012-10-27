@@ -687,5 +687,3 @@ EOF;
 	// update version
 	safe_delete('txp_prefs',"name = 'version'");
 	safe_insert('txp_prefs', "prefs_id=1, name='version',val='4.0', type='2'");
-
-?>

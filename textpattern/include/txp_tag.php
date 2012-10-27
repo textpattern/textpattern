@@ -3953,5 +3953,3 @@ begin tag builder functions
 
 		return $out;
 	}
-
-?>

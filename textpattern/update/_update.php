@@ -154,5 +154,3 @@
 	$prefs = get_prefs();
 
 	extract($prefs);
-
-?>

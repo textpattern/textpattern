@@ -94,5 +94,3 @@
 			safe_query('ALTER IGNORE TABLE `'.PFX.$table.'` ADD INDEX author_idx('.$col.')');
 		}
 	}
-
-?>

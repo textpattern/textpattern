@@ -372,5 +372,3 @@ EOSCR
 		$txp_user = '';
 		return $message;
 	}
-
-?>

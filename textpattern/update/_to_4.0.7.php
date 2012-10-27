@@ -51,5 +51,3 @@
 	#  Searchable article fields hidden preference
 	if (!safe_field('name', 'txp_prefs', "name = 'searchable_article_fields'"))
 		safe_insert('txp_prefs', "prefs_id = 1, name = 'searchable_article_fields', val = 'Title, Body', type = '2', event='publish', html='text_input', position='0'");
-	
-?>

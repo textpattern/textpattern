@@ -125,5 +125,3 @@ function write_log()
 		fclose($fp);
 	}
 }
-
-?>

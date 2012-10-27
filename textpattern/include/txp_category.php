@@ -656,5 +656,3 @@ EOS
 	{
 		return cat_event_category_save('file','txp_file');
 	}
-
-?>

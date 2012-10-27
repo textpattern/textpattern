@@ -110,5 +110,3 @@ function install_language_from_file($lang)
 	}
 	return false;
 }
-
-?>

@@ -125,5 +125,3 @@
 			"`time` = now(), page = '$uri', ip='$ip', host='$host', refer='$ref', status='$status', method='$method'"
 		);
 	}
-
-?>

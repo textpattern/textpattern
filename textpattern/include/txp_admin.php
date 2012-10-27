@@ -664,5 +664,3 @@
 	{
 		author_list($message);
 	}
-
-?>

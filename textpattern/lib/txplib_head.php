@@ -303,5 +303,3 @@
 	{
 		return '<span style="margin-right:2em"><a href="?event='.$link.'">'.$label.'</a></span>';
 	}
-
-?>

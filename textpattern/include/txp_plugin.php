@@ -532,4 +532,3 @@ EOS
 
 		plugin_list($message);
 	}
-?>

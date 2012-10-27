@@ -239,5 +239,3 @@
 		}
 		return join('<br />', $results);
 	}
-
-?>

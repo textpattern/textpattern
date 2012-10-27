@@ -605,5 +605,3 @@
 
 		return list_list();
 	}
-
-?>

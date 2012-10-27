@@ -251,5 +251,3 @@
 		}
 		css_edit($message);
 	}
-
-?>

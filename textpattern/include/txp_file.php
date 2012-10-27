@@ -1028,5 +1028,3 @@
 
 		return array_diff($dirlist,$files);
 	}
-
-?>

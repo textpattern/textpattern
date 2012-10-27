@@ -188,4 +188,3 @@
 		txp_die('DB-Connect was successful, but the textpattern-table was not found.',
 				'503 Service Unavailable');
 	}
-?>

@@ -214,4 +214,3 @@
 			return(gTxt('could_not_update_author').' '.txpspecialchars($name));
 		}
 	}
-?>

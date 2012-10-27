@@ -4645,5 +4645,3 @@
 
 		return parse(EvalElse($thing, $x));
 	}
-
-?>

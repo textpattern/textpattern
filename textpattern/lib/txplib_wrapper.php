@@ -958,5 +958,3 @@ class TXP_Wrapper
 		return $html;
 	}
 }
-
-?>

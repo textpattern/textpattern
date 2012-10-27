@@ -726,5 +726,3 @@ define('ATTS_STRIP_EMPTY', 0x1);
 
 error_reporting($old_level);
 unset($old_level);
-
-?>
