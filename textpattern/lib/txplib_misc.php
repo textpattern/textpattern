@@ -3833,6 +3833,66 @@ eod;
 	}
 
 /**
+ * Builds a HTML attribute list from an array.
+ *
+ * This function takes an array of raw HTML attributes, and returns a
+ * properly sanitised HTML attribute string for use in a HTML tag.
+ *
+ * This function internally handles HTML boolean attributes, array lists and 
+ * query strings. If an attributes value is set as a boolean, the attribute is
+ * considered as one too. If a value is NULL, it's omitted and the attribute is
+ * added without a value. An array value is converted to a space-separated list,
+ * or for 'href' and 'src' to URL encoded a query string.
+ *
+ * @param   array  $atts HTML attributes
+ * @return  string HTML attribute list
+ * @since   4.6.0
+ * @package HTML
+ * @example
+ * echo join_atts(array('class' => 'myClass', 'disabled' => true));
+ */
+
+	function join_atts($atts)
+	{
+		$list = array();
+
+		foreach ($atts as $name => $value)
+		{
+			if ($value === false)
+			{
+				continue;
+			}
+
+			elseif (is_array($value))
+			{
+				if ($name == 'href' || $name == 'src')
+				{
+					$value = join_qs($value);
+				}
+				else
+				{
+					$value = join(' ', doArray($value, 'trim'));
+				}
+			}
+
+			else if ($value === true)
+			{
+				$value = $name;
+			}
+
+			else if ($value === null)
+			{
+				$list[] = $name;
+				continue;
+			}
+
+			$list[] = $name.'="'.txpspecialchars($value).'"';
+		}
+
+		return $list ? ' '.join(' ', $list) : '';
+	}
+
+/**
  * Builds a page URL from an array of parameters.
  *
  * The $inherit can be used to add parameters to an existing url, e.g:
