@@ -449,7 +449,7 @@
 
 		$out = array();
 
-		$out[] = '<div'.$role.' id="'.$id.'" class="txp-details'.$class.'"' . ($content ? ' aria-labelledby="'.$id.'-label"' : '' ) . '>';
+		$out[] = '<section'.$role.' id="'.$id.'" class="txp-details'.$class.'"' . ($content ? ' aria-labelledby="'.$id.'-label"' : '' ) . '>';
 
 		if ($content)
 		{
@@ -459,7 +459,7 @@
 			$out[] = '</div>';
 		}
 
-		$out[] = '</div>';
+		$out[] = '</section>';
 
 		return join(n, $out);
 	}

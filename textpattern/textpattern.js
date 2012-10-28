@@ -1173,7 +1173,7 @@ $(document).ready(function() {
 	// Initialise dynamic WAI-ARIA attributes.
 	$('.txp-summary a').each(function(i, elm) {
 
-		// Get id of toggled <div> region.
+		// Get id of toggled <section> region.
 		var region = $(elm).attr('href');
 		if (region)
 		{
