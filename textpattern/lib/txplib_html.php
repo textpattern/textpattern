@@ -415,7 +415,7 @@
 	}
 
 /**
- * Wraps a collapsible region structure around content.
+ * Wraps a collapsible region and group structure around content.
  *
  * @param  string $id        HTML id attribute for the region wrapper and ARIA label
  * @param  string $content   Content to wrap. If empty, only the outer wrapper will be rendered
@@ -466,7 +466,7 @@
 	}
 
 /**
- * Wraps a group structure around content.
+ * Wraps a region and group structure around content.
  *
  * @param  string $name    HTML id attribute for the group wrapper and ARIA label
  * @param  string $content Content to wrap
@@ -480,7 +480,7 @@
 
 	function wrapGroup($id, $content, $label, $class = '', $help = '')
 	{
-		return wrapRegion($id, $content, '', $label, '', $class, 'group', $help);
+		return wrapRegion($id, $content, '', $label, '', $class, 'region', $help);
 	}
 
 /**
