@@ -325,7 +325,7 @@ EOS
 			echo '<div id="'.$event.'_container" class="txp-container">';
 			echo form(
 
-				'<div class="txp-edit">'.
+				'<section class="txp-edit">'.
 				hed($caption, 2).
 
 				(($is_default_section)
@@ -370,7 +370,7 @@ EOS
 				hInput('page', $page).
 				hInput('sort', $sort).
 				hInput('dir', $dir).
-				'</div>'
+				'</section>'
 			, '', '', 'post', 'edit-form', '', 'section_details');
 			echo '</div>';
 		}

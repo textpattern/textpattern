@@ -488,7 +488,7 @@
 					$rs
 				),
 
-				'<div class="txp-edit">',
+				'<section class="txp-edit">',
 				hed(gTxt('edit_image'), 2),
 
 				pluggable_ui(
@@ -567,7 +567,7 @@
 						n.hInput('crit', $crit)
 					, '', '', 'post', 'edit-form', '', 'image_details_form'),
 				'</div>',
-			'</div>'.n.'</div>';
+			'</section>'.n.'</div>';
 		}
 	}
 

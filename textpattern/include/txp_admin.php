@@ -228,14 +228,14 @@
 		pagetop(gTxt('tab_site_admin'), '');
 
 		echo form(
-			'<div class="txp-edit">'.
+			'<section class="txp-edit">'.n.
 			hed(gTxt('change_password'), 2).n.
 			inputLabel('new_pass', fInput('password', 'new_pass', '', '', '', '', INPUT_REGULAR, '', 'new_pass'), 'new_password').n.
 			graf(checkbox('mail_password', '1', true, '', 'mail_password') .n. '<label for="mail_password">'.gTxt('mail_it').'</label>', ' class="edit-mail-password"').n.
 			graf(fInput('submit', 'change_pass', gTxt('submit'), 'publish')).
 			eInput('admin').
 			sInput('change_pass').
-			'</div>'
+			'</section>'
 		, '', '', 'post', '', '', 'change_password');
 	}
 
@@ -252,13 +252,13 @@
 		$email = fetch('email', 'txp_users', 'name', $txp_user);
 
 		echo form(
-			'<div class="txp-edit">'.
+			'<section class="txp-edit">'.n.
 			hed(gTxt('change_email_address'), 2).n.
 			inputLabel('new_email', fInput('text', 'new_email', $email, '', '', '', INPUT_REGULAR, '', 'new_email'), 'new_email').n.
 			graf(fInput('submit', 'change_email', gTxt('submit'), 'publish')).
 			eInput('admin').
 			sInput('change_email').
-			'</div>'
+			'</section>'
 		, '', '', 'post', '','', 'change_email');
 	}
 
@@ -482,7 +482,7 @@
 		$caption = gTxt(($is_edit) ? 'edit_author' : 'add_new_author');
 
 		echo form(
-			'<div class="txp-edit">'.n.
+			'<section class="txp-edit">'.n.
 			hed($caption, 2).n.
 			inputLabel('login_name', ($is_edit ? strong($name) : fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'login_name')), ($is_edit ? '' : 'login_name'), ($is_edit ? '' : 'add_new_author')).n.
 			inputLabel('real_name', fInput('text', 'RealName', $RealName, '', '', '', INPUT_REGULAR, '', 'real_name'), 'real_name').n.
@@ -492,7 +492,7 @@
 			graf(fInput('submit', '', gTxt('save'), 'publish')).
 			eInput('admin').
 			($user_id ? hInput('user_id', $user_id).sInput('author_save') : sInput('author_save_new')).
-			'</div>'
+			'</section>'
 		, '', '', 'post', 'edit-form', '', 'user_edit');
 	}
 

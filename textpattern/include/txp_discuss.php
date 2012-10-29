@@ -426,7 +426,7 @@
 
 			echo '<div id="'.$event.'_container" class="txp-container">'.
 				form(
-					'<div class="txp-edit">'.n.
+					'<section class="txp-edit">'.n.
 					hed(gTxt('edit_comment'), 2).n.
 					inputLabel('status', $status_list, 'status').n.
 					inputLabel('name', fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'name'), 'name').n.
@@ -449,7 +449,7 @@
 	
 					eInput('discuss').
 					sInput('discuss_save').
-					'</div>'
+					'</section>'
 				, '', '', 'post', 'edit-form', '', 'discuss_edit_form'),'</div>';
 		}
 

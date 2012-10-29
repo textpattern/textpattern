@@ -535,7 +535,7 @@
 					);
 
 			echo n.'<div id="'.$event.'_container" class="txp-container">';
-			echo '<div class="txp-edit">',
+			echo '<section class="txp-edit">',
 				hed(gTxt('edit_file'), 2),
 				inputLabel('condition', $condition).n,
 				inputLabel('name', $downloadlink).n,
@@ -575,7 +575,7 @@
 					hInput('search_method', $search_method)
 				, '', '', 'post', 'edit-form', '', (($file_exists) ? 'file_details' : 'assign_file')),
 				'</div>'.n,
-				'</div>'.n.'</div>';
+				'</section>'.n.'</div>';
 		}
 	}
 

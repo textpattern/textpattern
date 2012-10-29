@@ -310,7 +310,7 @@
 			$caption = gTxt(($is_edit) ? 'edit_link' : 'add_new_link');
 
 			echo form(
-				'<div class="txp-edit">'.n.
+				'<section class="txp-edit">'.n.
 				hed($caption, 2).n.
 				inputLabel('linkname', fInput('text', 'linkname', $linkname, '', '', '', INPUT_REGULAR, '', 'linkname'), 'title').n.
 				inputLabel('linksort', fInput('text', 'linksort', $linksort, '', '', '', INPUT_REGULAR, '', 'linksort'), 'sort_value', 'link_sort').n.
@@ -324,7 +324,7 @@
 				hInput('id', $id).
 				hInput('search_method', gps('search_method')).
 				hInput('crit', gps('crit')).
-				'</div>'
+				'</section>'
 			, '', '', 'post', 'edit-form', '', 'link_details');
 		};
 

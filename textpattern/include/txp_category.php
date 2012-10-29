@@ -541,7 +541,7 @@ EOS
 			pagetop(gTxt('edit_category'));
 			extract($row);
 			list($parent_widget, $has_parent) = cat_parent_pop($parent,$evname,$id);
-			$out = '<div class="txp-edit">'.n.
+			$out = '<section class="txp-edit">'.n.
 				hed(gTxt('edit_category'), 2).n.
 				inputLabel('category_name', fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'category_name'), $evname.'_category_name').n.
 				($has_parent ? inputLabel('category_parent', $parent_widget, 'parent') : graf('<span class="edit-label">'.gTxt('parent').'</span><span class="edit-value">'.$parent_widget.'</span>')).n.
@@ -552,7 +552,7 @@ EOS
 				eInput('category').
 				sInput('cat_'.$evname.'_save').
 				hInput('old_name',$name).
-				'</div>';
+				'</section>';
 			echo '<div id="category_container" class="txp-container">'.
 				form(  $out, '', '', 'post', 'edit-form' ).
 				'</div>';

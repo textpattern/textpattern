@@ -88,7 +88,7 @@ function showHideFields(sel)
 }
 EOF
 );
-		$content = '<div class="txp-edit">';
+		$content = '<section class="txp-edit">';
 		$content.= hed(gTxt('txp_import'), 2);
 
 		// Select tool.
@@ -128,7 +128,7 @@ EOF
 		$content.= tag($wponly, 'div', ' id="wponly" style="display: none;"');
 		$content.= graf(fInput('submit', 'choose', gTxt('continue'), 'publish'));
 		$content.= sInput('start_import').eInput('import');
-		$content.= '</div>';
+		$content.= '</section>';
 		echo '<div id="'.$event.'_container" class="txp-container">'.
 			form($content, '', '', 'post', '', '', 'import').
 			'</div>';
