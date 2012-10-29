@@ -3844,9 +3844,9 @@ eod;
  * added without a value. An array value is converted to a space-separated list,
  * or for 'href' and 'src' to URL encoded a query string.
  *
- * @param   array  $atts  HTML attributes
- * @param   int    $flags ATTS_STRIP_EMPTY
- * @return  string HTML attribute list
+ * @param   array|string  $atts  HTML attributes
+ * @param   int           $flags ATTS_STRIP_EMPTY
+ * @return  string        HTML attribute list
  * @since   4.6.0
  * @package HTML
  * @example
@@ -3855,6 +3855,11 @@ eod;
 
 	function join_atts($atts, $flags = ATTS_STRIP_EMPTY)
 	{
+		if (!is_array($atts))
+		{
+			return $atts ? ' '.trim($atts) : '';
+		}
+
 		$list = array();
 
 		foreach ($atts as $name => $value)
