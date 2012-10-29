@@ -737,7 +737,7 @@
  * @param  string|array $atts    The element's HTML attributes
  * @return string       HTML
  * @example
- * echo tag('Link text', 'a', 'href="#" class="warning"');
+ * echo tag('Link text', 'a', array('href' => '#', 'class' => 'warning'));
  */
 
 	function tag($content, $tag, $atts = '')
