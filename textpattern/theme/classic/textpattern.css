@@ -411,23 +411,35 @@ a:hover .content-image {
 }
 
 
-/* Twisties
+/* Collapsible and non-collapsible regions
    ========================================================================== */
 
-.txp-summary {
-	font-size: 1em;
-	font-family: Verdana, Arial, sans-serif;
-	margin: 1em 0;
-	padding-left: 1em;
-	color: #000;
-	background: url("img/expand-collapse.gif") no-repeat 0 5px;
+.txp-details {
+	margin: 0 0 .25em 0;
+	border: 1px solid #ddd;
+	-moz-border-radius: .4em;
+	border-radius: .4em;
+	padding: 1px 1em;
 }
 
-.svg .txp-summary {
+.txp-details h3 {
+	margin: 1em 0;
+	color: #963;
+	font-size: 1em;
+	font-family: Verdana, Arial, sans-serif;
+	font-weight: bold;
+}
+
+.txp-summary a {
+	padding: 0 0 0 12px;
+	background: url("img/expand-collapse.gif") no-repeat 0 4px;
+}
+
+.svg .txp-summary a {
 	background-image: url("img/expand-collapse.svg");
 }
 
-.expanded {
+.txp-summary.expanded a {
 	background-position: 0 -90px;
 }
 
@@ -435,15 +447,22 @@ a:hover .content-image {
 /* Forms
    ========================================================================== */
 
+/* define consistent fieldset margin, border and padding */
 fieldset {
-	margin: 0 0 1em 0;
-	border: 1px solid #e5e5e5;
-	padding: 0 1em 0 1em;
+	margin: 0 0 .25em 0;
+	border: 1px solid #ddd;
+	-moz-border-radius: .4em;
+	border-radius: .4em;
+	padding: 1px .5em;
 }
 
+/* remove padding so people aren't caught out if they zero out fieldsets */
 legend {
-	border: 0;
-	padding: 0;
+	margin: 1em 0;
+	color: #963;
+    border: 0;
+    padding: 0;
+    font-weight: bold;
 }
 
 /* colour placeholder text (Webkit) */
@@ -837,7 +856,7 @@ td {
 
 .txp-list th,
 .txp-list td {
-	padding: .3em .5em;
+	padding: .3em 1em;
 }
 
 .txp-list thead th,
@@ -1125,6 +1144,8 @@ span.spinner {
 .txp-login {
 	margin: 0 auto 1em;
 	border: 1px solid #e5e5e5;
+	-moz-border-radius: .4em;
+	border-radius: .4em;
 	padding: 1em 1em 1px 1em;
 }
 

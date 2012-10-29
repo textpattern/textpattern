@@ -7,21 +7,8 @@
 /* Twisties
    ========================================================================== */
 
-.txp-summary {
-	background: none;
-	padding: 0;
-}
-
-.svg .txp-summary {
-	background: none;
-}
-
-.expanded {
-	background: none;
-}
-
 .txp-summary a {
-	padding-right: 12px;
+	padding: 0 12px 0 0;
 	text-decoration: none;
 	background: url("img/expand-collapse.gif") no-repeat right -91px;
 }
