@@ -742,17 +742,7 @@
 
 	function tag($content, $tag, $atts = '')
 	{
-		if (is_array($atts))
-		{
-			$atts = join_atts($atts);
-		}
-
-		elseif ($atts)
-		{
-			$atts = ' ' . trim($atts);
-		}
-
-		return ('' !== $content) ? '<'.$tag.$atts.'>'.$content.'</'.$tag.'>' : '';
+		return ('' !== $content) ? '<'.$tag.join_atts($atts).'>'.$content.'</'.$tag.'>' : '';
 	}
 
 /**
@@ -768,17 +758,7 @@
 
 	function tag_void($tag, $atts = '')
 	{
-		if (is_array($atts))
-		{
-			$atts = join_atts($atts);
-		}
-
-		elseif ($atts)
-		{
-			$atts = ' ' . trim($atts);
-		}
-
-		return '<'.$tag.$atts.'>';
+		return '<'.$tag.join_atts($atts).'>';
 	}
 
 /**
