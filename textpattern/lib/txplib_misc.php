@@ -614,6 +614,7 @@
 
 		if (!isset($txp_permissions[$res]))
 		{
+			$perm = join(',', do_list($perm));
 			$txp_permissions[$res] = $perm;
 		}
 	}
