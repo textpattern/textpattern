@@ -756,6 +756,32 @@
 	}
 
 /**
+ * Renders anything as a HTML void element.
+ *
+ * @param  string       $tag  The tag without brackets
+ * @param  string|array $atts HTML attributes
+ * @return string       HTML
+ * @since  4.6.0
+ * @example
+ * echo tag_void('input', array('name' => 'name', 'type' => 'text'));
+ */
+
+	function tag_void($tag, $atts = '')
+	{
+		if (is_array($atts))
+		{
+			$atts = join_atts($atts);
+		}
+
+		elseif ($atts)
+		{
+			$atts = ' ' . trim($atts);
+		}
+
+		return '<'.$tag.$atts.'>';
+	}
+
+/**
  * Renders a &lt;p&gt; element.
  *
  * @param  string       $item Enclosed content
