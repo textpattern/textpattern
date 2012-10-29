@@ -460,9 +460,9 @@ fieldset {
 legend {
 	margin: 1em 0;
 	color: #963;
-    border: 0;
-    padding: 0;
-    font-weight: bold;
+	border: 0;
+	padding: 0;
+	font-weight: bold;
 }
 
 /* colour placeholder text (Webkit) */
