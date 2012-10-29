@@ -765,15 +765,10 @@ if (!empty($event) and $event == 'article') {
 
 		// Sort and display.
 
-			echo pluggable_ui('article_ui', 'sort_display',
-				n.n.tag(
-					n.'<legend id="write-sort-label">'.gTxt('sort_display').'</legend>'.
-					//-- section select --------------
-					$partials['section']['html'].
-					//-- category selects -----------
-					$partials['categories']['html'].
-					n,
-					'fieldset', ' role="region" id="write-sort" aria-labelledby="write-sort-label"'),
+			echo pluggable_ui(
+				'article_ui',
+				'sort_display',
+				wrapRegion('write-sort', $partials['section']['html'].n.$partials['categories']['html'].n, '', gTxt('sort_display')),
 				$rs);
 
 		// "Comments" section.
@@ -791,30 +786,33 @@ if (!empty($event) and $event == 'article') {
 					safe_strtotime($store_out['year'].'-'.$store_out['month'].'-'.$store_out['day'].' '.$store_out['hour'].':'.$store_out['minute'].':'.$store_out['second'])
 					: time();
 
-				$posted_block = pluggable_ui('article_ui', 'timestamp',
-					n.n.'<fieldset id="write-timestamp">'.
-					n.'<legend>'.gTxt('timestamp').'</legend>'.
+				$posted_block = pluggable_ui(
+					'article_ui',
+					'timestamp',
+					wrapRegion(
+						'write-timestamp',
+						n.graf(checkbox('publish_now', '1', $publish_now, '', 'publish_now').'<label for="publish_now">'.gTxt('set_to_now').'</label>', ' class="publish-now"').
 
-					n.graf(checkbox('publish_now', '1', $publish_now, '', 'publish_now').'<label for="publish_now">'.gTxt('set_to_now').'</label>', ' class="publish-now"').
+						n.graf(gTxt('or_publish_at').n.popHelp('timestamp'), ' class="publish-at"').
 
-					n.graf(gTxt('or_publish_at').n.popHelp('timestamp'), ' class="publish-at"').
+						n.graf('<span class="label">'.gtxt('date').'</span>'.n.
+							tsi('year', '%Y', $persist_timestamp, '').' / '.
+							tsi('month', '%m', $persist_timestamp, '').' / '.
+							tsi('day', '%d', $persist_timestamp, '')
+						, ' class="date posted created"'
+						).
 
-					n.graf('<span class="label">'.gtxt('date').'</span>'.n.
-						tsi('year', '%Y', $persist_timestamp, '').' / '.
-						tsi('month', '%m', $persist_timestamp, '').' / '.
-						tsi('day', '%d', $persist_timestamp, '')
-					, ' class="date posted created"'
-					).
-
-					n.graf('<span class="label">'.gTxt('time').'</span>'.n.
-						tsi('hour', '%H', $persist_timestamp, '').' : '.
-						tsi('minute', '%M', $persist_timestamp, '').' : '.
-						tsi('second', '%S', $persist_timestamp, '')
-					, ' class="time posted created"'
-					).
-
-				n.'</fieldset>',
-				array('sPosted' => $persist_timestamp) + $rs);
+						n.graf('<span class="label">'.gTxt('time').'</span>'.n.
+							tsi('hour', '%H', $persist_timestamp, '').' : '.
+							tsi('minute', '%M', $persist_timestamp, '').' : '.
+							tsi('second', '%S', $persist_timestamp, '')
+						, ' class="time posted created"'
+						),
+						'',
+						gTxt('timestamp')
+					),
+					array('sPosted' => $persist_timestamp) + $rs
+				);
 
 			// Expires.
 
@@ -822,26 +820,29 @@ if (!empty($event) and $event == 'article') {
 					safe_strtotime($store_out['exp_year'].'-'.$store_out['exp_month'].'-'.$store_out['exp_day'].' '.$store_out['exp_hour'].':'.$store_out['exp_minute'].':'.$store_out['second'])
 					: NULLDATETIME;
 
-				$expires_block = pluggable_ui('article_ui', 'expires',
-					n.n.'<fieldset id="write-expires">'.
-					n.'<legend>'.gTxt('expires').'</legend>'.
+				$expires_block = pluggable_ui(
+					'article_ui',
+					'expires',
+					wrapRegion(
+						'write-expires',
+						n.graf('<span class="label">'.gtxt('date').'</span>'.n.
+							tsi('exp_year', '%Y', $persist_timestamp, '').' / '.
+							tsi('exp_month', '%m', $persist_timestamp, '').' / '.
+							tsi('exp_day', '%d', $persist_timestamp, '')
+						, ' class="date expires"'
+						).
 
-					n.graf('<span class="label">'.gtxt('date').'</span>'.n.
-						tsi('exp_year', '%Y', $persist_timestamp, '').' / '.
-						tsi('exp_month', '%m', $persist_timestamp, '').' / '.
-						tsi('exp_day', '%d', $persist_timestamp, '')
-					, ' class="date expires"'
-					).
-
-					n.graf('<span class="label">'.gTxt('time').'</span>'.n.
-						tsi('exp_hour', '%H', $persist_timestamp, '').' : '.
-						tsi('exp_minute', '%M', $persist_timestamp, '').' : '.
-						tsi('exp_second', '%S', $persist_timestamp, '')
-					, ' class="time expires"'
-					).
-
-				n.'</fieldset>',
-				$rs);
+						n.graf('<span class="label">'.gTxt('time').'</span>'.n.
+							tsi('exp_hour', '%H', $persist_timestamp, '').' : '.
+							tsi('exp_minute', '%M', $persist_timestamp, '').' : '.
+							tsi('exp_second', '%S', $persist_timestamp, '')
+						, ' class="time expires"'
+						),
+						'',
+						gTxt('expires')
+					),
+					$rs
+				);
 
 			// Publish button.
 
@@ -1469,11 +1470,10 @@ EOS
 
 	function article_partial_status($rs)
 	{
-		return pluggable_ui('article_ui', 'status',
-			n.n.'<fieldset role="region" id="write-status" aria-labelledby="write-status-label">'.
-				n.'<legend id="write-status-label">'.gTxt('status').'</legend>'.
-				n.status_radio($rs['Status']).
-				n.'</fieldset>',
+		return pluggable_ui(
+			'article_ui',
+			'status',
+			wrapRegion('write-status', status_radio($rs['Status']), '', gTxt('status')),
 			$rs);
 	}
 
@@ -1581,10 +1581,11 @@ EOS
 	function article_partial_posted($rs)
 	{
 		extract($rs);
-		return pluggable_ui('article_ui', 'timestamp',
-			n.n.'<fieldset id="write-timestamp">'.
-				n.'<legend>'.gTxt('timestamp').'</legend>'.
-
+		return pluggable_ui(
+			'article_ui',
+			'timestamp',
+			wrapRegion(
+				'write-timestamp',
 				n.graf(checkbox('reset_time', '1', $reset_time, '', 'reset_time').'<label for="reset_time">'.gTxt('reset_time').'</label>', ' class="reset-time"').
 
 				n.graf(gTxt('published_at').n.popHelp('timestamp'), ' class="publish-at"').
@@ -1594,16 +1595,19 @@ EOS
 					tsi('month', '%m', $sPosted).' / '.
 					tsi('day', '%d', $sPosted)
 				, ' class="date posted created"'
-			).
+				).
 
 				n.graf('<span class="label">'.gTxt('time').'</span>'.sp.
 					tsi('hour', '%H', $sPosted).' : ' .
 					tsi('minute', '%M', $sPosted).' : '.
 					tsi('second', '%S', $sPosted)
 				, ' class="time posted created"'
-			).
-			n.'</fieldset>',
-			$rs);
+				),
+				'',
+				gTxt('timestamp')
+			),
+			$rs
+		);
 	}
 
 /**
@@ -1616,27 +1620,30 @@ EOS
 	function article_partial_expires($rs)
 	{
 		extract($rs);
-		return pluggable_ui('article_ui', 'expires',
-			n.n.'<fieldset id="write-expires">'.
-				n.'<legend>'.gTxt('expires').'</legend>'.
-
+		return pluggable_ui(
+			'article_ui',
+			'expires',
+			wrapRegion(
+				'write-expires',
 				n.graf('<span class="label">'.gtxt('date').'</span>'.sp.
 					tsi('exp_year', '%Y', $sExpires).' / '.
 					tsi('exp_month', '%m', $sExpires).' / '.
 					tsi('exp_day', '%d', $sExpires)
 				, ' class="date expires"'
-			).
+				).
 
 				n.graf('<span class="label">'.gTxt('time').'</span>'.sp.
 					tsi('exp_hour', '%H', $sExpires).' : '.
 					tsi('exp_minute', '%M', $sExpires).' : '.
 					tsi('exp_second', '%S', $sExpires)
 				, ' class="time expires"'
-			).
-				n.hInput('sExpires', $sExpires).
-
-				n.'</fieldset>',
-			$rs);
+				).
+				n.hInput('sExpires', $sExpires),
+				'',
+				gTxt('expires')
+			),
+			$rs
+		);
 	}
 
 /**

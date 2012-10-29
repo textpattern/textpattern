@@ -435,8 +435,9 @@
 		$help_link = ($help) ? n.popHelp($help) : '';
 
 		$class = ($class) ? ' '.trim($class) : '';
+		$display_state = ($role == 'region') ? ' role="group"' : '';
 		$role = ($role) ? ' role="'.$role.'"' : '';
-		$pane_ref = $heading_class = $display_state = '';
+		$pane_ref = $heading_class = '';
 
 		if ($anchor_id && $pane)
 		{
@@ -449,7 +450,7 @@
 
 		$out = array();
 
-		$out[] = '<section'.$role.' id="'.$id.'" class="txp-details'.$class.'"' . ($content ? ' aria-labelledby="'.$id.'-label"' : '' ) . '>';
+		$out[] = n.'<section'.$role.' id="'.$id.'" class="txp-details'.$class.'"' . ($content ? ' aria-labelledby="'.$id.'-label"' : '' ) . '>';
 
 		if ($content)
 		{
