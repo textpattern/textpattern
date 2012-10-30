@@ -3677,6 +3677,8 @@
  *
  * @param   string $status The HTTP status code
  * @package Network
+ * @example
+ * txp_status_header('403 Forbidden');
  */
 
 	function txp_status_header($status = '200 OK')
@@ -3812,6 +3814,8 @@ eod;
  * @param   array  $q The parameters for the query
  * @return  string The query, including starting "?".
  * @package URL
+ * @example
+ * echo join_qs(array('param1' => 'value1', 'param2' => 'value2'));
  */
 
 	function join_qs($q)
@@ -4053,6 +4057,11 @@ eod;
  * @param  string $list  The value list
  * @param  string $delim The list boundary
  * @return bool   Returns TRUE if $val is found, FALSE otherwise
+ * @example
+ * if (in_list('red', 'blue, green, red, yellow'))
+ * {
+ * 	echo "'red' found from the list.";
+ * }
  */
 
 	function in_list($val, $list, $delim = ',')
@@ -4070,6 +4079,10 @@ eod;
  * @param  string $list  The string
  * @param  string $delim The boundary
  * @return array
+ * @example
+ * print_r(
+ * 	do_list('value1, value2, value3')
+ * );
  */
 
 	function do_list($list, $delim = ',')
@@ -4507,6 +4520,9 @@ eod;
  * @param  int   $limit The number of items per page
  * @param  int   $page  The page number
  * @return array Array of page, offset and number of pages.
+ * @example
+ * list($page, $offset, $num_pages) = pager(150, 10, 1);
+ * echo "Page {$page} of {$num_pages}. Offset is {$offset}.";
  */
 
 	function pager($total, $limit, $page)
