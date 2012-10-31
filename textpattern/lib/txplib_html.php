@@ -191,14 +191,12 @@
 
 	function wLink($event, $step = '', $thing = '', $value = '')
 	{
-		// TODO: Why index.php? while we don't need this in eLink etc.
-		return join('',array(
-			'<a href="index.php?event='.$event,
-			($step) ? a.'step='.$step : '',
-			($thing) ? a.''.$thing.'='.urlencode($value) : '',
-			a.'_txp_token='.form_token(),
-			'" class="dlink">'.sp.'!'.sp.'</a>'
-		));
+		return href(sp.'!'.sp, array(
+			'event' => $event,
+			'step' => $step,
+			$thing => $value,
+			'_txp_token' => form_token()
+		), array('class' => 'dlink'));
 	}
 
 /**
