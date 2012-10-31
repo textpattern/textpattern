@@ -448,14 +448,16 @@
  * current context are returned. If 'txpinterface' constant equals 'admin' all
  * strings are returned. Otherwise, only strings from events 'common' and 'public'.
  *
- * @param   string       $lang   The language code
- * @param   array|string $events Loaded events
+ * If $events is FALSE, returns all strings.
+ *
+ * @param   string            $lang   The language code
+ * @param   array|string|bool $events An array of loaded events
  * @return  array
  * @package L10n
  * @see     load_lang_event()
  * @example
  * print_r(
- * 	load_lang('en-gb', array())
+ * 	load_lang('en-gb', false)
  * );
  */
 
