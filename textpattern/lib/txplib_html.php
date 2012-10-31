@@ -1267,10 +1267,14 @@ EOF;
 		$out = '<script>'.n.
 			trim($js).n.
 			'</script>'.n;
+
 		if ($flags)
+		{
 			$out .= '<noscript>'.n.
 				trim($flags).n.
 				'</noscript>'.n;
+		}
+
 		return $out;
 	}
 
