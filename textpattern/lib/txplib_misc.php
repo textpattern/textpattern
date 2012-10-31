@@ -3866,15 +3866,15 @@ eod;
 	function join_qs($q)
 	{
 		$qs = array();
-		foreach ($q as $k=>$v)
+		foreach ($q as $k => $v)
 		{
 			if (is_array($v))
 			{
 				$v = join(',', $v);
 			}
-			if ($v)
+			if ($k && $v)
 			{
-				$qs[] = urlencode($k) . '=' . urlencode($v);
+				$qs[$k] = urlencode($k) . '=' . urlencode($v);
 			}
 		}
 
