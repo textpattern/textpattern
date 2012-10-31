@@ -1258,7 +1258,7 @@ EOF;
 					$js .= '.v'.txp_version.$ext;
 				}
 
-				return '<script src="'.txpspecialchars($js).'"></script>';
+				return '<script src="'.txpspecialchars($js).'"></script>'.n;
 			}
 		}
 
