@@ -544,6 +544,9 @@
 /**
  * Gets language strings for the given event.
  *
+ * If no $lang is specified, the strings are loaded
+ * from the currently active language.
+ *
  * @param   string       $event The event to get, e.g. "common", "admin", "public"
  * @param   string       $lang  The language code
  * @return  array|string Array of string on success, or an empty string when no strings were found
