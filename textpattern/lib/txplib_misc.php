@@ -2230,40 +2230,69 @@
 	}
 
 /**
- * Gets the peak memory usage.
+ * Renders peak memory usage in a HTML comment.
  *
- * @param   string $message  The message associated with the logged memory usage
- * @param   bool   $returnit Return the usage wrapped in a HTML comment
+ * @param   string      $message  The message associated with the logged memory usage
+ * @param   bool        $returnit Return the usage wrapped in a HTML comment
+ * @return  null|string HTML
  * @package Debug
  */
 
 	function maxMemUsage($message = 'none', $returnit = false)
 	{
-		static $memory_top = 0;
-		static $memory_message;
-
-		if (is_callable('memory_get_usage'))
-		{
-			$memory_now = memory_get_usage();
-			if ($memory_now > $memory_top)
-			{
-				$memory_top = $memory_now;
-				$memory_message = $message;
-			}
-		}
+		$memory = get_txp_memory_usage($message);
 
 		if ($returnit)
 		{
-			if (is_callable('memory_get_usage'))
+			if ($memory)
 			{
 				return n.comment(sprintf('Memory: %sKb, %s',
-					ceil($memory_top/1024), $memory_message));
+					ceil($memory[0]/1024), $memory[1]));
 			}
 			else
 			{
 				return n.comment('Memory: no info available');
 			}
 		}
+	}
+
+/**
+ * Gets Textpattern peak memory usage.
+ *
+ * Peak memory usage is checked, calculated and logged each
+ * time this function is invoked.
+ *
+ * @param   string     $message The message associated with the logged memory usage
+ * @return  array|bool An array consisting of peak usage and its message, or FALSE on error
+ * @since   4.6.0
+ * @package Debug
+ * @example
+ * if ($memory = get_txp_memory_usage())
+ * {
+ * 	list($usage, $message) = $memory;
+ * 	echo "Memory: {$usage}, {$message}.";
+ * }
+ */
+
+	function get_txp_memory_usage($message = 'none')
+	{
+		static $memory_top = 0;
+		static $memory_message = '';
+
+		if (!is_callable('memory_get_usage'))
+		{
+			return false;
+		}
+
+		$memory_now = memory_get_usage();
+
+		if ($memory_now > $memory_top)
+		{
+			$memory_top = $memory_now;
+			$memory_message = $message;
+		}
+
+		return array($memory_top, $memory_message);
 	}
 
 /**
