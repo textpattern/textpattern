@@ -1342,8 +1342,7 @@ EOF;
 
 	function fieldset($content, $legend = '', $id = '')
 	{
-		$a_id = ($id ? ' id="'.$id.'"' : '');
-		return tag(trim(tag($legend, 'legend').n.$content), 'fieldset', $a_id);
+		return tag(trim(tag($legend, 'legend').n.$content), 'fieldset', array('id' => $id));
 	}
 
 /**
