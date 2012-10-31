@@ -1258,21 +1258,17 @@ EOF;
 					$js .= '.v'.txp_version.$ext;
 				}
 
-				return '<script src="'.txpspecialchars($js).'"></script>'.n;
+				return tag(null, 'script', array('src' => $js)).n;
 			}
 		}
 
 		$js = preg_replace('#<(/?)script#', '\\x3c$1script', $js);
 
-		$out = '<script>'.n.
-			trim($js).n.
-			'</script>'.n;
+		$out = tag(n.trim($js).n, 'script').n;
 
 		if ($flags)
 		{
-			$out .= '<noscript>'.n.
-				trim($flags).n.
-				'</noscript>'.n;
+			$out .= tag(n.trim($flags).n, 'noscript').n;
 		}
 
 		return $out;
