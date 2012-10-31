@@ -444,27 +444,38 @@
  * This function gets the given language from the database
  * and returns the strings as an array.
  * 
- * Only appropriate strings for the current context are returned.
- * If 'txpinterface' constant equals 'admin' all strings are returned.
- * Otherwise, only strings from events 'common' and 'public'.
+ * If no $events is specified, only appropriate strings for the 
+ * current context are returned. If 'txpinterface' constant equals 'admin' all
+ * strings are returned. Otherwise, only strings from events 'common' and 'public'.
  *
- * @param   string $lang The language code
+ * @param   string       $lang   The language code
+ * @param   array|string $events Loaded events
  * @return  array
  * @package L10n
  * @see     load_lang_event()
  * @example
  * print_r(
- * 	load_lang('en-gb')
+ * 	load_lang('en-gb', array())
  * );
  */
 
-	function load_lang($lang)
+	function load_lang($lang, $events = null)
 	{
+		if ($events === null && txpinterface != 'admin')
+		{
+			$events = array('public', 'common');
+		}
+
+		$where = '';
+
+		if ($events)
+		{
+			$where .= ' and event in('.join(',', quote_list((array) $events)).')';
+		}
+
 		foreach(array($lang, 'en-gb') as $lang_code)
 		{
-			$rs = (txpinterface == 'admin')
-				? safe_rows('name, data', 'txp_lang', "lang='".doSlash($lang_code)."'")
-				: safe_rows('name, data', 'txp_lang', "lang='".doSlash($lang_code)."' AND ( event='public' OR event='common')");
+			$rs = safe_rows('name, data', 'txp_lang', "lang='".doSlash($lang_code)."'".$where);
 
 			if (!empty($rs))
 			{
