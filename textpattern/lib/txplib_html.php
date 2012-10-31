@@ -1355,6 +1355,13 @@ EOF;
  * @param  string|array $atts  HTML attributes
  * @return string HTML
  * @since  4.5.0
+ * @example
+ * echo asyncHref('Disable', array(
+ * 	'event'    => 'myEvent',
+ * 	'step'     => 'myStep',
+ * 	'thing'    => 'status',
+ * 	'property' => 'disable',
+ * ));
  */
 
 	function asyncHref($item, $parms, $atts = '')
