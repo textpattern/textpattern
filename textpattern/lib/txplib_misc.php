@@ -5280,7 +5280,7 @@ eod;
 					}
 				}
 
-				if (!get_pref('enable_xmlrpc_server'))
+				if (!get_pref('enable_xmlrpc_server', true))
 				{
 					unset(
 						$files_md5['/../rpc/index.php'],
