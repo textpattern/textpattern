@@ -384,7 +384,7 @@
 
 			$nav[] = selectInput('page', $option_list, $page, false, true);
 
-			if ($page != $numPages)
+			if ($page < $numPages)
 			{
 				$nav[] = sp.PrevNextLink($event, $page + 1, gTxt('next'), 'next', $sort, $dir, $crit, $search_method, $step);
 			}
