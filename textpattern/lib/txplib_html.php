@@ -373,14 +373,25 @@
 
 			$nav = array();
 
-			$nav[] = ($page > 1) ?
-				PrevNextLink($event, $page - 1, gTxt('prev'), 'prev', $sort, $dir, $crit, $search_method, $step).sp :
-				tag(gTxt('prev'), 'span', ' class="navlink-disabled" aria-disabled="true"').sp;
+			if ($page > 1)
+			{
+				$nav[] = PrevNextLink($event, $page - 1, gTxt('prev'), 'prev', $sort, $dir, $crit, $search_method, $step).sp;
+			}
+			else
+			{
+				$nav[] = tag(gTxt('prev'), 'span', ' class="navlink-disabled" aria-disabled="true"').sp;	
+			}
 
 			$nav[] = selectInput('page', $option_list, $page, false, true);
-			$nav[] = ($page != $numPages) ?
-				sp.PrevNextLink($event, $page + 1, gTxt('next'), 'next', $sort, $dir, $crit, $search_method, $step) :
-				sp.tag(gTxt('next'), 'span', ' class="navlink-disabled" aria-disabled="true"');
+
+			if ($page != $numPages)
+			{
+				$nav[] = sp.PrevNextLink($event, $page + 1, gTxt('next'), 'next', $sort, $dir, $crit, $search_method, $step);
+			}
+			else
+			{
+				$nav[] = sp.tag(gTxt('next'), 'span', ' class="navlink-disabled" aria-disabled="true"');
+			}
 
 			$out[] = form(
 				n.eInput($event).
