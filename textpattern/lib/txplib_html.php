@@ -346,7 +346,7 @@
  * @return string HTML
  */
 
-	function nav_form($event, $page, $numPages, $sort, $dir, $crit, $search_method, $total = 0, $limit = 0, $step = 'list')
+	function nav_form($event, $page, $numPages, $sort = '', $dir = '', $crit = '', $search_method = '', $total = 0, $limit = 0, $step = 'list')
 	{
 		global $theme;
 		if ($crit != '' && $total > 1)
