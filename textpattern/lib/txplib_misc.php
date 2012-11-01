@@ -3872,7 +3872,7 @@ eod;
 			{
 				$v = join(',', $v);
 			}
-			if ($k && $v)
+			if ($k && (string) $v !== '')
 			{
 				$qs[$k] = urlencode($k) . '=' . urlencode($v);
 			}
