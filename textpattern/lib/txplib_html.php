@@ -377,7 +377,7 @@
 				PrevNextLink($event, $page - 1, gTxt('prev'), 'prev', $sort, $dir, $crit, $search_method, $step).sp :
 				tag(gTxt('prev'), 'span', ' class="navlink-disabled" aria-disabled="true"').sp;
 
-			$nav[] = selectInput('page', $option_list, $page, false, ' onchange="submit(this.form);"');
+			$nav[] = selectInput('page', $option_list, $page, false, true);
 			$nav[] = ($page != $numPages) ?
 				sp.PrevNextLink($event, $page + 1, gTxt('next'), 'next', $sort, $dir, $crit, $search_method, $step) :
 				sp.tag(gTxt('next'), 'span', ' class="navlink-disabled" aria-disabled="true"');
