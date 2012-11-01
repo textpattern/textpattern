@@ -485,7 +485,7 @@
  * Renders start of a layout &lt;table&gt; element.
  *
  * @return     string HTML
- * @deprecated 4.4.0
+ * @deprecated in 4.4.0
  */
 
 	function startSkelTable()
