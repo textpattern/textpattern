@@ -357,9 +357,9 @@
 						'{from}'  => (($page - 1) * $limit) + 1,
 						'{to}'    => min($total, $page * $limit),
 						'{total}' => $total
-						)
 					)
-				);
+				)
+			);
 		}
 
 		if ($numPages > 1)
@@ -368,15 +368,7 @@
 
 			for ($i = 1; $i <= $numPages; $i++)
 			{
-				if ($i == $page)
-				{
-					$option_list[] = '<option value="'.$i.'" selected="selected">'."$i/$numPages".'</option>';
-				}
-
-				else
-				{
-					$option_list[] = '<option value="'.$i.'">'."$i/$numPages".'</option>';
-				}
+				$option_list[$i] = $i.'/'.$numPages;
 			}
 
 			$nav = array();
@@ -385,24 +377,17 @@
 				PrevNextLink($event, $page - 1, gTxt('prev'), 'prev', $sort, $dir, $crit, $search_method, $step).sp :
 				tag(gTxt('prev'), 'span', ' class="navlink-disabled" aria-disabled="true"').sp;
 
-			$nav[] = '<select name="page" onchange="submit(this.form);">';
-			$nav[] = n.join(n, $option_list);
-			$nav[] = n.'</select>';
-
+			$nav[] = selectInput('page', $option_list, $page, false, ' onchange="submit(this.form);"');
 			$nav[] = ($page != $numPages) ?
 				sp.PrevNextLink($event, $page + 1, gTxt('next'), 'next', $sort, $dir, $crit, $search_method, $step) :
 				sp.tag(gTxt('next'), 'span', ' class="navlink-disabled" aria-disabled="true"');
 
-			$out[] = '<form class="nav-form" method="get" action="index.php">'.
+			$out[] = form(
 				n.eInput($event).
 				n.sInput($step).
-				( $sort ? n.hInput('sort', $sort).n.hInput('dir', $dir) : '' ).
-				( ($crit != '') ? n.hInput('crit', $crit).n.hInput('search_method', $search_method) : '' ).
-				'<p class="prev-next">'.
-				join('', $nav).
-				'</p>'.
-				n.tInput().
-				n.'</form>';
+				($sort ? n.hInput('sort', $sort).n.hInput('dir', $dir) : '' ).
+				(($crit != '') ? n.hInput('crit', $crit).n.hInput('search_method', $search_method) : '').
+				graf(join('', $nav), array('class' => 'prev-next')), '', '', 'get', 'nav-form');
 		}
 		else
 		{
