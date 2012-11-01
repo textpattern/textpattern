@@ -320,14 +320,14 @@
 
 	function PrevNextLink($event, $page, $label, $type, $sort = '', $dir = '', $crit = '', $search_method = '', $step = 'list')
 	{
-		return '<a href="?event='.$event.a.'step='.$step.a.'page='.$page.
-			($sort ? a.'sort='.$sort : '').
-			($dir ? a.'dir='.$dir : '').
-			(($crit != '') ? a.'crit='.$crit : '').
-			($search_method ? a.'search_method='.$search_method : '').
-			'" class="navlink" rel="'.$type.'">'.
-			$label.
-			'</a>';
+		return href($label, array(
+			'event' => $event,
+			'step' => $step,
+			'page' => (int) $page,
+			'dir' => $dir,
+			'crit' => $crit,
+			'search_method' => $search_method,
+		), array('class' => 'navlink', 'rel' => $type));
 	}
 
 /**
