@@ -225,7 +225,7 @@
 
 					n.td(txpspecialchars($log_ip), '', 'log_detail ip').
 
-					n.td(txpspecialchars(soft_wrap($log_host, 30)), '', 'host').
+					n.td(txpspecialchars($log_host), '', 'host').
 
 					n.td($log_page, '', 'page').
 					n.td($log_refer, '', 'refer').
