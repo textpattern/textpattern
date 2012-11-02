@@ -228,7 +228,7 @@
 		pagetop(gTxt('tab_site_admin'), '');
 
 		echo form(
-			'<section class="txp-edit">'.
+			n.'<section class="txp-edit">'.
 			n.hed(gTxt('change_password'), 2).
 			n.inputLabel('new_pass', fInput('password', 'new_pass', '', '', '', '', INPUT_REGULAR, '', 'new_pass'), 'new_password').
 			n.graf(checkbox('mail_password', '1', true, '', 'mail_password') .n. '<label for="mail_password">'.gTxt('mail_it').'</label>', ' class="edit-mail-password"').
@@ -252,7 +252,7 @@
 		$email = fetch('email', 'txp_users', 'name', $txp_user);
 
 		echo form(
-			'<section class="txp-edit">'.
+			n.'<section class="txp-edit">'.
 			n.hed(gTxt('change_email_address'), 2).
 			n.inputLabel('new_email', fInput('text', 'new_email', $email, '', '', '', INPUT_REGULAR, '', 'new_email'), 'new_email').
 			n.graf(fInput('submit', 'change_email', gTxt('submit'), 'publish')).
@@ -383,7 +383,7 @@
 				n.startTable('', '', 'txp-list').
 				'<thead>'.
 				n.tr(
-					n. (($use_multi_edit)
+					n.(($use_multi_edit)
 						? hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="multi-edit"')
 						: hCell('', '', ' scope="col" class="multi-edit"')
 					).
@@ -489,7 +489,7 @@
 			n.inputLabel('login_email', fInput('email', 'email', $email, '', '', '', INPUT_REGULAR, '', 'login_email'), 'email').
 			n.inputLabel('privileges', (($txp_user != $name) ? privs($privs) : hInput('privs', $privs).strong(get_priv_level($privs))), ($is_edit ? '' : 'privileges'), 'about_privileges').
 			n.pluggable_ui('author_ui', 'extend_detail_form', '', $rs).
-			n.graf(fInput('submit', '', gTxt('save'), 'publish')).
+			graf(fInput('submit', '', gTxt('save'), 'publish')).
 			n.eInput('admin').
 			n.($user_id ? hInput('user_id', $user_id).sInput('author_save') : sInput('author_save_new')).
 			n.'</section>'

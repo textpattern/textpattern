@@ -432,30 +432,30 @@
 
 			echo '<div id="'.$event.'_container" class="txp-container">'.
 				form(
-					'<section class="txp-edit">'.n.
-					hed(gTxt('edit_comment'), 2).n.
-					inputLabel('status', $status_list, 'status').n.
-					inputLabel('name', fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'name'), 'name').n.
-					inputLabel('IP', $ip.n.$ban_link, '').n.
-					inputLabel('email', fInput('email', 'email', $email, '', '', '', INPUT_REGULAR, '', 'email'), 'email').n.
-					inputLabel('website', fInput('text', 'web', $web, '', '', '', INPUT_REGULAR, '', 'website'), 'website').n.
-					inputLabel('date', safe_strftime('%d %b %Y %X', $uPosted), '').n.
-					inputLabel('commentmessage', '<textarea id="commentmessage" name="message" cols="'.INPUT_LARGE.'" rows="'.INPUT_MEDIUM.'">'.$message.'</textarea>', 'message', '', '', '').n.
+					n.'<section class="txp-edit">'.
+					n.hed(gTxt('edit_comment'), 2).
+					n.inputLabel('status', $status_list, 'status').
+					n.inputLabel('name', fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'name'), 'name').
+					n.inputLabel('IP', $ip.n.$ban_link, '').
+					n.inputLabel('email', fInput('email', 'email', $email, '', '', '', INPUT_REGULAR, '', 'email'), 'email').
+					n.inputLabel('website', fInput('text', 'web', $web, '', '', '', INPUT_REGULAR, '', 'website'), 'website').
+					n.inputLabel('date', safe_strftime('%d %b %Y %X', $uPosted), '').
+					n.inputLabel('commentmessage', '<textarea id="commentmessage" name="message" cols="'.INPUT_LARGE.'" rows="'.INPUT_MEDIUM.'">'.$message.'</textarea>', 'message', '', '', '').
 					graf(fInput('submit', 'step', gTxt('save'), 'publish')).
 
-					hInput('sort', $sort).
-					hInput('dir', $dir).
-					hInput('page', $page).
-					hInput('crit', $crit).
-					hInput('search_method', $search_method).
+					n.hInput('sort', $sort).
+					n.hInput('dir', $dir).
+					n.hInput('page', $page).
+					n.hInput('crit', $crit).
+					n.hInput('search_method', $search_method).
 	
-					hInput('discussid', $discussid).
-					hInput('parentid', $parentid).
-					hInput('ip', $ip).
+					n.hInput('discussid', $discussid).
+					n.hInput('parentid', $parentid).
+					n.hInput('ip', $ip).
 	
-					eInput('discuss').
-					sInput('discuss_save').
-					'</section>'
+					n.eInput('discuss').
+					n.sInput('discuss_save').
+					n.'</section>'
 				, '', '', 'post', 'edit-form', '', 'discuss_edit_form'),'</div>';
 		}
 

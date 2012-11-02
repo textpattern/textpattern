@@ -310,21 +310,21 @@
 			$caption = gTxt(($is_edit) ? 'edit_link' : 'add_new_link');
 
 			echo form(
-				'<section class="txp-edit">'.n.
-				hed($caption, 2).n.
-				inputLabel('linkname', fInput('text', 'linkname', $linkname, '', '', '', INPUT_REGULAR, '', 'linkname'), 'title').n.
-				inputLabel('linksort', fInput('text', 'linksort', $linksort, '', '', '', INPUT_REGULAR, '', 'linksort'), 'sort_value', 'link_sort').n.
-				inputLabel('url', fInput('text', 'url', $url, '', '', '', INPUT_REGULAR, '', 'url'), 'url', 'link_url', 'edit-link-url').n. /* TODO: maybe use type = 'url' once browsers are less strict */
-				inputLabel('link_category', linkcategory_popup($category).' <span role="presentation">[</span>'.eLink('category', 'list', '', '', gTxt('edit')).'<span role="presentation">]</span>', 'link_category', 'link_category').n.
-				inputLabel('link_description', '<textarea id="link_description" name="description" cols="'.INPUT_LARGE.'" rows="'.INPUT_SMALL.'">'.txpspecialchars($description).'</textarea>', 'description', 'link_description', '', '').n.
-				pluggable_ui('link_ui', 'extend_detail_form', '', $rs).n.
+				n.'<section class="txp-edit">'.
+				n.hed($caption, 2).
+				n.inputLabel('linkname', fInput('text', 'linkname', $linkname, '', '', '', INPUT_REGULAR, '', 'linkname'), 'title').
+				n.inputLabel('linksort', fInput('text', 'linksort', $linksort, '', '', '', INPUT_REGULAR, '', 'linksort'), 'sort_value', 'link_sort').
+				n.inputLabel('url', fInput('text', 'url', $url, '', '', '', INPUT_REGULAR, '', 'url'), 'url', 'link_url', 'edit-link-url'). /* TODO: maybe use type = 'url' once browsers are less strict */
+				n.inputLabel('link_category', linkcategory_popup($category).' <span role="presentation">[</span>'.eLink('category', 'list', '', '', gTxt('edit')).'<span role="presentation">]</span>', 'link_category', 'link_category').
+				n.inputLabel('link_description', '<textarea id="link_description" name="description" cols="'.INPUT_LARGE.'" rows="'.INPUT_SMALL.'">'.txpspecialchars($description).'</textarea>', 'description', 'link_description', '', '').
+				n.pluggable_ui('link_ui', 'extend_detail_form', '', $rs).
 				graf(fInput('submit', '', gTxt('save'), 'publish')).
-				eInput('link').
-				sInput('link_save').
-				hInput('id', $id).
-				hInput('search_method', gps('search_method')).
-				hInput('crit', gps('crit')).
-				'</section>'
+				n.eInput('link').
+				n.sInput('link_save').
+				n.hInput('id', $id).
+				n.hInput('search_method', gps('search_method')).
+				n.hInput('crit', gps('crit')).
+				n.'</section>'
 			, '', '', 'post', 'edit-form', '', 'link_details');
 		};
 

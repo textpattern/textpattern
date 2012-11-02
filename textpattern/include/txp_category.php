@@ -541,19 +541,19 @@ EOS
 			pagetop(gTxt('edit_category'));
 			extract($row);
 			list($parent_widget, $has_parent) = cat_parent_pop($parent,$evname,$id);
-			$out = '<section class="txp-edit">'.n.
-				hed(gTxt('edit_category'), 2).n.
-				inputLabel('category_name', fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'category_name'), $evname.'_category_name').n.
-				($has_parent ? inputLabel('category_parent', $parent_widget, 'parent') : graf('<span class="edit-label">'.gTxt('parent').'</span><span class="edit-value">'.$parent_widget.'</span>')).n.
-				inputLabel('category_title', fInput('text', 'title', $title, '', '', '', INPUT_REGULAR, '', 'category_title'), $evname.'_category_title').n.
-				pluggable_ui('category_ui', 'extend_detail_form', '', $row).n.
-				hInput('id',$id).
-				graf(fInput('submit', '', gTxt('save'), 'publish')).
-				eInput('category').
-				sInput('cat_'.$evname.'_save').
-				hInput('old_name',$name).
-				'</section>';
-			echo '<div id="category_container" class="txp-container">'.
+			$out = n.'<section class="txp-edit">'.
+				n.hed(gTxt('edit_category'), 2).
+				n.inputLabel('category_name', fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'category_name'), $evname.'_category_name').
+				($has_parent ? n.inputLabel('category_parent', $parent_widget, 'parent') : graf('<span class="edit-label">'.gTxt('parent').'</span><span class="edit-value">'.$parent_widget.'</span>')).
+				n.inputLabel('category_title', fInput('text', 'title', $title, '', '', '', INPUT_REGULAR, '', 'category_title'), $evname.'_category_title').
+				pluggable_ui('category_ui', 'extend_detail_form', '', $row).
+				n.hInput('id',$id).
+				n.graf(fInput('submit', '', gTxt('save'), 'publish')).
+				n.eInput('category').
+				n.sInput('cat_'.$evname.'_save').
+				n.hInput('old_name',$name).
+				n.'</section>';
+			echo n.'<div id="category_container" class="txp-container">'.
 				form(  $out, '', '', 'post', 'edit-form' ).
 				'</div>';
 		} else {

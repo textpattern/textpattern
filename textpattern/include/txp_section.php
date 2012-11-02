@@ -322,55 +322,54 @@ EOS
 				$sec_searchable = $default['searchable'];
 			}
 
-			echo '<div id="'.$event.'_container" class="txp-container">';
+			echo n.'<div id="'.$event.'_container" class="txp-container">';
 			echo form(
+				n.'<section class="txp-edit">'.
+				n.hed($caption, 2).
 
-				'<section class="txp-edit">'.
-				hed($caption, 2).
-
-				(($is_default_section)
+				n.(($is_default_section)
 				? hInput('name', 'default')
 				: inputLabel('section_name', fInput('text', 'name', $sec_name, '', '', '', INPUT_REGULAR, '', 'section_name'), 'section_name')
 				).
 
-				(($is_default_section)
+				n.(($is_default_section)
 				? ''
 				: inputLabel('section_title', fInput('text', 'title', $sec_title, '', '', '', INPUT_REGULAR, '', 'section_title'), 'section_longtitle')
 				).
 
-				inputLabel('section_page', selectInput('section_page', $all_pages, $sec_page, '', '', 'section_page'), 'uses_page', 'section_uses_page').
-				inputLabel('section_css', selectInput('css', $all_styles, $sec_css, '', '', 'section_css'), 'uses_style', 'section_uses_css').
+				n.inputLabel('section_page', selectInput('section_page', $all_pages, $sec_page, '', '', 'section_page'), 'uses_page', 'section_uses_page').
+				n.inputLabel('section_css', selectInput('css', $all_styles, $sec_css, '', '', 'section_css'), 'uses_style', 'section_uses_css').
 
-				(($is_default_section)
+				n.(($is_default_section)
 				? ''
 				: inputLabel('on_front_page', yesnoradio('on_frontpage', $sec_on_frontpage, '', $sec_name), '', 'section_on_frontpage')
 				).
 
-				(($is_default_section)
+				n.(($is_default_section)
 				? ''
 				: inputLabel('syndicate', yesnoradio('in_rss', $sec_in_rss, '', $sec_name), '', 'section_syndicate')
 				).
 
-				(($is_default_section)
+				n.(($is_default_section)
 				? ''
 				: inputLabel('include_in_search', yesnoradio('searchable', $sec_searchable, '', $sec_name), '', 'section_searchable')
 				).
 
 				pluggable_ui('section_ui', 'extend_detail_form', '', $rs).
 
-				graf(
+				n.graf(
 					fInput('submit', '', gTxt('save'), 'publish')
 				).
 
-				eInput('section').
-				sInput('section_save').
-				hInput('old_name', $sec_name).
-				hInput('search_method', $search_method).
-				hInput('crit', $crit).
-				hInput('page', $page).
-				hInput('sort', $sort).
-				hInput('dir', $dir).
-				'</section>'
+				n.eInput('section').
+				n.sInput('section_save').
+				n.hInput('old_name', $sec_name).
+				n.hInput('search_method', $search_method).
+				n.hInput('crit', $crit).
+				n.hInput('page', $page).
+				n.hInput('sort', $sort).
+				n.hInput('dir', $dir).
+				n.'</section>'
 			, '', '', 'post', 'edit-form', '', 'section_details');
 			echo '</div>';
 		}
