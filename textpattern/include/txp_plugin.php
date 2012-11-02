@@ -66,25 +66,25 @@
 		if ($rs and numRows($rs) > 0)
 		{
 			echo n.'<div id="'.$event.'_container" class="txp-container">';
-			echo '<form action="index.php" id="plugin_form" class="multi_edit_form" method="post" name="longform">'.
+			echo n.'<form action="index.php" id="plugin_form" class="multi_edit_form" method="post" name="longform">'.
 
 			n.'<div class="txp-listtables">'.
 			n. startTable('', '', 'txp-list').
-			n.'<thead>'.
-			tr(
+			'<thead>'.
+			n.tr(
 				n.hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
-				n.column_head('plugin', 'name', 'plugin', true, $switch_dir, '', '', (('name' == $sort) ? "$dir " : '').'name').
-				n.column_head('author', 'author', 'plugin', true, $switch_dir, '', '', (('author' == $sort) ? "$dir " : '').'author').
-				n.column_head('version', 'version', 'plugin', true, $switch_dir, '', '', (('version' == $sort) ? "$dir " : '').'version').
-				n.column_head('plugin_modified', 'modified', 'plugin', true, $switch_dir, '', '', (('modified' == $sort) ? "$dir " : '').'modified').
+				column_head('plugin', 'name', 'plugin', true, $switch_dir, '', '', (('name' == $sort) ? "$dir " : '').'name').
+				column_head('author', 'author', 'plugin', true, $switch_dir, '', '', (('author' == $sort) ? "$dir " : '').'author').
+				column_head('version', 'version', 'plugin', true, $switch_dir, '', '', (('version' == $sort) ? "$dir " : '').'version').
+				column_head('plugin_modified', 'modified', 'plugin', true, $switch_dir, '', '', (('modified' == $sort) ? "$dir " : '').'modified').
 				n.hCell(gTxt('description'), '', ' scope="col" class="description"').
-				n.column_head('active', 'status', 'plugin', true, $switch_dir, '', '', (('status' == $sort) ? "$dir " : '').'status').
-				n.column_head('order', 'load_order', 'plugin', true, $switch_dir, '', '', (('load_order' == $sort) ? "$dir " : '').'load-order').
+				column_head('active', 'status', 'plugin', true, $switch_dir, '', '', (('status' == $sort) ? "$dir " : '').'status').
+				column_head('order', 'load_order', 'plugin', true, $switch_dir, '', '', (('load_order' == $sort) ? "$dir " : '').'load-order').
 				n.hCell(gTxt('manage'), '',  ' scope="col" class="manage actions"')
 			).
 			n.'</thead>';
 
-			echo '<tbody>';
+			echo n.'<tbody>';
 
 			while ($a = nextRow($rs))
 			{
@@ -118,39 +118,39 @@
 				$manage_items = ($manage) ? join(tag(sp.'&#124;'.sp, 'span'), $manage) : '-';
 				$edit_url = eLink('plugin', 'plugin_edit', 'name', $name, $name);
 
-				echo tr(
+				echo n.tr(
 					n.td(
 						fInput('checkbox', 'selected[]', $name)
 					,'', 'multi-edit').
 
-					hCell($edit_url, '', ' scope="row" class="name"').
+					n.hCell($edit_url, '', ' scope="row" class="name"').
 
-					td(
+					n.td(
 						href($author, $author_uri, ' rel="external"')
 					, '', 'author').
 
-					td($version, '', 'version').
-					td(($modified ? '<span class="warning">'.gTxt('yes').'</span>' : ''), '', 'modified').
-					td($description, '', 'description').
+					n.td($version, '', 'version').
+					n.td(($modified ? '<span class="warning">'.gTxt('yes').'</span>' : ''), '', 'modified').
+					n.td($description, '', 'description').
 
-					td(
+					n.td(
 						status_link($status, $name, yes_no($status))
 					, '', 'status').
 
-					td($load_order, '', 'load-order').
-					td($manage_items, '', 'manage')
+					n.td($load_order, '', 'load-order').
+					n.td($manage_items, '', 'manage')
 				, $status ? ' class="active"' : '');
 
 				unset($name, $page, $deletelink);
 			}
 
-			echo '</tbody>',
-				n, endTable(),
-				n, '</div>',
-				n, plugin_multiedit_form('', $sort, $dir, '', ''),
-				n, tInput(),
-				n, '</form>',
-				n, '</div>';
+			echo n.'</tbody>'.
+				endTable().
+				'</div>'.
+				n.plugin_multiedit_form('', $sort, $dir, '', '').
+				n.tInput().
+				n.'</form>'.
+				n.'</div>';
 
 			// Show/hide "Options" link by setting the appropriate class on the plugins TR
 			echo script_js(<<<EOS

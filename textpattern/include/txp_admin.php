@@ -228,14 +228,14 @@
 		pagetop(gTxt('tab_site_admin'), '');
 
 		echo form(
-			'<section class="txp-edit">'.n.
-			hed(gTxt('change_password'), 2).n.
-			inputLabel('new_pass', fInput('password', 'new_pass', '', '', '', '', INPUT_REGULAR, '', 'new_pass'), 'new_password').n.
-			graf(checkbox('mail_password', '1', true, '', 'mail_password') .n. '<label for="mail_password">'.gTxt('mail_it').'</label>', ' class="edit-mail-password"').n.
-			graf(fInput('submit', 'change_pass', gTxt('submit'), 'publish')).
-			eInput('admin').
-			sInput('change_pass').
-			'</section>'
+			'<section class="txp-edit">'.
+			n.hed(gTxt('change_password'), 2).
+			n.inputLabel('new_pass', fInput('password', 'new_pass', '', '', '', '', INPUT_REGULAR, '', 'new_pass'), 'new_password').
+			n.graf(checkbox('mail_password', '1', true, '', 'mail_password') .n. '<label for="mail_password">'.gTxt('mail_it').'</label>', ' class="edit-mail-password"').
+			n.graf(fInput('submit', 'change_pass', gTxt('submit'), 'publish')).
+			n.eInput('admin').
+			n.sInput('change_pass').
+			n.'</section>'
 		, '', '', 'post', '', '', 'change_password');
 	}
 
@@ -252,13 +252,13 @@
 		$email = fetch('email', 'txp_users', 'name', $txp_user);
 
 		echo form(
-			'<section class="txp-edit">'.n.
-			hed(gTxt('change_email_address'), 2).n.
-			inputLabel('new_email', fInput('text', 'new_email', $email, '', '', '', INPUT_REGULAR, '', 'new_email'), 'new_email').n.
-			graf(fInput('submit', 'change_email', gTxt('submit'), 'publish')).
-			eInput('admin').
-			sInput('change_email').
-			'</section>'
+			'<section class="txp-edit">'.
+			n.hed(gTxt('change_email_address'), 2).
+			n.inputLabel('new_email', fInput('text', 'new_email', $email, '', '', '', INPUT_REGULAR, '', 'new_email'), 'new_email').
+			n.graf(fInput('submit', 'change_email', gTxt('submit'), 'publish')).
+			n.eInput('admin').
+			n.sInput('change_email').
+			n.'</section>'
 		, '', '', 'post', '','', 'change_email');
 	}
 
@@ -377,51 +377,51 @@
 			if ($rs)
 			{
 				echo n.'<div id="users_container" class="txp-container">';
-				echo '<form action="index.php" id="users_form" class="multi_edit_form" method="post" name="longform">'.
+				echo n.'<form action="index.php" id="users_form" class="multi_edit_form" method="post" name="longform">'.
 
 				n.'<div class="txp-listtables">'.
 				n.startTable('', '', 'txp-list').
-				n.'<thead>'.
+				'<thead>'.
 				n.tr(
 					n. (($use_multi_edit)
 						? hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="multi-edit"')
 						: hCell('', '', ' scope="col" class="multi-edit"')
 					).
-					n.column_head('login_name', 'name', 'admin', true, $switch_dir, '', '', (('name' == $sort) ? "$dir " : '').'name login-name').
-					n.column_head('real_name', 'RealName', 'admin', true, $switch_dir, '', '', (('RealName' == $sort) ? "$dir " : '').'name real-name').
-					n.column_head('email', 'email', 'admin', true, $switch_dir, '', '', (('email' == $sort) ? "$dir " : '').'email').
-					n.column_head('privileges', 'privs', 'admin', true, $switch_dir, '', '', (('privs' == $sort) ? "$dir " : '').'privs').
-					n.column_head('last_login', 'last_login', 'admin', true, $switch_dir, '', '', (('last_login' == $sort) ? "$dir " : '').'date last-login modified')
+					column_head('login_name', 'name', 'admin', true, $switch_dir, '', '', (('name' == $sort) ? "$dir " : '').'name login-name').
+					column_head('real_name', 'RealName', 'admin', true, $switch_dir, '', '', (('RealName' == $sort) ? "$dir " : '').'name real-name').
+					column_head('email', 'email', 'admin', true, $switch_dir, '', '', (('email' == $sort) ? "$dir " : '').'email').
+					column_head('privileges', 'privs', 'admin', true, $switch_dir, '', '', (('privs' == $sort) ? "$dir " : '').'privs').
+					column_head('last_login', 'last_login', 'admin', true, $switch_dir, '', '', (('last_login' == $sort) ? "$dir " : '').'date last-login modified')
 				).
 				n.'</thead>';
 
-				echo '<tbody>';
+				echo n.'<tbody>';
 
 				while ($a = nextRow($rs))
 				{
 					extract(doSpecial($a));
 
-					echo tr(
-						td(((has_privs('admin.edit') and $txp_user != $a['name']) ? fInput('checkbox', 'selected[]', $a['name'], 'checkbox') : ''), '', 'multi-edit').
-						hCell(((has_privs('admin.edit')) ? eLink('admin', 'author_edit', 'user_id', $user_id, $name) : $name), '', ' scope="row" class="name login-name"').
-						td($RealName, '', 'name real-name').
-						td('<a href="mailto:'.$email.'">'.$email.'</a>', '', 'email').
-						td(get_priv_level($privs), '', 'privs').
-						td(($last_login ? safe_strftime('%b&#160;%Y', $last_login) : ''), '', 'date last-login modified')
+					echo n.tr(
+						n.td(((has_privs('admin.edit') and $txp_user != $a['name']) ? fInput('checkbox', 'selected[]', $a['name'], 'checkbox') : ''), '', 'multi-edit').
+						n.hCell(((has_privs('admin.edit')) ? eLink('admin', 'author_edit', 'user_id', $user_id, $name) : $name), '', ' scope="row" class="name login-name"').
+						n.td($RealName, '', 'name real-name').
+						n.td('<a href="mailto:'.$email.'">'.$email.'</a>', '', 'email').
+						n.td(get_priv_level($privs), '', 'privs').
+						n.td(($last_login ? safe_strftime('%b&#160;%Y', $last_login) : ''), '', 'date last-login modified')
 					);
 				}
 
-				echo '</tbody>',
-					n, endTable(),
-					n, '</div>',
-					n, (($use_multi_edit) ? author_multiedit_form($page, $sort, $dir, $crit, $search_method) : ''),
-					n, tInput(),
-					n, '</form>',
-					n, '<div id="users_navigation" class="txp-navigation">',
-					n, nav_form('admin', $page, $numPages, $sort, $dir, $crit, $search_method),
-					n, pageby_form('admin', $author_list_pageby),
-					n, '</div>',
-					n, '</div>';
+				echo n.'</tbody>'.
+					endTable().
+					'</div>'.
+					(($use_multi_edit) ? n.author_multiedit_form($page, $sort, $dir, $crit, $search_method) : '').
+					n.tInput().
+					n.'</form>'.
+					n.'<div id="users_navigation" class="txp-navigation">'.
+					n.nav_form('admin', $page, $numPages, $sort, $dir, $crit, $search_method).
+					n.pageby_form('admin', $author_list_pageby).
+					n.'</div>'.
+					n.'</div>';
 			}
 		}
 
@@ -482,17 +482,17 @@
 		$caption = gTxt(($is_edit) ? 'edit_author' : 'add_new_author');
 
 		echo form(
-			'<section class="txp-edit">'.n.
-			hed($caption, 2).n.
-			inputLabel('login_name', ($is_edit ? strong($name) : fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'login_name')), ($is_edit ? '' : 'login_name'), ($is_edit ? '' : 'add_new_author')).n.
-			inputLabel('real_name', fInput('text', 'RealName', $RealName, '', '', '', INPUT_REGULAR, '', 'real_name'), 'real_name').n.
-			inputLabel('login_email', fInput('email', 'email', $email, '', '', '', INPUT_REGULAR, '', 'login_email'), 'email').n.
-			inputLabel('privileges', (($txp_user != $name) ? privs($privs) : hInput('privs', $privs).strong(get_priv_level($privs))), ($is_edit ? '' : 'privileges'), 'about_privileges').n.
-			pluggable_ui('author_ui', 'extend_detail_form', '', $rs).n.
-			graf(fInput('submit', '', gTxt('save'), 'publish')).
-			eInput('admin').
-			($user_id ? hInput('user_id', $user_id).sInput('author_save') : sInput('author_save_new')).
-			'</section>'
+			n.'<section class="txp-edit">'.
+			n.hed($caption, 2).
+			n.inputLabel('login_name', ($is_edit ? strong($name) : fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'login_name')), ($is_edit ? '' : 'login_name'), ($is_edit ? '' : 'add_new_author')).
+			n.inputLabel('real_name', fInput('text', 'RealName', $RealName, '', '', '', INPUT_REGULAR, '', 'real_name'), 'real_name').
+			n.inputLabel('login_email', fInput('email', 'email', $email, '', '', '', INPUT_REGULAR, '', 'login_email'), 'email').
+			n.inputLabel('privileges', (($txp_user != $name) ? privs($privs) : hInput('privs', $privs).strong(get_priv_level($privs))), ($is_edit ? '' : 'privileges'), 'about_privileges').
+			n.pluggable_ui('author_ui', 'extend_detail_form', '', $rs).
+			n.graf(fInput('submit', '', gTxt('save'), 'publish')).
+			n.eInput('admin').
+			n.($user_id ? hInput('user_id', $user_id).sInput('author_save') : sInput('author_save_new')).
+			n.'</section>'
 		, '', '', 'post', 'edit-form', '', 'user_edit');
 	}
 

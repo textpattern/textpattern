@@ -208,28 +208,28 @@
 			$show_authors = !has_single_author('txp_file');
 
 			echo n.'<div id="'.$event.'_container" class="txp-container">';
-			echo '<form name="longform" id="files_form" class="multi_edit_form" method="post" action="index.php">'.
+			echo n.'<form name="longform" id="files_form" class="multi_edit_form" method="post" action="index.php">'.
 
 				n.'<div class="txp-listtables">'.
 				n.startTable('', '', 'txp-list').
-				n.'<thead>'.
-				tr(
+				'<thead>'.
+				n.tr(
 					n.hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
-					n.column_head('ID', 'id', 'file', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id').
-					n.column_head('file_name', 'filename', 'file', true, $switch_dir, $crit, $search_method, (('filename' == $sort) ? "$dir " : '').'name').
-					n.column_head('title', 'title', 'file', true, $switch_dir, $crit, $search_method, (('title' == $sort) ? "$dir " : '').'title').
-					n.column_head('description', 'description', 'file', true, $switch_dir, $crit, $search_method, (('description' == $sort) ? "$dir " : '').'files_detail description').
-					n.column_head('file_category', 'category', 'file', true, $switch_dir, $crit, $search_method, (('category' == $sort) ? "$dir " : '').'category').
+					column_head('ID', 'id', 'file', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id').
+					column_head('file_name', 'filename', 'file', true, $switch_dir, $crit, $search_method, (('filename' == $sort) ? "$dir " : '').'name').
+					column_head('title', 'title', 'file', true, $switch_dir, $crit, $search_method, (('title' == $sort) ? "$dir " : '').'title').
+					column_head('description', 'description', 'file', true, $switch_dir, $crit, $search_method, (('description' == $sort) ? "$dir " : '').'files_detail description').
+					column_head('file_category', 'category', 'file', true, $switch_dir, $crit, $search_method, (('category' == $sort) ? "$dir " : '').'category').
 					// column_head('permissions', 'permissions', 'file', true, $switch_dir, $crit, $search_method).
 					n.hCell(gTxt('tags'), '', ' scope="col" class="files_detail tag-build"').
 					n.hCell(gTxt('status'), '', ' scope="col" class="status"').
 					n.hCell(gTxt('condition'), '', ' scope="col" class="condition"').
-					n.column_head('downloads', 'downloads', 'file', true, $switch_dir, $crit, $search_method, (('downloads' == $sort) ? "$dir " : '').'downloads').
-					($show_authors ? n.column_head('author', 'author', 'file', true, $switch_dir, $crit, $search_method, (('author' == $sort) ? "$dir " : '').'author') : '')
+					column_head('downloads', 'downloads', 'file', true, $switch_dir, $crit, $search_method, (('downloads' == $sort) ? "$dir " : '').'downloads').
+					($show_authors ? column_head('author', 'author', 'file', true, $switch_dir, $crit, $search_method, (('author' == $sort) ? "$dir " : '').'author') : '')
 				).
 				n.'</thead>';
 
-			echo '<tbody>';
+			echo n.'<tbody>';
 
 			$validator = new Validator();
 
@@ -260,7 +260,7 @@
 
 				$can_edit = has_privs('file.edit') || ($author == $txp_user && has_privs('file.edit.own'));
 
-				echo tr(
+				echo n.tr(
 					n.td($can_edit ? fInput('checkbox', 'selected[]', $id) : '&#160;'
 					, '', 'multi-edit').
 
@@ -269,13 +269,13 @@
 						(($file_exists) ? sp.'<span class="files_detail"><span role="presentation">[</span>'.make_download_link($id, gTxt('download'), $filename).'<span role="presentation">]</span></span>' : '')
 					, '', ' scope="row" class="id"').
 
-					td(
+					n.td(
 						($can_edit ? href(txpspecialchars($filename), $edit_url, ' title="'.gTxt('edit').'"') : txpspecialchars($filename))
 					, '', 'name').
 
-					td(txpspecialchars($title), '', 'title').
-					td(txpspecialchars($description), '', 'files_detail description').
-					td($category, '', 'category'.$vc).
+					n.td(txpspecialchars($title), '', 'title').
+					n.td(txpspecialchars($description), '', 'files_detail description').
+					n.td($category, '', 'category'.$vc).
 
 					/*
 					td(
@@ -283,39 +283,39 @@
 					).
 					*/
 
-					td(
-						n.'<a target="_blank" href="'.$tag_url.a.'type=textile" onclick="popWin(this.href, 400, 250); return false;">Textile</a>'.sp.
+					n.td(
+						'<a target="_blank" href="'.$tag_url.a.'type=textile" onclick="popWin(this.href, 400, 250); return false;">Textile</a>'.sp.
 						'&#124;'.sp.'<a target="_blank" href="'.$tag_url.a.'type=textpattern" onclick="popWin(this.href, 400, 250); return false;">Textpattern</a>'.sp.
 						'&#124;'.sp.'<a target="_blank" href="'.$tag_url.a.'type=html" onclick="popWin(this.href, 400, 250); return false;">HTML</a>'
 					, '', 'files_detail tag-build').
 
-					td(in_array($status, array_keys($file_statuses)) ? $file_statuses[$status] : '<span class="error">'.gTxt('none').'</span>', '', 'status').
+					n.td(in_array($status, array_keys($file_statuses)) ? $file_statuses[$status] : '<span class="error">'.gTxt('none').'</span>', '', 'status').
 
-					td($condition, '', 'condition').
+					n.td($condition, '', 'condition').
 
-					td($download_link, '', 'downloads').
+					n.td($download_link, '', 'downloads').
 
-					($show_authors ? td(
+					($show_authors ? n.td(
 						'<span title="'.txpspecialchars(get_author_name($author)).'">'.txpspecialchars($author).'</span>'
 					, '', 'author') : '')
 				);
 			}
 
-			echo '</tbody>',
-				n, endTable(),
-				n, '</div>',
-				n, file_multiedit_form($page, $sort, $dir, $crit, $search_method),
-				n, tInput(),
-				n, '</form>',
-				n, graf(
+			echo n.'</tbody>'.
+				endTable().
+				'</div>'.
+				n.file_multiedit_form($page, $sort, $dir, $crit, $search_method).
+				n.tInput().
+				n.'</form>'.
+				n.graf(
 					toggle_box('files_detail'),
 					' class="detail-toggle"'
-				),
-				n, '<div id="'.$event.'_navigation" class="txp-navigation">',
-				n, nav_form('file', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit),
-				n, pageby_form('file', $file_list_pageby),
-				n, '</div>',
-				n, '</div>';
+				).
+				n.'<div id="'.$event.'_navigation" class="txp-navigation">'.
+				n.nav_form('file', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
+				n.pageby_form('file', $file_list_pageby).
+				n.'</div>'.
+				n.'</div>';
 		}
 	}
 

@@ -172,24 +172,24 @@
 			$show_authors = !has_single_author('txp_link');
 
 			echo n.'<div id="'.$event.'_container" class="txp-container">';
-			echo n.n.'<form action="index.php" id="links_form" class="multi_edit_form" method="post" name="longform">',
+			echo n.'<form action="index.php" id="links_form" class="multi_edit_form" method="post" name="longform">',
 
 				n.'<div class="txp-listtables">'.
 				n.startTable('', '', 'txp-list').
-				n.'<thead>'.
+				'<thead>'.
 				n.tr(
 					n.hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
-					n.column_head('ID', 'id', 'link', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id').
-					n.column_head('link_name', 'name', 'link', true, $switch_dir, $crit, $search_method, (('name' == $sort) ? "$dir " : '').'name').
-					n.column_head('description', 'description', 'link', true, $switch_dir, $crit, $search_method, (('description' == $sort) ? "$dir " : '').'links_detail description').
-					n.column_head('link_category', 'category', 'link', true, $switch_dir, $crit, $search_method, (('category' == $sort) ? "$dir " : '').'category').
-					n.column_head('url', 'url', 'link', true, $switch_dir, $crit, $search_method, (('url' == $sort) ? "$dir " : '').'url').
-					n.column_head('date', 'date', 'link', true, $switch_dir, $crit, $search_method, (('date' == $sort) ? "$dir " : '').'links_detail date created').
-					($show_authors ? n.column_head('author', 'author', 'link', true, $switch_dir, $crit, $search_method, (('author' == $sort) ? "$dir " : '').'author') : '')
+					column_head('ID', 'id', 'link', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id').
+					column_head('link_name', 'name', 'link', true, $switch_dir, $crit, $search_method, (('name' == $sort) ? "$dir " : '').'name').
+					column_head('description', 'description', 'link', true, $switch_dir, $crit, $search_method, (('description' == $sort) ? "$dir " : '').'links_detail description').
+					column_head('link_category', 'category', 'link', true, $switch_dir, $crit, $search_method, (('category' == $sort) ? "$dir " : '').'category').
+					column_head('url', 'url', 'link', true, $switch_dir, $crit, $search_method, (('url' == $sort) ? "$dir " : '').'url').
+					column_head('date', 'date', 'link', true, $switch_dir, $crit, $search_method, (('date' == $sort) ? "$dir " : '').'links_detail date created').
+					($show_authors ? column_head('author', 'author', 'link', true, $switch_dir, $crit, $search_method, (('author' == $sort) ? "$dir " : '').'author') : '')
 				).
 				n.'</thead>';
 
-			echo '<tbody>';
+			echo n.'<tbody>';
 
 			$validator = new Validator();
 
@@ -206,7 +206,7 @@
 				$can_edit = has_privs('link.edit') || ($link_author == $txp_user && has_privs('link.edit.own'));
 				$view_url = txpspecialchars($link_url);
 
-				echo tr(
+				echo n.tr(
 					n.td(
 						fInput('checkbox', 'selected[]', $link_id)
 					, '', 'multi-edit').
@@ -215,47 +215,47 @@
 						($can_edit ? href($link_id, $edit_url, ' title="'.gTxt('edit').'"') : $link_id)
 					, '', ' scope="row" class="id"').
 
-					td(
+					n.td(
 						($can_edit ? href(txpspecialchars($link_linkname), $edit_url, ' title="'.gTxt('edit').'"') : txpspecialchars($link_linkname))
 					, '', 'name').
 
-					td(
+					n.td(
 						txpspecialchars($link_description)
 					, '', 'links_detail description').
 
-					td(
+					n.td(
 						'<span title="'.txpspecialchars(fetch_category_title($link_category, 'link')).'">'.$link_category.'</span>'
 					, '', 'category'.$vc).
 
-					td(
+					n.td(
 						'<a rel="external" target="_blank" href="'.$view_url.'">'.$view_url.'</a>'
 					, '', 'url').
 
-					td(
+					n.td(
 						gTime($link_uDate)
 					, '', 'links_detail date created').
 
-					($show_authors ? td(
+					($show_authors ? n.td(
 						'<span title="'.txpspecialchars(get_author_name($link_author)).'">'.txpspecialchars($link_author).'</span>'
 					, '', 'author') : '')
 				);
 			}
 
-			echo '</tbody>',
-				n, endTable(),
-				n, '</div>',
-				n, link_multiedit_form($page, $sort, $dir, $crit, $search_method),
-				n, tInput(),
-				n, '</form>',
-				n, graf(
+			echo n.'</tbody>'.
+				endTable().
+				'</div>'.
+				n.link_multiedit_form($page, $sort, $dir, $crit, $search_method).
+				n.tInput().
+				n.'</form>'.
+				n.graf(
 					toggle_box('links_detail'),
 					' class="detail-toggle"'
-				),
-				n, '<div id="'.$event.'_navigation" class="txp-navigation">',
-				n, nav_form('link', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit),
-				n, pageby_form('link', $link_list_pageby),
-				n, '</div>',
-				n, '</div>';
+				).
+				n.'<div id="'.$event.'_navigation" class="txp-navigation">'.
+				n.nav_form('link', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
+				n.pageby_form('link', $link_list_pageby).
+				n.'</div>'.
+				n.'</div>';
 		}
 	}
 

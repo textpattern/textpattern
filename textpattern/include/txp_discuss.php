@@ -256,28 +256,28 @@
 		if ($rs)
 		{
 			echo n.'<div id="'.$event.'_container" class="txp-container">';
-			echo n.n.'<form name="longform" id="discuss_form" class="multi_edit_form" method="post" action="index.php">'.
+			echo n.'<form name="longform" id="discuss_form" class="multi_edit_form" method="post" action="index.php">'.
 
 				n.'<div class="txp-listtables">'.
 				n.startTable('', '', 'txp-list').
-				n.'<thead>'.
-				n.n.tr(
+				'<thead>'.
+				n.tr(
 					n.hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
-					n.column_head('ID', 'id', 'discuss', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id').
-					n.column_head('date', 'date', 'discuss', true, $switch_dir, $crit, $search_method, (('date' == $sort) ? "$dir " : '').'date posted created').
-					n.column_head('name', 'name', 'discuss', true, $switch_dir, $crit, $search_method, (('name' == $sort) ? "$dir " : '').'name').
-					n.column_head('message', 'message', 'discuss', true, $switch_dir, $crit, $search_method, (('message' == $sort) ? "$dir " : 'message')).
-					n.column_head('email', 'email', 'discuss', true, $switch_dir, $crit, $search_method, (('email' == $sort) ? "$dir " : '').'discuss_detail email').
-					n.column_head('website', 'website', 'discuss', true, $switch_dir, $crit, $search_method, (('website' == $sort) ? "$dir " : '').'discuss_detail website').
-					n.column_head('IP', 'ip', 'discuss', true, $switch_dir, $crit, $search_method, (('ip' == $sort) ? "$dir " : '').'discuss_detail ip').
-					n.column_head('status', 'status', 'discuss', true, $switch_dir, $crit, $search_method, (('status' == $sort) ? "$dir " : '').'status').
-					n.column_head('parent', 'parent', 'discuss', true, $switch_dir, $crit, $search_method, (('parent' == $sort) ? "$dir " : '').'parent')
+					column_head('ID', 'id', 'discuss', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id').
+					column_head('date', 'date', 'discuss', true, $switch_dir, $crit, $search_method, (('date' == $sort) ? "$dir " : '').'date posted created').
+					column_head('name', 'name', 'discuss', true, $switch_dir, $crit, $search_method, (('name' == $sort) ? "$dir " : '').'name').
+					column_head('message', 'message', 'discuss', true, $switch_dir, $crit, $search_method, (('message' == $sort) ? "$dir " : 'message')).
+					column_head('email', 'email', 'discuss', true, $switch_dir, $crit, $search_method, (('email' == $sort) ? "$dir " : '').'discuss_detail email').
+					column_head('website', 'website', 'discuss', true, $switch_dir, $crit, $search_method, (('website' == $sort) ? "$dir " : '').'discuss_detail website').
+					column_head('IP', 'ip', 'discuss', true, $switch_dir, $crit, $search_method, (('ip' == $sort) ? "$dir " : '').'discuss_detail ip').
+					column_head('status', 'status', 'discuss', true, $switch_dir, $crit, $search_method, (('status' == $sort) ? "$dir " : '').'status').
+					column_head('parent', 'parent', 'discuss', true, $switch_dir, $crit, $search_method, (('parent' == $sort) ? "$dir " : '').'parent')
 				).
 				n.'</thead>';
 
 			include_once txpath.'/publish/taghandlers.php';
 
-			echo '<tbody>';
+			echo n.'<tbody>';
 
 			while ($a = nextRow($rs))
 			{
@@ -326,43 +326,43 @@
 
 					if ($visible == VISIBLE and in_array($Status, array(4,5)))
 					{
-						$view = n.'<a title="'.gTxt('view').'" href="'.permlinkurl($a).'#c'.$discussid.'">'.$comment_status.'</a>';
+						$view = '<a title="'.gTxt('view').'" href="'.permlinkurl($a).'#c'.$discussid.'">'.$comment_status.'</a>';
 					}
 				}
 
-				echo n.n.tr(
+				echo n.tr(
 					n.td(fInput('checkbox', 'selected[]', $discussid), '', 'multi-edit').
-					hCell('<a title="'.gTxt('edit').'" href="'.$edit_url.'">'.$discussid.'</a>', '', ' scope="row" class="id"').
-					td(gTime($uPosted), '', 'date posted created').
-					td(txpspecialchars(soft_wrap($name, 15)), '', 'name').
-					td(short_preview($dmessage), '', 'message').
-					td(txpspecialchars(soft_wrap($email, 15)), '', 'discuss_detail email').
-					td(txpspecialchars(soft_wrap($web, 15)), '', 'discuss_detail website').
-					td($ip, '', 'discuss_detail ip').
-					td($view, '', 'status').
-					td($parent, '', 'parent')
+					n.hCell('<a title="'.gTxt('edit').'" href="'.$edit_url.'">'.$discussid.'</a>', '', ' scope="row" class="id"').
+					n.td(gTime($uPosted), '', 'date posted created').
+					n.td(txpspecialchars(soft_wrap($name, 15)), '', 'name').
+					n.td(short_preview($dmessage), '', 'message').
+					n.td(txpspecialchars(soft_wrap($email, 15)), '', 'discuss_detail email').
+					n.td(txpspecialchars(soft_wrap($web, 15)), '', 'discuss_detail website').
+					n.td($ip, '', 'discuss_detail ip').
+					n.td($view, '', 'status').
+					n.td($parent, '', 'parent')
 				, ' class="'.$row_class.'"');
 			}
 
 			if (empty($message))
-				echo tr(tda(gTxt('just_spam_results_found'),' colspan="10"'));
+				echo n.tr(tda(gTxt('just_spam_results_found'),' colspan="10"'));
 
-			echo '</tbody>',
-				n, endTable(),
-				n, '</div>',
-				n, discuss_multiedit_form($page, $sort, $dir, $crit, $search_method),
-				n, tInput(),
-				n, '</form>',
-				n, graf(
+			echo n.'</tbody>'.
+				endTable().
+				'</div>'.
+				n.discuss_multiedit_form($page, $sort, $dir, $crit, $search_method).
+				n.tInput().
+				n.'</form>'.
+				n.graf(
 					toggle_box('discuss_detail'),
 					' class="detail-toggle"'
-				),
-				n, cookie_box('show_spam'),
-				n, '<div id="'.$event.'_navigation" class="txp-navigation">',
-				n, nav_form('discuss', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit),
-				n, pageby_form('discuss', $comment_list_pageby),
-				n, '</div>',
-				n, '</div>';
+				).
+				n.cookie_box('show_spam').
+				n.'<div id="'.$event.'_navigation" class="txp-navigation">'.
+				n.nav_form('discuss', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
+				n.pageby_form('discuss', $comment_list_pageby).
+				n.'</div>'.
+				n.'</div>';
 		}
 	}
 
@@ -542,45 +542,45 @@
 
 		if ($rs and numRows($rs) > 0)
 		{
-			echo '<div id="'.$event.'_ban_container" class="txp-container">'.
-				startTable('', '', 'txp-list').
-				n.'<thead>'.
-				tr(
-					hCell(gTxt('date_banned'), '', ' scope="col" class="date banned"').
-					hCell(gTxt('IP'), '', ' scope="col" class="ip"').
-					hCell(gTxt('name_used'), '', ' scope="col" class="name"').
-					hCell(gTxt('banned_for'), '', ' scope="col" class="id"')
+			echo n.'<div id="'.$event.'_ban_container" class="txp-container">'.
+				n.startTable('', '', 'txp-list').
+				'<thead>'.
+				n.tr(
+					n.hCell(gTxt('date_banned'), '', ' scope="col" class="date banned"').
+					n.hCell(gTxt('IP'), '', ' scope="col" class="ip"').
+					n.hCell(gTxt('name_used'), '', ' scope="col" class="name"').
+					n.hCell(gTxt('banned_for'), '', ' scope="col" class="id"')
 				).
 				n.'</thead>';
 
-			echo '<tbody>';
+			echo n.'<tbody>';
 
 			while ($a = nextRow($rs))
 			{
 				extract($a);
 
-				echo tr(
-					hCell(
+				echo n.tr(
+					n.hCell(
 						gTime($uBanned)
 					, '', ' scope="row" class="date banned"').
 
-					td(
+					n.td(
 						txpspecialchars($ip).n.
 						'<span role="presentation">[</span><a class="action-ban" href="?event=discuss'.a.'step=ipban_unban'.a.'ip='.txpspecialchars($ip).a.'_txp_token='.form_token().'">'.gTxt('unban').'</a><span role="presentation">]</span>'
 					, '', 'ip').
 
-					td(
+					n.td(
 						txpspecialchars($name_used)
 					, '', 'name').
 
-					td(
+					n.td(
 						'<a href="?event=discuss'.a.'step=discuss_edit'.a.'discussid='.$banned_on_message.'">'.
 							$banned_on_message.'</a>'
 					, '', 'id')
 				);
 			}
 
-			echo '</tbody>'.
+			echo n.'</tbody>'.
 			endTable().
 			'</div>';
 		}

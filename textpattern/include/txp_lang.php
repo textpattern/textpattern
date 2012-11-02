@@ -246,24 +246,24 @@ Use of this software indicates acceptance of the Textpattern license agreement
 
 			$list .= tr(
 			// Lang-Name and Date.
-				hCell(
+				n.hCell(
 					gTxt($langname)
 					, ''
 					,(isset($langdat['db_lastmod']) && $rpc_updated)
 							? ' scope="row" class="highlight lang-label"'
 							: ' scope="row" class="lang-label"'
-					).n.
-				$rpc_install.n.
-				$lang_file.n.
-				tda( (in_array($langname, $installed_lang) ? dLink('lang', 'remove_language', 'lang_code', $langname, 1) : '-'), ' class="languages_detail'.((isset($langdat['db_lastmod']) && $rpc_updated) ? ' highlight' : '').'"')
-			).n.n;
+					).
+				n.$rpc_install.
+				n.$lang_file.
+				n.tda( (in_array($langname, $installed_lang) ? dLink('lang', 'remove_language', 'lang_code', $langname, 1) : '-'), ' class="languages_detail'.((isset($langdat['db_lastmod']) && $rpc_updated) ? ' highlight' : '').'"')
+			).n;
 		}
 
 		// Output table and content.
 		pagetop(gTxt('tab_languages'), $message);
 
-		echo '<h1 class="txp-heading">', gTxt('tab_languages'), '</h1>',
-			n, '<div id="language_container" class="txp-container">';
+		echo '<h1 class="txp-heading">', gTxt('tab_languages'), '</h1>'.
+			n.'<div id="language_container" class="txp-container">';
 
 		if (isset($msg) && $msg)
 		{
@@ -271,39 +271,39 @@ Use of this software indicates acceptance of the Textpattern license agreement
 		}
 
 		echo $lang_form,
-			n, '<div class="txp-listtables">',
-			n, startTable('', '', 'txp-list'),
-			n, '<thead>',
-			n, tr(
-				hCell(gTxt('language'), '', ' scope="col"').
-				hCell(gTxt('from_server').n.popHelp('install_lang_from_server'), '', ' scope="col"').
-				hCell(gTxt('from_file').n.popHelp('install_lang_from_file'), '', ' scope="col" class="languages_detail"').
-				hCell(gTxt('remove_lang').n.popHelp('remove_lang'), '', ' scope="col" class="languages_detail"')
-			),
-			n, '</thead>',
+			n.'<div class="txp-listtables">'.
+			n.startTable('', '', 'txp-list').
+			'<thead>'.
+			n.tr(
+				n.hCell(gTxt('language'), '', ' scope="col"').
+				n.hCell(gTxt('from_server').n.popHelp('install_lang_from_server'), '', ' scope="col"').
+				n.hCell(gTxt('from_file').n.popHelp('install_lang_from_file'), '', ' scope="col" class="languages_detail"').
+				n.hCell(gTxt('remove_lang').n.popHelp('remove_lang'), '', ' scope="col" class="languages_detail"')
+			).
+			n.'</thead>'.
 
-			n, '<tbody>', $list, '</tbody>',
-			n, endTable(),
-			n, '</div>',
+			'<tbody>' .$list. '</tbody>'.
+			endTable().
+			'</div>'.
 
 			graf(
 				toggle_box('languages_detail'),
 				' class="detail-toggle"'
-			),
+			).
 
-			hed(gTxt('install_from_textpack'), 3),
-			n, form(
-				graf(
-					'<label for="textpack-install">'.gTxt('install_textpack').'</label>'.n.
-					popHelp('get_textpack').n.
-					'<textarea id="textpack-install" class="code" name="textpack" cols="'.INPUT_LARGE.'" rows="'.INPUT_XSMALL.'"></textarea>'.n.
-					fInput('submit', 'install_new', gTxt('upload')).
-					eInput('lang').
-					sInput('get_textpack')
+			n.hed(gTxt('install_from_textpack'), 3).
+			form(
+				n.graf(
+					'<label for="textpack-install">'.gTxt('install_textpack').'</label>'.
+					n.popHelp('get_textpack').
+					n.'<textarea id="textpack-install" class="code" name="textpack" cols="'.INPUT_LARGE.'" rows="'.INPUT_XSMALL.'"></textarea>'.
+					n.fInput('submit', 'install_new', gTxt('upload')).
+					n.eInput('lang').
+					n.sInput('get_textpack')
 				)
-			, '', '', 'post', 'edit-form', '', 'text_uploader'),
+			, '', '', 'post', 'edit-form', '', 'text_uploader').
 	
-			n, '</div>'; // end language_container
+			'</div>'; // end language_container
 	}
 
 /**

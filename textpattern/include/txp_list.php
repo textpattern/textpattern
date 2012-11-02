@@ -213,14 +213,14 @@
 			$show_authors = !has_single_author('textpattern', 'AuthorID');
 
 			echo n.'<div id="'.$event.'_container" class="txp-container">';
-			echo n.n.'<form name="longform" id="articles_form" class="multi_edit_form" method="post" action="index.php">'.
+			echo n.'<form name="longform" id="articles_form" class="multi_edit_form" method="post" action="index.php">'.
 
 				n.'<div class="txp-listtables">'.
 				n.startTable('', '', 'txp-list').
-				n.'<thead>'.
+				'<thead>'.
 				n.tr(
 					n.hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
-					n.column_head('ID', 'id', 'list', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id actions').
+					column_head('ID', 'id', 'list', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id actions').
 					column_head('title', 'title', 'list', true, $switch_dir, $crit, $search_method, (('title' == $sort) ? "$dir " : '').'title').
 					column_head('posted', 'posted', 'list', true, $switch_dir, $crit, $search_method, (('posted' == $sort) ? "$dir " : '').'date posted created').
 					column_head('article_modified', 'lastmod', 'list', true, $switch_dir, $crit, $search_method, (('lastmod' == $sort) ? "$dir " : '').'articles_detail date modified').
@@ -236,7 +236,7 @@
 
 			include_once txpath.'/publish/taghandlers.php';
 
-			echo '<tbody>';
+			echo n.'<tbody>';
 
 			$validator = new Validator();
 
@@ -300,7 +300,7 @@
 
 				$comments = n.'<span class="comments-status">'.$comment_status.'</span> <span class="comments-manage">'.$comments.'</span>';
 
-				echo n.n.tr(
+				echo n.tr(
 
 					n.td((
 						(  ($a['Status'] >= STATUS_LIVE and has_privs('article.edit.published'))
@@ -315,47 +315,47 @@
 
 					n.hCell(eLink('article', 'edit', 'ID', $ID, $ID) .sp. '<span class="articles_detail"><span role="presentation">[</span><a href="'.$view_url.'">'.gTxt('view').'</a><span role="presentation">]</span></span>', '', ' scope="row" class="id"').
 
-					td($Title, '', 'title').
+					n.td($Title, '', 'title').
 
-					td(
+					n.td(
 						gTime($posted), '', ($posted < time() ? '' : 'unpublished ').'date posted created'
 					).
 
-					td(
+					n.td(
 						gTime($lastmod), '', "articles_detail date modified"
 					).
 
-					td(
+					n.td(
 						($expires ? gTime($expires) : ''), '' ,'articles_detail date expires'
 					).
 
-					td(span($Section, array('title' => $section_title)), '', 'section'.$vs).
+					n.td(span($Section, array('title' => $section_title)), '', 'section'.$vs).
 
-					td($Category1, '', "articles_detail category category1".$vc[1]).
-					td($Category2, '', "articles_detail category category2".$vc[2]).
-					td('<a href="'.$view_url.'" title="'.gTxt('view').'">'.$Status.'</a>', '', 'status').
+					n.td($Category1, '', "articles_detail category category1".$vc[1]).
+					n.td($Category2, '', "articles_detail category category2".$vc[2]).
+					n.td('<a href="'.$view_url.'" title="'.gTxt('view').'">'.$Status.'</a>', '', 'status').
 
-					($show_authors ? td(span(txpspecialchars($AuthorID), array('title' => $RealName)), '', 'author') : '').
+					($show_authors ? n.td(span(txpspecialchars($AuthorID), array('title' => $RealName)), '', 'author') : '').
 
-					($use_comments == 1 ? td($comments, '', "articles_detail comments") : '')
+					($use_comments == 1 ? n.td($comments, '', "articles_detail comments") : '')
 				);
 			}
 
-			echo '</tbody>',
-				n, endTable(),
-				n, '</div>',
-				n, list_multiedit_form($page, $sort, $dir, $crit, $search_method),
-				n, tInput(),
-				n, '</form>',
-				n, graf(
+			echo n.'</tbody>'.
+				endTable().
+				'</div>'.
+				n.list_multiedit_form($page, $sort, $dir, $crit, $search_method).
+				n.tInput().
+				n.'</form>'.
+				n.graf(
 					toggle_box('articles_detail'),
 					' class="detail-toggle"'
-				),
-				n, '<div id="'.$event.'_navigation" class="txp-navigation">',
-				n, nav_form('list', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit),
-				n, pageby_form('list', $article_list_pageby),
-				n, '</div>',
-				n, '</div>';
+				).
+				n.'<div id="'.$event.'_navigation" class="txp-navigation">'.
+				n.nav_form('list', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
+				n.pageby_form('list', $article_list_pageby).
+				n.'</div>'.
+				n.'</div>';
 		}
 	}
 
