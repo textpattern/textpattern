@@ -188,8 +188,13 @@
 		echo n.list_search_form($crit, $search_method).'</div>';
 
 		$rs = safe_query(
-			"select textpattern.ID, textpattern.Title, textpattern.Section, textpattern.Category1, textpattern.Category2, textpattern.Status, textpattern.Annotate, textpattern.AuthorID, unix_timestamp(textpattern.Posted) as posted,
-				unix_timestamp(textpattern.LastMod) as lastmod, unix_timestamp(textpattern.Expires) as expires,
+			"select
+				textpattern.ID, textpattern.Title, textpattern.Section,
+				textpattern.Category1, textpattern.Category2,
+				textpattern.Status, textpattern.Annotate, textpattern.AuthorID,
+				unix_timestamp(textpattern.Posted) as posted,
+				unix_timestamp(textpattern.LastMod) as lastmod,
+				unix_timestamp(textpattern.Expires) as expires,
 				category1.title as category1_title,
 				category2.title as category2_title,
 				section.title as section_title,
