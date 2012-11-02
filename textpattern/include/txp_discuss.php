@@ -16,6 +16,12 @@
 	if ($event == 'discuss') {
 		require_privs('discuss');
 
+		if (!get_pref('use_comments', 1, 1))
+		{
+			exit(pageTop('Restricted').'<p class="restricted-area">'.
+				gTxt('restricted_area').'</p>');
+		}
+
 		$available_steps = array(
 			'discuss_save'          => true,
 			'discuss_list'          => false,

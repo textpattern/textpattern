@@ -43,3 +43,8 @@
 		safe_alter('txp_lang',
 			"ADD owner VARCHAR(64) NOT NULL DEFAULT '' AFTER event, ADD INDEX owner (owner)");
 	}
+
+	// Keep all comment-related forms together. The loss of 'preview' ability on the
+	// comments_display Form is of little consequence compared with the benefit of
+	// tucking them away neatly when not required.
+	safe_update('txp_form', "type = 'comment'", "name = 'comments_display'");

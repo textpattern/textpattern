@@ -44,7 +44,7 @@
 
 	function list_list($message = '', $post = '')
 	{
-		global $statuses, $comments_disabled_after, $step, $txp_user, $article_list_pageby, $event;
+		global $statuses, $use_comments, $comments_disabled_after, $step, $txp_user, $article_list_pageby, $event;
 
 		pagetop(gTxt('tab_list'), $message);
 
@@ -230,7 +230,7 @@
 					column_head('category2', 'category2', 'list', true, $switch_dir, $crit, $search_method, (('category2' == $sort) ? "$dir " : '').'articles_detail category category2').
 					column_head('status', 'status', 'list', true, $switch_dir, $crit, $search_method, (('status' == $sort) ? "$dir " : '').'status').
 					($show_authors ? column_head('author', 'author', 'list', true, $switch_dir, $crit, $search_method, (('author' == $sort) ? "$dir " : '').'author') : '').
-					column_head('comments', 'comments', 'list', true, $switch_dir, $crit, $search_method, (('comments' == $sort) ? "$dir " : '').'articles_detail comments')
+					($use_comments == 1 ? column_head('comments', 'comments', 'list', true, $switch_dir, $crit, $search_method, (('comments' == $sort) ? "$dir " : '').'articles_detail comments') : '')
 				).
 				n.'</thead>';
 
@@ -337,7 +337,7 @@
 
 					($show_authors ? td(span(txpspecialchars($AuthorID), array('title' => $RealName)), '', 'author') : '').
 
-					td($comments, '', "articles_detail comments")
+					($use_comments == 1 ? td($comments, '', "articles_detail comments") : '')
 				);
 			}
 

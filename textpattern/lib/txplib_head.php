@@ -210,8 +210,7 @@
 			gTxt('tab_list')     => 'list',
 			gTxt('tab_image')    => 'image',
 			gTxt('tab_file')     => 'file',
-			gTxt('tab_link')     => 'link',
-			gTxt('tab_comments') => 'discuss'
+			gTxt('tab_link')     => 'link'
 		);
 
 		$areas['presentation'] = array(
@@ -233,6 +232,11 @@
 
 		$areas['extensions'] = array(
 		);
+
+		if (get_pref('use_comments', 1, 1))
+		{
+			$areas['content'][gTxt('tab_comments')] = 'discuss';
+		}
 
 		if (is_array($plugin_areas))
 		{
