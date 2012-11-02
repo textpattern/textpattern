@@ -233,7 +233,7 @@
 		$areas['extensions'] = array(
 		);
 
-		if (get_pref('use_comments', 1, 1))
+		if (get_pref('use_comments', 1))
 		{
 			$areas['content'][gTxt('tab_comments')] = 'discuss';
 		}

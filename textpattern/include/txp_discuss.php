@@ -16,7 +16,7 @@
 	if ($event == 'discuss') {
 		require_privs('discuss');
 
-		if (!get_pref('use_comments', 1, 1))
+		if (!get_pref('use_comments', 1))
 		{
 			exit(pageTop('Restricted').'<p class="restricted-area">'.
 				gTxt('restricted_area').'</p>');
