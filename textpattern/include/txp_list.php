@@ -196,8 +196,8 @@
 				user.RealName as RealName,
 				(select count(*) from ".safe_pfx('txp_discuss')." where parentid = textpattern.ID) as total_comments
 			from ".safe_pfx('textpattern')." textpattern
-			left join ".safe_pfx('txp_category')." category1 on category1.name = textpattern.Category1
-			left join ".safe_pfx('txp_category')." category2 on category2.name = textpattern.Category1
+			left join ".safe_pfx('txp_category')." category1 on category1.name = textpattern.Category1 and category1.type = 'article'
+			left join ".safe_pfx('txp_category')." category2 on category2.name = textpattern.Category2 and category2.type = 'article'
 			left join ".safe_pfx('txp_section')." section on section.name = textpattern.Section
 			left join ".safe_pfx('txp_users')." user on user.name = textpattern.AuthorID
 			where $criteria order by $sort_sql limit $offset, $limit"
