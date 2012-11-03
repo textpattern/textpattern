@@ -945,7 +945,7 @@ EOS
 				n.'<label for="status-'.$a.'">'.$b.'</label></li>';
 		}
 
-		return n.'<ul class="plain-list">'.join('', $out).n.'</ul>';
+		return n.'<ul class="status plain-list">'.join('', $out).n.'</ul>';
 	}
 
 /**
