@@ -821,7 +821,6 @@ optgroup::-moz-focus-inner {
 /* addresses box sizing set to content-box and excess padding in IE8-9 */
 input[type="checkbox"],
 input[type="radio"] {
-  margin-right: .5em;
   padding: 0;
   box-sizing: border-box;
 }
