@@ -413,7 +413,7 @@ if (!empty($event) and $event == 'article') {
 			'recent_articles' => array('mode' => PARTIAL_VOLATILE,       'selector' => '#recent_group .recent',    'cb' => 'article_partial_recent_articles'),
 			'title'           => array('mode' => PARTIAL_STATIC,         'selector' => 'p.title',             'cb' => 'article_partial_title'),
 			'title_value'     => array('mode' => PARTIAL_VOLATILE_VALUE, 'selector' => '#title',              'cb' => 'article_partial_title_value'),
-			'article_view'    => array('mode' => PARTIAL_VOLATILE,       'selector' => '#article_view',       'cb' => 'article_partial_article_view'),
+			'article_view'    => array('mode' => PARTIAL_VOLATILE,       'selector' => '#article_partial_article_view',       'cb' => 'article_partial_article_view'),
 			'body'            => array('mode' => PARTIAL_STATIC,         'selector' => 'p.body',              'cb' => 'article_partial_body'),
 			'excerpt'         => array('mode' => PARTIAL_STATIC,         'selector' => 'p.excerpt',           'cb' => 'article_partial_excerpt'),
 			'author'          => array('mode' => PARTIAL_VOLATILE,       'selector' => 'p.author',            'cb' => 'article_partial_author'),
@@ -1382,7 +1382,7 @@ EOS
 			include_once txpath.'/publish/taghandlers.php';
 			$url = permlinkurl_id($ID);
 		}
-		return n.'<span id="article_view"><a href="'.$url.'" class="article-view">'.gTxt('view').'</a></span>';
+		return n.'<span id="article_partial_article_view"><a href="'.$url.'" class="article-view">'.gTxt('view').'</a></span>';
 	}
 
 /**
