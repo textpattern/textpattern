@@ -410,7 +410,7 @@ if (!empty($event) and $event == 'article') {
 			'keywords_value'  => array('mode' => PARTIAL_VOLATILE_VALUE, 'selector' => '#keywords',           'cb' => 'article_partial_keywords_value'),
 			'url_title'       => array('mode' => PARTIAL_STATIC,         'selector' => 'p.url-title',         'cb' => 'article_partial_url_title'),
 			'url_title_value' => array('mode' => PARTIAL_VOLATILE_VALUE, 'selector' => '#url-title',          'cb' => 'article_partial_url_title_value'),
-			'recent_articles' => array('mode' => PARTIAL_VOLATILE,       'selector' => '#recent_group ul',    'cb' => 'article_partial_recent_articles'),
+			'recent_articles' => array('mode' => PARTIAL_VOLATILE,       'selector' => '#recent_group .recent',    'cb' => 'article_partial_recent_articles'),
 			'title'           => array('mode' => PARTIAL_STATIC,         'selector' => 'p.title',             'cb' => 'article_partial_title'),
 			'title_value'     => array('mode' => PARTIAL_VOLATILE_VALUE, 'selector' => '#title',              'cb' => 'article_partial_title_value'),
 			'article_view'    => array('mode' => PARTIAL_VOLATILE,       'selector' => '#article_view',       'cb' => 'article_partial_article_view'),
@@ -1346,7 +1346,7 @@ EOS
 
 		if ($recents)
 		{
-			$ra = '<ul class="plain-list">';
+			$ra = '<ul class="recent plain-list">';
 
 			while($recent = nextRow($recents))
 			{
