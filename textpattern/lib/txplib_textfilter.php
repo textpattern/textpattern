@@ -343,44 +343,32 @@ class TextileTextfilter extends Textfilter implements ITextfilter
 	{
 		return
 			n.'<ul class="textile plain-list">'.
-			n.t.'<li>'.gTxt('header').': <strong>h<em>n</em>.</strong>'.sp.
-			popHelpSubtle('header', 400, 400).'</li>'.
-			n.t.'<li>'.gTxt('blockquote').': <strong>bq.</strong>'.sp.
-			popHelpSubtle('blockquote',400,400).'</li>'.
-			n.t.'<li>'.gTxt('numeric_list').': <strong>#</strong>'.sp.
-			popHelpSubtle('numeric', 400, 400).'</li>'.
-			n.t.'<li>'.gTxt('bulleted_list').': <strong>*</strong>'.sp.
-			popHelpSubtle('bulleted', 400, 400).'</li>'.
-			n.t.'<li>'.gTxt('definition_list').': <strong>; :</strong>'.sp.
-			popHelpSubtle('definition', 400, 400).'</li>'.
+			n.'<li>'.gTxt('header').': <strong>h<em>n</em>.</strong>'.popHelpSubtle('header', 400, 400).'</li>'.
+			n.'<li>'.gTxt('blockquote').': <strong>bq.</strong>'.popHelpSubtle('blockquote',400,400).'</li>'.
+			n.'<li>'.gTxt('numeric_list').': <strong>#</strong>'.popHelpSubtle('numeric', 400, 400).'</li>'.
+			n.'<li>'.gTxt('bulleted_list').': <strong>*</strong>'.popHelpSubtle('bulleted', 400, 400).'</li>'.
+			n.'<li>'.gTxt('definition_list').': <strong>; :</strong>'.popHelpSubtle('definition', 400, 400).'</li>'.
 			n.'</ul>'.
 
 			n.'<ul class="textile plain-list">'.
-			n.t.'<li>'.'_<em>'.gTxt('emphasis').'</em>_'.sp.
-			popHelpSubtle('italic', 400, 400).'</li>'.
-			n.t.'<li>'.'*<strong>'.gTxt('strong').'</strong>*'.sp.
-			popHelpSubtle('bold', 400, 400).'</li>'.
-			n.t.'<li>'.'??<cite>'.gTxt('citation').'</cite>??'.sp.
-			popHelpSubtle('cite', 500, 300).'</li>'.
-			n.t.'<li>'.'-'.gTxt('deleted_text').'-'.sp.
-			popHelpSubtle('delete', 400, 300).'</li>'.
-			n.t.'<li>'.'+'.gTxt('inserted_text').'+'.sp.
-			popHelpSubtle('insert', 400, 300).'</li>'.
-			n.t.'<li>'.'^'.gTxt('superscript').'^'.sp.
-			popHelpSubtle('super', 400, 300).'</li>'.
-			n.t.'<li>'.'~'.gTxt('subscript').'~'.sp.
-			popHelpSubtle('subscript', 400, 400).'</li>'.
+			n.'<li>'.'_<em>'.gTxt('emphasis').'</em>_'.popHelpSubtle('italic', 400, 400).'</li>'.
+			n.'<li>'.'*<strong>'.gTxt('strong').'</strong>*'.popHelpSubtle('bold', 400, 400).'</li>'.
+			n.'<li>'.'??<cite>'.gTxt('citation').'</cite>??'.popHelpSubtle('cite', 500, 300).'</li>'.
+			n.'<li>'.'-'.gTxt('deleted_text').'-'.popHelpSubtle('delete', 400, 300).'</li>'.
+			n.'<li>'.'+'.gTxt('inserted_text').'+'.popHelpSubtle('insert', 400, 300).'</li>'.
+			n.'<li>'.'^'.gTxt('superscript').'^'.popHelpSubtle('super', 400, 300).'</li>'.
+			n.'<li>'.'~'.gTxt('subscript').'~'.popHelpSubtle('subscript', 400, 400).'</li>'.
 			n.'</ul>'.
 
-			n.graf(
-			'"'.gTxt('linktext').'":url'.sp.popHelpSubtle('link', 400, 500)
+			graf(
+			'"'.gTxt('linktext').'":url'.popHelpSubtle('link', 400, 500)
 			, ' class="textile"').
 
-			n.graf(
-			'!'.gTxt('imageurl').'!'.sp.popHelpSubtle('image', 500, 500)
+			graf(
+			'!'.gTxt('imageurl').'!'.popHelpSubtle('image', 500, 500)
 			, ' class="textile"').
 
-			n.graf(
+			graf(
 			'<a id="textile-docs-link" href="http://textpattern.com/textile-sandbox" target="_blank">'.gTxt('More').'</a>');
 	}
 }

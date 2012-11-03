@@ -1895,10 +1895,10 @@ body#page-setup {
   display: block;
 }
 
-.recent {
+#recent_group ul {
   list-style: decimal-leading-zero;
 }
-.recent li {
+#recent_group li {
   margin-left: 2em;
 }
 

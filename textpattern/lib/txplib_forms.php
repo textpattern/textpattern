@@ -257,7 +257,7 @@
 
 	function hInput($name,$value)
 	{
-		return n.fInput('hidden', $name, $value);
+		return fInput('hidden', $name, $value);
 	}
 
 /**

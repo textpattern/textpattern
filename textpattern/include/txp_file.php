@@ -520,7 +520,7 @@
 
 			$created =
 					graf(checkbox('publish_now', '1', $publish_now, '', 'publish_now') . '<label for="publish_now">'.gTxt('set_to_now').'</label>', ' class="edit-file-publish-now"').
-					graf(gTxt('or_publish_at').sp.popHelp('timestamp'), ' class="edit-file-publish-at"').
+					graf(gTxt('or_publish_at').popHelp('timestamp'), ' class="edit-file-publish-at"').
 					graf('<span class="label">'.gtxt('date').'</span>'.
 						tsi('year', '%Y', $rs['created'], '', gTxt('yyyy')).' / '.
 						tsi('month', '%m', $rs['created'], '', gTxt('mm')).' / '.
@@ -641,7 +641,7 @@
 // -------------------------------------------------------------
 	function file_insert()
 	{
-		global $txp_user,$file_base_path,$file_max_upload_size;
+		global $txp_user, $file_base_path, $file_max_upload_size;
 
 		if (!has_privs('file.edit.own'))
 		{
@@ -708,7 +708,7 @@
 // -------------------------------------------------------------
 	function file_replace()
 	{
-		global $txp_user,$file_base_path;
+		global $txp_user, $file_base_path;
 
 		$id = assert_int(gps('id'));
 
@@ -963,7 +963,7 @@
 	}
 
 // -------------------------------------------------------------
-	function file_upload_form($label,$pophelp,$step,$id='',$label_id='')
+	function file_upload_form($label, $pophelp, $step, $id='', $label_id='')
 	{
 		global $file_max_upload_size;
 

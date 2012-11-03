@@ -171,32 +171,32 @@ Use of this software indicates acceptance of the Textpattern license agreement
 		echo n.'<div id="login_container" class="txp-container">';
 		echo form(
 			n.'<div class="txp-login">'.
-			hed(gTxt($reset ? 'password_reset' : 'login_to_textpattern'), 2).
+			n.hed(gTxt($reset ? 'password_reset' : 'login_to_textpattern'), 2).
 
 			graf(
-				'<span class="login-label"><label for="login_name">'.gTxt('name').'</label></span>'.
-				n.'<span class="login-value">'.fInput('text', 'p_userid', $name, '', '', '', INPUT_REGULAR, '', 'login_name').'</span>'
+				n.'<span class="login-label"><label for="login_name">'.gTxt('name').'</label></span>'.
+				n.'<span class="login-value">'.fInput('text', 'p_userid', $name, '', '', '', INPUT_REGULAR, '', 'login_name').n.'</span>'.n
 			, ' class="login-name"').
 
 			($reset
 				? ''
 				: graf(
-					'<span class="login-label"><label for="login_password">'.gTxt('password').'</label></span>'.
-					n.'<span class="login-value">'.fInput('password', 'p_password', '', '', '', '', INPUT_REGULAR, '', 'login_password').'</span>'
+					n.'<span class="login-label"><label for="login_password">'.gTxt('password').'</label></span>'.
+					n.'<span class="login-value">'.fInput('password', 'p_password', '', '', '', '', INPUT_REGULAR, '', 'login_password').n.'</span>'.n
 				, ' class="login-password"')
 			).
 
 			($reset
 				? ''
 				: graf(
-					checkbox('stay', 1, $stay, '', 'login_stay').n.'<label for="login_stay">'.gTxt('stay_logged_in').'</label>'.sp.popHelp('remember_login')
+					checkbox('stay', 1, $stay, '', 'login_stay').n.'<label for="login_stay">'.gTxt('stay_logged_in').'</label>'.popHelp('remember_login').n
 					, ' class="login-stay"')
 			).
 
 			($reset ? hInput('p_reset', 1) : '').
 
 			graf(
-				fInput('submit', '', gTxt($reset ? 'password_reset_button' : 'log_in_button'), 'publish')
+				fInput('submit', '', gTxt($reset ? 'password_reset_button' : 'log_in_button'), 'publish').n
 			).
 			(
 				($reset
@@ -206,27 +206,26 @@ Use of this software indicates acceptance of the Textpattern license agreement
 			).
 			(gps('event') ? eInput(gps('event')) : '').
 			n.'</div>'
-		, '', '', 'post', '', '', 'login_form').n.'</div>'.
+		, '', '', 'post', '', '', 'login_form').'</div>'.
 
-
-		n.script_js(<<<EOSCR
-// Focus on either username or password when empty
+		// Focus on either username or password when empty.
+		script_js(<<<EOSCR
 $(document).ready(
-	function() {
-		var has_name = $("#login_name").val().length;
-		var password_box = $("#login_password").val();
-		var has_password = (password_box) ? password_box.length : 0;
-		if (!has_name) {
-			$("#login_name").focus();
-		} else if (!has_password) {
-		 	$("#login_password").focus();
-		}
-	}
+function() {
+var has_name = $("#login_name").val().length;
+var password_box = $("#login_password").val();
+var has_password = (password_box) ? password_box.length : 0;
+if (!has_name) {
+$("#login_name").focus();
+} else if (!has_password) {
+$("#login_password").focus();
+}
+}
 );
 EOSCR
 		).
-		n.script_js('textpattern.textarray = '.json_encode($textarray_script)).
-		'</div><!-- /txp-body -->'.n.'</body>'.n.'</html>';
+		script_js('textpattern.textarray = '.json_encode($textarray_script)).
+		n.'</div><!-- /txp-body -->'.n.'</body>'.n.'</html>';
 
 		exit(0);
 	}

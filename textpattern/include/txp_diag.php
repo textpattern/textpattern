@@ -416,7 +416,7 @@
 
 		if ($fail) {
 			foreach ($fail as $help => $message)
-				echo graf(nl2br($message).sp.popHelp($help));
+				echo graf(nl2br($message).popHelp($help));
 		}
 		else {
 			echo graf(diag_msg_wrap(gTxt('all_checks_passed'), 'success'));

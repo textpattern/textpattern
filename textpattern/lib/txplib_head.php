@@ -70,14 +70,12 @@
 		header('X-Frame-Options: '.X_FRAME_OPTIONS);
 
 	?><!DOCTYPE html>
-	<html lang="<?php echo LANG; ?>" dir="<?php echo txpspecialchars(gTxt('lang_dir')); ?>">
-	<head>
-	<meta charset="utf-8">
-	<meta name="robots" content="noindex, nofollow">
-	<title><?php echo escape_title($pagetitle) ?> - <?php echo txpspecialchars($sitename) ?> &#124; Textpattern CMS</title>
-	<?php
-	echo
-		script_js('jquery.js', SCRIPT_URL).n.
+<html lang="<?php echo LANG; ?>" dir="<?php echo txpspecialchars(gTxt('lang_dir')); ?>">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<title><?php echo escape_title($pagetitle) ?> - <?php echo txpspecialchars($sitename) ?> &#124; Textpattern CMS</title><?php echo
+		script_js('jquery.js', SCRIPT_URL).
 		script_js(
 			'var textpattern = ' . json_encode(array(
 				'event' => $event,
@@ -90,24 +88,27 @@
 					'#page-image #alt-text, #page-image #caption,'.
 					'#page-file #description,'.
 					'#page-link #link-title, #page-link #link-description')
-		)).';').n.
-		script_js('textpattern.js', SCRIPT_URL);
+		)).';').
+		script_js('textpattern.js', SCRIPT_URL).n;
 	gTxtScript(array('form_submission_error', 'are_you_sure', 'cookies_must_be_enabled'));
 	// Mandatory un-themable Textpattern core styles ?>
-	<style>.not-ready .doc-ready, .not-ready form.async input[type="submit"], .not-ready a.async { visibility: hidden; }</style>
-	<?php
-	echo $theme->html_head();
+<style>
+.not-ready .doc-ready, .not-ready form.async input[type="submit"], .not-ready a.async { visibility: hidden; }
+</style>
+<?php
+echo $theme->html_head();
 	callback_event('admin_side', 'head_end');
-	?>
-	</head>
-	<body id="<?php echo $body_id; ?>" class="not-ready <?php echo $area; ?>">
-	<p class="txp-accessibility"><a href="#txp-main"><?php echo gTxt('skip_to_main_content'); ?></a></p>
-	<header role="banner" class="txp-header">
-	<?php callback_event('admin_side', 'pagetop');
+?>
+</head>
+<body id="<?php echo $body_id; ?>" class="not-ready <?php echo $area; ?>">
+<p class="txp-accessibility"><a href="#txp-main"><?php echo gTxt('skip_to_main_content'); ?></a></p>
+<header role="banner" class="txp-header">
+<?php callback_event('admin_side', 'pagetop');
 		$theme->set_state($area, $event, $bm, $message);
 		echo pluggable_ui('admin_side', 'header', $theme->header());
 		callback_event('admin_side', 'pagetop_end');
-		echo n.'</header><!-- /txp-header -->'.n.'<div role="main" id="txp-main" class="txp-body" aria-label="'.gTxt('main_content').'">';
+		echo n.'</header><!-- /txp-header -->'.
+			n.'<div role="main" id="txp-main" class="txp-body" aria-label="'.gTxt('main_content').'">';
 	}
 
 /**
@@ -282,7 +283,7 @@
 
 		if ($out)
 		{
-			return '<form method="get" action="index.php" class="navpop">'.
+			return n.'<form method="get" action="index.php" class="navpop">'.
 				n.'<select name="event" onchange="submit(this.form);">'.
 				n.'<option>'.gTxt('go').'&#8230;</option>'.
 				join('', $out).

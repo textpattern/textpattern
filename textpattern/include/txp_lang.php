@@ -276,9 +276,9 @@ Use of this software indicates acceptance of the Textpattern license agreement
 			n.'<thead>'.
 			tr(
 				hCell(gTxt('language'), '', ' scope="col"').
-				hCell(gTxt('from_server').n.popHelp('install_lang_from_server'), '', ' scope="col"').
-				hCell(gTxt('from_file').n.popHelp('install_lang_from_file'), '', ' scope="col" class="languages_detail"').
-				hCell(gTxt('remove_lang').n.popHelp('remove_lang'), '', ' scope="col" class="languages_detail"')
+				hCell(gTxt('from_server').popHelp('install_lang_from_server'), '', ' scope="col"').
+				hCell(gTxt('from_file').popHelp('install_lang_from_file'), '', ' scope="col" class="languages_detail"').
+				hCell(gTxt('remove_lang').popHelp('remove_lang'), '', ' scope="col" class="languages_detail"')
 			).
 			n.'</thead>'.
 
@@ -294,8 +294,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
 			hed(gTxt('install_from_textpack'), 3).
 			form(
 				graf(
-					'<label for="textpack-install">'.gTxt('install_textpack').'</label>'.
-					n.popHelp('get_textpack').
+					'<label for="textpack-install">'.gTxt('install_textpack').'</label>'.popHelp('get_textpack').
 					n.'<textarea id="textpack-install" class="code" name="textpack" cols="'.INPUT_LARGE.'" rows="'.INPUT_XSMALL.'"></textarea>'.
 					fInput('submit', 'install_new', gTxt('upload')).
 					eInput('lang').

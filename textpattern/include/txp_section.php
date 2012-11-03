@@ -151,7 +151,7 @@
 
 		$total = safe_count('txp_section', "$criteria");
 
-		echo n.'<h1 class="txp-heading">'.gTxt('tab_sections').sp.popHelp('section_category').'</h1>';
+		echo n.'<h1 class="txp-heading">'.gTxt('tab_sections').popHelp('section_category').'</h1>';
 		echo n.'<div id="'.$event.'_control" class="txp-control-panel">';
 		echo graf(
 			sLink('section', 'section_edit', gTxt('create_section'))
@@ -159,7 +159,7 @@
 
 		echo n.'<form id="default_section_form" name="default_section_form" method="post" action="index.php" class="async">';
 		echo graf(
-				'<label>'.gTxt('default_write_section').'</label>'.sp.popHelp('section_default').n.section_select_list()
+				'<label>'.gTxt('default_write_section').'</label>'.popHelp('section_default').n.section_select_list()
 			).
 			eInput('section').
 			sInput('section_set_default');

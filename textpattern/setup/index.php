@@ -56,19 +56,19 @@ print <<<eod
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8">
-	<meta name="robots" content="noindex, nofollow" />
-	<title>Setup &#124; Textpattern CMS</title>
-	<script src="$rel_txpurl/jquery.js"></script>
-	<script>var textpattern = { do_spellcheck: "", textarray: {} };</script>
-	<script src="$rel_txpurl/textpattern.js"></script>
-	<link rel="stylesheet" href="$rel_txpurl/theme/hive/css/textpattern.css">
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-	<script src="$rel_txpurl/modernizr.js"></script>
-	<!--[if lt IE 9]><script src="$rel_txpurl/theme/hive/js/selectivizr.min.js"></script><![endif]-->
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow" />
+<title>Setup &#124; Textpattern CMS</title>
+<script src="$rel_txpurl/jquery.js"></script>
+<script>var textpattern = { do_spellcheck: "", textarray: {} };</script>
+<script src="$rel_txpurl/textpattern.js"></script>
+<link rel="stylesheet" href="$rel_txpurl/theme/hive/css/textpattern.css">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+<script src="$rel_txpurl/modernizr.js"></script>
+<!--[if lt IE 9]><script src="$rel_txpurl/theme/hive/js/selectivizr.min.js"></script><![endif]-->
 </head>
 <body id="page-setup"{$bodyclass}>
-	<div class="txp-body">
+<div class="txp-body">
 eod;
 
 	switch ($step) {
@@ -92,8 +92,8 @@ eod;
 			n.hed('Welcome to Textpattern',1),
 			n.'<form action="'.$_SERVER['PHP_SELF'].'" method="post">',
 			n.langs(),
-			n.graf(fInput('submit','Submit','Submit','publish')),
-			n.sInput('getDbInfo'),
+			graf(fInput('submit','Submit','Submit','publish')),
+			sInput('getDbInfo'),
 			n.'</form>',
 			n.'</div>',
 			n.'</div>';
@@ -168,53 +168,53 @@ eod;
 		echo '<form action="'.$_SERVER['PHP_SELF'].'" method="post">'.
 			n.hed(setup_gTxt('need_details'),1).
 			n.hed('MySQL',2).
-			n.graf(setup_gTxt('db_must_exist')).
+			graf(setup_gTxt('db_must_exist')).
 
-			n.graf(
+			graf(
 				'<span class="edit-label"><label for="setup_mysql_login">'.setup_gTxt('mysql_login').'</label></span>'.
 				n.'<span class="edit-value">'.fInput('text', 'duser', '', '', '', '', INPUT_REGULAR, '', 'setup_mysql_login').'</span>'
 			).
 
-			n.graf(
+			graf(
 				'<span class="edit-label"><label for="setup_mysql_pass">'.setup_gTxt('mysql_password').'</label></span>'.
 				n.'<span class="edit-value">'.fInput('text', 'dpass', '', '', '', '', INPUT_REGULAR, '', 'setup_mysql_pass').'</span>'
 			).
 
-			n.graf(
+			graf(
 				'<span class="edit-label"><label for="setup_mysql_server">'.setup_gTxt('mysql_server').'</label></span>'.
 				n.'<span class="edit-value">'.fInput('text', 'dhost', 'localhost', '', '', '', INPUT_REGULAR, '', 'setup_mysql_server', '', true).'</span>'
 			).
 
-			n.graf(
+			graf(
 				'<span class="edit-label"><label for="setup_mysql_db">'.setup_gTxt('mysql_database').'</label></span>'.
 				n.'<span class="edit-value">'.fInput('text', 'ddb', '', '', '', '', INPUT_REGULAR, '', 'setup_mysql_db', '', true).'</span>'
 			).
 
-			n.graf(
-				'<span class="edit-label"><label for="setup_table_prefix">'.setup_gTxt('table_prefix').'</label>'.sp.popHelp('table_prefix').'</span>'.
+			graf(
+				'<span class="edit-label"><label for="setup_table_prefix">'.setup_gTxt('table_prefix').'</label>'.popHelp('table_prefix').'</span>'.
 				n.'<span class="edit-value">'.fInput('text', 'dprefix', '', '', '', '', INPUT_REGULAR, '', 'setup_table_prefix').'</span>'
 			).
 
 			n.hed(setup_gTxt('site_url'),2).
-			n.graf(setup_gTxt('please_enter_url')).
-			n.graf(
-				'<span class="edit-label"><label for="setup_site_url">http://</label>'.sp.popHelp('siteurl').'</span>'.
+			graf(setup_gTxt('please_enter_url')).
+			graf(
+				'<span class="edit-label"><label for="setup_site_url">http://</label>'.popHelp('siteurl').'</span>'.
 				n.'<span class="edit-value">'.fInput('text', 'siteurl', $guess_siteurl, '', '', '', INPUT_REGULAR, '', 'setup_site_url', '', true).'</span>'
 			);
 
 		if (is_disabled('mail'))
 		{
-			echo n.graf(
+			echo graf(
 				'<span class="warning">'.setup_gTxt('warn_mail_unavailable').'</span>'
 			);
 		}
 
-		echo n.graf(
+		echo graf(
 			fInput('submit','Submit',setup_gTxt('next_step', '', 'raw'),'publish')
 		);
 
-		echo n.hInput('lang', LANG),
-			n.sInput('printConfig'),
+		echo hInput('lang', LANG),
+			sInput('printConfig'),
 			n.'</form>'.
 			n.'</div>'.
 			n.'</div>';
@@ -262,7 +262,7 @@ eod;
 //			exit;
 //		}
 
-		echo hed(setup_gTxt("checking_database"), 2);
+		echo n.hed(setup_gTxt("checking_database"), 2);
 
 		if (($mylink = mysql_connect($dhost, $duser, $dpass)))
 		{
@@ -418,42 +418,42 @@ eod;
 
 		echo '<form action="'.$_SERVER['PHP_SELF'].'" method="post">'.
 			n.hed(setup_gTxt('creating_db_tables'),2).
-			n.graf(setup_gTxt('about_to_create')).
+			graf(setup_gTxt('about_to_create')).
 
-			n.graf(
+			graf(
 				'<span class="edit-label"><label for="setup_user_realname">'.setup_gTxt('your_full_name').'</label></span>'.
 				n.'<span class="edit-value">'.fInput('text', 'RealName', '', '', '', '', INPUT_REGULAR, '', 'setup_user_realname', '', true).'</span>'
 			).
 
-			n.graf(
-				'<span class="edit-label"><label for="setup_user_login">'.setup_gTxt('setup_login').'</label>'.sp.popHelp('setup_user_login').'</span>'.
+			graf(
+				'<span class="edit-label"><label for="setup_user_login">'.setup_gTxt('setup_login').'</label>'.popHelp('setup_user_login').'</span>'.
 				n.'<span class="edit-value">'.fInput('text', 'name', '', '', '', '', INPUT_REGULAR, '', 'setup_user_login', '', true).'</span>'
 			).
 
-			n.graf(
-				'<span class="edit-label"><label for="setup_user_pass">'.setup_gTxt('choose_password').'</label>'.sp.popHelp('setup_user_pass').'</span>'.
+			graf(
+				'<span class="edit-label"><label for="setup_user_pass">'.setup_gTxt('choose_password').'</label>'.popHelp('setup_user_pass').'</span>'.
 				n.'<span class="edit-value">'.fInput('text', 'pass', '', '', '', '', INPUT_REGULAR, '', 'setup_user_pass', '', true).'</span>'
 			).
 
-			n.graf(
+			graf(
 				'<span class="edit-label"><label for="setup_user_email">'.setup_gTxt('your_email').'</label></span>'.
 				n.'<span class="edit-value">'.fInput('email', 'email', '', '', '', '', INPUT_REGULAR, '', 'setup_user_email', '', true).'</span>'
 			).
 
 			n.hed(setup_gTxt('site_config'),2).
 
-			n.graf(
-				'<span class="edit-label"><label for="setup_admin_theme">'.setup_gTxt('admin_theme').'</label>'.sp.popHelp('theme_name').'</span>'.
+			graf(
+				'<span class="edit-label"><label for="setup_admin_theme">'.setup_gTxt('admin_theme').'</label>'.popHelp('theme_name').'</span>'.
 				n.'<span class="edit-value">'.$theme_chooser.'</span>'
 			).
 
-			n.graf(
+			graf(
 				fInput('submit','Submit',setup_gTxt('next_step'),'publish')
 			).
 
-			n.sInput('createTxp'),
-			n.hInput('lang', txpspecialchars($lang)),
-			n.hInput('siteurl', txpspecialchars($siteurl)),
+			sInput('createTxp'),
+			hInput('lang', txpspecialchars($lang)),
+			hInput('siteurl', txpspecialchars($siteurl)),
 			n.'</form>'.
 			n.'</div>'.
 			n.'</div>';
@@ -469,7 +469,7 @@ eod;
 			echo n.'<div id="setup_container" class="txp-container">'.
 				txp_setup_progress_meter(3).
 				n.'<div class="txp-setup">'.
-				n.graf(
+				graf(
 					'<span class="error">'.setup_gTxt('name_required').'</span>'
 				).
 				n.setup_back_button().
@@ -483,7 +483,7 @@ eod;
 			echo n.'<div id="setup_container" class="txp-container">'.
 				txp_setup_progress_meter(3).
 				n.'<div class="txp-setup">'.
-				n.graf(
+				graf(
 					'<span class="error">'.setup_gTxt('pass_required').'</span>'
 				).
 				n.setup_back_button().
@@ -497,7 +497,7 @@ eod;
 			echo n.'<div id="setup_container" class="txp-container">'.
 				txp_setup_progress_meter(3).
 				n.'<div class="txp-setup">'.
-				n.graf(
+				graf(
 					'<span class="error">'.setup_gTxt('email_required').'</span>'
 				).
 				n.setup_back_button().
@@ -591,7 +591,7 @@ eod;
 
 		if ($GLOBALS['txp_install_successful'] === false)
 		{
-			return n.graf(
+			return graf(
 					'<span class="error">'.setup_gTxt('errors_during_install', array(
 						'{num}' => $GLOBALS['txp_err_count']
 					)).'</span>'
@@ -608,19 +608,19 @@ eod;
 
 				$warnings.
 
-				n.graf(
+				graf(
 					setup_gTxt('you_can_access', array(
 						'index.php' => $login_url,
 					))
 				).
 
-				n.graf(
+				graf(
 					setup_gTxt('installation_postamble')
 				).
 
 				n.hed(setup_gTxt('thanks_for_interest'), 3).
 
-				n.graf('<a href="'.$login_url.'" class="navlink publish">'.setup_gTxt('go_to_login').'</a>');
+				graf('<a href="'.$login_url.'" class="navlink publish">'.setup_gTxt('go_to_login').'</a>');
 
 				n.'</div>'.
 				n.'</div>';

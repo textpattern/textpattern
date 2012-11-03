@@ -366,7 +366,7 @@ EOS
 		$heading = 'tab_' . ($event == 'article' ? 'list' : $event);
 		$for = $rs ? ' for="'.$event.'_category_parent"' : '';
 
-		$out = hed(gTxt($heading).sp.popHelp($event.'_category'), 2).
+		$out = hed(gTxt($heading).popHelp($event.'_category'), 2).
 			form(
 				fInput('text', 'title', '', '', '', '', INPUT_REGULAR).
 				(($rs) ? '<div class="parent"><label'.$for.'>' . gTxt('parent') . '</label>' . treeSelectInput('parent_cat', $rs, $parent, $event.'_category_parent') . '</div>' : '').

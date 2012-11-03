@@ -401,30 +401,30 @@ if (!empty($event) and $event == 'article') {
 		)
 		*/
 		$partials = array(
-			'sLastMod'        => array('mode' => PARTIAL_VOLATILE_VALUE, 'selector' => '[name=sLastMod]', 'cb' => 'article_partial_value'),
-			'sPosted'         => array('mode' => PARTIAL_VOLATILE_VALUE, 'selector' => '[name=sPosted]', 'cb' => 'article_partial_value'),
-			'sidehelp'   	  => array('mode' => PARTIAL_VOLATILE,       'selector' => '#textfilter_group', 'cb' => 'article_partial_sidehelp'),
+			'sLastMod'        => array('mode' => PARTIAL_VOLATILE_VALUE, 'selector' => '[name=sLastMod]',     'cb' => 'article_partial_value'),
+			'sPosted'         => array('mode' => PARTIAL_VOLATILE_VALUE, 'selector' => '[name=sPosted]',      'cb' => 'article_partial_value'),
+			'sidehelp'   	  => array('mode' => PARTIAL_VOLATILE,       'selector' => '#textfilter_group',   'cb' => 'article_partial_sidehelp'),
 			'custom_fields'   => array('mode' => PARTIAL_STATIC,         'selector' => '#custom_field_group', 'cb' => 'article_partial_custom_fields'),
-			'image'           => array('mode' => PARTIAL_STATIC,         'selector' => '#image_group', 'cb' => 'article_partial_image'),
-			'keywords'        => array('mode' => PARTIAL_STATIC,         'selector' => 'p.keywords', 'cb' => 'article_partial_keywords'),
-			'keywords_value'  => array('mode' => PARTIAL_VOLATILE_VALUE, 'selector' => '#keywords', 'cb' => 'article_partial_keywords_value'),
-			'url_title'       => array('mode' => PARTIAL_STATIC,         'selector' => 'p.url-title', 'cb' => 'article_partial_url_title'),
-			'url_title_value' => array('mode' => PARTIAL_VOLATILE_VALUE, 'selector' => '#url-title', 'cb' => 'article_partial_url_title_value'),
-			'recent_articles' => array('mode' => PARTIAL_VOLATILE,       'selector' => '#recent_group .recent', 'cb' => 'article_partial_recent_articles'),
-			'title'           => array('mode' => PARTIAL_STATIC,         'selector' => 'p.title', 'cb' => 'article_partial_title'),
-			'title_value'     => array('mode' => PARTIAL_VOLATILE_VALUE, 'selector' => '#title', 'cb' => 'article_partial_title_value'),
-			'article_view'    => array('mode' => PARTIAL_VOLATILE,       'selector' => '#article_partial_article_view', 'cb' => 'article_partial_article_view'),
-			'body'            => array('mode' => PARTIAL_STATIC,         'selector' => 'p.body', 'cb' => 'article_partial_body'),
-			'excerpt'         => array('mode' => PARTIAL_STATIC,         'selector' => 'p.excerpt', 'cb' => 'article_partial_excerpt'),
-			'author'          => array('mode' => PARTIAL_VOLATILE,       'selector' => 'p.author', 'cb' => 'article_partial_author'),
-			'view_modes'      => array('mode' => PARTIAL_VOLATILE,       'selector' => '#view_modes', 'cb' => 'article_partial_view_modes'),
-			'article_nav'     => array('mode' => PARTIAL_VOLATILE,       'selector' => 'p.nav-tertiary', 'cb' => 'article_partial_article_nav'),
-			'status'          => array('mode' => PARTIAL_VOLATILE,       'selector' => '#write-status', 'cb' => 'article_partial_status'),
-			'categories'      => array('mode' => PARTIAL_STATIC,         'selector' => '#categories_group', 'cb' => 'article_partial_categories'),
-			'section'         => array('mode' => PARTIAL_STATIC,         'selector' => 'p.section', 'cb' => 'article_partial_section'),
-			'comments'        => array('mode' => PARTIAL_VOLATILE,       'selector' => '#write-comments', 'cb' => 'article_partial_comments'),
-			'posted'          => array('mode' => PARTIAL_VOLATILE,       'selector' => '#write-timestamp', 'cb' => 'article_partial_posted'),
-			'expires'         => array('mode' => PARTIAL_VOLATILE,       'selector' => '#write-expires', 'cb' => 'article_partial_expires'),
+			'image'           => array('mode' => PARTIAL_STATIC,         'selector' => '#image_group',        'cb' => 'article_partial_image'),
+			'keywords'        => array('mode' => PARTIAL_STATIC,         'selector' => 'p.keywords',          'cb' => 'article_partial_keywords'),
+			'keywords_value'  => array('mode' => PARTIAL_VOLATILE_VALUE, 'selector' => '#keywords',           'cb' => 'article_partial_keywords_value'),
+			'url_title'       => array('mode' => PARTIAL_STATIC,         'selector' => 'p.url-title',         'cb' => 'article_partial_url_title'),
+			'url_title_value' => array('mode' => PARTIAL_VOLATILE_VALUE, 'selector' => '#url-title',          'cb' => 'article_partial_url_title_value'),
+			'recent_articles' => array('mode' => PARTIAL_VOLATILE,       'selector' => '#recent_group ul',    'cb' => 'article_partial_recent_articles'),
+			'title'           => array('mode' => PARTIAL_STATIC,         'selector' => 'p.title',             'cb' => 'article_partial_title'),
+			'title_value'     => array('mode' => PARTIAL_VOLATILE_VALUE, 'selector' => '#title',              'cb' => 'article_partial_title_value'),
+			'article_view'    => array('mode' => PARTIAL_VOLATILE,       'selector' => '#article_view',       'cb' => 'article_partial_article_view'),
+			'body'            => array('mode' => PARTIAL_STATIC,         'selector' => 'p.body',              'cb' => 'article_partial_body'),
+			'excerpt'         => array('mode' => PARTIAL_STATIC,         'selector' => 'p.excerpt',           'cb' => 'article_partial_excerpt'),
+			'author'          => array('mode' => PARTIAL_VOLATILE,       'selector' => 'p.author',            'cb' => 'article_partial_author'),
+			'view_modes'      => array('mode' => PARTIAL_VOLATILE,       'selector' => '#view_modes',         'cb' => 'article_partial_view_modes'),
+			'article_nav'     => array('mode' => PARTIAL_VOLATILE,       'selector' => 'p.nav-tertiary',      'cb' => 'article_partial_article_nav'),
+			'status'          => array('mode' => PARTIAL_VOLATILE,       'selector' => '#write-status',       'cb' => 'article_partial_status'),
+			'categories'      => array('mode' => PARTIAL_STATIC,         'selector' => '#categories_group',   'cb' => 'article_partial_categories'),
+			'section'         => array('mode' => PARTIAL_STATIC,         'selector' => 'p.section',           'cb' => 'article_partial_section'),
+			'comments'        => array('mode' => PARTIAL_VOLATILE,       'selector' => '#write-comments',     'cb' => 'article_partial_comments'),
+			'posted'          => array('mode' => PARTIAL_VOLATILE,       'selector' => '#write-timestamp',    'cb' => 'article_partial_posted'),
+			'expires'         => array('mode' => PARTIAL_VOLATILE,       'selector' => '#write-expires',      'cb' => 'article_partial_expires'),
 		);
 
 		// Add partials for custom fields (and their values which is redundant by design, for plugins).
@@ -615,7 +615,7 @@ if (!empty($event) and $event == 'article') {
 
 			startTable('', '', 'txp-columntable').
 
-			n.'<tr>'.n.'<td id="article-col-1"><div id="configuration_content">';
+			n.'<tr>'.n.'<td id="article-col-1">'.n.'<div id="configuration_content">';
 
 		if ($view == 'text')
 		{
@@ -640,7 +640,7 @@ if (!empty($event) and $event == 'article') {
 
 			// Form override.
 			$html_override = ($allow_form_override)
-				? pluggable_ui('article_ui', 'override', graf('<label for="override-form">'.gTxt('override_default_form').'</label>'.n.popHelp('override_form').br.
+				? pluggable_ui('article_ui', 'override', graf('<label for="override-form">'.gTxt('override_default_form').'</label>'.popHelp('override_form').br.
 					form_pop($override_form, 'override-form'), ' class="override-form"'), $rs)
 				: '';
 
@@ -677,24 +677,24 @@ if (!empty($event) and $event == 'article') {
 
 		if ($view == 'preview')
 		{
-			echo '<div class="preview">'.hed(gTxt('preview'), 2).hed($Title, 1, ' class="title"');
+			echo n.'<div class="preview">'.n.hed(gTxt('preview'), 2).n.hed($Title, 1, ' class="title"');
 		}
 
 		elseif ($view == 'html')
 		{
-			echo '<div class="html">'.hed('HTML', 2).hed($Title, 1, ' class="title"');
+			echo n.'<div class="html">'.n.hed('HTML', 2).n.hed($Title, 1, ' class="title"');
 		}
 
 		elseif ($view == 'text')
 		{
-			echo '<div class="text">'.n.$partials['title']['html'];
+			echo n.'<div class="text">'.$partials['title']['html'];
 		}
 
 	// Body.
 
 		if ($view == 'preview')
 		{
-			echo '<div class="body">'.$Body_html.'</div>';
+			echo n.'<div class="body">'.$Body_html.'</div>';
 		}
 
 		elseif ($view == 'html')
@@ -713,7 +713,7 @@ if (!empty($event) and $event == 'article') {
 		{
 			if ($view == 'preview')
 			{
-				echo n.'<hr /><div class="excerpt">'.$Excerpt_html.'</div>';
+				echo n.'<hr />'.n.'<div class="excerpt">'.$Excerpt_html.'</div>';
 			}
 
 			elseif ($view == 'html')
@@ -735,21 +735,21 @@ if (!empty($event) and $event == 'article') {
 		}
 
 		echo hInput('from_view',$view),
-		'</div></div></td>';
+		n.'</div>'.n.'</div>'.n.'</td>';
 
 	// Layer tabs.
 
-		echo '<td id="article-tabs">';
+		echo n.'<td id="article-tabs">';
 		echo $partials['view_modes']['html'];
-		echo '</td>';
+		echo n.'</td>';
 
-		echo '<td id="article-col-2"><div id="supporting_content">';
+		echo n.'<td id="article-col-2">'.n.'<div id="supporting_content">';
 
 		if ($view == 'text')
 		{
 			if ($step != 'create')
 			{
-				echo n.graf(href(gtxt('create_new'), 'index.php?event=article'), ' class="action-create"');
+				echo graf(href(gtxt('create_new'), 'index.php?event=article'), ' class="action-create"');
 			}
 
 		// Prev/next article links.
@@ -767,7 +767,7 @@ if (!empty($event) and $event == 'article') {
 			echo pluggable_ui(
 				'article_ui',
 				'sort_display',
-				wrapRegion('write-sort', $partials['section']['html'].n.$partials['categories']['html'].n, '', gTxt('sort_display')),
+				wrapRegion('write-sort', $partials['section']['html'].$partials['categories']['html'], '', gTxt('sort_display')),
 				$rs);
 
 		// "Comments" section.
@@ -792,16 +792,16 @@ if (!empty($event) and $event == 'article') {
 						'write-timestamp',
 						graf(checkbox('publish_now', '1', $publish_now, '', 'publish_now').'<label for="publish_now">'.gTxt('set_to_now').'</label>', ' class="publish-now"').
 
-						graf(gTxt('or_publish_at').n.popHelp('timestamp'), ' class="publish-at"').
+						graf(gTxt('or_publish_at').popHelp('timestamp'), ' class="publish-at"').
 
-						graf('<span class="label">'.gtxt('date').'</span>'.n.
+						graf('<span class="label">'.gtxt('date').'</span>'.
 							tsi('year', '%Y', $persist_timestamp, '').' / '.
 							tsi('month', '%m', $persist_timestamp, '').' / '.
 							tsi('day', '%d', $persist_timestamp, '')
 						, ' class="date posted created"'
 						).
 
-						graf('<span class="label">'.gTxt('time').'</span>'.n.
+						graf('<span class="label">'.gTxt('time').'</span>'.
 							tsi('hour', '%H', $persist_timestamp, '').' : '.
 							tsi('minute', '%M', $persist_timestamp, '').' : '.
 							tsi('second', '%S', $persist_timestamp, '')
@@ -824,14 +824,14 @@ if (!empty($event) and $event == 'article') {
 					'expires',
 					wrapRegion(
 						'write-expires',
-						graf('<span class="label">'.gtxt('date').'</span>'.n.
+						graf('<span class="label">'.gtxt('date').'</span>'.
 							tsi('exp_year', '%Y', $persist_timestamp, '').' / '.
 							tsi('exp_month', '%m', $persist_timestamp, '').' / '.
 							tsi('exp_day', '%d', $persist_timestamp, '')
 						, ' class="date expires"'
 						).
 
-						graf('<span class="label">'.gTxt('time').'</span>'.n.
+						graf('<span class="label">'.gTxt('time').'</span>'.
 							tsi('exp_hour', '%H', $persist_timestamp, '').' : '.
 							tsi('exp_minute', '%M', $persist_timestamp, '').' : '.
 							tsi('exp_second', '%S', $persist_timestamp, '')
@@ -882,11 +882,11 @@ if (!empty($event) and $event == 'article') {
 			n.'</form>'.n.'</div>';
 		// Assume users would not change the timestamp if they wanted to "publish now"/"reset time".
 		echo script_js( <<<EOS
-		$('#write-timestamp input.year,#write-timestamp input.month,#write-timestamp input.day,#write-timestamp input.hour,#write-timestamp input.minute,#write-timestamp input.second').change(
-			function() {
-				$('#publish_now').prop('checked', false);
-				$('#reset_time').prop('checked', false);
-			});
+$('#write-timestamp input.year,#write-timestamp input.month,#write-timestamp input.day,#write-timestamp input.hour,#write-timestamp input.minute,#write-timestamp input.second').change(
+function() {
+$('#publish_now').prop('checked', false);
+$('#reset_time').prop('checked', false);
+});
 EOS
 );
 
@@ -942,10 +942,30 @@ EOS
 		foreach ($statuses as $a => $b)
 		{
 			$out[] = n.'<li class="status-'.$a.($Status == $a ? ' active' : '').'">'.radio('Status', $a, ($Status == $a) ? 1 : 0, 'status-'.$a).
-				'<label for="status-'.$a.'">'.$b.'</label></li>';
+				n.'<label for="status-'.$a.'">'.$b.'</label></li>';
 		}
 
-		return n.'<ul class="status plain-list">'.join('', $out).n.'</ul>';
+		return n.'<ul class="plain-list">'.join('', $out).n.'</ul>';
+	}
+
+/**
+ * Renders a section field.
+ *
+ * @param  string $Section The selected section
+ * @param  string $id      The HTML id
+ * @return string HTML &lt;select&gt; input
+ */
+
+	function section_popup($Section, $id)
+	{
+		$rs = safe_column('name', 'txp_section', "name != 'default'");
+
+		if ($rs)
+		{
+			return selectInput('Section', $rs, $Section, false, '', $id);
+		}
+
+		return false;
 	}
 
 /**
@@ -964,26 +984,6 @@ EOS
 		if ($rs)
 		{
 			return treeSelectInput($name,$rs,$val, $id, 35);
-		}
-
-		return false;
-	}
-
-/**
- * Renders a section field.
- *
- * @param  string $Section The selected section
- * @param  string $id      The HTML id
- * @return string HTML &lt;select&gt; input
- */
-
-	function section_popup($Section, $id)
-	{
-		$rs = safe_column('name', 'txp_section', "name != 'default'");
-
-		if ($rs)
-		{
-			return selectInput('Section', $rs, $Section, false, '', $id);
 		}
 
 		return false;
@@ -1184,8 +1184,8 @@ EOS
 		global $step;
 		$av_cb = $rs['partials_meta']['article_view']['cb'];
 		return pluggable_ui('article_ui', 'title',
-			graf('<label for="title">'.gTxt('title').'</label>'.n.popHelp('title').br.
-				'<input type="text" id="title" name="Title" value="'.escape_title($rs['Title']).'" size="40" />'.
+			graf('<label for="title">'.gTxt('title').'</label>'.popHelp('title').br.
+				n.'<input type="text" id="title" name="Title" value="'.escape_title($rs['Title']).'" size="48" />'.
 				($step != 'create' ?  $av_cb($rs) : '')
 				, ' class="title"'),
 			$rs);
@@ -1213,7 +1213,7 @@ EOS
 	function article_partial_author($rs)
 	{
 		extract($rs);
-		$out = '<p class="author"><small>'.gTxt('posted_by').': '.txpspecialchars($AuthorID).' &#183; '.safe_strftime('%d %b %Y &#183; %X',$sPosted);
+		$out = n.'<p class="author"><small>'.gTxt('posted_by').': '.txpspecialchars($AuthorID).' &#183; '.safe_strftime('%d %b %Y &#183; %X',$sPosted);
 		if($sPosted != $sLastMod) {
 			$out .= br.gTxt('modified_by').': '.txpspecialchars($LastModID).' &#183; '.safe_strftime('%d %b %Y &#183; %X',$sLastMod);
 		}
@@ -1270,7 +1270,7 @@ EOS
 	function article_partial_image($rs)
 	{
 		$default = graf(
-			'<label for="article-image">'.gTxt('article_image').'</label>'.n.popHelp('article_image').br.
+			'<label for="article-image">'.gTxt('article_image').'</label>'.popHelp('article_image').br.
 				fInput('text', 'Image', $rs['Image'], '', '', '', INPUT_REGULAR, '', 'article-image')
 			, ' class="article-image"');
 
@@ -1287,7 +1287,7 @@ EOS
 	function article_partial_keywords($rs)
 	{
 		return pluggable_ui('article_ui', 'keywords',
-			graf('<label for="keywords">'.gTxt('keywords').'</label>'.n.popHelp('keywords').br.
+			graf('<label for="keywords">'.gTxt('keywords').'</label>'.popHelp('keywords').br.
 				n.'<textarea id="keywords" name="Keywords" cols="'.INPUT_MEDIUM.'" rows="'.INPUT_XSMALL.'">'.txpspecialchars(article_partial_keywords_value($rs)).'</textarea>', ' class="keywords"'),
 			$rs);
 	}
@@ -1315,7 +1315,7 @@ EOS
 	function article_partial_url_title($rs)
 	{
 		return pluggable_ui('article_ui', 'url_title',
-			graf('<label for="url-title">'.gTxt('url_title').'</label>'.n.popHelp('url_title').br.
+			graf('<label for="url-title">'.gTxt('url_title').'</label>'.popHelp('url_title').br.
 				fInput('text', 'url_title', article_partial_url_title_value($rs), '', '', '', INPUT_REGULAR, '', 'url-title'), ' class="url-title"'),
 			$rs);
 	}
@@ -1346,7 +1346,7 @@ EOS
 
 		if ($recents)
 		{
-			$ra = '<ul class="recent plain-list">';
+			$ra = '<ul class="plain-list">';
 
 			while($recent = nextRow($recents))
 			{
@@ -1382,7 +1382,7 @@ EOS
 			include_once txpath.'/publish/taghandlers.php';
 			$url = permlinkurl_id($ID);
 		}
-		return ' <span id="article_partial_article_view"><a href="'.$url.'" class="article-view">'.gTxt('view').'</a></span>';
+		return n.'<span id="article_view"><a href="'.$url.'" class="article-view">'.gTxt('view').'</a></span>';
 	}
 
 /**
@@ -1395,8 +1395,8 @@ EOS
 	function article_partial_body($rs)
 	{
 		return pluggable_ui('article_ui', 'body',
-			graf('<label for="body">'.gTxt('body').'</label>'.n.popHelp('body').br.
-				'<textarea id="body" name="Body" cols="'.INPUT_LARGE.'" rows="'.INPUT_REGULAR.'">'.txpspecialchars($rs['Body']).'</textarea>', ' class="body"'),
+			graf('<label for="body">'.gTxt('body').'</label>'.popHelp('body').br.
+				n.'<textarea id="body" name="Body" cols="'.INPUT_LARGE.'" rows="'.INPUT_REGULAR.'">'.txpspecialchars($rs['Body']).'</textarea>', ' class="body"'),
 			$rs);
 	}
 
@@ -1410,8 +1410,8 @@ EOS
 	function article_partial_excerpt($rs)
 	{
 		return pluggable_ui('article_ui', 'excerpt',
-			graf('<label for="excerpt">'.gTxt('excerpt').'</label>'.n.popHelp('excerpt').br.
-				'<textarea id="excerpt" name="Excerpt" cols="'.INPUT_LARGE.'" rows="'.INPUT_SMALL.'">'.txpspecialchars($rs['Excerpt']).'</textarea>', ' class="excerpt"'),
+			graf('<label for="excerpt">'.gTxt('excerpt').'</label>'.popHelp('excerpt').br.
+				n.'<textarea id="excerpt" name="Excerpt" cols="'.INPUT_LARGE.'" rows="'.INPUT_SMALL.'">'.txpspecialchars($rs['Excerpt']).'</textarea>', ' class="excerpt"'),
 			$rs);
 	}
 
@@ -1433,9 +1433,9 @@ EOS
 
 		return n.'<div id="view_modes">'.
 			pluggable_ui('article_ui', 'view',
-			$hasfilter ? n.tag((tab('text',$view).tab('html',$view).tab('preview',$view)), 'ul').n : '&#160;',
+			$hasfilter ? n.tag((tab('text',$view).tab('html',$view).tab('preview',$view)), 'ul') : '&#160;',
 			$rs).
-			'</div>';
+			n.'</div>';
 
 	}
 
@@ -1448,7 +1448,7 @@ EOS
 
 	function article_partial_article_nav($rs)
 	{
-		return '<p role="navigation" class="nav-tertiary">'.
+		return n.'<p role="navigation" class="nav-tertiary">'.
 		($rs['prev_id']
 			?	prevnext_link(gTxt('prev'),'article','edit',
 				$rs['prev_id'],'', 'prev')
@@ -1456,7 +1456,7 @@ EOS
 		($rs['next_id']
 			?	prevnext_link(gTxt('next'),'article','edit',
 				$rs['next_id'],'', 'next')
-			:	'<span class="navlink-disabled" aria-disabled="true">'.gTxt('next').'</span>').n.
+			:	'<span class="navlink-disabled" aria-disabled="true">'.gTxt('next').'</span>').
 		'</p>';
 	}
 
@@ -1473,6 +1473,22 @@ EOS
 			'article_ui',
 			'status',
 			wrapRegion('write-status', status_radio($rs['Status']), '', gTxt('status')),
+			$rs);
+	}
+
+/**
+ * Renders article section partial.
+ *
+ * @param  array  $rs Article data
+ * @return string HTML
+ */
+
+	function article_partial_section($rs)
+	{
+		return pluggable_ui('article_ui', 'section',
+			graf('<label for="section">'.gTxt('section').'</label> '.
+				'<span class="section-edit"><span role="presentation">[</span>'.eLink('section', '', '', '', gTxt('edit')).'<span role="presentation">]</span></span>'.br.
+				section_popup($rs['Section'], 'section'), ' class="section"'),
 			$rs);
 	}
 
@@ -1495,22 +1511,6 @@ EOS
 			category_popup('Category2', $rs['Category2'], 'category-2'), ' class="category category-2"').
 			n.'</div>',
 		$rs);
-	}
-
-/**
- * Renders article section partial.
- *
- * @param  array  $rs Article data
- * @return string HTML
- */
-
-	function article_partial_section($rs)
-	{
-		return pluggable_ui('article_ui', 'section',
-			graf('<label for="section">'.gTxt('section').'</label> '.
-				'<span class="section-edit"><span role="presentation">[</span>'.eLink('section', '', '', '', gTxt('edit')).'<span role="presentation">]</span></span>'.br.
-				section_popup($rs['Section'], 'section'), ' class="section"'),
-			$rs);
 	}
 
 /**
@@ -1587,16 +1587,16 @@ EOS
 				'write-timestamp',
 				graf(checkbox('reset_time', '1', $reset_time, '', 'reset_time').'<label for="reset_time">'.gTxt('reset_time').'</label>', ' class="reset-time"').
 
-				graf(gTxt('published_at').n.popHelp('timestamp'), ' class="publish-at"').
+				graf(gTxt('published_at').popHelp('timestamp'), ' class="publish-at"').
 
-				graf('<span class="label">'.gtxt('date').'</span>'.sp.
+				graf('<span class="label">'.gtxt('date').'</span>'.
 					tsi('year', '%Y', $sPosted).' / '.
 					tsi('month', '%m', $sPosted).' / '.
 					tsi('day', '%d', $sPosted)
 				, ' class="date posted created"'
 				).
 
-				graf('<span class="label">'.gTxt('time').'</span>'.sp.
+				graf('<span class="label">'.gTxt('time').'</span>'.
 					tsi('hour', '%H', $sPosted).' : ' .
 					tsi('minute', '%M', $sPosted).' : '.
 					tsi('second', '%S', $sPosted)
@@ -1624,20 +1624,20 @@ EOS
 			'expires',
 			wrapRegion(
 				'write-expires',
-				graf('<span class="label">'.gtxt('date').'</span>'.sp.
+				graf('<span class="label">'.gtxt('date').'</span>'.
 					tsi('exp_year', '%Y', $sExpires).' / '.
 					tsi('exp_month', '%m', $sExpires).' / '.
 					tsi('exp_day', '%d', $sExpires)
 				, ' class="date expires"'
 				).
 
-				graf('<span class="label">'.gTxt('time').'</span>'.sp.
+				graf('<span class="label">'.gTxt('time').'</span>'.
 					tsi('exp_hour', '%H', $sExpires).' : '.
 					tsi('exp_minute', '%M', $sExpires).' : '.
 					tsi('exp_second', '%S', $sExpires)
 				, ' class="time expires"'
 				).
-				n.hInput('sExpires', $sExpires),
+				hInput('sExpires', $sExpires),
 				'',
 				gTxt('expires')
 			),

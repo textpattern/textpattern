@@ -32,8 +32,8 @@
 			echo n.'</div><!-- /txp-body -->'.n.'<footer role="contentinfo" class="txp-footer">';
 			echo pluggable_ui('admin_side', 'footer', $theme->footer());
 			callback_event('admin_side', 'body_end');
-			echo n.script_js('textpattern.textarray = '.json_encode($textarray_script)).
-				'</footer><!-- /txp-footer -->'.n.'</body>'.n.'</html>';
+			echo script_js('textpattern.textarray = '.json_encode($textarray_script)).
+				n.'</footer><!-- /txp-footer -->'.n.'</body>'.n.'</html>';
 		}
 	}
 
@@ -426,7 +426,7 @@
 	function wrapRegion($id, $content = '', $anchor_id = '', $label = '', $pane = '', $class = '', $role = 'region', $help = '')
 	{
 		$heading = gTxt($label);
-		$help_link = ($help) ? n.popHelp($help) : '';
+		$help_link = ($help) ? popHelp($help) : '';
 
 		$class = ($class) ? ' '.trim($class) : '';
 		$display_state = ($role == 'region') ? ' role="group"' : '';
@@ -449,8 +449,7 @@
 		if ($content)
 		{
 			$out[] = hed($heading.$help_link, 3, ' id="'.$id.'-label"'.$heading_class);
-			$out[] = '<div'.$display_state.'>';
-			$out[] = $content;
+			$out[] = '<div'.$display_state.'>'.$content;
 			$out[] = '</div>';
 		}
 
@@ -690,7 +689,7 @@
 
 	function fInputCell($name, $var = '', $tabindex = 0, $size = 0, $help = '', $id = '')
 	{
-		$pop = ($help) ? sp.popHelp($name) : '';
+		$pop = ($help) ? popHelp($name) : '';
 
 		return tda(fInput('text', $name, $var, '', '', '', $size, $tabindex, $id).$pop);
 	}
@@ -709,7 +708,7 @@
 
 	function inputLabel($name, $input, $label = '', $help = '', $class = '', $wraptag_val = 'span')
 	{
-		$help = ($help) ? sp.popHelp($help) : '';
+		$help = ($help) ? popHelp($help) : '';
 		$class = ($class) ? $class : 'edit-'.str_replace('_', '-', $name);
 		$label_open = ($label) ? '<label for="'.$name.'">' : '';
 		$label_close = ($label) ? '</label>' : '';
@@ -783,7 +782,7 @@
 
 	function hed($item, $level, $atts = '')
 	{
-		return n.tag($item, 'h'.$level, $atts);
+		return tag($item, 'h'.$level, $atts);
 	}
 
 /**
@@ -923,7 +922,7 @@
 
 	function popHelp($help_var, $width = 0, $height = 0, $class = 'pophelp')
 	{
-		$ui = '<a role="button" rel="help" target="_blank"'.
+		$ui = sp.'<a role="button" rel="help" target="_blank"'.
 			' href="'.HELP_URL.'?item='.$help_var.a.'language='.LANG.'"'.
 			' onclick="popWin(this.href'.
 			($width ? ', '.$width : '').
@@ -1145,7 +1144,7 @@
 			hInput('crit', $crit).
 
 			graf(
-				(($label) ? '<label for="'.$label_id.'">'.$label.'</label>' : '').(($pophelp) ? sp.popHelp($pophelp) : '').n.
+				(($label) ? '<label for="'.$label_id.'">'.$label.'</label>' : '').(($pophelp) ? popHelp($pophelp) : '').n.
 					fInput('file', 'thefile', '', '', '', '', '', '', $label_id).n.
 					fInput('submit', '', gTxt('upload'))
 			, ' class="'.$p_class.'"').
@@ -1252,17 +1251,17 @@ EOF;
 					$js .= '.v'.txp_version.$ext;
 				}
 
-				return tag(null, 'script', array('src' => $js)).n;
+				return n.tag(null, 'script', array('src' => $js));
 			}
 		}
 
 		$js = preg_replace('#<(/?)script#', '\\x3c$1script', $js);
 
-		$out = tag(n.trim($js).n, 'script').n;
+		$out = n.tag(n.trim($js).n, 'script');
 
 		if ($flags)
 		{
-			$out .= tag(n.trim($flags).n, 'noscript').n;
+			$out .= n.tag(n.trim($flags).n, 'noscript');
 		}
 
 		return $out;
@@ -1280,18 +1279,18 @@ EOF;
 	{
 		$name = 'cb_toggle_'.$classname;
 		$i =
-			'<input type="checkbox" name="'.$name.'" id="'.$name.'" value="1" '.
+			n.'<input type="checkbox" name="'.$name.'" id="'.$name.'" value="1" '.
 			(cs('toggle_'.$classname) ? 'checked="checked" ' : '').
 			'class="checkbox" onclick="toggleClassRemember(\''.$classname.'\');" />'.
-			' <label for="'.$name.'">'.gTxt('detail_toggle').'</label> '.
+			n.' <label for="'.$name.'">'.gTxt('detail_toggle').'</label> '.
 			script_js("setClassRemember('".$classname."');addEvent(window, 'load', function(){setClassRemember('".$classname."');});");
 		if ($form)
 		{
-			return n.form($i);
+			return form($i);
 		}
 		else
 		{
-			return n.$i;
+			return $i;
 		}
 	}
 
