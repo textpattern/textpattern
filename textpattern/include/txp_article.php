@@ -401,37 +401,142 @@ if (!empty($event) and $event == 'article') {
 		)
 		*/
 		$partials = array(
-			'sLastMod'        => array('mode' => PARTIAL_VOLATILE_VALUE, 'selector' => '[name=sLastMod]',     'cb' => 'article_partial_value'),
-			'sPosted'         => array('mode' => PARTIAL_VOLATILE_VALUE, 'selector' => '[name=sPosted]',      'cb' => 'article_partial_value'),
-			'sidehelp'   	  => array('mode' => PARTIAL_VOLATILE,       'selector' => '#textfilter_group',   'cb' => 'article_partial_sidehelp'),
-			'custom_fields'   => array('mode' => PARTIAL_STATIC,         'selector' => '#custom_field_group', 'cb' => 'article_partial_custom_fields'),
-			'image'           => array('mode' => PARTIAL_STATIC,         'selector' => '#image_group',        'cb' => 'article_partial_image'),
-			'keywords'        => array('mode' => PARTIAL_STATIC,         'selector' => 'p.keywords',          'cb' => 'article_partial_keywords'),
-			'keywords_value'  => array('mode' => PARTIAL_VOLATILE_VALUE, 'selector' => '#keywords',           'cb' => 'article_partial_keywords_value'),
-			'url_title'       => array('mode' => PARTIAL_STATIC,         'selector' => 'p.url-title',         'cb' => 'article_partial_url_title'),
-			'url_title_value' => array('mode' => PARTIAL_VOLATILE_VALUE, 'selector' => '#url-title',          'cb' => 'article_partial_url_title_value'),
-			'recent_articles' => array('mode' => PARTIAL_VOLATILE,       'selector' => '#recent_group .recent',    'cb' => 'article_partial_recent_articles'),
-			'title'           => array('mode' => PARTIAL_STATIC,         'selector' => 'p.title',             'cb' => 'article_partial_title'),
-			'title_value'     => array('mode' => PARTIAL_VOLATILE_VALUE, 'selector' => '#title',              'cb' => 'article_partial_title_value'),
-			'article_view'    => array('mode' => PARTIAL_VOLATILE,       'selector' => '#article_partial_article_view',       'cb' => 'article_partial_article_view'),
-			'body'            => array('mode' => PARTIAL_STATIC,         'selector' => 'p.body',              'cb' => 'article_partial_body'),
-			'excerpt'         => array('mode' => PARTIAL_STATIC,         'selector' => 'p.excerpt',           'cb' => 'article_partial_excerpt'),
-			'author'          => array('mode' => PARTIAL_VOLATILE,       'selector' => 'p.author',            'cb' => 'article_partial_author'),
-			'view_modes'      => array('mode' => PARTIAL_VOLATILE,       'selector' => '#view_modes',         'cb' => 'article_partial_view_modes'),
-			'article_nav'     => array('mode' => PARTIAL_VOLATILE,       'selector' => 'p.nav-tertiary',      'cb' => 'article_partial_article_nav'),
-			'status'          => array('mode' => PARTIAL_VOLATILE,       'selector' => '#write-status',       'cb' => 'article_partial_status'),
-			'categories'      => array('mode' => PARTIAL_STATIC,         'selector' => '#categories_group',   'cb' => 'article_partial_categories'),
-			'section'         => array('mode' => PARTIAL_STATIC,         'selector' => 'p.section',           'cb' => 'article_partial_section'),
-			'comments'        => array('mode' => PARTIAL_VOLATILE,       'selector' => '#write-comments',     'cb' => 'article_partial_comments'),
-			'posted'          => array('mode' => PARTIAL_VOLATILE,       'selector' => '#write-timestamp',    'cb' => 'article_partial_posted'),
-			'expires'         => array('mode' => PARTIAL_VOLATILE,       'selector' => '#write-expires',      'cb' => 'article_partial_expires'),
+			'sLastMod' => array(
+				'mode' => PARTIAL_VOLATILE_VALUE,
+				'selector' => '[name=sLastMod]',
+				'cb' => 'article_partial_value'
+			),
+			'sPosted' => array(
+				'mode' => PARTIAL_VOLATILE_VALUE,
+				'selector' => '[name=sPosted]',
+				'cb' => 'article_partial_value'
+			),
+			'sidehelp' => array(
+				'mode' => PARTIAL_VOLATILE,
+				'selector' => '#textfilter_group',
+				'cb' => 'article_partial_sidehelp'
+			),
+			'custom_fields' => array(
+				'mode' => PARTIAL_STATIC,
+				'selector' => '#custom_field_group',
+				'cb' => 'article_partial_custom_fields'
+			),
+			'image' => array(
+				'mode' => PARTIAL_STATIC,
+				'selector' => '#image_group',
+				'cb' => 'article_partial_image'
+			),
+			'keywords' => array(
+				'mode' => PARTIAL_STATIC,
+				'selector' => 'p.keywords',
+				'cb' => 'article_partial_keywords'
+			),
+			'keywords_value'  => array(
+				'mode' => PARTIAL_VOLATILE_VALUE,
+				'selector' => '#keywords',
+				'cb' => 'article_partial_keywords_value'
+			),
+			'url_title' => array(
+				'mode' => PARTIAL_STATIC,
+				'selector' => 'p.url-title',
+				'cb' => 'article_partial_url_title'
+			),
+			'url_title_value' => array(
+				'mode' => PARTIAL_VOLATILE_VALUE,
+				'selector' => '#url-title',
+				'cb' => 'article_partial_url_title_value'
+			),
+			'recent_articles' => array(
+				'mode' => PARTIAL_VOLATILE,
+				'selector' => '#recent_group .recent',
+				'cb' => 'article_partial_recent_articles'
+			),
+			'title' => array(
+				'mode' => PARTIAL_STATIC,
+				'selector' => 'p.title',
+				'cb' => 'article_partial_title'
+			),
+			'title_value' => array(
+				'mode' => PARTIAL_VOLATILE_VALUE,
+				'selector' => '#title',
+				'cb' => 'article_partial_title_value'
+			),
+			'article_view' => array(
+				'mode' => PARTIAL_VOLATILE,
+				'selector' => '#article_partial_article_view',
+				'cb' => 'article_partial_article_view'
+			),
+			'body' => array(
+				'mode' => PARTIAL_STATIC,
+				'selector' => 'p.body',
+				'cb' => 'article_partial_body'
+			),
+			'excerpt' => array(
+				'mode' => PARTIAL_STATIC,
+				'selector' => 'p.excerpt',
+				'cb' => 'article_partial_excerpt'
+			),
+			'author' => array(
+				'mode' => PARTIAL_VOLATILE,
+				'selector' => 'p.author',
+				'cb' => 'article_partial_author'
+			),
+			'view_modes' => array(
+				'mode' => PARTIAL_VOLATILE,
+				'selector' => '#view_modes',
+				'cb' => 'article_partial_view_modes'
+			),
+			'article_nav' => array(
+				'mode' => PARTIAL_VOLATILE,
+				'selector' => 'p.nav-tertiary',
+				'cb' => 'article_partial_article_nav'
+			),
+			'status' => array(
+				'mode' => PARTIAL_VOLATILE,
+				'selector' => '#write-status',
+				'cb' => 'article_partial_status'
+			),
+			'categories' => array(
+				'mode' => PARTIAL_STATIC,
+				'selector' => '#categories_group',
+				'cb' => 'article_partial_categories'
+			),
+			'section' => array(
+				'mode' => PARTIAL_STATIC,
+				'selector' => 'p.section',
+				'cb' => 'article_partial_section'
+			),
+			'comments' => array(
+				'mode' => PARTIAL_VOLATILE,
+				'selector' => '#write-comments',
+				'cb' => 'article_partial_comments'
+			),
+			'posted' => array(
+				'mode' => PARTIAL_VOLATILE,
+				'selector' => '#write-timestamp',
+				'cb' => 'article_partial_posted'
+			),
+			'expires' => array(
+				'mode' => PARTIAL_VOLATILE,
+				'selector' => '#write-expires',
+				'cb' => 'article_partial_expires'
+			),
 		);
 
 		// Add partials for custom fields (and their values which is redundant by design, for plugins).
 		global $cfs;
-		foreach ($cfs as $k => $v) {
-			$partials["custom_field_{$k}"] = array('mode' => PARTIAL_STATIC, 'selector' => "p.custom-field.custom-{$k}", 'cb' => 'article_partial_custom_field');
-			$partials["custom_{$k}"] = array('mode' => PARTIAL_STATIC, 'selector' => "#custom-{$k}", 'cb' => 'article_partial_value');
+		foreach ($cfs as $k => $v)
+		{
+			$partials["custom_field_{$k}"] = array(
+				'mode' => PARTIAL_STATIC,
+				'selector' => "p.custom-field.custom-{$k}",
+				'cb' => 'article_partial_custom_field'
+			);
+			$partials["custom_{$k}"] = array(
+				'mode' => PARTIAL_STATIC,
+				'selector' => "#custom-{$k}",
+				'cb' => 'article_partial_value'
+			);
 		}
 
 		extract(gpsa(array('view','from_view','step')));
