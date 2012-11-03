@@ -1669,6 +1669,7 @@
  * @return  string   The $callback as a human-readable string
  * @since   4.5.0
  * @package Callback
+ * @see     string_tocallback()
  * @example
  * echo callback_tostring(array('class', 'method'));
  */
@@ -1683,6 +1684,52 @@
 		{
 			return '';
 		}
+		return $callback;
+	}
+
+/**
+ * Convers a string presentation to a callable.
+ *
+ * This function returns FALSE if the given string isn't
+ * a valid callback.
+ *
+ * @param   string $string The callback string
+ * @return  mixed  Callable on success, FALSE on error
+ * @since   4.6.0
+ * @package Callback
+ * @see     callback_tostring()
+ * @example
+ * echo call_user_func(string_to_callback('class->method'));
+ */
+
+	function string_tocallback($string)
+	{
+		$callback = $string;
+
+		if (is_string($string))
+		{
+			if (strpos($string, '->'))
+			{
+				$callback = explode('->', $string);
+
+				if (!class_exists($callback[0]))
+				{
+					return false;
+				}
+
+				$callback[0] = new $callback[0];
+			}
+			else if(strpos($string, '::'))
+			{
+				$callback = explode('::', $string);
+			}
+		}
+
+		if (!is_callable($callback))
+		{
+			return false;
+		}
+
 		return $callback;
 	}
 
