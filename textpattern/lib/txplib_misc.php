@@ -1678,12 +1678,21 @@
 	{
 		if (is_array($callback))
 		{
+			$class = array_shift($callback);
+
+			if (is_object($class))
+			{
+				$class = get_class($class);
+			}
+
+			array_unshift($callback, $class);
 			return join('::', array_filter($callback, 'is_scalar'));
 		}
 		elseif (!is_scalar($callback))
 		{
 			return '';
 		}
+
 		return $callback;
 	}
 
