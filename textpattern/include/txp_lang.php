@@ -74,7 +74,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
 				' selected="selected"' :
 				'';
 
-			$out .= n.t.'<option value="'.txpspecialchars($avalue).'"'.$selected.'>'.txpspecialchars($alabel).'</option>'.n;
+			$out .= n.'<option value="'.txpspecialchars($avalue).'"'.$selected.'>'.txpspecialchars($alabel).'</option>';
 		}
 
 		$out .= n.'</select>';
@@ -262,8 +262,8 @@ Use of this software indicates acceptance of the Textpattern license agreement
 		// Output table and content.
 		pagetop(gTxt('tab_languages'), $message);
 
-		echo '<h1 class="txp-heading">', gTxt('tab_languages'), '</h1>'.
-			n.'<div id="language_container" class="txp-container">';
+		echo n.'<h1 class="txp-heading">', gTxt('tab_languages'), '</h1>';
+		echo n.'<div id="language_container" class="txp-container">';
 
 		if (isset($msg) && $msg)
 		{
@@ -272,34 +272,34 @@ Use of this software indicates acceptance of the Textpattern license agreement
 
 		echo $lang_form,
 			n.'<div class="txp-listtables">'.
-			n.startTable('', '', 'txp-list').
-			'<thead>'.
-			n.tr(
-				n.hCell(gTxt('language'), '', ' scope="col"').
-				n.hCell(gTxt('from_server').n.popHelp('install_lang_from_server'), '', ' scope="col"').
-				n.hCell(gTxt('from_file').n.popHelp('install_lang_from_file'), '', ' scope="col" class="languages_detail"').
-				n.hCell(gTxt('remove_lang').n.popHelp('remove_lang'), '', ' scope="col" class="languages_detail"')
+			startTable('', '', 'txp-list').
+			n.'<thead>'.
+			tr(
+				hCell(gTxt('language'), '', ' scope="col"').
+				hCell(gTxt('from_server').n.popHelp('install_lang_from_server'), '', ' scope="col"').
+				hCell(gTxt('from_file').n.popHelp('install_lang_from_file'), '', ' scope="col" class="languages_detail"').
+				hCell(gTxt('remove_lang').n.popHelp('remove_lang'), '', ' scope="col" class="languages_detail"')
 			).
 			n.'</thead>'.
 
 			'<tbody>' .$list. '</tbody>'.
 			endTable().
-			'</div>'.
+			n.'</div>'.
 
 			graf(
 				toggle_box('languages_detail'),
 				' class="detail-toggle"'
 			).
 
-			n.hed(gTxt('install_from_textpack'), 3).
+			hed(gTxt('install_from_textpack'), 3).
 			form(
-				n.graf(
+				graf(
 					'<label for="textpack-install">'.gTxt('install_textpack').'</label>'.
 					n.popHelp('get_textpack').
 					n.'<textarea id="textpack-install" class="code" name="textpack" cols="'.INPUT_LARGE.'" rows="'.INPUT_XSMALL.'"></textarea>'.
-					n.fInput('submit', 'install_new', gTxt('upload')).
-					n.eInput('lang').
-					n.sInput('get_textpack')
+					fInput('submit', 'install_new', gTxt('upload')).
+					eInput('lang').
+					sInput('get_textpack')
 				)
 			, '', '', 'post', 'edit-form', '', 'text_uploader').
 	

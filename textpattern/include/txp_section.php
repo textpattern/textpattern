@@ -151,8 +151,8 @@
 
 		$total = safe_count('txp_section', "$criteria");
 
-		echo '<h1 class="txp-heading">'.gTxt('tab_sections').sp.popHelp('section_category').'</h1>';
-		echo '<div id="'.$event.'_control" class="txp-control-panel">';
+		echo n.'<h1 class="txp-heading">'.gTxt('tab_sections').sp.popHelp('section_category').'</h1>';
+		echo n.'<div id="'.$event.'_control" class="txp-control-panel">';
 		echo graf(
 			sLink('section', 'section_edit', gTxt('create_section'))
 			, ' class="txp-buttons"');
@@ -169,8 +169,8 @@
 		{
 			if ($criteria != 1)
 			{
-				echo n.section_search_form($crit, $search_method).
-					n.graf(gTxt('no_results_found'), ' class="indicator"').'</div>';
+				echo section_search_form($crit, $search_method).
+					graf(gTxt('no_results_found'), ' class="indicator"').'</div>';
 			}
 
 			return;
@@ -180,7 +180,7 @@
 
 		list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-		echo n.section_search_form($crit, $search_method).'</div>';
+		echo section_search_form($crit, $search_method).'</div>';
 
 		$rs = safe_rows_start('*, (SELECT count(*) FROM '.safe_pfx('textpattern').' articles WHERE articles.Section = txp_section.name) AS article_count', 'txp_section',
 			"$criteria order by $sort_sql limit $offset, $limit" );
@@ -191,10 +191,10 @@
 			echo n.'<form action="index.php" id="section_form" class="multi_edit_form" method="post" name="longform">'.
 
 				n.'<div class="txp-listtables">'.
-				n.startTable('', '', 'txp-list').
-				'<thead>'.
-				n.tr(
-					n.hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
+				startTable('', '', 'txp-list').
+				n.'<thead>'.
+				tr(
+					hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
 					column_head('name', 'name', 'section', true, $switch_dir, $crit, $search_method, (('name' == $sort) ? "$dir " : '').'name').
 					column_head('title', 'title', 'section', true, $switch_dir, $crit, $search_method, (('title' == $sort) ? "$dir " : '').'title').
 					column_head('page', 'page', 'section', true, $switch_dir, $crit, $search_method, (('page' == $sort) ? "$dir " : '').'page').
@@ -228,37 +228,37 @@
 					'step' => 'section_toggle_option',
 					'thing' => $sec_name
 				);
-				echo n.tr(
+				echo tr(
 
-					n.td(
+					td(
 						fInput('checkbox', 'selected[]', $sec_name)
 					, '', 'multi-edit').
 
-					n.hCell('<a href="'.$edit_url.'" title="'.gTxt('edit').'">'.$sec_name.'</a>' .n. '<span class="section_detail"><span role="presentation">[</span><a href="'.hu.$sec_name.'">'.gTxt('view').'</a><span role="presentation">]</span></span>', '', ' scope="row" class="name"').
-					n.td(txpspecialchars($sec_title), '', 'title').
-					n.td('<a href="'.$page_url.'" title="'.gTxt('edit').'">'.$sec_page.'</a>', '', 'page').
-					n.td('<a href="'.$style_url.'" title="'.gTxt('edit').'">'.$sec_css.'</a>', '', 'style').
-					n.td($is_default_section ? '-' : asyncHref($sec_on_frontpage ? gTxt('yes') : gTxt('no'), $parms + array('property' => 'on_frontpage')), '', 'section_detail frontpage').
-					n.td($is_default_section ? '-' : asyncHref($sec_in_rss ? gTxt('yes') : gTxt('no'), $parms + array('property' => 'in_rss')), '', 'section_detail syndicate').
-					n.td($is_default_section ? '-' : asyncHref($sec_searchable ? gTxt('yes') : gTxt('no'), $parms + array('property' => 'searchable')), '', 'section_detail searchable').
-					n.td($is_default_section ? '' : $articles, '', 'section_detail article_count')
+					hCell('<a href="'.$edit_url.'" title="'.gTxt('edit').'">'.$sec_name.'</a>' .n. '<span class="section_detail"><span role="presentation">[</span><a href="'.hu.$sec_name.'">'.gTxt('view').'</a><span role="presentation">]</span></span>', '', ' scope="row" class="name"').
+					td(txpspecialchars($sec_title), '', 'title').
+					td('<a href="'.$page_url.'" title="'.gTxt('edit').'">'.$sec_page.'</a>', '', 'page').
+					td('<a href="'.$style_url.'" title="'.gTxt('edit').'">'.$sec_css.'</a>', '', 'style').
+					td($is_default_section ? '-' : asyncHref($sec_on_frontpage ? gTxt('yes') : gTxt('no'), $parms + array('property' => 'on_frontpage')), '', 'section_detail frontpage').
+					td($is_default_section ? '-' : asyncHref($sec_in_rss ? gTxt('yes') : gTxt('no'), $parms + array('property' => 'in_rss')), '', 'section_detail syndicate').
+					td($is_default_section ? '-' : asyncHref($sec_searchable ? gTxt('yes') : gTxt('no'), $parms + array('property' => 'searchable')), '', 'section_detail searchable').
+					td($is_default_section ? '' : $articles, '', 'section_detail article_count')
 				, ' id="txp_section_'.$sec_name.'"'
 				);
 			}
 
 			echo n.'</tbody>'.
 				endTable().
-				'</div>'.
-				n.section_multiedit_form($page, $sort, $dir, $crit, $search_method).
-				n.tInput().
+				n.'</div>'.
+				section_multiedit_form($page, $sort, $dir, $crit, $search_method).
+				tInput().
 				n.'</form>'.
-				n.graf(
+				graf(
 					toggle_box('section_detail'),
 					' class="detail-toggle"'
 				).
 				n.'<div id="'.$event.'_navigation" class="txp-navigation">'.
-				n.nav_form('section', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
-				n.pageby_form('section', $section_list_pageby).
+				nav_form('section', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
+				pageby_form('section', $section_list_pageby).
 				n.'</div>'.
 				n.'</div>';
 
@@ -325,53 +325,53 @@ EOS
 			echo n.'<div id="'.$event.'_container" class="txp-container">';
 			echo form(
 				n.'<section class="txp-edit">'.
-				n.hed($caption, 2).
+				hed($caption, 2).
 
-				n.(($is_default_section)
+				(($is_default_section)
 				? hInput('name', 'default')
 				: inputLabel('section_name', fInput('text', 'name', $sec_name, '', '', '', INPUT_REGULAR, '', 'section_name'), 'section_name')
 				).
 
-				n.(($is_default_section)
+				(($is_default_section)
 				? ''
 				: inputLabel('section_title', fInput('text', 'title', $sec_title, '', '', '', INPUT_REGULAR, '', 'section_title'), 'section_longtitle')
 				).
 
-				n.inputLabel('section_page', selectInput('section_page', $all_pages, $sec_page, '', '', 'section_page'), 'uses_page', 'section_uses_page').
-				n.inputLabel('section_css', selectInput('css', $all_styles, $sec_css, '', '', 'section_css'), 'uses_style', 'section_uses_css').
+				inputLabel('section_page', selectInput('section_page', $all_pages, $sec_page, '', '', 'section_page'), 'uses_page', 'section_uses_page').
+				inputLabel('section_css', selectInput('css', $all_styles, $sec_css, '', '', 'section_css'), 'uses_style', 'section_uses_css').
 
-				n.(($is_default_section)
+				(($is_default_section)
 				? ''
 				: inputLabel('on_front_page', yesnoradio('on_frontpage', $sec_on_frontpage, '', $sec_name), '', 'section_on_frontpage')
 				).
 
-				n.(($is_default_section)
+				(($is_default_section)
 				? ''
 				: inputLabel('syndicate', yesnoradio('in_rss', $sec_in_rss, '', $sec_name), '', 'section_syndicate')
 				).
 
-				n.(($is_default_section)
+				(($is_default_section)
 				? ''
 				: inputLabel('include_in_search', yesnoradio('searchable', $sec_searchable, '', $sec_name), '', 'section_searchable')
 				).
 
 				pluggable_ui('section_ui', 'extend_detail_form', '', $rs).
 
-				n.graf(
+				graf(
 					fInput('submit', '', gTxt('save'), 'publish')
 				).
 
-				n.eInput('section').
-				n.sInput('section_save').
-				n.hInput('old_name', $sec_name).
-				n.hInput('search_method', $search_method).
-				n.hInput('crit', $crit).
-				n.hInput('page', $page).
-				n.hInput('sort', $sort).
-				n.hInput('dir', $dir).
+				eInput('section').
+				sInput('section_save').
+				hInput('old_name', $sec_name).
+				hInput('search_method', $search_method).
+				hInput('crit', $crit).
+				hInput('page', $page).
+				hInput('sort', $sort).
+				hInput('dir', $dir).
 				n.'</section>'
 			, '', '', 'post', 'edit-form', '', 'section_details');
-			echo '</div>';
+			echo n.'</div>';
 		}
 	}
 
@@ -630,10 +630,10 @@ EOS
 		global $all_pages, $all_styles;
 
 		$methods = array(
-			'changepage'        => array('label' => gTxt('uses_page'), 'html' => selectInput('uses_page', $all_pages, '', false)),
-			'changecss'         => array('label' => gTxt('uses_style'), 'html' => selectInput('css', $all_styles, '', false)),
-			'changeonfrontpage' => array('label' => gTxt('on_front_page'), 'html' => yesnoRadio('on_frontpage', 1)),
-			'changesyndicate'   => array('label' => gTxt('syndicate'), 'html' => yesnoRadio('in_rss', 1)),
+			'changepage'        => array('label' => gTxt('uses_page'),         'html' => selectInput('uses_page', $all_pages, '', false)),
+			'changecss'         => array('label' => gTxt('uses_style'),        'html' => selectInput('css', $all_styles, '', false)),
+			'changeonfrontpage' => array('label' => gTxt('on_front_page'),     'html' => yesnoRadio('on_frontpage', 1)),
+			'changesyndicate'   => array('label' => gTxt('syndicate'),         'html' => yesnoRadio('in_rss', 1)),
 			'changesearchable'  => array('label' => gTxt('include_in_search'), 'html' => yesnoRadio('searchable', 1)),
 			'delete'            => gTxt('delete'),
 		);

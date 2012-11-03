@@ -272,8 +272,8 @@ EOS
 		}
 
 		$out =
-			'<h1 class="txp-heading">'.gTxt('tab_forms').sp.popHelp('forms_overview').'</h1>'.
-			'<div id="'.$event.'_container" class="txp-container">'.
+			n.'<h1 class="txp-heading">'.gTxt('tab_forms').sp.popHelp('forms_overview').'</h1>'.
+			n.'<div id="'.$event.'_container" class="txp-container">'.
 			startTable('', '', 'txp-columntable').
 			tr(
 				tdtl(
@@ -294,8 +294,8 @@ EOS
 					(empty($type) ? graf(gTxt('only_articles_can_be_previewed')) : '').
 					(empty($type) || $type == 'article' ? fInput('submit','form_preview',gTxt('preview')) : '' ).
 					graf($inputs).
-					'</div>'.
-					n.tInput().
+					n.'</div>'.
+					tInput().
 					n.'</form>'
 
 				, ' class="column"').

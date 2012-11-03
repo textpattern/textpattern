@@ -140,15 +140,15 @@
 
 		$total = safe_count('txp_log', "$criteria");
 
-		echo '<h1 class="txp-heading">'.gTxt('tab_logs').'</h1>';
-		echo '<div id="'.$event.'_control" class="txp-control-panel">';
+		echo n.'<h1 class="txp-heading">'.gTxt('tab_logs').'</h1>';
+		echo n.'<div id="'.$event.'_control" class="txp-control-panel">';
 
 		if ($total < 1)
 		{
 			if ($criteria != 1)
 			{
-				echo n.log_search_form($crit, $search_method).
-					n.graf(gTxt('no_results_found'), ' class="indicator"').'</div>';
+				echo log_search_form($crit, $search_method).
+					graf(gTxt('no_results_found'), ' class="indicator"').'</div>';
 			}
 
 			else
@@ -163,7 +163,7 @@
 
 		list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-		echo n.log_search_form($crit, $search_method).'</div>';
+		echo log_search_form($crit, $search_method).'</div>';
 
 		$rs = safe_rows_start('*, unix_timestamp(time) as uTime', 'txp_log',
 			"$criteria order by $sort_sql limit $offset, $limit");
@@ -174,10 +174,10 @@
 			echo n.'<form action="index.php" id="log_form" class="multi_edit_form" method="post" name="longform">'.
 
 				n.'<div class="txp-listtables">'.
-				n.startTable('', '', 'txp-list').
-				'<thead>'.
-				n.tr(
-					n.hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
+				startTable('', '', 'txp-list').
+				n.'<thead>'.
+				tr(
+					hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
 					column_head('time', 'time', 'log', true, $switch_dir, $crit, $search_method, (('time' == $sort) ? "$dir " : '').'date time').
 					column_head('IP', 'ip', 'log', true, $switch_dir, $crit, $search_method, (('ip' == $sort) ? "$dir " : '').'log_detail ip').
 					column_head('host', 'host', 'log', true, $switch_dir, $crit, $search_method, (('host' == $sort) ? "$dir " : '').'host').
@@ -214,39 +214,39 @@
 					}
 				}
 
-				echo n.tr(
-					n.td(
+				echo tr(
+					td(
 						fInput('checkbox', 'selected[]', $log_id)
 					, '', 'multi-edit').
 
-					n.hCell(
+					hCell(
 						gTime($log_uTime)
 					, '', ' scope="row" class="date time"').
 
-					n.td(txpspecialchars($log_ip), '', 'log_detail ip').
+					td(txpspecialchars($log_ip), '', 'log_detail ip').
 
-					n.td(txpspecialchars($log_host), '', 'host').
+					td(txpspecialchars($log_host), '', 'host').
 
-					n.td($log_page, '', 'page').
-					n.td($log_refer, '', 'refer').
-					n.td(txpspecialchars($log_method), '', 'log_detail method').
-					n.td($log_status, '', 'log_detail status')
+					td($log_page, '', 'page').
+					td($log_refer, '', 'refer').
+					td(txpspecialchars($log_method), '', 'log_detail method').
+					td($log_status, '', 'log_detail status')
 				);
 			}
 
 			echo n.'</tbody>'.
 				endTable().
-				'</div>'.
-				n.log_multiedit_form($page, $sort, $dir, $crit, $search_method).
-				n.tInput().
+				n.'</div>'.
+				log_multiedit_form($page, $sort, $dir, $crit, $search_method).
+				tInput().
 				n.'</form>'.
-				n.graf(
+				graf(
 					toggle_box('log_detail'),
 					' class="detail-toggle"'
 				).
 				n.'<div id="'.$event.'_navigation" class="txp-navigation">'.
-				n.nav_form('log', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
-				n.pageby_form('log', $log_list_pageby).
+				nav_form('log', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
+				pageby_form('log', $log_list_pageby).
 				n.'</div>'.
 				n.'</div>';
 		}

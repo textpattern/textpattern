@@ -4874,22 +4874,22 @@ eod;
 					{
 						if ($thiscontinent !== '')
 						{
-							$out[] = n.t.'</optgroup>';
+							$out[] = n.'</optgroup>';
 						}
-						$out[] = n.t.'<optgroup label="'.gTxt($continent).'">';
+						$out[] = n.'<optgroup label="'.gTxt($continent).'">';
 						$thiscontinent = $continent;
 					}
 
 					$where = gTxt(str_replace('_', ' ', $city))
 								.(!empty($subcity) ? '/'.gTxt(str_replace('_', ' ', $subcity)) : '').t
 								/*."($abbr)"*/;
-					$out[] = n.t.t.'<option value="'.txpspecialchars($timezone_id).'"'.($value == $timezone_id ? ' selected="selected"' : '').'>'.$where.'</option>';
+					$out[] = n.'<option value="'.txpspecialchars($timezone_id).'"'.($value == $timezone_id ? ' selected="selected"' : '').'>'.$where.'</option>';
 				}
-				$out[] = n.t.'</optgroup>';
+				$out[] = n.'</optgroup>';
 				return n.'<select'.( $select_id ? ' id="'.$select_id.'"' : '' ).' name="'.$name.'"'.
 					($onchange == 1 ? ' onchange="submit(this.form);"' : $onchange).
 					'>'.
-					($blank_first ? n.t.'<option value=""'.($selected == false ? ' selected="selected"' : '').'></option>' : '').
+					($blank_first ? n.'<option value=""'.($selected == false ? ' selected="selected"' : '').'></option>' : '').
 					join('', $out).
 					n.'</select>';
 			}

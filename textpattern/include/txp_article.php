@@ -597,7 +597,7 @@ if (!empty($event) and $event == 'article') {
 
 		echo n.'<h1 class="txp-heading txp-accessibility">'.gTxt('tab_write').'</h1>';
 		echo n.'<div id="'.$event.'_container" class="txp-container">';
-		echo n.n.'<form id="article_form" name="article_form" method="post" action="index.php" '. ($step=='create' ? '>' : ' class="async">');
+		echo n.'<form id="article_form" name="article_form" method="post" action="index.php" '. ($step=='create' ? '>' : ' class="async">');
 
 		if (!empty($store_out))
 		{
@@ -605,18 +605,17 @@ if (!empty($event) and $event == 'article') {
 		}
 
 		echo hInput('ID', $ID).
-			n.eInput('article').
-			n.sInput($step).
-			n.hInput('sPosted', $sPosted).
-			n.hInput('sLastMod', $sLastMod).
-			n.hInput('AuthorID', $AuthorID).
-			n.hInput('LastModID', $LastModID).
+			eInput('article').
+			sInput($step).
+			hInput('sPosted', $sPosted).
+			hInput('sLastMod', $sLastMod).
+			hInput('AuthorID', $AuthorID).
+			hInput('LastModID', $LastModID).
 			'<input type="hidden" name="view" />'.
 
 			startTable('', '', 'txp-columntable').
 
-		'<tr>'.n.
-				'<td id="article-col-1"><div id="configuration_content">';
+			n.'<tr>'.n.'<td id="article-col-1"><div id="configuration_content">';
 
 		if ($view == 'text')
 		{
@@ -633,9 +632,9 @@ if (!empty($event) and $event == 'article') {
 
 			// Markup selection.
 			$html_markup = pluggable_ui('article_ui', 'markup',
-				n.graf('<label for="markup-body">'.gTxt('article_markup').'</label>'.br.
+				graf('<label for="markup-body">'.gTxt('article_markup').'</label>'.br.
 					pref_text('textile_body', $textile_body, 'markup-body'), ' class="markup markup-body"').
-				n.graf('<label for="markup-excerpt">'.gTxt('excerpt_markup').'</label>'.br.
+				graf('<label for="markup-excerpt">'.gTxt('excerpt_markup').'</label>'.br.
 					pref_text('textile_excerpt', $textile_excerpt, 'markup-excerpt'), ' class="markup markup-excerpt"'),
 				$rs);
 
@@ -672,7 +671,7 @@ if (!empty($event) and $event == 'article') {
 			echo sp;
 		}
 
-		echo n.n.'</div>'.n.'</td>'.n.'<td id="article-main">'.n.'<div role="region" id="main_content">';
+		echo n.'</div>'.n.'</td>'.n.'<td id="article-main">'.n.'<div role="region" id="main_content">';
 
 	// Title input.
 
@@ -791,18 +790,18 @@ if (!empty($event) and $event == 'article') {
 					'timestamp',
 					wrapRegion(
 						'write-timestamp',
-						n.graf(checkbox('publish_now', '1', $publish_now, '', 'publish_now').'<label for="publish_now">'.gTxt('set_to_now').'</label>', ' class="publish-now"').
+						graf(checkbox('publish_now', '1', $publish_now, '', 'publish_now').'<label for="publish_now">'.gTxt('set_to_now').'</label>', ' class="publish-now"').
 
-						n.graf(gTxt('or_publish_at').n.popHelp('timestamp'), ' class="publish-at"').
+						graf(gTxt('or_publish_at').n.popHelp('timestamp'), ' class="publish-at"').
 
-						n.graf('<span class="label">'.gtxt('date').'</span>'.n.
+						graf('<span class="label">'.gtxt('date').'</span>'.n.
 							tsi('year', '%Y', $persist_timestamp, '').' / '.
 							tsi('month', '%m', $persist_timestamp, '').' / '.
 							tsi('day', '%d', $persist_timestamp, '')
 						, ' class="date posted created"'
 						).
 
-						n.graf('<span class="label">'.gTxt('time').'</span>'.n.
+						graf('<span class="label">'.gTxt('time').'</span>'.n.
 							tsi('hour', '%H', $persist_timestamp, '').' : '.
 							tsi('minute', '%M', $persist_timestamp, '').' : '.
 							tsi('second', '%S', $persist_timestamp, '')
@@ -825,14 +824,14 @@ if (!empty($event) and $event == 'article') {
 					'expires',
 					wrapRegion(
 						'write-expires',
-						n.graf('<span class="label">'.gtxt('date').'</span>'.n.
+						graf('<span class="label">'.gtxt('date').'</span>'.n.
 							tsi('exp_year', '%Y', $persist_timestamp, '').' / '.
 							tsi('exp_month', '%m', $persist_timestamp, '').' / '.
 							tsi('exp_day', '%d', $persist_timestamp, '')
 						, ' class="date expires"'
 						).
 
-						n.graf('<span class="label">'.gTxt('time').'</span>'.n.
+						graf('<span class="label">'.gTxt('time').'</span>'.n.
 							tsi('exp_hour', '%H', $persist_timestamp, '').' : '.
 							tsi('exp_minute', '%M', $persist_timestamp, '').' : '.
 							tsi('exp_second', '%S', $persist_timestamp, '')
@@ -878,9 +877,9 @@ if (!empty($event) and $event == 'article') {
 			echo $push_button;
 		}
 
-		echo '</div></td></tr></table>'.n.
-			tInput().n.
-			'</form></div>'.n;
+		echo n.'</div>'.n.'</td>'.n.'</tr>'.n.'</table>'.
+			tInput().
+			n.'</form>'.n.'</div>';
 		// Assume users would not change the timestamp if they wanted to "publish now"/"reset time".
 		echo script_js( <<<EOS
 		$('#write-timestamp input.year,#write-timestamp input.month,#write-timestamp input.day,#write-timestamp input.hour,#write-timestamp input.minute,#write-timestamp input.second').change(
@@ -905,8 +904,8 @@ EOS
 
 	function custField($num, $field, $content)
 	{
-		return n.n.graf('<label for="custom-'.$num.'">'.$field.'</label>'.br.
-			n.fInput('text', 'custom_'.$num, $content, '', '', '', INPUT_REGULAR, '', 'custom-'.$num), ' class="custom-field custom-'.$num.'"');
+		return graf('<label for="custom-'.$num.'">'.$field.'</label>'.br.
+			fInput('text', 'custom_'.$num, $content, '', '', '', INPUT_REGULAR, '', 'custom-'.$num), ' class="custom-field custom-'.$num.'"');
 	}
 
 /**
@@ -942,11 +941,11 @@ EOS
 
 		foreach ($statuses as $a => $b)
 		{
-			$out[] = n.t.'<li class="status-'.$a.($Status == $a ? ' active' : '').'">'.radio('Status', $a, ($Status == $a) ? 1 : 0, 'status-'.$a).
+			$out[] = n.'<li class="status-'.$a.($Status == $a ? ' active' : '').'">'.radio('Status', $a, ($Status == $a) ? 1 : 0, 'status-'.$a).
 				'<label for="status-'.$a.'">'.$b.'</label></li>';
 		}
 
-		return '<ul class="status plain-list">'.join('', $out).n.'</ul>';
+		return n.'<ul class="status plain-list">'.join('', $out).n.'</ul>';
 	}
 
 /**
@@ -1002,9 +1001,9 @@ EOS
 	{
 		$state = ($view == $tabevent) ? 'up' : 'down';
 		$pressed = ($view == $tabevent) ? 'true' : 'false';
-		return '<li class="view-mode '.$tabevent.'" id="tab-'.$tabevent.$state.'" title="'.gTxt('view_'.$tabevent).'">'.
+		return n.'<li class="view-mode '.$tabevent.'" id="tab-'.$tabevent.$state.'" title="'.gTxt('view_'.$tabevent).'">'.
 			'<a href="javascript:document.article_form.view.value=\''.$tabevent.'\';document.article_form.submit();" role="button" aria-pressed="'.$pressed.'">'.gTxt($tabevent).'</a>'.
-			'</li>'.n;
+			'</li>';
 	}
 
 /**
@@ -1270,7 +1269,7 @@ EOS
 
 	function article_partial_image($rs)
 	{
-		$default = n.graf(
+		$default = graf(
 			'<label for="article-image">'.gTxt('article_image').'</label>'.n.popHelp('article_image').br.
 				fInput('text', 'Image', $rs['Image'], '', '', '', INPUT_REGULAR, '', 'article-image')
 			, ' class="article-image"');
@@ -1288,7 +1287,7 @@ EOS
 	function article_partial_keywords($rs)
 	{
 		return pluggable_ui('article_ui', 'keywords',
-			n.graf('<label for="keywords">'.gTxt('keywords').'</label>'.n.popHelp('keywords').br.
+			graf('<label for="keywords">'.gTxt('keywords').'</label>'.n.popHelp('keywords').br.
 				n.'<textarea id="keywords" name="Keywords" cols="'.INPUT_MEDIUM.'" rows="'.INPUT_XSMALL.'">'.txpspecialchars(article_partial_keywords_value($rs)).'</textarea>', ' class="keywords"'),
 			$rs);
 	}
@@ -1316,7 +1315,7 @@ EOS
 	function article_partial_url_title($rs)
 	{
 		return pluggable_ui('article_ui', 'url_title',
-			n.graf('<label for="url-title">'.gTxt('url_title').'</label>'.n.popHelp('url_title').br.
+			graf('<label for="url-title">'.gTxt('url_title').'</label>'.n.popHelp('url_title').br.
 				fInput('text', 'url_title', article_partial_url_title_value($rs), '', '', '', INPUT_REGULAR, '', 'url-title'), ' class="url-title"'),
 			$rs);
 	}
@@ -1356,7 +1355,7 @@ EOS
 					$recent['Title'] = gTxt('untitled').sp.$recent['ID'];
 				}
 
-				$ra .= n.t.'<li class="recent-article"><a href="?event=article'.a.'step=edit'.a.'ID='.$recent['ID'].'">'.escape_title($recent['Title']).'</a></li>';
+				$ra .= n.'<li class="recent-article"><a href="?event=article'.a.'step=edit'.a.'ID='.$recent['ID'].'">'.escape_title($recent['Title']).'</a></li>';
 			}
 
 			$ra .= '</ul>';
@@ -1396,7 +1395,7 @@ EOS
 	function article_partial_body($rs)
 	{
 		return pluggable_ui('article_ui', 'body',
-			n.graf('<label for="body">'.gTxt('body').'</label>'.n.popHelp('body').br.
+			graf('<label for="body">'.gTxt('body').'</label>'.n.popHelp('body').br.
 				'<textarea id="body" name="Body" cols="'.INPUT_LARGE.'" rows="'.INPUT_REGULAR.'">'.txpspecialchars($rs['Body']).'</textarea>', ' class="body"'),
 			$rs);
 	}
@@ -1411,7 +1410,7 @@ EOS
 	function article_partial_excerpt($rs)
 	{
 		return pluggable_ui('article_ui', 'excerpt',
-			n.graf('<label for="excerpt">'.gTxt('excerpt').'</label>'.n.popHelp('excerpt').br.
+			graf('<label for="excerpt">'.gTxt('excerpt').'</label>'.n.popHelp('excerpt').br.
 				'<textarea id="excerpt" name="Excerpt" cols="'.INPUT_LARGE.'" rows="'.INPUT_SMALL.'">'.txpspecialchars($rs['Excerpt']).'</textarea>', ' class="excerpt"'),
 			$rs);
 	}
@@ -1488,12 +1487,12 @@ EOS
 	{
 		return pluggable_ui('article_ui', 'categories',
 			n.'<div id="categories_group">'.
-			n.graf('<label for="category-1">'.gTxt('category1').'</label> '.
+			graf('<label for="category-1">'.gTxt('category1').'</label> '.
 			'<span class="category-edit"><span role="presentation">[</span>'.eLink('category', '', '', '', gTxt('edit')).'<span role="presentation">]</span></span>'.br.
-			n.category_popup('Category1', $rs['Category1'], 'category-1'), ' class="category category-1"').
+			category_popup('Category1', $rs['Category1'], 'category-1'), ' class="category category-1"').
 
-			n.graf('<label for="category-2">'.gTxt('category2').'</label>'.br.
-			n.category_popup('Category2', $rs['Category2'], 'category-2'), ' class="category category-2"').
+			graf('<label for="category-2">'.gTxt('category2').'</label>'.br.
+			category_popup('Category2', $rs['Category2'], 'category-2'), ' class="category category-2"').
 			n.'</div>',
 		$rs);
 	}
@@ -1508,7 +1507,7 @@ EOS
 	function article_partial_section($rs)
 	{
 		return pluggable_ui('article_ui', 'section',
-			n.graf('<label for="section">'.gTxt('section').'</label> '.
+			graf('<label for="section">'.gTxt('section').'</label> '.
 				'<span class="section-edit"><span role="presentation">[</span>'.eLink('section', '', '', '', gTxt('edit')).'<span role="presentation">]</span></span>'.br.
 				section_popup($rs['Section'], 'section'), ' class="section"'),
 			$rs);
@@ -1555,16 +1554,16 @@ EOS
 			}
 			else
 			{
-				$invite = n.n.'<div id="write-comments">'.
-					n.n.graf(
+				$invite = n.'<div id="write-comments">'.
+					graf(
 					onoffRadio('Annotate', $Annotate)
 					, ' class="comment-annotate"').
 
-					n.n.graf(
+					graf(
 					'<label for="comment-invite">'.gTxt('comment_invitation').'</label>'.br.
 						fInput('text', 'AnnotateInvite', $AnnotateInvite, '', '', '', '', '', 'comment-invite')
 					, ' class="comment-invite"').
-					n.n.'</div>';
+					n.'</div>';
 			}
 
 			return pluggable_ui('article_ui', 'annotate_invite', $invite, $rs);
@@ -1586,18 +1585,18 @@ EOS
 			'timestamp',
 			wrapRegion(
 				'write-timestamp',
-				n.graf(checkbox('reset_time', '1', $reset_time, '', 'reset_time').'<label for="reset_time">'.gTxt('reset_time').'</label>', ' class="reset-time"').
+				graf(checkbox('reset_time', '1', $reset_time, '', 'reset_time').'<label for="reset_time">'.gTxt('reset_time').'</label>', ' class="reset-time"').
 
-				n.graf(gTxt('published_at').n.popHelp('timestamp'), ' class="publish-at"').
+				graf(gTxt('published_at').n.popHelp('timestamp'), ' class="publish-at"').
 
-				n.graf('<span class="label">'.gtxt('date').'</span>'.sp.
+				graf('<span class="label">'.gtxt('date').'</span>'.sp.
 					tsi('year', '%Y', $sPosted).' / '.
 					tsi('month', '%m', $sPosted).' / '.
 					tsi('day', '%d', $sPosted)
 				, ' class="date posted created"'
 				).
 
-				n.graf('<span class="label">'.gTxt('time').'</span>'.sp.
+				graf('<span class="label">'.gTxt('time').'</span>'.sp.
 					tsi('hour', '%H', $sPosted).' : ' .
 					tsi('minute', '%M', $sPosted).' : '.
 					tsi('second', '%S', $sPosted)
@@ -1625,14 +1624,14 @@ EOS
 			'expires',
 			wrapRegion(
 				'write-expires',
-				n.graf('<span class="label">'.gtxt('date').'</span>'.sp.
+				graf('<span class="label">'.gtxt('date').'</span>'.sp.
 					tsi('exp_year', '%Y', $sExpires).' / '.
 					tsi('exp_month', '%m', $sExpires).' / '.
 					tsi('exp_day', '%d', $sExpires)
 				, ' class="date expires"'
 				).
 
-				n.graf('<span class="label">'.gTxt('time').'</span>'.sp.
+				graf('<span class="label">'.gTxt('time').'</span>'.sp.
 					tsi('exp_hour', '%H', $sExpires).' : '.
 					tsi('exp_minute', '%M', $sExpires).' : '.
 					tsi('exp_second', '%S', $sExpires)

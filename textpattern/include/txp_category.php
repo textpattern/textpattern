@@ -238,7 +238,7 @@ EOS
 				form(
 					join('',$array).
 					hInput('type',$area).
-					n.multi_edit($methods, 'category', 'cat_category_multiedit', '', '', '', '', '', $area)
+					multi_edit($methods, 'category', 'cat_category_multiedit', '', '', '', '', '', $area)
 					,'', '', 'post', 'category-tree', '', 'category_'.$area.'_form'
 				);
 		}
@@ -366,13 +366,13 @@ EOS
 		$heading = 'tab_' . ($event == 'article' ? 'list' : $event);
 		$for = $rs ? ' for="'.$event.'_category_parent"' : '';
 
-		$out = n.n.hed(gTxt($heading).sp.popHelp($event.'_category'), 2).
+		$out = hed(gTxt($heading).sp.popHelp($event.'_category'), 2).
 			form(
 				fInput('text', 'title', '', '', '', '', INPUT_REGULAR).
 				(($rs) ? '<div class="parent"><label'.$for.'>' . gTxt('parent') . '</label>' . treeSelectInput('parent_cat', $rs, $parent, $event.'_category_parent') . '</div>' : '').
-				n.fInput('submit', '', gTxt('Create')).
-				n.eInput('category').
-				n.sInput('cat_'.$event.'_create')
+				fInput('submit', '', gTxt('Create')).
+				eInput('category').
+				sInput('cat_'.$event.'_create')
 			,'', '', 'post', 'action-create '.$event);
 
 		if ($rs)
@@ -542,20 +542,20 @@ EOS
 			extract($row);
 			list($parent_widget, $has_parent) = cat_parent_pop($parent,$evname,$id);
 			$out = n.'<section class="txp-edit">'.
-				n.hed(gTxt('edit_category'), 2).
-				n.inputLabel('category_name', fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'category_name'), $evname.'_category_name').
+				hed(gTxt('edit_category'), 2).
+				inputLabel('category_name', fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'category_name'), $evname.'_category_name').
 				($has_parent ? n.inputLabel('category_parent', $parent_widget, 'parent') : graf('<span class="edit-label">'.gTxt('parent').'</span><span class="edit-value">'.$parent_widget.'</span>')).
-				n.inputLabel('category_title', fInput('text', 'title', $title, '', '', '', INPUT_REGULAR, '', 'category_title'), $evname.'_category_title').
+				inputLabel('category_title', fInput('text', 'title', $title, '', '', '', INPUT_REGULAR, '', 'category_title'), $evname.'_category_title').
 				pluggable_ui('category_ui', 'extend_detail_form', '', $row).
-				n.hInput('id',$id).
-				n.graf(fInput('submit', '', gTxt('save'), 'publish')).
-				n.eInput('category').
-				n.sInput('cat_'.$evname.'_save').
-				n.hInput('old_name',$name).
+				hInput('id',$id).
+				graf(fInput('submit', '', gTxt('save'), 'publish')).
+				eInput('category').
+				sInput('cat_'.$evname.'_save').
+				hInput('old_name',$name).
 				n.'</section>';
 			echo n.'<div id="category_container" class="txp-container">'.
 				form(  $out, '', '', 'post', 'edit-form' ).
-				'</div>';
+				n.'</div>';
 		} else {
 			cat_category_list(array(gTxt('category_not_found'), E_ERROR));
 		}

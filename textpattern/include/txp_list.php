@@ -116,27 +116,27 @@
 			$crit_escaped = doSlash($verbatim ? $m[1] : str_replace(array('\\','%','_','\''), array('\\\\','\\%','\\_', '\\\''), $crit));
 			$critsql = $verbatim ?
 				array(
-					'id'         => "textpattern.ID in ('" .join("','", do_list($crit_escaped)). "')",
+					'id'                 => "textpattern.ID in ('" .join("','", do_list($crit_escaped)). "')",
 					'title_body_excerpt' => "textpattern.Title = '$crit_escaped' or textpattern.Body = '$crit_escaped' or textpattern.Excerpt = '$crit_escaped'",
-					'section'    => "textpattern.Section = '$crit_escaped'",
-					'keywords'   => "FIND_IN_SET('".$crit_escaped."',textpattern.Keywords)",
-					'categories' => "textpattern.Category1 = '$crit_escaped' or textpattern.Category2 = '$crit_escaped'",
-					'status'     => "textpattern.Status = '".(@$sesutats[gTxt($crit_escaped)])."'",
-					'author'     => "textpattern.AuthorID = '$crit_escaped'",
-					'article_image' => "textpattern.Image in ('" .join("','", do_list($crit_escaped)). "')",
-					'posted'     => "textpattern.Posted = '$crit_escaped'",
-					'lastmod'    => "textpattern.LastMod = '$crit_escaped'"
+					'section'            => "textpattern.Section = '$crit_escaped'",
+					'keywords'           => "FIND_IN_SET('".$crit_escaped."',textpattern.Keywords)",
+					'categories'         => "textpattern.Category1 = '$crit_escaped' or textpattern.Category2 = '$crit_escaped'",
+					'status'             => "textpattern.Status = '".(@$sesutats[gTxt($crit_escaped)])."'",
+					'author'             => "textpattern.AuthorID = '$crit_escaped'",
+					'article_image'      => "textpattern.Image in ('" .join("','", do_list($crit_escaped)). "')",
+					'posted'             => "textpattern.Posted = '$crit_escaped'",
+					'lastmod'            => "textpattern.LastMod = '$crit_escaped'"
 				) : array(
-					'id'         => "textpattern.ID in ('" .join("','", do_list($crit_escaped)). "')",
+					'id'                 => "textpattern.ID in ('" .join("','", do_list($crit_escaped)). "')",
 					'title_body_excerpt' => "textpattern.Title like '%$crit_escaped%' or textpattern.Body like '%$crit_escaped%' or textpattern.Excerpt like '%$crit_escaped%'",
-					'section'    => "textpattern.Section like '%$crit_escaped%'",
-					'keywords'   => "FIND_IN_SET('".$crit_escaped."',textpattern.Keywords)",
-					'categories' => "textpattern.Category1 like '%$crit_escaped%' or textpattern.Category2 like '%$crit_escaped%'",
-					'status'     => "textpattern.Status = '".(@$sesutats[gTxt($crit_escaped)])."'",
-					'author'     => "textpattern.AuthorID like '%$crit_escaped%'",
-					'article_image' => "textpattern.Image in ('" .join("','", do_list($crit_escaped)). "')",
-					'posted'     => "textpattern.Posted like '$crit_escaped%'",
-					'lastmod'    => "textpattern.LastMod like '$crit_escaped%'"
+					'section'            => "textpattern.Section like '%$crit_escaped%'",
+					'keywords'           => "FIND_IN_SET('".$crit_escaped."',textpattern.Keywords)",
+					'categories'         => "textpattern.Category1 like '%$crit_escaped%' or textpattern.Category2 like '%$crit_escaped%'",
+					'status'             => "textpattern.Status = '".(@$sesutats[gTxt($crit_escaped)])."'",
+					'author'             => "textpattern.AuthorID like '%$crit_escaped%'",
+					'article_image'      => "textpattern.Image in ('" .join("','", do_list($crit_escaped)). "')",
+					'posted'             => "textpattern.Posted like '$crit_escaped%'",
+					'lastmod'            => "textpattern.LastMod like '$crit_escaped%'"
 				);
 
 			if (array_key_exists($search_method, $critsql))
@@ -162,15 +162,15 @@
 
 		$total = safe_count('textpattern', "$criteria");
 
-		echo '<h1 class="txp-heading">'.gTxt('tab_list').'</h1>';
-		echo '<div id="'.$event.'_control" class="txp-control-panel">';
+		echo n.'<h1 class="txp-heading">'.gTxt('tab_list').'</h1>';
+		echo n.'<div id="'.$event.'_control" class="txp-control-panel">';
 
 		if ($total < 1)
 		{
 			if ($criteria != 1)
 			{
-				echo n.list_search_form($crit, $search_method).
-					n.graf(gTxt('no_results_found'), ' class="indicator"').'</div>';
+				echo list_search_form($crit, $search_method).
+					graf(gTxt('no_results_found'), ' class="indicator"').'</div>';
 			}
 
 			else
@@ -185,7 +185,7 @@
 
 		list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-		echo n.list_search_form($crit, $search_method).'</div>';
+		echo list_search_form($crit, $search_method).'</div>';
 
 		$rs = safe_query(
 			"select
@@ -216,10 +216,10 @@
 			echo n.'<form name="longform" id="articles_form" class="multi_edit_form" method="post" action="index.php">'.
 
 				n.'<div class="txp-listtables">'.
-				n.startTable('', '', 'txp-list').
-				'<thead>'.
-				n.tr(
-					n.hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
+				startTable('', '', 'txp-list').
+				n.'<thead>'.
+				tr(
+					hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
 					column_head('ID', 'id', 'list', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id actions').
 					column_head('title', 'title', 'list', true, $switch_dir, $crit, $search_method, (('title' == $sort) ? "$dir " : '').'title').
 					column_head('posted', 'posted', 'list', true, $switch_dir, $crit, $search_method, (('posted' == $sort) ? "$dir " : '').'date posted created').
@@ -298,11 +298,11 @@
 					}
 				}
 
-				$comments = n.'<span class="comments-status">'.$comment_status.'</span> <span class="comments-manage">'.$comments.'</span>';
+				$comments = '<span class="comments-status">'.$comment_status.'</span> <span class="comments-manage">'.$comments.'</span>';
 
-				echo n.tr(
+				echo tr(
 
-					n.td((
+					td((
 						(  ($a['Status'] >= STATUS_LIVE and has_privs('article.edit.published'))
 						or ($a['Status'] >= STATUS_LIVE and $AuthorID == $txp_user
 											     and has_privs('article.edit.own.published'))
@@ -313,47 +313,47 @@
 						: '&#160;'
 					), '', 'multi-edit').
 
-					n.hCell(eLink('article', 'edit', 'ID', $ID, $ID) .sp. '<span class="articles_detail"><span role="presentation">[</span><a href="'.$view_url.'">'.gTxt('view').'</a><span role="presentation">]</span></span>', '', ' scope="row" class="id"').
+					hCell(eLink('article', 'edit', 'ID', $ID, $ID) .sp. '<span class="articles_detail"><span role="presentation">[</span><a href="'.$view_url.'">'.gTxt('view').'</a><span role="presentation">]</span></span>', '', ' scope="row" class="id"').
 
-					n.td($Title, '', 'title').
+					td($Title, '', 'title').
 
-					n.td(
+					td(
 						gTime($posted), '', ($posted < time() ? '' : 'unpublished ').'date posted created'
 					).
 
-					n.td(
+					td(
 						gTime($lastmod), '', "articles_detail date modified"
 					).
 
-					n.td(
+					td(
 						($expires ? gTime($expires) : ''), '' ,'articles_detail date expires'
 					).
 
-					n.td(span($Section, array('title' => $section_title)), '', 'section'.$vs).
+					td(span($Section, array('title' => $section_title)), '', 'section'.$vs).
 
-					n.td($Category1, '', "articles_detail category category1".$vc[1]).
-					n.td($Category2, '', "articles_detail category category2".$vc[2]).
-					n.td('<a href="'.$view_url.'" title="'.gTxt('view').'">'.$Status.'</a>', '', 'status').
+					td($Category1, '', "articles_detail category category1".$vc[1]).
+					td($Category2, '', "articles_detail category category2".$vc[2]).
+					td('<a href="'.$view_url.'" title="'.gTxt('view').'">'.$Status.'</a>', '', 'status').
 
-					($show_authors ? n.td(span(txpspecialchars($AuthorID), array('title' => $RealName)), '', 'author') : '').
+					($show_authors ? td(span(txpspecialchars($AuthorID), array('title' => $RealName)), '', 'author') : '').
 
-					($use_comments == 1 ? n.td($comments, '', "articles_detail comments") : '')
+					($use_comments == 1 ? td($comments, '', "articles_detail comments") : '')
 				);
 			}
 
 			echo n.'</tbody>'.
 				endTable().
-				'</div>'.
-				n.list_multiedit_form($page, $sort, $dir, $crit, $search_method).
-				n.tInput().
+				n.'</div>'.
+				list_multiedit_form($page, $sort, $dir, $crit, $search_method).
+				tInput().
 				n.'</form>'.
-				n.graf(
+				graf(
 					toggle_box('articles_detail'),
 					' class="detail-toggle"'
 				).
 				n.'<div id="'.$event.'_navigation" class="txp-navigation">'.
-				n.nav_form('list', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
-				n.pageby_form('list', $article_list_pageby).
+				nav_form('list', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
+				pageby_form('list', $article_list_pageby).
 				n.'</div>'.
 				n.'</div>';
 		}
@@ -407,12 +407,12 @@
 		$authors = $all_authors ? selectInput('AuthorID', $all_authors, '', true) : '';
 
 		$methods = array(
-			'changesection'   => array('label' => gTxt('changesection'), 'html' => $sections),
+			'changesection'   => array('label' => gTxt('changesection'),   'html' => $sections),
 			'changecategory1' => array('label' => gTxt('changecategory1'), 'html' => $category1),
 			'changecategory2' => array('label' => gTxt('changecategory2'), 'html' => $category2),
-			'changestatus'    => array('label' => gTxt('changestatus'), 'html' => $status),
-			'changecomments'  => array('label' => gTxt('changecomments'), 'html' => $comments),
-			'changeauthor'    => array('label' => gTxt('changeauthor'), 'html' => $authors),
+			'changestatus'    => array('label' => gTxt('changestatus'),    'html' => $status),
+			'changecomments'  => array('label' => gTxt('changecomments'),  'html' => $comments),
+			'changeauthor'    => array('label' => gTxt('changeauthor'),    'html' => $authors),
 			'delete'          => gTxt('delete'),
 		);
 

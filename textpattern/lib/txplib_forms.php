@@ -23,10 +23,10 @@
 
 		foreach ($vals as $a => $b)
 		{
-			$out[] = '<input type="radio" id="'.$id.'-'.$a.'" name="'.$field.'" value="'.$a.'" class="radio'.($a == $var ? ' active' : '').'"';
+			$out[] = n.'<input type="radio" id="'.$id.'-'.$a.'" name="'.$field.'" value="'.$a.'" class="radio'.($a == $var ? ' active' : '').'"';
 			$out[] = ($a == $var) ? ' checked="checked"' : '';
 			$out[] = ($tabindex) ? ' tabindex="'.$tabindex.'"' : '';
-			$out[] = ' /><label for="'.$id.'-'.$a.'">'.$b.'</label> ';
+			$out[] = ' />'.n.'<label for="'.$id.'-'.$a.'">'.$b.'</label>';
 		}
 
 		return join('', $out);
@@ -118,13 +118,13 @@
 				$sel = '';
 			}
 
-			$out[] = n.t.'<option value="'.txpspecialchars($avalue).'"'.$sel.'>'.txpspecialchars($alabel).'</option>';
+			$out[] = n.'<option value="'.txpspecialchars($avalue).'"'.$sel.'>'.txpspecialchars($alabel).'</option>';
 		}
 
-		return '<select'.( $select_id ? ' id="'.$select_id.'"' : '' ).' name="'.$name.'"'.
+		return n.'<select'.( $select_id ? ' id="'.$select_id.'"' : '' ).' name="'.$name.'"'.
 			($onchange == 1 ? ' onchange="submit(this.form);"' : $onchange).
 			'>'.
-			($blank_first ? n.t.'<option value=""'.($selected == false ? ' selected="selected"' : '').'></option>' : '').
+			($blank_first ? n.'<option value=""'.($selected == false ? ' selected="selected"' : '').'></option>' : '').
 			( $out ? join('', $out) : '').
 			n.'</select>';
 	}
@@ -183,11 +183,11 @@
 				$htmltitle = $hellip = '';
 			}
 
-			$out[] = n.t.'<option value="'.txpspecialchars($name).'"'.$htmltitle.$sel.'>'.$sp.txpspecialchars($title).$hellip.'</option>';
+			$out[] = n.'<option value="'.txpspecialchars($name).'"'.$htmltitle.$sel.'>'.$sp.txpspecialchars($title).$hellip.'</option>';
 		}
 
 		return n.'<select'.( $select_id ? ' id="'.$select_id.'" ' : '' ).' name="'.$select_name.'">'.
-			n.t.'<option value=""'.($selected == false ? ' selected="selected"' : '').'>&#160;</option>'.
+			n.'<option value=""'.($selected == false ? ' selected="selected"' : '').'>&#160;</option>'.
 			( $out ? join('', $out) : '').
 			n.'</select>';
 	}
@@ -214,7 +214,7 @@
 
 	function fInput($type, $name, $value, $class = '', $title = '', $onClick = '', $size = 0, $tab = 0, $id = '', $disabled = false, $required = false, $placeholder = '')
 	{
-		$o  = '<input type="'.$type.'"';
+		$o  = n.'<input type="'.$type.'"';
 		$o .= ($type == 'file' || $type == 'image') ? '' : ' value="'.txpspecialchars($value).'"';
 		$o .= strlen($name) ? ' name="'.$name.'"' : '';
 		$o .= ($size)       ? ' size="'.$size.'"' : '';
@@ -257,7 +257,7 @@
 
 	function hInput($name,$value)
 	{
-		return fInput('hidden', $name, $value);
+		return n.fInput('hidden', $name, $value);
 	}
 
 /**
@@ -324,7 +324,7 @@
 
 	function checkbox($name, $value, $checked = true, $tabindex = 0, $id = '')
 	{
-		$o[] = '<input type="checkbox" name="'.$name.'" value="'.$value.'"';
+		$o[] = n.'<input type="checkbox" name="'.$name.'" value="'.$value.'"';
 		$o[] = ($id) ? ' id="'.$id.'"' : '';
 		$o[] = ($checked == 1) ? ' checked="checked"' : '';
 		$o[] = ($tabindex) ? ' tabindex="'.$tabindex.'"' : '';
@@ -363,7 +363,7 @@
 
 	function radio($name, $value, $checked = true, $id = '', $tabindex = 0)
 	{
-		$o[] = '<input type="radio" name="'.$name.'" value="'.$value.'"';
+		$o[] = n.'<input type="radio" name="'.$name.'" value="'.$value.'"';
 		$o[] = ($id) ? ' id="'.$id.'"' : '';
 		$o[] = ($checked == 1) ? ' checked="checked"' : '';
 		$o[] = ($tabindex) ? ' tabindex="'.$tabindex.'"' : '';
@@ -395,9 +395,9 @@
 			($class ? ' class="'.$class.'"' : '').
 			($style ? ' style="'.$style.'"' : '').
 			($onsubmit ? ' onsubmit="return '.$onsubmit.'"' : '').
-			'>'.$contents.n.
-			tInput().n.
-			'</form>'.n;
+			'>'.$contents.
+			tInput().
+			n.'</form>'.n;
 	}
 
 /**
@@ -455,7 +455,7 @@
 
 	function type_select($options)
 	{
-		return '<select name="type">'.n.type_options($options).'</select>'.n;
+		return n.'<select name="type">'.type_options($options).'</select>';
 	}
 
 /**
@@ -471,7 +471,7 @@
 	{
 		foreach ($array as $a => $b)
 		{
-			$out[] = t.'<option value="'.$a.'">'.gTxt($b).'</option>'.n;
+			$out[] = n.'<option value="'.$a.'">'.gTxt($b).'</option>';
 		}
 		return join('', $out);
 	}
@@ -492,8 +492,8 @@
 		foreach ($values as $k => $v)
 		{
 			$id = $name.'-'.$k;
-			$out[] = n.t.'<li class="status-'.$k.' '.$v.($hilight_val == $k ? ' active' : '').'">'.radio($name, $k, ($current_val == $k) ? 1 : 0, $id).
-				'<label for="'.$id.'">'.($hilight_val == $k ? strong($v) : $v).'</label></li>';
+			$out[] = n.'<li class="status-'.$k.' '.$v.($hilight_val == $k ? ' active' : '').'">'.radio($name, $k, ($current_val == $k) ? 1 : 0, $id).
+				n.'<label for="'.$id.'">'.($hilight_val == $k ? strong($v) : $v).'</label>'.n.'</li>';
 		}
 
 		return '<ul class="status plain-list">'.join('', $out).n.'</ul>';

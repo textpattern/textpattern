@@ -240,18 +240,17 @@
 		}
 
 		echo n.'</div>'.
-			n.sInput('prefs_save').
-			n.eInput('prefs').
-			n.hInput('prefs_id', '1').
-			n.tInput();
+			sInput('prefs_save').
+			eInput('prefs').
+			hInput('prefs_id', '1').
+			tInput();
 
 		if ($last_event !== null)
 		{
 			echo graf(fInput('submit', 'Submit', gTxt('save'), 'publish'));
 		}
 
-		echo n.'</form>'.
-			n.'</div>';
+		echo n.'</form>'.n.'</div>';
 	}
 
 /**
@@ -557,14 +556,14 @@ EOS
 		{
 			if (count($b) > 0)
 			{
-				$out[] = n.t.'<optgroup label="'.gTxt('tab_'.$a).'">';
+				$out[] = n.'<optgroup label="'.gTxt('tab_'.$a).'">';
 
 				foreach ($b as $c => $d)
 				{
-					$out[] = n.t.t.'<option value="'.$d.'"'.( $val == $d ? ' selected="selected"' : '' ).'>'.$c.'</option>';
+					$out[] = n.'<option value="'.$d.'"'.( $val == $d ? ' selected="selected"' : '' ).'>'.$c.'</option>';
 				}
 
-				$out[] = n.t.'</optgroup>';
+				$out[] = n.'</optgroup>';
 			}
 		}
 

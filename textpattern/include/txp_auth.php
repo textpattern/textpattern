@@ -170,17 +170,17 @@ Use of this software indicates acceptance of the Textpattern license agreement
 
 		echo n.'<div id="login_container" class="txp-container">';
 		echo form(
-			'<div class="txp-login">'.
-			n.hed(gTxt($reset ? 'password_reset' : 'login_to_textpattern'), 2).
+			n.'<div class="txp-login">'.
+			hed(gTxt($reset ? 'password_reset' : 'login_to_textpattern'), 2).
 
-			n.graf(
+			graf(
 				'<span class="login-label"><label for="login_name">'.gTxt('name').'</label></span>'.
 				n.'<span class="login-value">'.fInput('text', 'p_userid', $name, '', '', '', INPUT_REGULAR, '', 'login_name').'</span>'
 			, ' class="login-name"').
 
 			($reset
 				? ''
-				: n.graf(
+				: graf(
 					'<span class="login-label"><label for="login_password">'.gTxt('password').'</label></span>'.
 					n.'<span class="login-value">'.fInput('password', 'p_password', '', '', '', '', INPUT_REGULAR, '', 'login_password').'</span>'
 				, ' class="login-password"')
@@ -193,20 +193,20 @@ Use of this software indicates acceptance of the Textpattern license agreement
 					, ' class="login-stay"')
 			).
 
-			($reset ? n.hInput('p_reset', 1) : '').
+			($reset ? hInput('p_reset', 1) : '').
 
-			n.graf(
+			graf(
 				fInput('submit', '', gTxt($reset ? 'password_reset_button' : 'log_in_button'), 'publish')
 			).
-			n.(
+			(
 				($reset
 					? graf('<a href="index.php">'.gTxt('back_to_login').'</a>', ' class="login-return"')
 					: graf('<a href="?reset=1">'.gTxt('password_forgotten').'</a>', ' class="login-forgot"')
 				)
 			).
 			(gps('event') ? eInput(gps('event')) : '').
-			'</div>'
-		, '', '', 'post', '', '', 'login_form').'</div>'.
+			n.'</div>'
+		, '', '', 'post', '', '', 'login_form').n.'</div>'.
 
 
 		n.script_js(<<<EOSCR
@@ -226,7 +226,7 @@ $(document).ready(
 EOSCR
 		).
 		n.script_js('textpattern.textarray = '.json_encode($textarray_script)).
-		n.'</div><!-- /txp-body -->'.n.'</body>'.n.'</html>';
+		'</div><!-- /txp-body -->'.n.'</body>'.n.'</html>';
 
 		exit(0);
 	}

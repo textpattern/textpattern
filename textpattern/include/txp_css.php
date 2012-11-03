@@ -117,8 +117,8 @@
 		if (!empty($name)) {
 			$copy =
 				n.'<p class="copy-as"><label for="copy-css">'.gTxt('copy_css_as').'</label>'.
-				n.fInput('text','newname','','input-medium','','',INPUT_MEDIUM,'','copy-css').
-				n.fInput('submit', 'copy', gTxt('copy')).'</p>';
+				fInput('text','newname','','input-medium','','',INPUT_MEDIUM,'','copy-css').
+				fInput('submit', 'copy', gTxt('copy')).'</p>';
 		} else {
 			$copy = '';
 		}
@@ -131,8 +131,8 @@
 		'</div>';
 
 		echo
-		'<h1 class="txp-heading">'.gTxt('tab_style').'</h1>'.
-		'<div id="'.$event.'_container" class="txp-container">'.
+		n.'<h1 class="txp-heading">'.gTxt('tab_style').'</h1>'.
+		n.'<div id="'.$event.'_container" class="txp-container">'.
 		startTable('', '', 'txp-columntable').
 		tr(
 			td(
@@ -152,7 +152,7 @@
 			, ' class="column"')
 		).
 		endTable().
-		'</div>';
+		n.'</div>';
 	}
 
 /**

@@ -46,16 +46,16 @@ header(pluggable_ui('admin_side', 'x_frame_options', 'X-Frame-Options: SAMEORIGI
 
 	if (function_exists($functname))
 	{
-		$endform = n.tr(
+		$endform = tr(
 			td().
 			td(
 				fInput('submit', '', gTxt('build'))
 			)
 		).
-		n.endTable().
-		n.eInput('tag').
-		n.sInput('build').
-		n.hInput('tag_name', $tag_name);
+		endTable().
+		eInput('tag').
+		sInput('build').
+		hInput('tag_name', $tag_name);
 
 		echo $functname($tag_name);
 	}
@@ -76,9 +76,9 @@ begin generic functions
 
 	function tagRow($label, $thing)
 	{
-		return n.n.tr(
-			n.fLabelCell($label).
-			n.td($thing)
+		return tr(
+			fLabelCell($label).
+			td($thing)
 		);
 	}
 
@@ -115,7 +115,7 @@ begin generic functions
 
 	function tdb($thing)
 	{
-		return n.graf(text_area('tag', '', '', $thing), ' id="tagbuilder-output"');
+		return graf(text_area('tag', '', '', $thing), ' id="tagbuilder-output"');
 	}
 
 //--------------------------------------------------------------
@@ -2105,7 +2105,7 @@ begin tag builder functions
 				, 2)
 			).
 
-			n.endTable()
+			endTable()
 		).
 
 		tdb(tb($tag_name));
@@ -2126,7 +2126,7 @@ begin tag builder functions
 				, 2)
 			).
 
-			n.endTable()
+			endTable()
 		).
 
 		tdb(tb($tag_name));
@@ -2147,7 +2147,7 @@ begin tag builder functions
 				, 2)
 			).
 
-			n.endTable()
+			endTable()
 		).
 
 		tdb(tb($tag_name));
@@ -2168,7 +2168,7 @@ begin tag builder functions
 				, 2)
 			).
 
-			n.endTable()
+			endTable()
 		).
 
 		tdb(tb($tag_name));
@@ -2297,7 +2297,7 @@ begin tag builder functions
 				, 2)
 			).
 
-			n.endTable()
+			endTable()
 		).
 
 		tdb(tb($tag_name));
@@ -2318,7 +2318,7 @@ begin tag builder functions
 				, 2)
 			).
 
-			n.endTable()
+			endTable()
 		).
 
 		tdb(tb($tag_name));
@@ -2339,7 +2339,7 @@ begin tag builder functions
 				, 2)
 			).
 
-			n.endTable()
+			endTable()
 		).
 
 		tdb(tb($tag_name));
@@ -2706,7 +2706,7 @@ begin tag builder functions
 				, 2)
 			).
 
-			n.endTable()
+			endTable()
 		).
 
 		tdb(tb($tag_name));
@@ -2805,7 +2805,7 @@ begin tag builder functions
 				, 2)
 			).
 
-			n.endTable()
+			endTable()
 		).
 
 		tdb(tb($tag_name));
@@ -2826,7 +2826,7 @@ begin tag builder functions
 				, 2)
 			).
 
-			n.endTable()
+			endTable()
 		).
 
 		tdb(tb($tag_name));
@@ -2847,7 +2847,7 @@ begin tag builder functions
 				, 2)
 			).
 
-			n.endTable()
+			endTable()
 		).
 
 		tdb(tb($tag_name));
@@ -2868,7 +2868,7 @@ begin tag builder functions
 				, 2)
 			).
 
-			n.endTable()
+			endTable()
 		).
 
 		tdb(tb($tag_name));
@@ -2889,7 +2889,7 @@ begin tag builder functions
 				, 2)
 			).
 
-			n.endTable()
+			endTable()
 		).
 
 		tdb(tb($tag_name));
@@ -2910,7 +2910,7 @@ begin tag builder functions
 				, 2)
 			).
 
-			n.endTable()
+			endTable()
 		).
 
 		tdb(tb($tag_name));
@@ -2931,7 +2931,7 @@ begin tag builder functions
 				, 2)
 			).
 
-			n.endTable()
+			endTable()
 		).
 
 		tdb(tb($tag_name));
@@ -2952,7 +2952,7 @@ begin tag builder functions
 				, 2)
 			).
 
-			n.endTable()
+			endTable()
 		).
 
 		tdb(tb($tag_name));
@@ -2973,7 +2973,7 @@ begin tag builder functions
 				, 2)
 			).
 
-			n.endTable()
+			endTable()
 		).
 
 		tdb(tb($tag_name));
@@ -2994,7 +2994,7 @@ begin tag builder functions
 				, 2)
 			).
 
-			n.endTable()
+			endTable()
 		).
 
 		tdb(tb($tag_name));
@@ -3184,7 +3184,7 @@ begin tag builder functions
 				, 2)
 			).
 
-			n.endTable()
+			endTable()
 		).
 
 		tdb(tb($tag_name));
@@ -3244,7 +3244,7 @@ begin tag builder functions
 				, 2)
 			).
 
-			n.endTable()
+			endTable()
 		).
 
 		tdb(tb($tag_name));
@@ -3308,7 +3308,7 @@ begin tag builder functions
 				, 2)
 			).
 
-			n.endTable()
+			endTable()
 		).
 
 		tdb(tb($tag_name));
@@ -3841,7 +3841,7 @@ begin tag builder functions
 				, 2)
 			).
 
-			n.endTable()
+			endTable()
 		).
 
 		tdb(tb($tag_name));
@@ -3862,7 +3862,7 @@ begin tag builder functions
 				, 2)
 			).
 
-			n.endTable()
+			endTable()
 		).
 
 		tdb(tb($tag_name));

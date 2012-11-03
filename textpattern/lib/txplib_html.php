@@ -70,7 +70,7 @@
 
 	function column_multi_head($head_items, $class = '')
 	{
-		$o = n.t.'<th scope="col"'.($class ? ' class="'.$class.'"' : '').'>';
+		$o = n.'<th scope="col"'.($class ? ' class="'.$class.'"' : '').'>';
 		$first_item = true;
 		foreach ($head_items as $item)
 		{
@@ -128,7 +128,7 @@
 	function hCell($text = '', $caption = '', $atts = '')
 	{
 		$text = ('' === $text) ? sp : $text;
-		return tag($text, 'th', $atts);
+		return n.tag($text, 'th', $atts);
 	}
 
 /**
@@ -516,7 +516,7 @@
 			'width' => (int) $w,
 		));
 
-		return '<table'.$atts.'>'.n;
+		return n.'<table'.$atts.'>';
 	}
 
 /**
@@ -527,7 +527,7 @@
 
 	function endTable()
 	{
-		return n.'</table>'.n;
+		return n.'</table>';
 	}
 
 /**
@@ -582,7 +582,7 @@
 	function tda($content, $atts = '')
 	{
 		$content = ($content === '') ? sp : $content;
-		return tag($content, 'td', $atts);
+		return n.tag($content, 'td', $atts);
 	}
 
 /**
@@ -612,7 +612,7 @@
 
 	function tr($content, $atts = '')
 	{
-		return tag($content, 'tr', $atts);
+		return n.tag($content, 'tr', $atts);
 	}
 
 /**
@@ -767,7 +767,7 @@
 
 	function graf($item, $atts = '')
 	{
-		return tag($item, 'p', $atts);
+		return n.tag($item, 'p', $atts);
 	}
 
 /**
@@ -783,7 +783,7 @@
 
 	function hed($item, $level, $atts = '')
 	{
-		return tag($item, 'h'.$level, $atts);
+		return n.tag($item, 'h'.$level, $atts);
 	}
 
 /**
@@ -1053,7 +1053,7 @@
 
 				if (isset($option['html']))
 				{
-					$html[$value] = '<div class="multi-option multi-option-'.txpspecialchars($value).'">'.$option['html'].'</div>';
+					$html[$value] = n.'<div class="multi-option multi-option-'.txpspecialchars($value).'">'.$option['html'].'</div>';
 				}
 			}
 			else
@@ -1062,15 +1062,15 @@
 			}
 		}
 
-		return '<div class="multi-edit">'.
-			n.selectInput('edit_method', $methods, '').
-			n.eInput($event).
-			n.sInput($step).
-			n.hInput('page', $page).
-			($sort ? n.hInput('sort', $sort).n.hInput('dir', $dir) : '' ).
-			($crit !== '' ? n.hInput('crit', $crit).n.hInput('search_method', $search_method) : '').
-			n.implode('', $html).
-			n.fInput('submit', '', gTxt('go')).
+		return n.'<div class="multi-edit">'.
+			selectInput('edit_method', $methods, '').
+			eInput($event).
+			sInput($step).
+			hInput('page', $page).
+			($sort ? hInput('sort', $sort).hInput('dir', $dir) : '' ).
+			($crit !== '' ? hInput('crit', $crit).hInput('search_method', $search_method) : '').
+			implode('', $html).
+			fInput('submit', '', gTxt('go')).
 			n.'</div>';
 	}
 
@@ -1131,26 +1131,26 @@
 
 		$argv = func_get_args();
 		return pluggable_ui($event.'_ui', 'upload_form',
-			n.n.'<form'.$class.' method="post" enctype="multipart/form-data" action="index.php">'.
+			n.'<form'.$class.' method="post" enctype="multipart/form-data" action="index.php">'.
 
 			(!empty($max_file_size)? n.hInput('MAX_FILE_SIZE', $max_file_size): '').
-			n.eInput($event).
-			n.sInput($step).
-			n.hInput('id', $id).
+			eInput($event).
+			sInput($step).
+			hInput('id', $id).
 
-			n.hInput('sort', $sort).
-			n.hInput('dir', $dir).
-			n.hInput('page', $page).
-			n.hInput('search_method', $search_method).
-			n.hInput('crit', $crit).
+			hInput('sort', $sort).
+			hInput('dir', $dir).
+			hInput('page', $page).
+			hInput('search_method', $search_method).
+			hInput('crit', $crit).
 
-			n.graf(
+			graf(
 				(($label) ? '<label for="'.$label_id.'">'.$label.'</label>' : '').(($pophelp) ? sp.popHelp($pophelp) : '').n.
 					fInput('file', 'thefile', '', '', '', '', '', '', $label_id).n.
 					fInput('submit', '', gTxt('upload'))
 			, ' class="'.$p_class.'"').
 
-			n.tInput().
+			tInput().
 			n.'</form>',
 			$argv);
 	}

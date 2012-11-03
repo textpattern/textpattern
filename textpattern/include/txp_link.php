@@ -134,8 +134,8 @@
 
 		$total = getCount('txp_link', $criteria);
 
-		echo '<h1 class="txp-heading">'.gTxt('tab_link').'</h1>';
-		echo '<div id="'.$event.'_control" class="txp-control-panel">';
+		echo n.'<h1 class="txp-heading">'.gTxt('tab_link').'</h1>';
+		echo n.'<div id="'.$event.'_control" class="txp-control-panel">';
 		if (has_privs('link.edit'))
 		{
 			echo graf(
@@ -147,13 +147,13 @@
 		{
 			if ($criteria != 1)
 			{
-				echo n.link_search_form($crit, $search_method).
-					n.graf(gTxt('no_results_found'), ' class="indicator"').'</div>';
+				echo link_search_form($crit, $search_method).
+					graf(gTxt('no_results_found'), ' class="indicator"').'</div>';
 			}
 
 			else
 			{
-				echo n.graf(gTxt('no_links_recorded'), ' class="indicator"').'</div>';
+				echo graf(gTxt('no_links_recorded'), ' class="indicator"').'</div>';
 			}
 
 			return;
@@ -175,10 +175,10 @@
 			echo n.'<form action="index.php" id="links_form" class="multi_edit_form" method="post" name="longform">',
 
 				n.'<div class="txp-listtables">'.
-				n.startTable('', '', 'txp-list').
-				'<thead>'.
-				n.tr(
-					n.hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
+				startTable('', '', 'txp-list').
+				n.'<thead>'.
+				tr(
+					hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
 					column_head('ID', 'id', 'link', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id').
 					column_head('link_name', 'name', 'link', true, $switch_dir, $crit, $search_method, (('name' == $sort) ? "$dir " : '').'name').
 					column_head('description', 'description', 'link', true, $switch_dir, $crit, $search_method, (('description' == $sort) ? "$dir " : '').'links_detail description').
@@ -206,32 +206,32 @@
 				$can_edit = has_privs('link.edit') || ($link_author == $txp_user && has_privs('link.edit.own'));
 				$view_url = txpspecialchars($link_url);
 
-				echo n.tr(
-					n.td(
+				echo tr(
+					td(
 						fInput('checkbox', 'selected[]', $link_id)
 					, '', 'multi-edit').
 
-					n.hCell(
+					hCell(
 						($can_edit ? href($link_id, $edit_url, ' title="'.gTxt('edit').'"') : $link_id)
 					, '', ' scope="row" class="id"').
 
-					n.td(
+					td(
 						($can_edit ? href(txpspecialchars($link_linkname), $edit_url, ' title="'.gTxt('edit').'"') : txpspecialchars($link_linkname))
 					, '', 'name').
 
-					n.td(
+					td(
 						txpspecialchars($link_description)
 					, '', 'links_detail description').
 
-					n.td(
+					td(
 						'<span title="'.txpspecialchars(fetch_category_title($link_category, 'link')).'">'.$link_category.'</span>'
 					, '', 'category'.$vc).
 
-					n.td(
+					td(
 						'<a rel="external" target="_blank" href="'.$view_url.'">'.$view_url.'</a>'
 					, '', 'url').
 
-					n.td(
+					td(
 						gTime($link_uDate)
 					, '', 'links_detail date created').
 
@@ -244,16 +244,16 @@
 			echo n.'</tbody>'.
 				endTable().
 				'</div>'.
-				n.link_multiedit_form($page, $sort, $dir, $crit, $search_method).
-				n.tInput().
+				link_multiedit_form($page, $sort, $dir, $crit, $search_method).
+				tInput().
 				n.'</form>'.
-				n.graf(
+				graf(
 					toggle_box('links_detail'),
 					' class="detail-toggle"'
 				).
 				n.'<div id="'.$event.'_navigation" class="txp-navigation">'.
-				n.nav_form('link', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
-				n.pageby_form('link', $link_list_pageby).
+				nav_form('link', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
+				pageby_form('link', $link_list_pageby).
 				n.'</div>'.
 				n.'</div>';
 		}
@@ -311,19 +311,19 @@
 
 			echo form(
 				n.'<section class="txp-edit">'.
-				n.hed($caption, 2).
-				n.inputLabel('linkname', fInput('text', 'linkname', $linkname, '', '', '', INPUT_REGULAR, '', 'linkname'), 'title').
-				n.inputLabel('linksort', fInput('text', 'linksort', $linksort, '', '', '', INPUT_REGULAR, '', 'linksort'), 'sort_value', 'link_sort').
-				n.inputLabel('url', fInput('text', 'url', $url, '', '', '', INPUT_REGULAR, '', 'url'), 'url', 'link_url', 'edit-link-url'). /* TODO: maybe use type = 'url' once browsers are less strict */
-				n.inputLabel('link_category', linkcategory_popup($category).' <span role="presentation">[</span>'.eLink('category', 'list', '', '', gTxt('edit')).'<span role="presentation">]</span>', 'link_category', 'link_category').
-				n.inputLabel('link_description', '<textarea id="link_description" name="description" cols="'.INPUT_LARGE.'" rows="'.INPUT_SMALL.'">'.txpspecialchars($description).'</textarea>', 'description', 'link_description', '', '').
-				n.pluggable_ui('link_ui', 'extend_detail_form', '', $rs).
+				hed($caption, 2).
+				inputLabel('linkname', fInput('text', 'linkname', $linkname, '', '', '', INPUT_REGULAR, '', 'linkname'), 'title').
+				inputLabel('linksort', fInput('text', 'linksort', $linksort, '', '', '', INPUT_REGULAR, '', 'linksort'), 'sort_value', 'link_sort').
+				inputLabel('url', fInput('text', 'url', $url, '', '', '', INPUT_REGULAR, '', 'url'), 'url', 'link_url', 'edit-link-url'). /* TODO: maybe use type = 'url' once browsers are less strict */
+				inputLabel('link_category', linkcategory_popup($category).' <span role="presentation">[</span>'.eLink('category', 'list', '', '', gTxt('edit')).'<span role="presentation">]</span>', 'link_category', 'link_category').
+				inputLabel('link_description', '<textarea id="link_description" name="description" cols="'.INPUT_LARGE.'" rows="'.INPUT_SMALL.'">'.txpspecialchars($description).'</textarea>', 'description', 'link_description', '', '').
+				pluggable_ui('link_ui', 'extend_detail_form', '', $rs).
 				graf(fInput('submit', '', gTxt('save'), 'publish')).
-				n.eInput('link').
-				n.sInput('link_save').
-				n.hInput('id', $id).
-				n.hInput('search_method', gps('search_method')).
-				n.hInput('crit', gps('crit')).
+				eInput('link').
+				sInput('link_save').
+				hInput('id', $id).
+				hInput('search_method', gps('search_method')).
+				hInput('crit', gps('crit')).
 				n.'</section>'
 			, '', '', 'post', 'edit-form', '', 'link_details');
 		};

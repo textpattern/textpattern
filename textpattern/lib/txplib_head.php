@@ -94,11 +94,7 @@
 		script_js('textpattern.js', SCRIPT_URL);
 	gTxtScript(array('form_submission_error', 'are_you_sure', 'cookies_must_be_enabled'));
 	// Mandatory un-themable Textpattern core styles ?>
-	<style>
-		.not-ready .doc-ready, .not-ready form.async input[type="submit"], .not-ready a.async {
-			visibility: hidden;
-		}
-	</style>
+	<style>.not-ready .doc-ready, .not-ready form.async input[type="submit"], .not-ready a.async { visibility: hidden; }</style>
 	<?php
 	echo $theme->html_head();
 	callback_event('admin_side', 'head_end');
@@ -270,17 +266,17 @@
 
 			if (count($b) > 0)
 			{
-				$out[] = n.t.'<optgroup label="'.gTxt('tab_'.$a).'">';
+				$out[] = n.'<optgroup label="'.gTxt('tab_'.$a).'">';
 
 				foreach ($b as $c => $d)
 				{
 					if (has_privs($d))
 					{
-						$out[] = n.t.t.'<option value="'.$d.'">'.$c.'</option>';
+						$out[] = n.'<option value="'.$d.'">'.$c.'</option>';
 					}
 				}
 
-				$out[] = n.t.'</optgroup>';
+				$out[] = n.'</optgroup>';
 			}
 		}
 
@@ -288,7 +284,7 @@
 		{
 			return '<form method="get" action="index.php" class="navpop">'.
 				n.'<select name="event" onchange="submit(this.form);">'.
-				n.t.'<option>'.gTxt('go').'&#8230;</option>'.
+				n.'<option>'.gTxt('go').'&#8230;</option>'.
 				join('', $out).
 				n.'</select>'.
 				n.'</form>';

@@ -64,8 +64,8 @@
 		if ($dir === '') $dir = get_pref('image_sort_dir', 'desc');
 		$dir = ($dir == 'asc') ? 'asc' : 'desc';
 
-		echo '<h1 class="txp-heading">'.gTxt('tab_image').'</h1>';
-		echo '<div id="'.$event.'_control" class="txp-control-panel">';
+		echo n.'<h1 class="txp-heading">'.gTxt('tab_image').'</h1>';
+		echo n.'<div id="'.$event.'_control" class="txp-control-panel">';
 
 		if (!is_dir(IMPATH) or !is_writeable(IMPATH))
 		{
@@ -524,22 +524,22 @@
 						'thumbnail_create_group',
 						form(
 							graf(
-								'<label for="width">'.gTxt('thumb_width').'</label>'.n.
-								fInput('text', 'width', @$thumb_w, 'input-xsmall', '', '', INPUT_XSMALL, '', 'width').n.
-								'<label for="height">'.gTxt('thumb_height').'</label>'.n.
-								fInput('text', 'height', @$thumb_h, 'input-xsmall', '', '', INPUT_XSMALL, '', 'height').n.
-								'<label for="crop">'.gTxt('keep_square_pixels').'</label>'.n.
-								checkbox('crop', 1, @$prefs['thumb_crop'], '', 'crop').n.
+								n.'<label for="width">'.gTxt('thumb_width').'</label>'.
+								fInput('text', 'width', @$thumb_w, 'input-xsmall', '', '', INPUT_XSMALL, '', 'width').
+								n.'<label for="height">'.gTxt('thumb_height').'</label>'.
+								fInput('text', 'height', @$thumb_h, 'input-xsmall', '', '', INPUT_XSMALL, '', 'height').
+								n.'<label for="crop">'.gTxt('keep_square_pixels').'</label>'.
+								checkbox('crop', 1, @$prefs['thumb_crop'], '', 'crop').
 								fInput('submit', '', gTxt('Create'))
-							, ' class="edit-alter-thumbnail"').n.
-							n.hInput('id', $id).n.
-							n.eInput('image').n.
-							n.sInput('thumbnail_create').n.
-							n.hInput('sort', $sort).n.
-							n.hInput('dir', $dir).n.
-							n.hInput('page', $page).n.
-							n.hInput('search_method', $search_method).n.
-							n.hInput('crit', $crit)
+							, ' class="edit-alter-thumbnail"').
+							hInput('id', $id).
+							eInput('image').
+							sInput('thumbnail_create').
+							hInput('sort', $sort).
+							hInput('dir', $dir).
+							hInput('page', $page).
+							hInput('search_method', $search_method).n.
+							hInput('crit', $crit)
 						, '', '', 'post', 'edit-form', '', 'thumbnail_alter_form'),
 						'create_thumbnail',
 						'thumbnail-alter',
@@ -551,20 +551,20 @@
 
 				'<div class="image-detail">',
 					form(
-						inputLabel('image_name', fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'image_name'), 'image_name').n.
-						inputLabel('image_category', treeSelectInput('category', $all_image_cats, $category, 'image_category'), 'image_category').n.
-						inputLabel('image_alt_text', fInput('text', 'alt', $alt, '', '', '', INPUT_REGULAR, '', 'image_alt_text'), 'alt_text').n.
-						inputLabel('image_caption', '<textarea id="image_caption" name="caption" rows="'.INPUT_XSMALL.'" cols="'.INPUT_LARGE.'">'.$caption.'</textarea>', 'caption', '', '', '').n.
-						pluggable_ui('image_ui', 'extend_detail_form', '', $rs).n.
+						inputLabel('image_name', fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'image_name'), 'image_name').
+						inputLabel('image_category', treeSelectInput('category', $all_image_cats, $category, 'image_category'), 'image_category').
+						inputLabel('image_alt_text', fInput('text', 'alt', $alt, '', '', '', INPUT_REGULAR, '', 'image_alt_text'), 'alt_text').
+						inputLabel('image_caption', '<textarea id="image_caption" name="caption" rows="'.INPUT_XSMALL.'" cols="'.INPUT_LARGE.'">'.$caption.'</textarea>', 'caption', '', '', '').
+						pluggable_ui('image_ui', 'extend_detail_form', '', $rs).
 						graf(fInput('submit', '', gTxt('save'), 'publish')).
-						n.hInput('id', $id).
-						n.eInput('image').
-						n.sInput('image_save').
-						n.hInput('sort', $sort).
-						n.hInput('dir', $dir).
-						n.hInput('page', $page).
-						n.hInput('search_method', $search_method).
-						n.hInput('crit', $crit)
+						hInput('id', $id).
+						eInput('image').
+						sInput('image_save').
+						hInput('sort', $sort).
+						hInput('dir', $dir).
+						hInput('page', $page).
+						hInput('search_method', $search_method).
+						hInput('crit', $crit)
 					, '', '', 'post', 'edit-form', '', 'image_details_form'),
 				'</div>',
 			'</section>'.n.'</div>';
