@@ -93,7 +93,9 @@
 	gTxtScript(array('form_submission_error', 'are_you_sure', 'cookies_must_be_enabled'));
 	// Mandatory un-themable Textpattern core styles ?>
 <style>
-.not-ready .doc-ready, .not-ready form.async input[type="submit"], .not-ready a.async { visibility: hidden; }
+	.not-ready .doc-ready, .not-ready form.async input[type="submit"], .not-ready a.async {
+		visibility: hidden;
+	}
 </style>
 <?php
 echo $theme->html_head();

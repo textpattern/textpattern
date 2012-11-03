@@ -343,21 +343,33 @@ class TextileTextfilter extends Textfilter implements ITextfilter
 	{
 		return
 			n.'<ul class="textile plain-list">'.
-			n.'<li>'.gTxt('header').': <strong>h<em>n</em>.</strong>'.popHelpSubtle('header', 400, 400).'</li>'.
-			n.'<li>'.gTxt('blockquote').': <strong>bq.</strong>'.popHelpSubtle('blockquote',400,400).'</li>'.
-			n.'<li>'.gTxt('numeric_list').': <strong>#</strong>'.popHelpSubtle('numeric', 400, 400).'</li>'.
-			n.'<li>'.gTxt('bulleted_list').': <strong>*</strong>'.popHelpSubtle('bulleted', 400, 400).'</li>'.
-			n.'<li>'.gTxt('definition_list').': <strong>; :</strong>'.popHelpSubtle('definition', 400, 400).'</li>'.
+			n.'<li>'.gTxt('header').': <strong>h<em>n</em>.</strong>'.
+			popHelpSubtle('header', 400, 400).'</li>'.
+			n.'<li>'.gTxt('blockquote').': <strong>bq.</strong>'.
+			popHelpSubtle('blockquote',400,400).'</li>'.
+			n.'<li>'.gTxt('numeric_list').': <strong>#</strong>'.
+			popHelpSubtle('numeric', 400, 400).'</li>'.
+			n.'<li>'.gTxt('bulleted_list').': <strong>*</strong>'.
+			popHelpSubtle('bulleted', 400, 400).'</li>'.
+			n.'<li>'.gTxt('definition_list').': <strong>; :</strong>'.
+			popHelpSubtle('definition', 400, 400).'</li>'.
 			n.'</ul>'.
 
 			n.'<ul class="textile plain-list">'.
-			n.'<li>'.'_<em>'.gTxt('emphasis').'</em>_'.popHelpSubtle('italic', 400, 400).'</li>'.
-			n.'<li>'.'*<strong>'.gTxt('strong').'</strong>*'.popHelpSubtle('bold', 400, 400).'</li>'.
-			n.'<li>'.'??<cite>'.gTxt('citation').'</cite>??'.popHelpSubtle('cite', 500, 300).'</li>'.
-			n.'<li>'.'-'.gTxt('deleted_text').'-'.popHelpSubtle('delete', 400, 300).'</li>'.
-			n.'<li>'.'+'.gTxt('inserted_text').'+'.popHelpSubtle('insert', 400, 300).'</li>'.
-			n.'<li>'.'^'.gTxt('superscript').'^'.popHelpSubtle('super', 400, 300).'</li>'.
-			n.'<li>'.'~'.gTxt('subscript').'~'.popHelpSubtle('subscript', 400, 400).'</li>'.
+			n.'<li>'.'_<em>'.gTxt('emphasis').'</em>_'.
+			popHelpSubtle('italic', 400, 400).'</li>'.
+			n.'<li>'.'*<strong>'.gTxt('strong').'</strong>*'.
+			popHelpSubtle('bold', 400, 400).'</li>'.
+			n.'<li>'.'??<cite>'.gTxt('citation').'</cite>??'.
+			popHelpSubtle('cite', 500, 300).'</li>'.
+			n.'<li>'.'-'.gTxt('deleted_text').'-'.
+			popHelpSubtle('delete', 400, 300).'</li>'.
+			n.'<li>'.'+'.gTxt('inserted_text').'+'.
+			popHelpSubtle('insert', 400, 300).'</li>'.
+			n.'<li>'.'^'.gTxt('superscript').'^'.
+			popHelpSubtle('super', 400, 300).'</li>'.
+			n.'<li>'.'~'.gTxt('subscript').'~'.
+			popHelpSubtle('subscript', 400, 400).'</li>'.
 			n.'</ul>'.
 
 			graf(
