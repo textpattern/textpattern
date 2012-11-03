@@ -256,7 +256,7 @@
 /**
  * Calls a core or custom function to render a preference input widget.
  *
- * @param  string $func Function name to call
+ * @param  string $func Callable in a string presentation
  * @param  string $name HTML name/id of the input control
  * @param  string $val  Initial (or current) value of the input control
  * @param  int    $size Size of the input control (width or depth, dependent on control)
@@ -265,7 +265,15 @@
 
 	function pref_func($func, $name, $val, $size = '')
 	{
-		$func = (is_callable('pref_'.$func) ? 'pref_'.$func : (is_callable($func) ? $func : 'text_input'));
+		if ($func != 'func' && is_callable('pref_'.$func))
+		{
+			$func = 'pref_'.$func;
+		}
+		else if (($func = string_tocallback($func)) === false)
+		{
+			$func = 'text_input';
+		}
+
 		return call_user_func($func, $name, $val, $size);
 	}
 
