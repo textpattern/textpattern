@@ -1870,20 +1870,6 @@ body#page-setup {
 #content_switcher {
   margin-left: 1em;
 }
-#supporting_content > div,
-#content_switcher > div {
-  margin-bottom: 1em;
-}
-#supporting_content .action-create,
-#content_switcher .action-create {
-  margin-top: 0;
-}
-
-#supporting_content > div {
-  border: 1px solid #e3e3e3;
-  border-top: 0;
-  background: #f7f7f7;
-}
 
 #dates .date .label,
 #dates .time .label {
@@ -2148,7 +2134,7 @@ div.code {
   }
 
   #article-tabs {
-    padding: 0 0 1em 0;
+    padding: 0;
     height: 1.84615384615385em;
   }
 
