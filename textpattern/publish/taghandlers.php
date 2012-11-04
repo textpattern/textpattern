@@ -3509,9 +3509,9 @@
 /**
  * Renders a label.
  *
- * Is used to mostly used for rendering headings.
- * If no $labeltag is given, separates the label
- * from the content with &lt;br&gt;.
+ * This function is mostly used for rendering headings.
+ * If no $labeltag is given, label is separated from the
+ * content with a &lt;br&gt;.
  *
  * @param   string $label    The label
  * @param   string $labeltag The HTML element
