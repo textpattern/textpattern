@@ -758,7 +758,7 @@
 
 	function tag_void($tag, $atts = '')
 	{
-		return '<'.$tag.join_atts($atts).'>';
+		return '<'.$tag.join_atts($atts).' />';
 	}
 
 /**
