@@ -844,15 +844,21 @@
 /**
  * Renders a &lt;pre&gt; element.
  *
- * @param  string $item The input string
+ * @param  string       $item The input string
+ * @param  string|array $atts HTML attributes
  * @return string HTML
  * @example
  * echo htmlPre('&lt;?php echo "Hello World"; ?&gt;');
  */
 
-	function htmlPre($item)
+	function htmlPre($item, $atts = '')
 	{
-		return '<pre>'.tag($item, 'code').'</pre>';
+		if (($item = tag($item, 'code')) === '')
+		{
+			$item = null;
+		}
+
+		return tag($item, 'pre', $atts);
 	}
 
 /**
