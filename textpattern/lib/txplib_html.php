@@ -143,8 +143,15 @@
 
 	function sLink($event, $step, $linktext, $class = '')
 	{
-		$c = ($class) ? ' class="'.$class.'"' : '';
-		return '<a href="?event='.$event.a.'step='.$step.'"'.$c.'>'.$linktext.'</a>';
+		if ($linktext === '')
+		{
+			$linktext = null;
+		}
+
+		return href($linktext, array(
+			'event' => $event,
+			'step' => $step,
+		), array('class' => $class));
 	}
 
 /**
