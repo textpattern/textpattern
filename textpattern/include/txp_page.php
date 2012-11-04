@@ -152,8 +152,8 @@
 		if (empty($name))
 		{
 			$buttons = '<p class="edit-title">'.
-			gTxt('name_for_this_page').': '
-			.fInput('text', 'newname', '', '', '', '', INPUT_REGULAR).
+			gTxt('name_for_this_page').
+			fInput('text', 'newname', '', '', '', '', INPUT_REGULAR).
 			hInput('savenew', 'savenew').
 			'</p>';
 		}
