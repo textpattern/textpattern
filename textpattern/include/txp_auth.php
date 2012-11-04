@@ -170,8 +170,8 @@ Use of this software indicates acceptance of the Textpattern license agreement
 
 		echo n.'<div id="login_container" class="txp-container">';
 		echo form(
-			n.'<div class="txp-login">'.
-			n.hed(gTxt($reset ? 'password_reset' : 'login_to_textpattern'), 2).
+			n.'<section role="region" class="txp-login" aria-labelledby="txp-login-heading">'.
+			n.hed(gTxt($reset ? 'password_reset' : 'login_to_textpattern'), 2, ' id="txp-login-heading"').
 
 			graf(
 				n.'<span class="login-label"><label for="login_name">'.gTxt('name').'</label></span>'.
@@ -205,7 +205,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
 				)
 			).
 			(gps('event') ? eInput(gps('event')) : '').
-			n.'</div>'
+			n.'</section>'
 		, '', '', 'post', '', '', 'login_form').'</div>'.
 
 		// Focus on either username or password when empty.
