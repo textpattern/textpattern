@@ -151,15 +151,15 @@
 
 		if (empty($name))
 		{
-			$buttons = '<div class="edit-title">'.
+			$buttons = '<p class="edit-title">'.
 			gTxt('name_for_this_page').': '
 			.fInput('text', 'newname', '', '', '', '', INPUT_REGULAR).
 			hInput('savenew', 'savenew').
-			'</div>';
+			'</p>';
 		}
 		else
 		{
-			$buttons = '<div class="edit-title">'.gTxt('you_are_editing_page').sp.strong(txpspecialchars($name)).'</div>';
+			$buttons = '<p class="edit-title">'.gTxt('you_are_editing_page').sp.strong(txpspecialchars($name)).'</p>';
 		}
 
 		$out[] = '<div id="main_content">'.$buttons.

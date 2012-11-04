@@ -1965,10 +1965,6 @@ body#page-setup {
   width: 25%;
 }
 
-.edit-title {
-  margin: .30769230769231em 0 1em;
-}
-
 #page-page textarea.code,
 #page-form textarea.code,
 #page-css textarea.code {

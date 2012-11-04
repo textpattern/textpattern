@@ -284,7 +284,7 @@ EOS
 				tdtl(
 					'<form action="index.php" method="post" id="form_form">'.
 						'<div id="main_content">'.
-						'<div class="edit-title">'.gTxt('you_are_editing_form').sp.strong(($name) ? $name : gTxt('untitled')).'</div>'.
+						'<p class="edit-title">'.gTxt('you_are_editing_form').sp.strong(($name) ? $name : gTxt('untitled')).'</p>'.
 						'<textarea id="form" class="code" name="Form" cols="'.INPUT_LARGE.'" rows="'.INPUT_REGULAR.'">'.txpspecialchars($Form).'</textarea>'.
 
 					$changename.

@@ -102,15 +102,15 @@
 
 		if (empty($name))
 		{
-			$buttons = '<div class="edit-title">'.
+			$buttons = '<p class="edit-title">'.
 			gTxt('name_for_this_style').': '
 			.fInput('text','newname','','','','',INPUT_REGULAR).
 			hInput('savenew','savenew').
-			'</div>';
+			'</p>';
 			$thecss = gps('css');
 
 		} else {
-			$buttons = '<div class="edit-title">'.gTxt('you_are_editing_css').sp.strong(txpspecialchars($name)).'</div>';
+			$buttons = '<p class="edit-title">'.gTxt('you_are_editing_css').sp.strong(txpspecialchars($name)).'</p>';
 			$thecss = fetch("css",'txp_css','name',$name);
 		}
 

@@ -1437,10 +1437,6 @@ td.column:last-child {
 	min-width: 162px;
 }
 
-.edit-title {
-	margin-bottom: 1em;
-}
-
 textarea#html,
 textarea#css,
 textarea#form {
