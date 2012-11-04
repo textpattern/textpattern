@@ -494,7 +494,7 @@ a:hover .content-image {
   border: 1px solid #e3e3e3;
   border-top: 0;
   background: #f7f7f7;
-  margin-bottom: 1em;
+  margin: 1em 0;
 }
 
 h3.txp-summary,
@@ -651,7 +651,7 @@ h3.txp-summary.expanded a:after {
    ========================================================================== */
 /* define consistent fieldset margin, border and padding */
 fieldset {
-  margin: 0 0 1em 0;
+  margin: 1em 0;
   border: 1px solid #ccc;
   padding: 1px 1em;
 }
@@ -1785,7 +1785,6 @@ body#page-setup {
 
 #view_modes ul {
   list-style: none;
-  margin: 0;
   padding: 0;
 }
 #view_modes .text {
@@ -1860,10 +1859,6 @@ body#page-setup {
 }
 #article-main .author {
   color: #999999;
-}
-
-#main_content > div:first-of-type > p:first-of-type {
-  margin-top: 0;
 }
 
 #configuration_content,
