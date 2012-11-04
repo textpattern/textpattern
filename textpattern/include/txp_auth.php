@@ -170,7 +170,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
 
 		echo form(
 			n.'<section role="region" class="txp-login" aria-labelledby="txp-login-heading">'.
-			n.hed(gTxt($reset ? 'password_reset' : 'login_to_textpattern'), 2, ' id="txp-login-heading"').
+			hed(gTxt($reset ? 'password_reset' : 'login_to_textpattern'), 2, ' id="txp-login-heading"').
 
 			graf(
 				n.'<span class="login-label"><label for="login_name">'.gTxt('name').'</label></span>'.

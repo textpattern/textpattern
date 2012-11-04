@@ -565,8 +565,8 @@
 					, '', ' scope="row" class="date banned"').
 
 					td(
-						txpspecialchars($ip).n.
-						'<span role="presentation">[</span><a class="action-ban" href="?event=discuss'.a.'step=ipban_unban'.a.'ip='.txpspecialchars($ip).a.'_txp_token='.form_token().'">'.gTxt('unban').'</a><span role="presentation">]</span>'
+						txpspecialchars($ip).
+						n.'<span role="presentation">[</span><a class="action-ban" href="?event=discuss'.a.'step=ipban_unban'.a.'ip='.txpspecialchars($ip).a.'_txp_token='.form_token().'">'.gTxt('unban').'</a><span role="presentation">]</span>'
 					, '', 'ip').
 
 					td(

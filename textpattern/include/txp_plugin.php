@@ -273,11 +273,11 @@ EOS
 
 		return
 			form(
-				hed(gTxt('edit_plugin', array('{name}' => $name)), 2).n.
-				graf('<textarea id="plugin_code" name="code" class="code" cols="'.INPUT_XLARGE.'" rows="'.INPUT_REGULAR.'">'.txpspecialchars($thing).'</textarea>', ' class="edit-plugin-code"').n.
-				graf(fInput('submit', '', gTxt('Save'), 'publish')).n.
-				eInput('plugin').n.
-				sInput('plugin_save').n.
+				hed(gTxt('edit_plugin', array('{name}' => $name)), 2).
+				graf('<textarea id="plugin_code" name="code" class="code" cols="'.INPUT_XLARGE.'" rows="'.INPUT_REGULAR.'">'.txpspecialchars($thing).'</textarea>', ' class="edit-plugin-code"').
+				graf(fInput('submit', '', gTxt('Save'), 'publish')).
+				eInput('plugin').
+				sInput('plugin_save').
 				hInput('name',$name)
 			, '', '', 'post', 'edit-form', '', 'plugin_details');
 	}
@@ -550,10 +550,10 @@ EOS
 
 	function plugin_form()
 	{
-		return n.n.form(
+		return form(
 			'<p>'.
-			tag(gTxt('install_plugin'), 'label', ' for="plugin-install"').popHelp('install_plugin').n.
-			'<textarea id="plugin-install" class="code" name="plugin" cols="'.INPUT_LARGE.'" rows="'.INPUT_TINY.'"></textarea>'.n.
+			tag(gTxt('install_plugin'), 'label', ' for="plugin-install"').popHelp('install_plugin').
+			'<textarea id="plugin-install" class="code" name="plugin" cols="'.INPUT_LARGE.'" rows="'.INPUT_TINY.'"></textarea>'.
 			fInput('submit', 'install_new', gTxt('upload')).
 			eInput('plugin').
 			sInput('plugin_verify').

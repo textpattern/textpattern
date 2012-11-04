@@ -401,10 +401,10 @@
 			}
 
 			$out[] = form(
-				n.eInput($event).
-				n.sInput($step).
+				eInput($event).
+				sInput($step).
 				($sort ? n.hInput('sort', $sort).n.hInput('dir', $dir) : '' ).
-				(($crit != '') ? n.hInput('crit', $crit).n.hInput('search_method', $search_method) : '').
+				(($crit != '') ? n.hInput('crit', $crit).hInput('search_method', $search_method) : '').
 				graf(join('', $nav), array('class' => 'prev-next')), '', '', 'get', 'nav-form');
 		}
 		else
@@ -789,7 +789,7 @@
 
 	function hed($item, $level, $atts = '')
 	{
-		return tag($item, 'h'.$level, $atts);
+		return n.tag($item, 'h'.$level, $atts);
 	}
 
 /**
@@ -1157,8 +1157,8 @@
 			hInput('crit', $crit).
 
 			graf(
-				(($label) ? '<label for="'.$label_id.'">'.$label.'</label>' : '').(($pophelp) ? popHelp($pophelp) : '').n.
-					fInput('file', 'thefile', '', '', '', '', '', '', $label_id).n.
+				(($label) ? '<label for="'.$label_id.'">'.$label.'</label>' : '').(($pophelp) ? popHelp($pophelp) : '').
+					fInput('file', 'thefile', '', '', '', '', '', '', $label_id).
 					fInput('submit', '', gTxt('upload'))
 			, ' class="'.$p_class.'"').
 
@@ -1183,14 +1183,14 @@
 	{
 		$method = ($method) ? $method : $default_method;
 
-		return n.n.form(
+		return form(
 			graf(
 				'<label for="'.$event.'-search">'.gTxt('search').'</label>'.
-				n.selectInput('search_method', $methods, $method, '', '', $event.'-search').
-				n.fInput('text', 'crit', $crit, 'input-medium', '', '', INPUT_MEDIUM).
-				n.eInput($event).
-				n.sInput($step).
-				n.fInput('submit', 'search', gTxt('go'))
+				selectInput('search_method', $methods, $method, '', '', $event.'-search').
+				fInput('text', 'crit', $crit, 'input-medium', '', '', INPUT_MEDIUM).
+				eInput($event).
+				sInput($step).
+				fInput('submit', 'search', gTxt('go'))
 			)
 		, '', '', 'get', 'search-form');
 	}
@@ -1329,7 +1329,7 @@ EOF;
 		if ($form)
 		{
 			$args = empty($_SERVER['QUERY_STRING']) ? '' : '?'.txpspecialchars($_SERVER['QUERY_STRING']);
-			return '<form class="'.$name.'" method="post" action="index.php'.$args.'">'.$i.eInput(gps('event')).n.tInput().'</form>';
+			return '<form class="'.$name.'" method="post" action="index.php'.$args.'">'.$i.eInput(gps('event')).tInput().'</form>';
 		}
 		else
 		{

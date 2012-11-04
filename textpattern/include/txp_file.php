@@ -555,7 +555,7 @@
 						hInput('filename', $filename)
 					: (empty($existing_files)
 							? ''
-							: gTxt('existing_file').n.selectInput('filename', $existing_files, '', 1)
+							: gTxt('existing_file').selectInput('filename', $existing_files, '', 1)
 						).
 						pluggable_ui('file_ui', 'extend_detail_form', '', $rs).
 						graf(fInput('submit', '', gTxt('Save'), 'publish')).

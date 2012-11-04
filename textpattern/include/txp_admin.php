@@ -521,7 +521,7 @@
 	{
 		$privileges = privs();
 		$rs = safe_column('name', 'txp_users', '1=1');
-		$assign_assets = $rs ? '<label for="assign_assets">'.gTxt('assign_assets_to').'</label>'.n.selectInput('assign_assets', $rs, '', true, '', 'assign_assets') : '';
+		$assign_assets = $rs ? '<label for="assign_assets">'.gTxt('assign_assets_to').'</label>'.selectInput('assign_assets', $rs, '', true, '', 'assign_assets') : '';
 
 		$methods = array(
 			'changeprivilege' => array('label' => gTxt('changeprivilege'), 'html' => $privileges),

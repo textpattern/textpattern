@@ -111,7 +111,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
 				form(
 					graf(
 						gTxt('active_language').
-						languages('language',$active_lang).n.
+						languages('language',$active_lang).
 						fInput('submit','Submit',gTxt('save'),'publish').
 						eInput('lang').sInput('list_languages')
 					)

@@ -782,12 +782,12 @@ if (!empty($event) and $event == 'article') {
 
 		if ($view == 'preview')
 		{
-			echo n.'<div class="preview">'.n.hed(gTxt('preview'), 2).n.hed($Title, 1, ' class="title"');
+			echo n.'<div class="preview">'.hed(gTxt('preview'), 2).hed($Title, 1, ' class="title"');
 		}
 
 		elseif ($view == 'html')
 		{
-			echo n.'<div class="html">'.n.hed('HTML', 2).n.hed($Title, 1, ' class="title"');
+			echo n.'<div class="html">'.hed('HTML', 2).hed($Title, 1, ' class="title"');
 		}
 
 		elseif ($view == 'text')
@@ -1655,7 +1655,7 @@ EOS
 
 			if ($comments_expired)
 			{
-				$invite = n.n.graf(gTxt('expired'), ' class="comment-annotate" id="write-comments"');
+				$invite = graf(gTxt('expired'), ' class="comment-annotate" id="write-comments"');
 			}
 			else
 			{

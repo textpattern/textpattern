@@ -89,7 +89,7 @@ eod;
 	{
 		echo n.'<div id="setup_container" class="txp-container">',
 			n.'<div class="txp-setup">',
-			n.hed('Welcome to Textpattern',1),
+			hed('Welcome to Textpattern',1),
 			n.'<form action="'.$_SERVER['PHP_SELF'].'" method="post">',
 			n.langs(),
 			graf(fInput('submit','Submit','Submit','publish')),
@@ -166,8 +166,8 @@ eod;
 		}
 
 		echo '<form action="'.$_SERVER['PHP_SELF'].'" method="post">'.
-			n.hed(setup_gTxt('need_details'),1).
-			n.hed('MySQL',2).
+			hed(setup_gTxt('need_details'),1).
+			hed('MySQL',2).
 			graf(setup_gTxt('db_must_exist')).
 
 			graf(
@@ -195,7 +195,7 @@ eod;
 				n.'<span class="edit-value">'.fInput('text', 'dprefix', '', '', '', '', INPUT_REGULAR, '', 'setup_table_prefix').'</span>'
 			).
 
-			n.hed(setup_gTxt('site_url'),2).
+			hed(setup_gTxt('site_url'),2).
 			graf(setup_gTxt('please_enter_url')).
 			graf(
 				'<span class="edit-label"><label for="setup_site_url">http://</label>'.popHelp('siteurl').'</span>'.
@@ -262,7 +262,7 @@ eod;
 //			exit;
 //		}
 
-		echo n.hed(setup_gTxt("checking_database"), 2);
+		echo hed(setup_gTxt("checking_database"), 2);
 
 		if (($mylink = mysql_connect($dhost, $duser, $dpass)))
 		{
@@ -417,7 +417,7 @@ eod;
 			n.'<div class="txp-setup">';
 
 		echo '<form action="'.$_SERVER['PHP_SELF'].'" method="post">'.
-			n.hed(setup_gTxt('creating_db_tables'),2).
+			hed(setup_gTxt('creating_db_tables'),2).
 			graf(setup_gTxt('about_to_create')).
 
 			graf(
@@ -440,7 +440,7 @@ eod;
 				n.'<span class="edit-value">'.fInput('email', 'email', '', '', '', '', INPUT_REGULAR, '', 'setup_user_email', '', true).'</span>'
 			).
 
-			n.hed(setup_gTxt('site_config'),2).
+			hed(setup_gTxt('site_config'),2).
 
 			graf(
 				'<span class="edit-label"><label for="setup_admin_theme">'.setup_gTxt('admin_theme').'</label>'.popHelp('theme_name').'</span>'.
@@ -604,7 +604,7 @@ eod;
 			$warnings = @find_temp_dir() ? '' : n.graf('<span class="warning">'.setup_gTxt('set_temp_dir_prefs').'</span>');
 			$login_url = $GLOBALS['rel_txpurl'].'/index.php';
 
-			return n.hed(setup_gTxt('that_went_well'),1).
+			return hed(setup_gTxt('that_went_well'),1).
 
 				$warnings.
 
@@ -618,7 +618,7 @@ eod;
 					setup_gTxt('installation_postamble')
 				).
 
-				n.hed(setup_gTxt('thanks_for_interest'), 3).
+				hed(setup_gTxt('thanks_for_interest'), 3).
 
 				graf('<a href="'.$login_url.'" class="navlink publish">'.setup_gTxt('go_to_login').'</a>');
 

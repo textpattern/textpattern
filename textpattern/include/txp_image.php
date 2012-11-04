@@ -538,7 +538,7 @@
 							hInput('sort', $sort).
 							hInput('dir', $dir).
 							hInput('page', $page).
-							hInput('search_method', $search_method).n.
+							hInput('search_method', $search_method).
 							hInput('crit', $crit)
 						, '', '', 'post', 'edit-form', '', 'thumbnail_alter_form'),
 						'create_thumbnail',

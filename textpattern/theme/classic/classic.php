@@ -17,7 +17,7 @@ class classic_theme extends theme
 	{
 		$out[] = '<h1 class="txp-accessibility">'.htmlspecialchars($GLOBALS["prefs"]["sitename"]).'</h1>';
 		$out[] = '<div id="masthead">';
-		$out[] = '<div id="navpop">'.n.navPop(1).n.'</div>';
+		$out[] = '<div id="navpop">'.navPop(1).'</div>';
 		$out[] = '<h1 id="branding">Textpattern</h1>';
 		$out[] = '</div>';
 

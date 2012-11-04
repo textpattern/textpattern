@@ -349,7 +349,7 @@
 
 	function is_dst($name, $val)
 	{
-		$ui = yesnoRadio ($name, $val).n.
+		$ui = yesnoRadio ($name, $val).
 		script_js ("textpattern.timezone_is_supported = ".(int)timezone::is_supported().";").
 		script_js (<<<EOS
 			$(document).ready(function(){

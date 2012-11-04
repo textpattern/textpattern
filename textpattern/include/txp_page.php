@@ -107,7 +107,7 @@
 			tr(
 				tda(
 
-					'<div id="tagbuild_links">'.n.hed(
+					'<div id="tagbuild_links">'.hed(
 						gTxt('tagbuilder')
 					, 2).
 						$tagbuild_links.
@@ -119,11 +119,11 @@
 				, ' class="column"').
 
 				tda(
-					'<div id="content_switcher">'.
+					n.'<div id="content_switcher">'.
 					hed(gTxt('all_pages'), 2).
 					graf(sLink('page', 'page_new', gTxt('create_new_page')), ' class="action-create"').
 					page_list($name).
-					'</div>'
+					n.'</div>'
 				, ' class="column"')
 			).
 			endTable().'</div>';

@@ -77,7 +77,7 @@
 		extract(gpsa($vars));
 		pagetop(gTxt('txp_import'), '');
 		echo n.'<h1 class="txp-heading">'.gTxt('tab_import').'</h1>'.
-			n.script_js(<<<EOF
+			script_js(<<<EOF
 function showHideFields(sel)
 {
 	if(document.getElementById){
