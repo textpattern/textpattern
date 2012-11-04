@@ -168,7 +168,6 @@ Use of this software indicates acceptance of the Textpattern license agreement
 
 		$name = join(',', array_slice(explode(',', cs('txp_login')), 0, -1));
 
-		echo n.'<div id="login_container" class="txp-container">';
 		echo form(
 			n.'<section role="region" class="txp-login" aria-labelledby="txp-login-heading">'.
 			n.hed(gTxt($reset ? 'password_reset' : 'login_to_textpattern'), 2, ' id="txp-login-heading"').
@@ -206,7 +205,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
 			).
 			(gps('event') ? eInput(gps('event')) : '').
 			n.'</section>'
-		, '', '', 'post', '', '', 'login_form').'</div>'.
+		, '', '', 'post', '', '', 'login_form').
 
 		// Focus on either username or password when empty.
 		script_js(<<<EOSCR
