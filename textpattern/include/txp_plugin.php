@@ -248,7 +248,7 @@ EOS
 	}
 
 /**
- * Saves an edited plugin code.
+ * Saves edited plugin code.
  */
 
 	function plugin_save()
@@ -458,8 +458,8 @@ EOS
 					{
 						if (!empty($textpack))
 						{
-							// Plugins tag their textpack by plugin name.
-							// The ownership may be overridden in the textpack itself.
+							// Plugins tag their Textpack by plugin name.
+							// The ownership may be overridden in the Textpack itself.
 							$textpack = "#@owner {$name}".n.$textpack;
 							install_textpack($textpack, false);
 						}
@@ -575,7 +575,7 @@ EOS
 					{
 						$status = safe_field('status', 'txp_plugin', "name ='".doSlash($name)."'");
 						load_plugin($name, true);
-						// NB: won't show returned messages anywhere due to potentially overwhelming verbiage.
+						// Note: won't show returned messages anywhere due to potentially overwhelming verbiage.
 						callback_event("plugin_lifecycle.$name", $status ? 'disabled' : 'enabled');
 					}
 				}
