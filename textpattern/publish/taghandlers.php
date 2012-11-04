@@ -3405,7 +3405,25 @@
 		return '';
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders an array of items as a HTML.
+ *
+ * This function can be used to create a HTML list
+ * markup from an array of items.
+ *
+ * @param   array  $list
+ * @param   string $wraptag    The HTML element
+ * @param   string $break      The HTML break element
+ * @param   string $class      Class applied to the wraptag
+ * @param   string $breakclass Class applied to break tag
+ * @param   string $atts       HTML attributes applied to the wraptag
+ * @param   string $breakatts  HTML attributes applied to the break tag
+ * @param   string $id         HTML id applied to the wraptag
+ * @return  string HTML
+ * @package HTML
+ * @example
+ * echo doWrap(array('item1', 'item2'), 'div', 'p');
+ */
 
 	function doWrap($list, $wraptag, $break, $class = '', $breakclass = '', $atts = '', $breakatts = '', $id = '')
 	{
@@ -3445,7 +3463,22 @@
 			tag(n.join("</$break>".n."<{$break}{$breakatts}>".n, $list).n, $break, $breakatts);
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders anything as a HTML tag.
+ *
+ * If $content is empty, renders a self-closing
+ * tag.
+ *
+ * @param   string $content The wrapped item
+ * @param   string $tag     The HTML tag
+ * @param   string $class   HTML class
+ * @param   string $atts    HTML attributes
+ * @param   string $id      HTML id
+ * @return  string HTML
+ * @package HTML
+ * @example
+ * echo doTag('', 'meta', '', 'name="description" content="Some content"');
+ */
 
 	function doTag($content, $tag, $class = '', $atts = '', $id = '')
 	{
@@ -3467,7 +3500,21 @@
 		return ($content) ? tag($content, $tag, $atts) : "<$tag $atts />";
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders a label.
+ *
+ * Is used to mostly used for rendering headings.
+ * If no $labeltag is given, separates the label
+ * from the content with &lt;br&gt;.
+ *
+ * @param   string $label    The label
+ * @param   string $labeltag The HTML element
+ * @return  string HTML
+ * @package HTML
+ * @example
+ * echo doLabel('My label', 'h3');
+ */
+
 	function doLabel($label='', $labeltag='')
 	{
 		if ($label) {
