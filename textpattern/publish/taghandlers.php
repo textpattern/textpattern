@@ -8,6 +8,12 @@
 
 */
 
+/**
+ * Collection of tag functions.
+ *
+ * @package Tag
+ */
+
 // -------------------------------------------------------------
 
 	function page_title($atts)
