@@ -11,6 +11,12 @@
 
 */
 
+/**
+ * Plugins panel.
+ *
+ * @package Admin\Plugin
+ */
+
 	if (!defined('txpinterface')) die('txpinterface is undefined.');
 
 	if ($event == 'plugin') {
@@ -34,7 +40,11 @@
 		}
 	}
 
-// -------------------------------------------------------------
+/**
+ * The main panel listing all installed plugins.
+ *
+ * @param string|array $message The activity message
+ */
 
 	function plugin_list($message = '')
 	{
@@ -91,7 +101,7 @@
 				foreach ($a as $key => $value) {
 					$$key = txpspecialchars($value);
 				}
-				// Fix up the description for clean cases
+				// Fix up the description for clean cases.
 				$description = preg_replace(array('#&lt;br /&gt;#',
 												  '#&lt;(/?(a|b|i|em|strong))&gt;#',
 												  '#&lt;a href=&quot;(https?|\.|\/|ftp)([A-Za-z0-9:/?.=_]+?)&quot;&gt;#'),
@@ -152,7 +162,7 @@
 				n.'</form>'.
 				n.'</div>';
 
-			// Show/hide "Options" link by setting the appropriate class on the plugins TR
+			// Show/hide "Options" link by setting the appropriate class on the plugins TR.
 			echo script_js(<<<EOS
 textpattern.Relay.register('txpAsyncHref.success', function(event, data) {
 	$(data.this).closest('tr').toggleClass('active');
@@ -162,7 +172,9 @@ EOS
 		}
 	}
 
-// -------------------------------------------------------------
+/**
+ * Toggles a plugin's status.
+ */
 
 	function switch_status()
 	{
@@ -179,7 +191,10 @@ EOS
 		echo gTxt($change ? 'yes' : 'no');
 	}
 
-// -------------------------------------------------------------
+/**
+ * Editor panel for plugins.
+ */
+
 	function plugin_edit()
 	{
 		global $event;
@@ -192,8 +207,10 @@ EOS
 		echo '</div>';
   }
 
+/**
+ * Plugin help viewer panel.
+ */
 
-// -------------------------------------------------------------
 	function plugin_help()
 	{
 		global $event;
@@ -206,7 +223,13 @@ EOS
 			.'</div>';
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders an editor form for plugins.
+ *
+ * @param  string $name The plugin
+ * @return string HTML
+ */
+
 	function plugin_edit_form($name='')
 	{
 		assert_string($name);
@@ -224,7 +247,9 @@ EOS
 			, '', '', 'post', 'edit-form', '', 'plugin_details');
 	}
 
-// -------------------------------------------------------------
+/**
+ * Saves an edited plugin code.
+ */
 
 	function plugin_save()
 	{
@@ -237,14 +262,29 @@ EOS
 		plugin_list($message);
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders a status link.
+ *
+ * @param  string $status   The new status
+ * @param  string $name     The plugin
+ * @param  string $linktext The label
+ * @return string HTML
+ * @access private
+ * @see    asyncHref()
+ */
 
 	function status_link($status,$name,$linktext)
 	{
 		return asyncHref($linktext, array('step' => 'switch_status', 'thing' => $name),' title="'.($status==1 ? gTxt('disable') : gTxt('enable')).'"' );
 	}
 
-// -------------------------------------------------------------
+/**
+ * Plugin installation's preview step.
+ *
+ * Outputs a panel displaying the plugin's source code
+ * and the included help file.
+ */
+
 	function plugin_verify()
 	{
 		global $event;
@@ -255,13 +295,13 @@ EOS
 			$plugin = assert_string(ps('plugin'));
 		}
 
-		// pre-4.0 style plugin?
+		// Check for pre-4.0 style plugin.
 		if (strpos($plugin, '$plugin=\'') !== false) {
-			// try to increase PCRE's backtrack limit in PHP 5.2+ to accommodate to x-large plugins
-			// @see http://bugs.php.net/bug.php?id=40846 et al.
+			// Try to increase PCRE's backtrack limit in PHP 5.2+ to accommodate to x-large plugins.
+			// see http://bugs.php.net/bug.php?id=40846
 			@ini_set('pcre.backtrack_limit', '1000000');
 			$plugin = preg_replace('@.*\$plugin=\'([\w=+/]+)\'.*@s', '$1', $plugin);
-			// have we hit yet another PCRE restriction?
+			// Have we hit yet another PCRE restriction?
 			if ($plugin === null)
 			{
 				plugin_list(array(
@@ -272,7 +312,7 @@ EOS
 			}
 		}
 
-		// strip out #comment lines
+		// Strip out #comment lines.
 		$plugin = preg_replace('/^#.*$/m', '', $plugin);
 		if ($plugin === null)
 		{
@@ -338,7 +378,10 @@ EOS
 
 	}
 
-// -------------------------------------------------------------
+/**
+ * Installs a plugin.
+ */
+
 	function plugin_install()
 	{
 
@@ -369,7 +412,7 @@ EOS
 					$exists = fetch('name','txp_plugin','name',$name);
 
 					if (isset($help_raw) && empty($plugin['allow_html_help'])) {
-							// default: help is in Textile format
+							// Default: help is in Textile format.
 							include_once txpath.'/lib/classTextile.php';
 							$textile = new Textile();
 							$help = $textile->TextileRestricted($help_raw, 0, 0);
@@ -446,7 +489,13 @@ EOS
 		plugin_list(array(gTxt('bad_plugin_code'), E_ERROR));
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders a plugin installation form.
+ *
+ * @return string  HTML
+ * @access private
+ * @see    form()
+ */
 
 	function plugin_form()
 	{
@@ -461,7 +510,16 @@ EOS
 		, '', '', 'post', 'plugin-data', '', 'plugin_install_form');
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders a multi-edit form widget for plugins.
+ *
+ * @param  int    $page          The current page
+ * @param  string $sort          The sort criteria
+ * @param  string $dir           The sort direction
+ * @param  string $crit          The search term
+ * @param  string $search_method The search method
+ * @return string HTML
+ */
 
 	function plugin_multiedit_form($page, $sort, $dir, $crit, $search_method)
 	{
@@ -476,7 +534,9 @@ EOS
 		return multi_edit($methods, 'plugin', 'plugin_multi_edit', $page, $sort, $dir, $crit, $search_method);
 	}
 
-// -------------------------------------------------------------
+/**
+ * Processes multi-edit actions.
+ */
 
 	function plugin_multi_edit()
 	{
@@ -502,9 +562,9 @@ EOS
 						callback_event("plugin_lifecycle.$name", 'deleted');
 					}
 				}
-				// Remove plugins...
+				// Remove plugins.
 				safe_delete('txp_plugin', $where);
-				// ...and their l10n strings.
+				// Remove plugin's l10n strings.
 				safe_delete('txp_lang', "owner IN ('".join("','", doSlash($selected))."')");
 				break;
 
