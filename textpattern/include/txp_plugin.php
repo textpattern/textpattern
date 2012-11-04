@@ -17,9 +17,13 @@
  * @package Admin\Plugin
  */
 
-	if (!defined('txpinterface')) die('txpinterface is undefined.');
+	if (!defined('txpinterface'))
+	{
+		die('txpinterface is undefined.');
+	}
 
-	if ($event == 'plugin') {
+	if ($event == 'plugin')
+	{
 		require_privs('plugin');
 
 		$available_steps = array(
@@ -33,9 +37,12 @@
 			'plugin_multi_edit' => true
 		);
 
-		if ($step && bouncer($step, $available_steps)) {
+		if ($step && bouncer($step, $available_steps))
+		{
 			$step();
-		} else {
+		}
+		else
+		{
 			plugin_list();
 		}
 	}
@@ -58,10 +65,23 @@
 			n.'</div>';
 
 		extract(gpsa(array('sort', 'dir')));
-		if ($sort === '') $sort = get_pref('plugin_sort_column', 'name');
-		if ($dir === '') $dir = get_pref('plugin_sort_dir', 'asc');
+
+		if ($sort === '')
+		{
+			$sort = get_pref('plugin_sort_column', 'name');
+		}
+
+		if ($dir === '')
+		{
+			$dir = get_pref('plugin_sort_dir', 'asc');
+		}
+
 		$dir = ($dir == 'desc') ? 'desc' : 'asc';
-		if (!in_array($sort, array('name', 'status', 'author', 'version', 'modified', 'load_order'))) $sort = 'name';
+
+		if (!in_array($sort, array('name', 'status', 'author', 'version', 'modified', 'load_order')))
+		{
+			$sort = 'name';
+		}
 
 		$sort_sql = $sort.' '.$dir;
 
@@ -70,8 +90,11 @@
 
 		$switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
 
-		$rs = safe_rows_start('name, status, author, author_uri, version, description, length(help) as help, abs(strcmp(md5(code),code_md5)) as modified, load_order, flags',
-			'txp_plugin', '1 order by '.$sort_sql);
+		$rs = safe_rows_start(
+			'name, status, author, author_uri, version, description, length(help) as help, abs(strcmp(md5(code),code_md5)) as modified, load_order, flags',
+			'txp_plugin',
+			'1 order by '.$sort_sql
+		);
 
 		if ($rs and numRows($rs) > 0)
 		{
@@ -98,15 +121,25 @@
 
 			while ($a = nextRow($rs))
 			{
-				foreach ($a as $key => $value) {
+				foreach ($a as $key => $value)
+				{
 					$$key = txpspecialchars($value);
 				}
+
 				// Fix up the description for clean cases.
-				$description = preg_replace(array('#&lt;br /&gt;#',
-												  '#&lt;(/?(a|b|i|em|strong))&gt;#',
-												  '#&lt;a href=&quot;(https?|\.|\/|ftp)([A-Za-z0-9:/?.=_]+?)&quot;&gt;#'),
-											array('<br />','<$1>','<a href="$1$2">'),
-											$description);
+				$description = preg_replace(
+					array(
+						'#&lt;br /&gt;#',
+						'#&lt;(/?(a|b|i|em|strong))&gt;#',
+						'#&lt;a href=&quot;(https?|\.|\/|ftp)([A-Za-z0-9:/?.=_]+?)&quot;&gt;#'
+					),
+					array(
+						'<br />',
+						'<$1>',
+						'<a href="$1$2">'
+					),
+					$description
+				);
 
 				$help = !empty($help) ?
 					'<a class="plugin-help" href="?event=plugin'.a.'step=plugin_help'.a.'name='.urlencode($name).'">'.gTxt('help').'</a>' : '';
@@ -120,6 +153,7 @@
 				{
 					$manage[] = $help;
 				}
+
 				if ($plugin_prefs)
 				{
 					$manage[] = $plugin_prefs;
@@ -188,6 +222,7 @@ EOS
 			load_plugin($thing, true);
 			$message = callback_event("plugin_lifecycle.$thing", $change ? 'enabled' : 'disabled');
 		}
+
 		echo gTxt($change ? 'yes' : 'no');
 	}
 
@@ -273,9 +308,13 @@ EOS
  * @see    asyncHref()
  */
 
-	function status_link($status,$name,$linktext)
+	function status_link($status, $name, $linktext)
 	{
-		return asyncHref($linktext, array('step' => 'switch_status', 'thing' => $name),' title="'.($status==1 ? gTxt('disable') : gTxt('enable')).'"' );
+		return asyncHref(
+			$linktext,
+			array('step' => 'switch_status', 'thing' => $name),
+			' title="'.($status==1 ? gTxt('disable') : gTxt('enable')).'"'
+		);
 	}
 
 /**
@@ -289,14 +328,18 @@ EOS
 	{
 		global $event;
 
-		if (ps('txt_plugin')) {
+		if (ps('txt_plugin'))
+		{
 			$plugin = join("\n", file($_FILES['theplugin']['tmp_name']));
-		} else {
+		}
+		else
+		{
 			$plugin = assert_string(ps('plugin'));
 		}
 
 		// Check for pre-4.0 style plugin.
-		if (strpos($plugin, '$plugin=\'') !== false) {
+		if (strpos($plugin, '$plugin=\'') !== false)
+		{
 			// Try to increase PCRE's backtrack limit in PHP 5.2+ to accommodate to x-large plugins.
 			// see http://bugs.php.net/bug.php?id=40846
 			@ini_set('pcre.backtrack_limit', '1000000');
@@ -304,26 +347,22 @@ EOS
 			// Have we hit yet another PCRE restriction?
 			if ($plugin === null)
 			{
-				plugin_list(array(
-								gTxt('plugin_pcre_error', array('{errno}' => preg_last_error())),
-								E_ERROR
-							));
+				plugin_list(array(gTxt('plugin_pcre_error', array('{errno}' => preg_last_error())), E_ERROR));
 				return;
 			}
 		}
 
 		// Strip out #comment lines.
 		$plugin = preg_replace('/^#.*$/m', '', $plugin);
+
 		if ($plugin === null)
 		{
-			plugin_list(array(
-							gTxt('plugin_pcre_error', array('{errno}' => preg_last_error())),
-							E_ERROR
-						));
+			plugin_list(array(gTxt('plugin_pcre_error', array('{errno}' => preg_last_error())), E_ERROR));
 			return;
 		}
 
-		if (isset($plugin)) {
+		if (isset($plugin))
+		{
 			$plugin_encoded = $plugin;
 			$plugin = base64_decode($plugin);
 
@@ -333,7 +372,6 @@ EOS
 				{
 					$plugin = gzinflate(substr($plugin, 10));
 				}
-
 				else
 				{
 					plugin_list(array(gTxt('plugin_compression_unsupported'), E_ERROR));
@@ -343,16 +381,22 @@ EOS
 
 			if ($plugin = @unserialize($plugin))
 			{
-				if(is_array($plugin)){
+				if (is_array($plugin))
+				{
 					extract($plugin);
 					$source = '';
-					if (isset($help_raw) && empty($plugin['allow_html_help'])) {
+
+					if (isset($help_raw) && empty($plugin['allow_html_help']))
+					{
 						include_once txpath.'/lib/classTextile.php';
 						$textile = new Textile();
 						$help_source = $textile->TextileRestricted($help_raw, 0, 0);
-					} else {
-						$help_source= highlight_string($help, true);
 					}
+					else
+					{
+						$help_source = highlight_string($help, true);
+					}
+
 					$source.= highlight_string('<?php'.$plugin['code'].'?>', true);
 					$sub = fInput('submit','',gTxt('install'),'publish');
 
@@ -374,8 +418,8 @@ EOS
 				}
 			}
 		}
-		plugin_list(array(gTxt('bad_plugin_code'), E_ERROR));
 
+		plugin_list(array(gTxt('bad_plugin_code'), E_ERROR));
 	}
 
 /**
@@ -384,41 +428,46 @@ EOS
 
 	function plugin_install()
 	{
-
 		$plugin = assert_string(ps('plugin64'));
-		if (strpos($plugin, '$plugin=\'') !== false) {
+
+		if (strpos($plugin, '$plugin=\'') !== false)
+		{
 			@ini_set('pcre.backtrack_limit', '1000000');
 			$plugin = preg_replace('@.*\$plugin=\'([\w=+/]+)\'.*@s', '$1', $plugin);
 		}
 
 		$plugin = preg_replace('/^#.*$/m', '', $plugin);
 
-		if(trim($plugin)) {
-
+		if (trim($plugin))
+		{
 			$plugin = base64_decode($plugin);
-			if (strncmp($plugin,"\x1F\x8B",2)===0)
+
+			if (strncmp($plugin, "\x1F\x8B", 2) === 0)
+			{
 				$plugin = gzinflate(substr($plugin, 10));
+			}
 
-			if ($plugin = unserialize($plugin)) {
-
-				if(is_array($plugin)){
-
+			if ($plugin = unserialize($plugin))
+			{
+				if (is_array($plugin))
+				{
 					extract($plugin);
 
 					$type  = empty($type)  ? 0 : min(max(intval($type), 0), 5);
 					$order = empty($order) ? 5 : min(max(intval($order), 1), 9);
 					$flags = empty($flags) ? 0 : intval($flags);
-
 					$exists = fetch('name','txp_plugin','name',$name);
 
-					if (isset($help_raw) && empty($plugin['allow_html_help'])) {
-							// Default: help is in Textile format.
-							include_once txpath.'/lib/classTextile.php';
-							$textile = new Textile();
-							$help = $textile->TextileRestricted($help_raw, 0, 0);
+					if (isset($help_raw) && empty($plugin['allow_html_help']))
+					{
+						// Default: help is in Textile format.
+						include_once txpath.'/lib/classTextile.php';
+						$textile = new Textile();
+						$help = $textile->TextileRestricted($help_raw, 0, 0);
 					}
 
-					if ($exists) {
+					if ($exists)
+					{
 						$rs = safe_update(
 						   "txp_plugin",
 							"type        = $type,
@@ -433,9 +482,9 @@ EOS
 							flags        = $flags",
 							"name        = '".doSlash($name)."'"
 						);
-
-					} else {
-
+					}
+					else
+					{
 						$rs = safe_insert(
 						   "txp_plugin",
 						   "name         = '".doSlash($name)."',
@@ -470,22 +519,24 @@ EOS
 							$message = callback_event("plugin_lifecycle.$name", 'installed');
 						}
 
-						if (empty($message)) $message = gTxt('plugin_installed', array('{name}' => $name));
+						if (empty($message))
+						{
+							$message = gTxt('plugin_installed', array('{name}' => $name));
+						}
 
 						plugin_list($message);
 						return;
 					}
-
 					else
 					{
 						$message = array(gTxt('plugin_install_failed', array('{name}' => $name)), E_ERROR);
-
 						plugin_list($message);
 						return;
 					}
 				}
 			}
 		}
+
 		plugin_list(array(gTxt('bad_plugin_code'), E_ERROR));
 	}
 
@@ -523,7 +574,17 @@ EOS
 
 	function plugin_multiedit_form($page, $sort, $dir, $crit, $search_method)
 	{
-		$orders = selectInput('order', array(1=>1, 2=>2, 3=>3, 4=>4, 5=>5, 6=>6, 7=>7, 8=>8, 9=>9), 5, false);
+		$orders = selectInput('order', array(
+			1 => 1,
+			2 => 2,
+			3 => 3,
+			4 => 4,
+			5 => 5,
+			6 => 6,
+			7 => 7,
+			8 => 8,
+			9 => 9
+		), 5, false);
 
 		$methods = array(
 			'changestatus' => gTxt('changestatus'),
