@@ -3412,7 +3412,7 @@
 	}
 
 /**
- * Renders an array of items as a HTML.
+ * Renders an array of items as a HTML list.
  *
  * This function can be used to create a HTML list
  * markup from an array of items.
