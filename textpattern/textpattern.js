@@ -872,7 +872,7 @@ jQuery.fn.txpAsyncForm = function(options)
 	}, options);
 
 	// Send form data to application, process response as script.
-	this.submit(function(event) {
+	this.on('submit.txpAsyncForm', function(event) {
 		try
 		{
 			var form = $(this);
