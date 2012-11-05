@@ -866,85 +866,80 @@ textpattern.Relay =
 jQuery.fn.txpAsyncForm = function(options)
 {
 	options = $.extend({
-		dataType: 'script',
-		success: null,
-		error: null
+		dataType : 'script',
+		success  : null,
+		error    : null
 	}, options);
 
 	// Send form data to application, process response as script.
 	this.on('submit.txpAsyncForm', function(event) {
-		try
+		event.preventDefault();
+
+		var $this = $(this);
+		var form =
 		{
-			var form = $(this);
-			var s;
+			button  : $this.find('input[type="submit"]:focus').eq(0),
+			data    : $this.serialize(),
+			spinner : $('<span />').addClass('spinner')
+		};
 
-			// Show feedback while processing.
-			form.addClass('busy');
-			$('body').addClass('busy');
+		// Show feedback while processing.
 
-			s = form.find('input[type="submit"]:focus');
-			if (s.length == 0)
+		$this.addClass('busy');
+		$('body').addClass('busy');
+
+		// WebKit does not set :focus on button-click: use first submit input as a fallback.
+
+		if (!form.button.length)
+		{
+			form.button = $this.find('input[type="submit"]').eq(0);
+		}
+
+		form.button.attr('disabled', true).after(form.spinner);
+
+		if (form.data)
+		{
+			form.data += '&' + (form.button.attr('name') || '_txp_submit') + '=' + (form.button.val() || '_txp_submit');
+		}
+
+		sendAsyncEvent(form.data, function(){}, options.dataType)
+			.done(function(data, textStatus, jqXHR)
 			{
-				// WebKit does not set :focus on button-click: use first submit input as a fallback.
-				s = form.find('input[type="submit"]');
-			}
-			if (s.length > 0)
+				if (options.success)
+				{
+					options.success($this, event, data, textStatus, jqXHR);
+				}
+
+				textpattern.Relay.callback('txpAsyncForm.success', {
+					'this'       : $this,
+					'event'      : event,
+					'data'       : data,
+					'textStatus' : textStatus,
+					'jqXHR'      : jqXHR
+				});
+			})
+			.fail(function(jqXHR, textStatus, errorThrown)
 			{
-				s = s.slice(0,1);
-			}
-
-			s.attr('disabled', true).after(' <span class="spinner"></span>');
-
-			// Error handler.
-			form.ajaxError(function(event, jqXHR, ajaxSettings, thrownError)
-			{
-				// Do not pile up error handlers upon repeat submissions.
-				$(this).off('ajaxError');
-
-				// Remove feedback elements.
-				form.removeClass('busy');
-				s.removeAttr('disabled');
-				$('body').removeClass('busy');
-				$('span.spinner').remove();
 				if (options.error)
 				{
-					options.error(form, event, jqXHR, ajaxSettings, thrownError);
+					options.error($this, event, jqXHR, $.ajaxSetup(), errorThrown);
 				}
-				textpattern.Relay.callback('txpAsyncForm.error', {
-					'this': form,
-					'event': event,
-					'jqXHR': jqXHR,
-					'ajaxSettings': ajaxSettings,
-					'thrownError': thrownError
-				});
-			});
 
-			sendAsyncEvent(
-				form.serialize() + '&' + (s.attr('name') || '_txp_submit') + '=' + (s.val() || '_txp_submit'),
-				function(data, textStatus, jqXHR)
-				{
-					// Remove feedback elements.
-					form.removeClass('busy');
-					s.removeAttr('disabled');
-					$('body').removeClass('busy');
-					$('span.spinner').remove();
-					form.ajaxError = null;
-					if (options.success)
-					{
-						options.success(form, event, data, textStatus, jqXHR);
-					}
-					textpattern.Relay.callback('txpAsyncForm.success', {
-						'this': form,
-						'event': event,
-						'data': data,
-						'textStatus': textStatus,
-						'jqXHR': jqXHR
-					});
-				},
-				options.dataType
-			);
-			event.preventDefault();
-		} catch(e) {}
+				textpattern.Relay.callback('txpAsyncForm.error', {
+					'this'         : $this,
+					'event'        : event,
+					'jqXHR'        : jqXHR,
+					'ajaxSettings' : $.ajaxSetup(),
+					'thrownError'  : errorThrown
+				});
+			})
+			.always(function()
+			{
+				$this.removeClass('busy');
+				form.button.removeAttr('disabled');
+				form.spinner.remove();
+				$('body').removeClass('busy');
+			});
 	});
 	return this;
 };
