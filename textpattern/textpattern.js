@@ -827,7 +827,6 @@ textpattern.Relay =
 	callback: function(event, data)
 	{
 		return $(this).trigger(event, data);
-		return this;
 	},
 
 	/**
