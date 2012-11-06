@@ -715,7 +715,7 @@ function toggleDisplayHref()
 	{
 		toggleDisplay(href.substr(1));
 	}
-	if (lever)
+	if (lever.length)
 	{
 		var vis = $(href+':visible').length > 0;
         lever.toggleClass('expanded', vis);
