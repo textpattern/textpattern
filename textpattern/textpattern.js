@@ -684,7 +684,7 @@ function getElementsByClass(classname, node)
 function toggleDisplay(id)
 {
 	var obj = $('#' + id);
-	if (obj)
+	if (obj.length)
 	{
 		obj.toggle();
 
