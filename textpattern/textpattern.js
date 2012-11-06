@@ -30,7 +30,7 @@ function checkCookies()
  *
  * @param {string}  url     The location
  * @param {integer} width   The width
- * @parma {integer} height  The height
+ * @param {integer} height  The height
  * @param {string}  options A list of options
  */
 
