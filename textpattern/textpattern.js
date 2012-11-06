@@ -715,13 +715,15 @@ function toggleDisplayHref()
 	{
 		toggleDisplay(href.substr(1));
 	}
+
 	if (lever.length)
 	{
 		var vis = $(href).is(':visible');
-        lever.toggleClass('expanded', vis);
-        $this.attr('aria-pressed', vis.toString());
-        $(href).attr('aria-expanded', vis.toString());
+		lever.toggleClass('expanded', vis);
+		$this.attr('aria-pressed', vis.toString());
+		$(href).attr('aria-expanded', vis.toString());
 	}
+
 	return false;
 }
 
