@@ -688,8 +688,6 @@ class txp_thumb extends wet_thumb
 		if ($radius == 0)
 		{
 			return $img;
-			imagedestroy($img);
-			break;
 		}
 
 		$w = imagesx($img); $h = imagesy($img);
