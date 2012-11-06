@@ -848,7 +848,7 @@ textpattern.Relay =
 
 	register: function(event, fn)
 	{
-		$(this).bind(event, fn);
+		$(this).on(event, fn);
 		return this;
 	}
 };
