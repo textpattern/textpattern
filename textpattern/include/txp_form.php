@@ -1,5 +1,4 @@
 <?php
-
 /*
 	This is Textpattern
 
@@ -17,7 +16,10 @@
  * @package Admin\Form
  */
 
-	if (!defined('txpinterface')) die('txpinterface is undefined.');
+	if (!defined('txpinterface'))
+	{
+		die('txpinterface is undefined.');
+	}
 
 	global $vars;
 	$vars = array('Form','type','name','savenew','oldname');
@@ -46,7 +48,8 @@
 		'section'  => gTxt('section'),
 	);
 
-	if ($event == 'form') {
+	if ($event == 'form')
+	{
 		require_privs('form');
 
 		bouncer($step,
@@ -60,16 +63,30 @@
 			)
 		);
 
-		switch(strtolower($step)) {
-			case "":                form_edit();             break;
-			case "form_edit":       form_edit();             break;
-			case "form_create":     form_create();           break;
-			case "form_delete":     form_delete();           break;
-			case "form_multi_edit": form_multi_edit();       break;
-			case "form_save":       form_save();             break;
-			case "save_pane_state": form_save_pane_state();  break;
+		switch(strtolower($step))
+		{
+			case "":
+				form_edit();
+				break;
+			case "form_edit":
+				form_edit();
+				break;
+			case "form_create":
+				form_create();
+				break;
+			case "form_delete":
+				form_delete();
+				break;
+			case "form_multi_edit":
+				form_multi_edit();
+				break;
+			case "form_save":
+				form_save();
+				break;
+			case "save_pane_state":
+				form_save_pane_state();
+				break;
 		}
-
 	}
 
 /**
@@ -220,7 +237,7 @@ EOS
 	}
 
 /**
- * The main editor panel.
+ * Renders the main Form editor panel.
  *
  * @param string|array $message The activity message
  */
@@ -233,14 +250,17 @@ EOS
 		extract(gpsa(array('Form','name','type')));
 		$name = trim(preg_replace('/[<>&"\']/', '', $name));
 
-		if ($step=='form_create') {
+		if ($step=='form_create')
+		{
 			$inputs = fInput('submit','savenew',gTxt('save_new'),'publish').
 				eInput("form").sInput('form_save');
-		} else {
+		}
+		else
+		{
 			$name = (!$name or $step=='form_delete') ? 'default' : $name;
 			$rs = safe_row("*", "txp_form", "name='".doSlash($name)."'");
 //			if ($rs)
- {
+			{
 				extract($rs);
 				$inputs = fInput('submit','save',gTxt('save'),'publish').
 					eInput("form").sInput('form_save').hInput('oldname',$name);
@@ -248,26 +268,31 @@ EOS
 		}
 
 		if (!in_array($name, $essential_forms))
+		{
 			$changename = graf(gTxt('form_name').br.fInput('text','name',$name,'edit','','',INPUT_REGULAR));
+		}
 		else
+		{
 			$changename = graf(gTxt('form_name').br.tag($name, 'em').hInput('name',$name));
+		}
 
 		// Generate the tagbuilder links.
 		// Format of each entry is popTagLink -> array ( gTxt string, class/ID ).
 		$tagbuild_items = array(
-			'article'         => array('articles', 'article-tags'),
-			'link'            => array('links', 'link-tags'),
-			'comment'         => array('comments', 'comment-tags'),
-			'comment_details' => array('comment_details', 'comment-detail-tags'),
-			'comment_form'    => array('comment_form', 'comment-form-tags'),
+			'article'         => array('articles',            'article-tags'),
+			'link'            => array('links',               'link-tags'),
+			'comment'         => array('comments',            'comment-tags'),
+			'comment_details' => array('comment_details',     'comment-detail-tags'),
+			'comment_form'    => array('comment_form',        'comment-form-tags'),
 			'search_result'   => array('search_results_form', 'search-result-tags'),
-			'file_download'   => array('file_download_tags', 'file-tags'),
-			'category'        => array('category_tags', 'category-tags'),
-			'section'         => array('section_tags', 'section-tags'),
+			'file_download'   => array('file_download_tags',  'file-tags'),
+			'category'        => array('category_tags',       'category-tags'),
+			'section'         => array('section_tags',        'section-tags'),
 		);
 
 		$tagbuild_links = '';
-		foreach ($tagbuild_items as $tb => $item) {
+		foreach ($tagbuild_items as $tb => $item)
+		{
 			$tagbuild_links .= wrapRegion($item[1].'_group', popTagLinks($tb), $item[1], $item[0], $item[1]);
 		}
 
@@ -356,7 +381,7 @@ EOS
 			else
 			{
 				$message = array(gTxt('form_save_failed'), E_ERROR);
-			};
+			}
 
 			return form_edit($message);
 		}
@@ -433,7 +458,9 @@ EOS
 		{
 			set_pref("pane_{$pane}_visible", (gps('visible') == 'true' ? '1' : '0'), $event, PREF_HIDDEN, 'yesnoradio', 0, PREF_PRIVATE);
 			send_xml_response();
-		} else {
+		}
+		else
+		{
 			trigger_error('invalid_pane', E_USER_WARNING);
 		}
 	}

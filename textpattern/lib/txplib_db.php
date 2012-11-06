@@ -771,7 +771,7 @@ $DB = new DB;
 				$out[] = $v;
 			}
 			return $out;
-		};
+		}
 		return array();
 	}
 

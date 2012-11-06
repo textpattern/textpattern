@@ -326,7 +326,7 @@
 				hInput('crit', gps('crit')).
 				n.'</section>'
 			, '', '', 'post', 'edit-form', '', 'link_details');
-		};
+		}
 
 		echo '</div>';
 	}
