@@ -956,69 +956,61 @@ jQuery.fn.txpAsyncForm = function(options)
 jQuery.fn.txpAsyncHref = function(options)
 {
 	options = $.extend({
-		success: null,
-		error: null
+		success : null,
+		error   : null
 	}, options);
 
 	this.click(function(event)
 	{
-		try
-		{
-			event.preventDefault();
-			var obj = $(this);
+		event.preventDefault();
+		var $this = $(this);
 
-			// Show feedback while processing.
-			obj.addClass('busy');
-			$('body').addClass('busy');
+		// Show feedback while processing.
+		$this.addClass('busy');
+		$('body').addClass('busy');
 
-			// Error handler.
-			obj.ajaxError(function(event, jqXHR, ajaxSettings, thrownError)
+		sendAsyncEvent(
+			this.search.replace('?', '') + '&value=' + $this.text(), function() {}, 'text'
+		)
+			.done(function(data, textStatus, jqXHR)
 			{
-				// Do not pile up error handlers upon repeat submissions.
-				$(this).off('ajaxError');
+				$this.html(data);
 
-				// Remove feedback elements.
-				obj.removeClass('busy');
-				$('body').removeClass('busy');
+				if (options.success) 
+				{
+					options.success($this, event, data, textStatus, jqXHR);
+				}
+
+				textpattern.Relay.callback('txpAsyncHref.success', {
+					'this'       : $this,
+					'event'      : event,
+					'data'       : data,
+					'textStatus' : textStatus,
+					'jqXHR'      : jqXHR
+				});
+			})
+			.fail(function(jqXHR, textStatus, errorThrown)
+			{
 				if (options.error)
 				{
-					options.error(obj, event, jqXHR, ajaxSettings, thrownError);
+					options.error($this, event, jqXHR, $.ajaxSetup(), errorThrown);
 				}
+
 				textpattern.Relay.callback('txpAsyncHref.error', {
-					'this' : obj,
-					'event' : event,
-					'jqXHR' : jqXHR,
-					'ajaxSettings' : ajaxSettings,
-					'thrownError' : thrownError
+					'this'         : $this,
+					'event'        : event,
+					'jqXHR'        : jqXHR,
+					'ajaxSettings' : $.ajaxSetup(),
+					'thrownError'  : errorThrown
 				});
+			})
+			.always(function()
+			{
+				$this.removeClass('busy');
+				$('body').removeClass('busy');
 			});
-
-			sendAsyncEvent(
-				// Query string contains request params.
-				this.search.replace('?', '') + '&value=' + obj.text(),
-				function(data, textStatus, jqXHR)
-				{
-					obj.html(data);
-
-					// Remove feedback elements.
-					obj.removeClass('busy');
-					$('body').removeClass('busy');
-					if (options.success) 
-					{
-						options.success(obj, event, data, textStatus, jqXHR);
-					}
-					textpattern.Relay.callback('txpAsyncHref.success', {
-						'this' : obj,
-						'event' : event,
-						'data' : data,
-						'textStatus' : textStatus,
-						'jqXHR': jqXHR
-					});
-				},
-				'text'
-			);
-		} catch(e){}
 	});
+
 	return this;
 }
 
