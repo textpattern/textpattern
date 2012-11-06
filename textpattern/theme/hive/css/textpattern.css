@@ -962,15 +962,15 @@ input[type="button"]:active,
 .navlink:active,
 .navlink-active:active,
 .txp-buttons a:active {
-  background-color: #c5c5c5;
+  background-color: #bbbbbb;
   /* Safari5.1+, Chrome10+ */
-  background-image: -webkit-linear-gradient(#c5c5c5, #f8f8f8);
+  background-image: -webkit-linear-gradient(#bbbbbb, #eeeeee);
   /* Firefox3.6 */
-  background-image: -moz-linear-gradient(#c5c5c5, #f8f8f8);
+  background-image: -moz-linear-gradient(#bbbbbb, #eeeeee);
   /* Opera11.10+ */
-  background-image: -o-linear-gradient(#c5c5c5, #f8f8f8);
+  background-image: -o-linear-gradient(#bbbbbb, #eeeeee);
   /* CSS3 Compliant */
-  background-image: linear-gradient(#c5c5c5, #f8f8f8);
+  background-image: linear-gradient(#bbbbbb, #eeeeee);
 }
 
 .navlink-disabled {
@@ -1207,6 +1207,17 @@ td {
   border-top: 1px solid #dddddd;
   border-right: 1px solid #d0d0d0;
   border-bottom: 1px solid #c4c4c4;
+}
+.txp-list thead th.asc, .txp-list thead th.desc {
+  background-color: lightgrey;
+  /* Safari5.1+, Chrome10+ */
+  background-image: -webkit-linear-gradient(lightgrey, #e4e4e4);
+  /* Firefox3.6 */
+  background-image: -moz-linear-gradient(lightgrey, #e4e4e4);
+  /* Opera11.10+ */
+  background-image: -o-linear-gradient(lightgrey, #e4e4e4);
+  /* CSS3 Compliant */
+  background-image: linear-gradient(lightgrey, #e4e4e4);
 }
 .txp-list thead th:first-child {
   border-left: 1px solid #dddddd;
