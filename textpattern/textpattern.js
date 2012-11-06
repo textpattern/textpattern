@@ -717,7 +717,7 @@ function toggleDisplayHref()
 	}
 	if (lever.length)
 	{
-		var vis = $(href+':visible').length > 0;
+		var vis = $(href).is(':visible');
         lever.toggleClass('expanded', vis);
         $this.attr('aria-pressed', vis.toString());
         $(href).attr('aria-expanded', vis.toString());
