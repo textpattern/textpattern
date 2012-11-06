@@ -964,14 +964,13 @@ jQuery.fn.txpAsyncHref = function(options)
 	{
 		event.preventDefault();
 		var $this = $(this);
+		var data = this.search.replace('?', '') + '&' + $.param({value : $this.text()});
 
 		// Show feedback while processing.
 		$this.addClass('busy');
 		$('body').addClass('busy');
 
-		sendAsyncEvent(
-			this.search.replace('?', '') + '&value=' + $this.text(), function() {}, 'text'
-		)
+		sendAsyncEvent(data, function() {}, 'text')
 			.done(function(data, textStatus, jqXHR)
 			{
 				$this.html(data);
