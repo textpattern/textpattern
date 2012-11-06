@@ -960,7 +960,7 @@ jQuery.fn.txpAsyncHref = function(options)
 		error   : null
 	}, options);
 
-	this.click(function(event)
+	this.on('click.txpAsyncHref', function(event)
 	{
 		event.preventDefault();
 		var $this = $(this);
