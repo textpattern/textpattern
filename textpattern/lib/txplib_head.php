@@ -87,7 +87,8 @@
 					'#page-article #body, #page-article #title,'.
 					'#page-image #alt-text, #page-image #caption,'.
 					'#page-file #description,'.
-					'#page-link #link-title, #page-link #link-description')
+					'#page-link #link-title, #page-link #link-description'),
+				'production_status' => get_pref('production_status'),
 		)).';').
 		script_js('textpattern.js', SCRIPT_URL).n;
 	gTxtScript(array('form_submission_error', 'are_you_sure', 'cookies_must_be_enabled'));

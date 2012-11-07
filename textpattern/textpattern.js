@@ -854,6 +854,60 @@ textpattern.Relay =
 };
 
 /**
+ * Logs debugging messages.
+ *
+ * @since 4.6.0
+ */
+
+textpattern.Console =
+{
+	/**
+	 * Stores an array of invoked messages.
+	 */
+
+	history : [],
+
+	/**
+	 * Logs a message.
+	 *
+	 * @param message The message
+	 * @example
+	 * textpattern.Console.log('Some message');
+	 */
+
+	log : function(message)
+	{
+		if (textpattern.production_status !== 'debug')
+		{
+			return;
+		}
+
+		textpattern.Console.history.push(message);
+
+		textpattern.Relay.callback('txpConsoleLog', {
+			'message' : message
+		});
+	}
+};
+
+/**
+ * Console API module for textpattern.Console.
+ *
+ * Passes invoked messages to Web/JavaScript Console
+ * using console.log().
+ *
+ * Uses a namespaced 'txpConsoleLog.ConsoleAPI' event.
+ */
+
+textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function(event, data)
+{
+	if ($.type(console) === 'object' && $.type(console.log) === 'function')
+	{
+		console.log(data.message);
+	}
+});
+
+/**
  * Sends a form using AJAX and processes the response.
  *
  * @param  {object} options          Options
