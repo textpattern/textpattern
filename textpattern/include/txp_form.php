@@ -65,25 +65,25 @@
 
 		switch(strtolower($step))
 		{
-			case "":
+			case "" :
 				form_edit();
 				break;
-			case "form_edit":
+			case "form_edit" :
 				form_edit();
 				break;
-			case "form_create":
+			case "form_create" :
 				form_create();
 				break;
-			case "form_delete":
+			case "form_delete" :
 				form_delete();
 				break;
-			case "form_multi_edit":
+			case "form_multi_edit" :
 				form_multi_edit();
 				break;
-			case "form_save":
+			case "form_save" :
 				form_save();
 				break;
-			case "save_pane_state":
+			case "save_pane_state" :
 				form_save_pane_state();
 				break;
 		}
@@ -125,32 +125,33 @@
 			while ($a = nextRow($rs))
 			{
 				extract($a);
-				$editlink = ($curname != $name)
-					?	eLink('form', 'form_edit', 'name', $name, $name)
-					:	txpspecialchars($name);
+				$active = ($curname == $name);
+				$editlink = ($active)
+					? txpspecialchars($name)
+					: eLink('form', 'form_edit', 'name', $name, $name);
 				$modbox = (!in_array($name, $essential_forms))
-					?	'<input type="checkbox" name="selected_forms[]" value="'.$name.'" />'
-					:	'';
+					? '<input type="checkbox" name="selected_forms[]" value="'.$name.'" />'
+					: '';
 
 				if ($prev_type != $type)
 				{
 					if ($prev_type !== null)
 					{
 						$group_out[] = '</ul>';
-						$out[] = wrapRegion($prev_type.'_forms_group', join(n, $group_out), 'form_'.$prev_type, $form_types[$prev_type], 'form_'.$prev_type, 'form-list');
+						$out[] = wrapRegion($prev_type.'_forms_group', join(n, $group_out), 'form_'.$prev_type, $form_types[$prev_type], 'form_'.$prev_type);
 					}
 
 					$prev_type = $type;
-					$group_out = array('<ul class="plain-list">');
+					$group_out = array(n.'<ul class="switcher-list">');
 				}
 
-				$group_out[] = '<li>'.n.'<span class="form-list-action">'.$modbox.'</span><span class="form-list-name">'.$editlink.'</span></li>';
+				$group_out[] = '<li'.($active ? ' class="active"' : '').'><span class="switcher-action">'.$modbox.'</span>'.$editlink.'</li>';
 			}
 
 			if ($prev_type !== null)
 			{
 				$group_out[] = '</ul>';
-				$out[] = wrapRegion($prev_type.'_forms_group', join(n, $group_out), 'form_'.$prev_type, $form_types[$prev_type], 'form_'.$prev_type, 'form-list');
+				$out[] = wrapRegion($prev_type.'_forms_group', join(n, $group_out), 'form_'.$prev_type, $form_types[$prev_type], 'form_'.$prev_type);
 			}
 			$out[] = multi_edit($methods, 'form', 'form_multi_edit');
 
@@ -159,8 +160,8 @@
 				$(document).ready(function() {
 					$('#allforms_form').txpMultiEditForm({
 						'checkbox' : 'input[name="selected_forms[]"][type=checkbox]',
-						'row' : '.plain-list li, .form-list-name',
-						'highlighted' : '.plain-list li'
+						'row' : '.switcher-list li, .form-list-name',
+						'highlighted' : '.switcher-list li'
 					});
 				});
 EOS
@@ -297,20 +298,20 @@ EOS
 		}
 
 		$out =
-			n.'<h1 class="txp-heading">'.gTxt('tab_forms').popHelp('forms_overview').'</h1>'.
+			hed(gTxt('tab_forms').popHelp('forms_overview'), 1, 'class="txp-heading"').
 			n.'<div id="'.$event.'_container" class="txp-container">'.
 			startTable('', '', 'txp-columntable').
 			tr(
 				tdtl(
-					'<div id="tagbuild_links">'.hed(gTxt('tagbuilder'), 2).
+					n.'<div id="tagbuild_links">'.hed(gTxt('tagbuilder'), 2).
 					$tagbuild_links.
-					'</div>'
+					n.'</div>'
 				, ' class="column"').
 				tdtl(
-					'<form action="index.php" method="post" id="form_form">'.
-						'<div id="main_content">'.
-						'<p class="edit-title">'.gTxt('you_are_editing_form').sp.strong(($name) ? $name : gTxt('untitled')).'</p>'.
-						'<textarea id="form" class="code" name="Form" cols="'.INPUT_LARGE.'" rows="'.INPUT_REGULAR.'">'.txpspecialchars($Form).'</textarea>'.
+					n.'<form action="index.php" method="post" id="form_form">'.
+					n.'<div id="main_content">'.
+					n.'<p class="edit-title">'.gTxt('you_are_editing_form').sp.strong(($name) ? $name : gTxt('untitled')).'</p>'.
+					n.'<textarea id="form" class="code" name="Form" cols="'.INPUT_LARGE.'" rows="'.INPUT_REGULAR.'">'.txpspecialchars($Form).'</textarea>'.
 
 					$changename.
 
@@ -325,11 +326,11 @@ EOS
 
 				, ' class="column"').
 				tdtl(
-					'<div id="content_switcher">'.hed(gTxt('all_forms'), 2).
+					n.'<div id="content_switcher">'.hed(gTxt('all_forms'), 2).
 					form_list($name).
-					'</div>'
+					n.'</div>'
 				, ' class="column"')
-			).endTable().'</div>';
+			).endTable().n.'</div>';
 
 		echo $out;
 	}

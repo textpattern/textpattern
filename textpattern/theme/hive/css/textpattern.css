@@ -1968,28 +1968,26 @@ body#page-setup {
   height: 34.4615384615385em;
 }
 
-.copy-as {
-  line-height: 2;
-}
-
-#content_switcher .form-list-action,
-#content_switcher .destroy {
-  float: right;
-  margin-left: 1em;
-}
-
-.form-list .plain-list {
+.switcher-list {
+  list-style: none;
+  padding-left: 0;
   margin: 0 -1em;
 }
-.form-list .plain-list li {
+.switcher-list li {
   border-top: 1px solid #dddddd;
   padding: .38461538461538em .5em .38461538461538em 1em;
 }
-.form-list .plain-list li:nth-child(odd) {
+.switcher-list li:nth-child(odd) {
   background: white;
 }
-.form-list .plain-list li:first-child {
+.switcher-list li:first-child {
   border-top: 0;
+}
+
+.switcher-action,
+.switcher-list .destroy {
+  float: right;
+  margin-left: 1em;
 }
 
 /* Admin -> Diagnostics page

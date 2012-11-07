@@ -1443,22 +1443,25 @@ textarea#form {
 	height: 39.25em;
 }
 
-#content_switcher .form-list-action,
-#content_switcher .destroy {
-	float: right;
-	margin-left: 1em;
-}
-
-.form-list ul {
+.switcher-list {
+	list-style: none;
+	padding-left: 0;
 	border-top: 1px solid #ddd;
 }
 
-.form-list li {
+.switcher-list li {
 	margin: 0;
 	border-bottom: 1px solid #ddd;
 	padding: .3em 0;
 }
 
+.switcher-action,
+.switcher-list .destroy {
+	float: right;
+	margin-left: 1em;
+}
+
+/* TBC */
 .form-list-name {
 	display: block;
 	overflow: hidden;
