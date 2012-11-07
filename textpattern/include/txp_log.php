@@ -17,7 +17,10 @@
  * @package Admin\Log
  */
 
-	if (!defined('txpinterface')) die('txpinterface is undefined.');
+	if (!defined('txpinterface'))
+	{
+		die('txpinterface is undefined.');
+	}
 
 	if ($event == 'log')
 	{
@@ -29,9 +32,12 @@
 			'log_multi_edit'    => true
 		);
 
-		if ($step && bouncer($step, $available_steps)) {
+		if ($step && bouncer($step, $available_steps))
+		{
 			$step();
-		} else {
+		}
+		else
+		{
 			log_list();
 		}
 	}
@@ -48,9 +54,24 @@
 
 		pagetop(gTxt('tab_logs'), $message);
 
-		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
-		if ($sort === '') $sort = get_pref('log_sort_column', 'time');
-		if ($dir === '') $dir = get_pref('log_sort_dir', 'desc');
+		extract(gpsa(array(
+			'page',
+			'sort',
+			'dir',
+			'crit',
+			'search_method'
+		)));
+
+		if ($sort === '')
+		{
+			$sort = get_pref('log_sort_column', 'time');
+		}
+
+		if ($dir === '')
+		{
+			$dir = get_pref('log_sort_dir', 'desc');
+		}
+
 		$dir = ($dir == 'asc') ? 'asc' : 'desc';
 
 		$expire_logs_after = assert_int($expire_logs_after);
@@ -59,34 +80,28 @@
 
 		switch ($sort)
 		{
-			case 'ip':
+			case 'ip' :
 				$sort_sql = 'ip '.$dir;
-			break;
-
-			case 'host':
+				break;
+			case 'host' :
 				$sort_sql = 'host '.$dir;
-			break;
-
-			case 'page':
+				break;
+			case 'page' :
 				$sort_sql = 'page '.$dir;
-			break;
-
-			case 'refer':
+				break;
+			case 'refer' :
 				$sort_sql = 'refer '.$dir;
-			break;
-
-			case 'method':
+				break;
+			case 'method' :
 				$sort_sql = 'method '.$dir;
-			break;
-
-			case 'status':
+				break;
+			case 'status' :
 				$sort_sql = 'status '.$dir;
-			break;
-
+				break;
 			default:
 				$sort = 'time';
 				$sort_sql = 'time '.$dir;
-			break;
+				break;
 		}
 
 		set_pref('log_sort_column', $sort, 'log', 2, '', 0, PREF_PRIVATE);
@@ -165,8 +180,11 @@
 
 		echo log_search_form($crit, $search_method).'</div>';
 
-		$rs = safe_rows_start('*, unix_timestamp(time) as uTime', 'txp_log',
-			"$criteria order by $sort_sql limit $offset, $limit");
+		$rs = safe_rows_start(
+			'*, unix_timestamp(time) as uTime',
+			'txp_log',
+			"$criteria order by $sort_sql limit $offset, $limit"
+		);
 
 		if ($rs)
 		{
