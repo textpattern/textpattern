@@ -304,6 +304,13 @@
 
 /**
  * Renders a multi-edit widget.
+ *
+ * @param  int    $page          The page number
+ * @param  string $sort          The current sorting value
+ * @param  string $dir           The current sorting direction
+ * @param  string $crit          The current search criteria
+ * @param  string $search_method The current search method
+ * @return string HTML
  */
 
 	function log_multiedit_form($page, $sort, $dir, $crit, $search_method)
