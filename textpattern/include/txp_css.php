@@ -13,7 +13,6 @@
 
 		bouncer($step,
 			array(
-				'css_edit_raw' => false,
 				'pour'         => false,
 				'css_save'     => true,
 				'css_copy'     => true,
@@ -24,7 +23,6 @@
 
 		switch ($step) {
 			case '': css_edit(); break;
-			case 'css_edit_raw': css_edit();    break;
 			case 'pour': css_edit();            break;
 			case 'css_save': css_save();        break;
 			case 'css_copy': css_copy();        break;
@@ -66,27 +64,16 @@
 	}
 
 /**
- * The main editor panel as a complete HTML document.
+ * The main Stylesheet editor panel.
  *
  * @param string|array $message The activity message
- * @see   css_edit_raw()
  */
 
 	function css_edit($message='')
 	{
-		pagetop(gTxt("edit_css"),$message);
-		global $step,$prefs;
-		css_edit_raw();
-	}
-
-/**
- * The main editor without a header.
- *
- * @see css_edit()
- */
-
-	function css_edit_raw() {
 		global $event, $step;
+
+		pagetop(gTxt("edit_css"), $message);
 
 		$default_name = safe_field('css', 'txp_section', "name = 'default'");
 		extract(gpsa(array('name', 'newname', 'copy', 'savenew')));
