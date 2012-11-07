@@ -6,9 +6,13 @@
  * @package Admin\CSS
  */
 
-	if (!defined('txpinterface')) die('txpinterface is undefined.');
+	if (!defined('txpinterface'))
+	{
+		die('txpinterface is undefined.');
+	}
 
-	if ($event == 'css') {
+	if ($event == 'css')
+	{
 		require_privs('css');
 
 		bouncer($step,
@@ -21,13 +25,26 @@
 			)
 		);
 
-		switch ($step) {
-			case '': css_edit(); break;
-			case 'pour': css_edit();            break;
-			case 'css_save': css_save();        break;
-			case 'css_copy': css_copy();        break;
-			case 'css_delete': css_delete();    break;
-			case 'css_edit': css_edit();        break;
+		switch(strtolower($step))
+		{
+			case '':
+				css_edit();
+				break;
+			case 'pour':
+				css_edit();
+				break;
+			case 'css_save':
+				css_save();
+				break;
+			case 'css_copy':
+				css_copy();
+				break;
+			case 'css_delete':
+				css_delete();
+				break;
+			case 'css_edit':
+				css_edit();
+				break;
 		}
 	}
 
@@ -49,8 +66,10 @@
 
 		$rs = safe_rows_start('name', 'txp_css', $criteria);
 
-		if ($rs) {
-			while ($a = nextRow($rs)) {
+		if ($rs)
+		{
+			while ($a = nextRow($rs))
+			{
 				extract($a);
 				$edit = ($current != $name) ?	eLink('css', '', 'name', $name, $name) : txpspecialchars($name);
 				$delete = (!array_key_exists($name, $protected)) ? dLink('css', 'css_delete', 'name', $name) : '';
@@ -91,31 +110,35 @@
 		{
 			$buttons = '<p class="edit-title">'.
 			gTxt('name_for_this_style').
-			fInput('text','newname','','','','',INPUT_REGULAR).
-			hInput('savenew','savenew').
+			fInput('text', 'newname', '', '', '', '', INPUT_REGULAR).
+			hInput('savenew', 'savenew').
 			'</p>';
 			$thecss = gps('css');
-
-		} else {
+		}
+		else
+		{
 			$buttons = '<p class="edit-title">'.gTxt('you_are_editing_css').sp.strong(txpspecialchars($name)).'</p>';
-			$thecss = fetch("css",'txp_css','name',$name);
+			$thecss = fetch('css', 'txp_css', 'name', $name);
 		}
 
-		if (!empty($name)) {
+		if (!empty($name))
+		{
 			$copy =
 				n.'<p class="copy-as"><label for="copy-css">'.gTxt('copy_css_as').'</label>'.
-				fInput('text','newname','','input-medium','','',INPUT_MEDIUM,'','copy-css').
+				fInput('text', 'newname', '', 'input-medium', '', '', INPUT_MEDIUM, '', 'copy-css').
 				fInput('submit', 'copy', gTxt('copy')).'</p>';
-		} else {
+		}
+		else
+		{
 			$copy = '';
 		}
 
 		$right =
-		'<div id="content_switcher">'.
-		hed(gTxt('all_stylesheets'),2).
-		graf(sLink('css', 'pour', gTxt('create_new_css')), ' class="action-create"').
-		css_list($name, $default_name).
-		'</div>';
+			'<div id="content_switcher">'.
+			hed(gTxt('all_stylesheets'), 2).
+			graf(sLink('css', 'pour', gTxt('create_new_css')), ' class="action-create"').
+			css_list($name, $default_name).
+			'</div>';
 
 		echo
 		n.'<h1 class="txp-heading">'.gTxt('tab_style').'</h1>'.
@@ -127,9 +150,9 @@
 					'<div id="main_content">'.
 					$buttons.
 					'<textarea id="css" class="code" name="css" cols="'.INPUT_LARGE.'" rows="'.INPUT_REGULAR.'">'.txpspecialchars($thecss).'</textarea>'.
-					'<p>'.fInput('submit','',gTxt('save'),'publish').
+					'<p>'.fInput('submit', '', gTxt('save'), 'publish').
 					eInput('css').sInput('css_save').
-					hInput('name',$name).'</p>'
+					hInput('name', $name).'</p>'
 					.$copy.
 					'</div>'
 				, '', '', 'post', 'edit-form', '', 'style_form')
@@ -165,7 +188,7 @@
 
 	function css_save()
 	{
-		extract(array_map('assert_string', psa(array('name','css','savenew','newname','copy'))));
+		extract(array_map('assert_string', psa(array('name', 'css', 'savenew', 'newname', 'copy'))));
 		$css = doSlash($css);
 
 		if ($savenew or $copy)
