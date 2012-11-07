@@ -57,7 +57,8 @@ print <<<eod
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="robots" content="noindex, nofollow" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="robots" content="noindex, nofollow">
 <title>Setup &#124; Textpattern CMS</title>
 <script src="$rel_txpurl/jquery.js"></script>
 <script>var textpattern = { do_spellcheck: "", textarray: {} };</script>

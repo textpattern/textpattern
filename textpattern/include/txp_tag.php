@@ -30,6 +30,7 @@ header(pluggable_ui('admin_side', 'x_frame_options', 'X-Frame-Options: SAMEORIGI
 <html lang="<?php echo LANG; ?>" dir="<?php echo txpspecialchars(gTxt('lang_dir')); ?>">
 <head>
 	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<title><?php echo gTxt('build'); ?> &#124; Textpattern CMS</title>
 	<script src="jquery.js"></script>
 	<?php echo script_js(
