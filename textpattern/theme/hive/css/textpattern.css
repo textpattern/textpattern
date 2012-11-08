@@ -1150,6 +1150,33 @@ dt {
   padding-left: 0;
 }
 
+.switcher-list {
+  list-style: none;
+  margin: 0 -1em;
+  padding-left: 0;
+}
+.switcher-list li {
+  border-top: 1px solid #dddddd;
+  padding: .38461538461538em .5em .38461538461538em 1em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.switcher-list li:nth-child(odd) {
+  background: white;
+}
+.switcher-list li:first-child {
+  border-top: 0;
+}
+.switcher-list li.active {
+  background: #fff6d3;
+}
+
+.switcher-action,
+.switcher-list .destroy {
+  float: right;
+  margin-left: 1em;
+}
+
 /* Tables
    ========================================================================== */
 /* consistent tables */
@@ -1966,28 +1993,6 @@ body#page-setup {
 #page-form textarea.code,
 #page-css textarea.code {
   height: 34.4615384615385em;
-}
-
-.switcher-list {
-  list-style: none;
-  padding-left: 0;
-  margin: 0 -1em;
-}
-.switcher-list li {
-  border-top: 1px solid #dddddd;
-  padding: .38461538461538em .5em .38461538461538em 1em;
-}
-.switcher-list li:nth-child(odd) {
-  background: white;
-}
-.switcher-list li:first-child {
-  border-top: 0;
-}
-
-.switcher-action,
-.switcher-list .destroy {
-  float: right;
-  margin-left: 1em;
 }
 
 /* Admin -> Diagnostics page

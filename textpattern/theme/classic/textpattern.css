@@ -827,6 +827,26 @@ dt {
 	padding-left: 0;
 }
 
+.switcher-list {
+	list-style: none;
+	padding-left: 0;
+	border-top: 1px solid #ddd;
+}
+
+.switcher-list li {
+	margin: 0;
+	border-bottom: 1px solid #ddd;
+	padding: .3em 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.switcher-action,
+.switcher-list .destroy {
+	float: right;
+	margin-left: 1em;
+}
+
 
 /* Tables
    ========================================================================== */
@@ -1441,31 +1461,6 @@ textarea#html,
 textarea#css,
 textarea#form {
 	height: 39.25em;
-}
-
-.switcher-list {
-	list-style: none;
-	padding-left: 0;
-	border-top: 1px solid #ddd;
-}
-
-.switcher-list li {
-	margin: 0;
-	border-bottom: 1px solid #ddd;
-	padding: .3em 0;
-}
-
-.switcher-action,
-.switcher-list .destroy {
-	float: right;
-	margin-left: 1em;
-}
-
-/* TBC */
-.form-list-name {
-	display: block;
-	overflow: hidden;
-	white-space: nowrap;
 }
 
 
