@@ -14,13 +14,13 @@ function checkCookies()
 
 	date.setTime(date.getTime() + (60 * 1000));
 
-	document.cookie = 'testcookie=enabled; expired='+date.toGMTString()+'; path=/';
+	document.cookie = 'testcookie=enabled; expired=' + date.toGMTString() + '; path=/';
 
 	cookieEnabled = (document.cookie.length > 2) ? true : false;
 
 	date.setTime(date.getTime() - (60 * 1000));
 
-	document.cookie = 'testcookie=; expires='+date.toGMTString()+'; path=/';
+	document.cookie = 'testcookie=; expires=' + date.toGMTString() + '; path=/';
 
 	return cookieEnabled;
 }
@@ -40,13 +40,13 @@ function popWin(url, width, height, options)
 	var h = (height) ? height : 400;
 
 	var t = (screen.height) ? (screen.height - h) / 2 : 0;
-	var l =	 (screen.width) ? (screen.width - w) / 2 : 0;
+	var l = (screen.width) ? (screen.width - w) / 2 : 0;
 
-	var opt = (options) ? options : 'toolbar = no, location = no, directories = no, '+
+	var opt = (options) ? options : 'toolbar = no, location = no, directories = no, ' +
 		'status = yes, menubar = no, scrollbars = yes, copyhistory = no, resizable = yes';
 
 	var popped = window.open(url, 'popupwindow',
-		'top = '+t+', left = '+l+', width = '+w+', height = '+h+',' + opt);
+		'top = ' + t + ', left = ' + l + ', width = ' + w + ', height = ' + h + ',' + opt);
 
 	popped.focus();
 }
@@ -71,7 +71,7 @@ function poweredit(elm)
 		elm.parentNode.appendChild(br);
 
 		pjs = document.createElement('P');
-		pjs.setAttribute('id','js');
+		pjs.setAttribute('id', 'js');
 		elm.parentNode.appendChild(pjs);
 	}
 
@@ -137,7 +137,8 @@ function selectrange()
 {
 	var inrange = false;
 
-	$('form[name=longform] input[type=checkbox][name="selected[]"]').each(function() {
+	$('form[name=longform] input[type=checkbox][name="selected[]"]').each(function ()
+	{
 		var $this = $(this);
 
 		if ($this.is(':checked'))
@@ -177,7 +178,7 @@ function cleanSelects()
  * @since  4.5.0
  */
 
-jQuery.fn.txpMultiEditForm = function(method, opt)
+jQuery.fn.txpMultiEditForm = function (method, opt)
 {
 	var args = {};
 
@@ -204,8 +205,8 @@ jQuery.fn.txpMultiEditForm = function(method, opt)
 		args = opt;
 	}
 
-	this.closest('form').each(function() {
-
+	this.closest('form').each(function ()
+	{
 		var $this = $(this), form = {}, public = {}, private = {};
 
 		if ($this.data('_txpMultiEdit'))
@@ -234,7 +235,7 @@ jQuery.fn.txpMultiEditForm = function(method, opt)
 		 * @return {object} public
 		 */
 
-		public.addOption = function(options)
+		public.addOption = function (options)
 		{
 			var settings = $.extend({
 				'label' : null,
@@ -247,7 +248,8 @@ jQuery.fn.txpMultiEditForm = function(method, opt)
 				return public;
 			}
 
-			var option = form.editMethod.find('option').filter(function() {
+			var option = form.editMethod.find('option').filter(function ()
+			{
 				return $(this).attr('value') === settings.value;
 			});
 			
@@ -295,7 +297,7 @@ jQuery.fn.txpMultiEditForm = function(method, opt)
 		 * @return {object}  public
 		 */
 
-		public.select = function(options)
+		public.select = function (options)
 		{
 			var settings = $.extend({
 				'index' : null,  // Select based on row's index.
@@ -308,14 +310,16 @@ jQuery.fn.txpMultiEditForm = function(method, opt)
 
 			if (settings.value !== null)
 			{
-				obj = obj.filter(function() {
+				obj = obj.filter(function ()
+				{
 					return $.inArray($(this).attr('value'), settings.value) !== -1;
 				});
 			}
 
 			else if (settings.index !== null)
 			{
-				obj = obj.filter(function(index) {
+				obj = obj.filter(function (index)
+				{
 					return $.inArray(index, settings.index) !== -1;
 				});
 			}
@@ -335,7 +339,7 @@ jQuery.fn.txpMultiEditForm = function(method, opt)
 		 * @return {object} private
 		 */
 
-		private.highlight = function()
+		private.highlight = function ()
 		{
 			var element = $this.find(form.boxes);
 			element.filter(':checked').closest(opt.highlighted).addClass(opt.selectedClass);
@@ -349,7 +353,7 @@ jQuery.fn.txpMultiEditForm = function(method, opt)
 		 * @return {object} private
 		 */
 
-		private.extendedClick = function()
+		private.extendedClick = function ()
 		{
 			if (opt.rowClick)
 			{
@@ -360,7 +364,8 @@ jQuery.fn.txpMultiEditForm = function(method, opt)
 				var selector = form.boxes;
 			}
 
-			$this.on('click', selector, function(e) {
+			$this.on('click', selector, function (e)
+			{
 
 				var self = ($(e.target).is(form.boxes) || $(this).is(form.boxes));
 
@@ -423,9 +428,10 @@ jQuery.fn.txpMultiEditForm = function(method, opt)
 		 * @return {object} private
 		 */
 
-		private.checked = function()
+		private.checked = function ()
 		{
-			$this.on('change', form.boxes, function(e) {
+			$this.on('change', form.boxes, function (e)
+			{
 				var box = $(this);
 				var boxes = $this.find(form.boxes);
 
@@ -450,11 +456,12 @@ jQuery.fn.txpMultiEditForm = function(method, opt)
 		 * @return {object} private
 		 */
 
-		private.changeMethod = function()
+		private.changeMethod = function ()
 		{
 			form.button.hide();
 
-			form.editMethod.val('').change(function(e) {
+			form.editMethod.val('').change(function (e)
+			{
 				var selected = $(this).find('option:selected');
 				$this.find('.multi-step').remove();
 
@@ -485,9 +492,10 @@ jQuery.fn.txpMultiEditForm = function(method, opt)
 		 * @return {object} private
 		 */
 
-		private.sendForm = function()
+		private.sendForm = function ()
 		{
-			$this.submit(function() {
+			$this.submit(function ()
+			{
 				if (opt.confirmation !== false && verify(opt.confirmation) === false)
 				{
 					form.editMethod.val('').change();
@@ -502,13 +510,16 @@ jQuery.fn.txpMultiEditForm = function(method, opt)
 		{
 			private.highlight().extendedClick().checked().changeMethod().sendForm();
 
-			(function() {
+			(function ()
+			{
 				var multiOptions = $this.find('.multi-option:not(.multi-step)');
 
-				form.editMethod.find('option[value!=""]').each(function() {
+				form.editMethod.find('option[value!=""]').each(function ()
+				{
 					var value = $(this).val();
 
-					var option = multiOptions.filter(function() {
+					var option = multiOptions.filter(function ()
+					{
 						return $(this).hasClass('multi-option-'+value);
 					});
 
@@ -525,7 +536,8 @@ jQuery.fn.txpMultiEditForm = function(method, opt)
 				multiOptions.remove();
 			})();
 
-			$this.on('change', opt.selectAll, function(e) {
+			$this.on('change', opt.selectAll, function (e)
+			{
 				public.select({
 					'checked' : $(this).prop('checked')
 				});
@@ -589,7 +601,7 @@ function setCookie(name, value, days)
 	{
 		var date = new Date();
 
-		date.setTime(date.getTime() + (days*24*60*60*1000));
+		date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
 
 		var expires = '; expires=' + date.toGMTString();
 	}
@@ -619,7 +631,7 @@ function getCookie(name)
 	{
 		var c = ca[i];
 
-		while (c.charAt(0)==' ')
+		while (c.charAt(0) == ' ')
 		{
 			c = c.substring(1, c.length);
 		}
@@ -659,14 +671,14 @@ function getElementsByClass(classname, node)
 {
 	var a = [];
 	var re = new RegExp('(^|\\s)' + classname + '(\\s|$)');
-	if(node == null)
+	if (node == null)
 	{
 		node = document;
 	}
 	var els = node.getElementsByTagName("*");
-	for(var i=0,j=els.length; i<j; i++)
+	for (var i = 0, j = els.length; i < j; i++)
 	{
-		if(re.test(els[i].className))
+		if (re.test(els[i].className))
 		{
 			a.push(els[i]);
 		}
@@ -698,6 +710,7 @@ function toggleDisplay(id)
 			}
 		);
 	}
+
 	return false;
 }
 
@@ -736,7 +749,7 @@ function toggleDisplayHref()
 
 function setClassDisplay(className, show)
 {
-	var obj = $('.'+className);
+	var obj = $('.' + className);
 	
 	if (show == 1)
 	{
@@ -761,7 +774,7 @@ function toggleClassRemember(className)
 
 	setCookie('toggle_' + className, v, 365);
 	setClassDisplay(className, v);
-	setClassDisplay(className+'_neg', 1-v);
+	setClassDisplay(className + '_neg', 1 - v);
 }
 
 /**
@@ -779,7 +792,7 @@ function setClassRemember(className, force)
 	}
 	var v = getCookie('toggle_' + className);
 	setClassDisplay(className, v);
-	setClassDisplay(className+'_neg', 1-v);
+	setClassDisplay(className + '_neg', 1 - v);
 }
 
 /**
@@ -792,9 +805,9 @@ function setClassRemember(className, force)
  * @see    http://api.jquery.com/jQuery.post/
  */
 
-function sendAsyncEvent(data, fn, format)
+function sendAsyncEvent (data, fn, format)
 {
-	if($.type(data) === 'string' && data.length > 0)
+	if ($.type(data) === 'string' && data.length > 0)
 	{
 		// Got serialised data.
 		data = data + '&app_mode=async&_txp_token=' + textpattern._txp_token;
@@ -826,7 +839,7 @@ textpattern.Relay =
 	 * textpattern.Relay.callback('newEvent', {'name1' : 'value1', 'name2' : 'value2'});
 	 */
 
-	callback: function(event, data)
+	callback: function (event, data)
 	{
 		return $(this).trigger(event, data);
 	},
@@ -846,7 +859,7 @@ textpattern.Relay =
 	 * );
 	 */
 
-	register: function(event, fn)
+	register: function (event, fn)
 	{
 		$(this).on(event, fn);
 		return this;
@@ -875,7 +888,7 @@ textpattern.Console =
 	 * textpattern.Console.log('Some message');
 	 */
 
-	log : function(message)
+	log : function (message)
 	{
 		if (textpattern.production_status !== 'debug')
 		{
@@ -899,7 +912,7 @@ textpattern.Console =
  * Uses a namespaced 'txpConsoleLog.ConsoleAPI' event.
  */
 
-textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function(event, data)
+textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data)
 {
 	if ($.type(console) === 'object' && $.type(console.log) === 'function')
 	{
@@ -918,7 +931,7 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function(event, data)
  * @since  4.5.0
  */
 
-jQuery.fn.txpAsyncForm = function(options)
+jQuery.fn.txpAsyncForm = function (options)
 {
 	options = $.extend({
 		dataType : 'script',
@@ -927,7 +940,8 @@ jQuery.fn.txpAsyncForm = function(options)
 	}, options);
 
 	// Send form data to application, process response as script.
-	this.on('submit.txpAsyncForm', function(event) {
+	this.on('submit.txpAsyncForm', function (event)
+	{
 		event.preventDefault();
 
 		var $this = $(this);
@@ -939,12 +953,10 @@ jQuery.fn.txpAsyncForm = function(options)
 		};
 
 		// Show feedback while processing.
-
 		$this.addClass('busy');
 		$('body').addClass('busy');
 
 		// WebKit does not set :focus on button-click: use first submit input as a fallback.
-
 		if (!form.button.length)
 		{
 			form.button = $this.find('input[type="submit"]').eq(0);
@@ -957,8 +969,8 @@ jQuery.fn.txpAsyncForm = function(options)
 			form.data += '&' + (form.button.attr('name') || '_txp_submit') + '=' + (form.button.val() || '_txp_submit');
 		}
 
-		sendAsyncEvent(form.data, function(){}, options.dataType)
-			.done(function(data, textStatus, jqXHR)
+		sendAsyncEvent(form.data, function () {}, options.dataType)
+			.done(function (data, textStatus, jqXHR)
 			{
 				if (options.success)
 				{
@@ -973,7 +985,7 @@ jQuery.fn.txpAsyncForm = function(options)
 					'jqXHR'      : jqXHR
 				});
 			})
-			.fail(function(jqXHR, textStatus, errorThrown)
+			.fail(function (jqXHR, textStatus, errorThrown)
 			{
 				if (options.error)
 				{
@@ -988,7 +1000,7 @@ jQuery.fn.txpAsyncForm = function(options)
 					'thrownError'  : errorThrown
 				});
 			})
-			.always(function()
+			.always(function ()
 			{
 				$this.removeClass('busy');
 				form.button.removeAttr('disabled');
@@ -996,6 +1008,7 @@ jQuery.fn.txpAsyncForm = function(options)
 				$('body').removeClass('busy');
 			});
 	});
+
 	return this;
 };
 
@@ -1009,14 +1022,14 @@ jQuery.fn.txpAsyncForm = function(options)
  * @since  4.5.0
  */
 
-jQuery.fn.txpAsyncHref = function(options)
+jQuery.fn.txpAsyncHref = function (options)
 {
 	options = $.extend({
 		success : null,
 		error   : null
 	}, options);
 
-	this.on('click.txpAsyncHref', function(event)
+	this.on('click.txpAsyncHref', function (event)
 	{
 		event.preventDefault();
 		var $this = $(this);
@@ -1026,12 +1039,12 @@ jQuery.fn.txpAsyncHref = function(options)
 		$this.addClass('busy');
 		$('body').addClass('busy');
 
-		sendAsyncEvent(data, function() {}, 'text')
-			.done(function(data, textStatus, jqXHR)
+		sendAsyncEvent(data, function () {}, 'text')
+			.done(function (data, textStatus, jqXHR)
 			{
 				$this.html(data);
 
-				if (options.success) 
+				if (options.success)
 				{
 					options.success($this, event, data, textStatus, jqXHR);
 				}
@@ -1044,7 +1057,7 @@ jQuery.fn.txpAsyncHref = function(options)
 					'jqXHR'      : jqXHR
 				});
 			})
-			.fail(function(jqXHR, textStatus, errorThrown)
+			.fail(function (jqXHR, textStatus, errorThrown)
 			{
 				if (options.error)
 				{
@@ -1059,7 +1072,7 @@ jQuery.fn.txpAsyncHref = function(options)
 					'thrownError'  : errorThrown
 				});
 			})
-			.always(function()
+			.always(function ()
 			{
 				$this.removeClass('busy');
 				$('body').removeClass('busy');
@@ -1067,7 +1080,7 @@ jQuery.fn.txpAsyncHref = function(options)
 	});
 
 	return this;
-}
+};
 
 /**
  * Returns an i18n string.
@@ -1080,7 +1093,7 @@ jQuery.fn.txpAsyncHref = function(options)
  * textpattern.gTxt('string', {'{name}' : 'example'}, true);
  */
 
-textpattern.gTxt = function(i18n, atts, escape)
+textpattern.gTxt = function (i18n, atts, escape)
 {
 	var tags = atts || {};
 	var string = i18n;
@@ -1095,17 +1108,19 @@ textpattern.gTxt = function(i18n, atts, escape)
 	{
 		string = $('<div/>').text(string).html();
 
-		$.each(tags, function(key, value) {
+		$.each(tags, function (key, value)
+		{
 			tags[key] = $('<div/>').text(value).html();
 		});
 	}
 
-	$.each(tags, function(key, value) {
+	$.each(tags, function (key, value)
+	{
 		string = string.replace(key, value);
 	});
 
 	return string;
-}
+};
 
 /**
  * Replaces HTML contents of each matched with i18n string.
@@ -1124,7 +1139,7 @@ textpattern.gTxt = function(i18n, atts, escape)
  * $('p').gTxt('string').class('alert-block warning');
  */
 
-jQuery.fn.gTxt = function(opts, tags, escape)
+jQuery.fn.gTxt = function (opts, tags, escape)
 {
 	var options = $.extend({
 		'string' : opts,
@@ -1138,7 +1153,8 @@ jQuery.fn.gTxt = function(opts, tags, escape)
 
 // ESC button closes alert messages.
 
-$(document).keyup(function(e) {
+$(document).keyup(function (e)
+{
 	if (e.keyCode == 27)
 	{
 		$('.close').parent().remove();
@@ -1155,7 +1171,8 @@ var cookieEnabled = true;
 
 // Initialise JavaScript.
 
-$(document).ready(function() {
+$(document).ready(function ()
+{
 	// Check cookies.
 	if (textpattern.event == 'login' && !checkCookies())
 	{
@@ -1165,14 +1182,14 @@ $(document).ready(function() {
 
 	// Disable spellchecking on all elements of class "code" in capable browsers.
 	var c = $(".code")[0];
-	if(c && "spellcheck" in c)
+	if (c && "spellcheck" in c)
 	{
 		$(".code").prop("spellcheck", false);
 	}
 
 	// Enable spellcheck for all elements mentioned in textpattern.do_spellcheck.
 	c = $(textpattern.do_spellcheck)[0];
-	if(c && "spellcheck" in c)
+	if (c && "spellcheck" in c)
 	{
 		$(textpattern.do_spellcheck).prop("spellcheck", true);
 	}
@@ -1184,14 +1201,14 @@ $(document).ready(function() {
 	$('.multi_edit_form').txpMultiEditForm();
 
 	// Establish AJAX timeout from prefs.
-	if($.ajaxSetup().timeout === undefined)
+	if ($.ajaxSetup().timeout === undefined)
 	{
 		$.ajaxSetup({timeout : textpattern.ajax_timeout});
 	}
 
 	// Set up synchronous links.
 	$('form.async').txpAsyncForm({
-		error: function() 
+		error: function ()
 		{
 			window.alert(textpattern.gTxt('form_submission_error'));
 		}
@@ -1199,21 +1216,22 @@ $(document).ready(function() {
 
 	// Set up synchronous forms.
 	$('a.async').txpAsyncHref({
-		error: function()
+		error: function ()
 		{
 			window.alert(textpattern.gTxt('form_submission_error'));
 		}
 	});
 
 	// Close button on the announce pane.
-	$(document).on('click', '.close', function(e) {
+	$(document).on('click', '.close', function (e)
+	{
 		e.preventDefault();
 		$(this).parent().remove();
 	});
 
 	// Initialise dynamic WAI-ARIA attributes.
-	$('.txp-summary a').each(function(i, elm) {
-
+	$('.txp-summary a').each(function (i, elm)
+	{
 		// Get id of toggled <section> region.
 		var region = $(elm).attr('href');
 		if (region)
