@@ -1257,9 +1257,10 @@
 		$content = escape_js($content);
 
 		$js = <<<EOF
-			$(document).ready(function() {
-				$('#{$id}').append($('<{$wraptag} />').attr('id', '{$wraptagid}').html('{$content}'));
-			});
+$(document).ready(function ()
+{
+	$('#{$id}').append($('<{$wraptag} />').attr('id', '{$wraptagid}').html('{$content}'));
+});
 EOF;
 
 		return script_js($js, (string) $noscript);
@@ -1326,7 +1327,7 @@ EOF;
 			(cs('toggle_'.$classname) ? 'checked="checked" ' : '').
 			'class="checkbox" onclick="toggleClassRemember(\''.$classname.'\');" />'.
 			n.' <label for="'.$name.'">'.gTxt('detail_toggle').'</label> '.
-			script_js("setClassRemember('".$classname."');addEvent(window, 'load', function(){setClassRemember('".$classname."');});");
+			script_js("setClassRemember('".$classname."');addEvent(window, 'load', function () {setClassRemember('".$classname."');});");
 		if ($form)
 		{
 			return form($i);

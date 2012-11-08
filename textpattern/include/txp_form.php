@@ -157,13 +157,14 @@
 
 			return form( join('', $out), '', '', 'post', '', '', 'allforms_form' ).
 				script_js( <<<EOS
-				$(document).ready(function() {
-					$('#allforms_form').txpMultiEditForm({
-						'checkbox' : 'input[name="selected_forms[]"][type=checkbox]',
-						'row' : '.switcher-list li, .form-list-name',
-						'highlighted' : '.switcher-list li'
-					});
-				});
+$(document).ready(function ()
+{
+	$('#allforms_form').txpMultiEditForm({
+		'checkbox' : 'input[name="selected_forms[]"][type=checkbox]',
+		'row' : '.switcher-list li, .form-list-name',
+		'highlighted' : '.switcher-list li'
+	});
+});
 EOS
 				);
 		}

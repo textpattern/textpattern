@@ -9,9 +9,17 @@ class remora_theme extends classic_theme
 	function html_head()
 	{
 		$js = <<<SF
-			$(document).ready( function() {
-				$("#nav li").hover( function() { $(this).addClass("sfhover"); }, function() { $(this).removeClass("sfhover"); } );
-			});
+$(document).ready(function ()
+{
+	$("#nav li").hover(function ()
+	{
+		$(this).addClass("sfhover");
+	},
+	function ()
+	{
+		$(this).removeClass("sfhover");
+	});
+});
 SF;
 		return parent::html_head().script_js($js);
 	}

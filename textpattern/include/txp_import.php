@@ -86,8 +86,8 @@
 		pagetop(gTxt('txp_import'), '');
 		echo n.'<h1 class="txp-heading">'.gTxt('tab_import').'</h1>'.
 			script_js(<<<EOF
-$(document).ready(function(){
-
+$(document).ready(function ()
+{
 	var importOptions =
 	{
 		'mtdb' : '#mtblogid, #databased',
@@ -95,7 +95,7 @@ $(document).ready(function(){
 		'b2'   : '#databased'
 	};
 
-	$('select[name=import_tool]').change(function()
+	$('select[name=import_tool]').change(function ()
 	{
 		var value = $(this).val();
 
