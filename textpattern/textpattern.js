@@ -921,6 +921,60 @@ textpattern.Relay.register('txpConsoleLog.ConsoleAPI', function (event, data)
 });
 
 /**
+ * Script routing.
+ *
+ * @since 4.6.0
+ */
+
+textpattern.Route =
+{
+	/**
+	 * An array of attached listeners.
+	 */
+
+	attached : [],
+
+	/**
+	 * Attachs a listener.
+	 *
+	 * @param {string} page The page
+	 * @param {object} fn   The callback
+	 */
+
+	add : function (page, fn)
+	{
+		textpattern.Route.attached.push({
+			'page' : page,
+			'fn'   : fn
+		});
+	},
+
+	/**
+	 * Initialises attached listeners.
+	 *
+	 * @param {object} options       Options
+	 * @param {string} options.event The event
+	 * @param {string} options.step  The step
+	 */
+
+	init : function (options)
+	{
+		var options = $.extend({
+			'event' : textpattern.event,
+			'step'  : textpattern.step
+		}, options);
+
+		$.each(textpattern.Route.attached, function(index, data)
+		{
+			if (data.page === options.event || data.page === options.event + '.' + options.step)
+			{
+				data.fn(options);
+			}
+		});
+	}
+};
+
+/**
  * Sends a form using AJAX and processes the response.
  *
  * @param  {object} options          Options
