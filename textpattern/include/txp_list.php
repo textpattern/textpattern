@@ -8,6 +8,12 @@
 
 */
 
+/**
+ * Articles panel.
+ *
+ * @package Admin\List
+ */
+
 	if (!defined('txpinterface')) die('txpinterface is undefined.');
 
 	if ($event == 'list') {
@@ -40,7 +46,12 @@
 		}
 	}
 
-//--------------------------------------------------------------
+/**
+ * Outputs the main panel listing all articles.
+ *
+ * @param  string|array $message The activity message
+ * @param  string       $post    Not used
+ */
 
 	function list_list($message = '', $post = '')
 	{
@@ -359,14 +370,23 @@
 		}
 	}
 
-// -------------------------------------------------------------
+/**
+ * Saves pageby value for the article list.
+ */
+
 	function list_change_pageby()
 	{
 		event_change_pageby('article');
 		list_list();
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders a search form for articles.
+ *
+ * @param  string $crit   The current search criteria
+ * @param  string $method The selected search method
+ * @return string HTML
+ */
 
 	function list_search_form($crit, $method)
 	{
@@ -386,7 +406,16 @@
 		return search_form('list', 'list', $crit, $methods, $method, 'title_body_excerpt');
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders a multi-edit form widget for articles.
+ *
+ * @param  int    $page          The page number
+ * @param  string $sort          The current sort value
+ * @param  string $dir           The current sort direction
+ * @param  string $crit          The current search criteria
+ * @param  string $search_method The current search method
+ * @return string HTML
+ */
 
 	function list_multiedit_form($page, $sort, $dir, $crit, $search_method)
 	{
@@ -434,13 +463,15 @@
 		return multi_edit($methods, 'list', 'list_multi_edit', $page, $sort, $dir, $crit, $search_method);
 	}
 
-// -------------------------------------------------------------
+/**
+ * Processes multi-edit actions.
+ */
 
 	function list_multi_edit()
 	{
 		global $txp_user, $statuses, $all_cats, $all_authors, $all_sections;
 
-		// Empty entry to permit clearing the categories
+		// Empty entry to permit clearing the categories.
 		$categories = array('');
 
 		foreach ($all_cats as $row) {
@@ -513,7 +544,7 @@
 
 			switch ($method)
 			{
-				// change author
+				// Change author.
 				case 'changeauthor':
 					$val = has_privs('article.edit') ? ps('AuthorID') : '';
 					if (in_array($val, $all_authors))
@@ -522,7 +553,7 @@
 					}
 				break;
 
-				// change category1
+				// Change category1.
 				case 'changecategory1':
 					$val = ps('Category1');
 					if (in_array($val, $categories))
@@ -531,7 +562,7 @@
 					}
 				break;
 
-				// change category2
+				// Change category2.
 				case 'changecategory2':
 					$val = ps('Category2');
 					if (in_array($val, $categories))
@@ -540,13 +571,13 @@
 					}
 				break;
 
-				// change comments
+				// Change comment status.
 				case 'changecomments':
 					$key = 'Annotate';
 					$val = (int) ps('Annotate');
 				break;
 
-				// change section
+				// Change section.
 				case 'changesection':
 					$val = ps('Section');
 					if (in_array($val, $all_sections))
@@ -555,7 +586,7 @@
 					}
 				break;
 
-				// change status
+				// Change status.
 				case 'changestatus':
 					$val = (int) ps('Status');
 					if (array_key_exists($val, $statuses))
