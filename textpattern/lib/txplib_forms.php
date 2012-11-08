@@ -22,7 +22,7 @@
  * ), 'myInput', 'value1');
  */
 
-	function radioSet($values, $field, $checked, $tabindex = 0, $id = '')
+	function radioSet($values, $field, $checked = '', $tabindex = 0, $id = '')
 	{
 		$id = ($id) ? $id.'-'.$field : $field;
 
@@ -56,7 +56,7 @@
  * );
  */
 
-	function yesnoRadio($field, $checked, $tabindex = 0, $id = '')
+	function yesnoRadio($field, $checked = '', $tabindex = 0, $id = '')
 	{
 		$vals = array(
 			'0' => gTxt('no'),
@@ -77,7 +77,7 @@
  * @see    radioSet()
  */
 
-	function onoffRadio($field, $checked, $tabindex = 0, $id = '')
+	function onoffRadio($field, $checked = '', $tabindex = 0, $id = '')
 	{
 		$vals = array(
 			'0' => gTxt('off'),
