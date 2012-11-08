@@ -114,7 +114,7 @@
 
 		foreach ($array as $avalue => $alabel)
 		{
-			if ($value === (string) $avalue || $value === (string) $alabel)
+			if ($value === (string) $avalue)
 			{
 				$sel = ' selected="selected"';
 				$selected = true;
