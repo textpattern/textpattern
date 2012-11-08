@@ -15,6 +15,11 @@
  * @param  int    $tabindex The HTML tabindex
  * @param  string $id       The HTML id
  * @return string A HTML radio button set
+ * @example
+ * echo radioSet(array(
+ * 	'value1' => 'Label1',
+ * 	'value2' => 'Label2',
+ * ), 'myInput', 'value1');
  */
 
 	function radioSet($values, $field, $checked, $tabindex = 0, $id = '')
