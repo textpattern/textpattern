@@ -489,14 +489,25 @@
 
 	function radio_list($name, $values, $current_val = '', $hilight_val = '', $atts = array('class' => 'status plain-list'))
 	{
-		foreach ($values as $k => $v)
+		foreach ($values as $value => $label)
 		{
-			$id = $name.'-'.$k;
-			$out[] = n.'<li class="status-'.$k.' '.$v.($hilight_val == $k ? ' active' : '').'">'.radio($name, $k, ($current_val == $k) ? 1 : 0, $id).
-				n.'<label for="'.$id.'">'.($hilight_val == $k ? strong($v) : $v).'</label>'.n.'</li>';
+			$id = $name.'-'.$value;
+			$class = 'status-'.$value;
+
+			if ((string) $value === (string) $hilight_val)
+			{
+				$label = strong($label);
+				$class .= ' active';
+			}
+
+			$out[] = tag(
+				radio($name, $value, ((string) $current_val === (string) $value), $id).
+				n.tag($label, 'label', array('for' => $id)),
+				'li', array('class' => $class)
+			);
 		}
 
-		return tag(join('', $out), 'ul', $atts);
+		return tag(n.join(n, $out).n, 'ul', $atts);
 	}
 
 /**
