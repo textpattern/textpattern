@@ -6,7 +6,10 @@
  * @package Admin\Import
  */
 
-	if (!defined('txpinterface')) die('txpinterface is undefined.');
+	if (!defined('txpinterface'))
+	{
+		die('txpinterface is undefined.');
+	}
 
 	// TO-DO:
 	// * Improve performance of file imports
@@ -51,17 +54,22 @@
 	 */
 
 	$tools = array(
-		''=>'',
-		'mt'=>'Movable Type (File)',
-		'mtdb'=>'Movable Type (MySQL DB)',
-		'blogger'=>'Blogger',
-		'b2' => 'b2',
-		'wp'=>'WordPress'
+		'' => '',
+		'mt' => 'Movable Type (File)',
+		'mtdb' => 'Movable Type (MySQL DB)',
+		'blogger' => 'Blogger',
+		'b2'  => 'b2',
+		'wp' => 'WordPress'
 	);
 
-	if(!$step or !bouncer($step, array('switch_tool' => false, 'start_import' => true))) {
+	if (!$step or !bouncer($step, array(
+		'switch_tool' => false,
+		'start_import' => true
+	)))
+	{
 		$step = 'switch_tool';
 	}
+
 	$step();
 
 /**
@@ -71,9 +79,9 @@
  * configuration options.
  */
 
-	function switch_tool(){
-
-		global $vars,$event,$step,$tools;
+	function switch_tool()
+	{
+		global $vars, $event, $step, $tools;
 		extract(gpsa($vars));
 		pagetop(gTxt('txp_import'), '');
 		echo n.'<h1 class="txp-heading">'.gTxt('tab_import').'</h1>'.
@@ -158,7 +166,7 @@ EOF
 
 	function start_import()
 	{
-		global $event,$vars;
+		global $event, $vars;
 		extract(psa($vars));
 
 		$insert_into_section = $import_section;
@@ -168,42 +176,85 @@ EOF
 
 		$ini_time = ini_get('max_execution_time');
 
-		@ini_set('max_execution_time', 300 + intval($ini_time) );
+		@ini_set('max_execution_time', 300 + intval($ini_time));
 
 		switch ($import_tool)
 		{
-			case 'mtdb':
-				$out = doImportMTDB($importdblogin, $importdb, $importdbpass, $importdbhost, $import_blog_id, $insert_into_section, $insert_with_status, $default_comment_invite);
-				rebuild_tree('root',1,'article');
-			break;
-			case 'mt':
+			case 'mtdb' :
+				$out = doImportMTDB(
+					$importdblogin,
+					$importdb,
+					$importdbpass,
+					$importdbhost,
+					$import_blog_id,
+					$insert_into_section,
+					$insert_with_status,
+					$default_comment_invite
+				);
+				rebuild_tree('root', 1, 'article');
+				break;
+			case 'mt' :
 				$file = check_import_file();
-				if (!empty($file)){
-					$out = doImportMT($file, $insert_into_section, $insert_with_status, $import_comments_invite);
+				if (!empty($file))
+				{
+					$out = doImportMT(
+						$file,
+						$insert_into_section,
+						$insert_with_status,
+						$import_comments_invite
+					);
 					// Rebuilding category tree.
-					rebuild_tree('root',1,'article');
-				}else{
+					rebuild_tree('root', 1, 'article');
+				}
+				else
+				{
 					$out = 'Import file not found';
 				}
-			break;
-			case 'b2':
-				$out = doImportB2($importdblogin, $importdb, $importdbpass, $importdbhost, $insert_into_section, $insert_with_status, $default_comment_invite);
-			break;
-			case 'wp':
-				$out = doImportWP($importdblogin, $importdb, $importdbpass, $importdbhost, $wpdbprefix, $insert_into_section, $insert_with_status, $default_comment_invite, $wpdbcharset);
-				rebuild_tree('root',1,'article');
-			break;
+				break;
+			case 'b2' :
+				$out = doImportB2(
+					$importdblogin,
+					$importdb,
+					$importdbpass,
+					$importdbhost,
+					$insert_into_section,
+					$insert_with_status,
+					$default_comment_invite
+				);
+				break;
+			case 'wp' :
+				$out = doImportWP(
+					$importdblogin,
+					$importdb,
+					$importdbpass,
+					$importdbhost,
+					$wpdbprefix,
+					$insert_into_section,
+					$insert_with_status,
+					$default_comment_invite,
+					$wpdbcharset
+				);
+				rebuild_tree('root', 1, 'article');
+				break;
 			case 'blogger':
 				$file = check_import_file();
-				if (!empty($file)){
-					$out = doImportBLOGGER($file, $insert_into_section, $insert_with_status, $import_comments_invite);
-				}else{
+				if (!empty($file))
+				{
+					$out = doImportBLOGGER(
+						$file,
+						$insert_into_section,
+						$insert_with_status,
+						$import_comments_invite
+					);
+				}
+				else
+				{
 					$out = gTxt('import_file_not_found');
 				}
-			break;
+				break;
 		}
 
-		$out = tag('max_execution_time = '.ini_get('max_execution_time'),'p', ' class="highlight"').$out;
+		$out = tag('max_execution_time = '.ini_get('max_execution_time'), 'p', ' class="highlight"').$out;
 		pagetop(gTxt('txp_import'));
 
 		$content= '<div id="'.$event.'_container" class="txp-container">';
@@ -214,10 +265,14 @@ EOF
 		$content.= '</div>';
 		echo $content;
 
-		$rs = safe_rows_start('parentid, count(*) as thecount','txp_discuss','visible=1 group by parentid');
+		$rs = safe_rows_start('parentid, count(*) as thecount', 'txp_discuss', 'visible=1 group by parentid');
 		if (mysql_num_rows($rs) > 0)
-        	while ($a = nextRow($rs))
-                safe_update('textpattern',"comments_count=".$a['thecount'],"ID=".$a['parentid']);
+		{
+			while ($a = nextRow($rs))
+			{
+				safe_update('textpattern', "comments_count=".$a['thecount'], "ID=".$a['parentid']);
+			}
+		}
 	}
 
 /**
@@ -234,7 +289,8 @@ EOF
 		// size is too long and time_limit can not be altered.
 
 		$import_file = txpath.'/include/import/import.txt';
-		if (!is_file($import_file)) {
+		if (!is_file($import_file))
+		{
 			// trigger_error('Import file not found', E_USER_WARNING);
 			return '';
 		}
@@ -255,7 +311,7 @@ EOF
 
 	function array_slash($in)
 	{
-		return is_array($in) ? array_map('addslashes',$in) : addslashes($in);
+		return is_array($in) ? array_map('addslashes', $in) : addslashes($in);
 	}
 
 /**
@@ -269,7 +325,8 @@ EOF
 	function import_section_popup($Section)
 	{
 		$rs = safe_column("name", "txp_section", "name!='default'");
-		if ($rs) {
+		if ($rs)
+		{
 			return selectInput("import_section", $rs, $Section, 1, '', 'import_section');
 		}
 		return false;
