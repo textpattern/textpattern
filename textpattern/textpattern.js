@@ -1223,17 +1223,36 @@ $(document).keyup(function (e)
 
 var cookieEnabled = true;
 
-// Initialise JavaScript.
+// Login panel.
 
-$(document).ready(function ()
+textpattern.Route.add('login', function ()
 {
 	// Check cookies.
-	if (textpattern.event == 'login' && !checkCookies())
+	if (!checkCookies())
 	{
 		cookieEnabled = false;
 		$('#txp-main').prepend($('<p class="alert-block warning" />').text(textpattern.gTxt('cookies_must_be_enabled')));
 	}
 
+	// Focus on either username or password when empty.
+	var has_name = $('#login_name').val().length;
+	var password_box = $('#login_password').val();
+	var has_password = (password_box) ? password_box.length : 0;
+
+	if (!has_name)
+	{
+		$('#login_name').focus();
+	}
+	else if (!has_password)
+	{
+		$('#login_password').focus();
+	}
+});
+
+// Initialise JavaScript.
+
+$(document).ready(function ()
+{
 	// Disable spellchecking on all elements of class "code" in capable browsers.
 	var c = $(".code")[0];
 	if (c && "spellcheck" in c)
@@ -1295,6 +1314,9 @@ $(document).ready(function ()
 			$region.attr('aria-expanded', vis);
 		}
 	});
+
+	// Initialises panel specific JavaScript.
+	textpattern.Route.init();
 
 	// Arm UI.
 	$('body').removeClass('not-ready');

@@ -207,21 +207,6 @@ Use of this software indicates acceptance of the Textpattern license agreement
 			n.'</section>'
 		, '', '', 'post', '', '', 'login_form').
 
-		// Focus on either username or password when empty.
-		script_js(<<<EOSCR
-			$(document).ready(function ()
-			{
-				var has_name = $("#login_name").val().length;
-				var password_box = $("#login_password").val();
-				var has_password = (password_box) ? password_box.length : 0;
-				if (!has_name) {
-					$("#login_name").focus();
-				} else if (!has_password) {
-					$("#login_password").focus();
-				}
-			});
-EOSCR
-		).
 		script_js('textpattern.textarray = '.json_encode($textarray_script)).
 		n.'</div><!-- /txp-body -->'.n.'</body>'.n.'</html>';
 
