@@ -266,7 +266,7 @@ EOF
 		echo $content;
 
 		$rs = safe_rows_start('parentid, count(*) as thecount', 'txp_discuss', 'visible=1 group by parentid');
-		if (mysql_num_rows($rs) > 0)
+		if (numRows($rs) > 0)
 		{
 			while ($a = nextRow($rs))
 			{
