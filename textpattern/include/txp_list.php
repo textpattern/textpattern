@@ -14,9 +14,13 @@
  * @package Admin\List
  */
 
-	if (!defined('txpinterface')) die('txpinterface is undefined.');
+	if (!defined('txpinterface'))
+	{
+		die('txpinterface is undefined.');
+	}
 
-	if ($event == 'list') {
+	if ($event == 'list')
+	{
 		global $statuses, $all_cats, $all_authors, $all_sections;
 
 		require_privs('article');
@@ -39,9 +43,12 @@
 			'list_multi_edit'    => true,
 		);
 
-		if ($step && bouncer($step, $available_steps)) {
+		if ($step && bouncer($step, $available_steps))
+		{
 			$step();
-		} else {
+		}
+		else
+		{
 			list_list();
 		}
 	}
@@ -59,59 +66,64 @@
 
 		pagetop(gTxt('tab_list'), $message);
 
-		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
-		if ($sort === '') $sort = get_pref('article_sort_column', 'posted');
-		if ($dir === '') $dir = get_pref('article_sort_dir', 'desc');
+		extract(gpsa(array(
+			'page',
+			'sort',
+			'dir',
+			'crit',
+			'search_method'
+		)));
+
+		if ($sort === '')
+		{
+			$sort = get_pref('article_sort_column', 'posted');
+		}
+
+		if ($dir === '')
+		{
+			$dir = get_pref('article_sort_dir', 'desc');
+		}
+
 		$dir = ($dir == 'asc') ? 'asc' : 'desc';
 
 		$sesutats = array_flip($statuses);
 
 		switch ($sort)
 		{
-			case 'id':
+			case 'id' :
 				$sort_sql = 'textpattern.ID '.$dir;
-			break;
-
-			case 'title':
+				break;
+			case 'title' :
 				$sort_sql = 'textpattern.Title '.$dir.', textpattern.Posted desc';
-			break;
-
-			case 'expires':
+				break;
+			case 'expires' :
 				$sort_sql = 'textpattern.Expires '.$dir;
-			break;
-
-			case 'section':
+				break;
+			case 'section' :
 				$sort_sql = 'textpattern.Section '.$dir.', textpattern.Posted desc';
-			break;
-
-			case 'category1':
+				break;
+			case 'category1' :
 				$sort_sql = 'textpattern.Category1 '.$dir.', textpattern.Posted desc';
-			break;
-
-			case 'category2':
+				break;
+			case 'category2' :
 				$sort_sql = 'textpattern.Category2 '.$dir.', textpattern.Posted desc';
-			break;
-
-			case 'status':
+				break;
+			case 'status' :
 				$sort_sql = 'textpattern.Status '.$dir.', textpattern.Posted desc';
-			break;
-
-			case 'author':
+				break;
+			case 'author' :
 				$sort_sql = 'textpattern.AuthorID '.$dir.', textpattern.Posted desc';
-			break;
-
-			case 'comments':
+				break;
+			case 'comments' :
 				$sort_sql = 'textpattern.comments_count '.$dir.', textpattern.Posted desc';
-			break;
-
-			case 'lastmod':
+				break;
+			case 'lastmod' :
 				$sort_sql = 'textpattern.LastMod '.$dir.', textpattern.Posted desc';
-			break;
-
-			default:
+				break;
+			default :
 				$sort = 'posted';
 				$sort_sql = 'textpattern.Posted '.$dir;
-			break;
+				break;
 		}
 
 		set_pref('article_sort_column', $sort, 'list', 2, '', 0, PREF_PRIVATE);
@@ -194,7 +206,7 @@
 
 		$limit = max($article_list_pageby, 15);
 
-		list($page, $offset, $numPages) = pager($total, $limit, $page);
+		list ($page, $offset, $numPages) = pager($total, $limit, $page);
 
 		echo list_search_form($crit, $search_method).'</div>';
 
@@ -421,7 +433,8 @@
 	{
 		global $statuses, $all_cats, $all_authors, $all_sections;
 
-		if ($all_cats) {
+		if ($all_cats)
+		{
 			$category1 = treeSelectInput('Category1', $all_cats, '');
 			$category2 = treeSelectInput('Category2', $all_cats, '');
 		}
@@ -474,7 +487,8 @@
 		// Empty entry to permit clearing the categories.
 		$categories = array('');
 
-		foreach ($all_cats as $row) {
+		foreach ($all_cats as $row)
+		{
 			$categories[] = $row['name'];
 		}
 
@@ -524,8 +538,11 @@
 
 		else
 		{
-			$selected = safe_rows('ID, AuthorID, Status', 'textpattern',
-									  'ID in ('. implode(',',$selected) .')');
+			$selected = safe_rows(
+				'ID, AuthorID, Status',
+				'textpattern',
+				'ID in ('.join(',', $selected).')'
+			);
 
 			$allowed = array();
 			foreach ($selected as $item)
@@ -545,47 +562,42 @@
 			switch ($method)
 			{
 				// Change author.
-				case 'changeauthor':
+				case 'changeauthor' :
 					$val = has_privs('article.edit') ? ps('AuthorID') : '';
 					if (in_array($val, $all_authors))
 					{
 						$key = 'AuthorID';
 					}
-				break;
-
+					break;
 				// Change category1.
-				case 'changecategory1':
+				case 'changecategory1' :
 					$val = ps('Category1');
 					if (in_array($val, $categories))
 					{
 						$key = 'Category1';
 					}
-				break;
-
+					break;
 				// Change category2.
-				case 'changecategory2':
+				case 'changecategory2' :
 					$val = ps('Category2');
 					if (in_array($val, $categories))
 					{
 						$key = 'Category2';
 					}
-				break;
-
+					break;
 				// Change comment status.
-				case 'changecomments':
+				case 'changecomments' :
 					$key = 'Annotate';
 					$val = (int) ps('Annotate');
-				break;
-
+					break;
 				// Change section.
-				case 'changesection':
+				case 'changesection' :
 					$val = ps('Section');
 					if (in_array($val, $all_sections))
 					{
 						$key = 'Section';
 					}
-				break;
-
+					break;
 				// Change status.
 				case 'changestatus':
 					$val = (int) ps('Status');
@@ -598,12 +610,11 @@
 					{
 						$val = STATUS_PENDING;
 					}
-				break;
-
+					break;
 				default:
 					$key = '';
 					$val = '';
-				break;
+					break;
 			}
 
 			if ($selected and $key)
