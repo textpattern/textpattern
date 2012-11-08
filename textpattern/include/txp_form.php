@@ -130,7 +130,7 @@
 					? txpspecialchars($name)
 					: eLink('form', 'form_edit', 'name', $name, $name);
 				$modbox = (!in_array($name, $essential_forms))
-					? '<input type="checkbox" name="selected_forms[]" value="'.$name.'" />'
+					? '<span class="switcher-action"><input type="checkbox" name="selected_forms[]" value="'.$name.'" /></span>'
 					: '';
 
 				if ($prev_type != $type)
@@ -145,7 +145,7 @@
 					$group_out = array(n.'<ul class="switcher-list">');
 				}
 
-				$group_out[] = '<li'.($active ? ' class="active"' : '').'><span class="switcher-action">'.$modbox.'</span>'.$editlink.'</li>';
+				$group_out[] = '<li'.($active ? ' class="active"' : '').'>'.$modbox.$editlink.'</li>';
 			}
 
 			if ($prev_type !== null)
