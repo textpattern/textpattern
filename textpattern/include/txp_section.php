@@ -263,10 +263,10 @@
 				n.'</div>';
 
 			echo script_js( <<<EOS
-$('#default_section').change(function ()
-{
-	$('#default_section_form').submit();
-});
+				$('#default_section').change(function ()
+				{
+					$('#default_section_form').submit();
+				});
 EOS
 			);
 		}

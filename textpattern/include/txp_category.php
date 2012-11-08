@@ -66,13 +66,13 @@ if ($event == 'category') {
 		endTable(),
 		'</div>',
 		script_js( <<<EOS
-$(document).ready(function ()
-{
-	$('.category-tree').txpMultiEditForm({
-		'row' : 'p',
-		'highlighted' : 'p'
-	});
-});
+			$(document).ready(function ()
+			{
+				$('.category-tree').txpMultiEditForm({
+					'row' : 'p',
+					'highlighted' : 'p'
+				});
+			});
 EOS
 		));
 		echo join(n,$out);

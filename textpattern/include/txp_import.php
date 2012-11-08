@@ -86,30 +86,30 @@
 		pagetop(gTxt('txp_import'), '');
 		echo n.'<h1 class="txp-heading">'.gTxt('tab_import').'</h1>'.
 			script_js(<<<EOF
-$(document).ready(function ()
-{
-	var importOptions =
-	{
-		'mtdb' : '#mtblogid, #databased',
-		'wp'   : '#wponly, #databased',
-		'b2'   : '#databased'
-	};
-
-	$('select[name=import_tool]').change(function ()
-	{
-		var value = $(this).val();
-
-		$.each(importOptions, function(option, selector)
-		{
-			$(selector).hide();
-		});
-
-		if ($.type(importOptions[value]) === 'string')
-		{
-			$(importOptions[value]).show();
-		}
-	});
-});
+				$(document).ready(function ()
+				{
+					var importOptions =
+					{
+						'mtdb' : '#mtblogid, #databased',
+						'wp'   : '#wponly, #databased',
+						'b2'   : '#databased'
+					};
+				
+					$('select[name=import_tool]').change(function ()
+					{
+						var value = $(this).val();
+				
+						$.each(importOptions, function(option, selector)
+						{
+							$(selector).hide();
+						});
+				
+						if ($.type(importOptions[value]) === 'string')
+						{
+							$(importOptions[value]).show();
+						}
+					});
+				});
 EOF
 );
 		$content = '<section class="txp-edit">';

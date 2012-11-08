@@ -115,11 +115,11 @@ class classic_theme extends theme
 			// Try to inject $html into the message pane no matter when _announce()'s output is printed
 			$js = escape_js($html);
 			$js = <<< EOS
-$(document).ready(function ()
-{
-	$("#messagepane").html("{$js}");
-	$('#message.success, #message.warning, #message.error').fadeOut('fast').fadeIn('fast');
-});
+				$(document).ready(function ()
+				{
+					$("#messagepane").html("{$js}");
+					$('#message.success, #message.warning, #message.error').fadeOut('fast').fadeIn('fast');
+				});
 EOS;
 		}
 		if ($async) {

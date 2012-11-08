@@ -352,26 +352,26 @@
 		$ui = yesnoRadio ($name, $val).
 		script_js ("textpattern.timezone_is_supported = ".(int)timezone::is_supported().";").
 		script_js (<<<EOS
-$(document).ready(function ()
-{
-	var radio = $("#prefs-is_dst input");
-	if (radio) {
-		if ($("#auto_dst-1").prop("checked") && textpattern.timezone_is_supported) {
-			radio.prop("disabled","disabled");
-		}
-		$("#auto_dst-0").click(function ()
-		{
-			radio.removeProp("disabled");
-		});
-		$("#auto_dst-1").click(function ()
-		{
-			radio.prop("disabled","disabled");
-		});
-	}
-	if (!textpattern.timezone_is_supported) {
-		$("#prefs-auto_dst input").prop("disabled","disabled");
-	}
-});
+			$(document).ready(function ()
+			{
+				var radio = $("#prefs-is_dst input");
+				if (radio) {
+					if ($("#auto_dst-1").prop("checked") && textpattern.timezone_is_supported) {
+						radio.prop("disabled","disabled");
+					}
+					$("#auto_dst-0").click(function ()
+					{
+						radio.removeProp("disabled");
+					});
+					$("#auto_dst-1").click(function ()
+					{
+						radio.prop("disabled","disabled");
+					});
+				}
+				if (!textpattern.timezone_is_supported) {
+					$("#prefs-auto_dst input").prop("disabled","disabled");
+				}
+			});
 EOS
 		);
 		return pluggable_ui('prefs_ui', 'is_dst', $ui, $name, $val);

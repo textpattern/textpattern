@@ -198,9 +198,9 @@
 
 			// Show/hide "Options" link by setting the appropriate class on the plugins TR.
 			echo script_js(<<<EOS
-textpattern.Relay.register('txpAsyncHref.success', function(event, data) {
-	$(data.this).closest('tr').toggleClass('active');
-});
+				textpattern.Relay.register('txpAsyncHref.success', function(event, data) {
+					$(data.this).closest('tr').toggleClass('active');
+				});
 EOS
 			);
 		}

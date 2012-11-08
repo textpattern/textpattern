@@ -162,17 +162,17 @@ class hive_theme extends theme
 			// Try to inject $html into the message pane no matter when _announce()'s output is printed
 			$js = escape_js($html);
 			$js = <<< EOS
-$(document).ready(function ()
-{
-	$("#messagepane").html("{$js}");
-	$(window).resize(function ()
-	{
-		$("#messagepane").css({
-			left: ($(window).width() - $("#messagepane").outerWidth()) / 2
-		});
-	});
-	$(window).resize();
-});
+				$(document).ready(function ()
+				{
+					$("#messagepane").html("{$js}");
+					$(window).resize(function ()
+					{
+						$("#messagepane").css({
+							left: ($(window).width() - $("#messagepane").outerWidth()) / 2
+						});
+					});
+					$(window).resize();
+				});
 EOS;
 		}
 		if ($async) {
