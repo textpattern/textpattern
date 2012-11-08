@@ -1257,10 +1257,10 @@
 		$content = escape_js($content);
 
 		$js = <<<EOF
-$(document).ready(function ()
-{
-	$('#{$id}').append($('<{$wraptag} />').attr('id', '{$wraptagid}').html('{$content}'));
-});
+			$(document).ready(function ()
+			{
+				$('#{$id}').append($('<{$wraptag} />').attr('id', '{$wraptagid}').html('{$content}'));
+			});
 EOF;
 
 		return script_js($js, (string) $noscript);
