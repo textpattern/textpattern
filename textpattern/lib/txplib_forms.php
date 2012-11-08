@@ -479,15 +479,15 @@
 /**
  * Generates a list of radio buttons wrapped in a unordered list.
  *
- * @param  string $name          The field
- * @param  array  $values        The values as an array array( $value => $label )
- * @param  string $current_val   The selected option. Takes a value from $value
- * @param  string $hilight_val   The highlighted list item
- * @return string HTML
- * @access private
+ * @param  string       $name        The field
+ * @param  array        $values      The values as an array array( $value => $label )
+ * @param  string       $current_val The selected option. Takes a value from $value
+ * @param  string       $hilight_val The highlighted list item
+ * @param  string|array $atts        HTML attributes
+ * @return string       HTML
  */
 
-	function radio_list($name, $values, $current_val = '', $hilight_val = '')
+	function radio_list($name, $values, $current_val = '', $hilight_val = '', $atts = array('class' => 'status plain-list'))
 	{
 		foreach ($values as $k => $v)
 		{
@@ -496,7 +496,7 @@
 				n.'<label for="'.$id.'">'.($hilight_val == $k ? strong($v) : $v).'</label>'.n.'</li>';
 		}
 
-		return '<ul class="status plain-list">'.join('', $out).n.'</ul>';
+		return tag(join('', $out), 'ul', $atts);
 	}
 
 /**
