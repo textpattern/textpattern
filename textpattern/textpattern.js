@@ -1160,7 +1160,7 @@ $(document).ready(function() {
 	if (textpattern.event == 'login' && !checkCookies())
 	{
 		cookieEnabled = false;
-		alert(textpattern.gTxt('cookies_must_be_enabled'));
+		$('#txp-main').prepend($('<p class="alert-block warning" />').text(textpattern.gTxt('cookies_must_be_enabled')));
 	}
 
 	// Disable spellchecking on all elements of class "code" in capable browsers.
