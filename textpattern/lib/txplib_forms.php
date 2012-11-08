@@ -9,24 +9,24 @@
 /**
  * Generates a radio button toggle.
  *
- * @param  array  $vals     The values as an array
+ * @param  array  $values   The values as an array
  * @param  string $field    The field name
- * @param  string $var      The selected option, takes a value from $vals
+ * @param  string $checked  The checked button, takes a value from $vals
  * @param  int    $tabindex The HTML tabindex
  * @param  string $id       The HTML id
  * @return string A HTML radio button set
  */
 
-	function radioSet($vals, $field, $var, $tabindex = 0, $id = '')
+	function radioSet($values, $field, $checked, $tabindex = 0, $id = '')
 	{
 		$id = ($id) ? $id.'-'.$field : $field;
 
-		foreach ($vals as $a => $b)
+		foreach ($values as $value => $label)
 		{
-			$out[] = n.'<input type="radio" id="'.$id.'-'.$a.'" name="'.$field.'" value="'.$a.'" class="radio'.($a == $var ? ' active' : '').'"';
-			$out[] = ($a == $var) ? ' checked="checked"' : '';
+			$out[] = n.'<input type="radio" id="'.$id.'-'.$value.'" name="'.$field.'" value="'.$value.'" class="radio'.($value == $checked ? ' active' : '').'"';
+			$out[] = ($value == $checked) ? ' checked="checked"' : '';
 			$out[] = ($tabindex) ? ' tabindex="'.$tabindex.'"' : '';
-			$out[] = ' />'.n.'<label for="'.$id.'-'.$a.'">'.$b.'</label>';
+			$out[] = ' />'.n.'<label for="'.$id.'-'.$value.'">'.$label.'</label>';
 		}
 
 		return join('', $out);
@@ -39,7 +39,7 @@
  * 'No' is 0.
  *
  * @param  string $field    The field name
- * @param  string $var      The selected button. Either '1', '0'
+ * @param  string $checked  The checked button, either '1', '0'
  * @param  int    $tabindex The HTML tabindex
  * @param  string $id       The HTML id
  * @return string HTML
@@ -51,34 +51,35 @@
  * );
  */
 
-	function yesnoRadio($field, $var, $tabindex = 0, $id = '')
+	function yesnoRadio($field, $checked, $tabindex = 0, $id = '')
 	{
 		$vals = array(
 			'0' => gTxt('no'),
 			'1' => gTxt('yes')
 		);
-		return radioSet($vals, $field, $var, $tabindex, $id);
+
+		return radioSet($vals, $field, $checked, $tabindex, $id);
 	}
 
 /**
  * Generates an On/Off radio button toggle.
  *
  * @param  string $field    The field name
- * @param  string $var      The selected button. Either '1', '0'
+ * @param  string $checked  The checked button, either '1', '0'
  * @param  int    $tabindex The HTML tabindex
  * @param  string $id       The HTML id
  * @return string HTML
  * @see    radioSet()
  */
 
-	function onoffRadio($field, $var, $tabindex = 0, $id = '')
+	function onoffRadio($field, $checked, $tabindex = 0, $id = '')
 	{
 		$vals = array(
 			'0' => gTxt('off'),
 			'1' => gTxt('on')
 		);
 
-		return radioSet($vals, $field, $var, $tabindex, $id);
+		return radioSet($vals, $field, $checked, $tabindex, $id);
 	}
 
 /**
