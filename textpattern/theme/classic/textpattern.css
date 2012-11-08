@@ -418,10 +418,6 @@ a:hover .content-image {
 	border-bottom: 1px solid #ddd;
 }
 
-.txp-details:first-of-type {
-	border-top: 1px solid #ddd;
-}
-
 .txp-details h3 {
 	margin: 1em 0;
 	color: #963;
@@ -829,13 +825,13 @@ dt {
 
 .switcher-list {
 	list-style: none;
+	margin-bottom: 0;
 	padding-left: 0;
-	border-top: 1px solid #ddd;
 }
 
 .switcher-list li {
 	margin: 0;
-	border-bottom: 1px solid #ddd;
+	border-top: 1px solid #ddd;
 	padding: .3em 0;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -881,10 +877,6 @@ td {
 
 .txp-list tr :last-child {
 	padding-right: 0;
-}
-
-.txp-list thead {
-	border-top: 1px solid #ddd;
 }
 
 .txp-list thead th,
