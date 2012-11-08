@@ -78,21 +78,37 @@
 		pagetop(gTxt('txp_import'), '');
 		echo n.'<h1 class="txp-heading">'.gTxt('tab_import').'</h1>'.
 			script_js(<<<EOF
-function showHideFields(sel)
-{
-	if(document.getElementById){
-		document.getElementById('mtblogid').style.display = (sel=='mtdb') ? 'block': 'none';
-		document.getElementById('wponly').style.display =  (sel=='wp') ? 'block': 'none';
-		document.getElementById('databased').style.display = (sel=='wp' || sel=='mtdb' || sel=='b2')? 'block':'none';
-	}
-}
+$(document).ready(function(){
+
+	var importOptions =
+	{
+		'mtdb' : '#mtblogid, #databased',
+		'wp'   : '#wponly, #databased',
+		'b2'   : '#databased'
+	};
+
+	$('select[name=import_tool]').change(function()
+	{
+		var value = $(this).val();
+
+		$.each(importOptions, function(option, selector)
+		{
+			$(selector).hide();
+		});
+
+		if ($.type(importOptions[value]) === 'string')
+		{
+			$(importOptions[value]).show();
+		}
+	});
+});
 EOF
 );
 		$content = '<section class="txp-edit">';
 		$content.= hed(gTxt('txp_import'), 2);
 
 		// Select tool.
-		$content.= inputLabel('import_from', tag(type_options($tools), 'select', ' id="import_from" name="import_tool" onchange="showHideFields(this.value);"'), 'select_tool', 'import');
+		$content.= inputLabel('import_from', tag(type_options($tools), 'select', ' id="import_from" name="import_tool"'), 'select_tool', 'import');
 
 		// Some data we collect.
 		$content.= inputLabel('import_section', import_section_popup(''), 'import_section', 'import_section');
