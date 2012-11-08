@@ -310,14 +310,20 @@
 			// Commonly disabled functions that we don't need.
 			$disabled_funcs = array_diff($disabled_funcs, array(
 				'imagefilltoborder',
+				'escapeshellarg',
+				'escapeshellcmd',
 				'exec',
-				'system',
-				'dl',
 				'passthru',
-				'chown',
-				'shell_exec',
-				'popen',
+				'proc_close',
+				'proc_get_status',
+				'proc_nice',
 				'proc_open',
+				'proc_terminate',
+				'shell_exec',
+				'system',
+				'popen',
+				'dl',
+				'chown',
 			));
 			if ($disabled_funcs)
 				$fail['some_php_functions_disabled'] = diag_msg_wrap(gTxt('some_php_functions_disabled').cs.join(', ',$disabled_funcs), 'warning');
