@@ -14,9 +14,7 @@
 	if (!defined('txpinterface')) die('txpinterface is undefined.');
 
 	global $extensions;
-	$extensions = (has_privs('image.create.trusted')) ?
-			array(0,'.gif','.jpg','.png','.swf',0,0,0,0,0,0,0,0,'.swf') :
-			array(0,'.gif','.jpg','.png');
+	$extensions = get_safe_image_types();
 
 	include txpath.'/lib/class.thumb.php';
 

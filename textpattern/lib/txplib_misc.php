@@ -757,6 +757,45 @@
 	}
 
 /**
+ * Lists image types that can be safely uploaded.
+ *
+ * This function returns different results
+ * based on the logged in user's privileges.
+ *
+ * @param   int         $type If set, validates the given value
+ * @return  mixed
+ * @package Image
+ * @since   4.6.0
+ * @example
+ * list($width, $height, $extension) = getimagesize('image');
+ * if ($type = get_safe_image_types($extension))
+ * {
+ * 	echo "Valid image of {$type}.";
+ * }
+ */
+
+	function get_safe_image_types($type = null)
+	{
+		global $txp_user;
+
+		if (!$txp_user || !has_privs('image.create.trusted'))
+		{
+			$extensions = array(0, '.gif', '.jpg', '.png');
+		}
+		else
+		{
+			$extensions = array(0, '.gif', '.jpg', '.png', '.swf', 0, 0, 0, 0, 0, 0, 0, 0, '.swf');
+		}
+
+		if (func_num_args() > 0)
+		{
+			return !empty($extensions[$type]) ? $extensions[$type] : false;
+		}
+
+		return $extensions;
+	}
+
+/**
  * Gets a HTTP GET or POST parameter.
  *
  * This function internally handles and normalises MAGIC_QUOTES_GPC,
