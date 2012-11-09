@@ -1276,6 +1276,25 @@ textpattern.Route.add('import', function ()
 	});
 });
 
+// Write panel.
+
+textpattern.Route.add('article', function ()
+{
+	// Assume users would not change the timestamp if they wanted to "publish now"/"reset time".
+	$(
+		'#write-timestamp input.year,' +
+		'#write-timestamp input.month,' +
+		'#write-timestamp input.day,' +
+	 	'#write-timestamp input.hour,' +
+	 	'#write-timestamp input.minute,' +
+	 	'#write-timestamp input.second'
+	 ).change(function ()
+	{
+		$('#publish_now').prop('checked', false);
+		$('#reset_time').prop('checked', false);
+	});
+});
+
 // Initialise JavaScript.
 
 $(document).ready(function ()
