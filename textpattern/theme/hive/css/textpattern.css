@@ -1231,6 +1231,7 @@ dt {
   position: relative;
   border-top: 1px solid #dddddd;
   padding: .38461538461538em 3em .38461538461538em 1em;
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
