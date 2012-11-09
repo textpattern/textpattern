@@ -29,6 +29,7 @@ include_once txpath.'/include/txp_auth.php';
 assert_system_requirements();
 
 header("Content-type: text/html; charset=utf-8");
+header('X-UA-Compatible: '.X_UA_COMPATIBLE);
 
 // drop trailing cruft
 $_SERVER['PHP_SELF'] = preg_replace('#^(.*index.php).*$#i', '$1', $_SERVER['PHP_SELF']);
@@ -57,7 +58,6 @@ print <<<eod
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="robots" content="noindex, nofollow">
 <title>Setup &#124; Textpattern CMS</title>
 <script src="$rel_txpurl/jquery.js"></script>
