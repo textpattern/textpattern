@@ -399,6 +399,22 @@ if (!defined('X_FRAME_OPTIONS'))
 	define('X_FRAME_OPTIONS', 'SAMEORIGIN');
 }
 
+if (!defined('X_UA_COMPATIBLE'))
+{
+	/**
+	 * Sets X-UA-Compatible HTTP header's value.
+	 *
+	 * This constant can be overridden from the config.php.
+	 *
+	 * @since   4.6.0
+	 * @package HTML
+	 * @example
+	 * define('X_UA_COMPATIBLE', 'IE=IE9');
+	 */
+
+	define('X_UA_COMPATIBLE', 'IE=edge,chrome=1');
+}
+
 if (!defined('AJAX_TIMEOUT'))
 {
 	/**
