@@ -1388,8 +1388,8 @@ td {
 body {
   position: relative;
   margin: 0;
-  padding: 5em 2em 0;
-  min-width: 71.3846153846154em;
+  padding: 5em 1.69% 0;
+  min-width: 71.3846153846154em; /* TO BE REMOVED */
   color: #333333;
   background: white;
 }
@@ -1407,7 +1407,7 @@ body {
   left: 0;
   right: 0;
   z-index: 10000;
-  padding: 0 2em;
+  padding: 0 1.69%;
   height: 3em;
   min-width: 71.3846153846154em;
   -webkit-box-shadow: 0 0.15385em 0.23077em rgba(0, 0, 0, 0.15);
@@ -1460,7 +1460,7 @@ body {
   position: absolute;
   z-index: 10010;
   top: -0.5em;
-  right: 2em;
+  right: 1.69%;
 }
 
 /* Navigation
@@ -2072,11 +2072,6 @@ body#page-setup {
   width: 25%;
 }
 
-/* TO BE REMOVED */
-#page-css .txp-columntable td.column:last-child {
-  width: 25%;
-}
-
 #page-page textarea.code,
 #page-form textarea.code,
 #page-css textarea.code {
@@ -2155,6 +2150,19 @@ div.code {
     padding: 0 1em 0;
   }
 
+  /* Layout grid < 769px
+     ========================================================================== */
+  /* proportional units */
+  .txp-layout-1-4,
+  .txp-layout-2-4,
+  .txp-layout-3-4 {
+    width: 100%;
+  }
+
+  .txp-layout-grid > div.txp-layout-textbox {
+    padding: 0 1em;
+  }
+
   /* Header < 769px
      ========================================================================== */
   .txp-header {
@@ -2199,6 +2207,8 @@ div.code {
 
   /* Content -> Categories page < 769px
      ========================================================================== */
+
+  /* TO BE REMOVED */
   .category-list th,
   .category-list td,
   .category-list tr {
@@ -2206,22 +2216,28 @@ div.code {
     margin: 0 auto;
     max-width: 42em;
   }
+
+  /* TO BE REMOVED */
   .category-list td {
     width: 100%;
   }
 
+  /* TO BE REMOVED */
   .categories > div {
     margin: 0 0 1em 0;
   }
 
   /* Content -> Write page < 769px
      ========================================================================== */
+
+  /* TO BE REMOVED */
   #page-article .txp-columntable th,
   #page-article .txp-columntable td,
   #page-article .txp-columntable tr {
     display: block;
   }
 
+  /* TO BE REMOVED */
   #article-col-1,
   #article-col-2,
   #article-main,
@@ -2260,6 +2276,8 @@ div.code {
 
   /* Presentation -> Pages, Forms, Styles pages shared < 769px
      ========================================================================== */
+
+  /* TO BE REMOVED */
   #page-page .txp-columntable td.column:first-child,
   #page-form .txp-columntable td.column:first-child {
     display: none;
@@ -2271,12 +2289,12 @@ div.code {
   #page-section h2 {
     margin-top: 1.625em;
   }
+
+  /* TO BE REMOVED */
   #page-page > tr,
   #page-page .txp-columntable td.column,
   #page-form > tr,
   #page-form .txp-columntable td.column,
-  #page-css > tr,
-  #page-css .txp-columntable td.column,
   #page-section > tr,
   #page-section .txp-columntable td.column {
     display: block;
@@ -2284,9 +2302,10 @@ div.code {
     width: 100%;
     max-width: 42em;
   }
+
+  /* TO BE REMOVED */
   #page-page .txp-columntable td.column:last-child,
   #page-form .txp-columntable td.column:last-child,
-  #page-css .txp-columntable td.column:last-child,
   #page-section .txp-columntable td.column:last-child {
     width: 100%;
   }
