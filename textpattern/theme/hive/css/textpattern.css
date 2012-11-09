@@ -1988,8 +1988,7 @@ body#page-setup {
   margin-right: 1em;
 }
 
-#supporting_content,
-#content_switcher {
+#supporting_content {
   margin-left: 1em;
 }
 
@@ -2260,10 +2259,6 @@ div.code {
 
   /* Presentation -> Pages, Forms, Styles pages shared < 769px
      ========================================================================== */
-  #content_switcher {
-    margin: 0;
-  }
-
   #page-page .txp-columntable td.column:first-child,
   #page-form .txp-columntable td.column:first-child {
     display: none;
