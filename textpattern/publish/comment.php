@@ -148,7 +148,7 @@
 		))));
 
 		if ($message == '')
-		{	//Second or later preview will have randomized message-field name
+		{	// Second or later preview will have randomized message-field name.
 			$in = getComment();
 			$message = doDeEnt($in['message']);
 		}
@@ -204,7 +204,7 @@
 		}
 
 		// If the form fields are filled (anything other than blank), pages
-		// really should not be saved by a public cache. rfc2616/14.9.1
+		// really should not be saved by a public cache (rfc2616/14.9.1).
 		if ($name || $email || $web)
 		{
 			header('Cache-Control: private');
@@ -261,7 +261,7 @@
 
 		else
 		{
-			// inhibit default remember
+			// Inhibit default remember.
 			if ($remember != 1)
 			{
 				destroyCookies();
@@ -684,6 +684,8 @@ class comment_evaluation
 
 	/**
 	 * Gets resulting success or error message.
+	 *
+	 * @return array
 	 */
 
 	public function get_result_message()
@@ -759,9 +761,9 @@ class comment_evaluation
 		{
 			return false;
 		}
-		// delete expired nonces
+		// Delete expired nonces.
 		safe_delete("txp_discuss_nonce", "issue_time < date_sub(now(),interval 10 minute)");
-		// check for nonce
+		// Check for nonce.
 		return (safe_row("*", "txp_discuss_nonce", "nonce='".doSlash($nonce)."' and used = 0")) ? true : false;
 	}
 
