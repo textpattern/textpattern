@@ -12,7 +12,7 @@
  * @var string
  */
 
-	define("t","\t");
+	define("t", "\t");
 
 /**
  * A line feed.
@@ -20,7 +20,7 @@
  * @var string
  */
 
-	define("n","\n");
+	define("n", "\n");
 
 /**
  * A self-closing HTML line-break tag.
@@ -28,7 +28,7 @@
  * @var string
  */
 
-	define("br","<br />");
+	define("br", "<br />");
 
 /**
  * A non-breaking space as a HTML entity.
@@ -36,7 +36,7 @@
  * @var string
  */
 
-	define("sp","&#160;");
+	define("sp", "&#160;");
 
 /**
  * An ampersand as a HTML entity.
@@ -44,7 +44,7 @@
  * @var string
  */
 
-	define("a","&#38;");
+	define("a", "&#38;");
 
 /**
  * Renders the admin-side footer.
@@ -84,10 +84,16 @@
 
 	function column_head($value, $sort = '', $event = '', $is_link = '', $dir = '', $crit = '', $method = '', $class = '', $step = 'list')
 	{
-		return column_multi_head( array(
-					array ('value' => $value, 'sort' => $sort, 'event' => $event, 'step' => $step, 'is_link' => $is_link,
-						   'dir' => $dir, 'crit' => $crit, 'method' => $method)
-				), $class);
+		return column_multi_head(array(array(
+			'value' => $value,
+			'sort' => $sort,
+			'event' => $event,
+			'step' => $step,
+			'is_link' => $is_link,
+			'dir' => $dir,
+			'crit' => $crit,
+			'method' => $method
+		)), $class);
 	}
 
 /**
