@@ -890,11 +890,9 @@
 // Refactoring attempt, allowing other - plugin - functions to
 // upload images without the need for writing duplicated code.
 
-	function image_data($file , $meta = '', $id = '', $uploaded = true)
+	function image_data($file, $meta = array(), $id = 0, $uploaded = true)
 	{
-		global $txpcfg, $extensions, $txp_user, $prefs, $file_max_upload_size, $event;
-
-		extract($txpcfg);
+		global $txp_user, $prefs, $file_max_upload_size, $event;
 
 		$name = $file['name'];
 		$error = $file['error'];
@@ -918,18 +916,17 @@
 		}
 
 		list($w, $h, $extension) = getimagesize($file);
+		$ext = get_safe_image_types($extension);
 
-		if (($file !== false) && @$extensions[$extension])
+		if ($file !== false && $ext)
 		{
-			$ext = $extensions[$extension];
-
 			$name = substr($name, 0, strrpos($name, '.')).$ext;
 			$safename = doSlash($name);
-
-			if ($meta == false)
-			{
-				$meta = array('category' => '', 'caption' => '', 'alt' => '');
-			}
+			$meta = lAtts(array(
+				'category' => '',
+				'caption' => '',
+				'alt' => ''
+			), (array) $meta, false);
 
 			extract(doSlash($meta));
 
