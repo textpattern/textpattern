@@ -132,6 +132,12 @@
 		$prefs = get_prefs();
 		extract($prefs);
 
+		/**
+		 * @ignore
+		 */
+
+		define('IMPATH', $path_to_site.DS.$img_dir.DS);
+
 		$event = (gps('event') ? trim(gps('event')) : (!empty($default_event) && has_privs($default_event) ? $default_event : 'article'));
 		$step = trim(gps('step'));
 		$app_mode = trim(gps('app_mode'));

@@ -18,7 +18,6 @@
 			array(0,'.gif','.jpg','.png','.swf',0,0,0,0,0,0,0,0,'.swf') :
 			array(0,'.gif','.jpg','.png');
 
-	define("IMPATH",$path_to_site.DS.$img_dir.DS);
 	include txpath.'/lib/class.thumb.php';
 
 	if ($event == 'image')

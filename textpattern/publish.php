@@ -89,6 +89,14 @@
 		// http address of the site serving images
 	if (!defined('ihu')) define('ihu', hu);
 
+	/**
+	 * Path to image directory.
+	 *
+	 * @package Image
+	 */
+
+	define('IMPATH', $path_to_site.DS.$img_dir.DS);
+
 		// 1.0: a new $here variable in the top-level index.php
 		// should let us know the server path to the live site
 		// let's save it to prefs
