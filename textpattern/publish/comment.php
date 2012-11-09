@@ -8,7 +8,24 @@
 
 */
 
-// -------------------------------------------------------------
+/**
+ * Collection of comment tools.
+ *
+ * @package Comment
+ */
+
+/**
+ * Gets comments as an array from the given article.
+ *
+ * @param  int        $id The article ID
+ * @return array|null An array of comments, or NULL on error
+ * @example
+ * if ($comments = fetchComments(12))
+ * {
+ * 	print_r($comments);
+ * }
+ */
+
 	function fetchComments($id)
 	{
 		$rs = safe_rows(
@@ -19,7 +36,15 @@
 		if ($rs) return $rs;
 	}
 
-// -------------------------------------------------------------
+/**
+ * Returns a formatted comment thread and form.
+ *
+ * This function returns parsed 'comments_display' form template.
+ *
+ * @param  int         $id The article
+ * @return string|null HTML
+ */
+
 	function discuss($id)
 	{
 		$rs = safe_row('*, unix_timestamp(Posted) as uPosted, unix_timestamp(LastMod) as uLastMod, unix_timestamp(Expires) as uExpires', 'textpattern', 'ID='.intval($id).' and Status >= 4');
@@ -32,8 +57,13 @@
 		return '';
 	}
 
+/**
+ * Gets next nonce.
+ *
+ * @param  bool   $check_only
+ * @return string A random MD5 hash
+ */
 
-// -------------------------------------------------------------
 	function getNextNonce($check_only = false)
 	{
 		static $nonce = '';
@@ -41,6 +71,14 @@
 			$nonce = md5( uniqid( rand(), true ) );
 		return $nonce;
 	}
+
+/**
+ * Gets next secret.
+ *
+ * @param  bool   $check_only
+ * @return string A random MD5 hash
+ */
+
 	function getNextSecret($check_only = false)
 	{
 		static $secret = '';
@@ -48,6 +86,14 @@
 			$secret = md5( uniqid( rand(), true ) );
 		return $secret;
 	}
+
+/**
+ * Renders a HTML comment form.
+ *
+ * @param  int    $id   The Article ID
+ * @param  array  $atts An array of attributes
+ * @return string HTML
+ */
 
 	function commentForm($id, $atts=NULL)
 	{
@@ -225,7 +271,13 @@
 		return $out;
 	}
 
-// -------------------------------------------------------------
+/**
+ * Parses a &lt;txp:popup_comments /&gt; tag.
+ *
+ * @param  int    $id The article's id.
+ * @return string HTML
+ */
+
 	function popComments($id)
 	{
 		global $sitename,$s,$thisarticle;
@@ -239,7 +291,16 @@
 		return $out;
 	}
 
-// -------------------------------------------------------------
+/**
+ * Remembers comment form values.
+ *
+ * Creates a HTTP cookie for each value.
+ *
+ * @param string $name  The name
+ * @param string $email The email address
+ * @param string $web   The website
+ */
+
 	function setCookies($name,$email,$web)
 	{
 		$cookietime = time() + (365*24*3600);
@@ -251,7 +312,10 @@
 		setcookie("txp_remember", '1', $cookietime, "/");
 	}
 
-// -------------------------------------------------------------
+/**
+ * Deletes HTTP cookies created by the comment form.
+ */
+
 	function destroyCookies()
 	{
 		$cookietime = time()-3600;
@@ -263,11 +327,21 @@
 		setcookie("txp_remember", '0', $cookietime + (365*25*3600), "/");
 	}
 
-// -------------------------------------------------------------
+/**
+ * Gets the received comment.
+ *
+ * Comment spam filter plugins should call this function to
+ * fetch comment contents.
+ *
+ * @return  array
+ * @example
+ * print_r(
+ * 	getComment()
+ * );
+ */
+
 	function getComment()
 	{
-		// comment spam filter plugins: call this function to fetch comment contents
-
 		$c = psa( array(
 			'parentid',
 			'name',
@@ -299,7 +373,10 @@
 		return $c;
 	}
 
-// -------------------------------------------------------------
+/**
+ * Saves a comment.
+ */
+
 	function saveComment()
 	{
 		global $siteurl,$comments_moderate,$comments_sendmail,
@@ -402,12 +479,51 @@
 		//$evaluator->write_trace();
 	}
 
-// -------------------------------------------------------------
+/**
+ * Comment evaluator.
+ *
+ * Validates and filters comments. Keeps spam out.
+ *
+ * @package Comment
+ */
+
 	class comment_evaluation {
+
+		/**
+		 * Stores estimated statuses.
+		 *
+		 * @var array
+		 */
+
 		var $status;
+
+		/**
+		 * Stores estimated messages.
+		 *
+		 * @var array
+		 */
+
 		var $message;
+
+		/**
+		 * Debug log.
+		 *
+		 * @var array
+		 */
+
 		var $txpspamtrace = array();
+
+		/**
+		 * List of available statuses.
+		 *
+		 * @var array
+		 */
+
 		var $status_text = array();
+
+		/**
+		 * Constructor.
+		 */
 
 		function comment_evaluation() {
 			global $prefs;
@@ -430,6 +546,14 @@
 				$this->status[VISIBLE][]=0.5;
 		}
 
+		/**
+		 * Adds a estimate about the comment's status.
+		 *
+		 * @param int    $type        The status, either SPAM, MODERATE, VISIBLE or  RELOAD
+		 * @param float  $probability Estimate's probability. Throught 0 to 1, e.g. 0.75
+		 * @param string $msg         The error or success message shown to the user
+		 */
+
 		function add_estimate($type = SPAM, $probability = 0.75, $msg='') {
 			global $production_status;
 
@@ -443,6 +567,13 @@
 			if (trim($msg)) $this->message[$type][] = $msg;
 		}
 
+		/**
+		 * Gets resulting estimated status.
+		 *
+		 * @param  string     $result_type If 'numeric' returns the ID of the status, a localized label otherwise.
+		 * @return int|string
+		 */
+
 		function get_result($result_type='numeric') {
 			$result = array();
 			foreach ($this->status as $key => $value)
@@ -451,9 +582,19 @@
 			reset($result);
 			return (($result_type == 'numeric') ? key($result) : $this->status_text[key($result)]);
 		}
+
+		/**
+		 * Gets resulting success or error message.
+		 */
+
 		function get_result_message() {
 			return $this->message[$this->get_result()];
 		}
+
+		/**
+		 * Writes a debug log.
+		 */
+
 		function write_trace() {
 			global $prefs;
 			$file = $prefs['tempdir'].DS.'evaluator_trace.php';
@@ -474,6 +615,12 @@
 		}
 	}
 
+/**
+ * Gets a comment evaluator instance.
+ *
+ * @return comment_evaluation
+ */
+
 	function &get_comment_evaluator() {
 		static $instance;
 
@@ -484,7 +631,16 @@
 		return $instance;
 	}
 
-// -------------------------------------------------------------
+/**
+ * Verifies a given nonce.
+ *
+ * This function will also do clean up and deletes expired nonces.
+ *
+ * @param  string $nonce The nonce
+ * @return bool   TRUE if the nonce is valid
+ * @see    getNextNonce()
+ */
+
 	function checkNonce($nonce)
 	{
 		if (!$nonce || !preg_match('#^[a-zA-Z0-9]*$#',$nonce))
@@ -495,13 +651,25 @@
 		return (safe_row("*", "txp_discuss_nonce", "nonce='".doSlash($nonce)."' and used = 0")) ? true : false;
 	}
 
-// -------------------------------------------------------------
+/**
+ * Checks if a IP address is banned.
+ *
+ * @param  string $ip The IP address.
+ * @return bool TRUE if the IP is not banned
+ */
+
 	function checkBan($ip)
 	{
 		return (!fetch("ip", "txp_discuss_ipban", "ip", $ip)) ? true : false;
 	}
 
-// -------------------------------------------------------------
+/**
+ * Checks if comments are open for the given article.
+ *
+ * @param  int  $id The article.
+ * @return bool FALSE if comments are closed
+ */
+
 	function checkCommentsAllowed($id)
 	{
 		global $use_comments, $comments_disabled_after, $thisarticle;
@@ -538,13 +706,34 @@
 		return true;
 	}
 
-// -------------------------------------------------------------
+/**
+ * Renders a Textile help link.
+ *
+ * @return string HTML
+ */
+
 		function comments_help()
 	{
 		return ('<a id="txpCommentHelpLink" href="'.HELP_URL.'?item=textile_comments&amp;language='.LANG.'" onclick="window.open(this.href, \'popupwindow\', \'width=300,height=400,scrollbars,resizable\'); return false;">'.gTxt('textile_help').'</a>');
 	}
 
-// -------------------------------------------------------------
+/**
+ * Emails a new comment to the article's author.
+ *
+ * This function can only be executed directly after a comment
+ * was sent, otherwise it will not run properly.
+ *
+ * Will not send comments flagged as spam, and follows site's
+ * comment preferences.
+ *
+ * @param string $message   The comment message
+ * @param string $cname     The comment name
+ * @param string $cemail    The comment email
+ * @param string $cweb      The comment website
+ * @param int    $parentid  The article ID
+ * @param int    $discussid The comment ID
+ */
+
 	function mail_comment($message, $cname, $cemail, $cweb, $parentid, $discussid)
 	{
 		global $sitename, $comments_sendmail;
@@ -576,8 +765,23 @@
 		$success = txpMail($email, $subject, $out, $cemail);
 	}
 
-// -------------------------------------------------------------
-	# deprecated, use fInput instead
+/**
+ * Renders a HTML input.
+ *
+ * Deprecated, use fInput() instead.
+ *
+ * @param      string $type
+ * @param      string $name
+ * @param      string $val
+ * @param      int    $size
+ * @param      string $class
+ * @param      int    $tab
+ * @param      bool   $chkd
+ * @return     string
+ * @deprecated in 4.0.4
+ * @see        fInput()
+ */
+
 	function input($type,$name,$val,$size='',$class='',$tab='',$chkd='')
 	{
 		trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'fInput')), E_USER_NOTICE);
