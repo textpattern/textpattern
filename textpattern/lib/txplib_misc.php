@@ -829,6 +829,176 @@
 	}
 
 /**
+ * Uploads an image.
+ *
+ * This function can be used to upload a new image or replace an existing one.
+ * If $id is specified, the image will be replaced. If $uploaded is set
+ * FALSE, $file can take a local file instead of HTTP file upload variable.
+ *
+ * All uploaded files will included on the Images panel.
+ *
+ * @param   array        $file     HTTP file upload variables
+ * @param   array        $meta     Image meta data, allowed keys 'caption', 'alt', 'category'
+ * @param   int          $id       Existing image's ID
+ * @param   bool         $uploaded If FALSE, $file takes a filename instead of upload vars
+ * @return  array|string An array of array(message, id) on success, localized error string on error
+ * @package Image
+ * @example
+ * print_r(image_data(
+ * 	$_FILES['myfile'],
+ * 	array(
+ * 		'caption' => '',
+ * 		'alt' => '',
+ * 		'category' => '',
+ * 	)
+ * ));
+ */
+
+	function image_data($file, $meta = array(), $id = 0, $uploaded = true)
+	{
+		global $txp_user, $prefs, $file_max_upload_size, $event;
+
+		$name = $file['name'];
+		$error = $file['error'];
+		$file = $file['tmp_name'];
+
+		if ($uploaded)
+		{
+			$file = get_uploaded_file($file);
+
+			if ($file_max_upload_size < filesize($file))
+			{
+				unlink($file);
+
+				return upload_get_errormsg(UPLOAD_ERR_FORM_SIZE);
+			}
+		}
+
+		if (empty($file))
+		{
+			return upload_get_errormsg(UPLOAD_ERR_NO_FILE);
+		}
+
+		list($w, $h, $extension) = getimagesize($file);
+		$ext = get_safe_image_types($extension);
+
+		if ($file !== false && $ext)
+		{
+			$name = substr($name, 0, strrpos($name, '.')).$ext;
+			$safename = doSlash($name);
+			$meta = lAtts(array(
+				'category' => '',
+				'caption' => '',
+				'alt' => ''
+			), (array) $meta, false);
+
+			extract(doSlash($meta));
+
+			$q ="
+				name = '$safename',
+				ext = '$ext',
+				w = $w,
+				h = $h,
+				alt = '$alt',
+				caption = '$caption',
+				category = '$category',
+				date = now(),
+				author = '".doSlash($txp_user)."'
+			";
+
+			if (empty($id))
+			{
+				$rs = safe_insert('txp_image', $q);
+				if ($rs)
+				{
+					$id = $GLOBALS['ID'] = $rs;
+				}
+			}
+			else
+			{
+				$id = assert_int($id);
+
+				$rs = safe_update('txp_image', $q, "id = $id");
+			}
+
+			if (!$rs)
+			{
+				return gTxt('image_save_error');
+			}
+
+			else
+			{
+				$newpath = IMPATH.$id.$ext;
+
+				if (shift_uploaded_file($file, $newpath) == false)
+				{
+					$id = assert_int($id);
+
+					safe_delete('txp_image', "id = $id");
+
+					safe_alter('txp_image', "auto_increment = $id");
+
+					if (isset($GLOBALS['ID']))
+					{
+						unset( $GLOBALS['ID']);
+					}
+
+					return $newpath.sp.gTxt('upload_dir_perms');
+				}
+
+				else
+				{
+					@chmod($newpath, 0644);
+
+					// GD is supported
+					if (check_gd($ext))
+					{
+						// Auto-generate a thumbnail using the last settings
+						if (isset($prefs['thumb_w'], $prefs['thumb_h'], $prefs['thumb_crop']))
+						{
+							$width  = intval($prefs['thumb_w']);
+							$height = intval($prefs['thumb_h']);
+
+							if ($width > 0 or $height > 0)
+							{
+								$t = new txp_thumb( $id );
+
+								$t->crop = ($prefs['thumb_crop'] == '1');
+								$t->hint = '0';
+								$t->width = $width;
+								$t->height = $height;
+
+								$t->write();
+							}
+						}
+					}
+
+					$message = gTxt('image_uploaded', array('{name}' => $name));
+					update_lastmod();
+
+					// call post-upload plugins with new image's $id
+					callback_event('image_uploaded', $event, false, $id);
+
+					return array($message, $id);
+				}
+			}
+		}
+
+		else
+		{
+			if ($file === false)
+			{
+				return upload_get_errormsg($error);
+			}
+
+			else
+			{
+				return gTxt('only_graphic_files_allowed');
+			}
+		}
+	}
+
+/**
  * Gets a HTTP GET or POST parameter.
  *
  * This function internally handles and normalises MAGIC_QUOTES_GPC,
