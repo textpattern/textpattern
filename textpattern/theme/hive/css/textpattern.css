@@ -47,6 +47,78 @@ html {
   clear: both;
 }
 
+/* Layout grids
+   ========================================================================== */
+/* layout grid container - must only contain `.txp-layout-grid` or `.txp-layout-cell` components as children */
+.txp-layout-grid {
+  display: block;
+  padding: 0;
+  margin: 0 -1em;
+  /* ensure consistent default alignment */
+  text-align: left;
+  /* remove inter-unit whitespace for all non-monospace font-families */
+  letter-spacing: -0.31em;
+  word-spacing: -0.43em;
+  /* protect against WebKit bug with optimizelegibility */
+  text-rendering: optimizespeed;
+}
+
+.txp-layout-grid > div {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 0 1em;
+  /* reset text defaults */
+  letter-spacing: normal;
+  word-spacing: normal;
+  text-rendering: auto;
+}
+
+/* layout grid cells - no explicit width by default, apply `.txp-layout-x-y` classes below */
+.txp-layout-cell {
+  display: inline-block;
+  margin: 0;
+  width: 100%;
+  /* controls vertical positioning of units */
+  vertical-align: top;
+  /* keeps unit content correctly aligned */
+  text-align: left;
+}
+
+/* reset vertical margin on nested layout grids */
+.txp-layout-grid .txp-layout-grid .grid__cell {
+  margin-top: -1em;
+}
+
+/* proportional layout cells */
+.txp-layout-1-4 {
+  width: 25%;
+}
+
+.txp-layout-2-4 {
+  width: 50%;
+}
+
+.txp-layout-3-4 {
+  width: 75%;
+}
+
+/* text columns (fixed proportion cell) */
+.txp-layout-textbox {
+  margin: 0 auto;
+  max-width: 57em;
+}
+
+.txp-layout-grid > div.txp-layout-textbox {
+  padding: 0;
+}
+
+/* Deprecated @ 4.6 - use .txp-layout-textbox instead */
+.text-column {
+  margin: 0 auto;
+  max-width: 57em;
+}
+
 /* Links
    ========================================================================== */
 a {
@@ -1156,8 +1228,9 @@ dt {
   padding-left: 0;
 }
 .switcher-list li {
+  position: relative;
   border-top: 1px solid #dddddd;
-  padding: .38461538461538em .5em .38461538461538em 1em;
+  padding: .38461538461538em 3em .38461538461538em 1em;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -1173,8 +1246,17 @@ dt {
 
 .switcher-action,
 .switcher-list .destroy {
-  float: right;
-  margin-left: 1em;
+  position: absolute;
+  z-index: 2;
+  right: 1em;
+}
+
+switcher-action {
+  top: .38461538461538em;
+}
+
+.switcher-list .destroy {
+  top: .46153846153846em;
 }
 
 /* Tables
@@ -1312,7 +1394,7 @@ body {
 }
 
 .txp-body {
-  max-width: 110em;
+  max-width: 116em;
   margin: 0 auto;
 }
 
@@ -1545,6 +1627,10 @@ body {
   margin-top: 0;
 }
 
+.txp-actions a {
+  margin-left: .75em;
+}
+
 div.multi-edit {
   margin: 1em 0;
 }
@@ -1558,13 +1644,9 @@ div.multi-edit {
   display: inline-block;
 }
 
+/* TO BE REMOVED */
 .txp-columntable {
   width: 100%;
-}
-
-.text-column {
-  margin: 0 auto;
-  max-width: 56em;
 }
 
 .text-section {
@@ -1572,7 +1654,7 @@ div.multi-edit {
   background: url("../img/separator.gif") repeat-x 0 2.15385em;
 }
 
-/* grids */
+/* inline grids */
 .txp-grid {
   text-align: center;
   margin-bottom: .69230769230769em;
@@ -1811,6 +1893,8 @@ body#page-setup {
 
 /* Content -> Write page
    ========================================================================== */
+
+/* TO BE REMOVED */
 #article-col-1,
 #article-col-2 {
   width: 24%;
@@ -1979,12 +2063,16 @@ body#page-setup {
 
 /* Presentation -> Pages, Forms, Styles pages shared
    ========================================================================== */
-#page-page .txp-columntable td.column:first-child, #page-page .txp-columntable td.column:last-child,
+
+/* TO BE REMOVED */
+#page-page .txp-columntable td.column:first-child,
+#page-page .txp-columntable td.column:last-child,
 #page-form .txp-columntable td.column:first-child,
 #page-form .txp-columntable td.column:last-child {
   width: 25%;
 }
 
+/* TO BE REMOVED */
 #page-css .txp-columntable td.column:last-child {
   width: 25%;
 }

@@ -48,6 +48,80 @@ summary {
 }
 
 
+/* Layout grids
+   ========================================================================== */
+
+/* layout grid container - must only contain `.txp-layout-grid` or `.txp-layout-cell` components as children */
+.txp-layout-grid {
+	display: block;
+	padding: 0;
+	margin: 0 -1em;
+	/* ensure consistent default alignment */
+	text-align: left;
+	/* remove inter-unit whitespace for all non-monospace font-families */
+	letter-spacing: -0.31em;
+	word-spacing: -0.43em;
+	/* protect against WebKit bug with optimizelegibility */
+	text-rendering: optimizespeed;
+}
+
+.txp-layout-grid > div {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	padding: 0 1em;
+	/* reset text defaults */
+	letter-spacing: normal;
+	word-spacing: normal;
+	text-rendering: auto;
+}
+
+/* layout grid cells - no explicit width by default, apply `.txp-layout-x-y` classes below */
+.txp-layout-cell {
+	display: inline-block;
+	margin: 0;
+	width: 100%;
+	/* controls vertical positioning of units */
+	vertical-align: top;
+	/* keeps unit content correctly aligned */
+	text-align: left;
+}
+
+/* reset vertical margin on nested layout grids */
+.txp-layout-grid .txp-layout-grid .grid__cell {
+	margin-top: -1em;
+}
+
+/* proportional layout cells */
+.txp-layout-1-4 {
+	width: 25%;
+}
+
+.txp-layout-2-4 {
+	width: 50%;
+}
+
+.txp-layout-3-4 {
+	width: 75%;
+}
+
+/* text columns (fixed proportion cell) */
+.txp-layout-textbox {
+	margin: 0 auto;
+	max-width: 57em;
+}
+
+.txp-layout-grid > div.txp-layout-textbox {
+	padding: 0;
+}
+
+/* Deprecated @ 4.6 - use .txp-layout-textbox instead */
+.text-column {
+	margin: 0 auto;
+	max-width: 57em;
+}
+
+
 /* Links
    ========================================================================== */
 
@@ -830,17 +904,27 @@ dt {
 }
 
 .switcher-list li {
+	position: relative;
 	margin: 0;
 	border-top: 1px solid #ddd;
-	padding: .3em 0;
+	padding: .3em 2.5em .3em 0;
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
 
 .switcher-action,
 .switcher-list .destroy {
-	float: right;
-	margin-left: 1em;
+	position: absolute;
+	z-index: 2;
+	right: 0;
+}
+
+.switcher-action {
+	top: .27272727272727em;
+}
+
+.switcher-list .destroy {
+	top: .36363636363636em;
 }
 
 
@@ -948,7 +1032,7 @@ body {
 	margin: 0 auto 1.5em;
 	padding: 0 2em;
 	min-width: 82em;
-	max-width: 112em;
+	max-width: 116em;
 }
 
 
@@ -1079,6 +1163,10 @@ body {
 	text-align: center;
 }
 
+.txp-actions a {
+	margin-left: .75em;
+}
+
 div.multi-edit {
 	margin: 1em 0;
 }
@@ -1092,13 +1180,9 @@ div.multi-edit {
 	margin-left: .4em;
 }
 
+/* TO BE REMOVED */
 .txp-columntable {
 	width: 100%;
-}
-
-.text-column {
-	margin: 0 auto;
-	max-width: 600px;
 }
 
 .prev-next,
@@ -1106,7 +1190,7 @@ div.multi-edit {
 	text-align: center;
 }
 
-/* grids */
+/* inline grids */
 
 .txp-grid {
 	text-align: center;
@@ -1297,12 +1381,14 @@ td.categories p:first-child {
 /* Content -> Write page
    ========================================================================== */
 
+/* TO BE REMOVED */
 td#article-col-1 {
 	padding-right: 35px;
 	width: 23%;
 	min-width: 162px;
 }
 
+/* TO BE REMOVED */
 td#article-main {
 	width: 54%;
 	min-width: 472px;
@@ -1312,6 +1398,7 @@ td#article-main {
 	margin-top: 0;
 }
 
+/* TO BE REMOVED */
 td#article-col-2 {
 	padding-left: 20px;
 	width: 23%;
@@ -1444,12 +1531,14 @@ tr.moderate {
 /* Presentation -> Pages, Forms, Styles pages shared
    ========================================================================== */
 
+/* TO BE REMOVED */
 td.column:last-child {
 	padding-left: 35px;
 	width: 23%;
 	min-width: 162px;
 }
 
+/* TO BE REMOVED */
 #page-page td.column:first-child,
 #page-form td.column:first-child {
 	padding-right: 35px;
