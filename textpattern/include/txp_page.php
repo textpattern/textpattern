@@ -290,7 +290,7 @@
 
 		else
 		{
-			if (safe_update('txp_page', "user_html = '$html'", "name = '$name'"))
+			if (safe_update('txp_page', "user_html = '$html'", "name = '".doSlash($name)."'"))
 			{
 				update_lastmod();
 				$message = gTxt('page_updated', array('{name}' => $name));
