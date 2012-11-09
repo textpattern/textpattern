@@ -1036,37 +1036,3 @@
 			}
 		}
 	}
-
-// -------------------------------------------------------------
-// check GD info
-
-	function check_gd($image_type) {
-		// GD is installed
-		if (function_exists('gd_info')) {
-			$gd_info = gd_info();
-
-			switch ($image_type) {
-				// check gif support
-				case '.gif':
-					return ($gd_info['GIF Create Support'] == 1) ? true : false;
-				break;
-
-				// check png support
-				case '.png':
-					return ($gd_info['PNG Support'] == 1) ? true : false;
-				break;
-
-				// check jpg support
-				case '.jpg':
-					return (!empty($gd_info['JPEG Support']) || !empty($gd_info['JPG Support'])) ? true : false;
-				break;
-
-				// unsupported format
-				default:
-					return false;
-				break;
-			}
-		} else { // GD isn't installed
-			return false;
-		}
-	}

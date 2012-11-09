@@ -796,6 +796,39 @@
 	}
 
 /**
+ * Checks if GD supports the given image type.
+ *
+ * @param   string $image_type Either '.gif', '.png', '.jpg'
+ * @return  bool   TRUE if the type is supported
+ * @package Image
+ */
+
+	function check_gd($image_type)
+	{
+		if (!function_exists('gd_info'))
+		{
+			return false;
+		}
+
+		$gd_info = gd_info();
+
+		switch ($image_type)
+		{
+			case '.gif' :
+				return ($gd_info['GIF Create Support'] == true);
+				break;
+			case '.png' :
+				return ($gd_info['PNG Support'] == true);
+				break;
+			case '.jpg' :
+				return (!empty($gd_info['JPEG Support']) || !empty($gd_info['JPG Support']));
+				break;
+		}
+
+		return false;
+	}
+
+/**
  * Gets a HTTP GET or POST parameter.
  *
  * This function internally handles and normalises MAGIC_QUOTES_GPC,
