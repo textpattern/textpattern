@@ -24,7 +24,7 @@ if (!defined('txpinterface'))
 
 // -------------------------------------------------------------
 
-header(pluggable_ui('admin_side', 'x_frame_options', 'X-Frame-Options: SAMEORIGIN'));
+header('X-Frame-Options: '.X_FRAME_OPTIONS);
 header('X-UA-Compatible: '.X_UA_COMPATIBLE);
 
 ?><!DOCTYPE html>
