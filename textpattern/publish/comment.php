@@ -573,7 +573,7 @@ class comment_evaluation
 	 * @var array
 	 */
 
-	var $status;
+	public $status;
 
 	/**
 	 * Stores estimated messages.
@@ -581,7 +581,7 @@ class comment_evaluation
 	 * @var array
 	 */
 
-	var $message;
+	public $message;
 
 	/**
 	 * Debug log.
@@ -589,7 +589,7 @@ class comment_evaluation
 	 * @var array
 	 */
 
-	var $txpspamtrace = array();
+	public $txpspamtrace = array();
 
 	/**
 	 * List of available statuses.
@@ -597,13 +597,13 @@ class comment_evaluation
 	 * @var array
 	 */
 
-	var $status_text = array();
+	public $status_text = array();
 
 	/**
 	 * Constructor.
 	 */
 
-	function comment_evaluation()
+	public function __construct()
 	{
 		global $prefs;
 		extract(getComment());
@@ -643,7 +643,7 @@ class comment_evaluation
 	 * @param string $msg         The error or success message shown to the user
 	 */
 
-	function add_estimate($type = SPAM, $probability = 0.75, $msg = '')
+	public function add_estimate($type = SPAM, $probability = 0.75, $msg = '')
 	{
 		global $production_status;
 
@@ -670,7 +670,7 @@ class comment_evaluation
 	 * @return int|string
 	 */
 
-	function get_result($result_type = 'numeric')
+	public function get_result($result_type = 'numeric')
 	{
 		$result = array();
 		foreach ($this->status as $key => $value)
@@ -686,7 +686,7 @@ class comment_evaluation
 	 * Gets resulting success or error message.
 	 */
 
-	function get_result_message()
+	public function get_result_message()
 	{
 		return $this->message[$this->get_result()];
 	}
@@ -695,7 +695,7 @@ class comment_evaluation
 	 * Writes a debug log.
 	 */
 
-	function write_trace()
+	public function write_trace()
 	{
 		global $prefs;
 		$file = $prefs['tempdir'].DS.'evaluator_trace.php';
