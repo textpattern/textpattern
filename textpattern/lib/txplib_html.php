@@ -300,7 +300,7 @@
 	}
 
 /**
- * Renders a link with two addition URL parameters.
+ * Renders an add link.
  *
  * This function can be used for invoking an admin-side "add" action
  * while taking up to two additional URL parameters.
@@ -316,10 +316,13 @@
 
 	function aLink($event, $step, $thing, $value, $thing2, $value2)
 	{
-		$o = '<a href="?event='.$event.a.'step='.$step.a.'_txp_token='.form_token().
-			a.$thing.'='.urlencode($value).a.$thing2.'='.urlencode($value2).'"';
-		$o.= ' class="alink">+</a>';
-		return $o;
+		return href('+', array(
+			'event' => $event,
+			'step' => $step,
+			$thing => $value,
+			$thing2 => $value2,
+			'_txp_token' => form_token(),
+		), array('class' => 'alink'));
 	}
 
 /**
