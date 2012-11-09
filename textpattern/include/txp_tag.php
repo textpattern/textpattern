@@ -34,7 +34,11 @@ header('X-UA-Compatible: '.X_UA_COMPATIBLE);
 	<title><?php echo gTxt('build'); ?> &#124; Textpattern CMS</title>
 	<script src="jquery.js"></script>
 	<?php echo script_js(
-		'var textpattern = {event: "'.txpspecialchars($event).'", step: "'.txpspecialchars($step).'", _txp_token: "'.txpspecialchars(form_token()).'"};'
+		'var textpattern = '.json_encode(array(
+			'event' => $event,
+			'step' => $step,
+			'_txp_token' => form_token(),
+		)).';'
 	); ?>
 	<?php echo $theme->html_head(); ?>
 	</head>
