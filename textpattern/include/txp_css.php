@@ -1,4 +1,14 @@
 <?php
+/*
+	This is Textpattern
+
+	Copyright 2005 by Dean Allen
+	www.textpattern.com
+	All rights reserved
+
+	Use of this software indicates acceptance of the Textpattern license agreement
+
+*/
 
 /**
  * Styles panel.
@@ -17,32 +27,28 @@
 
 		bouncer($step,
 			array(
-				'pour'         => false,
-				'css_save'     => true,
-				'css_copy'     => true,
-				'css_delete'   => true,
-				'css_edit'     => false,
+				'pour'       => false,
+				'css_save'   => true,
+				'css_delete' => true,
+				'css_edit'   => false,
 			)
 		);
 
 		switch(strtolower($step))
 		{
-			case '':
+			case '' :
 				css_edit();
 				break;
-			case 'pour':
+			case 'pour' :
 				css_edit();
 				break;
-			case 'css_save':
+			case 'css_save' :
 				css_save();
 				break;
-			case 'css_copy':
-				css_copy();
-				break;
-			case 'css_delete':
+			case 'css_delete' :
 				css_delete();
 				break;
-			case 'css_edit':
+			case 'css_edit' :
 				css_edit();
 				break;
 		}
@@ -57,8 +63,7 @@
  */
 
 	function css_list($current, $default) {
-		$out[] = startTable('', '', 'txp-list');
-
+		$out = array();
 		$protected = safe_column('DISTINCT css', 'txp_section', '1=1');
 
 		$criteria = 1;
@@ -68,17 +73,20 @@
 
 		if ($rs)
 		{
+			$out[] = n.'<ul class="switcher-list">';
+
 			while ($a = nextRow($rs))
 			{
 				extract($a);
-				$edit = ($current != $name) ?	eLink('css', '', 'name', $name, $name) : txpspecialchars($name);
+				$active = ($current == $name);
+				$edit = ($active) ? txpspecialchars($name) : eLink('css', '', 'name', $name, $name);
 				$delete = (!array_key_exists($name, $protected)) ? dLink('css', 'css_delete', 'name', $name) : '';
-				$out[] = tr(td($edit).td($delete));
+				$out[] = '<li'.($active ? ' class="active"' : '').'>'.$edit.$delete.'</li>';
 			}
 
-			$out[] =  endTable();
+			$out[] = '</ul>';
 
-			return join('', $out);
+			return wrapGroup('all_styles', join(n, $out), 'all_stylesheets');
 		}
 	}
 
@@ -92,150 +100,169 @@
 	{
 		global $event, $step;
 
-		pagetop(gTxt("edit_css"), $message);
+		pagetop(gTxt('edit_css'), $message);
 
 		$default_name = safe_field('css', 'txp_section', "name = 'default'");
-		extract(gpsa(array('name', 'newname', 'copy', 'savenew')));
+
+		extract(array_map('assert_string', gpsa(array(
+			'copy',
+			'save_error',
+			'savenew',
+		))));
+
+		$name = sanitizeForPage(assert_string(gps('name')));
+		$newname = sanitizeForPage(assert_string(gps('newname')));
 
 		if ($step == 'css_delete' || empty($name) && $step != 'pour' && !$savenew)
 		{
 			$name = $default_name;
 		}
-		elseif (($copy || $savenew) && trim(preg_replace('/[<>&"\']/', '', $newname)) )
+		elseif ( ((($copy || $savenew) && $newname) || ($newname && ($newname != $name))) && !$save_error)
 		{
 			$name = $newname;
 		}
 
-		if (empty($name))
+		$buttons = n.'<label for="new_style">'.gTxt('css_name').'</label>'.br.fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_style');
+		$buttons .= (empty($name)) ? n.hInput('savenew', 'savenew') : n.'<span class="txp-actions">'.href(gTxt('duplicate'), '#', array('id' => 'txp_clone', 'class' => 'clone', 'title' => gTxt('css_clone'))) . '</span>';
+		$thecss = gps('css');
+
+		if (!$save_error)
 		{
-			$buttons = '<p class="edit-title">'.
-			gTxt('name_for_this_style').
-			fInput('text', 'newname', '', '', '', '', INPUT_REGULAR).
-			hInput('savenew', 'savenew').
-			'</p>';
-			$thecss = gps('css');
-		}
-		else
-		{
-			$buttons = '<p class="edit-title">'.gTxt('you_are_editing_css').sp.strong(txpspecialchars($name)).'</p>';
 			$thecss = fetch('css', 'txp_css', 'name', $name);
 		}
 
-		if (!empty($name))
-		{
-			$copy =
-				n.'<p class="copy-as"><label for="copy-css">'.gTxt('copy_css_as').'</label>'.
-				fInput('text', 'newname', '', 'input-medium', '', '', INPUT_MEDIUM, '', 'copy-css').
-				fInput('submit', 'copy', gTxt('copy')).'</p>';
-		}
-		else
-		{
-			$copy = '';
-		}
-
 		$right =
-			'<div id="content_switcher">'.
-			hed(gTxt('all_stylesheets'), 2).
+			'<div id="content_switcher" class="txp-layout-cell txp-layout-1-4">'.
 			graf(sLink('css', 'pour', gTxt('create_new_css')), ' class="action-create"').
 			css_list($name, $default_name).
 			'</div>';
 
+		// TODO: Use Textpattern.Route for JS, because it'll apply to Style, Page and Form panels.
 		echo
-		n.'<h1 class="txp-heading">'.gTxt('tab_style').'</h1>'.
-		n.'<div id="'.$event.'_container" class="txp-container">'.
-		startTable('', '', 'txp-columntable').
-		tr(
-			td(
-				form(
-					'<div id="main_content">'.
-					$buttons.
-					'<textarea id="css" class="code" name="css" cols="'.INPUT_LARGE.'" rows="'.INPUT_REGULAR.'">'.txpspecialchars($thecss).'</textarea>'.
-					'<p>'.fInput('submit', '', gTxt('save'), 'publish').
-					eInput('css').sInput('css_save').
-					hInput('name', $name).'</p>'
-					.$copy.
-					'</div>'
-				, '', '', 'post', 'edit-form', '', 'style_form')
-			, '', 'column').
-			tdtl(
-				$right
-			, ' class="column"')
-		).
-		endTable().
-		n.'</div>';
-	}
-
-/**
- * Copies an existing style.
- */
-
-	function css_copy()
-	{
-		extract(psa(array('oldname', 'newname')));
-
-		$css = doSlash(fetch('css', 'txp_css', 'name', $oldname));
-
-		$rs = safe_insert('txp_css', "css = '$css', name = '".doSlash($newname)."'");
-
-		css_edit(
-			gTxt('css_created', array('{name}' => $newname))
+		n.hed(gTxt('tab_style'), 1, 'class="txp-heading"').
+		n.'<div id="'.$event.'_container" class="txp-layout-grid">'.
+		n.'<div id="main_content" class="txp-layout-cell txp-layout-3-4">'.
+		form(
+			graf($buttons).
+			graf(
+				'<label for="css">'.gTxt('css_code').'</label>'.
+				br.'<textarea id="css" class="code" name="css" cols="'.INPUT_LARGE.'" rows="'.INPUT_REGULAR.'">'.txpspecialchars($thecss).'</textarea>'
+			).
+			graf(
+				fInput('submit', '', gTxt('save'), 'publish').
+				eInput('css').sInput('css_save').
+				hInput('name', $name)
+			)
+		, '', '', 'post', 'edit-form', '', 'style_form').
+		n.'</div>'.
+		$right.
+		n.'</div>'.
+		n.script_js( <<<EOS
+			$(document).ready(function ()
+			{
+				$('#txp_clone').click(function(ev)
+				{
+					ev.preventDefault();
+					$(this).closest('form').append('<input type="hidden" name="copy" value="1" />').submit();
+				});
+			});
+EOS
 		);
 	}
 
 /**
- * Saves a style.
+ * Saves or clones a style.
  */
 
 	function css_save()
 	{
-		extract(array_map('assert_string', psa(array('name', 'css', 'savenew', 'newname', 'copy'))));
-		$css = doSlash($css);
+		extract(doSlash(array_map('assert_string', psa(array(
+			'savenew',
+			'copy',
+			'css',
+		)))));
 
-		if ($savenew or $copy)
+		$name = sanitizeForPage(assert_string(ps('name')));
+		$newname = doSlash(sanitizeForPage(assert_string(ps('newname'))));
+
+		$save_error = false;
+		$message = '';
+
+		if (!$newname)
 		{
-			$newname = doSlash(trim(preg_replace('/[<>&"\']/', '', ps('newname'))));
-
-			if ($newname and safe_field('name', 'txp_css', "name = '$newname'"))
+			$message = array(gTxt('css_name_required'), E_ERROR);
+			$save_error = true;
+		}
+		else
+		{
+			if ($copy && ($name == $newname))
 			{
-				$message = gTxt('css_already_exists', array('{name}' => $newname), E_ERROR);
+				$newname .= '_copy';
+				$_POST['newname'] = $newname;
+			}
+	
+			$exists = safe_field('name', 'txp_css', "name = '$newname'");
+	
+			if (($newname != $name) and $exists)
+			{
+				$message = array(gTxt('css_already_exists', array('{name}' => $newname)), E_ERROR);
 				if ($savenew)
 				{
 					$_POST['newname'] = '';
 				}
+	
+				$save_error = true;
 			}
-
-			elseif ($newname)
+			else
 			{
-				if (safe_insert('txp_css', "name = '".$newname."', css = '$css'"))
+				if ($savenew or $copy)
 				{
-					update_lastmod();
-					$message = gTxt('css_created', array('{name}' => $newname));
+					if ($newname)
+					{
+						if (safe_insert('txp_css', "name = '".$newname."', css = '$css'"))
+						{
+							update_lastmod();
+							$message = gTxt('css_created', array('{name}' => $newname));
+						}
+						else
+						{
+							$message = array(gTxt('css_save_failed'), E_ERROR);
+							$save_error = true;
+						}
+					}
+					else
+					{
+						$message = array(gTxt('css_name_required'), E_ERROR);
+						$save_error = true;
+					}
 				}
 				else
 				{
-					$message = array(gTxt('css_save_failed'), E_ERROR);
+					if (safe_update('txp_css', "css = '$css', name = '$newname'", "name = '".doSlash($name)."'"))
+					{
+						safe_update('txp_section', "css = '$newname'", "css='".doSlash($name)."'");
+						update_lastmod();
+						$message = gTxt('css_updated', array('{name}' => $name));
+					}
+					else
+					{
+						$message = array(gTxt('css_save_failed'), E_ERROR);
+						$save_error = true;
+					}
 				}
 			}
-			else
-			{
-				$message = array(gTxt('css_name_required'), E_ERROR);
-			}
+		}
 
-			css_edit($message);
+		if ($save_error === true)
+		{
+			$_POST['save_error'] = '1';
 		}
 		else
 		{
-			if (safe_update('txp_css', "css = '$css'", "name = '".doSlash($name)."'"))
-			{
-				update_lastmod();
-				$message = gTxt('css_updated', array('{name}' => $name));
-			}
-			else
-			{
-				$message = array(gTxt('css_save_failed'), E_ERROR);
-			}
-			css_edit($message);
+			callback_event('css_saved', '', 0, $name, $newname);
 		}
+
+		css_edit($message);
 	}
 
 /**
