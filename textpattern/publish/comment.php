@@ -148,7 +148,7 @@
 		))));
 
 		if ($message == '')
-		{	// Second or later preview will have randomized message-field name.
+		{	// Second or later preview will have randomised message-field name.
 			$in = getComment();
 			$message = doDeEnt($in['message']);
 		}
@@ -214,8 +214,8 @@
 
 		$url = $GLOBALS['pretext']['request_uri'];
 
-		// Experimental clean urls with only 404-error-document on apache
-		// possibly requires messy urls for POST requests.
+		// Experimental clean URLs with only 404-error-document on Apache
+		// possibly requires messy URLs for POST requests.
 
 		if (defined('PARTLY_MESSY') and (PARTLY_MESSY))
 		{
@@ -242,7 +242,7 @@
 		// By default, the submit button is visible but disabled.
 		$comment_submit_button = fInput('submit', 'submit', $submitlabel, 'button disabled', '', '', '', '', 'txpCommentSubmit', true);
 
-		// If all fields checkout, the submit button is active/clickable.
+		// If all fields check out, the submit button is active/clickable.
 		if ($preview)
 		{
 			$comment_submit_button = fInput('submit', 'submit', $submitlabel, 'button', '', '', '', '', 'txpCommentSubmit', false);
@@ -473,7 +473,7 @@
 			(!trim($message))
 		)
 		{
-			$evaluator->add_estimate(RELOAD,1); // The error-messages are added in the preview-code
+			$evaluator->add_estimate(RELOAD,1); // The error-messages are added in the preview-code.
 		}
 
 		if ($isdup)
@@ -552,7 +552,7 @@
 				}
 			}
 		}
-		// Force another Preview
+		// Force another Preview.
 		$_POST['preview'] = RELOAD;
 		//$evaluator->write_trace();
 	}
@@ -560,7 +560,7 @@
 /**
  * Comment evaluator.
  *
- * Validates and filters comments. Keeps spam out.
+ * Validates and filters comments. Keeps out spam.
  *
  * @package Comment
  */
@@ -636,10 +636,10 @@ class comment_evaluation
 	}
 
 	/**
-	 * Adds a estimate about the comment's status.
+	 * Adds an estimate about the comment's status.
 	 *
 	 * @param int    $type        The status, either SPAM, MODERATE, VISIBLE or  RELOAD
-	 * @param float  $probability Estimate's probability. Throught 0 to 1, e.g. 0.75
+	 * @param float  $probability Estimates probability - throughout 0 to 1, e.g. 0.75
 	 * @param string $msg         The error or success message shown to the user
 	 */
 
@@ -666,7 +666,7 @@ class comment_evaluation
 	/**
 	 * Gets resulting estimated status.
 	 *
-	 * @param  string     $result_type If 'numeric' returns the ID of the status, a localized label otherwise.
+	 * @param  string     $result_type If 'numeric' returns the ID of the status, a localised label otherwise.
 	 * @return int|string
 	 */
 
@@ -768,7 +768,7 @@ class comment_evaluation
 	}
 
 /**
- * Checks if a IP address is banned.
+ * Checks if an IP address is banned.
  *
  * @param  string $ip The IP address.
  * @return bool TRUE if the IP is not banned
