@@ -314,7 +314,7 @@
  * @return string HTML
  */
 
-	function aLink($event, $step, $thing, $value, $thing2, $value2)
+	function aLink($event, $step, $thing = '', $value = '', $thing2 = '', $value2 = '')
 	{
 		return href('+', array(
 			'event' => $event,
