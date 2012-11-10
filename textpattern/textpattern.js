@@ -937,15 +937,18 @@ textpattern.Route =
 	/**
 	 * Attachs a listener.
 	 *
-	 * @param {string} page The page
-	 * @param {object} fn   The callback
+	 * @param {string} pages The page
+	 * @param {object} fn    The callback
 	 */
 
-	add : function (page, fn)
+	add : function (pages, fn)
 	{
-		textpattern.Route.attached.push({
-			'page' : page,
-			'fn'   : fn
+		$.each(pages.split(','), function (index, page)
+		{
+			textpattern.Route.attached.push({
+				'page' : $.trim(page),
+				'fn'   : fn
+			});
 		});
 	},
 
@@ -1297,7 +1300,7 @@ textpattern.Route.add('article', function ()
 
 // Styles panel.
 
-textpattern.Route.add('css', function ()
+textpattern.Route.add('css, page, form', function ()
 {
 	$('#txp_clone').click(function (e)
 	{
