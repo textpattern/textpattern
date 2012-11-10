@@ -106,14 +106,16 @@
 
 	function column_multi_head($head_items, $class = '')
 	{
-		$o = n.'<th scope="col"'.($class ? ' class="'.$class.'"' : '').'>';
+		$o = '';
 		$first_item = true;
+
 		foreach ($head_items as $item)
 		{
 			if (empty($item))
 			{
 				continue;
 			}
+
 			extract(lAtts(array(
 				'value'   => '',
 				'sort'    => '',
@@ -125,31 +127,30 @@
 				'method'  => '',
 			), $item));
 
-			$o .= ($first_item) ? '' : ', '; $first_item = false;
+			$o .= ($first_item) ? '' : ', ';
+			$first_item = false;
 
 			if ($is_link)
 			{
-				$o .= '<a href="index.php?step='.$step;
-
-				$o .= ($event) ? a."event=$event" : '';
-				$o .= ($sort) ? a."sort=$sort" : '';
-				$o .= ($dir) ? a."dir=$dir" : '';
-				$o .= ($crit != '') ? a."crit=$crit" : '';
-				$o .= ($method) ? a."search_method=$method" : '';
-
-				$o .= '">';
+				$o .= href(gTxt($value), array(
+					'event'         => $event,
+					'step'          => $step,
+					'sort'          => $sort,
+					'dir'           => $dir,
+					'crit'          => $crit,
+					'search_method' => $method,
+				), array());
 			}
-
-			$o .= gTxt($value);
-
-			if ($is_link)
+			else
 			{
-				$o .= '</a>';
+				$o .= gTxt($value);
 			}
 		}
-		$o .= '</th>';
 
-		return $o;
+		return hCell($o, '', array(
+			'scope' => 'col',
+			'class' => $class,
+		));
 	}
 
 /**
