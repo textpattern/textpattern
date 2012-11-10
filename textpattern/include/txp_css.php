@@ -262,6 +262,7 @@
 	{
 		$name  = ps('name');
 		$count = safe_count('txp_section', "css = '".doSlash($name)."'");
+		$message = '';
 
 		if ($count)
 		{
