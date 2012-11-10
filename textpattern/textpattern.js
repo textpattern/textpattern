@@ -971,7 +971,11 @@ textpattern.Route =
 		{
 			if (data.page === options.event || data.page === options.event + '.' + options.step)
 			{
-				data.fn(options);
+				data.fn({
+					'event' : options.event,
+					'step'  : options.step,
+					'route' : data.page
+				});
 			}
 		});
 	}
