@@ -1540,7 +1540,6 @@ td.column:last-child {
 }
 
 /* TO BE REMOVED */
-#page-page td.column:first-child,
 #page-form td.column:first-child {
 	padding-right: 35px;
 	width: 23%;

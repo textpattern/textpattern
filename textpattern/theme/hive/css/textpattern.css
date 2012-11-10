@@ -1984,8 +1984,7 @@ body#page-setup {
   color: #999999;
 }
 
-#configuration_content,
-#tagbuild_links {
+#configuration_content {
   margin-right: 1em;
 }
 
@@ -2065,8 +2064,6 @@ body#page-setup {
    ========================================================================== */
 
 /* TO BE REMOVED */
-#page-page .txp-columntable td.column:first-child,
-#page-page .txp-columntable td.column:last-child,
 #page-form .txp-columntable td.column:first-child,
 #page-form .txp-columntable td.column:last-child {
   width: 25%;
@@ -2263,7 +2260,6 @@ div.code {
   }
 
   #configuration_content,
-  #tagbuild_links,
   #supporting_content {
     margin: 0;
   }
@@ -2278,25 +2274,19 @@ div.code {
      ========================================================================== */
 
   /* TO BE REMOVED */
-  #page-page .txp-columntable td.column:first-child,
   #page-form .txp-columntable td.column:first-child {
     display: none;
   }
 
   #page-page h2,
   #page-form h2,
-  #page-css h2,
-  #page-section h2 {
+  #page-css h2 {
     margin-top: 1.625em;
   }
 
   /* TO BE REMOVED */
-  #page-page > tr,
-  #page-page .txp-columntable td.column,
   #page-form > tr,
-  #page-form .txp-columntable td.column,
-  #page-section > tr,
-  #page-section .txp-columntable td.column {
+  #page-form .txp-columntable td.column {
     display: block;
     margin: 0 auto;
     width: 100%;
@@ -2304,9 +2294,7 @@ div.code {
   }
 
   /* TO BE REMOVED */
-  #page-page .txp-columntable td.column:last-child,
-  #page-form .txp-columntable td.column:last-child,
-  #page-section .txp-columntable td.column:last-child {
+  #page-form .txp-columntable td.column:last-child {
     width: 100%;
   }
 
