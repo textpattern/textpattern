@@ -893,11 +893,11 @@ textpattern.Console =
 	{
 		if (textpattern.production_status === 'debug')
 		{
-            textpattern.Console.history.push(message);
+			textpattern.Console.history.push(message);
 
-            textpattern.Relay.callback('txpConsoleLog', {
-                'message' : message
-            });
+			textpattern.Relay.callback('txpConsoleLog', {
+				'message' : message
+			});
 		}
 
 		return this;
