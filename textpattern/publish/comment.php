@@ -47,6 +47,8 @@
  *
  * @param  int         $id The article
  * @return string|null HTML
+ * @example
+ * echo discuss(12);
  */
 
 	function discuss($id)
@@ -310,7 +312,7 @@
 /**
  * Parses a &lt;txp:popup_comments /&gt; tag.
  *
- * @param  int    $id The article's id.
+ * @param  int    $id The article's ID
  * @return string HTML
  */
 
@@ -641,6 +643,9 @@ class comment_evaluation
 	 * @param int    $type        The status, either SPAM, MODERATE, VISIBLE or  RELOAD
 	 * @param float  $probability Estimates probability - throughout 0 to 1, e.g. 0.75
 	 * @param string $msg         The error or success message shown to the user
+	 * @example
+	 * $evaluator =& get_comment_evaluator();
+	 * $evaluator->add_estimate(RELOAD, 1, 'Message');
 	 */
 
 	public function add_estimate($type = SPAM, $probability = 0.75, $msg = '')
@@ -666,8 +671,13 @@ class comment_evaluation
 	/**
 	 * Gets resulting estimated status.
 	 *
-	 * @param  string     $result_type If 'numeric' returns the ID of the status, a localised label otherwise.
+	 * @param  string     $result_type If 'numeric' returns the ID of the status, a localised label otherwise
 	 * @return int|string
+	 * @example
+	 * $evaluator =& get_comment_evaluator();
+	 * print_r(
+	 * 	$evaluator->get_result()
+	 * );
 	 */
 
 	public function get_result($result_type = 'numeric')
@@ -686,6 +696,9 @@ class comment_evaluation
 	 * Gets resulting success or error message.
 	 *
 	 * @return array
+	 * @example
+	 * $evaluator =& get_comment_evaluator();
+	 * echo $evaluator->get_result_message();
 	 */
 
 	public function get_result_message()
@@ -770,8 +783,13 @@ class comment_evaluation
 /**
  * Checks if an IP address is banned.
  *
- * @param  string $ip The IP address.
- * @return bool TRUE if the IP is not banned
+ * @param  string $ip The IP address
+ * @return bool   TRUE if the IP is not banned
+ * @example
+ * if (checkBan('127.0.0.1') === false)
+ * {
+ * 	echo "IP address is banned.";
+ * }
  */
 
 	function checkBan($ip)
@@ -784,6 +802,11 @@ class comment_evaluation
  *
  * @param  int  $id The article.
  * @return bool FALSE if comments are closed
+ * @example
+ * if (checkCommentsAllowed(12))
+ * {
+ * 	echo "Article accepts comments";
+ * }
  */
 
 	function checkCommentsAllowed($id)
