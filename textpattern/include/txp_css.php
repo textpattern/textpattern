@@ -62,7 +62,8 @@
  * @return string A HTML &lt;table&gt;
  */
 
-	function css_list($current, $default) {
+	function css_list($current, $default)
+	{
 		$out = array();
 		$protected = safe_column('DISTINCT css', 'txp_section', '1=1');
 
@@ -73,7 +74,7 @@
 
 		if ($rs)
 		{
-			$out[] = n.'<ul class="switcher-list">';
+			$out[] = '<ul class="switcher-list">';
 
 			while ($a = nextRow($rs))
 			{
@@ -81,7 +82,7 @@
 				$active = ($current == $name);
 				$edit = ($active) ? txpspecialchars($name) : eLink('css', '', 'name', $name, $name);
 				$delete = (!array_key_exists($name, $protected)) ? dLink('css', 'css_delete', 'name', $name) : '';
-				$out[] = '<li'.($active ? ' class="active"' : '').'>'.$edit.$delete.'</li>';
+				$out[] = '<li'.($active ? ' class="active"' : '').'>'.n.$edit.$delete.n.'</li>';
 			}
 
 			$out[] = '</ul>';
@@ -122,8 +123,8 @@
 			$name = $newname;
 		}
 
-		$buttons = n.'<label for="new_style">'.gTxt('css_name').'</label>'.br.fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_style');
-		$buttons .= (empty($name)) ? n.hInput('savenew', 'savenew') : n.'<span class="txp-actions">'.href(gTxt('duplicate'), '#', array('id' => 'txp_clone', 'class' => 'clone', 'title' => gTxt('css_clone'))) . '</span>';
+		$buttons = n.'<label for="new_style">'.gTxt('css_name').'</label>'.br.fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_style', false, true);
+		$buttons .= (empty($name)) ? hInput('savenew', 'savenew') : n.'<span class="txp-actions">'.href(gTxt('duplicate'), '#', array('id' => 'txp_clone', 'class' => 'clone', 'title' => gTxt('css_clone'))) . '</span>';
 		$thecss = gps('css');
 
 		if (!$save_error)
@@ -132,14 +133,14 @@
 		}
 
 		$right =
-			'<div id="content_switcher" class="txp-layout-cell txp-layout-1-4">'.
+			n.'<div id="content_switcher" class="txp-layout-cell txp-layout-1-4">'.
 			graf(sLink('css', 'pour', gTxt('create_new_css')), ' class="action-create"').
 			css_list($name, $default_name).
-			'</div>';
+			n.'</div>';
 
 		// TODO: Use Textpattern.Route for JS, because it'll apply to Style, Page and Form panels.
 		echo
-		n.hed(gTxt('tab_style'), 1, 'class="txp-heading"').
+		hed(gTxt('tab_style'), 1, 'class="txp-heading"').
 		n.'<div id="'.$event.'_container" class="txp-layout-grid">'.
 		n.'<div id="main_content" class="txp-layout-cell txp-layout-3-4">'.
 		form(
@@ -157,10 +158,10 @@
 		n.'</div>'.
 		$right.
 		n.'</div>'.
-		n.script_js( <<<EOS
+		script_js( <<<EOS
 			$(document).ready(function ()
 			{
-				$('#txp_clone').click(function(ev)
+				$('#txp_clone').click(function (ev)
 				{
 					ev.preventDefault();
 					$(this).closest('form').append('<input type="hidden" name="copy" value="1" />').submit();
@@ -200,9 +201,9 @@ EOS
 				$newname .= '_copy';
 				$_POST['newname'] = $newname;
 			}
-	
+
 			$exists = safe_field('name', 'txp_css', "name = '$newname'");
-	
+
 			if (($newname != $name) and $exists)
 			{
 				$message = array(gTxt('css_already_exists', array('{name}' => $newname)), E_ERROR);
@@ -210,7 +211,7 @@ EOS
 				{
 					$_POST['newname'] = '';
 				}
-	
+
 				$save_error = true;
 			}
 			else

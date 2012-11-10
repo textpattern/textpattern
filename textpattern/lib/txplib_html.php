@@ -289,19 +289,19 @@
 		}
 
 		return join('', array(
-			'<form method="post" action="index.php" onsubmit="return confirm(\''.gTxt('confirm_delete_popup').'\');">',
-			 fInput('submit', '', '×', 'destroy', gTxt('delete')),
-			 eInput($event).
-			 sInput($step),
-			 hInput($thing, $value),
-			 ($thing2) ? hInput($thing2, $thing2val) : '',
-			 ($remember) ? hInput('page', $page) : '',
-			 ($remember) ? hInput('sort', $sort) : '',
-			 ($remember) ? hInput('dir', $dir) : '',
-			 ($remember) ? hInput('crit', $crit) : '',
-			 ($remember) ? hInput('search_method', $search_method) : '',
-			 n.tInput(),
-			 '</form>'
+			n.'<form method="post" action="index.php" onsubmit="return confirm(\''.gTxt('confirm_delete_popup').'\');">',
+			fInput('submit', '', '×', 'destroy', gTxt('delete')),
+			eInput($event).
+			sInput($step),
+			hInput($thing, $value),
+			($thing2) ? hInput($thing2, $thing2val) : '',
+			($remember) ? hInput('page', $page) : '',
+			($remember) ? hInput('sort', $sort) : '',
+			($remember) ? hInput('dir', $dir) : '',
+			($remember) ? hInput('crit', $crit) : '',
+			($remember) ? hInput('search_method', $search_method) : '',
+			tInput(),
+			n.'</form>'
 		));
 	}
 
@@ -323,10 +323,10 @@
 	function aLink($event, $step, $thing = '', $value = '', $thing2 = '', $value2 = '')
 	{
 		return href('+', array(
-			'event' => $event,
-			'step' => $step,
-			$thing => $value,
-			$thing2 => $value2,
+			'event'      => $event,
+			'step'       => $step,
+			$thing       => $value,
+			$thing2      => $value2,
 			'_txp_token' => form_token(),
 		), array('class' => 'alink'));
 	}
@@ -367,11 +367,11 @@
 	function PrevNextLink($event, $page, $label, $type, $sort = '', $dir = '', $crit = '', $search_method = '', $step = 'list')
 	{
 		return href($label, array(
-			'event' => $event,
-			'step' => $step,
-			'page' => (int) $page,
-			'dir' => $dir,
-			'crit' => $crit,
+			'event'         => $event,
+			'step'          => $step,
+			'page'          => (int) $page,
+			'dir'           => $dir,
+			'crit'          => $crit,
 			'search_method' => $search_method,
 		), array('class' => 'navlink', 'rel' => $type));
 	}
