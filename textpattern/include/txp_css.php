@@ -79,7 +79,7 @@
 			while ($a = nextRow($rs))
 			{
 				extract($a);
-				$active = ($current == $name);
+				$active = ($current === $name);
 				$edit = ($active) ? txpspecialchars($name) : eLink('css', '', 'name', $name, $name);
 				$delete = (!array_key_exists($name, $protected)) ? dLink('css', 'css_delete', 'name', $name) : '';
 				$out[] = '<li'.($active ? ' class="active"' : '').'>'.n.$edit.$delete.n.'</li>';
@@ -184,7 +184,7 @@ EOS
 		)))));
 
 		$name = sanitizeForPage(assert_string(ps('name')));
-		$newname = doSlash(sanitizeForPage(assert_string(ps('newname'))));
+		$newname = sanitizeForPage(assert_string(ps('newname')));
 
 		$save_error = false;
 		$message = '';
@@ -196,15 +196,15 @@ EOS
 		}
 		else
 		{
-			if ($copy && ($name == $newname))
+			if ($copy && ($name === $newname))
 			{
 				$newname .= '_copy';
 				$_POST['newname'] = $newname;
 			}
 
-			$exists = safe_field('name', 'txp_css', "name = '$newname'");
+			$exists = safe_field('name', 'txp_css', "name = '".doSlash($newname)."'");
 
-			if (($newname != $name) and $exists)
+			if (($newname !== $name) && $exists)
 			{
 				$message = array(gTxt('css_already_exists', array('{name}' => $newname)), E_ERROR);
 				if ($savenew)
@@ -220,7 +220,7 @@ EOS
 				{
 					if ($newname)
 					{
-						if (safe_insert('txp_css', "name = '".$newname."', css = '$css'"))
+						if (safe_insert('txp_css', "name = '".doSlash($newname)."', css = '$css'"))
 						{
 							update_lastmod();
 							$message = gTxt('css_created', array('{name}' => $newname));
@@ -239,9 +239,9 @@ EOS
 				}
 				else
 				{
-					if (safe_update('txp_css', "css = '$css', name = '$newname'", "name = '".doSlash($name)."'"))
+					if (safe_update('txp_css', "css = '$css', name = '".doSlash($newname)."'", "name = '".doSlash($name)."'"))
 					{
-						safe_update('txp_section', "css = '$newname'", "css='".doSlash($name)."'");
+						safe_update('txp_section', "css = '".doSlash($newname)."'", "css='".doSlash($name)."'");
 						update_lastmod();
 						$message = gTxt('css_updated', array('{name}' => $name));
 					}
