@@ -891,16 +891,14 @@ textpattern.Console =
 
 	log : function (message)
 	{
-		if (textpattern.production_status !== 'debug')
+		if (textpattern.production_status === 'debug')
 		{
-			return this;
+            textpattern.Console.history.push(message);
+
+            textpattern.Relay.callback('txpConsoleLog', {
+                'message' : message
+            });
 		}
-
-		textpattern.Console.history.push(message);
-
-		textpattern.Relay.callback('txpConsoleLog', {
-			'message' : message
-		});
 
 		return this;
 	}
