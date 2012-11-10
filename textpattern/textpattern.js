@@ -883,7 +883,8 @@ textpattern.Console =
 	/**
 	 * Logs a message.
 	 *
-	 * @param message The message
+	 * @param  message The message
+	 * @return textpattern.Console
 	 * @example
 	 * textpattern.Console.log('Some message');
 	 */
@@ -892,7 +893,7 @@ textpattern.Console =
 	{
 		if (textpattern.production_status !== 'debug')
 		{
-			return;
+			return this;
 		}
 
 		textpattern.Console.history.push(message);
@@ -900,6 +901,8 @@ textpattern.Console =
 		textpattern.Relay.callback('txpConsoleLog', {
 			'message' : message
 		});
+
+		return this;
 	}
 };
 
