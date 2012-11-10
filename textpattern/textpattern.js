@@ -1388,6 +1388,17 @@ $(document).ready(function ()
 		}
 	});
 
+	// Confirmation dialogs.
+	$(document).on('click', 'a[data-verify]', function (e)
+	{
+		return verify($(this).data('verify'));
+	});
+
+	$(document).on('submit', 'form[data-verify]', function (e)
+	{
+		return verify($(this).data('verify'));
+	});
+
 	// Initialises panel specific JavaScript.
 	textpattern.Route.init();
 

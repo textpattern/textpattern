@@ -282,14 +282,14 @@
 			}
 
 			return join('', array(
-				'<a href="'.$url.'" class="dlink destroy" title="'.gTxt('delete').'" onclick="return verify(\'',
+				'<a href="'.$url.'" class="dlink destroy" title="'.gTxt('delete').'" data-verify="',
 				($verify) ? gTxt($verify) : gTxt('confirm_delete_popup'),
-				'\')">×</a>'
+				'">×</a>'
 			));
 		}
 
 		return join('', array(
-			n.'<form method="post" action="index.php" onsubmit="return confirm(\''.gTxt('confirm_delete_popup').'\');">',
+			n.'<form method="post" action="index.php" data-verify="'.gTxt('confirm_delete_popup').'">',
 			fInput('submit', '', '×', 'destroy', gTxt('delete')),
 			eInput($event).
 			sInput($step),
