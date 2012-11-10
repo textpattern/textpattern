@@ -1280,7 +1280,7 @@ EOF;
  * Renders a &lt:script&gt; element.
  *
  * @param  string     $js    JavaScript code
- * @param  int|string $flags Flags SCRIPT_URL | SCRIPT_ATTACH_VERSION, or noscript alternative if a string.
+ * @param  int|string $flags Flags SCRIPT_URL | SCRIPT_ATTACH_VERSION, or noscript alternative if a string
  * @return string HTML with embedded script element
  * @example
  * echo script_js('/js/script.js', SCRIPT_URL);
@@ -1324,8 +1324,8 @@ EOF;
 /**
  * Renders a "Details" toggle checkbox.
  *
- * @param  string $classname Unique identfier. The cookie's name will be derived from this value.
- * @param  bool	  $form      Create as a stand-along &lt;form&gt; element [false]
+ * @param  string $classname Unique identfier. The cookie's name will be derived from this value
+ * @param  bool	  $form      Create as a stand-along &lt;form&gt; element
  * @return string HTML
  */
 
@@ -1351,8 +1351,8 @@ EOF;
 /**
  * Renders a checkbox to set/unset a browser cookie.
  *
- * @param  string $classname Label text. The cookie's name will be derived from this value.
- * @param  bool   $form      Create as a stand-along &lt;form&gt; element [true]
+ * @param  string $classname Label text. The cookie's name will be derived from this value
+ * @param  bool   $form      Create as a stand-along &lt;form&gt; element
  * @return string HTML
  */
 
