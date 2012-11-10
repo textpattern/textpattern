@@ -1318,7 +1318,7 @@ textpattern.Route.add('css, page, form', function ()
 	$('#txp_clone').click(function (e)
 	{
 		e.preventDefault();
-		$(this).closest('form').append('<input type="hidden" name="copy" value="1" />').submit();
+		$(this).parents('form').append('<input type="hidden" name="copy" value="1" />').submit();
 	});
 });
 
