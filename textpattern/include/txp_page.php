@@ -34,19 +34,19 @@
 
 		switch(strtolower($step))
 		{
-			case "":
+			case "" :
 				page_edit();
 				break;
-			case "page_edit":
+			case "page_edit" :
 				page_edit();
 				break;
-			case "page_save":
+			case "page_save" :
 				page_save();
 				break;
-			case "page_delete":
+			case "page_delete" :
 				page_delete();
 				break;
-			case "page_new":
+			case "page_new" :
 				page_new();
 				break;
 			case "save_pane_state":
