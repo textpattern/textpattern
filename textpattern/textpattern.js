@@ -1295,6 +1295,17 @@ textpattern.Route.add('article', function ()
 	});
 });
 
+// Styles panel.
+
+textpattern.Route.add('css', function ()
+{
+	$('#txp_clone').click(function (e)
+	{
+		e.preventDefault();
+		$(this).closest('form').append('<input type="hidden" name="copy" value="1" />').submit();
+	});
+});
+
 // Initialise JavaScript.
 
 $(document).ready(function ()

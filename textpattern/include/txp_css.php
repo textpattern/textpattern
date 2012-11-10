@@ -138,7 +138,6 @@
 			css_list($name, $default_name).
 			n.'</div>';
 
-		// TODO: Use Textpattern.Route for JS, because it'll apply to Style, Page and Form panels.
 		echo
 		hed(gTxt('tab_style'), 1, 'class="txp-heading"').
 		n.'<div id="'.$event.'_container" class="txp-layout-grid">'.
@@ -157,18 +156,7 @@
 		, '', '', 'post', 'edit-form', '', 'style_form').
 		n.'</div>'.
 		$right.
-		n.'</div>'.
-		script_js( <<<EOS
-			$(document).ready(function ()
-			{
-				$('#txp_clone').click(function (ev)
-				{
-					ev.preventDefault();
-					$(this).closest('form').append('<input type="hidden" name="copy" value="1" />').submit();
-				});
-			});
-EOS
-		);
+		n.'</div>';
 	}
 
 /**
