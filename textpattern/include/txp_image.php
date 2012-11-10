@@ -160,12 +160,12 @@
 			if ($criteria != 1)
 			{
 				echo n.image_search_form($crit, $search_method).
-					n.graf(gTxt('no_results_found'), ' class="indicator"').'</div>';
+					graf(gTxt('no_results_found'), ' class="indicator"').'</div>';
 			}
 
 			else
 			{
-				echo n.graf(gTxt('no_images_recorded'), ' class="indicator"').'</div>';
+				echo graf(gTxt('no_images_recorded'), ' class="indicator"').'</div>';
 			}
 
 			return;
@@ -192,15 +192,15 @@
 			echo n.'<form name="longform" id="images_form" class="multi_edit_form" method="post" action="index.php">'.
 
 				n.'<div class="txp-listtables">'.
-				n.startTable('', '', 'txp-list').
-				'<thead>'.
-				n.tr(
-					n.hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
+				startTable('', '', 'txp-list').
+				n.'<thead>'.
+				tr(
+					hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
 					column_head('ID', 'id', 'image', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id').
 					column_head('name', 'name', 'image', true, $switch_dir, $crit, $search_method, (('name' == $sort) ? "$dir " : '').'name').
 					column_head('date', 'date', 'image', true, $switch_dir, $crit, $search_method, (('date' == $sort) ? "$dir " : '').'images_detail date created').
 					column_head('thumbnail', 'thumbnail', 'image', true, $switch_dir, $crit, $search_method, (('thumbnail' == $sort) ? "$dir " : '').'thumbnail').
-					n.hCell(gTxt('tags'), '', ' scope="col" class="images_detail tag-build"').
+					hCell(gTxt('tags'), '', ' scope="col" class="images_detail tag-build"').
 					column_head('image_category', 'category', 'image', true, $switch_dir, $crit, $search_method, (('category' == $sort) ? "$dir " : '').'category').
 					($show_authors ? column_head('author', 'author', 'image', true, $switch_dir, $crit, $search_method, (('author' == $sort) ? "$dir " : '').'author') : '')
 				).
@@ -246,33 +246,33 @@
 
 				$can_edit = has_privs('image.edit') || ($author == $txp_user && has_privs('image.edit.own'));
 
-				echo n.tr(
-					n.td($can_edit ? fInput('checkbox', 'selected[]', $id) : '&#160;'
+				echo tr(
+					td($can_edit ? fInput('checkbox', 'selected[]', $id) : '&#160;'
 					, '', 'multi-edit').
 
-					n.hCell(
+					hCell(
 						($can_edit ? href($id, $edit_url, ' title="'.gTxt('edit').'"') : $id).sp.
 						'<span class="images_detail"><span role="presentation">[</span><a href="'.imagesrcurl($id, $ext).'">'.gTxt('view').'</a><span role="presentation">]</span></span>'
 					, '', ' scope="row" class="id"').
 
-					n.td(
+					td(
 						($can_edit ? href($name, $edit_url, ' title="'.gTxt('edit').'"') : $name)
 					, '', 'name').
 
-					n.td(
+					td(
 						gTime($uDate)
 					, '', 'images_detail date created').
 
-					n.td(
+					td(
 						pluggable_ui('image_ui', 'thumbnail',
 						($can_edit ? href($thumbnail, $edit_url) : $thumbnail)
 						, $a)
 					, '', 'thumbnail').
 
-					n.td($tagbuilder, '', 'images_detail tag-build').
-					n.td($category, '', 'category'.$vc).
+					td($tagbuilder, '', 'images_detail tag-build').
+					td($category, '', 'category'.$vc).
 
-					($show_authors ? n.td(
+					($show_authors ? td(
 						'<span title="'.txpspecialchars(get_author_name($author)).'">'.txpspecialchars($author).'</span>'
 					, '', 'author') : '')
 				);
@@ -280,17 +280,17 @@
 
 			echo n.'</tbody>'.
 				endTable().
-				'</div>'.
-				n.image_multiedit_form($page, $sort, $dir, $crit, $search_method).
-				n.tInput().
+				n.'</div>'.
+				image_multiedit_form($page, $sort, $dir, $crit, $search_method).
+				tInput().
 				n.'</form>'.
-				n.graf(
+				graf(
 					toggle_box('images_detail'),
 					' class="detail-toggle"'
 				).
 				n.'<div id="'.$event.'_navigation" class="txp-navigation">'.
-				n.nav_form('image', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
-				n.pageby_form('image', $image_list_pageby).
+				nav_form('image', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
+				pageby_form('image', $image_list_pageby).
 				n.'</div>'.
 				n.'</div>';
 		}
