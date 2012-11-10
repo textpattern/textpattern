@@ -1303,6 +1303,15 @@ textpattern.Route.add('article', function ()
 		$('#publish_now').prop('checked', false);
 		$('#reset_time').prop('checked', false);
 	});
+
+    // Switch to text/html/preview mode.
+    $('.view-mode a').click(function (e)
+    {
+        e.preventDefault();
+        $('input[name="view"]').val($(this).data('view-mode'));
+        document.article_form.submit();
+    });
+
 });
 
 // Styles panel.

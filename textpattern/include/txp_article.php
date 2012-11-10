@@ -1096,7 +1096,7 @@ if (!empty($event) and $event == 'article') {
 		$state = ($view == $tabevent) ? 'up' : 'down';
 		$pressed = ($view == $tabevent) ? 'true' : 'false';
 		return n.'<li class="view-mode '.$tabevent.'" id="tab-'.$tabevent.$state.'" title="'.gTxt('view_'.$tabevent).'">'.
-			'<a href="javascript:document.article_form.view.value=\''.$tabevent.'\';document.article_form.submit();" role="button" aria-pressed="'.$pressed.'">'.gTxt($tabevent).'</a>'.
+			'<a href="#" data-view-mode="'.$tabevent.'" role="button" aria-pressed="'.$pressed.'">'.gTxt($tabevent).'</a>'.
 			'</li>';
 	}
 
