@@ -25,12 +25,14 @@
 	{
 		require_privs('page');
 
-		bouncer($step, array(
-			'page_edit'       => false,
-			'page_save'       => true,
-			'page_delete'     => true,
-			'save_pane_state' => true,
-		));
+		bouncer($step,
+			array(
+				'page_edit'       => false,
+				'page_save'       => true,
+				'page_delete'     => true,
+				'save_pane_state' => true,
+			)
+		);
 
 		switch(strtolower($step))
 		{
@@ -49,7 +51,7 @@
 			case "page_new" :
 				page_new();
 				break;
-			case "save_pane_state":
+			case "save_pane_state" :
 				page_save_pane_state();
 				break;
 		}
@@ -67,11 +69,13 @@
 
 		pagetop(gTxt('edit_pages'), $message);
 
-		extract(array_map('assert_string', gpsa(array(
-			'copy',
-			'save_error',
-			'savenew',
-		))));
+		extract(array_map('assert_string', gpsa(
+			array(
+				'copy',
+				'save_error',
+				'savenew',
+			)
+		)));
 
 		$name = sanitizeForPage(assert_string(gps('name')));
 		$newname = sanitizeForPage(assert_string(gps('newname')));
@@ -86,7 +90,7 @@
 		}
 
 		$buttons = n.'<label for="new_page">'.gTxt('page_name').'</label>'.br.fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_page', false, true);
-		$buttons .= (empty($name)) ? hInput('savenew', 'savenew') : n.'<span class="txp-actions">'.href(gTxt('duplicate'), '#', array('id' => 'txp_clone', 'class' => 'clone', 'title' => gTxt('page_clone'))) . '</span>';
+		$buttons .= (empty($name)) ? hInput('savenew', 'savenew') : n.'<span class="txp-actions">'.href(gTxt('duplicate'), '#', array('id' => 'txp_clone', 'class' => 'clone', 'title' => gTxt('page_clone'))) . '</span>'.n;
 		$html = (!$save_error) ? fetch('user_html', 'txp_page', 'name', $name) : gps('html');
 
 		// Format of each entry is popTagLink -> array ( gTxt() string, class/ID).
@@ -162,7 +166,7 @@
 				$active = ($current === $name);
 				$edit = ($active) ? txpspecialchars($name) : eLink('page', '', 'name', $name, $name);
 				$delete = !in_array($name, $protected) ? dLink('page', 'page_delete', 'name', $name) : '';
-				$out[] = '<li'.($active ? ' class="active"' : '').'>'.$edit.$delete.'</li>';
+				$out[] = '<li'.($active ? ' class="active"' : '').'>'.n.$edit.$delete.n.'</li>';
 			}
 
 			$out[] = '</ul>';
@@ -203,16 +207,18 @@
 	}
 
 /**
- * Saves a page template.
+ * Saves or clones a page template.
  */
 
 	function page_save()
 	{
-		extract(doSlash(array_map('assert_string', psa(array(
-			'savenew',
-			'html',
-			'copy',
-		)))));
+		extract(doSlash(array_map('assert_string', psa(
+			array(
+				'savenew',
+				'html',
+				'copy',
+			)
+		))));
 
 		$name = sanitizeForPage(assert_string(ps('name')));
 		$newname = sanitizeForPage(assert_string(ps('newname')));

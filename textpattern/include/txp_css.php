@@ -55,9 +55,9 @@
 	}
 
 /**
- * Renders a list of styles.
+ * Renders a list of stylesheets.
  *
- * @param  string $current The active style
+ * @param  string $current The active stylesheet
  * @param  string $default Not used
  * @return string HTML
  */
@@ -92,12 +92,12 @@
 	}
 
 /**
- * The main Stylesheet editor panel.
+ * The main stylesheet editor panel.
  *
  * @param string|array $message The activity message
  */
 
-	function css_edit($message='')
+	function css_edit($message = '')
 	{
 		global $event, $step;
 
@@ -105,11 +105,13 @@
 
 		$default_name = safe_field('css', 'txp_section', "name = 'default'");
 
-		extract(array_map('assert_string', gpsa(array(
-			'copy',
-			'save_error',
-			'savenew',
-		))));
+		extract(array_map('assert_string', gpsa(
+			array(
+				'copy',
+				'save_error',
+				'savenew',
+			)
+		)));
 
 		$name = sanitizeForPage(assert_string(gps('name')));
 		$newname = sanitizeForPage(assert_string(gps('newname')));
@@ -124,7 +126,7 @@
 		}
 
 		$buttons = n.'<label for="new_style">'.gTxt('css_name').'</label>'.br.fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_style', false, true);
-		$buttons .= (empty($name)) ? hInput('savenew', 'savenew') : n.'<span class="txp-actions">'.href(gTxt('duplicate'), '#', array('id' => 'txp_clone', 'class' => 'clone', 'title' => gTxt('css_clone'))) . '</span>';
+		$buttons .= (empty($name)) ? hInput('savenew', 'savenew') : n.'<span class="txp-actions">'.href(gTxt('duplicate'), '#', array('id' => 'txp_clone', 'class' => 'clone', 'title' => gTxt('css_clone'))) . '</span>'.n;
 		$thecss = gps('css');
 
 		if (!$save_error)
@@ -134,42 +136,44 @@
 
 		$right =
 			n.'<div id="content_switcher" class="txp-layout-cell txp-layout-1-4">'.
-			graf(sLink('css', 'pour', gTxt('create_new_css')), ' class="action-create"').
-			css_list($name, $default_name).
+				graf(sLink('css', 'pour', gTxt('create_new_css')), ' class="action-create"').
+				css_list($name, $default_name).
 			n.'</div>';
 
 		echo
 		hed(gTxt('tab_style'), 1, 'class="txp-heading"').
 		n.'<div id="'.$event.'_container" class="txp-layout-grid">'.
-		n.'<div id="main_content" class="txp-layout-cell txp-layout-3-4">'.
-		form(
-			graf($buttons).
-			graf(
-				'<label for="css">'.gTxt('css_code').'</label>'.
-				br.'<textarea id="css" class="code" name="css" cols="'.INPUT_LARGE.'" rows="'.INPUT_REGULAR.'">'.txpspecialchars($thecss).'</textarea>'
-			).
-			graf(
-				fInput('submit', '', gTxt('save'), 'publish').
-				eInput('css').sInput('css_save').
-				hInput('name', $name)
-			)
-		, '', '', 'post', 'edit-form', '', 'style_form').
-		n.'</div>'.
-		$right.
+			n.'<div id="main_content" class="txp-layout-cell txp-layout-3-4">'.
+			form(
+				graf($buttons).
+				graf(
+					'<label for="css">'.gTxt('css_code').'</label>'.
+					br.'<textarea id="css" class="code" name="css" cols="'.INPUT_LARGE.'" rows="'.INPUT_REGULAR.'">'.txpspecialchars($thecss).'</textarea>'
+				).
+				graf(
+					fInput('submit', '', gTxt('save'), 'publish').
+					eInput('css').sInput('css_save').
+					hInput('name', $name)
+				)
+			, '', '', 'post', 'edit-form', '', 'style_form').
+			n.'</div>'.
+			$right.
 		n.'</div>';
 	}
 
 /**
- * Saves or clones a style.
+ * Saves or clones a stylesheet.
  */
 
 	function css_save()
 	{
-		extract(doSlash(array_map('assert_string', psa(array(
-			'savenew',
-			'copy',
-			'css',
-		)))));
+		extract(doSlash(array_map('assert_string', psa(
+			array(
+				'savenew',
+				'copy',
+				'css',
+			)
+		))));
 
 		$name = sanitizeForPage(assert_string(ps('name')));
 		$newname = sanitizeForPage(assert_string(ps('newname')));
@@ -255,7 +259,7 @@
 	}
 
 /**
- * Removes a style.
+ * Deletes a stylesheet.
  */
 
 	function css_delete()
