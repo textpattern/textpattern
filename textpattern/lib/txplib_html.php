@@ -84,21 +84,16 @@
 
 	function column_head($value, $sort = '', $event = '', $is_link = '', $dir = '', $crit = '', $method = '', $class = '', $step = 'list')
 	{
-		return column_multi_head(
-			array(
-				array(
-					'value'   => $value,
-					'sort'    => $sort,
-					'event'   => $event,
-					'step'    => $step,
-					'is_link' => $is_link,
-					'dir'     => $dir,
-					'crit'    => $crit,
-					'method'  => $method,
-				)
-			),
-			$class
-		);
+		return column_multi_head(array(array(
+			'value' => $value,
+			'sort' => $sort,
+			'event' => $event,
+			'step' => $step,
+			'is_link' => $is_link,
+			'dir' => $dir,
+			'crit' => $crit,
+			'method' => $method,
+		)), $class);
 	}
 
 /**
@@ -121,36 +116,30 @@
 				continue;
 			}
 
-			extract(lAtts(
-				array(
-					'value'   => '',
-					'sort'    => '',
-					'event'   => '',
-					'step'    => 'list',
-					'is_link' => '',
-					'dir'     => '',
-					'crit'    => '',
-					'method'  => '',
-				),
-				$item
-			));
+			extract(lAtts(array(
+				'value'   => '',
+				'sort'    => '',
+				'event'   => '',
+				'step'    => 'list',
+				'is_link' => '',
+				'dir'     => '',
+				'crit'    => '',
+				'method'  => '',
+			), $item));
 
 			$o .= ($first_item) ? '' : ', ';
 			$first_item = false;
 
 			if ($is_link)
 			{
-				$o .= href(gTxt($value),
-					array(
-						'event'         => $event,
-						'step'          => $step,
-						'sort'          => $sort,
-						'dir'           => $dir,
-						'crit'          => $crit,
-						'search_method' => $method,
-					),
-					array()
-				);
+				$o .= href(gTxt($value), array(
+					'event'         => $event,
+					'step'          => $step,
+					'sort'          => $sort,
+					'dir'           => $dir,
+					'crit'          => $crit,
+					'search_method' => $method,
+				), array());
 			}
 			else
 			{
@@ -158,12 +147,10 @@
 			}
 		}
 
-		return hCell($o, '',
-			array(
-				'scope' => 'col',
-				'class' => $class,
-			)
-		);
+		return hCell($o, '', array(
+			'scope' => 'col',
+			'class' => $class,
+		));
 	}
 
 /**
@@ -198,15 +185,10 @@
 			$linktext = null;
 		}
 
-		return href($linktext,
-			array(
-				'event' => $event,
-				'step'  => $step,
-			),
-			array(
-				'class' => $class
-			)
-		);
+		return href($linktext, array(
+			'event' => $event,
+			'step'  => $step,
+		), array('class' => $class));
 	}
 
 /**
@@ -228,16 +210,14 @@
 
 	function eLink($event, $step = '', $thing = '', $value = '', $linktext, $thing2 = '', $val2 = '', $title = 'edit')
 	{
-		return join('',
-			array(
-				'<a href="?event='.$event,
-				($step) ? a.'step='.$step : '',
-				($thing) ? a.''.$thing.'='.urlencode($value) : '',
-				($thing2) ? a.''.$thing2.'='.urlencode($val2) : '',
-				a.'_txp_token='.form_token(),
-				'"'.(($title) ? ' title="'.gTxt($title).'"' : '') .'>'.escape_title($linktext).'</a>'
-			)
-		);
+		return join('',array(
+			'<a href="?event='.$event,
+			($step) ? a.'step='.$step : '',
+			($thing) ? a.''.$thing.'='.urlencode($value) : '',
+			($thing2) ? a.''.$thing2.'='.urlencode($val2) : '',
+			a.'_txp_token='.form_token(),
+			'"'.(($title) ? ' title="'.gTxt($title).'"' : '') .'>'.escape_title($linktext).'</a>'
+		));
 	}
 
 /**
@@ -255,17 +235,12 @@
 
 	function wLink($event, $step = '', $thing = '', $value = '')
 	{
-		return href(sp.'!'.sp,
-			array(
-				'event'      => $event,
-				'step'       => $step,
-				$thing       => $value,
-				'_txp_token' => form_token(),
-			),
-			array(
-				'class' => 'dlink'
-			)
-		);
+		return href(sp.'!'.sp, array(
+			'event'      => $event,
+			'step'       => $step,
+			$thing       => $value,
+			'_txp_token' => form_token(),
+		), array('class' => 'dlink'));
 	}
 
 /**
@@ -307,32 +282,28 @@
 				$url .= a.'page='.$page.a.'sort='.$sort.a.'dir='.$dir.a.'crit='.$crit.a.'search_method='.$search_method;
 			}
 
-			return join('',
-				array(
-					'<a href="'.$url.'" class="dlink destroy" title="'.gTxt('delete').'" data-verify="',
-					($verify) ? gTxt($verify) : gTxt('confirm_delete_popup'),
-					'">×</a>'
-				)
-			);
+			return join('', array(
+				'<a href="'.$url.'" class="dlink destroy" title="'.gTxt('delete').'" data-verify="',
+				($verify) ? gTxt($verify) : gTxt('confirm_delete_popup'),
+				'">×</a>'
+			));
 		}
 
-		return join('',
-			array(
-				n.'<form method="post" action="index.php" data-verify="'.gTxt('confirm_delete_popup').'">',
-					fInput('submit', '', '×', 'destroy', gTxt('delete')),
-					eInput($event).
-					sInput($step),
-					hInput($thing, $value),
-					($thing2) ? hInput($thing2, $thing2val) : '',
-					($remember) ? hInput('page', $page) : '',
-					($remember) ? hInput('sort', $sort) : '',
-					($remember) ? hInput('dir', $dir) : '',
-					($remember) ? hInput('crit', $crit) : '',
-					($remember) ? hInput('search_method', $search_method) : '',
-					tInput(),
-				n.'</form>'
-			)
-		);
+		return join('', array(
+			n.'<form method="post" action="index.php" data-verify="'.gTxt('confirm_delete_popup').'">',
+			fInput('submit', '', '×', 'destroy', gTxt('delete')),
+			eInput($event).
+			sInput($step),
+			hInput($thing, $value),
+			($thing2) ? hInput($thing2, $thing2val) : '',
+			($remember) ? hInput('page', $page) : '',
+			($remember) ? hInput('sort', $sort) : '',
+			($remember) ? hInput('dir', $dir) : '',
+			($remember) ? hInput('crit', $crit) : '',
+			($remember) ? hInput('search_method', $search_method) : '',
+			tInput(),
+			n.'</form>'
+		));
 	}
 
 /**
@@ -352,18 +323,13 @@
 
 	function aLink($event, $step, $thing = '', $value = '', $thing2 = '', $value2 = '')
 	{
-		return href('+',
-			array(
-				'event'      => $event,
-				'step'       => $step,
-				$thing       => $value,
-				$thing2      => $value2,
-				'_txp_token' => form_token(),
-			),
-			array(
-				'class' => 'alink'
-			)
-		);
+		return href('+', array(
+			'event'      => $event,
+			'step'       => $step,
+			$thing       => $value,
+			$thing2      => $value2,
+			'_txp_token' => form_token(),
+		), array('class' => 'alink'));
 	}
 
 /**
@@ -401,19 +367,14 @@
 
 	function PrevNextLink($event, $page, $label, $type, $sort = '', $dir = '', $crit = '', $search_method = '', $step = 'list')
 	{
-		return href($label,
-			array(
-				'event'         => $event,
-				'step'          => $step,
-				'page'          => (int) $page,
-				'dir'           => $dir,
-				'crit'          => $crit,
-				'search_method' => $search_method,
-			),
-			array(
-				'class' => 'navlink', 'rel' => $type
-			)
-		);
+		return href($label, array(
+			'event'         => $event,
+			'step'          => $step,
+			'page'          => (int) $page,
+			'dir'           => $dir,
+			'crit'          => $crit,
+			'search_method' => $search_method,
+		), array('class' => 'navlink', 'rel' => $type));
 	}
 
 /**
@@ -593,15 +554,13 @@
 
 	function startTable($id = '', $align = '', $class = '', $p = 0, $w = 0)
 	{
-		$atts = join_atts(
-			array(
-				'id'          => $id,
-				'align'       => $align,
-				'class'       => $class,
-				'cellpadding' => (int) $p,
-				'width'       => (int) $w,
-			)
-		);
+		$atts = join_atts(array(
+			'id'          => $id,
+			'align'       => $align,
+			'class'       => $class,
+			'cellpadding' => (int) $p,
+			'width'       => (int) $w,
+		));
 
 		return n.'<table'.$atts.'>';
 	}
@@ -651,13 +610,11 @@
 
 	function td($content = '', $width = 0, $class = '', $id = '')
 	{
-		return tda($content,
-			array(
-				'width' => (int) $width,
-				'class' => $class,
-				'id'    => $id,
-			)
-		);
+		return tda($content, array(
+			'width' => (int) $width,
+			'class' => $class,
+			'id'    => $id,
+		));
 	}
 
 /**
@@ -716,13 +673,11 @@
 
 	function tdcs($content, $span, $width = 0, $class = '')
 	{
-		return tda($content,
-			array(
-				'colspan' => (int) $span,
-				'width'   => (int) $width,
-				'class'   => $class,
-			)
-		);
+		return tda($content, array(
+			'colspan' => (int) $span,
+			'width'   => (int) $width,
+			'class'   => $class,
+		));
 	}
 
 /**
@@ -737,13 +692,11 @@
 
 	function tdrs($content, $span, $width = 0, $class = '')
 	{
-		return tda($content,
-			array(
-				'rowspan' => (int) $span,
-				'width'   => (int) $width,
-				'class'   => $class,
-			)
-		);
+		return tda($content, array(
+			'rowspan' => (int) $span,
+			'width'   => (int) $width,
+			'class'   => $class,
+		));
 	}
 
 /**
@@ -1462,15 +1415,12 @@ EOF;
 	{
 		global $event, $step;
 
-		$parms = lAtts(
-			array(
-				'event'    => $event,
-				'step'     => $step,
-				'thing'    => '',
-				'property' => '',
-			),
-			$parms
-		);
+		$parms = lAtts(array(
+			'event'    => $event,
+			'step'     => $step,
+			'thing'    => '',
+			'property' => '',
+		), $parms);
 
 		$class = $parms['step'].' async';
 
