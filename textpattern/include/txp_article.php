@@ -58,16 +58,27 @@ if (!empty($event) and $event == 'article') {
 			'publish'         => true,
 			'edit'            => false,
 			'save'            => true,
-			'save_pane_state' => true
+			'save_pane_state' => true,
 		)
 	);
 
-	switch($step) {
-		case "create":   article_edit();    break;
-		case "publish":  article_post();    break;
-		case "edit":     article_edit();    break;
-		case "save":     article_save();    break;
-		case "save_pane_state":     article_save_pane_state();    break;
+	switch($step)
+	{
+		case "create" :
+			article_edit();
+			break;
+		case "publish" :
+			article_post();
+			break;
+		case "edit" :
+			article_edit();
+			break;
+		case "save" :
+			article_save();
+			break;
+		case "save_pane_state" :
+			article_save_pane_state();
+			break;
 	}
 }
 
@@ -716,11 +727,12 @@ if (!empty($event) and $event == 'article') {
 			hInput('sLastMod', $sLastMod).
 			hInput('AuthorID', $AuthorID).
 			hInput('LastModID', $LastModID).
-			'<input type="hidden" name="view" />'.
+			n.'<input type="hidden" name="view" />'.
 
 			startTable('', '', 'txp-columntable').
-
-			n.'<tr>'.n.'<td id="article-col-1">'.n.'<div id="configuration_content">';
+			n.'<tr>'.
+			n.'<td id="article-col-1">'.
+			n.'<div id="configuration_content">';
 
 		if ($view == 'text')
 		{
@@ -1769,8 +1781,8 @@ if (!empty($event) and $event == 'article') {
 			'Section'   => new SectionConstraint($rs['Section']),
 			'Category1' => new CategoryConstraint($rs['Category1'], array('type' => 'article')),
 			'Category2' => new CategoryConstraint($rs['Category2'], array('type' => 'article')),
-			'textile_body' 		=> new TextfilterConstraint($rs['textile_body'], array('message' => 'invalid_textfilter_body')),
-			'textile_excerpt' 	=> new TextfilterConstraint($rs['textile_excerpt'], array('message' => 'invalid_textfilter_excerpt')),
+			'textile_body'    => new TextfilterConstraint($rs['textile_body'], array('message' => 'invalid_textfilter_body')),
+			'textile_excerpt' => new TextfilterConstraint($rs['textile_excerpt'], array('message' => 'invalid_textfilter_excerpt')),
 		);
 
 		if (!$prefs['articles_use_excerpts']) {

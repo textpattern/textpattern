@@ -42,7 +42,7 @@
 		'importdbpass',
 		'importdbhost',
 		'wpdbprefix',
-		'wpdbcharset'
+		'wpdbcharset',
 	);
 
 	/**
@@ -55,15 +55,15 @@
 
 	$tools = array(
 		'' => '',
-		'mt' => 'Movable Type (File)',
-		'mtdb' => 'Movable Type (MySQL DB)',
+		'mt'      => 'Movable Type (File)',
+		'mtdb'    => 'Movable Type (MySQL DB)',
 		'blogger' => 'Blogger',
-		'b2'  => 'b2',
-		'wp' => 'WordPress'
+		'b2'      => 'b2',
+		'wp'      => 'WordPress'
 	);
 
 	if (!$step or !bouncer($step, array(
-		'switch_tool' => false,
+		'switch_tool'  => false,
 		'start_import' => true
 	)))
 	{
@@ -99,7 +99,7 @@
 			STATUS_LIVE    => gTxt('live'),
 			STATUS_DRAFT   => gTxt('draft'),
 			STATUS_HIDDEN  => gTxt('hidden'),
-			STATUS_PENDING => gTxt('pending')
+			STATUS_PENDING => gTxt('pending'),
 		);
 
 		$content.= inputLabel('import_status', tag(type_options($status_options), 'select', ' id="import_status"'), 'import_status', 'import_status');
@@ -210,7 +210,7 @@
 				);
 				rebuild_tree('root', 1, 'article');
 				break;
-			case 'blogger':
+			case 'blogger' :
 				$file = check_import_file();
 				if (!empty($file))
 				{
