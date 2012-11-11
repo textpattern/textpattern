@@ -87,12 +87,7 @@
 
 		$buttons = n.'<label for="new_page">'.gTxt('page_name').'</label>'.br.fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_page', false, true);
 		$buttons .= (empty($name)) ? hInput('savenew', 'savenew') : n.'<span class="txp-actions">'.href(gTxt('duplicate'), '#', array('id' => 'txp_clone', 'class' => 'clone', 'title' => gTxt('page_clone'))) . '</span>';
-		$html = ($name) ? safe_field('user_html', 'txp_page', "name='".doSlash($name)."'") : gps('html');
-
-		if (!$save_error)
-		{
-			$html = fetch('user_html', 'txp_page', 'name', $name);
-		}
+		$html = (!$save_error) ? fetch('user_html', 'txp_page', 'name', $name) : gps('html');
 
 		// Format of each entry is popTagLink -> array ( gTxt() string, class/ID).
 		$tagbuild_items = array(
