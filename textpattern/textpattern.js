@@ -1311,7 +1311,7 @@ textpattern.Route.add('article', function ()
 	});
 });
 
-// Pages, Forms, Styles panels.
+// Clone button on Pages, Forms, Styles panels.
 
 textpattern.Route.add('css, page, form', function ()
 {
@@ -1319,6 +1319,16 @@ textpattern.Route.add('css, page, form', function ()
 	{
 		e.preventDefault();
 		$(this).parents('form').append('<input type="hidden" name="copy" value="1" />').submit();
+	});
+});
+
+// Plugins panel.
+
+textpattern.Route.add('plugin', function ()
+{
+	textpattern.Relay.register('txpAsyncHref.success', function (event, data)
+	{
+		$(data.this).closest('tr').toggleClass('active');
 	});
 });
 
