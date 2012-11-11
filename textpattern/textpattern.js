@@ -1409,6 +1409,12 @@ $(document).ready(function ()
 		return verify($(this).data('verify'));
 	});
 
+	// Event handling and automation.
+	$(document).on('change.txpAutoSubmit', 'form [data-submit-on="change"]', function (e)
+	{
+		$(this).parents('form').submit();
+	});
+
 	// Initialises panel specific JavaScript.
 	textpattern.Route.init();
 

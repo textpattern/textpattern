@@ -128,7 +128,7 @@
 		}
 
 		return n.'<select'.( $select_id ? ' id="'.$select_id.'"' : '' ).' name="'.$name.'"'.
-			($onchange == 1 ? ' onchange="submit(this.form);"' : $onchange).
+			($onchange == 1 ? ' data-submit-on="change"' : $onchange).
 			'>'.
 			($blank_first ? n.'<option value=""'.($selected == false ? ' selected="selected"' : '').'></option>' : '').
 			( $out ? join('', $out) : '').
