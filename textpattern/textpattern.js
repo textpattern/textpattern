@@ -1311,7 +1311,7 @@ textpattern.Route.add('article', function ()
 	});
 });
 
-// Styles panel.
+// Pages, Forms, Styles panels.
 
 textpattern.Route.add('css, page, form', function ()
 {
