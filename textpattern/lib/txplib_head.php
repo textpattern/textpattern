@@ -291,7 +291,7 @@ echo $theme->html_head();
 		if ($out)
 		{
 			return n.'<form method="get" action="index.php" class="navpop">'.
-				n.'<select name="event" onchange="submit(this.form);">'.
+				n.'<select name="event" data-submit-on="change">'.
 				n.'<option>'.gTxt('go').'&#8230;</option>'.
 				join('', $out).
 				n.'</select>'.
