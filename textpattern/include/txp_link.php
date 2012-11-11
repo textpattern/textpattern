@@ -263,13 +263,13 @@
 
 	function link_search_form($crit, $method)
 	{
-		$methods =	array(
+		$methods = array(
 			'id'          => gTxt('ID'),
 			'name'        => gTxt('link_name'),
 			'description' => gTxt('description'),
 			'url'         => gTxt('url'),
 			'category'    => gTxt('link_category'),
-			'author'      => gTxt('author')
+			'author'      => gTxt('author'),
 		);
 
 		return search_form('link', 'link_list', $crit, $methods, $method, 'name');

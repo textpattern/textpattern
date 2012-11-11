@@ -300,7 +300,7 @@
 
 	function image_search_form($crit, $method)
 	{
-		$methods =	array(
+		$methods = array(
 			'id'       => gTxt('ID'),
 			'name'     => gTxt('name'),
 			'category' => gTxt('image_category'),

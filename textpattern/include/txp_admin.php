@@ -440,7 +440,7 @@
 
 	function author_search_form($crit, $method)
 	{
-		$methods =	array(
+		$methods = array(
 			'id'        => gTxt('ID'),
 			'login'     => gTxt('login_name'),
 			'real_name' => gTxt('real_name'),

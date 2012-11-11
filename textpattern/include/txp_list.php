@@ -402,7 +402,7 @@
 
 	function list_search_form($crit, $method)
 	{
-		$methods =	array(
+		$methods = array(
 			'id'                 => gTxt('ID'),
 			'title_body_excerpt' => gTxt('title_body_excerpt'),
 			'section'            => gTxt('section'),
@@ -412,7 +412,7 @@
 			'author'             => gTxt('author'),
 			'article_image'      => gTxt('article_image'),
 			'posted'             => gTxt('posted'),
-			'lastmod'            => gTxt('article_modified')
+			'lastmod'            => gTxt('article_modified'),
 		);
 
 		return search_form('list', 'list', $crit, $methods, $method, 'title_body_excerpt');

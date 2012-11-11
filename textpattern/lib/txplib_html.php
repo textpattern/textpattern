@@ -399,13 +399,11 @@
 		if ($crit != '' && $total > 1)
 		{
 			$out[] = $theme->announce(
-				gTxt('showing_search_results',
-					array(
-						'{from}'  => (($page - 1) * $limit) + 1,
-						'{to}'    => min($total, $page * $limit),
-						'{total}' => $total,
-					)
-				)
+				gTxt('showing_search_results', array(
+					'{from}'  => (($page - 1) * $limit) + 1,
+					'{to}'    => min($total, $page * $limit),
+					'{total}' => $total,
+				))
 			);
 		}
 

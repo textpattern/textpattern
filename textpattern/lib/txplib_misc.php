@@ -219,14 +219,12 @@
 
 	function escape_title($title)
 	{
-		return strtr($title,
-			array(
-				'<' => '&#60;',
-				'>' => '&#62;',
-				"'" => '&#39;',
-				'"' => '&#34;',
-			)
-		);
+		return strtr($title, array(
+			'<' => '&#60;',
+			'>' => '&#62;',
+			"'" => '&#39;',
+			'"' => '&#34;',
+		));
 	}
 
 /**
@@ -276,12 +274,10 @@
 	function escape_tags($str)
 	{
 		trigger_error(gTxt('deprecated_function', array('{name}' => __FUNCTION__)), E_USER_NOTICE);
-		return strtr($str,
-			array(
-				'<' => '&#60;',
-				'>' => '&#62;',
-			)
-		);
+		return strtr($str, array(
+			'<' => '&#60;',
+			'>' => '&#62;',
+		));
 	}
 
 /**

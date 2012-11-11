@@ -370,14 +370,14 @@
 
 	function discuss_search_form($crit, $method)
 	{
-		$methods =	array(
+		$methods = array(
 			'id'      => gTxt('ID'),
 			'parent'  => gTxt('parent'),
 			'name'    => gTxt('name'),
 			'message' => gTxt('message'),
 			'email'   => gTxt('email'),
 			'website' => gTxt('website'),
-			'ip'      => gTxt('IP')
+			'ip'      => gTxt('IP'),
 		);
 
 		return search_form('discuss', 'list', $crit, $methods, $method, 'message');

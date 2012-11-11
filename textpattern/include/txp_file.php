@@ -323,13 +323,13 @@
 
 	function file_search_form($crit, $method)
 	{
-		$methods =	array(
+		$methods = array(
 			'id'          => gTxt('ID'),
 			'filename'    => gTxt('file_name'),
 			'title'       => gTxt('title'),
 			'description' => gTxt('description'),
 			'category'    => gTxt('file_category'),
-			'author'      => gTxt('author')
+			'author'      => gTxt('author'),
 		);
 
 		return search_form('file', 'file_list', $crit, $methods, $method, 'filename');

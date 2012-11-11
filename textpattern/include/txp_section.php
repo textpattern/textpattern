@@ -602,14 +602,14 @@ EOS
 
 	function section_search_form($crit, $method)
 	{
-		$methods =	array(
+		$methods = array(
 			'name'         => gTxt('name'),
 			'title'        => gTxt('title'),
 			'page'         => gTxt('page'),
 			'css'          => gTxt('css'),
 			'on_frontpage' => gTxt('on_front_page'),
 			'in_rss'       => gTxt('syndicate'),
-			'searchable'   => gTxt('include_in_search')
+			'searchable'   => gTxt('include_in_search'),
 		);
 
 		return search_form('section', 'sec_section_list', $crit, $methods, $method, 'name');

@@ -52,15 +52,13 @@ if (!empty($event) and $event == 'article') {
 
 	if (empty($step)) $step = 'create';
 
-	bouncer($step,
-		array(
-			'create'          => false,
-			'publish'         => true,
-			'edit'            => false,
-			'save'            => true,
-			'save_pane_state' => true,
-		)
-	);
+	bouncer($step, array(
+		'create'          => false,
+		'publish'         => true,
+		'edit'            => false,
+		'save'            => true,
+		'save_pane_state' => true,
+	));
 
 	switch($step)
 	{

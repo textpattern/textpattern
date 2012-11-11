@@ -25,14 +25,12 @@
 	{
 		require_privs('css');
 
-		bouncer($step,
-			array(
-				'pour'       => false,
-				'css_save'   => true,
-				'css_delete' => true,
-				'css_edit'   => false,
-			)
-		);
+		bouncer($step, array(
+			'pour'       => false,
+			'css_save'   => true,
+			'css_delete' => true,
+			'css_edit'   => false,
+		));
 
 		switch(strtolower($step))
 		{
@@ -105,13 +103,11 @@
 
 		$default_name = safe_field('css', 'txp_section', "name = 'default'");
 
-		extract(array_map('assert_string', gpsa(
-			array(
-				'copy',
-				'save_error',
-				'savenew',
-			)
-		)));
+		extract(array_map('assert_string', gpsa(array(
+			'copy',
+			'save_error',
+			'savenew',
+		))));
 
 		$name = sanitizeForPage(assert_string(gps('name')));
 		$newname = sanitizeForPage(assert_string(gps('newname')));
@@ -167,13 +163,11 @@
 
 	function css_save()
 	{
-		extract(doSlash(array_map('assert_string', psa(
-			array(
-				'savenew',
-				'copy',
-				'css',
-			)
-		))));
+		extract(doSlash(array_map('assert_string', psa(array(
+			'savenew',
+			'copy',
+			'css',
+		)))));
 
 		$name = sanitizeForPage(assert_string(ps('name')));
 		$newname = sanitizeForPage(assert_string(ps('newname')));
