@@ -214,8 +214,6 @@
 
 				if ($log_refer)
 				{
-					$log_refer = 'http://'.$log_refer;
-
 					$log_refer = '<a href="'.txpspecialchars($log_refer).'" target="_blank">'.txpspecialchars(soft_wrap($log_refer, 30)).'</a>';
 				}
 

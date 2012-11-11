@@ -304,6 +304,22 @@ define('PLUGIN_LIFECYCLE_NOTIFY', 0x0002);
 
 define('PLUGIN_RESERVED_FLAGS', 0x0fff);
 
+if (!defined('LOG_REFERER_PROTOCOLS'))
+{
+	/**
+	 * Sets accepted protocols for HTTP referrer header.
+	 *
+	 * This constant can be overridden from the config.php.
+	 *
+	 * @package Log
+	 * @since   4.6.0
+	 * @example
+	 * define('LOG_REFERER_PROTOCOLS', 'http');
+	 */
+
+	define('LOG_REFERER_PROTOCOLS', 'http, https');
+}
+
 if (!defined('PASSWORD_LENGTH'))
 {
 	/**

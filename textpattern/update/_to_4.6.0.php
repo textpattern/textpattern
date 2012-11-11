@@ -48,3 +48,10 @@
 	// comments_display Form is of little consequence compared with the benefit of
 	// tucking them away neatly when not required.
 	safe_update('txp_form', "type = 'comment'", "name = 'comments_display'");
+
+	// Adds protocol to logged HTTP referers.
+	safe_update(
+		'txp_log',
+		"refer = CONCAT('http://', refer)",
+		"refer != '' and refer NOT LIKE 'http://%' and refer NOT LIKE 'https://%'"
+	);

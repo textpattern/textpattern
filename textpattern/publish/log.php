@@ -61,17 +61,54 @@
 
 	function logit($r = '', $status = 200)
 	{
-		global $siteurl, $prefs, $pretext;
-		$mydomain = str_replace('www.', '', preg_quote($siteurl,"/"));
-		$out['uri'] = @$pretext['request_uri'];
-		$out['ref'] = clean_url(str_replace("http://", "", serverSet('HTTP_REFERER')));
-		$ip = remote_addr();
-		$host = $ip;
+		global $prefs, $pretext;
+
+		if (!isset($pretext['request_uri']))
+		{
+			return;
+		}
+
+		$host = $ip = (string) remote_addr();
+		$protocol = false;
+		$referer = serverSet('HTTP_REFERER');
+
+		if ($referer)
+		{
+			foreach (do_list(LOG_REFERER_PROTOCOLS) as $option)
+			{
+				if (strpos($referer, $option.'://') === 0)
+				{
+					$protocol = $option;
+					$referer = substr($referer, strlen($protocol)+3);
+					break;
+				}
+			}
+
+			if (!$protocol || ($protocol === 'https' && PROTOCOL !== 'https://'))
+			{
+				$referer = '';
+			}
+
+			else if (preg_match('/^[^\.]*\.?'.preg_quote(preg_replace('/^www\./', '', SITE_HOST), '/').'/i', $referer))
+			{
+				$referer = '';
+			}
+
+			else
+			{
+				$referer = $protocol.'://'.clean_url($referer);
+			}
+		}
+
+		if ($r == 'refer' && !$referer)
+		{
+			return;
+		}
 
 		if (!empty($prefs['use_dns']))
 		{
 			// A crude rDNS cache.
-			if ($h = safe_field('host', 'txp_log', "ip='".doSlash($ip)."' limit 1"))
+			if (($h = safe_field('host', 'txp_log', "ip='".doSlash($ip)."' limit 1")) !== false)
 			{
 				$host = $h;
 			}
@@ -79,34 +116,22 @@
 			{
 				// Double-check the rDNS.
 				$host = @gethostbyaddr($ip);
-				if ($host != $ip and @gethostbyname($host) != $ip)
+
+				if ($host !== $ip && @gethostbyname($host) !== $ip)
 				{
 					$host = $ip;
 				}
 			}
 		}
 
-		$out['ip'] = $ip;
-		$out['host'] = $host;
-		$out['status'] = $status;
-		$out['method'] = serverSet('REQUEST_METHOD');
-
-		if (preg_match("/^[^\.]*\.?$mydomain/i", $out['ref']))
-		{
-			$out['ref'] = "";
-		}
-
-		if ($r == 'refer')
-		{
-			if (trim($out['ref']))
-			{
-				insert_logit($out);
-			}
-		}
-		else
-		{
-			insert_logit($out);
-		}
+		insert_logit(array(
+			'uri'    => $pretext['request_uri'],
+			'ip'     => $ip,
+			'host'   => $host,
+			'status' => $status,
+			'method' => serverSet('REQUEST_METHOD'),
+			'ref'    => $referer,
+		));
 	}
 
 /**
