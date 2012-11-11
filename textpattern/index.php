@@ -136,6 +136,12 @@
 		 * @ignore
 		 */
 
+		define('SITE_HOST', preg_replace('/^www\./', '', parse_url(hu, PHP_URL_HOST)));
+
+		/**
+		 * @ignore
+		 */
+
 		define('IMPATH', $path_to_site.DS.$img_dir.DS);
 
 		$event = (gps('event') ? trim(gps('event')) : (!empty($default_event) && has_privs($default_event) ? $default_event : 'article'));
