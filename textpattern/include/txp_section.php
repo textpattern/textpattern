@@ -261,14 +261,6 @@
 				pageby_form('section', $section_list_pageby).
 				n.'</div>'.
 				n.'</div>';
-
-			echo script_js( <<<EOS
-				$('#default_section').change(function ()
-				{
-					$('#default_section_form').submit();
-				});
-EOS
-			);
 		}
 	}
 
@@ -541,7 +533,7 @@ EOS
 			$vals[$row['name']] = $row['title'];
 		}
 
-		return selectInput('default_section', $vals, $val, '', '', 'default_section');
+		return selectInput('default_section', $vals, $val, false, true, 'default_section');
 	}
 
 /**
