@@ -136,7 +136,7 @@
 		 * @ignore
 		 */
 
-		define('SITE_HOST', preg_replace('/^www\./', '', (string) @parse_url(hu, PHP_URL_HOST)));
+		define('SITE_HOST', (string) @parse_url(hu, PHP_URL_HOST));
 
 		/**
 		 * @ignore

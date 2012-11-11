@@ -92,13 +92,12 @@
 	/**
 	 * Site hostname.
 	 *
-	 * www sub-domain is not included if used.
 	 *
 	 * @package Network
 	 * @since   4.6.0
 	 */
 
-	define('SITE_HOST', preg_replace('/^www\./', '', (string) @parse_url(hu, PHP_URL_HOST)));
+	define('SITE_HOST', (string) @parse_url(hu, PHP_URL_HOST));
 
 	/**
 	 * Path to image directory.
