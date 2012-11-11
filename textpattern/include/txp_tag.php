@@ -43,30 +43,7 @@ header('X-UA-Compatible: '.X_UA_COMPATIBLE);
 	<?php echo $theme->html_head(); ?>
 	</head>
 <body id="tag-event">
-<?php
-
-	$tag_name = gps('tag_name');
-
-	$functname = 'tag_'.$tag_name;
-
-	if (function_exists($functname))
-	{
-		$endform = tr(
-			td().
-			td(
-				fInput('submit', '', gTxt('build'))
-			)
-		).
-		endTable().
-		eInput('tag').
-		sInput('build').
-		hInput('tag_name', $tag_name);
-
-		echo $functname($tag_name);
-	}
-
-?>
-
+<?php echo TagBuilderTags::tag(gps('tag_name')); ?>
 </body>
 </html>
 <?php
@@ -493,15 +470,44 @@ begin generic functions
 		return ' '.selectInput('escape', $vals, $val, false);
 	}
 
-//--------------------------------------------------------------
+/**
+ * Collection of tag builder functions.
+ *
+ * @package Admin\Tag
+ */
 
-/*
+class TagBuilderTags
+{
+	/**
+	 * Returns a tag handler.
+	 *
+	 * @param  string      $name The tag
+	 * @return string|bool FALSE on error
+	 */
 
-begin tag builder functions
+	static public function tag($name)
+	{
+		global $tag_name, $endform;
 
-*/
+		$tagbuilder = new TagBuilderTags();
+		$tag_name = gps('tag_name');
+		$method = 'tag_'.$tag_name;
 
-// -------------------------------------------------------------
+		if (method_exists($tagbuilder, $method))
+		{
+			$endform = tr(
+				td().
+				td(fInput('submit', '', gTxt('build')))
+			).
+			endTable().
+			eInput('tag').
+			sInput('build').
+			hInput('tag_name', $tag_name);
+			return $tagbuilder->$method($tag_name);
+		}
+
+		return false;
+	}
 
 	function tag_article()
 	{
@@ -3958,3 +3964,4 @@ begin tag builder functions
 
 		return $out;
 	}
+}
