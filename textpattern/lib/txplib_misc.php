@@ -4023,7 +4023,7 @@
  *
  * @param   string           $name      The preference string name
  * @param   string|null|bool $user_name Either the username, NULL, PREF_PRIVATE or PREF_GLOBAL
- * @return  bool             TRUE if the string exists
+ * @return  bool             TRUE if the string exists, or FALSE on error
  * @since   4.6.0
  * @package Pref
  */
@@ -4035,8 +4035,13 @@
 		$sql = array();
 		$sql[] = "name = '".doSlash($name)."'";
 
-		if ($user_name === PREF_PRIVATE && $txp_user)
+		if ($user_name === PREF_PRIVATE)
 		{
+			if (!$txp_user)
+			{
+				return false;
+			}
+
 			$sql[] = "user_name = '".doSlash($txp_user)."'";
 		}
 
