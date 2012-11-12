@@ -4042,17 +4042,12 @@
 				return false;
 			}
 
-			$sql[] = "user_name = '".doSlash($txp_user)."'";
+			$user_name = $txp_user;
 		}
 
-		else if ($user_name === PREF_GLOBAL)
+		if ($user_name !== null)
 		{
-			$sql[] = "user_name = ''";
-		}
-
-		else if ($user_name !== null)
-		{
-			$sql[] = "user_name = '".doSlash($user_name)."'";
+			$sql[] = "user_name = '".doSlash((string) $user_name)."'";
 		}
 
 		if (safe_row('name', 'txp_prefs', join(' and ', $sql)))
