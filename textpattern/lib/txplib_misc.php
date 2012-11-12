@@ -3960,7 +3960,7 @@
  * arguments. Use NULL to omit an argument.
  *
  * @param   string|null      $name       The preference string name
- * @param   string|null|bool $event      The preference event
+ * @param   string|null      $event      The preference event
  * @param   string|null|bool $user_name  The owner. If PREF_PRIVATE, the current user
  * @return  bool             TRUE on success
  * @since   4.6.0
