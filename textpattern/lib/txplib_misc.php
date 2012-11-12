@@ -4106,6 +4106,110 @@
 	}
 
 /**
+ * Updates a preference string.
+ *
+ * This function updates preference string's properties.
+ * $name and $user_name arguments are used for selecting
+ * the update string, and rest of the arguments take
+ * the new values. Use NULL to omit an argument.
+ *
+ * @param   string           $name       The update preference string's name
+ * @param   string|null      $val        The value
+ * @param   string|null      $event      The section the preference appears in
+ * @param   int|null         $type       Either PREF_CORE, PREF_PLUGIN, PREF_HIDDEN
+ * @param   string|null      $html       The HTML control type the field uses. Can take a custom function name
+ * @param   int|null         $position   Used to sort the field on the Preferences panel
+ * @param   string|bool|null $user_name  The updated string's owner, PREF_GLOBAL or PREF_PRIVATE
+ * @return  bool             FALSE on error
+ * @since   4.6.0
+ * @package Pref
+ * @example
+ * if (update_pref('myPref', 'New value.'))
+ * {
+ * 	echo "Updated 'myPref' value.";
+ * }
+ */
+
+	function update_pref($name, $val = null, $event = null,  $type = null, $html = null, $position = null, $user_name = PREF_GLOBAL)
+	{
+		global $txp_user;
+
+		$where = $set = array();
+		$where[] = "name = '".doSlash($name)."'";
+
+		if ($user_name === PREF_PRIVATE)
+		{
+			if (!$txp_user)
+			{
+				return false;
+			}
+
+			$user_name = $txp_user;
+		}
+
+		if ($user_name !== null)
+		{
+			$where[] = "user_name = '".doSlash((string) $user_name)."'";
+		}
+
+		foreach (array('val', 'event', 'type', 'html', 'position') as $field)
+		{
+			if ($$field !== null)
+			{
+				$set[] = $field." = '".doSlash($$field)."'";
+			}
+		}
+
+		if ($set)
+		{
+			return safe_update('txp_prefs', join(', ', $set), join(' and ', $where));
+		}
+
+		return false;
+	}
+
+/**
+ * Renames a preference string.
+ *
+ * @param   string $newname   The new name
+ * @param   string $name      The current name
+ * @param   string $user_name Either the username, PREF_GLOBAL or PREF_PRIVATE
+ * @return  bool   FALSE on error
+ * @since   4.6.0
+ * @package Pref
+ * @example
+ * if (rename_pref('mynewPref', 'myPref'))
+ * {
+ * 	echo "Renamed 'myPref' to 'mynewPref'.";
+ * }
+ */
+
+	function rename_pref($newname, $name, $user_name = null)
+	{
+		global $txp_user;
+
+		$where = array();
+		$where[] = "name = '".doSlash($name)."'";
+
+		if ($user_name === PREF_PRIVATE)
+		{
+			if (!$txp_user)
+			{
+				return false;
+			}
+
+			$user_name = $txp_user;
+		}
+
+		if ($user_name !== null)
+		{
+			$where[] = "user_name = '".doSlash((string) $user_name)."'";
+		}
+
+		return safe_update('txp_prefs', "name = '".doSlash($newname)."'", join(' and ', $where));
+	}
+
+/**
  * Gets a list of custom fields.
  *
  * @return  array
