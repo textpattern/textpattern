@@ -3954,6 +3954,64 @@
 	}
 
 /**
+ * Removes a preference string.
+ *
+ * This function removes preference strings based on the given
+ * arguments. Use NULL to omit an argument.
+ *
+ * @param   string|null      $name       The preference string name
+ * @param   string|null|bool $event      The preference event
+ * @param   string|null|bool $user_name  The owner. If PREF_PRIVATE, the current user
+ * @return  bool             TRUE on success
+ * @since   4.6.0
+ * @package Pref
+ * @example
+ * if (remove_pref(null, 'myEvent'))
+ * {
+ * 	echo "Removed all preferences from 'myEvent'.";
+ * }
+ */
+
+	function remove_pref($name = null, $event = null, $user_name = null)
+	{
+		global $txp_user;
+
+		$sql = array();
+
+		if ($user_name === PREF_PRIVATE)
+		{
+			if (!$txp_user)
+			{
+				return false;
+			}
+
+			$user_name = $txp_user;
+		}
+
+		if ($user_name !== null)
+		{
+			$sql[] = "user_name = '".doSlash($user_name)."'";
+		}
+
+		if ($event !== null)
+		{
+			$sql[] = "event = '".doSlash($event)."'";
+		}
+
+		if ($name !== null)
+		{
+			$sql[] = "name = '".doSlash($name)."'";
+		}
+
+		if ($sql)
+		{
+			return safe_delete('txp_prefs', join(' and ', $sql));
+		}
+
+		return false;
+	}
+
+/**
  * Gets a list of custom fields.
  *
  * @return  array
