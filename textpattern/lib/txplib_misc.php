@@ -4012,6 +4012,53 @@
 	}
 
 /**
+ * Checks if a preference string exists.
+ *
+ * This function searches for matching preference strings based on
+ * the given arguments.
+ *
+ * The $user_name argument can be used to limit the search to a specifc
+ * user, or to global and private strings. If NULL, matches are searched
+ * from both private and global strings.
+ *
+ * @param   string           $name      The preference string name
+ * @param   string|null|bool $user_name Either the username, NULL, PREF_PRIVATE or PREF_GLOBAL
+ * @return  bool             TRUE if the string exists
+ * @since   4.6.0
+ * @package Pref
+ */
+
+	function pref_exists($name, $user_name = null)
+	{
+		global $txp_user;
+
+		$sql = array();
+		$sql[] = "name = '".doSlash($name)."'";
+
+		if ($user_name === PREF_PRIVATE && $txp_user)
+		{
+			$sql[] = "user_name = '".doSlash($txp_user)."'";
+		}
+
+		else if ($user_name === PREF_GLOBAL)
+		{
+			$sql[] = "user_name = ''";
+		}
+
+		else if ($user_name !== null)
+		{
+			$sql[] = "user_name = '".doSlash($user_name)."'";
+		}
+
+		if (safe_row('name', 'txp_prefs', join(' and ', $sql)))
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+/**
  * Gets a list of custom fields.
  *
  * @return  array
