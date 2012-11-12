@@ -4059,6 +4059,53 @@
 	}
 
 /**
+ * Creates a preference string.
+ *
+ * @param   string      $name       The name
+ * @param   string      $value      The value
+ * @param   string      $event      The section the preference appears in
+ * @param   int         $type       Either PREF_CORE, PREF_PLUGIN, PREF_HIDDEN
+ * @param   string      $html       The HTML control type the field uses. Can take a custom function name
+ * @param   int         $position   Used to sort the field on the Preferences panel
+ * @param   string|bool $user_name  The user name, PREF_GLOBAL or PREF_PRIVATE
+ * @return  bool        TRUE if the string exists, FALSE on error
+ * @since   4.6.0
+ * @package Pref
+ */
+
+	function create_pref($name, $value, $event = 'publish',  $type = PREF_CORE, $html = 'text_input', $position = 0, $user_name = PREF_GLOBAL)
+	{
+		global $txp_user;
+
+		if ($user_name === PREF_PRIVATE)
+		{
+			if (!$txp_user)
+			{
+				return false;
+			}
+
+			$user_name = $txp_user;
+		}
+
+		if (pref_exists($name, $user_name))
+		{
+			return true;
+		}
+
+		return safe_insert(
+			'txp_prefs',
+			"prefs_id = 1,
+			name = '".doSlash($name)."',
+			val = '".doSlash($value)."',
+			event = '".doSlash($event)."',
+			html = '".doSlash($html)."',
+			type = '".doSlash($type)."',
+			position = ".intval($position).",
+			user_name = '".doSlash((string) $user_name)."'"
+		) !== false;
+	}
+
+/**
  * Gets a list of custom fields.
  *
  * @return  array
