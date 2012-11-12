@@ -4099,7 +4099,7 @@
 			val = '".doSlash($value)."',
 			event = '".doSlash($event)."',
 			html = '".doSlash($html)."',
-			type = '".doSlash($type)."',
+			type = ".intval($type).",
 			position = ".intval($position).",
 			user_name = '".doSlash((string) $user_name)."'"
 		) !== false;
