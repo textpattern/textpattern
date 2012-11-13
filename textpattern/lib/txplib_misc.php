@@ -5599,6 +5599,8 @@ eod;
 	{
 		$lines = explode(n, (string) $textpack);
 		$out = array();
+		$version = false;
+		$lastmod = false;
 
 		foreach ($lines as $line)
 		{
@@ -5607,6 +5609,14 @@ eod;
 			// A comment line.
 			if (preg_match('/^#[^@]/', $line, $m))
 			{
+				continue;
+			}
+
+			// Sets version and lastmod timestamp.
+			if (preg_match('/^#@version\s+([^;\n]+);?([0-9]*)$/', $line, $m))
+			{
+				$version = $m[1];
+				$lastmod = $m[2] !== false ? $m[2] : $lastmod;
 				continue;
 			}
 
@@ -5637,11 +5647,13 @@ eod;
 				if (!empty($m[1]) && !empty($m[2]))
 				{
 					$out[] = array(
-						'name'  => $m[1],
-						'lang'  => $language,
-						'data'  => $m[2],
-						'event' => $event,
-						'owner' => $owner,
+						'name'    => $m[1],
+						'lang'    => $language,
+						'data'    => $m[2],
+						'event'   => $event,
+						'owner'   => $owner,
+						'version' => $version,
+						'lastmod' => $lastmod,
 					);
 				}
 			}
