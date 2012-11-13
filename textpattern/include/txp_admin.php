@@ -43,9 +43,12 @@
 			'new_pass_form'       => false,
 		);
 
-		if ($step && bouncer($step, $available_steps)) {
+		if ($step && bouncer($step, $available_steps))
+		{
 			$step();
-		} else {
+		}
+		else
+		{
 			author_list();
 		}
 	}
@@ -79,7 +82,7 @@
 		require_privs('admin.edit');
 
 		extract(doSlash(psa(array('privs', 'user_id', 'RealName', 'email'))));
-		$privs   = assert_int($privs);
+		$privs = assert_int($privs);
 		$user_id = assert_int($user_id);
 
 		if (!is_valid_email($email))
@@ -164,8 +167,8 @@
 			}
 
 			$password = generate_password(PASSWORD_LENGTH);
-			$hash	= doSlash(txp_hash_password($password));
-			$nonce	= doSlash(md5(uniqid(mt_rand(), TRUE)));
+			$hash = doSlash(txp_hash_password($password));
+			$nonce = doSlash(md5(uniqid(mt_rand(), TRUE)));
 
 			$rs = safe_insert('txp_users', "
 				privs    = $privs,
@@ -552,8 +555,8 @@
 		require_privs('admin.edit');
 
 		$selected = ps('selected');
-		$method   = ps('edit_method');
-		$changed  = array();
+		$method = ps('edit_method');
+		$changed = array();
 
 		if (!$selected or !is_array($selected))
 		{
@@ -566,7 +569,7 @@
 
 		switch ($method)
 		{
-			case 'delete':
+			case 'delete' :
 
 				$assign_assets = ps('assign_assets');
 				if ($assign_assets === '')
@@ -606,7 +609,7 @@
 
 				break;
 
-			case 'changeprivilege':
+			case 'changeprivilege' :
 
 				global $levels;
 
@@ -622,7 +625,7 @@
 
 				break;
 
-			case 'resetpassword':
+			case 'resetpassword' :
 
 				$failed  = array();
 
