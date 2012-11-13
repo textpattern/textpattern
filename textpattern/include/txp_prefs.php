@@ -121,7 +121,7 @@
 
 		if (isset($post['siteurl']))
 		{
-			$post['siteurl'] = rtrim(str_replace('http://', '', $post['siteurl']), '/ ');
+			$post['siteurl'] = preg_replace('#^https?://#', '', rtrim($post['siteurl'], '/ '));
 		}
 
 		while ($a = nextRow($prefnames))
