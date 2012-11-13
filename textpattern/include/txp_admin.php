@@ -565,7 +565,10 @@
 
 		$names = safe_column('name', 'txp_users', "name IN ('".join("','", doSlash($selected))."') AND name != '".doSlash($txp_user)."'");
 
-		if (!$names) return author_list();
+		if (!$names)
+		{
+			return author_list();
+		}
 
 		switch ($method)
 		{
