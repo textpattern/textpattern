@@ -55,3 +55,6 @@
 		"refer = CONCAT('http://', refer)",
 		"refer != '' and refer NOT LIKE 'http://%' and refer NOT LIKE 'https://%'"
 	);
+
+	// Usernames can be 64 characters long at most.
+	safe_alter('txp_file', "MODIFY author VARCHAR(64) NOT NULL default ''");
