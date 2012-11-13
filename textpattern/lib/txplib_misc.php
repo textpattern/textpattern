@@ -5596,6 +5596,76 @@ eod;
 	}
 
 /**
+ * Converts a Textpack to an array.
+ *
+ * @param   string $textpack The Textpack
+ * @param   string $language The default language
+ * @param   string $owner    The default owner
+ * @return  array            An array of translations
+ * @since   4.6.0
+ * @package L10n
+ * @example
+ * print_r(
+ * 	parse_textpack("string => translation")
+ * );
+ */
+
+	function parse_textpack($textpack, $language = LANG, $owner = LANG_OWNER_SITE)
+	{
+		$lines = explode(n, (string) $textpack);
+		$out = array();
+
+		foreach ($lines as $line)
+		{
+			$line = trim($line);
+
+			// A comment line.
+			if (preg_match('/^#[^@]/', $line, $m))
+			{
+				continue;
+			}
+
+			// Sets language.
+			if (preg_match('/^#@language\s+(.+)$/', $line, $m))
+			{
+				$language = $m[1];
+				continue;
+			}
+
+			// Sets owner.
+			if (preg_match('/^#@owner\s+(.+)$/', $line, $m))
+			{
+				$owner = $m[1];
+				continue;
+			}
+
+			// Sets event.
+			if (preg_match('/^#@([a-zA-Z0-9_-]+)$/', $line, $m))
+			{
+				$event = $m[1];
+				continue;
+			}
+
+			// Translation.
+			if (preg_match('/^(\w+)\s*=>\s*(.+)$/', $line, $m))
+			{
+				if (!empty($m[1]) && !empty($m[2]))
+				{
+					$out[] = array(
+						'name'  => $m[1],
+						'lang'  => $language,
+						'data'  => $m[2],
+						'event' => $event,
+						'owner' => $owner,
+					);
+				}
+			}
+		}
+
+		return $out;
+	}
+
+/**
  * Generate a ciphered token.
  *
  * The token is reproducable, unique among sites and users, expires later.
