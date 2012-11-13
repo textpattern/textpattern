@@ -5601,6 +5601,7 @@ eod;
 		$out = array();
 		$version = false;
 		$lastmod = false;
+		$event = false;
 
 		foreach ($lines as $line)
 		{
