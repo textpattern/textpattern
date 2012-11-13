@@ -5517,6 +5517,10 @@ eod;
 /**
  * Installs localisation strings from a Textpack.
  *
+ * Created strings get a well-known static modifcation date set in the past.
+ * This is done to avoid tampering with lastmod dates used for RPC server
+ * interactions, caching and update checks.
+ *
  * @param   string $textpack      The Textpack to install
  * @param   bool   $add_new_langs If TRUE, installs strings for any included language
  * @return  int    Number of installed strings
@@ -5525,73 +5529,54 @@ eod;
 
 	function install_textpack($textpack, $add_new_langs = false)
 	{
-		$textpack = explode(n, $textpack);
-		if (empty($textpack))
+		$textpack = parse_textpack($textpack, get_pref('language', 'en-gb'));
+
+		if (!$textpack)
 		{
 			return 0;
 		}
 
-		// Presume site language equals Textpack language, string owner is LANG_OWNER_SITE.
-		$language = get_pref('language', 'en-gb');
-		$owner = doSlash(LANG_OWNER_SITE);
-
 		$installed_langs = safe_column('lang', 'txp_lang', "1 = 1 group by lang");
-		$doit = true;
-
 		$done = 0;
-		foreach ($textpack as $line)
+
+		foreach ($textpack as $translation)
 		{
-			$line = trim($line);
-			// A line starting with #, not followed by @ is a simple comment.
-			if (preg_match('/^#[^@]/', $line, $m))
+			extract($translation);
+
+			if (!$add_new_langs && !in_array($lang, $installed_langs))
 			{
 				continue;
 			}
 
-			// A line matching "#@language xx-xx" establishes the designated language for all subsequent lines.
-			if (preg_match('/^#@language\s+(.+)$/', $line, $m))
+			$where = "lang='".doSlash($lang)."' and name='".doSlash($name)."'";
+
+			if (safe_count('txp_lang', $where))
 			{
-				$language = doSlash($m[1]);
-				// May this Textpack introduce texts for this language?
-				$doit = ($add_new_langs || in_array($language, $installed_langs));
-				continue;
+				safe_update(
+					'txp_lang',
+					"lastmod='2005-08-14',
+					data='".doSlash($data)."',
+					event='".doSlash($event)."',
+					owner='".doSlash($owner)."'",
+					$where
+				);
+			}
+			else
+			{
+				safe_insert(
+					'txp_lang',
+					"lastmod='2005-08-14',
+					data='".doSlash($data)."',
+					event='".doSlash($event)."',
+					owner='".doSlash($owner)."',
+					lang='".doSlash($lang)."',
+					name='".doSlash($name)."'"
+				);
 			}
 
-			// A line matching "#@owner xxxx" establishes the designated owner for all subsequent lines.
-			if (preg_match('/^#@owner\s+(.+)$/', $line, $m))
-			{
-				$owner = doSlash($m[1]);
-				continue;
-			}
-
-			// A line matching "#@event_name" establishes the event value for all subsequent lines.
-			if (preg_match('/^#@([a-zA-Z0-9_-]+)$/', $line, $m))
-			{
-				$event = doSlash($m[1]);
-				continue;
-			}
-
-			// Data lines match a "name => value" pattern. Some white space allowed.
-			if ($doit && preg_match('/^(\w+)\s*=>\s*(.+)$/', $line, $m))
-			{
-				if (!empty($m[1]) && !empty($m[2]))
-				{
-					$name = doSlash($m[1]);
-					$value = doSlash($m[2]);
-					$where = "lang='$language' AND name='$name'";
-					// Store text; do *not* tamper with last modification date from RPC but use a well-known date in the past.
-					if (safe_count('txp_lang', $where))
-					{
-						safe_update('txp_lang',	"lastmod='2005-08-14', data='$value', event='$event', owner='$owner'", $where);
-					}
-					else
-					{
-						safe_insert('txp_lang',	"lastmod='2005-08-14', data='$value', event='$event', owner='$owner', lang='$language', name='$name'");
-					}
-					++$done;
-				}
-			}
+			$done++;
 		}
+
 		return $done;
 	}
 
