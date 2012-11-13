@@ -520,16 +520,21 @@
 	function author_multiedit_form($page, $sort, $dir, $crit, $search_method)
 	{
 		$privileges = privs();
-		$rs = safe_column('name', 'txp_users', '1=1');
-		$assign_assets = $rs ? '<label for="assign_assets">'.gTxt('assign_assets_to').'</label>'.selectInput('assign_assets', $rs, '', true, '', 'assign_assets') : '';
+		$users = safe_column('name', 'txp_users', '1=1');
 
 		$methods = array(
 			'changeprivilege' => array('label' => gTxt('changeprivilege'), 'html' => $privileges),
 			'resetpassword'   => gTxt('resetpassword'),
-			'delete'          => array('label' => gTxt('delete'), 'html' => $assign_assets),
 		);
 
-		if (safe_count('txp_users', '1=1') <= 1) unset($methods['delete']); // Sorry guy, you're last.
+		if (count($users) > 1)
+		{
+			$methods['delete'] = array(
+				'label' => gTxt('delete'),
+				'html'  => tag(gTxt('assign_assets_to'), 'label', array('for' => 'assign_assets')).
+					selectInput('assign_assets', $users, '', true, '', 'assign_assets'),
+			);
+		}
 
 		return multi_edit($methods, 'admin', 'admin_multi_edit', $page, $sort, $dir, $crit, $search_method);
 	}
