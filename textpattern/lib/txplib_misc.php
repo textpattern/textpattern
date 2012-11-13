@@ -4108,7 +4108,7 @@
 /**
  * Updates a preference string.
  *
- * This function updates preference string's properties.
+ * This function updates a preference string's properties.
  * $name and $user_name arguments are used for selecting
  * the update string, and rest of the arguments take
  * the new values. Use NULL to omit an argument.
