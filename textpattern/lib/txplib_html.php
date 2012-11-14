@@ -760,17 +760,29 @@
 
 	function inputLabel($name, $input, $label = '', $help = '', $class = '', $wraptag_val = 'span')
 	{
-		$class = ($class) ? $class : 'edit-'.str_replace('_', '-', $name);
-		$label_open = ($label) ? '<label for="'.$name.'">' : '';
-		$label_close = ($label) ? '</label>' : '';
-		$label = ($label) ? $label : $name;
-		$wrapval_open = ($wraptag_val) ? '<'.$wraptag_val.' class="edit-value">' : '';
-		$wrapval_close = ($wraptag_val) ? '</'.$wraptag_val.'>' : '';
+		if (!$class)
+		{
+			$class = 'edit-'.str_replace('_', '-', $name);
+		}
+
+		if ($label)
+		{
+			$label = tag(gTxt($label), 'label', array('for' => $name));
+		}
+		else
+		{
+			$label = gTxt($name);
+		}
+
+		if ($wraptag_val)
+		{
+			$input = tag($input, $wraptag_val, array('class' => 'edit-value'));
+		}
 
 		return graf(
-			'<span class="edit-label">'.$label_open.gTxt($label).$label_close.popHelp($help).'</span>'.n.
-			$wrapval_open.$input.$wrapval_close
-		, ' class="'.$class.'"');
+			tag($label.popHelp($help), 'span', array('class' => 'edit-label')).
+			n.$input
+		, array('class' => $class));
 	}
 
 /**
