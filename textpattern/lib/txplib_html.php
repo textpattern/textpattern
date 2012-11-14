@@ -1001,12 +1001,14 @@
 			return '';
 		}
 
-		$ui = sp.'<a role="button" rel="help" target="_blank"'.
-			' href="'.HELP_URL.'?item='.$help_var.a.'language='.LANG.'"'.
-			' onclick="popWin(this.href'.
-			($width ? ', '.$width : '').
-			($height ? ', '.$height : '').
-			'); return false;"'. ($class ? ' class="'.$class.'"' : '') .'>?</a>';
+		$ui = sp.href('?', HELP_URL.'?item='.urlencode($help_var).'&language='.urlencode(LANG), array(
+			'role'    => 'button',
+			'rel'     => 'help',
+			'target'  => '_blank',
+			'onclick' => 'popWin(this.href, '.intval($width).', '.intval($height).'); return false;',
+			'class'   => $class,
+		));
+
 		return pluggable_ui('admin_help', $help_var, $ui, compact('help_var', 'width', 'height', 'class'));
 	}
 
