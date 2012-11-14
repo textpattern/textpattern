@@ -749,13 +749,15 @@
 /**
  * Renders a name-value input control with label.
  *
- * @param  string $name        HTML id / name attribute
- * @param  string $input       complete input control widget (result of fInput(), yesnoRadio(), etc)
+ * @param  string $name        Input name
+ * @param  string $input       Complete input control widget
  * @param  string $label       Label
- * @param  string $help        pophelp text item
+ * @param  string $help        Help text item
  * @param  string $class       CSS class name to apply to wrapper
- * @param  string $wraptag_val Tag to wrap the value in. If set to '', no wrapper is used (useful for textareas)
+ * @param  string $wraptag_val Tag to wrap the value in, or empty string to omit
  * @return string HTML
+ * @example
+ * echo inputLabel('active', yesnoRadio('active'), 'Keep active?');
  */
 
 	function inputLabel($name, $input, $label = '', $help = '', $class = '', $wraptag_val = 'span')
