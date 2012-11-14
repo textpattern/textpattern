@@ -497,7 +497,7 @@
 		if ($content)
 		{
 			$content =
-				hed($label.($help ? popHelp($help) : ''), 3, array(
+				hed($label.popHelp($help), 3, array(
 					'id'    => $id.'-label',
 					'class' => $heading_class
 				)).
@@ -717,9 +717,7 @@
 
 	function fLabelCell($text, $help = '', $label_id = '')
 	{
-		$help = ($help) ? popHelp($help) : '';
-
-		$cell = gTxt($text).' '.$help;
+		$cell = gTxt($text).' '.popHelp($help);
 
 		if ($label_id)
 		{
@@ -762,7 +760,6 @@
 
 	function inputLabel($name, $input, $label = '', $help = '', $class = '', $wraptag_val = 'span')
 	{
-		$help = ($help) ? popHelp($help) : '';
 		$class = ($class) ? $class : 'edit-'.str_replace('_', '-', $name);
 		$label_open = ($label) ? '<label for="'.$name.'">' : '';
 		$label_close = ($label) ? '</label>' : '';
@@ -771,7 +768,7 @@
 		$wrapval_close = ($wraptag_val) ? '</'.$wraptag_val.'>' : '';
 
 		return graf(
-			'<span class="edit-label">'.$label_open.gTxt($label).$label_close.$help.'</span>'.n.
+			'<span class="edit-label">'.$label_open.gTxt($label).$label_close.popHelp($help).'</span>'.n.
 			$wrapval_open.$input.$wrapval_close
 		, ' class="'.$class.'"');
 	}
@@ -1223,7 +1220,7 @@
 
 			graf(
 				tag($label, 'label', array('for' => $label_id)).
-				(($pophelp) ? popHelp($pophelp) : '').
+				popHelp($pophelp).
 				fInput('file', 'thefile', '', '', '', '', '', '', $label_id).
 				fInput('submit', '', gTxt('upload'))
 			, array('class' => $p_class)).
