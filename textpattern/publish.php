@@ -89,23 +89,28 @@
 		// http address of the site serving images
 	if (!defined('ihu')) define('ihu', hu);
 
-	/**
-	 * Site hostname.
-	 *
-	 *
-	 * @package Network
-	 * @since   4.6.0
-	 */
+	if (!defined('SITE_HOST'))
+	{
+		/**
+		 * Site hostname.
+		 *
+		 * @package Network
+		 * @since   4.6.0
+		 */
 
-	define('SITE_HOST', (string) @parse_url(hu, PHP_URL_HOST));
+		define('SITE_HOST', (string) @parse_url(hu, PHP_URL_HOST));
+	}
 
-	/**
-	 * Path to image directory.
-	 *
-	 * @package Image
-	 */
+	if (!defined('IMPATH'))
+	{
+		/**
+		 * Path to image directory.
+		 *
+		 * @package Image
+		 */
 
-	define('IMPATH', $path_to_site.DS.$img_dir.DS);
+		define('IMPATH', $path_to_site.DS.$img_dir.DS);
+	}
 
 		// 1.0: a new $here variable in the top-level index.php
 		// should let us know the server path to the live site
