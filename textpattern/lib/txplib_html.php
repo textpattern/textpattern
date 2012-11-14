@@ -964,6 +964,9 @@
 /**
  * Renders the ubiquitious popup help button.
  *
+ * The rendered link can be customised via a 'admin_help > {$help_var}'
+ * pluggable UI callback event.
+ *
  * @param  string $help_var Help topic
  * @param  int    $width    Popup window width
  * @param  int    $height   Popup window height
@@ -984,6 +987,9 @@
 
 /**
  * Renders the ubiquitious popup help button with a little less visual noise.
+ *
+ * The rendered link can be customised via a 'admin_help > {$help_var}'
+ * pluggable UI callback event.
  *
  * @param  string $help_var Help topic
  * @param  int    $width    Popup window width
@@ -1156,7 +1162,10 @@
 	}
 
 /**
- * Renders a file upload form via the "$event_ui" > "upload_form" pluggable UI.
+ * Renders a file upload form.
+ *
+ * The rendered form can be customised via the '{$event}_ui > upload_form'
+ * pluggable UI callback event.
  *
  * @param  string $label         File name label. May be empty
  * @param  string $pophelp       Help item
