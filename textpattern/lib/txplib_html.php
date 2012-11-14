@@ -470,37 +470,46 @@
 
 	function wrapRegion($id, $content = '', $anchor_id = '', $label = '', $pane = '', $class = '', $role = 'region', $help = '')
 	{
-		$heading = gTxt($label);
-		$help_link = ($help) ? popHelp($help) : '';
-
-		$class = ($class) ? ' '.trim($class) : '';
-		$display_state = ($role == 'region') ? ' role="group"' : '';
-		$role = ($role) ? ' role="'.$role.'"' : '';
-		$pane_ref = $heading_class = '';
+		$label = $label ? gTxt($label) : null;
 
 		if ($anchor_id && $pane)
 		{
-			$pane_ref = get_pref('pane_'.$pane.'_visible');
-			$heading_class = ' class="txp-summary' . ($pane_ref ? ' expanded' : '') . '"';
-			$display_state = ' role="group" id="'.$anchor_id.'" class="toggle" style="display:' . ($pane_ref ? 'block' : 'none') . '"';
-			$heading = '<a href="#'.$anchor_id.'" role="button">' . $heading . '</a>';
-			$help_link = '';
+			$visible = get_pref('pane_'.$pane.'_visible');
+			$heading_class = 'txp-summary' . ($visible ? ' expanded' : '');
+			$display_state = array(
+				'role'  => 'group',
+				'id'    => $anchor_id,
+				'class' => 'toggle',
+				'style' => $visible ? 'display: block' : 'display: none',
+			);
+
+			$label = href($label, '#'.$anchor_id, array('role' => 'button'));
+			$help = '';
 		}
-
-		$out = array();
-
-		$out[] = n.'<section'.$role.' id="'.$id.'" class="txp-details'.$class.'"' . ($content ? ' aria-labelledby="'.$id.'-label"' : '' ) . '>';
+		else
+		{
+			$heading_class = '';
+			$display_state = array(
+				'role' => $role == 'region' ? 'group' : ''
+			);
+		}
 
 		if ($content)
 		{
-			$out[] = hed($heading.$help_link, 3, ' id="'.$id.'-label"'.$heading_class);
-			$out[] = '<div'.$display_state.'>'.$content;
-			$out[] = '</div>';
+			$content =
+				hed($label.($help ? popHelp($help) : ''), 3, array(
+					'id'    => $id.'-label',
+					'class' => $heading_class
+				)).
+				n.tag($content.n, 'div', $display_state);
 		}
 
-		$out[] = '</section>';
-
-		return join(n, $out);
+		return n.tag($content.n, 'section', array(
+			'role'            => $role,
+			'id'              => $id,
+			'class'           => trim('txp-details '.$class),
+			'aria-labelledby' => $content ? $id.'-label' : '',
+		));
 	}
 
 /**
