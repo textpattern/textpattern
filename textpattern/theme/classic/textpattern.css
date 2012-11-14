@@ -1532,20 +1532,6 @@ tr.moderate {
 /* Presentation -> Pages, Forms, Styles pages shared
    ========================================================================== */
 
-/* TO BE REMOVED */
-td.column:last-child {
-	padding-left: 35px;
-	width: 23%;
-	min-width: 162px;
-}
-
-/* TO BE REMOVED */
-#page-form td.column:first-child {
-	padding-right: 35px;
-	width: 23%;
-	min-width: 162px;
-}
-
 textarea#html,
 textarea#css,
 textarea#form {

@@ -2063,12 +2063,6 @@ body#page-setup {
 /* Presentation -> Pages, Forms, Styles pages shared
    ========================================================================== */
 
-/* TO BE REMOVED */
-#page-form .txp-columntable td.column:first-child,
-#page-form .txp-columntable td.column:last-child {
-  width: 25%;
-}
-
 #page-page textarea.code,
 #page-form textarea.code,
 #page-css textarea.code {
@@ -2268,34 +2262,6 @@ div.code {
   #textile_group,
   #recent_group {
     display: none;
-  }
-
-  /* Presentation -> Pages, Forms, Styles pages shared < 769px
-     ========================================================================== */
-
-  /* TO BE REMOVED */
-  #page-form .txp-columntable td.column:first-child {
-    display: none;
-  }
-
-  #page-page h2,
-  #page-form h2,
-  #page-css h2 {
-    margin-top: 1.625em;
-  }
-
-  /* TO BE REMOVED */
-  #page-form > tr,
-  #page-form .txp-columntable td.column {
-    display: block;
-    margin: 0 auto;
-    width: 100%;
-    max-width: 42em;
-  }
-
-  /* TO BE REMOVED */
-  #page-form .txp-columntable td.column:last-child {
-    width: 100%;
   }
 
   /* Admin -> Basic/advanced preferences pages < 769px
