@@ -1180,8 +1180,6 @@
 
 	function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_size = 1000000, $label_id = '', $class = 'upload-form')
 	{
-		global $sort, $dir, $page, $search_method, $crit;
-
 		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
 
 		$class = ($class) ? ' class="'.$class.'"' : '';
