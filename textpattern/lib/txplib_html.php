@@ -1182,15 +1182,21 @@
 	{
 		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
 
-		$class = ($class) ? ' class="'.$class.'"' : '';
-		$p_class = 'edit-'. (($label_id) ? str_replace('_', '-', $label_id) : $event.'-upload');
-		$label_id = ($label_id) ? $label_id : $event.'-upload';
+		if (!$label_id)
+		{
+			$p_class = 'edit-'.$event.'-upload';
+			$label_id = $event.'-upload';
+		}
+		else
+		{
+			$p_class = 'edit-'.str_replace('_', '-', $label_id);
+		}
 
 		$argv = func_get_args();
 		return pluggable_ui($event.'_ui', 'upload_form',
-			n.'<form'.$class.' method="post" enctype="multipart/form-data" action="index.php">'.
+			n.tag(
 
-			(!empty($max_file_size)? n.hInput('MAX_FILE_SIZE', $max_file_size): '').
+			(!empty($max_file_size) ? hInput('MAX_FILE_SIZE', $max_file_size) : '').
 			eInput($event).
 			sInput($step).
 			hInput('id', $id).
@@ -1202,14 +1208,20 @@
 			hInput('crit', $crit).
 
 			graf(
-				(($label) ? '<label for="'.$label_id.'">'.$label.'</label>' : '').(($pophelp) ? popHelp($pophelp) : '').
-					fInput('file', 'thefile', '', '', '', '', '', '', $label_id).
-					fInput('submit', '', gTxt('upload'))
-			, ' class="'.$p_class.'"').
+				tag($label, 'label', array('for' => $label_id)).
+				(($pophelp) ? popHelp($pophelp) : '').
+				fInput('file', 'thefile', '', '', '', '', '', '', $label_id).
+				fInput('submit', '', gTxt('upload'))
+			, array('class' => $p_class)).
 
-			tInput().
-			n.'</form>',
-			$argv);
+			tInput().n,
+
+			'form', array(
+				'class'   => $class,
+				'method'  => 'post',
+				'enctype' => 'multipart/form-data',
+				'action'  => 'index.php',
+			)), $argv);
 	}
 
 /**
