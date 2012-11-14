@@ -1223,7 +1223,7 @@
 
 		return form(
 			graf(
-				'<label for="'.$event.'-search">'.gTxt('search').'</label>'.
+				tag(gTxt('search'), 'label', array('for' => $event.'-search')).
 				selectInput('search_method', $methods, $method, '', '', $event.'-search').
 				fInput('text', 'crit', $crit, 'input-medium', '', '', INPUT_MEDIUM).
 				eInput($event).
