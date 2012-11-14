@@ -985,6 +985,11 @@
 
 	function popHelp($help_var, $width = 0, $height = 0, $class = 'pophelp')
 	{
+		if (!$help_var)
+		{
+			return '';
+		}
+
 		$ui = sp.'<a role="button" rel="help" target="_blank"'.
 			' href="'.HELP_URL.'?item='.$help_var.a.'language='.LANG.'"'.
 			' onclick="popWin(this.href'.
