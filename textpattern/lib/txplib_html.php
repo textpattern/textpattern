@@ -734,12 +734,12 @@
  * @param  string $var      Input value
  * @param  int    $tabindex HTML tabindex attribute
  * @param  int    $size     HTML size attribute
- * @param  string $help     Help text
+ * @param  bool   $help     TRUE to display help link
  * @param  string $id       HTML id attribute
  * @return string HTML
  */
 
-	function fInputCell($name, $var = '', $tabindex = 0, $size = 0, $help = '', $id = '')
+	function fInputCell($name, $var = '', $tabindex = 0, $size = 0, $help = false, $id = '')
 	{
 		$pop = ($help) ? popHelp($name) : '';
 
