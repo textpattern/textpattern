@@ -1041,12 +1041,13 @@
 
 	function popTag($var, $text, $width = 0, $height = 0)
 	{
-		return '<a target="_blank"'.
-			' href="?event=tag'.a.'tag_name='.$var.'"'.
-			' onclick="popWin(this.href'.
-			($width ? ', '.$width : '').
-			($height ? ', '.$height : '').
-			'); return false;">'.$text.'</a>';
+		return href($text, array(
+			'event'    => 'tag',
+			'tag_name' => $var,
+		), array(
+			'target'  => '_blank',
+			'onclick' => 'popWin(this.href, '.intval($width).', '.intval($height).'); return false;',
+		));
 	}
 
 /**
