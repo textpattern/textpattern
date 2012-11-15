@@ -2060,15 +2060,6 @@ body#page-setup {
   background: #fff8dd;
 }
 
-/* Presentation -> Pages, Forms, Styles pages shared
-   ========================================================================== */
-
-#page-page textarea.code,
-#page-form textarea.code,
-#page-css textarea.code {
-  height: 34.4615384615385em;
-}
-
 /* Admin -> Diagnostics page
    ========================================================================== */
 #page-diag textarea {

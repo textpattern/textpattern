@@ -1529,16 +1529,6 @@ tr.moderate {
 }
 
 
-/* Presentation -> Pages, Forms, Styles pages shared
-   ========================================================================== */
-
-textarea#html,
-textarea#css,
-textarea#form {
-	height: 39.25em;
-}
-
-
 /* Admin -> Preferences page
    ========================================================================== */
 
