@@ -1065,16 +1065,12 @@
 
 		$out = array();
 
-		$out[] = n.'<ul class="plain-list">';
-
 		foreach ($$arname as $a)
 		{
-			$out[] = n.tag(popTag($a,gTxt('tag_'.$a)), 'li');
+			$out[] = tag(popTag($a,gTxt('tag_'.$a)), 'li');
 		}
 
-		$out[] = n.'</ul>';
-
-		return join('', $out);
+		return n.tag(n.join(n, $out).n, 'ul', array('class' => 'plain-list'));
 	}
 
 /**
