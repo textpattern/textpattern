@@ -1133,7 +1133,10 @@
 
 				if (isset($option['html']))
 				{
-					$html[$value] = n.tag($option['html'], 'div', array('class' => 'multi-option multi-option-'.$value));
+					$html[$value] = n.tag($option['html'], 'div', array(
+						'class'             => 'multi-option',
+						'data-multi-option' => $value,
+					));
 				}
 			}
 			else
