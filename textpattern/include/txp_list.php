@@ -308,7 +308,10 @@
 					$view_url = permlinkurl($a);
 				}
 
-				$Status = !empty($Status) ? $statuses[$Status] : '';
+				if (isset($statuses[$Status]))
+				{
+					$Status = $statuses[$Status];
+				}
 
 				$comments = '(0)';
 
