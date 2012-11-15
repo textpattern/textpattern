@@ -296,8 +296,8 @@
 				$validator->setConstraints(array(new CategoryConstraint($Category2, array('type' => 'article'))));
 				$vc[2] = $validator->validate() ? '' : ' error';
 
-				$Category1 = ($Category1) ? span($category1_title, array('title' => $Category1)) : '';
-				$Category2 = ($Category2) ? span($category2_title, array('title' => $Category2)) : '';
+				$Category1 = ($Category1) ? span(txpspecialchars($category1_title), array('title' => $Category1)) : '';
+				$Category2 = ($Category2) ? span(txpspecialchars($category2_title), array('title' => $Category2)) : '';
 
 				if ($Status != STATUS_LIVE and $Status != STATUS_STICKY)
 				{
