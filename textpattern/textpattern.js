@@ -183,16 +183,16 @@ jQuery.fn.txpMultiEditForm = function (method, opt)
 	var args = {};
 
 	var defaults = {
-		'checkbox' : 'input[name="selected[]"][type=checkbox]',
-		'row' : 'tbody td',
-		'highlighted' : 'tr',
+		'checkbox'      : 'input[name="selected[]"][type=checkbox]',
+		'row'           : 'tbody td',
+		'highlighted'   : 'tr',
 		'selectedClass' : 'selected',
-		'actions' : 'select[name=edit_method]',
-		'submitButton' : '.multi-edit input[type=submit]',
-		'selectAll' : 'input[name=select_all][type=checkbox]',
-		'rowClick' : true,
-		'altClick' : true,
-		'confirmation' : textpattern.gTxt('are_you_sure')
+		'actions'       : 'select[name=edit_method]',
+		'submitButton'  : '.multi-edit input[type=submit]',
+		'selectAll'     : 'input[name=select_all][type=checkbox]',
+		'rowClick'      : true,
+		'altClick'      : true,
+		'confirmation'  : textpattern.gTxt('are_you_sure')
 	};
 
 	if ($.type(method) !== 'string')
@@ -240,9 +240,9 @@ jQuery.fn.txpMultiEditForm = function (method, opt)
 			var settings = $.extend({
 				'label' : null,
 				'value' : null,
-				'html' : null
+				'html'  : null
 			}, options);
-			
+
 			if (!settings.value)
 			{
 				return public;
@@ -252,35 +252,35 @@ jQuery.fn.txpMultiEditForm = function (method, opt)
 			{
 				return $(this).attr('value') === settings.value;
 			});
-			
+
 			var exists = (option.length > 0);
 			form.editMethod.val('');
-			
+
 			if (!exists)
 			{
 				option = $('<option />');
 			}
-			
+
 			if (!option.data('method'))
 			{
 				if (!option.attr('value'))
 				{
 					option.attr('value', settings.value);
 				}
-				
+
 				if (!option.text() && settings.label)
 				{
 					option.text(settings.label);
 				}
-				
+
 				option.data('method', settings.html);
 			}
-			
+
 			if (!exists)
 			{
 				form.editMethod.append(option);
 			}
-			
+
 			return public;
 		};
 
@@ -300,9 +300,9 @@ jQuery.fn.txpMultiEditForm = function (method, opt)
 		public.select = function (options)
 		{
 			var settings = $.extend({
-				'index' : null,  // Select based on row's index.
-				'range' : null,  // Select based on index range.
-				'value' : null,  // Select based on values.
+				'index'   : null,  // Select based on row's index.
+				'range'   : null,  // Select based on index range.
+				'value'   : null,  // Select based on values.
 				'checked' : true // Check or uncheck.
 			}, options);
 
@@ -366,7 +366,6 @@ jQuery.fn.txpMultiEditForm = function (method, opt)
 
 			$this.on('click', selector, function (e)
 			{
-
 				var self = ($(e.target).is(form.boxes) || $(this).is(form.boxes));
 
 				if (!self && (e.target != this || $(this).is('a, :input') || $(e.target).is('a, :input')))
@@ -400,7 +399,7 @@ jQuery.fn.txpMultiEditForm = function (method, opt)
 					var end = boxes.index(form.lastCheck);
 
 					public.select({
-						'range' : [Math.min(start, end), Math.max(start, end)+1],
+						'range'   : [Math.min(start, end), Math.max(start, end)+1],
 						'checked' : !checked
 					});
 				}
@@ -527,7 +526,7 @@ jQuery.fn.txpMultiEditForm = function (method, opt)
 					{
 						public.addOption({
 							'label' : null,
-							'html' : option.eq(0).contents(),
+							'html'  : option.eq(0).contents(),
 							'value' : $(this).val()
 						});
 					}
