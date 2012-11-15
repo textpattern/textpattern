@@ -100,7 +100,7 @@
 				$sort_sql = 'textpattern.Expires '.$dir;
 				break;
 			case 'section' :
-				$sort_sql = 'textpattern.Section '.$dir.', textpattern.Posted desc';
+				$sort_sql = 'section.title '.$dir.', textpattern.Posted desc';
 				break;
 			case 'category1' :
 				$sort_sql = 'textpattern.Category1 '.$dir.', textpattern.Posted desc';
@@ -141,7 +141,7 @@
 				array(
 					'id'                 => "textpattern.ID in ('" .join("','", do_list($crit_escaped)). "')",
 					'title_body_excerpt' => "textpattern.Title = '$crit_escaped' or textpattern.Body = '$crit_escaped' or textpattern.Excerpt = '$crit_escaped'",
-					'section'            => "textpattern.Section = '$crit_escaped'",
+					'section'            => "textpattern.Section = '$crit_escaped' or section.title = '$crit_escaped'",
 					'keywords'           => "FIND_IN_SET('".$crit_escaped."',textpattern.Keywords)",
 					'categories'         => "textpattern.Category1 = '$crit_escaped' or textpattern.Category2 = '$crit_escaped'",
 					'status'             => "textpattern.Status = '".(@$sesutats[gTxt($crit_escaped)])."'",
@@ -152,7 +152,7 @@
 				) : array(
 					'id'                 => "textpattern.ID in ('" .join("','", do_list($crit_escaped)). "')",
 					'title_body_excerpt' => "textpattern.Title like '%$crit_escaped%' or textpattern.Body like '%$crit_escaped%' or textpattern.Excerpt like '%$crit_escaped%'",
-					'section'            => "textpattern.Section like '%$crit_escaped%'",
+					'section'            => "textpattern.Section like '%$crit_escaped%' or section.title like '%$crit_escaped%'",
 					'keywords'           => "FIND_IN_SET('".$crit_escaped."',textpattern.Keywords)",
 					'categories'         => "textpattern.Category1 like '%$crit_escaped%' or textpattern.Category2 like '%$crit_escaped%'",
 					'status'             => "textpattern.Status = '".(@$sesutats[gTxt($crit_escaped)])."'",
@@ -183,7 +183,21 @@
 
 		$criteria .= callback_event('admin_criteria', 'list_list', 0, $criteria);
 
-		$total = safe_count('textpattern', "$criteria");
+		$sql_from = 
+			safe_pfx('textpattern')." textpattern
+			left join ".safe_pfx('txp_category')." category1 on category1.name = textpattern.Category1 and category1.type = 'article'
+			left join ".safe_pfx('txp_category')." category2 on category2.name = textpattern.Category2 and category2.type = 'article'
+			left join ".safe_pfx('txp_section')." section on section.name = textpattern.Section
+			left join ".safe_pfx('txp_users')." user on user.name = textpattern.AuthorID";
+
+		if ($criteria === 1)
+		{
+			$total = safe_count('textpattern', $criteria);
+		}
+		else
+		{
+			$total = getThing('select count(*) from '.$sql_from.' where '.$criteria);
+		}
 
 		echo n.'<h1 class="txp-heading">'.gTxt('tab_list').'</h1>';
 		echo n.'<div id="'.$event.'_control" class="txp-control-panel">';
@@ -223,12 +237,7 @@
 				section.title as section_title,
 				user.RealName as RealName,
 				(select count(*) from ".safe_pfx('txp_discuss')." where parentid = textpattern.ID) as total_comments
-			from ".safe_pfx('textpattern')." textpattern
-			left join ".safe_pfx('txp_category')." category1 on category1.name = textpattern.Category1 and category1.type = 'article'
-			left join ".safe_pfx('txp_category')." category2 on category2.name = textpattern.Category2 and category2.type = 'article'
-			left join ".safe_pfx('txp_section')." section on section.name = textpattern.Section
-			left join ".safe_pfx('txp_users')." user on user.name = textpattern.AuthorID
-			where $criteria order by $sort_sql limit $offset, $limit"
+			from $sql_from where $criteria order by $sort_sql limit $offset, $limit"
 		);
 
 		if ($rs)
@@ -352,7 +361,7 @@
 						($expires ? gTime($expires) : ''), '' ,'articles_detail date expires'
 					).
 
-					td(span($Section, array('title' => $section_title)), '', 'section'.$vs).
+					td(span(txpspecialchars($section_title), array('title' => $Section)), '', 'section'.$vs).
 
 					td($Category1, '', "articles_detail category category1".$vc[1]).
 					td($Category2, '', "articles_detail category category2".$vc[2]).
