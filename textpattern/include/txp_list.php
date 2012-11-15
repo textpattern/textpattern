@@ -103,10 +103,10 @@
 				$sort_sql = 'section.title '.$dir.', textpattern.Posted desc';
 				break;
 			case 'category1' :
-				$sort_sql = 'textpattern.Category1 '.$dir.', textpattern.Posted desc';
+				$sort_sql = 'category1.title '.$dir.', textpattern.Posted desc';
 				break;
 			case 'category2' :
-				$sort_sql = 'textpattern.Category2 '.$dir.', textpattern.Posted desc';
+				$sort_sql = 'category2.title '.$dir.', textpattern.Posted desc';
 				break;
 			case 'status' :
 				$sort_sql = 'textpattern.Status '.$dir.', textpattern.Posted desc';
@@ -143,7 +143,7 @@
 					'title_body_excerpt' => "textpattern.Title = '$crit_escaped' or textpattern.Body = '$crit_escaped' or textpattern.Excerpt = '$crit_escaped'",
 					'section'            => "textpattern.Section = '$crit_escaped' or section.title = '$crit_escaped'",
 					'keywords'           => "FIND_IN_SET('".$crit_escaped."',textpattern.Keywords)",
-					'categories'         => "textpattern.Category1 = '$crit_escaped' or textpattern.Category2 = '$crit_escaped'",
+					'categories'         => "textpattern.Category1 = '$crit_escaped' or textpattern.Category2 = '$crit_escaped' or category1.title = '$crit_escaped' or category2.title = '$crit_escaped'",
 					'status'             => "textpattern.Status = '".(@$sesutats[gTxt($crit_escaped)])."'",
 					'author'             => "textpattern.AuthorID = '$crit_escaped'",
 					'article_image'      => "textpattern.Image in ('" .join("','", do_list($crit_escaped)). "')",
@@ -154,7 +154,7 @@
 					'title_body_excerpt' => "textpattern.Title like '%$crit_escaped%' or textpattern.Body like '%$crit_escaped%' or textpattern.Excerpt like '%$crit_escaped%'",
 					'section'            => "textpattern.Section like '%$crit_escaped%' or section.title like '%$crit_escaped%'",
 					'keywords'           => "FIND_IN_SET('".$crit_escaped."',textpattern.Keywords)",
-					'categories'         => "textpattern.Category1 like '%$crit_escaped%' or textpattern.Category2 like '%$crit_escaped%'",
+					'categories'         => "textpattern.Category1 like '%$crit_escaped%' or textpattern.Category2 like '%$crit_escaped%' or category1.title like '%$crit_escaped%' or category2.title like '%$crit_escaped%'",
 					'status'             => "textpattern.Status = '".(@$sesutats[gTxt($crit_escaped)])."'",
 					'author'             => "textpattern.AuthorID like '%$crit_escaped%'",
 					'article_image'      => "textpattern.Image in ('" .join("','", do_list($crit_escaped)). "')",
@@ -296,8 +296,8 @@
 				$validator->setConstraints(array(new CategoryConstraint($Category2, array('type' => 'article'))));
 				$vc[2] = $validator->validate() ? '' : ' error';
 
-				$Category1 = ($Category1) ? span($Category1, array('title' => $category1_title)) : '';
-				$Category2 = ($Category2) ? span($Category2, array('title' => $category2_title)) : '';
+				$Category1 = ($Category1) ? span($category1_title, array('title' => $Category1)) : '';
+				$Category2 = ($Category2) ? span($category2_title, array('title' => $Category2)) : '';
 
 				if ($Status != STATUS_LIVE and $Status != STATUS_STICKY)
 				{
