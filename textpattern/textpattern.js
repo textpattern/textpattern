@@ -290,20 +290,20 @@ jQuery.fn.txpMultiEditForm = function (method, opt)
 		 * Only one of the filters applies at a time.
 		 *
 		 * @param  {object}  options
-		 * @param  {array}   options.index Indexes to select
-		 * @param  {array}   options.range Select index range, takes [min, max]
-		 * @param  {array}   options.value Values to select
-		 * @param  {boolean} TRUE to check, FALSE to uncheck
+		 * @param  {array}   options.index   Indexes to select
+		 * @param  {array}   options.range   Select index range, takes [min, max]
+		 * @param  {array}   options.value   Values to select
+		 * @param  {boolean} options.checked TRUE to check, FALSE to uncheck
 		 * @return {object}  public
 		 */
 
 		public.select = function (options)
 		{
 			var settings = $.extend({
-				'index'   : null,  // Select based on row's index.
-				'range'   : null,  // Select based on index range.
-				'value'   : null,  // Select based on values.
-				'checked' : true // Check or uncheck.
+				'index'   : null,
+				'range'   : null,
+				'value'   : null,
+				'checked' : true
 			}, options);
 
 			var obj = $this.find(form.boxes);
@@ -560,10 +560,10 @@ jQuery.fn.txpMultiEditForm = function (method, opt)
  * See jQuery before trying to use this.
  *
  * @author S.Andrew http://www.scottandrew.com/
- * @param  {object}  elm        The element to attach to
- * @param  {string}  evType     The event
- * @param  {object}  fn         The callback function
- * @param  {boolean} useCapture Initiate capture
+ * @param {object}  elm        The element to attach to
+ * @param {string}  evType     The event
+ * @param {object}  fn         The callback function
+ * @param {boolean} useCapture Initiate capture
  */
 
 function addEvent(elm, evType, fn, useCapture)
