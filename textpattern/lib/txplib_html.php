@@ -1067,7 +1067,7 @@
 
 		foreach ($$arname as $a)
 		{
-			$out[] = tag(popTag($a,gTxt('tag_'.$a)), 'li');
+			$out[] = tag(popTag($a, gTxt('tag_'.$a)), 'li');
 		}
 
 		return n.tag(n.join(n, $out).n, 'ul', array('class' => 'plain-list'));
