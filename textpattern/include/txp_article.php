@@ -1062,11 +1062,18 @@ if (!empty($event) and $event == 'article') {
 
 	function section_popup($Section, $id)
 	{
-		$rs = safe_column('name', 'txp_section', "name != 'default'");
+		$rs = safe_rows('name, title', 'txp_section', "name != 'default' order by title asc, name asc");
 
 		if ($rs)
 		{
-			return selectInput('Section', $rs, $Section, false, '', $id);
+			$options = array();
+
+			foreach ($rs as $a)
+			{
+				$options[$a['name']] = $a['title'];
+			}
+
+			return selectInput('Section', $options, $Section, false, '', $id);
 		}
 
 		return false;
