@@ -1133,7 +1133,7 @@
 
 				if (isset($option['html']))
 				{
-					$html[$value] = n.'<div class="multi-option multi-option-'.txpspecialchars($value).'">'.$option['html'].'</div>';
+					$html[$value] = n.tag($option['html'], 'div', array('class' => 'multi-option multi-option-'.$value));
 				}
 			}
 			else
@@ -1142,16 +1142,16 @@
 			}
 		}
 
-		return n.'<div class="multi-edit">'.
+		return n.tag(
 			selectInput('edit_method', $methods, '').
 			eInput($event).
 			sInput($step).
 			hInput('page', $page).
 			($sort ? hInput('sort', $sort).hInput('dir', $dir) : '' ).
 			($crit !== '' ? hInput('crit', $crit).hInput('search_method', $search_method) : '').
-			implode('', $html).
+			join('', $html).
 			fInput('submit', '', gTxt('go')).
-			n.'</div>';
+			n, 'div', array('class' => 'multi-edit'));
 	}
 
 /**
