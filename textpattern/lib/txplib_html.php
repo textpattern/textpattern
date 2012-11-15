@@ -1479,3 +1479,127 @@ EOF;
 
 		return href($item, join_qs($parms), $atts);
 	}
+
+/**
+ * Renders an array of items as a HTML list.
+ *
+ * This function is used for tag handler functions.
+ * Creates a HTML list markup from an array of items.
+ *
+ * @param   array  $list
+ * @param   string $wraptag    The HTML element
+ * @param   string $break      The HTML break element
+ * @param   string $class      Class applied to the wraptag
+ * @param   string $breakclass Class applied to break tag
+ * @param   string $atts       HTML attributes applied to the wraptag
+ * @param   string $breakatts  HTML attributes applied to the break tag
+ * @param   string $id         HTML id applied to the wraptag
+ * @return  string HTML
+ * @package HTML
+ * @example
+ * echo doWrap(array('item1', 'item2'), 'div', 'p');
+ */
+
+	function doWrap($list, $wraptag, $break, $class = '', $breakclass = '', $atts = '', $breakatts = '', $id = '')
+	{
+		if (!$list)
+		{
+			return '';
+		}
+
+		if ($id)
+		{
+			$atts .= ' id="'.txpspecialchars($id).'"';
+		}
+
+		if ($class)
+		{
+			$atts .= ' class="'.txpspecialchars($class).'"';
+		}
+
+		if ($breakclass)
+		{
+			$breakatts.= ' class="'.txpspecialchars($breakclass).'"';
+		}
+
+		// non-enclosing breaks
+		if (!preg_match('/^\w+$/', $break) or $break == 'br' or $break == 'hr')
+		{
+			if ($break == 'br' or $break == 'hr')
+			{
+				$break = "<$break $breakatts/>".n;
+			}
+
+			return ($wraptag) ?	tag(join($break, $list), $wraptag, $atts) :	join($break, $list);
+		}
+
+		return ($wraptag) ?
+			tag(n.t.tag(join("</$break>".n.t."<{$break}{$breakatts}>", $list), $break, $breakatts).n, $wraptag, $atts) :
+			tag(n.join("</$break>".n."<{$break}{$breakatts}>".n, $list).n, $break, $breakatts);
+	}
+
+/**
+ * Renders anything as a HTML tag.
+ *
+ * Used for tag handler functions.
+ *
+ * If $content is empty, renders a self-closing
+ * tag.
+ *
+ * @param   string $content The wrapped item
+ * @param   string $tag     The HTML tag
+ * @param   string $class   HTML class
+ * @param   string $atts    HTML attributes
+ * @param   string $id      HTML id
+ * @return  string HTML
+ * @package HTML
+ * @example
+ * echo doTag('', 'meta', '', 'name="description" content="Some content"');
+ */
+
+	function doTag($content, $tag, $class = '', $atts = '', $id = '')
+	{
+		if ($id)
+		{
+			$atts .= ' id="'.txpspecialchars($id).'"';
+		}
+
+		if ($class)
+		{
+			$atts .= ' class="'.txpspecialchars($class).'"';
+		}
+
+		if (!$tag)
+		{
+			return $content;
+		}
+
+		return ($content) ? tag($content, $tag, $atts) : "<$tag $atts />";
+	}
+
+/**
+ * Renders a label.
+ *
+ * This function is mostly used for rendering headings in tag
+ * handler functions.
+ *
+ * If no $labeltag is given, label is separated from the
+ * content with a &lt;br&gt;.
+ *
+ * @param   string $label    The label
+ * @param   string $labeltag The HTML element
+ * @return  string HTML
+ * @package HTML
+ * @example
+ * echo doLabel('My label', 'h3');
+ */
+
+	function doLabel($label = '', $labeltag = '')
+	{
+		if ($label)
+		{
+			return (empty($labeltag) ? $label.'<br />' : tag($label, $labeltag));
+		}
+
+		return '';
+	}
