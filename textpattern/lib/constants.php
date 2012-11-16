@@ -756,5 +756,44 @@ define('LANG_OWNER_SITE', 'site');
 
 define('ATTS_STRIP_EMPTY', 0x1);
 
+/**
+ * Sends an adaptive announcement.
+ *
+ * The rendered message type is based on the context
+ * mode.
+ *
+ * @since   4.6.0
+ * @package Announce
+ * @see     announce()
+ */
+
+define('ANNOUNCE_ADAPTIVE', 0x1);
+
+/**
+ * Sends an modal announcement.
+ *
+ * The announcement is instructed to be rendered
+ * as soon as possible as a modal alert window.
+ *
+ * @since   4.6.0
+ * @package Announce
+ * @see     announce()
+ */
+
+define('ANNOUNCE_MODAL', 0x2);
+
+/**
+ * Sends an asynchronous announcement.
+ *
+ * The announcement is instructed to be rendered
+ * as soon as possible.
+ *
+ * @since   4.6.0
+ * @package Announce
+ * @see     announce()
+ */
+
+define('ANNOUNCE_ASYNC', 0x4);
+
 error_reporting($old_level);
 unset($old_level);

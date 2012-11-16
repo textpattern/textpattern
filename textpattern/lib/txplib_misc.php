@@ -5290,6 +5290,40 @@ eod;
 	}
 
 /**
+ * Sends an activity message to the client.
+ *
+ * @param   string|array $message The message
+ * @param   int          $type    The type, either 0, E_ERROR, E_WARNING
+ * @param   int          $flags   Flags, consisting of ANNOUNCE_ADAPTIVE | ANNOUNCE_ASYNC | ANNOUNCE_MODAL
+ * @package Announce
+ * @since   4.6.0
+ * @example
+ * echo announce('My message', E_WARNING);
+ */
+
+	function announce($message, $type = 0, $flags = ANNOUNCE_ADAPTIVE)
+	{
+		global $app_mode, $theme;
+
+		if (!is_array($message))
+		{
+			$message = array($message, $type);
+		}
+
+		if ($flags & ANNOUNCE_ASYNC || ($flags & ANNOUNCE_ADAPTIVE && $app_mode === 'async'))
+		{
+			return $theme->announce_async($message);
+		}
+
+		if ($flags & ANNOUNCE_MODAL)
+		{
+			return $theme->announce_async($message, true);
+		}
+
+		return $theme->announce($message);
+	}
+
+/**
  * Performs regular housekeeping.
  *
  * @access private
