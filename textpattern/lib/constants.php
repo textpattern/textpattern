@@ -785,15 +785,22 @@ define('ANNOUNCE_MODAL', 0x2);
 /**
  * Sends an asynchronous announcement.
  *
- * The announcement is instructed to be rendered
- * as soon as possible.
- *
  * @since   4.6.0
  * @package Announce
  * @see     announce()
  */
 
 define('ANNOUNCE_ASYNC', 0x4);
+
+/**
+ * Sends a synchronous announcement.
+ *
+ * @since   4.6.0
+ * @package Announce
+ * @see     announce()
+ */
+
+define('ANNOUNCE_REGULAR', 0x8);
 
 error_reporting($old_level);
 unset($old_level);
