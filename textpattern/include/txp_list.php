@@ -352,7 +352,7 @@
 						or ($a['Status'] < STATUS_LIVE and $AuthorID == $txp_user and has_privs('article.edit.own'))
 						)
 						? fInput('checkbox', 'selected[]', $ID, 'checkbox')
-						: '&#160;'
+						: ''
 					), '', 'multi-edit').
 
 					hCell(
