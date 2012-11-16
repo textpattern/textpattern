@@ -316,7 +316,7 @@
 
 			if ($search_method and $crit != '')
 			{
-				$crit_escaped = doSlash(str_replace(array('\\','%','_','\''), array('\\\\','\\%','\\_', '\\\''), $crit));
+				$crit_escaped = doLike($crit);
 
 				$critsql = array(
 					'id'        => "user_id in ('" .join("','", do_list($crit_escaped)). "')",

@@ -136,7 +136,7 @@
 		if ($search_method and $crit != '')
 		{
 			$verbatim = preg_match('/^"(.*)"$/', $crit, $m);
-			$crit_escaped = doSlash($verbatim ? $m[1] : str_replace(array('\\','%','_','\''), array('\\\\','\\%','\\_', '\\\''), $crit));
+			$crit_escaped = $verbatim ? doSlash($m[1]) : doLike($crit);
 			$critsql = $verbatim ?
 				array(
 					'id'                 => "textpattern.ID in ('" .join("','", do_list($crit_escaped)). "')",
