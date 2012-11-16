@@ -199,7 +199,7 @@
 			$total = getThing('select count(*) from '.$sql_from.' where '.$criteria);
 		}
 
-		echo n.'<h1 class="txp-heading">'.gTxt('tab_list').'</h1>';
+		echo n.hed(gTxt('tab_list'), 1, array('class' => 'txp-heading'));
 		echo n.'<div id="'.$event.'_control" class="txp-control-panel">';
 
 		if ($total < 1)
@@ -313,11 +313,16 @@
 					$Status = $statuses[$Status];
 				}
 
-				$comments = '(0)';
+				$comments = '('.$total_comments.')';
 
 				if ($total_comments)
 				{
-					$comments = href('('.$total_comments.')', 'index.php?event=discuss'.a.'step=list'.a.'search_method=parent'.a.'crit='.$ID, ' title="'.gTxt('manage').'"');
+					$comments = href($comments, array(
+						'event'         => 'discuss',
+						'step'          => 'list',
+						'search_method' => 'parent',
+						'crit'          => $ID,
+					), array('title' => gTxt('manage')));
 				}
 
 				$comment_status = ($Annotate) ? gTxt('on') : gTxt('off');
@@ -333,7 +338,9 @@
 					}
 				}
 
-				$comments = '<span class="comments-status">'.$comment_status.'</span> <span class="comments-manage">'.$comments.'</span>';
+				$comments =
+					tag($comment_status, 'span', array('class' => 'comments-status')).' '.
+					tag($comments, 'span', array('class' => 'comments-manage'));
 
 				echo tr(
 
@@ -348,7 +355,14 @@
 						: '&#160;'
 					), '', 'multi-edit').
 
-					hCell(eLink('article', 'edit', 'ID', $ID, $ID) .sp. '<span class="articles_detail"><span role="presentation">[</span><a href="'.$view_url.'">'.gTxt('view').'</a><span role="presentation">]</span></span>', '', ' scope="row" class="id"').
+					hCell(
+						eLink('article', 'edit', 'ID', $ID, $ID) .sp. 
+						tag(
+							tag('[', 'span', array('role' => 'presentation')).
+							href(gTxt('view'), $view_url).
+							tag(']', 'span', array('role' => 'presentation'))
+						, 'span', array('class' => 'articles_detail'))
+					, '', ' scope="row" class="id"').
 
 					td($Title, '', 'title').
 
@@ -368,7 +382,7 @@
 
 					td($Category1, '', "articles_detail category category1".$vc[1]).
 					td($Category2, '', "articles_detail category category2".$vc[2]).
-					td('<a href="'.$view_url.'" title="'.gTxt('view').'">'.$Status.'</a>', '', 'status').
+					td(href($Status, $view_url, join_atts(array('title' => gTxt('view')))), '', 'status').
 
 					($show_authors ? td(span(txpspecialchars($AuthorID), array('title' => $RealName)), '', 'author') : '').
 
@@ -382,14 +396,20 @@
 				list_multiedit_form($page, $sort, $dir, $crit, $search_method).
 				tInput().
 				n.'</form>'.
+
 				graf(
 					toggle_box('articles_detail'),
-					' class="detail-toggle"'
+					array('class' => 'detail-toggle')
 				).
-				n.'<div id="'.$event.'_navigation" class="txp-navigation">'.
-				nav_form('list', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
-				pageby_form('list', $article_list_pageby).
-				n.'</div>'.
+
+				n.tag(
+					nav_form('list', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
+					pageby_form('list', $article_list_pageby).n,
+					'div', array(
+					'class' => 'txp-navigation',
+					'id'    => $event.'_navigation'
+				)).
+
 				n.'</div>';
 		}
 	}
