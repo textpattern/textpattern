@@ -252,8 +252,7 @@ pre,
 code,
 kbd,
 samp,
-.code,
-#diagnostics-detail {
+.code {
 	font-size: 1.09090909090909em; /* 12px / 11px */
 	font-family: Monaco, "Lucida Console", "Bitstream Vera Sans Mono", "DejaVu Sans Mono", monospace;
 }

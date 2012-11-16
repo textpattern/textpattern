@@ -434,7 +434,7 @@
 		$fmt_date = '%Y-%m-%d %H:%M:%S';
 
 		$out = array(
-			'<p><textarea id="diagnostics-detail" cols="'.INPUT_LARGE.'" rows="24" readonly="readonly">',
+			'<p><textarea id="diagnostics-detail" class="code" cols="'.INPUT_LARGE.'" rows="24" readonly="readonly">',
 
 			gTxt('txp_version').cs.txp_version.' ('.check_file_integrity(INTEGRITY_DIGEST).')'.n,
 
