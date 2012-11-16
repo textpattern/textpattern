@@ -356,9 +356,9 @@
 					), '', 'multi-edit').
 
 					hCell(
-						eLink('article', 'edit', 'ID', $ID, $ID) .sp. 
+						eLink('article', 'edit', 'ID', $ID, $ID).
 						tag(
-							tag('[', 'span', array('role' => 'presentation')).
+							sp.tag('[', 'span', array('role' => 'presentation')).
 							href(gTxt('view'), $view_url).
 							tag(']', 'span', array('role' => 'presentation'))
 						, 'span', array('class' => 'articles_detail'))
