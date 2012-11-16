@@ -140,6 +140,22 @@
 	}
 
 /**
+ * Escape SQL LIKE pattern's wildcards for use in an SQL statement.
+ *
+ * @param   string|array $in The input value
+ * @return  mixed        An array of escaped values or a string depending on $in
+ * @since   4.6.0
+ * @package DB
+ * @example
+ * echo safe_field('column', 'table', "color LIKE '" . doLike(gps('color')) . "'");
+ */
+
+	function doLike($in)
+	{
+		return doArray($in, 'safe_escape_like');
+	}
+
+/**
  * A shell for htmlspecialchars() with $flags defaulting to ENT_QUOTES.
  *
  * @param   string $string The string being converted

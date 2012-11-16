@@ -252,6 +252,29 @@ $DB = new DB;
 	}
 
 /**
+ * Escape LIKE pattern's wildcards in a string for use in an SQL statement.
+ *
+ * @param  string $in The input string
+ * @return string
+ * @since  4.6.0
+ * @see    doLike()
+ * @example
+ * if (safe_update('myTable', "value='".doLike($user_value)."'", "name LIKE '".doLike($user_name)."'"))
+ * {
+ * 	echo 'Updated.';
+ * }
+ */
+
+	function safe_escape_like($in = '')
+	{
+		return safe_escape(str_replace(
+			array('\\', '%', '_', '\''),
+			array('\\\\', '\\%', '\\_', '\\\''),
+			(string) $in
+		));
+	}
+
+/**
  * Executes an SQL statement.
  *
  * @param  string $q     The SQL statement to execute
