@@ -673,8 +673,7 @@ if (!empty($event) and $event == 'article') {
 		}
 
 		if ($refresh_partials) {
-			global $theme;
-			$response[] = $theme->announce_async($message);
+			$response[] = announce($message);
 
 			// Update the volatile partials.
 			foreach ($partials as $k => $p) {
