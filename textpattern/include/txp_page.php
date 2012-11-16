@@ -118,7 +118,7 @@
 				graf($buttons).
 				graf(
 					'<label for="html">'.gTxt('page_code').'</label>'.
-					br.'<textarea id="html" class="code" name="html" cols="'.INPUT_LARGE.'" rows="'.INPUT_REGULAR.'">'.txpspecialchars($html).'</textarea>'
+					br.'<textarea id="html" class="code" name="html" cols="'.INPUT_LARGE.'" rows="24">'.txpspecialchars($html).'</textarea>'
 				).
 				graf(
 					fInput('submit', '', gTxt('save'), 'publish').

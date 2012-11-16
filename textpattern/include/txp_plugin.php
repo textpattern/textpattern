@@ -34,7 +34,7 @@
 			'plugin_save'       => true,
 			'plugin_verify'     => true,
 			'switch_status'     => true,
-			'plugin_multi_edit' => true
+			'plugin_multi_edit' => true,
 		);
 
 		if ($step && bouncer($step, $available_steps))
@@ -266,7 +266,7 @@
 		return
 			form(
 				hed(gTxt('edit_plugin', array('{name}' => $name)), 2).
-				graf('<textarea id="plugin_code" name="code" class="code" cols="'.INPUT_XLARGE.'" rows="'.INPUT_REGULAR.'">'.txpspecialchars($thing).'</textarea>', ' class="edit-plugin-code"').
+				graf('<textarea id="plugin_code" class="code" name="code" cols="'.INPUT_XLARGE.'" rows="24">'.txpspecialchars($thing).'</textarea>', ' class="edit-plugin-code"').
 				graf(fInput('submit', '', gTxt('Save'), 'publish')).
 				eInput('plugin').
 				sInput('plugin_save').
@@ -545,7 +545,7 @@
 		return form(
 			'<p>'.
 			tag(gTxt('install_plugin'), 'label', ' for="plugin-install"').popHelp('install_plugin').
-			'<textarea id="plugin-install" class="code" name="plugin" cols="'.INPUT_LARGE.'" rows="'.INPUT_TINY.'"></textarea>'.
+			'<textarea id="plugin-install" class="code" name="plugin" cols="'.INPUT_LARGE.'" rows="4"></textarea>'.
 			fInput('submit', 'install_new', gTxt('upload')).
 			eInput('plugin').
 			sInput('plugin_verify').
@@ -575,7 +575,7 @@
 			6 => 6,
 			7 => 7,
 			8 => 8,
-			9 => 9
+			9 => 9,
 		), 5, false);
 
 		$methods = array(

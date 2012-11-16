@@ -144,7 +144,7 @@
 				graf($buttons).
 				graf(
 					'<label for="css">'.gTxt('css_code').'</label>'.
-					br.'<textarea id="css" class="code" name="css" cols="'.INPUT_LARGE.'" rows="'.INPUT_REGULAR.'">'.txpspecialchars($thecss).'</textarea>'
+					br.'<textarea id="css" class="code" name="css" cols="'.INPUT_LARGE.'" rows="24">'.txpspecialchars($thecss).'</textarea>'
 				).
 				graf(
 					fInput('submit', '', gTxt('save'), 'publish').

@@ -1399,7 +1399,7 @@ if (!empty($event) and $event == 'article') {
 	{
 		return pluggable_ui('article_ui', 'keywords',
 			graf('<label for="keywords">'.gTxt('keywords').'</label>'.popHelp('keywords').br.
-				n.'<textarea id="keywords" name="Keywords" cols="'.INPUT_MEDIUM.'" rows="'.INPUT_XSMALL.'">'.txpspecialchars(article_partial_keywords_value($rs)).'</textarea>', ' class="keywords"'),
+				n.'<textarea id="keywords" name="Keywords" cols="'.INPUT_MEDIUM.'" rows="4">'.txpspecialchars(article_partial_keywords_value($rs)).'</textarea>', ' class="keywords"'),
 			$rs);
 	}
 
@@ -1507,7 +1507,7 @@ if (!empty($event) and $event == 'article') {
 	{
 		return pluggable_ui('article_ui', 'body',
 			graf('<label for="body">'.gTxt('body').'</label>'.popHelp('body').br.
-				n.'<textarea id="body" name="Body" cols="'.INPUT_LARGE.'" rows="'.INPUT_REGULAR.'">'.txpspecialchars($rs['Body']).'</textarea>', ' class="body"'),
+				n.'<textarea id="body" name="Body" cols="'.INPUT_LARGE.'" rows="24">'.txpspecialchars($rs['Body']).'</textarea>', ' class="body"'),
 			$rs);
 	}
 
@@ -1522,7 +1522,7 @@ if (!empty($event) and $event == 'article') {
 	{
 		return pluggable_ui('article_ui', 'excerpt',
 			graf('<label for="excerpt">'.gTxt('excerpt').'</label>'.popHelp('excerpt').br.
-				n.'<textarea id="excerpt" name="Excerpt" cols="'.INPUT_LARGE.'" rows="'.INPUT_SMALL.'">'.txpspecialchars($rs['Excerpt']).'</textarea>', ' class="excerpt"'),
+				n.'<textarea id="excerpt" name="Excerpt" cols="'.INPUT_LARGE.'" rows="8">'.txpspecialchars($rs['Excerpt']).'</textarea>', ' class="excerpt"'),
 			$rs);
 	}
 
