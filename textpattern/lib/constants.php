@@ -593,6 +593,42 @@ define('INPUT_XSMALL', 4);
 define('INPUT_TINY', 2);
 
 /**
+ * Textarea height large.
+ *
+ * @since   4.6.0
+ * @package Form
+ */
+
+define('TEXTAREA_HEIGHT_LARGE', 24);
+
+/**
+ * Textarea height regular.
+ *
+ * @since   4.6.0
+ * @package Form
+ */
+
+define('TEXTAREA_HEIGHT_REGULAR', 16);
+
+/**
+ * Textarea height medium.
+ *
+ * @since   4.6.0
+ * @package Form
+ */
+
+define('TEXTAREA_HEIGHT_MEDIUM', 8);
+
+/**
+ * Textarea height small.
+ *
+ * @since   4.6.0
+ * @package Form
+ */
+
+define('TEXTAREA_HEIGHT_SMALL', 4);
+
+/**
  * Required PHP version.
  *
  * @since   4.5.0
@@ -770,10 +806,10 @@ define('ATTS_STRIP_EMPTY', 0x1);
 define('ANNOUNCE_ADAPTIVE', 0x1);
 
 /**
- * Sends an modal announcement.
+ * Sends a modal announcement.
  *
  * The announcement is instructed to be rendered
- * as soon as possible as a modal alert window.
+ * as soon as possible, as a modal alert window.
  *
  * @since   4.6.0
  * @package Announce

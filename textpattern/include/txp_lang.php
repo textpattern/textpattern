@@ -296,7 +296,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
 				graf(
 					'<label for="textpack-install">'.gTxt('install_textpack').'</label>'.
 					popHelp('get_textpack').
-					n.'<textarea id="textpack-install" class="code" name="textpack" cols="'.INPUT_LARGE.'" rows="4"></textarea>'.
+					n.'<textarea id="textpack-install" class="code" name="textpack" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'"></textarea>'.
 					fInput('submit', 'install_new', gTxt('upload')).
 					eInput('lang').
 					sInput('get_textpack')

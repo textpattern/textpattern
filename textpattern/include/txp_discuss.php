@@ -440,7 +440,7 @@
 					inputLabel('email', fInput('email', 'email', $email, '', '', '', INPUT_REGULAR, '', 'email'), 'email').
 					inputLabel('website', fInput('text', 'web', $web, '', '', '', INPUT_REGULAR, '', 'website'), 'website').
 					inputLabel('date', safe_strftime('%d %b %Y %X', $uPosted), '').
-					inputLabel('commentmessage', '<textarea id="commentmessage" name="message" cols="'.INPUT_LARGE.'" rows="16">'.$message.'</textarea>', 'message', '', '', '').
+					inputLabel('commentmessage', '<textarea id="commentmessage" name="message" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_REGULAR.'">'.$message.'</textarea>', 'message', '', '', '').
 					graf(fInput('submit', 'step', gTxt('save'), 'publish')).
 
 					hInput('sort', $sort).

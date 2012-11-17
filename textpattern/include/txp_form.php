@@ -310,7 +310,7 @@ EOS
 					n.'<form action="index.php" method="post" id="form_form">'.
 					n.'<div id="main_content">'.
 					n.'<p class="edit-title">'.gTxt('you_are_editing_form').sp.strong(($name) ? $name : gTxt('untitled')).'</p>'.
-					n.'<textarea id="form" class="code" name="Form" cols="'.INPUT_LARGE.'" rows="24">'.txpspecialchars($Form).'</textarea>'.
+					n.'<textarea id="form" class="code" name="Form" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'">'.txpspecialchars($Form).'</textarea>'.
 
 					$changename.
 

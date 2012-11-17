@@ -548,7 +548,7 @@
 						inputLabel('file_title', fInput('text', 'title', $title, '', '', '', INPUT_REGULAR, '', 'file_title'), 'title').
 						inputLabel('file_category', treeSelectInput('category', $all_file_cats, $category, 'file_category'), 'file_category').
 //						inputLabel('perms', selectInput('perms', $levels, $permissions), 'permissions').
-						inputLabel('file_description', '<textarea id="file_description" name="description" cols="'.INPUT_LARGE.'" rows="4">'.$description.'</textarea>', 'description', '', '', '').
+						inputLabel('file_description', '<textarea id="file_description" name="description" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.$description.'</textarea>', 'description', '', '', '').
 						wrapRegion('file_created', $created, '', gTxt('timestamp'), '', 'file-created').
 						pluggable_ui('file_ui', 'extend_detail_form', '', $rs).
 						graf(fInput('submit', '', gTxt('Save'), 'publish')).

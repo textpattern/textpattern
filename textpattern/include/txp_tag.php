@@ -3795,7 +3795,7 @@ class TagBuilderTags
 				fInput('text', 'thing', ($thing ? $thing : $filename), '', '', '', INPUT_REGULAR)).
 
 			tagRow('description',
-				'<textarea name="description" cols="'.INPUT_REGULAR.'" rows="4">'.$description.'</textarea>').
+				'<textarea name="description" cols="'.INPUT_REGULAR.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.$description.'</textarea>').
 
 			$endform
 		);

@@ -442,8 +442,8 @@
 	function text_area($name, $h = 0, $w = 0, $thing = '', $id = '', $rows = 5, $cols = 40, $placeholder='')
 	{
 		$id = ($id) ? ' id="'.$id.'"' : '';
-		$rows = ' rows="' . ( ($rows && is_numeric($rows)) ? $rows : '5') . '"';
-		$cols = ' cols="' . ( ($cols && is_numeric($cols)) ? $cols : '40') . '"';
+		$rows = ' rows="' . ( ($rows && is_numeric($rows)) ? $rows : '4') . '"';
+		$cols = ' cols="' . ( ($cols && is_numeric($cols)) ? $cols : '48') . '"';
 		$width = ($w) ? 'width:'.$w.'px;' : '';
 		$height = ($h) ? 'height:'.$h.'px;' : '';
 		$style = ($width || $height) ? ' style="'.$width.$height.'"' : '';
