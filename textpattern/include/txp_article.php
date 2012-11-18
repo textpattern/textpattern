@@ -945,11 +945,15 @@
 
 			// Markup selection.
 			$html_markup = pluggable_ui('article_ui', 'markup',
-				graf('<label for="markup-body">'.gTxt('article_markup').'</label>'.br.
-					pref_text('textile_body', $textile_body, 'markup-body'), ' class="markup markup-body"').
-				graf('<label for="markup-excerpt">'.gTxt('excerpt_markup').'</label>'.br.
-					pref_text('textile_excerpt', $textile_excerpt, 'markup-excerpt'), ' class="markup markup-excerpt"'),
-				$rs);
+				graf(
+					'<label for="markup-body">'.gTxt('article_markup').'</label>'.br.
+					pref_text('textile_body', $textile_body, 'markup-body')
+				, ' class="markup markup-body"').
+				graf(
+					'<label for="markup-excerpt">'.gTxt('excerpt_markup').'</label>'.br.
+					pref_text('textile_excerpt', $textile_excerpt, 'markup-excerpt')
+				, ' class="markup markup-excerpt"')
+			, $rs);
 
 			// Form override.
 			$html_override = ($allow_form_override)
@@ -1078,16 +1082,28 @@
 			{
 				// Timestamp.
 				// Avoiding modified date to disappear.
-				$persist_timestamp = (!empty($store_out['year']))?
-					safe_strtotime($store_out['year'].'-'.$store_out['month'].'-'.$store_out['day'].' '.$store_out['hour'].':'.$store_out['minute'].':'.$store_out['second'])
-					: time();
+
+				if (!empty($store_out['year']))
+				{
+					$persist_timestamp = safe_strtotime(
+						$store_out['year'].'-'.$store_out['month'].'-'.$store_out['day'].' '.
+						$store_out['hour'].':'.$store_out['minute'].':'.$store_out['second']
+					);
+				}
+				else
+				{
+					$persist_timestamp = time();
+				}
 
 				$posted_block = pluggable_ui(
 					'article_ui',
 					'timestamp',
 					wrapRegion(
 						'write-timestamp',
-						graf(checkbox('publish_now', '1', $publish_now, '', 'publish_now').'<label for="publish_now">'.gTxt('set_to_now').'</label>', ' class="publish-now"').
+						graf(
+							checkbox('publish_now', '1', $publish_now, '', 'publish_now').
+							'<label for="publish_now">'.gTxt('set_to_now').'</label>'
+						, ' class="publish-now"').
 
 						graf(gTxt('or_publish_at').popHelp('timestamp'), ' class="publish-at"').
 
@@ -1223,7 +1239,8 @@
 
 		foreach ($statuses as $a => $b)
 		{
-			$out[] = n.'<li class="status-'.$a.($Status == $a ? ' active' : '').'">'.radio('Status', $a, ($Status == $a) ? 1 : 0, 'status-'.$a).
+			$out[] = n.'<li class="status-'.$a.($Status == $a ? ' active' : '').'">'.
+				radio('Status', $a, ($Status == $a) ? 1 : 0, 'status-'.$a).
 				n.'<label for="status-'.$a.'">'.$b.'</label></li>';
 		}
 
@@ -1367,10 +1384,14 @@
 	{
 		switch ($Status)
 		{
-			case STATUS_PENDING: return gTxt("article_saved_pending");
-			case STATUS_HIDDEN: return gTxt("article_saved_hidden");
-			case STATUS_DRAFT: return gTxt("article_saved_draft");
-			default: return gTxt('article_posted');
+			case STATUS_PENDING :
+				return gTxt("article_saved_pending");
+			case STATUS_HIDDEN :
+				return gTxt("article_saved_hidden");
+			case STATUS_DRAFT :
+				return gTxt("article_saved_draft");
+			default :
+				return gTxt('article_posted');
 		}
 	}
 
@@ -1393,8 +1414,19 @@
 		$incoming['Title_plain'] = $incoming['Title'];
 		$incoming['Title_html'] = ''; // not used
 		$incoming['Title'] = $textile->TextileThis($incoming['Title'], '', 1);
-		$incoming['Body_html'] = TextfilterSet::filter($incoming['textile_body'], $incoming['Body'], array('field' => 'Body', 'options' => array('lite' => false), 'data' => $incoming));
-		$incoming['Excerpt_html'] = TextfilterSet::filter($incoming['textile_excerpt'], $incoming['Excerpt'], array('field' => 'Excerpt', 'options' => array('lite' => false), 'data' => $incoming));
+
+		$incoming['Body_html'] = TextfilterSet::filter(
+			$incoming['textile_body'],
+			$incoming['Body'],
+			array('field' => 'Body', 'options' => array('lite' => false), 'data' => $incoming)
+		);
+
+		$incoming['Excerpt_html'] = TextfilterSet::filter(
+			$incoming['textile_excerpt'],
+			$incoming['Excerpt'],
+			array('field' => 'Excerpt', 'options' => array('lite' => false), 'data' => $incoming)
+		);
+
 		return $incoming;
 	}
 
@@ -1639,7 +1671,7 @@
 
 	function article_partial_recent_articles($rs)
 	{
-		$recents = safe_rows_start('Title, ID', 'textpattern', '1=1 order by LastMod desc limit '.(int)WRITE_RECENT_ARTICLES_COUNT);
+		$recents = safe_rows_start('Title, ID', 'textpattern', '1=1 order by LastMod desc limit '.(int) WRITE_RECENT_ARTICLES_COUNT);
 		$ra = '';
 
 		if ($recents)
@@ -1753,16 +1785,27 @@
 
 	function article_partial_article_nav($rs)
 	{
-		return n.'<p role="navigation" class="nav-tertiary">'.
-		($rs['prev_id']
-			?	prevnext_link(gTxt('prev'), 'article', 'edit',
-				$rs['prev_id'], '', 'prev')
-			:	'<span class="navlink-disabled" aria-disabled="true">'.gTxt('prev').'</span>').
-		($rs['next_id']
-			?	prevnext_link(gTxt('next'), 'article', 'edit',
-				$rs['next_id'], '', 'next')
-			:	'<span class="navlink-disabled" aria-disabled="true">'.gTxt('next').'</span>').
-		'</p>';
+		$out = array();
+
+		if ($rs['prev_id'])
+		{
+			$out[] = prevnext_link(gTxt('prev'), 'article', 'edit', $rs['prev_id'], '', 'prev');
+		}
+		else
+		{
+			$out[] = '<span class="navlink-disabled" aria-disabled="true">'.gTxt('prev').'</span>';
+		}
+
+		if ($rs['next_id'])
+		{
+			$out[] = prevnext_link(gTxt('next'), 'article', 'edit', $rs['next_id'], '', 'next');
+		}
+		else
+		{
+			$out[] = '<span class="navlink-disabled" aria-disabled="true">'.gTxt('next').'</span>';
+		}
+
+		return n.'<p role="navigation" class="nav-tertiary">'.join('', $out).'</p>';
 	}
 
 /**
@@ -1774,11 +1817,9 @@
 
 	function article_partial_status($rs)
 	{
-		return pluggable_ui(
-			'article_ui',
-			'status',
-			wrapRegion('write-status', status_radio($rs['Status']), '', gTxt('status')),
-			$rs);
+		$out = wrapRegion('write-status', status_radio($rs['Status']), '', gTxt('status'));
+
+		return pluggable_ui('article_ui', 'status', $out, $rs);
 	}
 
 /**
@@ -1790,11 +1831,11 @@
 
 	function article_partial_section($rs)
 	{
-		return pluggable_ui('article_ui', 'section',
-			graf('<label for="section">'.gTxt('section').'</label> '.
+		$out = graf('<label for="section">'.gTxt('section').'</label> '.
 				'<span class="section-edit"><span role="presentation">[</span>'.eLink('section', '', '', '', gTxt('edit')).'<span role="presentation">]</span></span>'.br.
-				section_popup($rs['Section'], 'section'), ' class="section"'),
-			$rs);
+				section_popup($rs['Section'], 'section'), ' class="section"');
+
+		return pluggable_ui('article_ui', 'section', $out, $rs);
 	}
 
 /**
@@ -1834,7 +1875,16 @@
 		if ($step == "create")
 		{
 			// Avoid invite disappearing when previewing.
-			$AnnotateInvite = (!empty($store_out['AnnotateInvite']))? $store_out['AnnotateInvite'] : $comments_default_invite;
+
+			if (!empty($store_out['AnnotateInvite']))
+			{
+				$AnnotateInvite = $store_out['AnnotateInvite'];
+			}
+			else
+			{
+				$AnnotateInvite = $comments_default_invite;
+			}
+
 			if ($comments_on_default == 1)
 			{
 				$Annotate = 1;
@@ -1893,7 +1943,10 @@
 			'timestamp',
 			wrapRegion(
 				'write-timestamp',
-				graf(checkbox('reset_time', '1', $reset_time, '', 'reset_time').'<label for="reset_time">'.gTxt('reset_time').'</label>', ' class="reset-time"').
+				graf(
+					checkbox('reset_time', '1', $reset_time, '', 'reset_time').
+					'<label for="reset_time">'.gTxt('reset_time').'</label>'
+				, ' class="reset-time"').
 
 				graf(gTxt('published_at').popHelp('timestamp'), ' class="publish-at"').
 
@@ -1979,32 +2032,63 @@
 		global $prefs, $step, $statuses;
 
 		$constraints = array(
-			'Status'    => new ChoiceConstraint($rs['Status'], array('choices' => array_keys($statuses), 'message' => 'invalid_status')),
-			'Section'   => new SectionConstraint($rs['Section']),
-			'Category1' => new CategoryConstraint($rs['Category1'], array('type' => 'article')),
-			'Category2' => new CategoryConstraint($rs['Category2'], array('type' => 'article')),
-			'textile_body'    => new TextfilterConstraint($rs['textile_body'], array('message' => 'invalid_textfilter_body')),
-			'textile_excerpt' => new TextfilterConstraint($rs['textile_excerpt'], array('message' => 'invalid_textfilter_excerpt')),
+			'Status'          => new ChoiceConstraint(
+				$rs['Status'],
+				array('choices' => array_keys($statuses), 'message' => 'invalid_status')
+			),
+			'Section'         => new SectionConstraint($rs['Section']),
+			'Category1'       => new CategoryConstraint(
+				$rs['Category1'],
+				array('type' => 'article')
+			),
+			'Category2'       => new CategoryConstraint(
+				$rs['Category2'],
+				array('type' => 'article')
+			),
+			'textile_body'    => new TextfilterConstraint(
+				$rs['textile_body'],
+				array('message' => 'invalid_textfilter_body')
+			),
+			'textile_excerpt' => new TextfilterConstraint(
+				$rs['textile_excerpt'],
+				array('message' => 'invalid_textfilter_excerpt')
+			),
 		);
 
 		if (!$prefs['articles_use_excerpts'])
 		{
-			$constraints['excerpt_blank'] = new BlankConstraint($rs['Excerpt'], array('message' => 'excerpt_not_blank'));
+			$constraints['excerpt_blank'] = new BlankConstraint(
+				$rs['Excerpt'],
+				array('message' => 'excerpt_not_blank')
+			);
 		}
 
 		if (!$prefs['use_comments'])
 		{
-			$constraints['annotate_invite_blank'] = new BlankConstraint($rs['AnnotateInvite'], array('message' => 'invite_not_blank'));
-			$constraints['annotate_false'] = new FalseConstraint($rs['Annotate'], array('message' => 'comments_are_on'));
+			$constraints['annotate_invite_blank'] = new BlankConstraint(
+				$rs['AnnotateInvite'],
+				array('message' => 'invite_not_blank')
+			);
+
+			$constraints['annotate_false'] = new FalseConstraint(
+				$rs['Annotate'],
+				array('message' => 'comments_are_on')
+			);
 		}
 
 		if ($prefs['allow_form_override'])
 		{
-			$constraints['override_form'] = new FormConstraint($rs['override_form'], array('type' => 'article'));
+			$constraints['override_form'] = new FormConstraint(
+				$rs['override_form'],
+				array('type' => 'article')
+			);
 		}
 		else
 		{
-			$constraints['override_form'] = new BlankConstraint($rs['override_form'], array('message' => 'override_form_not_blank'));
+			$constraints['override_form'] = new BlankConstraint(
+				$rs['override_form'],
+				array('message' => 'override_form_not_blank')
+			);
 		}
 
 		callback_event_ref('article_ui', "validate_$step", 0, $rs, $constraints);
