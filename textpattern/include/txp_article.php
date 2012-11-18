@@ -1307,9 +1307,19 @@
 	{
 		$state = ($view == $tabevent) ? 'up' : 'down';
 		$pressed = ($view == $tabevent) ? 'true' : 'false';
-		return n.'<li class="view-mode '.$tabevent.'" id="tab-'.$tabevent.$state.'" title="'.gTxt('view_'.$tabevent).'">'.
-			'<a href="#" data-view-mode="'.$tabevent.'" role="button" aria-pressed="'.$pressed.'">'.gTxt($tabevent).'</a>'.
-			'</li>';
+
+		$link = tag(gTxt($tabevent), 'a', array(
+			'href'           => '#',
+			'data-view-mode' => $tabevent,
+			'role'           => 'button',
+			'aria-pressed'   => $pressed,
+		));
+
+		return n.tag($link, 'li', array(
+			'class' => 'view-mode '.$tabevent,
+			'id'    => 'tab-'.$tabevent.$state,
+			'title' => gTxt('view_'.$tabevent),
+		));
 	}
 
 /**
@@ -1814,7 +1824,7 @@
 
 		$out = pluggable_ui('article_ui', 'view', $out, $rs);
 
-		return n.'<div id="view_modes">'.$out.n.'</div>';
+		return n.tag($out.n, 'div', array('id' => 'view_modes'));
 	}
 
 /**
