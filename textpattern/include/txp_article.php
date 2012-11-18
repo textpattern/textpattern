@@ -1698,11 +1698,11 @@
 		$recents = safe_rows_start('Title, ID', 'textpattern', '1=1 order by LastMod desc limit '.(int) WRITE_RECENT_ARTICLES_COUNT);
 		$ra = '';
 
-		if ($recents)
+		if (numRows($recents))
 		{
 			$ra = '<ul class="recent plain-list">';
 
-			while($recent = nextRow($recents))
+			while ($recent = nextRow($recents))
 			{
 				if (!$recent['Title'])
 				{
