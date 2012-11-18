@@ -14,6 +14,48 @@
  * @package XML
  */
 
+	/**
+	 * @ignore
+	 */
+
+	define("t_texthtml", ' type="text/html"');
+
+	/**
+	 * @ignore
+	 */
+
+	define("t_text", ' type="text"');
+
+	/**
+	 * @ignore
+	 */
+
+	define("t_html", ' type="html"');
+
+	/**
+	 * @ignore
+	 */
+
+	define("t_xhtml", ' type="xhtml"');
+
+	/**
+	 * @ignore
+	 */
+
+	define('t_appxhtml', ' type="xhtml"');
+
+	/**
+	 * @ignore
+	 */
+
+	define("r_relalt", ' rel="alternate"');
+
+	/**
+	 * @ignore
+	*/
+
+	define("r_relself", ' rel="self"');
+
 /**
  * Generates and outputs an Atom feed.
  *
@@ -28,48 +70,6 @@
 		set_error_handler('feedErrorHandler');
 		ob_clean();
 		extract($prefs);
-
-		/**
-		 * @ignore
-		 */
-
-		define("t_texthtml", ' type="text/html"');
-
-		/**
-		 * @ignore
-		 */
-
-		define("t_text", ' type="text"');
-
-		/**
-		 * @ignore
-		 */
-
-		define("t_html", ' type="html"');
-
-		/**
-		 * @ignore
-		 */
-
-		define("t_xhtml", ' type="xhtml"');
-
-		/**
-		 * @ignore
-		 */
-
-		define('t_appxhtml', ' type="xhtml"');
-
-		/**
-		 * @ignore
-		 */
-
-		define("r_relalt", ' rel="alternate"');
-
-		/**
-		 * @ignore
-		 */
-
-		define("r_relself", ' rel="self"');
 
 		$last = fetch('unix_timestamp(val)', 'txp_prefs', 'name', 'lastmod');
 
