@@ -1308,8 +1308,7 @@
 		$state = ($view == $tabevent) ? 'up' : 'down';
 		$pressed = ($view == $tabevent) ? 'true' : 'false';
 
-		$link = tag(gTxt($tabevent), 'a', array(
-			'href'           => '#',
+		$link = href(gTxt($tabevent), '#', array(
 			'data-view-mode' => $tabevent,
 			'role'           => 'button',
 			'aria-pressed'   => $pressed,
