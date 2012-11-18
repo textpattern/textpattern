@@ -2000,19 +2000,22 @@
 				'write-timestamp',
 				graf(
 					checkbox('reset_time', '1', $reset_time, '', 'reset_time').
-					'<label for="reset_time">'.gTxt('reset_time').'</label>'
-				, ' class="reset-time"').
+					tag(gTxt('reset_time'), 'label', array('for' => 'reset_time'))
+				, ' class="reset-time"'
+				).
 
 				graf(gTxt('published_at').popHelp('timestamp'), ' class="publish-at"').
 
-				graf('<span class="label">'.gtxt('date').'</span>'.
+				graf(
+					tag(gTxt('date'), 'span', array('class' => 'label')).
 					tsi('year', '%Y', $sPosted).' / '.
 					tsi('month', '%m', $sPosted).' / '.
 					tsi('day', '%d', $sPosted)
 				, ' class="date posted created"'
 				).
 
-				graf('<span class="label">'.gTxt('time').'</span>'.
+				graf(
+					tag(gTxt('time'), 'span', array('class' => 'label')).
 					tsi('hour', '%H', $sPosted).' : ' .
 					tsi('minute', '%M', $sPosted).' : '.
 					tsi('second', '%S', $sPosted)
@@ -2042,14 +2045,16 @@
 		$out =
 			wrapRegion(
 				'write-expires',
-				graf('<span class="label">'.gtxt('date').'</span>'.
+				graf(
+					tag(gTxt('date'), 'span', array('class' => 'label')).
 					tsi('exp_year', '%Y', $sExpires).' / '.
 					tsi('exp_month', '%m', $sExpires).' / '.
 					tsi('exp_day', '%d', $sExpires)
 				, ' class="date expires"'
 				).
 
-				graf('<span class="label">'.gTxt('time').'</span>'.
+				graf(
+					tag(gTxt('time'), 'span', array('class' => 'label')).
 					tsi('exp_hour', '%H', $sExpires).' : '.
 					tsi('exp_minute', '%M', $sExpires).' : '.
 					tsi('exp_second', '%S', $sExpires)
