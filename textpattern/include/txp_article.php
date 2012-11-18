@@ -1484,6 +1484,9 @@
 /**
  * Renders article formatting tips.
  *
+ * The rendered widget can be customised via the 'article_ui > sidehelp'
+ * pluggable UI callback event.
+ *
  * @param array $rs Article data
  */
 
@@ -1504,6 +1507,9 @@
 /**
  * Renders article title partial.
  *
+ * The rendered widget can be customised via the 'article_ui > title'
+ * pluggable UI callback event.
+ *
  * @param array $rs Article data
  */
 
@@ -1511,12 +1517,12 @@
 	{
 		global $step;
 		$av_cb = $rs['partials_meta']['article_view']['cb'];
-		return pluggable_ui('article_ui', 'title',
-			graf('<label for="title">'.gTxt('title').'</label>'.popHelp('title').br.
-				n.'<input type="text" id="title" name="Title" value="'.escape_title($rs['Title']).'" size="48" />'.
-				($step != 'create' ?  $av_cb($rs) : '')
-				, ' class="title"'),
-			$rs);
+		$out = graf('<label for="title">'.gTxt('title').'</label>'.popHelp('title').br.
+			n.'<input type="text" id="title" name="Title" value="'.escape_title($rs['Title']).'" size="48" />'.
+			($step != 'create' ?  $av_cb($rs) : '')
+		, ' class="title"');
+
+		return pluggable_ui('article_ui', 'title', $out, $rs);
 	}
 
 /**
@@ -1533,6 +1539,9 @@
 
 /**
  * Renders author partial.
+ *
+ * The rendered widget can be customised via the 'article_ui > author'
+ * pluggable UI callback event.
  *
  * @param  array  $rs Article data
  * @return string HTML
@@ -1554,6 +1563,9 @@
 
 /**
  * Renders all custom fields in one partial.
+ *
+ * The rendered widget can be customised via the 'article_ui > custom_fields'
+ * pluggable UI callback event.
  *
  * @param  array  $rs Article data
  * @return string HTML
@@ -1593,6 +1605,9 @@
 /**
  * Renders article image partial.
  *
+ * The rendered widget can be customised via the 'article_ui > article_image'
+ * pluggable UI callback event.
+ *
  * @param  array $rs Article data
  * @return string HTML
  */
@@ -1610,16 +1625,19 @@
 /**
  * Renders keywords partial.
  *
+ * The rendered widget can be customised via the 'article_ui > keywords'
+ * pluggable UI callback event.
+ *
  * @param  array  $rs Article data
  * @return string HTML
  */
 
 	function article_partial_keywords($rs)
 	{
-		return pluggable_ui('article_ui', 'keywords',
-			graf('<label for="keywords">'.gTxt('keywords').'</label>'.popHelp('keywords').br.
-				n.'<textarea id="keywords" name="Keywords" cols="'.INPUT_MEDIUM.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.txpspecialchars(article_partial_keywords_value($rs)).'</textarea>', ' class="keywords"'),
-			$rs);
+		$out = graf('<label for="keywords">'.gTxt('keywords').'</label>'.popHelp('keywords').br.
+			n.'<textarea id="keywords" name="Keywords" cols="'.INPUT_MEDIUM.'" rows="'.TEXTAREA_HEIGHT_SMALL.'">'.txpspecialchars(article_partial_keywords_value($rs)).'</textarea>', ' class="keywords"');
+
+		return pluggable_ui('article_ui', 'keywords', $out, $rs);
 	}
 
 /**
@@ -1638,16 +1656,19 @@
 /**
  * Renders URL title partial.
  *
+ * The rendered widget can be customised via the 'article_ui > url_title'
+ * pluggable UI callback event.
+ *
  * @param  array  $rs Article data
  * @return string HTML
  */
 
 	function article_partial_url_title($rs)
 	{
-		return pluggable_ui('article_ui', 'url_title',
-			graf('<label for="url-title">'.gTxt('url_title').'</label>'.popHelp('url_title').br.
-				fInput('text', 'url_title', article_partial_url_title_value($rs), '', '', '', INPUT_REGULAR, '', 'url-title'), ' class="url-title"'),
-			$rs);
+		$out = graf('<label for="url-title">'.gTxt('url_title').'</label>'.popHelp('url_title').br.
+			fInput('text', 'url_title', article_partial_url_title_value($rs), '', '', '', INPUT_REGULAR, '', 'url-title'), ' class="url-title"');
+
+		return pluggable_ui('article_ui', 'url_title', $out, $rs);
 	}
 
 /**
@@ -1664,6 +1685,9 @@
 
 /**
  * Renders &lt;ul&gt; list of recent articles.
+ *
+ * The rendered widget can be customised via the 'article_ui > recent_articles'
+ * pluggable UI callback event.
  *
  * @param  array  $rs Article data
  * @return string HTML
@@ -1721,20 +1745,27 @@
 /**
  * Renders article body field.
  *
+ * The rendered widget can be customised via the 'article_ui > body'
+ * pluggable UI callback event.
+ *
  * @param  array  $rs Article data
  * @return string HTML
  */
 
 	function article_partial_body($rs)
 	{
-		return pluggable_ui('article_ui', 'body',
-			graf('<label for="body">'.gTxt('body').'</label>'.popHelp('body').br.
-				n.'<textarea id="body" name="Body" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'">'.txpspecialchars($rs['Body']).'</textarea>', ' class="body"'),
-			$rs);
+		$out = graf('<label for="body">'.gTxt('body').'</label>'.popHelp('body').br.
+			n.'<textarea id="body" name="Body" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'">'.txpspecialchars($rs['Body']).'</textarea>'
+		, ' class="body"');
+
+		return pluggable_ui('article_ui', 'body', $out, $rs);
 	}
 
 /**
  * Renders article excerpt field.
+ *
+ * The rendered widget can be customised via the 'article_ui > excerpt'
+ * pluggable UI callback event.
  *
  * @param  array  $rs Article data
  * @return string HTML
@@ -1742,14 +1773,18 @@
 
 	function article_partial_excerpt($rs)
 	{
-		return pluggable_ui('article_ui', 'excerpt',
-			graf('<label for="excerpt">'.gTxt('excerpt').'</label>'.popHelp('excerpt').br.
-				n.'<textarea id="excerpt" name="Excerpt" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_MEDIUM.'">'.txpspecialchars($rs['Excerpt']).'</textarea>', ' class="excerpt"'),
-			$rs);
+		$out = graf('<label for="excerpt">'.gTxt('excerpt').'</label>'.popHelp('excerpt').br.
+			n.'<textarea id="excerpt" name="Excerpt" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_MEDIUM.'">'.txpspecialchars($rs['Excerpt']).'</textarea>', ' class="excerpt"'
+		);
+
+		return pluggable_ui('article_ui', 'excerpt', $out, $rs);
 	}
 
 /**
  * Renders list of view modes.
+ *
+ * The rendered widget can be customised via the 'article_ui > view'
+ * pluggable UI callback event.
  *
  * @param  array  $rs Article data
  * @return string HTML
@@ -1768,12 +1803,18 @@
 			$hasfilter = ($rs['textile_body'] !== LEAVE_TEXT_UNTOUCHED || $rs['textile_excerpt'] !== LEAVE_TEXT_UNTOUCHED);
 		}
 
-		return n.'<div id="view_modes">'.
-			pluggable_ui('article_ui', 'view',
-			$hasfilter ? n.tag((tab('text', $view).tab('html', $view).tab('preview', $view)), 'ul') : '&#160;',
-			$rs).
-			n.'</div>';
+		if ($hasfilter)
+		{
+			$out = n.tag((tab('text', $view).tab('html', $view).tab('preview', $view)), 'ul');
+		}
+		else
+		{
+			$out = '&#160;';
+		}
 
+		$out = pluggable_ui('article_ui', 'view', $out, $rs);
+
+		return n.'<div id="view_modes">'.$out.n.'</div>';
 	}
 
 /**
@@ -1811,6 +1852,9 @@
 /**
  * Renders article status partial.
  *
+ * The rendered widget can be customised via the 'article_ui > status'
+ * pluggable UI callback event.
+ *
  * @param  array  $rs Article data
  * @return string HTML
  */
@@ -1824,6 +1868,9 @@
 
 /**
  * Renders article section partial.
+ *
+ * The rendered widget can be customised via the 'article_ui > section'
+ * pluggable UI callback event.
  *
  * @param  array  $rs Article data
  * @return string HTML
@@ -1841,29 +1888,35 @@
 /**
  * Renders article categories partial.
  *
+ * The rendered widget can be customised via the 'article_ui > categories'
+ * pluggable UI callback event.
+ *
  * @param  array  $rs Article data
  * @return string HTML
  */
 
 	function article_partial_categories($rs)
 	{
-		return pluggable_ui('article_ui', 'categories',
-			n.'<div id="categories_group">'.
+		$out = n.'<div id="categories_group">'.
 			graf('<label for="category-1">'.gTxt('category1').'</label> '.
 			'<span class="category-edit"><span role="presentation">[</span>'.eLink('category', '', '', '', gTxt('edit')).'<span role="presentation">]</span></span>'.br.
 			category_popup('Category1', $rs['Category1'], 'category-1'), ' class="category category-1"').
 
 			graf('<label for="category-2">'.gTxt('category2').'</label>'.br.
 			category_popup('Category2', $rs['Category2'], 'category-2'), ' class="category category-2"').
-			n.'</div>',
-		$rs);
+			n.'</div>';
+
+		return pluggable_ui('article_ui', 'categories', $out, $rs);
 	}
 
 /**
  * Renders comment options partial.
  *
- * @param  array  $rs Article data
- * @return string HTML
+ * The rendered widget can be customised via the 'article_ui > annotate_invite'
+ * pluggable UI callback event.
+ *
+ * @param  array       $rs Article data
+ * @return string|null HTML
  */
 
 	function article_partial_comments($rs)
@@ -1931,6 +1984,9 @@
 /**
  * Renders timestamp partial.
  *
+ * The rendered widget can be customised via the 'article_ui > timestamp'
+ * pluggable UI callback event.
+ *
  * @param  array  $rs Article data
  * @return string HTML
  */
@@ -1938,9 +1994,8 @@
 	function article_partial_posted($rs)
 	{
 		extract($rs);
-		return pluggable_ui(
-			'article_ui',
-			'timestamp',
+
+		$out =
 			wrapRegion(
 				'write-timestamp',
 				graf(
@@ -1965,13 +2020,16 @@
 				),
 				'',
 				gTxt('timestamp')
-			),
-			$rs
-		);
+			);
+
+		return pluggable_ui('article_ui', 'timestamp', $out, $rs);
 	}
 
 /**
  * Renders expiration date partial.
+ *
+ * The rendered widget can be customised via the 'article_ui > expires'
+ * pluggable UI callback event.
  *
  * @param  array  $rs Article data
  * @return string HTML
@@ -1980,9 +2038,8 @@
 	function article_partial_expires($rs)
 	{
 		extract($rs);
-		return pluggable_ui(
-			'article_ui',
-			'expires',
+
+		$out =
 			wrapRegion(
 				'write-expires',
 				graf('<span class="label">'.gtxt('date').'</span>'.
@@ -2001,9 +2058,9 @@
 				hInput('sExpires', $sExpires),
 				'',
 				gTxt('expires')
-			),
-			$rs
-		);
+			);
+
+		return pluggable_ui('article_ui', 'expires', $out, $rs);
 	}
 
 /**
