@@ -22,7 +22,7 @@
  * @ignore
  */
 
-	define("cs",': ');
+	define("cs", ': ');
 
 /**
  * @ignore
@@ -43,7 +43,8 @@
 		$files = array_keys($files);
 	}
 
-	if ($event == 'diag') {
+	if ($event == 'diag')
+	{
 		require_privs('diag');
 
 		$step = gps('step');
@@ -57,9 +58,11 @@
  * @return bool|null TRUE on success, NULL or FALSE on error
  */
 
-	function apache_module($m) {
+	function apache_module($m)
+	{
 		$modules = @apache_get_modules();
-		if (is_array($modules)) {
+		if (is_array($modules))
+		{
 			return in_array($m, $modules);
 		}
 	}
@@ -74,9 +77,11 @@
  * @return bool|null NULL on error, TRUE on success
  */
 
-	function test_tempdir($dir) {
+	function test_tempdir($dir)
+	{
 		$f = realpath(tempnam($dir, 'txp_'));
-		if (is_file($f)) {
+		if (is_file($f))
+		{
 			@unlink($f);
 			return true;
 		}
@@ -90,7 +95,8 @@
  * @return array
  */
 
-	function list_txp_tables() {
+	function list_txp_tables()
+	{
 		$table_names = array(PFX.'textpattern');
 		$rows = getRows("SHOW TABLES LIKE '".PFX."txp\_%'");
 		foreach ($rows as $row)
@@ -111,11 +117,14 @@
  * );
  */
 
-	function check_tables($tables, $type='FAST', $warnings=0) {
+	function check_tables($tables, $type='FAST', $warnings = 0)
+	{
 		$msgs = array();
-		foreach ($tables as $table) {
+		foreach ($tables as $table)
+		{
 			$rs = getRows("CHECK TABLE `$table` $type");
-			if ($rs) {
+			if ($rs)
+			{
 				foreach ($rs as $r)
 					if ($r['Msg_type'] != 'status' and ($warnings or $r['Msg_type'] != 'warning'))
 						$msgs[] = $table.cs.$r['Msg_type'].cs.$r['Msg_text'];
@@ -159,13 +168,13 @@
 		$real_doc_root = (isset($_SERVER['DOCUMENT_ROOT'])) ? realpath($_SERVER['DOCUMENT_ROOT']) : '';
 
 		// ini_get() returns string values passed via php_value as a string, not boolean.
-		$is_register_globals = ( (strcasecmp(ini_get('register_globals'),'on')===0) or (ini_get('register_globals')==='1'));
+		$is_register_globals = ( (strcasecmp(ini_get('register_globals'), 'on') === 0) or (ini_get('register_globals') === '1'));
 
 		// Check for Textpattern updates, at most once every 24 hours.
 		$now = time();
 		$updateInfo = unserialize(get_pref('last_update_check', ''));
 
-		if (!$updateInfo || ( $now > ($updateInfo['when'] + (60*60*24)) ))
+		if (!$updateInfo || ( $now > ($updateInfo['when'] + (60 * 60 * 24)) ))
 		{
 			$updates = checkUpdates();
 			$updateInfo['msg'] = ($updates) ? gTxt($updates['msg'], array('{version}' => $updates['version'])) : '';
@@ -256,17 +265,19 @@
 
 			'warn_register_globals_or_update' =>
 			( $is_register_globals &&
-			  (    version_compare(phpversion(),'4.4.0','<=')
-				or ( version_compare(phpversion(),'5.0.0','>=') and version_compare(phpversion(),'5.0.5','<=') )
+			  (    version_compare(phpversion(), '4.4.0', '<=')
+				or ( version_compare(phpversion(), '5.0.0', '>=') and version_compare(phpversion(), '5.0.5', '<=') )
 			))
 			? diag_msg_wrap(gTxt('warn_register_globals_or_update'), 'warning')
 			: '',
 
 		);
 
-		if ($permlink_mode != 'messy') {
-			$rs = safe_column("name","txp_section", "1");
-			foreach ($rs as $name) {
+		if ($permlink_mode != 'messy')
+		{
+			$rs = safe_column("name", "txp_section", "1");
+			foreach ($rs as $name)
+			{
 				if ($name and @file_exists($path_to_site.'/'.$name))
 					$fail['old_placeholder_exists'] = diag_msg_wrap(gTxt('old_placeholder').": {$path_to_site}/{$name}");
 			}
@@ -305,7 +316,8 @@
 		}
 
 		// Anything might break if arbitrary functions are disabled.
-		if (ini_get('disable_functions')) {
+		if (ini_get('disable_functions'))
+		{
 			$disabled_funcs = array_map('trim', explode(',', ini_get('disable_functions')));
 			// Commonly disabled functions that we don't need.
 			$disabled_funcs = array_diff($disabled_funcs, array(
@@ -333,17 +345,20 @@
 		#if (strncmp(php_sapi_name(), 'cgi', 3) == 0 and ini_get('cgi.rfc2616_headers'))
 		#	$fail['cgi_header_config'] = gTxt('cgi_header_config');
 
-		$guess_site_url = $_SERVER['HTTP_HOST'] . preg_replace('#[/\\\\]$#','',dirname(dirname($_SERVER['SCRIPT_NAME'])));
+		$guess_site_url = $_SERVER['HTTP_HOST'] . preg_replace('#[/\\\\]$#', '', dirname(dirname($_SERVER['SCRIPT_NAME'])));
 		if ($siteurl and strip_prefix($siteurl, 'www.') != strip_prefix($guess_site_url, 'www.'))
 			$fail['site_url_mismatch'] = diag_msg_wrap(gTxt('site_url_mismatch').cs.$guess_site_url, 'warning');
 
 		// Test clean URL server vars.
-		if (hu) {
-			if (ini_get('allow_url_fopen') and ($permlink_mode != 'messy')) {
+		if (hu)
+		{
+			if (ini_get('allow_url_fopen') and ($permlink_mode != 'messy'))
+			{
 				$s = md5(uniqid(rand(), true));
 				ini_set('default_socket_timeout', 10);
 				$pretext_data = @file(hu.$s.'/?txpcleantest=1');
-				if ($pretext_data) {
+				if ($pretext_data)
+				{
 					$pretext_req = trim(@$pretext_data[0]);
 					if ($pretext_req != md5('/'.$s.'/?txpcleantest=1'))
 						$fail['clean_url_data_failed'] = diag_msg_wrap(gTxt('clean_url_data_failed').cs.txpspecialchars($pretext_req), 'warning');
@@ -353,15 +368,18 @@
 			}
 		}
 
-		if ($tables = list_txp_tables()) {
+		if ($tables = list_txp_tables())
+		{
 			$table_errors = check_tables($tables);
 			if ($table_errors)
 				$fail['mysql_table_errors'] = diag_msg_wrap(gTxt('mysql_table_errors').cs.n.t.join(', '.n.t, $table_errors));
 		}
 
 		$active_plugins = array();
-		if ($rows = safe_rows('name, version, code_md5, md5(code) as md5', 'txp_plugin', 'status > 0')) {
-			foreach ($rows as $row) {
+		if ($rows = safe_rows('name, version, code_md5, md5(code) as md5', 'txp_plugin', 'status > 0'))
+		{
+			foreach ($rows as $row)
+			{
 				$n = $row['name'].'-'.$row['version'];
 				if (strtolower($row['md5']) != strtolower($row['code_md5']))
 					$n .= 'm';
@@ -372,25 +390,30 @@
 		$theme_manifest = $theme->manifest();
 
 		// Check GD info.
-		if (function_exists('gd_info')) {
+		if (function_exists('gd_info'))
+		{
 			$gd_info = gd_info();
 
 			$gd_support = array();
 
-			if ($gd_info['GIF Create Support']) {
+			if ($gd_info['GIF Create Support'])
+			{
 				$gd_support[] = 'GIF';
 			}
 
 			 // Aside: In PHP 5.3, they chose to add a previously unemployed capital "E" to the array key.
-			 if (!empty($gd_info['JPEG Support']) || !empty($gd_info['JPG Support'])) {
+			if (!empty($gd_info['JPEG Support']) || !empty($gd_info['JPG Support']))
+			{
 				$gd_support[] = 'JPG';
 			}
 
-			if ($gd_info['PNG Support']) {
+			if ($gd_info['PNG Support'])
+			{
 				$gd_support[] = 'PNG';
 			}
 
-			if ($gd_support) {
+			if ($gd_support)
+			{
 				$gd_support = join(', ', $gd_support);
 			} else {
 				$gd_support = gTxt('none');
@@ -400,7 +423,9 @@
 				'{version}'   => $gd_info['GD Version'],
 				'{supported}' => $gd_support
 			));
-		} else {
+		}
+		else
+		{
 			$gd = gTxt('gd_unavailable');
 		}
 
@@ -413,21 +438,23 @@
 		extract(doSpecial(getRow('select @@global.time_zone as db_global_timezone, @@session.time_zone as db_session_timezone, now() as db_server_time, unix_timestamp(now()) as db_server_timestamp')));
 		$db_server_timeoffset = $db_server_timestamp - $now;
 
-		echo pagetop(gTxt('tab_diagnostics'),'').
+		echo pagetop(gTxt('tab_diagnostics'), '').
 			n.'<h1 class="txp-heading">'.gTxt('tab_diagnostics').'</h1>'.
 			n.'<div id="'.$event.'_container" class="txp-container">'.
 			n.'<div id="pre_flight_check">'.
 			hed(gTxt('preflight_check'),2);
 
-		if ($fail) {
+		if ($fail)
+		{
 			foreach ($fail as $help => $message)
 				echo graf(nl2br($message).popHelp($help));
 		}
-		else {
+		else
+		{
 			echo graf(diag_msg_wrap(gTxt('all_checks_passed'), 'success'));
 		}
-		echo '</div>';
 
+		echo '</div>';
 		echo '<div id="diagnostics">',
 			hed(gTxt('diagnostic_info'),2);
 
@@ -499,7 +526,8 @@
 			:	''
 		);
 
-		if ($step == 'high') {
+		if ($step == 'high')
+		{
 			$mysql_client_encoding = (is_callable('mysql_client_encoding')) ? mysql_client_encoding() : '-';
 			$out[] = n.'Charset (default/config)'.cs.$mysql_client_encoding.'/'.@$txpcfg['dbcharset'].n;
 
@@ -525,12 +553,12 @@
 					unset($table_names[$table]);
 					continue;
 				}
-				$ctcharset = preg_replace('#^CREATE TABLE.*SET=([^ ]+)[^)]*$#is','\\1',mysql_result($ctr,0,'Create Table'));
-				if (isset($conn_char) && !stristr($ctcharset,'CREATE') && ($conn_char != $ctcharset))
+				$ctcharset = preg_replace('#^CREATE TABLE.*SET=([^ ]+)[^)]*$#is', '\\1', mysql_result($ctr, 0, 'Create Table'));
+				if (isset($conn_char) && !stristr($ctcharset, 'CREATE') && ($conn_char != $ctcharset))
 					$table_msg[] = "$table is $ctcharset";
 				$ctr = safe_query("CHECK TABLE ". $table);
-				if (in_array(mysql_result($ctr,0,'Msg_type'), array('error','warning')) )
-					$table_msg[] = $table .cs. mysql_result($ctr,0,'Msg_Text');
+				if (in_array(mysql_result($ctr, 0, 'Msg_type'), array('error', 'warning')))
+					$table_msg[] = $table .cs. mysql_result($ctr, 0, 'Msg_Text');
 			}
 			if ($table_msg == array())
 				$table_msg = (count($table_names) < 17) ?  array('-') : array('OK');
@@ -542,7 +570,8 @@
 
 			$extns = get_loaded_extensions();
 			$extv = array();
-			foreach ($extns as $e) {
+			foreach ($extns as $e)
+			{
 				$extv[] = $e . (phpversion($e) ? '/' . phpversion($e) : '');
 			}
 			$out[] = n.gTxt('php_extensions').cs.join(', ', $extv).n;
@@ -570,7 +599,7 @@
 		$out[] = callback_event('diag_results', $step).n;
 		$out[] = '</textarea></p>';
 
-		$dets = array('low'=>gTxt('low'),'high'=>gTxt('high'));
+		$dets = array('low'=>gTxt('low'), 'high' => gTxt('high'));
 
 		$out[] =
 			form(
@@ -608,16 +637,17 @@
 	{
 		require_once txpath.'/lib/IXRClass.php';
 		$client = new IXR_Client('http://rpc.textpattern.com');
-		$uid = safe_field('val','txp_prefs',"name='blog_uid'");
+		$uid = safe_field('val', 'txp_prefs', "name='blog_uid'");
+
 		if (!$client->query('tups.getTXPVersion',$uid))
 		{
 			return array('version' => 0, 'msg' => 'problem_connecting_rpc_server');
 		}
-
 		else
 		{
 			$out = array();
 			$response = $client->getResponse();
+
 			if (is_array($response))
 			{
 				ksort($response);

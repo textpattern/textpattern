@@ -29,7 +29,8 @@
 			STATUS_LIVE    => gTxt('live'),
 	);
 
-	if ($event == 'file') {
+	if ($event == 'file')
+	{
 		require_privs('file');
 
 		global $all_file_cats, $all_file_authors;
@@ -47,9 +48,12 @@
 			'file_create'        => true,
 		);
 
-		if ($step && bouncer($step, $available_steps)) {
+		if ($step && bouncer($step, $available_steps))
+		{
 			$step();
-		} else {
+		}
+		else
+		{
 			file_list();
 		}
 	}
@@ -76,7 +80,6 @@
 				gTxt('file_dir_not_writeable', array('{filedir}' => $file_base_path))
 			, ' class="alert-block warning"');
 		}
-
 		elseif (has_privs('file.edit.own'))
 		{
 			$existing_files = get_filenames();
@@ -98,27 +101,27 @@
 
 		switch ($sort)
 		{
-			case 'id':
+			case 'id' :
 				$sort_sql = 'id '.$dir;
 			break;
 
-			case 'description':
+			case 'description' :
 				$sort_sql = 'description '.$dir.', filename desc';
 			break;
 
-			case 'category':
+			case 'category' :
 				$sort_sql = 'category '.$dir.', filename desc';
 			break;
 
-			case 'title':
+			case 'title' :
 				$sort_sql = 'title '.$dir.', filename desc';
 			break;
 
-			case 'downloads':
+			case 'downloads' :
 				$sort_sql = 'downloads '.$dir.', filename desc';
 			break;
 
-			case 'author':
+			case 'author' :
 				$sort_sql = 'author '.$dir.', id asc';
 			break;
 
@@ -161,14 +164,12 @@
 				$criteria = $critsql[$search_method];
 				$limit = 500;
 			}
-
 			else
 			{
 				$search_method = '';
 				$crit = '';
 			}
 		}
-
 		else
 		{
 			$search_method = '';
@@ -186,7 +187,6 @@
 				echo file_search_form($crit, $search_method).
 					graf(gTxt('no_results_found'), ' class="indicator"').'</div>';
 			}
-
 			else
 			{
 				echo graf(gTxt('no_files_recorded'), ' class="indicator"').'</div>';
@@ -398,11 +398,11 @@
 
 		switch ($method)
 		{
-			case 'delete':
+			case 'delete' :
 				return file_delete($selected);
 				break;
 
-			case 'changecategory':
+			case 'changecategory' :
 				$val = ps('category');
 				if (in_array($val, $categories))
 				{
@@ -410,7 +410,7 @@
 				}
 				break;
 
-			case 'changeauthor':
+			case 'changeauthor' :
 				$val = ps('author');
 				if (in_array($val, $all_file_authors))
 				{
@@ -418,12 +418,12 @@
 				}
 				break;
 
-			case 'changecount':
+			case 'changecount' :
 				$key = 'downloads';
 				$val = 0;
 				break;
 
-			case 'changestatus':
+			case 'changestatus' :
 				$key = 'status';
 				$val = ps('status');
 
@@ -505,7 +505,7 @@
 			if ($permissions=='') $permissions='-1';
 			if (!has_privs('file.publish') && $status >= STATUS_LIVE) $status = STATUS_PENDING;
 
-			$file_exists = file_exists(build_file_path($file_base_path,$filename));
+			$file_exists = file_exists(build_file_path($file_base_path, $filename));
 			$existing_files = get_filenames();
 
 			$replace = ($file_exists)
@@ -516,7 +516,7 @@
 				(($file_exists) ? gTxt('file_status_ok') : gTxt('file_status_missing')).
 				'</span>';
 
-			$downloadlink = ($file_exists) ? make_download_link($id, txpspecialchars($filename),$filename) : txpspecialchars($filename);
+			$downloadlink = ($file_exists) ? make_download_link($id, txpspecialchars($filename), $filename) : txpspecialchars($filename);
 
 			$created =
 					graf(checkbox('publish_now', '1', $publish_now, '', 'publish_now') . '<label for="publish_now">'.gTxt('set_to_now').'</label>', ' class="edit-file-publish-now"').
@@ -567,7 +567,7 @@
 					).
 					eInput('file').
 					sInput('file_save').
-					hInput('id',$id).
+					hInput('id', $id).
 					hInput('sort', $sort).
 					hInput('dir', $dir).
 					hInput('page', $page).
@@ -594,7 +594,8 @@
 			 author = '".doSlash($txp_user)."'
 		");
 
-		if ($rs) {
+		if ($rs)
+		{
 			$GLOBALS['ID'] = $rs;
 			return $GLOBALS['ID'];
 		}
@@ -613,26 +614,33 @@
 			return;
 		}
 
-		extract(doSlash(array_map('assert_string', gpsa(array('filename','title','category','permissions','description')))));
+		extract(doSlash(array_map('assert_string', gpsa(array('filename', 'title', 'category', 'permissions', 'description')))));
 		$safe_filename = sanitizeForFile($filename);
-		if ($safe_filename != $filename) {
+		if ($safe_filename != $filename)
+		{
 			file_list(array(gTxt('invalid_filename'), E_ERROR));
 			return;
 		}
 
-		$size = filesize(build_file_path($file_base_path,$safe_filename));
-		$id = file_db_add($safe_filename,$category,$permissions,$description,$size,$title);
+		$size = filesize(build_file_path($file_base_path, $safe_filename));
+		$id = file_db_add($safe_filename, $category, $permissions, $description, $size, $title);
 
-		if($id === false){
+		if ($id === false)
+		{
 			file_list(array(gTxt('file_upload_failed').' (db_add)', E_ERROR));
-		} else {
+		}
+		else
+		{
 			$newpath = build_file_path($file_base_path, $safe_filename);
 
-			if (is_file($newpath)) {
+			if (is_file($newpath))
+			{
 				file_set_perm($newpath);
 				update_lastmod();
 				file_list(gTxt('linked_to_file').' '.$safe_filename);
-			} else {
+			}
+			else
+			{
 				file_list(gTxt('file_not_found').' '.$safe_filename);
 			}
 		}
@@ -649,19 +657,21 @@
 			return;
 		}
 
-		extract(doSlash(array_map('assert_string', gpsa(array('category','title','permissions','description')))));
+		extract(doSlash(array_map('assert_string', gpsa(array('category', 'title', 'permissions', 'description')))));
 
 		$name = file_get_uploaded_name();
 		$file = file_get_uploaded();
 
-		if ($file === false) {
+		if ($file === false)
+		{
 			// could not get uploaded file
 			file_list(array(gTxt('file_upload_failed') ." $name - ".upload_get_errormsg($_FILES['thefile']['error']), E_ERROR));
 			return;
 		}
 
 		$size = filesize($file);
-		if ($file_max_upload_size < $size) {
+		if ($file_max_upload_size < $size)
+		{
 			unlink($file);
 			file_list(array(gTxt('file_upload_failed') ." $name - ".upload_get_errormsg(UPLOAD_ERR_FORM_SIZE), E_ERROR));
 			return;
@@ -670,23 +680,28 @@
 		$newname = sanitizeForFile($name);
 		$newpath = build_file_path($file_base_path, $newname);
 
-		if (!is_file($newpath)) {
+		if (!is_file($newpath))
+		{
+			$id = file_db_add(doSlash($newname), $category, $permissions, $description, $size, $title);
 
-			$id = file_db_add(doSlash($newname),$category,$permissions,$description,$size,$title);
-
-			if(!$id){
+			if (!$id)
+			{
 				file_list(array(gTxt('file_upload_failed').' (db_add)', E_ERROR));
-			} else {
-
+			}
+			else
+			{
 				$id = assert_int($id);
 
-				if(!shift_uploaded_file($file, $newpath)) {
-					safe_delete("txp_file","id = $id");
+				if (!shift_uploaded_file($file, $newpath))
+				{
+					safe_delete("txp_file", "id = $id");
 					safe_alter("txp_file", "auto_increment=$id");
 					if ( isset( $GLOBALS['ID'])) unset( $GLOBALS['ID']);
 					file_list(array($newpath.' '.gTxt('upload_dir_perms'), E_ERROR));
 					// clean up file
-				} else {
+				}
+				else
+				{
 					file_set_perm($newpath);
 					update_lastmod();
 
@@ -696,7 +711,6 @@
 				}
 			}
 		}
-
 		else
 		{
 			$message = gTxt('file_already_exists', array('{name}' => $newname));
@@ -712,10 +726,11 @@
 
 		$id = assert_int(gps('id'));
 
-		$rs = safe_row('filename, author','txp_file',"id = $id");
+		$rs = safe_row('filename, author', 'txp_file', "id = $id");
 
-		if (!$rs) {
-			file_list(messenger(array(gTxt('invalid_id'), E_ERROR),$id,''));
+		if (!$rs)
+		{
+			file_list(messenger(array(gTxt('invalid_id'), E_ERROR), $id, ''));
 			return;
 		}
 
@@ -731,31 +746,39 @@
 		$file = file_get_uploaded();
 		$name = file_get_uploaded_name();
 
-		if ($file === false) {
+		if ($file === false)
+		{
 			// could not get uploaded file
 			file_list(gTxt('file_upload_failed') ." $name ".upload_get_errormsg($_FILES['thefile']['error']));
 			return;
 		}
 
-		if (!$filename) {
+		if (!$filename)
+		{
 			file_list(gTxt('invalid_filename'));
-		} else {
-			$newpath = build_file_path($file_base_path,$filename);
+		}
+		else
+		{
+			$newpath = build_file_path($file_base_path, $filename);
 
-			if (is_file($newpath)) {
-				rename($newpath,$newpath.'.tmp');
+			if (is_file($newpath))
+			{
+				rename($newpath, $newpath.'.tmp');
 			}
 
-			if(!shift_uploaded_file($file, $newpath)) {
-				safe_delete("txp_file","id = $id");
+			if (!shift_uploaded_file($file, $newpath))
+			{
+				safe_delete("txp_file", "id = $id");
 
 				file_list($newpath.sp.gTxt('upload_dir_perms'));
 				// rename tmp back
-				rename($newpath.'.tmp',$newpath);
+				rename($newpath.'.tmp', $newpath);
 
 				// remove tmp upload
 				unlink($file);
-			} else {
+			}
+			else
+			{
 				file_set_perm($newpath);
 				update_lastmod();
 				if ($size = filesize($newpath))
@@ -782,7 +805,8 @@
 		extract(doSlash($varray));
 		$filename = $varray['filename'] = sanitizeForFile(gps('filename'));
 
-		if ($filename == '') {
+		if ($filename == '')
+		{
 			$message = gTxt('file_not_updated', array('{name}' => $filename));
 			return file_list($message);
 		}
@@ -790,9 +814,10 @@
 		$id = $varray['id'] = assert_int($id);
 
 		$permissions = gps('perms');
-		if (is_array($permissions)) {
+		if (is_array($permissions))
+		{
 			asort($permissions);
-			$permissions = implode(",",$permissions);
+			$permissions = implode(",", $permissions);
 		}
 		$varray['permissions'] = $permissions;
 		$perms = doSlash($permissions);
@@ -807,8 +832,8 @@
 		$old_filename = $varray['old_filename'] = sanitizeForFile($rs['filename']);
 		if ($old_filename != false && strcmp($old_filename, $filename) != 0)
 		{
-			$old_path = build_file_path($file_base_path,$old_filename);
-			$new_path = build_file_path($file_base_path,$filename);
+			$old_path = build_file_path($file_base_path, $old_filename);
+			$new_path = build_file_path($file_base_path, $filename);
 
 			if (file_exists($old_path) && shift_uploaded_file($old_path, $new_path) === false)
 			{
@@ -816,7 +841,6 @@
 
 				return file_list($message);
 			}
-
 			else
 			{
 				file_set_perm($new_path);
@@ -831,7 +855,7 @@
 		else
 			$created = '';
 
-		$size = filesize(build_file_path($file_base_path,$filename));
+		$size = filesize(build_file_path($file_base_path, $filename));
 
 		$constraints = array(
 			'category' => new CategoryConstraint(gps('category'), array('type' => 'file')),
@@ -861,7 +885,6 @@
 				$message = gTxt('file_unsynchronized', array('{name}' => $filename));
 				return file_list($message);
 			}
-
 			else
 			{
 				$message = gTxt('file_not_updated', array('{name}' => $filename));
@@ -959,7 +982,7 @@
 // -------------------------------------------------------------
 	function file_set_perm($file)
 	{
-		return @chmod($file,0644);
+		return @chmod($file, 0644);
 	}
 
 // -------------------------------------------------------------
@@ -967,7 +990,7 @@
 	{
 		global $file_max_upload_size;
 
-		if (!$file_max_upload_size || intval($file_max_upload_size)==0) $file_max_upload_size = 2*(1024*1024);
+		if (!$file_max_upload_size || intval($file_max_upload_size) == 0) $file_max_upload_size = 2 * (1024 * 1024);
 
 		$max_file_size = (intval($file_max_upload_size) == 0) ? '': intval($file_max_upload_size);
 
@@ -1000,11 +1023,15 @@
 		if (!is_dir($file_base_path))
 			return $dirlist;
 
-		if (chdir($file_base_path)) {
+		if (chdir($file_base_path))
+		{
 			$g_array = glob("*.*");
-			if ($g_array) {
-				foreach ($g_array as $filename) {
-					if (is_file($filename)) {
+			if ($g_array)
+			{
+				foreach ($g_array as $filename)
+				{
+					if (is_file($filename))
+					{
 						$dirlist[$filename] = $filename;
 					}
 				}
@@ -1014,11 +1041,13 @@
 		$files = array();
 		$rs = safe_rows("filename", "txp_file", "1=1");
 
-		if ($rs) {
-			foreach ($rs as $a) {
+		if ($rs)
+		{
+			foreach ($rs as $a)
+			{
 				$files[$a['filename']] = $a['filename'];
 			}
 		}
 
-		return array_diff($dirlist,$files);
+		return array_diff($dirlist, $files);
 	}

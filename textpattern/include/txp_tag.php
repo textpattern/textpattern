@@ -30,18 +30,18 @@ header('X-UA-Compatible: '.X_UA_COMPATIBLE);
 ?><!DOCTYPE html>
 <html lang="<?php echo LANG; ?>" dir="<?php echo txpspecialchars(gTxt('lang_dir')); ?>">
 <head>
-	<meta charset="utf-8">
-	<title><?php echo gTxt('build'); ?> &#124; Textpattern CMS</title>
-	<script src="jquery.js"></script>
-	<?php echo script_js(
-		'var textpattern = '.json_encode(array(
-			'event' => $event,
-			'step' => $step,
-			'_txp_token' => form_token(),
-		)).';'
-	); ?>
-	<?php echo $theme->html_head(); ?>
-	</head>
+<meta charset="utf-8">
+<title><?php echo gTxt('build'); ?> &#124; Textpattern CMS</title>
+<script src="jquery.js"></script>
+<?php echo script_js(
+	'var textpattern = '.json_encode(array(
+		'event' => $event,
+		'step' => $step,
+		'_txp_token' => form_token(),
+	)).';'
+); ?>
+<?php echo $theme->html_head(); ?>
+</head>
 <body id="tag-event">
 <?php echo TagBuilderTags::tag(gps('tag_name')); ?>
 </body>
@@ -243,7 +243,7 @@ begin generic functions
 
 	function article_category_pop($val)
 	{
-		$vals = getTree('root','article');
+		$vals = getTree('root', 'article');
 
 		if ($vals)
 		{
@@ -257,7 +257,7 @@ begin generic functions
 
 	function link_category_pop($val)
 	{
-		$vals = getTree('root','link');
+		$vals = getTree('root', 'link');
 
 		if ($vals)
 		{
@@ -271,7 +271,7 @@ begin generic functions
 
 	function file_category_pop($val)
 	{
-		$vals = getTree('root','file');
+		$vals = getTree('root', 'file');
 
 		if ($vals)
 		{
@@ -3454,7 +3454,7 @@ class TagBuilderTags
 
 			switch ($type)
 			{
-				case 'textile':
+				case 'textile' :
 					$alt = ($alt) ? ' ('.$alt.')' : '';
 					$modifiers = '';
 
@@ -3469,7 +3469,6 @@ class TagBuilderTags
 
 						$modifiers .= ')';
 					}
-
 					elseif ($html_id)
 					{
 						$modifiers .= "(#$html_id)";
@@ -3487,7 +3486,7 @@ class TagBuilderTags
 					);
 				break;
 
-				case 'html':
+				case 'html' :
 					$alt     = ' alt="'.txpspecialchars($alt).'"';
 					$caption = ($caption) ? ' title="'.txpspecialchars($caption).'"' : '';
 					$class   = ($class)   ? ' class="'.$class.'"' : '';
@@ -3501,7 +3500,7 @@ class TagBuilderTags
 					);
 				break;
 
-				case 'textpattern':
+				case 'textpattern' :
 				default:
 
 					$atts = array(
@@ -3610,13 +3609,13 @@ class TagBuilderTags
 				input_tag('labeltag', $labeltag)).
 
 			tagRow('wraptag',
-				input_tag('wraptag',$wraptag)).
+				input_tag('wraptag', $wraptag)).
 
 			tagRow('break',
-				input_tag('break',$break)).
+				input_tag('break', $break)).
 
 			tagRow('form',
-				form_pop('form','file',$form)).
+				form_pop('form', 'file', $form)).
 
 			$endform
 		);
@@ -3719,7 +3718,7 @@ class TagBuilderTags
 			'p' => 'Petabytes',
 			'e' => 'Exabytes',
 			'z' => 'Zettabytes',
-			'y' => 'Yottabytes'
+			'y' => 'Yottabytes',
 		);
 
 		extract($atts);
@@ -3810,21 +3809,21 @@ class TagBuilderTags
 
 			switch ($type)
 			{
-				case 'textile':
+				case 'textile' :
 					$thing = ($thing) ? $thing : $filename;
 					$description = ($description) ? ' ('.$description.')' : '';
 
 					$out .= tdb('"'.$thing.$description.'":'.$url);
 				break;
 
-				case 'html':
+				case 'html' :
 					$thing = ($thing) ? $thing : $filename;
 					$description = ($description) ? ' title="'.$description.'"' : '';
 
 					$out .= tdb('<a href="'.$url.'"'.$description.'>'.$thing.'</a>');
 				break;
 
-				case 'textpattern':
+				case 'textpattern' :
 				default:
 					$atts = array('id' => $id);
 					$thing = ($thing) ? $thing : '<txp:file_download_name />';

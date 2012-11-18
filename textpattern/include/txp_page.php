@@ -331,6 +331,7 @@
 		global $event;
 		$panes = array('article-tags', 'article-nav-tags', 'nav-tags', 'xml-tags', 'misc-tags', 'file-tags');
 		$pane = gps('pane');
+
 		if (in_array($pane, $panes))
 		{
 			set_pref("pane_page_{$pane}_visible", (gps('visible') == 'true' ? '1' : '0'), $event, PREF_HIDDEN, 'yesnoradio', 0, PREF_PRIVATE);

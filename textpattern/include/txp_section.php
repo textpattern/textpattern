@@ -97,7 +97,7 @@
 				$sort_sql = 'article_count '.$dir;
 			break;
 
-			default :
+			default:
 				$sort_sql = 'name '.$dir;
 			break;
 		}
@@ -692,7 +692,7 @@
 				$val = (int) ps('searchable');
 				break;
 
-			default :
+			default:
 				$key = '';
 				$val = '';
 				break;

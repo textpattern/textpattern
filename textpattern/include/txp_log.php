@@ -29,7 +29,7 @@
 		$available_steps = array(
 			'log_list'          => false,
 			'log_change_pageby' => true,
-			'log_multi_edit'    => true
+			'log_multi_edit'    => true,
 		);
 
 		if ($step && bouncer($step, $available_steps))
@@ -122,14 +122,14 @@
 					'page'   => "page = '$crit_escaped'",
 					'refer'  => "refer = '$crit_escaped'",
 					'method' => "method = '$crit_escaped'",
-					'status' => "status = '$crit_escaped'"
+					'status' => "status = '$crit_escaped'",
 				) : array(
 					'ip'     => "ip like '%$crit_escaped%'",
 					'host'   => "host like '%$crit_escaped%'",
 					'page'   => "page like '%$crit_escaped%'",
 					'refer'  => "refer like '%$crit_escaped%'",
 					'method' => "method like '%$crit_escaped%'",
-					'status' => "status like '%$crit_escaped%'"
+					'status' => "status like '%$crit_escaped%'",
 				);
 
 			if (array_key_exists($search_method, $critsql))
@@ -137,14 +137,12 @@
 				$criteria = $critsql[$search_method];
 				$limit = 500;
 			}
-
 			else
 			{
 				$search_method = '';
 				$crit = '';
 			}
 		}
-
 		else
 		{
 			$search_method = '';
@@ -165,7 +163,6 @@
 				echo log_search_form($crit, $search_method).
 					graf(gTxt('no_results_found'), ' class="indicator"').'</div>';
 			}
-
 			else
 			{
 				echo graf(gTxt('no_refers_recorded'), ' class="indicator"').'</div>';
@@ -219,7 +216,7 @@
 
 				if ($log_page)
 				{
-					$log_anchor = preg_replace('/\/$/','',$log_page);
+					$log_anchor = preg_replace('/\/$/', '', $log_page);
 					$log_anchor = soft_wrap(substr($log_anchor,1), 30);
 
 					$log_page = '<a href="'.txpspecialchars($log_page).'" target="_blank">'.txpspecialchars($log_anchor).'</a>';

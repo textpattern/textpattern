@@ -357,7 +357,7 @@
 				var radio = $("#prefs-is_dst input");
 				if (radio) {
 					if ($("#auto_dst-1").prop("checked") && textpattern.timezone_is_supported) {
-						radio.prop("disabled","disabled");
+						radio.prop("disabled", "disabled");
 					}
 					$("#auto_dst-0").click(function ()
 					{
@@ -365,11 +365,11 @@
 					});
 					$("#auto_dst-1").click(function ()
 					{
-						radio.prop("disabled","disabled");
+						radio.prop("disabled", "disabled");
 					});
 				}
 				if (!textpattern.timezone_is_supported) {
-					$("#prefs-auto_dst input").prop("disabled","disabled");
+					$("#prefs-auto_dst input").prop("disabled", "disabled");
 				}
 			});
 EOS

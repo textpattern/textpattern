@@ -165,7 +165,7 @@
 				echo tr(
 					td(
 						fInput('checkbox', 'selected[]', $name)
-					,'', 'multi-edit').
+					, '', 'multi-edit').
 
 					hCell($edit_url, '', ' scope="row" class="name"').
 
@@ -244,7 +244,7 @@
 
 		$name = gps('name');
 		pagetop(gTxt('plugin_help'));
-		$help = ($name) ? safe_field('help','txp_plugin',"name = '".doSlash($name)."'") : '';
+		$help = ($name) ? safe_field('help', 'txp_plugin', "name = '".doSlash($name)."'") : '';
 		echo '<div id="'.$event.'_container" class="txp-container txp-view">'
 			.'<div class="text-column">' . $help . '</div>'
 			.'</div>';
@@ -260,7 +260,7 @@
 	function plugin_edit_form($name='')
 	{
 		assert_string($name);
-		$code = ($name) ? fetch('code','txp_plugin','name',$name) : '';
+		$code = ($name) ? fetch('code', 'txp_plugin', 'name', $name) : '';
 		$thing = ($code) ? $code : '';
 
 		return
@@ -270,7 +270,7 @@
 				graf(fInput('submit', '', gTxt('Save'), 'publish')).
 				eInput('plugin').
 				sInput('plugin_save').
-				hInput('name',$name)
+				hInput('name', $name)
 			, '', '', 'post', 'edit-form', '', 'plugin_details');
 	}
 
@@ -305,7 +305,7 @@
 		return asyncHref(
 			$linktext,
 			array('step' => 'switch_status', 'thing' => $name),
-			' title="'.($status==1 ? gTxt('disable') : gTxt('enable')).'"'
+			' title="'.($status == 1 ? gTxt('disable') : gTxt('enable')).'"'
 		);
 	}
 
@@ -390,7 +390,7 @@
 					}
 
 					$source.= highlight_string('<?php'.$plugin['code'].'?>', true);
-					$sub = fInput('submit','',gTxt('install'),'publish');
+					$sub = fInput('submit', '', gTxt('install'), 'publish');
 
 					pagetop(gTxt('verify_plugin'));
 					echo
@@ -448,7 +448,7 @@
 					$type  = empty($type)  ? 0 : min(max(intval($type), 0), 5);
 					$order = empty($order) ? 5 : min(max(intval($order), 1), 9);
 					$flags = empty($flags) ? 0 : intval($flags);
-					$exists = fetch('name','txp_plugin','name',$name);
+					$exists = fetch('name', 'txp_plugin', 'name', $name);
 
 					if (isset($help_raw) && empty($plugin['allow_html_help']))
 					{
@@ -605,7 +605,7 @@
 
 		switch ($method)
 		{
-			case 'delete':
+			case 'delete' :
 				foreach ($selected as $name)
 				{
 					if (safe_field('flags', 'txp_plugin', "name ='".doSlash($name)."'") & PLUGIN_LIFECYCLE_NOTIFY)
@@ -621,7 +621,7 @@
 				safe_delete('txp_lang', "owner IN ('".join("','", doSlash($selected))."')");
 				break;
 
-			case 'changestatus':
+			case 'changestatus' :
 				foreach ($selected as $name)
 				{
 					if (safe_field('flags', 'txp_plugin', "name ='".doSlash($name)."'") & PLUGIN_LIFECYCLE_NOTIFY)
@@ -635,7 +635,7 @@
 				safe_update('txp_plugin', 'status = (1-status)', $where);
 				break;
 
-			case 'changeorder':
+			case 'changeorder' :
 				$order = min(max(intval(ps('order')), 1), 9);
 				safe_update('txp_plugin', 'load_order = '.$order, $where);
 				break;

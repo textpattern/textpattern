@@ -57,7 +57,7 @@
 
 	function cat_category_list($message="")
 	{
-		pagetop(gTxt('categories'),$message);
+		pagetop(gTxt('categories'), $message);
 		$out = array('<h1 class="txp-heading">'.gTxt('tab_organise').'</h1>',
 		'<div id="category_container" class="txp-container">',
 		'<table class="category-list">',
@@ -79,7 +79,7 @@
 			});
 EOS
 		));
-		echo join(n,$out);
+		echo join(n, $out);
 	}
 
 /**
@@ -242,8 +242,8 @@ EOS
 		{
 			return
 				form(
-					join('',$array).
-					hInput('type',$area).
+					join('', $array).
+					hInput('type', $area).
 					multi_edit($methods, 'category', 'cat_category_multiedit', '', '', '', '', '', $area)
 					, '', '', 'post', 'category-tree', '', 'category_'.$area.'_form'
 				);
@@ -293,7 +293,7 @@ EOS
 						{
 							// Clear the deleted category names from assets.
 							$affected = join("','", $names);
-							if($type === 'article')
+							if ($type === 'article')
 							{
 								safe_update('textpattern', "category1 = ''", "category1 IN ('$affected')");
 								safe_update('textpattern', "category2 = ''", "category2 IN ('$affected')");
@@ -310,7 +310,7 @@ EOS
 						rebuild_tree_full($type);
 						callback_event('categories_deleted', $type, 0, $catid);
 
-						$message = gTxt($type.'_categories_deleted', array('{list}' => join(', ',$catid)));
+						$message = gTxt($type.'_categories_deleted', array('{list}' => join(', ', $catid)));
 
 						return cat_category_list($message);
 					}
@@ -345,7 +345,7 @@ EOS
 					{
 						rebuild_tree_full($type);
 
-						$message = gTxt('categories_set_parent', array('{type}' => gTxt($type), '{parent}' => $parent, '{list}' => join(', ',$affected)));
+						$message = gTxt('categories_set_parent', array('{type}' => gTxt($type), '{parent}' => $parent, '{list}' => join(', ', $affected)));
 
 						return cat_category_list($message);
 					}
@@ -548,18 +548,18 @@ EOS
 		{
 			pagetop(gTxt('edit_category'));
 			extract($row);
-			list($parent_widget, $has_parent) = cat_parent_pop($parent,$evname,$id);
+			list($parent_widget, $has_parent) = cat_parent_pop($parent, $evname, $id);
 			$out = n.'<section class="txp-edit">'.
 				hed(gTxt('edit_category'), 2).
 				inputLabel('category_name', fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'category_name'), $evname.'_category_name').
 				($has_parent ? n.inputLabel('category_parent', $parent_widget, 'parent') : graf('<span class="edit-label">'.gTxt('parent').'</span><span class="edit-value">'.$parent_widget.'</span>')).
 				inputLabel('category_title', fInput('text', 'title', $title, '', '', '', INPUT_REGULAR, '', 'category_title'), $evname.'_category_title').
 				pluggable_ui('category_ui', 'extend_detail_form', '', $row).
-				hInput('id',$id).
+				hInput('id', $id).
 				graf(fInput('submit', '', gTxt('save'), 'publish')).
 				eInput('category').
 				sInput('cat_'.$evname.'_save').
-				hInput('old_name',$name).
+				hInput('old_name', $name).
 				n.'</section>';
 			echo n.'<div id="category_container" class="txp-container">'.
 				form(  $out, '', '', 'post', 'edit-form' ).

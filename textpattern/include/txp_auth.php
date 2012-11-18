@@ -283,12 +283,12 @@ Use of this software indicates acceptance of the Textpattern license agreement
 		}
 		elseif ($p_userid and $p_password) // Incoming login vars.
 		{
-			$name = txp_validate($p_userid,$p_password);
+			$name = txp_validate($p_userid, $p_password);
 
 			if ($name !== false)
 			{
 				$c_hash = md5(uniqid(mt_rand(), true));
-				$nonce  = md5($name.pack('H*',$c_hash));
+				$nonce  = md5($name.pack('H*', $c_hash));
 
 				safe_update(
 					'txp_users',

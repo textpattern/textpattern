@@ -839,10 +839,10 @@
 		if ($step != 'create' && isset($sPosted))
 		{
 			// Previous record?
-			$rs['prev_id'] = checkIfNeighbour('prev',$sPosted);
+			$rs['prev_id'] = checkIfNeighbour('prev', $sPosted);
 
 			// Next record?
-			$rs['next_id'] = checkIfNeighbour('next',$sPosted);
+			$rs['next_id'] = checkIfNeighbour('next', $sPosted);
 		}
 		else
 		{
@@ -1036,7 +1036,7 @@
 			echo $partials['author']['html'];
 		}
 
-		echo hInput('from_view',$view),
+		echo hInput('from_view', $view),
 		n.'</div>'.n.'</div>'.n.'</td>';
 
 		// Layer tabs.
@@ -1198,7 +1198,7 @@
  * @return int
  */
 
-	function checkIfNeighbour($whichway,$sPosted)
+	function checkIfNeighbour($whichway, $sPosted)
 	{
 		$sPosted = assert_int($sPosted);
 		$dir = ($whichway == 'prev') ? '<' : '>';
@@ -1272,7 +1272,7 @@
 
 		if ($rs)
 		{
-			return treeSelectInput($name,$rs,$val, $id, 35);
+			return treeSelectInput($name, $rs, $val, $id, 35);
 		}
 
 		return false;
@@ -1286,7 +1286,7 @@
  * @return string HTML
  */
 
-	function tab($tabevent,$view)
+	function tab($tabevent, $view)
 	{
 		$state = ($view == $tabevent) ? 'up' : 'down';
 		$pressed = ($view == $tabevent) ? 'true' : 'false';
@@ -1509,11 +1509,11 @@
 	function article_partial_author($rs)
 	{
 		extract($rs);
-		$out = n.'<p class="author"><small>'.gTxt('posted_by').': '.txpspecialchars($AuthorID).' &#183; '.safe_strftime('%d %b %Y &#183; %X',$sPosted);
+		$out = n.'<p class="author"><small>'.gTxt('posted_by').': '.txpspecialchars($AuthorID).' &#183; '.safe_strftime('%d %b %Y &#183; %X', $sPosted);
 
 		if ($sPosted != $sLastMod)
 		{
-			$out .= br.gTxt('modified_by').': '.txpspecialchars($LastModID).' &#183; '.safe_strftime('%d %b %Y &#183; %X',$sLastMod);
+			$out .= br.gTxt('modified_by').': '.txpspecialchars($LastModID).' &#183; '.safe_strftime('%d %b %Y &#183; %X', $sLastMod);
 		}
 
 		$out .= '</small></p>';
@@ -1738,7 +1738,7 @@
 
 		return n.'<div id="view_modes">'.
 			pluggable_ui('article_ui', 'view',
-			$hasfilter ? n.tag((tab('text',$view).tab('html',$view).tab('preview',$view)), 'ul') : '&#160;',
+			$hasfilter ? n.tag((tab('text', $view).tab('html', $view).tab('preview', $view)), 'ul') : '&#160;',
 			$rs).
 			n.'</div>';
 

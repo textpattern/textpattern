@@ -39,9 +39,12 @@
 			'image_multi_edit'    => true,
 		);
 
-		if ($step && bouncer($step, $available_steps)) {
+		if ($step && bouncer($step, $available_steps))
+		{
 			$step();
-		} else {
+		}
+		else
+		{
 			image_list();
 		}
 	}
@@ -68,9 +71,8 @@
 		{
 			echo graf(
 				gTxt('img_dir_not_writeable', array('{imgdir}' => IMPATH))
-			,' class="alert-block warning"');
+			, ' class="alert-block warning"');
 		}
-
 		elseif (has_privs('image.edit.own'))
 		{
 			echo upload_form(gTxt('upload_image'), 'upload_image', 'image_insert', 'image', '', $file_max_upload_size);
@@ -78,23 +80,23 @@
 
 		switch ($sort)
 		{
-			case 'name':
+			case 'name' :
 				$sort_sql = 'name '.$dir;
 			break;
 
-			case 'thumbnail':
+			case 'thumbnail' :
 				$sort_sql = 'thumbnail '.$dir.', id asc';
 			break;
 
-			case 'category':
+			case 'category' :
 				$sort_sql = 'category '.$dir.', id asc';
 			break;
 
-			case 'date':
+			case 'date' :
 				$sort_sql = 'date '.$dir.', id asc';
 			break;
 
-			case 'author':
+			case 'author' :
 				$sort_sql = 'author '.$dir.', id asc';
 			break;
 
@@ -137,7 +139,6 @@
 				$criteria = $critsql[$search_method];
 				$limit = 500;
 			}
-
 			else
 			{
 				$search_method = '';
@@ -162,7 +163,6 @@
 				echo n.image_search_form($crit, $search_method).
 					graf(gTxt('no_results_found'), ' class="indicator"').'</div>';
 			}
-
 			else
 			{
 				echo graf(gTxt('no_images_recorded'), ' class="indicator"').'</div>';
@@ -220,14 +220,19 @@
 				$name = empty($name) ? gTxt('unnamed') : txpspecialchars($name);
 
 				if ($thumbnail) {
-					if ($ext != '.swf') {
+					if ($ext != '.swf')
+					{
 						$thumbnail = '<img class="content-image" src="'.imagesrcurl($id, $ext, true)."?$uDate".'" alt="" '.
 											"title='$id$ext ($w &#215; $h)'".
 											($thumb_w ? " width='$thumb_w' height='$thumb_h'" : ''). ' />';
-					} else {
+					}
+					else
+					{
 						$thumbnail = '';
 					}
-				} else {
+				}
+				else
+				{
 					$thumbnail = gTxt('no');
 				}
 
@@ -236,7 +241,9 @@
 					$tagbuilder = '<a target="_blank" href="'.$tag_url.a.'type=textile" onclick="popWin(this.href); return false;">Textile</a>'.sp.
 							'&#124;'.sp.'<a target="_blank" href="'.$tag_url.a.'type=textpattern" onclick="popWin(this.href); return false;">Textpattern</a>'.sp.
 							'&#124;'.sp.'<a target="_blank" href="'.$tag_url.a.'type=html" onclick="popWin(this.href); return false;">HTML</a>';
-				} else {
+				}
+				else
+				{
 					$tagbuilder = sp;
 				}
 
@@ -354,7 +361,8 @@
 		// Empty entry to permit clearing the category
 		$categories = array('');
 
-		foreach ($all_image_cats as $row) {
+		foreach ($all_image_cats as $row)
+		{
 			$categories[] = $row['name'];
 		}
 
@@ -372,11 +380,11 @@
 
 		switch ($method)
 		{
-			case 'delete':
+			case 'delete' :
 				return image_delete($selected);
 				break;
 
-			case 'changecategory':
+			case 'changecategory' :
 				$val = ps('category');
 				if (in_array($val, $categories))
 				{
@@ -384,7 +392,7 @@
 				}
 				break;
 
-			case 'changeauthor':
+			case 'changeauthor' :
 				$val = ps('author');
 				if (in_array($val, $all_image_authors))
 				{
@@ -432,7 +440,7 @@
 	}
 
 // -------------------------------------------------------------
-	function image_edit($message='',$id='')
+	function image_edit($message='', $id='')
 	{
 		global $prefs, $file_max_upload_size, $txp_user, $event, $all_image_cats;
 
@@ -441,7 +449,8 @@
 
 		$rs = safe_row("*, unix_timestamp(date) as uDate", "txp_image", "id = $id");
 
-		if ($rs) {
+		if ($rs)
+		{
 			extract($rs);
 
 			if (!has_privs('image.edit') && !($author == $txp_user && has_privs('image.edit.own')))
@@ -450,28 +459,37 @@
 				return;
 			}
 
-			pagetop(gTxt('edit_image'),$message);
+			pagetop(gTxt('edit_image'), $message);
 
 			extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
 
-			if ($ext != '.swf') {
+			if ($ext != '.swf')
+			{
 				$aspect = ($h == $w) ? ' square' : (($h > $w) ? ' portrait' : ' landscape');
 				$img_info = $id.$ext.' ('.$w.' &#215; '.$h.')';
 				$img = '<div class="fullsize-image"><img class="content-image" src="'.imagesrcurl($id, $ext)."?$uDate".'" alt="'.$img_info.'" title="'.$img_info.'" /></div>';
-			} else {
+			}
+			else
+			{
 				$img = $aspect = '';
 			}
 
-			if ($thumbnail and ($ext != '.swf')) {
+			if ($thumbnail and ($ext != '.swf'))
+			{
 				$thumb_info = $id.'t'.$ext.' ('.$thumb_w.' &#215; '.$thumb_h.')';
 				$thumb = '<img class="content-image" src="'.imagesrcurl($id, $ext, true)."?$uDate".'" alt="'.$thumb_info.'" '.
 							($thumb_w ? 'width="'.$thumb_w.'" height="'.$thumb_h.'" title="'.$thumb_info.'"' : ''). ' />';
-			} else {
+			}
+			else
+			{
 				$thumb = '';
-				if ($thumb_w == 0) {
+				if ($thumb_w == 0)
+				{
 					$thumb_w = get_pref('thumb_w', 0);
 				}
-				if ($thumb_h == 0) {
+
+				if ($thumb_h == 0)
+				{
 					$thumb_h = get_pref('thumb_h', 0);
 				}
 			}
@@ -500,7 +518,7 @@
 					'thumbnail_image',
 					'<div class="thumbnail-edit">'.
 					(($thumbnail)
-						? $thumb.n.dLink('image','thumbnail_delete','id',$id, '', '', '', '', array($page, $sort, $dir, $crit, $search_method))
+						? $thumb.n.dLink('image', 'thumbnail_delete', 'id', $id, '', '', '', '', array($page, $sort, $dir, $crit, $search_method))
 						: 	'').
 					'</div>',
 					$rs
@@ -509,7 +527,7 @@
 				pluggable_ui(
 					'image_ui',
 					'thumbnail_edit',
-					wrapGroup('thumbnail_edit_group', upload_form('', '', 'thumbnail_insert','image', $id, $file_max_upload_size, 'upload_thumbnail', 'thumbnail-upload'), 'upload_thumbnail', 'thumbnail-upload', 'upload_thumbnail'),
+					wrapGroup('thumbnail_edit_group', upload_form('', '', 'thumbnail_insert', 'image', $id, $file_max_upload_size, 'upload_thumbnail', 'thumbnail-upload'), 'upload_thumbnail', 'thumbnail-upload', 'upload_thumbnail'),
 					$rs
 				),
 
@@ -591,7 +609,6 @@
 
 			return image_edit($message, $id);
 		}
-
 		else
 		{
 			return image_list(array($img_result, E_ERROR));
@@ -601,7 +618,7 @@
 // -------------------------------------------------------------
 	function image_replace()
 	{
-		global $txpcfg,$extensions,$txp_user;
+		global $txpcfg, $extensions, $txp_user;
 		extract($txpcfg);
 
 		$id = assert_int(gps('id'));
@@ -613,9 +630,12 @@
 			return;
 		}
 
-		if ($rs) {
+		if ($rs)
+		{
 			$meta = array('category' => $rs['category'], 'caption' => $rs['caption'], 'alt' => $rs['alt']);
-		} else {
+		}
+		else
+		{
 			$meta = '';
 		}
 
@@ -625,7 +645,9 @@
 		{
 			list($message, $id) = $img_result;
 			return image_edit($message, $id);
-		}else{
+		}
+		else
+		{
 			return image_edit(array($img_result, E_ERROR), $id);
 		}
 	}
@@ -633,7 +655,7 @@
 // -------------------------------------------------------------
 	function thumbnail_insert()
 	{
-		global $txpcfg,$extensions,$txp_user,$img_dir,$path_to_site;
+		global $txpcfg, $extensions, $txp_user, $img_dir, $path_to_site;
 		extract($txpcfg);
 		$id = assert_int(gps('id'));
 
@@ -657,13 +679,17 @@
 
 		list($w, $h, $extension) = getimagesize($file);
 
-		if (($file !== false) && @$extensions[$extension]) {
+		if (($file !== false) && @$extensions[$extension])
+		{
 			$ext = $extensions[$extension];
 			$newpath = IMPATH.$id.'t'.$ext;
 
-			if (shift_uploaded_file($file, $newpath) == false) {
+			if (shift_uploaded_file($file, $newpath) == false)
+			{
 				image_list(array($newpath.sp.gTxt('upload_dir_perms'), E_ERROR));
-			} else {
+			}
+			else
+			{
 				chmod($newpath, 0644);
 				safe_update("txp_image", "thumbnail = 1, thumb_w = $w, thumb_h = $h, date = now()", "id = $id");
 
@@ -672,7 +698,9 @@
 
 				image_edit($message, $id);
 			}
-		} else {
+		}
+		else
+		{
 			if ($file === false)
 				image_list(array(upload_get_errormsg($_FILES['thefile']['error']), E_ERROR));
 			else
@@ -853,7 +881,6 @@
 
 			image_edit($message, $id);
 		}
-
 		else
 		{
 			$message = array(gTxt('thumbnail_not_saved', array('{id}' => $id)), E_ERROR);
@@ -877,11 +904,14 @@
 		}
 
 		$t = new txp_thumb($id);
-		if ($t->delete()) {
+		if ($t->delete())
+		{
 			callback_event('thumbnail_deleted', '', false, $id);
 			update_lastmod();
-			image_edit(gTxt('thumbnail_deleted'),$id);
-		} else {
-			image_edit(array(gTxt('thumbnail_delete_failed'), E_ERROR),$id);
+			image_edit(gTxt('thumbnail_deleted'), $id);
+		}
+		else
+		{
+			image_edit(array(gTxt('thumbnail_delete_failed'), E_ERROR), $id);
 		}
 	}

@@ -22,7 +22,8 @@ Use of this software indicates acceptance of the Textpattern license agreement
 
 	include_once txpath.'/lib/txplib_update.php';
 
-	if ($event == 'lang') {
+	if ($event == 'lang')
+	{
 		require_privs('lang');
 
 		$available_steps = array(
@@ -32,9 +33,12 @@ Use of this software indicates acceptance of the Textpattern license agreement
 			'list_languages'  => false,
 		);
 
-		if ($step && bouncer($step, $available_steps)) {
+		if ($step && bouncer($step, $available_steps))
+		{
 			$step();
-		} else {
+		}
+		else
+		{
 			list_languages();
 		}
 	}
@@ -111,8 +115,8 @@ Use of this software indicates acceptance of the Textpattern license agreement
 				form(
 					graf(
 						gTxt('active_language').
-						languages('language',$active_lang).
-						fInput('submit','Submit',gTxt('save'),'publish').
+						languages('language', $active_lang).
+						fInput('submit', 'Submit',gTxt('save'), 'publish').
 						eInput('lang').sInput('list_languages')
 					)
 				).'</div>';
@@ -132,7 +136,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
 			$response = $client->getResponse();
 			foreach ($response as $language)
 			{
-				$available_lang[$language['language']]['rpc_lastmod'] = gmmktime($language['lastmodified']->hour,$language['lastmodified']->minute,$language['lastmodified']->second,$language['lastmodified']->month,$language['lastmodified']->day,$language['lastmodified']->year);
+				$available_lang[$language['language']]['rpc_lastmod'] = gmmktime($language['lastmodified']->hour, $language['lastmodified']->minute, $language['lastmodified']->second, $language['lastmodified']->month, $language['lastmodified']->day, $language['lastmodified']->year);
 			}
 		}
 		elseif (gps('force') != 'file')
@@ -147,14 +151,14 @@ Use of this software indicates acceptance of the Textpattern license agreement
 		{
 			foreach ($files as $file)
 			{
-				if ($fp = @fopen(txpath.DS.'lang'.DS.$file,'r'))
+				if ($fp = @fopen(txpath.DS.'lang'.DS.$file, 'r'))
 				{
-					$name = str_replace('.txt','',$file);
+					$name = str_replace('.txt', '', $file);
 					$firstline = fgets($fp, 4069);
 					fclose($fp);
-					if (strpos($firstline,'#@version') !== false)
+					if (strpos($firstline, '#@version') !== false)
 					{
-						@list($fversion,$ftime) = explode(';',trim(substr($firstline,strpos($firstline,' ',1))));
+						@list($fversion, $ftime) = explode(';',trim(substr($firstline,strpos($firstline, ' ', 1))));
 					}
 					else
 					{
@@ -169,7 +173,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
 
 		// Get installed items from the database.
 		// We need a value here for the language itself, not for each one of the rows.
-		$rows = safe_rows('lang, UNIX_TIMESTAMP(MAX(lastmod)) as lastmod','txp_lang',"1 GROUP BY lang ORDER BY lastmod DESC");
+		$rows = safe_rows('lang, UNIX_TIMESTAMP(MAX(lastmod)) as lastmod', 'txp_lang', "1 GROUP BY lang ORDER BY lastmod DESC");
 		$installed_lang = array();
 		foreach ($rows as $language)
 		{
@@ -211,7 +215,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
 										: '-'
 									).
 									(isset($langdat['db_lastmod'])
-										? n.'<span class="date modified">'.safe_strftime('%d %b %Y %X',$langdat['db_lastmod']).'</span>'
+										? n.'<span class="date modified">'.safe_strftime('%d %b %Y %X', $langdat['db_lastmod']).'</span>'
 										: ''
 									)
 								)
@@ -238,7 +242,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
 									''
 								)
 							).
-							n.'<span class="date '.($file_updated ? 'created' : 'modified').'">'.safe_strftime($prefs['archive_dateformat'],$langdat['file_lastmod']).'</span>'
+							n.'<span class="date '.($file_updated ? 'created' : 'modified').'">'.safe_strftime($prefs['archive_dateformat'], $langdat['file_lastmod']).'</span>'
 
 							: '-'
 						, ' class="lang-value languages_detail'.((isset($langdat['db_lastmod']) && $rpc_updated) ? ' highlight' : '').'"'
@@ -344,27 +348,29 @@ Use of this software indicates acceptance of the Textpattern license agreement
 			{
 				pagetop(gTxt('installing_language'));
 				echo tag( gTxt('rpc_connect_error')."<!--".$client->getErrorCode().' '.$client->getErrorMessage()."-->"
-						,'p',' class="error lang-msg"' );
+					, 'p', ' class="error lang-msg"' );
 			}
 		}
 		else
 		{
 			$response = $client->getResponse();
 			$lang_struct = unserialize($response);
-			if ($lang_struct === false) {
+			if ($lang_struct === false)
+			{
 				$errors = $size = 1;
 			}
 			else
 			{
-				array_walk($lang_struct,'install_lang_key');
+				array_walk($lang_struct, 'install_lang_key');
 				$size = count($lang_struct);
 				$errors = 0;
-				for($i=0; $i < $size ; $i++)
+				for($i = 0; $i < $size ; $i++)
 				{
 					$errors += ( !$lang_struct[$i]['ok'] );
 				}
 
-				if (defined('LANG')) {
+				if (defined('LANG'))
+				{
 					$textarray = load_lang(LANG);
 				}
 			}
@@ -373,8 +379,9 @@ Use of this software indicates acceptance of the Textpattern license agreement
 
 			callback_event('lang_installed', 'remote', false, $lang_code);
 	
-			if ($errors > 0) {
-				$msg = array($msg.sprintf(" (%s errors, %s ok)",$errors, ($size-$errors)), E_ERROR);
+			if ($errors > 0)
+			{
+				$msg = array($msg.sprintf(" (%s errors, %s ok)", $errors, ($size-$errors)), E_ERROR);
 			}
 
 			list_languages($msg);
@@ -395,9 +402,9 @@ Use of this software indicates acceptance of the Textpattern license agreement
 
 	function install_lang_key(&$value, $key)
 	{
-		extract(gpsa(array('lang_code','updating')));
-		$exists = safe_field('name','txp_lang',"name='".doSlash($value['name'])."' AND lang='".doSlash($lang_code)."'");
-		$q = "name='".doSlash($value['name'])."', event='".doSlash($value['event'])."', data='".doSlash($value['data'])."', lastmod='".doSlash(strftime('%Y%m%d%H%M%S',$value['uLastmod']))."'";
+		extract(gpsa(array('lang_code', 'updating')));
+		$exists = safe_field('name', 'txp_lang', "name='".doSlash($value['name'])."' AND lang='".doSlash($lang_code)."'");
+		$q = "name='".doSlash($value['name'])."', event='".doSlash($value['event'])."', data='".doSlash($value['data'])."', lastmod='".doSlash(strftime('%Y%m%d%H%M%S', $value['uLastmod']))."'";
 
 		if ($exists)
 		{
@@ -435,7 +442,8 @@ Use of this software indicates acceptance of the Textpattern license agreement
 	{
 		$lang_code = ps('lang_code');
 		$ret = safe_delete('txp_lang', "lang='".doSlash($lang_code)."'");
-		if ($ret) {
+		if ($ret)
+		{
 			callback_event('lang_deleted', '', 0, $lang_code);
 			$msg = gTxt($lang_code).sp.gTxt('deleted');
 		}

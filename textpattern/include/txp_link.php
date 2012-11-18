@@ -29,12 +29,15 @@
 			'link_edit'          => false,
 			'link_save'          => true,
 			'link_change_pageby' => true,
-			'link_multi_edit'    => true
+			'link_multi_edit'    => true,
 		);
 
-		if ($step && bouncer($step, $available_steps)) {
+		if ($step && bouncer($step, $available_steps))
+		{
 			$step();
-		} else {
+		}
+		else
+		{
 			link_list();
 		}
 	}
@@ -43,7 +46,7 @@
 
 	function link_list($message = '')
 	{
-		global $event,$step, $link_list_pageby, $txp_user;
+		global $event, $step, $link_list_pageby, $txp_user;
 
 		pagetop(gTxt('tab_link'), $message);
 
@@ -54,27 +57,27 @@
 
 		switch ($sort)
 		{
-			case 'id':
+			case 'id' :
 				$sort_sql = 'id '.$dir;
 			break;
 
-			case 'description':
+			case 'description' :
 				$sort_sql = 'description '.$dir.', id asc';
 			break;
 
-			case 'url':
+			case 'url' :
 				$sort_sql = 'url '.$dir.', id asc';
 			break;
 
-			case 'category':
+			case 'category' :
 				$sort_sql = 'category '.$dir.', id asc';
 			break;
 
-			case 'date':
+			case 'date' :
 				$sort_sql = 'date '.$dir.', id asc';
 			break;
 
-			case 'author':
+			case 'author' :
 				$sort_sql = 'author '.$dir.', id asc';
 			break;
 
@@ -116,14 +119,12 @@
 			{
 				$criteria = $critsql[$search_method];
 			}
-
 			else
 			{
 				$search_method = '';
 				$crit = '';
 			}
 		}
-
 		else
 		{
 			$search_method = '';
@@ -136,6 +137,7 @@
 
 		echo n.'<h1 class="txp-heading">'.gTxt('tab_link').'</h1>';
 		echo n.'<div id="'.$event.'_control" class="txp-control-panel">';
+
 		if (has_privs('link.edit'))
 		{
 			echo graf(
@@ -150,7 +152,6 @@
 				echo link_search_form($crit, $search_method).
 					graf(gTxt('no_results_found'), ' class="indicator"').'</div>';
 			}
-
 			else
 			{
 				echo graf(gTxt('no_links_recorded'), ' class="indicator"').'</div>';
@@ -373,7 +374,8 @@
 		callback_event_ref('link_ui', 'validate_save', 0, $varray, $constraints);
 		$validator = new Validator($constraints);
 
-		if ($validator->validate()) {
+		if ($validator->validate())
+		{
 			if ($id)
 			{
 				$ok = safe_update('txp_link',
@@ -488,7 +490,7 @@
 
 		switch ($method)
 		{
-			case 'delete':
+			case 'delete' :
 				if (!has_privs('link.delete'))
 				{
 					if (has_privs('link.delete.own'))
@@ -516,7 +518,7 @@
 				$key = '';
 				break;
 
-			case 'changecategory':
+			case 'changecategory' :
 				$val = ps('category');
 				if (in_array($val, $categories))
 				{
@@ -524,7 +526,7 @@
 				}
 				break;
 
-			case 'changeauthor':
+			case 'changeauthor' :
 				$val = ps('author');
 				if (in_array($val, $all_link_authors))
 				{

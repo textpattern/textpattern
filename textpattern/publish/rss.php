@@ -125,7 +125,8 @@
 					$summary = trim(replace_relative_urls(parse($thisarticle['excerpt']), $permlink));
 					$content = trim(replace_relative_urls(parse($thisarticle['body']), $permlink));
 
-					if ($syndicate_body_or_excerpt) {
+					if ($syndicate_body_or_excerpt)
+					{
 						// Short feed: use body as summary if there's no excerpt.
 						if (!trim($summary))
 							$summary = $content;
@@ -201,13 +202,13 @@
 			{
 				switch ($area)
 				{
-					case 'link':
+					case 'link' :
 						if (safe_field('id', 'txp_category', "name = '$category' and type = 'link'") == false)
 						{
 							txp_die(gTxt('404_not_found'), '404');
 						}
 						break;
-					case 'article':
+					case 'article' :
 					default:
 						if (safe_field('id', 'txp_category', "name in ('".join("','", $category)."') and type = 'article'") == false)
 						{
@@ -332,13 +333,17 @@
  * @deprecated in 4.0.4
  */
 
-	function rss_safe_hed($toUnicode) {
-
-		if (version_compare(phpversion(), "5.0.0", ">=")) {
+	function rss_safe_hed($toUnicode)
+	{
+		if (version_compare(phpversion(), "5.0.0", ">="))
+		{
 			$str =  html_entity_decode($toUnicode, ENT_QUOTES, "UTF-8");
-		} else {
+		}
+		else
+		{
 			$trans_tbl = get_html_translation_table(HTML_ENTITIES);
-			foreach($trans_tbl as $k => $v) {
+			foreach($trans_tbl as $k => $v)
+			{
 				$ttr[$v] = utf8_encode($k);
 			}
 			$str = strtr($toUnicode, $ttr);

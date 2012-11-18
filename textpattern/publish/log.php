@@ -88,12 +88,10 @@
 			{
 				$referer = '';
 			}
-
 			else if (preg_match('/^[^\.]*\.?'.preg_quote(preg_replace('/^www\./', '', SITE_HOST), '/').'/i', $referer))
 			{
 				$referer = '';
 			}
-
 			else
 			{
 				$referer = $protocol.'://'.clean_url($referer);
