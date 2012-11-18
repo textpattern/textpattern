@@ -19,7 +19,7 @@
 
 	// Keep error display until we add an error handler for this.
 	error_reporting(E_ALL);
-	@ini_set("display_errors","1");
+	@ini_set("display_errors", "1");
 
 	require_privs('import');
 
@@ -59,7 +59,7 @@
 		'mtdb'    => 'Movable Type (MySQL DB)',
 		'blogger' => 'Blogger',
 		'b2'      => 'b2',
-		'wp'      => 'WordPress'
+		'wp'      => 'WordPress',
 	);
 
 	if (!$step or !bouncer($step, array(

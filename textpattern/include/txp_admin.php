@@ -262,7 +262,7 @@
 			eInput('admin').
 			sInput('change_email').
 			n.'</section>'
-		, '', '', 'post', '','', 'change_email');
+		, '', '', 'post', '', '', 'change_email');
 	}
 
 /**
@@ -279,7 +279,7 @@
 
 		if (is_disabled('mail'))
 		{
-			echo tag(gTxt('warn_mail_unavailable'), 'p',' class="alert-block warning" ');
+			echo tag(gTxt('warn_mail_unavailable'), 'p', ' class="alert-block warning"');
 		}
 
 		echo n.'<h1 class="txp-heading">'.gTxt('tab_site_admin').'</h1>';

@@ -14,71 +14,104 @@
  * @package Admin\Article
  */
 
-if (!defined('txpinterface')) die('txpinterface is undefined.');
+	if (!defined('txpinterface')) die('txpinterface is undefined.');
 
-global $vars, $statuses;
+	global $vars, $statuses;
 
-$vars = array(
-	'ID','Title','Body','Excerpt','textile_excerpt','Image',
-	'textile_body', 'Keywords','Status','Posted','Expires','Section','Category1','Category2',
-	'Annotate','AnnotateInvite','publish_now','reset_time','AuthorID','sPosted',
-	'LastModID','sLastMod','override_form','from_view','year','month','day','hour',
-	'minute','second','url_title','exp_year','exp_month','exp_day','exp_hour',
-	'exp_minute','exp_second','sExpires'
-);
-$cfs = getCustomFields();
-foreach ($cfs as $i => $cf_name)
-{
-	$vars[] = "custom_$i";
-}
+	$vars = array(
+		'ID',
+		'Title',
+		'Body',
+		'Excerpt',
+		'textile_excerpt',
+		'Image',
+		'textile_body',
+		'Keywords',
+		'Status',
+		'Posted',
+		'Expires',
+		'Section',
+		'Category1',
+		'Category2',
+		'Annotate',
+		'AnnotateInvite',
+		'publish_now',
+		'reset_time',
+		'AuthorID',
+		'sPosted',
+		'LastModID',
+		'sLastMod',
+		'override_form',
+		'from_view',
+		'year',
+		'month',
+		'day',
+		'hour',
+		'minute',
+		'second',
+		'url_title',
+		'exp_year',
+		'exp_month',
+		'exp_day',
+		'exp_hour',
+		'exp_minute',
+		'exp_second',
+		'sExpires',
+	);
 
-$statuses = array(
+	$cfs = getCustomFields();
+	foreach ($cfs as $i => $cf_name)
+	{
+		$vars[] = "custom_$i";
+	}
+
+	$statuses = array(
 		STATUS_DRAFT   => gTxt('draft'),
 		STATUS_HIDDEN  => gTxt('hidden'),
 		STATUS_PENDING => gTxt('pending'),
 		STATUS_LIVE    => strong(gTxt('live')),
 		STATUS_STICKY  => gTxt('sticky'),
-);
+	);
 
-if (!empty($event) and $event == 'article')
-{
-	require_privs('article');
-
-	$save = gps('save');
-	if ($save) $step = 'save';
-
-	$publish = gps('publish');
-	if ($publish) $step = 'publish';
-
-	if (empty($step)) $step = 'create';
-
-	bouncer($step, array(
-		'create'          => false,
-		'publish'         => true,
-		'edit'            => false,
-		'save'            => true,
-		'save_pane_state' => true,
-	));
-
-	switch($step)
+	if (!empty($event) and $event == 'article')
 	{
-		case "create" :
-			article_edit();
-			break;
-		case "publish" :
-			article_post();
-			break;
-		case "edit" :
-			article_edit();
-			break;
-		case "save" :
-			article_save();
-			break;
-		case "save_pane_state" :
-			article_save_pane_state();
-			break;
+		require_privs('article');
+
+		$save = gps('save');
+		if ($save) $step = 'save';
+
+		$publish = gps('publish');
+		if ($publish) $step = 'publish';
+
+		if (empty($step)) $step = 'create';
+
+		bouncer($step, array(
+			'create'          => false,
+			'publish'         => true,
+			'edit'            => false,
+			'save'            => true,
+			'save_pane_state' => true,
+		));
+
+		switch($step)
+		{
+			case "create" :
+				article_edit();
+				break;
+			case "publish" :
+				article_post();
+				break;
+			case "edit" :
+				article_edit();
+				break;
+			case "save" :
+				article_save();
+				break;
+			case "save_pane_state" :
+				article_save_pane_state();
+				break;
+		}
 	}
-}
 
 /**
  * Processes sent forms and saves new articles.
@@ -599,7 +632,7 @@ if (!empty($event) and $event == 'article')
 			);
 		}
 
-		extract(gpsa(array('view','from_view','step')));
+		extract(gpsa(array('view', 'from_view', 'step')));
 
 		// Newly-saved article.
 		if (!empty($GLOBALS['ID']))
@@ -941,7 +974,7 @@ if (!empty($event) and $event == 'article')
 				$rs);
 
 		// "Comments" section.
-			echo wrapRegion('comments_group', $partials['comments']['html'], 'comments', 'comment_settings', 'article_comments', (($use_comments==1) ? '' : 'empty'));
+			echo wrapRegion('comments_group', $partials['comments']['html'], 'comments', 'comment_settings', 'article_comments', (($use_comments == 1) ? '' : 'empty'));
 
 		// "Dates" section.
 			$push_button = '';
@@ -1015,8 +1048,8 @@ if (!empty($event) and $event == 'article')
 			// Publish button.
 				$push_button = graf(
 					(has_privs('article.publish')) ?
-					fInput('submit','publish',gTxt('publish'),"publish") :
-					fInput('submit','publish',gTxt('save'),"publish")
+					fInput('submit', 'publish',gTxt('publish'), "publish") :
+					fInput('submit', 'publish',gTxt('save'), "publish")
 				, ' id="write-publish"');
 			}
 
@@ -1035,7 +1068,7 @@ if (!empty($event) and $event == 'article')
 					or ($Status < STATUS_LIVE and has_privs('article.edit'))
 					or ($Status < STATUS_LIVE and $AuthorID==$txp_user and has_privs('article.edit.own')))
 					{
-						$push_button = graf(fInput('submit','save',gTxt('save'),"publish", '', '', '', 4), ' id="write-save"');
+						$push_button = graf(fInput('submit', 'save',gTxt('save'), "publish", '', '', '', 4), ' id="write-save"');
 					}
 			}
 
@@ -1265,7 +1298,7 @@ if (!empty($event) and $event == 'article')
 
 		$incoming['Title_plain'] = $incoming['Title'];
 		$incoming['Title_html'] = ''; // not used
-		$incoming['Title'] = $textile->TextileThis($incoming['Title'],'',1);
+		$incoming['Title'] = $textile->TextileThis($incoming['Title'], '', 1);
 		$incoming['Body_html'] = TextfilterSet::filter($incoming['textile_body'], $incoming['Body'], array('field' => 'Body', 'options' => array('lite' => false), 'data' => $incoming));
 		$incoming['Excerpt_html'] = TextfilterSet::filter($incoming['textile_excerpt'], $incoming['Excerpt'], array('field' => 'Excerpt', 'options' => array('lite' => false), 'data' => $incoming));
 		return $incoming;
@@ -1510,7 +1543,7 @@ if (!empty($event) and $event == 'article')
 
 	function article_partial_recent_articles($rs)
 	{
-		$recents = safe_rows_start('Title, ID','textpattern','1=1 order by LastMod desc limit '.(int)WRITE_RECENT_ARTICLES_COUNT);
+		$recents = safe_rows_start('Title, ID', 'textpattern', '1=1 order by LastMod desc limit '.(int)WRITE_RECENT_ARTICLES_COUNT);
 		$ra = '';
 
 		if ($recents)
@@ -1623,12 +1656,12 @@ if (!empty($event) and $event == 'article')
 	{
 		return n.'<p role="navigation" class="nav-tertiary">'.
 		($rs['prev_id']
-			?	prevnext_link(gTxt('prev'),'article','edit',
-				$rs['prev_id'],'', 'prev')
+			?	prevnext_link(gTxt('prev'), 'article', 'edit',
+				$rs['prev_id'], '', 'prev')
 			:	'<span class="navlink-disabled" aria-disabled="true">'.gTxt('prev').'</span>').
 		($rs['next_id']
-			?	prevnext_link(gTxt('next'),'article','edit',
-				$rs['next_id'],'', 'next')
+			?	prevnext_link(gTxt('next'), 'article', 'edit',
+				$rs['next_id'], '', 'next')
 			:	'<span class="navlink-disabled" aria-disabled="true">'.gTxt('next').'</span>').
 		'</p>';
 	}

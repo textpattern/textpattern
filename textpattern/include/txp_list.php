@@ -167,7 +167,6 @@
 				$criteria = $critsql[$search_method];
 				$limit = 500;
 			}
-
 			else
 			{
 				$search_method = '';
@@ -209,7 +208,6 @@
 				echo list_search_form($crit, $search_method).
 					graf(gTxt('no_results_found'), ' class="indicator"').'</div>';
 			}
-
 			else
 			{
 				echo graf(gTxt('no_articles_recorded'), ' class="indicator"').'</div>';
@@ -280,7 +278,6 @@
 				{
 					$Title = '<em>'.eLink('article', 'edit', 'ID', $ID, gTxt('untitled')).'</em>';
 				}
-
 				else
 				{
 					$Title = eLink('article', 'edit', 'ID', $ID, $Title);
@@ -375,7 +372,7 @@
 					).
 
 					td(
-						($expires ? gTime($expires) : ''), '' ,'articles_detail date expires'
+						($expires ? gTime($expires) : ''), '', 'articles_detail date expires'
 					).
 
 					td(span(txpspecialchars($section_title), array('title' => $Section)), '', 'section'.$vs).
@@ -545,7 +542,7 @@
 
 				if (has_privs('article.delete.own'))
 				{
-					$allowed = safe_column_num('ID', 'textpattern', 'ID in('.join(',',$selected).') and AuthorID=\''.doSlash($txp_user).'\'');
+					$allowed = safe_column_num('ID', 'textpattern', 'ID in('.join(',', $selected).') and AuthorID=\''.doSlash($txp_user).'\'');
 				}
 
 				$selected = $allowed;
@@ -631,7 +628,7 @@
 					}
 					break;
 				// Change status.
-				case 'changestatus':
+				case 'changestatus' :
 					$val = (int) ps('Status');
 					if (array_key_exists($val, $statuses))
 					{
@@ -643,7 +640,7 @@
 						$val = STATUS_PENDING;
 					}
 					break;
-				default:
+				default :
 					$key = '';
 					$val = '';
 					break;

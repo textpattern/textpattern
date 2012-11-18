@@ -19,7 +19,8 @@
 
 	if (!defined('txpinterface')) die('txpinterface is undefined.');
 
-	if ($event == 'section') {
+	if ($event == 'section')
+	{
 		require_privs('section');
 
 		global $all_pages, $all_styles;
@@ -37,9 +38,12 @@
 			'section_toggle_option' => true,
 		);
 
-		if ($step && bouncer($step, $available_steps)) {
+		if ($step && bouncer($step, $available_steps))
+		{
 			$step();
-		} else {
+		}
+		else
+		{
 			sec_section_list();
 		}
 	}
@@ -65,35 +69,35 @@
 
 		switch ($sort)
 		{
-			case 'title':
+			case 'title' :
 				$sort_sql = 'title '.$dir;
 			break;
 
-			case 'page':
+			case 'page' :
 				$sort_sql = 'page '.$dir;
 			break;
 
-			case 'css':
+			case 'css' :
 				$sort_sql = 'css '.$dir;
 			break;
 
-			case 'in_rss':
+			case 'in_rss' :
 				$sort_sql = 'in_rss '.$dir;
 			break;
 
-			case 'on_frontpage':
+			case 'on_frontpage' :
 				$sort_sql = 'on_frontpage '.$dir;
 			break;
 
-			case 'searchable':
+			case 'searchable' :
 				$sort_sql = 'searchable '.$dir;
 			break;
 
-			case 'article_count':
+			case 'article_count' :
 				$sort_sql = 'article_count '.$dir;
 			break;
 
-			default:
+			default :
 				$sort_sql = 'name '.$dir;
 			break;
 		}
@@ -133,14 +137,12 @@
 				$criteria = $critsql[$search_method];
 				$limit = 500;
 			}
-
 			else
 			{
 				$search_method = '';
 				$crit = '';
 			}
 		}
-
 		else
 		{
 			$search_method = '';
@@ -280,7 +282,9 @@
 		{
 			$name = assert_string($name);
 			$rs = safe_row('*', 'txp_section', "name = '".doSlash($name)."'");
-		} else {
+		}
+		else
+		{
 			$rs = array_flip(getThings('describe `'.PFX.'txp_section`'));
 		}
 
@@ -413,7 +417,7 @@
 		}
 		else if ($name)
 		{
-			extract(array_map('assert_int', psa(array('on_frontpage','in_rss','searchable'))));
+			extract(array_map('assert_int', psa(array('on_frontpage', 'in_rss', 'searchable'))));
 
 			if ($safe_old_name)
 			{
@@ -553,12 +557,12 @@
 		}
 		$protected = array_unique($protected);
 
-		foreach ($selected as $item) {
+		foreach ($selected as $item)
+		{
 			if (in_array($item, $protected))
 			{
 				$del['error'][] = $item;
 			}
-
 			else
 			{
 				$ret = safe_delete('txp_section', "name = '".doSlash($item)."'");
@@ -566,7 +570,6 @@
 				{
 					$del['success'][] = $item;
 				}
-
 				else
 				{
 					$del['error'][] = $item;
@@ -654,11 +657,11 @@
 
 		switch ($method)
 		{
-			case 'delete':
+			case 'delete' :
 				return section_delete($selected);
 				break;
 
-			case 'changepage':
+			case 'changepage' :
 				$val = ps('uses_page');
 				if (in_array($val, $all_pages))
 				{
@@ -666,7 +669,7 @@
 				}
 				break;
 
-			case 'changecss':
+			case 'changecss' :
 				$val = ps('css');
 				if (in_array($val, $all_styles))
 				{
@@ -674,22 +677,22 @@
 				}
 				break;
 
-			case 'changeonfrontpage':
+			case 'changeonfrontpage' :
 				$key = 'on_frontpage';
 				$val = (int) ps('on_frontpage');
 				break;
 
-			case 'changesyndicate':
+			case 'changesyndicate' :
 				$key = 'in_rss';
 				$val = (int) ps('in_rss');
 				break;
 
-			case 'changesearchable':
+			case 'changesearchable' :
 				$key = 'searchable';
 				$val = (int) ps('searchable');
 				break;
 
-			default:
+			default :
 				$key = '';
 				$val = '';
 				break;

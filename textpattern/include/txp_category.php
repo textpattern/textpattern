@@ -16,34 +16,38 @@
  * @package Admin\Category
  */
 
-if (!defined('txpinterface')) die('txpinterface is undefined.');
+	if (!defined('txpinterface')) die('txpinterface is undefined.');
 
-if ($event == 'category') {
-	require_privs('category');
+	if ($event == 'category')
+	{
+		require_privs('category');
 
-	$available_steps = array(
-		'cat_category_list'      => false,
-		'cat_category_multiedit' => true,
-		'cat_article_create'     => true,
-		'cat_image_create'       => true,
-		'cat_file_create'        => true,
-		'cat_link_create'        => true,
-		'cat_article_save'       => true,
-		'cat_image_save'         => true,
-		'cat_file_save'          => true,
-		'cat_link_save'          => true,
-		'cat_article_edit'       => false,
-		'cat_image_edit'         => false,
-		'cat_file_edit'          => false,
-		'cat_link_edit'          => false,
-	);
+		$available_steps = array(
+			'cat_category_list'      => false,
+			'cat_category_multiedit' => true,
+			'cat_article_create'     => true,
+			'cat_image_create'       => true,
+			'cat_file_create'        => true,
+			'cat_link_create'        => true,
+			'cat_article_save'       => true,
+			'cat_image_save'         => true,
+			'cat_file_save'          => true,
+			'cat_link_save'          => true,
+			'cat_article_edit'       => false,
+			'cat_image_edit'         => false,
+			'cat_file_edit'          => false,
+			'cat_link_edit'          => false,
+		);
 
-	if ($step && bouncer($step, $available_steps)){
-		$step();
-	} else {
-		cat_category_list();
+		if ($step && bouncer($step, $available_steps))
+		{
+			$step();
+		}
+		else
+		{
+			cat_category_list();
+		}
 	}
-}
 
 /**
  * Outputs the main panel listing all categories.
@@ -58,10 +62,10 @@ if ($event == 'category') {
 		'<div id="category_container" class="txp-container">',
 		'<table class="category-list">',
 		'<tr>',
-			tdtl('<div id="categories_article">'.cat_article_list().'</div>',' class="categories article"'),
-			tdtl('<div id="categories_link">'.cat_link_list().'</div>',' class="categories link"'),
-			tdtl('<div id="categories_image">'.cat_image_list().'</div>',' class="categories image"'),
-			tdtl('<div id="categories_file">'.cat_file_list().'</div>',' class="categories file"'),
+			tdtl('<div id="categories_article">'.cat_article_list().'</div>', ' class="categories article"'),
+			tdtl('<div id="categories_link">'.cat_link_list().'</div>', ' class="categories link"'),
+			tdtl('<div id="categories_image">'.cat_image_list().'</div>', ' class="categories image"'),
+			tdtl('<div id="categories_file">'.cat_file_list().'</div>', ' class="categories file"'),
 		'</tr>',
 		endTable(),
 		'</div>',
@@ -234,13 +238,14 @@ EOS
 			'delete'       => gTxt('delete'),
 		);
 
-		if ($array) {
+		if ($array)
+		{
 			return
 				form(
 					join('',$array).
 					hInput('type',$area).
 					multi_edit($methods, 'category', 'cat_category_multiedit', '', '', '', '', '', $area)
-					,'', '', 'post', 'category-tree', '', 'category_'.$area.'_form'
+					, '', '', 'post', 'category-tree', '', 'category_'.$area.'_form'
 				);
 		}
 		return;
@@ -256,7 +261,7 @@ EOS
 		$method = ps('edit_method');
 		$things = ps('selected');
 
-		if (is_array($things) and $things and in_array($type, array('article','image','link','file')))
+		if (is_array($things) and $things and in_array($type, array('article', 'image', 'link', 'file')))
 		{
 			$things = array_map('assert_int', $things);
 
@@ -282,7 +287,7 @@ EOS
 						$names[] = doSlash($cat['name']);
 					}
 
-					if (safe_delete('txp_category','id IN ('.join(',', $catid).')'))
+					if (safe_delete('txp_category', 'id IN ('.join(',', $catid).')'))
 					{
 						if ($method == 'deleteforce')
 						{
@@ -374,7 +379,7 @@ EOS
 				fInput('submit', '', gTxt('Create')).
 				eInput('category').
 				sInput('cat_'.$event.'_create')
-			,'', '', 'post', 'action-create '.$event);
+			, '', '', 'post', 'action-create '.$event);
 
 		if ($rs)
 		{
@@ -403,15 +408,15 @@ EOS
 			{
 				switch ($event)
 				{
-					case 'link':
+					case 'link' :
 						$rs2 = safe_rows_start('category, count(*) as num', 'txp_link', "1 group by category");
 					break;
 
-					case 'image':
+					case 'image' :
 						$rs2 = safe_rows_start('category, count(*) as num', 'txp_image', "1 group by category");
 					break;
 
-					case 'file':
+					case 'file' :
 						$rs2 = safe_rows_start('category, count(*) as num', 'txp_file', "1 group by category");
 					break;
 				}
@@ -434,19 +439,19 @@ EOS
 				// Format count.
 				switch ($event)
 				{
-					case 'article':
+					case 'article' :
 						$url = 'index.php?event=list'.a.'search_method=categories'.a.'crit='.$name;
 					break;
 
-					case 'link':
+					case 'link' :
 						$url = 'index.php?event=link'.a.'search_method=category'.a.'crit='.$name;
 					break;
 
-					case 'image':
+					case 'image' :
 						$url = 'index.php?event=image'.a.'search_method=category'.a.'crit='.$name;
 					break;
 
-					case 'file':
+					case 'file' :
 						$url = 'index.php?event=file'.a.'search_method=category'.a.'crit='.$name;
 					break;
 				}
@@ -538,7 +543,9 @@ EOS
 		$parent = doSlash(gps('parent'));
 
 		$row = safe_row('*', 'txp_category', "id=$id");
-		if ($row) {
+
+		if ($row)
+		{
 			pagetop(gTxt('edit_category'));
 			extract($row);
 			list($parent_widget, $has_parent) = cat_parent_pop($parent,$evname,$id);
@@ -557,7 +564,9 @@ EOS
 			echo n.'<div id="category_container" class="txp-container">'.
 				form(  $out, '', '', 'post', 'edit-form' ).
 				n.'</div>';
-		} else {
+		}
+		else
+		{
 			cat_category_list(array(gTxt('category_not_found'), E_ERROR));
 		}
 	}
@@ -655,5 +664,5 @@ EOS
 
 	function cat_file_save()
 	{
-		return cat_event_category_save('file','txp_file');
+		return cat_event_category_save('file', 'txp_file');
 	}
