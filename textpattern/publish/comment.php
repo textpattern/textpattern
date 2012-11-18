@@ -111,7 +111,7 @@
  * @return string HTML
  */
 
-	function commentForm($id, $atts = NULL)
+	function commentForm($id, $atts=NULL)
 	{
 		global $prefs;
 		extract($prefs);
@@ -127,7 +127,7 @@
 			'previewlabel'  => gTxt('preview'),
 			'submitlabel'   => gTxt('submit'),
 			'rememberlabel' => gTxt('remember'),
-			'forgetlabel'   => gTxt('forget'),
+			'forgetlabel'   => gTxt('forget')
 		), $atts, 0));
 
 		$namewarn = false;
@@ -146,7 +146,7 @@
 			'preview',
 			'message',
 			'submit',
-			'backpage',
+			'backpage'
 		))));
 
 		if ($message == '')
@@ -227,7 +227,7 @@
 		$out = '<form id="txpCommentInputForm" method="post" action="'.txpspecialchars($url).'#cpreview">'.
 
 			// Prevent XHTML Strict validation gotchas.
-			n.'<div class="comments-wrapper">'.n;
+			n.'<div class="comments-wrapper">'.n.n;
 
 		$Form = fetch('Form', 'txp_form', 'name', $form);
 
@@ -260,6 +260,7 @@
 
 			$checkbox = checkbox('forget', 1, $forget, '', 'forget').' '.tag(txpspecialchars($forgetlabel), 'label', ' for="forget"');
 		}
+
 		else
 		{
 			// Inhibit default remember.
@@ -447,7 +448,6 @@
 
 		$web = clean_url($web);
 		$email = clean_url($email);
-
 		if ($remember == 1 || ps('checkbox_type') == 'forget' && ps('forget') != 1)
 		{
 			setCookies($name, $email, $web);
@@ -937,7 +937,7 @@ class comment_evaluation
  * @see        fInput()
  */
 
-	function input($type, $name, $val, $size='', $class='', $tab='', $chkd='')
+	function input($type,$name,$val,$size='',$class='',$tab='',$chkd='')
 	{
 		trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'fInput')), E_USER_NOTICE);
 		$o = array(
@@ -948,5 +948,5 @@ class comment_evaluation
 			($chkd)	? ' checked="checked"'	: '',
 			' />'.n
 		);
-		return join('', $o);
+		return join('',$o);
 	}

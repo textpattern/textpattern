@@ -106,8 +106,8 @@
 		$pub = safe_row("RealName, email", "txp_users", "privs=1");
 
 		// Feed header.
-		$out[] = tag(htmlspecialchars($sitename), 'title', t_text);
-		$out[] = tag(htmlspecialchars($site_slogan), 'subtitle', t_text);
+		$out[] = tag(htmlspecialchars($sitename),'title', t_text);
+		$out[] = tag(htmlspecialchars($site_slogan),'subtitle', t_text);
 		$out[] = '<link'.r_relself.' href="'.pagelinkurl(array(
 			'atom' => 1,
 			'area' => $area,
@@ -250,8 +250,8 @@
 					$e['title'] = tag(htmlspecialchars($linkname), 'title', t_html);
 					$e['content'] = tag(n.htmlspecialchars($description).n, 'content', t_html);
 
-					$url = (preg_replace("/^\/(.*)/", "https?://$siteurl/$1", $url));
-					$url = preg_replace("/&((?U).*)=/", "&amp;\\1=", $url);
+					$url = (preg_replace("/^\/(.*)/","https?://$siteurl/$1", $url));
+					$url = preg_replace("/&((?U).*)=/","&amp;\\1=", $url);
 					$e['link'] = '<link'.r_relalt.t_texthtml.' href="'.$url.'" />';
 
 					$e['issued'] = tag(safe_strftime('w3cdtf', strtotime($date)), 'published');
@@ -287,7 +287,7 @@
 						}
 						break;
 					case 'article' :
-					default:
+					default :
 						if (safe_field('id', 'txp_category', "name in ('".join("','", $category)."') and type = 'article'") == false)
 						{
 							txp_die(gTxt('404_not_found'), '404');
@@ -413,15 +413,11 @@
 
 	function safe_hed($toUnicode) {
 
-		if (version_compare(phpversion(), "5.0.0", ">="))
-		{
+		if (version_compare(phpversion(), "5.0.0", ">=")) {
 			$str =  html_entity_decode($toUnicode, ENT_QUOTES, "UTF-8");
-		}
-		else
-		{
+		} else {
 			$trans_tbl = get_html_translation_table(HTML_ENTITIES);
-			foreach($trans_tbl as $k => $v)
-			{
+			foreach($trans_tbl as $k => $v) {
 				$ttr[$v] = utf8_encode($k);
 			}
 			$str = strtr($toUnicode, $ttr);
@@ -442,17 +438,17 @@
  * @deprecated in 4.0.4
  */
 
-	function fixup_for_feed($toFeed, $permalink)
-	{
+	function fixup_for_feed($toFeed, $permalink) {
+
 		// Fix relative urls.
-		$txt = str_replace('href="/','href="'.hu.'/', $toFeed);
-		$txt = preg_replace("/href=\\\"#(.*)\"/", "href=\"".$permalink."#\\1\"", $txt);
+		$txt = str_replace('href="/','href="'.hu.'/',$toFeed);
+		$txt = preg_replace("/href=\\\"#(.*)\"/","href=\"".$permalink."#\\1\"",$txt);
 		// This was removed as entities shouldn't be stripped in Atom feeds when the content type is HTML.
 		// Leaving it commented out as a reminder.
 		//$txt = safe_hed($txt);
 
 		// Encode and entify.
-		$txt = preg_replace(array('/</', '/>/', "/'/", '/"/'), array('&#60;', '&#62;', '&#039;', '&#34;'), $txt);
-		$txt = preg_replace("/&(?![#0-9]+;)/i", '&amp;', $txt);
+		$txt = preg_replace(array('/</','/>/',"/'/",'/"/'), array('&#60;','&#62;','&#039;','&#34;'), $txt);
+		$txt = preg_replace("/&(?![#0-9]+;)/i",'&amp;', $txt);
 		return $txt;
 	}
