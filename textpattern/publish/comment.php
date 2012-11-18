@@ -111,7 +111,7 @@
  * @return string HTML
  */
 
-	function commentForm($id, $atts=NULL)
+	function commentForm($id, $atts = null)
 	{
 		global $prefs;
 		extract($prefs);
@@ -127,7 +127,7 @@
 			'previewlabel'  => gTxt('preview'),
 			'submitlabel'   => gTxt('submit'),
 			'rememberlabel' => gTxt('remember'),
-			'forgetlabel'   => gTxt('forget')
+			'forgetlabel'   => gTxt('forget'),
 		), $atts, 0));
 
 		$namewarn = false;
@@ -146,7 +146,7 @@
 			'preview',
 			'message',
 			'submit',
-			'backpage'
+			'backpage',
 		))));
 
 		if ($message == '')
@@ -190,12 +190,12 @@
 		{
 			$rememberCookie = cs('txp_remember');
 
-			if($rememberCookie === '')
+			if ($rememberCookie === '')
 			{
 				$checkbox_type = 'remember';
 				$remember = 1;
 			}
-			else if($rememberCookie == 1)
+			else if ($rememberCookie == 1)
 			{
 				$checkbox_type = 'forget';
 			}
@@ -448,6 +448,7 @@
 
 		$web = clean_url($web);
 		$email = clean_url($email);
+
 		if ($remember == 1 || ps('checkbox_type') == 'forget' && ps('forget') != 1)
 		{
 			setCookies($name, $email, $web);

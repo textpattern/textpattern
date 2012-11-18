@@ -33,49 +33,49 @@
 		 * @ignore
 		 */
 
-		define("t_texthtml",' type="text/html"');
+		define("t_texthtml", ' type="text/html"');
 
 		/**
 		 * @ignore
 		 */
 
-		define("t_text",' type="text"');
+		define("t_text", ' type="text"');
 
 		/**
 		 * @ignore
 		 */
 
-		define("t_html",' type="html"');
+		define("t_html", ' type="html"');
 
 		/**
 		 * @ignore
 		 */
 
-		define("t_xhtml",' type="xhtml"');
+		define("t_xhtml", ' type="xhtml"');
 
 		/**
 		 * @ignore
 		 */
 
-		define('t_appxhtml',' type="xhtml"');
+		define('t_appxhtml', ' type="xhtml"');
 
 		/**
 		 * @ignore
 		 */
 
-		define("r_relalt",' rel="alternate"');
+		define("r_relalt", ' rel="alternate"');
 
 		/**
 		 * @ignore
 		 */
 
-		define("r_relself",' rel="self"');
+		define("r_relself", ' rel="self"');
 
 		$last = fetch('unix_timestamp(val)', 'txp_prefs', 'name', 'lastmod');
 
 		extract(doSlash(gpsa(array(
 			'limit',
-			'area'
+			'area',
 		))));
 
 		// Build filter criteria from a comma-separated list of sections and categories.
@@ -106,8 +106,8 @@
 		$pub = safe_row("RealName, email", "txp_users", "privs=1");
 
 		// Feed header.
-		$out[] = tag(htmlspecialchars($sitename),'title', t_text);
-		$out[] = tag(htmlspecialchars($site_slogan),'subtitle', t_text);
+		$out[] = tag(htmlspecialchars($sitename), 'title', t_text);
+		$out[] = tag(htmlspecialchars($site_slogan), 'subtitle', t_text);
 		$out[] = '<link'.r_relself.' href="'.pagelinkurl(array(
 			'atom' => 1,
 			'area' => $area,
@@ -250,8 +250,8 @@
 					$e['title'] = tag(htmlspecialchars($linkname), 'title', t_html);
 					$e['content'] = tag(n.htmlspecialchars($description).n, 'content', t_html);
 
-					$url = (preg_replace("/^\/(.*)/","https?://$siteurl/$1", $url));
-					$url = preg_replace("/&((?U).*)=/","&amp;\\1=", $url);
+					$url = (preg_replace("/^\/(.*)/", "https?://$siteurl/$1", $url));
+					$url = preg_replace("/&((?U).*)=/", "&amp;\\1=", $url);
 					$e['link'] = '<link'.r_relalt.t_texthtml.' href="'.$url.'" />';
 
 					$e['issued'] = tag(safe_strftime('w3cdtf', strtotime($date)), 'published');
