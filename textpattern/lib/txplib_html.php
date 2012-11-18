@@ -501,10 +501,10 @@
 					'id'    => $id.'-label',
 					'class' => $heading_class
 				)).
-				n.tag($content.n, 'div', $display_state);
+				n.tag($content.n, 'div', $display_state).n;
 		}
 
-		return n.tag($content.n, 'section', array(
+		return n.tag($content, 'section', array(
 			'role'            => $role,
 			'id'              => $id,
 			'class'           => trim('txp-details '.$class),
