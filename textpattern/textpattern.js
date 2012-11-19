@@ -1321,6 +1321,17 @@ textpattern.Route.add('css, page, form', function ()
 	});
 });
 
+// Preview button on Forms panel.
+
+textpattern.Route.add('form', function ()
+{
+	$('#form_preview').click(function (e)
+	{
+		e.preventDefault();
+		$(this).parents('form').append('<input type="hidden" name="form_preview" value="1" />').submit();
+	});
+});
+
 // Plugins panel.
 
 textpattern.Route.add('plugin', function ()
