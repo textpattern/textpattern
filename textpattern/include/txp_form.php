@@ -118,7 +118,7 @@
 		$rs = safe_rows_start(
 			'*',
 			'txp_form',
-			"$criteria order by field(type,'" . join("','", array_keys($form_types)) . "') asc, name asc"
+			"$criteria order by field(type, '" . join("','", array_keys($form_types)) . "') asc, name asc"
 		);
 
 		if ($rs)
@@ -235,7 +235,7 @@
  * @param string|array $message The activity message
  */
 
-	function form_edit($message='')
+	function form_edit($message = '')
 	{
 		global $event, $step, $essential_forms;
 
@@ -481,7 +481,7 @@
 
 		$name = doSlash($name);
 
-		return safe_delete("txp_form","name='$name'");
+		return safe_delete("txp_form", "name='$name'");
 	}
 
 /**
@@ -547,7 +547,7 @@
 			'search-result-tags',
 			'file-tags',
 			'category-tags',
-			'section-tags'
+			'section-tags',
 		);
 
 		$pane = gps('pane');
