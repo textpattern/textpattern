@@ -27,7 +27,14 @@
  * @global array $essential_forms
  */
 
-	$essential_forms = array('comments','comments_display','comment_form','default','plainlinks','files');
+	$essential_forms = array(
+		'comments',
+		'comments_display',
+		'comment_form',
+		'default',
+		'plainlinks',
+		'files',
+	);
 
 /**
  * List of form types.
@@ -58,7 +65,7 @@
 			'save_pane_state' => true,
 		));
 
-		switch(strtolower($step))
+		switch (strtolower($step))
 		{
 			case "" :
 				form_edit();
@@ -108,7 +115,11 @@
 		$criteria = 1;
 		$criteria .= callback_event('admin_criteria', 'form_list', 0, $criteria);
 
-		$rs = safe_rows_start('*', 'txp_form', "$criteria order by field(type,'" . join("','", array_keys($form_types)) . "') asc, name asc");
+		$rs = safe_rows_start(
+			'*',
+			'txp_form',
+			"$criteria order by field(type,'" . join("','", array_keys($form_types)) . "') asc, name asc"
+		);
 
 		if ($rs)
 		{
@@ -402,7 +413,14 @@ EOS
 					{
 						if ($newname)
 						{
-							if (safe_insert('txp_form', "Form = '$Form', type = '$type', name = '".doSlash($newname)."'"))
+							if (
+								safe_insert(
+									'txp_form',
+									"Form = '$Form',
+									type = '$type',
+									name = '".doSlash($newname)."'"
+								)
+							)
 							{
 								update_lastmod();
 								$message = gTxt('form_created', array('{name}' => $newname));
@@ -421,7 +439,15 @@ EOS
 					}
 					else
 					{
-						if (safe_update('txp_form', "Form = '$Form', type = '$type', name = '".doSlash($newname)."'", "name = '".doSlash($name)."'"))
+						if (
+							safe_update(
+								'txp_form',
+								"Form = '$Form',
+								type = '$type',
+								name = '".doSlash($newname)."'",
+								"name = '".doSlash($name)."'"
+							)
+						)
 						{
 							update_lastmod();
 							$message = gTxt('form_updated', array('{name}' => $name));
@@ -515,8 +541,28 @@ EOS
 	function form_save_pane_state()
 	{
 		global $event;
-		$panes = array('form_article', 'form_category', 'form_comment', 'form_file', 'form_link', 'form_misc', 'form_section', 'article-tags', 'link-tags', 'comment-tags', 'comment-detail-tags', 'comment-form-tags', 'search-result-tags', 'file-tags', 'category-tags', 'section-tags');
+
+		$panes = array(
+			'form_article',
+			'form_category',
+			'form_comment',
+			'form_file',
+			'form_link',
+			'form_misc',
+			'form_section',
+			'article-tags',
+			'link-tags',
+			'comment-tags',
+			'comment-detail-tags',
+			'comment-form-tags',
+			'search-result-tags',
+			'file-tags',
+			'category-tags',
+			'section-tags'
+		);
+
 		$pane = gps('pane');
+
 		if (in_array($pane, $panes))
 		{
 			set_pref("pane_{$pane}_visible", (gps('visible') == 'true' ? '1' : '0'), $event, PREF_HIDDEN, 'yesnoradio', 0, PREF_PRIVATE);
