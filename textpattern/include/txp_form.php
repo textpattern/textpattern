@@ -118,7 +118,7 @@
 		$rs = safe_rows_start(
 			'*',
 			'txp_form',
-			"$criteria order by field(type, '" . join("','", array_keys($form_types)) . "') asc, name asc"
+			"$criteria order by field(type, ".join(',', quote_list(array_keys($form_types))).") asc, name asc"
 		);
 
 		if ($rs)
