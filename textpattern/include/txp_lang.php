@@ -299,9 +299,10 @@ Use of this software indicates acceptance of the Textpattern license agreement
 			hed(gTxt('install_from_textpack'), 3).
 			form(
 				graf(
-					'<label for="textpack-install">'.gTxt('install_textpack').'</label>'.
-					popHelp('get_textpack').
-					n.'<textarea id="textpack-install" class="code" name="textpack" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'"></textarea>'.
+					'<label for="textpack-install">'.gTxt('install_textpack').'</label>'.popHelp('get_textpack').br.
+					n.'<textarea id="textpack-install" class="code" name="textpack" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'"></textarea>'
+				).
+				graf(
 					fInput('submit', 'install_new', gTxt('upload')).
 					eInput('lang').
 					sInput('get_textpack')
