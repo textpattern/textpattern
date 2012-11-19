@@ -380,7 +380,8 @@
 		// Empty entry to permit clearing the category
 		$categories = array('');
 
-		foreach ($all_file_cats as $row) {
+		foreach ($all_file_cats as $row)
+		{
 			$categories[] = $row['name'];
 		}
 

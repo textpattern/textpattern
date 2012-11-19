@@ -178,7 +178,8 @@ Use of this software indicates acceptance of the Textpattern license agreement
 		foreach ($rows as $language)
 		{
 			$available_lang[$language['lang']]['db_lastmod'] = $language['lastmod'];
-			if ($language['lang'] != $active_lang) {
+			if ($language['lang'] != $active_lang)
+			{
 				$installed_lang[] = $language['lang'];
 			}
 		}

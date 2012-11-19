@@ -133,7 +133,6 @@ EOS
 
 			$rs = getTree('root', $type, "lft not between $lft and $rgt");
 		}
-
 		else
 		{
 			$rs = getTree('root', $type);
@@ -248,6 +247,7 @@ EOS
 					, '', '', 'post', 'category-tree', '', 'category_'.$area.'_form'
 				);
 		}
+
 		return;
 	}
 
@@ -316,7 +316,6 @@ EOS
 					}
 				}
 			}
-
 			else if ($method == 'changeparent')
 			{
 				$new_parent = ps('new_parent');
@@ -403,7 +402,6 @@ EOS
 					}
 				}
 			}
-
 			else
 			{
 				switch ($event)
@@ -458,9 +456,12 @@ EOS
 
 				$count = isset($total_count[$name]) ? href('('.$total_count[$name].')', $url) : '(0)';
 
-				if (empty($title)) {
+				if (empty($title))
+				{
 					$edit_link = '<em>'.eLink('category', 'cat_'.$event.'_edit', 'id', $id, gTxt('untitled')).'</em>';
-				} else {
+				}
+				else
+				{
 					$edit_link = eLink('category', 'cat_'.$event.'_edit', 'id', $id, $title);
 				}
 
@@ -474,7 +475,6 @@ EOS
 				$out .= cat_article_multiedit_form($event, $items);
 			}
 		}
-
 		else
 		{
 			$out .= graf(gTxt('no_categories_exist'));

@@ -145,7 +145,6 @@
 				$crit = '';
 			}
 		}
-
 		else
 		{
 			$search_method = '';
@@ -219,7 +218,8 @@
 
 				$name = empty($name) ? gTxt('unnamed') : txpspecialchars($name);
 
-				if ($thumbnail) {
+				if ($thumbnail)
+				{
 					if ($ext != '.swf')
 					{
 						$thumbnail = '<img class="content-image" src="'.imagesrcurl($id, $ext, true)."?$uDate".'" alt="" '.
@@ -236,7 +236,8 @@
 					$thumbnail = gTxt('no');
 				}
 
-				if ($ext != '.swf') {
+				if ($ext != '.swf')
+				{
 					$tag_url = '?event=tag'.a.'tag_name=image'.a.'id='.$id.a.'ext='.$ext.a.'w='.$w.a.'h='.$h.a.'alt='.urlencode($alt).a.'caption='.urlencode($caption);
 					$tagbuilder = '<a target="_blank" href="'.$tag_url.a.'type=textile" onclick="popWin(this.href); return false;">Textile</a>'.sp.
 							'&#124;'.sp.'<a target="_blank" href="'.$tag_url.a.'type=textpattern" onclick="popWin(this.href); return false;">Textpattern</a>'.sp.

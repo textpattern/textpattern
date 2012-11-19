@@ -579,7 +579,8 @@
 			if (is_callable('apache_get_modules'))
 				$out[] = n.gTxt('apache_modules').cs.join(', ', apache_get_modules()).n;
 
-			if (@is_array($pretext_data) and count($pretext_data) > 1) {
+			if (@is_array($pretext_data) and count($pretext_data) > 1)
+			{
 				$out[] = n.gTxt('pretext_data').cs.txpspecialchars(join('', array_slice($pretext_data, 1, 20))).n;
 			}
 

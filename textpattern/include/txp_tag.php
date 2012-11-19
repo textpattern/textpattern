@@ -150,13 +150,15 @@ begin generic functions
 
 //--------------------------------------------------------------
 
-	function yesno_pop($select_name, $val) {
+	function yesno_pop($select_name, $val)
+	{
 		$vals = array(
 			1 => gTxt('yes'),
 			0 => gTxt('no'),
 		);
 
-		if (is_numeric($val)) {
+		if (is_numeric($val))
+		{
 			$val = (int) $val;
 		}
 

@@ -301,6 +301,7 @@
 				$class = 'input-xsmall';
 				break;
 		}
+
 		return fInput('text', $name, $val, $class, '', '', $size, '', $name);
 	}
 
@@ -334,6 +335,7 @@
 		$key = safe_field('val', 'txp_prefs', "name='timezone_key'");
 		$tz = new timezone;
 		$ui = $tz->selectInput('timezone_key', $key, true, '', 'gmtoffset');
+
 		return pluggable_ui('prefs_ui', 'gmtoffset', $ui, $name, $val);
 	}
 
@@ -355,25 +357,31 @@
 			$(document).ready(function ()
 			{
 				var radio = $("#prefs-is_dst input");
-				if (radio) {
-					if ($("#auto_dst-1").prop("checked") && textpattern.timezone_is_supported) {
+				if (radio)
+				{
+					if ($("#auto_dst-1").prop("checked") && textpattern.timezone_is_supported)
+					{
 						radio.prop("disabled", "disabled");
 					}
+
 					$("#auto_dst-0").click(function ()
 					{
 						radio.removeProp("disabled");
 					});
+
 					$("#auto_dst-1").click(function ()
 					{
 						radio.prop("disabled", "disabled");
 					});
 				}
-				if (!textpattern.timezone_is_supported) {
+				if (!textpattern.timezone_is_supported)
+				{
 					$("#prefs-auto_dst input").prop("disabled", "disabled");
 				}
 			});
 EOS
 		);
+
 		return pluggable_ui('prefs_ui', 'is_dst', $ui, $name, $val);
 	}
 
@@ -707,6 +715,7 @@ EOS
 				}
 			}
 		}
+
 		return $real_max;
 	}
 

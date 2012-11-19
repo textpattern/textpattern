@@ -512,6 +512,7 @@
 				{
 					do_pings();
 				}
+
 				if ($Status >= STATUS_LIVE || $oldArticle['Status'] >= STATUS_LIVE)
 				{
 					update_lastmod();
@@ -746,7 +747,6 @@
 		}
 		else
 		{
-
 			$pull = false; // Assume they came from post.
 
 			if ($from_view == 'preview' or $from_view == 'html')
@@ -934,7 +934,6 @@
 
 		if ($view == 'text')
 		{
-
 			// Markup help.
 			echo $partials['sidehelp']['html'];
 
@@ -978,9 +977,8 @@
 			$html_url_title = $partials['url_title']['html'];
 			echo wrapRegion('meta_group', $html_keywords.$html_url_title, 'meta', 'meta', 'article_meta');
 
-		// Recent articles.
+			// Recent articles.
 			echo wrapRegion('recent_group', $partials['recent_articles']['html'], 'recent', 'recent_articles', 'article_recent');
-
 		}
 		else
 		{
@@ -1162,10 +1160,8 @@
 					fInput('submit', 'publish',gTxt('save'), "publish")
 				, ' id="write-publish"');
 			}
-
 			else
 			{
-
 				// Timestamp.
 				$posted_block = $partials['posted']['html'];
 
@@ -1366,7 +1362,6 @@
 		{
 			return gTxt('url_title_is_blank');
 		}
-
 		else
 		{
 			$url_title_count = safe_count('textpattern', "url_title = '$url_title'");

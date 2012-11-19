@@ -399,12 +399,14 @@
 					description = '$description',
 					author      = '".doSlash($txp_user)."'"
 				);
-				if ($ok) {
+				if ($ok)
+				{
 					$GLOBALS['ID'] = $_POST['id'] = $ok;
 				}
 			}
 
-			if ($ok) {
+			if ($ok)
+			{
 				// update lastmod due to link feeds
 				update_lastmod();
 				$message = gTxt(($id ? 'link_updated' : 'link_created'), array('{name}' => doStrip($linkname)));
@@ -471,7 +473,8 @@
 		// Empty entry to permit clearing the category
 		$categories = array('');
 
-		foreach ($all_link_cats as $row) {
+		foreach ($all_link_cats as $row)
+		{
 			$categories[] = $row['name'];
 		}
 
