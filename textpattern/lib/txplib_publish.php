@@ -190,13 +190,13 @@ Use of this software indicates acceptance of the Textpattern license agreement
 		$id = (!$id) ? '' : " and ID IN (".join(',', $ids).")";
 		switch ($time)
 		{
-			case 'any':
+			case 'any' :
 				$time = "";
 				break;
-			case 'future':
+			case 'future' :
 				$time = " and Posted > now()";
 				break;
-			default:
+			default :
 				$time = " and Posted <= now()";
 		}
 
@@ -217,7 +217,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
 				}
 			}
 
-			if(!empty($customPairs))
+			if (!empty($customPairs))
 			{
 				$custom = buildCustomSql($customFields, $customPairs);
 			}
@@ -324,7 +324,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
 					$threshold = 'from_unixtime('.doSlash($thisarticle['modified']).')';
 					$threshold_type = 'cooked';
 					break;
-				default:
+				default :
 					// Retrieve current threshold value per sort column from $thisarticle.
 					$acm = array_flip(article_column_map());
 					$key = $acm[$atts['sortby']];

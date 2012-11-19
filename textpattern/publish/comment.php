@@ -218,7 +218,6 @@
 
 		// Experimental clean URLs with only 404-error-document on Apache
 		// possibly requires messy URLs for POST requests.
-
 		if (defined('PARTLY_MESSY') and (PARTLY_MESSY))
 		{
 			$url = hu.'?id='.intval($parentid);
@@ -260,7 +259,6 @@
 
 			$checkbox = checkbox('forget', 1, $forget, '', 'forget').' '.tag(txpspecialchars($forgetlabel), 'label', ' for="forget"');
 		}
-
 		else
 		{
 			// Inhibit default remember.
@@ -320,7 +318,7 @@
 	{
 		global $sitename, $s, $thisarticle;
 		$preview = gps('preview');
-		$h3 = ($preview) ? hed(gTxt('message_preview'),3) : '';
+		$h3 = ($preview) ? hed(gTxt('message_preview'), 3) : '';
 		$discuss = discuss($id);
 		ob_start('parse');
 		$out = fetch_form('popup_comments');
@@ -341,7 +339,7 @@
 
 	function setCookies($name, $email, $web)
 	{
-		$cookietime = time() + (365*24*3600);
+		$cookietime = time() + (365 * 24 * 3600);
 		ob_start();
 		setcookie("txp_name", $name, $cookietime, "/");
 		setcookie("txp_email", $email, $cookietime, "/");
@@ -356,13 +354,13 @@
 
 	function destroyCookies()
 	{
-		$cookietime = time()-3600;
+		$cookietime = time() - 3600;
 		ob_start();
 		setcookie("txp_name", '', $cookietime, "/");
 		setcookie("txp_email", '', $cookietime, "/");
 		setcookie("txp_web", '', $cookietime, "/");
 		setcookie("txp_last", '', $cookietime, "/");
-		setcookie("txp_remember", '0', $cookietime + (365*25*3600), "/");
+		setcookie("txp_remember", '0', $cookietime + (365 * 25 * 3600), "/");
 	}
 
 /**
@@ -387,7 +385,7 @@
 			'web',
 			'message',
 			'backpage',
-			'remember'
+			'remember',
 		));
 
 		$n = array();
@@ -844,9 +842,9 @@ class comment_evaluation
 
 		if ($comments_disabled_after)
 		{
-			$lifespan = ( $comments_disabled_after * 86400 );
-			$timesince = ( time() - $uPosted );
-			return ( $lifespan > $timesince );
+			$lifespan = ($comments_disabled_after * 86400);
+			$timesince = (time() - $uPosted);
+			return ($lifespan > $timesince);
 		}
 
 		return true;
@@ -902,7 +900,7 @@ class comment_evaluation
 		extract($article);
 		extract(safe_row("RealName, email", "txp_users", "name = '".doSlash($AuthorID)."'"));
 
-		$out = gTxt('greeting')." $RealName,".n.n;
+		$out = gTxt('greeting')." $RealName,".n;
 		$out .= str_replace('{title}', $Title, gTxt('comment_recorded')).n;
 		$out .= permlinkurl_id($parentid).n;
 		if (has_privs('discuss', $AuthorID))

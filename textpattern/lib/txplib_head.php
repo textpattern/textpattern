@@ -56,12 +56,10 @@
 		{
 			$body_id = 'page-logout';
 		}
-
 		elseif (!$txp_user)
 		{
 			$body_id = 'page-login';
 		}
-
 		else
 		{
 			$body_id = 'page-'.txpspecialchars($event);
@@ -214,14 +212,14 @@ echo $theme->html_head();
 			gTxt('tab_list')     => 'list',
 			gTxt('tab_image')    => 'image',
 			gTxt('tab_file')     => 'file',
-			gTxt('tab_link')     => 'link'
+			gTxt('tab_link')     => 'link',
 		);
 
 		$areas['presentation'] = array(
 			gTxt('tab_sections') => 'section',
 			gTxt('tab_pages')    => 'page',
 			gTxt('tab_forms')    => 'form',
-			gTxt('tab_style')    => 'css'
+			gTxt('tab_style')    => 'css',
 		);
 
 		$areas['admin'] = array(
@@ -231,7 +229,7 @@ echo $theme->html_head();
 			gTxt('tab_site_admin')  => 'admin',
 			gTxt('tab_logs')        => 'log',
 			gTxt('tab_plugins')     => 'plugin',
-			gTxt('tab_import')      => 'import'
+			gTxt('tab_import')      => 'import',
 		);
 
 		$areas['extensions'] = array(

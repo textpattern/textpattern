@@ -173,7 +173,7 @@ class Constraint
 	 * @param null $key Key for scalar option
 	 */
 
-	public function setOptions($options, $key=null)
+	public function setOptions($options, $key = null)
 	{
 		if ($key === null)
 		{

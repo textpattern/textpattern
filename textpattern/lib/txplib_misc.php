@@ -108,7 +108,7 @@
 			'&#x3C;' => '<',
 			'&#62;'  => '>',
 			'&gt;'   => '>',
-			'&#x3E;' => '>'
+			'&#x3E;' => '>',
 		);
 
 		foreach ($array as $k => $v)
@@ -681,7 +681,6 @@
 		{
 			return in_array($privs[$user], explode(',', $txp_permissions[$res]));
 		}
-
 		else
 		{
 			return false;
@@ -937,7 +936,6 @@
 			{
 				return gTxt('image_save_error');
 			}
-
 			else
 			{
 				$newpath = IMPATH.$id.$ext;
@@ -957,7 +955,6 @@
 
 					return $newpath.sp.gTxt('upload_dir_perms');
 				}
-
 				else
 				{
 					@chmod($newpath, 0644);
@@ -995,14 +992,12 @@
 				}
 			}
 		}
-
 		else
 		{
 			if ($file === false)
 			{
 				return upload_get_errormsg($error);
 			}
-
 			else
 			{
 				return gTxt('only_graphic_files_allowed');
@@ -1689,6 +1684,7 @@
 		{
 			return;
 		}
+
 		if ($production_status == 'live' || ($production_status != 'debug' && $errno == E_USER_NOTICE))
 		{
 			return;
@@ -1982,7 +1978,7 @@
 
 				$callback[0] = new $callback[0];
 			}
-			else if(strpos($string, '::'))
+			else if (strpos($string, '::'))
 			{
 				$callback = explode('::', $string);
 			}
@@ -2319,7 +2315,7 @@
 				'&ugrave;'=>'u','&uacute;'=>'u','&ucirc;'=>'u','&uuml;'=>'ue',
 				'&yacute;'=>'y','&yuml;'=>'y',
 				'&thorn;'=>'t',
-				'&szlig;'=>'ss'
+				'&szlig;'=>'ss',
 			);
 
 
@@ -2511,10 +2507,10 @@
 			{
 				switch (count($m))
 				{
-					case 3:
+					case 3 :
 						$val = str_replace('""', '"', $m[2]);
 						break;
-					case 4:
+					case 4 :
 						$val = str_replace("''", "'", $m[3]);
 
 						if (strpos($m[3], '<txp:') !== FALSE)
@@ -2525,7 +2521,7 @@
 						}
 
 						break;
-					case 5:
+					case 5 :
 						$val = $m[4];
 						trigger_error(gTxt('attribute_values_must_be_quoted'), E_USER_WARNING);
 						break;
@@ -2677,7 +2673,6 @@
 				extract(safe_row('RealName, email', 'txp_users', "name = '".doSlash($txp_user)."'"));
 			}
 		}
-
 		// Likely sending comments -> "to" equals "from".
 		else
 		{
@@ -2692,7 +2687,6 @@
 			$subject = utf8_decode($subject);
 			$body = utf8_decode($body);
 		}
-
 		else
 		{
 			$charset = 'UTF-8';

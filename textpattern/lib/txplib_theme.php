@@ -267,7 +267,8 @@ class theme
 				{
 					if (has_privs($b))
 					{
-						if ($e_ === '') {
+						if ($e_ === '')
+						{
 							$e_ = $b;
 						}
 

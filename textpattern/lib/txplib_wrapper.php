@@ -83,11 +83,38 @@ class TXP_Wrapper
 	 */
 
 	public $vars = array(
-		'ID','Title','Title_html','Body','Body_html','Excerpt','Excerpt_html','textile_excerpt','Image',
-		'textile_body', 'Keywords','Status','Posted','Section','Category1','Category2',
-		'Annotate','AnnotateInvite','AuthorID','Posted','override_form',
-		'url_title','custom_1','custom_2','custom_3','custom_4','custom_5',
-		'custom_6','custom_7','custom_8','custom_9','custom_10'
+		'ID',
+		'Title',
+		'Title_html',
+		'Body',
+		'Body_html',
+		'Excerpt',
+		'Excerpt_html',
+		'textile_excerpt',
+		'Image',
+		'textile_body',
+		'Keywords',
+		'Status',
+		'Posted',
+		'Section',
+		'Category1',
+		'Category2',
+		'Annotate',
+		'AnnotateInvite',
+		'AuthorID',
+		'Posted',
+		'override_form',
+		'url_title',
+		'custom_1',
+		'custom_2',
+		'custom_3',
+		'custom_4',
+		'custom_5',
+		'custom_6',
+		'custom_7',
+		'custom_8',
+		'custom_9',
+		'custom_10',
 	);
 
 	/**
@@ -180,7 +207,7 @@ class TXP_Wrapper
 			{
 				while ($a = nextRow($rs))
 				{
-					$out[]= $a;
+					$out[] = $a;
 				}
 			}
 			return $out;
@@ -366,7 +393,7 @@ class TXP_Wrapper
 	{
 		if ($this->loggedin && has_privs('article', $this->txp_user))
 		{
-			return safe_rows('*', 'txp_section',"name!='default'");
+			return safe_rows('*', 'txp_section', "name!='default'");
 		}
 		return false;
 	}
@@ -463,7 +490,7 @@ class TXP_Wrapper
 		if ($this->loggedin && has_privs('article', $this->txp_user))
 		{
 			$id = assert_int($id);
-			return safe_row('*', 'txp_category',"id = $id");
+			return safe_row('*', 'txp_category', "id = $id");
 		}
 		return false;
 	}
@@ -484,7 +511,7 @@ class TXP_Wrapper
 		if ($this->loggedin && has_privs('article', $this->txp_user))
 		{
 			$title = doSlash($title);
-			return safe_row('*', 'txp_category',"title='$title' AND type='article'");
+			return safe_row('*', 'txp_category', "title='$title' AND type='article'");
 		}
 		return false;
 	}
@@ -508,7 +535,7 @@ class TXP_Wrapper
 	{
 		if ($this->loggedin)
 		{
-			return safe_row('*', 'txp_users',"name='$this->txp_user'");
+			return safe_row('*', 'txp_users', "name='$this->txp_user'");
 		}
 		return false;
 	}
@@ -581,9 +608,21 @@ class TXP_Wrapper
 
 	public function updateArticleField($article_id, $field, $value)
 	{
-		$disallow = array('Body','Body_html','Title','Title_html','Excerpt',
-					'Excerpt_html','textile_excerpt','textile_body','LastMod',
-					'LastModID', 'feed_time', 'uid');
+		$disallow = array(
+			'Body',
+			'Body_html',
+			'Title',
+			'Title_html',
+			'Excerpt',
+			'Excerpt_html',
+			'textile_excerpt',
+			'textile_body',
+			'LastMod',
+			'LastModID',
+			'feed_time',
+			'uid',
+		);
+
 		if ($this->loggedin && has_privs('article.edit', $this->txp_user) && !in_array(doSlash($field), $disallow))
 		{
 			$field = doSlash($field);
@@ -652,7 +691,8 @@ class TXP_Wrapper
 			return false;
 		}
 
-		if ($article_id!==null) {
+		if ($article_id !== null)
+		{
 			$article_id = assert_int($article_id);
 		}
 
@@ -694,13 +734,14 @@ class TXP_Wrapper
 			$when = "from_unixtime($when)";
 		}
 
-		if ($incoming['Title'] || $incoming['Body'] || $incoming['Excerpt']) {
+		if ($incoming['Title'] || $incoming['Body'] || $incoming['Excerpt'])
+		{
 			// Build SQL then and run query.
 			// Prevent data erase if not defined on the update action but
 			// it was on the database from a previous creation/edition time.
 			if ($article_id)
 			{
-				$old = safe_row('*','textpattern', "ID = $article_id");
+				$old = safe_row('*', 'textpattern', "ID = $article_id");
 
 				if (!has_privs('article.publish', $this->txp_user) && $incoming['Status'] == 4 && $old['Status'] != 4)
 				{
@@ -725,7 +766,7 @@ class TXP_Wrapper
 
 			if (empty($incoming['Section']) && $article_id)
 			{
-				$incoming['Section'] = safe_field('Section','textpattern',"ID = $article_id");
+				$incoming['Section'] = safe_field('Section', 'textpattern', "ID = $article_id");
 			}
 
 			$incoming = $this->_check_keys($incoming, array(
@@ -917,14 +958,14 @@ class TXP_Wrapper
 
 		if ($incoming['textile_body'] == USE_TEXTILE)
 		{
-			$incoming['Title'] = $textile->TextileThis($incoming['Title'],'',1);
+			$incoming['Title'] = $textile->TextileThis($incoming['Title'], '', 1);
 		}
 
 		$incoming['url_title'] = preg_replace('|[\x00-\x1f#%+/?\x7f]|', '', $incoming['url_title']);
 
-		$incoming['Body_html'] = TXP_Wrapper::format_field($incoming['Body'],$incoming['textile_body'],$textile);
+		$incoming['Body_html'] = TXP_Wrapper::format_field($incoming['Body'], $incoming['textile_body'], $textile);
 
-		$incoming['Excerpt_html'] = TXP_Wrapper::format_field($incoming['Excerpt'],$incoming['textile_excerpt'],$textile);
+		$incoming['Excerpt_html'] = TXP_Wrapper::format_field($incoming['Excerpt'], $incoming['textile_excerpt'], $textile);
 
 		return $incoming;
 	}

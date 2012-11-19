@@ -28,7 +28,7 @@ $link_tags = array(
 	'link_name',
 	'link_description',
 	'link_category',
-	'link_date'
+	'link_date',
 );
 
 $comment_tags = array(
@@ -76,12 +76,12 @@ $file_download_tags = array(
 
 $category_tags = array(
 	'category',
-	'if_category'
+	'if_category',
 );
 
 $section_tags = array(
 	'section',
-	'if_section'
+	'if_section',
 );
 
 $page_article_tags = array(

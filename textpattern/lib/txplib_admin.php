@@ -124,7 +124,6 @@
 				return gTxt('could_not_mail');
 			}
 		}
-
 		else
 		{
 			// Though 'unknown_author' could be thrown, send generic 'request_sent' message
@@ -202,13 +201,11 @@
 			{
 				return(gTxt('password_sent_to').' '.$email);
 			}
-
 			else
 			{
 				return(gTxt('could_not_mail').' '.$email);
 			}
 		}
-
 		else
 		{
 			return(gTxt('could_not_update_author').' '.txpspecialchars($name));

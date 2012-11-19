@@ -167,7 +167,7 @@ class wet_thumb
 	 * @var array
 	 */
 
-	public $types = array('','.gif','.jpg','.png');
+	public $types = array('', '.gif', '.jpg', '.png');
 
 	/**
 	 * Source.
