@@ -118,7 +118,7 @@
 			while ($a = nextRow($rs))
 			{
 				extract($a);
-				$active = ($curname == $name);
+				$active = ($curname === $name);
 				$editlink = ($active)
 					? txpspecialchars($name)
 					: eLink('form', 'form_edit', 'name', $name, $name);
@@ -126,7 +126,7 @@
 					? '<span class="switcher-action"><input type="checkbox" name="selected_forms[]" value="'.$name.'" /></span>'
 					: '';
 
-				if ($prev_type != $type)
+				if ($prev_type !== $type)
 				{
 					if ($prev_type !== null)
 					{
@@ -255,7 +255,7 @@ EOS
 		{
 			$name = 'default';
 		}
-		elseif ( ((($copy || $savenew) && $newname) || ($newname && ($newname != $name))) && !$save_error)
+		elseif (((($copy || $savenew) && $newname) || ($newname && $newname !== $name)) && !$save_error)
 		{
 			$name = $newname;
 		}
@@ -378,7 +378,7 @@ EOS
 			}
 			else
 			{
-				if ($copy && ($name === $newname))
+				if ($copy && $name === $newname)
 				{
 					$newname .= '_copy';
 					$_POST['newname'] = $newname;
@@ -386,7 +386,7 @@ EOS
 
 				$exists = safe_field('name', 'txp_form', "name = '".doSlash($newname)."'");
 
-				if (($newname != $name) && $exists)
+				if ($newname !== $name && $exists)
 				{
 					$message = array(gTxt('form_already_exists', array('{name}' => $newname)), E_ERROR);
 					if ($savenew)
