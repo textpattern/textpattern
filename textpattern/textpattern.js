@@ -1321,7 +1321,7 @@ textpattern.Route.add('css, page, form', function ()
 	});
 });
 
-// Preview button on Forms panel.
+// Forms panel.
 
 textpattern.Route.add('form', function ()
 {
@@ -1329,6 +1329,12 @@ textpattern.Route.add('form', function ()
 	{
 		e.preventDefault();
 		$(this).parents('form').append('<input type="hidden" name="form_preview" value="1" />').submit();
+	});
+
+	$('#allforms_form').txpMultiEditForm({
+		'checkbox'    : 'input[name="selected_forms[]"][type=checkbox]',
+		'row'         : '.switcher-list li, .form-list-name',
+		'highlighted' : '.switcher-list li'
 	});
 });
 
