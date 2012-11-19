@@ -105,13 +105,6 @@
 	{
 		global $essential_forms, $form_types;
 
-		$types = formTypes('', false, 'changetype');
-
-		$methods = array(
-			'changetype' => array('label' => gTxt('changetype'), 'html' => $types),
-			'delete'     => gTxt('delete'),
-		);
-
 		$criteria = 1;
 		$criteria .= callback_event('admin_criteria', 'form_list', 0, $criteria);
 
@@ -130,33 +123,61 @@
 			{
 				extract($a);
 				$active = ($curname === $name);
-				$editlink = ($active)
-					? txpspecialchars($name)
-					: eLink('form', 'form_edit', 'name', $name, $name);
-				$modbox = (!in_array($name, $essential_forms))
-					? '<span class="switcher-action"><input type="checkbox" name="selected_forms[]" value="'.$name.'" /></span>'
-					: '';
 
 				if ($prev_type !== $type)
 				{
 					if ($prev_type !== null)
 					{
-						$group_out[] = '</ul>';
-						$out[] = wrapRegion($prev_type.'_forms_group', join(n, $group_out), 'form_'.$prev_type, $form_types[$prev_type], 'form_'.$prev_type);
+						$group_out = tag(n.join(n, $group_out).n, 'ul', array(
+							'class' => 'switcher-list',
+						));
+
+						$out[] = wrapRegion($prev_type.'_forms_group', $group_out, 'form_'.$prev_type, $form_types[$prev_type], 'form_'.$prev_type);
 					}
 
 					$prev_type = $type;
-					$group_out = array(n.'<ul class="switcher-list">');
+					$group_out = array();
 				}
 
-				$group_out[] = '<li'.($active ? ' class="active"' : '').'>'.n.$modbox.$editlink.n.'</li>';
+				if ($active)
+				{
+					$editlink = txpspecialchars($name);
+				}
+				else
+				{
+					$editlink = eLink('form', 'form_edit', 'name', $name, $name);
+				}
+
+				if (!in_array($name, $essential_forms))
+				{
+					$modbox = tag(
+						checkbox('selected_forms[]', txpspecialchars($name), false)
+					, 'span', array('class' => 'switcher-action'));
+				}
+				else
+				{
+					$modbox = '';
+				}
+
+				$group_out[] = tag(n.$modbox.$editlink.n, 'li', array(
+					'class' => $active ? 'active' : ''
+				));
 			}
 
 			if ($prev_type !== null)
 			{
-				$group_out[] = '</ul>';
-				$out[] = wrapRegion($prev_type.'_forms_group', join(n, $group_out), 'form_'.$prev_type, $form_types[$prev_type], 'form_'.$prev_type);
+				$group_out = tag(n.join(n, $group_out).n, 'ul', array(
+					'class' => 'switcher-list',
+				));
+
+				$out[] = wrapRegion($prev_type.'_forms_group', $group_out, 'form_'.$prev_type, $form_types[$prev_type], 'form_'.$prev_type);
 			}
+
+			$methods = array(
+				'changetype' => array('label' => gTxt('changetype'), 'html' => formTypes('', false, 'changetype')),
+				'delete'     => gTxt('delete'),
+			);
+
 			$out[] = multi_edit($methods, 'form', 'form_multi_edit');
 
 			return form(join('', $out), '', '', 'post', '', '', 'allforms_form');
