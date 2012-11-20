@@ -3540,7 +3540,7 @@
 			$length = strlen($name);
 		}
 
-		return $name && !preg_match('/^\s|[,\'"<>]|\s$/', $name) && $length <= 64;
+		return $name && !preg_match('/^\s|[,\'"<>]|\s$/u', $name) && $length <= 64;
 	}
 
 /**
