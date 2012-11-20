@@ -302,11 +302,23 @@
 		if (has_privs('admin.list'))
 		{
 			extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
-			if ($sort === '') $sort = get_pref('admin_sort_column', 'name');
-			if ($dir === '') $dir = get_pref('admin_sort_dir', 'asc');
+
+			if ($sort === '')
+			{
+				$sort = get_pref('admin_sort_column', 'name');
+			}
+
+			if ($dir === '')
+			{
+				$dir = get_pref('admin_sort_dir', 'asc');
+			}
+
 			$dir = ($dir == 'desc') ? 'desc' : 'asc';
 
-			if (!in_array($sort, array('name', 'RealName', 'email', 'privs', 'last_login'))) $sort = 'name';
+			if (!in_array($sort, array('name', 'RealName', 'email', 'privs', 'last_login')))
+			{
+				$sort = 'name';
+			}
 
 			$sort_sql = $sort.' '.$dir;
 
