@@ -10,50 +10,50 @@
 
 */
 
-if (!defined('txpath'))
-{
-	define("txpath", dirname(dirname(__FILE__)));
-}
+	if (!defined('txpath'))
+	{
+		define("txpath", dirname(dirname(__FILE__)));
+	}
 
-define("txpinterface", "admin");
-error_reporting(E_ALL | E_STRICT);
-@ini_set("display_errors","1");
+	define("txpinterface", "admin");
+	error_reporting(E_ALL | E_STRICT);
+	@ini_set("display_errors", "1");
+	
+	include_once txpath.'/lib/constants.php';
+	include_once txpath.'/lib/txplib_html.php';
+	include_once txpath.'/lib/txplib_forms.php';
+	include_once txpath.'/lib/txplib_misc.php';
+	include_once txpath.'/lib/txplib_theme.php';
+	include_once txpath.'/include/txp_auth.php';
 
-include_once txpath.'/lib/constants.php';
-include_once txpath.'/lib/txplib_html.php';
-include_once txpath.'/lib/txplib_forms.php';
-include_once txpath.'/lib/txplib_misc.php';
-include_once txpath.'/lib/txplib_theme.php';
-include_once txpath.'/include/txp_auth.php';
+	assert_system_requirements();
 
-assert_system_requirements();
+	header("Content-type: text/html; charset=utf-8");
+	header('X-UA-Compatible: '.X_UA_COMPATIBLE);
 
-header("Content-type: text/html; charset=utf-8");
-header('X-UA-Compatible: '.X_UA_COMPATIBLE);
+	// Drop trailing cruft.
+	$_SERVER['PHP_SELF'] = preg_replace('#^(.*index.php).*$#i', '$1', $_SERVER['PHP_SELF']);
 
-// drop trailing cruft
-$_SERVER['PHP_SELF'] = preg_replace('#^(.*index.php).*$#i', '$1', $_SERVER['PHP_SELF']);
-// sniff out the 'textpattern' directory's name
-// '/path/to/site/textpattern/setup/index.php'
-//                -3          -2    -1
-$txpdir = explode('/', $_SERVER['PHP_SELF']);
-if (count($txpdir) > 3)
-{
-	// we live in the regular directory structure
-	$txpdir = '/'.$txpdir[count($txpdir) - 3];
-}
-else
-{
-	// we probably came here from a clever assortment of symlinks and DocumentRoot
-	$txpdir = '/';
-}
+	// Sniff out the 'textpattern' directory's name '/path/to/site/textpattern/setup/index.php'.
+	$txpdir = explode('/', $_SERVER['PHP_SELF']);
 
-$step = ps('step');
-$rel_siteurl = preg_replace("#^(.*?)($txpdir)?/setup.*$#i",'$1',$_SERVER['PHP_SELF']);
-$rel_txpurl = rtrim(dirname(dirname($_SERVER['PHP_SELF'])), '/\\');
-$bodyclass = ($step=='') ? ' class="welcome"' : '';
+	if (count($txpdir) > 3)
+	{
+		// We live in the regular directory structure.
+		$txpdir = '/'.$txpdir[count($txpdir) - 3];
+	}
+	else
+	{
+		// We probably came here from a clever assortment of symlinks and DocumentRoot.
+		$txpdir = '/';
+	}
 
-print <<<eod
+	$step = ps('step');
+	$rel_siteurl = preg_replace("#^(.*?)($txpdir)?/setup.*$#i", '$1', $_SERVER['PHP_SELF']);
+	$rel_txpurl = rtrim(dirname(dirname($_SERVER['PHP_SELF'])), '/\\');
+	$bodyclass = ($step == '') ? ' class="welcome"' : '';
+
+	print <<<eod
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -72,12 +72,22 @@ print <<<eod
 <div class="txp-body">
 eod;
 
-	switch ($step) {
-		case "": chooseLang(); break;
-		case "getDbInfo": getDbInfo(); break;
-		case "getTxpLogin": getTxpLogin(); break;
-		case "printConfig": printConfig(); break;
-		case "createTxp": createTxp();
+	switch ($step)
+	{
+		case "" :
+			chooseLang();
+			break;
+		case "getDbInfo" :
+			getDbInfo();
+			break;
+		case "getTxpLogin" :
+			getTxpLogin();
+			break;
+		case "printConfig" :
+			printConfig();
+			break;
+		case "createTxp" :
+			createTxp();
 	}
 ?>
 </div>
@@ -92,8 +102,8 @@ eod;
 			n.'<div class="txp-setup">',
 			hed('Welcome to Textpattern',1),
 			n.'<form action="'.$_SERVER['PHP_SELF'].'" method="post">',
-			n.langs(),
-			graf(fInput('submit','Submit','Submit','publish')),
+			langs(),
+			graf(fInput('submit', 'Submit', 'Submit', 'publish')),
 			sInput('getDbInfo'),
 			n.'</form>',
 			n.'</div>',
@@ -101,7 +111,8 @@ eod;
 	}
 
 // -------------------------------------------------------------
-	function txp_setup_progress_meter($stage=1) {
+	function txp_setup_progress_meter($stage = 1)
+	{
 
 		$stages = array(
 			1 => setup_gTxt('set_db_details'),
@@ -150,7 +161,7 @@ eod;
 			echo graf(
 					'<span class="warning">'.setup_gTxt('already_installed', array('{txpath}' => txpath)).'</span>'
 				).
-				n.setup_back_button().
+				setup_back_button().
 				n.'</div>'.
 				n.'</div>';
 			exit;
@@ -167,8 +178,8 @@ eod;
 		}
 
 		echo '<form action="'.$_SERVER['PHP_SELF'].'" method="post">'.
-			hed(setup_gTxt('need_details'),1).
-			hed('MySQL',2).
+			hed(setup_gTxt('need_details'), 1).
+			hed('MySQL', 2).
 			graf(setup_gTxt('db_must_exist')).
 
 			graf(
@@ -196,7 +207,7 @@ eod;
 				n.'<span class="edit-value">'.fInput('text', 'dprefix', '', '', '', '', INPUT_REGULAR, '', 'setup_table_prefix').'</span>'
 			).
 
-			hed(setup_gTxt('site_url'),2).
+			hed(setup_gTxt('site_url'), 2).
 			graf(setup_gTxt('please_enter_url')).
 			graf(
 				'<span class="edit-label"><label for="setup_site_url">http://</label>'.popHelp('siteurl').'</span>'.
@@ -211,7 +222,7 @@ eod;
 		}
 
 		echo graf(
-			fInput('submit','Submit',setup_gTxt('next_step', '', 'raw'),'publish')
+			fInput('submit', 'Submit',setup_gTxt('next_step', '', 'raw'), 'publish')
 		);
 
 		echo hInput('lang', LANG),
@@ -224,7 +235,7 @@ eod;
 // -------------------------------------------------------------
 	function printConfig()
 	{
-		$carry = psa(array('ddb','duser','dpass','dhost','dprefix','siteurl','lang'));
+		$carry = psa(array('ddb', 'duser', 'dpass', 'dhost', 'dprefix', 'siteurl', 'lang'));
 		extract($carry);
 
 		$GLOBALS['textarray'] = setup_load_lang($lang);
@@ -245,7 +256,7 @@ eod;
 			echo graf(
 					'<span class="warning">'.setup_gTxt('already_installed', array('{txpath}' => txpath)).'</span>'
 				).
-				n.setup_back_button().
+				setup_back_button().
 				n.'</div>'.
 				n.'</div>';
 			exit;
@@ -278,7 +289,7 @@ eod;
 			echo graf(
 					'<span class="error">'.setup_gTxt('db_cant_connect').'</span>'
 				).
-				n.setup_back_button().
+				setup_back_button().
 				n.'</div>'.
 				n.'</div>';
 			exit;
@@ -288,14 +299,14 @@ eod;
 			'<span class="success">'.setup_gTxt('db_connected').'</span>'
 			);
 
-		if (! ($dprefix == '' || preg_match('#^[a-zA-Z_][a-zA-Z0-9_]*$#', $dprefix)) )
+		if (!($dprefix == '' || preg_match('#^[a-zA-Z_][a-zA-Z0-9_]*$#', $dprefix)))
 		{
 			echo graf(
 					'<span class="error">'.setup_gTxt('prefix_bad_characters', array(
 						'{dbprefix}' => strong(txpspecialchars($dprefix))
 					), 'raw').'</span>'
 				).
-				n.setup_back_button().
+				setup_back_button().
 				n.'</div>'.
 				n.'</div>';
 			exit;
@@ -308,7 +319,7 @@ eod;
 						'{dbname}' => strong(txpspecialchars($ddb))
 					), 'raw').'</span>'
 				).
-				n.setup_back_button().
+				setup_back_button().
 				n.'</div>'.
 				n.'</div>';
 			exit;
@@ -322,7 +333,7 @@ eod;
 						'{dbname}' => strong(txpspecialchars($ddb))
 					), 'raw').'</span>'
 				).
-				n.setup_back_button().
+				setup_back_button().
 				n.'</div>'.
 				n.'</div>';
 			exit;
@@ -331,7 +342,7 @@ eod;
 		// On 4.1 or greater use utf8-tables
 		$version = mysql_get_server_info();
 
-		if ( intval($version[0]) >= 5 || preg_match('#^4\.[1-9]#',$version))
+		if (intval($version[0]) >= 5 || preg_match('#^4\.[1-9]#', $version))
 		{
 			if (mysql_query("SET NAMES utf8"))
 			{
@@ -390,7 +401,7 @@ eod;
 			echo txp_setup_progress_meter(2).
 				n.'<div class="txp-setup">'.
 				n.join(n, $problems).
-				n.setup_config_contents($carry).
+				setup_config_contents($carry).
 				n.'</div>'.
 				n.'</div>';
 			exit;
@@ -403,7 +414,8 @@ eod;
 		foreach ($themes as $t)
 		{
 			$theme = theme::factory($t);
-			if ($theme) {
+			if ($theme)
+			{
 				$m = $theme->manifest();
 				$title = empty($m['title']) ? ucwords($theme->name) : $m['title'];
 				$vals[$t] = (in_array($t, $core_themes) ? setup_gTxt('core_theme', array('{theme}' => $title)) : $title);
@@ -418,7 +430,7 @@ eod;
 			n.'<div class="txp-setup">';
 
 		echo '<form action="'.$_SERVER['PHP_SELF'].'" method="post">'.
-			hed(setup_gTxt('creating_db_tables'),2).
+			hed(setup_gTxt('creating_db_tables'), 2).
 			graf(setup_gTxt('about_to_create')).
 
 			graf(
@@ -441,7 +453,7 @@ eod;
 				n.'<span class="edit-value">'.fInput('email', 'email', '', '', '', '', INPUT_REGULAR, '', 'setup_user_email', '', true).'</span>'
 			).
 
-			hed(setup_gTxt('site_config'),2).
+			hed(setup_gTxt('site_config'), 2).
 
 			graf(
 				'<span class="edit-label"><label for="setup_admin_theme">'.setup_gTxt('admin_theme').'</label>'.popHelp('theme_name').'</span>'.
@@ -449,7 +461,7 @@ eod;
 			).
 
 			graf(
-				fInput('submit','Submit',setup_gTxt('next_step'),'publish')
+				fInput('submit', 'Submit',setup_gTxt('next_step'), 'publish')
 			).
 
 			sInput('createTxp'),
@@ -473,7 +485,7 @@ eod;
 				graf(
 					'<span class="error">'.setup_gTxt('name_required').'</span>'
 				).
-				n.setup_back_button().
+				setup_back_button().
 				n.'</div>'.
 				n.'</div>';
 			exit;
@@ -487,7 +499,7 @@ eod;
 				graf(
 					'<span class="error">'.setup_gTxt('pass_required').'</span>'
 				).
-				n.setup_back_button().
+				setup_back_button().
 				n.'</div>'.
 				n.'</div>';
 			exit;
@@ -501,7 +513,7 @@ eod;
 				graf(
 					'<span class="error">'.setup_gTxt('email_required').'</span>'
 				).
-				n.setup_back_button().
+				setup_back_button().
 				n.'</div>'.
 				n.'</div>';
 			exit;
@@ -522,8 +534,8 @@ eod;
 		$dprefix = $txpcfg['table_prefix'];
 		$dbcharset = $txpcfg['dbcharset'];
 
-		$siteurl = str_replace("http://",'', ps('siteurl'));
-		$siteurl = rtrim($siteurl,"/");
+		$siteurl = str_replace("http://", '', ps('siteurl'));
+		$siteurl = rtrim($siteurl, "/");
 		$urlpath = preg_replace('#^[^/]+#', '', $siteurl);
 
 		define("PFX",trim($dprefix));
@@ -532,14 +544,14 @@ eod;
 		include_once txpath.'/lib/txplib_update.php';
 		include txpath.'/setup/txpsql.php';
 
-		// This has to come after txpsql.php, because otherwise we can't call mysql_real_escape_string
-		extract(doSlash(psa(array('name','pass','RealName','email', 'theme'))));
+		// This has to come after txpsql.php, because otherwise we can't call mysql_real_escape_string.
+		extract(doSlash(psa(array('name', 'pass', 'RealName', 'email', 'theme'))));
 
-		$nonce = md5( uniqid( rand(), true ) );
+		$nonce = md5(uniqid(rand(), true));
 		$hash  = doSlash(txp_hash_password($pass));
 
 		mysql_query("INSERT INTO `".PFX."txp_users` VALUES
-			(1,'$name','$hash','$RealName','$email',1,now(),'$nonce')");
+			(1, '$name', '$hash', '$RealName', '$email', 1, now(), '$nonce')");
 
 		mysql_query("update `".PFX."txp_prefs` set val = '".doSlash($siteurl)."' where `name`='siteurl'");
 		mysql_query("update `".PFX."txp_prefs` set val = '".LANG."' where `name`='language'");
@@ -547,7 +559,7 @@ eod;
 		mysql_query("update `".PFX."textpattern` set Body = replace(Body, 'siteurl', '".doSlash($urlpath)."'), Body_html = replace(Body_html, 'siteurl', '".doSlash($urlpath)."') WHERE ID = 1");
 
 		// cf. update/_to_4.2.0.php.
-		// TODO: Position might need altering when prefs panel layout is altered
+		// TODO: Position might need altering when prefs panel layout is altered.
 		$theme = $theme ? $theme : 'hive';
 		mysql_query("insert `".PFX."txp_prefs` set prefs_id = 1, name = 'theme_name', val = '".doSlash($theme)."', type = '1', event = 'admin', html = 'themename', position = '160'");
 
@@ -557,14 +569,15 @@ eod;
 // -------------------------------------------------------------
 	function makeConfig($ar)
 	{
-		define("nl","';\n");
-		define("o",'$txpcfg[\'');
-		define("m","'] = '");
+		define("nl", "';\n");
+		define("o", '$txpcfg[\'');
+		define("m", "'] = '");
 		$open = chr(60).'?php';
 		$close = '?'.chr(62);
 
-		// Escape single quotes and backslashes in literal PHP strings
-		foreach ($ar as $k => $v) {
+		// Escape single quotes and backslashes in literal PHP strings.
+		foreach ($ar as $k => $v)
+		{
 			$ar[$k] = addcslashes($ar[$k], "'\\");
 		}
 		$ar = doSpecial($ar);
@@ -602,10 +615,10 @@ eod;
 		}
 		else
 		{
-			$warnings = @find_temp_dir() ? '' : n.graf('<span class="warning">'.setup_gTxt('set_temp_dir_prefs').'</span>');
+			$warnings = @find_temp_dir() ? '' : graf('<span class="warning">'.setup_gTxt('set_temp_dir_prefs').'</span>');
 			$login_url = $GLOBALS['rel_txpurl'].'/index.php';
 
-			return hed(setup_gTxt('that_went_well'),1).
+			return hed(setup_gTxt('that_went_well'), 1).
 
 				$warnings.
 
@@ -620,7 +633,6 @@ eod;
 				).
 
 				hed(setup_gTxt('thanks_for_interest'), 3).
-
 				graf('<a href="'.$login_url.'" class="navlink publish">'.setup_gTxt('go_to_login').'</a>');
 
 				n.'</div>'.
@@ -633,17 +645,18 @@ eod;
 	{
 		return hed(setup_gTxt('creating_config'), 2).
 			graf(
-				strong(setup_gTxt('before_you_proceed')).' '.setup_gTxt('create_config', array('{txpath}' => txpspecialchars(txpath)))
+				strong(setup_gTxt('before_you_proceed')).' '.
+				setup_gTxt('create_config', array('{txpath}' => txpspecialchars(txpath)))
 			).
 
-		'<textarea class="code" readonly="readonly" name="config" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_REGULAR.'">'.
-		makeConfig($carry).
-		'</textarea>'.
-		'<form action="'.$_SERVER['PHP_SELF'].'" method="post">'.
-		graf(fInput('submit','submit',setup_gTxt('did_it'),'publish')).
-		sInput('getTxpLogin').
-		hInput('carry',postEncode($carry)).
-		'</form>';
+			n.'<textarea class="code" readonly="readonly" name="config" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_REGULAR.'">'.
+				makeConfig($carry).
+			n.'</textarea>'.
+			n.'<form action="'.$_SERVER['PHP_SELF'].'" method="post">'.
+				graf(fInput('submit', 'submit',setup_gTxt('did_it'), 'publish')).
+				sInput('getTxpLogin').
+				hInput('carry',postEncode($carry)).
+			n.'</form>';
 	}
 
 // -------------------------------------------------------------
@@ -664,7 +677,7 @@ eod;
 		return graf(
 			setup_gTxt('please_go_back')
 		).
-		n.graf(
+		graf(
 			'<a class="navlink" href="javascript:history.back()">'.setup_gTxt('back').'</a>'
 		);
 	}
@@ -726,8 +739,8 @@ eod;
 
 		foreach ($langs as $a => $b)
 		{
-			$out .= n.t.'<option value="'.txpspecialchars($a).'"'.
-				( ($a == $default) ? ' selected="selected"' : '').
+			$out .= n.'<option value="'.txpspecialchars($a).'"'.
+				(($a == $default) ? ' selected="selected"' : '').
 				'>'.txpspecialchars($b).'</option>';
 		}
 
@@ -745,18 +758,20 @@ eod;
 		$en_gb_strings = $langs['en-gb'];
 		$lang = (isset($langs[$lang]) && !empty($langs[$lang]))? $lang : 'en-gb';
 		define('LANG', $lang);
+
 		return $langs[LANG];
 	}
 
 // -------------------------------------------------------------
-	function setup_gTxt($var, $atts=array(), $escape='html')
+	function setup_gTxt($var, $atts=array(), $escape = 'html')
 	{
 		global $en_gb_strings;
 
-		// Try to translate the string in chosen native language
+		// Try to translate the string in chosen native language.
 		$xlate = gTxt($var, $atts, $escape);
 
-		if (!is_array($atts)) {
+		if (!is_array($atts))
+		{
 			$atts = array();
 		}
 
@@ -770,7 +785,7 @@ eod;
 
 		$v = strtolower($var);
 
-		// Find out if the translated string is the same as the $var input
+		// Find out if the translated string is the same as the $var input.
 		if ($atts)
 		{
 			$compare = ($xlate == $v.': '.join(', ', $atts));
@@ -780,7 +795,7 @@ eod;
 			$compare = ($xlate == $v);
 		}
 		if ($compare) {
-			// No translation string available, so grab an english string we know exists as fallback
+			// No translation string available, so grab an English string we know exists as fallback.
 			$xlate = strtr($en_gb_strings[$v], $atts);
 		}
 

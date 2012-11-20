@@ -7,21 +7,21 @@ if (!defined('TXP_INSTALL'))
 @ignore_user_abort(1);
 @set_time_limit(0);
 
-mysql_connect($dhost,$duser,$dpass,false,$dclient_flags);
+mysql_connect($dhost, $duser, $dpass, false, $dclient_flags);
 mysql_select_db($ddb);
 
 $result = mysql_query("describe `".PFX."textpattern`");
 if ($result) die("Textpattern database table already exists. Can't run setup.");
 
-
 $version = mysql_get_server_info();
-//Use "ENGINE" if version of MySQL > (4.0.18 or 4.1.2)
-$tabletype = ( intval($version[0]) >= 5 || preg_match('#^4\.(0\.[2-9]|(1[89]))|(1\.[2-9])#',$version))
+
+//Use "ENGINE" if version of MySQL > (4.0.18 or 4.1.2).
+$tabletype = (intval($version[0]) >= 5 || preg_match('#^4\.(0\.[2-9]|(1[89]))|(1\.[2-9])#',$version))
 	? " ENGINE=MyISAM "
 	: " TYPE=MyISAM ";
 
-// On 4.1 or greater use utf8-tables
-if ( isset($dbcharset) && (intval($version[0]) >= 5 || preg_match('#^4\.[1-9]#',$version)))
+// On 4.1 or greater use UTF-8 tables.
+if (isset($dbcharset) && (intval($version[0]) >= 5 || preg_match('#^4\.[1-9]#',$version)))
 {
 	$tabletype .= " CHARACTER SET = $dbcharset ";
 	if ($dbcharset == 'utf8')
@@ -40,7 +40,7 @@ if (is_callable('apache_get_modules'))
 else
 {
 	$server_software = (@$_SERVER['SERVER_SOFTWARE'] || @$_SERVER['HTTP_HOST'])
-		? ( (@$_SERVER['SERVER_SOFTWARE']) ?  @$_SERVER['SERVER_SOFTWARE'] :  $_SERVER['HTTP_HOST'] )
+		? ((@$_SERVER['SERVER_SOFTWARE']) ? @$_SERVER['SERVER_SOFTWARE'] : $_SERVER['HTTP_HOST'])
 		: '';
 	if (!stristr($server_software, 'Apache'))
 		$permlink_mode = 'messy';
@@ -412,6 +412,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_users` (
 
 $GLOBALS['txp_install_successful'] = true;
 $GLOBALS['txp_err_count'] = 0;
+
 foreach ($create_sql as $query)
 {
 	$result = mysql_query($query);
@@ -424,7 +425,7 @@ foreach ($create_sql as $query)
 	}
 }
 
-# Skip the RPC language fetch when testing
+// Skip the RPC language fetch when testing.
 if (defined('TXP_TEST'))
 	return;
 
@@ -433,12 +434,13 @@ $client = new IXR_Client('http://rpc.textpattern.com');
 
 if (!$client->query('tups.getLanguage',$prefs['blog_uid'],LANG))
 {
-	# If cannot install from lang file, setup the english lang
+	// If cannot install from lang file, setup the English lang.
 	if (!install_language_from_file(LANG))
 	{
 		$lang = 'en-gb';
 		include_once txpath.'/setup/en-gb.php';
 		if (!@$lastmod) $lastmod = '0000-00-00 00:00:00';
+
 		foreach ($en_gb_lang as $evt_name => $evt_strings)
 		{
 			foreach ($evt_strings as $lang_key => $lang_val)
@@ -454,6 +456,7 @@ else
 {
 	$response = $client->getResponse();
 	$lang_struct = unserialize($response);
+
 	foreach ($lang_struct as $item)
 	{
 		foreach ($item as $name => $value)
@@ -467,7 +470,7 @@ mysql_query("FLUSH TABLE `".PFX."txp_lang`");
 /**
  * Stub replacement for txplib_db.php/safe_escape()
  */
-function safe_escape($in='')
+function safe_escape($in = '')
 {
 	return mysql_real_escape_string($in);
 }
