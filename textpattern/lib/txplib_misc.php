@@ -3521,6 +3521,29 @@
 	}
 
 /**
+ * Validates a string as a username.
+ *
+ * @param   string $name The username
+ * @return  bool   TRUE if the string valid
+ * @since   4.6.0
+ * @package User
+ */
+
+	function is_valid_username($name)
+	{
+		if (function_exists('mb_strlen'))
+		{
+			$length = mb_strlen($name, '8bit');
+		}
+		else
+		{
+			$length = strlen($name);
+		}
+
+		return $name && !preg_match('/^\s|[,\'"<>]|\s$/', $name) && $length <= 64;
+	}
+
+/**
  * Extracts a statement from a if/else condition.
  *
  * @param   string  $thing     Statement in Textpattern tag markup presentation
