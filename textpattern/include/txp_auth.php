@@ -57,9 +57,13 @@ Use of this software indicates acceptance of the Textpattern license agreement
  * If the combination is correct, the user's login name is returned,
  * FALSE otherwise.
  *
+ * If $log is TRUE, also checks that the user has permissions to access
+ * the admin side interface. On success, updates the user's last access
+ * timestamp.
+ *
  * @param   string      $user     The login
  * @param   string      $password The password
- * @param   bool        $log      If TRUE, updates the user's last access time
+ * @param   bool        $log      If TRUE, requires privilege level greater than 'none'
  * @return  string|bool The user's login name or FALSE on error
  * @package User
  */
