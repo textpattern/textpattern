@@ -230,14 +230,17 @@
 		pagetop(gTxt('tab_site_admin'), '');
 
 		echo form(
-			n.'<section class="txp-edit">'.
-			hed(gTxt('change_password'), 2).
-			inputLabel('new_pass', fInput('password', 'new_pass', '', '', '', '', INPUT_REGULAR, '', 'new_pass'), 'new_password').
-			graf(checkbox('mail_password', '1', true, '', 'mail_password') .n. '<label for="mail_password">'.gTxt('mail_it').'</label>', ' class="edit-mail-password"').
-			graf(fInput('submit', 'change_pass', gTxt('submit'), 'publish')).
-			eInput('admin').
-			sInput('change_pass').
-			n.'</section>'
+			n.tag(
+				hed(gTxt('change_password'), 2).
+				inputLabel('new_pass', fInput('password', 'new_pass', '', '', '', '', INPUT_REGULAR, '', 'new_pass'), 'new_password').
+				graf(
+					checkbox('mail_password', '1', true, '', 'mail_password').
+					n.tag(gTxt('mail_it'), 'label', array('for' => 'mail_password'))
+				, ' class="edit-mail-password"').
+				graf(fInput('submit', 'change_pass', gTxt('submit'), 'publish')).
+				eInput('admin').
+				sInput('change_pass').n
+			, 'section', array('class' => 'txp-edit'))
 		, '', '', 'post', '', '', 'change_password');
 	}
 
@@ -254,13 +257,14 @@
 		$email = fetch('email', 'txp_users', 'name', $txp_user);
 
 		echo form(
-			n.'<section class="txp-edit">'.
-			hed(gTxt('change_email_address'), 2).
-			inputLabel('new_email', fInput('text', 'new_email', $email, '', '', '', INPUT_REGULAR, '', 'new_email'), 'new_email').
-			graf(fInput('submit', 'change_email', gTxt('submit'), 'publish')).
-			eInput('admin').
-			sInput('change_email').
-			n.'</section>'
+			n.tag(
+				hed(gTxt('change_email_address'), 2).
+				inputLabel('new_email', fInput('text', 'new_email', $email, '', '', '', INPUT_REGULAR, '', 'new_email'), 'new_email').
+				graf(fInput('submit', 'change_email', gTxt('submit'), 'publish')).
+				eInput('admin').
+				sInput('change_email').
+				n, 'section', array('class' => 'txp-edit')
+			)
 		, '', '', 'post', '', '', 'change_email');
 	}
 
@@ -281,7 +285,7 @@
 			echo tag(gTxt('warn_mail_unavailable'), 'p', ' class="alert-block warning"');
 		}
 
-		echo n.'<h1 class="txp-heading">'.gTxt('tab_site_admin').'</h1>';
+		echo n.hed(gTxt('tab_site_admin'), 1, array('class' => 'txp-heading'));
 		echo n.'<div id="users_control" class="txp-control-panel">';
 
 		// Change password button.
@@ -419,10 +423,13 @@
 					(($use_multi_edit) ? author_multiedit_form($page, $sort, $dir, $crit, $search_method) : '').
 					tInput().
 					n.'</form>'.
-					n.'<div id="users_navigation" class="txp-navigation">'.
-					nav_form('admin', $page, $numPages, $sort, $dir, $crit, $search_method).
-					pageby_form('admin', $author_list_pageby).
-					n.'</div>'.
+					tag(
+						n.nav_form('admin', $page, $numPages, $sort, $dir, $crit, $search_method).
+						pageby_form('admin', $author_list_pageby).n
+					, 'div', array(
+						'id'    => 'users_navigation',
+						'class' => 'txp-navigation'
+					)).
 					n.'</div>';
 			}
 		}
@@ -484,17 +491,17 @@
 		$caption = gTxt(($is_edit) ? 'edit_author' : 'add_new_author');
 
 		echo form(
-			n.'<section class="txp-edit">'.
-			hed($caption, 2).
-			inputLabel('login_name', ($is_edit ? strong($name) : fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'login_name')), ($is_edit ? '' : 'login_name'), ($is_edit ? '' : 'add_new_author')).
-			inputLabel('real_name', fInput('text', 'RealName', $RealName, '', '', '', INPUT_REGULAR, '', 'real_name'), 'real_name').
-			inputLabel('login_email', fInput('email', 'email', $email, '', '', '', INPUT_REGULAR, '', 'login_email'), 'email').
-			inputLabel('privileges', (($txp_user != $name) ? privs($privs) : hInput('privs', $privs).strong(get_priv_level($privs))), ($is_edit ? '' : 'privileges'), 'about_privileges').
-			pluggable_ui('author_ui', 'extend_detail_form', '', $rs).
-			graf(fInput('submit', '', gTxt('save'), 'publish')).
-			eInput('admin').
-			($user_id ? hInput('user_id', $user_id).sInput('author_save') : sInput('author_save_new')).
-			n.'</section>'
+			n.tag(
+				hed($caption, 2).
+				inputLabel('login_name', ($is_edit ? strong($name) : fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'login_name')), ($is_edit ? '' : 'login_name'), ($is_edit ? '' : 'add_new_author')).
+				inputLabel('real_name', fInput('text', 'RealName', $RealName, '', '', '', INPUT_REGULAR, '', 'real_name'), 'real_name').
+				inputLabel('login_email', fInput('email', 'email', $email, '', '', '', INPUT_REGULAR, '', 'login_email'), 'email').
+				inputLabel('privileges', (($txp_user != $name) ? privs($privs) : hInput('privs', $privs).strong(get_priv_level($privs))), ($is_edit ? '' : 'privileges'), 'about_privileges').
+				pluggable_ui('author_ui', 'extend_detail_form', '', $rs).
+				graf(fInput('submit', '', gTxt('save'), 'publish')).
+				eInput('admin').
+				($user_id ? hInput('user_id', $user_id).sInput('author_save') : sInput('author_save_new')).
+			n, 'section', array('class' => 'txp-edit'))
 		, '', '', 'post', 'edit-form', '', 'user_edit');
 	}
 
