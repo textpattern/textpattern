@@ -170,7 +170,6 @@
 				$sel = ' selected="selected"';
 				$selected = true;
 			}
-
 			else
 			{
 				$sel = '';
@@ -181,7 +180,7 @@
 			if (($truncate > 3) && (strlen(utf8_decode($title)) > $truncate))
 			{
 				$htmltitle = ' title="'.txpspecialchars($title).'"';
-				$title = preg_replace('/^(.{0,'.($truncate - 3).'}).*$/su','$1',$title);
+				$title = preg_replace('/^(.{0,'.($truncate - 3).'}).*$/su', '$1', $title);
 				$hellip = '&#8230;';
 			}
 			else
@@ -233,6 +232,7 @@
 		$o .= ($required)   ? ' required="required"' : '';
 		$o .= ($placeholder)? ' placeholder="'.txpspecialchars($placeholder).'"' : '';
 		$o .= " />";
+
 		return $o;
 	}
 
@@ -261,7 +261,7 @@
  * echo hInput('myInput', 'hidden value');
  */
 
-	function hInput($name,$value)
+	function hInput($name, $value)
 	{
 		return fInput('hidden', $name, $value);
 	}
@@ -422,6 +422,7 @@
 	function fetch_editable($name, $event, $identifier, $id)
 	{
 		$q = fetch($name, 'txp_'.$event, $identifier, $id);
+
 		return txpspecialchars($q);
 	}
 
@@ -447,6 +448,7 @@
 		$width = ($w) ? 'width:'.$w.'px;' : '';
 		$height = ($h) ? 'height:'.$h.'px;' : '';
 		$style = ($width || $height) ? ' style="'.$width.$height.'"' : '';
+
 		return '<textarea'.$id.' name="'.$name.'"'.$rows.$cols.$style.($placeholder == '' ? '' : ' placeholder="'.txpspecialchars($placeholder).'"').'>'.txpspecialchars($thing).'</textarea>';
 	}
 
@@ -479,6 +481,7 @@
 		{
 			$out[] = n.'<option value="'.$a.'">'.gTxt($b).'</option>';
 		}
+
 		return join('', $out);
 	}
 
@@ -538,8 +541,9 @@
 			'%S' => 'ss',
 		);
 
-		$size = ($name=='year' or $name=='exp_year') ? INPUT_XSMALL : INPUT_TINY;
+		$size = ($name == 'year' or $name == 'exp_year') ? INPUT_XSMALL : INPUT_TINY;
 		$s = ($time == 0) ? '' : safe_strftime($datevar, $time);
+
 		return n.'<input type="text" name="'.$name.'" value="'.
 			$s
 			.'" size="'.$size.'" maxlength="'.$size.'" class="'.$name.'"'.(empty($tab) ? '' : ' tabindex="'.$tab.'"').' title="'.gTxt('article_'.$name)

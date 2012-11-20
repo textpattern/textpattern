@@ -53,8 +53,8 @@ class classic_theme extends theme
 			$out[] = $secondary;
 			$out[] = '</nav>';
 		}
-
 		$out[] = '<div id="messagepane">'.$this->announce($this->message).'</div>'.n;
+
 		return join(n, $out);
 	}
 
@@ -85,34 +85,39 @@ class classic_theme extends theme
 
 	private function _announce($thing, $async, $modal)
 	{
-		// $thing[0]: message text
-		// $thing[1]: message type, defaults to "success" unless empty or a different flag is set
+		// $thing[0]: message text.
+		// $thing[1]: message type, defaults to "success" unless empty or a different flag is set.
 
-		if (!is_array($thing) || !isset($thing[1]))	{
+		if (!is_array($thing) || !isset($thing[1]))
+		{
 			$thing = array($thing, 0);
 		}
 
-		// still nothing to say?
+		// Still nothing to say?
 		if (trim($thing[0]) === '') return '';
 
-		switch ($thing[1]) {
-			case E_ERROR:
+		switch ($thing[1])
+		{
+			case E_ERROR :
 				$class = 'error';
 				break;
-			case E_WARNING:
+			case E_WARNING :
 				$class = 'warning';
 				break;
-			default:
+			default :
 				$class = 'success';
 				break;
 		}
 
-		if ($modal) {
+		if ($modal)
+		{
 			$html = ''; // TODO: Say what?
 			$js = 'window.alert("'.escape_js(strip_tags($thing[0])).'")';
-		} else {
+		}
+		else
+		{
 			$html = '<span role="alert" id="message" class="'.$class.'">'.gTxt($thing[0]).' <a role="button" href="#close" class="close" title="'.gTxt('close').'">&times;</a></span>';
-			// Try to inject $html into the message pane no matter when _announce()'s output is printed
+			// Try to inject $html into the message pane no matter when _announce()'s output is printed.
 			$js = escape_js($html);
 			$js = <<< EOS
 				$(document).ready(function ()
@@ -122,9 +127,12 @@ class classic_theme extends theme
 				});
 EOS;
 		}
-		if ($async) {
+		if ($async)
+		{
 			return $js;
-		} else {
+		}
+		else
+		{
 			return script_js(str_replace('</', '<\/', $js), $html);
 		}
 	}

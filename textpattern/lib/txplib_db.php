@@ -310,7 +310,7 @@ $DB = new DB;
 
 		trace_add("[SQL ($time): $q]");
 
-		if(!$result)
+		if (!$result)
 		{
 			return false;
 		}
@@ -498,7 +498,7 @@ $DB = new DB;
 	{
 		$index = strtolower($index);
 
-		if($r = safe_show('index', $table, $debug))
+		if ($r = safe_show('index', $table, $debug))
 		{
 			foreach ($r as $a)
 			{
@@ -1093,7 +1093,7 @@ $DB = new DB;
 	{
 		if ($r = safe_query($query, $debug))
 		{
-			$thing = (mysql_num_rows($r) != 0) ? mysql_result($r,0) : '';
+			$thing = (mysql_num_rows($r) != 0) ? mysql_result($r, 0) : '';
 			mysql_free_result($r);
 			return $thing;
 		}
@@ -1273,7 +1273,7 @@ $DB = new DB;
 	function rebuild_tree($parent, $left, $type, $tbl = 'txp_category')
 	{
 		$left  = assert_int($left);
-		$right = $left+1;
+		$right = $left + 1;
 
 		$parent = doSlash($parent);
 		$type   = doSlash($type);
@@ -1291,7 +1291,7 @@ $DB = new DB;
 			"lft=$left, rgt=$right",
 			"name='$parent' and type='$type'"
 		);
-		return $right+1;
+		return $right + 1;
 	}
 
 /**
