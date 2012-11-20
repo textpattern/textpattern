@@ -612,7 +612,7 @@
 		$names = safe_column(
 			'name',
 			'txp_users',
-			"name IN ('".join("','", doSlash($selected))."') AND name != '".doSlash($txp_user)."'"
+			"name IN (".join(',', quote_list($selected)).") AND name != '".doSlash($txp_user)."'"
 		);
 
 		if (!$names)
@@ -634,14 +634,14 @@
 					$msg = array('cannot_assign_assets_to_deletee', E_ERROR);
 				}
 
-				elseif (safe_delete('txp_users', "name IN ('".join("','", doSlash($names))."')"))
+				elseif (safe_delete('txp_users', "name IN (".join(',', quote_list($names)).")"))
 				{
 					$changed = $names;
 					$assign_assets = doSlash($assign_assets);
-					$names = join("','", doSlash($names));
+					$names = join(',', quote_list($names));
 
 					// Delete private prefs.
-					safe_delete('txp_prefs', "user_name IN ('$names')");
+					safe_delete('txp_prefs', "user_name IN ($names)");
 
 					// Assign dangling assets to their new owner.
 					$reassign = array(
@@ -652,7 +652,7 @@
 					);
 					foreach ($reassign as $table => $col)
 					{
-						safe_update($table, "$col='$assign_assets'", "$col IN ('$names')");
+						safe_update($table, "$col='$assign_assets'", "$col IN ($names)");
 					}
 
 					callback_event('authors_deleted', '', 0, $changed);
@@ -674,7 +674,7 @@
 					safe_update(
 						'txp_users',
 						'privs = '.intval($privilege),
-						"name IN ('".join("','", doSlash($names))."')"
+						"name IN (".join(',', quote_list($names)).")"
 					)
 				)
 				{
