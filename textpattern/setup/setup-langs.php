@@ -1181,8 +1181,7 @@ $langs = array(
 		'welcome_to_textpattern' => 'Welkom bij Textpattern',
 		'your_email' => 'Je e-mail adres',
 		'your_full_name' => 'Je volledige naam',
-		'you_can_access' => 'De Textpattern database tabellen zijn aangemaakt en gevuld.
-Je kunt nu inloggen via de <a href="index.php">centrale login</a> met de loginnaam en het wachtwoord dat je hebt gekozen.',
+		'you_can_access' => 'De Textpattern database tabellen zijn aangemaakt en gevuld. Je kunt nu inloggen via de <a href="index.php">centrale login</a> met de loginnaam en het wachtwoord dat je hebt gekozen.',
 	),
 	'no-no' => array(
 		'about_to_create' => 'Du er i ferd med å opprette og fyle inn database-tabeller.',
