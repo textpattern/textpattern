@@ -1335,7 +1335,7 @@
 			if ($exclude)
 			{
 				$exclude = join(',', quote_list(do_list($exclude)));
-				$sql[] = "name in ($exclude)";
+				$sql[] = "name not in ($exclude)";
 			}
 
 			if (!$include_default)
