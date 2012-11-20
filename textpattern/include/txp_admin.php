@@ -154,9 +154,8 @@
 		extract(doSlash(psa(array('privs', 'name', 'email', 'RealName'))));
 
 		$privs  = assert_int($privs);
-		$length = function_exists('mb_strlen') ? mb_strlen($name, '8bit') : strlen($name);
 
-		if ($name and $length <= 64 and is_valid_email($email))
+		if (is_valid_username($name) && is_valid_email($email))
 		{
 			$exists = safe_field('name', 'txp_users', "name = '" .$name. "'");
 
