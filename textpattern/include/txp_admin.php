@@ -69,7 +69,11 @@
 			return;
 		}
 
-		$rs = safe_update('txp_users', "email = '".doSlash($new_email)."'", "name = '".doSlash($txp_user)."'");
+		$rs = safe_update(
+			'txp_users',
+			"email = '".doSlash($new_email)."'",
+			"name = '".doSlash($txp_user)."'"
+		);
 
 		if ($rs)
 		{
@@ -88,7 +92,13 @@
 	{
 		require_privs('admin.edit');
 
-		extract(doSlash(psa(array('privs', 'user_id', 'RealName', 'email'))));
+		extract(doSlash(psa(array(
+			'privs',
+			'user_id',
+			'RealName',
+			'email',
+		))));
+
 		$privs = assert_int($privs);
 		$user_id = assert_int($user_id);
 
@@ -404,7 +414,11 @@
 
 			echo author_search_form($crit, $search_method).'</div>';
 
-			$rs = safe_rows_start('*, unix_timestamp(last_access) as last_login', 'txp_users', "$criteria order by $sort_sql limit $offset, $limit");
+			$rs = safe_rows_start(
+				'*, unix_timestamp(last_access) as last_login',
+				'txp_users',
+				"$criteria order by $sort_sql limit $offset, $limit"
+			);
 
 			if ($rs)
 			{
@@ -595,7 +609,11 @@
 			return author_list();
 		}
 
-		$names = safe_column('name', 'txp_users', "name IN ('".join("','", doSlash($selected))."') AND name != '".doSlash($txp_user)."'");
+		$names = safe_column(
+			'name',
+			'txp_users',
+			"name IN ('".join("','", doSlash($selected))."') AND name != '".doSlash($txp_user)."'"
+		);
 
 		if (!$names)
 		{
@@ -652,7 +670,13 @@
 
 				if (!isset($levels[$privilege])) return author_list();
 
-				if (safe_update('txp_users', 'privs = '.intval($privilege), "name IN ('".join("','", doSlash($names))."')"))
+				if (
+					safe_update(
+						'txp_users',
+						'privs = '.intval($privilege),
+						"name IN ('".join("','", doSlash($names))."')"
+					)
+				)
 				{
 					$changed = $names;
 					$msg = 'author_updated';
