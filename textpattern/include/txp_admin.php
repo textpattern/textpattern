@@ -70,7 +70,14 @@
 		}
 
 		$rs = safe_update('txp_users', "email = '".doSlash($new_email)."'", "name = '".doSlash($txp_user)."'");
-		author_list($rs ? gTxt('email_changed', array('{email}' => $new_email)) : gTxt(array('author_save_failed', E_ERROR)));
+
+		if ($rs)
+		{
+			author_list(gTxt('email_changed', array('{email}' => $new_email)));
+			return;
+		}
+
+		author_list(array(gTxt('author_save_failed'), E_ERROR));
 	}
 
 /**
@@ -97,7 +104,14 @@
 			email    = '$email'",
 			"user_id = $user_id"
 		);
-		author_list($rs ? gTxt('author_updated', array('{name}' => $RealName)) : gTxt(array('author_save_failed', E_ERROR)));
+
+		if ($rs)
+		{
+			author_list(gTxt('author_updated', array('{name}' => $RealName)));
+			return;
+		}
+
+		author_list(array(gTxt('author_save_failed'), E_ERROR));
 	}
 
 /**
