@@ -73,17 +73,19 @@ Use of this software indicates acceptance of the Textpattern license agreement
 		$safe_user = doSlash($user);
 		$name = false;
 
-		$hash = safe_field('pass', 'txp_users', "name = '$safe_user'");
+		$r = safe_row('pass, privs', 'txp_users', "name = '$safe_user'");
+
+		if (!$r)
+		{
+			return false;
+		}
+
 		$phpass = new PasswordHash(PASSWORD_COMPLEXITY, PASSWORD_PORTABILITY);
 
 		// Check post-4.3-style passwords.
-		if ($phpass->CheckPassword($password, $hash))
+		if ($phpass->CheckPassword($password, $r['pass']))
 		{
-			if ($log)
-			{
-				$name = safe_field("name", "txp_users",	"name = '$safe_user' and privs > 0");
-			}
-			else
+			if (!$log || $r['privs'] > 0)
 			{
 				$name = $user;
 			}
