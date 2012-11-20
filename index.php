@@ -11,7 +11,7 @@
 			die('GLOBALS overwrite attempt detected. Please consider turning register_globals off.');
 		}
 
-		// Collect and unset all registered variables from globals
+		// Collect and unset all registered variables from globals.
 		$_txpg = array_merge(
 			isset($_SESSION) ? (array) $_SESSION : array(),
 			(array) $_ENV,
