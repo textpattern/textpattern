@@ -575,7 +575,7 @@
 			case 'delete' :
 
 				$assign_assets = ps('assign_assets');
-				if ($assign_assets === '')
+				if (!$assign_assets)
 				{
 					$msg = array('must_reassign_assets', E_ERROR);
 				}
