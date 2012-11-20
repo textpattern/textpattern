@@ -155,7 +155,6 @@
 
 				$message .= sp.gTxt('and_mailed_to').sp.$email;
 			}
-
 			else
 			{
 				echo comment(mysql_error());
@@ -369,14 +368,12 @@
 				{
 					$criteria = $critsql[$search_method];
 				}
-
 				else
 				{
 					$search_method = '';
 					$crit = '';
 				}
 			}
-
 			else
 			{
 				$search_method = '';
@@ -473,7 +470,6 @@
 					n.'</div>';
 			}
 		}
-
 		else
 		{
 			echo n.'</div>';
@@ -633,7 +629,6 @@
 				{
 					$msg = array('cannot_assign_assets_to_deletee', E_ERROR);
 				}
-
 				elseif (safe_delete('txp_users', "name IN (".join(',', quote_list($names)).")"))
 				{
 					$changed = $names;
