@@ -1306,49 +1306,79 @@
 			'sections'        => '',
 			'sort'            => '',
 			'wraptag'         => '',
+			'offset'          => '',
+			'limit'           => '',
 		), $atts));
 
-		$sort = doSlash($sort);
+		$sql_limit = '';
+		$sql_sort = doSlash($sort);
+		$sql = array();
+		$sql[] = 1;
 
-		$rs = array();
+		if ($limit !== '' || $offset)
+		{
+			$sql_limit = ' limit '.intval($offset).', '.($limit === '' ? PHP_INT_MAX : intval($limit));
+		}
+
 		if ($sections)
 		{
-			$sections = do_list($sections);
+			$sections = join(',', quote_list(do_list($sections)));
+			$sql[] = "name in ($sections)";
 
-			$sections = join("','", doSlash($sections));
-
-			$rs = safe_rows('name, title', 'txp_section', "name in ('$sections') order by ".($sort ? $sort : "field(name, '$sections')"));
+			if (!$sql_sort)
+			{
+				$sql_sort = "field(name, $sections)";
+			}
 		}
 		else
 		{
 			if ($exclude)
 			{
-				$exclude = do_list($exclude);
-
-				$exclude = join("','", doSlash($exclude));
-
-				$exclude = "and name not in('$exclude')";
+				$exclude = join(',', quote_list(do_list($exclude)));
+				$sql[] = "name in ($exclude)";
 			}
 
-			$rs = safe_rows('name, title', 'txp_section', "name != 'default' $exclude order by ".($sort ? $sort : 'name ASC'));
+			if (!$include_default)
+			{
+				$sql[] = "name != 'default'";
+			}
+
+			if (!$sql_sort)
+			{
+				$sql_sort = 'name asc';
+			}
 		}
 
 		if ($include_default)
 		{
-			array_unshift($rs, array('name' => 'default', 'title' => $default_title));
+			$sql_sort = "name != 'default', " . $sql_sort;
 		}
 
-		if ($rs)
+		$rs = safe_rows_start(
+			'name, title',
+			'txp_section',
+			join(' and ', $sql).' order by '.$sql_sort.$sql_limit
+		);
+
+		if ($rs && $last = numRows($rs))
 		{
 			$out = array();
 			$count = 0;
-			$last = count($rs);
 
-			if (isset($thissection)) $old_section = $thissection;
-			foreach ($rs as $a)
+			if (isset($thissection))
+			{
+				$old_section = $thissection;
+			}
+
+			while ($a = nextRow($rs))
 			{
 				++$count;
 				extract($a);
+
+				if ($name == 'default')
+				{
+					$title = $default_title;
+				}
 
 				if (empty($form) && empty($thing))
 				{
@@ -1361,13 +1391,18 @@
 				}
 				else
 				{
-					$thissection = array('name' => $name, 'title' => ($name == 'default') ? $default_title : $title);
-					$thissection['is_first'] = ($count == 1);
-					$thissection['is_last'] = ($count == $last);
+					$thissection = array(
+						'name'     => $name,
+						'title'    => $title,
+						'is_first' => ($count == 1),
+						'is_last'  => ($count == $last),
+					);
+
 					$out[] = ($thing) ? parse($thing) : parse_form($form);
 				}
 			}
-			$thissection = (isset($old_section) ? $old_section : NULL);
+
+			$thissection = isset($old_section) ? $old_section : null;
 
 			if ($out)
 			{
