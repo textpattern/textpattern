@@ -100,7 +100,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
 		global $prefs, $locale, $textarray;
 		require_once txpath.'/lib/IXRClass.php';
 
-		// Select and save active language
+		// Select and save active language.
 		if (!$message && ps('step') == 'list_languages' && ps('language'))
 		{
 			$locale = doSlash(getlocale(ps('language')));
@@ -114,8 +114,10 @@ Use of this software indicates acceptance of the Textpattern license agreement
 		$lang_form = '<div id="language_control" class="txp-control-panel">'.
 				form(
 					graf(
-						gTxt('active_language').
-						languages('language', $active_lang).
+						'<label for="language">'.gTxt('active_language').'</label>'.br.
+						languages('language', $active_lang)
+					).
+					graf(
 						fInput('submit', 'Submit',gTxt('save'), 'publish').
 						eInput('lang').sInput('list_languages')
 					)
@@ -251,16 +253,16 @@ Use of this software indicates acceptance of the Textpattern license agreement
 
 			$list .= tr(
 			// Lang-Name and Date.
-				n.hCell(
+				hCell(
 					gTxt($langname)
 					, ''
-					,(isset($langdat['db_lastmod']) && $rpc_updated)
+					, (isset($langdat['db_lastmod']) && $rpc_updated)
 							? ' scope="row" class="highlight lang-label"'
 							: ' scope="row" class="lang-label"'
 					).
 				n.$rpc_install.
 				n.$lang_file.
-				n.tda( (in_array($langname, $installed_lang) ? dLink('lang', 'remove_language', 'lang_code', $langname, 1) : '-'), ' class="languages_detail'.((isset($langdat['db_lastmod']) && $rpc_updated) ? ' highlight' : '').'"')
+				tda( (in_array($langname, $installed_lang) ? dLink('lang', 'remove_language', 'lang_code', $langname, 1) : '-'), ' class="languages_detail'.((isset($langdat['db_lastmod']) && $rpc_updated) ? ' highlight' : '').'"')
 			).n;
 		}
 
@@ -309,7 +311,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
 				)
 			, '', '', 'post', 'edit-form', '', 'text_uploader').
 	
-			'</div>'; // end language_container
+			'</div>'; // End language_container
 	}
 
 /**
