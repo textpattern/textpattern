@@ -628,7 +628,7 @@ class TXP_Wrapper
 			$field = doSlash($field);
 			$value = doSlash($value);
 
-			if($field == 'Posted')
+			if ($field == 'Posted')
 			{
 				$value = strtotime($value)-tz_offset();
 				$value = "from_unixtime($value)";
@@ -783,7 +783,7 @@ class TXP_Wrapper
 
 			foreach ($incoming as $key => $val)
 			{
-				if($key == 'Posted' && $val == 'now()')
+				if ($key == 'Posted' && $val == 'now()')
 				{
 					$sql[] = "$key = $val";
 				}

@@ -2,7 +2,9 @@
 
 
 if (!defined('TXP_INSTALL'))
+{
 	exit;
+}
 
 @ignore_user_abort(1);
 @set_time_limit(0);
@@ -11,7 +13,10 @@ mysql_connect($dhost, $duser, $dpass, false, $dclient_flags);
 mysql_select_db($ddb);
 
 $result = mysql_query("describe `".PFX."textpattern`");
-if ($result) die("Textpattern database table already exists. Can't run setup.");
+if ($result)
+{
+	die("Textpattern database table already exists. Can't run setup.");
+}
 
 $version = mysql_get_server_info();
 
@@ -25,7 +30,9 @@ if (isset($dbcharset) && (intval($version[0]) >= 5 || preg_match('#^4\.[1-9]#',$
 {
 	$tabletype .= " CHARACTER SET = $dbcharset ";
 	if ($dbcharset == 'utf8')
+	{
 		$tabletype .= " COLLATE utf8_general_ci ";
+	}
 	mysql_query("SET NAMES ".$dbcharset);
 }
 
@@ -35,7 +42,9 @@ if (is_callable('apache_get_modules'))
 {
 	$modules = @apache_get_modules();
 	if (!is_array($modules) || !in_array('mod_rewrite', $modules))
+	{
 		$permlink_mode = 'messy';
+	}
 }
 else
 {
@@ -43,7 +52,9 @@ else
 		? ((@$_SERVER['SERVER_SOFTWARE']) ? @$_SERVER['SERVER_SOFTWARE'] : $_SERVER['HTTP_HOST'])
 		: '';
 	if (!stristr($server_software, 'Apache'))
+	{
 		$permlink_mode = 'messy';
+	}
 }
 
 $name = ps('name') ? ps('name') : 'anon';
@@ -427,7 +438,9 @@ foreach ($create_sql as $query)
 
 // Skip the RPC language fetch when testing.
 if (defined('TXP_TEST'))
+{
 	return;
+}
 
 require_once txpath.'/lib/IXRClass.php';
 $client = new IXR_Client('http://rpc.textpattern.com');
@@ -439,7 +452,10 @@ if (!$client->query('tups.getLanguage',$prefs['blog_uid'],LANG))
 	{
 		$lang = 'en-gb';
 		include_once txpath.'/setup/en-gb.php';
-		if (!@$lastmod) $lastmod = '0000-00-00 00:00:00';
+		if (!@$lastmod)
+		{
+			$lastmod = '0000-00-00 00:00:00';
+		}
 
 		foreach ($en_gb_lang as $evt_name => $evt_strings)
 		{
@@ -447,7 +463,9 @@ if (!$client->query('tups.getLanguage',$prefs['blog_uid'],LANG))
 			{
 				$lang_val = doSlash($lang_val);
 				if (@$lang_val)
+				{
 					mysql_query("INSERT DELAYED INTO `".PFX."txp_lang` SET lang='en-gb', name='".$lang_key."', event='".$evt_name."', data='".$lang_val."', lastmod='".$lastmod."'");
+				}
 			}
 		}
 	}
@@ -460,7 +478,9 @@ else
 	foreach ($lang_struct as $item)
 	{
 		foreach ($item as $name => $value)
+		{
 			$item[$name] = doSlash($value);
+		}
 		mysql_query("INSERT DELAYED INTO `".PFX."txp_lang` SET lang='".LANG."', name='".$item['name']."', event='".$item['event']."', data='".$item['data']."', lastmod='".strftime('%Y%m%d%H%M%S',$item['uLastmod'])."'");
 	}
 }

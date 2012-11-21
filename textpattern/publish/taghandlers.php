@@ -568,7 +568,7 @@
 		{
 			$sql[] = 'id = '.intval($id);
 		}
-		else if($name)
+		else if ($name)
 		{
 			$sql[] = "linkname = '".doSlash($name)."'";
 		}
@@ -1872,7 +1872,7 @@
 
 		assert_article();
 
-		if($thisarticle['expires'] == 0)
+		if ($thisarticle['expires'] == 0)
 		{
 			return;
 		}
@@ -3018,7 +3018,7 @@
 	{
 		if (is_array($atts)) extract($atts);
 		global $s, $c, $p;
-		if($p)
+		if ($p)
 		{
 			$rs = safe_row("*", "txp_image", 'id='.intval($p).' limit 1');
 			if ($rs)
@@ -3560,7 +3560,9 @@
 				if ($prefs['attach_titles_to_permalinks'])
 				{
 					$out = hu."$section/$thisid/$url_title";
-				}else{
+				}
+				else
+				{
 					$out = hu."$section/$thisid/";
 				}
 				break;
@@ -3572,7 +3574,9 @@
 				if ($prefs['attach_titles_to_permalinks'])
 				{
 					$out = hu."$thisid/$url_title";
-				}else{
+				}
+				else
+				{
 					$out = hu."$thisid/";
 				}
 				break;
@@ -3693,7 +3697,7 @@
 
 		$content = array();
 		extract($pretext);
-		if(!empty($s) && $s!= 'default')
+		if (!empty($s) && $s!= 'default')
 		{
 			$section_title = ($title) ? fetch_section_title($s) : $s;
 			$section_title_html = escape_title($section_title);
@@ -3753,7 +3757,7 @@
 	{
 		global $thispage, $pretext;
 
-		if(empty($pretext['q'])) return '';
+		if (empty($pretext['q'])) return '';
 
 		extract(lAtts(array(
 			'min' => 1,
