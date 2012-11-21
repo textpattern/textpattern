@@ -1,6 +1,9 @@
 <?php
 
-if (!defined('txpinterface')) die('txpinterface is undefined.');
+if (!defined('txpinterface'))
+{
+	die('txpinterface is undefined.');
+}
 
 class hive_theme extends theme
 {
@@ -9,55 +12,55 @@ class hive_theme extends theme
 		$out[] = '<link rel="stylesheet" href="'.$this->url.'css/textpattern.css">';
 
 		// Start of custom CSS toggles (see README.textile for usage instructions)
-		if(defined('hive_theme_hide_branding'))
+		if (defined('hive_theme_hide_branding'))
 		{
 			$out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_branding.css">';
 		}
-		if(defined('hive_theme_hide_headings'))
+		if (defined('hive_theme_hide_headings'))
 		{
 			$out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_headings.css">';
 		}
-		if(defined('hive_theme_hide_preview_tabs_group'))
+		if (defined('hive_theme_hide_preview_tabs_group'))
 		{
 			$out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_preview_tabs.css">';
 		}
-		if(defined('hive_theme_hide_textfilter_group'))
+		if (defined('hive_theme_hide_textfilter_group'))
 		{
 			$out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_textfilter_group.css">';
 		}
-		if(defined('hive_theme_hide_advanced_group'))
+		if (defined('hive_theme_hide_advanced_group'))
 		{
 			$out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_advanced_group.css">';
 		}
-		if(defined('hive_theme_hide_custom_field_group'))
+		if (defined('hive_theme_hide_custom_field_group'))
 		{
 			$out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_custom_field_group.css">';
 		}
-		if(defined('hive_theme_hide_image_group'))
+		if (defined('hive_theme_hide_image_group'))
 		{
 			$out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_image_group.css">';
 		}
-		if(defined('hive_theme_hide_keywords_field'))
+		if (defined('hive_theme_hide_keywords_field'))
 		{
 			$out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_keywords_field.css">';
 		}
-		if(defined('hive_theme_hide_recent_articles_group'))
+		if (defined('hive_theme_hide_recent_articles_group'))
 		{
 			$out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_recent_articles_group.css">';
 		}
-		if(defined('hive_theme_hide_comments_group'))
+		if (defined('hive_theme_hide_comments_group'))
 		{
 			$out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_comments_group.css">';
 		}
-		if(defined('hive_theme_hide_expires_field'))
+		if (defined('hive_theme_hide_expires_field'))
 		{
 			$out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_expires_field.css">';
 		}
-		if(defined('hive_theme_hide_tag_builder_column'))
+		if (defined('hive_theme_hide_tag_builder_column'))
 		{
 			$out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_tag_builder_column.css">';
 		}
-		if(defined('hive_theme_hide_form_preview'))
+		if (defined('hive_theme_hide_form_preview'))
 		{
 			$out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_form_preview.css">';
 		}

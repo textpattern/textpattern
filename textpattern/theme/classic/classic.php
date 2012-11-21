@@ -1,6 +1,9 @@
 <?php
 
-if (!defined('txpinterface')) die('txpinterface is undefined.');
+if (!defined('txpinterface'))
+{
+	die('txpinterface is undefined.');
+}
 
 class classic_theme extends theme
 {
