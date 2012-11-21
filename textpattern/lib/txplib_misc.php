@@ -3611,6 +3611,55 @@
 	}
 
 /**
+ * Removes a user.
+ *
+ * The user's assets are assigned to the given new owner.
+ *
+ * On a successful run, this function will trigger
+ * a 'user.remove > removed' callback event.
+ *
+ * @param   string|array $user      List of removed users
+ * @param   string       $new_owner Assign assets to
+ * @return  bool         FALSE on error
+ * @since   4.6.0
+ * @package User
+ * @example
+ * if (remove_user('user', 'new_owner'))
+ * {
+ * 	echo "Removed 'user' and assigned assets to 'new_owner'.";
+ * }
+ */
+
+	function remove_user($user, $new_owner)
+	{
+		if (!$user || !$new_owner)
+		{
+			return false;
+		}
+
+		$names = join(',', quote_list((array) $user));
+
+		if (assign_user_assets($user, $new_owner) === false)
+		{
+			return false;
+		}
+
+		if (safe_delete('txp_prefs', "user_name in ($names)") === false)
+		{
+			return false;
+		}
+
+		if (safe_delete('txp_users', "name in ($names)") === false)
+		{
+			return false;
+		}
+
+		callback_event('user.remove', 'removed', 0, $user, $new_owner);
+
+		return true;
+	}
+
+/**
  * Extracts a statement from a if/else condition.
  *
  * @param   string  $thing     Statement in Textpattern tag markup presentation
