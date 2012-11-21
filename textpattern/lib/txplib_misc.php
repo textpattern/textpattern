@@ -3544,6 +3544,73 @@
 	}
 
 /**
+ * Assigns assets to a different user.
+ *
+ * This function changes the owner of user's assets. It will
+ * move articles, files, images and links from
+ * one user to another.
+ *
+ * This function should be run when a user's permissions are taken
+ * away, username is renamed or the user is removed from the site.
+ *
+ * Affected database tables can be extended with a 'user.assign_assets > columns'
+ * callback event. Callback functions get passed three arguments: '$event',
+ * '$step' and '$columns'. The third parameter contains a reference to an
+ * array of 'table => column' pairs.
+ *
+ * On a successful run, this function will trigger a 'user.assign_assets > assigned'
+ * callback event.
+ *
+ * @param   string|array $owner     List of current owners
+ * @param   string       $new_owner The new owner
+ * @return  bool         FALSE on error
+ * @since   4.6.0
+ * @package User
+ * @example
+ * if (assign_user_assets(array('user1', 'user2'), 'new_owner'))
+ * {
+ * 	echo "Assigned assets by 'user1' and 'user2' to 'new_owner'.";
+ * }
+ */
+
+	function assign_user_assets($owner, $new_owner)
+	{
+		static $columns = null;
+
+		if (!$owner || !$new_owner)
+		{
+			return false;
+		}
+
+		if ($columns === null)
+		{
+			$columns = array(
+				'textpattern' => 'AuthorID',
+				'txp_file'    => 'author',
+				'txp_image'   => 'author',
+				'txp_link'    => 'author',
+			);
+
+			callback_event_ref('user.assign_assets', 'columns', 0, $columns);
+		}
+
+		$names = join(',', quote_list((array) $owner));
+		$assign = doSlash($new_owner);
+
+		foreach ($columns as $table => $column)
+		{
+			if (safe_update($table, "$column = '$assign'", "$column in ($names)") === false)
+			{
+				return false;
+			}
+		}
+
+		callback_event('user.assign_assets', 'assigned', 0, $owner, $new_owner, $columns);
+
+		return true;
+	}
+
+/**
  * Extracts a statement from a if/else condition.
  *
  * @param   string  $thing     Statement in Textpattern tag markup presentation
