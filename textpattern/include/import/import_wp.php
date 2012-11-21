@@ -44,7 +44,6 @@
 			return 'WordPress database does not support the requested character set. Aborting.';
 		}
 
-
 		// Keep some response on some part.
 		$results = array();
 		$errors = array();
@@ -57,7 +56,6 @@
 		*/
 
 		$users = array();
-
 
 		$user_query = mysql_query("
 			select
@@ -85,30 +83,30 @@
 				switch ($key)
 				{
 					// Publisher.
-					case 'administrator':
+					case 'administrator' :
 						$user['privs'] = 1;
-					break;
+						break;
 
 					// Managing editor.
-					case 'editor':
+					case 'editor' :
 						$user['privs'] = 2;
-					break;
+						break;
 
 					// Staff writer.
-					case 'author':
+					case 'author' :
 						$user['privs'] = 4;
-					break;
+						break;
 
 					// Freelancer.
-					case 'contributor':
+					case 'contributor' :
 						$user['privs'] = 5;
-					break;
+						break;
 
 					// None.
-					case 'subscriber':
-					default:
+					case 'subscriber' :
+					default :
 						$user['privs'] = 0;
-					break;
+						break;
 				}
 			}
 
@@ -130,7 +128,7 @@
 				tt.parent as parent
 			from ".$wpdbprefix."terms as t inner join ".$wpdbprefix."term_taxonomy as tt
 				on(t.term_id = tt.term_id)
-			order by field(tt.taxonomy, 'category','post_tag','link_category'), tt.parent asc, t.name asc
+			order by field(tt.taxonomy, 'category', 'post_tag', 'link_category'), tt.parent asc, t.name asc
 		", $b2link) or $errors[] = mysql_error();
 
 		while ($category = mysql_fetch_array($category_query))
@@ -149,7 +147,6 @@
 					$category['parent'] = $parent['name'];
 				}
 			}
-
 			else
 			{
 				$category['parent'] = 'root';
@@ -157,14 +154,13 @@
 
 			switch ($category['type'])
 			{
-				case 'post_tag':
-				case 'category':
+				case 'post_tag' :
+				case 'category' :
 					$category['type'] = 'article';
-				break;
-
-				case 'link_category':
+					break;
+				case 'link_category' :
 					$category['type'] = 'link';
-				break;
+					break;
 			}
 
 			$categories[] = $category;
@@ -198,42 +194,42 @@
 			// Convert WordPress article status to Textpattern equivalent.
 			switch ($article['Status'])
 			{
-				case 'draft':
+				case 'draft' :
 					$article['Status'] = 1;
-				break;
+					break;
 
 				// Hidden.
-				case 'private':
+				case 'private' :
 					$article['Status'] = 2;
-				break;
+					break;
 
-				case 'pending':
+				case 'pending' :
 					$article['Status'] = 3;
-				break;
+					break;
 
 				// Live.
-				case 'publish':
+				case 'publish' :
 					$article['Status'] = 4;
-				break;
+					break;
 
-				default:
+				default :
 					$article['Status'] = $insert_with_status;
-				break;
+					break;
 			}
 
 			// Convert WordPress comment status to Textpattern equivalent.
 			switch ($article['Annotate'])
 			{
 				// On.
-				case 'open':
+				case 'open' :
 					$article['Annotate'] = 1;
-				break;
+					break;
 
 				// Off.
-				case 'closed':
-				case 'registered_only':
+				case 'closed' :
+				case 'registered_only' :
 					$article['Annotate'] = 0;
-				break;
+					break;
 			}
 
 			// Article commments.
@@ -351,8 +347,6 @@
 			$links[] = $link;
 		}
 
-
-
 		mysql_close($b2link);
 
 
@@ -361,16 +355,13 @@
 		*/
 
 
-		// keep a handy copy of txpdb values, and do not alter Dean code
-		// for now! ;-)
-
+		// Keep a handy copy of txpdb values.
 		$txpdb      = $txpcfg['db'];
 		$txpdblogin = $txpcfg['user'];
 		$txpdbpass  = $txpcfg['pass'];
 		$txpdbhost  = $txpcfg['host'];
 
-		// Yes, we have to make a new connection
-		// otherwise doArray complains
+		// Yes, we have to make a new connection, otherwise doArray complains.
 		$DB = new DB;
 		$txplink = &$DB->link;
 
@@ -386,7 +377,7 @@
 			include_once txpath.'/lib/txplib_admin.php';
 
 			$results[] = hed('Imported Users:', 2).
-				n.graf('Because WordPress uses a different password mechanism than Textpattern, you will need to reset each user&#8217;s password from <a href="index.php?event=admin">the Users tab</a>.').
+				graf('Because WordPress uses a different password mechanism than Textpattern, you will need to reset each user&#8217;s password from <a href="index.php?event=admin">the Users tab</a>.').
 				n.'<ul>';
 
 			foreach ($users as $user)
@@ -417,7 +408,6 @@
 
 			$results[] = '</ul>';
 		}
-
 
 
 		/*
@@ -586,7 +576,6 @@
 
 			$results[] = '</ul>';
 		}
-
 
 		return join(n, $results);
 	}
