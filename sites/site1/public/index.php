@@ -19,7 +19,8 @@
 			(array) $_POST,
 			(array) $_COOKIE,
 			(array) $_FILES,
-			(array) $_SERVER);
+			(array) $_SERVER,
+		);
 
 		// As the deliberately awkward-named local variable $_txpfoo MUST NOT be unset to avoid notices further
 		// down, we must remove any potentially identical-named global from the list of global names here.
