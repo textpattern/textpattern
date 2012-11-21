@@ -973,9 +973,8 @@
 		{
 			$statusq = ' and Status >= 4';
 		}
-		elseif
+		elseif ($id)
 		{
-			($id)
 			$statusq = ' and Status >= 4';
 		}
 		else
