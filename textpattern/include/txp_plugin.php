@@ -620,7 +620,6 @@
 				// Remove plugin's l10n strings.
 				safe_delete('txp_lang', "owner IN ('".join("','", doSlash($selected))."')");
 				break;
-
 			case 'changestatus' :
 				foreach ($selected as $name)
 				{
@@ -634,7 +633,6 @@
 				}
 				safe_update('txp_plugin', 'status = (1-status)', $where);
 				break;
-
 			case 'changeorder' :
 				$order = min(max(intval(ps('order')), 1), 9);
 				safe_update('txp_plugin', 'load_order = '.$order, $where);

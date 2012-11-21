@@ -3486,8 +3486,7 @@ class TagBuilderTags
 					$out .= tdb(
 						( ($wraptag) ? $wraptag : '') . '!'. ( ($wraptag) ? '' : $modifiers ) .$url.$alt.'!'
 					);
-				break;
-
+					break;
 				case 'html' :
 					$alt     = ' alt="'.txpspecialchars($alt).'"';
 					$caption = ($caption) ? ' title="'.txpspecialchars($caption).'"' : '';
@@ -3500,11 +3499,9 @@ class TagBuilderTags
 						'<img src="'.$url.'" width="'.$w.'" height="'.$h.'"'.$alt.$caption.$html_id.$class.$style.' />'.
 						($wraptag ? "</$wraptag>" : '')
 					);
-				break;
-
+					break;
 				case 'textpattern' :
 				default:
-
 					$atts = array(
 						'class'   => $class,
 						'html_id' => $html_id,
@@ -3512,9 +3509,8 @@ class TagBuilderTags
 						'style'   => $style,
 						'wraptag' => $wraptag
 					);
-
 					$out .= tdb(tb($tag_name, $atts));
-				break;
+					break;
 			}
 		}
 
@@ -3816,22 +3812,20 @@ class TagBuilderTags
 					$description = ($description) ? ' ('.$description.')' : '';
 
 					$out .= tdb('"'.$thing.$description.'":'.$url);
-				break;
-
+					break;
 				case 'html' :
 					$thing = ($thing) ? $thing : $filename;
 					$description = ($description) ? ' title="'.$description.'"' : '';
 
 					$out .= tdb('<a href="'.$url.'"'.$description.'>'.$thing.'</a>');
-				break;
-
+					break;
 				case 'textpattern' :
-				default:
+				default :
 					$atts = array('id' => $id);
 					$thing = ($thing) ? $thing : '<txp:file_download_name />';
 
 					$out .= tdb(tb($tag_name, $atts, $thing));
-				break;
+					break;
 			}
 		}
 

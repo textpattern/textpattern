@@ -11,7 +11,10 @@
 
 */
 
-	if (!defined('txpinterface')) die('txpinterface is undefined.');
+	if (!defined('txpinterface'))
+	{
+		die('txpinterface is undefined.');
+	}
 
 	if ($event == 'discuss')
 	{
@@ -66,8 +69,8 @@
 			 web     = '$web',
 			 message = '$message',
 			 visible = $visible",
-			"discussid = $discussid"))
-		{
+			"discussid = $discussid"
+		)) {
 			update_comments_count($parentid);
 			update_lastmod();
 			$message = gTxt('comment_updated', array('{id}' => $discussid));
@@ -105,51 +108,55 @@
 		pagetop(gTxt('list_discussions'), $message);
 
 		extract(gpsa(array('sort', 'dir', 'page', 'crit', 'search_method')));
-		if ($sort === '') $sort = get_pref('discuss_sort_column', 'date');
-		if ($dir === '') $dir = get_pref('discuss_sort_dir', 'desc');
+
+		if ($sort === '')
+		{
+			$sort = get_pref('discuss_sort_column', 'date');
+		}
+
+		if ($dir === '')
+		{
+			$dir = get_pref('discuss_sort_dir', 'desc');
+		}
+
 		$dir = ($dir == 'asc') ? 'asc' : 'desc';
 
 		switch ($sort)
 		{
 			case 'id' :
 				$sort_sql = 'discussid '.$dir;
-			break;
-
+				break;
 			case 'ip' :
 				$sort_sql = 'ip '.$dir;
-			break;
-
+				break;
 			case 'name' :
 				$sort_sql = 'name '.$dir;
-			break;
-
+				break;
 			case 'email' :
 				$sort_sql = 'email '.$dir;
-			break;
-
+				break;
 			case 'website' :
 				$sort_sql = 'web '.$dir;
-			break;
-
+				break;
 			case 'message' :
 				$sort_sql = 'message '.$dir;
-			break;
-
+				break;
 			case 'status' :
 				$sort_sql = 'visible '.$dir;
-			break;
-
+				break;
 			case 'parent' :
 				$sort_sql = 'parentid '.$dir;
-			break;
-
-			default:
+				break;
+			default :
 				$sort = 'date';
 				$sort_sql = 'txp_discuss.posted '.$dir;
-			break;
+				break;
 		}
 
-		if ($sort != 'date') $sort_sql .= ', txp_discuss.posted asc';
+		if ($sort != 'date')
+		{
+			$sort_sql .= ', txp_discuss.posted asc';
+		}
 
 		set_pref('discuss_sort_column', $sort, 'discuss', 2, '', 0, PREF_PRIVATE);
 		set_pref('discuss_sort_dir', $dir, 'discuss', 2, '', 0, PREF_PRIVATE);
@@ -292,23 +299,20 @@
 
 				switch ($visible)
 				{
-					case VISIBLE:
+					case VISIBLE :
 						$comment_status = gTxt('visible');
 						$row_class = 'visible';
-					break;
-
-					case SPAM:
+						break;
+					case SPAM :
 						$comment_status = gTxt('spam');
 						$row_class = 'spam';
-					break;
-
-					case MODERATE:
+						break;
+					case MODERATE :
 						$comment_status = gTxt('unmoderated');
 						$row_class = 'moderate';
-					break;
-
-					default:
-					break;
+						break;
+					default :
+						break;
 				}
 
 				if (empty($thisid))
@@ -345,7 +349,9 @@
 			}
 
 			if (empty($message))
+			{
 				echo n.tr(tda(gTxt('just_spam_results_found'), ' colspan="10"'));
+			}
 
 			echo n.'</tbody>'.
 				endTable().
@@ -457,7 +463,6 @@
 					n.'</section>'
 				, '', '', 'post', 'edit-form', '', 'discuss_edit_form'), '</div>';
 		}
-
 		else
 		{
 			echo graf(gTxt('comment_not_found'), ' class="indicator"');
@@ -583,7 +588,6 @@
 			endTable().
 			'</div>';
 		}
-
 		else
 		{
 			echo graf(gTxt('no_ips_banned'), ' class="indicator"');
@@ -615,15 +619,14 @@
 // -------------------------------------------------------------
 	function discuss_multi_edit()
 	{
-		//FIXME, this method needs some refactoring
-
+		// FIXME: this method needs some refactoring.
 		$selected = ps('selected');
 		$method = ps('edit_method');
 		$done = array();
 
 		if ($selected and is_array($selected))
 		{
-			// Get all articles for which we have to update the count
+			// Get all articles for which we have to update the count.
 			foreach($selected as $id)
 				$ids[] = assert_int($id);
 			$parentids = safe_column("DISTINCT parentid", "txp_discuss", "discussid IN (".implode(',', $ids).")");
@@ -637,15 +640,17 @@
 
 				if ($method == 'delete')
 				{
-					// Delete and if successful update comment count
+					// Delete and, if successful, update comment count.
 					if (safe_delete('txp_discuss', "discussid = $id"))
+					{
 						$done[] = $id;
+					}
 
 					callback_event('discuss_deleted', '', 0, $done);
 				}
 				elseif ($method == 'ban')
 				{
-					// Ban the IP and hide all messages by that IP
+					// Ban the IP and hide all messages by that IP.
 					if (!safe_field('ip', 'txp_discuss_ipban', "ip='".doSlash($ip)."'"))
 					{
 						safe_insert("txp_discuss_ipban",
@@ -663,27 +668,30 @@
 				}
 				elseif ($method == 'spam')
 				{
-						if (safe_update('txp_discuss',
-							"visible = ".SPAM,
-							"discussid = $id"
-						))
-							$done[] = $id;
+					if (safe_update('txp_discuss',
+						"visible = ".SPAM,
+						"discussid = $id"
+					)) {
+						$done[] = $id;
+					}
 				}
 				elseif ($method == 'unmoderated')
 				{
-						if (safe_update('txp_discuss',
-							"visible = ".MODERATE,
-							"discussid = $id"
-						))
-							$done[] = $id;
+					if (safe_update('txp_discuss',
+						"visible = ".MODERATE,
+						"discussid = $id"
+					)) {
+						$done[] = $id;
+					}
 				}
 				elseif ($method == 'visible')
 				{
-						if (safe_update('txp_discuss',
-							"visible = ".VISIBLE,
-							"discussid = $id"
-						))
-							$done[] = $id;
+					if (safe_update('txp_discuss',
+						"visible = ".VISIBLE,
+						"discussid = $id"
+					)) {
+						$done[] = $id;
+					}
 				}
 			}
 
@@ -691,7 +699,7 @@
 
 			if ($done)
 			{
-				// might as well clean up all comment counts while we're here.
+				// Might as well clean up all comment counts while we're here.
 				clean_comment_counts($parentids);
 
 				$messages = array(

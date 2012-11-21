@@ -11,7 +11,10 @@
 
 */
 
-	if (!defined('txpinterface')) die('txpinterface is undefined.');
+	if (!defined('txpinterface'))
+	{
+		die('txpinterface is undefined.');
+	}
 
 	if ($event == 'link')
 	{
@@ -51,40 +54,42 @@
 		pagetop(gTxt('tab_link'), $message);
 
 		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
-		if ($sort === '') $sort = get_pref('link_sort_column', 'name');
-		if ($dir === '') $dir = get_pref('link_sort_dir', 'asc');
+
+		if ($sort === '')
+		{
+			$sort = get_pref('link_sort_column', 'name');
+		}
+
+		if ($dir === '')
+		{
+			$dir = get_pref('link_sort_dir', 'asc');
+		}
 		$dir = ($dir == 'desc') ? 'desc' : 'asc';
 
 		switch ($sort)
 		{
 			case 'id' :
 				$sort_sql = 'id '.$dir;
-			break;
-
+				break;
 			case 'description' :
 				$sort_sql = 'description '.$dir.', id asc';
-			break;
-
+				break;
 			case 'url' :
 				$sort_sql = 'url '.$dir.', id asc';
-			break;
-
+				break;
 			case 'category' :
 				$sort_sql = 'category '.$dir.', id asc';
-			break;
-
+				break;
 			case 'date' :
 				$sort_sql = 'date '.$dir.', id asc';
-			break;
-
+				break;
 			case 'author' :
 				$sort_sql = 'author '.$dir.', id asc';
-			break;
-
-			default:
+				break;
+			default :
 				$sort = 'name';
 				$sort_sql = 'linksort '.$dir.', id asc';
-			break;
+				break;
 		}
 
 		set_pref('link_sort_column', $sort, 'link', 2, '', 0, PREF_PRIVATE);
@@ -365,7 +370,10 @@
 			return;
 		}
 
-		if (!$linksort) $linksort = $linkname;
+		if (!$linksort)
+		{
+			$linksort = $linkname;
+		}
 
 		$constraints = array(
 			'category' => new CategoryConstraint($varray['category'], array('type' => 'link'))
@@ -520,7 +528,6 @@
 
 				$key = '';
 				break;
-
 			case 'changecategory' :
 				$val = ps('category');
 				if (in_array($val, $categories))
@@ -528,7 +535,6 @@
 					$key = 'category';
 				}
 				break;
-
 			case 'changeauthor' :
 				$val = ps('author');
 				if (in_array($val, $all_link_authors))
@@ -536,8 +542,7 @@
 					$key = 'author';
 				}
 				break;
-
-			default:
+			default :
 				$key = '';
 				$val = '';
 				break;

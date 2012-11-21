@@ -17,7 +17,10 @@
  * @package Admin\Section
  */
 
-	if (!defined('txpinterface')) die('txpinterface is undefined.');
+	if (!defined('txpinterface'))
+	{
+		die('txpinterface is undefined.');
+	}
 
 	if ($event == 'section')
 	{
@@ -63,43 +66,44 @@
 		pagetop(gTxt('tab_sections'), $message);
 
 		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
-		if ($sort === '') $sort = get_pref('section_sort_column', 'time');
-		if ($dir === '') $dir = get_pref('section_sort_dir', 'desc');
+
+		if ($sort === '')
+		{
+			$sort = get_pref('section_sort_column', 'time');
+		}
+
+		if ($dir === '')
+		{
+			$dir = get_pref('section_sort_dir', 'desc');
+		}
 		$dir = ($dir == 'asc') ? 'asc' : 'desc';
 
 		switch ($sort)
 		{
 			case 'title' :
 				$sort_sql = 'title '.$dir;
-			break;
-
+				break;
 			case 'page' :
 				$sort_sql = 'page '.$dir;
-			break;
-
+				break;
 			case 'css' :
 				$sort_sql = 'css '.$dir;
-			break;
-
+				break;
 			case 'in_rss' :
 				$sort_sql = 'in_rss '.$dir;
-			break;
-
+				break;
 			case 'on_frontpage' :
 				$sort_sql = 'on_frontpage '.$dir;
-			break;
-
+				break;
 			case 'searchable' :
 				$sort_sql = 'searchable '.$dir;
-			break;
-
+				break;
 			case 'article_count' :
 				$sort_sql = 'article_count '.$dir;
-			break;
-
+				break;
 			default:
 				$sort_sql = 'name '.$dir;
-			break;
+				break;
 		}
 
 		set_pref('section_sort_column', $sort, 'section', 2, '', 0, PREF_PRIVATE);
@@ -660,7 +664,6 @@
 			case 'delete' :
 				return section_delete($selected);
 				break;
-
 			case 'changepage' :
 				$val = ps('uses_page');
 				if (in_array($val, $all_pages))
@@ -668,7 +671,6 @@
 					$key = 'page';
 				}
 				break;
-
 			case 'changecss' :
 				$val = ps('css');
 				if (in_array($val, $all_styles))
@@ -676,22 +678,18 @@
 					$key = 'css';
 				}
 				break;
-
 			case 'changeonfrontpage' :
 				$key = 'on_frontpage';
 				$val = (int) ps('on_frontpage');
 				break;
-
 			case 'changesyndicate' :
 				$key = 'in_rss';
 				$val = (int) ps('in_rss');
 				break;
-
 			case 'changesearchable' :
 				$key = 'searchable';
 				$val = (int) ps('searchable');
 				break;
-
 			default:
 				$key = '';
 				$val = '';

@@ -65,8 +65,7 @@
 	if (!$step or !bouncer($step, array(
 		'switch_tool'  => false,
 		'start_import' => true
-	)))
-	{
+	))) {
 		$step = 'switch_tool';
 	}
 

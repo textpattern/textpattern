@@ -120,7 +120,7 @@
 			case 'lastmod' :
 				$sort_sql = 'textpattern.LastMod '.$dir.', textpattern.Posted desc';
 				break;
-			default:
+			default :
 				$sort = 'posted';
 				$sort_sql = 'textpattern.Posted '.$dir;
 				break;
@@ -640,7 +640,7 @@
 						$val = STATUS_PENDING;
 					}
 					break;
-				default:
+				default :
 					$key = '';
 					$val = '';
 					break;

@@ -98,7 +98,7 @@
 			case 'status' :
 				$sort_sql = 'status '.$dir;
 				break;
-			default:
+			default :
 				$sort = 'time';
 				$sort_sql = 'time '.$dir;
 				break;

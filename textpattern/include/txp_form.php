@@ -423,15 +423,12 @@
 					{
 						if ($newname)
 						{
-							if (
-								safe_insert(
+							if (safe_insert(
 									'txp_form',
 									"Form = '$Form',
 									type = '$type',
 									name = '".doSlash($newname)."'"
-								)
-							)
-							{
+							)) {
 								update_lastmod();
 								$message = gTxt('form_created', array('{name}' => $newname));
 							}
@@ -449,16 +446,13 @@
 					}
 					else
 					{
-						if (
-							safe_update(
+						if (safe_update(
 								'txp_form',
 								"Form = '$Form',
 								type = '$type',
 								name = '".doSlash($newname)."'",
 								"name = '".doSlash($name)."'"
-							)
-						)
-						{
+						)) {
 							update_lastmod();
 							$message = gTxt('form_updated', array('{name}' => $name));
 						}

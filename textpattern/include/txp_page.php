@@ -80,7 +80,7 @@
 		{
 			$name = safe_field('page', 'txp_section', "name = 'default'");
 		}
-		elseif ( ((($copy || $savenew) && $newname) || ($newname && ($newname != $name))) && !$save_error)
+		elseif (((($copy || $savenew) && $newname) || ($newname && ($newname != $name))) && !$save_error)
 		{
 			$name = $newname;
 		}

@@ -18,7 +18,10 @@ Use of this software indicates acceptance of the Textpattern license agreement
  * @since   4.6.0
  */
 
-	if (!defined('txpinterface')) die('txpinterface is undefined.');
+	if (!defined('txpinterface'))
+	{
+		die('txpinterface is undefined.');
+	}
 
 	include_once txpath.'/lib/txplib_update.php';
 
@@ -149,7 +152,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
 		// Get items from Filesystem.
 		$files = get_lang_files();
 
-		if ( is_array($files) && !empty($files) )
+		if (is_array($files) && !empty($files))
 		{
 			foreach ($files as $file)
 			{

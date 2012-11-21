@@ -15,11 +15,14 @@
 
 */
 
-	if (!defined('txpinterface')) die('txpinterface is undefined.');
+	if (!defined('txpinterface'))
+	{
+		die('txpinterface is undefined.');
+	}
 
 	$levels = array(
 		1 => gTxt('private'),
-		0 => gTxt('public')
+		0 => gTxt('public'),
 	);
 
 	global $file_statuses;
@@ -67,8 +70,16 @@
 		pagetop(gTxt('tab_file'), $message);
 
 		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
-		if ($sort === '') $sort = get_pref('file_sort_column', 'filename');
-		if ($dir === '') $dir = get_pref('file_sort_dir', 'asc');
+
+		if ($sort === '')
+		{
+			$sort = get_pref('file_sort_column', 'filename');
+		}
+
+		if ($dir === '')
+		{
+			$dir = get_pref('file_sort_dir', 'asc');
+		}
 		$dir = ($dir == 'desc') ? 'desc' : 'asc';
 
 		echo n.'<h1 class="txp-heading">'.gTxt('tab_file').'</h1>';
@@ -103,32 +114,26 @@
 		{
 			case 'id' :
 				$sort_sql = 'id '.$dir;
-			break;
-
+				break;
 			case 'description' :
 				$sort_sql = 'description '.$dir.', filename desc';
-			break;
-
+				break;
 			case 'category' :
 				$sort_sql = 'category '.$dir.', filename desc';
-			break;
-
+				break;
 			case 'title' :
 				$sort_sql = 'title '.$dir.', filename desc';
-			break;
-
+				break;
 			case 'downloads' :
 				$sort_sql = 'downloads '.$dir.', filename desc';
-			break;
-
+				break;
 			case 'author' :
 				$sort_sql = 'author '.$dir.', id asc';
-			break;
-
-			default:
+				break;
+			default :
 				$sort = 'filename';
 				$sort_sql = 'filename '.$dir;
-			break;
+				break;
 		}
 
 		set_pref('file_sort_column', $sort, 'file', PREF_HIDDEN, '', 0, PREF_PRIVATE);
@@ -402,7 +407,6 @@
 			case 'delete' :
 				return file_delete($selected);
 				break;
-
 			case 'changecategory' :
 				$val = ps('category');
 				if (in_array($val, $categories))
@@ -410,7 +414,6 @@
 					$key = 'category';
 				}
 				break;
-
 			case 'changeauthor' :
 				$val = ps('author');
 				if (in_array($val, $all_file_authors))
@@ -418,12 +421,10 @@
 					$key = 'author';
 				}
 				break;
-
 			case 'changecount' :
 				$key = 'downloads';
 				$val = 0;
 				break;
-
 			case 'changestatus' :
 				$key = 'status';
 				$val = ps('status');
@@ -434,8 +435,7 @@
 					$selected = array();
 				}
 				break;
-
-			default:
+			default :
 				$key = '';
 				$val = '';
 				break;
@@ -503,8 +503,15 @@
 
 			pagetop(gTxt('edit_file'), $message);
 
-			if ($permissions=='') $permissions='-1';
-			if (!has_privs('file.publish') && $status >= STATUS_LIVE) $status = STATUS_PENDING;
+			if ($permissions=='')
+			{
+				$permissions='-1';
+			}
+
+			if (!has_privs('file.publish') && $status >= STATUS_LIVE)
+			{
+				$status = STATUS_PENDING;
+			}
 
 			$file_exists = file_exists(build_file_path($file_base_path, $filename));
 			$existing_files = get_filenames();
@@ -697,9 +704,14 @@
 				{
 					safe_delete("txp_file", "id = $id");
 					safe_alter("txp_file", "auto_increment=$id");
-					if ( isset( $GLOBALS['ID'])) unset( $GLOBALS['ID']);
+
+					if (isset( $GLOBALS['ID']))
+					{
+						unset( $GLOBALS['ID']);
+					}
+
 					file_list(array($newpath.' '.gTxt('upload_dir_perms'), E_ERROR));
-					// clean up file
+					// Clean up file.
 				}
 				else
 				{
@@ -749,7 +761,7 @@
 
 		if ($file === false)
 		{
-			// could not get uploaded file
+			// Could not get uploaded file.
 			file_list(gTxt('file_upload_failed') ." $name ".upload_get_errormsg($_FILES['thefile']['error']));
 			return;
 		}
@@ -772,10 +784,11 @@
 				safe_delete("txp_file", "id = $id");
 
 				file_list($newpath.sp.gTxt('upload_dir_perms'));
-				// rename tmp back
+
+				// Rename tmp back.
 				rename($newpath.'.tmp', $newpath);
 
-				// remove tmp upload
+				// Remove tmp upload.
 				unlink($file);
 			}
 			else
@@ -783,14 +796,19 @@
 				file_set_perm($newpath);
 				update_lastmod();
 				if ($size = filesize($newpath))
+				{
 					safe_update('txp_file', 'size = '.$size.', modified = now()', 'id = '.$id);
+				}
 
 				$message = gTxt('file_uploaded', array('{name}' => txpspecialchars($name)));
 
 				file_edit($message, $id);
-				// clean up old
+
+				// Clean up old.
 				if (is_file($newpath.'.tmp'))
+				{
 					unlink($newpath.'.tmp');
+				}
 			}
 		}
 	}
@@ -850,11 +868,17 @@
 
 		$created_ts = @safe_strtotime($year.'-'.$month.'-'.$day.' '.$hour.':'.$minute.':'.$second);
 		if ($publish_now)
+		{
 			$created = 'now()';
+		}
 		elseif ($created_ts > 0)
+		{
 			$created = "from_unixtime('".$created_ts."')";
+		}
 		else
+		{
 			$created = '';
+		}
 
 		$size = filesize(build_file_path($file_base_path, $filename));
 
@@ -1022,7 +1046,9 @@
 		$dirlist = array();
 
 		if (!is_dir($file_base_path))
+		{
 			return $dirlist;
+		}
 
 		if (chdir($file_base_path))
 		{

@@ -42,7 +42,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
 
 		$message = doTxpValidate();
 
-		if(!$txp_user)
+		if (!$txp_user)
 		{
 			doLoginForm($message);
 		}
@@ -162,7 +162,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
 		{
 			$step = 'logout';
 		}
-		else if(gps('reset'))
+		else if (gps('reset'))
 		{
 			$step = 'reset';
 		}
@@ -262,7 +262,6 @@ Use of this software indicates acceptance of the Textpattern license agreement
 			if ($nonce and $nonce === md5($c_userid.pack('H*', $c_hash)))
 			{
 				// Cookie is good.
-
 				if ($logout)
 				{
 					// Destroy nonce.

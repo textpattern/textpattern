@@ -665,14 +665,11 @@
 
 				if (!isset($levels[$privilege])) return author_list();
 
-				if (
-					safe_update(
+				if (safe_update(
 						'txp_users',
 						'privs = '.intval($privilege),
 						"name IN (".join(',', quote_list($names)).")"
-					)
-				)
-				{
+				)) {
 					$changed = $names;
 					$msg = 'author_updated';
 				}

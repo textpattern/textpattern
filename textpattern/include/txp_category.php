@@ -16,7 +16,10 @@
  * @package Admin\Category
  */
 
-	if (!defined('txpinterface')) die('txpinterface is undefined.');
+	if (!defined('txpinterface'))
+	{
+		die('txpinterface is undefined.');
+	}
 
 	if ($event == 'category')
 	{
@@ -408,15 +411,13 @@ EOS
 				{
 					case 'link' :
 						$rs2 = safe_rows_start('category, count(*) as num', 'txp_link', "1 group by category");
-					break;
-
+						break;
 					case 'image' :
 						$rs2 = safe_rows_start('category, count(*) as num', 'txp_image', "1 group by category");
-					break;
-
+						break;
 					case 'file' :
 						$rs2 = safe_rows_start('category, count(*) as num', 'txp_file', "1 group by category");
-					break;
+						break;
 				}
 
 				while ($a = nextRow($rs2))
@@ -439,19 +440,16 @@ EOS
 				{
 					case 'article' :
 						$url = 'index.php?event=list'.a.'search_method=categories'.a.'crit='.$name;
-					break;
-
+						break;
 					case 'link' :
 						$url = 'index.php?event=link'.a.'search_method=category'.a.'crit='.$name;
-					break;
-
+						break;
 					case 'image' :
 						$url = 'index.php?event=image'.a.'search_method=category'.a.'crit='.$name;
-					break;
-
+						break;
 					case 'file' :
 						$url = 'index.php?event=file'.a.'search_method=category'.a.'crit='.$name;
-					break;
+						break;
 				}
 
 				$count = isset($total_count[$name]) ? href('('.$total_count[$name].')', $url) : '(0)';

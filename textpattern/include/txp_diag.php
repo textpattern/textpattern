@@ -16,7 +16,10 @@
  * @package Admin\Diag
  */
 
-	if (!defined('txpinterface')) die('txpinterface is undefined.');
+	if (!defined('txpinterface'))
+	{
+		die('txpinterface is undefined.');
+	}
 
 /**
  * @ignore
@@ -61,6 +64,7 @@
 	function apache_module($m)
 	{
 		$modules = @apache_get_modules();
+
 		if (is_array($modules))
 		{
 			return in_array($m, $modules);
@@ -80,9 +84,11 @@
 	function test_tempdir($dir)
 	{
 		$f = realpath(tempnam($dir, 'txp_'));
+
 		if (is_file($f))
 		{
 			@unlink($f);
+
 			return true;
 		}
 	}
@@ -99,8 +105,12 @@
 	{
 		$table_names = array(PFX.'textpattern');
 		$rows = getRows("SHOW TABLES LIKE '".PFX."txp\_%'");
+
 		foreach ($rows as $row)
+		{
 			$table_names[] = array_shift($row);
+		}
+
 		return $table_names;
 	}
 
@@ -120,16 +130,22 @@
 	function check_tables($tables, $type='FAST', $warnings = 0)
 	{
 		$msgs = array();
+
 		foreach ($tables as $table)
 		{
 			$rs = getRows("CHECK TABLE `$table` $type");
 			if ($rs)
 			{
 				foreach ($rs as $r)
+				{
 					if ($r['Msg_type'] != 'status' and ($warnings or $r['Msg_type'] != 'warning'))
+					{
 						$msgs[] = $table.cs.$r['Msg_type'].cs.$r['Msg_text'];
+					}
+				}
 			}
 		}
+
 		return $msgs;
 	}
 
@@ -174,7 +190,7 @@
 		$now = time();
 		$updateInfo = unserialize(get_pref('last_update_check', ''));
 
-		if (!$updateInfo || ( $now > ($updateInfo['when'] + (60 * 60 * 24)) ))
+		if (!$updateInfo || ($now > ($updateInfo['when'] + (60 * 60 * 24))))
 		{
 			$updates = checkUpdates();
 			$updateInfo['msg'] = ($updates) ? gTxt($updates['msg'], array('{version}' => $updates['version'])) : '';
@@ -183,7 +199,6 @@
 		}
 
 		$fail = array(
-
 			'textpattern_version_update' => ($updateInfo['msg'] ? diag_msg_wrap($updateInfo['msg'], 'information') : ''),
 
 			'php_version_required' =>
@@ -198,35 +213,35 @@
 
 			'dns_lookup_fails' =>
 			(@gethostbyname($mydomain) == $mydomain)
-			?	diag_msg_wrap(gTxt('dns_lookup_fails').cs.$mydomain, 'warning')
-			:	'',
+			? diag_msg_wrap(gTxt('dns_lookup_fails').cs.$mydomain, 'warning')
+			: '',
 
 			'path_to_site_inacc' =>
 			(!@is_dir($path_to_site))
-			?	diag_msg_wrap(gTxt('path_to_site_inacc').cs.$path_to_site)
-			: 	'',
+			? diag_msg_wrap(gTxt('path_to_site_inacc').cs.$path_to_site)
+			: '',
 
 			'site_trailing_slash' =>
 			(rtrim($siteurl, '/') != $siteurl)
-			?	diag_msg_wrap(gTxt('site_trailing_slash').cs.$path_to_site, 'warning')
-			:	'',
+			? diag_msg_wrap(gTxt('site_trailing_slash').cs.$path_to_site, 'warning')
+			: '',
 
 			'index_inaccessible' =>
 			(!@is_file($path_to_site."/index.php") or !@is_readable($path_to_site."/index.php"))
-			?	diag_msg_wrap("{$path_to_site}/index.php ".gTxt('is_inaccessible'))
-			:	'',
+			? diag_msg_wrap("{$path_to_site}/index.php ".gTxt('is_inaccessible'))
+			: '',
 
 			'dir_not_writable' =>
 			trim(
 				((!@is_writable($path_to_site.'/'.$img_dir))
-				?	diag_msg_wrap(str_replace('{dirtype}', gTxt('img_dir'), gTxt('dir_not_writable')).": {$path_to_site}/{$img_dir}", 'warning').n
-				:	'').
+				? diag_msg_wrap(str_replace('{dirtype}', gTxt('img_dir'), gTxt('dir_not_writable')).": {$path_to_site}/{$img_dir}", 'warning').n
+				: '').
 				((!@is_writable($file_base_path))
-				?	diag_msg_wrap(str_replace('{dirtype}', gTxt('file_base_path'), gTxt('dir_not_writable')).": {$file_base_path}", 'warning').n
-				:	'').
+				? diag_msg_wrap(str_replace('{dirtype}', gTxt('file_base_path'), gTxt('dir_not_writable')).": {$file_base_path}", 'warning').n
+				: '').
 				((!@is_writable($tempdir))
-				?	diag_msg_wrap(str_replace('{dirtype}', gTxt('tempdir'), gTxt('dir_not_writable')).": {$tempdir}", 'warning').n
-				:	'')),
+				? diag_msg_wrap(str_replace('{dirtype}', gTxt('tempdir'), gTxt('dir_not_writable')).": {$tempdir}", 'warning').n
+				: '')),
 
 			'cleanurl_only_apache' =>
 			($permlink_mode != 'messy' and !$is_apache )
@@ -235,8 +250,8 @@
 
 			'htaccess_missing' =>
 			($permlink_mode != 'messy' and !@is_readable($path_to_site.'/.htaccess'))
-			?	diag_msg_wrap(gTxt('htaccess_missing'))
-			:	'',
+			? diag_msg_wrap(gTxt('htaccess_missing'))
+			: '',
 
 			'mod_rewrite_missing' =>
 			($permlink_mode != 'messy' and is_callable('apache_get_modules') and !apache_module('mod_rewrite'))
@@ -245,8 +260,8 @@
 
 			'file_uploads_disabled' =>
 			(!ini_get('file_uploads'))
-			?	diag_msg_wrap(gTxt('file_uploads_disabled'), 'information')
-			:	'',
+			? diag_msg_wrap(gTxt('file_uploads_disabled'), 'information')
+			: '',
 
 			'setup_still_exists' =>
 			(@is_dir(txpath . DS. 'setup'))
@@ -264,27 +279,34 @@
 			: '',
 
 			'warn_register_globals_or_update' =>
-			( $is_register_globals &&
-			  (    version_compare(phpversion(), '4.4.0', '<=')
-				or ( version_compare(phpversion(), '5.0.0', '>=') and version_compare(phpversion(), '5.0.5', '<=') )
+			($is_register_globals &&
+				(version_compare(phpversion(), '4.4.0', '<=')
+				or (version_compare(phpversion(), '5.0.0', '>=') and version_compare(phpversion(), '5.0.5', '<='))
 			))
 			? diag_msg_wrap(gTxt('warn_register_globals_or_update'), 'warning')
 			: '',
-
 		);
 
 		if ($permlink_mode != 'messy')
 		{
 			$rs = safe_column("name", "txp_section", "1");
+
 			foreach ($rs as $name)
 			{
 				if ($name and @file_exists($path_to_site.'/'.$name))
+				{
 					$fail['old_placeholder_exists'] = diag_msg_wrap(gTxt('old_placeholder').": {$path_to_site}/{$name}");
+				}
 			}
 		}
 
 		foreach ($fail as $k=>$v)
-			if (empty($v)) unset($fail[$k]);
+		{
+			if (empty($v))
+			{
+				unset($fail[$k]);
+			}
+		}
 	
 		$cs = check_file_integrity(INTEGRITY_REALPATH);
 
@@ -310,8 +332,7 @@
 			array_keys($cs, INTEGRITY_MISSING),
 			array_keys($cs, INTEGRITY_NOT_FILE),
 			array_keys($cs, INTEGRITY_NOT_READABLE)
-		))
-		{
+		)) {
 			$fail['missing_files'] = diag_msg_wrap(gTxt('missing_files').cs.n.t.join(', '.n.t, $missing));
 		}
 
@@ -337,17 +358,23 @@
 				'dl',
 				'chown',
 			));
+
 			if ($disabled_funcs)
+			{
 				$fail['some_php_functions_disabled'] = diag_msg_wrap(gTxt('some_php_functions_disabled').cs.join(', ',$disabled_funcs), 'warning');
+			}
 		}
 
-		# not sure about this one
-		#if (strncmp(php_sapi_name(), 'cgi', 3) == 0 and ini_get('cgi.rfc2616_headers'))
-		#	$fail['cgi_header_config'] = gTxt('cgi_header_config');
+		// Not sure about this one.
+//		if (strncmp(php_sapi_name(), 'cgi', 3) == 0 and ini_get('cgi.rfc2616_headers'))
+//			$fail['cgi_header_config'] = gTxt('cgi_header_config');
 
 		$guess_site_url = $_SERVER['HTTP_HOST'] . preg_replace('#[/\\\\]$#', '', dirname(dirname($_SERVER['SCRIPT_NAME'])));
+
 		if ($siteurl and strip_prefix($siteurl, 'www.') != strip_prefix($guess_site_url, 'www.'))
+		{
 			$fail['site_url_mismatch'] = diag_msg_wrap(gTxt('site_url_mismatch').cs.$guess_site_url, 'warning');
+		}
 
 		// Test clean URL server vars.
 		if (hu)
@@ -356,15 +383,22 @@
 			{
 				$s = md5(uniqid(rand(), true));
 				ini_set('default_socket_timeout', 10);
+
 				$pretext_data = @file(hu.$s.'/?txpcleantest=1');
+
 				if ($pretext_data)
 				{
 					$pretext_req = trim(@$pretext_data[0]);
+
 					if ($pretext_req != md5('/'.$s.'/?txpcleantest=1'))
+					{
 						$fail['clean_url_data_failed'] = diag_msg_wrap(gTxt('clean_url_data_failed').cs.txpspecialchars($pretext_req), 'warning');
+					}
 				}
 				else
+				{
 					$fail['clean_url_test_failed'] = diag_msg_wrap(gTxt('clean_url_test_failed'), 'warning');
+				}
 			}
 		}
 
@@ -372,7 +406,9 @@
 		{
 			$table_errors = check_tables($tables);
 			if ($table_errors)
+			{
 				$fail['mysql_table_errors'] = diag_msg_wrap(gTxt('mysql_table_errors').cs.n.t.join(', '.n.t, $table_errors));
+			}
 		}
 
 		$active_plugins = array();
@@ -381,8 +417,12 @@
 			foreach ($rows as $row)
 			{
 				$n = $row['name'].'-'.$row['version'];
+
 				if (strtolower($row['md5']) != strtolower($row['code_md5']))
+				{
 					$n .= 'm';
+				}
+
 				$active_plugins[] = $n;
 			}
 		}
@@ -415,7 +455,9 @@
 			if ($gd_support)
 			{
 				$gd_support = join(', ', $gd_support);
-			} else {
+			}
+			else
+			{
 				$gd_support = gTxt('none');
 			}
 
@@ -447,7 +489,9 @@
 		if ($fail)
 		{
 			foreach ($fail as $help => $message)
+			{
 				echo graf(nl2br($message).popHelp($help));
+			}
 		}
 		else
 		{
@@ -456,7 +500,7 @@
 
 		echo '</div>';
 		echo '<div id="diagnostics">',
-			hed(gTxt('diagnostic_info'),2);
+			hed(gTxt('diagnostic_info'), 2);
 
 		$fmt_date = '%Y-%m-%d %H:%M:%S';
 
@@ -522,7 +566,7 @@
 			: '',
 
 			(is_readable($path_to_site.'/.htaccess'))
-			?	n.gTxt('htaccess_contents').cs.n.ln.txpspecialchars(join('',file($path_to_site.'/.htaccess'))).n.ln
+			?	n.gTxt('htaccess_contents').cs.n.ln.txpspecialchars(join('', file($path_to_site.'/.htaccess'))).n.ln
 			:	''
 		);
 
@@ -532,19 +576,27 @@
 			$out[] = n.'Charset (default/config)'.cs.$mysql_client_encoding.'/'.@$txpcfg['dbcharset'].n;
 
 			$result = safe_query("SHOW variables like 'character_se%'");
+
 			while ($row = mysql_fetch_row($result))
 			{
 				$out[] = $row[0].cs.$row[1].n;
-				if ($row[0] == 'character_set_connection') $conn_char = $row[1];
+
+				if ($row[0] == 'character_set_connection')
+				{
+					$conn_char = $row[1];
+				}
 			}
 
 			$table_names = array(PFX.'textpattern');
 			$result = safe_query("SHOW TABLES LIKE '".PFX."txp\_%'");
+
 			while ($row = mysql_fetch_row($result))
 			{
 				$table_names[] = $row[0];
 			}
+
 			$table_msg = array();
+
 			foreach ($table_names as $table)
 			{
 				$ctr = safe_query("SHOW CREATE TABLE ". $table."");
@@ -553,15 +605,25 @@
 					unset($table_names[$table]);
 					continue;
 				}
+
 				$ctcharset = preg_replace('#^CREATE TABLE.*SET=([^ ]+)[^)]*$#is', '\\1', mysql_result($ctr, 0, 'Create Table'));
 				if (isset($conn_char) && !stristr($ctcharset, 'CREATE') && ($conn_char != $ctcharset))
+				{
 					$table_msg[] = "$table is $ctcharset";
+				}
+
 				$ctr = safe_query("CHECK TABLE ". $table);
 				if (in_array(mysql_result($ctr, 0, 'Msg_type'), array('error', 'warning')))
+				{
 					$table_msg[] = $table .cs. mysql_result($ctr, 0, 'Msg_Text');
+				}
 			}
+
 			if ($table_msg == array())
+			{
 				$table_msg = (count($table_names) < 17) ?  array('-') : array('OK');
+			}
+
 			$out[] = count($table_names).' Tables'.cs. implode(', ',$table_msg).n;
 
 			$cf = preg_grep('/^custom_\d+/', getThings('describe `'.PFX.'textpattern`'));
@@ -570,14 +632,18 @@
 
 			$extns = get_loaded_extensions();
 			$extv = array();
+
 			foreach ($extns as $e)
 			{
 				$extv[] = $e . (phpversion($e) ? '/' . phpversion($e) : '');
 			}
+
 			$out[] = n.gTxt('php_extensions').cs.join(', ', $extv).n;
 
 			if (is_callable('apache_get_modules'))
+			{
 				$out[] = n.gTxt('apache_modules').cs.join(', ', apache_get_modules()).n;
+			}
 
 			if (@is_array($pretext_data) and count($pretext_data) > 1)
 			{
@@ -593,6 +659,7 @@
 					$out[] = $f.cs.n.t.(!$checksum ? gTxt('unknown') : $checksum).n;
 				}
 			}
+
 			$out[] = n.ln;
 
 		}

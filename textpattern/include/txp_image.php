@@ -11,7 +11,10 @@
 
 */
 
-	if (!defined('txpinterface')) die('txpinterface is undefined.');
+	if (!defined('txpinterface'))
+	{
+		die('txpinterface is undefined.');
+	}
 
 	global $extensions;
 	$extensions = get_safe_image_types();
@@ -58,10 +61,17 @@
 		pagetop(gTxt('tab_image'), $message);
 
 		extract($txpcfg);
-
 		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
-		if ($sort === '') $sort = get_pref('image_sort_column', 'id');
-		if ($dir === '') $dir = get_pref('image_sort_dir', 'desc');
+
+		if ($sort === '')
+		{
+			$sort = get_pref('image_sort_column', 'id');
+		}
+
+		if ($dir === '')
+		{
+			$dir = get_pref('image_sort_dir', 'desc');
+		}
 		$dir = ($dir == 'asc') ? 'asc' : 'desc';
 
 		echo n.'<h1 class="txp-heading">'.gTxt('tab_image').'</h1>';
@@ -82,28 +92,23 @@
 		{
 			case 'name' :
 				$sort_sql = 'name '.$dir;
-			break;
-
+				break;
 			case 'thumbnail' :
 				$sort_sql = 'thumbnail '.$dir.', id asc';
-			break;
-
+				break;
 			case 'category' :
 				$sort_sql = 'category '.$dir.', id asc';
-			break;
-
+				break;
 			case 'date' :
 				$sort_sql = 'date '.$dir.', id asc';
-			break;
-
+				break;
 			case 'author' :
 				$sort_sql = 'author '.$dir.', id asc';
-			break;
-
-			default:
+				break;
+			default :
 				$sort = 'id';
 				$sort_sql = 'id '.$dir;
-			break;
+				break;
 		}
 
 		set_pref('image_sort_column', $sort, 'image', 2, '', 0, PREF_PRIVATE);
@@ -384,7 +389,6 @@
 			case 'delete' :
 				return image_delete($selected);
 				break;
-
 			case 'changecategory' :
 				$val = ps('category');
 				if (in_array($val, $categories))
@@ -392,7 +396,6 @@
 					$key = 'category';
 				}
 				break;
-
 			case 'changeauthor' :
 				$val = ps('author');
 				if (in_array($val, $all_image_authors))
@@ -400,8 +403,7 @@
 					$key = 'author';
 				}
 				break;
-
-			default:
+			default :
 				$key = '';
 				$val = '';
 				break;
@@ -445,7 +447,10 @@
 	{
 		global $prefs, $file_max_upload_size, $txp_user, $event, $all_image_cats;
 
-		if (!$id) $id = gps('id');
+		if (!$id)
+		{
+			$id = gps('id');
+		}
 		$id = assert_int($id);
 
 		$rs = safe_row("*, unix_timestamp(date) as uDate", "txp_image", "id = $id");
@@ -642,7 +647,7 @@
 
 		$img_result = image_data($_FILES['thefile'], $meta, $id);
 
-		if(is_array($img_result))
+		if (is_array($img_result))
 		{
 			list($message, $id) = $img_result;
 			return image_edit($message, $id);
@@ -703,9 +708,13 @@
 		else
 		{
 			if ($file === false)
+			{
 				image_list(array(upload_get_errormsg($_FILES['thefile']['error']), E_ERROR));
+			}
 			else
+			{
 				image_list(array(gTxt('only_graphic_files_allowed'), E_ERROR));
+			}
 		}
 	}
 
@@ -739,8 +748,7 @@
 			alt      = '$alt',
 			caption  = '$caption'",
 			"id = $id"
-		))
-		{
+		)) {
 			$message = gTxt('image_updated', array('{name}' => doStrip($name)));
 			update_lastmod();
 		}
@@ -785,7 +793,7 @@
 				{
 					extract($a);
 
-					// notify plugins of pending deletion, pass image's $id
+					// Notify plugins of pending deletion, pass image's $id.
 					callback_event('image_deleted', $event, false, $id);
 
 					$rsd = safe_delete('txp_image', "id = $id");
@@ -848,8 +856,15 @@
 		$width = (int) $width;
 		$height = (int) $height;
 
-		if ($width == 0) $width = '';
-		if ($height == 0) $height = '';
+		if ($width == 0)
+		{
+			$width = '';
+		}
+
+		if ($height == 0)
+		{
+			$height = '';
+		}
 
 		$crop = gps('crop');
 
@@ -857,7 +872,7 @@
 		$prefs['thumb_h'] = $height;
 		$prefs['thumb_crop'] = $crop;
 
-		// hidden prefs
+		// Hidden prefs.
 		set_pref('thumb_w', $width, 'image', 2);
 		set_pref('thumb_h', $height, 'image', 2);
 		set_pref('thumb_crop', $crop, 'image', 2);
