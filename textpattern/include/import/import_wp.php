@@ -343,7 +343,6 @@
 				$link['category'] = $category['name'];
 			}
 
-
 			$links[] = $link;
 		}
 

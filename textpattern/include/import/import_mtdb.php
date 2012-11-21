@@ -35,10 +35,12 @@
 		$categories_map = array();
 
 		$mtlink = mysql_connect($mt_dbhost, $mt_dblogin, $mt_dbpass, true);
+
 		if (!$mtlink)
 		{
 			return 'mt database values don&#8217;t work. Please replace them and try again';
 		}
+
 		mysql_select_db($mt_db, $mtlink);
 		$results[]= 'connected to mt database. Importing Data';
 
@@ -84,8 +86,15 @@
 				$categories[] = $cat_id[0];
 			}
 
-			if (!empty($categories[0])) $b['Category1'] = $categories[0];
-			if (!empty($categories[1])) $b['Category2'] = $categories[1];
+			if (!empty($categories[0]))
+			{
+				$b['Category1'] = $categories[0];
+			}
+
+			if (!empty($categories[1]))
+			{
+				$b['Category2'] = $categories[1];
+			}
 
 			unset($categories);
 
@@ -118,7 +127,6 @@
 			// Article finished.
 			$articles[] = $b;
 		}
-
 
 		$a = mysql_query("
 			select category_id,category_label from mt_category where category_blog_id='{$blog_id}'
@@ -164,7 +172,10 @@
 					{
 						$results[]= 'inserted '.$RealName.' into txp_users';
 					}
-					else $results[]=mysql_error();
+					else
+					{
+						$results[]=mysql_error();
+					}
 				}
 			}
 		}
@@ -184,7 +195,10 @@
 					{
 						$results[]= 'inserted '.stripslashes($category).' into txp_category';
 					}
-					else $results[]=mysql_error();
+					else
+					{
+						$results[]=mysql_error();
+					}
 				}
 			}
 		}
@@ -251,11 +265,17 @@
 								$results[] = 'inserted MT comment '.$commentID.
 									' for article '.$insertID.' into txp_discuss';
 							}
-							else $results[]=mysql_error();
+							else
+							{
+								$results[]=mysql_error();
+							}
 						}
 					}
 				}
-				else $results[] = mysql_error();
+				else
+				{
+					$results[] = mysql_error();
+				}
 			}
 		}
 

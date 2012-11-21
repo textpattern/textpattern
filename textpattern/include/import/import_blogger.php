@@ -29,10 +29,12 @@
 
 function doImportBLOGGER($file, $section, $status, $invite)
 {
-
 	$fp = fopen($file, 'r');
+
 	if (!$fp)
+	{
 		return false;
+	}
 
 	// Keep some response on some part.
 	$results = array();
@@ -66,14 +68,19 @@ function doImportBLOGGER($file, $section, $status, $invite)
 		elseif ($line == '-----' and $state == 'multiline')
 		{
 			if (!empty($multiline_type))
+			{
 				$item[$multiline_type][] = $multiline_data;
+			}
+
 			$state = 'multiline';
 			$multiline_type = '';
 		}
 		elseif ($state == 'metadata')
 		{
 			if (preg_match('/^([A-Z ]+):\s*(.*)$/', $line, $match))
+			{
 				$item[$match[1]] = $match[2];
+			}
 		}
 		elseif ($state == 'multiline' and empty($multiline_type))
 		{
@@ -106,7 +113,9 @@ function doImportBLOGGER($file, $section, $status, $invite)
 
 	// Catch the last item in the file, if it doesn't end with a separator.
 	if (!empty($item))
+	{
 		$results[]= import_blogger_item($item, $section, $status, $invite);
+	}
 
 	fclose($fp);
 	return join('<br />', $results);
@@ -127,7 +136,10 @@ function doImportBLOGGER($file, $section, $status, $invite)
 
 function import_blogger_item($item, $section, $status, $invite) {
 
-	if (empty($item)) return;
+	if (empty($item))
+	{
+		return;
+	}
 
 	include_once txpath.'/lib/classTextile.php';
 	$textile = new Textile();
@@ -142,17 +154,23 @@ function import_blogger_item($item, $section, $status, $invite) {
 	$date = date('Y-m-d H:i:s', $date);
 
 	if (isset($item['STATUS']))
+	{
 		$post_status = ($item['STATUS'] == 'Draft' ? 1 : 4);
+	}
 	else
+	{
 		$post_status = $status;
+	}
 
 	// Blogger can use special chars on author names. Strip them and check for realname.
 	$authorid = safe_field('user_id', 'txp_users', "RealName = '".doSlash($item['AUTHOR'])."'");
 	if (!$authorid)
+	{
 //		$authorid = safe_field('user_id', 'txp_users', 'order by user_id asc limit 1');
 
 		// Add new authors.
 		safe_insert('txp_users', "name='".doSlash(stripSpace($textile->TextileThis($item['AUTHOR'], 1)))."', RealName='".doSlash($item['AUTHOR'])."'");
+	}
 
 	if (!safe_field("ID", "textpattern", "Title = '".doSlash($title)."' AND Posted = '".doSlash($date)."'"))
 	{

@@ -23,17 +23,18 @@
 
 	function doImportB2($b2dblogin, $b2db, $b2dbpass, $b2dbhost, $insert_into_section, $insert_with_status, $default_comment_invite)
 	{
-
 		global $txpcfg;
 
 		// Keep some response on some part.
 		$results = array();
 
 		$b2link = mysql_connect($b2dbhost, $b2dblogin, $b2dbpass, true);
+
 		if (!$b2link)
 		{
 			return 'b2 database values don&#8217;t work. Go back, replace them and try again';
 		}
+
 		mysql_select_db($b2db, $b2link);
 		$results[]='connected to b2 database. Importing Data';
 
@@ -164,7 +165,10 @@
 				extract(array_slash($comment));
 
 				if (is_callable('utf8_encode'))
+				{
 					$message = utf8_encode($message);
+				}
+
 				$message = nl2br($message);
 
 				$q = mysql_query("insert into `".PFX."txp_discuss` values

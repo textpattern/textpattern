@@ -31,8 +31,11 @@ function doImportMT($file, $section, $status, $invite)
 	ini_set('auto_detect_line_endings', 1);
 
 	$fp = fopen($file, 'r');
+
 	if (!$fp)
+	{
 		return false;
+	}
 
 	// Keep some response on some part.
 	$results = array();
@@ -40,7 +43,8 @@ function doImportMT($file, $section, $status, $invite)
 	$state = 'metadata';
 	$item = array();
 
-	while (!feof($fp)) {
+	while (!feof($fp))
+	{
 		$line = rtrim(fgets($fp, 8192));
 
 		// The states suggested by the spec are inconsisent, but we'll do our best to fake it.
@@ -104,7 +108,9 @@ function doImportMT($file, $section, $status, $invite)
 
 	// Catch the last item in the file, if it doesn't end with a separator.
 	if (!empty($item))
+	{
 		$results[]= import_mt_item($item, $section, $status, $invite, $blogid);
+	}
 
 	fclose($fp);
 	return join('<br />', $results);
@@ -127,7 +133,10 @@ function import_mt_item($item, $section, $status, $invite)
 {
 	global $prefs;
 
-	if (empty($item)) return;
+	if (empty($item))
+	{
+		return;
+	}
 
 	include_once txpath.'/lib/classTextile.php';
 	$textile = new Textile();
@@ -140,7 +149,9 @@ function import_mt_item($item, $section, $status, $invite)
 	$body = isset($item['BODY'][0]['content']) ? $item['BODY'][0]['content'] : '';
 
 	if (isset($item['EXTENDED BODY'][0]['content']))
+	{
 		$body .= "\n <!-- more -->\n\n" . $item['EXTENDED BODY'][0]['content'];
+	}
 
 	$body_html = $textile->textileThis($body);
 
@@ -151,40 +162,55 @@ function import_mt_item($item, $section, $status, $invite)
 	$date = strftime('%Y-%m-%d %H:%M:%S', $date);
 
 	if (isset($item['STATUS']))
+	{
 		$post_status = ($item['STATUS'] == 'Draft' ? 1 : 4);
+	}
 	else
+	{
 		$post_status = $status;
+	}
 
 	$category1 = @$item['PRIMARY CATEGORY'];
 
 	if ($category1 and !safe_field("name","txp_category","name = '$category1'"))
-			safe_insert('txp_category', "name='".doSlash($category1)."', type='article', parent='root'");
+	{
+		safe_insert('txp_category', "name='".doSlash($category1)."', type='article', parent='root'");
+	}
 
 	$category2 = @$item['CATEGORY'];
 
 	if ($category2 == $category1)
+	{
 		$category2 = '';
+	}
 
 	if ($category2 and !safe_field("name","txp_category","name = '$category2'"))
-			safe_insert('txp_category', "name='".doSlash($category2)."', type='article', parent='root'");
+	{
+		safe_insert('txp_category', "name='".doSlash($category2)."', type='article', parent='root'");
+	}
 
 	$keywords = isset($item['KEYWORDS'][0]['content']) ? $item['KEYWORDS'][0]['content'] : '';
 
 	$annotate = !empty($item['ALLOW COMMENTS']);
 
 	if (isset($item['ALLOW COMMENTS']))
+	{
 		$annotate = intval($item['ALLOW COMMENTS']);
+	}
 	else
+	{
 		$annotate = (!empty($item['COMMENT']) or $prefs['comments_on_default']);
+	}
 
 	$authorid = safe_field('user_id', 'txp_users', "name = '".doSlash($item['AUTHOR'])."'");
 
 	if (!$authorid)
+	{
 //		$authorid = safe_field('user_id', 'txp_users', 'order by user_id asc limit 1');
 
 		// Add new authors.
 		safe_insert('txp_users', "name='".doSlash($item['AUTHOR'])."'");
-
+	}
 
 	if (!safe_field("ID", "textpattern", "Title = '".doSlash($title)."' AND Posted = '".doSlash($date)."'"))
 	{
