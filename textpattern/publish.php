@@ -11,11 +11,15 @@
 */
 
 	if (!defined('txpath'))
+	{
 		define("txpath", dirname(__FILE__));
+	}
 
 	if (!defined("txpinterface"))
+	{
 		die('If you just updated and expect to see your site here, please also update the files in your main installation directory.'.
 			' (Otherwise note that publish.php cannot be called directly.)');
+	}
 
 	include_once txpath.'/lib/constants.php';
 	include_once txpath.'/lib/txplib_publish.php';
@@ -61,7 +65,9 @@
 	}
 
 	if (empty($path_to_site))
+	{
 		updateSitePath(dirname(dirname(__FILE__)));
+	}
 
 	if (!defined('PROTOCOL'))
 	{
@@ -70,22 +76,30 @@
 			case '' :
 			case 'off': // ISAPI with IIS.
 				define('PROTOCOL', 'http://');
-			break;
-
+				break;
 			default :
 				define('PROTOCOL', 'https://');
-			break;
+				break;
 		}
 	}
 
 	// Definitive HTTP address of the site.
-	if (!defined('hu'))	define('hu', PROTOCOL.$siteurl.'/');
+	if (!defined('hu'))
+	{
+		define('hu', PROTOCOL.$siteurl.'/');
+	}
 
 	// Relative URL global.
-	if (!defined('rhu')) define('rhu', preg_replace('|^https?://[^/]+|', '', hu));
+	if (!defined('rhu'))
+	{
+		define('rhu', preg_replace('|^https?://[^/]+|', '', hu));
+	}
 
 	// HTTP address of the site serving images.
-	if (!defined('ihu')) define('ihu', hu);
+	if (!defined('ihu'))
+	{
+		define('ihu', hu);
+	}
 
 	if (!defined('SITE_HOST'))
 	{
@@ -112,7 +126,10 @@
 
 	// 1.0: a new $here variable in the top-level index.php should let
 	// us know the server path to the live site let's save it to prefs.
-	if (isset($here) and $path_to_site != $here) updateSitePath($here);
+	if (isset($here) and $path_to_site != $here)
+	{
+		updateSitePath($here);
+	}
 
 	// 1.0 removed $doc_root variable from config, but we'll
 	// leave it here for a bit until plugins catch up.
@@ -120,11 +137,19 @@
 
 	// Work around the IIS lobotomy.
 	if (empty($txpcfg['doc_root']))
+	{
 		$txpcfg['doc_root'] = @$_SERVER['PATH_TRANSLATED'];
+	}
 
 	if (!defined('LANG'))
+	{
 		define("LANG", $language);
-	if (!empty($locale)) setlocale(LC_ALL, $locale);
+	}
+
+	if (!empty($locale))
+	{
+		setlocale(LC_ALL, $locale);
+	}
 
 	// Initialise the current user.
 	$txp_user = NULL;
@@ -136,7 +161,10 @@
 	janitor();
 
 	// Here come the plugins.
-	if ($use_plugins) load_plugins();
+	if ($use_plugins)
+	{
+		load_plugins();
+	}
 
 	// This step deprecated as of 1.0 - really only useful with old-style
 	// section placeholders, which passed $s='section_name'.
@@ -151,7 +179,9 @@
 	set_error_level($production_status);
 
 	if (isset($feed))
+	{
 		exit($feed());
+	}
 
 	if (gps('parentid') && gps('submit'))
 	{
@@ -276,7 +306,9 @@
 
 		// IIS fix.
 		if (!$out['request_uri'] and serverSet('SCRIPT_NAME'))
+		{
 			$out['request_uri'] = serverSet('SCRIPT_NAME').((serverSet('QUERY_STRING')) ? '?'.serverSet('QUERY_STRING') : '');
+		}
 
 		// Another IIS fix.
 		if (!$out['request_uri'] and serverSet('argv'))
@@ -311,16 +343,19 @@
 				{
 					case 'atom' :
 						include txpath.'/publish/atom.php';
-						$out['feed'] = 'atom'; break;
+						$out['feed'] = 'atom';
+						break;
 
 					case 'rss' :
 						include txpath.'/publish/rss.php';
-						$out['feed'] = 'rss'; break;
+						$out['feed'] = 'rss';
+						break;
 
 					// urldecode(strtolower(urlencode())) looks ugly but is the only way to
 					// make it multibyte-safe without breaking backwards-compatibility.
 					case urldecode(strtolower(urlencode(gTxt('section')))) :
-						$out['s'] = (ckEx('section', $u2)) ? $u2 : ''; $is_404 = empty($out['s']); break;
+						$out['s'] = (ckEx('section', $u2)) ? $u2 : ''; $is_404 = empty($out['s']);
+						break;
 
 					case urldecode(strtolower(urlencode(gTxt('category')))) :
 						if ($u3)
@@ -376,7 +411,7 @@
 									$out['id'] = @$rs['ID'];
 									$is_404 = (empty($out['s']) or empty($out['id']));
 								}
-							break;
+								break;
 
 							case 'year_month_day_title':
 								if (empty($u2))
@@ -384,9 +419,14 @@
 									$out['s'] = (ckEx('section', $u1)) ? $u1 : '';
 									$is_404 = empty($out['s']);
 								}
-								elseif (empty($u4)){
+								elseif (empty($u4))
+								{
 									$month = "$u1-$u2";
-									if (!empty($u3)) $month.= "-$u3";
+									if (!empty($u3))
+									{
+										$month.= "-$u3";
+									}
+
 									if (preg_match('/\d+-\d+(?:-\d+)?/', $month))
 									{
 										$out['month'] = $month;
@@ -405,7 +445,7 @@
 									$out['s'] = (!empty($rs['Section'])) ? $rs['Section'] : '';
 									$is_404 = (empty($out['s']) or empty($out['id']));
 								}
-							break;
+								break;
 
 							case 'section_title':
 								if (empty($u2))
@@ -420,7 +460,7 @@
 									$out['s'] = isset($rs['Section']) ? $rs['Section'] : '';
 									$is_404 = (empty($out['s']) or empty($out['id']));
 								}
-							break;
+								break;
 
 							case 'title_only':
 								$rs = lookupByTitle($u1);
@@ -428,7 +468,7 @@
 								$out['s'] = (empty($rs['Section']) ? ckEx('section', $u1) :
 										$rs['Section']);
 								$is_404 = empty($out['s']);
-							break;
+								break;
 
 							case 'id_title':
 								if (is_numeric($u1) && ckExID($u1))
@@ -444,12 +484,14 @@
 									$out['s']= ckEx('section', $u1)? $u1 : '';
 									$is_404 = empty($out['s']);
 								}
-							break;
+								break;
 						}
+
 						if (!$is_404)
 						{
 							$out['context'] = validContext($out['context']);
 						}
+
 						break; // Prefs-defined permlink scheme case.
 				}
 			}
@@ -544,13 +586,18 @@
 		}
 
 		if (!$is_404)
+		{
 			$out['s'] = (empty($out['s'])) ? 'default' : $out['s'];
+		}
 		$s = $out['s'];
 		$id = $out['id'];
 
 		// Hackish.
 		global $is_article_list;
-		if (empty($id)) $is_article_list = true;
+		if (empty($id))
+		{
+			$is_article_list = true;
+		}
 
 		// By this point we should know the section, so grab its page and CSS.
 		if (txpinterface != 'css')
@@ -601,14 +648,20 @@
 		callback_event('textpattern');
 
 		if ($pretext['status'] == '404')
+		{
 			txp_die(gTxt('404_not_found'), '404');
+		}
 
 		if ($pretext['status'] == '410')
+		{
 			txp_die(gTxt('410_gone'), '410');
+		}
 
 		$html = safe_field('user_html', 'txp_page', "name='".doSlash($pretext['page'])."'");
 		if (!$html)
+		{
 			txp_die(gTxt('unknown_section'), '404');
+		}
 
 		// Useful for clean URLs with error-handlers.
 		txp_status_header('200 OK');
@@ -623,7 +676,10 @@
 
 		// Make sure the page has an article tag if necessary.
 		if (!$has_article_tag and $production_status != 'live' and $pretext['context'] == 'article' and (!empty($pretext['id']) or !empty($pretext['c']) or !empty($pretext['q']) or !empty($pretext['pg'])))
+		{
 			trigger_error(gTxt('missing_article_tag', array('{page}' => $pretext['page'])));
+		}
+
 		restore_error_handler();
 
 		header("Content-type: text/html; charset=utf-8");
@@ -637,7 +693,9 @@
 			echo n,comment('Queries: '.$qcount);
 			echo maxMemUsage('end of textpattern()',1);
 			if (!empty($txptrace) and is_array($txptrace))
+			{
 				echo n, comment('txp tag trace: '.n.join(n, $txptrace).n);
+			}
 		}
 
 		callback_event('textpattern_end');
@@ -655,7 +713,10 @@
 			}
 			$n = do_list($n);
 			$cssname = join("','", doSlash($n));
-			if (count($n) > 1) $order  = " order by field(name, '$cssname')";
+			if (count($n) > 1)
+			{
+				$order  = " order by field(name, '$cssname')";
+			}
 		}
 		elseif ($s)
 		{
@@ -669,7 +730,10 @@
 		if (isset($cssname))
 		{
 			$css = join(n, safe_column_num('css', 'txp_css', "name in ('$cssname')".$order));
-			if (isset($css)) echo $css;
+			if (isset($css))
+			{
+				echo $css;
+			}
 		}
 	}
 
@@ -751,7 +815,10 @@
 		extract($theAtts);
 
 		// If a listform is specified, $thing is for doArticle() - hence ignore here.
-		if (!empty($listform)) $thing = '';
+		if (!empty($listform))
+		{
+			$thing = '';
+		}
 
 		$pageby = (empty($pageby) ? $limit : $pageby);
 
@@ -772,7 +839,10 @@
             // Searchable article fields are limited to the columns of
             // the textpattern table and a matching fulltext index must exist.
 			$cols = do_list($searchable_article_fields);
-			if (empty($cols) or $cols[0] == '') $cols = array('Title', 'Body');
+			if (empty($cols) or $cols[0] == '')
+			{
+				$cols = array('Title', 'Body');
+			}
 
 			$match = ', match (`'.join('`, `', $cols)."`) against ('$q') as score";
 			$search_terms = preg_replace('/\s+/', ' ', str_replace(array('\\', '%', '_', '\''), array('\\\\', '\\%', '\\_', '\\\''), $q));
@@ -803,12 +873,24 @@
 			$search = " and ($cols) $s_filter";
 
 			// searchall=0 can be used to show search results for the current section only.
-			if ($searchall) $section = '';
-			if (!$sort) $sort = 'score desc';
+			if ($searchall)
+			{
+				$section = '';
+			}
+
+			if (!$sort)
+			{
+				$sort = 'score desc';
+			}
 		}
-		else {
+		else
+		{
 			$match = $search = '';
-			if (!$sort) $sort = 'Posted desc';
+
+			if (!$sort)
+			{
+				$sort = 'Posted desc';
+			}
 		}
 
 		// For backwards compatibility.
@@ -846,9 +928,11 @@
 		switch ($time)
 		{
 			case 'any' :
-				$time = ""; break;
+				$time = "";
+				break;
 			case 'future' :
-				$time = " and Posted > now()"; break;
+				$time = " and Posted > now()";
+				break;
 			default :
 				$time = " and Posted <= now()";
 		}
@@ -886,11 +970,18 @@
 		}
 
 		if ($q and $searchsticky)
+		{
 			$statusq = ' and Status >= 4';
-		elseif ($id)
+		}
+		elseif
+		{
+			($id)
 			$statusq = ' and Status >= 4';
+		}
 		else
+		{
 			$statusq = ' and Status = '.intval($status);
+		}
 
 		$where = "1=1" . $statusq. $time.
 			$search . $id . $category . $section . $excerpted . $month . $author . $keywords . $custom . $frontpage;
@@ -915,9 +1006,14 @@
 
 			global $thispage;
 			if (empty($thispage))
+			{
 				$thispage = $pageout;
+			}
+
 			if ($pgonly)
+			{
 				return;
+			}
 		}
 		else
 		{
@@ -939,9 +1035,13 @@
 
 		// Get the form name.
 		if ($q and !$iscustom and !$issticky)
+		{
 			$fname = ($searchform ? $searchform : 'search_results');
+		}
 		else
+		{
 			$fname = ($listform ? $listform : $form);
+		}
 
 		if ($rs)
 		{
@@ -1008,10 +1108,16 @@
 		filterAtts($atts);
 
 		// No output required.
-		if ($pgonly) return '';
+		if ($pgonly)
+		{
+			return '';
+		}
 
 		// If a form is specified, $thing is for doArticles() - hence ignore $thing here.
-		if (!empty($atts['form'])) $thing = '';
+		if (!empty($atts['form']))
+		{
+			$thing = '';
+		}
 
 		if ($status)
 		{

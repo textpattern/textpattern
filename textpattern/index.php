@@ -60,13 +60,17 @@
 	$txp_using_svn = true; // Set false for releases.
 
 	ob_start(NULL, 2048);
+
 	if (!isset($txpcfg['table_prefix']) && !@include './config.php')
 	{
 		ob_end_clean();
 		header('HTTP/1.1 503 Service Unavailable');
 		exit('config.php is missing or corrupt. To install Textpattern, visit <a href="./setup/">setup</a>.');
 	}
-	else ob_end_clean();
+	else
+	{
+		ob_end_clean();
+	}
 
 	header("Content-type: text/html; charset=utf-8");
 
@@ -94,12 +98,16 @@
 		$prefs = get_prefs();
 		extract($prefs);
 
-		if (empty($siteurl)) {
+		if (empty($siteurl))
+		{
 			$httphost = preg_replace('/[^-_a-zA-Z0-9.:]/', '', $_SERVER['HTTP_HOST']);
 			$prefs['siteurl'] = $siteurl = $httphost . rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'])), '/');
 		}
+
 		if (empty($path_to_site))
+		{
 			updateSitePath(dirname(dirname(__FILE__)));
+		}
 
 		define("LANG",$language);
 
@@ -126,9 +134,16 @@
 		define('rhu', preg_replace('|^https?://[^/]+|', '', hu));
 
 		// HTTP address of the site serving images.
-		if (!defined('ihu')) define('ihu', hu);
+		if (!defined('ihu'))
+		{
+			define('ihu', hu);
+		}
 
-		if (!empty($locale)) setlocale(LC_ALL, $locale);
+		if (!empty($locale))
+		{
+			setlocale(LC_ALL, $locale);
+		}
+
 		$textarray = load_lang(LANG);
 
 		// Init global theme.
@@ -174,7 +189,9 @@
 		}
 
 		if (!empty($admin_side_plugins) and gps('event') != 'plugin')
+		{
 			load_plugins(1);
+		}
 
 		// Plugins may have altered privilege settings.
 		if (!defined('TXP_UPDATE_DONE') && !gps('event') && !empty($default_event) && has_privs($default_event))
@@ -190,8 +207,12 @@
 		require_privs($event);
 		callback_event($event, $step, 1);
 		$inc = txpath . '/include/txp_'.$event.'.php';
+
 		if (is_readable($inc))
+		{
 			include($inc);
+		}
+
 		callback_event($event, $step, 0);
 
 		end_page();
