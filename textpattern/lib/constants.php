@@ -262,7 +262,8 @@ define('PREF_CORE', 0);
  *
  * @package    Pref
  * @deprecated in 4.6.0
- * @see        PREF_CORE for core prefs | PREF_PLUGIN for 3rd party prefs
+ * @see        PREF_CORE
+ * @see        PREF_PLUGIN
  * @see        set_pref()
  */
 
