@@ -754,8 +754,15 @@
 		return $link;
 	}
 
-// -------------------------------------------------------------
-	function eE($txt) // convert email address into unicode entities
+/**
+ * Converts an email address into unicode entities.
+ *
+ * @param   string      $txt The email address
+ * @return  string|null Encoded email address
+ * @package Email
+ */
+
+	function eE($txt)
 	{
 		for ($i = 0; $i<strlen($txt); $i++)
 		{
