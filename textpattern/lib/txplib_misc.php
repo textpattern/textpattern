@@ -2777,18 +2777,21 @@
 /**
  * Converts an email address into unicode entities.
  *
- * @param   string      $txt The email address
- * @return  string|null Encoded email address
+ * @param   string $txt The email address
+ * @return  string Encoded email address
  * @package Email
  */
 
 	function eE($txt)
 	{
-		for ($i = 0; $i<strlen($txt); $i++)
+		$ent = array();
+
+		for ($i = 0; $i < strlen($txt); $i++)
 		{
 			$ent[] = "&#".ord(substr($txt, $i, 1)).";";
 		}
-		if (!empty($ent)) return join('', $ent);
+
+		return join('', $ent);
 	}
 
 /**
