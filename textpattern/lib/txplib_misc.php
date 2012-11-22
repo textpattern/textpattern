@@ -4048,7 +4048,7 @@
  * @param   string $name       The name
  * @param   string $val        The value
  * @param   string $event      The section the preference appears in
- * @param   int    $type       The type. Can be either PREF_BASIC, PREF_ADVANCED, PREF_HIDDEN
+ * @param   int    $type       Either PREF_CORE, PREF_PLUGIN, PREF_HIDDEN
  * @param   string $html       The HTML control type the field uses. Can take a custom function name
  * @param   int    $position   Used to sort the field on the Preferences panel
  * @param   bool   $is_private If PREF_PRIVATE, is created as a user pref
@@ -4056,7 +4056,7 @@
  * @package Pref
  */
 
-	function set_pref($name, $val, $event = 'publish',  $type = 0, $html = 'text_input', $position = 0, $is_private = PREF_GLOBAL)
+	function set_pref($name, $val, $event = 'publish',  $type = PREF_CORE, $html = 'text_input', $position = 0, $is_private = PREF_GLOBAL)
 	{
 		global $txp_user;
 		extract(doSlash(func_get_args()));
