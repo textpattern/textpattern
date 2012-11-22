@@ -1002,11 +1002,13 @@
 		}
 
 		$ui = sp.href('?', HELP_URL.'?item='.urlencode($help_var).'&language='.urlencode(LANG), array(
-			'role'    => 'button',
-			'rel'     => 'help',
-			'target'  => '_blank',
-			'onclick' => 'popWin(this.href, '.intval($width).', '.intval($height).'); return false;',
-			'class'   => $class,
+			'role'       => 'button',
+			'rel'        => 'help',
+			'target'     => '_blank',
+			'onclick'    => 'popWin(this.href, '.intval($width).', '.intval($height).'); return false;',
+			'class'      => $class,
+			'title'      => gTxt('help'),
+			'aria-label' => gTxt('help'),
 		));
 
 		return pluggable_ui('admin_help', $help_var, $ui, compact('help_var', 'width', 'height', 'class'));
