@@ -240,7 +240,7 @@
 						fInput('checkbox', 'selected[]', $sec_name)
 					, '', 'multi-edit').
 
-					hCell('<a href="'.$edit_url.'" title="'.gTxt('edit').'">'.$sec_name.'</a>' .n. '<span class="section_detail"><span role="presentation">[</span><a href="'.hu.$sec_name.'">'.gTxt('view').'</a><span role="presentation">]</span></span>', '', ' scope="row" class="name"').
+					hCell('<a href="'.$edit_url.'" title="'.gTxt('edit').'">'.$sec_name.'</a>' .n. '<span class="section_detail"><span role="presentation">[</span><a href="'.pagelinkurl(array('s' => $sec_name)).'">'.gTxt('view').'</a><span role="presentation">]</span></span>', '', ' scope="row" class="name"').
 					td(txpspecialchars($sec_title), '', 'title').
 					td('<a href="'.$page_url.'" title="'.gTxt('edit').'">'.$sec_page.'</a>', '', 'page').
 					td('<a href="'.$style_url.'" title="'.gTxt('edit').'">'.$sec_css.'</a>', '', 'style').
@@ -289,7 +289,15 @@
 		}
 		else
 		{
-			$rs = array_flip(getThings('describe `'.PFX.'txp_section`'));
+			// Pulling out the radio items from the default entry might seem pointless since they can't be directly
+			// edited, but they will take on either:
+			//  a) the default (SQL) values as defined at table creation time, or
+			//  b) the values set when a multi-edit was performed that included the default section (because the values are silently updated then)
+			$rs = safe_row('*', 'txp_section', "name = 'default'"); //array_flip(getThings('describe `'.PFX.'txp_section`'));
+			if ($rs)
+			{
+				$rs['name'] = $rs['title'] = '';
+			}
 		}
 
 		if ($rs)
@@ -307,21 +315,6 @@
 
 			$is_default_section = ($is_edit && $sec_name == 'default');
 			$caption = gTxt(($is_default_section) ? 'edit_default_section' : ($is_edit ? 'edit_section' : 'create_section'));
-
-			if (!$is_edit)
-			{
-				// Pulling out the radio items from the default entry might seem pointless since they can't be directly
-				// edited, but they will take on either:
-				//  a) the default (SQL) values as defined at table creation time, or
-				//  b) the values set when a multi-edit was performed that included the default section (because the values are silently updated then)
-				$default = doSlash(safe_row('page, css, on_frontpage, in_rss, searchable', 'txp_section', "name = 'default'"));
-				$sec_name = $sec_title = '';
-				$sec_page = $default['page'];
-				$sec_css = $default['css'];
-				$sec_on_frontpage = $default['on_frontpage'];
-				$sec_in_rss = $default['in_rss'];
-				$sec_searchable = $default['searchable'];
-			}
 
 			echo n.'<div id="'.$event.'_container" class="txp-container">';
 			echo form(
