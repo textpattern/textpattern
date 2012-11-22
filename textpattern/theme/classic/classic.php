@@ -119,7 +119,7 @@ class classic_theme extends theme
 		}
 		else
 		{
-			$html = '<span role="alert" id="message" class="'.$class.'">'.gTxt($thing[0]).' <a role="button" href="#close" class="close" title="'.gTxt('close').'">&times;</a></span>';
+			$html = '<span role="alert" id="message" class="'.$class.'">'.gTxt($thing[0]).' <a role="button" href="#close" class="close" title="'.gTxt('close').'" aria-label="'.gTxt('close').'">&times;</a></span>';
 			// Try to inject $html into the message pane no matter when _announce()'s output is printed.
 			$js = escape_js($html);
 			$js = <<< EOS
