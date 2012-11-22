@@ -1288,26 +1288,30 @@ textpattern.Route.add('import', function ()
 textpattern.Route.add('article', function ()
 {
 	// Assume users would not change the timestamp if they wanted to "publish now"/"reset time".
-	$(
+	$(document).on('change',
 		'#write-timestamp input.year,' +
 		'#write-timestamp input.month,' +
 		'#write-timestamp input.day,' +
-	 	'#write-timestamp input.hour,' +
-	 	'#write-timestamp input.minute,' +
-	 	'#write-timestamp input.second'
-	 ).change(function ()
-	{
-		$('#publish_now').prop('checked', false);
-		$('#reset_time').prop('checked', false);
-	});
+		'#write-timestamp input.hour,' +
+		'#write-timestamp input.minute,' +
+		'#write-timestamp input.second',
+		function ()
+		{
+			$('#publish_now').prop('checked', false);
+			$('#reset_time').prop('checked', false);
+		}
+	);
 
 	// Switch to text/html/preview mode.
-	$('.view-mode a').click(function (e)
-	{
-		e.preventDefault();
-		$('input[name="view"]').val($(this).data('view-mode'));
-		document.article_form.submit();
-	});
+	$(document).on('click',
+		'.view-mode a',
+		function (e)
+		{
+			e.preventDefault();
+			$('input[name="view"]').val($(this).data('view-mode'));
+			document.article_form.submit();
+		}
+	);
 });
 
 // Clone button on Pages, Forms, Styles panels.
