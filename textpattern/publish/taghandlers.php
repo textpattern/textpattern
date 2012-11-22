@@ -1463,7 +1463,7 @@
 		if (empty($q)) return '';
 
 		extract(lAtts(array(
-			'escape' => 'html'
+			'escape' => 'html' // Deprecated in 4.5.0.
 		), $atts));
 
 		if (isset($atts['escape']))
@@ -2095,10 +2095,15 @@
 		return parse(EvalElse($thing,(count($evaluator -> get_result_message()) > 0)));
 	}
 
-// -------------------------------------------------------------
-	# DEPRECATED - provided only for backwards compatibility
-	# this functionality will be merged into comments_invite
-	# no point in having two tags for one functionality
+/**
+ * Renders a heading for comments.
+ *
+ * @param      array  $atts
+ * @param      string $thing
+ * @return     string
+ * @deprecated in 4.0.0
+ */
+
 	function comments_annotateinvite($atts, $thing)
 	{
 		trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
@@ -3589,8 +3594,15 @@
 		return LANG;
 	}
 
-// -------------------------------------------------------------
-	# DEPRECATED - provided only for backwards compatibility
+/**
+ * Formats article permanent links.
+ *
+ * @param      int    $ID
+ * @param      string $Section
+ * @return     string
+ * @deprecated in 4.0.0
+ */
+
 	function formatPermLink($ID, $Section)
 	{
 		trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
@@ -3598,8 +3610,16 @@
 		return permlinkurl_id($ID);
 	}
 
-// -------------------------------------------------------------
-	# DEPRECATED - provided only for backwards compatibility
+/**
+ * Formats comments invite link.
+ *
+ * @param      string $AnnotateInvite
+ * @param      string $Section
+ * @param      int    $ID
+ * @return     string
+ * @deprecated in 4.0.0
+ */
+
 	function formatCommentsInvite($AnnotateInvite, $Section, $ID)
 	{
 		trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
@@ -3620,8 +3640,18 @@
 		}
 
 	}
-// -------------------------------------------------------------
-	# DEPRECATED - provided only for backwards compatibility
+
+/**
+ * Formats article permanent link.
+ *
+ * @param      string $text
+ * @param      string $plink
+ * @param      string $Title
+ * @param      string $url_title
+ * @return     string
+ * @deprecated in 4.0.0
+ */
+
 	function doPermlink($text, $plink, $Title, $url_title)
 	{
 		trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
@@ -3633,8 +3663,17 @@
 			"<a href=\"".$plink.$Title."\" title=\"".gTxt('permanent_link')."\">$2</a>", $text);
 	}
 
-// -------------------------------------------------------------
-	# DEPRECATED - provided only for backwards compatibility
+/**
+ * Formats article link.
+ *
+ * @param      int    $ID
+ * @param      string $Title
+ * @param      string $url_title
+ * @param      string $Section
+ * @return     string
+ * @deprecated in 4.0.0
+ */
+
 	function doArticleHref($ID, $Title, $url_title, $Section)
 	{
 		trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
