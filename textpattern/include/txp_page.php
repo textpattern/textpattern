@@ -85,8 +85,22 @@
 			$name = $newname;
 		}
 
-		$buttons = n.'<label for="new_page">'.gTxt('page_name').'</label>'.br.fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_page', false, true);
-		$buttons .= (empty($name)) ? hInput('savenew', 'savenew') : n.'<span class="txp-actions">'.href(gTxt('duplicate'), '#', array('id' => 'txp_clone', 'class' => 'clone', 'title' => gTxt('page_clone'))) . '</span>'.n;
+		$buttons = n.tag(gTxt('page_name'), 'label', array('for' => 'new_page')).
+			br.fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_page', false, true);
+
+		if ($name)
+		{
+			$buttons .= tag(href(gTxt('duplicate'), '#', array(
+				'id'    => 'txp_clone',
+				'class' => 'clone',
+				'title' => gTxt('page_clone')
+			)), 'span', array('class' => 'txp-actions'));
+		}
+		else
+		{
+			$buttons .= hInput('savenew', 'savenew');
+		}
+
 		$html = (!$save_error) ? fetch('user_html', 'txp_page', 'name', $name) : gps('html');
 
 		// Format of each entry is popTagLink -> array ( gTxt() string, class/ID).
@@ -107,32 +121,46 @@
 
 		echo
 		hed(gTxt('tab_pages'), 1, 'class="txp-heading"').
-		n.'<div id="'.$event.'_container" class="txp-layout-grid">'.
-			n.'<div id="tagbuild_links" class="txp-layout-cell txp-layout-1-4">'.
+		n.tag(
+
+			n.tag(
 				hed(gTxt('tagbuilder'), 2).
-				$tagbuild_links.
-			n.'</div>'.
+				$tagbuild_links
+			, 'div', array(
+				'id'    => 'tagbuild_links',
+				'class' => 'txp-layout-cell txp-layout-1-4',
+			)).
 
-			n.'<div id="main_content" class="txp-layout-cell txp-layout-2-4">'.
-			form(
-				graf($buttons).
-				graf(
-					'<label for="html">'.gTxt('page_code').'</label>'.
-					br.'<textarea id="html" class="code" name="html" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'">'.txpspecialchars($html).'</textarea>'
-				).
-				graf(
-					fInput('submit', '', gTxt('save'), 'publish').
-					eInput('page').sInput('page_save').
-					hInput('name', $name)
-				)
-			, '', '', 'post', 'edit-form', '', 'page_form').
-			n.'</div>'.
+			n.tag(
+				form(
+					graf($buttons).
+					graf(
+						tag(gTxt('page_code'), 'label', array('for' => 'html')).
+						br.'<textarea id="html" class="code" name="html" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'">'.txpspecialchars($html).'</textarea>'
+					).
+					graf(
+						fInput('submit', '', gTxt('save'), 'publish').
+						eInput('page').sInput('page_save').
+						hInput('name', $name)
+					)
+				, '', '', 'post', 'edit-form', '', 'page_form')
+			, 'div', array(
+				'id'    => 'main_content',
+				'class' => 'txp-layout-cell txp-layout-2-4',
+			)).
 
-			n.'<div id="content_switcher" class="txp-layout-cell txp-layout-1-4">'.
+			n.tag(
 				graf(sLink('page', 'page_new', gTxt('create_new_page')), ' class="action-create"').
 				page_list($name).
-			n.'</div>'.
-		n.'</div>';
+			n, 'div', array(
+				'id'    => 'content_switcher',
+				'class' => 'txp-layout-cell txp-layout-1-4',
+			)).n
+
+		, 'div', array(
+			'id'    => $event.'_container',
+			'class' => 'txp-layout-grid'
+		));
 	}
 
 /**
@@ -154,20 +182,35 @@
 
 		if ($rs)
 		{
-			$out[] = '<ul class="switcher-list">';
-
 			while ($a = nextRow($rs))
 			{
 				extract($a);
 				$active = ($current === $name);
-				$edit = ($active) ? txpspecialchars($name) : eLink('page', '', 'name', $name, $name);
-				$delete = !in_array($name, $protected) ? dLink('page', 'page_delete', 'name', $name) : '';
-				$out[] = '<li'.($active ? ' class="active"' : '').'>'.n.$edit.$delete.n.'</li>';
+
+				if ($active)
+				{
+					$edit = txpspecialchars($name);
+				}
+				else
+				{
+					$edit = eLink('page', '', 'name', $name, $name);
+				}
+
+				if (!in_array($name, $protected))
+				{
+					$edit .= dLink('page', 'page_delete', 'name', $name);
+				}
+
+				$out[] = tag($edit, 'li', array(
+					'class' => $active ? 'active' : ''
+				));
 			}
 
-			$out[] = '</ul>';
+			$out = tag(join(n, $out), 'ul', array(
+				'class' => 'switcher-list'
+			));
 
-			return wrapGroup('all_pages', join(n, $out), 'all_pages');
+			return wrapGroup('all_pages', $out, 'all_pages');
 		}
 	}
 
@@ -329,7 +372,14 @@
 	function page_save_pane_state()
 	{
 		global $event;
-		$panes = array('article-tags', 'article-nav-tags', 'nav-tags', 'xml-tags', 'misc-tags', 'file-tags');
+		$panes = array(
+			'article-tags',
+			'article-nav-tags',
+			'nav-tags',
+			'xml-tags',
+			'misc-tags',
+			'file-tags',
+		);
 		$pane = gps('pane');
 
 		if (in_array($pane, $panes))
