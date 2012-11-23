@@ -5970,6 +5970,8 @@ eod;
 /**
  * Test whether the client accepts a certain response format.
  *
+ * Discards formats with a quality factor below 0.1
+ *
  * @param   string  $format One of 'html', 'txt', 'js', 'css', 'json', 'xml', 'rdf', 'atom', 'rss'
  * @return  boolean $format TRUE if accepted
  * @since   4.5.0
@@ -5990,21 +5992,30 @@ eod;
 			'rss'  => array('application/rss+xml', '*/*'),
 		);
 		static $accepts = array();
-//	static $q = array(); // nice to have
+		static $q = array();
 
 		if (empty($accepts))
 		{
 			// Build cache of accepted formats.
 			$accepts = preg_split('/\s*,\s*/', serverSet('HTTP_ACCEPT'), null, PREG_SPLIT_NO_EMPTY);
-			foreach ($accepts as &$a)
+			foreach ($accepts as $i => &$a)
 			{
 				// Sniff out quality factors if present.
 				if (preg_match('/(.*)\s*;\s*q=([.0-9]*)/', $a, $m))
 				{
 					$a = $m[1];
-//				$q[$a] = floatval($m[2]);
-//			} else {
-//				$q[$a] = 1.0;
+					$q[$a] = floatval($m[2]);
+				}
+				else
+				{
+					$q[$a] = 1.0;
+				}
+				// Discard formats with quality factors below an arbitrary threshold
+				// as jQuery adds a wildcard '*/*; q=0.01' to the 'Accepts' header for XHR requests.
+				if ($q[$a] < 0.1)
+				{
+					unset($q[$a]);
+					unset($accepts[$i]);
 				}
 			}
 		}
