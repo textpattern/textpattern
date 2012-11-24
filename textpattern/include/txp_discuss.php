@@ -420,14 +420,16 @@
 				$ban_text = gTxt('ban');
 			}
 
-			$ban_link = '<span role="presentation">[</span><a class="action-ban" href="?event=discuss'.a.'step='.$ban_step.a.'ip='.$ip.
-				a.'name='.urlencode($name).a.'discussid='.$discussid.a.'_txp_token='.form_token().'">'.$ban_text.'</a><span role="presentation">]</span>';
+			$ban_link = sp.span('[', array('role' => 'presentation')).
+				'<a class="action-ban" href="?event=discuss'.a.'step='.$ban_step.a.'ip='.$ip.
+				a.'name='.urlencode($name).a.'discussid='.$discussid.a.'_txp_token='.form_token().'">'.$ban_text.'</a>'.
+				span(']', array('role' => 'presentation'));
 
 			$status_list = selectInput(
 				'visible',
 				array(
-					VISIBLE	 => gTxt('visible'),
-					SPAM		 => gTxt('spam'),
+					VISIBLE  => gTxt('visible'),
+					SPAM     => gTxt('spam'),
 					MODERATE => gTxt('unmoderated')
 				),
 				$visible,
@@ -441,7 +443,7 @@
 					hed(gTxt('edit_comment'), 2).
 					inputLabel('status', $status_list, 'status').
 					inputLabel('name', fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'name'), 'name').
-					inputLabel('IP', $ip.n.$ban_link, '').
+					inputLabel('IP', $ip.$ban_link, '').
 					inputLabel('email', fInput('email', 'email', $email, '', '', '', INPUT_REGULAR, '', 'email'), 'email').
 					inputLabel('website', fInput('text', 'web', $web, '', '', '', INPUT_REGULAR, '', 'website'), 'website').
 					inputLabel('date', safe_strftime('%d %b %Y %X', $uPosted), '').
@@ -570,7 +572,10 @@
 
 					td(
 						txpspecialchars($ip).
-						n.'<span role="presentation">[</span><a class="action-ban" href="?event=discuss'.a.'step=ipban_unban'.a.'ip='.txpspecialchars($ip).a.'_txp_token='.form_token().'">'.gTxt('unban').'</a><span role="presentation">]</span>'
+						sp.span('[', array('role' => 'presentation')).
+						'<a class="action-ban" href="?event=discuss'.a.'step=ipban_unban'.a.'ip='.txpspecialchars($ip).
+						a.'_txp_token='.form_token().'">'.gTxt('unban').'</a>'.
+						span(']', array('role' => 'presentation'))
 					, '', 'ip').
 
 					td(

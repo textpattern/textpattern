@@ -1763,8 +1763,8 @@
 	function article_partial_body($rs)
 	{
 		$out = graf('<label for="body">'.gTxt('body').'</label>'.popHelp('body').br.
-			n.'<textarea id="body" name="Body" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'">'.txpspecialchars($rs['Body']).'</textarea>'
-		, ' class="body"');
+			n.'<textarea id="body" name="Body" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'">'.txpspecialchars($rs['Body']).'</textarea>', ' class="body"'
+		);
 
 		return pluggable_ui('article_ui', 'body', $out, $rs);
 	}
@@ -1886,9 +1886,17 @@
 
 	function article_partial_section($rs)
 	{
-		$out = graf('<label for="section">'.gTxt('section').'</label> '.
-				'<span class="section-edit"><span role="presentation">[</span>'.eLink('section', '', '', '', gTxt('edit')).'<span role="presentation">]</span></span>'.br.
-				section_popup($rs['Section'], 'section'), ' class="section"');
+		$out = graf(
+			'<label for="section">'.gTxt('section').'</label>'.
+
+			sp.span(
+				span('[', array('role' => 'presentation')).
+				eLink('section', '', '', '', gTxt('edit')).
+				span(']', array('role' => 'presentation'))
+			, array('class' => 'section-edit')).br.
+
+			section_popup($rs['Section'], 'section')
+		, ' class="section"');
 
 		return pluggable_ui('article_ui', 'section', $out, $rs);
 	}
@@ -1906,12 +1914,24 @@
 	function article_partial_categories($rs)
 	{
 		$out = n.'<div id="categories_group">'.
-			graf('<label for="category-1">'.gTxt('category1').'</label> '.
-			'<span class="category-edit"><span role="presentation">[</span>'.eLink('category', '', '', '', gTxt('edit')).'<span role="presentation">]</span></span>'.br.
-			category_popup('Category1', $rs['Category1'], 'category-1'), ' class="category category-1"').
 
-			graf('<label for="category-2">'.gTxt('category2').'</label>'.br.
-			category_popup('Category2', $rs['Category2'], 'category-2'), ' class="category category-2"').
+			graf(
+				'<label for="category-1">'.gTxt('category1').'</label>'.
+
+				sp.span(
+					span('[', array('role' => 'presentation')).
+					eLink('category', '', '', '', gTxt('edit')).
+					span(']', array('role' => 'presentation'))
+				, array('class' => 'category-edit')).br.
+
+				category_popup('Category1', $rs['Category1'], 'category-1')
+			, ' class="category category-1"').
+
+			graf(
+				'<label for="category-2">'.gTxt('category2').'</label>'.br.
+				category_popup('Category2', $rs['Category2'], 'category-2')
+			, ' class="category category-2"').
+
 			n.'</div>';
 
 		return pluggable_ui('article_ui', 'categories', $out, $rs);

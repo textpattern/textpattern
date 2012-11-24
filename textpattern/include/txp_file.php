@@ -270,8 +270,13 @@
 					, '', 'multi-edit').
 
 					hCell(
-						($can_edit ? href($id, $edit_url, ' title="'.gTxt('edit').'"') : $id).
-						(($file_exists) ? sp.'<span class="files_detail"><span role="presentation">[</span>'.make_download_link($id, gTxt('download'), $filename).'<span role="presentation">]</span></span>' : '')
+						($can_edit ? href($id, $edit_url, array('title' => gTxt('edit'))) : $id).
+						(($file_exists)
+							? sp.span('[', array('role' => 'presentation')).
+								make_download_link($id, gTxt('download'), $filename).
+								span(']', array('role' => 'presentation'))
+							: ''
+						)
 					, '', ' scope="row" class="id"').
 
 					td(

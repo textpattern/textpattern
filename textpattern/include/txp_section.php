@@ -240,7 +240,15 @@
 						fInput('checkbox', 'selected[]', $sec_name)
 					, '', 'multi-edit').
 
-					hCell('<a href="'.$edit_url.'" title="'.gTxt('edit').'">'.$sec_name.'</a>' .n. '<span class="section_detail"><span role="presentation">[</span><a href="'.pagelinkurl(array('s' => $sec_name)).'">'.gTxt('view').'</a><span role="presentation">]</span></span>', '', ' scope="row" class="name"').
+					hCell(
+						href($sec_name, $edit_url, array('title' => gTxt('edit'))).
+						sp.span(
+							span('[', array('role' => 'presentation')).
+							href(gTxt('view'), pagelinkurl(array('s' => $sec_name))).
+							span(']', array('role' => 'presentation'))
+						, array('class' => 'section_detail'))
+					, '', ' scope="row" class="name"').
+
 					td(txpspecialchars($sec_title), '', 'title').
 					td('<a href="'.$page_url.'" title="'.gTxt('edit').'">'.$sec_page.'</a>', '', 'page').
 					td('<a href="'.$style_url.'" title="'.gTxt('edit').'">'.$sec_css.'</a>', '', 'style').

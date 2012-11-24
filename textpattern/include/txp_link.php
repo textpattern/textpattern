@@ -321,7 +321,15 @@
 				inputLabel('linkname', fInput('text', 'linkname', $linkname, '', '', '', INPUT_REGULAR, '', 'linkname'), 'title').
 				inputLabel('linksort', fInput('text', 'linksort', $linksort, '', '', '', INPUT_REGULAR, '', 'linksort'), 'sort_value', 'link_sort').
 				inputLabel('url', fInput('text', 'url', $url, '', '', '', INPUT_REGULAR, '', 'url'), 'url', 'link_url', 'edit-link-url'). /* TODO: maybe use type = 'url' once browsers are less strict */
-				inputLabel('link_category', linkcategory_popup($category).' <span role="presentation">[</span>'.eLink('category', 'list', '', '', gTxt('edit')).'<span role="presentation">]</span>', 'link_category', 'link_category').
+
+				inputLabel(
+					'link_category',
+					linkcategory_popup($category).
+					sp.span('[', array('role' => 'presentation')).
+					eLink('category', 'list', '', '', gTxt('edit')).
+					span(']', array('role' => 'presentation'))
+				, 'link_category', 'link_category').
+
 				inputLabel('link_description', '<textarea id="link_description" name="description" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_MEDIUM.'">'.txpspecialchars($description).'</textarea>', 'description', 'link_description', '', '').
 				pluggable_ui('link_ui', 'extend_detail_form', '', $rs).
 				graf(fInput('submit', '', gTxt('save'), 'publish')).

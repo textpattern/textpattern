@@ -264,8 +264,12 @@
 					, '', 'multi-edit').
 
 					hCell(
-						($can_edit ? href($id, $edit_url, ' title="'.gTxt('edit').'"') : $id).sp.
-						'<span class="images_detail"><span role="presentation">[</span><a href="'.imagesrcurl($id, $ext).'">'.gTxt('view').'</a><span role="presentation">]</span></span>'
+						($can_edit ? href($id, $edit_url, array('title' => gTxt('edit'))) : $id).
+						sp.span(
+							span('[', array('role' => 'presentation')).
+							href(gTxt('view'), imagesrcurl($id, $ext)).
+							span(']', array('role' => 'presentation'))
+						, array('class' => 'images_detail'))
 					, '', ' scope="row" class="id"').
 
 					td(
