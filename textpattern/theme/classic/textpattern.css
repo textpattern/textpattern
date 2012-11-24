@@ -1261,34 +1261,54 @@ span.spinner {
 	width: 32em;
 }
 
+.txp-label,
+.txp-value {
+	display: inline-block;
+	float: left;
+	width: 50%;
+}
+
+.txp-value input,
+.txp-value select {
+	margin-top: -.27272727272727em;
+	margin-bottom: -.27272727272727em;
+}
+
+/* deprecated @ 4.6 */
 .edit-label,
 .login-label {
 	display: inline-block;
 	float: left;
 }
 
+/* deprecated @ 4.6 */
 .edit-label {
 	width: 45%;
 }
 
+/* deprecated @ 4.6 */
 .login-label {
 	width: 31%;
 }
 
+/* deprecated @ 4.6 */
 .edit-value,
 .login-value {
 	display: inline-block;
 	float: right;
 }
 
+/* deprecated @ 4.6 */
 .edit-value {
 	width: 55%;
 }
 
+/* deprecated @ 4.6 */
 .login-value {
 	width: 69%;
 }
 
+/* deprecated @ 4.6 */
 .edit-value input,
 .edit-value select,
 .login-value input,
@@ -1551,6 +1571,14 @@ tr.moderate {
 	margin: 0;
 }
 
+
+/* Admin -> Languages page
+   ========================================================================== */
+
+#language_control {
+	text-align: left;
+}
+
 #textpack-install {
 	width: 32em;
 }
@@ -1586,7 +1614,8 @@ div.code {
 	background-color: #f5f5f5;
 }
 
+/* Deprecated @ 4.6 - use .txp-layout-textbox instead */
 .plugin-column {
 	margin: 0 auto;
-	max-width: 600px;
+	max-width: 57em;
 }
