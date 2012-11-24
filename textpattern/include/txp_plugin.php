@@ -543,13 +543,15 @@
 	function plugin_form()
 	{
 		return form(
-			'<p>'.
-			tag(gTxt('install_plugin'), 'label', ' for="plugin-install"').popHelp('install_plugin').
-			'<textarea id="plugin-install" class="code" name="plugin" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'"></textarea>'.
-			fInput('submit', 'install_new', gTxt('upload')).
-			eInput('plugin').
-			sInput('plugin_verify').
-			'</p>'
+			graf(
+				tag(gTxt('install_plugin'), 'label', ' for="plugin-install"').popHelp('install_plugin').br.
+				'<textarea id="plugin-install" class="code" name="plugin" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'"></textarea>'
+			).
+			graf(
+				fInput('submit', 'install_new', gTxt('upload')).
+				eInput('plugin').
+				sInput('plugin_verify')
+			)
 		, '', '', 'post', 'plugin-data', '', 'plugin_install_form');
 	}
 
