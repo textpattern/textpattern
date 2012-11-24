@@ -2047,7 +2047,7 @@ body#page-setup {
   background: #fff8dd;
 }
 
-/* Admin -> Preferences page
+/* Admin -> Languages page
    ========================================================================== */
 #page-lang .txp-list .modified {
   color: #999999;
@@ -2064,6 +2064,10 @@ body#page-setup {
 
 /* Admin -> Plugins page
    ========================================================================== */
+#plugin_install_form {
+  text-align: left;
+}
+
 tr .manage span,
 tr .plugin-prefs {
   visibility: hidden;
@@ -2093,9 +2097,10 @@ div.code {
   box-sizing: border-box;
 }
 
+/* Deprecated @ 4.6 - use .txp-layout-textbox instead */
 .plugin-column {
   margin: 0 auto;
-  max-width: 56em;
+  max-width: 57em;
 }
 
 /* ==========================================================================
