@@ -1747,7 +1747,8 @@
 			$url = permlinkurl_id($ID);
 		}
 
-		return n.'<span id="article_partial_article_view"><a href="'.$url.'" class="article-view">'.gTxt('view').'</a></span>';
+		return n.span(href(gTxt('view'), $url, array('class' => 'article-view'))
+			, array('id' => 'article_partial_article_view'));
 	}
 
 /**
@@ -1842,7 +1843,10 @@
 		}
 		else
 		{
-			$out[] = '<span class="navlink-disabled" aria-disabled="true">'.gTxt('prev').'</span>';
+			$out[] = span(gTxt('prev'), array(
+				'class'         => 'navlink-disabled',
+				'aria-disabled' => 'true',
+			));
 		}
 
 		if ($rs['next_id'])
@@ -1851,7 +1855,10 @@
 		}
 		else
 		{
-			$out[] = '<span class="navlink-disabled" aria-disabled="true">'.gTxt('next').'</span>';
+			$out[] = span(gTxt('next'), array(
+				'class'         => 'navlink-disabled',
+				'aria-disabled' => 'true',
+			));
 		}
 
 		return n.'<p role="navigation" class="nav-tertiary">'.join('', $out).'</p>';

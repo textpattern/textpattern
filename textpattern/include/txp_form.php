@@ -309,7 +309,9 @@
 		$buttons = href(gTxt('duplicate'), '#', array('id' => 'txp_clone', 'class' => 'clone', 'title' => gTxt('form_clone')));
 		$buttons .= (empty($type) || $type == 'article') ? href(gTxt('preview'), '#',  array('id' => 'form_preview', 'class' => 'form-preview')) : '';
 
-		$name_widgets .= (empty($name)) ? hInput('savenew', 'savenew') : n.'<span class="txp-actions">'.$buttons.'</span>'.n;
+		$name_widgets .= (empty($name))
+			? hInput('savenew', 'savenew')
+			: n.span($buttons, array('class' => 'txp-actions'));
 
 		// Generate the tagbuilder links.
 		// Format of each entry is popTagLink -> array ( gTxt string, class/ID ).

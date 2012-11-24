@@ -122,7 +122,14 @@
 		}
 
 		$buttons = n.'<label for="new_style">'.gTxt('css_name').'</label>'.br.fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_style', false, true);
-		$buttons .= (empty($name)) ? hInput('savenew', 'savenew') : n.'<span class="txp-actions">'.href(gTxt('duplicate'), '#', array('id' => 'txp_clone', 'class' => 'clone', 'title' => gTxt('css_clone'))) . '</span>'.n;
+		$buttons .= (empty($name))
+			? hInput('savenew', 'savenew')
+			: n.span(
+				href(gTxt('duplicate'), '#', array(
+					'id'    => 'txp_clone',
+					'class' => 'clone',
+					'title' => gTxt('css_clone')
+				)), array('class' => 'txp-actions'));
 		$thecss = gps('css');
 
 		if (!$save_error)

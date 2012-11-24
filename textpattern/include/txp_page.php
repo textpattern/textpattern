@@ -90,11 +90,11 @@
 
 		if ($name)
 		{
-			$buttons .= tag(href(gTxt('duplicate'), '#', array(
+			$buttons .= span(href(gTxt('duplicate'), '#', array(
 				'id'    => 'txp_clone',
 				'class' => 'clone',
 				'title' => gTxt('page_clone')
-			)), 'span', array('class' => 'txp-actions'));
+			)), array('class' => 'txp-actions'));
 		}
 		else
 		{
