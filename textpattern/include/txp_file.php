@@ -529,13 +529,17 @@
 			$created =
 					graf(checkbox('publish_now', '1', $publish_now, '', 'publish_now') . '<label for="publish_now">'.gTxt('set_to_now').'</label>', ' class="edit-file-publish-now"').
 					graf(gTxt('or_publish_at').popHelp('timestamp'), ' class="edit-file-publish-at"').
-					graf('<span class="label">'.gtxt('date').'</span>'.
+
+					graf(
+						tag(gTxt('date'), 'span', 'class="txp-label-fixed"').br.
 						tsi('year', '%Y', $rs['created'], '', gTxt('yyyy')).' / '.
 						tsi('month', '%m', $rs['created'], '', gTxt('mm')).' / '.
 						tsi('day', '%d', $rs['created'], '', gTxt('dd'))
 					, ' class="edit-file-published"'
-					).n.
-					graf('<span class="label">'.gTxt('time').'</span>'.
+					).
+
+					graf(
+						tag(gTxt('time'), 'span', 'class="txp-label-fixed"').br.
 						tsi('hour', '%H', $rs['created'], '', gTxt('hh')).' : '.
 						tsi('minute', '%M', $rs['created'], '', gTxt('mm')).' : '.
 						tsi('second', '%S', $rs['created'], '', gTxt('ss'))

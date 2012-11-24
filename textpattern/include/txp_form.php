@@ -291,13 +291,19 @@
 
 		if (in_array($name, $essential_forms))
 		{
-			$name_widgets = gTxt('form_name').br.tag($name, 'span', 'class="txp-value-fixed"');
-			$type_widgets = gTxt('form_type').br.tag($type, 'span', 'class="txp-value-fixed"');
+			$name_widgets = tag(gTxt('form_name'), 'span', 'class="txp-label-fixed"').br.
+				tag($name, 'span', 'class="txp-value-fixed"');
+
+			$type_widgets = tag(gTxt('form_type'), 'span', 'class="txp-label-fixed"').br.
+				tag($type, 'span', 'class="txp-value-fixed"');
 		}
 		else
 		{
-			$name_widgets = '<label for="new_form">'.gTxt('form_name').'</label>'.br.fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_form', false, true);
-			$type_widgets = '<label for="type">'.gTxt('form_type').'</label>'.br.formTypes($type, false);
+			$name_widgets = tag(gTxt('form_name'), 'label', ' for="new_form"').br.
+				fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_form', false, true);
+
+			$type_widgets = tag(gTxt('form_type'), 'label', ' for="type"').br.
+				formTypes($type, false);
 		}
 
 		$buttons = href(gTxt('duplicate'), '#', array('id' => 'txp_clone', 'class' => 'clone', 'title' => gTxt('form_clone')));

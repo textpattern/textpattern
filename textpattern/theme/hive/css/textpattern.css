@@ -1988,11 +1988,6 @@ body#page-setup {
   margin-left: 1em;
 }
 
-#dates .date .label,
-#dates .time .label {
-  display: block;
-}
-
 #recent_group ul {
   list-style: decimal-leading-zero;
 }
