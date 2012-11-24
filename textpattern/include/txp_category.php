@@ -58,10 +58,10 @@
  * @param string|array $message The activity message
  */
 
-	function cat_category_list($message="")
+	function cat_category_list($message = "")
 	{
 		pagetop(gTxt('categories'), $message);
-		$out = array('<h1 class="txp-heading">'.gTxt('tab_organise').'</h1>',
+		$out = array(hed(gTxt('tab_organise'), 1, 'class="txp-heading"'),
 		'<div id="category_container" class="txp-container">',
 		'<table class="category-list">',
 		'<tr>',

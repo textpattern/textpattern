@@ -909,9 +909,9 @@
 
 		pagetop($page_title, $message);
 
-		echo n.'<h1 class="txp-heading txp-accessibility">'.gTxt('tab_write').'</h1>';
-		echo n.'<div id="'.$event.'_container" class="txp-container">';
-		echo n.'<form id="article_form" name="article_form" method="post" action="index.php" '. ($step=='create' ? '>' : ' class="async">');
+		echo hed(gTxt('tab_write'), 1, array('class' => 'txp-heading txp-accessibility'));
+		echo n.'<div id="'.$event.'_container" class="txp-container">'.
+			n.'<form id="article_form" name="article_form" method="post" action="index.php" '. ($step=='create' ? '>' : ' class="async">');
 
 		if (!empty($store_out))
 		{

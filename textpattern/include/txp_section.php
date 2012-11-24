@@ -157,7 +157,7 @@
 
 		$total = safe_count('txp_section', "$criteria");
 
-		echo n.'<h1 class="txp-heading">'.gTxt('tab_sections').popHelp('section_category').'</h1>';
+		echo hed(gTxt('tab_sections').popHelp('section_category'), 1, array('class' => 'txp-heading'));
 		echo n.'<div id="'.$event.'_control" class="txp-control-panel">';
 		echo graf(
 			sLink('section', 'section_edit', gTxt('create_section'))
@@ -169,7 +169,7 @@
 			).
 			eInput('section').
 			sInput('section_set_default');
-		echo '</form>';
+		echo n.'</form>';
 
 		if ($total < 1)
 		{

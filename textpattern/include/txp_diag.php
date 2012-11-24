@@ -480,11 +480,12 @@
 		extract(doSpecial(getRow('select @@global.time_zone as db_global_timezone, @@session.time_zone as db_session_timezone, now() as db_server_time, unix_timestamp(now()) as db_server_timestamp')));
 		$db_server_timeoffset = $db_server_timestamp - $now;
 
-		echo pagetop(gTxt('tab_diagnostics'), '').
-			n.'<h1 class="txp-heading">'.gTxt('tab_diagnostics').'</h1>'.
-			n.'<div id="'.$event.'_container" class="txp-container">'.
+		echo pagetop(gTxt('tab_diagnostics'), '');
+
+		echo hed(gTxt('tab_diagnostics'), 1, array('class' => 'txp-heading'));
+		echo n.'<div id="'.$event.'_container" class="txp-container">'.
 			n.'<div id="pre_flight_check">'.
-			hed(gTxt('preflight_check'),2);
+			hed(gTxt('preflight_check'), 2);
 
 		if ($fail)
 		{

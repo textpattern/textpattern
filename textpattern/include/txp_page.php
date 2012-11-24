@@ -119,9 +119,8 @@
 			$tagbuild_links .= wrapRegion($item[1].'_group', taglinks($tb), $item[1], $item[0], 'page_'.$item[1]);
 		}
 
-		echo
-		hed(gTxt('tab_pages'), 1, 'class="txp-heading"').
-		n.tag(
+		echo hed(gTxt('tab_pages'), 1, array('class' => 'txp-heading'));
+		echo n.tag(
 
 			n.tag(
 				hed(gTxt('tagbuilder'), 2).

@@ -272,7 +272,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
 		// Output table and content.
 		pagetop(gTxt('tab_languages'), $message);
 
-		echo n.'<h1 class="txp-heading">', gTxt('tab_languages'), '</h1>';
+		echo hed(gTxt('tab_languages'), 1, array('class' => 'txp-heading'));
 		echo n.'<div id="language_container" class="txp-container">';
 
 		if (isset($msg) && $msg)

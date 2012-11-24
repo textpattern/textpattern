@@ -153,7 +153,7 @@
 
 		$total = safe_count('txp_log', "$criteria");
 
-		echo n.'<h1 class="txp-heading">'.gTxt('tab_logs').'</h1>';
+		echo hed(gTxt('tab_logs'), 1, array('class' => 'txp-heading'));
 		echo n.'<div id="'.$event.'_control" class="txp-control-panel">';
 
 		if ($total < 1)

@@ -223,7 +223,7 @@
 		// grand total comment count
 		$total = $count[SPAM] + $count[MODERATE] + $count[VISIBLE];
 
-		echo n.'<h1 class="txp-heading">'.gTxt('list_discussions').'</h1>';
+		echo hed(gTxt('list_discussions'), 1, array('class' => 'txp-heading'));
 		echo n.'<div id="'.$event.'_control" class="txp-control-panel">';
 		echo graf(
 			sLink('discuss', 'ipban_list', gTxt('list_banned_ips'))
@@ -534,12 +534,12 @@
 
 		pageTop(gTxt('list_banned_ips'), $message);
 
-		echo '<h1 class="txp-heading">'.gTxt('banned_ips').'</h1>';
-		echo '<div id="'.$event.'_banned_control" class="txp-control-panel">';
-		echo graf(
-			sLink('discuss', 'discuss_list', gTxt('list_discussions'))
-			, ' class="txp-buttons"');
-		echo '</div>';
+		echo hed(gTxt('banned_ips'), 1, array('class' => 'txp-heading'));
+		echo n.'<div id="'.$event.'_banned_control" class="txp-control-panel">'.
+			graf(
+				sLink('discuss', 'discuss_list', gTxt('list_discussions'))
+			, ' class="txp-buttons"').
+			n.'</div>';
 
 		$rs = safe_rows_start('*, unix_timestamp(date_banned) as uBanned', 'txp_discuss_ipban',
 			"1 = 1 order by date_banned desc");

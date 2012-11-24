@@ -136,9 +136,8 @@
 				css_list($name, $default_name).
 			n.'</div>';
 
-		echo
-		hed(gTxt('tab_style'), 1, 'class="txp-heading"').
-		n.'<div id="'.$event.'_container" class="txp-layout-grid">'.
+		echo hed(gTxt('tab_style'), 1, array('class' => 'txp-heading'));
+		echo n.'<div id="'.$event.'_container" class="txp-layout-grid">'.
 			n.'<div id="main_content" class="txp-layout-cell txp-layout-3-4">'.
 			form(
 				graf($buttons).

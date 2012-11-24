@@ -82,7 +82,7 @@
 		}
 		$dir = ($dir == 'desc') ? 'desc' : 'asc';
 
-		echo n.'<h1 class="txp-heading">'.gTxt('tab_file').'</h1>';
+		echo hed(gTxt('tab_file'), 1, array('class' => 'txp-heading'));
 		echo n.'<div id="'.$event.'_control" class="txp-control-panel">';
 
 		if (!is_dir($file_base_path) or !is_writeable($file_base_path))

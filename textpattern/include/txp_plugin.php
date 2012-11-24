@@ -59,9 +59,9 @@
 
 		pagetop(gTxt('tab_plugins'), $message);
 
-		echo n.'<h1 class="txp-heading">'.gTxt('tab_plugins').'</h1>';
-		echo n.'<div id="'.$event.'_control" class="txp-control-panel">';
-		echo plugin_form().
+		echo hed(gTxt('tab_plugins'), 1, array('class' => 'txp-heading'));
+		echo n.'<div id="'.$event.'_control" class="txp-control-panel">'.
+			plugin_form().
 			n.'</div>';
 
 		extract(gpsa(array('sort', 'dir')));

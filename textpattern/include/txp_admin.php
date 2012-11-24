@@ -308,7 +308,7 @@
 			echo tag(gTxt('warn_mail_unavailable'), 'p', ' class="alert-block warning"');
 		}
 
-		echo n.hed(gTxt('tab_site_admin'), 1, array('class' => 'txp-heading'));
+		echo hed(gTxt('tab_site_admin'), 1, array('class' => 'txp-heading'));
 		echo n.'<div id="users_control" class="txp-control-panel">';
 
 		// Change password button.

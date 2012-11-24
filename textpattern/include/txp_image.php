@@ -74,7 +74,7 @@
 		}
 		$dir = ($dir == 'asc') ? 'asc' : 'desc';
 
-		echo n.'<h1 class="txp-heading">'.gTxt('tab_image').'</h1>';
+		echo hed(gTxt('tab_image'), 1, array('class' => 'txp-heading'));
 		echo n.'<div id="'.$event.'_control" class="txp-control-panel">';
 
 		if (!is_dir(IMPATH) or !is_writeable(IMPATH))

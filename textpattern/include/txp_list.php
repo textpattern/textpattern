@@ -198,7 +198,7 @@
 			$total = getThing('select count(*) from '.$sql_from.' where '.$criteria);
 		}
 
-		echo n.hed(gTxt('tab_list'), 1, array('class' => 'txp-heading'));
+		echo hed(gTxt('tab_list'), 1, array('class' => 'txp-heading'));
 		echo n.'<div id="'.$event.'_control" class="txp-control-panel">';
 
 		if ($total < 1)

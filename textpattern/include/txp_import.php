@@ -82,8 +82,10 @@
 	{
 		global $vars, $event, $step, $tools;
 		extract(gpsa($vars));
+
 		pagetop(gTxt('txp_import'), '');
-		echo n.'<h1 class="txp-heading">'.gTxt('tab_import').'</h1>';
+
+		echo hed(gTxt('tab_import'), 1, array('class' => 'txp-heading'));
 
 		$content = '<section class="txp-edit">';
 		$content.= hed(gTxt('txp_import'), 2);

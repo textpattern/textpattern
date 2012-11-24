@@ -166,8 +166,8 @@
 
 		$locale = setlocale(LC_ALL, $locale);
 
-		echo n.'<h1 class="txp-heading">'. gTxt('tab_preferences'). '</h1>'.
-			n.'<div id="prefs_container" class="txp-container">'.
+		echo hed(gTxt('tab_preferences'), 1, array('class' => 'txp-heading'));
+		echo n.'<div id="prefs_container" class="txp-container">'.
 			n.'<form method="post" class="prefs-form" action="index.php">'.
 			n.'<div class="plugin-column">';
 

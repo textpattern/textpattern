@@ -325,9 +325,8 @@
 			$tagbuild_links .= wrapRegion($item[1].'_group', popTagLinks($tb), $item[1], $item[0], $item[1]);
 		}
 
- 		echo
- 		hed(gTxt('tab_forms').popHelp('forms_overview'), 1, 'class="txp-heading"').
- 		n.'<div id="'.$event.'_container" class="txp-layout-grid">'.
+		echo hed(gTxt('tab_forms').popHelp('forms_overview'), 1, array('class' => 'txp-heading'));
+ 		echo n.'<div id="'.$event.'_container" class="txp-layout-grid">'.
  			n.'<div id="tagbuild_links" class="txp-layout-cell txp-layout-1-4">'.
  				hed(gTxt('tagbuilder'), 2).
  				$tagbuild_links.
