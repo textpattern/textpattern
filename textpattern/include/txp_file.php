@@ -531,7 +531,7 @@
 					graf(gTxt('or_publish_at').popHelp('timestamp'), ' class="edit-file-publish-at"').
 
 					graf(
-						tag(gTxt('date'), 'span', 'class="txp-label-fixed"').br.
+						tag(gTxt('date'), 'span', array('class' => 'txp-label-fixed')).br.
 						tsi('year', '%Y', $rs['created'], '', gTxt('yyyy')).' / '.
 						tsi('month', '%m', $rs['created'], '', gTxt('mm')).' / '.
 						tsi('day', '%d', $rs['created'], '', gTxt('dd'))
@@ -539,7 +539,7 @@
 					).
 
 					graf(
-						tag(gTxt('time'), 'span', 'class="txp-label-fixed"').br.
+						tag(gTxt('time'), 'span', array('class' => 'txp-label-fixed')).br.
 						tsi('hour', '%H', $rs['created'], '', gTxt('hh')).' : '.
 						tsi('minute', '%M', $rs['created'], '', gTxt('mm')).' : '.
 						tsi('second', '%S', $rs['created'], '', gTxt('ss'))

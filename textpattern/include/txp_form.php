@@ -291,18 +291,18 @@
 
 		if (in_array($name, $essential_forms))
 		{
-			$name_widgets = tag(gTxt('form_name'), 'span', 'class="txp-label-fixed"').br.
+			$name_widgets = tag(gTxt('form_name'), 'span', array('class' => 'txp-label-fixed')).br.
 				tag($name, 'span', 'class="txp-value-fixed"');
 
-			$type_widgets = tag(gTxt('form_type'), 'span', 'class="txp-label-fixed"').br.
+			$type_widgets = tag(gTxt('form_type'), 'span', array('class' => 'txp-label-fixed')).br.
 				tag($type, 'span', 'class="txp-value-fixed"');
 		}
 		else
 		{
-			$name_widgets = tag(gTxt('form_name'), 'label', ' for="new_form"').br.
+			$name_widgets = tag(gTxt('form_name'), 'label', 'for="new_form"').br.
 				fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_form', false, true);
 
-			$type_widgets = tag(gTxt('form_type'), 'label', ' for="type"').br.
+			$type_widgets = tag(gTxt('form_type'), 'label', 'for="type"').br.
 				formTypes($type, false);
 		}
 

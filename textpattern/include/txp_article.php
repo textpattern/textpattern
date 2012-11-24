@@ -1106,7 +1106,7 @@
 						graf(gTxt('or_publish_at').popHelp('timestamp'), ' class="publish-at"').
 
 						graf(
-							tag(gTxt('date'), 'span', 'class="txp-label-fixed"').br.
+							tag(gTxt('time'), 'span', array('class' => 'txp-label-fixed')).br.
 							tsi('year', '%Y', $persist_timestamp, '').' / '.
 							tsi('month', '%m', $persist_timestamp, '').' / '.
 							tsi('day', '%d', $persist_timestamp, '')
@@ -1114,7 +1114,7 @@
 						).
 
 						graf(
-							tag(gTxt('time'), 'span', 'class="txp-label-fixed"').br.
+							tag(gTxt('time'), 'span', array('class' => 'txp-label-fixed')).br.
 							tsi('hour', '%H', $persist_timestamp, '').' : '.
 							tsi('minute', '%M', $persist_timestamp, '').' : '.
 							tsi('second', '%S', $persist_timestamp, '')
@@ -1137,7 +1137,7 @@
 					wrapRegion(
 						'write-expires',
 						graf(
-							tag(gTxt('date'), 'span', 'class="txp-label-fixed"').br.
+							tag(gTxt('time'), 'span', array('class' => 'txp-label-fixed')).br.
 							tsi('exp_year', '%Y', $persist_timestamp, '').' / '.
 							tsi('exp_month', '%m', $persist_timestamp, '').' / '.
 							tsi('exp_day', '%d', $persist_timestamp, '')
@@ -1145,7 +1145,7 @@
 						).
 
 						graf(
-							tag(gTxt('time'), 'span', 'class="txp-label-fixed"').br.
+							tag(gTxt('time'), 'span', array('class' => 'txp-label-fixed')).br.
 							tsi('exp_hour', '%H', $persist_timestamp, '').' : '.
 							tsi('exp_minute', '%M', $persist_timestamp, '').' : '.
 							tsi('exp_second', '%S', $persist_timestamp, '')
