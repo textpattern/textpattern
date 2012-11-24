@@ -2015,7 +2015,7 @@
 				graf(gTxt('published_at').popHelp('timestamp'), ' class="publish-at"').
 
 				graf(
-					span(gTxt('date'), array('class' => 'label')).
+					span(gTxt('date'), array('class' => 'txp-label-fixed')).
 					tsi('year', '%Y', $sPosted).' / '.
 					tsi('month', '%m', $sPosted).' / '.
 					tsi('day', '%d', $sPosted)
@@ -2023,7 +2023,7 @@
 				).
 
 				graf(
-					span(gTxt('time'), array('class' => 'label')).
+					span(gTxt('time'), array('class' => 'txp-label-fixed')).
 					tsi('hour', '%H', $sPosted).' : ' .
 					tsi('minute', '%M', $sPosted).' : '.
 					tsi('second', '%S', $sPosted)
@@ -2054,7 +2054,7 @@
 			wrapRegion(
 				'write-expires',
 				graf(
-					span(gTxt('date'), array('class' => 'label')).
+					span(gTxt('date'), array('class' => 'txp-label-fixed')).
 					tsi('exp_year', '%Y', $sExpires).' / '.
 					tsi('exp_month', '%m', $sExpires).' / '.
 					tsi('exp_day', '%d', $sExpires)
@@ -2062,7 +2062,7 @@
 				).
 
 				graf(
-					span(gTxt('time'), array('class' => 'label')).
+					span(gTxt('time'), array('class' => 'txp-label-fixed')).
 					tsi('exp_hour', '%H', $sExpires).' : '.
 					tsi('exp_minute', '%M', $sExpires).' : '.
 					tsi('exp_second', '%S', $sExpires)
