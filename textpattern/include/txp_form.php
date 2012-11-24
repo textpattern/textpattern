@@ -150,9 +150,9 @@
 
 				if (!in_array($name, $essential_forms))
 				{
-					$modbox = tag(
+					$modbox = span(
 						checkbox('selected_forms[]', txpspecialchars($name), false)
-					, 'span', array('class' => 'switcher-action'));
+					, array('class' => 'switcher-action'));
 				}
 				else
 				{
@@ -291,11 +291,11 @@
 
 		if (in_array($name, $essential_forms))
 		{
-			$name_widgets = tag(gTxt('form_name'), 'span', array('class' => 'txp-label-fixed')).br.
-				tag($name, 'span', 'class="txp-value-fixed"');
+			$name_widgets = span(gTxt('form_name'), array('class' => 'txp-label-fixed')).br.
+				span($name, array('class' => 'txp-value-fixed'));
 
-			$type_widgets = tag(gTxt('form_type'), 'span', array('class' => 'txp-label-fixed')).br.
-				tag($type, 'span', 'class="txp-value-fixed"');
+			$type_widgets = span(gTxt('form_type'), array('class' => 'txp-label-fixed')).br.
+				span($type, array('class' => 'txp-value-fixed'));
 		}
 		else
 		{
