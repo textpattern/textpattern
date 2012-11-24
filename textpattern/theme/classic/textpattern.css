@@ -1274,6 +1274,11 @@ span.spinner {
 	margin-bottom: -.27272727272727em;
 }
 
+.txp-value-fixed {
+	display: inline-block;
+	padding: .27272727272727em 0;
+}
+
 /* deprecated @ 4.6 */
 .edit-label,
 .login-label {
