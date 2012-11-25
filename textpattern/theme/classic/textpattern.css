@@ -491,6 +491,10 @@ a:hover .content-image {
 	border-bottom: 1px solid #ddd;
 }
 
+.txp-details .txp-details:last-of-type {
+	border-bottom: 0;
+}
+
 .txp-details h3 {
 	margin: 1em 0;
 	color: #963;
