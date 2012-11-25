@@ -174,7 +174,7 @@
 					, '', 'author').
 
 					td($version, '', 'version').
-					td(($modified ? '<span class="warning">'.gTxt('yes').'</span>' : ''), '', 'modified').
+					td(($modified ? span(gTxt('yes'), array('class' => 'warning')) : ''), '', 'modified').
 					td($description, '', 'description').
 
 					td(

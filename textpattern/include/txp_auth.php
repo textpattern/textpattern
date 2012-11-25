@@ -179,15 +179,15 @@ Use of this software indicates acceptance of the Textpattern license agreement
 			hed(gTxt($reset ? 'password_reset' : 'login_to_textpattern'), 2, ' id="txp-login-heading"').
 
 			graf(
-				n.'<span class="login-label"><label for="login_name">'.gTxt('name').'</label></span>'.
-				n.'<span class="login-value">'.fInput('text', 'p_userid', $name, '', '', '', INPUT_REGULAR, '', 'login_name').n.'</span>'.n
+				n.span('<label for="login_name">'.gTxt('name').'</label>', array('class' => 'login-label')).
+				n.span(fInput('text', 'p_userid', $name, '', '', '', INPUT_REGULAR, '', 'login_name'), array('class' => 'login-value'))
 			, ' class="login-name"').
 
 			($reset
 				? ''
 				: graf(
-					n.'<span class="login-label"><label for="login_password">'.gTxt('password').'</label></span>'.
-					n.'<span class="login-value">'.fInput('password', 'p_password', '', '', '', '', INPUT_REGULAR, '', 'login_password').n.'</span>'.n
+					n.span('<label for="login_password">'.gTxt('password').'</label>', array('class' => 'login-label')).
+					n.span(fInput('password', 'p_password', '', '', '', '', INPUT_REGULAR, '', 'login_password'), array('class' => 'login-value'))
 				, ' class="login-password"')
 			).
 

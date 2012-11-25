@@ -255,7 +255,10 @@
 
 				$validator->setConstraints(array(new CategoryConstraint($category, array('type' => 'image'))));
 				$vc = $validator->validate() ? '' : ' error';
-				$category = ($category) ? '<span title="'.txpspecialchars(fetch_category_title($category, 'image')).'">'.$category.'</span>' : '';
+
+				$category = ($category)
+					? span($category, array('title' => txpspecialchars(fetch_category_title($category, 'image'))))
+					: '';
 
 				$can_edit = has_privs('image.edit') || ($author == $txp_user && has_privs('image.edit.own'));
 
@@ -290,7 +293,7 @@
 					td($category, '', 'category'.$vc).
 
 					($show_authors ? td(
-						'<span title="'.txpspecialchars(get_author_name($author)).'">'.txpspecialchars($author).'</span>'
+						span(txpspecialchars($author), array('title' => txpspecialchars(get_author_name($author))))
 					, '', 'author') : '')
 				);
 			}

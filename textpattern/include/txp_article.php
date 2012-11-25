@@ -459,7 +459,7 @@
 		if (empty($url_title)
 			  || (($oldArticle['Status'] < STATUS_LIVE)
 					&& ($oldArticle['url_title'] == $url_title )
-					&& ($oldArticle['url_title'] == stripSpace($oldArticle['Title'],1))
+					&& ($oldArticle['url_title'] == stripSpace($oldArticle['Title'], 1))
 					&& ($oldArticle['Title'] != $Title)
 				 )
 		   )
@@ -1315,8 +1315,8 @@
 		));
 
 		return n.tag($link, 'li', array(
-			'class' => 'view-mode '.$tabevent,
 			'id'    => 'tab-'.$tabevent.$state,
+			'class' => 'view-mode '.$tabevent,
 			'title' => gTxt('view_'.$tabevent),
 		));
 	}
@@ -2129,20 +2129,20 @@
 		global $prefs, $step, $statuses;
 
 		$constraints = array(
-			'Status'          => new ChoiceConstraint(
+			'Status' => new ChoiceConstraint(
 				$rs['Status'],
 				array('choices' => array_keys($statuses), 'message' => 'invalid_status')
 			),
-			'Section'         => new SectionConstraint($rs['Section']),
-			'Category1'       => new CategoryConstraint(
+			'Section' => new SectionConstraint($rs['Section']),
+			'Category1' => new CategoryConstraint(
 				$rs['Category1'],
 				array('type' => 'article')
 			),
-			'Category2'       => new CategoryConstraint(
+			'Category2' => new CategoryConstraint(
 				$rs['Category2'],
 				array('type' => 'article')
 			),
-			'textile_body'    => new TextfilterConstraint(
+			'textile_body' => new TextfilterConstraint(
 				$rs['textile_body'],
 				array('message' => 'invalid_textfilter_body')
 			),

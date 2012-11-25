@@ -224,8 +224,17 @@
 	
 				// TODO: remove $noPopHelp condition when custom fields move to meta store.
 				$out[] = graf(
-						n.'<span class="txp-label">'.$label.(($noPopHelp) ? '' : popHelp($a['name'])).'</span>'.
-						n.'<span class="txp-value">'.pref_func($a['html'], $a['name'], $a['val'], ($a['html'] == 'text_input' ? INPUT_REGULAR : '')).'</span>'
+						n.span($label.
+							(($noPopHelp)
+								? ''
+								: popHelp($a['name']
+							))
+						, array('class' => 'txp-label')).
+						n.span(pref_func($a['html'], $a['name'], $a['val'], ($a['html'] == 'text_input'
+							? INPUT_REGULAR
+							: ''
+							))
+						, array('class' => 'txp-value'))
 					, ' id="prefs-'.$a['name'].'"');
 			}
 		}

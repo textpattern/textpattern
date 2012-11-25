@@ -252,16 +252,18 @@
 
 				$validator->setConstraints(array(new CategoryConstraint($category, array('type' => 'file'))));
 				$vc = $validator->validate() ? '' : ' error';
-				$category = ($category) ? '<span title="'.txpspecialchars(fetch_category_title($category, 'file')).'">'.$category.'</span>' : '';
+
+				$category = ($category)
+					? span($category, array('title' => txpspecialchars(fetch_category_title($category, 'file'))))
+					: '';
 
 				$tag_url = '?event=tag'.a.'tag_name=file_download_link'.a.'id='.$id.a.'description='.urlencode($description).
 					a.'filename='.urlencode($filename);
 
-				$condition = '<span class="';
-				$condition .= ($file_exists) ? 'success' : 'error';
-				$condition .= '">';
-				$condition .= ($file_exists) ? gTxt('file_status_ok') : gTxt('file_status_missing');
-				$condition .= '</span>';
+				$condition = span(($file_exists)
+					? gTxt('file_status_ok')
+					: gTxt('file_status_missing')
+				, array('class' => ($file_exists) ? 'success' : 'error'));
 
 				$can_edit = has_privs('file.edit') || ($author == $txp_user && has_privs('file.edit.own'));
 
@@ -299,14 +301,17 @@
 						'&#124;'.sp.'<a target="_blank" href="'.$tag_url.a.'type=html" onclick="popWin(this.href, 400, 250); return false;">HTML</a>'
 					, '', 'files_detail tag-build').
 
-					td(in_array($status, array_keys($file_statuses)) ? $file_statuses[$status] : '<span class="error">'.gTxt('none').'</span>', '', 'status').
+					td(in_array($status, array_keys($file_statuses))
+						? $file_statuses[$status]
+						: span(gTxt('none'), array('class' => 'error'))
+					, '', 'status').
 
 					td($condition, '', 'condition').
 
 					td($download_link, '', 'downloads').
 
-					($show_authors ? n.td(
-						'<span title="'.txpspecialchars(get_author_name($author)).'">'.txpspecialchars($author).'</span>'
+					($show_authors ? td(
+						span(txpspecialchars($author), array('title' => txpspecialchars(get_author_name($author))))
 					, '', 'author') : '')
 				);
 			}
@@ -525,9 +530,10 @@
 				? wrapGroup('file_upload_group', file_upload_form('', '', 'file_replace', $id, 'file_replace'), 'replace_file', 'replace-file', 'file_replace')
 				: wrapGroup('file_upload_group', file_upload_form('', '', 'file_replace', $id, 'file_reassign'), 'file_relink', 'upload-file', 'file_reassign');
 
-			$condition = '<span class="'.(($file_exists) ? 'success' : 'error').'">'.
-				(($file_exists) ? gTxt('file_status_ok') : gTxt('file_status_missing')).
-				'</span>';
+			$condition = span((($file_exists)
+					? gTxt('file_status_ok')
+					: gTxt('file_status_missing')
+				), array('class' => (($file_exists) ? 'success' : 'error')));
 
 			$downloadlink = ($file_exists) ? make_download_link($id, txpspecialchars($filename), $filename) : txpspecialchars($filename);
 

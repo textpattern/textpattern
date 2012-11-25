@@ -550,7 +550,13 @@ EOS
 			$out = n.'<section class="txp-edit">'.
 				hed(gTxt('edit_category'), 2).
 				inputLabel('category_name', fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'category_name'), $evname.'_category_name').
-				($has_parent ? n.inputLabel('category_parent', $parent_widget, 'parent') : graf('<span class="edit-label">'.gTxt('parent').'</span><span class="edit-value">'.$parent_widget.'</span>')).
+				($has_parent
+					? inputLabel('category_parent', $parent_widget, 'parent')
+					: graf(
+						span(gTxt('parent'), array('class' => 'edit-label')).
+						span($parent_widget, array('class' => 'edit-value'))
+					)
+				).
 				inputLabel('category_title', fInput('text', 'title', $title, '', '', '', INPUT_REGULAR, '', 'category_title'), $evname.'_category_title').
 				pluggable_ui('category_ui', 'extend_detail_form', '', $row).
 				hInput('id', $id).

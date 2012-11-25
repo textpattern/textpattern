@@ -160,7 +160,7 @@
 
 	function diag_msg_wrap($msg, $type='error')
 	{
-		return '<span class="'.$type.'">'.$msg.'</span>';
+		return span($msg, array('class' => $type));
 	}
 
 /**

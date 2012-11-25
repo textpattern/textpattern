@@ -113,18 +113,20 @@ Use of this software indicates acceptance of the Textpattern license agreement
 			$locale = setlocale(LC_ALL, $locale);
 			$message = gTxt('preferences_saved');
 		}
+
 		$active_lang = safe_field('val', 'txp_prefs', "name='language'");
+
 		$lang_form = '<div id="language_control" class="txp-control-panel">'.
-				form(
-					graf(
-						'<label for="language">'.gTxt('active_language').'</label>'.br.
-						languages('language', $active_lang)
-					).
-					graf(
-						fInput('submit', 'Submit',gTxt('save'), 'publish').
-						eInput('lang').sInput('list_languages')
-					)
-				).'</div>';
+			form(
+				graf(
+					'<label for="language">'.gTxt('active_language').'</label>'.br.
+					languages('language', $active_lang)
+				).
+				graf(
+					fInput('submit', 'Submit',gTxt('save'), 'publish').
+					eInput('lang').sInput('list_languages')
+				)
+			).'</div>';
 	
 		$client = new IXR_Client(RPC_SERVER);
 	//	$client->debug = true;
@@ -198,61 +200,62 @@ Use of this software indicates acceptance of the Textpattern license agreement
 			$rpc_updated = ( @$langdat['rpc_lastmod'] > @$langdat['db_lastmod']);
 
 			$rpc_install = tda(
-							($rpc_updated)
-							? strong(
-									eLink(
-										'lang',
-										'get_language',
-										'lang_code',
-										$langname,
-										(isset($langdat['db_lastmod'])
-											? gTxt('update')
-											: gTxt('install')
-										),
-										'updating',
-										isset($langdat['db_lastmod']),
-										''
-									)
-								).
-								n.'<span class="date modified">'.safe_strftime('%d %b %Y %X',@$langdat['rpc_lastmod']).'</span>'
-							: (
-									(isset($langdat['rpc_lastmod'])
-										? gTxt('updated')
-										: '-'
-									).
-									(isset($langdat['db_lastmod'])
-										? n.'<span class="date modified">'.safe_strftime('%d %b %Y %X', $langdat['db_lastmod']).'</span>'
-										: ''
-									)
-								)
-							,(isset($langdat['db_lastmod']) && $rpc_updated)
-								? ' class="highlight lang-value"'
-								: ' class="lang-value"'
-							);
+				($rpc_updated)
+				? strong(
+					eLink(
+						'lang',
+						'get_language',
+						'lang_code',
+						$langname,
+						(isset($langdat['db_lastmod'])
+							? gTxt('update')
+							: gTxt('install')
+						),
+						'updating',
+						isset($langdat['db_lastmod']),
+						''
+					)
+				).
+				n.span(safe_strftime('%d %b %Y %X',@$langdat['rpc_lastmod']), array('class' => 'date modified'))
+				: (
+					(isset($langdat['rpc_lastmod'])
+						? gTxt('updated')
+						: '-'
+					).
+					(isset($langdat['db_lastmod'])
+						? n.span(safe_strftime('%d %b %Y %X', $langdat['db_lastmod']), array('class' => 'date modified'))
+						: ''
+					)
+				)
+				, (isset($langdat['db_lastmod']) && $rpc_updated)
+					? ' class="highlight lang-value"'
+					: ' class="lang-value"'
+			);
 
 			$lang_file = tda(
-							(isset($langdat['file_lastmod']))
-							? strong(
-								eLink(
-									'lang',
-									'get_language',
-									'lang_code',
-									$langname,
-									(
-										($file_updated)
-										? gTxt('update')
-										: gTxt('install')
-									),
-									'force',
-									'file',
-									''
-								)
-							).
-							n.'<span class="date '.($file_updated ? 'created' : 'modified').'">'.safe_strftime($prefs['archive_dateformat'], $langdat['file_lastmod']).'</span>'
-
-							: '-'
-						, ' class="lang-value languages_detail'.((isset($langdat['db_lastmod']) && $rpc_updated) ? ' highlight' : '').'"'
-						);
+				(isset($langdat['file_lastmod']))
+				? strong(
+					eLink(
+						'lang',
+						'get_language',
+						'lang_code',
+						$langname,
+						(
+							($file_updated)
+							? gTxt('update')
+							: gTxt('install')
+						),
+						'force',
+						'file',
+						''
+					)
+				).
+				n.span(safe_strftime($prefs['archive_dateformat'], $langdat['file_lastmod']), array(
+					'class' => 'date '.($file_updated ? 'created' : 'modified')
+				))
+				: '-'
+			, ' class="lang-value languages_detail'.((isset($langdat['db_lastmod']) && $rpc_updated) ? ' highlight' : '').'"'
+			);
 
 			$list .= tr(
 			// Lang-Name and Date.

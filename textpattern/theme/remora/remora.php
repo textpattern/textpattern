@@ -56,21 +56,32 @@ SF;
 		}
 
 		$out[] = '<li id="view-site" class="primary tabdown inactive"><a href="'.hu.'" target="_blank">'.gTxt('tab_view_site').'</a></li>';
-		if ($txp_user) $out[] = '<li id="logout" class="primary tabdown inactive"><a href="index.php?logout=1" onclick="return verify(\''.gTxt('are_you_sure').'\')">'.gTxt('logout').'</a></li>';
+
+		if ($txp_user)
+		{
+			$out[] = '<li id="logout" class="primary tabdown inactive"><a href="index.php?logout=1" onclick="return verify(\''.gTxt('are_you_sure').'\')">'.gTxt('logout').'</a></li>';
+		}
+
 		$out[] = '</ul>';
 		$out[] = '</nav>';
 		$out[] = '<div id="messagepane">'.$this->announce($this->message).'</div>'.n;
+
 		return join(n, $out);
 	}
 
 	function footer()
 	{
-		return graf('<a href="http://textpattern.com/" title="'.gTxt('go_txp_com').'" rel="external">Textpattern CMS</a> <span role="separator">&#183;</span> '.txp_version);
+		return graf(
+			'<a href="http://textpattern.com/" title="'.gTxt('go_txp_com').'" rel="external">Textpattern CMS</a>'.
+			n.span('&#183;', array('role' => 'separator')).
+			n.txp_version
+		);
 	}
 
 	function manifest()
 	{
 		global $prefs;
+
 		return array(
 			'author'      => 'Team Textpattern',
 			'author_uri'  => 'http://textpattern.com/',

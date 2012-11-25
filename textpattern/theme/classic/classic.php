@@ -65,7 +65,9 @@ class classic_theme extends theme
 	{
 		global $txp_user;
 
-		$out[] = '<a href="http://textpattern.com/" title="'.gTxt('go_txp_com').'" rel="external">Textpattern CMS</a> <span role="separator">&#183;</span> '.txp_version;
+		$out[] = '<a href="http://textpattern.com/" title="'.gTxt('go_txp_com').'" rel="external">Textpattern CMS</a>'.
+			n.span('&#183;', array('role' => 'separator')).
+			n.txp_version;
 
 		if ($txp_user)
 		{
@@ -119,7 +121,14 @@ class classic_theme extends theme
 		}
 		else
 		{
-			$html = '<span role="alert" id="message" class="'.$class.'">'.gTxt($thing[0]).' <a role="button" href="#close" class="close" title="'.gTxt('close').'" aria-label="'.gTxt('close').'">&times;</a></span>';
+			$html = span(
+				gTxt($thing[0]).' <a role="button" href="#close" class="close" title="'.gTxt('close').'" aria-label="'.gTxt('close').'">&times;</a>'
+			, array(
+				'role'  => 'alert',
+				'id'    => 'message',
+				'class' => $class,
+			));
+
 			// Try to inject $html into the message pane no matter when _announce()'s output is printed.
 			$js = escape_js($html);
 			$js = <<< EOS
@@ -130,6 +139,7 @@ class classic_theme extends theme
 				});
 EOS;
 		}
+
 		if ($async)
 		{
 			return $js;
@@ -143,6 +153,7 @@ EOS;
 	function manifest()
 	{
 		global $prefs;
+
 		return array(
 			'author'      => 'Team Textpattern',
 			'author_uri'  => 'http://textpattern.com/',
