@@ -1861,7 +1861,7 @@
 			));
 		}
 
-		return n.'<p role="navigation" class="nav-tertiary">'.join('', $out).'</p>';
+		return graf(join('', $out), ' role="navigation" class="nav-tertiary"');
 	}
 
 /**

@@ -22,8 +22,8 @@
 
 		if (!get_pref('use_comments', 1))
 		{
-			exit(pageTop('Restricted').'<p class="restricted-area">'.
-				gTxt('restricted_area').'</p>');
+			exit(pageTop('Restricted').
+				graf(gTxt('restricted_area'), ' class="restricted-area"'));
 		}
 
 		$available_steps = array(

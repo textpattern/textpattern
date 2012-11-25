@@ -1178,15 +1178,15 @@
 
 		$select_page = selectInput('qty', $vals, $val, '', 1);
 
-		// proper localisation
+		// Proper localisation.
 		$page = str_replace('{page}', $select_page, gTxt('view_per_page'));
 
 		return form(
-			'<p>'.
+			graf(
 				$page.
 				eInput($event).
-				sInput($event.'_change_pageby').
-			'</p>'
+				sInput($event.'_change_pageby')
+			)
 		, '', '', 'post', 'pageby');
 	}
 

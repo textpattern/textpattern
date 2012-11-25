@@ -703,8 +703,8 @@
 	{
 		if (!has_privs($res, $user))
 		{
-			exit(pageTop('Restricted').'<p class="restricted-area">'.
-				gTxt('restricted_area').'</p>');
+			exit(pageTop('Restricted').
+				graf(gTxt('restricted_area'), ' class="restricted-area"'));
 		}
 	}
 
