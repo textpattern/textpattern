@@ -337,9 +337,9 @@
 			'textpattern', 'ID = '.(int)$incoming['ID']);
 
 		if (!(($oldArticle['Status'] >= STATUS_LIVE and has_privs('article.edit.published'))
-				or ($oldArticle['Status'] >= STATUS_LIVE and $incoming['AuthorID']==$txp_user and has_privs('article.edit.own.published'))
-				or ($oldArticle['Status'] < STATUS_LIVE and has_privs('article.edit'))
-				or ($oldArticle['Status'] < STATUS_LIVE and $incoming['AuthorID']==$txp_user and has_privs('article.edit.own'))))
+			or ($oldArticle['Status'] >= STATUS_LIVE and $incoming['AuthorID']==$txp_user and has_privs('article.edit.own.published'))
+			or ($oldArticle['Status'] < STATUS_LIVE and has_privs('article.edit'))
+			or ($oldArticle['Status'] < STATUS_LIVE and $incoming['AuthorID']==$txp_user and has_privs('article.edit.own'))))
 		{
 			// Not allowed, you silly rabbit, you shouldn't even be here.
 			// Show default editing screen.
@@ -357,6 +357,7 @@
 
 		extract(doSlash($incoming));
 		extract(array_map('assert_int', psa(array('ID', 'Status'))));
+
 		// Comments may be on, off, or disabled.
 		$Annotate = (int) $Annotate;
 
@@ -457,13 +458,11 @@
 
 		// Auto-update custom-titles according to Title, as long as unpublished and NOT customised.
 		if (empty($url_title)
-			  || (($oldArticle['Status'] < STATUS_LIVE)
-					&& ($oldArticle['url_title'] == $url_title )
-					&& ($oldArticle['url_title'] == stripSpace($oldArticle['Title'], 1))
-					&& ($oldArticle['Title'] != $Title)
-				 )
-		   )
-		{
+			|| (($oldArticle['Status'] < STATUS_LIVE)
+			&& ($oldArticle['url_title'] == $url_title )
+			&& ($oldArticle['url_title'] == stripSpace($oldArticle['Title'], 1))
+			&& ($oldArticle['Title'] != $Title)
+		)) {
 			$url_title = stripSpace($Title_plain, 1);
 		}
 
@@ -990,11 +989,11 @@
 		// Title input.
 		if ($view == 'preview')
 		{
-			echo n.'<div class="preview">'.hed(gTxt('preview'), 2).hed($Title, 1, ' class="title"');
+			echo n.'<div class="preview">'.hed(gTxt('preview'), 2).hed($Title, 1, array('class' => 'title'));
 		}
 		else if ($view == 'html')
 		{
-			echo n.'<div class="html">'.hed('HTML', 2).hed($Title, 1, ' class="title"');
+			echo n.'<div class="html">'.hed('HTML', 2).hed($Title, 1, array('class' => 'title'));
 		}
 		else if ($view == 'text')
 		{
@@ -1008,7 +1007,7 @@
 		}
 		else if ($view == 'html')
 		{
-			echo tag(str_replace(array(n,t), array(br,sp.sp.sp.sp), txpspecialchars($Body_html)), 'code', ' class="body"');
+			echo tag(str_replace(array(n,t), array(br,sp.sp.sp.sp), txpspecialchars($Body_html)), 'code', array('class' => 'body'));
 		}
 		else
 		{
@@ -1024,7 +1023,8 @@
 			}
 			else if ($view == 'html')
 			{
-				echo n.'<hr />'.tag(str_replace(array(n,t), array(br,sp.sp.sp.sp), txpspecialchars($Excerpt_html)), 'code', ' class="excerpt"');
+				echo n.'<hr />'.
+					tag(str_replace(array(n,t), array(br,sp.sp.sp.sp), txpspecialchars($Excerpt_html)), 'code', array('class' => 'excerpt'));
 			}
 			else
 			{
@@ -1068,10 +1068,14 @@
 				'article_ui',
 				'sort_display',
 				wrapRegion('write-sort', $partials['section']['html'].$partials['categories']['html'], '', gTxt('sort_display')),
-				$rs);
+				$rs
+			);
 
 			// "Comments" section.
-			echo wrapRegion('comments_group', $partials['comments']['html'], 'comments', 'comment_settings', 'article_comments', (($use_comments == 1) ? '' : 'empty'));
+			echo wrapRegion('comments_group', $partials['comments']['html'], 'comments', 'comment_settings', 'article_comments', (($use_comments == 1)
+				? ''
+				: 'empty'
+			));
 
 			// "Dates" section.
 			$push_button = '';
@@ -1106,7 +1110,7 @@
 						graf(gTxt('or_publish_at').popHelp('timestamp'), ' class="publish-at"').
 
 						graf(
-							span(gTxt('time'), array('class' => 'txp-label-fixed')).br.
+							span(gTxt('date'), array('class' => 'txp-label-fixed')).br.
 							tsi('year', '%Y', $persist_timestamp, '').' / '.
 							tsi('month', '%m', $persist_timestamp, '').' / '.
 							tsi('day', '%d', $persist_timestamp, '')
@@ -1127,8 +1131,8 @@
 				);
 
 				// Expires.
-				$persist_timestamp = (!empty($store_out['exp_year'])) ?
-					safe_strtotime($store_out['exp_year'].'-'.$store_out['exp_month'].'-'.$store_out['exp_day'].' '.$store_out['exp_hour'].':'.$store_out['exp_minute'].':'.$store_out['second'])
+				$persist_timestamp = (!empty($store_out['exp_year']))
+					? safe_strtotime($store_out['exp_year'].'-'.$store_out['exp_month'].'-'.$store_out['exp_day'].' '.$store_out['exp_hour'].':'.$store_out['exp_minute'].':'.$store_out['second'])
 					: NULLDATETIME;
 
 				$expires_block = pluggable_ui(
@@ -1137,7 +1141,7 @@
 					wrapRegion(
 						'write-expires',
 						graf(
-							span(gTxt('time'), array('class' => 'txp-label-fixed')).br.
+							span(gTxt('date'), array('class' => 'txp-label-fixed')).br.
 							tsi('exp_year', '%Y', $persist_timestamp, '').' / '.
 							tsi('exp_month', '%m', $persist_timestamp, '').' / '.
 							tsi('exp_day', '%d', $persist_timestamp, '')
