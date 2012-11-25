@@ -211,15 +211,15 @@
 
 				if ($log_refer)
 				{
-					$log_refer = '<a href="'.txpspecialchars($log_refer).'" target="_blank">'.txpspecialchars(soft_wrap($log_refer, 30)).'</a>';
+					$log_refer = href(txpspecialchars(soft_wrap($log_refer, 30)), txpspecialchars($log_refer), array('target' => '_blank'));
 				}
 
 				if ($log_page)
 				{
 					$log_anchor = preg_replace('/\/$/', '', $log_page);
-					$log_anchor = soft_wrap(substr($log_anchor,1), 30);
+					$log_anchor = soft_wrap(substr($log_anchor, 1), 30);
 
-					$log_page = '<a href="'.txpspecialchars($log_page).'" target="_blank">'.txpspecialchars($log_anchor).'</a>';
+					$log_page = href(txpspecialchars($log_anchor), txpspecialchars($log_page), array('target' => '_blank'));
 
 					if ($log_method == 'POST')
 					{

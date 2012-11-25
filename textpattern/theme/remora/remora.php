@@ -30,14 +30,14 @@ SF;
 	function header()
 	{
 		global $txp_user;
-		$out[] = '<h1 class="txp-accessibility">'.htmlspecialchars($GLOBALS["prefs"]["sitename"]).'</h1>';
+		$out[] = hed(htmlspecialchars($GLOBALS["prefs"]["sitename"]), 1, array('class' => 'txp-accessibility'));
 		$out[] = '<nav role="navigation" id="masthead" aria-label="'.gTxt('navigation').'">';
 		$out[] = '<ul id="nav">';
 
 		foreach ($this->menu as $tab)
 		{
 			$class = ($tab['active']) ? ' active' : '';
-			$out[] = '<li class="primary'.$class.'"><a href="?event='.$tab["event"].'">'.$tab["label"].'</a>';
+			$out[] = '<li class="primary'.$class.'">'.href($tab["label"], '?event='.$tab["event"]);
 
 			if (!empty($tab['items']))
 			{
@@ -46,7 +46,9 @@ SF;
 				foreach ($tab['items'] as $item)
 				{
 					$class = ($item['active']) ? ' active' : '';
-					$out[] = '<li class="secondary'.$class.'"><a href="?event='.$item["event"].'">'.$item["label"].'</a></li>';
+					$out[] = '<li class="secondary'.$class.'">'.
+						href($item["label"], '?event='.$item["event"]).
+						'</li>';
 				}
 
 				$out[] = '</ul>';
@@ -55,11 +57,15 @@ SF;
 			$out[] = '</li>';
 		}
 
-		$out[] = '<li id="view-site" class="primary tabdown inactive"><a href="'.hu.'" target="_blank">'.gTxt('tab_view_site').'</a></li>';
+		$out[] = '<li id="view-site" class="primary tabdown inactive">'.
+			href(gTxt('tab_view_site'), hu, array('target' => '_blank')).
+			'</li>';
 
 		if ($txp_user)
 		{
-			$out[] = '<li id="logout" class="primary tabdown inactive"><a href="index.php?logout=1" onclick="return verify(\''.gTxt('are_you_sure').'\')">'.gTxt('logout').'</a></li>';
+			$out[] = '<li id="logout" class="primary tabdown inactive">'.
+				href(gTxt('logout'), 'index.php?logout=1', ' onclick="return verify(\''.gTxt('are_you_sure').'\')"').
+				'</li>';
 		}
 
 		$out[] = '</ul>';
@@ -72,7 +78,11 @@ SF;
 	function footer()
 	{
 		return graf(
-			'<a href="http://textpattern.com/" title="'.gTxt('go_txp_com').'" rel="external">Textpattern CMS</a>'.
+			href('Textpattern CMS', 'http://textpattern.com/', array(
+				'rel'    => 'external',
+				'title'  => gTxt('go_txp_com'),
+				'target' => '_blank',
+			)).
 			n.span('&#183;', array('role' => 'separator')).
 			n.txp_version
 		);

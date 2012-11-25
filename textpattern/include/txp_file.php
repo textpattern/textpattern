@@ -282,7 +282,7 @@
 					, '', ' scope="row" class="id"').
 
 					td(
-						($can_edit ? href(txpspecialchars($filename), $edit_url, ' title="'.gTxt('edit').'"') : txpspecialchars($filename))
+						($can_edit ? href(txpspecialchars($filename), $edit_url, array('title' => gTxt('edit'))) : txpspecialchars($filename))
 					, '', 'name').
 
 					td(txpspecialchars($title), '', 'title').
@@ -296,9 +296,11 @@
 					*/
 
 					td(
-						'<a target="_blank" href="'.$tag_url.a.'type=textile" onclick="popWin(this.href, 400, 250); return false;">Textile</a>'.sp.
-						'&#124;'.sp.'<a target="_blank" href="'.$tag_url.a.'type=textpattern" onclick="popWin(this.href, 400, 250); return false;">Textpattern</a>'.sp.
-						'&#124;'.sp.'<a target="_blank" href="'.$tag_url.a.'type=html" onclick="popWin(this.href, 400, 250); return false;">HTML</a>'
+						href('Textile', $tag_url.a.'type=textile', ' target="_blank" onclick="popWin(this.href); return false;"').
+						sp.span('&#124;', array('role' => 'separator')).
+						sp.href('Textpattern', $tag_url.a.'type=textpattern', ' target="_blank" onclick="popWin(this.href); return false;"').
+						sp.span('&#124;', array('role' => 'separator')).
+						sp.href('HTML', $tag_url.a.'type=html', ' target="_blank" onclick="popWin(this.href); return false;"')
 					, '', 'files_detail tag-build').
 
 					td(in_array($status, array_keys($file_statuses))
@@ -1050,7 +1052,8 @@
 	{
 		$label = ($label != '') ? $label : gTxt('download');
 		$url = filedownloadurl($id, $filename);
-		return '<a title="'.gTxt('download').'" href="'.$url.'">'.$label.'</a>';
+
+		return href($label, $url, array('title' => gTxt('download')));
 	}
 
 // -------------------------------------------------------------

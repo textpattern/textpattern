@@ -218,11 +218,11 @@
 					, '', 'multi-edit').
 
 					hCell(
-						($can_edit ? href($link_id, $edit_url, ' title="'.gTxt('edit').'"') : $link_id)
+						($can_edit ? href($link_id, $edit_url, array('title' => gTxt('edit'))) : $link_id)
 					, '', ' scope="row" class="id"').
 
 					td(
-						($can_edit ? href(txpspecialchars($link_linkname), $edit_url, ' title="'.gTxt('edit').'"') : txpspecialchars($link_linkname))
+						($can_edit ? href(txpspecialchars($link_linkname), $edit_url, array('title' => gTxt('edit'))) : txpspecialchars($link_linkname))
 					, '', 'name').
 
 					td(
@@ -234,7 +234,10 @@
 					, '', 'category'.$vc).
 
 					td(
-						'<a rel="external" target="_blank" href="'.$view_url.'">'.$view_url.'</a>'
+						href($view_url, $view_url, array(
+							'rel'    => 'external',
+							'target' => '_blank',
+						))
 					, '', 'url').
 
 					td(

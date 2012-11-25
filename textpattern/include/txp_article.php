@@ -1051,7 +1051,7 @@
 		{
 			if ($step != 'create')
 			{
-				echo graf(href(gtxt('create_new'), 'index.php?event=article'), ' class="action-create"');
+				echo graf(href(gtxt('create_new'), 'index.php?event=article'), array('class' => 'action-create'));
 			}
 
 			// Prev/next article links.
@@ -1717,7 +1717,9 @@
 					$recent['Title'] = gTxt('untitled').sp.$recent['ID'];
 				}
 
-				$ra .= n.'<li class="recent-article"><a href="?event=article'.a.'step=edit'.a.'ID='.$recent['ID'].'">'.escape_title($recent['Title']).'</a></li>';
+				$ra .= n.'<li class="recent-article">'.
+					href(escape_title($recent['Title']), '?event=article'.a.'step=edit'.a.'ID='.$recent['ID']).
+					'</li>';
 			}
 
 			$ra .= '</ul>';

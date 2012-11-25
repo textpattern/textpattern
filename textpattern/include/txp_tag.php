@@ -3810,20 +3810,17 @@ class TagBuilderTags
 				case 'textile' :
 					$thing = ($thing) ? $thing : $filename;
 					$description = ($description) ? ' ('.$description.')' : '';
-
 					$out .= tdb('"'.$thing.$description.'":'.$url);
 					break;
 				case 'html' :
 					$thing = ($thing) ? $thing : $filename;
 					$description = ($description) ? ' title="'.$description.'"' : '';
-
-					$out .= tdb('<a href="'.$url.'"'.$description.'>'.$thing.'</a>');
+					$out .= tdb(href($thing, $url, $description));
 					break;
 				case 'textpattern' :
 				default :
 					$atts = array('id' => $id);
 					$thing = ($thing) ? $thing : '<txp:file_download_name />';
-
 					$out .= tdb(tb($tag_name, $atts, $thing));
 					break;
 			}

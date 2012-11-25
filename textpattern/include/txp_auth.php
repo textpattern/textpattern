@@ -205,8 +205,8 @@ Use of this software indicates acceptance of the Textpattern license agreement
 			).
 			(
 				($reset
-					? graf('<a href="index.php">'.gTxt('back_to_login').'</a>', ' class="login-return"')
-					: graf('<a href="?reset=1">'.gTxt('password_forgotten').'</a>', ' class="login-forgot"')
+					? graf(href(gTxt('back_to_login'), 'index.php'), array('class' => 'login-return'))
+					: graf(href(gTxt('password_forgotten'), '?reset=1'), array('class' => 'login-forgot'))
 				)
 			).
 			(gps('event') ? eInput(gps('event')) : '').

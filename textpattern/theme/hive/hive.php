@@ -79,11 +79,19 @@ class hive_theme extends theme
 	function header()
 	{
 		global $txp_user;
-		$out[] = '<h1><a href="'.hu.'" title="'.gTxt('tab_view_site').'" rel="external">'.htmlspecialchars($GLOBALS["prefs"]["sitename"]).'</a></h1>';
+		$out[] = hed(
+			href(htmlspecialchars($GLOBALS["prefs"]["sitename"]), hu, array(
+				'rel'   => 'external',
+				'title' => gTxt('tab_view_site'),
+			))
+			, 1);
 
 		if ($txp_user)
 		{
-			$out[] = '<p class="txp-logout"><a href="index.php?logout=1" onclick="return verify(\''.gTxt('are_you_sure').'\')">'.gTxt('logout').'</a></p>';
+			$out[] = graf(
+				href(gTxt('logout'), 'index.php?logout=1', ' onclick="return verify(\''.gTxt('are_you_sure').'\')"')
+				, array('class' => 'txp-logout'));
+
 			$out[] = '<nav role="navigation" aria-label="'.gTxt('navigation').'">';
 			$out[] = '<div class="txp-nav">';
 			$out[] = '<ul class="data-dropdown">';
@@ -91,7 +99,8 @@ class hive_theme extends theme
 			foreach ($this->menu as $tab)
 			{
 				$class = ($tab['active']) ? ' active' : '';
-				$out[] = '<li class="dropdown'.$class.'"><a class="dropdown-toggle" href="?event='.$tab["event"].'">'.$tab["label"].'</a>';
+				$out[] = '<li class="dropdown'.$class.'">'.
+					href($tab["label"], '?event='.$tab["event"], array('class' => 'dropdown-toggle'));
 
 				if (!empty($tab['items']))
 				{
@@ -100,7 +109,9 @@ class hive_theme extends theme
 					foreach ($tab['items'] as $item)
 					{
 						$class = ($item['active']) ? ' class="active"' : '';
-						$out[] = '<li'.$class.'><a href="?event='.$item["event"].'">'.$item["label"].'</a></li>';
+						$out[] = '<li'.$class.'>'.
+							href($item["label"], '?event='.$item["event"]).
+							'</li>';
 					}
 
 					$out[] = '</ul>';
@@ -141,8 +152,16 @@ class hive_theme extends theme
 
 	function footer()
 	{
-		$out[] = n.'<p class="mothership"><a href="http://textpattern.com" title="'.gTxt('go_txp_com').'" rel="external">Textpattern CMS</a> (v'.txp_version.')</p>';
-		$out[] = '<p class="pagejump"><a href="#">'.gTxt('back_to_top').'</a></p>';
+		$out[] = graf(
+			href('Textpattern CMS', 'http://textpattern.com', array(
+				'rel'   => 'external',
+				'title' => gTxt('go_txp_com'),
+			)).
+			' (v'.txp_version.')'
+			, array('class' => 'mothership'));
+
+		$out[] = graf(href(gTxt('back_to_top'), '#'), array('class' => 'pagejump'));
+
 		return join(n, $out);
 	}
 
@@ -188,7 +207,13 @@ class hive_theme extends theme
 		else
 		{
 			$html = span(
-				gTxt($thing[0]).' <a role="button" href="#close" class="close" title="'.gTxt('close').'" aria-label="'.gTxt('close').'">&times;</a>'
+				gTxt($thing[0]).
+				sp.href('&times;', '#close', array(
+					'role'       => 'button',
+					'class'      => 'close',
+					'title'      => gTxt('close'),
+					'aria-label' => gTxt('close'),
+				))
 			, array(
 				'role'  => 'alert',
 				'class' => 'messageflash '.$class,

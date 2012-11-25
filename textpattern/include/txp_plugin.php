@@ -141,11 +141,13 @@
 					$description
 				);
 
-				$help = !empty($help) ?
-					'<a class="plugin-help" href="?event=plugin'.a.'step=plugin_help'.a.'name='.urlencode($name).'">'.gTxt('help').'</a>' : '';
+				$help = !empty($help)
+					? href(gTxt('help'), '?event=plugin'.a.'step=plugin_help'.a.'name='.urlencode($name), array('class' => 'plugin-help'))
+					: '';
 
-				$plugin_prefs = ($flags & PLUGIN_HAS_PREFS) ?
-					'<a class="plugin-prefs" href="?event=plugin_prefs.'.urlencode($name).'">'.gTxt('plugin_prefs').'</a>' : '';
+				$plugin_prefs = ($flags & PLUGIN_HAS_PREFS)
+					? href(gTxt('plugin_prefs'), '?event=plugin_prefs.'.urlencode($name), array('class' => 'plugin-prefs'))
+					: '';
 
 				$manage = array();
 
@@ -170,7 +172,7 @@
 					hCell($edit_url, '', ' scope="row" class="name"').
 
 					td(
-						href($author, $author_uri, ' rel="external"')
+						href($author, $author_uri, array('rel' => 'external'))
 					, '', 'author').
 
 					td($version, '', 'version').

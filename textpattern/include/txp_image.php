@@ -244,9 +244,11 @@
 				if ($ext != '.swf')
 				{
 					$tag_url = '?event=tag'.a.'tag_name=image'.a.'id='.$id.a.'ext='.$ext.a.'w='.$w.a.'h='.$h.a.'alt='.urlencode($alt).a.'caption='.urlencode($caption);
-					$tagbuilder = '<a target="_blank" href="'.$tag_url.a.'type=textile" onclick="popWin(this.href); return false;">Textile</a>'.sp.
-							'&#124;'.sp.'<a target="_blank" href="'.$tag_url.a.'type=textpattern" onclick="popWin(this.href); return false;">Textpattern</a>'.sp.
-							'&#124;'.sp.'<a target="_blank" href="'.$tag_url.a.'type=html" onclick="popWin(this.href); return false;">HTML</a>';
+					$tagbuilder = href('Textile', $tag_url.a.'type=textile', ' target="_blank" onclick="popWin(this.href); return false;"').
+						sp.span('&#124;', array('role' => 'separator')).
+						sp.href('Textpattern', $tag_url.a.'type=textpattern', ' target="_blank" onclick="popWin(this.href); return false;"').
+						sp.span('&#124;', array('role' => 'separator')).
+						sp.href('HTML', $tag_url.a.'type=html', ' target="_blank" onclick="popWin(this.href); return false;"');
 				}
 				else
 				{
@@ -276,7 +278,7 @@
 					, '', ' scope="row" class="id"').
 
 					td(
-						($can_edit ? href($name, $edit_url, ' title="'.gTxt('edit').'"') : $name)
+						($can_edit ? href($name, $edit_url, array('title'=> gTxt('edit'))) : $name)
 					, '', 'name').
 
 					td(

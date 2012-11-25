@@ -226,7 +226,7 @@
 				$style_url = '?event=css'.a.'name='.$sec_css;
 				$articles = ($sec_article_count > 0
 					? href($sec_article_count, '?event=list'.a.'search_method=section'.a.'crit=&quot;'.txpspecialchars($sec_name).'&quot;',
-						' title="'.gTxt('article_count', array('{num}' => $sec_article_count)).'"')
+						array('title' => gTxt('article_count', array('{num}' => $sec_article_count))))
 					: ($is_default_section ? '' : '0'));
 //				$can_delete = ($sec_name != 'default' && $sec_article_count == 0);
 
@@ -250,8 +250,8 @@
 					, '', ' scope="row" class="name"').
 
 					td(txpspecialchars($sec_title), '', 'title').
-					td('<a href="'.$page_url.'" title="'.gTxt('edit').'">'.$sec_page.'</a>', '', 'page').
-					td('<a href="'.$style_url.'" title="'.gTxt('edit').'">'.$sec_css.'</a>', '', 'style').
+					td(href($sec_page, $page_url, array('title' => gTxt('edit'))), '', 'page').
+					td(href($sec_css, $style_url, array('title' => gTxt('edit'))), '', 'style').
 					td($is_default_section ? '-' : asyncHref($sec_on_frontpage ? gTxt('yes') : gTxt('no'), $parms + array('property' => 'on_frontpage')), '', 'section_detail frontpage').
 					td($is_default_section ? '-' : asyncHref($sec_in_rss ? gTxt('yes') : gTxt('no'), $parms + array('property' => 'in_rss')), '', 'section_detail syndicate').
 					td($is_default_section ? '-' : asyncHref($sec_searchable ? gTxt('yes') : gTxt('no'), $parms + array('property' => 'searchable')), '', 'section_detail searchable').

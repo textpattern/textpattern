@@ -381,7 +381,10 @@ class TextileTextfilter extends Textfilter implements ITextfilter
 			, ' class="textile"').
 
 			graf(
-			'<a id="textile-docs-link" href="http://textpattern.com/textile-sandbox" target="_blank">'.gTxt('More').'</a>');
+			href(gTxt('More'), 'http://textpattern.com/textile-sandbox', array(
+				'id'     => 'textile-docs-link',
+				'target' => '_blank'
+			)));
 	}
 }
 

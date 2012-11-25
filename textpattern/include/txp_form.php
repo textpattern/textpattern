@@ -306,8 +306,18 @@
 				formTypes($type, false);
 		}
 
-		$buttons = href(gTxt('duplicate'), '#', array('id' => 'txp_clone', 'class' => 'clone', 'title' => gTxt('form_clone')));
-		$buttons .= (empty($type) || $type == 'article') ? href(gTxt('preview'), '#',  array('id' => 'form_preview', 'class' => 'form-preview')) : '';
+		$buttons = href(gTxt('duplicate'), '#', array(
+			'id'    => 'txp_clone',
+			'class' => 'clone',
+			'title' => gTxt('form_clone'),
+		));
+
+		$buttons .= (empty($type) || $type == 'article')
+			? href(gTxt('preview'), '#', array(
+				'id'    => 'form_preview',
+				'class' => 'form-preview',
+			))
+			: '';
 
 		$name_widgets .= (empty($name))
 			? hInput('savenew', 'savenew')
@@ -316,15 +326,42 @@
 		// Generate the tagbuilder links.
 		// Format of each entry is popTagLink -> array ( gTxt string, class/ID ).
 		$tagbuild_items = array(
-			'article'         => array('articles',            'article-tags'),
-			'link'            => array('links',               'link-tags'),
-			'comment'         => array('comments',            'comment-tags'),
-			'comment_details' => array('comment_details',     'comment-detail-tags'),
-			'comment_form'    => array('comment_form',        'comment-form-tags'),
-			'search_result'   => array('search_results_form', 'search-result-tags'),
-			'file_download'   => array('file_download_tags',  'file-tags'),
-			'category'        => array('category_tags',       'category-tags'),
-			'section'         => array('section_tags',        'section-tags'),
+			'article' => array(
+				'articles',
+				'article-tags',
+			),
+			'link' => array(
+				'links',
+				'link-tags',
+			),
+			'comment' => array(
+				'comments',
+				'comment-tags',
+			),
+			'comment_details' => array(
+				'comment_details',
+				'comment-detail-tags',
+			),
+			'comment_form' => array(
+				'comment_form',
+				'comment-form-tags',
+			),
+			'search_result' => array(
+				'search_results_form',
+				'search-result-tags',
+			),
+			'file_download' => array(
+				'file_download_tags',
+				'file-tags',
+			),
+			'category' => array(
+				'category_tags',
+				'category-tags',
+			),
+			'section' => array(
+				'section_tags',
+				'section-tags',
+			),
 		);
 
 		$tagbuild_links = '';

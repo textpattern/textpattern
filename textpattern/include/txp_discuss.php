@@ -328,15 +328,17 @@
 
 					$view = $comment_status;
 
-					if ($visible == VISIBLE and in_array($Status, array(4,5)))
+					if ($visible == VISIBLE and in_array($Status, array(4, 5)))
 					{
-						$view = '<a title="'.gTxt('view').'" href="'.permlinkurl($a).'#c'.$discussid.'">'.$comment_status.'</a>';
+						$view = href($comment_status, permlinkurl($a).'#c'.$discussid, array('title' => gTxt('view')));
 					}
 				}
 
 				echo tr(
 					td(fInput('checkbox', 'selected[]', $discussid), '', 'multi-edit').
-					hCell('<a title="'.gTxt('edit').'" href="'.$edit_url.'">'.$discussid.'</a>', '', ' scope="row" class="id"').
+
+					hCell(href($discussid, $edit_url, array('title' => gTxt('edit'))), '', ' scope="row" class="id"').
+
 					td(gTime($uPosted), '', 'date posted created').
 					td(txpspecialchars(soft_wrap($name, 15)), '', 'name').
 					td(short_preview($dmessage), '', 'message').
@@ -421,8 +423,11 @@
 			}
 
 			$ban_link = sp.span('[', array('role' => 'presentation')).
-				'<a class="action-ban" href="?event=discuss'.a.'step='.$ban_step.a.'ip='.$ip.
-				a.'name='.urlencode($name).a.'discussid='.$discussid.a.'_txp_token='.form_token().'">'.$ban_text.'</a>'.
+				href(
+					$ban_text,
+					'?event=discuss'.a.'step='.$ban_step.a.'ip='.$ip.a.'name='.urlencode($name).a.'discussid='.$discussid.a.'_txp_token='.form_token(),
+					array('class' => 'action-ban')
+				).
 				span(']', array('role' => 'presentation'));
 
 			$status_list = selectInput(
@@ -573,8 +578,11 @@
 					td(
 						txpspecialchars($ip).
 						sp.span('[', array('role' => 'presentation')).
-						'<a class="action-ban" href="?event=discuss'.a.'step=ipban_unban'.a.'ip='.txpspecialchars($ip).
-						a.'_txp_token='.form_token().'">'.gTxt('unban').'</a>'.
+						href(
+							gTxt('unban'),
+							'?event=discuss'.a.'step=ipban_unban'.a.'ip='.txpspecialchars($ip).a.'_txp_token='.form_token(),
+							array('class' => 'action-ban')
+						).
 						span(']', array('role' => 'presentation'))
 					, '', 'ip').
 
@@ -583,8 +591,7 @@
 					, '', 'name').
 
 					td(
-						'<a href="?event=discuss'.a.'step=discuss_edit'.a.'discussid='.$banned_on_message.'">'.
-							$banned_on_message.'</a>'
+						href($banned_on_message, '?event=discuss'.a.'step=discuss_edit'.a.'discussid='.$banned_on_message)
 					, '', 'id')
 				);
 			}

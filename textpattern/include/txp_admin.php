@@ -448,7 +448,7 @@
 						td(((has_privs('admin.edit') and $txp_user != $a['name']) ? fInput('checkbox', 'selected[]', $a['name'], 'checkbox') : ''), '', 'multi-edit').
 						hCell(((has_privs('admin.edit')) ? eLink('admin', 'author_edit', 'user_id', $user_id, $name) : $name), '', ' scope="row" class="name login-name"').
 						td($RealName, '', 'name real-name').
-						td('<a href="mailto:'.$email.'">'.$email.'</a>', '', 'email').
+						td(href($email, 'mailto:'.$email), '', 'email').
 						td(get_priv_level($privs), '', 'privs').
 						td(($last_login ? safe_strftime('%b&#160;%Y', $last_login) : ''), '', 'date last-login modified')
 					);
