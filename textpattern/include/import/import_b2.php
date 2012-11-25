@@ -177,8 +177,7 @@
 
 				if (mysql_insert_id())
 				{
-					$results[]= 'inserted b2 comment <strong>'.$parentid
-						.'</strong> into txp_discuss';
+					$results[]= 'inserted b2 comment '.strong($parentid).' into txp_discuss';
 				}
 			}
 		}

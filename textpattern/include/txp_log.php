@@ -223,7 +223,7 @@
 
 					if ($log_method == 'POST')
 					{
-						$log_page = '<strong>'.$log_page.'</strong>';
+						$log_page = strong($log_page);
 					}
 				}
 
