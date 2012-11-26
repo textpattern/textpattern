@@ -68,7 +68,7 @@
 		extract(lAtts(array(
 			'format' => 'url',
 			'media'  => 'screen',
-			'n'      => $css, // deprecated in 4.3.0
+			'n'      => $css, // Deprecated in 4.3.0.
 			'name'   => $css,
 			'rel'    => 'stylesheet',
 			'title'  => '',
@@ -100,7 +100,6 @@
 	function image($atts)
 	{
 		global $thisimage;
-
 		static $cache = array();
 
 		extract(lAtts(array(
@@ -155,6 +154,7 @@
 		else
 		{
 			trigger_error(gTxt('unknown_image'));
+
 			return;
 		}
 
@@ -168,19 +168,46 @@
 				$caption = txpspecialchars($caption);
 			}
 
-			if ($width=='' && $w) $width = $w;
-			if ($height=='' && $h) $height = $h;
+			if ($width == '' && $w)
+			{
+				$width = $w;
+			}
+
+			if ($height == '' && $h)
+			{
+				$height = $h;
+			}
 
 			$out = '<img src="'.imagesrcurl($id, $ext).'" alt="'.$alt.'"'.
-				($caption ? ' title="'.$caption.'"' : '').
-				( ($html_id and !$wraptag) ? ' id="'.txpspecialchars($html_id).'"' : '' ).
-				( ($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '' ).
-				($style ? ' style="'.txpspecialchars($style).'"' : '').
-				($width ? ' width="'.(int)$width.'"' : '').
-				($height ? ' height="'.(int)$height.'"' : '').
+				($caption
+					? ' title="'.$caption.'"'
+					: ''
+				).
+				(($html_id and !$wraptag)
+					? ' id="'.txpspecialchars($html_id).'"'
+					: ''
+				).
+				(($class and !$wraptag)
+					? ' class="'.txpspecialchars($class).'"'
+					: ''
+				).
+				($style
+					? ' style="'.txpspecialchars($style).'"'
+					: ''
+				).
+				($width
+					? ' width="'.(int)$width.'"'
+					: ''
+				).
+				($height
+					? ' height="'.(int)$height.'"'
+					: ''
+				).
 				' />';
 
-			return ($wraptag) ? doTag($out, $wraptag, $class, '', $html_id) : $out;
+			return ($wraptag)
+				? doTag($out, $wraptag, $class, '', $html_id)
+				: $out;
 		}
 
 		trigger_error(gTxt('unknown_image'));
@@ -201,7 +228,7 @@
 			'link'      => 0,
 			'link_rel'  => '',
 			'name'      => '',
-			'poplink'   => 0, // is this used?
+			'poplink'   => 0, // Is this used?
 			'style'     => '',
 			'wraptag'   => '',
 			'width'   	=> ''
@@ -242,21 +269,49 @@
 					$caption = txpspecialchars($caption);
 				}
 
-				if ($width=='' && $thumb_w) $width = $thumb_w;
-				if ($height=='' && $thumb_h) $height = $thumb_h;
+				if ($width=='' && $thumb_w)
+				{
+					$width = $thumb_w;
+				}
+
+				if ($height=='' && $thumb_h)
+				{
+					$height = $thumb_h;
+				}
 
 				$out = '<img src="'.imagesrcurl($id, $ext, true).'" alt="'.$alt.'"'.
-					($caption ? ' title="'.$caption.'"' : '').
-					( ($html_id and !$wraptag) ? ' id="'.txpspecialchars($html_id).'"' : '' ).
-					( ($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '' ).
-					($style ? ' style="'.txpspecialchars($style).'"' : '').
-					($width ? ' width="'.(int)$width.'"' : '').
-					($height ? ' height="'.(int)$height.'"' : '').
+					($caption
+						? ' title="'.$caption.'"'
+						: ''
+					).
+					(($html_id and !$wraptag)
+						? ' id="'.txpspecialchars($html_id).'"'
+						: ''
+					).
+					(($class and !$wraptag)
+						? ' class="'.txpspecialchars($class).'"'
+						: ''
+					).
+					($style
+						? ' style="'.txpspecialchars($style).'"'
+						: ''
+					).
+					($width
+						? ' width="'.(int)$width.'"'
+						: ''
+					).
+					($height
+						? ' height="'.(int)$height.'"'
+						: ''
+					).
 					' />';
 
 				if ($link)
 				{
-					$out = href($out, imagesrcurl($id, $ext), (!empty($link_rel) ? " rel='".txpspecialchars($link_rel)."'" : '')." title='$caption'");
+					$out = href($out, imagesrcurl($id, $ext), (!empty($link_rel)
+						? " rel='".txpspecialchars($link_rel)."'"
+						: ''
+					)." title='$caption'");
 				}
 				elseif ($poplink)
 				{
@@ -265,7 +320,9 @@
 						'\'width='.$w.', height='.$h.', scrollbars, resizable\'); return false;">'.$out.'</a>';
 				}
 
-				return ($wraptag) ? doTag($out, $wraptag, $class, '', $html_id) : $out;
+				return ($wraptag)
+					? doTag($out, $wraptag, $class, '', $html_id)
+					: $out;
 			}
 
 		}
@@ -341,7 +398,7 @@
 			'format'   => 'a',
 			'label'    => '',
 			'limit'    => '',
-			'section'  => ( $s == 'default' ? '' : $s),
+			'section'  => ($s == 'default' ? '' : $s),
 			'title'    => gTxt('rss_feed_title'),
 			'wraptag'  => '',
 			'class'    => '',
@@ -444,12 +501,24 @@
 		$context_list = (empty($auto_detect) || $filters) ? array() : do_list($auto_detect);
 		$pageby = ($pageby=='limit') ? $limit : $pageby;
 
-		if ($category) $where[] = "category IN ('".join("','", doSlash(do_list($category)))."')";
-		if ($id) $where[] = "id IN ('".join("','", doSlash(do_list($id)))."')";
-		if ($author) $where[] = "author IN ('".join("','", doSlash(do_list($author)))."')";
+		if ($category)
+		{
+			$where[] = "category IN ('".join("','", doSlash(do_list($category)))."')";
+		}
+
+		if ($id)
+		{
+			$where[] = "id IN ('".join("','", doSlash(do_list($id)))."')";
+		}
+
+		if ($author)
+		{
+			$where[] = "author IN ('".join("','", doSlash(do_list($author)))."')";
+		}
+
 		if ($realname)
 		{
-			$authorlist = safe_column('name', 'txp_users', "RealName IN ('". join("','", doArray(doSlash(do_list($realname)), 'urldecode')) ."')" );
+			$authorlist = safe_column('name', 'txp_users', "RealName IN ('". join("','", doArray(doSlash(do_list($realname)), 'urldecode'))."')");
 			$where[] = "author IN ('".join("','", doSlash($authorlist))."')";
 		}
 
@@ -461,38 +530,44 @@
 				switch ($ctxt)
 				{
 					case 'category' :
-						// ... the global category in the URL
+						// ...the global category in the URL.
 						if ($context == 'link' && !empty($c))
 						{
 							$where[] = "category = '".doSlash($c)."'";
 						}
 						break;
 					case 'author' :
-						// ... the global author in the URL
+						// ...the global author in the URL.
 						if ($context == 'link' && !empty($pretext['author']))
 						{
 							$where[] = "author = '".doSlash($pretext['author'])."'";
 						}
 						break;
 				}
-				// Only one context can be processed
-				if ($where) break;
+
+				// Only one context can be processed.
+				if ($where)
+				{
+					break;
+				}
 			}
 		}
 
 		if (!$where && $filters)
 		{
-			return ''; // If nothing matches, output nothing
+			// If nothing matches, output nothing.
+			return '';
 		}
 
 		if (!$where)
 		{
-			$where[] = "1=1"; // If nothing matches, start with all links
+			// If nothing matches, start with all links.
+			$where[] = "1=1";
 		}
 
 		$where = join(' AND ', $where);
 
-		// Set up paging if required
+		// Set up paging if required.
 		if ($limit && $pageby)
 		{
 			$grand_total = safe_count('txp_link', $where);
@@ -500,7 +575,8 @@
 			$numPages = ($pageby > 0) ? ceil($total/$pageby) : 1;
 			$pg = (!$pretext['pg']) ? 1 : $pretext['pg'];
 			$pgoffset = $offset + (($pg - 1) * $pageby);
-			// send paging info to txp:newer and txp:older
+
+			// Send paging info to txp:newer and txp:older.
 			$pageout['pg']          = $pg;
 			$pageout['numPages']    = $numPages;
 			$pageout['s']           = $s;
@@ -510,7 +586,9 @@
 			$pageout['total']       = $total;
 
 			if (empty($thispage))
+			{
 				$thispage = $pageout;
+			}
 		}
 		else
 		{
@@ -550,14 +628,14 @@
 	}
 
 // -------------------------------------------------------------
-// NOTE: tpt_ prefix used because link() is a PHP function. See publish.php
+// NOTE: tpt_ prefix used because link() is a PHP function. See publish.php.
 	function tpt_link($atts)
 	{
 		global $thislink;
 
 		extract(lAtts(array(
-			'rel' => '',
-			'id' => '',
+			'rel'  => '',
+			'id'   => '',
 			'name' => '',
 		), $atts));
 
@@ -596,15 +674,16 @@
 	function linkdesctitle($atts)
 	{
 		global $thislink;
+
 		assert_link();
 
 		extract(lAtts(array(
 			'rel' => '',
 		), $atts));
 
-		$description = ($thislink['description']) ?
-			' title="'.txpspecialchars($thislink['description']).'"' :
-			'';
+		$description = ($thislink['description'])
+			? ' title="'.txpspecialchars($thislink['description']).'"'
+			: '';
 
 		return tag(
 			txpspecialchars($thislink['linkname']), 'a',
@@ -618,15 +697,16 @@
 	function link_name($atts)
 	{
 		global $thislink;
+
 		assert_link();
 
 		extract(lAtts(array(
 			'escape' => 'html',
 		), $atts));
 
-		return ($escape == 'html') ?
-			txpspecialchars($thislink['linkname']) :
-			$thislink['linkname'];
+		return ($escape == 'html')
+			? txpspecialchars($thislink['linkname'])
+			: $thislink['linkname'];
 	}
 
 // -------------------------------------------------------------
@@ -634,6 +714,7 @@
 	function link_url()
 	{
 		global $thislink;
+
 		assert_link();
 
 		return doSpecial($thislink['url']);
@@ -644,6 +725,7 @@
 	function link_author($atts)
 	{
 		global $thislink, $s;
+
 		assert_link();
 
 		extract(lAtts(array(
@@ -658,13 +740,13 @@
 		if ($thislink['author'])
 		{
 			$author_name = get_author_name($thislink['author']);
-			$display_name = txpspecialchars( ($title) ? $author_name : $thislink['author'] );
+			$display_name = txpspecialchars(($title) ? $author_name : $thislink['author']);
 
-			$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
+			$section = ($this_section) ? ($s == 'default' ? '' : $s) : $section;
 
-			$author = ($link) ?
-				href($display_name, pagelinkurl(array('s' => $section, 'author' => $author_name, 'context' => 'link'))) :
-				$display_name;
+			$author = ($link)
+				? href($display_name, pagelinkurl(array('s' => $section, 'author' => $author_name, 'context' => 'link')))
+				: $display_name;
 
 			return ($wraptag) ? doTag($author, $wraptag, $class) : $author;
 		}
@@ -675,6 +757,7 @@
 	function link_description($atts)
 	{
 		global $thislink;
+
 		assert_link();
 
 		extract(lAtts(array(
@@ -700,6 +783,7 @@
 	function link_date($atts)
 	{
 		global $thislink, $dateformat;
+
 		assert_link();
 
 		extract(lAtts(array(
@@ -716,6 +800,7 @@
 	function link_category($atts)
 	{
 		global $thislink;
+
 		assert_link();
 
 		extract(lAtts(array(
@@ -728,9 +813,9 @@
 
 		if ($thislink['category'])
 		{
-			$category = ($title) ?
-				fetch_category_title($thislink['category'], 'link') :
-				$thislink['category'];
+			$category = ($title)
+				? fetch_category_title($thislink['category'], 'link')
+				: $thislink['category'];
 
 			return doLabel($label, $labeltag).doTag($category, $wraptag, $class);
 		}
@@ -741,7 +826,9 @@
 	function link_id()
 	{
 		global $thislink;
+
 		assert_link();
+
 		return $thislink['id'];
 	}
 
@@ -749,7 +836,9 @@
 	function link_format_info($link)
 	{
 		if (($unix_ts = @strtotime($link['date'])) > 0)
+		{
 			$link['date'] = $unix_ts;
+		}
 
 		return $link;
 	}
@@ -765,13 +854,21 @@
 
 		if ($email)
 		{
-			if ($thing !== NULL) $linktext = parse($thing);
-			// obfuscate link text?
-			if (is_valid_email($linktext)) $linktext = eE($linktext);
+			if ($thing !== NULL)
+			{
+				$linktext = parse($thing);
+			}
+
+			// Obfuscate link text?
+			if (is_valid_email($linktext))
+			{
+				$linktext = eE($linktext);
+			}
 
 			return '<a href="'.eE('mailto:'.txpspecialchars($email)).'"'.
 				($title ? ' title="'.txpspecialchars($title).'"' : '').">$linktext</a>";
 		}
+
 		return '';
 	}
 
@@ -787,12 +884,15 @@
 
 		$au = serverSet('PHP_AUTH_USER');
 		$ap = serverSet('PHP_AUTH_PW');
-		//For php as (f)cgi, two rules in htaccess often allow this workaround
+
+		// For PHP as (f)cgi, two rules in htaccess often allow this workaround.
 		$ru = serverSet('REDIRECT_REMOTE_USER');
-		if ($ru && !$au && !$ap && substr($ru, 0, 5) == 'Basic' )
+
+		if ($ru && !$au && !$ap && substr($ru, 0, 5) == 'Basic')
 		{
-			list ( $au, $ap ) = explode(':', base64_decode(substr($ru, 6)));
+			list ($au, $ap) = explode(':', base64_decode(substr($ru, 6)));
 		}
+
 		if ($login && $pass)
 		{
 			if (!$au || !$ap || $au!= $login || $ap!= $pass)
@@ -808,6 +908,7 @@
 	function recent_articles($atts)
 	{
 		global $prefs;
+
 		extract(lAtts(array(
 			'break'    => br,
 			'category' => '',
@@ -817,14 +918,14 @@
 			'limit'    => 10,
 			'section'  => '',
 			'sort'     => 'Posted desc',
-			'sortby'   => '', // deprecated
-			'sortdir'  => '', // deprecated
+			'sortby'   => '', // Deprecated.
+			'sortdir'  => '', // Deprecated.
 			'wraptag'  => '',
 			'no_widow' => @$prefs['title_no_widow'],
 		), $atts));
 
-		// for backwards compatibility
-		// sortby and sortdir are deprecated
+		// For backwards compatibility.
+		// sortby and sortdir are deprecated.
 		if ($sortby)
 		{
 			trigger_error(gTxt('deprecated_attribute', array('{name}' => 'sortby')), E_USER_NOTICE);
@@ -846,10 +947,10 @@
 			$sort = "Posted $sortdir";
 		}
 
-		$category   = join("','", doSlash(do_list($category)));
+		$category = join("','", doSlash(do_list($category)));
 		$categories = ($category) ? "and (Category1 IN ('".$category."') or Category2 IN ('".$category."'))" : '';
 		$section = ($section) ? " and Section IN ('".join("','", doSlash(do_list($section)))."')" : '';
-		$expired = ($prefs['publish_expired_articles']) ? '' : ' and (now() <= Expires or Expires = '.NULLDATETIME.') ';
+		$expired = ($prefs['publish_expired_articles']) ? '' : ' and (now() <= Expires or Expires = '.NULLDATETIME.')';
 
 		$rs = safe_rows_start('*, id as thisid, unix_timestamp(Posted) as posted', 'textpattern',
 			"Status = 4 $section $categories and Posted <= now()$expired order by ".doSlash($sort).' limit 0,'.intval($limit));
@@ -877,9 +978,9 @@
 
 	function recent_comments($atts, $thing = NULL)
 	{
-
 		global $prefs;
 		global $thisarticle, $thiscomment;
+
 		extract(lAtts(array(
 			'break'    => br,
 			'class'    => __FUNCTION__,
@@ -896,13 +997,15 @@
 		$expired = ($prefs['publish_expired_articles']) ? '' : ' and (now() <= t.Expires or t.Expires = '.NULLDATETIME.') ';
 
 		$rs = startRows('select d.name, d.email, d.web, d.message, d.discussid, unix_timestamp(d.Posted) as time, '.
-				't.ID as thisid, unix_timestamp(t.Posted) as posted, t.Title as title, t.Section as section, t.url_title '.
-				'from '. safe_pfx('txp_discuss') .' as d inner join '. safe_pfx('textpattern') .' as t on d.parentid = t.ID '.
-				'where t.Status >= 4'.$expired.' and d.visible = '.VISIBLE.' order by '.doSlash($sort).' limit '.intval($offset).','.intval($limit));
+			't.ID as thisid, unix_timestamp(t.Posted) as posted, t.Title as title, t.Section as section, t.url_title '.
+			'from '. safe_pfx('txp_discuss') .' as d inner join '. safe_pfx('textpattern') .' as t on d.parentid = t.ID '.
+			'where t.Status >= 4'.$expired.' and d.visible = '.VISIBLE.' order by '.doSlash($sort).' limit '.intval($offset).','.intval($limit));
+
 		if ($rs)
 		{
 			$out = array();
 			$old_article = $thisarticle;
+
 			while ($c = nextRow($rs))
 			{
 				if (empty($form) && empty($thing))
@@ -921,7 +1024,7 @@
 					$thiscomment['discussid'] = $c['discussid'];
 					$thiscomment['time'] = $c['time'];
 
-					// allow permlink guesstimation in permlinkurl(), elsewhere
+					// Allow permlink guesstimation in permlinkurl(), elsewhere.
 					$thisarticle['thisid'] = $c['thisid'];
 					$thisarticle['posted'] = $c['posted'];
 					$thisarticle['title'] = $c['title'];
@@ -1094,7 +1197,7 @@
 
 			if ($out)
 			{
-				$section = ($this_section) ? ( $s == 'default' ? '' : $s) : $section;
+				$section = ($this_section) ? ($s == 'default' ? '' : $s) : $section;
 
 				$out = n.'<select name="'.txpspecialchars($type).'" onchange="submit(this.form);">'.
 					n.t.'<option value=""'.($selected ? '' : ' selected="selected"').'>&#160;</option>'.
@@ -1117,7 +1220,7 @@
 				}
 				else
 				{
-					// Clean urls for category popup
+					// Clean URLs for category popup.
 					$action = pagelinkurl(array('s' => $section));
 					$his = '';
 				}
@@ -1176,7 +1279,6 @@
 			$rs = safe_rows_start('name, title', 'txp_category',
 				"type = '".doSlash($type)."' and name in ('$categories') order by ".($sort ? $sort : "field(name, '$categories')").$sql_limit);
 		}
-
 		else
 		{
 			if ($parent)
@@ -1190,16 +1292,14 @@
 			}
 			else
 			{
-				// descend only one level from either 'parent' or 'root', plus parent category
+				// Descend only one level from either 'parent' or 'root', plus parent category.
 				$shallow = ($parent) ? "and (parent in($parents) or name in($parents))" : "and parent = 'root'" ;
 			}
 
 			if ($exclude)
 			{
 				$exclude = do_list($exclude);
-
 				$exclude = join("','", doSlash($exclude));
-
 				$exclude = "and name not in('$exclude')";
 			}
 
@@ -1238,7 +1338,11 @@
 			$count = 0;
 			$last = numRows($rs);
 
-			if (isset($thiscategory)) $old_category = $thiscategory;
+			if (isset($thiscategory))
+			{
+				$old_category = $thiscategory;
+			}
+
 			while ($a = nextRow($rs))
 			{
 				++$count;
@@ -1246,12 +1350,12 @@
 
 				if ($name)
 				{
-					$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
+					$section = ($this_section) ? ($s == 'default' ? '' : $s) : $section;
 
 					if (empty($form) && empty($thing))
 					{
 						$out[] = tag(txpspecialchars($title), 'a',
-							( ($active_class and (0 == strcasecmp($c, $name))) ? ' class="'.txpspecialchars($active_class).'"' : '' ).
+							(($active_class and (0 == strcasecmp($c, $name))) ? ' class="'.txpspecialchars($active_class).'"' : '').
 							' href="'.pagelinkurl(array('s' => $section, 'c' => $name, 'context' => $type)).'"'
 						);
 					}
@@ -1260,11 +1364,17 @@
 						$thiscategory = array('name' => $name, 'title' => $title, 'type' => $type);
 						$thiscategory['is_first'] = ($count == 1);
 						$thiscategory['is_last'] = ($count == $last);
-						if (isset($atts['section'])) $thiscategory['section'] = $section;
+
+						if (isset($atts['section']))
+						{
+							$thiscategory['section'] = $section;
+						}
+
 						$out[] = ($thing) ? parse($thing) : parse_form($form);
 					}
 				}
 			}
+
 			$thiscategory = (isset($old_category) ? $old_category : NULL);
 
 			if ($out)
@@ -1375,7 +1485,7 @@
 					$url = pagelinkurl(array('s' => $name));
 
 					$out[] = tag(txpspecialchars($title), 'a',
-						( ($active_class and (0 == strcasecmp($s, $name))) ? ' class="'.txpspecialchars($active_class).'"' : '' ).
+						(($active_class and (0 == strcasecmp($s, $name))) ? ' class="'.txpspecialchars($active_class).'"' : '').
 						' href="'.$url.'"'
 					);
 				}
@@ -1407,6 +1517,7 @@
 	function search_input($atts) // input form for search queries
 	{
 		global $q, $permlink_mode, $doctype;
+
 		extract(lAtts(array(
 			'form'    => 'search_input',
 			'wraptag' => 'p',
@@ -1422,6 +1533,7 @@
 		if ($form)
 		{
 			$rs = fetch('form', 'txp_form', 'name', $form);
+
 			if ($rs)
 			{
 				return parse($rs);
@@ -1431,7 +1543,7 @@
 		$h5 = ($doctype == 'html5');
 		$sub = (!empty($button)) ? '<input type="submit" value="'.txpspecialchars($button).'" />' : '';
 		$id =  (!empty($html_id)) ? ' id="'.txpspecialchars($html_id).'"' : '';
-		$out = fInput( $h5 ? 'search' : 'text', 'q', $q, '', '', '', $size, '', '',false, $h5);
+		$out = fInput($h5 ? 'search' : 'text', 'q', $q, '', '', '', $size, '', '',false, $h5);
 		$out = (!empty($label)) ? txpspecialchars($label).br.$out.$sub : $out.$sub;
 		$out = ($match === 'exact') ? $out : fInput('hidden', 'm', txpspecialchars($match)) . $out;
 		$out = ($wraptag) ? doTag($out, $wraptag, $class) : $out;
@@ -1460,7 +1572,10 @@
 	function search_term($atts)
 	{
 		global $q;
-		if (empty($q)) return '';
+		if (empty($q))
+		{
+			return '';
+		}
 
 		extract(lAtts(array(
 			'escape' => 'html' // Deprecated in 4.5.0.
@@ -1470,7 +1585,8 @@
 		{
 			trigger_error(gTxt('deprecated_attribute', array('{name}' => 'escape')), E_USER_NOTICE);
 		}
-		// TODO: Remove deprecated attribute 'escape'
+
+		// TODO: Remove deprecated attribute 'escape'.
         return ($escape == 'html' ? txpspecialchars($q) : $q);
 	}
 
@@ -1514,6 +1630,7 @@
 				return $url;
 			}
 		}
+
 		return ($showalways) ? parse($thing) : '';
 	}
 
@@ -1557,6 +1674,7 @@
 				return $url;
 			}
 		}
+
 		return ($showalways) ? parse($thing) : '';
 	}
 
@@ -1568,6 +1686,7 @@
 		$thisarticle, $next_id, $next_title, $prev_id, $prev_title;
 
 		assert_article();
+
 		if (!is_array($thisarticle))
 		{
 			return '';
@@ -1579,6 +1698,7 @@
 			$thisarticle = $thisarticle + $np;
 			extract($np);
 		}
+
 		return escape_title($next_title);
 	}
 
@@ -1590,6 +1710,7 @@
 		$thisarticle, $next_id, $next_title, $prev_id, $prev_title;
 
 		assert_article();
+
 		if (!is_array($thisarticle))
 		{
 			return '';
@@ -1601,6 +1722,7 @@
 			$thisarticle = $thisarticle + $np;
 			extract($np);
 		}
+
 		return escape_title($prev_title);
 	}
 
@@ -1609,6 +1731,7 @@
 	function site_name()
 	{
 		global $sitename;
+
 		return txpspecialchars($sitename);
 	}
 
@@ -1617,6 +1740,7 @@
 	function site_slogan()
 	{
 		global $site_slogan;
+
 		return txpspecialchars($site_slogan);
 	}
 
@@ -1656,10 +1780,13 @@
 		{
 			$nextpg = ($pg - 1 == 1) ? 0 : ($pg - 1);
 
-			// author urls should use RealName, rather than username
-			if (!empty($pretext['author'])) {
+			// Author URLs should use RealName, rather than username.
+			if (!empty($pretext['author']))
+			{
 				$author = get_author_name($pretext['author']);
-			} else {
+			}
+			else
+			{
 				$author = '';
 			}
 
@@ -1711,7 +1838,7 @@
 		{
 			$nextpg = $pg + 1;
 
-			// author urls should use RealName, rather than username
+			// Author URLs should use RealName, rather than username.
 			if (!empty($pretext['author']))
 			{
 				$author = get_author_name($pretext['author']);
@@ -1754,7 +1881,7 @@
 	function text($atts)
 	{
 		extract(lAtts(array(
-			'item' => '',
+			'item'   => '',
 			'escape' => 'html',
 		), $atts, false));
 
@@ -1899,7 +2026,9 @@
 	function if_expires($atts, $thing)
 	{
 		global $thisarticle;
+
 		assert_article();
+
 		return parse(EvalElse($thing, $thisarticle['expires']));
 	}
 
@@ -1908,13 +2037,16 @@
 	function if_expired($atts, $thing)
 	{
 		global $thisarticle, $publish_expired_articles, $production_status;
+
 		assert_article();
 
 		if (!$publish_expired_articles && $production_status != 'live')
+		{
 			trigger_error(gTxt('publish_expired_articles_prefs_off'), E_USER_NOTICE);
+		}
 
 		return parse(EvalElse($thing,
-			$thisarticle['expires'] && ($thisarticle['expires'] <= time() )));
+			$thisarticle['expires'] && ($thisarticle['expires'] <= time())));
 	}
 
 // -------------------------------------------------------------
@@ -1975,24 +2107,30 @@
 		global $comments_mode;
 
 		if (!$comments_invite)
+		{
 			$comments_invite = get_pref('comments_default_invite');
+		}
 
 		extract(lAtts(array(
 			'class'      => __FUNCTION__,
 			'showcount'  => true,
 			'textonly'   => false,
-			'showalways' => false,  //FIXME in crockery. This is only for BC.
+			'showalways' => false,  // FIXME in crockery. This is only for BC.
 			'wraptag'    => '',
 		), $atts));
 
 		$invite_return = '';
+
 		if (($annotate or $comments_count) && ($showalways or $is_article_list))
 		{
 
 			$comments_invite = txpspecialchars($comments_invite);
 			$ccount = ($comments_count && $showcount) ?  ' ['.$comments_count.']' : '';
+
 			if ($textonly)
+			{
 				$invite_return = $comments_invite.$ccount;
+			}
 			else
 			{
 				if (!$comments_mode)
@@ -2004,7 +2142,11 @@
 					$invite_return = "<a href=\"".hu."?parentid=$thisid\" onclick=\"window.open(this.href, 'popupwindow', 'width=500,height=500,scrollbars,resizable,status'); return false;\"".(($class) ? ' class="'.txpspecialchars($class).'"' : '').'>'.$comments_invite.'</a> '.$ccount;
 				}
 			}
-			if ($wraptag) $invite_return = doTag($invite_return, $wraptag, $class);
+
+			if ($wraptag)
+			{
+				$invite_return = doTag($invite_return, $wraptag, $class);
+			}
 		}
 
 		return $invite_return;
@@ -2053,19 +2195,26 @@
 		elseif (gps('commented') !== '')
 		{
 			$out = gTxt("comment_posted");
+
 			if (gps('commented') === '0')
+			{
 				$out .= " ". gTxt("comment_moderated");
+			}
+
 			$out = graf($out, ' id="txpCommentInputForm"');
 		}
 		else
 		{
-			# display a comment preview if required
+			// Display a comment preview if required.
 			if (ps('preview') and $show_preview)
+			{
 				$out = comments_preview(array());
+			}
+
 			$out .= commentForm($thisid, $atts);
 		}
 
-		return (!$wraptag ? $out : doTag($out, $wraptag, $class) );
+		return (!$wraptag ? $out : doTag($out, $wraptag, $class));
 	}
 
 // -------------------------------------------------------------
@@ -2092,6 +2241,7 @@
 	function if_comments_error($atts, $thing)
 	{
 		$evaluator =& get_comment_evaluator();
+
 		return parse(EvalElse($thing,(count($evaluator -> get_result_message()) > 0)));
 	}
 
@@ -2153,7 +2303,10 @@
 
 		extract($thisarticle);
 
-		if (!$comments_count) return '';
+		if (!$comments_count)
+		{
+			return '';
+		}
 
 		$qparts = array(
 			'parentid='.intval($thisid).' and visible='.VISIBLE,
@@ -2188,7 +2341,9 @@
 		global $has_comments_preview;
 
 		if (!ps('preview'))
+		{
 			return;
+		}
 
 		extract(lAtts(array(
 			'form'    => 'comments',
@@ -2203,13 +2358,17 @@
 		$preview['discussid'] = 0;
 		$preview['name'] = strip_tags($preview['name']);
 		$preview['email'] = clean_url($preview['email']);
+
 		if ($preview['message'] == '')
 		{
 			$in = getComment();
 			$preview['message'] = $in['message'];
 
 		}
-		$preview['message'] = markup_comment(substr(trim($preview['message']), 0, 65535)); // it is called 'message', not 'novel'
+
+		// It is called 'message', not 'novel'!
+		$preview['message'] = markup_comment(substr(trim($preview['message']), 0, 65535));
+
 		$preview['web'] = clean_url($preview['web']);
 
 		$GLOBALS['thiscomment'] = $preview;
@@ -2217,7 +2376,7 @@
 		unset($GLOBALS['thiscomment']);
 		$out = doTag($comments, $wraptag, $class);
 
-		# set a flag, to tell the comments_form tag that it doesn't have to show a preview
+		// Set a flag to tell the comments_form tag that it doesn't have to show a preview.
 		$has_comments_preview = true;
 
 		return $out;
@@ -2226,7 +2385,7 @@
 // -------------------------------------------------------------
 	function if_comments_preview($atts, $thing)
 	{
-		return parse(EvalElse($thing, ps('preview') && checkCommentsAllowed(gps('parentid')) ));
+		return parse(EvalElse($thing, ps('preview') && checkCommentsAllowed(gps('parentid'))));
 	}
 
 // -------------------------------------------------------------
@@ -2316,13 +2475,14 @@
 
 		if (preg_match('/^\S/', $thiscomment['web']))
 		{
-			// Prepend default protocol 'http' for all non-local URLs
+			// Prepend default protocol 'http' for all non-local URLs.
 			if (!preg_match('!^https?://|^#|^/[^/]!', $thiscomment['web']))
 			{
 				$thiscomment['web'] = 'http://'.$thiscomment['web'];
 			}
 			return txpspecialchars($thiscomment['web']);
 		}
+
 		return '';
 	}
 
@@ -2361,6 +2521,7 @@
 		assert_comment();
 
 		$thiscomment['has_anchor_tag'] = 1;
+
 		return '<a id="c'.$thiscomment['discussid'].'"></a>';
 	}
 
@@ -2388,13 +2549,13 @@
 		}
 
 		$author_name = get_author_name($theAuthor);
-		$display_name = txpspecialchars( ($title) ? $author_name : $theAuthor );
+		$display_name = txpspecialchars(($title) ? $author_name : $theAuthor);
 
-		$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
+		$section = ($this_section) ? ($s == 'default' ? '' : $s) : $section;
 
-		return ($link) ?
-			href($display_name, pagelinkurl(array('s' => $section, 'author' => $author_name)), ' rel="author"') :
-			$display_name;
+		return ($link)
+			? href($display_name, pagelinkurl(array('s' => $section, 'author' => $author_name)), array('rel' => 'author'))
+			: $display_name;
 	}
 
 // -------------------------------------------------------------
@@ -2411,7 +2572,10 @@
 
 		$author_email = get_author_email($thisarticle['authorid']);
 		$display_email = ($escape == 'html' ? txpspecialchars($author_email) : $author_email);
-		return ($link) ? email(array('email' => $author_email, 'linktext' => $display_email)) : $display_email;
+
+		return ($link)
+			? email(array('email' => $author_email, 'linktext' => $display_email))
+			: $display_email;
 	}
 
 // -------------------------------------------------------------
@@ -2462,12 +2626,14 @@
 	function body()
 	{
 		global $thisarticle, $is_article_body;
+
 		assert_article();
 
 		$was_article_body = $is_article_body;
 		$is_article_body = 1;
 		$out = parse($thisarticle['body']);
 		$is_article_body = $was_article_body;
+
 		return $out;
 	}
 
@@ -2475,14 +2641,20 @@
 	function title($atts)
 	{
 		global $thisarticle, $prefs;
+
 		assert_article();
+
 		extract(lAtts(array(
 			'no_widow' => @$prefs['title_no_widow'],
 		), $atts));
 
 		$t = escape_title($thisarticle['title']);
+
 		if ($no_widow)
+		{
 			$t = noWidow($t);
+		}
+
 		return $t;
 	}
 
@@ -2490,12 +2662,14 @@
 	function excerpt()
 	{
 		global $thisarticle, $is_article_body;
+
 		assert_article();
 
 		$was_article_body = $is_article_body;
 		$is_article_body = 1;
 		$out = parse($thisarticle['excerpt']);
 		$is_article_body = $was_article_body;
+
 		return $out;
 	}
 
@@ -2518,7 +2692,7 @@
 
 		if ($thisarticle['category1'])
 		{
-			$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
+			$section = ($this_section) ? ($s == 'default' ? '' : $s) : $section;
 			$category = $thisarticle['category1'];
 
 			$label = txpspecialchars(($title) ? fetch_category_title($category) : $category);
@@ -2527,7 +2701,7 @@
 			{
 				$out = '<a'.
 					($permlink_mode != 'messy' ? ' rel="tag"' : '').
-					( ($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '' ).
+					(($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
 					' href="'.pagelinkurl(array('s' => $section, 'c' => $category)).'"'.
 					($title ? ' title="'.$label.'"' : '').
 					'>'.parse($thing).'</a>';
@@ -2566,7 +2740,7 @@
 
 		if ($thisarticle['category2'])
 		{
-			$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
+			$section = ($this_section) ? ($s == 'default' ? '' : $s) : $section;
 			$category = $thisarticle['category2'];
 
 			$label = txpspecialchars(($title) ? fetch_category_title($category) : $category);
@@ -2575,7 +2749,7 @@
 			{
 				$out = '<a'.
 					($permlink_mode != 'messy' ? ' rel="tag"' : '').
-					( ($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '' ).
+					(($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
 					' href="'.pagelinkurl(array('s' => $section, 'c' => $category)).'"'.
 					($title ? ' title="'.$label.'"' : '').
 					'>'.parse($thing).'</a>';
@@ -2625,6 +2799,7 @@
 		else
 		{
 			$category = $c;
+
 			if (!isset($atts['type']))
 			{
 				$type = $context;
@@ -2642,14 +2817,14 @@
 				$section = $thiscategory['section'];
 			}
 
-			$label = txpspecialchars( ($title) ? fetch_category_title($category, $type) : $category );
+			$label = txpspecialchars(($title) ? fetch_category_title($category, $type) : $category);
 
 			$href = pagelinkurl(array('s' => $section, 'c' => $category, 'context' => $type));
 
 			if ($thing)
 			{
 				$out = '<a href="'.$href.'"'.
-					( ($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '' ).
+					(($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
 					($title ? ' title="'.$label.'"' : '').
 					'>'.parse($thing).'</a>';
 			}
@@ -2704,14 +2879,14 @@
 
 		if ($sec)
 		{
-			$label = txpspecialchars( ($title) ? fetch_section_title($sec) : $sec );
+			$label = txpspecialchars(($title) ? fetch_section_title($sec) : $sec);
 
 			$href = pagelinkurl(array('s' => $sec));
 
 			if ($thing)
 			{
 				$out = '<a href="'.$href.'"'.
-					( ($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '' ).
+					(($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
 					($title ? ' title="'.$label.'"' : '').
 					'>'.parse($thing).'</a>';
 			}
@@ -2736,6 +2911,7 @@
 	function keywords()
 	{
 		global $thisarticle;
+
 		assert_article();
 
 		return txpspecialchars($thisarticle['keywords']);
@@ -2745,14 +2921,16 @@
 	function if_keywords($atts, $thing = NULL)
 	{
 		global $thisarticle;
+
 		assert_article();
+
 		extract(lAtts(array(
 			'keywords' => ''
 		), $atts));
 
-		$condition = empty($keywords) ?
-			$thisarticle['keywords'] :
-			array_intersect(do_list($keywords), do_list($thisarticle['keywords']));
+		$condition = empty($keywords)
+			? $thisarticle['keywords']
+			: array_intersect(do_list($keywords), do_list($thisarticle['keywords']));
 
 		return parse(EvalElse($thing, !empty($condition)));
 	}
@@ -2762,6 +2940,7 @@
 	function if_article_image($atts, $thing='')
 	{
 	    global $thisarticle;
+
 	    assert_article();
 
 	    return parse(EvalElse($thing, $thisarticle['article_image']));
@@ -2818,8 +2997,8 @@
 
 						$out = '<img src="'.imagesrcurl($id, $ext, true).'" alt="'.$alt.'"'.
 							($caption ? ' title="'.$caption.'"' : '').
-							( ($html_id and !$wraptag) ? ' id="'.txpspecialchars($html_id).'"' : '' ).
-							( ($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '' ).
+							(($html_id and !$wraptag) ? ' id="'.txpspecialchars($html_id).'"' : '').
+							(($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
 							($style ? ' style="'.txpspecialchars($style).'"' : '').
 							($width ? ' width="'.(int)$width.'"' : '').
 							($height ? ' height="'.(int)$height.'"' : '').
@@ -2842,8 +3021,8 @@
 
 					$out = '<img src="'.imagesrcurl($id, $ext).'" alt="'.$alt.'"'.
 						($caption ? ' title="'.$caption.'"' : '').
-						( ($html_id and !$wraptag) ? ' id="'.txpspecialchars($html_id).'"' : '' ).
-						( ($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '' ).
+						(($html_id and !$wraptag) ? ' id="'.txpspecialchars($html_id).'"' : '').
+						(($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
 						($style ? ' style="'.txpspecialchars($style).'"' : '').
 						($width ? ' width="'.(int)$width.'"' : '').
 						($height ? ' height="'.(int)$height.'"' : '').
@@ -2853,14 +3032,15 @@
 			else
 			{
 				trigger_error(gTxt('unknown_image'));
+
 				return;
 			}
 		}
 		else
 		{
 			$out = '<img src="'.txpspecialchars($image).'" alt=""'.
-				( ($html_id and !$wraptag) ? ' id="'.txpspecialchars($html_id).'"' : '' ).
-				( ($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '' ).
+				(($html_id and !$wraptag) ? ' id="'.txpspecialchars($html_id).'"' : '').
+				(($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
 				($style ? ' style="'.txpspecialchars($style).'"' : '').
 				($width ? ' width="'.(int)$width.'"' : '').
 				($height ? ' height="'.(int)$height.'"' : '').
@@ -2892,7 +3072,7 @@
 		$m = $pretext['m'];
 		$q = $pretext['q'];
 
-		$quoted = ($q[0] === '"') && ($q[strlen($q)-1] === '"');
+		$quoted = ($q[0] === '"') && ($q[strlen($q) - 1] === '"');
 		$q = $quoted ? trim(trim($q, '"')) : $q;
 
 		$result = preg_replace('/\s+/', ' ', strip_tags(str_replace('><', '> <', $thisarticle['body'])));
@@ -2929,9 +3109,11 @@
 	function search_result_url($atts)
 	{
 		global $thisarticle;
+
 		assert_article();
 
 		$l = permlinkurl($thisarticle);
+
 		return permlink($atts, $l);
 	}
 
@@ -2939,6 +3121,7 @@
 	function search_result_date($atts)
 	{
 		assert_article();
+
 		return posted($atts);
 	}
 
@@ -2947,8 +3130,9 @@
 	{
 		global $thispage;
 		$t = @$thispage['grand_total'];
+
 		extract(lAtts(array(
-			'text'     => ($t == 1 ? gTxt('article_found') : gTxt('articles_found')),
+			'text' => ($t == 1 ? gTxt('article_found') : gTxt('articles_found')),
 		), $atts));
 
 		return $t . ($text ? ' ' . $text : '');
@@ -2958,13 +3142,14 @@
 	function image_index($atts)
 	{
 		global $s, $c, $p, $path_to_site;
+
 		extract(lAtts(array(
 			'label'    => '',
 			'break'    => br,
 			'wraptag'  => '',
 			'class'    => __FUNCTION__,
 			'labeltag' => '',
-			'c'        => $c, // Keep the option to override categories due to backward compatibility
+			'c'        => $c, // Keep the option to override categories due to backward compatibility.
 			'category' => $c,
 			'limit'    => 0,
 			'offset'   => 0,
@@ -2978,7 +3163,8 @@
 
 		if (isset($atts['category']))
 		{
-			$c = $category; // Override the global
+			// Override the global.
+			$c = $category;
 		}
 
 		$qparts = array(
@@ -2992,6 +3178,7 @@
 		if ($rs)
 		{
 			$out = array();
+
 			while ($a = nextRow($rs))
 			{
 				extract($a);
@@ -3001,24 +3188,33 @@
 					'<img src="'.imagesrcurl($id, $ext, true).'"'.$dims.' alt="'.txpspecialchars($alt).'" />'.'</a>';
 			}
 
-			if (count($out)) {
+			if (count($out))
+			{
 				return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
 			}
 		}
+
 		return '';
 	}
 
 // -------------------------------------------------------------
 	function image_display($atts)
 	{
-		if (is_array($atts)) extract($atts);
+		if (is_array($atts))
+		{
+			extract($atts);
+		}
+
 		global $s, $c, $p;
+
 		if ($p)
 		{
 			$rs = safe_row("*", "txp_image", 'id='.intval($p).' limit 1');
+
 			if ($rs)
 			{
 				extract($rs);
+
 				return '<img src="'.imagesrcurl($id, $ext).
 					'" style="height:'.$h.'px;width:'.$w.'px" alt="'.txpspecialchars($alt).'" />';
 			}
@@ -3059,22 +3255,41 @@
 		$context_list = (empty($auto_detect) || $filters) ? array() : do_list($auto_detect);
 		$pageby = ($pageby=='limit') ? $limit : $pageby;
 
-		if ($name) $where[] = "name IN ('".join("','", doSlash(do_list($name)))."')";
+		if ($name)
+		{
+			$where[] = "name IN ('".join("','", doSlash(do_list($name)))."')";
+		}
 
-		if ($category) $where[] = "category IN ('".join("','", doSlash(do_list($category)))."')";
+		if ($category)
+		{
+			$where[] = "category IN ('".join("','", doSlash(do_list($category)))."')";
+		}
 
-		if ($id) $where[] = "id IN ('".join("','", doSlash(do_list($id)))."')";
+		if ($id)
+		{
+			$where[] = "id IN ('".join("','", doSlash(do_list($id)))."')";
+		}
 
-		if ($author) $where[] = "author IN ('".join("','", doSlash(do_list($author)))."')";
+		if ($author)
+		{
+			$where[] = "author IN ('".join("','", doSlash(do_list($author)))."')";
+		}
 
 		if ($realname)
 		{
-			$authorlist = safe_column('name', 'txp_users', "RealName IN ('". join("','", doArray(doSlash(do_list($realname)), 'urldecode')) ."')" );
+			$authorlist = safe_column('name', 'txp_users', "RealName IN ('". join("','", doArray(doSlash(do_list($realname)), 'urldecode')) ."')");
 			$where[] = "author IN ('".join("','", doSlash($authorlist))."')";
 		}
 
-		if ($extension) $where[] = "ext IN ('".join("','", doSlash(do_list($extension)))."')";
-		if ($thumbnail === '0' || $thumbnail === '1') $where[] = "thumbnail = $thumbnail";
+		if ($extension)
+		{
+			$where[] = "ext IN ('".join("','", doSlash(do_list($extension)))."')";
+		}
+
+		if ($thumbnail === '0' || $thumbnail === '1')
+		{
+			$where[] = "thumbnail = $thumbnail";
+		}
 
 		// If no images are selected, try...
 		if (!$where && !$filters)
@@ -3084,7 +3299,7 @@
 				switch($ctxt)
 				{
 					case 'article' :
-						// ...the article image field
+						// ...the article image field.
 						if ($thisarticle && !empty($thisarticle['article_image']))
 						{
 							$items = do_list($thisarticle['article_image']);
@@ -3100,9 +3315,11 @@
 								}
 							}
 							$items = join(",", $items);
-							// NB: This clause will squash duplicate ids
+
+							// Note: This clause will squash duplicate ids.
 							$where[] = "id IN ($items)";
-							// order of ids in article image field overrides default 'sort' attribute
+
+							// Order of ids in article image field overrides default 'sort' attribute.
 							if (empty($atts['sort']))
 							{
 								$safe_sort = "field(id, $items)";
@@ -3110,53 +3327,58 @@
 						}
 						break;
 					case 'category' :
-						// ... the global category in the URL
+						// ...the global category in the URL.
 						if ($context == 'image' && !empty($c))
 						{
 							$where[] = "category = '".doSlash($c)."'";
 						}
 						break;
 					case 'author' :
-						// ... the global author in the URL
+						// ...the global author in the URL.
 						if ($context == 'image' && !empty($pretext['author']))
 						{
 							$where[] = "author = '".doSlash($pretext['author'])."'";
 						}
 						break;
 				}
-				// Only one context can be processed
-				if ($where) break;
+				// Only one context can be processed.
+				if ($where)
+				{
+					break;
+				}
 			}
 		}
 
-		// order of ids in 'id' attribute overrides default 'sort' attribute
+		// Order of ids in 'id' attribute overrides default 'sort' attribute.
 		if (empty($atts['sort']) && $id !== '')
 		{
 			$safe_sort = 'field(id, '.join(',', doSlash(do_list($id))).')';
 		}
 
-
+		// If nothing matches, output nothing.
 		if (!$where && $filters)
 		{
-			return ''; // If nothing matches, output nothing
+			return '';
 		}
 
+		// If nothing matches, start with all images.
 		if (!$where)
 		{
-			$where[] = "1=1"; // If nothing matches, start with all images
+			$where[] = "1=1";
 		}
 
 		$where = join(' AND ', $where);
 
-		// Set up paging if required
+		// Set up paging if required.
 		if ($limit && $pageby)
 		{
 			$grand_total = safe_count('txp_image', $where);
 			$total = $grand_total - $offset;
-			$numPages = ($pageby > 0) ? ceil($total/$pageby) : 1;
+			$numPages = ($pageby > 0) ? ceil($total / $pageby) : 1;
 			$pg = (!$pretext['pg']) ? 1 : $pretext['pg'];
 			$pgoffset = $offset + (($pg - 1) * $pageby);
-			// send paging info to txp:newer and txp:older
+
+			// Send paging info to txp:newer and txp:older.
 			$pageout['pg']          = $pg;
 			$pageout['numPages']    = $numPages;
 			$pageout['s']           = $s;
@@ -3166,7 +3388,9 @@
 			$pageout['total']       = $total;
 
 			if (empty($thispage))
+			{
 				$thispage = $pageout;
+			}
 		}
 		else
 		{
@@ -3179,24 +3403,34 @@
 			($limit) ? 'limit '.intval($pgoffset).', '.intval($limit) : ''
 		);
 
-		$rs = safe_rows_start('*', 'txp_image',  join(' ', $qparts));
+		$rs = safe_rows_start('*', 'txp_image', join(' ', $qparts));
 
 		if ($rs)
 		{
 			$out = array();
 
-			if (isset($thisimage)) $old_image = $thisimage;
+			if (isset($thisimage))
+			{
+				$old_image = $thisimage;
+			}
 
 			while ($a = nextRow($rs))
 			{
 				$thisimage = image_format_info($a);
+
 				if (!$has_content)
 				{
-					$url = pagelinkurl(array('c'=>$thisimage['category'], 'context'=>'image', 's'=>$s, 'p'=>$thisimage['id']));
+					$url = pagelinkurl(array(
+						'c'       => $thisimage['category'],
+						'context' => 'image',
+						's'       => $s,
+						'p'       => $thisimage['id'],
+					));
 					$src = image_url(array('thumbnail' => '1'));
 					$thing = '<a href="'.$url.'">'.
 						'<img src="'. $src .'" alt="'.txpspecialchars($thisimage['alt']).'" />'.'</a>'.n;
 				}
+
 				$out[] = ($thing) ? parse($thing) : parse_form($form);
 			}
 
@@ -3207,6 +3441,7 @@
 				return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class, '', '', '', $html_id);
 			}
 		}
+
 		return '';
 	}
 
@@ -3267,6 +3502,7 @@
 				$thisimage = '';
 			}
 		}
+
 		return doWrap($out, $wraptag, $break, $class, $breakclass);
 	}
 
@@ -3312,6 +3548,7 @@
 
 			return $out;
 		}
+
 		return '';
 	}
 
@@ -3334,13 +3571,13 @@
 		if ($thisimage['author'])
 		{
 			$author_name = get_author_name($thisimage['author']);
-			$display_name = txpspecialchars( ($title) ? $author_name : $thisimage['author'] );
+			$display_name = txpspecialchars(($title) ? $author_name : $thisimage['author']);
 
-			$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
+			$section = ($this_section) ? ($s == 'default' ? '' : $s) : $section;
 
-			$author = ($link) ?
-				href($display_name, pagelinkurl(array('s' => $section, 'author' => $author_name, 'context' => 'image'))) :
-				$display_name;
+			$author = ($link)
+				? href($display_name, pagelinkurl(array('s' => $section, 'author' => $author_name, 'context' => 'image')))
+				: $display_name;
 
 			return ($wraptag) ? doTag($author, $wraptag, $class) : $author;
 		}
@@ -3375,7 +3612,7 @@
 
 		if (isset($thisimage['date']))
 		{
-			// Not a typo: use fileDownloadFormatTime() since it is fit for purpose
+			// Not a typo: use fileDownloadFormatTime() since it's fit for purpose.
 			$out = fileDownloadFormatTime(array(
 				'ftime'  => $thisimage['date'],
 				'format' => $format
@@ -3394,6 +3631,7 @@
 	function if_thumbnail($atts, $thing)
 	{
 		global $thisimage;
+
 		assert_image();
 
 		return parse(EvalElse($thing, ($thisimage['thumbnail'] == 1)));
@@ -3403,6 +3641,7 @@
 	function if_comments($atts, $thing)
 	{
 		global $thisarticle;
+
 		assert_article();
 
 		return parse(EvalElse($thing, ($thisarticle['comments_count'] > 0)));
@@ -3412,6 +3651,7 @@
 	function if_comments_allowed($atts, $thing)
 	{
 		global $thisarticle;
+
 		assert_article();
 
 		return parse(EvalElse($thing, checkCommentsAllowed($thisarticle['thisid'])));
@@ -3421,6 +3661,7 @@
 	function if_comments_disallowed($atts, $thing)
 	{
 		global $thisarticle;
+
 		assert_article();
 
 		return parse(EvalElse($thing, !checkCommentsAllowed($thisarticle['thisid'])));
@@ -3430,6 +3671,7 @@
 	function if_individual_article($atts, $thing)
 	{
 		global $is_article_list;
+
 		return parse(EvalElse($thing, ($is_article_list == false)));
 	}
 
@@ -3437,6 +3679,7 @@
 	function if_article_list($atts, $thing)
 	{
 		global $is_article_list;
+
 		return parse(EvalElse($thing, ($is_article_list == true)));
 	}
 
@@ -3444,9 +3687,10 @@
 	function meta_keywords()
 	{
 		global $id_keywords;
+
 		return ($id_keywords)
-		?	'<meta name="keywords" content="'.txpspecialchars($id_keywords).'" />'
-		:	'';
+			? '<meta name="keywords" content="'.txpspecialchars($id_keywords).'" />'
+			: '';
 	}
 
 // -------------------------------------------------------------
@@ -3463,6 +3707,7 @@
 			$display_name = ($title) ? get_author_name($id_author) : $id_author;
 			return '<meta name="author" content="'.txpspecialchars($display_name).'" />';
 		}
+
 		return '';
 	}
 
@@ -3506,7 +3751,11 @@
 	function permlinkurl_id($id)
 	{
 		global $permlinks;
-		if (isset($permlinks[$id])) return $permlinks[$id];
+
+		if (isset($permlinks[$id]))
+		{
+			return $permlinks[$id];
+		}
 
 		$id = (int) $id;
 
@@ -3533,18 +3782,42 @@
 			return $url;
 		}
 
-		if (empty($article_array)) return;
+		if (empty($article_array))
+		{
+			return;
+		}
 
 		extract($article_array);
 
-		if (empty($thisid)) $thisid = $ID;
+		if (empty($thisid))
+		{
+			$thisid = $ID;
+		}
 
-		if (isset($permlinks[$thisid])) return $permlinks[$thisid];
+		if (isset($permlinks[$thisid]))
+		{
+			return $permlinks[$thisid];
+		}
 
-		if (!isset($title)) $title = $Title;
-		if (empty($url_title)) $url_title = stripSpace($title);
-		if (empty($section)) $section = $Section; // lame, huh?
-		if (!isset($posted)) $posted = $Posted;
+		if (!isset($title))
+		{
+			$title = $Title;
+		}
+
+		if (empty($url_title))
+		{
+			$url_title = stripSpace($title);
+		}
+
+		if (empty($section))
+		{
+			$section = $Section;
+		}
+
+		if (!isset($posted))
+		{
+			$posted = $Posted;
+		}
 
 		$section = urlencode($section);
 		$url_title = urlencode($url_title);
@@ -3585,6 +3858,7 @@
 				$out = hu."index.php?id=$thisid";
 				break;
 		}
+
 		return $permlinks[$thisid] = $out;
 	}
 
@@ -3692,7 +3966,7 @@
 
 		extract(lAtts(array(
 			'wraptag'   => 'p',
-			'sep'       => '&#160;&#187;&#160;', // deprecated in 4.3.0
+			'sep'       => '&#160;&#187;&#160;', // Deprecated in 4.3.0.
 			'separator' => '&#160;&#187;&#160;',
 			'link'      => 1,
 			'label'     => $sitename,
@@ -3707,7 +3981,7 @@
 			trigger_error(gTxt('deprecated_attribute', array('{name}' => 'sep')), E_USER_NOTICE);
 		}
 
-		// bc, get rid of in crockery
+		// For BC, get rid of in crockery.
 		if ($link == 'y')
 		{
 			$linked = true;
@@ -3722,17 +3996,22 @@
 		}
 
 		$label = txpspecialchars($label);
-		if ($linked) $label = doTag($label, 'a', $linkclass, ' href="'.hu.'"');
+
+		if ($linked)
+		{
+			$label = doTag($label, 'a', $linkclass, ' href="'.hu.'"');
+		}
 
 		$content = array();
 		extract($pretext);
+
 		if (!empty($s) && $s!= 'default')
 		{
 			$section_title = ($title) ? fetch_section_title($s) : $s;
 			$section_title_html = escape_title($section_title);
-			$content[] = ($linked)? (
-					doTag($section_title_html, 'a', $linkclass, ' href="'.pagelinkurl(array('s'=>$s)).'"')
-				):$section_title_html;
+			$content[] = ($linked)
+				? (doTag($section_title_html, 'a', $linkclass, ' href="'.pagelinkurl(array('s'=>$s)).'"'))
+				: $section_title_html;
 		}
 
 		$category = empty($c)? '': $c;
@@ -3742,13 +4021,13 @@
 			if ($cat['name'] != 'root')
 			{
 				$category_title_html = $title ? escape_title($cat['title']) : $cat['name'];
-				$content[] = ($linked)?
-					doTag($category_title_html, 'a', $linkclass, ' href="'.pagelinkurl(array('c'=>$cat['name'])).'"')
-						:$category_title_html;
+				$content[] = ($linked)
+					? doTag($category_title_html, 'a', $linkclass, ' href="'.pagelinkurl(array('c'=>$cat['name'])).'"')
+					: $category_title_html;
 			}
 		}
 
-		// add the label at the end, to prevent breadcrumb for home page
+		// Add the label at the end, to prevent breadcrumb for homepage.
 		if ($content)
 		{
 			$content = array_merge(array($label), $content);
@@ -3763,10 +4042,13 @@
 	function if_excerpt($atts, $thing)
 	{
 		global $thisarticle;
+
 		assert_article();
-		# eval condition here. example for article excerpt
+
+		// Eval condition here. Example for article excerpt.
 		$excerpt = trim($thisarticle['excerpt']);
 		$condition = (!empty($excerpt))? true : false;
+
 		return parse(EvalElse($thing, $condition));
 	}
 
@@ -3777,6 +4059,7 @@
 	function if_search($atts, $thing)
 	{
 		global $pretext;
+
 		return parse(EvalElse($thing, !empty($pretext['q'])));
 	}
 
@@ -3786,7 +4069,10 @@
 	{
 		global $thispage, $pretext;
 
-		if (empty($pretext['q'])) return '';
+		if (empty($pretext['q']))
+		{
+			return '';
+		}
 
 		extract(lAtts(array(
 			'min' => 1,
@@ -3794,6 +4080,7 @@
 		), $atts));
 
 		$results = (int)$thispage['grand_total'];
+
 		return parse(EvalElse($thing, $results >= $min && (!$max || $results <= $max)));
 	}
 
@@ -3808,6 +4095,7 @@
 		), $atts));
 
 		$theType = ($type) ? $type == $context : true;
+
 		if ($name === FALSE)
 		{
 			return parse(EvalElse($thing, ($theType && !empty($c))));
@@ -3833,7 +4121,8 @@
 
 		$cats = array();
 
-		if ($number) {
+		if ($number)
+		{
 			if (!empty($thisarticle['category'.$number]))
 			{
 				$cats = array($thisarticle['category'.$number]);
@@ -3868,7 +4157,9 @@
 	function if_first_category($atts, $thing)
 	{
 		global $thiscategory;
+
 		assert_category();
+
 		return parse(EvalElse($thing, !empty($thiscategory['is_first'])));
 	}
 
@@ -3876,7 +4167,9 @@
 	function if_last_category($atts, $thing)
 	{
 		global $thiscategory;
+
 		assert_category();
+
 		return parse(EvalElse($thing, !empty($thiscategory['is_last'])));
 	}
 
@@ -3893,16 +4186,20 @@
 		$section = ($s == 'default' ? '' : $s);
 
 		if ($section)
+		{
 			return parse(EvalElse($thing, $name === FALSE or in_list($section, $name)));
+		}
 		else
+		{
 			return parse(EvalElse($thing, $name !== FALSE and (in_list('', $name) or in_list('default', $name))));
-
+		}
 	}
 
 //--------------------------------------------------------------------------
 	function if_article_section($atts, $thing)
 	{
 		global $thisarticle;
+
 		assert_article();
 
 		extract(lAtts(array(
@@ -3918,7 +4215,9 @@
 	function if_first_section($atts, $thing)
 	{
 		global $thissection;
+
 		assert_section();
+
 		return parse(EvalElse($thing, !empty($thissection['is_first'])));
 	}
 
@@ -3926,7 +4225,9 @@
 	function if_last_section($atts, $thing)
 	{
 		global $thissection;
+
 		assert_section();
+
 		return parse(EvalElse($thing, !empty($thissection['is_last'])));
 	}
 
@@ -3935,28 +4236,43 @@
 	{
 		global $is_article_body, $thisarticle, $prefs;
 
-		if (assert_array($prefs) === FALSE) return '';
+		if (assert_array($prefs) === FALSE)
+		{
+			return '';
+		}
 
 		ob_start();
+
 		if (empty($is_article_body))
 		{
 			if (!empty($prefs['allow_page_php_scripting']))
+			{
 				eval($thing);
+			}
 			else
+			{
 				trigger_error(gTxt('php_code_disabled_page'));
+			}
 		}
 		else
 		{
 			if (!empty($prefs['allow_article_php_scripting']))
 			{
 				if (has_privs('article.php', $thisarticle['authorid']))
+				{
 					eval($thing);
+				}
 				else
+				{
 					trigger_error(gTxt('php_code_forbidden_user'));
+				}
 			}
 			else
+			{
 				trigger_error(gTxt('php_code_disabled_article'));
+			}
 		}
+
 		return ob_get_clean();
 	}
 
@@ -3964,6 +4280,7 @@
 	function custom_field($atts)
 	{
 		global $is_article_body, $thisarticle, $prefs;
+
 		assert_article();
 
 		extract(lAtts(array(
@@ -3974,14 +4291,19 @@
 
 		$name = strtolower($name);
 		if (!empty($thisarticle[$name]))
+		{
 			$out = $thisarticle[$name];
+		}
 		else
+		{
 			$out = $default;
+		}
 
 		$was_article_body = $is_article_body;
 		$is_article_body = 1;
 		$out = ($escape == 'html' ? txpspecialchars($out) : parse($out));
 		$is_article_body = $was_article_body;
+
 		return $out;
 	}
 
@@ -3989,12 +4311,13 @@
 	function if_custom_field($atts, $thing)
 	{
 		global $thisarticle, $prefs;
+
 		assert_article();
 
 		extract(lAtts(array(
 			'name'      => @$prefs['custom_1_set'],
 			'value'     => NULL,
-			'val'       => NULL, // deprecated in 4.3.0
+			'val'       => NULL, // Deprecated in 4.3.0.
 			'match'     => 'exact',
 			'separator' => '',
 		), $atts));
@@ -4006,7 +4329,9 @@
 		}
 
 		$name = strtolower($name);
+
 		if ($value !== NULL)
+		{
 			switch ($match)
 			{
 				case '' :
@@ -4021,7 +4346,7 @@
 						if ($term == '') continue;
 						$cond = is_array($cf_contents) ? in_array($term, $cf_contents) : ((strpos($cf_contents, $term) !== false) ? true : false);
 
-						// Short circuit if a match is found
+						// Short circuit if a match is found.
 						if ($cond) break;
 					}
 					break;
@@ -4040,18 +4365,21 @@
 					// Cannot guarantee that a fixed delimiter won't break preg_match (and preg_quote doesn't help) so
 					// dynamically assign the delimiter based on the first entry in $dlmPool that is NOT in the value attribute.
 					// This minimises (does not eliminate) the possibility of a TXP-initiated preg_match error, while still
-					// preserving errors outside TXP's control (e.g. mangled user-submitted PCRE pattern)
+					// preserving errors outside TXP's control (e.g. mangled user-submitted PCRE pattern).
 					$dlmPool = array('/', '@', '#', '~', '`', '|', '!', '%');
 					$dlm = array_merge(array_diff($dlmPool, preg_split('//', $value, -1)));
 					$dlm = (count($dlm) > 0) ? $dlm[0].$value.$dlm[0] : $value;
 					$cond = preg_match($dlm, @$thisarticle[$name]);
 					break;
-				default:
+				default :
 					trigger_error(gTxt('invalid_attribute_value', array('{name}' => 'value')), E_USER_NOTICE);
 					$cond = false;
 			}
+		}
 		else
+		{
 			$cond = !empty($thisarticle[$name]);
+		}
 
 		return parse(EvalElse($thing, $cond));
 	}
@@ -4066,6 +4394,7 @@
 	function error_message()
 	{
 		global $txp_error_message;
+
 		return $txp_error_message;
 	}
 
@@ -4073,6 +4402,7 @@
 	function error_status()
 	{
 		global $txp_error_status;
+
 		return $txp_error_status;
 	}
 
@@ -4110,23 +4440,26 @@
 		static $last;
 
 		$key = md5($thing);
-
 		$cond = EvalElse($thing, 1);
-
 		$out = parse($cond);
+
 		if (empty($last[$key]) or $out != $last[$key])
 		{
 			return $last[$key] = $out;
 		}
 		else
+		{
 			return parse(EvalElse($thing, 0));
+		}
 	}
 
 // -------------------------------------------------------------
 	function if_first_article($atts, $thing)
 	{
 		global $thisarticle;
+
 		assert_article();
+
 		return parse(EvalElse($thing, !empty($thisarticle['is_first'])));
 	}
 
@@ -4134,7 +4467,9 @@
 	function if_last_article($atts, $thing)
 	{
 		global $thisarticle;
+
 		assert_article();
+
 		return parse(EvalElse($thing, !empty($thisarticle['is_last'])));
 	}
 
@@ -4142,9 +4477,10 @@
 	function if_plugin($atts, $thing)
 	{
 		global $plugins, $plugins_ver;
+
 		extract(lAtts(array(
 			'name'    => '',
-			'ver'     => '', // deprecated in 4.3.0
+			'ver'     => '', // Deprecated in 4.3.0.
 			'version' => '',
 		), $atts));
 
@@ -4183,22 +4519,41 @@
 		), $atts));
 
 		if (!is_numeric($status))
+		{
 			$status = getStatusNum($status);
+		}
 
-		// N.B. status treated slightly differently
+		// Note: status treated slightly differently.
 		$where = $statwhere = array();
 		$filters = isset($atts['id']) || isset($atts['category']) || isset($atts['author']) || isset($atts['realname']) || isset($atts['status']);
 		$context_list = (empty($auto_detect) || $filters) ? array() : do_list($auto_detect);
 		$pageby = ($pageby=='limit') ? $limit : $pageby;
 
-		if ($category) $where[] = "category IN ('".join("','", doSlash(do_list($category)))."')";
+		if ($category)
+		{
+			$where[] = "category IN ('".join("','", doSlash(do_list($category)))."')";
+		}
+
 		$ids = array_map('intval', do_list($id));
-		if ($id) $where[] = "id IN ('".join("','", $ids)."')";
-		if ($status) $statwhere[] = "status = '".doSlash($status)."'";
-		if ($author) $where[] = "author IN ('".join("','", doSlash(do_list($author)))."')";
+
+		if ($id)
+		{
+			$where[] = "id IN ('".join("','", $ids)."')";
+		}
+
+		if ($status)
+		{
+			$statwhere[] = "status = '".doSlash($status)."'";
+		}
+
+		if ($author)
+		{
+			$where[] = "author IN ('".join("','", doSlash(do_list($author)))."')";
+		}
+
 		if ($realname)
 		{
-			$authorlist = safe_column('name', 'txp_users', "RealName IN ('". join("','", doArray(doSlash(do_list($realname)), 'urldecode')) ."')" );
+			$authorlist = safe_column('name', 'txp_users', "RealName IN ('". join("','", doArray(doSlash(do_list($realname)), 'urldecode')) ."')");
 			$where[] = "author IN ('".join("','", doSlash($authorlist))."')";
 		}
 
@@ -4210,38 +4565,40 @@
 				switch ($ctxt)
 				{
 					case 'category' :
-						// ... the global category in the URL
+						// ...the global category in the URL.
 						if ($context == 'file' && !empty($c))
 						{
 							$where[] = "category = '".doSlash($c)."'";
 						}
 						break;
 					case 'author' :
-						// ... the global author in the URL
+						// ...the global author in the URL.
 						if ($context == 'file' && !empty($pretext['author']))
 						{
 							$where[] = "author = '".doSlash($pretext['author'])."'";
 						}
 						break;
 				}
-				// Only one context can be processed
+				// Only one context can be processed.
 				if ($where) break;
 			}
 		}
 
 		if (!$where && !$statwhere && $filters)
 		{
-			return ''; // If nothing matches, output nothing
+			// If nothing matches, output nothing.
+			return '';
 		}
 
 		if (!$where)
 		{
-			$where[] = "1=1"; // If nothing matches, start with all files
+			// If nothing matches, start with all files.
+			$where[] = "1=1";
 		}
 
 		$where = join(' AND ', array_merge($where, $statwhere));
 
-		// Set up paging if required
+		// Set up paging if required.
 		if ($limit && $pageby)
 		{
 			$grand_total = safe_count('txp_file', $where);
@@ -4249,7 +4606,8 @@
 			$numPages = ($pageby > 0) ? ceil($total/$pageby) : 1;
 			$pg = (!$pretext['pg']) ? 1 : $pretext['pg'];
 			$pgoffset = $offset + (($pg - 1) * $pageby);
-			// send paging info to txp:newer and txp:older
+
+			// Send paging info to txp:newer and txp:older.
 			$pageout['pg']          = $pg;
 			$pageout['numPages']    = $numPages;
 			$pageout['s']           = $s;
@@ -4259,14 +4617,16 @@
 			$pageout['total']       = $total;
 
 			if (empty($thispage))
+			{
 				$thispage = $pageout;
+			}
 		}
 		else
 		{
 			$pgoffset = $offset;
 		}
 
-		// preserve order of custom file ids unless 'sort' attribute is set
+		// Preserve order of custom file ids unless 'sort' attribute is set.
 		if (!empty($atts['id']) && empty($atts['sort']))
 		{
 			$safe_sort = 'field(id, '.join(',', $ids).')';
@@ -4301,6 +4661,7 @@
 				return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
 			}
 		}
+
 		return '';
 	}
 
@@ -4337,8 +4698,8 @@
 		{
 			$out = ($thing) ? parse($thing) : parse_form($form);
 
-			// cleanup: this wasn't called from a form,
-			// so we don't want this value remaining
+			// Cleanup: this wasn't called from a form,
+			// so we don't want this value remaining.
 			if (!$from_form)
 			{
 				$thisfile = '';
@@ -4412,9 +4773,14 @@
 	function file_download_format_info($file)
 	{
 		if (($unix_ts = @strtotime($file['created'])) > 0)
+		{
 			$file['created'] = $unix_ts;
+		}
+
 		if (($unix_ts = @strtotime($file['modified'])) > 0)
+		{
 			$file['modified'] = $unix_ts;
+		}
 
 		return $file;
 	}
@@ -4424,6 +4790,7 @@
 	function file_download_size($atts)
 	{
 		global $thisfile;
+
 		assert_file();
 
 		extract(lAtts(array(
@@ -4456,16 +4823,18 @@
 	function file_download_created($atts)
 	{
 		global $thisfile;
+
 		assert_file();
 
 		extract(lAtts(array(
 			'format' => '',
 		), $atts));
 
-		if ($thisfile['created']) {
+		if ($thisfile['created'])
+		{
 			return fileDownloadFormatTime(array(
 				'ftime'  => $thisfile['created'],
-				'format' => $format
+				'format' => $format,
 			));
 		}
 	}
@@ -4475,6 +4844,7 @@
 	function file_download_modified($atts)
 	{
 		global $thisfile;
+
 		assert_file();
 
 		extract(lAtts(array(
@@ -4485,14 +4855,14 @@
 		{
 			return fileDownloadFormatTime(array(
 				'ftime'  => $thisfile['modified'],
-				'format' => $format
+				'format' => $format,
 			));
 		}
 	}
 
 //-------------------------------------------------------------------------
-// All the time related file_download tags in one
-// One Rule to rule them all... now using safe formats
+// All the time related file_download tags in one.
+// One Rule to rule them all... now using safe formats.
 
 	function fileDownloadFormatTime($params)
 	{
@@ -4505,9 +4875,11 @@
 
 		if (!empty($ftime))
 		{
-			return !empty($format) ?
-				safe_strftime($format, $ftime) : safe_strftime($prefs['archive_dateformat'], $ftime);
+			return !empty($format)
+				? safe_strftime($format, $ftime)
+				: safe_strftime($prefs['archive_dateformat'], $ftime);
 		}
+
 		return '';
 	}
 
@@ -4516,7 +4888,9 @@
 	function file_download_id()
 	{
 		global $thisfile;
+
 		assert_file();
+
 		return $thisfile['id'];
 	}
 
@@ -4525,6 +4899,7 @@
 	function file_download_name($atts)
 	{
 		global $thisfile;
+
 		assert_file();
 
 		extract(lAtts(array(
@@ -4539,6 +4914,7 @@
 	function file_download_category($atts)
 	{
 		global $thisfile;
+
 		assert_file();
 
 		extract(lAtts(array(
@@ -4549,9 +4925,9 @@
 
 		if ($thisfile['category'])
 		{
-			$category = ($title) ?
-				fetch_category_title($thisfile['category'], 'file') :
-				$thisfile['category'];
+			$category = ($title)
+				? fetch_category_title($thisfile['category'], 'file')
+				: $thisfile['category'];
 
 			return ($wraptag) ? doTag($category, $wraptag, $class) : $category;
 		}
@@ -4562,6 +4938,7 @@
 	function file_download_author($atts)
 	{
 		global $thisfile, $s;
+
 		assert_file();
 
 		extract(lAtts(array(
@@ -4576,13 +4953,13 @@
 		if ($thisfile['author'])
 		{
 			$author_name = get_author_name($thisfile['author']);
-			$display_name = txpspecialchars( ($title) ? $author_name : $thisfile['author'] );
+			$display_name = txpspecialchars(($title) ? $author_name : $thisfile['author']);
 
-			$section = ($this_section) ? ( $s == 'default' ? '' : $s ) : $section;
+			$section = ($this_section) ? ($s == 'default' ? '' : $s) : $section;
 
-			$author = ($link) ?
-				href($display_name, pagelinkurl(array('s' => $section, 'author' => $author_name, 'context' => 'file'))) :
-				$display_name;
+			$author = ($link)
+				? href($display_name, pagelinkurl(array('s' => $section, 'author' => $author_name, 'context' => 'file')))
+				: $display_name;
 
 			return ($wraptag) ? doTag($author, $wraptag, $class) : $author;
 		}
@@ -4593,7 +4970,9 @@
 	function file_download_downloads()
 	{
 		global $thisfile;
+
 		assert_file();
+
 		return $thisfile['downloads'];
 	}
 
@@ -4602,6 +4981,7 @@
 	function file_download_description($atts)
 	{
 		global $thisfile;
+
 		assert_file();
 
 		extract(lAtts(array(
@@ -4612,8 +4992,9 @@
 
 		if ($thisfile['description'])
 		{
-			$description = ($escape == 'html') ?
-				txpspecialchars($thisfile['description']) : $thisfile['description'];
+			$description = ($escape == 'html')
+				? txpspecialchars($thisfile['description'])
+				: $thisfile['description'];
 
 			return ($wraptag) ? doTag($description, $wraptag, $class) : $description;
 		}
@@ -4631,6 +5012,7 @@
 	function rsd()
 	{
 		global $prefs;
+
 		return ($prefs['enable_xmlrpc_server']) ? '<link rel="EditURI" type="application/rsd+xml" title="RSD" href="'.hu.'rpc/" />' : '';
 	}
 
@@ -4677,12 +5059,13 @@
 
 		extract(lAtts(array(
 			'name'  => '',
-			'value' => ''
+			'value' => '',
 		), $atts));
 
 		if (empty($name))
 		{
 			trigger_error(gTxt('variable_name_empty'));
+
 			return;
 		}
 
