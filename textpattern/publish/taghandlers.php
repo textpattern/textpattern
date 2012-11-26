@@ -184,36 +184,46 @@
 				$height = $h;
 			}
 
-			$out = '<img src="'.imagesrcurl($id, $ext).'" alt="'.$alt.'"'.
-				($caption
-					? ' title="'.$caption.'"'
-					: ''
-				).
-				(($html_id and !$wraptag)
-					? ' id="'.txpspecialchars($html_id).'"'
-					: ''
-				).
-				(($class and !$wraptag)
-					? ' class="'.txpspecialchars($class).'"'
-					: ''
-				).
-				($style
-					? ' style="'.txpspecialchars($style).'"'
-					: ''
-				).
-				($width
-					? ' width="'.(int)$width.'"'
-					: ''
-				).
-				($height
-					? ' height="'.(int)$height.'"'
-					: ''
-				).
-				' />';
+			$out = '<img src="'.imagesrcurl($id, $ext).'" alt="'.$alt.'"';
 
-			return ($wraptag)
-				? doTag($out, $wraptag, $class, '', $html_id)
-				: $out;
+			if ($caption)
+			{
+				$out .= ' title="'.$caption.'"';
+			}
+
+			if ($html_id and !$wraptag)
+			{
+				$out .= ' id="'.txpspecialchars($html_id).'"';
+			}
+
+			if ($class and !$wraptag)
+			{
+				$out .= ' class="'.txpspecialchars($class).'"';
+			}
+
+			if ($style)
+			{
+				$out .= ' style="'.txpspecialchars($style).'"';
+			}
+
+			if ($width)
+			{
+				$out .= ' width="'.(int) $width.'"';
+			}
+
+			if ($height)
+			{
+				$out .= ' height="'.(int) $height.'"';
+			}
+
+			$out .= ' />';
+
+			if ($wraptag)
+			{
+				return doTag($out, $wraptag, $class, '', $html_id);
+			}
+
+			return $out;
 		}
 
 		trigger_error(gTxt('unknown_image'));
