@@ -80,19 +80,25 @@
 			trigger_error(gTxt('deprecated_attribute', array('{name}' => 'n')), E_USER_NOTICE);
 		}
 
-		if (empty($name)) $name = 'default';
-		$url = hu.'css.php?n='.txpspecialchars($name);
+		if (empty($name))
+		{
+			$name = 'default';
+		}
+
+		$url = hu.'css.php?n='.$name;
 
 		if ($format == 'link')
 		{
-			return '<link rel="'.txpspecialchars($rel).
-				($doctype != 'html5' ? '" type="text/css"': '"').
-				($media ? ' media="'.txpspecialchars($media).'"' : '').
-				($title ? ' title="'.txpspecialchars($title).'"' : '').
-				' href="'.$url.'" />';
+			return tag_void('link', array(
+				'rel'   => $rel,
+				'type'  => $doctype != 'html5' ? 'text/css' : '',
+				'media' => $media,
+				'title' => $title,
+				'href'  => $url,
+			));
 		}
 
-		return $url;
+		return txpspecialchars($url);
 	}
 
 // -------------------------------------------------------------
