@@ -426,7 +426,8 @@
 		}
 
 		$txt = ($thing === NULL ? $label : parse($thing));
-		$out = '<a href="'.$url.'" title="'.$title.'">'.$txt.'</a>';
+
+		$out = href($txt, $url, array('title' => $title));
 
 		return ($wraptag) ? doTag($out, $wraptag, $class) : $out;
 	}
@@ -467,7 +468,7 @@
 			return '<link rel="alternate" type="'.$type.'" title="'.$title.'" href="'.$url.'" />';
 		}
 
-		$out = '<a href="'.$url.'" title="'.$title.'">'.$label.'</a>';
+		$out = href($label, $url, array('title' => $title));
 
 		return ($wraptag) ? doTag($out, $wraptag, $class) : $out;
 	}
@@ -865,8 +866,11 @@
 				$linktext = eE($linktext);
 			}
 
-			return '<a href="'.eE('mailto:'.txpspecialchars($email)).'"'.
-				($title ? ' title="'.txpspecialchars($title).'"' : '').">$linktext</a>";
+			return href(
+				$linktext,
+				eE('mailto:'.txpspecialchars($email)),
+				($title ? ' title="'.txpspecialchars($title).'"' : '')
+			);
 		}
 
 		return '';
@@ -1622,9 +1626,12 @@
 					$thing = parse($thing);
 					$next_title = escape_title($next_title);
 
-					return '<a rel="next" href="'.$url.'"'.
+					return href(
+						$thing,
+						$url,
 						($next_title != $thing ? ' title="'.$next_title.'"' : '').
-						'>'.$thing.'</a>';
+						' rel="next"'
+					);
 				}
 
 				return $url;
@@ -1666,9 +1673,12 @@
 					$thing = parse($thing);
 					$prev_title = escape_title($prev_title);
 
-					return '<a rel="prev" href="'.$url.'"'.
+					return href(
+						$thing,
+						$url,
 						($prev_title != $thing ? ' title="'.$prev_title.'"' : '').
-						'>'.$thing.'</a>';
+						' rel="prev"'
+					);
 				}
 
 				return $url;
@@ -1755,7 +1765,13 @@
 		if ($thing)
 		{
 			$class = ($class) ? ' class="'.txpspecialchars($class).'"' : '';
-			return '<a rel="home" href="'.hu.'"'.$class.'>'.parse($thing).'</a>';
+
+			return href(
+				parse($thing),
+				hu,
+				$class.
+				' rel="home"'
+			);
 		}
 
 		return hu;
@@ -1808,9 +1824,11 @@
 					$title = escape_title($title);
 				}
 
-				return '<a href="'.$url.'"'.
-					(empty($title) ? '' : ' title="'.$title.'"').
-					'>'.parse($thing).'</a>';
+				return href(
+					parse($thing),
+					$url,
+					(empty($title) ? '' : ' title="'.$title.'"')
+				);
 			}
 
 			return $url;
@@ -1866,9 +1884,11 @@
 					$title = escape_title($title);
 				}
 
-				return '<a href="'.$url.'"'.
-					(empty($title) ? '' : ' title="'.$title.'"').
-					'>'.parse($thing).'</a>';
+				return href(
+					parse($thing),
+					$url,
+					(empty($title) ? '' : ' title="'.$title.'"')
+				);
 			}
 
 			return $url;
@@ -2444,12 +2464,12 @@
 
 			if (!empty($web))
 			{
-				return '<a href="'.$web.'"'.$nofollow.'>'.$name.'</a>';
+				return href($name, $web, $nofollow);
 			}
 
 			if ($email && !$never_display_email)
 			{
-				return '<a href="'.eE('mailto:'.$email).'"'.$nofollow.'>'.$name.'</a>';
+				return href($name, eE('mailto:'.$email), $nofollow);
 			}
 		}
 
@@ -2699,18 +2719,21 @@
 
 			if ($thing)
 			{
-				$out = '<a'.
-					($permlink_mode != 'messy' ? ' rel="tag"' : '').
+				$out = href(
+					parse($thing),
+					pagelinkurl(array('s' => $section, 'c' => $category)),
 					(($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
-					' href="'.pagelinkurl(array('s' => $section, 'c' => $category)).'"'.
 					($title ? ' title="'.$label.'"' : '').
-					'>'.parse($thing).'</a>';
+					($permlink_mode != 'messy' ? ' rel="tag"' : '')
+				);
 			}
 			elseif ($link)
 			{
-				$out = '<a'.
-					($permlink_mode != 'messy' ? ' rel="tag"' : '').
-					' href="'.pagelinkurl(array('s' => $section, 'c' => $category)).'">'.$label.'</a>';
+				$out = href(
+					$label,
+					pagelinkurl(array('s' => $section, 'c' => $category)),
+					($permlink_mode != 'messy' ? ' rel="tag"' : '')
+				);
 			}
 			else
 			{
@@ -2747,18 +2770,21 @@
 
 			if ($thing)
 			{
-				$out = '<a'.
-					($permlink_mode != 'messy' ? ' rel="tag"' : '').
+				$out = href(
+					parse($thing),
+					pagelinkurl(array('s' => $section, 'c' => $category)),
 					(($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
-					' href="'.pagelinkurl(array('s' => $section, 'c' => $category)).'"'.
 					($title ? ' title="'.$label.'"' : '').
-					'>'.parse($thing).'</a>';
+					($permlink_mode != 'messy' ? ' rel="tag"' : '')
+				);
 			}
 			elseif ($link)
 			{
-				$out = '<a'.
-					($permlink_mode != 'messy' ? ' rel="tag"' : '').
-					' href="'.pagelinkurl(array('s' => $section, 'c' => $category)).'">'.$label.'</a>';
+				$out = href(
+					$label,
+					pagelinkurl(array('s' => $section, 'c' => $category)),
+					($permlink_mode != 'messy' ? ' rel="tag"' : '')
+				);
 			}
 			else
 			{
@@ -2823,14 +2849,20 @@
 
 			if ($thing)
 			{
-				$out = '<a href="'.$href.'"'.
+				$out = href(
+					parse($thing),
+					$href,
 					(($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
-					($title ? ' title="'.$label.'"' : '').
-					'>'.parse($thing).'</a>';
+					($title ? ' title="'.$label.'"' : '')
+				);
 			}
 			elseif ($link)
 			{
-				$out = href($label, $href, ($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '');
+				$out = href(
+					$label,
+					$href,
+					($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : ''
+				);
 			}
 			elseif ($url)
 			{
@@ -2885,14 +2917,20 @@
 
 			if ($thing)
 			{
-				$out = '<a href="'.$href.'"'.
+				$out = href(
+					parse($thing),
+					$href,
 					(($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
-					($title ? ' title="'.$label.'"' : '').
-					'>'.parse($thing).'</a>';
+					($title ? ' title="'.$label.'"' : '')
+				);
 			}
 			elseif ($link)
 			{
-				$out = href($label, $href, ($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '');
+				$out = href(
+					$label,
+					$href,
+					($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : ''
+				);
 			}
 			elseif ($url)
 			{
@@ -3184,8 +3222,10 @@
 				extract($a);
 				$dims = ($thumb_h ? " height=\"$thumb_h\"" : '') . ($thumb_w ? " width=\"$thumb_w\"" : '');
 				$url = pagelinkurl(array('c'=>$c, 'context'=>'image', 's'=>$s, 'p'=>$id));
-				$out[] = '<a href="'.$url.'">'.
-					'<img src="'.imagesrcurl($id, $ext, true).'"'.$dims.' alt="'.txpspecialchars($alt).'" />'.'</a>';
+				$out[] = href(
+					'<img src="'.imagesrcurl($id, $ext, true).'"'.$dims.' alt="'.txpspecialchars($alt).'" />',
+					$url
+				);
 			}
 
 			if (count($out))
@@ -3427,8 +3467,10 @@
 						'p'       => $thisimage['id'],
 					));
 					$src = image_url(array('thumbnail' => '1'));
-					$thing = '<a href="'.$url.'">'.
-						'<img src="'. $src .'" alt="'.txpspecialchars($thisimage['alt']).'" />'.'</a>'.n;
+					$thing = href(
+						'<img src="'.$src.'" alt="'.txpspecialchars($thisimage['alt']).'" />',
+						$url
+					);
 				}
 
 				$out[] = ($thing) ? parse($thing) : parse_form($form);
