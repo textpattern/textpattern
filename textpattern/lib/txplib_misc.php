@@ -3680,6 +3680,105 @@
 	}
 
 /**
+ * Validates the given user credentials.
+ *
+ * This function validates a given login and a password combination.
+ * If the combination is correct, the user's login name is returned,
+ * FALSE otherwise.
+ *
+ * If $log is TRUE, also checks that the user has permissions to access
+ * the admin side interface. On success, updates the user's last access
+ * timestamp.
+ *
+ * @param   string      $user     The login
+ * @param   string      $password The password
+ * @param   bool        $log      If TRUE, requires privilege level greater than 'none'
+ * @return  string|bool The user's login name or FALSE on error
+ * @package User
+ */
+
+	function txp_validate($user, $password, $log = true)
+	{
+		static $phpass = null;
+
+		$safe_user = doSlash($user);
+		$name = false;
+
+		$r = safe_row('pass, privs', 'txp_users', "name = '$safe_user'");
+
+		if (!$r)
+		{
+			return false;
+		}
+
+		if (!$phpass)
+		{
+			include_once txpath.'/lib/PasswordHash.php';
+			$phpass = new PasswordHash(PASSWORD_COMPLEXITY, PASSWORD_PORTABILITY);
+		}
+
+		// Check post-4.3-style passwords.
+		if ($phpass->CheckPassword($password, $r['pass']))
+		{
+			if (!$log || $r['privs'] > 0)
+			{
+				$name = $user;
+			}
+		}
+		else
+		{
+			// No good password: check 4.3-style passwords.
+			$passwords = array();
+			$passwords[] = "password(lower('".doSlash($password)."'))";
+			$passwords[] = "password('".doSlash($password)."')";
+
+			if (version_compare(mysql_get_server_info(), '4.1.0', '>='))
+			{
+				$passwords[] = "old_password(lower('".doSlash($password)."'))";
+				$passwords[] = "old_password('".doSlash($password)."')";
+			}
+
+			$name = safe_field("name", "txp_users",
+				"name = '$safe_user' and (pass = ".join(' or pass = ', $passwords).") and privs > 0");
+
+			// Old password is good: migrate password to phpass.
+			if ($name !== false)
+			{
+				safe_update("txp_users", "pass = '".doSlash($phpass->HashPassword($password))."'", "name = '$safe_user'");
+			}
+		}
+
+		if ($name !== false && $log)
+		{
+			// Update the last access time.
+			safe_update("txp_users", "last_access = now()", "name = '$safe_user'");
+		}
+
+		return $name;
+	}
+
+/**
+ * Calculates a password hash.
+ *
+ * @param   string $password The password
+ * @return  string A hash
+ * @see     PASSWORD_COMPLEXITY
+ * @see     PASSWORD_PORTABILITY
+ * @package User
+ */
+
+	function txp_hash_password($password)
+	{
+		static $phpass = null;
+		if (!$phpass)
+		{
+			include_once txpath.'/lib/PasswordHash.php';
+			$phpass = new PasswordHash(PASSWORD_COMPLEXITY, PASSWORD_PORTABILITY);
+		}
+		return $phpass->HashPassword($password);
+	}
+
+/**
  * Extracts a statement from a if/else condition.
  *
  * @param   string  $thing     Statement in Textpattern tag markup presentation
