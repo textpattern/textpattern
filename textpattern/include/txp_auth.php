@@ -70,6 +70,8 @@ Use of this software indicates acceptance of the Textpattern license agreement
 
 	function txp_validate($user, $password, $log = true)
 	{
+		static $phpass = null;
+
 		$safe_user = doSlash($user);
 		$name = false;
 
@@ -80,7 +82,11 @@ Use of this software indicates acceptance of the Textpattern license agreement
 			return false;
 		}
 
-		$phpass = new PasswordHash(PASSWORD_COMPLEXITY, PASSWORD_PORTABILITY);
+		if (!$phpass)
+		{
+			include_once txpath.'/lib/PasswordHash.php';
+			$phpass = new PasswordHash(PASSWORD_COMPLEXITY, PASSWORD_PORTABILITY);
+		}
 
 		// Check post-4.3-style passwords.
 		if ($phpass->CheckPassword($password, $r['pass']))
@@ -137,6 +143,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
 		static $phpass = null;
 		if (!$phpass)
 		{
+			include_once txpath.'/lib/PasswordHash.php';
 			$phpass = new PasswordHash(PASSWORD_COMPLEXITY, PASSWORD_PORTABILITY);
 		}
 		return $phpass->HashPassword($password);
