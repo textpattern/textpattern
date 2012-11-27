@@ -33,6 +33,7 @@
 	{
 		global $nolog, $logging;
 		callback_event('log_hit');
+
 		if (!isset($nolog) && $status != 404)
 		{
 			if ($logging == 'refer')

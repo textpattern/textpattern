@@ -40,6 +40,7 @@
 		$feed_filter_limit = get_pref('feed_filter_limit', 10);
 		$section = gps('section');
 		$category = gps('category');
+
 		if (!is_scalar($section) || !is_scalar($category))
 		{
 			txp_die('Not Found', 404);
@@ -48,11 +49,14 @@
 		$section = ($section ? array_slice(array_unique(do_list($section)), 0, $feed_filter_limit) : array());
 		$category = ($category ? array_slice(array_unique(do_list($category)), 0, $feed_filter_limit) : array());
 		$st = array();
+
 		foreach ($section as $s)
 		{
 			$st[] = fetch_section_title($s);
 		}
+
 		$ct = array();
+
 		foreach ($category as $c)
 		{
 			$ct[] = fetch_category_title($c);
@@ -68,11 +72,11 @@
 		$out[] = tag(doSpecial($sitename), 'title');
 		$out[] = tag(hu, 'link');
 		$out[] = '<atom:link href="'.pagelinkurl(array(
-			'rss' => 1,
-			'area' => $area,
-			'section' => $section,
+			'rss'      => 1,
+			'area'     => $area,
+			'section'  => $section,
 			'category' => $category,
-			'limit' => $limit
+			'limit'    => $limit,
 		)).'" rel="self" type="application/rss+xml" />';
 		$out[] = tag(doSpecial($site_slogan), 'description');
 		$last = fetch('unix_timestamp(val)', 'txp_prefs', 'name', 'lastmod');
@@ -92,6 +96,7 @@
 			$limit = intval(min($limit, max(100, $rss_how_many)));
 
 			$frs = safe_column("name", "txp_section", "in_rss != '1'");
+
 			if ($frs)
 			{
 				foreach ($frs as $f)
@@ -99,6 +104,7 @@
 					$query[] = "and Section != '".doSlash($f)."'";
 				}
 			}
+
 			$query[] = $sfilter;
 			$query[] = $cfilter;
 
@@ -125,10 +131,14 @@
 					$summary = trim(replace_relative_urls(parse($thisarticle['excerpt']), $permlink));
 					$content = trim(replace_relative_urls(parse($thisarticle['body']), $permlink));
 
-					if ($syndicate_body_or_excerpt) {
+					if ($syndicate_body_or_excerpt)
+					{
 						// Short feed: use body as summary if there's no excerpt.
 						if (!trim($summary))
+						{
 							$summary = $content;
+						}
+
 						$content = '';
 					}
 
@@ -226,10 +236,12 @@
 			{
 				// Make sure notices/warnings/errors don't fudge up the feed when compression is used.
 				$buf = '';
+
 				while ($b = @ob_get_clean())
 				{
 					$buf .= $b;
 				}
+
 				@ob_start('ob_gzhandler');
 				echo $buf;
 			}
@@ -241,6 +253,7 @@
 			if (is_callable('apache_request_headers'))
 			{
 				$headers = apache_request_headers();
+
 				if (isset($headers["A-IM"]))
 				{
 					$canaim = strpos($headers["A-IM"], "feed");
@@ -313,10 +326,12 @@
 		$out = array_merge($out, $articles);
 
 		header("Content-Type: application/rss+xml; charset=utf-8");
+
 		if (isset($etag))
 		{
 			header('ETag: "'.$etag.'"');
 		}
+
 		return
 			'<?xml version="1.0" encoding="utf-8"?>'.n.
 			'<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom">'.n.

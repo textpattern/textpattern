@@ -2118,7 +2118,6 @@
 		{
 			$out = safe_strftime($format, $thisarticle['modified'], $gmt, $lang);
 		}
-
 		else
 		{
 			if ($id or $c or $pg)
@@ -4413,12 +4412,20 @@
 					$values = do_list($value);
 					$cond = false;
 					$cf_contents = ($separator) ? do_list(@$thisarticle[$name], $separator) : @$thisarticle[$name];
-					foreach($values as $term) {
-						if ($term == '') continue;
+					foreach($values as $term)
+					{
+						if ($term == '')
+						{
+							continue;
+						}
+
 						$cond = is_array($cf_contents) ? in_array($term, $cf_contents) : ((strpos($cf_contents, $term) !== false) ? true : false);
 
 						// Short circuit if a match is found.
-						if ($cond) break;
+						if ($cond)
+						{
+							break;
+						}
 					}
 					break;
 				case 'all' :
@@ -4426,8 +4433,13 @@
 					$num_values = count($values);
 					$term_count = 0;
 					$cf_contents = ($separator) ? do_list(@$thisarticle[$name], $separator) : @$thisarticle[$name];
-					foreach ($values as $term) {
-						if ($term == '') continue;
+					foreach ($values as $term)
+					{
+						if ($term == '')
+						{
+							continue;
+						}
+
 						$term_count += is_array($cf_contents) ? in_array($term, $cf_contents) : ((strpos($cf_contents, $term) !== false) ? true : false);
 					}
 					$cond = ($term_count == $num_values) ? true : false;
@@ -4650,6 +4662,7 @@
 						}
 						break;
 				}
+
 				// Only one context can be processed.
 				if ($where) break;
 			}
@@ -5113,6 +5126,7 @@
 			else
 			{
 				trace_add("[<txp:variable>: Unknown variable '$name']");
+
 				return '';
 			}
 		}

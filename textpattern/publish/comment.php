@@ -79,10 +79,12 @@
 	function getNextNonce($check_only = false)
 	{
 		static $nonce = '';
+
 		if (!$nonce && !$check_only)
 		{
 			$nonce = md5(uniqid(rand(), true));
 		}
+
 		return $nonce;
 	}
 
@@ -96,10 +98,12 @@
 	function getNextSecret($check_only = false)
 	{
 		static $secret = '';
+
 		if (!$secret && !$check_only)
 		{
 			$secret = md5(uniqid(rand(), true));
 		}
+
 		return $secret;
 	}
 
@@ -408,6 +412,7 @@
 			$c['secret'] = $rs['secret'];
 		}
 		$c['message'] = ps(md5('message'.$c['secret']));
+
 		return $c;
 	}
 
@@ -682,12 +687,15 @@ class comment_evaluation
 	public function get_result($result_type = 'numeric')
 	{
 		$result = array();
+
 		foreach ($this->status as $key => $value)
 		{
 			$result[$key] = array_sum($value)/max(1, count($value));
 		}
+
 		arsort($result, SORT_NUMERIC);
 		reset($result);
+
 		return (($result_type == 'numeric') ? key($result) : $this->status_text[key($result)]);
 	}
 
@@ -717,6 +725,7 @@ class comment_evaluation
 		if (!file_exists($file))
 		{
 			$fp = fopen($file, 'wb');
+
 			if ($fp)
 			{
 				fwrite($fp, "<?php return; ?>\n".
@@ -754,6 +763,7 @@ class comment_evaluation
 		{
 			$instance = new comment_evaluation();
 		}
+
 		return $instance;
 	}
 
@@ -773,8 +783,10 @@ class comment_evaluation
 		{
 			return false;
 		}
+
 		// Delete expired nonces.
 		safe_delete("txp_discuss_nonce", "issue_time < date_sub(now(),interval 10 minute)");
+
 		// Check for nonce.
 		return (safe_row("*", "txp_discuss_nonce", "nonce='".doSlash($nonce)."' and used = 0")) ? true : false;
 	}
@@ -903,10 +915,12 @@ class comment_evaluation
 		$out = gTxt('greeting')." $RealName,".n;
 		$out .= str_replace('{title}', $Title, gTxt('comment_recorded')).n;
 		$out .= permlinkurl_id($parentid).n;
+
 		if (has_privs('discuss', $AuthorID))
 		{
 			$out .= hu.'textpattern/index.php?event=discuss&step=discuss_edit&discussid='.$discussid.n;
 		}
+
 		$out .= gTxt('status').": ".$evaluator->get_result('text').'. '.implode(',', $evaluator->get_result_message()).n;
 		$out .= n;
 		$out .= gTxt('comment_name').": $cname".n;

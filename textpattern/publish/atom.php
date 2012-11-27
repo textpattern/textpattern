@@ -90,11 +90,14 @@
 		$section = ($section ? array_slice(array_unique(do_list($section)), 0, $feed_filter_limit) : array());
 		$category = ($category ? array_slice(array_unique(do_list($category)), 0, $feed_filter_limit) : array());
 		$st = array();
+
 		foreach ($section as $s)
 		{
 			$st[] = fetch_section_title($s);
 		}
+
 		$ct = array();
+
 		foreach ($category as $c)
 		{
 			$ct[] = fetch_category_title($c);
@@ -147,10 +150,12 @@
 			$frs = safe_column("name", "txp_section", "in_rss != '1'");
 
 			$query = array();
+
 			foreach ($frs as $f)
 			{
 				$query[] = "and Section != '".doSlash($f)."'";
 			}
+
 			$query[] = $sfilter;
 			$query[] = $cfilter;
 
@@ -165,6 +170,7 @@
 				"Status=4 and Posted <= now() $expired".join(' ', $query).
 				"order by Posted desc limit $limit"
 			);
+
 			if ($rs)
 			{
 				while ($a = nextRow($rs))
@@ -305,10 +311,12 @@
 			{
 				// Make sure notices/warnings/errors don't fudge up the feed when compression is used.
 				$buf = '';
+
 				while ($b = @ob_get_clean())
 				{
 					$buf .= $b;
 				}
+
 				@ob_start('ob_gzhandler');
 				echo $buf;
 			}
@@ -320,6 +328,7 @@
 			if (is_callable('apache_request_headers'))
 			{
 				$headers = apache_request_headers();
+
 				if (isset($headers["A-IM"]))
 				{
 					$canaim = strpos($headers["A-IM"], "feed");
