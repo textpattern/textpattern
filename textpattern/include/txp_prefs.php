@@ -57,7 +57,7 @@
 
 		// Update custom fields count from database schema and cache it as a hidden pref.
 		// TODO: move this when custom fields are refactored.
-		$max_custom_fields = count(preg_grep('/^custom_\d+/', getThings('describe `'.PFX.'textpattern`')));
+		$max_custom_fields = count(preg_grep('/^custom_\d+/', getThings('describe '.safe_pfx('textpattern'))));
 		set_pref('max_custom_fields', $max_custom_fields, 'publish', 2);
 
 		$sql = array();
