@@ -66,6 +66,15 @@ class DB
 	public $pass;
 
 	/**
+	 * Database table prefix.
+	 *
+	 * @var   string
+	 * @since 4.6.0
+	 */
+
+	public $table_prefix = '';
+
+	/**
 	 * Database client flags.
 	 *
 	 * @var int
@@ -111,6 +120,11 @@ class DB
 		$this->pass = $txpcfg['pass'];
 		$this->client_flags = isset($txpcfg['client_flags']) ? $txpcfg['client_flags'] : 0;
 		$this->table_options['type'] = 'MyISAM';
+
+		if (!empty($txpcfg['table_prefix']))
+		{
+			$this->table_prefix = $txpcfg['table_prefix'];
+		}
 
 		$this->link = @mysql_connect($this->host, $this->user, $this->pass, false, $this->client_flags);
 
@@ -169,7 +183,6 @@ $DB = new DB;
  *
  * @param  string $table The database table
  * @return string The $table with a prefix
- * @uses   PFX
  * @see    safe_pfx_j()
  * @example
  * if (safe_query('DROP TABLE '.safe_pfx('myTable'))
@@ -180,7 +193,9 @@ $DB = new DB;
 
 	function safe_pfx($table)
 	{
-		$name = PFX.$table;
+		global $DB;
+
+		$name = $DB->table_prefix.$table;
 		if (preg_match('@[^\w._$]@', $name))
 		{
 			return '`'.$name.'`';
@@ -204,7 +219,6 @@ $DB = new DB;
  *
  * @param  string $table The database table, or comma-separated list of tables
  * @return string The $table with a prefix
- * @uses   PFX
  * @see    safe_pfx()
  * @example
  * if ($r = getRows('SELECT id FROM '.safe_pfx_j('tableA').' JOIN '.safe_pfx('tableB').' ON tableB.id = tableA.id and tableB.active = 1'))
@@ -215,10 +229,12 @@ $DB = new DB;
 
 	function safe_pfx_j($table)
 	{
+		global $DB;
+
 		$ts = array();
 		foreach (explode(',', $table) as $t)
 		{
-			$name = PFX.trim($t);
+			$name = $DB->table_prefix.trim($t);
 			if (preg_match('@[^\w._$]@', $name))
 			{
 				$ts[] = "`$name`".(PFX ? " as `$t`" : '');
