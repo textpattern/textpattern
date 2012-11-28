@@ -241,11 +241,11 @@ $DB = new DB;
 			$name = $DB->table_prefix.trim($t);
 			if (preg_match('@[^\w._$]@', $name))
 			{
-				$ts[] = "`$name`".(PFX ? " as `$t`" : '');
+				$ts[] = "`$name`".($DB->table_prefix ? " as `$t`" : '');
 			}
 			else
 			{
-				$ts[] = "$name".(PFX ? " as $t" : '');
+				$ts[] = "$name".($DB->table_prefix ? " as $t" : '');
 			}
 		}
 		return join(', ', $ts);
