@@ -80,7 +80,7 @@ class DB
 	 * @var int
 	 */
 
-	public $client_flags;
+	public $client_flags = 0;
 
 	/**
 	 * The database link identifier.
@@ -115,15 +115,19 @@ class DB
 		global $txpcfg, $connected;
 
 		$this->host = $txpcfg['host'];
-		$this->db   = $txpcfg['db'];
+		$this->db = $txpcfg['db'];
 		$this->user = $txpcfg['user'];
 		$this->pass = $txpcfg['pass'];
-		$this->client_flags = isset($txpcfg['client_flags']) ? $txpcfg['client_flags'] : 0;
 		$this->table_options['type'] = 'MyISAM';
 
 		if (!empty($txpcfg['table_prefix']))
 		{
 			$this->table_prefix = $txpcfg['table_prefix'];
+		}
+
+		if (isset($txpcfg['client_flags']))
+		{
+			$this->client_flags = $txpcfg['client_flags'];
 		}
 
 		$this->link = @mysql_connect($this->host, $this->user, $this->pass, false, $this->client_flags);
