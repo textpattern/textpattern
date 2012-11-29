@@ -456,7 +456,7 @@
 
 		$txt = ($thing === NULL ? $label : parse($thing));
 
-		$out = href($txt, $url, array('title' => $title));
+		$out = href($txt, $url, ' title="'.$title.'"');
 
 		return ($wraptag) ? doTag($out, $wraptag, $class) : $out;
 	}
@@ -497,7 +497,7 @@
 			return '<link rel="alternate" type="'.$type.'" title="'.$title.'" href="'.$url.'" />';
 		}
 
-		$out = href($label, $url, array('title' => $title));
+		$out = href($label, $url, ' title="'.$title.'"');
 
 		return ($wraptag) ? doTag($out, $wraptag, $class) : $out;
 	}
@@ -2602,7 +2602,7 @@
 		$section = ($this_section) ? ($s == 'default' ? '' : $s) : $section;
 
 		return ($link)
-			? href($display_name, pagelinkurl(array('s' => $section, 'author' => $author_name)), array('rel' => 'author'))
+			? href($display_name, pagelinkurl(array('s' => $section, 'author' => $author_name)), ' rel="author"')
 			: $display_name;
 	}
 

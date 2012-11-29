@@ -147,14 +147,14 @@
 						'event' => 'plugin',
 						'step'  => 'plugin_help',
 						'name'  => $name,
-					), array('class' => 'plugin-help'));
+					), ' class="plugin-help"');
 				}
 
 				if ($flags & PLUGIN_HAS_PREFS)
 				{
 					$plugin_prefs = href(gTxt('plugin_prefs'), array(
 						'event' => 'plugin_prefs.'.$name
-					), array('class' => 'plugin-prefs'));
+					), ' class="plugin-prefs"');
 				}
 				else
 				{
@@ -184,7 +184,7 @@
 					hCell($edit_url, '', ' scope="row" class="name"').
 
 					td(
-						href($author, $a['author_uri'], array('rel' => 'external'))
+						href($author, $a['author_uri'], ' rel="external"')
 					, '', 'author').
 
 					td($version, '', 'version').

@@ -278,7 +278,7 @@
 					, '', ' scope="row" class="id"').
 
 					td(
-						($can_edit ? href($name, $edit_url, array('title'=> gTxt('edit'))) : $name)
+						($can_edit ? href($name, $edit_url, ' title="'.gTxt('edit').'"') : $name)
 					, '', 'name').
 
 					td(

@@ -80,17 +80,14 @@ class hive_theme extends theme
 	{
 		global $txp_user;
 		$out[] = hed(
-			href(htmlspecialchars($GLOBALS["prefs"]["sitename"]), hu, array(
-				'rel'   => 'external',
-				'title' => gTxt('tab_view_site'),
-			))
+			href(htmlspecialchars($GLOBALS["prefs"]["sitename"]), hu, ' title="'.gTxt('tab_view_site').'" rel="external"')
 			, 1);
 
 		if ($txp_user)
 		{
 			$out[] = graf(
 				href(gTxt('logout'), 'index.php?logout=1', ' onclick="return verify(\''.gTxt('are_you_sure').'\')"')
-				, array('class' => 'txp-logout'));
+				, ' class="txp-logout"');
 
 			$out[] = '<nav role="navigation" aria-label="'.gTxt('navigation').'">';
 			$out[] = '<div class="txp-nav">';
@@ -100,7 +97,7 @@ class hive_theme extends theme
 			{
 				$class = ($tab['active']) ? ' active' : '';
 				$out[] = '<li class="dropdown'.$class.'">'.
-					href($tab["label"], '?event='.$tab["event"], array('class' => 'dropdown-toggle'));
+					href($tab["label"], '?event='.$tab["event"], ' class="dropdown-toggle"');
 
 				if (!empty($tab['items']))
 				{
@@ -153,14 +150,11 @@ class hive_theme extends theme
 	function footer()
 	{
 		$out[] = graf(
-			href('Textpattern CMS', 'http://textpattern.com', array(
-				'rel'   => 'external',
-				'title' => gTxt('go_txp_com'),
-			)).
+			href('Textpattern CMS', 'http://textpattern.com', ' rel="external" title="'.gTxt('go_txp_com').'"').
 			' (v'.txp_version.')'
-			, array('class' => 'mothership'));
+			, ' class="mothership"');
 
-		$out[] = graf(href(gTxt('back_to_top'), '#'), array('class' => 'pagejump'));
+		$out[] = graf(href(gTxt('back_to_top'), '#'), ' class="pagejump"');
 
 		return join(n, $out);
 	}
@@ -208,12 +202,7 @@ class hive_theme extends theme
 		{
 			$html = span(
 				gTxt($thing[0]).
-				sp.href('&times;', '#close', array(
-					'role'       => 'button',
-					'class'      => 'close',
-					'title'      => gTxt('close'),
-					'aria-label' => gTxt('close'),
-				))
+				sp.href('&times;', '#close', ' role="button"class="close" title="'.gTxt('close').'" aria-label="'.gTxt('close').'"')
 			, array(
 				'role'  => 'alert',
 				'class' => 'messageflash '.$class,

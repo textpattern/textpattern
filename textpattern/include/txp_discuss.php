@@ -330,15 +330,13 @@
 
 					if ($visible == VISIBLE and in_array($Status, array(4, 5)))
 					{
-						$view = href($comment_status, permlinkurl($a).'#c'.$discussid, array('title' => gTxt('view')));
+						$view = href($comment_status, permlinkurl($a).'#c'.$discussid, ' title="'.gTxt('view').'"');
 					}
 				}
 
 				echo tr(
 					td(fInput('checkbox', 'selected[]', $discussid), '', 'multi-edit').
-
-					hCell(href($discussid, $edit_url, array('title' => gTxt('edit'))), '', ' scope="row" class="id"').
-
+					hCell(href($discussid, $edit_url, ' title="'.gTxt('edit').'"'), '', ' scope="row" class="id"').
 					td(gTime($uPosted), '', 'date posted created').
 					td(txpspecialchars(soft_wrap($name, 15)), '', 'name').
 					td(short_preview($dmessage), '', 'message').
@@ -426,7 +424,7 @@
 				href(
 					$ban_text,
 					'?event=discuss'.a.'step='.$ban_step.a.'ip='.$ip.a.'name='.urlencode($name).a.'discussid='.$discussid.a.'_txp_token='.form_token(),
-					array('class' => 'action-ban')
+					' class="action-ban"'
 				).
 				span(']', array('role' => 'presentation'));
 
@@ -581,7 +579,7 @@
 						href(
 							gTxt('unban'),
 							'?event=discuss'.a.'step=ipban_unban'.a.'ip='.txpspecialchars($ip).a.'_txp_token='.form_token(),
-							array('class' => 'action-ban')
+							' class="action-ban"'
 						).
 						span(']', array('role' => 'presentation'))
 					, '', 'ip').

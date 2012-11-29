@@ -30,7 +30,7 @@ SF;
 	function header()
 	{
 		global $txp_user;
-		$out[] = hed(htmlspecialchars($GLOBALS["prefs"]["sitename"]), 1, array('class' => 'txp-accessibility'));
+		$out[] = hed(htmlspecialchars($GLOBALS["prefs"]["sitename"]), 1, ' class="txp-accessibility"');
 		$out[] = '<nav role="navigation" id="masthead" aria-label="'.gTxt('navigation').'">';
 		$out[] = '<ul id="nav">';
 
@@ -58,7 +58,7 @@ SF;
 		}
 
 		$out[] = '<li id="view-site" class="primary tabdown inactive">'.
-			href(gTxt('tab_view_site'), hu, array('target' => '_blank')).
+			href(gTxt('tab_view_site'), hu, ' target="_blank"').
 			'</li>';
 
 		if ($txp_user)
@@ -78,11 +78,7 @@ SF;
 	function footer()
 	{
 		return graf(
-			href('Textpattern CMS', 'http://textpattern.com/', array(
-				'rel'    => 'external',
-				'title'  => gTxt('go_txp_com'),
-				'target' => '_blank',
-			)).
+			href('Textpattern CMS', 'http://textpattern.com/', ' rel="external" title="'.gTxt('go_txp_com').'" target="_blank"').
 			n.span('&#183;', array('role' => 'separator')).
 			n.txp_version
 		);

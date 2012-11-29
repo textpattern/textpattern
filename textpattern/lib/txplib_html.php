@@ -396,6 +396,7 @@
 	function nav_form($event, $page, $numPages, $sort = '', $dir = '', $crit = '', $search_method = '', $total = 0, $limit = 0, $step = 'list')
 	{
 		global $theme;
+
 		if ($crit != '' && $total > 1)
 		{
 			$out[] = $theme->announce(
@@ -602,6 +603,7 @@
 		{
 			$o[] = tr($a);
 		}
+
 		return join('', $o);
 	}
 
@@ -960,6 +962,7 @@
 		{
 			$o[] = tda($a, ' width="'.$b.'"');
 		}
+
 		return tr(join(n.t, $o), $atts);
 	}
 
@@ -974,10 +977,12 @@
 	function assHead()
 	{
 		$array = func_get_args();
+
 		foreach ($array as $a)
 		{
 			$o[] = hCell(gTxt($a), '', ' scope="col"');
 		}
+
 		return tr(join('', $o));
 	}
 
@@ -1155,8 +1160,8 @@
 			($sort ? hInput('sort', $sort).hInput('dir', $dir) : '' ).
 			($crit !== '' ? hInput('crit', $crit).hInput('search_method', $search_method) : '').
 			join('', $html).
-			fInput('submit', '', gTxt('go')).
-			n, 'div', array('class' => 'multi-edit'));
+			fInput('submit', '', gTxt('go'))
+			, 'div', array('class' => 'multi-edit'));
 	}
 
 /**
@@ -1384,6 +1389,7 @@ EOF;
 			'class="checkbox" onclick="toggleClassRemember(\''.$classname.'\');" />'.
 			n.' <label for="'.$name.'">'.gTxt('detail_toggle').'</label> '.
 			script_js("setClassRemember('".$classname."');addEvent(window, 'load', function () {setClassRemember('".$classname."');});");
+
 		if ($form)
 		{
 			return form($i);
@@ -1416,6 +1422,7 @@ EOF;
 		if ($form)
 		{
 			$args = empty($_SERVER['QUERY_STRING']) ? '' : '?'.txpspecialchars($_SERVER['QUERY_STRING']);
+
 			return '<form class="'.$name.'" method="post" action="index.php'.$args.'">'.$i.eInput(gps('event')).tInput().'</form>';
 		}
 		else
@@ -1535,9 +1542,9 @@ EOF;
 			return ($wraptag) ?	tag(join($break, $list), $wraptag, $atts) :	join($break, $list);
 		}
 
-		return ($wraptag) ?
-			tag(n.t.tag(join("</$break>".n.t."<{$break}{$breakatts}>", $list), $break, $breakatts).n, $wraptag, $atts) :
-			tag(n.join("</$break>".n."<{$break}{$breakatts}>".n, $list).n, $break, $breakatts);
+		return ($wraptag)
+			? tag(n.tag(join("</$break>".n."<{$break}{$breakatts}>", $list), $break, $breakatts).n, $wraptag, $atts) 
+			: tag(n.join("</$break>".n."<{$break}{$breakatts}>".n, $list).n, $break, $breakatts);
 	}
 
 /**

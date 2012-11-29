@@ -18,10 +18,10 @@ class classic_theme extends theme
 
 	function header()
 	{
-		$out[] = hed(htmlspecialchars($GLOBALS["prefs"]["sitename"]), 1, array('class' => 'txp-accessibility'));
+		$out[] = hed(htmlspecialchars($GLOBALS["prefs"]["sitename"]), 1, ' class="txp-accessibility"');
 		$out[] = '<div id="masthead">';
 		$out[] = '<div id="navpop">'.navPop(1).'</div>';
-		$out[] = hed('Textpattern', 1, array('id' => 'branding'));
+		$out[] = hed('Textpattern', 1, ' id="branding"');
 		$out[] = '</div>';
 
 		if (!$this->is_popup)
@@ -35,7 +35,7 @@ class classic_theme extends theme
 			{
 				$tc = ($tab['active']) ? 'tabup' : 'tabdown';
 				$out[] = '<li>'.
-					href($tab["label"], '?event='.$tab["event"], array('class' => $tc)).
+					href($tab["label"], '?event='.$tab["event"], ' class="'.$tc.'"').
 					'</li>';
 
 				if ($tab['active'] && !empty($tab['items']))
@@ -46,7 +46,7 @@ class classic_theme extends theme
 					{
 						$tc = ($item['active']) ? 'tabup' : 'tabdown';
 						$secondary .= n.'<li>'.
-							href($item['label'], '?event='.$item['event'], array('class' => $tc)).
+							href($item['label'], '?event='.$item['event'], ' class="'.$tc.'"').
 							'</li>';
 					}
 					$secondary .= n.'</ul>'.
@@ -55,10 +55,7 @@ class classic_theme extends theme
 			}
 
 			$out[] = '<li id="view-site">'.
-				href(gTxt('tab_view_site'), hu, array(
-					'class' => 'tabdown',
-					'target' => '_blank',
-				)).
+				href(gTxt('tab_view_site'), hu, ' class="tabdown" target="_blank"').
 				'</li>';
 
 			$out[] = '</ul>';
@@ -75,11 +72,7 @@ class classic_theme extends theme
 	{
 		global $txp_user;
 
-		$out[] = href('Textpattern CMS', 'http://textpattern.com', array(
-				'rel'    => 'external',
-				'title'  => gTxt('go_txp_com'),
-				'target' => '_target',
-			)).
+		$out[] = href('Textpattern CMS', 'http://textpattern.com', ' title="'.gTxt('go_txp_com').'" rel="external" target="_blank"').
 			n.span('&#183;', array('role' => 'separator')).
 			n.txp_version;
 
@@ -87,7 +80,7 @@ class classic_theme extends theme
 		{
 			$out[] = graf(gTxt('logged_in_as').' '.span(txpspecialchars($txp_user)).br.
 				href(gTxt('logout'), 'index.php?logout=1', ' onclick="return verify(\''.gTxt('are_you_sure').'\')"')
-				, array('id' => 'moniker'));
+				, ' id="moniker"');
 		}
 
 		return join(n, $out);;
@@ -138,12 +131,7 @@ class classic_theme extends theme
 		{
 			$html = span(
 				gTxt($thing[0]).
-				sp.href('&times;', '#close', array(
-					'role'       => 'button',
-					'class'      => 'close',
-					'title'      => gTxt('close'),
-					'aria-label' => gTxt('close'),
-				))
+				sp.href('&times;', '#close', ' role="button" class="close" title="'.gTxt('close').'" aria-label="'.gTxt('close').'"')
 			, array(
 				'role'  => 'alert',
 				'id'    => 'message',

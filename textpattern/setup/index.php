@@ -635,7 +635,7 @@ eod;
 				hed(setup_gTxt('thanks_for_interest'), 3).
 
 				graf(
-					href(setup_gTxt('go_to_login'), $login_url, array('class' => 'navlink publish'))
+					href(setup_gTxt('go_to_login'), $login_url, ' class="navlink publish"')
 				).
 
 				n.'</div>'.
@@ -681,7 +681,7 @@ eod;
 			setup_gTxt('please_go_back')
 		).
 		graf(
-			href(setup_gTxt('back'), 'javascript:history.back()', array('class' => 'navlink'))
+			href(setup_gTxt('back'), 'javascript:history.back()', ' class="navlink"')
 		);
 	}
 

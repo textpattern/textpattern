@@ -989,11 +989,11 @@
 		// Title input.
 		if ($view == 'preview')
 		{
-			echo n.'<div class="preview">'.hed(gTxt('preview'), 2).hed($Title, 1, array('class' => 'title'));
+			echo n.'<div class="preview">'.hed(gTxt('preview'), 2).hed($Title, 1, ' class="title"');
 		}
 		else if ($view == 'html')
 		{
-			echo n.'<div class="html">'.hed('HTML', 2).hed($Title, 1, array('class' => 'title'));
+			echo n.'<div class="html">'.hed('HTML', 2).hed($Title, 1, ' class="title"');
 		}
 		else if ($view == 'text')
 		{
@@ -1007,7 +1007,7 @@
 		}
 		else if ($view == 'html')
 		{
-			echo tag(str_replace(array(n,t), array(br,sp.sp.sp.sp), txpspecialchars($Body_html)), 'code', array('class' => 'body'));
+			echo tag(str_replace(array(n,t), array(br,sp.sp.sp.sp), txpspecialchars($Body_html)), 'code', ' class="body"');
 		}
 		else
 		{
@@ -1051,7 +1051,7 @@
 		{
 			if ($step != 'create')
 			{
-				echo graf(href(gtxt('create_new'), 'index.php?event=article'), array('class' => 'action-create'));
+				echo graf(href(gtxt('create_new'), 'index.php?event=article'), ' class="action-create"');
 			}
 
 			// Prev/next article links.

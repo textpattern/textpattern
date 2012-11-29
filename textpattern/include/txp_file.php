@@ -282,7 +282,7 @@
 					, '', ' scope="row" class="id"').
 
 					td(
-						($can_edit ? href(txpspecialchars($filename), $edit_url, array('title' => gTxt('edit'))) : txpspecialchars($filename))
+						($can_edit ? href(txpspecialchars($filename), $edit_url, ' title="'.gTxt('edit').'"') : txpspecialchars($filename))
 					, '', 'name').
 
 					td(txpspecialchars($title), '', 'title').
@@ -1053,7 +1053,7 @@
 		$label = ($label != '') ? $label : gTxt('download');
 		$url = filedownloadurl($id, $filename);
 
-		return href($label, $url, array('title' => gTxt('download')));
+		return href($label, $url, ' title="'.gTxt('download').'"');
 	}
 
 // -------------------------------------------------------------
