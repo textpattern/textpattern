@@ -176,11 +176,8 @@
 
 		$urlparts = parse_url(hu);
 		$mydomain = $urlparts['host'];
-		$server_software = (@$_SERVER['SERVER_SOFTWARE'] || @$_SERVER['HTTP_HOST'])
-							? ( (@$_SERVER['SERVER_SOFTWARE']) ?  @$_SERVER['SERVER_SOFTWARE'] :  $_SERVER['HTTP_HOST'] )
-							: '';
-		$is_apache = ($server_software and stristr($server_software, 'Apache'))
-					   or (is_callable('apache_get_version'));
+
+		$is_apache = stristr(serverSet('SERVER_SOFTWARE'), 'Apache') || is_callable('apache_get_version');
 		$real_doc_root = (isset($_SERVER['DOCUMENT_ROOT'])) ? realpath($_SERVER['DOCUMENT_ROOT']) : '';
 
 		// ini_get() returns string values passed via php_value as a string, not boolean.
@@ -198,94 +195,104 @@
 			set_pref('last_update_check', serialize($updateInfo), 'publish', PREF_HIDDEN, 'text_input');
 		}
 
-		$fail = array(
-			'textpattern_version_update' => ($updateInfo['msg'] ? diag_msg_wrap($updateInfo['msg'], 'information') : ''),
+		$fail = array();
 
-			'php_version_required' =>
-			(!is_callable('version_compare') or version_compare(PHP_VERSION, REQUIRED_PHP_VERSION, '<'))
-			? diag_msg_wrap(gTxt('php_version_required', array('{version}' => REQUIRED_PHP_VERSION)))
-			: '',
+		if (!empty($updateInfo['msg']))
+		{
+			$fail['textpattern_version_update'] = diag_msg_wrap($updateInfo['msg'], 'information');
+		}
 
-			'path_to_site_missing' =>
-			(!isset($path_to_site))
-			? diag_msg_wrap(gTxt('path_to_site_missing'), 'warning')
-			: '',
+		if (!is_callable('version_compare') || version_compare(PHP_VERSION, REQUIRED_PHP_VERSION, '<'))
+		{
+			$fail['php_version_required'] = diag_msg_wrap(gTxt('php_version_required', array('{version}' => REQUIRED_PHP_VERSION)));
+		}
 
-			'dns_lookup_fails' =>
-			(@gethostbyname($mydomain) == $mydomain)
-			? diag_msg_wrap(gTxt('dns_lookup_fails').cs.$mydomain, 'warning')
-			: '',
+		if (!isset($path_to_site))
+		{
+			$fail['path_to_site_missing'] = diag_msg_wrap(gTxt('path_to_site_missing'), 'warning');
+		}
 
-			'path_to_site_inacc' =>
-			(!@is_dir($path_to_site))
-			? diag_msg_wrap(gTxt('path_to_site_inacc').cs.$path_to_site)
-			: '',
+		if (@gethostbyname($mydomain) == $mydomain)
+		{
+			$fail['dns_lookup_fails'] = diag_msg_wrap(gTxt('dns_lookup_fails').cs.$mydomain, 'warning');
+		}
 
-			'site_trailing_slash' =>
-			(rtrim($siteurl, '/') != $siteurl)
-			? diag_msg_wrap(gTxt('site_trailing_slash').cs.$path_to_site, 'warning')
-			: '',
+		if (!@is_dir($path_to_site))
+		{
+			$fail['path_to_site_inacc'] = diag_msg_wrap(gTxt('path_to_site_inacc').cs.$path_to_site);
+		}
 
-			'index_inaccessible' =>
-			(!@is_file($path_to_site."/index.php") or !@is_readable($path_to_site."/index.php"))
-			? diag_msg_wrap("{$path_to_site}/index.php ".gTxt('is_inaccessible'))
-			: '',
+		if (rtrim($siteurl, '/') != $siteurl)
+		{
+			$fail['site_trailing_slash'] = diag_msg_wrap(gTxt('site_trailing_slash').cs.$path_to_site, 'warning');
+		}
 
-			'dir_not_writable' =>
-			trim(
-				((!@is_writable($path_to_site.'/'.$img_dir))
-				? diag_msg_wrap(str_replace('{dirtype}', gTxt('img_dir'), gTxt('dir_not_writable')).": {$path_to_site}/{$img_dir}", 'warning').n
-				: '').
-				((!@is_writable($file_base_path))
-				? diag_msg_wrap(str_replace('{dirtype}', gTxt('file_base_path'), gTxt('dir_not_writable')).": {$file_base_path}", 'warning').n
-				: '').
-				((!@is_writable($tempdir))
-				? diag_msg_wrap(str_replace('{dirtype}', gTxt('tempdir'), gTxt('dir_not_writable')).": {$tempdir}", 'warning').n
-				: '')),
+		if (!@is_file($path_to_site."/index.php") || !@is_readable($path_to_site."/index.php"))
+		{
+			$fail['index_inaccessible'] = diag_msg_wrap("{$path_to_site}/index.php ".gTxt('is_inaccessible'));
+		}
 
-			'cleanurl_only_apache' =>
-			($permlink_mode != 'messy' and !$is_apache )
-			? diag_msg_wrap(gTxt('cleanurl_only_apache'), 'information')
-			: '',
+		$not_readable = array();
 
-			'htaccess_missing' =>
-			($permlink_mode != 'messy' and !@is_readable($path_to_site.'/.htaccess'))
-			? diag_msg_wrap(gTxt('htaccess_missing'))
-			: '',
+		if (!@is_writable($path_to_site.'/'.$img_dir))
+		{
+			$not_readable[] = diag_msg_wrap(str_replace('{dirtype}', gTxt('img_dir'), gTxt('dir_not_writable')).": {$path_to_site}/{$img_dir}", 'warning');
+		}
 
-			'mod_rewrite_missing' =>
-			($permlink_mode != 'messy' and is_callable('apache_get_modules') and !apache_module('mod_rewrite'))
-			? diag_msg_wrap(gTxt('mod_rewrite_missing'))
-			: '',
+		if (!@is_writable($file_base_path))
+		{
+			$not_readable[] = diag_msg_wrap(str_replace('{dirtype}', gTxt('file_base_path'), gTxt('dir_not_writable')).": {$file_base_path}", 'warning');
+		}
 
-			'file_uploads_disabled' =>
-			(!ini_get('file_uploads'))
-			? diag_msg_wrap(gTxt('file_uploads_disabled'), 'information')
-			: '',
+		if (!@is_writable($tempdir))
+		{
+			$not_readable[] = diag_msg_wrap(str_replace('{dirtype}', gTxt('tempdir'), gTxt('dir_not_writable')).": {$tempdir}", 'warning');
+		}
 
-			'setup_still_exists' =>
-			(@is_dir(txpath . DS. 'setup'))
-			?	diag_msg_wrap(txpath.DS."setup".DS.' '.gTxt('still_exists'), 'warning')
-			:	'',
+		if ($not_readable)
+		{
+			$fail['dir_not_writable'] = join(n, $not_readable);
+		}
 
-			'no_temp_dir' =>
-			(empty($tempdir))
-			? diag_msg_wrap(gTxt('no_temp_dir'), 'warning')
-			: '',
+		if ($permlink_mode != 'messy' && !$is_apache)
+		{
+			$fail['cleanurl_only_apache'] = diag_msg_wrap(gTxt('cleanurl_only_apache'), 'information');
+		}
 
-			'warn_mail_unavailable' =>
-			(is_disabled('mail'))
-			? diag_msg_wrap(gTxt('warn_mail_unavailable'), 'warning')
-			: '',
+		if ($permlink_mode != 'messy' and !@is_readable($path_to_site.'/.htaccess'))
+		{
+			$fail['htaccess_missing'] = diag_msg_wrap(gTxt('htaccess_missing'));
+		}
 
-			'warn_register_globals_or_update' =>
-			($is_register_globals &&
-				(version_compare(phpversion(), '4.4.0', '<=')
-				or (version_compare(phpversion(), '5.0.0', '>=') and version_compare(phpversion(), '5.0.5', '<='))
-			))
-			? diag_msg_wrap(gTxt('warn_register_globals_or_update'), 'warning')
-			: '',
-		);
+		if ($permlink_mode != 'messy' and is_callable('apache_get_modules') and !apache_module('mod_rewrite'))
+		{
+			$fail['mod_rewrite_missing'] = diag_msg_wrap(gTxt('mod_rewrite_missing'));
+		}
+
+		if (!ini_get('file_uploads'))
+		{
+			$fail['file_uploads_disabled'] = diag_msg_wrap(gTxt('file_uploads_disabled'), 'information');
+		}
+
+		if (@is_dir(txpath . DS. 'setup'))
+		{
+			$fail['setup_still_exists'] = diag_msg_wrap(txpath.DS."setup".DS.' '.gTxt('still_exists'), 'warning');
+		}
+
+		if (empty($tempdir))
+		{
+			$fail['no_temp_dir'] = diag_msg_wrap(gTxt('no_temp_dir'), 'warning');
+		}
+
+		if (is_disabled('mail'))
+		{
+			$fail['warn_mail_unavailable'] = diag_msg_wrap(gTxt('warn_mail_unavailable'), 'warning');
+		}
+
+		if ($is_register_globals)
+		{
+			$fail['warn_register_globals_or_update'] = diag_msg_wrap(gTxt('warn_register_globals_or_update'), 'warning');
+		}
 
 		if ($permlink_mode != 'messy')
 		{
@@ -300,14 +307,6 @@
 			}
 		}
 
-		foreach ($fail as $k=>$v)
-		{
-			if (empty($v))
-			{
-				unset($fail[$k]);
-			}
-		}
-	
 		$cs = check_file_integrity(INTEGRITY_REALPATH);
 
 		if (!$cs)
