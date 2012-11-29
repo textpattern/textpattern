@@ -141,13 +141,25 @@
 					$description
 				);
 
-				$help = !empty($help)
-					? href(gTxt('help'), '?event=plugin'.a.'step=plugin_help'.a.'name='.urlencode($name), array('class' => 'plugin-help'))
-					: '';
+				if (!empty($help))
+				{
+					$help = href(gTxt('help'), array(
+						'event' => 'plugin',
+						'step'  => 'plugin_help',
+						'name'  => $name,
+					), array('class' => 'plugin-help'));
+				}
 
-				$plugin_prefs = ($flags & PLUGIN_HAS_PREFS)
-					? href(gTxt('plugin_prefs'), '?event=plugin_prefs.'.urlencode($name), array('class' => 'plugin-prefs'))
-					: '';
+				if ($flags & PLUGIN_HAS_PREFS)
+				{
+					$plugin_prefs = href(gTxt('plugin_prefs'), array(
+						'event' => 'plugin_prefs.'.$name
+					), array('class' => 'plugin-prefs'));
+				}
+				else
+				{
+					$plugin_prefs = '';
+				}
 
 				$manage = array();
 
@@ -172,7 +184,7 @@
 					hCell($edit_url, '', ' scope="row" class="name"').
 
 					td(
-						href($author, $author_uri, array('rel' => 'external'))
+						href($author, $a['author_uri'], array('rel' => 'external'))
 					, '', 'author').
 
 					td($version, '', 'version').
