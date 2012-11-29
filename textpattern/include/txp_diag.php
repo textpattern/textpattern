@@ -171,7 +171,7 @@
 
 	function doDiagnostics()
 	{
-		global $prefs, $files, $txpcfg, $event, $step, $theme;
+		global $prefs, $files, $txpcfg, $event, $step, $theme, $DB;
 		extract(get_prefs());
 
 		$urlparts = parse_url(hu);
@@ -573,8 +573,7 @@
 
 		if ($step == 'high')
 		{
-			$mysql_client_encoding = (is_callable('mysql_client_encoding')) ? mysql_client_encoding() : '-';
-			$out[] = n.'Charset (default/config)'.cs.$mysql_client_encoding.'/'.@$txpcfg['dbcharset'].n;
+			$out[] = n.'Charset (default/config)'.cs.$DB->default_charset.'/'.$DB->charset.n;
 
 			$result = safe_query("SHOW variables like 'character_se%'");
 
