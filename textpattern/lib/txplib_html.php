@@ -856,7 +856,7 @@
  * Renders an &lt;a&gt; element.
  *
  * @param  string       $item Enclosed content
- * @param  string       $href The link target
+ * @param  string|array $href The link target
  * @param  string|array $atts HTML attributes
  * @return string       HTML
  */
@@ -869,6 +869,11 @@
 		}
 		else
 		{
+			if (is_array($href))
+			{
+				$href = join_qs($href);
+			}
+
 			$atts .= ' href="'.$href.'"';
 		}
 
