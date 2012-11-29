@@ -83,6 +83,15 @@ class DB
 	public $client_flags = 0;
 
 	/**
+	 * Database connection charset.
+	 *
+	 * @var   string
+	 * @since 4.6.0
+	 */
+
+	public $charset = '';
+
+	/**
 	 * The database link identifier.
 	 *
 	 * @var resource
@@ -105,6 +114,15 @@ class DB
 	 */
 
 	public $table_options = array();
+
+	/**
+	 * The default character set for the connection.
+	 *
+	 * @var   string
+	 * @since 4.6.0
+	 */
+
+	public $default_charset;
 
 	/**
 	 * Creates a new link.
@@ -130,6 +148,11 @@ class DB
 			$this->client_flags = $txpcfg['client_flags'];
 		}
 
+		if (isset($txpcfg['dbcharset']))
+		{
+			$this->charset = $txpcfg['dbcharset'];
+		}
+
 		$this->link = @mysql_connect($this->host, $this->user, $this->pass, false, $this->client_flags);
 
 		if (!$this->link)
@@ -143,11 +166,13 @@ class DB
 		$connected = true;
 
 		// Be backwards compatible.
-		if (isset($txpcfg['dbcharset']) && (intval($version[0]) >= 5 || preg_match('#^4\.[1-9]#', $version)))
+		if ($this->charset && (intval($version[0]) >= 5 || preg_match('#^4\.[1-9]#', $version)))
 		{
-			mysql_query("SET NAMES ". $txpcfg['dbcharset'], $this->link);
-			$this->table_options['charset'] = $txpcfg['dbcharset'];
+			mysql_query("SET NAMES ".$this->charset, $this->link);
+			$this->table_options['charset'] = $this->charset;
 		}
+
+		$this->default_charset = mysql_client_encoding($this->link);
 
 		// Use "ENGINE" if version of MySQL > (4.0.18 or 4.1.2).
 		if (intval($version[0]) >= 5 || preg_match('#^4\.(0\.[2-9]|(1[89]))|(1\.[2-9])#', $version))
