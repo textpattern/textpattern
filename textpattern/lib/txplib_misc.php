@@ -3927,7 +3927,7 @@
 			if (!$row)
 			{
 				trigger_error(gTxt('form_not_found').': '.$name);
-				return;
+				return '';
 			}
 			$f = $row['Form'];
 			$forms[$name] = $f;
@@ -3940,8 +3940,8 @@
 /**
  * Parses a form template.
  *
- * @param   string      $name The form
- * @return  string|null The parsed contents, NULL when form is empty or missing
+ * @param   string $name The form
+ * @return  string The parsed contents, NULL when form is empty or missing
  * @package TagParser
  */
 
@@ -3950,21 +3950,23 @@
 		global $txp_current_form;
 		static $stack = array();
 
+		$out = '';
 		$f = fetch_form($name);
 		if ($f)
 		{
 			if (in_array($name, $stack))
 			{
 				trigger_error(gTxt('form_circular_reference', array('{name}' => $name)));
-				return;
+				return '';
 			}
 			$old_form = $txp_current_form;
 			$txp_current_form = $stack[] = $name;
 			$out = parse($f);
 			$txp_current_form = $old_form;
 			array_pop($stack);
-			return $out;
 		}
+
+		return $out;
 	}
 
 /**
