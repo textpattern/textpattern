@@ -1383,27 +1383,14 @@ table#setup td {
 	margin-right: 0;
 }
 
-td.categories p {
+.category-tree p {
 	margin: 0;
 	border-bottom: 1px solid #ddd;
 	padding: .3em 0;
 }
 
-td.categories p:first-child {
+.category-tree p:first-child {
 	border-top: 1px solid #ddd;
-}
-
-#category_container .action-create {
-	margin-bottom: 1em;
-}
-
-#category_container .action-create label {
-	display: block;
-}
-
-#category_container .parent,
-#category_container .action-create input[type="submit"] {
-	margin: .5em 0 0;
 }
 
 

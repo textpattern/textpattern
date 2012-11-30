@@ -1861,11 +1861,6 @@ body#page-setup {
 
 /* Content -> Categories page
    ========================================================================== */
-#page-category .action-create input[type="submit"],
-.parent {
-  margin-top: .38461538461538em;
-}
-
 .category-list {
   width: 100%;
 }
@@ -1885,10 +1880,6 @@ body#page-setup {
 
 #categories_file {
   margin-right: 0;
-}
-
-.category-list .small {
-  display: block;
 }
 
 /* Content -> Write page

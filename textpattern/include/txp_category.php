@@ -376,11 +376,21 @@ EOS
 
 		$out = hed(gTxt($heading).popHelp($event.'_category'), 2).
 			form(
-				fInput('text', 'title', '', '', '', '', INPUT_REGULAR).
-				(($rs) ? '<div class="parent"><label'.$for.'>' . gTxt('parent') . '</label>' . treeSelectInput('parent_cat', $rs, $parent, $event.'_category_parent') . '</div>' : '').
-				fInput('submit', '', gTxt('Create')).
-				eInput('category').
-				sInput('cat_'.$event.'_create')
+				graf(
+					tag(gTxt('create_new_category'), 'label', array('for' => $event.'_category_new')).br.
+					fInput('text', 'title', '', '', '', '', INPUT_REGULAR, '', $event.'_category_new')
+				).
+				(($rs)
+					? graf('<label'.$for.'>'.gTxt('parent').'</label>'.br.
+						treeSelectInput('parent_cat', $rs, $parent, $event.'_category_parent')
+						, array('class' => 'parent'))
+					: ''
+				).
+				graf(
+					fInput('submit', '', gTxt('Create')).
+					eInput('category').
+					sInput('cat_'.$event.'_create')
+				)
 			, '', '', 'post', 'action-create '.$event);
 
 		if ($rs)
