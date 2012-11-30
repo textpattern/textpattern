@@ -259,7 +259,7 @@
 				graf(
 					checkbox('mail_password', '1', true, '', 'mail_password').
 					n.tag(gTxt('mail_it'), 'label', array('for' => 'mail_password'))
-				, ' class="edit-mail-password"').
+				, array('class' => 'edit-mail-password')).
 				graf(fInput('submit', 'change_pass', gTxt('submit'), 'publish')).
 				eInput('admin').
 				sInput('change_pass').n
@@ -305,7 +305,7 @@
 
 		if (is_disabled('mail'))
 		{
-			echo tag(gTxt('warn_mail_unavailable'), 'p', ' class="alert-block warning"');
+			echo graf(gTxt('warn_mail_unavailable'), array('class' => 'alert-block warning'));
 		}
 
 		echo hed(gTxt('tab_site_admin'), 1, array('class' => 'txp-heading'));
