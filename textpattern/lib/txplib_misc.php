@@ -3851,9 +3851,12 @@
 		}
 		elseif ($els === strpos($thing, '<txp:'))
 		{
-			return $condition
-				? substr($thing, 0, $els)
-				: substr($thing, strpos($thing, '>', $els) + 1);
+			if ($condition)
+			{
+				return substr($thing, 0, $els);
+			}
+
+			return substr($thing, strpos($thing, '>', $els) + 1);
 		}
 
 		$tag    = false;
@@ -3868,9 +3871,12 @@
 			{
 				if ($level === 0 and strpos($chunk, 'else') === 5 and substr($chunk, -2, 1) === '/')
 				{
-					return $condition
-						? $str
-						: substr($thing, strlen($str)+strlen($chunk));
+					if ($condition)
+					{
+						return $str;
+					}
+
+					return substr($thing, strlen($str)+strlen($chunk));
 				}
 				elseif (substr($chunk, 1, 1) === '/')
 				{
@@ -3886,7 +3892,12 @@
 			$str .= $chunk;
 		}
 
-		return $condition ? $thing : '';
+		if ($condition)
+		{
+			return $thing;
+		}
+
+		return '';
 	}
 
 /**
