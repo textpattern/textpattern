@@ -4614,7 +4614,7 @@
 			$code = @$parts[0];
 		}
 
-		callback_event('txp_die', $code);
+		callback_event('txp_die', $code, 0, $url);
 
 		// Redirect with status.
 		if ($url && in_array($code, array(301, 302, 307)))
