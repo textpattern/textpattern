@@ -822,6 +822,37 @@
 	}
 
 /**
+ * Renders anything as a HTML start tag.
+ *
+ * @param  string       $tag  The tag without brackets
+ * @param  string|array $atts HTML attributes
+ * @return string       A HTML start tag
+ * @since  4.6.0
+ * @example
+ * echo tag_start('section', array('class' => 'myClass'));
+ */
+
+	function tag_start($tag, $atts = '')
+	{
+		return '<'.$tag.join_atts($atts).'>';
+	}
+
+/**
+ * Renders anything as a HTML end tag.
+ *
+ * @param  string       $tag  The tag without brackets
+ * @return string       A HTML end tag
+ * @since  4.6.0
+ * @example
+ * echo tag_end('section');
+ */
+
+	function tag_end($tag)
+	{
+		return '</'.$tag.'>';
+	}
+
+/**
  * Renders a &lt;p&gt; element.
  *
  * @param  string       $item Enclosed content
