@@ -3680,6 +3680,47 @@
 	}
 
 /**
+ * Renames a user.
+ *
+ * On a successful run, this function will trigger
+ * a 'user.rename > renamed' callback event.
+ *
+ * @param   string $user    Updated user
+ * @param   string $newname The new name
+ * @return  bool   FALSE on error
+ * @since   4.6.0
+ * @package User
+ */
+
+	function rename_user($user, $newname)
+	{
+		if (!$user || !is_valid_username($newname))
+		{
+			return false;
+		}
+
+		if (
+			safe_update(
+				'txp_users',
+				"name = '".doSlash($newname)."'",
+				"name = '".doSlash($user)."'"
+			) === false
+		)
+		{
+			return false;
+		}
+
+		if (assign_user_assets($user, $newname) === false)
+		{
+			return false;
+		}
+
+		callback_event('user.rename', 'renamed', 0, $user, $newname);
+
+		return true;
+	}
+
+/**
  * Validates the given user credentials.
  *
  * This function validates a given login and a password combination.
