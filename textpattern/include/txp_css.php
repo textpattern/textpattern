@@ -131,20 +131,28 @@
 		{
 			$name = $default_name;
 		}
-		elseif ( ((($copy || $savenew) && $newname) || ($newname && ($newname != $name))) && !$save_error)
+		elseif (((($copy || $savenew) && $newname) || ($newname && ($newname != $name))) && !$save_error)
 		{
 			$name = $newname;
 		}
 
-		$buttons = n.'<label for="new_style">'.gTxt('css_name').'</label>'.br.fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_style', false, true);
-		$buttons .= (empty($name))
-			? hInput('savenew', 'savenew')
-			: n.span(
+		$buttons = n.tag(gTxt('css_name'), 'label', array('for' => 'new_style')).
+			br.fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_style', false, true);
+
+		if ($name)
+		{
+			$buttons .= n.span(
 				href(gTxt('duplicate'), '#', array(
 					'id'    => 'txp_clone',
 					'class' => 'clone',
 					'title' => gTxt('css_clone')
 				)), array('class' => 'txp-actions'));
+		}
+		else
+		{
+			$buttons .= hInput('savenew', 'savenew');
+		}
+
 		$thecss = gps('css');
 
 		if (!$save_error)
