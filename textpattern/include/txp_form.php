@@ -312,16 +312,22 @@
 			'title' => gTxt('form_clone'),
 		));
 
-		$buttons .= (empty($type) || $type == 'article')
-			? href(gTxt('preview'), '#', array(
+		if (empty($type) || $type == 'article')
+		{
+			$buttons .= href(gTxt('preview'), '#', array(
 				'id'    => 'form_preview',
 				'class' => 'form-preview',
-			))
-			: '';
+			));
+		}
 
-		$name_widgets .= (empty($name))
-			? hInput('savenew', 'savenew')
-			: n.span($buttons, array('class' => 'txp-actions'));
+		if ($name)
+		{
+			$name_widgets .= n.span($buttons, array('class' => 'txp-actions'));
+		}
+		else
+		{
+			$name_widgets .= hInput('savenew', 'savenew');
+		}
 
 		// Generate the tagbuilder links.
 		// Format of each entry is popTagLink -> array ( gTxt string, class/ID ).
