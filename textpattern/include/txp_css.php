@@ -72,20 +72,35 @@
 
 		if ($rs)
 		{
-			$out[] = '<ul class="switcher-list">';
-
 			while ($a = nextRow($rs))
 			{
 				extract($a);
 				$active = ($current === $name);
-				$edit = ($active) ? txpspecialchars($name) : eLink('css', '', 'name', $name, $name);
-				$delete = (!array_key_exists($name, $protected)) ? dLink('css', 'css_delete', 'name', $name) : '';
-				$out[] = '<li'.($active ? ' class="active"' : '').'>'.n.$edit.$delete.n.'</li>';
+
+				if ($active)
+				{
+					$edit = txpspecialchars($name);
+				}
+				else
+				{
+					$edit = eLink('css', '', 'name', $name, $name);
+				}
+
+				if (!array_key_exists($name, $protected))
+				{
+					$edit .= dLink('css', 'css_delete', 'name', $name);
+				}
+
+				$out[] = tag(n.$edit.n, 'li', array(
+					'class' => $active ? 'active' : '',
+				));
 			}
 
-			$out[] = '</ul>';
+			$out = tag(join(n, $out), 'ul', array(
+				'class' => 'switcher-list'
+			));
 
-			return wrapGroup('all_styles', join(n, $out), 'all_stylesheets');
+			return wrapGroup('all_styles', $out, 'all_stylesheets');
 		}
 	}
 
