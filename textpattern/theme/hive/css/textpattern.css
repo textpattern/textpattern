@@ -1861,6 +1861,11 @@ body#page-setup {
 
 /* Content -> Categories page
    ========================================================================== */
+#page-category .action-create input[type="submit"],
+.parent {
+  margin-top: .38461538461538em;
+}
+
 .category-list {
   width: 100%;
 }
@@ -1874,12 +1879,16 @@ body#page-setup {
   background: #f7f7f7;
 }
 
-#categories_article {
+.categories:first-child > div {
   margin-left: 0;
 }
 
-#categories_file {
+.categories:last-child > div {
   margin-right: 0;
+}
+
+.category-list .small {
+  display: block;
 }
 
 /* Content -> Write page
