@@ -81,44 +81,67 @@ Use of this software indicates acceptance of the Textpattern license agreement
 		$reset = gps('reset');
 
 		$name = join(',', array_slice(explode(',', cs('txp_login')), 0, -1));
+		$out = array();
+
+		if ($reset)
+		{
+			$out[] = hed(gTxt('password_reset'), 2, array('id' => 'txp-login-heading')).
+
+				graf(
+					n.span(tag(gTxt('name'), 'label', array('for' => 'login_name')), array('class' => 'login-label')).
+					n.span(fInput('text', 'p_userid', $name, '', '', '', INPUT_REGULAR, '', 'login_name'), array('class' => 'login-value'))
+				, ' class="login-name"').
+
+				graf(
+					fInput('submit', '', gTxt('password_reset_button'), 'publish').n
+				).
+
+				graf(
+					href(gTxt('back_to_login'), 'index.php')
+				, array('class' => 'login-return')).
+
+				hInput('p_reset', 1);
+		}
+		else
+		{
+			$out[] = hed(gTxt('login_to_textpattern'), 2, array('id' => 'txp-login-heading')).
+
+				graf(
+					n.span(tag(gTxt('name'), 'label', array('for' => 'login_name')), array('class' => 'login-label')).
+					n.span(fInput('text', 'p_userid', $name, '', '', '', INPUT_REGULAR, '', 'login_name'), array('class' => 'login-value'))
+				, array('class' => 'login-name')).
+
+				graf(
+					n.span(tag(gTxt('password'), 'label', array('for' => 'login_password')), array('class' => 'login-label')).
+					n.span(fInput('password', 'p_password', '', '', '', '', INPUT_REGULAR, '', 'login_password'), array('class' => 'login-value'))
+				, array('class' => 'login-password')).
+
+				graf(
+					checkbox('stay', 1, $stay, '', 'login_stay').n.
+					tag(gTxt('stay_logged_in'), 'label', array('for' => 'login_stay')).
+					popHelp('remember_login').n
+				, array('class' => 'login-stay')).
+
+				graf(
+					fInput('submit', '', gTxt('log_in_button'), 'publish').n
+				).
+
+				graf(
+					href(gTxt('password_forgotten'), '?reset=1')
+				, array('class' => 'login-forgot'));
+
+			if (gps('event'))
+			{
+				$out[] = eInput(gps('event'));
+			}
+		}
 
 		echo form(
-			n.'<section role="region" class="txp-login" aria-labelledby="txp-login-heading">'.
-			hed(gTxt($reset ? 'password_reset' : 'login_to_textpattern'), 2, ' id="txp-login-heading"').
-
-			graf(
-				n.span('<label for="login_name">'.gTxt('name').'</label>', array('class' => 'login-label')).
-				n.span(fInput('text', 'p_userid', $name, '', '', '', INPUT_REGULAR, '', 'login_name'), array('class' => 'login-value'))
-			, ' class="login-name"').
-
-			($reset
-				? ''
-				: graf(
-					n.span('<label for="login_password">'.gTxt('password').'</label>', array('class' => 'login-label')).
-					n.span(fInput('password', 'p_password', '', '', '', '', INPUT_REGULAR, '', 'login_password'), array('class' => 'login-value'))
-				, ' class="login-password"')
-			).
-
-			($reset
-				? ''
-				: graf(
-					checkbox('stay', 1, $stay, '', 'login_stay').n.'<label for="login_stay">'.gTxt('stay_logged_in').'</label>'.popHelp('remember_login').n
-					, ' class="login-stay"')
-			).
-
-			($reset ? hInput('p_reset', 1) : '').
-
-			graf(
-				fInput('submit', '', gTxt($reset ? 'password_reset_button' : 'log_in_button'), 'publish').n
-			).
-			(
-				($reset
-					? graf(href(gTxt('back_to_login'), 'index.php'), ' class="login-return"')
-					: graf(href(gTxt('password_forgotten'), '?reset=1'), ' class="login-forgot"')
-				)
-			).
-			(gps('event') ? eInput(gps('event')) : '').
-			n.'</section>'
+			tag(join('', $out), 'section', array(
+				'role'            => 'region',
+				'class'           => 'txp-login',
+				'aria-labelledby' => 'txp-login-heading',
+			))
 		, '', '', 'post', '', '', 'login_form').
 
 		script_js('textpattern.textarray = '.json_encode($textarray_script)).
