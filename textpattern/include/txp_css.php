@@ -160,30 +160,38 @@
 			$thecss = fetch('css', 'txp_css', 'name', $name);
 		}
 
-		$right =
-			n.'<div id="content_switcher" class="txp-layout-cell txp-layout-1-4">'.
-				graf(sLink('css', 'pour', gTxt('create_new_css')), ' class="action-create"').
-				css_list($name, $default_name).
-			n.'</div>';
-
 		echo hed(gTxt('tab_style'), 1, array('class' => 'txp-heading'));
-		echo n.'<div id="'.$event.'_container" class="txp-layout-grid">'.
-			n.'<div id="main_content" class="txp-layout-cell txp-layout-3-4">'.
-			form(
-				graf($buttons).
-				graf(
-					'<label for="css">'.gTxt('css_code').'</label>'.
-					br.'<textarea id="css" class="code" name="css" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'">'.txpspecialchars($thecss).'</textarea>'
-				).
-				graf(
-					fInput('submit', '', gTxt('save'), 'publish').
-					eInput('css').sInput('css_save').
-					hInput('name', $name)
-				)
-			, '', '', 'post', 'edit-form', '', 'style_form').
-			n.'</div>'.
-			$right.
-		n.'</div>';
+		echo n.tag(
+			n.tag(
+				form(
+					graf($buttons).
+					graf(
+						tag(gTxt('css_code'), 'label', array('for' => 'css')).
+						br.'<textarea id="css" class="code" name="css" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'">'.txpspecialchars($thecss).'</textarea>'
+					).
+					graf(
+						fInput('submit', '', gTxt('save'), 'publish').
+						eInput('css').sInput('css_save').
+						hInput('name', $name)
+					)
+				, '', '', 'post', 'edit-form', '', 'style_form').n
+			, 'div', array(
+				'id'    => 'main_content',
+				'class' => 'txp-layout-cell txp-layout-3-4',
+			)).
+
+			n.tag(
+				graf(sLink('css', 'pour', gTxt('create_new_css')), array('class' => 'action-create')).
+				css_list($name, $default_name).n
+			, 'div', array(
+				'id'    => 'content_switcher',
+				'class' => 'txp-layout-cell txp-layout-1-4',
+			)).n
+
+		, 'div', array(
+			'id'    => $event.'_container',
+			'class' => 'txp-layout-grid',
+		));
 	}
 
 /**
