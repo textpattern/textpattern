@@ -377,34 +377,48 @@
 		}
 
 		echo hed(gTxt('tab_forms').popHelp('forms_overview'), 1, array('class' => 'txp-heading'));
- 		echo n.'<div id="'.$event.'_container" class="txp-layout-grid">'.
- 			n.'<div id="tagbuild_links" class="txp-layout-cell txp-layout-1-4">'.
- 				hed(gTxt('tagbuilder'), 2).
- 				$tagbuild_links.
- 			n.'</div>'.
+		echo n.tag(
 
- 			n.'<div id="main_content" class="txp-layout-cell txp-layout-2-4">'.
- 			form(
- 				graf($name_widgets).
- 				graf(
- 					'<label for="form">'.gTxt('form_code').'</label>'.
- 					br.'<textarea id="form" class="code" name="Form" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'">'.txpspecialchars($Form).'</textarea>'
- 				).
- 				graf($type_widgets).
- 				(empty($type) ? graf(gTxt('only_articles_can_be_previewed')) : '').
- 				graf(
- 					fInput('submit', 'save', gTxt('save'), 'publish').
- 					eInput('form').sInput('form_save').
- 					hInput('name', $name)
- 				)
- 			, '', '', 'post', 'edit-form', '', 'form_form').
- 			n.'</div>'.
+			n.tag(
+				hed(gTxt('tagbuilder'), 2).
+				$tagbuild_links.n
+			, 'div', array(
+				'id'    => 'tagbuild_links',
+				'class' => 'txp-layout-cell txp-layout-1-4',
+			)).
 
- 			n.'<div id="content_switcher" class="txp-layout-cell txp-layout-1-4">'.
- 				graf(sLink('form', 'form_create', gTxt('create_new_form')), ' class="action-create"').
- 				form_list($name).
- 			n.'</div>'
- 		.'</div>';
+			n.tag(
+				form(
+					graf($name_widgets).
+					graf(
+						tag(gTxt('form_code'), 'label', array('for' => 'form')).
+						br.'<textarea id="form" class="code" name="Form" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'">'.txpspecialchars($Form).'</textarea>'
+					).
+					graf($type_widgets).
+					(empty($type) ? graf(gTxt('only_articles_can_be_previewed')) : '').
+					graf(
+						fInput('submit', 'save', gTxt('save'), 'publish').
+						eInput('form').sInput('form_save').
+						hInput('name', $name)
+					)
+				, '', '', 'post', 'edit-form', '', 'form_form').n
+			, 'div', array(
+				'id'    => 'main_content',
+				'class' => 'txp-layout-cell txp-layout-2-4',
+			)).
+
+			n.tag(
+				graf(sLink('form', 'form_create', gTxt('create_new_form')), ' class="action-create"').
+				form_list($name).n
+			, 'div', array(
+				'id'    => 'content_switcher',
+				'class' => 'txp-layout-cell txp-layout-1-4',
+			)).n
+
+		, 'div', array(
+			'id'    => $event.'_container',
+			'class' => 'txp-layout-grid'
+		));
 	}
 
 /**
@@ -584,8 +598,8 @@
 
 	function formTypes($type, $blank_first = true, $id = 'type')
 	{
-	 	global $form_types;
-	 	return selectInput('type', $form_types, $type, $blank_first, '', $id);
+		global $form_types;
+		return selectInput('type', $form_types, $type, $blank_first, '', $id);
 	}
 
 /**
