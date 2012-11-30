@@ -311,15 +311,23 @@
 		echo hed(gTxt('tab_site_admin'), 1, array('class' => 'txp-heading'));
 		echo n.'<div id="users_control" class="txp-control-panel">';
 
-		// Change password button.
-		echo '<p class="txp-buttons">';
-		echo sLink('admin', 'new_pass_form', gTxt('change_password'));
+		$buttons = array();
 
-		// Change email address button.
+		// Change password button.
+		$buttons[] = sLink('admin', 'new_pass_form', gTxt('change_password'));
+
 		if (!has_privs('admin.edit'))
 		{
-			echo n.sLink('admin', 'change_email_form', gTxt('change_email_address'));
+			// Change email address button.
+			$buttons[] = sLink('admin', 'change_email_form', gTxt('change_email_address'));
 		}
+		else
+		{
+			// New author button.
+			$buttons[] = sLink('admin', 'author_edit', gTxt('add_new_author'));
+		}
+
+		echo graf(join(n, $buttons), array('class' => 'txp-buttons'));
 
 		// User list.
 		if (has_privs('admin.list'))
@@ -383,14 +391,6 @@
 			$criteria .= callback_event('admin_criteria', 'author_list', 0, $criteria);
 
 			$total = getCount('txp_users', $criteria);
-
-			// New author button.
-			if (has_privs('admin.edit'))
-			{
-				echo n.sLink('admin', 'author_edit', gTxt('add_new_author'));
-			}
-
-			echo '</p>'; // End txp-buttons.
 
 			if ($total < 1)
 			{
