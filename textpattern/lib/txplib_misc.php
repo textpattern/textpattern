@@ -3847,7 +3847,12 @@
 
 		if ($els === false)
 		{
-			return $condition ? $thing : '';
+			if ($condition)
+			{
+				return $thing;
+			}
+
+			return '';
 		}
 		elseif ($els === strpos($thing, '<txp:'))
 		{
