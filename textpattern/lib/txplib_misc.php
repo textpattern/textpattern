@@ -3941,7 +3941,7 @@
  * Parses a form template.
  *
  * @param   string $name The form
- * @return  string The parsed contents, NULL when form is empty or missing
+ * @return  string The parsed contents
  * @package TagParser
  */
 
