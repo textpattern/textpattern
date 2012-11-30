@@ -3699,6 +3699,11 @@
 			return false;
 		}
 
+		if (assign_user_assets($user, $newname) === false)
+		{
+			return false;
+		}
+
 		if (
 			safe_update(
 				'txp_users',
@@ -3706,11 +3711,6 @@
 				"name = '".doSlash($user)."'"
 			) === false
 		)
-		{
-			return false;
-		}
-
-		if (assign_user_assets($user, $newname) === false)
 		{
 			return false;
 		}
