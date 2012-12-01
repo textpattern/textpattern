@@ -4630,6 +4630,8 @@
 
 	function txp_die($msg, $status = '503', $url = '')
 	{
+		global $connected, $txp_error_message, $txp_error_status, $txp_error_code;
+
 		// Make it possible to call this function as a tag, e.g. in an article <txp:txp_die status="410" />.
 		if (is_array($msg))
 		{
@@ -4683,7 +4685,7 @@
 			die('<html><head><meta http-equiv="refresh" content="0;URL='.txpspecialchars($url).'"></head><body></body></html>');
 		}
 
-		if (@$GLOBALS['connected'] && @txpinterface == 'public')
+		if ($connected && @txpinterface == 'public')
 		{
 			$out = safe_field('user_html', 'txp_page', "name='error_".doSlash($code)."'");
 			if ($out === false)
@@ -4711,9 +4713,9 @@ eod;
 
 		if (is_callable('parse'))
 		{
-			$GLOBALS['txp_error_message'] = $msg;
-			$GLOBALS['txp_error_status'] = $status;
-			$GLOBALS['txp_error_code'] = $code;
+			$txp_error_message = $msg;
+			$txp_error_status = $status;
+			$txp_error_code = $code;
 			set_error_handler("tagErrorHandler");
 			die(parse($out));
 		}
