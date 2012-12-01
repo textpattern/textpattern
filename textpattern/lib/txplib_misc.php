@@ -4693,8 +4693,7 @@
 				$out = safe_field('user_html', 'txp_page', "name='error_default'");
 			}
 		}
-
-		if (!isset($out))
+		else
 		{
 			$out = <<<eod
 <!DOCTYPE html>
@@ -4709,6 +4708,7 @@
 </html>
 eod;
 		}
+
 		header("Content-type: text/html; charset=utf-8");
 
 		if (is_callable('parse'))
