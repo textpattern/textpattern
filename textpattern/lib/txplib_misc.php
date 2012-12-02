@@ -3721,6 +3721,20 @@
 	}
 
 /**
+ * Checks if a user exists.
+ *
+ * @param   string $user The user
+ * @return  bool   TRUE if the user exists
+ * @since   4.6.0
+ * @package User
+ */
+
+	function user_exists($user)
+	{
+		return (bool) safe_row('name', 'txp_users', "name = '".doSlash($user)."'");
+	}
+
+/**
  * Validates the given user credentials.
  *
  * This function validates a given login and a password combination.
