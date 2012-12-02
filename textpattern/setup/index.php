@@ -101,7 +101,7 @@ eod;
 		echo n.'<div id="setup_container" class="txp-container">',
 			n.'<div class="txp-setup">',
 			hed('Welcome to Textpattern',1),
-			n.'<form action="'.$_SERVER['PHP_SELF'].'" method="post">',
+			n.'<form action="'.$_SERVER['PHP_SELF'].'" method="post" class="prefs-form">',
 			langs(),
 			graf(fInput('submit', 'Submit', 'Submit', 'publish')),
 			sInput('getDbInfo'),
@@ -177,7 +177,7 @@ eod;
 			$guess_siteurl = 'mysite.com';
 		}
 
-		echo '<form action="'.$_SERVER['PHP_SELF'].'" method="post">'.
+		echo '<form action="'.$_SERVER['PHP_SELF'].'" method="post" class="prefs-form">'.
 			hed(setup_gTxt('need_details'), 1).
 			hed('MySQL', 2).
 			graf(setup_gTxt('db_must_exist')).
@@ -429,7 +429,7 @@ eod;
 		echo txp_setup_progress_meter(3).
 			n.'<div class="txp-setup">';
 
-		echo '<form action="'.$_SERVER['PHP_SELF'].'" method="post">'.
+		echo '<form action="'.$_SERVER['PHP_SELF'].'" method="post" class="prefs-form">'.
 			hed(setup_gTxt('creating_db_tables'), 2).
 			graf(setup_gTxt('about_to_create')).
 
