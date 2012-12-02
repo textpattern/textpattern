@@ -621,37 +621,19 @@
 			case 'delete' :
 
 				$assign_assets = ps('assign_assets');
+
 				if (!$assign_assets)
 				{
 					$msg = array('must_reassign_assets', E_ERROR);
 				}
-				elseif (in_array($assign_assets, $names))
+				else if (in_array($assign_assets, $names))
 				{
 					$msg = array('cannot_assign_assets_to_deletee', E_ERROR);
 				}
-				elseif (safe_delete('txp_users', "name IN (".join(',', quote_list($names)).")"))
+				else if (remove_user($names, $assign_assets))
 				{
 					$changed = $names;
-					$assign_assets = doSlash($assign_assets);
-					$names = join(',', quote_list($names));
-
-					// Delete private prefs.
-					safe_delete('txp_prefs', "user_name IN ($names)");
-
-					// Assign dangling assets to their new owner.
-					$reassign = array(
-						'textpattern' => 'AuthorID',
-						'txp_file'    => 'author',
-						'txp_image'   => 'author',
-						'txp_link'    => 'author',
-					);
-					foreach ($reassign as $table => $col)
-					{
-						safe_update($table, "$col='$assign_assets'", "$col IN ($names)");
-					}
-
 					callback_event('authors_deleted', '', 0, $changed);
-
 					$msg = 'author_deleted';
 				}
 
