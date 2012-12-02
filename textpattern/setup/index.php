@@ -397,7 +397,7 @@ eod;
 
 		if (!isset($txpcfg) || ($txpcfg['db'] != $ddb) || ($txpcfg['table_prefix'] != $dprefix))
 		{
-			$problems[] = graf('<span class="error">'.setup_gTxt('config_php_does_not_match_input', 'raw').'</span>');
+			$problems[] = graf('<span class="error">'.setup_gTxt('config_php_does_not_match_input', '', 'raw').'</span>');
 			echo txp_setup_progress_meter(2).
 				n.'<div class="txp-setup">'.
 				n.join(n, $problems).
