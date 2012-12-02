@@ -24,22 +24,13 @@ summary {
 
 /* Clearfix
    ========================================================================== */
-
-.clearfix:before,
-.txp-edit p:before,
-.txp-login p:before,
-.plugin-column p:before,
 .clearfix:after,
 .txp-edit p:after,
 .txp-login p:after,
-.plugin-column p:after {
+.edit-form p:after,
+.prefs-form p:after {
 	content: "";
 	display: table;
-}
-.clearfix:after, 
-.txp-edit p:after,
-.txp-login p:after,
-.plugin-column p:after {
 	clear: both;
 }
 
@@ -1595,4 +1586,11 @@ div.code {
 .plugin-column {
 	margin: 0 auto;
 	max-width: 57em;
+}
+
+/* Deprecated @ 4.6 - use .txp-layout-textbox instead */
+.plugin-column p:after {
+	content: "";
+	display: table;
+	clear: both;
 }
