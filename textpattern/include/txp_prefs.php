@@ -169,7 +169,7 @@
 		echo hed(gTxt('tab_preferences'), 1, array('class' => 'txp-heading'));
 		echo n.'<div id="prefs_container" class="txp-container">'.
 			n.'<form method="post" class="prefs-form" action="index.php">'.
-			n.'<div class="plugin-column">';
+			n.'<div class="txp-layout-textbox">';
 
 		// TODO: remove 'custom' when custom fields are refactored.
 		$core_events = array('site', 'admin', 'publish', 'feeds', 'custom', 'comments');
