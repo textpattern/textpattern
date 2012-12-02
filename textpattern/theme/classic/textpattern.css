@@ -1364,25 +1364,6 @@ table#setup td {
 /* Content -> Categories page
    ========================================================================== */
 
-.category-list {
-	width: 100%;
-}
-.category-list td {
-	width: 25%;
-}
-
-.categories > div {
-	margin: 0 1em 0 1em;
-}
-
-.categories:first-child > div {
-	margin-left: 0;
-}
-
-.categories:last-child > div {
-	margin-right: 0;
-}
-
 .category-tree p {
 	margin: 0;
 	border-bottom: 1px solid #ddd;

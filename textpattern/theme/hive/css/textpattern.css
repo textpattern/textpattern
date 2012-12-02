@@ -1861,34 +1861,10 @@ body#page-setup {
 
 /* Content -> Categories page
    ========================================================================== */
-#page-category .action-create input[type="submit"],
-.parent {
-  margin-top: .38461538461538em;
-}
-
-.category-list {
-  width: 100%;
-}
-.category-list td {
-  width: 25%;
-}
-
-.categories > div {
-  margin: 0 .5em 1em;
+.categories {
+  margin-bottom: 1em;
   padding: 1em 1em 1px;
   background: #f7f7f7;
-}
-
-.categories:first-child > div {
-  margin-left: 0;
-}
-
-.categories:last-child > div {
-  margin-right: 0;
-}
-
-.category-list .small {
-  display: block;
 }
 
 /* Content -> Write page
@@ -2171,28 +2147,6 @@ div.code {
   .text-section {
     padding-top: 4em;
     background-position: 0 1.69230769230769em;
-  }
-
-  /* Content -> Categories page < 769px
-     ========================================================================== */
-
-  /* TO BE REMOVED */
-  .category-list th,
-  .category-list td,
-  .category-list tr {
-    display: block;
-    margin: 0 auto;
-    max-width: 42em;
-  }
-
-  /* TO BE REMOVED */
-  .category-list td {
-    width: 100%;
-  }
-
-  /* TO BE REMOVED */
-  .categories > div {
-    margin: 0 0 1em 0;
   }
 
   /* Content -> Write page < 769px

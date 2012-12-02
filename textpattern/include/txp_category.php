@@ -62,26 +62,47 @@
 	{
 		pagetop(gTxt('categories'), $message);
 		$out = array(hed(gTxt('tab_organise'), 1, 'class="txp-heading"'),
-		'<div id="category_container" class="txp-container">',
-		'<table class="category-list">',
-		'<tr>',
-			tdtl('<div id="categories_article">'.cat_article_list().'</div>', ' class="categories article"'),
-			tdtl('<div id="categories_image">'.cat_image_list().'</div>', ' class="categories image"'),
-			tdtl('<div id="categories_file">'.cat_file_list().'</div>', ' class="categories file"'),
-			tdtl('<div id="categories_link">'.cat_link_list().'</div>', ' class="categories link"'),
-		'</tr>',
-		endTable(),
-		'</div>',
-		script_js( <<<EOS
-			$(document).ready(function ()
-			{
-				$('.category-tree').txpMultiEditForm({
-					'row' : 'p',
-					'highlighted' : 'p'
+			'<div id="category_container" class="txp-layout-grid">',
+				n.tag(
+					n.tag(cat_article_list(), 'div', array('class' => 'categories'))
+					, 'div', array(
+						'id'    => 'categories_article',
+						'class' => 'txp-layout-cell txp-layout-1-4'
+					)
+				),
+				n.tag(
+					n.tag(cat_image_list(), 'div', array('class' => 'categories'))
+					, 'div', array(
+						'id'    => 'categories_image',
+						'class' => 'txp-layout-cell txp-layout-1-4'
+					)
+				),
+				n.tag(
+					n.tag(cat_file_list(), 'div', array('class' => 'categories'))
+					, 'div', array(
+						'id'    => 'categories_file',
+						'class' => 'txp-layout-cell txp-layout-1-4'
+					)
+				),
+				n.tag(
+					n.tag(cat_link_list(), 'div', array('class' => 'categories'))
+					, 'div', array(
+						'id'    => 'categories_link',
+						'class' => 'txp-layout-cell txp-layout-1-4'
+					)
+				),
+			'</div>',
+			script_js( <<<EOS
+				$(document).ready(function ()
+				{
+					$('.category-tree').txpMultiEditForm({
+						'row' : 'p',
+						'highlighted' : 'p'
+					});
 				});
-			});
 EOS
-		));
+			)
+		);
 		echo join(n, $out);
 	}
 
