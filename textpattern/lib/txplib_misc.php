@@ -3735,6 +3735,34 @@
 	}
 
 /**
+ * Changes a user's group.
+ *
+ * @param   string|array $user  Updated users
+ * @param   int          $group The new group
+ * @return  bool         FALSE on error
+ * @since   4.6.0
+ * @package User
+ */
+
+	function change_user_group($user, $group)
+	{
+		$levels = get_groups();
+
+		if (!$user || !isset($levels[$group]))
+		{
+			return false;
+		}
+
+		$names = join(',', quote_list((array) $user));
+
+		return safe_update(
+			'txp_users',
+			'privs = '.intval($group),
+			"name in ($names)"
+		);
+	}
+
+/**
  * Validates the given user credentials.
  *
  * This function validates a given login and a password combination.
