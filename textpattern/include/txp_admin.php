@@ -599,6 +599,7 @@
 		$selected = ps('selected');
 		$method = ps('edit_method');
 		$changed = array();
+		$msg = '';
 
 		if (!$selected or !is_array($selected))
 		{
@@ -641,17 +642,8 @@
 
 			case 'changeprivilege' :
 
-				global $levels;
-
-				$privilege = ps('privs');
-
-				if (!isset($levels[$privilege])) return author_list();
-
-				if (safe_update(
-						'txp_users',
-						'privs = '.intval($privilege),
-						"name IN (".join(',', quote_list($names)).")"
-				)) {
+				if (change_user_group($names, ps('privs')))
+				{
 					$changed = $names;
 					$msg = 'author_updated';
 				}
