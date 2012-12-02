@@ -3694,7 +3694,7 @@
 
 	function rename_user($user, $newname)
 	{
-		if (!$user || !is_valid_username($newname))
+		if (!is_scalar($user) || !is_valid_username($newname))
 		{
 			return false;
 		}
