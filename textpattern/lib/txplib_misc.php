@@ -3597,7 +3597,7 @@
 	{
 		static $columns = null;
 
-		if (!$owner || !$new_owner)
+		if (!$owner || !user_exists($new_owner))
 		{
 			return false;
 		}
