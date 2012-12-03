@@ -669,8 +669,6 @@
 
 			case 'resetpassword' :
 
-				$failed  = array();
-
 				foreach ($names as $name)
 				{
 					$passwd = generate_password(PASSWORD_LENGTH);
