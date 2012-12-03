@@ -674,9 +674,8 @@
 				foreach ($names as $name)
 				{
 					$passwd = generate_password(PASSWORD_LENGTH);
-					$hash 	= doSlash(txp_hash_password($passwd));
 
-					if (safe_update('txp_users', "pass = '$hash'", "name = '".doSlash($name)."'"))
+					if (change_user_password($name, $passwd))
 					{
 						$email = safe_field('email', 'txp_users', "name = '".doSlash($name)."'");
 
