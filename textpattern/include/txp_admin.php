@@ -174,32 +174,26 @@
 	{
 		require_privs('admin.edit');
 
-		extract(doSlash(psa(array('privs', 'name', 'email', 'RealName'))));
+		extract(psa(array(
+			'privs',
+			'name',
+			'email',
+			'RealName',
+		)));
 
-		$privs  = assert_int($privs);
+		$privs = assert_int($privs);
 
 		if (is_valid_username($name) && is_valid_email($email))
 		{
-			$exists = safe_field('name', 'txp_users', "name = '" .$name. "'");
-
-			if ($exists)
+			if (user_exists($name))
 			{
 				author_list(array(gTxt('author_already_exists', array('{name}' => $name)), E_ERROR));
 				return;
 			}
 
 			$password = generate_password(PASSWORD_LENGTH);
-			$hash = doSlash(txp_hash_password($password));
-			$nonce = doSlash(md5(uniqid(mt_rand(), TRUE)));
 
-			$rs = safe_insert('txp_users', "
-				privs    = $privs,
-				name     = '$name',
-				email    = '$email',
-				RealName = '$RealName',
-				nonce    = '$nonce',
-				pass     = '$hash'
-			");
+			$rs = create_user($name, $email, $password, $RealName, $privs);
 
 			if ($rs)
 			{
