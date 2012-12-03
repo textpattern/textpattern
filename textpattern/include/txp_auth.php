@@ -188,9 +188,13 @@ Use of this software indicates acceptance of the Textpattern license agreement
 
 		if ($c_userid and strlen($c_hash) == 32) // Cookie exists.
 		{
-			$nonce = safe_field('nonce', 'txp_users', "name='".doSlash($c_userid)."' AND last_access > DATE_SUB(NOW(), INTERVAL 30 DAY)");
+			$r = safe_row(
+				'name, nonce',
+				'txp_users',
+				"name='".doSlash($c_userid)."' AND last_access > DATE_SUB(NOW(), INTERVAL 30 DAY)"
+			);
 
-			if ($nonce and $nonce === md5($c_userid.pack('H*', $c_hash)))
+			if ($r && $r['nonce'] and $r['nonce'] === md5($c_userid.pack('H*', $c_hash)))
 			{
 				// Cookie is good.
 				if ($logout)
@@ -205,8 +209,9 @@ Use of this software indicates acceptance of the Textpattern license agreement
 				else
 				{
 					// Create $txp_user.
-					$txp_user = $c_userid;
+					$txp_user = $r['name'];
 				}
+
 				return $message;
 			}
 			else

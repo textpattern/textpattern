@@ -3975,7 +3975,7 @@
 		$safe_user = doSlash($user);
 		$name = false;
 
-		$r = safe_row('pass, privs', 'txp_users', "name = '$safe_user'");
+		$r = safe_row('name, pass, privs', 'txp_users', "name = '$safe_user'");
 
 		if (!$r)
 		{
@@ -3993,7 +3993,7 @@
 		{
 			if (!$log || $r['privs'] > 0)
 			{
-				$name = $user;
+				$name = $r['name'];
 			}
 		}
 		else
