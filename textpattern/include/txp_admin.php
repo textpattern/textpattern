@@ -140,8 +140,7 @@
 			return;
 		}
 
-		$hash = doSlash(txp_hash_password($new_pass));
-		$rs = safe_update('txp_users', "pass = '$hash'", "name = '".doSlash($txp_user)."'");
+		$rs = change_user_password($txp_user, $new_pass);
 
 		if ($rs)
 		{
