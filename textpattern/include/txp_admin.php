@@ -69,11 +69,7 @@
 			return;
 		}
 
-		$rs = safe_update(
-			'txp_users',
-			"email = '".doSlash($new_email)."'",
-			"name = '".doSlash($txp_user)."'"
-		);
+		$rs = update_user($txp_user, $new_email);
 
 		if ($rs)
 		{
