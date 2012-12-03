@@ -1780,7 +1780,12 @@
 	function register_callback($func, $event, $step = '', $pre = 0)
 	{
 		global $plugin_callback;
-		$plugin_callback[] = array('function'=>$func, 'event'=>$event, 'step'=>$step, 'pre'=>$pre);
+		$plugin_callback[] = array(
+			'function' => $func,
+			'event'    => $event,
+			'step'     => $step,
+			'pre'      => $pre,
+		);
 	}
 
 /**
