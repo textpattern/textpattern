@@ -1823,7 +1823,7 @@
  * @param   string $event The callback event
  * @param   string $step  Additional callback step
  * @param   bool   $pre   Allows two callbacks, a prepending and an appending, with same event and step
- * @return  mixed  The value returned by the attached callback functions, or an empty string
+ * @return  string The value returned by the attached callback functions, or an empty string
  * @package Callback
  * @see     register_callback()
  * @example
