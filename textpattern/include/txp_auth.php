@@ -194,7 +194,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
 				"name='".doSlash($c_userid)."' AND last_access > DATE_SUB(NOW(), INTERVAL 30 DAY)"
 			);
 
-			if ($r && $r['nonce'] and $r['nonce'] === md5($c_userid.pack('H*', $c_hash)))
+			if ($r && $r['nonce'] && $r['nonce'] === md5($c_userid.pack('H*', $c_hash)))
 			{
 				// Cookie is good.
 				if ($logout)
