@@ -533,11 +533,11 @@
 
 		if ($txp_user != $name)
 		{
-			$out[] = inputLabel('privileges', privs($privs), ($is_edit ? '' : 'privileges'), 'about_privileges');
+			$out[] = inputLabel('privileges', privs($privs), 'privileges', 'about_privileges');
 		}
 		else
 		{
-			$out[] = inputLabel('privileges', strong(get_priv_level($privs)), ($is_edit ? '' : 'privileges'), 'about_privileges').
+			$out[] = inputLabel('privileges', strong(get_priv_level($privs))).
 				hInput('privs', $privs);
 		}
 
