@@ -233,8 +233,6 @@
 
 	function new_pass_form()
 	{
-		global $step, $txp_user;
-
 		pagetop(gTxt('tab_site_admin'), '');
 
 		echo form(
@@ -258,7 +256,7 @@
 
 	function change_email_form()
 	{
-		global $step, $txp_user;
+		global $txp_user;
 
 		pagetop(gTxt('tab_site_admin'), '');
 
