@@ -3631,6 +3631,158 @@
 	}
 
 /**
+ * Creates a user account.
+ *
+ * On a successful run, this function will trigger
+ * a 'user.create > created' callback event.
+ *
+ * @param   string $name     The login name
+ * @param   string $email    The email address
+ * @param   string $password The password
+ * @param   string $realname The real name
+ * @param   int    $group    The user group
+ * @return  bool   FALSE on error
+ * @since   4.6.0
+ * @package User
+ * @example
+ * if (create_user('john', 'john.doe@example.com', 'DancingWalrus', 'John Doe', 1))
+ * {
+ * 	echo "User 'john' created.";
+ * }
+ */
+
+	function create_user($name, $email, $password, $realname = '', $group = 0)
+	{
+		$levels = get_groups();
+
+		if (!$password || !is_valid_username($name) || !is_valid_email($email) || user_exists($name) || !isset($levels[$group]))
+		{
+			return false;
+		}
+
+		$nonce = md5(uniqid(mt_rand(), TRUE));
+		$pass = txp_hash_password($password);
+
+		if (
+			safe_insert(
+				'txp_users',
+				"name = '".doSlash($name)."',
+				email = '".doSlash($email)."',
+				pass = '".doSlash($pass)."',
+				nonce = '".doSlash($nonce)."',
+				privs = ".intval($group).",
+				RealName = '".doSlash($realname)."'"
+			) === false
+		)
+		{
+			return false;
+		}
+
+		callback_event('user.create', 'created', 0, $name, $email, $password, $realname, $group);
+		return true;
+	}
+
+/**
+ * Updates a user.
+ *
+ * This function updates a user account's properties.
+ * The $user argument is used for selecting the updated
+ * user, and rest of the arguments new values.
+ * Use NULL to omit an argument.
+ *
+ * On a successful run, this function will trigger
+ * a 'user.update > updated' callback event.
+ *
+ * @param   string      $user     The updated user
+ * @param   string|null $email    The email address
+ * @param   string|null $realname The real name
+ * @param   array|null  $meta     Additional meta fields
+ * @return  bool   FALSE on error
+ * @since   4.6.0
+ * @package User
+ * @example
+ * if (update_user('login', null, 'John Doe'))
+ * {
+ * 	echo "Updated user's real name.";
+ * }
+ */
+
+	function update_user($user, $email = null, $realname = null, $meta = array())
+	{
+		if (($email !== null && !is_valid_email($email)) || !user_exists($user))
+		{
+			return false;
+		}
+
+		$meta = (array) $meta;
+		$meta['RealName'] = $realname;
+		$meta['email'] = $email;
+		$set = array();
+
+		foreach ($meta as $name => $value)
+		{
+			if ($value !== null)
+			{
+				$set[] = $name."='".doSlash($value)."'";
+			}
+		}
+
+		if (
+			safe_update(
+				'txp_users',
+				join(',', $set),
+				"name = '".doSlash($user)."'"
+			) === false
+		)
+		{
+			return false;
+		}
+
+		callback_event('user.update', 'updated', 0, $user, $email, $realname, $meta);
+		return true;
+	}
+
+/**
+ * Changes a user's password.
+ *
+ * On a successful run, this function will trigger
+ * a 'user.change_password > changed' callback event.
+ *
+ * @param   string $user     The updated user
+ * @param   string $password The new password
+ * @return  bool   FALSE on error
+ * @since   4.6.0
+ * @package User
+ * @example
+ * if (change_user_password('login', 'WalrusWasDancing'))
+ * {
+ * 	echo "Password changed.";
+ * }
+ */
+
+	function change_user_password($user, $password)
+	{
+		if (!$user || !$password)
+		{
+			return false;
+		}
+
+		if (
+			safe_update(
+				'txp_users',
+				"pass = '".doSlash(txp_hash_password($password))."'",
+				"name = '".doSlash($user)."'"
+			) === false
+		)
+		{
+			return false;
+		}
+
+		callback_event('user.password_change', 'changed', 0, $user, $password);
+		return true;
+	}
+
+/**
  * Removes a user.
  *
  * The user's assets are assigned to the given new owner.
