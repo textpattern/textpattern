@@ -3547,6 +3547,11 @@
  * @return  bool   TRUE if the string valid
  * @since   4.6.0
  * @package User
+ * @example
+ * if (is_valid_username('john'))
+ * {
+ * 	echo "'john' is a valid username.";
+ * }
  */
 
 	function is_valid_username($name)
@@ -3746,7 +3751,7 @@
  * Changes a user's password.
  *
  * On a successful run, this function will trigger
- * a 'user.change_password > changed' callback event.
+ * a 'user.password_change > changed' callback event.
  *
  * @param   string $user     The updated user
  * @param   string $password The new password
@@ -3842,6 +3847,11 @@
  * @return  bool   FALSE on error
  * @since   4.6.0
  * @package User
+ * @example
+ * if (rename_user('login', 'newname'))
+ * {
+ * 	echo "'login' renamed to 'newname'.";
+ * }
  */
 
 	function rename_user($user, $newname)
@@ -3879,6 +3889,11 @@
  * @return  bool   TRUE if the user exists
  * @since   4.6.0
  * @package User
+ * @example
+ * if (user_exists('john'))
+ * {
+ * 	echo "'john' exists.";
+ * }
  */
 
 	function user_exists($user)
@@ -3894,6 +3909,11 @@
  * @return  bool         FALSE on error
  * @since   4.6.0
  * @package User
+ * @example
+ * if (change_user_group('john', 1))
+ * {
+ * 	echo "'john' is now publisher.";
+ * }
  */
 
 	function change_user_group($user, $group)
