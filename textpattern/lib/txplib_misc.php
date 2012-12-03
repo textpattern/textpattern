@@ -3904,6 +3904,9 @@
 /**
  * Changes a user's group.
  *
+ * On a successful run, this function will trigger
+ * a 'user.change_group > changed' callback event.
+ *
  * @param   string|array $user  Updated users
  * @param   int          $group The new group
  * @return  bool         FALSE on error
@@ -3927,11 +3930,19 @@
 
 		$names = join(',', quote_list((array) $user));
 
-		return safe_update(
-			'txp_users',
-			'privs = '.intval($group),
-			"name in ($names)"
-		);
+		if (
+			safe_update(
+				'txp_users',
+				'privs = '.intval($group),
+				"name in ($names)"
+			) === false
+		)
+		{
+			return false;
+		}
+
+		callback_event('user.change_group', 'changed', 0, $user, $group);
+		return true;
 	}
 
 /**
