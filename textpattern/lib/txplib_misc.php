@@ -3583,7 +3583,7 @@
  * '$step' and '$columns'. The third parameter contains a reference to an
  * array of 'table => column' pairs.
  *
- * On a successful run, this function will trigger a 'user.assign_assets > assigned'
+ * On a successful run, this function will trigger a 'user.assign_assets > done'
  * callback event.
  *
  * @param   string|array $owner     List of current owners
@@ -3630,7 +3630,7 @@
 			}
 		}
 
-		callback_event('user.assign_assets', 'assigned', 0, $owner, $new_owner, $columns);
+		callback_event('user.assign_assets', 'done', 0, $owner, $new_owner, $columns);
 
 		return true;
 	}
@@ -3639,7 +3639,7 @@
  * Creates a user account.
  *
  * On a successful run, this function will trigger
- * a 'user.create > created' callback event.
+ * a 'user.create > done' callback event.
  *
  * @param   string $name     The login name
  * @param   string $email    The email address
@@ -3683,7 +3683,7 @@
 			return false;
 		}
 
-		callback_event('user.create', 'created', 0, $name, $email, $password, $realname, $group);
+		callback_event('user.create', 'done', 0, $name, $email, $password, $realname, $group);
 		return true;
 	}
 
@@ -3696,7 +3696,7 @@
  * Use NULL to omit an argument.
  *
  * On a successful run, this function will trigger
- * a 'user.update > updated' callback event.
+ * a 'user.update > done' callback event.
  *
  * @param   string      $user     The updated user
  * @param   string|null $email    The email address
@@ -3743,7 +3743,7 @@
 			return false;
 		}
 
-		callback_event('user.update', 'updated', 0, $user, $email, $realname, $meta);
+		callback_event('user.update', 'done', 0, $user, $email, $realname, $meta);
 		return true;
 	}
 
@@ -3751,7 +3751,7 @@
  * Changes a user's password.
  *
  * On a successful run, this function will trigger
- * a 'user.password_change > changed' callback event.
+ * a 'user.password_change > done' callback event.
  *
  * @param   string $user     The updated user
  * @param   string $password The new password
@@ -3783,7 +3783,7 @@
 			return false;
 		}
 
-		callback_event('user.password_change', 'changed', 0, $user, $password);
+		callback_event('user.password_change', 'done', 0, $user, $password);
 		return true;
 	}
 
@@ -3793,7 +3793,7 @@
  * The user's assets are assigned to the given new owner.
  *
  * On a successful run, this function will trigger
- * a 'user.remove > removed' callback event.
+ * a 'user.remove > done' callback event.
  *
  * @param   string|array $user      List of removed users
  * @param   string       $new_owner Assign assets to
@@ -3831,7 +3831,7 @@
 			return false;
 		}
 
-		callback_event('user.remove', 'removed', 0, $user, $new_owner);
+		callback_event('user.remove', 'done', 0, $user, $new_owner);
 
 		return true;
 	}
@@ -3840,7 +3840,7 @@
  * Renames a user.
  *
  * On a successful run, this function will trigger
- * a 'user.rename > renamed' callback event.
+ * a 'user.rename > done' callback event.
  *
  * @param   string $user    Updated user
  * @param   string $newname The new name
@@ -3877,7 +3877,7 @@
 			return false;
 		}
 
-		callback_event('user.rename', 'renamed', 0, $user, $newname);
+		callback_event('user.rename', 'done', 0, $user, $newname);
 
 		return true;
 	}
@@ -3905,7 +3905,7 @@
  * Changes a user's group.
  *
  * On a successful run, this function will trigger
- * a 'user.change_group > changed' callback event.
+ * a 'user.change_group > done' callback event.
  *
  * @param   string|array $user  Updated users
  * @param   int          $group The new group
@@ -3941,7 +3941,7 @@
 			return false;
 		}
 
-		callback_event('user.change_group', 'changed', 0, $user, $group);
+		callback_event('user.change_group', 'done', 0, $user, $group);
 		return true;
 	}
 
