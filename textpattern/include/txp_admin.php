@@ -521,7 +521,7 @@
 
 		if ($is_edit)
 		{
-			$out[] = inputLabel('login_name', strong($name));
+			$out[] = inputLabel('login_name', strong(txpspecialchars($name)));
 		}
 		else
 		{
