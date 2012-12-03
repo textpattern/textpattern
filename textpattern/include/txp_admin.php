@@ -61,7 +61,7 @@
 	{
 		global $txp_user;
 
-		$new_email = gps('new_email');
+		$new_email = ps('new_email');
 
 		if (!is_valid_email($new_email))
 		{
