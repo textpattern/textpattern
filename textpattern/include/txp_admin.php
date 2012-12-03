@@ -497,6 +497,7 @@
 
 		$vars = array('user_id', 'name', 'RealName', 'email', 'privs');
 		$rs = array();
+		$out = array();
 
 		extract(gpsa($vars));
 
@@ -509,20 +510,53 @@
 			extract($rs);
 		}
 
-		$caption = gTxt(($is_edit) ? 'edit_author' : 'add_new_author');
+		if ($is_edit)
+		{
+			$out[] = hed(gTxt('edit_author'), 2);
+		}
+		else
+		{
+			$out[] = hed(gTxt('add_new_author'), 2);
+		}
+
+		if ($is_edit)
+		{
+			$out[] = inputLabel('login_name', strong($name));
+		}
+		else
+		{
+			$out[] =  inputLabel('login_name', fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'login_name'), 'login_name', 'add_new_author');
+		}
+
+		$out[] = inputLabel('real_name', fInput('text', 'RealName', $RealName, '', '', '', INPUT_REGULAR, '', 'real_name'), 'real_name').
+			inputLabel('login_email', fInput('email', 'email', $email, '', '', '', INPUT_REGULAR, '', 'login_email'), 'email');
+
+		if ($txp_user != $name)
+		{
+			$out[] = inputLabel('privileges', privs($privs), ($is_edit ? '' : 'privileges'), 'about_privileges');
+		}
+		else
+		{
+			$out[] = inputLabel('privileges', strong(get_priv_level($privs)), ($is_edit ? '' : 'privileges'), 'about_privileges').
+				hInput('privs', $privs);
+		}
+
+		$out[] = pluggable_ui('author_ui', 'extend_detail_form', '', $rs).
+			graf(fInput('submit', '', gTxt('save'), 'publish')).
+			eInput('admin');
+
+		if ($user_id)
+		{
+			$out[] = hInput('user_id', $user_id).
+				sInput('author_save');
+		}
+		else
+		{
+			$out[] = sInput('author_save_new');
+		}
 
 		echo form(
-			n.tag(
-				hed($caption, 2).
-				inputLabel('login_name', ($is_edit ? strong($name) : fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'login_name')), ($is_edit ? '' : 'login_name'), ($is_edit ? '' : 'add_new_author')).
-				inputLabel('real_name', fInput('text', 'RealName', $RealName, '', '', '', INPUT_REGULAR, '', 'real_name'), 'real_name').
-				inputLabel('login_email', fInput('email', 'email', $email, '', '', '', INPUT_REGULAR, '', 'login_email'), 'email').
-				inputLabel('privileges', (($txp_user != $name) ? privs($privs) : hInput('privs', $privs).strong(get_priv_level($privs))), ($is_edit ? '' : 'privileges'), 'about_privileges').
-				pluggable_ui('author_ui', 'extend_detail_form', '', $rs).
-				graf(fInput('submit', '', gTxt('save'), 'publish')).
-				eInput('admin').
-				($user_id ? hInput('user_id', $user_id).sInput('author_save') : sInput('author_save_new')).
-			n, 'section', array('class' => 'txp-edit'))
+			n.tag(join('', $out).n, 'section', array('class' => 'txp-edit'))
 		, '', '', 'post', 'edit-form', '', 'user_edit');
 	}
 
