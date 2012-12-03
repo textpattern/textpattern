@@ -154,10 +154,6 @@
 
 				$message .= sp.gTxt('and_mailed_to').sp.$email;
 			}
-			else
-			{
-				echo comment(mysql_error());
-			}
 
 			$message .= '.';
 
