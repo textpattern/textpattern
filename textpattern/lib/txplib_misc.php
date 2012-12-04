@@ -2658,81 +2658,37 @@
 	{
 		global $txp_user, $prefs;
 
-		// If mailing isn't possible, don't even try.
-		if (is_disabled('mail'))
-		{
-			return false;
-		}
-
-		// Likely sending passwords.
+		// Send the email as the currently logged in user.
 		if ($txp_user)
 		{
-			if (is_valid_email($prefs['publisher_email']))
+			$sender = safe_row(
+				'RealName, email',
+				'txp_users',
+				"name = '".doSlash($txp_user)."'"
+			);
+
+			if ($sender && is_valid_email($prefs['publisher_email']))
 			{
-				// Explicit publisher email address preferred.
-				$RealName = safe_field('RealName', 'txp_users', "name = '".doSlash($txp_user)."'");
-				$email = $prefs['publisher_email'];
-			}
-			else
-			{
-				// Default: current user invites new users using her personal email address.
-				extract(safe_row('RealName, email', 'txp_users', "name = '".doSlash($txp_user)."'"));
+				$sender['email'] = $prefs['publisher_email'];
 			}
 		}
-		// Likely sending comments -> "to" equals "from".
+		// If not logged in, the receiver is the sender.
 		else
 		{
-			extract(safe_row('RealName, email', 'txp_users', "email = '".doSlash($to_address)."'"));
+			$sender = safe_row(
+				'RealName, email',
+				'txp_users',
+				"email = '".doSlash($to_address)."'"
+			);
 		}
 
-		if ($prefs['override_emailcharset'] and is_callable('utf8_decode'))
+		if ($sender)
 		{
-			$charset = 'ISO-8859-1';
-
-			$RealName = utf8_decode($RealName);
-			$subject = utf8_decode($subject);
-			$body = utf8_decode($body);
-		}
-		else
-		{
-			$charset = 'UTF-8';
+			extract($sender);
+			return send_email($RealName, $email, $to_address, $subject, $body, '', $reply_to);
 		}
 
-		$RealName = encode_mailheader(strip_rn($RealName), 'phrase');
-		$subject = encode_mailheader(strip_rn($subject), 'text');
-		$email = strip_rn($email);
-
-		if (!is_null($reply_to))
-		{
-			$reply_to = strip_rn($reply_to);
-		}
-
-		$sep = !IS_WIN ? "\n" : "\r\n";
-
-		$body = str_replace("\r\n", "\n", $body);
-		$body = str_replace("\r", "\n", $body);
-		$body = str_replace("\n", $sep, $body);
-
-		$headers = "From: $RealName <$email>".
-			$sep.'Reply-To: '.( isset($reply_to) ? $reply_to : "$RealName <$email>" ).
-			$sep.'X-Mailer: Textpattern'.
-			$sep.'Content-Transfer-Encoding: 8bit'.
-			$sep.'Content-Type: text/plain; charset="'.$charset.'"'.
-			$sep;
-
-		if (is_valid_email($prefs['smtp_from']))
-		{
-			if (IS_WIN)
-			{
-				ini_set('sendmail_from', $prefs['smtp_from']);
-			}
-			elseif (!ini_get('safe_mode'))
-			{
-				return mail($to_address, $subject, $body, $headers, '-f'.$prefs['smtp_from']);
-			}
-		}
-
-		return mail($to_address, $subject, $body, $headers);
+		return false;
 	}
 
 /**
