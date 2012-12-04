@@ -2607,7 +2607,7 @@
 	}
 
 /**
- * Replaces CRLF with two spaces.
+ * Replaces CR and LF with spaces.
  *
  * @param   string $str The string
  * @return  string
@@ -2616,7 +2616,7 @@
 
 	function strip_rn($str)
 	{
-		return strtr($str, "\r\n", '  ');
+		return str_replace(array("\r\n", "\r", "\n"), ' ', $str);
 	}
 
 /**
