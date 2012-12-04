@@ -2664,7 +2664,7 @@
 		}
 
 		// Likely sending passwords.
-		if (isset($txp_user))
+		if ($txp_user)
 		{
 			if (is_valid_email($prefs['publisher_email']))
 			{
