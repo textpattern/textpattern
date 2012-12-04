@@ -2638,13 +2638,14 @@
 	}
 
 /**
- * Sends an email.
+ * Sends an email message as the currently logged in user.
  *
  * @param   string $to_address The receiver
  * @param   string $subject    The subject
  * @param   string $body       The message
  * @param   string $reply_to   The reply to address
  * @return  bool   Returns FALSE when sending failed
+ * @see     send_email()
  * @package Email
  * @example
  * if (txpMail('john.doe@example.com', 'Subject', 'Some message'))
@@ -2728,6 +2729,115 @@
 			elseif (!ini_get('safe_mode'))
 			{
 				return mail($to_address, $subject, $body, $headers, '-f'.$prefs['smtp_from']);
+			}
+		}
+
+		return mail($to_address, $subject, $body, $headers);
+	}
+
+/**
+ * Sends an email.
+ *
+ * @param   string|null $from_name     Sender name
+ * @param   string      $from_address  Sender address
+ * @param   string      $to_address    The receiver
+ * @param   string      $subject       The subject
+ * @param   string      $body          The message
+ * @param   string|null $reply_name    The reply to name
+ * @param   string|null $reply_address The reply to address
+ * @param   array       $headers       An array of additional email headers
+ * @return  bool        Returns FALSE when sending failed
+ * @since   4.6.0
+ * @package Email
+ * @example
+ * if (send_email('John Doe', 'john.doe@example.com', 'receiver@example.com', 'Hello world!', 'Some message.'))
+ * {
+ * 	echo "Email sent to 'receiver@example.com'."; 
+ * }
+ */
+
+	function send_email($from_name, $from_address, $to_address, $subject, $body, $reply_name = '', $reply_address = null, $headers = array())
+	{
+		if (is_disabled('mail') || !is_array($headers) || !is_valid_email($from_address) || !is_valid_email($to_address))
+		{
+			return false;
+		}
+
+		if (get_pref('override_emailcharset') && is_callable('utf8_decode'))
+		{
+			$charset = 'ISO-8859-1';
+			$from_name = utf8_decode($from_name);
+			$reply_name = utf8_decode($reply_name);
+			$subject = utf8_decode($subject);
+			$body = utf8_decode($body);
+		}
+		else
+		{
+			$charset = 'UTF-8';
+		}
+
+		$subject = encode_mailheader(strip_rn($subject), 'text');
+
+		if ($from_name)
+		{
+			$from_name = encode_mailheader(strip_rn($from_name), 'phrase');
+			$from = $from_name.' <'.$from_address.'>';
+		}
+		else
+		{
+			$from = $from_address;
+		}
+
+		if ($reply_address !== null)
+		{
+			if (!is_valid_email($reply_address))
+			{
+				return false;
+			}
+
+			if ($reply_name)
+			{
+				$reply_name = encode_mailheader(strip_rn($reply_name), 'phrase');
+				$reply_to = $reply_name.' <'.$reply_address.'>';
+			}
+			else
+			{
+				$reply_to = $reply_address;
+			}
+		}
+		else
+		{
+			$reply_to = $from;
+		}
+
+		$sep = !IS_WIN ? "\n" : "\r\n";
+
+		$body = str_replace("\r\n", "\n", $body);
+		$body = str_replace("\r", "\n", $body);
+		$body = str_replace("\n", $sep, $body);
+
+		$headers['From'] = $from;
+		$headers['Reply-to'] = $reply_to;
+		$headers['X-Mailer'] = 'Textpattern';
+		$headers['Content-Transfer-Encoding'] = '8bit';
+		$headers['Content-Type'] = 'text/plain; charset="'.$charset.'"';
+
+		foreach ($headers as $field => &$value)
+		{
+			$value = strip_rn($field.': '.$value);
+		}
+
+		$headers = join($sep, $headers).$sep;
+
+		if (is_valid_email(get_pref('smtp_from')))
+		{
+			if (IS_WIN)
+			{
+				ini_set('sendmail_from', get_pref('smtp_from'));
+			}
+			else if (!ini_get('safe_mode'))
+			{
+				return mail($to_address, $subject, $body, $headers, '-f'.get_pref('smtp_from'));
 			}
 		}
 
