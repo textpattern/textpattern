@@ -893,7 +893,7 @@
 		list($w, $h, $extension) = getimagesize($file);
 		$ext = get_safe_image_types($extension);
 
-		if ($file !== false && $ext)
+		if ($ext)
 		{
 			$name = substr($name, 0, strrpos($name, '.')).$ext;
 			$safename = doSlash($name);
@@ -994,14 +994,7 @@
 		}
 		else
 		{
-			if ($file === false)
-			{
-				return upload_get_errormsg($error);
-			}
-			else
-			{
-				return gTxt('only_graphic_files_allowed');
-			}
+			return gTxt('only_graphic_files_allowed');
 		}
 	}
 
