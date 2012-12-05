@@ -86,17 +86,18 @@
 
 	function author_save()
 	{
+		global $txp_user;
+
 		require_privs('admin.edit');
 
 		extract(doSlash(psa(array(
 			'privs',
-			'user_id',
+			'name',
 			'RealName',
 			'email',
 		))));
 
 		$privs = assert_int($privs);
-		$user_id = assert_int($user_id);
 
 		if (!is_valid_email($email))
 		{
@@ -104,14 +105,9 @@
 			return;
 		}
 
-		$rs = safe_update('txp_users', "
-			privs    = $privs,
-			RealName = '$RealName',
-			email    = '$email'",
-			"user_id = $user_id"
-		);
+		$rs = update_user($name, $email, $RealName);
 
-		if ($rs)
+		if ($rs && ($txp_user == $name || change_user_group($name, $privs)))
 		{
 			author_list(gTxt('author_updated', array('{name}' => $RealName)));
 			return;
@@ -546,6 +542,7 @@
 		if ($user_id)
 		{
 			$out[] = hInput('user_id', $user_id).
+				hInput('name', $name).
 				sInput('author_save');
 		}
 		else
