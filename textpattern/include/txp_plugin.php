@@ -75,15 +75,15 @@ $LastChangedRevision$
 			n. startTable('', '', 'txp-list').
 			n.'<thead>'.
 			tr(
-				n.hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
+				n.hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
 				n.column_head('plugin', 'name', 'plugin', true, $switch_dir, '', '', (('name' == $sort) ? "$dir " : '').'name').
 				n.column_head('author', 'author', 'plugin', true, $switch_dir, '', '', (('author' == $sort) ? "$dir " : '').'author').
 				n.column_head('version', 'version', 'plugin', true, $switch_dir, '', '', (('version' == $sort) ? "$dir " : '').'version').
 				n.column_head('plugin_modified', 'modified', 'plugin', true, $switch_dir, '', '', (('modified' == $sort) ? "$dir " : '').'modified').
-				n.hCell(gTxt('description'), '', ' scope="col" class="description"').
+				n.hCell(gTxt('description'), '', ' class="description"').
 				n.column_head('active', 'status', 'plugin', true, $switch_dir, '', '', (('status' == $sort) ? "$dir " : '').'status').
 				n.column_head('order', 'load_order', 'plugin', true, $switch_dir, '', '', (('load_order' == $sort) ? "$dir " : '').'load-order').
-				n.hCell(gTxt('manage'), '',  ' scope="col" class="manage actions"')
+				n.hCell(gTxt('manage'), '',  ' class="manage actions"')
 			).
 			n.'</thead>';
 
@@ -126,7 +126,7 @@ $LastChangedRevision$
 						fInput('checkbox', 'selected[]', $name)
 					,'', 'multi-edit').
 
-					hCell($edit_url, '', ' scope="row" class="name"').
+					td($edit_url, '', 'name').
 
 					td(
 						href($author, $author_uri, ' rel="external"')
@@ -179,7 +179,14 @@ EOS
 			load_plugin($thing, true);
 			$message = callback_event("plugin_lifecycle.$thing", $change ? 'enabled' : 'disabled');
 		}
-		echo gTxt($change ? 'yes' : 'no');
+
+		// TODO: Remove non-AJAX alternative code path in future version
+		if (!AJAXALLY_CHALLENGED) {
+			echo gTxt($change ? 'yes' : 'no');
+		} else {
+			if (empty($message)) $message = gTxt('plugin_updated', array('{name}' => $thing));
+			plugin_list($message);
+		}
 	}
 
 // -------------------------------------------------------------

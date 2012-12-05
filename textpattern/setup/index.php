@@ -19,7 +19,7 @@ if (!defined('txpath'))
 }
 
 define("txpinterface", "admin");
-error_reporting(E_ALL | E_STRICT);
+error_reporting(E_ALL);
 @ini_set("display_errors","1");
 
 include_once txpath.'/lib/constants.php';
@@ -56,20 +56,20 @@ $rel_txpurl = rtrim(dirname(dirname($_SERVER['PHP_SELF'])), '/\\');
 $bodyclass = ($step=='') ? ' class="welcome"' : '';
 
 print <<<eod
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-	<meta charset="utf-8">
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<meta name="robots" content="noindex, nofollow" />
 	<title>Setup &#124; Textpattern CMS</title>
-	<script src="$rel_txpurl/jquery.js"></script>
-	<script>var textpattern = { do_spellcheck: "", textarray: {} };</script>
-	<script src="$rel_txpurl/textpattern.js"></script>
-	<link rel="stylesheet" href="$rel_txpurl/theme/hive/css/textpattern.css">
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-	<script src="$rel_txpurl/theme/hive/js/modernizr.js"></script>
-	<script src="$rel_txpurl/theme/hive/js/jquery.formalize.min.js"></script>
-	<!--[if lt IE 9]><script src="$rel_txpurl/theme/hive/js/selectivizr.min.js"></script><![endif]-->
+	<script type="text/javascript" src="$rel_txpurl/jquery.js"></script>
+	<script type="text/javascript">var textpattern = { do_spellcheck: "", textarray: {} };</script>
+	<script type="text/javascript" src="$rel_txpurl/textpattern.js"></script>
+	<link rel="stylesheet" href="$rel_txpurl/theme/hive/css/textpattern.css" type="text/css" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+	<script type="text/javascript" src="$rel_txpurl/theme/hive/js/modernizr.js"></script>
+	<script type="text/javascript" src="$rel_txpurl/theme/hive/js/jquery.formalize.min.js"></script>
+	<!--[if lt IE 9]><script type="text/javascript" src="$rel_txpurl/theme/hive/js/selectivizr.min.js"></script><![endif]-->
 </head>
 <body id="page-setup"{$bodyclass}>
 	<div class="txp-body">
@@ -185,12 +185,12 @@ eod;
 
 			n.graf(
 				'<span class="edit-label"><label for="setup_mysql_server">'.setup_gTxt('mysql_server').'</label></span>'.
-				n.'<span class="edit-value">'.fInput('text', 'dhost', 'localhost', '', '', '', INPUT_REGULAR, '', 'setup_mysql_server', '', true).'</span>'
+				n.'<span class="edit-value">'.fInput('text', 'dhost', 'localhost', '', '', '', INPUT_REGULAR, '', 'setup_mysql_server').'</span>'
 			).
 
 			n.graf(
 				'<span class="edit-label"><label for="setup_mysql_db">'.setup_gTxt('mysql_database').'</label></span>'.
-				n.'<span class="edit-value">'.fInput('text', 'ddb', '', '', '', '', INPUT_REGULAR, '', 'setup_mysql_db', '', true).'</span>'
+				n.'<span class="edit-value">'.fInput('text', 'ddb', '', '', '', '', INPUT_REGULAR, '', 'setup_mysql_db').'</span>'
 			).
 
 			n.graf(
@@ -202,7 +202,7 @@ eod;
 			n.graf(setup_gTxt('please_enter_url')).
 			n.graf(
 				'<span class="edit-label"><label for="setup_site_url">http://</label>'.sp.popHelp('siteurl').'</span>'.
-				n.'<span class="edit-value">'.fInput('url', 'siteurl', $guess_siteurl, '', '', '', INPUT_REGULAR, '', 'setup_site_url', '', true).'</span>'
+				n.'<span class="edit-value">'.fInput('text', 'siteurl', $guess_siteurl, '', '', '', INPUT_REGULAR, '', 'setup_site_url').'</span>'
 			);
 
 		if (is_disabled('mail'))
@@ -414,7 +414,7 @@ eod;
 		}
 		asort($vals, SORT_STRING);
 
-		$theme_chooser = selectInput('theme', $vals, 'hive', '', '', '', 'setup_admin_theme');
+		$theme_chooser = selectInput('theme', $vals, 'classic', '', '', '', 'setup_admin_theme');
 
 		echo txp_setup_progress_meter(3).
 			n.'<div class="txp-setup">';
@@ -425,22 +425,22 @@ eod;
 
 			n.graf(
 				'<span class="edit-label"><label for="setup_user_realname">'.setup_gTxt('your_full_name').'</label></span>'.
-				n.'<span class="edit-value">'.fInput('text', 'RealName', '', '', '', '', INPUT_REGULAR, '', 'setup_user_realname', '', true).'</span>'
+				n.'<span class="edit-value">'.fInput('text', 'RealName', '', '', '', '', INPUT_REGULAR, '', 'setup_user_realname').'</span>'
 			).
 
 			n.graf(
 				'<span class="edit-label"><label for="setup_user_login">'.setup_gTxt('setup_login').'</label>'.sp.popHelp('setup_user_login').'</span>'.
-				n.'<span class="edit-value">'.fInput('text', 'name', '', '', '', '', INPUT_REGULAR, '', 'setup_user_login', '', true).'</span>'
+				n.'<span class="edit-value">'.fInput('text', 'name', '', '', '', '', INPUT_REGULAR, '', 'setup_user_login').'</span>'
 			).
 
 			n.graf(
 				'<span class="edit-label"><label for="setup_user_pass">'.setup_gTxt('choose_password').'</label>'.sp.popHelp('setup_user_pass').'</span>'.
-				n.'<span class="edit-value">'.fInput('text', 'pass', '', '', '', '', INPUT_REGULAR, '', 'setup_user_pass', '', true).'</span>'
+				n.'<span class="edit-value">'.fInput('text', 'pass', '', '', '', '', INPUT_REGULAR, '', 'setup_user_pass').'</span>'
 			).
 
 			n.graf(
 				'<span class="edit-label"><label for="setup_user_email">'.setup_gTxt('your_email').'</label></span>'.
-				n.'<span class="edit-value">'.fInput('email', 'email', '', '', '', '', INPUT_REGULAR, '', 'setup_user_email', '', true).'</span>'
+				n.'<span class="edit-value">'.fInput('text', 'email', '', '', '', '', INPUT_REGULAR, '', 'setup_user_email').'</span>'
 			).
 
 			n.hed(setup_gTxt('site_config'),2).
@@ -550,7 +550,7 @@ eod;
 
 		// cf. update/_to_4.2.0.php.
 		// TODO: Position might need altering when prefs panel layout is altered
-		$theme = $theme ? $theme : 'hive';
+		$theme = $theme ? $theme : 'classic';
 		mysql_query("insert `".PFX."txp_prefs` set prefs_id = 1, name = 'theme_name', val = '".doSlash($theme)."', type = '1', event = 'admin', html = 'themename', position = '160'");
 
 		echo fbCreate();

@@ -62,7 +62,7 @@ $LastChangedRevision$
 
 ?>
 
-<script>
+<script type="text/javascript">
 <!--//
 function showHideFields($sel)
 {

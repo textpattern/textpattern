@@ -259,7 +259,7 @@ $LastChangedRevision$
 				n.startTable('', '', 'txp-list').
 				n.'<thead>'.
 				n.n.tr(
-					n.hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
+					n.hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
 					n.column_head('ID', 'id', 'discuss', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id').
 					n.column_head('date', 'date', 'discuss', true, $switch_dir, $crit, $search_method, (('date' == $sort) ? "$dir " : '').'date posted created').
 					n.column_head('name', 'name', 'discuss', true, $switch_dir, $crit, $search_method, (('name' == $sort) ? "$dir " : '').'name').
@@ -329,7 +329,7 @@ $LastChangedRevision$
 
 				echo n.n.tr(
 					n.td(fInput('checkbox', 'selected[]', $discussid), '', 'multi-edit').
-					hCell('<a title="'.gTxt('edit').'" href="'.$edit_url.'">'.$discussid.'</a>', '', ' scope="row" class="id"').
+					td('<a title="'.gTxt('edit').'" href="'.$edit_url.'">'.$discussid.'</a>', '', 'id').
 					td(gTime($uPosted), '', 'date posted created').
 					td(txpspecialchars(soft_wrap($name, 15)), '', 'name').
 					td(short_preview($dmessage), '', 'message').
@@ -434,7 +434,7 @@ $LastChangedRevision$
 					inputLabel('status', $status_list, 'status').n.
 					inputLabel('name', fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'name'), 'name').n.
 					inputLabel('IP', $ip.n.$ban_link, '').n.
-					inputLabel('email', fInput('email', 'email', $email, '', '', '', INPUT_REGULAR, '', 'email'), 'email').n.
+					inputLabel('email', fInput('text', 'email', $email, '', '', '', INPUT_REGULAR, '', 'email'), 'email').n.
 					inputLabel('website', fInput('text', 'web', $web, '', '', '', INPUT_REGULAR, '', 'website'), 'website').n.
 					inputLabel('date', safe_strftime('%d %b %Y %X', $uPosted), '').n.
 					inputLabel('commentmessage', '<textarea id="commentmessage" name="message" cols="'.INPUT_LARGE.'" rows="'.INPUT_MEDIUM.'">'.$message.'</textarea>', 'message', '', '', '').n.
@@ -543,10 +543,10 @@ $LastChangedRevision$
 				startTable('', '', 'txp-list').
 				n.'<thead>'.
 				tr(
-					hCell(gTxt('date_banned'), '', ' scope="col" class="date banned"').
-					hCell(gTxt('IP'), '', ' scope="col" class="ip"').
-					hCell(gTxt('name_used'), '', ' scope="col" class="name"').
-					hCell(gTxt('banned_for'), '', ' scope="col" class="id"')
+					hCell(gTxt('date_banned'), '', ' class="date banned"').
+					hCell(gTxt('IP'), '', ' class="ip"').
+					hCell(gTxt('name_used'), '', ' class="name"').
+					hCell(gTxt('banned_for'), '', ' class="id"')
 				).
 				n.'</thead>';
 
@@ -557,9 +557,9 @@ $LastChangedRevision$
 				extract($a);
 
 				echo tr(
-					hCell(
+					td(
 						gTime($uBanned)
-					, '', ' scope="row" class="date banned"').
+					, '', 'date banned').
 
 					td(
 						txpspecialchars($ip).n.

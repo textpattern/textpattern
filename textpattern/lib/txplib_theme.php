@@ -77,7 +77,7 @@ class theme
 
 		if ($name === '')
 		{
-			$name = pluggable_ui('admin_side', 'theme_name', get_pref('theme_name', 'hive'));
+			$name = pluggable_ui('admin_side', 'theme_name', get_pref('theme_name', 'classic'));
 		}
 
 		if ($instance && is_object($instance) && ($name == $instance->name))
@@ -92,7 +92,7 @@ class theme
 		$instance = theme::factory($name);
 		if (!$instance)
 		{
-			set_pref('theme_name', 'hive');
+			set_pref('theme_name', 'classic');
 			die(gTxt('cannot_instantiate_theme', array('{name}' => $name, '{class}' => "{$name}_theme", '{path}' => theme::path($name))));
 		}
 
@@ -138,7 +138,7 @@ class theme
 		$theme = theme::factory($name);
 		if (!$theme)
 		{
-			set_pref('theme_name', 'hive');
+			set_pref('theme_name', 'classic');
 			if ($production_status === 'debug')
 			{
 				echo gTxt('cannot_instantiate_theme', array('{name}' => $name, '{class}' => "{$name}_theme", '{path}' => theme::path($name)));

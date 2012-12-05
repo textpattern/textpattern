@@ -1,0 +1,511 @@
+/* ==========================================================================
+   Hive theme for Textpattern CMS (v4.5)
+   ========================================================================== */
+/* combined and abridged version of Normalize and Formalize
+   Normalize original authors: Nicolas Gallagher and Jonathan Neal - http://necolas.github.com/normalize.css/
+   Formalize original author: Nathan Smith - http://formalize.me/ */
+/* Base
+   ========================================================================== */
+/* 1. corrects text resizing oddly in IE7 when body font-size is set using em units
+   2. prevents iOS text size adjust after orientation change, without disabling user zoom
+      www.456bereastreet.com/archive/201012/controlling_text_size_in_safari_for_ios_without_disabling_user_zoom/ */
+html {
+  /* 1 */
+  font-size: 100%;
+  font-family: Arial, Helvetica, sans-serif;
+  /* 2 */
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+
+/* addresses margins handled incorrectly in IE7 */
+body {
+  margin: 0;
+  font-size: 0.8125em;
+  line-height: 1.38462;
+}
+
+/* Links
+   ========================================================================== */
+a:focus {
+  outline: thin dotted #0066ff;
+}
+a:hover, a:active {
+  outline: 0;
+}
+
+/* Typography
+   ========================================================================== */
+/* addresses margins set differently in IE7 */
+p,
+pre {
+  margin: 1em 0;
+}
+
+/* addresses styling not present in IE7-9, Safari5, Chrome */
+abbr[title],
+dfn[title] {
+  border-bottom: 1px dotted;
+  cursor: help;
+}
+
+/* addresses style set to 'bolder' in Firefox3-4, Safari4-5, Chrome */
+b,
+strong {
+  font-weight: bold;
+}
+
+blockquote {
+  margin: 1em 2em;
+}
+
+/* addresses CSS quotes not supported in IE7, addresses quote property not supported in Safari4 */
+q {
+  quotes: none;
+}
+q:before, q:after {
+  content: "";
+  content: none;
+}
+
+/* addresses styling not present in Safari5, Chrome */
+dfn {
+  font-style: italic;
+}
+
+/* corrects font family set oddly in Safari4-5, Chrome - en.wikipedia.org/wiki/User:Davidgothberg/Test59 */
+pre,
+code,
+kbd,
+samp {
+  font-family: monospace, monospace;
+  font-size: 1em;
+}
+
+/* prevents sub and sup affecting line-height in all browsers - gist.github.com/413930 */
+sub,
+sup {
+  font-size: 0.84615em;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sup {
+  top: -0.5em;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+/* Lists
+   ========================================================================== */
+/* addresses margins set differently in IE7 */
+dl,
+ol,
+ul {
+  margin: 1em 0;
+}
+
+dd {
+  margin: 0 0 0 2em;
+}
+
+/* remove margins from nested lists */
+dl dl,
+ul ul,
+ol ol {
+  margin: 0;
+}
+
+/* addresses paddings set differently in IE7 */
+ol,
+ul {
+  padding: 0 0 0 2em;
+}
+
+dt {
+  font-weight: bold;
+}
+
+/* Embedded content
+   ========================================================================== */
+/* 1. removes border when inside 'a' element in IE7-9, Firefox3
+   2. improves image quality when scaled in IE7 */
+img {
+  /* 1 */
+  border: 0;
+  /* 2 */
+  -ms-interpolation-mode: bicubic;
+}
+
+/* corrects overflow displayed oddly in IE9 */
+svg:not(:root) {
+  overflow: hidden;
+}
+
+/* Tables
+   ========================================================================== */
+/* remove most spacing between table cells */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* make table cells align top and left by default, remove any cellpadding */
+th,
+td {
+  vertical-align: top;
+  text-align: left;
+  padding: 0;
+}
+
+/* Forms
+   ========================================================================== */
+/* corrects margin displayed oddly in IE7 */
+form {
+  margin: 0;
+}
+
+/* 1. corrects color not being inherited in IE7-9
+   2. corrects text not wrapping in FF3 
+   3. corrects alignment displayed oddly in IE7 */
+legend {
+  /* 1 */
+  border: 0;
+  padding: 0;
+  /* 2 */
+  white-space: normal;
+  /* 3 */
+  *margin-right: 7px;
+  *margin-left: -7px;
+}
+
+/* added via JS to <textarea> and class="input_full" (applies only to IE7, other browsers don't need it) */
+.input_full_wrap {
+  display: block;
+}
+
+button,
+input[type="reset"],
+input[type="submit"],
+input[type="button"],
+.txp-logout a,
+.action-create a,
+.navlink,
+.navlink-active,
+.txp-buttons a {
+  -webkit-appearance: none;
+  -moz-border-radius: 0.38462em;
+  border-radius: 0.38462em;
+  -webkit-background-clip: padding;
+  -khtml-background-clip: padding-box;
+  -moz-background-clip: padding;
+  background-clip: padding-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  cursor: pointer;
+  color: #333333;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: .92307692307692em;
+  line-height: 1.33333333333333;
+  text-decoration: none;
+  margin: 0;
+  padding: .25em .75em;
+  -webkit-box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.25);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.25);
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.4);
+  width: auto;
+  height: 2em;
+  border: 1px solid #bbb;
+  border-bottom-color: #a2a2a2;
+  background-color: #eeeeee;
+  /* Konqueror */
+  background-image: -khtml-gradient(linear, left top, left bottom, from(#eeeeee), to(#bbbbbb));
+  /* Safari4+, Chrome */
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#eeeeee), to(#bbbbbb));
+  /* Safari5.1+, Chrome10+ */
+  background-image: -webkit-linear-gradient(#eeeeee, #bbbbbb);
+  /* Firefox3.6 */
+  background-image: -moz-linear-gradient(#eeeeee, #bbbbbb);
+  /* Opera11.10+ */
+  background-image: -o-linear-gradient(#eeeeee, #bbbbbb);
+  /* CSS3 Compliant */
+  background-image: linear-gradient(#eeeeee, #bbbbbb);
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  /* IE7 vertical alignment fix */
+  *padding-top: 2px;
+  *padding-bottom: 0;
+  *overflow: visible;
+}
+button:hover,
+input[type="reset"]:hover,
+input[type="submit"]:hover,
+input[type="button"]:hover,
+.txp-logout a:hover,
+.action-create a:hover,
+.navlink:hover,
+.navlink-active:hover,
+.txp-buttons a:hover {
+  color: #333333;
+  text-decoration: none;
+  background-color: #f8f8f8;
+  /* Konqueror */
+  background-image: -khtml-gradient(linear, left top, left bottom, from(#f8f8f8), to(#c5c5c5));
+  /* Safari4+, Chrome */
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#f8f8f8), to(#c5c5c5));
+  /* Safari5.1+, Chrome10+ */
+  background-image: -webkit-linear-gradient(#f8f8f8, #c5c5c5);
+  /* Firefox3.6 */
+  background-image: -moz-linear-gradient(#f8f8f8, #c5c5c5);
+  /* Opera11.10+ */
+  background-image: -o-linear-gradient(#f8f8f8, #c5c5c5);
+  /* CSS3 Compliant */
+  background-image: linear-gradient(#f8f8f8, #c5c5c5);
+}
+button:active,
+input[type="reset"]:active,
+input[type="submit"]:active,
+input[type="button"]:active,
+.txp-logout a:active,
+.action-create a:active,
+.navlink:active,
+.navlink-active:active,
+.txp-buttons a:active {
+  background-color: #c5c5c5;
+  /* Konqueror */
+  background-image: -khtml-gradient(linear, left top, left bottom, from(#c5c5c5), to(#f8f8f8));
+  /* Safari4+, Chrome */
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#c5c5c5), to(#f8f8f8));
+  /* Safari5.1+, Chrome10+ */
+  background-image: -webkit-linear-gradient(#c5c5c5, #f8f8f8);
+  /* Firefox3.6 */
+  background-image: -moz-linear-gradient(#c5c5c5, #f8f8f8);
+  /* Opera11.10+ */
+  background-image: -o-linear-gradient(#c5c5c5, #f8f8f8);
+  /* CSS3 Compliant */
+  background-image: linear-gradient(#c5c5c5, #f8f8f8);
+}
+
+input[type="reset"],
+input[type="submit"],
+input[type="button"] {
+  height: 2em;
+}
+
+.navlink-disabled {
+  -moz-border-radius: 0.38462em;
+  border-radius: 0.38462em;
+  -webkit-background-clip: padding;
+  -khtml-background-clip: padding-box;
+  -moz-background-clip: padding;
+  background-clip: padding-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  font-size: .92307692307692em;
+  line-height: 1.33333333333333;
+  border: 1px solid;
+  padding: .30769230769231em .75em;
+  height: 2em;
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+}
+
+.nav-tertiary .navlink-active {
+  background-color: #c5c5c5;
+  /* Konqueror */
+  background-image: -khtml-gradient(linear, left top, left bottom, from(#c5c5c5), to(#f8f8f8));
+  /* Safari4+, Chrome */
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#c5c5c5), to(#f8f8f8));
+  /* Safari5.1+, Chrome10+ */
+  background-image: -webkit-linear-gradient(#c5c5c5, #f8f8f8);
+  /* Firefox3.6 */
+  background-image: -moz-linear-gradient(#c5c5c5, #f8f8f8);
+  /* Opera11.10+ */
+  background-image: -o-linear-gradient(#c5c5c5, #f8f8f8);
+  /* CSS3 Compliant */
+  background-image: linear-gradient(#c5c5c5, #f8f8f8);
+}
+
+/* IE7 button fixes */
+button {
+  *padding-top: 1px;
+  *padding-bottom: 1px;
+}
+
+textarea,
+select,
+input[type="password"],
+input[type="text"] {
+  -webkit-appearance: none;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  -webkit-background-clip: padding;
+  -khtml-background-clip: padding-box;
+  -moz-background-clip: padding;
+  background-clip: padding-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1em;
+  line-height: 1.46153846153846;
+  color: #333333;
+  background-color: white;
+  margin: 0;
+  border: 1px solid #cccccc;
+  padding: .15384615384615em .38461538461538em;
+  height: 1.84615384615385em;
+  max-width: 100%;
+  /* IE7 box-sizing workaround */
+  *padding-right: 0;
+  *padding-left: 0;
+  /* IE7 vertical alignment fix */
+  *padding-top: 1px;
+  *padding-bottom: 4px;
+  *height: auto;
+}
+
+.boxshadow button:focus,
+.boxshadow input[type="button"]:focus,
+.boxshadow input[type="password"]:focus,
+.boxshadow input[type="reset"]:focus,
+.boxshadow input[type="submit"]:focus,
+.boxshadow input[type="text"]:focus,
+.boxshadow select:focus,
+.boxshadow textarea:focus,
+.boxshadow .txp-logout a:focus,
+.boxshadow .action-create a:focus,
+.boxshadow .navlink:focus,
+.boxshadow .navlink-active:focus,
+.boxshadow .txp-buttons a:focus {
+  outline: 0;
+  -webkit-box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.25), 0 0 7px #0066ff;
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.25), 0 0 7px #0066ff;
+  /* Opera */
+  z-index: 1;
+}
+
+input[type="file"]:focus, input[type="file"]:active,
+input[type="radio"]:focus,
+input[type="radio"]:active,
+input[type="checkbox"]:focus,
+input[type="checkbox"]:active {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+button[disabled],
+input[disabled],
+select[disabled],
+select[disabled] option,
+select[disabled] optgroup,
+textarea[disabled],
+.navlink-disabled {
+  opacity: 1;
+  border-color: #dddddd !important;
+  background-color: #eee !important;
+  text-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: -moz-none;
+  user-select: none;
+  color: #999999 !important;
+  cursor: default;
+}
+
+button[disabled],
+input[disabled],
+.navlink-disabled {
+  background-image: none !important;
+}
+
+textarea {
+  min-height: 4.38461538461538em;
+  resize: vertical;
+  width: 100%;
+  /* removes default vertical scrollbar in IE7-9 */
+  overflow: auto;
+  /* improves readability and alignment in all browsers */
+  vertical-align: top;
+}
+
+textarea,
+select[size],
+select[multiple] {
+  height: auto;
+}
+
+select[size="0"],
+select[size="1"] {
+  height: 1.8em;
+  /* IE7 */
+  *height: auto;
+}
+
+optgroup {
+  font-family: Arial, Helvetica, sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  color: #333333;
+}
+optgroup::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+
+/* tweaks for Safari, Chrome */
+@media (-webkit-min-device-pixel-ratio: 0) {
+  select[size],
+  select[multiple],
+  select[multiple][size] {
+    background-image: none;
+    padding-right: .23076923076923em;
+  }
+
+  select,
+  select[size="0"],
+  select[size="1"] {
+    background: white url("../img/svg/select_arrow.svg") no-repeat right center;
+    padding-right: 2em;
+    -webkit-background-size: 1em .30769230769231em;
+    background-size: 1em .30769230769231em;
+  }
+}
+/* addresses box sizing set to content-box and excess padding in IE7-9 */
+input[type="checkbox"],
+input[type="radio"] {
+  padding: 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  *height: 1em;
+  *width: 1em;
+  *position: relative;
+  *top: -3px;
+}
+
+/* suppress red glow that Firefox adds to form fields by default, even when user is still typing
+   and kill phantom spacing and dotted border that appears in Firefox */
+input:invalid,
+button:invalid,
+select:invalid,
+textarea:invalid {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+input::-moz-focus-inner,
+button::-moz-focus-inner,
+select::-moz-focus-inner,
+textarea::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}

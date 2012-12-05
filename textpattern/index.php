@@ -56,8 +56,8 @@ $LastChangedRevision$
 
 	define("txpinterface", "admin");
 
-	$thisversion = '4.5.1';
-	$txp_using_svn = true; // set false for releases
+	$thisversion = '4.5.4';
+	$txp_using_svn = false; // set false for releases
 
 	ob_start(NULL, 2048);
 	if (!isset($txpcfg['table_prefix']) && !@include './config.php') {
@@ -68,7 +68,9 @@ $LastChangedRevision$
 
 	header("Content-type: text/html; charset=utf-8");
 
-	error_reporting(E_ALL | E_STRICT);
+	// We need to violate/disable E_STRICT for PHP 4.x compatibility
+	// E_STRICT bitmask calculation stems from the variations for E_ALL in PHP 4.x, 5.3, and 5.4
+	error_reporting(E_ALL & ~(defined('E_STRICT') ? E_STRICT : 0));
 	@ini_set("display_errors","1");
 
 	include_once txpath.'/lib/constants.php';
@@ -78,7 +80,6 @@ $LastChangedRevision$
 	include txpath.'/lib/txplib_html.php';
 	include txpath.'/lib/txplib_theme.php';
 	include txpath.'/lib/txplib_validator.php';
-	include txpath.'/lib/txplib_textfilter.php';
 	include txpath.'/lib/admin_config.php';
 
 	set_error_handler('adminErrorHandler', error_reporting());

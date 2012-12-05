@@ -394,7 +394,7 @@ function maybe_tag($tag)
  */
 function processTags($tag, $atts, $thing = NULL)
 {
-	global $production_status, $txptrace, $txptracelevel, $txp_current_tag, $txp_current_form;
+	global $production_status, $txptrace, $txptracelevel, $txp_current_tag;
 
 	if ($production_status !== 'live')
 	{
@@ -407,7 +407,7 @@ function processTags($tag, $atts, $thing = NULL)
 
 		if ($production_status === 'debug')
 		{
-			maxMemUsage("Form='$txp_current_form', Tag='$txp_current_tag'");
+			maxMemUsage($txp_current_tag);
 		}
 	}
 
@@ -613,17 +613,22 @@ function filterAtts($atts = null)
 		'time'          => 'past',
 	);
 
-	if (is_array($atts)) {
-		if (empty($out)) {
+	if (is_array($atts))
+	{
+		if (empty($out))
+		{
 			$out = $atts;
 			trace_add('[filterAtts accepted]');
-		} else {
-			// TODO: deal w/ nested txp:article[_custom] tags
+		}
+		else
+		{
+			// TODO: deal w/ nested txp:article[_custom] tags.
 			trace_add('[filterAtts ignored]');
 		}
 	}
 
-	if (empty($out)) {
+	if (empty($out))
+	{
 		trace_add('[filterAtts not set]');
 	}
 	return lAtts($valid, $out, 0);

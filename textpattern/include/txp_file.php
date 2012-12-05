@@ -217,16 +217,16 @@ $LastChangedRevision$
 				n.startTable('', '', 'txp-list').
 				n.'<thead>'.
 				tr(
-					n.hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
+					n.hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
 					n.column_head('ID', 'id', 'file', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id').
 					n.column_head('file_name', 'filename', 'file', true, $switch_dir, $crit, $search_method, (('filename' == $sort) ? "$dir " : '').'name').
 					n.column_head('title', 'title', 'file', true, $switch_dir, $crit, $search_method, (('title' == $sort) ? "$dir " : '').'title').
 					n.column_head('description', 'description', 'file', true, $switch_dir, $crit, $search_method, (('description' == $sort) ? "$dir " : '').'files_detail description').
 					n.column_head('file_category', 'category', 'file', true, $switch_dir, $crit, $search_method, (('category' == $sort) ? "$dir " : '').'category').
 					// column_head('permissions', 'permissions', 'file', true, $switch_dir, $crit, $search_method).
-					n.hCell(gTxt('tags'), '', ' scope="col" class="files_detail tag-build"').
-					n.hCell(gTxt('status'), '', ' scope="col" class="status"').
-					n.hCell(gTxt('condition'), '', ' scope="col" class="condition"').
+					n.hCell(gTxt('tags'), '', ' class="files_detail tag-build"').
+					n.hCell(gTxt('status'), '', ' class="status"').
+					n.hCell(gTxt('condition'), '', ' class="condition"').
 					n.column_head('downloads', 'downloads', 'file', true, $switch_dir, $crit, $search_method, (('downloads' == $sort) ? "$dir " : '').'downloads').
 					($show_authors ? n.column_head('author', 'author', 'file', true, $switch_dir, $crit, $search_method, (('author' == $sort) ? "$dir " : '').'author') : '')
 				).
@@ -267,10 +267,10 @@ $LastChangedRevision$
 					n.td($can_edit ? fInput('checkbox', 'selected[]', $id) : '&#160;'
 					, '', 'multi-edit').
 
-					n.hCell(
+					n.td(
 						($can_edit ? href($id, $edit_url, ' title="'.gTxt('edit').'"') : $id).
 						(($file_exists) ? sp.'<span class="files_detail">['.make_download_link($id, gTxt('download'), $filename).']</span>' : '')
-					, '', ' scope="row" class="id"').
+					, '', 'id').
 
 					td(
 						($can_edit ? href(txpspecialchars($filename), $edit_url, ' title="'.gTxt('edit').'"') : txpspecialchars($filename))
@@ -512,13 +512,13 @@ $LastChangedRevision$
 			$existing_files = get_filenames();
 
 			$replace = ($file_exists)
-				? '<div role="group" class="txp-details replace-file">'.n.
+				? '<div class="summary-details replace-file">'.n.
 						'<h3>'.gTxt('replace_file').sp.popHelp('file_replace').'</h3>'.n.
 						'<div>'.n.
 							file_upload_form('', '', 'file_replace', $id, 'file_replace').n.
 						'</div>'.n.
 					'</div>'.n
-				: '<div role="group" class="txp-details upload-file">'.n.
+				: '<div class="summary-details upload-file">'.n.
 						'<h3>'.gTxt('file_relink').sp.popHelp('file_reassign').'</h3>'.n.
 						'<div>'.n.
 							file_upload_form('', '', 'file_replace', $id, 'file_reassign').n.
@@ -535,15 +535,15 @@ $LastChangedRevision$
 					graf(checkbox('publish_now', '1', $publish_now, '', 'publish_now') . '<label for="publish_now">'.gTxt('set_to_now').'</label>', ' class="edit-file-publish-now"').n.
 					graf(gTxt('or_publish_at').sp.popHelp('timestamp'), ' class="edit-file-publish-at"').n.
 					graf('<span class="label">'.gtxt('date').'</span>'.n.
-						tsi('year', '%Y', $rs['created'], '', gTxt('yyyy')).' / '.n.
-						tsi('month', '%m', $rs['created'], '', gTxt('mm')).' / '.n.
-						tsi('day', '%d', $rs['created'], '', gTxt('dd'))
+						tsi('year', '%Y', $rs['created']).' / '.n.
+						tsi('month', '%m', $rs['created']).' / '.n.
+						tsi('day', '%d', $rs['created'])
 					, ' class="edit-file-published"'
 					).n.
 					graf('<span class="label">'.gTxt('time').'</span>'.n.
-						tsi('hour', '%H', $rs['created'], '', gTxt('hh')).' : '.n.
-						tsi('minute', '%M', $rs['created'], '', gTxt('mm')).' : '.n.
-						tsi('second', '%S', $rs['created'], '', gTxt('ss'))
+						tsi('hour', '%H', $rs['created']).' : '.n.
+						tsi('minute', '%M', $rs['created']).' : '.n.
+						tsi('second', '%S', $rs['created'])
 					, ' class="edit-file-created"'
 					);
 

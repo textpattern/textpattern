@@ -155,11 +155,12 @@ class wet_thumb {
 
 	// make sure we have enough memory if the image is large
 	if (max($this->_SRC['width'], $this->_SRC['height']) > 1024) {
-		$shorthand = array('K','M','G');
+		$shorthand = array('/K/i','/M/i','/G/i');
 		$tens = array('000','000000', '000000000'); // A good enough decimal approximation of K, M, and G
 
 		// Do not *decrease* memory_limit
-		list($ml, $extra) = str_ireplace($shorthand, $tens, array(ini_get('memory_limit'), EXTRA_MEMORY));
+		// TODO: Try str_ireplace instead of preg_replace once we are on PHP5
+		list($ml, $extra) = preg_replace($shorthand, $tens, array(ini_get('memory_limit'), EXTRA_MEMORY));
 		if ($ml < $extra) {
 			// this won't work on all servers but it's worth a try
 			ini_set('memory_limit', EXTRA_MEMORY);
@@ -338,7 +339,7 @@ class txp_thumb extends wet_thumb {
      * create thumbnail image from source image
      * @return	boolean, true indicates success
      */
-    function write( $dummy1='', $dummy2='' ) {
+    function write( ) {
         if ( !isset($this->m_ext) ) return false;
 
         if ( parent::write ( IMPATH.$this->m_id.$this->m_ext, IMPATH.$this->m_id.'t'.$this->m_ext ) ) {

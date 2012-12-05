@@ -3,40 +3,9 @@
 
 @import url("../classic/textpattern.css");
 
-
-/* Twisties
-   ========================================================================== */
-
-.txp-summary {
-	background: none;
-	padding: 0;
-}
-
-.expanded {
-	background: none;
-}
-
-.txp-summary a {
-	padding-right: 14px;
-	text-decoration: none;
-}
-
-.txp-summary a:hover,
-.txp-summary.expanded a {
-	background: url("../../txp_img/expandcollapse.gif") no-repeat right 5px;
-}
-
-
-/* Header
-   ========================================================================== */
-
 #masthead {
 	text-align: center;
 }
-
-
-/* Navigation
-   ========================================================================== */
 
 #nav {
 	display: inline-block;
@@ -44,6 +13,9 @@
 	margin: 0 auto;
 	padding: 0 0 0 124px;
 	background: url("../classic/textpattern.png") no-repeat left center;
+	/* display and zoom IE7 fix for display:inline-block */
+	*display: inline;
+	*zoom: 1;
 }
 
 #nav,
@@ -109,4 +81,23 @@
 
 #nav li li a:hover {
 	background-color: #ffc;
+}
+
+.lever {
+	background: none;
+	padding: 0;
+}
+
+.expanded {
+	background: none;
+}
+
+.lever a {
+	padding-right: 14px;
+	text-decoration: none;
+}
+
+.lever a:hover,
+.lever.expanded a {
+	background: url("../../txp_img/expandcollapse.gif") no-repeat right 5px;
 }

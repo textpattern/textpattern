@@ -49,13 +49,13 @@ $LastChangedRevision$
 
 		header('X-Frame-Options: '.X_FRAME_OPTIONS);
 
-	?><!doctype html>
-	<html lang="<?php echo LANG; ?>" dir="<?php echo txpspecialchars(gTxt('lang_dir')); ?>">
+	?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+	<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo LANG; ?>" lang="<?php echo LANG; ?>" dir="<?php echo txpspecialchars(gTxt('lang_dir')); ?>">
 	<head>
-	<meta charset="utf-8">
-	<meta name="robots" content="noindex, nofollow">
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta name="robots" content="noindex, nofollow" />
 	<title><?php echo escape_title($pagetitle) ?> - <?php echo txpspecialchars($sitename) ?> &#124; Textpattern CMS</title>
-	<script src="jquery.js"></script>
+	<script type="text/javascript" src="jquery.js"></script>
 	<?php
 	echo script_js(
 		'var textpattern = {
@@ -63,6 +63,7 @@ $LastChangedRevision$
 		step: "'.txpspecialchars($step).'",
 		_txp_token: "'.txpspecialchars(form_token()).'",
 		ajax_timeout: '.txpspecialchars(AJAX_TIMEOUT).',
+		ajaxally_challenged: '.(AJAXALLY_CHALLENGED ? 'true' : 'false').',
 		textarray: {},
 		do_spellcheck: "'.txpspecialchars(
 							get_pref('do_spellcheck', '#page-article #body, #page-article #title,'.
@@ -73,8 +74,8 @@ $LastChangedRevision$
 	);
 	gTxtScript(array('form_submission_error', 'are_you_sure'));
 	?>
-	<script src="textpattern.js"></script>
-	<script>
+	<script type="text/javascript" src="textpattern.js"></script>
+	<script type="text/javascript">
 	<!--
 		var cookieEnabled = checkCookies();
 
@@ -122,7 +123,7 @@ $LastChangedRevision$
 	-->
 	</script>
 	<?php // Mandatory un-themable Textpattern core styles ?>
-	<style>
+	<style type="text/css">
 		.not-ready .doc-ready, .not-ready form.async input[type="submit"], .not-ready a.async {
 			visibility: hidden;
 		}
@@ -133,13 +134,12 @@ $LastChangedRevision$
 	?>
 	</head>
 	<body id="<?php echo $body_id; ?>" class="not-ready <?php echo $area; ?>">
-	<p class="txp-accessibility"><a href="#txp-main"><?php echo gTxt('skip_to_main_content'); ?></a></p>
-	<header role="banner" class="txp-header">
+	<div class="txp-header">
 	<?php callback_event('admin_side', 'pagetop');
 		$theme->set_state($area, $event, $bm, $message);
 		echo pluggable_ui('admin_side', 'header', $theme->header());
 		callback_event('admin_side', 'pagetop_end');
-		echo '</header><!-- /txp-header -->'.n.'<div role="main" id="txp-main" class="txp-body" aria-label="'.gTxt('main_content').'">';
+		echo '</div><!-- /txp-header --><div class="txp-body">';
 	}
 
 // -------------------------------------------------------------
@@ -195,7 +195,7 @@ $LastChangedRevision$
 		$areas['content'] = array(
 			gTxt('tab_organise') => 'category',
 			gTxt('tab_write')    => 'article',
-			gTxt('tab_list')     => 'list',
+			gTxt('tab_list')     =>  'list',
 			gTxt('tab_image')    => 'image',
 			gTxt('tab_file')     => 'file',
 			gTxt('tab_link')     => 'link',
@@ -212,7 +212,6 @@ $LastChangedRevision$
 		$areas['admin'] = array(
 			gTxt('tab_diagnostics') => 'diag',
 			gTxt('tab_preferences') => 'prefs',
-			gTxt('tab_languages')   => 'lang',
 			gTxt('tab_site_admin')  => 'admin',
 			gTxt('tab_logs')        => 'log',
 			gTxt('tab_plugins')     => 'plugin',

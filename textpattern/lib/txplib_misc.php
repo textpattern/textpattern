@@ -793,13 +793,12 @@ function escape_js($js)
 			if ($files) {
 				natsort($files);
 				foreach ($files as $f) {
-					trace_add("[Loading plugin from cache dir '$f']");
 					load_plugin(basename($f, '.php'));
 				}
 			}
 		}
 
-		$admin = ($app_mode == 'async' ? '4,5' : '1,3,4,5');
+		$admin = ($app_mode == 'async' && !AJAXALLY_CHALLENGED ? '4,5' : '1,3,4,5');
 		$where = 'status = 1 AND type IN ('.($type ? $admin : '0,1,5').')';
 
 		$rs = safe_rows("name, code, version", "txp_plugin", $where.' order by load_order');
@@ -810,7 +809,6 @@ function escape_js($js)
 					$plugins[] = $a['name'];
 					$plugins_ver[$a['name']] = $a['version'];
 					$GLOBALS['txp_current_plugin'] = $a['name'];
-					trace_add("[Loading plugin '{$a['name']}' version '{$a['version']}']");
 					$eval_ok = eval($a['code']);
 					if ($eval_ok === FALSE)
 						echo gTxt('plugin_load_error_above').strong($a['name']).n.br;
@@ -1713,17 +1711,22 @@ function escape_js($js)
 	{
 
 		if ($level == 'debug') {
-			error_reporting(E_ALL | E_STRICT);
+			// We need to violate/disable E_STRICT for PHP 4.x compatibility
+			// E_STRICT bitmask calculation stems from the variations for E_ALL in PHP 4.x, 5.{0,1,2,3}, and 5.4+
+			// E_STRICT is defined since PHP 5.x and is set in E_ALL in PHP 5.4
+			error_reporting(E_ALL & ~(defined('E_STRICT') ? E_STRICT : 0));
 		}
 		elseif ($level == 'live') {
 			// don't show errors on screen
-			$suppress = E_NOTICE | E_USER_NOTICE | E_WARNING | E_STRICT | (defined('E_DEPRECATED') ? E_DEPRECATED : 0);
+			$suppress = E_WARNING | E_NOTICE;
+			if (defined('E_STRICT') && (E_ALL & E_STRICT)) $suppress |= E_STRICT;
+			if (defined('E_DEPRECATED')) $suppress |= E_DEPRECATED;
 			error_reporting(E_ALL ^ $suppress);
 			@ini_set("display_errors","1");
 		}
 		else {
-			// default is 'testing': display everything except notices
-			error_reporting((E_ALL | E_STRICT) ^ (E_NOTICE | E_USER_NOTICE));
+			// default is 'testing': display everything except notices and strict
+			error_reporting((E_ALL ^ E_NOTICE) & ~(defined('E_STRICT') ? E_STRICT : 0));
 		}
 	}
 
@@ -2287,14 +2290,15 @@ function escape_js($js)
 
 		if (!isset($out))
 			$out = <<<eod
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-   <meta charset="utf-8">
+   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
    <title>Textpattern Error: <txp:error_status /></title>
 </head>
 <body>
-	<p><txp:error_message /></p>
+<p align="center" style="margin-top:4em"><txp:error_message /></p>
 </body>
 </html>
 eod;
@@ -2856,6 +2860,12 @@ function modal_halt($thing)
 				set_pref('is_dst', $is_dst, 'publish', 2);
 			}
 		}
+
+        // deprecation nags
+        if (AJAXALLY_CHALLENGED)
+        {
+            trigger_error(gTxt('deprecated_configuration', array('{name}' => 'AJAXALLY_CHALLENGED')), E_USER_NOTICE);
+        }
 	}
 
 // -------------------------------------------------------------
@@ -3171,11 +3181,16 @@ function modal_halt($thing)
 	}
 
 /**
- * Test whether the client accepts a certain response format
- * @param   string  $format One of 'html', 'txt', 'js', 'css', 'json', 'xml', 'rdf', 'atom', or 'rss'
- * @return  boolean $format is accepted
- * @since 4.5.0
+ * Test whether the client accepts a certain response format.
+ *
+ * Discards formats with a quality factor below 0.1
+ *
+ * @param   string  $format One of 'html', 'txt', 'js', 'css', 'json', 'xml', 'rdf', 'atom', 'rss'
+ * @return  boolean $format TRUE if accepted
+ * @since   4.5.0
+ * @package Network
  */
+
 function http_accept_format($format)
 {
 	static $formats = array(
@@ -3190,18 +3205,30 @@ function http_accept_format($format)
 		'rss'  => array('application/rss+xml', '*/*'),
 	);
 	static $accepts = array();
-//	static $q = array(); // nice to have
+	static $q = array();
 
-	if (empty($accepts)) {
-		// build cache of accepted formats
+	if (empty($accepts))
+	{
+		// Build cache of accepted formats.
 		$accepts = preg_split('/\s*,\s*/', serverSet('HTTP_ACCEPT'), null, PREG_SPLIT_NO_EMPTY);
-		foreach ($accepts as &$a) {
-			// sniff out quality factors if present
-			if (preg_match('/(.*)\s*;\s*q=([.0-9]*)/', $a, $m)) {
+		foreach ($accepts as $i => &$a)
+		{
+			// Sniff out quality factors if present.
+			if (preg_match('/(.*)\s*;\s*q=([.0-9]*)/', $a, $m))
+			{
 				$a = $m[1];
-//				$q[$a] = floatval($m[2]);
-//			} else {
-//				$q[$a] = 1.0;
+				$q[$a] = floatval($m[2]);
+			}
+			else
+			{
+				$q[$a] = 1.0;
+			}
+			// Discard formats with quality factors below an arbitrary threshold
+			// as jQuery adds a wildcard '*/*; q=0.01' to the 'Accepts' header for XHR requests.
+			if ($q[$a] < 0.1)
+			{
+				unset($q[$a]);
+				unset($accepts[$i]);
 			}
 		}
 	}

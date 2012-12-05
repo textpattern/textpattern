@@ -583,13 +583,15 @@ function toggleDisplay(id)
 
 function toggleDisplayHref()
 {
-	var $this = $(this), href = $this.attr('href'), lever = $this.parent('.txp-summary');
+	var href = $(this).attr('href');
+	var lever = $(this).parent('.lever');
 	if (href) toggleDisplay(href.substr(1));
 	if (lever) {
-		var vis = $(href+':visible').length > 0;
-        lever.toggleClass('expanded', vis);
-        $this.attr('aria-pressed', vis.toString());
-        $(href).attr('aria-expanded', vis.toString());
+		if ($(href+':visible').length) {
+			lever.addClass('expanded');
+		} else {
+			lever.removeClass('expanded');
+		}
 	}
 	return false;
 }
@@ -878,35 +880,25 @@ $(document).ready(function() {
 	c = $(textpattern.do_spellcheck)[0];
 	if(c && "spellcheck" in c) {$(textpattern.do_spellcheck).prop("spellcheck", true);}
 	// attach toggle behaviours
-    $(document).on('click', '.txp-summary a[class!=pophelp]', toggleDisplayHref);
+	$('.lever a[class!=pophelp]').click(toggleDisplayHref);
 	$('.multi_edit_form').txpMultiEditForm();
 	// establish AJAX timeout from prefs
 	if($.ajaxSetup().timeout === undefined) {
 		$.ajaxSetup( {timeout : textpattern.ajax_timeout} );
 	}
 	// setup async forms/hrefs
-    $('form.async').txpAsyncForm({
-        error: function() {window.alert(textpattern.gTxt('form_submission_error'));}
-    });
-    $('a.async').txpAsyncHref({
-        error: function() {window.alert(textpattern.gTxt('form_submission_error'));}
-    });
-    // close button on announce pane
+	if(!textpattern.ajaxally_challenged) {
+		$('form.async').txpAsyncForm({
+			error: function() {window.alert(textpattern.gTxt('form_submission_error'));}
+		});
+		$('a.async').txpAsyncHref({
+			error: function() {window.alert(textpattern.gTxt('form_submission_error'));}
+		});
+	}
 	$(document).on('click', '.close', function(e) {
 		e.preventDefault();
 		$(this).parent().remove();
 	});
-    // initialise dynamic WAI-ARIA attributes
-    $('.txp-summary a').each(function(i, elm) {
-        // get id of toggled <div> region
-        var region = $(elm).attr('href');
-        if (region) {
-            var $region = $(region), vis = $region.is(':visible').toString();
-            $(elm).attr('aria-control', region.substr(1)).attr('aria-pressed', vis);
-            $region.attr('role', 'region').attr('aria-expanded', vis);
-        }
-    });
-
 	// arm UI
 	$('body').removeClass('not-ready');
 });

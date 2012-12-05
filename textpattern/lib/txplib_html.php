@@ -22,11 +22,11 @@ $LastChangedRevision$
 		global $txp_user, $event, $app_mode, $theme, $textarray_script;
 
 		if ($app_mode != 'async' && $event != 'tag') {
-			echo '</div><!-- /txp-body --><footer role="contentinfo" class="txp-footer">';
+			echo '</div><!-- /txp-body --><div class="txp-footer">';
 			echo pluggable_ui('admin_side', 'footer', $theme->footer());
 			callback_event('admin_side', 'body_end');
 			echo n.script_js('textpattern.textarray = '.json_encode($textarray_script)).n.
-			'</footer><!-- /txp-footer --></body>'.n.'</html>';
+			'</div><!-- /txp-footer --></body>'.n.'</html>';
 		}
 	}
 
@@ -73,7 +73,7 @@ $LastChangedRevision$
 
 	function column_multi_head($head_items, $class='')
 	{
-		$o = n.t.'<th scope="col"'.($class ? ' class="'.$class.'"' : '').'>';
+		$o = n.t.'<th'.($class ? ' class="'.$class.'"' : '').'>';
 		$first_item = true;
 		foreach ($head_items as $item)
 		{
@@ -375,7 +375,7 @@ $LastChangedRevision$
 
 			$nav[] = ($page > 1) ?
 				PrevNextLink($event, $page - 1, gTxt('prev'), 'prev', $sort, $dir, $crit, $search_method, $step).sp :
-				tag(gTxt('prev'), 'span', ' class="navlink-disabled" aria-disabled="true"').sp;
+				tag(gTxt('prev'), 'span', ' class="navlink-disabled"').sp;
 
 			$nav[] = '<select name="page" onchange="submit(this.form);">';
 			$nav[] = n.join(n, $option_list);
@@ -383,7 +383,7 @@ $LastChangedRevision$
 
 			$nav[] = ($page != $numPages) ?
 				sp.PrevNextLink($event, $page + 1, gTxt('next'), 'next', $sort, $dir, $crit, $search_method, $step) :
-				sp.tag(gTxt('next'), 'span', ' class="navlink-disabled" aria-disabled="true"');
+				sp.tag(gTxt('next'), 'span', ' class="navlink-disabled"');
 
 			$out[] = '<form class="nav-form" method="get" action="index.php">'.
 				n.eInput($event).
@@ -790,7 +790,7 @@ $LastChangedRevision$
 	function assHead()
 	{
 		$array = func_get_args();
-		foreach($array as $a) $o[] = hCell(gTxt($a), '', ' scope="col"');
+		foreach($array as $a) $o[] = hCell(gTxt($a));
 		return tr(join('',$o));
 	}
 
@@ -804,15 +804,14 @@ $LastChangedRevision$
  * @return	string	HTML
  */
 
-	function popHelp($help_var, $width = '', $height = '', $class='pophelp')
+	function popHelp($help_var, $width = '', $height = '')
 	{
-		$ui = '<a rel="help" target="_blank"'.
+		return '<a rel="help" target="_blank"'.
 			' href="'.HELP_URL.'?item='.$help_var.a.'language='.LANG.'"'.
 			' onclick="popWin(this.href'.
 			($width ? ', '.$width : '').
 			($height ? ', '.$height : '').
-			'); return false;"'. ($class ? ' class="'.$class.'"' : '') .'>?</a>';
-		return pluggable_ui('admin_help', $help_var, $ui, compact('help_var', 'width', 'height', 'class'));
+			'); return false;" class="pophelp">?</a>';
 	}
 
 
@@ -827,7 +826,12 @@ $LastChangedRevision$
 
 	function popHelpSubtle($help_var, $width = '', $height = '')
 	{
-		return popHelp($help_var, $width, $height, 'pophelpsubtle');
+		return '<a rel="help" target="_blank"'.
+			' href="http://rpc.textpattern.com/help/?item='.$help_var.a.'language='.LANG.'"'.
+			' onclick="popWin(this.href'.
+			($width ? ', '.$width : '').
+			($height ? ', '.$height : '').
+			'); return false;" class="pophelpsubtle">?</a>';
 	}
 
 
@@ -1078,7 +1082,13 @@ $LastChangedRevision$
 	function pref_text($name, $val, $id = '')
 	{
 		$id = ($id) ? $id : $name;
-		$vals = TextfilterSet::map();
+
+		$vals = array(
+			USE_TEXTILE          => gTxt('use_textile'),
+			CONVERT_LINEBREAKS   => gTxt('convert_linebreaks'),
+			LEAVE_TEXT_UNTOUCHED => gTxt('leave_text_untouched')
+		);
+
 		return selectInput($name, $vals, $val, '', '', $id);
 	}
 
@@ -1086,7 +1096,7 @@ $LastChangedRevision$
 /**
  * Attach a HTML fragment to a DOM node.
  *
- * @param	string	$id	Target DOM node's id
+ * @param	string	$id	Target DMO node's id
  * @param	string	$content	HTML fragment
  * @param	string	$noscript	noscript alternative	fragment ['']
  * @param	string	$wraptag	Wrapping HTML element
@@ -1120,7 +1130,7 @@ EOF;
 	{
 		$js = preg_replace('#<(/?)script#', '\\x3c$1script', $js);
 
-		$out = '<script>'.n.
+		$out = '<script type="text/javascript">'.n.
 			trim($js).n.
 			'</script>'.n;
 		if ($noscript)
@@ -1220,6 +1230,9 @@ EOF;
 
 		$class = "$step async";
 		$href = "?event=$event&amp;step=$step&amp;thing=$thing&amp;property=$property";
+		if (AJAXALLY_CHALLENGED) {
+			$href .= '&amp;value='.txpspecialchars($item).'&amp;_txp_token='.form_token();
+		}
 		return href($item, $href, $atts." class=\"$class\"");
 	}
 

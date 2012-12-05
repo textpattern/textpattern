@@ -217,7 +217,6 @@ $txp_permissions = array(
 	'image.delete'                => '1,2',
 	'image.delete.own'            => '1,2,3,4,  6',
 	'import'                      => '1,2',
-	'lang'                        => '1,2', // more?
 	'link'                        => '1,2,3',
 	'link.edit'                   => '1,2,3',
 	'link.edit.own'               => '1,2,3',

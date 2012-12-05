@@ -11,26 +11,20 @@ class classic_theme extends theme
 {
 	function html_head()
 	{
-		$out[] = '<link rel="stylesheet" href="'.$this->url.'textpattern.css">';
-		$out[] = '<meta name="generator" content="Textpattern CMS">';
-		$out[] = '<script src="modernizr.js"></script>';
-
-		return join(n, $out);
+		return '<link type="text/css" href="'.$this->url.'textpattern.css" rel="stylesheet" />'.n;
 	}
 
 	function header()
 	{
-		$out[] = '<h1 class="txp-accessibility">'.htmlspecialchars($GLOBALS["prefs"]["sitename"]).'</h1>';
-		$out[] = '<div id="masthead">';
-		$out[] = '<div id="navpop">'.n.navPop(1).n.'</div>';
-		$out[] = '<h1 id="branding">Textpattern</h1>';
-		$out[] = '</div>';
+		$out[] = '<div id="masthead">'.
+			n.'<div id="navpop">'.n.navPop(1).n.'</div>'.
+			n.'<h1 id="branding">Textpattern</h1>'.
+			n.'</div>';
 
 		if (!$this->is_popup)
 		{
-			$out[] = '<nav role="navigation" aria-label="'.gTxt('navigation').'">';
-			$out[] = '<div id="nav-primary" class="nav-tabs">';
-			$out[] = '<ul>';
+			$out[] = '<div id="nav-primary" class="nav-tabs">'.
+				n.'<ul>';
 
 			$secondary = '';
 			foreach ($this->menu as $tab)
@@ -51,14 +45,11 @@ class classic_theme extends theme
 						n.'</div>';
 				}
 			}
-
 			$out[] = '<li id="view-site"><a class="tabdown" href="'.hu.'" target="_blank">'.gTxt('tab_view_site').'</a></li>';
 			$out[] = '</ul>';
 			$out[] = '</div>';
 			$out[] = $secondary;
-			$out[] = '</nav>';
 		}
-
 		$out[] = '<div id="messagepane">'.$this->announce($this->message).'</div>'.n;
 		return join(n, $out);
 	}
@@ -117,7 +108,7 @@ class classic_theme extends theme
 			$html = ''; // TODO: Say what?
 			$js = 'window.alert("'.escape_js(strip_tags($thing[0])).'")';
 		} else {
-			$html = '<span role="alert" id="message" class="'.$class.'">'.gTxt($thing[0]).' <a role="button" href="#close" class="close" title="'.gTxt('close').'">&times;</a></span>';
+			$html = '<span id="message" class="'.$class.'">'.gTxt($thing[0]).' <a href="#close" class="close">&times;</a></span>';
 			// Try to inject $html into the message pane no matter when _announce()'s output is printed
 			$js = escape_js($html);
 			$js = <<< EOS

@@ -81,7 +81,8 @@ if (!empty($event) and $event == 'article') {
 
 		$msg = '';
 		if ($Title or $Body or $Excerpt) {
-			$Status = assert_int(ps('Status'));
+
+			extract(array_map('assert_int', psa(array( 'Status', 'textile_body', 'textile_excerpt'))));
 			// comments my be on, off, or disabled.
 			$Annotate = (int) $Annotate;
 			// set and validate article timestamp
@@ -132,9 +133,9 @@ if (!empty($event) and $event == 'article') {
 			}
 
 			if ($expires) {
-				$whenexpires = "Expires=from_unixtime($expires)";
+				$whenexpires = "from_unixtime($expires)";
 			} else {
-				$whenexpires = "Expires=".NULLDATETIME;
+				$whenexpires = NULLDATETIME;
 			}
 
 			$user = doSlash($txp_user);
@@ -173,8 +174,8 @@ if (!empty($event) and $event == 'article') {
 					Section         = '$Section',
 					Category1       = '$Category1',
 					Category2       = '$Category2',
-					textile_body    = '$textile_body',
-					textile_excerpt = '$textile_excerpt',
+					textile_body    =  $textile_body,
+					textile_excerpt =  $textile_excerpt,
 					Annotate        =  $Annotate,
 					override_form   = '$override_form',
 					url_title       = '$url_title',
@@ -234,14 +235,14 @@ if (!empty($event) and $event == 'article') {
 
 		if ($oldArticle['sLastMod'] != $incoming['sLastMod'])
 		{
-			article_edit(array(gTxt('concurrent_edit_by', array('{author}' => txpspecialchars($oldArticle['LastModID']))), E_ERROR), TRUE, TRUE );
+			article_edit(array(gTxt('concurrent_edit_by', array('{author}' => txpspecialchars($oldArticle['LastModID']))), E_ERROR), TRUE , !AJAXALLY_CHALLENGED );
 			return;
 		}
 
 		$incoming = textile_main_fields($incoming);
 
 		extract(doSlash($incoming));
-		extract(array_map('assert_int', psa(array('ID', 'Status'))));
+		extract(array_map('assert_int', psa(array('ID', 'Status', 'textile_body', 'textile_excerpt'))));
 		// comments my be on, off, or disabled.
 		$Annotate = (int) $Annotate;
 
@@ -340,8 +341,8 @@ if (!empty($event) and $event == 'article') {
 				Category1       = '$Category1',
 				Category2       = '$Category2',
 				Annotate        =  $Annotate,
-				textile_body    = '$textile_body',
-				textile_excerpt = '$textile_excerpt',
+				textile_body    =  $textile_body,
+				textile_excerpt =  $textile_excerpt,
 				override_form   = '$override_form',
 				url_title       = '$url_title',
 				AnnotateInvite  = '$AnnotateInvite',"
@@ -367,14 +368,14 @@ if (!empty($event) and $event == 'article') {
 				$msg = array(gTxt('article_save_failed'), E_ERROR);
 			}
 		}
-		article_edit($msg, FALSE, TRUE);
+		article_edit($msg, FALSE, !AJAXALLY_CHALLENGED);
 	}
 
 //--------------------------------------------------------------
 
 	function article_edit($message = '', $concurrent = FALSE, $refresh_partials = FALSE)
 	{
-		global $vars, $txp_user, $prefs, $event, $view;
+		global $vars, $txp_user, $prefs, $event;
 
 		extract($prefs);
 
@@ -390,7 +391,6 @@ if (!empty($event) and $event == 'article') {
 		$partials = array(
 			'sLastMod'        => array('mode' => PARTIAL_VOLATILE_VALUE, 'selector' => '[name=sLastMod]', 'cb' => 'article_partial_value'),
 			'sPosted'         => array('mode' => PARTIAL_VOLATILE_VALUE, 'selector' => '[name=sPosted]', 'cb' => 'article_partial_value'),
-			'sidehelp'   	  => array('mode' => PARTIAL_VOLATILE,       'selector' => '#textfilter_group', 'cb' => 'article_partial_sidehelp'),
 			'custom_fields'   => array('mode' => PARTIAL_STATIC,         'selector' => '#custom_field_group', 'cb' => 'article_partial_custom_fields'),
 			'image'           => array('mode' => PARTIAL_STATIC,         'selector' => '#image_group', 'cb' => 'article_partial_image'),
 			'keywords'        => array('mode' => PARTIAL_STATIC,         'selector' => 'p.keywords', 'cb' => 'article_partial_keywords'),
@@ -404,7 +404,6 @@ if (!empty($event) and $event == 'article') {
 			'body'            => array('mode' => PARTIAL_STATIC,         'selector' => 'p.body', 'cb' => 'article_partial_body'),
 			'excerpt'         => array('mode' => PARTIAL_STATIC,         'selector' => 'p.excerpt', 'cb' => 'article_partial_excerpt'),
 			'author'          => array('mode' => PARTIAL_VOLATILE,       'selector' => 'p.author', 'cb' => 'article_partial_author'),
-			'view_modes'      => array('mode' => PARTIAL_VOLATILE,       'selector' => '#view_modes', 'cb' => 'article_partial_view_modes'),
 			'article_nav'     => array('mode' => PARTIAL_VOLATILE,       'selector' => 'p.nav-tertiary', 'cb' => 'article_partial_article_nav'),
 			'status'          => array('mode' => PARTIAL_VOLATILE,       'selector' => '#write-status', 'cb' => 'article_partial_status'),
 			'categories'      => array('mode' => PARTIAL_STATIC,         'selector' => '#categories_group', 'cb' => 'article_partial_categories'),
@@ -483,17 +482,6 @@ if (!empty($event) and $event == 'article') {
 				}
 			}
 
-			// Use preferred textfilter as default and fallback
-			$hasfilter = new TextfilterConstraint(null);
-			$validator = new Validator();
-			foreach (array('textile_body', 'textile_excerpt') as $k) {
-				$hasfilter->setValue($store_out[$k]);
-				$validator->setConstraints($hasfilter);
-				if (!$validator->validate()) {
-					$store_out[$k] = $use_textile;
-				}
-			}
-
 			$rs = textile_main_fields($store_out);
 
 			if (!empty($rs['exp_year']))
@@ -513,7 +501,9 @@ if (!empty($event) and $event == 'article') {
 			}
 		}
 
-		$validator = new Validator(new SectionConstraint($rs['Section']));
+		$validator = new Validator(array(
+			new SectionConstraint($rs['Section'])
+		));
 		if (!$validator->validate()) {
 			$rs['Section'] = getDefaultSection();
 		}
@@ -521,6 +511,12 @@ if (!empty($event) and $event == 'article') {
 		extract($rs);
 
 		$GLOBALS['step'] = $step;
+
+		if ($step == 'create')
+		{
+			$textile_body = $use_textile;
+			$textile_excerpt = $use_textile;
+		}
 
 		if ($step != 'create' && isset($sPosted)) {
 
@@ -582,7 +578,6 @@ if (!empty($event) and $event == 'article') {
 
 		pagetop($page_title, $message);
 
-		echo n.'<h1 class="txp-heading txp-accessibility">'.gTxt('tab_write').'</h1>';
 		echo n.'<div id="'.$event.'_container" class="txp-container">';
 		echo n.n.'<form id="article_form" name="article_form" method="post" action="index.php" '. ($step=='create' ? '>' : ' class="async">');
 
@@ -610,7 +605,7 @@ if (!empty($event) and $event == 'article') {
 
 		//-- markup help --------------
 
-			echo $partials['sidehelp']['html'];
+			echo pluggable_ui('article_ui', 'sidehelp', side_help($textile_body, $textile_excerpt), $rs);
 
 		//-- custom menu entries --------------
 
@@ -618,9 +613,8 @@ if (!empty($event) and $event == 'article') {
 
 		//-- advanced --------------
 
-			echo n.n.'<div role="group" id="advanced_group" class="txp-details">'.
-				n.'<h3 class="txp-summary'.(get_pref('pane_article_advanced_visible') ? ' expanded' : '').'"><a href="#advanced" role="button">'.gTxt('advanced_options').'</a></h3>'.
-				n.'<div id="advanced" class="toggle" style="display:'.(get_pref('pane_article_advanced_visible') ? 'block' : 'none').'">';
+			echo '<div id="advanced_group"><h3 class="lever'.(get_pref('pane_article_advanced_visible') ? ' expanded' : '').'"><a href="#advanced">'.gTxt('advanced_options').'</a></h3>'.
+				'<div id="advanced" class="toggle" style="display:'.(get_pref('pane_article_advanced_visible') ? 'block' : 'none').'">';
 
 			// markup selection
 			echo pluggable_ui('article_ui', 'markup',
@@ -635,7 +629,7 @@ if (!empty($event) and $event == 'article') {
 				? pluggable_ui('article_ui', 'override', graf('<label for="override-form">'.gTxt('override_default_form').'</label>'.sp.popHelp('override_form').br.
 					form_pop($override_form, 'override-form'), ' class="override-form"'), $rs)
 				: '';
-			echo n.'</div>'.n.'</div>';
+			echo '</div></div>'.n;
 
 		//-- custom fields --------------
 
@@ -647,22 +641,20 @@ if (!empty($event) and $event == 'article') {
 
 		//-- meta info --------------
 
-			echo n.n.'<div role="group" id="meta_group" class="txp-details">'.
-				n.'<h3 class="txp-summary'.(get_pref('pane_article_meta_visible') ? ' expanded' : '').'"><a href="#meta" role="button">'.gTxt('meta').'</a></h3>'.
-				n.'<div id="meta" class="toggle" style="display:'.(get_pref('pane_article_meta_visible') ? 'block' : 'none').'">';
+			echo '<div id="meta_group"><h3 class="lever'.(get_pref('pane_article_meta_visible') ? ' expanded' : '').'"><a href="#meta">'.gTxt('meta').'</a></h3>'.
+				'<div id="meta" class="toggle" style="display:'.(get_pref('pane_article_meta_visible') ? 'block' : 'none').'">';
 			// keywords
 			echo $partials['keywords']['html'];
 			// url title
 			echo $partials['url_title']['html'];
-			echo n.'</div>'.n.'</div>';
+			echo '</div></div>'.n;
 
 		//-- recent articles --------------
 
-			echo n.n.'<div role="navigation" id="recent_group" class="txp-details">'.
-				n.'<h3 class="txp-summary'.(get_pref('pane_article_recent_visible') ? ' expanded' : '').'"><a href="#recent" role="button">'.gTxt('recent_articles').'</a>'.'</h3>'.
-				n.'<div id="recent" class="toggle" style="display:'.(get_pref('pane_article_recent_visible') ? 'block' : 'none').'">';
+			echo '<div id="recent_group"><h3 class="lever'.(get_pref('pane_article_recent_visible') ? ' expanded' : '').'"><a href="#recent">'.gTxt('recent_articles').'</a>'.'</h3>'.
+				'<div id="recent" class="toggle" style="display:'.(get_pref('pane_article_recent_visible') ? 'block' : 'none').'">';
 			echo $partials['recent_articles']['html'];
-			echo n.'</div>'.n.'</div>';
+			echo '</div></div>';
 		}
 
 		else
@@ -670,7 +662,7 @@ if (!empty($event) and $event == 'article') {
 			echo sp;
 		}
 
-		echo n.n.'</div>'.n.'</td>'.n.'<td id="article-main"><div id="main_content">';
+		echo '</div></td>'.n.'<td id="article-main"><div id="main_content">';
 
 	//-- title input --------------
 
@@ -738,9 +730,14 @@ if (!empty($event) and $event == 'article') {
 
 	//-- layer tabs -------------------
 
-		echo '<td id="article-tabs">';
-		echo $partials['view_modes']['html'];
-		echo '</td>';
+		echo '<td id="article-tabs"><div id="view_modes">';
+
+		echo pluggable_ui('article_ui', 'view',
+			($use_textile == USE_TEXTILE || $textile_body == USE_TEXTILE)
+			? tag((tab('text',$view).tab('html',$view).tab('preview',$view)), 'ul')
+			: '&#160;',
+			$rs);
+		echo '</div></td>';
 
 		echo '<td id="article-col-2"><div id="supporting_content">';
 
@@ -775,19 +772,17 @@ if (!empty($event) and $event == 'article') {
 				$rs);
 
 		//-- "Comments" section
-			echo n.n.'<div role="group" id="comments_group" class="txp-details'.(($use_comments==1) ? '' : ' empty').'">'.
-				n.'<h3 class="txp-summary'.(get_pref('pane_article_comments_visible') ? ' expanded' : '').'"><a href="#comments" role="button">'.gTxt('comment_settings').'</a></h3>'.
-				n.'<div id="comments" class="toggle" style="display:'.(get_pref('pane_article_comments_visible') ? 'block' : 'none').'">';
+			echo n.n.'<div id="comments_group"'.(($use_comments==1) ? '' : ' class="empty"').'><h3 class="lever'.(get_pref('pane_article_comments_visible') ? ' expanded' : '').'"><a href="#comments">'.gTxt('comment_settings').'</a></h3>',
+				'<div id="comments" class="toggle" style="display:'.(get_pref('pane_article_comments_visible') ? 'block' : 'none').'">';
 
 			echo $partials['comments']['html'];
 
 			// end "Comments" section
-			echo '</div>'.n.'</div>';
+			echo '</div></div>';
 
 		//-- "Dates" section
-			echo n.n.'<div role="group" id="dates_group" class="txp-details">'.
-				n.'<h3 class="txp-summary'.(get_pref('pane_article_dates_visible') ? ' expanded' : '').'"><a href="#dates" role="button">'.gTxt('date_settings').'</a></h3>'.
-				n.'<div id="dates" class="toggle" style="display:'.(get_pref('pane_article_dates_visible') ? 'block' : 'none').'">';
+			echo n.n.'<div id="dates_group"><h3 class="lever'.(get_pref('pane_article_dates_visible') ? ' expanded' : '').'"><a href="#dates">'.gTxt('date_settings').'</a></h3>',
+				'<div id="dates" class="toggle" style="display:'.(get_pref('pane_article_dates_visible') ? 'block' : 'none').'">';
 
 			if ($step == "create" and empty($GLOBALS['ID']))
 			{
@@ -807,16 +802,16 @@ if (!empty($event) and $event == 'article') {
 					n.graf(gTxt('or_publish_at').sp.popHelp('timestamp'), ' class="publish-at"').
 
 					n.graf('<span class="label">'.gtxt('date').'</span>'.sp.
-						tsi('year', '%Y', $persist_timestamp, '').' / '.
-						tsi('month', '%m', $persist_timestamp, '').' / '.
-						tsi('day', '%d', $persist_timestamp, '')
+						tsi('year', '%Y', $persist_timestamp).' / '.
+						tsi('month', '%m', $persist_timestamp).' / '.
+						tsi('day', '%d', $persist_timestamp)
 					, ' class="date posted created"'
 					).
 
 					n.graf('<span class="label">'.gTxt('time').'</span>'.sp.
-						tsi('hour', '%H', $persist_timestamp, '').' : '.
-						tsi('minute', '%M', $persist_timestamp, '').' : '.
-						tsi('second', '%S', $persist_timestamp, '')
+						tsi('hour', '%H', $persist_timestamp).' : '.
+						tsi('minute', '%M', $persist_timestamp).' : '.
+						tsi('second', '%S', $persist_timestamp)
 					, ' class="time posted created"'
 					).
 
@@ -834,16 +829,16 @@ if (!empty($event) and $event == 'article') {
 					n.'<legend>'.gTxt('expires').'</legend>'.
 
 					n.graf('<span class="label">'.gtxt('date').'</span>'.sp.
-						tsi('exp_year', '%Y', $persist_timestamp, '').' / '.
-						tsi('exp_month', '%m', $persist_timestamp, '').' / '.
-						tsi('exp_day', '%d', $persist_timestamp, '')
+						tsi('exp_year', '%Y', $persist_timestamp).' / '.
+						tsi('exp_month', '%m', $persist_timestamp).' / '.
+						tsi('exp_day', '%d', $persist_timestamp)
 					, ' class="date expires"'
 					).
 
 					n.graf('<span class="label">'.gTxt('time').'</span>'.sp.
-						tsi('exp_hour', '%H', $persist_timestamp, '').' : '.
-						tsi('exp_minute', '%M', $persist_timestamp, '').' : '.
-						tsi('exp_second', '%S', $persist_timestamp, '')
+						tsi('exp_hour', '%H', $persist_timestamp).' : '.
+						tsi('exp_minute', '%M', $persist_timestamp).' : '.
+						tsi('exp_second', '%S', $persist_timestamp)
 					, ' class="time expires"'
 					).
 
@@ -851,7 +846,7 @@ if (!empty($event) and $event == 'article') {
 				$rs);
 
 				// end "Dates" section
-				echo n.n.'</div>'.n.'</div>';
+				echo n.n.'</div></div>';
 
 		//-- publish button --------------
 
@@ -874,7 +869,7 @@ if (!empty($event) and $event == 'article') {
 				echo $partials['expires']['html'];;
 
 				// end "Dates" section
-				echo n.n.'</div>'.n.'</div>';
+				echo n.n.'</div></div>';
 
 		//-- save button --------------
 
@@ -919,6 +914,67 @@ EOS
 
 		return safe_field("ID", "textpattern",
 			"Posted $dir from_unixtime($sPosted) order by Posted $ord limit 1");
+	}
+
+//--------------------------------------------------------------
+// remember to show markup help for both body and excerpt
+// if they are different
+
+	function side_help($textile_body, $textile_excerpt)
+	{
+		if ($textile_body == USE_TEXTILE or $textile_excerpt == USE_TEXTILE)
+		{
+			return n.
+				'<div id="textile_group">'.
+				hed(
+				'<a href="#textile_help">'.gTxt('textile_help').'</a>'
+			, 3, ' class="lever'.(get_pref('pane_article_textile_help_visible') ? ' expanded' : '').'"').
+
+				n.'<div id="textile_help" class="toggle" style="display:'.(get_pref('pane_article_textile_help_visible') ? 'block' : 'none').'">'.
+
+				n.'<ul class="textile plain-list">'.
+					n.t.'<li>'.gTxt('header').': <strong>h<em>n</em>.</strong>'.sp.
+						popHelpSubtle('header', 400, 400).'</li>'.
+					n.t.'<li>'.gTxt('blockquote').': <strong>bq.</strong>'.sp.
+						popHelpSubtle('blockquote',400,400).'</li>'.
+					n.t.'<li>'.gTxt('numeric_list').': <strong>#</strong>'.sp.
+						popHelpSubtle('numeric', 400, 400).'</li>'.
+					n.t.'<li>'.gTxt('bulleted_list').': <strong>*</strong>'.sp.
+						popHelpSubtle('bulleted', 400, 400).'</li>'.
+					n.t.'<li>'.gTxt('definition_list').': <strong>; :</strong>'.sp.
+						popHelpSubtle('definition', 400, 400).'</li>'.
+				n.'</ul>'.
+
+				n.'<ul class="textile plain-list">'.
+					n.t.'<li>'.'_<em>'.gTxt('emphasis').'</em>_'.sp.
+						popHelpSubtle('italic', 400, 400).'</li>'.
+					n.t.'<li>'.'*<strong>'.gTxt('strong').'</strong>*'.sp.
+						popHelpSubtle('bold', 400, 400).'</li>'.
+					n.t.'<li>'.'??<cite>'.gTxt('citation').'</cite>??'.sp.
+						popHelpSubtle('cite', 500, 300).'</li>'.
+					n.t.'<li>'.'-'.gTxt('deleted_text').'-'.sp.
+						popHelpSubtle('delete', 400, 300).'</li>'.
+					n.t.'<li>'.'+'.gTxt('inserted_text').'+'.sp.
+						popHelpSubtle('insert', 400, 300).'</li>'.
+					n.t.'<li>'.'^'.gTxt('superscript').'^'.sp.
+						popHelpSubtle('super', 400, 300).'</li>'.
+					n.t.'<li>'.'~'.gTxt('subscript').'~'.sp.
+						popHelpSubtle('subscript', 400, 400).'</li>'.
+				n.'</ul>'.
+
+				n.graf(
+					'"'.gTxt('linktext').'":url'.sp.popHelpSubtle('link', 400, 500)
+				, ' class="textile"').
+
+				n.graf(
+					'!'.gTxt('imageurl').'!'.sp.popHelpSubtle('image', 500, 500)
+				, ' class="textile"').
+
+				n.graf(
+					'<a id="textile-docs-link" href="http://textpattern.com/textile-sandbox" target="_blank">'.gTxt('More').'</a>').
+
+				n.'</div></div>';
+		}
 	}
 
 //--------------------------------------------------------------
@@ -969,11 +1025,11 @@ EOS
 //--------------------------------------------------------------
 	function tab($tabevent,$view)
 	{
-		$state = ($view == $tabevent) ? 'up' : 'down';
-		$pressed = ($view == $tabevent) ? 'true' : 'false';
-		return '<li class="view-mode '.$tabevent.'" id="tab-'.$tabevent.$state.'" title="'.gTxt('view_'.$tabevent).'">'.
-			'<a href="javascript:document.article_form.view.value=\''.$tabevent.'\';document.article_form.submit();" role="button" aria-pressed="'.$pressed.'">'.gTxt($tabevent).'</a>'.
-			'</li>'.n;
+		$state = ($view==$tabevent) ? 'up' : 'down';
+		$out = '<li class="view-mode '.$tabevent.'" id="tab-'.$tabevent.$state.'" title="'.gTxt('view_'.$tabevent).'">';
+		$out.= ($tabevent!=$view) ? '<a href="javascript:document.article_form.view.value=\''.$tabevent.'\';document.article_form.submit();">'.gTxt($tabevent).'</a>' : gTxt($tabevent);
+		$out.='</li>';
+		return $out;
 	}
 
 //--------------------------------------------------------------
@@ -1034,15 +1090,38 @@ EOS
 		global $prefs;
 
 		include_once txpath.'/lib/classTextile.php';
-		include_once txpath.'/lib/txplib_textfilter.php';
-
 		$textile = new Textile($prefs['doctype']);
 
 		$incoming['Title_plain'] = $incoming['Title'];
 		$incoming['Title_html'] = ''; // not used
-		$incoming['Title'] = $textile->TextileThis($incoming['Title'],'',1);
-		$incoming['Body_html'] = TextfilterSet::filter($incoming['textile_body'], $incoming['Body'], array('field' => 'Body', 'options' => array('lite' => false), 'data' => $incoming));
-		$incoming['Excerpt_html'] = TextfilterSet::filter($incoming['textile_excerpt'], $incoming['Excerpt'], array('field' => 'Excerpt', 'options' => array('lite' => false), 'data' => $incoming));
+
+		if ($incoming['textile_body'] == LEAVE_TEXT_UNTOUCHED) {
+
+			$incoming['Body_html'] = trim($incoming['Body']);
+
+		}elseif ($incoming['textile_body'] == USE_TEXTILE){
+
+			$incoming['Body_html'] = $textile->TextileThis($incoming['Body']);
+			$incoming['Title'] = $textile->TextileThis($incoming['Title'],'',1);
+
+		}elseif ($incoming['textile_body'] == CONVERT_LINEBREAKS){
+
+			$incoming['Body_html'] = nl2br(trim($incoming['Body']));
+		}
+
+		if ($incoming['textile_excerpt'] == LEAVE_TEXT_UNTOUCHED) {
+
+			$incoming['Excerpt_html'] = trim($incoming['Excerpt']);
+
+		}elseif ($incoming['textile_excerpt'] == USE_TEXTILE){
+
+			$incoming['Excerpt_html'] = $textile->TextileThis($incoming['Excerpt']);
+
+		}elseif ($incoming['textile_excerpt'] == CONVERT_LINEBREAKS){
+
+			$incoming['Excerpt_html'] = nl2br(trim($incoming['Excerpt']));
+		}
+
 		return $incoming;
 	}
 // -------------------------------------------------------------
@@ -1073,7 +1152,7 @@ EOS
 	function article_save_pane_state()
 	{
 		global $event;
-		$panes = array('textfilter_help', 'advanced', 'custom_field', 'image', 'meta', 'recent', 'comments', 'dates');
+		$panes = array('textile_help', 'advanced', 'custom_field', 'image', 'meta', 'recent', 'comments', 'dates');
 		$pane = gps('pane');
 		if (in_array($pane, $panes))
 		{
@@ -1082,25 +1161,6 @@ EOS
 		} else {
 			trigger_error('invalid_pane', E_USER_WARNING);
 		}
-	}
-
-// -------------------------------------------------------------
-	function article_partial_sidehelp($rs)
-	{
-		// show markup help for both body and excerpt if they are different
-		$help = TextfilterSet::help($rs['textile_body']);
-		if ($rs['textile_body'] != $rs['textile_excerpt']) $help .=  TextfilterSet::help($rs['textile_excerpt']);
-
-		$out[] = '<div role="group" id="textfilter_group" class="txp-details">';
-		if ($help) {
-			$out[] =  hed('<a href="#textfilter_help" role="button">'.gTxt('textfilter_help').'</a>', 3,
-					' class="txp-summary'.(get_pref('pane_article_textfilter_help_visible') ? ' expanded' : '').'"').
-				n.'<div id="textfilter_help" class="toggle" style="display:'.(get_pref('pane_article_textfilter_help_visible') ? 'block' : 'none').'">'.
-				$help.
-				n.'</div>';
-		}
-		$out[] = '</div>';
-		return pluggable_ui('article_ui', 'sidehelp', join(n, $out), $rs);
 	}
 
 // -------------------------------------------------------------
@@ -1140,15 +1200,15 @@ EOS
 		global $cfs;
 
 		$cf = '';
-		$out = n.n.'<div role="group" id="custom_field_group" class="txp-details'.(($cfs) ? '' : ' empty').'">'.n.'<h3 class="txp-summary'.(get_pref('pane_article_custom_field_visible') ? ' expanded' : '').'"><a href="#custom_field" role="button">'.gTxt('custom').'</a></h3>'.
-			n.'<div id="custom_field" class="toggle" style="display:'.(get_pref('pane_article_custom_field_visible') ? 'block' : 'none').'">';
+		$out = '<div id="custom_field_group"'.(($cfs) ? '' : ' class="empty"').'><h3 class="lever'.(get_pref('pane_article_custom_field_visible') ? ' expanded' : '').'"><a href="#custom_field">'.gTxt('custom').'</a></h3>'.
+			'<div id="custom_field" class="toggle" style="display:'.(get_pref('pane_article_custom_field_visible') ? 'block' : 'none').'">';
 
 		foreach($cfs as $k => $v)
 		{
 			$cf .= article_partial_custom_field($rs, "custom_field_{$k}");
 		}
 		$out .= pluggable_ui('article_ui', 'custom_fields', $cf, $rs);
-		return $out.n.'</div>'.n.'</div>';
+		return $out.'</div></div>'.n;
 
 	}
 
@@ -1167,15 +1227,14 @@ EOS
 // -------------------------------------------------------------
 	function article_partial_image($rs)
 	{
-		$out = n.n.'<div role="group" id="image_group" class="txp-details">'.
-			n.'<h3 class="txp-summary'.(get_pref('pane_article_image_visible') ? ' expanded' : '').'"><a href="#image" role="button">'.gTxt('article_image').'</a></h3>'.
-			n.'<div id="image" class="toggle" style="display:'.(get_pref('pane_article_image_visible') ? 'block' : 'none').'">';
+		$out = '<div id="image_group"><h3 class="lever'.(get_pref('pane_article_image_visible') ? ' expanded' : '').'"><a href="#image">'.gTxt('article_image').'</a></h3>'.
+			'<div id="image" class="toggle" style="display:'.(get_pref('pane_article_image_visible') ? 'block' : 'none').'">';
 
 		$out .= pluggable_ui('article_ui', 'article_image',
 			n.graf('<label for="article-image">'.gTxt('article_image').'</label>'.sp.popHelp('article_image').br.
 				fInput('text', 'Image', $rs['Image'], '', '', '', INPUT_REGULAR, '', 'article-image'), ' class="article-image"'),
 			$rs);
-		return $out.n.'</div>'.n.'</div>';
+		return $out.'</div></div>'.n;
 	}
 
 // -------------------------------------------------------------
@@ -1269,34 +1328,17 @@ EOS
 	}
 
 // -------------------------------------------------------------
-	function article_partial_view_modes($rs)
-	{
-		global $step, $view, $use_textile;
-		if ($step == "create") {
-			$hasfilter = ($use_textile !== LEAVE_TEXT_UNTOUCHED);
-		} else {
-			$hasfilter = ($rs['textile_body'] !== LEAVE_TEXT_UNTOUCHED || $rs['textile_excerpt'] !== LEAVE_TEXT_UNTOUCHED);
-		}
-
-		return n.'<div id="view_modes">'.
-			pluggable_ui('article_ui', 'view',
-			$hasfilter ? n.tag((tab('text',$view).tab('html',$view).tab('preview',$view)), 'ul').n : '&#160;',
-			$rs).
-			'</div>';
-
-	}
-// -------------------------------------------------------------
 	function article_partial_article_nav($rs)
 	{
-		return '<p role="navigation" class="nav-tertiary">'.
+		return '<p class="nav-tertiary">'.
 		($rs['prev_id']
 			?	prevnext_link(gTxt('prev'),'article','edit',
 				$rs['prev_id'],'', 'prev')
-			:	'<span class="navlink-disabled" aria-disabled="true">'.gTxt('prev').'</span>').
+			:	'<span class="navlink-disabled">'.gTxt('prev').'</span>').
 		($rs['next_id']
 			?	prevnext_link(gTxt('next'),'article','edit',
 				$rs['next_id'],'', 'next')
-			:	'<span class="navlink-disabled" aria-disabled="true">'.gTxt('next').'</span>').n.
+			:	'<span class="navlink-disabled">'.gTxt('next').'</span>').n.
 		'</p>';
 	}
 
@@ -1459,8 +1501,6 @@ EOS
 			'Section'   => new SectionConstraint($rs['Section']),
 			'Category1' => new CategoryConstraint($rs['Category1'], array('type' => 'article')),
 			'Category2' => new CategoryConstraint($rs['Category2'], array('type' => 'article')),
-			'textile_body' 		=> new TextfilterConstraint($rs['textile_body'], array('message' => 'invalid_textfilter_body')),
-			'textile_excerpt' 	=> new TextfilterConstraint($rs['textile_excerpt'], array('message' => 'invalid_textfilter_excerpt')),
 		);
 
 		if (!$prefs['articles_use_excerpts']) {

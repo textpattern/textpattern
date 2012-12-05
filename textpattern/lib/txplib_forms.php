@@ -65,11 +65,6 @@ $LastChangedRevision$
 			}
 
 			else {
-				// coerce type of array members into incoming value's type
-				// otherwise ('foo' == 0) === true
-				settype($avalue, gettype($value));
-				settype($alabel, gettype($value));
-
 				if ($avalue == $value || $alabel == $value) {
 					$sel = ' selected="selected"';
 					$selected = true;
@@ -140,28 +135,26 @@ $LastChangedRevision$
 	function fInput($type, 		          // generic form input
 					$name,
 					$value,
-					$class = '',
-					$title = '',
-					$onClick = '',
-					$size = '',
-					$tab = '',
-					$id = '',
+					$class='',
+					$title='',
+					$onClick='',
+					$size='',
+					$tab='',
+					$id='',
 					$disabled = false,
-					$required = false,
-					$placeholder = '')
+					$required = false)
 	{
 		$o  = '<input type="'.$type.'"';
-		$o .= ' value="'.txpspecialchars($value).'"';
-		$o .= strlen($name) ? ' name="'.$name.'"' : '';
-		$o .= ($size)       ? ' size="'.$size.'"' : '';
-		$o .= ($class)      ? ' class="'.$class.'"' : '';
-		$o .= ($title)      ? ' title="'.$title.'"' : '';
-		$o .= ($onClick)    ? ' onclick="'.$onClick.'"' : '';
-		$o .= ($tab)        ? ' tabindex="'.$tab.'"' : '';
-		$o .= ($id)         ? ' id="'.$id.'"' : '';
-		$o .= ($disabled)   ? ' disabled="disabled"' : '';
-		$o .= ($required)   ? ' required="required"' : '';
-		$o .= ($placeholder)? ' placeholder="'.txpspecialchars($placeholder).'"' : '';
+		$o .= ($type == 'file' || $type == 'image') ? '' : ' value="'.txpspecialchars($value).'"';
+		$o .= strlen($name)? ' name="'.$name.'"' : '';
+		$o .= ($size)     ? ' size="'.$size.'"' : '';
+		$o .= ($class)    ? ' class="'.$class.'"' : '';
+		$o .= ($title)    ? ' title="'.$title.'"' : '';
+		$o .= ($onClick)  ? ' onclick="'.$onClick.'"' : '';
+		$o .= ($tab)      ? ' tabindex="'.$tab.'"' : '';
+		$o .= ($id)       ? ' id="'.$id.'"' : '';
+		$o .= ($disabled) ? ' disabled="disabled"' : '';
+		$o .= ($required) ? ' required' : '';
 		$o .= " />";
 		return $o;
 	}
@@ -260,7 +253,7 @@ $LastChangedRevision$
 
 //-------------------------------------------------------------
 
-	function text_area($name, $h='', $w='', $thing = '', $id = '', $rows='5', $cols='40', $placeholder='')
+	function text_area($name, $h='', $w='', $thing = '', $id = '', $rows='5', $cols='40')
 	{
 		$id = ($id) ? ' id="'.$id.'"' : '';
 		$rows = ' rows="' . ( ($rows && is_numeric($rows)) ? $rows : '5') . '"';
@@ -268,7 +261,7 @@ $LastChangedRevision$
 		$width = ($w) ? 'width:'.$w.'px;' : '';
 		$height = ($h) ? 'height:'.$h.'px;' : '';
 		$style = ($width || $height) ? ' style="'.$width.$height.'"' : '';
-		return '<textarea'.$id.' name="'.$name.'"'.$rows.$cols.$style.($placeholder == '' ? '' : ' placeholder="'.txpspecialchars($placeholder).'"').'>'.txpspecialchars($thing).'</textarea>';
+		return '<textarea'.$id.' name="'.$name.'"'.$rows.$cols.$style.'>'.txpspecialchars($thing).'</textarea>';
 	}
 
 //-------------------------------------------------------------
@@ -302,22 +295,12 @@ $LastChangedRevision$
 	}
 
 //--------------------------------------------------------------
-	function tsi($name, $datevar, $time, $tab='')
+	function tsi($name,$datevar,$time,$tab='')
 	{
-		static $placeholders = array(
-			'%Y' => 'yyyy',
-			'%m' => 'mm',
-			'%d' => 'dd',
-			'%H' => 'hh',
-			'%M' => 'mn',
-			'%S' => 'ss',
-		);
-
 		$size = ($name=='year' or $name=='exp_year') ? INPUT_XSMALL : INPUT_TINY;
 		$s = ($time == 0)? '' : safe_strftime($datevar, $time);
 		return n.'<input type="text" name="'.$name.'" value="'.
 			$s
-			.'" size="'.$size.'" maxlength="'.$size.'" class="'.$name.'"'.(empty($tab) ? '' : ' tabindex="'.$tab.'"').' title="'.gTxt('article_'.$name)
-			.'"'.(isset($placeholders[$datevar]) ? ' placeholder="'.txpspecialchars(gTxt($placeholders[$datevar])).'"' : '').' />';
+		.'" size="'.$size.'" maxlength="'.$size.'" class="'.$name.'"'.(empty($tab) ? '' : ' tabindex="'.$tab.'"').' title="'.gTxt('article_'.$name).'" />';
 	}
 ?>
