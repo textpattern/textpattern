@@ -1,3 +1,7 @@
+Changes in 4.5.4
+
+* Corrects a packaging error in the 4.5.3 archives.
+
 Changes in 4.5.3
 
 * Maintenance release with bug fixes, no security implications
