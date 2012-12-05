@@ -1309,7 +1309,7 @@
 
 	function tab($tabevent, $view)
 	{
-		$state = ($view == $tabevent) ? 'up' : 'down';
+		$state = ($view == $tabevent) ? 'active' : '';
 		$pressed = ($view == $tabevent) ? 'true' : 'false';
 
 		$link = href(gTxt('view_'.$tabevent), '#', array(
@@ -1320,8 +1320,8 @@
 		));
 
 		return n.tag($link, 'li', array(
-			'id'    => 'tab-'.$tabevent.$state,
-			'class' => 'view-mode '.$tabevent,
+			'id'    => 'tab-'.$tabevent,
+			'class' => $state,
 		));
 	}
 

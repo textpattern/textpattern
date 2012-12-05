@@ -1402,55 +1402,61 @@ td#article-col-2 {
 	padding-left: 1em;
 }
 
-#article-tabs ul {
+#view_modes ul {
 	list-style: none;
 	margin-top: .72727272727273em;
 	padding: 0;
 }
 
-#article-tabs .text a {
-	background-image: url("img/view-text.png");
-}
-
-.svg #view_modes .text a {
-	background-image: url("img/view-text.svg");
-}
-
-#article-tabs .html a {
-	background-image: url("img/view-html.png");
-}
-
-.svg #view_modes .html a {
-	background-image: url("img/view-html.svg");
-}
-
-#article-tabs .preview a {
-	background-image: url("img/view-preview.png");
-}
-
-.svg #view_modes .preview a {
-	background-image: url("img/view-preview.svg");
-}
-
-.view-mode {
-	text-indent: -9999px;
-	width: 24px;
-	height: 24px;
+#view_modes li {
 	margin-bottom: 1em;
 	border: 1px solid #ccc;
-	-moz-border-radius: .4em;
-	border-radius: .4em;
-	background-color: #fff8dd;
+	width: 24px;
+	height: 24px;
 }
 
-.view-mode a {
+#view_modes a {
+	text-indent: 110%;
+	white-space: nowrap;
+	overflow: hidden;
 	display: block;
 	width: 24px;
 	height: 24px;
-	background: no-repeat 50% 50%;
+	background-color: #fff8dd;
+	background-repeat: no-repeat;
+	background-position: 50% 50%;
 }
 
-.svg .view-mode a {
+#view_modes a:hover,
+#view_modes li.active a {
+	background-color: #fff;
+}
+
+#tab-text a {
+	background-image: url("img/view-text.png");
+}
+
+.svg #tab-text a {
+	background-image: url("img/view-text.svg");
+}
+
+#tab-html a {
+	background-image: url("img/view-html.png");
+}
+
+.svg #tab-html a {
+	background-image: url("img/view-html.svg");
+}
+
+#tab-preview a {
+	background-image: url("img/view-preview.png");
+}
+
+.svg #tab-preview a {
+	background-image: url("img/view-preview.svg");
+}
+
+.svg #view_modes a {
 	-webkit-background-size: 22px 22px;
 	-moz-background-size: 22px 22px;
 	-o-background-size: 22px 22px;
