@@ -893,109 +893,103 @@
 		list($w, $h, $extension) = getimagesize($file);
 		$ext = get_safe_image_types($extension);
 
-		if ($ext)
+		if (!$ext)
 		{
-			$name = substr($name, 0, strrpos($name, '.')).$ext;
-			$safename = doSlash($name);
-			$meta = lAtts(array(
-				'category' => '',
-				'caption' => '',
-				'alt' => ''
-			), (array) $meta, false);
+			return gTxt('only_graphic_files_allowed');
+		}
 
-			extract(doSlash($meta));
+		$name = substr($name, 0, strrpos($name, '.')).$ext;
+		$safename = doSlash($name);
+		$meta = lAtts(array(
+			'category' => '',
+			'caption' => '',
+			'alt' => ''
+		), (array) $meta, false);
 
-			$q ="
-				name = '$safename',
-				ext = '$ext',
-				w = $w,
-				h = $h,
-				alt = '$alt',
-				caption = '$caption',
-				category = '$category',
-				date = now(),
-				author = '".doSlash($txp_user)."'
-			";
+		extract(doSlash($meta));
 
-			if (empty($id))
+		$q ="
+			name = '$safename',
+			ext = '$ext',
+			w = $w,
+			h = $h,
+			alt = '$alt',
+			caption = '$caption',
+			category = '$category',
+			date = now(),
+			author = '".doSlash($txp_user)."'
+		";
+
+		if (empty($id))
+		{
+			$rs = safe_insert('txp_image', $q);
+			if ($rs)
 			{
-				$rs = safe_insert('txp_image', $q);
-				if ($rs)
-				{
-					$id = $GLOBALS['ID'] = $rs;
-				}
-			}
-			else
-			{
-				$id = assert_int($id);
-
-				$rs = safe_update('txp_image', $q, "id = $id");
-			}
-
-			if (!$rs)
-			{
-				return gTxt('image_save_error');
-			}
-			else
-			{
-				$newpath = IMPATH.$id.$ext;
-
-				if (shift_uploaded_file($file, $newpath) == false)
-				{
-					$id = assert_int($id);
-
-					safe_delete('txp_image', "id = $id");
-
-					safe_alter('txp_image', "auto_increment = $id");
-
-					if (isset($GLOBALS['ID']))
-					{
-						unset( $GLOBALS['ID']);
-					}
-
-					return $newpath.sp.gTxt('upload_dir_perms');
-				}
-				else
-				{
-					@chmod($newpath, 0644);
-
-					// GD is supported
-					if (check_gd($ext))
-					{
-						// Auto-generate a thumbnail using the last settings
-						if (isset($prefs['thumb_w'], $prefs['thumb_h'], $prefs['thumb_crop']))
-						{
-							$width  = intval($prefs['thumb_w']);
-							$height = intval($prefs['thumb_h']);
-
-							if ($width > 0 or $height > 0)
-							{
-								$t = new txp_thumb( $id );
-
-								$t->crop = ($prefs['thumb_crop'] == '1');
-								$t->hint = '0';
-								$t->width = $width;
-								$t->height = $height;
-
-								$t->write();
-							}
-						}
-					}
-
-					$message = gTxt('image_uploaded', array('{name}' => $name));
-					update_lastmod();
-
-					// call post-upload plugins with new image's $id
-					callback_event('image_uploaded', $event, false, $id);
-
-					return array($message, $id);
-				}
+				$id = $GLOBALS['ID'] = $rs;
 			}
 		}
 		else
 		{
-			return gTxt('only_graphic_files_allowed');
+			$id = assert_int($id);
+
+			$rs = safe_update('txp_image', $q, "id = $id");
 		}
+
+		if (!$rs)
+		{
+			return gTxt('image_save_error');
+		}
+
+		$newpath = IMPATH.$id.$ext;
+
+		if (shift_uploaded_file($file, $newpath) == false)
+		{
+			$id = assert_int($id);
+
+			safe_delete('txp_image', "id = $id");
+
+			safe_alter('txp_image', "auto_increment = $id");
+
+			if (isset($GLOBALS['ID']))
+			{
+				unset( $GLOBALS['ID']);
+			}
+
+			return $newpath.sp.gTxt('upload_dir_perms');
+		}
+
+		@chmod($newpath, 0644);
+
+		// GD is supported
+		if (check_gd($ext))
+		{
+			// Auto-generate a thumbnail using the last settings
+			if (isset($prefs['thumb_w'], $prefs['thumb_h'], $prefs['thumb_crop']))
+			{
+				$width  = intval($prefs['thumb_w']);
+				$height = intval($prefs['thumb_h']);
+
+				if ($width > 0 or $height > 0)
+				{
+					$t = new txp_thumb( $id );
+
+					$t->crop = ($prefs['thumb_crop'] == '1');
+					$t->hint = '0';
+					$t->width = $width;
+					$t->height = $height;
+
+					$t->write();
+				}
+			}
+		}
+
+		$message = gTxt('image_uploaded', array('{name}' => $name));
+		update_lastmod();
+
+		// call post-upload plugins with new image's $id
+		callback_event('image_uploaded', $event, false, $id);
+
+		return array($message, $id);
 	}
 
 /**
