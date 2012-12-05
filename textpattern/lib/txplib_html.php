@@ -395,16 +395,15 @@
 
 	function nav_form($event, $page, $numPages, $sort = '', $dir = '', $crit = '', $search_method = '', $total = 0, $limit = 0, $step = 'list')
 	{
-		global $theme;
-
 		if ($crit != '' && $total > 1)
 		{
-			$out[] = $theme->announce(
+			$out[] = announce(
 				gTxt('showing_search_results', array(
 					'{from}'  => (($page - 1) * $limit) + 1,
 					'{to}'    => min($total, $page * $limit),
 					'{total}' => $total,
-				))
+				)),
+				ANNOUNCE_REGULAR
 			);
 		}
 
