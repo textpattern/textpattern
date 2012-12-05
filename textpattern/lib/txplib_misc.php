@@ -4905,7 +4905,7 @@
 		{
 			header("Status: $status");
 		}
-		elseif ($_SERVER['SERVER_PROTOCOL'] == 'HTTP/1.0')
+		elseif (serverSet('SERVER_PROTOCOL') == 'HTTP/1.0')
 		{
 			header("HTTP/1.0 $status");
 		}
