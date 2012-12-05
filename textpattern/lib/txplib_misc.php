@@ -5903,7 +5903,7 @@ eod;
  *
  * @param   string|array $message The message
  * @param   int          $type    The type, either 0, E_ERROR, E_WARNING
- * @param   int          $flags   Flags, consisting of ANNOUNCE_ADAPTIVE | ANNOUNCE_ASYNC | ANNOUNCE_MODAL
+ * @param   int          $flags   Flags, consisting of ANNOUNCE_ADAPTIVE | ANNOUNCE_ASYNC | ANNOUNCE_MODAL | ANNOUNCE_REGULAR
  * @package Announce
  * @since   4.6.0
  * @example
