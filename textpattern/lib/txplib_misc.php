@@ -908,7 +908,7 @@
 
 		extract(doSlash($meta));
 
-		$q ="
+		$q = "
 			name = '$safename',
 			ext = '$ext',
 			w = $w,
@@ -923,16 +923,19 @@
 		if (empty($id))
 		{
 			$rs = safe_insert('txp_image', $q);
+
 			if ($rs)
 			{
 				$id = $GLOBALS['ID'] = $rs;
 			}
+
+			$update = false;
 		}
 		else
 		{
 			$id = assert_int($id);
-
 			$rs = safe_update('txp_image', $q, "id = $id");
+			$update = true;
 		}
 
 		if (!$rs)
@@ -944,17 +947,12 @@
 
 		if (shift_uploaded_file($file, $newpath) == false)
 		{
-			$id = assert_int($id);
-
-			safe_delete('txp_image', "id = $id");
-
-			safe_alter('txp_image', "auto_increment = $id");
-
-			if (isset($GLOBALS['ID']))
+			if (!$update)
 			{
-				unset( $GLOBALS['ID']);
+				safe_delete('txp_image', "id = $id");
 			}
 
+			unset($GLOBALS['ID']);
 			return $newpath.sp.gTxt('upload_dir_perms');
 		}
 
