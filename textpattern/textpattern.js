@@ -1304,7 +1304,7 @@ textpattern.Route.add('article', function ()
 
 	// Switch to text/html/preview mode.
 	$(document).on('click',
-		'.view-mode a',
+		'[data-view-mode]',
 		function (e)
 		{
 			e.preventDefault();
