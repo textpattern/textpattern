@@ -4467,7 +4467,7 @@
 			header("Last-Modified: $last");
 			header('Cache-Control: no-cache');
 
-			$hims = serverset('HTTP_IF_MODIFIED_SINCE');
+			$hims = serverSet('HTTP_IF_MODIFIED_SINCE');
 			if ($hims and @strtotime($hims) >= $unix_ts)
 			{
 				log_hit('304');
