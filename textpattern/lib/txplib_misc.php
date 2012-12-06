@@ -4598,7 +4598,7 @@
 
 		if ($user_name !== null)
 		{
-			$sql[] = "user_name = '".doSlash($user_name)."'";
+			$sql[] = "user_name = '".doSlash((string) $user_name)."'";
 		}
 
 		if ($event !== null)
