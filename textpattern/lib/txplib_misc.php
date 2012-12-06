@@ -5300,6 +5300,7 @@ eod;
 			'title'     => null,
 			'url_title' => null,
 			'section'   => null,
+			'Section'   => null,
 			'posted'    => null,
 			'Posted'    => null,
 		), $article_array, false));
