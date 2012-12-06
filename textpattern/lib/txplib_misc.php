@@ -5227,7 +5227,7 @@ eod;
 	}
 
 /**
- * Gets an URL for the given article.
+ * Gets a URL for the given article.
  *
  * @param   int    $id The article ID
  * @return  string The URL
