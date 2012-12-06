@@ -3816,7 +3816,16 @@
 		}
 	}
 
-// -------------------------------------------------------------
+/**
+ * Gets an URL for the given article.
+ *
+ * @param   int    $id The article ID
+ * @return  string The URL
+ * @see     permlinkurl()
+ * @package URL
+ * @example
+ * echo permlinkurl_id(12);
+ */
 
 	function permlinkurl_id($id)
 	{
@@ -3838,7 +3847,22 @@
 		return permlinkurl($rs);
 	}
 
-// -------------------------------------------------------------
+/**
+ * Generates an article URL from the given data array.
+ *
+ * @param   array  $article_array An array consisting of keys 'thisid', 'section', 'title', 'url_title', 'posted'
+ * @return  string The URL
+ * @package URL
+ * @see     permlinkurl_id()
+ * @example
+ * echo permlinkurl_id(array(
+ * 	'thisid'    => 12,
+ * 	'section'   => 'blog',
+ * 	'url_title' => 'my-title',
+ * 	'posted'    => 1345414041
+ * ));
+ */
+
 	function permlinkurl($article_array)
 	{
 		global $permlink_mode, $prefs, $permlinks;
