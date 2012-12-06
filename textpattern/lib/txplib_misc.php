@@ -1295,7 +1295,7 @@
 
 	function yes_no($status)
 	{
-		return ($status == 0) ? gTxt('no') : gTxt('yes');
+		return (!$status) ? gTxt('no') : gTxt('yes');
 	}
 
 /**
