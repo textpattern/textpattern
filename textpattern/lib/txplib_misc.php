@@ -2737,7 +2737,7 @@
 		if ($sender)
 		{
 			extract($sender);
-			return send_email($RealName, $email, $to_address, $subject, $body, '', $reply_to);
+			return send_email($RealName, $email, null, $to_address, $subject, $body, null, $reply_to);
 		}
 
 		return false;
@@ -2748,7 +2748,8 @@
  *
  * @param   string|null $from_name     Sender name
  * @param   string      $from_address  Sender address
- * @param   string      $to_address    The receiver
+ * @param   string|null $to_name       The receiver name
+ * @param   string      $to_address    The receiver address
  * @param   string      $subject       The subject
  * @param   string      $body          The message
  * @param   string|null $reply_name    The reply to name
@@ -2758,13 +2759,13 @@
  * @since   4.6.0
  * @package Email
  * @example
- * if (send_email('John Doe', 'john.doe@example.com', 'receiver@example.com', 'Hello world!', 'Some message.'))
+ * if (send_email('John Doe', 'john.doe@example.com', 'Receiver', 'receiver@example.com', 'Hello world!', 'Some message.'))
  * {
  * 	echo "Email sent to 'receiver@example.com'."; 
  * }
  */
 
-	function send_email($from_name, $from_address, $to_address, $subject, $body, $reply_name = '', $reply_address = null, $headers = array())
+	function send_email($from_name, $from_address, $to_name, $to_address, $subject, $body, $reply_name = '', $reply_address = null, $headers = array())
 	{
 		if (is_disabled('mail') || !is_array($headers) || !is_valid_email($from_address) || !is_valid_email($to_address))
 		{
@@ -2778,6 +2779,7 @@
 			$reply_name = utf8_decode($reply_name);
 			$subject = utf8_decode($subject);
 			$body = utf8_decode($body);
+			$to_name = utf8_decode($to_name);
 		}
 		else
 		{
@@ -2794,6 +2796,16 @@
 		else
 		{
 			$from = $from_address;
+		}
+
+		if ($to_name)
+		{
+			$to_name = encode_mailheader(strip_rn($to_name), 'phrase');
+			$send_to = $to_name.' <'.$to_address.'>';
+		}
+		else
+		{
+			$send_to = $to_address;
 		}
 
 		if ($reply_address !== null)
@@ -2845,11 +2857,11 @@
 			}
 			else if (!ini_get('safe_mode'))
 			{
-				return mail($to_address, $subject, $body, $headers, '-f'.get_pref('smtp_from'));
+				return mail($send_to, $subject, $body, $headers, '-f'.get_pref('smtp_from'));
 			}
 		}
 
-		return mail($to_address, $subject, $body, $headers);
+		return mail($send_to, $subject, $body, $headers);
 	}
 
 /**
