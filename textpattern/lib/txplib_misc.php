@@ -5280,8 +5280,11 @@ eod;
 	function permlinkurl($article_array)
 	{
 		global $permlink_mode, $prefs, $permlinks;
-		// TODO: A bit hackish. lAtts() might serve us better.
-		unset($article_array['permlink_mode'], $article_array['prefs'], $article_array['permlinks']);
+
+		if (!$article_array || !is_array($article_array))
+		{
+			return;
+		}
 
 		if (isset($prefs['custom_url_func'])
 		    and is_callable($prefs['custom_url_func'])
@@ -5290,12 +5293,16 @@ eod;
 			return $url;
 		}
 
-		if (empty($article_array))
-		{
-			return;
-		}
-
-		extract($article_array);
+		extract(lAtts(array(
+			'thisid'    => null,
+			'ID'        => null,
+			'Title'     => null,
+			'title'     => null,
+			'url_title' => null,
+			'section'   => null,
+			'posted'    => null,
+			'Posted'    => null,
+		), $article_array, false));
 
 		if (empty($thisid))
 		{
