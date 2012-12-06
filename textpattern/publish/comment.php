@@ -930,6 +930,11 @@ class comment_evaluation
 
 		$subject = strtr(gTxt('comment_received'),array('{site}' => $sitename, '{title}' => $Title));
 
+		if (!is_valid_email($cemail))
+		{
+			$cemail = null;
+		}
+
 		$success = txpMail($email, $subject, $out, $cemail);
 	}
 
