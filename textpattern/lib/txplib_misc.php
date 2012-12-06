@@ -5229,6 +5229,10 @@ eod;
 /**
  * Gets a URL for the given article.
  *
+ * If you need to generate a list of article URLs
+ * from already fetched table rows, consider using
+ * permlinkurl() over this due to performance benefits.
+ *
  * @param   int    $id The article ID
  * @return  string The URL
  * @see     permlinkurl()
