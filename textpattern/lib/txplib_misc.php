@@ -5330,7 +5330,7 @@ eod;
 		$section = urlencode($section);
 		$url_title = urlencode($url_title);
 
-		switch($permlink_mode)
+		switch ($permlink_mode)
 		{
 			case 'section_id_title' :
 				if ($prefs['attach_titles_to_permalinks'])
@@ -5343,7 +5343,7 @@ eod;
 				}
 				break;
 			case 'year_month_day_title' :
-				list($y, $m, $d) = explode("-",date("Y-m-d", $posted));
+				list($y, $m, $d) = explode("-", date("Y-m-d", $posted));
 				$out =  hu."$y/$m/$d/$url_title";
 				break;
 			case 'id_title':
