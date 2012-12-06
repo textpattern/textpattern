@@ -1983,6 +1983,73 @@
 	}
 
 /**
+ * Checks if a callback event has active handlers.
+ *
+ * @param   string $event   The callback event
+ * @param   string $step    The callback step
+ * @param   bool   $pre     The position
+ * @return  bool   TRUE if the event is active, FALSE otherwise
+ * @since   4.6.0
+ * @package Callback
+ * @example
+ * if (has_handlers('article_saved'))
+ * {
+ * 	echo "There are active handlers for 'article_saved' event.";
+ * }
+ */
+
+	function has_handler($event, $step = '', $pre = 0)
+	{
+		return (bool) callback_handlers($event, $step, $pre, false);
+	}
+
+/**
+ * Lists handlers attached to an event.
+ *
+ * @param   string     $event     The callback event
+ * @param   string     $step      The callback step
+ * @param   bool       $pre       The position
+ * @param   bool       $as_string Return callables in string representation
+ * @return  array|bool An array of handlers, or FALSE
+ * @since   4.6.0
+ * @package Callback
+ * @example
+ * if ($handlers = callback_handlers('article_saved'))
+ * {
+ * 	print_r($handlers);
+ * }
+ */
+
+	function callback_handlers($event, $step = '', $pre = 0, $as_string = true)
+	{
+		global $plugin_callback;
+
+		$out = array();
+
+		foreach ((array) $plugin_callback as $c)
+		{
+			if ($c['event'] == $event && (!$c['step'] || $c['step'] == $step) && $c['pre'] == $pre)
+			{
+				if ($as_string)
+				{
+					$out[] = callback_tostring($c['function']);
+				}
+				else
+				{
+					$out[] = $c['function'];
+				}
+			}
+		}
+
+		if ($out)
+		{
+			return $out;
+		}
+
+		return false;
+	}
+
+/**
  * Registers a new admin-side panel and adds a navigation link to the menu.
  *
  * @param   string $area  The menu the panel appears in, e.g. "home", "content", "presentation", "admin", "extensions"
