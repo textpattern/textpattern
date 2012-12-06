@@ -4535,6 +4535,9 @@
 /**
  * Gets a preference string.
  *
+ * This function prefers global system-wide preferences
+ * over a user's private preferences.
+ *
  * @param   string $thing   The named variable
  * @param   mixed  $default Used as a replacement if named pref isn't found
  * @param   bool   $from_db If TRUE checks database opposed $prefs variable in memory
@@ -4550,15 +4553,25 @@
 		{
 			$name = doSlash($thing);
 			$user_name = doSlash($txp_user);
-			// Prefer system prefs over user's prefs.
-			$field = safe_field('val', 'txp_prefs', "name='$name' AND (user_name='' OR user_name='$user_name') order by user_name limit 1");
+
+			$field = safe_field(
+				'val',
+				'txp_prefs',
+				"name='$name' and (user_name='' or user_name='$user_name') order by user_name limit 1"
+			);
+
 			if ($field !== false)
 			{
 				$prefs[$thing] = $field;
 			}
 		}
 
-		return (isset($prefs[$thing])) ? $prefs[$thing] : $default;
+		if (isset($prefs[$thing]))
+		{
+			return $prefs[$thing];
+		}
+
+		return $default;
 	}
 
 /**
