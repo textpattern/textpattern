@@ -5245,12 +5245,12 @@ eod;
 	{
 		global $permlinks;
 
+		$id = (int) $id;
+
 		if (isset($permlinks[$id]))
 		{
 			return $permlinks[$id];
 		}
-
-		$id = (int) $id;
 
 		$rs = safe_row(
 			"ID as thisid, Section as section, Title as title, url_title, unix_timestamp(Posted) as posted",
@@ -5308,6 +5308,8 @@ eod;
 		{
 			$thisid = $ID;
 		}
+
+		$thisid = (int) $thisid;
 
 		if (isset($permlinks[$thisid]))
 		{
