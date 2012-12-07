@@ -2746,6 +2746,10 @@
 /**
  * Sends an email.
  *
+ * If the given arguments validate, the function fires
+ * a 'mail.handler' callback event. This event can be used
+ * replace the default mail handler.
+ *
  * @param   string|null $from_name     Sender name
  * @param   string      $from_address  Sender address
  * @param   string|null $to_name       The receiver name
@@ -2767,10 +2771,27 @@
 
 	function send_email($from_name, $from_address, $to_name, $to_address, $subject, $body, $reply_name = '', $reply_address = null, $headers = array())
 	{
-		if (is_disabled('mail') || !is_array($headers) || !is_valid_email($from_address) || !is_valid_email($to_address))
+		if (is_disabled('mail') && !has_handler('mail.handler'))
 		{
 			return false;
 		}
+
+		if (!is_array($headers) || !is_valid_email($from_address) || !is_valid_email($to_address))
+		{
+			return false;
+		}
+
+		$arguments = compact(
+			'from_name',
+			'from_address',
+			'to_name',
+			'to_address',
+			'subject',
+			'body',
+			'reply_name',
+			'reply_address',
+			'headers'
+		);
 
 		if (get_pref('override_emailcharset') && is_callable('utf8_decode'))
 		{
@@ -2849,16 +2870,19 @@
 
 		$headers = join($sep, $headers).$sep;
 
-		if (is_valid_email(get_pref('smtp_from')))
+		if (is_valid_email(get_pref('smtp_from')) && IS_WIN)
 		{
-			if (IS_WIN)
-			{
-				ini_set('sendmail_from', get_pref('smtp_from'));
-			}
-			else if (!ini_get('safe_mode'))
-			{
-				return mail($send_to, $subject, $body, $headers, '-f'.get_pref('smtp_from'));
-			}
+			ini_set('sendmail_from', get_pref('smtp_from'));
+		}
+
+		if (has_handler('mail.handler'))
+		{
+			return callback_event('mail.handler', '', 0, $arguments, $send_to, $subject, $body, $headers) !== '';
+		}
+
+		if (is_valid_email(get_pref('smtp_from')) && !IS_WIN && !ini_get('safe_mode'))
+		{
+			return mail($send_to, $subject, $body, $headers, '-f'.get_pref('smtp_from'));
 		}
 
 		return mail($send_to, $subject, $body, $headers);
