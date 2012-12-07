@@ -2532,17 +2532,7 @@
 
 	function updateSitePath($here)
 	{
-		$here = doSlash($here);
-		$rs = safe_field("name", 'txp_prefs', "name = 'path_to_site'");
-
-		if (!$rs)
-		{
-			safe_insert("txp_prefs", "prefs_id=1, name='path_to_site', val='$here'");
-		}
-		else
-		{
-			safe_update('txp_prefs', "val='$here'", "name='path_to_site'");
-		}
+		set_pref('path_to_site', $here, 'publish', PREF_HIDDEN);
 	}
 
 /**
