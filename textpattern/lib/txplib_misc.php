@@ -2813,7 +2813,7 @@
 			}
 
 			$reply_name = encode_mailheader(strip_rn($reply_name), 'phrase');
-			$reply_to = $reply_name.' <'.$reply_address.'>';
+			$reply_to = trim($reply_name.' <'.$reply_address.'>');
 		}
 		else
 		{
