@@ -2799,25 +2799,11 @@
 
 		$subject = encode_mailheader(strip_rn($subject), 'text');
 
-		if ($from_name)
-		{
-			$from_name = encode_mailheader(strip_rn($from_name), 'phrase');
-			$from = $from_name.' <'.$from_address.'>';
-		}
-		else
-		{
-			$from = $from_address;
-		}
+		$from_name = encode_mailheader(strip_rn($from_name), 'phrase');
+		$from = trim($from_name.' <'.$from_address.'>');
 
-		if ($to_name)
-		{
-			$to_name = encode_mailheader(strip_rn($to_name), 'phrase');
-			$send_to = $to_name.' <'.$to_address.'>';
-		}
-		else
-		{
-			$send_to = $to_address;
-		}
+		$to_name = encode_mailheader(strip_rn($to_name), 'phrase');
+		$send_to = trim($to_name.' <'.$to_address.'>');
 
 		if ($reply_address !== null)
 		{
@@ -2826,15 +2812,8 @@
 				return false;
 			}
 
-			if ($reply_name)
-			{
-				$reply_name = encode_mailheader(strip_rn($reply_name), 'phrase');
-				$reply_to = $reply_name.' <'.$reply_address.'>';
-			}
-			else
-			{
-				$reply_to = $reply_address;
-			}
+			$reply_name = encode_mailheader(strip_rn($reply_name), 'phrase');
+			$reply_to = $reply_name.' <'.$reply_address.'>';
 		}
 		else
 		{
