@@ -2849,7 +2849,12 @@
 
 		$headers['From'] = $from;
 		$headers['Reply-to'] = $reply_to;
-		$headers['X-Mailer'] = 'Textpattern';
+
+		if (empty($headers['X-Mailer']))
+		{
+			$headers['X-Mailer'] = 'Textpattern';
+		}
+
 		$headers['Content-Transfer-Encoding'] = '8bit';
 		$headers['Content-Type'] = 'text/plain; charset="'.$charset.'"';
 
