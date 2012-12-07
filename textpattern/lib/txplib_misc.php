@@ -2820,7 +2820,7 @@
 			$reply_to = $from;
 		}
 
-		$sep = !IS_WIN ? "\n" : "\r\n";
+		$sep = IS_WIN ? "\r\n" : "\n";
 
 		$body = str_replace("\r\n", "\n", $body);
 		$body = str_replace("\r", "\n", $body);
