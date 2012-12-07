@@ -2676,7 +2676,7 @@
 
 	function is_valid_email($address)
 	{
-		return (bool) preg_match('/^[a-z0-9](\.?[a-z0-9_+%-])*@([a-z0-9](-*[a-z0-9])*\.)+[a-z]{2,6}$/i', $address);
+		return (bool) filter_var($address, FILTER_VALIDATE_EMAIL);
 	}
 
 /**
