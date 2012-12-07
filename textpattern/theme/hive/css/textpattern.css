@@ -2177,7 +2177,7 @@ div.code {
     height: 1.84615384615385em;
   }
 
-  .#view_modes li {
+  #view_modes li {
     float: left;
     margin-right: .8125em;
     margin-bottom: 0;
