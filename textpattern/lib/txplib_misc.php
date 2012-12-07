@@ -2874,7 +2874,7 @@
 	function encode_mailheader($string, $type)
 	{
 		global $prefs;
-		if (!strstr($string, '=?') and !preg_match('/[\x00-\x1F\x7F-\xFF]/', $string))
+		if (strpos($string, '=?') === false and !preg_match('/[\x00-\x1F\x7F-\xFF]/', $string))
 		{
 			if ("phrase" == $type)
 			{
