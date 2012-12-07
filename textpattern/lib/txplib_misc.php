@@ -2649,7 +2649,9 @@
 	}
 
 /**
- * Replaces CR and LF with spaces.
+ * Replaces CR and LF with spaces, and drops NULL bytes.
+ *
+ * This function is used for sanitising email headers.
  *
  * @param   string $str The string
  * @return  string
@@ -2658,7 +2660,7 @@
 
 	function strip_rn($str)
 	{
-		return str_replace(array("\r\n", "\r", "\n"), ' ', $str);
+		return str_replace(array("\r\n", "\r", "\n"), ' ', deNull($str));
 	}
 
 /**
