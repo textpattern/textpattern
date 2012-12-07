@@ -2827,6 +2827,7 @@
 		$body = str_replace("\r\n", "\n", $body);
 		$body = str_replace("\r", "\n", $body);
 		$body = str_replace("\n", $sep, $body);
+		$body = deNull($body);
 
 		$headers['From'] = $from;
 		$headers['Reply-to'] = $reply_to;
