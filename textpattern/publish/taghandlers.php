@@ -864,7 +864,7 @@
 
 			return href(
 				$linktext,
-				eE('mailto:'.txpspecialchars($email)),
+				eE('mailto:'.$email),
 				($title ? ' title="'.txpspecialchars($title).'"' : '')
 			);
 		}
