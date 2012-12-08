@@ -3665,9 +3665,12 @@
 
 		if (!empty($ftime))
 		{
-			return !empty($format)
-				? safe_strftime($format, $ftime)
-				: safe_strftime($prefs['archive_dateformat'], $ftime);
+			if ($format)
+			{
+				return safe_strftime($format, $ftime);
+			}
+
+			return safe_strftime($prefs['archive_dateformat'], $ftime);
 		}
 
 		return '';
