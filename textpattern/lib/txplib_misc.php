@@ -1033,7 +1033,9 @@
 	function image_format_info($image)
 	{
 		if (($unix_ts = @strtotime($image['date'])) > 0)
+		{
 			$image['date'] = $unix_ts;
+		}
 
 		return $image;
 	}
