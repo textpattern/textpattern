@@ -191,9 +191,7 @@
 		$email = safe_field('email', 'txp_users', "name = '".doSlash($name)."'");
 
 		$new_pass = generate_password(PASSWORD_LENGTH);
-		$hash = doSlash(txp_hash_password($new_pass));
-
-		$rs = safe_update('txp_users', "pass = '$hash'", "name = '".doSlash($name)."'");
+		$rs = change_user_password($name, $new_pass);
 
 		if ($rs)
 		{
