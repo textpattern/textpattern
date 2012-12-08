@@ -841,7 +841,7 @@
 	}
 
 // -------------------------------------------------------------
-	function email($atts, $thing = NULL)
+	function email($atts, $thing = null)
 	{
 		extract(lAtts(array(
 			'email'    => '',
@@ -851,7 +851,7 @@
 
 		if ($email)
 		{
-			if ($thing !== NULL)
+			if ($thing !== null)
 			{
 				$linktext = parse($thing);
 			}
