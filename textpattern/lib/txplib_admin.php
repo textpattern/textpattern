@@ -197,15 +197,15 @@
 		{
 			if (send_new_password($new_pass, $email, $name))
 			{
-				return(gTxt('password_sent_to').' '.$email);
+				return gTxt('password_sent_to').' '.$email;
 			}
 			else
 			{
-				return(gTxt('could_not_mail').' '.$email);
+				return gTxt('could_not_mail').' '.$email;
 			}
 		}
 		else
 		{
-			return(gTxt('could_not_update_author').' '.txpspecialchars($name));
+			return gTxt('could_not_update_author').' '.txpspecialchars($name);
 		}
 	}
