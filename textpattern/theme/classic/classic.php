@@ -31,6 +31,7 @@ class classic_theme extends theme
 			$out[] = '<ul>';
 
 			$secondary = '';
+
 			foreach ($this->menu as $tab)
 			{
 				$tc = ($tab['active']) ? 'tabup' : 'tabdown';
@@ -42,6 +43,7 @@ class classic_theme extends theme
 				{
 					$secondary = '<div id="nav-secondary" class="nav-tabs">'.
 						n.'<ul>';
+
 					foreach ($tab['items'] as $item)
 					{
 						$tc = ($item['active']) ? 'tabup' : 'tabdown';
@@ -49,6 +51,7 @@ class classic_theme extends theme
 							href($item['label'], '?event='.$item['event'], ' class="'.$tc.'"').
 							'</li>';
 					}
+
 					$secondary .= n.'</ul>'.
 						n.'</div>';
 				}
@@ -86,12 +89,12 @@ class classic_theme extends theme
 		return join(n, $out);;
 	}
 
-	function announce($thing=array('', 0), $modal = false)
+	function announce($thing = array('', 0), $modal = false)
 	{
 		return $this->_announce($thing, false, $modal);
 	}
 
-	function announce_async($thing=array('', 0), $modal = false)
+	function announce_async($thing = array('', 0), $modal = false)
 	{
 		return $this->_announce($thing, true, $modal);
 	}
@@ -107,17 +110,20 @@ class classic_theme extends theme
 		}
 
 		// Still nothing to say?
-		if (trim($thing[0]) === '') return '';
+		if (trim($thing[0]) === '')
+		{
+			return '';
+		}
 
 		switch ($thing[1])
 		{
-			case E_ERROR :
+			case E_ERROR:
 				$class = 'error';
 				break;
-			case E_WARNING :
+			case E_WARNING:
 				$class = 'warning';
 				break;
-			default :
+			default:
 				$class = 'success';
 				break;
 		}
@@ -131,7 +137,7 @@ class classic_theme extends theme
 		{
 			$html = span(
 				gTxt($thing[0]).
-				sp.href('&times;', '#close', ' role="button" class="close" title="'.gTxt('close').'" aria-label="'.gTxt('close').'"')
+				sp.href('&#215;', '#close', ' role="button" class="close" title="'.gTxt('close').'" aria-label="'.gTxt('close').'"')
 			, array(
 				'role'  => 'alert',
 				'id'    => 'message',

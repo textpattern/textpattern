@@ -159,12 +159,12 @@ class hive_theme extends theme
 		return join(n, $out);
 	}
 
-	function announce($thing=array('', 0), $modal = false)
+	function announce($thing = array('', 0), $modal = false)
 	{
 		return $this->_announce($thing, false, $modal);
 	}
 
-	function announce_async($thing=array('', 0), $modal = false)
+	function announce_async($thing = array('', 0), $modal = false)
 	{
 		return $this->_announce($thing, true, $modal);
 	}
@@ -174,7 +174,10 @@ class hive_theme extends theme
 		// $thing[0]: message text.
 		// $thing[1]: message type, defaults to "success" unless empty or a different flag is set.
 
-		if ($thing === '') return '';
+		if ($thing === '')
+		{
+			return '';
+		}
 
 		if (!is_array($thing) || !isset($thing[1]))	{
 			$thing = array($thing, 0);
@@ -182,13 +185,13 @@ class hive_theme extends theme
 
 		switch ($thing[1])
 		{
-			case E_ERROR :
+			case E_ERROR:
 				$class = 'error';
 				break;
-			case E_WARNING :
+			case E_WARNING:
 				$class = 'warning';
 				break;
-			default :
+			default:
 				$class = 'success';
 				break;
 		}
@@ -202,7 +205,7 @@ class hive_theme extends theme
 		{
 			$html = span(
 				gTxt($thing[0]).
-				sp.href('&times;', '#close', ' role="button"class="close" title="'.gTxt('close').'" aria-label="'.gTxt('close').'"')
+				sp.href('&#215;', '#close', ' role="button"class="close" title="'.gTxt('close').'" aria-label="'.gTxt('close').'"')
 			, array(
 				'role'  => 'alert',
 				'class' => 'messageflash '.$class,
