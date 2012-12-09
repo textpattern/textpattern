@@ -1369,47 +1369,14 @@ table#setup td {
 /* Content -> Write page
    ========================================================================== */
 
-/* TO BE REMOVED */
-td#article-col-1 {
-	padding-right: 35px;
-	width: 23%;
-	min-width: 162px;
-}
-
-/* TO BE REMOVED */
-td#article-main {
-	width: 54%;
-	min-width: 472px;
-}
-
-#main_content > div:first-of-type > p:first-of-type {
-	margin-top: 0;
-}
-
-/* TO BE REMOVED */
-td#article-col-2 {
-	padding-left: 20px;
-	width: 23%;
-	min-width: 162px;
-}
-
-#article-main #title {
-	width: 75%;
-}
-
-#article-tabs {
-	width: 26px;
-	padding-left: 1em;
-}
-
 #view_modes ul {
 	list-style: none;
-	margin-top: .72727272727273em;
 	padding: 0;
 }
 
 #view_modes li {
-	margin-bottom: 1em;
+	display: inline-block;
+	margin-right: .75em;
 	border: 1px solid #ccc;
 	width: 24px;
 	height: 24px;
@@ -1468,6 +1435,10 @@ td#article-col-2 {
 #tab-htmlup,
 #tab-previewup {
 	background-color: #fff;
+}
+
+#main_content #title {
+  width: 75%;
 }
 
 

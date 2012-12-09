@@ -909,8 +909,8 @@
 		pagetop($page_title, $message);
 
 		echo hed(gTxt('tab_write'), 1, array('class' => 'txp-heading txp-accessibility'));
-		echo n.'<div id="'.$event.'_container" class="txp-container">'.
-			n.'<form id="article_form" name="article_form" method="post" action="index.php" '. ($step=='create' ? '>' : ' class="async">');
+		echo n.'<form id="article_form" name="article_form" method="post" action="index.php" '.($step=='create' ? '>' : ' class="async">').
+			n.'<div id="'.$event.'_container" class="txp-layout-grid">';
 
 		if (!empty($store_out))
 		{
@@ -924,11 +924,9 @@
 			hInput('sLastMod', $sLastMod).
 			hInput('AuthorID', $AuthorID).
 			hInput('LastModID', $LastModID).
-			n.'<input type="hidden" name="view" />'.
+			n.'<input type="hidden" name="view" />';
 
-			startTable('', '', 'txp-columntable').
-			n.'<tr>'.
-			n.'<td id="article-col-1">'.
+		echo n.'<div class="txp-layout-cell txp-layout-1-4">'.
 			n.'<div id="configuration_content">';
 
 		if ($view == 'text')
@@ -984,7 +982,15 @@
 			echo sp;
 		}
 
-		echo n.'</div>'.n.'</td>'.n.'<td id="article-main">'.n.'<div role="region" id="main_content">';
+		echo n.'</div>'. // End of #configuration_content.
+			n.'</div>'; // End of .txp-layout-cell.
+
+
+		echo n.'<div class="txp-layout-cell txp-layout-2-4">'.
+			n.'<div role="region" id="main_content">';
+
+		// View mode tabs.
+		echo $partials['view_modes']['html'];
 
 		// Title input.
 		if ($view == 'preview')
@@ -1039,13 +1045,13 @@
 		}
 
 		echo hInput('from_view', $view),
-		n.'</div>'.n.'</div>'.n.'</td>';
+			n.'</div>';
 
-		// Layer tabs.
-		echo n.'<td id="article-tabs">';
-		echo $partials['view_modes']['html'];
-		echo n.'</td>';
-		echo n.'<td id="article-col-2">'.n.'<div id="supporting_content">';
+		echo n.'</div>'. // End of #main_content.
+			n.'</div>'; // End of .txp-layout-cell.
+
+		echo n.'<div class="txp-layout-cell txp-layout-1-4">'.
+			n.'<div id="supporting_content">';
 
 		if ($view == 'text')
 		{
@@ -1190,9 +1196,11 @@
 			echo $push_button;
 		}
 
-		echo n.'</div>'.n.'</td>'.n.'</tr>'.n.'</table>'.
+		echo n.'</div>'. // End of #supporting_content.
+			n.'</div>'. // End of .txp-layout-cell.
+			n.'</div>'. // End of .txp-layout-grid.
 			tInput().
-			n.'</form>'.n.'</div>';
+			n.'</form>';
 	}
 
 /**

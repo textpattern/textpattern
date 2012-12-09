@@ -1871,25 +1871,14 @@ body#page-setup {
 
 /* Content -> Write page
    ========================================================================== */
-
-/* TO BE REMOVED */
-#article-col-1,
-#article-col-2 {
-  width: 24%;
-}
-
-#article-tabs {
-  width: 2em;
-  padding-left: 1em;
-}
-
 #view_modes ul {
   list-style: none;
   padding: 0;
 }
 #view_modes li {
+  display: inline-block;
   font-size: 16px;
-  margin-bottom: .8125em;
+  margin-right: .5em;
   width: 1.5em;
   height: 1.5em;
 }
@@ -1914,6 +1903,7 @@ body#page-setup {
 #tab-text a {
   background-image: url("../img/view-text.png");
 }
+
 .svg #tab-text a {
   background-image: url("../img/view-text.svg");
 }
@@ -1921,6 +1911,7 @@ body#page-setup {
 #tab-html a {
   background-image: url("../img/view-html.png");
 }
+
 .svg #tab-html a {
   background-image: url("../img/view-html.svg");
 }
@@ -1928,6 +1919,7 @@ body#page-setup {
 #tab-preview a {
   background-image: url("../img/view-preview.png");
 }
+
 .svg #tab-preview a {
   background-image: url("../img/view-preview.svg");
 }
@@ -1943,19 +1935,11 @@ body#page-setup {
   margin-bottom: 1em;
 }
 
-#article-main #title {
+#main_content #title {
   width: 75%;
 }
-#article-main .author {
+#main_content .author {
   color: #999999;
-}
-
-#configuration_content {
-  margin-right: 1em;
-}
-
-#supporting_content {
-  margin-left: 1em;
 }
 
 #recent_group ul {
@@ -2150,44 +2134,6 @@ div.code {
 
   /* Content -> Write page < 769px
      ========================================================================== */
-
-  /* TO BE REMOVED */
-  #page-article .txp-columntable th,
-  #page-article .txp-columntable td,
-  #page-article .txp-columntable tr {
-    display: block;
-  }
-
-  /* TO BE REMOVED */
-  #article-col-1,
-  #article-col-2,
-  #article-main,
-  #article-tabs {
-    width: 100%;
-    margin: 0 auto;
-    max-width: 42em;
-  }
-
-  #article-col-2 {
-    clear: left;
-  }
-
-  #article-tabs {
-    padding: 0;
-    height: 1.84615384615385em;
-  }
-
-  #view_modes li {
-    float: left;
-    margin-right: .8125em;
-    margin-bottom: 0;
-  }
-
-  #configuration_content,
-  #supporting_content {
-    margin: 0;
-  }
-
   /* turn off features to optimise small screen size */
   #textile_group,
   #recent_group {
