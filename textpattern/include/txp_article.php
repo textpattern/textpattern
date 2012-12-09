@@ -290,7 +290,7 @@
 					url_title       = '$url_title',
 					AnnotateInvite  = '$AnnotateInvite',"
 					.(($cfs) ? $cfq.',' : '').
-					"uid            = '".md5(uniqid(rand(),true))."',
+					"uid            = '".md5(uniqid(rand(), true))."',
 					feed_time       = now()"
 				);
 
@@ -530,7 +530,7 @@
 				$msg = array(gTxt('article_save_failed'), E_ERROR);
 			}
 		}
-		article_edit($msg, FALSE, TRUE);
+		article_edit($msg, false, true);
 	}
 
 /**
@@ -541,7 +541,7 @@
  * @param bool         $refresh_partials Whether refresh partial contents
  */
 
-	function article_edit($message = '', $concurrent = FALSE, $refresh_partials = FALSE)
+	function article_edit($message = '', $concurrent = false, $refresh_partials = false)
 	{
 		global $vars, $txp_user, $prefs, $event, $view;
 

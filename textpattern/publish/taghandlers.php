@@ -361,7 +361,7 @@
 
 // -------------------------------------------------------------
 
-	function output_form($atts, $thing = NULL)
+	function output_form($atts, $thing = null)
 	{
 		global $yield;
 
@@ -375,7 +375,7 @@
 		}
 		else
 		{
-			$yield[] = $thing !== NULL ? parse($thing) : NULL;
+			$yield[] = $thing !== null ? parse($thing) : null;
 			$out = parse_form($form);
 			array_pop($yield);
 			return $out;
@@ -395,7 +395,7 @@
 
 // -------------------------------------------------------------
 
-	function feed_link($atts, $thing = NULL)
+	function feed_link($atts, $thing = null)
 	{
 		global $s, $c;
 
@@ -432,7 +432,7 @@
 			return '<link rel="alternate" type="'.$type.'" title="'.$title.'" href="'.$url.'" />';
 		}
 
-		$txt = ($thing === NULL ? $label : parse($thing));
+		$txt = ($thing === null ? $label : parse($thing));
 
 		$out = href($txt, $url, ' title="'.$title.'"');
 
@@ -482,7 +482,7 @@
 
 // -------------------------------------------------------------
 
-	function linklist($atts, $thing = NULL)
+	function linklist($atts, $thing = null)
 	{
 		global $s, $c, $context, $thislink, $thispage, $pretext;
 
@@ -976,7 +976,7 @@
 
 // -------------------------------------------------------------
 
-	function recent_comments($atts, $thing = NULL)
+	function recent_comments($atts, $thing = null)
 	{
 		global $prefs;
 		global $thisarticle, $thiscomment;
@@ -1048,7 +1048,7 @@
 
 // -------------------------------------------------------------
 
-	function related_articles($atts, $thing = NULL)
+	function related_articles($atts, $thing = null)
 	{
 		global $thisarticle, $prefs;
 
@@ -1239,7 +1239,7 @@
 // -------------------------------------------------------------
 // output href list of site categories
 
-	function category_list($atts, $thing = NULL)
+	function category_list($atts, $thing = null)
 	{
 		global $s, $c, $thiscategory;
 
@@ -1375,7 +1375,7 @@
 				}
 			}
 
-			$thiscategory = (isset($old_category) ? $old_category : NULL);
+			$thiscategory = (isset($old_category) ? $old_category : null);
 
 			if ($out)
 			{
@@ -1389,7 +1389,7 @@
 // -------------------------------------------------------------
 // output href list of site sections
 
-	function section_list($atts, $thing = NULL)
+	function section_list($atts, $thing = null)
 	{
 		global $sitename, $s, $thissection;
 
@@ -1593,7 +1593,7 @@
 // -------------------------------------------------------------
 // link to next article, if it exists
 
-	function link_to_next($atts, $thing = NULL)
+	function link_to_next($atts, $thing = null)
 	{
 		global /** @noinspection PhpUnusedLocalVariableInspection */
 		$thisarticle, $next_id, $next_title, $prev_id, $prev_title;
@@ -1640,7 +1640,7 @@
 // -------------------------------------------------------------
 // link to previous article, if it exists
 
-	function link_to_prev($atts, $thing = NULL)
+	function link_to_prev($atts, $thing = null)
 	{
 		global /** @noinspection PhpUnusedLocalVariableInspection */
 		$thisarticle, $next_id, $next_title, $prev_id, $prev_title;
@@ -1752,7 +1752,7 @@
 
 // -------------------------------------------------------------
 
-	function link_to_home($atts, $thing = NULL)
+	function link_to_home($atts, $thing = null)
 	{
 		extract(lAtts(array(
 			'class' => false,
@@ -1775,7 +1775,7 @@
 
 // -------------------------------------------------------------
 
-	function newer($atts, $thing = NULL)
+	function newer($atts, $thing = null)
 	{
 		global $thispage, $pretext, $m;
 
@@ -1835,7 +1835,7 @@
 
 // -------------------------------------------------------------
 
-	function older($atts, $thing = NULL)
+	function older($atts, $thing = null)
 	{
 		global $thispage, $pretext, $m;
 
@@ -2690,7 +2690,7 @@
 
 // -------------------------------------------------------------
 
-	function category1($atts, $thing = NULL)
+	function category1($atts, $thing = null)
 	{
 		global $thisarticle, $s, $permlink_mode;
 
@@ -2741,7 +2741,7 @@
 
 // -------------------------------------------------------------
 
-	function category2($atts, $thing = NULL)
+	function category2($atts, $thing = null)
 	{
 		global $thisarticle, $s, $permlink_mode;
 
@@ -2792,7 +2792,7 @@
 
 // -------------------------------------------------------------
 
-	function category($atts, $thing = NULL)
+	function category($atts, $thing = null)
 	{
 		global $s, $c, $thiscategory, $context;
 
@@ -2874,7 +2874,7 @@
 
 // -------------------------------------------------------------
 
-	function section($atts, $thing = NULL)
+	function section($atts, $thing = null)
 	{
 		global $thisarticle, $s, $thissection;
 
@@ -2951,7 +2951,7 @@
 	}
 
 // -------------------------------------------------------------
-	function if_keywords($atts, $thing = NULL)
+	function if_keywords($atts, $thing = null)
 	{
 		global $thisarticle;
 
@@ -3257,7 +3257,7 @@
 	}
 
 // -------------------------------------------------------------
-	function images($atts, $thing = NULL)
+	function images($atts, $thing = null)
 	{
 		global $s, $c, $context, $p, $path_to_site, $thisimage, $thisarticle, $thispage, $pretext;
 
@@ -3471,7 +3471,7 @@
 				$out[] = ($thing) ? parse($thing) : parse_form($form);
 			}
 
-			$thisimage = (isset($old_image) ? $old_image : NULL);
+			$thisimage = (isset($old_image) ? $old_image : null);
 
 			if ($out)
 			{
@@ -3544,7 +3544,7 @@
 	}
 
 // -------------------------------------------------------------
-	function image_url($atts, $thing = NULL)
+	function image_url($atts, $thing = null)
 	{
 		global $thisimage;
 
@@ -3750,7 +3750,7 @@
 
 // -------------------------------------------------------------
 
-	function permlink($atts, $thing = NULL)
+	function permlink($atts, $thing = null)
 	{
 		global $thisarticle;
 
@@ -3770,7 +3770,7 @@
 
 		if ($url)
 		{
-			if ($thing === NULL)
+			if ($thing === null)
 			{
 				return $url;
 			}
@@ -4012,12 +4012,12 @@
 
 		extract(lAtts(array(
 			'type' => 'article',
-			'name' => FALSE,
+			'name' => false,
 		), $atts));
 
 		$theType = ($type) ? $type == $context : true;
 
-		if ($name === FALSE)
+		if ($name === false)
 		{
 			return parse(EvalElse($thing, ($theType && !empty($c))));
 		}
@@ -4101,18 +4101,18 @@
 		extract($pretext);
 
 		extract(lAtts(array(
-			'name' => FALSE,
+			'name' => false,
 		), $atts));
 
 		$section = ($s == 'default' ? '' : $s);
 
 		if ($section)
 		{
-			return parse(EvalElse($thing, $name === FALSE or in_list($section, $name)));
+			return parse(EvalElse($thing, $name === false or in_list($section, $name)));
 		}
 		else
 		{
-			return parse(EvalElse($thing, $name !== FALSE and (in_list('', $name) or in_list('default', $name))));
+			return parse(EvalElse($thing, $name !== false and (in_list('', $name) or in_list('default', $name))));
 		}
 	}
 
@@ -4157,7 +4157,7 @@
 	{
 		global $is_article_body, $thisarticle, $prefs;
 
-		if (assert_array($prefs) === FALSE)
+		if (assert_array($prefs) === false)
 		{
 			return '';
 		}
@@ -4237,8 +4237,8 @@
 
 		extract(lAtts(array(
 			'name'      => @$prefs['custom_1_set'],
-			'value'     => NULL,
-			'val'       => NULL, // Deprecated in 4.3.0.
+			'value'     => null,
+			'val'       => null, // Deprecated in 4.3.0.
 			'match'     => 'exact',
 			'separator' => '',
 		), $atts));
@@ -4251,7 +4251,7 @@
 
 		$name = strtolower($name);
 
-		if ($value !== NULL)
+		if ($value !== null)
 		{
 			switch ($match)
 			{
@@ -4429,7 +4429,7 @@
 
 //--------------------------------------------------------------------------
 
-	function file_download_list($atts, $thing = NULL)
+	function file_download_list($atts, $thing = null)
 	{
 		global $s, $c, $context, $thisfile, $thispage, $pretext;
 
@@ -4602,7 +4602,7 @@
 
 //--------------------------------------------------------------------------
 
-	function file_download($atts, $thing = NULL)
+	function file_download($atts, $thing = null)
 	{
 		global $thisfile;
 
@@ -4646,7 +4646,7 @@
 
 //--------------------------------------------------------------------------
 
-	function file_download_link($atts, $thing = NULL)
+	function file_download_link($atts, $thing = null)
 	{
 		global $thisfile;
 
@@ -4899,7 +4899,7 @@
 
 // -------------------------------------------------------------
 
-	function variable($atts, $thing = NULL)
+	function variable($atts, $thing = null)
 	{
 		global $variable;
 
@@ -4935,7 +4935,7 @@
 
 // -------------------------------------------------------------
 
-	function if_variable($atts, $thing = NULL)
+	function if_variable($atts, $thing = null)
 	{
 		global $variable;
 

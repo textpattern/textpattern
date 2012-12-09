@@ -209,7 +209,7 @@
 
 	function _null($a)
 	{
-		return NULL;
+		return null;
 	}
 
 /**
@@ -1771,15 +1771,19 @@
 		if (!empty($prefs['plugin_cache_dir']))
 		{
 			$dir = rtrim($prefs['plugin_cache_dir'], '/') . '/';
+
 			// In case it's a relative path.
 			if (!is_dir($dir))
 			{
 				$dir = rtrim(realpath(txpath.'/'.$dir), '/') . '/';
 			}
+
 			$files = glob($dir.'*.php');
+
 			if ($files)
 			{
 				natsort($files);
+
 				foreach ($files as $f)
 				{
 					trace_add("[Loading plugin from cache dir '$f']");
@@ -1792,6 +1796,7 @@
 		$where = 'status = 1 AND type IN ('.($type ? $admin : '0,1,5').')';
 
 		$rs = safe_rows("name, code, version", "txp_plugin", $where.' order by load_order');
+
 		if ($rs)
 		{
 			$old_error_handler = set_error_handler("pluginErrorHandler");
@@ -1804,10 +1809,12 @@
 					$GLOBALS['txp_current_plugin'] = $a['name'];
 					trace_add("[Loading plugin '{$a['name']}' version '{$a['version']}']");
 					$eval_ok = eval($a['code']);
-					if ($eval_ok === FALSE)
+
+					if ($eval_ok === false)
 					{
 						echo gTxt('plugin_load_error_above').strong($a['name']).n.br;
 					}
+
 					unset($GLOBALS['txp_current_plugin']);
 				}
 			}
@@ -2545,7 +2552,7 @@
 				}
 			}
 
-			$hosts = $rbl ? @gethostbynamel($rip.'.'.trim($rbl, '. ').'.') : FALSE;
+			$hosts = $rbl ? @gethostbynamel($rip.'.'.trim($rbl, '. ').'.') : false;
 
 			if ($hosts and (!isset($codes) or array_intersect($hosts, $codes)))
 			{
@@ -2629,7 +2636,7 @@
 					case 4 :
 						$val = str_replace("''", "'", $m[3]);
 
-						if (strpos($m[3], '<txp:') !== FALSE)
+						if (strpos($m[3], '<txp:') !== false)
 						{
 							trace_add("[attribute '".$m[1]."']");
 							$val = parse($val);
@@ -3172,7 +3179,7 @@
  * @package DateTime
  */
 
-	function tz_offset($timestamp = NULL)
+	function tz_offset($timestamp = null)
 	{
 		global $gmtoffset, $timezone_key;
 
@@ -3955,7 +3962,7 @@
 			return false;
 		}
 
-		$nonce = md5(uniqid(mt_rand(), TRUE));
+		$nonce = md5(uniqid(mt_rand(), true));
 		$pass = txp_hash_password($password);
 
 		if (
@@ -4641,11 +4648,11 @@
  * @package Pref
  */
 
-	function get_lastmod($unix_ts = NULL)
+	function get_lastmod($unix_ts = null)
 	{
 		global $prefs;
 
-		if ($unix_ts === NULL)
+		if ($unix_ts === null)
 		{
 			$unix_ts = @strtotime($prefs['lastmod']);
 		}
@@ -4668,7 +4675,7 @@
  * @package Pref
  */
 
-	function handle_lastmod($unix_ts=NULL, $exit=1)
+	function handle_lastmod($unix_ts = null, $exit = 1)
 	{
 		global $prefs;
 		extract($prefs);
@@ -4679,8 +4686,9 @@
 
 			// Make sure lastmod isn't in the future.
 			$unix_ts = min($unix_ts, time());
+
 			// Or too far in the past (7 days).
-			$unix_ts = max($unix_ts, time() - 3600*24*7);
+			$unix_ts = max($unix_ts, time() - 3600 * 24 * 7);
 
 			$last = safe_strftime('rfc822', $unix_ts, 1);
 			header("Last-Modified: $last");
@@ -4695,6 +4703,7 @@
 					return array('304', $last);
 				}
 				txp_status_header('304 Not Modified');
+
 				// Some mod_deflate versions have a bug that breaks subsequent
 				// requests when keepalive is used.  dropping the connection
 				// is the only reliable way to fix this.
@@ -4703,6 +4712,7 @@
 					header('Connection: close');
 				}
 				header('Content-Length: 0');
+
 				// Discard all output.
 				while (@ob_end_clean());
 				exit;
@@ -5074,7 +5084,7 @@
 	function getCustomFields()
 	{
 		global $prefs;
-		static $out = NULL;
+		static $out = null;
 
 		// Have cache?
 		if (!is_array($out))
@@ -5379,7 +5389,7 @@ eod;
 
 		if (isset($prefs['custom_url_func'])
 		    and is_callable($prefs['custom_url_func'])
-		    and ($url = call_user_func($prefs['custom_url_func'], $keys, PAGELINKURL)) !== FALSE)
+		    and ($url = call_user_func($prefs['custom_url_func'], $keys, PAGELINKURL)) !== false)
 		{
 			return $url;
 		}
@@ -5522,7 +5532,7 @@ eod;
 
 		if (isset($prefs['custom_url_func'])
 		    and is_callable($prefs['custom_url_func'])
-		    and ($url = call_user_func($prefs['custom_url_func'], $article_array, PERMLINKURL)) !== FALSE)
+		    and ($url = call_user_func($prefs['custom_url_func'], $article_array, PERMLINKURL)) !== false)
 		{
 			return $url;
 		}

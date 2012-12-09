@@ -380,7 +380,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
 		$level  = 0;
 		$out    = '';
 		$inside = '';
-		$istag  = FALSE;
+		$istag  = false;
 
 		foreach ($parsed as $chunk)
 		{
@@ -475,7 +475,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
  * @package TagParser
  */
 
-	function processTags($tag, $atts, $thing = NULL)
+	function processTags($tag, $atts, $thing = null)
 	{
 		global $production_status, $txptrace, $txptracelevel, $txp_current_tag, $txp_current_form;
 

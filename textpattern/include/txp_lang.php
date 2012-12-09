@@ -169,7 +169,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
 					}
 					else
 					{
-						$fversion = $ftime = NULL;
+						$fversion = $ftime = null;
 					}
 
 					$available_lang[$name]['file_note'] = (isset($fversion)) ? $fversion : 0;

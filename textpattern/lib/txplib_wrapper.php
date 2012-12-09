@@ -129,7 +129,7 @@ class TXP_Wrapper
 	 * $wrapper = new TXP_wrapper('username', 'password');
 	 */
 
-	public function __construct($txp_user, $txpass = NULL)
+	public function __construct($txp_user, $txpass = null)
 	{
 		if ($this->_validate($txp_user, $txpass))
 		{
@@ -846,9 +846,9 @@ class TXP_Wrapper
 	 * @access private
 	 */
 
-	public function _validate($user, $password = NULL)
+	public function _validate($user, $password = null)
 	{
-		if ($password !== NULL)
+		if ($password !== null)
     	{
 	    	$r = txp_validate($user, $password);
     	}

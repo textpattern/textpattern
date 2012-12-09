@@ -386,7 +386,7 @@
 				if (!safe_row('user_id', 'txp_users', "name = '".doSlash($name)."'"))
 				{
 					$pass = doSlash(generate_password(6));
-					$nonce = doSlash(md5(uniqid(mt_rand(), TRUE)));
+					$nonce = doSlash(md5(uniqid(mt_rand(), true)));
 
 					$rs = mysql_query("
 						insert into ".safe_pfx('txp_users')." set

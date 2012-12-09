@@ -152,7 +152,7 @@
 	}
 
 	// Initialise the current user.
-	$txp_user = NULL;
+	$txp_user = null;
 
 	// i18n.
 	$textarray = (txpinterface == 'css') ? array() : load_lang(LANG);
@@ -742,7 +742,7 @@
 //	otherwise, output a list.
 
 // -------------------------------------------------------------
-	function article($atts, $thing = NULL)
+	function article($atts, $thing = null)
 	{
 		global $is_article_body, $has_article_tag;
 		if ($is_article_body)
@@ -755,7 +755,7 @@
 	}
 
 // -------------------------------------------------------------
-	function doArticles($atts, $iscustom, $thing = NULL)
+	function doArticles($atts, $iscustom, $thing = null)
 	{
 		global $pretext, $prefs;
 		extract($pretext);
@@ -1087,7 +1087,7 @@
 	}
 
 // -------------------------------------------------------------
-	function doArticle($atts, $thing = NULL)
+	function doArticle($atts, $thing = null)
 	{
 		global $pretext, $prefs, $thisarticle;
 		extract($prefs);
@@ -1126,7 +1126,7 @@
 		if (empty($thisarticle) or $thisarticle['thisid'] != $id)
 		{
 			$id = assert_int($id);
-			$thisarticle = NULL;
+			$thisarticle = null;
 
 			$q_status = ($status ? 'and Status = '.intval($status) : 'and Status in (4,5)');
 
@@ -1167,13 +1167,13 @@
 	}
 
 // -------------------------------------------------------------
-	function article_custom($atts, $thing = NULL)
+	function article_custom($atts, $thing = null)
 	{
 		return parseArticles($atts, '1', $thing);
 	}
 
 // -------------------------------------------------------------
-	function parseArticles($atts, $iscustom = 0, $thing = NULL)
+	function parseArticles($atts, $iscustom = 0, $thing = null)
 	{
 		global $pretext, $is_article_list;
 		$old_ial = $is_article_list;

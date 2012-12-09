@@ -182,8 +182,8 @@ Use of this software indicates acceptance of the Textpattern license agreement
 
 		if ($logout)
 		{
-			setcookie('txp_login', '', time()-3600);
-			setcookie('txp_login_public', '', time()-3600, $pub_path);
+			setcookie('txp_login', '', time() - 3600);
+			setcookie('txp_login_public', '', time() - 3600, $pub_path);
 		}
 
 		if ($c_userid and strlen($c_hash) == 32) // Cookie exists.
@@ -202,7 +202,7 @@ Use of this software indicates acceptance of the Textpattern license agreement
 					// Destroy nonce.
 					safe_update(
 						'txp_users',
-						"nonce = '".doSlash(md5(uniqid(mt_rand(), TRUE)))."'",
+						"nonce = '".doSlash(md5(uniqid(mt_rand(), true)))."'",
 						"name = '".doSlash($c_userid)."'"
 					);
 				}
@@ -216,8 +216,8 @@ Use of this software indicates acceptance of the Textpattern license agreement
 			}
 			else
 			{
-				setcookie('txp_login', $c_userid, time()+3600*24*365);
-				setcookie('txp_login_public', '', time()-3600, $pub_path);
+				setcookie('txp_login', $c_userid, time() + 3600 * 24 * 365);
+				setcookie('txp_login_public', '', time() - 3600, $pub_path);
 				$message = array(gTxt('bad_cookie'), E_ERROR);
 			}
 
