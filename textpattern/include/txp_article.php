@@ -985,7 +985,6 @@
 		echo n.'</div>'. // End of #configuration_content.
 			n.'</div>'; // End of .txp-layout-cell.
 
-
 		echo n.'<div class="txp-layout-cell txp-layout-2-4">'.
 			n.'<div role="region" id="main_content">';
 
