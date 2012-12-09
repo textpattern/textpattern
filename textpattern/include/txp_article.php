@@ -110,19 +110,19 @@
 
 		switch ($step)
 		{
-			case "create" :
+			case "create":
 				article_edit();
 				break;
-			case "publish" :
+			case "publish":
 				article_post();
 				break;
-			case "edit" :
+			case "edit":
 				article_edit();
 				break;
-			case "save" :
+			case "save":
 				article_save();
 				break;
-			case "save_pane_state" :
+			case "save_pane_state":
 				article_save_pane_state();
 				break;
 		}
@@ -1396,13 +1396,13 @@
 	{
 		switch ($Status)
 		{
-			case STATUS_PENDING :
+			case STATUS_PENDING:
 				return gTxt("article_saved_pending");
-			case STATUS_HIDDEN :
+			case STATUS_HIDDEN:
 				return gTxt("article_saved_hidden");
-			case STATUS_DRAFT :
+			case STATUS_DRAFT:
 				return gTxt("article_saved_draft");
-			default :
+			default:
 				return gTxt('article_posted');
 		}
 	}
@@ -1753,8 +1753,10 @@
 			$url = permlinkurl_id($ID);
 		}
 
-		return n.span(href(gTxt('view'), $url, array('class' => 'article-view'))
-			, array('id' => 'article_partial_article_view'));
+		return n.span(href(gTxt('view'), $url, array('class' => 'article-view')), array(
+			'id'    => 'article_partial_article_view',
+			'class' => 'txp-actions',
+		));
 	}
 
 /**
