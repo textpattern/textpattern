@@ -200,9 +200,6 @@
 					continue;
 				}
 
-				// TODO: remove $noPopHelp exception when custom fields move to meta store.
-				$noPopHelp = (strpos($a['name'], 'custom_') !== false);
-
 				if ($a['event'] !== $last_event)
 				{
 					if ($last_event !== null)
@@ -214,24 +211,32 @@
 					$out = array();
 				}
 
-				$label = (!in_array($a['html'], array('yesnoradio', 'is_dst'))) ?
-					'<label for="'.$a['name'].'">'.gTxt($a['name']).'</label>' :
-						gTxt($a['name']);
-	
-				// TODO: remove $noPopHelp condition when custom fields move to meta store.
+				$label = gTxt($a['name']);
+
+				if (!in_array($a['html'], array('yesnoradio', 'is_dst')))
+				{
+					$label = tag($label, 'label', array('for' => $a['name']));
+				}
+
+				// TODO: remove exception when custom fields move to meta store.
+				if (strpos($a['name'], 'custom_') === false)
+				{
+					$label .= popHelp($a['name']);
+				}
+
+				if ($a['html'] == 'text_input')
+				{
+					$size = INPUT_REGULAR;
+				}
+				else
+				{
+					$size = '';
+				}
+
 				$out[] = graf(
-						n.span($label.
-							(($noPopHelp)
-								? ''
-								: popHelp($a['name']
-							))
-						, array('class' => 'txp-label')).
-						n.span(pref_func($a['html'], $a['name'], $a['val'], ($a['html'] == 'text_input'
-							? INPUT_REGULAR
-							: ''
-							))
-						, array('class' => 'txp-value'))
-					, ' id="prefs-'.$a['name'].'"');
+					n.span($label , array('class' => 'txp-label')).
+					n.span(pref_func($a['html'], $a['name'], $a['val'], $size), array('class' => 'txp-value'))
+				, array('id' => 'prefs-'.$a['name']));
 			}
 		}
 
