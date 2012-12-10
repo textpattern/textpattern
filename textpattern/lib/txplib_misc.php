@@ -4805,6 +4805,11 @@
  * @param   bool   $from_db If TRUE checks database opposed $prefs variable in memory
  * @return  string Preference value or $default
  * @package Pref
+ * @example
+ * if (get_pref('enable_xmlrpc_server'))
+ * {
+ * 	echo "XML-RPC server is enabled.";
+ * }
  */
 
 	function get_pref($thing, $default = '', $from_db = false)
