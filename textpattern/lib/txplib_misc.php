@@ -4914,6 +4914,11 @@
  * @return  bool             TRUE if the string exists, or FALSE on error
  * @since   4.6.0
  * @package Pref
+ * @example
+ * if (pref_exists('myPref'))
+ * {
+ * 	echo "'myPref' exists.";
+ * }
  */
 
 	function pref_exists($name, $user_name = null)
