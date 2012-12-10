@@ -4964,6 +4964,11 @@
  * @return  bool        TRUE if the string exists, FALSE on error
  * @since   4.6.0
  * @package Pref
+ * @example
+ * if (set_pref('myPref', 'value', 'site', PREF_PLUGIN, 'text_input', 25))
+ * {
+ * 	echo "'myPref' created.";
+ * }
  */
 
 	function create_pref($name, $val, $event = 'publish', $type = PREF_CORE, $html = 'text_input', $position = 0, $user_name = PREF_GLOBAL)
