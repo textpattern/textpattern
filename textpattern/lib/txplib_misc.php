@@ -4772,7 +4772,7 @@
  * @package Pref
  */
 
-	function set_pref($name, $val, $event = 'publish',  $type = PREF_CORE, $html = 'text_input', $position = 0, $is_private = PREF_GLOBAL)
+	function set_pref($name, $val, $event = 'publish', $type = PREF_CORE, $html = 'text_input', $position = 0, $is_private = PREF_GLOBAL)
 	{
 		$user_name = null;
 
@@ -4951,7 +4951,7 @@
  * @package Pref
  */
 
-	function create_pref($name, $val, $event = 'publish',  $type = PREF_CORE, $html = 'text_input', $position = 0, $user_name = PREF_GLOBAL)
+	function create_pref($name, $val, $event = 'publish', $type = PREF_CORE, $html = 'text_input', $position = 0, $user_name = PREF_GLOBAL)
 	{
 		global $txp_user;
 
@@ -5008,7 +5008,7 @@
  * }
  */
 
-	function update_pref($name, $val = null, $event = null,  $type = null, $html = null, $position = null, $user_name = PREF_GLOBAL)
+	function update_pref($name, $val = null, $event = null, $type = null, $html = null, $position = null, $user_name = PREF_GLOBAL)
 	{
 		global $txp_user;
 
