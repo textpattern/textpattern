@@ -2805,7 +2805,7 @@
 		if ($sender)
 		{
 			extract($sender);
-			return send_email($RealName, $email, null, $to_address, $subject, $body, null, $reply_to);
+			return send_email(array($email => $RealName), (string) $to_address, $subject, $body, (string) $reply_to);
 		}
 
 		return false;
@@ -2818,57 +2818,52 @@
  * a 'mail.handler' callback event. This event can be used
  * replace the default mail handler.
  *
- * @param   string|null $from_name     Sender name
- * @param   string      $from_address  Sender address
- * @param   string|null $to_name       The receiver name
- * @param   string      $to_address    The receiver address
- * @param   string      $subject       The subject
- * @param   string      $body          The message
- * @param   string|null $reply_name    The reply to name
- * @param   string|null $reply_address The reply to address
- * @param   array       $headers       An array of additional email headers
- * @return  bool        Returns FALSE when sending failed
+ * @param   string|array $from     Sender
+ * @param   string|array $send_to  The receiver
+ * @param   string       $subject  The subject
+ * @param   string       $body     The message
+ * @param   string|array $reply_to The reply address
+ * @param   string|array $cc       Carbon copy
+ * @param   string|array $bbc      Blind carbon copy
+ * @param   array        $headers  An array of additional email headers
+ * @return  bool         Returns FALSE when sending failed
  * @since   4.6.0
  * @package Email
  * @example
- * if (send_email('John Doe', 'john.doe@example.com', 'Receiver', 'receiver@example.com', 'Hello world!', 'Some message.'))
+ * if (send_email(array('john.doe@example.com' => 'John Doe'), 'receiver@example.com', 'Hello world!', 'Some message.'))
  * {
  * 	echo "Email sent to 'receiver@example.com'."; 
  * }
  */
 
-	function send_email($from_name, $from_address, $to_name, $to_address, $subject, $body, $reply_name = '', $reply_address = null, $headers = array())
+	function send_email($from, $send_to, $subject, $body, $reply_to = array(), $cc = array(), $bcc = array(), $headers = array())
 	{
 		if (is_disabled('mail') && !has_handler('mail.handler'))
 		{
 			return false;
 		}
 
-		if (!is_array($headers) || !is_valid_email($from_address) || !is_valid_email($to_address))
+		if (!is_array($headers) || !$from || !$send_to)
 		{
 			return false;
 		}
 
 		$arguments = compact(
-			'from_name',
-			'from_address',
-			'to_name',
-			'to_address',
+			'from',
+			'send_to',
 			'subject',
 			'body',
-			'reply_name',
-			'reply_address',
+			'reply_to',
+			'cc',
+			'bcc',
 			'headers'
 		);
 
 		if (get_pref('override_emailcharset') && is_callable('utf8_decode'))
 		{
 			$charset = 'ISO-8859-1';
-			$from_name = utf8_decode($from_name);
-			$reply_name = utf8_decode($reply_name);
 			$subject = utf8_decode($subject);
 			$body = utf8_decode($body);
-			$to_name = utf8_decode($to_name);
 		}
 		else
 		{
@@ -2877,25 +2872,40 @@
 
 		$subject = encode_mailheader(strip_rn($subject), 'text');
 
-		$from_name = encode_mailheader(strip_rn($from_name), 'phrase');
-		$from = trim($from_name.' <'.$from_address.'>');
-
-		$to_name = encode_mailheader(strip_rn($to_name), 'phrase');
-		$send_to = trim($to_name.' <'.$to_address.'>');
-
-		if ($reply_address !== null)
+		foreach (compact('from', 'send_to', 'reply_to', 'cc', 'bcc') as $field => $value)
 		{
-			if (!is_valid_email($reply_address))
+			if (!$value)
 			{
-				return false;
+				$$field = null;
+				continue;
 			}
 
-			$reply_name = encode_mailheader(strip_rn($reply_name), 'phrase');
-			$reply_to = trim($reply_name.' <'.$reply_address.'>');
-		}
-		else
-		{
-			$reply_to = $from;
+			$out = array();
+
+			foreach ((array) $value as $email => $name)
+			{
+				if (is_int($email))
+				{
+					$email = $name;
+					$name = '';
+				}
+
+				if (is_valid_email($email))
+				{
+					if ($charset == 'UTF-8')
+					{
+						$name = utf8_decode($name);
+					}
+
+					$out[] = trim(encode_mailheader(strip_rn($name), 'phrase').' <'.$email.'>');
+				}
+				else
+				{
+					return false;
+				}
+			}
+
+			$$field = join(', ', $out);
 		}
 
 		$sep = IS_WIN ? "\r\n" : "\n";
@@ -2905,23 +2915,46 @@
 		$body = str_replace("\n", $sep, $body);
 		$body = deNull($body);
 
-		$headers['From'] = $from;
-		$headers['Reply-to'] = $reply_to;
+		$envelope = array();
+		$envelope['From'] = $from;
+
+		if ($cc)
+		{
+			$envelope['Cc'] = $cc;
+		}
+
+		if ($bcc)
+		{
+			$envelope['Bcc'] = $bbc;
+		}
+
+		if ($reply_to)
+		{
+			$envelope['Reply-to'] = $reply_to;
+		}
 
 		if (empty($headers['X-Mailer']))
 		{
-			$headers['X-Mailer'] = 'Textpattern';
+			$envelope['X-Mailer'] = 'Textpattern';
 		}
 
-		$headers['Content-Transfer-Encoding'] = '8bit';
-		$headers['Content-Type'] = 'text/plain; charset="'.$charset.'"';
+		$envelope['Content-Transfer-Encoding'] = '8bit';
+		$envelope['Content-Type'] = 'text/plain; charset="'.$charset.'"';
 
-		foreach ($headers as $field => &$value)
+		foreach ($envelope as $n => &$v)
 		{
-			$value = strip_rn($field.': '.$value);
+			$v = $n.': '.$v;
 		}
 
-		$headers = join($sep, $headers).$sep;
+		foreach ($headers as $field => $value)
+		{
+			if (!isset($envelope[$field]) && preg_match('/[A-z0-9-_]/i', $value))
+			{
+				$envelope[] = $field.': '.encode_mailheader(strip_rn($value), 'phrase');
+			}
+		}
+
+		$headers = join($sep, $envelope).$sep;
 
 		if (is_valid_email(get_pref('smtp_from')) && IS_WIN)
 		{
