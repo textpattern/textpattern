@@ -2824,7 +2824,7 @@
  * @param   string       $body     The message
  * @param   string|array $reply_to The reply address
  * @param   string|array $cc       Carbon copy
- * @param   string|array $bbc      Blind carbon copy
+ * @param   string|array $bcc      Blind carbon copy
  * @param   array        $headers  An array of additional email headers
  * @return  bool         Returns FALSE when sending failed
  * @since   4.6.0
