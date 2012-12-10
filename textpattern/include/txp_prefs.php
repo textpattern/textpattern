@@ -133,11 +133,7 @@
 				continue;
 			}
 
-			safe_update(
-				"txp_prefs",
-				"val = '".doSlash($post[$name])."'",
-				"prefs_id = 1 and name = '".doSlash($name)."' and user_name='".doSlash($user_name)."'"
-			);
+			update_pref($name, (string) $post[$name], null, null, null, null, (string) $user_name);
 		}
 
 		update_lastmod();
@@ -341,7 +337,7 @@
 	function gmtoffset_select($name, $val)
 	{
 		// Fetch *hidden* pref
-		$key = safe_field('val', 'txp_prefs', "name='timezone_key'");
+		$key = get_pref('timezone_key', '', true);
 		$tz = new timezone;
 		$ui = $tz->selectInput('timezone_key', $key, true, '', 'gmtoffset');
 
