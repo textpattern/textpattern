@@ -4768,8 +4768,13 @@
  * @param   string $html       The HTML control type the field uses. Can take a custom function name
  * @param   int    $position   Used to sort the field on the Preferences panel
  * @param   bool   $is_private If PREF_PRIVATE, is created as a user pref
- * @return  bool
+ * @return  bool   FALSE on error
  * @package Pref
+ * @example
+ * if (set_pref('myPref', 'value'))
+ * {
+ * 	echo "'myPref' created or updated.";
+ * }
  */
 
 	function set_pref($name, $val, $event = 'publish', $type = PREF_CORE, $html = 'text_input', $position = 0, $is_private = PREF_GLOBAL)
