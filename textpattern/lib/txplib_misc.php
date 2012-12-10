@@ -3960,7 +3960,7 @@
 			}
 		}
 
-		callback_event('user.assign_assets', 'done', 0, $owner, $new_owner, $columns);
+		callback_event('user.assign_assets', 'done', 0, compact('owner', 'new_owner', 'columns'));
 
 		return true;
 	}
@@ -4013,7 +4013,7 @@
 			return false;
 		}
 
-		callback_event('user.create', 'done', 0, $name, $email, $password, $realname, $group);
+		callback_event('user.create', 'done', 0, compact('name', 'email', 'password', 'realname', 'group'));
 		return true;
 	}
 
@@ -4073,7 +4073,7 @@
 			return false;
 		}
 
-		callback_event('user.update', 'done', 0, $user, $email, $realname, $meta);
+		callback_event('user.update', 'done', 0, compact('user', 'email', 'realname', 'meta'));
 		return true;
 	}
 
@@ -4113,7 +4113,7 @@
 			return false;
 		}
 
-		callback_event('user.password_change', 'done', 0, $user, $password);
+		callback_event('user.password_change', 'done', 0, compact('user', 'password'));
 		return true;
 	}
 
@@ -4161,7 +4161,7 @@
 			return false;
 		}
 
-		callback_event('user.remove', 'done', 0, $user, $new_owner);
+		callback_event('user.remove', 'done', 0, compact('user', 'new_owner'));
 
 		return true;
 	}
@@ -4207,7 +4207,7 @@
 			return false;
 		}
 
-		callback_event('user.rename', 'done', 0, $user, $newname);
+		callback_event('user.rename', 'done', 0, compact('user', 'newname'));
 
 		return true;
 	}
@@ -4271,7 +4271,7 @@
 			return false;
 		}
 
-		callback_event('user.change_group', 'done', 0, $user, $group);
+		callback_event('user.change_group', 'done', 0, compact('user', 'group'));
 		return true;
 	}
 
