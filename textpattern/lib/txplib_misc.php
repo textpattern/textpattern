@@ -4940,7 +4940,7 @@
  * Creates a preference string.
  *
  * @param   string      $name       The name
- * @param   string      $value      The value
+ * @param   string      $val        The value
  * @param   string      $event      The section the preference appears in
  * @param   int         $type       Either PREF_CORE, PREF_PLUGIN, PREF_HIDDEN
  * @param   string      $html       The HTML control type the field uses. Can take a custom function name
@@ -4951,7 +4951,7 @@
  * @package Pref
  */
 
-	function create_pref($name, $value, $event = 'publish',  $type = PREF_CORE, $html = 'text_input', $position = 0, $user_name = PREF_GLOBAL)
+	function create_pref($name, $val, $event = 'publish',  $type = PREF_CORE, $html = 'text_input', $position = 0, $user_name = PREF_GLOBAL)
 	{
 		global $txp_user;
 
@@ -4974,7 +4974,7 @@
 			'txp_prefs',
 			"prefs_id = 1,
 			name = '".doSlash($name)."',
-			val = '".doSlash($value)."',
+			val = '".doSlash($val)."',
 			event = '".doSlash($event)."',
 			html = '".doSlash($html)."',
 			type = ".intval($type).",
