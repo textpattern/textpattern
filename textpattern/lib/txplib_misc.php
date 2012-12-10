@@ -5008,7 +5008,7 @@
  *
  * This function updates a preference string's properties.
  * $name and $user_name arguments are used for selecting
- * the update string, and rest of the arguments take
+ * the updated string, and rest of the arguments take
  * the new values. Use NULL to omit an argument.
  *
  * @param   string           $name       The update preference string's name
