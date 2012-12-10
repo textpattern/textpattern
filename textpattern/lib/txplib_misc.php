@@ -3996,14 +3996,14 @@
 		}
 
 		$nonce = md5(uniqid(mt_rand(), true));
-		$pass = txp_hash_password($password);
+		$hash = txp_hash_password($password);
 
 		if (
 			safe_insert(
 				'txp_users',
 				"name = '".doSlash($name)."',
 				email = '".doSlash($email)."',
-				pass = '".doSlash($pass)."',
+				pass = '".doSlash($hash)."',
 				nonce = '".doSlash($nonce)."',
 				privs = ".intval($group).",
 				RealName = '".doSlash($realname)."'"
@@ -4013,7 +4013,7 @@
 			return false;
 		}
 
-		callback_event('user.create', 'done', 0, compact('name', 'email', 'password', 'realname', 'group'));
+		callback_event('user.create', 'done', 0, compact('name', 'email', 'password', 'realname', 'group', 'nonce', 'hash'));
 		return true;
 	}
 
