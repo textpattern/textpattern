@@ -4774,39 +4774,19 @@
 
 	function set_pref($name, $val, $event = 'publish',  $type = PREF_CORE, $html = 'text_input', $position = 0, $is_private = PREF_GLOBAL)
 	{
-		global $txp_user;
-		extract(doSlash(func_get_args()));
-
-		$user_name = '';
+		$user_name = null;
 
 		if ($is_private == PREF_PRIVATE)
 		{
-			if (empty($txp_user))
-			{
-				return false;
-			}
-
-			$user_name = 'user_name = \''.doSlash($txp_user).'\'';
+			$user_name = PREF_PRIVATE;
 		}
 
-		if (!safe_row('name', 'txp_prefs', "name = '$name'" . ($user_name ? " AND $user_name" : '')))
+		if (pref_exists($name, $user_name))
 		{
-			$user_name = ($user_name ? "$user_name," : '');
-			return safe_insert('txp_prefs', "
-				name  = '$name',
-				val   = '$val',
-				event = '$event',
-				html  = '$html',
-				type  = '$type',
-				position = '$position',
-				$user_name
-				prefs_id = 1"
-			);
-    	}
-    	else
-    	{
-        	return safe_update('txp_prefs', "val = '$val'", "name = '$name'" . ($user_name ? " AND $user_name" : ''));
-    	}
+			return update_pref($name, (string) $val, null, null, null, null, $user_name);
+		}
+
+		return create_pref($name, $val, $event, $type, $html, $position, $user_name);
 	}
 
 /**
