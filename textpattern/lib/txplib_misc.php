@@ -4102,10 +4102,12 @@
 			return false;
 		}
 
+		$hash = txp_hash_password($password);
+
 		if (
 			safe_update(
 				'txp_users',
-				"pass = '".doSlash(txp_hash_password($password))."'",
+				"pass = '".doSlash($hash)."'",
 				"name = '".doSlash($user)."'"
 			) === false
 		)
@@ -4113,7 +4115,7 @@
 			return false;
 		}
 
-		callback_event('user.password_change', 'done', 0, compact('user', 'password'));
+		callback_event('user.password_change', 'done', 0, compact('user', 'password', 'hash'));
 		return true;
 	}
 
