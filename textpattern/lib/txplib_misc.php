@@ -5025,6 +5025,9 @@
  * the updated string, and rest of the arguments take
  * the new values. Use NULL to omit an argument.
  *
+ * When a string is updated, this function will trigger a
+ * 'preference.update > done' callback event.
+ *
  * @param   string           $name       The update preference string's name
  * @param   string|null      $val        The value
  * @param   string|null      $event      The section the preference appears in
@@ -5072,9 +5075,10 @@
 			}
 		}
 
-		if ($set)
+		if ($set && safe_update('txp_prefs', join(', ', $set), join(' and ', $where)))
 		{
-			return safe_update('txp_prefs', join(', ', $set), join(' and ', $where));
+			callback_event('preference.update', 'done', 0, compact('name', 'val', 'event', 'type', 'html', 'position', 'user_name'));
+			return true;
 		}
 
 		return false;
