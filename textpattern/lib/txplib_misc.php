@@ -4956,6 +4956,9 @@
 /**
  * Creates a preference string.
  *
+ * When a string is created, this function will trigger a
+ * 'preference.create > done' callback event.
+ *
  * @param   string      $name       The name
  * @param   string      $val        The value
  * @param   string      $event      The section the preference appears in
@@ -4992,17 +4995,26 @@
 			return true;
 		}
 
-		return safe_insert(
-			'txp_prefs',
-			"prefs_id = 1,
-			name = '".doSlash($name)."',
-			val = '".doSlash($val)."',
-			event = '".doSlash($event)."',
-			html = '".doSlash($html)."',
-			type = ".intval($type).",
-			position = ".intval($position).",
-			user_name = '".doSlash((string) $user_name)."'"
-		) !== false;
+		if (
+			safe_insert(
+				'txp_prefs',
+				"prefs_id = 1,
+				name = '".doSlash($name)."',
+				val = '".doSlash($val)."',
+				event = '".doSlash($event)."',
+				html = '".doSlash($html)."',
+				type = ".intval($type).",
+				position = ".intval($position).",
+				user_name = '".doSlash((string) $user_name)."'"
+			) === false
+		)
+		{
+			return false;
+		}
+
+		callback_event('preference.create', 'done', 0, compact('name', 'val', 'event', 'type', 'html', 'position', 'user_name'));
+
+		return true;
 	}
 
 /**
