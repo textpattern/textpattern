@@ -5087,6 +5087,9 @@
 /**
  * Renames a preference string.
  *
+ * When a string is renamed, this function will trigger
+ * a 'preference.rename > done' callback event.
+ *
  * @param   string $newname   The new name
  * @param   string $name      The current name
  * @param   string $user_name Either the username, PREF_GLOBAL or PREF_PRIVATE
@@ -5122,7 +5125,13 @@
 			$where[] = "user_name = '".doSlash((string) $user_name)."'";
 		}
 
-		return safe_update('txp_prefs', "name = '".doSlash($newname)."'", join(' and ', $where));
+		if (safe_update('txp_prefs', "name = '".doSlash($newname)."'", join(' and ', $where)))
+		{
+			callback_event('preference.rename', 'done', 0, compact('newname', 'name', 'user_name'));
+			return true;
+		}
+
+		return false;
 	}
 
 /**
