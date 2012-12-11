@@ -2950,6 +2950,11 @@
 		{
 			if (!isset($envelope[$field]) && preg_match('/[A-z0-9-_]/i', $value))
 			{
+				if ($charset != 'UTF-8')
+				{
+					$value = utf8_decode($value);
+				}
+
 				$envelope[] = $field.': '.encode_mailheader(strip_rn($value), 'phrase');
 			}
 		}
