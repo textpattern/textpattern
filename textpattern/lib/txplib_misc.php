@@ -4970,7 +4970,7 @@
  * @since   4.6.0
  * @package Pref
  * @example
- * if (set_pref('myPref', 'value', 'site', PREF_PLUGIN, 'text_input', 25))
+ * if (create_pref('myPref', 'value', 'site', PREF_PLUGIN, 'text_input', 25))
  * {
  * 	echo "'myPref' created.";
  * }
