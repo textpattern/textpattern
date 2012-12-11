@@ -2892,7 +2892,7 @@
 
 				if (is_valid_email($email))
 				{
-					if ($charset == 'UTF-8')
+					if ($charset != 'UTF-8')
 					{
 						$name = utf8_decode($name);
 					}
