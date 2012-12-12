@@ -220,10 +220,27 @@
 
 				$is_default_section = ($sec_name == 'default');
 
-				$edit_url = '?event=section'.a.'step=section_edit'.a.'name='.$sec_name.a.'sort='.$sort.
-					a.'dir='.$dir.a.'page='.$page.a.'search_method='.$search_method.a.'crit='.$crit;
-				$page_url = '?event=page'.a.'name='.$sec_page;
-				$style_url = '?event=css'.a.'name='.$sec_css;
+				$edit_url = array(
+					'event'         => 'section',
+					'step'          => 'section_edit',
+					'name'          => $sec_name,
+					'sort'          => $sort,
+					'dir'           => $dir,
+					'page'          => $page,
+					'search_method' => $search_method,
+					'crit'          => $crit,
+				);
+
+				$page_url = array(
+					'event' => 'page',
+					'name'  => $sec_page,
+				);
+
+				$style_url = array(
+					'event' => 'css',
+					'name'  => $sec_css,
+				);
+
 				$articles = ($sec_article_count > 0
 					? href($sec_article_count, '?event=list'.a.'search_method=section'.a.'crit=&quot;'.txpspecialchars($sec_name).'&quot;',
 						' title="'.gTxt('article_count', array('{num}' => $sec_article_count)).'"')
