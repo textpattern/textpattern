@@ -1358,51 +1358,6 @@ $DB = new DB;
 	}
 
 /**
- * Gets all preferences as an array.
- *
- * Returns all preference values from the database as an array.
- * This function shouldn't be used to retrieve selected preferences,
- * see get_pref() instead.
- *
- * If run on an authenticated admin page, the results include current user's
- * private preferences. Any global preference overrides equally named user prefs.
- *
- * @return array
- * @access private
- * @see    get_pref()
- */
-
-	function get_prefs()
-	{
-		global $txp_user;
-		$out = array();
-
-		// Get current user's private prefs.
-		if ($txp_user)
-		{
-			$r = safe_rows_start('name, val', 'txp_prefs', 'prefs_id=1 AND user_name=\''.doSlash($txp_user).'\'');
-			if ($r)
-			{
-				while ($a = nextRow($r))
-				{
-					$out[$a['name']] = $a['val'];
-				}
-			}
-		}
-
-		// Get global prefs, eventually override equally named user prefs.
-		$r = safe_rows_start('name, val', 'txp_prefs', 'prefs_id=1 AND user_name=\'\'');
-		if ($r)
-		{
-			while ($a = nextRow($r))
-			{
-				$out[$a['name']] = $a['val'];
-			}
-		}
-		return $out;
-	}
-
-/**
  * Returns an error page.
  *
  * This function is used to return a bailout page when resolving database connections fails.
