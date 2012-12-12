@@ -1395,7 +1395,7 @@
  * }
  */
 
-	function load_plugin($name, $force=false)
+	function load_plugin($name, $force = false)
 	{
 		global $plugins, $plugins_ver, $prefs, $txp_current_plugin;
 
