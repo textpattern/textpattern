@@ -1348,7 +1348,7 @@ textpattern.Route.add('plugin', function ()
 {
 	textpattern.Relay.register('txpAsyncHref.success', function (event, data)
 	{
-		$(data.this).closest('tr').toggleClass('active');
+		$(data['this']).closest('tr').toggleClass('active');
 	});
 });
 
