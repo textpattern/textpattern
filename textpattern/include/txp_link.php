@@ -230,7 +230,7 @@
 					, '', 'links_detail description').
 
 					td(
-						span($link_category, array('title' => txpspecialchars(fetch_category_title($link_category, 'link'))))
+						span($link_category, array('title' => fetch_category_title($link_category, 'link')))
 					, '', 'category'.$vc).
 
 					td(
@@ -242,7 +242,7 @@
 					, '', 'links_detail date created').
 
 					($show_authors ? td(
-						span(txpspecialchars($link_author), array('title' => txpspecialchars(get_author_name($link_author))))
+						span(txpspecialchars($link_author), array('title' => get_author_name($link_author)))
 					, '', 'author') : '')
 				);
 			}
