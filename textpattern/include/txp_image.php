@@ -218,8 +218,16 @@
 			{
 				extract($a);
 
-				$edit_url = '?event=image'.a.'step=image_edit'.a.'id='.$id.a.'sort='.$sort.
-					a.'dir='.$dir.a.'page='.$page.a.'search_method='.$search_method.a.'crit='.$crit;
+				$edit_url = array(
+					'event'         => 'image',
+					'step'          => 'image_edit',
+					'id'            => $id,
+					'sort'          => $sort,
+					'dir'           => $dir,
+					'page'          => $page,
+					'search_method' => $search_method,
+					'crit'          => $crit,
+				);
 
 				$name = empty($name) ? gTxt('unnamed') : txpspecialchars($name);
 
