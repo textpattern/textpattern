@@ -241,13 +241,25 @@
 					'name'  => $sec_css,
 				);
 
-				$articles = ($sec_article_count > 0
-					? href($sec_article_count, array(
+				if ($sec_article_count > 0)
+				{
+					$articles = href($sec_article_count, array(
 						'event'         => 'list',
 						'search_method' => 'section',
 						'crit'          => '"'.$sec_name.'"',
-					), array('title' => gTxt('article_count', array('{num}' => $sec_article_count))))
-					: ($is_default_section ? '' : '0'));
+					), array(
+						'title' => gTxt('article_count', array('{num}' => $sec_article_count))
+					));
+				}
+				else if($is_default_section)
+				{
+					$articles = '';
+				}
+				else
+				{
+					$articles = 0;
+				}
+
 //				$can_delete = ($sec_name != 'default' && $sec_article_count == 0);
 
 				$parms = array(
