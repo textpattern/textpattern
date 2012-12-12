@@ -4667,23 +4667,33 @@
 		return $textile->TextileRestricted($msg, $lite, $disallow_images, $rel);
 	}
 
+	include_once txpath.'/lib/classTextile.php';
+
 /**
- * Gets new instance of Textile.
+ * Textpattern configured Textile class.
  *
- * This function returns a pre-configurated instance
- * of Textile class.
- *
- * @return  Textile
  * @since   4.6.0
  * @package Textile
  */
 
-	function txpTextile()
+class TextpatternTextile extends Textile
+{
+	/**
+	 * Constructor.
+	 *
+	 * @param string|null $doctype The output doctype
+	 */
+
+	public function __construct($doctype = null)
 	{
-		include_once txpath.'/lib/classTextile.php';
-		$textile = new Textile(get_pref('doctype'));
-		return $textile;
+		if ($doctype === null)
+		{
+			$doctype = get_pref('doctype');
+		}
+
+		parent::__construct($doctype);
 	}
+}
 
 /**
  * Updates site's last modification date.
