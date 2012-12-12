@@ -292,8 +292,16 @@
 				extract($a);
 				$parentid = assert_int($parentid);
 
-				$edit_url = '?event=discuss'.a.'step=discuss_edit'.a.'discussid='.$discussid.a.'sort='.$sort.
-					a.'dir='.$dir.a.'page='.$page.a.'search_method='.$search_method.a.'crit='.$crit;
+				$edit_url = array(
+					'event'         => 'discuss',
+					'step'          => 'discuss_edit',
+					'discussid'     => $discussid,
+					'sort'          => $sort,
+					'dir'           => $dir,
+					'page'          => $page,
+					'search_method' => $search_method,
+					'crit'          => $crit,
+				);
 
 				$dmessage = ($visible == SPAM) ? short_preview($message) : $message;
 
