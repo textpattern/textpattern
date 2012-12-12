@@ -262,7 +262,7 @@
 				$vc = $validator->validate() ? '' : ' error';
 
 				$category = ($category)
-					? span($category, array('title' => txpspecialchars(fetch_category_title($category, 'file'))))
+					? span($category, array('title' => fetch_category_title($category, 'file')))
 					: '';
 
 				$tag_url = '?event=tag'.a.'tag_name=file_download_link'.a.'id='.$id.a.'description='.urlencode($description).
@@ -321,7 +321,7 @@
 					td($download_link, '', 'downloads').
 
 					($show_authors ? td(
-						span(txpspecialchars($author), array('title' => txpspecialchars(get_author_name($author))))
+						span(txpspecialchars($author), array('title' => get_author_name($author)))
 					, '', 'author') : '')
 				);
 			}
@@ -825,7 +825,7 @@
 					safe_update('txp_file', 'size = '.$size.', modified = now()', 'id = '.$id);
 				}
 
-				$message = gTxt('file_uploaded', array('{name}' => txpspecialchars($name)));
+				$message = gTxt('file_uploaded', array('{name}' => $name));
 
 				file_edit($message, $id);
 
