@@ -4668,6 +4668,24 @@
 	}
 
 /**
+ * Gets new instance of Textile.
+ *
+ * This function returns a pre-configurated instance
+ * of Textile class.
+ *
+ * @return  Textile
+ * @since   4.6.0
+ * @package Textile
+ */
+
+	function txpTextile()
+	{
+		include_once txpath.'/lib/classTextile.php';
+		$textile = new Textile(get_pref('doctype'));
+		return $textile;
+	}
+
+/**
  * Updates site's last modification date.
  *
  * @package Pref
