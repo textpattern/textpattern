@@ -242,8 +242,11 @@
 				);
 
 				$articles = ($sec_article_count > 0
-					? href($sec_article_count, '?event=list'.a.'search_method=section'.a.'crit=&quot;'.txpspecialchars($sec_name).'&quot;',
-						' title="'.gTxt('article_count', array('{num}' => $sec_article_count)).'"')
+					? href($sec_article_count, array(
+						'event'         => 'list',
+						'search_method' => 'section',
+						'crit'          => '"'.$sec_name.'"',
+					), array('title' => gTxt('article_count', array('{num}' => $sec_article_count))))
 					: ($is_default_section ? '' : '0'));
 //				$can_delete = ($sec_name != 'default' && $sec_article_count == 0);
 
