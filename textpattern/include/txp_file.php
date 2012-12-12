@@ -243,8 +243,16 @@
 				extract($a);
 				$filename = sanitizeForFile($filename);
 
-				$edit_url = '?event=file'.a.'step=file_edit'.a.'id='.$id.a.'sort='.$sort.
-					a.'dir='.$dir.a.'page='.$page.a.'search_method='.$search_method.a.'crit='.$crit;
+				$edit_url = array(
+					'event'         => 'file',
+					'step'          => 'file_edit',
+					'id'            => $id,
+					'sort'          => $sort,
+					'dir'           => $dir,
+					'page'          => $page,
+					'search_method' => $search_method,
+					'crit'          => $crit,
+				);
 
 				$file_exists = file_exists(build_file_path($file_base_path, $filename));
 
