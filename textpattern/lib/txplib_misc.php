@@ -2948,7 +2948,7 @@
 
 		foreach ($headers as $field => $value)
 		{
-			if (!isset($envelope[$field]) && preg_match('/[A-z0-9-_]/i', $value))
+			if (!isset($envelope[$field]) && (string) $value !== '' && preg_match('/[A-z0-9-_]/i', $value))
 			{
 				if ($charset != 'UTF-8')
 				{
