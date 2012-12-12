@@ -423,8 +423,15 @@
 			$ban_link = sp.span('[', array('role' => 'presentation')).
 				href(
 					$ban_text,
-					'?event=discuss'.a.'step='.$ban_step.a.'ip='.$ip.a.'name='.urlencode($name).a.'discussid='.$discussid.a.'_txp_token='.form_token(),
-					' class="action-ban"'
+					array(
+						'event'      => 'discuss',
+						'step'       => $ban_step,
+						'ip'         => $ip,
+						'name'       => $name,
+						'discussid'  => $discussid,
+						'_txp_token' => form_token(),
+					),
+					array('class' => 'action-ban')
 				).
 				span(']', array('role' => 'presentation'));
 
@@ -578,8 +585,13 @@
 						sp.span('[', array('role' => 'presentation')).
 						href(
 							gTxt('unban'),
-							'?event=discuss'.a.'step=ipban_unban'.a.'ip='.txpspecialchars($ip).a.'_txp_token='.form_token(),
-							' class="action-ban"'
+							array(
+								'event'      => 'discuss',
+								'step'       => 'ipban_unban',
+								'ip'         => $ip,
+								'_txp_token' => form_token(),
+							),
+							array('class' => 'action-ban')
 						).
 						span(']', array('role' => 'presentation'))
 					, '', 'ip').
