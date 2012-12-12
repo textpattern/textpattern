@@ -267,7 +267,7 @@
 				$vc = $validator->validate() ? '' : ' error';
 
 				$category = ($category)
-					? span($category, array('title' => txpspecialchars(fetch_category_title($category, 'image'))))
+					? span($category, array('title' => fetch_category_title($category, 'image')))
 					: '';
 
 				$can_edit = has_privs('image.edit') || ($author == $txp_user && has_privs('image.edit.own'));
@@ -303,7 +303,7 @@
 					td($category, '', 'category'.$vc).
 
 					($show_authors ? td(
-						span(txpspecialchars($author), array('title' => txpspecialchars(get_author_name($author))))
+						span(txpspecialchars($author), array('title' => get_author_name($author)))
 					, '', 'author') : '')
 				);
 			}
