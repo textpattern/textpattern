@@ -203,8 +203,16 @@
 			{
 				extract($a, EXTR_PREFIX_ALL, 'link');
 
-				$edit_url = '?event=link'.a.'step=link_edit'.a.'id='.$link_id.a.'sort='.$sort.
-					a.'dir='.$dir.a.'page='.$page.a.'search_method='.$search_method.a.'crit='.$crit;
+				$edit_url = array(
+					'event'         => 'link',
+					'step'          => 'link_edit',
+					'id'            => $link_id,
+					'sort'          => $sort,
+					'dir'           => $dir,
+					'page'          => $page,
+					'search_method' => $search_method,
+					'crit'          => $crit,
+				);
 
 				$validator->setConstraints(array(new CategoryConstraint($link_category, array('type' => 'link'))));
 				$vc = $validator->validate() ? '' : ' error';
