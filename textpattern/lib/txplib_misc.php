@@ -3080,6 +3080,20 @@
 	}
 
 /**
+ * Checks if a form template exists.
+ *
+ * @param   string $name The form
+ * @return  bool   TRUE if the form exists
+ * @since   4.6.0
+ * @package Template
+ */
+
+	function form_exists($name)
+	{
+		return (bool) safe_row('name', 'txp_form', "name = '".doSlash($name)."'");
+	}
+
+/**
  * Updates a list's per page number.
  *
  * Gets the per page number from a "qty" HTTP POST/GET parameter and
