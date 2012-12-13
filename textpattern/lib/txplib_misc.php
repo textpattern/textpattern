@@ -4688,7 +4688,7 @@ class TextpatternTextile extends Textile
 	{
 		if ($doctype === null)
 		{
-			$doctype = get_pref('doctype');
+			$doctype = get_pref('doctype', 'html5');
 		}
 
 		parent::__construct($doctype);
