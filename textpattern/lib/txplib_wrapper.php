@@ -948,8 +948,7 @@ class TXP_Wrapper
 	{
 		global $txpcfg;
 
-		include_once txpath.'/lib/classTextile.php';
-		$textile = new Textile();
+		$textile = new TextpatternTextile();
 
 		if (!empty($event) and $event == 'article')
 		{

@@ -141,8 +141,7 @@ function import_blogger_item($item, $section, $status, $invite) {
 		return;
 	}
 
-	include_once txpath.'/lib/classTextile.php';
-	$textile = new Textile();
+	$textile = new TextpatternTextile();
 
 	$title = $textile->TextileThis($item['TITLE'], 1);
 	$url_title = stripSpace($title,1);

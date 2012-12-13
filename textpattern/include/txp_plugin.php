@@ -394,8 +394,7 @@
 
 					if (isset($help_raw) && empty($plugin['allow_html_help']))
 					{
-						include_once txpath.'/lib/classTextile.php';
-						$textile = new Textile();
+						$textile = new TextpatternTextile();
 						$help_source = $textile->TextileRestricted($help_raw, 0, 0);
 					}
 					else
@@ -467,8 +466,7 @@
 					if (isset($help_raw) && empty($plugin['allow_html_help']))
 					{
 						// Default: help is in Textile format.
-						include_once txpath.'/lib/classTextile.php';
-						$textile = new Textile();
+						$textile = new TextpatternTextile();
 						$help = $textile->TextileRestricted($help_raw, 0, 0);
 					}
 

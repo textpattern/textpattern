@@ -453,9 +453,7 @@
 		{
 			$results[] = hed('Imported Articles and Comments:', 2).n.'<ul>';
 
-			include txpath.'/lib/classTextile.php';
-
-			$textile = new Textile;
+			$textile = new TextpatternTextile;
 
 			foreach ($articles as $article)
 			{

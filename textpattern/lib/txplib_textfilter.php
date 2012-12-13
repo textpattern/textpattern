@@ -18,12 +18,6 @@ Use of this software indicates acceptance of the Textpattern license agreement
  */
 
 /**
- * Imports Textile.
- */
-
-require_once txpath.'/lib/classTextile.php';
-
-/**
  * Imports Validator.
  */
 
@@ -292,10 +286,8 @@ class TextileTextfilter extends Textfilter implements ITextfilter
 	public function __construct()
 	{
 		parent::__construct(USE_TEXTILE, gTxt('use_textile'));
-
-		global $prefs;
-		$this->textile = new Textile($prefs['doctype']);
-		$this->version = $this->textile->ver;
+		$this->textile = new TextpatternTextile();
+		$this->version = $this->textile->getVersion();
 	}
 
 	/**

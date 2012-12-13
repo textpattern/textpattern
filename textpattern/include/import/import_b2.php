@@ -97,9 +97,7 @@
 
 		mysql_select_db($txpdb, $txplink);
 
-		include txpath.'/lib/classTextile.php';
-
-		$textile = new Textile;
+		$textile = new TextpatternTextile();
 
 		if (!empty($articles))
 		{

@@ -4653,18 +4653,8 @@
 
 	function markup_comment($msg)
 	{
-		global $prefs;
-
-		$disallow_images = !empty($prefs['comments_disallow_images']);
-		$lite = empty($prefs['comments_use_fat_textile']);
-
-		$rel = !empty($prefs['comment_nofollow']) ? 'nofollow' : '';
-
-		include_once txpath.'/lib/classTextile.php';
-
-		$textile = new Textile($prefs['doctype']);
-
-		return $textile->TextileRestricted($msg, $lite, $disallow_images, $rel);
+		$textile = new TextpatternTextile();
+		return $textile->TextileRestricted($msg);
 	}
 
 	include_once txpath.'/lib/classTextile.php';
@@ -4692,6 +4682,7 @@ class TextpatternTextile extends Textile
 		}
 
 		parent::__construct($doctype);
+		$this->setRelativeImagePrefix(hu);
 	}
 
 	/**

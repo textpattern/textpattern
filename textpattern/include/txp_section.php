@@ -424,9 +424,8 @@
 		}
 
 		// Prevent non-URL characters on section names.
-		include_once txpath.'/lib/classTextile.php';
 
-		$textile = new Textile();
+		$textile = new TextpatternTextile();
 		$in['title'] = $textile->TextileThis($in['title'],1);
 		$in['name']  = strtolower(sanitizeForUrl($in['name']));
 
