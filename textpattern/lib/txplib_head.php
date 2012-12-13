@@ -68,8 +68,16 @@
 		header('X-Frame-Options: '.X_FRAME_OPTIONS);
 		header('X-UA-Compatible: '.X_UA_COMPATIBLE);
 
+		$lang_direction = gTxt('lang_dir');
+
+		if (!in_array($lang_direction, array('ltr', 'rtl')))
+		{
+			// Apply biased default for missing translations
+			$lang_direction = 'ltr';
+		}
+
 	?><!DOCTYPE html>
-<html lang="<?php echo LANG; ?>" dir="<?php echo txpspecialchars(gTxt('lang_dir')); ?>">
+<html lang="<?php echo LANG; ?>" dir="<?php echo $lang_direction; ?>">
 <head>
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow">
