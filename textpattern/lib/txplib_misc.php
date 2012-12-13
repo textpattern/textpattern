@@ -3129,6 +3129,42 @@
 	}
 
 /**
+ * Gets a list of essential form templates.
+ *
+ * These forms can not be deleted or renamed.
+ *
+ * The list forms can be extendeding with a 'template.essential_forms > forms'
+ * callback event. Callback functions get passed three arguments: '$event',
+ * '$step' and '$essential'. The third parameter contains a reference to an
+ * array of forms.
+ *
+ * @return  array An array of form names
+ * @since   4.6.0
+ * @package Template
+ */
+
+	function get_essential_forms()
+	{
+		static $essential = null;
+
+		if ($essential === null)
+		{
+			$essential = array(
+				'comments',
+				'comments_display',
+				'comment_form',
+				'default',
+				'plainlinks',
+				'files',
+			);
+
+			callback_event_ref('template.essential_forms', 'forms', 0, $essential);
+		}
+
+		return $essential;
+	}
+
+/**
  * Updates a list's per page number.
  *
  * Gets the per page number from a "qty" HTTP POST/GET parameter and
