@@ -68,5 +68,6 @@
 /update/_to_4.5.0.php: 5c62c69fcf242524130375fa17dfe35b
 /update/_to_4.6.0.php: 4ddfa8128e395e8b32aefcdbbb98443b
 /update/_update.php: 0aae1c76998b371fe2b8930add6eabb2
+/vendors/Textpattern/Textile/Parser.php: 22a13affd56b5ba0b98cc89f93725ad8
 /../rpc/index.php: d134f60347a1e1b0621991922c0c3c1f
 /../rpc/TXP_RPCServer.php: 22a13affd56b5ba0b98cc89f93725ad8
