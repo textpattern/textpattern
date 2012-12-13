@@ -1423,8 +1423,6 @@
 
 	function textile_main_fields($incoming)
 	{
-		global $prefs;
-
 		include_once txpath.'/lib/txplib_textfilter.php';
 
 		$textile = new Textpattern_Textile_Parser();
