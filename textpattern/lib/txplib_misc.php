@@ -3158,7 +3158,7 @@
 /**
  * Gets a list of form types.
  *
- * The list form types can be extendeding with a 'template.form_types > types'
+ * The list form types can be extendeding with a 'form.types > types'
  * callback event. Callback functions get passed three arguments: '$event',
  * '$step' and '$types'. The third parameter contains a reference to an
  * array of 'type => label' pairs.
@@ -3184,7 +3184,7 @@
 				'section'  => gTxt('section'),
 			);
 
-			callback_event_ref('template.form_types', 'types', 0, $types);
+			callback_event_ref('form.types', 'types', 0, $types);
 		}
 
 		return $types;
@@ -3195,7 +3195,7 @@
  *
  * These forms can not be deleted or renamed.
  *
- * The list forms can be extendeding with a 'template.essential_forms > forms'
+ * The list forms can be extendeding with a 'form.essential > forms'
  * callback event. Callback functions get passed three arguments: '$event',
  * '$step' and '$essential'. The third parameter contains a reference to an
  * array of forms.
@@ -3220,7 +3220,7 @@
 				'files',
 			);
 
-			callback_event_ref('template.essential_forms', 'forms', 0, $essential);
+			callback_event_ref('form.essential', 'forms', 0, $essential);
 		}
 
 		return $essential;
