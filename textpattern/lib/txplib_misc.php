@@ -3094,6 +3094,29 @@
 	}
 
 /**
+ * Validates a string as a form template name.
+ *
+ * @param   string $name The form name
+ * @return  bool   TRUE if the string validates
+ * @since   4.6.0
+ * @package Template
+ */
+
+	function is_valid_form($name)
+	{
+		if (function_exists('mb_strlen'))
+		{
+			$length = mb_strlen($name, '8bit');
+		}
+		else
+		{
+			$length = strlen($name);
+		}
+
+		return $name && !preg_match('/^\s|[<>&"\']|\s$/u', $name) && $length <= 64;
+	}
+
+/**
  * Gets a list of form types.
  *
  * The list form types can be extendeding with a 'template.form_types > types'
