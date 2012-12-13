@@ -425,7 +425,7 @@
 
 		// Prevent non-URL characters on section names.
 
-		$textile = new TextpatternTextile();
+		$textile = new Textpattern_Textile_Parser();
 		$in['title'] = $textile->TextileThis($in['title'],1);
 		$in['name']  = strtolower(sanitizeForUrl($in['name']));
 

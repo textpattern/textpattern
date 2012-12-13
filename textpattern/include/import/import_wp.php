@@ -453,7 +453,7 @@
 		{
 			$results[] = hed('Imported Articles and Comments:', 2).n.'<ul>';
 
-			$textile = new TextpatternTextile;
+			$textile = new Textpattern_Textile_Parser;
 
 			foreach ($articles as $article)
 			{

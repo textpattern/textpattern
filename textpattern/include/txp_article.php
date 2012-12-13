@@ -1427,7 +1427,7 @@
 
 		include_once txpath.'/lib/txplib_textfilter.php';
 
-		$textile = new TextpatternTextile();
+		$textile = new Textpattern_Textile_Parser();
 
 		$incoming['Title_plain'] = $incoming['Title'];
 		$incoming['Title_html'] = ''; // not used

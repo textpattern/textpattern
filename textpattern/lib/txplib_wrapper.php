@@ -948,7 +948,7 @@ class TXP_Wrapper
 	{
 		global $txpcfg;
 
-		$textile = new TextpatternTextile();
+		$textile = new Textpattern_Textile_Parser();
 
 		if (!empty($event) and $event == 'article')
 		{

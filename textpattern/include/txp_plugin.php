@@ -394,7 +394,7 @@
 
 					if (isset($help_raw) && empty($plugin['allow_html_help']))
 					{
-						$textile = new TextpatternTextile();
+						$textile = new Textpattern_Textile_Parser();
 						$help_source = $textile->TextileRestricted($help_raw, 0, 0);
 					}
 					else
@@ -466,7 +466,7 @@
 					if (isset($help_raw) && empty($plugin['allow_html_help']))
 					{
 						// Default: help is in Textile format.
-						$textile = new TextpatternTextile();
+						$textile = new Textpattern_Textile_Parser();
 						$help = $textile->TextileRestricted($help_raw, 0, 0);
 					}
 

@@ -141,7 +141,7 @@ function import_blogger_item($item, $section, $status, $invite) {
 		return;
 	}
 
-	$textile = new TextpatternTextile();
+	$textile = new Textpattern_Textile_Parser();
 
 	$title = $textile->TextileThis($item['TITLE'], 1);
 	$url_title = stripSpace($title,1);

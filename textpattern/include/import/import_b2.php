@@ -97,7 +97,7 @@
 
 		mysql_select_db($txpdb, $txplink);
 
-		$textile = new TextpatternTextile();
+		$textile = new Textpattern_Textile_Parser();
 
 		if (!empty($articles))
 		{
