@@ -3094,6 +3094,41 @@
 	}
 
 /**
+ * Gets a list of form types.
+ *
+ * The list form types can be extendeding with a 'template.form_types > types'
+ * callback event. Callback functions get passed three arguments: '$event',
+ * '$step' and '$types'. The third parameter contains a reference to an
+ * array of 'type => label' pairs.
+ *
+ * @return  array An array of form types
+ * @since   4.6.0
+ * @package Template
+ */
+
+	function get_form_types()
+	{
+		static $types = null;
+
+		if ($types === null)
+		{
+			$types = array(
+				'article'  => gTxt('article'),
+				'misc'     => gTxt('misc'),
+				'comment'  => gTxt('comment'),
+				'category' => gTxt('category'),
+				'file'     => gTxt('file'),
+				'link'     => gTxt('link'),
+				'section'  => gTxt('section'),
+			);
+
+			callback_event_ref('template.form_types', 'types', 0, $types);
+		}
+
+		return $types;
+	}
+
+/**
  * Updates a list's per page number.
  *
  * Gets the per page number from a "qty" HTTP POST/GET parameter and
