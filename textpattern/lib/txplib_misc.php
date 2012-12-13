@@ -7323,8 +7323,12 @@ class TextpatternLoader
 
 		if (file_exists($file))
 		{
-			require $file;
-			trace_add('[Loaded class: '.$request.']');
+			require_once $file;
+
+			if (class_exists($request, false))
+			{
+				trace_add('[Loaded class: '.$request.']');
+			}
 		}
 
 		return true;
