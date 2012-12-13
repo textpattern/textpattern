@@ -3080,6 +3080,45 @@
 	}
 
 /**
+ * Creates a form template.
+ *
+ * On a successful run, this function will trigger
+ * a 'form.create > done' callback event.
+ *
+ * @param   string $name The name
+ * @param   string $type The type
+ * @param   string $Form The template
+ * @return  bool   FALSE on error
+ * @since   4.6.0
+ * @package Template
+ */
+
+	function create_form($name, $type, $Form)
+	{
+		$types = get_form_types();
+
+		if (form_exists($name) || !is_valid_form($name) || !in_array($type, array_keys($types)))
+		{
+			return false;
+		}
+
+		if (
+			safe_insert(
+				'txp_form',
+				"name = '".doSlash($name)."',
+				type = '".doSlash($type)."',
+				Form = '".doSlash($Form)."'"
+			) === false
+		)
+		{
+			return false;
+		}
+
+		callback_event('form.create', 'done', 0, compact('name', 'type', 'Form'));
+		return true;
+	}
+
+/**
  * Checks if a form template exists.
  *
  * @param   string $name The form
