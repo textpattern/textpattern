@@ -188,6 +188,12 @@
 			exit;
 		}
 
+		$loader = new TextpatternLoader(txpath.'/vendors');
+		$loader->register();
+
+		$loader = new TextpatternLoader(txpath.'/lib');
+		$loader->register();
+
 		if (!empty($admin_side_plugins) and gps('event') != 'plugin')
 		{
 			load_plugins(1);

@@ -160,6 +160,12 @@
 	// Tidy up the site.
 	janitor();
 
+	$loader = new TextpatternLoader(txpath.'/vendors');
+	$loader->register();
+
+	$loader = new TextpatternLoader(txpath.'/lib');
+	$loader->register();
+
 	// Here come the plugins.
 	if ($use_plugins)
 	{
