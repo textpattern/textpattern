@@ -1448,7 +1448,7 @@
 
 		$incoming['Title_plain'] = $incoming['Title'];
 		$incoming['Title_html'] = ''; // not used
-		$incoming['Title'] = $textile->TextileThis($incoming['Title'], '', 1);
+		$incoming['Title'] = $textile->textileEncode($incoming['Title']);
 
 		$incoming['Body_html'] = TextfilterSet::filter(
 			$incoming['textile_body'],
