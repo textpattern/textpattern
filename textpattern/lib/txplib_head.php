@@ -81,7 +81,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow">
-<title><?php echo escape_title($pagetitle) ?> - <?php echo txpspecialchars($sitename) ?> &#124; Textpattern CMS</title><?php echo
+<title><?php echo admin_title($pagetitle)?></title><?php echo
 		script_js('jquery.js', SCRIPT_URL).
 		script_js(
 			'var textpattern = ' . json_encode(array(
@@ -122,6 +122,19 @@ echo $theme->html_head();
 		callback_event('admin_side', 'pagetop_end');
 		echo n.'</header><!-- /txp-header -->'.
 			n.'<div role="main" id="txp-main" class="txp-body" aria-label="'.gTxt('main_content').'">';
+	}
+
+/**
+ * Return the HTML &lt;title&gt; contents for an admin-side page
+ *
+ * @param   string  $pagetitle  Specific page title part
+ * @return  string
+ * @since   4.6.0
+ */
+	function admin_title($pagetitle)
+	{
+		global $sitename;
+		return pluggable_ui('admin_side', 'html_title', escape_title($pagetitle).' - '.txpspecialchars($sitename).' &#124; Textpattern CMS');
 	}
 
 /**
