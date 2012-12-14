@@ -420,7 +420,7 @@ jQuery.fn.txpMultiEditForm = function (method, opt)
 					var end = boxes.index(form.lastCheck);
 
 					methods.select({
-						'range'   : [Math.min(start, end), Math.max(start, end)+1],
+						'range'   : [Math.min(start, end), Math.max(start, end) + 1],
 						'checked' : !checked
 					});
 				}
@@ -496,7 +496,7 @@ jQuery.fn.txpMultiEditForm = function (method, opt)
 					$(this).after($('<div />').attr('class', 'multi-step multi-option').html(selected.data('method')));
 					form.button.show();
 				}
-				else 
+				else
 				{
 					form.button.hide();
 					$(this).parents('form').submit();
@@ -526,7 +526,7 @@ jQuery.fn.txpMultiEditForm = function (method, opt)
 			return lib;
 		};
 
-		if(!$this.data('_txpMultiEdit'))
+		if (!$this.data('_txpMultiEdit'))
 		{
 			lib.highlight().extendedClick().checked().changeMethod().sendForm();
 
@@ -988,7 +988,7 @@ textpattern.Route =
 			'step'  : textpattern.step
 		}, options);
 
-		$.each(textpattern.Route.attached, function(index, data)
+		$.each(textpattern.Route.attached, function (index, data)
 		{
 			if (data.page === options.event || data.page === options.event + '.' + options.step)
 			{
@@ -1292,7 +1292,7 @@ textpattern.Route.add('import', function ()
 	{
 		var value = $(this).val();
 
-		$.each(importOptions, function(option, selector)
+		$.each(importOptions, function (option, selector)
 		{
 			$(selector).hide();
 		});
