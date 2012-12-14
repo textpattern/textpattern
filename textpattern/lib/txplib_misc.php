@@ -7262,7 +7262,7 @@ class TextpatternLoader
 
 		$file .= str_replace('_', DS, $class) . $this->extension;
 
-		if (file_exists($file))
+		if (is_readable($file))
 		{
 			require_once $file;
 
