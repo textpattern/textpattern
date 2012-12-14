@@ -3457,6 +3457,8 @@
 		if ($rs)
 		{
 			$out = array();
+			$count = 0;
+			$last = numRows($rs);
 
 			if (isset($thisimage))
 			{
@@ -3465,7 +3467,10 @@
 
 			while ($a = nextRow($rs))
 			{
+				++$count;
 				$thisimage = image_format_info($a);
+				$thisimage['is_first'] = ($count == 1);
+				$thisimage['is_last'] = ($count == $last);
 
 				if (!$has_content)
 				{
@@ -3676,6 +3681,42 @@
 
 			return $out;
 		}
+	}
+
+/**
+ * Checks if the image is the first in the list.
+ *
+ * @param  array  $atts
+ * @param  string $thing
+ * @return string
+ * @since  4.6.0
+ */
+
+	function if_first_image($atts, $thing)
+	{
+		global $thisimage;
+
+		assert_image();
+
+		return parse(EvalElse($thing, !empty($thisimage['is_first'])));
+	}
+
+/**
+ * Checks if the image is the last in the list.
+ *
+ * @param  array  $atts
+ * @param  string $thing
+ * @return string
+ * @since  4.6.0
+ */
+
+	function if_last_image($atts, $thing)
+	{
+		global $thisimage;
+
+		assert_image();
+
+		return parse(EvalElse($thing, !empty($thisimage['is_last'])));
 	}
 
 //--------------------------------------------------------------------------
