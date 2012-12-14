@@ -557,6 +557,11 @@
 		)
 		*/
 		$partials = array(
+			'html_title'   => array(
+				'mode'     => PARTIAL_VOLATILE,
+				'selector' => 'title',
+				'cb'       => 'article_partial_html_title'
+			),
 			'sLastMod' => array(
 				'mode'     => PARTIAL_VOLATILE_VALUE,
 				'selector' => '[name=sLastMod]',
@@ -1495,6 +1500,18 @@
 		{
 			trigger_error('invalid_pane', E_USER_WARNING);
 		}
+	}
+
+/**
+ * Renders the &lt;title&gt; element for the 'Write' page.
+ *
+ * @param  array  $rs Article data
+ * @return string HTML
+ */
+
+	function article_partial_html_title($rs)
+	{
+		return tag(admin_title($rs['Title']), 'title');
 	}
 
 /**
