@@ -4676,11 +4676,16 @@
 
 		if ($rs)
 		{
+			$count = 0;
+			$last = numRows($rs);
 			$out = array();
 
 			while ($a = nextRow($rs))
 			{
+				++$count;
 				$thisfile = file_download_format_info($a);
+				$thisfile['is_first'] = ($count == 1);
+				$thisfile['is_last'] = ($count == $last);
 
 				$out[] = ($thing) ? parse($thing) : parse_form($form);
 
@@ -4975,6 +4980,42 @@
 
 			return ($wraptag) ? doTag($description, $wraptag, $class) : $description;
 		}
+	}
+
+/**
+ * Checks if the file is the first in the list.
+ *
+ * @param  array  $atts
+ * @param  string $thing
+ * @return string
+ * @since  4.6.0
+ */
+
+	function if_first_file($atts, $thing)
+	{
+		global $thisfile;
+
+		assert_file();
+
+		return parse(EvalElse($thing, !empty($thisfile['is_first'])));
+	}
+
+/**
+ * Checks if the file is the last in the list.
+ *
+ * @param  array  $atts
+ * @param  string $thing
+ * @return string
+ * @since  4.6.0
+ */
+
+	function if_last_file($atts, $thing)
+	{
+		global $thisfile;
+
+		assert_file();
+
+		return parse(EvalElse($thing, !empty($thisfile['is_last'])));
 	}
 
 // -------------------------------------------------------------
