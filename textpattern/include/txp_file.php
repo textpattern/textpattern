@@ -1,19 +1,31 @@
 <?php
+
 /*
-            _______________________________________
-   ________|            Textpattern                |________
-   \       |          Mod File Upload              |       /
-    \      |   Michael Manfre (http://manfre.net)  |      /
-    /      |_______________________________________|      \
-   /___________)                               (___________\
-
-	Textpattern Copyright 2004 by Dean Allen. All rights reserved.
-	Use of this software denotes acceptance of the Textpattern license agreement
-
-	"Mod File Upload" Copyright 2004 by Michael Manfre. All rights reserved.
-	Use of this mod denotes acceptance of the Textpattern license agreement
-
-*/
+ * Textpattern Content Management System
+ * http://textpattern.com
+ *
+ * Copyright (C) 2004 Dean Allen
+ * Copyright (C) 2012 The Textpattern Development Team
+ * 
+ * "Mod File Upload" by Michael Manfre
+ * http://manfre.net
+ * 
+ * Copyright (C) 2004 Michael Manfre
+ *
+ * This file is part of Textpattern.
+ *
+ * Textpattern is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, version 2.
+ *
+ * Textpattern is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 	if (!defined('txpinterface'))
 	{
