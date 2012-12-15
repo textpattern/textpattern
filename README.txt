@@ -1,10 +1,10 @@
 Textpattern CMS 4.5.4
 
-Released under the GNU General Public License. See textpattern/license.txt
-for terms and conditions.
+Released under the GNU General Public License.
+See LICENSE.txt for terms and conditions.
 
 Includes contributions licensed under the GNU Lesser General Public License.
-See textpattern/lgpl-2.1.txt for terms and conditions.
+See LICENSE-LESSER.txt for terms and conditions.
 
 Includes contributions licensed under the New BSD License.
 
