@@ -64,3 +64,7 @@
 	safe_alter('txp_form', "MODIFY name VARCHAR(255) NOT NULL");
 	safe_alter('txp_page', "MODIFY name VARCHAR(255) NOT NULL");
 	safe_alter('txp_section', "MODIFY page VARCHAR(255) NOT NULL default '', MODIFY css VARCHAR(255) NOT NULL default ''");
+
+	// Save sections correctly in articles.
+	safe_alter('textpattern', "MODIFY Section VARCHAR(255) NOT NULL default ''");
+	safe_alter('txp_section', "MODIFY name VARCHAR(255) NOT NULL");
