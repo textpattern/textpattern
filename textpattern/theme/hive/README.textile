@@ -63,8 +63,7 @@ Major components:
 
 * Modernizr: MIT/BSD
 * Selectivizr: MIT
-* Formalize: MIT/GPL
 
 Everything else:
 
-Released under the GNU General Public License, see license.txt for terms and conditions.
+Released under the GNU General Public License, see LICENSE.txt for terms and conditions.
