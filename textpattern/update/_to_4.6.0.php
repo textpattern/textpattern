@@ -63,3 +63,4 @@
 	// Consistent name length limitations for presentation items.
 	safe_alter('txp_form', "MODIFY name VARCHAR(255) NOT NULL");
 	safe_alter('txp_page', "MODIFY name VARCHAR(255) NOT NULL");
+	safe_alter('txp_section', "MODIFY page VARCHAR(255) NOT NULL default '', MODIFY css VARCHAR(255) NOT NULL default ''");
