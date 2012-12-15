@@ -59,3 +59,7 @@
 	// Usernames can be 64 characters long at most.
 	safe_alter('txp_file', "MODIFY author VARCHAR(64) NOT NULL default ''");
 	safe_alter('txp_image', "MODIFY author VARCHAR(64) NOT NULL default ''");
+
+	// Consistent name length limitations for presentation items.
+	safe_alter('txp_form', "MODIFY name VARCHAR(255) NOT NULL");
+	safe_alter('txp_page', "MODIFY name VARCHAR(255) NOT NULL");
