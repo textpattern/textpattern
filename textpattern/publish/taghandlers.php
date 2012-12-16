@@ -407,6 +407,28 @@
 		return isset($inner) ? $inner : '';
 	}
 
+/**
+ * Conditional for yield.
+ *
+ * @param  array  $atts
+ * @param  string $thing
+ * @return string
+ * @since  4.6.0
+ */
+
+	function if_yield($atts, $thing)
+	{
+		global $yield;
+
+		extract(lAtts(array(
+			'value' => null,
+		), $atts));
+
+		$inner = end($yield);
+
+		return parse(EvalElse($thing, $inner !== null && ($value === null || $inner == $value)));
+	}
+
 // -------------------------------------------------------------
 
 	function feed_link($atts, $thing = null)
