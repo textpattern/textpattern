@@ -971,9 +971,10 @@
 			, $rs);
 
 			// Form override.
-			$html_override = ($allow_form_override)
+			$form_pop = $allow_form_override ? form_pop($override_form, 'override-form') : '';
+			$html_override = $form_pop
 				? pluggable_ui('article_ui', 'override', graf('<label for="override-form">'.gTxt('override_default_form').'</label>'.popHelp('override_form').br.
-					form_pop($override_form, 'override-form'), ' class="override-form"'), $rs)
+					$form_pop, ' class="override-form"'), $rs)
 				: '';
 
 			echo wrapRegion('advanced_group', $html_markup.$html_override, 'advanced', 'advanced_options', 'article_advanced');
@@ -1372,8 +1373,6 @@
 
 	function form_pop($form, $id)
 	{
-		$arr = array(' ');
-
 		$rs = safe_column('name', 'txp_form', "type = 'article' and name != 'default' order by name");
 
 		if ($rs)
