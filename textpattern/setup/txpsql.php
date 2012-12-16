@@ -511,6 +511,8 @@ mysql_query("FLUSH TABLE `".PFX."txp_lang`");
 
 /**
  * Stub replacement for txplib_db.php/safe_escape()
+ *
+ * @ignore
  */
 
 function safe_escape($in = '')
