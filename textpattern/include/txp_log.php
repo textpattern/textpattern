@@ -222,7 +222,7 @@
 
 				if ($log_refer)
 				{
-					$log_refer = href(txpspecialchars(soft_wrap($log_refer, 30)), txpspecialchars($log_refer), ' target="_blank"');
+					$log_refer = href(txpspecialchars(soft_wrap(preg_replace('#^http://#', '', $log_refer), 30)), txpspecialchars($log_refer), ' target="_blank"');
 				}
 
 				if ($log_page)
