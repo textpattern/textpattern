@@ -139,7 +139,8 @@ a.busy {
 	visibility: hidden;
 }
 
-a.pophelp {
+a.pophelp,
+a.pophelpsubtle {
 	border: 1px solid;
 	border-color: #ddd #bbb #bbb #ddd;
 	-moz-border-radius: .4em;
