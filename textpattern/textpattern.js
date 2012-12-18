@@ -540,7 +540,7 @@ jQuery.fn.txpMultiEditForm = function (method, opt)
 
 					var option = multiOptions.filter(function ()
 					{
-						return $(this).attr('data-multi-option') === value;
+						return $(this).data('multi-option') === value;
 					});
 
 					if (option.length > 0)
