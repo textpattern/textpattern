@@ -282,7 +282,7 @@ jQuery.fn.txpMultiEditForm = function (method, opt)
 				option = $('<option />');
 			}
 
-			if (!option.data('method'))
+			if (!option.data('_txpMultiMethod'))
 			{
 				if (!option.val())
 				{
@@ -294,7 +294,7 @@ jQuery.fn.txpMultiEditForm = function (method, opt)
 					option.text(settings.label);
 				}
 
-				option.data('method', settings.html);
+				option.data('_txpMultiMethod', settings.html);
 			}
 
 			if (!exists)
@@ -491,9 +491,9 @@ jQuery.fn.txpMultiEditForm = function (method, opt)
 					return lib;
 				}
 
-				if (selected.data('method'))
+				if (selected.data('_txpMultiMethod'))
 				{
-					$(this).after($('<div />').attr('class', 'multi-step multi-option').html(selected.data('method')));
+					$(this).after($('<div />').attr('class', 'multi-step multi-option').html(selected.data('_txpMultiMethod')));
 					form.button.show();
 				}
 				else
