@@ -271,7 +271,7 @@ jQuery.fn.txpMultiEditForm = function (method, opt)
 
 			var option = form.editMethod.find('option').filter(function ()
 			{
-				return $(this).attr('value') === settings.value;
+				return $(this).val() === settings.value;
 			});
 
 			var exists = (option.length > 0);
@@ -284,9 +284,9 @@ jQuery.fn.txpMultiEditForm = function (method, opt)
 
 			if (!option.data('method'))
 			{
-				if (!option.attr('value'))
+				if (!option.val())
 				{
-					option.attr('value', settings.value);
+					option.val(settings.value);
 				}
 
 				if (!option.text() && settings.label)
@@ -333,7 +333,7 @@ jQuery.fn.txpMultiEditForm = function (method, opt)
 			{
 				obj = obj.filter(function ()
 				{
-					return $.inArray($(this).attr('value'), settings.value) !== -1;
+					return $.inArray($(this).val(), settings.value) !== -1;
 				});
 			}
 
