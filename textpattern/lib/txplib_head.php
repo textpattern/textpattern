@@ -104,6 +104,8 @@
 <meta name="robots" content="noindex, nofollow">
 <title><?php echo admin_title($pagetitle)?></title><?php echo
 		script_js('jquery.js', SCRIPT_URL).
+		// TODO: Remove jQuery migrate plugin in production
+		script_js('http://code.jquery.com/jquery-migrate-git.js', SCRIPT_URL).
 		script_js(
 			'var textpattern = ' . json_encode(array(
 				'event' => $event,
