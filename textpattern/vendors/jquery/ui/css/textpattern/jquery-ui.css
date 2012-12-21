@@ -68,23 +68,6 @@
 /* Component containers
    ========================================================================== */
 
-.ui-widget {
-	font-family: Verdana, Arial, sans-serif;
-	font-size: 1.1em;
-}
-
-.ui-widget .ui-widget {
-	font-size: 1em;
-}
-
-.ui-widget input,
-.ui-widget select,
-.ui-widget textarea,
-.ui-widget button {
-	font-family: Verdana, Arial, sans-serif;
-	font-size: 1em;
-}
-
 .ui-widget-content {
 	border: 1px solid #aaa;
 	background: #fff;
@@ -169,15 +152,15 @@
 .ui-state-highlight,
 .ui-widget-content .ui-state-highlight,
 .ui-widget-header .ui-state-highlight {
-	border: 1px solid #fcefa1;
-	background: #fbf9ee;
-	color: #363636;
+	border: 1px solid #fabc2b;
+	background: #fee580;
+	color: #333;
 }
 
 .ui-state-highlight a,
 .ui-widget-content .ui-state-highlight a,
 .ui-widget-header .ui-state-highlight a {
-	color: #363636;
+	color: #333;
 }
 
 .ui-state-error,
@@ -240,9 +223,11 @@
 	left: 0;
 	width: 100%;
 	height: 100%;
-	background: #aaa;
-	opacity: .3;
-	filter:Alpha(Opacity=30);
+	background: rgba(0, 0, 0, .25);
+}
+
+.no-rgba .ui-widget-overlay {
+	background: url("images/overlay-no-rgba.png");
 }
 
 
@@ -264,36 +249,36 @@
    ========================================================================== */
 
 .ui-corner-all {
-	-moz-border-radius: .25em;
-	border-radius: .25em;
+	-moz-border-radius: .4em;
+	border-radius: .4em;
 }
 
 .ui-corner-top,
 .ui-corner-left,
 .ui-corner-tl {
-	-moz-border-radius-topleft: .25em;
-	border-top-left-radius: .25em;
+	-moz-border-radius-topleft: .4em;
+	border-top-left-radius: .4em;
 }
 
 .ui-corner-top,
 .ui-corner-right,
 .ui-corner-tr {
-	-moz-border-radius-topright: .25em;
-	border-top-right-radius: .25em;
+	-moz-border-radius-topright: .4em;
+	border-top-right-radius: .4em;
 }
 
 .ui-corner-bottom,
 .ui-corner-left,
 .ui-corner-bl {
-	-moz-border-radius-bottomleft: .25em;
-	border-bottom-left-radius: .25em;
+	-moz-border-radius-bottomleft: .4em;
+	border-bottom-left-radius: .4em;
 }
 
 .ui-corner-bottom,
 .ui-corner-right,
 .ui-corner-br {
-	-moz-border-radius-bottomright: .25em;
-	border-bottom-right-radius: .25em;
+	-moz-border-radius-bottomright: .4em;
+	border-bottom-right-radius: .4em;
 }
 
 
@@ -392,7 +377,7 @@
 .ui-selectable-helper {
 	position: absolute;
 	z-index: 100;
-	border: 1px dotted black;
+	border: 1px dotted #000;
 }
 
 
@@ -586,11 +571,13 @@ button.ui-button::-moz-focus-inner {
 	width: 17em;
 	padding: .2em .2em 0;
 	display: none;
+	-webkit-box-shadow: 0 0 .5em rgba(0, 0, 0, 0.2);
+	box-shadow: 0 0 .5em rgba(0, 0, 0, 0.2);
 }
 
 .ui-datepicker .ui-datepicker-header {
-	position:relative;
-	padding:.2em 0;
+	position: relative;
+	padding: .2em 0;
 }
 
 .ui-datepicker .ui-datepicker-prev,
@@ -611,7 +598,7 @@ button.ui-button::-moz-focus-inner {
 }
 
 .ui-datepicker .ui-datepicker-next {
-	right:2px;
+	right: 2px;
 }
 
 .ui-datepicker .ui-datepicker-prev-hover {
@@ -682,7 +669,7 @@ button.ui-button::-moz-focus-inner {
 .ui-datepicker .ui-datepicker-buttonpane {
 	background-image: none;
 	margin: .7em 0 0 0;
-	padding:0 .2em;
+	padding: 0 .2em;
 	border-left: 0;
 	border-right: 0;
 	border-bottom: 0;
@@ -735,9 +722,11 @@ button.ui-button::-moz-focus-inner {
 .ui-datepicker-multi .ui-datepicker-group-middle .ui-datepicker-header {
 	border-left-width: 0;
 }
+
 .ui-datepicker-multi .ui-datepicker-buttonpane {
 	clear: left;
 }
+
 .ui-datepicker-row-break {
 	clear: both;
 	width: 100%;
@@ -804,6 +793,8 @@ button.ui-button::-moz-focus-inner {
 	padding: .2em;
 	width: 300px;
 	overflow: hidden;
+	-webkit-box-shadow: 0 0 .5em rgba(0, 0, 0, 0.2);
+	box-shadow: 0 0 .5em rgba(0, 0, 0, 0.2);
 }
 
 .ui-dialog .ui-dialog-titlebar {
@@ -1048,7 +1039,7 @@ button.ui-button::-moz-focus-inner {
    ========================================================================== */
 
 .ui-spinner {
-	position:relative;
+	position: relative;
 	display: inline-block;
 	overflow: hidden;
 	padding: 0;
@@ -1172,8 +1163,8 @@ button.ui-button::-moz-focus-inner {
 	position: absolute;
 	z-index: 9999;
 	max-width: 300px;
-	-webkit-box-shadow: 0 0 5px #aaa;
-	box-shadow: 0 0 5px #aaa;
+	-webkit-box-shadow: 0 0 .5em rgba(0, 0, 0, 0.2);
+	box-shadow: 0 0 .5em rgba(0, 0, 0, 0.2);
 }
 
 body .ui-tooltip {
@@ -1191,7 +1182,7 @@ body .ui-tooltip {
 
 .ui-icon {
 	display: block;
-	text-indent: -99999px;
+	text-indent: -9999px;
 	overflow: hidden;
 	background-repeat: no-repeat;
 	width: 16px;
