@@ -1170,6 +1170,49 @@ jQuery.fn.txpAsyncHref = function (options)
 };
 
 /**
+ * Creates a UI dialog.
+ *
+ * @param  {object} options          Options
+ * @return {object} this
+ * @since  4.6.0
+ */
+
+jQuery.fn.txpDialog = function (options)
+{
+	options = $.extend({
+		autoOpen: false,
+		buttons: [
+			{
+				text: textpattern.gTxt('ok'),
+				click: function() {
+					// callbacks?
+					$(this).dialog('close');
+				}
+			}
+		]
+	}, options);
+
+	this.dialog(options);
+
+	return this;
+}
+
+/**
+ * Creates a date picker.
+ *
+ * @param  {object} options          Options
+ * @return {object} this
+ * @since  4.6.0
+ */
+
+jQuery.fn.txpDatepicker = function (options)
+{
+	// TODO $.datepicker.regional[ "en" ];
+	this.datepicker(options);
+	return this;
+}
+
+/**
  * Returns an i18n string.
  *
  * @param  {string}  i18n   The i18n string
@@ -1459,6 +1502,17 @@ $(document).ready(function ()
 	$(document).on('change.txpAutoSubmit', 'form [data-submit-on="change"]', function (e)
 	{
 		$(this).parents('form').submit();
+	});
+
+	// Establish UI defaults.
+	$('.txp-dialog').txpDialog();
+	$('.txp-dialog.modal').dialog('option', 'modal', true);
+	$('.txp-datepicker').txpDatepicker();
+
+	// Find and open associated dialogs.
+	$(document).on('click.txpDialog', '[data-txp-dialog]', function(event) {
+		$($(this).data('txp-dialog')).dialog('open');
+		event.preventDefault();
 	});
 
 	// Initialises panel specific JavaScript.

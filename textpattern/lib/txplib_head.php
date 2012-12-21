@@ -103,7 +103,8 @@
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow">
 <title><?php echo admin_title($pagetitle)?></title><?php echo
-		script_js('jquery.js', SCRIPT_URL).
+		script_js('vendors/jquery/jquery/jquery.js', SCRIPT_URL).
+		script_js('vendors/jquery/ui/js/jquery-ui.js', SCRIPT_URL).
 		// TODO: Remove jQuery migrate plugin in production
 		script_js('http://code.jquery.com/jquery-migrate-git.js', SCRIPT_URL).
 		script_js(
@@ -121,7 +122,7 @@
 				'production_status' => get_pref('production_status'),
 		)).';').
 		script_js('textpattern.js', SCRIPT_URL).n;
-	gTxtScript(array('form_submission_error', 'are_you_sure', 'cookies_must_be_enabled'));
+	gTxtScript(array('form_submission_error', 'are_you_sure', 'cookies_must_be_enabled', 'ok'));
 	// Mandatory un-themable Textpattern core styles ?>
 <style>
 .not-ready .doc-ready,
