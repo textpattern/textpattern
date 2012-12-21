@@ -5,8 +5,14 @@
 * Copyright (c) 2012 jQuery Foundation and other contributors Licensed MIT */
 
 
+
+/* ==========================================================================
+   Global
+   ========================================================================== */
+
+
 /* Layout helpers
-----------------------------------*/
+   ========================================================================== */
 
 .ui-helper-hidden {
 	display: none;
@@ -59,18 +65,174 @@
 }
 
 
-/* Interaction Cues
-----------------------------------*/
+/* Component containers
+   ========================================================================== */
+
+.ui-widget {
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 1.1em;
+}
+
+.ui-widget .ui-widget {
+	font-size: 1em;
+}
+
+.ui-widget input,
+.ui-widget select,
+.ui-widget textarea,
+.ui-widget button {
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 1em;
+}
+
+.ui-widget-content {
+	border: 1px solid #aaa;
+	background: #fff;
+	color: #222;
+}
+
+.ui-widget-content a {
+	color: #222;
+}
+
+.ui-widget-header {
+	border: 1px solid #aaa;
+	background: #ccc;
+	color: #222;
+	font-weight: bold;
+}
+
+.ui-widget-header a {
+	color: #222;
+}
+
+
+/* Interaction states
+   ========================================================================== */
+
+.ui-state-default,
+.ui-widget-content .ui-state-default,
+.ui-widget-header .ui-state-default {
+	border: 1px solid #d3d3d3;
+	background: #e6e6e6;
+	font-weight: normal;
+	color: #555;
+}
+
+.ui-state-default a,
+.ui-state-default a:link,
+.ui-state-default a:visited {
+	color: #555;
+	text-decoration: none;
+}
+
+.ui-state-hover,
+.ui-widget-content .ui-state-hover,
+.ui-widget-header .ui-state-hover,
+.ui-state-focus,
+.ui-widget-content .ui-state-focus,
+.ui-widget-header .ui-state-focus {
+	border: 1px solid #999;
+	background: #dadada;
+	font-weight: normal;
+	color: #212121;
+}
+
+.ui-state-hover a,
+.ui-state-hover a:hover,
+.ui-state-hover a:link,
+.ui-state-hover a:visited {
+	color: #212121;
+	text-decoration: none;
+}
+
+.ui-state-active,
+.ui-widget-content .ui-state-active,
+.ui-widget-header .ui-state-active {
+	border: 1px solid #aaa;
+	background: #fff;
+	font-weight: normal;
+	color: #212121;
+}
+
+.ui-state-active a,
+.ui-state-active a:link,
+.ui-state-active a:visited {
+	color: #212121;
+	text-decoration: none;
+}
+
+
+/* Interaction cues
+   ========================================================================== */
+
+.ui-state-highlight,
+.ui-widget-content .ui-state-highlight,
+.ui-widget-header .ui-state-highlight {
+	border: 1px solid #fcefa1;
+	background: #fbf9ee;
+	color: #363636;
+}
+
+.ui-state-highlight a,
+.ui-widget-content .ui-state-highlight a,
+.ui-widget-header .ui-state-highlight a {
+	color: #363636;
+}
+
+.ui-state-error,
+.ui-widget-content .ui-state-error,
+.ui-widget-header .ui-state-error {
+	border: 1px solid #cd0a0a;
+	background: #fef1ec;
+	color: #cd0a0a;
+}
+
+.ui-state-error a,
+.ui-widget-content .ui-state-error a,
+.ui-widget-header .ui-state-error a {
+	color: #cd0a0a;
+}
+
+.ui-state-error-text,
+.ui-widget-content .ui-state-error-text,
+.ui-widget-header .ui-state-error-text {
+	color: #cd0a0a;
+}
+
+.ui-priority-primary,
+.ui-widget-content .ui-priority-primary,
+.ui-widget-header .ui-priority-primary {
+	font-weight: bold;
+}
+
+.ui-priority-secondary,
+.ui-widget-content .ui-priority-secondary,
+.ui-widget-header .ui-priority-secondary {
+	opacity: .7;
+	filter:Alpha(Opacity=70);
+	font-weight: normal;
+}
+
+.ui-state-disabled,
+.ui-widget-content .ui-state-disabled,
+.ui-widget-header .ui-state-disabled {
+	opacity: .35;
+	filter:Alpha(Opacity=35);
+	background-image: none;
+}
+
+.ui-state-disabled .ui-icon {
+	filter:Alpha(Opacity=35);
+}
 
 .ui-state-disabled {
 	cursor: default !important;
 }
 
 
-/* Misc visuals
-----------------------------------*/
-
-/* Overlays */
+/* Overlays
+   ========================================================================== */
 
 .ui-widget-overlay {
 	position: absolute;
@@ -78,7 +240,170 @@
 	left: 0;
 	width: 100%;
 	height: 100%;
+	background: #aaa;
+	opacity: .3;
+	filter:Alpha(Opacity=30);
 }
+
+
+/* Shadows
+   ========================================================================== */
+
+.ui-widget-shadow {
+	margin: -8px 0 0 -8px;
+	padding: 8px;
+	background: #aaa;
+	opacity: .3;
+	filter:Alpha(Opacity=30);
+	-moz-border-radius: .5em;
+	border-radius: .5em;
+}
+
+
+/* Corners
+   ========================================================================== */
+
+.ui-corner-all {
+	-moz-border-radius: .25em;
+	border-radius: .25em;
+}
+
+.ui-corner-top,
+.ui-corner-left,
+.ui-corner-tl {
+	-moz-border-radius-topleft: .25em;
+	border-top-left-radius: .25em;
+}
+
+.ui-corner-top,
+.ui-corner-right,
+.ui-corner-tr {
+	-moz-border-radius-topright: .25em;
+	border-top-right-radius: .25em;
+}
+
+.ui-corner-bottom,
+.ui-corner-left,
+.ui-corner-bl {
+	-moz-border-radius-bottomleft: .25em;
+	border-bottom-left-radius: .25em;
+}
+
+.ui-corner-bottom,
+.ui-corner-right,
+.ui-corner-br {
+	-moz-border-radius-bottomright: .25em;
+	border-bottom-right-radius: .25em;
+}
+
+
+
+/* ==========================================================================
+   Interactions
+   ========================================================================== */
+
+
+/* Resizable - http://jqueryui.com/resizable/
+   ========================================================================== */
+
+.ui-resizable {
+	position: relative;
+}
+
+.ui-resizable-handle {
+	position: absolute;
+	font-size: 0.1px;
+	display: block;
+}
+
+.ui-resizable-disabled .ui-resizable-handle,
+.ui-resizable-autohide .ui-resizable-handle {
+	display: none;
+}
+
+.ui-resizable-n {
+	cursor: n-resize;
+	height: 7px;
+	width: 100%;
+	top: -5px;
+	left: 0;
+}
+
+.ui-resizable-s {
+	cursor: s-resize;
+	height: 7px;
+	width: 100%;
+	bottom: -5px;
+	left: 0;
+}
+
+.ui-resizable-e {
+	cursor: e-resize;
+	width: 7px;
+	right: -5px;
+	top: 0;
+	height: 100%;
+}
+
+.ui-resizable-w {
+	cursor: w-resize;
+	width: 7px;
+	left: -5px;
+	top: 0;
+	height: 100%;
+}
+
+.ui-resizable-se {
+	cursor: se-resize;
+	width: 12px;
+	height: 12px;
+	right: 1px;
+	bottom: 1px;
+}
+
+.ui-resizable-sw {
+	cursor: sw-resize;
+	width: 9px;
+	height: 9px;
+	left: -5px;
+	bottom: -5px;
+}
+
+.ui-resizable-nw {
+	cursor: nw-resize;
+	width: 9px;
+	height: 9px;
+	left: -5px;
+	top: -5px;
+}
+
+.ui-resizable-ne {
+	cursor: ne-resize;
+	width: 9px;
+	height: 9px;
+	right: -5px;
+	top: -5px;
+}
+
+
+/* Selectable - http://jqueryui.com/selectable/
+   ========================================================================== */
+
+.ui-selectable-helper {
+	position: absolute;
+	z-index: 100;
+	border: 1px dotted black;
+}
+
+
+
+/* ==========================================================================
+   Widgets
+   ========================================================================== */
+
+
+/* Accordion - http://jqueryui.com/accordion/
+   ========================================================================== */
 
 .ui-accordion .ui-accordion-header {
 	display: block;
@@ -115,6 +440,10 @@
 	zoom: 1;
 }
 
+
+/* Autocomplete - http://jqueryui.com/autocomplete/
+   ========================================================================== */
+
 .ui-autocomplete {
 	position: absolute;
 	top: 0;
@@ -122,7 +451,9 @@
 	cursor: default;
 }
 
-/* workarounds */
+
+/* Button - http://jqueryui.com/button/
+   ========================================================================== */
 
 .ui-button {
 	display: inline-block;
@@ -132,8 +463,7 @@
 	cursor: pointer;
 	text-align: center;
 	zoom: 1;
-	overflow: visible;
-	/* the overflow property removes extra width in IE */
+	overflow: visible; /* the overflow property removes extra width in IE */
 }
 
 .ui-button,
@@ -145,13 +475,11 @@
 }
 
 .ui-button-icon-only {
-	width: 2.2em;
-	/* to make room for the icon, a width needs to be set here */
+	width: 2.2em; /* to make room for the icon, a width needs to be set here */
 }
 
 button.ui-button-icon-only {
-	width: 2.4em;
-	/* button elements seem to need a little more width */
+	width: 2.4em; /* button elements seem to need a little more width */
 }
 
 .ui-button-icons-only {
@@ -233,7 +561,8 @@ input.ui-button {
 	right: .5em;
 }
 
-/*button sets*/
+
+/* Button sets */
 
 .ui-buttonset {
 	margin-right: 7px;
@@ -244,13 +573,14 @@ input.ui-button {
 	margin-right: -.3em;
 }
 
-/* workarounds */
-
-/* reset extra padding in Firefox */
 button.ui-button::-moz-focus-inner {
 	border: 0;
 	padding: 0;
 }
+
+
+/* Datepicker - http://jqueryui.com/datepicker/
+   ========================================================================== */
 
 .ui-datepicker {
 	width: 17em;
@@ -463,6 +793,10 @@ button.ui-button::-moz-focus-inner {
 	border-left-width: 1px;
 }
 
+
+/* Dialog - http://jqueryui.com/dialog/
+   ========================================================================== */
+
 .ui-dialog {
 	position: absolute;
 	top: 0;
@@ -538,6 +872,10 @@ button.ui-button::-moz-focus-inner {
 .ui-draggable .ui-dialog-titlebar {
 	cursor: move;
 }
+
+
+/* Menu - http://jqueryui.com/menu/
+   ========================================================================== */
 
 .ui-menu {
 	list-style: none;
@@ -618,6 +956,10 @@ button.ui-button::-moz-focus-inner {
 	float: right;
 }
 
+
+/* Progressbar - http://jqueryui.com/progressbar/
+   ========================================================================== */
+
 .ui-progressbar {
 	height: 2em;
 	text-align: left;
@@ -629,90 +971,9 @@ button.ui-button::-moz-focus-inner {
 	height: 100%;
 }
 
-.ui-resizable {
-	position: relative;
-}
 
-.ui-resizable-handle {
-	position: absolute;
-	font-size: 0.1px;
-	display: block;
-}
-
-.ui-resizable-disabled .ui-resizable-handle,
-.ui-resizable-autohide .ui-resizable-handle {
-	display: none;
-}
-
-.ui-resizable-n {
-	cursor: n-resize;
-	height: 7px;
-	width: 100%;
-	top: -5px;
-	left: 0;
-}
-
-.ui-resizable-s {
-	cursor: s-resize;
-	height: 7px;
-	width: 100%;
-	bottom: -5px;
-	left: 0;
-}
-
-.ui-resizable-e {
-	cursor: e-resize;
-	width: 7px;
-	right: -5px;
-	top: 0;
-	height: 100%;
-}
-
-.ui-resizable-w {
-	cursor: w-resize;
-	width: 7px;
-	left: -5px;
-	top: 0;
-	height: 100%;
-}
-
-.ui-resizable-se {
-	cursor: se-resize;
-	width: 12px;
-	height: 12px;
-	right: 1px;
-	bottom: 1px;
-}
-
-.ui-resizable-sw {
-	cursor: sw-resize;
-	width: 9px;
-	height: 9px;
-	left: -5px;
-	bottom: -5px;
-}
-
-.ui-resizable-nw {
-	cursor: nw-resize;
-	width: 9px;
-	height: 9px;
-	left: -5px;
-	top: -5px;
-}
-
-.ui-resizable-ne {
-	cursor: ne-resize;
-	width: 9px;
-	height: 9px;
-	right: -5px;
-	top: -5px;
-}
-
-.ui-selectable-helper {
-	position: absolute;
-	z-index: 100;
-	border: 1px dotted black;
-}
+/* Slider - http://jqueryui.com/slider/
+   ========================================================================== */
 
 .ui-slider {
 	position: relative;
@@ -782,6 +1043,10 @@ button.ui-button::-moz-focus-inner {
 	top: 0;
 }
 
+
+/* Spinner - http://jqueryui.com/spinner/
+   ========================================================================== */
+
 .ui-spinner {
 	position:relative;
 	display: inline-block;
@@ -842,6 +1107,10 @@ button.ui-button::-moz-focus-inner {
 	background-position: -65px -16px; /* need to fix icons sprite */
 }
 
+
+/* Tabs - http://jqueryui.com/tabs/
+   ========================================================================== */
+
 .ui-tabs {
 	position: relative; /* position: relative prevents IE scroll bug (element with position: relative inside container with overflow: auto appear as "fixed") */
 	padding: .2em;
@@ -894,6 +1163,10 @@ button.ui-button::-moz-focus-inner {
 	background: none;
 }
 
+
+/* Tooltip - http://jqueryui.com/tooltip/
+   ========================================================================== */
+
 .ui-tooltip {
 	padding: 8px;
 	position: absolute;
@@ -907,225 +1180,12 @@ body .ui-tooltip {
 	border-width: 2px;
 }
 
-/* Component containers
-----------------------------------*/
-
-.ui-widget {
-	font-family: Verdana, Arial, sans-serif;
-	font-size: 1.1em;
-}
-
-.ui-widget .ui-widget {
-	font-size: 1em;
-}
-
-.ui-widget input,
-.ui-widget select,
-.ui-widget textarea,
-.ui-widget button {
-	font-family: Verdana, Arial, sans-serif;
-	font-size: 1em;
-}
-
-.ui-widget-content {
-	border: 1px solid #aaa;
-	background: #fff;
-	color: #222;
-}
-
-.ui-widget-content a {
-	color: #222;
-}
-
-.ui-widget-header {
-	border: 1px solid #aaa;
-	background: #ccc;
-	color: #222;
-	font-weight: bold;
-}
-
-.ui-widget-header a {
-	color: #222;
-}
-
-/* Interaction states
-----------------------------------*/
-
-.ui-state-default,
-.ui-widget-content .ui-state-default,
-.ui-widget-header .ui-state-default {
-	border: 1px solid #d3d3d3;
-	background: #e6e6e6;
-	font-weight: normal;
-	color: #555;
-}
-
-.ui-state-default a,
-.ui-state-default a:link,
-.ui-state-default a:visited {
-	color: #555;
-	text-decoration: none;
-}
-
-.ui-state-hover,
-.ui-widget-content .ui-state-hover,
-.ui-widget-header .ui-state-hover,
-.ui-state-focus,
-.ui-widget-content .ui-state-focus,
-.ui-widget-header .ui-state-focus {
-	border: 1px solid #999;
-	background: #dadada;
-	font-weight: normal;
-	color: #212121;
-}
-
-.ui-state-hover a,
-.ui-state-hover a:hover,
-.ui-state-hover a:link,
-.ui-state-hover a:visited {
-	color: #212121;
-	text-decoration: none;
-}
-
-.ui-state-active,
-.ui-widget-content .ui-state-active,
-.ui-widget-header .ui-state-active {
-	border: 1px solid #aaa;
-	background: #fff;
-	font-weight: normal;
-	color: #212121;
-}
-
-.ui-state-active a,
-.ui-state-active a:link,
-.ui-state-active a:visited {
-	color: #212121;
-	text-decoration: none;
-}
-
-/* Interaction Cues
-----------------------------------*/
-
-.ui-state-highlight,
-.ui-widget-content .ui-state-highlight,
-.ui-widget-header .ui-state-highlight {
-	border: 1px solid #fcefa1;
-	background: #fbf9ee;
-	color: #363636;
-}
-
-.ui-state-highlight a,
-.ui-widget-content .ui-state-highlight a,
-.ui-widget-header .ui-state-highlight a {
-	color: #363636;
-}
-
-.ui-state-error,
-.ui-widget-content .ui-state-error,
-.ui-widget-header .ui-state-error {
-	border: 1px solid #cd0a0a;
-	background: #fef1ec;
-	color: #cd0a0a;
-}
-
-.ui-state-error a,
-.ui-widget-content .ui-state-error a,
-.ui-widget-header .ui-state-error a {
-	color: #cd0a0a;
-}
-
-.ui-state-error-text,
-.ui-widget-content .ui-state-error-text,
-.ui-widget-header .ui-state-error-text {
-	color: #cd0a0a;
-}
-
-.ui-priority-primary,
-.ui-widget-content .ui-priority-primary,
-.ui-widget-header .ui-priority-primary {
-	font-weight: bold;
-}
-
-.ui-priority-secondary,
-.ui-widget-content .ui-priority-secondary,
-.ui-widget-header .ui-priority-secondary {
-	opacity: .7;
-	filter:Alpha(Opacity=70);
-	font-weight: normal;
-}
-
-.ui-state-disabled,
-.ui-widget-content .ui-state-disabled,
-.ui-widget-header .ui-state-disabled {
-	opacity: .35;
-	filter:Alpha(Opacity=35);
-	background-image: none;
-}
-
-.ui-state-disabled .ui-icon {
-	filter:Alpha(Opacity=35);
-}
 
 
-/* Misc visuals
-----------------------------------*/
+/* ==========================================================================
+   Icons
+   ========================================================================== */
 
-/* Corner radius */
-
-.ui-corner-all {
-	-moz-border-radius: .25em;
-	border-radius: .25em;
-}
-
-.ui-corner-top,
-.ui-corner-left,
-.ui-corner-tl {
-	-moz-border-radius-topleft: .25em;
-	border-top-left-radius: .25em;
-}
-
-.ui-corner-top,
-.ui-corner-right,
-.ui-corner-tr {
-	-moz-border-radius-topright: .25em;
-	border-top-right-radius: .25em;
-}
-
-.ui-corner-bottom,
-.ui-corner-left,
-.ui-corner-bl {
-	-moz-border-radius-bottomleft: .25em;
-	border-bottom-left-radius: .25em;
-}
-
-.ui-corner-bottom,
-.ui-corner-right,
-.ui-corner-br {
-	-moz-border-radius-bottomright: .25em;
-	border-bottom-right-radius: .25em;
-}
-
-/* Overlays */
-
-.ui-widget-overlay {
-	background: #aaa;
-	opacity: .3;
-	filter:Alpha(Opacity=30);
-}
-
-.ui-widget-shadow {
-	margin: -8px 0 0 -8px;
-	padding: 8px;
-	background: #aaa;
-	opacity: .3;
-	filter:Alpha(Opacity=30);
-	-moz-border-radius: .5em;
-	border-radius: .5em;
-}
-
-
-/* Icons
-----------------------------------*/
 
 /* states and images */
 
