@@ -440,7 +440,7 @@ a:hover .content-image {
 #messagepane {
   position: fixed;
   bottom: 0;
-  z-index: 20000;
+  z-index: 1000;
   text-align: center;
 }
 #messagepane span.success, #messagepane span.warning, #messagepane span.error {
@@ -1411,7 +1411,7 @@ body {
   top: 0;
   left: 0;
   right: 0;
-  z-index: 10000;
+  z-index: 1000;
   padding: 0 1.69%;
   height: 3em;
   min-width: 71.3846153846154em;
@@ -1463,7 +1463,6 @@ body {
 
 .txp-logout {
   position: absolute;
-  z-index: 10010;
   top: -0.5em;
   right: 1.69%;
 }
@@ -1840,7 +1839,7 @@ body#page-setup {
   top: 0;
   left: 0;
   right: 0;
-  z-index: 10000;
+  z-index: 1000;
   padding: .5em 1em;
   -webkit-box-shadow: 0 0.15385em 0.23077em rgba(0, 0, 0, 0.15);
   box-shadow: 0 0.15385em 0.23077em rgba(0, 0, 0, 0.15);
@@ -2189,7 +2188,7 @@ div.code {
     top: 2.46153846153846em;
     right: 0;
     left: 0;
-    z-index: 10010;
+    z-index: 1000;
     border-top: 1px solid #fffbed;
     padding: .53846153846154em 1em;
     background: #fff6d3;
