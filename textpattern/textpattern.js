@@ -1249,11 +1249,11 @@ textpattern.gTxt = function (i18n, atts, escape)
 
 	if (escape !== false)
 	{
-		string = $('<div/>').text(string).html();
+		string = textpattern.encodeHTML(string);
 
 		$.each(tags, function (key, value)
 		{
-			tags[key] = $('<div/>').text(value).html();
+			tags[key] = textpattern.encodeHTML(value);
 		});
 	}
 
