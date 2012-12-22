@@ -1226,6 +1226,49 @@ textpattern.encodeHTML = function (string)
 };
 
 /**
+ * Translates given substrings.
+ *
+ * @param  {string} string       The string being translated
+ * @param  {object} replacements Translated substrings
+ * @return string   Translated string
+ * @since  4.6.0
+ * @example
+ * textpattern.tr('hello world, and bye!', {'hello' : 'bye', 'bye' : 'hello'});
+ */
+
+textpattern.tr = function(string, replacements)
+{
+	var match, position, output = '', replacement;
+
+	for (position = 0; position < string.length; position++)
+	{
+		match = false;
+
+		$.each(replacements, function (from, to)
+		{
+			if (string.substr(position, from.length) === from)
+			{
+				match = true;
+				replacement = to;
+				position = (position + from.length) - 1;
+				return;
+			}
+		});
+
+		if (match)
+		{
+			output += replacement;
+		}
+		else
+		{
+			output += string.charAt(position);
+		}
+	}
+
+	return output;
+};
+
+/**
  * Returns an i18n string.
  *
  * @param  {string}  i18n   The i18n string
