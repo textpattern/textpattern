@@ -1,2 +1,6 @@
 /* Pages and Forms pages: Tag builder column */
-#page-page .txp-columntable td.column:first-child, #page-form .txp-columntable td.column:first-child {display:none !important;}
+#tagbuild_links {display:none !important;}
+#page-form .txp-layout-2-4, #page-page .txp-layout-2-4 {width:75%;}
+@media only screen and (max-width: 768px) {
+	#page-form .txp-layout-2-4, #page-page .txp-layout-2-4 {width:100%;}
+}
