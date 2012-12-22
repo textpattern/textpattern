@@ -1300,7 +1300,7 @@ textpattern.gTxt = function (i18n, atts, escape)
 		});
 	}
 
-	textpattern.tr(string, tags);
+	string = textpattern.tr(string, tags);
 
 	return string;
 };
