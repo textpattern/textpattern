@@ -40,18 +40,10 @@
 	list-style: none;
 }
 
-.ui-helper-clearfix:before,
 .ui-helper-clearfix:after {
 	content: "";
 	display: table;
-}
-
-.ui-helper-clearfix:after {
 	clear: both;
-}
-
-.ui-helper-clearfix {
-	zoom: 1;
 }
 
 .ui-helper-zfix {
