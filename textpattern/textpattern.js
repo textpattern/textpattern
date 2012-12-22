@@ -1300,10 +1300,7 @@ textpattern.gTxt = function (i18n, atts, escape)
 		});
 	}
 
-	$.each(tags, function (key, value)
-	{
-		string = string.replace(key, value);
-	});
+	textpattern.tr(string, tags);
 
 	return string;
 };
