@@ -1213,6 +1213,19 @@ jQuery.fn.txpDatepicker = function (options)
 }
 
 /**
+ * Encodes a string for a use in HTML.
+ *
+ * @param  {string} string The string
+ * @return {string} Encoded string
+ * @since  4.6.0
+ */
+
+textpattern.encodeHTML = function (string)
+{
+	return $('<div/>').text(string).html();
+};
+
+/**
  * Returns an i18n string.
  *
  * @param  {string}  i18n   The i18n string
