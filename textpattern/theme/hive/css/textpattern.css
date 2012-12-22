@@ -22,7 +22,7 @@ summary {
   display: block;
 }
 
-/* addresses styling for 'hidden' attribute not present in IE8-9 */
+/* addresses styling for `hidden` attribute not present in IE8-9 */
 [hidden] {
   display: none;
 }
@@ -125,6 +125,26 @@ html {
   max-width: 57em;
 }
 
+/* Inline grids
+   ========================================================================== */
+.txp-grid {
+  text-align: center;
+  margin-bottom: .69230769230769em;
+}
+
+.txp-grid-cell {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  display: inline-block;
+  text-align: left;
+  max-width: 22.6153846153846em;
+  vertical-align: top;
+  margin: 0 .15384615384615em .30769230769231em;
+  border: 1px solid #cccccc;
+  padding: 0 1em;
+}
+
 /* Links
    ========================================================================== */
 a {
@@ -205,7 +225,7 @@ h6 {
   margin: 0 0 1em;
 }
 
-/* addresses style set to 'bolder' in Firefox4+, Safari5, and Chrome */
+/* addresses style set to `bolder` in Firefox4+, Safari5, and Chrome */
 b,
 strong {
   font-weight: bold;
@@ -290,7 +310,7 @@ code.excerpt {
   background: none;
 }
 
-/* prevents sub and sup affecting line-height in all browsers */
+/* prevents `<sub>` and `<sup>` affecting line height in all browsers */
 sub,
 sup {
   font-size: 0.84615em;
@@ -340,7 +360,7 @@ html[lang="zh-tw"] {
 /* Embedded content
    ========================================================================== */
 img {
-  /* removes border when inside 'a' element in IE8-9 */
+  /* removes border when inside `<a>` element in IE8-9 */
   border: 0;
 }
 img.align-left {
@@ -739,7 +759,7 @@ legend {
   padding: 0;
 }
 
-/* colour placeholder text (Webkit and Mozilla only, so far) */
+/* colour placeholder text (WebKit and Mozilla only, so far) */
 input::-webkit-input-placeholder,
 textarea::-webkit-input-placeholder {
   color: #999999;
@@ -895,7 +915,7 @@ optgroup::-moz-focus-inner {
   padding: 0;
 }
 
-/* addresses box sizing set to content-box and excess padding in IE8-9 */
+/* addresses box sizing set to `content-box` and excess padding in IE8-9 */
 input[type="checkbox"],
 input[type="radio"] {
   padding: 0;
@@ -904,7 +924,7 @@ input[type="radio"] {
 
 /* make sure disable elements really are disabled */
 button[disabled],
-input[disabled],
+html input[disabled],
 input[type="button"][disabled],
 input[type="reset"][disabled],
 input[type="submit"][disabled],
@@ -1200,7 +1220,7 @@ button.destroy:active {
 
 /* Lists
    ========================================================================== */
-/* addresses paddings set differently */
+/* addresses padding set differently */
 menu,
 ol,
 ul {
@@ -1257,7 +1277,7 @@ dt {
   right: 1em;
 }
 
-switcher-action {
+.switcher-action {
   top: .38461538461538em;
 }
 
@@ -1278,7 +1298,7 @@ caption {
   margin-bottom: .5em;
 }
 
-/* make table cells align top and left by default, remove any cellpadding */
+/* make table cells align top and left by default, remove any cell padding */
 th,
 td {
   vertical-align: top;
@@ -1469,7 +1489,7 @@ body {
 
 /* Navigation
    ========================================================================== */
-/* hide <select> version of navigation on non-touch devices
+/* hide `<select>` version of navigation on non-touch devices
    also happens via media-queries when screen width is < 768px regardless of touch ability */
 .txp-nav-select {
   display: none;
@@ -1478,7 +1498,7 @@ body {
   display: inherit;
 }
 
-/* Hide <ul> version of navigation on touch devices */
+/* hide `<ul>` version of navigation on touch devices */
 .touch .txp-nav {
   display: none;
 }
@@ -1608,7 +1628,7 @@ body {
 
 /* Miscellaneous/shared layout
    ========================================================================== */
-/* Hide text but still allow screen reader access */
+/* hide text but still allow screen reader access */
 .txp-accessibility {
   position: absolute;
   left: -1000em;
@@ -1641,33 +1661,9 @@ div.multi-edit {
   display: inline-block;
 }
 
-/* TO BE REMOVED */
-.txp-columntable {
-  width: 100%;
-}
-
 .text-section {
   padding-top: 5em;
   background: url("../img/separator.gif") repeat-x 0 2.15385em;
-}
-
-/* inline grids */
-.txp-grid {
-  text-align: center;
-  margin-bottom: .69230769230769em;
-}
-
-.txp-grid-cell {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  display: inline-block;
-  text-align: left;
-  max-width: 22.6153846153846em;
-  vertical-align: top;
-  margin: 0 .15384615384615em .30769230769231em;
-  border: 1px solid #cccccc;
-  padding: 0 1em;
 }
 
 .restricted-area {
@@ -2047,7 +2043,7 @@ div.code {
   box-sizing: border-box;
 }
 
-/* Deprecated @ 4.6 - use .txp-layout-textbox instead */
+/* Deprecated @ 4.6 - use `.txp-layout-textbox` instead */
 .plugin-column {
   margin: 0 auto;
   max-width: 57em;
@@ -2111,12 +2107,12 @@ div.code {
 
   /* Navigation < 769px
      ========================================================================== */
-  /* show <select> version of navigation on small screen widths */
+  /* show `<select>` version of navigation on small screen widths */
   .txp-nav-select {
     display: inherit;
   }
 
-  /* hide <ul> version of navigation on small screen widths */
+  /* hide `<ul>` version of navigation on small screen widths */
   .txp-nav {
     display: none;
   }
@@ -2175,7 +2171,7 @@ div.code {
     max-width: 66%;
   }
 
-  /* show select version of navigation for smaller screens (and hide list version) */
+  /* show `<select>` version of navigation for smaller screens (and hide list version) */
   .txp-nav-select {
     position: absolute;
     top: 2.46153846153846em;
