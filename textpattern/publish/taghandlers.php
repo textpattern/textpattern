@@ -39,11 +39,11 @@
 		), $atts));
 
 		$out = txpspecialchars($sitename.$separator);
+		$parent_id = (int) $parentid;
 
-		if ($parentid)
+		if ($parent_id)
 		{
-			$parent_id = (int) $parent_id;
-			$out .= gTxt('comments_on').' '.escape_title(safe_field('Title', 'textpattern', "ID = $parentid"));
+			$out .= gTxt('comments_on').' '.escape_title(safe_field('Title', 'textpattern', "ID = $parent_id"));
 		}
 		elseif ($thisarticle['title'])
 		{
