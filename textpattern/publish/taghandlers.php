@@ -1501,8 +1501,9 @@
 		{
 			if ($include_default)
 			{
-				$sections .= ',default';
+				$sections .= ', default';
 			}
+
 			$sections = join(',', quote_list(do_list($sections)));
 			$sql[] = "name in ($sections)";
 
