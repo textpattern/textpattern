@@ -534,14 +534,9 @@ jQuery.fn.txpMultiEditForm = function (method, opt)
 			{
 				var multiOptions = $this.find('.multi-option:not(.multi-step)');
 
-				form.editMethod.find('option').each(function ()
+				form.editMethod.find('option[value!=""]').each(function ()
 				{
 					var value = $(this).val();
-
-                    if (value === '')
-                    {
-                        return;
-                    }
 
 					var option = multiOptions.filter(function ()
 					{
