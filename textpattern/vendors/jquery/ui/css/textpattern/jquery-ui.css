@@ -63,7 +63,7 @@
 .ui-widget-content {
 	border: 1px solid #d4d4d4;
 	color: #333;
-	background: #fff;
+	background-color: #fff;
 }
 
 .ui-widget-content a {
@@ -73,7 +73,7 @@
 .ui-widget-header {
 	border: 1px solid #aaa;
 	color: #333;
-	background: #ccc;
+	background-color: #ccc;
 	font-weight: bold;
 }
 
@@ -90,7 +90,7 @@
 .ui-widget-header .ui-state-default {
 	border: 1px solid #d3d3d3;
 	color: #555;
-	background: #e6e6e6;
+	background-color: #e6e6e6;
 	font-weight: normal;
 }
 
@@ -109,7 +109,7 @@
 .ui-widget-header .ui-state-focus {
 	border: 1px solid #999;
 	color: #212121;
-	background: #dadada;
+	background-color: #dadada;
 	font-weight: normal;
 }
 
@@ -126,7 +126,7 @@
 .ui-widget-header .ui-state-active {
 	border: 1px solid #aaa;
 	color: #212121;
-	background: #fff;
+	background-color: #fff;
 	font-weight: normal;
 }
 
@@ -135,6 +135,14 @@
 .ui-state-active a:visited {
 	color: #212121;
 	text-decoration: none;
+}
+
+.ui-selecting {
+	background-color: #dbe7fb;
+}
+
+.ui-selected {
+	background-color: #e3edfc;
 }
 
 
@@ -146,7 +154,7 @@
 .ui-widget-header .ui-state-highlight {
 	border: 1px solid #fabc2b;
 	color: #333;
-	background: #fee580;
+	background-color: #fee580;
 }
 
 .ui-state-highlight a,
@@ -160,7 +168,7 @@
 .ui-widget-header .ui-state-error {
 	border: 1px solid #cd0a0a;
 	color: #cd0a0a;
-	background: #fef1ec;
+	background-color: #fef1ec;
 }
 
 .ui-state-error a,
@@ -229,7 +237,7 @@
 .ui-widget-shadow {
 	margin: -8px 0 0 -8px;
 	padding: 8px;
-	background: #aaa;
+	background-color: #aaa;
 	-moz-border-radius: .5em;
 	border-radius: .5em;
 	opacity: .3;
