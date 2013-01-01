@@ -381,6 +381,19 @@
 }
 
 
+/* Sortable - http://jqueryui.com/sortable/
+   ========================================================================== */
+
+.ui-sortable li {
+	padding-left: 1.5em;
+}
+
+.ui-sortable li .ui-icon {
+	position: absolute;
+	margin-left: -1.3em;
+}
+
+
 
 /* ==========================================================================
    Widgets
