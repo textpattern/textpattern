@@ -66,19 +66,25 @@
 	background-color: #fff;
 }
 
+.ui-widget-header a,
 .ui-widget-content a {
 	color: #333;
 }
 
 .ui-widget-header {
-	border: 1px solid #aaa;
+	border-top: 1px solid #dddddd;
+	border-bottom: 1px solid #bebebe;
 	color: #333;
-	background-color: #ccc;
 	font-weight: bold;
-}
-
-.ui-widget-header a {
-	color: #333;
+	background-color: #eeeeee;
+	/* Safari5.1+, Chrome10+ */
+	background-image: -webkit-linear-gradient(#eeeeee, #dddddd);
+	/* Firefox3.6 */
+	background-image: -moz-linear-gradient(#eeeeee, #dddddd);
+	/* Opera11.10+ */
+	background-image: -o-linear-gradient(#eeeeee, #dddddd);
+	/* CSS3 Compliant */
+	background-image: linear-gradient(#eeeeee, #dddddd);
 }
 
 
@@ -90,7 +96,7 @@
 .ui-widget-header .ui-state-default {
 	border: 1px solid #d3d3d3;
 	color: #555;
-	background-color: #e6e6e6;
+	background-color: #f7f7f7;
 	font-weight: normal;
 }
 
@@ -961,16 +967,20 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
    ========================================================================== */
 
 .ui-progressbar {
-	height: 2em;
+	height: 24px;
 	text-align: left;
 	overflow: hidden;
 }
 
-.ui-progressbar .ui-progressbar-value {
+.ui-progressbar-value {
 	margin: -1px;
-	height: 100%;
+	height: 24px;
 }
 
+.ui-progressbar-value.ui-widget-header {
+	background-color: #ffda44;
+	background-image: url("images/ui-progressbar.gif");
+}
 
 /* Slider - http://jqueryui.com/slider/
    ========================================================================== */
@@ -1435,3 +1445,19 @@ body .ui-tooltip {
 .ui-icon-grip-solid-horizontal { background-position: -48px -224px; }
 .ui-icon-gripsmall-diagonal-se { background-position: -64px -224px; }
 .ui-icon-grip-diagonal-se { background-position: -80px -224px; }
+
+
+
+/* ==========================================================================
+   HiDPI
+   ========================================================================== */
+
+
+@media print, (-o-min-device-pixel-ratio: 5/4), (-webkit-min-device-pixel-ratio: 1.25), (min-resolution: 120dpi) {
+
+	.ui-progressbar-value.ui-widget-header {
+		background-image: url("images/ui-progressbar@2x.gif");
+		background-size: 16px 24px;
+	}
+
+}
