@@ -29,13 +29,13 @@
 /lib/IXRClass.php: d3faba9d67deb971258b6cb7715eaf3b
 /lib/admin_config.php: 297705c66128412c6a55049b65b711a1
 /lib/class.thumb.php: 3401760faee7800123726e710b38beae
-/lib/classTextile.php: e94254ead5c7a714ad4a6645306a84ed
+/lib/classTextile.php: 74704d6479d8a677e299dfc2916833c9
 /lib/constants.php: 1fd381d1c5c4ec4f58dca2285d44beef
 /lib/taglib.php: f1e66aed964170e84f3042393c049dcf
 /lib/txplib_admin.php: 1dfcf3d3a7cf55341c12b130f22fb98d
 /lib/txplib_db.php: 3a38fde308d3a41874ead644c6beda40
 /lib/txplib_forms.php: d934c1208f13541716cfdd0608346542
-/lib/txplib_head.php: 11d3c4c05888f6603e99c134f53d520a
+/lib/txplib_head.php: e2e3f5addd178bdd000cd76ad84f676e
 /lib/txplib_html.php: 5fa0a18bd34f144c1b447db8b68abf7a
 /lib/txplib_misc.php: a367fa560a388a2ede6d8846218d8ba4
 /lib/txplib_publish.php: ee49a4e5c2d681438964747bb9c28348
@@ -49,8 +49,8 @@
 /publish/log.php: 88d2b44af43818530ccc2b88033cb1f7
 /publish/rss.php: 6d890e1f2d24782e443ed42721efd322
 /publish/search.php: 8d632df9c9fb8d2a0ce169c53d2167f3
-/publish/taghandlers.php: cfc7359fbc3332386a9150b3fab13742
-/textpattern.js: bfc0699fc1ff597e0d7835d1419dad06
+/publish/taghandlers.php: f115400e5e7b23791f5d42083e74c23e
+/textpattern.js: ab73d91548e8631cbf104225b1ee9aaa
 /theme/classic/classic.php: c0b4725c62e2ba4b4dc84a1d558687ed
 /update/_to_1.0.0.php: cd8c60d85bd386bf7d86de0da6cdad7c
 /update/_to_4.0.2.php: d3f9fa3b0903cde8d6fda2f61d80f7fc
@@ -69,8 +69,8 @@
 /update/_update.php: e1819ce3879d798b3c7328e828f3f753
 /vendors/keithclark/selectivizr/selectivizr.min.js: ed32136af18ca3ea4a3080ff620fba16
 /vendors/modernizr/modernizr/modernizr.js: af8a12ede2cda0ce5e98b017c3626699
-/vendors/jquery/jquery/jquery.js: cd9a270165981cc60f31f8d54f77f146
-/vendors/jquery/ui/css/textpattern/jquery-ui.css: 5addc77a8eba70540092f9f076528ed0
+/vendors/jquery/jquery/jquery.js: 7422b695269a23bd4c7b856d368d2edd
+/vendors/jquery/ui/css/textpattern/jquery-ui.css: f905934439d632bfc2b4c535ed74ed18
 /vendors/jquery/ui/js/jquery-ui.js: ba23883b51f5f372d28755e199785526
 /vendors/Textpattern/Textile/Parser.php: df11d96f3d2545e0445d332d4799bcce
 /../rpc/index.php: 11de9694fc77c71d634e400ec6beb250

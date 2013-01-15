@@ -106,7 +106,7 @@
 		script_js('vendors/jquery/jquery/jquery.js', SCRIPT_URL).
 		script_js('vendors/jquery/ui/js/jquery-ui.js', SCRIPT_URL).
 		// TODO: Remove jQuery migrate plugin in production
-		script_js('http://code.jquery.com/jquery-migrate-git.js', SCRIPT_URL).
+		script_js('http://code.jquery.com/jquery-migrate-1.0.0rc1.js', SCRIPT_URL).
 		script_js(
 			'var textpattern = ' . json_encode(array(
 				'event' => $event,
