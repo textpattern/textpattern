@@ -106,14 +106,14 @@
 	function column_head($value, $sort = '', $event = '', $is_link = '', $dir = '', $crit = '', $method = '', $class = '', $step = 'list')
 	{
 		return column_multi_head(array(array(
-			'value' => $value,
-			'sort' => $sort,
-			'event' => $event,
-			'step' => $step,
+			'value'   => $value,
+			'sort'    => $sort,
+			'event'   => $event,
+			'step'    => $step,
 			'is_link' => $is_link,
-			'dir' => $dir,
-			'crit' => $crit,
-			'method' => $method,
+			'dir'     => $dir,
+			'crit'    => $crit,
+			'method'  => $method,
 		)), $class);
 	}
 
