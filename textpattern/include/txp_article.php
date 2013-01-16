@@ -1939,9 +1939,9 @@
 			'<label for="section">'.gTxt('section').'</label>'.
 
 			sp.span(
-				span('[', array('role' => 'presentation')).
+				span('[', array('aria-hidden' => 'true')).
 				eLink('section', '', '', '', gTxt('edit')).
-				span(']', array('role' => 'presentation'))
+				span(']', array('aria-hidden' => 'true'))
 			, array('class' => 'section-edit')).br.
 
 			section_popup($rs['Section'], 'section')
@@ -1968,9 +1968,9 @@
 				'<label for="category-1">'.gTxt('category1').'</label>'.
 
 				sp.span(
-					span('[', array('role' => 'presentation')).
+					span('[', array('aria-hidden' => 'true')).
 					eLink('category', '', '', '', gTxt('edit')).
-					span(']', array('role' => 'presentation'))
+					span(']', array('aria-hidden' => 'true'))
 				, array('class' => 'category-edit')).br.
 
 				category_popup('Category1', $rs['Category1'], 'category-1')

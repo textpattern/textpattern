@@ -439,7 +439,7 @@
 				$ban_text = gTxt('ban');
 			}
 
-			$ban_link = sp.span('[', array('role' => 'presentation')).
+			$ban_link = sp.span('[', array('aria-hidden' => 'true')).
 				href(
 					$ban_text,
 					array(
@@ -452,7 +452,7 @@
 					),
 					array('class' => 'action-ban')
 				).
-				span(']', array('role' => 'presentation'));
+				span(']', array('aria-hidden' => 'true'));
 
 			$status_list = selectInput(
 				'visible',
@@ -601,7 +601,7 @@
 
 					td(
 						txpspecialchars($ip).
-						sp.span('[', array('role' => 'presentation')).
+						sp.span('[', array('aria-hidden' => 'true')).
 						href(
 							gTxt('unban'),
 							array(
@@ -612,7 +612,7 @@
 							),
 							array('class' => 'action-ban')
 						).
-						span(']', array('role' => 'presentation'))
+						span(']', array('aria-hidden' => 'true'))
 					, '', 'ip').
 
 					td(

@@ -369,9 +369,9 @@
 					hCell(
 						eLink('article', 'edit', 'ID', $ID, $ID).
 						tag(
-							sp.tag('[', 'span', array('role' => 'presentation')).
+							sp.tag('[', 'span', array('aria-hidden' => 'true')).
 							href(gTxt('view'), $view_url).
-							tag(']', 'span', array('role' => 'presentation'))
+							tag(']', 'span', array('aria-hidden' => 'true'))
 						, 'span', array('class' => 'articles_detail'))
 					, '', ' scope="row" class="id"').
 

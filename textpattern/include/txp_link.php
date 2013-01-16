@@ -344,9 +344,9 @@
 				inputLabel(
 					'link_category',
 					linkcategory_popup($category).
-					sp.span('[', array('role' => 'presentation')).
+					sp.span('[', array('aria-hidden' => 'true')).
 					eLink('category', 'list', '', '', gTxt('edit')).
-					span(']', array('role' => 'presentation'))
+					span(']', array('aria-hidden' => 'true'))
 				, 'link_category', 'link_category').
 
 				inputLabel('link_description', '<textarea id="link_description" name="description" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_MEDIUM.'">'.txpspecialchars($description).'</textarea>', 'description', 'link_description', '', '').

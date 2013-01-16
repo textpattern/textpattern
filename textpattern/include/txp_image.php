@@ -290,9 +290,9 @@
 					hCell(
 						($can_edit ? href($id, $edit_url, array('title' => gTxt('edit'))) : $id).
 						sp.span(
-							span('[', array('role' => 'presentation')).
+							span('[', array('aria-hidden' => 'true')).
 							href(gTxt('view'), imagesrcurl($id, $ext)).
-							span(']', array('role' => 'presentation'))
+							span(']', array('aria-hidden' => 'true'))
 						, array('class' => 'images_detail'))
 					, '', ' scope="row" class="id"').
 

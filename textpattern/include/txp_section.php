@@ -286,9 +286,9 @@
 					hCell(
 						href($sec_name, $edit_url, array('title' => gTxt('edit'))).
 						sp.span(
-							span('[', array('role' => 'presentation')).
+							span('[', array('aria-hidden' => 'true')).
 							href(gTxt('view'), pagelinkurl(array('s' => $sec_name))).
-							span(']', array('role' => 'presentation'))
+							span(']', array('aria-hidden' => 'true'))
 						, array('class' => 'section_detail'))
 					, '', ' scope="row" class="name"').
 

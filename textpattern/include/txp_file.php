@@ -294,9 +294,9 @@
 					hCell(
 						($can_edit ? href($id, $edit_url, array('title' => gTxt('edit'))) : $id).
 						(($file_exists)
-							? sp.span('[', array('role' => 'presentation')).
+							? sp.span('[', array('aria-hidden' => 'true')).
 								make_download_link($id, gTxt('download'), $filename).
-								span(']', array('role' => 'presentation'))
+								span(']', array('aria-hidden' => 'true'))
 							: ''
 						)
 					, '', ' scope="row" class="id"').
