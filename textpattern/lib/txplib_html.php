@@ -229,7 +229,7 @@
  * @return string HTML
  */
 
-	function eLink($event, $step = '', $thing = '', $value = '', $linktext, $thing2 = '', $val2 = '', $title = 'edit')
+	function eLink($event, $step, $thing, $value, $linktext, $thing2 = '', $val2 = '', $title = 'edit')
 	{
 		return join('',array(
 			'<a href="?event='.$event,
