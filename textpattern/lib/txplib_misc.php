@@ -3982,7 +3982,7 @@
 		$base = rtrim($base, '/\\');
 		$path = ltrim($path, '/\\');
 
-		return $base.DIRECTORY_SEPARATOR.$path;
+		return $base.DS.$path;
 	}
 
 /**
