@@ -1223,12 +1223,13 @@
 /**
  * Renders a form to select various amounts to page lists by.
  *
- * @param  string $event Event
- * @param  int    $val   Current setting
- * @return string HTML
+ * @param  string      $event Event
+ * @param  int         $val   Current setting
+ * @param  string|null $step  Step
+ * @return string      HTML
  */
 
-	function pageby_form($event, $val)
+	function pageby_form($event, $val, $step = null)
 	{
 		$vals = array(
 			15  => 15,
@@ -1236,6 +1237,11 @@
 			50  => 50,
 			100 => 100,
 		);
+
+		if ($step === null)
+		{
+			$step = $event.'_change_pageby';
+		}
 
 		$select_page = selectInput('qty', $vals, $val, '', 1);
 
@@ -1246,7 +1252,7 @@
 			graf(
 				$page.
 				eInput($event).
-				sInput($event.'_change_pageby')
+				sInput($step)
 			)
 		, '', '', 'post', 'pageby');
 	}
