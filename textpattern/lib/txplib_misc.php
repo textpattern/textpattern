@@ -3706,7 +3706,7 @@
  *
  * @param   string $f    The file to move
  * @param   string $dest The destination
- * @return  bool
+ * @return  bool   TRUE on success, or FALSE on error
  * @package File
  */
 
@@ -3722,6 +3722,8 @@
 			unlink($f);
 			return true;
 		}
+
+		return false;
 	}
 
 /**
