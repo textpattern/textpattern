@@ -3271,8 +3271,6 @@
 		$GLOBALS[$pageby] = $qty;
 
 		set_pref($pageby, $qty, $event, PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
-
-		return;
 	}
 
 /**
