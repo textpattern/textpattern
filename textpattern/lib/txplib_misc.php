@@ -3253,12 +3253,18 @@
  * Gets the per page number from a "qty" HTTP POST/GET parameter and
  * creates a user-specific preference value "$name_list_pageby".
  *
- * @param string $name The name of the list
+ * @param string|null $name The name of the list
  */
 
- 	function event_change_pageby($name)
+ 	function event_change_pageby($name = null)
 	{
 		global $event;
+
+		if ($name === null)
+		{
+			$name = $event;
+		}
+
 		$qty = gps('qty');
 		assert_int($qty);
 		$pageby = $name.'_list_pageby';
