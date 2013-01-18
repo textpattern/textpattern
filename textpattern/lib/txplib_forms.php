@@ -126,7 +126,7 @@
  * ));
  */
 
-	function selectInput($name = '', $array = array(), $value = '', $blank_first = '', $onchange = '', $select_id = '', $check_type = false)
+	function selectInput($name = '', $array = array(), $value = '', $blank_first = false, $onchange = '', $select_id = '', $check_type = false)
 	{
 		$out = array();
 
