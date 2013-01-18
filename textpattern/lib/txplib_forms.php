@@ -417,14 +417,26 @@
 
 	function form($contents, $style = '', $onsubmit = '', $method = 'post', $class = '', $fragment = '', $id = '')
 	{
-		return n.'<form method="'.$method.'" action="index.php'.($fragment ? '#'.$fragment.'"' : '"').
-			($id ? ' id="'.$id.'"' : '').
-			($class ? ' class="'.$class.'"' : '').
-			($style ? ' style="'.$style.'"' : '').
-			($onsubmit ? ' onsubmit="return '.$onsubmit.'"' : '').
-			'>'.$contents.
-			tInput().
-			n.'</form>'.n;
+		$action = 'index.php';
+
+		if ($onsubmit)
+		{
+			$onsubmit = 'return '.$onsubmit;
+		}
+
+		if ($fragment)
+		{
+			$action .= '#'.$fragment;
+		}
+
+		return n.tag($contents.tInput().n, 'form', array(
+			'method'   => $method,
+			'action'   => $action,
+			'id'       => $id,
+			'class'    => $class,
+			'style'    => $style,
+			'onsubmit' => $onsubmit,
+		));
 	}
 
 /**
