@@ -1,8 +1,8 @@
-/*! jQuery UI - v1.9.2 - 2012-11-23
+/*! jQuery UI - v1.10.0 - 2013-01-17
 * http://jqueryui.com
 * Includes: jquery.ui.core.css, jquery.ui.accordion.css, jquery.ui.autocomplete.css, jquery.ui.button.css, jquery.ui.datepicker.css, jquery.ui.dialog.css, jquery.ui.menu.css, jquery.ui.progressbar.css, jquery.ui.resizable.css, jquery.ui.selectable.css, jquery.ui.slider.css, jquery.ui.spinner.css, jquery.ui.tabs.css, jquery.ui.tooltip.css
 * To view and modify this theme, visit http://jqueryui.com/themeroller/
-* Copyright (c) 2012 jQuery Foundation and other contributors Licensed MIT */
+* Copyright (c) 2013 jQuery Foundation and other contributors Licensed MIT */
 
 
 
@@ -56,9 +56,17 @@
 	filter:Alpha(Opacity=0);
 }
 
+.ui-front {
+	z-index: 100;
+}
+
 
 /* Component containers
    ========================================================================== */
+
+.ui-widget .ui-widget {
+	font-size: 1em;
+}
 
 .ui-widget-content {
 	border: 1px solid #d4d4d4;
@@ -212,7 +220,7 @@
 }
 
 .ui-state-disabled .ui-icon {
-	filter:Alpha(Opacity=35);
+	filter:Alpha(Opacity=35); /* For IE8 - See #6059 */
 }
 
 .ui-state-disabled {
@@ -415,7 +423,6 @@
 	margin-top: 2px;
 	padding: .5em .5em .5em .7em;
 	cursor: pointer;
-	zoom: 1;
 }
 
 .ui-accordion .ui-accordion-icons {
@@ -441,7 +448,6 @@
 	border-top: 0;
 	padding: 1em 2.2em;
 	overflow: auto;
-	zoom: 1;
 }
 
 
@@ -466,8 +472,9 @@
 	padding: 0;
 	cursor: pointer;
 	text-align: center;
+	line-height: normal;
+	vertical-align: middle;
 	overflow: visible; /* the overflow property removes extra width in IE */
-	zoom: 1;
 }
 
 .ui-button,
@@ -494,11 +501,11 @@ button.ui-button-icons-only {
 	width: 3.7em;
 }
 
-/*button text element */
+/* button text element */
 
 .ui-button .ui-button-text {
 	display: block;
-	line-height: 1.4;
+	line-height: normal;
 }
 
 .ui-button-text-only .ui-button-text {
@@ -531,7 +538,7 @@ input.ui-button {
 	padding: .4em 1em;
 }
 
-/*button icon element(s) */
+/* button icon element(s) */
 
 .ui-button-icon-only .ui-icon,
 .ui-button-text-icon-primary .ui-icon,
@@ -560,13 +567,7 @@ input.ui-button {
 	right: .5em;
 }
 
-.ui-button-text-icons .ui-button-icon-secondary,
-.ui-button-icons-only .ui-button-icon-secondary {
-	right: .5em;
-}
-
-
-/* Button sets */
+/* button sets */
 
 .ui-buttonset {
 	margin-right: 7px;
@@ -577,6 +578,8 @@ input.ui-button {
 	margin-right: -.3em;
 }
 
+/* reset extra padding in Firefox, see h5bp.com/l */
+input.ui-button::-moz-focus-inner,
 button.ui-button::-moz-focus-inner {
 	border: 0;
 	padding: 0;
@@ -734,10 +737,7 @@ button.ui-button::-moz-focus-inner {
 	width: 25%;
 }
 
-.ui-datepicker-multi .ui-datepicker-group-last .ui-datepicker-header {
-	border-left-width: 0;
-}
-
+.ui-datepicker-multi .ui-datepicker-group-last .ui-datepicker-header,
 .ui-datepicker-multi .ui-datepicker-group-middle .ui-datepicker-header {
 	border-left-width: 0;
 }
@@ -749,7 +749,7 @@ button.ui-button::-moz-focus-inner {
 .ui-datepicker-row-break {
 	clear: both;
 	width: 100%;
-	font-size: 0em;
+	font-size: 0;
 }
 
 /* Datepicker RTL support */
@@ -787,11 +787,7 @@ html[dir="rtl"] .ui-datepicker-group {
 	float: right;
 }
 
-html[dir="rtl"] .ui-datepicker-group-last .ui-datepicker-header {
-	border-right-width: 0;
-	border-left-width: 1px;
-}
-
+html[dir="rtl"] .ui-datepicker-group-last .ui-datepicker-header,
 html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 	border-right-width: 0;
 	border-left-width: 1px;
@@ -806,7 +802,6 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 	top: 0;
 	left: 0;
 	padding: .2em;
-	width: 300px;
 	overflow: hidden;
 	-webkit-box-shadow: 0 0 .5em rgba(0, 0, 0, 0.2);
 	box-shadow: 0 0 .5em rgba(0, 0, 0, 0.2);
@@ -819,7 +814,11 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 
 .ui-dialog .ui-dialog-title {
 	float: left;
-	margin: .1em 16px .1em 0;
+	margin: .1em 0;
+	width: 90%;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 }
 
 .ui-dialog .ui-dialog-titlebar-close {
@@ -828,18 +827,8 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 	right: .3em;
 	margin: -10px 0 0 0;
 	padding: 1px;
-	width: 19px;
-	height: 18px;
-}
-
-.ui-dialog .ui-dialog-titlebar-close span {
-	display: block;
-	margin: 1px;
-}
-
-.ui-dialog .ui-dialog-titlebar-close:hover,
-.ui-dialog .ui-dialog-titlebar-close:focus {
-	padding: 0;
+	width: 21px;
+	height: 20px;
 }
 
 .ui-dialog .ui-dialog-content {
@@ -848,11 +837,10 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 	padding: .5em 1em;
 	background: none;
 	overflow: auto;
-	zoom: 1;
 }
 
 .ui-dialog .ui-dialog-buttonpane {
-	margin: .5em 0 0 0;
+	margin-top: .5em;
 	border-width: 1px 0 0 0;
 	padding: .3em 1em .5em .4em;
 	background-image: none;
@@ -869,10 +857,11 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 }
 
 .ui-dialog .ui-resizable-se {
-	bottom: 3px;
-	right: 3px;
-	width: 14px;
-	height: 14px;
+	right: -5px;
+	bottom: -5px;
+	width: 12px;
+	height: 12px;
+	background-position: 16px 16px;
 }
 
 .ui-draggable .ui-dialog-titlebar {
@@ -900,7 +889,6 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 	margin: 0;
 	padding: 0;
 	width: 100%;
-	zoom: 1;
 }
 
 .ui-menu .ui-menu-divider {
@@ -917,7 +905,6 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 	font-weight: normal;
 	line-height: 1.5;
 	text-decoration: none;
-	zoom: 1;
 }
 
 .ui-menu .ui-menu-item a.ui-state-focus,
@@ -948,7 +935,6 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 }
 
 /* left-aligned */
-
 .ui-menu .ui-icon {
 	position: absolute;
 	top: .2em;
@@ -956,7 +942,6 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 }
 
 /* right-aligned */
-
 .ui-menu .ui-menu-icon {
 	position: static;
 	float: right;
@@ -978,9 +963,15 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 }
 
 .ui-progressbar-value.ui-widget-header {
+	height: 24px;
 	background-color: #ffda44;
 	background-image: url("images/ui-progressbar.gif");
 }
+
+.ui-progressbar-indeterminate .ui-progressbar-value {
+	background-image: none;
+}
+
 
 /* Slider - http://jqueryui.com/slider/
    ========================================================================== */
@@ -1005,6 +996,12 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 	display: block;
 	border: 0;
 	background-position: 0 0;
+}
+
+/* For IE8 - See #6727 */
+.ui-slider.ui-state-disabled .ui-slider-handle,
+.ui-slider.ui-state-disabled .ui-slider-range {
+	filter: inherit;
 }
 
 .ui-slider-horizontal {
@@ -1067,9 +1064,10 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 
 .ui-spinner-input {
 	margin: .2em 22px .2em .4em;
-	border: none;
+	border: 0;
 	padding: 0;
 	vertical-align: middle;
+	color: inherit;
 	background: none;
 }
 
@@ -1089,9 +1087,9 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 
 /* more specificity required here to overide default borders */
 .ui-spinner a.ui-spinner-button {
-	border-top: none;
-	border-right: none;
-	border-bottom: none;
+	border-top: 0;
+	border-right: 0;
+	border-bottom: 0;
 }
 
 /* vertical centre icon */
@@ -1122,7 +1120,6 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 .ui-tabs {
 	position: relative; /* position: relative prevents IE scroll bug (element with position: relative inside container with overflow: auto appear as "fixed") */
 	padding: .2em;
-	zoom: 1;
 }
 
 .ui-tabs .ui-tabs-nav {
