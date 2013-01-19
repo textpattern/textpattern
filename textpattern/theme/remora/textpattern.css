@@ -10,7 +10,11 @@
 .txp-summary a {
 	padding: 0 12px 0 0;
 	text-decoration: none;
-	background: url("img/expand-collapse.gif") no-repeat right -91px;
+	background: no-repeat right -91px;
+}
+
+.nosvg .txp-summary a {
+	background-image: url("img/expand-collapse.png");
 }
 
 .svg .txp-summary a {
@@ -39,9 +43,11 @@
 	text-align: left;
 	margin: 0 auto;
 	padding: 0 0 0 11em;
+	background: no-repeat 0 50%;
+}
+
+.nosvg #nav {
 	background-image: url("../classic/img/textpattern.png");
-	background-repeat: no-repeat;
-	background-position: 0 50%;
 }
 
 .svg #nav {

@@ -502,7 +502,11 @@ a:hover .content-image {
 
 .txp-summary a {
 	padding: 0 0 0 12px;
-	background: url("img/expand-collapse.gif") no-repeat 0 4px;
+	background: no-repeat 0 4px;
+}
+
+.nosvg .txp-summary a {
+	background-image: url("img/expand-collapse.gif");
 }
 
 .svg .txp-summary a {
@@ -977,7 +981,12 @@ td {
 .txp-list thead .desc a {
 	margin-right: 0;
 	padding-right: 14px;
-	background: url("img/arrow-up-down.gif") no-repeat;
+	background-repeat: no-repeat;
+}
+
+.nosvg .txp-list thead .asc a,
+.nosvg .txp-list thead .desc a {
+	background-image: url("img/arrow-up-down.gif");
 }
 
 .svg .txp-list thead .asc a,
@@ -1066,7 +1075,11 @@ body {
 	height: 2.63636363636364em;
 	line-height: 2.63636363636364;
 	text-indent: -9999px;
-	background: url("img/textpattern.png") no-repeat 0 50%;
+	background: no-repeat 0 50%;
+}
+
+.nosvg #branding {
+	background-image: url("img/textpattern.png");
 }
 
 .svg #branding {
@@ -1396,9 +1409,7 @@ table#setup td {
 	display: block;
 	width: 24px;
 	height: 24px;
-	background-color: #fff8dd;
-	background-repeat: no-repeat;
-	background-position: 50% 50%;
+	background: #fff8dd no-repeat 50% 50%;
 }
 
 #view_modes a:hover,
@@ -1406,7 +1417,7 @@ table#setup td {
 	background-color: #fff;
 }
 
-#tab-text a {
+.nosvg #tab-text a {
 	background-image: url("img/view-text.png");
 }
 
@@ -1414,7 +1425,7 @@ table#setup td {
 	background-image: url("img/view-text.svg");
 }
 
-#tab-html a {
+.nosvg #tab-html a {
 	background-image: url("img/view-html.png");
 }
 
@@ -1422,7 +1433,7 @@ table#setup td {
 	background-image: url("img/view-html.svg");
 }
 
-#tab-preview a {
+.nosvg #tab-preview a {
 	background-image: url("img/view-preview.png");
 }
 
