@@ -509,8 +509,8 @@
 		return tag($thing, 'textarea', array(
 			'name'        => $name,
 			'id'          => $id,
-			'rows'        => $rows,
-			'cols'        => $cols,
+			'rows'        => (int) $rows,
+			'cols'        => (int) $cols,
 			'style'       => $style,
 			'placeholder' => $placeholder,
 		));
