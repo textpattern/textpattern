@@ -473,16 +473,47 @@
  * @return string HTML
  */
 
-	function text_area($name, $h = 0, $w = 0, $thing = '', $id = '', $rows = 5, $cols = 40, $placeholder='')
+	function text_area($name, $h = 0, $w = 0, $thing = '', $id = '', $rows = 5, $cols = 40, $placeholder = '')
 	{
-		$id = ($id) ? ' id="'.$id.'"' : '';
-		$rows = ' rows="' . ( ($rows && is_numeric($rows)) ? $rows : '4') . '"';
-		$cols = ' cols="' . ( ($cols && is_numeric($cols)) ? $cols : '48') . '"';
-		$width = ($w) ? 'width:'.$w.'px;' : '';
-		$height = ($h) ? 'height:'.$h.'px;' : '';
-		$style = ($width || $height) ? ' style="'.$width.$height.'"' : '';
+		$style = '';
 
-		return '<textarea'.$id.' name="'.$name.'"'.$rows.$cols.$style.($placeholder == '' ? '' : ' placeholder="'.txpspecialchars($placeholder).'"').'>'.txpspecialchars($thing).'</textarea>';
+		if ($w)
+		{
+			$style .= 'width:'.intval($w).'px;';
+		}
+
+		if ($h)
+		{
+			$style .= 'height:'.intval($h).'px;';
+		}
+
+		if ($thing === '')
+		{
+			$thing = null;
+		}
+		else
+		{
+			$thing = txpspecialchars($thing);
+		}
+
+		if (!intval($rows))
+		{
+			$rows = 5;
+		}
+
+		if (!intval($cols))
+		{
+			$cols = 40;
+		}
+
+		return tag($thing, 'textarea', array(
+			'name'        => $name,
+			'id'          => $id,
+			'rows'        => $rows,
+			'cols'        => $cols,
+			'style'       => $style,
+			'placeholder' => $placeholder,
+		));
 	}
 
 /**
