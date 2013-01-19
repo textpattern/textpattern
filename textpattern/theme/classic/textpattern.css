@@ -1431,10 +1431,10 @@ table#setup td {
 }
 
 .svg #view_modes a {
-	-webkit-background-size: 22px 22px;
-	-moz-background-size: 22px 22px;
-	-o-background-size: 22px 22px;
-	background-size: 22px 22px;
+	-webkit-background-size: 24px 24px;
+	-moz-background-size: 24px 24px;
+	-o-background-size: 24px 24px;
+	background-size: 24px 24px;
 }
 
 .view-mode:hover,
