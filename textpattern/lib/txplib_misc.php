@@ -3258,7 +3258,7 @@
 
  	function event_change_pageby($name = null)
 	{
-		global $event;
+		global $event, $prefs;
 
 		if ($name === null)
 		{
@@ -3268,7 +3268,7 @@
 		$qty = gps('qty');
 		assert_int($qty);
 		$pageby = $name.'_list_pageby';
-		$GLOBALS[$pageby] = $qty;
+		$GLOBALS[$pageby] = $prefs[$pageby] = $qty;
 
 		set_pref($pageby, $qty, $event, PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
 	}
