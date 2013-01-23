@@ -237,7 +237,9 @@ address {
 }
 
 blockquote {
-  margin: 1em 2em;
+  margin: 1em 0;
+  border-left: 3px solid #cccccc;
+  padding: 0 0 0 1em;
 }
 
 /* sets consistent quote types */
