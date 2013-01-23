@@ -1207,7 +1207,7 @@
 					or ($Status < STATUS_LIVE and has_privs('article.edit'))
 					or ($Status < STATUS_LIVE and $AuthorID==$txp_user and has_privs('article.edit.own')))
 				{
-					$push_button = graf(fInput('submit', 'save',gTxt('save'), "publish", '', '', '', 4), ' id="write-save"');
+					$push_button = graf(fInput('submit', 'save',gTxt('save'), "publish", '', '', ''), ' id="write-save"');
 				}
 			}
 
