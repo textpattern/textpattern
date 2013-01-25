@@ -1,7 +1,6 @@
 /*! jQuery UI - v1.10.0 - 2013-01-17
 * http://jqueryui.com
 * Includes: jquery.ui.core.css, jquery.ui.accordion.css, jquery.ui.autocomplete.css, jquery.ui.button.css, jquery.ui.datepicker.css, jquery.ui.dialog.css, jquery.ui.menu.css, jquery.ui.progressbar.css, jquery.ui.resizable.css, jquery.ui.selectable.css, jquery.ui.slider.css, jquery.ui.spinner.css, jquery.ui.tabs.css, jquery.ui.tooltip.css
-* To view and modify this theme, visit http://jqueryui.com/themeroller/
 * Copyright (c) 2013 jQuery Foundation and other contributors Licensed MIT */
 
 
@@ -69,7 +68,7 @@
 }
 
 .ui-widget-content {
-	border: 1px solid #d4d4d4;
+	border: 1px solid #ccc;
 	color: #333;
 	background-color: #fff;
 }
@@ -80,8 +79,6 @@
 }
 
 .ui-widget-header {
-	border-top: 1px solid #dddddd;
-	border-bottom: 1px solid #bebebe;
 	color: #333;
 	font-weight: bold;
 	background-color: #eeeeee;
@@ -102,7 +99,7 @@
 .ui-state-default,
 .ui-widget-content .ui-state-default,
 .ui-widget-header .ui-state-default {
-	border: 1px solid #d3d3d3;
+	border: 1px solid #ccc;
 	color: #555;
 	background-color: #f7f7f7;
 	font-weight: normal;
@@ -138,7 +135,7 @@
 .ui-state-active,
 .ui-widget-content .ui-state-active,
 .ui-widget-header .ui-state-active {
-	border: 1px solid #aaa;
+	border: 1px solid #ccc;
 	color: #212121;
 	background-color: #fff;
 	font-weight: normal;
@@ -1119,21 +1116,23 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 
 .ui-tabs {
 	position: relative; /* position: relative prevents IE scroll bug (element with position: relative inside container with overflow: auto appear as "fixed") */
-	padding: .2em;
+	border: 0;
+	-moz-border-radius: 0;
+	border-radius: 0;
 }
 
 .ui-tabs .ui-tabs-nav {
 	margin: 0;
-	padding: .2em .2em 0;
+	-moz-border-radius: 0;
+	border-radius: 0;
+	background: none;
 }
 
 .ui-tabs .ui-tabs-nav li {
 	position: relative;
 	top: 0;
 	float: left;
-	margin: 1px .2em 0 0;
 	border-bottom: 0;
-	padding: 0;
 	list-style: none;
 	white-space: nowrap;
 }
@@ -1163,8 +1162,11 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 
 .ui-tabs .ui-tabs-panel {
 	display: block;
-	border: 0;
-	padding: 1em 1.4em;
+	margin: 0 0 1em 0;
+	border-width: 1px 0 1px 0;
+	-moz-border-radius: 0;
+	border-radius: 0;
+	padding: 1px 0;
 	background: none;
 }
 
