@@ -949,24 +949,23 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
    ========================================================================== */
 
 .ui-progressbar {
-	height: 24px;
+	-moz-border-radius: 0;
+	border-radius: 0;
 	text-align: left;
 	overflow: hidden;
 }
 
 .ui-progressbar-value {
-	margin: -1px;
-	height: 24px;
-}
-
-.ui-progressbar-value.ui-widget-header {
-	height: 24px;
+	-moz-border-radius: 0;
+	border-radius: 0;
+	height: 16px;
 	background-color: #ffda44;
 	background-image: url("images/ui-progressbar.gif");
 }
 
 .ui-progressbar-indeterminate .ui-progressbar-value {
-	background-image: none;
+	background-color: #f7f7f7;
+	background-image: url("images/ui-progressbar-indeterminate.gif");
 }
 
 
@@ -1462,7 +1461,12 @@ body .ui-tooltip {
 
 	.ui-progressbar-value.ui-widget-header {
 		background-image: url("images/ui-progressbar@2x.gif");
-		background-size: 16px 24px;
+		background-size: 16px 16px;
+	}
+
+	.ui-progressbar-indeterminate .ui-progressbar-value {
+		background-image: url("images/ui-progressbar-indeterminate@2x.gif");
+		background-size: 16px 16px;
 	}
 
 }
