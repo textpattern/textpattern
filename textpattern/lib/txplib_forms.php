@@ -240,21 +240,26 @@
 
 	function fInput($type, $name, $value, $class = '', $title = '', $onClick = '', $size = 0, $tab = 0, $id = '', $disabled = false, $required = false, $placeholder = '')
 	{
-		$o  = n.'<input type="'.$type.'"';
-		$o .= ($type == 'file' || $type == 'image') ? '' : ' value="'.txpspecialchars($value).'"';
-		$o .= strlen($name) ? ' name="'.$name.'"' : '';
-		$o .= ($size)       ? ' size="'.$size.'"' : '';
-		$o .= ($class)      ? ' class="'.$class.'"' : '';
-		$o .= ($title)      ? ' title="'.$title.'"' : '';
-		$o .= ($onClick)    ? ' onclick="'.$onClick.'"' : '';
-		$o .= ($tab)        ? ' tabindex="'.$tab.'"' : '';
-		$o .= ($id)         ? ' id="'.$id.'"' : '';
-		$o .= ($disabled)   ? ' disabled="disabled"' : '';
-		$o .= ($required)   ? ' required="required"' : '';
-		$o .= ($placeholder)? ' placeholder="'.txpspecialchars($placeholder).'"' : '';
-		$o .= " />";
+		$atts = join_atts(array(
+			'type'        => $type,
+			'name'        => $name,
+			'size'        => (int) $size,
+			'class'       => $class,
+			'title'       => $title,
+			'onclick'     => $onClick,
+			'tabindex'    => (int) $tab,
+			'id'          => $id,
+			'disabled'    => (bool) $disabled,
+			'required'    => (bool) $required,
+			'placeholder' => $placeholder,
+		));
 
-		return $o;
+		if ($type != 'file' && $type != 'image')
+		{
+			$atts .= join_atts(array('value' => (string) $value), 0);
+		}
+
+		return tag_void('input', $atts);
 	}
 
 /**
