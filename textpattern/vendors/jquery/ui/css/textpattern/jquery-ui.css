@@ -596,6 +596,10 @@ button.ui-button::-moz-focus-inner {
 
 .ui-datepicker .ui-datepicker-header {
 	position: relative;
+	-moz-border-radius-bottomright: 0;
+	border-bottom-right-radius: 0;
+	-moz-border-radius-bottomleft: 0;
+	border-bottom-left-radius: 0;
 	padding: .2em 0;
 }
 
@@ -949,6 +953,7 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
    ========================================================================== */
 
 .ui-progressbar {
+	margin-bottom: 1em;
 	-moz-border-radius: 0;
 	border-radius: 0;
 	text-align: left;
@@ -974,15 +979,22 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 
 .ui-slider {
 	position: relative;
+	-moz-border-radius: 0;
+	border-radius: 0;
 	text-align: left;
 }
 
 .ui-slider .ui-slider-handle {
 	position: absolute;
 	z-index: 2;
-	width: 1.2em;
-	height: 1.2em;
+	-moz-border-radius: 50%;
+	border-radius: 50%;
+	width: 20px;
+	height: 20px;
 	cursor: default;
+	background-color: #ffffff;
+	-webkit-box-shadow: 0 0 .5em rgba(0, 0, 0, 0.2);
+	box-shadow: 0 0 .5em rgba(0, 0, 0, 0.2);
 }
 
 .ui-slider .ui-slider-range {
@@ -1001,12 +1013,13 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 }
 
 .ui-slider-horizontal {
-	height: .8em;
+	margin-bottom: 1em;
+	height: 12px;
 }
 
 .ui-slider-horizontal .ui-slider-handle {
-	top: -.3em;
-	margin-left: -.6em;
+	top: -5px;
+	margin-left: -10px;
 }
 
 .ui-slider-horizontal .ui-slider-range {
@@ -1023,14 +1036,14 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 }
 
 .ui-slider-vertical {
-	width: .8em;
+	width: 12px;
 	height: 100px;
 }
 
 .ui-slider-vertical .ui-slider-handle {
-	left: -.3em;
+	left: -5px;
 	margin-left: 0;
-	margin-bottom: -.6em;
+	margin-bottom: -10px;
 }
 
 .ui-slider-vertical .ui-slider-range {
