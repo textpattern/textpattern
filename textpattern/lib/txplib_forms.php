@@ -363,13 +363,25 @@
 
 	function checkbox($name, $value, $checked = true, $tabindex = 0, $id = '')
 	{
-		$o[] = n.'<input type="checkbox" name="'.$name.'" value="'.$value.'"';
-		$o[] = ($id) ? ' id="'.$id.'"' : '';
-		$o[] = ($checked == 1) ? ' checked="checked"' : '';
-		$o[] = ($tabindex) ? ' tabindex="'.$tabindex.'"' : '';
-		$o[] = ' class="checkbox'.($checked == 1 ? ' active' : '').'" />';
+		$class = 'checkbox';
 
-		return join('', $o);
+		if ($checked)
+		{
+			$class .= ' active';
+		}
+
+		$atts = join_atts(array(
+			'type'     => 'checkbox',
+			'name'     => $name,
+			'id'       => $id,
+			'checked'  => (bool) $checked,
+			'tabindex' => (int) $tabindex,
+			'class'    => $class,
+		));
+
+		$atts .= join_atts(array('value' => (string) $value), 0);
+
+		return n.tag_void('input', $atts);
 	}
 
 /**
