@@ -264,7 +264,7 @@
 			$atts .= join_atts(array('value' => (string) $value), 0);
 		}
 
-		return tag_void('input', $atts);
+		return n.tag_void('input', $atts);
 	}
 
 /**
