@@ -45,14 +45,19 @@
 
 	function radioSet($values, $field, $checked = '', $tabindex = 0, $id = '')
 	{
-		$id = ($id) ? $id.'-'.$field : $field;
-
-		foreach ($values as $value => $label)
+		if ($id)
 		{
-			$out[] = n.'<input type="radio" id="'.$id.'-'.$value.'" name="'.$field.'" value="'.$value.'" class="radio'.($value == $checked ? ' active' : '').'"';
-			$out[] = ($value == $checked) ? ' checked="checked"' : '';
-			$out[] = ($tabindex) ? ' tabindex="'.$tabindex.'"' : '';
-			$out[] = ' />'.n.'<label for="'.$id.'-'.$value.'">'.$label.'</label>';
+			$id = $id.'-'.$field;
+		}
+		else
+		{
+			$id = $field;
+		}
+
+		foreach((array) $values as $value => $label)
+		{
+			$out[] = radio($field, $value, (string) $value === (string) $checked, $id.'-'.$value, $tabindex);
+			$out[] = n.tag($label, 'label', array('for' => $id.'-'.$value));
 		}
 
 		return join('', $out);
@@ -395,13 +400,25 @@
 
 	function radio($name, $value, $checked = true, $id = '', $tabindex = 0)
 	{
-		$o[] = n.'<input type="radio" name="'.$name.'" value="'.$value.'"';
-		$o[] = ($id) ? ' id="'.$id.'"' : '';
-		$o[] = ($checked == 1) ? ' checked="checked"' : '';
-		$o[] = ($tabindex) ? ' tabindex="'.$tabindex.'"' : '';
-		$o[] = ' class="radio'.($checked == 1 ? ' active' : '').'" />';
+		$class = 'radio';
 
-		return join('', $o);
+		if ($checked)
+		{
+			$class .= ' active';
+		}
+
+		$atts = join_atts(array(
+			'type'     => 'radio',
+			'name'     => $name,
+			'id'       => $id,
+			'checked'  => (bool) $checked,
+			'tabindex' => (int) $tabindex,
+			'class'    => $class,
+		));
+
+		$atts .= join_atts(array('value' => (string) $value), 0);
+
+		return n.tag_void('input', $atts);
 	}
 
 /**
