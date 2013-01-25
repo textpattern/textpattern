@@ -54,6 +54,8 @@
 			$id = $field;
 		}
 
+		$out = array();
+
 		foreach((array) $values as $value => $label)
 		{
 			$out[] = radio($field, $value, (string) $value === (string) $checked, $id.'-'.$value, $tabindex);
