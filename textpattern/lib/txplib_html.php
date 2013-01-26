@@ -758,7 +758,7 @@
 
 		if ($label_id)
 		{
-			$cell = '<label for="'.$label_id.'">'.$cell.'</label>';
+			$cell = tag($cell, 'label', array('for' => $label_id));
 		}
 
 		return tda($cell, ' class="cell-label"');
