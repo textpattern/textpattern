@@ -1031,7 +1031,7 @@
 	{
 		foreach ($array as $a => $b)
 		{
-			$o[] = tda($a, ' width="'.$b.'"');
+			$o[] = tda($a, array('width' => (int) $b));
 		}
 
 		return tr(join('', $o), $atts);
