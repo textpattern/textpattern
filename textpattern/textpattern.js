@@ -1237,7 +1237,8 @@ jQuery.fn.txpSortable = function (options)
 		step     : 'sortable_save',
 		cancel   : ':input, button',
 		delay    : 0,
-		distance : 15
+		distance : 15,
+		items    : '[data-txp-sortable-id]'
 	}, options);
 
 	var methods =
@@ -1298,7 +1299,8 @@ jQuery.fn.txpSortable = function (options)
 		cancel   : options.cancel,
 		delay    : options.delay,
 		distance : options.distance,
-		update   : methods.update
+		update   : methods.update,
+		items    : options.items
 	});
 };
 
