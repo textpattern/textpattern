@@ -1027,14 +1027,16 @@
  * @return string       A HTML table row
  */
 
-	function assRow($array, $atts ='')
+	function assRow($array, $atts = '')
 	{
-		foreach ($array as $a => $b)
+		$out = array();
+
+		foreach ($array as $value => $width)
 		{
-			$o[] = tda($a, array('width' => (int) $b));
+			$out[] = tda($value, array('width' => (int) $width));
 		}
 
-		return tr(join('', $o), $atts);
+		return tr(join('', $out), $atts);
 	}
 
 /**
