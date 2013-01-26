@@ -1167,7 +1167,7 @@ jQuery.fn.txpAsyncHref = function (options)
 /**
  * Creates a UI dialog.
  *
- * @param  {object} options          Options
+ * @param  {object} options Options
  * @return {object} this
  * @since  4.6.0
  */
@@ -1195,7 +1195,7 @@ jQuery.fn.txpDialog = function (options)
 /**
  * Creates a date picker.
  *
- * @param  {object} options          Options
+ * @param  {object} options Options
  * @return {object} this
  * @since  4.6.0
  */
