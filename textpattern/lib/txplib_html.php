@@ -1050,6 +1050,7 @@
 	function assHead()
 	{
 		$array = func_get_args();
+		$o = array();
 
 		foreach ($array as $a)
 		{
