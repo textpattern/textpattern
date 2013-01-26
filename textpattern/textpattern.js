@@ -1190,7 +1190,7 @@ jQuery.fn.txpDialog = function (options)
 	this.dialog(options);
 
 	return this;
-}
+};
 
 /**
  * Creates a date picker.
@@ -1205,7 +1205,7 @@ jQuery.fn.txpDatepicker = function (options)
 	// TODO $.datepicker.regional[ "en" ];
 	this.datepicker(options);
 	return this;
-}
+};
 
 /**
  * Encodes a string for a use in HTML.
