@@ -761,7 +761,7 @@
 			$cell = tag($cell, 'label', array('for' => $label_id));
 		}
 
-		return tda($cell, ' class="cell-label"');
+		return tda($cell, array('class' => 'cell-label'));
 	}
 
 /**
