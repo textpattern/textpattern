@@ -138,7 +138,6 @@ echo $theme->html_head();
 ?>
 </head>
 <body id="<?php echo $body_id; ?>" class="not-ready <?php echo $area; ?>">
-<p class="txp-accessibility"><a href="#txp-main"><?php echo gTxt('skip_to_main_content'); ?></a></p>
 <header role="banner" class="txp-header">
 <?php callback_event('admin_side', 'pagetop');
 		$theme->set_state($area, $event, $bm, $message);
