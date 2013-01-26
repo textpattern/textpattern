@@ -1034,7 +1034,7 @@
 			$o[] = tda($a, ' width="'.$b.'"');
 		}
 
-		return tr(join(n.t, $o), $atts);
+		return tr(join('', $o), $atts);
 	}
 
 /**
