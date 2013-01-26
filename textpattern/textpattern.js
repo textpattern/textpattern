@@ -1208,6 +1208,101 @@ jQuery.fn.txpDatepicker = function (options)
 };
 
 /**
+ * Creates a sortable element.
+ *
+ * This method creates a sortable widget, allowing to
+ * reorder elements in a list and synchronises the updated
+ * order with the server.
+ *
+ * @param  {object}  options
+ * @param  {string}  options.dataType The response datatype
+ * @param  {object}  options.success  The sync success callback
+ * @param  {object}  options.error    The sync error callback
+ * @param  {string}  options.event    The event
+ * @param  {string}  options.step     The step
+ * @param  {string}  options.cancel   Prevents sorting if you start on elements matching the selector
+ * @param  {integer} options.delay    Sorting delay
+ * @param  {integer} options.distance Tolerance, in pixels, for when sorting should start
+ * @return this
+ * @since  4.6.0
+ */
+
+jQuery.fn.txpSortable = function (options)
+{
+	options = $.extend({
+		dataType : 'script',
+		success  : null,
+		error    : null,
+		event    : textpattern.event,
+		step     : 'sortable_save',
+		cancel   : ':input, button',
+		delay    : 0,
+		distance : 15
+	}, options);
+
+	var methods =
+	{
+		/**
+		 * Sends updated order to the server.
+		 */
+
+		update : function ()
+		{
+			var ids = [], $this = $(this);
+
+			$this.children('[data-txp-sortable-id]').each(function ()
+			{
+				ids.push($(this).data('txp-sortable-id'));
+			});
+
+			if (ids)
+			{
+				sendAsyncEvent({
+					event : options.event,
+					step  : options.step,
+					order : ids
+				}, function () {}, options.dataType)
+					.done(function (data, textStatus, jqXHR)
+					{
+						if (options.success)
+						{
+							options.success.call($this, data, textStatus, jqXHR);
+						}
+
+						textpattern.Relay.callback('txpSortable.success', {
+							'this'       : $this,
+							'data'       : data,
+							'textStatus' : textStatus,
+							'jqXHR'      : jqXHR
+						});
+					})
+					.fail(function (jqXHR, textStatus, errorThrown)
+					{
+						if (options.error)
+						{
+							options.error.call($this, jqXHR, $.ajaxSetup(), errorThrown);
+						}
+
+						textpattern.Relay.callback('txpSortable.error', {
+							'this'         : $this,
+							'jqXHR'        : jqXHR,
+							'ajaxSettings' : $.ajaxSetup(),
+							'thrownError'  : errorThrown
+						});
+					});
+			}
+		}
+	};
+
+	return this.sortable({
+		cancel   : options.cancel,
+		delay    : options.delay,
+		distance : options.distance,
+		update   : methods.update
+	});
+};
+
+/**
  * Encodes a string for a use in HTML.
  *
  * @param  {string} string The string
@@ -1556,6 +1651,7 @@ $(document).ready(function ()
 	$('.txp-dialog').txpDialog();
 	$('.txp-dialog.modal').dialog('option', 'modal', true);
 	$('.txp-datepicker').txpDatepicker();
+	$('.txp-sortable').txpSortable();
 
 	// Find and open associated dialogs.
 	$(document).on('click.txpDialog', '[data-txp-dialog]', function(event) {
