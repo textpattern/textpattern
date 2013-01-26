@@ -231,13 +231,26 @@
 
 	function eLink($event, $step, $thing, $value, $linktext, $thing2 = '', $val2 = '', $title = 'edit')
 	{
-		return join('',array(
-			'<a href="?event='.$event,
-			($step) ? a.'step='.$step : '',
-			($thing) ? a.''.$thing.'='.urlencode($value) : '',
-			($thing2) ? a.''.$thing2.'='.urlencode($val2) : '',
-			a.'_txp_token='.form_token(),
-			'"'.(($title) ? ' title="'.gTxt($title).'"' : '') .'>'.escape_title($linktext).'</a>'
+		if ($title)
+		{
+			$title = gTxt($title);
+		}
+
+		if ($linktext === '')
+		{
+			$linktext = null;
+		}
+		else
+		{
+			$linktext = escape_title($linktext);
+		}
+
+		return href($linktext, array(
+			'event'      => $event,
+			'step'       => $step,
+			$thing       => $value,
+			$thing2      => $val2,
+			'_txp_token' => form_token(),
 		));
 	}
 
