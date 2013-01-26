@@ -251,6 +251,8 @@
 			$thing       => $value,
 			$thing2      => $val2,
 			'_txp_token' => form_token(),
+		), array(
+			'title' => $title,
 		));
 	}
 
