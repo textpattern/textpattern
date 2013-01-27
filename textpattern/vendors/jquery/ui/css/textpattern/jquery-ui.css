@@ -392,19 +392,6 @@
 }
 
 
-/* Sortable - http://jqueryui.com/sortable/
-   ========================================================================== */
-
-.ui-sortable li {
-	padding-left: 1.5em;
-}
-
-.ui-sortable li .ui-icon {
-	position: absolute;
-	margin-left: -1.3em;
-}
-
-
 
 /* ==========================================================================
    Widgets
@@ -1042,7 +1029,6 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 
 .ui-slider-vertical .ui-slider-handle {
 	left: -5px;
-	margin-left: 0;
 	margin-bottom: -10px;
 }
 
@@ -1209,12 +1195,13 @@ body .ui-tooltip {
 /* states and images */
 
 .ui-icon {
-	display: block;
+	display: inline-block;
 	width: 16px;
 	height: 16px;
 	text-indent: -9999px;
 	overflow: hidden;
 	background-repeat: no-repeat;
+	vertical-align: text-bottom;
 }
 
 .nosvg .ui-icon {
@@ -1255,22 +1242,42 @@ body .ui-tooltip {
 	background-image: url("images/ui-icon-sprite-555555.svg");
 }
 
-.nosvg .ui-state-highlight .ui-icon {
+.nosvg .success .ui-icon {
+	background-image: url("images/ui-icon-sprite-success.png");
+}
+
+.svg .success .ui-icon {
+	background-image: url("images/ui-icon-sprite-success.svg");
+}
+
+.nosvg .ui-state-highlight .ui-icon,
+.nosvg .warning .ui-icon {
 	background-image: url("images/ui-icon-sprite-warning.png");
 }
 
-.svg .ui-state-highlight .ui-icon {
+.svg .ui-state-highlight .ui-icon,
+.svg .warning .ui-icon {
 	background-image: url("images/ui-icon-sprite-warning.svg");
 }
 
 .nosvg .ui-state-error .ui-icon,
-.nosvg .ui-state-error-text .ui-icon {
+.nosvg .ui-state-error-text .ui-icon,
+.nosvg .error .ui-icon {
 	background-image: url("images/ui-icon-sprite-error.png");
 }
 
 .svg .ui-state-error .ui-icon,
-.svg .ui-state-error-text .ui-icon {
+.svg .ui-state-error-text .ui-icon,
+.svg .error .ui-icon {
 	background-image: url("images/ui-icon-sprite-error.svg");
+}
+
+.nosvg .information .ui-icon {
+	background-image: url("images/ui-icon-sprite-info.png");
+}
+
+.svg .information .ui-icon {
+	background-image: url("images/ui-icon-sprite-info.svg");
 }
 
 /* positioning */

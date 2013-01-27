@@ -402,28 +402,26 @@ a:hover .content-image {
 
 .alert-block {
 	margin: 0 auto 1em auto;
-	border: 2px solid;
 	padding: .5em 1em;
-	text-align: center;
 }
 
 .alert-block.success {
-	border-color: #a3d48e;
+	border: 1px solid #a3d48e;
 	background: #dff0d8;
 }
 
 .alert-block.warning {
-	border-color: #ffe16d;
+	border: 1px solid #ffe16d;
 	background: #fff6d3;
 }
 
 .alert-block.error {
-	border-color: #e1b2b2;
+	border: 1px solid #e1b2b2;
 	background: #f2dede;
 }
 
 .alert-block.information {
-	border-color: #b1e2f5;
+	border: 1px solid #b1e2f5;
 	background: #e7f6fc;
 }
 

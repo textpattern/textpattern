@@ -441,22 +441,19 @@ a:hover .content-image {
 }
 
 .alert-block {
-  border: 1px solid;
-  padding: .53846153846154em 2.84615384615385em;
-  line-height: 1.38461538461538;
-  text-align: center;
+  padding: 0.5em 1em;
 }
 .alert-block.success {
-  border-color: #a3d48e;
+  border: 1px solid #a3d48e;
 }
 .alert-block.warning {
-  border-color: #ffe16d;
+  border: 1px solid #ffe16d;
 }
 .alert-block.error {
-  border-color: #e1b2b2;
+  border: 1px solid #e1b2b2;
 }
 .alert-block.information {
-  border-color: #b1e2f5;
+  border: 1px solid #b1e2f5;
 }
 
 /* alert boxes */
