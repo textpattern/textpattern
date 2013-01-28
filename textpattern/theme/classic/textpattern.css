@@ -964,7 +964,7 @@ td {
 	padding: .3em 1em .3em 0;
 }
 
-.txp-list tr :last-child {
+.txp-list td:last-child {
 	padding-right: 0;
 }
 
@@ -1590,9 +1590,9 @@ div.code {
 	clear: both;
 }
 
+
 /* UI
    ========================================================================== */
 .txp-dialog {
     display: none;
 }
-
