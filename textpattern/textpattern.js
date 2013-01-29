@@ -1181,6 +1181,12 @@ jQuery.fn.txpDialog = function (options)
 				text: textpattern.gTxt('ok'),
 				click: function() {
 					// callbacks?
+
+					if ($(this).is('form'))
+					{
+						$(this).submit();
+					}
+
 					$(this).dialog('close');
 				}
 			}
