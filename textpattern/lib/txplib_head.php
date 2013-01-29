@@ -148,12 +148,13 @@ echo $theme->html_head();
 	}
 
 /**
- * Return the HTML &lt;title&gt; contents for an admin-side page
+ * Return the HTML &lt;title&gt; contents for an admin-side page.
  *
- * @param   string  $pagetitle  Specific page title part
- * @return  string
- * @since   4.6.0
+ * @param  string $pagetitle Specific page title part
+ * @return string
+ * @since  4.6.0
  */
+
 	function admin_title($pagetitle)
 	{
 		global $sitename;
