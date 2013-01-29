@@ -1175,11 +1175,12 @@ jQuery.fn.txpAsyncHref = function (options)
 jQuery.fn.txpDialog = function (options)
 {
 	options = $.extend({
-		autoOpen: false,
-		buttons: [
+		autoOpen : false,
+		buttons  : [
 			{
-				text: textpattern.gTxt('ok'),
-				click: function() {
+				text  : textpattern.gTxt('ok'),
+				click : function ()
+				{
 					// callbacks?
 
 					if ($(this).is('form'))
