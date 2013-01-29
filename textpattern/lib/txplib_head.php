@@ -158,7 +158,8 @@ echo $theme->html_head();
 	function admin_title($pagetitle)
 	{
 		global $sitename;
-		return pluggable_ui('admin_side', 'html_title', escape_title($pagetitle).' - '.txpspecialchars($sitename).' &#124; Textpattern CMS');
+		$title = escape_title($pagetitle).' - '.txpspecialchars($sitename).' &#124; Textpattern CMS';
+		return pluggable_ui('admin_side', 'html_title', $title, compact('pagetitle'));
 	}
 
 /**
