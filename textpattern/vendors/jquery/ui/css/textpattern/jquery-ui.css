@@ -418,6 +418,8 @@
 	position: relative;
 	display: block;
 	margin-top: 2px;
+	-moz-border-radius: 0;
+	border-radius: 0;
 	padding: .5em .5em .5em .7em;
 	cursor: pointer;
 }
@@ -443,6 +445,8 @@
 
 .ui-accordion .ui-accordion-content {
 	border-top: 0;
+	-moz-border-radius: 0;
+	border-radius: 0;
 	padding: 1em 2.2em;
 	overflow: auto;
 }
