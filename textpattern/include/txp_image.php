@@ -281,7 +281,7 @@
 					? span($category, array('title' => fetch_category_title($category, 'image')))
 					: '';
 
-				$can_edit = has_privs('image.edit') || ($author == $txp_user && has_privs('image.edit.own'));
+				$can_edit = has_privs('image.edit') || ($author === $txp_user && has_privs('image.edit.own'));
 
 				echo tr(
 					td($can_edit ? fInput('checkbox', 'selected[]', $id) : '&#160;'
@@ -487,7 +487,7 @@
 		{
 			extract($rs);
 
-			if (!has_privs('image.edit') && !($author == $txp_user && has_privs('image.edit.own')))
+			if (!has_privs('image.edit') && !($author === $txp_user && has_privs('image.edit.own')))
 			{
 				image_list(gTxt('restricted_area'));
 				return;
@@ -658,7 +658,7 @@
 		$id = assert_int(gps('id'));
 		$rs = safe_row("*", "txp_image", "id = $id");
 
-		if (!has_privs('image.edit') && !($rs['author'] == $txp_user && has_privs('image.edit.own')))
+		if (!has_privs('image.edit') && !($rs['author'] === $txp_user && has_privs('image.edit.own')))
 		{
 			image_list(gTxt('restricted_area'));
 			return;
@@ -694,7 +694,7 @@
 		$id = assert_int(gps('id'));
 
 		$author = fetch('author', 'txp_image', 'id', $id);
-		if (!has_privs('image.edit') && !($author == $txp_user && has_privs('image.edit.own')))
+		if (!has_privs('image.edit') && !($author === $txp_user && has_privs('image.edit.own')))
 		{
 			image_list(gTxt('restricted_area'));
 			return;
@@ -757,7 +757,7 @@
 		$id = $varray['id'] = assert_int($id);
 
 		$author = fetch('author', 'txp_image', 'id', $id);
-		if (!has_privs('image.edit') && !($author == $txp_user && has_privs('image.edit.own')))
+		if (!has_privs('image.edit') && !($author === $txp_user && has_privs('image.edit.own')))
 		{
 			image_list(gTxt('restricted_area'));
 			return;
@@ -875,7 +875,7 @@
 		$id = assert_int($id);
 
 		$author = fetch('author', 'txp_image', 'id', $id);
-		if (!has_privs('image.edit') && !($author == $txp_user && has_privs('image.edit.own')))
+		if (!has_privs('image.edit') && !($author === $txp_user && has_privs('image.edit.own')))
 		{
 			image_list(gTxt('restricted_area'));
 			return;
@@ -941,7 +941,7 @@
 		$id = assert_int(gps('id'));
 
 		$author = fetch('author', 'txp_image', 'id', $id);
-		if (!has_privs('image.edit') && !($author == $txp_user && has_privs('image.edit.own')))
+		if (!has_privs('image.edit') && !($author === $txp_user && has_privs('image.edit.own')))
 		{
 			image_list(gTxt('restricted_area'));
 			return;
