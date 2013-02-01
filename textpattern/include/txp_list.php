@@ -288,7 +288,7 @@
 			{
 				extract($a);
 
-				if (empty($Title))
+				if ($Title === '')
 				{
 					$Title = '<em>'.eLink('article', 'edit', 'ID', $ID, gTxt('untitled')).'</em>';
 				}
@@ -357,10 +357,10 @@
 
 					td((
 						(  ($a['Status'] >= STATUS_LIVE and has_privs('article.edit.published'))
-						or ($a['Status'] >= STATUS_LIVE and $AuthorID == $txp_user
+						or ($a['Status'] >= STATUS_LIVE and $AuthorID === $txp_user
 											     and has_privs('article.edit.own.published'))
 						or ($a['Status'] < STATUS_LIVE and has_privs('article.edit'))
-						or ($a['Status'] < STATUS_LIVE and $AuthorID == $txp_user and has_privs('article.edit.own'))
+						or ($a['Status'] < STATUS_LIVE and $AuthorID === $txp_user and has_privs('article.edit.own'))
 						)
 						? fInput('checkbox', 'selected[]', $ID, 'checkbox')
 						: ''
@@ -397,7 +397,7 @@
 
 					($show_authors ? td(span(txpspecialchars($AuthorID), array('title' => $RealName)), '', 'author') : '').
 
-					($use_comments == 1 ? td($comments, '', "articles_detail comments") : '')
+					($use_comments ? td($comments, '', "articles_detail comments") : '')
 				);
 			}
 
@@ -591,9 +591,9 @@
 			foreach ($selected as $item)
 			{
 				if ( ($item['Status'] >= STATUS_LIVE and has_privs('article.edit.published'))
-				  or ($item['Status'] >= STATUS_LIVE and $item['AuthorID'] == $txp_user and has_privs('article.edit.own.published'))
+				  or ($item['Status'] >= STATUS_LIVE and $item['AuthorID'] === $txp_user and has_privs('article.edit.own.published'))
 				  or ($item['Status'] < STATUS_LIVE and has_privs('article.edit'))
-				  or ($item['Status'] < STATUS_LIVE and $item['AuthorID'] == $txp_user and has_privs('article.edit.own')))
+				  or ($item['Status'] < STATUS_LIVE and $item['AuthorID'] === $txp_user and has_privs('article.edit.own')))
 				{
 					$allowed[] = $item['ID'];
 				}
