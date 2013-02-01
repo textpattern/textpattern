@@ -351,9 +351,9 @@
 			'textpattern', 'ID = '.(int)$incoming['ID']);
 
 		if (!(($oldArticle['Status'] >= STATUS_LIVE and has_privs('article.edit.published'))
-			or ($oldArticle['Status'] >= STATUS_LIVE and $incoming['AuthorID']==$txp_user and has_privs('article.edit.own.published'))
+			or ($oldArticle['Status'] >= STATUS_LIVE and $incoming['AuthorID']===$txp_user and has_privs('article.edit.own.published'))
 			or ($oldArticle['Status'] < STATUS_LIVE and has_privs('article.edit'))
-			or ($oldArticle['Status'] < STATUS_LIVE and $incoming['AuthorID']==$txp_user and has_privs('article.edit.own'))))
+			or ($oldArticle['Status'] < STATUS_LIVE and $incoming['AuthorID']===$txp_user and has_privs('article.edit.own'))))
 		{
 			// Not allowed, you silly rabbit, you shouldn't even be here.
 			// Show default editing screen.
@@ -473,9 +473,9 @@
 		// Auto-update custom-titles according to Title, as long as unpublished and NOT customised.
 		if (empty($url_title)
 			|| (($oldArticle['Status'] < STATUS_LIVE)
-			&& ($oldArticle['url_title'] == $url_title )
-			&& ($oldArticle['url_title'] == stripSpace($oldArticle['Title'], 1))
-			&& ($oldArticle['Title'] != $Title)
+			&& ($oldArticle['url_title'] === $url_title )
+			&& ($oldArticle['url_title'] === stripSpace($oldArticle['Title'], 1))
+			&& ($oldArticle['Title'] !== $Title)
 		)) {
 			$url_title = stripSpace($Title_plain, 1);
 		}
@@ -923,7 +923,7 @@
 			}
 		}
 
-		$page_title = ($Title) ? $Title : gTxt('write');
+		$page_title = $Title !== '' ? $Title : gTxt('write');
 
 		pagetop($page_title, $message);
 
@@ -1203,9 +1203,9 @@
 
 				// Save button.
 				if (($Status >= STATUS_LIVE and has_privs('article.edit.published'))
-					or ($Status >= STATUS_LIVE and $AuthorID==$txp_user and has_privs('article.edit.own.published'))
+					or ($Status >= STATUS_LIVE and $AuthorID===$txp_user and has_privs('article.edit.own.published'))
 					or ($Status < STATUS_LIVE and has_privs('article.edit'))
-					or ($Status < STATUS_LIVE and $AuthorID==$txp_user and has_privs('article.edit.own')))
+					or ($Status < STATUS_LIVE and $AuthorID===$txp_user and has_privs('article.edit.own')))
 				{
 					$push_button = graf(fInput('submit', 'save', gTxt('save'), 'publish'), ' id="write-save"');
 				}
