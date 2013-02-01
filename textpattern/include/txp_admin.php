@@ -118,7 +118,7 @@
 
 		$rs = update_user($name, $email, $RealName);
 
-		if ($rs && ($txp_user == $name || change_user_group($name, $privs)))
+		if ($rs && ($txp_user === $name || change_user_group($name, $privs)))
 		{
 			author_list(gTxt('author_updated', array('{name}' => $RealName)));
 			return;
