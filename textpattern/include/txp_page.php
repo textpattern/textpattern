@@ -289,7 +289,7 @@
 
 			$exists = safe_field('name', 'txp_page', "name = '".doSlash($newname)."'");
 
-			if (($newname != $name) && $exists)
+			if ($newname !== $name && $exists !== false)
 			{
 				$message = array(gTxt('page_already_exists', array('{name}' => $newname)), E_ERROR);
 				if ($savenew)
