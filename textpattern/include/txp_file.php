@@ -285,7 +285,7 @@
 					: gTxt('file_status_missing')
 				, array('class' => ($file_exists) ? 'success' : 'error'));
 
-				$can_edit = has_privs('file.edit') || ($author == $txp_user && has_privs('file.edit.own'));
+				$can_edit = has_privs('file.edit') || ($author === $txp_user && has_privs('file.edit.own'));
 
 				echo tr(
 					td($can_edit ? fInput('checkbox', 'selected[]', $id) : '&#160;'
@@ -527,7 +527,7 @@
 			extract($rs);
 			$filename = sanitizeForFile($filename);
 
-			if (!has_privs('file.edit') && !($author == $txp_user && has_privs('file.edit.own')))
+			if (!has_privs('file.edit') && !($author === $txp_user && has_privs('file.edit.own')))
 			{
 				file_list(gTxt('restricted_area'));
 				return;
@@ -787,7 +787,7 @@
 		extract($rs);
 		$filename = sanitizeForFile($filename);
 
-		if (!has_privs('file.edit') && !($author == $txp_user && has_privs('file.edit.own')))
+		if (!has_privs('file.edit') && !($author === $txp_user && has_privs('file.edit.own')))
 		{
 			file_edit(gTxt('restricted_area'));
 			return;
@@ -879,7 +879,7 @@
 		$perms = doSlash($permissions);
 
 		$rs = safe_row('filename, author', 'txp_file', "id=$id");
-		if (!has_privs('file.edit') && !($rs['author'] == $txp_user && has_privs('file.edit.own')))
+		if (!has_privs('file.edit') && !($rs['author'] === $txp_user && has_privs('file.edit.own')))
 		{
 			file_edit(gTxt('restricted_area'));
 			return;
