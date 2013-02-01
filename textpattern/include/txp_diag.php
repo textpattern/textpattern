@@ -224,7 +224,7 @@
 			$fail['path_to_site_missing'] = diag_msg_wrap(gTxt('path_to_site_missing'), 'warning');
 		}
 
-		if (@gethostbyname($mydomain) == $mydomain)
+		if (@gethostbyname($mydomain) === $mydomain)
 		{
 			$fail['dns_lookup_fails'] = diag_msg_wrap(gTxt('dns_lookup_fails').cs.$mydomain, 'warning');
 		}
@@ -482,7 +482,7 @@
 			$gd = gTxt('gd_unavailable');
 		}
 
-		if ( realpath($prefs['tempdir']) == realpath($prefs['plugin_cache_dir']) )
+		if ( realpath($prefs['tempdir']) === realpath($prefs['plugin_cache_dir']) )
 		{
 			$fail['tmp_plugin_paths_match'] = diag_msg_wrap(gTxt('tmp_plugin_paths_match'));
 		}
