@@ -228,7 +228,7 @@
 				$validator->setConstraints(array(new CategoryConstraint($link_category, array('type' => 'link'))));
 				$vc = $validator->validate() ? '' : ' error';
 
-				$can_edit = has_privs('link.edit') || ($link_author == $txp_user && has_privs('link.edit.own'));
+				$can_edit = has_privs('link.edit') || ($link_author === $txp_user && has_privs('link.edit.own'));
 				$view_url = txpspecialchars($link_url);
 
 				echo tr(
@@ -322,7 +322,7 @@
 			if ($rs)
 			{
 				extract($rs);
-				if (!has_privs('link.edit') && !($author == $txp_user && has_privs('link.edit.own')))
+				if (!has_privs('link.edit') && !($author === $txp_user && has_privs('link.edit.own')))
 				{
 					link_list(gTxt('restricted_area'));
 					return;
@@ -391,7 +391,7 @@
 		}
 
 		$author = fetch('author', 'txp_link', 'id', $id);
-		if (!has_privs('link.edit') && !($author == $txp_user && has_privs('link.edit.own')))
+		if (!has_privs('link.edit') && !($author === $txp_user && has_privs('link.edit.own')))
 		{
 			link_list(gTxt('restricted_area'));
 			return;
