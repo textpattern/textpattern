@@ -361,7 +361,7 @@ EOS
 				if ($rs)
 				{
 					$exists = safe_field('name', 'txp_category', "name = '".doSlash($new_parent)."' AND type='$type'");
-					$parent = ($exists == '') ? 'root' : $exists;
+					$parent = ($exists === false) ? 'root' : $exists;
 					$to_change = $affected = array();
 
 					foreach($rs as $cat)
@@ -545,7 +545,7 @@ EOS
 
 		$exists = safe_field('name', 'txp_category', "name = '".doSlash($name)."' and type = '".doSlash($event)."'");
 
-		if ($exists)
+		if ($exists !== false)
 		{
 			$message = array(gTxt($event.'_category_already_exists', array('{name}' => $name)), E_ERROR);
 
@@ -554,7 +554,7 @@ EOS
 
 		$parent = strtolower(sanitizeForUrl(ps('parent_cat')));
 		$parent_exists = safe_field('name', 'txp_category', "name = '".doSlash($parent)."' and type = '".doSlash($event)."'");
-		$parent = ($parent_exists) ? $parent_exists : 'root';
+		$parent = ($parent_exists !== false) ? $parent_exists : 'root';
 
 		$q = safe_insert('txp_category', "name = '".doSlash($name)."', title = '".doSlash($title)."', type = '".doSlash($event)."', parent = '".$parent."'");
 
