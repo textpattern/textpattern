@@ -238,7 +238,7 @@
 
 		$rs = safe_query(
 			"select
-				textpattern.ID, textpattern.Title, textpattern.Section,
+				textpattern.ID, textpattern.Title, textpattern.url_title, textpattern.Section,
 				textpattern.Category1, textpattern.Category2,
 				textpattern.Status, textpattern.Annotate, textpattern.AuthorID,
 				unix_timestamp(textpattern.Posted) as posted,
