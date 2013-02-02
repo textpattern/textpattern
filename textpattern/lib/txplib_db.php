@@ -1192,9 +1192,10 @@ $DB = new DB;
  *
  * This function is identical to safe_count().
  *
- * @param  string $table The table
- * @param  string $where The where clause
- * @param  bool   $debug Dump query
+ * @param  string   $table The table
+ * @param  string   $where The where clause
+ * @param  bool     $debug Dump query
+ * @return int|bool Number of rows or FALSE on error
  * @access private
  * @see    safe_count()
  */
