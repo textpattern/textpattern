@@ -523,7 +523,7 @@
 			$style .= 'height:'.intval($h).'px;';
 		}
 
-		if ($thing === '')
+		if ((string) $thing === '')
 		{
 			$thing = null;
 		}
