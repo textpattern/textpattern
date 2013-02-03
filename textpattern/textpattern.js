@@ -1098,6 +1098,7 @@ jQuery.fn.txpAsyncForm = function (options)
  * Sends a link using AJAX and processes the plain text response.
  *
  * @param  {object} options          Options
+ * @param  {string} options.dataType The response data type
  * @param  {object} options.success  The success callback
  * @param  {object} options.error    The error callback
  * @return {object} this
@@ -1107,24 +1108,28 @@ jQuery.fn.txpAsyncForm = function (options)
 jQuery.fn.txpAsyncHref = function (options)
 {
 	options = $.extend({
-		success : null,
-		error   : null
+		dataType : 'text',
+		success  : null,
+		error    : null
 	}, options);
 
 	this.on('click.txpAsyncHref', function (event)
 	{
 		event.preventDefault();
 		var $this = $(this);
-		var data = this.search.replace('?', '') + '&' + $.param({value : $this.text()});
+		var url = this.search.replace('?', '') + '&' + $.param({value : $this.text()});
 
 		// Show feedback while processing.
 		$this.addClass('busy');
 		$('body').addClass('busy');
 
-		sendAsyncEvent(data, function () {}, 'text')
+		sendAsyncEvent(url, function () {}, options.dataType)
 			.done(function (data, textStatus, jqXHR)
 			{
-				$this.html(data);
+				if (options.dataType === 'text')
+				{
+					$this.html(data);
+				}
 
 				if (options.success)
 				{
@@ -1612,8 +1617,16 @@ $(document).ready(function ()
 	});
 
 	// Set up synchronous forms.
-	$('a.async').txpAsyncHref({
+	$('a.async:not(.script)').txpAsyncHref({
 		error: function ()
+		{
+			window.alert(textpattern.gTxt('form_submission_error'));
+		}
+	});
+
+	$('a.async.script').txpAsyncHref({
+		dataType : 'script',
+		error    : function ()
 		{
 			window.alert(textpattern.gTxt('form_submission_error'));
 		}
