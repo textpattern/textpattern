@@ -1608,7 +1608,7 @@ $(document).ready(function ()
 		$.ajaxSetup({timeout : textpattern.ajax_timeout});
 	}
 
-	// Set up synchronous links.
+	// Set up asynchronous forms.
 	$('form.async').txpAsyncForm({
 		error: function ()
 		{
@@ -1616,7 +1616,7 @@ $(document).ready(function ()
 		}
 	});
 
-	// Set up synchronous forms.
+	// Set up asynchronous links.
 	$('a.async:not(.script)').txpAsyncHref({
 		error: function ()
 		{
