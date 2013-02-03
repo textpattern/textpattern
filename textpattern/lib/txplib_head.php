@@ -327,7 +327,7 @@ echo $theme->html_head();
 				{
 					if (has_privs($d))
 					{
-						$out[] = n.'<option value="'.$d.'">'.$c.'</option>';
+						$out[] = n.'<option value="'.txpspecialchars($d).'">'.strip_tags($c).'</option>';
 					}
 				}
 

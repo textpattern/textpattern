@@ -57,7 +57,7 @@ class classic_theme extends theme
 			{
 				$tc = ($tab['active']) ? 'tabup' : 'tabdown';
 				$out[] = '<li>'.
-					href($tab["label"], '?event='.$tab["event"], ' class="'.$tc.'"').
+					href($tab["label"], array('event' => $tab['event']), ' class="'.$tc.'"').
 					'</li>';
 
 				if ($tab['active'] && !empty($tab['items']))
@@ -69,7 +69,7 @@ class classic_theme extends theme
 					{
 						$tc = ($item['active']) ? 'tabup' : 'tabdown';
 						$secondary .= n.'<li>'.
-							href($item['label'], '?event='.$item['event'], ' class="'.$tc.'"').
+							href($item['label'], array('event' => $item['event']), ' class="'.$tc.'"').
 							'</li>';
 					}
 

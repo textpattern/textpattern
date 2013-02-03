@@ -118,7 +118,7 @@ class hive_theme extends theme
 			{
 				$class = ($tab['active']) ? ' active' : '';
 				$out[] = '<li class="dropdown'.$class.'">'.
-					href($tab["label"], '?event='.$tab["event"], ' class="dropdown-toggle"');
+					href($tab["label"], array('event' => $tab['event']), ' class="dropdown-toggle"');
 
 				if (!empty($tab['items']))
 				{
@@ -128,7 +128,7 @@ class hive_theme extends theme
 					{
 						$class = ($item['active']) ? ' class="active"' : '';
 						$out[] = '<li'.$class.'>'.
-							href($item["label"], '?event='.$item["event"]).
+							href($item["label"], array('event' => $item['event'])).
 							'</li>';
 					}
 
@@ -151,7 +151,7 @@ class hive_theme extends theme
 					foreach ($tab['items'] as $item)
 					{
 						$select = ($item['active']) ? ' selected="selected"' : '';
-						$out[] = '<option value="?event='.$item["event"].'"'.$select.'>'.$item["label"].'</option>';
+						$out[] = '<option value="?event='.$item["event"].'"'.$select.'>'.strip_tags($item["label"]).'</option>';
 					}
 				}
 

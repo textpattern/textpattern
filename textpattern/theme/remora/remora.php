@@ -58,7 +58,7 @@ SF;
 		foreach ($this->menu as $tab)
 		{
 			$class = ($tab['active']) ? ' active' : '';
-			$out[] = '<li class="primary'.$class.'">'.href($tab["label"], '?event='.$tab["event"]);
+			$out[] = '<li class="primary'.$class.'">'.href($tab["label"], array('event' => $tab['event']));
 
 			if (!empty($tab['items']))
 			{
@@ -68,7 +68,7 @@ SF;
 				{
 					$class = ($item['active']) ? ' active' : '';
 					$out[] = '<li class="secondary'.$class.'">'.
-						href($item["label"], '?event='.$item["event"]).
+						href($item["label"], array('event' => $item['event'])).
 						'</li>';
 				}
 
