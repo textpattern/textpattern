@@ -32,7 +32,7 @@ class classic_theme extends theme
 	{
 		$out[] = '<link rel="stylesheet" href="'.$this->url.'textpattern.css">';
 		$out[] = '<meta name="generator" content="Textpattern CMS">';
-		$out[] = '<script src="modernizr.js"></script>';
+		$out[] = '<script src="vendors/modernizr/modernizr/modernizr.js"></script>';
 
 		return join(n, $out);
 	}
