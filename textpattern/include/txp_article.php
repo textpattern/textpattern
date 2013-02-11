@@ -791,7 +791,7 @@
 			}
 
 			// Use preferred textfilter as default and fallback.
-			$hasfilter = new TextfilterConstraint(null);
+			$hasfilter = new Textpattern_Textfilter_Constraint(null);
 			$validator = new Validator();
 
 			foreach (array('textile_body', 'textile_excerpt') as $k)
@@ -1441,21 +1441,19 @@
 
 	function textile_main_fields($incoming)
 	{
-		include_once txpath.'/lib/txplib_textfilter.php';
-
 		$textile = new Textpattern_Textile_Parser();
 
 		$incoming['Title_plain'] = $incoming['Title'];
 		$incoming['Title_html'] = ''; // not used
 		$incoming['Title'] = $textile->textileEncode($incoming['Title']);
 
-		$incoming['Body_html'] = TextfilterSet::filter(
+		$incoming['Body_html'] = Textpattern_Textfilter_Set::filter(
 			$incoming['textile_body'],
 			$incoming['Body'],
 			array('field' => 'Body', 'options' => array('lite' => false), 'data' => $incoming)
 		);
 
-		$incoming['Excerpt_html'] = TextfilterSet::filter(
+		$incoming['Excerpt_html'] = Textpattern_Textfilter_Set::filter(
 			$incoming['textile_excerpt'],
 			$incoming['Excerpt'],
 			array('field' => 'Excerpt', 'options' => array('lite' => false), 'data' => $incoming)
@@ -1539,11 +1537,11 @@
 	function article_partial_sidehelp($rs)
 	{
 		// Show markup help for both body and excerpt if they are different.
-		$help = TextfilterSet::help($rs['textile_body']);
+		$help = Textpattern_Textfilter_Set::help($rs['textile_body']);
 
 		if ($rs['textile_body'] != $rs['textile_excerpt'])
 		{
-			$help .=  TextfilterSet::help($rs['textile_excerpt']);
+			$help .=  Textpattern_Textfilter_Set::help($rs['textile_excerpt']);
 		}
 
 		$out = wrapRegion('textfilter_group', $help, 'textfilter_help', 'textfilter_help', 'article_textfilter_help');
@@ -2184,11 +2182,11 @@
 				$rs['Category2'],
 				array('type' => 'article')
 			),
-			'textile_body' => new TextfilterConstraint(
+			'textile_body' => new Textpattern_Textfilter_Constraint(
 				$rs['textile_body'],
 				array('message' => 'invalid_textfilter_body')
 			),
-			'textile_excerpt' => new TextfilterConstraint(
+			'textile_excerpt' => new Textpattern_Textfilter_Constraint(
 				$rs['textile_excerpt'],
 				array('message' => 'invalid_textfilter_excerpt')
 			),

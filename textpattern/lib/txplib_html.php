@@ -1378,7 +1378,7 @@
 	function pref_text($name, $val, $id = '')
 	{
 		$id = ($id) ? $id : $name;
-		$vals = TextfilterSet::map();
+		$vals = Textpattern_Textfilter_Set::map();
 		return selectInput($name, $vals, $val, '', '', $id);
 	}
 
