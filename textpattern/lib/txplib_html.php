@@ -1440,7 +1440,7 @@ EOF;
 			}
 		}
 
-		$js = preg_replace('#<(/?)script#', '\\x3c$1script', $js);
+		$js = preg_replace('#<(/?)(script)#i', '\\x3c$1$2', $js);
 
 		$out = n.tag(n.trim($js).n, 'script');
 
