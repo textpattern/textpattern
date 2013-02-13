@@ -103,23 +103,10 @@
 	font-weight: normal;
 }
 
-.ui-state-hover a,
-.ui-state-hover a:hover,
-.ui-state-hover a:visited {
-	color: #212121;
-	text-decoration: none;
-}
-
 .ui-state-active {
 	color: #212121;
 	background-color: #fff;
 	font-weight: normal;
-}
-
-.ui-state-active a,
-.ui-state-active a:visited {
-	color: #212121;
-	text-decoration: none;
 }
 
 .ui-selecting {
@@ -392,7 +379,6 @@
 }
 
 .ui-button,
-.ui-button:link,
 .ui-button:visited,
 .ui-button:hover,
 .ui-button:active {
@@ -820,9 +806,8 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 	text-decoration: none;
 }
 
-.ui-menu .ui-menu-item a.ui-state-focus,
-.ui-menu .ui-menu-item a.ui-state-active {
-	font-weight: normal;
+.ui-menu .ui-state-active {
+	background-color: #dadada;
 }
 
 .ui-menu .ui-state-disabled {
