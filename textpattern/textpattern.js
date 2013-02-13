@@ -770,8 +770,8 @@ function toggleDisplayHref()
 function setClassDisplay(className, show)
 {
 	var obj = $('.' + className);
-	
-	if (show == 1)
+
+	if (show)
 	{
 		obj.show();
 	}
