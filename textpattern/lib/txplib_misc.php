@@ -713,16 +713,16 @@
  *
  * Terminates the script if user doesn't have required privileges.
  *
- * @param   string $res  The resource
- * @param   string $user The user. If no user name is supplied, assume the current logged in user
+ * @param   string|null $res  The resource, or NULL
+ * @param   string      $user The user. If no user name is supplied, assume the current logged in user
  * @package User
  * @example
  * require_privs('article.edit');
  */
 
-	function require_privs($res, $user = '')
+	function require_privs($res = null, $user = '')
 	{
-		if (!has_privs($res, $user))
+		if ($res === null || !has_privs($res, $user))
 		{
 			pagetop('Restricted');
 			echo graf(gTxt('restricted_area'), ' class="restricted-area"');
