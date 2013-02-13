@@ -93,20 +93,18 @@
 	border: 1px solid #ccc;
 	color: #555;
 	background-color: #f7f7f7;
-	font-weight: normal;
 }
 
 .ui-state-hover,
 .ui-state-focus {
+	border-color: #999;
 	color: #212121;
 	background-color: #dadada;
-	font-weight: normal;
 }
 
 .ui-state-active {
 	color: #212121;
 	background-color: #fff;
-	font-weight: normal;
 }
 
 .ui-selecting {
@@ -378,13 +376,6 @@
 	overflow: visible; /* the overflow property removes extra width in IE */
 }
 
-.ui-button,
-.ui-button:visited,
-.ui-button:hover,
-.ui-button:active {
-	text-decoration: none;
-}
-
 .ui-button-icon-only {
 	width: 2.2em; /* to make room for the icon, a width needs to be set here */
 }
@@ -570,7 +561,6 @@ button.ui-button::-moz-focus-inner {
 .ui-datepicker th {
 	border: 0;
 	padding: .7em .3em;
-	font-weight: bold;
 	text-align: center;
 }
 
@@ -584,7 +574,6 @@ button.ui-button::-moz-focus-inner {
 	display: block;
 	padding: .2em;
 	text-align: center;
-	text-decoration: none;
 }
 
 .ui-datepicker .ui-datepicker-buttonpane {
@@ -801,9 +790,7 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 .ui-menu .ui-menu-item a {
 	display: block;
 	padding: 2px .4em;
-	font-weight: normal;
 	line-height: 1.5;
-	text-decoration: none;
 }
 
 .ui-menu .ui-state-active {
@@ -812,7 +799,6 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 
 .ui-menu .ui-state-disabled {
 	margin: .4em 0 .2em;
-	font-weight: normal;
 	line-height: 1.5;
 }
 
@@ -985,9 +971,7 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 
 /* more specificity required here to overide default borders */
 .ui-spinner a.ui-spinner-button {
-	border-top: 0;
-	border-right: 0;
-	border-bottom: 0;
+	border-width: 0 0 0 1px;
 }
 
 /* vertical centre icon */
@@ -1039,7 +1023,6 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 .ui-tabs .ui-tabs-nav li a {
 	float: left;
 	padding: .5em 1em;
-	text-decoration: none;
 }
 
 .ui-tabs .ui-tabs-nav li.ui-tabs-active {
@@ -1074,14 +1057,12 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 .ui-tooltip {
 	position: absolute;
 	z-index: 9999;
-	padding: 8px;
-	max-width: 300px;
+	-moz-border-radius: .4em;
+	border-radius: .4em;
+	padding: .5em 1em;
+	max-width: 22em;
 	-webkit-box-shadow: 0 0 .5em rgba(0, 0, 0, 0.2);
 	box-shadow: 0 0 .5em rgba(0, 0, 0, 0.2);
-}
-
-body .ui-tooltip {
-	border-width: 2px;
 }
 
 
