@@ -39,9 +39,9 @@
 
 	global $file_statuses;
 	$file_statuses = array(
-			STATUS_HIDDEN  => gTxt('hidden'),
-			STATUS_PENDING => gTxt('pending'),
-			STATUS_LIVE    => gTxt('live'),
+		STATUS_HIDDEN  => gTxt('hidden'),
+		STATUS_PENDING => gTxt('pending'),
+		STATUS_LIVE    => gTxt('live'),
 	);
 
 	if ($event == 'file')
@@ -81,7 +81,13 @@
 
 		pagetop(gTxt('tab_file'), $message);
 
-		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
+		extract(gpsa(array(
+			'page',
+			'sort',
+			'dir',
+			'crit',
+			'search_method',
+		)));
 
 		if ($sort === '')
 		{
@@ -512,7 +518,19 @@
 	{
 		global $file_base_path, $levels, $file_statuses, $txp_user, $event, $all_file_cats;
 
-		extract(gpsa(array('name', 'title', 'category', 'permissions', 'description', 'sort', 'dir', 'page', 'crit', 'search_method', 'publish_now')));
+		extract(gpsa(array(
+			'name',
+			'title',
+			'category',
+			'permissions',
+			'description',
+			'sort',
+			'dir',
+			'page',
+			'crit',
+			'search_method',
+			'publish_now',
+		)));
 
 		if (!$id)
 		{
@@ -655,7 +673,14 @@
 
 		require_privs('file.edit.own');
 
-		extract(doSlash(array_map('assert_string', gpsa(array('filename', 'title', 'category', 'permissions', 'description')))));
+		extract(doSlash(array_map('assert_string', gpsa(array(
+			'filename',
+			'title',
+			'category',
+			'permissions',
+			'description',
+		)))));
+
 		$safe_filename = sanitizeForFile($filename);
 		if ($safe_filename != $filename)
 		{
@@ -694,7 +719,12 @@
 
 		require_privs('file.edit.own');
 
-		extract(doSlash(array_map('assert_string', gpsa(array('category', 'title', 'permissions', 'description')))));
+		extract(doSlash(array_map('assert_string', gpsa(array(
+			'category',
+			'title',
+			'permissions',
+			'description',
+		)))));
 
 		$name = file_get_uploaded_name();
 		$file = file_get_uploaded();
@@ -841,8 +871,21 @@
 	{
 		global $file_base_path, $txp_user;
 
-		$varray = array_map('assert_string',
-			gpsa(array('id', 'category', 'title', 'description', 'status', 'publish_now', 'year', 'month', 'day', 'hour', 'minute', 'second')));
+		$varray = array_map('assert_string', gpsa(array(
+			'id',
+			'category',
+			'title',
+			'description',
+			'status',
+			'publish_now',
+			'year',
+			'month',
+			'day',
+			'hour',
+			'minute',
+			'second',
+		)));
+
 		extract(doSlash($varray));
 		$filename = $varray['filename'] = sanitizeForFile(gps('filename'));
 
