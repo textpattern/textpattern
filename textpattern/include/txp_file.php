@@ -653,11 +653,7 @@
 	{
 		global $txp_user, $file_base_path;
 
-		if (!has_privs('file.edit.own'))
-		{
-			file_list(gTxt('restricted_area'));
-			return;
-		}
+		require_privs('file.edit.own');
 
 		extract(doSlash(array_map('assert_string', gpsa(array('filename', 'title', 'category', 'permissions', 'description')))));
 		$safe_filename = sanitizeForFile($filename);
@@ -696,11 +692,7 @@
 	{
 		global $txp_user, $file_base_path, $file_max_upload_size;
 
-		if (!has_privs('file.edit.own'))
-		{
-			file_list(gTxt('restricted_area'));
-			return;
-		}
+		require_privs('file.edit.own');
 
 		extract(doSlash(array_map('assert_string', gpsa(array('category', 'title', 'permissions', 'description')))));
 
