@@ -725,7 +725,7 @@
 		if ($res === null || !has_privs($res, $user))
 		{
 			pagetop(gTxt('restricted_area'));
-			echo graf(gTxt('restricted_area'), ' class="restricted-area"');
+			echo graf(gTxt('restricted_area'), array('class' => 'restricted-area'));
 			end_page();
 			exit;
 		}
