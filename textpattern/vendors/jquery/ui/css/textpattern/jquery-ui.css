@@ -69,17 +69,10 @@
 
 .ui-widget-content {
 	border: 1px solid #ccc;
-	color: #333;
 	background-color: #fff;
 }
 
-.ui-widget-header a,
-.ui-widget-content a {
-	color: #333;
-}
-
 .ui-widget-header {
-	color: #333;
 	font-weight: bold;
 	background-color: #eeeeee;
 	/* Safari5.1+, Chrome10+ */
@@ -96,28 +89,15 @@
 /* Interaction states
    ========================================================================== */
 
-.ui-state-default,
-.ui-widget-content .ui-state-default,
-.ui-widget-header .ui-state-default {
+.ui-state-default {
 	border: 1px solid #ccc;
 	color: #555;
 	background-color: #f7f7f7;
 	font-weight: normal;
 }
 
-.ui-state-default a,
-.ui-state-default a:link,
-.ui-state-default a:visited {
-	color: #555;
-	text-decoration: none;
-}
-
 .ui-state-hover,
-.ui-widget-content .ui-state-hover,
-.ui-widget-header .ui-state-hover,
-.ui-state-focus,
-.ui-widget-content .ui-state-focus,
-.ui-widget-header .ui-state-focus {
+.ui-state-focus {
 	color: #212121;
 	background-color: #dadada;
 	font-weight: normal;
@@ -125,22 +105,18 @@
 
 .ui-state-hover a,
 .ui-state-hover a:hover,
-.ui-state-hover a:link,
 .ui-state-hover a:visited {
 	color: #212121;
 	text-decoration: none;
 }
 
-.ui-state-active,
-.ui-widget-content .ui-state-active,
-.ui-widget-header .ui-state-active {
+.ui-state-active {
 	color: #212121;
 	background-color: #fff;
 	font-weight: normal;
 }
 
 .ui-state-active a,
-.ui-state-active a:link,
 .ui-state-active a:visited {
 	color: #212121;
 	text-decoration: none;
@@ -158,57 +134,41 @@
 /* Interaction cues
    ========================================================================== */
 
-.ui-state-highlight,
-.ui-widget-content .ui-state-highlight,
-.ui-widget-header .ui-state-highlight {
+.ui-state-highlight {
 	border: 1px solid #ffe16d;
 	color: #cb8f02;
 	background-color: #fff6d3;
 }
 
-.ui-state-highlight a,
-.ui-widget-content .ui-state-highlight a,
-.ui-widget-header .ui-state-highlight a {
+.ui-state-highlight a {
 	color: #cb8f02;
 }
 
-.ui-state-error,
-.ui-widget-content .ui-state-error,
-.ui-widget-header .ui-state-error {
+.ui-state-error {
 	border: 1px solid #e1b2b2;
 	color: #9d261d;
 	background-color: #f2dede;
 }
 
-.ui-state-error a,
-.ui-widget-content .ui-state-error a,
-.ui-widget-header .ui-state-error a {
+.ui-state-error a {
 	color: #9d261d;
 }
 
-.ui-state-error-text,
-.ui-widget-content .ui-state-error-text,
-.ui-widget-header .ui-state-error-text {
+.ui-state-error-text {
 	color: #9d261d;
 }
 
-.ui-priority-primary,
-.ui-widget-content .ui-priority-primary,
-.ui-widget-header .ui-priority-primary {
+.ui-priority-primary {
 	font-weight: bold;
 }
 
-.ui-priority-secondary,
-.ui-widget-content .ui-priority-secondary,
-.ui-widget-header .ui-priority-secondary {
+.ui-priority-secondary {
 	font-weight: normal;
 	opacity: .7;
 	filter:Alpha(Opacity=70);
 }
 
-.ui-state-disabled,
-.ui-widget-content .ui-state-disabled,
-.ui-widget-header .ui-state-disabled {
+.ui-state-disabled {
 	background-image: none;
 	opacity: .35;
 	filter:Alpha(Opacity=35);
@@ -400,7 +360,7 @@
 
 .ui-accordion .ui-accordion-content {
 	border-top: 0;
-	padding: 1em 2.2em;
+	padding: 1px 1em;
 	overflow: auto;
 }
 
@@ -619,7 +579,6 @@ button.ui-button::-moz-focus-inner {
 	margin: 0 0 .4em;
 	border-collapse: collapse;
 	width: 100%;
-	font-size: .9em;
 }
 
 .ui-datepicker th {
