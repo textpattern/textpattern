@@ -1676,9 +1676,10 @@ $(document).ready(function ()
 	$('.txp-sortable').txpSortable();
 
 	// Find and open associated dialogs.
-	$(document).on('click.txpDialog', '[data-txp-dialog]', function(event) {
+	$(document).on('click.txpDialog', '[data-txp-dialog]', function (e)
+	{
 		$($(this).data('txp-dialog')).dialog('open');
-		event.preventDefault();
+		e.preventDefault();
 	});
 
 	// Initialises panel specific JavaScript.
