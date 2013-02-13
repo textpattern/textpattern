@@ -721,14 +721,12 @@ function toggleDisplay(id)
 		obj.toggle();
 
 		// Send state of toggle pane to server.
-		sendAsyncEvent(
-			{
-				event: textpattern.event,
-				step: 'save_pane_state',
-				pane: $(obj).attr('id'),
-				visible: ($(obj).is(':visible'))
-			}
-		);
+		sendAsyncEvent({
+			event   : textpattern.event,
+			step    : 'save_pane_state',
+			pane    : obj.attr('id'),
+			visible : obj.is(':visible')
+		});
 	}
 
 	return false;
