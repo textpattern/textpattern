@@ -754,18 +754,13 @@
 				{
 					file_set_perm($newpath);
 					update_lastmod();
-
-					$message = gTxt('file_uploaded', array('{name}' => $newname));
-
-					file_edit($message, $id);
+					file_edit(gTxt('file_uploaded', array('{name}' => $newname)), $id);
 				}
 			}
 		}
 		else
 		{
-			$message = gTxt('file_already_exists', array('{name}' => $newname));
-
-			file_list($message);
+			file_list(array(gTxt('file_already_exists', array('{name}' => $newname)), E_ERROR));
 		}
 	}
 
@@ -780,7 +775,7 @@
 
 		if (!$rs)
 		{
-			file_list(messenger(array(gTxt('invalid_id'), E_ERROR), $id, ''));
+			file_list(array(messenger(gTxt('invalid_id'), $id), E_ERROR));
 			return;
 		}
 
@@ -799,13 +794,13 @@
 		if ($file === false)
 		{
 			// Could not get uploaded file.
-			file_list(gTxt('file_upload_failed') ." $name ".upload_get_errormsg($_FILES['thefile']['error']));
+			file_list(array(gTxt('file_upload_failed') ." $name ".upload_get_errormsg($_FILES['thefile']['error']), E_ERROR));
 			return;
 		}
 
 		if (!$filename)
 		{
-			file_list(gTxt('invalid_filename'));
+			file_list(array(gTxt('invalid_filename'), E_ERROR));
 		}
 		else
 		{
@@ -820,7 +815,7 @@
 			{
 				safe_delete("txp_file", "id = $id");
 
-				file_list($newpath.sp.gTxt('upload_dir_perms'));
+				file_list(array($newpath.sp.gTxt('upload_dir_perms'), E_ERROR));
 
 				// Rename tmp back.
 				rename($newpath.'.tmp', $newpath);
@@ -837,9 +832,7 @@
 					safe_update('txp_file', 'size = '.$size.', modified = now()', 'id = '.$id);
 				}
 
-				$message = gTxt('file_uploaded', array('{name}' => $name));
-
-				file_edit($message, $id);
+				file_edit(gTxt('file_uploaded', array('{name}' => $name)), $id);
 
 				// Clean up old.
 				if (is_file($newpath.'.tmp'))
@@ -863,8 +856,8 @@
 
 		if ($filename == '')
 		{
-			$message = gTxt('file_not_updated', array('{name}' => $filename));
-			return file_list($message);
+			file_list(array(gTxt('file_not_updated', array('{name}' => $filename)), E_ERROR));
+			return;
 		}
 
 		$id = $varray['id'] = assert_int($id);
@@ -893,9 +886,8 @@
 
 			if (file_exists($old_path) && shift_uploaded_file($old_path, $new_path) === false)
 			{
-				$message = gTxt('file_cannot_rename', array('{name}' => $filename));
-
-				return file_list($message);
+				file_list(array(gTxt('file_cannot_rename', array('{name}' => $filename)), E_ERROR));
+				return;
 			}
 			else
 			{
@@ -944,20 +936,18 @@
 			// update failed, rollback name
 			if (isset($old_path) && shift_uploaded_file($new_path, $old_path) === false)
 			{
-				$message = gTxt('file_unsynchronized', array('{name}' => $filename));
-				return file_list($message);
+				file_list(array(gTxt('file_unsynchronized', array('{name}' => $filename)), E_ERROR));
+				return;
 			}
 			else
 			{
-				$message = gTxt('file_not_updated', array('{name}' => $filename));
-				return file_list($message);
+				file_list(array(gTxt('file_not_updated', array('{name}' => $filename)), E_ERROR));
+				return;
 			}
 		}
 
 		update_lastmod();
-		$message = gTxt('file_updated', array('{name}' => $filename));
-
-		file_list($message);
+		file_list(gTxt('file_updated', array('{name}' => $filename)));
 	}
 
 // -------------------------------------------------------------
@@ -967,7 +957,6 @@
 		global $file_base_path, $txp_user;
 
 		$ids  = $ids ? array_map('assert_int', $ids) : array(assert_int(ps('id')));
-		$message = '';
 
 		if (!has_privs('file.delete'))
 		{
@@ -1013,20 +1002,23 @@
 				}
 				if ($fail)
 				{
-					$message = messenger(gTxt('file_delete_failed'), join(', ', $fail), '');
+					file_list(array(messenger(gTxt('file_delete_failed'), join(', ', $fail)), E_ERROR));
+					return;
 				}
 				else
 				{
 					update_lastmod();
-					$message = gTxt('file_deleted', array('{name}' => join(', ', $ids)));
+					file_list(gTxt('file_deleted', array('{name}' => join(', ', $ids))));
+					return;
 				}
 			}
 			else
 			{
-				$message = messenger(gTxt('file_not_found'), join(', ', $ids), '');
+				file_list(array(messenger(gTxt('file_not_found'), join(', ', $ids), ''), E_ERROR));
+				return;
 			}
 		}
-		file_list($message);
+		file_list();
 	}
 
 // -------------------------------------------------------------
