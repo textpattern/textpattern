@@ -90,14 +90,21 @@
    ========================================================================== */
 
 .ui-state-default {
+	color: #333;
 	border: 1px solid #ccc;
-	background-color: #eee;
+	background-color: #f2f2f2;
+}
+
+a.ui-state-default:hover,
+a.ui-state-default:focus {
+	color: #333;
+	text-decoration: none;
 }
 
 .ui-state-hover,
 .ui-state-focus {
 	border-color: #999;
-	background-color: #ddd;
+	background-color: #f7f7f7;
 }
 
 .ui-state-active {
@@ -122,7 +129,10 @@
 	background-color: #fff6d3;
 }
 
-.ui-state-highlight a {
+.ui-state-highlight a,
+.ui-state-highlight a:hover,
+a.ui-state-highlight,
+a.ui-state-highlight:hover {
 	color: #cb8f02;
 }
 
@@ -133,6 +143,9 @@
 }
 
 .ui-state-error a,
+.ui-state-error a:hover,
+a.ui-state-error,
+a.ui-state-error:hover,
 .ui-state-error-text {
 	color: #9d261d;
 }
@@ -198,6 +211,15 @@
 /* ==========================================================================
    Interactions
    ========================================================================== */
+
+
+/* Draggable - http://jqueryui.com/draggable/
+ ========================================================================== */
+
+.ui-draggable-dragging {
+	-webkit-box-shadow: 0 0 .5em rgba(0, 0, 0, 0.2);
+	box-shadow: 0 0 .5em rgba(0, 0, 0, 0.2);
+}
 
 
 /* Resizable - http://jqueryui.com/resizable/
@@ -317,6 +339,11 @@
 	margin-top: 2px;
 	padding: .5em 1em;
 	cursor: pointer;
+}
+
+.ui-accordion .ui-accordion-header a {
+	color: #333;
+	text-decoration: none;
 }
 
 .ui-accordion .ui-accordion-icons,
@@ -468,7 +495,7 @@ input.ui-button {
 
 .ui-buttonset .ui-button {
 	margin-left: 0;
-	margin-right: -.3em;
+	margin-right: -.34em;
 }
 
 /* reset extra padding in Firefox, see h5bp.com/l */
@@ -501,15 +528,17 @@ button.ui-button::-moz-focus-inner {
 	top: .2em;
 	width: 1.8em;
 	height: 1.8em;
+	-moz-border-radius: .4em;
+	border-radius: .4em;
 	background-color: transparent;
 }
 
 .ui-datepicker .ui-datepicker-prev {
-	left: 0;
+	left: .2em;
 }
 
 .ui-datepicker .ui-datepicker-next {
-	right: 0;
+	right: .2em;
 }
 
 .ui-datepicker .ui-datepicker-prev span,
@@ -523,7 +552,7 @@ button.ui-button::-moz-focus-inner {
 }
 
 .ui-datepicker .ui-datepicker-title {
-	margin: 0 2em;
+	margin: 0 2.2em;
 	line-height: 1.8em;
 	text-align: center;
 }
@@ -542,14 +571,13 @@ button.ui-button::-moz-focus-inner {
 }
 
 .ui-datepicker table {
-	margin: 0 0 .4em;
-	border-collapse: collapse;
+	margin: 0 0 .2em;
 	width: 100%;
 }
 
 .ui-datepicker th {
 	border: 0;
-	padding: .7em .3em;
+	padding: .5em .2em;
 	text-align: center;
 }
 
@@ -563,6 +591,20 @@ button.ui-button::-moz-focus-inner {
 	display: block;
 	padding: .2em;
 	text-align: center;
+}
+
+.ui-datepicker td a.ui-state-active {
+	color: #114eb1;
+	border-color: #a3bef3;
+	background-color: #e3edfc;
+}
+
+.ui-datepicker td a.ui-state-highlight:hover {
+	border-color: #edac19;
+}
+
+.ui-datepicker td a.ui-state-active:hover {
+	border-color: #6b8fe8;
 }
 
 .ui-datepicker .ui-datepicker-buttonpane {
@@ -721,7 +763,7 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 .ui-dialog .ui-dialog-buttonpane {
 	margin-top: .5em;
 	border-width: 1px 0 0 0;
-	padding: .3em 1em .5em .4em;
+	padding: .5em;
 	background-image: none;
 	text-align: left;
 }
