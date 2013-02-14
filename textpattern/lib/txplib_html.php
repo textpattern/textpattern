@@ -1460,24 +1460,42 @@ EOF;
  * @return string HTML
  */
 
-	function toggle_box($classname, $form = 0)
+	function toggle_box($classname, $form = false)
 	{
 		$name = 'cb_toggle_'.$classname;
-		$i =
-			n.'<input type="checkbox" name="'.$name.'" id="'.$name.'" value="1" '.
-			(cs('toggle_'.$classname) ? 'checked="checked" ' : '').
-			'class="checkbox" onclick="toggleClassRemember(\''.$classname.'\');" />'.
-			n.' <label for="'.$name.'">'.gTxt('detail_toggle').'</label> '.
-			script_js("setClassRemember('".$classname."');addEvent(window, 'load', function () {setClassRemember('".$classname."');});");
+		$id = escape_js($name);
+		$class = escape_js($classname);
+
+		$out = checkbox($name, 1, cs('toggle_'.$classname), 0, $name).
+			n.tag(gTxt('detail_toggle'), 'label', array('for' => $name));
+
+		$js = <<<EOF
+			$(document).ready(function ()
+			{
+				$('input')
+					.filter(function ()
+					{
+						if ($(this).attr('id') === '{$id}')
+						{
+							setClassDisplay('{$class}', $(this).is(':checked'));
+							return true;
+						}
+					})
+					.change(function ()
+					{
+						toggleClassRemember('{$class}');
+					});
+			});
+EOF;
+
+		$out .= script_js($js);
 
 		if ($form)
 		{
-			return form($i);
+			return form($out);
 		}
-		else
-		{
-			return $i;
-		}
+
+		return $out;
 	}
 
 /**
