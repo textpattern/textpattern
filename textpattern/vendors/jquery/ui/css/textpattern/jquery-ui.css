@@ -629,6 +629,11 @@ button.ui-button::-moz-focus-inner {
 	float: left;
 }
 
+.ui-datepicker td.ui-datepicker-week-col {
+	padding: .32em 0;
+	text-align: center;
+}
+
 /* Multiple calendars */
 
 .ui-datepicker.ui-datepicker-multi {
@@ -1046,8 +1051,8 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 	top: 0;
 	float: left;
 	border-bottom: 0;
-	-moz-border-radius: .5em .5em 0 0;
-	border-radius: .5em .5em 0 0;
+	-moz-border-radius: .4em .4em 0 0;
+	border-radius: .4em .4em 0 0;
 	list-style: none;
 	white-space: nowrap;
 }
@@ -1055,6 +1060,8 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 .ui-tabs .ui-tabs-nav li a {
 	float: left;
 	padding: .5em 1em;
+	color: #333;
+	text-decoration: none;
 }
 
 .ui-tabs .ui-tabs-nav li.ui-tabs-active {
