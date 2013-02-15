@@ -4659,12 +4659,14 @@
 		}
 		else
 		{
-			$row = safe_row('Form', 'txp_form',"name='".doSlash($name)."'");
+			$row = safe_row('Form', 'txp_form', "name = '".doSlash($name)."'");
+
 			if (!$row)
 			{
 				trigger_error(gTxt('form_not_found').': '.$name);
 				return '';
 			}
+
 			$f = $row['Form'];
 			$forms[$name] = $f;
 		}
@@ -4688,6 +4690,7 @@
 
 		$out = '';
 		$f = fetch_form($name);
+
 		if ($f)
 		{
 			if (in_array($name, $stack))
@@ -4695,6 +4698,7 @@
 				trigger_error(gTxt('form_circular_reference', array('{name}' => $name)));
 				return '';
 			}
+
 			$old_form = $txp_current_form;
 			$txp_current_form = $stack[] = $name;
 			$out = parse($f);
