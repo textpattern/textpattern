@@ -2089,7 +2089,7 @@
  * @since   4.6.0
  * @package Callback
  * @example
- * if (has_handlers('article_saved'))
+ * if (has_handler('article_saved'))
  * {
  * 	echo "There are active handlers for 'article_saved' event.";
  * }
