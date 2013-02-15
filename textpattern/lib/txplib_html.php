@@ -786,6 +786,9 @@
 /**
  * Renders a name-value input control with label.
  *
+ * The rendered input can be customised via the '{$event}_ui > inputlabel.{$name}'
+ * pluggable UI callback event.
+ *
  * @param  string $name        Input name
  * @param  string $input       Complete input control widget
  * @param  string $label       Label
@@ -799,6 +802,10 @@
 
 	function inputLabel($name, $input, $label = '', $help = '', $class = '', $wraptag_val = 'span')
 	{
+		global $event;
+
+		$arguments = compact('name', 'input', 'label', 'help', 'class', 'wraptag_val');
+
 		if (!$class)
 		{
 			$class = 'edit-'.str_replace('_', '-', $name);
@@ -818,10 +825,12 @@
 			$input = tag($input, $wraptag_val, array('class' => 'edit-value'));
 		}
 
-		return graf(
+		$out = graf(
 			tag($label.popHelp($help), 'span', array('class' => 'edit-label')).
 			n.$input
 		, array('class' => $class));
+
+		return pluggable_ui($event.'_ui', 'inputlabel.'.$name, $out, $arguments);
 	}
 
 /**
