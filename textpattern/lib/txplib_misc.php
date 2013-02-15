@@ -4644,6 +4644,11 @@
 /**
  * Gets a form template's contents.
  *
+ * The form template's reading method can be modified
+ * by registering a handler to a 'form.fetch' callback
+ * event. Any value returned by the callback function
+ * will be used as the form template markup.
+ *
  * @param   string $name The form
  * @return  string
  * @package TagParser
@@ -4655,26 +4660,28 @@
 
 		$name = (string) $name;
 
-		if (isset($forms[$name]))
+		if (!isset($forms[$name]))
 		{
-			$f = $forms[$name];
-		}
-		else
-		{
-			$row = safe_row('Form', 'txp_form', "name = '".doSlash($name)."'");
-
-			if (!$row)
+			if (has_handler('form.fetch'))
 			{
-				trigger_error(gTxt('form_not_found').': '.$name);
-				return '';
+				$form = callback_event('form.fetch', '', false, compact('name'));
+			}
+			else
+			{
+				$form = safe_field('Form', 'txp_form', "name = '".doSlash($name)."'");
+
+				if ($form === false)
+				{
+					trigger_error(gTxt('form_not_found').': '.$name);
+					return '';
+				}
 			}
 
-			$f = $row['Form'];
-			$forms[$name] = $f;
+			$forms[$name] = $form;
 		}
 
 		trace_add('['.gTxt('form').': '.$name.']');
-		return $f;
+		return $forms[$name];
 	}
 
 /**
