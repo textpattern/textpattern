@@ -1272,8 +1272,7 @@
 
 		$select_page = selectInput('qty', $vals, $val, '', 1);
 
-		// Proper localisation.
-		$page = str_replace('{page}', $select_page, gTxt('view_per_page'));
+		$page = gTxt('view_per_page', array('{page}' => $select_page), false);
 
 		return form(
 			graf(
