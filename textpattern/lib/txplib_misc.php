@@ -4653,6 +4653,8 @@
 	{
 		static $forms = array();
 
+		$name = (string) $name;
+
 		if (isset($forms[$name]))
 		{
 			$f = $forms[$name];
@@ -4689,11 +4691,12 @@
 		static $stack = array();
 
 		$out = '';
+		$name = (string) $name;
 		$f = fetch_form($name);
 
 		if ($f)
 		{
-			if (in_array($name, $stack))
+			if (in_array($name, $stack, true))
 			{
 				trigger_error(gTxt('form_circular_reference', array('{name}' => $name)));
 				return '';
