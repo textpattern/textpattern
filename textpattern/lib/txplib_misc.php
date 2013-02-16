@@ -1910,7 +1910,7 @@
  * @param   string $event The callback event
  * @param   string $step  Additional callback step
  * @param   bool   $pre   Allows two callbacks, a prepending and an appending, with same event and step
- * @return  string The value returned by the attached callback functions, or an empty string
+ * @return  mixed  The value returned by the attached callback functions, or an empty string
  * @package Callback
  * @see     register_callback()
  * @example
@@ -1931,19 +1931,33 @@
 			return '';
 		}
 
-		$return_value = '';
-
 		// Any payload parameters?
 		$argv = func_get_args();
 		$argv = (count($argv) > 3) ? array_slice($argv, 3) : array();
 
 		foreach ($plugin_callback as $c)
 		{
-			if ($c['event'] == $event and (empty($c['step']) or $c['step'] == $step) and $c['pre'] == $pre)
+			if ($c['event'] == $event && (empty($c['step']) || $c['step'] == $step) && $c['pre'] == $pre)
 			{
 				if (is_callable($c['function']))
 				{
-					$return_value .= call_user_func_array($c['function'], array('event' => $event, 'step' => $step) + $argv);
+					$return_value = call_user_func_array($c['function'], array('event' => $event, 'step' => $step) + $argv);
+
+					if (isset($out))
+					{
+						if (is_array($return_value) && is_array($out))
+						{
+							$out = array_merge($out, $return_value);
+						}
+						else
+						{
+							$out .= $return_value;
+						}
+					}
+					else
+					{
+						$out = $return_value;
+					}
 				}
 				elseif ($production_status == 'debug')
 				{
@@ -1952,7 +1966,12 @@
 			}
 		}
 
-		return $return_value;
+		if (isset($out))
+		{
+			return $out;
+		}
+
+		return '';
 	}
 
 /**
