@@ -4720,6 +4720,71 @@
 	}
 
 /**
+ * Gets a page template's contents.
+ *
+ * The page template's reading method can be modified
+ * by registering a handler to a 'page.fetch' callback
+ * event. Any value returned by the callback function
+ * will be used as the template markup.
+ *
+ * @param   string      $name The template
+ * @return  string|bool The page template, or FALSE on error
+ * @package TagParser
+ * @since   4.6.0
+ * @example
+ * echo fetch_page('default');
+ */
+
+	function fetch_page($name)
+	{
+		if (has_handler('page.fetch'))
+		{
+			$page = callback_event('page.fetch', '', false, compact('name'));
+		}
+		else
+		{
+			$page = safe_field('user_html', 'txp_page', "name = '".doSlash($name)."'");
+		}
+
+		if ($page === false)
+		{
+			return false;
+		}
+
+		trace_add('['.gTxt('page').': '.$name.']');
+		return $page;
+	}
+
+/**
+ * Parses a page template.
+ *
+ * @param   string      $name The template
+ * @return  string|bool The parsed page template, or FALSE on error
+ * @since   4.6.0
+ * @package TagParser
+ * @example
+ * echo parse_page('default');
+ */
+
+	function parse_page($name)
+	{
+		global $pretext;
+
+		$page = fetch_page($name);
+
+		if ($page !== false)
+		{
+			$pretext['secondpass'] = false;
+			$page = parse($page);
+			$pretext['secondpass'] = true;
+			trace_add('[ ~~~ '.gTxt('secondpass').' ~~~ ]');
+			$page = parse($page);
+		}
+
+		return $page;
+	}
+
+/**
  * Gets a category's title.
  *
  * @param  string      $name The category

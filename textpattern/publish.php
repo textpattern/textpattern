@@ -675,22 +675,16 @@
 			txp_die(gTxt('410_gone'), '410');
 		}
 
-		$html = safe_field('user_html', 'txp_page', "name='".doSlash($pretext['page'])."'");
-		if (!$html)
-		{
-			txp_die(gTxt('unknown_section'), '404');
-		}
-
 		// Useful for clean URLs with error-handlers.
 		txp_status_header('200 OK');
 
-		trace_add('['.gTxt('page').': '.$pretext['page'].']');
-		set_error_handler("tagErrorHandler");
-		$pretext['secondpass'] = false;
-		$html = parse($html);
-		$pretext['secondpass'] = true;
-		trace_add('[ ~~~ '.gTxt('secondpass').' ~~~ ]');
-		$html = parse($html); // The function so nice, he ran it twice.
+		set_error_handler('tagErrorHandler');
+		$html = parse_page($pretext['page']);
+
+		if ($html === false)
+		{
+			txp_die(gTxt('unknown_section'), '404');
+		}
 
 		// Make sure the page has an article tag if necessary.
 		if (!$has_article_tag and $production_status != 'live' and $pretext['context'] == 'article' and (!empty($pretext['id']) or !empty($pretext['c']) or !empty($pretext['q']) or !empty($pretext['pg'])))
