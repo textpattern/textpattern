@@ -4688,12 +4688,12 @@
 			else
 			{
 				$form = safe_field('Form', 'txp_form', "name = '".doSlash($name)."'");
+			}
 
-				if ($form === false)
-				{
-					trigger_error(gTxt('form_not_found').': '.$name);
-					return '';
-				}
+			if ($form === false)
+			{
+				trigger_error(gTxt('form_not_found').': '.$name);
+				return '';
 			}
 
 			$forms[$name] = $form;
