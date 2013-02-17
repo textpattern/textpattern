@@ -1074,6 +1074,30 @@
 
 		if ($view == 'text')
 		{
+			// Publish and Save buttons.
+			if ($step == 'create' and empty($GLOBALS['ID']))
+			{
+				if (has_privs('article.publish'))
+				{
+					$push_button = fInput('submit', 'publish', gTxt('publish'), 'publish');
+				}
+				else
+				{
+					$push_button = fInput('submit', 'publish', gTxt('save'), 'publish');
+				}
+
+				echo graf($push_button, array('id' => 'write-publish'));
+			}
+			else if (
+				($Status >= STATUS_LIVE && has_privs('article.edit.published')) ||
+				($Status >= STATUS_LIVE && $AuthorID === $txp_user && has_privs('article.edit.own.published')) ||
+				($Status < STATUS_LIVE && has_privs('article.edit')) ||
+				($Status < STATUS_LIVE && $AuthorID === $txp_user && has_privs('article.edit.own'))
+			)
+			{
+				echo graf(fInput('submit', 'save', gTxt('save'), 'publish'), array('id' => 'write-save'));
+			}
+
 			if ($step != 'create')
 			{
 				echo graf(href(gtxt('create_new'), 'index.php?event=article'), ' class="action-create"');
@@ -1103,7 +1127,6 @@
 			));
 
 			// "Dates" section.
-			$push_button = '';
 
 			if ($step == "create" and empty($GLOBALS['ID']))
 			{
@@ -1186,12 +1209,7 @@
 					$rs
 				);
 
-				// Publish button.
-				$push_button = graf(
-					(has_privs('article.publish')) ?
-					fInput('submit', 'publish',gTxt('publish'), "publish") :
-					fInput('submit', 'publish',gTxt('save'), "publish")
-				, ' id="write-publish"');
+				
 			}
 			else
 			{
@@ -1199,20 +1217,10 @@
 				$posted_block = $partials['posted']['html'];
 
 				// Expires.
-				$expires_block = $partials['expires']['html'];;
-
-				// Save button.
-				if (($Status >= STATUS_LIVE and has_privs('article.edit.published'))
-					or ($Status >= STATUS_LIVE and $AuthorID===$txp_user and has_privs('article.edit.own.published'))
-					or ($Status < STATUS_LIVE and has_privs('article.edit'))
-					or ($Status < STATUS_LIVE and $AuthorID===$txp_user and has_privs('article.edit.own')))
-				{
-					$push_button = graf(fInput('submit', 'save', gTxt('save'), 'publish'), ' id="write-save"');
-				}
+				$expires_block = $partials['expires']['html'];
 			}
 
 			echo wrapRegion('dates_group', $posted_block.$expires_block, 'dates', 'date_settings', 'article_dates');
-			echo $push_button;
 		}
 
 		echo n.'</div>'. // End of #supporting_content.
