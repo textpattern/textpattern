@@ -99,7 +99,14 @@
 			$name = 'default';
 		}
 
-		$url = hu.'css.php?n='.urlencode($name);
+		if (has_handler('css.url'))
+		{
+			$url = callback_event('css.url', '', false, compact('name'));
+		}
+		else
+		{
+			$url = hu.'css.php?n='.urlencode($name);
+		}
 
 		if ($format == 'link')
 		{
