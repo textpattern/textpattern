@@ -424,7 +424,7 @@ EOS
 					eInput('category').
 					sInput('cat_'.$event.'_create')
 				)
-			, '', '', 'post', 'action-create '.$event);
+			, '', '', 'post', $event);
 
 		if ($rs)
 		{
