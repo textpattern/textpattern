@@ -99,7 +99,7 @@
 			$name = 'default';
 		}
 
-		$url = hu.'css.php?n='.$name;
+		$url = hu.'css.php?n='.urlencode($name);
 
 		if ($format == 'link')
 		{
