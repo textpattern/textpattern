@@ -1756,10 +1756,11 @@
 
 			while ($recent = nextRow($recents))
 			{
-				if (!$recent['Title'])
+				if ('' === $recent['Title'])
 				{
 					$recent['Title'] = gTxt('untitled').sp.$recent['ID'];
 				}
+				// TODO: Deal with article titles containing just blanks.
 
 				$ra .= n.'<li class="recent-article">'.
 					href(escape_title($recent['Title']), '?event=article'.a.'step=edit'.a.'ID='.$recent['ID']).
