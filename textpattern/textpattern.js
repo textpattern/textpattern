@@ -1453,7 +1453,7 @@ textpattern.Route.add('login', function ()
 	if (!checkCookies())
 	{
 		cookieEnabled = false;
-		$('#txp-main').prepend($('<p class="alert-block warning" />').text(textpattern.gTxt('cookies_must_be_enabled')));
+		$('main').prepend($('<p class="alert-block warning" />').text(textpattern.gTxt('cookies_must_be_enabled')));
 	}
 
 	// Focus on either username or password when empty.

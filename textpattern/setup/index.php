@@ -81,7 +81,7 @@
 <!--[if lt IE 9]><script src="$rel_txpurl/theme/hive/js/selectivizr.min.js"></script><![endif]-->
 </head>
 <body id="page-setup"{$bodyclass}>
-<div class="txp-body">
+<main class="txp-body">
 eod;
 
 	switch ($step)
@@ -102,7 +102,7 @@ eod;
 			createTxp();
 	}
 ?>
-</div>
+</main>
 </body>
 </html>
 <?php
