@@ -43,6 +43,7 @@
 	content: "";
 	display: table;
 	clear: both;
+	border-collapse: collapse;
 }
 
 .ui-helper-zfix {

@@ -37,6 +37,7 @@ summary {
 	content: "";
 	display: table;
 	clear: both;
+	border-collapse: collapse;
 }
 
 .clear {
