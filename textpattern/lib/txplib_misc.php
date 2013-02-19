@@ -6010,16 +6010,27 @@ eod;
 	{
 		global $permlink_mode;
 
-		$filename = urlencode($filename);
-		// FIXME: work around yet another mod_deflate problem (double compression)
-		// http://blogs.msdn.com/wndp/archive/2006/08/21/Content-Encoding-not-equal-Content-Type.aspx
-		if (preg_match('/gz$/i', $filename))
+		if ($permlink_mode == 'messy')
 		{
-			$filename .= a;
+			return hu.'index.php'.join_qs(array(
+				's'  => 'file_download',
+				'id' => (int) $id,
+			));
 		}
-		return ($permlink_mode == 'messy') ?
-			hu.'index.php?s=file_download'.a.'id='.$id :
-			hu.gTxt('file_download').'/'.$id.($filename ? '/'.$filename : '');
+
+		if ($filename)
+		{
+			$filename = '/'.urlencode($filename);
+
+			// FIXME: work around yet another mod_deflate problem (double compression)
+			// http://blogs.msdn.com/wndp/archive/2006/08/21/Content-Encoding-not-equal-Content-Type.aspx
+			if (preg_match('/gz$/i', $filename))
+			{
+				$filename .= a;
+			}
+		}
+
+		return hu.urlencode(gTxt('file_download')).'/'.intval($id).$filename;
 	}
 
 /**
