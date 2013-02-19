@@ -26,6 +26,9 @@ Includes contributions licensed under the New BSD License.
   and everything in your /textpattern/ directory (except config.php)
   with the corresponding files in this distribution. css.php and /rpc/
   might not yet exist in your current site.
+* It is recommended that you flush the cache of your browser, to ensure
+  old cached files are not being used in preference of any newer versions
+  within the upgrade.
 * When you login to the admin-side, the relevant upgrade script is
   run automatically. Please take a look into diagnostics to find out
   whether there are any errors and whether the correct version number
