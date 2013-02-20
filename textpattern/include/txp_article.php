@@ -923,7 +923,7 @@
 			}
 		}
 
-		$page_title = $Title !== '' ? $Title : gTxt('write');
+		$page_title = $ID ? $Title : gTxt('write');
 
 		pagetop($page_title, $message);
 
