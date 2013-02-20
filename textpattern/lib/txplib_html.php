@@ -70,8 +70,12 @@
 /**
  * Renders the admin-side footer.
  *
- * Theme's footer partial via the "admin_side" > "footer" pluggable UI
- * and send the "admin_side" > "body_end" event.
+ * The footer's default markup is provided by a theme. It can
+ * be further customized via the "admin_side > footer" pluggable
+ * UI callback event.
+ *
+ * In addition to the pluggable UI, this function also calls callback
+ * events "admin_side > main_content_end" and "admin_side > body_end".
  */
 
 	function end_page()
@@ -80,6 +84,7 @@
 
 		if ($app_mode != 'async' && $event != 'tag')
 		{
+			callback_event('admin_side', 'main_content_end');
 			echo n.'</main><!-- /txp-body -->'.n.'<footer role="contentinfo" class="txp-footer">';
 			echo pluggable_ui('admin_side', 'footer', $theme->footer());
 			callback_event('admin_side', 'body_end');

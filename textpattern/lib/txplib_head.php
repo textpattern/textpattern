@@ -145,6 +145,7 @@ echo $theme->html_head();
 		callback_event('admin_side', 'pagetop_end');
 		echo n.'</header><!-- /txp-header -->'.
 			n.'<main role="main" class="txp-body" aria-label="'.gTxt('main_content').'">';
+		callback_event('admin_side', 'main_content');
 	}
 
 /**
