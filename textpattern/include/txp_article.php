@@ -1451,9 +1451,9 @@
 	{
 		$textile = new Textpattern_Textile_Parser();
 
-		$incoming['Title_plain'] = $incoming['Title'];
+		$incoming['Title_plain'] = trim($incoming['Title']);
 		$incoming['Title_html'] = ''; // not used
-		$incoming['Title'] = $textile->textileEncode($incoming['Title']);
+		$incoming['Title'] = $textile->textileEncode($incoming['Title_plain']);
 
 		$incoming['Body_html'] = Textpattern_Textfilter_Set::filter(
 			$incoming['textile_body'],
@@ -1756,11 +1756,10 @@
 
 			while ($recent = nextRow($recents))
 			{
-				if ('' === $recent['Title'])
+				if ($recent['Title'] === '')
 				{
 					$recent['Title'] = gTxt('untitled').sp.$recent['ID'];
 				}
-				// TODO: Deal with article titles containing just blanks.
 
 				$ra .= n.'<li class="recent-article">'.
 					href(escape_title($recent['Title']), '?event=article'.a.'step=edit'.a.'ID='.$recent['ID']).
