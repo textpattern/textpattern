@@ -131,26 +131,26 @@
 		switch ($sort)
 		{
 			case 'id' :
-				$sort_sql = 'id '.$dir;
+				$sort_sql = 'txp_file.id '.$dir;
 				break;
 			case 'description' :
-				$sort_sql = 'description '.$dir.', filename desc';
+				$sort_sql = 'txp_file.description '.$dir.', txp_file.filename desc';
 				break;
 			case 'category' :
-				$sort_sql = 'category '.$dir.', filename desc';
+				$sort_sql = 'txp_category.title '.$dir.', txp_file.filename desc';
 				break;
 			case 'title' :
-				$sort_sql = 'title '.$dir.', filename desc';
+				$sort_sql = 'txp_file.title '.$dir.', txp_file.filename desc';
 				break;
 			case 'downloads' :
-				$sort_sql = 'downloads '.$dir.', filename desc';
+				$sort_sql = 'txp_file.downloads '.$dir.', txp_file.filename desc';
 				break;
 			case 'author' :
-				$sort_sql = 'author '.$dir.', id asc';
+				$sort_sql = 'txp_users.RealName '.$dir.', txp_file.id asc';
 				break;
 			default :
 				$sort = 'filename';
-				$sort_sql = 'filename '.$dir;
+				$sort_sql = 'txp_file.filename '.$dir;
 				break;
 		}
 
@@ -167,19 +167,19 @@
 			$crit_escaped = $verbatim ? doSlash($m[1]) : doLike($crit);
 			$critsql = $verbatim ?
 				array(
-					'id'          => "ID in ('" .join("','", do_list($crit_escaped)). "')",
-					'filename'    => "filename = '$crit_escaped'",
-					'title'       => "title = '$crit_escaped'",
-					'description' => "description = '$crit_escaped'",
-					'category'    => "category = '$crit_escaped'",
-					'author'      => "author = '$crit_escaped'"
+					'id'          => "txp_file.id in ('" .join("','", do_list($crit_escaped)). "')",
+					'filename'    => "txp_file.filename = '$crit_escaped'",
+					'title'       => "txp_file.title = '$crit_escaped'",
+					'description' => "txp_file.description = '$crit_escaped'",
+					'category'    => "txp_file.category = '$crit_escaped' or txp_category.title = '$crit_escaped'",
+					'author'      => "txp_file.author = '$crit_escaped' or txp_users.RealName = '$crit_escaped'"
 				) :	array(
-					'id'          => "ID in ('" .join("','", do_list($crit_escaped)). "')",
-					'filename'    => "filename like '%$crit_escaped%'",
-					'title'       => "title like '%$crit_escaped%'",
-					'description' => "description like '%$crit_escaped%'",
-					'category'    => "category like '%$crit_escaped%'",
-					'author'      => "author like '%$crit_escaped%'"
+					'id'          => "txp_file.id in ('" .join("','", do_list($crit_escaped)). "')",
+					'filename'    => "txp_file.filename like '%$crit_escaped%'",
+					'title'       => "txp_file.title like '%$crit_escaped%'",
+					'description' => "txp_file.description like '%$crit_escaped%'",
+					'category'    => "txp_file.category like '%$crit_escaped%' or txp_category.title like '%$crit_escaped%'",
+					'author'      => "txp_file.author like '%$crit_escaped%' or txp_users.RealName like '%$crit_escaped%'"
 				);
 
 			if (array_key_exists($search_method, $critsql))
@@ -201,7 +201,19 @@
 
 		$criteria .= callback_event('admin_criteria', 'file_list', 0, $criteria);
 
-		$total = safe_count('txp_file', "$criteria");
+		$sql_from =
+			safe_pfx_j('txp_file')."
+			left join ".safe_pfx_j('txp_category')." on txp_category.name = txp_file.category and txp_category.type = 'file'
+			left join ".safe_pfx_j('txp_users')." on txp_users.name = txp_file.author";
+
+		if ($criteria === 1)
+		{
+			$total = safe_count('txp_file', $criteria);
+		}
+		else
+		{
+			$total = getThing('select count(*) from '.$sql_from.' where '.$criteria);
+		}
 
 		if ($total < 1)
 		{
@@ -224,9 +236,22 @@
 
 		echo file_search_form($crit, $search_method).'</div>';
 
-		$rs = safe_rows_start('*', 'txp_file', "$criteria order by $sort_sql limit $offset, $limit");
+		$rs = safe_query(
+			"select
+				txp_file.id,
+				txp_file.filename,
+				txp_file.title,
+				txp_file.category,
+				txp_file.description,
+				txp_file.downloads,
+				txp_file.status,
+				txp_file.author,
+				txp_users.RealName as realname,
+				txp_category.Title as category_title
+			from $sql_from where $criteria order by $sort_sql limit $offset, $limit"
+		);
 
-		if ($rs)
+		if ($rs && numRows($rs))
 		{
 			$show_authors = !has_single_author('txp_file');
 
@@ -279,9 +304,10 @@
 				$validator->setConstraints(array(new CategoryConstraint($category, array('type' => 'file'))));
 				$vc = $validator->validate() ? '' : ' error';
 
-				$category = ($category)
-					? span($category, array('title' => fetch_category_title($category, 'file')))
-					: '';
+				if ($category)
+				{
+					$category = span($category_title, array('title' => $category));
+				}
 
 				$tag_url = '?event=tag'.a.'tag_name=file_download_link'.a.'id='.$id.a.'description='.urlencode($description).
 					a.'filename='.urlencode($filename);
@@ -338,9 +364,7 @@
 
 					td($download_link, '', 'downloads').
 
-					($show_authors ? td(
-						span(txpspecialchars($author), array('title' => get_author_name($author)))
-					, '', 'author') : '')
+					($show_authors ? td(span(txpspecialchars($realname), array('title' => $author)), '', 'author') : '')
 				);
 			}
 
