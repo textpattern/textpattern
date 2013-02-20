@@ -161,7 +161,17 @@ echo $theme->html_head();
 	function admin_title($pagetitle)
 	{
 		global $sitename;
-		$title = escape_title($pagetitle).' - '.txpspecialchars($sitename).' &#124; Textpattern CMS';
+
+		if ((string) $pagetitle === '')
+		{
+			$title = gTxt('untitled');
+		}
+		else
+		{
+			$title = $pagetitle;
+		}
+
+		$title = escape_title($title).' - '.txpspecialchars($sitename).' &#124; Textpattern CMS';
 		return pluggable_ui('admin_side', 'html_title', $title, compact('pagetitle'));
 	}
 
