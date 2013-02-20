@@ -68,3 +68,6 @@
 	// Save sections correctly in articles.
 	safe_alter('textpattern', "MODIFY Section VARCHAR(255) NOT NULL default ''");
 	safe_alter('txp_section', "MODIFY name VARCHAR(255) NOT NULL");
+
+	// Plugins can have longer version numbers.
+	safe_alter('txp_plugin', "MODIFY version VARCHAR(255) NOT NULL DEFAULT '1.0'");
