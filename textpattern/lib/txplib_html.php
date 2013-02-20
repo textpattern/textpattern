@@ -80,7 +80,7 @@
 
 	function end_page()
 	{
-		global $txp_user, $event, $app_mode, $theme, $textarray_script;
+		global $event, $app_mode, $theme, $textarray_script;
 
 		if ($app_mode != 'async' && $event != 'tag')
 		{
