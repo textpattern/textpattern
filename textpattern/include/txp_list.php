@@ -126,7 +126,7 @@
 				$sort_sql = 'textpattern.Status '.$dir.', textpattern.Posted desc';
 				break;
 			case 'author' :
-				$sort_sql = 'textpattern.AuthorID '.$dir.', textpattern.Posted desc';
+				$sort_sql = 'user.RealName '.$dir.', textpattern.Posted desc';
 				break;
 			case 'comments' :
 				$sort_sql = 'textpattern.comments_count '.$dir.', textpattern.Posted desc';
@@ -159,7 +159,7 @@
 					'keywords'           => "FIND_IN_SET('".$crit_escaped."',textpattern.Keywords)",
 					'categories'         => "textpattern.Category1 = '$crit_escaped' or textpattern.Category2 = '$crit_escaped' or category1.title = '$crit_escaped' or category2.title = '$crit_escaped'",
 					'status'             => "textpattern.Status = '".(@$sesutats[gTxt($crit_escaped)])."'",
-					'author'             => "textpattern.AuthorID = '$crit_escaped'",
+					'author'             => "textpattern.AuthorID = '$crit_escaped' or user.RealName = '$crit_escaped'",
 					'article_image'      => "textpattern.Image in ('" .join("','", do_list($crit_escaped)). "')",
 					'posted'             => "textpattern.Posted = '$crit_escaped'",
 					'lastmod'            => "textpattern.LastMod = '$crit_escaped'"
@@ -170,7 +170,7 @@
 					'keywords'           => "FIND_IN_SET('".$crit_escaped."',textpattern.Keywords)",
 					'categories'         => "textpattern.Category1 like '%$crit_escaped%' or textpattern.Category2 like '%$crit_escaped%' or category1.title like '%$crit_escaped%' or category2.title like '%$crit_escaped%'",
 					'status'             => "textpattern.Status = '".(@$sesutats[gTxt($crit_escaped)])."'",
-					'author'             => "textpattern.AuthorID like '%$crit_escaped%'",
+					'author'             => "textpattern.AuthorID like '%$crit_escaped%' or user.RealName like '%$crit_escaped%'",
 					'article_image'      => "textpattern.Image in ('" .join("','", do_list($crit_escaped)). "')",
 					'posted'             => "textpattern.Posted like '$crit_escaped%'",
 					'lastmod'            => "textpattern.LastMod like '$crit_escaped%'"
@@ -395,7 +395,7 @@
 					td($Category2, '', "articles_detail category category2".$vc[2]).
 					td(href($Status, $view_url, join_atts(array('title' => gTxt('view')))), '', 'status').
 
-					($show_authors ? td(span(txpspecialchars($AuthorID), array('title' => $RealName)), '', 'author') : '').
+					($show_authors ? td(span(txpspecialchars($RealName), array('title' => $AuthorID)), '', 'author') : '').
 
 					($use_comments ? td($comments, '', "articles_detail comments") : '')
 				);
