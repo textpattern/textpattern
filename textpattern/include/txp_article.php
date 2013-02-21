@@ -1179,9 +1179,18 @@
 				);
 
 				// Expires.
-				$persist_timestamp = (!empty($store_out['exp_year']))
-					? safe_strtotime($store_out['exp_year'].'-'.$store_out['exp_month'].'-'.$store_out['exp_day'].' '.$store_out['exp_hour'].':'.$store_out['exp_minute'].':'.$store_out['second'])
-					: NULLDATETIME;
+
+				if (!empty($store_out['exp_year']))
+				{
+					$persist_timestamp = safe_strtotime(
+						$store_out['exp_year'].'-'.$store_out['exp_month'].'-'.$store_out['exp_day'].' '.
+						$store_out['exp_hour'].':'.$store_out['exp_minute'].':'.$store_out['second']
+					);
+				}
+				else
+				{
+					$persist_timestamp = 0;
+				}
 
 				$expires_block = pluggable_ui(
 					'article_ui',
