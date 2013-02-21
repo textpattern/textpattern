@@ -571,8 +571,7 @@
 
 			if (!has_privs('file.edit') && !($author === $txp_user && has_privs('file.edit.own')))
 			{
-				file_list(gTxt('restricted_area'));
-				return;
+				require_privs();
 			}
 
 			pagetop(gTxt('edit_file'), $message);
@@ -830,8 +829,7 @@
 
 		if (!has_privs('file.edit') && !($author === $txp_user && has_privs('file.edit.own')))
 		{
-			file_edit(gTxt('restricted_area'));
-			return;
+			require_privs();
 		}
 
 		$file = file_get_uploaded();
@@ -933,8 +931,7 @@
 		$rs = safe_row('filename, author', 'txp_file', "id=$id");
 		if (!has_privs('file.edit') && !($rs['author'] === $txp_user && has_privs('file.edit.own')))
 		{
-			file_edit(gTxt('restricted_area'));
-			return;
+			require_privs();
 		}
 
 		$old_filename = $varray['old_filename'] = sanitizeForFile($rs['filename']);
