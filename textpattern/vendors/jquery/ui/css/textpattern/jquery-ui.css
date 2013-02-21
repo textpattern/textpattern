@@ -198,11 +198,11 @@ a.ui-state-error:hover,
    ========================================================================== */
 
 .ui-widget-shadow {
-	margin: -.4em 0 0 -.4em;
-	padding: .4em;
+	margin: -.5em 0 0 -.5em;
+	padding: .5em;
 	background-color: #999;
-	-moz-border-radius: .4em;
-	border-radius: .4em;
+	-moz-border-radius: .5em;
+	border-radius: .5em;
 	opacity: .33;
 	filter:Alpha(Opacity=33);
 }
@@ -412,14 +412,21 @@ button.ui-button-icons-only {
 	width: 3.7em;
 }
 
+/* button rounded corners */
+
+.ui-button.ui-corner-all {
+	-moz-border-radius: .5em;
+	border-radius: .5em;
+}
+
 .ui-button.ui-corner-right {
-	-moz-border-radius: 0 .4em .4em 0;
-	border-radius: 0 .4em .4em 0;
+	-moz-border-radius: 0 .5em .5em 0;
+	border-radius: 0 .5em .5em 0;
 }
 
 .ui-button.ui-corner-left {
-	-moz-border-radius: .4em 0 0 .4em;
-	border-radius: .4em 0 0 .4em;
+	-moz-border-radius: .5em 0 0 .5em;
+	border-radius: .5em 0 0 .5em;
 }
 
 /* button text element */
@@ -529,8 +536,8 @@ input::-moz-focus-inner {
 	top: .2em;
 	width: 1.8em;
 	height: 1.8em;
-	-moz-border-radius: .4em;
-	border-radius: .4em;
+	-moz-border-radius: .5em;
+	border-radius: .5em;
 	background-color: transparent;
 }
 
@@ -1052,8 +1059,8 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 	top: 0;
 	float: left;
 	border-bottom: 0;
-	-moz-border-radius: .4em .4em 0 0;
-	border-radius: .4em .4em 0 0;
+	-moz-border-radius: .5em .5em 0 0;
+	border-radius: .5em .5em 0 0;
 	list-style: none;
 	white-space: nowrap;
 }

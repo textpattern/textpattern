@@ -149,8 +149,8 @@ a.pophelp,
 a.pophelpsubtle {
 	border: 1px solid;
 	border-color: #ddd #bbb #bbb #ddd;
-	-moz-border-radius: .4em;
-	border-radius: .4em;
+	-moz-border-radius: .5em;
+	border-radius: .5em;
 	padding: 0 2px;
 	font-weight: normal;
 	background-color: #f5f5f5;
@@ -171,7 +171,7 @@ select,
 button {
 	font-size: 11px;
 	font-family: Verdana, Tahoma, sans-serif;
-	line-height: 1.54545454545455; /* 17px / 11px */
+	line-height: 1.4;
 }
 
 h1,
@@ -526,8 +526,8 @@ a:hover .content-image {
 fieldset {
 	margin: 0 0 .25em 0;
 	border: 1px solid #ddd;
-	-moz-border-radius: .4em;
-	border-radius: .4em;
+	-moz-border-radius: .5em;
+	border-radius: .5em;
 	padding: 1px .5em;
 }
 
@@ -749,8 +749,8 @@ input[type="button"],
 	margin: 0;
 	border: 1px solid;
 	border-color: #ddd #bbb #bbb #ddd;
-	-moz-border-radius: .4em;
-	border-radius: .4em;
+	-moz-border-radius: .5em;
+	border-radius: .5em;
 	padding: .18181818181818em .5em;
 	width: auto;
 	text-decoration: none;
@@ -786,8 +786,8 @@ input[type="button"]:active,
 
 .navlink-disabled {
 	border: 1px solid;
-	-moz-border-radius: .4em;
-	border-radius: .4em;
+	-moz-border-radius: .5em;
+	border-radius: .5em;
 	padding: .18181818181818em .5em;
 	display: inline-block;
 }
@@ -843,18 +843,18 @@ form.busy input[type="submit"] {
 
 .nav-tertiary > :first-child,
 .prev-next > :first-child {
-	-moz-border-radius-topleft: .4em;
-	border-top-left-radius: .4em;
-	-moz-border-radius-bottomleft: .4em;
-	border-bottom-left-radius: .4em;
+	-moz-border-radius-topleft: .5em;
+	border-top-left-radius: .5em;
+	-moz-border-radius-bottomleft: .5em;
+	border-bottom-left-radius: .5em;
 }
 
 .nav-tertiary > :last-child,
 .prev-next > :last-child {
-	-moz-border-radius-topright: .4em;
-	border-top-right-radius: .4em;
-	-moz-border-radius-bottomright: .4em;
-	border-bottom-right-radius: .4em;
+	-moz-border-radius-topright: .5em;
+	border-top-right-radius: .5em;
+	-moz-border-radius-bottomright: .5em;
+	border-bottom-right-radius: .5em;
 }
 
 .nav-tertiary .navlink-active {
@@ -1257,8 +1257,8 @@ span.spinner {
 .txp-login {
 	margin: 0 auto 1em;
 	border: 1px solid #e5e5e5;
-	-moz-border-radius: .4em;
-	border-radius: .4em;
+	-moz-border-radius: .5em;
+	border-radius: .5em;
 	padding: 1em 1em 1px 1em;
 }
 
