@@ -182,7 +182,7 @@
 			$critsql = $verbatim ?
 				array(
 					'id'      => "txp_discuss.discussid = '$crit_escaped'",
-					'parent'  => "txp_discuss.parentid = '$crit_escaped'".(intval($crit_escaped) ? '' : " or textpattern.Title = '$crit_escaped'"),
+					'parent'  => "txp_discuss.parentid = '$crit_escaped'".((string) intval($crit_escaped) === $crit_escaped ? '' : " or textpattern.Title = '$crit_escaped'"),
 					'name'    => "txp_discuss.name = '$crit_escaped'",
 					'message' => "txp_discuss.message = '$crit_escaped'",
 					'email'   => "txp_discuss.email = '$crit_escaped'",
@@ -190,7 +190,7 @@
 					'ip'      => "txp_discuss.ip = '$crit_escaped'",
 				) : array(
 					'id'      => "txp_discuss.discussid = '$crit_escaped'",
-					'parent'  => "txp_discuss.parentid = '$crit_escaped'".(intval($crit_escaped) ? '' : " or textpattern.Title like '%$crit_escaped%'"),
+					'parent'  => "txp_discuss.parentid = '$crit_escaped'".((string) intval($crit_escaped) === $crit_escaped ? '' : " or textpattern.Title like '%$crit_escaped%'"),
 					'name'    => "txp_discuss.name like '%$crit_escaped%'",
 					'message' => "txp_discuss.message like '%$crit_escaped%'",
 					'email'   => "txp_discuss.email like '%$crit_escaped%'",
