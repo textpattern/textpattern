@@ -152,15 +152,29 @@
 				$sel = '';
 			}
 
-			$out[] = n.'<option value="'.txpspecialchars($avalue).'"'.$sel.'>'.txpspecialchars($alabel).'</option>';
+			$out[] = '<option value="'.txpspecialchars($avalue).'"'.$sel.'>'.txpspecialchars($alabel).'</option>';
 		}
 
-		return n.'<select'.( $select_id ? ' id="'.$select_id.'"' : '' ).' name="'.$name.'"'.
-			($onchange == 1 ? ' data-submit-on="change"' : $onchange).
-			'>'.
-			($blank_first ? n.'<option value=""'.($selected == false ? ' selected="selected"' : '').'></option>' : '').
-			( $out ? join('', $out) : '').
-			n.'</select>';
+		if ($blank_first)
+		{
+			array_unshift($out, '<option value=""'.($selected === false ? ' selected="selected"' : '').'></option>');
+		}
+
+		$atts = join_atts(array(
+			'name' => $name,
+			'id'   => $select_id,
+		));
+
+		if ($onchange == true)
+		{
+			$atts .= ' data-submit-on="change"';
+		}
+		else
+		{
+			$atts .= $onchange;
+		}
+
+		return n.'<select'.$atts.'>'.n.join(n, $out).n.'</select>';
 	}
 
 /**
