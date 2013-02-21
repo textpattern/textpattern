@@ -67,7 +67,10 @@
 		$message = $varray['message'] = preg_replace('#<(/?txp:.+?)>#', '&lt;$1&gt;', $message);
 
 		$constraints = array(
-			'status' => new ChoiceConstraint($visible, array('choices' => array(SPAM, MODERATE, VISIBLE), 'message' =>  'invalid_status'))
+			'status' => new ChoiceConstraint($visible, array(
+				'choices' => array(SPAM, MODERATE, VISIBLE),
+				'message' => 'invalid_status'
+			))
 		);
 
 		callback_event_ref('discuss_ui', 'validate_save', 0, $varray, $constraints);
@@ -117,7 +120,13 @@
 
 		pagetop(gTxt('list_discussions'), $message);
 
-		extract(gpsa(array('sort', 'dir', 'page', 'crit', 'search_method')));
+		extract(gpsa(array(
+			'sort',
+			'dir',
+			'page',
+			'crit',
+			'search_method',
+		)));
 
 		if ($sort === '')
 		{
@@ -432,7 +441,14 @@
 
 		pagetop(gTxt('edit_comment'));
 
-		extract(gpsa(array('discussid', 'sort', 'dir', 'page', 'crit', 'search_method')));
+		extract(gpsa(array(
+			'discussid',
+			'sort',
+			'dir',
+			'page',
+			'crit',
+			'search_method',
+		)));
 
 		$discussid = assert_int($discussid);
 
