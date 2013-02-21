@@ -491,7 +491,7 @@ input.ui-button {
 /* button sets */
 
 .ui-buttonset {
-	margin-right: 7px;
+	margin-right: .5em;
 }
 
 .ui-buttonset .ui-button {
@@ -499,9 +499,9 @@ input.ui-button {
 	margin-right: -.34em;
 }
 
-/* reset extra padding in Firefox, see h5bp.com/l */
-input.ui-button::-moz-focus-inner,
-button.ui-button::-moz-focus-inner {
+/* removes inner padding and border in Firefox 4+ */
+button::-moz-focus-inner,
+input::-moz-focus-inner {
 	border: 0;
 	padding: 0;
 }

@@ -771,13 +771,6 @@ textarea:-moz-placeholder {
   color: #999999;
 }
 
-/* removes inner padding and border in Firefox 4+ */
-button::-moz-focus-inner,
-input::-moz-focus-inner {
-  border: 0;
-  padding: 0;
-}
-
 /* removes inner padding and search cancel button in Safari5+ and Chrome on OS X */
 input[type="search"]::-webkit-search-cancel-button,
 input[type="search"]::-webkit-search-decoration {
