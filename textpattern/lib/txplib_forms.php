@@ -662,9 +662,9 @@
 		$value = $placeholder = '';
 		$size = INPUT_TINY;
 
-		if ($time)
+		if ((int) $time)
 		{
-			$value = safe_strftime($datevar, $time);
+			$value = safe_strftime($datevar, (int) $time);
 		}
 
 		if (isset($placeholders[$datevar]))
