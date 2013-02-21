@@ -493,7 +493,11 @@
 
 		if (chdir($lang_dir))
 		{
-			$files = glob('*.txt');
+			if ($files = glob('*.txt'))
+			{
+				return $files;
+			}
 		}
-		return (is_array($files)) ? $files : array();
+
+		return array();
 	}
