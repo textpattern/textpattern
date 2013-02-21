@@ -422,17 +422,37 @@
 
 	function install_lang_key(&$value, $key)
 	{
-		extract(gpsa(array('lang_code', 'updating')));
-		$exists = safe_field('name', 'txp_lang', "name='".doSlash($value['name'])."' AND lang='".doSlash($lang_code)."'");
-		$q = "name='".doSlash($value['name'])."', event='".doSlash($value['event'])."', data='".doSlash($value['data'])."', lastmod='".doSlash(strftime('%Y%m%d%H%M%S', $value['uLastmod']))."'";
+		extract(gpsa(array(
+			'lang_code',
+			'updating',
+		)));
 
-		if ($exists)
+		$exists = safe_field(
+			'name',
+			'txp_lang',
+			"name = '".doSlash($value['name'])."' and lang = '".doSlash($lang_code)."'"
+		);
+
+		$q =
+			"name = '".doSlash($value['name'])."',
+			event = '".doSlash($value['event'])."',
+			data = '".doSlash($value['data'])."',
+			lastmod = '".doSlash(strftime('%Y%m%d%H%M%S', $value['uLastmod']))."'";
+
+		if ($exists !== false)
 		{
-			$value['ok'] = safe_update('txp_lang', $q, "owner = '".doSlash(LANG_OWNER_SYSTEM)."' AND lang='".doSlash($lang_code)."' AND name='".doSlash($value['name'])."'");
+			$value['ok'] = safe_update(
+				'txp_lang',
+				$q,
+				"owner = '".doSlash(LANG_OWNER_SYSTEM)."' and lang = '".doSlash($lang_code)."' and name = '".doSlash($value['name'])."'"
+			);
 		}
 		else
 		{
-			$value['ok'] = safe_insert('txp_lang', $q.", lang='".doSlash($lang_code)."'");
+			$value['ok'] = safe_insert(
+				'txp_lang',
+				$q.", lang='".doSlash($lang_code)."'"
+			);
 		}
 	}
 
