@@ -370,9 +370,11 @@
  * @param  string $name     The field
  * @param  string $value    The value
  * @param  bool   $checked  If TRUE the box is checked
- * @param  int    $tabindex 
- * @param  string $id
+ * @param  int    $tabindex The HTML tabindex
+ * @param  string $id       The HTML id
  * @return string HTML input
+ * @example
+ * echo checkbox('name', 'value', true);
  */
 
 	function checkbox($name, $value, $checked = true, $tabindex = 0, $id = '')
