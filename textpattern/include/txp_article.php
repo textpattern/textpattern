@@ -1275,24 +1275,41 @@
 /**
  * Renders an article status field.
  *
- * @param  int    $Status Selected status
+ * @param  int    $status Selected status
  * @return string HTML
  */
 
-	function status_radio($Status)
+	function status_radio($status)
 	{
 		global $statuses;
 
-		$Status = (!$Status) ? STATUS_LIVE : $Status;
-
-		foreach ($statuses as $a => $b)
+		if (!$status)
 		{
-			$out[] = n.'<li class="status-'.$a.($Status == $a ? ' active' : '').'">'.
-				radio('Status', $a, ($Status == $a) ? 1 : 0, 'status-'.$a).
-				n.'<label for="status-'.$a.'">'.$b.'</label></li>';
+			$status = STATUS_LIVE;
 		}
 
-		return n.'<ul class="status plain-list">'.join('', $out).n.'</ul>';
+		$out = array();
+
+		foreach ($statuses as $value => $label)
+		{
+			$checked = false;
+			$id = 'status-'.$value;
+			$class = $id;
+
+			if ($status == $value)
+			{
+				$checked = true;
+				$class .= ' active';
+			}
+
+			$out[] = n.tag(
+				radio('Status', $value, $checked, $id).
+				n.tag($label, 'label', array('for' => $id)),
+				'li', array('class' => $class)
+			);
+		}
+
+		return n.tag(join('', $out).n, 'ul', array('class' => 'status plain-list'));
 	}
 
 /**
