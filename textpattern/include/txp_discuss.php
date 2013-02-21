@@ -33,8 +33,7 @@
 
 		if (!get_pref('use_comments', 1))
 		{
-			exit(pageTop('Restricted').
-				graf(gTxt('restricted_area'), ' class="restricted-area"'));
+			require_privs();
 		}
 
 		$available_steps = array(
