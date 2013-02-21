@@ -134,28 +134,28 @@
 		switch ($sort)
 		{
 			case 'id' :
-				$sort_sql = 'discussid '.$dir;
+				$sort_sql = 'txp_discuss.discussid '.$dir;
 				break;
 			case 'ip' :
-				$sort_sql = 'ip '.$dir;
+				$sort_sql = 'txp_discuss.ip '.$dir;
 				break;
 			case 'name' :
-				$sort_sql = 'name '.$dir;
+				$sort_sql = 'txp_discuss.name '.$dir;
 				break;
 			case 'email' :
-				$sort_sql = 'email '.$dir;
+				$sort_sql = 'txp_discuss.email '.$dir;
 				break;
 			case 'website' :
-				$sort_sql = 'web '.$dir;
+				$sort_sql = 'txp_discuss.web '.$dir;
 				break;
 			case 'message' :
-				$sort_sql = 'message '.$dir;
+				$sort_sql = 'txp_discuss.message '.$dir;
 				break;
 			case 'status' :
-				$sort_sql = 'visible '.$dir;
+				$sort_sql = 'txp_discuss.visible '.$dir;
 				break;
 			case 'parent' :
-				$sort_sql = 'parentid '.$dir;
+				$sort_sql = 'txp_discuss.parentid '.$dir;
 				break;
 			default :
 				$sort = 'date';
@@ -181,21 +181,21 @@
 			$crit_escaped = $verbatim ? doSlash($m[1]) : doLike($crit);
 			$critsql = $verbatim ?
 				array(
-					'id'      => "discussid = '$crit_escaped'",
-					'parent'  => "parentid = '$crit_escaped'".(intval($crit_escaped) ? '' : " OR title = '$crit_escaped'"),
-					'name'    => "name = '$crit_escaped'",
-					'message' => "message = '$crit_escaped'",
-					'email'   => "email = '$crit_escaped'",
-					'website' => "web = '$crit_escaped'",
-					'ip'      => "ip = '$crit_escaped'",
+					'id'      => "txp_discuss.discussid = '$crit_escaped'",
+					'parent'  => "txp_discuss.parentid = '$crit_escaped'".(intval($crit_escaped) ? '' : " or textpattern.Title = '$crit_escaped'"),
+					'name'    => "txp_discuss.name = '$crit_escaped'",
+					'message' => "txp_discuss.message = '$crit_escaped'",
+					'email'   => "txp_discuss.email = '$crit_escaped'",
+					'website' => "txp_discuss.web = '$crit_escaped'",
+					'ip'      => "txp_discuss.ip = '$crit_escaped'",
 				) : array(
-					'id'      => "discussid = '$crit_escaped'",
-					'parent'  => "parentid = '$crit_escaped'".(intval($crit_escaped) ? '' : " OR title like '%$crit_escaped%'"),
-					'name'    => "name like '%$crit_escaped%'",
-					'message' => "message like '%$crit_escaped%'",
-					'email'   => "email like '%$crit_escaped%'",
-					'website' => "web like '%$crit_escaped%'",
-					'ip'      => "ip like '%$crit_escaped%'",
+					'id'      => "txp_discuss.discussid = '$crit_escaped'",
+					'parent'  => "txp_discuss.parentid = '$crit_escaped'".(intval($crit_escaped) ? '' : " or textpattern.Title like '%$crit_escaped%'"),
+					'name'    => "txp_discuss.name like '%$crit_escaped%'",
+					'message' => "txp_discuss.message like '%$crit_escaped%'",
+					'email'   => "txp_discuss.email like '%$crit_escaped%'",
+					'website' => "txp_discuss.web like '%$crit_escaped%'",
+					'ip'      => "txp_discuss.ip like '%$crit_escaped%'",
 				);
 
 			if (array_key_exists($search_method, $critsql))
@@ -218,9 +218,10 @@
 		$criteria .= callback_event('admin_criteria', 'discuss_list', 0, $criteria);
 
 		$counts = getRows(
-			'SELECT visible, COUNT(*) AS c'.
-			' FROM '.safe_pfx_j('txp_discuss').' LEFT JOIN '.safe_pfx_j('textpattern').' ON txp_discuss.parentid = textpattern.ID'.
-			' WHERE '. $criteria.' GROUP BY visible'
+			"select txp_discuss.visible, COUNT(*) AS c
+			from ".safe_pfx_j('txp_discuss')."
+			left join ".safe_pfx_j('textpattern')." ON txp_discuss.parentid = textpattern.ID
+			where {$criteria} group by txp_discuss.visible"
 		);
 
 		$count[SPAM] = $count[MODERATE] = $count[VISIBLE] = 0;
@@ -254,21 +255,37 @@
 			return;
 		}
 
-		// paging through displayed comments
-		$total = ((cs('toggle_show_spam')) ? $count[SPAM] : 0) + $count[MODERATE] + $count[VISIBLE];
+		echo discuss_search_form($crit, $search_method).'</div>';
+
+		if (!cs('toggle_show_spam'))
+		{
+			$total = $count[MODERATE] + $count[VISIBLE];
+			$criteria = 'visible != '.intval(SPAM).' and '.$criteria;
+		}
+
 		$limit = max($comment_list_pageby, 15);
 		list($page, $offset, $numPages) = pager($total, $limit, $page);
 
-		echo discuss_search_form($crit, $search_method).'</div>';
-
-		$spamq = cs('toggle_show_spam') ? '1=1' : 'visible != '.intval(SPAM);
-
 		$rs = safe_query(
-			'SELECT txp_discuss.*, unix_timestamp(txp_discuss.posted) as uPosted, ID as thisid, Section as section, url_title, Title as title, Status, unix_timestamp(textpattern.Posted) as posted'.
-			' FROM '.safe_pfx_j('txp_discuss').' LEFT JOIN '.safe_pfx_j('textpattern').' ON txp_discuss.parentid = textpattern.ID'.
-			' WHERE '.$spamq.' AND '.$criteria.
-			' ORDER BY '.$sort_sql.
-			' LIMIT '.$offset.', '.$limit
+			"select
+			txp_discuss.discussid,
+			txp_discuss.parentid,
+			txp_discuss.name,
+			txp_discuss.email,
+			txp_discuss.web,
+			txp_discuss.ip,
+			txp_discuss.message,
+			txp_discuss.visible,
+			unix_timestamp(txp_discuss.posted) as uPosted,
+			textpattern.ID as thisid,
+			textpattern.Section as section,
+			textpattern.url_title,
+			textpattern.Title as title,
+			textpattern.Status,
+			unix_timestamp(textpattern.Posted) as posted
+			from ".safe_pfx_j('txp_discuss')."
+			left join ".safe_pfx_j('textpattern')." on txp_discuss.parentid = textpattern.ID
+			where {$criteria} order by {$sort_sql} limit {$offset}, {$limit}"
 		);
 
 		if ($rs)
