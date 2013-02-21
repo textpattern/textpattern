@@ -644,6 +644,8 @@
  * @param  int    $tab         The HTML tabindex
  * @return string HTML
  * @access private
+ * @example
+ * echo tsi('year', '%Y', 1200000000);
  */
 
 	function tsi($name, $datevar, $time, $tab = 0)
