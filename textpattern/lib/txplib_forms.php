@@ -657,11 +657,33 @@
 			'%S' => 'ss',
 		);
 
-		$size = ($name == 'year' or $name == 'exp_year') ? INPUT_XSMALL : INPUT_TINY;
-		$s = ($time == 0) ? '' : safe_strftime($datevar, $time);
+		$value = $placeholder = '';
+		$size = INPUT_TINY;
 
-		return n.'<input type="text" name="'.$name.'" value="'.
-			$s
-			.'" size="'.$size.'" maxlength="'.$size.'" class="'.$name.'"'.(empty($tab) ? '' : ' tabindex="'.$tab.'"').' title="'.gTxt('article_'.$name)
-			.'"'.(isset($placeholders[$datevar]) ? ' placeholder="'.txpspecialchars(gTxt($placeholders[$datevar])).'"' : '').' />';
+		if ($time)
+		{
+			$value = safe_strftime($datevar, $time);
+		}
+
+		if (isset($placeholders[$datevar]))
+		{
+			$placeholder = gTxt($placeholders[$datevar]);
+		}
+
+		if ($datevar == '%Y' || $name == 'year' || $name == 'exp_year')
+		{
+			$size = INPUT_XSMALL;
+		}
+
+		return n.tag_void('input', array(
+			'type'        => 'text',
+			'name'        => $name,
+			'value'       => $value,
+			'size'        => (int) $size,
+			'maxlength'   => $size,
+			'class'       => $name,
+			'tabindex'    => (int) $tab,
+			'title'       => gTxt('article_'.$name),
+			'placeholder' => $placeholder,
+		));
 	}
