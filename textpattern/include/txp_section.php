@@ -671,6 +671,7 @@
 		{
 			callback_event('sections_deleted', '', 0, $sections);
 			sec_section_list(gTxt('section_deleted', array('{name}' => join(', ', $sections))));
+			return;
 		}
 
 		sec_section_list();
