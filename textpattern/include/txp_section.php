@@ -749,32 +749,34 @@
 	function section_multi_edit()
 	{
 		global $txp_user, $all_pages, $all_styles;
-		$selected = ps('selected');
 
-		if (!$selected or !is_array($selected))
+		extract(psa(array(
+			'edit_method',
+			'selected',
+		)));
+
+		if (!$selected || !is_array($selected))
 		{
 			return sec_section_list();
 		}
 
-		$method   = ps('edit_method');
-		$changed  = array();
-		$key = $msg = '';
+		$key = $val = '';
 
-		switch ($method)
+		switch ($edit_method)
 		{
 			case 'delete' :
-				return section_delete($selected);
+				return section_delete();
 				break;
 			case 'changepage' :
 				$val = ps('uses_page');
-				if (in_array($val, $all_pages))
+				if (in_array($val, $all_pages, true))
 				{
 					$key = 'page';
 				}
 				break;
 			case 'changecss' :
 				$val = ps('css');
-				if (in_array($val, $all_styles))
+				if (in_array($val, $all_styles, true))
 				{
 					$key = 'css';
 				}
@@ -791,25 +793,28 @@
 				$key = 'searchable';
 				$val = (int) ps('searchable');
 				break;
-			default:
-				$key = '';
-				$val = '';
-				break;
 		}
 
-		$selected = safe_column('name', 'txp_section', "name IN ('".join("','", doSlash($selected))."')");
+		$sections = safe_column(
+			'name',
+			'txp_section',
+			"name in (".join(',', quote_list($selected)).")"
+		);
 
-		if ($selected and $key)
+		if ($key && $sections)
 		{
-			foreach ($selected as $id)
+			if (
+				safe_update(
+					'txp_section',
+					"{$key} = '".doSlash($val)."'",
+					"name in (".join(',', quote_list($sections)).")"
+				)
+			)
 			{
-				if (safe_update('txp_section', "$key = '".doSlash($val)."'", "name = '".doSlash($id)."'"))
-				{
-					$changed[] = $id;
-				}
+				sec_section_list(gTxt('section_updated', array('{name}' => join(', ', $sections))));
+				return;
 			}
-			$msg = gTxt('section_updated', array('{name}' => join(', ', $changed)));
 		}
 
-		return sec_section_list($msg);
+		sec_section_list();
 	}
