@@ -166,24 +166,34 @@
 
 		$criteria .= callback_event('admin_criteria', 'section_list', 0, $criteria);
 
-		$total = safe_count('txp_section', "$criteria");
+		$total = safe_count('txp_section', $criteria);
 
-		echo hed(gTxt('tab_sections').popHelp('section_category'), 1, array('class' => 'txp-heading'));
-		echo n.'<div id="'.$event.'_control" class="txp-control-panel">';
-		echo graf(
-			sLink('section', 'section_edit', gTxt('create_section'))
-			, ' class="txp-buttons"');
-
-		echo n.'<form id="default_section_form" name="default_section_form" method="post" action="index.php" class="async">';
 		echo
+			hed(gTxt('tab_sections').popHelp('section_category'), 1, array('class' => 'txp-heading'));
+			n.tag_start('div', array('id' => $event.'_control', 'class' => 'txp-control-panel')).
+
+			graf(
+				sLink('section', 'section_edit', gTxt('create_section')),
+				array('class' => 'txp-buttons')
+			).
+
+			n.tag_start('form', array(
+				'id'     => 'default_section_form',
+				'name'   => 'default_section_form',
+				'method' => 'post',
+				'action' => 'index.php',
+				'class'  => 'async',
+			)).
+
 			graf(
 				tag(gTxt('default_write_section'), 'label', array('for' => 'default_section')).
 				popHelp('section_default').
 				n.section_select_list()
 			).
+
 			eInput('section').
-			sInput('section_set_default');
-		echo n.'</form>';
+			sInput('section_set_default').
+			n.tag_end('form');
 
 		if ($total < 1)
 		{
@@ -202,17 +212,31 @@
 
 		echo section_search_form($crit, $search_method).'</div>';
 
-		$rs = safe_rows_start('*, (SELECT count(*) FROM '.safe_pfx('textpattern').' articles WHERE articles.Section = txp_section.name) AS article_count', 'txp_section',
-			"$criteria order by $sort_sql limit $offset, $limit" );
+		$rs = safe_rows_start(
+			'*, (select count(*) from '.safe_pfx_j('textpattern').' where textpattern.Section = txp_section.name) as article_count',
+			'txp_section',
+			"{$criteria} order by {$sort_sql} limit {$offset}, {$limit}"
+		);
 
 		if ($rs)
 		{
-			echo n.'<div id="'.$event.'_container" class="txp-container">';
-			echo n.'<form action="index.php" id="section_form" class="multi_edit_form" method="post" name="longform">'.
+			echo
+				n.tag_start('div', array(
+					'id'    => $event.'_container',
+					'class' => 'txp-container',
+				)).
 
-				n.'<div class="txp-listtables">'.
-				startTable('', '', 'txp-list').
-				n.'<thead>'.
+				n.tag_start('form', array(
+					'action' => 'index.php',
+					'id'     => 'section_form',
+					'class'  => 'multi_edit_form',
+					'method' => 'post',
+					'name'   => 'longform',
+				)).
+
+				n.tag_start('div', array('class' => 'txp-listtables')).
+				n.tag_start('table', array('class' => 'txp-list')).
+				n.tag_start('thead').
 				tr(
 					hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
 					column_head('name', 'name', 'section', true, $switch_dir, $crit, $search_method, (('name' == $sort) ? "$dir " : '').'name').
@@ -223,16 +247,13 @@
 					column_head('syndicate', 'in_rss', 'section', true, $switch_dir, $crit, $search_method, (('in_rss' == $sort) ? "$dir " : '').'section_detail syndicate').
 					column_head('include_in_search', 'searchable', 'section', true, $switch_dir, $crit, $search_method, (('searchable' == $sort) ? "$dir " : '').'section_detail searchable').
 					column_head('article', 'article_count', 'section', true, $switch_dir, $crit, $search_method, (('article_count' == $sort) ? "$dir " : '').'section_detail article_count')
-			).
-			n.'</thead>';
-
-			echo n.'<tbody>';
+				).
+				n.tag_end('thead').
+				n.tag_start('tbody');
 
 			while ($a = nextRow($rs))
 			{
 				extract($a, EXTR_PREFIX_ALL, 'sec');
-
-				$is_default_section = ($sec_name == 'default');
 
 				$edit_url = array(
 					'event'         => 'section',
@@ -245,82 +266,98 @@
 					'crit'          => $crit,
 				);
 
-				$page_url = array(
-					'event' => 'page',
-					'name'  => $sec_page,
-				);
-
-				$style_url = array(
-					'event' => 'css',
-					'name'  => $sec_css,
-				);
-
-				if ($sec_article_count > 0)
+				if ($sec_name == 'default')
 				{
-					$articles = href($sec_article_count, array(
-						'event'         => 'list',
-						'search_method' => 'section',
-						'crit'          => '"'.$sec_name.'"',
-					), array(
-						'title' => gTxt('article_count', array('{num}' => $sec_article_count))
-					));
-				}
-				else if($is_default_section)
-				{
-					$articles = '';
+					$articles = $sec_searchable = $sec_in_rss = $sec_on_frontpage = '-';
 				}
 				else
 				{
-					$articles = 0;
+					$sec_on_frontpage = asyncHref(yes_no($sec_on_frontpage), array(
+						'step'     => 'section_toggle_option',
+						'thing'    => $sec_name,
+						'property' => 'on_frontpage',
+					));
+
+					$sec_in_rss = asyncHref(yes_no($sec_in_rss), array(
+						'step'     => 'section_toggle_option',
+						'thing'    => $sec_name,
+						'property' => 'in_rss',
+					));
+
+					$sec_searchable = asyncHref(yes_no($sec_searchable), array(
+						'step'     => 'section_toggle_option',
+						'thing'    => $sec_name,
+						'property' => 'searchable',
+					));
+
+					if ($sec_article_count > 0)
+					{
+						$articles = href($sec_article_count, array(
+							'event'         => 'list',
+							'search_method' => 'section',
+							'crit'          => '"'.$sec_name.'"',
+						), array(
+							'title' => gTxt('article_count', array('{num}' => $sec_article_count))
+						));
+					}
+					else
+					{
+						$articles = 0;
+					}
 				}
 
-//				$can_delete = ($sec_name != 'default' && $sec_article_count == 0);
+				$sec_page = href(txpspecialchars($sec_page), array(
+					'event' => 'page',
+					'name'  => $sec_page,
+				), array('title' => gTxt('edit')));
 
-				$parms = array(
-					'step' => 'section_toggle_option',
-					'thing' => $sec_name
-				);
+				$sec_css = href(txpspecialchars($sec_css), array(
+					'event' => 'css',
+					'name'  => $sec_css,
+				), array('title' => gTxt('edit')));
+
 				echo tr(
-
-					td(
-						fInput('checkbox', 'selected[]', $sec_name)
-					, '', 'multi-edit').
-
+					td(fInput('checkbox', 'selected[]', $sec_name), '', 'multi-edit').
 					hCell(
-						href($sec_name, $edit_url, array('title' => gTxt('edit'))).
+						href(txpspecialchars($sec_name), $edit_url, array('title' => gTxt('edit'))).
 						sp.span(
 							span('[', array('aria-hidden' => 'true')).
 							href(gTxt('view'), pagelinkurl(array('s' => $sec_name))).
 							span(']', array('aria-hidden' => 'true'))
 						, array('class' => 'section_detail'))
-					, '', ' scope="row" class="name"').
+					, '', array('scope' => 'row', 'class' => 'name')).
 
 					td(txpspecialchars($sec_title), '', 'title').
-					td(href($sec_page, $page_url, ' title="'.gTxt('edit').'"'), '', 'page').
-					td(href($sec_css, $style_url, ' title="'.gTxt('edit').'"'), '', 'style').
-					td($is_default_section ? '-' : asyncHref($sec_on_frontpage ? gTxt('yes') : gTxt('no'), $parms + array('property' => 'on_frontpage')), '', 'section_detail frontpage').
-					td($is_default_section ? '-' : asyncHref($sec_in_rss ? gTxt('yes') : gTxt('no'), $parms + array('property' => 'in_rss')), '', 'section_detail syndicate').
-					td($is_default_section ? '-' : asyncHref($sec_searchable ? gTxt('yes') : gTxt('no'), $parms + array('property' => 'searchable')), '', 'section_detail searchable').
-					td($is_default_section ? '' : $articles, '', 'section_detail article_count')
-				, ' id="txp_section_'.$sec_name.'"'
+					td($sec_page, '', 'page').
+					td($sec_css, '', 'style').
+					td($sec_on_frontpage, '', 'section_detail frontpage').
+					td($sec_in_rss, '', 'section_detail syndicate').
+					td($sec_searchable, '', 'section_detail searchable').
+					td($articles, '', 'section_detail article_count'),
+					array('id' => 'txp_section_'.$sec_name)
 				);
 			}
 
-			echo n.'</tbody>'.
-				endTable().
-				n.'</div>'.
+			echo
+				n.tag_end('tbody').
+				n.tag_end('table').
+				n.tag_end('div').
 				section_multiedit_form($page, $sort, $dir, $crit, $search_method).
 				tInput().
-				n.'</form>'.
-				graf(
-					toggle_box('section_detail'),
-					' class="detail-toggle"'
-				).
-				n.'<div id="'.$event.'_navigation" class="txp-navigation">'.
+				n.tag_end('form').
+
+				graf(toggle_box('section_detail'), array('class' => 'detail-toggle')).
+
+				n.tag_start('div', array(
+					'id'    => $event.'_navigation',
+					'class' => 'txp-navigation',
+				)).
+
 				nav_form('section', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
 				pageby_form('section', $section_list_pageby).
-				n.'</div>'.
-				n.'</div>';
+
+				n.tag_end('div').
+				n.tag_end('div');
 		}
 	}
 
