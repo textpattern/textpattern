@@ -574,24 +574,24 @@
 
 	function section_toggle_option()
 	{
-		$column = gps('property');
-		$value = gps('value');
-		$name = gps('thing');
-		$newval = ($value == gTxt('yes')) ? '0' : '1';
-		$ret = false;
-		if (in_array($column, array('on_frontpage', 'in_rss', 'searchable')))
+		extract(psa(array(
+			'property',
+			'value',
+			'thing',
+		)));
+
+		$value = (int) ($value === gTxt('no'));
+
+		if (in_array($property, array('on_frontpage', 'in_rss', 'searchable')))
 		{
-			$ret = safe_update('txp_section', "$column='$newval'", "name='".doSlash($name)."'");
+			if (safe_update('txp_section', $property.' = '.$value, "name = '".doSlash($thing)."'"))
+			{
+				echo yes_no($value);
+				return;
+			}
 		}
 
-		if ($ret)
-		{
-			echo gTxt($newval ? 'yes' : 'no');
-		}
-		else
-		{
-			trigger_error(gTxt('section_save_failed'), E_USER_ERROR);
-		}
+		trigger_error(gTxt('section_save_failed'), E_USER_ERROR);
 	}
 
 /**
