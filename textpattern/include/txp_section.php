@@ -659,45 +659,21 @@
 
 	function section_delete()
 	{
-		$selected  = ps('selected');
-		$with_articles = safe_rows('Section, Count(*) AS count', 'textpattern', "Section in ('".join("','", doSlash($selected))."') GROUP BY Section");
-		$protected[] = 'default';
-		$del['success'] = $del['error'] = array();
+		$selected = join(',', quote_list(ps('selected')));
 
-		foreach ($with_articles as $row)
-		{
-			$protected[] = $row['Section'];
-		}
-		$protected = array_unique($protected);
+		$sections = safe_column(
+			'name',
+			'txp_section',
+			"name != 'default' and name in ({$selected}) and name not in (select Section from ".safe_pfx('textpattern').")"
+		);
 
-		foreach ($selected as $item)
+		if ($sections && safe_delete('txp_section', 'name in ('.join(',', quote_list($sections)).')'))
 		{
-			if (in_array($item, $protected))
-			{
-				$del['error'][] = $item;
-			}
-			else
-			{
-				$ret = safe_delete('txp_section', "name = '".doSlash($item)."'");
-				if ($ret)
-				{
-					$del['success'][] = $item;
-				}
-				else
-				{
-					$del['error'][] = $item;
-				}
-			}
+			callback_event('sections_deleted', '', 0, $sections);
+			sec_section_list(gTxt('section_deleted', array('{name}' => join(', ', $sections))));
 		}
 
-		if ($del['success'])
-		{
-			callback_event('sections_deleted', '', 0, $del['success']);
-		}
-
-		$message = ($del['success']) ? gTxt('section_deleted', array('{name}' => join(', ', $del['success']))) : '';
-
-		sec_section_list($message);
+		sec_section_list();
 	}
 
 /**
