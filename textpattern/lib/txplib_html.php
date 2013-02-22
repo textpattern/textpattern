@@ -1253,7 +1253,7 @@
 	}
 
 /**
- * Renders a form to select various amounts to page lists by.
+ * Renders a widget to select various amounts to page lists by.
  *
  * @param  string      $event Event
  * @param  int         $val   Current setting
@@ -1263,29 +1263,38 @@
 
 	function pageby_form($event, $val, $step = null)
 	{
-		$vals = array(
-			15  => 15,
-			25  => 25,
-			50  => 50,
-			100 => 100,
-		);
+		$vals = array(15, 25, 50, 100);
 
 		if ($step === null)
 		{
 			$step = $event.'_change_pageby';
 		}
 
-		$select_page = selectInput('qty', $vals, $val, '', 1);
+		$out = array();
 
-		$page = gTxt('view_per_page', array('{page}' => $select_page), false);
+		foreach ($vals as $qty)
+		{
+			if ($qty == $val)
+			{
+				$class = 'navlink-active';
+			}
+			else
+			{
+				$class = 'navlink';
+			}
 
-		return form(
-			graf(
-				$page.
-				eInput($event).
-				sInput($step)
-			)
-		, '', '', 'post', 'pageby');
+			$out[] = href($qty, array(
+				'event'      => $event,
+				'step'       => $step,
+				'qty'        => $qty,
+				'_txp_token' => form_token(),
+			), array(
+				'class' => $class,
+				'title' => gTxt('view_per_page', array('{page}' => $qty)),
+			));
+		}
+
+		return graf(join('', $out), array('class' => 'nav-tertiary pageby'));
 	}
 
 /**
