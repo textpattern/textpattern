@@ -29,6 +29,7 @@ summary {
 }
 
 html {
+  -webkit-tap-highlight-color: rgba(0, 102, 255, 0.5);
   /* prevents iOS text size adjust after orientation change, without disabling user zoom */
   -webkit-text-size-adjust: 100%;
   /* as above, for Windows Phone */
@@ -150,7 +151,6 @@ html {
 /* Links
    ========================================================================== */
 a {
-  -webkit-tap-highlight-color: rgba(0, 102, 255, 0.5);
   color: #114eb1;
   text-decoration: none;
 }
