@@ -76,7 +76,13 @@
 
 		pagetop(gTxt('tab_sections'), $message);
 
-		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
+		extract(gpsa(array(
+			'page',
+			'sort',
+			'dir',
+			'crit',
+			'search_method',
+		)));
 
 		if ($sort === '')
 		{
@@ -402,7 +408,13 @@
 			pagetop(gTxt('tab_sections'));
 
 			extract($rs, EXTR_PREFIX_ALL, 'sec');
-			extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
+			extract(gpsa(array(
+				'page',
+				'sort',
+				'dir',
+				'crit',
+				'search_method',
+			)));
 
 			$is_default_section = ($is_edit && $sec_name == 'default');
 			$caption = gTxt(($is_default_section) ? 'edit_default_section' : ($is_edit ? 'edit_section' : 'create_section'));
@@ -468,7 +480,14 @@
 	{
 		global $app_mode;
 
-		$in = array_map('assert_string', psa(array('name', 'title', 'old_name', 'section_page', 'css')));
+		$in = array_map('assert_string', psa(array(
+			'name',
+			'title',
+			'old_name',
+			'section_page',
+			'css',
+		)));
+
 		if (empty($in['title']))
 		{
 			$in['title'] = $in['name'];
@@ -711,12 +730,27 @@
 		global $all_pages, $all_styles;
 
 		$methods = array(
-			'changepage'        => array('label' => gTxt('uses_page'),         'html' => selectInput('uses_page', $all_pages, '', false)),
-			'changecss'         => array('label' => gTxt('uses_style'),        'html' => selectInput('css', $all_styles, '', false)),
-			'changeonfrontpage' => array('label' => gTxt('on_front_page'),     'html' => yesnoRadio('on_frontpage', 1)),
-			'changesyndicate'   => array('label' => gTxt('syndicate'),         'html' => yesnoRadio('in_rss', 1)),
-			'changesearchable'  => array('label' => gTxt('include_in_search'), 'html' => yesnoRadio('searchable', 1)),
-			'delete'            => gTxt('delete'),
+			'changepage' => array(
+				'label' => gTxt('uses_page'),
+				'html'  => selectInput('uses_page', $all_pages, '', false)
+			),
+			'changecss' => array(
+				'label' => gTxt('uses_style'),
+				'html'  => selectInput('css', $all_styles, '', false)
+			),
+			'changeonfrontpage' => array(
+				'label' => gTxt('on_front_page'),
+				'html'  => yesnoRadio('on_frontpage', 1)
+			),
+			'changesyndicate' => array(
+				'label' => gTxt('syndicate'),
+				'html'  => yesnoRadio('in_rss', 1)
+			),
+			'changesearchable' => array(
+				'label' => gTxt('include_in_search'),
+				'html'  => yesnoRadio('searchable', 1)
+			),
+			'delete' => gTxt('delete'),
 		);
 
 		return multi_edit($methods, 'section', 'section_multi_edit', $page, $sort, $dir, $crit, $search_method);
