@@ -175,7 +175,7 @@
 		$total = safe_count('txp_section', $criteria);
 
 		echo
-			hed(gTxt('tab_sections').popHelp('section_category'), 1, array('class' => 'txp-heading'));
+			hed(gTxt('tab_sections').popHelp('section_category'), 1, array('class' => 'txp-heading')).
 			n.tag_start('div', array('id' => $event.'_control', 'class' => 'txp-control-panel')).
 
 			graf(
