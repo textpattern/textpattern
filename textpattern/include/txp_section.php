@@ -194,7 +194,7 @@
 			graf(
 				tag(gTxt('default_write_section'), 'label', array('for' => 'default_section')).
 				popHelp('section_default').
-				n.section_select_list()
+				section_select_list()
 			).
 
 			eInput('section').
