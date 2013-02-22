@@ -83,20 +83,7 @@
 		asort($vals);
 		reset($vals);
 
-		$out = n.'<select id="'.$name.'" name="'.$name.'" class="languages">';
-
-		foreach ($vals as $avalue => $alabel)
-		{
-			$selected = ($avalue == $val || $alabel == $val) ?
-				' selected="selected"' :
-				'';
-
-			$out .= n.'<option value="'.txpspecialchars($avalue).'"'.$selected.'>'.txpspecialchars($alabel).'</option>';
-		}
-
-		$out .= n.'</select>';
-
-		return $out;
+		return selectInput($name, $vals, $val, false, true, $name);
 	}
 
 /**
@@ -129,12 +116,10 @@
 		$lang_form = '<div id="language_control" class="txp-control-panel">'.
 			form(
 				graf(
-					'<label for="language">'.gTxt('active_language').'</label>'.br.
-					languages('language', $active_lang)
-				).
-				graf(
-					fInput('submit', 'Submit',gTxt('save'), 'publish').
-					eInput('lang').sInput('list_languages')
+					'<label for="language">'.gTxt('active_language').'</label>'.
+					languages('language', $active_lang).
+					eInput('lang').
+					sInput('list_languages')
 				)
 			).'</div>';
 	
