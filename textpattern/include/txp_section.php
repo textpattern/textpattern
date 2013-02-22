@@ -373,99 +373,112 @@
 
 	function section_edit()
 	{
-		global $event, $step, $txp_user, $all_pages, $all_styles;
+		global $event, $step, $all_pages, $all_styles;
 
 		require_privs('section.edit');
 
-		$name = gps('name');
+		extract(gpsa(array(
+			'page',
+			'sort',
+			'dir',
+			'crit',
+			'search_method',
+			'name',
+		)));
 
 		$is_edit = ($name && $step == 'section_edit');
+		$caption = gTxt('create_section');
+		$is_default_section = false;
 
 		if ($is_edit)
 		{
-			$name = assert_string($name);
-			$rs = safe_row('*', 'txp_section', "name = '".doSlash($name)."'");
+			$rs = safe_row(
+				'*',
+				'txp_section',
+				"name = '".doSlash($name)."'"
+			);
+
+			if ($name == 'default')
+			{
+				$caption = gTxt('edit_default_section');
+				$is_default_section = true;
+			}
+			else
+			{
+				$caption = gTxt('edit_section');
+			}
 		}
 		else
 		{
-			// Pulling out the radio items from the default entry might seem pointless since they can't be directly
-			// edited, but they will take on either:
-			//  a) the default (SQL) values as defined at table creation time, or
-			//  b) the values set when a multi-edit was performed that included the default section (because the values are silently updated then)
-			$rs = safe_row('*', 'txp_section', "name = 'default'"); //array_flip(getThings('describe `'.PFX.'txp_section`'));
+			// Pulls defaults for the new section from the 'default'.
+
+			$rs = safe_row(
+				'*',
+				'txp_section',
+				"name = 'default'"
+			);
+
 			if ($rs)
 			{
 				$rs['name'] = $rs['title'] = '';
 			}
 		}
 
-		if ($rs)
+		if (!$rs)
 		{
-			pagetop(gTxt('tab_sections'));
-
-			extract($rs, EXTR_PREFIX_ALL, 'sec');
-			extract(gpsa(array(
-				'page',
-				'sort',
-				'dir',
-				'crit',
-				'search_method',
-			)));
-
-			$is_default_section = ($is_edit && $sec_name == 'default');
-			$caption = gTxt(($is_default_section) ? 'edit_default_section' : ($is_edit ? 'edit_section' : 'create_section'));
-
-			echo n.'<div id="'.$event.'_container" class="txp-container">';
-			echo form(
-				n.'<section class="txp-edit">'.
-				hed($caption, 2).
-
-				(($is_default_section)
-				? hInput('name', 'default')
-				: inputLabel('section_name', fInput('text', 'name', $sec_name, '', '', '', INPUT_REGULAR, '', 'section_name'), 'section_name')
-				).
-
-				(($is_default_section)
-				? ''
-				: inputLabel('section_title', fInput('text', 'title', $sec_title, '', '', '', INPUT_REGULAR, '', 'section_title'), 'section_longtitle')
-				).
-
-				inputLabel('section_page', selectInput('section_page', $all_pages, $sec_page, '', '', 'section_page'), 'uses_page', 'section_uses_page').
-				inputLabel('section_css', selectInput('css', $all_styles, $sec_css, '', '', 'section_css'), 'uses_style', 'section_uses_css').
-
-				(($is_default_section)
-				? ''
-				: inputLabel('on_front_page', yesnoradio('on_frontpage', $sec_on_frontpage, '', $sec_name), '', 'section_on_frontpage')
-				).
-
-				(($is_default_section)
-				? ''
-				: inputLabel('syndicate', yesnoradio('in_rss', $sec_in_rss, '', $sec_name), '', 'section_syndicate')
-				).
-
-				(($is_default_section)
-				? ''
-				: inputLabel('include_in_search', yesnoradio('searchable', $sec_searchable, '', $sec_name), '', 'section_searchable')
-				).
-
-				pluggable_ui('section_ui', 'extend_detail_form', '', $rs).
-
-				graf(
-					fInput('submit', '', gTxt('save'), 'publish')
-				).
-
-				eInput('section').
-				sInput('section_save').
-				hInput('old_name', $sec_name).
-				hInput('search_method', $search_method).
-				hInput('crit', $crit).
-				hInput('page', $page).
-				hInput('sort', $sort).
-				hInput('dir', $dir).
-				n.'</section>'
-			, '', '', 'post', 'edit-form', '', 'section_details');
-			echo n.'</div>';
+			sec_section_list(array(gTxt('unknown_section'), E_ERROR));
+			return;
 		}
+
+		extract($rs, EXTR_PREFIX_ALL, 'sec');
+		pagetop(gTxt('tab_sections'));
+
+		$out = array();
+
+		$out[] =
+			n.tag_start('section', array('class' => 'txp-edit')).
+			hed($caption, 2);
+
+		if ($is_default_section)
+		{
+			$out[] = hInput('name', 'default');
+		}
+		else
+		{
+			$out[] =
+				inputLabel('section_name', fInput('text', 'name', $sec_name, '', '', '', INPUT_REGULAR, '', 'section_name'), 'section_name').
+				inputLabel('section_title', fInput('text', 'title', $sec_title, '', '', '', INPUT_REGULAR, '', 'section_title'), 'section_longtitle');
+		}
+
+		$out[] =
+			inputLabel('section_page', selectInput('section_page', $all_pages, $sec_page, '', '', 'section_page'), 'uses_page', 'section_uses_page').
+			inputLabel('section_css', selectInput('css', $all_styles, $sec_css, '', '', 'section_css'), 'uses_style', 'section_uses_css');
+
+		if (!$is_default_section)
+		{
+			$out[] =
+				inputLabel('on_front_page', yesnoradio('on_frontpage', $sec_on_frontpage, '', $sec_name), '', 'section_on_frontpage').
+				inputLabel('syndicate', yesnoradio('in_rss', $sec_in_rss, '', $sec_name), '', 'section_syndicate').
+				inputLabel('include_in_search', yesnoradio('searchable', $sec_searchable, '', $sec_name), '', 'section_searchable');
+		}
+
+		$out[] =
+			pluggable_ui('section_ui', 'extend_detail_form', '', $rs).
+			graf(fInput('submit', '', gTxt('save'), 'publish')).
+			eInput('section').
+			sInput('section_save').
+			hInput('old_name', $sec_name).
+			hInput('search_method', $search_method).
+			hInput('crit', $crit).
+			hInput('page', $page).
+			hInput('sort', $sort).
+			hInput('dir', $dir).
+			n.tag_end('section');
+
+		echo
+			n.tag_start('div', array('id' => $event.'_container', 'class' => 'txp-container')).
+			form(join('', $out), '', '', 'post', 'edit-form', '', 'section_details').
+			n.tag_end('div');
 	}
 
 /**
