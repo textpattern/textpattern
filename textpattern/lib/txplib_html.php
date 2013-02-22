@@ -1255,6 +1255,9 @@
 /**
  * Renders a widget to select various amounts to page lists by.
  *
+ * The rendered options can be changed via a '{$event}_ui > pageby_values'
+ * callback event.
+ *
  * @param  string      $event Event
  * @param  int         $val   Current setting
  * @param  string|null $step  Step
@@ -1264,6 +1267,7 @@
 	function pageby_form($event, $val, $step = null)
 	{
 		$vals = array(15, 25, 50, 100);
+		callback_event_ref($event.'_ui', 'pageby_values', 0, $vals);
 
 		if ($step === null)
 		{
