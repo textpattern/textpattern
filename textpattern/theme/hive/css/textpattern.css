@@ -796,7 +796,6 @@ input[type="search"]::-webkit-search-decoration {
 .boxshadow select:focus,
 .boxshadow textarea:focus {
   outline: 0;
-  border-color: #0066ff;
   -webkit-box-shadow: 0 0 7px #0066ff;
   box-shadow: 0 0 7px #0066ff;
   /* Opera */
@@ -812,7 +811,6 @@ input[type="search"]::-webkit-search-decoration {
 .boxshadow .navlink-active:focus,
 .boxshadow .txp-buttons a:focus {
   outline: 0;
-  border-color: #0066ff;
   -webkit-box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.25), 0 0 7px #0066ff;
   box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.25), 0 0 7px #0066ff;
   /* Opera */
