@@ -437,7 +437,7 @@ button.ui-button-icons-only {
 }
 
 .ui-button-text-only .ui-button-text {
-	padding: .25em 1em;
+	padding: .25em .75em;
 }
 
 .ui-button-icon-only .ui-button-text,
@@ -448,12 +448,12 @@ button.ui-button-icons-only {
 
 .ui-button-text-icon-primary .ui-button-text,
 .ui-button-text-icons .ui-button-text {
-	padding: .25em 1em .25em 2.1em;
+	padding: .25em .75em .25em 2.1em;
 }
 
 .ui-button-text-icon-secondary .ui-button-text,
 .ui-button-text-icons .ui-button-text {
-	padding: .25em 2.1em .25em 1em;
+	padding: .25em 2.1em .25em .75em;
 }
 
 .ui-button-text-icons .ui-button-text {
@@ -463,7 +463,7 @@ button.ui-button-icons-only {
 
 /* no icon support for input elements, provide padding by default */
 input.ui-button {
-	padding: .25em 1em;
+	padding: .25em .75em;
 }
 
 /* button icon element(s) */
@@ -503,7 +503,7 @@ input.ui-button {
 
 .ui-buttonset .ui-button {
 	margin-left: 0;
-	margin-right: -.34em;
+	margin-right: -.35em;
 }
 
 /* removes inner padding and border in Firefox 4+ */

@@ -610,9 +610,11 @@ select[multiple] {
 	height: auto;
 }
 
+
+/* TODO: check we actually need this */
 select[size="0"],
 select[size="1"] {
-	height: 2.09090909090909em; /* 23px / 11px */
+	height: 2em;
 }
 
 /* addresses select alignment in Safari/Chrome */
@@ -628,7 +630,7 @@ select[size="1"] {
 	select[multiple],
 	select[multiple][size] {
 		background-image: none;
-		padding-right: .36363636363636em;
+		padding-right: .25em;
 	}
 }
 
@@ -702,7 +704,6 @@ input.input-xsmall {
 
 input.year,
 input.exp_year {
-	padding: .18181818181818em; /* 2px / 11px */
 	width: 4em;; /* 44px / 11px */
 	text-align: center;
 }
@@ -717,7 +718,6 @@ input.minute,
 input.exp_minute,
 input.second,
 input.exp_second {
-	padding: .18181818181818em; /* 2px / 11px */
 	width: 2.72727272727273em; /* 30px / 11px */
 	text-align: center;
 }
@@ -746,7 +746,7 @@ input[type="button"],
 	border-color: #ddd #bbb #bbb #ddd;
 	-moz-border-radius: .5em;
 	border-radius: .5em;
-	padding: .25em 1em;
+	padding: .25em .75em;
 	width: auto;
 	text-decoration: none;
 	color: #000;
@@ -790,7 +790,6 @@ input[type="button"]:active,
 input[type="submit"].publish,
 button.publish {
 	border-color: #b00 #600 #600 #b00;
-	padding: .5em;
 	color: #fff;
 	background-color: #900;
 }
@@ -809,7 +808,7 @@ input[type="submit"].destroy,
 button.destroy {
 	font-size: .90909090909091em;
 	margin: 0;
-	padding: 0 .3em;
+	padding: 0 .25em;
 	width: 1.6em;
 }
 
