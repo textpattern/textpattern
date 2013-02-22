@@ -126,29 +126,13 @@ a.ui-state-default:focus {
 
 .ui-state-highlight {
 	border: 1px solid #ffe16d;
-	color: #cb8f02;
 	background-color: #fff6d3;
-}
-
-.ui-state-highlight a,
-.ui-state-highlight a:hover,
-a.ui-state-highlight,
-a.ui-state-highlight:hover {
-	color: #cb8f02;
 }
 
 .ui-state-error {
 	border: 1px solid #e1b2b2;
 	color: #9d261d;
 	background-color: #f2dede;
-}
-
-.ui-state-error a,
-.ui-state-error a:hover,
-a.ui-state-error,
-a.ui-state-error:hover,
-.ui-state-error-text {
-	color: #9d261d;
 }
 
 .ui-priority-primary {
@@ -388,12 +372,55 @@ a.ui-state-error:hover,
 	position: relative;
 	display: inline-block;
 	margin-right: .1em;
+	border: 1px solid #c4c4c4;
+	border-bottom-color: #aaaaaa;
 	padding: 0;
 	cursor: pointer;
 	text-align: center;
+	text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.4);
 	line-height: 1.4;
 	vertical-align: middle;
 	overflow: visible; /* the overflow property removes extra width in IE */
+	background-color: #eeeeee;
+	/* Safari5.1+, Chrome10+ */
+	background-image: -webkit-linear-gradient(#eeeeee, #dddddd);
+	/* Firefox3.6 */
+	background-image: -moz-linear-gradient(#eeeeee, #dddddd);
+	/* Opera11.10+ */
+	background-image: -o-linear-gradient(#eeeeee, #dddddd);
+	/* CSS3 Compliant */
+	background-image: linear-gradient(#eeeeee, #dddddd);
+}
+
+.ui-button:hover {
+	border: 1px solid #aaaaaa;
+	border-bottom-color: #919191;
+	text-decoration: none;
+	background-color: #f8f8f8;
+	/* Safari5.1+, Chrome10+ */
+	background-image: -webkit-linear-gradient(#f8f8f8, #e7e7e7);
+	/* Firefox3.6 */
+	background-image: -moz-linear-gradient(#f8f8f8, #e7e7e7);
+	/* Opera11.10+ */
+	background-image: -o-linear-gradient(#f8f8f8, #e7e7e7);
+	/* CSS3 Compliant */
+	background-image: linear-gradient(#f8f8f8, #e7e7e7);
+}
+
+.ui-button:active {
+	border: 1px solid #aaaaaa;
+	border-bottom-color: #919191;
+	-webkit-box-shadow: inset 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
+	box-shadow: inset 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
+	background-color: #e6e6e6;
+	/* Safari5.1+, Chrome10+ */
+	background-image: -webkit-linear-gradient(#e6e6e6, #d5d5d5);
+	/* Firefox3.6 */
+	background-image: -moz-linear-gradient(#e6e6e6, #d5d5d5);
+	/* Opera11.10+ */
+	background-image: -o-linear-gradient(#e6e6e6, #d5d5d5);
+	/* CSS3 Compliant */
+	background-image: linear-gradient(#e6e6e6, #d5d5d5);
 }
 
 .ui-button-icon-only {
@@ -506,6 +533,47 @@ input.ui-button {
 	margin-right: -.35em;
 }
 
+[aria-pressed="true"].ui-button {
+	border-color: #a3bef3;
+	border-bottom-color: #769eed;
+	background-color: #e3edfc;
+	/* Safari5.1+, Chrome10+ */
+	background-image: -webkit-linear-gradient(#e3edfc, #bed4f9);
+	/* Firefox3.6 */
+	background-image: -moz-linear-gradient(#e3edfc, #bed4f9);
+	/* Opera11.10+ */
+	background-image: -o-linear-gradient(#e3edfc, #bed4f9);
+	/* CSS3 Compliant */
+	background-image: linear-gradient(#e3edfc, #bed4f9);
+}
+
+[aria-pressed="true"].ui-button:hover {
+	border-color: #97b0ef;
+	border-bottom-color: #6b8fe8;
+	background-color: #f1f6fe;
+	/* Safari5.1+, Chrome10+ */
+	background-image: -webkit-linear-gradient(#f1f6fe, #ccdefa);
+	/* Firefox3.6 */
+	background-image: -moz-linear-gradient(#f1f6fe, #ccdefa);
+	/* Opera11.10+ */
+	background-image: -o-linear-gradient(#f1f6fe, #ccdefa);
+	/* CSS3 Compliant */
+	background-image: linear-gradient(#f1f6fe, #ccdefa);
+}
+[aria-pressed="true"].ui-button:active {
+	border-color: #97b0ef;
+	border-bottom-color: #6b8fe8;
+	background-color: #d5e4fb;
+	/* Safari5.1+, Chrome10+ */
+	background-image: -webkit-linear-gradient(#d5e4fb, #b0cbf7);
+	/* Firefox3.6 */
+	background-image: -moz-linear-gradient(#d5e4fb, #b0cbf7);
+	/* Opera11.10+ */
+	background-image: -o-linear-gradient(#d5e4fb, #b0cbf7);
+	/* CSS3 Compliant */
+	background-image: linear-gradient(#d5e4fb, #b0cbf7);
+}
+
 /* removes inner padding and border in Firefox 4+ */
 button::-moz-focus-inner,
 input::-moz-focus-inner {
@@ -602,7 +670,6 @@ input::-moz-focus-inner {
 }
 
 .ui-datepicker td a.ui-state-active {
-	color: #114eb1;
 	border-color: #a3bef3;
 	background-color: #e3edfc;
 }

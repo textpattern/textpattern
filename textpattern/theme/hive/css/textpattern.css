@@ -1212,7 +1212,6 @@ button.destroy:active {
 }
 
 .nav-tertiary .navlink-active {
-  color: #114eb1;
   border-color: #a3bef3;
   border-bottom-color: #769eed;
   background-color: #e3edfc;
