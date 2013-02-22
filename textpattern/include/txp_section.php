@@ -375,6 +375,8 @@
 	{
 		global $event, $step, $txp_user, $all_pages, $all_styles;
 
+		require_privs('section.edit');
+
 		$name = gps('name');
 
 		$is_edit = ($name && $step == 'section_edit');
@@ -399,12 +401,6 @@
 
 		if ($rs)
 		{
-			if (!has_privs('section.edit'))
-			{
-				sec_section_list(gTxt('restricted_area'));
-				return;
-			}
-
 			pagetop(gTxt('tab_sections'));
 
 			extract($rs, EXTR_PREFIX_ALL, 'sec');
