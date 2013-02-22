@@ -588,7 +588,7 @@ textarea {
 	margin: 0;
 	border: 1px solid;
 	border-color: #bbb #ddd #ddd #bbb;
-	padding: .4em;
+	padding: .25em;
 	max-width: 100%;
 	background-color: #f5f5f5;
 	-webkit-box-sizing: border-box;
@@ -746,7 +746,7 @@ input[type="button"],
 	border-color: #ddd #bbb #bbb #ddd;
 	-moz-border-radius: .5em;
 	border-radius: .5em;
-	padding: .4em 1em;
+	padding: .25em 1em;
 	width: auto;
 	text-decoration: none;
 	color: #000;
