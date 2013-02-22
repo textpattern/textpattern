@@ -352,15 +352,22 @@
 
 			if ($search_method and $crit != '')
 			{
-				$crit_escaped = doLike($crit);
-
-				$critsql = array(
-					'id'        => "user_id in ('" .join("','", do_list($crit_escaped)). "')",
-					'login'     => "name like '%$crit_escaped%'",
-					'real_name' => "RealName like '%$crit_escaped%'",
-					'email'     => "email like '%$crit_escaped%'",
-					'privs'     => "privs in ('" .join("','", do_list($crit_escaped)). "')",
-				);
+				$verbatim = preg_match('/^"(.*)"$/', $crit, $m);
+				$crit_escaped = $verbatim ? doSlash($m[1]) : doLike($crit);
+				$critsql = $verbatim ?
+					array(
+						'id'        => "user_id in ('" .join("','", do_list($crit_escaped)). "')",
+						'login'     => "name = '$crit_escaped'",
+						'real_name' => "RealName = '$crit_escaped'",
+						'email'     => "email = '$crit_escaped'",
+						'privs'     => "convert(privs, char) in ('" .join("','", do_list($crit_escaped)). "')",
+					) : array(
+						'id'        => "user_id in ('" .join("','", do_list($crit_escaped)). "')",
+						'login'     => "name like '%$crit_escaped%'",
+						'real_name' => "RealName like '%$crit_escaped%'",
+						'email'     => "email like '%$crit_escaped%'",
+						'privs'     => "convert(privs, char) in ('" .join("','", do_list($crit_escaped)). "')",
+					);
 
 				if (array_key_exists($search_method, $critsql))
 				{
