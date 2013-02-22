@@ -175,8 +175,11 @@
 			, ' class="txp-buttons"');
 
 		echo n.'<form id="default_section_form" name="default_section_form" method="post" action="index.php" class="async">';
-		echo graf(
-				'<label>'.gTxt('default_write_section').'</label>'.popHelp('section_default').n.section_select_list()
+		echo
+			graf(
+				tag(gTxt('default_write_section'), 'label', array('for' => 'default_section')).
+				popHelp('section_default').
+				n.section_select_list()
 			).
 			eInput('section').
 			sInput('section_set_default');
