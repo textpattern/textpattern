@@ -140,17 +140,17 @@
 					'title'        => "title = '$crit_escaped'",
 					'page'         => "page = '$crit_escaped'",
 					'css'          => "css = '$crit_escaped'",
-					'in_rss'       => "in_rss = '$crit_escaped'",
-					'on_frontpage' => "on_frontpage = '$crit_escaped'",
-					'searchable'   => "searchable = '$crit_escaped'"
+					'in_rss'       => "convert(in_rss, char) = '$crit_escaped'",
+					'on_frontpage' => "convert(on_frontpage, char) = '$crit_escaped'",
+					'searchable'   => "convert(searchable, char) = '$crit_escaped'"
 				) : array(
 					'name'         => "name like '%$crit_escaped%'",
 					'title'        => "title like '%$crit_escaped%'",
 					'page'         => "page like '%$crit_escaped%'",
 					'css'          => "css like '%$crit_escaped%'",
-					'in_rss'       => "in_rss = '$crit_escaped'",
-					'on_frontpage' => "on_frontpage = '$crit_escaped'",
-					'searchable'   => "searchable = '$crit_escaped'"
+					'in_rss'       => "convert(in_rss, char) = '$crit_escaped'",
+					'on_frontpage' => "convert(on_frontpage, char) = '$crit_escaped'",
+					'searchable'   => "convert(searchable, char) = '$crit_escaped'"
 				);
 
 			if (array_key_exists($search_method, $critsql))
