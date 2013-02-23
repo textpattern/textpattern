@@ -485,7 +485,7 @@
 
 			if ($start > 1)
 			{
-				$nav[1] = href(1, $parameters + array('page' => 1), array(
+				$nav[] = href(1, $parameters + array('page' => 1), array(
 					'class' => 'navlink',
 				));
 			}
@@ -495,7 +495,7 @@
 			if ($start > 2)
 			{
 				$between = ceil($start/2);
-				$nav[2] = href('&#8230;', $parameters + array('page' => $between), array(
+				$nav[] = href('&#8230;', $parameters + array('page' => $between), array(
 					'class' => 'navlink',
 					'title' => $between,
 				));
