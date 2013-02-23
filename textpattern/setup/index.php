@@ -72,13 +72,14 @@
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow">
 <title>Setup &#124; Textpattern CMS</title>
-<script src="$rel_txpurl/jquery.js"></script>
+<script src="../vendors/jquery/jquery/jquery.js"></script>
+<script src="../vendors/jquery/ui/js/jquery-ui.js"></script>
 <script>var textpattern = { do_spellcheck: "", textarray: {} };</script>
-<script src="$rel_txpurl/textpattern.js"></script>
-<link rel="stylesheet" href="$rel_txpurl/theme/hive/css/textpattern.css">
+<script src="../textpattern.js"></script>
+<link rel="stylesheet" href="../theme/hive/css/textpattern.css">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<script src="$rel_txpurl/modernizr.js"></script>
-<!--[if lt IE 9]><script src="$rel_txpurl/theme/hive/js/selectivizr.min.js"></script><![endif]-->
+<script src="../vendors/modernizr/modernizr/modernizr.js"></script>
+<!--[if lt IE 9]><script src="../vendors/keithclark/selectivizr/selectivizr.min.js"></script><![endif]-->
 </head>
 <body id="page-setup"{$bodyclass}>
 <main class="txp-body">
