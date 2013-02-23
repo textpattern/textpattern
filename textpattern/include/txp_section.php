@@ -133,7 +133,6 @@
 		if ($search_method and $crit != '')
 		{
 			$verbatim = preg_match('/^"(.*)"$/', $crit, $m);
-			$truthyfalsy = array('0' => falsy(), '1' => truthy());
 			$crit_escaped = $verbatim ? doSlash($m[1]) : doLike($crit);
 			$critsql = $verbatim ?
 				array(
@@ -141,22 +140,55 @@
 					'title'        => "title = '$crit_escaped'",
 					'page'         => "page = '$crit_escaped'",
 					'css'          => "css = '$crit_escaped'",
-					'in_rss'       => "convert(in_rss, char) = '".multiCompare($truthyfalsy, $crit_escaped, COMPARE_SUBSTRING | COMPARE_ONE)."'",
-					'on_frontpage' => "convert(on_frontpage, char) = '".multiCompare($truthyfalsy, $crit_escaped, COMPARE_SUBSTRING | COMPARE_ONE)."'",
-					'searchable'   => "convert(searchable, char) = '".multiCompare($truthyfalsy, $crit_escaped, COMPARE_SUBSTRING | COMPARE_ONE)."'"
 				) : array(
 					'name'         => "name like '%$crit_escaped%'",
 					'title'        => "title like '%$crit_escaped%'",
 					'page'         => "page like '%$crit_escaped%'",
 					'css'          => "css like '%$crit_escaped%'",
-					'in_rss'       => "convert(in_rss, char) = '".multiCompare($truthyfalsy, $crit_escaped, COMPARE_SUBSTRING | COMPARE_ONE)."'",
-					'on_frontpage' => "convert(on_frontpage, char) = '".multiCompare($truthyfalsy, $crit_escaped, COMPARE_SUBSTRING | COMPARE_ONE)."'",
-					'searchable'   => "convert(searchable, char) = '".multiCompare($truthyfalsy, $crit_escaped, COMPARE_SUBSTRING | COMPARE_ONE)."'"
 				);
 
-			if (array_key_exists($search_method, $critsql))
+			if ($verbatim)
 			{
-				$criteria = $critsql[$search_method];
+				$critsql['in_rss'] =
+					"('$crit_escaped' in ('".doSlash(gTxt('yes'))."', 1) and in_rss = 1) or
+					('$crit_escaped' in ('".doSlash(gTxt('no'))."', '0') and in_rss = 0)";
+
+				$critsql['on_frontpage'] =
+					"('$crit_escaped' in ('".doSlash(gTxt('yes'))."', 1) and on_frontpage = 1) or
+					('$crit_escaped' in ('".doSlash(gTxt('no'))."', '0') and on_frontpage = 0)";
+
+				$critsql['searchable'] =
+					"('$crit_escaped' in ('".doSlash(gTxt('yes'))."', 1) and searchable = 1) or
+					('$crit_escaped' in ('".doSlash(gTxt('no'))."', '0') and searchable = 0)";
+			}
+			else
+			{
+				$critsql['in_rss'] =
+					"(('".doSlash(gTxt('yes'))."' like '%$crit_escaped%' or '$crit_escaped' = 1) and in_rss = 1) or
+					(('".doSlash(gTxt('no'))."' like '%$crit_escaped%' or '$crit_escaped' = '0') and in_rss = 0)";
+
+				$critsql['on_frontpage'] =
+					"(('".doSlash(gTxt('yes'))."' like '%$crit_escaped%' or '$crit_escaped' = 1) and on_frontpage = 1) or
+					(('".doSlash(gTxt('no'))."' like '%$crit_escaped%' or '$crit_escaped' = '0') and on_frontpage = 0)";
+
+				$critsql['searchable'] =
+					"(('".doSlash(gTxt('yes'))."' like '%$crit_escaped%' or '$crit_escaped' = 1) and searchable = 1) or
+					(('".doSlash(gTxt('no'))."' like '%$crit_escaped%' or '$crit_escaped' = '0') and searchable = 0)";
+			}
+
+			$search_sql = array();
+
+			foreach ((array) $search_method as $method)
+			{
+				if (isset($critsql[$method]))
+				{
+					$search_sql[] = $critsql[$method];
+				}
+			}
+
+			if ($search_sql)
+			{
+				$criteria = join(' or ', $search_sql);
 				$limit = 500;
 			}
 			else
