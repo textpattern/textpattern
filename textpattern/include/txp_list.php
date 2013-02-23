@@ -527,6 +527,18 @@
 	{
 		global $txp_user, $statuses, $all_cats, $all_authors, $all_sections;
 
+		extract(psa(array(
+			'selected',
+			'edit_method',
+		)));
+
+		if (!$selected || !is_array($selected))
+		{
+			return list_list();
+		}
+
+		$selected = array_map('assert_int', $selected);
+
 		// Empty entry to permit clearing the categories.
 		$categories = array('');
 
@@ -535,152 +547,118 @@
 			$categories[] = $row['name'];
 		}
 
-		$selected = ps('selected');
+		$allowed = array();
+		$key = $val = '';
 
-		if (!$selected or !is_array($selected))
+		switch ($edit_method)
 		{
-			return list_list();
+			// Delete.
+			case 'delete' :
+				if (!has_privs('article.delete'))
+				{
+					if (has_privs('article.delete.own'))
+					{
+						$allowed = safe_column_num(
+							'ID',
+							'textpattern',
+							"ID in(".join(',', $selected).") and AuthorID = '".doSlash($txp_user)."'"
+						);
+					}
+
+					$selected = $allowed;
+				}
+
+				if ($selected && safe_delete('textpattern', 'ID in ('.join(',', $selected).')'))
+				{
+					safe_update('txp_discuss', "visible = ".MODERATE, "parentid in(".join(',', $selected).")");
+					callback_event('articles_deleted', '', 0, $selected);
+					update_lastmod();
+					return list_list(messenger('article', join(', ', $selected), 'deleted'));
+				}
+
+				return list_list();
+				break;
+			// Change author.
+			case 'changeauthor' :
+				$val = ps('AuthorID');
+				if (has_privs('article.edit') && in_array($val, $all_authors, true))
+				{
+					$key = 'AuthorID';
+				}
+				break;
+
+			// Change category1.
+			case 'changecategory1' :
+				$val = ps('Category1');
+				if (in_array($val, $categories, true))
+				{
+					$key = 'Category1';
+				}
+				break;
+			// Change category2.
+			case 'changecategory2' :
+				$val = ps('Category2');
+				if (in_array($val, $categories, true))
+				{
+					$key = 'Category2';
+				}
+				break;
+			// Change comment status.
+			case 'changecomments' :
+				$key = 'Annotate';
+				$val = (int) ps('Annotate');
+				break;
+			// Change section.
+			case 'changesection' :
+				$val = ps('Section');
+				if (in_array($val, $all_sections, true))
+				{
+					$key = 'Section';
+				}
+				break;
+			// Change status.
+			case 'changestatus' :
+				$val = (int) ps('Status');
+				if (array_key_exists($val, $statuses))
+				{
+					$key = 'Status';
+				}
+
+				if (!has_privs('article.publish') && $val >= STATUS_LIVE)
+				{
+					$val = STATUS_PENDING;
+				}
+				break;
 		}
 
-		$selected = array_map('assert_int', $selected);
-		$method   = ps('edit_method');
-		$changed  = false;
-		$ids      = array();
-		$key      = '';
+		$selected = safe_rows(
+			'ID, AuthorID, Status',
+			'textpattern',
+			'ID in ('.join(',', $selected).')'
+		);
 
-		if ($method == 'delete')
+		foreach ($selected as $item)
 		{
-			if (!has_privs('article.delete'))
+			if (
+				($item['Status'] >= STATUS_LIVE && has_privs('article.edit.published')) ||
+				($item['Status'] >= STATUS_LIVE && $item['AuthorID'] === $txp_user && has_privs('article.edit.own.published')) ||
+				($item['Status'] < STATUS_LIVE && has_privs('article.edit')) ||
+				($item['Status'] < STATUS_LIVE && $item['AuthorID'] === $txp_user && has_privs('article.edit.own'))
+			)
 			{
-				$allowed = array();
-
-				if (has_privs('article.delete.own'))
-				{
-					$allowed = safe_column_num('ID', 'textpattern', 'ID in('.join(',', $selected).') and AuthorID=\''.doSlash($txp_user).'\'');
-				}
-
-				$selected = $allowed;
-			}
-
-			foreach ($selected as $id)
-			{
-				if (safe_delete('textpattern', "ID = $id"))
-				{
-					$ids[] = $id;
-				}
-			}
-
-			$changed = join(', ', $ids);
-
-			if ($changed)
-			{
-				safe_update('txp_discuss', "visible = ".MODERATE, "parentid in($changed)");
-				callback_event('articles_deleted', '', 0, $ids);
-			}
-		}
-
-		else
-		{
-			$selected = safe_rows(
-				'ID, AuthorID, Status',
-				'textpattern',
-				'ID in ('.join(',', $selected).')'
-			);
-
-			$allowed = array();
-			foreach ($selected as $item)
-			{
-				if ( ($item['Status'] >= STATUS_LIVE and has_privs('article.edit.published'))
-				  or ($item['Status'] >= STATUS_LIVE and $item['AuthorID'] === $txp_user and has_privs('article.edit.own.published'))
-				  or ($item['Status'] < STATUS_LIVE and has_privs('article.edit'))
-				  or ($item['Status'] < STATUS_LIVE and $item['AuthorID'] === $txp_user and has_privs('article.edit.own')))
-				{
-					$allowed[] = $item['ID'];
-				}
-			}
-
-			$selected = $allowed;
-			unset($allowed);
-
-			switch ($method)
-			{
-				// Change author.
-				case 'changeauthor' :
-					$val = has_privs('article.edit') ? ps('AuthorID') : '';
-					if (in_array($val, $all_authors))
-					{
-						$key = 'AuthorID';
-					}
-					break;
-				// Change category1.
-				case 'changecategory1' :
-					$val = ps('Category1');
-					if (in_array($val, $categories))
-					{
-						$key = 'Category1';
-					}
-					break;
-				// Change category2.
-				case 'changecategory2' :
-					$val = ps('Category2');
-					if (in_array($val, $categories))
-					{
-						$key = 'Category2';
-					}
-					break;
-				// Change comment status.
-				case 'changecomments' :
-					$key = 'Annotate';
-					$val = (int) ps('Annotate');
-					break;
-				// Change section.
-				case 'changesection' :
-					$val = ps('Section');
-					if (in_array($val, $all_sections))
-					{
-						$key = 'Section';
-					}
-					break;
-				// Change status.
-				case 'changestatus' :
-					$val = (int) ps('Status');
-					if (array_key_exists($val, $statuses))
-					{
-						$key = 'Status';
-					}
-
-					if (!has_privs('article.publish') && $val >= STATUS_LIVE)
-					{
-						$val = STATUS_PENDING;
-					}
-					break;
-				default :
-					$key = '';
-					$val = '';
-					break;
-			}
-
-			if ($selected and $key)
-			{
-				foreach ($selected as $id)
-				{
-					if (safe_update('textpattern', "$key = '".doSlash($val)."'", "ID = $id"))
-					{
-						$ids[] = $id;
-					}
-				}
-
-				$changed = join(', ', $ids);
+				$allowed[] = $item['ID'];
 			}
 		}
 
-		if ($changed)
-		{
-			update_lastmod();
+		$selected = $allowed;
 
-			return list_list(
-				messenger('article', $changed, (($method == 'delete') ? 'deleted' : 'modified' ))
-			);
+		if ($selected && $key)
+		{
+			if (safe_update('textpattern', "$key = '".doSlash($val)."'", "ID in (".join(',', $selected).")"))
+			{
+				update_lastmod();
+				return list_list(messenger('article', join(', ', $selected), 'modified'));
+			}
 		}
 
 		return list_list();
