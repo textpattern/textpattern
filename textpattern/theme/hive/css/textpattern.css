@@ -1190,6 +1190,7 @@ ul.nav-tertiary > li {
   border-radius: 0;
 }
 .nav-tertiary > :first-child > a,
+.nav-tertiary > :first-child > span,
 .nav-tertiary > :first-child,
 .prev-next > :first-child {
   -moz-border-radius-topleft: .5em;
@@ -1198,6 +1199,7 @@ ul.nav-tertiary > li {
   border-bottom-left-radius: .5em;
 }
 .nav-tertiary > :last-child > a,
+.nav-tertiary > :last-child > span,
 .nav-tertiary > :last-child,
 .prev-next > :last-child {
   -moz-border-radius-topright: .5em;
