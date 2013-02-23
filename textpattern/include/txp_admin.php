@@ -101,12 +101,12 @@
 
 		require_privs('admin.edit');
 
-		extract(doSlash(psa(array(
+		extract(psa(array(
 			'privs',
 			'name',
 			'RealName',
 			'email',
-		))));
+		)));
 
 		$privs = assert_int($privs);
 
