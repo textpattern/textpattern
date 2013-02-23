@@ -863,18 +863,6 @@ textarea {
   overflow: auto;
 }
 
-textarea,
-select[size],
-select[multiple] {
-  height: auto;
-}
-
-/* TODO: check we actually need this */
-select[size="0"],
-select[size="1"] {
-  height: 2em;
-}
-
 /* addresses select alignment in Safari/Chrome */
 @media (-webkit-min-device-pixel-ratio: 0) {
   select[size],
