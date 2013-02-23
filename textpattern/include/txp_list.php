@@ -548,7 +548,7 @@
 		}
 
 		$allowed = array();
-		$key = $val = '';
+		$field = $value = '';
 
 		switch ($edit_method)
 		{
@@ -572,6 +572,7 @@
 				{
 					safe_update('txp_discuss', "visible = ".MODERATE, "parentid in(".join(',', $selected).")");
 					callback_event('articles_deleted', '', 0, $selected);
+					callback_event('multi_edited.articles', 'delete', 0, compact('selected', 'field', 'value'));
 					update_lastmod();
 					return list_list(messenger('article', join(', ', $selected), 'deleted'));
 				}
@@ -580,53 +581,53 @@
 				break;
 			// Change author.
 			case 'changeauthor' :
-				$val = ps('AuthorID');
-				if (has_privs('article.edit') && in_array($val, $all_authors, true))
+				$value = ps('AuthorID');
+				if (has_privs('article.edit') && in_array($value, $all_authors, true))
 				{
-					$key = 'AuthorID';
+					$field = 'AuthorID';
 				}
 				break;
 
 			// Change category1.
 			case 'changecategory1' :
-				$val = ps('Category1');
-				if (in_array($val, $categories, true))
+				$value = ps('Category1');
+				if (in_array($value, $categories, true))
 				{
-					$key = 'Category1';
+					$field = 'Category1';
 				}
 				break;
 			// Change category2.
 			case 'changecategory2' :
-				$val = ps('Category2');
-				if (in_array($val, $categories, true))
+				$value = ps('Category2');
+				if (in_array($value, $categories, true))
 				{
-					$key = 'Category2';
+					$field = 'Category2';
 				}
 				break;
 			// Change comment status.
 			case 'changecomments' :
-				$key = 'Annotate';
-				$val = (int) ps('Annotate');
+				$field = 'Annotate';
+				$value = (int) ps('Annotate');
 				break;
 			// Change section.
 			case 'changesection' :
-				$val = ps('Section');
-				if (in_array($val, $all_sections, true))
+				$value = ps('Section');
+				if (in_array($value, $all_sections, true))
 				{
-					$key = 'Section';
+					$field = 'Section';
 				}
 				break;
 			// Change status.
 			case 'changestatus' :
-				$val = (int) ps('Status');
-				if (array_key_exists($val, $statuses))
+				$value = (int) ps('Status');
+				if (array_key_exists($value, $statuses))
 				{
-					$key = 'Status';
+					$field = 'Status';
 				}
 
-				if (!has_privs('article.publish') && $val >= STATUS_LIVE)
+				if (!has_privs('article.publish') && $value >= STATUS_LIVE)
 				{
-					$val = STATUS_PENDING;
+					$value = STATUS_PENDING;
 				}
 				break;
 		}
@@ -652,11 +653,12 @@
 
 		$selected = $allowed;
 
-		if ($selected && $key)
+		if ($selected && $field)
 		{
-			if (safe_update('textpattern', "$key = '".doSlash($val)."'", "ID in (".join(',', $selected).")"))
+			if (safe_update('textpattern', "$field = '".doSlash($value)."'", "ID in (".join(',', $selected).")"))
 			{
 				update_lastmod();
+				callback_event('multi_edited.articles', $edit_method, 0, compact('selected', 'field', 'value'));
 				return list_list(messenger('article', join(', ', $selected), 'modified'));
 			}
 		}
