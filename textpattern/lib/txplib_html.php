@@ -1346,10 +1346,12 @@
 			if ($qty == $val)
 			{
 				$class = 'navlink-active';
+				$aria_pressed = 'true';
 			}
 			else
 			{
 				$class = 'navlink';
+				$aria_pressed = 'false';
 			}
 
 			$out[] = href($qty, array(
@@ -1358,8 +1360,10 @@
 				'qty'        => $qty,
 				'_txp_token' => form_token(),
 			), array(
-				'class' => $class,
-				'title' => gTxt('view_per_page', array('{page}' => $qty)),
+				'class'        => $class,
+				'title'        => gTxt('view_per_page', array('{page}' => $qty)),
+				'aria-pressed' => $aria_pressed,
+				'role'         => 'button',
 			));
 		}
 
