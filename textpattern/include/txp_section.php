@@ -133,6 +133,7 @@
 		if ($search_method and $crit != '')
 		{
 			$verbatim = preg_match('/^"(.*)"$/', $crit, $m);
+			$truthyfalsy = array('0' => falsy(), '1' => truthy());
 			$crit_escaped = $verbatim ? doSlash($m[1]) : doLike($crit);
 			$critsql = $verbatim ?
 				array(
@@ -140,17 +141,17 @@
 					'title'        => "title = '$crit_escaped'",
 					'page'         => "page = '$crit_escaped'",
 					'css'          => "css = '$crit_escaped'",
-					'in_rss'       => "convert(in_rss, char) = '$crit_escaped'",
-					'on_frontpage' => "convert(on_frontpage, char) = '$crit_escaped'",
-					'searchable'   => "convert(searchable, char) = '$crit_escaped'"
+					'in_rss'       => "convert(in_rss, char) = '".multiCompare($truthyfalsy, $crit_escaped, COMPARE_SUBSTRING | COMPARE_ONE)."'",
+					'on_frontpage' => "convert(on_frontpage, char) = '".multiCompare($truthyfalsy, $crit_escaped, COMPARE_SUBSTRING | COMPARE_ONE)."'",
+					'searchable'   => "convert(searchable, char) = '".multiCompare($truthyfalsy, $crit_escaped, COMPARE_SUBSTRING | COMPARE_ONE)."'"
 				) : array(
 					'name'         => "name like '%$crit_escaped%'",
 					'title'        => "title like '%$crit_escaped%'",
 					'page'         => "page like '%$crit_escaped%'",
 					'css'          => "css like '%$crit_escaped%'",
-					'in_rss'       => "convert(in_rss, char) = '$crit_escaped'",
-					'on_frontpage' => "convert(on_frontpage, char) = '$crit_escaped'",
-					'searchable'   => "convert(searchable, char) = '$crit_escaped'"
+					'in_rss'       => "convert(in_rss, char) = '".multiCompare($truthyfalsy, $crit_escaped, COMPARE_SUBSTRING | COMPARE_ONE)."'",
+					'on_frontpage' => "convert(on_frontpage, char) = '".multiCompare($truthyfalsy, $crit_escaped, COMPARE_SUBSTRING | COMPARE_ONE)."'",
+					'searchable'   => "convert(searchable, char) = '".multiCompare($truthyfalsy, $crit_escaped, COMPARE_SUBSTRING | COMPARE_ONE)."'"
 				);
 
 			if (array_key_exists($search_method, $critsql))

@@ -246,6 +246,129 @@
 		return array_map('_null', $in);
 	}
 
+
+/**
+ * Checks if one of an array of values are in a master list.
+ *
+ * If any of the values in the passed $value array match an entry in 
+ * one of the master lists, the array index of the group in which the
+ * values were found will be returned.
+ *
+ * If $accept is a single array then the returned value will be a boolean
+ * depending on whether the $value was found or not.
+ *
+ * If $accept is a two-dimensional array then each sub-array is checked in
+ * turn and the indexes of the matches are returned, unless COMPARE_ONE is
+ * employed to restrict the results to the first match.
+ *
+ * @param   array  $accept Master list (array of arrays) of items
+ * @param   mixed  $value  The value(s) to test
+ * @param   int    $flags  Flags, comprising COMPARE_SUBSTRING | COMPARE_CASE | COMPARE_ONE
+ * @param   string $join   The delimiter character(s) to join the results
+ * @return  array
+ * @since   4.6.0
+ */
+
+	function multiCompare($accept, $value, $flags = COMPARE_SUBSTRING, $join = ',')
+	{
+		$out = array();
+
+		if (!is_array($value))
+		{
+			$value = array($value);
+		}
+
+		foreach ($accept as $ret => $valid)
+		{
+			if (count($accept) === 1)
+			{
+				$retval = true;
+			}
+			else
+			{
+				$retval = $ret;
+			}
+
+			foreach ($value as $compare)
+			{
+				if ( (~$flags & COMPARE_CASE) && is_string($compare))
+				{
+					$compare = strtolower($compare);
+				}
+
+				// Although in_array can take two arrays as arguments,
+				// we want type checking per array value. 
+				if ( ( ($flags & COMPARE_CASE) && in_array($compare, $valid, true) )
+					|| ( (~$flags & COMPARE_CASE) && preg_grep('/^' . preg_quote($compare, '/') . '$/i', $valid) ) )
+				{
+					$out[] = $retval;
+					break;
+				}
+				else if ( ($flags & COMPARE_SUBSTRING) && is_string($compare))
+				{
+					// Do a substring match so things like 'pub' will match 'publisher'
+					foreach ($valid as $individual)
+					{
+						if (stripos($individual, $compare) !== false)
+						{
+							$out[] = $retval;
+						}
+					}
+				}
+			}
+
+			if ( ($flags & COMPARE_ONE) && count($out) > 0)
+			{
+				break;
+			}
+			
+		}
+
+		return ($join !== '') ? join($join, $out) : $out;
+	}
+
+/**
+ * An array of 'positive' things.
+ *
+ * @return  bool
+ * @see     multiCompare
+ * @since   4.6.0
+ */
+
+	function truthy()
+	{
+		$accept = array(
+			true,
+			gTxt('true'),
+			1,
+			'1',
+			gTxt('yes'),
+		);
+
+		return $accept;
+	}
+
+/**
+ * An array of 'negative' things.
+ *
+ * @return  bool
+ * @see     multiCompare
+ * @since   4.6.0
+ */
+
+	function falsy()
+	{
+		$accept = array(
+			false,
+			gTxt('false'),
+			0,
+			'0',
+			gTxt('no'),
+		);
+
+		return $accept;
+	}
+
 /**
  * Escapes a page title. Converts &lt;, &gt;, ', " characters to HTML entities.
  *
