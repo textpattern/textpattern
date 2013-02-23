@@ -822,6 +822,14 @@ form.busy input[type="submit"] {
 
 /* button sets */
 
+ul.nav-tertiary {
+	list-style: none;
+}
+
+ul.nav-tertiary > li {
+	display: inline;
+}
+
 .nav-tertiary a,
 .nav-tertiary .navlink-disabled,
 .prev-next a,
@@ -830,6 +838,7 @@ form.busy input[type="submit"] {
 	border-radius: 0;
 }
 
+.nav-tertiary > :first-child > a,
 .nav-tertiary > :first-child,
 .prev-next > :first-child {
 	-moz-border-radius-topleft: .5em;
@@ -838,6 +847,7 @@ form.busy input[type="submit"] {
 	border-bottom-left-radius: .5em;
 }
 
+.nav-tertiary > :last-child > a,
 .nav-tertiary > :last-child,
 .prev-next > :last-child {
 	-moz-border-radius-topright: .5em;

@@ -1175,6 +1175,13 @@ button.destroy:active {
 }
 
 /* button sets */
+
+ul.nav-tertiary {
+  list-style: none;
+}
+ul.nav-tertiary > li {
+  display: inline;
+}
 .nav-tertiary a,
 .nav-tertiary .navlink-disabled,
 .prev-next a,
@@ -1182,6 +1189,7 @@ button.destroy:active {
   -moz-border-radius: 0;
   border-radius: 0;
 }
+.nav-tertiary > :first-child > a,
 .nav-tertiary > :first-child,
 .prev-next > :first-child {
   -moz-border-radius-topleft: .5em;
@@ -1189,6 +1197,7 @@ button.destroy:active {
   -moz-border-radius-bottomleft: .5em;
   border-bottom-left-radius: .5em;
 }
+.nav-tertiary > :last-child > a,
 .nav-tertiary > :last-child,
 .prev-next > :last-child {
   -moz-border-radius-topright: .5em;
@@ -1705,7 +1714,8 @@ div.multi-edit {
 }
 
 /* list navigators on list pages */
-.txp-navigation p {
+.txp-navigation p,
+.txp-navigation ul {
   margin: 0 0 .5em;
 }
 .txp-navigation .pageby {
