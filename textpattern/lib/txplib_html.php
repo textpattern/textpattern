@@ -553,10 +553,10 @@
 				));
 			}
 
-			$out[] = tag(tag(join(tag_end('li').tag_start('li'), $nav), 'li'), 'ul', array('class' => 'nav-tertiary prev-next'));
+			$out[] = n.tag(tag(join(tag_end('li').tag_start('li'), $nav), 'li'), 'ul', array('class' => 'nav-tertiary prev-next'));
 		}
 
-		return n.join('', $out);
+		return join('', $out);
 	}
 
 /**
