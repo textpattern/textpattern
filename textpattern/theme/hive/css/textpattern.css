@@ -1164,13 +1164,12 @@ button.destroy:active {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  height: 2em;
-  font-size: .92307692307692em;
-  line-height: 1.33333333333333;
+  font-size: 1em;
+  line-height: 1.4;
   border: 1px solid;
-  -moz-border-radius: 0.38462em;
-  border-radius: 0.38462em;
-  padding: .30769230769231em .75em;
+  -moz-border-radius: .5em;
+  border-radius: .5em;
+  padding: .25em .75em;
   display: inline-block;
 }
 

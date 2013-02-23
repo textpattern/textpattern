@@ -778,7 +778,7 @@ input[type="button"]:active,
 	border: 1px solid;
 	-moz-border-radius: .5em;
 	border-radius: .5em;
-	padding: .18181818181818em .5em;
+	padding: .25em .5em;
 	display: inline-block;
 }
 
