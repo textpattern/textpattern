@@ -471,11 +471,11 @@
 
 			if ($page > 1)
 			{
-				$nav[] = tag(PrevNextLink($event, $page - 1, gTxt('prev'), 'prev', $sort, $dir, $crit, $search_method, $step), 'li');
+				$nav[] = PrevNextLink($event, $page - 1, gTxt('prev'), 'prev', $sort, $dir, $crit, $search_method, $step);
 			}
 			else
 			{
-				$nav[] = tag(gTxt('prev'), 'li', array(
+				$nav[] = span(gTxt('prev'), array(
 					'class'         => 'navlink-disabled',
 					'aria-disabled' => 'true',
 				));
@@ -485,9 +485,9 @@
 
 			if ($start > 1)
 			{
-				$nav[] = tag(href(1, $parameters + array('page' => 1), array(
+				$nav[] = href(1, $parameters + array('page' => 1), array(
 					'class' => 'navlink',
-				)), 'li');
+				));
 			}
 
 			// Jump to mid.
@@ -495,10 +495,10 @@
 			if ($start > 2)
 			{
 				$between = ceil($start/2);
-				$nav[] = tag(href('&#8230;', $parameters + array('page' => $between), array(
+				$nav[] = href('&#8230;', $parameters + array('page' => $between), array(
 					'class' => 'navlink',
 					'title' => $between,
-				)), 'li');
+				));
 			}
 
 			// Page links.
@@ -514,9 +514,9 @@
 					$class = 'navlink';
 				}
 
-				$nav[] = tag(href($i, $parameters + array('page' => $i), array(
+				$nav[] = href($i, $parameters + array('page' => $i), array(
 					'class' => $class,
-				)), 'li');
+				));
 			}
 
 			// Jump to mid.
@@ -524,36 +524,36 @@
 			if ($end < $numPages-1)
 			{
 				$between = $end + floor(($numPages-$end) / 2);
-				$nav[] = tag(href('&#8230;', $parameters + array('page' => $between), array(
+				$nav[] = href('&#8230;', $parameters + array('page' => $between), array(
 					'class' => 'navlink',
 					'title' => $between,
-				)), 'li');
+				));
 			}
 
 			// Jump to the last page.
 
 			if ($end < $numPages)
 			{
-				$nav[] = tag(href($numPages, $parameters + array('page' => $numPages), array(
+				$nav[] = href($numPages, $parameters + array('page' => $numPages), array(
 					'class' => 'navlink',
-				)), 'li');
+				));
 			}
 
 			// Next page.
 
 			if ($page < $numPages)
 			{
-				$nav[] = tag(PrevNextLink($event, $page + 1, gTxt('next'), 'next', $sort, $dir, $crit, $search_method, $step), 'li');
+				$nav[] = PrevNextLink($event, $page + 1, gTxt('next'), 'next', $sort, $dir, $crit, $search_method, $step);
 			}
 			else
 			{
-				$nav[] = tag(gTxt('next'), 'li', array(
+				$nav[] = span(gTxt('next'), array(
 					'class'         => 'navlink-disabled',
 					'aria-disabled' => 'true',
 				));
 			}
 
-			$out[] = tag(join('', $nav), 'ul', array('class' => 'nav-tertiary prev-next'));
+			$out[] = tag(tag(join(tag_end('li').tag_start('li'), $nav), 'li'), 'ul', array('class' => 'nav-tertiary prev-next'));
 		}
 
 		return n.join('', $out);
