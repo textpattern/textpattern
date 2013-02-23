@@ -851,7 +851,7 @@ ul.nav-tertiary > li {
 }
 
 .nav-tertiary > :last-child > a,
-.nav-tertiary > :first-child > span,
+.nav-tertiary > :last-child > span,
 .nav-tertiary > :last-child,
 .prev-next > :last-child {
 	-moz-border-radius-topright: .5em;
