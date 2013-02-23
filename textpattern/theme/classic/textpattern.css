@@ -602,6 +602,7 @@ textarea {
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
+	vertical-align: middle;
 }
 
 textarea {
@@ -609,7 +610,6 @@ textarea {
 	min-height: 5.18181818181818em;
 	resize: vertical;
 	overflow: auto; /* removes default vertical scrollbar in IE8-9 */
-	vertical-align: top; /* improves readability and alignment in all browsers */
 }
 
 /* addresses select alignment in Safari/Chrome */
@@ -745,6 +745,7 @@ input[type="button"],
 	width: auto;
 	text-decoration: none;
 	color: #000;
+	vertical-align: middle;
 	background-color: #ddd;
 	-webkit-box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, .3);
 	-moz-box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, .3);
@@ -780,6 +781,7 @@ input[type="button"]:active,
 	border-radius: .5em;
 	padding: .25em .5em;
 	display: inline-block;
+	vertical-align: middle;
 }
 
 input[type="submit"].publish,

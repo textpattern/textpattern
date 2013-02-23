@@ -1166,6 +1166,7 @@ button.destroy:active {
   box-sizing: border-box;
   font-size: 1em;
   line-height: 1.4;
+  vertical-align: middle;
   border: 1px solid;
   -moz-border-radius: .5em;
   border-radius: .5em;
