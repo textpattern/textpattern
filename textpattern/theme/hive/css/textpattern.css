@@ -1717,6 +1717,9 @@ div.multi-edit {
 }
 
 /* list navigators on list pages */
+.txp-navigation p {
+  margin: 0 0 .5em;
+}
 .txp-navigation .pageby {
   float: left;
 }
@@ -2273,6 +2276,9 @@ div.code {
   /* remove float from txp-navigation elements */
   .txp-navigation {
     text-align: center;
+  }
+  .txp-navigation p {
+    margin: 1em 0 .5em;
   }
   .txp-navigation .pageby {
     float: none;
