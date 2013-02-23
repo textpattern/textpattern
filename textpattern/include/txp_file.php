@@ -379,8 +379,8 @@
 					' class="detail-toggle"'
 				).
 				n.'<div id="'.$event.'_navigation" class="txp-navigation">'.
-				nav_form('file', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
 				pageby_form('file', $file_list_pageby).
+				nav_form('file', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
 				n.'</div>'.
 				n.'</div>';
 		}

@@ -409,8 +409,8 @@
 				).
 				cookie_box('show_spam').
 				n.'<div id="'.$event.'_navigation" class="txp-navigation">'.
-				nav_form('discuss', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
 				pageby_form('discuss', $comment_list_pageby).
+				nav_form('discuss', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
 				n.'</div>'.
 				n.'</div>';
 		}

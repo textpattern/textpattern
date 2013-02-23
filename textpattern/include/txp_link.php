@@ -277,8 +277,8 @@
 					' class="detail-toggle"'
 				).
 				n.'<div id="'.$event.'_navigation" class="txp-navigation">'.
-				nav_form('link', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
 				pageby_form('link', $link_list_pageby).
+				nav_form('link', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
 				n.'</div>'.
 				n.'</div>';
 		}

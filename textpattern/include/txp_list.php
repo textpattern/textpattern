@@ -414,8 +414,8 @@
 				).
 
 				n.tag(
-					nav_form('list', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
-					pageby_form('list', $article_list_pageby).n,
+					pageby_form('list', $article_list_pageby).
+					nav_form('list', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).n,
 					'div', array(
 					'class' => 'txp-navigation',
 					'id'    => $event.'_navigation'

@@ -392,8 +392,8 @@
 					'class' => 'txp-navigation',
 				)).
 
-				nav_form('section', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
 				pageby_form('section', $section_list_pageby).
+				nav_form('section', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
 
 				n.tag_end('div').
 				n.tag_end('div');

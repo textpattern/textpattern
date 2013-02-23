@@ -269,8 +269,8 @@
 					' class="detail-toggle"'
 				).
 				n.'<div id="'.$event.'_navigation" class="txp-navigation">'.
-				nav_form('log', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
 				pageby_form('log', $log_list_pageby).
+				nav_form('log', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
 				n.'</div>'.
 				n.'</div>';
 		}

@@ -466,8 +466,8 @@
 					tInput().
 					n.'</form>'.
 					tag(
-						n.nav_form('admin', $page, $numPages, $sort, $dir, $crit, $search_method).
-						pageby_form('admin', $author_list_pageby).n
+						pageby_form('admin', $author_list_pageby).
+						nav_form('admin', $page, $numPages, $sort, $dir, $crit, $search_method).n
 					, 'div', array(
 						'id'    => 'users_navigation',
 						'class' => 'txp-navigation'

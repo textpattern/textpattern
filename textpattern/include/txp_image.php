@@ -330,8 +330,8 @@
 					' class="detail-toggle"'
 				).
 				n.'<div id="'.$event.'_navigation" class="txp-navigation">'.
-				nav_form('image', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
 				pageby_form('image', $image_list_pageby).
+				nav_form('image', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
 				n.'</div>'.
 				n.'</div>';
 		}
