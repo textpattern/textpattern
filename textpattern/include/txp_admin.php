@@ -289,7 +289,7 @@
 
 	function author_list($message = '')
 	{
-		global $txp_user, $author_list_pageby, $levels;
+		global $txp_user, $author_list_pageby;
 
 		pagetop(gTxt('tab_site_admin'), $message);
 
@@ -354,13 +354,6 @@
 			{
 				$verbatim = preg_match('/^"(.*)"$/', $crit, $m);
 
-				$priv_search = array();
-
-				foreach ($levels as $level => $level_name)
-				{
-					$priv_search[$level] = array($level, "$level", $level_name);
-				}
-
 				$crit_escaped = $verbatim ? doSlash($m[1]) : doLike($crit);
 				$critsql = $verbatim ?
 					array(
@@ -368,13 +361,13 @@
 						'login'     => "name = '$crit_escaped'",
 						'real_name' => "RealName = '$crit_escaped'",
 						'email'     => "email = '$crit_escaped'",
-						'privs'     => "convert(privs, char) in ('" . multiCompare($priv_search, do_list($crit_escaped), 0x0, "','"). "')",
+						'privs'     => "convert(privs, char) in ('" .join("','", do_list($crit_escaped)). "')",
 					) : array(
 						'id'        => "user_id in ('" .join("','", do_list($crit_escaped)). "')",
 						'login'     => "name like '%$crit_escaped%'",
 						'real_name' => "RealName like '%$crit_escaped%'",
 						'email'     => "email like '%$crit_escaped%'",
-						'privs'     => "convert(privs, char) in ('" . multiCompare($priv_search, do_list($crit_escaped), COMPARE_SUBSTRING, "','"). "')",
+						'privs'     => "convert(privs, char) in ('" .join("','", do_list($crit_escaped)). "')",
 					);
 
 				if (array_key_exists($search_method, $critsql))

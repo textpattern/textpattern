@@ -860,35 +860,5 @@ define('ANNOUNCE_ASYNC', 0x4);
 
 define('ANNOUNCE_REGULAR', 0x8);
 
-/**
- * Compare strings in a case-sensitive manner.
- *
- * @since   4.6.0
- * @package String
- * @see     multiCompare()
- */
-
-define('COMPARE_CASE', 0x1);
-
-/**
- * Consider a substring match a success.
- *
- * @since   4.6.0
- * @package String
- * @see     multiCompare()
- */
-
-define('COMPARE_SUBSTRING', 0x2);
-
-/**
- * Bail out after first successful match.
- *
- * @since   4.6.0
- * @package String
- * @see     multiCompare()
- */
-
-define('COMPARE_ONE', 0x4);
-
 error_reporting($old_level);
 unset($old_level);
