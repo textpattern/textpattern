@@ -576,6 +576,7 @@
 
 	function wrapRegion($id, $content = '', $anchor_id = '', $label = '', $pane = '', $class = '', $role = 'region', $help = '')
 	{
+		global $event;
 		$label = $label ? gTxt($label) : null;
 
 		if ($anchor_id && $pane)
@@ -589,7 +590,12 @@
 				'style' => $visible ? 'display: block' : 'display: none',
 			);
 
-			$label = href($label, '#'.$anchor_id, array('role' => 'button'));
+			$label = href($label, '#'.$anchor_id, array(
+				'role'           => 'button',
+				'data-txp-token' => md5($pane . $event . form_token() . get_pref('blog_uid')),
+				'data-txp-pane'  => $pane,
+			));
+
 			$help = '';
 		}
 		else
@@ -604,8 +610,8 @@
 		{
 			$content =
 				hed($label.popHelp($help), 3, array(
-					'id'    => $id.'-label',
-					'class' => $heading_class
+					'id'             => $id.'-label',
+					'class'          => $heading_class,
 				)).
 				n.tag($content.n, 'div', $display_state).n;
 		}

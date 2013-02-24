@@ -74,7 +74,6 @@
 			'form_delete'     => true,
 			'form_multi_edit' => true,
 			'form_save'       => true,
-			'save_pane_state' => true,
 		));
 
 		switch (strtolower($step))
@@ -96,9 +95,6 @@
 				break;
 			case "form_save" :
 				form_save();
-				break;
-			case "save_pane_state" :
-				form_save_pane_state();
 				break;
 		}
 	}
@@ -612,44 +608,4 @@
 	{
 		global $form_types;
 		return selectInput('type', $form_types, $type, $blank_first, '', $id);
-	}
-
-/**
- * Saves a pane visibility state on the server.
- */
-
-	function form_save_pane_state()
-	{
-		global $event;
-
-		$panes = array(
-			'form_article',
-			'form_category',
-			'form_comment',
-			'form_file',
-			'form_link',
-			'form_misc',
-			'form_section',
-			'article-tags',
-			'link-tags',
-			'comment-tags',
-			'comment-detail-tags',
-			'comment-form-tags',
-			'search-result-tags',
-			'file-tags',
-			'category-tags',
-			'section-tags',
-		);
-
-		$pane = gps('pane');
-
-		if (in_array($pane, $panes))
-		{
-			set_pref("pane_{$pane}_visible", (gps('visible') == 'true' ? '1' : '0'), $event, PREF_HIDDEN, 'yesnoradio', 0, PREF_PRIVATE);
-			send_xml_response();
-		}
-		else
-		{
-			trigger_error('invalid_pane', E_USER_WARNING);
-		}
 	}

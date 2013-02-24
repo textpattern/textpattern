@@ -38,10 +38,9 @@
 		require_privs('page');
 
 		bouncer($step, array(
-			'page_edit'       => false,
-			'page_save'       => true,
-			'page_delete'     => true,
-			'save_pane_state' => true,
+			'page_edit'   => false,
+			'page_save'   => true,
+			'page_delete' => true,
 		));
 
 		switch(strtolower($step))
@@ -60,9 +59,6 @@
 				break;
 			case "page_new" :
 				page_new();
-				break;
-			case "save_pane_state" :
-				page_save_pane_state();
 				break;
 		}
 	}
@@ -374,32 +370,4 @@
 	function taglinks($type)
 	{
 		return popTagLinks($type);
-	}
-
-/**
- * Saves the pane visibility state on the server.
- */
-
-	function page_save_pane_state()
-	{
-		global $event;
-		$panes = array(
-			'article-tags',
-			'article-nav-tags',
-			'nav-tags',
-			'xml-tags',
-			'misc-tags',
-			'file-tags',
-		);
-		$pane = gps('pane');
-
-		if (in_array($pane, $panes))
-		{
-			set_pref("pane_page_{$pane}_visible", (gps('visible') == 'true' ? '1' : '0'), $event, PREF_HIDDEN, 'yesnoradio', 0, PREF_PRIVATE);
-			send_xml_response();
-		}
-		else
-		{
-			trigger_error('invalid_pane', E_USER_WARNING);
-		}
 	}

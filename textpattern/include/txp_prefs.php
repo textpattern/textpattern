@@ -38,9 +38,8 @@
 		require_privs('prefs');
 
 		bouncer($step, array(
-			'prefs_save'      => true,
-			'prefs_list'      => false,
-			'save_pane_state' => true,
+			'prefs_save' => true,
+			'prefs_list' => false,
 		));
 
 		switch (strtolower($step))
@@ -51,9 +50,6 @@
 				break;
 			case "prefs_save" :
 				prefs_save();
-				break;
-			case "save_pane_state" :
-				prefs_save_pane_state();
 				break;
 		}
 	}
@@ -738,27 +734,4 @@ EOS
 		}
 
 		return $real_max;
-	}
-
-/**
- * Stores the open/closed state of the prefs group twisties.
- *
- * Outputs response code on success. Triggers E_USER_WARNING on
- * error.
- */
-
-	function prefs_save_pane_state()
-	{
-		global $event;
-		$pane = doSlash(gps('pane'));
-
-		if (strpos($pane, 'prefs_') === 0)
-		{
-			set_pref("pane_{$pane}_visible", (gps('visible') == 'true' ? '1' : '0'), $event, PREF_HIDDEN, 'yesnoradio', 0, PREF_PRIVATE);
-			send_xml_response();
-		}
-		else
-		{
-			trigger_error('invalid_pane', E_USER_WARNING);
-		}
 	}

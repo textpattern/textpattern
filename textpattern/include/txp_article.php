@@ -115,11 +115,10 @@
 		}
 
 		bouncer($step, array(
-			'create'          => false,
-			'publish'         => true,
-			'edit'            => false,
-			'save'            => true,
-			'save_pane_state' => true,
+			'create'  => false,
+			'publish' => true,
+			'edit'    => false,
+			'save'    => true,
 		));
 
 		switch ($step)
@@ -135,9 +134,6 @@
 				break;
 			case "save":
 				article_save();
-				break;
-			case "save_pane_state":
-				article_save_pane_state();
 				break;
 		}
 	}
@@ -1524,26 +1520,6 @@
 		{
 			$wl_client = new IXR_Client('http://rpc.pingomatic.com/');
 			$wl_client->query('weblogUpdates.ping', $prefs['sitename'], hu);
-		}
-	}
-
-/**
- * Saves an editor pane state to the server.
- */
-
-	function article_save_pane_state()
-	{
-		global $event;
-		$panes = array('textfilter_help', 'advanced', 'custom_field', 'image', 'meta', 'recent', 'comments', 'dates');
-		$pane = gps('pane');
-		if (in_array($pane, $panes))
-		{
-			set_pref("pane_{$event}_{$pane}_visible", (gps('visible') == 'true' ? '1' : '0'), $event, PREF_HIDDEN, 'yesnoradio', 0, PREF_PRIVATE);
-			send_xml_response();
-		}
-		else
-		{
-			trigger_error('invalid_pane', E_USER_WARNING);
 		}
 	}
 

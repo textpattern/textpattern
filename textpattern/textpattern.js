@@ -721,12 +721,27 @@ function toggleDisplay(id)
 		obj.toggle();
 
 		// Send state of toggle pane to server.
-		sendAsyncEvent({
-			event   : textpattern.event,
-			step    : 'save_pane_state',
-			pane    : obj.attr('id'),
-			visible : obj.is(':visible')
-		});
+
+		if ($(this).data('txp-token') && $(this).data('txp-pane'))
+		{
+			sendAsyncEvent({
+				event   : 'pane',
+				step    : 'visible',
+				pane    : $(this).data('txp-pane'),
+				visible : obj.is(':visible'),
+				origin  : textpattern.event,
+				token   : $(this).data('txp-token')
+			});
+		}
+		else
+		{
+			sendAsyncEvent({
+				event   : textpattern.event,
+				step    : 'save_pane_state',
+				pane    : obj.attr('id'),
+				visible : obj.is(':visible')
+			});
+		}
 	}
 
 	return false;
@@ -744,7 +759,7 @@ function toggleDisplayHref()
 
 	if (href)
 	{
-		toggleDisplay(href.substr(1));
+		toggleDisplay.call(this, href.substr(1));
 	}
 
 	if (lever.length)
