@@ -826,6 +826,7 @@ form.busy input[type="submit"] {
 
 ul.nav-tertiary {
 	list-style: none;
+	padding: 0;
 }
 
 ul.nav-tertiary > li {

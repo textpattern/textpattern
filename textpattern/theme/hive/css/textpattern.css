@@ -1178,6 +1178,7 @@ button.destroy:active {
 
 ul.nav-tertiary {
   list-style: none;
+  padding: 0;
 }
 ul.nav-tertiary > li {
   display: inline;
