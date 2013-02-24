@@ -3707,40 +3707,54 @@
 	{
 		global $file_base_path;
 
-		$dirlist = array();
+		$files = array();
 
-		if (!is_dir($file_base_path))
+		if (!is_dir($file_base_path) || !is_readable($file_base_path))
 		{
-			return $dirlist;
+			return array();
 		}
+
+		$cwd = getcwd();
 
 		if (chdir($file_base_path))
 		{
-			$g_array = glob("*.*");
-			if ($g_array)
+			$directory = glob('*.*', GLOB_NOSORT);
+
+			if ($directory)
 			{
-				foreach ($g_array as $filename)
+				foreach ($directory as $filename)
 				{
-					if (is_file($filename))
+					if (is_file($filename) && is_readable($filename))
 					{
-						$dirlist[$filename] = $filename;
+						$files[$filename] = $filename;
 					}
 				}
+
+				unset($directory);
 			}
-		}
 
-		$files = array();
-		$rs = safe_rows("filename", "txp_file", "1=1");
-
-		if ($rs)
-		{
-			foreach ($rs as $a)
+			if ($cwd)
 			{
-				$files[$a['filename']] = $a['filename'];
+				chdir($cwd);
 			}
 		}
 
-		return array_diff($dirlist, $files);
+		if (!$files)
+		{
+			return array();
+		}
+
+		$rs = safe_rows_start('filename', 'txp_file', '1 = 1');
+
+		if ($rs && numRows($rs))
+		{
+			while ($a = nextRow($rs))
+			{
+				unset($files[$a['filename']]);
+			}
+		}
+
+		return $files;
 	}
 
 /**
