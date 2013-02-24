@@ -1124,7 +1124,15 @@
 		return href($label, $url, ' title="'.gTxt('download').'"');
 	}
 
-// -------------------------------------------------------------
+/**
+ * Gets an array of files in the Files directory that weren't uploaded from Textpattern.
+ *
+ * This function is used for importing existing files on
+ * the server to Textpatterns files panel.
+ *
+ * @return array An array of file paths
+ */
+
 	function get_filenames()
 	{
 		global $file_base_path;
