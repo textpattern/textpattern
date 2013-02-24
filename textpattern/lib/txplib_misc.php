@@ -3694,6 +3694,56 @@
 	}
 
 /**
+ * Gets an array of files in the Files directory that weren't uploaded from Textpattern.
+ *
+ * This function is used for importing existing files on
+ * the server to Textpatterns files panel.
+ *
+ * @return  array An array of file paths
+ * @package File
+ */
+
+	function get_filenames()
+	{
+		global $file_base_path;
+
+		$dirlist = array();
+
+		if (!is_dir($file_base_path))
+		{
+			return $dirlist;
+		}
+
+		if (chdir($file_base_path))
+		{
+			$g_array = glob("*.*");
+			if ($g_array)
+			{
+				foreach ($g_array as $filename)
+				{
+					if (is_file($filename))
+					{
+						$dirlist[$filename] = $filename;
+					}
+				}
+			}
+		}
+
+		$files = array();
+		$rs = safe_rows("filename", "txp_file", "1=1");
+
+		if ($rs)
+		{
+			foreach ($rs as $a)
+			{
+				$files[$a['filename']] = $a['filename'];
+			}
+		}
+
+		return array_diff($dirlist, $files);
+	}
+
+/**
  * Sets error reporting level.
  *
  * @param   string $level The level. Either "debug", "live" or "testing"
