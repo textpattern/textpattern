@@ -32,7 +32,7 @@
  * @package Admin\Pane
  */
 
-class txp_pane
+class Textpattern_Admin_Pane
 {
 	/**
 	 * Constructor.
@@ -87,4 +87,4 @@ class txp_pane
 	}
 }
 
-new txp_pane();
+new Textpattern_Admin_Pane();
