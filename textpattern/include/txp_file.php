@@ -98,30 +98,39 @@
 		{
 			$dir = get_pref('file_sort_dir', 'asc');
 		}
-		$dir = ($dir == 'desc') ? 'desc' : 'asc';
 
-		echo hed(gTxt('tab_file'), 1, array('class' => 'txp-heading'));
-		echo n.'<div id="'.$event.'_control" class="txp-control-panel">';
-
-		if (!is_dir($file_base_path) or !is_writeable($file_base_path))
+		if ($dir = 'desc')
 		{
-			echo graf(
-				gTxt('file_dir_not_writeable', array('{filedir}' => $file_base_path))
-			, ' class="alert-block warning"');
+			$dir = 'desc';
 		}
-		elseif (has_privs('file.edit.own'))
+		else
+		{
+			$dir = 'asc';
+		}
+
+		echo
+			hed(gTxt('tab_file'), 1, array('class' => 'txp-heading')).
+			n.tag_start('div', array('id' => $event.'_control', 'class' => 'txp-control-panel'));
+
+		if (!is_dir($file_base_path) || !is_writeable($file_base_path))
+		{
+			echo graf(gTxt('file_dir_not_writeable', array('{filedir}' => $file_base_path)), array('class' => 'alert-block warning'));
+		}
+		else if (has_privs('file.edit.own'))
 		{
 			$existing_files = get_filenames();
 
-			if (count($existing_files) > 0)
+			if ($existing_files)
 			{
 				echo form(
 					eInput('file').
 					sInput('file_create').
-
-					graf('<label for="file-existing">'.gTxt('existing_file').'</label>'.sp.selectInput('filename', $existing_files, '', 1, '', 'file-existing').sp.
-						fInput('submit', '', gTxt('Create')), ' class="existing-file"')
-
+					graf(
+						tag(gTxt('existing_file'), 'label', array('for' => 'file-existing')).
+						sp.selectInput('filename', $existing_files, '', 1, '', 'file-existing').
+						sp.fInput('submit', '', gTxt('Create')),
+						array('class' => 'existing-file')
+					)
 				, '', '', 'post', '', '', 'assign_file');
 			}
 
@@ -157,11 +166,18 @@
 		set_pref('file_sort_column', $sort, 'file', PREF_HIDDEN, '', 0, PREF_PRIVATE);
 		set_pref('file_sort_dir', $dir, 'file', PREF_HIDDEN, '', 0, PREF_PRIVATE);
 
-		$switch_dir = ($dir == 'desc') ? 'asc' : 'desc';
+		if ($dir == 'desc')
+		{
+			$switch_dir = 'asc';
+		}
+		else
+		{
+			$switch_dir = 'desc';
+		}
 
 		$criteria = 1;
 
-		if ($search_method and $crit != '')
+		if ($search_method && $crit !== '')
 		{
 			$verbatim = preg_match('/^"(.*)"$/', $crit, $m);
 			$crit_escaped = $verbatim ? doSlash($m[1]) : doLike($crit);
@@ -255,12 +271,18 @@
 		{
 			$show_authors = !has_single_author('txp_file');
 
-			echo n.'<div id="'.$event.'_container" class="txp-container">';
-			echo n.'<form name="longform" id="files_form" class="multi_edit_form" method="post" action="index.php">'.
-
-				n.'<div class="txp-listtables">'.
-				startTable('', '', 'txp-list').
-				n.'<thead>'.
+			echo
+				n.tag_start('div', array('id' => $event.'_container', 'class' => 'txp-container')).
+				n.tag_start('form', array(
+					'name'   => 'longform',
+					'id'     => 'files_form',
+					'class'  => 'multi_edit_form',
+					'method' => 'post',
+					'action' => 'index.php',
+				)).
+				n.tag_start('div', array('class' => 'txp-listtables')).
+				n.tag_start('table', array('class' => 'txp-list')).
+				n.tag_start('thead').
 				tr(
 					hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
 					column_head('ID', 'id', 'file', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id').
@@ -268,16 +290,14 @@
 					column_head('title', 'title', 'file', true, $switch_dir, $crit, $search_method, (('title' == $sort) ? "$dir " : '').'title').
 					column_head('description', 'description', 'file', true, $switch_dir, $crit, $search_method, (('description' == $sort) ? "$dir " : '').'files_detail description').
 					column_head('file_category', 'category', 'file', true, $switch_dir, $crit, $search_method, (('category' == $sort) ? "$dir " : '').'category').
-					// column_head('permissions', 'permissions', 'file', true, $switch_dir, $crit, $search_method).
 					hCell(gTxt('tags'), '', ' scope="col" class="files_detail tag-build"').
 					hCell(gTxt('status'), '', ' scope="col" class="status"').
 					hCell(gTxt('condition'), '', ' scope="col" class="condition"').
 					column_head('downloads', 'downloads', 'file', true, $switch_dir, $crit, $search_method, (('downloads' == $sort) ? "$dir " : '').'downloads').
 					($show_authors ? column_head('author', 'author', 'file', true, $switch_dir, $crit, $search_method, (('author' == $sort) ? "$dir " : '').'author') : '')
 				).
-				n.'</thead>';
-
-			echo n.'<tbody>';
+				n.tag_end('thead').
+				n.tag_start('tbody');
 
 			$validator = new Validator();
 
@@ -297,92 +317,114 @@
 					'crit'          => $crit,
 				);
 
+				$tag_url = array(
+					'event'       => 'tag',
+					'tag_name'    => 'file_download_link',
+					'id'          => $id,
+					'description' => $description,
+					'filename'    => $filename,
+				);
+
 				$file_exists = file_exists(build_file_path($file_base_path, $filename));
-
-				$download_link = ($file_exists) ? make_download_link($id, $downloads, $filename) : $downloads;
-
+				$can_edit = has_privs('file.edit') || ($author === $txp_user && has_privs('file.edit.own'));
 				$validator->setConstraints(array(new CategoryConstraint($category, array('type' => 'file'))));
-				$vc = $validator->validate() ? '' : ' error';
+
+				if ($validator->validate())
+				{
+					$vc = '';
+				}
+				else
+				{
+					$vc = ' error';
+				}
+
+				if ($file_exists)
+				{
+					$downloads = make_download_link($id, $downloads, $filename);
+					$condition = span(gTxt('file_status_ok'), array('class' => 'success'));
+				}
+				else
+				{
+					$condition = span(gTxt('file_status_missing'), array('class' => 'error'));
+				}
 
 				if ($category)
 				{
-					$category = span($category_title, array('title' => $category));
+					$category = span(txpspecialchars($category_title), array('title' => $category));
 				}
 
-				$tag_url = '?event=tag'.a.'tag_name=file_download_link'.a.'id='.$id.a.'description='.urlencode($description).
-					a.'filename='.urlencode($filename);
+				if ($can_edit)
+				{
+					$name = href(txpspecialchars($filename), $edit_url, array('title' => gTxt('edit')));
+				}
+				else
+				{
+					$name = txpspecialchars($filename);
+				}
 
-				$condition = span(($file_exists)
-					? gTxt('file_status_ok')
-					: gTxt('file_status_missing')
-				, array('class' => ($file_exists) ? 'success' : 'error'));
+				if ($can_edit)
+				{
+					$id_column = href($id, $edit_url, array('title' => gTxt('edit')));
+					$multi_edit = fInput('checkbox', 'selected[]', $id);
+				}
+				else
+				{
+					$id_column = $id;
+					$multi_edit = '';
+				}
 
-				$can_edit = has_privs('file.edit') || ($author === $txp_user && has_privs('file.edit.own'));
+				if ($file_exists)
+				{
+					$id_column .=
+						sp.span('[', array('aria-hidden' => 'true')).
+						make_download_link($id, gTxt('download'), $filename).
+						span(']', array('aria-hidden' => 'true'));
+				}
+
+				if (in_array($status, array_keys($file_statuses)))
+				{
+					$status = $file_statuses[$status];
+				}
+				else
+				{
+					$status = span(gTxt('none'), array('class' => 'error'));
+				}
 
 				echo tr(
-					td($can_edit ? fInput('checkbox', 'selected[]', $id) : '&#160;'
-					, '', 'multi-edit').
-
-					hCell(
-						($can_edit ? href($id, $edit_url, array('title' => gTxt('edit'))) : $id).
-						(($file_exists)
-							? sp.span('[', array('aria-hidden' => 'true')).
-								make_download_link($id, gTxt('download'), $filename).
-								span(']', array('aria-hidden' => 'true'))
-							: ''
-						)
-					, '', ' scope="row" class="id"').
-
-					td(
-						($can_edit ? href(txpspecialchars($filename), $edit_url, ' title="'.gTxt('edit').'"') : txpspecialchars($filename))
-					, '', 'name').
-
+					td($multi_edit, '', 'multi-edit').
+					hCell($id_column, '', array('scope' => 'row', 'class' => 'id')).
+					td($name, '', 'name').
 					td(txpspecialchars($title), '', 'title').
 					td(txpspecialchars($description), '', 'files_detail description').
 					td($category, '', 'category'.$vc).
-
-					/*
 					td(
-						($permissions == '1') ? gTxt('private') : gTxt('public')
-					).
-					*/
-
-					td(
-						href('Textile', $tag_url.a.'type=textile', ' target="_blank" onclick="popWin(this.href); return false;"').
+						href('Textile', $tag_url + array('type' => 'textile'), ' target="_blank" onclick="popWin(this.href); return false;"').
 						sp.span('&#124;', array('role' => 'separator')).
-						sp.href('Textpattern', $tag_url.a.'type=textpattern', ' target="_blank" onclick="popWin(this.href); return false;"').
+						sp.href('Textpattern', $tag_url + array('type' => 'textpattern'), ' target="_blank" onclick="popWin(this.href); return false;"').
 						sp.span('&#124;', array('role' => 'separator')).
-						sp.href('HTML', $tag_url.a.'type=html', ' target="_blank" onclick="popWin(this.href); return false;"')
+						sp.href('HTML', $tag_url + array('type' => 'html'), ' target="_blank" onclick="popWin(this.href); return false;"')
 					, '', 'files_detail tag-build').
 
-					td(in_array($status, array_keys($file_statuses))
-						? $file_statuses[$status]
-						: span(gTxt('none'), array('class' => 'error'))
-					, '', 'status').
-
+					td($status, '', 'status').
 					td($condition, '', 'condition').
-
-					td($download_link, '', 'downloads').
-
+					td($downloads, '', 'downloads').
 					($show_authors ? td(span(txpspecialchars($realname), array('title' => $author)), '', 'author') : '')
 				);
 			}
 
-			echo n.'</tbody>'.
-				endTable().
-				n.'</div>'.
+			echo
+				n.tag_end('tbody').
+				n.tag_end('table').
+				n.tag_end('div').
 				file_multiedit_form($page, $sort, $dir, $crit, $search_method).
 				tInput().
-				n.'</form>'.
-				graf(
-					toggle_box('files_detail'),
-					' class="detail-toggle"'
-				).
-				n.'<div id="'.$event.'_navigation" class="txp-navigation">'.
+				n.tag_end('form').
+				graf(toggle_box('files_detail'), array('class' => 'detail-toggle')).
+				n.tag_start('div', array('id' => $event.'_navigation', 'class' => 'txp-navigation')).
 				pageby_form('file', $file_list_pageby).
 				nav_form('file', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
-				n.'</div>'.
-				n.'</div>';
+				n.tag_end('div').
+				n.tag_end('div');
 		}
 	}
 
