@@ -770,7 +770,7 @@
 		$newname = sanitizeForFile($name);
 		$newpath = build_file_path($file_base_path, $newname);
 
-		if (!is_file($newpath))
+		if (!is_file($newpath) && !safe_count('txp_file', "filename = '".doSlash($newname)."'"))
 		{
 			$id = file_db_add(doSlash($newname), $category, $permissions, $description, $size, $title);
 
