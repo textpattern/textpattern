@@ -1118,8 +1118,12 @@
 
 	function make_download_link($id, $label = '', $filename = '')
 	{
-		$label = ($label != '') ? $label : gTxt('download');
+		if ((string) $label === '')
+		{
+			$label = gTxt('download');
+		}
+
 		$url = filedownloadurl($id, $filename);
 
-		return href($label, $url, ' title="'.gTxt('download').'"');
+		return href($label, $url, array('title' => gTxt('download')));
 	}
