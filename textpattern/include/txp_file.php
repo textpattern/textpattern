@@ -1113,25 +1113,3 @@
 		event_change_pageby('file');
 		file_list();
 	}
-
-/**
- * Renders a download link.
- *
- * @param   int    $id       The file ID
- * @param   string $label    The label
- * @param   string $filename The filename
- * @return  string HTML
- * @package File
- */
-
-	function make_download_link($id, $label = '', $filename = '')
-	{
-		if ((string) $label === '')
-		{
-			$label = gTxt('download');
-		}
-
-		$url = filedownloadurl($id, $filename);
-
-		return href($label, $url, array('title' => gTxt('download')));
-	}
