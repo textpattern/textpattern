@@ -4259,11 +4259,7 @@
 
 		assert_article();
 
-		// Eval condition here. Example for article excerpt.
-		$excerpt = trim($thisarticle['excerpt']);
-		$condition = (!empty($excerpt))? true : false;
-
-		return parse(EvalElse($thing, $condition));
+		return parse(EvalElse($thing, trim($thisarticle['excerpt']) !== ''));
 	}
 
 //--------------------------------------------------------------------------
