@@ -1092,7 +1092,7 @@
 
 			while ($c = nextRow($rs))
 			{
-				if (empty($form) && empty($thing))
+				if ($form === '' && $thing === null)
 				{
 					$out[] = href(
 						txpspecialchars($c['name']).' ('.escape_title($c['title']).')',
@@ -1115,7 +1115,14 @@
 					$thisarticle['section'] = $c['section'];
 					$thisarticle['url_title'] = $c['url_title'];
 
-					$out[] = ($thing) ? parse($thing) : parse_form($form);
+					if ($thing === null && $form !== '')
+					{
+						$out[] = parse_form($form);
+					}
+					else
+					{
+						$out[] = parse($thing);
+					}
 				}
 			}
 
@@ -1210,14 +1217,22 @@
 				$a['Title'] = ($no_widow) ? noWidow(escape_title($a['Title'])) : escape_title($a['Title']);
 				$a['uPosted'] = $a['posted']; // populateArticleData() and permlinkurl() assume quite a bunch of posting dates...
 
-				if (empty($form) && empty($thing))
+				if ($form === '' && $thing === null)
 				{
 					$out[] = href($a['Title'], permlinkurl($a));
 				}
 				else
 				{
 					populateArticleData($a);
-					$out[] = ($thing) ?  parse($thing) : parse_form($form);
+
+					if ($thing === null && $form !== '')
+					{
+						$out[] = parse_form($form);
+					}
+					else
+					{
+						$out[] = parse($thing);
+					}
 				}
 			}
 			$thisarticle = $old_article;
@@ -1436,7 +1451,7 @@
 				{
 					$section = ($this_section) ? ($s == 'default' ? '' : $s) : $section;
 
-					if (empty($form) && empty($thing))
+					if ($form === '' && $thing === null)
 					{
 						$out[] = tag(txpspecialchars($title), 'a',
 							(($active_class and (0 == strcasecmp($c, $name))) ? ' class="'.txpspecialchars($active_class).'"' : '').
@@ -1454,7 +1469,14 @@
 							$thiscategory['section'] = $section;
 						}
 
-						$out[] = ($thing) ? parse($thing) : parse_form($form);
+						if ($thing === null && $form !== '')
+						{
+							$out[] = parse_form($form);
+						}
+						else
+						{
+							$out[] = parse($thing);
+						}
 					}
 				}
 			}
@@ -1569,7 +1591,7 @@
 					$title = $default_title;
 				}
 
-				if (empty($form) && empty($thing))
+				if ($form === '' && $thing === null)
 				{
 					$url = pagelinkurl(array('s' => $name));
 
@@ -1587,7 +1609,14 @@
 						'is_last'  => ($count == $last),
 					);
 
-					$out[] = ($thing) ? parse($thing) : parse_form($form);
+					if ($thing === null && $form !== '')
+					{
+						$out[] = parse_form($form);
+					}
+					else
+					{
+						$out[] = parse($thing);
+					}
 				}
 			}
 
