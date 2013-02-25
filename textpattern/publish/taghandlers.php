@@ -2764,7 +2764,7 @@
 		{
 			return href($display_name, pagelinkurl(array(
 				's'      => $section,
-				'author' => $author_name,
+				'author' => $realname,
 			)), ' rel="author"');
 		}
 
