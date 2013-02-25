@@ -2824,7 +2824,7 @@
 
 		if ($thisauthor)
 		{
-			return parse(EvalElse($thing, !$name || in_list($thisauthor['name'], $name)));
+			return parse(EvalElse($thing, $name === '' || in_list($thisauthor['name'], $name)));
 		}
 
 		$theType = ($type) ? $type == $context : true;
@@ -2834,7 +2834,7 @@
 			return parse(EvalElse($thing, ($theType && in_list($author, $name))));
 		}
 
-		return parse(EvalElse($thing, ($theType && !empty($author))));
+		return parse(EvalElse($thing, ($theType && (string) $author !== '')));
 	}
 
 // -------------------------------------------------------------
@@ -2856,7 +2856,7 @@
 			return parse(EvalElse($thing, in_list($author, $name)));
 		}
 
-		return parse(EvalElse($thing, !empty($author)));
+		return parse(EvalElse($thing, (string) $author !== ''));
 	}
 
 // -------------------------------------------------------------
