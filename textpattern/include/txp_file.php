@@ -114,7 +114,11 @@
 
 		if (!is_dir($file_base_path) || !is_writeable($file_base_path))
 		{
-			echo graf(gTxt('file_dir_not_writeable', array('{filedir}' => $file_base_path)), array('class' => 'alert-block warning'));
+			echo graf(
+				'<span class="ui-icon ui-icon-alert"></span> '.gTxt('file_dir_not_writeable',
+				array('{filedir}' => $file_base_path)),
+				array('class' => 'alert-block warning')
+			);
 		}
 		else if (has_privs('file.edit.own'))
 		{

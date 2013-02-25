@@ -295,7 +295,10 @@
 
 		if (is_disabled('mail'))
 		{
-			echo graf(gTxt('warn_mail_unavailable'), array('class' => 'alert-block warning'));
+			echo graf(
+				'<span class="ui-icon ui-icon-alert"></span> '.gTxt('warn_mail_unavailable'),
+				array('class' => 'alert-block warning')
+			);
 		}
 
 		echo hed(gTxt('tab_site_admin'), 1, array('class' => 'txp-heading'));

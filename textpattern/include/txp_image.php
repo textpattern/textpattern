@@ -91,8 +91,10 @@
 		if (!is_dir(IMPATH) or !is_writeable(IMPATH))
 		{
 			echo graf(
-				gTxt('img_dir_not_writeable', array('{imgdir}' => IMPATH))
-			, ' class="alert-block warning"');
+				'<span class="ui-icon ui-icon-alert"></span> '.gTxt('img_dir_not_writeable',
+				array('{imgdir}' => IMPATH)),
+				array('class' => 'alert-block warning')
+			);
 		}
 		elseif (has_privs('image.edit.own'))
 		{
