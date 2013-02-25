@@ -1280,6 +1280,14 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 	background-image: url("images/ui-icon-sprite-info.svg");
 }
 
+.nosvg #messagepane .ui-icon {
+	background-image: url("images/ui-icon-sprite-ffffff.png");
+}
+
+.svg #messagepane .ui-icon {
+	background-image: url("images/ui-icon-sprite-ffffff.svg");
+}
+
 /* positioning */
 
 .ui-icon-carat-1-n { background-position: 0 0; }
