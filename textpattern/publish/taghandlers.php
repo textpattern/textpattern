@@ -2629,11 +2629,98 @@
 		return '<a id="c'.$thiscomment['discussid'].'"></a>';
 	}
 
+/**
+ * Generates a list of authors.
+ *
+ * @param  array  $atts
+ * @param  string $thing
+ * @return string
+ * @since  4.6.0
+ */
+
+	function authors($atts, $thing = null)
+	{
+		global $thisauthor, $txp_groups;
+
+		extract(lAtts(array(
+			'break'    => '',
+			'class'    => '',
+			'form'     => '',
+			'group'    => '',
+			'label'    => '',
+			'labeltag' => '',
+			'limit'    => '',
+			'name'     => '',
+			'offset'   => '',
+			'sort'     => 'name asc',
+			'wraptag'  => '',
+		), $atts));
+
+		$sql = array('1 = 1');
+		$sql_limit = '';
+		$sql_sort = ' order by '.doSlash($sort);
+
+		if ($name)
+		{
+			$sql[] = 'name in ('.join(', ', quote_list(do_list($name))).')';
+		}
+
+		if ($group !== '')
+		{
+			$privs = do_list($group);
+			$groups = array_flip($txp_groups);
+
+			foreach ($privs as &$priv)
+			{
+				if (isset($groups[$priv]))
+				{
+					$priv = $groups[$priv];
+				}
+			}
+
+			$sql[] = 'convert(privs, char) in ('.join(', ', quote_list($privs)).')';
+		}
+
+		if ($limit !== '' || $offset)
+		{
+			$sql_limit = ' limit '.intval($offset).', '.($limit === '' ? PHP_INT_MAX : intval($limit));
+		}
+
+		$rs = safe_rows_start(
+			'user_id as id, name, RealName as realname, email, privs, last_access',
+			'txp_users',
+			join(' and ', $sql)." {$sql_sort} {$sql_limit}"
+		);
+
+		if ($rs && numRows($rs))
+		{
+			$out = array();
+
+			if ($thing === null && $form !== '')
+			{
+				$thing = fetch_form($form);
+			}
+
+			while ($a = nextRow($rs))
+			{
+				$oldauthor = $thisauthor;
+				$thisauthor = $a;
+				$out[] = parse($thing);
+				$thisauthor = $oldauthor;
+			}
+
+			unset($thisauthor);
+			return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
+		}
+
+		return '';
+	}
+
 // -------------------------------------------------------------
 
 	function author($atts)
 	{
-		global $thisarticle, $s, $author;
+		global $thisarticle, $thisauthor, $s, $author;
 
 		extract(lAtts(array(
 			'link'         => '',
@@ -2642,56 +2729,103 @@
 			'this_section' => 0,
 		), $atts));
 
-		if (!empty($author))
+		if ($thisauthor)
 		{
-			$theAuthor = $author;
+			$realname = $thisauthor['realname'];
+			$name = $thisauthor['name'];
+		}
+		else if ($author)
+		{
+			$realname = get_author_name($author);
+			$name = $author;
 		}
 		else
 		{
 			assert_article();
-			$theAuthor = $thisarticle['authorid'];
+			$realname = get_author_name($thisarticle['authorid']);
+			$name = $thisarticle['authorid'];
 		}
 
-		$author_name = get_author_name($theAuthor);
-		$display_name = txpspecialchars(($title) ? $author_name : $theAuthor);
+		if ($title)
+		{
+			$display_name = txpspecialchars($realname);
+		}
+		else
+		{
+			$display_name = txpspecialchars($name);
+		}
 
-		$section = ($this_section) ? ($s == 'default' ? '' : $s) : $section;
+		if ($this_section && $s != 'default')
+		{
+			$section = $s;
+		}
 
-		return ($link)
-			? href($display_name, pagelinkurl(array('s' => $section, 'author' => $author_name)), ' rel="author"')
-			: $display_name;
+		if ($link)
+		{
+			return href($display_name, pagelinkurl(array(
+				's'      => $section,
+				'author' => $author_name,
+			)), ' rel="author"');
+		}
+
+		return $display_name;
 	}
 
 // -------------------------------------------------------------
 	function author_email($atts)
 	{
-		global $thisarticle;
-
-		assert_article();
+		global $thisarticle, $thisauthor;
 
 		extract(lAtts(array(
 			'escape' => 'html',
-			'link' 	=> ''
+			'link' 	 => '',
 		), $atts));
 
-		$author_email = get_author_email($thisarticle['authorid']);
-		$display_email = ($escape == 'html' ? txpspecialchars($author_email) : $author_email);
+		if ($thisauthor)
+		{
+			$email = get_author_email($thisauthor['name']);
+		}
+		else
+		{
+			assert_article();
+			$email = get_author_email($thisarticle['authorid']);
+		}
 
-		return ($link)
-			? email(array('email' => $author_email, 'linktext' => $display_email))
-			: $display_email;
+		if ($escape == 'html')
+		{
+			$display_email = txpspecialchars($email);
+		}
+		else
+		{
+			$display_email = $email;
+		}
+
+		if ($link)
+		{
+			return email(array(
+				'email'    => $email,
+				'linktext' => $display_email,
+			));
+		}
+
+		return $display_email;
 	}
 
 // -------------------------------------------------------------
 
 	function if_author($atts, $thing)
 	{
-		global $author, $context;
+		global $author, $context, $thisauthor;
 
 		extract(lAtts(array(
 			'type' => 'article',
 			'name' => '',
 		), $atts));
+
+		if ($thisauthor)
+		{
+			return parse(EvalElse($thing, !$name || in_list($thisauthor['name'], $name)));
+		}
 
 		$theType = ($type) ? $type == $context : true;
 
