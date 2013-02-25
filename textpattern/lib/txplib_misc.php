@@ -6154,7 +6154,7 @@ eod;
 	{
 		$args = do_list($list, $delim);
 
-		return in_array($val, $args);
+		return in_array((string) $val, $args, true);
 	}
 
 /**
