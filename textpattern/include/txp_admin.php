@@ -296,7 +296,8 @@
 		if (is_disabled('mail'))
 		{
 			echo graf(
-				'<span class="ui-icon ui-icon-alert"></span> '.gTxt('warn_mail_unavailable'),
+				span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
+				gTxt('warn_mail_unavailable'),
 				array('class' => 'alert-block warning')
 			);
 		}

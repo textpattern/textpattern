@@ -91,8 +91,8 @@
 		if (!is_dir(IMPATH) or !is_writeable(IMPATH))
 		{
 			echo graf(
-				'<span class="ui-icon ui-icon-alert"></span> '.gTxt('img_dir_not_writeable',
-				array('{imgdir}' => IMPATH)),
+				span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
+				gTxt('img_dir_not_writeable', array('{imgdir}' => IMPATH)),
 				array('class' => 'alert-block warning')
 			);
 		}
