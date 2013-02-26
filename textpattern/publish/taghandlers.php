@@ -34,7 +34,7 @@
 	Textpattern_Tag_Registry::Register('thumbnail');
 	Textpattern_Tag_Registry::Register('output_form');
 	Textpattern_Tag_Registry::Register('yield');
-	Textpattern_Tag_Registry::Register('if_yield');
+	Textpattern_Tag_Registry::Register(array('Textpattern_Tag_Syntax_Partial', 'if_yield'), 'if_yield');
 	Textpattern_Tag_Registry::Register('feed_link');
 	Textpattern_Tag_Registry::Register('link_feed_link');
 	Textpattern_Tag_Registry::Register('linklist');
@@ -562,28 +562,6 @@
 		$inner = end($yield);
 
 		return isset($inner) ? $inner : '';
-	}
-
-/**
- * Conditional for yield.
- *
- * @param  array  $atts
- * @param  string $thing
- * @return string
- * @since  4.6.0
- */
-
-	function if_yield($atts, $thing)
-	{
-		global $yield;
-
-		extract(lAtts(array(
-			'value' => null,
-		), $atts));
-
-		$inner = end($yield);
-
-		return parse(EvalElse($thing, $inner !== null && ($value === null || $inner == $value)));
 	}
 
 // -------------------------------------------------------------
