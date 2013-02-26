@@ -47,8 +47,8 @@
 	Textpattern_Tag_Registry::Register('link_date');
 	Textpattern_Tag_Registry::Register('link_category');
 	Textpattern_Tag_Registry::Register('link_id');
-	Textpattern_Tag_Registry::Register('if_first_link');
-	Textpattern_Tag_Registry::Register('if_last_link');
+	Textpattern_Tag_Registry::Register(array('Textpattern_Tag_Syntax_Link', 'if_first_link'), 'if_first_link');
+	Textpattern_Tag_Registry::Register(array('Textpattern_Tag_Syntax_Link', 'if_last_link'), 'if_last_link');
 	Textpattern_Tag_Registry::Register('email');
 	Textpattern_Tag_Registry::Register('password_protect');
 	Textpattern_Tag_Registry::Register('recent_articles');
@@ -121,8 +121,8 @@
 	Textpattern_Tag_Registry::Register('image_url');
 	Textpattern_Tag_Registry::Register('image_author');
 	Textpattern_Tag_Registry::Register('image_date');
-	Textpattern_Tag_Registry::Register('if_first_image');
-	Textpattern_Tag_Registry::Register('if_last_image');
+	Textpattern_Tag_Registry::Register(array('Textpattern_Tag_Syntax_Image', 'if_first_image'), 'if_first_image');
+	Textpattern_Tag_Registry::Register(array('Textpattern_Tag_Syntax_Image', 'if_last_image'), 'if_last_image');
 	Textpattern_Tag_Registry::Register('if_thumbnail');
 	Textpattern_Tag_Registry::Register('if_comments');
 	Textpattern_Tag_Registry::Register('if_comments_allowed');
@@ -169,8 +169,8 @@
 	Textpattern_Tag_Registry::Register('file_download_author');
 	Textpattern_Tag_Registry::Register('file_download_downloads');
 	Textpattern_Tag_Registry::Register('file_download_description');
-	Textpattern_Tag_Registry::Register('if_first_file');
-	Textpattern_Tag_Registry::Register('if_last_file');
+	Textpattern_Tag_Registry::Register(array('Textpattern_Tag_Syntax_File', 'if_first_file'), 'if_first_file');
+	Textpattern_Tag_Registry::Register(array('Textpattern_Tag_Syntax_File', 'if_last_file'), 'if_last_file');
 	Textpattern_Tag_Registry::Register('hide');
 	Textpattern_Tag_Registry::Register('rsd');
 	Textpattern_Tag_Registry::Register('variable');
@@ -1014,42 +1014,6 @@
 		assert_link();
 
 		return $thislink['id'];
-	}
-
-/**
- * Checks if the link is the first in the list.
- *
- * @param  array  $atts
- * @param  string $thing
- * @return string
- * @since  4.6.0
- */
-
-	function if_first_link($atts, $thing)
-	{
-		global $thislink;
-
-		assert_link();
-
-		return parse(EvalElse($thing, !empty($thislink['is_first'])));
-	}
-
-/**
- * Checks if the link is the last in the list.
- *
- * @param  array  $atts
- * @param  string $thing
- * @return string
- * @since  4.6.0
- */
-
-	function if_last_link($atts, $thing)
-	{
-		global $thislink;
-
-		assert_link();
-
-		return parse(EvalElse($thing, !empty($thislink['is_last'])));
 	}
 
 // -------------------------------------------------------------
@@ -3962,42 +3926,6 @@
 		}
 	}
 
-/**
- * Checks if the image is the first in the list.
- *
- * @param  array  $atts
- * @param  string $thing
- * @return string
- * @since  4.6.0
- */
-
-	function if_first_image($atts, $thing)
-	{
-		global $thisimage;
-
-		assert_image();
-
-		return parse(EvalElse($thing, !empty($thisimage['is_first'])));
-	}
-
-/**
- * Checks if the image is the last in the list.
- *
- * @param  array  $atts
- * @param  string $thing
- * @return string
- * @since  4.6.0
- */
-
-	function if_last_image($atts, $thing)
-	{
-		global $thisimage;
-
-		assert_image();
-
-		return parse(EvalElse($thing, !empty($thisimage['is_last'])));
-	}
-
 //--------------------------------------------------------------------------
 	function if_thumbnail($atts, $thing)
 	{
@@ -5214,42 +5142,6 @@
 
 			return ($wraptag) ? doTag($description, $wraptag, $class) : $description;
 		}
-	}
-
-/**
- * Checks if the file is the first in the list.
- *
- * @param  array  $atts
- * @param  string $thing
- * @return string
- * @since  4.6.0
- */
-
-	function if_first_file($atts, $thing)
-	{
-		global $thisfile;
-
-		assert_file();
-
-		return parse(EvalElse($thing, !empty($thisfile['is_first'])));
-	}
-
-/**
- * Checks if the file is the last in the list.
- *
- * @param  array  $atts
- * @param  string $thing
- * @return string
- * @since  4.6.0
- */
-
-	function if_last_file($atts, $thing)
-	{
-		global $thisfile;
-
-		assert_file();
-
-		return parse(EvalElse($thing, !empty($thisfile['is_last'])));
 	}
 
 // -------------------------------------------------------------
