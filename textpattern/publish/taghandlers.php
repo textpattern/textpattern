@@ -177,6 +177,7 @@
 	Textpattern_Tag_Registry::Register('if_variable');
 	Textpattern_Tag_Registry::Register('article');
 	Textpattern_Tag_Registry::Register('article_custom');
+	Textpattern_Tag_Registry::Register('txp_die');
 
 // -------------------------------------------------------------
 
