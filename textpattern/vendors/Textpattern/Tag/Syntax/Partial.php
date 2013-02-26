@@ -47,6 +47,6 @@ class Textpattern_Tag_Syntax_Partial
 
 		$inner = end($yield);
 
-		return parse(EvalElse($thing, $inner !== null && ($value === null || $inner == $value)));
+		return parse(EvalElse($thing, $inner !== null && ($value === null || (string) $inner === (string) $value)));
 	}
 }
