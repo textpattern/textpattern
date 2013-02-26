@@ -716,9 +716,8 @@
 	{
 		require_once txpath.'/lib/IXRClass.php';
 		$client = new IXR_Client('http://rpc.textpattern.com');
-		$uid = safe_field('val', 'txp_prefs', "name='blog_uid'");
 
-		if (!$client->query('tups.getTXPVersion',$uid))
+		if (!$client->query('tups.getTXPVersion', get_pref('blog_uid')))
 		{
 			return array('version' => 0, 'msg' => 'problem_connecting_rpc_server');
 		}
