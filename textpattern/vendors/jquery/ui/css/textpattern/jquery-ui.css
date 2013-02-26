@@ -1062,17 +1062,13 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 .ui-spinner {
 	position: relative;
 	display: inline-block;
-	overflow: hidden;
+	border: 0;
 	padding: 0;
 	vertical-align: middle;
 }
 
-.ui-spinner-input {
-	margin: .2em 22px .2em .4em;
-	border: 0;
-	padding: 0;
-	vertical-align: middle;
-	background: none;
+.ui-spinner .ui-spinner-input {
+	padding-right: 22px;
 }
 
 .ui-spinner-button {
@@ -1082,16 +1078,10 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 	margin: 0;
 	padding: 0;
 	width: 16px;
-	height: 50%;
+	height: 42%;
 	font-size: .5em;
-	text-align: center;
 	overflow: hidden;
 	cursor: default;
-}
-
-/* more specificity required here to overide default borders */
-.ui-spinner a.ui-spinner-button {
-	border-width: 0 0 0 1px;
 }
 
 /* vertical centre icon */
@@ -1108,11 +1098,6 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 
 .ui-spinner-down {
 	bottom: 0;
-}
-
-/* TR overrides */
-.ui-spinner .ui-icon-triangle-1-s {
-	background-position: -65px -16px; /* need to fix icons sprite */
 }
 
 
