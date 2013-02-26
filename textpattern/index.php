@@ -198,10 +198,12 @@
 			exit;
 		}
 
-		$loader = new TextpatternLoader(txpath.'/vendors');
+		include txpath.'/vendors/Textpattern/Loader.php';
+
+		$loader = new Textpattern_Loader(txpath.'/vendors');
 		$loader->register();
 
-		$loader = new TextpatternLoader(txpath.'/lib');
+		$loader = new Textpattern_Loader(txpath.'/lib');
 		$loader->register();
 
 		if (!empty($admin_side_plugins) and gps('event') != 'plugin')

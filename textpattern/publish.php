@@ -33,6 +33,14 @@
 			' (Otherwise note that publish.php cannot be called directly.)');
 	}
 
+	include_once txpath.'/vendors/Textpattern/Loader.php';
+
+	$loader = new Textpattern_Loader(txpath.'/vendors');
+	$loader->register();
+
+	$loader = new Textpattern_Loader(txpath.'/lib');
+	$loader->register();
+
 	include_once txpath.'/lib/constants.php';
 	include_once txpath.'/lib/txplib_publish.php';
 	include_once txpath.'/lib/txplib_misc.php';
@@ -41,6 +49,7 @@
 	include_once txpath.'/lib/txplib_forms.php';
 	include_once txpath.'/lib/admin_config.php';
 
+	include_once txpath.'/publish/taghandlers.php';
 	include_once txpath.'/publish/log.php';
 	include_once txpath.'/publish/comment.php';
 
@@ -170,14 +179,6 @@
 
 	// Tidy up the site.
 	janitor();
-
-	$loader = new TextpatternLoader(txpath.'/vendors');
-	$loader->register();
-
-	$loader = new TextpatternLoader(txpath.'/lib');
-	$loader->register();
-
-	include_once txpath.'/publish/taghandlers.php';
 
 	// Here come the plugins.
 	if ($use_plugins)
