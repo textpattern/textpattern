@@ -488,6 +488,7 @@
 	function processTags($tag, $atts, $thing = null)
 	{
 		global $production_status, $txptrace, $txptracelevel, $txp_current_tag, $txp_current_form;
+		static $registry = null;
 
 		if ($production_status !== 'live')
 		{
@@ -504,14 +505,21 @@
 			}
 		}
 
-		if ($tag === 'link')
+		if ($registry === null)
 		{
-			$tag = 'tpt_'.$tag;
+			$registry = new Textpattern_Tag_Registry();
 		}
 
-		if (maybe_tag($tag))
+		if ($registry->is_registered($tag))
+		{
+			$out = $registry->process($tag, splat($atts), $thing);
+		}
+
+		// Deprecated in 4.6.0.
+		else if (maybe_tag($tag))
 		{
 			$out = $tag(splat($atts), $thing);
+			trigger_error(gTxt('unregistered_tag'), E_USER_NOTICE);
 		}
 
 		// Deprecated, remove in crockery.

@@ -41,7 +41,6 @@
 	include_once txpath.'/lib/txplib_forms.php';
 	include_once txpath.'/lib/admin_config.php';
 
-	include_once txpath.'/publish/taghandlers.php';
 	include_once txpath.'/publish/log.php';
 	include_once txpath.'/publish/comment.php';
 
@@ -177,6 +176,8 @@
 
 	$loader = new TextpatternLoader(txpath.'/lib');
 	$loader->register();
+
+	include_once txpath.'/publish/taghandlers.php';
 
 	// Here come the plugins.
 	if ($use_plugins)
