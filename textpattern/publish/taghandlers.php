@@ -93,7 +93,7 @@
 	Textpattern_Tag_Registry::Register('comment_time');
 	Textpattern_Tag_Registry::Register('comment_message');
 	Textpattern_Tag_Registry::Register('comment_anchor');
-	Textpattern_Tag_Registry::Register('authors');
+	Textpattern_Tag_Registry::Register(array('Textpattern_Tag_Syntax_Authors', 'authors'), 'authors');
 	Textpattern_Tag_Registry::Register('author');
 	Textpattern_Tag_Registry::Register('author_email');
 	Textpattern_Tag_Registry::Register('if_author');
@@ -2806,93 +2806,6 @@
 		$thiscomment['has_anchor_tag'] = 1;
 
 		return '<a id="c'.$thiscomment['discussid'].'"></a>';
-	}
-
-/**
- * Generates a list of authors.
- *
- * @param  array  $atts
- * @param  string $thing
- * @return string
- * @since  4.6.0
- */
-
-	function authors($atts, $thing = null)
-	{
-		global $thisauthor, $txp_groups;
-
-		extract(lAtts(array(
-			'break'    => '',
-			'class'    => '',
-			'form'     => '',
-			'group'    => '',
-			'label'    => '',
-			'labeltag' => '',
-			'limit'    => '',
-			'name'     => '',
-			'offset'   => '',
-			'sort'     => 'name asc',
-			'wraptag'  => '',
-		), $atts));
-
-		$sql = array('1 = 1');
-		$sql_limit = '';
-		$sql_sort = ' order by '.doSlash($sort);
-
-		if ($name)
-		{
-			$sql[] = 'name in ('.join(', ', quote_list(do_list($name))).')';
-		}
-
-		if ($group !== '')
-		{
-			$privs = do_list($group);
-			$groups = array_flip($txp_groups);
-
-			foreach ($privs as &$priv)
-			{
-				if (isset($groups[$priv]))
-				{
-					$priv = $groups[$priv];
-				}
-			}
-
-			$sql[] = 'convert(privs, char) in ('.join(', ', quote_list($privs)).')';
-		}
-
-		if ($limit !== '' || $offset)
-		{
-			$sql_limit = ' limit '.intval($offset).', '.($limit === '' ? PHP_INT_MAX : intval($limit));
-		}
-
-		$rs = safe_rows_start(
-			'user_id as id, name, RealName as realname, email, privs, last_access',
-			'txp_users',
-			join(' and ', $sql)." {$sql_sort} {$sql_limit}"
-		);
-
-		if ($rs && numRows($rs))
-		{
-			$out = array();
-
-			if ($thing === null && $form !== '')
-			{
-				$thing = fetch_form($form);
-			}
-
-			while ($a = nextRow($rs))
-			{
-				$oldauthor = $thisauthor;
-				$thisauthor = $a;
-				$out[] = parse($thing);
-				$thisauthor = $oldauthor;
-			}
-
-			unset($thisauthor);
-			return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
-		}
-
-		return '';
 	}
 
 // -------------------------------------------------------------
