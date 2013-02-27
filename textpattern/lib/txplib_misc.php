@@ -702,7 +702,7 @@
 
 			if (isset($txp_permissions[$res]) && $privs[$user] && $txp_permissions[$res])
 			{
-				return in_array($privs[$user], explode(',', $txp_permissions[$res]));
+				return in_list($privs[$user], $txp_permissions[$res]);
 			}
 		}
 
