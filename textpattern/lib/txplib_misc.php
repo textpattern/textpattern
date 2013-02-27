@@ -7377,7 +7377,8 @@ eod;
 				}
 			}
 		}
-		return isset($formats[$format]) ? count(array_intersect($formats[$format], $accepts)) > 0 : false;
+
+		return isset($formats[$format]) && count(array_intersect($formats[$format], $accepts)) > 0;
 	}
 
 /**
