@@ -638,7 +638,6 @@ h3.txp-summary a:after {
   width: 0;
   height: 0;
   display: inline-block;
-  vertical-align: top;
   opacity: .5;
   border-left: .30769em solid #333333;
   border-right: 0;
@@ -845,7 +844,7 @@ textarea {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 1em;
   line-height: 1.4;
-  vertical-align: middle;
+  vertical-align: baseline;
   color: #333333;
   background-color: white;
   margin: 0;
@@ -982,7 +981,7 @@ input[type="button"],
   font-family: Arial, Helvetica, sans-serif;
   font-size: 1em;
   line-height: 1.4;
-  vertical-align: middle;
+  vertical-align: baseline;
   text-decoration: none;
   text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.4);
   cursor: pointer;
@@ -1166,7 +1165,6 @@ button.destroy:active {
   box-sizing: border-box;
   font-size: 1em;
   line-height: 1.4;
-  vertical-align: middle;
   border: 1px solid;
   -moz-border-radius: .5em;
   border-radius: .5em;
@@ -1406,7 +1404,6 @@ td {
   width: 0;
   height: 0;
   display: inline-block;
-  vertical-align: top;
   opacity: .5;
   text-indent: 110%;
   white-space: nowrap;

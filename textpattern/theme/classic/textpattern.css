@@ -602,7 +602,7 @@ textarea {
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
-	vertical-align: middle;
+	vertical-align: baseline;
 }
 
 textarea {
@@ -745,7 +745,7 @@ input[type="button"],
 	width: auto;
 	text-decoration: none;
 	color: #000;
-	vertical-align: middle;
+	vertical-align: baseline;
 	background-color: #ddd;
 	-webkit-box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, .3);
 	-moz-box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, .3);
@@ -781,7 +781,6 @@ input[type="button"]:active,
 	border-radius: .5em;
 	padding: .25em .5em;
 	display: inline-block;
-	vertical-align: middle;
 }
 
 input[type="submit"].publish,
@@ -1336,19 +1335,6 @@ span.spinner {
 }
 
 
-/* Setup pages
-   ========================================================================== */
-
-#page-setup {
-	border-top: 15px solid #fc3;
-}
-
-table#setup td {
-	padding: 3px;
-	vertical-align: middle;
-}
-
-
 /* Tag builder page
    ========================================================================== */
 
@@ -1511,7 +1497,6 @@ tr.moderate {
 #page-prefs .txp-list th,
 #page-prefs .txp-list td {
 	height: 2.09090909090909em;
-	vertical-align: middle;
 }
 
 #page-prefs .modified {

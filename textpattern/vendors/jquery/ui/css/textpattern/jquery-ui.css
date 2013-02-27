@@ -379,7 +379,7 @@ a.ui-state-default:focus {
 	text-align: center;
 	text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.4);
 	line-height: 1.4;
-	vertical-align: middle;
+	vertical-align: baseline;
 	overflow: visible; /* the overflow property removes extra width in IE */
 	background-color: #eeeeee;
 	/* Safari5.1+, Chrome10+ */
@@ -1064,7 +1064,7 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 	display: inline-block;
 	border: 0;
 	padding: 0;
-	vertical-align: middle;
+	vertical-align: baseline;
 }
 
 .ui-spinner .ui-spinner-input {
