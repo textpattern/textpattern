@@ -28,7 +28,7 @@
 require_once txpath.'/lib/txplib_validator.php';
 
 /**
- * Constraint for Textfilters.
+ * Constraint for textfilters.
  *
  * @since   4.6.0
  * @package Textfilter
