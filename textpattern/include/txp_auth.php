@@ -156,7 +156,7 @@
 		, '', '', 'post', '', '', 'login_form').
 
 		script_js('textpattern.textarray = '.json_encode($textarray_script)).
-		n.'</div><!-- /txp-body -->'.n.'</body>'.n.'</html>';
+		n.'</main><!-- /txp-body -->'.n.'</body>'.n.'</html>';
 
 		exit(0);
 	}
