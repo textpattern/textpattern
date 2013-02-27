@@ -813,9 +813,7 @@
 
 	function get_safe_image_types($type = null)
 	{
-		global $txp_user;
-
-		if (!$txp_user || !has_privs('image.create.trusted'))
+		if (!has_privs('image.create.trusted'))
 		{
 			$extensions = array(0, '.gif', '.jpg', '.png');
 		}
