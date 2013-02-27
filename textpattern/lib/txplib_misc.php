@@ -2806,7 +2806,7 @@
  * @param   string $body       The message
  * @param   string $reply_to   The reply to address
  * @return  bool   Returns FALSE when sending failed
- * @see     send_email()
+ * @see     Textpattern_Mail_Compose
  * @package Email
  * @example
  * if (txpMail('john.doe@example.com', 'Subject', 'Some message'))
@@ -2846,178 +2846,16 @@
 		if ($sender)
 		{
 			extract($sender);
-			return send_email(array($email => $RealName), (string) $to_address, $subject, $body, (string) $reply_to);
+			$mail = Textpattern_Mail_Compose();
+			$mail->from($email, $RealName);
+			$mail->to($to_address);
+			$mail->subject($subject);
+			$mail->body($body);
+			$mail->reply_to($reply_to);
+			return $mail->send();
 		}
 
 		return false;
-	}
-
-/**
- * Sends an email.
- *
- * If the given arguments validate, the function fires
- * a 'mail.handler' callback event. This event can be used
- * replace the default mail handler.
- *
- * @param   string|array $from     Sender
- * @param   string|array $send_to  The receiver
- * @param   string       $subject  The subject
- * @param   string       $body     The message
- * @param   string|array $reply_to The reply address
- * @param   string|array $cc       Carbon copy
- * @param   string|array $bcc      Blind carbon copy
- * @param   array        $headers  An array of additional email headers
- * @return  bool         Returns FALSE when sending failed
- * @since   4.6.0
- * @package Email
- * @example
- * if (send_email(array('john.doe@example.com' => 'John Doe'), 'receiver@example.com', 'Hello world!', 'Some message.'))
- * {
- * 	echo "Email sent to 'receiver@example.com'."; 
- * }
- */
-
-	function send_email($from, $send_to, $subject, $body, $reply_to = array(), $cc = array(), $bcc = array(), $headers = array())
-	{
-		if (is_disabled('mail') && !has_handler('mail.handler'))
-		{
-			return false;
-		}
-
-		if (!is_array($headers) || !$from || !$send_to)
-		{
-			return false;
-		}
-
-		$arguments = compact(
-			'from',
-			'send_to',
-			'subject',
-			'body',
-			'reply_to',
-			'cc',
-			'bcc',
-			'headers'
-		);
-
-		if (get_pref('override_emailcharset') && is_callable('utf8_decode'))
-		{
-			$charset = 'ISO-8859-1';
-			$subject = utf8_decode($subject);
-			$body = utf8_decode($body);
-		}
-		else
-		{
-			$charset = 'UTF-8';
-		}
-
-		$subject = encode_mailheader(strip_rn($subject), 'text');
-
-		foreach (compact('from', 'send_to', 'reply_to', 'cc', 'bcc') as $field => $value)
-		{
-			if (!$value)
-			{
-				$$field = null;
-				continue;
-			}
-
-			$out = array();
-
-			foreach ((array) $value as $email => $name)
-			{
-				if (is_int($email))
-				{
-					$email = $name;
-					$name = '';
-				}
-
-				if (is_valid_email($email))
-				{
-					if ($charset != 'UTF-8')
-					{
-						$name = utf8_decode($name);
-					}
-
-					$out[] = trim(encode_mailheader(strip_rn($name), 'phrase').' <'.$email.'>');
-				}
-				else
-				{
-					return false;
-				}
-			}
-
-			$$field = join(', ', $out);
-		}
-
-		$sep = IS_WIN ? "\r\n" : "\n";
-
-		$body = str_replace("\r\n", "\n", $body);
-		$body = str_replace("\r", "\n", $body);
-		$body = str_replace("\n", $sep, $body);
-		$body = deNull($body);
-
-		$envelope = array();
-		$envelope['From'] = $from;
-
-		if ($cc)
-		{
-			$envelope['Cc'] = $cc;
-		}
-
-		if ($bcc)
-		{
-			$envelope['Bcc'] = $bbc;
-		}
-
-		if ($reply_to)
-		{
-			$envelope['Reply-to'] = $reply_to;
-		}
-
-		if (empty($headers['X-Mailer']))
-		{
-			$envelope['X-Mailer'] = 'Textpattern';
-		}
-
-		$envelope['Content-Transfer-Encoding'] = '8bit';
-		$envelope['Content-Type'] = 'text/plain; charset="'.$charset.'"';
-
-		foreach ($envelope as $n => &$v)
-		{
-			$v = $n.': '.$v;
-		}
-
-		foreach ($headers as $field => $value)
-		{
-			if (!isset($envelope[$field]) && (string) $value !== '' && preg_match('/^[\041-\071\073-\176]+$/', $field))
-			{
-				if ($charset != 'UTF-8')
-				{
-					$value = utf8_decode($value);
-				}
-
-				$envelope[] = $field.': '.encode_mailheader(strip_rn($value), 'phrase');
-			}
-		}
-
-		$headers = join($sep, $envelope).$sep;
-
-		if (is_valid_email(get_pref('smtp_from')) && IS_WIN)
-		{
-			ini_set('sendmail_from', get_pref('smtp_from'));
-		}
-
-		if (has_handler('mail.handler'))
-		{
-			return callback_event('mail.handler', '', 0, $arguments, $send_to, $subject, $body, $headers) !== '';
-		}
-
-		if (is_valid_email(get_pref('smtp_from')) && !IS_WIN && !ini_get('safe_mode'))
-		{
-			return mail($send_to, $subject, $body, $headers, '-f'.get_pref('smtp_from'));
-		}
-
-		return mail($send_to, $subject, $body, $headers);
 	}
 
 /**
