@@ -2846,7 +2846,7 @@
 		if ($sender)
 		{
 			extract($sender);
-			$mail = Textpattern_Mail_Compose();
+			$mail = new Textpattern_Mail_Compose();
 			$mail->from($email, $RealName);
 			$mail->to($to_address);
 			$mail->subject($subject);
