@@ -108,7 +108,7 @@ class Textpattern_Mail_Compose
 	}
 
 	/**
-	 * Sets a recipiend.
+	 * Sets a recipient.
 	 *
 	 * @param  string $address The email address
 	 * @param  string $name    The name
@@ -225,7 +225,7 @@ class Textpattern_Mail_Compose
 	}
 
 	/**
-	 * Sets an addition header.
+	 * Sets an additional header.
 	 *
 	 * @param  string $name  The header name
 	 * @param  string $value The value
@@ -252,7 +252,7 @@ class Textpattern_Mail_Compose
 	 *
 	 * If the given arguments validate, the function fires
 	 * a 'mail.handler' callback event. This event can be used
-	 * replace the default mail handler.
+	 * to replace the default mail handler.
 	 *
 	 * @return  bool Returns FALSE if sending fails
 	 * @example
