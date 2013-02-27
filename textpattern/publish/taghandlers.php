@@ -181,12 +181,12 @@
 	Textpattern_Tag_Registry::Register('comments_help');
 
 	// These outliers bypass the regular tag parser; adding them here for completeness.
-	Textpattern_Tag_Registry::Register('comment_name_input');   
-	Textpattern_Tag_Registry::Register('comment_email_input');  
-	Textpattern_Tag_Registry::Register('comment_web_input');    
+	Textpattern_Tag_Registry::Register('comment_name_input');
+	Textpattern_Tag_Registry::Register('comment_email_input');
+	Textpattern_Tag_Registry::Register('comment_web_input');
 	Textpattern_Tag_Registry::Register('comment_message_input');
-	Textpattern_Tag_Registry::Register('comment_remember');     
-	Textpattern_Tag_Registry::Register('comment_preview');      
+	Textpattern_Tag_Registry::Register('comment_remember');
+	Textpattern_Tag_Registry::Register('comment_preview');
 	Textpattern_Tag_Registry::Register('comment_submit');
 	// End of outliers
 
