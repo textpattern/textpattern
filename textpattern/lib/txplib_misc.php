@@ -688,12 +688,14 @@
 		global $txp_user, $txp_permissions;
 		static $privs;
 
-		if (empty($user))
+		$user = (string) $user;
+
+		if ($user === '')
 		{
-			$user = $txp_user;
+			$user = (string) $txp_user;
 		}
 
-		if ($user)
+		if ($user !== '')
 		{
 			if (!isset($privs[$user]))
 			{
