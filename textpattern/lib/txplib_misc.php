@@ -693,19 +693,20 @@
 			$user = $txp_user;
 		}
 
-		if (!isset($privs[$user]))
+		if ($user)
 		{
-			$privs[$user] = safe_field("privs", "txp_users", "name='".doSlash($user)."'");
+			if (!isset($privs[$user]))
+			{
+				$privs[$user] = safe_field("privs", "txp_users", "name = '".doSlash($user)."'");
+			}
+
+			if (isset($txp_permissions[$res]) && $privs[$user] && $txp_permissions[$res])
+			{
+				return in_array($privs[$user], explode(',', $txp_permissions[$res]));
+			}
 		}
 
-		if (isset($txp_permissions[$res]) && $privs[$user] && $txp_permissions[$res])
-		{
-			return in_array($privs[$user], explode(',', $txp_permissions[$res]));
-		}
-		else
-		{
-			return false;
-		}
+		return false;
 	}
 
 /**
