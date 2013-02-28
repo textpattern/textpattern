@@ -1950,6 +1950,10 @@
 						{
 							$out = array_merge($out, $return_value);
 						}
+						else if (is_bool($return_value) && is_bool($out))
+						{
+							$out = $return_value && $out;
+						}
 						else
 						{
 							$out .= $return_value;
