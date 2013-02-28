@@ -22,18 +22,18 @@
  */
 
 /**
- * Textpattern_Textfilter_Set: A set of Textfilters interfaces those to the core.
+ * Textpattern_Textfilter_Registry: A registry of Textfilters interfaces those to the core.
  *
  * @since   4.6.0
  * @package Textfilter
  */
 
-class Textpattern_Textfilter_Set implements ArrayAccess, IteratorAggregate
+class Textpattern_Textfilter_Registry implements ArrayAccess, IteratorAggregate
 {
 	/**
 	 * Stores an instance.
 	 *
-	 * @var Textpattern_Textfilter_Set
+	 * @var Textpattern_Textfilter_Registry
 	 */
 
 	private static $instance;
@@ -87,7 +87,7 @@ class Textpattern_Textfilter_Set implements ArrayAccess, IteratorAggregate
 	/**
 	 * Private singleton instance access.
 	 *
-	 * @return Textpattern_Textfilter_Set
+	 * @return Textpattern_Textfilter_Registry
 	 */
 
 	private static function getInstance()

@@ -1479,7 +1479,7 @@
 	function pref_text($name, $val, $id = '')
 	{
 		$id = ($id) ? $id : $name;
-		$vals = Textpattern_Textfilter_Set::map();
+		$vals = Textpattern_Textfilter_Registry::map();
 		return selectInput($name, $vals, $val, '', '', $id);
 	}
 

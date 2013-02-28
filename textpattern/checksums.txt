@@ -78,7 +78,7 @@
 /vendors/Textpattern/Textfilter/Interface.php: cc8c2bdfec705dc7571603024beec943
 /vendors/Textpattern/Textfilter/Nl2Br.php: f46f182ddba1c2f0bf2b06f426ba1369
 /vendors/Textpattern/Textfilter/Plain.php: 5c3110a284826a36ebf22d9bf38be1c9
-/vendors/Textpattern/Textfilter/Set.php: 10dcb7245b298c8020131a7b56196e47
+/vendors/Textpattern/Textfilter/Registry.php: 10dcb7245b298c8020131a7b56196e47
 /vendors/Textpattern/Textfilter/Textile.php: c5d0aa121dea87c2baa59eecc03acef4
 /vendors/Textpattern/Textile/Parser.php: df11d96f3d2545e0445d332d4799bcce
 /../rpc/index.php: 11de9694fc77c71d634e400ec6beb250

@@ -106,12 +106,12 @@ class Textpattern_Textfilter_Base implements Textpattern_Textfilter_Interface
 	 *
 	 * @param string        $step  Not used
 	 * @param string        $event Not used
-	 * @param Textpattern_Textfilter_Set $set   The set of registered Textfilters
+	 * @param Textpattern_Textfilter_Registry $registry   Maintains the set of known Textfilters
 	 */
 
-	public function register($step, $event, $set)
+	public function register($step, $event, $registry)
 	{
-		$set[] = $this;
+		$registry[] = $this;
 	}
 
 	/**
