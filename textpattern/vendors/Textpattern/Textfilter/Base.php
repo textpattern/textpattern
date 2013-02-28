@@ -63,9 +63,9 @@ class Textpattern_Textfilter_Base implements Textpattern_Textfilter_Interface
 	protected $options;
 
 	/**
-	 * General constructor for textfilters.
+	 * General constructor for Textfilters.
 	 *
-	 * @param string $key   A globally unique, persistable identifier for this particular textfilter class
+	 * @param string $key   A globally unique, persistable identifier for this particular Textfilter class
 	 * @param string $title The human-readable title of this filter class
 	 */
 
@@ -102,11 +102,11 @@ class Textpattern_Textfilter_Base implements Textpattern_Textfilter_Interface
 	}
 
 	/**
-	 * Event handler, registers textfilter class with the core.
+	 * Event handler, registers Textfilter class with the core.
 	 *
 	 * @param string        $step  Not used
 	 * @param string        $event Not used
-	 * @param Textpattern_Textfilter_Set $set   The set of registered textfilters
+	 * @param Textpattern_Textfilter_Set $set   The set of registered Textfilters
 	 */
 
 	public function register($step, $event, $set)

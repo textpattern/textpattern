@@ -22,7 +22,7 @@
  */
 
 /**
- * Textpattern_Textfilter_Set: A set of textfilters interfaces those to the core.
+ * Textpattern_Textfilter_Set: A set of Textfilters interfaces those to the core.
  *
  * @since   4.6.0
  * @package Textfilter
@@ -47,13 +47,13 @@ class Textpattern_Textfilter_Set implements ArrayAccess, IteratorAggregate
 	private $filters;
 
 	/**
-	 * Preference name for a comma-separated list of available textfilters.
+	 * Preference name for a comma-separated list of available Textfilters.
 	 */
 
 	const filterprefs = 'admin_textfilter_classes';
 
 	/**
-	 * Default textfilter preference value.
+	 * Default Textfilter preference value.
 	 */
 
 	const corefilters = 'Textpattern_Textfilter_Plain, Textpattern_Textfilter_Nl2Br, Textpattern_Textfilter_Textile';
@@ -63,13 +63,13 @@ class Textpattern_Textfilter_Set implements ArrayAccess, IteratorAggregate
 	 *
 	 * This is not a publicly instantiable class.
 	 *
-	 * Creates core textfilters according to a preference and
+	 * Creates core Textfilters according to a preference and
 	 * registers all available filters with the core.
 	 */
 
 	private function __construct()
 	{
-		// Construct core textfilters from preferences.
+		// Construct core Textfilters from preferences.
 		foreach (do_list(get_pref(self::filterprefs, self::corefilters)) as $f)
 		{
 			if (class_exists($f))
@@ -80,7 +80,7 @@ class Textpattern_Textfilter_Set implements ArrayAccess, IteratorAggregate
 
 		$this->filters = array();
 
-		// Broadcast a request for registration to both core textfilters and textfilter plugins.
+		// Broadcast a request for registration to both core Textfilters and Textfilter plugins.
 		callback_event('textfilter', 'register', 0, $this);
 	}
 
@@ -102,7 +102,7 @@ class Textpattern_Textfilter_Set implements ArrayAccess, IteratorAggregate
 	/**
 	 * Create an array map of filter keys vs. titles.
 	 *
-	 * @return array Map of 'key' => 'title' for all textfilters
+	 * @return array Map of 'key' => 'title' for all Textfilters
 	 */
 
 	static public function map()
@@ -119,11 +119,11 @@ class Textpattern_Textfilter_Set implements ArrayAccess, IteratorAggregate
 	}
 
 	/**
-	 * Filter raw input text by calling one of our known textfilters by its key.
+	 * Filter raw input text by calling one of our known Textfilters by its key.
 	 *
 	 * Invokes the 'textfilter'.'filter' pre- and post-callbacks.
 	 *
-	 * @param  string $key     The textfilter's key
+	 * @param  string $key     The Textfilter's key
 	 * @param  string $thing   Raw input text
 	 * @param  array  $context Filter context ('options' => array, 'field' => string, 'data' => mixed)
 	 * @return string Filtered output text
@@ -151,9 +151,9 @@ class Textpattern_Textfilter_Set implements ArrayAccess, IteratorAggregate
 	}
 
 	/**
-	 * Get help text for a certain textfilter.
+	 * Get help text for a certain Textfilter.
 	 *
-	 * @param  string $key The textfilter's key
+	 * @param  string $key The Textfilter's key
 	 * @return string HTML for human-readable help
 	 */
 

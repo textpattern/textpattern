@@ -1468,7 +1468,7 @@
 	}
 
 /**
- * Renders a dropdown for selecting text filter method preferences.
+ * Renders a dropdown for selecting Textfilter method preferences.
  *
  * @param  string $name Element name
  * @param  string $val  Current value

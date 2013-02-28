@@ -786,7 +786,7 @@
 				}
 			}
 
-			// Use preferred textfilter as default and fallback.
+			// Use preferred Textfilter as default and fallback.
 			$hasfilter = new Textpattern_Textfilter_Constraint(null);
 			$validator = new Validator();
 

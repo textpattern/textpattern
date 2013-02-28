@@ -24,7 +24,7 @@
 /**
  * Textfilter interface.
  *
- * This is an interface for creating text filters.
+ * This is an interface for creating Textfilters.
  *
  * @since   4.6.0
  * @package Textfilter
