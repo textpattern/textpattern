@@ -305,10 +305,12 @@
 			$atts = filterAtts();
 			$m = preg_split('/\s+/', $atts['sort']);
 
-			if (empty($m[0]) || count($m) > 2 || preg_match('/[),]/', $m[0]))
+			// If in doubt, fall back to chronologically descending order.
+			if (empty($m[0])            // No explicit sort attribute
+				|| count($m) > 2        // Complex clause, e.g. 'foo asc, bar desc'
+				|| !preg_match('/^(?:[0-9a-zA-Z$_\x{0080}-\x{FFFF}]+|`[\x{0001}-\x{FFFF}]+`)$/u', $m[0])  // The clause's first verb is not a MySQL column identifier.
+			)
 			{
-				// Either no explicit sort order or a complex clause, e.g. 'foo asc, bar desc' or 'FUNC(foo,bar) asc'.
-				// Fall back to chronologically descending order.
 				$atts['sortby'] = 'Posted';
 				$atts['sortdir']= 'desc';
 			}
