@@ -6988,7 +6988,7 @@ eod;
 /**
  * Generate a ciphered token.
  *
- * The token is reproducable, unique among sites and users, expires later.
+ * The token is reproducible, unique among sites and users, expires later.
  *
  * @return  string The token
  * @see     bouncer()
