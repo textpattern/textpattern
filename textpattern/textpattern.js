@@ -2,7 +2,7 @@
  * Textpattern Content Management System
  * http://textpattern.com
  *
- * Copyright (C) 2012 The Textpattern Development Team
+ * Copyright (C) 2013 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
