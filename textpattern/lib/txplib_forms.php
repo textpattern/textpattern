@@ -233,7 +233,7 @@
 
 		array_unshift($out, '<option value=""'.($selected === false ? ' selected="selected"' : '').'></option>');
 
-		return tag(n.join(n, $out).n, 'select', array(
+		return n.tag(n.join(n, $out).n, 'select', array(
 			'id'   => $select_id,
 			'name' => $select_name,
 		));
