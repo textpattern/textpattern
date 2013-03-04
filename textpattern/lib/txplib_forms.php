@@ -165,7 +165,7 @@
 			'id'   => $select_id,
 		));
 
-		if ($onchange === true)
+		if ((string) $onchange === '1')
 		{
 			$atts .= ' data-submit-on="change"';
 		}
