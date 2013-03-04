@@ -169,7 +169,7 @@
 		{
 			$atts .= ' data-submit-on="change"';
 		}
-		else
+		else if ($onchange)
 		{
 			$atts .= ' '.trim($onchange);
 		}
