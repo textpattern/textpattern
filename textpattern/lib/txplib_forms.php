@@ -205,9 +205,7 @@
 				continue;
 			}
 
-			extract($a);
-
-			if ($name == $value)
+			if ((string) $a['name'] === (string) $value)
 			{
 				$sel = ' selected="selected"';
 				$selected = true;
@@ -217,12 +215,12 @@
 				$sel = '';
 			}
 
-			$sp = str_repeat(sp.sp, $level);
+			$sp = str_repeat(sp.sp, $a['level']);
 
-			if (($truncate > 3) && (strlen(utf8_decode($title)) > $truncate))
+			if (($truncate > 3) && (strlen(utf8_decode($a['title'])) > $truncate))
 			{
-				$htmltitle = ' title="'.txpspecialchars($title).'"';
-				$title = preg_replace('/^(.{0,'.($truncate - 3).'}).*$/su', '$1', $title);
+				$htmltitle = ' title="'.txpspecialchars($a['title']).'"';
+				$a['title'] = preg_replace('/^(.{0,'.($truncate - 3).'}).*$/su', '$1', $a['title']);
 				$hellip = '&#8230;';
 			}
 			else
@@ -230,13 +228,15 @@
 				$htmltitle = $hellip = '';
 			}
 
-			$out[] = n.'<option value="'.txpspecialchars($name).'"'.$htmltitle.$sel.'>'.$sp.txpspecialchars($title).$hellip.'</option>';
+			$out[] = '<option value="'.txpspecialchars($a['name']).'"'.$htmltitle.$sel.'>'.$sp.txpspecialchars($a['title']).$hellip.'</option>';
 		}
 
-		return n.'<select'.( $select_id ? ' id="'.$select_id.'" ' : '' ).' name="'.$select_name.'">'.
-			n.'<option value=""'.($selected == false ? ' selected="selected"' : '').'>&#160;</option>'.
-			( $out ? join('', $out) : '').
-			n.'</select>';
+		array_unshift($out, '<option value=""'.($selected === false ? ' selected="selected"' : '').'></option>');
+
+		return tag(n.join(n, $out).n, 'select', array(
+			'id'   => $select_id,
+			'name' => $select_name,
+		));
 	}
 
 /**
