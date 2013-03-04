@@ -171,7 +171,7 @@
 		}
 		else
 		{
-			$atts .= $onchange;
+			$atts .= ' '.trim($onchange);
 		}
 
 		return n.'<select'.$atts.'>'.n.join(n, $out).n.'</select>';
