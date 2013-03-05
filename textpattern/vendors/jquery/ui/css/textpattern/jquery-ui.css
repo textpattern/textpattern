@@ -568,6 +568,7 @@ input.ui-button {
 	/* CSS3 Compliant */
 	background-image: linear-gradient(#f1f6fe, #ccdefa);
 }
+
 [aria-pressed="true"].ui-button:active {
 	border-color: #97b0ef;
 	border-bottom-color: #6b8fe8;
@@ -911,7 +912,6 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 .ui-menu .ui-menu-item a {
 	display: block;
 	padding: 2px .4em;
-	line-height: 1.4;
 }
 
 .ui-menu .ui-state-active {
@@ -920,7 +920,6 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 
 .ui-menu .ui-state-disabled {
 	margin: .4em 0 .2em;
-	line-height: 1.4;
 }
 
 .ui-menu .ui-state-disabled a {
