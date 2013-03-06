@@ -2298,4 +2298,25 @@ div.code {
   .progress-meter li:after {
     display: none;
   }
+
+  /* responsive jQuery UI tabs */
+  .ui-tabs .ui-tabs-nav li {
+    float: none;
+    margin-top: 2px;
+    border-bottom-width: 1px;
+    -moz-border-radius: 0;
+    border-radius: 0;
+  }
+  .ui-tabs .ui-tabs-nav li.ui-tabs-active {
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+  .ui-tabs .ui-tabs-nav li a {
+    float: none;
+    display: block;
+  }
+
+  .ui-tabs .ui-tabs-panel {
+    border-top-width: 0;
+  }
 }
