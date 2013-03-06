@@ -297,7 +297,7 @@ a.ui-state-default:focus {
 .ui-selectable-helper {
 	position: absolute;
 	z-index: 100;
-	border: 1px dotted #333;
+	border: 1px dotted #114eb1;
 }
 
 
@@ -307,6 +307,10 @@ a.ui-state-default:focus {
 .ui-sortable-helper {
 	-webkit-box-shadow: 0 0 .5em rgba(0, 0, 0, 0.2);
 	box-shadow: 0 0 .5em rgba(0, 0, 0, 0.2);
+}
+
+.ui-sortable-placeholder {
+	border: 1px dotted #114eb1;
 }
 
 
