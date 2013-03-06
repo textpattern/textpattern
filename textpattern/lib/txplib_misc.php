@@ -669,7 +669,7 @@
 	}
 
 /**
- * Checks if a users has priviliges to the given resource.
+ * Checks if a users has privileges to the given resource.
  *
  * @param   string $res  The resource
  * @param   string $user The user. If no user name is supplied, assume the current logged in user
