@@ -5509,11 +5509,7 @@
 			txp_status_header($status);
 		}
 
-		$code = '';
-		if ($status and $parts = @explode(' ', $status, 2))
-		{
-			$code = @$parts[0];
-		}
+		$code = (int) $status;
 
 		callback_event('txp_die', $code, 0, $url);
 
