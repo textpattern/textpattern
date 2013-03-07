@@ -5476,9 +5476,9 @@
 		if (is_array($msg))
 		{
 			extract(lAtts(array(
-				'msg' => '',
+				'msg'    => '',
 				'status' => '503',
-				'url' => ''
+				'url'    => '',
 			), $msg));
 		}
 
