@@ -4966,10 +4966,10 @@
  * If run on an authenticated admin page, the results include current user's
  * private preferences. Any global preference overrides equally named user prefs.
  *
- * @return array
+ * @return  array
  * @package Pref
- * @access private
- * @see    get_pref()
+ * @access  private
+ * @see     get_pref()
  */
 
 	function get_prefs()
