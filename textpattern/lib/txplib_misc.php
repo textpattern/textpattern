@@ -5638,7 +5638,7 @@ eod;
 				continue;
 			}
 
-			elseif (is_array($value))
+			else if (is_array($value))
 			{
 				if ($name == 'href' || $name == 'src')
 				{
