@@ -891,7 +891,7 @@
 
 	function image_data($file, $meta = array(), $id = 0, $uploaded = true)
 	{
-		global $txp_user, $prefs, $file_max_upload_size, $event;
+		global $txp_user, $event;
 
 		$name = $file['name'];
 		$error = $file['error'];
@@ -901,7 +901,7 @@
 		{
 			$file = get_uploaded_file($file);
 
-			if ($file_max_upload_size < filesize($file))
+			if (get_pref('file_max_upload_size') < filesize($file))
 			{
 				unlink($file);
 
@@ -986,22 +986,14 @@
 		if (check_gd($ext))
 		{
 			// Auto-generate a thumbnail using the last settings
-			if (isset($prefs['thumb_w'], $prefs['thumb_h'], $prefs['thumb_crop']))
+			if (get_pref('thumb_w') > 0 || get_pref('thumb_h') > 0)
 			{
-				$width  = intval($prefs['thumb_w']);
-				$height = intval($prefs['thumb_h']);
-
-				if ($width > 0 or $height > 0)
-				{
-					$t = new txp_thumb( $id );
-
-					$t->crop = ($prefs['thumb_crop'] == '1');
-					$t->hint = '0';
-					$t->width = $width;
-					$t->height = $height;
-
-					$t->write();
-				}
+				$t = new txp_thumb($id);
+				$t->crop = (bool) get_pref('thumb_crop');
+				$t->hint = '0';
+				$t->width = (int) get_pref('thumb_w');
+				$t->height = (int) get_pref('thumb_h');
+				$t->write();
 			}
 		}
 
