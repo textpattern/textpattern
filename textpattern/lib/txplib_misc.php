@@ -2818,7 +2818,7 @@
 
 	function txpMail($to_address, $subject, $body, $reply_to = null)
 	{
-		global $txp_user, $prefs;
+		global $txp_user;
 
 		// Send the email as the currently logged in user.
 		if ($txp_user)
@@ -2829,9 +2829,9 @@
 				"name = '".doSlash($txp_user)."'"
 			);
 
-			if ($sender && is_valid_email($prefs['publisher_email']))
+			if ($sender && is_valid_email(get_pref('publisher_email')))
 			{
-				$sender['email'] = $prefs['publisher_email'];
+				$sender['email'] = get_pref('publisher_email');
 			}
 		}
 		// If not logged in, the receiver is the sender.
