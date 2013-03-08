@@ -2309,11 +2309,10 @@
 
 	function stripSpace($text, $force = false)
 	{
-		global $prefs;
-		if ($force or !empty($prefs['attach_titles_to_permalinks']))
+		if ($force || get_pref('attach_titles_to_permalinks'))
 		{
 			$text = trim(sanitizeForUrl($text), '-');
-			if ($prefs['permalink_title_format'])
+			if (get_pref('permalink_title_format'))
 			{
 				return (function_exists('mb_strtolower') ? mb_strtolower($text, 'UTF-8') : strtolower($text));
 			}
