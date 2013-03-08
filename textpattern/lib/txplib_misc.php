@@ -2870,7 +2870,6 @@
 
 	function encode_mailheader($string, $type)
 	{
-		global $prefs;
 		if (strpos($string, '=?') === false and !preg_match('/[\x00-\x1F\x7F-\xFF]/', $string))
 		{
 			if ("phrase" == $type)
@@ -2887,7 +2886,7 @@
 			return $string;
 		}
 
-		if ($prefs['override_emailcharset'] and is_callable('utf8_decode'))
+		if (get_pref('override_emailcharset') && is_callable('utf8_decode'))
 		{
 			$start = '=?ISO-8859-1?B?';
 			$pcre  = '/.{1,42}/s';
