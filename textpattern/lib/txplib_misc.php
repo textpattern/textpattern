@@ -3819,8 +3819,6 @@
 
 	function fileDownloadFormatTime($params)
 	{
-		global $prefs;
-
 		extract(lAtts(array(
 			'ftime'  => '',
 			'format' => ''
@@ -3833,7 +3831,7 @@
 				return safe_strftime($format, $ftime);
 			}
 
-			return safe_strftime($prefs['archive_dateformat'], $ftime);
+			return safe_strftime(get_pref('archive_dateformat'), $ftime);
 		}
 
 		return '';
