@@ -4892,18 +4892,15 @@
 /**
  * Sends and handles a lastmod header.
  *
- * @param   int|null $unix_ts The last modification date as a UNIX timestamp
- * @param   bool     $exit    If TRUE, terminates the script
- * @return  array    Array of sent HTTP status and the lastmod header
+ * @param   int|null   $unix_ts The last modification date as a UNIX timestamp
+ * @param   bool       $exit    If TRUE, terminates the script
+ * @return  array|null Array of sent HTTP status and the lastmod header, or NULL
  * @package Pref
  */
 
-	function handle_lastmod($unix_ts = null, $exit = 1)
+	function handle_lastmod($unix_ts = null, $exit = true)
 	{
-		global $prefs;
-		extract($prefs);
-
-		if ($send_lastmod and $production_status == 'live')
+		if (get_pref('send_lastmod') && get_pref('production_status') == 'live')
 		{
 			$unix_ts = get_lastmod($unix_ts);
 
@@ -4930,7 +4927,7 @@
 				// Some mod_deflate versions have a bug that breaks subsequent
 				// requests when keepalive is used.  dropping the connection
 				// is the only reliable way to fix this.
-				if (empty($lastmod_keepalive))
+				if (!get_pref('lastmod_keepalive'))
 				{
 					header('Connection: close');
 				}
