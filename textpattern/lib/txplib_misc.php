@@ -2561,9 +2561,9 @@
 /**
  * Checks if an IP is on a spam blacklist.
  *
- * @param   string  $ip     The IP address
- * @param   string  $checks The checked lists. Defaults to 'spam_blacklists' preferences string
- * @return  string|bool     The lists the IP is on or FALSE
+ * @param   string       $ip     The IP address
+ * @param   string|array $checks The checked lists. Defaults to 'spam_blacklists' preferences string
+ * @return  string|bool  The lists the IP is on or FALSE
  * @package Comment
  * @example
  * if (is_blacklisted('127.0.0.1'))
@@ -2581,7 +2581,7 @@
 
 		$rip = join('.', array_reverse(explode('.', $ip)));
 
-		foreach ($checks as $a)
+		foreach ((array) $checks as $a)
 		{
 			$parts = explode(':', $a, 2);
 			$rbl   = $parts[0];
