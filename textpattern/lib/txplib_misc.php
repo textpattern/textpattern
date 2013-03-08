@@ -4875,11 +4875,9 @@
 
 	function get_lastmod($unix_ts = null)
 	{
-		global $prefs;
-
 		if ($unix_ts === null)
 		{
-			$unix_ts = @strtotime($prefs['lastmod']);
+			$unix_ts = @strtotime(get_pref('lastmod'));
 		}
 
 		// Check for future articles that are now visible.
