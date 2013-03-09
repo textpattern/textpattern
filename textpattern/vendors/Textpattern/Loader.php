@@ -149,7 +149,6 @@ class Textpattern_Loader
 
 			if (class_exists($request, false))
 			{
-				trace_add('[Loaded class: '.$request.']');
 				return true;
 			}
 		}
