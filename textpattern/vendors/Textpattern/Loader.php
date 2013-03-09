@@ -131,17 +131,17 @@ class Textpattern_Loader
 			return false;
 		}
 
-		$file = $this->directory . DS;
+		$file = $this->directory . '/';
 		$divide = strripos($class, $this->separator);
 
 		if ($divide !== false)
 		{
 			$namespace = substr($class, 0, $divide);
 			$class = substr($class, $divide + 1);
-			$file .= str_replace($this->separator, DS, $namespace) . DS;
+			$file .= str_replace($this->separator, '/', $namespace) . '/';
 		}
 
-		$file .= str_replace('_', DS, $class) . $this->extension;
+		$file .= str_replace('_', '/', $class) . $this->extension;
 
 		if (is_readable($file))
 		{
