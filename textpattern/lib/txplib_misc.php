@@ -2041,7 +2041,7 @@
 			array_unshift($callback, $class);
 			return join('::', array_filter($callback, 'is_scalar'));
 		}
-		elseif (!is_scalar($callback))
+		else if (!is_scalar($callback))
 		{
 			return '';
 		}
