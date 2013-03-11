@@ -1521,12 +1521,12 @@
 		global $production_status, $txp_current_plugin;
 
 		$error = array(
-			E_WARNING => "Warning",
-			E_NOTICE => "Notice",
-			E_RECOVERABLE_ERROR => "Catchable fatal error",
-			E_USER_ERROR => "User_Error",
-			E_USER_WARNING => "User_Warning",
-			E_USER_NOTICE => "User_Notice"
+			E_WARNING           => 'Warning',
+			E_NOTICE            => 'Notice',
+			E_RECOVERABLE_ERROR => 'Catchable fatal error',
+			E_USER_ERROR        => 'User_Error',
+			E_USER_WARNING      => 'User_Warning',
+			E_USER_NOTICE       => 'User_Notice',
 		);
 
 		if (!($errno & error_reporting()))
@@ -1564,12 +1564,12 @@
 		global $production_status, $txp_current_tag, $txp_current_form, $pretext;
 
 		$error = array(
-			E_WARNING => "Warning",
-			E_NOTICE => "Notice",
-			E_RECOVERABLE_ERROR => "Textpattern Catchable fatal error",
-			E_USER_ERROR => "Textpattern Error",
-			E_USER_WARNING => "Textpattern Warning",
-			E_USER_NOTICE => "Textpattern Notice"
+			E_WARNING           => 'Warning',
+			E_NOTICE            => 'Notice',
+			E_RECOVERABLE_ERROR => 'Textpattern Catchable fatal error',
+			E_USER_ERROR        => 'Textpattern Error',
+			E_USER_WARNING      => 'Textpattern Warning',
+			E_USER_NOTICE       => 'Textpattern Notice',
 		);
 
 		if (!($errno & error_reporting()))
@@ -1741,11 +1741,11 @@
 		global $production_status;
 
 		$error = array(
-			E_WARNING => "Warning",
-			E_NOTICE => "Notice",
-			E_USER_ERROR => "Textpattern Error",
-			E_USER_WARNING => "Textpattern Warning",
-			E_USER_NOTICE => "Textpattern Notice"
+			E_WARNING      => 'Warning',
+			E_NOTICE       => 'Notice',
+			E_USER_ERROR   => 'Textpattern Error',
+			E_USER_WARNING => 'Textpattern Warning',
+			E_USER_NOTICE  => 'Textpattern Notice',
 		);
 
 		if (!($errno & error_reporting()))
