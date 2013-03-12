@@ -6934,7 +6934,7 @@ eod;
 
 			if (safe_count('txp_lang', $where))
 			{
-				safe_update(
+				$r = safe_update(
 					'txp_lang',
 					"lastmod = '2005-08-14',
 					data = '".doSlash($data)."',
@@ -6945,7 +6945,7 @@ eod;
 			}
 			else
 			{
-				safe_insert(
+				$r = safe_insert(
 					'txp_lang',
 					"lastmod = '2005-08-14',
 					data = '".doSlash($data)."',
@@ -6956,7 +6956,10 @@ eod;
 				);
 			}
 
-			$done++;
+			if ($r)
+			{
+				$done++;
+			}
 		}
 
 		return $done;
