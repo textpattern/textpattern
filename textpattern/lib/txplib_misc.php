@@ -6930,16 +6930,16 @@ eod;
 				continue;
 			}
 
-			$where = "lang='".doSlash($lang)."' and name='".doSlash($name)."'";
+			$where = "lang = '".doSlash($lang)."' and name = '".doSlash($name)."'";
 
 			if (safe_count('txp_lang', $where))
 			{
 				safe_update(
 					'txp_lang',
-					"lastmod='2005-08-14',
-					data='".doSlash($data)."',
-					event='".doSlash($event)."',
-					owner='".doSlash($owner)."'",
+					"lastmod = '2005-08-14',
+					data = '".doSlash($data)."',
+					event = '".doSlash($event)."',
+					owner = '".doSlash($owner)."'",
 					$where
 				);
 			}
@@ -6947,12 +6947,12 @@ eod;
 			{
 				safe_insert(
 					'txp_lang',
-					"lastmod='2005-08-14',
-					data='".doSlash($data)."',
-					event='".doSlash($event)."',
-					owner='".doSlash($owner)."',
-					lang='".doSlash($lang)."',
-					name='".doSlash($name)."'"
+					"lastmod = '2005-08-14',
+					data = '".doSlash($data)."',
+					event = '".doSlash($event)."',
+					owner = '".doSlash($owner)."',
+					lang = '".doSlash($lang)."',
+					name = '".doSlash($name)."'"
 				);
 			}
 
