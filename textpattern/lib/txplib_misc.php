@@ -6703,7 +6703,7 @@ class timezone
 	 * Constructor.
 	 */
 
-	function __construct()
+	public function __construct()
 	{
 		if (!timezone::is_supported())
 		{
@@ -6799,7 +6799,7 @@ class timezone
 	 * @return string         HTML markup
 	 */
 
-	function selectInput($name = '', $value = '', $blank_first = '', $onchange = '', $select_id = '')
+	public function selectInput($name = '', $value = '', $blank_first = '', $onchange = '', $select_id = '')
 	{
 		if (!empty($this->_details))
 		{
@@ -6854,7 +6854,7 @@ class timezone
 	 * @return array Array of timezone details indexed by timezone key
 	 */
 
-	function details()
+	public function details()
 	{
 		return $this->_details;
 	}
@@ -6869,7 +6869,7 @@ class timezone
 	 * @return string timezone key
 	 */
 
-	function key($gmtoffset)
+	public function key($gmtoffset)
 	{
 		return isset($this->_offsets[$gmtoffset]) ? $this->_offsets[$gmtoffset] : '';
 	}
@@ -6882,7 +6882,7 @@ class timezone
 	 * @return bool
 	 */
 
-	static function is_dst($timestamp, $timezone_key)
+	static public function is_dst($timestamp, $timezone_key)
 	{
 		global $is_dst, $auto_dst;
 
@@ -6912,7 +6912,7 @@ class timezone
 	 * @return bool Timezone feature is enabled
 	 */
 
-	static function is_supported()
+	static public function is_supported()
 	{
 		return !defined('NO_TIMEZONE_SUPPORT');	// user-definable emergency brake
 	}
