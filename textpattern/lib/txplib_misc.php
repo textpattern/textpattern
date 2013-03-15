@@ -1713,11 +1713,14 @@
 		}
 
 		$backtrace = '';
-		$msg = gTxt('internal_error');
 
 		if (has_privs('debug.verbose'))
 		{
-			$msg .= ' "'.$errstr.'"';
+			$msg = $error[$errno].' "'.$errstr.'"';
+		}
+		else
+		{
+			$msg = gTxt('internal_error');
 		}
 
 		if ($production_status == 'debug' && has_privs('debug.backtrace'))
