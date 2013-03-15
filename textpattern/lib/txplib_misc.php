@@ -1809,7 +1809,6 @@
 		{
 			$error = array(
 				E_WARNING           => 'Warning',
-				E_NOTICE            => 'Notice',
 				E_USER_ERROR        => 'Textpattern Error',
 				E_USER_WARNING      => 'Textpattern Warning',
 			);
