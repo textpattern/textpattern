@@ -1803,20 +1803,34 @@
 	{
 		global $production_status;
 
-		$error = array(
-			E_WARNING      => 'Warning',
-			E_NOTICE       => 'Notice',
-			E_USER_ERROR   => 'Textpattern Error',
-			E_USER_WARNING => 'Textpattern Warning',
-			E_USER_NOTICE  => 'Textpattern Notice',
-		);
+		$error = array();
 
-		if (!($errno & error_reporting()))
+		if ($production_status == 'testing')
 		{
-			return;
+			$error = array(
+				E_WARNING           => 'Warning',
+				E_NOTICE            => 'Notice',
+				E_USER_ERROR        => 'Textpattern Error',
+				E_USER_WARNING      => 'Textpattern Warning',
+			);
+		}
+		else if ($production_status == 'debug')
+		{
+			$error = array(
+				E_WARNING           => 'Warning',
+				E_NOTICE            => 'Notice',
+				E_USER_ERROR        => 'Textpattern Error',
+				E_USER_WARNING      => 'Textpattern Warning',
+				E_USER_NOTICE       => 'Textpattern Notice',
+			);
+
+			if (!isset($error[$errno]))
+			{
+				$error[$errno] = $errno;
+			}
 		}
 
-		if ($production_status == 'live' || ($production_status != 'debug' && $errno == E_USER_NOTICE))
+		if (!isset($error[$errno]))
 		{
 			return;
 		}
