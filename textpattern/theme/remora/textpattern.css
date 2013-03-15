@@ -13,7 +13,7 @@
 	background: no-repeat right -91px;
 }
 
-.nosvg .txp-summary a {
+.no-svg .txp-summary a {
 	background-image: url("img/expand-collapse.png");
 }
 
@@ -46,7 +46,7 @@
 	background: no-repeat 0 50%;
 }
 
-.nosvg #nav {
+.no-svg #nav {
 	background-image: url("../classic/img/textpattern.png");
 }
 

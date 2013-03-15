@@ -510,7 +510,7 @@ a:hover .content-image {
 	background: no-repeat 0 4px;
 }
 
-.nosvg .txp-summary a {
+.no-svg .txp-summary a {
 	background-image: url("img/expand-collapse.gif");
 }
 
@@ -974,8 +974,8 @@ td {
 	background-repeat: no-repeat;
 }
 
-.nosvg .txp-list thead .asc a,
-.nosvg .txp-list thead .desc a {
+.no-svg .txp-list thead .asc a,
+.no-svg .txp-list thead .desc a {
 	background-image: url("img/arrow-up-down.gif");
 }
 
@@ -1069,7 +1069,7 @@ body {
 	background: no-repeat 0 50%;
 }
 
-.nosvg #branding {
+.no-svg #branding {
 	background-image: url("img/textpattern.png");
 }
 
@@ -1393,7 +1393,7 @@ span.spinner {
 	background-color: #fff;
 }
 
-.nosvg #tab-text a {
+.no-svg #tab-text a {
 	background-image: url("img/view-text.png");
 }
 
@@ -1401,7 +1401,7 @@ span.spinner {
 	background-image: url("img/view-text.svg");
 }
 
-.nosvg #tab-html a {
+.no-svg #tab-html a {
 	background-image: url("img/view-html.png");
 }
 
@@ -1409,7 +1409,7 @@ span.spinner {
 	background-image: url("img/view-html.svg");
 }
 
-.nosvg #tab-preview a {
+.no-svg #tab-preview a {
 	background-image: url("img/view-preview.png");
 }
 

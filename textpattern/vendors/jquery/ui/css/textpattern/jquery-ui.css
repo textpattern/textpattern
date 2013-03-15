@@ -1193,7 +1193,7 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 	vertical-align: text-bottom;
 }
 
-.nosvg .ui-icon {
+.no-svg .ui-icon {
 	background-image: url("images/ui-icon-sprite-333333.png");
 }
 
@@ -1201,8 +1201,8 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 	background-image: url("images/ui-icon-sprite-333333.svg");
 }
 
-.nosvg .ui-widget-content .ui-icon,
-.nosvg .ui-widget-header .ui-icon {
+.no-svg .ui-widget-content .ui-icon,
+.no-svg .ui-widget-header .ui-icon {
 	background-image: url("images/ui-icon-sprite-333333.png");
 }
 
@@ -1211,7 +1211,7 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 	background-image: url("images/ui-icon-sprite-333333.svg");
 }
 
-.nosvg .ui-state-default .ui-icon {
+.no-svg .ui-state-default .ui-icon {
 	background-image: url("images/ui-icon-sprite-555555.png");
 }
 
@@ -1219,9 +1219,9 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 	background-image: url("images/ui-icon-sprite-555555.svg");
 }
 
-.nosvg .ui-state-hover .ui-icon,
-.nosvg .ui-state-focus .ui-icon,
-.nosvg .ui-state-active .ui-icon {
+.no-svg .ui-state-hover .ui-icon,
+.no-svg .ui-state-focus .ui-icon,
+.no-svg .ui-state-active .ui-icon {
 	background-image: url("images/ui-icon-sprite-333333.png");
 }
 
@@ -1231,7 +1231,7 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 	background-image: url("images/ui-icon-sprite-333333.svg");
 }
 
-.nosvg .success .ui-icon {
+.no-svg .success .ui-icon {
 	background-image: url("images/ui-icon-sprite-success.png");
 }
 
@@ -1239,8 +1239,8 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 	background-image: url("images/ui-icon-sprite-success.svg");
 }
 
-.nosvg .ui-state-highlight .ui-icon,
-.nosvg .warning .ui-icon {
+.no-svg .ui-state-highlight .ui-icon,
+.no-svg .warning .ui-icon {
 	background-image: url("images/ui-icon-sprite-warning.png");
 }
 
@@ -1249,9 +1249,9 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 	background-image: url("images/ui-icon-sprite-warning.svg");
 }
 
-.nosvg .ui-state-error .ui-icon,
-.nosvg .ui-state-error-text .ui-icon,
-.nosvg .error .ui-icon {
+.no-svg .ui-state-error .ui-icon,
+.no-svg .ui-state-error-text .ui-icon,
+.no-svg .error .ui-icon {
 	background-image: url("images/ui-icon-sprite-error.png");
 }
 
@@ -1261,7 +1261,7 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 	background-image: url("images/ui-icon-sprite-error.svg");
 }
 
-.nosvg .information .ui-icon {
+.no-svg .information .ui-icon {
 	background-image: url("images/ui-icon-sprite-info.png");
 }
 
@@ -1269,7 +1269,7 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 	background-image: url("images/ui-icon-sprite-info.svg");
 }
 
-.nosvg #messagepane .ui-icon {
+.no-svg #messagepane .ui-icon {
 	background-image: url("images/ui-icon-sprite-ffffff.png");
 }
 

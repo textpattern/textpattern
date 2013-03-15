@@ -1490,7 +1490,7 @@ body {
   text-overflow: ellipsis;
   background: no-repeat 0 46%;
 }
-.nosvg .txp-header h1 {
+.no-svg .txp-header h1 {
   background-image: url("../img/textpattern-lrg.png");
 }
 .svg .txp-header h1 {
@@ -1628,7 +1628,7 @@ body {
   height: .61538em;
   background-repeat: no-repeat;
 }
-.nosvg .dropdown-menu:before {
+.no-svg .dropdown-menu:before {
   background-image: url("../img/indicator.gif");
 }
 .svg .dropdown-menu:before {
@@ -1843,7 +1843,7 @@ body#page-setup {
   overflow: hidden;
   background-repeat: no-repeat;
 }
-.nosvg .welcome h1 {
+.no-svg .welcome h1 {
   background-image: url("../img/textpattern-xlrg.png");
 }
 .svg .welcome h1 {
@@ -1930,7 +1930,7 @@ body#page-setup {
   background-color: #fff6d3;
 }
 
-.nosvg #tab-text a {
+.no-svg #tab-text a {
   background-image: url("../img/view-text.png");
 }
 
@@ -1938,7 +1938,7 @@ body#page-setup {
   background-image: url("../img/view-text.svg");
 }
 
-.nosvg #tab-html a {
+.no-svg #tab-html a {
   background-image: url("../img/view-html.png");
 }
 
@@ -1946,7 +1946,7 @@ body#page-setup {
   background-image: url("../img/view-html.svg");
 }
 
-.nosvg #tab-preview a {
+.no-svg #tab-preview a {
   background-image: url("../img/view-preview.png");
 }
 
@@ -2131,7 +2131,7 @@ div.code {
     max-width: 50%;
     padding-left: 2em;
   }
-  .nosvg .txp-header h1 {
+  .no-svg .txp-header h1 {
     background-image: url("../img/textpattern-sml.png");
   }
   .svg .txp-header h1 {
