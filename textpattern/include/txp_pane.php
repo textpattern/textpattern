@@ -60,7 +60,8 @@ class Textpattern_Admin_Pane
 
 	protected function valid_token()
 	{
-		return ps('token') === md5(join('', func_get_args()) . ps('origin') . form_token() . get_pref('blog_uid'));
+		$args = func_get_args();
+		return ps('token') === md5(join('', $args) . ps('origin') . form_token() . get_pref('blog_uid'));
 	}
 
 	/**
