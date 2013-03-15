@@ -1625,8 +1625,8 @@
 		}
 
 		$locus = gTxt('while_parsing_page_form', array(
-			'{page}' => txpspecialchars($page),
-			'{form}' => txpspecialchars($txp_current_form)
+			'{page}' => $page,
+			'{form}' => $txp_current_form,
 		));
 
 		printf("<pre>".gTxt('tag_error').' <b>%s</b> -> <b> %s: %s %s</b></pre>',
