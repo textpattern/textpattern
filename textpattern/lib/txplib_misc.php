@@ -1520,27 +1520,33 @@
 	{
 		global $production_status, $txp_current_plugin;
 
-		$error = array(
-			E_WARNING           => 'Warning',
-			E_NOTICE            => 'Notice',
-			E_RECOVERABLE_ERROR => 'Catchable fatal error',
-			E_USER_ERROR        => 'User_Error',
-			E_USER_WARNING      => 'User_Warning',
-			E_USER_NOTICE       => 'User_Notice',
-		);
+		if ($production_status == 'live')
+		{
+			$error = array();
+		}
+		else
+		{
+			$error = array(
+				E_WARNING           => 'Warning',
+				E_NOTICE            => 'Notice',
+				E_RECOVERABLE_ERROR => 'Catchable fatal error',
+				E_USER_ERROR        => 'User_Error',
+				E_USER_WARNING      => 'User_Warning',
+			);
+		}
 
-		if (!($errno & error_reporting()))
+		if ($production_status == 'debug')
+		{
+			$error[E_USER_NOTICE] = 'User_Notice';
+		}
+
+		if (!isset($error[$errno]))
 		{
 			return;
 		}
 
-		if ($production_status == 'live' || ($production_status != 'debug' && $errno == E_USER_NOTICE))
-		{
-			return;
-		}
-
-		printf("<pre>".gTxt('plugin_load_error').' <b>%s</b> -> <b>%s: %s on line %s</b></pre>',
-				$txp_current_plugin, $error[$errno], $errstr, $errline);
+		printf('<pre>'.gTxt('plugin_load_error').' <b>%s</b> -> <b>%s: %s on line %s</b></pre>',
+			$txp_current_plugin, $error[$errno], $errstr, $errline);
 
 		if ($production_status == 'debug')
 		{
