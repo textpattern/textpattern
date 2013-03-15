@@ -1577,21 +1577,35 @@
 	{
 		global $production_status, $txp_current_tag, $txp_current_form, $pretext;
 
-		$error = array(
-			E_WARNING           => 'Warning',
-			E_NOTICE            => 'Notice',
-			E_RECOVERABLE_ERROR => 'Textpattern Catchable fatal error',
-			E_USER_ERROR        => 'Textpattern Error',
-			E_USER_WARNING      => 'Textpattern Warning',
-			E_USER_NOTICE       => 'Textpattern Notice',
-		);
+		$error = array();
 
-		if (!($errno & error_reporting()))
+		if ($production_status == 'testing')
 		{
-			return;
+			$error = array(
+				E_WARNING           => 'Warning',
+				E_RECOVERABLE_ERROR => 'Textpattern Catchable fatal error',
+				E_USER_ERROR        => 'Textpattern Error',
+				E_USER_WARNING      => 'Textpattern Warning',
+			);
+		}
+		else if ($production_status == 'debug')
+		{
+			$error = array(
+				E_WARNING           => 'Warning',
+				E_NOTICE            => 'Notice',
+				E_RECOVERABLE_ERROR => 'Textpattern Catchable fatal error',
+				E_USER_ERROR        => 'Textpattern Error',
+				E_USER_WARNING      => 'Textpattern Warning',
+				E_USER_NOTICE       => 'Textpattern Notice',
+			);
+
+			if (!isset($error[$errno]))
+			{
+				$error[$errno] = $errno;
+			}
 		}
 
-		if ($production_status == 'live')
+		if (!isset($error[$errno]))
 		{
 			return;
 		}
