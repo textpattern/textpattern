@@ -1528,7 +1528,6 @@
 		{
 			$error = array(
 				E_WARNING           => 'Warning',
-				E_NOTICE            => 'Notice',
 				E_RECOVERABLE_ERROR => 'Catchable fatal error',
 				E_USER_ERROR        => 'User_Error',
 				E_USER_WARNING      => 'User_Warning',
@@ -1537,6 +1536,7 @@
 
 		if ($production_status == 'debug')
 		{
+			$error[E_NOTICE] = 'Notice';
 			$error[E_USER_NOTICE] = 'User_Notice';
 		}
 
