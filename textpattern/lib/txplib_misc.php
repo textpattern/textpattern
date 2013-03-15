@@ -1520,11 +1520,9 @@
 	{
 		global $production_status, $txp_current_plugin;
 
-		if ($production_status == 'live')
-		{
-			$error = array();
-		}
-		else
+		$error = array();
+
+		if ($production_status == 'testing')
 		{
 			$error = array(
 				E_WARNING           => 'Warning',
@@ -1533,11 +1531,16 @@
 				E_USER_WARNING      => 'User_Warning',
 			);
 		}
-
-		if ($production_status == 'debug')
+		else if ($production_status == 'debug')
 		{
-			$error[E_NOTICE] = 'Notice';
-			$error[E_USER_NOTICE] = 'User_Notice';
+			$error = array(
+				E_WARNING           => 'Warning',
+				E_NOTICE            => 'Notice',
+				E_RECOVERABLE_ERROR => 'Catchable fatal error',
+				E_USER_ERROR        => 'User_Error',
+				E_USER_WARNING      => 'User_Warning',
+				E_USER_NOTICE       => 'User_Notice',
+			);
 		}
 
 		if (!isset($error[$errno]))
