@@ -1672,7 +1672,35 @@
 	{
 		global $production_status, $theme, $event, $step;
 
-		if (!error_reporting())
+		$error = array();
+
+		if ($production_status == 'testing')
+		{
+			$error = array(
+				E_WARNING           => 'Warning',
+				E_RECOVERABLE_ERROR => 'Catchable fatal error',
+				E_USER_ERROR        => 'User_Error',
+				E_USER_WARNING      => 'User_Warning',
+			);
+		}
+		else if ($production_status == 'debug')
+		{
+			$error = array(
+				E_WARNING           => 'Warning',
+				E_NOTICE            => 'Notice',
+				E_RECOVERABLE_ERROR => 'Catchable fatal error',
+				E_USER_ERROR        => 'User_Error',
+				E_USER_WARNING      => 'User_Warning',
+				E_USER_NOTICE       => 'User_Notice',
+			);
+
+			if (!isset($error[$errno]))
+			{
+				$error[$errno] = $errno;
+			}
+		}
+
+		if (!isset($error[$errno]))
 		{
 			return;
 		}
@@ -1684,59 +1712,70 @@
 			return;
 		}
 
-		if ($production_status == 'live' || ($production_status != 'debug' && $errno == E_USER_NOTICE))
+		$backtrace = '';
+		$msg = gTxt('internal_error');
+
+		if (has_privs('debug.verbose'))
 		{
-			$backtrace = $msg = '';
+			$msg .= ' "'.$errstr.'"';
+		}
+
+		if ($production_status == 'debug' && has_privs('debug.backtrace'))
+		{
+			$msg .= n."in $errfile at line $errline";
+			$backtrace = join(n, get_caller(5, 1));
+		}
+
+		if ($errno == E_ERROR || $errno == E_USER_ERROR)
+		{
+			$httpstatus = 500;
 		}
 		else
 		{
-			$backtrace = '';
-			$msg = gTxt('internal_error');
-
-			if (has_privs('debug.verbose'))
-			{
-				$msg .= ' "'.$errstr.'"';
-			}
-
-			if ($production_status == 'debug')
-			{
-				if (has_privs('debug.backtrace'))
-				{
-					$msg .= n."in $errfile at line $errline";
-					$backtrace = join(n, get_caller(5, 1));
-				}
-			}
+			$httpstatus = 200;
 		}
 
-		$httpstatus = in_array($errno, array(E_ERROR, E_USER_ERROR)) ? '500' : '200';
 		$out = "$msg.\n$backtrace";
 
 		if (http_accept_format('html'))
 		{
-			if (!empty($backtrace))
+			if ($backtrace)
 			{
 				echo "<pre>$msg.</pre>".
 					n.'<pre style="padding-left: 2em;" class="backtrace"><code>'.
 					txpspecialchars($backtrace).'</code></pre>';
 			}
-			elseif (!empty($msg))
+			else if (is_object($theme))
 			{
-				echo is_object($theme) ? $theme->announce(array($out, E_ERROR), true) : "<pre>$out</pre>";
+				echo $theme->announce(array($out, E_ERROR), true);
 			}
+			else
+			{
+				echo "<pre>$out</pre>";
+			}
+
 			$c = array('in' => '', 'out' => '');
 		}
-		elseif (http_accept_format('js'))
+		else if (http_accept_format('js'))
 		{
-			send_script_response(
-				is_object($theme) && !empty($msg) ?
-				$theme->announce_async(array($out, E_ERROR), true) :
-				"/* $out */"
-			);
+			if (is_object($theme))
+			{
+				send_script_response($theme->announce_async(array($out, E_ERROR), true));
+			}
+			else
+			{
+				send_script_response('/* '. $out . '*/');
+			}
+
 			$c = array('in' => '/* ', 'out' => ' */');
 		}
-		elseif (http_accept_format('xml'))
+		else if (http_accept_format('xml'))
 		{
-			send_xml_response(array('http-status' => $httpstatus, 'internal_error' => "$out"));
+			send_xml_response(array(
+				'http-status'    => $httpstatus,
+				'internal_error' => "$out",
+			));
+
 			$c = array('in' => '<!-- ', 'out' => ' -->');
 		}
 		else
@@ -1748,7 +1787,7 @@
 		{
 			die($c['in'].gTxt('get_off_my_lawn', array(
 				'{event}' => $event,
-				'{step}' => $step
+				'{step}'  => $step,
 			)).$c['out']);
 		}
 	}
