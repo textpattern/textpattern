@@ -1610,7 +1610,14 @@
 			return;
 		}
 
-		$page = empty($pretext['page']) ? gTxt('none') : $pretext['page'];
+		if (empty($pretext['page']))
+		{
+			$page = gTxt('none');
+		}
+		else
+		{
+			$page = $pretext['page'];
+		}
 
 		if (!isset($txp_current_form))
 		{
