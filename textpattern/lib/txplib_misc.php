@@ -1756,8 +1756,6 @@
 			{
 				echo "<pre>$out</pre>";
 			}
-
-			$c = array('in' => '', 'out' => '');
 		}
 		else if (http_accept_format('js'))
 		{
@@ -1769,8 +1767,6 @@
 			{
 				send_script_response('/* '. $out . '*/');
 			}
-
-			$c = array('in' => '/* ', 'out' => ' */');
 		}
 		else if (http_accept_format('xml'))
 		{
@@ -1778,20 +1774,10 @@
 				'http-status'    => $httpstatus,
 				'internal_error' => "$out",
 			));
-
-			$c = array('in' => '<!-- ', 'out' => ' -->');
 		}
 		else
 		{
 			txp_die($msg, 500);
-		}
-
-		if ($production_status != 'live' && in_array($errno, array(E_ERROR, E_USER_ERROR)))
-		{
-			die($c['in'].gTxt('get_off_my_lawn', array(
-				'{event}' => $event,
-				'{step}'  => $step,
-			)).$c['out']);
 		}
 	}
 
