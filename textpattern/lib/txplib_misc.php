@@ -6761,7 +6761,7 @@ class timezone
 						{
 							if (!empty($server_tz))
 							{
-								if (date_default_timezone_set($timezone_id))
+								if (@date_default_timezone_set($timezone_id))
 								{
 									$is_dst = date('I', time());
 								}
@@ -6894,7 +6894,7 @@ class timezone
 			if ($server_tz)
 			{
 				// Switch to client timezone.
-				if (date_default_timezone_set($timezone_key))
+				if (@date_default_timezone_set($timezone_key))
 				{
 					$out = date('I', $timestamp);
 					// Restore server timezone.
