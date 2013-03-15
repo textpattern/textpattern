@@ -1541,6 +1541,11 @@
 				E_USER_WARNING      => 'User_Warning',
 				E_USER_NOTICE       => 'User_Notice',
 			);
+
+			if (!isset($error[$errno]))
+			{
+				$error[$errno] = $errno;
+			}
 		}
 
 		if (!isset($error[$errno]))
