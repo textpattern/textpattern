@@ -1548,7 +1548,7 @@
 			}
 		}
 
-		if (!isset($error[$errno]))
+		if (!isset($error[$errno]) || !error_reporting())
 		{
 			return;
 		}
@@ -1605,7 +1605,7 @@
 			}
 		}
 
-		if (!isset($error[$errno]))
+		if (!isset($error[$errno]) || !error_reporting())
 		{
 			return;
 		}
@@ -1707,7 +1707,7 @@
 			}
 		}
 
-		if (!isset($error[$errno]))
+		if (!isset($error[$errno]) || !error_reporting())
 		{
 			return;
 		}
@@ -1829,7 +1829,7 @@
 			}
 		}
 
-		if (!isset($error[$errno]))
+		if (!isset($error[$errno]) || !error_reporting())
 		{
 			return;
 		}
