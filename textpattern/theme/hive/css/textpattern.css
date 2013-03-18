@@ -67,9 +67,14 @@ html {
   text-align: left;
   /* remove inter-unit whitespace for all non-monospace font-families */
   letter-spacing: -.31em;
-  word-spacing: -.43em;
   /* protect against WebKit bug with optimizelegibility */
   text-rendering: optimizespeed;
+}
+
+/* Opera hack */
+.opera:-o-prefocus,
+.txp-layout-grid {
+  word-spacing: -.43em;
 }
 
 .txp-layout-grid > div {
