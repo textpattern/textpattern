@@ -153,7 +153,13 @@
 
 	if (!defined('LANG'))
 	{
-		define("LANG", $language);
+		/**
+		 * Currently active language.
+		 *
+		 * @package L10n
+		 */
+
+		define('LANG', $language);
 	}
 
 	if (!empty($locale))
