@@ -65,7 +65,7 @@ html {
 	/* ensure consistent default alignment */
 	text-align: left;
 	/* remove inter-unit whitespace for all non-monospace font-families */
-	letter-spacing: -0.31em;
+	letter-spacing: -0.34em;
 	/* protect against WebKit bug with optimizelegibility */
 	text-rendering: optimizespeed;
 }
