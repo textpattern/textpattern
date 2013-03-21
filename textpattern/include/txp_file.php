@@ -99,7 +99,7 @@
 			$dir = get_pref('file_sort_dir', 'asc');
 		}
 
-		if ($dir = 'desc')
+		if ($dir === 'desc')
 		{
 			$dir = 'desc';
 		}
