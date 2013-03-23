@@ -18,7 +18,7 @@ Includes contributions licensed under the New BSD License.
   to your install destination. Most FTP clients or IDEs will have an option
   to show these hidden files. Otherwise, you can temporarily show hidden
   files in the OS by using the terminal.app - follow these instructions:
-  http://osxdaily.com/2009/02/25/show-hidden-files-in-os-x/
+  http://textpattern.com/hidden-files-osx
 * Create or establish the existence of a working MySQL database,
   load /textpattern/setup/ (or /subpath/textpattern/setup/) in a
   browser, and follow the directions.
