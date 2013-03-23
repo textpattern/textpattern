@@ -13,6 +13,12 @@ Includes contributions licensed under the New BSD License.
 * Extract the files to your site (in the web root, or choose a
   subdirectory). The top-level index.php should reside in this
   directory, as should the /textpattern/ and the /rpc/ directory.
+* The .htaccess file, located in the root directory, is hidden by default
+  on Mac OS X systems. Make sure this file is transferred across correctly
+  to your install destination. Most FTP clients or IDEs will have an option
+  to show these hidden files. Otherwise, you can temporarily show hidden
+  files in the OS by using the terminal.app - follow these instructions:
+  http://osxdaily.com/2009/02/25/show-hidden-files-in-os-x/
 * Create or establish the existence of a working MySQL database,
   load /textpattern/setup/ (or /subpath/textpattern/setup/) in a
   browser, and follow the directions.
