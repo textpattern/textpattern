@@ -88,6 +88,14 @@
 	error_reporting(E_ALL | E_STRICT);
 	@ini_set("display_errors","1");
 
+	include txpath.'/vendors/Textpattern/Loader.php';
+
+	$loader = new Textpattern_Loader(txpath.'/vendors');
+	$loader->register();
+
+	$loader = new Textpattern_Loader(txpath.'/lib');
+	$loader->register();
+
 	include_once txpath.'/lib/constants.php';
 	include txpath.'/lib/txplib_misc.php';
 	include txpath.'/lib/txplib_db.php';
@@ -197,14 +205,6 @@
 			textpattern();
 			exit;
 		}
-
-		include txpath.'/vendors/Textpattern/Loader.php';
-
-		$loader = new Textpattern_Loader(txpath.'/vendors');
-		$loader->register();
-
-		$loader = new Textpattern_Loader(txpath.'/lib');
-		$loader->register();
 
 		if (!empty($admin_side_plugins) and gps('event') != 'plugin')
 		{
