@@ -608,7 +608,7 @@ $DB = new DB;
 		}
 		else
 		{
-			$q = 'create '.$index.' index `'.$name.'` on '.safe_pfx($table).' ('.$columns.')'. ($type ? ' using '.$type : '');
+			$q = 'create '.$index.' index `'.$name.'`'.($type ? ' using '.$type : '').' on '.safe_pfx($table).' ('.$columns.')';
 		}
 
 		return (bool) safe_query($q, $debug);
