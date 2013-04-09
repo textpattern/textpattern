@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg>
-<svg version="1.1" baseProfile="full" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="256px" height="240px" viewBox="0 0 256 240" enable-background="new 0 0 256 240" xml:space="preserve">
+<svg version="1.1" baseProfile="full" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="256px" height="272px" viewBox="0 0 256 272" enable-background="new 0 0 256 272" xml:space="preserve">
 <metadata>jQuery UI icon sprite by Phil Wareham - http://twitter.com/philwareham</metadata>
 
 <style type="text/css">
@@ -841,6 +841,54 @@
 	<polygon points="94,235 91,238 90,238 90,237 93,234 94,234"/>
 	<polygon points="94,231 87,238 86,238 86,237 93,230 94,230"/>
 	<polygon points="94,227 83,238 82,238 82,236.876 92.875,226 94,226"/>
+</g>
+
+<g id="ui-extra-icon-code">
+	<polygon points="7,261 5,259 0,264 5,269 7,267 4,264"/>
+	<polygon points="9,267 11,269 16,264 11,259 9,261 12,264"/>
+</g>
+
+<g id="ui-extra-icon-time">
+	<polygon points="23,264 23,260 25,260 25,265 21,266.5 20.5,265"/>
+	<path d="M17,264c0-3.875,3.125-7,7-7s7,3.125,7,7s-3.125,7-7,7S17,267.875,17,264z M24,269c2.75,0,5-2.25,5-5s-2.25-5-5-5s-5,2.25-5,5S21.25,269,24,269z"/>
+</g>
+
+<g id="ui-extra-icon-list">
+	<rect x="37" y="259" width="10" height="1"/>
+	<rect x="37" y="262" width="10" height="1"/>
+	<rect x="37" y="265" width="10" height="1"/>
+	<rect x="37" y="268" width="10" height="1"/>
+	<rect x="33" y="258" width="2" height="2"/>
+	<rect x="33" y="261" width="2" height="2"/>
+	<rect x="33" y="264" width="2" height="2"/>
+	<rect x="33" y="267" width="2" height="2"/>
+</g>
+
+<g id="ui-extra-icon-grid">
+	<rect x="48" y="259" width="16" height="1"/>
+	<rect x="48" y="262" width="16" height="1"/>
+	<rect x="48" y="265" width="16" height="1"/>
+	<rect x="48" y="268" width="16" height="1"/>
+	<rect x="48" y="259" width="1" height="10"/>
+	<rect x="51" y="259" width="1" height="10"/>
+	<rect x="54" y="259" width="1" height="10"/>
+	<rect x="57" y="259" width="1" height="10"/>
+	<rect x="60" y="259" width="1" height="10"/>
+	<rect x="63" y="259" width="1" height="10"/>
+</g>
+
+<g id="ui-extra-icon-download">
+	<polygon points="74,266 77,266 77,258 67,258 67,266 70,266 70,268 65,268 65,256 79,256 79,268 74,268"/>
+	<polygon points="72,272 75,269 73,269 73,262 71,262 71,269 69,269"/>
+</g>
+
+<g id="ui-extra-icon-upload">
+	<polygon points="90,266 93,266 93,258 83,258 83,266 86,266 86,268 81,268 81,256 95,256 95,268 90,268"/>
+	<polygon points="88,262 85,265 87,265 87,272 89,272 89,265 91,265"/>
+</g>
+
+<g id="ui-extra-icon-attach">
+	<path fill="none" stroke="#cb8f02" stroke-miterlimit="10" d="M97.5,262.5c0,0,6.25,6.25,7.5,7.5c1,1,3,1.529,4.5,0c1.482-1.544,1-3.5,0-4.5l-8-7.5c-1-1-2.5-1.5-3.5-0.5s-0.5,2.5,0.5,3.5l7.5,7.5c0.5,0.5,1.5,0.5,2,0s0.5-1.5,0-2l-7.5-7"/>
 </g>
 
 </svg>

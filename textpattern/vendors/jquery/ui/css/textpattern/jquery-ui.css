@@ -1477,6 +1477,15 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 .ui-icon-gripsmall-diagonal-se { background-position: -64px -224px; }
 .ui-icon-grip-diagonal-se { background-position: -80px -224px; }
 
+/* Textpattern extra icons */
+.ui-extra-icon-code { background-position: 0 -256px; }
+.ui-extra-icon-time { background-position: -16px -256px; }
+.ui-extra-icon-list { background-position: -32px -256px; }
+.ui-extra-icon-grid { background-position: -48px -256px; }
+.ui-extra-icon-download { background-position: -64px -256px; }
+.ui-extra-icon-upload { background-position: -80px -256px; }
+.ui-extra-icon-attach { background-position: -96px -256px; }
+
 
 
 /* ==========================================================================
