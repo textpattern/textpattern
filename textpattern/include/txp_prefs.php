@@ -175,7 +175,7 @@
 			n.'<div class="txp-layout-textbox">';
 
 		// TODO: remove 'custom' when custom fields are refactored.
-		$core_events = array('site', 'admin', 'publish', 'feeds', 'custom', 'comments');
+		$core_events = array('site', 'admin', 'publish', 'feeds', 'comments', 'custom');
 		$joined_core = join(',', quote_list($core_events));
 
 		$sql = array();
