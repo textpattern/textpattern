@@ -2058,7 +2058,7 @@
 
 					graf(
 					'<label for="comment-invite">'.gTxt('comment_invitation').'</label>'.br.
-						fInput('text', 'AnnotateInvite', $AnnotateInvite, '', '', '', '', '', 'comment-invite')
+						fInput('text', 'AnnotateInvite', $AnnotateInvite, '', '', '', INPUT_REGULAR, '', 'comment-invite')
 					, ' class="comment-invite"').
 					n.'</div>';
 			}
