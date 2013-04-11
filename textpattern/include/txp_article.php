@@ -587,15 +587,15 @@
 				'selector' => '#textfilter_group',
 				'cb'       => 'article_partial_sidehelp'
 			),
-			'custom_fields' => array(
+			'url_title' => array(
 				'mode'     => PARTIAL_STATIC,
-				'selector' => '#custom_field_group',
-				'cb'       => 'article_partial_custom_fields'
+				'selector' => 'p.url-title',
+				'cb'       => 'article_partial_url_title'
 			),
-			'image' => array(
-				'mode'     => PARTIAL_STATIC,
-				'selector' => '#image_group',
-				'cb'       => 'article_partial_image'
+			'url_title_value' => array(
+				'mode'     => PARTIAL_VOLATILE_VALUE,
+				'selector' => '#url-title',
+				'cb'       => 'article_partial_url_title_value'
 			),
 			'keywords' => array(
 				'mode'     => PARTIAL_STATIC,
@@ -607,15 +607,15 @@
 				'selector' => '#keywords',
 				'cb'       => 'article_partial_keywords_value'
 			),
-			'url_title' => array(
+			'image' => array(
 				'mode'     => PARTIAL_STATIC,
-				'selector' => 'p.url-title',
-				'cb'       => 'article_partial_url_title'
+				'selector' => '#image_group',
+				'cb'       => 'article_partial_image'
 			),
-			'url_title_value' => array(
-				'mode'     => PARTIAL_VOLATILE_VALUE,
-				'selector' => '#url-title',
-				'cb'       => 'article_partial_url_title_value'
+			'custom_fields' => array(
+				'mode'     => PARTIAL_STATIC,
+				'selector' => '#custom_field_group',
+				'cb'       => 'article_partial_custom_fields'
 			),
 			'recent_articles' => array(
 				'mode'     => PARTIAL_VOLATILE,
@@ -975,12 +975,6 @@
 
 			echo wrapRegion('advanced_group', $html_markup.$html_override, 'advanced', 'advanced_options', 'article_advanced');
 
-			// Custom fields.
-			echo $partials['custom_fields']['html'];
-
-			// Article image.
-			echo $partials['image']['html'];
-
 			// Meta info.
 
 			// keywords.
@@ -988,7 +982,14 @@
 
 			// URL title.
 			$html_url_title = $partials['url_title']['html'];
-			echo wrapRegion('meta_group', $html_keywords.$html_url_title, 'meta', 'meta', 'article_meta');
+
+			echo wrapRegion('meta_group', $html_url_title.$html_keywords, 'meta', 'meta', 'article_meta');
+
+			// Article image.
+			echo $partials['image']['html'];
+
+			// Custom fields.
+			echo $partials['custom_fields']['html'];
 
 			// Recent articles.
 			echo wrapRegion('recent_group', $partials['recent_articles']['html'], 'recent', 'recent_articles', 'article_recent');
@@ -1616,29 +1617,6 @@
 	}
 
 /**
- * Renders all custom fields in one partial.
- *
- * The rendered widget can be customised via the 'article_ui > custom_fields'
- * pluggable UI callback event.
- *
- * @param  array  $rs Article data
- * @return string HTML
- */
-
-	function article_partial_custom_fields($rs)
-	{
-		global $cfs;
-		$cf = '';
-
-		foreach ($cfs as $k => $v)
-		{
-			$cf .= article_partial_custom_field($rs, "custom_field_{$k}");
-		}
-
-		return wrapRegion('custom_field_group', pluggable_ui('article_ui', 'custom_fields', $cf, $rs), 'custom_field', 'custom', 'article_custom_field', (($cfs) ? '' : 'empty'));
-	}
-
-/**
  * Renders custom field partial.
  *
  * @param  array  $rs Article data
@@ -1657,23 +1635,33 @@
 	}
 
 /**
- * Renders article image partial.
+ * Renders URL title partial.
  *
- * The rendered widget can be customised via the 'article_ui > article_image'
+ * The rendered widget can be customised via the 'article_ui > url_title'
  * pluggable UI callback event.
  *
- * @param  array $rs Article data
+ * @param  array  $rs Article data
  * @return string HTML
  */
 
-	function article_partial_image($rs)
+	function article_partial_url_title($rs)
 	{
-		$default = graf(
-			'<label for="article-image">'.gTxt('article_image').'</label>'.popHelp('article_image').br.
-				fInput('text', 'Image', $rs['Image'], '', '', '', INPUT_REGULAR, '', 'article-image')
-			, ' class="article-image"');
+		$out = graf('<label for="url-title">'.gTxt('url_title').'</label>'.popHelp('url_title').br.
+			fInput('text', 'url_title', article_partial_url_title_value($rs), '', '', '', INPUT_REGULAR, '', 'url-title'), ' class="url-title"');
 
-		return wrapRegion('image_group', pluggable_ui('article_ui', 'article_image', $default, $rs), 'image', 'article_image', 'article_image');
+		return pluggable_ui('article_ui', 'url_title', $out, $rs);
+	}
+
+/**
+ * Gets URL title from the given article data set.
+ *
+ * @param  array  $rs Article data
+ * @return string HTML
+ */
+
+	function article_partial_url_title_value($rs)
+	{
+		return $rs['url_title'];
 	}
 
 /**
@@ -1708,33 +1696,46 @@
 	}
 
 /**
- * Renders URL title partial.
+ * Renders article image partial.
  *
- * The rendered widget can be customised via the 'article_ui > url_title'
+ * The rendered widget can be customised via the 'article_ui > article_image'
+ * pluggable UI callback event.
+ *
+ * @param  array $rs Article data
+ * @return string HTML
+ */
+
+	function article_partial_image($rs)
+	{
+		$default = graf(
+			'<label for="article-image">'.gTxt('article_image').'</label>'.popHelp('article_image').br.
+				fInput('text', 'Image', $rs['Image'], '', '', '', INPUT_REGULAR, '', 'article-image')
+			, ' class="article-image"');
+
+		return wrapRegion('image_group', pluggable_ui('article_ui', 'article_image', $default, $rs), 'image', 'article_image', 'article_image');
+	}
+
+/**
+ * Renders all custom fields in one partial.
+ *
+ * The rendered widget can be customised via the 'article_ui > custom_fields'
  * pluggable UI callback event.
  *
  * @param  array  $rs Article data
  * @return string HTML
  */
 
-	function article_partial_url_title($rs)
+	function article_partial_custom_fields($rs)
 	{
-		$out = graf('<label for="url-title">'.gTxt('url_title').'</label>'.popHelp('url_title').br.
-			fInput('text', 'url_title', article_partial_url_title_value($rs), '', '', '', INPUT_REGULAR, '', 'url-title'), ' class="url-title"');
+		global $cfs;
+		$cf = '';
 
-		return pluggable_ui('article_ui', 'url_title', $out, $rs);
-	}
+		foreach ($cfs as $k => $v)
+		{
+			$cf .= article_partial_custom_field($rs, "custom_field_{$k}");
+		}
 
-/**
- * Gets URL title from the given article data set.
- *
- * @param  array  $rs Article data
- * @return string HTML
- */
-
-	function article_partial_url_title_value($rs)
-	{
-		return $rs['url_title'];
+		return wrapRegion('custom_field_group', pluggable_ui('article_ui', 'custom_fields', $cf, $rs), 'custom_field', 'custom', 'article_custom_field', (($cfs) ? '' : 'empty'));
 	}
 
 /**
