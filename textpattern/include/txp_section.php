@@ -520,8 +520,6 @@
 
 	function section_save()
 	{
-		global $app_mode;
-
 		$in = array_map('assert_string', psa(array(
 			'name',
 			'title',
@@ -536,7 +534,6 @@
 		}
 
 		// Prevent non-URL characters on section names.
-
 		$in['name']  = strtolower(sanitizeForUrl($in['name']));
 
 		extract($in);
