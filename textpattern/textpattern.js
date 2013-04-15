@@ -1586,6 +1586,17 @@ textpattern.Route.add('plugin', function ()
 
 $(document).ready(function ()
 {
+	// Confirmation dialogs.
+	$(document).on('click.txpVerify', 'a[data-verify]', function (e)
+	{
+		return verify($(this).data('verify'));
+	});
+
+	$(document).on('submit.txpVerify', 'form[data-verify]', function (e)
+	{
+		return verify($(this).data('verify'));
+	});
+
 	// Disable spellchecking on all elements of class "code" in capable browsers.
 	var c = $(".code")[0];
 	if (c && "spellcheck" in c)
@@ -1654,17 +1665,6 @@ $(document).ready(function ()
 			$(elm).attr('aria-control', region.substr(1)).attr('aria-pressed', vis);
 			$region.attr('aria-expanded', vis);
 		}
-	});
-
-	// Confirmation dialogs.
-	$(document).on('click.txpVerify', 'a[data-verify]', function (e)
-	{
-		return verify($(this).data('verify'));
-	});
-
-	$(document).on('submit.txpVerify', 'form[data-verify]', function (e)
-	{
-		return verify($(this).data('verify'));
 	});
 
 	// Event handling and automation.
