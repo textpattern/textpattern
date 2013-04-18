@@ -38,11 +38,7 @@
 	);
 
 	global $file_statuses;
-	$file_statuses = array(
-		STATUS_HIDDEN  => gTxt('hidden'),
-		STATUS_PENDING => gTxt('pending'),
-		STATUS_LIVE    => gTxt('live'),
-	);
+	$file_statuses = status_list(true, array(STATUS_DRAFT, STATUS_STICKY));
 
 	if ($event == 'file')
 	{
@@ -385,7 +381,7 @@
 						span(']', array('aria-hidden' => 'true'));
 				}
 
-				if (in_array($status, array_keys($file_statuses)))
+				if (isset($file_statuses[$status]))
 				{
 					$status = $file_statuses[$status];
 				}
@@ -676,7 +672,7 @@
 				n.'<div class="file-detail '.($file_exists ? '' : 'not-').'exists">'.
 				form(
 					(($file_exists)
-					? inputLabel('file_status', radioSet($file_statuses, 'status', $status)).
+					? inputLabel('file_status', selectInput('status', $file_statuses, $status, false)).
 						inputLabel('file_title', fInput('text', 'title', $title, '', '', '', INPUT_REGULAR, '', 'file_title'), 'title').
 						inputLabel('file_category', treeSelectInput('category', $all_file_cats, $category, 'file_category'), 'file_category').
 //						inputLabel('perms', selectInput('perms', $levels, $permissions), 'permissions').
@@ -937,7 +933,7 @@
 
 	function file_save()
 	{
-		global $file_base_path, $txp_user;
+		global $file_base_path, $file_statuses, $txp_user;
 
 		$varray = array_map('assert_string', gpsa(array(
 			'id',
@@ -1015,7 +1011,7 @@
 
 		$constraints = array(
 			'category' => new CategoryConstraint(gps('category'), array('type' => 'file')),
-			'status'   => new ChoiceConstraint(gps('status'), array('choices' => array(STATUS_HIDDEN, STATUS_PENDING, STATUS_LIVE), 'message' => 'invalid_status'))
+			'status'   => new ChoiceConstraint(gps('status'), array('choices' => array_keys($file_statuses), 'message' => 'invalid_status'))
 		);
 		callback_event_ref('file_ui', 'validate_save', 0, $varray, $constraints);
 		$validator = new Validator($constraints);

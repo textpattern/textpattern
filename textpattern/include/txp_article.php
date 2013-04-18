@@ -83,13 +83,7 @@
 		$vars[] = "custom_$i";
 	}
 
-	$statuses = array(
-		STATUS_DRAFT   => gTxt('draft'),
-		STATUS_HIDDEN  => gTxt('hidden'),
-		STATUS_PENDING => gTxt('pending'),
-		STATUS_LIVE    => strong(gTxt('live')),
-		STATUS_STICKY  => gTxt('sticky'),
-	);
+	$statuses = status_list();
 
 	if (!empty($event) and $event == 'article')
 	{
@@ -334,7 +328,7 @@
 
 	function article_save()
 	{
-		global $txp_user, $vars, $prefs, $statuses;
+		global $txp_user, $vars, $prefs;
 
 		extract($prefs);
 
@@ -1106,14 +1100,11 @@
 				echo $partials['article_nav']['html'];
 			}
 
-			// Status radios.
-			echo $partials['status']['html'];
-
 			// Sort and display.
 			echo pluggable_ui(
 				'article_ui',
 				'sort_display',
-				wrapRegion('write-sort', $partials['section']['html'].$partials['categories']['html'], '', gTxt('sort_display')),
+				wrapRegion('write-sort', $partials['status']['html'].$partials['section']['html'].$partials['categories']['html'], '', gTxt('sort_display')),
 				$rs
 			);
 
@@ -1276,7 +1267,7 @@
  * @return string HTML
  */
 
-	function status_radio($status)
+	function status_display($status)
 	{
 		global $statuses;
 
@@ -1285,28 +1276,10 @@
 			$status = STATUS_LIVE;
 		}
 
-		$out = array();
-
-		foreach ($statuses as $value => $label)
-		{
-			$checked = false;
-			$id = 'status-'.$value;
-			$class = $id;
-
-			if ($status == $value)
-			{
-				$checked = true;
-				$class .= ' active';
-			}
-
-			$out[] = n.tag(
-				radio('Status', $value, $checked, $id).
-				n.tag($label, 'label', array('for' => $id)),
-				'li', array('class' => $class)
-			);
-		}
-
-		return n.tag(join('', $out).n, 'ul', array('class' => 'status plain-list'));
+		return graf(
+			'<label for="status">'.gTxt('status').'</label>'.br.
+			selectInput('Status', $statuses, $status, false, '', 'status')
+		, ' class="status"');
 	}
 
 /**
@@ -1927,9 +1900,7 @@
 
 	function article_partial_status($rs)
 	{
-		$out = wrapRegion('write-status', status_radio($rs['Status']), '', gTxt('status'));
-
-		return pluggable_ui('article_ui', 'status', $out, $rs);
+		return pluggable_ui('article_ui', 'status', status_display($rs['Status']), $rs);
 	}
 
 /**

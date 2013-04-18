@@ -3105,7 +3105,7 @@
 /**
  * Gets a list of form types.
  *
- * The list form types can be extendeding with a 'form.types > types'
+ * The list form types can be extended with a 'form.types > types'
  * callback event. Callback functions get passed three arguments: '$event',
  * '$step' and '$types'. The third parameter contains a reference to an
  * array of 'type => label' pairs.
@@ -3142,7 +3142,7 @@
  *
  * These forms can not be deleted or renamed.
  *
- * The list forms can be extendeding with a 'form.essential > forms'
+ * The list forms can be extended with a 'form.essential > forms'
  * callback event. Callback functions get passed three arguments: '$event',
  * '$step' and '$essential'. The third parameter contains a reference to an
  * array of forms.
@@ -7223,24 +7223,69 @@ class timezone
 	}
 
 /**
- * Translates article status names into numerical status codes.
+ * Return a list of status codes and their associated names.
  *
- * @param  string $name Named status 'draft', 'hidden', 'pending', 'live', 'sticky'
- * @return int    Numerical status [1..5]
+ * The list can be extended with a 'status.types > types' callback event.
+ * Callback functions get passed three arguments: '$event', '$step' and
+ * '$status_list'. The third parameter contains a reference to an array of
+ * 'status_code => label' pairs.
+ *
+ * @param   bool  Return the list with L10n labels (for UI purposes) or raw values (for comparisons)
+ * @param   array List of status keys (numbers) to exclude
+ * @return  array A status array
+ * @since   4.6.0
  */
 
-	function getStatusNum($name)
+	function status_list($labels = true, $exclude = array())
 	{
-		$labels = array(
-			'draft'   => 1,
-			'hidden'  => 2,
-			'pending' => 3,
-			'live'    => 4,
-			'sticky'  => 5
+		$status_list = array(
+			STATUS_DRAFT   => 'draft',
+			STATUS_HIDDEN  => 'hidden',
+			STATUS_PENDING => 'pending',
+			STATUS_LIVE    => 'live',
+			STATUS_STICKY  => 'sticky',
 		);
+
+		if (!is_array($exclude))
+		{
+			$exclude = array();
+		}
+
+		foreach ($exclude as $remove)
+		{
+			unset($status_list[(int)$remove]);
+		}
+
+		callback_event_ref('status.types', 'types', 0, $status_list);
+
+		if ($labels)
+		{
+			$status_list = array_map('gTxt', $status_list);
+		}
+
+		return $status_list;
+	}
+
+/**
+ * Translates article status names into numerical status codes.
+ *
+ * @param  string $name    Named status in local language
+ * @param  int    $default Status code to return if $name is not a defined status name
+ * @return int    Matching numerical status
+ */
+
+	function getStatusNum($name, $default = STATUS_LIVE)
+	{
+		$statuses = status_list(false);
 		$status = strtolower($name);
-		$num = empty($labels[$status]) ? 4 : $labels[$status];
-		return $num;
+		$num = array_search($status, $statuses);
+
+		if ($num === false)
+		{
+			$num = $default;
+		}
+
+		return (int) $num;
 	}
 
 /**
