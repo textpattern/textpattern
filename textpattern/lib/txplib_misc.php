@@ -7269,7 +7269,7 @@ class timezone
 /**
  * Translates article status names into numerical status codes.
  *
- * @param  string $name    Named status in local language
+ * @param  string $name    Status name
  * @param  int    $default Status code to return if $name is not a defined status name
  * @return int    Matching numerical status
  */
