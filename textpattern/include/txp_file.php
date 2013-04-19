@@ -672,7 +672,7 @@
 				n.'<div class="file-detail '.($file_exists ? '' : 'not-').'exists">'.
 				form(
 					(($file_exists)
-					? inputLabel('file_status', selectInput('status', $file_statuses, $status, false)).
+					? inputLabel('file_status', selectInput('status', $file_statuses, $status, false, '', 'file_status'), 'file_status').
 						inputLabel('file_title', fInput('text', 'title', $title, '', '', '', INPUT_REGULAR, '', 'file_title'), 'title').
 						inputLabel('file_category', treeSelectInput('category', $all_file_cats, $category, 'file_category'), 'file_category').
 //						inputLabel('perms', selectInput('perms', $levels, $permissions), 'permissions').
