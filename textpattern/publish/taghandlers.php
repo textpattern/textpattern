@@ -1141,7 +1141,7 @@
 		$expired = ($prefs['publish_expired_articles']) ? '' : ' and (now() <= Expires or Expires = '.NULLDATETIME.')';
 
 		$rs = safe_rows_start('*, id as thisid, unix_timestamp(Posted) as posted', 'textpattern',
-			"Status = 4 $section $categories and Posted <= now()$expired order by ".doSlash($sort).' limit 0,'.intval($limit));
+			"Status = ".STATUS_LIVE." $section $categories and Posted <= now()$expired order by ".doSlash($sort).' limit 0,'.intval($limit));
 
 		if ($rs)
 		{
@@ -1187,7 +1187,7 @@
 		$rs = startRows('select d.name, d.email, d.web, d.message, d.discussid, unix_timestamp(d.Posted) as time, '.
 			't.ID as thisid, unix_timestamp(t.Posted) as posted, t.Title as title, t.Section as section, t.url_title '.
 			'from '. safe_pfx('txp_discuss') .' as d inner join '. safe_pfx('textpattern') .' as t on d.parentid = t.ID '.
-			'where t.Status >= 4'.$expired.' and d.visible = '.VISIBLE.' order by '.doSlash($sort).' limit '.intval($offset).','.intval($limit));
+			'where t.Status >= '.STATUS_LIVE.$expired.' and d.visible = '.VISIBLE.' order by '.doSlash($sort).' limit '.intval($offset).','.intval($limit));
 
 		if ($rs)
 		{
@@ -1309,7 +1309,7 @@
 
 		$expired = ($prefs['publish_expired_articles']) ? '' : ' and (now() <= Expires or Expires = '.NULLDATETIME.') ';
 		$rs = safe_rows_start('*, unix_timestamp(Posted) as posted, unix_timestamp(LastMod) as uLastMod, unix_timestamp(Expires) as uExpires', 'textpattern',
-			'ID != '.intval($id)." and Status = 4 $expired  and Posted <= now() $categories $section order by ".doSlash($sort).' limit 0,'.intval($limit));
+			'ID != '.intval($id)." and Status = ".STATUS_LIVE." $expired  and Posted <= now() $categories $section order by ".doSlash($sort).' limit 0,'.intval($limit));
 
 		if ($rs)
 		{
@@ -4719,7 +4719,7 @@
 			'offset'      => 0,
 			'sort'        => 'filename asc',
 			'wraptag'     => '',
-			'status'      => '4',
+			'status'      => STATUS_LIVE,
 		), $atts));
 
 		if (!is_numeric($status))
