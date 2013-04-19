@@ -596,7 +596,7 @@
 					$out['filename'] = preg_replace('/gz&$/i', 'gz', $out['filename']);
 				}
 				$fn = empty($out['filename']) ? '' : ' and filename = \''.doSlash($out['filename']).'\'';
-				$rs = safe_row('*', 'txp_file', 'id='.intval($out['id']).' and status = 4'.$fn);
+				$rs = safe_row('*', 'txp_file', 'id='.intval($out['id']).' and status = '.STATUS_LIVE.$fn);
 			}
 			return (!empty($rs)) ? array_merge($out, $rs) : array('s' => 'file_download', 'file_error' => 404);
 		}
@@ -625,7 +625,7 @@
 
 		if (is_numeric($id) and !$is_404)
 		{
-			$a = safe_row('*, unix_timestamp(Posted) as uPosted, unix_timestamp(Expires) as uExpires, unix_timestamp(LastMod) as uLastMod', 'textpattern', 'ID='.intval($id).(gps('txpreview') ? '' : ' and Status in (4,5)'));
+			$a = safe_row('*, unix_timestamp(Posted) as uPosted, unix_timestamp(Expires) as uExpires, unix_timestamp(LastMod) as uLastMod', 'textpattern', 'ID='.intval($id).(gps('txpreview') ? '' : ' and Status in ('.STATUS_LIVE.','.STATUS_STICKY.')'));
 			if ($a)
 			{
 				$out['id_keywords'] = $a['Keywords'];
@@ -793,7 +793,7 @@
 			'frontpage'     => '',
 			'id'            => '',
 			'time'          => 'past',
-			'status'        => '4',
+			'status'        => STATUS_LIVE,
 			'pgonly'        => 0,
 			'searchall'     => 1,
 			'searchsticky'  => 0,
@@ -833,8 +833,8 @@
 		$pageby = (empty($pageby) ? $limit : $pageby);
 
 		// Treat sticky articles differently wrt search filtering, etc.
-		$status = in_array(strtolower($status), array('sticky', '5')) ? 5 : 4;
-		$issticky = ($status == 5);
+		$status = in_array(strtolower($status), array('sticky', STATUS_STICKY)) ? STATUS_STICKY : STATUS_LIVE;
+		$issticky = ($status == STATUS_STICKY);
 
 		// Give control to search, if necessary.
 		if ($q && !$iscustom && !$issticky)
@@ -981,11 +981,11 @@
 
 		if ($q and $searchsticky)
 		{
-			$statusq = ' and Status >= 4';
+			$statusq = ' and Status >= '.STATUS_LIVE;
 		}
 		elseif ($id)
 		{
-			$statusq = ' and Status >= 4';
+			$statusq = ' and Status >= '.STATUS_LIVE;
 		}
 		else
 		{
@@ -1108,7 +1108,7 @@
 		$theAtts = lAtts(array(
 			'allowoverride' => '1',
 			'form'          => 'default',
-			'status'        => '4',
+			'status'        => STATUS_LIVE,
 			'pgonly'        => 0,
 		), $atts, 0);
 		extract($theAtts);
@@ -1130,7 +1130,7 @@
 
 		if ($status)
 		{
-			$status = in_array(strtolower($status), array('sticky', '5')) ? 5 : 4;
+			$status = in_array(strtolower($status), array('sticky', STATUS_STICKY)) ? STATUS_STICKY : STATUS_LIVE;
 		}
 
 		if (empty($thisarticle) or $thisarticle['thisid'] != $id)
@@ -1138,7 +1138,7 @@
 			$id = assert_int($id);
 			$thisarticle = null;
 
-			$q_status = ($status ? 'and Status = '.intval($status) : 'and Status in (4,5)');
+			$q_status = ($status ? 'and Status = '.intval($status) : 'and Status in ('.STATUS_LIVE.','.STATUS_STICKY.')');
 
 			$rs = safe_row("*, unix_timestamp(Posted) as uPosted, unix_timestamp(Expires) as uExpires, unix_timestamp(LastMod) as uLastMod",
 					"textpattern", 'ID = '.$id." $q_status limit 1");
