@@ -596,8 +596,8 @@ EOS
 				($has_parent
 					? inputLabel('category_parent', $parent_widget, 'parent')
 					: graf(
-						span(gTxt('parent'), array('class' => 'edit-label')).
-						span($parent_widget, array('class' => 'edit-value'))
+						span(gTxt('parent'), array('class' => 'txp-label')).
+						span($parent_widget, array('class' => 'txp-value'))
 					)
 				).
 				inputLabel('category_title', fInput('text', 'title', $title, '', '', '', INPUT_REGULAR, '', 'category_title'), $evname.'_category_title').

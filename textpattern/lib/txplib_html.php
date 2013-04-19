@@ -898,11 +898,11 @@
 
 		if ($wraptag_val)
 		{
-			$input = tag($input, $wraptag_val, array('class' => 'edit-value'));
+			$input = tag($input, $wraptag_val, array('class' => 'txp-value'));
 		}
 
 		$out = graf(
-			tag($label.popHelp($help), 'span', array('class' => 'edit-label')).
+			tag($label.popHelp($help), 'span', array('class' => 'txp-label')).
 			n.$input
 		, array('class' => $class));
 

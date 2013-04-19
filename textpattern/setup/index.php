@@ -197,35 +197,35 @@ eod;
 			graf(setup_gTxt('db_must_exist')).
 
 			graf(
-				span('<label for="setup_mysql_login">'.setup_gTxt('mysql_login').'</label>', ' class="edit-label"').
-				n.span(fInput('text', 'duser', '', '', '', '', INPUT_REGULAR, '', 'setup_mysql_login'), ' class="edit-value"')
+				span('<label for="setup_mysql_login">'.setup_gTxt('mysql_login').'</label>', ' class="txp-label"').
+				n.span(fInput('text', 'duser', '', '', '', '', INPUT_REGULAR, '', 'setup_mysql_login'), ' class="txp-value"')
 			).
 
 			graf(
-				span('<label for="setup_mysql_pass">'.setup_gTxt('mysql_password').'</label>', ' class="edit-label"').
-				n.span(fInput('text', 'dpass', '', '', '', '', INPUT_REGULAR, '', 'setup_mysql_pass'), ' class="edit-value"')
+				span('<label for="setup_mysql_pass">'.setup_gTxt('mysql_password').'</label>', ' class="txp-label"').
+				n.span(fInput('text', 'dpass', '', '', '', '', INPUT_REGULAR, '', 'setup_mysql_pass'), ' class="txp-value"')
 			).
 
 			graf(
-				span('<label for="setup_mysql_server">'.setup_gTxt('mysql_server').'</label>', ' class="edit-label"').
-				n.span(fInput('text', 'dhost', 'localhost', '', '', '', INPUT_REGULAR, '', 'setup_mysql_server', '', true), ' class="edit-value"')
+				span('<label for="setup_mysql_server">'.setup_gTxt('mysql_server').'</label>', ' class="txp-label"').
+				n.span(fInput('text', 'dhost', 'localhost', '', '', '', INPUT_REGULAR, '', 'setup_mysql_server', '', true), ' class="txp-value"')
 			).
 
 			graf(
-				span('<label for="setup_mysql_db">'.setup_gTxt('mysql_database').'</label>', ' class="edit-label"').
-				n.span(fInput('text', 'ddb', '', '', '', '', INPUT_REGULAR, '', 'setup_mysql_db', '', true), ' class="edit-value"')
+				span('<label for="setup_mysql_db">'.setup_gTxt('mysql_database').'</label>', ' class="txp-label"').
+				n.span(fInput('text', 'ddb', '', '', '', '', INPUT_REGULAR, '', 'setup_mysql_db', '', true), ' class="txp-value"')
 			).
 
 			graf(
-				span('<label for="setup_table_prefix">'.setup_gTxt('table_prefix').'</label>'.popHelp('table_prefix'), ' class="edit-label"').
-				n.span(fInput('text', 'dprefix', '', '', '', '', INPUT_REGULAR, '', 'setup_table_prefix'), ' class="edit-value"')
+				span('<label for="setup_table_prefix">'.setup_gTxt('table_prefix').'</label>'.popHelp('table_prefix'), ' class="txp-label"').
+				n.span(fInput('text', 'dprefix', '', '', '', '', INPUT_REGULAR, '', 'setup_table_prefix'), ' class="txp-value"')
 			).
 
 			hed(setup_gTxt('site_url'), 2).
 			graf(setup_gTxt('please_enter_url')).
 			graf(
-				span('<label for="setup_site_url">http://</label>'.popHelp('siteurl'), ' class="edit-label"').
-				n.span(fInput('text', 'siteurl', $guess_siteurl, '', '', '', INPUT_REGULAR, '', 'setup_site_url', '', true), ' class="edit-value"')
+				span('<label for="setup_site_url">http://</label>'.popHelp('siteurl'), ' class="txp-label"').
+				n.span(fInput('text', 'siteurl', $guess_siteurl, '', '', '', INPUT_REGULAR, '', 'setup_site_url', '', true), ' class="txp-value"')
 			);
 
 		if (is_disabled('mail'))
@@ -463,30 +463,30 @@ eod;
 			graf(setup_gTxt('about_to_create')).
 
 			graf(
-				span('<label for="setup_user_realname">'.setup_gTxt('your_full_name').'</label>', ' class="edit-label"').
-				n.span(fInput('text', 'RealName', '', '', '', '', INPUT_REGULAR, '', 'setup_user_realname', '', true), ' class="edit-value"')
+				span('<label for="setup_user_realname">'.setup_gTxt('your_full_name').'</label>', ' class="txp-label"').
+				n.span(fInput('text', 'RealName', '', '', '', '', INPUT_REGULAR, '', 'setup_user_realname', '', true), ' class="txp-value"')
 			).
 
 			graf(
-				span('<label for="setup_user_login">'.setup_gTxt('setup_login').'</label>'.popHelp('setup_user_login'), ' class="edit-label"').
-				n.span(fInput('text', 'name', '', '', '', '', INPUT_REGULAR, '', 'setup_user_login', '', true), ' class="edit-value"')
+				span('<label for="setup_user_login">'.setup_gTxt('setup_login').'</label>'.popHelp('setup_user_login'), ' class="txp-label"').
+				n.span(fInput('text', 'name', '', '', '', '', INPUT_REGULAR, '', 'setup_user_login', '', true), ' class="txp-value"')
 			).
 
 			graf(
-				span('<label for="setup_user_pass">'.setup_gTxt('choose_password').'</label>'.popHelp('setup_user_pass'), ' class="edit-label"').
-				n.span(fInput('text', 'pass', '', '', '', '', INPUT_REGULAR, '', 'setup_user_pass', '', true), ' class="edit-value"')
+				span('<label for="setup_user_pass">'.setup_gTxt('choose_password').'</label>'.popHelp('setup_user_pass'), ' class="txp-label"').
+				n.span(fInput('text', 'pass', '', '', '', '', INPUT_REGULAR, '', 'setup_user_pass', '', true), ' class="txp-value"')
 			).
 
 			graf(
-				span('<label for="setup_user_email">'.setup_gTxt('your_email'), ' class="edit-label"').
-				n.span(fInput('email', 'email', '', '', '', '', INPUT_REGULAR, '', 'setup_user_email', '', true), ' class="edit-value"')
+				span('<label for="setup_user_email">'.setup_gTxt('your_email'), ' class="txp-label"').
+				n.span(fInput('email', 'email', '', '', '', '', INPUT_REGULAR, '', 'setup_user_email', '', true), ' class="txp-value"')
 			).
 
 			hed(setup_gTxt('site_config'), 2).
 
 			graf(
-				span('<label for="setup_admin_theme">'.setup_gTxt('admin_theme').'</label>'.popHelp('theme_name'), ' class="edit-label"').
-				n.span($theme_chooser, ' class="edit-value"')
+				span('<label for="setup_admin_theme">'.setup_gTxt('admin_theme').'</label>'.popHelp('theme_name'), ' class="txp-label"').
+				n.span($theme_chooser, ' class="txp-value"')
 			).
 
 			graf(
