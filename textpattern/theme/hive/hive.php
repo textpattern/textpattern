@@ -89,6 +89,8 @@ class hive_theme extends theme
 
 		$out[] = '<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">';
 		$out[] = '<meta name="apple-mobile-web-app-capable" content="yes">';
+		$out[] = '<meta name="apple-mobile-web-app-status-bar-style" content="black">';
+		$out[] = '<meta name="apple-mobile-web-app-title" content="'.htmlspecialchars($GLOBALS["prefs"]["sitename"]).'">';
 		$out[] = '<meta name="generator" content="Textpattern CMS">';
 		$out[] = '<script src="vendors/modernizr/modernizr/modernizr.js"></script>';
 		$out[] = '<!--[if lt IE 9]><script src="vendors/keithclark/selectivizr/selectivizr.min.js"></script><![endif]-->';
