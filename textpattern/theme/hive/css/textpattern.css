@@ -540,20 +540,6 @@ a:hover .content-image {
   }
 }
 
-@-ms-keyframes messageflash {
-  0% {
-    opacity: 0;
-  }
-
-  50%, 100% {
-    opacity: 1;
-  }
-
-  75% {
-    opacity: .5;
-  }
-}
-
 @-o-keyframes messageflash {
   0% {
     opacity: 0;
