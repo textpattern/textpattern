@@ -905,7 +905,8 @@ textarea[disabled],
   box-shadow: none !important;
   -khtml-user-select: none;
   -webkit-user-select: none;
-  -moz-user-select: -moz-none;
+  -moz-user-select: none;
+  -ms-user-select: none;
   user-select: none;
   color: #999999 !important;
   cursor: default;
