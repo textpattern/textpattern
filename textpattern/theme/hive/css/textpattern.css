@@ -2161,25 +2161,6 @@ div.code {
   #recent_group {
     display: none;
   }
-
-  /* Admin -> Basic/advanced preferences pages < 769px
-     ========================================================================== */
-  #page-prefs .basic th,
-  #page-prefs .basic td,
-  #page-prefs .basic tr,
-  #page-prefs .advanced th,
-  #page-prefs .advanced td,
-  #page-prefs .advanced tr {
-    display: block;
-  }
-  #page-prefs .basic tr,
-  #page-prefs .advanced tr {
-    border-top: 0;
-  }
-  #page-prefs .basic .pref-value,
-  #page-prefs .advanced .pref-value {
-    width: 100%;
-  }
 }
 /* ==========================================================================
    Additional layout for devices < 546px
