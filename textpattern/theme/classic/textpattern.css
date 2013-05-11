@@ -1050,13 +1050,10 @@ body {
 	border-top: 1px solid #f8c225;
 	border-bottom: 1px solid #d9a307;
 	background-color: #ffda44;
-	/* Safari5.1+, Chrome10+ */
+	background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffda44), color-stop(100%, #f8c225));
 	background-image: -webkit-linear-gradient(#ffda44, #f8c225);
-	/* Firefox3.6 */
 	background-image: -moz-linear-gradient(#ffda44, #f8c225);
-	/* Opera11.10+ */
 	background-image: -o-linear-gradient(#ffda44, #f8c225);
-	/* CSS3 Compliant */
 	background-image: linear-gradient(#ffda44, #f8c225);
 }
 
