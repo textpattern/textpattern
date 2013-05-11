@@ -69,21 +69,18 @@
 }
 
 .ui-widget-content {
-	border: 1px solid #ccc;
-	background-color: #fff;
+	border: 1px solid #cccccc;
+	background-color: #ffffff;
 }
 
 .ui-widget-header {
 	font-weight: bold;
-	background-color: #eee;
-	/* Safari5.1+, Chrome10+ */
-	background-image: -webkit-linear-gradient(#eee, #ddd);
-	/* Firefox3.6 */
-	background-image: -moz-linear-gradient(#eee, #ddd);
-	/* Opera11.10+ */
-	background-image: -o-linear-gradient(#eee, #ddd);
-	/* CSS3 Compliant */
-	background-image: linear-gradient(#eee, #ddd);
+	background-color: #eeeeee;
+	background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #eeeeee), color-stop(100%, #dddddd));
+	background-image: -webkit-linear-gradient(#eeeeee, #dddddd);
+	background-image: -moz-linear-gradient(#eeeeee, #dddddd);
+	background-image: -o-linear-gradient(#eeeeee, #dddddd);
+	background-image: linear-gradient(#eeeeee, #dddddd);
 }
 
 
@@ -91,25 +88,25 @@
    ========================================================================== */
 
 .ui-state-default {
-	color: #333;
-	border: 1px solid #ccc;
+	color: #333333;
+	border: 1px solid #cccccc;
 	background-color: #f2f2f2;
 }
 
 a.ui-state-default:hover,
 a.ui-state-default:focus {
-	color: #333;
+	color: #333333;
 	text-decoration: none;
 }
 
 .ui-state-hover,
 .ui-state-focus {
-	border-color: #999;
+	border-color: #999999;
 	background-color: #f7f7f7;
 }
 
 .ui-state-active {
-	background-color: #fff;
+	background-color: #ffffff;
 }
 
 .ui-selecting {
@@ -141,13 +138,13 @@ a.ui-state-default:focus {
 
 .ui-priority-secondary {
 	font-weight: normal;
-	opacity: .66;
+	opacity: 0.66;
 	filter:Alpha(Opacity=66);
 }
 
 .ui-state-disabled {
 	background-image: none;
-	opacity: .33;
+	opacity: 0.33;
 	filter:Alpha(Opacity=33);
 }
 
@@ -170,7 +167,7 @@ a.ui-state-default:focus {
 	z-index: 1001;
 	width: 100%;
 	height: 100%;
-	background: rgba(0, 0, 0, .75);
+	background: rgba(0, 0, 0, 0.75);
 }
 
 .no-rgba .ui-widget-overlay {
@@ -182,12 +179,12 @@ a.ui-state-default:focus {
    ========================================================================== */
 
 .ui-widget-shadow {
-	margin: -.5em 0 0 -.5em;
-	padding: .5em;
-	background-color: #999;
-	-moz-border-radius: .5em;
-	border-radius: .5em;
-	opacity: .33;
+	margin: -0.5em 0 0 -0.5em;
+	padding: 0.5em;
+	background-color: #999999;
+	-moz-border-radius: 0.5em;
+	border-radius: 0.5em;
+	opacity: 0.33;
 	filter:Alpha(Opacity=33);
 }
 
@@ -203,8 +200,9 @@ a.ui-state-default:focus {
 
 .ui-draggable-dragging {
 	z-index: 1000;
-	-webkit-box-shadow: 0 0 .5em rgba(0, 0, 0, 0.2);
-	box-shadow: 0 0 .5em rgba(0, 0, 0, 0.2);
+	-webkit-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+	box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
 }
 
 
@@ -305,8 +303,9 @@ a.ui-state-default:focus {
  ========================================================================== */
 
 .ui-sortable-helper {
-	-webkit-box-shadow: 0 0 .5em rgba(0, 0, 0, 0.2);
-	box-shadow: 0 0 .5em rgba(0, 0, 0, 0.2);
+	-webkit-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+	box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
 }
 
 .ui-sortable-placeholder {
@@ -327,12 +326,12 @@ a.ui-state-default:focus {
 	position: relative;
 	display: block;
 	margin-top: 2px;
-	padding: .5em 1em;
+	padding: 0.5em 1em;
 	cursor: pointer;
 }
 
 .ui-accordion .ui-accordion-header a {
-	color: #333;
+	color: #333333;
 	text-decoration: none;
 }
 
@@ -342,13 +341,13 @@ a.ui-state-default:focus {
 }
 
 .ui-accordion .ui-accordion-noicons {
-	padding-left: .5em;
+	padding-left: 0.5em;
 }
 
 .ui-accordion .ui-accordion-header .ui-accordion-header-icon {
 	position: absolute;
 	top: 50%;
-	left: .5em;
+	left: 0.5em;
 	margin-top: -8px;
 }
 
@@ -376,7 +375,7 @@ a.ui-state-default:focus {
 .ui-button {
 	position: relative;
 	display: inline-block;
-	margin-right: .1em;
+	margin-right: 0.1em;
 	border: 1px solid #c4c4c4;
 	border-bottom-color: #aaaaaa;
 	padding: 0;
@@ -387,13 +386,10 @@ a.ui-state-default:focus {
 	vertical-align: baseline;
 	overflow: visible; /* the overflow property removes extra width in IE */
 	background-color: #eeeeee;
-	/* Safari5.1+, Chrome10+ */
+	background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #eeeeee), color-stop(100%, #dddddd));
 	background-image: -webkit-linear-gradient(#eeeeee, #dddddd);
-	/* Firefox3.6 */
 	background-image: -moz-linear-gradient(#eeeeee, #dddddd);
-	/* Opera11.10+ */
 	background-image: -o-linear-gradient(#eeeeee, #dddddd);
-	/* CSS3 Compliant */
 	background-image: linear-gradient(#eeeeee, #dddddd);
 }
 
@@ -402,13 +398,10 @@ a.ui-state-default:focus {
 	border-bottom-color: #919191;
 	text-decoration: none;
 	background-color: #f8f8f8;
-	/* Safari5.1+, Chrome10+ */
+	background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f8f8f8), color-stop(100%, #e7e7e7));
 	background-image: -webkit-linear-gradient(#f8f8f8, #e7e7e7);
-	/* Firefox3.6 */
 	background-image: -moz-linear-gradient(#f8f8f8, #e7e7e7);
-	/* Opera11.10+ */
 	background-image: -o-linear-gradient(#f8f8f8, #e7e7e7);
-	/* CSS3 Compliant */
 	background-image: linear-gradient(#f8f8f8, #e7e7e7);
 }
 
@@ -416,21 +409,20 @@ a.ui-state-default:focus {
 	border: 1px solid #aaaaaa;
 	border-bottom-color: #919191;
 	-webkit-box-shadow: inset 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
+	-moz-box-shadow: inset 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
 	box-shadow: inset 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
 	background-color: #e6e6e6;
-	/* Safari5.1+, Chrome10+ */
+	background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #e6e6e6), color-stop(100%, #d5d5d5));
 	background-image: -webkit-linear-gradient(#e6e6e6, #d5d5d5);
-	/* Firefox3.6 */
 	background-image: -moz-linear-gradient(#e6e6e6, #d5d5d5);
-	/* Opera11.10+ */
 	background-image: -o-linear-gradient(#e6e6e6, #d5d5d5);
-	/* CSS3 Compliant */
 	background-image: linear-gradient(#e6e6e6, #d5d5d5);
 }
 
 .boxshadow .ui-button.ui-state-focus {
 	outline: 0;
 	-webkit-box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.25), 0 0 7px #0066ff;
+	-moz-box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.25), 0 0 7px #0066ff;
 	box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.25), 0 0 7px #0066ff;
 	/* Opera */
 	z-index: 1;
@@ -455,18 +447,18 @@ button.ui-button-icons-only {
 /* button rounded corners */
 
 .ui-button.ui-corner-all {
-	-moz-border-radius: .5em;
-	border-radius: .5em;
+	-moz-border-radius: 0.5em;
+	border-radius: 0.5em;
 }
 
 .ui-button.ui-corner-right {
-	-moz-border-radius: 0 .5em .5em 0;
-	border-radius: 0 .5em .5em 0;
+	-moz-border-radius: 0 0.5em 0.5em 0;
+	border-radius: 0 0.5em 0.5em 0;
 }
 
 .ui-button.ui-corner-left {
-	-moz-border-radius: .5em 0 0 .5em;
-	border-radius: .5em 0 0 .5em;
+	-moz-border-radius: 0.5em 0 0 0.5em;
+	border-radius: 0.5em 0 0 0.5em;
 }
 
 /* button text element */
@@ -477,23 +469,23 @@ button.ui-button-icons-only {
 }
 
 .ui-button-text-only .ui-button-text {
-	padding: .25em .75em;
+	padding: 0.25em 0.75em;
 }
 
 .ui-button-icon-only .ui-button-text,
 .ui-button-icons-only .ui-button-text {
-	padding: .25em;
+	padding: 0.25em;
 	text-indent: -9999px;
 }
 
 .ui-button-text-icon-primary .ui-button-text,
 .ui-button-text-icons .ui-button-text {
-	padding: .25em .75em .25em 2.1em;
+	padding: 0.25em 0.75em 0.25em 2.1em;
 }
 
 .ui-button-text-icon-secondary .ui-button-text,
 .ui-button-text-icons .ui-button-text {
-	padding: .25em 2.1em .25em .75em;
+	padding: 0.25em 2.1em 0.25em 0.75em;
 }
 
 .ui-button-text-icons .ui-button-text {
@@ -503,7 +495,7 @@ button.ui-button-icons-only {
 
 /* no icon support for input elements, provide padding by default */
 input.ui-button {
-	padding: .25em .75em;
+	padding: 0.25em 0.75em;
 }
 
 /* button icon element(s) */
@@ -526,37 +518,34 @@ input.ui-button {
 .ui-button-text-icon-primary .ui-button-icon-primary,
 .ui-button-text-icons .ui-button-icon-primary,
 .ui-button-icons-only .ui-button-icon-primary {
-	left: .5em;
+	left: 0.5em;
 }
 
 .ui-button-text-icon-secondary .ui-button-icon-secondary,
 .ui-button-text-icons .ui-button-icon-secondary,
 .ui-button-icons-only .ui-button-icon-secondary {
-	right: .5em;
+	right: 0.5em;
 }
 
 /* button sets */
 
 .ui-buttonset {
-	margin-right: .5em;
+	margin-right: 0.5em;
 }
 
 .ui-buttonset .ui-button {
 	margin-left: 0;
-	margin-right: -.35em;
+	margin-right: -0.35em;
 }
 
 [aria-pressed="true"].ui-button {
 	border-color: #a3bef3;
 	border-bottom-color: #769eed;
 	background-color: #e3edfc;
-	/* Safari5.1+, Chrome10+ */
+	background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #e3edfc), color-stop(100%, #c7dbfa));
 	background-image: -webkit-linear-gradient(#e3edfc, #c7dbfa);
-	/* Firefox3.6 */
 	background-image: -moz-linear-gradient(#e3edfc, #c7dbfa);
-	/* Opera11.10+ */
 	background-image: -o-linear-gradient(#e3edfc, #c7dbfa);
-	/* CSS3 Compliant */
 	background-image: linear-gradient(#e3edfc, #c7dbfa);
 }
 
@@ -564,13 +553,10 @@ input.ui-button {
 	border-color: #97b0ef;
 	border-bottom-color: #6b8fe8;
 	background-color: #f1f6fe;
-	/* Safari5.1+, Chrome10+ */
+	background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f1f6fe), color-stop(100%, #ccdefa));
 	background-image: -webkit-linear-gradient(#f1f6fe, #ccdefa);
-	/* Firefox3.6 */
 	background-image: -moz-linear-gradient(#f1f6fe, #ccdefa);
-	/* Opera11.10+ */
 	background-image: -o-linear-gradient(#f1f6fe, #ccdefa);
-	/* CSS3 Compliant */
 	background-image: linear-gradient(#f1f6fe, #ccdefa);
 }
 
@@ -578,13 +564,10 @@ input.ui-button {
 	border-color: #97b0ef;
 	border-bottom-color: #6b8fe8;
 	background-color: #c7dbfa;
-	/* Safari5.1+, Chrome10+ */
+	background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #c7dbfa), color-stop(100%, #b0cbf7));
 	background-image: -webkit-linear-gradient(#c7dbfa, #b0cbf7);
-	/* Firefox3.6 */
 	background-image: -moz-linear-gradient(#c7dbfa, #b0cbf7);
-	/* Opera11.10+ */
 	background-image: -o-linear-gradient(#c7dbfa, #b0cbf7);
-	/* CSS3 Compliant */
 	background-image: linear-gradient(#c7dbfa, #b0cbf7);
 }
 
@@ -601,34 +584,35 @@ input::-moz-focus-inner {
 
 .ui-datepicker {
 	display: none;
-	padding: .2em .2em 0;
+	padding: 0.2em 0.2em 0;
 	width: 17em;
-	-webkit-box-shadow: 0 0 .5em rgba(0, 0, 0, 0.2);
-	box-shadow: 0 0 .5em rgba(0, 0, 0, 0.2);
+	-webkit-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+	box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
 }
 
 .ui-datepicker .ui-datepicker-header {
 	position: relative;
-	padding: .2em 0;
+	padding: 0.2em 0;
 }
 
 .ui-datepicker .ui-datepicker-prev,
 .ui-datepicker .ui-datepicker-next {
 	position: absolute;
-	top: .2em;
+	top: 0.2em;
 	width: 1.8em;
 	height: 1.8em;
-	-moz-border-radius: .5em;
-	border-radius: .5em;
+	-moz-border-radius: 0.5em;
+	border-radius: 0.5em;
 	background-color: transparent;
 }
 
 .ui-datepicker .ui-datepicker-prev {
-	left: .2em;
+	left: 0.2em;
 }
 
 .ui-datepicker .ui-datepicker-next {
-	right: .2em;
+	right: 0.2em;
 }
 
 .ui-datepicker .ui-datepicker-prev span,
@@ -661,13 +645,13 @@ input::-moz-focus-inner {
 }
 
 .ui-datepicker table {
-	margin: 0 0 .2em;
+	margin: 0 0 0.2em;
 	width: 100%;
 }
 
 .ui-datepicker th {
 	border: 0;
-	padding: .5em .2em;
+	padding: 0.5em 0.2em;
 	text-align: center;
 }
 
@@ -679,7 +663,7 @@ input::-moz-focus-inner {
 .ui-datepicker td span,
 .ui-datepicker td a {
 	display: block;
-	padding: .2em;
+	padding: 0.2em;
 	text-align: center;
 }
 
@@ -697,18 +681,18 @@ input::-moz-focus-inner {
 }
 
 .ui-datepicker .ui-datepicker-buttonpane {
-	margin: .7em 0 0 0;
+	margin: 0.7em 0 0 0;
 	border-left: 0;
 	border-right: 0;
 	border-bottom: 0;
-	padding: 0 .2em;
+	padding: 0 0.2em;
 	background-image: none;
 }
 
 .ui-datepicker .ui-datepicker-buttonpane button {
 	float: right;
-	margin: .5em .2em .4em;
-	padding: .2em .6em .3em .6em;
+	margin: 0.5em 0.2em 0.4em;
+	padding: 0.2em 0.6em 0.3em 0.6em;
 	width: auto;
 	overflow: visible;
 	cursor: pointer;
@@ -719,7 +703,7 @@ input::-moz-focus-inner {
 }
 
 .ui-datepicker td.ui-datepicker-week-col {
-	padding: .32em 0;
+	padding: 0.32em 0;
 	text-align: center;
 }
 
@@ -734,7 +718,7 @@ input::-moz-focus-inner {
 }
 
 .ui-datepicker-multi .ui-datepicker-group table {
-	margin: 0 auto .4em;
+	margin: 0 auto 0.4em;
 	width: 95%;
 }
 
@@ -815,20 +799,21 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 	top: 0;
 	left: 0;
 	z-index: 1002;
-	padding: .2em;
+	padding: 0.2em;
 	overflow: hidden;
-	-webkit-box-shadow: 0 0 .5em rgba(0, 0, 0, 0.2);
-	box-shadow: 0 0 .5em rgba(0, 0, 0, 0.2);
+	-webkit-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+	box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
 }
 
 .ui-dialog .ui-dialog-titlebar {
 	position: relative;
-	padding: .4em 1em;
+	padding: 0.4em 1em;
 }
 
 .ui-dialog .ui-dialog-title {
 	float: left;
-	margin: .1em 0;
+	margin: 0.1em 0;
 	width: 90%;
 	overflow: hidden;
 	white-space: nowrap;
@@ -849,15 +834,15 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 .ui-dialog .ui-dialog-content {
 	position: relative;
 	border: 0;
-	padding: .5em 1em;
+	padding: 0.5em 1em;
 	background: none;
 	overflow: auto;
 }
 
 .ui-dialog .ui-dialog-buttonpane {
-	margin-top: .5em;
+	margin-top: 0.5em;
 	border-width: 1px 0 0 0;
-	padding: .5em;
+	padding: 0.5em;
 	background-image: none;
 	text-align: left;
 }
@@ -867,7 +852,7 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 }
 
 .ui-dialog .ui-dialog-buttonpane button {
-	margin: .5em .4em .5em 0;
+	margin: 0.5em 0.4em 0.5em 0;
 	cursor: pointer;
 }
 
@@ -918,7 +903,7 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 
 .ui-menu .ui-menu-item a {
 	display: block;
-	padding: 2px .4em;
+	padding: 2px 0.4em;
 }
 
 .ui-menu .ui-state-active {
@@ -926,7 +911,7 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 }
 
 .ui-menu .ui-state-disabled {
-	margin: .4em 0 .2em;
+	margin: 0.4em 0 0.2em;
 }
 
 .ui-menu .ui-state-disabled a {
@@ -947,8 +932,8 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 /* left-aligned */
 .ui-menu .ui-icon {
 	position: absolute;
-	top: .2em;
-	left: .2em;
+	top: 0.2em;
+	left: 0.2em;
 }
 
 /* right-aligned */
@@ -995,15 +980,16 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 	width: 20px;
 	height: 20px;
 	cursor: default;
-	background-color: #fff;
-	-webkit-box-shadow: 0 0 .5em rgba(0, 0, 0, 0.2);
-	box-shadow: 0 0 .5em rgba(0, 0, 0, 0.2);
+	background-color: #ffffff;
+	-webkit-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+	box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
 }
 
 .ui-slider .ui-slider-range {
 	position: absolute;
 	z-index: 1;
-	font-size: .7em;
+	font-size: 0.7em;
 	display: block;
 	border: 0;
 	background-position: 0 0;
@@ -1085,7 +1071,7 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 	padding: 0;
 	width: 16px;
 	height: 42%;
-	font-size: .5em;
+	font-size: 0.5em;
 	overflow: hidden;
 	cursor: default;
 }
@@ -1125,20 +1111,20 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 	top: 0;
 	float: left;
 	border-bottom-width: 0;
-	-moz-border-radius-topright: .75em 2em;
-	border-top-right-radius: .75em 2em;
-	-moz-border-radius-topleft: .75em 2em;
-	border-top-left-radius: .75em 2em;
+	-moz-border-radius-topright: 0.75em 2em;
+	border-top-right-radius: 0.75em 2em;
+	-moz-border-radius-topleft: 0.75em 2em;
+	border-top-left-radius: 0.75em 2em;
 	list-style: none;
 	white-space: nowrap;
-	-webkit-box-shadow: inset 0 -.2em .4em rgba(102, 102, 102, .15);
-	-moz-box-shadow: inset 0 -.2em .4em rgba(102, 102, 102, .15);
-	box-shadow: inset 0 -.2em .4em rgba(102, 102, 102, .15);
+	-webkit-box-shadow: inset 0 -0.2em 0.4em rgba(102, 102, 102, 0.15);
+	-moz-box-shadow: inset 0 -0.2em 0.4em rgba(102, 102, 102, 0.15);
+	box-shadow: inset 0 -0.2em 0.4em rgba(102, 102, 102, 0.15);
 }
 
 .ui-tabs .ui-tabs-nav li a {
 	float: left;
-	padding: .5em 1em;
+	padding: 0.5em 1em;
 	color: #333;
 	text-decoration: none;
 }
@@ -1178,10 +1164,11 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 .ui-tooltip {
 	position: absolute;
 	z-index: 9999;
-	padding: .5em 1em;
+	padding: 0.5em 1em;
 	max-width: 22em;
-	-webkit-box-shadow: 0 0 .5em rgba(0, 0, 0, 0.2);
-	box-shadow: 0 0 .5em rgba(0, 0, 0, 0.2);
+	-webkit-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+	box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
 }
 
 
@@ -1203,21 +1190,21 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 	vertical-align: text-bottom;
 }
 
-.no-svg .ui-icon {
-	background-image: url("images/ui-icon-sprite-333333.png");
-}
-
-.svg .ui-icon {
-	background-image: url("images/ui-icon-sprite-333333.svg");
-}
-
+.no-svg .ui-icon,
 .no-svg .ui-widget-content .ui-icon,
-.no-svg .ui-widget-header .ui-icon {
+.no-svg .ui-widget-header .ui-icon,
+.no-svg .ui-state-hover .ui-icon,
+.no-svg .ui-state-focus .ui-icon,
+.no-svg .ui-state-active .ui-icon {
 	background-image: url("images/ui-icon-sprite-333333.png");
 }
 
+.svg .ui-icon,
 .svg .ui-widget-content .ui-icon,
-.svg .ui-widget-header .ui-icon {
+.svg .ui-widget-header .ui-icon,
+.svg .ui-state-hover .ui-icon,
+.svg .ui-state-focus .ui-icon,
+.svg .ui-state-active .ui-icon {
 	background-image: url("images/ui-icon-sprite-333333.svg");
 }
 
@@ -1227,18 +1214,6 @@ html[dir="rtl"] .ui-datepicker-group-middle .ui-datepicker-header {
 
 .svg .ui-state-default .ui-icon {
 	background-image: url("images/ui-icon-sprite-555555.svg");
-}
-
-.no-svg .ui-state-hover .ui-icon,
-.no-svg .ui-state-focus .ui-icon,
-.no-svg .ui-state-active .ui-icon {
-	background-image: url("images/ui-icon-sprite-333333.png");
-}
-
-.svg .ui-state-hover .ui-icon,
-.svg .ui-state-focus .ui-icon,
-.svg .ui-state-active .ui-icon {
-	background-image: url("images/ui-icon-sprite-333333.svg");
 }
 
 .no-svg .success .ui-icon {
