@@ -69,7 +69,7 @@
 
 #nav > li.active {
 	background: rgb(252, 220, 127); /* fallback no RGBa support */
-	background: rgba(255, 255, 255, .25);
+	background: rgba(255, 255, 255, 0.25);
 }
 
 #nav a {
@@ -93,15 +93,15 @@
 	padding: 0;
 	width: 15em;
 	background-color: #fff;
-	-webkit-box-shadow: 0 .25em .4em rgba(0, 0, 0, .15);
-	-moz-box-shadow: 0 .25em .4em rgba(0, 0, 0, .15);
-	box-shadow: 0 .25em .4em rgba(0, 0, 0, .15);
+	-webkit-box-shadow: 0 0.25em 0.4em rgba(0, 0, 0, 0.15);
+	-moz-box-shadow: 0 0.25em 0.4em rgba(0, 0, 0, 0.15);
+	box-shadow: 0 0.25em 0.4em rgba(0, 0, 0, 0.15);
 }
 
 #nav li:hover,
 #nav li.sfhover {
 	background: rgb(254, 237, 148); /* fallback no RGBa support */
-	background: rgba(255, 255, 255, .4);
+	background: rgba(255, 255, 255, 0.4);
 }
 
 #nav li:hover ul,
