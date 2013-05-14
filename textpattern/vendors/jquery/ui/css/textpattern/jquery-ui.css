@@ -76,7 +76,6 @@
 .ui-widget-header {
 	font-weight: bold;
 	background-color: #eeeeee;
-	background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #eeeeee), color-stop(100%, #dddddd));
 	background-image: -webkit-linear-gradient(#eeeeee, #dddddd);
 	background-image: -moz-linear-gradient(#eeeeee, #dddddd);
 	background-image: -o-linear-gradient(#eeeeee, #dddddd);
@@ -386,7 +385,6 @@ a.ui-state-default:focus {
 	vertical-align: baseline;
 	overflow: visible; /* the overflow property removes extra width in IE */
 	background-color: #eeeeee;
-	background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #eeeeee), color-stop(100%, #dddddd));
 	background-image: -webkit-linear-gradient(#eeeeee, #dddddd);
 	background-image: -moz-linear-gradient(#eeeeee, #dddddd);
 	background-image: -o-linear-gradient(#eeeeee, #dddddd);
@@ -398,7 +396,6 @@ a.ui-state-default:focus {
 	border-bottom-color: #919191;
 	text-decoration: none;
 	background-color: #f8f8f8;
-	background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f8f8f8), color-stop(100%, #e7e7e7));
 	background-image: -webkit-linear-gradient(#f8f8f8, #e7e7e7);
 	background-image: -moz-linear-gradient(#f8f8f8, #e7e7e7);
 	background-image: -o-linear-gradient(#f8f8f8, #e7e7e7);
@@ -412,7 +409,6 @@ a.ui-state-default:focus {
 	-moz-box-shadow: inset 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
 	box-shadow: inset 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
 	background-color: #e6e6e6;
-	background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #e6e6e6), color-stop(100%, #d5d5d5));
 	background-image: -webkit-linear-gradient(#e6e6e6, #d5d5d5);
 	background-image: -moz-linear-gradient(#e6e6e6, #d5d5d5);
 	background-image: -o-linear-gradient(#e6e6e6, #d5d5d5);
@@ -542,7 +538,6 @@ input.ui-button {
 	border-color: #a3bef3;
 	border-bottom-color: #769eed;
 	background-color: #e3edfc;
-	background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #e3edfc), color-stop(100%, #c7dbfa));
 	background-image: -webkit-linear-gradient(#e3edfc, #c7dbfa);
 	background-image: -moz-linear-gradient(#e3edfc, #c7dbfa);
 	background-image: -o-linear-gradient(#e3edfc, #c7dbfa);
@@ -553,7 +548,6 @@ input.ui-button {
 	border-color: #97b0ef;
 	border-bottom-color: #6b8fe8;
 	background-color: #f1f6fe;
-	background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f1f6fe), color-stop(100%, #ccdefa));
 	background-image: -webkit-linear-gradient(#f1f6fe, #ccdefa);
 	background-image: -moz-linear-gradient(#f1f6fe, #ccdefa);
 	background-image: -o-linear-gradient(#f1f6fe, #ccdefa);
@@ -564,7 +558,6 @@ input.ui-button {
 	border-color: #97b0ef;
 	border-bottom-color: #6b8fe8;
 	background-color: #c7dbfa;
-	background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #c7dbfa), color-stop(100%, #b0cbf7));
 	background-image: -webkit-linear-gradient(#c7dbfa, #b0cbf7);
 	background-image: -moz-linear-gradient(#c7dbfa, #b0cbf7);
 	background-image: -o-linear-gradient(#c7dbfa, #b0cbf7);

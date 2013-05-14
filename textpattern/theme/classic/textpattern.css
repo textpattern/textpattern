@@ -1047,7 +1047,6 @@ body {
 	border-top: 1px solid #f8c225;
 	border-bottom: 1px solid #d9a307;
 	background-color: #ffda44;
-	background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffda44), color-stop(100%, #f8c225));
 	background-image: -webkit-linear-gradient(#ffda44, #f8c225);
 	background-image: -moz-linear-gradient(#ffda44, #f8c225);
 	background-image: -o-linear-gradient(#ffda44, #f8c225);
