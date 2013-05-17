@@ -425,7 +425,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_section` (
 ) $tabletype PACK_KEYS=1";
 
 $create_sql[] = "INSERT INTO `".PFX."txp_section` VALUES ('articles', 'archive', 'default', 1, 1, 1, 1, 'Articles')";
-$create_sql[] = "INSERT INTO `".PFX."txp_section` VALUES ('default', 'default', 'default', 0, 1, 1, 1, 'default')";
+$create_sql[] = "INSERT INTO `".PFX."txp_section` VALUES ('default', 'default', 'default', 0, 1, 1, 1, 'Default')";
 $create_sql[] = "INSERT INTO `".PFX."txp_section` VALUES ('about', 'default', 'default', 0, 0, 0, 1, 'About')";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_users` (
