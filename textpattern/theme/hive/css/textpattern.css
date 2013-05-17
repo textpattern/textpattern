@@ -867,10 +867,6 @@ textarea[disabled],
   -moz-box-shadow: none !important;
   box-shadow: none !important;
   cursor: default;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
 }
 
 /* additional input field widths */
