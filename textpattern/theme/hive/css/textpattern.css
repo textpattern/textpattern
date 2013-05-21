@@ -796,6 +796,10 @@ textarea {
   -moz-border-radius: 0;
   border-radius: 0;
   padding: 0.25em;
+  -webkit-transition: box-shadow 0.2s linear;
+  -moz-transition: box-shadow 0.2s linear;
+  -o-transition: box-shadow 0.2s linear;
+  transition: box-shadow 0.2s linear;
 }
 
 /* addresses box sizing set to `content-box` and excess padding in IE8-9 */
@@ -971,6 +975,10 @@ input[type="button"],
   background-image: -moz-linear-gradient(#eeeeee, #dddddd);
   background-image: -o-linear-gradient(#eeeeee, #dddddd);
   background-image: linear-gradient(#eeeeee, #dddddd);
+  -webkit-transition: box-shadow 0.2s linear;
+  -moz-transition: box-shadow 0.2s linear;
+  -o-transition: box-shadow 0.2s linear;
+  transition: box-shadow 0.2s linear;
 }
 button:hover,
 input[type="reset"]:hover,
