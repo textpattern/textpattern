@@ -5544,6 +5544,7 @@
 			'200' => 'OK',
 			'301' => 'Moved Permanently',
 			'302' => 'Found',
+			'303' => 'See Other',
 			'304' => 'Not Modified',
 			'307' => 'Temporary Redirect',
 			'401' => 'Unauthorized',
@@ -5571,7 +5572,7 @@
 		callback_event('txp_die', $code, 0, $url);
 
 		// Redirect with status.
-		if ($url && in_array($code, array(301, 302, 307)))
+		if ($url && in_array($code, array(301, 302, 303, 307)))
 		{
 			ob_end_clean();
 			header("Location: $url", true, $code);
