@@ -339,10 +339,6 @@ a.ui-state-default:focus {
 	padding-left: 2em;
 }
 
-.ui-accordion .ui-accordion-noicons {
-	padding-left: 0.5em;
-}
-
 .ui-accordion .ui-accordion-header .ui-accordion-header-icon {
 	position: absolute;
 	top: 50%;
