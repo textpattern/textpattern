@@ -194,7 +194,7 @@
 
 	function page_title($atts)
 	{
-		global $parentid, $thisarticle, $id, $q, $c, $context, $s, $pg, $sitename;
+		global $parentid, $thisarticle, $id, $q, $c, $author, $context, $s, $pg, $sitename;
 
 		extract(lAtts(array(
 			'separator' => ': ',
@@ -222,6 +222,10 @@
 		elseif ($s and $s != 'default')
 		{
 			$out .= txpspecialchars(fetch_section_title($s));
+		}
+		elseif ($author)
+		{
+			$out .= txpspecialchars(get_author_name($author));
 		}
 		elseif ($pg)
 		{
