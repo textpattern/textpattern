@@ -30,6 +30,21 @@
 class Textpattern_Tag_Syntax_Partial
 {
 	/**
+	 * Returns the inner content of the enclosing <txp:output_form> tag.
+	 *
+	 * @return string
+	 */
+
+	static public function renderYield()
+	{
+		global $yield;
+
+		$inner = end($yield);
+
+		return isset($inner) ? $inner : '';
+	}
+
+	/**
 	 * Conditional for yield.
 	 *
 	 * @param  array  $atts

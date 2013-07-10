@@ -33,7 +33,7 @@
 	Textpattern_Tag_Registry::register('image');
 	Textpattern_Tag_Registry::register('thumbnail');
 	Textpattern_Tag_Registry::register('output_form');
-	Textpattern_Tag_Registry::register('yield');
+	Textpattern_Tag_Registry::register(array('Textpattern_Tag_Syntax_Partial', 'renderYield'), 'yield');
 	Textpattern_Tag_Registry::register(array('Textpattern_Tag_Syntax_Partial', 'if_yield'), 'if_yield');
 	Textpattern_Tag_Registry::register('feed_link');
 	Textpattern_Tag_Registry::register('link_feed_link');
@@ -567,17 +567,6 @@
 			array_pop($yield);
 			return $out;
 		}
-	}
-
-// -------------------------------------------------------------
-
-	function yield()
-	{
-		global $yield;
-
-		$inner = end($yield);
-
-		return isset($inner) ? $inner : '';
 	}
 
 // -------------------------------------------------------------
