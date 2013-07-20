@@ -658,8 +658,19 @@
 
 	function section_set_default()
 	{
-		set_pref('default_section', ps('default_section'), 'section', PREF_HIDDEN, '', 0);
-		send_script_response();
+		extract(psa(array(
+			'default_section',
+		)));
+
+		$exists = safe_row('name', 'txp_section', "name = '".doSlash($default_section)."'");
+
+		if ($exists && set_pref('default_section', $default_section, 'section', PREF_HIDDEN))
+		{
+			send_script_response(announce(gTxt('default_section_updated')));
+			return;
+		}
+
+		send_script_response(announce(gTxt('section_save_failed'), E_ERROR));
 	}
 
 /**
