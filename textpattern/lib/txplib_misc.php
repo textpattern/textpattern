@@ -2930,45 +2930,18 @@
 /**
  * Encodes a string for use in an email header.
  *
- * @param   string $string The string
- * @param   string $type   The type of header, either "text" or "phrase"
- * @return  string
- * @package Email
+ * @param      string $string The string
+ * @param      string $type   The type of header, either "text" or "phrase"
+ * @return     string
+ * @package    Email
+ * @deprecated in 4.6.0
+ * @see        Textpattern_Mail_Encode::header()
  */
 
 	function encode_mailheader($string, $type)
 	{
-		if (strpos($string, '=?') === false and !preg_match('/[\x00-\x1F\x7F-\xFF]/', $string))
-		{
-			if ("phrase" == $type)
-			{
-				if (preg_match('/[][()<>@,;:".\x5C]/', $string))
-				{
-					$string = '"'. strtr($string, array("\\" => "\\\\", '"' => '\"')) . '"';
-				}
-			}
-			elseif ("text" != $type)
-			{
-				trigger_error( 'Unknown encode_mailheader type', E_USER_WARNING);
-			}
-			return $string;
-		}
-
-		if (get_pref('override_emailcharset') && is_callable('utf8_decode'))
-		{
-			$start = '=?ISO-8859-1?B?';
-			$pcre  = '/.{1,42}/s';
-		}
-		else
-		{
-			$start = '=?UTF-8?B?';
-			$pcre  = '/.{1,45}(?=[\x00-\x7F\xC0-\xFF]|$)/s';
-		}
-
-		$end = '?=';
-		$sep = IS_WIN ? "\r\n" : "\n";
-		preg_match_all($pcre, $string, $matches);
-		return $start . join($end.$sep.' '.$start, array_map('base64_encode', $matches[0])) . $end;
+		$encode = new Textpattern_Mail_Encode();
+		return $encode->header($string, $type);
 	}
 
 /**

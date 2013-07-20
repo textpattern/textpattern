@@ -71,12 +71,21 @@ class Textpattern_Mail_Compose
 	protected $smtp_from = false;
 
 	/**
+	 * The encoder.
+	 *
+	 * @var Textpattern_Mail_Encode
+	 */
+
+	protected $encoder;
+
+	/**
 	 * Constructor.
 	 */
 
 	public function __construct()
 	{
 		$this->mail = new Textpattern_Mail_Message();
+		$this->encoder = new Textpattern_Mail_Encode();
 
 		if (IS_WIN)
 		{
@@ -240,7 +249,7 @@ class Textpattern_Mail_Compose
 		if ((string) $value !== '' && preg_match('/^[\041-\071\073-\176]+$/', $name))
 		{
 			$this->mail->header[$name] = $value;
-			$this->headers[$name] = encode_mailheader(strip_rn($value), 'phrase');
+			$this->headers[$name] = $this->encoder->header(strip_rn($value), 'phrase');
 			return true;
 		}
 
@@ -285,11 +294,11 @@ class Textpattern_Mail_Compose
 			$body = utf8_decode($body);
 		}
 
-		$subject = encode_mailheader(strip_rn($subject), 'text');
+		$subject = $this->encoder->header(strip_rn($subject), 'text');
 
 		foreach (array('from', 'send_to', 'reply_to', 'cc', 'bcc') as $field)
 		{
-			$$field = $this->encode_address_list($this->mail->$field);
+			$$field = $this->encoder->addressList($this->mail->$field);
 		}
 
 		$body = str_replace("\r\n", "\n", $body);
@@ -335,35 +344,6 @@ class Textpattern_Mail_Compose
 		}
 
 		return mail($send_to, $subject, $body, $headers);
-	}
-
-	/**
-	 * Encodes an address list to a valid email header value.
-	 *
-	 * @param  array  $value The address list
-	 * @return string
-	 */
-
-	protected function encode_address_list($value)
-	{
-		if (!$value)
-		{
-			return '';
-		}
-
-		$out = array();
-
-		foreach ($value as $email => $name)
-		{
-			if ($this->charset != 'UTF-8')
-			{
-				$name = utf8_decode($name);
-			}
-
-			$out[] = trim(encode_mailheader(strip_rn($name), 'phrase').' <'.$email.'>');
-		}
-
-		return join(', ', $out);
 	}
 
 	/**
