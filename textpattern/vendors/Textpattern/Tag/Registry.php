@@ -80,7 +80,7 @@ class Textpattern_Tag_Registry
 
 	public function process($tag, $atts, $thing)
 	{
-		if ($this->is_registered($tag))
+		if ($this->isRegistered($tag))
 		{
 			return call_user_func(self::$tags[$tag], $atts, $thing);
 		}
@@ -93,7 +93,7 @@ class Textpattern_Tag_Registry
 	 * @return bool   TRUE if a tag exists
 	 */
 
-	public function is_registered($tag)
+	public function isRegistered($tag)
 	{
 		return array_key_exists($tag, self::$tags) && is_callable(self::$tags[$tag]);
 	}
