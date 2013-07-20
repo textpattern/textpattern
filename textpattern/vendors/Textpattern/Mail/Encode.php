@@ -86,6 +86,7 @@ class Textpattern_Mail_Encode
 	 * @param   string $type   The type of header, either "text" or "phrase"
 	 * @return  string
 	 * @package Email
+	 * @throws  Textpattern_Mail_Exception
 	 */
 
 	public function header($string, $type)
@@ -101,7 +102,7 @@ class Textpattern_Mail_Encode
 			}
 			elseif ("text" != $type)
 			{
-				trigger_error( 'Unknown encode_mailheader type', E_USER_WARNING);
+				throw new Textpattern_Mail_Exception('Unknown encode_mailheader type.');
 			}
 			return $string;
 		}

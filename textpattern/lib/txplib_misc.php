@@ -2940,8 +2940,15 @@
 
 	function encode_mailheader($string, $type)
 	{
-		$encode = new Textpattern_Mail_Encode();
-		return $encode->header($string, $type);
+		try
+		{
+			$encode = new Textpattern_Mail_Encode();
+			return $encode->header($string, $type);
+		}
+		catch (Textpattern_Mail_Exception $e)
+		{
+			trigger_error($e->getMessage(), E_USER_WARNING);
+		}
 	}
 
 /**
