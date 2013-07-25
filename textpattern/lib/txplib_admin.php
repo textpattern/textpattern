@@ -159,36 +159,37 @@
  * Generates a random password of given length 
  * using the symbols set in PASSWORD_SYMBOLS constant.
  *
- * The $length is limited by the length of PASSWORD_SYMBOLS
- * string.
- *
  * @param  int    $length The length of the password
  * @return string Random plain-text password
  * @see    PASSWORD_SYMBOLS
  * @see    PASSWORD_LENGTH
  * @example
- * echo generate_password();
+ * echo generate_password(128);
  */
 
 	function generate_password($length = 10)
 	{
-		$pass = '';
-		$chars = PASSWORD_SYMBOLS;
-		$length = min(strlen($chars), $length);
-		$i = 0;
-		$max = strlen($chars)-1;
-		$used = array();
+		static $chars;
 
-		while ($i < $length)
+		if (!$chars)
 		{
-			$offset = mt_rand(0, $max);
+			$chars = str_split(PASSWORD_SYMBOLS);
+		}
 
-			if (!in_array($offset, $used))
+		$pool = false;
+		$pass = '';
+
+		for ($i = 0; $i < $length; $i++)
+		{
+			if (!$pool)
 			{
-				$pass .= substr($chars, $offset, 1);
-				$used[] = $offset;
-				$i++;
+				$pool = $chars;
 			}
+
+			$index = mt_rand(0, count($pool) - 1);
+			$pass .= $pool[$index];
+			unset($pool[$index]);
+			$pool = array_values($pool);
 		}
 
 		return $pass;
