@@ -512,7 +512,7 @@
 			$registry = new Textpattern_Tag_Registry();
 		}
 
-		if ($registry->is_registered($tag))
+		if ($registry->isRegistered($tag))
 		{
 			$out = $registry->process($tag, splat($atts), $thing);
 		}
