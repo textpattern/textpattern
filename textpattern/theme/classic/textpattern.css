@@ -814,6 +814,10 @@ ul.nav-tertiary {
 	padding: 0;
 }
 
+[dir="rtl"] ul.nav-tertiary {
+	padding: 0;
+}
+
 ul.nav-tertiary > li {
 	display: inline;
 }
@@ -844,6 +848,30 @@ ul.nav-tertiary > li {
 	border-top-right-radius: 0.5em;
 	-moz-border-radius-bottomright: 0.5em;
 	border-bottom-right-radius: 0.5em;
+}
+
+[dir="rtl"] .nav-tertiary > :first-child > a,
+[dir="rtl"] .nav-tertiary > :first-child > span,
+[dir="rtl"] .nav-tertiary > :first-child,
+[dir="rtl"] .prev-next > :first-child {
+	-moz-border-radius: 0;
+	border-radius: 0;
+	-moz-border-radius-topright: 0.5em;
+	border-top-right-radius: 0.5em;
+	-moz-border-radius-bottomright: 0.5em;
+	border-bottom-right-radius: 0.5em;
+}
+
+[dir="rtl"] .nav-tertiary > :last-child > a,
+[dir="rtl"] .nav-tertiary > :last-child > span,
+[dir="rtl"] .nav-tertiary > :last-child,
+[dir="rtl"] .prev-next > :last-child {
+	-moz-border-radius: 0;
+	border-radius: 0;
+	-moz-border-radius-topleft: 0.5em;
+	border-top-left-radius: 0.5em;
+	-moz-border-radius-bottomleft: 0.5em;
+	border-bottom-left-radius: 0.5em;
 }
 
 .nav-tertiary .navlink-active {
