@@ -1395,6 +1395,10 @@ td {
   color: #333333;
   margin-right: 0.5em;
 }
+[dir="rtl"] .txp-list thead th a {
+  margin-right: 0;
+  margin-left: 0.5em;
+}
 .txp-list thead th a:hover {
   color: #333333;
   text-decoration: none;
@@ -1411,6 +1415,10 @@ td {
   text-indent: 110%;
   white-space: nowrap;
   overflow: hidden;
+}
+[dir="rtl"] .txp-list thead th a:after {
+  right: auto;
+  left: -0.76923em;
 }
 .txp-list thead th a:hover:after {
   opacity: 1;
