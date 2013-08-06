@@ -854,10 +854,17 @@ ul.nav-tertiary > li {
 /* Lists
    ========================================================================== */
 
-/* addresses paddings set differently */
-ul,
-ol {
+/* address padding set differently */
+menu,
+ol,
+ul {
 	padding: 0 0 0 2.3em;
+}
+
+[dir="rtl"] menu,
+[dir="rtl"] ol,
+[dir="rtl"] ul {
+	padding: 0 2.3em 0 0;
 }
 
 ul {
@@ -875,6 +882,10 @@ dd {
 	margin: 0 0 0 2.3em;
 }
 
+[dir="rtl"] dd {
+	margin: 0 2.3em 0 0;
+}
+
 dt {
 	font-weight: bold;
 }
@@ -882,6 +893,10 @@ dt {
 .plain-list {
 	list-style: none;
 	padding-left: 0;
+}
+
+[dir="rtl"] .plain-list {
+	padding-right: 0;
 }
 
 .switcher-list {
@@ -930,11 +945,20 @@ caption {
 	margin-bottom: 0.5em;
 }
 
+[dir="rtl"] caption {
+	text-align: right;
+}
+
 /* make table cells align top and left by default, remove any cellpadding */
 th,
 td {
 	text-align: left;
 	vertical-align: top;
+}
+
+[dir="rtl"] th,
+[dir="rtl"] td {
+	text-align: right;
 }
 
 .txp-list {
@@ -947,8 +971,17 @@ td {
 	padding: 0.3em 1em 0.3em 0;
 }
 
+[dir="rtl"] .txp-list th,
+[dir="rtl"] .txp-list td {
+	padding: 0.3em 0 0.3em 1em;
+}
+
 .txp-list td:last-child {
 	padding-right: 0;
+}
+
+[dir="rtl"] .txp-list td:last-child {
+	padding-left: 0;
 }
 
 .txp-list thead th,
@@ -960,11 +993,22 @@ td {
 	margin-right: 14px;
 }
 
+[dir="rtl"] .txp-list thead a {
+	margin-right: 0;
+	margin-left: 14px;
+}
+
 .txp-list thead .asc a,
 .txp-list thead .desc a {
 	margin-right: 0;
 	padding-right: 14px;
 	background-repeat: no-repeat;
+}
+
+[dir="rtl"] .txp-list thead .asc a,
+[dir="rtl"] .txp-list thead .desc a {
+	padding-right: 0;
+	padding-left: 14px;
 }
 
 .no-svg .txp-list thead .asc a,
@@ -981,8 +1025,16 @@ td {
 	background-position: right 2px;
 }
 
+[dir="rtl"] .txp-list thead .asc a {
+	background-position: left 2px;
+}
+
 .txp-list thead .desc a {
 	background-position: right -36px;
+}
+
+[dir="rtl"] .txp-list thead .desc a {
+	background-position: left -36px;
 }
 
 .txp-list tbody {
@@ -1079,6 +1131,10 @@ body {
 	margin: 0.2em 2em;
 }
 
+[dir="rtl"] #navpop {
+    float: left;
+}
+
 .nav-tabs {
 	text-align: center;
 }
@@ -1154,6 +1210,11 @@ body {
 	overflow: hidden;
 }
 
+[dir="rtl"] .txp-accessibility {
+	left: auto;
+	right: -1000em;
+}
+
 .txp-control-panel {
 	text-align: center;
 }
@@ -1205,6 +1266,10 @@ div.multi-edit {
 	display: inline-block;
 }
 
+[dir="rtl"] .txp-grid-cell {
+	text-align: right;
+}
+
 .restricted-area {
 	margin: 3em auto auto;
 	text-align: center;
@@ -1227,6 +1292,7 @@ span.spinner {
 	height: 13px;
 	background-image: url("img/spinner.gif");
 }
+
 @media print,
 	(-webkit-min-device-pixel-ratio: 2),
 	(min--moz-device-pixel-ratio: 2),

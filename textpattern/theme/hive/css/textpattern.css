@@ -149,6 +149,10 @@ html {
   padding: 0 1em;
 }
 
+[dir="rtl"] .txp-grid-cell {
+  text-align: right;
+}
+
 /* Links
    ========================================================================== */
 a {
@@ -1209,6 +1213,12 @@ ul {
   padding: 0 0 0 2em;
 }
 
+[dir="rtl"] menu,
+[dir="rtl"] ol,
+[dir="rtl"] ul {
+  padding: 0 2em 0 0;
+}
+
 /* remove margins from nested lists */
 ul ul,
 ol ol,
@@ -1220,6 +1230,10 @@ dd {
   margin: 0 0 0 2em;
 }
 
+[dir="rtl"] dd {
+  margin: 0 2em 0 0;
+}
+
 dt {
   font-weight: bold;
 }
@@ -1227,6 +1241,10 @@ dt {
 .plain-list {
   list-style: none;
   padding-left: 0;
+}
+
+[dir="rtl"] .plain-list {
+  padding-right: 0;
 }
 
 .switcher-list {
@@ -1280,12 +1298,21 @@ caption {
   margin-bottom: 0.5em;
 }
 
+[dir="rtl"] caption {
+  text-align: right;
+}
+
 /* make table cells align top and left by default, remove any cell padding */
 th,
 td {
   vertical-align: top;
   text-align: left;
   padding: 0;
+}
+
+[dir="rtl"] th,
+[dir="rtl"] td {
+  text-align: right;
 }
 
 .txp-list {
@@ -1612,6 +1639,11 @@ body {
   height: 1px;
   width: 1px;
   overflow: hidden;
+}
+
+[dir="rtl"] .txp-accessibility {
+  left: auto;
+  right: -1000em;
 }
 
 .txp-control-panel {
