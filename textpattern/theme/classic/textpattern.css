@@ -280,16 +280,18 @@ pre {
 	overflow-x: auto;
 }
 
-.code {
-	padding: 0.2em;
-}
-
 pre code,
 .code code,
 code.body,
 code.excerpt {
 	border: 0;
 	background-color: transparent;
+}
+
+code,
+.code {
+	direction: ltr;
+	unicode-bidi: embed;
 }
 
 /* prevents sub and sup affecting line-height in all browsers */

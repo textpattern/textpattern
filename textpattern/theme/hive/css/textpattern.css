@@ -316,6 +316,11 @@ code.excerpt {
   background: none;
 }
 
+code,
+.code {
+  direction: ltr;
+}
+
 /* prevents `<sub>` and `<sup>` affecting line height in all browsers */
 sub,
 sup {
@@ -1553,6 +1558,7 @@ body {
 }
 .txp-nav ul {
   list-style: none;
+  padding-right: 0;
   padding-left: 0;
 }
 
