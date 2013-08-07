@@ -291,7 +291,6 @@ code.excerpt {
 code,
 .code {
 	direction: ltr;
-	unicode-bidi: embed;
 }
 
 /* prevents sub and sup affecting line-height in all browsers */
