@@ -1161,7 +1161,7 @@ body {
 }
 
 [dir="rtl"] #navpop {
-    float: left;
+	float: left;
 }
 
 .nav-tabs {
@@ -1362,6 +1362,19 @@ span.spinner {
 	width: 50%;
 }
 
+[dir="rtl"] .txp-label,
+[dir="rtl"] .txp-value {
+	float: right;
+}
+
+.txp-login .txp-label {
+	width: 31%;
+}
+
+.txp-login .txp-value {
+	width: 69%;
+}
+
 .txp-value input,
 .txp-value select {
 	margin-top: -0.25em;
@@ -1374,44 +1387,22 @@ span.spinner {
 }
 
 /* deprecated @ 4.6 */
-.edit-label,
-.login-label {
+.edit-label {
 	display: inline-block;
 	float: left;
-}
-
-/* deprecated @ 4.6 */
-.edit-label {
 	width: 45%;
 }
 
 /* deprecated @ 4.6 */
-.login-label {
-	width: 31%;
-}
-
-/* deprecated @ 4.6 */
-.edit-value,
-.login-value {
+.edit-value {
 	display: inline-block;
 	float: right;
-}
-
-/* deprecated @ 4.6 */
-.edit-value {
 	width: 55%;
 }
 
 /* deprecated @ 4.6 */
-.login-value {
-	width: 69%;
-}
-
-/* deprecated @ 4.6 */
 .edit-value input,
-.edit-value select,
-.login-value input,
-.login-value select {
+.edit-value select {
 	margin-top: -0.25em;
 	margin-bottom: -0.25em;
 }
