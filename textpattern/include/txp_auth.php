@@ -99,8 +99,8 @@
 			$out[] = hed(gTxt('password_reset'), 2, array('id' => 'txp-login-heading')).
 
 				graf(
-					n.span(tag(gTxt('name'), 'label', array('for' => 'login_name')), array('class' => 'login-label')).
-					n.span(fInput('text', 'p_userid', $name, '', '', '', INPUT_REGULAR, '', 'login_name'), array('class' => 'login-value'))
+					n.span(tag(gTxt('name'), 'label', array('for' => 'login_name')), array('class' => 'txp-label')).
+					n.span(fInput('text', 'p_userid', $name, '', '', '', INPUT_REGULAR, '', 'login_name'), array('class' => 'txp-value'))
 				, ' class="login-name"').
 
 				graf(
@@ -118,13 +118,13 @@
 			$out[] = hed(gTxt('login_to_textpattern'), 2, array('id' => 'txp-login-heading')).
 
 				graf(
-					n.span(tag(gTxt('name'), 'label', array('for' => 'login_name')), array('class' => 'login-label')).
-					n.span(fInput('text', 'p_userid', $name, '', '', '', INPUT_REGULAR, '', 'login_name'), array('class' => 'login-value'))
+					n.span(tag(gTxt('name'), 'label', array('for' => 'login_name')), array('class' => 'txp-label')).
+					n.span(fInput('text', 'p_userid', $name, '', '', '', INPUT_REGULAR, '', 'login_name'), array('class' => 'txp-value'))
 				, array('class' => 'login-name')).
 
 				graf(
-					n.span(tag(gTxt('password'), 'label', array('for' => 'login_password')), array('class' => 'login-label')).
-					n.span(fInput('password', 'p_password', '', '', '', '', INPUT_REGULAR, '', 'login_password'), array('class' => 'login-value'))
+					n.span(tag(gTxt('password'), 'label', array('for' => 'login_password')), array('class' => 'txp-label')).
+					n.span(fInput('password', 'p_password', '', '', '', '', INPUT_REGULAR, '', 'login_password'), array('class' => 'txp-value'))
 				, array('class' => 'login-password')).
 
 				graf(
