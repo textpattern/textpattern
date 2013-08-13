@@ -59,8 +59,6 @@ html {
   display: block;
   padding: 0;
   margin: 0 -1em;
-  /* ensure consistent default alignment */
-  text-align: left;
   /* remove inter-unit whitespace for all non-monospace font-families */
   letter-spacing: -0.34em;
   /* protect against WebKit bug with optimizelegibility */
@@ -91,8 +89,6 @@ html {
   width: 100%;
   /* controls vertical positioning of units */
   vertical-align: top;
-  /* keeps unit content correctly aligned */
-  text-align: left;
 }
 
 /* reset vertical margin on nested layout grids */
@@ -1926,9 +1922,12 @@ body#page-setup {
 #view_modes li {
   display: inline-block;
   font-size: 16px;
-  margin-right: .5em;
+  margin: 0 .5em 0 0;
   width: 1.5em;
   height: 1.5em;
+}
+[dir="rtl"] #view_modes li {
+  margin: 0 0 0 .5em;
 }
 #view_modes a {
   text-indent: 110%;
