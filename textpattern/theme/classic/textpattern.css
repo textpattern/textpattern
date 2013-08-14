@@ -315,6 +315,10 @@ figcaption {
 /* Support for non-latin languages
    ========================================================================== */
 
+.ltr {
+	direction: ltr;
+}
+
 html[lang="ja-jp"] {
 	font-family: "Hiragino Kaku Gothic Pro", Meiryo, sans-serif;
 }
