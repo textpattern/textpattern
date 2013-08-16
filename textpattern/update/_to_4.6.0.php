@@ -71,3 +71,6 @@
 
 	// Plugins can have longer version numbers.
 	safe_alter('txp_plugin', "MODIFY version VARCHAR(255) NOT NULL DEFAULT '1.0'");
+
+	// Translation strings should allow more than 255 characters.
+	safe_alter('txp_lang', "MODIFY data TEXT");

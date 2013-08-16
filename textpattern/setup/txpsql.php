@@ -244,7 +244,7 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_lang` (
   `lang` varchar(16) NOT NULL,
   `name` varchar(64) NOT NULL,
   `event` varchar(64) NOT NULL,
-  `data` tinytext,
+  `data` text,
   `lastmod` timestamp,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `lang` (`lang`,`name`),
