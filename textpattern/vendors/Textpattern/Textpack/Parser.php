@@ -140,7 +140,7 @@ class Textpattern_Textpack_Parser
 			}
 
 			// Translation.
-			if (preg_match('/^(\w+)\s*=>\s*(.+)$/', $line, $m))
+			if (preg_match('/^([\w\-]+)\s*=>\s*(.+)$/', $line, $m))
 			{
 				if (!empty($m[1]) && !empty($m[2]))
 				{
