@@ -107,12 +107,14 @@ class Textpattern_Iterator_FileIterator implements Iterator
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * Returns the current element.
+	 *
+	 * @return Textpattern_Type_String
 	 */
 
 	public function current()
 	{
-		return $this->current;
+		return new Textpattern_Type_String($this->current);
 	}
 
 	/**
