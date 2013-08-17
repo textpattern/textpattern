@@ -86,13 +86,12 @@ class Textpattern_Iterator_FileIterator implements Iterator
 	 * Constructor.
 	 *
 	 * @param string $filename The filename
-	 * @param int    $length   Line length
 	 */
 
-	public function __construct($filename, $length = 4096)
+	public function __construct($filename)
 	{
 		$this->filename = $filename;
-		$this->lineLength = (int) $length;
+		$this->rewind();
 	}
 
 	/**
