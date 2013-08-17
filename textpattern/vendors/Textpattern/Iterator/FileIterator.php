@@ -75,7 +75,7 @@ class Textpattern_Iterator_FileIterator implements Iterator
 	protected $key = -1;
 
 	/**
-	 * Whether its valid or not.
+	 * Whether it's valid or not.
 	 *
 	 * @var bool
 	 */
