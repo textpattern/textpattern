@@ -30,7 +30,7 @@
 class Textpattern_Tag_Syntax_Partial
 {
 	/**
-	 * Returns the inner content of the enclosing <txp:output_form> tag.
+	 * Returns the inner content of the enclosing &lt;txp:output_form /&gt; tag.
 	 *
 	 * @return string
 	 */
