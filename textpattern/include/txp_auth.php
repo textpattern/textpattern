@@ -33,8 +33,6 @@
 		die('txpinterface is undefined.');
 	}
 
-	include_once txpath.'/lib/PasswordHash.php';
-
 /**
  * Renders a login panel if necessary.
  *

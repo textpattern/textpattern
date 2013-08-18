@@ -4165,7 +4165,8 @@
 		}
 
 		$nonce = md5(uniqid(mt_rand(), true));
-		$hash = txp_hash_password($password);
+		$hash = new Textpattern_Password_Hash();
+		$hash = $hash->hash($password);
 
 		if (
 			safe_insert(
@@ -4271,7 +4272,8 @@
 			return false;
 		}
 
-		$hash = txp_hash_password($password);
+		$hash = new Textpattern_Password_Hash();
+		$hash = $hash->hash($password);
 
 		if (
 			safe_update(
@@ -4466,8 +4468,6 @@
 
 	function txp_validate($user, $password, $log = true)
 	{
-		static $phpass = null;
-
 		$safe_user = doSlash($user);
 		$name = false;
 
@@ -4478,14 +4478,10 @@
 			return false;
 		}
 
-		if (!$phpass)
-		{
-			include_once txpath.'/lib/PasswordHash.php';
-			$phpass = new PasswordHash(PASSWORD_COMPLEXITY, PASSWORD_PORTABILITY);
-		}
+		$hash = new Textpattern_Password_Hash();
 
 		// Check post-4.3-style passwords.
-		if ($phpass->CheckPassword($password, $r['pass']))
+		if ($hash->verify($password, $r['pass']))
 		{
 			if (!$log || $r['privs'] > 0)
 			{
@@ -4511,7 +4507,7 @@
 			// Old password is good: migrate password to phpass.
 			if ($name !== false)
 			{
-				safe_update("txp_users", "pass = '".doSlash($phpass->HashPassword($password))."'", "name = '$safe_user'");
+				safe_update("txp_users", "pass = '".doSlash($hash->hash($password))."'", "name = '$safe_user'");
 			}
 		}
 
