@@ -77,10 +77,11 @@ class Textpattern_Textfilter_Base implements Textpattern_Textfilter_Interface
 		$this->title = $title;
 		$this->version = $txpversion;
 		$this->options = array(
-			'lite' => false,
+			'lite'       => false,
 			'restricted' => false,
-			'rel' => '',
-			'noimage' => false);
+			'rel'        => '',
+			'noimage'    => false,
+		);
 
 		register_callback(array($this, 'register'), 'textfilter', 'register');
 	}
@@ -94,10 +95,10 @@ class Textpattern_Textfilter_Base implements Textpattern_Textfilter_Interface
 	private function setOptions($options)
 	{
 		$this->options = lAtts(array(
-			'lite' => false,
+			'lite'       => false,
 			'restricted' => false,
-			'rel' => '',
-			'noimage' => false
+			'rel'        => '',
+			'noimage'    => false,
 		), $options);
 	}
 
