@@ -146,7 +146,7 @@ class Textpattern_Type_String implements Textpattern_Type_Template
 	 * Finds the first occurrence of a string in the string.
 	 *
 	 * @param  string   $needle The string to find
-	 * @param  string   $offset The search offset
+	 * @param  int      $offset The search offset
 	 * @return int|bool FALSE if the string does not contain results
 	 * @example
 	 * $string = new Textpattern_Type_String('#@language');
@@ -201,6 +201,8 @@ class Textpattern_Type_String implements Textpattern_Type_Template
 	/**
 	 * HTML encodes the string.
 	 *
+	 * @param   int    $flags A bitmask of one or more flags. The default is ENT_QUOTES
+	 * @param   bool   $double_encode When double_encode is turned off PHP will not encode existing HTML entities, the default is to convert everything
 	 * @return Textpattern_Type_String
 	 * @example
 	 * $string = new Textpattern_Type_String('Hello World!');
