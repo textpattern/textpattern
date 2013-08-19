@@ -201,7 +201,7 @@ class Textpattern_Type_String implements Textpattern_Type_Template
 	/**
 	 * HTML encodes the string.
 	 *
-	 * @param   int    $flags A bitmask of one or more flags. The default is ENT_QUOTES
+	 * @param   int    $flags         A bitmask of one or more flags. The default is ENT_QUOTES
 	 * @param   bool   $double_encode When double_encode is turned off PHP will not encode existing HTML entities, the default is to convert everything
 	 * @return Textpattern_Type_String
 	 * @example
