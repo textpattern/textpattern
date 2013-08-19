@@ -757,7 +757,7 @@ define('INTEGRITY_DIGEST', 0x8);
  * @see     check_file_integrity()
  */
 
-define('INTEGRITY_TABLE', 0x16);
+define('INTEGRITY_TABLE', 0x10);
 
 /**
  * Link to an external script.
