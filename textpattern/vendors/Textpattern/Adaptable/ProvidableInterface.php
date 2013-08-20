@@ -44,7 +44,8 @@ interface Textpattern_Adaptable_ProvidableInterface
 	/**
 	 * Sets the current adapter.
 	 *
-	 * @param Textpattern_Adaptable_Provider $provider The adapter
+	 * @param  Textpattern_Adaptable_Provider $provider The adapter
+	 * @return Textpattern_Adaptable_ProvidableInterface
 	 */
 
 	public function setAdaptableProvider(Textpattern_Adaptable_Provider $provider);

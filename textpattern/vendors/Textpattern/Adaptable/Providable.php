@@ -70,6 +70,7 @@ abstract class Textpattern_Adaptable_Providable implements Textpattern_Adaptable
 	public function setAdaptableProvider(Textpattern_Adaptable_Provider $provider)
 	{
 		$this->provider = $provider;
+		return $this;
 	}
 
 	/**
