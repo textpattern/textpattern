@@ -286,9 +286,15 @@
 		{
 			$func = 'pref_'.$func;
 		}
-		else if (($func = string_tocallback($func)) === false)
+		else
 		{
-			$func = 'text_input';
+			$string = new Textpattern_Type_String($func);
+			$func = $string->toCallback();
+
+			if (!is_callable($func))
+			{
+				$func = 'text_input';
+			}
 		}
 
 		return call_user_func($func, $name, $val, $size);
