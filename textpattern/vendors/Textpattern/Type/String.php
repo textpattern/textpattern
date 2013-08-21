@@ -184,6 +184,36 @@ class Textpattern_Type_String implements Textpattern_Type_Template
 	}
 
 	/**
+	 * Converts the string to a callback.
+	 *
+	 * @return mixed Callable
+	 * @example
+	 * $string = new Textpattern_Type_String('Textpattern_Password_Hash->hash');
+	 * $string->toCallback();
+	 */
+
+	public function toCallback()
+	{
+		$callback = $this->string;
+
+		if (strpos($this->string, '->'))
+		{
+			$callback = explode('->', $this->string);
+
+			if (class_exists($callback[0]))
+			{
+				$callback[0] = new $callback[0];
+			}
+		}
+		else if (strpos($this->string, '::'))
+		{
+			$callback = explode('::', $this->string);
+		}
+
+		return $callback;
+	}
+
+	/**
 	 * Add slashes.
 	 *
 	 * @return Textpattern_Type_String
@@ -449,5 +479,5 @@ class Textpattern_Type_String implements Textpattern_Type_Template
 		}
 
 		return $this;
-	}
+	}	
 }
