@@ -36,33 +36,33 @@ interface Textpattern_Adaptable_ProvidableInterface
 	 * This method sets or overrides the default adapter
 	 * with an static object.
 	 *
-	 * @param Textpattern_Adaptable_Provider $provider The overriding adapter
+	 * @param Textpattern_Adaptable_Adapter $adapter The overriding adapter
 	 */
 
-	static public function setDefaultAdaptableProvider(Textpattern_Adaptable_Provider $provider);
+	static public function setDefaultAdapter(Textpattern_Adaptable_Adapter $adapter);
 
 	/**
 	 * Sets the current adapter.
 	 *
-	 * @param  Textpattern_Adaptable_Provider $provider The adapter
+	 * @param  Textpattern_Adaptable_Adapter $adapter The adapter
 	 * @return Textpattern_Adaptable_ProvidableInterface
 	 */
 
-	public function setAdaptableProvider(Textpattern_Adaptable_Provider $provider);
+	public function setAdapter(Textpattern_Adaptable_Adapter $adapter);
 
 	/**
 	 * Gets the current adapter.
 	 *
-	 * @return Textpattern_Adaptable_Provider
+	 * @return Textpattern_Adaptable_Adapter
 	 */
 
-	public function getAdaptableProvider();
+	public function getAdapter();
 
 	/**
 	 * Gets the original default adapter.
 	 *
-	 * @return Textpattern_Adaptable_Provider
+	 * @return Textpattern_Adaptable_Adapter
 	 */
 
-	public function getDefaultAdaptableProvider();
+	public function getDefaultAdapter();
 }

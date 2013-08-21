@@ -28,7 +28,7 @@
  * @package Password
  */
 
-class Textpattern_Password_Adapter_PasswordHash implements Textpattern_Password_ProviderInterface
+class Textpattern_Password_Adapter_PasswordHash implements Textpattern_Password_AdapterInterface
 {
 	/**
 	 * Stores an instance of PHPass.

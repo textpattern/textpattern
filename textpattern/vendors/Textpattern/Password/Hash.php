@@ -37,7 +37,7 @@ class Textpattern_Password_Hash extends Textpattern_Adaptable_Providable
 	 * {@inheritdoc}
 	 */
 
-	public function getDefaultAdaptableProvider()
+	public function getDefaultAdapter()
 	{
 		return new Textpattern_Password_Adapter_PasswordHash();
 	}

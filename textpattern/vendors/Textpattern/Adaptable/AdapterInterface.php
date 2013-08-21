@@ -31,6 +31,6 @@
  * @package Adaptable
  */
 
-interface Textpattern_Adaptable_ProviderInterface
+interface Textpattern_Adaptable_AdapterInterface
 {
 }

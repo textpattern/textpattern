@@ -41,35 +41,35 @@ abstract class Textpattern_Adaptable_Providable implements Textpattern_Adaptable
 	/**
 	 * Stores an instance of the default provider.
 	 *
-	 * @var Textpattern_Adaptable_Provider
+	 * @var Textpattern_Adaptable_Adapter
 	 */
 
-	static private $defaultProvider;
+	static private $defaultAdapter;
 
 	/**
 	 * Stores an instance of the current provider.
 	 *
-	 * @var Textpattern_Adaptable_Provider
+	 * @var Textpattern_Adaptable_Adapter
 	 */
 
-	private $provider;
+	private $adapter;
 
 	/**
 	 * {@inheritdoc}
 	 */
 
-	static public function setDefaultAdaptableProvider(Textpattern_Adaptable_Provider $provider)
+	static public function setDefaultAdapter(Textpattern_Adaptable_Adapter $adapter)
 	{
-		self::$defaultProvider = $provider;
+		self::$defaultAdapter = $adapter;
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
 
-	public function setAdaptableProvider(Textpattern_Adaptable_Provider $provider)
+	public function setAdapter(Textpattern_Adaptable_Adapter $adapter)
 	{
-		$this->provider = $provider;
+		$this->adapter = $adapter;
 		return $this;
 	}
 
@@ -77,19 +77,19 @@ abstract class Textpattern_Adaptable_Providable implements Textpattern_Adaptable
 	 * {@inheritdoc}
 	 */
 
-	public function getAdaptableProvider()
+	public function getAdapter()
 	{
-		if ($this->provider)
+		if ($this->adapter)
 		{
-			return $this->provider;
+			return $this->adapter;
 		}
 
-		if (self::$defaultProvider)
+		if (self::$defaultAdapter)
 		{
-			return self::$defaultProvider;
+			return self::$defaultAdapter;
 		}
 
-		return $this->getDefaultAdaptableProvider();
+		return $this->getDefaultAdapter();
 	}
 
 	/**
@@ -102,6 +102,6 @@ abstract class Textpattern_Adaptable_Providable implements Textpattern_Adaptable
 
 	public function __call($name, array $args)
 	{
-		return call_user_func_array(array($this->getAdaptableProvider(), $name), $args);
+		return call_user_func_array(array($this->getAdapter(), $name), $args);
 	}
 }
