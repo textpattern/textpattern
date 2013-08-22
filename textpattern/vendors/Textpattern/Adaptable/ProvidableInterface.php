@@ -31,17 +31,6 @@
 interface Textpattern_Adaptable_ProvidableInterface
 {
 	/**
-	 * Sets the default adapter.
-	 *
-	 * This method sets or overrides the default adapter
-	 * with an static object.
-	 *
-	 * @param Textpattern_Adaptable_Adapter $adapter The overriding adapter
-	 */
-
-	static public function setDefaultAdapter(Textpattern_Adaptable_Adapter $adapter);
-
-	/**
 	 * Sets the current adapter.
 	 *
 	 * @param  Textpattern_Adaptable_Adapter $adapter The adapter

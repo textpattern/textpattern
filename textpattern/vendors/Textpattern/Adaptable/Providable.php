@@ -39,29 +39,12 @@
 abstract class Textpattern_Adaptable_Providable implements Textpattern_Adaptable_ProvidableInterface
 {
 	/**
-	 * Stores an instance of the default provider.
-	 *
-	 * @var Textpattern_Adaptable_Adapter
-	 */
-
-	static private $defaultAdapter;
-
-	/**
 	 * Stores an instance of the current provider.
 	 *
 	 * @var Textpattern_Adaptable_Adapter
 	 */
 
 	private $adapter;
-
-	/**
-	 * {@inheritdoc}
-	 */
-
-	static public function setDefaultAdapter(Textpattern_Adaptable_Adapter $adapter)
-	{
-		self::$defaultAdapter = $adapter;
-	}
 
 	/**
 	 * {@inheritdoc}
@@ -82,11 +65,6 @@ abstract class Textpattern_Adaptable_Providable implements Textpattern_Adaptable
 		if ($this->adapter)
 		{
 			return $this->adapter;
-		}
-
-		if (self::$defaultAdapter)
-		{
-			return self::$defaultAdapter;
 		}
 
 		return $this->getDefaultAdapter();
