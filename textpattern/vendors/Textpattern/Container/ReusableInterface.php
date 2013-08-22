@@ -25,7 +25,7 @@
  * Signals to the factory that the instance can be reused.
  *
  * Instances of this interface are treated as static. Once
- * you initilise the instance, its kept and use again
+ * you initilise the instance, it's kept and use again
  * each time you reference the class using the factory.
  *
  * @since   4.6.0

@@ -22,7 +22,7 @@
  */
 
 /**
- * Providers the factory its own initialisation method.
+ * Provides the factory its own initialisation method.
  *
  * @since   4.6.0
  * @package Container
