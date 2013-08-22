@@ -28,7 +28,7 @@
  * @package Tag
  */
 
-class Textpattern_Tag_Registry
+class Textpattern_Tag_Registry implements Textpattern_Container_ReusableInterface
 {
 	/**
 	 * Stores registered tags.
@@ -36,37 +36,34 @@ class Textpattern_Tag_Registry
 	 * @var array
 	 */
 
-	static private $tags = array();
+	private $tags = array();
 
 	/**
 	 * Registers a tag.
 	 *
 	 * @param  callback    $callback The tag callback
 	 * @param  string|null $tag      The tag name
-	 * @return bool
+	 * @return Textpattern_Tag_Registry
 	 * @example
-	 * Textpattern_Tag_Registry::register(array('class', 'method'), 'tag');
+	 * Txp::get('TagRegistry')->register(array('class', 'method'), 'tag');
 	 */
 
-	static public function register($callback, $tag = null)
+	public function register($callback, $tag = null)
 	{
-		if (!is_callable($callback, true))
+		if (is_callable($callback, true))
 		{
-			return false;
+			if ($tag === null && is_string($callback))
+			{
+				$tag = $callback;
+			}
+
+			if ($tag)
+			{
+				$this->tags[$tag] = $callback;
+			}
 		}
 
-		if ($tag === null && is_string($callback))
-		{
-			$tag = $callback;
-		}
-
-		if (!$tag)
-		{
-			return false;
-		}
-
-		self::$tags[$tag] = $callback;
-		return true;
+		return $this;
 	}
 
 	/**
@@ -82,7 +79,7 @@ class Textpattern_Tag_Registry
 	{
 		if ($this->isRegistered($tag))
 		{
-			return call_user_func(self::$tags[$tag], $atts, $thing);
+			return call_user_func($this->tags[$tag], $atts, $thing);
 		}
 	}
 
@@ -95,7 +92,7 @@ class Textpattern_Tag_Registry
 
 	public function isRegistered($tag)
 	{
-		return array_key_exists($tag, self::$tags) && is_callable(self::$tags[$tag]);
+		return array_key_exists($tag, $this->tags) && is_callable($this->tags[$tag]);
 	}
 
 	/**
@@ -106,6 +103,6 @@ class Textpattern_Tag_Registry
 
 	public function registered()
 	{
-		return self::$tags;
+		return $this->tags;
 	}
 }
