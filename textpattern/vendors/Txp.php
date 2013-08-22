@@ -53,6 +53,8 @@ class Txp implements Textpattern_Container_FactoryInterface
 
 	/**
 	 * Gets the container.
+	 *
+	 * @return object
 	 */
 
 	static private function getContainer()
