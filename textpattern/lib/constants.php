@@ -657,7 +657,7 @@ define('TEXTAREA_HEIGHT_SMALL', 4);
  * @package System
  */
 
-define('REQUIRED_PHP_VERSION', '5.2');
+define('REQUIRED_PHP_VERSION', '5.2.3');
 
 /**
  * File integrity status good.
