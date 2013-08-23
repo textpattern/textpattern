@@ -52,12 +52,10 @@ class Txp implements Textpattern_Container_FactoryInterface
 	}
 
 	/**
-	 * Gets the container.
-	 *
-	 * @return object
+	 * {@inheritdoc}
 	 */
 
-	static private function getContainer()
+	static public function getContainer()
 	{
 		if (!self::$container)
 		{

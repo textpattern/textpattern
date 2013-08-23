@@ -38,4 +38,12 @@ interface Textpattern_Container_FactoryInterface
 	 */
 
 	static public function get($name);
+
+	/**
+	 * Gets the container.
+	 *
+	 * @return Textpattern_Container_ContainerInterface
+	 */
+
+	static public function getContainer();
 }
