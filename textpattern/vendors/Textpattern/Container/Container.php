@@ -52,7 +52,13 @@ class Textpattern_Container_Container implements Textpattern_Container_Container
 
 	public function register($alias, $class)
 	{
+		if (isset($this->registered[$alias]))
+		{
+			throw new Exception('alias_is_taken');
+		}
+
 		$this->registered[$alias] = $class;
+		return $this;
 	}
 
 	/**
@@ -61,7 +67,7 @@ class Textpattern_Container_Container implements Textpattern_Container_Container
 
 	public function remove($alias)
 	{
-		unset($this->registered[$alias]);
+		unset($this->registered[$alias], $this->instances[$alias]);
 		return $this;
 	}
 
