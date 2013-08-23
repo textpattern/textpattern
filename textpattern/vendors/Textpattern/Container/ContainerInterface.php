@@ -52,9 +52,13 @@ interface Textpattern_Container_ContainerInterface
 	/**
 	 * Registers a class.
 	 *
+	 * Throws an exception if the alias is taken.
+	 * To replace an alias, first call remove.
+	 *
 	 * @param  string $alias The alias
 	 * @param  string $class The class
 	 * @return Textpattern_Container_ContainerInterface
+	 * @throws Exception
 	 */
 
 	public function register($alias, $class);
