@@ -93,7 +93,7 @@ class Textpattern_L10n_Locale
 	 * This method wraps around system setlocale.
 	 * It accepts either a language code or some locale
 	 * identifier. The method tries to format the given
-	 * code or identifier so that it works on the system.
+	 * code so that it works on the system.
 	 *
 	 * @param  int    $category The localisation category to change
 	 * @param  string $locale   The locale or language code
@@ -110,12 +110,14 @@ class Textpattern_L10n_Locale
 
 		foreach ($this->locales as $key => $data)
 		{
-			if (strtolower($key) === $code || in_array($code, array_map('strtolower', $data), true))
+			if (strtolower($key) === $code)
 			{
-				if (@setlocale($category, $data) !== false)
+				if (@setlocale($category, $data) === false)
 				{
-					return $this;
+					throw new Exception('unable_to_set_locale');
 				}
+
+				return $this;
 			}
 		}
 
