@@ -140,7 +140,7 @@ class Textpattern_Iterator_FileIterator implements Iterator
 		}
 		else
 		{
-			$this->_valid = false;
+			$this->valid = false;
 			fclose($this->filepointer);
 		}
 	}
