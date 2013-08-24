@@ -3366,7 +3366,7 @@
 		$q = $pretext['q'];
 
 		$quoted = ($q[0] === '"') && ($q[strlen($q) - 1] === '"');
-		$q = $quoted ? trim(trim($q, '"')) : $q;
+		$q = $quoted ? trim(trim($q, '"')) : trim($q);
 
 		$result = preg_replace('/\s+/', ' ', strip_tags(str_replace('><', '> <', $thisarticle['body'])));
 
