@@ -874,6 +874,16 @@
 		if ($refresh_partials)
 		{
 			$response[] = announce($message);
+			$response[] = '$("#article_form [type=submit]").val(textpattern.gTxt("save"))';
+
+			if ($Status < STATUS_LIVE)
+			{
+				$response[] = '$("#article_form").addClass("saved").removeClass("published")';
+			}
+			else
+			{
+				$response[] = '$("#article_form").addClass("published").removeClass("saved")';
+			}
 
 			// Update the volatile partials.
 			foreach ($partials as $k => $p)
@@ -917,8 +927,31 @@
 
 		pagetop($page_title, $message);
 
+		$class = array();
+
+		if ($Status >= STATUS_LIVE)
+		{
+			$class[] = 'published';
+		}
+		else if($ID)
+		{
+			$class[] = 'saved';
+		}
+
+		if ($step !== 'create')
+		{
+			$class[] = 'async';
+		}
+
 		echo hed(gTxt('tab_write'), 1, array('class' => 'txp-heading txp-accessibility'));
-		echo n.'<form id="article_form" name="article_form" method="post" action="index.php" '.($step=='create' ? '>' : ' class="async">').
+		echo
+			n.tag_start('form', array(
+				'id'     => 'article_form',
+				'name'   => 'article_form',
+				'method' => 'post',
+				'action' => 'index.php',
+				'class'  => $class,
+			)).
 			n.'<div id="'.$event.'_container" class="txp-layout-grid">';
 
 		if (!empty($store_out))

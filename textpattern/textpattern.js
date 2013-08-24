@@ -1532,6 +1532,23 @@ textpattern.Route.add('article', function ()
 		}
 	);
 
+	var status = $('select[name=Status]'), form = status.parents('form'), submitButton = form.find('input[type=submit]');
+
+	status.change(function ()
+	{
+		if (!form.hasClass('published'))
+		{
+			if ($(this).val() < 4)
+			{
+				submitButton.val(textpattern.gTxt('save'));
+			}
+			else
+			{
+				submitButton.val(textpattern.gTxt('publish'));
+			}
+		}
+	});
+
 	// Switch to text/html/preview mode.
 	$(document).on('click',
 		'[data-view-mode]',

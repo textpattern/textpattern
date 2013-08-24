@@ -122,7 +122,7 @@
 				'production_status' => get_pref('production_status'),
 		)).';').
 		script_js('textpattern.js', SCRIPT_URL).n;
-	gTxtScript(array('form_submission_error', 'are_you_sure', 'cookies_must_be_enabled', 'ok'));
+	gTxtScript(array('form_submission_error', 'are_you_sure', 'cookies_must_be_enabled', 'ok', 'save', 'publish'));
 	// Mandatory un-themable Textpattern core styles ?>
 <style>
 .not-ready .doc-ready,
