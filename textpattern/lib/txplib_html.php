@@ -1526,7 +1526,10 @@
 
 	function dom_attach($id, $content, $noscript = '', $wraptag = 'div', $wraptagid = '')
 	{
+		$id = escape_js($id);
 		$content = escape_js($content);
+		$wraptag = escape_js($wraptag);
+		$wraptagid = escape_js($wraptagid);
 
 		$js = <<<EOF
 			$(function ()
