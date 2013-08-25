@@ -1640,27 +1640,68 @@ EOF;
  * @return string HTML
  */
 
-	function cookie_box($classname, $form = 1)
+	function cookie_box($classname, $form = true)
 	{
 		$name = 'cb_'.$classname;
-		$val = cs('toggle_'.$classname) ? 1 : 0;
+		$id = escape_js($name);
+		$class = escape_js($classname);
 
-		$i =
-			'<input type="checkbox" name="'.$name.'" id="'.$name.'" value="1" '.
-			($val ? 'checked="checked" ' : '').
-			'class="checkbox" onclick="setClassRemember(\''.$classname.'\','.(1-$val).');submit(this.form);" />'.
-			' <label for="'.$name.'">'.gTxt($classname).'</label> ';
-
-		if ($form)
+		if (cs('toggle_'.$classname))
 		{
-			$args = empty($_SERVER['QUERY_STRING']) ? '' : '?'.txpspecialchars($_SERVER['QUERY_STRING']);
-
-			return '<form class="'.$name.'" method="post" action="index.php'.$args.'">'.$i.eInput(gps('event')).tInput().'</form>';
+			$value = 1;
 		}
 		else
 		{
-			return n.$i;
+			$value = 0;
 		}
+
+		$newvalue = 1 - $value;
+
+		$out = checkbox($name, 1, (bool) $value, 0, $name).
+			n.tag(gTxt($classname), 'label', array('for' => $name));
+
+		$js = <<<EOF
+			$(function ()
+			{
+				$('input')
+					.filter(function ()
+					{
+						if ($(this).attr('id') === '{$id}')
+						{
+							return true;
+						}
+					})
+					.change(function ()
+					{
+						setClassRemember('{$class}', $newvalue);
+						$(this).parents('form').submit();
+					});
+			});
+EOF;
+
+		$out .= script_js($js);
+
+		if ($form)
+		{
+			if (serverSet('QUERY_STRING'))
+			{
+				$action = 'index.php?'.serverSet('QUERY_STRING');
+			}
+			else
+			{
+				$action = 'index.php';
+			}
+
+			$out .= eInput(gps('event')) . tInput();
+
+			return tag($out, 'form', array(
+				'class'  => $name,
+				'method' => 'post',
+				'action' => $action,
+			));
+		}
+
+		return $out;
 	}
 
 /**
