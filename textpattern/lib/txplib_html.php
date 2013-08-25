@@ -376,19 +376,26 @@
 /**
  * Renders a link invoking an admin-side "previous/next article" action.
  *
- * @param  string $name    Link text
- * @param  string $event   Event
- * @param  string $step    Step
- * @param  int    $id      ID of target Textpattern object (article,...)
- * @param  string $titling HTML title attribute
- * @param  string $rel     HTML rel attribute
+ * @param  string $name  Link text
+ * @param  string $event Event
+ * @param  string $step  Step
+ * @param  int    $id    ID of target Textpattern object (article,...)
+ * @param  string $title HTML title attribute
+ * @param  string $rel   HTML rel attribute
  * @return string HTML
  */
 
-	function prevnext_link($name, $event, $step, $id, $titling = '', $rel = '')
+	function prevnext_link($name, $event, $step, $id, $title = '', $rel = '')
 	{
-		return '<a href="?event='.$event.a.'step='.$step.a.'ID='.$id.
-			'" class="navlink"'.($titling ? ' title="'.$titling.'"' : '').($rel ? ' rel="'.$rel.'"' : '').'>'.$name.'</a>';
+		return href($name, array(
+			'event' => $event,
+			'step'  => $step,
+			'ID'    => $id,
+		), array(
+			'class' => 'navlink',
+			'title' => $title,
+			'rel'   => $rel,
+		));
 	}
 
 /**
