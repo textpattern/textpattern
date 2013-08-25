@@ -297,7 +297,7 @@
  * @param  string $verify    Show an "Are you sure?" dialogue with this text
  * @param  string $thing2    URL parameter key #2
  * @param  string $thing2val URL parameter value #2
- * @param  bool   $get       Use GET request [false: Use POST request]
+ * @param  bool   $get       If TRUE, uses GET request
  * @param  array  $remember  Convey URL parameters for page state. Member sequence is $page, $sort, $dir, $crit, $search_method
  * @return string HTML
  */
@@ -311,22 +311,45 @@
 
 		if ($get)
 		{
-			$url = '?event='.$event.a.'step='.$step.a.$thing.'='.urlencode($value).a.'_txp_token='.form_token();
-
-			if ($thing2)
+			if ($verify)
 			{
-				$url .= a.$thing2.'='.urlencode($thing2val);
+				$verify = gTxt($verify);
+			}
+			else
+			{
+				$verify = gTxt('confirm_delete_popup');
 			}
 
 			if ($remember)
 			{
-				$url .= a.'page='.$page.a.'sort='.$sort.a.'dir='.$dir.a.'crit='.$crit.a.'search_method='.$search_method;
+				return href('×', array(
+					'event'         => $event,
+					'step'          => $step,
+					$thing          => $value,
+					$thing2         => $thing2val,
+					'_txp_token'    => form_token(),
+					'page'          => $page,
+					'sort'          => $sort,
+					'dir'           => $dir,
+					'crit'          => $crit,
+					'search_method' => $search_method,
+				), array(
+					'class'       => 'dlink destroy',
+					'title'       => gTxt('delete'),
+					'data-verify' => $verify,
+				));
 			}
 
-			return join('', array(
-				'<a href="'.$url.'" class="dlink destroy" title="'.gTxt('delete').'" data-verify="',
-				($verify) ? gTxt($verify) : gTxt('confirm_delete_popup'),
-				'">×</a>'
+			return href('×', array(
+				'event'         => $event,
+				'step'          => $step,
+				$thing          => $value,
+				$thing2         => $thing2val,
+				'_txp_token'    => form_token(),
+			), array(
+				'class'       => 'dlink destroy',
+				'title'       => gTxt('delete'),
+				'data-verify' => $verify,
 			));
 		}
 
