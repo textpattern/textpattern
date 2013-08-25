@@ -1529,7 +1529,7 @@
 		$content = escape_js($content);
 
 		$js = <<<EOF
-			$(document).ready(function ()
+			$(function ()
 			{
 				$('#{$id}').append($('<{$wraptag} />').attr('id', '{$wraptagid}').html('{$content}'));
 			});
@@ -1601,7 +1601,7 @@ EOF;
 			n.tag(gTxt('detail_toggle'), 'label', array('for' => $name));
 
 		$js = <<<EOF
-			$(document).ready(function ()
+			$(function ()
 			{
 				$('input')
 					.filter(function ()
