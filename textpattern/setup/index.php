@@ -19,7 +19,13 @@ if (!defined('txpath'))
 }
 
 define("txpinterface", "admin");
-error_reporting(E_ALL);
+if (defined('E_DEPRECATED')) {
+	// Work-around for mysql_* being deprecated in PHP 5.5.
+	error_reporting(E_ALL ^ E_DEPRECATED);
+} else {
+	error_reporting(E_ALL);
+}
+
 @ini_set("display_errors","1");
 
 include_once txpath.'/lib/constants.php';

@@ -566,7 +566,7 @@ $LastChangedRevision$
 						inputLabel('image_name', fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'image_name'), 'image_name').n.
 						inputLabel('image_category', treeSelectInput('category', $all_image_cats, $category, 'image_category'), 'image_category').n.
 						inputLabel('image_alt_text', fInput('text', 'alt', $alt, '', '', '', INPUT_REGULAR, '', 'image_alt_text'), 'alt_text').n.
-						inputLabel('image_caption', '<textarea id="image_caption" name="caption" rows="'.INPUT_XSMALL.'" cols="'.INPUT_LARGE.'">'.$caption.'</textarea>', 'caption', '', '', '').n.
+						inputLabel('image_caption', text_area('caption', 0, 0, $caption, 'image_caption', INPUT_XSMALL, INPUT_LARGE), 'caption', '', '', '').n.
 						pluggable_ui('image_ui', 'extend_detail_form', '', $rs).n.
 						graf(fInput('submit', '', gTxt('save'), 'publish')).
 						n.hInput('id', $id).

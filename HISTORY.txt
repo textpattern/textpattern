@@ -1,3 +1,9 @@
+Changes in 4.5.5
+
+* Maintenance release with bug fixes, no security implications
+* Fix compatibility issues with PHP 5.5 in <txp:yield> and setup routines.
+* jQuery 1.8.3
+
 Changes in 4.5.4
 
 * Corrects a packaging error in the 4.5.3 archives.

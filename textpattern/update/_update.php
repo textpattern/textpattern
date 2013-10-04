@@ -118,10 +118,10 @@ $LastChangedRevision$
 			$dbversion = '4.4.1';
 	}
 
-	if (version_compare($dbversion, '4.5.4', '<'))
+	if (version_compare($dbversion, '4.5.5', '<'))
 	{
 		if ((include txpath.DS.'update'.DS.'_to_4.5.0.php') !== false)
-			$dbversion = '4.5.4';
+			$dbversion = '4.5.5';
 	}
 
 	// Invite optional third parties to the update experience

@@ -527,7 +527,7 @@ EOS
 
 		$message = array(gTxt('category_save_failed'), E_ERROR);
 		if (safe_update('txp_category', "name = '$name', parent = '$parent', title = '$title'", "id = $id") &&
-			safe_update('txp_category', "parent = '$name'", "parent = '$old_name'"))
+			safe_update('txp_category', "parent = '$name'", "parent = '$old_name' and type='$event'"))
 		{
 			rebuild_tree_full($event);
 

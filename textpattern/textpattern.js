@@ -149,7 +149,7 @@ jQuery.fn.txpMultiEditForm = function(method, opt)
 
 	this.closest('form').each(function() {
 
-		var $this = $(this), form = {}, public = {}, private = {};
+		var $this = $(this), form = {}, methods = {}, lib = {};
 
 		if ($this.data('_txpMultiEdit'))
 		{
@@ -175,7 +175,7 @@ jQuery.fn.txpMultiEditForm = function(method, opt)
 		 * @return obj this
 		 */
 
-		public.addOption = function(options)
+		methods.addOption = function(options)
 		{
 			var settings = $.extend({
 				'label' : null,
@@ -185,7 +185,7 @@ jQuery.fn.txpMultiEditForm = function(method, opt)
 			
 			if (!settings.value)
 			{
-				return public;
+				return methods;
 			}
 
 			var option = form.editMethod.find('option').filter(function() {
@@ -220,7 +220,7 @@ jQuery.fn.txpMultiEditForm = function(method, opt)
 				form.editMethod.append(option);
 			}
 			
-			return public;
+			return methods;
 		};
 
 		/**
@@ -231,7 +231,7 @@ jQuery.fn.txpMultiEditForm = function(method, opt)
 		 * @param bool checked Set matched checked or unchecked. FALSE to uncheck.
 		 */
 
-		public.select = function(options)
+		methods.select = function(options)
 		{
 			var settings = $.extend({
 				'index' : null,
@@ -262,26 +262,26 @@ jQuery.fn.txpMultiEditForm = function(method, opt)
 			}
 
 			obj.prop('checked', settings.checked).change();
-			return public;
+			return methods;
 		};
 
 		/**
 		 * Highlights selected rows
 		 */
 
-		private.highlight = function()
+		lib.highlight = function()
 		{
 			var element = $this.find(form.boxes);
 			element.filter(':checked').closest(opt.highlighted).addClass(opt.selectedClass);
 			element.filter(':not(:checked)').closest(opt.highlighted).removeClass(opt.selectedClass);
-			return private;
+			return lib;
 		};
 
 		/**
 		 * Extends click region to whole row
 		 */
 
-		private.extendedClick = function()
+		lib.extendedClick = function()
 		{
 			if (opt.rowClick)
 			{
@@ -326,7 +326,7 @@ jQuery.fn.txpMultiEditForm = function(method, opt)
 					var start = boxes.index(box);
 					var end = boxes.index(form.lastCheck);
 
-					public.select({
+					methods.select({
 						'range' : [Math.min(start, end), Math.max(start, end)+1],
 						'checked' : !checked
 					});
@@ -346,14 +346,14 @@ jQuery.fn.txpMultiEditForm = function(method, opt)
 				}
 			});
 
-			return private;
+			return lib;
 		};
 
 		/**
 		 * Tracks row checks
 		 */
 
-		private.checked = function()
+		lib.checked = function()
 		{
 			$this.on('change', form.boxes, function(e) {
 				var box = $(this);
@@ -371,14 +371,14 @@ jQuery.fn.txpMultiEditForm = function(method, opt)
 				}
 			});
 
-			return private;
+			return lib;
 		};
 
 		/**
 		 * Handles edit method selecting
 		 */
 
-		private.changeMethod = function()
+		lib.changeMethod = function()
 		{
 			form.button.hide();
 
@@ -389,7 +389,7 @@ jQuery.fn.txpMultiEditForm = function(method, opt)
 				if (selected.length < 1 || selected.val() === '')
 				{
 					form.button.hide();
-					return private;
+					return lib;
 				}
 
 				if (selected.data('method'))
@@ -404,14 +404,14 @@ jQuery.fn.txpMultiEditForm = function(method, opt)
 				}
 			});
 
-			return private;
+			return lib;
 		};
 
 		/**
 		 * Handles sending
 		 */
 
-		private.sendForm = function()
+		lib.sendForm = function()
 		{
 			$this.submit(function() {
 				if (opt.confirmation !== false && verify(opt.confirmation) === false)
@@ -421,12 +421,12 @@ jQuery.fn.txpMultiEditForm = function(method, opt)
 				}
 			});
 
-			return private;
+			return lib;
 		};
 
 		if(!$this.data('_txpMultiEdit'))
 		{
-			private.highlight().extendedClick().checked().changeMethod().sendForm();
+			lib.highlight().extendedClick().checked().changeMethod().sendForm();
 
 			(function() {
 				var multiOptions = $this.find('.multi-option:not(.multi-step)');
@@ -440,7 +440,7 @@ jQuery.fn.txpMultiEditForm = function(method, opt)
 
 					if (option.length > 0)
 					{
-						public.addOption({
+						methods.addOption({
 							'label' : null,
 							'html' : option.eq(0).contents(),
 							'value' : $(this).val()
@@ -452,15 +452,15 @@ jQuery.fn.txpMultiEditForm = function(method, opt)
 			})();
 
 			$this.on('change', opt.selectAll, function(e) {
-				public.select({
+				methods.select({
 					'checked' : $(this).prop('checked')
 				});
 			});
 		}
 
-		if (method && public[method])
+		if (method && methods[method])
 		{
-			public[method].call($this, args);
+			methods[method].call($this, args);
 		}
 
 		$this.data('_txpMultiEdit', form);

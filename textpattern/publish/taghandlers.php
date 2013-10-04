@@ -22,10 +22,10 @@ $LastChangedRevision$
 		), $atts));
 
 		$out = txpspecialchars($sitename.$separator);
+		$parent_id = (int) $parentid;
 
-		if ($parentid) {
-			$parent_id = (int) $parent_id;
-			$out .= gTxt('comments_on').' '.escape_title(safe_field('Title', 'textpattern', "ID = $parentid"));
+		if ($parent_id) {
+			$out .= gTxt('comments_on').' '.escape_title(safe_field('Title', 'textpattern', "ID = $parent_id"));
 		} elseif ($thisarticle['title']) {
 			$out .= escape_title($thisarticle['title']);
 		} elseif ($q) {
@@ -310,7 +310,7 @@ $LastChangedRevision$
 
 // -------------------------------------------------------------
 
-	function yield()
+	function tpt_yield()
 	{
 		global $yield;
 
