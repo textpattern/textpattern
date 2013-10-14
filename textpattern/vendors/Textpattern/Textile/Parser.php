@@ -58,6 +58,10 @@ class Textpattern_Textile_Parser extends Textile
 
 		parent::__construct($doctype);
 		$this->setRelativeImagePrefix(hu);
+		$this->setSymbol('quote_single_open', gTxt('txt_quote_single_open'));
+        $this->setSymbol('quote_single_close', gTxt('txt_quote_single_close'));
+        $this->setSymbol('quote_double_open', gTxt('txt_quote_double_open'));
+        $this->setSymbol('quote_double_close', gTxt('txt_quote_double_close'));
 	}
 
 	/**
