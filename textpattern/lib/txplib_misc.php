@@ -3283,7 +3283,6 @@
 	function safe_strftime($format, $time = '', $gmt = false, $override_locale = '')
 	{
 		global $locale;
-		$old_locale = $locale;
 
 		if (!$time)
 		{
@@ -3305,7 +3304,8 @@
 
 		if ($override_locale)
 		{
-			getlocale($override_locale);
+			$oldLocale = Txp::get('L10nLocale')->getLocale(LC_TIME);
+			Txp::get('L10nLocale')->setLocale(LC_TIME, $override_locale);
 		}
 
 		if ($format == 'since')
@@ -3351,9 +3351,9 @@
 		}
 
 		// Revert to the old locale.
-		if ($override_locale)
+		if ($override_locale && $oldLocale)
 		{
-			$locale = setlocale(LC_ALL, $old_locale);
+			Txp::get('L10nLocale')->setLocale(LC_TIME, $oldLocale);
 		}
 
 		return $str;
