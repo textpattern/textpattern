@@ -498,6 +498,7 @@
 			'changestatus'    => array('label' => gTxt('changestatus'),    'html' => $status),
 			'changecomments'  => array('label' => gTxt('changecomments'),  'html' => $comments),
 			'changeauthor'    => array('label' => gTxt('changeauthor'),    'html' => $authors),
+			'duplicate'       => gTxt('duplicate'),
 			'delete'          => gTxt('delete'),
 		);
 
@@ -652,15 +653,51 @@
 		}
 
 		$selected = $allowed;
+		$message = messenger('article', join(', ', $selected), 'modified');
 
-		if ($selected && $field)
+		if ($selected)
 		{
-			if (safe_update('textpattern', "$field = '".doSlash($value)."'", "ID in (".join(',', $selected).")"))
+			if ($edit_method === 'duplicate')
 			{
-				update_lastmod();
-				callback_event('multi_edited.articles', $edit_method, 0, compact('selected', 'field', 'value'));
-				return list_list(messenger('article', join(', ', $selected), 'modified'));
+				$rs = safe_rows_start('*', 'textpattern', "ID in (".join(',', $selected).")");
+
+				if ($rs)
+				{
+					while ($a = nextRow($rs))
+					{
+						unset($a['ID'], $a['LastMod'], $a['LastModID'], $a['Expires']);
+						$a['uid'] = md5(uniqid(rand(), true));
+						$a['AuthorID'] = $txp_user;
+
+						foreach ($a as $name => &$value)
+						{
+							$value = "`{$name}` = '".doSlash($value)."'";
+						}
+
+						if ($id = (int) safe_insert('textpattern', join(',', $a)))
+						{
+							safe_update(
+								'textpattern',
+								"Title = concat(Title, ' (', {$id}, ')'),
+								url_title = concat(url_title, '-', {$id}),
+								Posted = now(),
+								feed_time = now()",
+								"ID = {$id}"
+							);
+						}
+					}
+				}
+
+				$message = gTxt('duplicated_articles', array('{id}' => join(', ', $selected)));
 			}
+			else if (!$field || safe_update('textpattern', "$field = '".doSlash($value)."'", "ID in (".join(',', $selected).")") === false)
+			{
+				return list_list();
+			}
+
+			update_lastmod();
+			callback_event('multi_edited.articles', $edit_method, 0, compact('selected', 'field', 'value'));
+			return list_list($message);
 		}
 
 		return list_list();
