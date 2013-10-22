@@ -653,10 +653,11 @@
 		}
 
 		$selected = $allowed;
-		$message = messenger('article', join(', ', $selected), 'modified');
 
 		if ($selected)
 		{
+			$message = messenger('article', join(', ', $selected), 'modified');
+
 			if ($edit_method === 'duplicate')
 			{
 				$rs = safe_rows_start('*', 'textpattern', "ID in (".join(',', $selected).")");
