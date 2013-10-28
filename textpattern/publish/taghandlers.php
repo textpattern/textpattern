@@ -4472,7 +4472,14 @@
 		), $atts));
 
 		$name = strtolower($name);
-		if (!empty($thisarticle[$name]))
+
+		if (!isset($thisarticle[$name]))
+		{
+			trigger_error(gTxt('field_not_found', array('{name}' => $name)), E_USER_NOTICE);
+			return false;
+		}
+
+		if ($thisarticle[$name] !== '')
 		{
 			$out = $thisarticle[$name];
 		}
@@ -4512,18 +4519,24 @@
 
 		$name = strtolower($name);
 
+		if (!isset($thisarticle[$name]))
+		{
+			trigger_error(gTxt('field_not_found', array('{name}' => $name)), E_USER_NOTICE);
+			return false;
+		}
+
 		if ($value !== null)
 		{
 			switch ($match)
 			{
 				case '' :
 				case 'exact':
-					$cond = (@$thisarticle[$name] == $value);
+					$cond = ($thisarticle[$name] == $value);
 					break;
 				case 'any' :
 					$values = do_list($value);
 					$cond = false;
-					$cf_contents = ($separator) ? do_list(@$thisarticle[$name], $separator) : @$thisarticle[$name];
+					$cf_contents = ($separator) ? do_list($thisarticle[$name], $separator) : $thisarticle[$name];
 					foreach($values as $term)
 					{
 						if ($term == '')
@@ -4544,7 +4557,7 @@
 					$values = do_list($value);
 					$num_values = count($values);
 					$term_count = 0;
-					$cf_contents = ($separator) ? do_list(@$thisarticle[$name], $separator) : @$thisarticle[$name];
+					$cf_contents = ($separator) ? do_list($thisarticle[$name], $separator) : $thisarticle[$name];
 					foreach ($values as $term)
 					{
 						if ($term == '')
@@ -4564,7 +4577,7 @@
 					$dlmPool = array('/', '@', '#', '~', '`', '|', '!', '%');
 					$dlm = array_merge(array_diff($dlmPool, preg_split('//', $value, -1)));
 					$dlm = (count($dlm) > 0) ? $dlm[0].$value.$dlm[0] : $value;
-					$cond = preg_match($dlm, @$thisarticle[$name]);
+					$cond = preg_match($dlm, $thisarticle[$name]);
 					break;
 				default :
 					trigger_error(gTxt('invalid_attribute_value', array('{name}' => 'value')), E_USER_NOTICE);
@@ -4573,7 +4586,7 @@
 		}
 		else
 		{
-			$cond = !empty($thisarticle[$name]);
+			$cond = ($thisarticle[$name] !== '');
 		}
 
 		return parse(EvalElse($thing, $cond));
