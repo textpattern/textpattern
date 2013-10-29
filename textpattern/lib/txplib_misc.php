@@ -1885,7 +1885,7 @@
 		$admin = ($app_mode == 'async' ? '4,5' : '1,3,4,5');
 		$where = 'status = 1 AND type IN ('.($type ? $admin : '0,1,5').')';
 
-		$rs = safe_rows("name, code, version", "txp_plugin", $where.' order by load_order');
+		$rs = safe_rows("name, code, version", "txp_plugin", $where.' order by load_order asc, name asc');
 
 		if ($rs)
 		{
