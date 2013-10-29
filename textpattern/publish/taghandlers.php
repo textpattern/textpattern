@@ -811,7 +811,7 @@
 			}
 		}
 
-		return false;
+		return '';
 	}
 
 // -------------------------------------------------------------
@@ -4476,7 +4476,7 @@
 		if (!isset($thisarticle[$name]))
 		{
 			trigger_error(gTxt('field_not_found', array('{name}' => $name)), E_USER_NOTICE);
-			return false;
+			return '';
 		}
 
 		if ($thisarticle[$name] !== '')
@@ -4522,7 +4522,7 @@
 		if (!isset($thisarticle[$name]))
 		{
 			trigger_error(gTxt('field_not_found', array('{name}' => $name)), E_USER_NOTICE);
-			return false;
+			return '';
 		}
 
 		if ($value !== null)
