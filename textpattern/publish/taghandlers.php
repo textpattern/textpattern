@@ -4461,12 +4461,12 @@
 //--------------------------------------------------------------------------
 	function custom_field($atts)
 	{
-		global $is_article_body, $thisarticle, $prefs;
+		global $is_article_body, $thisarticle;
 
 		assert_article();
 
 		extract(lAtts(array(
-			'name'    => @$prefs['custom_1_set'],
+			'name'    => get_pref('custom_1_set'),
 			'escape'  => 'html',
 			'default' => '',
 		), $atts));
@@ -4499,12 +4499,12 @@
 //--------------------------------------------------------------------------
 	function if_custom_field($atts, $thing)
 	{
-		global $thisarticle, $prefs;
+		global $thisarticle;
 
 		assert_article();
 
 		extract(lAtts(array(
-			'name'      => @$prefs['custom_1_set'],
+			'name'      => get_pref('custom_1_set'),
 			'value'     => null,
 			'val'       => null, // Deprecated in 4.3.0.
 			'match'     => 'exact',
