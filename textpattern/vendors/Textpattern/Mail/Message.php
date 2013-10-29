@@ -44,7 +44,7 @@ class Textpattern_Mail_Message
 	 * @var array
 	 */
 
-	public $send_to = array();
+	public $sendTo = array();
 
 	/**
 	 * The subject.
@@ -68,7 +68,7 @@ class Textpattern_Mail_Message
 	 * @var array
 	 */
 
-	public $reply_to = array();
+	public $replyTo = array();
 
 	/**
 	 * An array of carbon copy addresses.

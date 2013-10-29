@@ -68,7 +68,7 @@ class Textpattern_Mail_Compose
 	 * @var string|bool
 	 */
 
-	protected $smtp_from = false;
+	protected $smtpFrom = false;
 
 	/**
 	 * The encoder.
@@ -105,7 +105,7 @@ class Textpattern_Mail_Compose
 			}
 			else if(!ini_get('safe_mode'))
 			{
-				$this->smtp_from = get_pref('smtp_from');
+				$this->smtpFrom = get_pref('smtp_from');
 			}
 		}
 
@@ -123,13 +123,12 @@ class Textpattern_Mail_Compose
 	 * @param  string $name    The name
 	 * @return bool   TRUE on success
 	 * @example
-	 * $email = new Textpattern_Mail_Compose();
-	 * echo $email->to('john.doe@example.com', 'John Doe');
+	 * Txp::get('MailCompose')->to('john.doe@example.com', 'John Doe');
 	 */
 
 	public function to($address, $name = '')
 	{
-		return $this->add_address($this->mail->send_to, $address, $name);
+		return $this->addAddress($this->mail->sendTo, $address, $name);
 	}
 
 	/**
@@ -139,13 +138,12 @@ class Textpattern_Mail_Compose
 	 * @param  string $name    The name
 	 * @return bool   TRUE on success
 	 * @example
-	 * $email = new Textpattern_Mail_Compose();
-	 * echo $email->from('john.doe@example.com', 'John Doe');
+	 * Txp::get('MailCompose')->from('john.doe@example.com', 'John Doe');
 	 */
 
 	public function from($address, $name = '')
 	{
-		return $this->add_address($this->mail->from, $address, $name);
+		return $this->addAddress($this->mail->from, $address, $name);
 	}
 
 	/**
@@ -155,13 +153,12 @@ class Textpattern_Mail_Compose
 	 * @param  string $name    The name
 	 * @return bool   TRUE on success
 	 * @example
-	 * $email = new Textpattern_Mail_Compose();
-	 * echo $email->reply_to('john.doe@example.com', 'John Doe');
+	 * Txp::get('MailCompose')->replyTo('john.doe@example.com', 'John Doe');
 	 */
 
-	public function reply_to($address, $name = '')
+	public function replyTo($address, $name = '')
 	{
-		return $this->add_address($this->mail->reply_to, $address, $name);
+		return $this->addAddress($this->mail->replyTo, $address, $name);
 	}
 
 	/**
@@ -171,13 +168,12 @@ class Textpattern_Mail_Compose
 	 * @param  string $name    The name
 	 * @return bool   TRUE on success
 	 * @example
-	 * $email = new Textpattern_Mail_Compose();
-	 * echo $email->cc('john.doe@example.com', 'John Doe');
+	 * Txp::get('MailCompose')->cc('john.doe@example.com', 'John Doe');
 	 */
 
 	public function cc($address, $name = '')
 	{
-		return $this->add_address($this->mail->cc, $address, $name);
+		return $this->addAddress($this->mail->cc, $address, $name);
 	}
 
 	/**
@@ -187,13 +183,12 @@ class Textpattern_Mail_Compose
 	 * @param  string $name    The name
 	 * @return bool   TRUE on success
 	 * @example
-	 * $email = new Textpattern_Mail_Compose();
-	 * echo $email->bcc('john.doe@example.com', 'John Doe');
+	 * Txp::get('MailCompose')->bcc('john.doe@example.com', 'John Doe');
 	 */
 
 	public function bcc($address, $name = '')
 	{
-		return $this->add_address($this->mail->bcc, $address, $name);
+		return $this->addAddress($this->mail->bcc, $address, $name);
 	}
 
 	/**
@@ -202,8 +197,7 @@ class Textpattern_Mail_Compose
 	 * @param  string $subject The subject
 	 * @return bool   TRUE on success
 	 * @example
-	 * $email = new Textpattern_Mail_Compose();
-	 * echo $email->subject('My subject');
+	 * Txp::get('MailCompose')->subject('My subject');
 	 */
 
 	public function subject($subject)
@@ -223,8 +217,7 @@ class Textpattern_Mail_Compose
 	 * @param  string $body The message
 	 * @return bool TRUE on success
 	 * @example
-	 * $email = new Textpattern_Mail_Compose();
-	 * echo $email->body('Plain-text based message.');
+	 * Txp::get('MailCompose')->body('Plain-text based message.');
 	 */
 
 	public function body($body)
@@ -240,8 +233,7 @@ class Textpattern_Mail_Compose
 	 * @param  string $value The value
 	 * @return bool
 	 * @example
-	 * $email = new Textpattern_Mail_Compose();
-	 * echo $email->header('X-Mailer', 'abc_plugin');
+	 * Txp::get('MailCompose')->header('X-Mailer', 'abc_plugin');
 	 */
 
 	public function header($name, $value)
@@ -265,7 +257,7 @@ class Textpattern_Mail_Compose
 	 *
 	 * @return  bool Returns FALSE if sending fails
 	 * @example
-	 * $email = new Textpattern_Mail_Compose();
+	 * $email = Txp::get('MailCompose');
 	 * $email->to('to@example.com');
 	 * $email->from('from.@example.com');
 	 * $email->subject('Subject');
@@ -280,7 +272,7 @@ class Textpattern_Mail_Compose
 			return false;
 		}
 
-		if (!$this->mail->from || !$this->mail->send_to)
+		if (!$this->mail->from || !$this->mail->sendTo)
 		{
 			return false;
 		}
@@ -296,7 +288,7 @@ class Textpattern_Mail_Compose
 
 		$subject = $this->encoder->header(strip_rn($subject), 'text');
 
-		foreach (array('from', 'send_to', 'reply_to', 'cc', 'bcc') as $field)
+		foreach (array('from', 'sendTo', 'replyTo', 'cc', 'bcc') as $field)
 		{
 			$$field = $this->encoder->addressList($this->mail->$field);
 		}
@@ -319,9 +311,9 @@ class Textpattern_Mail_Compose
 			$headers['Bcc'] = $bbc;
 		}
 
-		if ($reply_to)
+		if ($replyTo)
 		{
-			$headers['Reply-to'] = $reply_to;
+			$headers['Reply-to'] = $replyTo;
 		}
 
 		$headers += $this->headers;
@@ -335,15 +327,15 @@ class Textpattern_Mail_Compose
 
 		if (has_handler('mail.handler'))
 		{
-			return callback_event('mail.handler', '', 0, $this->mail, $send_to, $subject, $body, $headers) !== false;
+			return callback_event('mail.handler', '', 0, $this->mail, $sendTo, $subject, $body, $headers) !== false;
 		}
 
-		if ($this->smtp_from)
+		if ($this->smtpFrom)
 		{
-			return mail($send_to, $subject, $body, $headers, '-f'.$this->smtp_from);
+			return mail($sendTo, $subject, $body, $headers, '-f'.$this->smtpFrom);
 		}
 
-		return mail($send_to, $subject, $body, $headers);
+		return mail($sendTo, $subject, $body, $headers);
 	}
 
 	/**
@@ -355,7 +347,7 @@ class Textpattern_Mail_Compose
 	 * @return bool   FALSE if the addresses doesn't validate as an email
 	 */
 
-	protected function add_address(&$field, $address, $name = '')
+	protected function addAddress(&$field, $address, $name = '')
 	{
 		if (is_valid_email($address))
 		{

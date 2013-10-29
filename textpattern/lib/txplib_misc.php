@@ -2868,12 +2868,12 @@
 		if ($sender)
 		{
 			extract($sender);
-			$mail = new Textpattern_Mail_Compose();
+			$mail = Txp::get('MailCompose');
 			$mail->from($email, $RealName);
 			$mail->to($to_address);
 			$mail->subject($subject);
 			$mail->body($body);
-			$mail->reply_to($reply_to);
+			$mail->replyTo($reply_to);
 			return $mail->send();
 		}
 
