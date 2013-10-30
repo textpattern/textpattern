@@ -1052,34 +1052,52 @@
 	}
 
 // -------------------------------------------------------------
-	function password_protect($atts)
+	function password_protect($atts, $thing = null)
 	{
 		ob_start();
 
 		extract(lAtts(array(
-			'login' => '',
-			'pass'  => '',
+			'login' => null,
+			'pass'  => null,
+			'privs' => null,
 		), $atts));
 
-		$au = serverSet('PHP_AUTH_USER');
-		$ap = serverSet('PHP_AUTH_PW');
-
-		// For PHP as (f)cgi, two rules in htaccess often allow this workaround.
-		$ru = serverSet('REDIRECT_REMOTE_USER');
-
-		if ($ru && !$au && !$ap && substr($ru, 0, 5) == 'Basic')
+		if ($pass === null)
 		{
-			list ($au, $ap) = explode(':', base64_decode(substr($ru, 6)));
+			$access = ($user = is_logged_in($login)) !== false && ($privs === null || !in_list($user['privs'], $privs));
+		}
+		else
+		{
+			$au = serverSet('PHP_AUTH_USER');
+			$ap = serverSet('PHP_AUTH_PW');
+
+			// For PHP as (f)cgi, two rules in htaccess often allow this workaround.
+			$ru = serverSet('REDIRECT_REMOTE_USER');
+
+			if (!$au && !$ap && strpos($ru, 'Basic') === 0)
+			{
+				list ($au, $ap) = explode(':', base64_decode(substr($ru, 6)));
+			}
+
+			$access = $au === $login && $ap === $pass;
 		}
 
-		if ($login && $pass)
+		if ($access === false && $pass !== null)
 		{
-			if (!$au || !$ap || $au!= $login || $ap!= $pass)
+			header('WWW-Authenticate: Basic realm="Private"');
+		}
+
+		if ($thing === null)
+		{
+			if ($access === false)
 			{
-				header('WWW-Authenticate: Basic realm="Private"');
 				txp_die(gTxt('auth_required'), '401');
 			}
+
+			return '';
 		}
+
+		return parse(EvalElse($thing, $access));
 	}
 
 // -------------------------------------------------------------
