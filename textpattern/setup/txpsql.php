@@ -280,7 +280,9 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_log` (
   `method` varchar(16) NOT NULL default 'GET',
   `ip` varchar(16) NOT NULL default '',
   PRIMARY KEY  (`id`),
-  KEY `time` (`time`)
+  KEY `time` (`time`),
+  KEY `page` (`page`),
+  KEY `ip` (`ip`)
 ) $tabletype AUTO_INCREMENT=77 ";
 
 $create_sql[] = "CREATE TABLE `".PFX."txp_page` (
