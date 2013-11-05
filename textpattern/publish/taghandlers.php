@@ -1064,7 +1064,7 @@
 
 		if ($pass === null)
 		{
-			$access = ($user = is_logged_in($login)) !== false && ($privs === null || !in_list($user['privs'], $privs));
+			$access = ($user = is_logged_in($login)) !== false && ($privs === null || in_list($user['privs'], $privs));
 		}
 		else
 		{
