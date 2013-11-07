@@ -79,7 +79,7 @@
 		}
 
 		$prefnames = safe_rows_start(
-			"name, event, user_name",
+			"name, event, user_name, val",
 			'txp_prefs',
 			join(' and ', $sql)
 		);
@@ -138,6 +138,16 @@
 			if (!isset($post[$name]) || !has_privs('prefs.'.$event))
 			{
 				continue;
+			}
+
+			if ($name === 'logging' && $post[$name] === 'none' && $post[$name] !== $val)
+			{
+				safe_truncate('txp_log');
+			}
+
+			if ($name === 'expire_logs_after' && (int) $post[$name] !== (int) $val)
+			{
+				safe_delete('txp_log', 'time < date_sub(now(), interval '.intval($post[$name]).' day)');
 			}
 
 			update_pref($name, (string) $post[$name], null, null, null, null, (string) $user_name);
