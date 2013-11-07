@@ -35,6 +35,11 @@
 
 	if ($event == 'log')
 	{
+		if (get_pref('logging') === 'none' || !intval(get_pref('expire_logs_after')))
+		{
+			require_privs();
+		}
+
 		require_privs('log');
 
 		$available_steps = array(

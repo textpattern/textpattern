@@ -287,7 +287,6 @@ echo $theme->html_head();
 			gTxt('tab_preferences') => 'prefs',
 			gTxt('tab_languages')   => 'lang',
 			gTxt('tab_site_admin')  => 'admin',
-			gTxt('tab_logs')        => 'log',
 			gTxt('tab_plugins')     => 'plugin',
 			gTxt('tab_import')      => 'import',
 		);
@@ -298,6 +297,11 @@ echo $theme->html_head();
 		if (get_pref('use_comments', 1))
 		{
 			$areas['content'][gTxt('tab_comments')] = 'discuss';
+		}
+
+		if (get_pref('logging') !== 'none' && get_pref('expire_logs_after'))
+		{
+			$areas['content'][gTxt('tab_logs')] = 'log';
 		}
 
 		if (is_array($plugin_areas))
