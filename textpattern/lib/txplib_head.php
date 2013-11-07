@@ -301,7 +301,7 @@ echo $theme->html_head();
 
 		if (get_pref('logging') !== 'none' && get_pref('expire_logs_after'))
 		{
-			$areas['content'][gTxt('tab_logs')] = 'log';
+			$areas['admin'][gTxt('tab_logs')] = 'log';
 		}
 
 		if (is_array($plugin_areas))
