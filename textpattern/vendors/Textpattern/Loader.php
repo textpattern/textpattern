@@ -24,11 +24,12 @@
 /**
  * Autoloader.
  *
+ * <code>
+ * Txp::get('Loader', '/path/to/directory')->register();
+ * </code>
+ *
  * @since   4.6.0
  * @package Autoloader
- * @example
- * $loader = new Textpattern_Loader(txpath . '/vendors');
- * $loader->register();
  */
 
 class Textpattern_Loader
