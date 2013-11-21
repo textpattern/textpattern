@@ -24,11 +24,12 @@
 /**
  * Generates a password.
  *
+ * <code>
+ * echo Txp::get('PasswordGenerator')->generate(16);
+ * </code>
+ *
  * @since   4.6.0
  * @package Password
- * @example
- * $password = new Textpattern_Password_Generator();
- * echo $password->generate(16);
  */
 
 class Textpattern_Password_Generator
@@ -60,11 +61,12 @@ class Textpattern_Password_Generator
 	/**
 	 * Generates a random password.
 	 *
+	 * <code>
+	 * echo Txp::get('PasswordGenerator')->generate(16);
+	 * </code>
+	 *
 	 * @param  int    $length The length of the generated password
 	 * @return string The password
-	 * @example
-	 * $password = new Textpattern_Password_Generator();
-	 * echo $password->generate(16);
 	 */
 
 	public function generate($length)

@@ -24,11 +24,12 @@
 /**
  * Hashes a password.
  *
+ * <code>
+ * Txp::get('PasswordHash')->hash('password');
+ * </code>
+ *
  * @since   4.6.0
  * @package Password
- * @example
- * $password = new Textpattern_Password_Hash();
- * echo $password->hash('password');
  */
 
 class Textpattern_Password_Hash extends Textpattern_Adaptable_Providable
