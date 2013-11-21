@@ -27,11 +27,12 @@
  * Wraps around Multibyte string extension,
  * offering multi-byte safe string functions.
  *
+ * <code>
+ * echo (string) Txp::get('TypeString', 'Hello World!')->trim()->replace('!', '.')->lower();
+ * </code>
+ *
  * @since   4.6.0
  * @package Type
- * @example
- * $string = new Textpattern_Type_String(' Hello World! ');
- * echo (string) $string->trim()->replace('!', '.')->lower();
  */
 
 class Textpattern_Type_String implements Textpattern_Type_Template
@@ -92,10 +93,12 @@ class Textpattern_Type_String implements Textpattern_Type_Template
 	/**
 	 * Gets the string.
 	 *
+	 * <code>
+	 * echo (string) Txp::get('TypeString', 'Hello World!');
+	 * </code>
+	 *
 	 * @return string
 	 * @see    Textpattern_Type_String::getString()
-	 * @example
-	 * echo (string) new Textpattern_Type_String('Hello World!');
 	 */
 
 	public function __toString()
@@ -106,11 +109,12 @@ class Textpattern_Type_String implements Textpattern_Type_Template
 	/**
 	 * Gets the string.
 	 *
+	 * <code>
+	 * echo Txp::get('TypeString', 'Hello World!')->getString();
+	 * </code>
+	 *
 	 * @return string
 	 * @see    Textpattern_Type_String::_toString()
-	 * @example
-	 * $string = new Textpattern_Type_String('Hello World!');
-	 * echo $string->getString();
 	 */
 
 	public function getString()
@@ -121,10 +125,11 @@ class Textpattern_Type_String implements Textpattern_Type_Template
 	/**
 	 * Gets string length.
 	 *
+	 * <code>
+	 * echo Txp::get('TypeString', 'Hello World!')->getLength();
+	 * </code>
+	 *
 	 * @return int
-	 * @example
-	 * $string = new Textpattern_Type_String('Hello World!');
-	 * echo $string->getLength();
 	 */
 
 	public function getLength()
@@ -145,12 +150,13 @@ class Textpattern_Type_String implements Textpattern_Type_Template
 	/**
 	 * Finds the first occurrence of a string in the string.
 	 *
+	 * <code>
+	 * echo Txp::get('TypeString', '#@language')->position('@');
+	 * </code>
+	 *
 	 * @param  string   $needle The string to find
 	 * @param  int      $offset The search offset
 	 * @return int|bool FALSE if the string does not contain results
-	 * @example
-	 * $string = new Textpattern_Type_String('#@language');
-	 * echo $string->position('@');
 	 */
 
 	public function position($needle, $offset = 0)
@@ -166,11 +172,12 @@ class Textpattern_Type_String implements Textpattern_Type_Template
 	/**
 	 * Gets substring count.
 	 *
+	 * <code>
+	 * echo Txp::get('TypeString', 'Hello World!')->count('ello');
+	 * </code>
+	 *
 	 * @param  string $needle The string to find
 	 * @return int
-	 * @example
-	 * $string = new Textpattern_Type_String('Hello World!');
-	 * echo $string->count('ello');
 	 */
 
 	public function count($needle)
@@ -186,10 +193,11 @@ class Textpattern_Type_String implements Textpattern_Type_Template
 	/**
 	 * Converts the string to a callback.
 	 *
+	 * <code>
+	 * Txp::get('TypeString', 'Textpattern_Password_Hash->hash')->toCallback();
+	 * </code>
+	 *
 	 * @return mixed Callable
-	 * @example
-	 * $string = new Textpattern_Type_String('Textpattern_Password_Hash->hash');
-	 * $string->toCallback();
 	 */
 
 	public function toCallback()
@@ -216,10 +224,11 @@ class Textpattern_Type_String implements Textpattern_Type_Template
 	/**
 	 * Add slashes.
 	 *
+	 * <code>
+	 * echo (string) Txp::get('TypeString', 'Some "content" to slash.')->addSlashes();
+	 * </code>
+	 *
 	 * @return Textpattern_Type_String
-	 * @example
-	 * $string = new Textpattern_Type_String('Some "content" to slash.');
-	 * echo (string) $string->addSlashes();
 	 */
 
 	public function addSlashes()
@@ -231,12 +240,13 @@ class Textpattern_Type_String implements Textpattern_Type_Template
 	/**
 	 * HTML encodes the string.
 	 *
+	 * <code>
+	 * echo (string) Txp::get('TypeString', 'Hello World!')->substring(2, 5);
+	 * </code>
+	 *
 	 * @param   int    $flags         A bitmask of one or more flags. The default is ENT_QUOTES
 	 * @param   bool   $double_encode When double_encode is turned off PHP will not encode existing HTML entities, the default is to convert everything
 	 * @return Textpattern_Type_String
-	 * @example
-	 * $string = new Textpattern_Type_String('Hello World!');
-	 * echo (string) $string->html();
 	 */
 
 	public function html($flags = ENT_QUOTES, $double_encode = true)
@@ -248,12 +258,13 @@ class Textpattern_Type_String implements Textpattern_Type_Template
 	/**
 	 * Splits part of the string.
 	 *
+	 * <code>
+	 * echo (string) Txp::get('TypeString', 'Hello World!')->substring(2, 5);
+	 * </code>
+	 *
 	 * @param  int $start  The start
 	 * @param  int $length The length
 	 * @return Textpattern_Type_String
-	 * @example
-	 * $string = new Textpattern_Type_String('Hello World!');
-	 * echo (string) $string->substring(2, 5);
 	 */
 
 	public function substring($start, $length = null)
@@ -273,12 +284,13 @@ class Textpattern_Type_String implements Textpattern_Type_Template
 	/**
 	 * Replaces all occurrences with replacements.
 	 *
+	 * <code>
+	 * echo (string) Txp::get('TypeString', 'Hello World!')->replace('!', '.');
+	 * </code>
+	 *
 	 * @param  mixed $from The needle to find
 	 * @param  mixed $to   The replacement
 	 * @return Textpattern_Type_String
-	 * @example
-	 * $string = new Textpattern_Type_String('Hello World!');
-	 * echo (string) $string->replace('!', '.');
 	 */
 
 	public function replace($from, $to)
@@ -290,12 +302,13 @@ class Textpattern_Type_String implements Textpattern_Type_Template
 	/**
 	 * Translates substrings.
 	 *
+	 * <code>
+	 * echo (string) Txp::get('TypeString', 'Article <strong>{title}</strong> deleted.')->tr('{title}', 'Hello {title} variable.');
+	 * </code>
+	 *
 	 * @param  string $from String to find
 	 * @param  string $to   The replacement
 	 * @return Textpattern_Type_String
-	 * @example
-	 * $string = new Textpattern_Type_String('Article <strong>{title}</strong> deleted.');
-	 * echo (string) $string->tr('{title}', 'Hello {title} variable.');
 	 */
 
 	public function tr($from, $to = null)
@@ -307,11 +320,12 @@ class Textpattern_Type_String implements Textpattern_Type_Template
 	/**
 	 * Trims surrounding whitespace or other characters.
 	 *
+	 * <code>
+	 * echo (string) Txp::get('TypeString', ' Hello World! ')->trim();
+	 * </code>
+	 *
 	 * @param  string $characters Character list
 	 * @return Textpattern_Type_String
-	 * @example
-	 * $string = new Textpattern_Type_String(' Hello World! ');
-	 * echo (string) $string->trim();
 	 */
 
 	public function trim($characters = "\t\n\r\0\x0B")
@@ -323,11 +337,12 @@ class Textpattern_Type_String implements Textpattern_Type_Template
 	/**
 	 * Trims whitespace or other characters from the beginning.
 	 *
+	 * <code>
+	 * echo (string) Txp::get('TypeString', ' Hello World! ')->ltrim();
+	 * </code>
+	 *
 	 * @param  string $characters Character list
 	 * @return Textpattern_Type_String
-	 * @example
-	 * $string = new Textpattern_Type_String(' Hello World! ');
-	 * echo (string) $string->ltrim();
 	 */
 
 	public function ltrim($characters = "\t\n\r\0\x0B")
@@ -339,11 +354,12 @@ class Textpattern_Type_String implements Textpattern_Type_Template
 	/**
 	 * Trims whitespace or other characters from the end.
 	 *
+	 * <code>
+	 * echo (string) Txp::get('TypeString', ' Hello World! ')->rtrim();
+	 * </code>
+	 *
 	 * @param  string $characters Character list
 	 * @return Textpattern_Type_String
-	 * @example
-	 * $string = new Textpattern_Type_String(' Hello World! ');
-	 * echo (string) $string->rtrim();
 	 */
 
 	public function rtrim($characters = "\t\n\r\0\x0B")
@@ -355,12 +371,13 @@ class Textpattern_Type_String implements Textpattern_Type_Template
 	/**
 	 * Splits string to chunks.
 	 *
+	 * <code>
+	 * echo (string) Txp::get('TypeString', 'Hello World!')->chunk(1);
+	 * </code>
+	 *
 	 * @param  int    $length    The chunk length
 	 * @param  string $delimiter The delimiter
 	 * @return Textpattern_Type_String
-	 * @example
-	 * $string = new Textpattern_Type_String('Hello World!');
-	 * echo (string) $string->chunk(1);
 	 */
 
 	public function chunk($length = 76, $delimiter = n)
@@ -372,13 +389,14 @@ class Textpattern_Type_String implements Textpattern_Type_Template
 	/**
 	 * Word wraps the string.
 	 *
+	 * <code>
+	 * echo (string) Txp::get('TypeString', 'Hello World!')->wordWrap();
+	 * </code>
+	 *
 	 * @param  int    $length    The line length
 	 * @param  string $delimiter The line delimiter
 	 * @param  bool   $cut       Cut off words
 	 * @return Textpattern_Type_String
-	 * @example
-	 * $string = new Textpattern_Type_String('Hello World!');
-	 * echo (string) $string->wordWrap();
 	 */
 
 	public function wordWrap($length = 75, $delimiter = n, $cut = false)
@@ -390,10 +408,11 @@ class Textpattern_Type_String implements Textpattern_Type_Template
 	/**
 	 * Converts the string to lowercase.
 	 *
+	 * <code>
+	 * echo (string) Txp::get('TypeString', 'Hello World!')->lower();
+	 * </code>
+	 *
 	 * @return Textpattern_Type_String
-	 * @example
-	 * $string = new Textpattern_Type_String('Hello World!');
-	 * echo (string) $string->lower();
 	 */
 
 	public function lower()
@@ -413,10 +432,11 @@ class Textpattern_Type_String implements Textpattern_Type_Template
 	/**
 	 * Converts the string to uppercase.
 	 *
+	 * <code>
+	 * echo (string) Txp::get('TypeString', 'Hello World!')->upper();
+	 * </code>
+	 *
 	 * @return Textpattern_Type_String
-	 * @example
-	 * $string = new Textpattern_Type_String('Hello World!');
-	 * echo (string) $string->upper();
 	 */
 
 	public function upper()
@@ -436,10 +456,11 @@ class Textpattern_Type_String implements Textpattern_Type_Template
 	/**
 	 * Converts the string to titlecase.
 	 *
+	 * <code>
+	 * echo (string) Txp::get('TypeString', 'hello world!')->title();
+	 * </code>
+	 *
 	 * @return Textpattern_Type_String
-	 * @example
-	 * $string = new Textpattern_Type_String('hello world!');
-	 * echo (string) $string->title();
 	 */
 
 	public function title()
@@ -459,10 +480,11 @@ class Textpattern_Type_String implements Textpattern_Type_Template
 	/**
 	 * Uppercase the first letter.
 	 *
+	 * <code>
+	 * echo (string) Txp::get('TypeString', 'Hello World!')->ucfirst();
+	 * </code>
+	 *
 	 * @return Textpattern_Type_String
-	 * @example
-	 * $string = new Textpattern_Type_String('Hello World!');
-	 * echo (string) $string->ucfirst();
 	 */
 
 	public function ucfirst()
