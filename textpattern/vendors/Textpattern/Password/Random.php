@@ -24,7 +24,7 @@
 /**
  * Generates random bytes.
  *
- * Could be used as a seed or as an unique value itself.
+ * Could be used as a seed or as a unique value itself.
  * Note that the value is not intended to be human-readable,
  * and as such should not be used for passwords. To generate
  * passwords, see Textpattern_Password_Generator instead.
