@@ -35,7 +35,7 @@
  * @package Type
  */
 
-class Textpattern_Type_String implements Textpattern_Type_Template
+class Textpattern_Type_String implements Textpattern_Type_TypeInterface
 {
 	/**
 	 * The string.

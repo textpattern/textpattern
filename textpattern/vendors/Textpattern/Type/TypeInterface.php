@@ -22,13 +22,13 @@
  */
 
 /**
- * Type object template.
+ * Type object interface.
  *
  * @since   4.6.0
  * @package Type
  */
 
-interface Textpattern_Type_Template
+interface Textpattern_Type_TypeInterface
 {
 	/**
 	 * Gets string representation of the item.
