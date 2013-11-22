@@ -165,6 +165,41 @@ class Textpattern_L10n_Locale
 	}
 
 	/**
+	 * Gets a locale identifier for the given language code.
+	 *
+	 * This method takes a IETF language code and returns
+	 * a locale for it that works on the current system.
+	 *
+	 * The following returns 'en_GB.UTF-8':
+	 *
+	 * <code>
+	 * echo Txp::get('L10nLocale')->getLanguageLocale('en-GB');
+	 * </code>
+	 *
+	 * @param  string      $language The language
+	 * @return string|bool Locale code, or FALSE on error
+	 */
+
+	public function getLanguageLocale($language)
+	{
+		$locale = false;
+
+		if ($original = $this->getLocale(LC_TIME))
+		{
+			try
+			{
+				$locale = $this->setLocale(LC_TIME, $language)->getLocale(LC_TIME);
+				$this->setLocale(LC_TIME, $original);
+			}
+			catch (Exception $e)
+			{
+			}
+		}
+
+		return $locale;
+	}
+
+	/**
 	 * Gets a language code for the given locale identifier.
 	 *
 	 * This method supports various different formats used by
