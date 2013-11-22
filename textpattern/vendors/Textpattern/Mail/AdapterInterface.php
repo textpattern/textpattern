@@ -85,7 +85,7 @@ interface Textpattern_Mail_AdapterInterface extends Textpattern_Adaptable_Adapte
 	 * 	->send();
 	 * </code>
 	 *
-	 * @return bool
+	 * @return Textpattern_Mail_AdapterInterface
 	 * @throws Textpattern_Mail_Exception
 	 */
 
