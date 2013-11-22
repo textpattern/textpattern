@@ -123,4 +123,27 @@ class Textpattern_Mail_Encode
 		preg_match_all($pcre, $string, $matches);
 		return $start . join($end.$sep.' '.$start, array_map('base64_encode', $matches[0])) . $end;
 	}
+
+/**
+ * Converts an email address into unicode entities.
+ *
+ * <code>
+ * echo Txp::get('MailEncode')->entityObfuscateAddress('john.doe@example.com');
+ * </code>
+ *
+ * @param   string $address The email address
+ * @return  string Encoded email address
+ */
+
+	public function entityObfuscateAddress($address)
+	{
+		$ent = array();
+
+		for ($i = 0; $i < strlen($address); $i++)
+		{
+			$ent[] = "&#".ord(substr($address, $i, 1)).";";
+		}
+
+		return join('', $ent);
+	}
 }

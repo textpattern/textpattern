@@ -2890,21 +2890,16 @@
 /**
  * Converts an email address into unicode entities.
  *
- * @param   string $txt The email address
- * @return  string Encoded email address
- * @package Mail
+ * @param      string $txt The email address
+ * @return     string Encoded email address
+ * @package    Mail
+ * @deprecated in 4.6.0
+ * @see        Textpattern_Mail_Encode::entityObfuscateAddress()
  */
 
 	function eE($txt)
 	{
-		$ent = array();
-
-		for ($i = 0; $i < strlen($txt); $i++)
-		{
-			$ent[] = "&#".ord(substr($txt, $i, 1)).";";
-		}
-
-		return join('', $ent);
+		return Txp::get('MailEncode')->entityObfuscateAddress($txt);
 	}
 
 /**
