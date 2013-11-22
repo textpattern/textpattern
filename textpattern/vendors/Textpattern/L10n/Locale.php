@@ -24,10 +24,12 @@
 /**
  * Handles locales.
  *
+ * <code>
+ * echo Txp::get('L10nLocale')->setLocale(LC_ALL, 'da-dk')->getLocale();
+ * </code>
+ *
  * @since   4.6.0
  * @package L10n
- * @example
- * echo Txp::get('L10nLocale')->setLocale(LC_ALL, 'da-dk')->getLocale();
  */
 
 class Textpattern_L10n_Locale
@@ -91,17 +93,30 @@ class Textpattern_L10n_Locale
 	 * Sets the locale.
 	 *
 	 * This method wraps around system setlocale.
-	 * It accepts either a language code or some locale
-	 * identifier. The method tries to format the given
-	 * code so that it works on the system.
+	 * It takes a IETF language code and sets
+	 * the locale accordingly.
+	 *
+	 * The following would set the locale to English:
+	 *
+	 * <code>
+	 * Txp::get('L10nLocale')->setLocale(LC_ALL, 'en-GB');
+	 * </code>
+	 *
+	 * This would format currencies according to the Frech localisation:
+	 *
+	 * <code>
+	 * Txp::get('L10nLocale')->setLocale(LC_MONETARY, 'fr-FR');
+	 * echo money_format('%i', 51.99);
+	 * </code>
+	 *
+	 * The '51.99' would be returned as '51,99 EUR' if you have up to date
+	 * French locale installed on your system.
 	 *
 	 * @param  int    $category The localisation category to change
 	 * @param  string $locale   The locale or language code
 	 * @return Textpattern_L10n_Locale
 	 * @throws Exception
 	 * @see    setlocale()
-	 * @example
-	 * Txp::get('L10nLocale')->setLocale(LC_ALL, 'en-gb');
 	 */
 
 	public function setLocale($category, $locale)
@@ -132,6 +147,10 @@ class Textpattern_L10n_Locale
 	/**
 	 * Gets the current locale.
 	 *
+	 * <code>
+	 * echo Txp::get('L10nLocale')->getLocale(LC_ALL);
+	 * </code>
+	 *
 	 * @param  int   $category The localisation category
 	 * @return mixed
 	 */
@@ -143,6 +162,23 @@ class Textpattern_L10n_Locale
 
 	/**
 	 * Gets a language code for the given locale identifier.
+	 *
+	 * This method supports various different formats used by
+	 * different host platform. These formats include
+	 * IETF language tag, POSIX locale name and language name
+	 * in English.
+	 *
+	 * All these will return 'en-GB':
+	 *
+	 * <code>
+	 * echo Txp::get('L10nLocale')->getLocaleLanguage('en_GB.UTF-8');
+	 * echo Txp::get('L10nLocale')->getLocaleLanguage('en-gb');
+	 * echo Txp::get('L10nLocale')->getLocaleLanguage('english');
+	 * echo Txp::get('L10nLocale')->getLocaleLanguage('c');
+	 * echo Txp::get('L10nLocale')->getLocaleLanguage('English_UK.1252');
+	 * </code>
+	 *
+	 * If the specified locale isn't supported, FALSE will be returned.
 	 *
 	 * @param  string      $locale The locale identifier
 	 * @return string|bool The language code, or FALSE on failure
@@ -174,6 +210,10 @@ class Textpattern_L10n_Locale
 	 * This method exports the character set from the
 	 * current locale string as returned by the OS.
 	 *
+	 * <code>
+	 * echo Txp::get('L10nLocale')->getCharset();
+	 * </code>
+	 *
 	 * @param  int         $category The localisation category
 	 * @return string|bool The character set, or FALSE on failure
 	 */
@@ -197,6 +237,10 @@ class Textpattern_L10n_Locale
 
 	/**
 	 * Gets the language from the current locale.
+	 *
+	 * <code>
+	 * echo Txp::get('L10nLocale')->getLanguage();
+	 * </code>
 	 *
 	 * @param  int         $category The localisation category
 	 * @return string|bool The language code, or FALSE on failure
