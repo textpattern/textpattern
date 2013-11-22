@@ -107,7 +107,7 @@ class Textpattern_Mail_Encode
 			return $string;
 		}
 
-		if ($this->charset = 'ISO-8859-1')
+		if ($this->charset == 'ISO-8859-1')
 		{
 			$start = '=?ISO-8859-1?B?';
 			$pcre  = '/.{1,42}/s';
