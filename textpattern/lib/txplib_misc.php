@@ -2878,8 +2878,7 @@
 	{
 		try
 		{
-			$encode = new Textpattern_Mail_Encode();
-			return $encode->header($string, $type);
+			return Txp::get('MailEncode')->header($string, $type);
 		}
 		catch (Textpattern_Mail_Exception $e)
 		{
