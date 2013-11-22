@@ -30,7 +30,15 @@
 	define("txpinterface", "admin");
 	error_reporting(E_ALL | E_STRICT);
 	@ini_set("display_errors", "1");
-	
+
+	include txpath.'/vendors/Textpattern/Loader.php';
+
+	$loader = new Textpattern_Loader(txpath.'/vendors');
+	$loader->register();
+
+	$loader = new Textpattern_Loader(txpath.'/lib');
+	$loader->register();
+
 	include_once txpath.'/lib/constants.php';
 	include_once txpath.'/lib/txplib_html.php';
 	include_once txpath.'/lib/txplib_forms.php';
