@@ -176,6 +176,9 @@ class Textpattern_L10n_Locale
 	 * echo Txp::get('L10nLocale')->getLanguageLocale('en-GB');
 	 * </code>
 	 *
+	 * Returns the current locale name if the system doesn't
+	 * have anything more appropriate.
+	 *
 	 * @param  string      $language The language
 	 * @return string|bool Locale code, or FALSE on error
 	 */
@@ -186,6 +189,8 @@ class Textpattern_L10n_Locale
 
 		if ($original = $this->getLocale(LC_TIME))
 		{
+			$locale = $original;
+
 			try
 			{
 				$locale = $this->setLocale(LC_TIME, $language)->getLocale(LC_TIME);
