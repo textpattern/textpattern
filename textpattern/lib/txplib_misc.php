@@ -2732,59 +2732,26 @@
 
 	function maxMemUsage($message = 'none', $returnit = false)
 	{
-		$memory = get_txp_memory_usage($message);
-
-		if ($returnit)
+		try
 		{
-			if ($memory)
+			Txp::get('DebugMemory')->logPeakUsage($message);
+
+			if ($returnit)
 			{
-				return n.comment(sprintf('Memory: %sKb, %s',
-					ceil($memory[0]/1024), $memory[1]));
+				if (Txp::get('DebugMemory')->getLoggedUsage())
+				{
+					return n.comment(sprintf('Memory: %sKb, %s',
+					ceil(Txp::get('DebugMemory')->getLoggedUsage()/1024), Txp::get('DebugMemory')->getLoggedMessage()));
+				}
+				else
+				{
+					return n.comment('Memory: no info available');
+				}
 			}
-			else
-			{
-				return n.comment('Memory: no info available');
-			}
 		}
-	}
-
-/**
- * Gets Textpattern peak memory usage.
- *
- * Peak memory usage is checked, calculated and logged each
- * time this function is invoked.
- *
- * @param   string     $message The message associated with the logged memory usage
- * @return  array|bool An array consisting of peak usage and its message, or FALSE on error
- * @since   4.6.0
- * @package Debug
- * @example
- * if ($memory = get_txp_memory_usage())
- * {
- * 	list($usage, $message) = $memory;
- * 	echo "Memory: {$usage}, {$message}.";
- * }
- */
-
-	function get_txp_memory_usage($message = 'none')
-	{
-		static $memory_top = 0;
-		static $memory_message = '';
-
-		if (!is_callable('memory_get_usage'))
+		catch (Exception $e)
 		{
-			return false;
 		}
-
-		$memory_now = memory_get_usage();
-
-		if ($memory_now > $memory_top)
-		{
-			$memory_top = $memory_now;
-			$memory_message = $message;
-		}
-
-		return array($memory_top, $memory_message);
 	}
 
 /**
