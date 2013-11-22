@@ -25,7 +25,7 @@
  * Exception.
  *
  * @since   4.6.0
- * @package Email
+ * @package Mail
  */
 
 class Textpattern_Mail_Exception extends Exception

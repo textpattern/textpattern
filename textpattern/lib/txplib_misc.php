@@ -2868,13 +2868,23 @@
 		if ($sender)
 		{
 			extract($sender);
-			$mail = Txp::get('MailCompose');
-			$mail->from($email, $RealName);
-			$mail->to($to_address);
-			$mail->subject($subject);
-			$mail->body($body);
-			$mail->replyTo($reply_to);
-			return $mail->send();
+
+			try
+			{
+				Txp::get('MailCompose')
+					->from($email, $RealName)
+					->to($to_address)
+					->subject($subject)
+					->body($body)
+					->replyTo($reply_to)
+					->send();
+			}
+			catch (Exception $e)
+			{
+				return false;
+			}
+
+			return true;
 		}
 
 		return false;

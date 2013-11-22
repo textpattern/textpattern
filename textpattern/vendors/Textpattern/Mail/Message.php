@@ -25,7 +25,7 @@
  * Mail message fields.
  *
  * @since   4.6.0
- * @package Email
+ * @package Mail
  */
 
 class Textpattern_Mail_Message
@@ -44,7 +44,7 @@ class Textpattern_Mail_Message
 	 * @var array
 	 */
 
-	public $sendTo = array();
+	public $to = array();
 
 	/**
 	 * The subject.
@@ -92,5 +92,9 @@ class Textpattern_Mail_Message
 	 * @var array
 	 */
 
-	public $headers = array();
+	public $headers = array(
+		'X-Mailer'                  => 'Textpattern',
+		'Content-Transfer-Encoding' => '8bit',
+		'Content-Type'              => 'text/plain; charset="UTF-8"',
+	);
 }

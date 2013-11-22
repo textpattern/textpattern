@@ -25,7 +25,7 @@
  * Collection of email related encoders.
  *
  * @since   4.6.0
- * @package Email
+ * @package Mail
  */
 
 class Textpattern_Mail_Encode
