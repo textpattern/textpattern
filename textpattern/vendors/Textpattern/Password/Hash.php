@@ -22,10 +22,10 @@
  */
 
 /**
- * Hashes a password.
+ * Hashes and verifies a password.
  *
  * <code>
- * Txp::get('PasswordHash')->hash('password');
+ * echo Txp::get('PasswordHash')->hash('password');
  * </code>
  *
  * @since   4.6.0
