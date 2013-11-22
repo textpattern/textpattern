@@ -6131,77 +6131,26 @@ eod;
  *
  * The function name is misleading but remains for legacy reasons.
  *
- * @param   string $lang
- * @return  string Current locale
- * @package L10n
+ * @param      string $lang
+ * @return     string Current locale
+ * @package    L10n
+ * @deprecated in 4.6.0
+ * @see        Textpattern_L10n_Locale::setLocale()
  */
 
 	function getlocale($lang)
 	{
 		global $locale;
 
-		if (empty($locale))
+		try
 		{
-			$locale = @setlocale(LC_TIME, '0');
+			Txp::get('L10nLocale')->setLocale(LC_TIME, array($lang, $locale));
+		}
+		catch (Exception $e)
+		{
 		}
 
-		// Locale identifiers vary from system to system.  The
-		// following code will attempt to discover which identifiers
-		// are available.  We'll need to expand these lists to
-		// improve support.
-		// ISO identifiers: http://www.w3.org/WAI/ER/IG/ert/iso639.htm
-		// Windows: http://msdn.microsoft.com/library/default.asp?url=/library/en-us/vclib/html/_crt_language_strings.asp
-		$guesses = array(
-			'ar-dz' => array('ar_DZ.UTF-8', 'ar_DZ', 'ara', 'ar', 'arabic', 'ar_DZ.ISO_8859-6'),
-			'bg-bg' => array('bg_BG.UTF-8', 'bg_BG', 'bg', 'bul', 'bulgarian', 'bg_BG.ISO8859-5'),
-			'ca-es' => array('ca_ES.UTF-8', 'ca_ES', 'cat', 'ca', 'catalan', 'ca_ES.ISO_8859-1'),
-			'cs-cz' => array('cs_CZ.UTF-8', 'cs_CZ', 'ces', 'cze', 'cs', 'csy', 'czech', 'cs_CZ.cs_CZ.ISO_8859-2'),
-			'da-dk' => array('da_DK.UTF-8', 'da_DK'),
-			'de-de' => array('de_DE.UTF-8', 'de_DE', 'de', 'deu', 'german', 'de_DE.ISO_8859-1'),
-			'en-gb' => array('en_GB.UTF-8', 'en_GB', 'en_UK', 'eng', 'en', 'english-uk', 'english', 'en_GB.ISO_8859-1','C'),
-			'en-us' => array('en_US.UTF-8', 'en_US', 'english-us', 'en_US.ISO_8859-1'),
-			'es-es' => array('es_ES.UTF-8', 'es_ES', 'esp', 'spanish', 'es_ES.ISO_8859-1'),
-			'et-ee' => array('et_EE.UTF-8', 'et_EE'),
-			'el-gr' => array('el_GR.UTF-8', 'el_GR', 'el', 'gre', 'greek', 'el_GR.ISO_8859-7'),
-			'fi-fi' => array('fi_FI.UTF-8', 'fi_FI', 'fin', 'fi', 'finnish', 'fi_FI.ISO_8859-1'),
-			'fr-fr' => array('fr_FR.UTF-8', 'fr_FR', 'fra', 'fre', 'fr', 'french', 'fr_FR.ISO_8859-1'),
-			'gl-gz' => array('gl_GZ.UTF-8', 'gl_GZ', 'glg', 'gl', '', ''),
-			'he_il' => array('he_IL.UTF-8', 'he_IL', 'heb', 'he', 'hebrew', 'he_IL.ISO_8859-8'),
-			'hr-hr' => array('hr_HR.UTF-8', 'hr_HR', 'hr'),
-			'hu-hu' => array('hu_HU.UTF-8', 'hu_HU', 'hun', 'hu', 'hungarian', 'hu_HU.ISO8859-2'),
-			'id-id' => array('id_ID.UTF-8', 'id_ID', 'id', 'ind', 'indonesian','id_ID.ISO_8859-1'),
-			'is-is' => array('is_IS.UTF-8', 'is_IS'),
-			'it-it' => array('it_IT.UTF-8', 'it_IT', 'it', 'ita', 'italian', 'it_IT.ISO_8859-1'),
-			'ja-jp' => array('ja_JP.UTF-8', 'ja_JP', 'ja', 'jpn', 'japanese', 'ja_JP.ISO_8859-1'),
-			'ko-kr' => array('ko_KR.UTF-8', 'ko_KR', 'ko', 'kor', 'korean'),
-			'lv-lv' => array('lv_LV.UTF-8', 'lv_LV', 'lv', 'lav'),
-			'nl-nl' => array('nl_NL.UTF-8', 'nl_NL', 'dut', 'nla', 'nl', 'nld', 'dutch', 'nl_NL.ISO_8859-1'),
-			'no-no' => array('no_NO.UTF-8', 'no_NO', 'no', 'nor', 'norwegian', 'no_NO.ISO_8859-1'),
-			'pl-pl' => array('pl_PL.UTF-8', 'pl_PL', 'pl', 'pol', 'polish', ''),
-			'pt-br' => array('pt_BR.UTF-8', 'pt_BR', 'pt', 'ptb', 'portuguese-brazil', ''),
-			'pt-pt' => array('pt_PT.UTF-8', 'pt_PT', 'por', 'portuguese', 'pt_PT.ISO_8859-1'),
-			'ro-ro' => array('ro_RO.UTF-8', 'ro_RO', 'ron', 'rum', 'ro', 'romanian', 'ro_RO.ISO8859-2'),
-			'ru-ru' => array('ru_RU.UTF-8', 'ru_RU', 'ru', 'rus', 'russian', 'ru_RU.ISO8859-5'),
-			'sk-sk' => array('sk_SK.UTF-8', 'sk_SK', 'sk', 'slo', 'slk', 'sky', 'slovak', 'sk_SK.ISO_8859-1'),
-			'sv-se' => array('sv_SE.UTF-8', 'sv_SE', 'sv', 'swe', 'sve', 'swedish', 'sv_SE.ISO_8859-1'),
-			'th-th' => array('th_TH.UTF-8', 'th_TH', 'th', 'tha', 'thai', 'th_TH.ISO_8859-11'),
-			'uk-ua' => array('uk_UA.UTF-8', 'uk_UA', 'uk', 'ukr'),
-			'vi-vn' => array('vi_VN.UTF-8', 'vi_VN', 'vi', 'vie'),
-			'zh-cn' => array('zh_CN.UTF-8', 'zh_CN'),
-			'zh-tw' => array('zh_TW.UTF-8', 'zh_TW'),
-		);
-
-		if (!empty($guesses[$lang]))
-		{
-			$l = @setlocale(LC_TIME, $guesses[$lang]);
-			if ($l !== false)
-			{
-				$locale = $l;
-			}
-		}
-		@setlocale(LC_TIME, $locale);
-
-		return $locale;
+		return Txp::get('L10nLocale')->getLocale(LC_TIME);
 	}
 
 /**

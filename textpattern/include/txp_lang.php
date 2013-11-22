@@ -103,7 +103,7 @@
 		// Select and save active language.
 		if (!$message && ps('step') == 'list_languages' && ps('language'))
 		{
-			$locale = doSlash(getlocale(ps('language')));
+			$locale = doSlash(Txp::get('L10nLocale')->getLanguageLocale(ps('language')));
 			safe_update('txp_prefs', "val='". doSlash(ps('language')) ."'", "name='language'");
 			safe_update('txp_prefs', "val='". $locale ."'", "name='locale'");
 			$textarray = load_lang(doSlash(ps('language')));
