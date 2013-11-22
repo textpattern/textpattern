@@ -112,8 +112,11 @@ class Textpattern_L10n_Locale
 	 * The '51.99' would be returned as '51,99 EUR' if you have up to date
 	 * French locale installed on your system.
 	 *
-	 * @param  int    $category The localisation category to change
-	 * @param  string $locale   The locale or language code
+	 * If an array of locales is provided, the first one that works
+	 * is used.
+	 *
+	 * @param  int          $category The localisation category to change
+	 * @param  string|array $locale   The language code
 	 * @return Textpattern_L10n_Locale
 	 * @throws Exception
 	 * @see    setlocale()
@@ -121,27 +124,28 @@ class Textpattern_L10n_Locale
 
 	public function setLocale($category, $locale)
 	{
-		$code = strtolower($locale);
-
-		foreach ($this->locales as $key => $data)
+		foreach ((array) $locale as $name)
 		{
-			if (strtolower($key) === $code)
-			{
-				if (@setlocale($category, $data) === false)
-				{
-					throw new Exception('unable_to_set_locale');
-				}
+			$code = strtolower($name);
 
+			foreach ($this->locales as $key => $data)
+			{
+				if (strtolower($key) === $code)
+				{
+					if (@setlocale($category, $data))
+					{
+						return $this;
+					}
+				}
+			}
+
+			if (@setlocale($category, $name))
+			{
 				return $this;
 			}
 		}
 
-		if (@setlocale($category, $locale) === false)
-		{
-			throw new Exception('unable_to_set_locale');
-		}
-
-		return $this;
+		throw new Exception(gTxt('invalid_argument', array('{name}' => 'locale')));
 	}
 
 	/**
