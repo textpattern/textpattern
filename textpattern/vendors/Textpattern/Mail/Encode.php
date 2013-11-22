@@ -82,11 +82,10 @@ class Textpattern_Mail_Encode
 	/**
 	 * Encodes a string for use in an email header.
 	 *
-	 * @param   string $string The string
-	 * @param   string $type   The type of header, either "text" or "phrase"
-	 * @return  string
-	 * @package Email
-	 * @throws  Textpattern_Mail_Exception
+	 * @param  string $string The string
+	 * @param  string $type   The type of header, either "text" or "phrase"
+	 * @return string
+	 * @throws Textpattern_Mail_Exception
 	 */
 
 	public function header($string, $type)
