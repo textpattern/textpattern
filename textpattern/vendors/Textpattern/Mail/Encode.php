@@ -101,7 +101,7 @@ class Textpattern_Mail_Encode
 			}
 			else if ($type != 'text')
 			{
-				throw new Textpattern_Mail_Exception('Unknown encode_mailheader type.');
+				throw new Textpattern_Mail_Exception(gTxt('invalid_argument', array('{name}' => 'type')));
 			}
 
 			return $string;

@@ -126,7 +126,7 @@ class Textpattern_Mail_Adapter_Mail implements Textpattern_Mail_AdapterInterface
 		{
 			if (property_exists($this->mail, $name) === false)
 			{
-				throw new Textpattern_Mail_Exception(gTxt('property_does_not_exists'));
+				throw new Textpattern_Mail_Exception(gTxt('invalid_argument', array('{name}' => 'name')));
 			}
 
 			return $this->mail->$name;
@@ -148,7 +148,7 @@ class Textpattern_Mail_Adapter_Mail implements Textpattern_Mail_AdapterInterface
 	{
 		if (!is_scalar($subject) || (string) $subject === '')
 		{
-			throw new Textpattern_Mail_Exception(gTxt('invalid_subject'));
+			throw new Textpattern_Mail_Exception(gTxt('invalid_argument', array('{name}' => 'subject')));
 		}
 
 		$this->mail->subject = $subject;
@@ -270,6 +270,6 @@ class Textpattern_Mail_Adapter_Mail implements Textpattern_Mail_AdapterInterface
 			return $this;
 		}
 
-		throw new Textpattern_Mail_Exception(gTxt('invalid_email'));
+		throw new Textpattern_Mail_Exception(gTxt('invalid_argument', array('{name}' => 'address')));
 	}
 }
