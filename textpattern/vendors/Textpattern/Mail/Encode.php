@@ -91,31 +91,32 @@ class Textpattern_Mail_Encode
 
 	public function header($string, $type)
 	{
-		if (strpos($string, '=?') === false and !preg_match('/[\x00-\x1F\x7F-\xFF]/', $string))
+		if (strpos($string, '=?') === false && !preg_match('/[\x00-\x1F\x7F-\xFF]/', $string))
 		{
-			if ("phrase" == $type)
+			if ($type == 'phrase')
 			{
 				if (preg_match('/[][()<>@,;:".\x5C]/', $string))
 				{
 					$string = '"'. strtr($string, array("\\" => "\\\\", '"' => '\"')) . '"';
 				}
 			}
-			elseif ("text" != $type)
+			else if ($type != 'text')
 			{
 				throw new Textpattern_Mail_Exception('Unknown encode_mailheader type.');
 			}
+
 			return $string;
 		}
 
 		if ($this->charset == 'ISO-8859-1')
 		{
 			$start = '=?ISO-8859-1?B?';
-			$pcre  = '/.{1,42}/s';
+			$pcre = '/.{1,42}/s';
 		}
 		else
 		{
 			$start = '=?UTF-8?B?';
-			$pcre  = '/.{1,45}(?=[\x00-\x7F\xC0-\xFF]|$)/s';
+			$pcre = '/.{1,45}(?=[\x00-\x7F\xC0-\xFF]|$)/s';
 		}
 
 		$end = '?=';
