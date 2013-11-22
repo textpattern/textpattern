@@ -2761,7 +2761,7 @@
  *
  * @param   string $str The string
  * @return  string
- * @package Email
+ * @package Mail
  */
 
 	function strip_rn($str)
@@ -2794,18 +2794,20 @@
 /**
  * Sends an email message as the currently logged in user.
  *
+ * <code>
+ * if (txpMail('john.doe@example.com', 'Subject', 'Some message'))
+ * {
+ * 	echo "Email sent to 'john.doe@example.com'.";
+ * }
+ * </code>
+ *
  * @param   string $to_address The receiver
  * @param   string $subject    The subject
  * @param   string $body       The message
  * @param   string $reply_to   The reply to address
  * @return  bool   Returns FALSE when sending failed
  * @see     Textpattern_Mail_Compose
- * @package Email
- * @example
- * if (txpMail('john.doe@example.com', 'Subject', 'Some message'))
- * {
- * 	echo "Email sent to 'john.doe@example.com'.";
- * }
+ * @package Mail
  */
 
 	function txpMail($to_address, $subject, $body, $reply_to = null)
@@ -2867,7 +2869,7 @@
  * @param      string $string The string
  * @param      string $type   The type of header, either "text" or "phrase"
  * @return     string
- * @package    Email
+ * @package    Mail
  * @deprecated in 4.6.0
  * @see        Textpattern_Mail_Encode::header()
  */
@@ -2890,7 +2892,7 @@
  *
  * @param   string $txt The email address
  * @return  string Encoded email address
- * @package Email
+ * @package Mail
  */
 
 	function eE($txt)
