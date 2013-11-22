@@ -38,15 +38,4 @@ class Textpattern_Mail_Compose extends Textpattern_Adaptable_Providable
 	{
 		return new Textpattern_Mail_Adapter_Mail();
 	}
-
-	/**
-	 * Sends an email.
-	 *
-	 * @return Textpattern_Mail_Compose
-	 */
-
-	public function send()
-	{
-		return $this->getAdapter()->send();
-	}
 }
