@@ -2772,14 +2772,18 @@
 /**
  * Validates a string as an email address.
  *
- * @param   string $address The email address
- * @return  bool
- * @package Email
- * @example
+ * <code>
  * if (is_valid_email('john.doe@example.com'))
  * {
  * 	echo "'john.doe@example.com' validates.";
  * }
+ * </code>
+ *
+ * @param      string $address The email address
+ * @return     bool
+ * @package    Mail
+ * @deprecated in 4.6.0
+ * @see        filter_var()
  */
 
 	function is_valid_email($address)
