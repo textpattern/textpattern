@@ -96,6 +96,8 @@ class Textpattern_Mail_Adapter_Mail implements Textpattern_Mail_AdapterInterface
 		if (get_pref('override_emailcharset') && is_callable('utf8_decode'))
 		{
 			$this->charset = 'ISO-8859-1';
+			$this->mail->headers['Content-Type'] = 'text/plain; charset="ISO-8859-1"';
+			$this->encoded->headers['Content-Type'] = 'text/plain; charset="ISO-8859-1"';
 		}
 
 		if (is_valid_email(get_pref('smtp_from')))
@@ -194,7 +196,8 @@ class Textpattern_Mail_Adapter_Mail implements Textpattern_Mail_AdapterInterface
 			throw new Textpattern_Mail_Exception(gTxt('invalid_header'));
 		}
 
-		$this->mail->headers[$name] = $this->encoder->header(strip_rn($value), 'phrase');
+		$this->mail->headers[$name] = $value;
+		$this->encoded->headers[$name] = $this->encoder->header(strip_rn($value), 'phrase');
 		return $this;
 	}
 
