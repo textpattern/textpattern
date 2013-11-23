@@ -234,7 +234,7 @@ class Textpattern_L10n_Locale
 
 		foreach ($this->locales as $lang => $data)
 		{
-			if ($code === $lang || in_array($code, array_map('strtolower', $data), true))
+			if (strtolower($lang) === $code || in_array($code, array_map('strtolower', $data), true))
 			{
 				return $lang;
 			}
