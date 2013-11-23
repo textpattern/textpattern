@@ -302,4 +302,42 @@ class Textpattern_L10n_Locale
 
 		return false;
 	}
+
+	/**
+	 * Gets locale identifiers mapped to the given language.
+	 *
+	 * Returns all locale identifiers that match the given language or locale code.
+	 * For instance providing 'en', will return both en-US and en-GB locale
+	 * identifiers.
+	 *
+	 * <code>
+	 * echo Txp::get('L10nLocale')->getLocaleIdentifiers('english');
+	 * echo Txp::get('L10nLocale')->getLocaleIdentifiers('en');
+	 * echo Txp::get('L10nLocale')->getLocaleIdentifiers('en-gb');
+	 * </code>
+	 *
+	 * @param  string     $locale The locale or language code
+	 * @return array|bool An array of identifiers, or FALSE if not supported
+	 */
+
+	public function getLocaleIdentifiers($locale)
+	{
+		if (isset($this->locales[$locale]))
+		{
+			return array_merge($this->locales[$locale], array($locale));
+		}
+
+		$code = strtolower($locale);
+		$matches = array();
+
+		foreach ($this->locales as $key => $data)
+		{
+			if (strtolower($key) === $code || in_array($code, array_map('strtolower', $data), true))
+			{
+				$matches = array_merge($matches, $data, array($key, $locale));
+			}
+		}
+
+		return array_unique($matches);
+	}
 }
