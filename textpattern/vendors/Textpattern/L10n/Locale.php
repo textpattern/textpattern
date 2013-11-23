@@ -338,6 +338,11 @@ class Textpattern_L10n_Locale
 			}
 		}
 
-		return array_unique($matches);
+		if ($matches)
+		{
+			return array_unique($matches);
+		}
+
+		return false;
 	}
 }
