@@ -311,9 +311,9 @@ class Textpattern_L10n_Locale
 	 * identifiers.
 	 *
 	 * <code>
-	 * echo Txp::get('L10nLocale')->getLocaleIdentifiers('english');
-	 * echo Txp::get('L10nLocale')->getLocaleIdentifiers('en');
-	 * echo Txp::get('L10nLocale')->getLocaleIdentifiers('en-gb');
+	 * print_r(Txp::get('L10nLocale')->getLocaleIdentifiers('english'));
+	 * print_r(Txp::get('L10nLocale')->getLocaleIdentifiers('en'));
+	 * print_r(Txp::get('L10nLocale')->getLocaleIdentifiers('en-gb'));
 	 * </code>
 	 *
 	 * @param  string     $locale The locale or language code
