@@ -72,22 +72,18 @@ abstract class Textpattern_Adaptable_Providable implements Textpattern_Adaptable
 
 	public function getAdapter()
 	{
-		if ($this->adapter)
+		if (!$this->adapter)
 		{
-			$object = $this->adapter;
-		}
-		else
-		{
-			$object = $this->getDefaultAdapter();
+			$this->adapter = $this->getDefaultAdapter();
 		}
 
 		if ($this->firstRun)
 		{
 			$this->firstRun = false;
-			$object->providable = $this;
+			$this->adapter->providable = $this;
 		}
 
-		return $object;
+		return $this->adapter;
 	}
 
 	/**
