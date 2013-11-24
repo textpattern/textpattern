@@ -93,7 +93,7 @@ class Textpattern_L10n_Locale
 	 * Sets the locale.
 	 *
 	 * This method wraps around system setlocale.
-	 * It takes a IETF language code and sets
+	 * It takes an IETF language code and sets
 	 * the locale accordingly.
 	 *
 	 * The following would set the locale to English:
@@ -102,7 +102,7 @@ class Textpattern_L10n_Locale
 	 * Txp::get('L10nLocale')->setLocale(LC_ALL, 'en-GB');
 	 * </code>
 	 *
-	 * This would format currencies according to the Frech localisation:
+	 * This would format currencies according to the French localisation:
 	 *
 	 * <code>
 	 * Txp::get('L10nLocale')->setLocale(LC_MONETARY, 'fr-FR');
@@ -167,7 +167,7 @@ class Textpattern_L10n_Locale
 	/**
 	 * Gets a locale identifier for the given language code.
 	 *
-	 * This method takes a IETF language code and returns
+	 * This method takes an IETF language code and returns
 	 * a locale for it that works on the current system.
 	 *
 	 * The following returns 'en_GB.UTF-8':
