@@ -49,7 +49,7 @@ abstract class Textpattern_Adaptable_Providable implements Textpattern_Adaptable
 	private $adapter;
 
 	/**
-	 * Whether its the first run.
+	 * Whether it's the first run.
 	 *
 	 * @var bool
 	 */
