@@ -47,6 +47,14 @@ abstract class Textpattern_Adaptable_Providable implements Textpattern_Adaptable
 	private $adapter;
 
 	/**
+	 * Whether its the first run.
+	 *
+	 * @var bool
+	 */
+
+	private $firstRun = true;
+
+	/**
 	 * {@inheritdoc}
 	 */
 
@@ -64,10 +72,20 @@ abstract class Textpattern_Adaptable_Providable implements Textpattern_Adaptable
 	{
 		if ($this->adapter)
 		{
-			return $this->adapter;
+			$object = $this->adapter;
+		}
+		else
+		{
+			$object = $this->getDefaultAdapter();
 		}
 
-		return $this->getDefaultAdapter();
+		if ($this->firstRun)
+		{
+			$this->firstRun = false;
+			$object->providable = $this;
+		}
+
+		return $object;
 	}
 
 	/**
