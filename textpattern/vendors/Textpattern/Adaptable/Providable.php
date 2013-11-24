@@ -24,9 +24,7 @@
 /**
  * Adapting providable base class.
  *
- * @since   4.6.0
- * @package Adaptable
- * @example
+ * <code>
  * class MyProvidableAdaptee extends Textpattern_Adaptable_Providable
  * {
  * 	public function getDefaultAdaptableProvider()
@@ -34,6 +32,10 @@
  * 		return new MyAdapterDriver();
  * 	}
  * }
+ * </code>
+ *
+ * @since   4.6.0
+ * @package Adaptable
  */
 
 abstract class Textpattern_Adaptable_Providable implements Textpattern_Adaptable_ProvidableInterface
