@@ -30,7 +30,7 @@
  * passwords, see Textpattern_Password_Generator instead.
  *
  * <code>
- * echo Txp::get('PasswordRandom')->generate(16);
+ * echo Txp::get('PasswordRandom')->generate(196);
  * </code>
  *
  * @since   4.6.0
@@ -56,17 +56,20 @@ class Textpattern_Password_Random extends Textpattern_Password_Generator
 	 * echo Txp::get('PasswordRandom')->generate(196);
 	 * </code>
 	 *
-	 * @param  int    $length The length of the generated value
+	 * @param  int    $length The length of the generated value, minimum 32
 	 * @return string The value
 	 */
 
 	public function generate($length)
 	{
+		$length = max(32, (int) $length);
+		$bytes = $length / 2;
+
 		if (function_exists('mcrypt_create_iv') && version_compare(PHP_VERSION, '5.3.0') >= 0)
 		{
-			$random = mcrypt_create_iv($length, MCRYPT_DEV_URANDOM);
+			$random = mcrypt_create_iv($bytes, MCRYPT_DEV_URANDOM);
 
-			if ($random && strlen($random) === (int) $length)
+			if ($random && strlen($random) === $bytes)
 			{
 				return bin2hex($random);
 			}
@@ -79,10 +82,10 @@ class Textpattern_Password_Random extends Textpattern_Password_Generator
 				stream_set_read_buffer($fp, 0);
 			}
 
-			$random = fread($fp, $length);
+			$random = fread($fp, $bytes);
 			fclose($fp);
 
-			if ($random && strlen($random) === (int) $length)
+			if ($random && strlen($random) === $bytes)
 			{
 				return bin2hex($random);
 			}
@@ -90,9 +93,9 @@ class Textpattern_Password_Random extends Textpattern_Password_Generator
 
 		if (IS_WIN === false && function_exists('openssl_random_pseudo_bytes') && version_compare(PHP_VERSION, '5.3.4') >= 0)
 		{
-			$random = openssl_random_pseudo_bytes($length, $strong);
+			$random = openssl_random_pseudo_bytes($bytes, $strong);
 
-			if ($random && $strong === true && strlen($random) === (int) $length)
+			if ($random && $strong === true && strlen($random) === $bytes)
 			{
 				return bin2hex($random);
 			}
