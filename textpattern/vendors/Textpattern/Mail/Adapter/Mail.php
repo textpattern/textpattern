@@ -100,7 +100,7 @@ class Textpattern_Mail_Adapter_Mail implements Textpattern_Mail_AdapterInterface
 			$this->encoded->headers['Content-Type'] = 'text/plain; charset="ISO-8859-1"';
 		}
 
-		if (is_valid_email(get_pref('smtp_from')))
+		if (filter_var(get_pref('smtp_from'), FILTER_VALIDATE_EMAIL))
 		{
 			if (IS_WIN)
 			{
@@ -266,7 +266,7 @@ class Textpattern_Mail_Adapter_Mail implements Textpattern_Mail_AdapterInterface
 
 	protected function addAddress($field, $address, $name = '')
 	{
-		if (is_valid_email($address))
+		if (filter_var($address, FILTER_VALIDATE_EMAIL))
 		{
 			$this->mail->$field = array_merge($this->mail->$field, array($address => $name));
 			$this->encoded->$field = $this->encoder->addressList($this->mail->$field);
