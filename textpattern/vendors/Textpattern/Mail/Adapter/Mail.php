@@ -160,7 +160,7 @@ class Textpattern_Mail_Adapter_Mail implements Textpattern_Mail_AdapterInterface
 			$subject = utf8_decode($subject);
 		}
 
-		$this->encoded->subject = $this->encoder->header(strip_rn($subject), 'text');
+		$this->encoded->subject = $this->encoder->header($this->encoder->escapeHeader($subject), 'text');
 		return $this;
 	}
 
@@ -197,7 +197,7 @@ class Textpattern_Mail_Adapter_Mail implements Textpattern_Mail_AdapterInterface
 		}
 
 		$this->mail->headers[$name] = $value;
-		$this->encoded->headers[$name] = $this->encoder->header(strip_rn($value), 'phrase');
+		$this->encoded->headers[$name] = $this->encoder->header($this->encoder->escapeHeader($value), 'phrase');
 		return $this;
 	}
 

@@ -2759,14 +2759,16 @@
  *
  * This function is used for sanitising email headers.
  *
- * @param   string $str The string
- * @return  string
- * @package Mail
+ * @param      string $str The string
+ * @return     string
+ * @package    Mail
+ * @deprecated in 4.6.0
+ * @see        Textpattern_Mail_Encode::escapeHeader()
  */
 
 	function strip_rn($str)
 	{
-		return str_replace(array("\r\n", "\r", "\n"), ' ', deNull($str));
+		return Txp::get('MailEncode')->escapeHeader($str);
 	}
 
 /**

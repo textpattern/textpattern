@@ -73,7 +73,7 @@ class Textpattern_Mail_Encode
 				$name = utf8_decode($name);
 			}
 
-			$out[] = trim($this->header(strip_rn($name), 'phrase').' <'.$email.'>');
+			$out[] = trim($this->header($this->escapeHeader($name), 'phrase').' <'.$this->escapeHeader($email).'>');
 		}
 
 		return join(', ', $out);
@@ -145,5 +145,17 @@ class Textpattern_Mail_Encode
 		}
 
 		return join('', $ent);
+	}
+
+	/**
+	 * Removes new lines and NULL bytes from header lines, preventing header injections.
+	 *
+	 * @param  string $string The string
+	 * @return string Escaped header value
+	 */
+
+	public function escapeHeader($string)
+	{
+		return str_replace(array("\r\n", "\r", "\n", "\0"), array(' ', ' ', ' ', ''), (string) $string);
 	}
 }
