@@ -83,7 +83,7 @@ class Textpattern_Security_Filter
 
 	public function registerGlobals()
 	{
-		if (@ini_get('register_globals'))
+		if (Txp::get('ServerVar')->getRegisterGlobals())
 		{
 			if (array_key_exists('GLOBALS', $_REQUEST) || array_key_exists('GLOBALS', $_FILES))
 			{

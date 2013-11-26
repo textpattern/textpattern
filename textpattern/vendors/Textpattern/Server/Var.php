@@ -51,6 +51,14 @@ class Textpattern_Server_Var
 	private $magicQuotesRuntime = false;
 
 	/**
+	 * Register globals status.
+	 *
+	 * @var bool
+	 */
+
+	private $registerGlobals = false;
+
+	/**
 	 * Constructor.
 	 */
 
@@ -60,6 +68,7 @@ class Textpattern_Server_Var
 		{
 			$this->magicQuotesGpc = @get_magic_quotes_gpc();
 			$this->magicQuotesRuntime = @get_magic_quotes_runtime();
+			$this->registerGlobals = @ini_get('register_globals');
 		}
 	}
 
@@ -89,6 +98,17 @@ class Textpattern_Server_Var
 	public function getMagicQuotesGpc()
 	{
 		return (bool) $this->magicQuotesGpc;
+	}
+
+	/**
+	 * Gets register globals status.
+	 *
+	 * @return bool
+	 */
+
+	public function getRegisterGlobals()
+	{
+		return (bool) $this->registerGlobals;
 	}
 
 	/**
