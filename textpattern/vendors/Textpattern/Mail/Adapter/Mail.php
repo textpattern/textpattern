@@ -207,6 +207,11 @@ class Textpattern_Mail_Adapter_Mail implements Textpattern_Mail_AdapterInterface
 
 	public function send()
 	{
+		if (is_disabled('mail'))
+		{
+			throw new Textpattern_Mail_Exception(gTxt('disabled_function', array('{name}' => 'mail')));
+		}
+
 		if (!$this->mail->from || !$this->mail->to)
 		{
 			throw new Textpattern_Mail_Exception(gTxt('from_or_to_address_missing'));
