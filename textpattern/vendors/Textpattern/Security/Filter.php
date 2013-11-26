@@ -25,7 +25,7 @@
  * Basic security filter options.
  *
  * <code>
- * Txp::get('SecurityFilter')->setMaxRequestUriLength(255)->registerGlobals();
+ * Txp::get('SecurityFilter')->registerGlobals()->setMaxRequestUriLength(255);
  * </code>
  *
  * @since   4.6.0
@@ -65,7 +65,7 @@ class Textpattern_Security_Filter
 
 		if (strlen($uri) > $length)
 		{
-			throw new Textpattern_Security_Exception(gTxt('requested_uri_too_long'));
+			throw new Textpattern_Security_Exception('Requested URL length exceeds application limit.');
 		}
 
 		return $this;
@@ -87,7 +87,7 @@ class Textpattern_Security_Filter
 		{
 			if (array_key_exists('GLOBALS', $_REQUEST) || array_key_exists('GLOBALS', $_FILES))
 			{
-				throw new Textpattern_Security_Exception(gTxt('globals_overwrite_detected'));
+				throw new Textpattern_Security_Exception('GLOBALS overwrite attempt detected. Please consider turning register_globals off.');
 			}
 
 			$variables = array_merge(
