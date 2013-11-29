@@ -56,14 +56,13 @@ class Textpattern_Password_Random extends Textpattern_Password_Generator
 	 * echo Txp::get('PasswordRandom')->generate(196);
 	 * </code>
 	 *
-	 * @param  int    $length The length of the generated value, minimum 32
+	 * @param  int    $length The length of the generated value
 	 * @return string The value
 	 */
 
 	public function generate($length)
 	{
-		$length = max(32, (int) $length);
-		$bytes = $length / 2;
+		$bytes = (int) ceil($length / 2);
 
 		if (function_exists('mcrypt_create_iv') && version_compare(PHP_VERSION, '5.3.0') >= 0)
 		{
@@ -71,7 +70,7 @@ class Textpattern_Password_Random extends Textpattern_Password_Generator
 
 			if ($random && strlen($random) === $bytes)
 			{
-				return bin2hex($random);
+				return substr(bin2hex($random), 0, $length);
 			}
 		}
 
@@ -87,7 +86,7 @@ class Textpattern_Password_Random extends Textpattern_Password_Generator
 
 			if ($random && strlen($random) === $bytes)
 			{
-				return bin2hex($random);
+				return substr(bin2hex($random), 0, $length);
 			}
 		}
 
@@ -97,7 +96,7 @@ class Textpattern_Password_Random extends Textpattern_Password_Generator
 
 			if ($random && $strong === true && strlen($random) === $bytes)
 			{
-				return bin2hex($random);
+				return substr(bin2hex($random), 0, $length);
 			}
 		}
 
