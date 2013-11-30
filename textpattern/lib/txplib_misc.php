@@ -2094,34 +2094,21 @@
 /**
  * Converts a callable to a string presentation.
  *
- * @param   callback $callback The callback
- * @return  string   The $callback as a human-readable string
- * @since   4.5.0
- * @package Callback
- * @example
+ * <code>
  * echo callback_tostring(array('class', 'method'));
+ * </code>
+ *
+ * @param      callback $callback The callback
+ * @return     string   The $callback as a human-readable string
+ * @since      4.5.0
+ * @package    Callback
+ * @deprecated in 4.6.0
+ * @see        Textpattern_Type_Callable::toString()
  */
 
 	function callback_tostring($callback)
 	{
-		if (is_array($callback))
-		{
-			$class = array_shift($callback);
-
-			if (is_object($class))
-			{
-				$class = get_class($class);
-			}
-
-			array_unshift($callback, $class);
-			return join('::', array_filter($callback, 'is_scalar'));
-		}
-		else if (!is_scalar($callback))
-		{
-			return '';
-		}
-
-		return $callback;
+		return Txp::get('TypeCallable', $callback)->toString();
 	}
 
 /**
