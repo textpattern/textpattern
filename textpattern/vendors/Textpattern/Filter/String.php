@@ -24,18 +24,19 @@
 /**
  * String filter.
  *
- * @since   4.6.0
- * @package Filter
- * @example
+ * <code>
  * try
  * {
- * 	$string = new Textpattern_Filter_String('Hello World!');
- * 	echo (string) $string->length(1, 64)->match('/^[a-z]$/i')->html();
+ * 	echo (string) Txp::get('FilterString', 'Hello World!')->length(1, 64)->match('/^[a-z]$/i')->html();
  * }
- * catch (Textpatter_Filter_Exception $e)
+ * catch (Textpattern_Filter_Exception $e)
  * {
  * 	echo $e->getMessage();
  * }
+ * </code>
+ *
+ * @since   4.6.0
+ * @package Filter
  */
 
 class Textpattern_Filter_String extends Textpattern_Type_String
@@ -57,15 +58,23 @@ class Textpattern_Filter_String extends Textpattern_Type_String
 	/**
 	 * Matches the string against a regular expression.
 	 *
+	 * <code>
+	 * try
+	 * {
+	 * 	echo (string) Txp::get('FilterString', 'Hello World!')->match('/^[^0-9]$/');
+	 * }
+	 * catch (Textpattern_Filter_Exception $e)
+	 * {
+	 * 	echo $e->getMessage();
+	 * }
+	 * </code>
+	 *
 	 * @param  string $pattern The pattern
 	 * @param  array  $matches Matches 
 	 * @param  int    $flags   Flags
 	 * @param  int    $offset  Offset
 	 * @return Textpattern_Filter_String
 	 * @throws Textpattern_Filter_Exception
-	 * @example
-	 * $string = new Textpattern_Filter_String('Hello World!');
-	 * echo (string) $string->match('/^[^0-9]$/');
 	 */
 
 	public function match($pattern, &$matches = null, $flags = 0, $offset = 0)
@@ -81,13 +90,21 @@ class Textpattern_Filter_String extends Textpattern_Type_String
 	/**
 	 * Limits the length.
 	 *
+	 * <code>
+	 * try
+	 * {
+	 * 	echo (string) Txp::get('FilterString', 'Hello World!')->length(64);
+	 * }
+	 * catch (Textpattern_Filter_Exception $e)
+	 * {
+	 * 	echo $e->getMessage();
+	 * }
+	 * </code>
+	 *
 	 * @param  int $min The minimum length
 	 * @param  int $max The maximum length
 	 * @return Textpattern_Filter_String
 	 * @throws Textpattern_Filter_Exception
-	 * @example
-	 * $string = new Textpattern_Filter_String('Hello World!');
-	 * echo (string) $string->length(64);
 	 */
 
 	public function length($min, $max = null)
