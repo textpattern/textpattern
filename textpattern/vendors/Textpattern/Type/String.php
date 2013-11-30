@@ -241,7 +241,7 @@ class Textpattern_Type_String implements Textpattern_Type_TypeInterface
 	 * HTML encodes the string.
 	 *
 	 * <code>
-	 * echo (string) Txp::get('TypeString', 'Hello World!')->substring(2, 5);
+	 * echo (string) Txp::get('TypeString', '<strong>Hello World!</strong>')->html();
 	 * </code>
 	 *
 	 * @param   int    $flags         A bitmask of one or more flags. The default is ENT_QUOTES
