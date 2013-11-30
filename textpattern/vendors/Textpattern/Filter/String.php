@@ -49,7 +49,7 @@ class Textpattern_Filter_String extends Textpattern_Type_String
 	{
 		if (!is_string($string))
 		{
-			throw new Textpattern_Filter_Exception('assert_string');
+			throw new Textpattern_Filter_Exception(gTxt('assert_string'));
 		}
 
 		parent::__construct($string);
@@ -81,7 +81,7 @@ class Textpattern_Filter_String extends Textpattern_Type_String
 	{
 		if (!preg_match($pattern, $this->string, $matches, $flags, $offset))
 		{
-			throw new Textpattern_Filter_Exception('filter_not_matching_pattern');
+			throw new Textpattern_Filter_Exception(gTxt('assert_pattern'));
 		}
 
 		return $this;
@@ -111,7 +111,7 @@ class Textpattern_Filter_String extends Textpattern_Type_String
 	{
 		if ($this->getLength() < $min || ($max !== null && $this->getLength() > $max))
 		{
-			throw new Textpattern_Filter_Exception('filter_length_not_within_limits');
+			throw new Textpattern_Filter_Exception(gTxt('assert_length'));
 		}
 
 		return $this;
