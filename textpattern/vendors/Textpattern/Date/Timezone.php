@@ -162,7 +162,7 @@ class Textpattern_Date_Timezone
 	 * thus the returned value is ambiguous and merely useful for
 	 * presentation purposes.
 	 *
-	 * @param  int         $gmtoffset
+	 * @param  int         $offset
 	 * @return string|bool Timezone identifier, or FALSE
 	 */
 
@@ -210,17 +210,41 @@ class Textpattern_Date_Timezone
 	 *
 	 * Returns FALSE if the timezone does not use DST.
 	 *
-	 * @param 
+	 * <code>
+	 * print_r(Txp::get('DateTimezone')->getDstPeriod('Europe/Helsinki'));
+	 * </code>
+	 *
+	 * Returns:
+	 *
+	 * <code>
+	 * Array
+	 * (
+	 * 	[0] => Array
+	 * 	(
+	 * 		[ts] => 1396141200
+	 * 		[time] => 2014-03-30T01:00:00+0000
+	 *		[offset] => 10800
+	 * 		[isdst] => 1
+	 * 		[abbr] => EEST
+	 * 	)
+	 * 	[1] => Array
+	 * 	(
+	 * 		[ts] => 1414285200
+	 * 		[time] => 2014-10-26T01:00:00+0000
+	 * 		[offset] => 7200
+	 * 		[isdst] => 
+	 * 		[abbr] => EET
+	 * 	)
+	 * )
+	 * </code>
+	 *
+	 * @param  string     $timezone The timezone identifier
 	 * @return array|bool An array of next two transitions, or FALSE 
 	 */
 
 	public function getDstPeriod($timezone)
 	{
-		if ($timezone !== null && !is_object($timezone))
-		{
-			$timezone = new DateTimeZone($timezone);
-		}
-
+		$timezone = new DateTimeZone($timezone);
 		$time = time();
 		$transitions = $timezone->getTransitions();
 		$start = null;
