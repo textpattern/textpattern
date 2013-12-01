@@ -126,7 +126,13 @@ class Textpattern_Date_Timezone
 				if (in_array($parts[0], $this->continents, true) && $data = $this->getIdentifier($timezone))
 				{
 					$this->details[$timezone] = $data;
-					$this->offsets[$data['offset']] = $timezone;
+
+					if (!isset($this->offsets[$data['offset']]))
+					{
+						$this->offsets[$data['offset']] = array();
+					}
+
+					$this->offsets[$data['offset']][] = $timezone;
 				}
 			}
 
@@ -137,17 +143,33 @@ class Textpattern_Date_Timezone
 	}
 
 	/**
-	 * Find a timezone identifier for the given timezone offset.
+	 * Gets timezone identifiers for the given timezone offset.
 	 *
-	 * More than one key might fit any given offset,
+	 * More than one timezone might fit any given offset,
 	 * thus the returned value is ambiguous and merely useful for
 	 * presentation purposes.
 	 *
-	 * @param  int         $offset
-	 * @return string|bool Timezone identifier, or FALSE
+	 * <code>
+	 * print_r(Txp::get('DateTimezone')->getOffsetIdentifiers(3600));
+	 * </code>
+	 *
+	 * Returns:
+	 *
+	 * <code>
+	 * Array
+	 * (
+	 * 	[0] => Africa/Malabo
+	 * 	[1] => Europe/Amsterdam
+	 * 	[2] => Europe/Berlin
+	 * 	[3] => Europe/Zurich
+	 * )
+	 * </code>
+	 *
+	 * @param  int        $offset Offset in seconds
+	 * @return array|bool An array of timezone identifiers, or FALSE
 	 */
 
-	public function getOffsetIdentifier($offset)
+	public function getOffsetIdentifiers($offset)
 	{
 		if ($this->getTimeZones() && isset($this->offsets[$offset]))
 		{

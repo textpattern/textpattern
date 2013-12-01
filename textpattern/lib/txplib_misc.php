@@ -6683,12 +6683,17 @@ class timezone
 	 * @param      int    $gmtoffset
 	 * @return     string timezone key
 	 * @deprecated in 4.6.0
-	 * @see        Textpattern_Date_Timezone::getTimeZones()
+	 * @see        Textpattern_Date_Timezone::getOffsetIdentifiers()
 	 */
 
 	public function key($gmtoffset)
 	{
-		return Txp::get('DateTimezone')->getOffsetIdentifier($gmtoffset);
+		if ($idenfiers = Txp::get('DateTimezone')->getOffsetIdentifiers($gmtoffset))
+		{
+			return $idenfiers[0];
+		}
+
+		return '';
 	}
 
 	/**
