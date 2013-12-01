@@ -121,34 +121,12 @@ class Textpattern_Date_Timezone
 
 			foreach ($timezones as $timezone)
 			{
-				$parts = array_pad(explode('/', $timezone), 3, '');
+				$parts = explode('/', $timezone);
 
-				if (in_array($parts[0], $this->continents, true))
+				if (in_array($parts[0], $this->continents, true) && $data = $this->getIdentifier($timezone))
 				{
-					try
-					{
-						$dateTime = new DateTime('now', new DateTimeZone($timezone));
-
-						$data = array(
-							'continent' => $parts[0],
-							'city'      => $parts[1],
-							'subcity'   => $parts[2],
-							'offset'    => $dateTime->getOffset(),
-							'dst'       => false,
-						);
-
-						if ($dateTime->format('I'))
-						{
-							$data['offset'] -= 3600;
-							$data['dst'] = true;
-						}
-
-						$this->details[$timezone] = $data;
-						$this->offsets[$data['offset']] = $timezone;
-					}
-					catch (Exception $e)
-					{
-					}
+					$this->details[$timezone] = $data;
+					$this->offsets[$data['offset']] = $timezone;
 				}
 			}
 
@@ -314,6 +292,77 @@ class Textpattern_Date_Timezone
 		}
 
 		return false;
+	}
+
+	/**
+	 * Gets a timezone identifier.
+	 *
+	 * Extracts information about the given timezone. If the $timezone
+	 * is NULL, uses the server's default timezone.
+	 *
+	 * <code>
+	 * print_r(Txp::get('DateTimezone')->getIdentifier('Europe/London'));
+	 * </code>
+	 *
+	 * Returns:
+	 *
+	 * <code>
+	 * Array
+	 * (
+	 * 	[continent] => Europe
+	 * 	[city] => London
+	 * 	[subcity] => 
+	 * 	[offset] => 0
+	 * 	[dst] => 1
+	 * )
+	 * </code>
+	 *
+	 * @return array|bool
+	 */
+
+	public function getIdentifier($timezone = null)
+	{
+		if ($timezone === null)
+		{
+			$timezone = $this->getTimeZone();
+		}
+
+		if (isset($this->details[$timezone]))
+		{
+			return $this->details[$timezone];
+		}
+
+		try
+		{
+			$dateTime = new DateTime('now', new DateTimeZone($timezone));
+
+			$data = array(
+				'continent' => '',
+				'city'      => '',
+				'subcity'   => '',
+				'offset'    => $dateTime->getOffset(),
+				'dst'       => false,
+			);
+
+			if (strpos($timezone, '/') !== false)
+			{
+				$parts = array_pad(explode('/', $timezone), 3, '');
+				$data['continent'] = $parts[0];
+				$data['city'] = $parts[1];
+				$data['subcity'] = $parts[2];
+			}
+
+			if ($dateTime->format('I'))
+			{
+				$data['offset'] -= 3600;
+				$data['dst'] = true;
+			}
+
+			return $data;
+		}
+		catch (Exception $e)
+		{
+		}
 	}
 
 	/**
