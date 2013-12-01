@@ -182,14 +182,17 @@ class Textpattern_Date_Timezone
 	 * @param  int|null     $timestamp When
 	 * @param  string|null  $timezone  Timezone identifier
 	 * @return bool
+	 * @throws Exception
 	 */
 
 	public function isDst($timestamp = null, $timezone = null)
 	{
-		if ($timezone !== null && !is_object($timezoone))
+		if (!$timezone)
 		{
-			$timezone = new DateTimeZone($timezone);
+			$timezone = $this->getTimeZone();
 		}
+
+		$timezone = new DateTimeZone($timezone);
 
 		if ($timestamp !== null)
 		{
@@ -238,12 +241,18 @@ class Textpattern_Date_Timezone
 	 * )
 	 * </code>
 	 *
-	 * @param  string     $timezone The timezone identifier
-	 * @return array|bool An array of next two transitions, or FALSE 
+	 * @param  string|null $timezone The timezone identifier
+	 * @return array|bool  An array of next two transitions, or FALSE 
+	 * @throws Exception
 	 */
 
-	public function getDstPeriod($timezone)
+	public function getDstPeriod($timezone = null)
 	{
+		if (!$timezone)
+		{
+			$timezone = $this->getTimeZone();
+		}
+
 		$timezone = new DateTimeZone($timezone);
 		$time = time();
 		$transitions = $timezone->getTransitions();
