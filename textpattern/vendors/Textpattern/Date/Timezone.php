@@ -22,7 +22,10 @@
  */
  
 /**
- * Dealing with timezones.
+ * Handles timezones.
+ *
+ * This method extracts information from PHP's Timezone DB,
+ * and allows configuring server's timezone information.
  *
  * @package Date
  * @since   4.6.0
@@ -39,7 +42,7 @@ class Textpattern_Date_Timezone
 	protected $details;
 
 	/**
-	 * Stores a list of timezone offsets
+	 * Stores a list of timezone offsets.
 	 *
 	 * @var array 
 	 */
@@ -102,7 +105,7 @@ class Textpattern_Date_Timezone
 	 * daylight saving time, DST is whether it's currently DST
 	 * in the timezone. Identifiers are sorted alphabetically.
 	 *
-	 * @return array|bool An array of timezones, or FALSE on error
+	 * @return array|bool An array of timezones, or FALSE on failure
 	 */
 
 	public function getTimeZones()
@@ -158,7 +161,7 @@ class Textpattern_Date_Timezone
 	/**
 	 * Find a timezone identifier for the given timezone offset.
 	 *
-	 * More than one key might fit any given GMT offset,
+	 * More than one key might fit any given offset,
 	 * thus the returned value is ambiguous and merely useful for
 	 * presentation purposes.
 	 *
@@ -179,8 +182,32 @@ class Textpattern_Date_Timezone
 	/**
 	 * Whether DST is in effect.
 	 *
-	 * @param  int|null     $timestamp When
-	 * @param  string|null  $timezone  Timezone identifier
+	 * The given timestamp can either be a date format
+	 * supported by DateTime, UNIX timestamp or NULL
+	 * to check current status.
+	 *
+	 * If timezone is NULL, checks the server default
+	 * timezone.
+	 *
+	 * <code>
+	 * echo Txp::get('DateTimezone')->isDst('2013/06/20', 'Europe/London');
+	 * </code>
+	 *
+	 * Returns TRUE, while this returns FALSE as the timezone does not
+	 * use daylight saving time:
+	 *
+	 * <code>
+	 * echo Txp::get('DateTimezone')->isDst('2013/06/20', 'Africa/Accra');
+	 * </code>
+	 *
+	 * If it's winter this returns FALSE:
+	 *
+	 * <code>
+	 * echo Txp::get('DateTimezone')->isDst(null, 'Europe/London');
+	 * </code>
+	 *
+	 * @param  string|int|null $timestamp Time to check
+	 * @param  string|null     $timezone  Timezone identifier
 	 * @return bool
 	 * @throws Exception
 	 */
@@ -209,9 +236,10 @@ class Textpattern_Date_Timezone
 	}
 
 	/**
-	 * Gets the next daylight saving transition period for the given timezone.
+	 * Gets the next day light saving transition period for the given timezone.
 	 *
-	 * Returns FALSE if the timezone does not use DST.
+	 * Returns FALSE if the timezone does not use DST, or will in the future
+	 * drop DST.
 	 *
 	 * <code>
 	 * print_r(Txp::get('DateTimezone')->getDstPeriod('Europe/Helsinki'));
