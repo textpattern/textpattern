@@ -296,15 +296,7 @@ class Textpattern_Date_Timezone
 			$from = time();
 		}
 
-		if (version_compare(PHP_VERSION, '5.3.0') < 0)
-		{
-			$transitions = $timezone->getTransitions();
-		}
-		else
-		{
-			$transitions = $timezone->getTransitions($from, $from + 60 * 60 * 24 * 30 * 12 * 2);
-		}
-
+		$transitions = $timezone->getTransitions();
 		$start = null;
 		$end = null;
 
