@@ -96,12 +96,6 @@
 			$post['file_max_upload_size'] = real_max_upload_size($post['file_max_upload_size']);
 		}
 
-		// Forge $auto_dst for (in-)capable servers.
-		if (!timezone::is_supported())
-		{
-			$post['auto_dst'] = false;
-		}
-
 		if (isset($post['auto_dst']))
 		{
 			$prefs['auto_dst'] = $auto_dst = $post['auto_dst'];
@@ -116,13 +110,13 @@
 		if (isset($post['timezone_key']))
 		{
 			$key = $post['timezone_key'];
-			$tz = new timezone;
-			$tzd = $tz->details();
+			$tzd = Txp::get('DateTimezone')->getTimeZones();
+
 			if (isset($tzd[$key]))
 			{
 				$prefs['timezone_key'] = $timezone_key = $key;
 				$post['gmtoffset'] = $prefs['gmtoffset'] = $gmtoffset = $tzd[$key]['offset'];
-				$post['is_dst'] = $prefs['is_dst'] = $is_dst = timezone::is_dst(time(), $key);
+				$post['is_dst'] = $prefs['is_dst'] = $is_dst = Txp::get('DateTimezone')->isDst(null, $key);
 			}
 		}
 
@@ -366,8 +360,14 @@
 	{
 		// Fetch *hidden* pref
 		$key = get_pref('timezone_key', '', true);
+
+		if ($key === '')
+		{
+			$key = (string) Txp::get('DateTimezone')->getTimezone();
+		}
+
 		$tz = new timezone;
-		$ui = $tz->selectInput('timezone_key', $key, true, '', 'gmtoffset');
+		$ui = $tz->selectInput('timezone_key', $key, false, '', 'gmtoffset');
 
 		return pluggable_ui('prefs_ui', 'gmtoffset', $ui, $name, $val);
 	}
@@ -385,14 +385,13 @@
 	function is_dst($name, $val)
 	{
 		$ui = yesnoRadio ($name, $val).
-		script_js ("textpattern.timezone_is_supported = ".(int)timezone::is_supported().";").
 		script_js (<<<EOS
 			$(document).ready(function ()
 			{
 				var radio = $("#prefs-is_dst input");
 				if (radio)
 				{
-					if ($("#auto_dst-1").prop("checked") && textpattern.timezone_is_supported)
+					if ($("#auto_dst-1").prop("checked"))
 					{
 						radio.prop("disabled", "disabled");
 					}
@@ -406,10 +405,6 @@
 					{
 						radio.prop("disabled", "disabled");
 					});
-				}
-				if (!textpattern.timezone_is_supported)
-				{
-					$("#prefs-auto_dst input").prop("disabled", "disabled");
 				}
 			});
 EOS
