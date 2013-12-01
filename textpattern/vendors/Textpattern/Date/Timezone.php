@@ -208,8 +208,7 @@ class Textpattern_Date_Timezone
 	 *
 	 * @param  string|int|null $timestamp Time to check
 	 * @param  string|null     $timezone  Timezone identifier
-	 * @return bool
-	 * @throws Exception
+	 * @return bool            TRUE if timezone is using DST
 	 */
 
 	public function isDst($timestamp = null, $timezone = null)
@@ -219,20 +218,28 @@ class Textpattern_Date_Timezone
 			$timezone = $this->getTimeZone();
 		}
 
-		$timezone = new DateTimeZone($timezone);
-
-		if ($timestamp !== null)
+		try
 		{
-			if ((string) intval($timestamp) !== (string) $timestamp)
+			$timezone = new DateTimeZone($timezone);
+
+			if ($timestamp !== null)
 			{
-				$timestamp = strtotime($timestamp);
+				if ((string) intval($timestamp) !== (string) $timestamp)
+				{
+					$timestamp = strtotime($timestamp);
+				}
+
+				$timestamp = date('Y-m-d H:m:s', $timestamp);
 			}
 
-			$timestamp = date('Y-m-d H:m:s', $timestamp);
+			$dateTime = new DateTime($timestamp, $timezone);
+			return (bool) $dateTime->format('I');
+		}
+		catch (Exception $e)
+		{
 		}
 
-		$dateTime = new DateTime($timestamp, $timezone);
-		return (bool) $dateTime->format('I');
+		return false;
 	}
 
 	/**
