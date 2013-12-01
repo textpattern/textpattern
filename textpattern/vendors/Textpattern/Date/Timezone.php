@@ -317,7 +317,8 @@ class Textpattern_Date_Timezone
 	 * )
 	 * </code>
 	 *
-	 * @return array|bool
+	 * @param  string|null $timezone Timezone identifier
+	 * @return array|bool  An array, or FALSE on failure
 	 */
 
 	public function getIdentifier($timezone = null)
@@ -362,6 +363,7 @@ class Textpattern_Date_Timezone
 		}
 		catch (Exception $e)
 		{
+			return false;
 		}
 	}
 
