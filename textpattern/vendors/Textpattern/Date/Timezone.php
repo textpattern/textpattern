@@ -221,7 +221,7 @@ class Textpattern_Date_Timezone
 	}
 
 	/**
-	 * Gets the next day light saving transition period for the given timezone.
+	 * Gets the next daylight saving transition period for the given timezone.
 	 *
 	 * Returns FALSE if the timezone does not use DST, or will in the future
 	 * drop DST.
