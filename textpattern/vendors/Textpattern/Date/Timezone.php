@@ -277,11 +277,12 @@ class Textpattern_Date_Timezone
 	 * </code>
 	 *
 	 * @param  string|null $timezone The timezone identifier
+	 * @param  int         Next transitions starting from when
 	 * @return array|bool  An array of next two transitions, or FALSE 
 	 * @throws Exception
 	 */
 
-	public function getDstPeriod($timezone = null)
+	public function getDstPeriod($timezone = null, $from = null)
 	{
 		if (!$timezone)
 		{
@@ -289,8 +290,21 @@ class Textpattern_Date_Timezone
 		}
 
 		$timezone = new DateTimeZone($timezone);
-		$time = time();
-		$transitions = $timezone->getTransitions();
+
+		if ($from === null)
+		{
+			$from = time();
+		}
+
+		if (version_compare(PHP_VERSION, '5.3.0') < 0)
+		{
+			$transitions = $timezone->getTransitions();
+		}
+		else
+		{
+			$transitions = $timezone->getTransitions($from, $from + 60 * 60 * 24 * 30 * 12 * 2);
+		}
+
 		$start = null;
 		$end = null;
 
@@ -302,7 +316,7 @@ class Textpattern_Date_Timezone
 				break;
 			}
 
-			if ($transition['ts'] >= $time && $transition['isdst'])
+			if ($transition['ts'] >= $from && $transition['isdst'])
 			{
 				$start = $transition;
 			}
