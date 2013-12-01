@@ -323,6 +323,75 @@ class Textpattern_Date_Timezone
 	}
 
 	/**
+	 * Gets timezone abbreviation.
+	 *
+	 * If the $timezone is NULL, uses the server default. Returns FALSE
+	 * if there is no abbreviation to give.
+	 *
+	 * <code>
+	 * echo Txp::get('DateTimezone')->getTimeZoneAbbreviation('Europe/London');
+	 * </code>
+	 *
+	 * Returns 'GMT', while the following returns 'FALSE':
+	 *
+	 * <code>
+	 * echo Txp::get('DateTimezone')->getTimeZoneAbbreviation('Africa/Accra', true);
+	 * </code>
+	 *
+	 * As according to the timezone database, the timezone does not currently use DST.
+	 *
+	 * @param  string      $timezone Timezone identifier
+	 * @param  bool        $dst      TRUE to get the abbreviation during DST
+	 * @return string|bool The abbreviation, or FALSE on failure
+	 */
+
+	public function getTimeZoneAbbreviation($timezone = null, $dst = false)
+	{
+		try
+		{
+			if ($timezone === null)
+			{
+				$timezone = $this->getTimeZone();
+			}
+
+			$timezone = new DateTimeZone($timezone);
+			$time = time();
+
+			if ($transitions = $timezone->getTransitions())
+			{
+				$latest = end($transitions);
+
+				if ($latest['ts'] <= $time)
+				{
+					$latest['ts'] = $time;
+					$transitions = array($latest);
+				}
+
+				foreach ($transitions as $transition)
+				{
+					if ($time <= $transition['ts'])
+					{
+						if ($dst === true && $transition['isdst'])
+						{
+							return $transition['abbr'];
+						}
+
+						if ($dst === false && !$transition['isdst'])
+						{
+							return $transition['abbr'];
+						}
+					}
+				}
+			}
+		}
+		catch (Exception $e)
+		{
+		}
+
+		return false;
+	}
+
+	/**
 	 * Gets a timezone identifier.
 	 *
 	 * Extracts information about the given timezone. If the $timezone
