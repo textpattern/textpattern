@@ -1,7 +1,7 @@
 Changes in 4.5.6
 
 * Maintenance release with bug fixes, no security implications.
-* Textile v2.4.2 resolves PHP 5.5 compatibility issues.
+* Textile v2.4.3 resolves PHP 5.5 compatibility issues.
 * Fixed: <txp:link_to_prev>, <txp:link_to_next>, <txp:prev_title>, and <txp:next_title> tags for certain combinations with <txp:article_custom>.
 
 Changes in 4.5.5
