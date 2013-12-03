@@ -1,3 +1,18 @@
+Changes in 4.5.6
+
+* Maintenance release with bug fixes, no security implications.
+* Textile v2.4.2 resolves PHP 5.5 compatibility issues.
+* Fixed: <txp:link_to_prev>, <txp:link_to_next>, <txp:prev_title>, and <txp:next_title> tags for certain combinations with <txp:article_custom>.
+
+Changes in 4.5.5
+
+* Maintenance release with bug fixes, no security implications.
+* Fixed: Compatibility issues with PHP 5.5 in <txp:yield> and setup routines.
+* Fixed: Category table's parent-child associations break and the table malforms on name updates, if two different category types share same category name.
+* Fixed: Image caption isn't escaped.
+* Fixed: Admin-side JavaScript dies on Safari 5 (or any browser that doesn't allow re-defining keywords or constructs as variables).
+* jQuery 1.8.3.
+
 Changes in 4.5.4
 
 * Corrects a packaging error in the 4.5.3 archives.
