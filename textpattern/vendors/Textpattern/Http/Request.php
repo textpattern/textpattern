@@ -106,6 +106,12 @@ class Textpattern_Http_Request
 
 	/**
 	 * Constructor.
+	 *
+	 * <code>
+	 * echo Txp::get('HttpRequest', new Abc_Custom_Request_Data)->getHostName();
+	 * </code>
+	 *
+	 * @param Textpattern_Server_Var|null $request The raw request data, defaults to the current request body
 	 */
 
 	public function __construct(Textpattern_Server_Var $request = null)
