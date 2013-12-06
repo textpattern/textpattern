@@ -95,12 +95,23 @@ class Textpattern_Http_Request
 	);
 
 	/**
+	 * Raw request data.
+	 *
+	 * Wraps around PHP's $_SERVER variable.
+	 *
+	 * @var Textpattern_Server_Var
+	 */
+
+	protected $request;
+
+	/**
 	 * Constructor.
 	 */
 
 	public function __construct()
 	{
-		$this->magicQuotesGpc = Txp::get('ServerVar')->getMagicQuotesGpc();
+		$this->request = Txp::get('ServerVar');
+		$this->magicQuotesGpc = $this->request->getMagicQuotesGpc();
 	}
 
 	/**
@@ -138,7 +149,7 @@ class Textpattern_Http_Request
 	{
 		if ($this->acceptedTypes === null)
 		{
-			$this->acceptedTypes = $this->getAcceptsMap(Txp::get('ServerVar')->HTTP_ACCEPT);
+			$this->acceptedTypes = $this->getAcceptsMap($this->request->HTTP_ACCEPT);
 		}
 
 		foreach ((array) $formats as $format)
@@ -182,7 +193,7 @@ class Textpattern_Http_Request
 
 	public function getAcceptedLanguage($languages = null, $threshold = 0.1)
 	{
-		$accepts = $this->getAcceptsMap(Txp::get('ServerVar')->HTTP_ACCEPT_LANGUAGE);
+		$accepts = $this->getAcceptsMap($this->request->HTTP_ACCEPT_LANGUAGE);
 
 		if ($languages === null)
 		{
@@ -234,7 +245,7 @@ class Textpattern_Http_Request
 
 	public function getAcceptedEncoding($encodings = null, $threshold = 0.1)
 	{
-		$accepts = $this->getAcceptsMap(Txp::get('ServerVar')->HTTP_ACCEPT_ENCODING);
+		$accepts = $this->getAcceptsMap($this->request->HTTP_ACCEPT_ENCODING);
 
 		if ($encodings === null)
 		{
@@ -293,7 +304,7 @@ class Textpattern_Http_Request
 
 	public function getHost()
 	{
-		return (string) Txp::get('ServerVar')->HTTP_HOST;
+		return (string) $this->request->HTTP_HOST;
 	}
 
 	/**
@@ -313,7 +324,7 @@ class Textpattern_Http_Request
 
 	public function getPort()
 	{
-		$port = (int) Txp::get('ServerVar')->SERVER_PORT;
+		$port = (int) $this->request->SERVER_PORT;
 		$protocol = $this->getProtocol();
 
 		if ($port && (!isset($this->protocolMap[$protocol]) || $port !== $this->protocolMap[$protocol]))
@@ -342,10 +353,10 @@ class Textpattern_Http_Request
 
 	public function getIp()
 	{
-		$ip = Txp::get('ServerVar')->REMOTE_ADDR;
+		$ip = $this->request->REMOTE_ADDR;
 		$proxy = $this->getHeader('X-Forwarded-For');
 
-		if ($proxy && ($ip === '127.0.0.1' || $ip === '::1' || $ip === '::ffff:127.0.0.1' || $ip === Txp::get('ServerVar')->SERVER_ADDR))
+		if ($proxy && ($ip === '127.0.0.1' || $ip === '::1' || $ip === '::ffff:127.0.0.1' || $ip === $this->request->SERVER_ADDR))
 		{
 			$ips = explode(',', $proxy);
 			$ip = trim($ips[0]);
@@ -403,7 +414,7 @@ class Textpattern_Http_Request
 
 	public function getProtocol()
 	{
-		if (($https = Txp::get('ServerVar')->HTTPS) && $https !== 'off')
+		if (($https = $this->request->HTTPS) && $https !== 'off')
 		{
 			return 'https';
 		}
@@ -442,7 +453,7 @@ class Textpattern_Http_Request
 		{
 			$protocol = $this->referer = false;
 
-			if ($referer = Txp::get('ServerVar')->HTTP_REFERER)
+			if ($referer = $this->request->HTTP_REFERER)
 			{
 				if (strpos($referer, '://'))
 				{
@@ -483,7 +494,7 @@ class Textpattern_Http_Request
 
 	public function getUri()
 	{
-		return (string) Txp::get('ServerVar')->REQUEST_URI;
+		return (string) $this->request->REQUEST_URI;
 	}
 
 	/**
