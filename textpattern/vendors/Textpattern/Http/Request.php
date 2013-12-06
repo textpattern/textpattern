@@ -584,7 +584,7 @@ class Textpattern_Http_Request
 	 * echo Txp::get('HttpRequest')->getHeader('User-Agent');
 	 * </code>
 	 *
-	 * Would return the client's User-Agent header, if it has
+	 * Will return the client's User-Agent header, if it has
 	 * any. If the client didn't send User-Agent, the method
 	 * returns FALSE.
 	 *
