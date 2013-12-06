@@ -175,7 +175,7 @@ class Textpattern_Http_Request
 
 			foreach ((array) $format as $type)
 			{
-				if (isset($this->acceptedTypes[$type]) && $this->acceptedTypes[$type] >= $threshold)
+				if (isset($this->acceptedTypes[$type]) && $this->acceptedTypes[$type]['q'] >= $threshold)
 				{
 					return $type;
 				}
@@ -227,9 +227,9 @@ class Textpattern_Http_Request
 				$search = array_map('strtolower', array_merge($search, $identifiers));
 			}
 
-			foreach ($accepts as $accept => $quality)
+			foreach ($accepts as $accept => $params)
 			{
-				if (in_array(strtolower($accept), $search, true) && $quality >= $threshold && $quality >= $top)
+				if (in_array(strtolower($accept), $search, true) && $params['q'] >= $threshold && $params['q'] >= $top)
 				{
 					$top = $quality;
 					$acceptedLanguage = $language;
@@ -269,7 +269,7 @@ class Textpattern_Http_Request
 
 		foreach ((array) $encodings as $encoding)
 		{
-			if (isset($accepts[$encoding]) && $accepts[$encoding] >= $threshold)
+			if (isset($accepts[$encoding]) && $accepts[$encoding]['q'] >= $threshold)
 			{
 				return $encoding;
 			}
@@ -763,7 +763,7 @@ class Textpattern_Http_Request
 	/**
 	 * Builds a content-negotiation accepts map from the given value.
 	 *
-	 * Keys are the accepted type and the value is the quality. If client doesn't
+	 * Keys are the accepted type and the value are the params. If client doesn't
 	 * specify quality, defaults to 1.0. Values are sorted by the quality,
 	 * from the highest to the lowest.
 	 *
@@ -774,32 +774,65 @@ class Textpattern_Http_Request
 	 * print_r($this->getAcceptsMap('en-us;q=1.0,en;q=0.9'));
 	 * </code>
 	 *
+	 * Returns:
+	 *
+	 * <code>
+	 * Array
+	 * (
+	 * 	[en-us] => Array
+	 * 	(
+	 * 		[q] => 1.0
+	 * 	)
+	 * 	[en] => Array
+	 * 	(
+	 * 		[q] => 0.9
+	 * 	)
+	 * )
+	 * </code>
+	 *
 	 * @param  string $header The header string
 	 * @return array  Accepts map
 	 */
 
-	protected function getAcceptsMap($header)
+	public function getAcceptsMap($header)
 	{
 		$types = explode(',', $header);
 		$accepts = array();
+		$sort = array();
 
 		foreach ($types as $type)
 		{
 			if ($type = trim($type))
 			{
-				if (preg_match('/(.*)\s*;\s*q=([.0-9]+)/', $type, $m))
+				if ($parts = explode(';', $type))
 				{
-					$accepts[$m[1]] = floatval($m[2]);
-				}
-				else
-				{
-					$accepts[$type] = 1.0;
+					$type = array_shift($parts);
+
+					$params = array(
+						'q' => 1.0,
+					);
+
+					foreach ($parts as $value)
+					{
+						if (strpos($value, '=') === false)
+						{
+							$params[$value] = true;
+						}
+						else
+						{
+							$value = explode('=', $value);
+							$params[array_shift($value)] = join('=', $value);
+						}
+					}
+
+					$params['q'] = floatval($params['q']);
+					$accepts[$type] = $params;
+					$sort[$type] = $params['q'];
 				}
 			}
 		}
 
-		arsort($accepts);
-
+		array_multisort($sort, SORT_DESC, $accepts);
 		return $accepts;
 	}
 }
