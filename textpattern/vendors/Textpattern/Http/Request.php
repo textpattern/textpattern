@@ -771,7 +771,7 @@ class Textpattern_Http_Request
 	 * Accept-Language header values.
 	 *
 	 * <code>
-	 * print_r($this->getAcceptsMap('en-us;q=1.0,en;q=0.9'));
+	 * print_r(Txp::get('HttpRequest')->getAcceptsMap('en-us;q=1.0,en;q=0.9'));
 	 * </code>
 	 *
 	 * Returns:
@@ -794,7 +794,7 @@ class Textpattern_Http_Request
 	 * @return array  Accepts map
 	 */
 
-	protected function getAcceptsMap($header)
+	public function getAcceptsMap($header)
 	{
 		$types = explode(',', $header);
 		$accepts = array();
