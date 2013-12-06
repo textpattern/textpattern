@@ -794,7 +794,7 @@ class Textpattern_Http_Request
 	 * @return array  Accepts map
 	 */
 
-	public function getAcceptsMap($header)
+	protected function getAcceptsMap($header)
 	{
 		$types = explode(',', $header);
 		$accepts = array();
