@@ -39,7 +39,7 @@ class Textpattern_Http_Request
 	 * @var array
 	 */
 
-	private $protocolMap = array(
+	protected $protocolMap = array(
 		'http'  => 80,
 		'https' => 443,
 	);
@@ -50,7 +50,7 @@ class Textpattern_Http_Request
 	 * @var array
 	 */
 
-	private $headers;
+	protected $headers;
 
 	/**
 	 * Magic quotes GCP.
@@ -58,7 +58,7 @@ class Textpattern_Http_Request
 	 * @var bool
 	 */
 
-	private $magicQuotesGpc = false;
+	protected $magicQuotesGpc = false;
 
 	/**
 	 * Stores referer.
@@ -66,7 +66,7 @@ class Textpattern_Http_Request
 	 * @var string
 	 */
 
-	private $referer;
+	protected $referer;
 
 	/**
 	 * Content types accepted by the client.
@@ -74,7 +74,7 @@ class Textpattern_Http_Request
 	 * @var array
 	 */
 
-	private $acceptedTypes;
+	protected $acceptedTypes;
 
 	/**
 	 * Formats mapping.
@@ -82,7 +82,7 @@ class Textpattern_Http_Request
 	 * @var array
 	 */
 
-	private $acceptsFormats = array(
+	protected $acceptsFormats = array(
 		'html' => array('text/html', 'application/xhtml+xml', '*/*'),
 		'txt'  => array('text/plain', '*/*'),
 		'js'   => array('application/javascript', 'application/x-javascript', 'text/javascript', 'application/ecmascript', 'application/x-ecmascript', '*/*'),
