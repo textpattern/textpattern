@@ -281,6 +281,13 @@ class Textpattern_Http_Request
 	/**
 	 * Gets the server hostname.
 	 *
+	 * <code>
+	 * echo Txp::get('HttpRequest')->getHost();
+	 * </code>
+	 *
+	 * Returns 'example.com' if requesting
+	 * http://example.test/path/to/subpage.
+	 *
 	 * @return string The host
 	 */
 
@@ -294,6 +301,12 @@ class Textpattern_Http_Request
 	 *
 	 * This method returns FALSE, if the port is the request protocol's
 	 * default. Neither '80' or 443 for HTTPS are returned.
+	 *
+	 * <code>
+	 * echo Txp::get('HttpRequest')->getPort();
+	 * </code>
+	 *
+	 * Returns '8080' if requesting http://example.test:8080/path/to/subpage.
 	 *
 	 * @return int|bool Port number, or FALSE
 	 */
@@ -316,6 +329,13 @@ class Textpattern_Http_Request
 	 *
 	 * This method supports proxies and uses 'X_FORWARDED_FOR'
 	 * HTTP header if deemed necessary.
+	 *
+	 * <code>
+	 * echo Txp::get('HttpRequest')->getIp();
+	 * </code>
+	 *
+	 * Returns the IP address the request came from, e.g. '0.0.0.0'.
+	 * Can be either IPv6 or IPv4 depending on the request.
 	 *
 	 * @return string The IP address
 	 */
@@ -376,6 +396,8 @@ class Textpattern_Http_Request
 	 * echo Txp::get('HttpRequest')->getProtocol();
 	 * </code>
 	 *
+	 * Returns 'https' if requesting https://example.test:8080/path/to/subpage.
+	 *
 	 * @return string Either 'http' or 'https'
 	 */
 
@@ -408,6 +430,8 @@ class Textpattern_Http_Request
 	 * <code>
 	 * echo Txp::get('HttpRequest')->getReferer();
 	 * </code>
+	 *
+	 * Returns full URL such as 'http://example.com/referring/page.php?id=12'.
 	 *
 	 * @return string|bool Referer, or FALSE if not available
 	 */
@@ -446,6 +470,13 @@ class Textpattern_Http_Request
 
 	/**
 	 * Gets requested URI.
+	 *
+	 * <code>
+	 * echo Txp::get('HttpRequest')->getUri();
+	 * </code>
+	 *
+	 * Returns '/some/requested/page?and=query' if requesting
+	 * http://example.com/some/requested/page?and=query.
 	 *
 	 * @return string The URI
 	 */
@@ -528,6 +559,10 @@ class Textpattern_Http_Request
 	 * echo Txp::get('HttpRequest')->getHeader('User-Agent');
 	 * </code>
 	 *
+	 * Would return the client's User-Agent header, if it has
+	 * any. If the client didn't send User-Agent, the method
+	 * returns FALSE.
+	 *
 	 * @param  string      $name The header name
 	 * @return string|bool The header value, or FALSE on failure
 	 */
@@ -548,7 +583,23 @@ class Textpattern_Http_Request
 	/**
 	 * Gets an array of HTTP cookies.
 	 *
-	 * @return array
+	 * <code>
+	 * print_r(Txp::get('HttpRequest')->getHeaders());
+	 * </code>
+	 *
+	 * Returns:
+	 *
+	 * <code>
+	 * Array(
+	 * 	[foobar] => value
+	 * )
+	 * </code>
+	 *
+	 * Returned cookie values are processed properly for you,
+	 * and will not contain runtime quoting slashes or be
+	 * URL encoded. Just pick and choose.
+	 *
+	 * @return array An array of cookies
 	 */
 
 	public function getCookies()
@@ -569,8 +620,12 @@ class Textpattern_Http_Request
 	/**
 	 * Gets a HTTP cookie.
 	 *
+	 * <code>
+	 * echo Txp::get('HttpRequest')->getCookie('foobar');
+	 * </code>
+	 *
 	 * @param  string $name The cookie name
-	 * @return string
+	 * @return string The value
 	 */
 
 	public function getCookie($name)
@@ -689,6 +744,10 @@ class Textpattern_Http_Request
 	 *
 	 * This method can be used to parse Accept, Accept-Charset, Accept-Encoding and
 	 * Accept-Language header values.
+	 *
+	 * <code>
+	 * print_r($this->getAcceptsMap('en-us;q=1.0,en;q=0.9'));
+	 * </code>
 	 *
 	 * @param  string $header The header string
 	 * @return array  Accepts map
