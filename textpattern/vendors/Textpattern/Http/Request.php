@@ -108,9 +108,17 @@ class Textpattern_Http_Request
 	 * Constructor.
 	 */
 
-	public function __construct()
+	public function __construct(Textpattern_Server_Var $request = null)
 	{
-		$this->request = Txp::get('ServerVar');
+		if ($request === null)
+		{
+			$this->request = Txp::get('ServerVar');
+		}
+		else
+		{
+			$this->request = $request;
+		}
+
 		$this->magicQuotesGpc = $this->request->getMagicQuotesGpc();
 	}
 
