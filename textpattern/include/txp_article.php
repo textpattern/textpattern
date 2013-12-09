@@ -1559,7 +1559,7 @@
 
 		if ($rs['textile_body'] != $rs['textile_excerpt'])
 		{
-			$help .=  Textpattern_Textfilter_Registry::help($rs['textile_excerpt']);
+			$help .= Textpattern_Textfilter_Registry::help($rs['textile_excerpt']);
 		}
 
 		$out = wrapRegion('textfilter_group', $help, 'textfilter_help', 'textfilter_help', 'article_textfilter_help');
