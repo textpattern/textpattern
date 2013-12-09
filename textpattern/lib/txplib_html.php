@@ -1509,7 +1509,7 @@
 	function pref_text($name, $val, $id = '')
 	{
 		$id = ($id) ? $id : $name;
-		$vals = Textpattern_Textfilter_Registry::map();
+		$vals = Txp::get('TextfilterRegistry')->map();
 		return selectInput($name, $vals, $val, '', '', $id);
 	}
 
