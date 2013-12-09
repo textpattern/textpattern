@@ -643,7 +643,12 @@
 			$downloadlink = ($file_exists) ? make_download_link($id, txpspecialchars($filename), $filename) : txpspecialchars($filename);
 
 			$created =
-					graf(checkbox('publish_now', '1', $publish_now, '', 'publish_now') . '<label for="publish_now">'.gTxt('set_to_now').'</label>', ' class="edit-file-publish-now"').
+					graf(
+						checkbox('publish_now', '1', $publish_now, '', 'publish_now').
+						n.'<label for="publish_now">'.gTxt('set_to_now').'</label>'
+					, ' class="edit-file-publish-now"'
+					).
+
 					graf(gTxt('or_publish_at').popHelp('timestamp'), ' class="edit-file-publish-at"').
 
 					graf(

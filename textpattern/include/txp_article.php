@@ -1173,8 +1173,9 @@
 						'write-timestamp',
 						graf(
 							checkbox('publish_now', '1', $publish_now, '', 'publish_now').
-							'<label for="publish_now">'.gTxt('set_to_now').'</label>'
-						, ' class="publish-now"').
+							n.'<label for="publish_now">'.gTxt('set_to_now').'</label>'
+						, ' class="publish-now"'
+						).
 
 						graf(gTxt('or_publish_at').popHelp('timestamp'), ' class="publish-at"').
 
