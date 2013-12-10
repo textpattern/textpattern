@@ -467,14 +467,31 @@ class Textpattern_Date_Timezone
 	/**
 	 * Sets the server default timezone.
 	 *
-	 * @param  string $identifier The timezone identifier
+	 * If an array of identifiers is given, the first one supported
+	 * is used.
+	 *
+	 * <code>
+	 * echo Txp::get('DateTimezone')->setTimeZone('UTC');
+	 * </code>
+	 *
+	 * Throws an exception if the identifier isn't valid.
+	 *
+	 * @param  array|string $identifiers The timezone identifier
 	 * @return Textpattern_Date_Timezone
+	 * @throws Exception
 	 */
 
-	public function setTimeZone($identifier)
+	public function setTimeZone($identifiers)
 	{
-		@date_default_timezone_set($identifier);
-		return $this;
+		foreach ((array) $identifiers as $identifier)
+		{
+			if (@date_default_timezone_set($identifier))
+			{
+				return $this;
+			}
+		}
+
+		throw new Exception(gTxt('invalid_argument', array('{name}' => 'identifiers')));
 	}
 
 	/**
