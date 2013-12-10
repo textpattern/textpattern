@@ -35,7 +35,7 @@ interface Textpattern_Container_ContainerInterface
 	 *
 	 * @param  string $alias   The class alias
 	 * @param  array  $options Options
-	 * @return object
+	 * @return object Instance of the resolved class
 	 */
 
 	public function getInstance($alias, array $options);
