@@ -85,9 +85,16 @@ class Textpattern_Container_Container implements Textpattern_Container_Container
 			return $this->registered[$alias];
 		}
 
-		if (strpos($alias, '_') === false && strpos($alias, '\\') === false)
+		$colon = strpos($alias, ':');
+
+		if ($colon === false && strpos($alias, '_') === false && strpos($alias, '\\') === false)
 		{
 			return 'Textpattern' . preg_replace('/([A-Z])/', '_$1', $alias);
+		}
+
+		if ($colon === 0)
+		{
+			$alias = substr($alias, 1);
 		}
 
 		return $alias;
