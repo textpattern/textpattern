@@ -497,6 +497,12 @@ class Textpattern_Date_Timezone
 	/**
 	 * Gets the server default timezone.
 	 *
+	 * <code>
+	 * echo Txp::get('DateTimezone')->setTimeZone('Europe/London')->getTimeZone();
+	 * </code>
+	 *
+	 * The above returns 'Europe/London'.
+	 *
 	 * @return string|bool Timezone identifier
 	 */
 
