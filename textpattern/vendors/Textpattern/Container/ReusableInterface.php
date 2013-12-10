@@ -28,6 +28,25 @@
  * you initialise the instance, it's kept and used again
  * each time you reference the class using the factory.
  *
+ * For instance, the following will remember the initial value:
+ *
+ * <code>
+ * class Abc_Class implements Textpattern_Container_ReusableInterface
+ * {
+ * 	public $random;
+ * 	public function __construct()
+ * 	{
+ * 		$this->random = rand();
+ * 	}
+ * }
+ * echo Txp::get('Abc_Class')->random;
+ * echo Txp::get('Abc_Class')->random;
+ * echo Txp::get('Abc_Class')->random;
+ * </code>
+ *
+ * All the tree calls return the same Abc_Class::$random as the
+ * instance is kept between calls.
+ *
  * @since   4.6.0
  * @package Container
  */
