@@ -57,7 +57,23 @@ class Textpattern_Container_Container implements Textpattern_Container_Container
 	 * @var array
 	 */
 
-	protected $instances = array();	
+	protected $instances = array();
+
+	/**
+	 * The default namespace.
+	 *
+	 * @var string
+	 */
+
+	protected $namespace = 'Textpattern';
+
+	/**
+	 * Namespace separator.
+	 *
+	 * @var string
+	 */
+
+	protected $separator = '_';
 
 	/**
 	 * {@inheritdoc}
@@ -98,16 +114,19 @@ class Textpattern_Container_Container implements Textpattern_Container_Container
 			return $this->registered[$alias];
 		}
 
-		$colon = strpos($alias, ':');
-
-		if ($colon === false && strpos($alias, '_') === false && strpos($alias, '\\') === false)
+		if (strpos($alias, $this->separator) === false && strpos($alias, '\\') === false)
 		{
-			return 'Textpattern' . preg_replace('/([A-Z])/', '_$1', $alias);
-		}
+			$colon = strpos($alias, ':');
 
-		if ($colon === 0)
-		{
-			$alias = substr($alias, 1);
+			if ($colon === false)
+			{
+				return $this->namespace . preg_replace('/([A-Z])/', $this->separator . '$1', $alias);
+			}
+
+			if ($colon === 0)
+			{
+				$alias = substr($alias, 1);
+			}
 		}
 
 		return $alias;
