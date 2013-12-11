@@ -24,14 +24,16 @@
 /**
  * File iterator.
  *
- * @since   4.6.0
- * @package Iterator
- * @example
+ * <code>
  * $file = new Textpattern_Iterator_FileIterator('file.txt');
  * foreach ($file as $key => $line)
  * {
  * 	echo $line;
  * }
+ * </code>
+ *
+ * @since   4.6.0
+ * @package Iterator
  */
 
 class Textpattern_Iterator_FileIterator implements Iterator
