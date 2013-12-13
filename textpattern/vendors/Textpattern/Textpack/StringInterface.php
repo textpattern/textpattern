@@ -28,7 +28,7 @@
  * @package Textpack
  */
 
-interface Textpattern_Textpack_StringTemplate
+interface Textpattern_Textpack_StringInterface
 {
 	/**
 	 * Gets the name of the string.
