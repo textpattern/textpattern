@@ -155,7 +155,10 @@ class Textpattern_Iterator_FileIterator implements Iterator
 	{
 		if (is_resource($this->filepointer) === false)
 		{
-			$this->filepointer = fopen($this->filename, 'r');
+			if (($this->filepointer = fopen($this->filename, 'r')) === false)
+			{
+				throw new Exception(gTxt('invalid_argument', array('{name}' => 'filename')));
+			}
 		}
 
 		rewind($this->filepointer);
