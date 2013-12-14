@@ -530,29 +530,6 @@
 				}
 			}
 		}
-		else
-		{
-			// Backward compatibility stuff. Remove when necessary.
-			$filename = is_file(txpath.'/lang/'.$lang.'.txt')
-				? txpath.'/lang/'.$lang.'.txt'
-				: txpath.'/lang/en-gb.txt';
-
-			$file = @fopen($filename, "r");
-			if ($file)
-			{
-				while (!feof($file))
-				{
-					$line = fgets($file, 4096);
-					if ($line[0] == '#')
-					{
-						continue;
-					}
-					@list($name, $val) = explode(' => ', trim($line));
-					$out[$name] = $val;
-				}
-				@fclose($filename);
-			}
-		}
 
 		return $out;
 	}
