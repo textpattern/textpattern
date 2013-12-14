@@ -43,6 +43,7 @@
 			'get_language'    => true,
 			'get_textpack'    => true,
 			'remove_language' => true,
+			'save_language'   => true,
 			'list_languages'  => false,
 		);
 
@@ -97,32 +98,21 @@
 
 	function list_languages($message='')
 	{
-		global $prefs, $locale, $textarray;
 		require_once txpath.'/lib/IXRClass.php';
-
-		// Select and save active language.
-		if (!$message && ps('step') == 'list_languages' && ps('language'))
-		{
-			$locale = doSlash(Txp::get('L10nLocale')->getLanguageLocale(ps('language')));
-			safe_update('txp_prefs', "val='". doSlash(ps('language')) ."'", "name='language'");
-			safe_update('txp_prefs', "val='". $locale ."'", "name='locale'");
-			$textarray = load_lang(doSlash(ps('language')));
-			$locale = setlocale(LC_ALL, $locale);
-			$message = gTxt('preferences_saved');
-		}
 
 		$active_lang = safe_field('val', 'txp_prefs', "name='language'");
 
-		$lang_form = '<div id="language_control" class="txp-control-panel">'.
+		$lang_form = tag(
 			form(
 				graf(
-					'<label for="language">'.gTxt('active_language').'</label>'.
+					tag(gTxt('active_language'), 'label', array('for' => 'language')).
 					languages('language', $active_lang).
 					eInput('lang').
-					sInput('list_languages')
+					sInput('save_language')
 				)
-			).'</div>';
-	
+			), 'div', array('id' => 'language_control', 'class' => 'txp-control-panel')
+		);
+
 		$client = new IXR_Client(RPC_SERVER);
 	//	$client->debug = true;
 
@@ -132,7 +122,7 @@
 
 		// Get items from RPC.
 		@set_time_limit(90); // TODO: 90 seconds: seriously?
-		if ($client->query('tups.listLanguages', $prefs['blog_uid']))
+		if ($client->query('tups.listLanguages', get_pref('blog_uid')))
 		{
 			$rpc_connect = true;
 			$response = $client->getResponse();
@@ -245,7 +235,7 @@
 						''
 					)
 				).
-				n.span(safe_strftime($prefs['archive_dateformat'], $langdat['file_lastmod']), array(
+				n.span(safe_strftime(get_pref('archive_dateformat'), $langdat['file_lastmod']), array(
 					'class' => 'date '.($file_updated ? 'created' : 'modified')
 				))
 				: '-'
@@ -313,6 +303,32 @@
 			, '', '', 'post', 'edit-form', '', 'text_uploader').
 	
 			'</div>'; // End language_container
+	}
+
+/**
+ * Saves the active language.
+ */
+
+	function save_language()
+	{
+		global $textarray, $locale;
+
+		extract(psa(array(
+			'language',
+		)));
+
+		if (safe_field('lang', 'txp_lang', "lang='".doSlash($language)."' limit 1"))
+		{
+			$locale = $prefs['locale'] = Txp::get('L10nLocale')->getLanguageLocale($language);
+			Txp::get('L10nLocale')->setLocale(LC_ALL, $language);
+			set_pref('locale', $locale);
+			set_pref('language', $language);
+			$textarray = load_lang($language);
+			list_languages(gTxt('preferences_saved'));
+			return;
+		}
+
+		list_languages(gTxt('language_not_installed', array('{name}' => $language)));
 	}
 
 /**
