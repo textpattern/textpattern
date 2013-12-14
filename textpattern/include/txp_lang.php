@@ -328,7 +328,7 @@
 			return;
 		}
 
-		list_languages(gTxt('language_not_installed', array('{name}' => $language)));
+		list_languages(array(gTxt('language_not_installed', array('{name}' => $language)), E_ERROR));
 	}
 
 /**
