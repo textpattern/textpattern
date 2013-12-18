@@ -25,14 +25,14 @@
  * Access server configuration variables.
  *
  * <code>
- * Txp::get('ServerVar')->SERVER_NAME;
+ * Txp::get('ServerConfig')->getVariable('REQUEST_URI');
  * </code>
  *
  * @since   4.6.0
  * @package Server
  */
 
-class Textpattern_Server_Var
+class Textpattern_Server_Config
 {
 	/**
 	 * Magic quotes GPC status.
@@ -79,7 +79,7 @@ class Textpattern_Server_Var
 	 * @return mixed  The variable
 	 */
 
-	public function __get($name)
+	public function getVariable($name)
 	{
 		if (isset($_SERVER[$name]))
 		{
@@ -115,7 +115,7 @@ class Textpattern_Server_Var
 	 * Turn runtime magic quotes off.
 	 *
 	 * <code>
-	 * Txp::get('ServerVar')->setMagicQuotesOff();
+	 * Txp::get('ServerConfig')->setMagicQuotesOff();
 	 * </code>
 	 *
 	 * @return Textpattern_Server_Var

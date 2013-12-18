@@ -61,7 +61,7 @@ class Textpattern_Security_Filter
 
 	public function setMaxRequestUriLength($length)
 	{
-		$uri = Txp::get('ServerVar')->REQUEST_URI;
+		$uri = Txp::get('ServerConfig')->getVariable('REQUEST_URI');
 
 		if (strlen($uri) > $length)
 		{
@@ -83,7 +83,7 @@ class Textpattern_Security_Filter
 
 	public function registerGlobals()
 	{
-		if (Txp::get('ServerVar')->getRegisterGlobals())
+		if (Txp::get('ServerConfig')->getRegisterGlobals())
 		{
 			if (array_key_exists('GLOBALS', $_REQUEST) || array_key_exists('GLOBALS', $_FILES))
 			{
