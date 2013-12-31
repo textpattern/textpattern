@@ -5,7 +5,7 @@
  * http://textpattern.com
  *
  * Copyright (C) 2004 Dean Allen
- * Copyright (C) 2013 The Textpattern Development Team
+ * Copyright (C) 2014 The Textpattern Development Team
  * 
  * "Mod File Upload" by Michael Manfre
  * http://manfre.net
