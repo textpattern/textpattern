@@ -371,11 +371,6 @@
 
 			$out = '<img src="'.imagesrcurl($id, $ext).'" alt="'.$alt.'"';
 
-			if ($caption)
-			{
-				$out .= ' title="'.$caption.'"';
-			}
-
 			if ($html_id and !$wraptag)
 			{
 				$out .= ' id="'.txpspecialchars($html_id).'"';
@@ -482,11 +477,6 @@
 
 				$out = '<img src="'.imagesrcurl($id, $ext, true).'" alt="'.$alt.'"';
 
-				if ($caption)
-				{
-					$out .= ' title="'.$caption.'"';
-				}
-
 				if ($html_id and !$wraptag)
 				{
 					$out .= ' id="'.txpspecialchars($html_id).'"';
@@ -516,14 +506,14 @@
 
 				if ($link)
 				{
-					$atts = " title='$caption'";
+					$attribs = '';
 
 					if (!empty($link_rel))
 					{
-						$atts .= " rel='".txpspecialchars($link_rel)."'";
+						$attribs .= " rel='".txpspecialchars($link_rel)."'";
 					}
 
-					$out = href($out, imagesrcurl($id, $ext), $atts);
+					$out = href($out, imagesrcurl($id, $ext), $attribs);
 				}
 				elseif ($poplink)
 				{
@@ -3312,7 +3302,6 @@
 						}
 
 						$out = '<img src="'.imagesrcurl($id, $ext, true).'" alt="'.$alt.'"'.
-							($caption ? ' title="'.$caption.'"' : '').
 							(($html_id and !$wraptag) ? ' id="'.txpspecialchars($html_id).'"' : '').
 							(($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
 							($style ? ' style="'.txpspecialchars($style).'"' : '').
@@ -3336,7 +3325,6 @@
 					}
 
 					$out = '<img src="'.imagesrcurl($id, $ext).'" alt="'.$alt.'"'.
-						($caption ? ' title="'.$caption.'"' : '').
 						(($html_id and !$wraptag) ? ' id="'.txpspecialchars($html_id).'"' : '').
 						(($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
 						($style ? ' style="'.txpspecialchars($style).'"' : '').
