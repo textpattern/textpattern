@@ -138,7 +138,7 @@
 
 	function article_post()
 	{
-		global $txp_user, $vars, $prefs;
+		global $txp_user, $vars, $prefs, $step;
 
 		extract($prefs);
 
@@ -148,6 +148,8 @@
 		$msg = '';
 		if ($Title or $Body or $Excerpt)
 		{
+			$is_clone = (ps('copy'));
+
 			$Status = assert_int(ps('Status'));
 
 			// Comments my be on, off, or disabled.
@@ -252,6 +254,12 @@
 				$Status = STATUS_PENDING;
 			}
 
+			if ($is_clone && $Status >= STATUS_LIVE)
+			{
+				$Status = STATUS_DRAFT; 
+				$url_title = '';
+			}
+
 			if (empty($url_title))
 			{
 				$url_title = stripSpace($Title_plain, 1);
@@ -301,6 +309,16 @@
 				if ($ok)
 				{
 					$rs['ID'] = $GLOBALS['ID'] = $ok;
+
+					if ($is_clone)
+					{
+						safe_update(
+							'textpattern',
+							"Title = concat(Title, ' (', {$ok}, ')'),
+							url_title = concat(url_title, '-', {$ok})",
+							"ID = {$ok}"
+						);
+					}
 
 					if ($Status >= STATUS_LIVE)
 					{
@@ -621,10 +639,15 @@
 				'selector' => 'p.title',
 				'cb'       => 'article_partial_title'
 			),
-			'title_value' => array(
+			'title_value'  => array(
 				'mode'     => PARTIAL_VOLATILE_VALUE,
 				'selector' => '#title',
 				'cb'       => 'article_partial_title_value'
+			),
+			'article_clone' => array(
+				'mode'     => PARTIAL_VOLATILE,
+				'selector' => '#article_partial_article_clone',
+				'cb'       => 'article_partial_article_clone'
 			),
 			'article_view' => array(
 				'mode'     => PARTIAL_VOLATILE,
@@ -1579,9 +1602,10 @@
 	{
 		global $step;
 		$av_cb = $rs['partials_meta']['article_view']['cb'];
+		$ac_cb = $rs['partials_meta']['article_clone']['cb'];
 		$out = graf('<label for="title">'.gTxt('title').'</label>'.popHelp('title').br.
 			n.'<input type="text" id="title" name="Title" value="'.escape_title($rs['Title']).'" size="48" />'.
-			($step != 'create' ?  $av_cb($rs) : '')
+			($step != 'create' ?  $ac_cb($rs) . $av_cb($rs) : '')
 		, ' class="title"');
 
 		return pluggable_ui('article_ui', 'title', $out, $rs);
@@ -1780,6 +1804,23 @@
 		}
 
 		return pluggable_ui('article_ui', 'recent_articles', $ra, $rs);
+	}
+
+/**
+ * Renders article duplicate link.
+ *
+ * @param  array  $rs Article data
+ * @return string HTML
+ */
+
+	function article_partial_article_clone($rs)
+	{
+		extract($rs);
+
+		return n.span(href(gTxt('duplicate'), '#', array('id' => 'txp_clone', 'class' => 'article-clone')), array(
+				'id'    => 'article_partial_article_clone',
+				'class' => 'txp-actions',
+			));
 	}
 
 /**

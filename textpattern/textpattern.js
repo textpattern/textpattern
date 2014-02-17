@@ -1549,6 +1549,14 @@ textpattern.Route.add('article', function ()
 		}
 	});
 
+	$('#txp_clone').click(function (e)
+	{
+		e.preventDefault();
+		form.append('<input type="hidden" name="copy" value="1" />'+
+			'<input type="hidden" name="publish" value="1" />');
+		form.off('submit.txpAsyncForm').trigger('submit');
+	});
+
 	// Switch to text/html/preview mode.
 	$(document).on('click',
 		'[data-view-mode]',
