@@ -138,7 +138,7 @@
 
 	function article_post()
 	{
-		global $txp_user, $vars, $prefs, $step;
+		global $txp_user, $vars, $prefs;
 
 		extract($prefs);
 
