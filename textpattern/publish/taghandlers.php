@@ -2539,13 +2539,18 @@
 			'wraptag'    => ($comments_are_ol ? 'ol' : ''),
 			'break'      => ($comments_are_ol ? 'li' : 'div'),
 			'class'      => __FUNCTION__,
-			'breakclass' => '',
+			'breakclass' => '', // Deprecated in 4.6.0
 			'limit'      => 0,
 			'offset'     => 0,
 			'sort'       => 'posted ASC',
 		), $atts));
 
 		assert_article();
+
+		if (isset($atts['breakclass']))
+		{
+			trigger_error(gTxt('deprecated_attribute', array('{name}' => 'breakclass')), E_USER_NOTICE);
+		}
 
 		extract($thisarticle);
 
@@ -3778,8 +3783,13 @@
 			'wraptag'    => '',
 			'class'      => '',
 			'break'      => '',
-			'breakclass' => '',
+			'breakclass' => '', // Deprecated in 4.6.0
 		), $atts));
+
+		if (isset($atts['breakclass']))
+		{
+			trigger_error(gTxt('deprecated_attribute', array('{name}' => 'breakclass')), E_USER_NOTICE);
+		}
 
 		$validItems = array('id', 'name', 'category', 'category_title', 'alt', 'caption', 'ext', 'author', 'w', 'h', 'thumb_w', 'thumb_h', 'date');
 		$type = do_list($type);

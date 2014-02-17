@@ -3032,7 +3032,6 @@ class TagBuilderTags
 
 		$atts = gpsa(array(
 			'break',
-			'breakclass',
 			'class',
 			'form',
 			'limit',
@@ -3072,9 +3071,6 @@ class TagBuilderTags
 
 			tagRow('break',
 				input_tag('break', $break)).
-
-			tagRow('breakclass',
-				fInput('text', 'breakclass', $breakclass, '', '', '', INPUT_REGULAR)).
 
 			$endform
 		);
