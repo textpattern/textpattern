@@ -30,10 +30,11 @@ class classic_theme extends theme
 {
 	function html_head()
 	{
-		$out[] = '<link rel="stylesheet" href="vendors/jquery/ui/css/textpattern/jquery-ui.css">';
-		$out[] = '<link rel="stylesheet" href="'.$this->url.'textpattern.css">';
+		$out[] = '<link rel="stylesheet" href="vendors/jquery/ui/css/textpattern/jquery-ui.min.css">';
+		$out[] = '<link rel="stylesheet" href="'.$this->url.'textpattern.min.css">';
 		$out[] = '<meta name="generator" content="Textpattern CMS">';
 		$out[] = '<script src="vendors/modernizr/modernizr/modernizr.js"></script>';
+		$out[] = '<!--[if lt IE 9]><link rel="stylesheet" href="vendors/jquery/ui/css/textpattern/jquery-ui-ie8.min.css"><![endif]-->'.n;
 
 		return join(n, $out);
 	}

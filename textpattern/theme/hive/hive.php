@@ -30,10 +30,10 @@ class hive_theme extends theme
 {
 	function html_head()
 	{
-		$out[] = '<link rel="stylesheet" href="vendors/jquery/ui/css/textpattern/jquery-ui.css">';
-		$out[] = '<link rel="stylesheet" href="'.$this->url.'css/textpattern.css">';
+		$out[] = '<link rel="stylesheet" href="vendors/jquery/ui/css/textpattern/jquery-ui.min.css">';
+		$out[] = '<link rel="stylesheet" href="'.$this->url.'css/textpattern.min.css">';
 
-		// Start of custom CSS toggles (see README.textile for usage instructions)
+		// Start of custom CSS toggles (see README.textile for usage instructions).
 		if (defined('hive_theme_hide_branding'))
 		{
 			$out[] = '<link rel="stylesheet" href="'.$this->url.'css/custom/hide_branding.css">';
@@ -89,13 +89,16 @@ class hive_theme extends theme
 		// End of custom CSS toggles.
 
 		$out[] = '<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">';
-		$out[] = '<meta name="apple-mobile-web-app-capable" content="yes">';
-		$out[] = '<meta name="apple-mobile-web-app-status-bar-style" content="black">';
-		$out[] = '<meta name="apple-mobile-web-app-title" content="'.htmlspecialchars($GLOBALS["prefs"]["sitename"]).'">';
 		$out[] = '<meta name="generator" content="Textpattern CMS">';
+		$out[] = '<meta name="application-name" content="'.htmlspecialchars($GLOBALS["prefs"]["sitename"]).'">';
+		$out[] = '<meta name="apple-mobile-web-app-capable" content="yes">';
+		$out[] = '<meta name="apple-mobile-web-app-title" content="'.htmlspecialchars($GLOBALS["prefs"]["sitename"]).'">';
 		$out[] = '<script src="vendors/modernizr/modernizr/modernizr.js"></script>';
-		$out[] = '<!--[if lt IE 9]><script src="vendors/keithclark/selectivizr/selectivizr.min.js"></script><![endif]-->';
-		$out[] = '<script src="'.$this->url.'js/scripts.js"></script>'.n;
+		$out[] = '<script src="'.$this->url.'js/scripts.js"></script>';
+		$out[] = '<!--[if lt IE 9]>';
+		$out[] = '<script src="vendors/keithclark/selectivizr/selectivizr.min.js"></script>';
+		$out[] = '<link rel="stylesheet" href="vendors/jquery/ui/css/textpattern/jquery-ui-ie8.min.css">';
+		$out[] = '<![endif]-->'.n;
 
 		return join(n, $out);
 	}
@@ -104,14 +107,17 @@ class hive_theme extends theme
 	{
 		global $txp_user;
 		$out[] = hed(
-			href(htmlspecialchars($GLOBALS["prefs"]["sitename"]), hu, ' title="'.gTxt('tab_view_site').'" rel="external"')
+			href(htmlspecialchars($GLOBALS["prefs"]["sitename"]), hu, array(
+				'rel'   => 'external',
+				'title' => gTxt('tab_view_site'),
+			))
 			, 1);
 
 		if ($txp_user)
 		{
 			$out[] = graf(
 				href(gTxt('logout'), 'index.php?logout=1', ' onclick="return verify(\''.gTxt('are_you_sure').'\')"')
-				, ' class="txp-logout"');
+				, array('class' => 'txp-logout'));
 
 			$out[] = '<nav role="navigation" aria-label="'.gTxt('navigation').'">';
 			$out[] = '<div class="txp-nav">';
@@ -174,11 +180,14 @@ class hive_theme extends theme
 	function footer()
 	{
 		$out[] = graf(
-			href('Textpattern CMS', 'http://textpattern.com', ' rel="external" title="'.gTxt('go_txp_com').'"').
+			href('Textpattern CMS', 'http://textpattern.com', array(
+				'rel'   => 'external',
+				'title' => gTxt('go_txp_com'),
+			)).
 			' (v'.txp_version.')'
-			, ' class="mothership"');
+			, array('class' => 'mothership'));
 
-		$out[] = graf(href(gTxt('back_to_top'), '#'), ' class="pagejump"');
+		$out[] = graf(href(gTxt('back_to_top'), '#'), array('class' => 'pagejump'));
 
 		return join(n, $out);
 	}
@@ -203,7 +212,8 @@ class hive_theme extends theme
 			return '';
 		}
 
-		if (!is_array($thing) || !isset($thing[1]))	{
+		if (!is_array($thing) || !isset($thing[1]))
+		{
 			$thing = array($thing, 0);
 		}
 
