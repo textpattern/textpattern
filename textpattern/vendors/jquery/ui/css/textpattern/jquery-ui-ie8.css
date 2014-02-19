@@ -1,0 +1,67 @@
+.ui-helper-zfix {
+  filter: Alpha(Opacity=0);
+}
+
+.ui-priority-secondary {
+  filter: Alpha(Opacity=66);
+}
+
+.ui-state-disabled {
+  filter: Alpha(Opacity=33);
+}
+.ui-state-disabled .ui-icon {
+  filter: Alpha(Opacity=33);
+}
+
+.ui-widget-shadow {
+  filter: Alpha(Opacity=33);
+}
+
+.ui-widget-overlay {
+  background: url("images/overlay-no-rgba.png");
+}
+
+.ui-slider.ui-state-disabled .ui-slider-handle,
+.ui-slider.ui-state-disabled .ui-slider-range {
+  filter: inherit;
+}
+
+/* fallbacks for lack of SVG support in IE 8 */
+.ui-icon {
+  background-image: url("images/ui-icon-sprite-333333.png");
+}
+
+.ui-state-default .ui-icon {
+  background-image: url("images/ui-icon-sprite-555555.png");
+}
+
+.ui-widget-content .ui-icon,
+.ui-widget-header .ui-icon,
+.ui-state-hover .ui-icon,
+.ui-state-focus .ui-icon,
+.ui-state-active .ui-icon {
+  background-image: url("images/ui-icon-sprite-333333.png");
+}
+
+.success .ui-icon {
+  background-image: url("images/ui-icon-sprite-success.png");
+}
+
+.ui-state-highlight .ui-icon,
+.warning .ui-icon {
+  background-image: url("images/ui-icon-sprite-warning.png");
+}
+
+.ui-state-error .ui-icon,
+.ui-state-error-text .ui-icon,
+.error .ui-icon {
+  background-image: url("images/ui-icon-sprite-error.png");
+}
+
+.information .ui-icon {
+  background-image: url("images/ui-icon-sprite-info.png");
+}
+
+#messagepane .ui-icon {
+  background-image: url("images/ui-icon-sprite-ffffff.png");
+}
