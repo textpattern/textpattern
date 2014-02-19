@@ -6630,7 +6630,7 @@ class timezone
 			return n.'<select'.( $select_id ? ' id="'.$select_id.'"' : '' ).' name="'.$name.'"'.
 				($onchange == 1 ? ' onchange="submit(this.form);"' : $onchange).
 				'>'.
-				($blank_first ? n.'<option value=""'.($selected == false ? ' selected="selected"' : '').'></option>' : '').
+				($blank_first ? n.'<option value=""'.($selected == false ? ' selected="selected"' : '').'>&#160;</option>' : '').
 				join('', $out).
 				n.'</select>';
 		}

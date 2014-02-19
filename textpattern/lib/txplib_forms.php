@@ -157,7 +157,7 @@
 
 		if ($blank_first)
 		{
-			array_unshift($out, '<option value=""'.($selected === false ? ' selected="selected"' : '').'></option>');
+			array_unshift($out, '<option value=""'.($selected === false ? ' selected="selected"' : '').'>&#160;</option>');
 		}
 
 		$atts = join_atts(array(
@@ -231,7 +231,7 @@
 			$out[] = '<option value="'.txpspecialchars($a['name']).'"'.$htmltitle.$sel.'>'.$sp.txpspecialchars($a['title']).$hellip.'</option>';
 		}
 
-		array_unshift($out, '<option value=""'.($selected === false ? ' selected="selected"' : '').'></option>');
+		array_unshift($out, '<option value=""'.($selected === false ? ' selected="selected"' : '').'>&#160;</option>');
 
 		return n.tag(n.join(n, $out).n, 'select', array(
 			'id'   => $select_id,
