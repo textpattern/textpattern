@@ -1,0 +1,26 @@
+/* Extends Classic IE 8 theme
+   ========================================================================== */
+
+@import url("../classic/ie8.css");
+
+
+/* fallbacks for lack of RGBa support in IE 8 */
+
+#nav > li.active {
+    background: #fcdc7f;
+}
+
+#nav li:hover,
+#nav li.sfhover {
+    background: #feed94;
+}
+
+/* fallbacks for lack of SVG support in IE 8 */
+
+.txp-summary a {
+    background-image: url("img/expand-collapse.png");
+}
+
+#nav {
+    background-image: url("../classic/img/textpattern.png");
+}

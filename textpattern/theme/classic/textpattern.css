@@ -1,7 +1,9 @@
 /* Base
    ========================================================================== */
 
-/* corrects block display not defined in IE8-9 */
+/* correct `block` display not defined for any HTML5 element in IE 8-9
+   correct `block` display not defined for `details` or `summary` in IE 10-11 and Firefox
+   correct `block` display not defined for `main` in IE 11 */
 article,
 aside,
 details,
@@ -16,13 +18,15 @@ summary {
     display: block;
 }
 
-/* addresses styling for 'hidden' attribute not present in IE8-9 */
-[hidden] {
+/* address `[hidden]` styling not present in IE 8-10
+   hide the `template` element in IE 8-11, Safari, Firefox < 22 */
+[hidden],
+template {
     display: none;
 }
 
-/* set correct display for `progress` in IE8-9
-   improve vertical alignment of `progress` in Chrome, Firefox, and Opera */
+/* set correct display for `progress` in IE 8-9
+   improve vertical alignment of `progress` in Chrome, Firefox, Opera */
 progress {
     display: inline-block;
     vertical-align: baseline;
@@ -36,7 +40,7 @@ html {
     -ms-text-size-adjust: 100%;
 }
 
-/* remove tap delay in IE10+ (and proposed for other browsers) */
+/* remove tap delay in IE 10+ (and proposed for other browsers) */
 a,
 input,
 button {
@@ -166,7 +170,7 @@ a.busy {
 a.pophelp,
 a.pophelpsubtle {
     border: 1px solid;
-    border-color: #ddd #bbb #bbb #ddd;
+    border-color: #dddddd #bbbbbb #bbbbbb #dddddd;
     -moz-border-radius: 50%;
     border-radius: 50%;
     padding: 0 2px;
@@ -211,12 +215,12 @@ h1 .pophelp {
 
 h2 {
     font-size: 1.5em; /* 18px / 12px */
-    line-height: 1.33333;
+    line-height: 1.3333333;
     margin: 0 0 0.66667em 0;
 }
 
 h2 .pophelp {
-    font-size: 0.66667em;
+    font-size: 0.6666667em;
 }
 
 h3 {
@@ -229,7 +233,7 @@ h3 {
     margin-top: 0.8em;
 }
 
-/* addresses style set to 'bolder' in Firefox4+, Safari5, and Chrome */
+/* address style set to `bolder` in Firefox 4+, Safari, Chrome */
 b,
 strong {
     font-weight: bold;
@@ -245,12 +249,12 @@ blockquote {
     padding: 0 0 0 1em;
 }
 
-/* addresses styling not present in Safari5 and Chrome */
+/* address styling not present in Safari, Chrome */
 dfn {
     font-style: italic;
 }
 
-/* addresses styling not present in IE8-9, Safari5, Chrome */
+/* address styling not present in IE 8-9, Safari 5, Chrome */
 abbr[title],
 dfn[title] {
     border-bottom: 1px dotted;
@@ -259,7 +263,7 @@ dfn[title] {
 
 mark,
 var {
-    background-color: #ffc;
+    background-color: #ffffcc;
 }
 
 pre,
@@ -299,10 +303,10 @@ code,
     direction: ltr;
 }
 
-/* prevents sub and sup affecting line-height in all browsers */
+/* prevent `<sub>` and `<sup>` affecting line height in all browsers */
 sub,
 sup {
-    font-size: 0.83333em; /* 10px / 12px */
+    font-size: 0.8333333em; /* 10px / 12px */
     line-height: 0;
     position: relative;
     vertical-align: baseline;
@@ -318,7 +322,7 @@ sub {
 
 small,
 figcaption {
-    font-size: 0.83333em; /* 10px / 12px */
+    font-size: 0.8333333em; /* 10px / 12px */
 }
 
 
@@ -349,9 +353,11 @@ html[lang="zh-tw"] {
 /* Embedded content
    ========================================================================== */
 
-/* removes border when inside 'a' element in IE8-9 */
+/* remove border when inside `<a>` element in IE 8-10
+   remove the gap between images and the bottom of their containers */
 img {
     border: 0;
+    vertical-align: middle;
 }
 
 img.align-left {
@@ -369,12 +375,12 @@ img.align-center {
     margin: 1em auto;
 }
 
-/* addresses margin not present in IE 8-9 and Safari 5 */
+/* address margin not present in IE 8-9, Safari 5 */
 figure {
     margin: 0;
 }
 
-/* corrects overflow displayed oddly in IE9 */
+/* correct overflow not hidden in IE 9-11 */
 svg:not(:root) {
     overflow: hidden;
 }
@@ -382,11 +388,11 @@ svg:not(:root) {
 .content-image {
     border: solid 1px #cccccc;
     padding: 4px;
-    background: #fff;
+    background: #ffffff;
 }
 
 a:hover .content-image {
-    border: solid 1px #963;
+    border: solid 1px #996633;
 }
 
 
@@ -481,17 +487,13 @@ a:hover .content-image {
     right: 1em;
     font-size: 1.25em;
     text-decoration: none;
-    color: #ccc;
-    font-weight: bold;
-}
-
-.rgba .close {
     color: rgba(255, 255, 255, 0.5);
+    font-weight: bold;
 }
 
 .close:hover {
     text-decoration: none;
-    color: #fff;
+    color: #ffffff;
     cursor: pointer;
 }
 
@@ -500,7 +502,7 @@ a:hover .content-image {
    ========================================================================== */
 
 .txp-details {
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #dddddd;
 }
 
 .txp-details .txp-details:last-of-type {
@@ -509,7 +511,7 @@ a:hover .content-image {
 
 .txp-details h3 {
     margin: 1em 0;
-    color: #963;
+    color: #996633;
     font-size: 1em;
     font-family: Verdana, Arial, sans-serif;
     font-weight: bold;
@@ -517,15 +519,7 @@ a:hover .content-image {
 
 .txp-summary a {
     padding: 0 0 0 12px;
-    background: no-repeat 0 4px;
-}
-
-.no-svg .txp-summary a {
-    background-image: url("img/expand-collapse.gif");
-}
-
-.svg .txp-summary a {
-    background-image: url("img/expand-collapse.svg");
+    background: url("img/expand-collapse.svg") no-repeat 0 4px;
 }
 
 .txp-summary.expanded a {
@@ -539,7 +533,7 @@ a:hover .content-image {
 /* define consistent fieldset margin, border and padding */
 fieldset {
     margin: 0 0 0.25em 0;
-    border: 1px solid #ddd;
+    border: 1px solid #dddddd;
     padding: 1px 0.5em;
     min-width: 0; /* address width being affected by wide descendants in Chrome and Firefox */
 }
@@ -547,7 +541,7 @@ fieldset {
 /* remove padding so people aren't caught out if they zero out fieldsets */
 legend {
     margin: 1em 0;
-    color: #963;
+    color: #996633;
     border: 0;
     padding: 0;
     font-weight: bold;
@@ -556,21 +550,23 @@ legend {
 /* colour placeholder text (Webkit) */
 input::-webkit-input-placeholder,
 textarea::-webkit-input-placeholder {
-    color: #888;
+    color: #888888;
 }
 
 /* colour placeholder text (Mozilla) */
 input:-moz-placeholder,
 textarea:-moz-placeholder {
-    color: #888;
+    color: #888888;
 }
 
-/* colour placeholder text when using polyfill */
-span.placeholder {
-    color: #888;
+/* remove inner padding and border in Firefox 4+ */
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+    border: 0;
+    padding: 0;
 }
 
-/* removes inner padding and search cancel button in Safari5+ and Chrome on OS X */
+/* remove inner padding and search cancel button in Safari 5+ and Chrome on OS X */
 input[type="search"]::-webkit-search-cancel-button,
 input[type="search"]::-webkit-search-decoration {
     -webkit-appearance: none;
@@ -599,7 +595,7 @@ textarea {
     background-clip: padding-box;
     margin: 0;
     border: 1px solid;
-    border-color: #bbb #ddd #ddd #bbb;
+    border-color: #bbbbbb #dddddd #dddddd #bbbbbb;
     padding: 0.25em;
     max-width: 100%;
     background-color: #f5f5f5;
@@ -619,21 +615,22 @@ input[type="number"]::-webkit-outer-spin-button {
     height: auto;
 }
 
-textarea {
-    width: 100%;
-    min-height: 5.18181818181818em;
-    resize: vertical;
-    overflow: auto; /* removes default vertical scrollbar in IE8-9 */
+/* addresses box sizing set to content-box and excess padding in IE 8-9 */
+input[type="checkbox"],
+input[type="radio"] {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 0;
 }
 
-/* addresses select alignment in Safari/Chrome */
+/* address inconsistent `text-transform` inheritance for `select` in Firefox 4+ */
+select {
+    text-transform: none;
+}
+
+/* address `<select>` alignment in Safari, Chrome */
 @media (-webkit-min-device-pixel-ratio: 0) {
-    select,
-    select[size="0"],
-    select[size="1"] {
-        background: #f5f5f5 url("data:image/svg+xml,<svg version='1.1' baseProfile='full' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' width='11px' height='4px' viewBox='0 0 11 4' enable-background='new 0 0 11 4' xml:space='preserve'><polygon fill='#333333' points='3.5,4 0,0 7,0'/></svg>") no-repeat right center;
-        padding-right: 16px;
-    }
 
     select[size],
     select[multiple],
@@ -641,13 +638,21 @@ textarea {
         background-image: none;
         padding-right: 0.25em;
     }
+
+    select,
+    select[size="0"],
+    select[size="1"] {
+        background: #f5f5f5 url("data:image/svg+xml,<svg version='1.1' baseProfile='full' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' width='11px' height='4px' viewBox='0 0 11 4' enable-background='new 0 0 11 4' xml:space='preserve'><polygon fill='#333333' points='3.5,4 0,0 7,0'/></svg>") no-repeat right center;
+        padding-right: 16px;
+    }
+
 }
 
 optgroup {
     font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
     font-style: normal;
     font-weight: bold;
-    color: #000;
+    color: #000000;
 }
 
 /* kill phantom spacing and dotted border that appears in Firefox */
@@ -656,11 +661,11 @@ optgroup::-moz-focus-inner {
     padding: 0;
 }
 
-/* addresses box sizing set to content-box and excess padding in IE8-9 */
-input[type="checkbox"],
-input[type="radio"] {
-    box-sizing: border-box;
-    padding: 0;
+textarea {
+    width: 100%;
+    min-height: 5.1818182em;
+    resize: vertical;
+    overflow: auto; /* removes default vertical scrollbar in IE 8-11 */
 }
 
 /* make sure disable elements really are disabled */
@@ -676,7 +681,7 @@ textarea[disabled],
 .navlink-disabled {
     opacity: 1; /* overrides iOS opacity setting */
     border-color: #e5e5e5 !important;
-    color: #bbb !important;
+    color: #bbbbbb !important;
     background-color: #fafafa !important;
     cursor: default;
 }
@@ -723,7 +728,7 @@ input.minute,
 input.exp_minute,
 input.second,
 input.exp_second {
-    width: 2.66667em; /* 32px / 12px */
+    width: 2.6666667em; /* 32px / 12px */
     text-align: center;
 }
 
@@ -731,8 +736,8 @@ input.exp_second {
 /* Buttons
    ========================================================================== */
 
-/* address inconsistent `text-transform` inheritance for `button` in Chrome, Safari5+, and IE6+
-   address `overflow` set to `hidden` in IE8-10. */
+/* address inconsistent `text-transform` inheritance for `button` in Chrome, Safari 5+, IE 6+
+   address `overflow` set to `hidden` in IE 8-10. */
 button {
     text-transform: none;
     overflow: visible;
@@ -754,15 +759,15 @@ input[type="button"],
     cursor: pointer;
     margin: 0;
     border: 1px solid;
-    border-color: #ddd #bbb #bbb #ddd;
+    border-color: #dddddd #bbbbbb #bbbbbb #dddddd;
     -moz-border-radius: 0.5em;
     border-radius: 0.5em;
     padding: 0.25em 0.75em;
     width: auto;
     text-decoration: none;
-    color: #000;
+    color: #000000;
     vertical-align: baseline;
-    background-color: #ddd;
+    background-color: #dddddd;
     -webkit-box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.3);
     -moz-box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.3);
     box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.3);
@@ -777,7 +782,7 @@ input[type="button"]:hover,
 .navlink-active:hover,
 .txp-buttons a:hover {
     text-decoration: none;
-    background-color: #eee;
+    background-color: #eeeeee;
 }
 
 button:active,
@@ -788,7 +793,7 @@ input[type="button"]:active,
 .navlink:active,
 .navlink-active:active,
 .txp-buttons a:active {
-    background-color: #ccc;
+    background-color: #cccccc;
 }
 
 .navlink-disabled {
@@ -801,19 +806,19 @@ input[type="button"]:active,
 
 input[type="submit"].publish,
 button.publish {
-    border-color: #b00 #600 #600 #b00;
-    color: #fff;
-    background-color: #900;
+    border-color: #bb0000 #660000 #660000 #bb0000;
+    color: #ffffff;
+    background-color: #990000;
 }
 
 input[type="submit"].publish:hover,
 button.publish:hover {
-    background-color: #b00;
+    background-color: #bb0000;
 }
 
 input[type="submit"].publish:active,
 button.publish:active {
-    background-color: #700;
+    background-color: #770000;
 }
 
 input[type="submit"].destroy,
@@ -825,7 +830,7 @@ button.destroy {
 
 form.busy input[type="submit"] {
     border-color: #f0f0f0;
-    color: #bbb;
+    color: #bbbbbb;
     background-color: #f0f0f0;
 }
 
@@ -904,7 +909,7 @@ ul.nav-tertiary > li {
 }
 
 .nav-tertiary .navlink-active {
-    background-color: #eee;
+    background-color: #eeeeee;
 }
 
 
@@ -929,9 +934,8 @@ ul {
 }
 
 /* remove margins from nested lists */
-dl dl,
-ul ul,
-ol ol {
+li > ul,
+li > ol {
     margin: 0;
 }
 
@@ -944,16 +948,16 @@ dd {
 }
 
 dt {
-    font-weight: bold;
+    font-style: italic;
 }
 
 .plain-list {
     list-style: none;
-    padding-left: 0;
+    padding: 0;
 }
 
 [dir="rtl"] .plain-list {
-    padding-right: 0;
+    padding: 0; /* required for specificity */
 }
 
 .switcher-list {
@@ -1059,23 +1063,13 @@ td {
 .txp-list thead .desc a {
     margin-right: 0;
     padding-right: 14px;
-    background-repeat: no-repeat;
+    background: url("img/arrow-up-down.svg") no-repeat;
 }
 
 [dir="rtl"] .txp-list thead .asc a,
 [dir="rtl"] .txp-list thead .desc a {
     padding-right: 0;
     padding-left: 14px;
-}
-
-.no-svg .txp-list thead .asc a,
-.no-svg .txp-list thead .desc a {
-    background-image: url("img/arrow-up-down.gif");
-}
-
-.svg .txp-list thead .asc a,
-.svg .txp-list thead .desc a {
-    background-image: url("img/arrow-up-down.svg");
 }
 
 .txp-list thead .asc a {
@@ -1095,12 +1089,12 @@ td {
 }
 
 .txp-list tbody {
-    border-top: 1px solid #ddd;
+    border-top: 1px solid #dddddd;
 }
 
 .txp-list tbody th,
 .txp-list tbody td {
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #dddddd;
 }
 
 .txp-list tbody th {
@@ -1126,8 +1120,8 @@ td {
 body {
     margin: 0 0 3.5em 0;
     padding: 0;
-    color: #000;
-    background-color: #fff;
+    color: #000000;
+    background-color: #ffffff;
 }
 
 .txp-body {
@@ -1164,18 +1158,7 @@ body {
     height: 2.5em;
     line-height: 2.5;
     text-indent: -9999px;
-    background: no-repeat 0 50%;
-}
-
-.no-svg #branding {
-    background-image: url("img/textpattern.png");
-}
-
-.svg #branding {
-    background-image: url("img/textpattern.svg");
-    -webkit-background-size: 9em 2em;
-    -moz-background-size: 9em 2em;
-    -o-background-size: 9em 2em;
+    background: url("img/textpattern.svg") no-repeat 0 50%;
     background-size: 9em 2em;
 }
 
@@ -1199,7 +1182,7 @@ body {
 .nav-tabs ul {
     list-style: none;
     margin: 0.5em 0 0;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #cccccc;
     padding: 0;
     -webkit-box-shadow: inset 0 -0.25em 0.4em rgba(0, 0, 0, 0.15);
     -moz-box-shadow: inset 0 -0.25em 0.4em rgba(0, 0, 0, 0.15);
@@ -1214,7 +1197,7 @@ body {
     display: block;
     position: relative;
     bottom: -1px;
-    border: 1px solid #ddd;
+    border: 1px solid #dddddd;
     border-bottom: 0;
     -moz-border-radius-topright: 0.75em 2em;
     border-top-right-radius: 0.75em 2em;
@@ -1222,7 +1205,7 @@ body {
     border-top-left-radius: 0.75em 2em;
     padding: 0.2em 1.5em;
     text-decoration: none;
-    color: #000;
+    color: #000000;
     background-color: #fff8dd;
     -webkit-box-shadow: inset 0 -0.2em 0.4em rgba(219, 203, 141, 0.5), 0 -0.15em 0.15em rgba(0, 0, 0, 0.1);
     -moz-box-shadow: inset 0 -0.2em 0.4em rgba(219, 203, 141, 0.5), 0 -0.15em 0.15em rgba(0, 0, 0, 0.1);
@@ -1230,11 +1213,11 @@ body {
 }
 
 .nav-tabs a:hover {
-    background-color: #fff;
+    background-color: #ffffff;
 }
 
 .nav-tabs a.tabup {
-    background-color: #fff;
+    background-color: #ffffff;
     -webkit-box-shadow: 0 -0.15em 0.15em rgba(0, 0, 0, 0.1);
     -moz-box-shadow: 0 -0.15em 0.15em rgba(0, 0, 0, 0.1);
     box-shadow: 0 -0.15em 0.15em rgba(0, 0, 0, 0.1);
@@ -1318,7 +1301,7 @@ div.multi-edit {
     max-width: 26em;
     vertical-align: top;
     margin: 0 0.125em 0.25em;
-    border: 1px solid #ccc;
+    border: 1px solid #cccccc;
     padding: 0 1em;
     display: inline-block;
 }
@@ -1338,8 +1321,6 @@ div.multi-edit {
 
 .disabled {
     opacity: 0.33;
-    /* transparency support for IE8 */
-    filter: alpha(opacity=33);
 }
 
 /* AJAX spinner */
@@ -1359,7 +1340,6 @@ span.spinner {
     (min-resolution: 2dppx) {
     span.spinner {
         background-image: url("img/spinner@2x.gif") !important;
-        -webkit-background-size: 13px 13px;
         background-size: 13px 13px;
     }
 }
@@ -1440,10 +1420,9 @@ span.spinner {
    ========================================================================== */
 
 #tag-event {
-    border-top: 0.5em solid #fc3;
+    border-top: 0.5em solid #ffcc33;
     padding: 0 1em;
-    /* Prevent 'jumping' */
-    overflow-y: scroll;
+    overflow-y: scroll; /* Prevent 'jumping' */
 }
 
 #tag-event th,
@@ -1462,12 +1441,12 @@ span.spinner {
 
 .category-tree p {
     margin: 0;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #dddddd;
     padding: 0.3em 0;
 }
 
 .category-tree p:first-child {
-    border-top: 1px solid #ddd;
+    border-top: 1px solid #dddddd;
 }
 
 
@@ -1482,7 +1461,7 @@ span.spinner {
 #view_modes li {
     display: inline-block;
     margin: 0 0.75em 0 0;
-    border: 1px solid #ccc;
+    border: 1px solid #cccccc;
     width: 24px;
     height: 24px;
 }
@@ -1499,49 +1478,31 @@ span.spinner {
     width: 24px;
     height: 24px;
     background: #fff8dd no-repeat 50% 50%;
+    background-size: 24px 24px;
 }
 
 #view_modes a:hover,
 #view_modes li.active a {
-    background-color: #fff;
+    background-color: #ffffff;
 }
 
-.no-svg #tab-text a {
-    background-image: url("img/view-text.png");
-}
-
-.svg #tab-text a {
+#tab-text a {
     background-image: url("img/view-text.svg");
 }
 
-.no-svg #tab-html a {
-    background-image: url("img/view-html.png");
-}
-
-.svg #tab-html a {
+#tab-html a {
     background-image: url("img/view-html.svg");
 }
 
-.no-svg #tab-preview a {
-    background-image: url("img/view-preview.png");
-}
-
-.svg #tab-preview a {
+#tab-preview a {
     background-image: url("img/view-preview.svg");
-}
-
-.svg #view_modes a {
-    -webkit-background-size: 24px 24px;
-    -moz-background-size: 24px 24px;
-    -o-background-size: 24px 24px;
-    background-size: 24px 24px;
 }
 
 .view-mode:hover,
 #tab-textup,
 #tab-htmlup,
 #tab-previewup {
-    background-color: #fff;
+    background-color: #ffffff;
 }
 
 #main_content #title {
@@ -1553,7 +1514,7 @@ span.spinner {
    ========================================================================== */
 
 .unpublished {
-    color: #888;
+    color: #888888;
 }
 
 
@@ -1580,7 +1541,7 @@ span.spinner {
 
 .thumbnail-edit form {
     vertical-align: top;
-     display: inline-block;
+    display: inline-block;
 }
 
 
@@ -1609,7 +1570,7 @@ tr.moderate {
 
 #page-lang .modified {
     font-style: italic;
-    color: #aaa;
+    color: #aaaaaa;
 }
 
 #textpack-install {

@@ -34,7 +34,10 @@ class classic_theme extends theme
 		$out[] = '<link rel="stylesheet" href="'.$this->url.'textpattern.min.css">';
 		$out[] = '<meta name="generator" content="Textpattern CMS">';
 		$out[] = '<script src="vendors/modernizr/modernizr/modernizr.js"></script>';
-		$out[] = '<!--[if lt IE 9]><link rel="stylesheet" href="vendors/jquery/ui/css/textpattern/jquery-ui-ie8.min.css"><![endif]-->'.n;
+		$out[] = '<!--[if lt IE 9]>';
+		$out[] = '<link rel="stylesheet" href="vendors/jquery/ui/css/textpattern/jquery-ui-ie8.min.css">';
+		$out[] = '<link rel="stylesheet" href="'.$this->url.'ie8.min.css">';
+		$out[] = '<![endif]-->'.n;
 
 		return join(n, $out);
 	}

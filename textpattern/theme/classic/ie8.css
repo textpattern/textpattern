@@ -1,0 +1,36 @@
+/* fallbacks for lack of RGBa/opacity support in IE 8 */
+
+.close {
+    color: #cccccc;
+}
+
+.disabled {
+    filter: alpha(opacity=33);
+}
+
+/* fallbacks for lack of SVG support in IE 8 */
+
+.txp-summary a {
+    background-image: url("img/expand-collapse.gif");
+}
+
+.txp-list thead .asc a,
+.txp-list thead .desc a {
+    background-image: url("img/arrow-up-down.gif");
+}
+
+#branding {
+    background-image: url("img/textpattern.png");
+}
+
+#tab-text a {
+    background-image: url("img/view-text.png");
+}
+
+#tab-html a {
+    background-image: url("img/view-html.png");
+}
+
+#tab-preview a {
+    background-image: url("img/view-preview.png");
+}
