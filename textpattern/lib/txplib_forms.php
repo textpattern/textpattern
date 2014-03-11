@@ -196,6 +196,7 @@
 	{
 		$out = array();
 
+		$doctype = get_pref('doctype');
 		$selected = false;
 
 		foreach ($array as $a)
@@ -228,7 +229,12 @@
 				$htmltitle = $hellip = '';
 			}
 
-			$out[] = '<option value="'.txpspecialchars($a['name']).'"'.$htmltitle.$sel.'>'.$sp.txpspecialchars($a['title']).$hellip.'</option>';
+			$data_level = '';
+			if ($doctype !== 'xhtml') {
+				$data_level = ' data-level="'.$a['level'].'"';
+			}
+
+			$out[] = '<option value="'.txpspecialchars($a['name']).'"'.$htmltitle.$sel.$data_level.'>'.$sp.txpspecialchars($a['title']).$hellip.'</option>';
 		}
 
 		array_unshift($out, '<option value=""'.($selected === false ? ' selected="selected"' : '').'>&#160;</option>');
