@@ -2816,7 +2816,7 @@
 					->subject($subject)
 					->body($body);
 
-				if ($replyTo)
+				if ($reply_to)
 				{
 					$message->replyTo($reply_to);
 				}
