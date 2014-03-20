@@ -2810,13 +2810,18 @@
 
 			try
 			{
-				Txp::get('MailCompose')
+				$message = Txp::get('MailCompose')
 					->from($email, $RealName)
 					->to($to_address)
 					->subject($subject)
-					->body($body)
-					->replyTo($reply_to)
-					->send();
+					->body($body);
+
+				if ($replyTo)
+				{
+					$message->replyTo($reply_to);
+				}
+
+				$message->send();
 			}
 			catch (Exception $e)
 			{
