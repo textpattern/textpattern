@@ -895,26 +895,36 @@
  * The rendered input can be customised via the '{$event}_ui > inputlabel.{$name}'
  * pluggable UI callback event.
  *
- * @param  string $name        Input name
- * @param  string $input       Complete input control widget
- * @param  string $label       Label
- * @param  string $help        Help text item
- * @param  string $class       CSS class name to apply to wrapper
- * @param  string $wraptag_val Tag to wrap the value in, or empty string to omit
+ * @param  string       $name        Input name
+ * @param  string       $input       Complete input control widget
+ * @param  string       $label       Label
+ * @param  string       $help        Help text item
+ * @param  string|array $atts        Class name (for b/c) | attribute pairs to assign to graf()
+ * @param  string       $wraptag_val Tag to wrap the value in, or empty string to omit
  * @return string HTML
  * @example
  * echo inputLabel('active', yesnoRadio('active'), 'Keep active?');
  */
 
-	function inputLabel($name, $input, $label = '', $help = '', $class = '', $wraptag_val = 'span')
+	function inputLabel($name, $input, $label = '', $help = '', $atts = array(), $wraptag_val = 'span')
 	{
 		global $event;
 
-		$arguments = compact('name', 'input', 'label', 'help', 'class', 'wraptag_val');
+		$arguments = compact('name', 'input', 'label', 'help', 'atts', 'wraptag_val');
 
-		if (!$class)
+		$fallback_class = 'edit-'.str_replace('_', '-', $name);
+
+		if ($atts && is_string($atts))
 		{
-			$class = 'edit-'.str_replace('_', '-', $name);
+			$atts = array('class' => $atts);
+		}
+		elseif (!$atts)
+		{
+			$atts = array('class' => $fallback_class);
+		}
+		elseif (is_array($atts) && !array_key_exists('class', $atts))
+		{
+			$atts['class'] = $fallback_class;
 		}
 
 		if ($label)
@@ -934,7 +944,7 @@
 		$out = graf(
 			tag($label.popHelp($help), 'span', array('class' => 'txp-label')).
 			n.$input
-		, array('class' => $class));
+		, $atts);
 
 		return pluggable_ui($event.'_ui', 'inputlabel.'.$name, $out, $arguments);
 	}

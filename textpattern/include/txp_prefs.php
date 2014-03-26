@@ -222,17 +222,18 @@
 					$out = array();
 				}
 
-				$label = gTxt($a['name']);
+				$label = '';
 
 				if (!in_array($a['html'], array('yesnoradio', 'is_dst')))
 				{
-					$label = tag($label, 'label', array('for' => $a['name']));
+					$label = $a['name'];
 				}
 
 				// TODO: remove exception when custom fields move to meta store.
+				$help = '';
 				if (strpos($a['name'], 'custom_') === false)
 				{
-					$label .= popHelp($a['name']);
+					$help = $a['name'];
 				}
 
 				if ($a['html'] == 'text_input')
@@ -244,10 +245,13 @@
 					$size = '';
 				}
 
-				$out[] = graf(
-					n.span($label , array('class' => 'txp-label')).
-					n.span(pref_func($a['html'], $a['name'], $a['val'], $size), array('class' => 'txp-value'))
-				, array('id' => 'prefs-'.$a['name']));
+				$out[] = inputLabel(
+					$a['name'],
+					pref_func($a['html'], $a['name'], $a['val'], $size),
+					$label,
+					$help,
+					array('id' => 'prefs-'.$a['name'])
+				);
 			}
 		}
 
@@ -349,7 +353,8 @@
 /**
  * Renders a HTML &lt;select&gt; list of cities for timezone selection.
  *
- * Can be altered by plugins.
+ * Can be altered by plugins via the 'prefs_ui > gmtoffset'
+ * pluggable UI callback event.
  *
  * @param  string $name HTML name of the list
  * @param  string $val  Initial (or current) selected option
@@ -375,7 +380,8 @@
 /**
  * Renders a HTML choice for whether Daylight Savings Time is in effect.
  *
- * Can be altered by plugins.
+ * Can be altered by plugins via the 'prefs_ui > is_dst'
+ * pluggable UI callback event.
  *
  * @param  string $name HTML name of the widget
  * @param  string $val  Initial (or current) selected item
@@ -476,7 +482,8 @@ EOS
 /**
  * Renders a HTML &lt;select&gt; list of comment popup modes.
  *
- * Can be altered by plugins.
+ * Can be altered by plugins via the 'prefs_ui > weeks'
+ * pluggable UI callback event.
  *
  * @param  string $name HTML name and id of the widget
  * @param  string $val  Initial (or current) selected item
@@ -502,6 +509,9 @@ EOS
 
 /**
  * Renders a HTML &lt;select&gt; list of available ways to display the date.
+ *
+ * Can be altered by plugins via the 'prefs_ui > dateformats'
+ * pluggable UI callback event.
  *
  * @param  string $name HTML name and id of the widget
  * @param  string $val  Initial (or current) selected item
@@ -561,7 +571,7 @@ EOS
 
 		$vals['since'] = gTxt('hours_days_ago');
 
-		return selectInput($name, array_unique($vals), $val, '', '', $name);
+		return pluggable_ui('prefs_ui', 'dateformats', selectInput($name, array_unique($vals), $val, '', '', $name), compact('vals', 'name', 'val', 'ts'));
 	}
 
 /**
@@ -639,7 +649,8 @@ EOS
 /**
  * Renders a HTML custom field.
  *
- * Can be altered by plugins.
+ * Can be altered by plugins via the 'prefs_ui > custom_set'
+ * pluggable UI callback event.
  *
  * @param  string $name HTML name of the widget
  * @param  string $val  Initial (or current) content
@@ -655,7 +666,8 @@ EOS
 /**
  * Renders a HTML &lt;select&gt; list of installed admin-side themes.
  *
- * Can be altered by plugins.
+ * Can be altered by plugins via the 'prefs_ui > theme_name'
+ * pluggable UI callback event.
  *
  * @param  string $name HTML name and id of the widget
  * @param  string $val  Initial (or current) selected item
