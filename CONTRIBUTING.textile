@@ -1,0 +1,25 @@
+h1. Contributing
+
+h2. License
+
+"GNU General Public License, version 2":https://github.com/textpattern/textpattern/blob/master/LICENSE.txt. By contributing code, you agree to license your additions under the GPLv2 license.
+
+h2. Dependencies
+
+Dependencies are managed using "Composer":http://getcomposer.org. After you have cloned the repository, run composer install:
+
+bc. $ composer install
+
+And update before testing and committing:
+
+bc. $ composer update
+
+h2. Coding standard
+
+The project follows the "PSR-0":https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md and "PSR-2":https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide-meta.md standards with PHP 5.2 style namespacing. You can use PHP_CodeSniffer to make sure your additions follow them too:
+
+bc. $ ./vendor/bin/phpcs --standard=phpcs.xml *.php textpattern
+
+h2. Versioning
+
+"Semantic Versioning":http://semver.org/ and major.minor.path format.
