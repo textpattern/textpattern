@@ -30,133 +30,127 @@
 
 class Textpattern_Textpack_Parser
 {
-	/**
-	 * Stores the default language.
-	 *
-	 * @var string
-	 */
+    /**
+     * Stores the default language.
+     *
+     * @var string
+     */
 
-	protected $language;
+    protected $language;
 
-	/**
-	 * Stores the default owner.
-	 *
-	 * @var string
-	 */
+    /**
+     * Stores the default owner.
+     *
+     * @var string
+     */
 
-	protected $owner;
+    protected $owner;
 
-	/**
-	 * Constructor.
-	 */
+    /**
+     * Constructor.
+     */
 
-	public function __construct()
-	{
-		$this->language = get_pref('language', 'en-gb');
-		$this->owner = LANG_OWNER_SITE;
-	}
+    public function __construct()
+    {
+        $this->language = get_pref('language', 'en-gb');
+        $this->owner = LANG_OWNER_SITE;
+    }
 
-	/**
-	 * Sets the default language.
-	 *
-	 * @param string $language The language code
-	 */
+    /**
+     * Sets the default language.
+     *
+     * @param string $language The language code
+     */
 
-	public function set_language($language)
-	{
-		$this->language = $language;
-	}
+    public function setLanguage($language)
+    {
+        $this->language = $language;
+    }
 
-	/**
-	 * Sets the default owner.
-	 *
-	 * @param string $owner The default owner
-	 */
+    /**
+     * Sets the default owner.
+     *
+     * @param string $owner The default owner
+     */
 
-	public function set_owner($owner)
-	{
-		$this->owner = $owner;
-	}
+    public function setOwner($owner)
+    {
+        $this->owner = $owner;
+    }
 
-	/**
-	 * Converts a Textpack to an array.
-	 *
-	 * @param   string $textpack The Textpack
-	 * @return  array  An array of translations
-	 * @example
-	 * $textpack = Textpattern_Textpack_Parser();
-	 * print_r(
-	 * 	$textpack->parse("string => translation")
-	 * );
-	 */
+    /**
+     * Converts a Textpack to an array.
+     *
+     * <code>
+     * $textpack = Textpattern_Textpack_Parser();
+     * print_r(
+     *     $textpack->parse("string => translation")
+     * );
+     * </code>
+     *
+     * @param   string $textpack The Textpack
+     * @return  array  An array of translations
+     */
 
-	public function parse($textpack)
-	{
-		$lines = explode(n, (string) $textpack);
-		$out = array();
-		$version = false;
-		$lastmod = false;
-		$event = false;
-		$language = $this->language;
-		$owner = $this->owner;
+    public function parse($textpack)
+    {
+        $lines = explode(n, (string) $textpack);
+        $out = array();
+        $version = false;
+        $lastmod = false;
+        $event = false;
+        $language = $this->language;
+        $owner = $this->owner;
 
-		foreach ($lines as $line)
-		{
-			$line = trim($line);
+        foreach ($lines as $line) {
+            $line = trim($line);
 
-			// A comment line.
-			if (preg_match('/^#[^@]/', $line, $m))
-			{
-				continue;
-			}
+            // A comment line.
+            if (preg_match('/^#[^@]/', $line, $m)) {
+                continue;
+            }
 
-			// Sets version and lastmod timestamp.
-			if (preg_match('/^#@version\s+([^;\n]+);?([0-9]*)$/', $line, $m))
-			{
-				$version = $m[1];
-				$lastmod = $m[2] !== false ? $m[2] : $lastmod;
-				continue;
-			}
+            // Sets version and lastmod timestamp.
+            if (preg_match('/^#@version\s+([^;\n]+);?([0-9]*)$/', $line, $m)) {
+                $version = $m[1];
+                $lastmod = $m[2] !== false ? $m[2] : $lastmod;
+                continue;
+            }
 
-			// Sets language.
-			if (preg_match('/^#@language\s+(.+)$/', $line, $m))
-			{
-				$language = $m[1];
-				continue;
-			}
+            // Sets language.
+            if (preg_match('/^#@language\s+(.+)$/', $line, $m)) {
+                $language = $m[1];
+                continue;
+            }
 
-			// Sets owner.
-			if (preg_match('/^#@owner\s+(.+)$/', $line, $m))
-			{
-				$owner = $m[1];
-				continue;
-			}
+            // Sets owner.
+            if (preg_match('/^#@owner\s+(.+)$/', $line, $m)) {
+                $owner = $m[1];
+                continue;
+            }
 
-			// Sets event.
-			if (preg_match('/^#@([a-zA-Z0-9_-]+)$/', $line, $m))
-			{
-				$event = $m[1];
-				continue;
-			}
+            // Sets event.
+            if (preg_match('/^#@([a-zA-Z0-9_-]+)$/', $line, $m)) {
+                $event = $m[1];
+                continue;
+            }
 
-			// Translation.
-			if (preg_match('/^([\w\-]+)\s*=>\s*(.+)$/', $line, $m))
-			{
-				if (!empty($m[1]) && !empty($m[2]))
-				{
-					$out[] = array(
-						'name'    => $m[1],
-						'lang'    => $language,
-						'data'    => $m[2],
-						'event'   => $event,
-						'owner'   => $owner,
-						'version' => $version,
-						'lastmod' => $lastmod,
-					);
-				}
-			}
-		}
+            // Translation.
+            if (preg_match('/^([\w\-]+)\s*=>\s*(.+)$/', $line, $m)) {
+                if (!empty($m[1]) && !empty($m[2])) {
+                    $out[] = array(
+                        'name'    => $m[1],
+                        'lang'    => $language,
+                        'data'    => $m[2],
+                        'event'   => $event,
+                        'owner'   => $owner,
+                        'version' => $version,
+                        'lastmod' => $lastmod,
+                    );
+                }
+            }
+        }
 
-		return $out;
-	}
+        return $out;
+    }
 }

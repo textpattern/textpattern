@@ -30,59 +30,59 @@
 
 interface Textpattern_Textpack_StringInterface
 {
-	/**
-	 * Gets the name of the string.
-	 *
-	 * @return string
-	 */
+    /**
+     * Gets the name of the string.
+     *
+     * @return string
+     */
 
-	public function getName();
+    public function getName();
 
-	/**
-	 * Gets the language.
-	 *
-	 * @return string
-	 */
+    /**
+     * Gets the language.
+     *
+     * @return string
+     */
 
-	public function getLanguage();
+    public function getLanguage();
 
-	/**
-	 * Gets the translation string contents.
-	 *
-	 * @return string
-	 */
+    /**
+     * Gets the translation string contents.
+     *
+     * @return string
+     */
 
-	public function getString();
+    public function getString();
 
-	/**
-	 * Gets the event.
-	 *
-	 * @return string
-	 */
+    /**
+     * Gets the event.
+     *
+     * @return string
+     */
 
-	public function getEvent();
+    public function getEvent();
 
-	/**
-	 * Gets the owner.
-	 *
-	 * @return string
-	 */
+    /**
+     * Gets the owner.
+     *
+     * @return string
+     */
 
-	public function getOwner();
+    public function getOwner();
 
-	/**
-	 * Gets the version.
-	 *
-	 * @return string
-	 */
+    /**
+     * Gets the version.
+     *
+     * @return string
+     */
 
-	public function getVersion();
+    public function getVersion();
 
-	/**
-	 * Gets the last modification timestamp.
-	 *
-	 * @return int
-	 */
+    /**
+     * Gets the last modification timestamp.
+     *
+     * @return int
+     */
 
-	public function getLastmod();
+    public function getLastmod();
 }

@@ -33,11 +33,11 @@
  * <code>
  * class Abc_Class implements Textpattern_Container_ReusableInterface
  * {
- * 	public $random;
- * 	public function __construct()
- * 	{
- * 		$this->random = rand();
- * 	}
+ *     public $random;
+ *     public function __construct()
+ *     {
+ *         $this->random = rand();
+ *     }
  * }
  * echo Txp::get('Abc_Class')->random;
  * echo Txp::get('Abc_Class')->random;

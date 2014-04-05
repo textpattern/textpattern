@@ -30,26 +30,26 @@
 
 class Textpattern_Textfilter_Plain extends Textpattern_Textfilter_Base implements Textpattern_Textfilter_Interface
 {
-	/**
-	 * Constructor.
-	 */
+    /**
+     * Constructor.
+     */
 
-	public function __construct()
-	{
-		parent::__construct(LEAVE_TEXT_UNTOUCHED, gTxt('leave_text_untouched'));
-	}
+    public function __construct()
+    {
+        parent::__construct(LEAVE_TEXT_UNTOUCHED, gTxt('leave_text_untouched'));
+    }
 
-	/**
-	 * Filter.
-	 *
-	 * @param  string $thing
-	 * @param  array  $options
-	 * @return string
-	 */
+    /**
+     * Filter.
+     *
+     * @param  string $thing
+     * @param  array  $options
+     * @return string
+     */
 
-	public function filter($thing, $options)
-	{
-		parent::filter($thing, $options);
-		return trim($thing);
-	}
+    public function filter($thing, $options)
+    {
+        parent::filter($thing, $options);
+        return trim($thing);
+    }
 }

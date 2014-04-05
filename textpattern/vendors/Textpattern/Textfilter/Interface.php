@@ -32,33 +32,33 @@
 
 interface Textpattern_Textfilter_Interface
 {
-	/**
-	 * Filters the given raw input value.
-	 *
-	 * @param  string $thing   The raw input string
-	 * @param  array  $options Options
-	 * @return string Filtered output text
-	 */
+    /**
+     * Filters the given raw input value.
+     *
+     * @param  string $thing   The raw input string
+     * @param  array  $options Options
+     * @return string Filtered output text
+     */
 
-	public function filter($thing, $options);
+    public function filter($thing, $options);
 
-	/**
-	 * Gets filter-specific help.
-	 *
-	 * Help can be used to set and offer HTML formatted instructions,
-	 * examples and formatting tips. These instructions will be
-	 * presented to the user.
-	 *
-	 * @return string HTML for filter-specific help
-	 */
+    /**
+     * Gets filter-specific help.
+     *
+     * Help can be used to set and offer HTML formatted instructions,
+     * examples and formatting tips. These instructions will be
+     * presented to the user.
+     *
+     * @return string HTML for filter-specific help
+     */
 
-	public function help();
+    public function help();
 
-	/**
-	 * Gets a filter's globally unique identifier.
-	 *
-	 * @return string
-	 */
+    /**
+     * Gets a filter's globally unique identifier.
+     *
+     * @return string
+     */
 
-	public function getKey();
+    public function getKey();
 }

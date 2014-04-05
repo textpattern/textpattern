@@ -29,89 +29,81 @@
 
 class Textpattern_Tag_Syntax_Authors
 {
-	/**
-	 * Generates a list of authors.
-	 *
-	 * @param  array  $atts
-	 * @param  string $thing
-	 * @return string
-	 */
+    /**
+     * Generates a list of authors.
+     *
+     * @param  array  $atts
+     * @param  string $thing
+     * @return string
+     */
 
-	static public function authors($atts, $thing = null)
-	{
-		global $thisauthor, $txp_groups;
+    public static function renderAuthors($atts, $thing = null)
+    {
+        global $thisauthor, $txp_groups;
 
-		extract(lAtts(array(
-			'break'    => '',
-			'class'    => '',
-			'form'     => '',
-			'group'    => '',
-			'label'    => '',
-			'labeltag' => '',
-			'limit'    => '',
-			'name'     => '',
-			'offset'   => '',
-			'sort'     => 'name asc',
-			'wraptag'  => '',
-		), $atts));
+        extract(lAtts(array(
+            'break'    => '',
+            'class'    => '',
+            'form'     => '',
+            'group'    => '',
+            'label'    => '',
+            'labeltag' => '',
+            'limit'    => '',
+            'name'     => '',
+            'offset'   => '',
+            'sort'     => 'name asc',
+            'wraptag'  => '',
+        ), $atts));
 
-		$sql = array('1 = 1');
-		$sql_limit = '';
-		$sql_sort = ' order by '.doSlash($sort);
+        $sql = array('1 = 1');
+        $sql_limit = '';
+        $sql_sort = ' order by '.doSlash($sort);
 
-		if ($name)
-		{
-			$sql[] = 'name in ('.join(', ', quote_list(do_list($name))).')';
-		}
+        if ($name) {
+            $sql[] = 'name in ('.join(', ', quote_list(do_list($name))).')';
+        }
 
-		if ($group !== '')
-		{
-			$privs = do_list($group);
-			$groups = array_flip($txp_groups);
+        if ($group !== '') {
+            $privs = do_list($group);
+            $groups = array_flip($txp_groups);
 
-			foreach ($privs as &$priv)
-			{
-				if (isset($groups[$priv]))
-				{
-					$priv = $groups[$priv];
-				}
-			}
+            foreach ($privs as &$priv) {
+                if (isset($groups[$priv])) {
+                    $priv = $groups[$priv];
+                }
+            }
 
-			$sql[] = 'convert(privs, char) in ('.join(', ', quote_list($privs)).')';
-		}
+            $sql[] = 'convert(privs, char) in ('.join(', ', quote_list($privs)).')';
+        }
 
-		if ($limit !== '' || $offset)
-		{
-			$sql_limit = ' limit '.intval($offset).', '.($limit === '' ? PHP_INT_MAX : intval($limit));
-		}
+        if ($limit !== '' || $offset) {
+            $sql_limit = ' limit '.intval($offset).', '.($limit === '' ? PHP_INT_MAX : intval($limit));
+        }
 
-		$rs = safe_rows_start(
-			'user_id as id, name, RealName as realname, email, privs, last_access',
-			'txp_users',
-			join(' and ', $sql)." {$sql_sort} {$sql_limit}"
-		);
+        $rs = safe_rows_start(
+            'user_id as id, name, RealName as realname, email, privs, last_access',
+            'txp_users',
+            join(' and ', $sql)." {$sql_sort} {$sql_limit}"
+        );
 
-		if ($rs && numRows($rs))
-		{
-			$out = array();
+        if ($rs && numRows($rs)) {
+            $out = array();
 
-			if ($thing === null && $form !== '')
-			{
-				$thing = fetch_form($form);
-			}
+            if ($thing === null && $form !== '') {
+                $thing = fetch_form($form);
+            }
 
-			while ($a = nextRow($rs))
-			{
-				$oldauthor = $thisauthor;
-				$thisauthor = $a;
-				$out[] = parse($thing);
-				$thisauthor = $oldauthor;
-			}
+            while ($a = nextRow($rs)) {
+                $oldauthor = $thisauthor;
+                $thisauthor = $a;
+                $out[] = parse($thing);
+                $thisauthor = $oldauthor;
+            }
 
-			unset($thisauthor);
-			return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
-		}
+            unset($thisauthor);
+            return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
+        }
 
-		return '';
-	}
+        return '';
+    }
 }

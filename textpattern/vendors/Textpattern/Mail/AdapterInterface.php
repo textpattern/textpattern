@@ -30,64 +30,64 @@
 
 interface Textpattern_Mail_AdapterInterface extends Textpattern_Adaptable_AdapterInterface
 {
-	/**
-	 * Sets the subject.
-	 *
-	 * <code>
-	 * Txp::get('MailCompose')->subject('My subject');
-	 * </code>
-	 *
-	 * @param  string $subject The subject
-	 * @return Textpattern_Mail_AdapterInterface
-	 * @throws Textpattern_Mail_Exception
-	 */
+    /**
+     * Sets the subject.
+     *
+     * <code>
+     * Txp::get('MailCompose')->subject('My subject');
+     * </code>
+     *
+     * @param  string $subject The subject
+     * @return Textpattern_Mail_AdapterInterface
+     * @throws Textpattern_Mail_Exception
+     */
 
-	public function subject($subject);
+    public function subject($subject);
 
-	/**
-	 * Sets the message.
-	 *
-	 * <code>
-	 * Txp::get('MailCompose')->body('Plain-text based message.');
-	 * </code>
-	 *
-	 * @param  string $body The message
-	 * @return Textpattern_Mail_AdapterInterface
-	 * @throws Textpattern_Mail_Exception
-	 */
+    /**
+     * Sets the message.
+     *
+     * <code>
+     * Txp::get('MailCompose')->body('Plain-text based message.');
+     * </code>
+     *
+     * @param  string $body The message
+     * @return Textpattern_Mail_AdapterInterface
+     * @throws Textpattern_Mail_Exception
+     */
 
-	public function body($body);
+    public function body($body);
 
-	/**
-	 * Sets an additional header.
-	 *
-	 * <code>
-	 * Txp::get('MailCompose')->header('X-Mailer', 'abc_plugin');
-	 * </code>
-	 *
-	 * @param  string $name  The header name
-	 * @param  string $value The value
-	 * @return Textpattern_Mail_AdapterInterface
-	 * @throws Textpattern_Mail_Exception
-	 */
+    /**
+     * Sets an additional header.
+     *
+     * <code>
+     * Txp::get('MailCompose')->header('X-Mailer', 'abc_plugin');
+     * </code>
+     *
+     * @param  string $name  The header name
+     * @param  string $value The value
+     * @return Textpattern_Mail_AdapterInterface
+     * @throws Textpattern_Mail_Exception
+     */
 
-	public function header($name, $value);
+    public function header($name, $value);
 
-	/**
-	 * Sends an email.
-	 *
-	 * <code>
-	 * Txp::get('MailCompose')
-	 * 	->to('to@example.com')
-	 * 	->from('from@example.com')
-	 * 	->subject('Subject')
-	 * 	->body('Hello world!')
-	 * 	->send();
-	 * </code>
-	 *
-	 * @return Textpattern_Mail_AdapterInterface
-	 * @throws Textpattern_Mail_Exception
-	 */
+    /**
+     * Sends an email.
+     *
+     * <code>
+     * Txp::get('MailCompose')
+     *     ->to('to@example.com')
+     *     ->from('from@example.com')
+     *     ->subject('Subject')
+     *     ->body('Hello world!')
+     *     ->send();
+     * </code>
+     *
+     * @return Textpattern_Mail_AdapterInterface
+     * @throws Textpattern_Mail_Exception
+     */
 
-	public function send();
+    public function send();
 }

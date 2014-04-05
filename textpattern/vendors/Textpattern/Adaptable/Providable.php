@@ -27,10 +27,10 @@
  * <code>
  * class MyProvidableAdaptee extends Textpattern_Adaptable_Providable
  * {
- * 	public function getDefaultAdaptableProvider()
- * 	{
- * 		return new MyAdapterDriver();
- * 	}
+ *     public function getDefaultAdaptableProvider()
+ *     {
+ *         return new MyAdapterDriver();
+ *     }
  * }
  * </code>
  *
@@ -40,62 +40,60 @@
 
 abstract class Textpattern_Adaptable_Providable implements Textpattern_Adaptable_ProvidableInterface
 {
-	/**
-	 * Stores an instance of the current provider.
-	 *
-	 * @var Textpattern_Adaptable_Adapter
-	 */
+    /**
+     * Stores an instance of the current provider.
+     *
+     * @var Textpattern_Adaptable_Adapter
+     */
 
-	private $adapter;
+    private $adapter;
 
-	/**
-	 * Whether it's the first run.
-	 *
-	 * @var bool
-	 */
+    /**
+     * Whether it's the first run.
+     *
+     * @var bool
+     */
 
-	private $firstRun = true;
+    private $firstRun = true;
 
-	/**
-	 * {@inheritdoc}
-	 */
+    /**
+     * {@inheritdoc}
+     */
 
-	public function setAdapter(Textpattern_Adaptable_Adapter $adapter)
-	{
-		$this->adapter = $adapter;
-		return $this;
-	}
+    public function setAdapter(Textpattern_Adaptable_Adapter $adapter)
+    {
+        $this->adapter = $adapter;
+        return $this;
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
+    /**
+     * {@inheritdoc}
+     */
 
-	public function getAdapter()
-	{
-		if (!$this->adapter)
-		{
-			$this->adapter = $this->getDefaultAdapter();
-		}
+    public function getAdapter()
+    {
+        if (!$this->adapter) {
+            $this->adapter = $this->getDefaultAdapter();
+        }
 
-		if ($this->firstRun)
-		{
-			$this->firstRun = false;
-			$this->adapter->providable = $this;
-		}
+        if ($this->firstRun) {
+            $this->firstRun = false;
+            $this->adapter->providable = $this;
+        }
 
-		return $this->adapter;
-	}
+        return $this->adapter;
+    }
 
-	/**
-	 * Redirects method calls to the adapter.
-	 *
-	 * @param  string $name The method
-	 * @param  array  $args The arguments
-	 * @return mixed
-	 */
+    /**
+     * Redirects method calls to the adapter.
+     *
+     * @param  string $name The method
+     * @param  array  $args The arguments
+     * @return mixed
+     */
 
-	public function __call($name, array $args)
-	{
-		return call_user_func_array(array($this->getAdapter(), $name), $args);
-	}
+    public function __call($name, array $args)
+    {
+        return call_user_func_array(array($this->getAdapter(), $name), $args);
+    }
 }

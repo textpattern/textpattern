@@ -34,82 +34,80 @@
 
 class Textpattern_Debug_Memory implements Textpattern_Container_ReusableInterface
 {
-	/**
-	 * Top memory usage.
-	 *
-	 * @var int
-	 */
+    /**
+     * Top memory usage.
+     *
+     * @var int
+     */
 
-	private $memoryTop = 0;
+    private $memoryTop = 0;
 
-	/**
-	 * Last logged message.
-	 *
-	 * @var string
-	 */
+    /**
+     * Last logged message.
+     *
+     * @var string
+     */
 
-	private $memoryMessage = '';
+    private $memoryMessage = '';
 
-	/**
-	 * Logs the current memory usage.
-	 *
-	 * This method updates the logged peak memory usage if
-	 * the current usage is greater than the last logged value.
-	 *
-	 * <code>
-	 * Txp::get('DebugMemory')->logPeakUsage();
-	 * </code>
-	 *
-	 * @param  string $message The message to log with memory usage
-	 * @return Textpattern_Debug_Memory
-	 * @throws Exception
-	 */
+    /**
+     * Logs the current memory usage.
+     *
+     * This method updates the logged peak memory usage if
+     * the current usage is greater than the last logged value.
+     *
+     * <code>
+     * Txp::get('DebugMemory')->logPeakUsage();
+     * </code>
+     *
+     * @param  string $message The message to log with memory usage
+     * @return Textpattern_Debug_Memory
+     * @throws Exception
+     */
 
-	public function logPeakUsage($message = null)
-	{
-		if (!is_callable('memory_get_usage'))
-		{
-			throw new Exception('disabled_function', array('{name}' => 'memory_get_usage'));
-		}
+    public function logPeakUsage($message = null)
+    {
+        if (!is_callable('memory_get_usage')) {
+            throw new Exception('disabled_function', array('{name}' => 'memory_get_usage'));
+        }
 
-		$memory = memory_get_usage();
+        $memory = memory_get_usage();
 
-		if ($memory > $this->memoryTop)
-		{
-			$this->memoryTop = $memory;
-			$this->memoryMessage = (string) $message;
-		}
+        if ($memory > $this->memoryTop) {
+            $this->memoryTop = $memory;
+            $this->memoryMessage = (string) $message;
+        }
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Gets the logged message.
-	 *
-	 * <code>
-	 * echo Txp::get('DebugMemory')->getLoggedMessage();
-	 * </code>
-	 *
-	 * @return string
-	 */
+    /**
+     * Gets the logged message.
+     *
+     * <code>
+     * echo Txp::get('DebugMemory')->getLoggedMessage();
+     * </code>
+     *
+     * @return string
+     */
 
-	public function getLoggedMessage()
-	{
-		return $this->memoryMessage;
-	}
+    public function getLoggedMessage()
+    {
+        return $this->memoryMessage;
+    }
 
-	/**
-	 * Gets the logged peak memory usage.
-	 *
-	 * <code>
-	 * echo Txp::get('DebugMemory')->getLoggedUsage();
-	 * </code>
-	 *
-	 * @return int
-	 */
+    /**
+     * Gets the logged peak memory usage.
+     *
+     * <code>
+     * echo Txp::get('DebugMemory')->getLoggedUsage();
+     * </code>
+     *
+     * @return int
+     */
 
-	public function getLoggedUsage()
-	{
-		return $this->memoryTop;
-	}
+    public function getLoggedUsage()
+    {
+        return $this->memoryTop;
+    }
 }

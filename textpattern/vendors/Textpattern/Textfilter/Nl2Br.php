@@ -32,25 +32,25 @@
 
 class Textpattern_Textfilter_Nl2Br extends Textpattern_Textfilter_Base implements Textpattern_Textfilter_Interface
 {
-	/**
-	 * Constructor.
-	 */
+    /**
+     * Constructor.
+     */
 
-	public function __construct()
-	{
-		parent::__construct(CONVERT_LINEBREAKS, gTxt('convert_linebreaks'));
-	}
+    public function __construct()
+    {
+        parent::__construct(CONVERT_LINEBREAKS, gTxt('convert_linebreaks'));
+    }
 
-	/**
-	 * Filter.
-	 *
-	 * @param string $thing
-	 * @param array  $options
-	 */
+    /**
+     * Filter.
+     *
+     * @param string $thing
+     * @param array  $options
+     */
 
-	public function filter($thing, $options)
-	{
-		parent::filter($thing, $options);
-		return nl2br(trim($thing));
-	}
+    public function filter($thing, $options)
+    {
+        parent::filter($thing, $options);
+        return nl2br(trim($thing));
+    }
 }

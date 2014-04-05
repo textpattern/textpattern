@@ -30,38 +30,38 @@
 
 class Textpattern_Password_Adapter_PasswordHash implements Textpattern_Password_AdapterInterface
 {
-	/**
-	 * Stores an instance of PHPass.
-	 *
-	 * @var PasswordHash
-	 */
+    /**
+     * Stores an instance of PHPass.
+     *
+     * @var PasswordHash
+     */
 
-	private $phpass;
+    private $phpass;
 
-	/**
-	 * Constructor.
-	 */
+    /**
+     * Constructor.
+     */
 
-	public function __construct()
-	{
-		$this->phpass = new PasswordHash(PASSWORD_COMPLEXITY, PASSWORD_PORTABILITY);
-	}
+    public function __construct()
+    {
+        $this->phpass = new PasswordHash(PASSWORD_COMPLEXITY, PASSWORD_PORTABILITY);
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
+    /**
+     * {@inheritdoc}
+     */
 
-	public function verify($password, $hash)
-	{
-		return $this->phpass->CheckPassword($password, $hash);
-	}
+    public function verify($password, $hash)
+    {
+        return $this->phpass->CheckPassword($password, $hash);
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
+    /**
+     * {@inheritdoc}
+     */
 
-	public function hash($password)
-	{
-		return $this->phpass->HashPassword($password);
-	}
+    public function hash($password)
+    {
+        return $this->phpass->HashPassword($password);
+    }
 }

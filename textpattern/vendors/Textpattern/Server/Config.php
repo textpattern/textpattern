@@ -34,100 +34,97 @@
 
 class Textpattern_Server_Config
 {
-	/**
-	 * Magic quotes GPC status.
-	 *
-	 * @var bool
-	 */
+    /**
+     * Magic quotes GPC status.
+     *
+     * @var bool
+     */
 
-	private $magicQuotesGpc = false;
+    private $magicQuotesGpc = false;
 
-	/**
-	 * Magic quotes runtime status.
-	 *
-	 * @var bool
-	 */
+    /**
+     * Magic quotes runtime status.
+     *
+     * @var bool
+     */
 
-	private $magicQuotesRuntime = false;
+    private $magicQuotesRuntime = false;
 
-	/**
-	 * Register globals status.
-	 *
-	 * @var bool
-	 */
+    /**
+     * Register globals status.
+     *
+     * @var bool
+     */
 
-	private $registerGlobals = false;
+    private $registerGlobals = false;
 
-	/**
-	 * Constructor.
-	 */
+    /**
+     * Constructor.
+     */
 
-	public function __construct()
-	{
-		if (version_compare(PHP_VERSION, '5.4.0') < 0)
-		{
-			$this->magicQuotesGpc = @get_magic_quotes_gpc();
-			$this->magicQuotesRuntime = @get_magic_quotes_runtime();
-			$this->registerGlobals = @ini_get('register_globals');
-		}
-	}
+    public function __construct()
+    {
+        if (version_compare(PHP_VERSION, '5.4.0') < 0) {
+            $this->magicQuotesGpc = @get_magic_quotes_gpc();
+            $this->magicQuotesRuntime = @get_magic_quotes_runtime();
+            $this->registerGlobals = @ini_get('register_globals');
+        }
+    }
 
-	/**
-	 * Gets a server configuration variable.
-	 *
-	 * @param  string $name The variable
-	 * @return mixed  The variable
-	 */
+    /**
+     * Gets a server configuration variable.
+     *
+     * @param  string $name The variable
+     * @return mixed  The variable
+     */
 
-	public function getVariable($name)
-	{
-		if (isset($_SERVER[$name]))
-		{
-			return $_SERVER[$name];
-		}
+    public function getVariable($name)
+    {
+        if (isset($_SERVER[$name])) {
+            return $_SERVER[$name];
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	/**
-	 * Magic quotes.
-	 *
-	 * @return bool
-	 */
+    /**
+     * Magic quotes.
+     *
+     * @return bool
+     */
 
-	public function getMagicQuotesGpc()
-	{
-		return (bool) $this->magicQuotesGpc;
-	}
+    public function getMagicQuotesGpc()
+    {
+        return (bool) $this->magicQuotesGpc;
+    }
 
-	/**
-	 * Gets register globals status.
-	 *
-	 * @return bool
-	 */
+    /**
+     * Gets register globals status.
+     *
+     * @return bool
+     */
 
-	public function getRegisterGlobals()
-	{
-		return (bool) $this->registerGlobals;
-	}
+    public function getRegisterGlobals()
+    {
+        return (bool) $this->registerGlobals;
+    }
 
-	/**
-	 * Turn runtime magic quotes off.
-	 *
-	 * <code>
-	 * Txp::get('ServerConfig')->setMagicQuotesOff();
-	 * </code>
-	 *
-	 * @return Textpattern_Server_Var
-	 */
+    /**
+     * Turn runtime magic quotes off.
+     *
+     * <code>
+     * Txp::get('ServerConfig')->setMagicQuotesOff();
+     * </code>
+     *
+     * @return Textpattern_Server_Var
+     */
 
-	public function setMagicQuotesOff()
-	{
-		if ($this->magicQuotesRuntime)
-		{
-			@set_magic_quotes_runtime(0);
-		}
+    public function setMagicQuotesOff()
+    {
+        if ($this->magicQuotesRuntime) {
+            @set_magic_quotes_runtime(0);
+        }
 
-		return $this;
-	}
+        return $this;
+    }
 }

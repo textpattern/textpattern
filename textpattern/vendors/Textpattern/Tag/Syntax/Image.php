@@ -29,37 +29,37 @@
 
 class Textpattern_Tag_Syntax_Image
 {
-	/**
-	 * Checks if the image is the first in the list.
-	 *
-	 * @param  array  $atts
-	 * @param  string $thing
-	 * @return string
-	 */
+    /**
+     * Checks if the image is the first in the list.
+     *
+     * @param  array  $atts
+     * @param  string $thing
+     * @return string
+     */
 
-	static public function if_first_image($atts, $thing)
-	{
-		global $thisimage;
+    public static function renderIfFirstImage($atts, $thing)
+    {
+        global $thisimage;
 
-		assert_image();
+        assert_image();
 
-		return parse(EvalElse($thing, !empty($thisimage['is_first'])));
-	}
+        return parse(EvalElse($thing, !empty($thisimage['is_first'])));
+    }
 
-	/**
-	 * Checks if the image is the last in the list.
-	 *
-	 * @param  array  $atts
-	 * @param  string $thing
-	 * @return string
-	 */
+    /**
+     * Checks if the image is the last in the list.
+     *
+     * @param  array  $atts
+     * @param  string $thing
+     * @return string
+     */
 
-	static public function if_last_image($atts, $thing)
-	{
-		global $thisimage;
+    public static function renderIfLastImage($atts, $thing)
+    {
+        global $thisimage;
 
-		assert_image();
+        assert_image();
 
-		return parse(EvalElse($thing, !empty($thisimage['is_last'])));
-	}
+        return parse(EvalElse($thing, !empty($thisimage['is_last'])));
+    }
 }

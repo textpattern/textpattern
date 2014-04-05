@@ -34,81 +34,76 @@
 
 class Textpattern_Security_Filter
 {
-	/**
-	 * An array of protected superglobals.
-	 *
-	 * @var array
-	 */
+    /**
+     * An array of protected superglobals.
+     *
+     * @var array
+     */
 
-	private $protectedGlobals = array(
-		'_SESSION',
-		'_ENV',
-		'_GET',
-		'_POST',
-		'_COOKIE',
-		'_FILES',
-		'_SERVER',
-		'_REQUEST',
-		'GLOBALS',
-	);
+    private $protectedGlobals = array(
+        '_SESSION',
+        '_ENV',
+        '_GET',
+        '_POST',
+        '_COOKIE',
+        '_FILES',
+        '_SERVER',
+        '_REQUEST',
+        'GLOBALS',
+    );
 
-	/**
-	 * Protection from those who'd bomb the site by GET.
-	 *
-	 * @throws Textpattern_Security_Exception
-	 * @return Textpattern_Security_Filter
-	 */
+    /**
+     * Protection from those who'd bomb the site by GET.
+     *
+     * @throws Textpattern_Security_Exception
+     * @return Textpattern_Security_Filter
+     */
 
-	public function setMaxRequestUriLength($length)
-	{
-		$uri = Txp::get('ServerConfig')->getVariable('REQUEST_URI');
+    public function setMaxRequestUriLength($length)
+    {
+        $uri = Txp::get('ServerConfig')->getVariable('REQUEST_URI');
 
-		if (strlen($uri) > $length)
-		{
-			throw new Textpattern_Security_Exception('Requested URL length exceeds application limit.');
-		}
+        if (strlen($uri) > $length) {
+            throw new Textpattern_Security_Exception('Requested URL length exceeds application limit.');
+        }
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Wipes automatically registered superglobals.
-	 *
-	 * Protects the server from global registering
-	 * and overwriting attempts.
-	 *
-	 * @throws Textpattern_Security_Exception
-	 * @return Textpattern_Security_Filter
-	 */
+    /**
+     * Wipes automatically registered superglobals.
+     *
+     * Protects the server from global registering
+     * and overwriting attempts.
+     *
+     * @throws Textpattern_Security_Exception
+     * @return Textpattern_Security_Filter
+     */
 
-	public function registerGlobals()
-	{
-		if (Txp::get('ServerConfig')->getRegisterGlobals())
-		{
-			if (array_key_exists('GLOBALS', $_REQUEST) || array_key_exists('GLOBALS', $_FILES))
-			{
-				throw new Textpattern_Security_Exception('GLOBALS overwrite attempt detected. Please consider turning register_globals off.');
-			}
+    public function registerGlobals()
+    {
+        if (Txp::get('ServerConfig')->getRegisterGlobals()) {
+            if (array_key_exists('GLOBALS', $_REQUEST) || array_key_exists('GLOBALS', $_FILES)) {
+                throw new Textpattern_Security_Exception('GLOBALS overwrite attempt detected. Please consider turning register_globals off.');
+            }
 
-			$variables = array_merge(
-				isset($_SESSION) ? (array) $_SESSION : array(),
-				(array) $_ENV,
-				(array) $_GET,
-				(array) $_POST,
-				(array) $_COOKIE,
-				(array) $_FILES,
-				(array) $_SERVER
-			);
+            $variables = array_merge(
+                isset($_SESSION) ? (array) $_SESSION : array(),
+                (array) $_ENV,
+                (array) $_GET,
+                (array) $_POST,
+                (array) $_COOKIE,
+                (array) $_FILES,
+                (array) $_SERVER
+            );
 
-			foreach ($variables as $variable => $value)
-			{
-				if (!in_array($variable, $this->protectedGlobals, true))
-				{
-					unset($GLOBALS[$variable]);
-				}
-			}
-		}
+            foreach ($variables as $variable => $value) {
+                if (!in_array($variable, $this->protectedGlobals, true)) {
+                    unset($GLOBALS[$variable]);
+                }
+            }
+        }
 
-		return $this;
-	}
+        return $this;
+    }
 }

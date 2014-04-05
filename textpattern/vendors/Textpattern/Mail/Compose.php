@@ -30,12 +30,12 @@
 
 class Textpattern_Mail_Compose extends Textpattern_Adaptable_Providable
 {
-	/**
-	 * {@inheritdoc}
-	 */
+    /**
+     * {@inheritdoc}
+     */
 
-	public function getDefaultAdapter()
-	{
-		return new Textpattern_Mail_Adapter_Mail();
-	}
+    public function getDefaultAdapter()
+    {
+        return new Textpattern_Mail_Adapter_Mail();
+    }
 }

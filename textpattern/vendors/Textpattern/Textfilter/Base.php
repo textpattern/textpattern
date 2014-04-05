@@ -30,124 +30,124 @@
 
 class Textpattern_Textfilter_Base implements Textpattern_Textfilter_Interface
 {
-	/**
-	 * The filter's title.
-	 *
-	 * @var string
-	 */
+    /**
+     * The filter's title.
+     *
+     * @var string
+     */
 
-	public $title;
+    public $title;
 
-	/**
-	 * The filter's version.
-	 *
-	 * @var string
-	 */
+    /**
+     * The filter's version.
+     *
+     * @var string
+     */
 
-	public $version;
+    public $version;
 
-	/**
-	 * The filter's identifier.
-	 *
-	 * @var string
-	 */
+    /**
+     * The filter's identifier.
+     *
+     * @var string
+     */
 
-	protected $key;
+    protected $key;
 
-	/**
-	 * The filter's options.
-	 *
-	 * @var array
-	 */
+    /**
+     * The filter's options.
+     *
+     * @var array
+     */
 
-	protected $options;
+    protected $options;
 
-	/**
-	 * General constructor for Textfilters.
-	 *
-	 * @param string $key   A globally unique, persistable identifier for this particular Textfilter class
-	 * @param string $title The human-readable title of this filter class
-	 */
+    /**
+     * General constructor for Textfilters.
+     *
+     * @param string $key   A globally unique, persistable identifier for this particular Textfilter class
+     * @param string $title The human-readable title of this filter class
+     */
 
-	public function __construct($key, $title)
-	{
-		global $txpversion;
+    public function __construct($key, $title)
+    {
+        global $txpversion;
 
-		$this->key = $key;
-		$this->title = $title;
-		$this->version = $txpversion;
-		$this->options = array(
-			'lite'       => false,
-			'restricted' => false,
-			'rel'        => '',
-			'noimage'    => false,
-		);
+        $this->key = $key;
+        $this->title = $title;
+        $this->version = $txpversion;
+        $this->options = array(
+            'lite'       => false,
+            'restricted' => false,
+            'rel'        => '',
+            'noimage'    => false,
+        );
 
-		register_callback(array($this, 'register'), 'textfilter', 'register');
-	}
+        register_callback(array($this, 'register'), 'textfilter', 'register');
+    }
 
-	/**
-	 * Sets filter's options.
-	 *
-	 * @param array $options Array of options: 'lite' => boolean, 'rel' => string, 'noimage' => boolean, 'restricted' => boolean
-	 */
+    /**
+     * Sets filter's options.
+     *
+     * @param array $options Array of options: 'lite' => boolean, 'rel' => string, 'noimage' => boolean, 'restricted' => boolean
+     */
 
-	private function setOptions($options)
-	{
-		$this->options = lAtts(array(
-			'lite'       => false,
-			'restricted' => false,
-			'rel'        => '',
-			'noimage'    => false,
-		), $options);
-	}
+    private function setOptions($options)
+    {
+        $this->options = lAtts(array(
+            'lite'       => false,
+            'restricted' => false,
+            'rel'        => '',
+            'noimage'    => false,
+        ), $options);
+    }
 
-	/**
-	 * Event handler, registers Textfilter class with the core.
-	 *
-	 * @param string                          $step       Not used
-	 * @param string                          $event      Not used
-	 * @param Textpattern_Textfilter_Registry $registry   Maintains the set of known Textfilters
-	 */
+    /**
+     * Event handler, registers Textfilter class with the core.
+     *
+     * @param string                          $step       Not used
+     * @param string                          $event      Not used
+     * @param Textpattern_Textfilter_Registry $registry   Maintains the set of known Textfilters
+     */
 
-	public function register($step, $event, $registry)
-	{
-		$registry[] = $this;
-	}
+    public function register($step, $event, $registry)
+    {
+        $registry[] = $this;
+    }
 
-	/**
-	 * Filters the given raw input value.
-	 *
-	 * @param  string $thing   The raw input string
-	 * @param  array  $options Options
-	 * @return string Filtered output text
-	 */
+    /**
+     * Filters the given raw input value.
+     *
+     * @param  string $thing   The raw input string
+     * @param  array  $options Options
+     * @return string Filtered output text
+     */
 
-	public function filter($thing, $options)
-	{
-		$this->setOptions($options);
-		return $thing;
-	}
+    public function filter($thing, $options)
+    {
+        $this->setOptions($options);
+        return $thing;
+    }
 
-	/**
-	 * Gets this filter's help.
-	 *
-	 * @return string
-	 */
+    /**
+     * Gets this filter's help.
+     *
+     * @return string
+     */
 
-	public function help()
-	{
-		return '';
-	}
+    public function help()
+    {
+        return '';
+    }
 
-	/**
-	 * Gets this filter's identifier.
-	 *
-	 * @return string
-	 */
+    /**
+     * Gets this filter's identifier.
+     *
+     * @return string
+     */
 
-	public function getKey()
-	{
-		return $this->key;
-	}
+    public function getKey()
+    {
+        return $this->key;
+    }
 }

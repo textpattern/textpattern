@@ -30,20 +30,20 @@
 
 interface Textpattern_Container_FactoryInterface
 {
-	/**
-	 * Gets an instance.
-	 *
-	 * @param  string $name The class
-	 * @return object
-	 */
+    /**
+     * Gets an instance.
+     *
+     * @param  string $name The class
+     * @return object
+     */
 
-	static public function get($name);
+    public static function get($name);
 
-	/**
-	 * Gets the container.
-	 *
-	 * @return Textpattern_Container_ContainerInterface
-	 */
+    /**
+     * Gets the container.
+     *
+     * @return Textpattern_Container_ContainerInterface
+     */
 
-	static public function getContainer();
+    public static function getContainer();
 }

@@ -36,105 +36,101 @@
 
 class Textpattern_Type_Callable implements Textpattern_Type_TypeInterface
 {
-	/**
-	 * The callable.
-	 *
-	 * @var callable
-	 */
+    /**
+     * The callable.
+     *
+     * @var callable
+     */
 
-	protected $callable;
+    protected $callable;
 
-	/**
-	 * Constructor.
-	 *
-	 * @param string $callable The callable
-	 */
+    /**
+     * Constructor.
+     *
+     * @param string $callable The callable
+     */
 
-	public function __construct($callable)
-	{
-		$this->callable = $callable;
-	}
+    public function __construct($callable)
+    {
+        $this->callable = $callable;
+    }
 
-	/**
-	 * Gets the callable string presentation.
-	 *
-	 * @return string
-	 */
+    /**
+     * Gets the callable string presentation.
+     *
+     * @return string
+     */
 
-	public function __toString()
-	{
-		return (string) $this->toString();
-	}
+    public function __toString()
+    {
+        return (string) $this->toString();
+    }
 
-	/**
-	 * Converts a callable to a string presentation.
-	 *
-	 * If the callable is an object, returns the class name. For a
-	 * callable array of object and method, a 'class::staticMethod'
-	 * or a 'class->method', and for functions the name.
-	 *
-	 * <code>
-	 * echo (string) Txp::get('TypeCallable', function () {return 'Hello world!';});
-	 * </code>
-	 *
-	 * Returns 'Closure'.
-	 *
-	 * <code>
-	 * echo (string) Txp::get('TypeCallable', array('DateTimeZone', 'listAbbreviations'));
-	 * </code>
-	 *
-	 * Returns 'DateTimeZone::listAbbreviations'.
-	 *
-	 * <code>
-	 * echo (string) Txp::get('TypeCallable', array(new DateTime(), 'setTime'));
-	 * </code>
-	 *
-	 * Returns 'DateTime->setTime'.
-	 *
-	 * <code>
-	 * echo (string) Txp::get('TypeCallable', 'date');
-	 * </code>
-	 *
-	 * Returns 'date'.
-	 *
-	 * <code>
-	 * echo (string) Txp::get('TypeCallable', 1);
-	 * </code>
-	 *
-	 * Returns ''.
-	 *
-	 * @return string The callable as a human-readable string
-	 */
+    /**
+     * Converts a callable to a string presentation.
+     *
+     * If the callable is an object, returns the class name. For a
+     * callable array of object and method, a 'class::staticMethod'
+     * or a 'class->method', and for functions the name.
+     *
+     * <code>
+     * echo (string) Txp::get('TypeCallable', function () {return 'Hello world!';});
+     * </code>
+     *
+     * Returns 'Closure'.
+     *
+     * <code>
+     * echo (string) Txp::get('TypeCallable', array('DateTimeZone', 'listAbbreviations'));
+     * </code>
+     *
+     * Returns 'DateTimeZone::listAbbreviations'.
+     *
+     * <code>
+     * echo (string) Txp::get('TypeCallable', array(new DateTime(), 'setTime'));
+     * </code>
+     *
+     * Returns 'DateTime->setTime'.
+     *
+     * <code>
+     * echo (string) Txp::get('TypeCallable', 'date');
+     * </code>
+     *
+     * Returns 'date'.
+     *
+     * <code>
+     * echo (string) Txp::get('TypeCallable', 1);
+     * </code>
+     *
+     * Returns ''.
+     *
+     * @return string The callable as a human-readable string
+     */
 
-	public function toString()
-	{
-		$callable = $this->callable;
+    public function toString()
+    {
+        $callable = $this->callable;
 
-		if (is_object($callable))
-		{
-			return get_class($callable);
-		}
+        if (is_object($callable)) {
+            return get_class($callable);
+        }
 
-		if (is_array($callable))
-		{
-			$class = array_shift($callable);
-			$separator = '::';
+        if (is_array($callable)) {
+            $class = array_shift($callable);
+            $separator = '::';
 
-			if (is_object($class))
-			{
-				$class = get_class($class);
-				$separator = '->';
-			}
+            if (is_object($class)) {
+                $class = get_class($class);
+                $separator = '->';
+            }
 
-			array_unshift($callable, $class);
-			return implode($separator, array_filter($callable, 'is_scalar'));
-		}
+            array_unshift($callable, $class);
+            return implode($separator, array_filter($callable, 'is_scalar'));
+        }
 
-		if (!is_string($callable))
-		{
-			return '';
-		}
+        if (!is_string($callable)) {
+            return '';
+        }
 
-		return $callable;
-	}
+        return $callable;
+    }
 }

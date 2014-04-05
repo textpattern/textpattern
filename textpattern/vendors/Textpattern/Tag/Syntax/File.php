@@ -29,37 +29,37 @@
 
 class Textpattern_Tag_Syntax_File
 {
-	/**
-	 * Checks if the file is the first in the list.
-	 *
-	 * @param  array  $atts
-	 * @param  string $thing
-	 * @return string
-	 */
+    /**
+     * Checks if the file is the first in the list.
+     *
+     * @param  array  $atts
+     * @param  string $thing
+     * @return string
+     */
 
-	static public function if_first_file($atts, $thing)
-	{
-		global $thisfile;
+    public static function renderIfFirstFile($atts, $thing)
+    {
+        global $thisfile;
 
-		assert_file();
+        assert_file();
 
-		return parse(EvalElse($thing, !empty($thisfile['is_first'])));
-	}
+        return parse(EvalElse($thing, !empty($thisfile['is_first'])));
+    }
 
-	/**
-	 * Checks if the file is the last in the list.
-	 *
-	 * @param  array  $atts
-	 * @param  string $thing
-	 * @return string
-	 */
+    /**
+     * Checks if the file is the last in the list.
+     *
+     * @param  array  $atts
+     * @param  string $thing
+     * @return string
+     */
 
-	static public function if_last_file($atts, $thing)
-	{
-		global $thisfile;
+    public static function renderIfLastFile($atts, $thing)
+    {
+        global $thisfile;
 
-		assert_file();
+        assert_file();
 
-		return parse(EvalElse($thing, !empty($thisfile['is_last'])));
-	}
+        return parse(EvalElse($thing, !empty($thisfile['is_last'])));
+    }
 }

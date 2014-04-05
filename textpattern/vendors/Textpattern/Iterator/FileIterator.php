@@ -26,9 +26,8 @@
  *
  * <code>
  * $file = new Textpattern_Iterator_FileIterator('file.txt');
- * foreach ($file as $key => $line)
- * {
- * 	echo $line;
+ * foreach ($file as $key => $line) {
+ *     echo $line;
  * }
  * </code>
  *
@@ -38,140 +37,134 @@
 
 class Textpattern_Iterator_FileIterator implements Iterator
 {
-	/**
-	 * Filename.
-	 *
-	 * @var string
-	 */
+    /**
+     * Filename.
+     *
+     * @var string
+     */
 
-	protected $filename;
+    protected $filename;
 
-	/**
-	 * Line length.
-	 *
-	 * @var int
-	 */
+    /**
+     * Line length.
+     *
+     * @var int
+     */
 
-	protected $lineLength = 4096;
+    protected $lineLength = 4096;
 
-	/**
-	 * Filepointer.
-	 *
-	 * @var resource
-	 */
+    /**
+     * Filepointer.
+     *
+     * @var resource
+     */
 
-	protected $filepointer;
+    protected $filepointer;
 
-	/**
-	 * The current element.
-	 */
+    /**
+     * The current element.
+     */
 
-	protected $current;
+    protected $current;
 
-	/**
-	 * The current index.
-	 *
-	 * @var int
-	 */
+    /**
+     * The current index.
+     *
+     * @var int
+     */
 
-	protected $key = -1;
+    protected $key = -1;
 
-	/**
-	 * Whether it's valid or not.
-	 *
-	 * @var bool
-	 */
+    /**
+     * Whether it's valid or not.
+     *
+     * @var bool
+     */
 
-	protected $valid;
+    protected $valid;
 
-	/**
-	 * Constructor.
-	 *
-	 * @param string $filename The filename
-	 */
+    /**
+     * Constructor.
+     *
+     * @param string $filename The filename
+     */
 
-	public function __construct($filename)
-	{
-		$this->filename = $filename;
-		$this->rewind();
-	}
+    public function __construct($filename)
+    {
+        $this->filename = $filename;
+        $this->rewind();
+    }
 
-	/**
-	 * Destructor.
-	 */
+    /**
+     * Destructor.
+     */
 
-	public function __destruct()
-	{
-		if (is_resource($this->filepointer))
-		{
-			fclose($this->filepointer);
-		}
-	}
+    public function __destruct()
+    {
+        if (is_resource($this->filepointer)) {
+            fclose($this->filepointer);
+        }
+    }
 
-	/**
-	 * Returns the current element.
-	 *
-	 * @return Textpattern_Type_String
-	 */
+    /**
+     * Returns the current element.
+     *
+     * @return Textpattern_Type_String
+     */
 
-	public function current()
-	{
-		return new Textpattern_Type_String($this->current);
-	}
+    public function current()
+    {
+        return new Textpattern_Type_String($this->current);
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
+    /**
+     * {@inheritdoc}
+     */
 
-	public function key()
-	{
-		return $this->key;
-	}
+    public function key()
+    {
+        return $this->key;
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
+    /**
+     * {@inheritdoc}
+     */
 
-	public function next()
-	{
-		if (!feof($this->filepointer))
-		{
-			$this->current = fgets($this->filepointer, $this->lineLength);
-			$this->key++;
-			$this->valid = true;
-		}
-		else
-		{
-			$this->valid = false;
-			fclose($this->filepointer);
-		}
-	}
+    public function next()
+    {
+        if (!feof($this->filepointer)) {
+            $this->current = fgets($this->filepointer, $this->lineLength);
+            $this->key++;
+            $this->valid = true;
+        } else {
+            $this->valid = false;
+            fclose($this->filepointer);
+        }
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
+    /**
+     * {@inheritdoc}
+     */
 
-	public function rewind()
-	{
-		if (is_resource($this->filepointer) === false)
-		{
-			if (($this->filepointer = fopen($this->filename, 'r')) === false)
-			{
-				throw new Exception(gTxt('invalid_argument', array('{name}' => 'filename')));
-			}
-		}
+    public function rewind()
+    {
+        if (is_resource($this->filepointer) === false) {
+            if (($this->filepointer = fopen($this->filename, 'r')) === false) {
+                throw new Exception(gTxt('invalid_argument', array('{name}' => 'filename')));
+            }
+        }
 
-		rewind($this->filepointer);
-		$this->key = -1;
-		$this->next();
-	}
+        rewind($this->filepointer);
+        $this->key = -1;
+        $this->next();
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
+    /**
+     * {@inheritdoc}
+     */
 
-	public function valid()
-	{
-		return $this->valid;
-	}
+    public function valid()
+    {
+        return $this->valid;
+    }
 }

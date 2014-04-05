@@ -30,71 +30,71 @@
 
 class Textpattern_Mail_Message
 {
-	/**
-	 * An array of senders.
-	 *
-	 * @var array
-	 */
+    /**
+     * An array of senders.
+     *
+     * @var array
+     */
 
-	public $from = array();
+    public $from = array();
 
-	/**
-	 * An array of recipients.
-	 *
-	 * @var array
-	 */
+    /**
+     * An array of recipients.
+     *
+     * @var array
+     */
 
-	public $to = array();
+    public $to = array();
 
-	/**
-	 * The subject.
-	 *
-	 * @var string
-	 */
+    /**
+     * The subject.
+     *
+     * @var string
+     */
 
-	public $subject = '';
+    public $subject = '';
 
-	/**
-	 * The message body.
-	 *
-	 * @var string
-	 */
+    /**
+     * The message body.
+     *
+     * @var string
+     */
 
-	public $body = '';
+    public $body = '';
 
-	/**
-	 * An array of reply to addresses.
-	 *
-	 * @var array
-	 */
+    /**
+     * An array of reply to addresses.
+     *
+     * @var array
+     */
 
-	public $replyTo = array();
+    public $replyTo = array();
 
-	/**
-	 * An array of carbon copy addresses.
-	 *
-	 * @var array
-	 */
+    /**
+     * An array of carbon copy addresses.
+     *
+     * @var array
+     */
 
-	public $cc = array();
+    public $cc = array();
 
-	/**
-	 * An array of blind carbon copy addresses.
-	 *
-	 * @var array
-	 */
+    /**
+     * An array of blind carbon copy addresses.
+     *
+     * @var array
+     */
 
-	public $bcc = array();
+    public $bcc = array();
 
-	/**
-	 * An array of additional headers.
-	 *
-	 * @var array
-	 */
+    /**
+     * An array of additional headers.
+     *
+     * @var array
+     */
 
-	public $headers = array(
-		'X-Mailer'                  => 'Textpattern',
-		'Content-Transfer-Encoding' => '8bit',
-		'Content-Type'              => 'text/plain; charset="UTF-8"',
-	);
+    public $headers = array(
+        'X-Mailer'                  => 'Textpattern',
+        'Content-Transfer-Encoding' => '8bit',
+        'Content-Type'              => 'text/plain; charset="UTF-8"',
+    );
 }

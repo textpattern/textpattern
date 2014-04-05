@@ -30,132 +30,119 @@
 
 class Textpattern_Mail_Encode
 {
-	/**
-	 * Wished character encoding.
-	 *
-	 * @var string
-	 */
+    /**
+     * Wished character encoding.
+     *
+     * @var string
+     */
 
-	protected $charset = 'UTF-8';
+    protected $charset = 'UTF-8';
 
-	/**
-	 * Constructor.
-	 */
+    /**
+     * Constructor.
+     */
 
-	public function __construct()
-	{
-		if (get_pref('override_emailcharset') && is_callable('utf8_decode'))
-		{
-			$this->charset = 'ISO-8859-1';
-		}
-	}
+    public function __construct()
+    {
+        if (get_pref('override_emailcharset') && is_callable('utf8_decode')) {
+            $this->charset = 'ISO-8859-1';
+        }
+    }
 
-	/**
-	 * Encodes an address list to a valid email header value.
-	 *
-	 * @param  array  $value The address list
-	 * @return string
-	 */
+    /**
+     * Encodes an address list to a valid email header value.
+     *
+     * @param  array  $value The address list
+     * @return string
+     */
 
-	public function addressList($value)
-	{
-		if (!$value)
-		{
-			return '';
-		}
+    public function addressList($value)
+    {
+        if (!$value) {
+            return '';
+        }
 
-		$out = array();
+        $out = array();
 
-		foreach ($value as $email => $name)
-		{
-			if ($this->charset != 'UTF-8')
-			{
-				$name = utf8_decode($name);
-			}
+        foreach ($value as $email => $name) {
+            if ($this->charset != 'UTF-8') {
+                $name = utf8_decode($name);
+            }
 
-			$out[] = trim($this->header($this->escapeHeader($name), 'phrase').' <'.$this->escapeHeader($email).'>');
-		}
+            $out[] = trim($this->header($this->escapeHeader($name), 'phrase').' <'.$this->escapeHeader($email).'>');
+        }
 
-		return join(', ', $out);
-	}
+        return join(', ', $out);
+    }
 
-	/**
-	 * Encodes a string for use in an email header.
-	 *
-	 * @param  string $string The string
-	 * @param  string $type   The type of header, either "text" or "phrase"
-	 * @return string
-	 * @throws Textpattern_Mail_Exception
-	 */
+    /**
+     * Encodes a string for use in an email header.
+     *
+     * @param  string $string The string
+     * @param  string $type   The type of header, either "text" or "phrase"
+     * @return string
+     * @throws Textpattern_Mail_Exception
+     */
 
-	public function header($string, $type)
-	{
-		if (strpos($string, '=?') === false && !preg_match('/[\x00-\x1F\x7F-\xFF]/', $string))
-		{
-			if ($type == 'phrase')
-			{
-				if (preg_match('/[][()<>@,;:".\x5C]/', $string))
-				{
-					$string = '"'. strtr($string, array("\\" => "\\\\", '"' => '\"')) . '"';
-				}
-			}
-			else if ($type != 'text')
-			{
-				throw new Textpattern_Mail_Exception(gTxt('invalid_argument', array('{name}' => 'type')));
-			}
+    public function header($string, $type)
+    {
+        if (strpos($string, '=?') === false && !preg_match('/[\x00-\x1F\x7F-\xFF]/', $string)) {
+            if ($type == 'phrase') {
+                if (preg_match('/[][()<>@,;:".\x5C]/', $string)) {
+                    $string = '"'. strtr($string, array("\\" => "\\\\", '"' => '\"')) . '"';
+                }
+            } elseif ($type != 'text') {
+                throw new Textpattern_Mail_Exception(gTxt('invalid_argument', array('{name}' => 'type')));
+            }
 
-			return $string;
-		}
+            return $string;
+        }
 
-		if ($this->charset == 'ISO-8859-1')
-		{
-			$start = '=?ISO-8859-1?B?';
-			$pcre = '/.{1,42}/s';
-		}
-		else
-		{
-			$start = '=?UTF-8?B?';
-			$pcre = '/.{1,45}(?=[\x00-\x7F\xC0-\xFF]|$)/s';
-		}
+        if ($this->charset == 'ISO-8859-1') {
+            $start = '=?ISO-8859-1?B?';
+            $pcre = '/.{1,42}/s';
+        } else {
+            $start = '=?UTF-8?B?';
+            $pcre = '/.{1,45}(?=[\x00-\x7F\xC0-\xFF]|$)/s';
+        }
 
-		$end = '?=';
-		$sep = IS_WIN ? "\r\n" : "\n";
-		preg_match_all($pcre, $string, $matches);
-		return $start . join($end.$sep.' '.$start, array_map('base64_encode', $matches[0])) . $end;
-	}
+        $end = '?=';
+        $sep = IS_WIN ? "\r\n" : "\n";
+        preg_match_all($pcre, $string, $matches);
+        return $start . join($end.$sep.' '.$start, array_map('base64_encode', $matches[0])) . $end;
+    }
 
-	/**
-	 * Converts an email address into unicode entities.
-	 *
-	 * <code>
-	 * echo Txp::get('MailEncode')->entityObfuscateAddress('john.doe@example.com');
-	 * </code>
-	 *
-	 * @param  string $address The email address
-	 * @return string Encoded email address
-	 */
+    /**
+     * Converts an email address into unicode entities.
+     *
+     * <code>
+     * echo Txp::get('MailEncode')->entityObfuscateAddress('john.doe@example.com');
+     * </code>
+     *
+     * @param  string $address The email address
+     * @return string Encoded email address
+     */
 
-	public function entityObfuscateAddress($address)
-	{
-		$ent = array();
+    public function entityObfuscateAddress($address)
+    {
+        $ent = array();
 
-		for ($i = 0; $i < strlen($address); $i++)
-		{
-			$ent[] = "&#".ord(substr($address, $i, 1)).";";
-		}
+        for ($i = 0; $i < strlen($address); $i++) {
+            $ent[] = "&#".ord(substr($address, $i, 1)).";";
+        }
 
-		return join('', $ent);
-	}
+        return join('', $ent);
+    }
 
-	/**
-	 * Removes new lines and NULL bytes from header lines, preventing header injections.
-	 *
-	 * @param  string $string The string
-	 * @return string Escaped header value
-	 */
+    /**
+     * Removes new lines and NULL bytes from header lines, preventing header injections.
+     *
+     * @param  string $string The string
+     * @return string Escaped header value
+     */
 
-	public function escapeHeader($string)
-	{
-		return str_replace(array("\r\n", "\r", "\n", "\0"), array(' ', ' ', ' ', ''), (string) $string);
-	}
+    public function escapeHeader($string)
+    {
+        return str_replace(array("\r\n", "\r", "\n", "\0"), array(' ', ' ', ' ', ''), (string) $string);
+    }
 }

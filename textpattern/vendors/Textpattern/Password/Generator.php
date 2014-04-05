@@ -34,59 +34,56 @@
 
 class Textpattern_Password_Generator
 {
-	/**
-	 * Stores the character table.
-	 *
-	 * @var array
-	 */
+    /**
+     * Stores the character table.
+     *
+     * @var array
+     */
 
-	protected $chars;
+    protected $chars;
 
-	/**
-	 * Gets the character table.
-	 *
-	 * @return array
-	 */
+    /**
+     * Gets the character table.
+     *
+     * @return array
+     */
 
-	public function getCharacterTable()
-	{
-		if (!$this->chars)
-		{
-			$this->chars = str_split(PASSWORD_SYMBOLS);
-		}
+    public function getCharacterTable()
+    {
+        if (!$this->chars) {
+            $this->chars = str_split(PASSWORD_SYMBOLS);
+        }
 
-		return $this->chars;
-	}
+        return $this->chars;
+    }
 
-	/**
-	 * Generates a random password.
-	 *
-	 * <code>
-	 * echo Txp::get('PasswordGenerator')->generate(16);
-	 * </code>
-	 *
-	 * @param  int    $length The length of the generated password
-	 * @return string The password
-	 */
+    /**
+     * Generates a random password.
+     *
+     * <code>
+     * echo Txp::get('PasswordGenerator')->generate(16);
+     * </code>
+     *
+     * @param  int    $length The length of the generated password
+     * @return string The password
+     */
 
-	public function generate($length)
-	{
-		$pool = false;
-		$pass = '';
+    public function generate($length)
+    {
+        $pool = false;
+        $pass = '';
 
-		for ($i = 0; $i < $length; $i++)
-		{
-			if (!$pool)
-			{
-				$pool = $this->getCharacterTable();
-			}
+        for ($i = 0; $i < $length; $i++) {
+            if (!$pool) {
+                $pool = $this->getCharacterTable();
+            }
 
-			$index = mt_rand(0, count($pool) - 1);
-			$pass .= $pool[$index];
-			unset($pool[$index]);
-			$pool = array_values($pool);
-		}
+            $index = mt_rand(0, count($pool) - 1);
+            $pass .= $pool[$index];
+            unset($pool[$index]);
+            $pool = array_values($pool);
+        }
 
-		return $pass;
-	}
+        return $pass;
+    }
 }

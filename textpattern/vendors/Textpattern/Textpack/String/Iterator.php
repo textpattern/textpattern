@@ -25,9 +25,8 @@
  * Iterates over the given Textpack strings.
  *
  * <code>
- * foreach (Txp::get('TextpackStringIterator', 'en-gb.textpack') as $name => $string)
- * {
- * 	echo "{$name} is translated to: {$string} in " . $string->getLanguage();
+ * foreach (Txp::get('TextpackStringIterator', 'en-gb.textpack') as $name => $string) {
+ *     echo "{$name} is translated to: {$string} in " . $string->getLanguage();
  * }
  * </code>
  *
@@ -37,134 +36,131 @@
 
 class Textpattern_Textpack_String_Iterator extends Textpattern_Iterator_FileIterator implements Textpattern_Textpack_StringInterface
 {
-	/**
-	 * Stores Textpack parser instance.
-	 *
-	 * @var Textpattern_Textpack_Parser
-	 */
+    /**
+     * Stores Textpack parser instance.
+     *
+     * @var Textpattern_Textpack_Parser
+     */
 
-	protected $parser;
+    protected $parser;
 
-	/**
-	 * {@inheritdoc}
-	 */
+    /**
+     * {@inheritdoc}
+     */
 
-	public function __construct($filename)
-	{
-		$this->parser = Txp::get('TextpackParser');
-		parent::__construct($filename);
-	}
+    public function __construct($filename)
+    {
+        $this->parser = Txp::get('TextpackParser');
+        parent::__construct($filename);
+    }
 
-	/**
-	 * Returns the translation string.
-	 *
-	 * @return string
-	 */
+    /**
+     * Returns the translation string.
+     *
+     * @return string
+     */
 
-	public function __toString()
-	{
-		return (string) $this->getString();
-	}
+    public function __toString()
+    {
+        return (string) $this->getString();
+    }
 
-	/**
-	 * Returns the current element.
-	 *
-	 * @return Textpattern_Textpack_StringIterator
-	 */
+    /**
+     * Returns the current element.
+     *
+     * @return Textpattern_Textpack_StringIterator
+     */
 
-	public function current()
-	{
-		return $this;
-	}
+    public function current()
+    {
+        return $this;
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
+    /**
+     * {@inheritdoc}
+     */
 
-	public function getName()
-	{
-		return $this->current['name'];
-	}
+    public function getName()
+    {
+        return $this->current['name'];
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
+    /**
+     * {@inheritdoc}
+     */
 
-	public function getLanguage()
-	{
-		return $this->current['lang'];
-	}
+    public function getLanguage()
+    {
+        return $this->current['lang'];
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
+    /**
+     * {@inheritdoc}
+     */
 
-	public function getString()
-	{
-		return $this->current['data'];	
-	}
+    public function getString()
+    {
+        return $this->current['data'];
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
+    /**
+     * {@inheritdoc}
+     */
 
-	public function getEvent()
-	{
-		return $this->current['event'];
-	}
+    public function getEvent()
+    {
+        return $this->current['event'];
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
+    /**
+     * {@inheritdoc}
+     */
 
-	public function getOwner()
-	{
-		return $this->current['owner'];
-	}
+    public function getOwner()
+    {
+        return $this->current['owner'];
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
+    /**
+     * {@inheritdoc}
+     */
 
-	public function getVersion()
-	{
-		return $this->current['version'];
-	}
+    public function getVersion()
+    {
+        return $this->current['version'];
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
+    /**
+     * {@inheritdoc}
+     */
 
-	public function getLastmod()
-	{
-		return $this->current['lastmod'];
-	}
+    public function getLastmod()
+    {
+        return $this->current['lastmod'];
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
+    /**
+     * {@inheritdoc}
+     */
 
-	public function next()
-	{
-		$buffer = '';
+    public function next()
+    {
+        $buffer = '';
 
-		while (1)
-		{
-			parent::next();
+        while (1) {
+            parent::next();
 
-			if ($this->valid() === false)
-			{
-				return;
-			}
+            if ($this->valid() === false) {
+                return;
+            }
 
-			$buffer .= $this->current . "\n";
+            $buffer .= $this->current . "\n";
 
-			if ($string = $this->parser->parse($buffer))
-			{
-				$this->current = $string[0];
-				$this->key = $this->current['name'];
-				return;
-			}
-		}
-	}
+            if ($string = $this->parser->parse($buffer)) {
+                $this->current = $string[0];
+                $this->key = $this->current['name'];
+                return;
+            }
+        }
+    }
 }

@@ -30,11 +30,11 @@
  * <code>
  * class Abc_Class implements Textpattern_Container_FactorableInterface
  * {
- * 	public function getInstance()
- * 	{
- * 		echo 'Created instance';
- * 		return $this;
- * 	}
+ *     public function getInstance()
+ *     {
+ *         echo 'Created instance';
+ *         return $this;
+ *     }
  * }
  * Txp::get('Abc_Class');
  * </code>
@@ -50,11 +50,11 @@
 
 interface Textpattern_Container_FactorableInterface
 {
-	/**
-	 * Gets an instance of the class for the factory.
-	 *
-	 * @return Textpattern_Container_FactorableInterface
-	 */
+    /**
+     * Gets an instance of the class for the factory.
+     *
+     * @return Textpattern_Container_FactorableInterface
+     */
 
-	public function getInstance();
+    public function getInstance();
 }

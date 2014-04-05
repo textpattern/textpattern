@@ -30,79 +30,75 @@
 
 class Textpattern_Tag_Registry implements Textpattern_Container_ReusableInterface
 {
-	/**
-	 * Stores registered tags.
-	 *
-	 * @var array
-	 */
+    /**
+     * Stores registered tags.
+     *
+     * @var array
+     */
 
-	private $tags = array();
+    private $tags = array();
 
-	/**
-	 * Registers a tag.
-	 *
-	 * @param  callback    $callback The tag callback
-	 * @param  string|null $tag      The tag name
-	 * @return Textpattern_Tag_Registry
-	 * @example
-	 * Txp::get('TagRegistry')->register(array('class', 'method'), 'tag');
-	 */
+    /**
+     * Registers a tag.
+     *
+     * @param  callback    $callback The tag callback
+     * @param  string|null $tag      The tag name
+     * @return Textpattern_Tag_Registry
+     * @example
+     * Txp::get('TagRegistry')->register(array('class', 'method'), 'tag');
+     */
 
-	public function register($callback, $tag = null)
-	{
-		if (is_callable($callback, true))
-		{
-			if ($tag === null && is_string($callback))
-			{
-				$tag = $callback;
-			}
+    public function register($callback, $tag = null)
+    {
+        if (is_callable($callback, true)) {
+            if ($tag === null && is_string($callback)) {
+                $tag = $callback;
+            }
 
-			if ($tag)
-			{
-				$this->tags[$tag] = $callback;
-			}
-		}
+            if ($tag) {
+                $this->tags[$tag] = $callback;
+            }
+        }
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Processes a tag by name.
-	 *
-	 * @param  string      $tag   The tag
-	 * @param  array       $atts  An array of Attributes
-	 * @param  string|null $thing The contained statement
-	 * @return string|null The tag's results
-	 */
+    /**
+     * Processes a tag by name.
+     *
+     * @param  string      $tag   The tag
+     * @param  array       $atts  An array of Attributes
+     * @param  string|null $thing The contained statement
+     * @return string|null The tag's results
+     */
 
-	public function process($tag, $atts, $thing)
-	{
-		if ($this->isRegistered($tag))
-		{
-			return call_user_func($this->tags[$tag], $atts, $thing);
-		}
-	}
+    public function process($tag, $atts, $thing)
+    {
+        if ($this->isRegistered($tag)) {
+            return call_user_func($this->tags[$tag], $atts, $thing);
+        }
+    }
 
-	/**
-	 * Checks if a tag is registered.
-	 *
-	 * @param  string $tag The tag
-	 * @return bool   TRUE if a tag exists
-	 */
+    /**
+     * Checks if a tag is registered.
+     *
+     * @param  string $tag The tag
+     * @return bool   TRUE if a tag exists
+     */
 
-	public function isRegistered($tag)
-	{
-		return array_key_exists($tag, $this->tags) && is_callable($this->tags[$tag]);
-	}
+    public function isRegistered($tag)
+    {
+        return array_key_exists($tag, $this->tags) && is_callable($this->tags[$tag]);
+    }
 
-	/**
-	 * Lists registered tags.
-	 *
-	 * @return array
-	 */
+    /**
+     * Lists registered tags.
+     *
+     * @return array
+     */
 
-	public function registered()
-	{
-		return $this->tags;
-	}
+    public function registered()
+    {
+        return $this->tags;
+    }
 }

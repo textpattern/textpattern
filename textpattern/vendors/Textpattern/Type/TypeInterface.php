@@ -30,11 +30,11 @@
 
 interface Textpattern_Type_TypeInterface
 {
-	/**
-	 * Gets string representation of the item.
-	 *
-	 * @return string
-	 */
+    /**
+     * Gets string representation of the item.
+     *
+     * @return string
+     */
 
-	public function __toString();
+    public function __toString();
 }

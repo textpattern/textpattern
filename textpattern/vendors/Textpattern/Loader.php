@@ -34,126 +34,119 @@
 
 class Textpattern_Loader
 {
-	/**
-	 * Registered directory.
-	 *
-	 * @var string
-	 */
+    /**
+     * Registered directory.
+     *
+     * @var string
+     */
 
-	protected $directory;
+    protected $directory;
 
-	/**
-	 * Registered namespace.
-	 *
-	 * @var string
-	 */
+    /**
+     * Registered namespace.
+     *
+     * @var string
+     */
 
-	protected $namespace;
+    protected $namespace;
 
-	/**
-	 * Namespace separator.
-	 *
-	 * @var string
-	 */
+    /**
+     * Namespace separator.
+     *
+     * @var string
+     */
 
-	protected $separator;
+    protected $separator;
 
-	/**
-	 * File extension.
-	 *
-	 * @var string
-	 */
+    /**
+     * File extension.
+     *
+     * @var string
+     */
 
-	protected $extension;
+    protected $extension;
 
-	/**
-	 * Registers the loader.
-	 *
-	 * @return bool FALSE on error
-	 */
+    /**
+     * Registers the loader.
+     *
+     * @return bool FALSE on error
+     */
 
-	public function register()
-	{
-		if ($this->directory)
-		{
-			return spl_autoload_register(array($this, 'load'));
-		}
+    public function register()
+    {
+        if ($this->directory) {
+            return spl_autoload_register(array($this, 'load'));
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	/**
-	 * Unregisters a loader.
-	 *
-	 * @return bool FALSE on error
-	 */
+    /**
+     * Unregisters a loader.
+     *
+     * @return bool FALSE on error
+     */
 
-	public function unregister()
-	{
-		return spl_autoload_unregister(array($this, 'load'));
-	}
+    public function unregister()
+    {
+        return spl_autoload_unregister(array($this, 'load'));
+    }
 
-	/**
-	 * Constructor.
-	 *
-	 * @param string $directory Registered vendors directory
-	 * @param string $namespace Limits the loader to a specific namespace
-	 * @param string $separator Namespace separator
-	 * @param string $extension File extension
-	 */
+    /**
+     * Constructor.
+     *
+     * @param string $directory Registered vendors directory
+     * @param string $namespace Limits the loader to a specific namespace
+     * @param string $separator Namespace separator
+     * @param string $extension File extension
+     */
 
-	public function __construct($directory, $namespace = null, $separator = '\\', $extension = '.php')
-	{
-		if (file_exists($directory) && is_dir($directory))
-		{
-			$this->directory = $directory;
-			$this->namespace = $namespace;
-			$this->separator = $separator;
-			$this->extension = $extension;
-		}
-	}
+    public function __construct($directory, $namespace = null, $separator = '\\', $extension = '.php')
+    {
+        if (file_exists($directory) && is_dir($directory)) {
+            $this->directory = $directory;
+            $this->namespace = $namespace;
+            $this->separator = $separator;
+            $this->extension = $extension;
+        }
+    }
 
-	/**
-	 * Loads a class.
-	 *
-	 * @param  string $class The class
-	 * @return bool
-	 */
+    /**
+     * Loads a class.
+     *
+     * @param  string $class The class
+     * @return bool
+     */
 
-	public function load($class)
-	{
-		$request = $class;
+    public function load($class)
+    {
+        $request = $class;
 
-		if (
-			$this->namespace !== null && strpos($class, $this->namespace.$this->separator) !== 0 ||
-			!preg_match('/^[\\a-zA-Z_\x7f-\xff][a-zA-Z0-9_\\\x7f-\xff]*$/', $class)
-		)
-		{
-			return false;
-		}
+        if ($this->namespace !== null && strpos($class, $this->namespace.$this->separator) !== 0 ||
+            !preg_match('/^[\\a-zA-Z_\x7f-\xff][a-zA-Z0-9_\\\x7f-\xff]*$/', $class)
+        ) {
+            return false;
+        }
 
-		$file = $this->directory . '/';
-		$divide = strripos($class, $this->separator);
+        $file = $this->directory . '/';
+        $divide = strripos($class, $this->separator);
 
-		if ($divide !== false)
-		{
-			$namespace = substr($class, 0, $divide);
-			$class = substr($class, $divide + 1);
-			$file .= str_replace($this->separator, '/', $namespace) . '/';
-		}
+        if ($divide !== false) {
+            $namespace = substr($class, 0, $divide);
+            $class = substr($class, $divide + 1);
+            $file .= str_replace($this->separator, '/', $namespace) . '/';
+        }
 
-		$file .= str_replace('_', '/', $class) . $this->extension;
+        $file .= str_replace('_', '/', $class) . $this->extension;
 
-		if (is_readable($file))
-		{
-			require_once $file;
+        if (is_readable($file)) {
+            require_once $file;
 
-			if (class_exists($request, false))
-			{
-				return true;
-			}
-		}
+            if (class_exists($request, false)) {
+                return true;
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 }

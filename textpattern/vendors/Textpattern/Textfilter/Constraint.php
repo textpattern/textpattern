@@ -36,14 +36,14 @@ require_once txpath.'/lib/txplib_validator.php';
 
 class Textpattern_Textfilter_Constraint extends Constraint
 {
-	/**
-	 * Validates filter selection.
-	 *
-	 * @return bool
-	 */
+    /**
+     * Validates filter selection.
+     *
+     * @return bool
+     */
 
-	public function validate()
-	{
-		return array_key_exists($this->value, Txp::get('TextfilterRegistry')->map());
-	}
+    public function validate()
+    {
+        return array_key_exists($this->value, Txp::get('TextfilterRegistry')->map());
+    }
 }

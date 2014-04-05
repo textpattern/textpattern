@@ -30,22 +30,22 @@
 
 interface Textpattern_Password_AdapterInterface extends Textpattern_Adaptable_AdapterInterface
 {
-	/**
-	 * Verifies the password.
-	 *
-	 * @param  string $password The password
-	 * @param  string $hash     The hash
-	 * @return bool   TRUE if the password matches the hash
-	 */
+    /**
+     * Verifies the password.
+     *
+     * @param  string $password The password
+     * @param  string $hash     The hash
+     * @return bool   TRUE if the password matches the hash
+     */
 
-	public function verify($password, $hash);
+    public function verify($password, $hash);
 
-	/**
-	 * Hashes the password.
-	 *
-	 * @param  string $password
-	 * @return string The hash
-	 */
+    /**
+     * Hashes the password.
+     *
+     * @param  string $password
+     * @return string The hash
+     */
 
-	public function hash($password);
+    public function hash($password);
 }

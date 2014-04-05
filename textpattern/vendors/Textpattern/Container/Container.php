@@ -43,130 +43,117 @@
 
 class Textpattern_Container_Container implements Textpattern_Container_ContainerInterface
 {
-	/**
-	 * Stores registered classes.
-	 *
-	 * @var array
-	 */
+    /**
+     * Stores registered classes.
+     *
+     * @var array
+     */
 
-	protected $registered = array();
+    protected $registered = array();
 
-	/**
-	 * Stores shared instances.
-	 *
-	 * @var array
-	 */
+    /**
+     * Stores shared instances.
+     *
+     * @var array
+     */
 
-	protected $instances = array();
+    protected $instances = array();
 
-	/**
-	 * The default namespace.
-	 *
-	 * @var string
-	 */
+    /**
+     * The default namespace.
+     *
+     * @var string
+     */
 
-	protected $namespace = 'Textpattern';
+    protected $namespace = 'Textpattern';
 
-	/**
-	 * Namespace separator.
-	 *
-	 * @var string
-	 */
+    /**
+     * Namespace separator.
+     *
+     * @var string
+     */
 
-	protected $separator = '_';
+    protected $separator = '_';
 
-	/**
-	 * {@inheritdoc}
-	 */
+    /**
+     * {@inheritdoc}
+     */
 
-	public function register($alias, $class)
-	{
-		if (isset($this->registered[$alias]))
-		{
-			throw new Exception('alias_is_taken');
-		}
+    public function register($alias, $class)
+    {
+        if (isset($this->registered[$alias])) {
+            throw new Exception('alias_is_taken');
+        }
 
-		$this->registered[$alias] = $class;
-		return $this;
-	}
+        $this->registered[$alias] = $class;
+        return $this;
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
+    /**
+     * {@inheritdoc}
+     */
 
-	public function remove($alias)
-	{
-		unset($this->registered[$alias], $this->instances[$alias]);
-		return $this;
-	}
+    public function remove($alias)
+    {
+        unset($this->registered[$alias], $this->instances[$alias]);
+        return $this;
+    }
 
-	/**
-	 * Resolves an alias to the actual classname.
-	 *
-	 * @param  string $alias The alias
-	 * @return string The classname
-	 */
+    /**
+     * Resolves an alias to the actual classname.
+     *
+     * @param  string $alias The alias
+     * @return string The classname
+     */
 
-	protected function resolveAlias($alias)
-	{
-		if (isset($this->registered[$alias]))
-		{
-			return $this->registered[$alias];
-		}
+    protected function resolveAlias($alias)
+    {
+        if (isset($this->registered[$alias])) {
+            return $this->registered[$alias];
+        }
 
-		if (strpos($alias, $this->separator) === false && strpos($alias, '\\') === false)
-		{
-			$colon = strpos($alias, ':');
+        if (strpos($alias, $this->separator) === false && strpos($alias, '\\') === false) {
+            $colon = strpos($alias, ':');
 
-			if ($colon === false)
-			{
-				return $this->namespace . preg_replace('/([A-Z])/', $this->separator . '$1', $alias);
-			}
+            if ($colon === false) {
+                return $this->namespace . preg_replace('/([A-Z])/', $this->separator . '$1', $alias);
+            }
 
-			if ($colon === 0)
-			{
-				$alias = substr($alias, 1);
-			}
-		}
+            if ($colon === 0) {
+                $alias = substr($alias, 1);
+            }
+        }
 
-		return $alias;
-	}
+        return $alias;
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
+    /**
+     * {@inheritdoc}
+     */
 
-	public function getInstance($alias, array $options)
-	{
-		if (isset($this->instances[$alias]))
-		{
-			$instance = $this->instances[$alias];
-		}
-		else
-		{
-			$class = $this->resolveAlias($alias);
+    public function getInstance($alias, array $options)
+    {
+        if (isset($this->instances[$alias])) {
+            $instance = $this->instances[$alias];
+        } else {
+            $class = $this->resolveAlias($alias);
 
-			if ($options && method_exists($class, '__construct'))
-			{
-				$reflection = new ReflectionClass($class);
-				$instance = $reflection->newInstanceArgs($options);
-			}
-			else
-			{
-				$instance = new $class;
-			}
+            if ($options && method_exists($class, '__construct')) {
+                $reflection = new ReflectionClass($class);
+                $instance = $reflection->newInstanceArgs($options);
+            } else {
+                $instance = new $class;
+            }
 
-			if ($instance instanceof Textpattern_Container_ReusableInterface)
-			{
-				$this->instances[$alias] = $instance;
-			}
-		}
+            if ($instance instanceof Textpattern_Container_ReusableInterface) {
+                $this->instances[$alias] = $instance;
+            }
+        }
 
-		if ($instance instanceof Textpattern_Container_FactorableInterface)
-		{
-			$instance = call_user_func_array(array($instance, 'getInstance'), $options);
-		}
+        if ($instance instanceof Textpattern_Container_FactorableInterface) {
+            $instance = call_user_func_array(array($instance, 'getInstance'), $options);
+        }
 
-		return $instance;
-	}
+        return $instance;
+    }
 }

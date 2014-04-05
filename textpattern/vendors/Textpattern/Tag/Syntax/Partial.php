@@ -29,39 +29,39 @@
 
 class Textpattern_Tag_Syntax_Partial
 {
-	/**
-	 * Returns the inner content of the enclosing &lt;txp:output_form /&gt; tag.
-	 *
-	 * @return string
-	 */
+    /**
+     * Returns the inner content of the enclosing &lt;txp:output_form /&gt; tag.
+     *
+     * @return string
+     */
 
-	static public function renderYield()
-	{
-		global $yield;
+    public static function renderYield()
+    {
+        global $yield;
 
-		$inner = end($yield);
+        $inner = end($yield);
 
-		return isset($inner) ? $inner : '';
-	}
+        return isset($inner) ? $inner : '';
+    }
 
-	/**
-	 * Conditional for yield.
-	 *
-	 * @param  array  $atts
-	 * @param  string $thing
-	 * @return string
-	 */
+    /**
+     * Conditional for yield.
+     *
+     * @param  array  $atts
+     * @param  string $thing
+     * @return string
+     */
 
-	static public function if_yield($atts, $thing)
-	{
-		global $yield;
+    public static function renderIfYield($atts, $thing)
+    {
+        global $yield;
 
-		extract(lAtts(array(
-			'value' => null,
-		), $atts));
+        extract(lAtts(array(
+            'value' => null,
+        ), $atts));
 
-		$inner = end($yield);
+        $inner = end($yield);
 
-		return parse(EvalElse($thing, $inner !== null && ($value === null || (string) $inner === (string) $value)));
-	}
+        return parse(EvalElse($thing, $inner !== null && ($value === null || (string) $inner === (string) $value)));
+    }
 }

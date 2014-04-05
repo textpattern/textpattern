@@ -30,36 +30,36 @@
 
 interface Textpattern_Container_ContainerInterface
 {
-	/**
-	 * Gets an instance for the given alias.
-	 *
-	 * @param  string $alias   The class alias
-	 * @param  array  $options Options
-	 * @return object Instance of the resolved class
-	 */
+    /**
+     * Gets an instance for the given alias.
+     *
+     * @param  string $alias   The class alias
+     * @param  array  $options Options
+     * @return object Instance of the resolved class
+     */
 
-	public function getInstance($alias, array $options);
+    public function getInstance($alias, array $options);
 
-	/**
-	 * Removes a registered class.
-	 *
-	 * @param  string $alias The alias
-	 * @return Textpattern_Container_ContainerInterface
-	 */
+    /**
+     * Removes a registered class.
+     *
+     * @param  string $alias The alias
+     * @return Textpattern_Container_ContainerInterface
+     */
 
-	public function remove($alias);
+    public function remove($alias);
 
-	/**
-	 * Registers a class.
-	 *
-	 * Throws an exception if the alias is taken.
-	 * To replace an alias, first call remove.
-	 *
-	 * @param  string $alias The alias
-	 * @param  string $class The class
-	 * @return Textpattern_Container_ContainerInterface
-	 * @throws Exception
-	 */
+    /**
+     * Registers a class.
+     *
+     * Throws an exception if the alias is taken.
+     * To replace an alias, first call remove.
+     *
+     * @param  string $alias The alias
+     * @param  string $class The class
+     * @return Textpattern_Container_ContainerInterface
+     * @throws Exception
+     */
 
-	public function register($alias, $class);
+    public function register($alias, $class);
 }

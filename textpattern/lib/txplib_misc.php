@@ -6724,7 +6724,7 @@ class timezone
 	function install_textpack($textpack, $add_new_langs = false)
 	{
 		$parser = new Textpattern_Textpack_Parser();
-		$parser->set_language(get_pref('language', 'en-gb'));
+		$parser->setLanguage(get_pref('language', 'en-gb'));
 		$textpack = $parser->parse($textpack);
 
 		if (!$textpack)

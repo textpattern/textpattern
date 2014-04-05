@@ -25,13 +25,10 @@
  * Callable filter.
  *
  * <code>
- * try
- * {
- * 	Txp::get('FilterCallable', 'fn');
- * }
- * catch (Textpattern_Filter_Exception $e)
- * {
- * 	echo $e->getMessage();
+ * try {
+ *     Txp::get('FilterCallable', 'fn');
+ * } catch (Textpattern_Filter_Exception $e) {
+ *     echo $e->getMessage();
  * }
  * </code>
  *
@@ -41,17 +38,16 @@
 
 class Textpattern_Filter_Callable extends Textpattern_Type_Callable
 {
-	/**
-	 * {@inheritdoc}
-	 */
+    /**
+     * {@inheritdoc}
+     */
 
-	public function __construct($callable)
-	{
-		if (!is_callable($callable))
-		{
-			throw new Textpattern_Filter_Exception(gTxt('assert_callable'));
-		}
+    public function __construct($callable)
+    {
+        if (!is_callable($callable)) {
+            throw new Textpattern_Filter_Exception(gTxt('assert_callable'));
+        }
 
-		parent::__construct($callable);
-	}
+        parent::__construct($callable);
+    }
 }

@@ -40,66 +40,63 @@
 
 class Textpattern_Password_Random extends Textpattern_Password_Generator
 {
-	/**
-	 * {@inheritdoc}
-	 */
+    /**
+     * {@inheritdoc}
+     */
 
-	public function getCharacterTable()
-	{
-		return array('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '!', '@', '#', '$', '%', '&', '*', '?');
-	}
+    public function getCharacterTable()
+    {
+        return array(
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
+            'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3',
+            '4', '5', '6', '7', '8', '9', '!', '@', '#', '$', '%', '&', '*', '?',
+        );
+    }
 
-	/**
-	 * Generates random bytes as a string of given length.
-	 *
-	 * <code>
-	 * echo Txp::get('PasswordRandom')->generate(196);
-	 * </code>
-	 *
-	 * @param  int    $length The length of the generated value
-	 * @return string The value
-	 */
+    /**
+     * Generates random bytes as a string of given length.
+     *
+     * <code>
+     * echo Txp::get('PasswordRandom')->generate(196);
+     * </code>
+     *
+     * @param  int    $length The length of the generated value
+     * @return string The value
+     */
 
-	public function generate($length)
-	{
-		$bytes = (int) ceil($length / 2);
+    public function generate($length)
+    {
+        $bytes = (int) ceil($length / 2);
 
-		if (function_exists('mcrypt_create_iv') && version_compare(PHP_VERSION, '5.3.0') >= 0)
-		{
-			$random = mcrypt_create_iv($bytes, MCRYPT_DEV_URANDOM);
+        if (function_exists('mcrypt_create_iv') && version_compare(PHP_VERSION, '5.3.0') >= 0) {
+            $random = mcrypt_create_iv($bytes, MCRYPT_DEV_URANDOM);
 
-			if ($random && strlen($random) === $bytes)
-			{
-				return substr(bin2hex($random), 0, $length);
-			}
-		}
+            if ($random && strlen($random) === $bytes) {
+                return substr(bin2hex($random), 0, $length);
+            }
+        }
 
-		if (IS_WIN === false && file_exists('/dev/urandom') && is_readable('/dev/urandom') && ($fp = fopen('/dev/urandom', 'rb')) !== false)
-		{
-			if (function_exists('stream_set_read_buffer'))
-			{
-				stream_set_read_buffer($fp, 0);
-			}
+        if (IS_WIN === false && file_exists('/dev/urandom') && is_readable('/dev/urandom') && ($fp = fopen('/dev/urandom', 'rb')) !== false) {
+            if (function_exists('stream_set_read_buffer')) {
+                stream_set_read_buffer($fp, 0);
+            }
 
-			$random = fread($fp, $bytes);
-			fclose($fp);
+            $random = fread($fp, $bytes);
+            fclose($fp);
 
-			if ($random && strlen($random) === $bytes)
-			{
-				return substr(bin2hex($random), 0, $length);
-			}
-		}
+            if ($random && strlen($random) === $bytes) {
+                return substr(bin2hex($random), 0, $length);
+            }
+        }
 
-		if (IS_WIN === false && function_exists('openssl_random_pseudo_bytes') && version_compare(PHP_VERSION, '5.3.4') >= 0)
-		{
-			$random = openssl_random_pseudo_bytes($bytes, $strong);
+        if (IS_WIN === false && function_exists('openssl_random_pseudo_bytes') && version_compare(PHP_VERSION, '5.3.4') >= 0) {
+            $random = openssl_random_pseudo_bytes($bytes, $strong);
 
-			if ($random && $strong === true && strlen($random) === $bytes)
-			{
-				return substr(bin2hex($random), 0, $length);
-			}
-		}
+            if ($random && $strong === true && strlen($random) === $bytes) {
+                return substr(bin2hex($random), 0, $length);
+            }
+        }
 
-		return parent::generate($length);
-	}
+        return parent::generate($length);
+    }
 }

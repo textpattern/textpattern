@@ -30,28 +30,28 @@
 
 interface Textpattern_Adaptable_ProvidableInterface
 {
-	/**
-	 * Sets the current adapter.
-	 *
-	 * @param  Textpattern_Adaptable_Adapter $adapter The adapter
-	 * @return Textpattern_Adaptable_ProvidableInterface
-	 */
+    /**
+     * Sets the current adapter.
+     *
+     * @param  Textpattern_Adaptable_Adapter $adapter The adapter
+     * @return Textpattern_Adaptable_ProvidableInterface
+     */
 
-	public function setAdapter(Textpattern_Adaptable_Adapter $adapter);
+    public function setAdapter(Textpattern_Adaptable_Adapter $adapter);
 
-	/**
-	 * Gets the current adapter.
-	 *
-	 * @return Textpattern_Adaptable_Adapter
-	 */
+    /**
+     * Gets the current adapter.
+     *
+     * @return Textpattern_Adaptable_Adapter
+     */
 
-	public function getAdapter();
+    public function getAdapter();
 
-	/**
-	 * Gets the original default adapter.
-	 *
-	 * @return Textpattern_Adaptable_Adapter
-	 */
+    /**
+     * Gets the original default adapter.
+     *
+     * @return Textpattern_Adaptable_Adapter
+     */
 
-	public function getDefaultAdapter();
+    public function getDefaultAdapter();
 }

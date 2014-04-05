@@ -30,192 +30,180 @@
 
 class Textpattern_Textfilter_Registry implements ArrayAccess, IteratorAggregate, Textpattern_Container_ReusableInterface
 {
-	/**
-	 * An array of filters.
-	 *
-	 * @var array
-	 */
+    /**
+     * An array of filters.
+     *
+     * @var array
+     */
 
-	protected $filters;
+    protected $filters;
 
-	/**
-	 * Stores an array of filter titles.
-	 *
-	 * @var array
-	 */
+    /**
+     * Stores an array of filter titles.
+     *
+     * @var array
+     */
 
-	protected $titles;
+    protected $titles;
 
-	/**
-	 * Constructor.
-	 *
-	 * Creates core Textfilters according to a preference and
-	 * registers all available filters with the core.
-	 *
-	 * This method triggers 'textfilter.register' callback
-	 * event.
-	 */
+    /**
+     * Constructor.
+     *
+     * Creates core Textfilters according to a preference and
+     * registers all available filters with the core.
+     *
+     * This method triggers 'textfilter.register' callback
+     * event.
+     */
 
-	public function __construct()
-	{
-		if ($filters = get_pref('admin_textfilter_classes'))
-		{
-			foreach (do_list($filters) as $filter)
-			{
-				new $filter;
-			}
-		}
-		else
-		{
-			new Textpattern_Textfilter_Plain();
-			new Textpattern_Textfilter_Nl2Br();
-			new Textpattern_Textfilter_Textile();
-		}
+    public function __construct()
+    {
+        if ($filters = get_pref('admin_textfilter_classes')) {
+            foreach (do_list($filters) as $filter) {
+                new $filter;
+            }
+        } else {
+            new Textpattern_Textfilter_Plain();
+            new Textpattern_Textfilter_Nl2Br();
+            new Textpattern_Textfilter_Textile();
+        }
 
-		$this->filters = array();
-		callback_event('textfilter', 'register', 0, $this);
-	}
+        $this->filters = array();
+        callback_event('textfilter', 'register', 0, $this);
+    }
 
-	/**
-	 * Create an array map of filter keys vs. titles.
-	 *
-	 * @return array Map of 'key' => 'title' for all Textfilters
-	 */
+    /**
+     * Create an array map of filter keys vs. titles.
+     *
+     * @return array Map of 'key' => 'title' for all Textfilters
+     */
 
-	public function map()
-	{
-		if ($this->titles === null)
-		{
-			$this->titles = array();
+    public function map()
+    {
+        if ($this->titles === null) {
+            $this->titles = array();
 
-			foreach ($this as $filter)
-			{
-				$this->titles[$filter->getKey()] = $filter->title;
-			}
-		}
+            foreach ($this as $filter) {
+                $this->titles[$filter->getKey()] = $filter->title;
+            }
+        }
 
-		return $this->titles;
-	}
+        return $this->titles;
+    }
 
-	/**
-	 * Filter raw input text by calling one of our known Textfilters by its key.
-	 *
-	 * Invokes the 'textfilter.filter' pre- and post-callbacks.
-	 *
-	 * @param  string $key     The Textfilter's key
-	 * @param  string $thing   Raw input text
-	 * @param  array  $context Filter context ('options' => array, 'field' => string, 'data' => mixed)
-	 * @return string Filtered output text
-	 * @throws Exception
-	 */
+    /**
+     * Filter raw input text by calling one of our known Textfilters by its key.
+     *
+     * Invokes the 'textfilter.filter' pre- and post-callbacks.
+     *
+     * @param  string $key     The Textfilter's key
+     * @param  string $thing   Raw input text
+     * @param  array  $context Filter context ('options' => array, 'field' => string, 'data' => mixed)
+     * @return string Filtered output text
+     * @throws Exception
+     */
 
-	public function filter($key, $thing, $context)
-	{
-		// Preprocessing, anyone?
-		callback_event_ref('textfilter', 'filter', 0, $thing, $context);
+    public function filter($key, $thing, $context)
+    {
+        // Preprocessing, anyone?
+        callback_event_ref('textfilter', 'filter', 0, $thing, $context);
 
-		if (isset($this[$key]))
-		{
-			$thing = $this[$key]->filter($thing, $context['options']);
-		}
-		else
-		{
-			throw new Exception(gTxt('invalid_argument', array('{name}' => 'key')));
-		}
+        if (isset($this[$key])) {
+            $thing = $this[$key]->filter($thing, $context['options']);
+        } else {
+            throw new Exception(gTxt('invalid_argument', array('{name}' => 'key')));
+        }
 
-		// Postprocessing, anyone?
-		callback_event_ref('textfilter', 'filter', 1, $thing, $context);
+        // Postprocessing, anyone?
+        callback_event_ref('textfilter', 'filter', 1, $thing, $context);
 
-		return $thing;
-	}
+        return $thing;
+    }
 
-	/**
-	 * Get help text for a certain Textfilter.
-	 *
-	 * @param  string $key The Textfilter's key
-	 * @return string HTML for human-readable help
-	 */
+    /**
+     * Get help text for a certain Textfilter.
+     *
+     * @param  string $key The Textfilter's key
+     * @return string HTML for human-readable help
+     */
 
-	public function help($key)
-	{
-		if (isset($this[$key]))
-		{
-			return $this[$key]->help();
-		}
+    public function help($key)
+    {
+        if (isset($this[$key])) {
+            return $this[$key]->help();
+        }
 
-		return '';
-	}
+        return '';
+    }
 
-	/**
-	 * ArrayAccess interface to our set of filters.
-	 *
-	 * @param string $key
-	 * @param string $filter
-	 * @see   ArrayAccess
-	 */
+    /**
+     * ArrayAccess interface to our set of filters.
+     *
+     * @param string $key
+     * @param string $filter
+     * @see   ArrayAccess
+     */
 
-	public function offsetSet($key, $filter)
-	{
-		if ($key === null)
-		{
-			$key = $filter->getKey();
-		}
+    public function offsetSet($key, $filter)
+    {
+        if ($key === null) {
+            $key = $filter->getKey();
+        }
 
-		$this->filters[$key] = $filter;
-	}
+        $this->filters[$key] = $filter;
+    }
 
-	/**
-	 * Returns the value at specified offset.
-	 *
-	 * @param  string $key
-	 * @return string The value
-	 * @see    ArrayAccess
-	 */
+    /**
+     * Returns the value at specified offset.
+     *
+     * @param  string $key
+     * @return string The value
+     * @see    ArrayAccess
+     */
 
-	public function offsetGet($key)
-	{
-		if ($this->offsetExists($key))
-		{
-			return $this->filters[$key];
-		}
+    public function offsetGet($key)
+    {
+        if ($this->offsetExists($key)) {
+            return $this->filters[$key];
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	/**
-	 * Whether an offset exists.
-	 *
-	 * @param  string $key
-	 * @return bool
-	 * @see    ArrayAccess
-	 */
+    /**
+     * Whether an offset exists.
+     *
+     * @param  string $key
+     * @return bool
+     * @see    ArrayAccess
+     */
 
-	public function offsetExists($key)
-	{
-		return isset($this->filters[$key]);
-	}
+    public function offsetExists($key)
+    {
+        return isset($this->filters[$key]);
+    }
 
-	/**
-	 * Offset to unset.
-	 *
-	 * @param string $key
-	 * @see   ArrayAccess
-	 */
+    /**
+     * Offset to unset.
+     *
+     * @param string $key
+     * @see   ArrayAccess
+     */
 
-	public function offsetUnset($key)
-	{
-		unset($this->filters[$key]);
-	}
+    public function offsetUnset($key)
+    {
+        unset($this->filters[$key]);
+    }
 
-	/**
-	 * IteratorAggregate interface.
-	 *
-	 * @return ArrayIterator
-	 * @see    IteratorAggregate
-	 */
+    /**
+     * IteratorAggregate interface.
+     *
+     * @return ArrayIterator
+     * @see    IteratorAggregate
+     */
 
-	public function getIterator()
-	{
-		return new ArrayIterator($this->filters);
-	}
+    public function getIterator()
+    {
+        return new ArrayIterator($this->filters);
+    }
 }
