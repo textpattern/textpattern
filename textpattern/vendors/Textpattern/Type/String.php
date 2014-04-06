@@ -51,7 +51,7 @@ class Textpattern_Type_String implements Textpattern_Type_TypeInterface
      * @var bool
      */
 
-    static protected $mbString = null;
+    protected static $mbString = null;
 
     /**
      * Whether encoding functions are available.
@@ -59,7 +59,7 @@ class Textpattern_Type_String implements Textpattern_Type_TypeInterface
      * @var bool
      */
 
-    static protected $encode = null;
+    protected static $encode = null;
 
     /**
      * Expected encoding.
