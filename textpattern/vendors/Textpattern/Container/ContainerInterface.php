@@ -58,7 +58,7 @@ interface Textpattern_Container_ContainerInterface
      * @param  string $alias The alias
      * @param  string $class The class
      * @return Textpattern_Container_ContainerInterface
-     * @throws Exception
+     * @throws InvalidArgumentException
      */
 
     public function register($alias, $class);

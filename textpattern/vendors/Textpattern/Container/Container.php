@@ -82,7 +82,7 @@ class Textpattern_Container_Container implements Textpattern_Container_Container
     public function register($alias, $class)
     {
         if (isset($this->registered[$alias])) {
-            throw new Exception('alias_is_taken');
+            throw new InvalidArgumentException(gTxt('alias_is_taken'));
         }
 
         $this->registered[$alias] = $class;
