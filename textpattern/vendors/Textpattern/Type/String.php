@@ -234,8 +234,8 @@ class Textpattern_Type_String implements Textpattern_Type_TypeInterface
      * echo (string) Txp::get('Textpattern_Type_String', '<strong>Hello World!</strong>')->html();
      * </code>
      *
-     * @param   int    $flags         A bitmask of one or more flags. The default is ENT_QUOTES
-     * @param   bool   $double_encode When double_encode is turned off PHP will not encode existing HTML entities, the default is to convert everything
+     * @param  int    $flags         A bitmask of one or more flags. The default is ENT_QUOTES
+     * @param  bool   $double_encode When double_encode is turned off PHP will not encode existing HTML entities, the default is to convert everything
      * @return Textpattern_Type_String
      */
 
