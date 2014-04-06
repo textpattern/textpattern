@@ -279,7 +279,7 @@ class theme
 
 			if (has_privs('tab.'.$ar))
 			{
-				if (!has_privs($e_)) 
+				if (!has_privs($e_))
 				{
 					$e_ = '';
 				}

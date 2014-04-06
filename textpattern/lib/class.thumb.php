@@ -16,7 +16,7 @@
  * Home: http://www.cerdmann.com/thumb/
  * Copyright (C) 2005 Christoph Erdmann
  *
- * This library is free software; you can redistribute it and/or 
+ * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
@@ -436,7 +436,7 @@ class wet_thumb
 			$this->_DST['image'],
 			$this->_SRC['image'],
 			0,
-			0, 
+			0,
 			$off_w,
 			$off_h,
 			$this->_DST['width'],

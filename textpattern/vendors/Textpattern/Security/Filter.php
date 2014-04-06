@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 /*
  * Textpattern Content Management System

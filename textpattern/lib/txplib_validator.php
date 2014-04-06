@@ -92,7 +92,7 @@ class Validator
 	 *
 	 * @return array An array of messages
 	 */
- 
+
 	public function getMessages()
 	{
 		return $this->messages;

@@ -490,7 +490,7 @@ $DB = new DB;
  * @param   string $alter The statement to execute
  * @param   bool   $debug Dump query
  * @return  bool   FALSE on error
- * @example 
+ * @example
  * if (safe_alter('myTable', 'ADD myColumn TINYINT(1)'))
  * {
  * 	echo "'myColumn' added to 'myTable'";
@@ -895,7 +895,7 @@ $DB = new DB;
 /**
  * Gets a list rows from a table as an associative array.
  *
- * When working with large result sets remember that this function, 
+ * When working with large result sets remember that this function,
  * unlike safe_rows_start(), loads results to memory all at once.
  * To optimise performance in such situations, use safe_rows_start()
  * instead.

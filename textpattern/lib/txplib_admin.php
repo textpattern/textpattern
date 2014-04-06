@@ -156,7 +156,7 @@
 /**
  * Generates a password.
  *
- * Generates a random password of given length 
+ * Generates a random password of given length
  * using the symbols set in PASSWORD_SYMBOLS constant.
  *
  * @param  int    $length The length of the password

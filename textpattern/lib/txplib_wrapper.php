@@ -84,7 +84,7 @@ class TXP_Wrapper
 	 * Remember to always use $this->txp_user when checking
 	 * for permissions with this class.
 	 *
-	 * @var string 
+	 * @var string
 	 */
 
 	public $txp_user = null;
@@ -100,7 +100,7 @@ class TXP_Wrapper
 	/**
 	 * Predefined Textpattern variables to be populated.
 	 *
-	 * @var array 
+	 * @var array
 	 */
 
 	public $vars = array(

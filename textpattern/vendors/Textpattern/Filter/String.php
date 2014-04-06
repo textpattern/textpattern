@@ -64,7 +64,7 @@ class Textpattern_Filter_String extends Textpattern_Type_String
      * </code>
      *
      * @param  string $pattern The pattern
-     * @param  array  $matches Matches 
+     * @param  array  $matches Matches
      * @param  int    $flags   Flags
      * @param  int    $offset  Offset
      * @return Textpattern_Filter_String

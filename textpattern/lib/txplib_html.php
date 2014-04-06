@@ -263,7 +263,7 @@
 
 /**
  * Renders a link with one additional URL parameter.
- * 
+ *
  * Renders an link invoking an admin-side action while
  * taking up to one additional URL parameter.
  *
@@ -836,7 +836,7 @@
  * @param  string $content Cell content
  * @param  int    $span    Cell rowspan attribute
  * @param  int    $width   Cell width attribute
- * @param  string $class   Cell class attribute 
+ * @param  string $class   Cell class attribute
  * @return string HTML
  */
 
@@ -1826,7 +1826,7 @@ EOF;
 		}
 
 		return ($wraptag)
-			? tag(n.tag(join("</$break>".n."<{$break}{$breakatts}>", $list), $break, $breakatts).n, $wraptag, $atts) 
+			? tag(n.tag(join("</$break>".n."<{$break}{$breakatts}>", $list), $break, $breakatts).n, $wraptag, $atts)
 			: tag(n.join("</$break>".n."<{$break}{$breakatts}>".n, $list).n, $break, $breakatts);
 	}
 

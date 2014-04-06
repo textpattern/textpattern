@@ -33,7 +33,7 @@
  * </code>
  *
  * Normally you would write a static wrapper class for the container
- * to keep the instances and configuration between calls. See the 
+ * to keep the instances and configuration between calls. See the
  * 'Txp' class for Textpattern's own implementation.
  *
  * @since   4.6.0

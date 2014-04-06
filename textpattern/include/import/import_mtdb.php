@@ -45,7 +45,7 @@
  * @param  string $default_comment_invite Article comments invite
  * @return string HTML
  */
- 
+
 	function doImportMTDB($mt_dblogin, $mt_db, $mt_dbpass, $mt_dbhost, $blog_id, $insert_into_section, $insert_with_status, $default_comment_invite)
 	{
 		// Keep some response on some part.

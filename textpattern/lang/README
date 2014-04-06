@@ -1,17 +1,17 @@
 == Language Files ==
 
-All language strings used by the Textpattern CMS are stored in the database 
-(as of 1.0RC4 and later). You can change your language by selecting from 
-the installed languages in "admin -> preferences". To install additional 
-languages, go to "admin -> preferences -> Install Language". The 
-preferred and default method of installation is to query a remote server 
-(at textpattern.com) to ensure that you always get the most recent 
+All language strings used by the Textpattern CMS are stored in the database
+(as of 1.0RC4 and later). You can change your language by selecting from
+the installed languages in "admin -> preferences". To install additional
+languages, go to "admin -> preferences -> Install Language". The
+preferred and default method of installation is to query a remote server
+(at textpattern.com) to ensure that you always get the most recent
 set of languages in their most recent state.
 
 In case your computer is not connected to the internet, the fallback method
-is to install from the files that are in the /textpattern/lang directory. 
-Please be aware that these files may be outdated and newer language strings 
-may be missing. 
+is to install from the files that are in the /textpattern/lang directory.
+Please be aware that these files may be outdated and newer language strings
+may be missing.
 
 If you are interested in translating Textpattern into your own language, we
-would like to hear from you on our forums at http://forum.textpattern.com/. 
+would like to hear from you on our forums at http://forum.textpattern.com/.

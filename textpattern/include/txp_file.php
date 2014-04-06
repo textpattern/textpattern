@@ -6,10 +6,10 @@
  *
  * Copyright (C) 2004 Dean Allen
  * Copyright (C) 2014 The Textpattern Development Team
- * 
+ *
  * "Mod File Upload" by Michael Manfre
  * http://manfre.net
- * 
+ *
  * Copyright (C) 2004 Michael Manfre
  *
  * This file is part of Textpattern.

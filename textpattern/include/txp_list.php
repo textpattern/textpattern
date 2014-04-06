@@ -196,7 +196,7 @@
 
 		$criteria .= callback_event('admin_criteria', 'list_list', 0, $criteria);
 
-		$sql_from = 
+		$sql_from =
 			safe_pfx('textpattern')." textpattern
 			left join ".safe_pfx('txp_category')." category1 on category1.name = textpattern.Category1 and category1.type = 'article'
 			left join ".safe_pfx('txp_category')." category2 on category2.name = textpattern.Category2 and category2.type = 'article'

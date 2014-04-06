@@ -325,7 +325,7 @@
 			case INPUT_MEDIUM :
 				$class = 'input-medium';
 				break;
-			case INPUT_SMALL : 
+			case INPUT_SMALL :
 				$class = 'input-small';
 				break;
 			case INPUT_XSMALL :

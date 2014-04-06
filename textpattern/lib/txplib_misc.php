@@ -476,8 +476,8 @@
  *
  * This function gets the given language from the database
  * and returns the strings as an array.
- * 
- * If no $events is specified, only appropriate strings for the 
+ *
+ * If no $events is specified, only appropriate strings for the
  * current context are returned. If 'txpinterface' constant equals 'admin' all
  * strings are returned. Otherwise, only strings from events 'common' and 'public'.
  *
@@ -5534,7 +5534,7 @@ eod;
  * This function takes an array of raw HTML attributes, and returns a
  * properly sanitised HTML attribute string for use in a HTML tag.
  *
- * This function internally handles HTML boolean attributes, array lists and 
+ * This function internally handles HTML boolean attributes, array lists and
  * query strings. If an attributes value is set as a boolean, the attribute is
  * considered as one too. If a value is NULL, it's omitted and the attribute is
  * added without a value. An array value is converted to a space-separated list,
@@ -6393,9 +6393,9 @@ eod;
 		return preg_replace('/^'.preg_quote($pfx, '/').'/', '', $str);
 	}
 
-/** 
+/**
  * Sends an XML envelope.
- * 
+ *
  * Wraps an array of name => value tupels into an XML envelope,
  * supports one level of nested arrays at most.
  *

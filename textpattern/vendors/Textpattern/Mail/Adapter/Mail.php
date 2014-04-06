@@ -144,7 +144,7 @@ class Textpattern_Mail_Adapter_Mail implements Textpattern_Mail_AdapterInterface
         }
 
         $this->mail->subject = $subject;
-        
+
         if ($this->charset != 'UTF-8') {
             $subject = utf8_decode($subject);
         }

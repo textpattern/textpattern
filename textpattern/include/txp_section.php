@@ -621,7 +621,7 @@
 /**
  * Toggles section yes/no parameters.
  *
- * This function requires three HTTP POST parameters: 'column', 'value' and 
+ * This function requires three HTTP POST parameters: 'column', 'value' and
  * 'name'. The 'value' is the new value, localised 'Yes' or 'No',
  * 'name' is the section and the 'column' is the altered setting,
  * either 'on_frontpage', 'in_rss' or 'searchable'.

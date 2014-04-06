@@ -256,7 +256,7 @@
 
 			if ($is_clone && $Status >= STATUS_LIVE)
 			{
-				$Status = STATUS_DRAFT; 
+				$Status = STATUS_DRAFT;
 				$url_title = '';
 			}
 
@@ -731,7 +731,7 @@
 
 		// Newly-saved article.
 		if (!empty($GLOBALS['ID']))
-		{ 
+		{
 			$ID = $GLOBALS['ID'];
 			$step = 'edit';
 		}
@@ -1496,7 +1496,7 @@
 /**
  * Parses article fields using Textile.
  *
- * @param  array $incoming 
+ * @param  array $incoming
  * @return array
  */
 

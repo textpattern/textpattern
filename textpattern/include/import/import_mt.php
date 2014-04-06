@@ -31,7 +31,7 @@
  * Imports articles and comments from a Movable Type dump file.
  *
  * This function parses a file in the 'MovableType Import Format'.
- * The data isn't interpreted at all, just parsed into a 
+ * The data isn't interpreted at all, just parsed into a
  * structure.
  *
  * This function supports importing comments and articles

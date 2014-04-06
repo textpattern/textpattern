@@ -30,7 +30,7 @@
 /**
  * Imports a WordPress database.
  *
- * This function imports users, categories, articles and 
+ * This function imports users, categories, articles and
  * links from a WordPress installation.
  *
  * Returns results as a &lt;ul&gt; list.

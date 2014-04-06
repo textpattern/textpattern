@@ -36,7 +36,7 @@ if (!defined('TXP_DEBUG'))
 	/**
 	 * If set to "1", dumps debug log to the temp directory.
 	 *
-	 * This constant can be overridden from the config.php. 
+	 * This constant can be overridden from the config.php.
 	 *
 	 * @package Debug
 	 * @example
@@ -736,7 +736,7 @@ define('INTEGRITY_MD5', 0x2);
  * @package Debug
  * @see     check_file_integrity()
  */
- 
+
 define('INTEGRITY_REALPATH', 0x4);
 
 /**
@@ -746,7 +746,7 @@ define('INTEGRITY_REALPATH', 0x4);
  * @package Debug
  * @see     check_file_integrity()
  */
- 
+
 define('INTEGRITY_DIGEST', 0x8);
 
 /**

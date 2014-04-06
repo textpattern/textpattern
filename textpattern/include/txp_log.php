@@ -288,7 +288,7 @@
  * @param  string $method The selected search method
  * @retrun string HTML
  */
- 
+
 	function log_search_form($crit, $method)
 	{
 		$methods = array(

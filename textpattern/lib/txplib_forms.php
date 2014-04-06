@@ -68,7 +68,7 @@
 /**
  * Generates a Yes/No radio button toggle.
  *
- * These buttons are booleans. 'Yes' will have a value of 1 and 
+ * These buttons are booleans. 'Yes' will have a value of 1 and
  * 'No' is 0.
  *
  * @param  string $field    The field name
@@ -577,7 +577,7 @@
 /**
  * Generates a select field with a name "type".
  *
- * @param  array $options 
+ * @param  array $options
  * @return string
  * @access private
  * @see    selectInput()
@@ -645,7 +645,7 @@
  * Generates a field used to store and set a date.
  *
  * @param  string $name        The field
- * @param  string $datevar     The strftime format the date is displayed 
+ * @param  string $datevar     The strftime format the date is displayed
  * @param  int    $time        The displayed date as a UNIX timestamp
  * @param  int    $tab         The HTML tabindex
  * @return string HTML

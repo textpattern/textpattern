@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 /**
  * Handles timezones.
  *
@@ -36,7 +36,7 @@ class Textpattern_Date_Timezone
     /**
      * Stores a list of details about each timezone.
      *
-     * @var array 
+     * @var array
      */
 
     protected $details;
@@ -44,7 +44,7 @@ class Textpattern_Date_Timezone
     /**
      * Stores a list of timezone offsets.
      *
-     * @var array 
+     * @var array
      */
 
     protected $offsets;
@@ -86,7 +86,7 @@ class Textpattern_Date_Timezone
      *     (
      *         [continent] => America
      *         [city] => New_York
-     *         [subcity] => 
+     *         [subcity] =>
      *         [offset] => -18000
      *         [dst] => 1
      *     )
@@ -94,7 +94,7 @@ class Textpattern_Date_Timezone
      *     (
      *         [continent] => Europe
      *         [city] => London
-     *         [subcity] => 
+     *         [subcity] =>
      *         [offset] => 0
      *         [dst] => 1
      *     )
@@ -258,7 +258,7 @@ class Textpattern_Date_Timezone
      *         [ts] => 1414285200
      *         [time] => 2014-10-26T01:00:00+0000
      *         [offset] => 7200
-     *         [isdst] => 
+     *         [isdst] =>
      *         [abbr] => EET
      *     )
      * )
@@ -266,7 +266,7 @@ class Textpattern_Date_Timezone
      *
      * @param  string|null $timezone The timezone identifier
      * @param  int         Next transitions starting from when
-     * @return array|bool  An array of next two transitions, or FALSE 
+     * @return array|bool  An array of next two transitions, or FALSE
      * @throws Exception
      */
 
@@ -380,7 +380,7 @@ class Textpattern_Date_Timezone
      * (
      *     [continent] => Europe
      *     [city] => London
-     *     [subcity] => 
+     *     [subcity] =>
      *     [offset] => 0
      *     [dst] => 1
      * )
