@@ -6688,7 +6688,7 @@ class timezone
 	 * @see        Textpattern_Date_Timezone::isDst()
 	 */
 
-	static public function is_dst($timestamp, $timezone_key)
+	public static function is_dst($timestamp, $timezone_key)
 	{
 		return Txp::get('Textpattern_Date_Timezone')->isDst($timestamp, $timezone_key);
 	}
@@ -6702,7 +6702,7 @@ class timezone
 	 * @deprecated in 4.6.0
 	 */
 
-	static public function is_supported()
+	public static function is_supported()
 	{
 		return true;
 	}

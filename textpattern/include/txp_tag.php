@@ -498,7 +498,7 @@ class TagBuilderTags
 	 * @return string|bool FALSE on error
 	 */
 
-	static public function tag($name)
+	public static function tag($name)
 	{
 		global $tag_name, $endform;
 

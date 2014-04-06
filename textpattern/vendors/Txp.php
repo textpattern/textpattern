@@ -41,7 +41,7 @@ class Txp implements Textpattern_Container_FactoryInterface
      * @var Textpattern_Container_Container
      */
 
-    static private $container;
+    private static $container;
 
     /**
      * {@inheritdoc}
