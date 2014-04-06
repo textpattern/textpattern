@@ -35,35 +35,34 @@
 
 class Txp implements Textpattern_Container_FactoryInterface
 {
-	/**
-	 * Stores the container instance.
-	 *
-	 * @var Textpattern_Container_Container
-	 */
+    /**
+     * Stores the container instance.
+     *
+     * @var Textpattern_Container_Container
+     */
 
-	static private $container;
+    static private $container;
 
-	/**
-	 * {@inheritdoc}
-	 */
+    /**
+     * {@inheritdoc}
+     */
 
-	static public function get($name)
-	{
-		$args = func_get_args();
-		return self::getContainer()->getInstance(array_shift($args), $args);
-	}
+    public static function get($name)
+    {
+        $args = func_get_args();
+        return self::getContainer()->getInstance(array_shift($args), $args);
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
+    /**
+     * {@inheritdoc}
+     */
 
-	static public function getContainer()
-	{
-		if (!self::$container)
-		{
-			self::$container = new Textpattern_Container_Container();
-		}
+    public static function getContainer()
+    {
+        if (!self::$container) {
+            self::$container = new Textpattern_Container_Container();
+        }
 
-		return self::$container;
-	}
+        return self::$container;
+    }
 }
