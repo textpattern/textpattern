@@ -88,7 +88,7 @@ class Textpattern_Textfilter_Textile extends Textpattern_Textfilter_Base impleme
      * @return string HTML
      */
 
-    public function help()
+    public function getHelp()
     {
         return
             n.'<ul class="textile plain-list">'.

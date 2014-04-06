@@ -135,7 +135,7 @@ class Textpattern_Textfilter_Base implements Textpattern_Textfilter_Interface
      * @return string
      */
 
-    public function help()
+    public function getHelp()
     {
         return '';
     }

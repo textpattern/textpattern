@@ -1578,11 +1578,11 @@
 	function article_partial_sidehelp($rs)
 	{
 		// Show markup help for both body and excerpt if they are different.
-		$help = Txp::get('Textpattern_Textfilter_Registry')->help($rs['textile_body']);
+		$help = Txp::get('Textpattern_Textfilter_Registry')->getHelp($rs['textile_body']);
 
 		if ($rs['textile_body'] != $rs['textile_excerpt'])
 		{
-			$help .= Txp::get('Textpattern_Textfilter_Registry')->help($rs['textile_excerpt']);
+			$help .= Txp::get('Textpattern_Textfilter_Registry')->getHelp($rs['textile_excerpt']);
 		}
 
 		$out = wrapRegion('textfilter_group', $help, 'textfilter_help', 'textfilter_help', 'article_textfilter_help');

@@ -73,12 +73,12 @@ class Textpattern_Textfilter_Registry implements ArrayAccess, IteratorAggregate,
     }
 
     /**
-     * Create an array map of filter keys vs. titles.
+     * Gets an array map of filter keys vs. titles.
      *
      * @return array Map of 'key' => 'title' for all Textfilters
      */
 
-    public function map()
+    public function getMap()
     {
         if ($this->titles === null) {
             $this->titles = array();
@@ -127,10 +127,10 @@ class Textpattern_Textfilter_Registry implements ArrayAccess, IteratorAggregate,
      * @return string HTML for human-readable help
      */
 
-    public function help($key)
+    public function getHelp($key)
     {
         if (isset($this[$key])) {
-            return $this[$key]->help();
+            return $this[$key]->getHelp();
         }
 
         return '';

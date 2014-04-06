@@ -52,7 +52,7 @@ interface Textpattern_Textfilter_Interface
      * @return string HTML for filter-specific help
      */
 
-    public function help();
+    public function getHelp();
 
     /**
      * Gets a filter's globally unique identifier.
