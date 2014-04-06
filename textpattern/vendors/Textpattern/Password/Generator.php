@@ -25,7 +25,7 @@
  * Generates a password.
  *
  * <code>
- * echo Txp::get('PasswordGenerator')->generate(16);
+ * echo Txp::get('Textpattern_Password_Generator')->generate(16);
  * </code>
  *
  * @since   4.6.0
@@ -61,7 +61,7 @@ class Textpattern_Password_Generator
      * Generates a random password.
      *
      * <code>
-     * echo Txp::get('PasswordGenerator')->generate(16);
+     * echo Txp::get('Textpattern_Password_Generator')->generate(16);
      * </code>
      *
      * @param  int    $length The length of the generated password

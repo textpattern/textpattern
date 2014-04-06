@@ -28,7 +28,7 @@
  * @package Tag
  */
 
-	Txp::get('TagRegistry')
+	Txp::get('Textpattern_Tag_Registry')
 		->register('page_title')
 		->register('css')
 		->register('image')

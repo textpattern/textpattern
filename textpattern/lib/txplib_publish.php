@@ -509,7 +509,7 @@
 
 		if ($registry === null)
 		{
-			$registry = Txp::get('TagRegistry');
+			$registry = Txp::get('Textpattern_Tag_Registry');
 		}
 
 		if ($registry->isRegistered($tag))

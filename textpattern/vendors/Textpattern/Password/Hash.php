@@ -25,7 +25,7 @@
  * Hashes and verifies a password.
  *
  * <code>
- * echo Txp::get('PasswordHash')->hash('password');
+ * echo Txp::get('Textpattern_Password_Hash')->hash('password');
  * </code>
  *
  * @since   4.6.0

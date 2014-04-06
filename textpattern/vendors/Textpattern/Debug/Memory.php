@@ -25,7 +25,7 @@
  * Debugs memory usage.
  *
  * <code>
- * Txp::get('DebugMemory')->logPeakUsage();
+ * Txp::get('Textpattern_Debug_Memory')->logPeakUsage();
  * </code>
  *
  * @since   4.6.0
@@ -57,7 +57,7 @@ class Textpattern_Debug_Memory implements Textpattern_Container_ReusableInterfac
      * the current usage is greater than the last logged value.
      *
      * <code>
-     * Txp::get('DebugMemory')->logPeakUsage();
+     * Txp::get('Textpattern_Debug_Memory')->logPeakUsage();
      * </code>
      *
      * @param  string $message The message to log with memory usage
@@ -85,7 +85,7 @@ class Textpattern_Debug_Memory implements Textpattern_Container_ReusableInterfac
      * Gets the logged message.
      *
      * <code>
-     * echo Txp::get('DebugMemory')->getLoggedMessage();
+     * echo Txp::get('Textpattern_Debug_Memory')->getLoggedMessage();
      * </code>
      *
      * @return string
@@ -100,7 +100,7 @@ class Textpattern_Debug_Memory implements Textpattern_Container_ReusableInterfac
      * Gets the logged peak memory usage.
      *
      * <code>
-     * echo Txp::get('DebugMemory')->getLoggedUsage();
+     * echo Txp::get('Textpattern_Debug_Memory')->getLoggedUsage();
      * </code>
      *
      * @return int

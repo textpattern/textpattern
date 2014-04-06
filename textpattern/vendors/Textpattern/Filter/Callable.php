@@ -26,7 +26,7 @@
  *
  * <code>
  * try {
- *     Txp::get('FilterCallable', 'fn');
+ *     Txp::get('Textpattern_Filter_Callable', 'fn');
  * } catch (Textpattern_Filter_Exception $e) {
  *     echo $e->getMessage();
  * }

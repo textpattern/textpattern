@@ -44,6 +44,6 @@ class Textpattern_Textfilter_Constraint extends Constraint
 
     public function validate()
     {
-        return array_key_exists($this->value, Txp::get('TextfilterRegistry')->map());
+        return array_key_exists($this->value, Txp::get('Textpattern_Textfilter_Registry')->map());
     }
 }

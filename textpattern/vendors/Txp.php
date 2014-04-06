@@ -25,8 +25,8 @@
  * Factory.
  *
  * <code>
- * Txp::get('PasswordHash')->hash('abc');
- * Txp::get('TypeString', 'Hello word!')->replace('!', '.')->getLength();
+ * Txp::get('Textpattern_Password_Hash')->hash('abc');
+ * Txp::get('Textpattern_Type_String', 'Hello word!')->replace('!', '.')->getLength();
  * </code>
  *
  * @since   4.6.0

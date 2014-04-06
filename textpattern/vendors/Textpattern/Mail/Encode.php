@@ -116,7 +116,7 @@ class Textpattern_Mail_Encode
      * Converts an email address into unicode entities.
      *
      * <code>
-     * echo Txp::get('MailEncode')->entityObfuscateAddress('john.doe@example.com');
+     * echo Txp::get('Textpattern_Mail_Encode')->entityObfuscateAddress('john.doe@example.com');
      * </code>
      *
      * @param  string $address The email address

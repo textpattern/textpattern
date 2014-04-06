@@ -28,7 +28,7 @@
  * offering multi-byte safe string functions.
  *
  * <code>
- * echo (string) Txp::get('TypeString', 'Hello World!')->trim()->replace('!', '.')->lower();
+ * echo (string) Txp::get('Textpattern_Type_String', 'Hello World!')->trim()->replace('!', '.')->lower();
  * </code>
  *
  * @since   4.6.0
@@ -92,7 +92,7 @@ class Textpattern_Type_String implements Textpattern_Type_TypeInterface
      * Gets the string.
      *
      * <code>
-     * echo (string) Txp::get('TypeString', 'Hello World!');
+     * echo (string) Txp::get('Textpattern_Type_String', 'Hello World!');
      * </code>
      *
      * @return string
@@ -108,7 +108,7 @@ class Textpattern_Type_String implements Textpattern_Type_TypeInterface
      * Gets the string.
      *
      * <code>
-     * echo Txp::get('TypeString', 'Hello World!')->getString();
+     * echo Txp::get('Textpattern_Type_String', 'Hello World!')->getString();
      * </code>
      *
      * @return string
@@ -124,7 +124,7 @@ class Textpattern_Type_String implements Textpattern_Type_TypeInterface
      * Gets string length.
      *
      * <code>
-     * echo Txp::get('TypeString', 'Hello World!')->getLength();
+     * echo Txp::get('Textpattern_Type_String', 'Hello World!')->getLength();
      * </code>
      *
      * @return int
@@ -147,7 +147,7 @@ class Textpattern_Type_String implements Textpattern_Type_TypeInterface
      * Finds the first occurrence of a string in the string.
      *
      * <code>
-     * echo Txp::get('TypeString', '#@language')->position('@');
+     * echo Txp::get('Textpattern_Type_String', '#@language')->position('@');
      * </code>
      *
      * @param  string   $needle The string to find
@@ -168,7 +168,7 @@ class Textpattern_Type_String implements Textpattern_Type_TypeInterface
      * Gets substring count.
      *
      * <code>
-     * echo Txp::get('TypeString', 'Hello World!')->count('ello');
+     * echo Txp::get('Textpattern_Type_String', 'Hello World!')->count('ello');
      * </code>
      *
      * @param  string $needle The string to find
@@ -188,7 +188,7 @@ class Textpattern_Type_String implements Textpattern_Type_TypeInterface
      * Converts the string to a callback.
      *
      * <code>
-     * Txp::get('TypeString', 'Textpattern_Password_Hash->hash')->toCallback();
+     * Txp::get('Textpattern_Type_String', 'Textpattern_Password_Hash->hash')->toCallback();
      * </code>
      *
      * @return mixed Callable
@@ -215,7 +215,7 @@ class Textpattern_Type_String implements Textpattern_Type_TypeInterface
      * Add slashes.
      *
      * <code>
-     * echo (string) Txp::get('TypeString', 'Some "content" to slash.')->addSlashes();
+     * echo (string) Txp::get('Textpattern_Type_String', 'Some "content" to slash.')->addSlashes();
      * </code>
      *
      * @return Textpattern_Type_String
@@ -231,7 +231,7 @@ class Textpattern_Type_String implements Textpattern_Type_TypeInterface
      * HTML encodes the string.
      *
      * <code>
-     * echo (string) Txp::get('TypeString', '<strong>Hello World!</strong>')->html();
+     * echo (string) Txp::get('Textpattern_Type_String', '<strong>Hello World!</strong>')->html();
      * </code>
      *
      * @param   int    $flags         A bitmask of one or more flags. The default is ENT_QUOTES
@@ -249,7 +249,7 @@ class Textpattern_Type_String implements Textpattern_Type_TypeInterface
      * Splits part of the string.
      *
      * <code>
-     * echo (string) Txp::get('TypeString', 'Hello World!')->substring(2, 5);
+     * echo (string) Txp::get('Textpattern_Type_String', 'Hello World!')->substring(2, 5);
      * </code>
      *
      * @param  int $start  The start
@@ -272,7 +272,7 @@ class Textpattern_Type_String implements Textpattern_Type_TypeInterface
      * Replaces all occurrences with replacements.
      *
      * <code>
-     * echo (string) Txp::get('TypeString', 'Hello World!')->replace('!', '.');
+     * echo (string) Txp::get('Textpattern_Type_String', 'Hello World!')->replace('!', '.');
      * </code>
      *
      * @param  mixed $from The needle to find
@@ -290,7 +290,7 @@ class Textpattern_Type_String implements Textpattern_Type_TypeInterface
      * Translates substrings.
      *
      * <code>
-     * echo (string) Txp::get('TypeString', 'Article <strong>{title}</strong> deleted.')
+     * echo (string) Txp::get('Textpattern_Type_String', 'Article <strong>{title}</strong> deleted.')
      *     ->tr('{title}', 'Hello {title} variable.');
      * </code>
      *
@@ -309,7 +309,7 @@ class Textpattern_Type_String implements Textpattern_Type_TypeInterface
      * Trims surrounding whitespace or other characters.
      *
      * <code>
-     * echo (string) Txp::get('TypeString', ' Hello World! ')->trim();
+     * echo (string) Txp::get('Textpattern_Type_String', ' Hello World! ')->trim();
      * </code>
      *
      * @param  string $characters Character list
@@ -326,7 +326,7 @@ class Textpattern_Type_String implements Textpattern_Type_TypeInterface
      * Trims whitespace or other characters from the beginning.
      *
      * <code>
-     * echo (string) Txp::get('TypeString', ' Hello World! ')->ltrim();
+     * echo (string) Txp::get('Textpattern_Type_String', ' Hello World! ')->ltrim();
      * </code>
      *
      * @param  string $characters Character list
@@ -343,7 +343,7 @@ class Textpattern_Type_String implements Textpattern_Type_TypeInterface
      * Trims whitespace or other characters from the end.
      *
      * <code>
-     * echo (string) Txp::get('TypeString', ' Hello World! ')->rtrim();
+     * echo (string) Txp::get('Textpattern_Type_String', ' Hello World! ')->rtrim();
      * </code>
      *
      * @param  string $characters Character list
@@ -360,7 +360,7 @@ class Textpattern_Type_String implements Textpattern_Type_TypeInterface
      * Splits string to chunks.
      *
      * <code>
-     * echo (string) Txp::get('TypeString', 'Hello World!')->chunk(1);
+     * echo (string) Txp::get('Textpattern_Type_String', 'Hello World!')->chunk(1);
      * </code>
      *
      * @param  int    $length    The chunk length
@@ -378,7 +378,7 @@ class Textpattern_Type_String implements Textpattern_Type_TypeInterface
      * Word wraps the string.
      *
      * <code>
-     * echo (string) Txp::get('TypeString', 'Hello World!')->wordWrap();
+     * echo (string) Txp::get('Textpattern_Type_String', 'Hello World!')->wordWrap();
      * </code>
      *
      * @param  int    $length    The line length
@@ -397,7 +397,7 @@ class Textpattern_Type_String implements Textpattern_Type_TypeInterface
      * Converts the string to lowercase.
      *
      * <code>
-     * echo (string) Txp::get('TypeString', 'Hello World!')->lower();
+     * echo (string) Txp::get('Textpattern_Type_String', 'Hello World!')->lower();
      * </code>
      *
      * @return Textpattern_Type_String
@@ -418,7 +418,7 @@ class Textpattern_Type_String implements Textpattern_Type_TypeInterface
      * Converts the string to uppercase.
      *
      * <code>
-     * echo (string) Txp::get('TypeString', 'Hello World!')->upper();
+     * echo (string) Txp::get('Textpattern_Type_String', 'Hello World!')->upper();
      * </code>
      *
      * @return Textpattern_Type_String
@@ -439,7 +439,7 @@ class Textpattern_Type_String implements Textpattern_Type_TypeInterface
      * Converts the string to titlecase.
      *
      * <code>
-     * echo (string) Txp::get('TypeString', 'hello world!')->title();
+     * echo (string) Txp::get('Textpattern_Type_String', 'hello world!')->title();
      * </code>
      *
      * @return Textpattern_Type_String
@@ -460,7 +460,7 @@ class Textpattern_Type_String implements Textpattern_Type_TypeInterface
      * Uppercase the first letter.
      *
      * <code>
-     * echo (string) Txp::get('TypeString', 'Hello World!')->ucfirst();
+     * echo (string) Txp::get('Textpattern_Type_String', 'Hello World!')->ucfirst();
      * </code>
      *
      * @return Textpattern_Type_String

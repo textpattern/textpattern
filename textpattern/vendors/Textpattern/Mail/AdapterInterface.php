@@ -34,7 +34,7 @@ interface Textpattern_Mail_AdapterInterface extends Textpattern_Adaptable_Adapte
      * Sets the subject.
      *
      * <code>
-     * Txp::get('MailCompose')->subject('My subject');
+     * Txp::get('Textpattern_Mail_Compose')->subject('My subject');
      * </code>
      *
      * @param  string $subject The subject
@@ -48,7 +48,7 @@ interface Textpattern_Mail_AdapterInterface extends Textpattern_Adaptable_Adapte
      * Sets the message.
      *
      * <code>
-     * Txp::get('MailCompose')->body('Plain-text based message.');
+     * Txp::get('Textpattern_Mail_Compose')->body('Plain-text based message.');
      * </code>
      *
      * @param  string $body The message
@@ -62,7 +62,7 @@ interface Textpattern_Mail_AdapterInterface extends Textpattern_Adaptable_Adapte
      * Sets an additional header.
      *
      * <code>
-     * Txp::get('MailCompose')->header('X-Mailer', 'abc_plugin');
+     * Txp::get('Textpattern_Mail_Compose')->header('X-Mailer', 'abc_plugin');
      * </code>
      *
      * @param  string $name  The header name
@@ -77,7 +77,7 @@ interface Textpattern_Mail_AdapterInterface extends Textpattern_Adaptable_Adapte
      * Sends an email.
      *
      * <code>
-     * Txp::get('MailCompose')
+     * Txp::get('Textpattern_Mail_Compose')
      *     ->to('to@example.com')
      *     ->from('from@example.com')
      *     ->subject('Subject')

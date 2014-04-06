@@ -30,7 +30,7 @@
  * passwords, see Textpattern_Password_Generator instead.
  *
  * <code>
- * echo Txp::get('PasswordRandom')->generate(196);
+ * echo Txp::get('Textpattern_Password_Random')->generate(196);
  * </code>
  *
  * @since   4.6.0
@@ -57,7 +57,7 @@ class Textpattern_Password_Random extends Textpattern_Password_Generator
      * Generates random bytes as a string of given length.
      *
      * <code>
-     * echo Txp::get('PasswordRandom')->generate(196);
+     * echo Txp::get('Textpattern_Password_Random')->generate(196);
      * </code>
      *
      * @param  int    $length The length of the generated value

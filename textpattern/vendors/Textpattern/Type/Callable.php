@@ -27,7 +27,7 @@
  * Inspects and converts callables.
  *
  * <code>
- * echo Txp::get('TypeCallable', array('class', 'method'))->toString();
+ * echo Txp::get('Textpattern_Type_Callable', array('class', 'method'))->toString();
  * </code>
  *
  * @since   4.6.0
@@ -74,31 +74,31 @@ class Textpattern_Type_Callable implements Textpattern_Type_TypeInterface
      * or a 'class->method', and for functions the name.
      *
      * <code>
-     * echo (string) Txp::get('TypeCallable', function () {return 'Hello world!';});
+     * echo (string) Txp::get('Textpattern_Type_Callable', function () {return 'Hello world!';});
      * </code>
      *
      * Returns 'Closure'.
      *
      * <code>
-     * echo (string) Txp::get('TypeCallable', array('DateTimeZone', 'listAbbreviations'));
+     * echo (string) Txp::get('Textpattern_Type_Callable', array('DateTimeZone', 'listAbbreviations'));
      * </code>
      *
      * Returns 'DateTimeZone::listAbbreviations'.
      *
      * <code>
-     * echo (string) Txp::get('TypeCallable', array(new DateTime(), 'setTime'));
+     * echo (string) Txp::get('Textpattern_Type_Callable', array(new DateTime(), 'setTime'));
      * </code>
      *
      * Returns 'DateTime->setTime'.
      *
      * <code>
-     * echo (string) Txp::get('TypeCallable', 'date');
+     * echo (string) Txp::get('Textpattern_Type_Callable', 'date');
      * </code>
      *
      * Returns 'date'.
      *
      * <code>
-     * echo (string) Txp::get('TypeCallable', 1);
+     * echo (string) Txp::get('Textpattern_Type_Callable', 1);
      * </code>
      *
      * Returns ''.

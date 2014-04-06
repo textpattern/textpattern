@@ -25,7 +25,7 @@
  * Access server configuration variables.
  *
  * <code>
- * Txp::get('ServerConfig')->getVariable('REQUEST_URI');
+ * Txp::get('Textpattern_Server_Config')->getVariable('REQUEST_URI');
  * </code>
  *
  * @since   4.6.0
@@ -113,7 +113,7 @@ class Textpattern_Server_Config
      * Turn runtime magic quotes off.
      *
      * <code>
-     * Txp::get('ServerConfig')->setMagicQuotesOff();
+     * Txp::get('Textpattern_Server_Config')->setMagicQuotesOff();
      * </code>
      *
      * @return Textpattern_Server_Var

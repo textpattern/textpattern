@@ -26,7 +26,7 @@
  *
  * <code>
  * try {
- *     echo (string) Txp::get('FilterString', 'Hello World!')->length(1, 64)->match('/^[a-z]$/i')->html();
+ *     echo (string) Txp::get('Textpattern_Filter_String', 'Hello World!')->length(1, 64)->match('/^[a-z]$/i')->html();
  * } catch (Textpattern_Filter_Exception $e) {
  *     echo $e->getMessage();
  * }
@@ -57,7 +57,7 @@ class Textpattern_Filter_String extends Textpattern_Type_String
      * <code>
      * try
      * {
-     *     echo (string) Txp::get('FilterString', 'Hello World!')->match('/^[^0-9]$/');
+     *     echo (string) Txp::get('Textpattern_Filter_String', 'Hello World!')->match('/^[^0-9]$/');
      * } catch (Textpattern_Filter_Exception $e) {
      *     echo $e->getMessage();
      * }
@@ -85,7 +85,7 @@ class Textpattern_Filter_String extends Textpattern_Type_String
      *
      * <code>
      * try {
-     *     echo (string) Txp::get('FilterString', 'Hello World!')->length(64);
+     *     echo (string) Txp::get('Textpattern_Filter_String', 'Hello World!')->length(64);
      * } catch (Textpattern_Filter_Exception $e) {
      *     echo $e->getMessage();
      * }

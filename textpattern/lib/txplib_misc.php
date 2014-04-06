@@ -2085,7 +2085,7 @@
 
 	function callback_tostring($callback)
 	{
-		return Txp::get('TypeCallable', $callback)->toString();
+		return Txp::get('Textpattern_Type_Callable', $callback)->toString();
 	}
 
 /**
@@ -2698,14 +2698,14 @@
 	{
 		try
 		{
-			Txp::get('DebugMemory')->logPeakUsage($message);
+			Txp::get('Textpattern_Debug_Memory')->logPeakUsage($message);
 
 			if ($returnit)
 			{
-				if (Txp::get('DebugMemory')->getLoggedUsage())
+				if (Txp::get('Textpattern_Debug_Memory')->getLoggedUsage())
 				{
 					return n.comment(sprintf('Memory: %sKb, %s',
-					ceil(Txp::get('DebugMemory')->getLoggedUsage()/1024), Txp::get('DebugMemory')->getLoggedMessage()));
+					ceil(Txp::get('Textpattern_Debug_Memory')->getLoggedUsage()/1024), Txp::get('Textpattern_Debug_Memory')->getLoggedMessage()));
 				}
 				else
 				{
@@ -2732,7 +2732,7 @@
 
 	function strip_rn($str)
 	{
-		return Txp::get('MailEncode')->escapeHeader($str);
+		return Txp::get('Textpattern_Mail_Encode')->escapeHeader($str);
 	}
 
 /**
@@ -2810,7 +2810,7 @@
 
 			try
 			{
-				$message = Txp::get('MailCompose')
+				$message = Txp::get('Textpattern_Mail_Compose')
 					->from($email, $RealName)
 					->to($to_address)
 					->subject($subject)
@@ -2849,7 +2849,7 @@
 	{
 		try
 		{
-			return Txp::get('MailEncode')->header($string, $type);
+			return Txp::get('Textpattern_Mail_Encode')->header($string, $type);
 		}
 		catch (Textpattern_Mail_Exception $e)
 		{
@@ -2869,7 +2869,7 @@
 
 	function eE($txt)
 	{
-		return Txp::get('MailEncode')->entityObfuscateAddress($txt);
+		return Txp::get('Textpattern_Mail_Encode')->entityObfuscateAddress($txt);
 	}
 
 /**
@@ -3252,8 +3252,8 @@
 
 		if ($override_locale)
 		{
-			$oldLocale = Txp::get('L10nLocale')->getLocale(LC_TIME);
-			Txp::get('L10nLocale')->setLocale(LC_TIME, $override_locale);
+			$oldLocale = Txp::get('Textpattern_L10n_Locale')->getLocale(LC_TIME);
+			Txp::get('Textpattern_L10n_Locale')->setLocale(LC_TIME, $override_locale);
 		}
 
 		if ($format == 'since')
@@ -3301,7 +3301,7 @@
 		// Revert to the old locale.
 		if ($override_locale && $oldLocale)
 		{
-			Txp::get('L10nLocale')->setLocale(LC_TIME, $oldLocale);
+			Txp::get('Textpattern_L10n_Locale')->setLocale(LC_TIME, $oldLocale);
 		}
 
 		return $str;
@@ -4066,7 +4066,7 @@
 		}
 
 		$nonce = md5(uniqid(mt_rand(), true));
-		$hash = Txp::get('PasswordHash')->hash($password);
+		$hash = Txp::get('Textpattern_Password_Hash')->hash($password);
 
 		if (
 			safe_insert(
@@ -4172,7 +4172,7 @@
 			return false;
 		}
 
-		$hash = Txp::get('PasswordHash')->hash($password);
+		$hash = Txp::get('Textpattern_Password_Hash')->hash($password);
 
 		if (
 			safe_update(
@@ -4378,7 +4378,7 @@
 		}
 
 		// Check post-4.3-style passwords.
-		if (Txp::get('PasswordHash')->verify($password, $r['pass']))
+		if (Txp::get('Textpattern_Password_Hash')->verify($password, $r['pass']))
 		{
 			if (!$log || $r['privs'] > 0)
 			{
@@ -4404,7 +4404,7 @@
 			// Old password is good: migrate password to phpass.
 			if ($name !== false)
 			{
-				safe_update("txp_users", "pass = '".doSlash(Txp::get('PasswordHash')->hash($password))."'", "name = '$safe_user'");
+				safe_update("txp_users", "pass = '".doSlash(Txp::get('Textpattern_Password_Hash')->hash($password))."'", "name = '$safe_user'");
 			}
 		}
 
@@ -6115,13 +6115,13 @@ eod;
 
 		try
 		{
-			Txp::get('L10nLocale')->setLocale(LC_TIME, array($lang, $locale));
+			Txp::get('Textpattern_L10n_Locale')->setLocale(LC_TIME, array($lang, $locale));
 		}
 		catch (Exception $e)
 		{
 		}
 
-		return Txp::get('L10nLocale')->getLocale(LC_TIME);
+		return Txp::get('Textpattern_L10n_Locale')->getLocale(LC_TIME);
 	}
 
 /**
@@ -6565,7 +6565,7 @@ eod;
 		// Update DST setting.
 		if ($auto_dst && $timezone_key)
 		{
-			$is_dst = Txp::get('DateTimezone')->isDst(null, $timezone_key);
+			$is_dst = Txp::get('Textpattern_Date_Timezone')->isDst(null, $timezone_key);
 			if ($is_dst != $prefs['is_dst'])
 			{
 				$prefs['is_dst'] = $is_dst;
@@ -6598,7 +6598,7 @@ class timezone
 
 	public function selectInput($name = '', $value = '', $blank_first = '', $onchange = '', $select_id = '')
 	{
-		if ($details = Txp::get('DateTimezone')->getTimeZones())
+		if ($details = Txp::get('Textpattern_Date_Timezone')->getTimeZones())
 		{
 			$thiscontinent = '';
 			$selected = false;
@@ -6653,7 +6653,7 @@ class timezone
 
 	public function details()
 	{
-		return Txp::get('DateTimezone')->getTimeZones();
+		return Txp::get('Textpattern_Date_Timezone')->getTimeZones();
 	}
 
 	/**
@@ -6670,7 +6670,7 @@ class timezone
 
 	public function key($gmtoffset)
 	{
-		if ($idenfiers = Txp::get('DateTimezone')->getOffsetIdentifiers($gmtoffset))
+		if ($idenfiers = Txp::get('Textpattern_Date_Timezone')->getOffsetIdentifiers($gmtoffset))
 		{
 			return $idenfiers[0];
 		}
@@ -6690,7 +6690,7 @@ class timezone
 
 	static public function is_dst($timestamp, $timezone_key)
 	{
-		return Txp::get('DateTimezone')->isDst($timestamp, $timezone_key);
+		return Txp::get('Textpattern_Date_Timezone')->isDst($timestamp, $timezone_key);
 	}
 
 	/**

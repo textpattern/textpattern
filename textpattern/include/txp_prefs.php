@@ -110,13 +110,13 @@
 		if (isset($post['timezone_key']))
 		{
 			$key = $post['timezone_key'];
-			$tzd = Txp::get('DateTimezone')->getTimeZones();
+			$tzd = Txp::get('Textpattern_Date_Timezone')->getTimeZones();
 
 			if (isset($tzd[$key]))
 			{
 				$prefs['timezone_key'] = $timezone_key = $key;
 				$post['gmtoffset'] = $prefs['gmtoffset'] = $gmtoffset = $tzd[$key]['offset'];
-				$post['is_dst'] = $prefs['is_dst'] = $is_dst = Txp::get('DateTimezone')->isDst(null, $key);
+				$post['is_dst'] = $prefs['is_dst'] = $is_dst = Txp::get('Textpattern_Date_Timezone')->isDst(null, $key);
 			}
 		}
 
@@ -368,7 +368,7 @@
 
 		if ($key === '')
 		{
-			$key = (string) Txp::get('DateTimezone')->getTimezone();
+			$key = (string) Txp::get('Textpattern_Date_Timezone')->getTimezone();
 		}
 
 		$tz = new timezone;

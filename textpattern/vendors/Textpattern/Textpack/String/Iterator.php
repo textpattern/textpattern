@@ -25,7 +25,7 @@
  * Iterates over the given Textpack strings.
  *
  * <code>
- * foreach (Txp::get('TextpackStringIterator', 'en-gb.textpack') as $name => $string) {
+ * foreach (Txp::get('Textpattern_Textpack_String_Iterator', 'en-gb.textpack') as $name => $string) {
  *     echo "{$name} is translated to: {$string} in " . $string->getLanguage();
  * }
  * </code>
@@ -50,7 +50,7 @@ class Textpattern_Textpack_String_Iterator extends Textpattern_Iterator_FileIter
 
     public function __construct($filename)
     {
-        $this->parser = Txp::get('TextpackParser');
+        $this->parser = Txp::get('Textpattern_Textpack_Parser');
         parent::__construct($filename);
     }
 

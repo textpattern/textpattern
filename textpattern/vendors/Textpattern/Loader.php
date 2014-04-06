@@ -25,7 +25,7 @@
  * Autoloader.
  *
  * <code>
- * Txp::get('Loader', '/path/to/directory')->register();
+ * Txp::get('Textpattern_Loader', '/path/to/directory')->register();
  * </code>
  *
  * @since   4.6.0

@@ -1508,13 +1508,13 @@
 		$incoming['Title_html'] = ''; // not used
 		$incoming['Title'] = $textile->textileEncode($incoming['Title_plain']);
 
-		$incoming['Body_html'] = Txp::get('TextfilterRegistry')->filter(
+		$incoming['Body_html'] = Txp::get('Textpattern_Textfilter_Registry')->filter(
 			$incoming['textile_body'],
 			$incoming['Body'],
 			array('field' => 'Body', 'options' => array('lite' => false), 'data' => $incoming)
 		);
 
-		$incoming['Excerpt_html'] = Txp::get('TextfilterRegistry')->filter(
+		$incoming['Excerpt_html'] = Txp::get('Textpattern_Textfilter_Registry')->filter(
 			$incoming['textile_excerpt'],
 			$incoming['Excerpt'],
 			array('field' => 'Excerpt', 'options' => array('lite' => false), 'data' => $incoming)
@@ -1578,11 +1578,11 @@
 	function article_partial_sidehelp($rs)
 	{
 		// Show markup help for both body and excerpt if they are different.
-		$help = Txp::get('TextfilterRegistry')->help($rs['textile_body']);
+		$help = Txp::get('Textpattern_Textfilter_Registry')->help($rs['textile_body']);
 
 		if ($rs['textile_body'] != $rs['textile_excerpt'])
 		{
-			$help .= Txp::get('TextfilterRegistry')->help($rs['textile_excerpt']);
+			$help .= Txp::get('Textpattern_Textfilter_Registry')->help($rs['textile_excerpt']);
 		}
 
 		$out = wrapRegion('textfilter_group', $help, 'textfilter_help', 'textfilter_help', 'article_textfilter_help');
