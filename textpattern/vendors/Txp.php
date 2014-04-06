@@ -24,11 +24,13 @@
 /**
  * Factory.
  *
- * @since   4.6.0
- * @package Container
- * @example
+ * <code>
  * Txp::get('PasswordHash')->hash('abc');
  * Txp::get('TypeString', 'Hello word!')->replace('!', '.')->getLength();
+ * </code>
+ *
+ * @since   4.6.0
+ * @package Container
  */
 
 class Txp implements Textpattern_Container_FactoryInterface
