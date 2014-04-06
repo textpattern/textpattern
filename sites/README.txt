@@ -228,7 +228,6 @@ for each site. Your sites directory layout will look like the following:
 = B. Multi-Site with Integrated Admin Area =
 ============================================
 
-
 This setup method results in the more traditional Textpattern installation,
 where the admin area is located in a subdirectory of the main site's domain.
 For example:
