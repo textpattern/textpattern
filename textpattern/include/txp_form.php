@@ -400,7 +400,7 @@
 					graf($name_widgets).
 					graf(
 						tag(gTxt('form_code'), 'label', array('for' => 'form')).
-						br.'<textarea id="form" class="code" name="Form" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'">'.txpspecialchars($Form).'</textarea>'
+						br.'<textarea class="code" id="form" name="Form" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($Form).'</textarea>'
 					).
 					graf($type_widgets).
 					(empty($type) ? graf(gTxt('only_articles_can_be_previewed')) : '').

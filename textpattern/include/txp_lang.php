@@ -293,7 +293,7 @@
 			form(
 				graf(
 					'<label for="textpack-install">'.gTxt('install_textpack').'</label>'.popHelp('get_textpack').br.
-					n.'<textarea id="textpack-install" class="code" name="textpack" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'"></textarea>'
+					n.'<textarea class="code" id="textpack-install" name="textpack" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'" dir="ltr"></textarea>'
 				).
 				graf(
 					fInput('submit', 'install_new', gTxt('upload')).

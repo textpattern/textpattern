@@ -448,7 +448,7 @@
 
 		if (!$f)
 		{
-			echo "<pre>".n;
+			echo "<pre dir=\"auto\">".n;
 		}
 
 		foreach ($a as $thing)
@@ -1530,12 +1530,12 @@
 			return;
 		}
 
-		printf('<pre>'.gTxt('plugin_load_error').' <b>%s</b> -> <b>%s: %s on line %s</b></pre>',
+		printf('<pre dir="auto">'.gTxt('plugin_load_error').' <b>%s</b> -> <b>%s: %s on line %s</b></pre>',
 			$txp_current_plugin, $error[$errno], $errstr, $errline);
 
 		if ($production_status == 'debug')
 		{
-			print "\n<pre style=\"padding-left: 2em;\" class=\"backtrace\"><code>".txpspecialchars(join("\n", get_caller(10)))."</code></pre>";
+			print "\n<pre class=\"backtrace\" dir=\"ltr\"><code>".txpspecialchars(join("\n", get_caller(10)))."</code></pre>";
 		}
 	}
 
@@ -1606,12 +1606,12 @@
 			'{form}' => $txp_current_form,
 		));
 
-		printf("<pre>".gTxt('tag_error').' <b>%s</b> -> <b> %s: %s %s</b></pre>',
+		printf("<pre dir=\"auto\">".gTxt('tag_error').' <b>%s</b> -> <b> %s: %s %s</b></pre>',
 				txpspecialchars($txp_current_tag), $error[$errno], $errstr, $locus);
 
 		if ($production_status == 'debug')
 		{
-			print "\n<pre style=\"padding-left: 2em;\" class=\"backtrace\"><code>".txpspecialchars(join("\n", get_caller(10)))."</code></pre>";
+			print "\n<pre class=\"backtrace\" dir=\"ltr\"><code>".txpspecialchars(join("\n", get_caller(10)))."</code></pre>";
 
 			$trace_msg = gTxt('tag_error').' '.$txp_current_tag.' -> '.$error[$errno].': '.$errstr.' '.$locus;
 			trace_add($trace_msg);
@@ -1692,7 +1692,7 @@
 		// When even a minimum environment is missing.
 		if (!isset($production_status))
 		{
-			echo '<pre>'.gTxt('internal_error').' "'.$errstr.'"'.n."in $errfile at line $errline".'</pre>';
+			echo '<pre dir="auto">'.gTxt('internal_error').' "'.$errstr.'"'.n."in $errfile at line $errline".'</pre>';
 			return;
 		}
 
@@ -1728,8 +1728,8 @@
 		{
 			if ($backtrace)
 			{
-				echo "<pre>$msg.</pre>".
-					n.'<pre style="padding-left: 2em;" class="backtrace"><code>'.
+				echo "<pre dir=\"auto\">$msg.</pre>".
+					n.'<pre class="backtrace" dir="ltr"><code>'.
 					txpspecialchars($backtrace).'</code></pre>';
 			}
 			else if (is_object($theme))
@@ -1738,7 +1738,7 @@
 			}
 			else
 			{
-				echo "<pre>$out</pre>";
+				echo "<pre dir=\"auto\">$out</pre>";
 			}
 		}
 		else if (http_accept_format('js'))
@@ -1811,12 +1811,12 @@
 			return;
 		}
 
-		printf ("<pre>".gTxt('general_error').' <b>%s: %s on line %s</b></pre>',
+		printf ("<pre dir=\"auto\">".gTxt('general_error').' <b>%s: %s on line %s</b></pre>',
 			$error[$errno], $errstr, $errline);
 
 		if ($production_status == 'debug')
 		{
-			print "\n<pre style=\"padding-left: 2em;\" class=\"backtrace\"><code>".txpspecialchars(join("\n", get_caller(10)))."</code></pre>";
+			print "\n<pre class=\"backtrace\" dir=\"ltr\"><code>".txpspecialchars(join("\n", get_caller(10)))."</code></pre>";
 		}
 	}
 
@@ -3339,7 +3339,7 @@
 			return;
 		}
 
-		echo '<pre>'.n.n."$errno: $errstr in $errfile at line $errline\n";
+		echo '<pre dir="auto">'.n.n."$errno: $errstr in $errfile at line $errline\n";
 
 		if (is_callable('debug_backtrace'))
 		{

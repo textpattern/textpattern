@@ -291,7 +291,7 @@
 		return
 			form(
 				hed(gTxt('edit_plugin', array('{name}' => $name)), 2).
-				graf('<textarea id="plugin_code" class="code" name="code" cols="'.INPUT_XLARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'">'.txpspecialchars($thing).'</textarea>', ' class="edit-plugin-code"').
+				graf('<textarea class="code" id="plugin_code" name="code" cols="'.INPUT_XLARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($thing).'</textarea>', ' class="edit-plugin-code"').
 				graf(fInput('submit', '', gTxt('Save'), 'publish')).
 				eInput('plugin').
 				sInput('plugin_save').
@@ -421,9 +421,9 @@
 					'<div id="'.$event.'_container" class="txp-container txp-view">'.
 					form(
 						hed(gTxt('previewing_plugin'), 2).
-						tag($source, 'div', ' id="preview-plugin" class="code"').
+						tag($source, 'div', ' class="code" id="preview-plugin" dir="ltr"').
 						hed(gTxt('plugin_help').':', 2).
-						tag($help_source, 'div', ' id="preview-help" class="code"').
+						tag($help_source, 'div', ' class="code" id="preview-help" dir="ltr"').
 						$sub.
 						sInput('plugin_install').
 						eInput('plugin').
@@ -568,7 +568,7 @@
 		return form(
 			graf(
 				tag(gTxt('install_plugin'), 'label', ' for="plugin-install"').popHelp('install_plugin').br.
-				'<textarea id="plugin-install" class="code" name="plugin" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'"></textarea>'
+				'<textarea class="code" id="plugin-install" name="plugin" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_SMALL.'" dir="ltr"></textarea>'
 			).
 			graf(
 				fInput('submit', 'install_new', gTxt('upload')).

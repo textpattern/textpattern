@@ -179,7 +179,7 @@
 					graf($buttons).
 					graf(
 						tag(gTxt('css_code'), 'label', array('for' => 'css')).
-						br.'<textarea id="css" class="code" name="css" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'">'.txpspecialchars($thecss).'</textarea>'
+						br.'<textarea class="code" id="css" name="css" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_LARGE.'" dir="ltr">'.txpspecialchars($thecss).'</textarea>'
 					).
 					graf(
 						fInput('submit', '', gTxt('save'), 'publish').
