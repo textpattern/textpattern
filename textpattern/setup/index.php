@@ -694,7 +694,7 @@ eod;
 				strong(setup_gTxt('before_you_proceed')).' '.
 				setup_gTxt('create_config', array('{txpath}' => txpspecialchars(txpath)))
 			).
-			n.'<textarea class="code" readonly="readonly" name="config" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_REGULAR.'">'.
+			n.'<textarea class="code" name="config" cols="'.INPUT_LARGE.'" rows="'.TEXTAREA_HEIGHT_REGULAR.'" readonly>'.
 				makeConfig($carry).
 			n.'</textarea>'.
 			n.'<form action="'.$_SERVER['PHP_SELF'].'" method="post">'.
