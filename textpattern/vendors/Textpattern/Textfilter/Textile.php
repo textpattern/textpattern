@@ -132,7 +132,7 @@ class Textpattern_Textfilter_Textile extends Textpattern_Textfilter_Base impleme
             ).
 
             graf(
-                href(gTxt('More'), 'http://textpattern.com/textile-sandbox', ' id="textile-docs-link" target="_blank"')
+                href(gTxt('More'), 'http://textpattern.com/textile-sandbox', ' id="textile-docs-link" rel="external" target="_blank"')
             );
     }
 }
