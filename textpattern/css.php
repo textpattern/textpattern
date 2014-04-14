@@ -12,10 +12,10 @@
 
 if (!defined("txpath"))
 {
-	/**
-	 * @ignore
-	 */
-	define("txpath", dirname(__FILE__));
+    /**
+     * @ignore
+     */
+    define("txpath", dirname(__FILE__));
 }
 
 require_once txpath.'/../css.php';

@@ -28,7 +28,7 @@ ob_end_clean();
 
 if (!defined('txpath'))
 {
-	define("txpath", realpath(dirname(__FILE__).'/../../../../textpattern'));
+    define("txpath", realpath(dirname(__FILE__).'/../../../../textpattern'));
 }
 
 include txpath.'/setup/index.php';

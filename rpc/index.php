@@ -12,38 +12,38 @@ error_reporting(E_ALL & ~E_NOTICE);
 ini_set("display_errors","0");
 
 if (@ini_get('register_globals')) {
-	if (isset($_REQUEST['GLOBALS']) || isset($_FILES['GLOBALS'])) {
-		die('GLOBALS overwrite attempt detected. Please consider turning register_globals off.');
-	}
+    if (isset($_REQUEST['GLOBALS']) || isset($_FILES['GLOBALS'])) {
+        die('GLOBALS overwrite attempt detected. Please consider turning register_globals off.');
+    }
 
-	// Collect and unset all registered variables from globals
-	$_txpg = array_merge(
-		isset($_SESSION) ? (array) $_SESSION : array(),
-		(array) $_ENV,
-		(array) $_GET,
-		(array) $_POST,
-		(array) $_COOKIE,
-		(array) $_FILES,
-		(array) $_SERVER);
+    // Collect and unset all registered variables from globals
+    $_txpg = array_merge(
+        isset($_SESSION) ? (array) $_SESSION : array(),
+        (array) $_ENV,
+        (array) $_GET,
+        (array) $_POST,
+        (array) $_COOKIE,
+        (array) $_FILES,
+        (array) $_SERVER);
 
-	// As the deliberately awkward-named local variable $_txpfoo MUST NOT be unset to avoid notices further down
-	// we must remove any potentially identical-named global from the list of global names here.
-	unset($_txpg['_txpfoo']);
-	foreach ($_txpg as $_txpfoo => $value) {
-		if (!in_array($_txpfoo, array(
-			'GLOBALS',
-			'_SERVER',
-			'_GET',
-			'_POST',
-			'_FILES',
-			'_COOKIE',
-			'_SESSION',
-			'_REQUEST',
-			'_ENV',
-		))) {
-			unset($GLOBALS[$_txpfoo], $$_txpfoo);
-		}
-	}
+    // As the deliberately awkward-named local variable $_txpfoo MUST NOT be unset to avoid notices further down
+    // we must remove any potentially identical-named global from the list of global names here.
+    unset($_txpg['_txpfoo']);
+    foreach ($_txpg as $_txpfoo => $value) {
+        if (!in_array($_txpfoo, array(
+            'GLOBALS',
+            '_SERVER',
+            '_GET',
+            '_POST',
+            '_FILES',
+            '_COOKIE',
+            '_SESSION',
+            '_REQUEST',
+            '_ENV',
+        ))) {
+            unset($GLOBALS[$_txpfoo], $$_txpfoo);
+        }
+    }
 }
 
 define('txpath', dirname(dirname(__FILE__)).'/textpattern');
@@ -58,26 +58,26 @@ require_once txpath.'/lib/IXRClass.php';
 if ($connected && safe_query("describe `".PFX."textpattern`"))
 {
 #TODO: where is dbversion used?
-	$dbversion = safe_field('val','txp_prefs',"name = 'version'");
+    $dbversion = safe_field('val','txp_prefs',"name = 'version'");
 
-	// Hold it globally, instead of do several calls to the function
-	$prefs = get_prefs();
-	extract($prefs);
+    // Hold it globally, instead of do several calls to the function
+    $prefs = get_prefs();
+    extract($prefs);
 
-	if (!defined('LANG')) define("LANG", $language);
-	if (!defined('hu')) define("hu", 'http://'.$siteurl.'/');
-	if (!defined('txrpcpath')) define('txrpcpath', hu.'rpc/');
+    if (!defined('LANG')) define("LANG", $language);
+    if (!defined('hu')) define("hu", 'http://'.$siteurl.'/');
+    if (!defined('txrpcpath')) define('txrpcpath', hu.'rpc/');
 
-	if (!empty($locale)) setlocale(LC_ALL, $locale);
-	$textarray = load_lang(LANG);
+    if (!empty($locale)) setlocale(LC_ALL, $locale);
+    $textarray = load_lang(LANG);
 
 #TODO: include txplib_html instead of duplicating?
-	// from txplib_html.php
-	if (!defined('t'))  define("t", "\t");
-	if (!defined('n'))  define("n", "\n");
-	if (!defined('br')) define("br", "<br />");
-	if (!defined('sp')) define("sp", "&#160;");
-	if (!defined('a'))  define("a", "&#38;");
+    // from txplib_html.php
+    if (!defined('t'))  define("t", "\t");
+    if (!defined('n'))  define("n", "\n");
+    if (!defined('br')) define("br", "<br />");
+    if (!defined('sp')) define("sp", "&#160;");
+    if (!defined('a'))  define("a", "&#38;");
 }
 
 require_once txpath.'/lib/txplib_wrapper.php';
@@ -91,37 +91,37 @@ $server->serve();
 // save some debug logs:
 function write_log()
 {
-	global $HTTP_RAW_POST_DATA;
+    global $HTTP_RAW_POST_DATA;
 
-	if (!defined('txpdmpfile')) define('txpdmpfile', 'txpxmlrpc.txt');
+    if (!defined('txpdmpfile')) define('txpdmpfile', 'txpxmlrpc.txt');
 
-	$fp = @fopen(dirname(__FILE__).DIRECTORY_SEPARATOR.'xmlrpclog','a');
+    $fp = @fopen(dirname(__FILE__).DIRECTORY_SEPARATOR.'xmlrpclog','a');
 
-	if ($fp)
-	{
-		$lnsep = "\n================================\n";
-		fwrite($fp, "\n$lnsep".strftime("%Y-%m-%d %H:%M:%S"));
-		fwrite($fp, '[USER_AGENT] '.$_SERVER['HTTP_USER_AGENT']);
-		fwrite($fp, $lnsep);
-		fwrite($fp, '[ACCEPT_ENCODING] '.$_SERVER['HTTP_ACCEPT_ENCODING']);
+    if ($fp)
+    {
+        $lnsep = "\n================================\n";
+        fwrite($fp, "\n$lnsep".strftime("%Y-%m-%d %H:%M:%S"));
+        fwrite($fp, '[USER_AGENT] '.$_SERVER['HTTP_USER_AGENT']);
+        fwrite($fp, $lnsep);
+        fwrite($fp, '[ACCEPT_ENCODING] '.$_SERVER['HTTP_ACCEPT_ENCODING']);
 
-		if (strpos(strtolower($_SERVER['SERVER_SOFTWARE']),'apache')!==false && is_callable('getallheaders'))
-		{
-			fwrite($fp, $lnsep);
-			fwrite($fp, "Apache Request Headers:\n");
-			fwrite($fp, $lnsep);
-			$headers = getallheaders();
+        if (strpos(strtolower($_SERVER['SERVER_SOFTWARE']),'apache')!==false && is_callable('getallheaders'))
+        {
+            fwrite($fp, $lnsep);
+            fwrite($fp, "Apache Request Headers:\n");
+            fwrite($fp, $lnsep);
+            $headers = getallheaders();
 
-			foreach ($headers as $header => $value)
-			{
-				fwrite($fp, "$header: $value \n");
-			}
-		}
+            foreach ($headers as $header => $value)
+            {
+                fwrite($fp, "$header: $value \n");
+            }
+        }
 
-		fwrite($fp, $lnsep);
-		fwrite($fp,"Incoming data, usually utf-8 encoded:\n");
-		fwrite($fp, $lnsep);
-		fwrite($fp, $HTTP_RAW_POST_DATA);
-		fclose($fp);
-	}
+        fwrite($fp, $lnsep);
+        fwrite($fp,"Incoming data, usually utf-8 encoded:\n");
+        fwrite($fp, $lnsep);
+        fwrite($fp, $HTTP_RAW_POST_DATA);
+        fclose($fp);
+    }
 }
