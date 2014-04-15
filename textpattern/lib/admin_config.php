@@ -42,7 +42,6 @@ $txpac = array(
 
     'edit_raw_css_by_default'     => 1,
 
-
 // -------------------------------------------------------------
 // php scripts on page templates will be parsed
 
@@ -58,18 +57,15 @@ $txpac = array(
 
     'textile_links'               => 0,
 
-
 // -------------------------------------------------------------
 // in the article categories listing in the organise tab
 
     'show_article_category_count' => 1,
 
-
 // -------------------------------------------------------------
 // xml feeds display comment count as part of article title
 
     'show_comment_count_in_feed'  => 1,
-
 
 // -------------------------------------------------------------
 // include articles or full excerpts in feeds
@@ -78,18 +74,15 @@ $txpac = array(
 
     'syndicate_body_or_excerpt'   => 1,
 
-
 // -------------------------------------------------------------
 // include (encoded) author email in atom feeds
 
     'include_email_atom'          => 1,
 
-
 // -------------------------------------------------------------
 // each comment received updates the site Last-Modified header
 
     'comment_means_site_updated'  => 1,
-
 
 // -------------------------------------------------------------
 // comment email addresses are encoded to hide from spambots
@@ -97,32 +90,27 @@ $txpac = array(
 
     'never_display_email'         => 0,
 
-
 // -------------------------------------------------------------
 // comments must enter name and/or email address
 
     'comments_require_name'       => 1,
     'comments_require_email'      => 1,
 
-
 // -------------------------------------------------------------
 // show 'excerpt' pane in write tab
 
     'articles_use_excerpts'       => 1,
-
 
 // -------------------------------------------------------------
 // show form overrides on article-by-article basis
 
     'allow_form_override'         => 1,
 
-
 // -------------------------------------------------------------
 // whether or not to attach article titles to permalinks
 // e.g., /article/313/IAteACheeseSandwich
 
     'attach_titles_to_permalinks' => 1,
-
 
 // -------------------------------------------------------------
 // if attaching titles to permalinks, which format?
@@ -131,12 +119,10 @@ $txpac = array(
 
     'permalink_title_format'      => 1,
 
-
 // -------------------------------------------------------------
 // number of days after which logfiles are purged
 
     'expire_logs_after'           => 7,
-
 
 // -------------------------------------------------------------
 // plugins on or off
