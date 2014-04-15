@@ -838,7 +838,7 @@
 
         if ($Status >= STATUS_LIVE) {
             $class[] = 'published';
-        } else if ($ID) {
+        } elseif ($ID) {
             $class[] = 'saved';
         }
 
