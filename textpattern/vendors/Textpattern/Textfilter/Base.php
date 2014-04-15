@@ -105,9 +105,9 @@ class Textpattern_Textfilter_Base implements Textpattern_Textfilter_Interface
     /**
      * Event handler, registers Textfilter class with the core.
      *
-     * @param string                          $step       Not used
-     * @param string                          $event      Not used
-     * @param Textpattern_Textfilter_Registry $registry   Maintains the set of known Textfilters
+     * @param string                          $step     Not used
+     * @param string                          $event    Not used
+     * @param Textpattern_Textfilter_Registry $registry Maintains the set of known Textfilters
      */
 
     public function register($step, $event, $registry)

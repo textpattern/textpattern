@@ -211,8 +211,8 @@ class theme
     /**
      * Inherit from an ancestor theme.
      *
-     * @param  string  $name Name of ancestor theme
-     * @return bool    TRUE on success, FALSE on unavailable/invalid ancestor theme
+     * @param  string $name Name of ancestor theme
+     * @return bool   TRUE on success, FALSE on unavailable/invalid ancestor theme
      */
 
     public static function based_on($name)
