@@ -39,87 +39,87 @@
 
 class Validator
 {
-	/**
-	 * An array of constraint objects.
-	 *
-	 * @var array
-	 */
+    /**
+     * An array of constraint objects.
+     *
+     * @var array
+     */
 
-	protected $constraints;
+    protected $constraints;
 
-	/**
-	 * An array of messages.
-	 *
-	 * @var array
-	 */
+    /**
+     * An array of messages.
+     *
+     * @var array
+     */
 
-	protected $messages;
+    protected $messages;
 
-	/**
-	 * Constructs a validator.
-	 *
-	 * @param array $constraints Array of constraint objects to validate over
-	 */
+    /**
+     * Constructs a validator.
+     *
+     * @param array $constraints Array of constraint objects to validate over
+     */
 
-	public function __construct($constraints = array())
-	{
-		$this->setConstraints($constraints);
-	}
+    public function __construct($constraints = array())
+    {
+        $this->setConstraints($constraints);
+    }
 
-	/**
-	 * Validate all constraints and collect messages on violations.
-	 *
-	 * @return bool If TRUE, the value obeys constraints
-	 */
+    /**
+     * Validate all constraints and collect messages on violations.
+     *
+     * @return bool If TRUE, the value obeys constraints
+     */
 
-	public function validate()
-	{
-		foreach ($this->constraints as $c)
-		{
-			if (!$c->validate())
-			{
-				$this->messages[] = $c->getMessage();
-			}
-		}
-		return empty($this->messages);
-	}
+    public function validate()
+    {
+        foreach ($this->constraints as $c)
+        {
+            if (!$c->validate())
+            {
+                $this->messages[] = $c->getMessage();
+            }
+        }
+        return empty($this->messages);
+    }
 
-	/**
-	 * Gets an array of messages.
-	 *
-	 * This method returnsan array of message strings with constraint-violation
-	 * details collected from Validator::validate().
-	 *
-	 * @return array An array of messages
-	 */
+    /**
+     * Gets an array of messages.
+     *
+     * This method returnsan array of message strings with constraint-violation
+     * details collected from Validator::validate().
+     *
+     * @return array An array of messages
+     */
 
-	public function getMessages()
-	{
-		return $this->messages;
-	}
+    public function getMessages()
+    {
+        return $this->messages;
+    }
 
-	/**
-	 * Sets new constraints.
-	 *
-	 * This method takes an array of Constraint instances,
-	 * and adds it to end of the current stack.
-	 *
-	 * @param obj|array $constraints Single or array-of Constraint object(s)
-	 */
+    /**
+     * Sets new constraints.
+     *
+     * This method takes an array of Constraint instances,
+     * and adds it to end of the current stack.
+     *
+     * @param obj|array $constraints Single or array-of Constraint object(s)
+     */
 
-	public function setConstraints($constraints)
-	{
-		if (is_array($constraints))
-		{
-			$in = $constraints;
-		}
-		else
-		{
-			$in[] = $constraints;
-		}
-		$this->constraints = $in;
-		$this->messages = array();
-	}
+    public function setConstraints($constraints)
+    {
+        if (is_array($constraints))
+        {
+            $in = $constraints;
+        }
+        else
+        {
+            $in[] = $constraints;
+        }
+        $this->constraints = $in;
+        $this->messages = array();
+    }
 }
 
 /**
@@ -133,90 +133,90 @@ class Validator
 
 class Constraint
 {
-	/**
-	 * The value to be validated.
-	 *
-	 * @var mixed
-	 */
+    /**
+     * The value to be validated.
+     *
+     * @var mixed
+     */
 
-	protected $value;
+    protected $value;
 
-	/**
-	 * An array of options.
-	 *
-	 * @var array
-	 */
+    /**
+     * An array of options.
+     *
+     * @var array
+     */
 
-	protected $options;
+    protected $options;
 
-	/**
-	 * Constructs a constraint.
-	 *
-	 * @param mixed $value   The validee
-	 * @param array $options Key/value pairs of class-specific options
-	 */
+    /**
+     * Constructs a constraint.
+     *
+     * @param mixed $value   The validee
+     * @param array $options Key/value pairs of class-specific options
+     */
 
-	public function __construct($value, $options = array())
-	{
-		if (empty($options['message']))
-		{
-			$options['message'] = 'undefined_constraint_violation';
-		}
-		$this->value = $value;
-		$this->options = $options;
-	}
+    public function __construct($value, $options = array())
+    {
+        if (empty($options['message']))
+        {
+            $options['message'] = 'undefined_constraint_violation';
+        }
+        $this->value = $value;
+        $this->options = $options;
+    }
 
-	/**
-	 * Sets validee's value.
-	 *
-	 * @param $value mixed Validee
-	 */
+    /**
+     * Sets validee's value.
+     *
+     * @param $value mixed Validee
+     */
 
-	public function setValue($value)
-	{
-		$this->value = $value;
-	}
+    public function setValue($value)
+    {
+        $this->value = $value;
+    }
 
-	/**
-	 * Sets options.
-	 *
-	 * @param $options Scalar or array of options
-	 * @param null $key Key for scalar option
-	 */
+    /**
+     * Sets options.
+     *
+     * @param $options Scalar or array of options
+     * @param null $key Key for scalar option
+     */
 
-	public function setOptions($options, $key = null)
-	{
-		if ($key === null)
-		{
-			$this->options = $options;
-		}
-		else
-		{
-			$this->options[$key] = $options;
-		}
-	}
+    public function setOptions($options, $key = null)
+    {
+        if ($key === null)
+        {
+            $this->options = $options;
+        }
+        else
+        {
+            $this->options[$key] = $options;
+        }
+    }
 
-	/**
-	 * Validate a given value against this constraint.
-	 *
-	 * @return bool If TRUE, the value obeys constraint
-	 */
+    /**
+     * Validate a given value against this constraint.
+     *
+     * @return bool If TRUE, the value obeys constraint
+     */
 
-	public function validate()
-	{
-		return true;
-	}
+    public function validate()
+    {
+        return true;
+    }
 
-	/**
-	 * Gets a message.
-	 *
-	 * @return string
-	 */
+    /**
+     * Gets a message.
+     *
+     * @return string
+     */
 
-	public function getMessage()
-	{
-		return $this->options['message'];
-	}
+    public function getMessage()
+    {
+        return $this->options['message'];
+    }
 }
 
 /**
@@ -228,30 +228,30 @@ class Constraint
 
 class ChoiceConstraint extends Constraint
 {
-	/**
-	 * Constructor.
-	 *
-	 * @param mixed $value
-	 * @param array $options
-	 */
+    /**
+     * Constructor.
+     *
+     * @param mixed $value
+     * @param array $options
+     */
 
-	public function __construct($value, $options = array())
-	{
-		$options = lAtts(array('choices' => array(), 'allow_blank' => false, 'message' => 'unknown_choice'), $options, false);
-		parent::__construct($value, $options);
-	}
+    public function __construct($value, $options = array())
+    {
+        $options = lAtts(array('choices' => array(), 'allow_blank' => false, 'message' => 'unknown_choice'), $options, false);
+        parent::__construct($value, $options);
+    }
 
-	/**
-	 * Validates.
-	 *
-	 * @return bool
-	 */
+    /**
+     * Validates.
+     *
+     * @return bool
+     */
 
-	public function validate()
-	{
-		return ($this->options['allow_blank'] && ('' === $this->value)) ||
-		in_array($this->value, $this->options['choices']);
-	}
+    public function validate()
+    {
+        return ($this->options['allow_blank'] && ('' === $this->value)) ||
+        in_array($this->value, $this->options['choices']);
+    }
 }
 
 /**
@@ -263,24 +263,24 @@ class ChoiceConstraint extends Constraint
 
 class SectionConstraint extends ChoiceConstraint
 {
-	/**
-	 * Constructor.
-	 *
-	 * @param mixed $value
-	 * @param array $options
-	 */
+    /**
+     * Constructor.
+     *
+     * @param mixed $value
+     * @param array $options
+     */
 
-	public function __construct($value, $options = array())
-	{
-		static $choices = null;
-		if (null === $choices)
-		{
-			$choices = safe_column('name', 'txp_section', '1=1');
-		}
-		$options['choices'] = $choices;
-		$options['message'] = 'unknown_section';
-		parent::__construct($value, $options);
-	}
+    public function __construct($value, $options = array())
+    {
+        static $choices = null;
+        if (null === $choices)
+        {
+            $choices = safe_column('name', 'txp_section', '1=1');
+        }
+        $options['choices'] = $choices;
+        $options['message'] = 'unknown_section';
+        parent::__construct($value, $options);
+    }
 }
 
 /**
@@ -292,24 +292,24 @@ class SectionConstraint extends ChoiceConstraint
 
 class CategoryConstraint extends ChoiceConstraint
 {
-	/**
-	 * Constructor.
-	 *
-	 * @param mixed $value
-	 * @param array $options
-	 */
+    /**
+     * Constructor.
+     *
+     * @param mixed $value
+     * @param array $options
+     */
 
-	public function __construct($value, $options = array())
-	{
-		static $choices = null;
-		$options = lAtts(array('allow_blank' => true, 'type' => '', 'message' => 'unknown_category'), $options, false);
-		if (null === $choices)
-		{
-			$choices = safe_column('name', 'txp_category', $options['type'] !== '' ? 'type=\''.doSlash($options['type']).'\'' : '1=1');
-		}
-		$options['choices'] = $choices;
-		parent::__construct($value, $options);
-	}
+    public function __construct($value, $options = array())
+    {
+        static $choices = null;
+        $options = lAtts(array('allow_blank' => true, 'type' => '', 'message' => 'unknown_category'), $options, false);
+        if (null === $choices)
+        {
+            $choices = safe_column('name', 'txp_category', $options['type'] !== '' ? 'type=\''.doSlash($options['type']).'\'' : '1=1');
+        }
+        $options['choices'] = $choices;
+        parent::__construct($value, $options);
+    }
 }
 
 /**
@@ -321,25 +321,25 @@ class CategoryConstraint extends ChoiceConstraint
 
 class FormConstraint extends ChoiceConstraint
 {
-	/**
-	 * Constructor.
-	 *
-	 * @param mixed $value
-	 * @param array $options
-	 */
+    /**
+     * Constructor.
+     *
+     * @param mixed $value
+     * @param array $options
+     */
 
-	public function __construct($value, $options = array())
-	{
-		static $choices = null;
-		$options = lAtts(array('allow_blank' => true, 'type' => '', 'message' => 'unknown_form'), $options, false);
+    public function __construct($value, $options = array())
+    {
+        static $choices = null;
+        $options = lAtts(array('allow_blank' => true, 'type' => '', 'message' => 'unknown_form'), $options, false);
 
-		if (null === $choices)
-		{
-			$choices = safe_column('name', 'txp_form', $options['type'] !== '' ? 'type=\''.doSlash($options['type']).'\'' : '1=1');
-		}
-		$options['choices'] = $choices;
-		parent::__construct($value, $options);
-	}
+        if (null === $choices)
+        {
+            $choices = safe_column('name', 'txp_form', $options['type'] !== '' ? 'type=\''.doSlash($options['type']).'\'' : '1=1');
+        }
+        $options['choices'] = $choices;
+        parent::__construct($value, $options);
+    }
 }
 
 /**
@@ -351,29 +351,29 @@ class FormConstraint extends ChoiceConstraint
 
 class BlankConstraint extends Constraint
 {
-	/**
-	 * Constructor.
-	 *
-	 * @param mixed $value
-	 * @param array $options
-	 */
+    /**
+     * Constructor.
+     *
+     * @param mixed $value
+     * @param array $options
+     */
 
-	public function __construct($value, $options = array())
-	{
-		$options = lAtts(array('message' => 'should_be_blank'), $options, false);
-		parent::__construct($value, $options);
-	}
+    public function __construct($value, $options = array())
+    {
+        $options = lAtts(array('message' => 'should_be_blank'), $options, false);
+        parent::__construct($value, $options);
+    }
 
-	/**
-	 * Validates.
-	 *
-	 * @return bool
-	 */
+    /**
+     * Validates.
+     *
+     * @return bool
+     */
 
-	public function validate()
-	{
-		return $this->value === '' || $this->value === null;
-	}
+    public function validate()
+    {
+        return $this->value === '' || $this->value === null;
+    }
 }
 
 /**
@@ -385,29 +385,29 @@ class BlankConstraint extends Constraint
 
 class TrueConstraint extends Constraint
 {
-	/**
-	 * Constructor.
-	 *
-	 * @param mixed $value
-	 * @param array $options
-	 */
+    /**
+     * Constructor.
+     *
+     * @param mixed $value
+     * @param array $options
+     */
 
-	public function __construct($value, $options = array())
-	{
-		$options = lAtts(array('message' => 'should_be_true'), $options, false);
-		parent::__construct($value, $options);
-	}
+    public function __construct($value, $options = array())
+    {
+        $options = lAtts(array('message' => 'should_be_true'), $options, false);
+        parent::__construct($value, $options);
+    }
 
-	/**
-	 * Validates.
-	 *
-	 * @return bool
-	 */
+    /**
+     * Validates.
+     *
+     * @return bool
+     */
 
-	public function validate()
-	{
-		return (boolean)$this->value;
-	}
+    public function validate()
+    {
+        return (boolean)$this->value;
+    }
 }
 
 /**
@@ -419,27 +419,27 @@ class TrueConstraint extends Constraint
 
 class FalseConstraint extends Constraint
 {
-	/**
-	 * Constructor.
-	 *
-	 * @param mixed $value
-	 * @param array $options
-	 */
+    /**
+     * Constructor.
+     *
+     * @param mixed $value
+     * @param array $options
+     */
 
-	public function __construct($value, $options = array())
-	{
-		$options = lAtts(array('message' => 'should_be_false'), $options, false);
-		parent::__construct($value, $options);
-	}
+    public function __construct($value, $options = array())
+    {
+        $options = lAtts(array('message' => 'should_be_false'), $options, false);
+        parent::__construct($value, $options);
+    }
 
-	/**
-	 * Validates.
-	 *
-	 * @return bool
-	 */
+    /**
+     * Validates.
+     *
+     * @return bool
+     */
 
-	public function validate()
-	{
-		return !(boolean)$this->value;
-	}
+    public function validate()
+    {
+        return !(boolean)$this->value;
+    }
 }

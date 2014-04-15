@@ -46,107 +46,107 @@
  * echo 'My page contents.';
  */
 
-	function pagetop($pagetitle, $message = '')
-	{
-		global $siteurl, $sitename, $txp_user, $event, $step, $app_mode, $theme, $privs;
+    function pagetop($pagetitle, $message = '')
+    {
+        global $siteurl, $sitename, $txp_user, $event, $step, $app_mode, $theme, $privs;
 
-		if ($app_mode == 'async')
-		{
-			return;
-		}
+        if ($app_mode == 'async')
+        {
+            return;
+        }
 
-		$area = gps('area');
-		$event = (!$event) ? 'article' : $event;
-		$bm = gps('bm');
+        $area = gps('area');
+        $event = (!$event) ? 'article' : $event;
+        $bm = gps('bm');
 
-		$privs = safe_field("privs", "txp_users", "name = '".doSlash($txp_user)."'");
+        $privs = safe_field("privs", "txp_users", "name = '".doSlash($txp_user)."'");
 
-		$areas = areas();
-		$area = false;
+        $areas = areas();
+        $area = false;
 
-		foreach ($areas as $k => $v)
-		{
-			if (in_array($event, $v))
-			{
-				$area = $k;
-				break;
-			}
-		}
+        foreach ($areas as $k => $v)
+        {
+            if (in_array($event, $v))
+            {
+                $area = $k;
+                break;
+            }
+        }
 
-		if (gps('logout'))
-		{
-			$body_id = 'page-logout';
-		}
-		elseif (!$txp_user)
-		{
-			$body_id = 'page-login';
-		}
-		else
-		{
-			$body_id = 'page-'.txpspecialchars($event);
-		}
+        if (gps('logout'))
+        {
+            $body_id = 'page-logout';
+        }
+        elseif (!$txp_user)
+        {
+            $body_id = 'page-login';
+        }
+        else
+        {
+            $body_id = 'page-'.txpspecialchars($event);
+        }
 
-		header('X-Frame-Options: '.X_FRAME_OPTIONS);
-		header('X-UA-Compatible: '.X_UA_COMPATIBLE);
+        header('X-Frame-Options: '.X_FRAME_OPTIONS);
+        header('X-UA-Compatible: '.X_UA_COMPATIBLE);
 
-		$lang_direction = gTxt('lang_dir');
+        $lang_direction = gTxt('lang_dir');
 
-		if (!in_array($lang_direction, array('ltr', 'rtl')))
-		{
-			// Apply biased default for missing translations
-			$lang_direction = 'ltr';
-		}
+        if (!in_array($lang_direction, array('ltr', 'rtl')))
+        {
+            // Apply biased default for missing translations
+            $lang_direction = 'ltr';
+        }
 
-	?><!DOCTYPE html>
+    ?><!DOCTYPE html>
 <html lang="<?php echo LANG; ?>" dir="<?php echo $lang_direction; ?>">
 <head>
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow">
 <title><?php echo admin_title($pagetitle)?></title><?php echo
-		script_js('vendors/jquery/jquery/jquery.js', SCRIPT_URL).
-		script_js('vendors/jquery/ui/js/jquery-ui.js', SCRIPT_URL).
-		// TODO: Remove jQuery migrate plugin before release
-		script_js('//code.jquery.com/jquery-migrate-1.2.1.js', SCRIPT_URL).
-		script_js(
-			'var textpattern = ' . json_encode(array(
-				'event' => $event,
-				'step' => $step,
-				'_txp_token' => form_token(),
-				'ajax_timeout' => (int) AJAX_TIMEOUT,
-				'textarray' => (object) null,
-				'do_spellcheck' => get_pref('do_spellcheck',
-					'#page-article #body, #page-article #title,'.
-					'#page-image #alt-text, #page-image #caption,'.
-					'#page-file #description,'.
-					'#page-link #link-title, #page-link #link-description'),
-				'production_status' => get_pref('production_status'),
-		)).';').
-		script_js('textpattern.js', SCRIPT_URL).n;
-	gTxtScript(array('form_submission_error', 'are_you_sure', 'cookies_must_be_enabled', 'ok', 'save', 'publish'));
-	// Mandatory un-themable Textpattern core styles ?>
+        script_js('vendors/jquery/jquery/jquery.js', SCRIPT_URL).
+        script_js('vendors/jquery/ui/js/jquery-ui.js', SCRIPT_URL).
+        // TODO: Remove jQuery migrate plugin before release
+        script_js('//code.jquery.com/jquery-migrate-1.2.1.js', SCRIPT_URL).
+        script_js(
+            'var textpattern = ' . json_encode(array(
+                'event' => $event,
+                'step' => $step,
+                '_txp_token' => form_token(),
+                'ajax_timeout' => (int) AJAX_TIMEOUT,
+                'textarray' => (object) null,
+                'do_spellcheck' => get_pref('do_spellcheck',
+                    '#page-article #body, #page-article #title,'.
+                    '#page-image #alt-text, #page-image #caption,'.
+                    '#page-file #description,'.
+                    '#page-link #link-title, #page-link #link-description'),
+                'production_status' => get_pref('production_status'),
+        )).';').
+        script_js('textpattern.js', SCRIPT_URL).n;
+    gTxtScript(array('form_submission_error', 'are_you_sure', 'cookies_must_be_enabled', 'ok', 'save', 'publish'));
+    // Mandatory un-themable Textpattern core styles ?>
 <style>
 .not-ready .doc-ready,
 .not-ready form.async input[type="submit"],
 .not-ready a.async
 {
-	visibility: hidden;
+    visibility: hidden;
 }
 </style>
 <?php
 echo $theme->html_head();
-	callback_event('admin_side', 'head_end');
+    callback_event('admin_side', 'head_end');
 ?>
 </head>
 <body id="<?php echo $body_id; ?>" class="not-ready <?php echo $area; ?>">
 <header role="banner" class="txp-header">
 <?php callback_event('admin_side', 'pagetop');
-		$theme->set_state($area, $event, $bm, $message);
-		echo pluggable_ui('admin_side', 'header', $theme->header());
-		callback_event('admin_side', 'pagetop_end');
-		echo n.'</header><!-- /txp-header -->'.
-			n.'<main role="main" class="txp-body" aria-label="'.gTxt('main_content').'">';
-		callback_event('admin_side', 'main_content');
-	}
+        $theme->set_state($area, $event, $bm, $message);
+        echo pluggable_ui('admin_side', 'header', $theme->header());
+        callback_event('admin_side', 'pagetop_end');
+        echo n.'</header><!-- /txp-header -->'.
+            n.'<main role="main" class="txp-body" aria-label="'.gTxt('main_content').'">';
+        callback_event('admin_side', 'main_content');
+    }
 
 /**
  * Return the HTML &lt;title&gt; contents for an admin-side page.
@@ -159,22 +159,22 @@ echo $theme->html_head();
  * @since  4.6.0
  */
 
-	function admin_title($pagetitle)
-	{
-		global $sitename;
+    function admin_title($pagetitle)
+    {
+        global $sitename;
 
-		if ((string) $pagetitle === '')
-		{
-			$title = gTxt('untitled');
-		}
-		else
-		{
-			$title = $pagetitle;
-		}
+        if ((string) $pagetitle === '')
+        {
+            $title = gTxt('untitled');
+        }
+        else
+        {
+            $title = $pagetitle;
+        }
 
-		$title = escape_title($title).' - '.txpspecialchars($sitename).' &#124; Textpattern CMS';
-		return pluggable_ui('admin_side', 'html_title', $title, compact('pagetitle'));
-	}
+        $title = escape_title($title).' - '.txpspecialchars($sitename).' &#124; Textpattern CMS';
+        return pluggable_ui('admin_side', 'html_title', $title, compact('pagetitle'));
+    }
 
 /**
  * Creates an area tab.
@@ -189,13 +189,13 @@ echo $theme->html_head();
  * @deprecated in 4.6.0
  */
 
-	function areatab($label,$event,$tarea,$area)
-	{
-		$tc = ($area == $event) ? 'tabup' : 'tabdown';
-		$atts=' class="'.$tc.'"';
-		$hatts=' href="?event='.$tarea.'"';
-		return tda(tag($label,'a',$hatts),$atts);
-	}
+    function areatab($label,$event,$tarea,$area)
+    {
+        $tc = ($area == $event) ? 'tabup' : 'tabdown';
+        $atts=' class="'.$tc.'"';
+        $hatts=' href="?event='.$tarea.'"';
+        return tda(tag($label,'a',$hatts),$atts);
+    }
 
 /**
  * Creates a secondary area tab.
@@ -209,12 +209,12 @@ echo $theme->html_head();
  * @deprecated in 4.6.0
  */
 
-	function tabber($label,$tabevent,$event)
-	{
-		$tc = ($event==$tabevent) ? 'tabup' : 'tabdown2';
-		$out = '<td class="'.$tc.'"><a href="?event='.$tabevent.'">'.$label.'</a></td>';
-		return $out;
-	}
+    function tabber($label,$tabevent,$event)
+    {
+        $tc = ($event==$tabevent) ? 'tabup' : 'tabdown2';
+        $out = '<td class="'.$tc.'"><a href="?event='.$tabevent.'">'.$label.'</a></td>';
+        return $out;
+    }
 
 /**
  * Creates a table based navigation bar row.
@@ -227,27 +227,27 @@ echo $theme->html_head();
  * @deprecated in 4.6.0
  */
 
-	function tabsort($area, $event)
-	{
-		if ($area)
-		{
-			$areas = areas();
+    function tabsort($area, $event)
+    {
+        if ($area)
+        {
+            $areas = areas();
 
-			$out = array();
+            $out = array();
 
-			foreach ($areas[$area] as $a => $b)
-			{
-				if (has_privs($b))
-				{
-					$out[] = tabber($a, $b, $event, 2);
-				}
-			}
+            foreach ($areas[$area] as $a => $b)
+            {
+                if (has_privs($b))
+                {
+                    $out[] = tabber($a, $b, $event, 2);
+                }
+            }
 
-			return ($out) ? join('', $out) : '';
-		}
+            return ($out) ? join('', $out) : '';
+        }
 
-		return '';
-	}
+        return '';
+    }
 
 /**
  * Gets the main menu structure as an array.
@@ -255,62 +255,62 @@ echo $theme->html_head();
  * @return array
  * @example
  * print_r(
- * 	areas()
+ *     areas()
  * );
  */
 
-	function areas()
-	{
-		global $privs, $plugin_areas;
+    function areas()
+    {
+        global $privs, $plugin_areas;
 
-		$areas['start'] = array(
-		);
+        $areas['start'] = array(
+        );
 
-		$areas['content'] = array(
-			gTxt('tab_organise') => 'category',
-			gTxt('tab_write')    => 'article',
-			gTxt('tab_list')     => 'list',
-			gTxt('tab_image')    => 'image',
-			gTxt('tab_file')     => 'file',
-			gTxt('tab_link')     => 'link',
-		);
+        $areas['content'] = array(
+            gTxt('tab_organise') => 'category',
+            gTxt('tab_write')    => 'article',
+            gTxt('tab_list')     => 'list',
+            gTxt('tab_image')    => 'image',
+            gTxt('tab_file')     => 'file',
+            gTxt('tab_link')     => 'link',
+        );
 
-		$areas['presentation'] = array(
-			gTxt('tab_sections') => 'section',
-			gTxt('tab_pages')    => 'page',
-			gTxt('tab_forms')    => 'form',
-			gTxt('tab_style')    => 'css',
-		);
+        $areas['presentation'] = array(
+            gTxt('tab_sections') => 'section',
+            gTxt('tab_pages')    => 'page',
+            gTxt('tab_forms')    => 'form',
+            gTxt('tab_style')    => 'css',
+        );
 
-		$areas['admin'] = array(
-			gTxt('tab_diagnostics') => 'diag',
-			gTxt('tab_preferences') => 'prefs',
-			gTxt('tab_languages')   => 'lang',
-			gTxt('tab_site_admin')  => 'admin',
-			gTxt('tab_plugins')     => 'plugin',
-			gTxt('tab_import')      => 'import',
-		);
+        $areas['admin'] = array(
+            gTxt('tab_diagnostics') => 'diag',
+            gTxt('tab_preferences') => 'prefs',
+            gTxt('tab_languages')   => 'lang',
+            gTxt('tab_site_admin')  => 'admin',
+            gTxt('tab_plugins')     => 'plugin',
+            gTxt('tab_import')      => 'import',
+        );
 
-		$areas['extensions'] = array(
-		);
+        $areas['extensions'] = array(
+        );
 
-		if (get_pref('use_comments', 1))
-		{
-			$areas['content'][gTxt('tab_comments')] = 'discuss';
-		}
+        if (get_pref('use_comments', 1))
+        {
+            $areas['content'][gTxt('tab_comments')] = 'discuss';
+        }
 
-		if (get_pref('logging') !== 'none' && get_pref('expire_logs_after'))
-		{
-			$areas['admin'][gTxt('tab_logs')] = 'log';
-		}
+        if (get_pref('logging') !== 'none' && get_pref('expire_logs_after'))
+        {
+            $areas['admin'][gTxt('tab_logs')] = 'log';
+        }
 
-		if (is_array($plugin_areas))
-		{
-			$areas = array_merge_recursive($areas, $plugin_areas);
-		}
+        if (is_array($plugin_areas))
+        {
+            $areas = array_merge_recursive($areas, $plugin_areas);
+        }
 
-		return $areas;
-	}
+        return $areas;
+    }
 
 /**
  * Creates an admin-side main menu as a &lt;select&gt; dropdown.
@@ -321,45 +321,45 @@ echo $theme->html_head();
  * echo navPop();
  */
 
-	function navPop($inline = '')
-	{
-		$areas = areas();
+    function navPop($inline = '')
+    {
+        $areas = areas();
 
-		$out = array();
+        $out = array();
 
-		foreach ($areas as $a => $b)
-		{
-			if (!has_privs( 'tab.'.$a))
-			{
-				continue;
-			}
+        foreach ($areas as $a => $b)
+        {
+            if (!has_privs( 'tab.'.$a))
+            {
+                continue;
+            }
 
-			if (count($b) > 0)
-			{
-				$out[] = n.'<optgroup label="'.gTxt('tab_'.$a).'">';
+            if (count($b) > 0)
+            {
+                $out[] = n.'<optgroup label="'.gTxt('tab_'.$a).'">';
 
-				foreach ($b as $c => $d)
-				{
-					if (has_privs($d))
-					{
-						$out[] = n.'<option value="'.txpspecialchars($d).'">'.strip_tags($c).'</option>';
-					}
-				}
+                foreach ($b as $c => $d)
+                {
+                    if (has_privs($d))
+                    {
+                        $out[] = n.'<option value="'.txpspecialchars($d).'">'.strip_tags($c).'</option>';
+                    }
+                }
 
-				$out[] = n.'</optgroup>';
-			}
-		}
+                $out[] = n.'</optgroup>';
+            }
+        }
 
-		if ($out)
-		{
-			return n.'<form method="get" action="index.php" class="navpop">'.
-				n.'<select name="event" data-submit-on="change">'.
-				n.'<option>'.gTxt('go').'&#8230;</option>'.
-				join('', $out).
-				n.'</select>'.
-				n.'</form>';
-		}
-	}
+        if ($out)
+        {
+            return n.'<form method="get" action="index.php" class="navpop">'.
+                n.'<select name="event" data-submit-on="change">'.
+                n.'<option>'.gTxt('go').'&#8230;</option>'.
+                join('', $out).
+                n.'</select>'.
+                n.'</form>';
+        }
+    }
 
 /**
  * Generates a button link.
@@ -369,7 +369,7 @@ echo $theme->html_head();
  * @deprecated in 4.6.0
  */
 
-	function button($label,$link)
-	{
-		return '<span style="margin-right:2em"><a href="?event='.$link.'">'.$label.'</a></span>';
-	}
+    function button($label,$link)
+    {
+        return '<span style="margin-right:2em"><a href="?event='.$link.'">'.$label.'</a></span>';
+    }

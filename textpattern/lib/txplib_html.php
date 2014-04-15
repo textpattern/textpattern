@@ -33,7 +33,7 @@
  * @var string
  */
 
-	define("t", "\t");
+    define("t", "\t");
 
 /**
  * A line feed.
@@ -41,7 +41,7 @@
  * @var string
  */
 
-	define("n", "\n");
+    define("n", "\n");
 
 /**
  * A self-closing HTML line-break tag.
@@ -49,7 +49,7 @@
  * @var string
  */
 
-	define("br", "<br />");
+    define("br", "<br />");
 
 /**
  * A non-breaking space as a HTML entity.
@@ -57,7 +57,7 @@
  * @var string
  */
 
-	define("sp", "&#160;");
+    define("sp", "&#160;");
 
 /**
  * An ampersand as a HTML entity.
@@ -65,7 +65,7 @@
  * @var string
  */
 
-	define("a", "&#38;");
+    define("a", "&#38;");
 
 /**
  * Renders the admin-side footer.
@@ -78,20 +78,20 @@
  * events "admin_side > main_content_end" and "admin_side > body_end".
  */
 
-	function end_page()
-	{
-		global $event, $app_mode, $theme, $textarray_script;
+    function end_page()
+    {
+        global $event, $app_mode, $theme, $textarray_script;
 
-		if ($app_mode != 'async' && $event != 'tag')
-		{
-			callback_event('admin_side', 'main_content_end');
-			echo n.'</main><!-- /txp-body -->'.n.'<footer role="contentinfo" class="txp-footer">';
-			echo pluggable_ui('admin_side', 'footer', $theme->footer());
-			callback_event('admin_side', 'body_end');
-			echo script_js('textpattern.textarray = '.json_encode($textarray_script)).
-				n.'</footer><!-- /txp-footer -->'.n.'</body>'.n.'</html>';
-		}
-	}
+        if ($app_mode != 'async' && $event != 'tag')
+        {
+            callback_event('admin_side', 'main_content_end');
+            echo n.'</main><!-- /txp-body -->'.n.'<footer role="contentinfo" class="txp-footer">';
+            echo pluggable_ui('admin_side', 'footer', $theme->footer());
+            callback_event('admin_side', 'body_end');
+            echo script_js('textpattern.textarray = '.json_encode($textarray_script)).
+                n.'</footer><!-- /txp-footer -->'.n.'</body>'.n.'</html>';
+        }
+    }
 
 /**
  * Renders the user interface for one head cell of columnar data.
@@ -108,19 +108,19 @@
  * @return string HTML
  */
 
-	function column_head($value, $sort = '', $event = '', $is_link = '', $dir = '', $crit = '', $method = '', $class = '', $step = 'list')
-	{
-		return column_multi_head(array(array(
-			'value'   => $value,
-			'sort'    => $sort,
-			'event'   => $event,
-			'step'    => $step,
-			'is_link' => $is_link,
-			'dir'     => $dir,
-			'crit'    => $crit,
-			'method'  => $method,
-		)), $class);
-	}
+    function column_head($value, $sort = '', $event = '', $is_link = '', $dir = '', $crit = '', $method = '', $class = '', $step = 'list')
+    {
+        return column_multi_head(array(array(
+            'value'   => $value,
+            'sort'    => $sort,
+            'event'   => $event,
+            'step'    => $step,
+            'is_link' => $is_link,
+            'dir'     => $dir,
+            'crit'    => $crit,
+            'method'  => $method,
+        )), $class);
+    }
 
 /**
  * Renders the user interface for multiple head cells of columnar data.
@@ -130,54 +130,54 @@
  * @return string HTML
  */
 
-	function column_multi_head($head_items, $class = '')
-	{
-		$o = '';
-		$first_item = true;
+    function column_multi_head($head_items, $class = '')
+    {
+        $o = '';
+        $first_item = true;
 
-		foreach ($head_items as $item)
-		{
-			if (empty($item))
-			{
-				continue;
-			}
+        foreach ($head_items as $item)
+        {
+            if (empty($item))
+            {
+                continue;
+            }
 
-			extract(lAtts(array(
-				'value'   => '',
-				'sort'    => '',
-				'event'   => '',
-				'step'    => 'list',
-				'is_link' => '',
-				'dir'     => '',
-				'crit'    => '',
-				'method'  => '',
-			), $item));
+            extract(lAtts(array(
+                'value'   => '',
+                'sort'    => '',
+                'event'   => '',
+                'step'    => 'list',
+                'is_link' => '',
+                'dir'     => '',
+                'crit'    => '',
+                'method'  => '',
+            ), $item));
 
-			$o .= ($first_item) ? '' : ', ';
-			$first_item = false;
+            $o .= ($first_item) ? '' : ', ';
+            $first_item = false;
 
-			if ($is_link)
-			{
-				$o .= href(gTxt($value), array(
-					'event'         => $event,
-					'step'          => $step,
-					'sort'          => $sort,
-					'dir'           => $dir,
-					'crit'          => $crit,
-					'search_method' => $method,
-				), array());
-			}
-			else
-			{
-				$o .= gTxt($value);
-			}
-		}
+            if ($is_link)
+            {
+                $o .= href(gTxt($value), array(
+                    'event'         => $event,
+                    'step'          => $step,
+                    'sort'          => $sort,
+                    'dir'           => $dir,
+                    'crit'          => $crit,
+                    'search_method' => $method,
+                ), array());
+            }
+            else
+            {
+                $o .= gTxt($value);
+            }
+        }
 
-		return hCell($o, '', array(
-			'scope' => 'col',
-			'class' => $class,
-		));
-	}
+        return hCell($o, '', array(
+            'scope' => 'col',
+            'class' => $class,
+        ));
+    }
 
 /**
  * Renders a &lt;th&gt; element.
@@ -188,11 +188,11 @@
  * @return string       HTML
  */
 
-	function hCell($text = '', $caption = '', $atts = '')
-	{
-		$text = ('' === $text) ? sp : $text;
-		return n.tag($text, 'th', $atts);
-	}
+    function hCell($text = '', $caption = '', $atts = '')
+    {
+        $text = ('' === $text) ? sp : $text;
+        return n.tag($text, 'th', $atts);
+    }
 
 /**
  * Renders a link invoking an admin-side action.
@@ -204,18 +204,18 @@
  * @return string HTML
  */
 
-	function sLink($event, $step, $linktext, $class = '')
-	{
-		if ($linktext === '')
-		{
-			$linktext = null;
-		}
+    function sLink($event, $step, $linktext, $class = '')
+    {
+        if ($linktext === '')
+        {
+            $linktext = null;
+        }
 
-		return href($linktext, array(
-			'event' => $event,
-			'step'  => $step,
-		), array('class' => $class));
-	}
+        return href($linktext, array(
+            'event' => $event,
+            'step'  => $step,
+        ), array('class' => $class));
+    }
 
 /**
  * Renders a link with two additional URL parameters.
@@ -234,32 +234,32 @@
  * @return string HTML
  */
 
-	function eLink($event, $step, $thing, $value, $linktext, $thing2 = '', $val2 = '', $title = 'edit')
-	{
-		if ($title)
-		{
-			$title = gTxt($title);
-		}
+    function eLink($event, $step, $thing, $value, $linktext, $thing2 = '', $val2 = '', $title = 'edit')
+    {
+        if ($title)
+        {
+            $title = gTxt($title);
+        }
 
-		if ($linktext === '')
-		{
-			$linktext = null;
-		}
-		else
-		{
-			$linktext = escape_title($linktext);
-		}
+        if ($linktext === '')
+        {
+            $linktext = null;
+        }
+        else
+        {
+            $linktext = escape_title($linktext);
+        }
 
-		return href($linktext, array(
-			'event'      => $event,
-			'step'       => $step,
-			$thing       => $value,
-			$thing2      => $val2,
-			'_txp_token' => form_token(),
-		), array(
-			'title' => $title,
-		));
-	}
+        return href($linktext, array(
+            'event'      => $event,
+            'step'       => $step,
+            $thing       => $value,
+            $thing2      => $val2,
+            '_txp_token' => form_token(),
+        ), array(
+            'title' => $title,
+        ));
+    }
 
 /**
  * Renders a link with one additional URL parameter.
@@ -274,15 +274,15 @@
  * @return string HTML
  */
 
-	function wLink($event, $step = '', $thing = '', $value = '')
-	{
-		return href(sp.'!'.sp, array(
-			'event'      => $event,
-			'step'       => $step,
-			$thing       => $value,
-			'_txp_token' => form_token(),
-		), array('class' => 'dlink'));
-	}
+    function wLink($event, $step = '', $thing = '', $value = '')
+    {
+        return href(sp.'!'.sp, array(
+            'event'      => $event,
+            'step'       => $step,
+            $thing       => $value,
+            '_txp_token' => form_token(),
+        ), array('class' => 'dlink'));
+    }
 
 /**
  * Renders a delete link.
@@ -302,73 +302,73 @@
  * @return string HTML
  */
 
-	function dLink($event, $step, $thing, $value, $verify = '', $thing2 = '', $thing2val = '', $get = '', $remember = null)
-	{
-		if ($remember)
-		{
-			list($page, $sort, $dir, $crit, $search_method) = $remember;
-		}
+    function dLink($event, $step, $thing, $value, $verify = '', $thing2 = '', $thing2val = '', $get = '', $remember = null)
+    {
+        if ($remember)
+        {
+            list($page, $sort, $dir, $crit, $search_method) = $remember;
+        }
 
-		if ($get)
-		{
-			if ($verify)
-			{
-				$verify = gTxt($verify);
-			}
-			else
-			{
-				$verify = gTxt('confirm_delete_popup');
-			}
+        if ($get)
+        {
+            if ($verify)
+            {
+                $verify = gTxt($verify);
+            }
+            else
+            {
+                $verify = gTxt('confirm_delete_popup');
+            }
 
-			if ($remember)
-			{
-				return href('×', array(
-					'event'         => $event,
-					'step'          => $step,
-					$thing          => $value,
-					$thing2         => $thing2val,
-					'_txp_token'    => form_token(),
-					'page'          => $page,
-					'sort'          => $sort,
-					'dir'           => $dir,
-					'crit'          => $crit,
-					'search_method' => $search_method,
-				), array(
-					'class'       => 'dlink destroy',
-					'title'       => gTxt('delete'),
-					'data-verify' => $verify,
-				));
-			}
+            if ($remember)
+            {
+                return href('×', array(
+                    'event'         => $event,
+                    'step'          => $step,
+                    $thing          => $value,
+                    $thing2         => $thing2val,
+                    '_txp_token'    => form_token(),
+                    'page'          => $page,
+                    'sort'          => $sort,
+                    'dir'           => $dir,
+                    'crit'          => $crit,
+                    'search_method' => $search_method,
+                ), array(
+                    'class'       => 'dlink destroy',
+                    'title'       => gTxt('delete'),
+                    'data-verify' => $verify,
+                ));
+            }
 
-			return href('×', array(
-				'event'         => $event,
-				'step'          => $step,
-				$thing          => $value,
-				$thing2         => $thing2val,
-				'_txp_token'    => form_token(),
-			), array(
-				'class'       => 'dlink destroy',
-				'title'       => gTxt('delete'),
-				'data-verify' => $verify,
-			));
-		}
+            return href('×', array(
+                'event'         => $event,
+                'step'          => $step,
+                $thing          => $value,
+                $thing2         => $thing2val,
+                '_txp_token'    => form_token(),
+            ), array(
+                'class'       => 'dlink destroy',
+                'title'       => gTxt('delete'),
+                'data-verify' => $verify,
+            ));
+        }
 
-		return join('', array(
-			n.'<form method="post" action="index.php" data-verify="'.gTxt('confirm_delete_popup').'">',
-			fInput('submit', '', '×', 'destroy', gTxt('delete')),
-			eInput($event).
-			sInput($step),
-			hInput($thing, $value),
-			($thing2) ? hInput($thing2, $thing2val) : '',
-			($remember) ? hInput('page', $page) : '',
-			($remember) ? hInput('sort', $sort) : '',
-			($remember) ? hInput('dir', $dir) : '',
-			($remember) ? hInput('crit', $crit) : '',
-			($remember) ? hInput('search_method', $search_method) : '',
-			tInput(),
-			n.'</form>'
-		));
-	}
+        return join('', array(
+            n.'<form method="post" action="index.php" data-verify="'.gTxt('confirm_delete_popup').'">',
+            fInput('submit', '', '×', 'destroy', gTxt('delete')),
+            eInput($event).
+            sInput($step),
+            hInput($thing, $value),
+            ($thing2) ? hInput($thing2, $thing2val) : '',
+            ($remember) ? hInput('page', $page) : '',
+            ($remember) ? hInput('sort', $sort) : '',
+            ($remember) ? hInput('dir', $dir) : '',
+            ($remember) ? hInput('crit', $crit) : '',
+            ($remember) ? hInput('search_method', $search_method) : '',
+            tInput(),
+            n.'</form>'
+        ));
+    }
 
 /**
  * Renders an add link.
@@ -385,16 +385,16 @@
  * @return string HTML
  */
 
-	function aLink($event, $step, $thing = '', $value = '', $thing2 = '', $value2 = '')
-	{
-		return href('+', array(
-			'event'      => $event,
-			'step'       => $step,
-			$thing       => $value,
-			$thing2      => $value2,
-			'_txp_token' => form_token(),
-		), array('class' => 'alink'));
-	}
+    function aLink($event, $step, $thing = '', $value = '', $thing2 = '', $value2 = '')
+    {
+        return href('+', array(
+            'event'      => $event,
+            'step'       => $step,
+            $thing       => $value,
+            $thing2      => $value2,
+            '_txp_token' => form_token(),
+        ), array('class' => 'alink'));
+    }
 
 /**
  * Renders a link invoking an admin-side "previous/next article" action.
@@ -408,18 +408,18 @@
  * @return string HTML
  */
 
-	function prevnext_link($name, $event, $step, $id, $title = '', $rel = '')
-	{
-		return href($name, array(
-			'event' => $event,
-			'step'  => $step,
-			'ID'    => $id,
-		), array(
-			'class' => 'navlink',
-			'title' => $title,
-			'rel'   => $rel,
-		));
-	}
+    function prevnext_link($name, $event, $step, $id, $title = '', $rel = '')
+    {
+        return href($name, array(
+            'event' => $event,
+            'step'  => $step,
+            'ID'    => $id,
+        ), array(
+            'class' => 'navlink',
+            'title' => $title,
+            'rel'   => $rel,
+        ));
+    }
 
 /**
  * Renders a link invoking an admin-side "previous/next page" action.
@@ -436,158 +436,158 @@
  * @return string HTML
  */
 
-	function PrevNextLink($event, $page, $label, $type, $sort = '', $dir = '', $crit = '', $search_method = '', $step = 'list')
-	{
-		return href($label, array(
-			'event'         => $event,
-			'step'          => $step,
-			'page'          => (int) $page,
-			'dir'           => $dir,
-			'crit'          => $crit,
-			'search_method' => $search_method,
-		), array('class' => 'navlink', 'rel' => $type));
-	}
+    function PrevNextLink($event, $page, $label, $type, $sort = '', $dir = '', $crit = '', $search_method = '', $step = 'list')
+    {
+        return href($label, array(
+            'event'         => $event,
+            'step'          => $step,
+            'page'          => (int) $page,
+            'dir'           => $dir,
+            'crit'          => $crit,
+            'search_method' => $search_method,
+        ), array('class' => 'navlink', 'rel' => $type));
+    }
 
 /**
  * Renders a page navigation form.
  *
  * @param  string $event         Event
  * @param  int    $page          Current page number
- * @param  int    $numPages	     Total pages
+ * @param  int    $numPages         Total pages
  * @param  string $sort          Sort criterion
  * @param  string $dir           Sort direction, either "asc" or "desc"
  * @param  string $crit          Search criterion
  * @param  string $search_method Search method
- * @param  int    $total	     Total search term hit count [0]
- * @param  int    $limit	     First visible search term hit number [0]
- * @param  string $step	         Step
+ * @param  int    $total         Total search term hit count [0]
+ * @param  int    $limit         First visible search term hit number [0]
+ * @param  string $step             Step
  * @param  int    $list          Number of displayed page links discounting jump links, previous and next
  * @return string HTML
  */
 
-	function nav_form($event, $page, $numPages, $sort = '', $dir = '', $crit = '', $search_method = '', $total = 0, $limit = 0, $step = 'list', $list = 5)
-	{
-		$out = array();
+    function nav_form($event, $page, $numPages, $sort = '', $dir = '', $crit = '', $search_method = '', $total = 0, $limit = 0, $step = 'list', $list = 5)
+    {
+        $out = array();
 
-		if ($crit != '' && $total > 1)
-		{
-			$out[] = announce(
-				gTxt('showing_search_results', array(
-					'{from}'  => (($page - 1) * $limit) + 1,
-					'{to}'    => min($total, $page * $limit),
-					'{total}' => $total,
-				)),
-				ANNOUNCE_REGULAR
-			);
-		}
+        if ($crit != '' && $total > 1)
+        {
+            $out[] = announce(
+                gTxt('showing_search_results', array(
+                    '{from}'  => (($page - 1) * $limit) + 1,
+                    '{to}'    => min($total, $page * $limit),
+                    '{total}' => $total,
+                )),
+                ANNOUNCE_REGULAR
+            );
+        }
 
-		if ($numPages > 1)
-		{
-			$nav = array();
-			$list--;
-			$page = max(min($page, $numPages), 1);
-			$start = max(1, min($numPages - $list, $page - floor($list/2)));
-			$end = min($numPages, $start + $list);
+        if ($numPages > 1)
+        {
+            $nav = array();
+            $list--;
+            $page = max(min($page, $numPages), 1);
+            $start = max(1, min($numPages - $list, $page - floor($list/2)));
+            $end = min($numPages, $start + $list);
 
-			$parameters = array(
-				'event'         => $event,
-				'step'          => $step,
-				'dir'           => $dir,
-				'crit'          => $crit,
-				'search_method' => $search_method,
-			);
+            $parameters = array(
+                'event'         => $event,
+                'step'          => $step,
+                'dir'           => $dir,
+                'crit'          => $crit,
+                'search_method' => $search_method,
+            );
 
-			// Previous page.
+            // Previous page.
 
-			if ($page > 1)
-			{
-				$nav[] = PrevNextLink($event, $page - 1, gTxt('prev'), 'prev', $sort, $dir, $crit, $search_method, $step);
-			}
-			else
-			{
-				$nav[] = span(gTxt('prev'), array(
-					'class'         => 'navlink-disabled',
-					'aria-disabled' => 'true',
-				));
-			}
+            if ($page > 1)
+            {
+                $nav[] = PrevNextLink($event, $page - 1, gTxt('prev'), 'prev', $sort, $dir, $crit, $search_method, $step);
+            }
+            else
+            {
+                $nav[] = span(gTxt('prev'), array(
+                    'class'         => 'navlink-disabled',
+                    'aria-disabled' => 'true',
+                ));
+            }
 
-			// Jump to the first page.
+            // Jump to the first page.
 
-			if ($start > 1)
-			{
-				$nav[] = href(1, $parameters + array('page' => 1), array(
-					'class' => 'navlink',
-				));
-			}
+            if ($start > 1)
+            {
+                $nav[] = href(1, $parameters + array('page' => 1), array(
+                    'class' => 'navlink',
+                ));
+            }
 
-			// Jump to mid.
+            // Jump to mid.
 
-			if ($start > 2)
-			{
-				$between = ceil($start/2);
-				$nav[] = href('&#8230;', $parameters + array('page' => $between), array(
-					'class' => 'navlink',
-					'title' => $between,
-				));
-			}
+            if ($start > 2)
+            {
+                $between = ceil($start/2);
+                $nav[] = href('&#8230;', $parameters + array('page' => $between), array(
+                    'class' => 'navlink',
+                    'title' => $between,
+                ));
+            }
 
-			// Page links.
+            // Page links.
 
-			for ($i = $start; $i <= $end; $i++)
-			{
-				if ($i == $page)
-				{
-					$class = 'navlink-active';
-				}
-				else
-				{
-					$class = 'navlink';
-				}
+            for ($i = $start; $i <= $end; $i++)
+            {
+                if ($i == $page)
+                {
+                    $class = 'navlink-active';
+                }
+                else
+                {
+                    $class = 'navlink';
+                }
 
-				$nav[] = href($i, $parameters + array('page' => $i), array(
-					'class' => $class,
-				));
-			}
+                $nav[] = href($i, $parameters + array('page' => $i), array(
+                    'class' => $class,
+                ));
+            }
 
-			// Jump to mid.
+            // Jump to mid.
 
-			if ($end < $numPages-1)
-			{
-				$between = $end + floor(($numPages-$end) / 2);
-				$nav[] = href('&#8230;', $parameters + array('page' => $between), array(
-					'class' => 'navlink',
-					'title' => $between,
-				));
-			}
+            if ($end < $numPages-1)
+            {
+                $between = $end + floor(($numPages-$end) / 2);
+                $nav[] = href('&#8230;', $parameters + array('page' => $between), array(
+                    'class' => 'navlink',
+                    'title' => $between,
+                ));
+            }
 
-			// Jump to the last page.
+            // Jump to the last page.
 
-			if ($end < $numPages)
-			{
-				$nav[] = href($numPages, $parameters + array('page' => $numPages), array(
-					'class' => 'navlink',
-				));
-			}
+            if ($end < $numPages)
+            {
+                $nav[] = href($numPages, $parameters + array('page' => $numPages), array(
+                    'class' => 'navlink',
+                ));
+            }
 
-			// Next page.
+            // Next page.
 
-			if ($page < $numPages)
-			{
-				$nav[] = PrevNextLink($event, $page + 1, gTxt('next'), 'next', $sort, $dir, $crit, $search_method, $step);
-			}
-			else
-			{
-				$nav[] = span(gTxt('next'), array(
-					'class'         => 'navlink-disabled',
-					'aria-disabled' => 'true',
-				));
-			}
+            if ($page < $numPages)
+            {
+                $nav[] = PrevNextLink($event, $page + 1, gTxt('next'), 'next', $sort, $dir, $crit, $search_method, $step);
+            }
+            else
+            {
+                $nav[] = span(gTxt('next'), array(
+                    'class'         => 'navlink-disabled',
+                    'aria-disabled' => 'true',
+                ));
+            }
 
-			$out[] = n.tag(tag(join(tag_end('li').tag_start('li'), $nav), 'li'), 'ul', array('class' => 'nav-tertiary prev-next'));
-		}
+            $out[] = n.tag(tag(join(tag_end('li').tag_start('li'), $nav), 'li'), 'ul', array('class' => 'nav-tertiary prev-next'));
+        }
 
-		return join('', $out);
-	}
+        return join('', $out);
+    }
 
 /**
  * Wraps a collapsible region and group structure around content.
@@ -604,55 +604,55 @@
  * @since  4.6.0
  */
 
-	function wrapRegion($id, $content = '', $anchor_id = '', $label = '', $pane = '', $class = '', $role = 'region', $help = '')
-	{
-		global $event;
-		$label = $label ? gTxt($label) : null;
+    function wrapRegion($id, $content = '', $anchor_id = '', $label = '', $pane = '', $class = '', $role = 'region', $help = '')
+    {
+        global $event;
+        $label = $label ? gTxt($label) : null;
 
-		if ($anchor_id && $pane)
-		{
-			$visible = get_pref('pane_'.$pane.'_visible');
-			$heading_class = 'txp-summary' . ($visible ? ' expanded' : '');
-			$display_state = array(
-				'role'  => 'group',
-				'id'    => $anchor_id,
-				'class' => 'toggle',
-				'style' => $visible ? 'display: block' : 'display: none',
-			);
+        if ($anchor_id && $pane)
+        {
+            $visible = get_pref('pane_'.$pane.'_visible');
+            $heading_class = 'txp-summary' . ($visible ? ' expanded' : '');
+            $display_state = array(
+                'role'  => 'group',
+                'id'    => $anchor_id,
+                'class' => 'toggle',
+                'style' => $visible ? 'display: block' : 'display: none',
+            );
 
-			$label = href($label, '#'.$anchor_id, array(
-				'role'           => 'button',
-				'data-txp-token' => md5($pane . $event . form_token() . get_pref('blog_uid')),
-				'data-txp-pane'  => $pane,
-			));
+            $label = href($label, '#'.$anchor_id, array(
+                'role'           => 'button',
+                'data-txp-token' => md5($pane . $event . form_token() . get_pref('blog_uid')),
+                'data-txp-pane'  => $pane,
+            ));
 
-			$help = '';
-		}
-		else
-		{
-			$heading_class = '';
-			$display_state = array(
-				'role' => $role == 'region' ? 'group' : ''
-			);
-		}
+            $help = '';
+        }
+        else
+        {
+            $heading_class = '';
+            $display_state = array(
+                'role' => $role == 'region' ? 'group' : ''
+            );
+        }
 
-		if ($content)
-		{
-			$content =
-				hed($label.popHelp($help), 3, array(
-					'id'             => $id.'-label',
-					'class'          => $heading_class,
-				)).
-				n.tag($content.n, 'div', $display_state).n;
-		}
+        if ($content)
+        {
+            $content =
+                hed($label.popHelp($help), 3, array(
+                    'id'             => $id.'-label',
+                    'class'          => $heading_class,
+                )).
+                n.tag($content.n, 'div', $display_state).n;
+        }
 
-		return n.tag($content, 'section', array(
-			'role'            => $role,
-			'id'              => $id,
-			'class'           => trim('txp-details '.$class),
-			'aria-labelledby' => $content ? $id.'-label' : '',
-		));
-	}
+        return n.tag($content, 'section', array(
+            'role'            => $role,
+            'id'              => $id,
+            'class'           => trim('txp-details '.$class),
+            'aria-labelledby' => $content ? $id.'-label' : '',
+        ));
+    }
 
 /**
  * Wraps a region and group structure around content.
@@ -667,10 +667,10 @@
  * @since  4.6.0
  */
 
-	function wrapGroup($id, $content, $label, $class = '', $help = '')
-	{
-		return wrapRegion($id, $content, '', $label, '', $class, 'region', $help);
-	}
+    function wrapGroup($id, $content, $label, $class = '', $help = '')
+    {
+        return wrapRegion($id, $content, '', $label, '', $class, 'region', $help);
+    }
 
 /**
  * Renders start of a layout &lt;table&gt; element.
@@ -679,11 +679,11 @@
  * @deprecated in 4.4.0
  */
 
-	function startSkelTable()
-	{
-		return
-		'<table width="300" cellpadding="0" cellspacing="0" style="border:1px #ccc solid">';
-	}
+    function startSkelTable()
+    {
+        return
+        '<table width="300" cellpadding="0" cellspacing="0" style="border:1px #ccc solid">';
+    }
 
 /**
  * Renders start of a layout &lt;table&gt; element.
@@ -701,18 +701,18 @@
  * endTable();
  */
 
-	function startTable($id = '', $align = '', $class = '', $p = 0, $w = 0)
-	{
-		$atts = join_atts(array(
-			'id'          => $id,
-			'align'       => $align,
-			'class'       => $class,
-			'cellpadding' => (int) $p,
-			'width'       => (int) $w,
-		));
+    function startTable($id = '', $align = '', $class = '', $p = 0, $w = 0)
+    {
+        $atts = join_atts(array(
+            'id'          => $id,
+            'align'       => $align,
+            'class'       => $class,
+            'cellpadding' => (int) $p,
+            'width'       => (int) $w,
+        ));
 
-		return n.'<table'.$atts.'>';
-	}
+        return n.'<table'.$atts.'>';
+    }
 
 /**
  * Renders closing &lt;/table&gt; tag.
@@ -720,10 +720,10 @@
  * @return string HTML
  */
 
-	function endTable()
-	{
-		return n.'</table>';
-	}
+    function endTable()
+    {
+        return n.'</table>';
+    }
 
 /**
  * Renders &lt;tr&gt; elements from input parameters.
@@ -733,20 +733,20 @@
  * @return string HTML
  * @example
  * stackRows(
- * 	td('cell') . td('cell'),
+ *     td('cell') . td('cell'),
  *  td('cell') . td('cell')
  * );
  */
 
-	function stackRows()
-	{
-		foreach (func_get_args() as $a)
-		{
-			$o[] = tr($a);
-		}
+    function stackRows()
+    {
+        foreach (func_get_args() as $a)
+        {
+            $o[] = tr($a);
+        }
 
-		return join('', $o);
-	}
+        return join('', $o);
+    }
 
 /**
  * Renders a &lt;td&gt; element.
@@ -758,14 +758,14 @@
  * @return string HTML
  */
 
-	function td($content = '', $width = 0, $class = '', $id = '')
-	{
-		return tda($content, array(
-			'width' => (int) $width,
-			'class' => $class,
-			'id'    => $id,
-		));
-	}
+    function td($content = '', $width = 0, $class = '', $id = '')
+    {
+        return tda($content, array(
+            'width' => (int) $width,
+            'class' => $class,
+            'id'    => $id,
+        ));
+    }
 
 /**
  * Renders a &lt;td&gt; element with attributes.
@@ -775,11 +775,11 @@
  * @return string       HTML
  */
 
-	function tda($content, $atts = '')
-	{
-		$content = ($content === '') ? sp : $content;
-		return n.tag($content, 'td', $atts);
-	}
+    function tda($content, $atts = '')
+    {
+        $content = ($content === '') ? sp : $content;
+        return n.tag($content, 'td', $atts);
+    }
 
 /**
  * Renders a &lt;td&gt; element with attributes.
@@ -793,10 +793,10 @@
  * @see    tda()
  */
 
-	function tdtl($content, $atts = '')
-	{
-		return tda($content, $atts);
-	}
+    function tdtl($content, $atts = '')
+    {
+        return tda($content, $atts);
+    }
 
 /**
  * Renders a &lt;tr&gt; element with attributes.
@@ -806,10 +806,10 @@
  * @return string       HTML
  */
 
-	function tr($content, $atts = '')
-	{
-		return n.tag($content, 'tr', $atts);
-	}
+    function tr($content, $atts = '')
+    {
+        return n.tag($content, 'tr', $atts);
+    }
 
 /**
  * Renders a &lt;td&gt; element with top/left text orientation, colspan and other attributes.
@@ -821,14 +821,14 @@
  * @return string HTML
  */
 
-	function tdcs($content, $span, $width = 0, $class = '')
-	{
-		return tda($content, array(
-			'colspan' => (int) $span,
-			'width'   => (int) $width,
-			'class'   => $class,
-		));
-	}
+    function tdcs($content, $span, $width = 0, $class = '')
+    {
+        return tda($content, array(
+            'colspan' => (int) $span,
+            'width'   => (int) $width,
+            'class'   => $class,
+        ));
+    }
 
 /**
  * Renders a &lt;td&gt; element with a rowspan attribute.
@@ -840,14 +840,14 @@
  * @return string HTML
  */
 
-	function tdrs($content, $span, $width = 0, $class = '')
-	{
-		return tda($content, array(
-			'rowspan' => (int) $span,
-			'width'   => (int) $width,
-			'class'   => $class,
-		));
-	}
+    function tdrs($content, $span, $width = 0, $class = '')
+    {
+        return tda($content, array(
+            'rowspan' => (int) $span,
+            'width'   => (int) $width,
+            'class'   => $class,
+        ));
+    }
 
 /**
  * Renders a form label inside a table cell.
@@ -858,17 +858,17 @@
  * @return string HTML
  */
 
-	function fLabelCell($text, $help = '', $label_id = '')
-	{
-		$cell = gTxt($text).' '.popHelp($help);
+    function fLabelCell($text, $help = '', $label_id = '')
+    {
+        $cell = gTxt($text).' '.popHelp($help);
 
-		if ($label_id)
-		{
-			$cell = tag($cell, 'label', array('for' => $label_id));
-		}
+        if ($label_id)
+        {
+            $cell = tag($cell, 'label', array('for' => $label_id));
+        }
 
-		return tda($cell, array('class' => 'cell-label'));
-	}
+        return tda($cell, array('class' => 'cell-label'));
+    }
 
 /**
  * Renders a form input inside a table cell.
@@ -882,12 +882,12 @@
  * @return string HTML
  */
 
-	function fInputCell($name, $var = '', $tabindex = 0, $size = 0, $help = false, $id = '')
-	{
-		$pop = ($help) ? popHelp($name) : '';
+    function fInputCell($name, $var = '', $tabindex = 0, $size = 0, $help = false, $id = '')
+    {
+        $pop = ($help) ? popHelp($name) : '';
 
-		return tda(fInput('text', $name, $var, '', '', '', $size, $tabindex, $id).$pop);
-	}
+        return tda(fInput('text', $name, $var, '', '', '', $size, $tabindex, $id).$pop);
+    }
 
 /**
  * Renders a name-value input control with label.
@@ -906,48 +906,48 @@
  * echo inputLabel('active', yesnoRadio('active'), 'Keep active?');
  */
 
-	function inputLabel($name, $input, $label = '', $help = '', $atts = array(), $wraptag_val = 'span')
-	{
-		global $event;
+    function inputLabel($name, $input, $label = '', $help = '', $atts = array(), $wraptag_val = 'span')
+    {
+        global $event;
 
-		$arguments = compact('name', 'input', 'label', 'help', 'atts', 'wraptag_val');
+        $arguments = compact('name', 'input', 'label', 'help', 'atts', 'wraptag_val');
 
-		$fallback_class = 'edit-'.str_replace('_', '-', $name);
+        $fallback_class = 'edit-'.str_replace('_', '-', $name);
 
-		if ($atts && is_string($atts))
-		{
-			$atts = array('class' => $atts);
-		}
-		elseif (!$atts)
-		{
-			$atts = array('class' => $fallback_class);
-		}
-		elseif (is_array($atts) && !array_key_exists('class', $atts))
-		{
-			$atts['class'] = $fallback_class;
-		}
+        if ($atts && is_string($atts))
+        {
+            $atts = array('class' => $atts);
+        }
+        elseif (!$atts)
+        {
+            $atts = array('class' => $fallback_class);
+        }
+        elseif (is_array($atts) && !array_key_exists('class', $atts))
+        {
+            $atts['class'] = $fallback_class;
+        }
 
-		if ($label)
-		{
-			$label = tag(gTxt($label), 'label', array('for' => $name));
-		}
-		else
-		{
-			$label = gTxt($name);
-		}
+        if ($label)
+        {
+            $label = tag(gTxt($label), 'label', array('for' => $name));
+        }
+        else
+        {
+            $label = gTxt($name);
+        }
 
-		if ($wraptag_val)
-		{
-			$input = tag($input, $wraptag_val, array('class' => 'txp-value'));
-		}
+        if ($wraptag_val)
+        {
+            $input = tag($input, $wraptag_val, array('class' => 'txp-value'));
+        }
 
-		$out = graf(
-			tag($label.popHelp($help), 'span', array('class' => 'txp-label')).
-			n.$input
-		, $atts);
+        $out = graf(
+            tag($label.popHelp($help), 'span', array('class' => 'txp-label')).
+            n.$input
+        , $atts);
 
-		return pluggable_ui($event.'_ui', 'inputlabel.'.$name, $out, $arguments);
-	}
+        return pluggable_ui($event.'_ui', 'inputlabel.'.$name, $out, $arguments);
+    }
 
 /**
  * Renders anything as an XML element.
@@ -960,10 +960,10 @@
  * echo tag('Link text', 'a', array('href' => '#', 'class' => 'warning'));
  */
 
-	function tag($content, $tag, $atts = '')
-	{
-		return ('' !== $content) ? '<'.$tag.join_atts($atts).'>'.$content.'</'.$tag.'>' : '';
-	}
+    function tag($content, $tag, $atts = '')
+    {
+        return ('' !== $content) ? '<'.$tag.join_atts($atts).'>'.$content.'</'.$tag.'>' : '';
+    }
 
 /**
  * Renders anything as a HTML void element.
@@ -976,10 +976,10 @@
  * echo tag_void('input', array('name' => 'name', 'type' => 'text'));
  */
 
-	function tag_void($tag, $atts = '')
-	{
-		return '<'.$tag.join_atts($atts).' />';
-	}
+    function tag_void($tag, $atts = '')
+    {
+        return '<'.$tag.join_atts($atts).' />';
+    }
 
 /**
  * Renders anything as a HTML start tag.
@@ -992,10 +992,10 @@
  * echo tag_start('section', array('class' => 'myClass'));
  */
 
-	function tag_start($tag, $atts = '')
-	{
-		return '<'.$tag.join_atts($atts).'>';
-	}
+    function tag_start($tag, $atts = '')
+    {
+        return '<'.$tag.join_atts($atts).'>';
+    }
 
 /**
  * Renders anything as a HTML end tag.
@@ -1007,10 +1007,10 @@
  * echo tag_end('section');
  */
 
-	function tag_end($tag)
-	{
-		return '</'.$tag.'>';
-	}
+    function tag_end($tag)
+    {
+        return '</'.$tag.'>';
+    }
 
 /**
  * Renders a &lt;p&gt; element.
@@ -1022,10 +1022,10 @@
  * echo graf('This a paragraph.');
  */
 
-	function graf($item, $atts = '')
-	{
-		return n.tag($item, 'p', $atts);
-	}
+    function graf($item, $atts = '')
+    {
+        return n.tag($item, 'p', $atts);
+    }
 
 /**
  * Renders a &lt;hx&gt; element.
@@ -1038,10 +1038,10 @@
  * echo hed('Heading', 2);
  */
 
-	function hed($item, $level, $atts = '')
-	{
-		return n.tag($item, 'h'.$level, $atts);
-	}
+    function hed($item, $level, $atts = '')
+    {
+        return n.tag($item, 'h'.$level, $atts);
+    }
 
 /**
  * Renders an &lt;a&gt; element.
@@ -1052,24 +1052,24 @@
  * @return string       HTML
  */
 
-	function href($item, $href, $atts = '')
-	{
-		if (is_array($atts))
-		{
-			$atts['href'] = $href;
-		}
-		else
-		{
-			if (is_array($href))
-			{
-				$href = join_qs($href);
-			}
+    function href($item, $href, $atts = '')
+    {
+        if (is_array($atts))
+        {
+            $atts['href'] = $href;
+        }
+        else
+        {
+            if (is_array($href))
+            {
+                $href = join_qs($href);
+            }
 
-			$atts .= ' href="'.$href.'"';
-		}
+            $atts .= ' href="'.$href.'"';
+        }
 
-		return tag($item, 'a', $atts);
-	}
+        return tag($item, 'a', $atts);
+    }
 
 /**
  * Renders a &lt;strong&gt; element.
@@ -1079,10 +1079,10 @@
  * @return string       HTML
  */
 
-	function strong($item, $atts = '')
-	{
-		return tag($item, 'strong', $atts);
-	}
+    function strong($item, $atts = '')
+    {
+        return tag($item, 'strong', $atts);
+    }
 
 /**
  * Renders a &lt;span&gt; element.
@@ -1092,10 +1092,10 @@
  * @return string       HTML
  */
 
-	function span($item, $atts = '')
-	{
-		return tag($item, 'span', $atts);
-	}
+    function span($item, $atts = '')
+    {
+        return tag($item, 'span', $atts);
+    }
 
 /**
  * Renders a &lt;pre&gt; element.
@@ -1107,15 +1107,15 @@
  * echo htmlPre('&lt;?php echo "Hello World"; ?&gt;');
  */
 
-	function htmlPre($item, $atts = '')
-	{
-		if (($item = tag($item, 'code')) === '')
-		{
-			$item = null;
-		}
+    function htmlPre($item, $atts = '')
+    {
+        if (($item = tag($item, 'code')) === '')
+        {
+            $item = null;
+        }
 
-		return tag($item, 'pre', $atts);
-	}
+        return tag($item, 'pre', $atts);
+    }
 
 /**
  * Renders a HTML comment (&lt;!-- --&gt;) element.
@@ -1126,10 +1126,10 @@
  * echo comment('Some HTML comment.');
  */
 
-	function comment($item)
-	{
-		return '<!-- '.str_replace('--', '&shy;&shy;', $item).' -->';
-	}
+    function comment($item)
+    {
+        return '<!-- '.str_replace('--', '&shy;&shy;', $item).' -->';
+    }
 
 /**
  * Renders a &lt;small&gt element.
@@ -1139,10 +1139,10 @@
  * @return string       HTML
  */
 
-	function small($item, $atts = '')
-	{
-		return tag($item, 'small', $atts);
-	}
+    function small($item, $atts = '')
+    {
+        return tag($item, 'small', $atts);
+    }
 
 /**
  * Renders a table data row from an array of content => width pairs.
@@ -1152,17 +1152,17 @@
  * @return string       A HTML table row
  */
 
-	function assRow($array, $atts = '')
-	{
-		$out = array();
+    function assRow($array, $atts = '')
+    {
+        $out = array();
 
-		foreach ($array as $value => $width)
-		{
-			$out[] = tda($value, array('width' => (int) $width));
-		}
+        foreach ($array as $value => $width)
+        {
+            $out[] = tda($value, array('width' => (int) $width));
+        }
 
-		return tr(join('', $out), $atts);
-	}
+        return tr(join('', $out), $atts);
+    }
 
 /**
  * Renders a table head row from an array of strings.
@@ -1172,18 +1172,18 @@
  * @return string HTML
  */
 
-	function assHead()
-	{
-		$array = func_get_args();
-		$o = array();
+    function assHead()
+    {
+        $array = func_get_args();
+        $o = array();
 
-		foreach ($array as $a)
-		{
-			$o[] = hCell(gTxt($a), '', ' scope="col"');
-		}
+        foreach ($array as $a)
+        {
+            $o[] = hCell(gTxt($a), '', ' scope="col"');
+        }
 
-		return tr(join('', $o));
-	}
+        return tr(join('', $o));
+    }
 
 /**
  * Renders the ubiquitious popup help button.
@@ -1198,25 +1198,25 @@
  * @return string HTML
  */
 
-	function popHelp($help_var, $width = 0, $height = 0, $class = 'pophelp')
-	{
-		if (!$help_var)
-		{
-			return '';
-		}
+    function popHelp($help_var, $width = 0, $height = 0, $class = 'pophelp')
+    {
+        if (!$help_var)
+        {
+            return '';
+        }
 
-		$ui = sp.href('?', HELP_URL.'?item='.urlencode($help_var).'&language='.urlencode(LANG), array(
-			'role'       => 'button',
-			'rel'        => 'help',
-			'target'     => '_blank',
-			'onclick'    => 'popWin(this.href, '.intval($width).', '.intval($height).'); return false;',
-			'class'      => $class,
-			'title'      => gTxt('help'),
-			'aria-label' => gTxt('help'),
-		));
+        $ui = sp.href('?', HELP_URL.'?item='.urlencode($help_var).'&language='.urlencode(LANG), array(
+            'role'       => 'button',
+            'rel'        => 'help',
+            'target'     => '_blank',
+            'onclick'    => 'popWin(this.href, '.intval($width).', '.intval($height).'); return false;',
+            'class'      => $class,
+            'title'      => gTxt('help'),
+            'aria-label' => gTxt('help'),
+        ));
 
-		return pluggable_ui('admin_help', $help_var, $ui, compact('help_var', 'width', 'height', 'class'));
-	}
+        return pluggable_ui('admin_help', $help_var, $ui, compact('help_var', 'width', 'height', 'class'));
+    }
 
 /**
  * Renders the ubiquitious popup help button with a little less visual noise.
@@ -1230,10 +1230,10 @@
  * @return string HTML
  */
 
-	function popHelpSubtle($help_var, $width = 0, $height = 0)
-	{
-		return popHelp($help_var, $width, $height, 'pophelpsubtle');
-	}
+    function popHelpSubtle($help_var, $width = 0, $height = 0)
+    {
+        return popHelp($help_var, $width, $height, 'pophelpsubtle');
+    }
 
 /**
  * Renders a link that opens a popup tag help window.
@@ -1245,16 +1245,16 @@
  * @return string HTML
  */
 
-	function popTag($var, $text, $width = 0, $height = 0)
-	{
-		return href($text, array(
-			'event'    => 'tag',
-			'tag_name' => $var,
-		), array(
-			'target'  => '_blank',
-			'onclick' => 'popWin(this.href, '.intval($width).', '.intval($height).'); return false;',
-		));
-	}
+    function popTag($var, $text, $width = 0, $height = 0)
+    {
+        return href($text, array(
+            'event'    => 'tag',
+            'tag_name' => $var,
+        ), array(
+            'target'  => '_blank',
+            'onclick' => 'popWin(this.href, '.intval($width).', '.intval($height).'); return false;',
+        ));
+    }
 
 /**
  * Renders a list of tag builder links.
@@ -1263,21 +1263,21 @@
  * @return string HTML
  */
 
-	function popTagLinks($type)
-	{
-		include txpath.'/lib/taglib.php';
+    function popTagLinks($type)
+    {
+        include txpath.'/lib/taglib.php';
 
-		$arname = $type.'_tags';
+        $arname = $type.'_tags';
 
-		$out = array();
+        $out = array();
 
-		foreach ($$arname as $a)
-		{
-			$out[] = tag(popTag($a, gTxt('tag_'.$a)), 'li');
-		}
+        foreach ($$arname as $a)
+        {
+            $out[] = tag(popTag($a, gTxt('tag_'.$a)), 'li');
+        }
 
-		return n.tag(n.join(n, $out).n, 'ul', array('class' => 'plain-list'));
-	}
+        return n.tag(n.join(n, $out).n, 'ul', array('class' => 'plain-list'));
+    }
 
 /**
  * Renders an admin-side message text.
@@ -1288,10 +1288,10 @@
  * @return string HTML
  */
 
-	function messenger($thing, $thething = '', $action = '')
-	{
-		return gTxt($thing).' '.strong($thething).' '.gTxt($action);
-	}
+    function messenger($thing, $thething = '', $action = '')
+    {
+        return gTxt($thing).' '.strong($thething).' '.gTxt($action);
+    }
 
 /**
  * Renders a multi-edit form listing editing methods.
@@ -1307,61 +1307,61 @@
  * @return string  HTML
  * @example
  * echo form(
- * 	multi_edit(array(
- * 		'feature' => array('label' => 'Feature', 'html' => yesnoRadio('is_featured', 1)),
- * 		'delete'  => array('label' => 'Delete'),
- * 	))
+ *     multi_edit(array(
+ *         'feature' => array('label' => 'Feature', 'html' => yesnoRadio('is_featured', 1)),
+ *         'delete'  => array('label' => 'Delete'),
+ *     ))
  * );
  */
 
-	function multi_edit($options, $event = null, $step = null, $page = '', $sort = '', $dir = '', $crit = '', $search_method = '')
-	{
-		$html = $methods = array();
-		$methods[''] = gTxt('with_selected_option');
+    function multi_edit($options, $event = null, $step = null, $page = '', $sort = '', $dir = '', $crit = '', $search_method = '')
+    {
+        $html = $methods = array();
+        $methods[''] = gTxt('with_selected_option');
 
-		if ($event === null)
-		{
-			global $event;
-		}
+        if ($event === null)
+        {
+            global $event;
+        }
 
-		if ($step === null)
-		{
-			$step = $event.'_multi_edit';
-		}
+        if ($step === null)
+        {
+            $step = $event.'_multi_edit';
+        }
 
-		callback_event_ref($event.'_ui', 'multi_edit_options', 0, $options);
+        callback_event_ref($event.'_ui', 'multi_edit_options', 0, $options);
 
-		foreach ($options as $value => $option)
-		{
-			if (is_array($option))
-			{
-				$methods[$value] = $option['label'];
+        foreach ($options as $value => $option)
+        {
+            if (is_array($option))
+            {
+                $methods[$value] = $option['label'];
 
-				if (isset($option['html']))
-				{
-					$html[$value] = n.tag($option['html'], 'div', array(
-						'class'             => 'multi-option',
-						'data-multi-option' => $value,
-					));
-				}
-			}
-			else
-			{
-				$methods[$value] = $option;
-			}
-		}
+                if (isset($option['html']))
+                {
+                    $html[$value] = n.tag($option['html'], 'div', array(
+                        'class'             => 'multi-option',
+                        'data-multi-option' => $value,
+                    ));
+                }
+            }
+            else
+            {
+                $methods[$value] = $option;
+            }
+        }
 
-		return n.tag(
-			selectInput('edit_method', $methods, '').
-			eInput($event).
-			sInput($step).
-			hInput('page', $page).
-			($sort ? hInput('sort', $sort).hInput('dir', $dir) : '' ).
-			($crit !== '' ? hInput('crit', $crit).hInput('search_method', $search_method) : '').
-			join('', $html).
-			fInput('submit', '', gTxt('go'))
-			, 'div', array('class' => 'multi-edit'));
-	}
+        return n.tag(
+            selectInput('edit_method', $methods, '').
+            eInput($event).
+            sInput($step).
+            hInput('page', $page).
+            ($sort ? hInput('sort', $sort).hInput('dir', $dir) : '' ).
+            ($crit !== '' ? hInput('crit', $crit).hInput('search_method', $search_method) : '').
+            join('', $html).
+            fInput('submit', '', gTxt('go'))
+            , 'div', array('class' => 'multi-edit'));
+    }
 
 /**
  * Renders a widget to select various amounts to page lists by.
@@ -1375,46 +1375,46 @@
  * @return string      HTML
  */
 
-	function pageby_form($event, $val, $step = null)
-	{
-		$vals = array(15, 25, 50, 100);
-		callback_event_ref($event.'_ui', 'pageby_values', 0, $vals);
+    function pageby_form($event, $val, $step = null)
+    {
+        $vals = array(15, 25, 50, 100);
+        callback_event_ref($event.'_ui', 'pageby_values', 0, $vals);
 
-		if ($step === null)
-		{
-			$step = $event.'_change_pageby';
-		}
+        if ($step === null)
+        {
+            $step = $event.'_change_pageby';
+        }
 
-		$out = array();
+        $out = array();
 
-		foreach ($vals as $qty)
-		{
-			if ($qty == $val)
-			{
-				$class = 'navlink-active';
-				$aria_pressed = 'true';
-			}
-			else
-			{
-				$class = 'navlink';
-				$aria_pressed = 'false';
-			}
+        foreach ($vals as $qty)
+        {
+            if ($qty == $val)
+            {
+                $class = 'navlink-active';
+                $aria_pressed = 'true';
+            }
+            else
+            {
+                $class = 'navlink';
+                $aria_pressed = 'false';
+            }
 
-			$out[] = href($qty, array(
-				'event'      => $event,
-				'step'       => $step,
-				'qty'        => $qty,
-				'_txp_token' => form_token(),
-			), array(
-				'class'        => $class,
-				'title'        => gTxt('view_per_page', array('{page}' => $qty)),
-				'aria-pressed' => $aria_pressed,
-				'role'         => 'button',
-			));
-		}
+            $out[] = href($qty, array(
+                'event'      => $event,
+                'step'       => $step,
+                'qty'        => $qty,
+                '_txp_token' => form_token(),
+            ), array(
+                'class'        => $class,
+                'title'        => gTxt('view_per_page', array('{page}' => $qty)),
+                'aria-pressed' => $aria_pressed,
+                'role'         => 'button',
+            ));
+        }
 
-		return graf(join('', $out), array('class' => 'nav-tertiary pageby'));
-	}
+        return graf(join('', $out), array('class' => 'nav-tertiary pageby'));
+    }
 
 /**
  * Renders a file upload form.
@@ -1433,51 +1433,51 @@
  * @return string HTML
  */
 
-	function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_size = 1000000, $label_id = '', $class = 'upload-form')
-	{
-		extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
+    function upload_form($label, $pophelp = '', $step, $event, $id = '', $max_file_size = 1000000, $label_id = '', $class = 'upload-form')
+    {
+        extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
 
-		if (!$label_id)
-		{
-			$p_class = 'edit-'.$event.'-upload';
-			$label_id = $event.'-upload';
-		}
-		else
-		{
-			$p_class = 'edit-'.str_replace('_', '-', $label_id);
-		}
+        if (!$label_id)
+        {
+            $p_class = 'edit-'.$event.'-upload';
+            $label_id = $event.'-upload';
+        }
+        else
+        {
+            $p_class = 'edit-'.str_replace('_', '-', $label_id);
+        }
 
-		$argv = func_get_args();
-		return pluggable_ui($event.'_ui', 'upload_form',
-			n.tag(
+        $argv = func_get_args();
+        return pluggable_ui($event.'_ui', 'upload_form',
+            n.tag(
 
-			(!empty($max_file_size) ? hInput('MAX_FILE_SIZE', $max_file_size) : '').
-			eInput($event).
-			sInput($step).
-			hInput('id', $id).
+            (!empty($max_file_size) ? hInput('MAX_FILE_SIZE', $max_file_size) : '').
+            eInput($event).
+            sInput($step).
+            hInput('id', $id).
 
-			hInput('sort', $sort).
-			hInput('dir', $dir).
-			hInput('page', $page).
-			hInput('search_method', $search_method).
-			hInput('crit', $crit).
+            hInput('sort', $sort).
+            hInput('dir', $dir).
+            hInput('page', $page).
+            hInput('search_method', $search_method).
+            hInput('crit', $crit).
 
-			graf(
-				tag($label, 'label', array('for' => $label_id)).
-				popHelp($pophelp).
-				fInput('file', 'thefile', '', '', '', '', '', '', $label_id).
-				fInput('submit', '', gTxt('upload'))
-			, array('class' => $p_class)).
+            graf(
+                tag($label, 'label', array('for' => $label_id)).
+                popHelp($pophelp).
+                fInput('file', 'thefile', '', '', '', '', '', '', $label_id).
+                fInput('submit', '', gTxt('upload'))
+            , array('class' => $p_class)).
 
-			tInput().n,
+            tInput().n,
 
-			'form', array(
-				'class'   => $class,
-				'method'  => 'post',
-				'enctype' => 'multipart/form-data',
-				'action'  => 'index.php',
-			)), $argv);
-	}
+            'form', array(
+                'class'   => $class,
+                'method'  => 'post',
+                'enctype' => 'multipart/form-data',
+                'action'  => 'index.php',
+            )), $argv);
+    }
 
 /**
  * Renders an admin-side search form.
@@ -1491,21 +1491,21 @@
  * @return string HTML
  */
 
-	function search_form($event, $step, $crit, $methods, $method, $default_method)
-	{
-		$method = ($method) ? $method : $default_method;
+    function search_form($event, $step, $crit, $methods, $method, $default_method)
+    {
+        $method = ($method) ? $method : $default_method;
 
-		return form(
-			graf(
-				tag(gTxt('search'), 'label', array('for' => $event.'-search')).
-				selectInput('search_method', $methods, $method, '', '', $event.'-search').
-				fInput('text', 'crit', $crit, 'input-medium', '', '', INPUT_MEDIUM).
-				eInput($event).
-				sInput($step).
-				fInput('submit', 'search', gTxt('go'))
-			)
-		, '', '', 'get', 'search-form');
-	}
+        return form(
+            graf(
+                tag(gTxt('search'), 'label', array('for' => $event.'-search')).
+                selectInput('search_method', $methods, $method, '', '', $event.'-search').
+                fInput('text', 'crit', $crit, 'input-medium', '', '', INPUT_MEDIUM).
+                eInput($event).
+                sInput($step).
+                fInput('submit', 'search', gTxt('go'))
+            )
+        , '', '', 'get', 'search-form');
+    }
 
 /**
  * Renders a dropdown for selecting Textfilter method preferences.
@@ -1516,12 +1516,12 @@
  * @return string HTML
  */
 
-	function pref_text($name, $val, $id = '')
-	{
-		$id = ($id) ? $id : $name;
-		$vals = Txp::get('Textpattern_Textfilter_Registry')->getMap();
-		return selectInput($name, $vals, $val, '', '', $id);
-	}
+    function pref_text($name, $val, $id = '')
+    {
+        $id = ($id) ? $id : $name;
+        $vals = Txp::get('Textpattern_Textfilter_Registry')->getMap();
+        return selectInput($name, $vals, $val, '', '', $id);
+    }
 
 /**
  * Attaches a HTML fragment to a DOM node.
@@ -1534,22 +1534,22 @@
  * @return string HTML/JS
  */
 
-	function dom_attach($id, $content, $noscript = '', $wraptag = 'div', $wraptagid = '')
-	{
-		$id = escape_js($id);
-		$content = escape_js($content);
-		$wraptag = escape_js($wraptag);
-		$wraptagid = escape_js($wraptagid);
+    function dom_attach($id, $content, $noscript = '', $wraptag = 'div', $wraptagid = '')
+    {
+        $id = escape_js($id);
+        $content = escape_js($content);
+        $wraptag = escape_js($wraptag);
+        $wraptagid = escape_js($wraptagid);
 
-		$js = <<<EOF
-			$(function ()
-			{
-				$('#{$id}').append($('<{$wraptag} />').attr('id', '{$wraptagid}').html('{$content}'));
-			});
+        $js = <<<EOF
+            $(function ()
+            {
+                $('#{$id}').append($('<{$wraptag} />').attr('id', '{$wraptagid}').html('{$content}'));
+            });
 EOF;
 
-		return script_js($js, (string) $noscript);
-	}
+        return script_js($js, (string) $noscript);
+    }
 
 /**
  * Renders a &lt:script&gt; element.
@@ -1561,86 +1561,86 @@ EOF;
  * echo script_js('/js/script.js', SCRIPT_URL);
  */
 
-	function script_js($js, $flags = '')
-	{
-		if (is_int($flags))
-		{
-			if ($flags & SCRIPT_URL)
-			{
-				if ($flags & SCRIPT_ATTACH_VERSION && strpos(txp_version, '-dev') === false)
-				{
-					$ext = pathinfo($js, PATHINFO_EXTENSION);
+    function script_js($js, $flags = '')
+    {
+        if (is_int($flags))
+        {
+            if ($flags & SCRIPT_URL)
+            {
+                if ($flags & SCRIPT_ATTACH_VERSION && strpos(txp_version, '-dev') === false)
+                {
+                    $ext = pathinfo($js, PATHINFO_EXTENSION);
 
-					if ($ext)
-					{
-						$js = substr($js, 0, (strlen($ext)+1) * -1);
-						$ext = '.'.$ext;
-					}
+                    if ($ext)
+                    {
+                        $js = substr($js, 0, (strlen($ext)+1) * -1);
+                        $ext = '.'.$ext;
+                    }
 
-					$js .= '.v'.txp_version.$ext;
-				}
+                    $js .= '.v'.txp_version.$ext;
+                }
 
-				return n.tag(null, 'script', array('src' => $js));
-			}
-		}
+                return n.tag(null, 'script', array('src' => $js));
+            }
+        }
 
-		$js = preg_replace('#<(/?)(script)#i', '\\x3c$1$2', $js);
+        $js = preg_replace('#<(/?)(script)#i', '\\x3c$1$2', $js);
 
-		$out = n.tag(n.trim($js).n, 'script');
+        $out = n.tag(n.trim($js).n, 'script');
 
-		if ($flags)
-		{
-			$out .= n.tag(n.trim($flags).n, 'noscript');
-		}
+        if ($flags)
+        {
+            $out .= n.tag(n.trim($flags).n, 'noscript');
+        }
 
-		return $out;
-	}
+        return $out;
+    }
 
 /**
  * Renders a "Details" toggle checkbox.
  *
  * @param  string $classname Unique identfier. The cookie's name will be derived from this value
- * @param  bool	  $form      Create as a stand-along &lt;form&gt; element
+ * @param  bool      $form      Create as a stand-along &lt;form&gt; element
  * @return string HTML
  */
 
-	function toggle_box($classname, $form = false)
-	{
-		$name = 'cb_toggle_'.$classname;
-		$id = escape_js($name);
-		$class = escape_js($classname);
+    function toggle_box($classname, $form = false)
+    {
+        $name = 'cb_toggle_'.$classname;
+        $id = escape_js($name);
+        $class = escape_js($classname);
 
-		$out = checkbox($name, 1, cs('toggle_'.$classname), 0, $name).
-			n.tag(gTxt('detail_toggle'), 'label', array('for' => $name));
+        $out = checkbox($name, 1, cs('toggle_'.$classname), 0, $name).
+            n.tag(gTxt('detail_toggle'), 'label', array('for' => $name));
 
-		$js = <<<EOF
-			$(function ()
-			{
-				$('input')
-					.filter(function ()
-					{
-						if ($(this).attr('id') === '{$id}')
-						{
-							setClassDisplay('{$class}', $(this).is(':checked'));
-							return true;
-						}
-					})
-					.change(function ()
-					{
-						toggleClassRemember('{$class}');
-					});
-			});
+        $js = <<<EOF
+            $(function ()
+            {
+                $('input')
+                    .filter(function ()
+                    {
+                        if ($(this).attr('id') === '{$id}')
+                        {
+                            setClassDisplay('{$class}', $(this).is(':checked'));
+                            return true;
+                        }
+                    })
+                    .change(function ()
+                    {
+                        toggleClassRemember('{$class}');
+                    });
+            });
 EOF;
 
-		$out .= script_js($js);
+        $out .= script_js($js);
 
-		if ($form)
-		{
-			return form($out);
-		}
+        if ($form)
+        {
+            return form($out);
+        }
 
-		return $out;
-	}
+        return $out;
+    }
 
 /**
  * Renders a checkbox to set/unset a browser cookie.
@@ -1650,69 +1650,69 @@ EOF;
  * @return string HTML
  */
 
-	function cookie_box($classname, $form = true)
-	{
-		$name = 'cb_'.$classname;
-		$id = escape_js($name);
-		$class = escape_js($classname);
+    function cookie_box($classname, $form = true)
+    {
+        $name = 'cb_'.$classname;
+        $id = escape_js($name);
+        $class = escape_js($classname);
 
-		if (cs('toggle_'.$classname))
-		{
-			$value = 1;
-		}
-		else
-		{
-			$value = 0;
-		}
+        if (cs('toggle_'.$classname))
+        {
+            $value = 1;
+        }
+        else
+        {
+            $value = 0;
+        }
 
-		$newvalue = 1 - $value;
+        $newvalue = 1 - $value;
 
-		$out = checkbox($name, 1, (bool) $value, 0, $name).
-			n.tag(gTxt($classname), 'label', array('for' => $name));
+        $out = checkbox($name, 1, (bool) $value, 0, $name).
+            n.tag(gTxt($classname), 'label', array('for' => $name));
 
-		$js = <<<EOF
-			$(function ()
-			{
-				$('input')
-					.filter(function ()
-					{
-						if ($(this).attr('id') === '{$id}')
-						{
-							return true;
-						}
-					})
-					.change(function ()
-					{
-						setClassRemember('{$class}', $newvalue);
-						$(this).parents('form').submit();
-					});
-			});
+        $js = <<<EOF
+            $(function ()
+            {
+                $('input')
+                    .filter(function ()
+                    {
+                        if ($(this).attr('id') === '{$id}')
+                        {
+                            return true;
+                        }
+                    })
+                    .change(function ()
+                    {
+                        setClassRemember('{$class}', $newvalue);
+                        $(this).parents('form').submit();
+                    });
+            });
 EOF;
 
-		$out .= script_js($js);
+        $out .= script_js($js);
 
-		if ($form)
-		{
-			if (serverSet('QUERY_STRING'))
-			{
-				$action = 'index.php?'.serverSet('QUERY_STRING');
-			}
-			else
-			{
-				$action = 'index.php';
-			}
+        if ($form)
+        {
+            if (serverSet('QUERY_STRING'))
+            {
+                $action = 'index.php?'.serverSet('QUERY_STRING');
+            }
+            else
+            {
+                $action = 'index.php';
+            }
 
-			$out .= eInput(gps('event')) . tInput();
+            $out .= eInput(gps('event')) . tInput();
 
-			return tag($out, 'form', array(
-				'class'  => $name,
-				'method' => 'post',
-				'action' => $action,
-			));
-		}
+            return tag($out, 'form', array(
+                'class'  => $name,
+                'method' => 'post',
+                'action' => $action,
+            ));
+        }
 
-		return $out;
-	}
+        return $out;
+    }
 
 /**
  * Renders a &lt;fieldset&gt; element.
@@ -1723,10 +1723,10 @@ EOF;
  * @return string HTML
  */
 
-	function fieldset($content, $legend = '', $id = '')
-	{
-		return tag(trim(tag($legend, 'legend').n.$content), 'fieldset', array('id' => $id));
-	}
+    function fieldset($content, $legend = '', $id = '')
+    {
+        return tag(trim(tag($legend, 'legend').n.$content), 'fieldset', array('id' => $id));
+    }
 
 /**
  * Renders a link element to hook up txpAsyncHref() with request parameters.
@@ -1740,37 +1740,37 @@ EOF;
  * @since  4.5.0
  * @example
  * echo asyncHref('Disable', array(
- * 	'event'    => 'myEvent',
- * 	'step'     => 'myStep',
- * 	'thing'    => 'status',
- * 	'property' => 'disable',
+ *     'event'    => 'myEvent',
+ *     'step'     => 'myStep',
+ *     'thing'    => 'status',
+ *     'property' => 'disable',
  * ));
  */
 
-	function asyncHref($item, $parms, $atts = '')
-	{
-		global $event, $step;
+    function asyncHref($item, $parms, $atts = '')
+    {
+        global $event, $step;
 
-		$parms = lAtts(array(
-			'event'    => $event,
-			'step'     => $step,
-			'thing'    => '',
-			'property' => '',
-		), $parms);
+        $parms = lAtts(array(
+            'event'    => $event,
+            'step'     => $step,
+            'thing'    => '',
+            'property' => '',
+        ), $parms);
 
-		$class = $parms['step'].' async';
+        $class = $parms['step'].' async';
 
-		if (is_array($atts))
-		{
-			$atts['class'] = $class;
-		}
-		else
-		{
-			$atts .= ' class="'.txpspecialchars($class).'"';
-		}
+        if (is_array($atts))
+        {
+            $atts['class'] = $class;
+        }
+        else
+        {
+            $atts .= ' class="'.txpspecialchars($class).'"';
+        }
 
-		return href($item, join_qs($parms), $atts);
-	}
+        return href($item, join_qs($parms), $atts);
+    }
 
 /**
  * Renders an array of items as a HTML list.
@@ -1792,43 +1792,43 @@ EOF;
  * echo doWrap(array('item1', 'item2'), 'div', 'p');
  */
 
-	function doWrap($list, $wraptag, $break, $class = '', $breakclass = '', $atts = '', $breakatts = '', $id = '')
-	{
-		if (!$list)
-		{
-			return '';
-		}
+    function doWrap($list, $wraptag, $break, $class = '', $breakclass = '', $atts = '', $breakatts = '', $id = '')
+    {
+        if (!$list)
+        {
+            return '';
+        }
 
-		if ($id)
-		{
-			$atts .= ' id="'.txpspecialchars($id).'"';
-		}
+        if ($id)
+        {
+            $atts .= ' id="'.txpspecialchars($id).'"';
+        }
 
-		if ($class)
-		{
-			$atts .= ' class="'.txpspecialchars($class).'"';
-		}
+        if ($class)
+        {
+            $atts .= ' class="'.txpspecialchars($class).'"';
+        }
 
-		if ($breakclass)
-		{
-			$breakatts.= ' class="'.txpspecialchars($breakclass).'"';
-		}
+        if ($breakclass)
+        {
+            $breakatts.= ' class="'.txpspecialchars($breakclass).'"';
+        }
 
-		// non-enclosing breaks
-		if (!preg_match('/^\w+$/', $break) or $break == 'br' or $break == 'hr')
-		{
-			if ($break == 'br' or $break == 'hr')
-			{
-				$break = "<$break $breakatts/>".n;
-			}
+        // non-enclosing breaks
+        if (!preg_match('/^\w+$/', $break) or $break == 'br' or $break == 'hr')
+        {
+            if ($break == 'br' or $break == 'hr')
+            {
+                $break = "<$break $breakatts/>".n;
+            }
 
-			return ($wraptag) ?	tag(join($break, $list), $wraptag, $atts) :	join($break, $list);
-		}
+            return ($wraptag) ?    tag(join($break, $list), $wraptag, $atts) :    join($break, $list);
+        }
 
-		return ($wraptag)
-			? tag(n.tag(join("</$break>".n."<{$break}{$breakatts}>", $list), $break, $breakatts).n, $wraptag, $atts)
-			: tag(n.join("</$break>".n."<{$break}{$breakatts}>".n, $list).n, $break, $breakatts);
-	}
+        return ($wraptag)
+            ? tag(n.tag(join("</$break>".n."<{$break}{$breakatts}>", $list), $break, $breakatts).n, $wraptag, $atts)
+            : tag(n.join("</$break>".n."<{$break}{$breakatts}>".n, $list).n, $break, $breakatts);
+    }
 
 /**
  * Renders anything as a HTML tag.
@@ -1849,25 +1849,25 @@ EOF;
  * echo doTag('', 'meta', '', 'name="description" content="Some content"');
  */
 
-	function doTag($content, $tag, $class = '', $atts = '', $id = '')
-	{
-		if ($id)
-		{
-			$atts .= ' id="'.txpspecialchars($id).'"';
-		}
+    function doTag($content, $tag, $class = '', $atts = '', $id = '')
+    {
+        if ($id)
+        {
+            $atts .= ' id="'.txpspecialchars($id).'"';
+        }
 
-		if ($class)
-		{
-			$atts .= ' class="'.txpspecialchars($class).'"';
-		}
+        if ($class)
+        {
+            $atts .= ' class="'.txpspecialchars($class).'"';
+        }
 
-		if (!$tag)
-		{
-			return $content;
-		}
+        if (!$tag)
+        {
+            return $content;
+        }
 
-		return ($content) ? tag($content, $tag, $atts) : "<$tag $atts />";
-	}
+        return ($content) ? tag($content, $tag, $atts) : "<$tag $atts />";
+    }
 
 /**
  * Renders a label.
@@ -1886,12 +1886,12 @@ EOF;
  * echo doLabel('My label', 'h3');
  */
 
-	function doLabel($label = '', $labeltag = '')
-	{
-		if ($label)
-		{
-			return (empty($labeltag) ? $label.'<br />' : tag($label, $labeltag));
-		}
+    function doLabel($label = '', $labeltag = '')
+    {
+        if ($label)
+        {
+            return (empty($labeltag) ? $label.'<br />' : tag($label, $labeltag));
+        }
 
-		return '';
-	}
+        return '';
+    }

@@ -29,11 +29,11 @@
 
 if (!defined('THEME'))
 {
-	/**
-	 * Relative path to themes directory.
-	 */
+    /**
+     * Relative path to themes directory.
+     */
 
-	define('THEME', 'theme/');
+    define('THEME', 'theme/');
 }
 
 /**
@@ -44,366 +44,366 @@ if (!defined('THEME'))
 
 class theme
 {
-	/**
-	 * The theme name.
-	 *
-	 * @var string
-	 */
+    /**
+     * The theme name.
+     *
+     * @var string
+     */
 
-	public $name;
+    public $name;
 
-	/**
-	 * Stores a menu.
-	 *
-	 * @var array
-	 */
+    /**
+     * Stores a menu.
+     *
+     * @var array
+     */
 
-	public $menu;
+    public $menu;
 
-	/**
-	 * Theme location.
-	 *
-	 * @var string
-	 */
+    /**
+     * Theme location.
+     *
+     * @var string
+     */
 
-	public $url;
+    public $url;
 
-	/**
-	 * Just a popup window.
-	 *
-	 * @var bool
-	 */
+    /**
+     * Just a popup window.
+     *
+     * @var bool
+     */
 
-	public $is_popup;
+    public $is_popup;
 
-	/**
-	 * Stores an activity message.
-	 *
-	 * @var bool
-	 * @see theme::announce()
-	 * @see theme::announce_async()
-	 */
+    /**
+     * Stores an activity message.
+     *
+     * @var bool
+     * @see theme::announce()
+     * @see theme::announce_async()
+     */
 
-	public $message;
+    public $message;
 
-	/**
-	 * Constructor.
-	 *
-	 * @param string $name Theme name
-	 */
+    /**
+     * Constructor.
+     *
+     * @param string $name Theme name
+     */
 
-	public function __construct($name)
-	{
-		$this->name = $name;
-		$this->menu = array();
-		$this->url = THEME.rawurlencode($name).'/';
-		$this->is_popup = false;
-		$this->message = '';
-	}
+    public function __construct($name)
+    {
+        $this->name = $name;
+        $this->menu = array();
+        $this->url = THEME.rawurlencode($name).'/';
+        $this->is_popup = false;
+        $this->message = '';
+    }
 
-	/**
-	 * Gets a theme's source path.
-	 *
-	 * @param  string $name Theme name
-	 * @return string Source file path for named theme
-	 */
+    /**
+     * Gets a theme's source path.
+     *
+     * @param  string $name Theme name
+     * @return string Source file path for named theme
+     */
 
-	public static function path($name)
-	{
-		return txpath.DS.THEME.$name.DS.$name.'.php';
-	}
+    public static function path($name)
+    {
+        return txpath.DS.THEME.$name.DS.$name.'.php';
+    }
 
-	/**
-	 * Theme factory.
-	 *
-	 * @param  string   $name Theme name
-	 * @return obj|bool An initialised theme object or FALSE on failure
-	 */
+    /**
+     * Theme factory.
+     *
+     * @param  string   $name Theme name
+     * @return obj|bool An initialised theme object or FALSE on failure
+     */
 
-	public static function factory($name)
-	{
-		$path = theme::path($name);
-		if (is_readable($path))
-		{
-			require_once($path);
-		}
-		else
-		{
-			return false;
-		}
+    public static function factory($name)
+    {
+        $path = theme::path($name);
+        if (is_readable($path))
+        {
+            require_once($path);
+        }
+        else
+        {
+            return false;
+        }
 
-		$t = "{$name}_theme";
-		if (class_exists($t))
-		{
-			return new $t($name);
-		}
-		else
-		{
-			return false;
-		}
-	}
+        $t = "{$name}_theme";
+        if (class_exists($t))
+        {
+            return new $t($name);
+        }
+        else
+        {
+            return false;
+        }
+    }
 
-	/**
-	 * Initialise the theme singleton.
-	 *
-	 * @param  string $name Theme name
-	 * @return obj    A valid theme object
-	 */
+    /**
+     * Initialise the theme singleton.
+     *
+     * @param  string $name Theme name
+     * @return obj    A valid theme object
+     */
 
-	public static function init($name = '')
-	{
-		static $instance;
+    public static function init($name = '')
+    {
+        static $instance;
 
-		if ($name === '')
-		{
-			$name = pluggable_ui('admin_side', 'theme_name', get_pref('theme_name', 'hive'));
-		}
+        if ($name === '')
+        {
+            $name = pluggable_ui('admin_side', 'theme_name', get_pref('theme_name', 'hive'));
+        }
 
-		if ($instance && is_object($instance) && ($name == $instance->name))
-		{
-			return $instance;
-		}
-		else
-		{
-			$instance = null;
-		}
+        if ($instance && is_object($instance) && ($name == $instance->name))
+        {
+            return $instance;
+        }
+        else
+        {
+            $instance = null;
+        }
 
-		$instance = theme::factory($name);
-		if (!$instance)
-		{
-			set_pref('theme_name', 'hive');
-			die(gTxt('cannot_instantiate_theme', array('{name}' => $name, '{class}' => "{$name}_theme", '{path}' => theme::path($name))));
-		}
+        $instance = theme::factory($name);
+        if (!$instance)
+        {
+            set_pref('theme_name', 'hive');
+            die(gTxt('cannot_instantiate_theme', array('{name}' => $name, '{class}' => "{$name}_theme", '{path}' => theme::path($name))));
+        }
 
-		return $instance;
-	}
+        return $instance;
+    }
 
-	/**
-	 * Get a list of all theme names.
-	 *
-	 * @return array Alphabetically sorted array of all available theme names
-	 */
+    /**
+     * Get a list of all theme names.
+     *
+     * @return array Alphabetically sorted array of all available theme names
+     */
 
-	public static function names()
-	{
-		$dirs = glob(txpath.DS.THEME.'*');
-		if (is_array($dirs))
-		{
-			foreach ($dirs as $d)
-			{
-				// Extract trailing directory name.
-				preg_match('#(.*)[\\/]+(.*)$#', $d, $m);
-				$name = $m[2];
+    public static function names()
+    {
+        $dirs = glob(txpath.DS.THEME.'*');
+        if (is_array($dirs))
+        {
+            foreach ($dirs as $d)
+            {
+                // Extract trailing directory name.
+                preg_match('#(.*)[\\/]+(.*)$#', $d, $m);
+                $name = $m[2];
 
-				// Accept directories containing an equally named .php file.
-				if (is_dir($d) && ($d != '.') && ($d != '..') && isset($name) && is_file($d.DS.$name.'.php'))
-				{
-					$out[] = $name;
-				}
-			}
-			sort($out, SORT_STRING);
-			return $out;
-		}
+                // Accept directories containing an equally named .php file.
+                if (is_dir($d) && ($d != '.') && ($d != '..') && isset($name) && is_file($d.DS.$name.'.php'))
+                {
+                    $out[] = $name;
+                }
+            }
+            sort($out, SORT_STRING);
+            return $out;
+        }
 
-		return array();
-	}
+        return array();
+    }
 
-	/**
-	 * Inherit from an ancestor theme.
-	 *
-	 * @param  string  $name Name of ancestor theme
-	 * @return bool    TRUE on success, FALSE on unavailable/invalid ancestor theme
-	 */
+    /**
+     * Inherit from an ancestor theme.
+     *
+     * @param  string  $name Name of ancestor theme
+     * @return bool    TRUE on success, FALSE on unavailable/invalid ancestor theme
+     */
 
-	public static function based_on($name)
-	{
-		global $production_status;
-		$theme = theme::factory($name);
-		if (!$theme)
-		{
-			set_pref('theme_name', 'hive');
-			if ($production_status === 'debug')
-			{
-				echo gTxt('cannot_instantiate_theme', array('{name}' => $name, '{class}' => "{$name}_theme", '{path}' => theme::path($name)));
-			}
-			return false;
-		}
-		return true;
-	}
+    public static function based_on($name)
+    {
+        global $production_status;
+        $theme = theme::factory($name);
+        if (!$theme)
+        {
+            set_pref('theme_name', 'hive');
+            if ($production_status === 'debug')
+            {
+                echo gTxt('cannot_instantiate_theme', array('{name}' => $name, '{class}' => "{$name}_theme", '{path}' => theme::path($name)));
+            }
+            return false;
+        }
+        return true;
+    }
 
-	/**
-	 * Sets Textpatterns menu structure, message contents and other application states.
-	 *
-	 * @param  string $area      Currently active top level menu
-	 * @param  string $event     Currently active second level menu
-	 * @param  bool   $is_popup  Just a popup window for tag builder et cetera
-	 * @param  array  $message   The contents of the notification message pane
-	 * @return obj    This theme object
-	 */
+    /**
+     * Sets Textpatterns menu structure, message contents and other application states.
+     *
+     * @param  string $area      Currently active top level menu
+     * @param  string $event     Currently active second level menu
+     * @param  bool   $is_popup  Just a popup window for tag builder et cetera
+     * @param  array  $message   The contents of the notification message pane
+     * @return obj    This theme object
+     */
 
-	public function set_state($area, $event, $is_popup, $message)
-	{
-		$this->is_popup = $is_popup;
-		$this->message = $message;
+    public function set_state($area, $event, $is_popup, $message)
+    {
+        $this->is_popup = $is_popup;
+        $this->message = $message;
 
-		if ($is_popup)
-		{
-			return $this;
-		}
+        if ($is_popup)
+        {
+            return $this;
+        }
 
-		// Use legacy areas() for b/c.
-		$areas = areas();
-		$defaults = array(
-			'content' => 'article',
-			'presentation' => 'page',
-			'admin' => 'admin'
-		);
+        // Use legacy areas() for b/c.
+        $areas = areas();
+        $defaults = array(
+            'content' => 'article',
+            'presentation' => 'page',
+            'admin' => 'admin'
+        );
 
-		if (empty($areas['start']))
-		{
-			unset($areas['start']);
-		}
+        if (empty($areas['start']))
+        {
+            unset($areas['start']);
+        }
 
-		if (empty($areas['extensions']))
-		{
-			unset($areas['extensions']);
-		}
+        if (empty($areas['extensions']))
+        {
+            unset($areas['extensions']);
+        }
 
-		$dflt_tab = get_pref('default_event', '');
+        $dflt_tab = get_pref('default_event', '');
 
-		foreach ($areas as $ar => $items)
-		{
-			$l_ = gTxt('tab_'.$ar);
-			$e_ = (array_key_exists($ar, $defaults)) ? $defaults[$ar] : reset($areas[$ar]);
-			$i_ = array();
+        foreach ($areas as $ar => $items)
+        {
+            $l_ = gTxt('tab_'.$ar);
+            $e_ = (array_key_exists($ar, $defaults)) ? $defaults[$ar] : reset($areas[$ar]);
+            $i_ = array();
 
-			if (has_privs('tab.'.$ar))
-			{
-				if (!has_privs($e_))
-				{
-					$e_ = '';
-				}
+            if (has_privs('tab.'.$ar))
+            {
+                if (!has_privs($e_))
+                {
+                    $e_ = '';
+                }
 
-				foreach ($items as $a => $b)
-				{
-					if (has_privs($b))
-					{
-						if ($e_ === '')
-						{
-							$e_ = $b;
-						}
+                foreach ($items as $a => $b)
+                {
+                    if (has_privs($b))
+                    {
+                        if ($e_ === '')
+                        {
+                            $e_ = $b;
+                        }
 
-						if ($b == $dflt_tab)
-						{
-							$this->menu[$ar]['event'] = $dflt_tab;
-						}
+                        if ($b == $dflt_tab)
+                        {
+                            $this->menu[$ar]['event'] = $dflt_tab;
+                        }
 
-						$i_[] = array('label' => $a, 'event' => $b, 'active' => ($b == $event));
-					}
-				}
+                        $i_[] = array('label' => $a, 'event' => $b, 'active' => ($b == $event));
+                    }
+                }
 
-				if ($e_)
-				{
-					$this->menu[$ar] = array(
-						'label' => $l_,
-						'event' => $e_,
-						'active' => ($ar == $area),
-						'items' => $i_,
-					);
-				}
-			}
-		}
-		return $this;
-	}
+                if ($e_)
+                {
+                    $this->menu[$ar] = array(
+                        'label' => $l_,
+                        'event' => $e_,
+                        'active' => ($ar == $area),
+                        'items' => $i_,
+                    );
+                }
+            }
+        }
+        return $this;
+    }
 
-	/**
-	 * HTML &lt;head&gt; section.
-	 *
-	 * Returned value is rendered into the head element of
-	 * all admin pages.
-	 *
-	 * @return string
-	 */
+    /**
+     * HTML &lt;head&gt; section.
+     *
+     * Returned value is rendered into the head element of
+     * all admin pages.
+     *
+     * @return string
+     */
 
-	public function html_head()
-	{
-		trigger_error(__FUNCTION__.' is abstract.', E_USER_ERROR);
-	}
+    public function html_head()
+    {
+        trigger_error(__FUNCTION__.' is abstract.', E_USER_ERROR);
+    }
 
-	/**
-	 * Draw the theme's header.
-	 *
-	 * @return string
-	 */
+    /**
+     * Draw the theme's header.
+     *
+     * @return string
+     */
 
-	public function header()
-	{
-		trigger_error(__FUNCTION__.' is abstract.', E_USER_ERROR);
-	}
+    public function header()
+    {
+        trigger_error(__FUNCTION__.' is abstract.', E_USER_ERROR);
+    }
 
-	/**
-	 * Draw the theme's footer.
-	 *
-	 * @return string
-	 */
+    /**
+     * Draw the theme's footer.
+     *
+     * @return string
+     */
 
-	public function footer()
-	{
-		trigger_error(__FUNCTION__.' is abstract.', E_USER_ERROR);
-	}
+    public function footer()
+    {
+        trigger_error(__FUNCTION__.' is abstract.', E_USER_ERROR);
+    }
 
-	/**
-	 * Output notification message for synchronous HTML views.
-	 *
-	 * @param  array  $thing Message text and status flag
-	 * @param  bool   $modal If TRUE, immediate user interaction suggested
-	 * @return string HTML
-	 * @example
-	 * global $theme;
-	 * echo $theme->announce(array('my_message', E_ERROR));
-	 */
+    /**
+     * Output notification message for synchronous HTML views.
+     *
+     * @param  array  $thing Message text and status flag
+     * @param  bool   $modal If TRUE, immediate user interaction suggested
+     * @return string HTML
+     * @example
+     * global $theme;
+     * echo $theme->announce(array('my_message', E_ERROR));
+     */
 
-	public function announce($thing = array('', 0), $modal = false)
-	{
-		trigger_error(__FUNCTION__.' is abstract.', E_USER_ERROR);
-	}
+    public function announce($thing = array('', 0), $modal = false)
+    {
+        trigger_error(__FUNCTION__.' is abstract.', E_USER_ERROR);
+    }
 
-	/**
-	 * Output notification message for asynchronous JavaScript views.
-	 *
-	 * @param  array  $thing Message text and status flag
-	 * @param  bool   $modal If TRUE, immediate user interaction suggested
-	 * @return string JavaScript
-	 * @since 4.5.0
-	 * @example
-	 * global $theme;
-	 * echo script_js(
-	 * 	$theme->announce_async(array('my_message', E_ERROR))
-	 * );
-	 */
+    /**
+     * Output notification message for asynchronous JavaScript views.
+     *
+     * @param  array  $thing Message text and status flag
+     * @param  bool   $modal If TRUE, immediate user interaction suggested
+     * @return string JavaScript
+     * @since 4.5.0
+     * @example
+     * global $theme;
+     * echo script_js(
+     *     $theme->announce_async(array('my_message', E_ERROR))
+     * );
+     */
 
-	public function announce_async($thing = array('', 0), $modal = false)
-	{
-		trigger_error(__FUNCTION__.' is abstract.', E_USER_ERROR);
-	}
+    public function announce_async($thing = array('', 0), $modal = false)
+    {
+        trigger_error(__FUNCTION__.' is abstract.', E_USER_ERROR);
+    }
 
-	/**
-	 * Define bureaucratic details of this theme.
-	 *
-	 * All returned items are optional.
-	 *
-	 * @return array
-	 */
+    /**
+     * Define bureaucratic details of this theme.
+     *
+     * All returned items are optional.
+     *
+     * @return array
+     */
 
-	public function manifest()
-	{
-		return array(
-			'title'        => '', // Human-readable title of this theme. No HTML, keep it short.
-			'author'       => '', // Name(s) of this theme's creator(s).
-			'author_uri'   => '', // URI of the theme's site. Decent vanity is accepted.
-			'version'      => '', // Version numbering. Mind version_compare().
-			'description'  => '', // Human readable short description. No HTML.
-			'help'         => '', // URI of the theme's help and docs. Strictly optional.
-		);
-	}
+    public function manifest()
+    {
+        return array(
+            'title'        => '', // Human-readable title of this theme. No HTML, keep it short.
+            'author'       => '', // Name(s) of this theme's creator(s).
+            'author_uri'   => '', // URI of the theme's site. Decent vanity is accepted.
+            'version'      => '', // Version numbering. Mind version_compare().
+            'description'  => '', // Human readable short description. No HTML.
+            'help'         => '', // URI of the theme's help and docs. Strictly optional.
+        );
+    }
 }

@@ -43,27 +43,27 @@
  * @example
  * if (send_password('John Doe', 'login', 'example@example.tld', 'password'))
  * {
- * 	echo "Login details sent.";
+ *     echo "Login details sent.";
  * }
  */
 
-	function send_password($RealName, $name, $email, $password)
-	{
-		global $sitename;
+    function send_password($RealName, $name, $email, $password)
+    {
+        global $sitename;
 
-		require_privs('admin.edit');
+        require_privs('admin.edit');
 
-		$message = gTxt('greeting').' '.$RealName.','.
+        $message = gTxt('greeting').' '.$RealName.','.
 
-			n.n.gTxt('you_have_been_registered').' '.$sitename.
+            n.n.gTxt('you_have_been_registered').' '.$sitename.
 
-			n.n.gTxt('your_login_is').': '.$name.
-			n.gTxt('your_password_is').': '.$password.
+            n.n.gTxt('your_login_is').': '.$name.
+            n.gTxt('your_password_is').': '.$password.
 
-			n.n.gTxt('log_in_at').': '.hu.'textpattern/index.php';
+            n.n.gTxt('log_in_at').': '.hu.'textpattern/index.php';
 
-		return txpMail($email, "[$sitename] ".gTxt('your_login_info'), $message);
-	}
+        return txpMail($email, "[$sitename] ".gTxt('your_login_info'), $message);
+    }
 
 /**
  * Sends a new password to an existing user.
@@ -81,27 +81,27 @@
  * $pass = generate_password();
  * if (send_new_password($pass, 'example@example.tld', 'user'))
  * {
- * 	echo "Password was sent to 'user'.";
+ *     echo "Password was sent to 'user'.";
  * }
  */
 
-	function send_new_password($password, $email, $name)
-	{
-		global $txp_user, $sitename;
+    function send_new_password($password, $email, $name)
+    {
+        global $txp_user, $sitename;
 
-		if (empty($name))
-		{
-			$name = $txp_user;
-		}
+        if (empty($name))
+        {
+            $name = $txp_user;
+        }
 
-		$message = gTxt('greeting').' '.$name.','.
+        $message = gTxt('greeting').' '.$name.','.
 
-			n.n.gTxt('your_password_is').': '.$password.
+            n.n.gTxt('your_password_is').': '.$password.
 
-			n.n.gTxt('log_in_at').': '.hu.'textpattern/index.php';
+            n.n.gTxt('log_in_at').': '.hu.'textpattern/index.php';
 
-		return txpMail($email, "[$sitename] ".gTxt('your_new_password'), $message);
-	}
+        return txpMail($email, "[$sitename] ".gTxt('your_new_password'), $message);
+    }
 
 /**
  * Sends a password reset link to a user's email address.
@@ -119,39 +119,39 @@
  * echo send_reset_confirmation_request('username');
  */
 
-	function send_reset_confirmation_request($name)
-	{
-		global $sitename;
+    function send_reset_confirmation_request($name)
+    {
+        global $sitename;
 
-		$rs = safe_row('email, nonce', 'txp_users', "name = '".doSlash($name)."'");
+        $rs = safe_row('email, nonce', 'txp_users', "name = '".doSlash($name)."'");
 
-		if ($rs)
-		{
-			extract($rs);
+        if ($rs)
+        {
+            extract($rs);
 
-			$confirm = bin2hex(pack('H*', substr(md5($nonce), 0, 10)).$name);
+            $confirm = bin2hex(pack('H*', substr(md5($nonce), 0, 10)).$name);
 
-			$message = gTxt('greeting').' '.$name.','.
+            $message = gTxt('greeting').' '.$name.','.
 
-				n.n.gTxt('password_reset_confirmation').': '.
-				n.hu.'textpattern/index.php?confirm='.$confirm;
+                n.n.gTxt('password_reset_confirmation').': '.
+                n.hu.'textpattern/index.php?confirm='.$confirm;
 
-			if (txpMail($email, "[$sitename] ".gTxt('password_reset_confirmation_request'), $message))
-			{
-				return gTxt('password_reset_confirmation_request_sent');
-			}
-			else
-			{
-				return gTxt('could_not_mail');
-			}
-		}
-		else
-		{
-			// Though 'unknown_author' could be thrown, send generic 'request_sent' message
-			// instead so that (non-)existence of account names are not leaked.
-			return gTxt('password_reset_confirmation_request_sent');
-		}
-	}
+            if (txpMail($email, "[$sitename] ".gTxt('password_reset_confirmation_request'), $message))
+            {
+                return gTxt('password_reset_confirmation_request_sent');
+            }
+            else
+            {
+                return gTxt('could_not_mail');
+            }
+        }
+        else
+        {
+            // Though 'unknown_author' could be thrown, send generic 'request_sent' message
+            // instead so that (non-)existence of account names are not leaked.
+            return gTxt('password_reset_confirmation_request_sent');
+        }
+    }
 
 /**
  * Generates a password.
@@ -167,33 +167,33 @@
  * echo generate_password(128);
  */
 
-	function generate_password($length = 10)
-	{
-		static $chars;
+    function generate_password($length = 10)
+    {
+        static $chars;
 
-		if (!$chars)
-		{
-			$chars = str_split(PASSWORD_SYMBOLS);
-		}
+        if (!$chars)
+        {
+            $chars = str_split(PASSWORD_SYMBOLS);
+        }
 
-		$pool = false;
-		$pass = '';
+        $pool = false;
+        $pass = '';
 
-		for ($i = 0; $i < $length; $i++)
-		{
-			if (!$pool)
-			{
-				$pool = $chars;
-			}
+        for ($i = 0; $i < $length; $i++)
+        {
+            if (!$pool)
+            {
+                $pool = $chars;
+            }
 
-			$index = mt_rand(0, count($pool) - 1);
-			$pass .= $pool[$index];
-			unset($pool[$index]);
-			$pool = array_values($pool);
-		}
+            $index = mt_rand(0, count($pool) - 1);
+            $pass .= $pool[$index];
+            unset($pool[$index]);
+            $pool = array_values($pool);
+        }
 
-		return $pass;
-	}
+        return $pass;
+    }
 
 /**
  * Resets the given user's password and emails it.
@@ -208,26 +208,26 @@
  * echo reset_author_pass('username');
  */
 
-	function reset_author_pass($name)
-	{
-		$email = safe_field('email', 'txp_users', "name = '".doSlash($name)."'");
+    function reset_author_pass($name)
+    {
+        $email = safe_field('email', 'txp_users', "name = '".doSlash($name)."'");
 
-		$new_pass = generate_password(PASSWORD_LENGTH);
-		$rs = change_user_password($name, $new_pass);
+        $new_pass = generate_password(PASSWORD_LENGTH);
+        $rs = change_user_password($name, $new_pass);
 
-		if ($rs)
-		{
-			if (send_new_password($new_pass, $email, $name))
-			{
-				return gTxt('password_sent_to').' '.$email;
-			}
-			else
-			{
-				return gTxt('could_not_mail').' '.$email;
-			}
-		}
-		else
-		{
-			return gTxt('could_not_update_author').' '.txpspecialchars($name);
-		}
-	}
+        if ($rs)
+        {
+            if (send_new_password($new_pass, $email, $name))
+            {
+                return gTxt('password_sent_to').' '.$email;
+            }
+            else
+            {
+                return gTxt('could_not_mail').' '.$email;
+            }
+        }
+        else
+        {
+            return gTxt('could_not_update_author').' '.txpspecialchars($name);
+        }
+    }

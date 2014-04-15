@@ -361,7 +361,7 @@ class IXR_Server
     {
         if (!$data) {
             if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] !== 'POST') {
-            	header('Content-Type: text/plain'); // merged from WP #9093
+                header('Content-Type: text/plain'); // merged from WP #9093
                 die('XML-RPC server accepts POST requests only.');
             }
 
@@ -459,12 +459,12 @@ EOD;
     function output($xml)
     {
         $xml = '<?xml version="1.0" encoding="utf-8"?>'."\n".$xml;
-		if ( (@strpos($_SERVER["HTTP_ACCEPT_ENCODING"],'gzip') !== false) && extension_loaded('zlib') &&
-			ini_get("zlib.output_compression") == 0 && ini_get('output_handler') != 'ob_gzhandler' && !headers_sent())
-		{
-			$xml = gzencode($xml,7,FORCE_GZIP);
-			header("Content-Encoding: gzip");
-		}
+        if ( (@strpos($_SERVER["HTTP_ACCEPT_ENCODING"],'gzip') !== false) && extension_loaded('zlib') &&
+            ini_get("zlib.output_compression") == 0 && ini_get('output_handler') != 'ob_gzhandler' && !headers_sent())
+        {
+            $xml = gzencode($xml,7,FORCE_GZIP);
+            header("Content-Encoding: gzip");
+        }
         $length = strlen($xml);
         header('Connection: close');
         header('Content-Length: '.$length);
@@ -644,9 +644,9 @@ class IXR_Client
         $this->headers['User-Agent']    = $this->useragent;
         $this->headers['Content-Length']= $length;
 
-		// Accept gzipped response if zlib and if php4.3+ (fgets turned binary safe)
-		if ( extension_loaded('zlib') && preg_match('#^(4\.[3-9])|([5-9])#',phpversion()) )
-        	$this->headers['Accept-Encoding']    = 'gzip';
+        // Accept gzipped response if zlib and if php4.3+ (fgets turned binary safe)
+        if ( extension_loaded('zlib') && preg_match('#^(4\.[3-9])|([5-9])#',phpversion()) )
+            $this->headers['Accept-Encoding']    = 'gzip';
 
         foreach( $this->headers as $header => $value ) {
             $request .= "{$header}: {$value}{$r}";
@@ -661,9 +661,9 @@ class IXR_Client
         }
 
         if ($this->timeout) {
-	        $fp = (!is_disabled('fsockopen')) ? fsockopen($this->server, $this->port, $errno, $errstr, $this->timeout) : false;
+            $fp = (!is_disabled('fsockopen')) ? fsockopen($this->server, $this->port, $errno, $errstr, $this->timeout) : false;
         } else {
-        	$fp = (!is_disabled('fsockopen')) ? fsockopen($this->server, $this->port, $errno, $errstr) : false;
+            $fp = (!is_disabled('fsockopen')) ? fsockopen($this->server, $this->port, $errno, $errstr) : false;
         }
         if (!$fp) {
             $this->error = new IXR_Error(-32300, 'transport error - could not open socket ('.$errstr.')');
@@ -674,7 +674,7 @@ class IXR_Client
         $debugContents = '';
         $gotFirstLine = false;
         $gettingHeaders = true;
-		$is_gzipped = false;
+        $is_gzipped = false;
         while (!feof($fp)) {
             $line = fgets($fp, 4096);
             if (!$gotFirstLine) {
@@ -687,27 +687,27 @@ class IXR_Client
             }
             if ($gettingHeaders && trim($line) == '') {
                 $gettingHeaders = false;
-				continue;
+                continue;
             }
             if (!$gettingHeaders) {
-		        // We do a binary comparison of the first two bytes, see
-		        // rfc1952, to check wether the content is gzipped.
-				if ( ($contents=='') && (strncmp($line,"\x1F\x8B",2)===0))
-					$is_gzipped = true;
-            	// merged from WP #12559 - remove trim
+                // We do a binary comparison of the first two bytes, see
+                // rfc1952, to check wether the content is gzipped.
+                if ( ($contents=='') && (strncmp($line,"\x1F\x8B",2)===0))
+                    $is_gzipped = true;
+                // merged from WP #12559 - remove trim
                 $contents .= $line;
             }
             if ($this->debug) {
-            	$debugContents .= $line;
+                $debugContents .= $line;
             }
         }
-		// if gzipped, strip the 10 byte header, and pass it to gzinflate (rfc1952)
-		if ($is_gzipped)
-		{
-			$contents = gzinflate(substr($contents, 10));
-			//simulate trim() for each line; don't know why, but it won't work otherwise
-			$contents = preg_replace('#^[\x20\x09\x0A\x0D\x00\x0B]*(.*)[\x20\x09\x0A\x0D\x00\x0B]*$#m','\\1',$contents);
-		}
+        // if gzipped, strip the 10 byte header, and pass it to gzinflate (rfc1952)
+        if ($is_gzipped)
+        {
+            $contents = gzinflate(substr($contents, 10));
+            //simulate trim() for each line; don't know why, but it won't work otherwise
+            $contents = preg_replace('#^[\x20\x09\x0A\x0D\x00\x0B]*(.*)[\x20\x09\x0A\x0D\x00\x0B]*$#m','\\1',$contents);
+        }
         if ($this->debug) {
             echo '<pre class="ixr_response">'.htmlspecialchars($debugContents)."\n</pre>\n\n";
         }

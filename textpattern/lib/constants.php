@@ -33,17 +33,17 @@ $old_level = error_reporting((E_ALL | E_STRICT) ^ E_NOTICE);
 
 if (!defined('TXP_DEBUG'))
 {
-	/**
-	 * If set to "1", dumps debug log to the temp directory.
-	 *
-	 * This constant can be overridden from the config.php.
-	 *
-	 * @package Debug
-	 * @example
-	 * define('TXP_DEBUG', 1);
-	 */
+    /**
+     * If set to "1", dumps debug log to the temp directory.
+     *
+     * This constant can be overridden from the config.php.
+     *
+     * @package Debug
+     * @example
+     * define('TXP_DEBUG', 1);
+     */
 
-	define('TXP_DEBUG', 0);
+    define('TXP_DEBUG', 0);
 }
 
 /**
@@ -80,30 +80,30 @@ define('RELOAD', -99);
 
 if (!defined('RPC_SERVER'))
 {
-	/**
-	 * RPC server location.
-	 *
-	 * This constant can be overridden from the config.php.
-	 *
-	 * @example
-	 * define('RPC_SERVER', 'http://rpc.example.com');
-	 */
+    /**
+     * RPC server location.
+     *
+     * This constant can be overridden from the config.php.
+     *
+     * @example
+     * define('RPC_SERVER', 'http://rpc.example.com');
+     */
 
-	define('RPC_SERVER', 'http://rpc.textpattern.com');
+    define('RPC_SERVER', 'http://rpc.textpattern.com');
 }
 
 if (!defined('HELP_URL'))
 {
-	/**
-	 * The location where help documentation is fetched.
-	 *
-	 * This constant can be overridden from the config.php.
-	 *
-	 * @example
-	 * define('HELP_URL', 'http://rpc.example.com/help/');
-	 */
+    /**
+     * The location where help documentation is fetched.
+     *
+     * This constant can be overridden from the config.php.
+     *
+     * @example
+     * define('HELP_URL', 'http://rpc.example.com/help/');
+     */
 
-	define('HELP_URL', 'http://rpc.textpattern.com/help/');
+    define('HELP_URL', 'http://rpc.textpattern.com/help/');
 }
 
 /**
@@ -159,18 +159,18 @@ define('MAGIC_QUOTES_GPC', get_magic_quotes_gpc());
 
 if (!defined('REGEXP_UTF8'))
 {
-	/**
-	 * TRUE if the system supports UTF-8 regex patterns.
-	 *
-	 * This constant can be overridden from the config.php
-	 * in case UTF-8 regex patterns cause issues.
-	 *
-	 * @package System
-	 * @example
-	 * define('REGEXP_UTF8', false);
-	 */
+    /**
+     * TRUE if the system supports UTF-8 regex patterns.
+     *
+     * This constant can be overridden from the config.php
+     * in case UTF-8 regex patterns cause issues.
+     *
+     * @package System
+     * @example
+     * define('REGEXP_UTF8', false);
+     */
 
-	define('REGEXP_UTF8', @preg_match('@\pL@u', 'q'));
+    define('REGEXP_UTF8', @preg_match('@\pL@u', 'q'));
 }
 
 /**
@@ -201,19 +201,19 @@ define('PAGELINKURL', 1);
 
 if (!defined('EXTRA_MEMORY'))
 {
-	/**
-	 * Allocated extra memory.
-	 *
-	 * Used when creating thumbnails for instance.
-	 *
-	 * This constant can be overridden from the config.php.
-	 *
-	 * @package System
-	 * @example
-	 * define('EXTRA_MEMORY', '64M');
-	 */
+    /**
+     * Allocated extra memory.
+     *
+     * Used when creating thumbnails for instance.
+     *
+     * This constant can be overridden from the config.php.
+     *
+     * @package System
+     * @example
+     * define('EXTRA_MEMORY', '64M');
+     */
 
-	define('EXTRA_MEMORY', '32M');
+    define('EXTRA_MEMORY', '32M');
 }
 
 /**
@@ -328,144 +328,144 @@ define('PLUGIN_RESERVED_FLAGS', 0x0fff);
 
 if (!defined('LOG_REFERER_PROTOCOLS'))
 {
-	/**
-	 * Sets accepted protocols for HTTP referrer header.
-	 *
-	 * This constant can be overridden from the config.php.
-	 *
-	 * @package Log
-	 * @since   4.6.0
-	 * @example
-	 * define('LOG_REFERER_PROTOCOLS', 'http');
-	 */
+    /**
+     * Sets accepted protocols for HTTP referrer header.
+     *
+     * This constant can be overridden from the config.php.
+     *
+     * @package Log
+     * @since   4.6.0
+     * @example
+     * define('LOG_REFERER_PROTOCOLS', 'http');
+     */
 
-	define('LOG_REFERER_PROTOCOLS', 'http, https');
+    define('LOG_REFERER_PROTOCOLS', 'http, https');
 }
 
 if (!defined('PASSWORD_LENGTH'))
 {
-	/**
-	 * Password default length, in characters.
-	 *
-	 * This constant can be overridden from the config.php.
-	 *
-	 * @package User
-	 * @example
-	 * define('PASSWORD_LENGTH', 14);
-	 */
+    /**
+     * Password default length, in characters.
+     *
+     * This constant can be overridden from the config.php.
+     *
+     * @package User
+     * @example
+     * define('PASSWORD_LENGTH', 14);
+     */
 
-	define('PASSWORD_LENGTH', 10);
+    define('PASSWORD_LENGTH', 10);
 }
 
 if (!defined('PASSWORD_COMPLEXITY'))
 {
-	/**
-	 * Password iteration strength count.
-	 *
-	 * This constant can be overridden from the config.php.
-	 *
-	 * @package User
-	 * @example
-	 * define('PASSWORD_COMPLEXITY', 2);
-	 */
+    /**
+     * Password iteration strength count.
+     *
+     * This constant can be overridden from the config.php.
+     *
+     * @package User
+     * @example
+     * define('PASSWORD_COMPLEXITY', 2);
+     */
 
-	define('PASSWORD_COMPLEXITY', 8);
+    define('PASSWORD_COMPLEXITY', 8);
 }
 
 if (!defined('PASSWORD_PORTABILITY'))
 {
-	/**
-	 * Passwords are created portable if TRUE.
-	 *
-	 * This constant can be overridden from the config.php.
-	 *
-	 * @package User
-	 * @example
-	 * define('PASSWORD_PORTABILITY', false);
-	 */
+    /**
+     * Passwords are created portable if TRUE.
+     *
+     * This constant can be overridden from the config.php.
+     *
+     * @package User
+     * @example
+     * define('PASSWORD_PORTABILITY', false);
+     */
 
-	define('PASSWORD_PORTABILITY', true);
+    define('PASSWORD_PORTABILITY', true);
 }
 
 if (!defined('PASSWORD_SYMBOLS'))
 {
-	/**
-	 * Symbols used in auto-generated passwords.
-	 *
-	 * This constant can be overridden from the config.php.
-	 *
-	 * @package User
-	 * @since   4.6.0
-	 * @see     generate_password()
-	 * @example
-	 * define('PASSWORD_SYMBOLS', '23456789ABCDEFGHJKLMNPQRSTUYXZabcdefghijkmnopqrstuvwxyz_?!-');
-	 */
+    /**
+     * Symbols used in auto-generated passwords.
+     *
+     * This constant can be overridden from the config.php.
+     *
+     * @package User
+     * @since   4.6.0
+     * @see     generate_password()
+     * @example
+     * define('PASSWORD_SYMBOLS', '23456789ABCDEFGHJKLMNPQRSTUYXZabcdefghijkmnopqrstuvwxyz_?!-');
+     */
 
-	define('PASSWORD_SYMBOLS', '23456789abcdefghijkmnopqrstuvwxyz');
+    define('PASSWORD_SYMBOLS', '23456789abcdefghijkmnopqrstuvwxyz');
 }
 
 if (!defined('LOGIN_COOKIE_HTTP_ONLY'))
 {
-	/**
-	 * If TRUE, login cookie is set just for HTTP.
-	 *
-	 * This constant can be overridden from the config.php.
-	 *
-	 * @package CSRF
-	 * @example
-	 * define('LOGIN_COOKIE_HTTP_ONLY', false);
-	 */
+    /**
+     * If TRUE, login cookie is set just for HTTP.
+     *
+     * This constant can be overridden from the config.php.
+     *
+     * @package CSRF
+     * @example
+     * define('LOGIN_COOKIE_HTTP_ONLY', false);
+     */
 
-	define('LOGIN_COOKIE_HTTP_ONLY', true);
+    define('LOGIN_COOKIE_HTTP_ONLY', true);
 }
 
 if (!defined('X_FRAME_OPTIONS'))
 {
-	/**
-	 * Sets X-Frame-Options HTTP header's value.
-	 *
-	 * This is used to prevent framing of authenticated
-	 * pages.
-	 *
-	 * This constant can be overridden from the config.php.
-	 *
-	 * @package CSRF
-	 * @example
-	 * define('X_FRAME_OPTIONS', 'DENY');
-	 */
+    /**
+     * Sets X-Frame-Options HTTP header's value.
+     *
+     * This is used to prevent framing of authenticated
+     * pages.
+     *
+     * This constant can be overridden from the config.php.
+     *
+     * @package CSRF
+     * @example
+     * define('X_FRAME_OPTIONS', 'DENY');
+     */
 
-	define('X_FRAME_OPTIONS', 'SAMEORIGIN');
+    define('X_FRAME_OPTIONS', 'SAMEORIGIN');
 }
 
 if (!defined('X_UA_COMPATIBLE'))
 {
-	/**
-	 * Sets X-UA-Compatible HTTP header's value.
-	 *
-	 * This constant can be overridden from the config.php.
-	 *
-	 * @since   4.6.0
-	 * @package HTML
-	 * @example
-	 * define('X_UA_COMPATIBLE', 'IE=IE9');
-	 */
+    /**
+     * Sets X-UA-Compatible HTTP header's value.
+     *
+     * This constant can be overridden from the config.php.
+     *
+     * @since   4.6.0
+     * @package HTML
+     * @example
+     * define('X_UA_COMPATIBLE', 'IE=IE9');
+     */
 
-	define('X_UA_COMPATIBLE', 'IE=edge,chrome=1');
+    define('X_UA_COMPATIBLE', 'IE=edge,chrome=1');
 }
 
 if (!defined('AJAX_TIMEOUT'))
 {
-	/**
-	 * AJAX timeout in seconds.
-	 *
-	 * This constant can be overridden from the config.php.
-	 *
-	 * @package Ajax
-	 * @example
-	 * define('AJAX_TIMEOUT', 10);
-	 */
+    /**
+     * AJAX timeout in seconds.
+     *
+     * This constant can be overridden from the config.php.
+     *
+     * @package Ajax
+     * @example
+     * define('AJAX_TIMEOUT', 10);
+     */
 
-	define('AJAX_TIMEOUT', max(30000, 1000 * @ini_get('max_execution_time')));
+    define('AJAX_TIMEOUT', max(30000, 1000 * @ini_get('max_execution_time')));
 }
 
 /**
@@ -537,18 +537,18 @@ define('STATUS_STICKY', 5);
 
 if (!defined('WRITE_RECENT_ARTICLES_COUNT'))
 {
-	/**
-	 * Number of recent articles displayed on the Write panel.
-	 *
-	 * This constant can be overridden from the config.php.
-	 *
-	 * @package Admin\Article
-	 * @since   4.6.0
-	 * @example
-	 * define('WRITE_RECENT_ARTICLES_COUNT', 5);
-	 */
+    /**
+     * Number of recent articles displayed on the Write panel.
+     *
+     * This constant can be overridden from the config.php.
+     *
+     * @package Admin\Article
+     * @since   4.6.0
+     * @example
+     * define('WRITE_RECENT_ARTICLES_COUNT', 5);
+     */
 
-	define('WRITE_RECENT_ARTICLES_COUNT', 10);
+    define('WRITE_RECENT_ARTICLES_COUNT', 10);
 }
 
 /**
