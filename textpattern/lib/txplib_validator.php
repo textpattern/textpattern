@@ -394,7 +394,7 @@ class TrueConstraint extends Constraint
 
     public function validate()
     {
-        return (boolean)$this->value;
+        return (boolean) $this->value;
     }
 }
 
@@ -428,6 +428,6 @@ class FalseConstraint extends Constraint
 
     public function validate()
     {
-        return !(boolean)$this->value;
+        return !(boolean) $this->value;
     }
 }

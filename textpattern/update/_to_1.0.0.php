@@ -600,7 +600,7 @@ EOF;
     }
 
     // Multiply position on prefs to allow easy reordering.
-    if(intval($maxpos) < 100) {
+    if (intval($maxpos) < 100) {
         safe_update('txp_prefs','position = position*10','1');
     }
     // Remove, remove.

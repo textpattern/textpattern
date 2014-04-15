@@ -2280,7 +2280,7 @@
         if ($rs) {
             $comments = array();
 
-            while($vars = nextRow($rs)) {
+            while ($vars = nextRow($rs)) {
                 $GLOBALS['thiscomment'] = $vars;
                 $comments[] = parse_form($form).n;
                 unset($GLOBALS['thiscomment']);
@@ -3208,7 +3208,7 @@
         // If no images are selected, try...
         if (!$where && !$filters) {
             foreach ($context_list as $ctxt) {
-                switch($ctxt) {
+                switch ($ctxt) {
                     case 'article' :
                         // ...the article image field.
                         if ($thisarticle && !empty($thisarticle['article_image'])) {
@@ -4056,7 +4056,7 @@
                     $values = do_list($value);
                     $cond = false;
                     $cf_contents = ($separator) ? do_list($thisarticle[$name], $separator) : $thisarticle[$name];
-                    foreach($values as $term) {
+                    foreach ($values as $term) {
                         if ($term == '') {
                             continue;
                         }

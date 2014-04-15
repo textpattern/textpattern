@@ -42,7 +42,7 @@
             'css_edit'   => false,
         ));
 
-        switch(strtolower($step)) {
+        switch (strtolower($step)) {
             case '' :
                 css_edit();
                 break;

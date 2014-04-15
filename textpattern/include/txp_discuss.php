@@ -216,7 +216,7 @@
 
         $count[SPAM] = $count[MODERATE] = $count[VISIBLE] = 0;
 
-        if ($counts) foreach($counts as $c) {
+        if ($counts) foreach ($counts as $c) {
             $count[$c['visible']] = $c['c'];
         }
 

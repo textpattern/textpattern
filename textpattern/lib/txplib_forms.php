@@ -53,7 +53,7 @@
 
         $out = array();
 
-        foreach((array) $values as $value => $label) {
+        foreach ((array) $values as $value => $label) {
             $out[] = radio($field, $value, (string) $value === (string) $checked, $id.'-'.$value, $tabindex);
             $out[] = n.tag($label, 'label', array('for' => $id.'-'.$value));
         }

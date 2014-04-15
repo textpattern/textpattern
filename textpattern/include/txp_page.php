@@ -41,7 +41,7 @@
             'page_delete' => true,
         ));
 
-        switch(strtolower($step)) {
+        switch (strtolower($step)) {
             case "" :
                 page_edit();
                 break;

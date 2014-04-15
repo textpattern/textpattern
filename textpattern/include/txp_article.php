@@ -234,7 +234,7 @@
 
             $cfq = array();
             $cfs = getCustomFields();
-            foreach($cfs as $i => $cf_name) {
+            foreach ($cfs as $i => $cf_name) {
                 $custom_x = "custom_{$i}";
                 $cfq[] = "custom_$i = '".$$custom_x."'";
             }
@@ -316,7 +316,7 @@
             'unix_timestamp(LastMod) as sLastMod, LastModID, '.
             'unix_timestamp(Posted) as sPosted, '.
             'unix_timestamp(Expires) as sExpires',
-            'textpattern', 'ID = '.(int)$incoming['ID']);
+            'textpattern', 'ID = '.(int) $incoming['ID']);
 
         if (!(($oldArticle['Status'] >= STATUS_LIVE and has_privs('article.edit.published'))
             or ($oldArticle['Status'] >= STATUS_LIVE and $incoming['AuthorID']===$txp_user and has_privs('article.edit.own.published'))
@@ -702,7 +702,7 @@
                 $store_out = array();
                 $store = unserialize(base64_decode(ps('store')));
 
-                foreach($vars as $var) {
+                foreach ($vars as $var) {
                     if (isset($store[$var])) {
                         $store_out[$var] = $store[$var];
                     }
@@ -838,7 +838,7 @@
 
         if ($Status >= STATUS_LIVE) {
             $class[] = 'published';
-        } else if($ID) {
+        } else if ($ID) {
             $class[] = 'saved';
         }
 

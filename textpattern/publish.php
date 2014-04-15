@@ -213,7 +213,7 @@
                 @ignore_user_abort(true);
 
                 if ($file = fopen($fullpath, 'rb')) {
-                    while(!feof($file) and (connection_status() == 0)) {
+                    while (!feof($file) and (connection_status() == 0)) {
                         echo fread($file, 1024 * 64); $sent += (1024 * 64);
                         ob_flush();
                         flush();
@@ -238,7 +238,7 @@
 
         // Deal with error.
         if (isset($file_error)) {
-            switch($file_error) {
+            switch ($file_error) {
             case 403 :
                 txp_die(gTxt('403_forbidden'), '403');
                 break;
@@ -317,7 +317,7 @@
 
             // First we sniff out some of the preset URL schemes.
             if (strlen($u1)) {
-                switch($u1) {
+                switch ($u1) {
                     case 'atom' :
                         include txpath.'/publish/atom.php';
                         $out['feed'] = 'atom';
@@ -829,7 +829,7 @@
         $custom = '';
 
         if ($customFields) {
-            foreach($customFields as $cField) {
+            foreach ($customFields as $cField) {
                 if (isset($atts[$cField]))
                     $customPairs[$cField] = $atts[$cField];
             }
@@ -910,7 +910,7 @@
             $last = numRows($rs);
 
             $articles = array();
-            while($a = nextRow($rs)) {
+            while ($a = nextRow($rs)) {
                 ++$count;
                 populateArticleData($a);
                 global $thisarticle, $uPosted, $limit;
@@ -1035,7 +1035,7 @@
     function makeOut()
     {
         $array['status'] = '200';
-        foreach(func_get_args() as $a) {
+        foreach (func_get_args() as $a) {
             $in = gps($a);
             if (is_scalar($in)) {
                 $array[$a] = strval($in);

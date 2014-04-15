@@ -15,8 +15,8 @@
         'pg'          => 'page_url type="pg"',
     );
 
-    foreach($tags as $search => $replace) {
-        foreach(array(' ', '/') as $end) {
+    foreach ($tags as $search => $replace) {
+        foreach (array(' ', '/') as $end) {
             safe_update('txp_page', "user_html = REPLACE(user_html, '<txp:".$search.$end."', '<txp:".$replace.' '.trim($end)."')", '1=1');
             safe_update('txp_form', "Form = REPLACE(Form, '<txp:".$search.$end."', '<txp:".$replace.' '.trim($end)."')", '1=1');
         }

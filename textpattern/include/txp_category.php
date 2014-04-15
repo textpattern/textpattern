@@ -300,7 +300,7 @@ EOS
                 $rs = safe_rows('id, name', 'txp_category', "id IN (".join(',', $things).") AND type='".$type."'" . (($method == 'deleteforce') ? '' : " AND rgt - lft = 1 AND ".$used));
 
                 if ($rs) {
-                    foreach($rs as $cat) {
+                    foreach ($rs as $cat) {
                         $catid[] = $cat['id'];
                         $names[] = doSlash($cat['name']);
                     }
@@ -338,7 +338,7 @@ EOS
                     $parent = ($exists === false) ? 'root' : $exists;
                     $to_change = $affected = array();
 
-                    foreach($rs as $cat) {
+                    foreach ($rs as $cat) {
                         // Cannot assign parent to itself.
                         if ($cat['name'] != $new_parent) {
                             $to_change[] = doSlash($cat['name']);

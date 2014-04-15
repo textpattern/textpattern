@@ -465,7 +465,7 @@
                         Status         = '".doSlash($Status)."'
                 ", $txplink) or $errors[] = mysql_error();
 
-                if ((int)$insert_id = mysql_insert_id($txplink)) {
+                if ((int) $insert_id = mysql_insert_id($txplink)) {
                     $results[] = '<li>'.$Title.'</li>';
 
                     if (!empty($comments)) {

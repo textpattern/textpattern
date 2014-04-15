@@ -327,7 +327,7 @@
             $cutarticles = false;
 
             if ($canaim !== false) {
-                foreach($articles as $id => $thing) {
+                foreach ($articles as $id => $thing) {
                     if (strpos($hinm, $etags[$id])) {
                         unset($articles[$id]);
                         $cutarticles = true;

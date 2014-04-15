@@ -628,7 +628,7 @@
         $val = get_pref('default_section');
         $sections = safe_rows('name, title', 'txp_section', "name != 'default' ORDER BY title, name");
         $vals = array();
-        foreach($sections as $row) {
+        foreach ($sections as $row) {
             $vals[$row['name']] = $row['title'];
         }
 

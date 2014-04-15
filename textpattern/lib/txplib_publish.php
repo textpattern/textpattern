@@ -209,7 +209,7 @@
         $custom = '';
 
         if ($customFields) {
-            foreach($customFields as $cField) {
+            foreach ($customFields as $cField) {
                 if (isset($atts[$cField])) {
                     $customPairs[$cField] = $atts[$cField];
                 }
@@ -300,7 +300,7 @@
             }
 
             // Attributes with special treatment.
-            switch($atts['sortby']) {
+            switch ($atts['sortby']) {
                 case 'Posted' :
                     $threshold = 'from_unixtime('.doSlash($thisarticle['posted']).')';
                     $threshold_type = 'cooked';

@@ -353,7 +353,7 @@
                 array_walk($lang_struct, 'install_lang_key');
                 $size = count($lang_struct);
                 $errors = 0;
-                for($i = 0; $i < $size ; $i++) {
+                for ($i = 0; $i < $size ; $i++) {
                     $errors += ( !$lang_struct[$i]['ok'] );
                 }
 

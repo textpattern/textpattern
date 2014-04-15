@@ -488,7 +488,7 @@
             $where .= ' and event in('.join(',', quote_list((array) $events)).')';
         }
 
-        foreach(array($lang, 'en-gb') as $lang_code) {
+        foreach (array($lang, 'en-gb') as $lang_code) {
             $rs = safe_rows('name, data', 'txp_lang', "lang='".doSlash($lang_code)."'".$where);
 
             if (!empty($rs)) {
@@ -1104,7 +1104,7 @@
 
     function psa($array)
     {
-        foreach($array as $a) {
+        foreach ($array as $a) {
             $out[$a] = ps($a);
         }
         return $out;
@@ -1120,7 +1120,7 @@
 
     function psas($array)
     {
-        foreach($array as $a) {
+        foreach ($array as $a) {
             $out[$a] = doStripTags(ps($a));
         }
         return $out;
@@ -5706,7 +5706,7 @@ eod;
         if (is_string($myvar)) {
             return $myvar;
         }
-        trigger_error("'".txpspecialchars((string)$myvar)."' is not a string", E_USER_ERROR);
+        trigger_error("'".txpspecialchars((string) $myvar)."' is not a string", E_USER_ERROR);
         return false;
     }
 
@@ -5818,10 +5818,10 @@ eod;
     {
         $wbr = chr(226).chr(128).chr(139);
         $words = explode(' ', $text);
-        foreach($words as $wordnr => $word) {
+        foreach ($words as $wordnr => $word) {
             $word = preg_replace('|([,./\\>?!:;@-]+)(?=.)|', '$1 ', $word);
             $parts = explode(' ', $word);
-            foreach($parts as $partnr => $part) {
+            foreach ($parts as $partnr => $part) {
                 $len = strlen(utf8_decode($part));
                 if (!$len) {
                     continue;
@@ -6378,7 +6378,7 @@ class timezone
         }
 
         foreach ($exclude as $remove) {
-            unset($status_list[(int)$remove]);
+            unset($status_list[(int) $remove]);
         }
 
         callback_event_ref('status.types', 'types', 0, $status_list);
