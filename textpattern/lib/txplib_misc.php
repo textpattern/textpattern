@@ -616,7 +616,7 @@
         global $txp_user;
         $privs = safe_field("privs", "txp_users", "name='".doSlash($txp_user)."'");
         $args = func_get_args();
-        if(!in_array($privs,$args)) {
+        if (!in_array($privs,$args)) {
             exit(pageTop('Restricted').'<p style="margin-top:3em;text-align:center">'.
                 gTxt('restricted_area').'</p>');
         }
@@ -2479,7 +2479,6 @@
                 '&thorn;'=>'t',
                 '&szlig;'=>'ss',
             );
-
 
             if (is_file(txpath.'/lib/i18n-ascii.txt'))
             {
@@ -6642,7 +6641,7 @@ class timezone
 
         return '';
     }
-    
+
     /**
      * Build a matrix of timezone details.
      *

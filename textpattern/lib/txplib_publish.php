@@ -401,7 +401,7 @@
                 if ($level === 0)
                 {
                     preg_match($t, $chunk, $tag);
-    
+
                     if (substr($chunk, -2, 1) === '/')
                     {
                         // Self closing.

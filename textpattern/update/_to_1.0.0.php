@@ -29,7 +29,6 @@
         safe_alter("txp_category", "drop `level`");
     }
 
-
     $txp = getThings('describe `'.PFX.'textpattern`');
 
     if (!in_array('Keywords',$txp)) {
@@ -106,8 +105,6 @@
         safe_alter("textpattern", "add `custom_10` varchar(255) not null");
     }
 
-
-
     $txpsect = getThings('describe `'.PFX.'txp_section`');
 
     if (!in_array('searchable',$txpsect)) {
@@ -120,14 +117,13 @@
         safe_alter("txp_users", "add `nonce` varchar(64) not null");
     };
 
-
     // 1.0rc: checking nonce in txp_users table.
 
     $txpusers = safe_rows_start('name, nonce','txp_users','1');
     if ($txpusers) {
         while ($a = nextRow($txpusers)) {
             extract($a);
-            if (!$nonce){
+            if (!$nonce) {
                 $nonce = md5( uniqid( rand(), true ) );
                 safe_update('txp_users',"nonce='$nonce'", "name = '$name'");
             }
@@ -222,17 +218,16 @@ eod;
 
     $rs = mysql_query("select ID, Title from `".PFX."textpattern` where url_title like ''");
 
-    while ($a = mysql_fetch_array($rs)){
+    while ($a = mysql_fetch_array($rs)) {
         extract($a);
         $url_title = addslashes(stripSpace($Title,1));
         safe_update("textpattern","url_title = '$url_title'","ID=$ID");
     }
 
-
     // 1.0: properly i18n.
     // Change current language names by language codes.
     $lang = fetch('val','txp_prefs','name','language');
-    switch($lang){
+    switch ($lang) {
         case 'czech':
               $rs = safe_update("txp_prefs", "val= 'cs-cs'", "name='language' AND val= 'czech'");
         break;
@@ -310,23 +305,23 @@ eod;
     }
 
     // Non image file upload tab.
-    if (safe_field('val', 'txp_prefs',"name='file_list_pageby'") === false){
+    if (safe_field('val', 'txp_prefs',"name='file_list_pageby'") === false) {
         safe_insert('txp_prefs',"val=25,name='file_list_pageby',prefs_id=1");
     }
 
     // 1.0: max file upload size.
-    if (safe_field('val', 'txp_prefs',"name='file_max_upload_size'") === false){
+    if (safe_field('val', 'txp_prefs',"name='file_max_upload_size'") === false) {
         safe_insert('txp_prefs',"prefs_id=1,name='file_max_upload_size',val=2000000");
     }
 
     // 1.0: txp_file root cat.
-    if (!safe_field('name', 'txp_category',"type='file' AND name='root'")){
+    if (!safe_field('name', 'txp_category',"type='file' AND name='root'")) {
         safe_insert('txp_category',"name='root',type='file',lft=1,rgt=0");
     }
     rebuild_tree('root',1,'file');
 
     // 1.0: txp_file folder.
-    if (safe_field('val', 'txp_prefs',"name='file_base_path'") === false){
+    if (safe_field('val', 'txp_prefs',"name='file_base_path'") === false) {
         safe_insert('txp_prefs',"val='$tempdir',name='file_base_path',prefs_id=1");
     }
 
@@ -345,7 +340,7 @@ eod;
         ) $tabletype PACK_KEYS=0 AUTO_INCREMENT=1 ");
     }
 
-    if (safe_field('name', 'txp_form', "type='file'") === false){
+    if (safe_field('name', 'txp_form', "type='file'") === false) {
         safe_insert('txp_form',"
             name='files',
             type='file',
@@ -377,7 +372,7 @@ eod;
     $rs = mysql_query("select ID, Excerpt, textile_excerpt from `".PFX."textpattern` where Excerpt_html like ''");
     require_once txpath.'/lib/classTextile.php';
     $textile = new Textile();
-    while ($a = @mysql_fetch_assoc($rs)){
+    while ($a = @mysql_fetch_assoc($rs)) {
         extract($a);
         $lite = ($textile_excerpt)? '' : 1;
         $Excerpt_html = $textile->TextileThis($Excerpt,$lite);
@@ -652,7 +647,7 @@ EOF;
 
     // /tmp is bad for permanent storage of files,
     // if no files are uploaded yet, switch to the files directory in the top-txp dir.
-    if (!safe_count('txp_file',"1")){
+    if (!safe_count('txp_file',"1")) {
         $tempdir = find_temp_dir();
         if ($tempdir === safe_field('val','txp_prefs',"name='file_base_path'"))
             safe_update('txp_prefs',"val='".doSlash(dirname(txpath).DS.'files')."',prefs_id=1","name='file_base_path'");

@@ -71,7 +71,6 @@
 
         $results[] = hed('Connected to WordPress database. Importing Data&#8230;', 1);
 
-
         /*
         export users
         */
@@ -134,7 +133,6 @@
             $users[] = $user;
         }
 
-
         /*
         export article and link categories
         */
@@ -186,7 +184,6 @@
 
             $categories[] = $category;
         }
-
 
         /*
         export articles - do not export post revisions from WordPress 2.6+
@@ -276,7 +273,6 @@
 
             $article['comments'] = $comments;
 
-
             // Article categories.
             $article_categories = array();
 
@@ -301,7 +297,6 @@
             $article['Category1'] = !empty($article_categories[0]) ? $article_categories[0]['name'] : '';
             $article['Category2'] = !empty($article_categories[1]) ? $article_categories[1]['name'] : '';
 
-
             // Article images.
             $article_images = array();
 
@@ -323,7 +318,6 @@
 
             $articles[] = $article;
         }
-
 
         /*
         export links
@@ -369,11 +363,9 @@
 
         mysql_close($b2link);
 
-
         /*
         begin import
         */
-
 
         // Keep a handy copy of txpdb values.
         $txpdb      = $txpcfg['db'];
@@ -386,7 +378,6 @@
         $txplink = &$DB->link;
 
         mysql_select_db($txpdb, $txplink);
-
 
         /*
         import users
@@ -429,7 +420,6 @@
             $results[] = '</ul>';
         }
 
-
         /*
         import categories
         */
@@ -464,7 +454,6 @@
 
             $results[] = '</ul>';
         }
-
 
         /*
         import articles
@@ -546,7 +535,6 @@
             $results[] = '</ul>';
         }
 
-
         /*
         import links
         */
@@ -577,7 +565,6 @@
 
             $results[] = '</ul>';
         }
-
 
         /*
         show any errors we encountered

@@ -306,7 +306,7 @@ class wet_thumb
 
         $this->_DST['type'] = $this->_SRC['type'];
         $this->_DST['file'] = $outfile;
-        
+
         // Make sure we have enough memory if the image is large.
 
         if (max($this->_SRC['width'], $this->_SRC['height']) > 1024)

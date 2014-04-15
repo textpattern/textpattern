@@ -126,7 +126,7 @@ class DB
      */
 
     public $version;
-    
+
     /**
      * Default table options definition.
      *

@@ -1257,4 +1257,3 @@ $en_gb_lang = array(
     )
 );
 $lastmod = gmdate('Y-m-d H:m:s',1380023390);
-?>

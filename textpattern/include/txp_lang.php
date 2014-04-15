@@ -301,7 +301,7 @@
                     sInput('get_textpack')
                 )
             , '', '', 'post', 'edit-form', '', 'text_uploader').
-    
+
             '</div>'; // End language_container
     }
 
@@ -362,7 +362,7 @@
                     $textarray = load_lang(LANG);
                 }
                 callback_event('lang_installed', 'file', false, $lang_code);
-    
+
                 return list_languages(gTxt($lang_code).sp.gTxt('updated'));
             }
             else
@@ -399,7 +399,7 @@
             $msg = gTxt($lang_code).sp.gTxt('updated');
 
             callback_event('lang_installed', 'remote', false, $lang_code);
-    
+
             if ($errors > 0)
             {
                 $msg = array($msg.sprintf(" (%s errors, %s ok)", $errors, ($size-$errors)), E_ERROR);

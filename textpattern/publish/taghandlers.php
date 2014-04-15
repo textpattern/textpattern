@@ -3305,8 +3305,8 @@
                             (($html_id and !$wraptag) ? ' id="'.txpspecialchars($html_id).'"' : '').
                             (($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
                             ($style ? ' style="'.txpspecialchars($style).'"' : '').
-                            ($width ? ' width="'.(int)$width.'"' : '').
-                            ($height ? ' height="'.(int)$height.'"' : '').
+                            ($width ? ' width="'.(int) $width.'"' : '').
+                            ($height ? ' height="'.(int) $height.'"' : '').
                             ' />';
                     }
                     else
@@ -3328,8 +3328,8 @@
                         (($html_id and !$wraptag) ? ' id="'.txpspecialchars($html_id).'"' : '').
                         (($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
                         ($style ? ' style="'.txpspecialchars($style).'"' : '').
-                        ($width ? ' width="'.(int)$width.'"' : '').
-                        ($height ? ' height="'.(int)$height.'"' : '').
+                        ($width ? ' width="'.(int) $width.'"' : '').
+                        ($height ? ' height="'.(int) $height.'"' : '').
                         ' />';
                 }
             }
@@ -3346,8 +3346,8 @@
                 (($html_id and !$wraptag) ? ' id="'.txpspecialchars($html_id).'"' : '').
                 (($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
                 ($style ? ' style="'.txpspecialchars($style).'"' : '').
-                ($width ? ' width="'.(int)$width.'"' : '').
-                ($height ? ' height="'.(int)$height.'"' : '').
+                ($width ? ' width="'.(int) $width.'"' : '').
+                ($height ? ' height="'.(int) $height.'"' : '').
                 ' />';
         }
 
@@ -4277,7 +4277,7 @@
             'max' => 0,
         ), $atts));
 
-        $results = (int)$thispage['grand_total'];
+        $results = (int) $thispage['grand_total'];
 
         return parse(EvalElse($thing, $results >= $min && (!$max || $results <= $max)));
     }

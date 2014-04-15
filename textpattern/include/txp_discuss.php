@@ -516,11 +516,11 @@
                     hInput('page', $page).
                     hInput('crit', $crit).
                     hInput('search_method', $search_method).
-    
+
                     hInput('discussid', $discussid).
                     hInput('parentid', $parentid).
                     hInput('ip', $ip).
-    
+
                     eInput('discuss').
                     sInput('discuss_save').
                     n.'</section>'

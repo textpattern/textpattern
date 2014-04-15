@@ -58,7 +58,7 @@
             "(Title rlike '$q' or Body rlike '$q') $s_filter
             and Status = 4 and Posted <=now() order by score desc limit 40");
 
-        if($rs) {
+        if ($rs) {
             $result_rows = count($rs);
             $text = ($result_rows == 1) ? gTxt('article_found') : gTxt('articles_found');
         } else {
@@ -67,8 +67,8 @@
         }
 
         $results[] = graf($result_rows.' '.$text);
-        if($result_rows > 0) {
-            foreach($rs as $a) {
+        if ($result_rows > 0) {
+            foreach ($rs as $a) {
                 extract($a);
 
                 $result_date = safe_strftime($archive_dateformat,$posted);

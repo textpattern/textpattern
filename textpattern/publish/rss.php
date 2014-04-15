@@ -367,7 +367,7 @@
             $str =  html_entity_decode($toUnicode, ENT_QUOTES, "UTF-8");
         } else {
             $trans_tbl = get_html_translation_table(HTML_ENTITIES);
-            foreach($trans_tbl as $k => $v) {
+            foreach ($trans_tbl as $k => $v) {
                 $ttr[$v] = utf8_encode($k);
             }
             $str = strtr($toUnicode, $ttr);
