@@ -50,8 +50,7 @@
     {
         global $siteurl, $sitename, $txp_user, $event, $step, $app_mode, $theme, $privs;
 
-        if ($app_mode == 'async')
-        {
+        if ($app_mode == 'async') {
             return;
         }
 
@@ -64,25 +63,18 @@
         $areas = areas();
         $area = false;
 
-        foreach ($areas as $k => $v)
-        {
-            if (in_array($event, $v))
-            {
+        foreach ($areas as $k => $v) {
+            if (in_array($event, $v)) {
                 $area = $k;
                 break;
             }
         }
 
-        if (gps('logout'))
-        {
+        if (gps('logout')) {
             $body_id = 'page-logout';
-        }
-        elseif (!$txp_user)
-        {
+        } elseif (!$txp_user) {
             $body_id = 'page-login';
-        }
-        else
-        {
+        } else {
             $body_id = 'page-'.txpspecialchars($event);
         }
 
@@ -91,8 +83,7 @@
 
         $lang_direction = gTxt('lang_dir');
 
-        if (!in_array($lang_direction, array('ltr', 'rtl')))
-        {
+        if (!in_array($lang_direction, array('ltr', 'rtl'))) {
             // Apply biased default for missing translations
             $lang_direction = 'ltr';
         }
@@ -163,12 +154,9 @@ echo $theme->html_head();
     {
         global $sitename;
 
-        if ((string) $pagetitle === '')
-        {
+        if ((string) $pagetitle === '') {
             $title = gTxt('untitled');
-        }
-        else
-        {
+        } else {
             $title = $pagetitle;
         }
 
@@ -229,16 +217,13 @@ echo $theme->html_head();
 
     function tabsort($area, $event)
     {
-        if ($area)
-        {
+        if ($area) {
             $areas = areas();
 
             $out = array();
 
-            foreach ($areas[$area] as $a => $b)
-            {
-                if (has_privs($b))
-                {
+            foreach ($areas[$area] as $a => $b) {
+                if (has_privs($b)) {
                     $out[] = tabber($a, $b, $event, 2);
                 }
             }
@@ -294,18 +279,15 @@ echo $theme->html_head();
         $areas['extensions'] = array(
         );
 
-        if (get_pref('use_comments', 1))
-        {
+        if (get_pref('use_comments', 1)) {
             $areas['content'][gTxt('tab_comments')] = 'discuss';
         }
 
-        if (get_pref('logging') !== 'none' && get_pref('expire_logs_after'))
-        {
+        if (get_pref('logging') !== 'none' && get_pref('expire_logs_after')) {
             $areas['admin'][gTxt('tab_logs')] = 'log';
         }
 
-        if (is_array($plugin_areas))
-        {
+        if (is_array($plugin_areas)) {
             $areas = array_merge_recursive($areas, $plugin_areas);
         }
 
@@ -327,21 +309,16 @@ echo $theme->html_head();
 
         $out = array();
 
-        foreach ($areas as $a => $b)
-        {
-            if (!has_privs( 'tab.'.$a))
-            {
+        foreach ($areas as $a => $b) {
+            if (!has_privs( 'tab.'.$a)) {
                 continue;
             }
 
-            if (count($b) > 0)
-            {
+            if (count($b) > 0) {
                 $out[] = n.'<optgroup label="'.gTxt('tab_'.$a).'">';
 
-                foreach ($b as $c => $d)
-                {
-                    if (has_privs($d))
-                    {
+                foreach ($b as $c => $d) {
+                    if (has_privs($d)) {
                         $out[] = n.'<option value="'.txpspecialchars($d).'">'.strip_tags($c).'</option>';
                     }
                 }
@@ -350,8 +327,7 @@ echo $theme->html_head();
             }
         }
 
-        if ($out)
-        {
+        if ($out) {
             return n.'<form method="get" action="index.php" class="navpop">'.
                 n.'<select name="event" data-submit-on="change">'.
                 n.'<option>'.gTxt('go').'&#8230;</option>'.

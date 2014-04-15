@@ -28,13 +28,11 @@
  * @package Admin\Prefs
  */
 
-    if (!defined('txpinterface'))
-    {
+    if (!defined('txpinterface')) {
         die('txpinterface is undefined.');
     }
 
-    if ($event == 'prefs')
-    {
+    if ($event == 'prefs') {
         require_privs('prefs');
 
         bouncer($step, array(
@@ -42,8 +40,7 @@
             'prefs_list' => false,
         ));
 
-        switch (strtolower($step))
-        {
+        switch (strtolower($step)) {
             case "" :
             case "prefs_list" :
                 prefs_list();
@@ -73,8 +70,7 @@
                 select name from ".safe_pfx('txp_prefs')." where user_name = ''
             )))";
 
-        if (!get_pref('use_comments', 1, 1))
-        {
+        if (!get_pref('use_comments', 1, 1)) {
             $sql[] = "event != 'comments'";
         }
 
@@ -86,61 +82,50 @@
 
         $post = stripPost();
 
-        if (isset($post['tempdir']) && empty($post['tempdir']))
-        {
+        if (isset($post['tempdir']) && empty($post['tempdir'])) {
             $post['tempdir'] = find_temp_dir();
         }
 
-        if (!empty($post['file_max_upload_size']))
-        {
+        if (!empty($post['file_max_upload_size'])) {
             $post['file_max_upload_size'] = real_max_upload_size($post['file_max_upload_size']);
         }
 
-        if (isset($post['auto_dst']))
-        {
+        if (isset($post['auto_dst'])) {
             $prefs['auto_dst'] = $auto_dst = $post['auto_dst'];
 
-            if (isset($post['is_dst']) && !$post['auto_dst'])
-            {
+            if (isset($post['is_dst']) && !$post['auto_dst']) {
                 $is_dst = $post['is_dst'];
             }
         }
 
         // Forge $gmtoffset and $is_dst from $timezone_key if present.
-        if (isset($post['timezone_key']))
-        {
+        if (isset($post['timezone_key'])) {
             $key = $post['timezone_key'];
             $tzd = Txp::get('Textpattern_Date_Timezone')->getTimeZones();
 
-            if (isset($tzd[$key]))
-            {
+            if (isset($tzd[$key])) {
                 $prefs['timezone_key'] = $timezone_key = $key;
                 $post['gmtoffset'] = $prefs['gmtoffset'] = $gmtoffset = $tzd[$key]['offset'];
                 $post['is_dst'] = $prefs['is_dst'] = $is_dst = Txp::get('Textpattern_Date_Timezone')->isDst(null, $key);
             }
         }
 
-        if (isset($post['siteurl']))
-        {
+        if (isset($post['siteurl'])) {
             $post['siteurl'] = preg_replace('#^https?://#', '', rtrim($post['siteurl'], '/ '));
         }
 
-        while ($a = nextRow($prefnames))
-        {
+        while ($a = nextRow($prefnames)) {
             extract($a);
 
-            if (!isset($post[$name]) || !has_privs('prefs.'.$event))
-            {
+            if (!isset($post[$name]) || !has_privs('prefs.'.$event)) {
                 continue;
             }
 
-            if ($name === 'logging' && $post[$name] === 'none' && $post[$name] !== $val)
-            {
+            if ($name === 'logging' && $post[$name] === 'none' && $post[$name] !== $val) {
                 safe_truncate('txp_log');
             }
 
-            if ($name === 'expire_logs_after' && (int) $post[$name] !== (int) $val)
-            {
+            if ($name === 'expire_logs_after' && (int) $post[$name] !== (int) $val) {
                 safe_delete('txp_log', 'time < date_sub(now(), interval '.intval($post[$name]).' day)');
             }
 
@@ -188,8 +173,7 @@
                 select name from ".safe_pfx('txp_prefs')." where user_name = ''
             )))";
 
-        if (!get_pref('use_comments', 1, 1))
-        {
+        if (!get_pref('use_comments', 1, 1)) {
             $sql[] = "event != 'comments'";
         }
 
@@ -202,19 +186,14 @@
         $last_event = null;
         $out = array();
 
-        if (numRows($rs))
-        {
-            while ($a = nextRow($rs))
-            {
-                if (!has_privs('prefs.'.$a['event']))
-                {
+        if (numRows($rs)) {
+            while ($a = nextRow($rs)) {
+                if (!has_privs('prefs.'.$a['event'])) {
                     continue;
                 }
 
-                if ($a['event'] !== $last_event)
-                {
-                    if ($last_event !== null)
-                    {
+                if ($a['event'] !== $last_event) {
+                    if ($last_event !== null) {
                         echo wrapRegion('prefs_group_'.$last_event, join(n, $out), 'prefs_'.$last_event, $last_event, 'prefs_'.$last_event);
                     }
 
@@ -224,24 +203,19 @@
 
                 $label = '';
 
-                if (!in_array($a['html'], array('yesnoradio', 'is_dst')))
-                {
+                if (!in_array($a['html'], array('yesnoradio', 'is_dst'))) {
                     $label = $a['name'];
                 }
 
                 // TODO: remove exception when custom fields move to meta store.
                 $help = '';
-                if (strpos($a['name'], 'custom_') === false)
-                {
+                if (strpos($a['name'], 'custom_') === false) {
                     $help = $a['name'];
                 }
 
-                if ($a['html'] == 'text_input')
-                {
+                if ($a['html'] == 'text_input') {
                     $size = INPUT_REGULAR;
-                }
-                else
-                {
+                } else {
                     $size = '';
                 }
 
@@ -255,12 +229,9 @@
             }
         }
 
-        if ($last_event === null)
-        {
+        if ($last_event === null) {
             echo graf(gTxt('no_preferences'));
-        }
-        else
-        {
+        } else {
             echo wrapRegion('prefs_group_'.$last_event, join(n, $out), 'prefs_'.$last_event, $last_event, 'prefs_'.$last_event);
         }
 
@@ -270,8 +241,7 @@
             hInput('prefs_id', '1').
             tInput();
 
-        if ($last_event !== null)
-        {
+        if ($last_event !== null) {
             echo graf(fInput('submit', 'Submit', gTxt('save'), 'publish'));
         }
 
@@ -290,17 +260,13 @@
 
     function pref_func($func, $name, $val, $size = '')
     {
-        if ($func != 'func' && is_callable('pref_'.$func))
-        {
+        if ($func != 'func' && is_callable('pref_'.$func)) {
             $func = 'pref_'.$func;
-        }
-        else
-        {
+        } else {
             $string = new Textpattern_Type_String($func);
             $func = $string->toCallback();
 
-            if (!is_callable($func))
-            {
+            if (!is_callable($func)) {
                 $func = 'text_input';
             }
         }
@@ -320,8 +286,7 @@
     function text_input($name, $val, $size = 0)
     {
         $class = '';
-        switch ($size)
-        {
+        switch ($size) {
             case INPUT_MEDIUM :
                 $class = 'input-medium';
                 break;
@@ -366,8 +331,7 @@
         // Fetch *hidden* pref
         $key = get_pref('timezone_key', '', true);
 
-        if ($key === '')
-        {
+        if ($key === '') {
             $key = (string) Txp::get('Textpattern_Date_Timezone')->getTimezone();
         }
 
@@ -392,23 +356,18 @@
     {
         $ui = yesnoRadio ($name, $val).
         script_js (<<<EOS
-            $(document).ready(function ()
-            {
+            $(document).ready(function () {
                 var radio = $("#prefs-is_dst input");
-                if (radio)
-                {
-                    if ($("#auto_dst-1").prop("checked"))
-                    {
+                if (radio) {
+                    if ($("#auto_dst-1").prop("checked")) {
                         radio.prop("disabled", "disabled");
                     }
 
-                    $("#auto_dst-0").click(function ()
-                    {
+                    $("#auto_dst-0").click(function () {
                         radio.removeProp("disabled");
                     });
 
-                    $("#auto_dst-1").click(function ()
-                    {
+                    $("#auto_dst-1").click(function () {
                         radio.prop("disabled", "disabled");
                     });
                 }
@@ -561,10 +520,8 @@ EOS
 
         $vals = array();
 
-        foreach ($formats as $f)
-        {
-            if ($d = safe_strftime($f, $ts))
-            {
+        foreach ($formats as $f) {
+            if ($d = safe_strftime($f, $ts)) {
                 $vals[$f] = $d;
             }
         }
@@ -607,14 +564,11 @@ EOS
 
         $out = array();
 
-        foreach ($vals as $a => $b)
-        {
-            if (count($b) > 0)
-            {
+        foreach ($vals as $a => $b) {
+            if (count($b) > 0) {
                 $out[] = n.'<optgroup label="'.gTxt('tab_'.$a).'">';
 
-                foreach ($b as $c => $d)
-                {
+                foreach ($b as $c => $d) {
                     $out[] = n.'<option value="'.$d.'"'.( $val == $d ? ' selected="selected"' : '' ).'>'.$c.'</option>';
                 }
 
@@ -677,11 +631,9 @@ EOS
     function themename($name, $val)
     {
         $themes = theme::names();
-        foreach ($themes as $t)
-        {
+        foreach ($themes as $t) {
             $theme = theme::factory($t);
-            if ($theme)
-            {
+            if ($theme) {
                 $m = $theme->manifest();
                 $title = empty($m['title']) ? ucwords($theme->name) : $m['title'];
                 $vals[$t] = $title;
@@ -729,12 +681,10 @@ EOS
                             ini_get('post_max_size'),
                             ini_get('upload_max_filesize'));
         $real_max = null;
-        foreach ($candidates as $item)
-        {
+        foreach ($candidates as $item) {
             $val = trim($item);
             $modifier = strtolower( substr($val, -1) );
-            switch ($modifier)
-            {
+            switch ($modifier) {
                 // The 'G' modifier is available since PHP 5.1.0
                 case 'g' :
                     $val *= 1024;
@@ -743,14 +693,10 @@ EOS
                 case 'k' :
                     $val *= 1024;
             }
-            if ($val > 1)
-            {
-                if (is_null($real_max))
-                {
+            if ($val > 1) {
+                if (is_null($real_max)) {
                     $real_max = $val;
-                }
-                elseif ($val < $real_max)
-                {
+                } elseif ($val < $real_max) {
                     $real_max = $val;
                 }
             }

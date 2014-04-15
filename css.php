@@ -27,10 +27,8 @@
  * @since 4.2.0
  */
 
-if (@ini_get('register_globals'))
-{
-    if (isset($_REQUEST['GLOBALS']) || isset($_FILES['GLOBALS']))
-    {
+if (@ini_get('register_globals')) {
+    if (isset($_REQUEST['GLOBALS']) || isset($_FILES['GLOBALS'])) {
         die('GLOBALS overwrite attempt detected. Please consider turning register_globals off.');
     }
 
@@ -47,8 +45,7 @@ if (@ini_get('register_globals'))
     // As the deliberate awkwardly-named local variable $_txpfoo MUST NOT be unset to avoid notices further
     // down, we must remove any potential identically-named global from the list of global names here.
     unset($_txpg['_txpfoo']);
-    foreach ($_txpg as $_txpfoo => $value)
-    {
+    foreach ($_txpg as $_txpfoo => $value) {
         if (!in_array($_txpfoo, array(
             'GLOBALS',
             '_SERVER',
@@ -68,8 +65,7 @@ if (@ini_get('register_globals'))
 
 header('Content-type: text/css');
 
-if (!defined("txpath"))
-{
+if (!defined("txpath")) {
     /**
      * @ignore
      */
@@ -77,8 +73,7 @@ if (!defined("txpath"))
     define("txpath", dirname(__FILE__).'/textpattern');
 }
 
-if (!isset($txpcfg['table_prefix']))
-{
+if (!isset($txpcfg['table_prefix'])) {
     ob_start(NULL, 2048);
     include txpath.'/config.php';
     ob_end_clean();

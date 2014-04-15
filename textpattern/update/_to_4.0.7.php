@@ -1,7 +1,6 @@
 <?php
 
-    if (!defined('TXP_UPDATE'))
-    {
+    if (!defined('TXP_UPDATE')) {
         exit("Nothing here. You can't access this file directly.");
     }
 
@@ -12,18 +11,15 @@
     }
 
     // Enable XML-RPC server?
-    if (!safe_field('name', 'txp_prefs', "name = 'enable_xmlrpc_server'"))
-    {
+    if (!safe_field('name', 'txp_prefs', "name = 'enable_xmlrpc_server'")) {
         safe_insert('txp_prefs', "prefs_id = 1, name = 'enable_xmlrpc_server', val = 0, type = 1, event = 'admin', html = 'yesnoradio', position = 130");
     }
 
-    if (!safe_field('name', 'txp_prefs', "name = 'smtp_from'"))
-    {
+    if (!safe_field('name', 'txp_prefs', "name = 'smtp_from'")) {
         safe_insert('txp_prefs', "prefs_id = 1, name = 'smtp_from', val = '', type = 1, event = 'admin', position = 110");
     }
 
-    if (!safe_field('val', 'txp_prefs', "name='author_list_pageby'"))
-    {
+    if (!safe_field('val', 'txp_prefs', "name='author_list_pageby'")) {
         safe_insert('txp_prefs', "prefs_id = 1, name = 'author_list_pageby', val = 25, type = 2");
     }
 

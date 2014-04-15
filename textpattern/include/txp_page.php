@@ -28,13 +28,11 @@
  * @package Admin\Page
  */
 
-    if (!defined('txpinterface'))
-    {
+    if (!defined('txpinterface')) {
         die('txpinterface is undefined.');
     }
 
-    if ($event == 'page')
-    {
+    if ($event == 'page') {
         require_privs('page');
 
         bouncer($step, array(
@@ -43,8 +41,7 @@
             'page_delete' => true,
         ));
 
-        switch(strtolower($step))
-        {
+        switch(strtolower($step)) {
             case "" :
                 page_edit();
                 break;
@@ -84,28 +81,22 @@
         $name = sanitizeForPage(assert_string(gps('name')));
         $newname = sanitizeForPage(assert_string(gps('newname')));
 
-        if ($step == 'page_delete' || empty($name) && $step != 'page_new' && !$savenew)
-        {
+        if ($step == 'page_delete' || empty($name) && $step != 'page_new' && !$savenew) {
             $name = safe_field('page', 'txp_section', "name = 'default'");
-        }
-        elseif (((($copy || $savenew) && $newname) || ($newname && ($newname != $name))) && !$save_error)
-        {
+        } elseif (((($copy || $savenew) && $newname) || ($newname && ($newname != $name))) && !$save_error) {
             $name = $newname;
         }
 
         $buttons = n.tag(gTxt('page_name'), 'label', array('for' => 'new_page')).
             br.fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_page', false, true);
 
-        if ($name)
-        {
+        if ($name) {
             $buttons .= span(href(gTxt('duplicate'), '#', array(
                 'id'    => 'txp_clone',
                 'class' => 'clone',
                 'title' => gTxt('page_clone')
             )), array('class' => 'txp-actions'));
-        }
-        else
-        {
+        } else {
             $buttons .= hInput('savenew', 'savenew');
         }
 
@@ -122,8 +113,7 @@
         );
 
         $tagbuild_links = '';
-        foreach ($tagbuild_items as $tb => $item)
-        {
+        foreach ($tagbuild_items as $tb => $item) {
             $tagbuild_links .= wrapRegion($item[1].'_group', taglinks($tb), $item[1], $item[0], 'page_'.$item[1]);
         }
 
@@ -187,24 +177,18 @@
 
         $rs = safe_rows_start('name', 'txp_page', "$criteria order by name asc");
 
-        if ($rs)
-        {
-            while ($a = nextRow($rs))
-            {
+        if ($rs) {
+            while ($a = nextRow($rs)) {
                 extract($a);
                 $active = ($current === $name);
 
-                if ($active)
-                {
+                if ($active) {
                     $edit = txpspecialchars($name);
-                }
-                else
-                {
+                } else {
                     $edit = eLink('page', '', 'name', $name, $name);
                 }
 
-                if (!in_array($name, $protected))
-                {
+                if (!in_array($name, $protected)) {
                     $edit .= dLink('page', 'page_delete', 'name', $name);
                 }
 
@@ -231,19 +215,14 @@
         $count = safe_count('txp_section', "page = '".doSlash($name)."'");
         $message = '';
 
-        if ($name == 'error_default')
-        {
+        if ($name == 'error_default') {
             return page_edit();
         }
 
-        if ($count)
-        {
+        if ($count) {
             $message = array(gTxt('page_used_by_section', array('{name}' => $name, '{count}' => $count)), E_WARNING);
-        }
-        else
-        {
-            if (safe_delete('txp_page', "name = '".doSlash($name)."'"))
-            {
+        } else {
+            if (safe_delete('txp_page', "name = '".doSlash($name)."'")) {
                 callback_event('page_deleted', '', 0, $name);
                 $message = gTxt('page_deleted', array('{name}' => $name));
             }
@@ -270,64 +249,44 @@
         $save_error = false;
         $message = '';
 
-        if (!$newname)
-        {
+        if (!$newname) {
             $message = array(gTxt('page_name_invalid'), E_ERROR);
             $save_error = true;
-        }
-        else
-        {
-            if ($copy && ($name === $newname))
-            {
+        } else {
+            if ($copy && ($name === $newname)) {
                 $newname .= '_copy';
                 $_POST['newname'] = $newname;
             }
 
             $exists = safe_field('name', 'txp_page', "name = '".doSlash($newname)."'");
 
-            if ($newname !== $name && $exists !== false)
-            {
+            if ($newname !== $name && $exists !== false) {
                 $message = array(gTxt('page_already_exists', array('{name}' => $newname)), E_ERROR);
-                if ($savenew)
-                {
+                if ($savenew) {
                     $_POST['newname'] = '';
                 }
 
                 $save_error = true;
-            }
-            else
-            {
-                if ($savenew or $copy)
-                {
-                    if ($newname)
-                    {
-                        if (safe_insert('txp_page', "name = '".doSlash($newname)."', user_html = '$html'"))
-                        {
+            } else {
+                if ($savenew or $copy) {
+                    if ($newname) {
+                        if (safe_insert('txp_page', "name = '".doSlash($newname)."', user_html = '$html'")) {
                             update_lastmod();
                             $message = gTxt('page_created', array('{name}' => $newname));
-                        }
-                        else
-                        {
+                        } else {
                             $message = array(gTxt('page_save_failed'), E_ERROR);
                             $save_error = true;
                         }
-                    }
-                    else
-                    {
+                    } else {
                         $message = array(gTxt('page_name_invalid'), E_ERROR);
                         $save_error = true;
                     }
-                }
-                else
-                {
-                    if (safe_update('txp_page', "user_html = '$html', name = '".doSlash($newname)."'", "name = '".doSlash($name)."'"))
-                    {
+                } else {
+                    if (safe_update('txp_page', "user_html = '$html', name = '".doSlash($newname)."'", "name = '".doSlash($name)."'")) {
                         safe_update('txp_section', "page = '".doSlash($newname)."'", "page='".doSlash($name)."'");
                         update_lastmod();
                         $message = gTxt('page_updated', array('{name}' => $name));
-                    }
-                    else
-                    {
+                    } else {
                         $message = array(gTxt('page_save_failed'), E_ERROR);
                         $save_error = true;
                     }
@@ -335,12 +294,9 @@
             }
         }
 
-        if ($save_error === true)
-        {
+        if ($save_error === true) {
             $_POST['save_error'] = '1';
-        }
-        else
-        {
+        } else {
             callback_event('page_saved', '', 0, $name, $newname);
         }
 

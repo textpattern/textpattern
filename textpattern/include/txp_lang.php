@@ -28,15 +28,13 @@
  * @since   4.6.0
  */
 
-    if (!defined('txpinterface'))
-    {
+    if (!defined('txpinterface')) {
         die('txpinterface is undefined.');
     }
 
     include_once txpath.'/lib/txplib_update.php';
 
-    if ($event == 'lang')
-    {
+    if ($event == 'lang') {
         require_privs('lang');
 
         $available_steps = array(
@@ -47,12 +45,9 @@
             'list_languages'  => false,
         );
 
-        if ($step && bouncer($step, $available_steps))
-        {
+        if ($step && bouncer($step, $available_steps)) {
             $step();
-        }
-        else
-        {
+        } else {
             list_languages();
         }
     }
@@ -71,12 +66,10 @@
 
         $vals = array();
 
-        foreach ($installed_langs as $lang)
-        {
+        foreach ($installed_langs as $lang) {
             $vals[$lang] = safe_field('data', 'txp_lang', "name = '".doSlash($lang)."' AND lang = '".doSlash($lang)."'");
 
-            if (trim($vals[$lang]) == '')
-            {
+            if (trim($vals[$lang]) == '') {
                 $vals[$lang] = $lang;
             }
         }
@@ -122,38 +115,28 @@
 
         // Get items from RPC.
         @set_time_limit(90); // TODO: 90 seconds: seriously?
-        if ($client->query('tups.listLanguages', get_pref('blog_uid')))
-        {
+        if ($client->query('tups.listLanguages', get_pref('blog_uid'))) {
             $rpc_connect = true;
             $response = $client->getResponse();
-            foreach ($response as $language)
-            {
+            foreach ($response as $language) {
                 $available_lang[$language['language']]['rpc_lastmod'] = gmmktime($language['lastmodified']->hour, $language['lastmodified']->minute, $language['lastmodified']->second, $language['lastmodified']->month, $language['lastmodified']->day, $language['lastmodified']->year);
             }
-        }
-        elseif (gps('force') != 'file')
-        {
+        } elseif (gps('force') != 'file') {
             $msg = gTxt('rpc_connect_error')."<!--".$client->getErrorCode().' '.$client->getErrorMessage()."-->";
         }
 
         // Get items from Filesystem.
         $files = get_lang_files();
 
-        if (is_array($files) && !empty($files))
-        {
-            foreach ($files as $file)
-            {
-                if ($fp = @fopen(txpath.DS.'lang'.DS.$file, 'r'))
-                {
+        if (is_array($files) && !empty($files)) {
+            foreach ($files as $file) {
+                if ($fp = @fopen(txpath.DS.'lang'.DS.$file, 'r')) {
                     $name = str_replace('.txt', '', $file);
                     $firstline = fgets($fp, 4069);
                     fclose($fp);
-                    if (strpos($firstline, '#@version') !== false)
-                    {
+                    if (strpos($firstline, '#@version') !== false) {
                         @list($fversion, $ftime) = explode(';',trim(substr($firstline,strpos($firstline, ' ', 1))));
-                    }
-                    else
-                    {
+                    } else {
                         $fversion = $ftime = null;
                     }
 
@@ -167,11 +150,9 @@
         // We need a value here for the language itself, not for each one of the rows.
         $rows = safe_rows('lang, UNIX_TIMESTAMP(MAX(lastmod)) as lastmod', 'txp_lang', "1 GROUP BY lang ORDER BY lastmod DESC");
         $installed_lang = array();
-        foreach ($rows as $language)
-        {
+        foreach ($rows as $language) {
             $available_lang[$language['lang']]['db_lastmod'] = $language['lastmod'];
-            if ($language['lang'] != $active_lang)
-            {
+            if ($language['lang'] != $active_lang) {
                 $installed_lang[] = $language['lang'];
             }
         }
@@ -179,8 +160,7 @@
         $list = '';
 
         // Create the language table components.
-        foreach ($available_lang as $langname => $langdat)
-        {
+        foreach ($available_lang as $langname => $langdat) {
             $file_updated = ( isset($langdat['db_lastmod']) && @$langdat['file_lastmod'] > $langdat['db_lastmod']);
             $rpc_updated = ( @$langdat['rpc_lastmod'] > @$langdat['db_lastmod']);
 
@@ -263,8 +243,7 @@
         echo hed(gTxt('tab_languages'), 1, array('class' => 'txp-heading'));
         echo n.'<div id="language_container" class="txp-container">';
 
-        if (isset($msg) && $msg)
-        {
+        if (isset($msg) && $msg) {
             echo tag($msg, 'p', ' class="error lang-msg"');
         }
 
@@ -317,8 +296,7 @@
             'language',
         )));
 
-        if (safe_field('lang', 'txp_lang', "lang='".doSlash($language)."' limit 1"))
-        {
+        if (safe_field('lang', 'txp_lang', "lang='".doSlash($language)."' limit 1")) {
             $locale = $prefs['locale'] = Txp::get('Textpattern_L10n_Locale')->getLanguageLocale($language);
             Txp::get('Textpattern_L10n_Locale')->setLocale(LC_ALL, $language);
             set_pref('locale', $locale);
@@ -353,45 +331,33 @@
     //    $client->debug = true;
 
         @set_time_limit(90); // TODO: 90 seconds: seriously?
-        if (gps('force') == 'file' || !$client->query('tups.getLanguage', $prefs['blog_uid'], $lang_code))
-        {
-            if ( (gps('force') == 'file' || gps('updating') !== '1') && install_language_from_file($lang_code) )
-            {
-                if (defined('LANG'))
-                {
+        if (gps('force') == 'file' || !$client->query('tups.getLanguage', $prefs['blog_uid'], $lang_code)) {
+            if ( (gps('force') == 'file' || gps('updating') !== '1') && install_language_from_file($lang_code) ) {
+                if (defined('LANG')) {
                     $textarray = load_lang(LANG);
                 }
                 callback_event('lang_installed', 'file', false, $lang_code);
 
                 return list_languages(gTxt($lang_code).sp.gTxt('updated'));
-            }
-            else
-            {
+            } else {
                 pagetop(gTxt('installing_language'));
                 echo tag( gTxt('rpc_connect_error')."<!--".$client->getErrorCode().' '.$client->getErrorMessage()."-->"
                     , 'p', ' class="error lang-msg"' );
             }
-        }
-        else
-        {
+        } else {
             $response = $client->getResponse();
             $lang_struct = unserialize($response);
-            if ($lang_struct === false)
-            {
+            if ($lang_struct === false) {
                 $errors = $size = 1;
-            }
-            else
-            {
+            } else {
                 array_walk($lang_struct, 'install_lang_key');
                 $size = count($lang_struct);
                 $errors = 0;
-                for($i = 0; $i < $size ; $i++)
-                {
+                for($i = 0; $i < $size ; $i++) {
                     $errors += ( !$lang_struct[$i]['ok'] );
                 }
 
-                if (defined('LANG'))
-                {
+                if (defined('LANG')) {
                     $textarray = load_lang(LANG);
                 }
             }
@@ -400,8 +366,7 @@
 
             callback_event('lang_installed', 'remote', false, $lang_code);
 
-            if ($errors > 0)
-            {
+            if ($errors > 0) {
                 $msg = array($msg.sprintf(" (%s errors, %s ok)", $errors, ($size-$errors)), E_ERROR);
             }
 
@@ -440,16 +405,13 @@
             data = '".doSlash($value['data'])."',
             lastmod = '".doSlash(strftime('%Y%m%d%H%M%S', $value['uLastmod']))."'";
 
-        if ($exists !== false)
-        {
+        if ($exists !== false) {
             $value['ok'] = safe_update(
                 'txp_lang',
                 $q,
                 "owner = '".doSlash(LANG_OWNER_SYSTEM)."' and lang = '".doSlash($lang_code)."' and name = '".doSlash($value['name'])."'"
             );
-        }
-        else
-        {
+        } else {
             $value['ok'] = safe_insert(
                 'txp_lang',
                 $q.", lang='".doSlash($lang_code)."'"
@@ -483,13 +445,10 @@
     {
         $lang_code = ps('lang_code');
         $ret = safe_delete('txp_lang', "lang='".doSlash($lang_code)."'");
-        if ($ret)
-        {
+        if ($ret) {
             callback_event('lang_deleted', '', 0, $lang_code);
             $msg = gTxt($lang_code).sp.gTxt('deleted');
-        }
-        else
-        {
+        } else {
             $msg = gTxt('cannot_delete', array('{thing}' => $lang_code));
         }
 
@@ -506,16 +465,13 @@
     {
         $lang_dir = txpath.DS.'lang'.DS;
 
-        if (!is_dir($lang_dir))
-        {
+        if (!is_dir($lang_dir)) {
             trigger_error('Lang directory is not a directory: '.$lang_dir, E_USER_WARNING);
             return array();
         }
 
-        if (chdir($lang_dir))
-        {
-            if ($files = glob('*.txt'))
-            {
+        if (chdir($lang_dir)) {
+            if ($files = glob('*.txt')) {
                 return $files;
             }
         }

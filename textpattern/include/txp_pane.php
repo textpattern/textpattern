@@ -21,8 +21,7 @@
  * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
  */
 
-    if (!defined('txpinterface'))
-    {
+    if (!defined('txpinterface')) {
         die('txpinterface is undefined.');
     }
 
@@ -46,8 +45,7 @@ class Textpattern_Admin_Pane
             'visible' => true,
         );
 
-        if ($step && bouncer($step, $steps) && has_privs(ps('origin')))
-        {
+        if ($step && bouncer($step, $steps) && has_privs(ps('origin'))) {
             $this->$step();
         }
     }
@@ -78,8 +76,7 @@ class Textpattern_Admin_Pane
 
         send_xml_response();
 
-        if ($this->valid_token($pane) && preg_match('/^[a-z0-9_-]+$/i', $pane))
-        {
+        if ($this->valid_token($pane) && preg_match('/^[a-z0-9_-]+$/i', $pane)) {
             set_pref("pane_{$pane}_visible", (int) ($visible === 'true'), $origin, PREF_HIDDEN, 'yesnoradio', 0, PREF_PRIVATE);
             return;
         }

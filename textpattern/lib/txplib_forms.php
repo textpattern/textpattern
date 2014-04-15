@@ -45,19 +45,15 @@
 
     function radioSet($values, $field, $checked = '', $tabindex = 0, $id = '')
     {
-        if ($id)
-        {
+        if ($id) {
             $id = $id.'-'.$field;
-        }
-        else
-        {
+        } else {
             $id = $field;
         }
 
         $out = array();
 
-        foreach((array) $values as $value => $label)
-        {
+        foreach((array) $values as $value => $label) {
             $out[] = radio($field, $value, (string) $value === (string) $checked, $id.'-'.$value, $tabindex);
             $out[] = n.tag($label, 'label', array('for' => $id.'-'.$value));
         }
@@ -140,23 +136,18 @@
         $selected = false;
         $value = (string) $value;
 
-        foreach ($array as $avalue => $alabel)
-        {
-            if ($value === (string) $avalue)
-            {
+        foreach ($array as $avalue => $alabel) {
+            if ($value === (string) $avalue) {
                 $sel = ' selected="selected"';
                 $selected = true;
-            }
-            else
-            {
+            } else {
                 $sel = '';
             }
 
             $out[] = '<option value="'.txpspecialchars($avalue).'"'.$sel.'>'.txpspecialchars($alabel).'</option>';
         }
 
-        if ($blank_first)
-        {
+        if ($blank_first) {
             array_unshift($out, '<option value=""'.($selected === false ? ' selected="selected"' : '').'>&#160;</option>');
         }
 
@@ -165,12 +156,9 @@
             'id'   => $select_id,
         ));
 
-        if ((string) $onchange === '1')
-        {
+        if ((string) $onchange === '1') {
             $atts .= ' data-submit-on="change"';
-        }
-        else if ($onchange)
-        {
+        } elseif ($onchange) {
             $atts .= ' '.trim($onchange);
         }
 
@@ -199,33 +187,25 @@
         $doctype = get_pref('doctype');
         $selected = false;
 
-        foreach ($array as $a)
-        {
-            if ($a['name'] == 'root')
-            {
+        foreach ($array as $a) {
+            if ($a['name'] == 'root') {
                 continue;
             }
 
-            if ((string) $a['name'] === (string) $value)
-            {
+            if ((string) $a['name'] === (string) $value) {
                 $sel = ' selected="selected"';
                 $selected = true;
-            }
-            else
-            {
+            } else {
                 $sel = '';
             }
 
             $sp = str_repeat(sp.sp, $a['level']);
 
-            if (($truncate > 3) && (strlen(utf8_decode($a['title'])) > $truncate))
-            {
+            if (($truncate > 3) && (strlen(utf8_decode($a['title'])) > $truncate)) {
                 $htmltitle = ' title="'.txpspecialchars($a['title']).'"';
                 $a['title'] = preg_replace('/^(.{0,'.($truncate - 3).'}).*$/su', '$1', $a['title']);
                 $hellip = '&#8230;';
-            }
-            else
-            {
+            } else {
                 $htmltitle = $hellip = '';
             }
 
@@ -281,8 +261,7 @@
             'placeholder' => $placeholder,
         ));
 
-        if ($type != 'file' && $type != 'image')
-        {
+        if ($type != 'file' && $type != 'image') {
             $atts .= join_atts(array('value' => (string) $value), 0);
         }
 
@@ -387,8 +366,7 @@
     {
         $class = 'checkbox';
 
-        if ($checked)
-        {
+        if ($checked) {
             $class .= ' active';
         }
 
@@ -438,8 +416,7 @@
     {
         $class = 'radio';
 
-        if ($checked)
-        {
+        if ($checked) {
             $class .= ' active';
         }
 
@@ -477,13 +454,11 @@
     {
         $action = 'index.php';
 
-        if ($onsubmit)
-        {
+        if ($onsubmit) {
             $onsubmit = 'return '.$onsubmit;
         }
 
-        if ($fragment)
-        {
+        if ($fragment) {
             $action .= '#'.$fragment;
         }
 
@@ -535,32 +510,25 @@
     {
         $style = '';
 
-        if ($w)
-        {
+        if ($w) {
             $style .= 'width:'.intval($w).'px;';
         }
 
-        if ($h)
-        {
+        if ($h) {
             $style .= 'height:'.intval($h).'px;';
         }
 
-        if ((string) $thing === '')
-        {
+        if ((string) $thing === '') {
             $thing = null;
-        }
-        else
-        {
+        } else {
             $thing = txpspecialchars($thing);
         }
 
-        if (!intval($rows))
-        {
+        if (!intval($rows)) {
             $rows = 5;
         }
 
-        if (!intval($cols))
-        {
+        if (!intval($cols)) {
             $cols = 40;
         }
 
@@ -599,8 +567,7 @@
 
     function type_options($array)
     {
-        foreach ($array as $a => $b)
-        {
+        foreach ($array as $a => $b) {
             $out[] = n.'<option value="'.$a.'">'.gTxt($b).'</option>';
         }
 
@@ -620,13 +587,11 @@
 
     function radio_list($name, $values, $current_val = '', $hilight_val = '', $atts = array('class' => 'status plain-list'))
     {
-        foreach ($values as $value => $label)
-        {
+        foreach ($values as $value => $label) {
             $id = $name.'-'.$value;
             $class = 'status-'.$value;
 
-            if ((string) $value === (string) $hilight_val)
-            {
+            if ((string) $value === (string) $hilight_val) {
                 $label = strong($label);
                 $class .= ' active';
             }
@@ -668,18 +633,15 @@
         $value = $placeholder = '';
         $size = INPUT_TINY;
 
-        if ((int) $time)
-        {
+        if ((int) $time) {
             $value = safe_strftime($datevar, (int) $time);
         }
 
-        if (isset($placeholders[$datevar]))
-        {
+        if (isset($placeholders[$datevar])) {
             $placeholder = gTxt($placeholders[$datevar]);
         }
 
-        if ($datevar == '%Y' || $name == 'year' || $name == 'exp_year')
-        {
+        if ($datevar == '%Y' || $name == 'year' || $name == 'exp_year') {
             $size = INPUT_XSMALL;
         }
 

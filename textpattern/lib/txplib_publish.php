@@ -38,8 +38,7 @@
     {
         static $filterFrontPage;
 
-        if (isset($filterFrontPage))
-        {
+        if (isset($filterFrontPage)) {
             return $filterFrontPage;
         }
 
@@ -47,12 +46,10 @@
 
         $rs = safe_column('name', 'txp_section', "on_frontpage != '1'");
 
-        if ($rs)
-        {
+        if ($rs) {
             $filters = array();
 
-            foreach ($rs as $name)
-            {
+            foreach ($rs as $name) {
                 $filters[] = " and Section != '".doSlash($name)."'";
             }
 
@@ -95,8 +92,7 @@
         global $thisarticle;
 
         trace_add("[".gTxt('Article')." {$rs['ID']}]");
-        foreach (article_column_map() as $key => $column)
-        {
+        foreach (article_column_map() as $key => $column) {
             $thisarticle[$key] = $rs[$column];
         }
     }
@@ -138,10 +134,8 @@
     {
         $custom = getCustomFields();
         $custom_map = array();
-        if ($custom)
-        {
-            foreach ($custom as $i => $name)
-            {
+        if ($custom) {
+            foreach ($custom as $i => $name) {
                 $custom_map[$name] ='custom_' . $i;
             }
         }
@@ -186,8 +180,7 @@
         static $cache = array();
 
         $key = md5($threshold.$s.$type.join(n, $atts));
-        if (isset($cache[$key]))
-        {
+        if (isset($cache[$key])) {
             return $cache[$key];
         }
 
@@ -198,8 +191,7 @@
         // Building query parts; lifted from publish.php.
         $ids = array_map('intval', do_list($id));
         $id = (!$id) ? '' : " and ID IN (".join(',', $ids).")";
-        switch ($time)
-        {
+        switch ($time) {
             case 'any' :
                 $time = "";
                 break;
@@ -210,34 +202,27 @@
                 $time = " and Posted <= now()";
         }
 
-        if (!$expired)
-        {
+        if (!$expired) {
             $time .= " and (now() <= Expires or Expires = ".NULLDATETIME.")";
         }
 
         $custom = '';
 
-        if ($customFields)
-        {
-            foreach($customFields as $cField)
-            {
-                if (isset($atts[$cField]))
-                {
+        if ($customFields) {
+            foreach($customFields as $cField) {
+                if (isset($atts[$cField])) {
                     $customPairs[$cField] = $atts[$cField];
                 }
             }
 
-            if (!empty($customPairs))
-            {
+            if (!empty($customPairs)) {
                 $custom = buildCustomSql($customFields, $customPairs);
             }
         }
 
-        if ($keywords)
-        {
+        if ($keywords) {
             $keys = doSlash(do_list($keywords));
-            foreach ($keys as $key)
-            {
+            foreach ($keys as $key) {
                 $keyparts[] = "FIND_IN_SET('".$key."',Keywords)";
             }
             $keywords = " and (" . join(' or ', $keyparts) . ")";
@@ -252,8 +237,7 @@
         $type = ($type == '>') ? $types['>'][$sortdir] : $types['<'][$sortdir];
 
         // Escape threshold and treat it as a string unless explicitly told otherwise.
-        if ($threshold_type != 'cooked')
-        {
+        if ($threshold_type != 'cooked') {
             $threshold = "'".doSlash($threshold)."'";
         }
 
@@ -287,18 +271,14 @@
 
     function getNextPrev($id = 0, $threshold = null, $s = '')
     {
-        if ($id !== 0)
-        {
+        if ($id !== 0) {
             // Pivot is specific article by ID: In lack of further information, revert to default sort order 'Posted desc'.
             $atts = filterAtts(array('sortby' => 'Posted', 'sortdir' => 'desc'));
-        }
-        else
-        {
+        } else {
             // Pivot is $thisarticle: Use article attributes to find its neighbours.
             assert_article();
             global $thisarticle;
-            if (!is_array($thisarticle))
-            {
+            if (!is_array($thisarticle)) {
                 return array();
             }
 
@@ -313,17 +293,14 @@
             {
                 $atts['sortby'] = 'Posted';
                 $atts['sortdir']= 'desc';
-            }
-            else
-            {
+            } else {
                 // Sort is like 'foo asc'.
                 $atts['sortby'] = $m[0];
                 $atts['sortdir'] = (isset($m[1]) && strtolower($m[1]) == 'desc' ? 'desc' : 'asc');
             }
 
             // Attributes with special treatment.
-            switch($atts['sortby'])
-            {
+            switch($atts['sortby']) {
                 case 'Posted' :
                     $threshold = 'from_unixtime('.doSlash($thisarticle['posted']).')';
                     $threshold_type = 'cooked';
@@ -394,60 +371,39 @@
         $inside = '';
         $istag  = false;
 
-        foreach ($parsed as $chunk)
-        {
-            if ($istag)
-            {
-                if ($level === 0)
-                {
+        foreach ($parsed as $chunk) {
+            if ($istag) {
+                if ($level === 0) {
                     preg_match($t, $chunk, $tag);
 
-                    if (substr($chunk, -2, 1) === '/')
-                    {
+                    if (substr($chunk, -2, 1) === '/') {
                         // Self closing.
                         $out .= processTags($tag[1], $tag[2]);
-                    }
-                    else
-                    {
+                    } else {
                         // Opening.
                         $level++;
                     }
-                }
-                else
-                {
-                    if (substr($chunk, 1, 1) === '/')
-                    {
+                } else {
+                    if (substr($chunk, 1, 1) === '/') {
                         // Closing.
-                        if (--$level === 0)
-                        {
+                        if (--$level === 0) {
                             $out  .= processTags($tag[1], $tag[2], $inside);
                             $inside = '';
-                        }
-                        else
-                        {
+                        } else {
                             $inside .= $chunk;
                         }
-                    }
-                    elseif (substr($chunk, -2, 1) !== '/')
-                    {
+                    } elseif (substr($chunk, -2, 1) !== '/') {
                         // Opening inside open.
                         ++$level;
                         $inside .= $chunk;
-                    }
-                    else
-                    {
+                    } else {
                         $inside .= $chunk;
                     }
                 }
-            }
-            else
-            {
-                if ($level)
-                {
+            } else {
+                if ($level) {
                     $inside .= $chunk;
-                }
-                else
-                {
+                } else {
                     $out .= $chunk;
                 }
             }
@@ -469,8 +425,7 @@
     function maybe_tag($tag)
     {
         static $tags = null;
-        if ($tags === null)
-        {
+        if ($tags === null) {
             $tags = get_defined_functions();
             $tags = array_flip($tags['user']);
         }
@@ -492,8 +447,7 @@
         global $production_status, $txptrace, $txptracelevel, $txp_current_tag, $txp_current_form;
         static $registry = null;
 
-        if ($production_status !== 'live')
-        {
+        if ($production_status !== 'live') {
             $old_tag = $txp_current_tag;
 
             $txp_current_tag = '<txp:'.$tag.$atts.(isset($thing) ? '>' : '/>');
@@ -501,48 +455,38 @@
             trace_add($txp_current_tag);
             ++$txptracelevel;
 
-            if ($production_status === 'debug')
-            {
+            if ($production_status === 'debug') {
                 maxMemUsage("Form='$txp_current_form', Tag='$txp_current_tag'");
             }
         }
 
-        if ($registry === null)
-        {
+        if ($registry === null) {
             $registry = Txp::get('Textpattern_Tag_Registry');
         }
 
-        if ($registry->isRegistered($tag))
-        {
+        if ($registry->isRegistered($tag)) {
             $out = $registry->process($tag, splat($atts), $thing);
         }
 
         // Deprecated in 4.6.0.
-        else if (maybe_tag($tag))
-        {
+        else if (maybe_tag($tag)) {
             $out = $tag(splat($atts), $thing);
             trigger_error(gTxt('unregistered_tag'), E_USER_NOTICE);
         }
 
         // Deprecated, remove in crockery.
-        elseif (isset($GLOBALS['pretext'][$tag]))
-        {
+        elseif (isset($GLOBALS['pretext'][$tag])) {
             $out = txpspecialchars($pretext[$tag]);
             trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
-        }
-
-        else
-        {
+        } else {
             $out = '';
             trigger_error(gTxt('unknown_tag'), E_USER_WARNING);
         }
 
-        if ($production_status !== 'live')
-        {
+        if ($production_status !== 'live') {
             --$txptracelevel;
 
-            if (isset($thing))
-            {
+            if (isset($thing)) {
                 trace_add('</txp:'.$tag.'>');
             }
 
@@ -562,8 +506,7 @@
     {
         global $prefs;
         $in = serverset('REQUEST_URI');
-        if (!empty($prefs['max_url_len']) and strlen($in) > $prefs['max_url_len'])
-        {
+        if (!empty($prefs['max_url_len']) and strlen($in) > $prefs['max_url_len']) {
             txp_status_header('503 Service Unavailable');
             exit('Nice try.');
         }
@@ -742,8 +685,7 @@
         $req = strtolower($req);
         // Strip off query_string, if present.
         $qs = strpos($req, '?');
-        if ($qs)
-        {
+        if ($qs) {
             $req = substr($req, 0, $qs);
         }
         $req = preg_replace('/index\.php$/', '', $req);
@@ -772,10 +714,8 @@
         global $prefs;
         static $out = array();
 
-        if (is_array($atts))
-        {
-            if (empty($out))
-            {
+        if (is_array($atts)) {
+            if (empty($out)) {
                 $out = lAtts(array(
                     'sort'          => 'Posted desc',
                     'sortby'        => '',
@@ -786,16 +726,13 @@
                     'time'          => 'past',
                 ), $atts, 0);
                 trace_add('[filterAtts accepted]');
-            }
-            else
-            {
+            } else {
                 // TODO: deal w/ nested txp:article[_custom] tags.
                 trace_add('[filterAtts ignored]');
             }
         }
 
-        if (empty($out))
-        {
+        if (empty($out)) {
             trace_add('[filterAtts not set]');
         }
         return $out;

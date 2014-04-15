@@ -57,8 +57,7 @@
 
         $mtlink = mysql_connect($mt_dbhost, $mt_dblogin, $mt_dbpass, true);
 
-        if (!$mtlink)
-        {
+        if (!$mtlink) {
             return 'mt database values don&#8217;t work. Please replace them and try again';
         }
 
@@ -77,8 +76,7 @@
             from mt_author
         ", $mtlink);
 
-        while ($b = mysql_fetch_assoc($a))
-        {
+        while ($b = mysql_fetch_assoc($a)) {
             $authors[] = $b;
         }
 
@@ -99,21 +97,17 @@
 
         $results[]= mysql_error();
 
-        while ($b = mysql_fetch_assoc($a))
-        {
+        while ($b = mysql_fetch_assoc($a)) {
             $cat = mysql_query("select placement_category_id as category_id from mt_placement where placement_entry_id='{$b['ID']}'");
-            while ($cat_id = mysql_fetch_row($cat))
-            {
+            while ($cat_id = mysql_fetch_row($cat)) {
                 $categories[] = $cat_id[0];
             }
 
-            if (!empty($categories[0]))
-            {
+            if (!empty($categories[0])) {
                 $b['Category1'] = $categories[0];
             }
 
-            if (!empty($categories[1]))
-            {
+            if (!empty($categories[1])) {
                 $b['Category2'] = $categories[1];
             }
 
@@ -136,8 +130,7 @@
 
             $c = mysql_query($q, $mtlink);
 
-            while ($d=mysql_fetch_assoc($c))
-            {
+            while ($d=mysql_fetch_assoc($c)) {
                 $comments[] = $d;
             }
 
@@ -153,8 +146,7 @@
             select category_id,category_label from mt_category where category_blog_id='{$blog_id}'
         ", $mtlink);
 
-        while ($b=mysql_fetch_assoc($a))
-        {
+        while ($b=mysql_fetch_assoc($a)) {
             $categories_map[$b['category_id']] = $b['category_label'];
         }
 
@@ -168,18 +160,15 @@
 
         $textile = new Textile;
 
-        if (!empty($authors))
-        {
-            foreach ($authors as $author)
-            {
+        if (!empty($authors)) {
+            foreach ($authors as $author) {
                 extract($author);
                 $name = (empty($name)) ? $RealName : $name;
                 $authors_map[$user_id] = $name;
 
                 $authorid = safe_field('user_id', 'txp_users', "name = '".doSlash($name)."'");
 
-                if (!$authorid)
-                {
+                if (!$authorid) {
                     // Add new authors.
                     $q = safe_insert("txp_users","
                         name     = '".doSlash($RealName)."',
@@ -189,45 +178,34 @@
                         privs='1'"
                     );
 
-                    if ($q)
-                    {
+                    if ($q) {
                         $results[]= 'inserted '.$RealName.' into txp_users';
-                    }
-                    else
-                    {
+                    } else {
                         $results[]=mysql_error();
                     }
                 }
             }
         }
 
-        if (!empty($categories_map))
-        {
-            foreach ($categories_map as $category)
-            {
+        if (!empty($categories_map)) {
+            foreach ($categories_map as $category) {
                 $category = doSlash($category);
                 $rs = safe_row('id', 'txp_category', "name='$category' and type='article'");
 
-                if (!$rs)
-                {
+                if (!$rs) {
                     $q = safe_insert("txp_category","name='$category',type='article',parent='root'");
 
-                    if ($q)
-                    {
+                    if ($q) {
                         $results[]= 'inserted '.stripslashes($category).' into txp_category';
-                    }
-                    else
-                    {
+                    } else {
                         $results[]=mysql_error();
                     }
                 }
             }
         }
 
-        if (!empty($articles))
-        {
-            foreach ($articles as $article)
-            {
+        if (!empty($articles)) {
+            foreach ($articles as $article) {
                 extract($article);
                 $Body .= (trim($Body2)) ? "\n\n".$Body2 : '';
 
@@ -256,16 +234,13 @@
                     Status         = '$insert_with_status'
                 ");
 
-                if ($insertID)
-                {
+                if ($insertID) {
                     $results[] = 'inserted MT entry '.strong($Title).
                         ' into Textpattern as article '.strong($insertID).'';
 
                     // Do coment for article.
-                    if (!empty($comments) && is_array($comments))
-                    {
-                        foreach ($comments as $comment)
-                        {
+                    if (!empty($comments) && is_array($comments)) {
+                        foreach ($comments as $comment) {
                             extract($comment);
                             $message = nl2br($message);
 
@@ -281,20 +256,15 @@
                                 visible   = 1"
                             );
 
-                            if ($commentID)
-                            {
+                            if ($commentID) {
                                 $results[] = 'inserted MT comment '.$commentID.
                                     ' for article '.$insertID.' into txp_discuss';
-                            }
-                            else
-                            {
+                            } else {
                                 $results[]=mysql_error();
                             }
                         }
                     }
-                }
-                else
-                {
+                } else {
                     $results[] = mysql_error();
                 }
             }

@@ -22,8 +22,7 @@
  * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
  */
 
-    if (!defined('txpath'))
-    {
+    if (!defined('txpath')) {
         define("txpath", dirname(dirname(__FILE__)));
     }
 
@@ -57,13 +56,10 @@
     // Sniff out the 'textpattern' directory's name '/path/to/site/textpattern/setup/index.php'.
     $txpdir = explode('/', $_SERVER['PHP_SELF']);
 
-    if (count($txpdir) > 3)
-    {
+    if (count($txpdir) > 3) {
         // We live in the regular directory structure.
         $txpdir = '/'.$txpdir[count($txpdir) - 3];
-    }
-    else
-    {
+    } else {
         // We probably came here from a clever assortment of symlinks and DocumentRoot.
         $txpdir = '/';
     }
@@ -93,8 +89,7 @@
 <main class="txp-body">
 eod;
 
-    switch ($step)
-    {
+    switch ($step) {
         case "" :
             chooseLang();
             break;
@@ -148,8 +143,7 @@ eod;
             graf(setup_gTxt('progress_steps'), ' class="txp-accessibility"').
             n.'<ol>';
 
-        foreach ($stages as $idx => $phase)
-        {
+        foreach ($stages as $idx => $phase) {
             $active = ($idx == $stage);
             $sel = $active ? ' class="active"' : '';
             $out[] = n.'<li'.$sel.'>'.($active ? strong($phase) : $phase).'</li>';
@@ -172,13 +166,11 @@ eod;
             txp_setup_progress_meter(1),
             n.'<div class="txp-setup">';
 
-        if (!isset($txpcfg['db']))
-        {
+        if (!isset($txpcfg['db'])) {
             @include txpath.'/config.php';
         }
 
-        if (!empty($txpcfg['db']))
-        {
+        if (!empty($txpcfg['db'])) {
             echo graf(
                     span(setup_gTxt('already_installed', array('{txpath}' => txpath)), ' class="warning"')
                 ).
@@ -189,13 +181,10 @@ eod;
             exit;
         }
 
-        if (@$_SERVER['SCRIPT_NAME'] && (@$_SERVER['SERVER_NAME'] || @$_SERVER['HTTP_HOST']))
-        {
+        if (@$_SERVER['SCRIPT_NAME'] && (@$_SERVER['SERVER_NAME'] || @$_SERVER['HTTP_HOST'])) {
             $guess_siteurl = (@$_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
             $guess_siteurl .= $GLOBALS['rel_siteurl'];
-        }
-        else
-        {
+        } else {
             $guess_siteurl = 'mysite.com';
         }
 
@@ -236,8 +225,7 @@ eod;
                 n.span(fInput('text', 'siteurl', $guess_siteurl, '', '', '', INPUT_REGULAR, '', 'setup_site_url', '', true), ' class="txp-value"')
             );
 
-        if (is_disabled('mail'))
-        {
+        if (is_disabled('mail')) {
             echo graf(
                 span(setup_gTxt('warn_mail_unavailable'), ' class="warning"')
             );
@@ -268,13 +256,11 @@ eod;
             txp_setup_progress_meter(2).
             n.'<div class="txp-setup">';
 
-        if (!isset($txpcfg['db']))
-        {
+        if (!isset($txpcfg['db'])) {
             @include txpath.'/config.php';
         }
 
-        if (!empty($txpcfg['db']))
-        {
+        if (!empty($txpcfg['db'])) {
             echo graf(
                     span(setup_gTxt('already_installed', array('{txpath}' => txpath)), ' class="warning"')
                 ).
@@ -299,16 +285,11 @@ eod;
 
         echo hed(setup_gTxt("checking_database"), 2);
 
-        if (($mylink = mysql_connect($dhost, $duser, $dpass)))
-        {
+        if (($mylink = mysql_connect($dhost, $duser, $dpass))) {
             $carry['dclient_flags'] = 0;
-        }
-        elseif (($mylink = mysql_connect($dhost, $duser, $dpass, false, MYSQL_CLIENT_SSL)))
-        {
+        } elseif (($mylink = mysql_connect($dhost, $duser, $dpass, false, MYSQL_CLIENT_SSL))) {
             $carry['dclient_flags'] = 'MYSQL_CLIENT_SSL';
-        }
-        else
-        {
+        } else {
             echo graf(
                     span(setup_gTxt('db_cant_connect'), ' class="error"')
                 ).
@@ -323,8 +304,7 @@ eod;
             span(setup_gTxt('db_connected'), ' class="success"')
         );
 
-        if (!($dprefix == '' || preg_match('#^[a-zA-Z_][a-zA-Z0-9_]*$#', $dprefix)))
-        {
+        if (!($dprefix == '' || preg_match('#^[a-zA-Z_][a-zA-Z0-9_]*$#', $dprefix))) {
             echo graf(
                 span(setup_gTxt('prefix_bad_characters', array(
                     '{dbprefix}' => strong(txpspecialchars($dprefix))
@@ -337,8 +317,7 @@ eod;
             exit;
         }
 
-        if (!$mydb = mysql_select_db($ddb))
-        {
+        if (!$mydb = mysql_select_db($ddb)) {
             echo graf(
                 span(setup_gTxt('db_doesnt_exist', array(
                     '{dbname}' => strong(txpspecialchars($ddb))
@@ -352,8 +331,7 @@ eod;
         }
 
         $tables_exist = mysql_query("describe `".$dprefix."textpattern`");
-        if ($tables_exist)
-        {
+        if ($tables_exist) {
             echo graf(
                 span(setup_gTxt('tables_exist', array(
                     '{dbname}' => strong(txpspecialchars($ddb))
@@ -369,19 +347,13 @@ eod;
         // On 4.1 or greater use utf8-tables.
         $version = mysql_get_server_info();
 
-        if (intval($version[0]) >= 5 || preg_match('#^4\.[1-9]#', $version))
-        {
-            if (mysql_query("SET NAMES utf8"))
-            {
+        if (intval($version[0]) >= 5 || preg_match('#^4\.[1-9]#', $version)) {
+            if (mysql_query("SET NAMES utf8")) {
                 $carry['dbcharset'] = "utf8";
-            }
-            else
-            {
+            } else {
                 $carry['dbcharset'] = "latin1";
             }
-        }
-        else
-        {
+        } else {
             $carry['dbcharset'] = "latin1";
         }
 
@@ -411,22 +383,17 @@ eod;
 
         $problems = array();
 
-        if (!isset($txpcfg['db']))
-        {
-            if (!is_readable(txpath.'/config.php'))
-            {
+        if (!isset($txpcfg['db'])) {
+            if (!is_readable(txpath.'/config.php')) {
                 $problems[] = graf(
                     span(setup_gTxt('config_php_not_found', array('{file}' => txpspecialchars(txpath.'/config.php')), 'raw'), ' class="error"')
                 );
-            }
-            else
-            {
+            } else {
                 @include txpath.'/config.php';
             }
         }
 
-        if (!isset($txpcfg) || ($txpcfg['db'] != $ddb) || ($txpcfg['table_prefix'] != $dprefix))
-        {
+        if (!isset($txpcfg) || ($txpcfg['db'] != $ddb) || ($txpcfg['table_prefix'] != $dprefix)) {
             $problems[] = graf(
                 span(setup_gTxt('config_php_does_not_match_input', '', 'raw'), ' class="error"')
             );
@@ -446,12 +413,10 @@ eod;
 
         $themes = theme::names();
 
-        foreach ($themes as $t)
-        {
+        foreach ($themes as $t) {
             $theme = theme::factory($t);
 
-            if ($theme)
-            {
+            if ($theme) {
                 $m = $theme->manifest();
                 $title = empty($m['title']) ? ucwords($theme->name) : $m['title'];
                 $vals[$t] = (in_array($t, $core_themes) ? setup_gTxt('core_theme', array('{theme}' => $title)) : $title);
@@ -514,8 +479,7 @@ eod;
     {
         $GLOBALS['textarray'] = setup_load_lang(ps('lang'));
 
-        if (ps('name') == '')
-        {
+        if (ps('name') == '') {
             echo n.'<div id="setup_container" class="txp-container">'.
                 txp_setup_progress_meter(3).
                 n.'<div class="txp-setup">'.
@@ -528,8 +492,7 @@ eod;
             exit;
         }
 
-        if (!ps('pass'))
-        {
+        if (!ps('pass')) {
             echo n.'<div id="setup_container" class="txp-container">'.
                 txp_setup_progress_meter(3).
                 n.'<div class="txp-setup">'.
@@ -542,8 +505,7 @@ eod;
             exit;
         }
 
-        if (!is_valid_email(ps('email')))
-        {
+        if (!is_valid_email(ps('email'))) {
             echo n.'<div id="setup_container" class="txp-container">'.
                 txp_setup_progress_meter(3).
                 n.'<div class="txp-setup">'.
@@ -558,8 +520,7 @@ eod;
 
         global $txpcfg;
 
-        if (!isset($txpcfg['db']))
-        {
+        if (!isset($txpcfg['db'])) {
             require txpath.'/config.php';
         }
 
@@ -616,8 +577,7 @@ eod;
         $close = '?'.chr(62);
 
         // Escape single quotes and backslashes in literal PHP strings.
-        foreach ($ar as $k => $v)
-        {
+        foreach ($ar as $k => $v) {
             $ar[$k] = addcslashes($ar[$k], "'\\");
         }
         $ar = doSpecial($ar);
@@ -643,8 +603,7 @@ eod;
             txp_setup_progress_meter(4).
             n.'<div class="txp-setup">';
 
-        if ($GLOBALS['txp_install_successful'] === false)
-        {
+        if ($GLOBALS['txp_install_successful'] === false) {
             return graf(
                     span(setup_gTxt('errors_during_install', array(
                         '{num}' => $GLOBALS['txp_err_count']
@@ -652,9 +611,7 @@ eod;
                 ).
                 n.'</div>'.
                 n.'</div>';
-        }
-        else
-        {
+        } else {
             $warnings = @find_temp_dir() ? '' : graf(
                 span(setup_gTxt('set_temp_dir_prefs'), ' class="warning"')
             );
@@ -782,8 +739,7 @@ eod;
         $out = n.'<p><label for="setup_language">Please choose a language</label>'.
             br.'<select name="lang" id="setup_language">';
 
-        foreach ($langs as $a => $b)
-        {
+        foreach ($langs as $a => $b) {
             $out .= n.'<option value="'.txpspecialchars($a).'"'.
                 (($a == $default) ? ' selected="selected"' : '').
                 '>'.txpspecialchars($b).'</option>';
@@ -815,15 +771,12 @@ eod;
         // Try to translate the string in chosen native language.
         $xlate = gTxt($var, $atts, $escape);
 
-        if (!is_array($atts))
-        {
+        if (!is_array($atts)) {
             $atts = array();
         }
 
-        if ($escape == 'html')
-        {
-            foreach ($atts as $key => $value)
-            {
+        if ($escape == 'html') {
+            foreach ($atts as $key => $value) {
                 $atts[$key] = txpspecialchars($value);
             }
         }
@@ -831,18 +784,14 @@ eod;
         $v = strtolower($var);
 
         // Find out if the translated string is the same as the $var input.
-        if ($atts)
-        {
+        if ($atts) {
             $compare = ($xlate == $v.': '.join(', ', $atts));
-        }
-        else
-        {
+        } else {
             $compare = ($xlate == $v);
         }
 
         // No translation string available, so grab an English string we know exists as fallback.
-        if ($compare)
-        {
+        if ($compare) {
             $xlate = strtr($en_gb_strings[$v], $atts);
         }
 

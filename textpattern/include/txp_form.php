@@ -28,8 +28,7 @@
  * @package Admin\Form
  */
 
-    if (!defined('txpinterface'))
-    {
+    if (!defined('txpinterface')) {
         die('txpinterface is undefined.');
     }
 
@@ -64,8 +63,7 @@
         'section'  => gTxt('section'),
     );
 
-    if ($event == 'form')
-    {
+    if ($event == 'form') {
         require_privs('form');
 
         bouncer($step, array(
@@ -76,8 +74,7 @@
             'form_save'       => true,
         ));
 
-        switch (strtolower($step))
-        {
+        switch (strtolower($step)) {
             case "" :
                 form_edit();
                 break;
@@ -122,20 +119,16 @@
             "$criteria order by field(type, ".join(',', quote_list(array_keys($form_types))).") asc, name asc"
         );
 
-        if ($rs)
-        {
+        if ($rs) {
             $prev_type = null;
             $group_out = array();
 
-            while ($a = nextRow($rs))
-            {
+            while ($a = nextRow($rs)) {
                 extract($a);
                 $active = ($curname === $name);
 
-                if ($prev_type !== $type)
-                {
-                    if ($prev_type !== null)
-                    {
+                if ($prev_type !== $type) {
+                    if ($prev_type !== null) {
                         $group_out = tag(n.join(n, $group_out).n, 'ul', array(
                             'class' => 'switcher-list',
                         ));
@@ -147,23 +140,17 @@
                     $group_out = array();
                 }
 
-                if ($active)
-                {
+                if ($active) {
                     $editlink = txpspecialchars($name);
-                }
-                else
-                {
+                } else {
                     $editlink = eLink('form', 'form_edit', 'name', $name, $name);
                 }
 
-                if (!in_array($name, $essential_forms))
-                {
+                if (!in_array($name, $essential_forms)) {
                     $modbox = span(
                         checkbox('selected_forms[]', txpspecialchars($name), false)
                     , array('class' => 'switcher-action'));
-                }
-                else
-                {
+                } else {
                     $modbox = '';
                 }
 
@@ -172,8 +159,7 @@
                 ));
             }
 
-            if ($prev_type !== null)
-            {
+            if ($prev_type !== null) {
                 $group_out = tag(n.join(n, $group_out).n, 'ul', array(
                     'class' => 'switcher-list',
                 ));
@@ -202,14 +188,10 @@
         $forms = ps('selected_forms');
         $affected = array();
 
-        if ($forms && is_array($forms))
-        {
-            if ($method == 'delete')
-            {
-                foreach ($forms as $name)
-                {
-                    if (form_delete($name))
-                    {
+        if ($forms && is_array($forms)) {
+            if ($method == 'delete') {
+                foreach ($forms as $name) {
+                    if (form_delete($name)) {
                         $affected[] = $name;
                     }
                 }
@@ -221,14 +203,11 @@
                 form_edit($message);
             }
 
-            if ($method == 'changetype')
-            {
+            if ($method == 'changetype') {
                 $new_type = ps('type');
 
-                foreach ($forms as $name)
-                {
-                    if (form_set_type($name, $new_type))
-                    {
+                foreach ($forms as $name) {
+                    if (form_set_type($name, $new_type)) {
                         $affected[] = $name;
                     }
                 }
@@ -238,10 +217,7 @@
                 form_edit($message);
             }
 
-        }
-
-        else
-        {
+        } else {
             form_edit();
         }
     }
@@ -280,33 +256,26 @@
         $type = assert_string(gps('type'));
         $newname = sanitizeForPage(assert_string(gps('newname')));
 
-        if ($step == 'form_delete' || empty($name) && $step != 'form_create' && !$savenew)
-        {
+        if ($step == 'form_delete' || empty($name) && $step != 'form_create' && !$savenew) {
             $name = 'default';
-        }
-        elseif (((($copy || $savenew) && $newname) || ($newname && $newname !== $name)) && !$save_error)
-        {
+        } elseif (((($copy || $savenew) && $newname) || ($newname && $newname !== $name)) && !$save_error) {
             $name = $newname;
         }
 
         $Form = gps('Form');
 
-        if (!$save_error)
-        {
+        if (!$save_error) {
             $rs = safe_row('*', 'txp_form', "name='".doSlash($name)."'");
             extract($rs);
         }
 
-        if (in_array($name, $essential_forms))
-        {
+        if (in_array($name, $essential_forms)) {
             $name_widgets = span(gTxt('form_name'), array('class' => 'txp-label-fixed')).br.
                 span($name, array('class' => 'txp-value-fixed'));
 
             $type_widgets = span(gTxt('form_type'), array('class' => 'txp-label-fixed')).br.
                 span($type, array('class' => 'txp-value-fixed'));
-        }
-        else
-        {
+        } else {
             $name_widgets = tag(gTxt('form_name'), 'label', 'for="new_form"').br.
                 fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_form', false, true);
 
@@ -320,20 +289,16 @@
             'title' => gTxt('form_clone'),
         ));
 
-        if (empty($type) || $type == 'article')
-        {
+        if (empty($type) || $type == 'article') {
             $buttons .= href(gTxt('preview'), '#', array(
                 'id'    => 'form_preview',
                 'class' => 'form-preview',
             ));
         }
 
-        if ($name)
-        {
+        if ($name) {
             $name_widgets .= n.span($buttons, array('class' => 'txp-actions'));
-        }
-        else
-        {
+        } else {
             $name_widgets .= hInput('savenew', 'savenew');
         }
 
@@ -379,8 +344,7 @@
         );
 
         $tagbuild_links = '';
-        foreach ($tagbuild_items as $tb => $item)
-        {
+        foreach ($tagbuild_items as $tb => $item) {
             $tagbuild_links .= wrapRegion($item[1].'_group', popTagLinks($tb), $item[1], $item[0], $item[1]);
         }
 
@@ -450,51 +414,37 @@
         $save_error = false;
         $message = '';
 
-        if (in_array($name, $essential_forms))
-        {
+        if (in_array($name, $essential_forms)) {
             $newname = $name;
             $type = fetch('type', 'txp_form', 'name', $newname);
             $_POST['newname'] = $newname;
         }
 
-        if (!$newname)
-        {
+        if (!$newname) {
             $message = array(gTxt('form_name_invalid'), E_ERROR);
             $save_error = true;
-        }
-        else
-        {
-            if (!isset($form_types[$type]))
-            {
+        } else {
+            if (!isset($form_types[$type])) {
                 $message = array(gTxt('form_type_missing'), E_ERROR);
                 $save_error = true;
-            }
-            else
-            {
-                if ($copy && $name === $newname)
-                {
+            } else {
+                if ($copy && $name === $newname) {
                     $newname .= '_copy';
                     $_POST['newname'] = $newname;
                 }
 
                 $exists = safe_field('name', 'txp_form', "name = '".doSlash($newname)."'");
 
-                if ($newname !== $name && $exists !== false)
-                {
+                if ($newname !== $name && $exists !== false) {
                     $message = array(gTxt('form_already_exists', array('{name}' => $newname)), E_ERROR);
-                    if ($savenew)
-                    {
+                    if ($savenew) {
                         $_POST['newname'] = '';
                     }
 
                     $save_error = true;
-                }
-                else
-                {
-                    if ($savenew or $copy)
-                    {
-                        if ($newname)
-                        {
+                } else {
+                    if ($savenew or $copy) {
+                        if ($newname) {
                             if (safe_insert(
                                     'txp_form',
                                     "Form = '$Form',
@@ -503,21 +453,15 @@
                             )) {
                                 update_lastmod();
                                 $message = gTxt('form_created', array('{name}' => $newname));
-                            }
-                            else
-                            {
+                            } else {
                                 $message = array(gTxt('form_save_failed'), E_ERROR);
                                 $save_error = true;
                             }
-                        }
-                        else
-                        {
+                        } else {
                             $message = array(gTxt('form_name_invalid'), E_ERROR);
                             $save_error = true;
                         }
-                    }
-                    else
-                    {
+                    } else {
                         if (safe_update(
                                 'txp_form',
                                 "Form = '$Form',
@@ -527,9 +471,7 @@
                         )) {
                             update_lastmod();
                             $message = gTxt('form_updated', array('{name}' => $name));
-                        }
-                        else
-                        {
+                        } else {
                             $message = array(gTxt('form_save_failed'), E_ERROR);
                             $save_error = true;
                         }
@@ -538,12 +480,9 @@
             }
         }
 
-        if ($save_error === true)
-        {
+        if ($save_error === true) {
             $_POST['save_error'] = '1';
-        }
-        else
-        {
+        } else {
             callback_event('form_saved', '', 0, $name, $newname);
         }
 
@@ -561,8 +500,7 @@
     {
         global $essential_forms;
 
-        if (in_array($name, $essential_forms))
-        {
+        if (in_array($name, $essential_forms)) {
             return false;
         }
 
@@ -583,8 +521,7 @@
     {
         global $essential_forms, $form_types;
 
-        if (in_array($name, $essential_forms) || !isset($form_types[$type]))
-        {
+        if (in_array($name, $essential_forms) || !isset($form_types[$type])) {
             return false;
         }
 

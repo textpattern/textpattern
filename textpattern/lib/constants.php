@@ -31,8 +31,7 @@
 
 $old_level = error_reporting((E_ALL | E_STRICT) ^ E_NOTICE);
 
-if (!defined('TXP_DEBUG'))
-{
+if (!defined('TXP_DEBUG')) {
     /**
      * If set to "1", dumps debug log to the temp directory.
      *
@@ -78,8 +77,7 @@ define('VISIBLE', 1);
 
 define('RELOAD', -99);
 
-if (!defined('RPC_SERVER'))
-{
+if (!defined('RPC_SERVER')) {
     /**
      * RPC server location.
      *
@@ -92,8 +90,7 @@ if (!defined('RPC_SERVER'))
     define('RPC_SERVER', 'http://rpc.textpattern.com');
 }
 
-if (!defined('HELP_URL'))
-{
+if (!defined('HELP_URL')) {
     /**
      * The location where help documentation is fetched.
      *
@@ -157,8 +154,7 @@ define('DS', defined('DIRECTORY_SEPARATOR') ? DIRECTORY_SEPARATOR : (IS_WIN ? '\
 
 define('MAGIC_QUOTES_GPC', get_magic_quotes_gpc());
 
-if (!defined('REGEXP_UTF8'))
-{
+if (!defined('REGEXP_UTF8')) {
     /**
      * TRUE if the system supports UTF-8 regex patterns.
      *
@@ -199,8 +195,7 @@ define('PERMLINKURL', 0);
 
 define('PAGELINKURL', 1);
 
-if (!defined('EXTRA_MEMORY'))
-{
+if (!defined('EXTRA_MEMORY')) {
     /**
      * Allocated extra memory.
      *
@@ -326,8 +321,7 @@ define('PLUGIN_LIFECYCLE_NOTIFY', 0x0002);
 
 define('PLUGIN_RESERVED_FLAGS', 0x0fff);
 
-if (!defined('LOG_REFERER_PROTOCOLS'))
-{
+if (!defined('LOG_REFERER_PROTOCOLS')) {
     /**
      * Sets accepted protocols for HTTP referrer header.
      *
@@ -342,8 +336,7 @@ if (!defined('LOG_REFERER_PROTOCOLS'))
     define('LOG_REFERER_PROTOCOLS', 'http, https');
 }
 
-if (!defined('PASSWORD_LENGTH'))
-{
+if (!defined('PASSWORD_LENGTH')) {
     /**
      * Password default length, in characters.
      *
@@ -357,8 +350,7 @@ if (!defined('PASSWORD_LENGTH'))
     define('PASSWORD_LENGTH', 10);
 }
 
-if (!defined('PASSWORD_COMPLEXITY'))
-{
+if (!defined('PASSWORD_COMPLEXITY')) {
     /**
      * Password iteration strength count.
      *
@@ -372,8 +364,7 @@ if (!defined('PASSWORD_COMPLEXITY'))
     define('PASSWORD_COMPLEXITY', 8);
 }
 
-if (!defined('PASSWORD_PORTABILITY'))
-{
+if (!defined('PASSWORD_PORTABILITY')) {
     /**
      * Passwords are created portable if TRUE.
      *
@@ -387,8 +378,7 @@ if (!defined('PASSWORD_PORTABILITY'))
     define('PASSWORD_PORTABILITY', true);
 }
 
-if (!defined('PASSWORD_SYMBOLS'))
-{
+if (!defined('PASSWORD_SYMBOLS')) {
     /**
      * Symbols used in auto-generated passwords.
      *
@@ -404,8 +394,7 @@ if (!defined('PASSWORD_SYMBOLS'))
     define('PASSWORD_SYMBOLS', '23456789abcdefghijkmnopqrstuvwxyz');
 }
 
-if (!defined('LOGIN_COOKIE_HTTP_ONLY'))
-{
+if (!defined('LOGIN_COOKIE_HTTP_ONLY')) {
     /**
      * If TRUE, login cookie is set just for HTTP.
      *
@@ -419,8 +408,7 @@ if (!defined('LOGIN_COOKIE_HTTP_ONLY'))
     define('LOGIN_COOKIE_HTTP_ONLY', true);
 }
 
-if (!defined('X_FRAME_OPTIONS'))
-{
+if (!defined('X_FRAME_OPTIONS')) {
     /**
      * Sets X-Frame-Options HTTP header's value.
      *
@@ -437,8 +425,7 @@ if (!defined('X_FRAME_OPTIONS'))
     define('X_FRAME_OPTIONS', 'SAMEORIGIN');
 }
 
-if (!defined('X_UA_COMPATIBLE'))
-{
+if (!defined('X_UA_COMPATIBLE')) {
     /**
      * Sets X-UA-Compatible HTTP header's value.
      *
@@ -453,8 +440,7 @@ if (!defined('X_UA_COMPATIBLE'))
     define('X_UA_COMPATIBLE', 'IE=edge,chrome=1');
 }
 
-if (!defined('AJAX_TIMEOUT'))
-{
+if (!defined('AJAX_TIMEOUT')) {
     /**
      * AJAX timeout in seconds.
      *
@@ -535,8 +521,7 @@ define('STATUS_LIVE', 4);
 
 define('STATUS_STICKY', 5);
 
-if (!defined('WRITE_RECENT_ARTICLES_COUNT'))
-{
+if (!defined('WRITE_RECENT_ARTICLES_COUNT')) {
     /**
      * Number of recent articles displayed on the Write panel.
      *

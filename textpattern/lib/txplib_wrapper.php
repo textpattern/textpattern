@@ -36,15 +36,13 @@
  * @copyright 2005-2008 The Textpattern Development Team - http://textpattern.com
  */
 
-if (!defined('txpath'))
-{
+if (!defined('txpath')) {
     die('txpath is undefined.');
 }
 
 include_once txpath.'/include/txp_auth.php';
 
-if (!defined('LEAVE_TEXT_UNTOUCHED'))
-{
+if (!defined('LEAVE_TEXT_UNTOUCHED')) {
     /**
      * @ignore
      */
@@ -52,8 +50,7 @@ if (!defined('LEAVE_TEXT_UNTOUCHED'))
     define('LEAVE_TEXT_UNTOUCHED', 0);
 }
 
-if (!defined('USE_TEXTILE'))
-{
+if (!defined('USE_TEXTILE')) {
     /**
      * @ignore
      */
@@ -61,8 +58,7 @@ if (!defined('USE_TEXTILE'))
     define('USE_TEXTILE', 1);
 }
 
-if (!defined('CONVERT_LINEBREAKS'))
-{
+if (!defined('CONVERT_LINEBREAKS')) {
     /**
      * @ignore
      */
@@ -152,8 +148,7 @@ class TXP_Wrapper
 
     public function __construct($txp_user, $txpass = null)
     {
-        if ($this->_validate($txp_user, $txpass))
-        {
+        if ($this->_validate($txp_user, $txpass)) {
             $this->txp_user = $txp_user;
             $this->loggedin = true;
         }
@@ -169,15 +164,11 @@ class TXP_Wrapper
     public function deleteArticleID($article_id)
     {
         $article_id = assert_int($article_id);
-        if ($this->loggedin && has_privs('article.delete', $this->txp_user))
-        {
+        if ($this->loggedin && has_privs('article.delete', $this->txp_user)) {
             return safe_delete('textpattern', "ID = $article_id");
-        }
-        elseif ($this->loggedin && has_privs('article.delete.own', $this->txp_user))
-        {
+        } elseif ($this->loggedin && has_privs('article.delete.own', $this->txp_user)) {
             $r = safe_field('ID', 'textpattern', "ID = $article_id AND AuthorID='".doSlash($this->txp_user)."'");
-            if ($r || has_privs('article.delete', $this->txp_user))
-            {
+            if ($r || has_privs('article.delete', $this->txp_user)) {
                 return safe_delete('textpattern', "ID = $article_id");
             }
         }
@@ -204,30 +195,23 @@ class TXP_Wrapper
 
     public function getArticleList($what = '*', $where = '1', $offset = 0, $limit = 10, $slash = true)
     {
-        if ($this->loggedin && has_privs('article.edit.own', $this->txp_user))
-        {
+        if ($this->loggedin && has_privs('article.edit.own', $this->txp_user)) {
             $offset = assert_int($offset);
             $limit = assert_int($limit);
 
-            if ($slash)
-            {
+            if ($slash) {
                 $where = doSlash($where);
                 $what = doSlash($what);
             }
 
-            if (has_privs('article.edit', $this->txp_user))
-            {
+            if (has_privs('article.edit', $this->txp_user)) {
                 $rs = safe_rows_start($what, 'textpattern', $where." order by Posted desc LIMIT $offset, $limit");
-            }
-            else
-            {
+            } else {
                 $rs = safe_rows_start($what, 'textpattern', $where." AND AuthorID='".doSlash($this->txp_user)."' order by Posted desc LIMIT $offset, $limit");
             }
             $out = array();
-            if ($rs)
-            {
-                while ($a = nextRow($rs))
-                {
+            if ($rs) {
+                while ($a = nextRow($rs)) {
                     $out[] = $a;
                 }
             }
@@ -261,20 +245,15 @@ class TXP_Wrapper
 
     public function getArticle($what = '*', $where = '1', $slash = true)
     {
-        if ($this->loggedin && has_privs('article.edit.own', $this->txp_user))
-        {
-            if ($slash)
-            {
+        if ($this->loggedin && has_privs('article.edit.own', $this->txp_user)) {
+            if ($slash) {
                 $what  = doSlash($what);
                 $where = doSlash($where);
             }
             // Higher user groups should be able to edit any article.
-            if (has_privs('article.edit', $this->txp_user))
-            {
+            if (has_privs('article.edit', $this->txp_user)) {
                 return safe_row($what, 'textpattern', $where);
-            }
-            else
-            {
+            } else {
                 // While restricted users should be able to edit their own articles only.
                 return safe_row($what, 'textpattern', $where." AND AuthorID='".doSlash($this->txp_user)."'");
             }
@@ -301,15 +280,11 @@ class TXP_Wrapper
 
     public function getArticleID($article_id, $what = '*')
     {
-        if ($this->loggedin && has_privs('article.edit.own', $this->txp_user))
-        {
+        if ($this->loggedin && has_privs('article.edit.own', $this->txp_user)) {
             $article_id = assert_int($article_id);
-            if (has_privs('article.edit', $this->txp_user))
-            {
+            if (has_privs('article.edit', $this->txp_user)) {
                 return safe_row(doSlash($what), 'textpattern', "ID = $article_id");
-            }
-            else
-            {
+            } else {
                 return safe_row(doSlash($what), 'textpattern', "ID = $article_id AND AuthorID='".doSlash($this->txp_user)."'");
             }
         }
@@ -342,20 +317,16 @@ class TXP_Wrapper
         $article_id = assert_int($article_id);
         $r = safe_field('ID', 'textpattern', "AuthorID='".doSlash($this->txp_user)."' AND ID = $article_id");
 
-        if ($this->loggedin && $r && has_privs('article.edit.own', $this->txp_user))
-        {
+        if ($this->loggedin && $r && has_privs('article.edit.own', $this->txp_user)) {
             // Unprivileged user, check if they can edit published articles.
             $r = assert_int($r);
             $oldstatus = safe_field('Status', 'textpattern', "ID = $r");
-            if (($oldstatus == 4 || $oldstatus == 5) && !has_privs('article.edit.published', $this->txp_user))
-            {
+            if (($oldstatus == 4 || $oldstatus == 5) && !has_privs('article.edit.published', $this->txp_user)) {
                 return false;
             }
             // If they can, let's go.
             return $this->_setArticle($params, $article_id);
-        }
-        elseif ($this->loggedin && has_privs('article.edit', $this->txp_user))
-        {
+        } elseif ($this->loggedin && has_privs('article.edit', $this->txp_user)) {
             // Admin editing. Desires are behest.
             return $this->_setArticle($params, $article_id);
         }
@@ -381,10 +352,8 @@ class TXP_Wrapper
 
     public function newArticle($params)
     {
-        if ($this->loggedin && has_privs('article', $this->txp_user))
-        {
-            if (($params['Status'] == 4 || $params['Status'] == 5) && !has_privs('article.publish', $this->txp_user))
-            {
+        if ($this->loggedin && has_privs('article', $this->txp_user)) {
+            if (($params['Status'] == 4 || $params['Status'] == 5) && !has_privs('article.publish', $this->txp_user)) {
                 $params['Status'] = 3;
             }
 
@@ -412,8 +381,7 @@ class TXP_Wrapper
 
     public function getSectionsList()
     {
-        if ($this->loggedin && has_privs('article', $this->txp_user))
-        {
+        if ($this->loggedin && has_privs('article', $this->txp_user)) {
             return safe_rows('*', 'txp_section', "name!='default'");
         }
         return false;
@@ -436,8 +404,7 @@ class TXP_Wrapper
 
     public function getSection($name)
     {
-        if ($this->loggedin && has_privs('article', $this->txp_user))
-        {
+        if ($this->loggedin && has_privs('article', $this->txp_user)) {
             $name = doSlash($name);
             return safe_row('*', 'txp_section', "name='$name'");
         }
@@ -463,8 +430,7 @@ class TXP_Wrapper
 
     public function getCategoryList()
     {
-        if ($this->loggedin && has_privs('article', $this->txp_user))
-        {
+        if ($this->loggedin && has_privs('article', $this->txp_user)) {
             return safe_rows('*', 'txp_category', "name!='root' AND type='article'");
         }
         return false;
@@ -487,8 +453,7 @@ class TXP_Wrapper
 
     public function getCategory($name)
     {
-        if ($this->loggedin && has_privs('article', $this->txp_user))
-        {
+        if ($this->loggedin && has_privs('article', $this->txp_user)) {
             $name = doSlash($name);
             return safe_row('*', 'txp_category', "name='$name' AND type='article'");
         }
@@ -508,8 +473,7 @@ class TXP_Wrapper
 
     public function getCategoryID($id)
     {
-        if ($this->loggedin && has_privs('article', $this->txp_user))
-        {
+        if ($this->loggedin && has_privs('article', $this->txp_user)) {
             $id = assert_int($id);
             return safe_row('*', 'txp_category', "id = $id");
         }
@@ -529,8 +493,7 @@ class TXP_Wrapper
 
     public function getCategoryTitle($title)
     {
-        if ($this->loggedin && has_privs('article', $this->txp_user))
-        {
+        if ($this->loggedin && has_privs('article', $this->txp_user)) {
             $title = doSlash($title);
             return safe_row('*', 'txp_category', "title='$title' AND type='article'");
         }
@@ -554,8 +517,7 @@ class TXP_Wrapper
 
     public function getUser()
     {
-        if ($this->loggedin)
-        {
+        if ($this->loggedin) {
             return safe_row('*', 'txp_users', "name='$this->txp_user'");
         }
         return false;
@@ -573,8 +535,7 @@ class TXP_Wrapper
 
     public function getTemplate($name)
     {
-        if ($this->loggedin && has_privs('page', $this->txp_user))
-        {
+        if ($this->loggedin && has_privs('page', $this->txp_user)) {
             $name = doSlash($name);
             return safe_field('user_html', 'txp_page', "name='$name'");
         }
@@ -600,8 +561,7 @@ class TXP_Wrapper
 
     public function setTemplate($name, $html)
     {
-        if ($this->loggedin && has_privs('page', $this->txp_user))
-        {
+        if ($this->loggedin && has_privs('page', $this->txp_user)) {
             $name = doSlash($name);
             $html = doSlash($html);
             return safe_update('txp_page', "user_html='$html'", "name='$name'");
@@ -644,28 +604,21 @@ class TXP_Wrapper
             'uid',
         );
 
-        if ($this->loggedin && has_privs('article.edit', $this->txp_user) && !in_array(doSlash($field), $disallow))
-        {
+        if ($this->loggedin && has_privs('article.edit', $this->txp_user) && !in_array(doSlash($field), $disallow)) {
             $field = doSlash($field);
             $value = doSlash($value);
 
-            if ($field == 'Posted')
-            {
+            if ($field == 'Posted') {
                 $value = strtotime($value)-tz_offset();
                 $value = "from_unixtime($value)";
                 $sql = "Posted = $value";
-            }
-            elseif ($field == 'Status')
-            {
+            } elseif ($field == 'Status') {
                 $value = assert_int($value);
-                if (!has_privs('article.publish', $this->txp_user) && $value >=4)
-                {
+                if (!has_privs('article.publish', $this->txp_user) && $value >=4) {
                     $value = 3;
                 }
                 $sql = "Status = $value";
-            }
-            else
-            {
+            } else {
                 $sql = "$field='$value'";
             }
 
@@ -697,23 +650,19 @@ class TXP_Wrapper
 
         extract($prefs);
 
-        if (!empty($incoming['Section']) && !$this->getSection($incoming['Section']))
-        {
+        if (!empty($incoming['Section']) && !$this->getSection($incoming['Section'])) {
             return false;
         }
 
-        if (!empty($incoming['Category1']) && !$this->getCategory($incoming['Category1']))
-        {
+        if (!empty($incoming['Category1']) && !$this->getCategory($incoming['Category1'])) {
             return false;
         }
 
-        if (!empty($incoming['Category2']) && !$this->getCategory($incoming['Category2']))
-        {
+        if (!empty($incoming['Category2']) && !$this->getCategory($incoming['Category2'])) {
             return false;
         }
 
-        if ($article_id !== null)
-        {
+        if ($article_id !== null) {
             $article_id = assert_int($article_id);
         }
 
@@ -724,69 +673,52 @@ class TXP_Wrapper
 
         $incoming['Title'] = $incoming_with_markup['Title'];
 
-        if (empty($incoming['Body_html']) && !empty($incoming['Body']))
-        {
+        if (empty($incoming['Body_html']) && !empty($incoming['Body'])) {
             $incoming['Body_html'] = $incoming_with_markup['Body_html'];
         }
 
-        if (empty($incoming['Excerpt_html']) && !empty($incoming['Excerpt']))
-        {
+        if (empty($incoming['Excerpt_html']) && !empty($incoming['Excerpt'])) {
                 $incoming['Excerpt_html'] = $incoming_with_markup['Excerpt_html'];
         }
 
         unset($incoming_with_markup);
 
-        if (empty($incoming['Posted']))
-        {
-            if ($article_id === null)
-            {
+        if (empty($incoming['Posted'])) {
+            if ($article_id === null) {
                 $when = (!$article_id)? 'now()': '';
                 $incoming['Posted'] = $when;
-            }
-            else
-            {
+            } else {
                 // Do not override post time for existing articles unless Posted is present.
                 unset($incoming['Posted']);
             }
-        }
-        else
-        {
+        } else {
             $when = strtotime($incoming['Posted'])-tz_offset();
             $when = "from_unixtime($when)";
         }
 
-        if ($incoming['Title'] || $incoming['Body'] || $incoming['Excerpt'])
-        {
+        if ($incoming['Title'] || $incoming['Body'] || $incoming['Excerpt']) {
             // Build SQL then and run query.
             // Prevent data erase if not defined on the update action but
             // it was on the database from a previous creation/edition time.
-            if ($article_id)
-            {
+            if ($article_id) {
                 $old = safe_row('*', 'textpattern', "ID = $article_id");
 
-                if (!has_privs('article.publish', $this->txp_user) && $incoming['Status'] == 4 && $old['Status'] != 4)
-                {
+                if (!has_privs('article.publish', $this->txp_user) && $incoming['Status'] == 4 && $old['Status'] != 4) {
                     $incoming['Status'] = 3;
                 }
 
-                foreach ($old as $key => $val)
-                {
-                     if (!isset($incoming[$key]))
-                     {
+                foreach ($old as $key => $val) {
+                     if (!isset($incoming[$key])) {
                          $incoming[$key] = $val;
                      }
                 }
-            }
-            else
-            {
-                if (!has_privs('article.publish', $this->txp_user) && $incoming['Status'] == 4)
-                {
+            } else {
+                if (!has_privs('article.publish', $this->txp_user) && $incoming['Status'] == 4) {
                     $incoming['Status'] = 3;
                 }
             }
 
-            if (empty($incoming['Section']) && $article_id)
-            {
+            if (empty($incoming['Section']) && $article_id) {
                 $incoming['Section'] = safe_field('Section', 'textpattern', "ID = $article_id");
             }
 
@@ -802,14 +734,10 @@ class TXP_Wrapper
             // Build the SQL query.
             $sql = array();
 
-            foreach ($incoming as $key => $val)
-            {
-                if ($key == 'Posted' && $val == 'now()')
-                {
+            foreach ($incoming as $key => $val) {
+                if ($key == 'Posted' && $val == 'now()') {
                     $sql[] = "$key = $val";
-                }
-                elseif ($key != 'ID' && $key != 'uid' && $key != 'feed_time' && $key != 'LastMod' && $key != 'LastModID')
-                {
+                } elseif ($key != 'ID' && $key != 'uid' && $key != 'feed_time' && $key != 'LastMod' && $key != 'LastModID') {
                     $sql[] = "$key = '".doSlash($val)."'";
                 }
             }
@@ -817,19 +745,14 @@ class TXP_Wrapper
             $sql[] = 'LastMod = now()';
             $sql[] = "LastModID = '".doSlash($this->txp_user)."'";
 
-            if (!$article_id)
-            {
+            if (!$article_id) {
                 $sql[] = "uid = '".doSlash(md5(uniqid(rand(),true)))."'";
             }
 
-            if (!$article_id)
-            {
-                if (empty($incoming['Posted']))
-                {
+            if (!$article_id) {
+                if (empty($incoming['Posted'])) {
                     $sql[]= "feed_time = curdate()";
-                }
-                else
-                {
+                } else {
                     $when = strtotime($incoming['Posted'])-tz_offset();
                     $when = strftime("%Y-%m-%d", $when);
                     $sql[]= "feed_time ='".doSlash($when)."'";
@@ -842,13 +765,11 @@ class TXP_Wrapper
 
             $oldstatus = ($article_id)? $old['Status'] : '';
 
-            if (!$article_id && $rs)
-            {
+            if (!$article_id && $rs) {
                 $article_id = $rs;
             }
 
-            if (($incoming['Status'] >= 4 && !$article_id) || ($oldstatus != 4 && $article_id))
-            {
+            if (($incoming['Status'] >= 4 && !$article_id) || ($oldstatus != 4 && $article_id)) {
                 safe_update("txp_prefs", "val = now()", "name = 'lastmod'");
                 //@$this->_sendPings();
             }
@@ -869,16 +790,12 @@ class TXP_Wrapper
 
     public function _validate($user, $password = null)
     {
-        if ($password !== null)
-        {
+        if ($password !== null) {
             $r = txp_validate($user, $password);
-        }
-        else
-        {
+        } else {
             $r = true;
         }
-        if ($r)
-        {
+        if ($r) {
             // Update the last access time.
             $safe_user = addslashes($user);
             safe_update("txp_users", "last_access = now()", "name = '$safe_user'");
@@ -902,14 +819,12 @@ class TXP_Wrapper
 
         include_once txpath.'/lib/IXRClass.php';
 
-        if ($ping_textpattern_com)
-        {
+        if ($ping_textpattern_com) {
             $tx_client = new IXR_Client('http://textpattern.com/xmlrpc/');
             $tx_client->query('ping.Textpattern', $sitename, hu);
         }
 
-        if ($ping_weblogsdotcom == 1)
-        {
+        if ($ping_weblogsdotcom == 1) {
             $wl_client = new IXR_Client('http://rpc.pingomatic.com/');
             $wl_client->query('weblogUpdates.ping', $sitename, hu);
         }
@@ -930,24 +845,19 @@ class TXP_Wrapper
     {
         $out = array();
         // Strip off unsuited keys.
-        foreach ($incoming as $key => $val)
-        {
-            if (in_array($key, $this->vars))
-            {
+        foreach ($incoming as $key => $val) {
+            if (in_array($key, $this->vars)) {
                 $out[$key] = $val;
             }
         }
 
-        foreach ($this->vars as $def_key)
-        {
+        foreach ($this->vars as $def_key) {
             // Add those ones inexistent in the incoming array.
-            if (!array_key_exists($def_key, $out))
-            {
+            if (!array_key_exists($def_key, $out)) {
                 $out[$def_key] = '';
             }
             // Setup the provided default value, if any, only when the incoming value is empty.
-            if (array_key_exists($def_key, $default) && empty($out[$def_key]))
-            {
+            if (array_key_exists($def_key, $default) && empty($out[$def_key])) {
                 $out[$def_key] = $default[$def_key];
             }
         }
@@ -971,13 +881,11 @@ class TXP_Wrapper
 
         $textile = new Textpattern_Textile_Parser();
 
-        if (!empty($event) and $event == 'article')
-        {
+        if (!empty($event) and $event == 'article') {
             $incoming['Title_plain'] = $incoming['Title'];
         }
 
-        if ($incoming['textile_body'] == USE_TEXTILE)
-        {
+        if ($incoming['textile_body'] == USE_TEXTILE) {
             $incoming['Title'] = $textile->TextileThis($incoming['Title'], '', 1);
         }
 
@@ -1002,8 +910,7 @@ class TXP_Wrapper
 
     public function format_field($field, $format, $textile)
     {
-        switch ($format)
-        {
+        switch ($format) {
             case LEAVE_TEXT_UNTOUCHED :
                 $html = trim($field);
                 break;

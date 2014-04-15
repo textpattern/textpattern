@@ -1,7 +1,6 @@
 <?php
 
-    if (!defined('TXP_UPDATE'))
-    {
+    if (!defined('TXP_UPDATE')) {
         exit("Nothing here. You can't access this file directly.");
     }
 
@@ -18,7 +17,6 @@
 
     // Add column for file title.
     $cols = getThings('describe `'.PFX.'txp_file`');
-    if (!in_array('title', $cols))
-    {
+    if (!in_array('title', $cols)) {
         safe_alter('txp_file', "ADD `title` VARCHAR( 255 ) NULL AFTER `filename`");
     }

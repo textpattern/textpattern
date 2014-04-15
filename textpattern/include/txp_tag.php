@@ -28,8 +28,7 @@
  * @package Admin\Tag
  */
 
-if (!defined('txpinterface'))
-{
+if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
 
@@ -81,10 +80,8 @@ begin generic functions
     {
         $atts = array();
 
-        foreach ($atts_list as $att => $val)
-        {
-            if ($val or $val === '0' or $val === '{att_empty}')
-            {
+        foreach ($atts_list as $att => $val) {
+            if ($val or $val === '0' or $val === '{att_empty}') {
                 $val = str_replace('{att_empty}', '', $val);
                 $atts[] = ' '.$att.'="'.$val.'"';
             }
@@ -168,8 +165,7 @@ begin generic functions
             0 => gTxt('no'),
         );
 
-        if (is_numeric($val))
-        {
+        if (is_numeric($val)) {
             $val = (int) $val;
         }
 
@@ -199,10 +195,8 @@ begin generic functions
 
         $rs = safe_rows_start('name, title', 'txp_section', "name != 'default' order by name");
 
-        if ($rs and numRows($rs) > 0)
-        {
-            while ($a = nextRow($rs))
-            {
+        if ($rs and numRows($rs) > 0) {
+            while ($a = nextRow($rs)) {
                 extract($a);
 
                 $vals[$name] = $title;
@@ -258,8 +252,7 @@ begin generic functions
     {
         $vals = getTree('root', 'article');
 
-        if ($vals)
-        {
+        if ($vals) {
             return ' '.treeSelectInput('category', $vals, $val);
         }
 
@@ -272,8 +265,7 @@ begin generic functions
     {
         $vals = getTree('root', 'link');
 
-        if ($vals)
-        {
+        if ($vals) {
             return ' '.treeSelectInput('category', $vals, $val);
         }
 
@@ -286,8 +278,7 @@ begin generic functions
     {
         $vals = getTree('root', 'file');
 
-        if ($vals)
-        {
+        if ($vals) {
             return ' '.treeSelectInput('category', $vals, $val);
         }
 
@@ -328,10 +319,8 @@ begin generic functions
 
         $rs = safe_rows_start('name', 'txp_users', '1 = 1 order by name');
 
-        if ($rs)
-        {
-            while ($a = nextRow($rs))
-            {
+        if ($rs) {
+            while ($a = nextRow($rs)) {
                 extract($a);
 
                 $vals[$name] = $name;
@@ -421,10 +410,8 @@ begin generic functions
 
         $rs = safe_rows_start('name', 'txp_form', "$type order by name");
 
-        if ($rs and numRows($rs) > 0)
-        {
-            while ($a = nextRow($rs))
-            {
+        if ($rs and numRows($rs) > 0) {
+            while ($a = nextRow($rs)) {
                 extract($a);
 
                 $vals[$name] = $name;
@@ -444,10 +431,8 @@ begin generic functions
 
         $rs = safe_rows_start('name', 'txp_css', "1 = 1 order by name");
 
-        if ($rs)
-        {
-            while ($a = nextRow($rs))
-            {
+        if ($rs) {
+            while ($a = nextRow($rs)) {
                 extract($a);
 
                 $vals[$name] = $name;
@@ -506,8 +491,7 @@ class TagBuilderTags
         $tag_name = gps('tag_name');
         $method = 'tag_'.$tag_name;
 
-        if (method_exists($tagbuilder, $method))
-        {
+        if (method_exists($tagbuilder, $method)) {
             $endform = tr(
                 td().
                 td(fInput('submit', '', gTxt('build')))
@@ -591,8 +575,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts));
         }
 
@@ -706,8 +689,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts));
         }
 
@@ -749,8 +731,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts));
         }
 
@@ -782,8 +763,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts));
         }
 
@@ -858,8 +838,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts));
         }
 
@@ -933,8 +912,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts));
         }
 
@@ -1017,8 +995,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts));
         }
 
@@ -1080,8 +1057,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts));
         }
 
@@ -1149,8 +1125,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts));
         }
 
@@ -1208,8 +1183,7 @@ class TagBuilderTags
         $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts));
         }
 
@@ -1243,8 +1217,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts));
         }
 
@@ -1303,8 +1276,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts));
         }
 
@@ -1342,8 +1314,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts));
         }
 
@@ -1405,8 +1376,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts));
         }
 
@@ -1459,8 +1429,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts));
         }
 
@@ -1513,8 +1482,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts));
         }
 
@@ -1573,8 +1541,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts));
         }
 
@@ -1608,8 +1575,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts, gTxt('...')));
         }
 
@@ -1660,8 +1626,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts));
         }
 
@@ -1695,8 +1660,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts, gTxt('...')));
         }
 
@@ -1738,8 +1702,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts));
         }
 
@@ -1778,8 +1741,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts, $thing));
         }
 
@@ -1818,8 +1780,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts, $thing));
         }
 
@@ -1858,8 +1819,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts, $thing));
         }
 
@@ -1927,8 +1887,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts));
         }
 
@@ -1992,8 +1951,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts));
         }
 
@@ -2044,8 +2002,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts, $thing));
         }
 
@@ -2075,8 +2032,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, array(), $thing));
         }
 
@@ -2106,8 +2062,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, array(), $thing));
         }
 
@@ -2247,8 +2202,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts));
         }
 
@@ -2298,8 +2252,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts));
         }
 
@@ -2402,8 +2355,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts));
         }
 
@@ -2437,8 +2389,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts));
         }
 
@@ -2488,8 +2439,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts));
         }
 
@@ -2523,8 +2473,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts));
         }
 
@@ -2574,8 +2523,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts));
         }
 
@@ -2617,8 +2565,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts));
         }
 
@@ -2660,8 +2607,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts));
         }
 
@@ -2707,8 +2653,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts));
         }
 
@@ -2771,8 +2716,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts));
         }
 
@@ -2806,8 +2750,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts));
         }
 
@@ -3075,8 +3018,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts));
         }
 
@@ -3134,8 +3076,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts));
         }
 
@@ -3181,8 +3122,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts));
         }
 
@@ -3241,8 +3181,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts));
         }
 
@@ -3305,8 +3244,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts));
         }
 
@@ -3385,8 +3323,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts));
         }
 
@@ -3457,34 +3394,27 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $url = imagesrcurl($id, $ext);
 
-            switch ($type)
-            {
+            switch ($type) {
                 case 'textile' :
                     $alt = ($alt) ? ' ('.$alt.')' : '';
                     $modifiers = '';
 
-                    if ($class)
-                    {
+                    if ($class) {
                         $modifiers .= '('.$class;
 
-                        if ($html_id)
-                        {
+                        if ($html_id) {
                             $modifiers .= '#'.$html_id;
                         }
 
                         $modifiers .= ')';
-                    }
-                    elseif ($html_id)
-                    {
+                    } elseif ($html_id) {
                         $modifiers .= "(#$html_id)";
                     }
 
-                    if ($style)
-                    {
+                    if ($style) {
                         $modifiers .= '{'.$style.'}';
                     }
 
@@ -3555,8 +3485,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts));
         }
 
@@ -3625,8 +3554,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts));
         }
 
@@ -3660,8 +3588,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts));
         }
 
@@ -3695,8 +3622,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts));
         }
 
@@ -3745,8 +3671,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts));
         }
 
@@ -3804,16 +3729,14 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $description = str_replace('&', '&#38;', txpspecialchars($description));
             $urlinfo = parse_url(hu);
             $url = ($permlink_mode == 'messy') ?
                 $urlinfo['path'].'index.php?s=file_download'.($type == 'textile' ? '&' : a).'id='.$id:
                 $urlinfo['path'].gTxt('file_download').'/'.$id.($filename ? '/'.urlencode($filename) : '');
 
-            switch ($type)
-            {
+            switch ($type) {
                 case 'textile' :
                     $thing = ($thing) ? $thing : $filename;
                     $description = ($description) ? ' ('.$description.')' : '';
@@ -3913,8 +3836,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts));
         }
 
@@ -3956,8 +3878,7 @@ class TagBuilderTags
             $endform
         );
 
-        if ($step == 'build')
-        {
+        if ($step == 'build') {
             $out .= tdb(tb($tag_name, $atts));
         }
 

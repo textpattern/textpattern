@@ -28,13 +28,11 @@
  * @package Admin\Section
  */
 
-    if (!defined('txpinterface'))
-    {
+    if (!defined('txpinterface')) {
         die('txpinterface is undefined.');
     }
 
-    if ($event == 'section')
-    {
+    if ($event == 'section') {
         require_privs('section');
 
         global $all_pages, $all_styles;
@@ -52,12 +50,9 @@
             'section_toggle_option' => true,
         );
 
-        if ($step && bouncer($step, $available_steps))
-        {
+        if ($step && bouncer($step, $available_steps)) {
             $step();
-        }
-        else
-        {
+        } else {
             sec_section_list();
         }
     }
@@ -84,19 +79,16 @@
             'search_method',
         )));
 
-        if ($sort === '')
-        {
+        if ($sort === '') {
             $sort = get_pref('section_sort_column', 'time');
         }
 
-        if ($dir === '')
-        {
+        if ($dir === '') {
             $dir = get_pref('section_sort_dir', 'desc');
         }
         $dir = ($dir == 'asc') ? 'asc' : 'desc';
 
-        switch ($sort)
-        {
+        switch ($sort) {
             case 'title' :
                 $sort_sql = 'title '.$dir;
                 break;
@@ -130,8 +122,7 @@
 
         $criteria = 1;
 
-        if ($search_method and $crit != '')
-        {
+        if ($search_method and $crit != '') {
             $verbatim = preg_match('/^"(.*)"$/', $crit, $m);
             $crit_escaped = $verbatim ? doSlash($m[1]) : doLike($crit);
             $critsql = $verbatim ?
@@ -147,8 +138,7 @@
                     'css'          => "css like '%$crit_escaped%'",
                 );
 
-            if ($verbatim)
-            {
+            if ($verbatim) {
                 $critsql['in_rss'] =
                     "('$crit_escaped' in ('".doSlash(gTxt('yes'))."', 1) and in_rss = 1) or
                     ('$crit_escaped' in ('".doSlash(gTxt('no'))."', '0') and in_rss = 0)";
@@ -160,9 +150,7 @@
                 $critsql['searchable'] =
                     "('$crit_escaped' in ('".doSlash(gTxt('yes'))."', 1) and searchable = 1) or
                     ('$crit_escaped' in ('".doSlash(gTxt('no'))."', '0') and searchable = 0)";
-            }
-            else
-            {
+            } else {
                 $critsql['in_rss'] =
                     "(('".doSlash(gTxt('yes'))."' like '%$crit_escaped%' or '$crit_escaped' = 1) and in_rss = 1) or
                     (('".doSlash(gTxt('no'))."' like '%$crit_escaped%' or '$crit_escaped' = '0') and in_rss = 0)";
@@ -178,27 +166,20 @@
 
             $search_sql = array();
 
-            foreach ((array) $search_method as $method)
-            {
-                if (isset($critsql[$method]))
-                {
+            foreach ((array) $search_method as $method) {
+                if (isset($critsql[$method])) {
                     $search_sql[] = $critsql[$method];
                 }
             }
 
-            if ($search_sql)
-            {
+            if ($search_sql) {
                 $criteria = join(' or ', $search_sql);
                 $limit = 500;
-            }
-            else
-            {
+            } else {
                 $search_method = '';
                 $crit = '';
             }
-        }
-        else
-        {
+        } else {
             $search_method = '';
             $crit = '';
         }
@@ -234,10 +215,8 @@
             sInput('section_set_default').
             n.tag_end('form');
 
-        if ($total < 1)
-        {
-            if ($criteria != 1)
-            {
+        if ($total < 1) {
+            if ($criteria != 1) {
                 echo section_search_form($crit, $search_method).
                     graf(gTxt('no_results_found'), ' class="indicator"').'</div>';
             }
@@ -257,8 +236,7 @@
             "{$criteria} order by {$sort_sql} limit {$offset}, {$limit}"
         );
 
-        if ($rs)
-        {
+        if ($rs) {
             echo
                 n.tag_start('div', array(
                     'id'    => $event.'_container',
@@ -290,8 +268,7 @@
                 n.tag_end('thead').
                 n.tag_start('tbody');
 
-            while ($a = nextRow($rs))
-            {
+            while ($a = nextRow($rs)) {
                 extract($a, EXTR_PREFIX_ALL, 'sec');
 
                 $edit_url = array(
@@ -305,12 +282,9 @@
                     'crit'          => $crit,
                 );
 
-                if ($sec_name == 'default')
-                {
+                if ($sec_name == 'default') {
                     $articles = $sec_searchable = $sec_in_rss = $sec_on_frontpage = '-';
-                }
-                else
-                {
+                } else {
                     $sec_on_frontpage = asyncHref(yes_no($sec_on_frontpage), array(
                         'step'     => 'section_toggle_option',
                         'thing'    => $sec_name,
@@ -329,8 +303,7 @@
                         'property' => 'searchable',
                     ));
 
-                    if ($sec_article_count > 0)
-                    {
+                    if ($sec_article_count > 0) {
                         $articles = href($sec_article_count, array(
                             'event'         => 'list',
                             'search_method' => 'section',
@@ -338,9 +311,7 @@
                         ), array(
                             'title' => gTxt('article_count', array('{num}' => $sec_article_count))
                         ));
-                    }
-                    else
-                    {
+                    } else {
                         $articles = 0;
                     }
                 }
@@ -423,26 +394,20 @@
         $caption = gTxt('create_section');
         $is_default_section = false;
 
-        if ($is_edit)
-        {
+        if ($is_edit) {
             $rs = safe_row(
                 '*',
                 'txp_section',
                 "name = '".doSlash($name)."'"
             );
 
-            if ($name == 'default')
-            {
+            if ($name == 'default') {
                 $caption = gTxt('edit_default_section');
                 $is_default_section = true;
-            }
-            else
-            {
+            } else {
                 $caption = gTxt('edit_section');
             }
-        }
-        else
-        {
+        } else {
             // Pulls defaults for the new section from the 'default'.
 
             $rs = safe_row(
@@ -451,14 +416,12 @@
                 "name = 'default'"
             );
 
-            if ($rs)
-            {
+            if ($rs) {
                 $rs['name'] = $rs['title'] = '';
             }
         }
 
-        if (!$rs)
-        {
+        if (!$rs) {
             sec_section_list(array(gTxt('unknown_section'), E_ERROR));
             return;
         }
@@ -472,12 +435,9 @@
             n.tag_start('section', array('class' => 'txp-edit')).
             hed($caption, 2);
 
-        if ($is_default_section)
-        {
+        if ($is_default_section) {
             $out[] = hInput('name', 'default');
-        }
-        else
-        {
+        } else {
             $out[] =
                 inputLabel('section_name', fInput('text', 'name', $sec_name, '', '', '', INPUT_REGULAR, '', 'section_name'), 'section_name').
                 inputLabel('section_title', fInput('text', 'title', $sec_title, '', '', '', INPUT_REGULAR, '', 'section_title'), 'section_longtitle');
@@ -487,8 +447,7 @@
             inputLabel('section_page', selectInput('section_page', $all_pages, $sec_page, '', '', 'section_page'), 'uses_page', 'section_uses_page').
             inputLabel('section_css', selectInput('css', $all_styles, $sec_css, '', '', 'section_css'), 'uses_style', 'section_uses_css');
 
-        if (!$is_default_section)
-        {
+        if (!$is_default_section) {
             $out[] =
                 inputLabel('on_front_page', yesnoradio('on_frontpage', $sec_on_frontpage, '', $sec_name), '', 'section_on_frontpage').
                 inputLabel('syndicate', yesnoradio('in_rss', $sec_in_rss, '', $sec_name), '', 'section_syndicate').
@@ -528,8 +487,7 @@
             'css',
         )));
 
-        if (empty($in['title']))
-        {
+        if (empty($in['title'])) {
             $in['title'] = $in['name'];
         }
 
@@ -541,10 +499,8 @@
         $in = doSlash($in);
         extract($in, EXTR_PREFIX_ALL, 'safe');
 
-        if ($name != strtolower($old_name))
-        {
-            if (safe_field('name', 'txp_section', "name='$safe_name'"))
-            {
+        if ($name != strtolower($old_name)) {
+            if (safe_field('name', 'txp_section', "name='$safe_name'")) {
                 // Invalid input. Halt all further processing (e.g. plugin event handlers).
                 $message = array(gTxt('section_name_already_exists', array('{name}' => $name)), E_ERROR);
 //                modal_halt($message);
@@ -554,16 +510,12 @@
         }
 
         $ok = false;
-        if ($name == 'default')
-        {
+        if ($name == 'default') {
             $ok = safe_update('txp_section', "page = '$safe_section_page', css = '$safe_css'", "name = 'default'");
-        }
-        else if ($name)
-        {
+        } elseif ($name) {
             extract(array_map('assert_int', psa(array('on_frontpage', 'in_rss', 'searchable'))));
 
-            if ($safe_old_name)
-            {
+            if ($safe_old_name) {
                 $ok = safe_update('txp_section', "
                     name         = '$safe_name',
                     title        = '$safe_title',
@@ -575,13 +527,10 @@
                     ", "name = '$safe_old_name'");
 
                 // Manually maintain referential integrity.
-                if ($ok)
-                {
+                if ($ok) {
                     $ok = safe_update('textpattern', "Section = '$safe_name'", "Section = '$safe_old_name'");
                 }
-            }
-            else
-            {
+            } else {
                 $ok = safe_insert('txp_section', "
                     name         = '$safe_name',
                     title        = '$safe_title',
@@ -593,17 +542,13 @@
             }
         }
 
-        if ($ok)
-        {
+        if ($ok) {
             update_lastmod();
         }
 
-        if ($ok)
-        {
+        if ($ok) {
             sec_section_list(gTxt(($safe_old_name ? 'section_updated': 'section_created'), array('{name}' => $name)));
-        }
-        else
-        {
+        } else {
             sec_section_list(array(gTxt('section_save_failed'), E_ERROR));
         }
     }
@@ -640,10 +585,8 @@
 
         $value = (int) ($value === gTxt('no'));
 
-        if (in_array($property, array('on_frontpage', 'in_rss', 'searchable')))
-        {
-            if (safe_update('txp_section', $property.' = '.$value, "name = '".doSlash($thing)."'"))
-            {
+        if (in_array($property, array('on_frontpage', 'in_rss', 'searchable'))) {
+            if (safe_update('txp_section', $property.' = '.$value, "name = '".doSlash($thing)."'")) {
                 echo yes_no($value);
                 return;
             }
@@ -664,8 +607,7 @@
 
         $exists = safe_row('name', 'txp_section', "name = '".doSlash($default_section)."'");
 
-        if ($exists && set_pref('default_section', $default_section, 'section', PREF_HIDDEN))
-        {
+        if ($exists && set_pref('default_section', $default_section, 'section', PREF_HIDDEN)) {
             send_script_response(announce(gTxt('default_section_updated')));
             return;
         }
@@ -686,8 +628,7 @@
         $val = get_pref('default_section');
         $sections = safe_rows('name, title', 'txp_section', "name != 'default' ORDER BY title, name");
         $vals = array();
-        foreach($sections as $row)
-        {
+        foreach($sections as $row) {
             $vals[$row['name']] = $row['title'];
         }
 
@@ -708,8 +649,7 @@
             "name != 'default' and name in ({$selected}) and name not in (select Section from ".safe_pfx('textpattern').")"
         );
 
-        if ($sections && safe_delete('txp_section', 'name in ('.join(',', quote_list($sections)).')'))
-        {
+        if ($sections && safe_delete('txp_section', 'name in ('.join(',', quote_list($sections)).')')) {
             callback_event('sections_deleted', '', 0, $sections);
             sec_section_list(gTxt('section_deleted', array('{name}' => join(', ', $sections))));
             return;
@@ -796,29 +736,25 @@
             'selected',
         )));
 
-        if (!$selected || !is_array($selected))
-        {
+        if (!$selected || !is_array($selected)) {
             return sec_section_list();
         }
 
         $key = $val = '';
 
-        switch ($edit_method)
-        {
+        switch ($edit_method) {
             case 'delete' :
                 return section_delete();
                 break;
             case 'changepage' :
                 $val = ps('uses_page');
-                if (in_array($val, $all_pages, true))
-                {
+                if (in_array($val, $all_pages, true)) {
                     $key = 'page';
                 }
                 break;
             case 'changecss' :
                 $val = ps('css');
-                if (in_array($val, $all_styles, true))
-                {
+                if (in_array($val, $all_styles, true)) {
                     $key = 'css';
                 }
                 break;
@@ -842,8 +778,7 @@
             "name in (".join(',', quote_list($selected)).")"
         );
 
-        if ($key && $sections)
-        {
+        if ($key && $sections) {
             if (
                 safe_update(
                     'txp_section',

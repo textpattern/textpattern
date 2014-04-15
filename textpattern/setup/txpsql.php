@@ -21,8 +21,7 @@
  * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
  */
 
-if (!defined('TXP_INSTALL'))
-{
+if (!defined('TXP_INSTALL')) {
     exit;
 }
 
@@ -33,8 +32,7 @@ mysql_connect($dhost, $duser, $dpass, false, $dclient_flags);
 mysql_select_db($ddb);
 
 $result = mysql_query("describe `".PFX."textpattern`");
-if ($result)
-{
+if ($result) {
     die("Textpattern database table already exists. Can't run setup.");
 }
 
@@ -46,11 +44,9 @@ $tabletype = (intval($version[0]) >= 5 || preg_match('#^4\.(0\.[2-9]|(1[89]))|(1
     : " TYPE=MyISAM ";
 
 // On 4.1 or greater use UTF-8 tables.
-if (isset($dbcharset) && (intval($version[0]) >= 5 || preg_match('#^4\.[1-9]#', $version)))
-{
+if (isset($dbcharset) && (intval($version[0]) >= 5 || preg_match('#^4\.[1-9]#', $version))) {
     $tabletype .= " CHARACTER SET = $dbcharset ";
-    if ($dbcharset == 'utf8')
-    {
+    if ($dbcharset == 'utf8') {
         $tabletype .= " COLLATE utf8_general_ci ";
     }
     mysql_query("SET NAMES ".$dbcharset);
@@ -58,21 +54,16 @@ if (isset($dbcharset) && (intval($version[0]) >= 5 || preg_match('#^4\.[1-9]#', 
 
 // Default to messy URLs if we know clean ones won't work.
 $permlink_mode = 'section_id_title';
-if (is_callable('apache_get_modules'))
-{
+if (is_callable('apache_get_modules')) {
     $modules = @apache_get_modules();
-    if (!is_array($modules) || !in_array('mod_rewrite', $modules))
-    {
+    if (!is_array($modules) || !in_array('mod_rewrite', $modules)) {
         $permlink_mode = 'messy';
     }
-}
-else
-{
+} else {
     $server_software = (@$_SERVER['SERVER_SOFTWARE'] || @$_SERVER['HTTP_HOST'])
         ? ((@$_SERVER['SERVER_SOFTWARE']) ? @$_SERVER['SERVER_SOFTWARE'] : $_SERVER['HTTP_HOST'])
         : '';
-    if (!stristr($server_software, 'Apache'))
-    {
+    if (!stristr($server_software, 'Apache')) {
         $permlink_mode = 'messy';
     }
 }
@@ -443,11 +434,9 @@ $create_sql[] = "CREATE TABLE `".PFX."txp_users` (
 $GLOBALS['txp_install_successful'] = true;
 $GLOBALS['txp_err_count'] = 0;
 
-foreach ($create_sql as $query)
-{
+foreach ($create_sql as $query) {
     $result = mysql_query($query);
-    if (!$result)
-    {
+    if (!$result) {
         $GLOBALS['txp_err_count']++;
         echo "<b>".$GLOBALS['txp_err_count'].".</b> ".mysql_error()."<br />\n";
         echo "<!--\n $query \n-->\n";
@@ -456,48 +445,37 @@ foreach ($create_sql as $query)
 }
 
 // Skip the RPC language fetch when testing.
-if (defined('TXP_TEST'))
-{
+if (defined('TXP_TEST')) {
     return;
 }
 
 require_once txpath.'/lib/IXRClass.php';
 $client = new IXR_Client('http://rpc.textpattern.com');
 
-if (!$client->query('tups.getLanguage', $prefs['blog_uid'],LANG))
-{
+if (!$client->query('tups.getLanguage', $prefs['blog_uid'],LANG)) {
     // If cannot install from lang file, setup the English lang.
-    if (!install_language_from_file(LANG))
-    {
+    if (!install_language_from_file(LANG)) {
         $lang = 'en-gb';
         include_once txpath.'/setup/en-gb.php';
-        if (!@$lastmod)
-        {
+        if (!@$lastmod) {
             $lastmod = '0000-00-00 00:00:00';
         }
 
-        foreach ($en_gb_lang as $evt_name => $evt_strings)
-        {
-            foreach ($evt_strings as $lang_key => $lang_val)
-            {
+        foreach ($en_gb_lang as $evt_name => $evt_strings) {
+            foreach ($evt_strings as $lang_key => $lang_val) {
                 $lang_val = doSlash($lang_val);
-                if (@$lang_val)
-                {
+                if (@$lang_val) {
                     mysql_query("INSERT DELAYED INTO `".PFX."txp_lang` SET lang='en-gb', name='".$lang_key."', event='".$evt_name."', data='".$lang_val."', lastmod='".$lastmod."'");
                 }
             }
         }
     }
-}
-else
-{
+} else {
     $response = $client->getResponse();
     $lang_struct = unserialize($response);
 
-    foreach ($lang_struct as $item)
-    {
-        foreach ($item as $name => $value)
-        {
+    foreach ($lang_struct as $item) {
+        foreach ($item as $name => $value) {
             $item[$name] = doSlash($value);
         }
         mysql_query("INSERT DELAYED INTO `".PFX."txp_lang` SET lang='".LANG."', name='".$item['name']."', event='".$item['event']."', data='".$item['data']."', lastmod='".strftime('%Y%m%d%H%M%S', $item['uLastmod'])."'");

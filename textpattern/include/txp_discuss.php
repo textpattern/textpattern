@@ -22,17 +22,14 @@
  * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
  */
 
-    if (!defined('txpinterface'))
-    {
+    if (!defined('txpinterface')) {
         die('txpinterface is undefined.');
     }
 
-    if ($event == 'discuss')
-    {
+    if ($event == 'discuss') {
         require_privs('discuss');
 
-        if (!get_pref('use_comments', 1))
-        {
+        if (!get_pref('use_comments', 1)) {
             require_privs();
         }
 
@@ -47,12 +44,9 @@
             'discuss_change_pageby' => true,
         );
 
-        if ($step && bouncer($step, $available_steps))
-        {
+        if ($step && bouncer($step, $available_steps)) {
             $step();
-        }
-        else
-        {
+        } else {
             discuss_list();
         }
     }
@@ -87,9 +81,7 @@
             update_comments_count($parentid);
             update_lastmod();
             $message = gTxt('comment_updated', array('{id}' => $discussid));
-        }
-        else
-        {
+        } else {
             $message = array(gTxt('comment_save_failed'), E_ERROR);
         }
 
@@ -103,8 +95,7 @@
         $message = strip_tags($message);
         $offset = min(120, strlen($message));
 
-        if (strpos($message, ' ', $offset) !== false)
-        {
+        if (strpos($message, ' ', $offset) !== false) {
             $maxpos = strpos($message, ' ', $offset);
             $message = substr($message, 0, $maxpos).'&#8230;';
         }
@@ -128,20 +119,17 @@
             'search_method',
         )));
 
-        if ($sort === '')
-        {
+        if ($sort === '') {
             $sort = get_pref('discuss_sort_column', 'date');
         }
 
-        if ($dir === '')
-        {
+        if ($dir === '') {
             $dir = get_pref('discuss_sort_dir', 'desc');
         }
 
         $dir = ($dir == 'asc') ? 'asc' : 'desc';
 
-        switch ($sort)
-        {
+        switch ($sort) {
             case 'id' :
                 $sort_sql = 'txp_discuss.discussid '.$dir;
                 break;
@@ -172,8 +160,7 @@
                 break;
         }
 
-        if ($sort != 'date')
-        {
+        if ($sort != 'date') {
             $sort_sql .= ', txp_discuss.posted asc';
         }
 
@@ -184,8 +171,7 @@
 
         $criteria = 1;
 
-        if ($search_method and $crit != '')
-        {
+        if ($search_method and $crit != '') {
             $verbatim = preg_match('/^"(.*)"$/', $crit, $m);
             $crit_escaped = $verbatim ? doSlash($m[1]) : doLike($crit);
             $critsql = $verbatim ?
@@ -207,19 +193,14 @@
                     'ip'      => "txp_discuss.ip like '%$crit_escaped%'",
                 );
 
-            if (array_key_exists($search_method, $critsql))
-            {
+            if (array_key_exists($search_method, $critsql)) {
                 $criteria = $critsql[$search_method];
                 $limit = 500;
-            }
-            else
-            {
+            } else {
                 $search_method = '';
                 $crit = '';
             }
-        }
-        else
-        {
+        } else {
             $search_method = '';
             $crit = '';
         }
@@ -235,8 +216,7 @@
 
         $count[SPAM] = $count[MODERATE] = $count[VISIBLE] = 0;
 
-        if ($counts) foreach($counts as $c)
-        {
+        if ($counts) foreach($counts as $c) {
             $count[$c['visible']] = $c['c'];
         }
 
@@ -249,15 +229,11 @@
             sLink('discuss', 'ipban_list', gTxt('list_banned_ips'))
             , ' class="txp-buttons"');
 
-        if ($total < 1)
-        {
-            if ($criteria != 1)
-            {
+        if ($total < 1) {
+            if ($criteria != 1) {
                 echo discuss_search_form($crit, $search_method).
                     graf(gTxt('no_results_found'), ' class="indicator"').'</div>';
-            }
-            else
-            {
+            } else {
                 echo graf(gTxt('no_comments_recorded'), ' class="indicator"').'</div>';
             }
 
@@ -266,8 +242,7 @@
 
         echo discuss_search_form($crit, $search_method).'</div>';
 
-        if (!cs('toggle_show_spam'))
-        {
+        if (!cs('toggle_show_spam')) {
             $total = $count[MODERATE] + $count[VISIBLE];
             $criteria = 'visible != '.intval(SPAM).' and '.$criteria;
         }
@@ -297,8 +272,7 @@
             where {$criteria} order by {$sort_sql} limit {$offset}, {$limit}"
         );
 
-        if ($rs)
-        {
+        if ($rs) {
             echo n.'<div id="'.$event.'_container" class="txp-container">';
             echo n.'<form name="longform" id="discuss_form" class="multi_edit_form" method="post" action="index.php">'.
 
@@ -323,8 +297,7 @@
 
             echo n.'<tbody>';
 
-            while ($a = nextRow($rs))
-            {
+            while ($a = nextRow($rs)) {
                 extract($a);
                 $parentid = assert_int($parentid);
 
@@ -341,8 +314,7 @@
 
                 $dmessage = ($visible == SPAM) ? short_preview($message) : $message;
 
-                switch ($visible)
-                {
+                switch ($visible) {
                     case VISIBLE :
                         $comment_status = gTxt('visible');
                         $row_class = 'visible';
@@ -359,21 +331,17 @@
                         break;
                 }
 
-                if (empty($thisid))
-                {
+                if (empty($thisid)) {
                     $parent = gTxt('article_deleted').' ('.$parentid.')';
                     $view = '';
-                }
-                else
-                {
+                } else {
                     $parent_title = empty($title) ? '<em>'.gTxt('untitled').'</em>' : escape_title($title);
 
                     $parent = href($parent_title, '?event=article'.a.'step=edit'.a.'ID='.$parentid);
 
                     $view = $comment_status;
 
-                    if ($visible == VISIBLE and in_array($Status, array(4, 5)))
-                    {
+                    if ($visible == VISIBLE and in_array($Status, array(4, 5))) {
                         $view = href($comment_status, permlinkurl($a).'#c'.$discussid, ' title="'.gTxt('view').'"');
                     }
                 }
@@ -392,8 +360,7 @@
                 , ' class="'.$row_class.'"');
             }
 
-            if (empty($message))
-            {
+            if (empty($message)) {
                 echo n.tr(tda(gTxt('just_spam_results_found'), ' colspan="10"'));
             }
 
@@ -454,19 +421,15 @@
 
         $rs = safe_row('*, unix_timestamp(posted) as uPosted', 'txp_discuss', "discussid = $discussid");
 
-        if ($rs)
-        {
+        if ($rs) {
             extract($rs);
 
             $message = txpspecialchars($message);
 
-            if (fetch('ip', 'txp_discuss_ipban', 'ip', $ip))
-            {
+            if (fetch('ip', 'txp_discuss_ipban', 'ip', $ip)) {
                 $ban_step = 'ipban_unban';
                 $ban_text = gTxt('unban');
-            }
-            else
-            {
+            } else {
                 $ban_step = 'ipban_add';
                 $ban_text = gTxt('ban');
             }
@@ -525,9 +488,7 @@
                     sInput('discuss_save').
                     n.'</section>'
                 , '', '', 'post', 'edit-form', '', 'discuss_edit_form'), '</div>';
-        }
-        else
-        {
+        } else {
             echo graf(gTxt('comment_not_found'), ' class="indicator"');
         }
     }
@@ -539,15 +500,13 @@
         extract(gpsa(array('ip', 'name', 'discussid')));
         $discussid = assert_int($discussid);
 
-        if (!$ip)
-        {
+        if (!$ip) {
             return ipban_list(gTxt('cant_ban_blank_ip'));
         }
 
         $ban_exists = fetch('ip', 'txp_discuss_ipban', 'ip', $ip);
 
-        if ($ban_exists)
-        {
+        if ($ban_exists) {
             $message = gTxt('ip_already_banned', array('{ip}' => $ip));
 
             return ipban_list($message);
@@ -561,8 +520,7 @@
         ");
 
         // hide all messages from that IP also
-        if ($rs)
-        {
+        if ($rs) {
             safe_update('txp_discuss', "visible = ".SPAM, "ip = '".doSlash($ip)."'");
 
             $message = gTxt('ip_banned', array('{ip}' => $ip));
@@ -581,8 +539,7 @@
 
         $rs = safe_delete('txp_discuss_ipban', "ip = '$ip'");
 
-        if ($rs)
-        {
+        if ($rs) {
             $message = gTxt('ip_ban_removed', array('{ip}' => $ip));
 
             ipban_list($message);
@@ -607,8 +564,7 @@
         $rs = safe_rows_start('*, unix_timestamp(date_banned) as uBanned', 'txp_discuss_ipban',
             "1 = 1 order by date_banned desc");
 
-        if ($rs and numRows($rs) > 0)
-        {
+        if ($rs and numRows($rs) > 0) {
             echo n.'<div id="'.$event.'_ban_container" class="txp-container">'.
                 startTable('', '', 'txp-list').
                 '<thead>'.
@@ -622,8 +578,7 @@
 
             echo n.'<tbody>';
 
-            while ($a = nextRow($rs))
-            {
+            while ($a = nextRow($rs)) {
                 extract($a);
 
                 echo tr(
@@ -660,9 +615,7 @@
             echo n.'</tbody>'.
             endTable().
             '</div>';
-        }
-        else
-        {
+        } else {
             echo graf(gTxt('no_ips_banned'), ' class="indicator"');
         }
     }
@@ -697,35 +650,28 @@
         $method = ps('edit_method');
         $done = array();
 
-        if ($selected and is_array($selected))
-        {
+        if ($selected and is_array($selected)) {
             // Get all articles for which we have to update the count.
             foreach($selected as $id)
                 $ids[] = assert_int($id);
             $parentids = safe_column("DISTINCT parentid", "txp_discuss", "discussid IN (".implode(',', $ids).")");
 
             $rs = safe_rows_start('*', 'txp_discuss', "discussid IN (".implode(',', $ids).")");
-            while ($row = nextRow($rs))
-            {
+            while ($row = nextRow($rs)) {
                 extract($row);
                 $id = assert_int($discussid);
                 $parentids[] = $parentid;
 
-                if ($method == 'delete')
-                {
+                if ($method == 'delete') {
                     // Delete and, if successful, update comment count.
-                    if (safe_delete('txp_discuss', "discussid = $id"))
-                    {
+                    if (safe_delete('txp_discuss', "discussid = $id")) {
                         $done[] = $id;
                     }
 
                     callback_event('discuss_deleted', '', 0, $done);
-                }
-                elseif ($method == 'ban')
-                {
+                } elseif ($method == 'ban') {
                     // Ban the IP and hide all messages by that IP.
-                    if (!safe_field('ip', 'txp_discuss_ipban', "ip='".doSlash($ip)."'"))
-                    {
+                    if (!safe_field('ip', 'txp_discuss_ipban', "ip='".doSlash($ip)."'")) {
                         safe_insert("txp_discuss_ipban",
                             "ip = '".doSlash($ip)."',
                             name_used = '".doSlash($name)."',
@@ -738,27 +684,21 @@
                         );
                     }
                     $done[] = $id;
-                }
-                elseif ($method == 'spam')
-                {
+                } elseif ($method == 'spam') {
                     if (safe_update('txp_discuss',
                         "visible = ".SPAM,
                         "discussid = $id"
                     )) {
                         $done[] = $id;
                     }
-                }
-                elseif ($method == 'unmoderated')
-                {
+                } elseif ($method == 'unmoderated') {
                     if (safe_update('txp_discuss',
                         "visible = ".MODERATE,
                         "discussid = $id"
                     )) {
                         $done[] = $id;
                     }
-                }
-                elseif ($method == 'visible')
-                {
+                } elseif ($method == 'visible') {
                     if (safe_update('txp_discuss',
                         "visible = ".VISIBLE,
                         "discussid = $id"
@@ -770,8 +710,7 @@
 
             $done = join(', ', $done);
 
-            if ($done)
-            {
+            if ($done) {
                 // Might as well clean up all comment counts while we're here.
                 clean_comment_counts($parentids);
 

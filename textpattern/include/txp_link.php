@@ -22,13 +22,11 @@
  * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
  */
 
-    if (!defined('txpinterface'))
-    {
+    if (!defined('txpinterface')) {
         die('txpinterface is undefined.');
     }
 
-    if ($event == 'link')
-    {
+    if ($event == 'link') {
         require_privs('link');
 
         global $vars;
@@ -46,12 +44,9 @@
             'link_multi_edit'    => true,
         );
 
-        if ($step && bouncer($step, $available_steps))
-        {
+        if ($step && bouncer($step, $available_steps)) {
             $step();
-        }
-        else
-        {
+        } else {
             link_list();
         }
     }
@@ -66,19 +61,16 @@
 
         extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
 
-        if ($sort === '')
-        {
+        if ($sort === '') {
             $sort = get_pref('link_sort_column', 'name');
         }
 
-        if ($dir === '')
-        {
+        if ($dir === '') {
             $dir = get_pref('link_sort_dir', 'asc');
         }
         $dir = ($dir == 'desc') ? 'desc' : 'asc';
 
-        switch ($sort)
-        {
+        switch ($sort) {
             case 'id' :
                 $sort_sql = 'id '.$dir;
                 break;
@@ -110,8 +102,7 @@
 
         $criteria = 1;
 
-        if ($search_method and $crit != '')
-        {
+        if ($search_method and $crit != '') {
             $verbatim = preg_match('/^"(.*)"$/', $crit, $m);
             $crit_escaped = $verbatim ? doSlash($m[1]) : doLike($crit);
             $critsql = $verbatim ?
@@ -131,18 +122,13 @@
                     'author'      => "author like '%$crit_escaped%'"
                 );
 
-            if (array_key_exists($search_method, $critsql))
-            {
+            if (array_key_exists($search_method, $critsql)) {
                 $criteria = $critsql[$search_method];
-            }
-            else
-            {
+            } else {
                 $search_method = '';
                 $crit = '';
             }
-        }
-        else
-        {
+        } else {
             $search_method = '';
             $crit = '';
         }
@@ -154,22 +140,17 @@
         echo hed(gTxt('tab_link'), 1, array('class' => 'txp-heading'));
         echo n.'<div id="'.$event.'_control" class="txp-control-panel">';
 
-        if (has_privs('link.edit'))
-        {
+        if (has_privs('link.edit')) {
             echo graf(
                 sLink('link', 'link_edit', gTxt('add_new_link'))
                 , ' class="txp-buttons"');
         }
 
-        if ($total < 1)
-        {
-            if ($criteria != 1)
-            {
+        if ($total < 1) {
+            if ($criteria != 1) {
                 echo link_search_form($crit, $search_method).
                     graf(gTxt('no_results_found'), ' class="indicator"').'</div>';
-            }
-            else
-            {
+            } else {
                 echo graf(gTxt('no_links_recorded'), ' class="indicator"').'</div>';
             }
 
@@ -184,8 +165,7 @@
 
         $rs = safe_rows_start('*, unix_timestamp(date) as uDate', 'txp_link', "$criteria order by $sort_sql limit $offset, $limit");
 
-        if ($rs)
-        {
+        if ($rs) {
             $show_authors = !has_single_author('txp_link');
 
             echo n.'<div id="'.$event.'_container" class="txp-container">';
@@ -210,8 +190,7 @@
 
             $validator = new Validator();
 
-            while ($a = nextRow($rs))
-            {
+            while ($a = nextRow($rs)) {
                 extract($a, EXTR_PREFIX_ALL, 'link');
 
                 $edit_url = array(
@@ -315,23 +294,19 @@
         $is_edit = ($id && $step == 'link_edit');
 
         $rs = array();
-        if ($is_edit)
-        {
+        if ($is_edit) {
             $id = assert_int($id);
             $rs = safe_row('*', 'txp_link', "id = $id");
-            if ($rs)
-            {
+            if ($rs) {
                 extract($rs);
-                if (!has_privs('link.edit') && !($author === $txp_user && has_privs('link.edit.own')))
-                {
+                if (!has_privs('link.edit') && !($author === $txp_user && has_privs('link.edit.own'))) {
                     link_list(gTxt('restricted_area'));
                     return;
                 }
             }
         }
 
-        if (has_privs('link.edit') || has_privs('link.edit.own'))
-        {
+        if (has_privs('link.edit') || has_privs('link.edit.own')) {
             $caption = gTxt(($is_edit) ? 'edit_link' : 'add_new_link');
 
             echo form(
@@ -379,26 +354,22 @@
         $varray = array_map('assert_string', gpsa($vars));
         extract(doSlash($varray));
 
-        if ($id)
-        {
+        if ($id) {
             $id = $varray['id'] = assert_int($id);
         }
 
-        if ($linkname === '' && $url === '' && $description === '')
-        {
+        if ($linkname === '' && $url === '' && $description === '') {
             link_list(array(gTxt('link_empty'), E_ERROR));
             return;
         }
 
         $author = fetch('author', 'txp_link', 'id', $id);
-        if (!has_privs('link.edit') && !($author === $txp_user && has_privs('link.edit.own')))
-        {
+        if (!has_privs('link.edit') && !($author === $txp_user && has_privs('link.edit.own'))) {
             link_list(gTxt('restricted_area'));
             return;
         }
 
-        if (!$linksort)
-        {
+        if (!$linksort) {
             $linksort = $linkname;
         }
 
@@ -409,10 +380,8 @@
         callback_event_ref('link_ui', 'validate_save', 0, $varray, $constraints);
         $validator = new Validator($constraints);
 
-        if ($validator->validate())
-        {
-            if ($id)
-            {
+        if ($validator->validate()) {
+            if ($id) {
                 $ok = safe_update('txp_link',
                     "category   = '$category',
                     url         = '".trim($url)."',
@@ -422,9 +391,7 @@
                     author      = '".doSlash($txp_user)."'",
                     "id = $id"
                 );
-            }
-            else
-            {
+            } else {
                 $ok = safe_insert('txp_link',
                     "category   = '$category',
                     date        = now(),
@@ -434,25 +401,19 @@
                     description = '$description',
                     author      = '".doSlash($txp_user)."'"
                 );
-                if ($ok)
-                {
+                if ($ok) {
                     $GLOBALS['ID'] = $_POST['id'] = $ok;
                 }
             }
 
-            if ($ok)
-            {
+            if ($ok) {
                 // update lastmod due to link feeds
                 update_lastmod();
                 $message = gTxt(($id ? 'link_updated' : 'link_created'), array('{name}' => doStrip($linkname)));
-            }
-            else
-            {
+            } else {
                 $message = array(gTxt('link_save_failed'), E_ERROR);
             }
-        }
-        else
-        {
+        } else {
             $message = array(gTxt('link_save_failed'), E_ERROR);
         }
 
@@ -481,18 +442,15 @@
             'delete'         => gTxt('delete'),
         );
 
-        if (!$categories)
-        {
+        if (!$categories) {
             unset($methods['changecategory']);
         }
 
-        if (has_single_author('txp_link'))
-        {
+        if (has_single_author('txp_link')) {
             unset($methods['changeauthor']);
         }
 
-        if (!has_privs('link.delete.own') && !has_privs('link.delete'))
-        {
+        if (!has_privs('link.delete.own') && !has_privs('link.delete')) {
             unset($methods['delete']);
         }
 
@@ -508,15 +466,13 @@
         // Empty entry to permit clearing the category
         $categories = array('');
 
-        foreach ($all_link_cats as $row)
-        {
+        foreach ($all_link_cats as $row) {
             $categories[] = $row['name'];
         }
 
         $selected = ps('selected');
 
-        if (!$selected or !is_array($selected))
-        {
+        if (!$selected or !is_array($selected)) {
             link_list();
             return;
         }
@@ -526,30 +482,22 @@
         $changed  = array();
         $key = '';
 
-        switch ($method)
-        {
+        switch ($method) {
             case 'delete' :
-                if (!has_privs('link.delete'))
-                {
-                    if (has_privs('link.delete.own'))
-                    {
+                if (!has_privs('link.delete')) {
+                    if (has_privs('link.delete.own')) {
                         $selected = safe_column('id', 'txp_link', 'id IN ('.join(',', $selected).') AND author=\''.doSlash($txp_user).'\'' );
-                    }
-                    else
-                    {
+                    } else {
                         $selected = array();
                     }
                 }
-                foreach ($selected as $id)
-                {
-                    if (safe_delete('txp_link', 'id = '.$id))
-                    {
+                foreach ($selected as $id) {
+                    if (safe_delete('txp_link', 'id = '.$id)) {
                         $changed[] = $id;
                     }
                 }
 
-                if ($changed)
-                {
+                if ($changed) {
                     callback_event('links_deleted', '', 0, $changed);
                 }
 
@@ -557,15 +505,13 @@
                 break;
             case 'changecategory' :
                 $val = ps('category');
-                if (in_array($val, $categories))
-                {
+                if (in_array($val, $categories)) {
                     $key = 'category';
                 }
                 break;
             case 'changeauthor' :
                 $val = ps('author');
-                if (in_array($val, $all_link_authors))
-                {
+                if (in_array($val, $all_link_authors)) {
                     $key = 'author';
                 }
                 break;
@@ -575,19 +521,15 @@
                 break;
         }
 
-        if ($selected and $key)
-        {
-            foreach ($selected as $id)
-            {
-                if (safe_update('txp_link', "$key = '".doSlash($val)."'", "id = $id"))
-                {
+        if ($selected and $key) {
+            foreach ($selected as $id) {
+                if (safe_update('txp_link', "$key = '".doSlash($val)."'", "id = $id")) {
                     $changed[] = $id;
                 }
             }
         }
 
-        if ($changed)
-        {
+        if ($changed) {
             update_lastmod();
 
             link_list(gTxt(

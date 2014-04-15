@@ -27,8 +27,7 @@
  * @package Admin\Import
  */
 
-    if (!defined('txpinterface'))
-    {
+    if (!defined('txpinterface')) {
         die('txpinterface is undefined.');
     }
 
@@ -174,8 +173,7 @@
 
         @ini_set('max_execution_time', 300 + intval($ini_time));
 
-        switch ($import_tool)
-        {
+        switch ($import_tool) {
             case 'mtdb' :
                 $out = doImportMTDB(
                     $importdblogin,
@@ -191,8 +189,7 @@
                 break;
             case 'mt' :
                 $file = check_import_file();
-                if (!empty($file))
-                {
+                if (!empty($file)) {
                     $out = doImportMT(
                         $file,
                         $insert_into_section,
@@ -201,9 +198,7 @@
                     );
                     // Rebuilding category tree.
                     rebuild_tree('root', 1, 'article');
-                }
-                else
-                {
+                } else {
                     $out = 'Import file not found';
                 }
                 break;
@@ -234,17 +229,14 @@
                 break;
             case 'blogger' :
                 $file = check_import_file();
-                if (!empty($file))
-                {
+                if (!empty($file)) {
                     $out = doImportBLOGGER(
                         $file,
                         $insert_into_section,
                         $insert_with_status,
                         $import_comments_invite
                     );
-                }
-                else
-                {
+                } else {
                     $out = gTxt('import_file_not_found');
                 }
                 break;
@@ -262,10 +254,8 @@
         echo $content;
 
         $rs = safe_rows_start('parentid, count(*) as thecount', 'txp_discuss', 'visible=1 group by parentid');
-        if (numRows($rs) > 0)
-        {
-            while ($a = nextRow($rs))
-            {
+        if (numRows($rs) > 0) {
+            while ($a = nextRow($rs)) {
                 safe_update('textpattern', "comments_count=".$a['thecount'], "ID=".$a['parentid']);
             }
         }
@@ -285,8 +275,7 @@
         // size is too long and time_limit can not be altered.
 
         $import_file = txpath.'/include/import/import.txt';
-        if (!is_file($import_file))
-        {
+        if (!is_file($import_file)) {
             // trigger_error('Import file not found', E_USER_WARNING);
             return '';
         }
@@ -321,8 +310,7 @@
     function import_section_popup($Section)
     {
         $rs = safe_column("name", "txp_section", "name!='default'");
-        if ($rs)
-        {
+        if ($rs) {
             return selectInput("import_section", $rs, $Section, 1, '', 'import_section');
         }
         return false;

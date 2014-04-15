@@ -48,14 +48,10 @@
         global $nolog, $logging;
         callback_event('log_hit');
 
-        if (!isset($nolog) && $status != 404)
-        {
-            if ($logging == 'refer')
-            {
+        if (!isset($nolog) && $status != 404) {
+            if ($logging == 'refer') {
                 logit('refer', $status);
-            }
-            elseif ($logging == 'all')
-            {
+            } elseif ($logging == 'all') {
                 logit('', $status);
             }
         }
@@ -78,8 +74,7 @@
     {
         global $prefs, $pretext;
 
-        if (!isset($pretext['request_uri']))
-        {
+        if (!isset($pretext['request_uri'])) {
             return;
         }
 
@@ -87,51 +82,37 @@
         $protocol = false;
         $referer = serverSet('HTTP_REFERER');
 
-        if ($referer)
-        {
-            foreach (do_list(LOG_REFERER_PROTOCOLS) as $option)
-            {
-                if (strpos($referer, $option.'://') === 0)
-                {
+        if ($referer) {
+            foreach (do_list(LOG_REFERER_PROTOCOLS) as $option) {
+                if (strpos($referer, $option.'://') === 0) {
                     $protocol = $option;
                     $referer = substr($referer, strlen($protocol)+3);
                     break;
                 }
             }
 
-            if (!$protocol || ($protocol === 'https' && PROTOCOL !== 'https://'))
-            {
+            if (!$protocol || ($protocol === 'https' && PROTOCOL !== 'https://')) {
                 $referer = '';
-            }
-            else if (preg_match('/^[^\.]*\.?'.preg_quote(preg_replace('/^www\./', '', SITE_HOST), '/').'/i', $referer))
-            {
+            } elseif (preg_match('/^[^\.]*\.?'.preg_quote(preg_replace('/^www\./', '', SITE_HOST), '/').'/i', $referer)) {
                 $referer = '';
-            }
-            else
-            {
+            } else {
                 $referer = $protocol.'://'.clean_url($referer);
             }
         }
 
-        if ($r == 'refer' && !$referer)
-        {
+        if ($r == 'refer' && !$referer) {
             return;
         }
 
-        if (!empty($prefs['use_dns']))
-        {
+        if (!empty($prefs['use_dns'])) {
             // A crude rDNS cache.
-            if (($h = safe_field('host', 'txp_log', "ip='".doSlash($ip)."' limit 1")) !== false)
-            {
+            if (($h = safe_field('host', 'txp_log', "ip='".doSlash($ip)."' limit 1")) !== false) {
                 $host = $h;
-            }
-            else
-            {
+            } else {
                 // Double-check the rDNS.
                 $host = @gethostbyaddr($ip);
 
-                if ($host !== $ip && @gethostbyname($host) !== $ip)
-                {
+                if ($host !== $ip && @gethostbyname($host) !== $ip) {
                     $host = $ip;
                 }
             }

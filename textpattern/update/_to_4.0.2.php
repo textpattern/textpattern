@@ -20,10 +20,10 @@
     // textile_body or textile_excerpt.
     if (safe_field('val','txp_prefs',"name='textile_updated'") === false) {
         $ut = safe_field('val','txp_prefs',"name='use_textile'");
-        if ($ut == 1) {
+            if ($ut == 1) {
             safe_update('txp_prefs',"val='2'","name='use_textile'");
         } elseif ($ut == 2) {
             safe_update('txp_prefs',"val='1'","name='use_textile'");
         }
-        safe_insert('txp_prefs', "prefs_id=1, name='textile_updated',val='1', type='2'");
+            safe_insert('txp_prefs', "prefs_id=1, name='textile_updated',val='1', type='2'");
     }

@@ -48,8 +48,7 @@
             'parentid='.intval($id).' and visible='.VISIBLE.' order by posted asc'
         );
 
-        if ($rs)
-        {
+        if ($rs) {
             return $rs;
         }
     }
@@ -73,8 +72,7 @@
             'ID='.intval($id).' and Status >= 4'
         );
 
-        if ($rs)
-        {
+        if ($rs) {
             populateArticleData($rs);
             $result = parse_form('comments_display');
             return $result;
@@ -94,8 +92,7 @@
     {
         static $nonce = '';
 
-        if (!$nonce && !$check_only)
-        {
+        if (!$nonce && !$check_only) {
             $nonce = md5(uniqid(rand(), true));
         }
 
@@ -113,8 +110,7 @@
     {
         static $secret = '';
 
-        if (!$secret && !$check_only)
-        {
+        if (!$secret && !$check_only) {
             $secret = md5(uniqid(rand(), true));
         }
 
@@ -167,14 +163,12 @@
             'backpage',
         ))));
 
-        if ($message == '')
-        {    // Second or later preview will have randomised message-field name.
+        if ($message == '') {    // Second or later preview will have randomised message-field name.
             $in = getComment();
             $message = doDeEnt($in['message']);
         }
 
-        if ($preview)
-        {
+        if ($preview) {
             $name  = ps('name');
             $email = clean_url(ps('email'));
             $web   = clean_url(ps('web'));
@@ -189,44 +183,33 @@
 
             $evaluator =& get_comment_evaluator();
 
-            if ($namewarn)
-            {
+            if ($namewarn) {
                 $evaluator->add_estimate(RELOAD, 1, gTxt('comment_name_required'));
             }
 
-            if ($emailwarn)
-            {
+            if ($emailwarn) {
                 $evaluator->add_estimate(RELOAD, 1, gTxt('comment_email_required'));
             }
 
-            if ($commentwarn)
-            {
+            if ($commentwarn) {
                 $evaluator->add_estimate(RELOAD, 1, gTxt('comment_required'));
             }
-        }
-        else
-        {
+        } else {
             $rememberCookie = cs('txp_remember');
 
-            if ($rememberCookie === '')
-            {
+            if ($rememberCookie === '') {
                 $checkbox_type = 'remember';
                 $remember = 1;
-            }
-            else if ($rememberCookie == 1)
-            {
+            } elseif ($rememberCookie == 1) {
                 $checkbox_type = 'forget';
-            }
-            else
-            {
+            } else {
                 $checkbox_type = 'remember';
             }
         }
 
         // If the form fields are filled (anything other than blank), pages
         // really should not be saved by a public cache (rfc2616/14.9.1).
-        if ($name || $email || $web)
-        {
+        if ($name || $email || $web) {
             header('Cache-Control: private');
         }
 
@@ -236,8 +219,7 @@
 
         // Experimental clean URLs with only 404-error-document on Apache
         // possibly requires messy URLs for POST requests.
-        if (defined('PARTLY_MESSY') and (PARTLY_MESSY))
-        {
+        if (defined('PARTLY_MESSY') and (PARTLY_MESSY)) {
             $url = hu.'?id='.intval($parentid);
         }
 
@@ -262,26 +244,20 @@
         $comment_submit_button = fInput('submit', 'submit', $submitlabel, 'button disabled', '', '', '', '', 'txpCommentSubmit', true);
 
         // If all fields check out, the submit button is active/clickable.
-        if ($preview)
-        {
+        if ($preview) {
             $comment_submit_button = fInput('submit', 'submit', $submitlabel, 'button', '', '', '', '', 'txpCommentSubmit', false);
         }
 
-        if ($checkbox_type == 'forget')
-        {
+        if ($checkbox_type == 'forget') {
             // Inhibit default remember.
-            if ($forget == 1)
-            {
+            if ($forget == 1) {
                 destroyCookies();
             }
 
             $checkbox = checkbox('forget', 1, $forget, '', 'forget').' '.tag(txpspecialchars($forgetlabel), 'label', ' for="forget"');
-        }
-        else
-        {
+        } else {
             // Inhibit default remember.
-            if ($remember != 1)
-            {
+            if ($remember != 1) {
                 destroyCookies();
             }
 
@@ -300,8 +276,7 @@
             'comment_submit'        => $comment_submit_button
         );
 
-        foreach ($vals as $a => $b)
-        {
+        foreach ($vals as $a => $b) {
             $Form = str_replace('<txp:'.$a.' />', $b, $Form);
         }
 
@@ -408,10 +383,8 @@
 
         $n = array();
 
-        foreach (stripPost() as $k => $v)
-        {
-            if (preg_match('#^[A-Fa-f0-9]{32}$#', $k.$v))
-            {
+        foreach (stripPost() as $k => $v) {
+            if (preg_match('#^[A-Fa-f0-9]{32}$#', $k.$v)) {
                 $n[] = doSlash($k.$v);
             }
         }
@@ -419,8 +392,7 @@
         $c['nonce'] = '';
         $c['secret'] = '';
 
-        if (!empty($n))
-        {
+        if (!empty($n)) {
             $rs = safe_row('nonce, secret', 'txp_discuss_nonce', "nonce in ('".join("','", $n)."')");
             $c['nonce'] = $rs['nonce'];
             $c['secret'] = $rs['secret'];
@@ -444,34 +416,28 @@
 
         extract($in);
 
-        if (!checkCommentsAllowed($parentid))
-        {
+        if (!checkCommentsAllowed($parentid)) {
             txp_die(gTxt('comments_closed'), '403');
         }
 
         $ip = serverset('REMOTE_ADDR');
 
-        if (!checkBan($ip))
-        {
+        if (!checkBan($ip)) {
             txp_die(gTxt('you_have_been_banned'), '403');
         }
 
         $blacklisted = is_blacklisted($ip);
 
-        if ($blacklisted)
-        {
+        if ($blacklisted) {
             txp_die(gTxt('your_ip_is_blacklisted_by'.' '.$blacklisted), '403');
         }
 
         $web = clean_url($web);
         $email = clean_url($email);
 
-        if ($remember == 1 || ps('checkbox_type') == 'forget' && ps('forget') != 1)
-        {
+        if ($remember == 1 || ps('checkbox_type') == 'forget' && ps('forget') != 1) {
             setCookies($name, $email, $web);
-        }
-        else
-        {
+        } else {
             destroyCookies();
         }
 
@@ -496,18 +462,15 @@
             $evaluator->add_estimate(RELOAD,1); // The error-messages are added in the preview-code.
         }
 
-        if ($isdup)
-        {
+        if ($isdup) {
             $evaluator->add_estimate(RELOAD,1); // FIXME? Tell the user about dupe?
         }
 
-        if (($evaluator->get_result() != RELOAD) && checkNonce($nonce))
-        {
+        if (($evaluator->get_result() != RELOAD) && checkNonce($nonce)) {
             callback_event('comment.save');
             $visible = $evaluator->get_result();
 
-            if ($visible != RELOAD)
-            {
+            if ($visible != RELOAD) {
                 $parentid = assert_int($parentid);
                 $commentid = safe_insert(
                     "txp_discuss",
@@ -521,12 +484,10 @@
                      posted   = now()"
                 );
 
-                if ($commentid)
-                {
+                if ($commentid) {
                     safe_update("txp_discuss_nonce", "used = 1", "nonce='".doSlash($nonce)."'");
 
-                    if ($prefs['comment_means_site_updated'])
-                    {
+                    if ($prefs['comment_means_site_updated']) {
                         update_lastmod();
                     }
 
@@ -548,8 +509,7 @@
                     $backpage = preg_replace("/[\x0a\x0d#].*$/s", '', $backpage);
                     $backpage = preg_replace("#(https?://[^/]+)/.*$#", "$1", hu).$backpage;
 
-                    if (defined('PARTLY_MESSY') and (PARTLY_MESSY))
-                    {
+                    if (defined('PARTLY_MESSY') and (PARTLY_MESSY)) {
                         $backpage = permlinkurl_id($parentid);
                     }
 
@@ -557,12 +517,9 @@
 
                     txp_status_header('302 Found');
 
-                    if ($comments_moderate)
-                    {
+                    if ($comments_moderate) {
                         header('Location: '.$backpage.'#txpCommentInputForm');
-                    }
-                    else
-                    {
+                    } else {
                         header('Location: '.$backpage.'#c'.sprintf("%06s", $commentid));
                     }
 
@@ -645,12 +602,9 @@ class comment_evaluation
         $this->message = $this->status;
         $this -> txpspamtrace[] = "Comment on $parentid by $name (".safe_strftime($prefs['archive_dateformat'],time()).")";
 
-        if ($prefs['comments_moderate'])
-        {
+        if ($prefs['comments_moderate']) {
             $this->status[MODERATE][] = 0.5;
-        }
-        else
-        {
+        } else {
             $this->status[VISIBLE][] = 0.5;
         }
     }
@@ -670,8 +624,7 @@ class comment_evaluation
     {
         global $production_status;
 
-        if (!array_key_exists($type, $this->status))
-        {
+        if (!array_key_exists($type, $this->status)) {
             trigger_error(gTxt('unknown_spam_estimate'), E_USER_WARNING);
         }
 
@@ -680,8 +633,7 @@ class comment_evaluation
 
         $this->status[$type][] = max(0, min(1, $probability));
 
-        if (trim($msg))
-        {
+        if (trim($msg)) {
             $this->message[$type][] = $msg;
         }
     }
@@ -702,8 +654,7 @@ class comment_evaluation
     {
         $result = array();
 
-        foreach ($this->status as $key => $value)
-        {
+        foreach ($this->status as $key => $value) {
             $result[$key] = array_sum($value)/max(1, count($value));
         }
 
@@ -736,25 +687,20 @@ class comment_evaluation
         global $prefs;
         $file = $prefs['tempdir'].DS.'evaluator_trace.php';
 
-        if (!file_exists($file))
-        {
+        if (!file_exists($file)) {
             $fp = fopen($file, 'wb');
 
-            if ($fp)
-            {
+            if ($fp) {
                 fwrite($fp, "<?php return; ?>\n".
                     "This trace-file tracks saved comments. (created ".safe_strftime($prefs['archive_dateformat'],time()).")\n".
                     "Format is: Type; Probability; Message (Type can be -1 => spam, 0 => moderate, 1 => visible)\n\n"
                 );
             }
-        }
-        else
-        {
+        } else {
             $fp = fopen($file, 'ab');
         }
 
-        if ($fp)
-        {
+        if ($fp) {
             fwrite($fp, implode("\n", $this->txpspamtrace));
             fwrite($fp, "\n  RESULT: ".$this->get_result()."\n\n");
             fclose($fp);
@@ -773,8 +719,7 @@ class comment_evaluation
         static $instance;
 
         // If the instance is not there, create one
-        if (!isset($instance))
-        {
+        if (!isset($instance)) {
             $instance = new comment_evaluation();
         }
 
@@ -793,8 +738,7 @@ class comment_evaluation
 
     function checkNonce($nonce)
     {
-        if (!$nonce || !preg_match('#^[a-zA-Z0-9]*$#', $nonce))
-        {
+        if (!$nonce || !preg_match('#^[a-zA-Z0-9]*$#', $nonce)) {
             return false;
         }
 
@@ -840,18 +784,14 @@ class comment_evaluation
 
         $id = intval($id);
 
-        if (!$use_comments || !$id)
-        {
+        if (!$use_comments || !$id) {
             return false;
         }
 
-        if (isset($thisarticle['thisid']) && ($thisarticle['thisid'] == $id) && isset($thisarticle['annotate']))
-        {
+        if (isset($thisarticle['thisid']) && ($thisarticle['thisid'] == $id) && isset($thisarticle['annotate'])) {
             $Annotate = $thisarticle['annotate'];
             $uPosted  = $thisarticle['posted'];
-        }
-        else
-        {
+        } else {
             extract(
                 safe_row(
                     "Annotate,unix_timestamp(Posted) as uPosted",
@@ -861,13 +801,11 @@ class comment_evaluation
             );
         }
 
-        if ($Annotate != 1)
-        {
+        if ($Annotate != 1) {
             return false;
         }
 
-        if ($comments_disabled_after)
-        {
+        if ($comments_disabled_after) {
             $lifespan = ($comments_disabled_after * 86400);
             $timesince = (time() - $uPosted);
             return ($lifespan > $timesince);
@@ -908,15 +846,13 @@ class comment_evaluation
     {
         global $sitename, $comments_sendmail;
 
-        if (!$comments_sendmail)
-        {
+        if (!$comments_sendmail) {
             return;
         }
 
         $evaluator =& get_comment_evaluator();
 
-        if ($comments_sendmail == 2 && $evaluator->get_result() == SPAM)
-        {
+        if ($comments_sendmail == 2 && $evaluator->get_result() == SPAM) {
             return;
         }
 
@@ -930,8 +866,7 @@ class comment_evaluation
         $out .= str_replace('{title}', $Title, gTxt('comment_recorded')).n;
         $out .= permlinkurl_id($parentid).n;
 
-        if (has_privs('discuss', $AuthorID))
-        {
+        if (has_privs('discuss', $AuthorID)) {
             $out .= hu.'textpattern/index.php?event=discuss&step=discuss_edit&discussid='.$discussid.n;
         }
 
@@ -944,8 +879,7 @@ class comment_evaluation
 
         $subject = strtr(gTxt('comment_received'),array('{site}' => $sitename, '{title}' => $Title));
 
-        if (!is_valid_email($cemail))
-        {
+        if (!is_valid_email($cemail)) {
             $cemail = null;
         }
 

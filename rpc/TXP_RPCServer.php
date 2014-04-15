@@ -19,8 +19,7 @@ class TXP_RPCServer extends IXR_IntrospectionServer
         $this->IXR_IntrospectionServer();
         // Add API Methods as callbacks:
 
-        if ($enable_xmlrpc_server)
-        {
+        if ($enable_xmlrpc_server) {
             // Blogger API [http://www.blogger.com/developers/api/] - add as server capability
             $this->capabilities['bloggerAPI'] = array(
                 'specUrl'     => 'http://www.blogger.com/developers/api/',
@@ -177,12 +176,10 @@ class TXP_RPCServer extends IXR_IntrospectionServer
     // while dealing with unknown clients
     function serve($data = false)
     {
-        if (!$data)
-        {
+        if (!$data) {
             global $HTTP_RAW_POST_DATA;
 
-            if (!$HTTP_RAW_POST_DATA)
-            {
+            if (!$HTTP_RAW_POST_DATA) {
                 // RSD lets them find us via GET requests
                 $this->rsd();
                 exit;
@@ -191,28 +188,23 @@ class TXP_RPCServer extends IXR_IntrospectionServer
             $rx = '/<?xml.*encoding=[\'"](.*?)[\'"].*?>/m';
 
             // first, handle the known UAs in order to serve proper content
-            if (strpos('w.bloggar', $_SERVER['HTTP_USER_AGENT']) !== false)
-            {
+            if (strpos('w.bloggar', $_SERVER['HTTP_USER_AGENT']) !== false) {
                 $encoding = 'iso-8859-1';
             }
             // find for supplied encoding before to try other things
-            elseif (preg_match($rx, $HTTP_RAW_POST_DATA, $xml_enc))
-            {
+            elseif (preg_match($rx, $HTTP_RAW_POST_DATA, $xml_enc)) {
                 $encoding = strtolower($xml_enc[1]);
             }
             // try utf-8 detect
-            elseif (preg_match('/^([\x00-\x7f]|[\xc2-\xdf][\x80-\xbf]|\xe0[\xa0-\xbf][\x80-\xbf]|[\xe1-\xec][\x80-\xbf]{2}|\xed[\x80-\x9f][\x80-\xbf]|[\xee-\xef][\x80-\xbf]{2}|f0[\x90-\xbf][\x80-\xbf]{2}|[\xf1-\xf3][\x80-\xbf]{3}|\xf4[\x80-\x8f][\x80-\xbf]{2})*$/', $HTTP_RAW_POST_DATA) === 1)
-            {
+            elseif (preg_match('/^([\x00-\x7f]|[\xc2-\xdf][\x80-\xbf]|\xe0[\xa0-\xbf][\x80-\xbf]|[\xe1-\xec][\x80-\xbf]{2}|\xed[\x80-\x9f][\x80-\xbf]|[\xee-\xef][\x80-\xbf]{2}|f0[\x90-\xbf][\x80-\xbf]{2}|[\xf1-\xf3][\x80-\xbf]{3}|\xf4[\x80-\x8f][\x80-\xbf]{2})*$/', $HTTP_RAW_POST_DATA) === 1) {
                 $encoding = 'utf-8';
             }
             // otherwise, use iso-8859-1
-            else
-            {
+            else {
                 $encoding = 'iso-8859-1';
             }
 
-            switch ($encoding)
-            {
+            switch ($encoding) {
                 case 'utf-8':
                     $data = $HTTP_RAW_POST_DATA;
                     break;
@@ -234,21 +226,18 @@ class TXP_RPCServer extends IXR_IntrospectionServer
 
         $this->message = new IXR_Message($data);
 
-        if (!$this->message->parse())
-        {
+        if (!$this->message->parse()) {
             $this->error(-32700, 'parse error. not well formed');
         }
 
-        if ($this->message->messageType != 'methodCall')
-        {
+        if ($this->message->messageType != 'methodCall') {
             $this->error(-32600, 'server error. invalid xml-rpc. not conforming to spec. Request must be a methodCall');
         }
 
         $result = $this->call($this->message->methodName, $this->message->params);
 
         // Is the result an error?
-        if (is_a($result, 'IXR_Error'))
-        {
+        if (is_a($result, 'IXR_Error')) {
             $this->error($result);
         }
 
@@ -277,18 +266,12 @@ EOD;
     function output($xml, $enc = 'utf-8')
     {
         // Be kind with non-utf-8 capable clients
-        if ($enc != 'utf-8')
-        {
-            if ($enc == 'iso-8859-1' && function_exists('utf8_decode') && is_callable('utf8_decode'))
-            {
+        if ($enc != 'utf-8') {
+            if ($enc == 'iso-8859-1' && function_exists('utf8_decode') && is_callable('utf8_decode')) {
                 $xml = utf8_decode($xml);
-            }
-            elseif (function_exists('mb_convert_encoding') && is_callable('mb_convert_encoding'))
-            {
+            } elseif (function_exists('mb_convert_encoding') && is_callable('mb_convert_encoding')) {
                 $xml = mb_convert_encoding($xml, $enc, 'utf-8');
-            }
-            else
-            {
+            } else {
 # TODO: shouldn't this throw an error instead of serving non-utf8 content as utf8?
                 // if no decoding possible, serve contents as utf-8
                 $enc = 'utf-8';
@@ -312,8 +295,7 @@ EOD;
     {
         global $enable_xmlrpc_server;
 
-        if ($enable_xmlrpc_server)
-        {
+        if ($enable_xmlrpc_server) {
             $this->output(
                 tag(
                     n.tag(
@@ -328,9 +310,7 @@ EOD;
                     'service').n,
                     'rsd', ' version="1.0" xmlns="http://archipelago.phrasewise.com/rsd"')
                 );
-        }
-        else
-        {
+        } else {
             header('Status: 501 Not Implemented');
             header('HTTP/1.1 501 Not Implemented');
             die('Not Implemented');
@@ -346,8 +326,7 @@ EOD;
 
         $txp = new TXP_Wrapper($username, $password);
 
-        if (!$txp->loggedin)
-        {
+        if (!$txp->loggedin) {
             return new IXR_Error(100, gTxt('bad_login'));
         }
 
@@ -358,8 +337,7 @@ EOD;
 
         $rs = $txp->newArticle($contents);
 
-        if (false === $rs)
-        {
+        if (false === $rs) {
             return new IXR_Error(201, gTxt('problem_creating_article'));
         }
 
@@ -372,15 +350,13 @@ EOD;
 
         $txp = new TXP_Wrapper($username, $password);
 
-        if (!$txp->loggedin)
-        {
+        if (!$txp->loggedin) {
             return new IXR_Error(100, gTxt('bad_login'));
         }
 
         $id = $txp->getArticleID($postid, 'ID');
 
-        if (!$id)
-        {
+        if (!$id) {
             return new IXR_Error(404, gTxt('invalid_article_id'));
         }
 
@@ -390,8 +366,7 @@ EOD;
 
         $rs = $txp->updateArticleID($postid, $contents);
 
-        if (false === $rs)
-        {
+        if (false === $rs) {
             return new IXR_Error(202, gTxt('problem_updating_article'));
         }
 
@@ -406,22 +381,19 @@ EOD;
 
         $txp = new TXP_Wrapper($username, $password);
 
-        if (!$txp->loggedin)
-        {
+        if (!$txp->loggedin) {
             return new IXR_Error(100, gTxt('bad_login'));
         }
 
         $rs = $txp->getSectionsList();
 
-        if (false === $rs)
-        {
+        if (false === $rs) {
             return new IXR_Error(203, gTxt('problem_retrieving_sections'));
         }
 
         $sections = array();
 
-        foreach ($rs as $section)
-        {
+        foreach ($rs as $section) {
             $sections[] = array(
                 'blogid'   => $section['name'],
                 'blogName' => $section['title'],
@@ -438,26 +410,21 @@ EOD;
 
         $txp = new TXP_Wrapper($username, $password);
 
-        if (!$txp->loggedin)
-        {
+        if (!$txp->loggedin) {
             return new IXR_Error(100, gTxt('bad_login'));
         }
 
         $rs = $txp->getUser();
 
-        if (!$rs)
-        {
+        if (!$rs) {
             return new IXR_Error(204, gTxt('unable_retrieve_user'));
         }
 
         extract($rs);
 
-        if (strpos($RealName, ' ') != 0)
-        {
+        if (strpos($RealName, ' ') != 0) {
             list($firstname, $lastname) = explode(' ', $RealName);
-        }
-        else
-        {
+        } else {
             $firstname = $RealName;
             $lastname  = '';
         }
@@ -480,31 +447,25 @@ EOD;
 
         $txp = new TXP_Wrapper($username, $password);
 
-        if (!$txp->loggedin)
-        {
+        if (!$txp->loggedin) {
             return new IXR_Error(100, gTxt('bad_login'));
         }
 
-        if ($templateType == 'archiveIndex' && $blogid != 'default')
-        {
+        if ($templateType == 'archiveIndex' && $blogid != 'default') {
             $section = $txp->getSection($blogid);
 
-            if (!$section)
-            {
+            if (!$section) {
                 return new IXR_Error(208, gTxt('unable_retrieve_template'));
             }
 
             $name = $section['page'];
-        }
-        else
-        {
+        } else {
             $name = 'default';
         }
 
         $rs = $txp->getTemplate($name);
 
-        if (!$rs)
-        {
+        if (!$rs) {
             return new IXR_Error(208, gTxt('unable_retrieve_template'));
         }
 
@@ -517,31 +478,25 @@ EOD;
 
         $txp = new TXP_Wrapper($username, $password);
 
-        if (!$txp->loggedin)
-        {
+        if (!$txp->loggedin) {
             return new IXR_Error(100, gTxt('bad_login'));
         }
 
-        if ($templateType == 'archiveIndex' && $blogid != 'default')
-        {
+        if ($templateType == 'archiveIndex' && $blogid != 'default') {
             $section = $txp->getSection($blogid);
 
-            if (!$section)
-            {
+            if (!$section) {
                 return new IXR_Error(209, gTxt('unable_set_template'));
             }
 
             $name = $section['page'];
-        }
-        else
-        {
+        } else {
             $name = 'default';
         }
 
         $rs = $txp->setTemplate($name, $template);
 
-        if (!$rs)
-        {
+        if (!$rs) {
             return new IXR_Error(209, gTxt('unable_set_template'));
         }
 
@@ -557,15 +512,13 @@ EOD;
 
         $txp = new TXP_Wrapper($username, $password);
 
-        if (!$txp->loggedin)
-        {
+        if (!$txp->loggedin) {
             return new IXR_Error(100, gTxt('bad_login'));
         }
 
         $rs = $txp->getArticleID($postid, 'ID, Body, AuthorId, unix_timestamp(Posted) as uPosted');
 
-        if (!$rs)
-        {
+        if (!$rs) {
             return new IXR_Error(205, gTxt('problem_retrieving_article'));
         }
 
@@ -585,16 +538,14 @@ EOD;
 
         $txp = new TXP_Wrapper($username, $password);
 
-        if (!$txp->loggedin)
-        {
+        if (!$txp->loggedin) {
             return new IXR_Error(100, gTxt('bad_login'));
         }
 
         // Always delete, no matter of publish
         $rs = $txp->deleteArticleID($postid);
 
-        if (!$rs)
-        {
+        if (!$rs) {
             return new IXR_Error(206, gTxt('problem_deleting_article'));
         }
 
@@ -607,20 +558,17 @@ EOD;
 
         $txp = new TXP_Wrapper($username, $password);
 
-        if (!$txp->loggedin)
-        {
+        if (!$txp->loggedin) {
             return new IXR_Error(100, gTxt('bad_login'));
         }
 
         $articles = $txp->getArticleList('ID, Body, AuthorId, unix_timestamp(Posted) as uPosted', "Section='".doSlash($blogid)."'", '0', $numberOfPosts, false);
 
-        if (false === $articles)
-        {
+        if (false === $articles) {
             return new IXR_Error(207, gTxt('problem_getting_articles'));
         }
 
-        foreach ($articles as $rs)
-        {
+        foreach ($articles as $rs) {
             $out[] = array(
                 'content'     => $rs['Body'],
                 'userId'      => $rs['AuthorId'],
@@ -640,15 +588,13 @@ EOD;
 
         $txp = new TXP_Wrapper($username, $password);
 
-        if (!$txp->loggedin)
-        {
+        if (!$txp->loggedin) {
             return new IXR_Error(100, gTxt('bad_login'));
         }
 
         $rs = $txp->getArticleID($postid, 'ID, Title, Body, Excerpt, Annotate, Keywords, Section, Category1, Category2, textile_body, url_title, unix_timestamp(Posted) as uPosted');
 
-        if (!$rs)
-        {
+        if (!$rs) {
             return new IXR_Error(205, gTxt('problem_retrieving_article'));
         }
 
@@ -661,8 +607,7 @@ EOD;
 
         $txp = new TXP_Wrapper($username, $password);
 
-        if (!$txp->loggedin)
-        {
+        if (!$txp->loggedin) {
             return new IXR_Error(100, gTxt('bad_login'));
         }
 
@@ -672,8 +617,7 @@ EOD;
 
         $rs = $txp->newArticle($contents);
 
-        if (false === $rs)
-        {
+        if (false === $rs) {
             return new IXR_Error(201, gTxt('problem_creating_article'));
         }
 
@@ -687,8 +631,7 @@ EOD;
 
         $txp = new TXP_Wrapper($username, $password);
 
-        if (!$txp->loggedin)
-        {
+        if (!$txp->loggedin) {
             return new IXR_Error(100, gTxt('bad_login'));
         }
 
@@ -696,8 +639,7 @@ EOD;
 
         $rs = $txp->updateArticleID($postid, $contents);
 
-        if (false === $rs)
-        {
+        if (false === $rs) {
             return new IXR_Error(201, gTxt('problem_updating_article'));
         }
 
@@ -712,22 +654,19 @@ EOD;
 
         $txp = new TXP_Wrapper($username, $password);
 
-        if (!$txp->loggedin)
-        {
+        if (!$txp->loggedin) {
             return new IXR_Error(100, gTxt('bad_login'));
         }
 
         $rs = $txp->getCategoryList();
 
-        if (false === $rs)
-        {
+        if (false === $rs) {
             return new IXR_Error(210, gTxt('problem_retrieving_categories'));
         }
 
         $cats = array();
 
-        foreach ($rs as $c)
-        {
+        foreach ($rs as $c) {
             $cats[] = array(
                 'categoryName' => $c['title'],
                 'description'  => $c['title'],
@@ -745,23 +684,20 @@ EOD;
 
         $txp = new TXP_Wrapper($username, $password);
 
-        if (!$txp->loggedin)
-        {
+        if (!$txp->loggedin) {
             return new IXR_Error(100, gTxt('bad_login'));
         }
 
         $articles = $txp->getArticleList('ID, Title, url_title, Body, Excerpt, Annotate, Keywords, Section, Category1, Category2, textile_body, AuthorID, unix_timestamp(Posted) as uPosted',
             "Section='".doSlash($blogid)."'", '0', $numberOfPosts, false);
 
-        if (false === $articles)
-        {
+        if (false === $articles) {
             return new IXR_Error(207, gTxt('problem_getting_articles'));
         }
 
         $out = array();
 
-        foreach ($articles as $rs)
-        {
+        foreach ($articles as $rs) {
             $out[] = $this->_buildMetaWeblogStruct($rs, $txp);
         }
 
@@ -779,15 +715,13 @@ EOD;
 
         $txp = new TXP_Wrapper($username, $password);
 
-        if (!$txp->loggedin)
-        {
+        if (!$txp->loggedin) {
             return new IXR_Error(100, gTxt('bad_login'));
         }
 
         $articles = $txp->getArticleList('ID, Title, AuthorID, unix_timestamp(Posted) as uPosted', "Section='".doSlash($blogid)."'", '0', $numberOfPosts, false);
 
-        if (false === $articles)
-        {
+        if (false === $articles) {
             return new IXR_Error(207, gTxt('problem_getting_articles'));
         }
 
@@ -795,8 +729,7 @@ EOD;
 
         $out = array();
 
-        foreach ($articles as $rs)
-        {
+        foreach ($articles as $rs) {
             $out[] = array(
                 'userid'      => $username,
                 'postid'      => $rs['ID'],
@@ -814,22 +747,19 @@ EOD;
 
         $txp = new TXP_Wrapper($username, $password);
 
-        if (!$txp->loggedin)
-        {
+        if (!$txp->loggedin) {
             return new IXR_Error(100, gTxt('bad_login'));
         }
 
         $rs = $txp->getCategoryList();
 
-        if (false === $rs)
-        {
+        if (false === $rs) {
             return new IXR_Error(210, gTxt('problem_retrieving_categories'));
         }
 
         $cats = array();
 
-        foreach ($rs as $c)
-        {
+        foreach ($rs as $c) {
             $cats[] = array(
                 'categoryName' => $c['title'],
                 'categoryId'   => $c['id'],
@@ -856,15 +786,13 @@ EOD;
 
         $txp = new TXP_Wrapper($username, $password);
 
-        if (!$txp->loggedin)
-        {
+        if (!$txp->loggedin) {
             return new IXR_Error(100, gTxt('bad_login'));
         }
 
         $post = $txp->getArticleID($postid, 'Category1, Category2');
 
-        if (!$post)
-        {
+        if (!$post) {
             return new IXR_Error(211, gTxt('problem_retrieving_article_categories'));
         }
 
@@ -873,10 +801,8 @@ EOD;
         $cats[] = $post['Category1'];
         $cats[] = $post['Category2'];
 
-        foreach ($cats as $category)
-        {
-            if (!empty($category))
-            {
+        foreach ($cats as $category) {
+            if (!empty($category)) {
                 $rs = $txp->getCategory($category);
 
 #TODO: remove?
@@ -903,15 +829,13 @@ EOD;
 
         $txp = new TXP_Wrapper($username, $password);
 
-        if (!$txp->loggedin)
-        {
+        if (!$txp->loggedin) {
             return new IXR_Error(100, gTxt('bad_login'));
         }
 
         $published = $txp->updateArticleField($postid, 'Status', '4');
 
-        if (!$published)
-        {
+        if (!$published) {
             return new IXR_Error(201, gTxt('problem_updating_article'));
         }
 
@@ -924,31 +848,25 @@ EOD;
 
         $txp = new TXP_Wrapper($username, $password);
 
-        if (!$txp->loggedin)
-        {
+        if (!$txp->loggedin) {
             return new IXR_Error(100, gTxt('bad_login'));
         }
 
         $Category1 = '';
         $Category2 = '';
 
-        foreach ($categories as $category)
-        {
+        foreach ($categories as $category) {
             extract($category);
 
             $rs = $txp->getCategoryId($categoryId);
 
-            if (!$rs)
-            {
+            if (!$rs) {
                 return new IXR_Error(213, gTxt('trying_to_assign_unexisting_category_to_the_article'));
             }
 
-            if (empty($Category1))
-            {
+            if (empty($Category1)) {
                 $Category1 = $rs['name'];
-            }
-            else
-            {
+            } else {
                 $Category2 = $rs['name'];
             }
         }
@@ -956,8 +874,7 @@ EOD;
         $ct1 = $txp->updateArticleField($postid, 'Category1', $Category1);
         $ct2 = $txp->updateArticleField($postid, 'Category2', $Category2);
 
-        if (!$ct1 || !$ct2)
-        {
+        if (!$ct1 || !$ct2) {
             return new IXR_Error(214, gTxt('problem_saving_article_categories'));
         }
 
@@ -982,8 +899,7 @@ EOD;
         $body = $content;
 
         // Trick to add title, category and excerpts using XML-RPC
-        if (preg_match('/<title>(.*)<\/title>(.*)/s', $content, $matches))
-        {
+        if (preg_match('/<title>(.*)<\/title>(.*)/s', $content, $matches)) {
             $body  = $matches[2];
             $title = $matches[1];
         }
@@ -1008,44 +924,33 @@ EOD;
             'Title'  => $struct['title']
         );
 
-        if (!empty($struct['categories']))
-        {
-            if (!empty($struct['categories'][0]))
-            {
+        if (!empty($struct['categories'])) {
+            if (!empty($struct['categories'][0])) {
                 $c = $txp->getCategoryTitle($struct['categories'][0]);
                 $contents['Category1'] = $c['name'];
             }
 
-            if (!empty($struct['categories'][1]))
-            {
+            if (!empty($struct['categories'][1])) {
                 $c = $txp->getCategoryTitle($struct['categories'][1]);
                 $contents['Category2'] = $c['name'];
             }
         }
 
-        if (isset($struct['date_created_gmt']))
-        {
+        if (isset($struct['date_created_gmt'])) {
             $struct['dateCreated'] = $struct['date_created_gmt'];
             $struct['dateCreated']->tz = 'Z'; // force GMT timezone
         }
 
-        if (isset($struct['dateCreated']))
-        {
-            if ($struct['dateCreated']->tz == 'Z')
-            {
+        if (isset($struct['dateCreated'])) {
+            if ($struct['dateCreated']->tz == 'Z') {
                 // GMT-based posting time; transform into server time zone
                 $posted = $struct['dateCreated']->getTimestamp() - tz_offset() + $gmtoffset + ($is_dst ? 3600 : 0);
-            }
-            elseif (!$struct['dateCreated']->tz)
-            {
+            } elseif (!$struct['dateCreated']->tz) {
                 // posting in an unspecified time zone: Assume site time.
                 $posted = $struct['dateCreated']->getTimestamp() - tz_offset();
-            }
-            else
-            {
+            } else {
                 // numeric time zone offsets
-                if (preg_match('/([+-][0-9]{2})([0-9]{2})/', $struct['dateCreated']->tz, $t))
-                {
+                if (preg_match('/([+-][0-9]{2})([0-9]{2})/', $struct['dateCreated']->tz, $t)) {
                     $tz = $t[1] * 3600 + $t[2] * 60;
                     $posted = $struct['dateCreated']->getTimestamp() - tz_offset() + $gmtoffset + ($is_dst ? 3600 : 0) - $tz;
                 }
@@ -1055,37 +960,29 @@ EOD;
         if (isset($posted)) $contents['Posted'] = date('Y-m-d H:i:s', $posted);
 
         // MovableType Implementation Add ons
-        if (isset($struct['mt_allow_comments']))
-        {
+        if (isset($struct['mt_allow_comments'])) {
             $contents['Annotate'] = $struct['mt_allow_comments'];
         }
 
-        if (isset($struct['mt_convert_breaks']))
-        {
+        if (isset($struct['mt_convert_breaks'])) {
             $contents['textile_body'] = $contents['textile_excerpt'] = intval($struct['mt_convert_breaks']);
         }
 
-        if (isset($struct['mt_text_more']))
-        {
+        if (isset($struct['mt_text_more'])) {
             $contents['Body'] .= n.n.str_replace('\n', n ,$struct['mt_text_more']);
         }
 
-        if (isset($struct['mt_excerpt']))
-        {
+        if (isset($struct['mt_excerpt'])) {
             $contents['Excerpt'] = str_replace('\n', n, $struct['mt_excerpt']);
         }
 
-        if (isset($struct['mt_keywords']))
-        {
+        if (isset($struct['mt_keywords'])) {
             $contents['Keywords'] = $struct['mt_keywords'];
         }
 
-        if (isset($struct['mt_basename']))
-        {
+        if (isset($struct['mt_basename'])) {
             $contents['url_title'] = stripSpace($struct['mt_basename']);
-        }
-        elseif (isset($struct['wp_slug']))
-        {
+        } elseif (isset($struct['wp_slug'])) {
             $contents['url_title'] = stripSpace($struct['wp_slug']);
         }
 
@@ -1099,8 +996,7 @@ EOD;
     {
         global $permlink_mode, $is_dst, $gmtoffset;
 
-        switch ($permlink_mode)
-        {
+        switch ($permlink_mode) {
             case 'section_id_title':
                 $url = hu.join('/', array($rs['Section'], $rs['ID'], $rs['url_title']));
                 break;
@@ -1151,28 +1047,23 @@ EOD;
         $out['dateCreated']->tz = 'Z'; // GMT
 
         // MovableType Implementation Add ons
-        if (isset($rs['Annotate']) && !empty($rs['Annotate']))
-        {
+        if (isset($rs['Annotate']) && !empty($rs['Annotate'])) {
             $out['mt_allow_comments'] = intval($rs['Annotate']);
         }
 
-        if (isset($rs['textile_body']) && !empty($rs['textile_body']))
-        {
+        if (isset($rs['textile_body']) && !empty($rs['textile_body'])) {
             $out['mt_convert_breaks'] = strval($rs['textile_body']);
         }
 
-        if (isset($rs['Excerpt']) && !empty($rs['Excerpt']))
-        {
+        if (isset($rs['Excerpt']) && !empty($rs['Excerpt'])) {
             $out['mt_excerpt'] = $rs['Excerpt'];
         }
 
-        if (isset($rs['Keywords']) && !empty($rs['Keywords']))
-        {
+        if (isset($rs['Keywords']) && !empty($rs['Keywords'])) {
             $out['mt_keywords'] = $rs['Keywords'];
         }
 
-        if (isset($rs['url_title']) && !empty($rs['url_title']))
-        {
+        if (isset($rs['url_title']) && !empty($rs['url_title'])) {
             $out['mt_basename'] = $out['wp_slug'] = $rs['url_title'];
         }
 

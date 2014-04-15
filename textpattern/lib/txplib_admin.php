@@ -89,8 +89,7 @@
     {
         global $txp_user, $sitename;
 
-        if (empty($name))
-        {
+        if (empty($name)) {
             $name = $txp_user;
         }
 
@@ -125,8 +124,7 @@
 
         $rs = safe_row('email, nonce', 'txp_users', "name = '".doSlash($name)."'");
 
-        if ($rs)
-        {
+        if ($rs) {
             extract($rs);
 
             $confirm = bin2hex(pack('H*', substr(md5($nonce), 0, 10)).$name);
@@ -136,17 +134,12 @@
                 n.n.gTxt('password_reset_confirmation').': '.
                 n.hu.'textpattern/index.php?confirm='.$confirm;
 
-            if (txpMail($email, "[$sitename] ".gTxt('password_reset_confirmation_request'), $message))
-            {
+            if (txpMail($email, "[$sitename] ".gTxt('password_reset_confirmation_request'), $message)) {
                 return gTxt('password_reset_confirmation_request_sent');
-            }
-            else
-            {
+            } else {
                 return gTxt('could_not_mail');
             }
-        }
-        else
-        {
+        } else {
             // Though 'unknown_author' could be thrown, send generic 'request_sent' message
             // instead so that (non-)existence of account names are not leaked.
             return gTxt('password_reset_confirmation_request_sent');
@@ -171,18 +164,15 @@
     {
         static $chars;
 
-        if (!$chars)
-        {
+        if (!$chars) {
             $chars = str_split(PASSWORD_SYMBOLS);
         }
 
         $pool = false;
         $pass = '';
 
-        for ($i = 0; $i < $length; $i++)
-        {
-            if (!$pool)
-            {
+        for ($i = 0; $i < $length; $i++) {
+            if (!$pool) {
                 $pool = $chars;
             }
 
@@ -215,19 +205,13 @@
         $new_pass = generate_password(PASSWORD_LENGTH);
         $rs = change_user_password($name, $new_pass);
 
-        if ($rs)
-        {
-            if (send_new_password($new_pass, $email, $name))
-            {
+        if ($rs) {
+            if (send_new_password($new_pass, $email, $name)) {
                 return gTxt('password_sent_to').' '.$email;
-            }
-            else
-            {
+            } else {
                 return gTxt('could_not_mail').' '.$email;
             }
-        }
-        else
-        {
+        } else {
             return gTxt('could_not_update_author').' '.txpspecialchars($name);
         }
     }

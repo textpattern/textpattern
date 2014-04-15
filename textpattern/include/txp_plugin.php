@@ -28,13 +28,11 @@
  * @package Admin\Plugin
  */
 
-    if (!defined('txpinterface'))
-    {
+    if (!defined('txpinterface')) {
         die('txpinterface is undefined.');
     }
 
-    if ($event == 'plugin')
-    {
+    if ($event == 'plugin') {
         require_privs('plugin');
 
         $available_steps = array(
@@ -48,12 +46,9 @@
             'plugin_multi_edit' => true,
         );
 
-        if ($step && bouncer($step, $available_steps))
-        {
+        if ($step && bouncer($step, $available_steps)) {
             $step();
-        }
-        else
-        {
+        } else {
             plugin_list();
         }
     }
@@ -77,20 +72,17 @@
 
         extract(gpsa(array('sort', 'dir')));
 
-        if ($sort === '')
-        {
+        if ($sort === '') {
             $sort = get_pref('plugin_sort_column', 'name');
         }
 
-        if ($dir === '')
-        {
+        if ($dir === '') {
             $dir = get_pref('plugin_sort_dir', 'asc');
         }
 
         $dir = ($dir == 'desc') ? 'desc' : 'asc';
 
-        if (!in_array($sort, array('name', 'status', 'author', 'version', 'modified', 'load_order')))
-        {
+        if (!in_array($sort, array('name', 'status', 'author', 'version', 'modified', 'load_order'))) {
             $sort = 'name';
         }
 
@@ -107,8 +99,7 @@
             '1 order by '.$sort_sql
         );
 
-        if ($rs and numRows($rs) > 0)
-        {
+        if ($rs and numRows($rs) > 0) {
             echo n.'<div id="'.$event.'_container" class="txp-container">';
             echo n.'<form action="index.php" id="plugin_form" class="multi_edit_form" method="post" name="longform">'.
 
@@ -130,10 +121,8 @@
 
             echo n.'<tbody>';
 
-            while ($a = nextRow($rs))
-            {
-                foreach ($a as $key => $value)
-                {
+            while ($a = nextRow($rs)) {
+                foreach ($a as $key => $value) {
                     $$key = txpspecialchars($value);
                 }
 
@@ -152,8 +141,7 @@
                     $description
                 );
 
-                if (!empty($help))
-                {
+                if (!empty($help)) {
                     $help = href(gTxt('help'), array(
                         'event' => 'plugin',
                         'step'  => 'plugin_help',
@@ -161,26 +149,21 @@
                     ), array('class' => 'plugin-help'));
                 }
 
-                if ($flags & PLUGIN_HAS_PREFS)
-                {
+                if ($flags & PLUGIN_HAS_PREFS) {
                     $plugin_prefs = href(gTxt('plugin_prefs'), array(
                         'event' => 'plugin_prefs.'.$name
                     ), array('class' => 'plugin-prefs'));
-                }
-                else
-                {
+                } else {
                     $plugin_prefs = '';
                 }
 
                 $manage = array();
 
-                if ($help)
-                {
+                if ($help) {
                     $manage[] = $help;
                 }
 
-                if ($plugin_prefs)
-                {
+                if ($plugin_prefs) {
                     $manage[] = $plugin_prefs;
                 }
 
@@ -234,8 +217,7 @@
 
         safe_update('txp_plugin', "status = $change", "name = '".doSlash($thing)."'");
 
-        if (safe_field('flags', 'txp_plugin', "name ='".doSlash($thing)."'") & PLUGIN_LIFECYCLE_NOTIFY)
-        {
+        if (safe_field('flags', 'txp_plugin', "name ='".doSlash($thing)."'") & PLUGIN_LIFECYCLE_NOTIFY) {
             load_plugin($thing, true);
             $message = callback_event("plugin_lifecycle.$thing", $change ? 'enabled' : 'disabled');
         }
@@ -345,25 +327,20 @@
     {
         global $event;
 
-        if (ps('txt_plugin'))
-        {
+        if (ps('txt_plugin')) {
             $plugin = join("\n", file($_FILES['theplugin']['tmp_name']));
-        }
-        else
-        {
+        } else {
             $plugin = assert_string(ps('plugin'));
         }
 
         // Check for pre-4.0 style plugin.
-        if (strpos($plugin, '$plugin=\'') !== false)
-        {
+        if (strpos($plugin, '$plugin=\'') !== false) {
             // Try to increase PCRE's backtrack limit in PHP 5.2+ to accommodate to x-large plugins.
             // see http://bugs.php.net/bug.php?id=40846
             @ini_set('pcre.backtrack_limit', '1000000');
             $plugin = preg_replace('@.*\$plugin=\'([\w=+/]+)\'.*@s', '$1', $plugin);
             // Have we hit yet another PCRE restriction?
-            if ($plugin === null)
-            {
+            if ($plugin === null) {
                 plugin_list(array(gTxt('plugin_pcre_error', array('{errno}' => preg_last_error())), E_ERROR));
                 return;
             }
@@ -372,44 +349,33 @@
         // Strip out #comment lines.
         $plugin = preg_replace('/^#.*$/m', '', $plugin);
 
-        if ($plugin === null)
-        {
+        if ($plugin === null) {
             plugin_list(array(gTxt('plugin_pcre_error', array('{errno}' => preg_last_error())), E_ERROR));
             return;
         }
 
-        if (isset($plugin))
-        {
+        if (isset($plugin)) {
             $plugin_encoded = $plugin;
             $plugin = base64_decode($plugin);
 
-            if (strncmp($plugin, "\x1F\x8B", 2) === 0)
-            {
-                if (function_exists('gzinflate'))
-                {
+            if (strncmp($plugin, "\x1F\x8B", 2) === 0) {
+                if (function_exists('gzinflate')) {
                     $plugin = gzinflate(substr($plugin, 10));
-                }
-                else
-                {
+                } else {
                     plugin_list(array(gTxt('plugin_compression_unsupported'), E_ERROR));
                     return;
                 }
             }
 
-            if ($plugin = @unserialize($plugin))
-            {
-                if (is_array($plugin))
-                {
+            if ($plugin = @unserialize($plugin)) {
+                if (is_array($plugin)) {
                     extract($plugin);
                     $source = '';
 
-                    if (isset($help_raw) && empty($plugin['allow_html_help']))
-                    {
+                    if (isset($help_raw) && empty($plugin['allow_html_help'])) {
                         $textile = new Textpattern_Textile_Parser();
                         $help_source = $textile->TextileRestricted($help_raw, 0, 0);
-                    }
-                    else
-                    {
+                    } else {
                         $help_source = highlight_string($help, true);
                     }
 
@@ -446,27 +412,22 @@
     {
         $plugin = assert_string(ps('plugin64'));
 
-        if (strpos($plugin, '$plugin=\'') !== false)
-        {
+        if (strpos($plugin, '$plugin=\'') !== false) {
             @ini_set('pcre.backtrack_limit', '1000000');
             $plugin = preg_replace('@.*\$plugin=\'([\w=+/]+)\'.*@s', '$1', $plugin);
         }
 
         $plugin = preg_replace('/^#.*$/m', '', $plugin);
 
-        if (trim($plugin))
-        {
+        if (trim($plugin)) {
             $plugin = base64_decode($plugin);
 
-            if (strncmp($plugin, "\x1F\x8B", 2) === 0)
-            {
+            if (strncmp($plugin, "\x1F\x8B", 2) === 0) {
                 $plugin = gzinflate(substr($plugin, 10));
             }
 
-            if ($plugin = unserialize($plugin))
-            {
-                if (is_array($plugin))
-                {
+            if ($plugin = unserialize($plugin)) {
+                if (is_array($plugin)) {
                     extract($plugin);
 
                     $type  = empty($type)  ? 0 : min(max(intval($type), 0), 5);
@@ -474,15 +435,13 @@
                     $flags = empty($flags) ? 0 : intval($flags);
                     $exists = fetch('name', 'txp_plugin', 'name', $name);
 
-                    if (isset($help_raw) && empty($plugin['allow_html_help']))
-                    {
+                    if (isset($help_raw) && empty($plugin['allow_html_help'])) {
                         // Default: help is in Textile format.
                         $textile = new Textpattern_Textile_Parser();
                         $help = $textile->TextileRestricted($help_raw, 0, 0);
                     }
 
-                    if ($exists)
-                    {
+                    if ($exists) {
                         $rs = safe_update(
                            "txp_plugin",
                             "type        = $type,
@@ -497,9 +456,7 @@
                             flags        = $flags",
                             "name        = '".doSlash($name)."'"
                         );
-                    }
-                    else
-                    {
+                    } else {
                         $rs = safe_insert(
                            "txp_plugin",
                            "name         = '".doSlash($name)."',
@@ -518,32 +475,26 @@
                         );
                     }
 
-                    if ($rs and $code)
-                    {
-                        if (!empty($textpack))
-                        {
+                    if ($rs and $code) {
+                        if (!empty($textpack)) {
                             // Plugins tag their Textpack by plugin name.
                             // The ownership may be overridden in the Textpack itself.
                             $textpack = "#@owner {$name}".n.$textpack;
                             install_textpack($textpack, false);
                         }
 
-                        if ($flags & PLUGIN_LIFECYCLE_NOTIFY)
-                        {
+                        if ($flags & PLUGIN_LIFECYCLE_NOTIFY) {
                             load_plugin($name, true);
                             $message = callback_event("plugin_lifecycle.$name", 'installed');
                         }
 
-                        if (empty($message))
-                        {
+                        if (empty($message)) {
                             $message = gTxt('plugin_installed', array('{name}' => $name));
                         }
 
                         plugin_list($message);
                         return;
-                    }
-                    else
-                    {
+                    } else {
                         $message = array(gTxt('plugin_install_failed', array('{name}' => $name)), E_ERROR);
                         plugin_list($message);
                         return;
@@ -621,20 +572,16 @@
         $selected = ps('selected');
         $method   = assert_string(ps('edit_method'));
 
-        if (!$selected or !is_array($selected))
-        {
+        if (!$selected or !is_array($selected)) {
             return plugin_list();
         }
 
         $where = "name IN ('".join("','", doSlash($selected))."')";
 
-        switch ($method)
-        {
+        switch ($method) {
             case 'delete' :
-                foreach ($selected as $name)
-                {
-                    if (safe_field('flags', 'txp_plugin', "name ='".doSlash($name)."'") & PLUGIN_LIFECYCLE_NOTIFY)
-                    {
+                foreach ($selected as $name) {
+                    if (safe_field('flags', 'txp_plugin', "name ='".doSlash($name)."'") & PLUGIN_LIFECYCLE_NOTIFY) {
                         load_plugin($name, true);
                         callback_event("plugin_lifecycle.$name", 'disabled');
                         callback_event("plugin_lifecycle.$name", 'deleted');
@@ -646,10 +593,8 @@
                 safe_delete('txp_lang', "owner IN ('".join("','", doSlash($selected))."')");
                 break;
             case 'changestatus' :
-                foreach ($selected as $name)
-                {
-                    if (safe_field('flags', 'txp_plugin', "name ='".doSlash($name)."'") & PLUGIN_LIFECYCLE_NOTIFY)
-                    {
+                foreach ($selected as $name) {
+                    if (safe_field('flags', 'txp_plugin', "name ='".doSlash($name)."'") & PLUGIN_LIFECYCLE_NOTIFY) {
                         $status = safe_field('status', 'txp_plugin', "name ='".doSlash($name)."'");
                         load_plugin($name, true);
                         // Note: won't show returned messages anywhere due to potentially overwhelming verbiage.

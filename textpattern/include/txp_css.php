@@ -28,13 +28,11 @@
  * @package Admin\CSS
  */
 
-    if (!defined('txpinterface'))
-    {
+    if (!defined('txpinterface')) {
         die('txpinterface is undefined.');
     }
 
-    if ($event == 'css')
-    {
+    if ($event == 'css') {
         require_privs('css');
 
         bouncer($step, array(
@@ -44,8 +42,7 @@
             'css_edit'   => false,
         ));
 
-        switch(strtolower($step))
-        {
+        switch(strtolower($step)) {
             case '' :
                 css_edit();
                 break;
@@ -82,24 +79,18 @@
 
         $rs = safe_rows_start('name', 'txp_css', $criteria);
 
-        if ($rs)
-        {
-            while ($a = nextRow($rs))
-            {
+        if ($rs) {
+            while ($a = nextRow($rs)) {
                 extract($a);
                 $active = ($current === $name);
 
-                if ($active)
-                {
+                if ($active) {
                     $edit = txpspecialchars($name);
-                }
-                else
-                {
+                } else {
                     $edit = eLink('css', '', 'name', $name, $name);
                 }
 
-                if (!array_key_exists($name, $protected))
-                {
+                if (!array_key_exists($name, $protected)) {
                     $edit .= dLink('css', 'css_delete', 'name', $name);
                 }
 
@@ -139,36 +130,29 @@
         $name = sanitizeForPage(assert_string(gps('name')));
         $newname = sanitizeForPage(assert_string(gps('newname')));
 
-        if ($step == 'css_delete' || empty($name) && $step != 'pour' && !$savenew)
-        {
+        if ($step == 'css_delete' || empty($name) && $step != 'pour' && !$savenew) {
             $name = $default_name;
-        }
-        elseif (((($copy || $savenew) && $newname) || ($newname && ($newname != $name))) && !$save_error)
-        {
+        } elseif (((($copy || $savenew) && $newname) || ($newname && ($newname != $name))) && !$save_error) {
             $name = $newname;
         }
 
         $buttons = n.tag(gTxt('css_name'), 'label', array('for' => 'new_style')).
             br.fInput('text', 'newname', $name, 'input-medium', '', '', INPUT_MEDIUM, '', 'new_style', false, true);
 
-        if ($name)
-        {
+        if ($name) {
             $buttons .= n.span(
                 href(gTxt('duplicate'), '#', array(
                     'id'    => 'txp_clone',
                     'class' => 'clone',
                     'title' => gTxt('css_clone')
                 )), array('class' => 'txp-actions'));
-        }
-        else
-        {
+        } else {
             $buttons .= hInput('savenew', 'savenew');
         }
 
         $thecss = gps('css');
 
-        if (!$save_error)
-        {
+        if (!$save_error) {
             $thecss = fetch('css', 'txp_css', 'name', $name);
         }
 
@@ -224,64 +208,44 @@
         $save_error = false;
         $message = '';
 
-        if (!$newname)
-        {
+        if (!$newname) {
             $message = array(gTxt('css_name_required'), E_ERROR);
             $save_error = true;
-        }
-        else
-        {
-            if ($copy && ($name === $newname))
-            {
+        } else {
+            if ($copy && ($name === $newname)) {
                 $newname .= '_copy';
                 $_POST['newname'] = $newname;
             }
 
             $exists = safe_field('name', 'txp_css', "name = '".doSlash($newname)."'");
 
-            if (($newname !== $name) && $exists)
-            {
+            if (($newname !== $name) && $exists) {
                 $message = array(gTxt('css_already_exists', array('{name}' => $newname)), E_ERROR);
-                if ($savenew)
-                {
+                if ($savenew) {
                     $_POST['newname'] = '';
                 }
 
                 $save_error = true;
-            }
-            else
-            {
-                if ($savenew or $copy)
-                {
-                    if ($newname)
-                    {
-                        if (safe_insert('txp_css', "name = '".doSlash($newname)."', css = '$css'"))
-                        {
+            } else {
+                if ($savenew or $copy) {
+                    if ($newname) {
+                        if (safe_insert('txp_css', "name = '".doSlash($newname)."', css = '$css'")) {
                             update_lastmod();
                             $message = gTxt('css_created', array('{name}' => $newname));
-                        }
-                        else
-                        {
+                        } else {
                             $message = array(gTxt('css_save_failed'), E_ERROR);
                             $save_error = true;
                         }
-                    }
-                    else
-                    {
+                    } else {
                         $message = array(gTxt('css_name_required'), E_ERROR);
                         $save_error = true;
                     }
-                }
-                else
-                {
-                    if (safe_update('txp_css', "css = '$css', name = '".doSlash($newname)."'", "name = '".doSlash($name)."'"))
-                    {
+                } else {
+                    if (safe_update('txp_css', "css = '$css', name = '".doSlash($newname)."'", "name = '".doSlash($name)."'")) {
                         safe_update('txp_section', "css = '".doSlash($newname)."'", "css='".doSlash($name)."'");
                         update_lastmod();
                         $message = gTxt('css_updated', array('{name}' => $name));
-                    }
-                    else
-                    {
+                    } else {
                         $message = array(gTxt('css_save_failed'), E_ERROR);
                         $save_error = true;
                     }
@@ -289,12 +253,9 @@
             }
         }
 
-        if ($save_error === true)
-        {
+        if ($save_error === true) {
             $_POST['save_error'] = '1';
-        }
-        else
-        {
+        } else {
             callback_event('css_saved', '', 0, $name, $newname);
         }
 
@@ -311,14 +272,10 @@
         $count = safe_count('txp_section', "css = '".doSlash($name)."'");
         $message = '';
 
-        if ($count)
-        {
+        if ($count) {
             $message = array(gTxt('css_used_by_section', array('{name}' => $name, '{count}' => $count)), E_ERROR);
-        }
-        else
-        {
-            if (safe_delete('txp_css', "name = '".doSlash($name)."'"))
-            {
+        } else {
+            if (safe_delete('txp_css', "name = '".doSlash($name)."'")) {
                 callback_event('css_deleted', '', 0, $name);
                 $message = gTxt('css_deleted', array('{name}' => $name));
             }

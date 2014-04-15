@@ -55,8 +55,7 @@ require_once txpath.'/lib/txplib_misc.php';
 require_once txpath.'/lib/admin_config.php';
 require_once txpath.'/lib/IXRClass.php';
 
-if ($connected && safe_query("describe `".PFX."textpattern`"))
-{
+if ($connected && safe_query("describe `".PFX."textpattern`")) {
 #TODO: where is dbversion used?
     $dbversion = safe_field('val','txp_prefs',"name = 'version'");
 
@@ -97,23 +96,20 @@ function write_log()
 
     $fp = @fopen(dirname(__FILE__).DIRECTORY_SEPARATOR.'xmlrpclog','a');
 
-    if ($fp)
-    {
+    if ($fp) {
         $lnsep = "\n================================\n";
         fwrite($fp, "\n$lnsep".strftime("%Y-%m-%d %H:%M:%S"));
         fwrite($fp, '[USER_AGENT] '.$_SERVER['HTTP_USER_AGENT']);
         fwrite($fp, $lnsep);
         fwrite($fp, '[ACCEPT_ENCODING] '.$_SERVER['HTTP_ACCEPT_ENCODING']);
 
-        if (strpos(strtolower($_SERVER['SERVER_SOFTWARE']),'apache')!==false && is_callable('getallheaders'))
-        {
+        if (strpos(strtolower($_SERVER['SERVER_SOFTWARE']),'apache')!==false && is_callable('getallheaders')) {
             fwrite($fp, $lnsep);
             fwrite($fp, "Apache Request Headers:\n");
             fwrite($fp, $lnsep);
             $headers = getallheaders();
 
-            foreach ($headers as $header => $value)
-            {
+            foreach ($headers as $header => $value) {
                 fwrite($fp, "$header: $value \n");
             }
         }

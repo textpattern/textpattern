@@ -1,7 +1,6 @@
 <?php
 
-    if (!defined('TXP_UPDATE'))
-    {
+    if (!defined('TXP_UPDATE')) {
         exit("Nothing here. You can't access this file directly.");
     }
 
@@ -38,8 +37,8 @@
 
     // Support for l10n string owners.
     $cols = getThings('describe `'.PFX.'txp_lang`');
-    if (!in_array('owner', $cols))
-    {
+
+    if (!in_array('owner', $cols)) {
         safe_alter('txp_lang',
             "ADD owner VARCHAR(64) NOT NULL DEFAULT '' AFTER event, ADD INDEX owner (owner)");
     }

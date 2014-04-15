@@ -21,8 +21,7 @@
  * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
  */
 
-if (!defined('txpinterface'))
-{
+if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
 
@@ -50,28 +49,24 @@ class classic_theme extends theme
         $out[] = hed('Textpattern', 1, ' id="branding"');
         $out[] = '</div>';
 
-        if (!$this->is_popup)
-        {
+        if (!$this->is_popup) {
             $out[] = '<nav role="navigation" aria-label="'.gTxt('navigation').'">';
             $out[] = '<div id="nav-primary" class="nav-tabs">';
             $out[] = '<ul>';
 
             $secondary = '';
 
-            foreach ($this->menu as $tab)
-            {
+            foreach ($this->menu as $tab) {
                 $tc = ($tab['active']) ? 'tabup' : 'tabdown';
                 $out[] = '<li>'.
                     href($tab["label"], array('event' => $tab['event']), ' class="'.$tc.'"').
                     '</li>';
 
-                if ($tab['active'] && !empty($tab['items']))
-                {
+                if ($tab['active'] && !empty($tab['items'])) {
                     $secondary = '<div id="nav-secondary" class="nav-tabs">'.
                         n.'<ul>';
 
-                    foreach ($tab['items'] as $item)
-                    {
+                    foreach ($tab['items'] as $item) {
                         $tc = ($item['active']) ? 'tabup' : 'tabdown';
                         $secondary .= n.'<li>'.
                             href($item['label'], array('event' => $item['event']), ' class="'.$tc.'"').
@@ -105,8 +100,7 @@ class classic_theme extends theme
             n.span('&#183;', array('role' => 'separator')).
             n.txp_version;
 
-        if ($txp_user)
-        {
+        if ($txp_user) {
             $out[] = graf(gTxt('logged_in_as').' '.span(txpspecialchars($txp_user)).br.
                 href(gTxt('logout'), 'index.php?logout=1', ' onclick="return verify(\''.gTxt('are_you_sure').'\')"')
                 , ' id="moniker"');
@@ -130,19 +124,16 @@ class classic_theme extends theme
         // $thing[0]: message text.
         // $thing[1]: message type, defaults to "success" unless empty or a different flag is set.
 
-        if (!is_array($thing) || !isset($thing[1]))
-        {
+        if (!is_array($thing) || !isset($thing[1])) {
             $thing = array($thing, 0);
         }
 
         // Still nothing to say?
-        if (trim($thing[0]) === '')
-        {
+        if (trim($thing[0]) === '') {
             return '';
         }
 
-        switch ($thing[1])
-        {
+        switch ($thing[1]) {
             case E_ERROR:
                 $class = 'error';
                 break;
@@ -154,13 +145,10 @@ class classic_theme extends theme
                 break;
         }
 
-        if ($modal)
-        {
+        if ($modal) {
             $html = ''; // TODO: Say what?
             $js = 'window.alert("'.escape_js(strip_tags($thing[0])).'")';
-        }
-        else
-        {
+        } else {
             $html = span(
                 gTxt($thing[0]).
                 sp.href('&#215;', '#close', ' role="button" class="close" title="'.gTxt('close').'" aria-label="'.gTxt('close').'"')
@@ -173,20 +161,16 @@ class classic_theme extends theme
             // Try to inject $html into the message pane no matter when _announce()'s output is printed.
             $js = escape_js($html);
             $js = <<< EOS
-                $(document).ready(function ()
-                {
+                $(document).ready(function () {
                     $("#messagepane").html("{$js}");
                     $('#message.success, #message.warning, #message.error').fadeOut('fast').fadeIn('fast');
                 });
 EOS;
         }
 
-        if ($async)
-        {
+        if ($async) {
             return $js;
-        }
-        else
-        {
+        } else {
             return script_js(str_replace('</', '<\/', $js), $html);
         }
     }

@@ -53,15 +53,13 @@
 
         $b2link = mysql_connect($b2dbhost, $b2dblogin, $b2dbpass, true);
 
-        if (!$b2link)
-        {
+        if (!$b2link) {
             return 'WordPress database values don&#8217;t work. Go back, replace them and try again.';
         }
 
         mysql_select_db($b2db, $b2link);
 
-        if (!mysql_query('SET NAMES '.doslash($wpdbcharset), $b2link))
-        {
+        if (!mysql_query('SET NAMES '.doslash($wpdbcharset), $b2link)) {
             return 'WordPress database does not support the requested character set. Aborting.';
         }
 
@@ -86,8 +84,7 @@
             from ".$wpdbprefix."users
         ", $b2link) or $errors[] = mysql_error();
 
-        while ($user = mysql_fetch_array($user_query))
-        {
+        while ($user = mysql_fetch_array($user_query)) {
             $user_privs_query = mysql_query("
                 select
                     meta_value
@@ -97,11 +94,9 @@
 
             $privs = unserialize(mysql_result($user_privs_query, 0));
 
-            foreach ($privs as $key => $val)
-            {
+            foreach ($privs as $key => $val) {
                 // Convert the built-in WordPress roles to their Textpattern equivalent.
-                switch ($key)
-                {
+                switch ($key) {
                     // Publisher.
                     case 'administrator' :
                         $user['privs'] = 1;
@@ -150,10 +145,8 @@
             order by field(tt.taxonomy, 'category', 'post_tag', 'link_category'), tt.parent asc, t.name asc
         ", $b2link) or $errors[] = mysql_error();
 
-        while ($category = mysql_fetch_array($category_query))
-        {
-            if ($category['parent'] != 0)
-            {
+        while ($category = mysql_fetch_array($category_query)) {
+            if ($category['parent'] != 0) {
                 $category_parent_query = mysql_query("
                     select
                         slug as name
@@ -161,18 +154,14 @@
                     where term_id = '".doSlash($category['parent'])."'
                 ", $b2link) or $errors[] = mysql_error();
 
-                while ($parent = mysql_fetch_array($category_parent_query))
-                {
+                while ($parent = mysql_fetch_array($category_parent_query)) {
                     $category['parent'] = $parent['name'];
                 }
-            }
-            else
-            {
+            } else {
                 $category['parent'] = 'root';
             }
 
-            switch ($category['type'])
-            {
+            switch ($category['type']) {
                 case 'post_tag' :
                 case 'category' :
                     $category['type'] = 'article';
@@ -207,11 +196,9 @@
             order by p.ID asc
         ", $b2link) or $errors[] = mysql_error();
 
-        while ($article = mysql_fetch_array($article_query))
-        {
+        while ($article = mysql_fetch_array($article_query)) {
             // Convert WordPress article status to Textpattern equivalent.
-            switch ($article['Status'])
-            {
+            switch ($article['Status']) {
                 case 'draft' :
                     $article['Status'] = 1;
                     break;
@@ -236,8 +223,7 @@
             }
 
             // Convert WordPress comment status to Textpattern equivalent.
-            switch ($article['Annotate'])
-            {
+            switch ($article['Annotate']) {
                 // On.
                 case 'open' :
                     $article['Annotate'] = 1;
@@ -266,8 +252,7 @@
                 order by comment_ID asc
             ", $b2link) or $errors[]= mysql_error();
 
-            while ($comment = mysql_fetch_assoc($comment_query))
-            {
+            while ($comment = mysql_fetch_assoc($comment_query)) {
                 $comments[] = $comment;
             }
 
@@ -289,8 +274,7 @@
                 limit 2;
             ", $b2link) or $errors[] = mysql_error();
 
-            while ($category = mysql_fetch_array($article_category_query))
-            {
+            while ($category = mysql_fetch_array($article_category_query)) {
                 $article_categories[] = $category;
             }
 
@@ -307,8 +291,7 @@
             where post_type = 'attachment' and post_mime_type like 'image/%' and post_parent=".$article['ID']
             , $b2link) or $errors[] = mysql_error();
 
-            while ($image = mysql_fetch_array($article_image_query))
-            {
+            while ($image = mysql_fetch_array($article_image_query)) {
                 $article_images[] = $image['guid'];
             }
 
@@ -336,8 +319,7 @@
             order by link_id asc
         ", $b2link) or $errors[] = mysql_error();
 
-        while ($link = mysql_fetch_array($link_query))
-        {
+        while ($link = mysql_fetch_array($link_query)) {
             // Link categories.
             $link_categories = array();
 
@@ -353,8 +335,7 @@
                 order by tr.object_id asc, t.name asc
             ", $b2link) or $errors[] = mysql_error();
 
-            while ($category = mysql_fetch_array($link_category_query))
-            {
+            while ($category = mysql_fetch_array($link_category_query)) {
                 $link['category'] = $category['name'];
             }
 
@@ -383,20 +364,17 @@
         import users
         */
 
-        if ($users)
-        {
+        if ($users) {
             include_once txpath.'/lib/txplib_admin.php';
 
             $results[] = hed('Imported Users:', 2).
                 graf('Because WordPress uses a different password mechanism than Textpattern, you will need to reset each user&#8217;s password from <a href="index.php?event=admin">the Users tab</a>.').
                 n.'<ul>';
 
-            foreach ($users as $user)
-            {
+            foreach ($users as $user) {
                 extract($user);
 
-                if (!safe_row('user_id', 'txp_users', "name = '".doSlash($name)."'"))
-                {
+                if (!safe_row('user_id', 'txp_users', "name = '".doSlash($name)."'")) {
                     $pass = doSlash(generate_password(6));
                     $nonce = doSlash(md5(uniqid(mt_rand(), true)));
 
@@ -410,8 +388,7 @@
                             nonce    = '".doSlash($nonce)."'
                     ", $txplink) or $errors[] = mysql_error();
 
-                    if (mysql_insert_id())
-                    {
+                    if (mysql_insert_id()) {
                         $results[] = '<li>'.$name.' ('.$RealName.')</li>';
                     }
                 }
@@ -424,16 +401,13 @@
         import categories
         */
 
-        if ($categories)
-        {
+        if ($categories) {
             $results[] = hed('Imported Categories:', 2).n.'<ul>';
 
-            foreach ($categories as $category)
-            {
+            foreach ($categories as $category) {
                 extract($category);
 
-                if (!safe_row('id', 'txp_category', "name = '".doSlash($name)."' and type = '".doSlash($type)."' and parent = '".doSlash($parent)."'"))
-                {
+                if (!safe_row('id', 'txp_category', "name = '".doSlash($name)."' and type = '".doSlash($type)."' and parent = '".doSlash($parent)."'")) {
                     $rs = mysql_query("
                         insert into ".safe_pfx('txp_category')." set
                             name   = '".doSlash($name)."',
@@ -442,8 +416,7 @@
                             parent = '".doSlash($parent)."'
                     ", $txplink) or $errors[] = mysql_error();
 
-                    if (mysql_insert_id())
-                    {
+                    if (mysql_insert_id()) {
                         $results[] = '<li>'.$title.' ('.$type.')</li>';
                     }
                 }
@@ -459,14 +432,12 @@
         import articles
         */
 
-        if ($articles)
-        {
+        if ($articles) {
             $results[] = hed('Imported Articles and Comments:', 2).n.'<ul>';
 
             $textile = new Textpattern_Textile_Parser;
 
-            foreach ($articles as $article)
-            {
+            foreach ($articles as $article) {
                 extract($article);
 
                 // Ugly, really ugly way to workaround the slashes WordPress gotcha.
@@ -494,16 +465,13 @@
                         Status         = '".doSlash($Status)."'
                 ", $txplink) or $errors[] = mysql_error();
 
-                if ((int)$insert_id = mysql_insert_id($txplink))
-                {
+                if ((int)$insert_id = mysql_insert_id($txplink)) {
                     $results[] = '<li>'.$Title.'</li>';
 
-                    if (!empty($comments))
-                    {
+                    if (!empty($comments)) {
                         $inserted_comments = 0;
 
-                        foreach ($comments as $comment)
-                        {
+                        foreach ($comments as $comment) {
                             extract(array_slash($comment));
 
                             // The ugly workaround again.
@@ -521,8 +489,7 @@
                                     visible  = 1
                             ", $txplink) or $results[] = mysql_error();
 
-                            if (mysql_insert_id())
-                            {
+                            if (mysql_insert_id()) {
                                 $inserted_comments++;
                             }
                         }
@@ -539,12 +506,10 @@
         import links
         */
 
-        if ($links)
-        {
+        if ($links) {
             $results[] = hed('Imported Links:', 2).n.'<ul>';
 
-            foreach ($links as $link)
-            {
+            foreach ($links as $link) {
                 extract($link);
 
                 $rs = mysql_query("
@@ -557,8 +522,7 @@
                         url         = '".doSlash($url)."'
                 ", $txplink) or $errors[] = mysql_error();
 
-                if (mysql_insert_id())
-                {
+                if (mysql_insert_id()) {
                     $results[] = '<li>'.$linkname.'</li>';
                 }
             }
@@ -570,12 +534,10 @@
         show any errors we encountered
         */
 
-        if ($errors)
-        {
+        if ($errors) {
             $results[] = hed('Errors Encountered:', 2).n.'<ul>';
 
-            foreach ($errors as $error)
-            {
+            foreach ($errors as $error) {
                 $results[] = '<li>'.$error.'</li>';
             }
 

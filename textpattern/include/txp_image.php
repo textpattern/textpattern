@@ -22,8 +22,7 @@
  * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
  */
 
-    if (!defined('txpinterface'))
-    {
+    if (!defined('txpinterface')) {
         die('txpinterface is undefined.');
     }
 
@@ -32,8 +31,7 @@
 
     include txpath.'/lib/class.thumb.php';
 
-    if ($event == 'image')
-    {
+    if ($event == 'image') {
         require_privs('image');
 
         global $all_image_cats, $all_image_authors;
@@ -53,12 +51,9 @@
             'image_multi_edit'    => true,
         );
 
-        if ($step && bouncer($step, $available_steps))
-        {
+        if ($step && bouncer($step, $available_steps)) {
             $step();
-        }
-        else
-        {
+        } else {
             image_list();
         }
     }
@@ -74,13 +69,11 @@
         extract($txpcfg);
         extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
 
-        if ($sort === '')
-        {
+        if ($sort === '') {
             $sort = get_pref('image_sort_column', 'id');
         }
 
-        if ($dir === '')
-        {
+        if ($dir === '') {
             $dir = get_pref('image_sort_dir', 'desc');
         }
         $dir = ($dir == 'asc') ? 'asc' : 'desc';
@@ -88,21 +81,17 @@
         echo hed(gTxt('tab_image'), 1, array('class' => 'txp-heading'));
         echo n.'<div id="'.$event.'_control" class="txp-control-panel">';
 
-        if (!is_dir(IMPATH) or !is_writeable(IMPATH))
-        {
+        if (!is_dir(IMPATH) or !is_writeable(IMPATH)) {
             echo graf(
                 span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
                 gTxt('img_dir_not_writeable', array('{imgdir}' => IMPATH)),
                 array('class' => 'alert-block warning')
             );
-        }
-        elseif (has_privs('image.edit.own'))
-        {
+        } elseif (has_privs('image.edit.own')) {
             echo upload_form(gTxt('upload_image'), 'upload_image', 'image_insert', 'image', '', $file_max_upload_size);
         }
 
-        switch ($sort)
-        {
+        switch ($sort) {
             case 'name' :
                 $sort_sql = 'name '.$dir;
                 break;
@@ -131,8 +120,7 @@
 
         $criteria = 1;
 
-        if ($search_method and $crit != '')
-        {
+        if ($search_method and $crit != '') {
             $verbatim = preg_match('/^"(.*)"$/', $crit, $m);
             $crit_escaped = $verbatim ? doSlash($m[1]) : doLike($crit);
             $critsql = $verbatim ?
@@ -152,19 +140,14 @@
                     'caption'  => "caption like '%$crit_escaped%'"
                 );
 
-            if (array_key_exists($search_method, $critsql))
-            {
+            if (array_key_exists($search_method, $critsql)) {
                 $criteria = $critsql[$search_method];
                 $limit = 500;
-            }
-            else
-            {
+            } else {
                 $search_method = '';
                 $crit = '';
             }
-        }
-        else
-        {
+        } else {
             $search_method = '';
             $crit = '';
         }
@@ -173,15 +156,11 @@
 
         $total = safe_count('txp_image', "$criteria");
 
-        if ($total < 1)
-        {
-            if ($criteria != 1)
-            {
+        if ($total < 1) {
+            if ($criteria != 1) {
                 echo n.image_search_form($crit, $search_method).
                     graf(gTxt('no_results_found'), ' class="indicator"').'</div>';
-            }
-            else
-            {
+            } else {
                 echo graf(gTxt('no_images_recorded'), ' class="indicator"').'</div>';
             }
 
@@ -201,8 +180,7 @@
         echo pluggable_ui('image_ui', 'extend_controls', '', $rs);
         echo '</div>'; // end txp-control-panel
 
-        if ($rs)
-        {
+        if ($rs) {
             $show_authors = !has_single_author('txp_image');
 
             echo n.'<div id="'.$event.'_container" class="txp-container">';
@@ -227,8 +205,7 @@
 
             $validator = new Validator();
 
-            while ($a = nextRow($rs))
-            {
+            while ($a = nextRow($rs)) {
                 extract($a);
 
                 $edit_url = array(
@@ -244,35 +221,26 @@
 
                 $name = empty($name) ? gTxt('unnamed') : txpspecialchars($name);
 
-                if ($thumbnail)
-                {
-                    if ($ext != '.swf')
-                    {
+                if ($thumbnail) {
+                    if ($ext != '.swf') {
                         $thumbnail = '<img class="content-image" src="'.imagesrcurl($id, $ext, true)."?$uDate".'" alt="" '.
                                             "title='$id$ext ($w &#215; $h)'".
                                             ($thumb_w ? " width='$thumb_w' height='$thumb_h'" : ''). ' />';
-                    }
-                    else
-                    {
+                    } else {
                         $thumbnail = '';
                     }
-                }
-                else
-                {
+                } else {
                     $thumbnail = gTxt('no');
                 }
 
-                if ($ext != '.swf')
-                {
+                if ($ext != '.swf') {
                     $tag_url = '?event=tag'.a.'tag_name=image'.a.'id='.$id.a.'ext='.$ext.a.'w='.$w.a.'h='.$h.a.'alt='.urlencode($alt).a.'caption='.urlencode($caption);
                     $tagbuilder = href('Textile', $tag_url.a.'type=textile', ' target="_blank" onclick="popWin(this.href); return false;"').
                         sp.span('&#124;', array('role' => 'separator')).
                         sp.href('Textpattern', $tag_url.a.'type=textpattern', ' target="_blank" onclick="popWin(this.href); return false;"').
                         sp.span('&#124;', array('role' => 'separator')).
                         sp.href('HTML', $tag_url.a.'type=html', ' target="_blank" onclick="popWin(this.href); return false;"');
-                }
-                else
-                {
+                } else {
                     $tagbuilder = sp;
                 }
 
@@ -370,18 +338,15 @@
             'delete'         => gTxt('delete'),
         );
 
-        if (!$categories)
-        {
+        if (!$categories) {
             unset($methods['changecategory']);
         }
 
-        if (has_single_author('txp_image'))
-        {
+        if (has_single_author('txp_image')) {
             unset($methods['changeauthor']);
         }
 
-        if (!has_privs('image.delete.own') && !has_privs('image.delete'))
-        {
+        if (!has_privs('image.delete.own') && !has_privs('image.delete')) {
             unset($methods['delete']);
         }
 
@@ -397,15 +362,13 @@
         // Empty entry to permit clearing the category
         $categories = array('');
 
-        foreach ($all_image_cats as $row)
-        {
+        foreach ($all_image_cats as $row) {
             $categories[] = $row['name'];
         }
 
         $selected = ps('selected');
 
-        if (!$selected or !is_array($selected))
-        {
+        if (!$selected or !is_array($selected)) {
             return image_list();
         }
 
@@ -414,22 +377,19 @@
         $changed  = array();
         $key = '';
 
-        switch ($method)
-        {
+        switch ($method) {
             case 'delete' :
                 return image_delete($selected);
                 break;
             case 'changecategory' :
                 $val = ps('category');
-                if (in_array($val, $categories))
-                {
+                if (in_array($val, $categories)) {
                     $key = 'category';
                 }
                 break;
             case 'changeauthor' :
                 $val = ps('author');
-                if (in_array($val, $all_image_authors))
-                {
+                if (in_array($val, $all_image_authors)) {
                     $key = 'author';
                 }
                 break;
@@ -439,31 +399,23 @@
                 break;
         }
 
-        if (!has_privs('image.edit'))
-        {
-            if (has_privs('image.edit.own'))
-            {
+        if (!has_privs('image.edit')) {
+            if (has_privs('image.edit.own')) {
                 $selected = safe_column('id', 'txp_image', 'id IN ('.join(',', $selected).') AND author=\''.doSlash($txp_user).'\'');
-            }
-            else
-            {
+            } else {
                 $selected = array();
             }
         }
 
-        if ($selected and $key)
-        {
-            foreach ($selected as $id)
-            {
-                if (safe_update('txp_image', "$key = '".doSlash($val)."'", "id = $id"))
-                {
+        if ($selected and $key) {
+            foreach ($selected as $id) {
+                if (safe_update('txp_image', "$key = '".doSlash($val)."'", "id = $id")) {
                     $changed[] = $id;
                 }
             }
         }
 
-        if ($changed)
-        {
+        if ($changed) {
             update_lastmod();
 
             return image_list(gTxt('image_updated', array('{name}' => join(', ', $changed))));
@@ -477,20 +429,17 @@
     {
         global $prefs, $file_max_upload_size, $txp_user, $event, $all_image_cats;
 
-        if (!$id)
-        {
+        if (!$id) {
             $id = gps('id');
         }
         $id = assert_int($id);
 
         $rs = safe_row("*, unix_timestamp(date) as uDate", "txp_image", "id = $id");
 
-        if ($rs)
-        {
+        if ($rs) {
             extract($rs);
 
-            if (!has_privs('image.edit') && !($author === $txp_user && has_privs('image.edit.own')))
-            {
+            if (!has_privs('image.edit') && !($author === $txp_user && has_privs('image.edit.own'))) {
                 image_list(gTxt('restricted_area'));
                 return;
             }
@@ -499,33 +448,25 @@
 
             extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
 
-            if ($ext != '.swf')
-            {
+            if ($ext != '.swf') {
                 $aspect = ($h == $w) ? ' square' : (($h > $w) ? ' portrait' : ' landscape');
                 $img_info = $id.$ext.' ('.$w.' &#215; '.$h.')';
                 $img = '<div class="fullsize-image"><img class="content-image" src="'.imagesrcurl($id, $ext)."?$uDate".'" alt="'.$img_info.'" title="'.$img_info.'" /></div>';
-            }
-            else
-            {
+            } else {
                 $img = $aspect = '';
             }
 
-            if ($thumbnail and ($ext != '.swf'))
-            {
+            if ($thumbnail and ($ext != '.swf')) {
                 $thumb_info = $id.'t'.$ext.' ('.$thumb_w.' &#215; '.$thumb_h.')';
                 $thumb = '<img class="content-image" src="'.imagesrcurl($id, $ext, true)."?$uDate".'" alt="'.$thumb_info.'" '.
                             ($thumb_w ? 'width="'.$thumb_w.'" height="'.$thumb_h.'" title="'.$thumb_info.'"' : ''). ' />';
-            }
-            else
-            {
+            } else {
                 $thumb = '';
-                if ($thumb_w == 0)
-                {
+                if ($thumb_w == 0) {
                     $thumb_w = get_pref('thumb_w', 0);
                 }
 
-                if ($thumb_h == 0)
-                {
+                if ($thumb_h == 0) {
                     $thumb_h = get_pref('thumb_h', 0);
                 }
             }
@@ -627,8 +568,7 @@
     {
         global $txpcfg, $extensions, $txp_user;
 
-        if (!has_privs('image.edit.own'))
-        {
+        if (!has_privs('image.edit.own')) {
             image_list(gTxt('restricted_area'));
             return;
         }
@@ -639,14 +579,11 @@
 
         $img_result = image_data($_FILES['thefile'], $meta);
 
-        if (is_array($img_result))
-        {
+        if (is_array($img_result)) {
             list($message, $id) = $img_result;
 
             return image_edit($message, $id);
-        }
-        else
-        {
+        } else {
             return image_list(array($img_result, E_ERROR));
         }
     }
@@ -660,30 +597,23 @@
         $id = assert_int(gps('id'));
         $rs = safe_row("*", "txp_image", "id = $id");
 
-        if (!has_privs('image.edit') && !($rs['author'] === $txp_user && has_privs('image.edit.own')))
-        {
+        if (!has_privs('image.edit') && !($rs['author'] === $txp_user && has_privs('image.edit.own'))) {
             image_list(gTxt('restricted_area'));
             return;
         }
 
-        if ($rs)
-        {
+        if ($rs) {
             $meta = array('category' => $rs['category'], 'caption' => $rs['caption'], 'alt' => $rs['alt']);
-        }
-        else
-        {
+        } else {
             $meta = '';
         }
 
         $img_result = image_data($_FILES['thefile'], $meta, $id);
 
-        if (is_array($img_result))
-        {
+        if (is_array($img_result)) {
             list($message, $id) = $img_result;
             return image_edit($message, $id);
-        }
-        else
-        {
+        } else {
             return image_edit(array($img_result, E_ERROR), $id);
         }
     }
@@ -696,8 +626,7 @@
         $id = assert_int(gps('id'));
 
         $author = fetch('author', 'txp_image', 'id', $id);
-        if (!has_privs('image.edit') && !($author === $txp_user && has_privs('image.edit.own')))
-        {
+        if (!has_privs('image.edit') && !($author === $txp_user && has_privs('image.edit.own'))) {
             image_list(gTxt('restricted_area'));
             return;
         }
@@ -707,25 +636,20 @@
 
         $file = get_uploaded_file($file);
 
-        if (empty($file))
-        {
+        if (empty($file)) {
             image_edit(array(upload_get_errormsg(UPLOAD_ERR_NO_FILE), E_ERROR), $id);
             return;
         }
 
         list($w, $h, $extension) = getimagesize($file);
 
-        if (($file !== false) && @$extensions[$extension])
-        {
+        if (($file !== false) && @$extensions[$extension]) {
             $ext = $extensions[$extension];
             $newpath = IMPATH.$id.'t'.$ext;
 
-            if (shift_uploaded_file($file, $newpath) == false)
-            {
+            if (shift_uploaded_file($file, $newpath) == false) {
                 image_list(array($newpath.sp.gTxt('upload_dir_perms'), E_ERROR));
-            }
-            else
-            {
+            } else {
                 chmod($newpath, 0644);
                 safe_update("txp_image", "thumbnail = 1, thumb_w = $w, thumb_h = $h, date = now()", "id = $id");
 
@@ -734,15 +658,10 @@
 
                 image_edit($message, $id);
             }
-        }
-        else
-        {
-            if ($file === false)
-            {
+        } else {
+            if ($file === false) {
                 image_list(array(upload_get_errormsg($_FILES['thefile']['error']), E_ERROR));
-            }
-            else
-            {
+            } else {
                 image_list(array(gTxt('only_graphic_files_allowed'), E_ERROR));
             }
         }
@@ -758,8 +677,7 @@
         $id = $varray['id'] = assert_int($id);
 
         $author = fetch('author', 'txp_image', 'id', $id);
-        if (!has_privs('image.edit') && !($author === $txp_user && has_privs('image.edit.own')))
-        {
+        if (!has_privs('image.edit') && !($author === $txp_user && has_privs('image.edit.own'))) {
             image_list(gTxt('restricted_area'));
             return;
         }
@@ -780,9 +698,7 @@
         )) {
             $message = gTxt('image_updated', array('{name}' => doStrip($name)));
             update_lastmod();
-        }
-        else
-        {
+        } else {
             $message = array(gTxt('image_save_failed'), E_ERROR);
         }
 
@@ -798,28 +714,21 @@
         $ids = $ids ? array_map('assert_int', $ids) : array(assert_int(ps('id')));
         $message = '';
 
-        if (!has_privs('image.delete'))
-        {
-            if (has_privs('image.delete.own'))
-            {
+        if (!has_privs('image.delete')) {
+            if (has_privs('image.delete.own')) {
                 $ids = safe_column('id', 'txp_image', 'id IN ('.join(',', $ids).') AND author=\''.doSlash($txp_user).'\'' );
-            }
-            else
-            {
+            } else {
                 $ids = array();
             }
         }
 
-        if (!empty($ids))
-        {
+        if (!empty($ids)) {
             $fail = array();
 
             $rs   = safe_rows_start('id, ext', 'txp_image', 'id IN ('.join(',', $ids).')');
 
-            if ($rs)
-            {
-                while ($a = nextRow($rs))
-                {
+            if ($rs) {
+                while ($a = nextRow($rs)) {
                     extract($a);
 
                     // Notify plugins of pending deletion, pass image's $id.
@@ -829,28 +738,22 @@
 
                     $ul  = false;
 
-                    if (is_file(IMPATH.$id.$ext))
-                    {
+                    if (is_file(IMPATH.$id.$ext)) {
                         $ul = unlink(IMPATH.$id.$ext);
                     }
 
-                    if (is_file(IMPATH.$id.'t'.$ext))
-                    {
+                    if (is_file(IMPATH.$id.'t'.$ext)) {
                         $ult = unlink(IMPATH.$id.'t'.$ext);
                     }
 
-                    if (!$rsd or !$ul)
-                    {
+                    if (!$rsd or !$ul) {
                         $fail[] = $id;
                     }
                 }
 
-                if ($fail)
-                {
+                if ($fail) {
                     $message = array(gTxt('image_delete_failed', array('{name}' => join(', ', $fail))), E_ERROR);
-                }
-                else
-                {
+                } else {
                     update_lastmod();
                     $message = gTxt('image_deleted', array('{name}' => join(', ', $ids)));
                 }
@@ -876,8 +779,7 @@
         $id = assert_int($id);
 
         $author = fetch('author', 'txp_image', 'id', $id);
-        if (!has_privs('image.edit') && !($author === $txp_user && has_privs('image.edit.own')))
-        {
+        if (!has_privs('image.edit') && !($author === $txp_user && has_privs('image.edit.own'))) {
             image_list(gTxt('restricted_area'));
             return;
         }
@@ -885,13 +787,11 @@
         $width = (int) $width;
         $height = (int) $height;
 
-        if ($width == 0)
-        {
+        if ($width == 0) {
             $width = '';
         }
 
-        if ($height == 0)
-        {
+        if ($height == 0) {
             $height = '';
         }
 
@@ -906,8 +806,7 @@
         set_pref('thumb_h', $height, 'image', 2);
         set_pref('thumb_crop', $crop, 'image', 2);
 
-        if ($width === '' && $height === '')
-        {
+        if ($width === '' && $height === '') {
             image_edit(array(gTxt('invalid_width_or_height'), E_ERROR), $id);
             return;
         }
@@ -919,15 +818,12 @@
         $t->width = $width;
         $t->height = $height;
 
-        if ($t->write())
-        {
+        if ($t->write()) {
             $message = gTxt('thumbnail_saved', array('{id}' => $id));
             update_lastmod();
 
             image_edit($message, $id);
-        }
-        else
-        {
+        } else {
             $message = array(gTxt('thumbnail_not_saved', array('{id}' => $id)), E_ERROR);
 
             image_edit($message, $id);
@@ -942,21 +838,17 @@
         $id = assert_int(gps('id'));
 
         $author = fetch('author', 'txp_image', 'id', $id);
-        if (!has_privs('image.edit') && !($author === $txp_user && has_privs('image.edit.own')))
-        {
+        if (!has_privs('image.edit') && !($author === $txp_user && has_privs('image.edit.own'))) {
             image_list(gTxt('restricted_area'));
             return;
         }
 
         $t = new txp_thumb($id);
-        if ($t->delete())
-        {
+        if ($t->delete()) {
             callback_event('thumbnail_deleted', '', false, $id);
             update_lastmod();
             image_edit(gTxt('thumbnail_deleted'), $id);
-        }
-        else
-        {
+        } else {
             image_edit(array(gTxt('thumbnail_delete_failed'), E_ERROR), $id);
         }
     }

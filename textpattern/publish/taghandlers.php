@@ -201,36 +201,21 @@
         $out = txpspecialchars($sitename.$separator);
         $parent_id = (int) $parentid;
 
-        if ($parent_id)
-        {
+        if ($parent_id) {
             $out .= gTxt('comments_on').' '.escape_title(safe_field('Title', 'textpattern', "ID = $parent_id"));
-        }
-        elseif ($thisarticle['title'])
-        {
+        } elseif ($thisarticle['title']) {
             $out .= escape_title($thisarticle['title']);
-        }
-        elseif ($q)
-        {
+        } elseif ($q) {
             $out .= gTxt('search_results').txpspecialchars($separator.$q);
-        }
-        elseif ($c)
-        {
+        } elseif ($c) {
             $out .= txpspecialchars(fetch_category_title($c, $context));
-        }
-        elseif ($s and $s != 'default')
-        {
+        } elseif ($s and $s != 'default') {
             $out .= txpspecialchars(fetch_section_title($s));
-        }
-        elseif ($author)
-        {
+        } elseif ($author) {
             $out .= txpspecialchars(get_author_name($author));
-        }
-        elseif ($pg)
-        {
+        } elseif ($pg) {
             $out .= gTxt('page').' '.$pg;
-        }
-        else
-        {
+        } else {
             $out = txpspecialchars($sitename);
         }
 
@@ -252,28 +237,22 @@
             'title'  => '',
         ), $atts));
 
-        if (isset($atts['n']))
-        {
+        if (isset($atts['n'])) {
             $name = $n;
             trigger_error(gTxt('deprecated_attribute', array('{name}' => 'n')), E_USER_NOTICE);
         }
 
-        if (empty($name))
-        {
+        if (empty($name)) {
             $name = 'default';
         }
 
-        if (has_handler('css.url'))
-        {
+        if (has_handler('css.url')) {
             $url = callback_event('css.url', '', false, compact('name'));
-        }
-        else
-        {
+        } else {
             $url = hu.'css.php?n='.urlencode($name);
         }
 
-        if ($format == 'link')
-        {
+        if ($format == 'link') {
             return tag_void('link', array(
                 'rel'   => $rel,
                 'type'  => $doctype != 'html5' ? 'text/css' : '',
@@ -305,101 +284,77 @@
             'wraptag' => '',
         ), $atts));
 
-        if ($name)
-        {
-            if (isset($cache['n'][$name]))
-            {
+        if ($name) {
+            if (isset($cache['n'][$name])) {
                 $rs = $cache['n'][$name];
-            }
-            else
-            {
+            } else {
                 $name = doSlash($name);
 
                 $rs = safe_row('*', 'txp_image', "name = '$name' limit 1");
 
                 $cache['n'][$name] = $rs;
             }
-        }
-
-        elseif ($id)
-        {
-            if (isset($cache['i'][$id]))
-            {
+        } elseif ($id) {
+            if (isset($cache['i'][$id])) {
                 $rs = $cache['i'][$id];
-            }
-            else
-            {
+            } else {
                 $id = (int) $id;
 
                 $rs = safe_row('*', 'txp_image', "id = $id limit 1");
 
                 $cache['i'][$id] = $rs;
             }
-        }
-        elseif ($thisimage)
-        {
+        } elseif ($thisimage) {
             $id = (int) $thisimage['id'];
             $rs = $thisimage;
             $cache['i'][$id] = $rs;
-        }
-        else
-        {
+        } else {
             trigger_error(gTxt('unknown_image'));
 
             return;
         }
 
-        if ($rs)
-        {
+        if ($rs) {
             extract($rs);
 
-            if ($escape == 'html')
-            {
+            if ($escape == 'html') {
                 $alt = txpspecialchars($alt);
                 $caption = txpspecialchars($caption);
             }
 
-            if ($width == '' && $w)
-            {
+            if ($width == '' && $w) {
                 $width = $w;
             }
 
-            if ($height == '' && $h)
-            {
+            if ($height == '' && $h) {
                 $height = $h;
             }
 
             $out = '<img src="'.imagesrcurl($id, $ext).'" alt="'.$alt.'"';
 
-            if ($html_id and !$wraptag)
-            {
+            if ($html_id and !$wraptag) {
                 $out .= ' id="'.txpspecialchars($html_id).'"';
             }
 
-            if ($class and !$wraptag)
-            {
+            if ($class and !$wraptag) {
                 $out .= ' class="'.txpspecialchars($class).'"';
             }
 
-            if ($style)
-            {
+            if ($style) {
                 $out .= ' style="'.txpspecialchars($style).'"';
             }
 
-            if ($width)
-            {
+            if ($width) {
                 $out .= ' width="'.(int) $width.'"';
             }
 
-            if ($height)
-            {
+            if ($height) {
                 $out .= ' height="'.(int) $height.'"';
             }
 
             $out .= ' />';
 
-            if ($wraptag)
-            {
+            if ($wraptag) {
                 return doTag($out, $wraptag, $class, '', $html_id);
             }
 
@@ -430,100 +385,78 @@
             'width'       => ''
         ), $atts));
 
-        if ($name)
-        {
+        if ($name) {
             $name = doSlash($name);
 
             $rs = safe_row('*', 'txp_image', "name = '$name' limit 1");
-        }
-        elseif ($id)
-        {
+        } elseif ($id) {
             $id = (int) $id;
 
             $rs = safe_row('*', 'txp_image', "id = $id limit 1");
-        }
-        elseif ($thisimage)
-        {
+        } elseif ($thisimage) {
             $id = (int) $thisimage['id'];
             $rs = $thisimage;
-        }
-        else
-        {
+        } else {
             trigger_error(gTxt('unknown_image'));
             return;
         }
 
-        if ($rs)
-        {
+        if ($rs) {
             extract($rs);
 
-            if ($thumbnail)
-            {
-                if ($escape == 'html')
-                {
+            if ($thumbnail) {
+                if ($escape == 'html') {
                     $alt = txpspecialchars($alt);
                     $caption = txpspecialchars($caption);
                 }
 
-                if ($width=='' && $thumb_w)
-                {
+                if ($width=='' && $thumb_w) {
                     $width = $thumb_w;
                 }
 
-                if ($height=='' && $thumb_h)
-                {
+                if ($height=='' && $thumb_h) {
                     $height = $thumb_h;
                 }
 
                 $out = '<img src="'.imagesrcurl($id, $ext, true).'" alt="'.$alt.'"';
 
-                if ($html_id and !$wraptag)
-                {
+                if ($html_id and !$wraptag) {
                     $out .= ' id="'.txpspecialchars($html_id).'"';
                 }
 
-                if ($class and !$wraptag)
-                {
+                if ($class and !$wraptag) {
                     $out .= ' class="'.txpspecialchars($class).'"';
                 }
 
-                if ($style)
-                {
+                if ($style) {
                     $out .= ' style="'.txpspecialchars($style).'"';
                 }
 
-                if ($width)
-                {
+                if ($width) {
                     $out .= ' width="'.(int) $width.'"';
                 }
 
-                if ($height)
-                {
+                if ($height) {
                     $out .= ' height="'.(int) $height.'"';
                 }
 
                 $out .= ' />';
 
-                if ($link)
-                {
+                if ($link) {
                     $attribs = '';
 
-                    if (!empty($link_rel))
-                    {
+                    if (!empty($link_rel)) {
                         $attribs .= " rel='".txpspecialchars($link_rel)."'";
                     }
 
                     $out = href($out, imagesrcurl($id, $ext), $attribs);
-                }
-                elseif ($poplink)
-                {
+                } elseif ($poplink) {
                     $out = '<a href="'.imagesrcurl($id, $ext).'"'.
                         ' onclick="window.open(this.href, \'popupwindow\', '.
                         '\'width='.$w.', height='.$h.', scrollbars, resizable\'); return false;">'.$out.'</a>';
                 }
 
-                if ($wraptag)
-                {
+                if ($wraptag) {
                     return doTag($out, $wraptag, $class, '', $html_id);
                 }
 
@@ -544,12 +477,9 @@
             'form' => '',
         ), $atts));
 
-        if (!$form)
-        {
+        if (!$form) {
             trigger_error(gTxt('form_not_specified'));
-        }
-        else
-        {
+        } else {
             $yield[] = $thing !== null ? parse($thing) : null;
             $out = parse_form($form);
             array_pop($yield);
@@ -582,15 +512,13 @@
             'limit'    => $limit
         ));
 
-        if ($flavor == 'atom')
-        {
+        if ($flavor == 'atom') {
             $title = ($title == gTxt('rss_feed_title')) ? gTxt('atom_feed_title') : $title;
         }
 
         $title = txpspecialchars($title);
 
-        if ($format == 'link')
-        {
+        if ($format == 'link') {
             $type = ($flavor == 'atom') ? 'application/atom+xml' : 'application/rss+xml';
 
             return '<link rel="alternate" type="'.$type.'" title="'.$title.'" href="'.$url.'" />';
@@ -625,15 +553,13 @@
             'category' => $category
         ));
 
-        if ($flavor == 'atom')
-        {
+        if ($flavor == 'atom') {
             $title = ($title == gTxt('rss_feed_title')) ? gTxt('atom_feed_title') : $title;
         }
 
         $title = txpspecialchars($title);
 
-        if ($format == 'link')
-        {
+        if ($format == 'link') {
             $type = ($flavor == 'atom') ? 'application/atom+xml' : 'application/rss+xml';
 
             return '<link rel="alternate" type="'.$type.'" title="'.$title.'" href="'.$url.'" />';
@@ -673,66 +599,54 @@
         $context_list = (empty($auto_detect) || $filters) ? array() : do_list($auto_detect);
         $pageby = ($pageby=='limit') ? $limit : $pageby;
 
-        if ($category)
-        {
+        if ($category) {
             $where[] = "category IN ('".join("','", doSlash(do_list($category)))."')";
         }
 
-        if ($id)
-        {
+        if ($id) {
             $where[] = "id IN ('".join("','", doSlash(do_list($id)))."')";
         }
 
-        if ($author)
-        {
+        if ($author) {
             $where[] = "author IN ('".join("','", doSlash(do_list($author)))."')";
         }
 
-        if ($realname)
-        {
+        if ($realname) {
             $authorlist = safe_column('name', 'txp_users', "RealName IN ('". join("','", doArray(doSlash(do_list($realname)), 'urldecode'))."')");
             $where[] = "author IN ('".join("','", doSlash($authorlist))."')";
         }
 
         // If no links are selected, try...
-        if (!$where && !$filters)
-        {
-            foreach ($context_list as $ctxt)
-            {
-                switch ($ctxt)
-                {
+        if (!$where && !$filters) {
+            foreach ($context_list as $ctxt) {
+                switch ($ctxt) {
                     case 'category' :
                         // ...the global category in the URL.
-                        if ($context == 'link' && !empty($c))
-                        {
+                        if ($context == 'link' && !empty($c)) {
                             $where[] = "category = '".doSlash($c)."'";
                         }
                         break;
                     case 'author' :
                         // ...the global author in the URL.
-                        if ($context == 'link' && !empty($pretext['author']))
-                        {
+                        if ($context == 'link' && !empty($pretext['author'])) {
                             $where[] = "author = '".doSlash($pretext['author'])."'";
                         }
                         break;
                 }
 
                 // Only one context can be processed.
-                if ($where)
-                {
+                if ($where) {
                     break;
                 }
             }
         }
 
-        if (!$where && $filters)
-        {
+        if (!$where && $filters) {
             // If nothing matches, output nothing.
             return '';
         }
 
-        if (!$where)
-        {
+        if (!$where) {
             // If nothing matches, start with all links.
             $where[] = "1=1";
         }
@@ -740,8 +654,7 @@
         $where = join(' AND ', $where);
 
         // Set up paging if required.
-        if ($limit && $pageby)
-        {
+        if ($limit && $pageby) {
             $grand_total = safe_count('txp_link', $where);
             $total = $grand_total - $offset;
             $numPages = ($pageby > 0) ? ceil($total/$pageby) : 1;
@@ -757,13 +670,10 @@
             $pageout['grand_total'] = $grand_total;
             $pageout['total']       = $total;
 
-            if (empty($thispage))
-            {
+            if (empty($thispage)) {
                 $thispage = $pageout;
             }
-        }
-        else
-        {
+        } else {
             $pgoffset = $offset;
         }
 
@@ -775,14 +685,12 @@
 
         $rs = safe_rows_start('*, unix_timestamp(date) as uDate', 'txp_link', join(' ', $qparts));
 
-        if ($rs)
-        {
+        if ($rs) {
             $count = 0;
             $last = numRows($rs);
             $out = array();
 
-            while ($a = nextRow($rs))
-            {
+            while ($a = nextRow($rs)) {
                 ++$count;
                 $thislink = $a;
                 $thislink['date'] = $thislink['uDate'];
@@ -795,8 +703,7 @@
                 $thislink = '';
             }
 
-            if ($out)
-            {
+            if ($out) {
                 return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
             }
         }
@@ -819,22 +726,17 @@
         $rs = $thislink;
         $sql = array();
 
-        if ($id)
-        {
+        if ($id) {
             $sql[] = 'id = '.intval($id);
-        }
-        else if ($name)
-        {
+        } elseif ($name) {
             $sql[] = "linkname = '".doSlash($name)."'";
         }
 
-        if ($sql)
-        {
+        if ($sql) {
             $rs = safe_row('linkname, url', 'txp_link', implode(' and ', $sql).' limit 1');
         }
 
-        if (!$rs)
-        {
+        if (!$rs) {
             trigger_error(gTxt('unknown_link'));
             return;
         }
@@ -914,8 +816,7 @@
             'wraptag'      => '',
         ), $atts));
 
-        if ($thislink['author'])
-        {
+        if ($thislink['author']) {
             $author_name = get_author_name($thislink['author']);
             $display_name = txpspecialchars(($title) ? $author_name : $thislink['author']);
 
@@ -945,8 +846,7 @@
             'wraptag'  => '',
         ), $atts));
 
-        if ($thislink['description'])
-        {
+        if ($thislink['description']) {
             $description = ($escape == 'html') ?
                 txpspecialchars($thislink['description']) :
                 $thislink['description'];
@@ -988,8 +888,7 @@
             'wraptag'  => '',
         ), $atts));
 
-        if ($thislink['category'])
-        {
+        if ($thislink['category']) {
             $category = ($title)
                 ? fetch_category_title($thislink['category'], 'link')
                 : $thislink['category'];
@@ -1018,16 +917,13 @@
             'title'    => '',
         ), $atts));
 
-        if ($email)
-        {
-            if ($thing !== null)
-            {
+        if ($email) {
+            if ($thing !== null) {
                 $linktext = parse($thing);
             }
 
             // Obfuscate link text?
-            if (is_valid_email($linktext))
-            {
+            if (is_valid_email($linktext)) {
                 $linktext = eE($linktext);
             }
 
@@ -1052,35 +948,28 @@
             'privs' => null,
         ), $atts));
 
-        if ($pass === null)
-        {
+        if ($pass === null) {
             $access = ($user = is_logged_in($login)) !== false && ($privs === null || in_list($user['privs'], $privs));
-        }
-        else
-        {
+        } else {
             $au = serverSet('PHP_AUTH_USER');
             $ap = serverSet('PHP_AUTH_PW');
 
             // For PHP as (f)cgi, two rules in htaccess often allow this workaround.
             $ru = serverSet('REDIRECT_REMOTE_USER');
 
-            if (!$au && !$ap && strpos($ru, 'Basic') === 0)
-            {
+            if (!$au && !$ap && strpos($ru, 'Basic') === 0) {
                 list ($au, $ap) = explode(':', base64_decode(substr($ru, 6)));
             }
 
             $access = $au === $login && $ap === $pass;
         }
 
-        if ($access === false && $pass !== null)
-        {
+        if ($access === false && $pass !== null) {
             header('WWW-Authenticate: Basic realm="Private"');
         }
 
-        if ($thing === null)
-        {
-            if ($access === false)
-            {
+        if ($thing === null) {
+            if ($access === false) {
                 txp_die(gTxt('auth_required'), '401');
             }
 
@@ -1113,23 +1002,17 @@
 
         // For backwards compatibility.
         // sortby and sortdir are deprecated.
-        if ($sortby)
-        {
+        if ($sortby) {
             trigger_error(gTxt('deprecated_attribute', array('{name}' => 'sortby')), E_USER_NOTICE);
 
-            if (!$sortdir)
-            {
+            if (!$sortdir) {
                 $sortdir = 'desc';
-            }
-            else
-            {
+            } else {
                 trigger_error(gTxt('deprecated_attribute', array('{name}' => 'sortdir')), E_USER_NOTICE);
             }
 
             $sort = "$sortby $sortdir";
-        }
-        elseif ($sortdir)
-        {
+        } elseif ($sortdir) {
             trigger_error(gTxt('deprecated_attribute', array('{name}' => 'sortdir')), E_USER_NOTICE);
             $sort = "Posted $sortdir";
         }
@@ -1142,18 +1025,15 @@
         $rs = safe_rows_start('*, id as thisid, unix_timestamp(Posted) as posted', 'textpattern',
             "Status = ".STATUS_LIVE." $section $categories and Posted <= now()$expired order by ".doSlash($sort).' limit 0,'.intval($limit));
 
-        if ($rs)
-        {
+        if ($rs) {
             $out = array();
 
-            while ($a = nextRow($rs))
-            {
+            while ($a = nextRow($rs)) {
                 $a['Title'] = ($no_widow) ? noWidow(escape_title($a['Title'])) : escape_title($a['Title']);
                 $out[] = href($a['Title'], permlinkurl($a));
             }
 
-            if ($out)
-            {
+            if ($out) {
                 return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
             }
         }
@@ -1188,22 +1068,17 @@
             'from '. safe_pfx('txp_discuss') .' as d inner join '. safe_pfx('textpattern') .' as t on d.parentid = t.ID '.
             'where t.Status >= '.STATUS_LIVE.$expired.' and d.visible = '.VISIBLE.' order by '.doSlash($sort).' limit '.intval($offset).','.intval($limit));
 
-        if ($rs)
-        {
+        if ($rs) {
             $out = array();
             $old_article = $thisarticle;
 
-            while ($c = nextRow($rs))
-            {
-                if ($form === '' && $thing === null)
-                {
+            while ($c = nextRow($rs)) {
+                if ($form === '' && $thing === null) {
                     $out[] = href(
                         txpspecialchars($c['name']).' ('.escape_title($c['title']).')',
                         permlinkurl($c).'#c'.$c['discussid']
                     );
-                }
-                else
-                {
+                } else {
                     $thiscomment['name'] = $c['name'];
                     $thiscomment['email'] = $c['email'];
                     $thiscomment['web'] = $c['web'];
@@ -1218,19 +1093,15 @@
                     $thisarticle['section'] = $c['section'];
                     $thisarticle['url_title'] = $c['url_title'];
 
-                    if ($thing === null && $form !== '')
-                    {
+                    if ($thing === null && $form !== '') {
                         $out[] = parse_form($form);
-                    }
-                    else
-                    {
+                    } else {
                         $out[] = parse($thing);
                     }
                 }
             }
 
-            if ($out)
-            {
+            if ($out) {
                 unset($GLOBALS['thiscomment']);
                 $thisarticle = $old_article;
                 return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
@@ -1262,15 +1133,13 @@
             'wraptag'  => '',
         ), $atts));
 
-        if (empty($thisarticle['category1']) and empty($thisarticle['category2']))
-        {
+        if (empty($thisarticle['category1']) and empty($thisarticle['category2'])) {
             return;
         }
 
         $match = do_list($match);
 
-        if (!in_array('Category1', $match) and !in_array('Category2', $match))
-        {
+        if (!in_array('Category1', $match) and !in_array('Category2', $match)) {
             return;
         }
 
@@ -1278,13 +1147,11 @@
 
         $cats = array();
 
-        if ($thisarticle['category1'])
-        {
+        if ($thisarticle['category1']) {
             $cats[] = doSlash($thisarticle['category1']);
         }
 
-        if ($thisarticle['category2'])
-        {
+        if ($thisarticle['category2']) {
             $cats[] = doSlash($thisarticle['category2']);
         }
 
@@ -1292,13 +1159,11 @@
 
         $categories = array();
 
-        if (in_array('Category1', $match))
-        {
+        if (in_array('Category1', $match)) {
             $categories[] = "Category1 in('$cats')";
         }
 
-        if (in_array('Category2', $match))
-        {
+        if (in_array('Category2', $match)) {
             $categories[] = "Category2 in('$cats')";
         }
 
@@ -1310,38 +1175,29 @@
         $rs = safe_rows_start('*, unix_timestamp(Posted) as posted, unix_timestamp(LastMod) as uLastMod, unix_timestamp(Expires) as uExpires', 'textpattern',
             'ID != '.intval($id)." and Status = ".STATUS_LIVE." $expired  and Posted <= now() $categories $section order by ".doSlash($sort).' limit 0,'.intval($limit));
 
-        if ($rs)
-        {
+        if ($rs) {
             $out = array();
             $old_article = $thisarticle;
 
-            while ($a = nextRow($rs))
-            {
+            while ($a = nextRow($rs)) {
                 $a['Title'] = ($no_widow) ? noWidow(escape_title($a['Title'])) : escape_title($a['Title']);
                 $a['uPosted'] = $a['posted']; // populateArticleData() and permlinkurl() assume quite a bunch of posting dates...
 
-                if ($form === '' && $thing === null)
-                {
+                if ($form === '' && $thing === null) {
                     $out[] = href($a['Title'], permlinkurl($a));
-                }
-                else
-                {
+                } else {
                     populateArticleData($a);
 
-                    if ($thing === null && $form !== '')
-                    {
+                    if ($thing === null && $form !== '') {
                         $out[] = parse_form($form);
-                    }
-                    else
-                    {
+                    } else {
                         $out[] = parse($thing);
                     }
                 }
             }
             $thisarticle = $old_article;
 
-            if ($out)
-            {
+            if ($out) {
                 return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
             }
         }
@@ -1364,17 +1220,13 @@
             'type'         => 'c',
         ), $atts));
 
-        if ($type == 's')
-        {
+        if ($type == 's') {
             $rs = safe_rows_start('name, title', 'txp_section', "name != 'default' order by name");
-        }
-        else
-        {
+        } else {
             $rs = safe_rows_start('name, title', 'txp_category', "type = 'article' and name != 'root' order by name");
         }
 
-        if ($rs)
-        {
+        if ($rs) {
             $out = array();
 
             $current = ($type == 's') ? $s : $c;
@@ -1382,12 +1234,10 @@
             $sel = '';
             $selected = false;
 
-            while ($a = nextRow($rs))
-            {
+            while ($a = nextRow($rs)) {
                 extract($a);
 
-                if ($name == $current)
-                {
+                if ($name == $current) {
                     $sel = ' selected="selected"';
                     $selected = true;
                 }
@@ -1397,8 +1247,7 @@
                 $sel = '';
             }
 
-            if ($out)
-            {
+            if ($out) {
                 $section = ($this_section) ? ($s == 'default' ? '' : $s) : $section;
 
                 $out = n.'<select name="'.txpspecialchars($type).'" onchange="submit(this.form);">'.
@@ -1406,22 +1255,18 @@
                     n.t.join(n.t, $out).
                     n.'</select>';
 
-                if ($label)
-                {
+                if ($label) {
                     $out = $label.br.$out;
                 }
 
-                if ($wraptag)
-                {
+                if ($wraptag) {
                     $out = doTag($out, $wraptag, $class);
                 }
 
                 if (($type == 's' || $permlink_mode == 'messy')) {
                     $action = hu;
                     $his = ($section !== '') ? n.hInput('s', $section) : '';
-                }
-                else
-                {
+                } else {
                     // Clean URLs for category popup.
                     $action = pagelinkurl(array('s' => $section));
                     $his = '';
@@ -1468,116 +1313,89 @@
         $sort = doSlash($sort);
         $sql_limit = '';
 
-        if ($limit !== '' || $offset)
-        {
+        if ($limit !== '' || $offset) {
             $sql_limit = ' limit '.intval($offset).', '.($limit === '' ? PHP_INT_MAX : intval($limit));
         }
 
-        if ($categories)
-        {
+        if ($categories) {
             $categories = do_list($categories);
             $categories = join("','", doSlash($categories));
 
             $rs = safe_rows_start('name, title', 'txp_category',
                 "type = '".doSlash($type)."' and name in ('$categories') order by ".($sort ? $sort : "field(name, '$categories')").$sql_limit);
-        }
-        else
-        {
-            if ($parent)
-            {
+        } else {
+            if ($parent) {
                 $parents = join(',', quote_list(do_list($parent)));
             }
 
-            if ($children)
-            {
+            if ($children) {
                 $shallow = '';
-            }
-            else
-            {
+            } else {
                 // Descend only one level from either 'parent' or 'root', plus parent category.
                 $shallow = ($parent) ? "and (parent in($parents) or name in($parents))" : "and parent = 'root'" ;
             }
 
-            if ($exclude)
-            {
+            if ($exclude) {
                 $exclude = do_list($exclude);
                 $exclude = join("','", doSlash($exclude));
                 $exclude = "and name not in('$exclude')";
             }
 
-            if ($parent)
-            {
+            if ($parent) {
                 $qs = safe_rows('lft, rgt', 'txp_category', "type = '".doSlash($type)."' and name in($parents)");
 
-                if ($qs)
-                {
+                if ($qs) {
                     $between = array();
 
-                    foreach ($qs as $a)
-                    {
+                    foreach ($qs as $a) {
                         extract($a);
                         $between[] = "(lft between $lft and $rgt)";
                     }
 
                     $rs = safe_rows_start('name, title', 'txp_category',
                         "(".join(' or ', $between).") and type = '".doSlash($type)."' and name != 'default' $exclude $shallow order by ".($sort ? $sort : 'lft ASC').$sql_limit);
-                }
-                else
-                {
+                } else {
                     $rs = array();
                 }
-            }
-            else
-            {
+            } else {
                 $rs = safe_rows_start('name, title', 'txp_category',
                     "type = '".doSlash($type)."' and name not in('default','root') $exclude $shallow order by ".($sort ? $sort : 'name ASC').$sql_limit);
             }
         }
 
-        if ($rs)
-        {
+        if ($rs) {
             $out = array();
             $count = 0;
             $last = numRows($rs);
 
-            if (isset($thiscategory))
-            {
+            if (isset($thiscategory)) {
                 $old_category = $thiscategory;
             }
 
-            while ($a = nextRow($rs))
-            {
+            while ($a = nextRow($rs)) {
                 ++$count;
                 extract($a);
 
-                if ($name)
-                {
+                if ($name) {
                     $section = ($this_section) ? ($s == 'default' ? '' : $s) : $section;
 
-                    if ($form === '' && $thing === null)
-                    {
+                    if ($form === '' && $thing === null) {
                         $out[] = tag(txpspecialchars($title), 'a',
                             (($active_class and (0 == strcasecmp($c, $name))) ? ' class="'.txpspecialchars($active_class).'"' : '').
                             ' href="'.pagelinkurl(array('s' => $section, 'c' => $name, 'context' => $type)).'"'
                         );
-                    }
-                    else
-                    {
+                    } else {
                         $thiscategory = array('name' => $name, 'title' => $title, 'type' => $type);
                         $thiscategory['is_first'] = ($count == 1);
                         $thiscategory['is_last'] = ($count == $last);
 
-                        if (isset($atts['section']))
-                        {
+                        if (isset($atts['section'])) {
                             $thiscategory['section'] = $section;
                         }
 
-                        if ($thing === null && $form !== '')
-                        {
+                        if ($thing === null && $form !== '') {
                             $out[] = parse_form($form);
-                        }
-                        else
-                        {
+                        } else {
                             $out[] = parse($thing);
                         }
                     }
@@ -1586,8 +1404,7 @@
 
             $thiscategory = (isset($old_category) ? $old_category : null);
 
-            if ($out)
-            {
+            if ($out) {
                 return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
             }
         }
@@ -1624,47 +1441,37 @@
         $sql = array();
         $sql[] = 1;
 
-        if ($limit !== '' || $offset)
-        {
+        if ($limit !== '' || $offset) {
             $sql_limit = ' limit '.intval($offset).', '.($limit === '' ? PHP_INT_MAX : intval($limit));
         }
 
-        if ($sections)
-        {
-            if ($include_default)
-            {
+        if ($sections) {
+            if ($include_default) {
                 $sections .= ', default';
             }
 
             $sections = join(',', quote_list(do_list($sections)));
             $sql[] = "name in ($sections)";
 
-            if (!$sql_sort)
-            {
+            if (!$sql_sort) {
                 $sql_sort = "field(name, $sections)";
             }
-        }
-        else
-        {
-            if ($exclude)
-            {
+        } else {
+            if ($exclude) {
                 $exclude = join(',', quote_list(do_list($exclude)));
                 $sql[] = "name not in ($exclude)";
             }
 
-            if (!$include_default)
-            {
+            if (!$include_default) {
                 $sql[] = "name != 'default'";
             }
 
-            if (!$sql_sort)
-            {
+            if (!$sql_sort) {
                 $sql_sort = 'name asc';
             }
         }
 
-        if ($include_default)
-        {
+        if ($include_default) {
             $sql_sort = "name != 'default', " . $sql_sort;
         }
 
@@ -1674,37 +1481,30 @@
             join(' and ', $sql).' order by '.$sql_sort.$sql_limit
         );
 
-        if ($rs && $last = numRows($rs))
-        {
+        if ($rs && $last = numRows($rs)) {
             $out = array();
             $count = 0;
 
-            if (isset($thissection))
-            {
+            if (isset($thissection)) {
                 $old_section = $thissection;
             }
 
-            while ($a = nextRow($rs))
-            {
+            while ($a = nextRow($rs)) {
                 ++$count;
                 extract($a);
 
-                if ($name == 'default')
-                {
+                if ($name == 'default') {
                     $title = $default_title;
                 }
 
-                if ($form === '' && $thing === null)
-                {
+                if ($form === '' && $thing === null) {
                     $url = pagelinkurl(array('s' => $name));
 
                     $out[] = tag(txpspecialchars($title), 'a',
                         (($active_class and (0 == strcasecmp($s, $name))) ? ' class="'.txpspecialchars($active_class).'"' : '').
                         ' href="'.$url.'"'
                     );
-                }
-                else
-                {
+                } else {
                     $thissection = array(
                         'name'     => $name,
                         'title'    => $title,
@@ -1712,12 +1512,9 @@
                         'is_last'  => ($count == $last),
                     );
 
-                    if ($thing === null && $form !== '')
-                    {
+                    if ($thing === null && $form !== '') {
                         $out[] = parse_form($form);
-                    }
-                    else
-                    {
+                    } else {
                         $out[] = parse($thing);
                     }
                 }
@@ -1725,8 +1522,7 @@
 
             $thissection = isset($old_section) ? $old_section : null;
 
-            if ($out)
-            {
+            if ($out) {
                 return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
             }
         }
@@ -1751,12 +1547,10 @@
             'match'   => 'exact',
         ), $atts));
 
-        if ($form)
-        {
+        if ($form) {
             $rs = fetch('form', 'txp_form', 'name', $form);
 
-            if ($rs)
-            {
+            if ($rs) {
                 return parse($rs);
             }
         }
@@ -1769,15 +1563,13 @@
         $out = ($match === 'exact') ? $out : fInput('hidden', 'm', txpspecialchars($match)) . $out;
         $out = ($wraptag) ? doTag($out, $wraptag, $class) : $out;
 
-        if (!$section)
-        {
+        if (!$section) {
             return '<form method="get" action="'.hu.'"'.$id.'>'.
                 n.$out.
                 n.'</form>';
         }
 
-        if ($permlink_mode != 'messy')
-        {
+        if ($permlink_mode != 'messy') {
             return '<form method="get" action="'.pagelinkurl(array('s' => $section)).'"'.$id.'>'.
                 n.$out.
                 n.'</form>';
@@ -1793,8 +1585,7 @@
     function search_term($atts)
     {
         global $q;
-        if (empty($q))
-        {
+        if (empty($q)) {
             return '';
         }
 
@@ -1802,8 +1593,7 @@
             'escape' => 'html' // Deprecated in 4.5.0.
         ), $atts));
 
-        if (isset($atts['escape']))
-        {
+        if (isset($atts['escape'])) {
             trigger_error(gTxt('deprecated_attribute', array('{name}' => 'escape')), E_USER_NOTICE);
         }
 
@@ -1825,21 +1615,17 @@
             'showalways' => 0,
         ), $atts));
 
-        if (is_array($thisarticle))
-        {
-            if (!isset($thisarticle['next_id']))
-            {
+        if (is_array($thisarticle)) {
+            if (!isset($thisarticle['next_id'])) {
                 $np = getNextPrev();
                 $thisarticle = $thisarticle + $np;
                 extract($np);
             }
 
-            if ($next_id)
-            {
+            if ($next_id) {
                 $url = permlinkurl_id($next_id);
 
-                if ($thing)
-                {
+                if ($thing) {
                     $thing = parse($thing);
                     $next_title = escape_title($next_title);
 
@@ -1872,21 +1658,17 @@
             'showalways' => 0,
         ), $atts));
 
-        if (is_array($thisarticle))
-        {
-            if (!isset($thisarticle['prev_id']))
-            {
+        if (is_array($thisarticle)) {
+            if (!isset($thisarticle['prev_id'])) {
                 $np = getNextPrev();
                 $thisarticle = $thisarticle + $np;
                 extract($np);
             }
 
-            if ($prev_id)
-            {
+            if ($prev_id) {
                 $url = permlinkurl_id($prev_id);
 
-                if ($thing)
-                {
+                if ($thing) {
                     $thing = parse($thing);
                     $prev_title = escape_title($prev_title);
 
@@ -1914,13 +1696,11 @@
 
         assert_article();
 
-        if (!is_array($thisarticle))
-        {
+        if (!is_array($thisarticle)) {
             return '';
         }
 
-        if (!isset($thisarticle['next_title']))
-        {
+        if (!isset($thisarticle['next_title'])) {
             $np = getNextPrev();
             $thisarticle = $thisarticle + $np;
             extract($np);
@@ -1938,13 +1718,11 @@
 
         assert_article();
 
-        if (!is_array($thisarticle))
-        {
+        if (!is_array($thisarticle)) {
             return '';
         }
 
-        if (!isset($thisarticle['prev_title']))
-        {
+        if (!isset($thisarticle['prev_title'])) {
             $np = getNextPrev();
             $thisarticle = $thisarticle + $np;
             extract($np);
@@ -1979,8 +1757,7 @@
             'class' => false,
         ), $atts));
 
-        if ($thing)
-        {
+        if ($thing) {
             $class = ($class) ? ' class="'.txpspecialchars($class).'"' : '';
 
             return href(
@@ -2009,17 +1786,13 @@
         $numPages = $thispage['numPages'];
         $pg = $thispage['pg'];
 
-        if ($numPages > 1 and $pg > 1 and $pg <= $numPages)
-        {
+        if ($numPages > 1 and $pg > 1 and $pg <= $numPages) {
             $nextpg = ($pg - 1 == 1) ? 0 : ($pg - 1);
 
             // Author URLs should use RealName, rather than username.
-            if (!empty($pretext['author']))
-            {
+            if (!empty($pretext['author'])) {
                 $author = get_author_name($pretext['author']);
-            }
-            else
-            {
+            } else {
                 $author = '';
             }
 
@@ -2034,10 +1807,8 @@
                 'author'  => $author
             ));
 
-            if ($thing)
-            {
-                if ($escape == 'html')
-                {
+            if ($thing) {
+                if ($escape == 'html') {
                     $title = escape_title($title);
                 }
 
@@ -2069,17 +1840,13 @@
         $numPages = $thispage['numPages'];
         $pg = $thispage['pg'];
 
-        if ($numPages > 1 and $pg > 0 and $pg < $numPages)
-        {
+        if ($numPages > 1 and $pg > 0 and $pg < $numPages) {
             $nextpg = $pg + 1;
 
             // Author URLs should use RealName, rather than username.
-            if (!empty($pretext['author']))
-            {
+            if (!empty($pretext['author'])) {
                 $author = get_author_name($pretext['author']);
-            }
-            else
-            {
+            } else {
                 $author = '';
             }
 
@@ -2094,10 +1861,8 @@
                 'author'  => $author
             ));
 
-            if ($thing)
-            {
-                if ($escape == 'html')
-                {
+            if ($thing) {
+                if ($escape == 'html') {
                     $title = escape_title($title);
                 }
 
@@ -2122,8 +1887,7 @@
             'escape' => 'html',
         ), $atts, false));
 
-        if (!$item)
-        {
+        if (!$item) {
             return;
         }
 
@@ -2134,8 +1898,7 @@
 
         $tags = array();
 
-        foreach ($atts as $name => $value)
-        {
+        foreach ($atts as $name => $value) {
             $tags['{'.$name.'}'] = $value;
         }
 
@@ -2176,8 +1939,7 @@
             'id' => $pretext['id'],
         ), $atts));
 
-        if ($id)
-        {
+        if ($id) {
             return parse(EvalElse($thing, in_list($thisarticle['thisid'], $id)));
         }
     }
@@ -2198,19 +1960,12 @@
             'wraptag' => ''
         ), $atts));
 
-        if ($format)
-        {
+        if ($format) {
             $out = safe_strftime($format, $thisarticle['posted'], $gmt, $lang);
-        }
-
-        else
-        {
-            if ($id or $c or $pg)
-            {
+        } else {
+            if ($id or $c or $pg) {
                 $out = safe_strftime($archive_dateformat, $thisarticle['posted'], $gmt, $lang);
-            }
-            else
-            {
+            } else {
                 $out = safe_strftime($dateformat, $thisarticle['posted'], $gmt, $lang);
             }
         }
@@ -2226,8 +1981,7 @@
 
         assert_article();
 
-        if ($thisarticle['expires'] == 0)
-        {
+        if ($thisarticle['expires'] == 0) {
             return;
         }
 
@@ -2239,18 +1993,12 @@
             'wraptag' => '',
         ), $atts));
 
-        if ($format)
-        {
+        if ($format) {
             $out = safe_strftime($format, $thisarticle['expires'], $gmt, $lang);
-        }
-        else
-        {
-            if ($id or $c or $pg)
-            {
+        } else {
+            if ($id or $c or $pg) {
                 $out = safe_strftime($archive_dateformat, $thisarticle['expires'], $gmt, $lang);
-            }
-            else
-            {
+            } else {
                 $out = safe_strftime($dateformat, $thisarticle['expires'], $gmt, $lang);
             }
         }
@@ -2277,8 +2025,7 @@
 
         assert_article();
 
-        if (!$publish_expired_articles && $production_status != 'live')
-        {
+        if (!$publish_expired_articles && $production_status != 'live') {
             trigger_error(gTxt('publish_expired_articles_prefs_off'), E_USER_NOTICE);
         }
 
@@ -2302,18 +2049,12 @@
             'wraptag' => ''
         ), $atts));
 
-        if ($format)
-        {
+        if ($format) {
             $out = safe_strftime($format, $thisarticle['modified'], $gmt, $lang);
-        }
-        else
-        {
-            if ($id or $c or $pg)
-            {
+        } else {
+            if ($id or $c or $pg) {
                 $out = safe_strftime($archive_dateformat, $thisarticle['modified'], $gmt, $lang);
-            }
-            else
-            {
+            } else {
                 $out = safe_strftime($dateformat, $thisarticle['modified'], $gmt, $lang);
             }
         }
@@ -2342,8 +2083,7 @@
         extract($thisarticle);
         global $comments_mode;
 
-        if (!$comments_invite)
-        {
+        if (!$comments_invite) {
             $comments_invite = get_pref('comments_default_invite');
         }
 
@@ -2357,30 +2097,22 @@
 
         $invite_return = '';
 
-        if (($annotate or $comments_count) && ($showalways or $is_article_list))
-        {
+        if (($annotate or $comments_count) && ($showalways or $is_article_list)) {
 
             $comments_invite = txpspecialchars($comments_invite);
             $ccount = ($comments_count && $showcount) ?  ' ['.$comments_count.']' : '';
 
-            if ($textonly)
-            {
+            if ($textonly) {
                 $invite_return = $comments_invite.$ccount;
-            }
-            else
-            {
-                if (!$comments_mode)
-                {
+            } else {
+                if (!$comments_mode) {
                     $invite_return = doTag($comments_invite, 'a', $class, ' href="'.permlinkurl($thisarticle).'#'.gTxt('comment').'" '). $ccount;
-                }
-                else
-                {
+                } else {
                     $invite_return = "<a href=\"".hu."?parentid=$thisid\" onclick=\"window.open(this.href, 'popupwindow', 'width=500,height=500,scrollbars,resizable,status'); return false;\"".(($class) ? ' class="'.txpspecialchars($class).'"' : '').'>'.$comments_invite.'</a> '.$ccount;
                 }
             }
 
-            if ($wraptag)
-            {
+            if ($wraptag) {
                 $invite_return = doTag($invite_return, $wraptag, $class);
             }
         }
@@ -2416,34 +2148,23 @@
         $ip = serverset('REMOTE_ADDR');
         $blacklisted = is_blacklisted($ip);
 
-        if (!checkCommentsAllowed($thisid))
-        {
+        if (!checkCommentsAllowed($thisid)) {
             $out = graf(gTxt("comments_closed"), ' id="comments_closed"');
-        }
-        elseif (!checkBan($ip))
-        {
+        } elseif (!checkBan($ip)) {
             $out = graf(gTxt('you_have_been_banned'), ' id="comments_banned"');
-        }
-        elseif ($blacklisted)
-        {
+        } elseif ($blacklisted) {
             $out = graf(gTxt('your_ip_is_blacklisted_by'.' '.$blacklisted), ' id="comments_blacklisted"');
-        }
-        elseif (gps('commented') !== '')
-        {
+        } elseif (gps('commented') !== '') {
             $out = gTxt("comment_posted");
 
-            if (gps('commented') === '0')
-            {
+            if (gps('commented') === '0') {
                 $out .= " ". gTxt("comment_moderated");
             }
 
             $out = graf($out, ' id="txpCommentInputForm"');
-        }
-        else
-        {
+        } else {
             // Display a comment preview if required.
-            if (ps('preview') and $show_preview)
-            {
+            if (ps('preview') and $show_preview) {
                 $out = comments_preview(array());
             }
 
@@ -2467,8 +2188,7 @@
 
         $errors = $evaluator->get_result_message();
 
-        if ($errors)
-        {
+        if ($errors) {
             return doWrap($errors, $wraptag, $break, $class);
         }
     }
@@ -2537,15 +2257,13 @@
 
         assert_article();
 
-        if (isset($atts['breakclass']))
-        {
+        if (isset($atts['breakclass'])) {
             trigger_error(gTxt('deprecated_attribute', array('{name}' => 'breakclass')), E_USER_NOTICE);
         }
 
         extract($thisarticle);
 
-        if (!$comments_count)
-        {
+        if (!$comments_count) {
             return '';
         }
 
@@ -2559,12 +2277,10 @@
 
         $out = '';
 
-        if ($rs)
-        {
+        if ($rs) {
             $comments = array();
 
-            while($vars = nextRow($rs))
-            {
+            while($vars = nextRow($rs)) {
                 $GLOBALS['thiscomment'] = $vars;
                 $comments[] = parse_form($form).n;
                 unset($GLOBALS['thiscomment']);
@@ -2581,8 +2297,7 @@
     {
         global $has_comments_preview;
 
-        if (!ps('preview'))
-        {
+        if (!ps('preview')) {
             return;
         }
 
@@ -2600,8 +2315,7 @@
         $preview['name'] = strip_tags($preview['name']);
         $preview['email'] = clean_url($preview['email']);
 
-        if ($preview['message'] == '')
-        {
+        if ($preview['message'] == '') {
             $in = getComment();
             $preview['message'] = $in['message'];
 
@@ -2678,18 +2392,15 @@
 
         $name = txpspecialchars($name);
 
-        if ($link)
-        {
+        if ($link) {
             $web = comment_web();
             $nofollow = (@$comment_nofollow ? ' rel="nofollow"' : '');
 
-            if (!empty($web))
-            {
+            if (!empty($web)) {
                 return href($name, $web, $nofollow);
             }
 
-            if ($email && !$never_display_email)
-            {
+            if ($email && !$never_display_email) {
                 return href($name, eE('mailto:'.$email), $nofollow);
             }
         }
@@ -2714,11 +2425,9 @@
 
         assert_comment();
 
-        if (preg_match('/^\S/', $thiscomment['web']))
-        {
+        if (preg_match('/^\S/', $thiscomment['web'])) {
             // Prepend default protocol 'http' for all non-local URLs.
-            if (!preg_match('!^https?://|^#|^/[^/]!', $thiscomment['web']))
-            {
+            if (!preg_match('!^https?://|^#|^/[^/]!', $thiscomment['web'])) {
                 $thiscomment['web'] = 'http://'.$thiscomment['web'];
             }
             return txpspecialchars($thiscomment['web']);
@@ -2779,39 +2488,29 @@
             'this_section' => 0,
         ), $atts));
 
-        if ($thisauthor)
-        {
+        if ($thisauthor) {
             $realname = $thisauthor['realname'];
             $name = $thisauthor['name'];
-        }
-        else if ($author)
-        {
+        } elseif ($author) {
             $realname = get_author_name($author);
             $name = $author;
-        }
-        else
-        {
+        } else {
             assert_article();
             $realname = get_author_name($thisarticle['authorid']);
             $name = $thisarticle['authorid'];
         }
 
-        if ($title)
-        {
+        if ($title) {
             $display_name = txpspecialchars($realname);
-        }
-        else
-        {
+        } else {
             $display_name = txpspecialchars($name);
         }
 
-        if ($this_section && $s != 'default')
-        {
+        if ($this_section && $s != 'default') {
             $section = $s;
         }
 
-        if ($link)
-        {
+        if ($link) {
             return href($display_name, pagelinkurl(array(
                 's'      => $section,
                 'author' => $realname,
@@ -2831,27 +2530,20 @@
             'link'      => '',
         ), $atts));
 
-        if ($thisauthor)
-        {
+        if ($thisauthor) {
             $email = get_author_email($thisauthor['name']);
-        }
-        else
-        {
+        } else {
             assert_article();
             $email = get_author_email($thisarticle['authorid']);
         }
 
-        if ($escape == 'html')
-        {
+        if ($escape == 'html') {
             $display_email = txpspecialchars($email);
-        }
-        else
-        {
+        } else {
             $display_email = $email;
         }
 
-        if ($link)
-        {
+        if ($link) {
             return email(array(
                 'email'    => $email,
                 'linktext' => $display_email,
@@ -2872,15 +2564,13 @@
             'name' => '',
         ), $atts));
 
-        if ($thisauthor)
-        {
+        if ($thisauthor) {
             return parse(EvalElse($thing, $name === '' || in_list($thisauthor['name'], $name)));
         }
 
         $theType = ($type) ? $type == $context : true;
 
-        if ($name)
-        {
+        if ($name) {
             return parse(EvalElse($thing, ($theType && in_list($author, $name))));
         }
 
@@ -2901,8 +2591,7 @@
 
         $author = $thisarticle['authorid'];
 
-        if ($name)
-        {
+        if ($name) {
             return parse(EvalElse($thing, in_list($author, $name)));
         }
 
@@ -2938,8 +2627,7 @@
 
         $t = escape_title($thisarticle['title']);
 
-        if ($no_widow)
-        {
+        if ($no_widow) {
             $t = noWidow($t);
         }
 
@@ -2978,15 +2666,13 @@
             'wraptag'      => '',
         ), $atts));
 
-        if ($thisarticle['category1'])
-        {
+        if ($thisarticle['category1']) {
             $section = ($this_section) ? ($s == 'default' ? '' : $s) : $section;
             $category = $thisarticle['category1'];
 
             $label = txpspecialchars(($title) ? fetch_category_title($category) : $category);
 
-            if ($thing)
-            {
+            if ($thing) {
                 $out = href(
                     parse($thing),
                     pagelinkurl(array('s' => $section, 'c' => $category)),
@@ -2994,17 +2680,13 @@
                     ($title ? ' title="'.$label.'"' : '').
                     ($permlink_mode != 'messy' ? ' rel="tag"' : '')
                 );
-            }
-            elseif ($link)
-            {
+            } elseif ($link) {
                 $out = href(
                     $label,
                     pagelinkurl(array('s' => $section, 'c' => $category)),
                     ($permlink_mode != 'messy' ? ' rel="tag"' : '')
                 );
-            }
-            else
-            {
+            } else {
                 $out = $label;
             }
 
@@ -3029,15 +2711,13 @@
             'wraptag'      => '',
         ), $atts));
 
-        if ($thisarticle['category2'])
-        {
+        if ($thisarticle['category2']) {
             $section = ($this_section) ? ($s == 'default' ? '' : $s) : $section;
             $category = $thisarticle['category2'];
 
             $label = txpspecialchars(($title) ? fetch_category_title($category) : $category);
 
-            if ($thing)
-            {
+            if ($thing) {
                 $out = href(
                     parse($thing),
                     pagelinkurl(array('s' => $section, 'c' => $category)),
@@ -3045,17 +2725,13 @@
                     ($title ? ' title="'.$label.'"' : '').
                     ($permlink_mode != 'messy' ? ' rel="tag"' : '')
                 );
-            }
-            elseif ($link)
-            {
+            } elseif ($link) {
                 $out = href(
                     $label,
                     pagelinkurl(array('s' => $section, 'c' => $category)),
                     ($permlink_mode != 'messy' ? ' rel="tag"' : '')
                 );
-            }
-            else
-            {
+            } else {
                 $out = $label;
             }
 
@@ -3081,33 +2757,23 @@
             'wraptag'      => '',
         ), $atts));
 
-        if ($name)
-        {
+        if ($name) {
             $category = $name;
-        }
-        elseif (!empty($thiscategory['name']))
-        {
+        } elseif (!empty($thiscategory['name'])) {
             $category = $thiscategory['name'];
             $type = $thiscategory['type'];
-        }
-        else
-        {
+        } else {
             $category = $c;
 
-            if (!isset($atts['type']))
-            {
+            if (!isset($atts['type'])) {
                 $type = $context;
             }
         }
 
-        if ($category)
-        {
-            if ($this_section)
-            {
+        if ($category) {
+            if ($this_section) {
                 $section = ($s == 'default' ? '' : $s);
-            }
-            elseif (isset($thiscategory['section']))
-            {
+            } elseif (isset($thiscategory['section'])) {
                 $section = $thiscategory['section'];
             }
 
@@ -3115,29 +2781,22 @@
 
             $href = pagelinkurl(array('s' => $section, 'c' => $category, 'context' => $type));
 
-            if ($thing)
-            {
+            if ($thing) {
                 $out = href(
                     parse($thing),
                     $href,
                     (($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
                     ($title ? ' title="'.$label.'"' : '')
                 );
-            }
-            elseif ($link)
-            {
+            } elseif ($link) {
                 $out = href(
                     $label,
                     $href,
                     ($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : ''
                 );
-            }
-            elseif ($url)
-            {
+            } elseif ($url) {
                 $out = $href;
-            }
-            else
-            {
+            } else {
                 $out = $label;
             }
 
@@ -3160,52 +2819,37 @@
             'wraptag' => '',
         ), $atts));
 
-        if ($name)
-        {
+        if ($name) {
             $sec = $name;
-        }
-        elseif (!empty($thissection['name']))
-        {
+        } elseif (!empty($thissection['name'])) {
             $sec = $thissection['name'];
-        }
-        elseif (!empty($thisarticle['section']))
-        {
+        } elseif (!empty($thisarticle['section'])) {
             $sec = $thisarticle['section'];
-        }
-        else
-        {
+        } else {
             $sec = $s;
         }
 
-        if ($sec)
-        {
+        if ($sec) {
             $label = txpspecialchars(($title) ? fetch_section_title($sec) : $sec);
 
             $href = pagelinkurl(array('s' => $sec));
 
-            if ($thing)
-            {
+            if ($thing) {
                 $out = href(
                     parse($thing),
                     $href,
                     (($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
                     ($title ? ' title="'.$label.'"' : '')
                 );
-            }
-            elseif ($link)
-            {
+            } elseif ($link) {
                 $out = href(
                     $label,
                     $href,
                     ($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : ''
                 );
-            }
-            elseif ($url)
-            {
+            } elseif ($url) {
                 $out = $href;
-            }
-            else
-            {
+            } else {
                 $out = $label;
             }
 
@@ -3271,32 +2915,24 @@
             'wraptag'   => '',
         ), $atts));
 
-        if ($thisarticle['article_image'])
-        {
+        if ($thisarticle['article_image']) {
             $image = $thisarticle['article_image'];
-        }
-        else
-        {
+        } else {
             return;
         }
 
-        if (intval($image))
-        {
+        if (intval($image)) {
             $rs = safe_row('*', 'txp_image', 'id = '.intval($image));
 
-            if ($rs)
-            {
+            if ($rs) {
                 $width = ($width=='') ? (($thumbnail) ? $rs['thumb_w'] : $rs['w']) : $width;
                 $height = ($height=='') ? (($thumbnail) ? $rs['thumb_h'] : $rs['h']) : $height;
 
-                if ($thumbnail)
-                {
-                    if ($rs['thumbnail'])
-                    {
+                if ($thumbnail) {
+                    if ($rs['thumbnail']) {
                         extract($rs);
 
-                        if ($escape == 'html')
-                        {
+                        if ($escape == 'html') {
                             $alt = txpspecialchars($alt);
                             $caption = txpspecialchars($caption);
                         }
@@ -3308,18 +2944,13 @@
                             ($width ? ' width="'.(int) $width.'"' : '').
                             ($height ? ' height="'.(int) $height.'"' : '').
                             ' />';
-                    }
-                    else
-                    {
+                    } else {
                         return '';
                     }
-                }
-                else
-                {
+                } else {
                     extract($rs);
 
-                    if ($escape == 'html')
-                    {
+                    if ($escape == 'html') {
                         $alt = txpspecialchars($alt);
                         $caption = txpspecialchars($caption);
                     }
@@ -3332,16 +2963,12 @@
                         ($height ? ' height="'.(int) $height.'"' : '').
                         ' />';
                 }
-            }
-            else
-            {
+            } else {
                 trigger_error(gTxt('unknown_image'));
 
                 return;
             }
-        }
-        else
-        {
+        } else {
             $out = '<img src="'.txpspecialchars($image).'" alt=""'.
                 (($html_id and !$wraptag) ? ' id="'.txpspecialchars($html_id).'"' : '').
                 (($class and !$wraptag) ? ' class="'.txpspecialchars($class).'"' : '').
@@ -3381,13 +3008,10 @@
 
         $result = preg_replace('/\s+/', ' ', strip_tags(str_replace('><', '> <', $thisarticle['body'])));
 
-        if ($quoted || empty($m) || $m === 'exact')
-        {
+        if ($quoted || empty($m) || $m === 'exact') {
             $regex_search = '/(?:\G|\s).{0,50}'.preg_quote($q, '/').'.{0,50}(?:\s|$)/iu';
             $regex_hilite = '/('.preg_quote($q, '/').')/i';
-        }
-        else
-        {
+        } else {
             $regex_search = '/(?:\G|\s).{0,50}('.preg_replace('/\s+/', '|', preg_quote($q, '/')).').{0,50}(?:\s|$)/iu';
             $regex_hilite = '/('.preg_replace('/\s+/', '|', preg_quote($q, '/')).')/i';
         }
@@ -3395,8 +3019,7 @@
         preg_match_all($regex_search, $result, $concat);
         $concat = $concat[0];
 
-        for ($i = 0, $r = array(); $i < min($limit, count($concat)); $i++)
-        {
+        for ($i = 0, $r = array(); $i < min($limit, count($concat)); $i++) {
             $r[] = trim($concat[$i]);
         }
 
@@ -3460,13 +3083,11 @@
             'sort'     => 'name ASC',
         ), $atts));
 
-        if (isset($atts['c']))
-        {
+        if (isset($atts['c'])) {
             trigger_error(gTxt('deprecated_attribute', array('{name}' => 'c')), E_USER_NOTICE);
         }
 
-        if (isset($atts['category']))
-        {
+        if (isset($atts['category'])) {
             // Override the global.
             $c = $category;
         }
@@ -3479,12 +3100,10 @@
 
         $rs = safe_rows_start('*', 'txp_image',  join(' ', $qparts));
 
-        if ($rs)
-        {
+        if ($rs) {
             $out = array();
 
-            while ($a = nextRow($rs))
-            {
+            while ($a = nextRow($rs)) {
                 extract($a);
                 $dims = ($thumb_h ? " height=\"$thumb_h\"" : '') . ($thumb_w ? " width=\"$thumb_w\"" : '');
                 $url = pagelinkurl(array('c'=>$c, 'context'=>'image', 's'=>$s, 'p'=>$id));
@@ -3494,8 +3113,7 @@
                 );
             }
 
-            if (count($out))
-            {
+            if (count($out)) {
                 return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
             }
         }
@@ -3506,19 +3124,16 @@
 // -------------------------------------------------------------
     function image_display($atts)
     {
-        if (is_array($atts))
-        {
+        if (is_array($atts)) {
             extract($atts);
         }
 
         global $s, $c, $p;
 
-        if ($p)
-        {
+        if ($p) {
             $rs = safe_row("*", "txp_image", 'id='.intval($p).' limit 1');
 
-            if ($rs)
-            {
+            if ($rs) {
                 extract($rs);
 
                 return '<img src="'.imagesrcurl($id, $ext).
@@ -3561,62 +3176,47 @@
         $context_list = (empty($auto_detect) || $filters) ? array() : do_list($auto_detect);
         $pageby = ($pageby=='limit') ? $limit : $pageby;
 
-        if ($name)
-        {
+        if ($name) {
             $where[] = "name IN ('".join("','", doSlash(do_list($name)))."')";
         }
 
-        if ($category)
-        {
+        if ($category) {
             $where[] = "category IN ('".join("','", doSlash(do_list($category)))."')";
         }
 
-        if ($id)
-        {
+        if ($id) {
             $where[] = "id IN ('".join("','", doSlash(do_list($id)))."')";
         }
 
-        if ($author)
-        {
+        if ($author) {
             $where[] = "author IN ('".join("','", doSlash(do_list($author)))."')";
         }
 
-        if ($realname)
-        {
+        if ($realname) {
             $authorlist = safe_column('name', 'txp_users', "RealName IN ('". join("','", doArray(doSlash(do_list($realname)), 'urldecode')) ."')");
             $where[] = "author IN ('".join("','", doSlash($authorlist))."')";
         }
 
-        if ($extension)
-        {
+        if ($extension) {
             $where[] = "ext IN ('".join("','", doSlash(do_list($extension)))."')";
         }
 
-        if ($thumbnail === '0' || $thumbnail === '1')
-        {
+        if ($thumbnail === '0' || $thumbnail === '1') {
             $where[] = "thumbnail = $thumbnail";
         }
 
         // If no images are selected, try...
-        if (!$where && !$filters)
-        {
-            foreach ($context_list as $ctxt)
-            {
-                switch($ctxt)
-                {
+        if (!$where && !$filters) {
+            foreach ($context_list as $ctxt) {
+                switch($ctxt) {
                     case 'article' :
                         // ...the article image field.
-                        if ($thisarticle && !empty($thisarticle['article_image']))
-                        {
+                        if ($thisarticle && !empty($thisarticle['article_image'])) {
                             $items = do_list($thisarticle['article_image']);
-                            foreach ($items as &$item)
-                            {
-                                if (is_numeric($item))
-                                {
+                            foreach ($items as &$item) {
+                                if (is_numeric($item)) {
                                     $item = intval($item);
-                                }
-                                else
-                                {
+                                } else {
                                     return article_image(compact('class', 'html_id', 'wraptag'));
                                 }
                             }
@@ -3626,58 +3226,50 @@
                             $where[] = "id IN ($items)";
 
                             // Order of ids in article image field overrides default 'sort' attribute.
-                            if (empty($atts['sort']))
-                            {
+                            if (empty($atts['sort'])) {
                                 $safe_sort = "field(id, $items)";
                             }
                         }
                         break;
                     case 'category' :
                         // ...the global category in the URL.
-                        if ($context == 'image' && !empty($c))
-                        {
+                        if ($context == 'image' && !empty($c)) {
                             $where[] = "category = '".doSlash($c)."'";
                         }
                         break;
                     case 'author' :
                         // ...the global author in the URL.
-                        if ($context == 'image' && !empty($pretext['author']))
-                        {
+                        if ($context == 'image' && !empty($pretext['author'])) {
                             $where[] = "author = '".doSlash($pretext['author'])."'";
                         }
                         break;
                 }
                 // Only one context can be processed.
-                if ($where)
-                {
+                if ($where) {
                     break;
                 }
             }
         }
 
         // Order of ids in 'id' attribute overrides default 'sort' attribute.
-        if (empty($atts['sort']) && $id !== '')
-        {
+        if (empty($atts['sort']) && $id !== '') {
             $safe_sort = 'field(id, '.join(',', doSlash(do_list($id))).')';
         }
 
         // If nothing matches, output nothing.
-        if (!$where && $filters)
-        {
+        if (!$where && $filters) {
             return '';
         }
 
         // If nothing matches, start with all images.
-        if (!$where)
-        {
+        if (!$where) {
             $where[] = "1=1";
         }
 
         $where = join(' AND ', $where);
 
         // Set up paging if required.
-        if ($limit && $pageby)
-        {
+        if ($limit && $pageby) {
             $grand_total = safe_count('txp_image', $where);
             $total = $grand_total - $offset;
             $numPages = ($pageby > 0) ? ceil($total / $pageby) : 1;
@@ -3693,13 +3285,10 @@
             $pageout['grand_total'] = $grand_total;
             $pageout['total']       = $total;
 
-            if (empty($thispage))
-            {
+            if (empty($thispage)) {
                 $thispage = $pageout;
             }
-        }
-        else
-        {
+        } else {
             $pgoffset = $offset;
         }
 
@@ -3711,26 +3300,22 @@
 
         $rs = safe_rows_start('*', 'txp_image', join(' ', $qparts));
 
-        if ($rs)
-        {
+        if ($rs) {
             $out = array();
             $count = 0;
             $last = numRows($rs);
 
-            if (isset($thisimage))
-            {
+            if (isset($thisimage)) {
                 $old_image = $thisimage;
             }
 
-            while ($a = nextRow($rs))
-            {
+            while ($a = nextRow($rs)) {
                 ++$count;
                 $thisimage = image_format_info($a);
                 $thisimage['is_first'] = ($count == 1);
                 $thisimage['is_last'] = ($count == $last);
 
-                if (!$has_content)
-                {
+                if (!$has_content) {
                     $url = pagelinkurl(array(
                         'c'       => $thisimage['category'],
                         'context' => 'image',
@@ -3749,8 +3334,7 @@
 
             $thisimage = (isset($old_image) ? $old_image : null);
 
-            if ($out)
-            {
+            if ($out) {
                 return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class, '', '', '', $html_id);
             }
         }
@@ -3774,8 +3358,7 @@
             'breakclass' => '', // Deprecated in 4.6.0
         ), $atts));
 
-        if (isset($atts['breakclass']))
-        {
+        if (isset($atts['breakclass'])) {
             trigger_error(gTxt('deprecated_attribute', array('{name}' => 'breakclass')), E_USER_NOTICE);
         }
 
@@ -3784,39 +3367,29 @@
 
         $from_form = false;
 
-        if ($id)
-        {
+        if ($id) {
             $thisimage = imageFetchInfo('id = '.intval($id));
-        }
-        elseif ($name)
-        {
+        } elseif ($name) {
             $thisimage = imageFetchInfo("name = '".doSlash($name)."'");
-        }
-        else
-        {
+        } else {
             assert_image();
             $from_form = true;
         }
 
         $out = array();
-        if ($thisimage)
-        {
+        if ($thisimage) {
             $thisimage['category_title'] = fetch_category_title($thisimage['category'], 'image');
 
-            foreach ($type as $item)
-            {
-                if (in_array($item, $validItems))
-                {
-                    if (isset($thisimage[$item]))
-                    {
+            foreach ($type as $item) {
+                if (in_array($item, $validItems)) {
+                    if (isset($thisimage[$item])) {
                         $out[] = ($escape == 'html') ?
                             txpspecialchars($thisimage[$item]) : $thisimage[$item];
                     }
                 }
             }
 
-            if (!$from_form)
-            {
+            if (!$from_form) {
                 $thisimage = '';
             }
         }
@@ -3838,29 +3411,22 @@
 
         $from_form = false;
 
-        if ($id)
-        {
+        if ($id) {
             $thisimage = imageFetchInfo('id = '.intval($id));
-        }
-        elseif ($name)
-        {
+        } elseif ($name) {
             $thisimage = imageFetchInfo("name = '".doSlash($name)."'");
-        }
-        else
-        {
+        } else {
             assert_image();
             $from_form = true;
         }
 
-        if ($thisimage)
-        {
+        if ($thisimage) {
             $url = imagesrcurl($thisimage['id'], $thisimage['ext'], $thumbnail);
             $link = ($link == 'auto') ? (($thing) ? 1 : 0) : $link;
             $out = ($thing) ? parse($thing) : $url;
             $out = ($link) ? href($out, $url) : $out;
 
-            if (!$from_form)
-            {
+            if (!$from_form) {
                 $thisimage = '';
             }
 
@@ -3886,8 +3452,7 @@
             'wraptag'      => '',
         ), $atts));
 
-        if ($thisimage['author'])
-        {
+        if ($thisimage['author']) {
             $author_name = get_author_name($thisimage['author']);
             $display_name = txpspecialchars(($title) ? $author_name : $thisimage['author']);
 
@@ -3914,30 +3479,23 @@
 
         $from_form = false;
 
-        if ($id)
-        {
+        if ($id) {
             $thisimage = imageFetchInfo('id = '.intval($id));
-        }
-        elseif ($name)
-        {
+        } elseif ($name) {
             $thisimage = imageFetchInfo("name = '".doSlash($name)."'");
-        }
-        else
-        {
+        } else {
             assert_image();
             $from_form = true;
         }
 
-        if (isset($thisimage['date']))
-        {
+        if (isset($thisimage['date'])) {
             // Not a typo: use fileDownloadFormatTime() since it's fit for purpose.
             $out = fileDownloadFormatTime(array(
                 'ftime'  => $thisimage['date'],
                 'format' => $format
             ));
 
-            if (!$from_form)
-            {
+            if (!$from_form) {
                 $thisimage = '';
             }
 
@@ -4020,8 +3578,7 @@
             'title'  => 0,
         ), $atts));
 
-        if ($id_author)
-        {
+        if ($id_author) {
             $display_name = ($title) ? get_author_name($id_author) : $id_author;
             return '<meta name="author" content="'.txpspecialchars($display_name).'" />';
         }
@@ -4042,17 +3599,14 @@
             'title' => '',
         ), $atts));
 
-        if (!$id)
-        {
+        if (!$id) {
             assert_article();
         }
 
         $url = ($id) ? permlinkurl_id($id) : permlinkurl($thisarticle);
 
-        if ($url)
-        {
-            if ($thing === null)
-            {
+        if ($url) {
+            if ($thing === null) {
                 return $url;
             }
 
@@ -4105,13 +3659,10 @@
         $dc = safe_count('txp_discuss', 'parentid='.intval($ID).' and visible='.VISIBLE);
 
         $ccount = ($dc) ?  '['.$dc.']' : '';
-        if (!$comments_mode)
-        {
+        if (!$comments_mode) {
             return '<a href="'.permlinkurl_id($ID).'/#'.gTxt('comment').
                 '">'.$AnnotateInvite.'</a>'. $ccount;
-        }
-        else
-        {
+        } else {
             return "<a href=\"".hu."?parentid=$ID\" onclick=\"window.open(this.href, 'popupwindow', 'width=500,height=500,scrollbars,resizable,status'); return false;\">".$AnnotateInvite.'</a> '.$ccount;
         }
 
@@ -4177,38 +3728,30 @@
             'linkclass' => '',
         ), $atts));
 
-        if (isset($atts['sep']))
-        {
+        if (isset($atts['sep'])) {
             $separator = $sep;
             trigger_error(gTxt('deprecated_attribute', array('{name}' => 'sep')), E_USER_NOTICE);
         }
 
         // For BC, get rid of in crockery.
-        if ($link == 'y')
-        {
+        if ($link == 'y') {
             $linked = true;
-        }
-        elseif ($link == 'n')
-        {
+        } elseif ($link == 'n') {
             $linked = false;
-        }
-        else
-        {
+        } else {
             $linked = $link;
         }
 
         $label = txpspecialchars($label);
 
-        if ($linked)
-        {
+        if ($linked) {
             $label = doTag($label, 'a', $linkclass, ' href="'.hu.'"');
         }
 
         $content = array();
         extract($pretext);
 
-        if (!empty($s) && $s!= 'default')
-        {
+        if (!empty($s) && $s!= 'default') {
             $section_title = ($title) ? fetch_section_title($s) : $s;
             $section_title_html = escape_title($section_title);
             $content[] = ($linked)
@@ -4218,10 +3761,8 @@
 
         $category = empty($c)? '': $c;
 
-        foreach (getTreePath($category, 'article') as $cat)
-        {
-            if ($cat['name'] != 'root')
-            {
+        foreach (getTreePath($category, 'article') as $cat) {
+            if ($cat['name'] != 'root') {
                 $category_title_html = $title ? escape_title($cat['title']) : $cat['name'];
                 $content[] = ($linked)
                     ? doTag($category_title_html, 'a', $linkclass, ' href="'.pagelinkurl(array('c'=>$cat['name'])).'"')
@@ -4230,8 +3771,7 @@
         }
 
         // Add the label at the end, to prevent breadcrumb for homepage.
-        if ($content)
-        {
+        if ($content) {
             $content = array_merge(array($label), $content);
 
             return doTag(join($separator, $content), $wraptag, $class);
@@ -4267,8 +3807,7 @@
     {
         global $thispage, $pretext;
 
-        if (empty($pretext['q']))
-        {
+        if (empty($pretext['q'])) {
             return '';
         }
 
@@ -4294,12 +3833,9 @@
 
         $theType = ($type) ? $type == $context : true;
 
-        if ($name === false)
-        {
+        if ($name === false) {
             return parse(EvalElse($thing, ($theType && !empty($c))));
-        }
-        else
-        {
+        } else {
             return parse(EvalElse($thing, ($theType && in_list($c, $name))));
         }
     }
@@ -4319,34 +3855,25 @@
 
         $cats = array();
 
-        if ($number)
-        {
-            if (!empty($thisarticle['category'.$number]))
-            {
+        if ($number) {
+            if (!empty($thisarticle['category'.$number])) {
                 $cats = array($thisarticle['category'.$number]);
             }
-        }
-        else
-        {
-            if (!empty($thisarticle['category1']))
-            {
+        } else {
+            if (!empty($thisarticle['category1'])) {
                 $cats[] = $thisarticle['category1'];
             }
 
-            if (!empty($thisarticle['category2']))
-            {
+            if (!empty($thisarticle['category2'])) {
                 $cats[] = $thisarticle['category2'];
             }
 
             $cats = array_unique($cats);
         }
 
-        if ($name)
-        {
+        if ($name) {
             return parse(EvalElse($thing, array_intersect(do_list($name), $cats)));
-        }
-        else
-        {
+        } else {
             return parse(EvalElse($thing, ($cats)));
         }
     }
@@ -4383,12 +3910,9 @@
 
         $section = ($s == 'default' ? '' : $s);
 
-        if ($section)
-        {
+        if ($section) {
             return parse(EvalElse($thing, $name === false or in_list($section, $name)));
-        }
-        else
-        {
+        } else {
             return parse(EvalElse($thing, $name !== false and (in_list('', $name) or in_list('default', $name))));
         }
     }
@@ -4434,39 +3958,26 @@
     {
         global $is_article_body, $thisarticle, $prefs;
 
-        if (assert_array($prefs) === false)
-        {
+        if (assert_array($prefs) === false) {
             return '';
         }
 
         ob_start();
 
-        if (empty($is_article_body))
-        {
-            if (!empty($prefs['allow_page_php_scripting']))
-            {
+        if (empty($is_article_body)) {
+            if (!empty($prefs['allow_page_php_scripting'])) {
                 eval($thing);
-            }
-            else
-            {
+            } else {
                 trigger_error(gTxt('php_code_disabled_page'));
             }
-        }
-        else
-        {
-            if (!empty($prefs['allow_article_php_scripting']))
-            {
-                if (has_privs('article.php', $thisarticle['authorid']))
-                {
+        } else {
+            if (!empty($prefs['allow_article_php_scripting'])) {
+                if (has_privs('article.php', $thisarticle['authorid'])) {
                     eval($thing);
-                }
-                else
-                {
+                } else {
                     trigger_error(gTxt('php_code_forbidden_user'));
                 }
-            }
-            else
-            {
+            } else {
                 trigger_error(gTxt('php_code_disabled_article'));
             }
         }
@@ -4489,18 +4000,14 @@
 
         $name = strtolower($name);
 
-        if (!isset($thisarticle[$name]))
-        {
+        if (!isset($thisarticle[$name])) {
             trigger_error(gTxt('field_not_found', array('{name}' => $name)), E_USER_NOTICE);
             return '';
         }
 
-        if ($thisarticle[$name] !== '')
-        {
+        if ($thisarticle[$name] !== '') {
             $out = $thisarticle[$name];
-        }
-        else
-        {
+        } else {
             $out = $default;
         }
 
@@ -4527,24 +4034,20 @@
             'separator' => '',
         ), $atts));
 
-        if (isset($atts['val']))
-        {
+        if (isset($atts['val'])) {
             $value = $val;
             trigger_error(gTxt('deprecated_attribute', array('{name}' => 'val')), E_USER_NOTICE);
         }
 
         $name = strtolower($name);
 
-        if (!isset($thisarticle[$name]))
-        {
+        if (!isset($thisarticle[$name])) {
             trigger_error(gTxt('field_not_found', array('{name}' => $name)), E_USER_NOTICE);
             return '';
         }
 
-        if ($value !== null)
-        {
-            switch ($match)
-            {
+        if ($value !== null) {
+            switch ($match) {
                 case '' :
                 case 'exact':
                     $cond = ($thisarticle[$name] == $value);
@@ -4553,18 +4056,15 @@
                     $values = do_list($value);
                     $cond = false;
                     $cf_contents = ($separator) ? do_list($thisarticle[$name], $separator) : $thisarticle[$name];
-                    foreach($values as $term)
-                    {
-                        if ($term == '')
-                        {
+                    foreach($values as $term) {
+                        if ($term == '') {
                             continue;
                         }
 
                         $cond = is_array($cf_contents) ? in_array($term, $cf_contents) : ((strpos($cf_contents, $term) !== false) ? true : false);
 
                         // Short circuit if a match is found.
-                        if ($cond)
-                        {
+                        if ($cond) {
                             break;
                         }
                     }
@@ -4574,10 +4074,8 @@
                     $num_values = count($values);
                     $term_count = 0;
                     $cf_contents = ($separator) ? do_list($thisarticle[$name], $separator) : $thisarticle[$name];
-                    foreach ($values as $term)
-                    {
-                        if ($term == '')
-                        {
+                    foreach ($values as $term) {
+                        if ($term == '') {
                             continue;
                         }
 
@@ -4599,9 +4097,7 @@
                     trigger_error(gTxt('invalid_attribute_value', array('{name}' => 'value')), E_USER_NOTICE);
                     $cond = false;
             }
-        }
-        else
-        {
+        } else {
             $cond = ($thisarticle[$name] !== '');
         }
 
@@ -4667,12 +4163,9 @@
         $cond = EvalElse($thing, 1);
         $out = parse($cond);
 
-        if (empty($last[$key]) or $out != $last[$key])
-        {
+        if (empty($last[$key]) or $out != $last[$key]) {
             return $last[$key] = $out;
-        }
-        else
-        {
+        } else {
             return parse(EvalElse($thing, 0));
         }
     }
@@ -4708,8 +4201,7 @@
             'version' => '',
         ), $atts));
 
-        if (isset($atts['ver']))
-        {
+        if (isset($atts['ver'])) {
             $version = $ver;
             trigger_error(gTxt('deprecated_attribute', array('{name}' => 'ver')), E_USER_NOTICE);
         }
@@ -4742,8 +4234,7 @@
             'status'      => STATUS_LIVE,
         ), $atts));
 
-        if (!is_numeric($status))
-        {
+        if (!is_numeric($status)) {
             $status = getStatusNum($status);
         }
 
@@ -4753,52 +4244,42 @@
         $context_list = (empty($auto_detect) || $filters) ? array() : do_list($auto_detect);
         $pageby = ($pageby=='limit') ? $limit : $pageby;
 
-        if ($category)
-        {
+        if ($category) {
             $where[] = "category IN ('".join("','", doSlash(do_list($category)))."')";
         }
 
         $ids = array_map('intval', do_list($id));
 
-        if ($id)
-        {
+        if ($id) {
             $where[] = "id IN ('".join("','", $ids)."')";
         }
 
-        if ($status)
-        {
+        if ($status) {
             $statwhere[] = "status = '".doSlash($status)."'";
         }
 
-        if ($author)
-        {
+        if ($author) {
             $where[] = "author IN ('".join("','", doSlash(do_list($author)))."')";
         }
 
-        if ($realname)
-        {
+        if ($realname) {
             $authorlist = safe_column('name', 'txp_users', "RealName IN ('". join("','", doArray(doSlash(do_list($realname)), 'urldecode')) ."')");
             $where[] = "author IN ('".join("','", doSlash($authorlist))."')";
         }
 
         // If no files are selected, try...
-        if (!$where && !$filters)
-        {
-            foreach ($context_list as $ctxt)
-            {
-                switch ($ctxt)
-                {
+        if (!$where && !$filters) {
+            foreach ($context_list as $ctxt) {
+                switch ($ctxt) {
                     case 'category' :
                         // ...the global category in the URL.
-                        if ($context == 'file' && !empty($c))
-                        {
+                        if ($context == 'file' && !empty($c)) {
                             $where[] = "category = '".doSlash($c)."'";
                         }
                         break;
                     case 'author' :
                         // ...the global author in the URL.
-                        if ($context == 'file' && !empty($pretext['author']))
-                        {
+                        if ($context == 'file' && !empty($pretext['author'])) {
                             $where[] = "author = '".doSlash($pretext['author'])."'";
                         }
                         break;
@@ -4809,14 +4290,12 @@
             }
         }
 
-        if (!$where && !$statwhere && $filters)
-        {
+        if (!$where && !$statwhere && $filters) {
             // If nothing matches, output nothing.
             return '';
         }
 
-        if (!$where)
-        {
+        if (!$where) {
             // If nothing matches, start with all files.
             $where[] = "1=1";
         }
@@ -4824,8 +4303,7 @@
         $where = join(' AND ', array_merge($where, $statwhere));
 
         // Set up paging if required.
-        if ($limit && $pageby)
-        {
+        if ($limit && $pageby) {
             $grand_total = safe_count('txp_file', $where);
             $total = $grand_total - $offset;
             $numPages = ($pageby > 0) ? ceil($total/$pageby) : 1;
@@ -4841,23 +4319,17 @@
             $pageout['grand_total'] = $grand_total;
             $pageout['total']       = $total;
 
-            if (empty($thispage))
-            {
+            if (empty($thispage)) {
                 $thispage = $pageout;
             }
-        }
-        else
-        {
+        } else {
             $pgoffset = $offset;
         }
 
         // Preserve order of custom file ids unless 'sort' attribute is set.
-        if (!empty($atts['id']) && empty($atts['sort']))
-        {
+        if (!empty($atts['id']) && empty($atts['sort'])) {
             $safe_sort = 'field(id, '.join(',', $ids).')';
-        }
-        else
-        {
+        } else {
             $safe_sort = doSlash($sort);
         }
 
@@ -4868,14 +4340,12 @@
 
         $rs = safe_rows_start('*', 'txp_file', $where.' '.join(' ', $qparts));
 
-        if ($rs)
-        {
+        if ($rs) {
             $count = 0;
             $last = numRows($rs);
             $out = array();
 
-            while ($a = nextRow($rs))
-            {
+            while ($a = nextRow($rs)) {
                 ++$count;
                 $thisfile = file_download_format_info($a);
                 $thisfile['is_first'] = ($count == 1);
@@ -4886,8 +4356,7 @@
                 $thisfile = '';
             }
 
-            if ($out)
-            {
+            if ($out) {
                 return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
             }
         }
@@ -4909,29 +4378,22 @@
 
         $from_form = false;
 
-        if ($id)
-        {
+        if ($id) {
             $thisfile = fileDownloadFetchInfo('id = '.intval($id));
-        }
-        elseif ($filename)
-        {
+        } elseif ($filename) {
             $thisfile = fileDownloadFetchInfo("filename = '".doSlash($filename)."'");
-        }
-        else
-        {
+        } else {
             assert_file();
 
             $from_form = true;
         }
 
-        if ($thisfile)
-        {
+        if ($thisfile) {
             $out = ($thing) ? parse($thing) : parse_form($form);
 
             // Cleanup: this wasn't called from a form,
             // so we don't want this value remaining.
-            if (!$from_form)
-            {
+            if (!$from_form) {
                 $thisfile = '';
             }
 
@@ -4952,31 +4414,24 @@
 
         $from_form = false;
 
-        if ($id)
-        {
+        if ($id) {
             $thisfile = fileDownloadFetchInfo('id = '.intval($id));
-        }
-        elseif ($filename)
-        {
+        } elseif ($filename) {
             $thisfile = fileDownloadFetchInfo("filename = '".doSlash($filename)."'");
-        }
-        else
-        {
+        } else {
             assert_file();
 
             $from_form = true;
         }
 
-        if ($thisfile)
-        {
+        if ($thisfile) {
             $url = filedownloadurl($thisfile['id'], $thisfile['filename']);
 
             $out = ($thing) ? href(parse($thing), $url) : $url;
 
             // cleanup: this wasn't called from a form,
             // so we don't want this value remaining
-            if (!$from_form)
-            {
+            if (!$from_form) {
                 $thisfile = '';
             }
 
@@ -4997,22 +4452,16 @@
             'format'   => '',
         ), $atts));
 
-        if (is_numeric($decimals) and $decimals >= 0)
-        {
+        if (is_numeric($decimals) and $decimals >= 0) {
             $decimals = intval($decimals);
-        }
-        else
-        {
+        } else {
             $decimals = 2;
         }
 
-        if (isset($thisfile['size']))
-        {
+        if (isset($thisfile['size'])) {
             $format_unit = strtolower(substr($format, 0, 1));
             return format_filesize($thisfile['size'], $decimals, $format_unit);
-        }
-        else
-        {
+        } else {
             return '';
         }
     }
@@ -5029,8 +4478,7 @@
             'format' => '',
         ), $atts));
 
-        if ($thisfile['created'])
-        {
+        if ($thisfile['created']) {
             return fileDownloadFormatTime(array(
                 'ftime'  => $thisfile['created'],
                 'format' => $format,
@@ -5050,8 +4498,7 @@
             'format' => '',
         ), $atts));
 
-        if ($thisfile['modified'])
-        {
+        if ($thisfile['modified']) {
             return fileDownloadFormatTime(array(
                 'ftime'  => $thisfile['modified'],
                 'format' => $format,
@@ -5099,8 +4546,7 @@
             'wraptag' => '',
         ), $atts));
 
-        if ($thisfile['category'])
-        {
+        if ($thisfile['category']) {
             $category = ($title)
                 ? fetch_category_title($thisfile['category'], 'file')
                 : $thisfile['category'];
@@ -5126,8 +4572,7 @@
             'wraptag'      => '',
         ), $atts));
 
-        if ($thisfile['author'])
-        {
+        if ($thisfile['author']) {
             $author_name = get_author_name($thisfile['author']);
             $display_name = txpspecialchars(($title) ? $author_name : $thisfile['author']);
 
@@ -5166,8 +4611,7 @@
             'wraptag' => '',
         ), $atts));
 
-        if ($thisfile['description'])
-        {
+        if ($thisfile['description']) {
             $description = ($escape == 'html')
                 ? txpspecialchars($thisfile['description'])
                 : $thisfile['description'];
@@ -5203,27 +4647,20 @@
             'value' => parse($thing)
         ), $atts));
 
-        if (empty($name))
-        {
+        if (empty($name)) {
             trigger_error(gTxt('variable_name_empty'));
             return;
         }
 
-        if (!isset($atts['value']) && is_null($thing))
-        {
-            if (isset($variable[$name]))
-            {
+        if (!isset($atts['value']) && is_null($thing)) {
+            if (isset($variable[$name])) {
                 return $variable[$name];
-            }
-            else
-            {
+            } else {
                 trace_add("[<txp:variable>: Unknown variable '$name']");
 
                 return '';
             }
-        }
-        else
-        {
+        } else {
             $variable[$name] = $value;
         }
     }
@@ -5239,26 +4676,19 @@
             'value' => '',
         ), $atts));
 
-        if (empty($name))
-        {
+        if (empty($name)) {
             trigger_error(gTxt('variable_name_empty'));
 
             return;
         }
 
-        if (isset($variable[$name]))
-        {
-            if (!isset($atts['value']))
-            {
+        if (isset($variable[$name])) {
+            if (!isset($atts['value'])) {
                 $x = true;
-            }
-            else
-            {
+            } else {
                 $x = $variable[$name] == $value;
             }
-        }
-        else
-        {
+        } else {
             $x = false;
         }
 

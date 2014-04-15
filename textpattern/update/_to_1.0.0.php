@@ -123,7 +123,7 @@
     if ($txpusers) {
         while ($a = nextRow($txpusers)) {
             extract($a);
-            if (!$nonce) {
+                    if (!$nonce) {
                 $nonce = md5( uniqid( rand(), true ) );
                 safe_update('txp_users',"nonce='$nonce'", "name = '$name'");
             }
@@ -284,7 +284,6 @@ eod;
     }
 
     // FIXME: this presupposes 'gmtoffset' won't be set at clean install (RC4+ probably will)
-
     if (safe_field('val','txp_prefs',"name='gmtoffset'") === false) {
         $old_offset = safe_field('val', 'txp_prefs', "name='timeoffset'");
         $serveroffset = gmmktime(0,0,0) - mktime(0,0,0);
@@ -362,9 +361,9 @@ eod;
     $txplog = getThings('describe `'.PFX.'txp_log`');
     if (!in_array('status', $txplog))
         safe_alter('txp_log', "ADD `status` int NOT NULL default '200'");
-    if (!in_array('method', $txplog))
+        if (!in_array('method', $txplog))
         safe_alter('txp_log', "ADD `method` varchar(16) NOT NULL default 'GET'");
-    if (!in_array('ip', $txplog))
+        if (!in_array('ip', $txplog))
         safe_alter('txp_log', "ADD `ip` varchar(16) NOT NULL default ''");
 
     // 1.0: need to get Excerpt_html values into the textpattern table,
@@ -381,31 +380,25 @@ eod;
 
     // 1.0 feed unique ids.
     // Blog unique id.
-    if (safe_field('val','txp_prefs',"name='blog_uid'") === false)
-    {
+    if (safe_field('val','txp_prefs',"name='blog_uid'") === false) {
         $prefs['blog_uid'] = md5(uniqid(rand(),true));
         safe_insert('txp_prefs',"name='blog_uid', val='".$prefs['blog_uid']."', prefs_id='1'");
     }
-    if (safe_field('name','txp_prefs',"name='blog_mail_uid'") === false)
-    {
+    if (safe_field('name','txp_prefs',"name='blog_mail_uid'") === false) {
         $mail = safe_field('email', 'txp_users', "privs='1' LIMIT 1");
         safe_insert('txp_prefs',"name='blog_mail_uid', val='$mail', prefs_id='1'");
     }
-    if (safe_field('val','txp_prefs',"name='blog_time_uid'") === false)
-    {
+    if (safe_field('val','txp_prefs',"name='blog_time_uid'") === false) {
         safe_insert('txp_prefs',"name='blog_time_uid', val='".date("Y")."', prefs_id='1'");
     }
     // Articles unique id.
-    if (!in_array('uid',$txp))
-    {
+    if (!in_array('uid',$txp)) {
         safe_alter('textpattern',"add `uid` varchar(32) not null");
         safe_alter('textpattern',"add `feed_time` DATE not null DEFAULT '0000-00-00'");
 
         $rs = safe_rows_start('ID,Posted','textpattern','1');
-        if ($rs)
-        {
-            while ($a = nextRow($rs))
-            {
+            if ($rs) {
+            while ($a = nextRow($rs)) {
                 $feed_time = substr($a['Posted'],0,10);
                 safe_update('textpattern',"uid='".md5(uniqid(rand(),true))."', feed_time='$feed_time'","ID={$a['ID']}");
             }
@@ -428,9 +421,10 @@ eod;
     if (!in_array('title',$txpcat)) {
         safe_alter("txp_category", "add `title` varchar(255) not null default ''");
     }
+
     if (safe_count('txp_section', "title=''") > 0)
         safe_update('txp_section', 'title=name', "title=''");
-    if (safe_count('txp_category', "title=''") > 0)
+        if (safe_count('txp_category', "title=''") > 0)
         safe_update('txp_category', 'title=name', "title=''");
 
     // 1.0: Unique key and 'type' field for the txp_prefs table.
@@ -439,20 +433,19 @@ eod;
     foreach ($rs as $row)
         if ($row['Key_name'] == 'prefs_idx')
             $has_prefs_idx = 1;
-    if (!$has_prefs_idx)
+            if (!$has_prefs_idx)
         safe_query('alter ignore table `'.PFX.'txp_prefs` add unique prefs_idx(prefs_id,name)');
 
     $txpprefs = getThings('describe `'.PFX.'txp_prefs`');
     if (!in_array('type', $txpprefs))
         safe_alter('txp_prefs', "add `type` smallint unsigned not null default '2'");
-    // Update the updated with default hidden type for old plugins prefs.
+        // Update the updated with default hidden type for old plugins prefs.
     safe_alter('txp_prefs',"change `type` `type` smallint unsigned not null default '2'");
     if (!in_array('event', $txpprefs))
         safe_alter('txp_prefs', "add `event` varchar(12) not null default 'publish'");
-    if (!in_array('html', $txpprefs))
+        if (!in_array('html', $txpprefs))
         safe_alter('txp_prefs', "add `html` varchar(64) not null default ''");
-    if (!in_array('position', $txpprefs))
-    {
+        if (!in_array('position', $txpprefs)) {
         safe_alter('txp_prefs', "add `position` smallint unsigned not null default '0'");
 
         // Add new column values to prefs.
@@ -488,8 +481,7 @@ eod;
             'rss_how_many' => array('html' => 'text_input','event'=> 'admin', 'type' => '1', 'position' => '0'),
         );
 
-        foreach ($prefs_new_cols as $pref_key => $pref_val)
-        {
+        foreach ($prefs_new_cols as $pref_key => $pref_val) {
             safe_update('txp_prefs', "html='$pref_val[html]',event='$pref_val[event]',type='$pref_val[type]', position='$pref_val[position]'", "name='$pref_key' AND prefs_id='1'");
         }
 
@@ -498,19 +490,15 @@ eod;
         'blog_mail_uid','blog_time_uid','blog_uid','comment_list_pageby','file_list_pageby','image_list_pageby','link_list_pageby',
         'log_list_pageby',);
 
-        foreach ($prefs_hidden_rows as $hidden_pref)
-        {
+        foreach ($prefs_hidden_rows as $hidden_pref) {
             safe_update('txp_prefs', "type='2'", "name='$hidden_pref' AND prefs_id='1'");
         }
 
         global $txpac;
         // Advanced prefs.
-        foreach ($txpac as $key => $val)
-        {
-            if (!in_array($key, array_keys($prefs)))
-            {
-                switch ($key)
-                {
+        foreach ($txpac as $key => $val) {
+            if (!in_array($key, array_keys($prefs))) {
+                switch ($key) {
                     case'custom_1_set':
                     case'custom_2_set':
                     case'custom_3_set':
@@ -589,8 +577,7 @@ EOF;
 
         $client = new IXR_Client('http://rpc.textpattern.com');
 
-        if (!$client->query('tups.getLanguage',$prefs['blog_uid'],LANG))
-        {
+        if (!$client->query('tups.getLanguage',$prefs['blog_uid'],LANG)) {
             echo '<p style="color:red">Error trying to install language. Please, try it again again.<br />
             If problem connecting to the RPC server persists, you can go to <a href="http://rpc.textpattern.com/lang/">http://rpc.textpattern.com/lang/</a>, download the
             desired language file and place it in the /lang/ directory of your textpattern install. You can then install the language from file.</p>';
@@ -608,19 +595,16 @@ EOF;
 
     $maxpos = safe_field('max(position)', 'txp_prefs', '1');
     // 1.0: production_status setting to control error reporting.
-    if (safe_field('val','txp_prefs',"name='production_status'") === false)
-    {
+    if (safe_field('val','txp_prefs',"name='production_status'") === false) {
         safe_insert('txp_prefs',"name='production_status', val='testing', prefs_id='1', type='0', position='".doSlash($maxpos)."', html='prod_levels'");
     }
 
     // Multiply position on prefs to allow easy reordering.
-    if(intval($maxpos) < 100)
-    {
+    if(intval($maxpos) < 100) {
         safe_update('txp_prefs','position = position*10','1');
     }
     // Remove, remove.
-    if (safe_field('name','txp_prefs',"name='logs_expire'") !== false)
-    {
+    if (safe_field('name','txp_prefs',"name='logs_expire'") !== false) {
         safe_delete('txp_prefs',"name='logs_expire'");
     }
 
@@ -628,8 +612,7 @@ EOF;
     safe_update('txp_prefs',"type = '1'","name = 'file_base_path'");
 
     // 1.0: add option to override charset for emails (ISO-8559-1 instead of UTF-8).
-    if (safe_field('name','txp_prefs',"name='override_emailcharset'") === false)
-    {
+    if (safe_field('name','txp_prefs',"name='override_emailcharset'") === false) {
         safe_insert('txp_prefs',"name='override_emailcharset', val='0', prefs_id='1', type='1', event='admin', position='".doSlash($maxpos)."', html='yesnoradio'");
     }
 
@@ -649,7 +632,7 @@ EOF;
     // if no files are uploaded yet, switch to the files directory in the top-txp dir.
     if (!safe_count('txp_file',"1")) {
         $tempdir = find_temp_dir();
-        if ($tempdir === safe_field('val','txp_prefs',"name='file_base_path'"))
+            if ($tempdir === safe_field('val','txp_prefs',"name='file_base_path'"))
             safe_update('txp_prefs',"val='".doSlash(dirname(txpath).DS.'files')."',prefs_id=1","name='file_base_path'");
     }
 

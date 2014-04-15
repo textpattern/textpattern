@@ -213,8 +213,7 @@ class wet_thumb
     {
         global $verbose;
 
-        if ($verbose)
-        {
+        if ($verbose) {
             echo "writing thumb nail...";
         }
 
@@ -230,62 +229,42 @@ class wet_thumb
         //$this->_SRC['modified'] = filemtime($infile);
 
         // Check image orientation.
-        if ($this->_SRC['width'] >= $this->_SRC['height'])
-        {
+        if ($this->_SRC['width'] >= $this->_SRC['height']) {
             $this->_SRC['format'] = 'landscape';
-        }
-        else
-        {
+        } else {
             $this->_SRC['format'] = 'portrait';
         }
 
         // Get destination image info
 
-        if (is_numeric($this->width) AND empty($this->height))
-        {
+        if (is_numeric($this->width) AND empty($this->height)) {
             $this->_DST['width']  = $this->width;
             $this->_DST['height'] = round($this->width/($this->_SRC['width']/$this->_SRC['height']));
-        }
-        elseif (is_numeric($this->height) AND empty($this->width))
-        {
+        } elseif (is_numeric($this->height) AND empty($this->width)) {
             $this->_DST['height'] = $this->height;
             $this->_DST['width']  = round($this->height/($this->_SRC['height']/$this->_SRC['width']));
-        }
-        elseif (is_numeric($this->width) AND is_numeric($this->height))
-        {
+        } elseif (is_numeric($this->width) AND is_numeric($this->height)) {
             $this->_DST['width']  = $this->width;
             $this->_DST['height'] = $this->height;
-        }
-        elseif (is_numeric($this->longside) AND empty($this->shortside))
-        {
+        } elseif (is_numeric($this->longside) AND empty($this->shortside)) {
             // Preserve aspect ratio based on provided height.
-            if ($this->_SRC['format'] == 'portrait')
-            {
+            if ($this->_SRC['format'] == 'portrait') {
                 $this->_DST['height'] = $this->longside;
                 $this->_DST['width']  = round($this->longside/($this->_SRC['height']/$this->_SRC['width']));
-            }
-            else
-            {
+            } else {
                 $this->_DST['width']  = $this->longside;
                 $this->_DST['height'] = round($this->longside/($this->_SRC['width']/$this->_SRC['height']));
             }
-        }
-        elseif (is_numeric($this->shortside))
-        {
+        } elseif (is_numeric($this->shortside)) {
             // Preserve aspect ratio based on provided width.
-            if ($this->_SRC['format'] == 'portrait')
-            {
+            if ($this->_SRC['format'] == 'portrait') {
                 $this->_DST['width']  = $this->shortside;
                 $this->_DST['height'] = round($this->shortside/($this->_SRC['width']/$this->_SRC['height']));
-            }
-            else
-            {
+            } else {
                 $this->_DST['height'] = $this->shortside;
                 $this->_DST['width']  = round($this->shortside/($this->_SRC['height']/$this->_SRC['width']));
             }
-        }
-        else
-        {
+        } else {
             // Default dimensions.
             $this->width          = 100;
             $this->_DST['width']  = $this->width;
@@ -309,32 +288,25 @@ class wet_thumb
 
         // Make sure we have enough memory if the image is large.
 
-        if (max($this->_SRC['width'], $this->_SRC['height']) > 1024)
-        {
+        if (max($this->_SRC['width'], $this->_SRC['height']) > 1024) {
             $shorthand = array('K', 'M', 'G');
             $tens = array('000', '000000', '000000000'); // A good enough decimal approximation of K, M, and G.
 
             // Do not *decrease* memory_limit.
 
             list($ml, $extra) = str_ireplace($shorthand, $tens, array(ini_get('memory_limit'), EXTRA_MEMORY));
-            if ($ml < $extra)
-            {
+            if ($ml < $extra) {
                 ini_set('memory_limit', EXTRA_MEMORY);
             }
         }
 
         // Read source image.
 
-        if ($this->_SRC['type'] == 1)
-        {
+        if ($this->_SRC['type'] == 1) {
             $this->_SRC['image'] = imagecreatefromgif($this->_SRC['file']);
-        }
-        elseif ($this->_SRC['type'] == 2)
-        {
+        } elseif ($this->_SRC['type'] == 2) {
             $this->_SRC['image'] = imagecreatefromjpeg($this->_SRC['file']);
-        }
-        elseif ($this->_SRC['type'] == 3)
-        {
+        } elseif ($this->_SRC['type'] == 3) {
             $this->_SRC['image'] = imagecreatefrompng($this->_SRC['file']);
         }
 
@@ -343,45 +315,35 @@ class wet_thumb
         $off_w = 0;
         $off_h = 0;
 
-        if ($this->crop != false)
-        {
-            if ($this->_SRC['height'] < $this->_SRC['width'])
-            {
+        if ($this->crop != false) {
+            if ($this->_SRC['height'] < $this->_SRC['width']) {
                 $ratio = (double)($this->_SRC['height'] / $this->_DST['height']);
                 $cpyWidth = round($this->_DST['width'] * $ratio);
 
-                if ($cpyWidth > $this->_SRC['width'])
-                {
+                if ($cpyWidth > $this->_SRC['width']) {
                     $ratio = (double)($this->_SRC['width'] / $this->_DST['width']);
                     $cpyWidth = $this->_SRC['width'];
                     $cpyHeight = round($this->_DST['height'] * $ratio);
                     $off_w = 0;
                     $off_h = round(($this->_SRC['height'] - $cpyHeight) / 2);
                     $this->_SRC['height'] = $cpyHeight;
-                }
-                else
-                {
+                } else {
                     $cpyHeight = $this->_SRC['height'];
                     $off_w = round(($this->_SRC['width'] - $cpyWidth) / 2);
                     $off_h = 0;
                     $this->_SRC['width']= $cpyWidth;
                 }
-            }
-            else
-            {
+            } else {
                 $ratio = (double)($this->_SRC['width'] / $this->_DST['width']);
                 $cpyHeight = round($this->_DST['height'] * $ratio);
-                if ($cpyHeight > $this->_SRC['height'])
-                {
+                if ($cpyHeight > $this->_SRC['height']) {
                     $ratio = (double)($this->_SRC['height'] / $this->_DST['height']);
                     $cpyHeight = $this->_SRC['height'];
                     $cpyWidth = round($this->_DST['width'] * $ratio);
                     $off_w = round(($this->_SRC['width'] - $cpyWidth) / 2);
                     $off_h = 0;
                     $this->_SRC['width']= $cpyWidth;
-                }
-                else
-                {
+                } else {
                     $cpyWidth = $this->_SRC['width'];
                     $off_w = 0;
                     $off_h = round(($this->_SRC['height'] - $cpyHeight) / 2);
@@ -392,13 +354,11 @@ class wet_thumb
 
         // Ensure non-zero height/width.
 
-        if (!$this->_DST['height'])
-        {
+        if (!$this->_DST['height']) {
             $this->_DST['height'] = 1;
         }
 
-        if (!$this->_DST['width'])
-        {
+        if (!$this->_DST['width']) {
             $this->_DST['width'] = 1;
         }
 
@@ -406,13 +366,11 @@ class wet_thumb
         $this->_DST['image'] = imagecreatetruecolor($this->_DST['width'], $this->_DST['height']);
 
         // GIF or PNG destination, set the transparency up.
-        if ($this->_DST['type'] == 1 || $this->_DST['type'] == 3)
-        {
+        if ($this->_DST['type'] == 1 || $this->_DST['type'] == 3) {
             $trans_idx = imagecolortransparent($this->_SRC['image']);
 
             // Is there a specific transparent colour?
-            if ($trans_idx >= 0)
-            {
+            if ($trans_idx >= 0) {
                 $trans_color = imagecolorsforindex($this->_SRC['image'], $trans_idx);
                 $trans_idx = imagecolorallocate(
                     $this->_DST['image'],
@@ -422,9 +380,7 @@ class wet_thumb
                 );
                 imagefill($this->_DST['image'], 0, 0, $trans_idx);
                 imagecolortransparent($this->_DST['image'], $trans_idx);
-            }
-            else if ($this->_DST['type'] == 3)
-            {
+            } elseif ($this->_DST['type'] == 3) {
                 imagealphablending($this->_DST['image'], false);
                 $transparent = imagecolorallocatealpha($this->_DST['image'], 0, 0, 0, 127);
                 imagefill($this->_DST['image'], 0, 0, $transparent);
@@ -445,8 +401,7 @@ class wet_thumb
             $this->_SRC['height']
         );
 
-        if ($this->sharpen === true)
-        {
+        if ($this->sharpen === true) {
             $this->_DST['image'] = UnsharpMask($this->_DST['image'], 80, .5, 3);
         }
 
@@ -457,11 +412,9 @@ class wet_thumb
 
         // Add magnifying glass.
 
-        if ($this->hint === true)
-        {
+        if ($this->hint === true) {
             // Should we really add white bars?
-            if ($this->addgreytohint === true )
-            {
+            if ($this->addgreytohint === true ) {
                 $trans = imagecolorallocatealpha($this->_DST['image'], 255, 255, 255, 25);
                 imagefilledrectangle(
                     $this->_DST['image'],
@@ -480,36 +433,26 @@ class wet_thumb
             imagedestroy($magnifier);
         }
 
-        if ($verbose)
-        {
+        if ($verbose) {
             echo "... saving image ...";
         }
 
-        if ($this->_DST['type'] == 1)
-        {
+        if ($this->_DST['type'] == 1) {
             imagetruecolortopalette($this->_DST['image'], false, 256);
-            if (function_exists('imagegif'))
-            {
+            if (function_exists('imagegif')) {
                 imagegif($this->_DST['image'], $this->_DST['file']);
-            }
-            else
-            {
+            } else {
                 imagedestroy($this->_DST['image']);
                 imagedestroy($this->_SRC['image']);
                 return false;
             }
-        }
-        elseif ($this->_DST['type'] == 2)
-        {
+        } elseif ($this->_DST['type'] == 2) {
             imagejpeg($this->_DST['image'], $this->_DST['file'], $this->quality);
-        }
-        elseif ($this->_DST['type'] == 3)
-        {
+        } elseif ($this->_DST['type'] == 3) {
             imagepng($this->_DST['image'], $this->_DST['file']);
         }
 
-        if ($verbose)
-        {
+        if ($verbose) {
             echo "... image successfully saved ...";
         }
 
@@ -530,8 +473,7 @@ class wet_thumb
     {
         $imgtag = '<img src="'.$this->_DST['file'].'" '.$this->html.' width="'.$this->width.'" height="'.$this->height.'" />';
 
-        if ($aslink === true)
-        {
+        if ($aslink === true) {
             return '<a href="'.((empty($this->linkurl)) ? $this->_SRC['file'] : $this->linkurl).'" '.
                 (($aspopup === true) ? 'target="_blank"' : '').'>'.$imgtag .'</a>';
         }
@@ -575,8 +517,7 @@ class txp_thumb extends wet_thumb
     {
         $id = assert_int($id);
         $rs = safe_row('*', 'txp_image', 'id = '.$id.' limit 1');
-        if ($rs)
-        {
+        if ($rs) {
             extract($rs);
             $this->m_ext = $ext;
             $this->m_id = $id;
@@ -594,8 +535,7 @@ class txp_thumb extends wet_thumb
 
     public function write($dummy1 = '', $dummy2 = '')
     {
-        if (!isset($this->m_ext))
-        {
+        if (!isset($this->m_ext)) {
             return false;
         }
 
@@ -628,13 +568,11 @@ class txp_thumb extends wet_thumb
 
     public function delete()
     {
-        if (!isset($this->m_ext))
-        {
+        if (!isset($this->m_ext)) {
             return false;
         }
 
-        if (unlink(IMPATH.$this->m_id.'t'.$this->m_ext))
-        {
+        if (unlink(IMPATH.$this->m_id.'t'.$this->m_ext)) {
             safe_update('txp_image', 'thumbnail = 0', 'id = '.$this->m_id);
             return true;
         }
@@ -668,25 +606,21 @@ class txp_thumb extends wet_thumb
     function UnsharpMask($img, $amount, $radius, $threshold)
     {
         // Attempt to calibrate the parameters to Photoshop:
-        if ($amount > 500)
-        {
+        if ($amount > 500) {
             $amount = 500;
         }
         $amount = $amount * 0.016;
-        if ($radius > 50)
-        {
+        if ($radius > 50) {
             $radius = 50;
         }
         $radius = $radius * 2;
-        if ($threshold > 255)
-        {
+        if ($threshold > 255) {
             $threshold = 255;
         }
 
         $radius = abs(round($radius));     // Only integers make sense.
 
-        if ($radius == 0)
-        {
+        if ($radius == 0) {
             return $img;
         }
 
@@ -702,8 +636,7 @@ class txp_thumb extends wet_thumb
         // Move copies of the image around one pixel at the time and merge them with weight
         // according to the matrix. The same matrix is simply repeated for higher radii.
 
-        for ($i = 0; $i < $radius; $i++)
-        {
+        for ($i = 0; $i < $radius; $i++) {
             imagecopy($imgBlur, $imgCanvas, 0, 0, 1, 1, $w - 1, $h - 1); // up left
             imagecopymerge($imgBlur, $imgCanvas, 1, 1, 0, 0, $w, $h, 50); // down right
             imagecopymerge($imgBlur, $imgCanvas, 0, 1, 1, 0, $w - 1, $h, 33.33333); // down left
@@ -720,11 +653,9 @@ class txp_thumb extends wet_thumb
         // Calculate the difference between the blurred pixels and the original
         // and set the pixels.
 
-        for ($x = 0; $x < $w; $x++)
-        {
+        for ($x = 0; $x < $w; $x++) {
             // Each row.
-            for ($y = 0; $y < $h; $y++)
-            {
+            for ($y = 0; $y < $h; $y++) {
                 // Each pixel.
                 $rgbOrig = ImageColorAt($imgCanvas2, $x, $y);
                 $rOrig = (($rgbOrig >> 16) & 0xFF);
@@ -742,8 +673,7 @@ class txp_thumb extends wet_thumb
                 $gNew = (abs($gOrig - $gBlur) >= $threshold) ? max(0, min(255, ($amount * ($gOrig - $gBlur)) + $gOrig)) : $gOrig;
                 $bNew = (abs($bOrig - $bBlur) >= $threshold) ? max(0, min(255, ($amount * ($bOrig - $bBlur)) + $bOrig)) : $bOrig;
 
-                if (($rOrig != $rNew) || ($gOrig != $gNew) || ($bOrig != $bNew))
-                {
+                if (($rOrig != $rNew) || ($gOrig != $gNew) || ($bOrig != $bNew)) {
                     $pixCol = ImageColorAllocate($img, $rNew, $gNew, $bNew);
                     ImageSetPixel($img, $x, $y, $pixCol);
                 }

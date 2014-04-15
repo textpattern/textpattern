@@ -28,15 +28,12 @@
  * @package Admin\Log
  */
 
-    if (!defined('txpinterface'))
-    {
+    if (!defined('txpinterface')) {
         die('txpinterface is undefined.');
     }
 
-    if ($event == 'log')
-    {
-        if (get_pref('logging') === 'none' || !intval(get_pref('expire_logs_after')))
-        {
+    if ($event == 'log') {
+        if (get_pref('logging') === 'none' || !intval(get_pref('expire_logs_after'))) {
             require_privs();
         }
 
@@ -48,12 +45,9 @@
             'log_multi_edit'    => true,
         );
 
-        if ($step && bouncer($step, $available_steps))
-        {
+        if ($step && bouncer($step, $available_steps)) {
             $step();
-        }
-        else
-        {
+        } else {
             log_list();
         }
     }
@@ -78,13 +72,11 @@
             'search_method'
         )));
 
-        if ($sort === '')
-        {
+        if ($sort === '') {
             $sort = get_pref('log_sort_column', 'time');
         }
 
-        if ($dir === '')
-        {
+        if ($dir === '') {
             $dir = get_pref('log_sort_dir', 'desc');
         }
 
@@ -94,8 +86,7 @@
 
         safe_delete('txp_log', "time < date_sub(now(), interval $expire_logs_after day)");
 
-        switch ($sort)
-        {
+        switch ($sort) {
             case 'ip' :
                 $sort_sql = 'ip '.$dir;
                 break;
@@ -127,8 +118,7 @@
 
         $criteria = 1;
 
-        if ($search_method and $crit != '')
-        {
+        if ($search_method and $crit != '') {
             $verbatim = preg_match('/^"(.*)"$/', $crit, $m);
             $crit_escaped = $verbatim ? doSlash($m[1]) : doLike($crit);
             $critsql = $verbatim ?
@@ -148,19 +138,14 @@
                     'status' => "status like '%$crit_escaped%'",
                 );
 
-            if (array_key_exists($search_method, $critsql))
-            {
+            if (array_key_exists($search_method, $critsql)) {
                 $criteria = $critsql[$search_method];
                 $limit = 500;
-            }
-            else
-            {
+            } else {
                 $search_method = '';
                 $crit = '';
             }
-        }
-        else
-        {
+        } else {
             $search_method = '';
             $crit = '';
         }
@@ -172,15 +157,11 @@
         echo hed(gTxt('tab_logs'), 1, array('class' => 'txp-heading'));
         echo n.'<div id="'.$event.'_control" class="txp-control-panel">';
 
-        if ($total < 1)
-        {
-            if ($criteria != 1)
-            {
+        if ($total < 1) {
+            if ($criteria != 1) {
                 echo log_search_form($crit, $search_method).
                     graf(gTxt('no_results_found'), ' class="indicator"').'</div>';
-            }
-            else
-            {
+            } else {
                 echo graf(gTxt('no_refers_recorded'), ' class="indicator"').'</div>';
             }
 
@@ -199,8 +180,7 @@
             "$criteria order by $sort_sql limit $offset, $limit"
         );
 
-        if ($rs)
-        {
+        if ($rs) {
             echo n.'<div id="'.$event.'_container" class="txp-container">';
             echo n.'<form action="index.php" id="log_form" class="multi_edit_form" method="post" name="longform">'.
 
@@ -221,24 +201,20 @@
 
             echo n.'<tbody>';
 
-            while ($a = nextRow($rs))
-            {
+            while ($a = nextRow($rs)) {
                 extract($a, EXTR_PREFIX_ALL, 'log');
 
-                if ($log_refer)
-                {
+                if ($log_refer) {
                     $log_refer = href(txpspecialchars(soft_wrap(preg_replace('#^http://#', '', $log_refer), 30)), txpspecialchars($log_refer), ' target="_blank"');
                 }
 
-                if ($log_page)
-                {
+                if ($log_page) {
                     $log_anchor = preg_replace('/\/$/', '', $log_page);
                     $log_anchor = soft_wrap(substr($log_anchor, 1), 30);
 
                     $log_page = href(txpspecialchars($log_anchor), txpspecialchars($log_page), ' target="_blank"');
 
-                    if ($log_method == 'POST')
-                    {
+                    if ($log_method == 'POST') {
                         $log_page = strong($log_page);
                     }
                 }
@@ -341,8 +317,7 @@
     {
         $deleted = event_multi_edit('txp_log', 'id');
 
-        if ($deleted)
-        {
+        if ($deleted) {
             $message = gTxt('logs_deleted', array('{list}' => $deleted));
 
             return log_list($message);

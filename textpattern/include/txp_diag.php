@@ -28,8 +28,7 @@
  * @package Admin\Diag
  */
 
-    if (!defined('txpinterface'))
-    {
+    if (!defined('txpinterface')) {
         die('txpinterface is undefined.');
     }
 
@@ -49,17 +48,13 @@
 
     $files = check_file_integrity();
 
-    if (!$files)
-    {
+    if (!$files) {
         $files = array();
-    }
-    else
-    {
+    } else {
         $files = array_keys($files);
     }
 
-    if ($event == 'diag')
-    {
+    if ($event == 'diag') {
         require_privs('diag');
 
         $step = gps('step');
@@ -77,8 +72,7 @@
     {
         $modules = @apache_get_modules();
 
-        if (is_array($modules))
-        {
+        if (is_array($modules)) {
             return in_array($m, $modules);
         }
     }
@@ -97,8 +91,7 @@
     {
         $f = realpath(tempnam($dir, 'txp_'));
 
-        if (is_file($f))
-        {
+        if (is_file($f)) {
             @unlink($f);
 
             return true;
@@ -118,8 +111,7 @@
         $table_names = array(PFX.'textpattern');
         $rows = getRows("SHOW TABLES LIKE '".PFX."txp\_%'");
 
-        foreach ($rows as $row)
-        {
+        foreach ($rows as $row) {
             $table_names[] = array_shift($row);
         }
 
@@ -143,15 +135,11 @@
     {
         $msgs = array();
 
-        foreach ($tables as $table)
-        {
+        foreach ($tables as $table) {
             $rs = getRows("CHECK TABLE `$table` $type");
-            if ($rs)
-            {
-                foreach ($rs as $r)
-                {
-                    if ($r['Msg_type'] != 'status' and ($warnings or $r['Msg_type'] != 'warning'))
-                    {
+            if ($rs) {
+                foreach ($rs as $r) {
+                    if ($r['Msg_type'] != 'status' and ($warnings or $r['Msg_type'] != 'warning')) {
                         $msgs[] = $table.cs.$r['Msg_type'].cs.$r['Msg_text'];
                     }
                 }
@@ -199,8 +187,7 @@
         $now = time();
         $updateInfo = unserialize(get_pref('last_update_check', ''));
 
-        if (!$updateInfo || ($now > ($updateInfo['when'] + (60 * 60 * 24))))
-        {
+        if (!$updateInfo || ($now > ($updateInfo['when'] + (60 * 60 * 24)))) {
             $updates = checkUpdates();
             $updateInfo['msg'] = ($updates) ? gTxt($updates['msg'], array('{version}' => $updates['version'])) : '';
             $updateInfo['when'] = $now;
@@ -209,111 +196,89 @@
 
         $fail = array();
 
-        if (!empty($updateInfo['msg']))
-        {
+        if (!empty($updateInfo['msg'])) {
             $fail['textpattern_version_update'] = diag_msg_wrap($updateInfo['msg'], 'information');
         }
 
-        if (!is_callable('version_compare') || version_compare(PHP_VERSION, REQUIRED_PHP_VERSION, '<'))
-        {
+        if (!is_callable('version_compare') || version_compare(PHP_VERSION, REQUIRED_PHP_VERSION, '<')) {
             $fail['php_version_required'] = diag_msg_wrap(gTxt('php_version_required', array('{version}' => REQUIRED_PHP_VERSION)));
         }
 
-        if (!isset($path_to_site))
-        {
+        if (!isset($path_to_site)) {
             $fail['path_to_site_missing'] = diag_msg_wrap(gTxt('path_to_site_missing'), 'warning');
         }
 
-        if (@gethostbyname($mydomain) === $mydomain)
-        {
+        if (@gethostbyname($mydomain) === $mydomain) {
             $fail['dns_lookup_fails'] = diag_msg_wrap(gTxt('dns_lookup_fails').cs.$mydomain, 'warning');
         }
 
-        if (!@is_dir($path_to_site))
-        {
+        if (!@is_dir($path_to_site)) {
             $fail['path_to_site_inacc'] = diag_msg_wrap(gTxt('path_to_site_inacc').cs.$path_to_site);
         }
 
-        if (rtrim($siteurl, '/') != $siteurl)
-        {
+        if (rtrim($siteurl, '/') != $siteurl) {
             $fail['site_trailing_slash'] = diag_msg_wrap(gTxt('site_trailing_slash').cs.$path_to_site, 'warning');
         }
 
-        if (!@is_file($path_to_site."/index.php") || !@is_readable($path_to_site."/index.php"))
-        {
+        if (!@is_file($path_to_site."/index.php") || !@is_readable($path_to_site."/index.php")) {
             $fail['index_inaccessible'] = diag_msg_wrap("{$path_to_site}/index.php ".gTxt('is_inaccessible'));
         }
 
         $not_readable = array();
 
-        if (!@is_writable($path_to_site.'/'.$img_dir))
-        {
+        if (!@is_writable($path_to_site.'/'.$img_dir)) {
             $not_readable[] = diag_msg_wrap(str_replace('{dirtype}', gTxt('img_dir'), gTxt('dir_not_writable')).": {$path_to_site}/{$img_dir}", 'warning');
         }
 
-        if (!@is_writable($file_base_path))
-        {
+        if (!@is_writable($file_base_path)) {
             $not_readable[] = diag_msg_wrap(str_replace('{dirtype}', gTxt('file_base_path'), gTxt('dir_not_writable')).": {$file_base_path}", 'warning');
         }
 
-        if (!@is_writable($tempdir))
-        {
+        if (!@is_writable($tempdir)) {
             $not_readable[] = diag_msg_wrap(str_replace('{dirtype}', gTxt('tempdir'), gTxt('dir_not_writable')).": {$tempdir}", 'warning');
         }
 
-        if ($not_readable)
-        {
+        if ($not_readable) {
             $fail['dir_not_writable'] = join(n, $not_readable);
         }
 
-        if ($permlink_mode != 'messy' && !$is_apache)
-        {
+        if ($permlink_mode != 'messy' && !$is_apache) {
             $fail['cleanurl_only_apache'] = diag_msg_wrap(gTxt('cleanurl_only_apache'), 'information');
         }
 
-        if ($permlink_mode != 'messy' and !@is_readable($path_to_site.'/.htaccess'))
-        {
+        if ($permlink_mode != 'messy' and !@is_readable($path_to_site.'/.htaccess')) {
             $fail['htaccess_missing'] = diag_msg_wrap(gTxt('htaccess_missing'));
         }
 
-        if ($permlink_mode != 'messy' and is_callable('apache_get_modules') and !apache_module('mod_rewrite'))
-        {
+        if ($permlink_mode != 'messy' and is_callable('apache_get_modules') and !apache_module('mod_rewrite')) {
             $fail['mod_rewrite_missing'] = diag_msg_wrap(gTxt('mod_rewrite_missing'));
         }
 
-        if (!ini_get('file_uploads'))
-        {
+        if (!ini_get('file_uploads')) {
             $fail['file_uploads_disabled'] = diag_msg_wrap(gTxt('file_uploads_disabled'), 'information');
         }
 
-        if (@is_dir(txpath . DS. 'setup'))
-        {
+        if (@is_dir(txpath . DS. 'setup')) {
             $fail['setup_still_exists'] = diag_msg_wrap(txpath.DS."setup".DS.' '.gTxt('still_exists'), 'warning');
         }
 
-        if (empty($tempdir))
-        {
+        if (empty($tempdir)) {
             $fail['no_temp_dir'] = diag_msg_wrap(gTxt('no_temp_dir'), 'warning');
         }
 
-        if (is_disabled('mail'))
-        {
+        if (is_disabled('mail')) {
             $fail['warn_mail_unavailable'] = diag_msg_wrap(gTxt('warn_mail_unavailable'), 'warning');
         }
 
-        if ($is_register_globals)
-        {
+        if ($is_register_globals) {
             $fail['warn_register_globals_or_update'] = diag_msg_wrap(gTxt('warn_register_globals_or_update'), 'warning');
         }
 
-        if ($permlink_mode != 'messy')
-        {
+        if ($permlink_mode != 'messy') {
             $rs = safe_column("name", "txp_section", "1");
 
-            foreach ($rs as $name)
-            {
-                if ($name and @file_exists($path_to_site.'/'.$name))
-                {
+            foreach ($rs as $name) {
+                if ($name and @file_exists($path_to_site.'/'.$name)) {
                     $fail['old_placeholder_exists'] = diag_msg_wrap(gTxt('old_placeholder').": {$path_to_site}/{$name}");
                 }
             }
@@ -321,20 +286,17 @@
 
         $cs = check_file_integrity(INTEGRITY_REALPATH);
 
-        if (!$cs)
-        {
+        if (!$cs) {
             $cs = array();
         }
 
         // Files that don't match their checksums.
-        if ($modified_files = array_keys($cs, INTEGRITY_MODIFIED))
-        {
+        if ($modified_files = array_keys($cs, INTEGRITY_MODIFIED)) {
             $fail['modified_files'] = diag_msg_wrap(gTxt('modified_files').cs.n.t.join(', '.n.t, $modified_files), 'warning');
         }
 
         // Running development code in live mode is not recommended.
-        if (preg_match('/-dev$/', txp_version) and $production_status == 'live')
-        {
+        if (preg_match('/-dev$/', txp_version) and $production_status == 'live') {
             $fail['dev_version_live'] = diag_msg_wrap(gTxt('dev_version_live'), 'warning');
         }
 
@@ -348,8 +310,7 @@
         }
 
         // Anything might break if arbitrary functions are disabled.
-        if (ini_get('disable_functions'))
-        {
+        if (ini_get('disable_functions')) {
             $disabled_funcs = array_map('trim', explode(',', ini_get('disable_functions')));
             // Commonly disabled functions that we don't need.
             $disabled_funcs = array_diff($disabled_funcs, array(
@@ -370,8 +331,7 @@
                 'chown',
             ));
 
-            if ($disabled_funcs)
-            {
+            if ($disabled_funcs) {
                 $fail['some_php_functions_disabled'] = diag_msg_wrap(gTxt('some_php_functions_disabled').cs.join(', ',$disabled_funcs), 'warning');
             }
         }
@@ -382,55 +342,43 @@
 
         $guess_site_url = $_SERVER['HTTP_HOST'] . preg_replace('#[/\\\\]$#', '', dirname(dirname($_SERVER['SCRIPT_NAME'])));
 
-        if ($siteurl and strip_prefix($siteurl, 'www.') != strip_prefix($guess_site_url, 'www.'))
-        {
+        if ($siteurl and strip_prefix($siteurl, 'www.') != strip_prefix($guess_site_url, 'www.')) {
             $fail['site_url_mismatch'] = diag_msg_wrap(gTxt('site_url_mismatch').cs.$guess_site_url, 'warning');
         }
 
         // Test clean URL server vars.
-        if (hu)
-        {
-            if (ini_get('allow_url_fopen') and ($permlink_mode != 'messy'))
-            {
+        if (hu) {
+            if (ini_get('allow_url_fopen') and ($permlink_mode != 'messy')) {
                 $s = md5(uniqid(rand(), true));
                 ini_set('default_socket_timeout', 10);
 
                 $pretext_data = @file(hu.$s.'/?txpcleantest=1');
 
-                if ($pretext_data)
-                {
+                if ($pretext_data) {
                     $pretext_req = trim(@$pretext_data[0]);
 
-                    if ($pretext_req != md5('/'.$s.'/?txpcleantest=1'))
-                    {
+                    if ($pretext_req != md5('/'.$s.'/?txpcleantest=1')) {
                         $fail['clean_url_data_failed'] = diag_msg_wrap(gTxt('clean_url_data_failed').cs.txpspecialchars($pretext_req), 'warning');
                     }
-                }
-                else
-                {
+                } else {
                     $fail['clean_url_test_failed'] = diag_msg_wrap(gTxt('clean_url_test_failed'), 'warning');
                 }
             }
         }
 
-        if ($tables = list_txp_tables())
-        {
+        if ($tables = list_txp_tables()) {
             $table_errors = check_tables($tables);
-            if ($table_errors)
-            {
+            if ($table_errors) {
                 $fail['mysql_table_errors'] = diag_msg_wrap(gTxt('mysql_table_errors').cs.n.t.join(', '.n.t, $table_errors));
             }
         }
 
         $active_plugins = array();
-        if ($rows = safe_rows('name, version, code_md5, md5(code) as md5', 'txp_plugin', 'status > 0'))
-        {
-            foreach ($rows as $row)
-            {
+        if ($rows = safe_rows('name, version, code_md5, md5(code) as md5', 'txp_plugin', 'status > 0')) {
+            foreach ($rows as $row) {
                 $n = $row['name'].'-'.$row['version'];
 
-                if (strtolower($row['md5']) != strtolower($row['code_md5']))
-                {
+                if (strtolower($row['md5']) != strtolower($row['code_md5'])) {
                     $n .= 'm';
                 }
 
@@ -441,34 +389,27 @@
         $theme_manifest = $theme->manifest();
 
         // Check GD info.
-        if (function_exists('gd_info'))
-        {
+        if (function_exists('gd_info')) {
             $gd_info = gd_info();
 
             $gd_support = array();
 
-            if ($gd_info['GIF Create Support'])
-            {
+            if ($gd_info['GIF Create Support']) {
                 $gd_support[] = 'GIF';
             }
 
              // Aside: In PHP 5.3, they chose to add a previously unemployed capital "E" to the array key.
-            if (!empty($gd_info['JPEG Support']) || !empty($gd_info['JPG Support']))
-            {
+            if (!empty($gd_info['JPEG Support']) || !empty($gd_info['JPG Support'])) {
                 $gd_support[] = 'JPG';
             }
 
-            if ($gd_info['PNG Support'])
-            {
+            if ($gd_info['PNG Support']) {
                 $gd_support[] = 'PNG';
             }
 
-            if ($gd_support)
-            {
+            if ($gd_support) {
                 $gd_support = join(', ', $gd_support);
-            }
-            else
-            {
+            } else {
                 $gd_support = gTxt('none');
             }
 
@@ -476,14 +417,11 @@
                 '{version}'   => $gd_info['GD Version'],
                 '{supported}' => $gd_support
             ));
-        }
-        else
-        {
+        } else {
             $gd = gTxt('gd_unavailable');
         }
 
-        if ( realpath($prefs['tempdir']) === realpath($prefs['plugin_cache_dir']) )
-        {
+        if ( realpath($prefs['tempdir']) === realpath($prefs['plugin_cache_dir']) ) {
             $fail['tmp_plugin_paths_match'] = diag_msg_wrap(gTxt('tmp_plugin_paths_match'));
         }
 
@@ -498,15 +436,11 @@
             n.'<div id="pre_flight_check">'.
             hed(gTxt('preflight_check'), 2);
 
-        if ($fail)
-        {
-            foreach ($fail as $help => $message)
-            {
+        if ($fail) {
+            foreach ($fail as $help => $message) {
                 echo graf(nl2br($message).popHelp($help));
             }
-        }
-        else
-        {
+        } else {
             echo graf(diag_msg_wrap(gTxt('all_checks_passed'), 'success'));
         }
 
@@ -582,18 +516,15 @@
             :    ''
         );
 
-        if ($step == 'high')
-        {
+        if ($step == 'high') {
             $out[] = n.'Charset (default/config)'.cs.$DB->default_charset.'/'.$DB->charset.n;
 
             $result = safe_query("SHOW variables like 'character_se%'");
 
-            while ($row = mysql_fetch_row($result))
-            {
+            while ($row = mysql_fetch_row($result)) {
                 $out[] = $row[0].cs.$row[1].n;
 
-                if ($row[0] == 'character_set_connection')
-                {
+                if ($row[0] == 'character_set_connection') {
                     $conn_char = $row[1];
                 }
             }
@@ -601,37 +532,31 @@
             $table_names = array(PFX.'textpattern');
             $result = safe_query("SHOW TABLES LIKE '".PFX."txp\_%'");
 
-            while ($row = mysql_fetch_row($result))
-            {
+            while ($row = mysql_fetch_row($result)) {
                 $table_names[] = $row[0];
             }
 
             $table_msg = array();
 
-            foreach ($table_names as $table)
-            {
+            foreach ($table_names as $table) {
                 $ctr = safe_query("SHOW CREATE TABLE ". $table."");
-                if (!$ctr)
-                {
+                if (!$ctr) {
                     unset($table_names[$table]);
                     continue;
                 }
 
                 $ctcharset = preg_replace('#^CREATE TABLE.*SET=([^ ]+)[^)]*$#is', '\\1', mysql_result($ctr, 0, 'Create Table'));
-                if (isset($conn_char) && !stristr($ctcharset, 'CREATE') && ($conn_char != $ctcharset))
-                {
+                if (isset($conn_char) && !stristr($ctcharset, 'CREATE') && ($conn_char != $ctcharset)) {
                     $table_msg[] = "$table is $ctcharset";
                 }
 
                 $ctr = safe_query("CHECK TABLE ". $table);
-                if (in_array(mysql_result($ctr, 0, 'Msg_type'), array('error', 'warning')))
-                {
+                if (in_array(mysql_result($ctr, 0, 'Msg_type'), array('error', 'warning'))) {
                     $table_msg[] = $table .cs. mysql_result($ctr, 0, 'Msg_Text');
                 }
             }
 
-            if ($table_msg == array())
-            {
+            if ($table_msg == array()) {
                 $table_msg = (count($table_names) < 17) ?  array('-') : array('OK');
             }
 
@@ -644,29 +569,24 @@
             $extns = get_loaded_extensions();
             $extv = array();
 
-            foreach ($extns as $e)
-            {
+            foreach ($extns as $e) {
                 $extv[] = $e . (phpversion($e) ? '/' . phpversion($e) : '');
             }
 
             $out[] = n.gTxt('php_extensions').cs.join(', ', $extv).n;
 
-            if (is_callable('apache_get_modules'))
-            {
+            if (is_callable('apache_get_modules')) {
                 $out[] = n.gTxt('apache_modules').cs.join(', ', apache_get_modules()).n;
             }
 
-            if (@is_array($pretext_data) and count($pretext_data) > 1)
-            {
+            if (@is_array($pretext_data) and count($pretext_data) > 1) {
                 $out[] = n.gTxt('pretext_data').cs.txpspecialchars(join('', array_slice($pretext_data, 1, 20))).n;
             }
 
             $out[] = n;
 
-            if ($md5s = check_file_integrity(INTEGRITY_MD5))
-            {
-                foreach ($md5s as $f => $checksum)
-                {
+            if ($md5s = check_file_integrity(INTEGRITY_MD5)) {
+                foreach ($md5s as $f => $checksum) {
                     $out[] = $f.cs.n.t.(!$checksum ? gTxt('unknown') : $checksum).n;
                 }
             }
@@ -717,25 +637,19 @@
         require_once txpath.'/lib/IXRClass.php';
         $client = new IXR_Client('http://rpc.textpattern.com');
 
-        if (!$client->query('tups.getTXPVersion', get_pref('blog_uid')))
-        {
+        if (!$client->query('tups.getTXPVersion', get_pref('blog_uid'))) {
             return array('version' => 0, 'msg' => 'problem_connecting_rpc_server');
-        }
-        else
-        {
+        } else {
             $out = array();
             $response = $client->getResponse();
 
-            if (is_array($response))
-            {
+            if (is_array($response)) {
                 ksort($response);
                 $version = get_pref('version');
 
                 // Go through each available branch (x.y), but only return the _highest_ version.
-                foreach ($response as $key => $val)
-                {
-                    if (version_compare($version, $val) < 0)
-                    {
+                foreach ($response as $key => $val) {
+                    if (version_compare($version, $val) < 0) {
                         $out = array('version' => $val, 'msg' => 'textpattern_update_available');
                     }
                 }

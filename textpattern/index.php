@@ -22,10 +22,8 @@
  * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
  */
 
-    if (@ini_get('register_globals'))
-    {
-        if (isset($_REQUEST['GLOBALS']) || isset($_FILES['GLOBALS']))
-        {
+    if (@ini_get('register_globals')) {
+        if (isset($_REQUEST['GLOBALS']) || isset($_FILES['GLOBALS'])) {
             die('GLOBALS overwrite attempt detected. Please consider turning register_globals off.');
         }
 
@@ -42,8 +40,7 @@
         // As the deliberately awkward-named local variable $_txpfoo MUST NOT be unset to avoid notices further
         // down, we must remove any potentially identical-named global from the list of global names here.
         unset($_txpg['_txpfoo']);
-        foreach ($_txpg as $_txpfoo => $value)
-        {
+        foreach ($_txpg as $_txpfoo => $value) {
             if (!in_array($_txpfoo, array(
                 'GLOBALS',
                 '_SERVER',
@@ -60,8 +57,7 @@
         }
     }
 
-    if (!defined('txpath'))
-    {
+    if (!defined('txpath')) {
         define("txpath", dirname(__FILE__));
     }
 
@@ -72,14 +68,11 @@
 
     ob_start(NULL, 2048);
 
-    if (!isset($txpcfg['table_prefix']) && !@include './config.php')
-    {
+    if (!isset($txpcfg['table_prefix']) && !@include './config.php') {
         ob_end_clean();
         header('HTTP/1.1 503 Service Unavailable');
         exit('config.php is missing or corrupt. To install Textpattern, visit <a href="./setup/">setup</a>.');
-    }
-    else
-    {
+    } else {
         ob_end_clean();
     }
 
@@ -108,22 +101,19 @@
     set_error_handler('adminErrorHandler', error_reporting());
     $microstart = getmicrotime();
 
-    if ($connected && safe_query("describe `".PFX."textpattern`"))
-    {
+    if ($connected && safe_query("describe `".PFX."textpattern`")) {
         $dbversion = safe_field('val', 'txp_prefs', "name = 'version'");
 
         // Global site prefs.
         $prefs = get_prefs();
         extract($prefs);
 
-        if (empty($siteurl))
-        {
+        if (empty($siteurl)) {
             $httphost = preg_replace('/[^-_a-zA-Z0-9.:]/', '', $_SERVER['HTTP_HOST']);
             $prefs['siteurl'] = $siteurl = $httphost . rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'])), '/');
         }
 
-        if (empty($path_to_site))
-        {
+        if (empty($path_to_site)) {
             updateSitePath(dirname(dirname(__FILE__)));
         }
 
@@ -132,10 +122,8 @@
         // i18n: define("LANG","en-gb");
         define('txp_version', $thisversion);
 
-        if (!defined('PROTOCOL'))
-        {
-            switch (serverSet('HTTPS'))
-            {
+        if (!defined('PROTOCOL')) {
+            switch (serverSet('HTTPS')) {
                 case '' :
                 case 'off' : // ISAPI with IIS.
                     define('PROTOCOL', 'http://');
@@ -152,13 +140,11 @@
         define('rhu', preg_replace('|^https?://[^/]+|', '', hu));
 
         // HTTP address of the site serving images.
-        if (!defined('ihu'))
-        {
+        if (!defined('ihu')) {
             define('ihu', hu);
         }
 
-        if (!empty($locale))
-        {
+        if (!empty($locale)) {
             setlocale(LC_ALL, $locale);
         }
 
@@ -190,8 +176,7 @@
         $step = trim(gps('step'));
         $app_mode = trim(gps('app_mode'));
 
-        if (!$dbversion or ($dbversion != $thisversion) or $txp_using_svn)
-        {
+        if (!$dbversion or ($dbversion != $thisversion) or $txp_using_svn) {
             define('TXP_UPDATE', 1);
             include txpath.'/update/_update.php';
         }
@@ -199,21 +184,18 @@
         janitor();
 
         // Article or form preview.
-        if (isset($_POST['form_preview']) || isset($_GET['txpreview']))
-        {
+        if (isset($_POST['form_preview']) || isset($_GET['txpreview'])) {
             include txpath.'/publish.php';
             textpattern();
             exit;
         }
 
-        if (!empty($admin_side_plugins) and gps('event') != 'plugin')
-        {
+        if (!empty($admin_side_plugins) and gps('event') != 'plugin') {
             load_plugins(1);
         }
 
         // Plugins may have altered privilege settings.
-        if (!defined('TXP_UPDATE_DONE') && !gps('event') && !empty($default_event) && has_privs($default_event))
-        {
+        if (!defined('TXP_UPDATE_DONE') && !gps('event') && !empty($default_event) && has_privs($default_event)) {
              $event = $default_event;
         }
 
@@ -226,8 +208,7 @@
         callback_event($event, $step, 1);
         $inc = txpath . '/include/txp_'.$event.'.php';
 
-        if (is_readable($inc))
-        {
+        if (is_readable($inc)) {
             include($inc);
         }
 
@@ -238,19 +219,14 @@
         $microdiff = substr(getmicrotime() - $microstart, 0, 6);
         $memory_peak = is_callable('memory_get_peak_usage') ? ceil(memory_get_peak_usage(true) / 1024) : '-';
 
-        if ($app_mode != 'async')
-        {
+        if ($app_mode != 'async') {
             echo n.comment(gTxt('runtime').': '.$microdiff);
             echo n.comment(sprintf('Memory: %sKb', $memory_peak));
-        }
-        else
-        {
+        } else {
             header("X-Textpattern-Runtime: $microdiff");
             header("X-Textpattern-Memory: $memory_peak");
         }
-    }
-    else
-    {
+    } else {
         txp_die('DB-Connect was successful, but the textpattern-table was not found.',
             '503 Service Unavailable');
     }

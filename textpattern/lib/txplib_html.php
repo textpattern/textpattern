@@ -82,8 +82,7 @@
     {
         global $event, $app_mode, $theme, $textarray_script;
 
-        if ($app_mode != 'async' && $event != 'tag')
-        {
+        if ($app_mode != 'async' && $event != 'tag') {
             callback_event('admin_side', 'main_content_end');
             echo n.'</main><!-- /txp-body -->'.n.'<footer role="contentinfo" class="txp-footer">';
             echo pluggable_ui('admin_side', 'footer', $theme->footer());
@@ -135,10 +134,8 @@
         $o = '';
         $first_item = true;
 
-        foreach ($head_items as $item)
-        {
-            if (empty($item))
-            {
+        foreach ($head_items as $item) {
+            if (empty($item)) {
                 continue;
             }
 
@@ -156,8 +153,7 @@
             $o .= ($first_item) ? '' : ', ';
             $first_item = false;
 
-            if ($is_link)
-            {
+            if ($is_link) {
                 $o .= href(gTxt($value), array(
                     'event'         => $event,
                     'step'          => $step,
@@ -166,9 +162,7 @@
                     'crit'          => $crit,
                     'search_method' => $method,
                 ), array());
-            }
-            else
-            {
+            } else {
                 $o .= gTxt($value);
             }
         }
@@ -206,8 +200,7 @@
 
     function sLink($event, $step, $linktext, $class = '')
     {
-        if ($linktext === '')
-        {
+        if ($linktext === '') {
             $linktext = null;
         }
 
@@ -236,17 +229,13 @@
 
     function eLink($event, $step, $thing, $value, $linktext, $thing2 = '', $val2 = '', $title = 'edit')
     {
-        if ($title)
-        {
+        if ($title) {
             $title = gTxt($title);
         }
 
-        if ($linktext === '')
-        {
+        if ($linktext === '') {
             $linktext = null;
-        }
-        else
-        {
+        } else {
             $linktext = escape_title($linktext);
         }
 
@@ -304,24 +293,18 @@
 
     function dLink($event, $step, $thing, $value, $verify = '', $thing2 = '', $thing2val = '', $get = '', $remember = null)
     {
-        if ($remember)
-        {
+        if ($remember) {
             list($page, $sort, $dir, $crit, $search_method) = $remember;
         }
 
-        if ($get)
-        {
-            if ($verify)
-            {
+        if ($get) {
+            if ($verify) {
                 $verify = gTxt($verify);
-            }
-            else
-            {
+            } else {
                 $verify = gTxt('confirm_delete_popup');
             }
 
-            if ($remember)
-            {
+            if ($remember) {
                 return href('×', array(
                     'event'         => $event,
                     'step'          => $step,
@@ -469,8 +452,7 @@
     {
         $out = array();
 
-        if ($crit != '' && $total > 1)
-        {
+        if ($crit != '' && $total > 1) {
             $out[] = announce(
                 gTxt('showing_search_results', array(
                     '{from}'  => (($page - 1) * $limit) + 1,
@@ -481,8 +463,7 @@
             );
         }
 
-        if ($numPages > 1)
-        {
+        if ($numPages > 1) {
             $nav = array();
             $list--;
             $page = max(min($page, $numPages), 1);
@@ -499,12 +480,9 @@
 
             // Previous page.
 
-            if ($page > 1)
-            {
+            if ($page > 1) {
                 $nav[] = PrevNextLink($event, $page - 1, gTxt('prev'), 'prev', $sort, $dir, $crit, $search_method, $step);
-            }
-            else
-            {
+            } else {
                 $nav[] = span(gTxt('prev'), array(
                     'class'         => 'navlink-disabled',
                     'aria-disabled' => 'true',
@@ -513,8 +491,7 @@
 
             // Jump to the first page.
 
-            if ($start > 1)
-            {
+            if ($start > 1) {
                 $nav[] = href(1, $parameters + array('page' => 1), array(
                     'class' => 'navlink',
                 ));
@@ -522,8 +499,7 @@
 
             // Jump to mid.
 
-            if ($start > 2)
-            {
+            if ($start > 2) {
                 $between = ceil($start/2);
                 $nav[] = href('&#8230;', $parameters + array('page' => $between), array(
                     'class' => 'navlink',
@@ -533,14 +509,10 @@
 
             // Page links.
 
-            for ($i = $start; $i <= $end; $i++)
-            {
-                if ($i == $page)
-                {
+            for ($i = $start; $i <= $end; $i++) {
+                if ($i == $page) {
                     $class = 'navlink-active';
-                }
-                else
-                {
+                } else {
                     $class = 'navlink';
                 }
 
@@ -551,8 +523,7 @@
 
             // Jump to mid.
 
-            if ($end < $numPages-1)
-            {
+            if ($end < $numPages-1) {
                 $between = $end + floor(($numPages-$end) / 2);
                 $nav[] = href('&#8230;', $parameters + array('page' => $between), array(
                     'class' => 'navlink',
@@ -562,8 +533,7 @@
 
             // Jump to the last page.
 
-            if ($end < $numPages)
-            {
+            if ($end < $numPages) {
                 $nav[] = href($numPages, $parameters + array('page' => $numPages), array(
                     'class' => 'navlink',
                 ));
@@ -571,12 +541,9 @@
 
             // Next page.
 
-            if ($page < $numPages)
-            {
+            if ($page < $numPages) {
                 $nav[] = PrevNextLink($event, $page + 1, gTxt('next'), 'next', $sort, $dir, $crit, $search_method, $step);
-            }
-            else
-            {
+            } else {
                 $nav[] = span(gTxt('next'), array(
                     'class'         => 'navlink-disabled',
                     'aria-disabled' => 'true',
@@ -609,8 +576,7 @@
         global $event;
         $label = $label ? gTxt($label) : null;
 
-        if ($anchor_id && $pane)
-        {
+        if ($anchor_id && $pane) {
             $visible = get_pref('pane_'.$pane.'_visible');
             $heading_class = 'txp-summary' . ($visible ? ' expanded' : '');
             $display_state = array(
@@ -627,17 +593,14 @@
             ));
 
             $help = '';
-        }
-        else
-        {
+        } else {
             $heading_class = '';
             $display_state = array(
                 'role' => $role == 'region' ? 'group' : ''
             );
         }
 
-        if ($content)
-        {
+        if ($content) {
             $content =
                 hed($label.popHelp($help), 3, array(
                     'id'             => $id.'-label',
@@ -740,8 +703,7 @@
 
     function stackRows()
     {
-        foreach (func_get_args() as $a)
-        {
+        foreach (func_get_args() as $a) {
             $o[] = tr($a);
         }
 
@@ -862,8 +824,7 @@
     {
         $cell = gTxt($text).' '.popHelp($help);
 
-        if ($label_id)
-        {
+        if ($label_id) {
             $cell = tag($cell, 'label', array('for' => $label_id));
         }
 
@@ -914,30 +875,21 @@
 
         $fallback_class = 'edit-'.str_replace('_', '-', $name);
 
-        if ($atts && is_string($atts))
-        {
+        if ($atts && is_string($atts)) {
             $atts = array('class' => $atts);
-        }
-        elseif (!$atts)
-        {
+        } elseif (!$atts) {
             $atts = array('class' => $fallback_class);
-        }
-        elseif (is_array($atts) && !array_key_exists('class', $atts))
-        {
+        } elseif (is_array($atts) && !array_key_exists('class', $atts)) {
             $atts['class'] = $fallback_class;
         }
 
-        if ($label)
-        {
+        if ($label) {
             $label = tag(gTxt($label), 'label', array('for' => $name));
-        }
-        else
-        {
+        } else {
             $label = gTxt($name);
         }
 
-        if ($wraptag_val)
-        {
+        if ($wraptag_val) {
             $input = tag($input, $wraptag_val, array('class' => 'txp-value'));
         }
 
@@ -1054,14 +1006,10 @@
 
     function href($item, $href, $atts = '')
     {
-        if (is_array($atts))
-        {
+        if (is_array($atts)) {
             $atts['href'] = $href;
-        }
-        else
-        {
-            if (is_array($href))
-            {
+        } else {
+            if (is_array($href)) {
                 $href = join_qs($href);
             }
 
@@ -1109,8 +1057,7 @@
 
     function htmlPre($item, $atts = '')
     {
-        if (($item = tag($item, 'code')) === '')
-        {
+        if (($item = tag($item, 'code')) === '') {
             $item = null;
         }
 
@@ -1156,8 +1103,7 @@
     {
         $out = array();
 
-        foreach ($array as $value => $width)
-        {
+        foreach ($array as $value => $width) {
             $out[] = tda($value, array('width' => (int) $width));
         }
 
@@ -1177,8 +1123,7 @@
         $array = func_get_args();
         $o = array();
 
-        foreach ($array as $a)
-        {
+        foreach ($array as $a) {
             $o[] = hCell(gTxt($a), '', ' scope="col"');
         }
 
@@ -1200,8 +1145,7 @@
 
     function popHelp($help_var, $width = 0, $height = 0, $class = 'pophelp')
     {
-        if (!$help_var)
-        {
+        if (!$help_var) {
             return '';
         }
 
@@ -1271,8 +1215,7 @@
 
         $out = array();
 
-        foreach ($$arname as $a)
-        {
+        foreach ($$arname as $a) {
             $out[] = tag(popTag($a, gTxt('tag_'.$a)), 'li');
         }
 
@@ -1319,34 +1262,27 @@
         $html = $methods = array();
         $methods[''] = gTxt('with_selected_option');
 
-        if ($event === null)
-        {
+        if ($event === null) {
             global $event;
         }
 
-        if ($step === null)
-        {
+        if ($step === null) {
             $step = $event.'_multi_edit';
         }
 
         callback_event_ref($event.'_ui', 'multi_edit_options', 0, $options);
 
-        foreach ($options as $value => $option)
-        {
-            if (is_array($option))
-            {
+        foreach ($options as $value => $option) {
+            if (is_array($option)) {
                 $methods[$value] = $option['label'];
 
-                if (isset($option['html']))
-                {
+                if (isset($option['html'])) {
                     $html[$value] = n.tag($option['html'], 'div', array(
                         'class'             => 'multi-option',
                         'data-multi-option' => $value,
                     ));
                 }
-            }
-            else
-            {
+            } else {
                 $methods[$value] = $option;
             }
         }
@@ -1380,22 +1316,17 @@
         $vals = array(15, 25, 50, 100);
         callback_event_ref($event.'_ui', 'pageby_values', 0, $vals);
 
-        if ($step === null)
-        {
+        if ($step === null) {
             $step = $event.'_change_pageby';
         }
 
         $out = array();
 
-        foreach ($vals as $qty)
-        {
-            if ($qty == $val)
-            {
+        foreach ($vals as $qty) {
+            if ($qty == $val) {
                 $class = 'navlink-active';
                 $aria_pressed = 'true';
-            }
-            else
-            {
+            } else {
                 $class = 'navlink';
                 $aria_pressed = 'false';
             }
@@ -1437,13 +1368,10 @@
     {
         extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
 
-        if (!$label_id)
-        {
+        if (!$label_id) {
             $p_class = 'edit-'.$event.'-upload';
             $label_id = $event.'-upload';
-        }
-        else
-        {
+        } else {
             $p_class = 'edit-'.str_replace('_', '-', $label_id);
         }
 
@@ -1542,8 +1470,7 @@
         $wraptagid = escape_js($wraptagid);
 
         $js = <<<EOF
-            $(function ()
-            {
+            $(function () {
                 $('#{$id}').append($('<{$wraptag} />').attr('id', '{$wraptagid}').html('{$content}'));
             });
 EOF;
@@ -1563,16 +1490,12 @@ EOF;
 
     function script_js($js, $flags = '')
     {
-        if (is_int($flags))
-        {
-            if ($flags & SCRIPT_URL)
-            {
-                if ($flags & SCRIPT_ATTACH_VERSION && strpos(txp_version, '-dev') === false)
-                {
+        if (is_int($flags)) {
+            if ($flags & SCRIPT_URL) {
+                if ($flags & SCRIPT_ATTACH_VERSION && strpos(txp_version, '-dev') === false) {
                     $ext = pathinfo($js, PATHINFO_EXTENSION);
 
-                    if ($ext)
-                    {
+                    if ($ext) {
                         $js = substr($js, 0, (strlen($ext)+1) * -1);
                         $ext = '.'.$ext;
                     }
@@ -1588,8 +1511,7 @@ EOF;
 
         $out = n.tag(n.trim($js).n, 'script');
 
-        if ($flags)
-        {
+        if ($flags) {
             $out .= n.tag(n.trim($flags).n, 'noscript');
         }
 
@@ -1614,19 +1536,15 @@ EOF;
             n.tag(gTxt('detail_toggle'), 'label', array('for' => $name));
 
         $js = <<<EOF
-            $(function ()
-            {
+            $(function () {
                 $('input')
-                    .filter(function ()
-                    {
-                        if ($(this).attr('id') === '{$id}')
-                        {
+                    .filter(function () {
+                        if ($(this).attr('id') === '{$id}') {
                             setClassDisplay('{$class}', $(this).is(':checked'));
                             return true;
                         }
                     })
-                    .change(function ()
-                    {
+                    .change(function () {
                         toggleClassRemember('{$class}');
                     });
             });
@@ -1634,8 +1552,7 @@ EOF;
 
         $out .= script_js($js);
 
-        if ($form)
-        {
+        if ($form) {
             return form($out);
         }
 
@@ -1656,12 +1573,9 @@ EOF;
         $id = escape_js($name);
         $class = escape_js($classname);
 
-        if (cs('toggle_'.$classname))
-        {
+        if (cs('toggle_'.$classname)) {
             $value = 1;
-        }
-        else
-        {
+        } else {
             $value = 0;
         }
 
@@ -1671,18 +1585,14 @@ EOF;
             n.tag(gTxt($classname), 'label', array('for' => $name));
 
         $js = <<<EOF
-            $(function ()
-            {
+            $(function () {
                 $('input')
-                    .filter(function ()
-                    {
-                        if ($(this).attr('id') === '{$id}')
-                        {
+                    .filter(function () {
+                        if ($(this).attr('id') === '{$id}') {
                             return true;
                         }
                     })
-                    .change(function ()
-                    {
+                    .change(function () {
                         setClassRemember('{$class}', $newvalue);
                         $(this).parents('form').submit();
                     });
@@ -1691,14 +1601,10 @@ EOF;
 
         $out .= script_js($js);
 
-        if ($form)
-        {
-            if (serverSet('QUERY_STRING'))
-            {
+        if ($form) {
+            if (serverSet('QUERY_STRING')) {
                 $action = 'index.php?'.serverSet('QUERY_STRING');
-            }
-            else
-            {
+            } else {
                 $action = 'index.php';
             }
 
@@ -1760,12 +1666,9 @@ EOF;
 
         $class = $parms['step'].' async';
 
-        if (is_array($atts))
-        {
+        if (is_array($atts)) {
             $atts['class'] = $class;
-        }
-        else
-        {
+        } else {
             $atts .= ' class="'.txpspecialchars($class).'"';
         }
 
@@ -1794,31 +1697,25 @@ EOF;
 
     function doWrap($list, $wraptag, $break, $class = '', $breakclass = '', $atts = '', $breakatts = '', $id = '')
     {
-        if (!$list)
-        {
+        if (!$list) {
             return '';
         }
 
-        if ($id)
-        {
+        if ($id) {
             $atts .= ' id="'.txpspecialchars($id).'"';
         }
 
-        if ($class)
-        {
+        if ($class) {
             $atts .= ' class="'.txpspecialchars($class).'"';
         }
 
-        if ($breakclass)
-        {
+        if ($breakclass) {
             $breakatts.= ' class="'.txpspecialchars($breakclass).'"';
         }
 
         // non-enclosing breaks
-        if (!preg_match('/^\w+$/', $break) or $break == 'br' or $break == 'hr')
-        {
-            if ($break == 'br' or $break == 'hr')
-            {
+        if (!preg_match('/^\w+$/', $break) or $break == 'br' or $break == 'hr') {
+            if ($break == 'br' or $break == 'hr') {
                 $break = "<$break $breakatts/>".n;
             }
 
@@ -1851,18 +1748,15 @@ EOF;
 
     function doTag($content, $tag, $class = '', $atts = '', $id = '')
     {
-        if ($id)
-        {
+        if ($id) {
             $atts .= ' id="'.txpspecialchars($id).'"';
         }
 
-        if ($class)
-        {
+        if ($class) {
             $atts .= ' class="'.txpspecialchars($class).'"';
         }
 
-        if (!$tag)
-        {
+        if (!$tag) {
             return $content;
         }
 
@@ -1888,8 +1782,7 @@ EOF;
 
     function doLabel($label = '', $labeltag = '')
     {
-        if ($label)
-        {
+        if ($label) {
             return (empty($labeltag) ? $label.'<br />' : tag($label, $labeltag));
         }
 

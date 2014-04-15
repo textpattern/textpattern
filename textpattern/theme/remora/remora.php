@@ -21,8 +21,7 @@
  * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
  */
 
-if (!defined('txpinterface'))
-{
+if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
 }
 
@@ -33,14 +32,11 @@ class remora_theme extends classic_theme
     function html_head()
     {
         $js = <<<SF
-            $(document).ready(function ()
-            {
-                $("#nav li").hover(function ()
-                {
+            $(document).ready(function () {
+                $("#nav li").hover(function () {
                     $(this).addClass("sfhover");
                 },
-                function ()
-                {
+                function () {
                     $(this).removeClass("sfhover");
                 });
             });
@@ -55,17 +51,14 @@ SF;
         $out[] = '<nav role="navigation" id="masthead" aria-label="'.gTxt('navigation').'">';
         $out[] = '<ul id="nav">';
 
-        foreach ($this->menu as $tab)
-        {
+        foreach ($this->menu as $tab) {
             $class = ($tab['active']) ? ' active' : '';
             $out[] = '<li class="primary'.$class.'">'.href($tab["label"], array('event' => $tab['event']));
 
-            if (!empty($tab['items']))
-            {
+            if (!empty($tab['items'])) {
                 $out[] = '<ul>';
 
-                foreach ($tab['items'] as $item)
-                {
+                foreach ($tab['items'] as $item) {
                     $class = ($item['active']) ? ' active' : '';
                     $out[] = '<li class="secondary'.$class.'">'.
                         href($item["label"], array('event' => $item['event'])).
@@ -82,8 +75,7 @@ SF;
             href(gTxt('tab_view_site'), hu, ' target="_blank"').
             '</li>';
 
-        if ($txp_user)
-        {
+        if ($txp_user) {
             $out[] = '<li id="logout" class="primary tabdown inactive">'.
                 href(gTxt('logout'), 'index.php?logout=1', ' onclick="return verify(\''.gTxt('are_you_sure').'\')"').
                 '</li>';

@@ -10,8 +10,7 @@
  * @see        ../css.php
  */
 
-if (!defined("txpath"))
-{
+if (!defined("txpath")) {
     /**
      * @ignore
      */

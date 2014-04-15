@@ -27,8 +27,7 @@
  * @package Theme
  */
 
-if (!defined('THEME'))
-{
+if (!defined('THEME')) {
     /**
      * Relative path to themes directory.
      */
@@ -123,22 +122,16 @@ class theme
     public static function factory($name)
     {
         $path = theme::path($name);
-        if (is_readable($path))
-        {
+        if (is_readable($path)) {
             require_once($path);
-        }
-        else
-        {
+        } else {
             return false;
         }
 
         $t = "{$name}_theme";
-        if (class_exists($t))
-        {
+        if (class_exists($t)) {
             return new $t($name);
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
@@ -154,23 +147,18 @@ class theme
     {
         static $instance;
 
-        if ($name === '')
-        {
+        if ($name === '') {
             $name = pluggable_ui('admin_side', 'theme_name', get_pref('theme_name', 'hive'));
         }
 
-        if ($instance && is_object($instance) && ($name == $instance->name))
-        {
+        if ($instance && is_object($instance) && ($name == $instance->name)) {
             return $instance;
-        }
-        else
-        {
+        } else {
             $instance = null;
         }
 
         $instance = theme::factory($name);
-        if (!$instance)
-        {
+        if (!$instance) {
             set_pref('theme_name', 'hive');
             die(gTxt('cannot_instantiate_theme', array('{name}' => $name, '{class}' => "{$name}_theme", '{path}' => theme::path($name))));
         }
@@ -187,17 +175,14 @@ class theme
     public static function names()
     {
         $dirs = glob(txpath.DS.THEME.'*');
-        if (is_array($dirs))
-        {
-            foreach ($dirs as $d)
-            {
+        if (is_array($dirs)) {
+            foreach ($dirs as $d) {
                 // Extract trailing directory name.
                 preg_match('#(.*)[\\/]+(.*)$#', $d, $m);
                 $name = $m[2];
 
                 // Accept directories containing an equally named .php file.
-                if (is_dir($d) && ($d != '.') && ($d != '..') && isset($name) && is_file($d.DS.$name.'.php'))
-                {
+                if (is_dir($d) && ($d != '.') && ($d != '..') && isset($name) && is_file($d.DS.$name.'.php')) {
                     $out[] = $name;
                 }
             }
@@ -219,11 +204,9 @@ class theme
     {
         global $production_status;
         $theme = theme::factory($name);
-        if (!$theme)
-        {
+        if (!$theme) {
             set_pref('theme_name', 'hive');
-            if ($production_status === 'debug')
-            {
+            if ($production_status === 'debug') {
                 echo gTxt('cannot_instantiate_theme', array('{name}' => $name, '{class}' => "{$name}_theme", '{path}' => theme::path($name)));
             }
             return false;
@@ -246,8 +229,7 @@ class theme
         $this->is_popup = $is_popup;
         $this->message = $message;
 
-        if ($is_popup)
-        {
+        if ($is_popup) {
             return $this;
         }
 
@@ -259,42 +241,33 @@ class theme
             'admin' => 'admin'
         );
 
-        if (empty($areas['start']))
-        {
+        if (empty($areas['start'])) {
             unset($areas['start']);
         }
 
-        if (empty($areas['extensions']))
-        {
+        if (empty($areas['extensions'])) {
             unset($areas['extensions']);
         }
 
         $dflt_tab = get_pref('default_event', '');
 
-        foreach ($areas as $ar => $items)
-        {
+        foreach ($areas as $ar => $items) {
             $l_ = gTxt('tab_'.$ar);
             $e_ = (array_key_exists($ar, $defaults)) ? $defaults[$ar] : reset($areas[$ar]);
             $i_ = array();
 
-            if (has_privs('tab.'.$ar))
-            {
-                if (!has_privs($e_))
-                {
+            if (has_privs('tab.'.$ar)) {
+                if (!has_privs($e_)) {
                     $e_ = '';
                 }
 
-                foreach ($items as $a => $b)
-                {
-                    if (has_privs($b))
-                    {
-                        if ($e_ === '')
-                        {
+                foreach ($items as $a => $b) {
+                    if (has_privs($b)) {
+                        if ($e_ === '') {
                             $e_ = $b;
                         }
 
-                        if ($b == $dflt_tab)
-                        {
+                        if ($b == $dflt_tab) {
                             $this->menu[$ar]['event'] = $dflt_tab;
                         }
 
@@ -302,8 +275,7 @@ class theme
                     }
                 }
 
-                if ($e_)
-                {
+                if ($e_) {
                     $this->menu[$ar] = array(
                         'label' => $l_,
                         'event' => $e_,

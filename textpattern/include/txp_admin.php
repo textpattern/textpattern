@@ -28,15 +28,13 @@
  * @package Admin\Admin
  */
 
-    if (!defined('txpinterface'))
-    {
+    if (!defined('txpinterface')) {
         die('txpinterface is undefined.');
     }
 
     $levels = get_groups();
 
-    if ($event == 'admin')
-    {
+    if ($event == 'admin') {
         require_privs('admin');
 
         include_once txpath.'/lib/txplib_admin.php';
@@ -54,12 +52,9 @@
             'new_pass_form'       => false,
         );
 
-        if ($step && bouncer($step, $available_steps))
-        {
+        if ($step && bouncer($step, $available_steps)) {
             $step();
-        }
-        else
-        {
+        } else {
             author_list();
         }
     }
@@ -74,16 +69,14 @@
 
         $new_email = ps('new_email');
 
-        if (!is_valid_email($new_email))
-        {
+        if (!is_valid_email($new_email)) {
             author_list(array(gTxt('email_required'), E_ERROR));
             return;
         }
 
         $rs = update_user($txp_user, $new_email);
 
-        if ($rs)
-        {
+        if ($rs) {
             author_list(gTxt('email_changed', array('{email}' => $new_email)));
             return;
         }
@@ -110,16 +103,14 @@
 
         $privs = assert_int($privs);
 
-        if (!is_valid_email($email))
-        {
+        if (!is_valid_email($email)) {
             author_list(array(gTxt('email_required'), E_ERROR));
             return;
         }
 
         $rs = update_user($name, $email, $RealName);
 
-        if ($rs && ($txp_user === $name || change_user_group($name, $privs)))
-        {
+        if ($rs && ($txp_user === $name || change_user_group($name, $privs))) {
             author_list(gTxt('author_updated', array('{name}' => $RealName)));
             return;
         }
@@ -137,20 +128,17 @@
 
         extract(psa(array('new_pass', 'mail_password')));
 
-        if (empty($new_pass))
-        {
+        if (empty($new_pass)) {
             author_list(array(gTxt('password_required'), E_ERROR));
             return;
         }
 
         $rs = change_user_password($txp_user, $new_pass);
 
-        if ($rs)
-        {
+        if ($rs) {
             $message = gTxt('password_changed');
 
-            if ($mail_password)
-            {
+            if ($mail_password) {
                 $email = fetch('email', 'txp_users', 'name', $txp_user);
 
                 send_new_password($new_pass, $email, $txp_user);
@@ -181,10 +169,8 @@
 
         $privs = assert_int($privs);
 
-        if (is_valid_username($name) && is_valid_email($email))
-        {
-            if (user_exists($name))
-            {
+        if (is_valid_username($name) && is_valid_email($email)) {
+            if (user_exists($name)) {
                 author_list(array(gTxt('author_already_exists', array('{name}' => $name)), E_ERROR));
                 return;
             }
@@ -193,8 +179,7 @@
 
             $rs = create_user($name, $email, $password, $RealName, $privs);
 
-            if ($rs)
-            {
+            if ($rs) {
                 send_password($RealName, $name, $email, $password);
 
                 author_list(
@@ -293,8 +278,7 @@
 
         pagetop(gTxt('tab_site_admin'), $message);
 
-        if (is_disabled('mail'))
-        {
+        if (is_disabled('mail')) {
             echo graf(
                 span(null, array('class' => 'ui-icon ui-icon-alert')).' '.
                 gTxt('warn_mail_unavailable'),
@@ -310,13 +294,10 @@
         // Change password button.
         $buttons[] = sLink('admin', 'new_pass_form', gTxt('change_password'));
 
-        if (!has_privs('admin.edit'))
-        {
+        if (!has_privs('admin.edit')) {
             // Change email address button.
             $buttons[] = sLink('admin', 'change_email_form', gTxt('change_email_address'));
-        }
-        else
-        {
+        } else {
             // New author button.
             $buttons[] = sLink('admin', 'author_edit', gTxt('add_new_author'));
         }
@@ -324,24 +305,20 @@
         echo graf(join(n, $buttons), array('class' => 'txp-buttons'));
 
         // User list.
-        if (has_privs('admin.list'))
-        {
+        if (has_privs('admin.list')) {
             extract(gpsa(array('page', 'sort', 'dir', 'crit', 'search_method')));
 
-            if ($sort === '')
-            {
+            if ($sort === '') {
                 $sort = get_pref('admin_sort_column', 'name');
             }
 
-            if ($dir === '')
-            {
+            if ($dir === '') {
                 $dir = get_pref('admin_sort_dir', 'asc');
             }
 
             $dir = ($dir == 'desc') ? 'desc' : 'asc';
 
-            if (!in_array($sort, array('name', 'RealName', 'email', 'privs', 'last_login')))
-            {
+            if (!in_array($sort, array('name', 'RealName', 'email', 'privs', 'last_login'))) {
                 $sort = 'name';
             }
 
@@ -354,8 +331,7 @@
 
             $criteria = 1;
 
-            if ($search_method and $crit != '')
-            {
+            if ($search_method and $crit != '') {
                 $verbatim = preg_match('/^"(.*)"$/', $crit, $m);
 
                 $crit_escaped = $verbatim ? doSlash($m[1]) : doLike($crit);
@@ -374,18 +350,13 @@
                         'privs'     => "convert(privs, char) in ('" .join("','", do_list($crit_escaped)). "')",
                     );
 
-                if (array_key_exists($search_method, $critsql))
-                {
+                if (array_key_exists($search_method, $critsql)) {
                     $criteria = $critsql[$search_method];
-                }
-                else
-                {
+                } else {
                     $search_method = '';
                     $crit = '';
                 }
-            }
-            else
-            {
+            } else {
                 $search_method = '';
                 $crit = '';
             }
@@ -394,10 +365,8 @@
 
             $total = getCount('txp_users', $criteria);
 
-            if ($total < 1)
-            {
-                if ($criteria != 1)
-                {
+            if ($total < 1) {
+                if ($criteria != 1) {
                     echo n.author_search_form($crit, $search_method).
                         graf(gTxt('no_results_found'), ' class="indicator"').'</div>';
                 }
@@ -419,8 +388,7 @@
                 "$criteria order by $sort_sql limit $offset, $limit"
             );
 
-            if ($rs)
-            {
+            if ($rs) {
                 echo n.'<div id="users_container" class="txp-container">';
                 echo n.'<form action="index.php" id="users_form" class="multi_edit_form" method="post" name="longform">'.
 
@@ -442,8 +410,7 @@
 
                 echo n.'<tbody>';
 
-                while ($a = nextRow($rs))
-                {
+                while ($a = nextRow($rs)) {
                     extract(doSpecial($a));
 
                     echo tr(
@@ -471,9 +438,7 @@
                     )).
                     n.'</div>';
             }
-        }
-        else
-        {
+        } else {
             echo n.'</div>';
         }
     }
@@ -520,40 +485,30 @@
 
         $is_edit = ($user_id && $step == 'author_edit');
 
-        if ($is_edit)
-        {
+        if ($is_edit) {
             $user_id = assert_int($user_id);
             $rs = safe_row('*', 'txp_users', "user_id = $user_id");
             extract($rs);
         }
 
-        if ($is_edit)
-        {
+        if ($is_edit) {
             $out[] = hed(gTxt('edit_author'), 2);
-        }
-        else
-        {
+        } else {
             $out[] = hed(gTxt('add_new_author'), 2);
         }
 
-        if ($is_edit)
-        {
+        if ($is_edit) {
             $out[] = inputLabel('login_name', strong(txpspecialchars($name)));
-        }
-        else
-        {
+        } else {
             $out[] =  inputLabel('login_name', fInput('text', 'name', $name, '', '', '', INPUT_REGULAR, '', 'login_name'), 'login_name', 'add_new_author');
         }
 
         $out[] = inputLabel('real_name', fInput('text', 'RealName', $RealName, '', '', '', INPUT_REGULAR, '', 'real_name'), 'real_name').
             inputLabel('login_email', fInput('email', 'email', $email, '', '', '', INPUT_REGULAR, '', 'login_email'), 'email');
 
-        if ($txp_user != $name)
-        {
+        if ($txp_user != $name) {
             $out[] = inputLabel('privileges', privs($privs), 'privileges', 'about_privileges');
-        }
-        else
-        {
+        } else {
             $out[] = inputLabel('privileges', strong(get_priv_level($privs))).
                 hInput('privs', $privs);
         }
@@ -562,14 +517,11 @@
             graf(fInput('submit', '', gTxt('save'), 'publish')).
             eInput('admin');
 
-        if ($user_id)
-        {
+        if ($user_id) {
             $out[] = hInput('user_id', $user_id).
                 hInput('name', $name).
                 sInput('author_save');
-        }
-        else
-        {
+        } else {
             $out[] = sInput('author_save_new');
         }
 
@@ -609,8 +561,7 @@
             'resetpassword'   => gTxt('resetpassword'),
         );
 
-        if (count($users) > 1)
-        {
+        if (count($users) > 1) {
             $methods['delete'] = array(
                 'label' => gTxt('delete'),
                 'html'  => tag(gTxt('assign_assets_to'), 'label', array('for' => 'assign_assets')).
@@ -638,8 +589,7 @@
         $changed = array();
         $msg = '';
 
-        if (!$selected or !is_array($selected))
-        {
+        if (!$selected or !is_array($selected)) {
             return author_list();
         }
 
@@ -649,27 +599,20 @@
             "name IN (".join(',', quote_list($selected)).") AND name != '".doSlash($txp_user)."'"
         );
 
-        if (!$names)
-        {
+        if (!$names) {
             return author_list();
         }
 
-        switch ($method)
-        {
+        switch ($method) {
             case 'delete' :
 
                 $assign_assets = ps('assign_assets');
 
-                if (!$assign_assets)
-                {
+                if (!$assign_assets) {
                     $msg = array('must_reassign_assets', E_ERROR);
-                }
-                else if (in_array($assign_assets, $names))
-                {
+                } elseif (in_array($assign_assets, $names)) {
                     $msg = array('cannot_assign_assets_to_deletee', E_ERROR);
-                }
-                else if (remove_user($names, $assign_assets))
-                {
+                } elseif (remove_user($names, $assign_assets)) {
                     $changed = $names;
                     callback_event('authors_deleted', '', 0, $changed);
                     $msg = 'author_deleted';
@@ -679,8 +622,7 @@
 
             case 'changeprivilege' :
 
-                if (change_user_group($names, ps('privs')))
-                {
+                if (change_user_group($names, ps('privs'))) {
                     $changed = $names;
                     $msg = 'author_updated';
                 }
@@ -689,21 +631,16 @@
 
             case 'resetpassword' :
 
-                foreach ($names as $name)
-                {
+                foreach ($names as $name) {
                     $passwd = generate_password(PASSWORD_LENGTH);
 
-                    if (change_user_password($name, $passwd))
-                    {
+                    if (change_user_password($name, $passwd)) {
                         $email = safe_field('email', 'txp_users', "name = '".doSlash($name)."'");
 
-                        if (send_new_password($passwd, $email, $name))
-                        {
+                        if (send_new_password($passwd, $email, $name)) {
                             $changed[] = $name;
                             $msg = 'author_updated';
-                        }
-                        else
-                        {
+                        } else {
                             return author_list(array(gTxt('could_not_mail').' '.txpspecialchars($name), E_ERROR));
                         }
                     }
@@ -712,8 +649,7 @@
                 break;
         }
 
-        if ($changed)
-        {
+        if ($changed) {
             return author_list(gTxt($msg, array('{name}' => txpspecialchars(join(', ', $changed)))));
         }
 

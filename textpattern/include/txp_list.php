@@ -28,13 +28,11 @@
  * @package Admin\List
  */
 
-    if (!defined('txpinterface'))
-    {
+    if (!defined('txpinterface')) {
         die('txpinterface is undefined.');
     }
 
-    if ($event == 'list')
-    {
+    if ($event == 'list') {
         global $statuses, $all_cats, $all_authors, $all_sections;
 
         require_privs('article');
@@ -57,12 +55,9 @@
             'list_multi_edit'    => true,
         );
 
-        if ($step && bouncer($step, $available_steps))
-        {
+        if ($step && bouncer($step, $available_steps)) {
             $step();
-        }
-        else
-        {
+        } else {
             list_list();
         }
     }
@@ -88,13 +83,11 @@
             'search_method'
         )));
 
-        if ($sort === '')
-        {
+        if ($sort === '') {
             $sort = get_pref('article_sort_column', 'posted');
         }
 
-        if ($dir === '')
-        {
+        if ($dir === '') {
             $dir = get_pref('article_sort_dir', 'desc');
         }
 
@@ -102,8 +95,7 @@
 
         $sesutats = array_flip($statuses);
 
-        switch ($sort)
-        {
+        switch ($sort) {
             case 'id' :
                 $sort_sql = 'textpattern.ID '.$dir;
                 break;
@@ -147,8 +139,7 @@
 
         $criteria = 1;
 
-        if ($search_method and $crit != '')
-        {
+        if ($search_method and $crit != '') {
             $verbatim = preg_match('/^"(.*)"$/', $crit, $m);
             $crit_escaped = $verbatim ? doSlash($m[1]) : doLike($crit);
             $critsql = $verbatim ?
@@ -176,20 +167,14 @@
                     'lastmod'            => "textpattern.LastMod like '$crit_escaped%'"
                 );
 
-            if (array_key_exists($search_method, $critsql))
-            {
+            if (array_key_exists($search_method, $critsql)) {
                 $criteria = $critsql[$search_method];
                 $limit = 500;
-            }
-            else
-            {
+            } else {
                 $search_method = '';
                 $crit = '';
             }
-        }
-
-        else
-        {
+        } else {
             $search_method = '';
             $crit = '';
         }
@@ -203,27 +188,20 @@
             left join ".safe_pfx('txp_section')." section on section.name = textpattern.Section
             left join ".safe_pfx('txp_users')." user on user.name = textpattern.AuthorID";
 
-        if ($criteria === 1)
-        {
+        if ($criteria === 1) {
             $total = safe_count('textpattern', $criteria);
-        }
-        else
-        {
+        } else {
             $total = getThing('select count(*) from '.$sql_from.' where '.$criteria);
         }
 
         echo hed(gTxt('tab_list'), 1, array('class' => 'txp-heading'));
         echo n.'<div id="'.$event.'_control" class="txp-control-panel">';
 
-        if ($total < 1)
-        {
-            if ($criteria != 1)
-            {
+        if ($total < 1) {
+            if ($criteria != 1) {
                 echo list_search_form($crit, $search_method).
                     graf(gTxt('no_results_found'), ' class="indicator"').'</div>';
-            }
-            else
-            {
+            } else {
                 echo graf(gTxt('no_articles_recorded'), ' class="indicator"').'</div>';
             }
 
@@ -252,8 +230,7 @@
             from $sql_from where $criteria order by $sort_sql limit $offset, $limit"
         );
 
-        if ($rs)
-        {
+        if ($rs) {
             $show_authors = !has_single_author('textpattern', 'AuthorID');
 
             echo n.'<div id="'.$event.'_container" class="txp-container">';
@@ -284,16 +261,12 @@
 
             $validator = new Validator();
 
-            while ($a = nextRow($rs))
-            {
+            while ($a = nextRow($rs)) {
                 extract($a);
 
-                if ($Title === '')
-                {
+                if ($Title === '') {
                     $Title = '<em>'.eLink('article', 'edit', 'ID', $ID, gTxt('untitled')).'</em>';
-                }
-                else
-                {
+                } else {
                     $Title = eLink('article', 'edit', 'ID', $ID, $Title);
                 }
 
@@ -310,24 +283,19 @@
                 $Category1 = ($Category1) ? span(txpspecialchars($category1_title), array('title' => $Category1)) : '';
                 $Category2 = ($Category2) ? span(txpspecialchars($category2_title), array('title' => $Category2)) : '';
 
-                if ($Status != STATUS_LIVE and $Status != STATUS_STICKY)
-                {
+                if ($Status != STATUS_LIVE and $Status != STATUS_STICKY) {
                     $view_url = '?txpreview='.intval($ID).'.'.time();
-                }
-                else
-                {
+                } else {
                     $view_url = permlinkurl($a);
                 }
 
-                if (isset($statuses[$Status]))
-                {
+                if (isset($statuses[$Status])) {
                     $Status = $statuses[$Status];
                 }
 
                 $comments = '('.$total_comments.')';
 
-                if ($total_comments)
-                {
+                if ($total_comments) {
                     $comments = href($comments, array(
                         'event'         => 'discuss',
                         'step'          => 'list',
@@ -338,13 +306,11 @@
 
                 $comment_status = ($Annotate) ? gTxt('on') : gTxt('off');
 
-                if ($comments_disabled_after)
-                {
+                if ($comments_disabled_after) {
                     $lifespan = $comments_disabled_after * 86400;
                     $time_since = time() - $posted;
 
-                    if ($time_since > $lifespan)
-                    {
+                    if ($time_since > $lifespan) {
                         $comment_status = gTxt('expired');
                     }
                 }
@@ -476,13 +442,10 @@
     {
         global $statuses, $all_cats, $all_authors, $all_sections;
 
-        if ($all_cats)
-        {
+        if ($all_cats) {
             $category1 = treeSelectInput('Category1', $all_cats, '');
             $category2 = treeSelectInput('Category2', $all_cats, '');
-        }
-        else
-        {
+        } else {
             $category1 = $category2 = '';
         }
 
@@ -502,18 +465,15 @@
             'delete'          => gTxt('delete'),
         );
 
-        if (!$all_cats)
-        {
+        if (!$all_cats) {
             unset($methods['changecategory1'], $methods['changecategory2']);
         }
 
-        if (has_single_author('textpattern', 'AuthorID'))
-        {
+        if (has_single_author('textpattern', 'AuthorID')) {
             unset($methods['changeauthor']);
         }
 
-        if (!has_privs('article.delete.own') && !has_privs('article.delete'))
-        {
+        if (!has_privs('article.delete.own') && !has_privs('article.delete')) {
             unset($methods['delete']);
         }
 
@@ -533,8 +493,7 @@
             'edit_method',
         )));
 
-        if (!$selected || !is_array($selected))
-        {
+        if (!$selected || !is_array($selected)) {
             return list_list();
         }
 
@@ -543,22 +502,18 @@
         // Empty entry to permit clearing the categories.
         $categories = array('');
 
-        foreach ($all_cats as $row)
-        {
+        foreach ($all_cats as $row) {
             $categories[] = $row['name'];
         }
 
         $allowed = array();
         $field = $value = '';
 
-        switch ($edit_method)
-        {
+        switch ($edit_method) {
             // Delete.
             case 'delete' :
-                if (!has_privs('article.delete'))
-                {
-                    if (has_privs('article.delete.own'))
-                    {
+                if (!has_privs('article.delete')) {
+                    if (has_privs('article.delete.own')) {
                         $allowed = safe_column_num(
                             'ID',
                             'textpattern',
@@ -569,8 +524,7 @@
                     $selected = $allowed;
                 }
 
-                if ($selected && safe_delete('textpattern', 'ID in ('.join(',', $selected).')'))
-                {
+                if ($selected && safe_delete('textpattern', 'ID in ('.join(',', $selected).')')) {
                     safe_update('txp_discuss', "visible = ".MODERATE, "parentid in(".join(',', $selected).")");
                     callback_event('articles_deleted', '', 0, $selected);
                     callback_event('multi_edited.articles', 'delete', 0, compact('selected', 'field', 'value'));
@@ -583,8 +537,7 @@
             // Change author.
             case 'changeauthor' :
                 $value = ps('AuthorID');
-                if (has_privs('article.edit') && in_array($value, $all_authors, true))
-                {
+                if (has_privs('article.edit') && in_array($value, $all_authors, true)) {
                     $field = 'AuthorID';
                 }
                 break;
@@ -592,16 +545,14 @@
             // Change category1.
             case 'changecategory1' :
                 $value = ps('Category1');
-                if (in_array($value, $categories, true))
-                {
+                if (in_array($value, $categories, true)) {
                     $field = 'Category1';
                 }
                 break;
             // Change category2.
             case 'changecategory2' :
                 $value = ps('Category2');
-                if (in_array($value, $categories, true))
-                {
+                if (in_array($value, $categories, true)) {
                     $field = 'Category2';
                 }
                 break;
@@ -613,21 +564,18 @@
             // Change section.
             case 'changesection' :
                 $value = ps('Section');
-                if (in_array($value, $all_sections, true))
-                {
+                if (in_array($value, $all_sections, true)) {
                     $field = 'Section';
                 }
                 break;
             // Change status.
             case 'changestatus' :
                 $value = (int) ps('Status');
-                if (array_key_exists($value, $statuses))
-                {
+                if (array_key_exists($value, $statuses)) {
                     $field = 'Status';
                 }
 
-                if (!has_privs('article.publish') && $value >= STATUS_LIVE)
-                {
+                if (!has_privs('article.publish') && $value >= STATUS_LIVE) {
                     $value = STATUS_PENDING;
                 }
                 break;
@@ -639,8 +587,7 @@
             'ID in ('.join(',', $selected).')'
         );
 
-        foreach ($selected as $item)
-        {
+        foreach ($selected as $item) {
             if (
                 ($item['Status'] >= STATUS_LIVE && has_privs('article.edit.published')) ||
                 ($item['Status'] >= STATUS_LIVE && $item['AuthorID'] === $txp_user && has_privs('article.edit.own.published')) ||
@@ -654,29 +601,23 @@
 
         $selected = $allowed;
 
-        if ($selected)
-        {
+        if ($selected) {
             $message = messenger('article', join(', ', $selected), 'modified');
 
-            if ($edit_method === 'duplicate')
-            {
+            if ($edit_method === 'duplicate') {
                 $rs = safe_rows_start('*', 'textpattern', "ID in (".join(',', $selected).")");
 
-                if ($rs)
-                {
-                    while ($a = nextRow($rs))
-                    {
+                if ($rs) {
+                    while ($a = nextRow($rs)) {
                         unset($a['ID'], $a['LastMod'], $a['LastModID'], $a['Expires']);
                         $a['uid'] = md5(uniqid(rand(), true));
                         $a['AuthorID'] = $txp_user;
 
-                        foreach ($a as $name => &$value)
-                        {
+                        foreach ($a as $name => &$value) {
                             $value = "`{$name}` = '".doSlash($value)."'";
                         }
 
-                        if ($id = (int) safe_insert('textpattern', join(',', $a)))
-                        {
+                        if ($id = (int) safe_insert('textpattern', join(',', $a))) {
                             safe_update(
                                 'textpattern',
                                 "Title = concat(Title, ' (', {$id}, ')'),
@@ -690,9 +631,7 @@
                 }
 
                 $message = gTxt('duplicated_articles', array('{id}' => join(', ', $selected)));
-            }
-            else if (!$field || safe_update('textpattern', "$field = '".doSlash($value)."'", "ID in (".join(',', $selected).")") === false)
-            {
+            } elseif (!$field || safe_update('textpattern', "$field = '".doSlash($value)."'", "ID in (".join(',', $selected).")") === false) {
                 return list_list();
             }
 
