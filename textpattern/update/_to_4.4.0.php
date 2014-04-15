@@ -1,8 +1,8 @@
 <?php
 
-	if (!defined('TXP_UPDATE'))
-	{
-		exit("Nothing here. You can't access this file directly.");
-	}
+    if (!defined('TXP_UPDATE'))
+    {
+        exit("Nothing here. You can't access this file directly.");
+    }
 
-//	This page intentionally left blank.
+    // This page intentionally left blank.

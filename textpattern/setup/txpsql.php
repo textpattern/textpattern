@@ -23,7 +23,7 @@
 
 if (!defined('TXP_INSTALL'))
 {
-	exit;
+    exit;
 }
 
 @ignore_user_abort(1);
@@ -35,46 +35,46 @@ mysql_select_db($ddb);
 $result = mysql_query("describe `".PFX."textpattern`");
 if ($result)
 {
-	die("Textpattern database table already exists. Can't run setup.");
+    die("Textpattern database table already exists. Can't run setup.");
 }
 
 $version = mysql_get_server_info();
 
 // Use "ENGINE" if version of MySQL > (4.0.18 or 4.1.2).
 $tabletype = (intval($version[0]) >= 5 || preg_match('#^4\.(0\.[2-9]|(1[89]))|(1\.[2-9])#', $version))
-	? " ENGINE=MyISAM "
-	: " TYPE=MyISAM ";
+    ? " ENGINE=MyISAM "
+    : " TYPE=MyISAM ";
 
 // On 4.1 or greater use UTF-8 tables.
 if (isset($dbcharset) && (intval($version[0]) >= 5 || preg_match('#^4\.[1-9]#', $version)))
 {
-	$tabletype .= " CHARACTER SET = $dbcharset ";
-	if ($dbcharset == 'utf8')
-	{
-		$tabletype .= " COLLATE utf8_general_ci ";
-	}
-	mysql_query("SET NAMES ".$dbcharset);
+    $tabletype .= " CHARACTER SET = $dbcharset ";
+    if ($dbcharset == 'utf8')
+    {
+        $tabletype .= " COLLATE utf8_general_ci ";
+    }
+    mysql_query("SET NAMES ".$dbcharset);
 }
 
 // Default to messy URLs if we know clean ones won't work.
 $permlink_mode = 'section_id_title';
 if (is_callable('apache_get_modules'))
 {
-	$modules = @apache_get_modules();
-	if (!is_array($modules) || !in_array('mod_rewrite', $modules))
-	{
-		$permlink_mode = 'messy';
-	}
+    $modules = @apache_get_modules();
+    if (!is_array($modules) || !in_array('mod_rewrite', $modules))
+    {
+        $permlink_mode = 'messy';
+    }
 }
 else
 {
-	$server_software = (@$_SERVER['SERVER_SOFTWARE'] || @$_SERVER['HTTP_HOST'])
-		? ((@$_SERVER['SERVER_SOFTWARE']) ? @$_SERVER['SERVER_SOFTWARE'] : $_SERVER['HTTP_HOST'])
-		: '';
-	if (!stristr($server_software, 'Apache'))
-	{
-		$permlink_mode = 'messy';
-	}
+    $server_software = (@$_SERVER['SERVER_SOFTWARE'] || @$_SERVER['HTTP_HOST'])
+        ? ((@$_SERVER['SERVER_SOFTWARE']) ? @$_SERVER['SERVER_SOFTWARE'] : $_SERVER['HTTP_HOST'])
+        : '';
+    if (!stristr($server_software, 'Apache'))
+    {
+        $permlink_mode = 'messy';
+    }
 }
 
 $name = ps('name') ? ps('name') : 'anon';
@@ -448,20 +448,20 @@ $GLOBALS['txp_err_count'] = 0;
 
 foreach ($create_sql as $query)
 {
-	$result = mysql_query($query);
-	if (!$result)
-	{
-		$GLOBALS['txp_err_count']++;
-		echo "<b>".$GLOBALS['txp_err_count'].".</b> ".mysql_error()."<br />\n";
-		echo "<!--\n $query \n-->\n";
-		$GLOBALS['txp_install_successful'] = false;
-	}
+    $result = mysql_query($query);
+    if (!$result)
+    {
+        $GLOBALS['txp_err_count']++;
+        echo "<b>".$GLOBALS['txp_err_count'].".</b> ".mysql_error()."<br />\n";
+        echo "<!--\n $query \n-->\n";
+        $GLOBALS['txp_install_successful'] = false;
+    }
 }
 
 // Skip the RPC language fetch when testing.
 if (defined('TXP_TEST'))
 {
-	return;
+    return;
 }
 
 require_once txpath.'/lib/IXRClass.php';
@@ -469,42 +469,42 @@ $client = new IXR_Client('http://rpc.textpattern.com');
 
 if (!$client->query('tups.getLanguage', $prefs['blog_uid'],LANG))
 {
-	// If cannot install from lang file, setup the English lang.
-	if (!install_language_from_file(LANG))
-	{
-		$lang = 'en-gb';
-		include_once txpath.'/setup/en-gb.php';
-		if (!@$lastmod)
-		{
-			$lastmod = '0000-00-00 00:00:00';
-		}
+    // If cannot install from lang file, setup the English lang.
+    if (!install_language_from_file(LANG))
+    {
+        $lang = 'en-gb';
+        include_once txpath.'/setup/en-gb.php';
+        if (!@$lastmod)
+        {
+            $lastmod = '0000-00-00 00:00:00';
+        }
 
-		foreach ($en_gb_lang as $evt_name => $evt_strings)
-		{
-			foreach ($evt_strings as $lang_key => $lang_val)
-			{
-				$lang_val = doSlash($lang_val);
-				if (@$lang_val)
-				{
-					mysql_query("INSERT DELAYED INTO `".PFX."txp_lang` SET lang='en-gb', name='".$lang_key."', event='".$evt_name."', data='".$lang_val."', lastmod='".$lastmod."'");
-				}
-			}
-		}
-	}
+        foreach ($en_gb_lang as $evt_name => $evt_strings)
+        {
+            foreach ($evt_strings as $lang_key => $lang_val)
+            {
+                $lang_val = doSlash($lang_val);
+                if (@$lang_val)
+                {
+                    mysql_query("INSERT DELAYED INTO `".PFX."txp_lang` SET lang='en-gb', name='".$lang_key."', event='".$evt_name."', data='".$lang_val."', lastmod='".$lastmod."'");
+                }
+            }
+        }
+    }
 }
 else
 {
-	$response = $client->getResponse();
-	$lang_struct = unserialize($response);
+    $response = $client->getResponse();
+    $lang_struct = unserialize($response);
 
-	foreach ($lang_struct as $item)
-	{
-		foreach ($item as $name => $value)
-		{
-			$item[$name] = doSlash($value);
-		}
-		mysql_query("INSERT DELAYED INTO `".PFX."txp_lang` SET lang='".LANG."', name='".$item['name']."', event='".$item['event']."', data='".$item['data']."', lastmod='".strftime('%Y%m%d%H%M%S', $item['uLastmod'])."'");
-	}
+    foreach ($lang_struct as $item)
+    {
+        foreach ($item as $name => $value)
+        {
+            $item[$name] = doSlash($value);
+        }
+        mysql_query("INSERT DELAYED INTO `".PFX."txp_lang` SET lang='".LANG."', name='".$item['name']."', event='".$item['event']."', data='".$item['data']."', lastmod='".strftime('%Y%m%d%H%M%S', $item['uLastmod'])."'");
+    }
 }
 
 mysql_query("FLUSH TABLE `".PFX."txp_lang`");
@@ -518,5 +518,5 @@ mysql_query("FLUSH TABLE `".PFX."txp_lang`");
 
 function safe_escape($in = '')
 {
-	return mysql_real_escape_string($in);
+    return mysql_real_escape_string($in);
 }
