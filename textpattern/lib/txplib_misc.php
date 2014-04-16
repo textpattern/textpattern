@@ -5078,7 +5078,7 @@ eod;
  * or for 'href' and 'src' to URL encoded a query string.
  *
  * @param   array|string  $atts  HTML attributes
- * @param   int           $flags ATTS_STRIP_EMPTY
+ * @param   int           $flags TEXTPATTERN_ATTS_STRIP_EMPTY
  * @return  string        HTML attribute list
  * @since   4.6.0
  * @package HTML
@@ -5086,7 +5086,7 @@ eod;
  * echo join_atts(array('class' => 'myClass', 'disabled' => true));
  */
 
-    function join_atts($atts, $flags = ATTS_STRIP_EMPTY)
+    function join_atts($atts, $flags = TEXTPATTERN_ATTS_STRIP_EMPTY)
     {
         if (!is_array($atts)) {
             return $atts ? ' '.trim($atts) : '';
@@ -5095,7 +5095,7 @@ eod;
         $list = array();
 
         foreach ($atts as $name => $value) {
-            if (($flags & ATTS_STRIP_EMPTY && !$value) || $value === false) {
+            if (($flags & TEXTPATTERN_ATTS_STRIP_EMPTY && !$value) || $value === false) {
                 continue;
             } elseif (is_array($value)) {
                 if ($name == 'href' || $name == 'src') {

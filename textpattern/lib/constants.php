@@ -797,7 +797,7 @@ define('LANG_OWNER_SITE', 'site');
  * @see     join_atts()
  */
 
-define('ATTS_STRIP_EMPTY', 0x1);
+define('TEXTPATTERN_ATTS_STRIP_EMPTY', 0x1);
 
 /**
  * Sends an adaptive announcement.
