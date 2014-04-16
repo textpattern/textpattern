@@ -1482,17 +1482,17 @@ EOF;
  * Renders a &lt:script&gt; element.
  *
  * @param  string     $js    JavaScript code
- * @param  int|string $flags Flags SCRIPT_URL | SCRIPT_ATTACH_VERSION, or noscript alternative if a string
+ * @param  int|string $flags Flags TEXTPATTERN_SCRIPT_URL | TEXTPATTERN_SCRIPT_ATTACH_VERSION, or noscript alternative if a string
  * @return string HTML with embedded script element
  * @example
- * echo script_js('/js/script.js', SCRIPT_URL);
+ * echo script_js('/js/script.js', TEXTPATTERN_SCRIPT_URL);
  */
 
     function script_js($js, $flags = '')
     {
         if (is_int($flags)) {
-            if ($flags & SCRIPT_URL) {
-                if ($flags & SCRIPT_ATTACH_VERSION && strpos(txp_version, '-dev') === false) {
+            if ($flags & TEXTPATTERN_SCRIPT_URL) {
+                if ($flags & TEXTPATTERN_SCRIPT_ATTACH_VERSION && strpos(txp_version, '-dev') === false) {
                     $ext = pathinfo($js, PATHINFO_EXTENSION);
 
                     if ($ext) {

@@ -752,7 +752,7 @@ define('INTEGRITY_TABLE', 0x10);
  * @see     script_js()
  */
 
-define('SCRIPT_URL', 0x1);
+define('TEXTPATTERN_SCRIPT_URL', 0x1);
 
 /**
  * Attach version number to script URL if stable.
@@ -765,7 +765,7 @@ define('SCRIPT_URL', 0x1);
  * @see     script_js()
  */
 
-define('SCRIPT_ATTACH_VERSION', 0x2);
+define('TEXTPATTERN_SCRIPT_ATTACH_VERSION', 0x2);
 
 /**
  * The localised string is owned by the core system.

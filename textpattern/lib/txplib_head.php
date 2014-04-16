@@ -94,10 +94,10 @@
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow">
 <title><?php echo admin_title($pagetitle)?></title><?php echo
-        script_js('vendors/jquery/jquery/jquery.js', SCRIPT_URL).
-        script_js('vendors/jquery/ui/js/jquery-ui.js', SCRIPT_URL).
+        script_js('vendors/jquery/jquery/jquery.js', TEXTPATTERN_SCRIPT_URL).
+        script_js('vendors/jquery/ui/js/jquery-ui.js', TEXTPATTERN_SCRIPT_URL).
         // TODO: Remove jQuery migrate plugin before release
-        script_js('//code.jquery.com/jquery-migrate-1.2.1.js', SCRIPT_URL).
+        script_js('//code.jquery.com/jquery-migrate-1.2.1.js', TEXTPATTERN_SCRIPT_URL).
         script_js(
             'var textpattern = ' . json_encode(array(
                 'event' => $event,
@@ -112,7 +112,7 @@
                     '#page-link #link-title, #page-link #link-description'),
                 'production_status' => get_pref('production_status'),
         )).';').
-        script_js('textpattern.js', SCRIPT_URL).n;
+        script_js('textpattern.js', TEXTPATTERN_SCRIPT_URL).n;
     gTxtScript(array('form_submission_error', 'are_you_sure', 'cookies_must_be_enabled', 'ok', 'save', 'publish'));
     // Mandatory un-themable Textpattern core styles ?>
 <style>
