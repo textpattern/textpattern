@@ -51,6 +51,7 @@ class Textpattern_Textfilter_Nl2Br extends Textpattern_Textfilter_Base implement
     public function filter($thing, $options)
     {
         parent::filter($thing, $options);
+
         return nl2br(trim($thing));
     }
 }

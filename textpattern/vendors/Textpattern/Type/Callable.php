@@ -124,6 +124,7 @@ class Textpattern_Type_Callable implements Textpattern_Type_TypeInterface
             }
 
             array_unshift($callable, $class);
+
             return implode($separator, array_filter($callable, 'is_scalar'));
         }
 

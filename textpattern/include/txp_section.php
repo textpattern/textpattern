@@ -423,6 +423,7 @@ function sec_section_list($message = '')
 
         if (!$rs) {
             sec_section_list(array(gTxt('unknown_section'), E_ERROR));
+
             return;
         }
 
@@ -655,6 +656,7 @@ function section_delete()
     if ($sections && safe_delete('txp_section', 'name in ('.join(',', quote_list($sections)).')')) {
         callback_event('sections_deleted', '', 0, $sections);
         sec_section_list(gTxt('section_deleted', array('{name}' => join(', ', $sections))));
+
         return;
     }
 

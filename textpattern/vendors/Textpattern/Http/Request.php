@@ -203,6 +203,7 @@ class Textpattern_Http_Request
 
         if ($languages === null) {
             $accepts = array_keys($accepts);
+
             return array_shift($accepts);
         }
 
@@ -249,6 +250,7 @@ class Textpattern_Http_Request
 
         if ($encodings === null) {
             $accepts = array_keys($accepts);
+
             return array_shift($accepts);
         }
 
@@ -681,6 +683,7 @@ class Textpattern_Http_Request
             }
 
             $out = doArray($out, 'deCRLF');
+
             return doArray($out, 'deNull');
         }
 
@@ -775,6 +778,7 @@ class Textpattern_Http_Request
         }
 
         array_multisort($sort, SORT_DESC, $accepts);
+
         return $accepts;
     }
 }

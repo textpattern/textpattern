@@ -400,6 +400,7 @@ function safe_hed($toUnicode)
         }
         $str = strtr($toUnicode, $ttr);
     }
+
     return $str;
 }
 
@@ -428,5 +429,6 @@ function fixup_for_feed($toFeed, $permalink)
     // Encode and entify.
     $txt = preg_replace(array('/</','/>/',"/'/",'/"/'), array('&#60;','&#62;','&#039;','&#34;'), $txt);
     $txt = preg_replace("/&(?![#0-9]+;)/i",'&amp;', $txt);
+
     return $txt;
 }

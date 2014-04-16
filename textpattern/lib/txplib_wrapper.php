@@ -473,6 +473,7 @@ class TXP_Wrapper
     {
         if ($this->loggedin && has_privs('article', $this->txp_user)) {
             $name = doSlash($name);
+
             return safe_row('*', 'txp_category', "name='$name' AND type='article'");
         }
 
@@ -494,6 +495,7 @@ class TXP_Wrapper
     {
         if ($this->loggedin && has_privs('article', $this->txp_user)) {
             $id = assert_int($id);
+
             return safe_row('*', 'txp_category', "id = $id");
         }
 
@@ -515,6 +517,7 @@ class TXP_Wrapper
     {
         if ($this->loggedin && has_privs('article', $this->txp_user)) {
             $title = doSlash($title);
+
             return safe_row('*', 'txp_category', "title='$title' AND type='article'");
         }
 
@@ -828,6 +831,7 @@ class TXP_Wrapper
             // Update the last access time.
             $safe_user = addslashes($user);
             safe_update("txp_users", "last_access = now()", "name = '$safe_user'");
+
             return true;
         }
 

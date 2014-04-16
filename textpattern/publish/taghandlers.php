@@ -2452,6 +2452,7 @@ function comment_web()
         if (!preg_match('!^https?://|^#|^/[^/]!', $thiscomment['web'])) {
             $thiscomment['web'] = 'http://'.$thiscomment['web'];
         }
+
         return txpspecialchars($thiscomment['web']);
     }
 
@@ -3735,6 +3736,7 @@ function doPermlink($text, $plink, $Title, $url_title)
     global $url_mode;
     $Title = ($url_title) ? $url_title : stripSpace($Title);
     $Title = ($url_mode) ? $Title : '';
+
     return preg_replace("/<(txp:permlink)>(.*)<\/\\1>/sU",
         "<a href=\"".$plink.$Title."\" title=\"".gTxt('permanent_link')."\">$2</a>", $text);
 }
@@ -3755,6 +3757,7 @@ function doArticleHref($ID, $Title, $url_title, $Section)
     trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
 
     $conTitle = ($url_title) ? $url_title : stripSpace($Title);
+
     return ($GLOBALS['url_mode'])
     ?    tag($Title, 'a', ' href="'.hu.$Section.'/'.$ID.'/'.$conTitle.'"')
     :    tag($Title, 'a', ' href="'.hu.'index.php?id='.$ID.'"');
@@ -4529,6 +4532,7 @@ function file_download_size($atts)
 
     if (isset($thisfile['size'])) {
         $format_unit = strtolower(substr($format, 0, 1));
+
         return format_filesize($thisfile['size'], $decimals, $format_unit);
     } else {
         return '';

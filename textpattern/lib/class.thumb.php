@@ -437,6 +437,7 @@ class wet_thumb
             } else {
                 imagedestroy($this->_DST['image']);
                 imagedestroy($this->_SRC['image']);
+
                 return false;
             }
         } elseif ($this->_DST['type'] == 2) {

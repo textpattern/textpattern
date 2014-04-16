@@ -109,6 +109,7 @@ class Textpattern_Mail_Encode
         $end = '?=';
         $sep = IS_WIN ? "\r\n" : "\n";
         preg_match_all($pcre, $string, $matches);
+
         return $start . join($end.$sep.' '.$start, array_map('base64_encode', $matches[0])) . $end;
     }
 

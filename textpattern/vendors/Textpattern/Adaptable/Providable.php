@@ -63,6 +63,7 @@ abstract class Textpattern_Adaptable_Providable implements Textpattern_Adaptable
     public function setAdapter(Textpattern_Adaptable_Adapter $adapter)
     {
         $this->adapter = $adapter;
+
         return $this;
     }
 

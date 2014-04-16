@@ -528,6 +528,7 @@ function list_multi_edit()
                 callback_event('articles_deleted', '', 0, $selected);
                 callback_event('multi_edited.articles', 'delete', 0, compact('selected', 'field', 'value'));
                 update_lastmod();
+
                 return list_list(messenger('article', join(', ', $selected), 'deleted'));
             }
 

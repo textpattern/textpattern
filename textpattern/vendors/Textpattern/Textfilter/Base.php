@@ -126,6 +126,7 @@ class Textpattern_Textfilter_Base implements Textpattern_Textfilter_Interface
     public function filter($thing, $options)
     {
         $this->setOptions($options);
+
         return $thing;
     }
 

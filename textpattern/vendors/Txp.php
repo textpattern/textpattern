@@ -50,6 +50,7 @@ class Txp implements Textpattern_Container_FactoryInterface
     public static function get($name)
     {
         $args = func_get_args();
+
         return self::getContainer()->getInstance(array_shift($args), $args);
     }
 

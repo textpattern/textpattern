@@ -150,6 +150,7 @@ class Textpattern_Mail_Adapter_Mail implements Textpattern_Mail_AdapterInterface
         }
 
         $this->encoded->subject = $this->encoder->header($this->encoder->escapeHeader($subject), 'text');
+
         return $this;
     }
 
@@ -185,6 +186,7 @@ class Textpattern_Mail_Adapter_Mail implements Textpattern_Mail_AdapterInterface
 
         $this->mail->headers[$name] = $value;
         $this->encoded->headers[$name] = $this->encoder->header($this->encoder->escapeHeader($value), 'phrase');
+
         return $this;
     }
 
@@ -252,6 +254,7 @@ class Textpattern_Mail_Adapter_Mail implements Textpattern_Mail_AdapterInterface
         if (filter_var($address, FILTER_VALIDATE_EMAIL)) {
             $this->mail->$field = array_merge($this->mail->$field, array($address => $name));
             $this->encoded->$field = $this->encoder->addressList($this->mail->$field);
+
             return $this;
         }
 

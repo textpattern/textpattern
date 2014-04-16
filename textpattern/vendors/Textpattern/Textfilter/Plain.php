@@ -50,6 +50,7 @@ class Textpattern_Textfilter_Plain extends Textpattern_Textfilter_Base implement
     public function filter($thing, $options)
     {
         parent::filter($thing, $options);
+
         return trim($thing);
     }
 }

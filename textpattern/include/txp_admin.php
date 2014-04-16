@@ -71,6 +71,7 @@ function change_email()
 
     if (!is_valid_email($new_email)) {
         author_list(array(gTxt('email_required'), E_ERROR));
+
         return;
     }
 

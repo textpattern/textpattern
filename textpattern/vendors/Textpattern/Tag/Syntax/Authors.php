@@ -101,6 +101,7 @@ class Textpattern_Tag_Syntax_Authors
             }
 
             unset($thisauthor);
+
             return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
         }
 

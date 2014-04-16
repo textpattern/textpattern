@@ -224,6 +224,7 @@ class Textpattern_Type_String implements Textpattern_Type_TypeInterface
     public function addSlashes()
     {
         $this->string = addslashes($this->string);
+
         return $this;
     }
 
@@ -242,6 +243,7 @@ class Textpattern_Type_String implements Textpattern_Type_TypeInterface
     public function html($flags = ENT_QUOTES, $double_encode = true)
     {
         $this->string = htmlspecialchars($this->string, $flags, $this->encoding, $double_encode);
+
         return $this;
     }
 
@@ -283,6 +285,7 @@ class Textpattern_Type_String implements Textpattern_Type_TypeInterface
     public function replace($from, $to)
     {
         $this->string = str_replace($from, $to, $this->string);
+
         return $this;
     }
 
@@ -302,6 +305,7 @@ class Textpattern_Type_String implements Textpattern_Type_TypeInterface
     public function tr($from, $to = null)
     {
         $this->string = strtr($this->string, $from, $to);
+
         return $this;
     }
 
@@ -319,6 +323,7 @@ class Textpattern_Type_String implements Textpattern_Type_TypeInterface
     public function trim($characters = "\t\n\r\0\x0B")
     {
         $this->string = trim($this->string, $characters);
+
         return $this;
     }
 
@@ -336,6 +341,7 @@ class Textpattern_Type_String implements Textpattern_Type_TypeInterface
     public function ltrim($characters = "\t\n\r\0\x0B")
     {
         $this->string = ltrim($this->string, $characters);
+
         return $this;
     }
 
@@ -353,6 +359,7 @@ class Textpattern_Type_String implements Textpattern_Type_TypeInterface
     public function rtrim($characters = "\t\n\r\0\x0B")
     {
         $this->string = rtrim($this->string, $characters);
+
         return $this;
     }
 
@@ -371,6 +378,7 @@ class Textpattern_Type_String implements Textpattern_Type_TypeInterface
     public function chunk($length = 76, $delimiter = n)
     {
         $this->string = chunk_split($this->string, $length, $delimiter);
+
         return $this;
     }
 
@@ -390,6 +398,7 @@ class Textpattern_Type_String implements Textpattern_Type_TypeInterface
     public function wordWrap($length = 75, $delimiter = n, $cut = false)
     {
         $this->string = wordwrap($this->string, $length, $delimiter, $cut);
+
         return $this;
     }
 

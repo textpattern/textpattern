@@ -70,6 +70,7 @@ class Textpattern_Container_Container implements Textpattern_Container_Container
         }
 
         $this->registered[$alias] = $class;
+
         return $this;
     }
 
@@ -80,6 +81,7 @@ class Textpattern_Container_Container implements Textpattern_Container_Container
     public function remove($alias)
     {
         unset($this->registered[$alias], $this->instances[$alias]);
+
         return $this;
     }
 

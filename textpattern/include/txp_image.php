@@ -637,6 +637,7 @@ function thumbnail_insert()
 
     if (!has_privs('image.edit') && !($author === $txp_user && has_privs('image.edit.own'))) {
         image_list(gTxt('restricted_area'));
+
         return;
     }
 
@@ -646,6 +647,7 @@ function thumbnail_insert()
 
     if (empty($file)) {
         image_edit(array(upload_get_errormsg(UPLOAD_ERR_NO_FILE), E_ERROR), $id);
+
         return;
     }
 
@@ -688,6 +690,7 @@ function image_save()
 
     if (!has_privs('image.edit') && !($author === $txp_user && has_privs('image.edit.own'))) {
         image_list(gTxt('restricted_area'));
+
         return;
     }
 

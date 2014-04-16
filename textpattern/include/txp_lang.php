@@ -476,6 +476,7 @@ function get_lang_files()
 
     if (!is_dir($lang_dir)) {
         trigger_error('Lang directory is not a directory: '.$lang_dir, E_USER_WARNING);
+
         return array();
     }
 

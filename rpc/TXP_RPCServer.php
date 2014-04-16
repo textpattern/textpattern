@@ -577,6 +577,7 @@ EOD;
                 'dateCreated' => new IXR_Date($rs['uPosted'] + tz_offset())
             );
         }
+
         return $out;
     }
 
@@ -909,7 +910,9 @@ EOD;
             'Body' => str_replace('\n', n, $body)
         );
 
-        if (isset($title)) $contents['Title'] = $title;
+        if (isset($title)) {
+            $contents['Title'] = $title;
+        }
 
         return $contents;
     }

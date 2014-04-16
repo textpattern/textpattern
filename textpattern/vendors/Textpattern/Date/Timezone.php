@@ -223,6 +223,7 @@ class Textpattern_Date_Timezone
             }
 
             $dateTime = new DateTime($timestamp, $timezone);
+
             return (bool) $dateTime->format('I');
         } catch (Exception $e) {
         }

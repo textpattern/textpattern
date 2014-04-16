@@ -498,6 +498,7 @@ class TagBuilderTags
             eInput('tag').
             sInput('build').
             hInput('tag_name', $tag_name);
+
             return $tagbuilder->$method($tag_name);
         }
 

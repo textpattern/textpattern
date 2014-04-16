@@ -295,6 +295,7 @@ function escape_js($js)
 function escape_output($str)
 {
     trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'txpspecialchars')), E_USER_NOTICE);
+
     return txpspecialchars($str);
 }
 
@@ -311,6 +312,7 @@ function escape_output($str)
 function escape_tags($str)
 {
     trigger_error(gTxt('deprecated_function', array('{name}' => __FUNCTION__)), E_USER_NOTICE);
+
     return strtr($str, array(
         '<' => '&#60;',
         '>' => '&#62;',
@@ -719,6 +721,7 @@ function the_privileged($res)
 function get_groups()
 {
     global $txp_groups;
+
     return doArray($txp_groups, 'gTxt');
 }
 
@@ -738,6 +741,7 @@ function get_groups()
 function sizeImage($name)
 {
     $size = @getimagesize($name);
+
     return is_array($size) ? $size[3] : false;
 }
 
@@ -2039,8 +2043,8 @@ function pluggable_ui($event, $element, $default = '')
     // Signature for called functions:
     // string my_called_func(string $event, string $step, string $default_markup[, mixed $context_data...])
     $ui = call_user_func_array('callback_event', array('event' => $event, 'step' => $element, 'pre' => 0) + $argv);
-    // Either plugins provided a user interface, or we render our own.
 
+    // Either plugins provided a user interface, or we render our own.
     return ($ui === '') ? $default : $ui;
 }
 
@@ -2997,8 +3001,8 @@ function tz_offset($timestamp = null)
 
     extract(getdate($timestamp));
     $serveroffset = gmmktime($hours, $minutes, 0, $mon, $mday, $year) - mktime($hours, $minutes, 0, $mon, $mday, $year);
-
     $real_dst = timezone::is_dst($timestamp, $timezone_key);
+
     return $gmtoffset - $serveroffset + ($real_dst ? 3600 : 0);
 }
 
@@ -3354,6 +3358,7 @@ function shift_uploaded_file($f, $dest)
 
     if (@copy($f, $dest)) {
         unlink($f);
+
         return true;
     }
 
@@ -5569,6 +5574,7 @@ function doQuote($val)
 function quote_list($in)
 {
     $out = doSlash($in);
+
     return doArray($out, 'doQuote');
 }
 

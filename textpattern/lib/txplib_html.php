@@ -741,6 +741,7 @@ function td($content = '', $width = 0, $class = '', $id = '')
 function tda($content, $atts = '')
 {
     $content = ($content === '') ? sp : $content;
+
     return n.tag($content, 'td', $atts);
 }
 

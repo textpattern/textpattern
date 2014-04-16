@@ -159,6 +159,7 @@ class Textpattern_Textpack_String_Iterator extends Textpattern_Iterator_FileIter
             if ($string = $this->parser->parse($buffer)) {
                 $this->current = $string[0];
                 $this->key = $this->current['name'];
+
                 return;
             }
         }
