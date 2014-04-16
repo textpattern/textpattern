@@ -1,4 +1,5 @@
 <?php
+
 /*
 XML-RPC Server for Textpattern 4.0.x
 http://txp.kusor.com/rpc-api
@@ -8,6 +9,7 @@ http://txp.kusor.com/rpc-api
 
 #TODO: change error reporting to E_ALL, including E_NOTICE to detect subtle bugs?
 error_reporting(E_ALL & ~E_NOTICE);
+
 #TODO: if display_errors is set to 0... who will ever see errors?
 ini_set("display_errors","0");
 
@@ -29,6 +31,7 @@ if (@ini_get('register_globals')) {
     // As the deliberately awkward-named local variable $_txpfoo MUST NOT be unset to avoid notices further down
     // we must remove any potentially identical-named global from the list of global names here.
     unset($_txpg['_txpfoo']);
+
     foreach ($_txpg as $_txpfoo => $value) {
         if (!in_array($_txpfoo, array(
             'GLOBALS',
@@ -56,43 +59,71 @@ require_once txpath.'/lib/admin_config.php';
 require_once txpath.'/lib/IXRClass.php';
 
 if ($connected && safe_query("describe `".PFX."textpattern`")) {
+
 #TODO: where is dbversion used?
     $dbversion = safe_field('val','txp_prefs',"name = 'version'");
 
-    // Hold it globally, instead of do several calls to the function
+    // Hold it globally, instead of do several calls to the function.
     $prefs = get_prefs();
     extract($prefs);
 
-    if (!defined('LANG')) define("LANG", $language);
-    if (!defined('hu')) define("hu", 'http://'.$siteurl.'/');
-    if (!defined('txrpcpath')) define('txrpcpath', hu.'rpc/');
+    if (!defined('LANG')) {
+        define("LANG", $language);
+    }
 
-    if (!empty($locale)) setlocale(LC_ALL, $locale);
+    if (!defined('hu')) {
+        define("hu", 'http://'.$siteurl.'/');
+    }
+
+    if (!defined('txrpcpath')) {
+        define('txrpcpath', hu.'rpc/');
+    }
+
+    if (!empty($locale)) {
+        setlocale(LC_ALL, $locale);
+    }
+
     $textarray = load_lang(LANG);
 
 #TODO: include txplib_html instead of duplicating?
-    // from txplib_html.php
-    if (!defined('t'))  define("t", "\t");
-    if (!defined('n'))  define("n", "\n");
-    if (!defined('br')) define("br", "<br />");
-    if (!defined('sp')) define("sp", "&#160;");
-    if (!defined('a'))  define("a", "&#38;");
+    // From txplib_html.php.
+    if (!defined('t')) {
+        define("t", "\t");
+    }
+
+    if (!defined('n')) {
+        define("n", "\n");
+    }
+
+    if (!defined('br')) {
+        define("br", "<br />");
+    }
+
+    if (!defined('sp')) {
+        define("sp", "&#160;");
+    }
+
+    if (!defined('a')) {
+        define("a", "&#38;");
+    }
 }
 
 require_once txpath.'/lib/txplib_wrapper.php';
 require_once 'TXP_RPCServer.php';
 
-// run the XML-RPC Server
+// Run the XML-RPC server.
 $server = new TXP_RPCServer();
 $server->serve();
 
 #TODO: remove before official release?
-// save some debug logs:
+// Save some debug logs.
 function write_log()
 {
     global $HTTP_RAW_POST_DATA;
 
-    if (!defined('txpdmpfile')) define('txpdmpfile', 'txpxmlrpc.txt');
+    if (!defined('txpdmpfile')) {
+        define('txpdmpfile', 'txpxmlrpc.txt');
+    }
 
     $fp = @fopen(dirname(__FILE__).DIRECTORY_SEPARATOR.'xmlrpclog','a');
 

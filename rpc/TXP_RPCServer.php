@@ -1,4 +1,5 @@
 <?php
+
 /*
 XML-RPC Server for Textpattern 4.0.x
 http://txp.kusor.com/rpc-api
@@ -17,10 +18,10 @@ class TXP_RPCServer extends IXR_IntrospectionServer
         global $enable_xmlrpc_server;
 
         $this->IXR_IntrospectionServer();
-        // Add API Methods as callbacks:
 
+        // Add API Methods as callbacks.
         if ($enable_xmlrpc_server) {
-            // Blogger API [http://www.blogger.com/developers/api/] - add as server capability
+            // Blogger API [http://www.blogger.com/developers/api/] - add as server capability.
             $this->capabilities['bloggerAPI'] = array(
                 'specUrl'     => 'http://www.blogger.com/developers/api/',
                 'specVersion' => 2
@@ -62,8 +63,8 @@ class TXP_RPCServer extends IXR_IntrospectionServer
                 'updates section template - main=default template, archiveIndex=section template'
             );
 
-            // non-official Blogger API methods - supported by XML-RPC clients as BloggerAPI2
-            // Place all this info on a public URI
+            // Non-official Blogger API methods - supported by XML-RPC clients as BloggerAPI2.
+            // Place all this info on a public URI.
             $this->addCallback(
                 'blogger.getPost',
                 'this:blogger_getPost',
@@ -83,12 +84,12 @@ class TXP_RPCServer extends IXR_IntrospectionServer
                 'retrieves a list of posts (default 10)'
             );
 
-            // metaWeblog API[http://www.xmlrpc.com/metaWeblogApi] - add as server capability
+            // metaWeblog API[http://www.xmlrpc.com/metaWeblogApi] - add as server capability.
             $this->capabilities['metaWeblog API'] = array(
                 'specUrl'     => 'http://www.xmlrpc.com/metaWeblogApi',
                 'specVersion' => 1
             );
-            // Implements also MovableType extension of the API methods
+            // Implements also MovableType extension of the API methods.
             $this->addCallback(
                 'metaWeblog.getPost',
                 'this:metaWeblog_getPost',
@@ -119,14 +120,15 @@ class TXP_RPCServer extends IXR_IntrospectionServer
                 array('array', 'string', 'string', 'string', 'int'),
                 'retrieves a given number of recent posts'
             );
+
 #TODO: metaWeblog.newMediaObject (blogid, username, password, struct) returns struct
 
-            // MovableType API[] - add as server capability
+            // MovableType API[] - add as server capability.
             $this->capabilities['MovableType API'] = array(
                 'specUrl'     => 'http://www.sixapart.com/movabletype/docs/mtmanual_programmatic.html#xmlrpc%20api',
                 'specVersion' => 1
             );
-            // Not completelly implemented.
+            // Not completely implemented.
             $this->addCallback(
                 'mt.getRecentPostTitles',
                 'this:mt_getRecentPostTitles',
@@ -172,34 +174,33 @@ class TXP_RPCServer extends IXR_IntrospectionServer
         }
     }
 
-    // Override serve method in order to keep requests logs too
-    // while dealing with unknown clients
+    // Override serve method in order to keep requests logs too while dealing with unknown clients.
     function serve($data = false)
     {
         if (!$data) {
             global $HTTP_RAW_POST_DATA;
 
             if (!$HTTP_RAW_POST_DATA) {
-                // RSD lets them find us via GET requests
+                // RSD lets them find us via GET requests.
                 $this->rsd();
                 exit;
             }
 
             $rx = '/<?xml.*encoding=[\'"](.*?)[\'"].*?>/m';
 
-            // first, handle the known UAs in order to serve proper content
+            // First, handle the known UAs in order to serve proper content.
             if (strpos('w.bloggar', $_SERVER['HTTP_USER_AGENT']) !== false) {
                 $encoding = 'iso-8859-1';
             }
-            // find for supplied encoding before to try other things
+            // Find for supplied encoding before to try other things.
             elseif (preg_match($rx, $HTTP_RAW_POST_DATA, $xml_enc)) {
                 $encoding = strtolower($xml_enc[1]);
             }
-            // try utf-8 detect
+            // Try UTF-8 detect.
             elseif (preg_match('/^([\x00-\x7f]|[\xc2-\xdf][\x80-\xbf]|\xe0[\xa0-\xbf][\x80-\xbf]|[\xe1-\xec][\x80-\xbf]{2}|\xed[\x80-\x9f][\x80-\xbf]|[\xee-\xef][\x80-\xbf]{2}|f0[\x90-\xbf][\x80-\xbf]{2}|[\xf1-\xf3][\x80-\xbf]{3}|\xf4[\x80-\x8f][\x80-\xbf]{2})*$/', $HTTP_RAW_POST_DATA) === 1) {
                 $encoding = 'utf-8';
             }
-            // otherwise, use iso-8859-1
+            // Otherwise, use ISO-8859-1.
             else {
                 $encoding = 'iso-8859-1';
             }
@@ -212,13 +213,13 @@ class TXP_RPCServer extends IXR_IntrospectionServer
                 case 'iso-8859-1':
 #TODO: if utf8 conversion fails, throw: 32701 ---> parse error. unsupported encoding?
 #see: http://xmlrpc-epi.sourceforge.net/specs/rfc.fault_codes.php
-                    // this will fail on parser if utf8_encode is unavailiable
+                    // This will fail on parser if utf8_encode is unavailiable.
                     $data = (function_exists('utf8_encode') && is_callable('utf8_encode'))? utf8_encode($HTTP_RAW_POST_DATA) : $HTTP_RAW_POST_DATA;
                     break;
 
                 default:
 #TODO: if utf8 conversion fails, throw: 32701 ---> parse error. unsupported encoding?
-                    // this will fail on parser if mb_convert_encoding is unavailiable
+                    // This will fail on parser if mb_convert_encoding is unavailiable.
                     $data = (function_exists('mb_convert_encoding') && is_callable('mb_convert_encoding'))? mb_convert_encoding($HTTP_RAW_POST_DATA, 'utf-8', $encoding) : $HTTP_RAW_POST_DATA;
                     break;
             }
@@ -241,11 +242,11 @@ class TXP_RPCServer extends IXR_IntrospectionServer
             $this->error($result);
         }
 
-        // Encode the result
+        // Encode the result.
         $r = new IXR_Value($result);
         $resultxml = $r->getXml();
 
-        // Create the XML
+        // Create the XML.
         $xml = <<<EOD
 <methodResponse>
     <params>
@@ -262,18 +263,18 @@ EOD;
         return $this->output($xml, $encoding);
     }
 
-    // Override default utf-8 output, if needed
+    // Override default UTF-8 output, if needed.
     function output($xml, $enc = 'utf-8')
     {
-        // Be kind with non-utf-8 capable clients
+        // Be kind with non-UTF-8 capable clients.
         if ($enc != 'utf-8') {
             if ($enc == 'iso-8859-1' && function_exists('utf8_decode') && is_callable('utf8_decode')) {
                 $xml = utf8_decode($xml);
             } elseif (function_exists('mb_convert_encoding') && is_callable('mb_convert_encoding')) {
                 $xml = mb_convert_encoding($xml, $enc, 'utf-8');
             } else {
-# TODO: shouldn't this throw an error instead of serving non-utf8 content as utf8?
-                // if no decoding possible, serve contents as utf-8
+# TODO: shouldn't this throw an error instead of serving non-UTF-8 content as UTF-8?
+                // If no decoding possible, serve contents as UTF-8.
                 $enc = 'utf-8';
             }
         }
@@ -289,8 +290,8 @@ EOD;
     }
 
 //---------------------------------------------------------
-// Really Simple Discoverability 1.0 response
 
+    // Really Simple Discoverability 1.0 response.
     function rsd()
     {
         global $enable_xmlrpc_server;
@@ -318,8 +319,8 @@ EOD;
     }
 
 //---------------------------------------------------------
-// Blogger API
 
+    // Blogger API.
     function blogger_newPost($params)
     {
         list($appkey, $blogid, $username, $password, $content, $publish) = $params;
@@ -504,8 +505,8 @@ EOD;
     }
 
 //---------------------------------------------------------
-// Blogger 2.0
 
+    // Blogger 2.0.
     function blogger_getPost($params)
     {
         list($appkey, $postid, $username, $password) = $params;
@@ -580,8 +581,8 @@ EOD;
     }
 
 //---------------------------------------------------------
-// metaWeblog API
 
+    // metaWeblog API.
     function metaWeblog_getPost($params)
     {
         list($postid, $username, $password) = $params;
@@ -705,8 +706,8 @@ EOD;
     }
 
 //---------------------------------------------------------
-// MovableType API
 
+    // MovableType API.
     function mt_getRecentPostTitles($params)
     {
         list($blogid, $username, $password, $numberOfPosts) = $params;
@@ -822,7 +823,7 @@ EOD;
     }
 
 #TODO: explain what 'expecific' is ;)
-    // supported to avoid some client expecific behaviour
+    // Supported to avoid some client expecific behaviour.
     function mt_publishPost($params)
     {
         list($postid, $username, $password) = $params;
@@ -893,12 +894,12 @@ EOD;
      and String name (the name of the file). The type key (media type of the file) is currently ignored.
      */
 
-    //code refactoring for blogger_newPost & blogger_editPost
+    // Code refactoring for blogger_newPost and blogger_editPost.
     function _getBloggerContents($content)
     {
         $body = $content;
 
-        // Trick to add title, category and excerpts using XML-RPC
+        // Trick to add title, category and excerpts using XML-RPC.
         if (preg_match('/<title>(.*)<\/title>(.*)/s', $content, $matches)) {
             $body  = $matches[2];
             $title = $matches[1];
@@ -913,7 +914,7 @@ EOD;
         return $contents;
     }
 
-    //code refactoring for metaWeblog_newPost & metaweblog_EditPost
+    // Code refactoring for metaWeblog_newPost and metaweblog_EditPost.
     function _getMetaWeblogContents($struct, $publish, $txp)
     {
         global $gmtoffset, $is_dst;
@@ -943,13 +944,13 @@ EOD;
 
         if (isset($struct['dateCreated'])) {
             if ($struct['dateCreated']->tz == 'Z') {
-                // GMT-based posting time; transform into server time zone
+                // GMT-based posting time; transform into server time zone.
                 $posted = $struct['dateCreated']->getTimestamp() - tz_offset() + $gmtoffset + ($is_dst ? 3600 : 0);
             } elseif (!$struct['dateCreated']->tz) {
-                // posting in an unspecified time zone: Assume site time.
+                // Posting in an unspecified time zone: Assume site time.
                 $posted = $struct['dateCreated']->getTimestamp() - tz_offset();
             } else {
-                // numeric time zone offsets
+                // Numeric time zone offsets.
                 if (preg_match('/([+-][0-9]{2})([0-9]{2})/', $struct['dateCreated']->tz, $t)) {
                     $tz = $t[1] * 3600 + $t[2] * 60;
                     $posted = $struct['dateCreated']->getTimestamp() - tz_offset() + $gmtoffset + ($is_dst ? 3600 : 0) - $tz;
@@ -957,7 +958,9 @@ EOD;
             }
         }
 
-        if (isset($posted)) $contents['Posted'] = date('Y-m-d H:i:s', $posted);
+        if (isset($posted)) {
+            $contents['Posted'] = date('Y-m-d H:i:s', $posted);
+        }
 
         // MovableType Implementation Add ons
         if (isset($struct['mt_allow_comments'])) {
@@ -989,9 +992,9 @@ EOD;
         return $contents;
     }
 
-    // common code to metaWeblog_getPost and metaWeblog_getRecentPosts
+    // Common code to metaWeblog_getPost and metaWeblog_getRecentPosts
     // could not be this placed on a different file from taghandlers?
-    // remove if it is the case
+    // remove if it is the case.
     function _buildMetaWeblogStruct($rs, $txp)
     {
         global $permlink_mode, $is_dst, $gmtoffset;
@@ -1023,7 +1026,7 @@ EOD;
                 break;
 
             default:
-                //assume messy mode?
+                // Assume messy mode?
                 $url = hu.'?id='.$rs['ID'];
                 break;
         }
@@ -1044,9 +1047,9 @@ EOD;
             'title'       => $rs['Title'],
         );
 
-        $out['dateCreated']->tz = 'Z'; // GMT
+        $out['dateCreated']->tz = 'Z'; // GMT.
 
-        // MovableType Implementation Add ons
+        // MovableType Implementation Add ons.
         if (isset($rs['Annotate']) && !empty($rs['Annotate'])) {
             $out['mt_allow_comments'] = intval($rs['Annotate']);
         }
