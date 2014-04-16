@@ -43,19 +43,19 @@
  * log_hit(200);
  */
 
-    function log_hit($status)
-    {
-        global $nolog, $logging;
-        callback_event('log_hit');
+function log_hit($status)
+{
+    global $nolog, $logging;
+    callback_event('log_hit');
 
-        if (!isset($nolog) && $status != 404) {
-            if ($logging == 'refer') {
-                logit('refer', $status);
-            } elseif ($logging == 'all') {
-                logit('', $status);
-            }
+    if (!isset($nolog) && $status != 404) {
+        if ($logging == 'refer') {
+            logit('refer', $status);
+        } elseif ($logging == 'all') {
+            logit('', $status);
         }
     }
+}
 
 /**
  * Writes a record to the visitor log using the current visitor's information.
@@ -70,63 +70,63 @@
  * @see    log_hit()
  */
 
-    function logit($r = '', $status = 200)
-    {
-        global $prefs, $pretext;
+function logit($r = '', $status = 200)
+{
+    global $prefs, $pretext;
 
-        if (!isset($pretext['request_uri'])) {
-            return;
-        }
-
-        $host = $ip = (string) remote_addr();
-        $protocol = false;
-        $referer = serverSet('HTTP_REFERER');
-
-        if ($referer) {
-            foreach (do_list(LOG_REFERER_PROTOCOLS) as $option) {
-                if (strpos($referer, $option.'://') === 0) {
-                    $protocol = $option;
-                    $referer = substr($referer, strlen($protocol)+3);
-                    break;
-                }
-            }
-
-            if (!$protocol || ($protocol === 'https' && PROTOCOL !== 'https://')) {
-                $referer = '';
-            } elseif (preg_match('/^[^\.]*\.?'.preg_quote(preg_replace('/^www\./', '', SITE_HOST), '/').'/i', $referer)) {
-                $referer = '';
-            } else {
-                $referer = $protocol.'://'.clean_url($referer);
-            }
-        }
-
-        if ($r == 'refer' && !$referer) {
-            return;
-        }
-
-        if (!empty($prefs['use_dns'])) {
-            // A crude rDNS cache.
-            if (($h = safe_field('host', 'txp_log', "ip='".doSlash($ip)."' limit 1")) !== false) {
-                $host = $h;
-            } else {
-                // Double-check the rDNS.
-                $host = @gethostbyaddr($ip);
-
-                if ($host !== $ip && @gethostbyname($host) !== $ip) {
-                    $host = $ip;
-                }
-            }
-        }
-
-        insert_logit(array(
-            'uri'    => $pretext['request_uri'],
-            'ip'     => $ip,
-            'host'   => $host,
-            'status' => $status,
-            'method' => serverSet('REQUEST_METHOD'),
-            'ref'    => $referer,
-        ));
+    if (!isset($pretext['request_uri'])) {
+        return;
     }
+
+    $host = $ip = (string) remote_addr();
+    $protocol = false;
+    $referer = serverSet('HTTP_REFERER');
+
+    if ($referer) {
+        foreach (do_list(LOG_REFERER_PROTOCOLS) as $option) {
+            if (strpos($referer, $option.'://') === 0) {
+                $protocol = $option;
+                $referer = substr($referer, strlen($protocol)+3);
+                break;
+            }
+        }
+
+        if (!$protocol || ($protocol === 'https' && PROTOCOL !== 'https://')) {
+            $referer = '';
+        } elseif (preg_match('/^[^\.]*\.?'.preg_quote(preg_replace('/^www\./', '', SITE_HOST), '/').'/i', $referer)) {
+            $referer = '';
+        } else {
+            $referer = $protocol.'://'.clean_url($referer);
+        }
+    }
+
+    if ($r == 'refer' && !$referer) {
+        return;
+    }
+
+    if (!empty($prefs['use_dns'])) {
+        // A crude rDNS cache.
+        if (($h = safe_field('host', 'txp_log', "ip='".doSlash($ip)."' limit 1")) !== false) {
+            $host = $h;
+        } else {
+            // Double-check the rDNS.
+            $host = @gethostbyaddr($ip);
+
+            if ($host !== $ip && @gethostbyname($host) !== $ip) {
+                $host = $ip;
+            }
+        }
+    }
+
+    insert_logit(array(
+        'uri'    => $pretext['request_uri'],
+        'ip'     => $ip,
+        'host'   => $host,
+        'status' => $status,
+        'method' => serverSet('REQUEST_METHOD'),
+        'ref'    => $referer,
+    ));
+}
 
 /**
  * Inserts a log record into the database.
@@ -135,12 +135,12 @@
  * @see   log_hit()
  */
 
-    function insert_logit($in)
-    {
-        $in = doSlash($in);
-        extract($in);
-        safe_insert(
-            "txp_log",
-            "`time` = now(), page = '$uri', ip='$ip', host='$host', refer='$ref', status='$status', method='$method'"
-        );
-    }
+function insert_logit($in)
+{
+    $in = doSlash($in);
+    extract($in);
+    safe_insert(
+        "txp_log",
+        "`time` = now(), page = '$uri', ip='$ip', host='$host', refer='$ref', status='$status', method='$method'"
+    );
+}
