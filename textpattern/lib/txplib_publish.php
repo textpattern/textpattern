@@ -34,30 +34,30 @@
  * @return string An SQL qualifier for a query's 'WHERE' part
  */
 
-    function filterFrontPage()
-    {
-        static $filterFrontPage;
+function filterFrontPage()
+{
+    static $filterFrontPage;
 
-        if (isset($filterFrontPage)) {
-            return $filterFrontPage;
-        }
-
-        $filterFrontPage = false;
-
-        $rs = safe_column('name', 'txp_section', "on_frontpage != '1'");
-
-        if ($rs) {
-            $filters = array();
-
-            foreach ($rs as $name) {
-                $filters[] = " and Section != '".doSlash($name)."'";
-            }
-
-            $filterFrontPage = join('', $filters);
-        }
-
+    if (isset($filterFrontPage)) {
         return $filterFrontPage;
     }
+
+    $filterFrontPage = false;
+
+    $rs = safe_column('name', 'txp_section', "on_frontpage != '1'");
+
+    if ($rs) {
+        $filters = array();
+
+        foreach ($rs as $name) {
+            $filters[] = " and Section != '".doSlash($name)."'";
+        }
+
+        $filterFrontPage = join('', $filters);
+    }
+
+    return $filterFrontPage;
+}
 
 /**
  * Populates the current article data.
@@ -87,15 +87,16 @@
  * }
  */
 
-    function populateArticleData($rs)
-    {
-        global $thisarticle;
+function populateArticleData($rs)
+{
+    global $thisarticle;
 
-        trace_add("[".gTxt('Article')." {$rs['ID']}]");
-        foreach (article_column_map() as $key => $column) {
-            $thisarticle[$key] = $rs[$column];
-        }
+    trace_add("[".gTxt('Article')." {$rs['ID']}]");
+
+    foreach (article_column_map() as $key => $column) {
+        $thisarticle[$key] = $rs[$column];
     }
+}
 
 /**
  * Formats article info and populates the current article data.
@@ -113,13 +114,13 @@
  * )
  */
 
-    function article_format_info($rs)
-    {
-        $rs['uPosted'] = (($unix_ts = @strtotime($rs['Posted'])) > 0) ? $unix_ts : NULLDATETIME;
-        $rs['uLastMod'] = (($unix_ts = @strtotime($rs['LastMod'])) > 0) ? $unix_ts : NULLDATETIME;
-        $rs['uExpires'] = (($unix_ts = @strtotime($rs['Expires'])) > 0) ? $unix_ts : NULLDATETIME;
-        populateArticleData($rs);
-    }
+function article_format_info($rs)
+{
+    $rs['uPosted'] = (($unix_ts = @strtotime($rs['Posted'])) > 0) ? $unix_ts : NULLDATETIME;
+    $rs['uLastMod'] = (($unix_ts = @strtotime($rs['LastMod'])) > 0) ? $unix_ts : NULLDATETIME;
+    $rs['uExpires'] = (($unix_ts = @strtotime($rs['Expires'])) > 0) ? $unix_ts : NULLDATETIME;
+    populateArticleData($rs);
+}
 
 /**
  * Maps 'textpattern' table's columns to article data values.
@@ -130,38 +131,39 @@
  * @return array
  */
 
-    function article_column_map()
-    {
-        $custom = getCustomFields();
-        $custom_map = array();
-        if ($custom) {
-            foreach ($custom as $i => $name) {
-                $custom_map[$name] ='custom_' . $i;
-            }
-        }
+function article_column_map()
+{
+    $custom = getCustomFields();
+    $custom_map = array();
 
-        return array(
-            'thisid' => 'ID',
-            'posted' => 'uPosted',    // Calculated value!
-            'expires' => 'uExpires',  // Calculated value!
-            'modified' => 'uLastMod', // Calculated value!
-            'annotate' => 'Annotate',
-            'comments_invite' => 'AnnotateInvite',
-            'authorid' => 'AuthorID',
-            'title' => 'Title',
-            'url_title' => 'url_title',
-            'category1' => 'Category1',
-            'category2' => 'Category2',
-            'section' => 'Section',
-            'keywords' => 'Keywords',
-            'article_image' => 'Image',
-            'comments_count' => 'comments_count',
-            'body' => 'Body_html',
-            'excerpt' => 'Excerpt_html',
-            'override_form' => 'override_form',
-            'status' => 'Status',
-        ) + $custom_map;
+    if ($custom) {
+        foreach ($custom as $i => $name) {
+            $custom_map[$name] ='custom_' . $i;
+        }
     }
+
+    return array(
+        'thisid' => 'ID',
+        'posted' => 'uPosted',    // Calculated value!
+        'expires' => 'uExpires',  // Calculated value!
+        'modified' => 'uLastMod', // Calculated value!
+        'annotate' => 'Annotate',
+        'comments_invite' => 'AnnotateInvite',
+        'authorid' => 'AuthorID',
+        'title' => 'Title',
+        'url_title' => 'url_title',
+        'category1' => 'Category1',
+        'category2' => 'Category2',
+        'section' => 'Section',
+        'keywords' => 'Keywords',
+        'article_image' => 'Image',
+        'comments_count' => 'comments_count',
+        'body' => 'Body_html',
+        'excerpt' => 'Excerpt_html',
+        'override_form' => 'override_form',
+        'status' => 'Status',
+    ) + $custom_map;
+}
 
 /**
  * Find an adjacent article relative to a provided threshold level.
@@ -174,91 +176,95 @@
  * @return array|string An array populated with article data, or the empty string in case of no matches
  */
 
-    function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 'raw')
-    {
-        global $prefs;
-        static $cache = array();
+function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 'raw')
+{
+    global $prefs;
+    static $cache = array();
 
-        $key = md5($threshold.$s.$type.join(n, $atts));
-        if (isset($cache[$key])) {
-            return $cache[$key];
-        }
+    $key = md5($threshold.$s.$type.join(n, $atts));
 
-        extract($atts);
-        $expired = ($expired && ($prefs['publish_expired_articles']));
-        $customFields = getCustomFields();
-
-        // Building query parts; lifted from publish.php.
-        $ids = array_map('intval', do_list($id));
-        $id = (!$id) ? '' : " and ID IN (".join(',', $ids).")";
-        switch ($time) {
-            case 'any' :
-                $time = "";
-                break;
-            case 'future' :
-                $time = " and Posted > now()";
-                break;
-            default :
-                $time = " and Posted <= now()";
-        }
-
-        if (!$expired) {
-            $time .= " and (now() <= Expires or Expires = ".NULLDATETIME.")";
-        }
-
-        $custom = '';
-
-        if ($customFields) {
-            foreach ($customFields as $cField) {
-                if (isset($atts[$cField])) {
-                    $customPairs[$cField] = $atts[$cField];
-                }
-            }
-
-            if (!empty($customPairs)) {
-                $custom = buildCustomSql($customFields, $customPairs);
-            }
-        }
-
-        if ($keywords) {
-            $keys = doSlash(do_list($keywords));
-            foreach ($keys as $key) {
-                $keyparts[] = "FIND_IN_SET('".$key."',Keywords)";
-            }
-            $keywords = " and (" . join(' or ', $keyparts) . ")";
-        }
-
-        // Invert $type for ascending sortdir.
-        $types = array(
-            '>' => array('desc' => '>', 'asc' => '<'),
-            '<' => array('desc' => '<', 'asc' => '>'),
-        );
-
-        $type = ($type == '>') ? $types['>'][$sortdir] : $types['<'][$sortdir];
-
-        // Escape threshold and treat it as a string unless explicitly told otherwise.
-        if ($threshold_type != 'cooked') {
-            $threshold = "'".doSlash($threshold)."'";
-        }
-
-        $safe_name = safe_pfx('textpattern');
-        $q = array(
-            "select ID, Title, url_title, unix_timestamp(Posted) as uposted
-                from ".$safe_name." where $sortby $type ".$threshold,
-            ($s!='' && $s!='default') ? "and Section = '".doSlash($s)."'" : filterFrontPage(),
-            $id,
-            $time,
-            $custom,
-            $keywords,
-            'and Status=4',
-            'order by '.$sortby,
-            ($type=='<') ? 'desc' : 'asc',
-            'limit 1'
-        );
-
-        $cache[$key] = getRow(join(n.' ', $q));
-        return (is_array($cache[$key])) ? $cache[$key] : '';
+    if (isset($cache[$key])) {
+        return $cache[$key];
     }
+
+    extract($atts);
+    $expired = ($expired && ($prefs['publish_expired_articles']));
+    $customFields = getCustomFields();
+
+    // Building query parts; lifted from publish.php.
+    $ids = array_map('intval', do_list($id));
+    $id = (!$id) ? '' : " and ID IN (".join(',', $ids).")";
+    switch ($time) {
+        case 'any' :
+            $time = "";
+            break;
+        case 'future' :
+            $time = " and Posted > now()";
+            break;
+        default :
+            $time = " and Posted <= now()";
+    }
+
+    if (!$expired) {
+        $time .= " and (now() <= Expires or Expires = ".NULLDATETIME.")";
+    }
+
+    $custom = '';
+
+    if ($customFields) {
+        foreach ($customFields as $cField) {
+            if (isset($atts[$cField])) {
+                $customPairs[$cField] = $atts[$cField];
+            }
+        }
+
+        if (!empty($customPairs)) {
+            $custom = buildCustomSql($customFields, $customPairs);
+        }
+    }
+
+    if ($keywords) {
+        $keys = doSlash(do_list($keywords));
+
+        foreach ($keys as $key) {
+            $keyparts[] = "FIND_IN_SET('".$key."',Keywords)";
+        }
+
+        $keywords = " and (" . join(' or ', $keyparts) . ")";
+    }
+
+    // Invert $type for ascending sortdir.
+    $types = array(
+        '>' => array('desc' => '>', 'asc' => '<'),
+        '<' => array('desc' => '<', 'asc' => '>'),
+    );
+
+    $type = ($type == '>') ? $types['>'][$sortdir] : $types['<'][$sortdir];
+
+    // Escape threshold and treat it as a string unless explicitly told otherwise.
+    if ($threshold_type != 'cooked') {
+        $threshold = "'".doSlash($threshold)."'";
+    }
+
+    $safe_name = safe_pfx('textpattern');
+    $q = array(
+        "select ID, Title, url_title, unix_timestamp(Posted) as uposted
+            from ".$safe_name." where $sortby $type ".$threshold,
+        ($s!='' && $s!='default') ? "and Section = '".doSlash($s)."'" : filterFrontPage(),
+        $id,
+        $time,
+        $custom,
+        $keywords,
+        'and Status=4',
+        'order by '.$sortby,
+        ($type=='<') ? 'desc' : 'asc',
+        'limit 1'
+    );
+
+    $cache[$key] = getRow(join(n.' ', $q));
+
+    return (is_array($cache[$key])) ? $cache[$key] : '';
+}
 
 /**
  * Find next and previous articles relative to a provided threshold level.
@@ -269,74 +275,76 @@
  * @return array  An array populated with article data from the next and previous article
  */
 
-    function getNextPrev($id = 0, $threshold = null, $s = '')
-    {
-        if ($id !== 0) {
-            // Pivot is specific article by ID: In lack of further information, revert to default sort order 'Posted desc'.
-            $atts = filterAtts(array('sortby' => 'Posted', 'sortdir' => 'desc'));
-        } else {
-            // Pivot is $thisarticle: Use article attributes to find its neighbours.
-            assert_article();
-            global $thisarticle;
-            if (!is_array($thisarticle)) {
-                return array();
-            }
-
-            $atts = filterAtts();
-            $m = preg_split('/\s+/', $atts['sort']);
-
-            // If in doubt, fall back to chronologically descending order.
-            if (empty($m[0])            // No explicit sort attribute
-                || count($m) > 2        // Complex clause, e.g. 'foo asc, bar desc'
-                || !preg_match('/^(?:[0-9a-zA-Z$_\x{0080}-\x{FFFF}]+|`[\x{0001}-\x{FFFF}]+`)$/u', $m[0])  // The clause's first verb is not a MySQL column identifier.
-            )
-            {
-                $atts['sortby'] = 'Posted';
-                $atts['sortdir']= 'desc';
-            } else {
-                // Sort is like 'foo asc'.
-                $atts['sortby'] = $m[0];
-                $atts['sortdir'] = (isset($m[1]) && strtolower($m[1]) == 'desc' ? 'desc' : 'asc');
-            }
-
-            // Attributes with special treatment.
-            switch ($atts['sortby']) {
-                case 'Posted' :
-                    $threshold = 'from_unixtime('.doSlash($thisarticle['posted']).')';
-                    $threshold_type = 'cooked';
-                    break;
-                case 'Expires' :
-                    $threshold = 'from_unixtime('.doSlash($thisarticle['expires']).')';
-                    $threshold_type = 'cooked';
-                    break;
-                case 'LastMod' :
-                    $threshold = 'from_unixtime('.doSlash($thisarticle['modified']).')';
-                    $threshold_type = 'cooked';
-                    break;
-                default :
-                    // Retrieve current threshold value per sort column from $thisarticle.
-                    $acm = array_flip(article_column_map());
-                    $key = $acm[$atts['sortby']];
-                    $threshold = $thisarticle[$key];
-                    $threshold_type = 'raw';
-                    break;
-            }
-            $s = $thisarticle['section'];
+function getNextPrev($id = 0, $threshold = null, $s = '')
+{
+    if ($id !== 0) {
+        // Pivot is specific article by ID: In lack of further information, revert to default sort order 'Posted desc'.
+        $atts = filterAtts(array('sortby' => 'Posted', 'sortdir' => 'desc'));
+    } else {
+        // Pivot is $thisarticle: Use article attributes to find its neighbours.
+        assert_article();
+        global $thisarticle;
+        if (!is_array($thisarticle)) {
+            return array();
         }
 
-        $thenext            = getNeighbour($threshold, $s, '>', $atts, $threshold_type);
-        $out['next_id']     = ($thenext) ? $thenext['ID'] : '';
-        $out['next_title']  = ($thenext) ? $thenext['Title'] : '';
-        $out['next_utitle'] = ($thenext) ? $thenext['url_title'] : '';
-        $out['next_posted'] = ($thenext) ? $thenext['uposted'] : '';
+        $atts = filterAtts();
+        $m = preg_split('/\s+/', $atts['sort']);
 
-        $theprev            = getNeighbour($threshold, $s, '<', $atts, $threshold_type);
-        $out['prev_id']     = ($theprev) ? $theprev['ID'] : '';
-        $out['prev_title']  = ($theprev) ? $theprev['Title'] : '';
-        $out['prev_utitle'] = ($theprev) ? $theprev['url_title'] : '';
-        $out['prev_posted'] = ($theprev) ? $theprev['uposted'] : '';
-        return $out;
+        // If in doubt, fall back to chronologically descending order.
+        if (empty($m[0])            // No explicit sort attribute
+            || count($m) > 2        // Complex clause, e.g. 'foo asc, bar desc'
+            || !preg_match('/^(?:[0-9a-zA-Z$_\x{0080}-\x{FFFF}]+|`[\x{0001}-\x{FFFF}]+`)$/u', $m[0])  // The clause's first verb is not a MySQL column identifier.
+        )
+        {
+            $atts['sortby'] = 'Posted';
+            $atts['sortdir']= 'desc';
+        } else {
+            // Sort is like 'foo asc'.
+            $atts['sortby'] = $m[0];
+            $atts['sortdir'] = (isset($m[1]) && strtolower($m[1]) == 'desc' ? 'desc' : 'asc');
+        }
+
+        // Attributes with special treatment.
+        switch ($atts['sortby']) {
+            case 'Posted' :
+                $threshold = 'from_unixtime('.doSlash($thisarticle['posted']).')';
+                $threshold_type = 'cooked';
+                break;
+            case 'Expires' :
+                $threshold = 'from_unixtime('.doSlash($thisarticle['expires']).')';
+                $threshold_type = 'cooked';
+                break;
+            case 'LastMod' :
+                $threshold = 'from_unixtime('.doSlash($thisarticle['modified']).')';
+                $threshold_type = 'cooked';
+                break;
+            default :
+                // Retrieve current threshold value per sort column from $thisarticle.
+                $acm = array_flip(article_column_map());
+                $key = $acm[$atts['sortby']];
+                $threshold = $thisarticle[$key];
+                $threshold_type = 'raw';
+                break;
+        }
+
+        $s = $thisarticle['section'];
     }
+
+    $thenext            = getNeighbour($threshold, $s, '>', $atts, $threshold_type);
+    $out['next_id']     = ($thenext) ? $thenext['ID'] : '';
+    $out['next_title']  = ($thenext) ? $thenext['Title'] : '';
+    $out['next_utitle'] = ($thenext) ? $thenext['url_title'] : '';
+    $out['next_posted'] = ($thenext) ? $thenext['uposted'] : '';
+
+    $theprev            = getNeighbour($threshold, $s, '<', $atts, $threshold_type);
+    $out['prev_id']     = ($theprev) ? $theprev['ID'] : '';
+    $out['prev_title']  = ($theprev) ? $theprev['Title'] : '';
+    $out['prev_utitle'] = ($theprev) ? $theprev['url_title'] : '';
+    $out['prev_posted'] = ($theprev) ? $theprev['uposted'] : '';
+
+    return $out;
+}
 
 /**
  * Gets the site last modification date.
@@ -345,11 +353,11 @@
  * @package Pref
  */
 
-    function lastMod()
-    {
-        $last = safe_field("unix_timestamp(val)", "txp_prefs", "`name`='lastmod' and prefs_id=1");
-        return gmdate("D, d M Y H:i:s \G\M\T", $last);
-    }
+function lastMod()
+{
+    $last = safe_field("unix_timestamp(val)", "txp_prefs", "`name`='lastmod' and prefs_id=1");
+    return gmdate("D, d M Y H:i:s \G\M\T", $last);
+}
 
 /**
  * Parse a string and replace any Textpattern tags with their actual value.
@@ -359,60 +367,60 @@
  * @package TagParser
  */
 
-    function parse($thing)
-    {
-        $f = '@(</?txp:\w+(?:\s+\w+\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))*\s*/?'.chr(62).')@s';
-        $t = '@:(\w+)(.*?)/?.$@s';
+function parse($thing)
+{
+    $f = '@(</?txp:\w+(?:\s+\w+\s*=\s*(?:"(?:[^"]|"")*"|\'(?:[^\']|\'\')*\'|[^\s\'"/>]+))*\s*/?'.chr(62).')@s';
+    $t = '@:(\w+)(.*?)/?.$@s';
 
-        $parsed = preg_split($f, $thing, -1, PREG_SPLIT_DELIM_CAPTURE);
+    $parsed = preg_split($f, $thing, -1, PREG_SPLIT_DELIM_CAPTURE);
 
-        $level  = 0;
-        $out    = '';
-        $inside = '';
-        $istag  = false;
+    $level  = 0;
+    $out    = '';
+    $inside = '';
+    $istag  = false;
 
-        foreach ($parsed as $chunk) {
-            if ($istag) {
-                if ($level === 0) {
-                    preg_match($t, $chunk, $tag);
+    foreach ($parsed as $chunk) {
+        if ($istag) {
+            if ($level === 0) {
+                preg_match($t, $chunk, $tag);
 
-                    if (substr($chunk, -2, 1) === '/') {
-                        // Self closing.
-                        $out .= processTags($tag[1], $tag[2]);
-                    } else {
-                        // Opening.
-                        $level++;
-                    }
+                if (substr($chunk, -2, 1) === '/') {
+                    // Self closing.
+                    $out .= processTags($tag[1], $tag[2]);
                 } else {
-                    if (substr($chunk, 1, 1) === '/') {
-                        // Closing.
-                        if (--$level === 0) {
-                            $out  .= processTags($tag[1], $tag[2], $inside);
-                            $inside = '';
-                        } else {
-                            $inside .= $chunk;
-                        }
-                    } elseif (substr($chunk, -2, 1) !== '/') {
-                        // Opening inside open.
-                        ++$level;
-                        $inside .= $chunk;
-                    } else {
-                        $inside .= $chunk;
-                    }
+                    // Opening.
+                    $level++;
                 }
             } else {
-                if ($level) {
+                if (substr($chunk, 1, 1) === '/') {
+                    // Closing.
+                    if (--$level === 0) {
+                        $out  .= processTags($tag[1], $tag[2], $inside);
+                        $inside = '';
+                    } else {
+                        $inside .= $chunk;
+                    }
+                } elseif (substr($chunk, -2, 1) !== '/') {
+                    // Opening inside open.
+                    ++$level;
                     $inside .= $chunk;
                 } else {
-                    $out .= $chunk;
+                    $inside .= $chunk;
                 }
             }
-
-            $istag = !$istag;
+        } else {
+            if ($level) {
+                $inside .= $chunk;
+            } else {
+                $out .= $chunk;
+            }
         }
 
-        return $out;
+        $istag = !$istag;
     }
+
+    return $out;
+}
 
 /**
  * Guesstimate whether a given function name may be a valid tag handler.
@@ -422,15 +430,17 @@
  * @package TagParser
  */
 
-    function maybe_tag($tag)
-    {
-        static $tags = null;
-        if ($tags === null) {
-            $tags = get_defined_functions();
-            $tags = array_flip($tags['user']);
-        }
-        return isset($tags[$tag]);
+function maybe_tag($tag)
+{
+    static $tags = null;
+
+    if ($tags === null) {
+        $tags = get_defined_functions();
+        $tags = array_flip($tags['user']);
     }
+
+    return isset($tags[$tag]);
+}
 
 /**
  * Parse a tag for attributes and hand over to the tag handler function.
@@ -442,59 +452,59 @@
  * @package TagParser
  */
 
-    function processTags($tag, $atts, $thing = null)
-    {
-        global $production_status, $txptrace, $txptracelevel, $txp_current_tag, $txp_current_form;
-        static $registry = null;
+function processTags($tag, $atts, $thing = null)
+{
+    global $production_status, $txptrace, $txptracelevel, $txp_current_tag, $txp_current_form;
+    static $registry = null;
 
-        if ($production_status !== 'live') {
-            $old_tag = $txp_current_tag;
+    if ($production_status !== 'live') {
+        $old_tag = $txp_current_tag;
 
-            $txp_current_tag = '<txp:'.$tag.$atts.(isset($thing) ? '>' : '/>');
+        $txp_current_tag = '<txp:'.$tag.$atts.(isset($thing) ? '>' : '/>');
 
-            trace_add($txp_current_tag);
-            ++$txptracelevel;
+        trace_add($txp_current_tag);
+        ++$txptracelevel;
 
-            if ($production_status === 'debug') {
-                maxMemUsage("Form='$txp_current_form', Tag='$txp_current_tag'");
-            }
+        if ($production_status === 'debug') {
+            maxMemUsage("Form='$txp_current_form', Tag='$txp_current_tag'");
         }
-
-        if ($registry === null) {
-            $registry = Txp::get('Textpattern_Tag_Registry');
-        }
-
-        if ($registry->isRegistered($tag)) {
-            $out = $registry->process($tag, splat($atts), $thing);
-        }
-
-        // Deprecated in 4.6.0.
-        else if (maybe_tag($tag)) {
-            $out = $tag(splat($atts), $thing);
-            trigger_error(gTxt('unregistered_tag'), E_USER_NOTICE);
-        }
-
-        // Deprecated, remove in crockery.
-        elseif (isset($GLOBALS['pretext'][$tag])) {
-            $out = txpspecialchars($pretext[$tag]);
-            trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
-        } else {
-            $out = '';
-            trigger_error(gTxt('unknown_tag'), E_USER_WARNING);
-        }
-
-        if ($production_status !== 'live') {
-            --$txptracelevel;
-
-            if (isset($thing)) {
-                trace_add('</txp:'.$tag.'>');
-            }
-
-            $txp_current_tag = $old_tag;
-        }
-
-        return $out;
     }
+
+    if ($registry === null) {
+        $registry = Txp::get('Textpattern_Tag_Registry');
+    }
+
+    if ($registry->isRegistered($tag)) {
+        $out = $registry->process($tag, splat($atts), $thing);
+    }
+
+    // Deprecated in 4.6.0.
+    else if (maybe_tag($tag)) {
+        $out = $tag(splat($atts), $thing);
+        trigger_error(gTxt('unregistered_tag'), E_USER_NOTICE);
+    }
+
+    // Deprecated, remove in crockery.
+    elseif (isset($GLOBALS['pretext'][$tag])) {
+        $out = txpspecialchars($pretext[$tag]);
+        trigger_error(gTxt('deprecated_tag'), E_USER_NOTICE);
+    } else {
+        $out = '';
+        trigger_error(gTxt('unknown_tag'), E_USER_WARNING);
+    }
+
+    if ($production_status !== 'live') {
+        --$txptracelevel;
+
+        if (isset($thing)) {
+            trace_add('</txp:'.$tag.'>');
+        }
+
+        $txp_current_tag = $old_tag;
+    }
+
+    return $out;
+}
 
 /**
  * Protection from those who'd bomb the site by GET.
@@ -502,15 +512,16 @@
  * Origin of the infamous 'Nice try' message and an even more useful '503' HTTP status.
  */
 
-    function bombShelter()
-    {
-        global $prefs;
-        $in = serverset('REQUEST_URI');
-        if (!empty($prefs['max_url_len']) and strlen($in) > $prefs['max_url_len']) {
-            txp_status_header('503 Service Unavailable');
-            exit('Nice try.');
-        }
+function bombShelter()
+{
+    global $prefs;
+    $in = serverset('REQUEST_URI');
+
+    if (!empty($prefs['max_url_len']) and strlen($in) > $prefs['max_url_len']) {
+        txp_status_header('503 Service Unavailable');
+        exit('Nice try.');
     }
+}
 
 /**
  * Checks a named item's existence in a database table.
@@ -530,10 +541,10 @@
  * }
  */
 
-    function ckEx($table, $val, $debug = false)
-    {
-        return safe_field("name", 'txp_'.$table, "`name` = '".doSlash($val)."' limit 1", $debug);
-    }
+function ckEx($table, $val, $debug = false)
+{
+    return safe_field("name", 'txp_'.$table, "`name` = '".doSlash($val)."' limit 1", $debug);
+}
 
 /**
  * Checks if the given category exists.
@@ -551,10 +562,10 @@
  * }
  */
 
-    function ckCat($type, $val, $debug = false)
-    {
-        return safe_field("name", 'txp_category', "`name` = '".doSlash($val)."' AND type = '".doSlash($type)."' limit 1", $debug);
-    }
+function ckCat($type, $val, $debug = false)
+{
+    return safe_field("name", 'txp_category', "`name` = '".doSlash($val)."' AND type = '".doSlash($type)."' limit 1", $debug);
+}
 
 /**
  * Lookup an article by ID.
@@ -574,10 +585,10 @@
  * }
  */
 
-    function ckExID($val, $debug = false)
-    {
-        return safe_row("ID, Section", 'textpattern', 'ID = '.intval($val).' and Status >= 4 limit 1', $debug);
-    }
+function ckExID($val, $debug = false)
+{
+    return safe_row("ID, Section", 'textpattern', 'ID = '.intval($val).' and Status >= 4 limit 1', $debug);
+}
 
 /**
  * Lookup an article by URL title.
@@ -597,10 +608,10 @@
  * }
  */
 
-    function lookupByTitle($val, $debug = false)
-    {
-        return safe_row("ID, Section", 'textpattern', "url_title = '".doSlash($val)."' and Status >= 4 limit 1", $debug);
-    }
+function lookupByTitle($val, $debug = false)
+{
+    return safe_row("ID, Section", 'textpattern', "url_title = '".doSlash($val)."' and Status >= 4 limit 1", $debug);
+}
 
 /**
  * Lookup a published article by URL title and section.
@@ -621,10 +632,10 @@
  * }
  */
 
-    function lookupByTitleSection($val, $section, $debug = false)
-    {
-        return safe_row("ID, Section", 'textpattern', "url_title = '".doSlash($val)."' AND Section='".doSlash($section)."' and Status >= 4 limit 1", $debug);
-    }
+function lookupByTitleSection($val, $section, $debug = false)
+{
+    return safe_row("ID, Section", 'textpattern', "url_title = '".doSlash($val)."' AND Section='".doSlash($section)."' and Status >= 4 limit 1", $debug);
+}
 
 /**
  * Lookup live article by ID and section.
@@ -636,11 +647,11 @@
  * @package Filter
  */
 
-    function lookupByIDSection($id, $section, $debug = false)
-    {
-        return safe_row('ID, Section', 'textpattern',
-            'ID = '.intval($id)." and Section = '".doSlash($section)."' and Status >= 4 limit 1", $debug);
-    }
+function lookupByIDSection($id, $section, $debug = false)
+{
+    return safe_row('ID, Section', 'textpattern',
+        'ID = '.intval($id)." and Section = '".doSlash($section)."' and Status >= 4 limit 1", $debug);
+}
 
 /**
  * Lookup live article by ID.
@@ -651,10 +662,10 @@
  * @package Filter
  */
 
-    function lookupByID($id, $debug = false)
-    {
-        return safe_row("ID, Section", 'textpattern', 'ID = '.intval($id).' and Status >= 4 limit 1', $debug);
-    }
+function lookupByID($id, $debug = false)
+{
+    return safe_row("ID, Section", 'textpattern', 'ID = '.intval($id).' and Status >= 4 limit 1', $debug);
+}
 
 /**
  * Lookup live article by date and URL title.
@@ -666,11 +677,11 @@
  * @package Filter
  */
 
-    function lookupByDateTitle($when, $title, $debug = false)
-    {
-        return safe_row("ID, Section", "textpattern",
-            "posted like '".doSlash($when)."%' and url_title like '".doSlash($title)."' and Status >= 4 limit 1");
-    }
+function lookupByDateTitle($when, $title, $debug = false)
+{
+    return safe_row("ID, Section", "textpattern",
+        "posted like '".doSlash($when)."%' and url_title like '".doSlash($title)."' and Status >= 4 limit 1");
+}
 
 /**
  * Chops a request string into URL-decoded path parts.
@@ -680,24 +691,27 @@
  * @package URL
  */
 
-    function chopUrl($req)
-    {
-        $req = strtolower($req);
-        // Strip off query_string, if present.
-        $qs = strpos($req, '?');
-        if ($qs) {
-            $req = substr($req, 0, $qs);
-        }
-        $req = preg_replace('/index\.php$/', '', $req);
-        $r = array_map('urldecode', explode('/', $req));
-        $o['u0'] = (isset($r[0])) ? $r[0] : '';
-        $o['u1'] = (isset($r[1])) ? $r[1] : '';
-        $o['u2'] = (isset($r[2])) ? $r[2] : '';
-        $o['u3'] = (isset($r[3])) ? $r[3] : '';
-        $o['u4'] = (isset($r[4])) ? $r[4] : '';
+function chopUrl($req)
+{
+    $req = strtolower($req);
 
-        return $o;
+    // Strip off query_string, if present.
+    $qs = strpos($req, '?');
+
+    if ($qs) {
+        $req = substr($req, 0, $qs);
     }
+
+    $req = preg_replace('/index\.php$/', '', $req);
+    $r = array_map('urldecode', explode('/', $req));
+    $o['u0'] = (isset($r[0])) ? $r[0] : '';
+    $o['u1'] = (isset($r[1])) ? $r[1] : '';
+    $o['u2'] = (isset($r[2])) ? $r[2] : '';
+    $o['u3'] = (isset($r[3])) ? $r[3] : '';
+    $o['u4'] = (isset($r[4])) ? $r[4] : '';
+
+    return $o;
+}
 
 /**
  * Save and retrieve the individual article's attributes
@@ -709,31 +723,32 @@
  * @package TagParser
  */
 
-    function filterAtts($atts = null)
-    {
-        global $prefs;
-        static $out = array();
+function filterAtts($atts = null)
+{
+    global $prefs;
+    static $out = array();
 
-        if (is_array($atts)) {
-            if (empty($out)) {
-                $out = lAtts(array(
-                    'sort'          => 'Posted desc',
-                    'sortby'        => '',
-                    'sortdir'        => '',
-                    'keywords'      => '',
-                    'expired'       => $prefs['publish_expired_articles'],
-                    'id'            => '',
-                    'time'          => 'past',
-                ), $atts, 0);
-                trace_add('[filterAtts accepted]');
-            } else {
-                // TODO: deal w/ nested txp:article[_custom] tags.
-                trace_add('[filterAtts ignored]');
-            }
-        }
-
+    if (is_array($atts)) {
         if (empty($out)) {
-            trace_add('[filterAtts not set]');
+            $out = lAtts(array(
+                'sort'          => 'Posted desc',
+                'sortby'        => '',
+                'sortdir'        => '',
+                'keywords'      => '',
+                'expired'       => $prefs['publish_expired_articles'],
+                'id'            => '',
+                'time'          => 'past',
+            ), $atts, 0);
+            trace_add('[filterAtts accepted]');
+        } else {
+            // TODO: deal w/ nested txp:article[_custom] tags.
+            trace_add('[filterAtts ignored]');
         }
-        return $out;
     }
+
+    if (empty($out)) {
+        trace_add('[filterAtts not set]');
+    }
+
+    return $out;
+}

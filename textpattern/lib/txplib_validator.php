@@ -79,6 +79,7 @@ class Validator
                 $this->messages[] = $c->getMessage();
             }
         }
+
         return empty($this->messages);
     }
 
@@ -112,6 +113,7 @@ class Validator
         } else {
             $in[] = $constraints;
         }
+
         $this->constraints = $in;
         $this->messages = array();
     }
@@ -156,6 +158,7 @@ class Constraint
         if (empty($options['message'])) {
             $options['message'] = 'undefined_constraint_violation';
         }
+
         $this->value = $value;
         $this->options = $options;
     }
@@ -264,9 +267,11 @@ class SectionConstraint extends ChoiceConstraint
     public function __construct($value, $options = array())
     {
         static $choices = null;
+
         if (null === $choices) {
             $choices = safe_column('name', 'txp_section', '1=1');
         }
+
         $options['choices'] = $choices;
         $options['message'] = 'unknown_section';
         parent::__construct($value, $options);
@@ -293,9 +298,11 @@ class CategoryConstraint extends ChoiceConstraint
     {
         static $choices = null;
         $options = lAtts(array('allow_blank' => true, 'type' => '', 'message' => 'unknown_category'), $options, false);
+
         if (null === $choices) {
             $choices = safe_column('name', 'txp_category', $options['type'] !== '' ? 'type=\''.doSlash($options['type']).'\'' : '1=1');
         }
+
         $options['choices'] = $choices;
         parent::__construct($value, $options);
     }
@@ -325,6 +332,7 @@ class FormConstraint extends ChoiceConstraint
         if (null === $choices) {
             $choices = safe_column('name', 'txp_form', $options['type'] !== '' ? 'type=\''.doSlash($options['type']).'\'' : '1=1');
         }
+
         $options['choices'] = $choices;
         parent::__construct($value, $options);
     }

@@ -122,6 +122,7 @@ class theme
     public static function factory($name)
     {
         $path = theme::path($name);
+
         if (is_readable($path)) {
             require_once($path);
         } else {
@@ -129,6 +130,7 @@ class theme
         }
 
         $t = "{$name}_theme";
+
         if (class_exists($t)) {
             return new $t($name);
         } else {
@@ -158,6 +160,7 @@ class theme
         }
 
         $instance = theme::factory($name);
+
         if (!$instance) {
             set_pref('theme_name', 'hive');
             die(gTxt('cannot_instantiate_theme', array('{name}' => $name, '{class}' => "{$name}_theme", '{path}' => theme::path($name))));
@@ -175,6 +178,7 @@ class theme
     public static function names()
     {
         $dirs = glob(txpath.DS.THEME.'*');
+
         if (is_array($dirs)) {
             foreach ($dirs as $d) {
                 // Extract trailing directory name.
@@ -186,7 +190,9 @@ class theme
                     $out[] = $name;
                 }
             }
+
             sort($out, SORT_STRING);
+
             return $out;
         }
 
@@ -204,13 +210,17 @@ class theme
     {
         global $production_status;
         $theme = theme::factory($name);
+
         if (!$theme) {
             set_pref('theme_name', 'hive');
+
             if ($production_status === 'debug') {
                 echo gTxt('cannot_instantiate_theme', array('{name}' => $name, '{class}' => "{$name}_theme", '{path}' => theme::path($name)));
             }
+
             return false;
         }
+
         return true;
     }
 
@@ -285,6 +295,7 @@ class theme
                 }
             }
         }
+
         return $this;
     }
 

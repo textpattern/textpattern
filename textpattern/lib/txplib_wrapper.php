@@ -164,14 +164,17 @@ class TXP_Wrapper
     public function deleteArticleID($article_id)
     {
         $article_id = assert_int($article_id);
+
         if ($this->loggedin && has_privs('article.delete', $this->txp_user)) {
             return safe_delete('textpattern', "ID = $article_id");
         } elseif ($this->loggedin && has_privs('article.delete.own', $this->txp_user)) {
             $r = safe_field('ID', 'textpattern', "ID = $article_id AND AuthorID='".doSlash($this->txp_user)."'");
+
             if ($r || has_privs('article.delete', $this->txp_user)) {
                 return safe_delete('textpattern', "ID = $article_id");
             }
         }
+
         return false;
     }
 
@@ -209,14 +212,18 @@ class TXP_Wrapper
             } else {
                 $rs = safe_rows_start($what, 'textpattern', $where." AND AuthorID='".doSlash($this->txp_user)."' order by Posted desc LIMIT $offset, $limit");
             }
+
             $out = array();
+
             if ($rs) {
                 while ($a = nextRow($rs)) {
                     $out[] = $a;
                 }
             }
+
             return $out;
         }
+
         return false;
     }
 
@@ -250,6 +257,7 @@ class TXP_Wrapper
                 $what  = doSlash($what);
                 $where = doSlash($where);
             }
+
             // Higher user groups should be able to edit any article.
             if (has_privs('article.edit', $this->txp_user)) {
                 return safe_row($what, 'textpattern', $where);
@@ -258,6 +266,7 @@ class TXP_Wrapper
                 return safe_row($what, 'textpattern', $where." AND AuthorID='".doSlash($this->txp_user)."'");
             }
         }
+
         return false;
     }
 
@@ -282,12 +291,14 @@ class TXP_Wrapper
     {
         if ($this->loggedin && has_privs('article.edit.own', $this->txp_user)) {
             $article_id = assert_int($article_id);
+
             if (has_privs('article.edit', $this->txp_user)) {
                 return safe_row(doSlash($what), 'textpattern', "ID = $article_id");
             } else {
                 return safe_row(doSlash($what), 'textpattern', "ID = $article_id AND AuthorID='".doSlash($this->txp_user)."'");
             }
         }
+
         return false;
     }
 
@@ -321,9 +332,11 @@ class TXP_Wrapper
             // Unprivileged user, check if they can edit published articles.
             $r = assert_int($r);
             $oldstatus = safe_field('Status', 'textpattern', "ID = $r");
+
             if (($oldstatus == 4 || $oldstatus == 5) && !has_privs('article.edit.published', $this->txp_user)) {
                 return false;
             }
+
             // If they can, let's go.
             return $this->_setArticle($params, $article_id);
         } elseif ($this->loggedin && has_privs('article.edit', $this->txp_user)) {
@@ -359,6 +372,7 @@ class TXP_Wrapper
 
             return $this->_setArticle($params);
         }
+
         return false;
     }
 
@@ -384,6 +398,7 @@ class TXP_Wrapper
         if ($this->loggedin && has_privs('article', $this->txp_user)) {
             return safe_rows('*', 'txp_section', "name!='default'");
         }
+
         return false;
     }
 
@@ -406,8 +421,10 @@ class TXP_Wrapper
     {
         if ($this->loggedin && has_privs('article', $this->txp_user)) {
             $name = doSlash($name);
+
             return safe_row('*', 'txp_section', "name='$name'");
         }
+
         return false;
     }
 
@@ -433,6 +450,7 @@ class TXP_Wrapper
         if ($this->loggedin && has_privs('article', $this->txp_user)) {
             return safe_rows('*', 'txp_category', "name!='root' AND type='article'");
         }
+
         return false;
     }
 
@@ -457,6 +475,7 @@ class TXP_Wrapper
             $name = doSlash($name);
             return safe_row('*', 'txp_category', "name='$name' AND type='article'");
         }
+
         return false;
     }
 
@@ -477,6 +496,7 @@ class TXP_Wrapper
             $id = assert_int($id);
             return safe_row('*', 'txp_category', "id = $id");
         }
+
         return false;
     }
 
@@ -497,6 +517,7 @@ class TXP_Wrapper
             $title = doSlash($title);
             return safe_row('*', 'txp_category', "title='$title' AND type='article'");
         }
+
         return false;
     }
 
@@ -520,6 +541,7 @@ class TXP_Wrapper
         if ($this->loggedin) {
             return safe_row('*', 'txp_users', "name='$this->txp_user'");
         }
+
         return false;
     }
 
@@ -537,8 +559,10 @@ class TXP_Wrapper
     {
         if ($this->loggedin && has_privs('page', $this->txp_user)) {
             $name = doSlash($name);
+
             return safe_field('user_html', 'txp_page', "name='$name'");
         }
+
         return false;
     }
 
@@ -564,8 +588,10 @@ class TXP_Wrapper
         if ($this->loggedin && has_privs('page', $this->txp_user)) {
             $name = doSlash($name);
             $html = doSlash($html);
+
             return safe_update('txp_page', "user_html='$html'", "name='$name'");
         }
+
         return false;
     }
 
@@ -625,6 +651,7 @@ class TXP_Wrapper
             $sql.= ", LastMod = now(), LastModID = '$this->txp_user'";
             $article_id = assert_int($article_id);
             $rs = safe_update('textpattern', $sql, "ID = $article_id");
+
             return $rs;
         }
 
@@ -773,6 +800,7 @@ class TXP_Wrapper
                 safe_update("txp_prefs", "val = now()", "name = 'lastmod'");
                 //@$this->_sendPings();
             }
+
            return $article_id;
         }
 
@@ -795,12 +823,14 @@ class TXP_Wrapper
         } else {
             $r = true;
         }
+
         if ($r) {
             // Update the last access time.
             $safe_user = addslashes($user);
             safe_update("txp_users", "last_access = now()", "name = '$safe_user'");
             return true;
         }
+
         return false;
     }
 
@@ -844,6 +874,7 @@ class TXP_Wrapper
     public function _check_keys($incoming, $default = array())
     {
         $out = array();
+
         // Strip off unsuited keys.
         foreach ($incoming as $key => $val) {
             if (in_array($key, $this->vars)) {
@@ -856,11 +887,13 @@ class TXP_Wrapper
             if (!array_key_exists($def_key, $out)) {
                 $out[$def_key] = '';
             }
+
             // Setup the provided default value, if any, only when the incoming value is empty.
             if (array_key_exists($def_key, $default) && empty($out[$def_key])) {
                 $out[$def_key] = $default[$def_key];
             }
         }
+
         return $out;
     }
 
@@ -890,9 +923,7 @@ class TXP_Wrapper
         }
 
         $incoming['url_title'] = preg_replace('|[\x00-\x1f#%+/?\x7f]|', '', $incoming['url_title']);
-
         $incoming['Body_html'] = TXP_Wrapper::format_field($incoming['Body'], $incoming['textile_body'], $textile);
-
         $incoming['Excerpt_html'] = TXP_Wrapper::format_field($incoming['Excerpt'], $incoming['textile_excerpt'], $textile);
 
         return $incoming;
@@ -921,6 +952,7 @@ class TXP_Wrapper
                 $html = $textile->TextileThis($field);
                 break;
         }
+
         return $html;
     }
 }

@@ -43,23 +43,23 @@
  * ), 'myInput', 'value1');
  */
 
-    function radioSet($values, $field, $checked = '', $tabindex = 0, $id = '')
-    {
-        if ($id) {
-            $id = $id.'-'.$field;
-        } else {
-            $id = $field;
-        }
-
-        $out = array();
-
-        foreach ((array) $values as $value => $label) {
-            $out[] = radio($field, $value, (string) $value === (string) $checked, $id.'-'.$value, $tabindex);
-            $out[] = n.tag($label, 'label', array('for' => $id.'-'.$value));
-        }
-
-        return join('', $out);
+function radioSet($values, $field, $checked = '', $tabindex = 0, $id = '')
+{
+    if ($id) {
+        $id = $id.'-'.$field;
+    } else {
+        $id = $field;
     }
+
+    $out = array();
+
+    foreach ((array) $values as $value => $label) {
+        $out[] = radio($field, $value, (string) $value === (string) $checked, $id.'-'.$value, $tabindex);
+        $out[] = n.tag($label, 'label', array('for' => $id.'-'.$value));
+    }
+
+    return join('', $out);
+}
 
 /**
  * Generates a Yes/No radio button toggle.
@@ -80,15 +80,15 @@
  * );
  */
 
-    function yesnoRadio($field, $checked = '', $tabindex = 0, $id = '')
-    {
-        $vals = array(
-            '0' => gTxt('no'),
-            '1' => gTxt('yes')
-        );
+function yesnoRadio($field, $checked = '', $tabindex = 0, $id = '')
+{
+    $vals = array(
+        '0' => gTxt('no'),
+        '1' => gTxt('yes')
+    );
 
-        return radioSet($vals, $field, $checked, $tabindex, $id);
-    }
+    return radioSet($vals, $field, $checked, $tabindex, $id);
+}
 
 /**
  * Generates an On/Off radio button toggle.
@@ -101,15 +101,15 @@
  * @see    radioSet()
  */
 
-    function onoffRadio($field, $checked = '', $tabindex = 0, $id = '')
-    {
-        $vals = array(
-            '0' => gTxt('off'),
-            '1' => gTxt('on')
-        );
+function onoffRadio($field, $checked = '', $tabindex = 0, $id = '')
+{
+    $vals = array(
+        '0' => gTxt('off'),
+        '1' => gTxt('on')
+    );
 
-        return radioSet($vals, $field, $checked, $tabindex, $id);
-    }
+    return radioSet($vals, $field, $checked, $tabindex, $id);
+}
 
 /**
  * Generates a select field.
@@ -129,41 +129,41 @@
  * ));
  */
 
-    function selectInput($name = '', $array = array(), $value = '', $blank_first = false, $onchange = '', $select_id = '', $check_type = false)
-    {
-        $out = array();
+function selectInput($name = '', $array = array(), $value = '', $blank_first = false, $onchange = '', $select_id = '', $check_type = false)
+{
+    $out = array();
 
-        $selected = false;
-        $value = (string) $value;
+    $selected = false;
+    $value = (string) $value;
 
-        foreach ($array as $avalue => $alabel) {
-            if ($value === (string) $avalue) {
-                $sel = ' selected="selected"';
-                $selected = true;
-            } else {
-                $sel = '';
-            }
-
-            $out[] = '<option value="'.txpspecialchars($avalue).'"'.$sel.'>'.txpspecialchars($alabel).'</option>';
+    foreach ($array as $avalue => $alabel) {
+        if ($value === (string) $avalue) {
+            $sel = ' selected="selected"';
+            $selected = true;
+        } else {
+            $sel = '';
         }
 
-        if ($blank_first) {
-            array_unshift($out, '<option value=""'.($selected === false ? ' selected="selected"' : '').'>&#160;</option>');
-        }
-
-        $atts = join_atts(array(
-            'name' => $name,
-            'id'   => $select_id,
-        ));
-
-        if ((string) $onchange === '1') {
-            $atts .= ' data-submit-on="change"';
-        } elseif ($onchange) {
-            $atts .= ' '.trim($onchange);
-        }
-
-        return n.'<select'.$atts.'>'.n.join(n, $out).n.'</select>';
+        $out[] = '<option value="'.txpspecialchars($avalue).'"'.$sel.'>'.txpspecialchars($alabel).'</option>';
     }
+
+    if ($blank_first) {
+        array_unshift($out, '<option value=""'.($selected === false ? ' selected="selected"' : '').'>&#160;</option>');
+    }
+
+    $atts = join_atts(array(
+        'name' => $name,
+        'id'   => $select_id,
+    ));
+
+    if ((string) $onchange === '1') {
+        $atts .= ' data-submit-on="change"';
+    } elseif ($onchange) {
+        $atts .= ' '.trim($onchange);
+    }
+
+    return n.'<select'.$atts.'>'.n.join(n, $out).n.'</select>';
+}
 
 /**
  * Generates a tree structured select field.
@@ -180,50 +180,50 @@
  * @see    getTree()
  */
 
-    function treeSelectInput($select_name = '', $array = array(), $value = '', $select_id = '', $truncate = 0)
-    {
-        $out = array();
+function treeSelectInput($select_name = '', $array = array(), $value = '', $select_id = '', $truncate = 0)
+{
+    $out = array();
 
-        $doctype = get_pref('doctype');
-        $selected = false;
+    $doctype = get_pref('doctype');
+    $selected = false;
 
-        foreach ($array as $a) {
-            if ($a['name'] == 'root') {
-                continue;
-            }
-
-            if ((string) $a['name'] === (string) $value) {
-                $sel = ' selected="selected"';
-                $selected = true;
-            } else {
-                $sel = '';
-            }
-
-            $sp = str_repeat(sp.sp, $a['level']);
-
-            if (($truncate > 3) && (strlen(utf8_decode($a['title'])) > $truncate)) {
-                $htmltitle = ' title="'.txpspecialchars($a['title']).'"';
-                $a['title'] = preg_replace('/^(.{0,'.($truncate - 3).'}).*$/su', '$1', $a['title']);
-                $hellip = '&#8230;';
-            } else {
-                $htmltitle = $hellip = '';
-            }
-
-            $data_level = '';
-            if ($doctype !== 'xhtml') {
-                $data_level = ' data-level="'.$a['level'].'"';
-            }
-
-            $out[] = '<option value="'.txpspecialchars($a['name']).'"'.$htmltitle.$sel.$data_level.'>'.$sp.txpspecialchars($a['title']).$hellip.'</option>';
+    foreach ($array as $a) {
+        if ($a['name'] == 'root') {
+            continue;
         }
 
-        array_unshift($out, '<option value=""'.($selected === false ? ' selected="selected"' : '').'>&#160;</option>');
+        if ((string) $a['name'] === (string) $value) {
+            $sel = ' selected="selected"';
+            $selected = true;
+        } else {
+            $sel = '';
+        }
 
-        return n.tag(n.join(n, $out).n, 'select', array(
-            'id'   => $select_id,
-            'name' => $select_name,
-        ));
+        $sp = str_repeat(sp.sp, $a['level']);
+
+        if (($truncate > 3) && (strlen(utf8_decode($a['title'])) > $truncate)) {
+            $htmltitle = ' title="'.txpspecialchars($a['title']).'"';
+            $a['title'] = preg_replace('/^(.{0,'.($truncate - 3).'}).*$/su', '$1', $a['title']);
+            $hellip = '&#8230;';
+        } else {
+            $htmltitle = $hellip = '';
+        }
+
+        $data_level = '';
+        if ($doctype !== 'xhtml') {
+            $data_level = ' data-level="'.$a['level'].'"';
+        }
+
+        $out[] = '<option value="'.txpspecialchars($a['name']).'"'.$htmltitle.$sel.$data_level.'>'.$sp.txpspecialchars($a['title']).$hellip.'</option>';
     }
+
+    array_unshift($out, '<option value=""'.($selected === false ? ' selected="selected"' : '').'>&#160;</option>');
+
+    return n.tag(n.join(n, $out).n, 'select', array(
+        'id'   => $select_id,
+        'name' => $select_name,
+    ));
+}
 
 /**
  * Generic form input.
@@ -245,28 +245,28 @@
  * echo fInput('text', 'myInput', 'My example value');
  */
 
-    function fInput($type, $name, $value, $class = '', $title = '', $onClick = '', $size = 0, $tab = 0, $id = '', $disabled = false, $required = false, $placeholder = '')
-    {
-        $atts = join_atts(array(
-            'type'        => $type,
-            'name'        => $name,
-            'size'        => (int) $size,
-            'class'       => $class,
-            'title'       => $title,
-            'onclick'     => $onClick,
-            'tabindex'    => (int) $tab,
-            'id'          => $id,
-            'disabled'    => (bool) $disabled,
-            'required'    => (bool) $required,
-            'placeholder' => $placeholder,
-        ));
+function fInput($type, $name, $value, $class = '', $title = '', $onClick = '', $size = 0, $tab = 0, $id = '', $disabled = false, $required = false, $placeholder = '')
+{
+    $atts = join_atts(array(
+        'type'        => $type,
+        'name'        => $name,
+        'size'        => (int) $size,
+        'class'       => $class,
+        'title'       => $title,
+        'onclick'     => $onClick,
+        'tabindex'    => (int) $tab,
+        'id'          => $id,
+        'disabled'    => (bool) $disabled,
+        'required'    => (bool) $required,
+        'placeholder' => $placeholder,
+    ));
 
-        if ($type != 'file' && $type != 'image') {
-            $atts .= join_atts(array('value' => (string) $value), 0);
-        }
-
-        return n.tag_void('input', $atts);
+    if ($type != 'file' && $type != 'image') {
+        $atts .= join_atts(array('value' => (string) $value), 0);
     }
+
+    return n.tag_void('input', $atts);
+}
 
 /**
  * Sanitises a page title.
@@ -277,11 +277,11 @@
  * @see        escape_title()
  */
 
-    function cleanfInput($text)
-    {
-        trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'escape_title')), E_USER_NOTICE);
-        return escape_title($text);
-    }
+function cleanfInput($text)
+{
+    trigger_error(gTxt('deprecated_function_with', array('{name}' => __FUNCTION__, '{with}' => 'escape_title')), E_USER_NOTICE);
+    return escape_title($text);
+}
 
 /**
  * Hidden form input.
@@ -293,10 +293,10 @@
  * echo hInput('myInput', 'hidden value');
  */
 
-    function hInput($name, $value)
-    {
-        return fInput('hidden', $name, $value);
-    }
+function hInput($name, $value)
+{
+    return fInput('hidden', $name, $value);
+}
 
 /**
  * Hidden step input.
@@ -312,10 +312,10 @@
  * );
  */
 
-    function sInput($step)
-    {
-        return hInput('step', $step);
-    }
+function sInput($step)
+{
+    return hInput('step', $step);
+}
 
 /**
  * Hidden event input.
@@ -331,10 +331,10 @@
  * );
  */
 
-    function eInput($event)
-    {
-        return hInput('event', $event);
-    }
+function eInput($event)
+{
+    return hInput('event', $event);
+}
 
 /**
  * Hidden form token input.
@@ -344,10 +344,10 @@
  * @see    form_token()
  */
 
-    function tInput()
-    {
-        return hInput('_txp_token', form_token());
-    }
+function tInput()
+{
+    return hInput('_txp_token', form_token());
+}
 
 /**
  * A checkbox.
@@ -362,27 +362,27 @@
  * echo checkbox('name', 'value', true);
  */
 
-    function checkbox($name, $value, $checked = true, $tabindex = 0, $id = '')
-    {
-        $class = 'checkbox';
+function checkbox($name, $value, $checked = true, $tabindex = 0, $id = '')
+{
+    $class = 'checkbox';
 
-        if ($checked) {
-            $class .= ' active';
-        }
-
-        $atts = join_atts(array(
-            'type'     => 'checkbox',
-            'name'     => $name,
-            'id'       => $id,
-            'checked'  => (bool) $checked,
-            'tabindex' => (int) $tabindex,
-            'class'    => $class,
-        ));
-
-        $atts .= join_atts(array('value' => (string) $value), 0);
-
-        return n.tag_void('input', $atts);
+    if ($checked) {
+        $class .= ' active';
     }
+
+    $atts = join_atts(array(
+        'type'     => 'checkbox',
+        'name'     => $name,
+        'id'       => $id,
+        'checked'  => (bool) $checked,
+        'tabindex' => (int) $tabindex,
+        'class'    => $class,
+    ));
+
+    $atts .= join_atts(array('value' => (string) $value), 0);
+
+    return n.tag_void('input', $atts);
+}
 
 /**
  * A checkbox without an option to set the value.
@@ -396,10 +396,10 @@
  * @see    checkbox()
  */
 
-    function checkbox2($name, $value, $tabindex = 0, $id = '')
-    {
-        return checkbox($name, 1, $value, $tabindex, $id);
-    }
+function checkbox2($name, $value, $tabindex = 0, $id = '')
+{
+    return checkbox($name, 1, $value, $tabindex, $id);
+}
 
 /**
  * A single radio button.
@@ -412,27 +412,27 @@
  * @return string HTML input
  */
 
-    function radio($name, $value, $checked = true, $id = '', $tabindex = 0)
-    {
-        $class = 'radio';
+function radio($name, $value, $checked = true, $id = '', $tabindex = 0)
+{
+    $class = 'radio';
 
-        if ($checked) {
-            $class .= ' active';
-        }
-
-        $atts = join_atts(array(
-            'type'     => 'radio',
-            'name'     => $name,
-            'id'       => $id,
-            'checked'  => (bool) $checked,
-            'tabindex' => (int) $tabindex,
-            'class'    => $class,
-        ));
-
-        $atts .= join_atts(array('value' => (string) $value), 0);
-
-        return n.tag_void('input', $atts);
+    if ($checked) {
+        $class .= ' active';
     }
+
+    $atts = join_atts(array(
+        'type'     => 'radio',
+        'name'     => $name,
+        'id'       => $id,
+        'checked'  => (bool) $checked,
+        'tabindex' => (int) $tabindex,
+        'class'    => $class,
+    ));
+
+    $atts .= join_atts(array('value' => (string) $value), 0);
+
+    return n.tag_void('input', $atts);
+}
 
 /**
  * Generates a form element.
@@ -450,27 +450,27 @@
  * @return string HTML form element
  */
 
-    function form($contents, $style = '', $onsubmit = '', $method = 'post', $class = '', $fragment = '', $id = '')
-    {
-        $action = 'index.php';
+function form($contents, $style = '', $onsubmit = '', $method = 'post', $class = '', $fragment = '', $id = '')
+{
+    $action = 'index.php';
 
-        if ($onsubmit) {
-            $onsubmit = 'return '.$onsubmit;
-        }
-
-        if ($fragment) {
-            $action .= '#'.$fragment;
-        }
-
-        return n.tag($contents.tInput().n, 'form', array(
-            'method'   => $method,
-            'action'   => $action,
-            'id'       => $id,
-            'class'    => $class,
-            'style'    => $style,
-            'onsubmit' => $onsubmit,
-        ));
+    if ($onsubmit) {
+        $onsubmit = 'return '.$onsubmit;
     }
+
+    if ($fragment) {
+        $action .= '#'.$fragment;
+    }
+
+    return n.tag($contents.tInput().n, 'form', array(
+        'method'   => $method,
+        'action'   => $action,
+        'id'       => $id,
+        'class'    => $class,
+        'style'    => $style,
+        'onsubmit' => $onsubmit,
+    ));
+}
 
 /**
  * Gets and sanitises a field from a prefixed core database table.
@@ -485,12 +485,12 @@
  * @see    txpspecialchars()
  */
 
-    function fetch_editable($name, $event, $identifier, $id)
-    {
-        $q = fetch($name, 'txp_'.$event, $identifier, $id);
+function fetch_editable($name, $event, $identifier, $id)
+{
+    $q = fetch($name, 'txp_'.$event, $identifier, $id);
 
-        return txpspecialchars($q);
-    }
+    return txpspecialchars($q);
+}
 
 /**
  * A textarea.
@@ -506,41 +506,41 @@
  * @return string HTML
  */
 
-    function text_area($name, $h = 0, $w = 0, $thing = '', $id = '', $rows = 5, $cols = 40, $placeholder = '')
-    {
-        $style = '';
+function text_area($name, $h = 0, $w = 0, $thing = '', $id = '', $rows = 5, $cols = 40, $placeholder = '')
+{
+    $style = '';
 
-        if ($w) {
-            $style .= 'width:'.intval($w).'px;';
-        }
-
-        if ($h) {
-            $style .= 'height:'.intval($h).'px;';
-        }
-
-        if ((string) $thing === '') {
-            $thing = null;
-        } else {
-            $thing = txpspecialchars($thing);
-        }
-
-        if (!intval($rows)) {
-            $rows = 5;
-        }
-
-        if (!intval($cols)) {
-            $cols = 40;
-        }
-
-        return tag($thing, 'textarea', array(
-            'name'        => $name,
-            'id'          => $id,
-            'rows'        => (int) $rows,
-            'cols'        => (int) $cols,
-            'style'       => $style,
-            'placeholder' => $placeholder,
-        ));
+    if ($w) {
+        $style .= 'width:'.intval($w).'px;';
     }
+
+    if ($h) {
+        $style .= 'height:'.intval($h).'px;';
+    }
+
+    if ((string) $thing === '') {
+        $thing = null;
+    } else {
+        $thing = txpspecialchars($thing);
+    }
+
+    if (!intval($rows)) {
+        $rows = 5;
+    }
+
+    if (!intval($cols)) {
+        $cols = 40;
+    }
+
+    return tag($thing, 'textarea', array(
+        'name'        => $name,
+        'id'          => $id,
+        'rows'        => (int) $rows,
+        'cols'        => (int) $cols,
+        'style'       => $style,
+        'placeholder' => $placeholder,
+    ));
+}
 
 /**
  * Generates a select field with a name "type".
@@ -551,10 +551,10 @@
  * @see    selectInput()
  */
 
-    function type_select($options)
-    {
-        return n.'<select name="type">'.type_options($options).'</select>';
-    }
+function type_select($options)
+{
+    return n.'<select name="type">'.type_options($options).'</select>';
+}
 
 /**
  * Generates a list of options for use in a select field.
@@ -565,14 +565,14 @@
  * @see    selectInput()
  */
 
-    function type_options($array)
-    {
-        foreach ($array as $a => $b) {
-            $out[] = n.'<option value="'.$a.'">'.gTxt($b).'</option>';
-        }
-
-        return join('', $out);
+function type_options($array)
+{
+    foreach ($array as $a => $b) {
+        $out[] = n.'<option value="'.$a.'">'.gTxt($b).'</option>';
     }
+
+    return join('', $out);
+}
 
 /**
  * Generates a list of radio buttons wrapped in a unordered list.
@@ -585,26 +585,26 @@
  * @return string       HTML
  */
 
-    function radio_list($name, $values, $current_val = '', $hilight_val = '', $atts = array('class' => 'status plain-list'))
-    {
-        foreach ($values as $value => $label) {
-            $id = $name.'-'.$value;
-            $class = 'status-'.$value;
+function radio_list($name, $values, $current_val = '', $hilight_val = '', $atts = array('class' => 'status plain-list'))
+{
+    foreach ($values as $value => $label) {
+        $id = $name.'-'.$value;
+        $class = 'status-'.$value;
 
-            if ((string) $value === (string) $hilight_val) {
-                $label = strong($label);
-                $class .= ' active';
-            }
-
-            $out[] = tag(
-                radio($name, $value, ((string) $current_val === (string) $value), $id).
-                n.tag($label, 'label', array('for' => $id)),
-                'li', array('class' => $class)
-            );
+        if ((string) $value === (string) $hilight_val) {
+            $label = strong($label);
+            $class .= ' active';
         }
 
-        return tag(n.join(n, $out).n, 'ul', $atts);
+        $out[] = tag(
+            radio($name, $value, ((string) $current_val === (string) $value), $id).
+            n.tag($label, 'label', array('for' => $id)),
+            'li', array('class' => $class)
+        );
     }
+
+    return tag(n.join(n, $out).n, 'ul', $atts);
+}
 
 /**
  * Generates a field used to store and set a date.
@@ -619,41 +619,41 @@
  * echo tsi('year', '%Y', 1200000000);
  */
 
-    function tsi($name, $datevar, $time, $tab = 0)
-    {
-        static $placeholders = array(
-            '%Y' => 'yyyy',
-            '%m' => 'mm',
-            '%d' => 'dd',
-            '%H' => 'hh',
-            '%M' => 'mn',
-            '%S' => 'ss',
-        );
+function tsi($name, $datevar, $time, $tab = 0)
+{
+    static $placeholders = array(
+        '%Y' => 'yyyy',
+        '%m' => 'mm',
+        '%d' => 'dd',
+        '%H' => 'hh',
+        '%M' => 'mn',
+        '%S' => 'ss',
+    );
 
-        $value = $placeholder = '';
-        $size = INPUT_TINY;
+    $value = $placeholder = '';
+    $size = INPUT_TINY;
 
-        if ((int) $time) {
-            $value = safe_strftime($datevar, (int) $time);
-        }
-
-        if (isset($placeholders[$datevar])) {
-            $placeholder = gTxt($placeholders[$datevar]);
-        }
-
-        if ($datevar == '%Y' || $name == 'year' || $name == 'exp_year') {
-            $size = INPUT_XSMALL;
-        }
-
-        return n.tag_void('input', array(
-            'type'        => 'text',
-            'name'        => $name,
-            'value'       => $value,
-            'size'        => (int) $size,
-            'maxlength'   => $size,
-            'class'       => $name,
-            'tabindex'    => (int) $tab,
-            'title'       => gTxt('article_'.$name),
-            'placeholder' => $placeholder,
-        ));
+    if ((int) $time) {
+        $value = safe_strftime($datevar, (int) $time);
     }
+
+    if (isset($placeholders[$datevar])) {
+        $placeholder = gTxt($placeholders[$datevar]);
+    }
+
+    if ($datevar == '%Y' || $name == 'year' || $name == 'exp_year') {
+        $size = INPUT_XSMALL;
+    }
+
+    return n.tag_void('input', array(
+        'type'        => 'text',
+        'name'        => $name,
+        'value'       => $value,
+        'size'        => (int) $size,
+        'maxlength'   => $size,
+        'class'       => $name,
+        'tabindex'    => (int) $tab,
+        'title'       => gTxt('article_'.$name),
+        'placeholder' => $placeholder,
+    ));
+}

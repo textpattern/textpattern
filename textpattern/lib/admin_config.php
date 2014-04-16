@@ -37,102 +37,102 @@
  */
 
 $txpac = array(
-// -------------------------------------------------------------
-// bypass the Txp CSS editor entirely
+    // -------------------------------------------------------------
 
+    // Bypass the Txp CSS editor entirely.
     'edit_raw_css_by_default'     => 1,
 
-// -------------------------------------------------------------
-// php scripts on page templates will be parsed
+    // -------------------------------------------------------------
 
+    // PHP scripts on page templates will be parsed.
     'allow_page_php_scripting'    => 1,
 
-// -------------------------------------------------------------
-// php scripts in article bodies will be parsed
+    // -------------------------------------------------------------
 
+    // PHP scripts in article bodies will be parsed.
     'allow_article_php_scripting' => 1,
 
-// -------------------------------------------------------------
-// use Textile on link titles and descriptions
+    // -------------------------------------------------------------
 
+    // Use Textile on link titles and descriptions.
     'textile_links'               => 0,
 
-// -------------------------------------------------------------
-// in the article categories listing in the organise tab
+    // -------------------------------------------------------------
+    // In the article categories listing in the organise tab.
 
     'show_article_category_count' => 1,
 
-// -------------------------------------------------------------
-// xml feeds display comment count as part of article title
+    // -------------------------------------------------------------
 
+    // XML feeds display comment count as part of article title.
     'show_comment_count_in_feed'  => 1,
 
-// -------------------------------------------------------------
-// include articles or full excerpts in feeds
-// 0 = full article body
-// 1 = excerpt
+    // -------------------------------------------------------------
 
+    // Include articles or full excerpts in feeds:
+    // 0 = full article body.
+    // 1 = excerpt.
     'syndicate_body_or_excerpt'   => 1,
 
-// -------------------------------------------------------------
-// include (encoded) author email in atom feeds
+    // -------------------------------------------------------------
 
+    // Include (encoded) author email in Atom feeds.
     'include_email_atom'          => 1,
 
-// -------------------------------------------------------------
-// each comment received updates the site Last-Modified header
+    // -------------------------------------------------------------
 
+    // Each comment received updates the site Last-Modified header.
     'comment_means_site_updated'  => 1,
 
-// -------------------------------------------------------------
-// comment email addresses are encoded to hide from spambots
-// but if you never want to see them at all, set this to 1
+    // -------------------------------------------------------------
 
+    // Comment email addresses are encoded to hide from spambots,
+    // but if you never want to see them at all, set this to 1.
     'never_display_email'         => 0,
 
-// -------------------------------------------------------------
-// comments must enter name and/or email address
+    // -------------------------------------------------------------
 
+    // Comments must enter name and/or email address
     'comments_require_name'       => 1,
     'comments_require_email'      => 1,
 
-// -------------------------------------------------------------
-// show 'excerpt' pane in write tab
+    // -------------------------------------------------------------
 
+    // Show 'excerpt' pane in write tab.
     'articles_use_excerpts'       => 1,
 
-// -------------------------------------------------------------
-// show form overrides on article-by-article basis
+    // -------------------------------------------------------------
 
+    // Show form overrides on article-by-article basis.
     'allow_form_override'         => 1,
 
-// -------------------------------------------------------------
-// whether or not to attach article titles to permalinks
-// e.g., /article/313/IAteACheeseSandwich
+    // -------------------------------------------------------------
 
+    // Whether or not to attach article titles to permalinks.
+    // e.g., /article/313/IAteACheeseSandwich.
     'attach_titles_to_permalinks' => 1,
 
-// -------------------------------------------------------------
-// if attaching titles to permalinks, which format?
-// 0 = SuperStudlyCaps
-// 1 = hyphenated-lower-case
+    // -------------------------------------------------------------
 
+    // If attaching titles to permalinks, which format?
+    // 0 = SuperStudlyCaps.
+    // 1 = hyphenated-lower-case.
     'permalink_title_format'      => 1,
 
-// -------------------------------------------------------------
-// number of days after which logfiles are purged
+    // -------------------------------------------------------------
 
+    // Number of days after which logfiles are purged.
     'expire_logs_after'           => 7,
 
-// -------------------------------------------------------------
-// plugins on or off
+    // -------------------------------------------------------------
 
+    // Plugins on or off.
     'use_plugins'                 => 1,
 
-// -------------------------------------------------------------
-// use custom fields for articles - must be in 'quotes', and
-// must contain no spaces
+    // -------------------------------------------------------------
 
+    // Use custom fields for articles - must be in 'quotes',
+    // and must contain no spaces.
     'custom_1_set'                => 'custom1',
     'custom_2_set'                => 'custom2',
     'custom_3_set'                => '',
@@ -144,42 +144,41 @@ $txpac = array(
     'custom_9_set'                => '',
     'custom_10_set'               => '',
 
-// -------------------------------------------------------------
-// ping textpattern.com when an article is published
+    // -------------------------------------------------------------
 
+    // Ping textpattern.com when an article is published.
     'ping_textpattern_com'        => 1,
 
-// -------------------------------------------------------------
-// use DNS lookups in referrer log
+    // -------------------------------------------------------------
 
+    // Use DNS lookups in referrer log.
     'use_dns'        => 1,
 
-// -------------------------------------------------------------
-// load plugins in the admin interface
+    // -------------------------------------------------------------
 
+    // Load plugins in the admin interface.
     'admin_side_plugins'        => 1,
 
-// -------------------------------------------------------------
-// use rel="nofollow" on comment links
+    // -------------------------------------------------------------
 
+    // Use rel="nofollow" on comment links.
     'comment_nofollow'        => 1,
 
-// -------------------------------------------------------------
-// use encoded email on atom feeds id, instead of domain name
-// (if you plan to move this install to another domain, you should use this)
+    // -------------------------------------------------------------
 
+    // Use encoded email on Atom feeds id, instead of domain name
+    // (if you plan to move this install to another domain, you should use this).
     'use_mail_on_feeds_id'       =>0,
 
-// -------------------------------------------------------------
-// maximum url length before it should be considered malicious
+    // -------------------------------------------------------------
 
+    // Maximum URL length before it should be considered malicious.
     'max_url_len'               => 200,
 
-// -------------------------------------------------------------
-// Spam DNS RBLs
+    // -------------------------------------------------------------
 
+    // Spam DNS RBLs.
     'spam_blacklists'          => 'sbl.spamhaus.org',
-
 );
 
 /**
@@ -202,7 +201,7 @@ $txp_permissions = array(
     'article.publish'             => '1,2,3,4',
     'article.php'                 => '1,2',
     'article'                     => '1,2,3,4,5,6',
-    'list'                        => '1,2,3,4,5,6', //likely the same as for article.
+    'list'                        => '1,2,3,4,5,6', // Likely the same as for article.
     'category'                    => '1,2,3',
     'css'                         => '1,2,      6',
     'debug.verbose'               => '1,2',
@@ -223,13 +222,13 @@ $txp_permissions = array(
     'image.delete'                => '1,2',
     'image.delete.own'            => '1,2,3,4,  6',
     'import'                      => '1,2',
-    'lang'                        => '1,2', // more?
+    'lang'                        => '1,2', // More?
     'link'                        => '1,2,3',
     'link.edit'                   => '1,2,3',
     'link.edit.own'               => '1,2,3',
     'link.delete'                 => '1,2',
     'link.delete.own'             => '1,2,3',
-    'log'                         => '1,2,3', // more?
+    'log'                         => '1,2,3', // More?
     'page'                        => '1,2,3,    6',
     'pane'                        => '1,2,3,4,5,6',
     'plugin'                      => '1,2',

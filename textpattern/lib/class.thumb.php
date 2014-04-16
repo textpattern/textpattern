@@ -236,7 +236,6 @@ class wet_thumb
         }
 
         // Get destination image info
-
         if (is_numeric($this->width) AND empty($this->height)) {
             $this->_DST['width']  = $this->width;
             $this->_DST['height'] = round($this->width/($this->_SRC['width']/$this->_SRC['height']));
@@ -272,7 +271,6 @@ class wet_thumb
         }
 
         // Don't make the new image larger than the original image.
-
         if (
             $this->extrapolate === false &&
             $this->_DST['height'] > $this->_SRC['height'] &&
@@ -287,21 +285,19 @@ class wet_thumb
         $this->_DST['file'] = $outfile;
 
         // Make sure we have enough memory if the image is large.
-
         if (max($this->_SRC['width'], $this->_SRC['height']) > 1024) {
             $shorthand = array('K', 'M', 'G');
             $tens = array('000', '000000', '000000000'); // A good enough decimal approximation of K, M, and G.
 
             // Do not *decrease* memory_limit.
-
             list($ml, $extra) = str_ireplace($shorthand, $tens, array(ini_get('memory_limit'), EXTRA_MEMORY));
+
             if ($ml < $extra) {
                 ini_set('memory_limit', EXTRA_MEMORY);
             }
         }
 
         // Read source image.
-
         if ($this->_SRC['type'] == 1) {
             $this->_SRC['image'] = imagecreatefromgif($this->_SRC['file']);
         } elseif ($this->_SRC['type'] == 2) {
@@ -311,7 +307,6 @@ class wet_thumb
         }
 
         // Crop image.
-
         $off_w = 0;
         $off_h = 0;
 
@@ -336,6 +331,7 @@ class wet_thumb
             } else {
                 $ratio = (double) ($this->_SRC['width'] / $this->_DST['width']);
                 $cpyHeight = round($this->_DST['height'] * $ratio);
+
                 if ($cpyHeight > $this->_SRC['height']) {
                     $ratio = (double) ($this->_SRC['height'] / $this->_DST['height']);
                     $cpyHeight = $this->_SRC['height'];
@@ -353,7 +349,6 @@ class wet_thumb
         }
 
         // Ensure non-zero height/width.
-
         if (!$this->_DST['height']) {
             $this->_DST['height'] = 1;
         }
@@ -406,12 +401,10 @@ class wet_thumb
         }
 
         // Finally, the real dimensions.
-
         $this->height =  $this->_DST['height'];
         $this->width =  $this->_DST['width'];
 
         // Add magnifying glass.
-
         if ($this->hint === true) {
             // Should we really add white bars?
             if ($this->addgreytohint === true) {
@@ -458,6 +451,7 @@ class wet_thumb
 
         imagedestroy($this->_DST['image']);
         imagedestroy($this->_SRC['image']);
+
         return true;
     }
 
@@ -554,6 +548,7 @@ class txp_thumb extends wet_thumb
             );
 
             chmod(IMPATH.$this->m_id.'t'.$this->m_ext, 0644);
+
             return true;
         }
 
@@ -574,6 +569,7 @@ class txp_thumb extends wet_thumb
 
         if (unlink(IMPATH.$this->m_id.'t'.$this->m_ext)) {
             safe_update('txp_image', 'thumbnail = 0', 'id = '.$this->m_id);
+
             return true;
         }
 
@@ -609,11 +605,15 @@ class txp_thumb extends wet_thumb
         if ($amount > 500) {
             $amount = 500;
         }
+
         $amount = $amount * 0.016;
+
         if ($radius > 50) {
             $radius = 50;
         }
+
         $radius = $radius * 2;
+
         if ($threshold > 255) {
             $threshold = 255;
         }
@@ -635,7 +635,6 @@ class txp_thumb extends wet_thumb
         // 1 2 1
         // Move copies of the image around one pixel at the time and merge them with weight
         // according to the matrix. The same matrix is simply repeated for higher radii.
-
         for ($i = 0; $i < $radius; $i++) {
             imagecopy($imgBlur, $imgCanvas, 0, 0, 1, 1, $w - 1, $h - 1); // up left
             imagecopymerge($imgBlur, $imgCanvas, 1, 1, 0, 0, $w, $h, 50); // down right
@@ -652,7 +651,6 @@ class txp_thumb extends wet_thumb
 
         // Calculate the difference between the blurred pixels and the original
         // and set the pixels.
-
         for ($x = 0; $x < $w; $x++) {
             // Each row.
             for ($y = 0; $y < $h; $y++) {

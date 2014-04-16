@@ -48,8 +48,13 @@ function install_language_from_file($lang)
 
     if (is_file($lang_file) && is_readable($lang_file)) {
         $lang_file = txpath.'/lang/'.$lang.'.txt';
-        if (!is_file($lang_file) || !is_readable($lang_file)) return;
+
+        if (!is_file($lang_file) || !is_readable($lang_file)) {
+            return;
+        }
+
         $file = @fopen($lang_file, "r");
+
         if ($file) {
             $lastmod = @filemtime($lang_file);
             $lastmod = date('YmdHis', $lastmod);
@@ -61,7 +66,9 @@ function install_language_from_file($lang)
                 $line = fgets($file, 4096);
 
                 // Ignore empty lines and simple comments (any line starting with #, not followed by @).
-                if (trim($line) === '' || ($line[0] == '#' && $line[1] != '@' && $line[1] != '#')) continue;
+                if (trim($line) === '' || ($line[0] == '#' && $line[1] != '@' && $line[1] != '#')) {
+                    continue;
+                }
 
                 // If available use the lastmod time from the file.
                 if (strpos($line, '#@version') === 0) {
@@ -76,13 +83,18 @@ function install_language_from_file($lang)
                         foreach ($data as $name => $value) {
                             $value = addslashes($value);
                             $exists = mysql_query('SELECT name, lastmod FROM `'.PFX."txp_lang` WHERE `lang`='".$lang."' AND `name`='$name' AND `event`='$event'");
-                            if ($exists) $exists = mysql_fetch_row($exists);
+
+                            if ($exists) {
+                                $exists = mysql_fetch_row($exists);
+                            }
+
                             if ($exists[1]) {
                                 mysql_query("UPDATE `".PFX."txp_lang` SET `lastmod`='$lastmod', `data`='$value' WHERE owner = ''".doSlash(TEXTPATTERN_LANG_OWNER_SYSTEM)." AND `lang`='".$lang."' AND `name`='$name' AND `event`='$event'");
                                 echo mysql_error();
-                            } else
+                            } else {
                                 mysql_query("INSERT DELAYED INTO `".PFX."txp_lang` SET `lang`='".$lang."', `name`='$name', `lastmod`='$lastmod', `event`='$event', `data`='$value'");
                                 echo mysql_error();
+                            }
                         }
                     }
 
@@ -90,9 +102,11 @@ function install_language_from_file($lang)
                     $data = array();
                     $event = substr($line, 2, (strlen($line) - 2));
                     $event = rtrim($event);
+
                     if (strpos($event, 'version') === false) {
                         $core_events[] = $event;
                     }
+
                     continue;
                 }
 
@@ -110,6 +124,7 @@ function install_language_from_file($lang)
                      mysql_query("INSERT DELAYED INTO `".PFX."txp_lang` SET `lang`='".$lang."', `name`='$name', `lastmod`='$lastmod', `event`='$event', `data`='$value'");
                 }
             }
+
             mysql_query("DELETE FROM `".PFX."txp_lang` WHERE owner = '' AND `lang`='".$lang."' AND `event` IN ('".join("','", array_unique($core_events))."') AND `lastmod`>$lastmod");
             @fclose($filename);
 
@@ -120,5 +135,6 @@ function install_language_from_file($lang)
             return true;
         }
     }
+
     return false;
 }

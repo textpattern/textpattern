@@ -231,16 +231,17 @@ $DB = new DB;
  * }
  */
 
-    function safe_pfx($table)
-    {
-        global $DB;
+function safe_pfx($table)
+{
+    global $DB;
+    $name = $DB->table_prefix.$table;
 
-        $name = $DB->table_prefix.$table;
-        if (preg_match('@[^\w._$]@', $name)) {
-            return '`'.$name.'`';
-        }
-        return $name;
+    if (preg_match('@[^\w._$]@', $name)) {
+        return '`'.$name.'`';
     }
+
+    return $name;
+}
 
 /**
  * Prefixes a database table's name for use in a joined query.
@@ -266,21 +267,22 @@ $DB = new DB;
  * }
  */
 
-    function safe_pfx_j($table)
-    {
-        global $DB;
+function safe_pfx_j($table)
+{
+    global $DB;
+    $ts = array();
 
-        $ts = array();
-        foreach (explode(',', $table) as $t) {
-            $name = $DB->table_prefix.trim($t);
-            if (preg_match('@[^\w._$]@', $name)) {
-                $ts[] = "`$name`".($DB->table_prefix ? " as `$t`" : '');
-            } else {
-                $ts[] = "$name".($DB->table_prefix ? " as $t" : '');
-            }
+    foreach (explode(',', $table) as $t) {
+        $name = $DB->table_prefix.trim($t);
+        if (preg_match('@[^\w._$]@', $name)) {
+            $ts[] = "`$name`".($DB->table_prefix ? " as `$t`" : '');
+        } else {
+            $ts[] = "$name".($DB->table_prefix ? " as $t" : '');
         }
-        return join(', ', $ts);
     }
+
+    return join(', ', $ts);
+}
 
 /**
  * Escapes special characters in a string for use in an SQL statement.
@@ -296,11 +298,12 @@ $DB = new DB;
  * }
  */
 
-    function safe_escape($in = '')
-    {
-        global $DB;
-        return mysql_real_escape_string($in, $DB->link);
-    }
+function safe_escape($in = '')
+{
+    global $DB;
+
+    return mysql_real_escape_string($in, $DB->link);
+}
 
 /**
  * Escape LIKE pattern's wildcards in a string for use in an SQL statement.
@@ -316,14 +319,14 @@ $DB = new DB;
  * }
  */
 
-    function safe_escape_like($in = '')
-    {
-        return safe_escape(str_replace(
-            array('\\', '%', '_', '\''),
-            array('\\\\', '\\%', '\\_', '\\\''),
-            (string) $in
-        ));
-    }
+function safe_escape_like($in = '')
+{
+    return safe_escape(str_replace(
+        array('\\', '%', '_', '\''),
+        array('\\\\', '\\%', '\\_', '\\\''),
+        (string) $in
+    ));
+}
 
 /**
  * Executes an SQL statement.
@@ -336,33 +339,37 @@ $DB = new DB;
  * echo safe_query('SELECT * FROM table');
  */
 
-    function safe_query($q = '', $debug = false, $unbuf = false)
-    {
-        global $DB, $txpcfg, $qcount, $qtime, $production_status;
-        $method = (!$unbuf) ? 'mysql_query' : 'mysql_unbuffered_query';
-        if (!$q) {
-            return false;
-        }
-        if ($debug or TXP_DEBUG === 1) {
-            dmp($q);
-        }
+function safe_query($q = '', $debug = false, $unbuf = false)
+{
+    global $DB, $txpcfg, $qcount, $qtime, $production_status;
+    $method = (!$unbuf) ? 'mysql_query' : 'mysql_unbuffered_query';
 
-        $start = getmicrotime();
-        $result = $method($q, $DB->link);
-        $time = getmicrotime() - $start;
-        @$qtime += $time;
-        @$qcount++;
-        if ($result === false) {
-            trigger_error(mysql_error($DB->link), E_USER_ERROR);
-        }
-
-        trace_add("[SQL ($time): $q]");
-
-        if (!$result) {
-            return false;
-        }
-        return $result;
+    if (!$q) {
+        return false;
     }
+
+    if ($debug or TXP_DEBUG === 1) {
+        dmp($q);
+    }
+
+    $start = getmicrotime();
+    $result = $method($q, $DB->link);
+    $time = getmicrotime() - $start;
+    @$qtime += $time;
+    @$qcount++;
+
+    if ($result === false) {
+        trigger_error(mysql_error($DB->link), E_USER_ERROR);
+    }
+
+    trace_add("[SQL ($time): $q]");
+
+    if (!$result) {
+        return false;
+    }
+
+    return $result;
+}
 
 /**
  * Deletes a row from a table.
@@ -380,10 +387,10 @@ $DB = new DB;
  * }
  */
 
-    function safe_delete($table, $where, $debug = false)
-    {
-        return (bool) safe_query("delete from ".safe_pfx($table)." where $where", $debug);
-    }
+function safe_delete($table, $where, $debug = false)
+{
+    return (bool) safe_query("delete from ".safe_pfx($table)." where $where", $debug);
+}
 
 /**
  * Updates a table row.
@@ -402,10 +409,10 @@ $DB = new DB;
  * }
  */
 
-    function safe_update($table, $set, $where, $debug = false)
-    {
-        return (bool) safe_query("update ".safe_pfx($table)." set $set where $where", $debug);
-    }
+function safe_update($table, $set, $where, $debug = false)
+{
+    return (bool) safe_query("update ".safe_pfx($table)." set $set where $where", $debug);
+}
 
 /**
  * Inserts a new row into a table.
@@ -423,16 +430,19 @@ $DB = new DB;
  * }
  */
 
-    function safe_insert($table, $set, $debug = false)
-    {
-        global $DB;
-        $q = "insert into ".safe_pfx($table)." set $set";
-        if ($r = safe_query($q, $debug)) {
-            $id = mysql_insert_id($DB->link);
-            return ($id === 0 ? true : $id);
-        }
-        return false;
+function safe_insert($table, $set, $debug = false)
+{
+    global $DB;
+    $q = "insert into ".safe_pfx($table)." set $set";
+
+    if ($r = safe_query($q, $debug)) {
+        $id = mysql_insert_id($DB->link);
+
+        return ($id === 0 ? true : $id);
     }
+
+    return false;
+}
 
 /**
  * Inserts a new row, or updates an existing if a matching row is found.
@@ -449,17 +459,18 @@ $DB = new DB;
  * }
  */
 
-    function safe_upsert($table, $set, $where, $debug = false)
-    {
-        global $DB;
-        // FIXME: lock the table so this is atomic?
-        $r = safe_update($table, $set, $where, $debug);
-        if ($r and (mysql_affected_rows($DB->link) or safe_count($table, $where, $debug))) {
-            return $r;
-        } else {
-            return safe_insert($table, join(', ', array($where, $set)), $debug);
-        }
+function safe_upsert($table, $set, $where, $debug = false)
+{
+    global $DB;
+    // FIXME: lock the table so this is atomic?
+    $r = safe_update($table, $set, $where, $debug);
+
+    if ($r and (mysql_affected_rows($DB->link) or safe_count($table, $where, $debug))) {
+        return $r;
+    } else {
+        return safe_insert($table, join(', ', array($where, $set)), $debug);
     }
+}
 
 /**
  * Changes the structure of a table.
@@ -475,10 +486,10 @@ $DB = new DB;
  * }
  */
 
-    function safe_alter($table, $alter, $debug = false)
-    {
-        return (bool) safe_query("alter table ".safe_pfx($table)." $alter", $debug);
-    }
+function safe_alter($table, $alter, $debug = false)
+{
+    return (bool) safe_query("alter table ".safe_pfx($table)." $alter", $debug);
+}
 
 /**
  * Locks a table.
@@ -499,10 +510,10 @@ $DB = new DB;
  * }
  */
 
-    function safe_lock($table, $type = 'write', $debug = false)
-    {
-        return (bool) safe_query('lock tables ' . join(' '.$type.', ', doArray(do_list($table), 'safe_pfx')).' '.$type, $debug);
-    }
+function safe_lock($table, $type = 'write', $debug = false)
+{
+    return (bool) safe_query('lock tables ' . join(' '.$type.', ', doArray(do_list($table), 'safe_pfx')).' '.$type, $debug);
+}
 
 /**
  * Unlocks tables.
@@ -517,10 +528,10 @@ $DB = new DB;
  * }
  */
 
-    function safe_unlock($debug = false)
-    {
-        return (bool) safe_query('unlock tables', $debug);
-    }
+function safe_unlock($debug = false)
+{
+    return (bool) safe_query('unlock tables', $debug);
+}
 
 /**
  * Gets an array of information about an index.
@@ -537,20 +548,20 @@ $DB = new DB;
  * }
  */
 
-    function safe_index($table, $index, $debug = false)
-    {
-        $index = strtolower($index);
+function safe_index($table, $index, $debug = false)
+{
+    $index = strtolower($index);
 
-        if ($r = safe_show('index', $table, $debug)) {
-            foreach ($r as $a) {
-                if (strtolower($a['Key_name']) === $index) {
-                    return $a;
-                }
+    if ($r = safe_show('index', $table, $debug)) {
+        foreach ($r as $a) {
+            if (strtolower($a['Key_name']) === $index) {
+                return $a;
             }
         }
-
-        return false;
     }
+
+    return false;
+}
 
 /**
  * Creates an index.
@@ -570,20 +581,20 @@ $DB = new DB;
  * }
  */
 
-    function safe_create_index($table, $columns, $name, $index = 'fulltext', $type = '', $debug = false)
-    {
-        if (safe_index($table, $name, $debug)) {
-            return true;
-        }
-
-        if (strtolower($name) == 'primary') {
-            $q = 'alter table '.safe_pfx($table).' add primary key('.$columns.')';
-        } else {
-            $q = 'create '.$index.' index `'.$name.'`'.($type ? ' using '.$type : '').' on '.safe_pfx($table).' ('.$columns.')';
-        }
-
-        return (bool) safe_query($q, $debug);
+function safe_create_index($table, $columns, $name, $index = 'fulltext', $type = '', $debug = false)
+{
+    if (safe_index($table, $name, $debug)) {
+        return true;
     }
+
+    if (strtolower($name) == 'primary') {
+        $q = 'alter table '.safe_pfx($table).' add primary key('.$columns.')';
+    } else {
+        $q = 'create '.$index.' index `'.$name.'`'.($type ? ' using '.$type : '').' on '.safe_pfx($table).' ('.$columns.')';
+    }
+
+    return (bool) safe_query($q, $debug);
+}
 
 /**
  * Removes an index.
@@ -600,20 +611,20 @@ $DB = new DB;
  * }
  */
 
-    function safe_drop_index($table, $index, $debug = false)
-    {
-        if (!safe_index($table, $index, $debug)) {
-            return true;
-        }
-
-        if (strtolower($index) === 'primary') {
-            $q = 'alter table '.safe_pfx($table).' drop primary key';
-        } else {
-            $q = 'drop index `'.$index.'` on '.safe_pfx($table);
-        }
-
-        return (bool) safe_query($q, $debug);
+function safe_drop_index($table, $index, $debug = false)
+{
+    if (!safe_index($table, $index, $debug)) {
+        return true;
     }
+
+    if (strtolower($index) === 'primary') {
+        $q = 'alter table '.safe_pfx($table).' drop primary key';
+    } else {
+        $q = 'drop index `'.$index.'` on '.safe_pfx($table);
+    }
+
+    return (bool) safe_query($q, $debug);
+}
 
 /**
  * Optimises a table.
@@ -628,10 +639,10 @@ $DB = new DB;
  * }
  */
 
-    function safe_optimize($table, $debug = false)
-    {
-        return (bool) safe_query("optimize table ".safe_pfx($table), $debug);
-    }
+function safe_optimize($table, $debug = false)
+{
+    return (bool) safe_query("optimize table ".safe_pfx($table), $debug);
+}
 
 /**
  * Repairs a table.
@@ -646,10 +657,10 @@ $DB = new DB;
  * }
  */
 
-    function safe_repair($table, $debug = false)
-    {
-        return (bool) safe_query("repair table ".safe_pfx($table), $debug);
-    }
+function safe_repair($table, $debug = false)
+{
+    return (bool) safe_query("repair table ".safe_pfx($table), $debug);
+}
 
 /**
  * Truncates a table.
@@ -669,10 +680,10 @@ $DB = new DB;
  * }
  */
 
-    function safe_truncate($table, $debug = false)
-    {
-        return (bool) safe_query("truncate table ".safe_pfx($table), $debug);
-    }
+function safe_truncate($table, $debug = false)
+{
+    return (bool) safe_query("truncate table ".safe_pfx($table), $debug);
+}
 
 /**
  * Removes a table.
@@ -691,10 +702,10 @@ $DB = new DB;
  * }
  */
 
-    function safe_drop($table, $debug = false)
-    {
-        return (bool) safe_query('drop table if exists '.safe_pfx($table), $debug);
-    }
+function safe_drop($table, $debug = false)
+{
+    return (bool) safe_query('drop table if exists '.safe_pfx($table), $debug);
+}
 
 /**
  * Creates a table.
@@ -716,19 +727,19 @@ $DB = new DB;
  * }
  */
 
-    function safe_create($table, $definition, $options = '', $debug = false)
-    {
-        global $DB;
+function safe_create($table, $definition, $options = '', $debug = false)
+{
+    global $DB;
 
-        foreach ($DB->table_options as $name => $value) {
-            $options .= ' '.$name.' = '.$value;
-        }
-
-        $q = 'create table if not exists '.safe_pfx($table).' ('.
-            $definition.') '.$options.' AUTO_INCREMENT = 1 PACK_KEYS = 1';
-
-        return (bool) safe_query($q, $debug);
+    foreach ($DB->table_options as $name => $value) {
+        $options .= ' '.$name.' = '.$value;
     }
+
+    $q = 'create table if not exists '.safe_pfx($table).' ('.
+        $definition.') '.$options.' AUTO_INCREMENT = 1 PACK_KEYS = 1';
+
+    return (bool) safe_query($q, $debug);
+}
 
 /**
  * Renames a table.
@@ -740,10 +751,10 @@ $DB = new DB;
  * @since  4.6.0
  */
 
-    function safe_rename($table, $newname, $debug = false)
-    {
-        return (bool) safe_query('rename table '.safe_pfx($table).' to '.safe_pfx($newname), $debug);
-    }
+function safe_rename($table, $newname, $debug = false)
+{
+    return (bool) safe_query('rename table '.safe_pfx($table).' to '.safe_pfx($newname), $debug);
+}
 
 /**
  * Gets a field from a row.
@@ -763,17 +774,20 @@ $DB = new DB;
  * }
  */
 
-    function safe_field($thing, $table, $where, $debug = false)
-    {
-        $q = "select $thing from ".safe_pfx_j($table)." where $where";
-        $r = safe_query($q, $debug);
-        if (@mysql_num_rows($r) > 0) {
-            $f = mysql_result($r, 0);
-            mysql_free_result($r);
-            return $f;
-        }
-        return false;
+function safe_field($thing, $table, $where, $debug = false)
+{
+    $q = "select $thing from ".safe_pfx_j($table)." where $where";
+    $r = safe_query($q, $debug);
+
+    if (@mysql_num_rows($r) > 0) {
+        $f = mysql_result($r, 0);
+        mysql_free_result($r);
+
+        return $f;
     }
+
+    return false;
+}
 
 /**
  * Gets a list of values from a table's column.
@@ -785,19 +799,22 @@ $DB = new DB;
  * @return array
  */
 
-    function safe_column($thing, $table, $where, $debug = false)
-    {
-        $q = "select $thing from ".safe_pfx_j($table)." where $where";
-        $rs = getRows($q, $debug);
-        if ($rs) {
-            foreach ($rs as $a) {
-                $v = array_shift($a);
-                $out[$v] = $v;
-            }
-            return $out;
+function safe_column($thing, $table, $where, $debug = false)
+{
+    $q = "select $thing from ".safe_pfx_j($table)." where $where";
+    $rs = getRows($q, $debug);
+
+    if ($rs) {
+        foreach ($rs as $a) {
+            $v = array_shift($a);
+            $out[$v] = $v;
         }
-        return array();
+
+        return $out;
     }
+
+    return array();
+}
 
 /**
  * Fetch a column as an numeric array.
@@ -810,19 +827,21 @@ $DB = new DB;
  * @since  4.5.0
  */
 
-    function safe_column_num($thing, $table, $where, $debug = false)
-    {
-        $q = "select $thing from ".safe_pfx_j($table)." where $where";
-        $rs = getRows($q, $debug);
-        if ($rs) {
-            foreach ($rs as $a) {
-                $v = array_shift($a);
-                $out[] = $v;
-            }
-            return $out;
+function safe_column_num($thing, $table, $where, $debug = false)
+{
+    $q = "select $thing from ".safe_pfx_j($table)." where $where";
+    $rs = getRows($q, $debug);
+    if ($rs) {
+        foreach ($rs as $a) {
+            $v = array_shift($a);
+            $out[] = $v;
         }
-        return array();
+
+        return $out;
     }
+
+    return array();
+}
 
 /**
  * Gets a row from a table as an associative array.
@@ -842,15 +861,17 @@ $DB = new DB;
  * }
  */
 
-    function safe_row($things, $table, $where, $debug = false)
-    {
-        $q = "select $things from ".safe_pfx_j($table)." where $where";
-        $rs = getRow($q, $debug);
-        if ($rs) {
-            return $rs;
-        }
-        return array();
+function safe_row($things, $table, $where, $debug = false)
+{
+    $q = "select $things from ".safe_pfx_j($table)." where $where";
+    $rs = getRow($q, $debug);
+
+    if ($rs) {
+        return $rs;
     }
+
+    return array();
+}
 
 /**
  * Gets a list rows from a table as an associative array.
@@ -876,15 +897,17 @@ $DB = new DB;
  * }
  */
 
-    function safe_rows($things, $table, $where, $debug = false)
-    {
-        $q = "select $things from ".safe_pfx_j($table)." where $where";
-        $rs = getRows($q, $debug);
-        if ($rs) {
-            return $rs;
-        }
-        return array();
+function safe_rows($things, $table, $where, $debug = false)
+{
+    $q = "select $things from ".safe_pfx_j($table)." where $where";
+    $rs = getRows($q, $debug);
+
+    if ($rs) {
+        return $rs;
     }
+
+    return array();
+}
 
 /**
  * Selects rows from a table and returns result as a resource.
@@ -906,11 +929,12 @@ $DB = new DB;
  * }
  */
 
-    function safe_rows_start($things, $table, $where, $debug = false)
-    {
-        $q = "select $things from ".safe_pfx_j($table)." where $where";
-        return startRows($q, $debug);
-    }
+function safe_rows_start($things, $table, $where, $debug = false)
+{
+    $q = "select $things from ".safe_pfx_j($table)." where $where";
+
+    return startRows($q, $debug);
+}
 
 /**
  * Counts number of rows in a table.
@@ -926,10 +950,10 @@ $DB = new DB;
  * }
  */
 
-    function safe_count($table, $where, $debug = false)
-    {
-        return getCount($table, $where, $debug);
-    }
+function safe_count($table, $where, $debug = false)
+{
+    return getCount($table, $where, $debug);
+}
 
 /**
  * Shows information about a table.
@@ -942,15 +966,17 @@ $DB = new DB;
  * print_r(safe_show('columns', 'myTable'));
  */
 
-    function safe_show($thing, $table, $debug = false)
-    {
-        $q = "show $thing from ".safe_pfx($table)."";
-        $rs = getRows($q, $debug);
-        if ($rs) {
-            return $rs;
-        }
-        return array();
+function safe_show($thing, $table, $debug = false)
+{
+    $q = "show $thing from ".safe_pfx($table)."";
+    $rs = getRows($q, $debug);
+
+    if ($rs) {
+        return $rs;
     }
+
+    return array();
+}
 
 /**
  * Gets a field from a row.
@@ -970,18 +996,21 @@ $DB = new DB;
  * echo fetch('name', 'myTable', 'id', 12);
  */
 
-    function fetch($col, $table, $key, $val, $debug = false)
-    {
-        $key = doSlash($key);
-        $val = (is_int($val)) ? $val : "'".doSlash($val)."'";
-        $q = "select $col from ".safe_pfx($table)." where `$key` = $val limit 1";
-        if ($r = safe_query($q, $debug)) {
-            $thing = (mysql_num_rows($r) > 0) ? mysql_result($r,0) : '';
-            mysql_free_result($r);
-            return $thing;
-        }
-        return false;
+function fetch($col, $table, $key, $val, $debug = false)
+{
+    $key = doSlash($key);
+    $val = (is_int($val)) ? $val : "'".doSlash($val)."'";
+    $q = "select $col from ".safe_pfx($table)." where `$key` = $val limit 1";
+
+    if ($r = safe_query($q, $debug)) {
+        $thing = (mysql_num_rows($r) > 0) ? mysql_result($r,0) : '';
+        mysql_free_result($r);
+
+        return $thing;
     }
+
+    return false;
+}
 
 /**
  * Gets a row as an associative array.
@@ -992,15 +1021,17 @@ $DB = new DB;
  * @see    safe_row()
  */
 
-    function getRow($query, $debug = false)
-    {
-        if ($r = safe_query($query, $debug)) {
-            $row = (mysql_num_rows($r) > 0) ? mysql_fetch_assoc($r) : false;
-            mysql_free_result($r);
-            return $row;
-        }
-        return false;
+function getRow($query, $debug = false)
+{
+    if ($r = safe_query($query, $debug)) {
+        $row = (mysql_num_rows($r) > 0) ? mysql_fetch_assoc($r) : false;
+        mysql_free_result($r);
+
+        return $row;
     }
+
+    return false;
+}
 
 /**
  * Gets multiple rows as an associative array.
@@ -1020,19 +1051,22 @@ $DB = new DB;
  * }
  */
 
-    function getRows($query, $debug = false)
-    {
-        if ($r = safe_query($query, $debug)) {
-            if (mysql_num_rows($r) > 0) {
-                while ($a = mysql_fetch_assoc($r)) {
-                    $out[] = $a;
-                }
-                mysql_free_result($r);
-                return $out;
+function getRows($query, $debug = false)
+{
+    if ($r = safe_query($query, $debug)) {
+        if (mysql_num_rows($r) > 0) {
+            while ($a = mysql_fetch_assoc($r)) {
+                $out[] = $a;
             }
+
+            mysql_free_result($r);
+
+            return $out;
         }
-        return false;
     }
+
+    return false;
+}
 
 /**
  * Executes an SQL statement and returns results.
@@ -1047,10 +1081,10 @@ $DB = new DB;
  * @access private
  */
 
-    function startRows($query, $debug = false)
-    {
-        return safe_query($query, $debug);
-    }
+function startRows($query, $debug = false)
+{
+    return safe_query($query, $debug);
+}
 
 /**
  * Gets a next row as an associative array from a result resource.
@@ -1071,14 +1105,16 @@ $DB = new DB;
  * }
  */
 
-    function nextRow($r)
-    {
-        $row = mysql_fetch_assoc($r);
-        if ($row === false) {
-            mysql_free_result($r);
-        }
-        return $row;
+function nextRow($r)
+{
+    $row = mysql_fetch_assoc($r);
+
+    if ($row === false) {
+        mysql_free_result($r);
     }
+
+    return $row;
+}
 
 /**
  * Gets the number of rows in a result resource.
@@ -1093,10 +1129,10 @@ $DB = new DB;
  * }
  */
 
-    function numRows($r)
-    {
-        return mysql_num_rows($r);
-    }
+function numRows($r)
+{
+    return mysql_num_rows($r);
+}
 
 /**
  * Gets the contents of a single cell from a resource set.
@@ -1106,15 +1142,17 @@ $DB = new DB;
  * @return string|bool The contents, empty if no results were found or FALSE on error
  */
 
-    function getThing($query, $debug = false)
-    {
-        if ($r = safe_query($query, $debug)) {
-            $thing = (mysql_num_rows($r) != 0) ? mysql_result($r, 0) : '';
-            mysql_free_result($r);
-            return $thing;
-        }
-        return false;
+function getThing($query, $debug = false)
+{
+    if ($r = safe_query($query, $debug)) {
+        $thing = (mysql_num_rows($r) != 0) ? mysql_result($r, 0) : '';
+        mysql_free_result($r);
+
+        return $thing;
     }
+
+    return false;
+}
 
 /**
  * Return values of one column from multiple rows in a num indexed array.
@@ -1124,17 +1162,20 @@ $DB = new DB;
  * @return array
  */
 
-    function getThings($query, $debug = false)
-    {
-        $rs = getRows($query, $debug);
-        if ($rs) {
-            foreach ($rs as $a) {
-                $out[] = array_shift($a);
-            }
-            return $out;
+function getThings($query, $debug = false)
+{
+    $rs = getRows($query, $debug);
+
+    if ($rs) {
+        foreach ($rs as $a) {
+            $out[] = array_shift($a);
         }
-        return array();
+
+        return $out;
     }
+
+    return array();
+}
 
 /**
  * Counts number of rows in a table.
@@ -1149,10 +1190,10 @@ $DB = new DB;
  * @see    safe_count()
  */
 
-    function getCount($table, $where, $debug = false)
-    {
-        return getThing("select count(*) from ".safe_pfx_j($table)." where $where", $debug);
-    }
+function getCount($table, $where, $debug = false)
+{
+    return getThing("select count(*) from ".safe_pfx_j($table)." where $where", $debug);
+}
 
 /**
  * Gets a tree structure.
@@ -1166,52 +1207,55 @@ $DB = new DB;
  * @return array
  */
 
-    function getTree($root, $type, $where = '1=1', $tbl = 'txp_category')
-    {
+function getTree($root, $type, $where = '1=1', $tbl = 'txp_category')
+{
 
-        $root = doSlash($root);
-        $type = doSlash($type);
+    $root = doSlash($root);
+    $type = doSlash($type);
 
-        $rs = safe_row(
-            "lft as l, rgt as r",
-            $tbl,
-            "name='$root' and type = '$type'"
-        );
+    $rs = safe_row(
+        "lft as l, rgt as r",
+        $tbl,
+        "name='$root' and type = '$type'"
+    );
 
-        if (!$rs) {
-            return array();
-        }
-        extract($rs);
-
-        $out = array();
-        $right = array();
-
-        $rs = safe_rows_start(
-            "id, name, lft, rgt, parent, title",
-            $tbl,
-            "lft between $l and $r and type = '$type' and name != 'root' and $where order by lft asc"
-        );
-
-        while ($rs and $row = nextRow($rs)) {
-            extract($row);
-            while (count($right) > 0 && $right[count($right)-1] < $rgt) {
-                array_pop($right);
-            }
-
-            $out[] =
-                array(
-                    'id' => $id,
-                    'name' => $name,
-                    'title' => $title,
-                    'level' => count($right),
-                    'children' => ($rgt - $lft - 1) / 2,
-                    'parent' => $parent
-                );
-
-            $right[] = $rgt;
-        }
-        return $out;
+    if (!$rs) {
+        return array();
     }
+
+    extract($rs);
+
+    $out = array();
+    $right = array();
+
+    $rs = safe_rows_start(
+        "id, name, lft, rgt, parent, title",
+        $tbl,
+        "lft between $l and $r and type = '$type' and name != 'root' and $where order by lft asc"
+    );
+
+    while ($rs and $row = nextRow($rs)) {
+        extract($row);
+
+        while (count($right) > 0 && $right[count($right)-1] < $rgt) {
+            array_pop($right);
+        }
+
+        $out[] =
+            array(
+                'id' => $id,
+                'name' => $name,
+                'title' => $title,
+                'level' => count($right),
+                'children' => ($rgt - $lft - 1) / 2,
+                'parent' => $parent
+            );
+
+        $right[] = $rgt;
+    }
+
+    return $out;
+}
 
 /**
  * Gets a tree path up to a target.
@@ -1224,48 +1268,51 @@ $DB = new DB;
  * @return array
  */
 
-    function getTreePath($target, $type, $tbl = 'txp_category')
-    {
+function getTreePath($target, $type, $tbl = 'txp_category')
+{
 
-        $rs = safe_row(
-            "lft as l, rgt as r",
-            $tbl,
-            "name='".doSlash($target)."' and type = '".doSlash($type)."'"
-        );
-        if (!$rs) {
-            return array();
-        }
-        extract($rs);
+    $rs = safe_row(
+        "lft as l, rgt as r",
+        $tbl,
+        "name='".doSlash($target)."' and type = '".doSlash($type)."'"
+    );
 
-        $rs = safe_rows_start(
-            "*",
-            $tbl,
-            "lft <= $l and rgt >= $r and type = '".doSlash($type)."' order by lft asc"
-        );
-
-        $out = array();
-        $right = array();
-
-        while ($rs and $row = nextRow($rs)) {
-            extract($row);
-
-            while (count($right) > 0 && $right[count($right)-1] < $rgt) {
-                array_pop($right);
-            }
-
-            $out[] =
-                array(
-                    'id' => $id,
-                    'name' => $name,
-                    'title' => $title,
-                    'level' => count($right),
-                    'children' => ($rgt - $lft - 1) / 2
-                );
-
-            $right[] = $rgt;
-        }
-        return $out;
+    if (!$rs) {
+        return array();
     }
+
+    extract($rs);
+
+    $rs = safe_rows_start(
+        "*",
+        $tbl,
+        "lft <= $l and rgt >= $r and type = '".doSlash($type)."' order by lft asc"
+    );
+
+    $out = array();
+    $right = array();
+
+    while ($rs and $row = nextRow($rs)) {
+        extract($row);
+
+        while (count($right) > 0 && $right[count($right)-1] < $rgt) {
+            array_pop($right);
+        }
+
+        $out[] =
+            array(
+                'id' => $id,
+                'name' => $name,
+                'title' => $title,
+                'level' => count($right),
+                'children' => ($rgt - $lft - 1) / 2
+            );
+
+        $right[] = $rgt;
+    }
+
+    return $out;
+}
 
 /**
  * Rebuilds a nested tree set.
@@ -1279,28 +1326,29 @@ $DB = new DB;
  * @return int    The next left ID
  */
 
-    function rebuild_tree($parent, $left, $type, $tbl = 'txp_category')
-    {
-        $left  = assert_int($left);
-        $right = $left + 1;
+function rebuild_tree($parent, $left, $type, $tbl = 'txp_category')
+{
+    $left  = assert_int($left);
+    $right = $left + 1;
 
-        $parent = doSlash($parent);
-        $type   = doSlash($type);
+    $parent = doSlash($parent);
+    $type   = doSlash($type);
 
-        $result = safe_column("name", $tbl,
-            "parent='$parent' and type='$type' order by name");
+    $result = safe_column("name", $tbl,
+        "parent='$parent' and type='$type' order by name");
 
-        foreach ($result as $row) {
-            $right = rebuild_tree($row, $right, $type, $tbl);
-        }
-
-        safe_update(
-            $tbl,
-            "lft=$left, rgt=$right",
-            "name='$parent' and type='$type'"
-        );
-        return $right + 1;
+    foreach ($result as $row) {
+        $right = rebuild_tree($row, $right, $type, $tbl);
     }
+
+    safe_update(
+        $tbl,
+        "lft=$left, rgt=$right",
+        "name='$parent' and type='$type'"
+    );
+
+    return $right + 1;
+}
 
 /**
  * Rebuilds a tree.
@@ -1312,13 +1360,13 @@ $DB = new DB;
  * @return int    The next left ID
  */
 
-    function rebuild_tree_full($type, $tbl = 'txp_category')
-    {
-        // Fix circular references, otherwise rebuild_tree() could get stuck in a loop.
-        safe_update($tbl, "parent=''", "type='".doSlash($type)."' and name='root'");
-        safe_update($tbl, "parent='root'", "type='".doSlash($type)."' and parent=name");
-        rebuild_tree('root', 1, $type, $tbl);
-    }
+function rebuild_tree_full($type, $tbl = 'txp_category')
+{
+    // Fix circular references, otherwise rebuild_tree() could get stuck in a loop.
+    safe_update($tbl, "parent=''", "type='".doSlash($type)."' and name='root'");
+    safe_update($tbl, "parent='root'", "type='".doSlash($type)."' and parent=name");
+    rebuild_tree('root', 1, $type, $tbl);
+}
 
 /**
  * Returns an error page.
@@ -1330,12 +1378,13 @@ $DB = new DB;
  * @access private
  */
 
-    function db_down()
-    {
-        // 503 status might discourage search engines from indexing or caching the error message.
-        txp_status_header('503 Service Unavailable');
-        $error = mysql_error();
-        return <<<eod
+function db_down()
+{
+    // 503 status might discourage search engines from indexing or caching the error message.
+    txp_status_header('503 Service Unavailable');
+    $error = mysql_error();
+
+    return <<<eod
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1348,4 +1397,4 @@ $DB = new DB;
 </body>
 </html>
 eod;
-    }
+}
