@@ -25,12 +25,6 @@
  * Constants.
  */
 
-/**
- * @ignore
- */
-
-$old_level = error_reporting((E_ALL | E_STRICT) ^ E_NOTICE);
-
 if (!defined('TXP_DEBUG')) {
     /**
      * If set to "1", dumps debug log to the temp directory.
@@ -844,6 +838,3 @@ define('TEXTPATTERN_ANNOUNCE_ASYNC', 0x4);
  */
 
 define('TEXTPATTERN_ANNOUNCE_REGULAR', 0x8);
-
-error_reporting($old_level);
-unset($old_level);
