@@ -459,7 +459,7 @@
                     '{to}'    => min($total, $page * $limit),
                     '{total}' => $total,
                 )),
-                ANNOUNCE_REGULAR
+                TEXTPATTERN_ANNOUNCE_REGULAR
             );
         }
 

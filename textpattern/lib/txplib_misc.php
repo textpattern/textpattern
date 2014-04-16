@@ -5966,14 +5966,14 @@ eod;
  *
  * @param   string|array $message The message
  * @param   int          $type    The type, either 0, E_ERROR, E_WARNING
- * @param   int          $flags   Flags, consisting of ANNOUNCE_ADAPTIVE | ANNOUNCE_ASYNC | ANNOUNCE_MODAL | ANNOUNCE_REGULAR
+ * @param   int          $flags   Flags, consisting of TEXTPATTERN_ANNOUNCE_ADAPTIVE | TEXTPATTERN_ANNOUNCE_ASYNC | TEXTPATTERN_ANNOUNCE_MODAL | TEXTPATTERN_ANNOUNCE_REGULAR
  * @package Announce
  * @since   4.6.0
  * @example
  * echo announce('My message', E_WARNING);
  */
 
-    function announce($message, $type = 0, $flags = ANNOUNCE_ADAPTIVE)
+    function announce($message, $type = 0, $flags = TEXTPATTERN_ANNOUNCE_ADAPTIVE)
     {
         global $app_mode, $theme;
 
@@ -5981,11 +5981,11 @@ eod;
             $message = array($message, $type);
         }
 
-        if ($flags & ANNOUNCE_ASYNC || ($flags & ANNOUNCE_ADAPTIVE && $app_mode === 'async')) {
+        if ($flags & TEXTPATTERN_ANNOUNCE_ASYNC || ($flags & TEXTPATTERN_ANNOUNCE_ADAPTIVE && $app_mode === 'async')) {
             return $theme->announce_async($message);
         }
 
-        if ($flags & ANNOUNCE_MODAL) {
+        if ($flags & TEXTPATTERN_ANNOUNCE_MODAL) {
             return $theme->announce_async($message, true);
         }
 

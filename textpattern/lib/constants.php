@@ -810,7 +810,7 @@ define('ATTS_STRIP_EMPTY', 0x1);
  * @see     announce()
  */
 
-define('ANNOUNCE_ADAPTIVE', 0x1);
+define('TEXTPATTERN_ANNOUNCE_ADAPTIVE', 0x1);
 
 /**
  * Sends a modal announcement.
@@ -823,7 +823,7 @@ define('ANNOUNCE_ADAPTIVE', 0x1);
  * @see     announce()
  */
 
-define('ANNOUNCE_MODAL', 0x2);
+define('TEXTPATTERN_ANNOUNCE_MODAL', 0x2);
 
 /**
  * Sends an asynchronous announcement.
@@ -833,7 +833,7 @@ define('ANNOUNCE_MODAL', 0x2);
  * @see     announce()
  */
 
-define('ANNOUNCE_ASYNC', 0x4);
+define('TEXTPATTERN_ANNOUNCE_ASYNC', 0x4);
 
 /**
  * Sends a synchronous announcement.
@@ -843,7 +843,7 @@ define('ANNOUNCE_ASYNC', 0x4);
  * @see     announce()
  */
 
-define('ANNOUNCE_REGULAR', 0x8);
+define('TEXTPATTERN_ANNOUNCE_REGULAR', 0x8);
 
 error_reporting($old_level);
 unset($old_level);
