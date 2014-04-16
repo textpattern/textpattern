@@ -53,7 +53,7 @@ class Textpattern_Textpack_Parser
     public function __construct()
     {
         $this->language = get_pref('language', 'en-gb');
-        $this->owner = LANG_OWNER_SITE;
+        $this->owner = TEXTPATTERN_LANG_OWNER_SITE;
     }
 
     /**

@@ -409,7 +409,7 @@
             $value['ok'] = safe_update(
                 'txp_lang',
                 $q,
-                "owner = '".doSlash(LANG_OWNER_SYSTEM)."' and lang = '".doSlash($lang_code)."' and name = '".doSlash($value['name'])."'"
+                "owner = '".doSlash(TEXTPATTERN_LANG_OWNER_SYSTEM)."' and lang = '".doSlash($lang_code)."' and name = '".doSlash($value['name'])."'"
             );
         } else {
             $value['ok'] = safe_insert(

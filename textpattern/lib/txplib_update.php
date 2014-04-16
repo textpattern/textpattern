@@ -78,7 +78,7 @@ function install_language_from_file($lang)
                             $exists = mysql_query('SELECT name, lastmod FROM `'.PFX."txp_lang` WHERE `lang`='".$lang."' AND `name`='$name' AND `event`='$event'");
                             if ($exists) $exists = mysql_fetch_row($exists);
                             if ($exists[1]) {
-                                mysql_query("UPDATE `".PFX."txp_lang` SET `lastmod`='$lastmod', `data`='$value' WHERE owner = ''".doSlash(LANG_OWNER_SYSTEM)." AND `lang`='".$lang."' AND `name`='$name' AND `event`='$event'");
+                                mysql_query("UPDATE `".PFX."txp_lang` SET `lastmod`='$lastmod', `data`='$value' WHERE owner = ''".doSlash(TEXTPATTERN_LANG_OWNER_SYSTEM)." AND `lang`='".$lang."' AND `name`='$name' AND `event`='$event'");
                                 echo mysql_error();
                             } else
                                 mysql_query("INSERT DELAYED INTO `".PFX."txp_lang` SET `lang`='".$lang."', `name`='$name', `lastmod`='$lastmod', `event`='$event', `data`='$value'");

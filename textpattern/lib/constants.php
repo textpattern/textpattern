@@ -776,7 +776,7 @@ define('SCRIPT_ATTACH_VERSION', 0x2);
  * @package L10n
  */
 
-define('LANG_OWNER_SYSTEM', '');
+define('TEXTPATTERN_LANG_OWNER_SYSTEM', '');
 
 /**
  * The localised string is owned by the individual site.
@@ -787,7 +787,7 @@ define('LANG_OWNER_SYSTEM', '');
  * @package L10n
  */
 
-define('LANG_OWNER_SITE', 'site');
+define('TEXTPATTERN_LANG_OWNER_SITE', 'site');
 
 /**
  * Strip empty HTML attribute values.
