@@ -7,10 +7,10 @@ http://txp.kusor.com/rpc-api
 @author Pedro Palazón - http://kusor.com
 */
 
-#TODO: change error reporting to E_ALL, including E_NOTICE to detect subtle bugs?
+// TODO: change error reporting to E_ALL, including E_NOTICE to detect subtle bugs?
 error_reporting(E_ALL & ~E_NOTICE);
 
-#TODO: if display_errors is set to 0... who will ever see errors?
+// TODO: if display_errors is set to 0... who will ever see errors?
 ini_set("display_errors","0");
 
 if (@ini_get('register_globals')) {
@@ -60,7 +60,7 @@ require_once txpath.'/lib/IXRClass.php';
 
 if ($connected && safe_query("describe `".PFX."textpattern`")) {
 
-#TODO: where is dbversion used?
+// TODO: where is dbversion used?
     $dbversion = safe_field('val','txp_prefs',"name = 'version'");
 
     // Hold it globally, instead of do several calls to the function.
@@ -85,7 +85,7 @@ if ($connected && safe_query("describe `".PFX."textpattern`")) {
 
     $textarray = load_lang(LANG);
 
-#TODO: include txplib_html instead of duplicating?
+// TODO: include txplib_html instead of duplicating?
     // From txplib_html.php.
     if (!defined('t')) {
         define("t", "\t");
@@ -115,7 +115,7 @@ require_once 'TXP_RPCServer.php';
 $server = new TXP_RPCServer();
 $server->serve();
 
-#TODO: remove before official release?
+// TODO: remove before official release?
 // Save some debug logs.
 function write_log()
 {

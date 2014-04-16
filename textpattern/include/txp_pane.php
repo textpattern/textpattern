@@ -21,9 +21,9 @@
  * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
  */
 
-    if (!defined('txpinterface')) {
-        die('txpinterface is undefined.');
-    }
+if (!defined('txpinterface')) {
+    die('txpinterface is undefined.');
+}
 
 /**
  * Handles pane states.
@@ -59,6 +59,7 @@ class Textpattern_Admin_Pane
     protected function valid_token()
     {
         $args = func_get_args();
+
         return ps('token') === md5(join('', $args) . ps('origin') . form_token() . get_pref('blog_uid'));
     }
 
@@ -78,6 +79,7 @@ class Textpattern_Admin_Pane
 
         if ($this->valid_token($pane) && preg_match('/^[a-z0-9_-]+$/i', $pane)) {
             set_pref("pane_{$pane}_visible", (int) ($visible === 'true'), $origin, PREF_HIDDEN, 'yesnoradio', 0, PREF_PRIVATE);
+
             return;
         }
 

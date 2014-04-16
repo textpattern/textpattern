@@ -3025,7 +3025,7 @@
 
         $concat = join($break.n, $r);
         $concat = preg_replace('/^[^>]+>/U', '', $concat);
-#TODO
+// TODO:
 
         $concat = preg_replace($regex_hilite, "<$hilight>$1</$hilight>", $concat);
 

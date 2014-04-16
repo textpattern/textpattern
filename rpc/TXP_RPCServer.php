@@ -121,7 +121,7 @@ class TXP_RPCServer extends IXR_IntrospectionServer
                 'retrieves a given number of recent posts'
             );
 
-#TODO: metaWeblog.newMediaObject (blogid, username, password, struct) returns struct
+// TODO: metaWeblog.newMediaObject (blogid, username, password, struct) returns struct
 
             // MovableType API[] - add as server capability.
             $this->capabilities['MovableType API'] = array(
@@ -211,14 +211,14 @@ class TXP_RPCServer extends IXR_IntrospectionServer
                     break;
 
                 case 'iso-8859-1':
-#TODO: if utf8 conversion fails, throw: 32701 ---> parse error. unsupported encoding?
-#see: http://xmlrpc-epi.sourceforge.net/specs/rfc.fault_codes.php
+// TODO: if utf8 conversion fails, throw: 32701 ---> parse error. unsupported encoding?
+// see: http://xmlrpc-epi.sourceforge.net/specs/rfc.fault_codes.php
                     // This will fail on parser if utf8_encode is unavailiable.
                     $data = (function_exists('utf8_encode') && is_callable('utf8_encode'))? utf8_encode($HTTP_RAW_POST_DATA) : $HTTP_RAW_POST_DATA;
                     break;
 
                 default:
-#TODO: if utf8 conversion fails, throw: 32701 ---> parse error. unsupported encoding?
+// TODO: if utf8 conversion fails, throw: 32701 ---> parse error. unsupported encoding?
                     // This will fail on parser if mb_convert_encoding is unavailiable.
                     $data = (function_exists('mb_convert_encoding') && is_callable('mb_convert_encoding'))? mb_convert_encoding($HTTP_RAW_POST_DATA, 'utf-8', $encoding) : $HTTP_RAW_POST_DATA;
                     break;
@@ -622,7 +622,7 @@ EOD;
             return new IXR_Error(201, gTxt('problem_creating_article'));
         }
 
-#TODO: why "" quoted $rs?
+// TODO: why "" quoted $rs?
         return "$rs";
     }
 
@@ -806,7 +806,7 @@ EOD;
             if (!empty($category)) {
                 $rs = $txp->getCategory($category);
 
-#TODO: remove?
+// TODO: remove?
                 // if (!$rs) return new IXR_Error(212, gTxt('problem_retrieving_category_info'));
 
                 $ct['categoryId']   = $rs['id'];
@@ -822,7 +822,7 @@ EOD;
         return $out;
     }
 
-#TODO: explain what 'expecific' is ;)
+// TODO: explain what 'expecific' is ;)
     // Supported to avoid some client expecific behaviour.
     function mt_publishPost($params)
     {
@@ -883,7 +883,7 @@ EOD;
 
     }
 
-#TODO ???
+// TODO ???
     // MediaObjects
     /*
      metaWeblog.newMediaObject

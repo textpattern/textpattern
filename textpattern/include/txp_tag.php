@@ -59,414 +59,412 @@ header('X-UA-Compatible: '.X_UA_COMPATIBLE);
 <?php
 
 /*
-
 begin generic functions
-
 */
 
 // -------------------------------------------------------------
 
-    function tagRow($label, $thing)
-    {
-        return tr(
-            fLabelCell($label).
-            td($thing)
-        );
-    }
+function tagRow($label, $thing)
+{
+    return tr(
+        fLabelCell($label).
+        td($thing)
+    );
+}
 
 // -------------------------------------------------------------
 
-    function tb($tag, $atts_list = array(), $thing = '')
-    {
-        $atts = array();
+function tb($tag, $atts_list = array(), $thing = '')
+{
+    $atts = array();
 
-        foreach ($atts_list as $att => $val) {
-            if ($val or $val === '0' or $val === '{att_empty}') {
-                $val = str_replace('{att_empty}', '', $val);
-                $atts[] = ' '.$att.'="'.$val.'"';
-            }
+    foreach ($atts_list as $att => $val) {
+        if ($val or $val === '0' or $val === '{att_empty}') {
+            $val = str_replace('{att_empty}', '', $val);
+            $atts[] = ' '.$att.'="'.$val.'"';
         }
-
-        $atts = ($atts) ? join('', $atts) : '';
-
-        return !empty($thing) ?
-            '<txp:'.$tag.$atts.'>'.$thing.'</txp:'.$tag.'>' :
-            '<txp:'.$tag.$atts.' />';
     }
+
+    $atts = ($atts) ? join('', $atts) : '';
+
+    return !empty($thing) ?
+        '<txp:'.$tag.$atts.'>'.$thing.'</txp:'.$tag.'>' :
+        '<txp:'.$tag.$atts.' />';
+}
 
 // -------------------------------------------------------------
 
-    function tbd($tag, $thing)
-    {
-        return '<txp:'.$tag.'>'.$thing.'</txp:'.$tag.'>';
-    }
+function tbd($tag, $thing)
+{
+    return '<txp:'.$tag.'>'.$thing.'</txp:'.$tag.'>';
+}
 
 // -------------------------------------------------------------
 
-    function tdb($thing)
-    {
-        return graf(text_area('tag', '', '', $thing), ' id="tagbuilder-output"');
-    }
+function tdb($thing)
+{
+    return graf(text_area('tag', '', '', $thing), ' id="tagbuilder-output"');
+}
 
 //--------------------------------------------------------------
 
-    function key_input($name, $var)
-    {
-        return '<textarea name="'.$name.'">'.$var.'</textarea>';
-    }
+function key_input($name, $var)
+{
+    return '<textarea name="'.$name.'">'.$var.'</textarea>';
+}
 
 //--------------------------------------------------------------
 
-    function input_id($id)
-    {
-        return fInput('text', 'id', $id, '', '', '', 6);
-    }
+function input_id($id)
+{
+    return fInput('text', 'id', $id, '', '', '', 6);
+}
 
 //--------------------------------------------------------------
 
-    function time_pop($time)
-    {
-        $vals = array(
-            'past'   => gTxt('time_past'),
-            'future' => gTxt('time_future'),
-            'any'    => gTxt('time_any')
-        );
+function time_pop($time)
+{
+    $vals = array(
+        'past'   => gTxt('time_past'),
+        'future' => gTxt('time_future'),
+        'any'    => gTxt('time_any')
+    );
 
-        return ' '.selectInput('time', $vals, $time, true);
-    }
-
-//--------------------------------------------------------------
-
-    function input_limit($limit)
-    {
-        return fInput('text', 'limit', $limit, '', '', '', 2);
-    }
+    return ' '.selectInput('time', $vals, $time, true);
+}
 
 //--------------------------------------------------------------
 
-    function input_offset($offset)
-    {
-        return fInput('text', 'offset', $offset, '', '', '', 2);
-    }
+function input_limit($limit)
+{
+    return fInput('text', 'limit', $limit, '', '', '', 2);
+}
 
 //--------------------------------------------------------------
 
-    function input_tag($name, $val)
-    {
-        return fInput('text', $name, $val, '', '', '', 6);
-    }
+function input_offset($offset)
+{
+    return fInput('text', 'offset', $offset, '', '', '', 2);
+}
 
 //--------------------------------------------------------------
 
-    function yesno_pop($select_name, $val)
-    {
-        $vals = array(
-            1 => gTxt('yes'),
-            0 => gTxt('no'),
-        );
+function input_tag($name, $val)
+{
+    return fInput('text', $name, $val, '', '', '', 6);
+}
 
-        if (is_numeric($val)) {
-            $val = (int) $val;
+//--------------------------------------------------------------
+
+function yesno_pop($select_name, $val)
+{
+    $vals = array(
+        1 => gTxt('yes'),
+        0 => gTxt('no'),
+    );
+
+    if (is_numeric($val)) {
+        $val = (int) $val;
+    }
+
+    return ' '.selectInput($select_name, $vals, $val, true, '', '', true);
+}
+
+//--------------------------------------------------------------
+
+function status_pop($val)
+{
+    $vals = array(
+        4 => gTxt('live'),
+        5 => gTxt('sticky'),
+        3 => gTxt('pending'),
+        1 => gTxt('draft'),
+        2 => gTxt('hidden'),
+    );
+
+    return ' '.selectInput('status', $vals, $val, true);
+}
+
+//--------------------------------------------------------------
+
+function section_pop($select_name, $val)
+{
+    $vals = array();
+
+    $rs = safe_rows_start('name, title', 'txp_section', "name != 'default' order by name");
+
+    if ($rs and numRows($rs) > 0) {
+        while ($a = nextRow($rs)) {
+            extract($a);
+
+            $vals[$name] = $title;
         }
 
-        return ' '.selectInput($select_name, $vals, $val, true, '', '', true);
+        return ' '.selectInput($select_name, $vals, $val, true);
     }
+
+    return gTxt('no_sections_available');
+}
 
 //--------------------------------------------------------------
 
-    function status_pop($val)
-    {
-        $vals = array(
-            4 => gTxt('live'),
-            5 => gTxt('sticky'),
-            3 => gTxt('pending'),
-            1 => gTxt('draft'),
-            2 => gTxt('hidden'),
-        );
+function type_pop($val)
+{
+    $vals = array(
+        'article' => gTxt('article'),
+        'link'        => gTxt('link'),
+        'image'        => gTxt('image'),
+        'file'        => gTxt('file'),
+    );
 
-        return ' '.selectInput('status', $vals, $val, true);
-    }
+    return ' '.selectInput('type', $vals, $val, true);
+}
 
 //--------------------------------------------------------------
 
-    function section_pop($select_name, $val)
-    {
-        $vals = array();
+function feed_flavor_pop($val)
+{
+    $vals = array(
+        'atom' => 'Atom 1.0',
+        'rss'     => 'RSS 2.0'
+    );
 
-        $rs = safe_rows_start('name, title', 'txp_section', "name != 'default' order by name");
+    return ' '.selectInput('flavor', $vals, $val, true);
+}
 
-        if ($rs and numRows($rs) > 0) {
-            while ($a = nextRow($rs)) {
-                extract($a);
+//--------------------------------------------------------------
 
-                $vals[$name] = $title;
-            }
+function feed_format_pop($val)
+{
+    $vals = array(
+        'a'    => '<a href...',
+        'link' => '<link rel...',
+    );
 
-            return ' '.selectInput($select_name, $vals, $val, true);
+    return ' '.selectInput('format', $vals, $val, true);
+}
+
+//--------------------------------------------------------------
+
+function article_category_pop($val)
+{
+    $vals = getTree('root', 'article');
+
+    if ($vals) {
+        return ' '.treeSelectInput('category', $vals, $val);
+    }
+
+    return gTxt('no_categories_available');
+}
+
+//--------------------------------------------------------------
+
+function link_category_pop($val)
+{
+    $vals = getTree('root', 'link');
+
+    if ($vals) {
+        return ' '.treeSelectInput('category', $vals, $val);
+    }
+
+    return gTxt('no_categories_available');
+}
+
+//--------------------------------------------------------------
+
+function file_category_pop($val)
+{
+    $vals = getTree('root', 'file');
+
+    if ($vals) {
+        return ' '.treeSelectInput('category', $vals, $val);
+    }
+
+    return gTxt('no_categories_available');
+}
+
+//--------------------------------------------------------------
+
+function match_pop($val)
+{
+    $vals = array(
+        'Category1,Category2' => gTxt('category1').' '.gTxt('and').' '.gTxt('category2'),
+        'Category1'           => gTxt('category1'),
+        'Category2'           => gTxt('category2')
+    );
+
+    return ' '.selectInput('match', $vals, $val, true);
+}
+
+//--------------------------------------------------------------
+
+function search_opts_pop($val)
+{
+    $vals = array(
+        'exact' => gTxt('exact'),
+        'any'   => gTxt('any'),
+        'all'   => gTxt('all'),
+    );
+
+    return ' '.selectInput('match', $vals, $val, false);
+}
+
+//--------------------------------------------------------------
+
+function author_pop($val)
+{
+    $vals = array();
+
+    $rs = safe_rows_start('name', 'txp_users', '1 = 1 order by name');
+
+    if ($rs) {
+        while ($a = nextRow($rs)) {
+            extract($a);
+
+            $vals[$name] = $name;
         }
 
-        return gTxt('no_sections_available');
+        return ' '.selectInput('author', $vals, $val, true);
     }
+}
 
 //--------------------------------------------------------------
 
-    function type_pop($val)
-    {
-        $vals = array(
-            'article' => gTxt('article'),
-            'link'        => gTxt('link'),
-            'image'        => gTxt('image'),
-            'file'        => gTxt('file'),
-        );
+function sort_pop($val)
+{
+    $asc = ' ('.gTxt('ascending').')';
+    $desc = ' ('.gTxt('descending').')';
 
-        return ' '.selectInput('type', $vals, $val, true);
-    }
+    $vals = array(
+        'Title asc'      => gTxt('tag_title').$asc,
+        'Title desc'     => gTxt('tag_title').$desc,
+        'Posted asc'     => gTxt('tag_posted').$asc,
+        'Posted desc'    => gTxt('tag_posted').$desc,
+        'LastMod asc'    => gTxt('last_modification').$asc,
+        'LastMod desc'   => gTxt('last_modification').$desc,
+        'Section asc'    => gTxt('section').$asc,
+        'Section desc'   => gTxt('section').$desc,
+        'Category1 asc'  => gTxt('category1').$asc,
+        'Category1 desc' => gTxt('category1').$desc,
+        'Category2 asc'  => gTxt('category2').$asc,
+        'Category2 desc' => gTxt('category2').$desc,
+        'rand()'         => gTxt('random')
+    );
 
-//--------------------------------------------------------------
-
-    function feed_flavor_pop($val)
-    {
-        $vals = array(
-            'atom' => 'Atom 1.0',
-            'rss'     => 'RSS 2.0'
-        );
-
-        return ' '.selectInput('flavor', $vals, $val, true);
-    }
-
-//--------------------------------------------------------------
-
-    function feed_format_pop($val)
-    {
-        $vals = array(
-            'a'    => '<a href...',
-            'link' => '<link rel...',
-        );
-
-        return ' '.selectInput('format', $vals, $val, true);
-    }
+    return ' '.selectInput('sort', $vals, $val, true);
+}
 
 //--------------------------------------------------------------
 
-    function article_category_pop($val)
-    {
-        $vals = getTree('root', 'article');
+function discuss_sort_pop($val)
+{
+    $asc = ' ('.gTxt('ascending').')';
+    $desc = ' ('.gTxt('descending').')';
 
-        if ($vals) {
-            return ' '.treeSelectInput('category', $vals, $val);
+    $vals = array(
+        'posted asc'  => gTxt('posted').$asc,
+        'posted desc' => gTxt('posted').$desc,
+    );
+
+    return ' '.selectInput('sort', $vals, $val, true);
+}
+
+//--------------------------------------------------------------
+
+function list_sort_pop($val)
+{
+    $asc = ' ('.gTxt('ascending').')';
+    $desc = ' ('.gTxt('descending').')';
+
+    $vals = array(
+        'title asc'  => gTxt('tag_title').$asc,
+        'title desc' => gTxt('tag_title').$desc,
+        'name asc'   => gTxt('name').$asc,
+        'name desc'  => gTxt('name').$desc,
+    );
+
+    return ' '.selectInput('sort', $vals, $val, true);
+}
+
+//--------------------------------------------------------------
+
+function pgonly_pop($val)
+{
+    $vals = array(
+        '1' => gTxt('yes'),
+        '0' => gTxt('no')
+    );
+
+    return ' '.selectInput('pgonly', $vals, $val, true);
+}
+
+//--------------------------------------------------------------
+
+function form_pop($select_name, $type = '', $val)
+{
+    $vals = array();
+
+    $type = ($type) ? "type = '".doSlash($type)."'" : '1 = 1';
+
+    $rs = safe_rows_start('name', 'txp_form', "$type order by name");
+
+    if ($rs and numRows($rs) > 0) {
+        while ($a = nextRow($rs)) {
+            extract($a);
+
+            $vals[$name] = $name;
         }
 
-        return gTxt('no_categories_available');
+        return ' '.selectInput($select_name, $vals, $val, true);
     }
+
+    return gTxt('no_forms_available');
+}
 
 //--------------------------------------------------------------
 
-    function link_category_pop($val)
-    {
-        $vals = getTree('root', 'link');
+function css_pop($val)
+{
+    $vals = array();
 
-        if ($vals) {
-            return ' '.treeSelectInput('category', $vals, $val);
+    $rs = safe_rows_start('name', 'txp_css', "1 = 1 order by name");
+
+    if ($rs) {
+        while ($a = nextRow($rs)) {
+            extract($a);
+
+            $vals[$name] = $name;
         }
 
-        return gTxt('no_categories_available');
+        return ' '.selectInput('name', $vals, $val, true);
     }
+
+    return false;
+}
 
 //--------------------------------------------------------------
 
-    function file_category_pop($val)
-    {
-        $vals = getTree('root', 'file');
+function css_format_pop($val)
+{
+    $vals = array(
+        'link' => '<link rel...',
+        'url'  => 'css.php?...'
+    );
 
-        if ($vals) {
-            return ' '.treeSelectInput('category', $vals, $val);
-        }
-
-        return gTxt('no_categories_available');
-    }
-
-//--------------------------------------------------------------
-
-    function match_pop($val)
-    {
-        $vals = array(
-            'Category1,Category2' => gTxt('category1').' '.gTxt('and').' '.gTxt('category2'),
-            'Category1'           => gTxt('category1'),
-            'Category2'           => gTxt('category2')
-        );
-
-        return ' '.selectInput('match', $vals, $val, true);
-    }
+    return ' '.selectInput('format', $vals, $val, true);
+}
 
 //--------------------------------------------------------------
 
-    function search_opts_pop($val)
-    {
-        $vals = array(
-            'exact' => gTxt('exact'),
-            'any'   => gTxt('any'),
-            'all'   => gTxt('all'),
-        );
+function escape_pop($val)
+{
+    $vals = array(
+        '{att_empty}' => '',
+        'html'        => 'html',
+    );
 
-        return ' '.selectInput('match', $vals, $val, false);
-    }
-
-//--------------------------------------------------------------
-
-    function author_pop($val)
-    {
-        $vals = array();
-
-        $rs = safe_rows_start('name', 'txp_users', '1 = 1 order by name');
-
-        if ($rs) {
-            while ($a = nextRow($rs)) {
-                extract($a);
-
-                $vals[$name] = $name;
-            }
-
-            return ' '.selectInput('author', $vals, $val, true);
-        }
-    }
-
-//--------------------------------------------------------------
-
-    function sort_pop($val)
-    {
-        $asc = ' ('.gTxt('ascending').')';
-        $desc = ' ('.gTxt('descending').')';
-
-        $vals = array(
-            'Title asc'      => gTxt('tag_title').$asc,
-            'Title desc'     => gTxt('tag_title').$desc,
-            'Posted asc'     => gTxt('tag_posted').$asc,
-            'Posted desc'    => gTxt('tag_posted').$desc,
-            'LastMod asc'    => gTxt('last_modification').$asc,
-            'LastMod desc'   => gTxt('last_modification').$desc,
-            'Section asc'    => gTxt('section').$asc,
-            'Section desc'   => gTxt('section').$desc,
-            'Category1 asc'  => gTxt('category1').$asc,
-            'Category1 desc' => gTxt('category1').$desc,
-            'Category2 asc'  => gTxt('category2').$asc,
-            'Category2 desc' => gTxt('category2').$desc,
-            'rand()'         => gTxt('random')
-        );
-
-        return ' '.selectInput('sort', $vals, $val, true);
-    }
-
-//--------------------------------------------------------------
-
-    function discuss_sort_pop($val)
-    {
-        $asc = ' ('.gTxt('ascending').')';
-        $desc = ' ('.gTxt('descending').')';
-
-        $vals = array(
-            'posted asc'  => gTxt('posted').$asc,
-            'posted desc' => gTxt('posted').$desc,
-        );
-
-        return ' '.selectInput('sort', $vals, $val, true);
-    }
-
-//--------------------------------------------------------------
-
-    function list_sort_pop($val)
-    {
-        $asc = ' ('.gTxt('ascending').')';
-        $desc = ' ('.gTxt('descending').')';
-
-        $vals = array(
-            'title asc'  => gTxt('tag_title').$asc,
-            'title desc' => gTxt('tag_title').$desc,
-            'name asc'   => gTxt('name').$asc,
-            'name desc'  => gTxt('name').$desc,
-        );
-
-        return ' '.selectInput('sort', $vals, $val, true);
-    }
-
-//--------------------------------------------------------------
-
-    function pgonly_pop($val)
-    {
-        $vals = array(
-            '1' => gTxt('yes'),
-            '0' => gTxt('no')
-        );
-
-        return ' '.selectInput('pgonly', $vals, $val, true);
-    }
-
-//--------------------------------------------------------------
-
-    function form_pop($select_name, $type = '', $val)
-    {
-        $vals = array();
-
-        $type = ($type) ? "type = '".doSlash($type)."'" : '1 = 1';
-
-        $rs = safe_rows_start('name', 'txp_form', "$type order by name");
-
-        if ($rs and numRows($rs) > 0) {
-            while ($a = nextRow($rs)) {
-                extract($a);
-
-                $vals[$name] = $name;
-            }
-
-            return ' '.selectInput($select_name, $vals, $val, true);
-        }
-
-        return gTxt('no_forms_available');
-    }
-
-//--------------------------------------------------------------
-
-    function css_pop($val)
-    {
-        $vals = array();
-
-        $rs = safe_rows_start('name', 'txp_css', "1 = 1 order by name");
-
-        if ($rs) {
-            while ($a = nextRow($rs)) {
-                extract($a);
-
-                $vals[$name] = $name;
-            }
-
-            return ' '.selectInput('name', $vals, $val, true);
-        }
-
-        return false;
-    }
-
-//--------------------------------------------------------------
-
-    function css_format_pop($val)
-    {
-        $vals = array(
-            'link' => '<link rel...',
-            'url'  => 'css.php?...'
-        );
-
-        return ' '.selectInput('format', $vals, $val, true);
-    }
-
-//--------------------------------------------------------------
-
-    function escape_pop($val)
-    {
-        $vals = array(
-            '{att_empty}' => '',
-            'html'        => 'html',
-        );
-
-        return ' '.selectInput('escape', $vals, $val, false);
-    }
+    return ' '.selectInput('escape', $vals, $val, false);
+}
 
 /**
  * Collection of tag builder functions.
@@ -582,7 +580,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_article_custom()
     {
@@ -696,7 +694,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_email()
     {
@@ -738,7 +736,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_page_title()
     {
@@ -770,7 +768,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_linklist()
     {
@@ -845,7 +843,7 @@ class TagBuilderTags
         echo $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_section_list()
     {
@@ -920,7 +918,7 @@ class TagBuilderTags
 
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_category_list()
     {
@@ -1002,7 +1000,7 @@ class TagBuilderTags
         echo $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_recent_articles()
     {
@@ -1064,7 +1062,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_related_articles()
     {
@@ -1132,7 +1130,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_recent_comments()
     {
@@ -1190,7 +1188,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_output_form()
     {
@@ -1224,7 +1222,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_popup()
     {
@@ -1283,7 +1281,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_password_protect()
     {
@@ -1321,7 +1319,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_search_input()
     {
@@ -1383,7 +1381,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_category1()
     {
@@ -1436,7 +1434,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_category2()
     {
@@ -1489,7 +1487,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_category()
     {
@@ -1548,7 +1546,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_if_category()
     {
@@ -1582,7 +1580,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_section()
     {
@@ -1633,7 +1631,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_if_section()
     {
@@ -1667,7 +1665,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_author()
     {
@@ -1709,7 +1707,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_link_to_home()
     {
@@ -1748,7 +1746,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_link_to_prev()
     {
@@ -1787,7 +1785,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_link_to_next()
     {
@@ -1826,7 +1824,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_feed_link()
     {
@@ -1894,7 +1892,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_link_feed_link()
     {
@@ -1958,7 +1956,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_permlink()
     {
@@ -2009,7 +2007,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_newer()
     {
@@ -2039,7 +2037,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_older()
     {
@@ -2069,7 +2067,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_next_title()
     {
@@ -2090,7 +2088,7 @@ class TagBuilderTags
         tdb(tb($tag_name));
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_site_name()
     {
@@ -2111,7 +2109,7 @@ class TagBuilderTags
         tdb(tb($tag_name));
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_site_slogan()
     {
@@ -2132,7 +2130,7 @@ class TagBuilderTags
         tdb(tb($tag_name));
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_prev_title()
     {
@@ -2153,7 +2151,7 @@ class TagBuilderTags
         tdb(tb($tag_name));
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_article_image()
     {
@@ -2209,7 +2207,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_css()
     {
@@ -2259,7 +2257,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_body()
     {
@@ -2280,7 +2278,7 @@ class TagBuilderTags
         tdb(tb($tag_name));
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_excerpt()
     {
@@ -2301,7 +2299,7 @@ class TagBuilderTags
         tdb(tb($tag_name));
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_title()
     {
@@ -2322,7 +2320,7 @@ class TagBuilderTags
         tdb(tb($tag_name));
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_link()
     {
@@ -2362,7 +2360,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_linkdesctitle()
     {
@@ -2396,7 +2394,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_link_description()
     {
@@ -2446,7 +2444,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_link_name()
     {
@@ -2480,7 +2478,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_link_category()
     {
@@ -2530,7 +2528,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_link_date()
     {
@@ -2572,7 +2570,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_posted()
     {
@@ -2614,7 +2612,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_comments_invite()
     {
@@ -2660,7 +2658,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_comment_permlink()
     {
@@ -2681,7 +2679,7 @@ class TagBuilderTags
         tdb(tb($tag_name));
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_comment_time()
     {
@@ -2723,7 +2721,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_comment_name()
     {
@@ -2757,7 +2755,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_comment_email()
     {
@@ -2778,7 +2776,7 @@ class TagBuilderTags
         tdb(tb($tag_name));
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_comment_web()
     {
@@ -2799,7 +2797,7 @@ class TagBuilderTags
         tdb(tb($tag_name));
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_comment_message()
     {
@@ -2820,7 +2818,7 @@ class TagBuilderTags
         tdb(tb($tag_name));
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_comment_email_input()
     {
@@ -2841,7 +2839,7 @@ class TagBuilderTags
         tdb(tb($tag_name));
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_comment_message_input()
     {
@@ -2862,7 +2860,7 @@ class TagBuilderTags
         tdb(tb($tag_name));
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_comment_name_input()
     {
@@ -2883,7 +2881,7 @@ class TagBuilderTags
         tdb(tb($tag_name));
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_comment_preview()
     {
@@ -2904,7 +2902,7 @@ class TagBuilderTags
         tdb(tb($tag_name));
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_comment_remember()
     {
@@ -2925,7 +2923,7 @@ class TagBuilderTags
         tdb(tb($tag_name));
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_comment_submit()
     {
@@ -2946,7 +2944,7 @@ class TagBuilderTags
         tdb(tb($tag_name));
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_comment_web_input()
     {
@@ -2967,7 +2965,7 @@ class TagBuilderTags
         tdb(tb($tag_name));
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_comments()
     {
@@ -3025,7 +3023,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_comments_form()
     {
@@ -3083,7 +3081,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_comments_preview()
     {
@@ -3129,7 +3127,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_search_result_title()
     {
@@ -3150,7 +3148,7 @@ class TagBuilderTags
         tdb(tb($tag_name));
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_search_result_excerpt()
     {
@@ -3188,7 +3186,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_search_result_url()
     {
@@ -3209,7 +3207,7 @@ class TagBuilderTags
         tdb(tb($tag_name));
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_search_result_date()
     {
@@ -3251,7 +3249,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_lang()
     {
@@ -3272,7 +3270,7 @@ class TagBuilderTags
         tdb(tb($tag_name));
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_breadcrumb()
     {
@@ -3330,7 +3328,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_image()
     {
@@ -3454,7 +3452,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_file_download()
     {
@@ -3492,7 +3490,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_file_download_list()
     {
@@ -3561,7 +3559,7 @@ class TagBuilderTags
         echo $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_file_download_created()
     {
@@ -3595,7 +3593,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_file_download_modified()
     {
@@ -3629,7 +3627,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_file_download_size()
     {
@@ -3678,7 +3676,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_file_download_link()
     {
@@ -3759,7 +3757,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_file_download_name()
     {
@@ -3780,7 +3778,7 @@ class TagBuilderTags
         tdb(tb($tag_name));
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_file_download_downloads()
     {
@@ -3801,7 +3799,7 @@ class TagBuilderTags
         tdb(tb($tag_name));
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_file_download_category()
     {
@@ -3843,7 +3841,7 @@ class TagBuilderTags
         return $out;
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     function tag_file_download_description()
     {

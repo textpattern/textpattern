@@ -116,6 +116,7 @@ function doImportBLOGGER($file, $section, $status, $invite)
     }
 
     fclose($fp);
+
     return join('<br />', $results);
 }
 

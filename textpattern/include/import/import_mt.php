@@ -112,6 +112,7 @@ function doImportMT($file, $section, $status, $invite)
     }
 
     fclose($fp);
+
     return join('<br />', $results);
 }
 
@@ -225,6 +226,7 @@ function import_mt_item($item, $section, $status, $invite)
             foreach ($item['COMMENT'] as $comment) {
                 $comment_date = strftime('%Y-%m-%d %H:%M:%S', safe_strtotime(@$comment['DATE']));
                 $comment_content = $textile->TextileThis(nl2br(@$comment['content']), 1);
+
                 if (!safe_field("discussid","txp_discuss","posted = '".doSlash($comment_date)."' AND message = '".doSlash($comment_content)."'")) {
                     safe_insert('txp_discuss',
                         "parentid='".doSlash($parentid)."',".
@@ -237,6 +239,7 @@ function import_mt_item($item, $section, $status, $invite)
                         "visible='1'");
                 }
             }
+
             update_comments_count($parentid);
         }
 
@@ -258,6 +261,7 @@ function import_mt_utf8($str)
 {
     if (is_callable('mb_detect_encoding')) {
         $enc = mb_detect_encoding($str, 'UTF-8,ASCII,ISO-8859-1');
+
         if ($enc and $enc != 'UTF-8') {
             $str = mb_convert_encoding($str, 'UTF-8', $enc);
         }
