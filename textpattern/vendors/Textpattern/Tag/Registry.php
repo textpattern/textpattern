@@ -97,7 +97,7 @@ class Textpattern_Tag_Registry implements Textpattern_Container_ReusableInterfac
      * @return array
      */
 
-    public function registered()
+    public function getRegistered()
     {
         return $this->tags;
     }
