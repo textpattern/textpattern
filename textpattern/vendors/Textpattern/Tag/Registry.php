@@ -41,11 +41,13 @@ class Textpattern_Tag_Registry implements Textpattern_Container_ReusableInterfac
     /**
      * Registers a tag.
      *
+     * <code>
+     * Txp::get('Textpattern_Tag_Registry')->register(array('class', 'method'), 'tag');
+     * </code>
+     *
      * @param  callback    $callback The tag callback
      * @param  string|null $tag      The tag name
      * @return Textpattern_Tag_Registry
-     * @example
-     * Txp::get('Textpattern_Tag_Registry')->register(array('class', 'method'), 'tag');
      */
 
     public function register($callback, $tag = null)
