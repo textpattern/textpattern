@@ -85,7 +85,7 @@ class Textpattern_Tag_Registry implements Textpattern_Container_ReusableInterfac
      * Checks if a tag is registered.
      *
      * @param  string $tag The tag
-     * @return bool   TRUE if a tag exists
+     * @return bool   TRUE if the tag exists
      */
 
     public function isRegistered($tag)
