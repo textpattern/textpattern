@@ -1608,7 +1608,7 @@ function article_partial_custom_fields($rs)
 }
 
 /**
- * Renders &lt;ul&gt; list of recent articles.
+ * Renders &lt;ol&gt; list of recent articles.
  *
  * The rendered widget can be customised via the 'article_ui > recent_articles'
  * pluggable UI callback event.
@@ -1623,19 +1623,19 @@ function article_partial_recent_articles($rs)
     $ra = '';
 
     if ($recents && numRows($recents)) {
-        $ra = '<ul class="recent plain-list">';
+        $ra = '<ol class="recent-list">';
 
         while ($recent = nextRow($recents)) {
             if ($recent['Title'] === '') {
                 $recent['Title'] = gTxt('untitled').sp.$recent['ID'];
             }
 
-            $ra .= n.'<li class="recent-article">'.
+            $ra .= n.'<li class="recent-list-article">'.
                 href(escape_title($recent['Title']), '?event=article'.a.'step=edit'.a.'ID='.$recent['ID']).
                 '</li>';
         }
 
-        $ra .= '</ul>';
+        $ra .= '</ol>';
     }
 
     return pluggable_ui('article_ui', 'recent_articles', $ra, $rs);

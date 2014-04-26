@@ -1986,13 +1986,6 @@ body#page-setup {
   color: #999999;
 }
 
-#recent_group ul {
-  list-style: decimal-leading-zero;
-}
-#recent_group li {
-  margin-left: 2em;
-}
-
 /* Content -> Articles page
    ========================================================================== */
 .unpublished {
