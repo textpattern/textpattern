@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Hive theme for Textpattern CMS (v4.6alpha2)
+   Hive theme for Textpattern CMS
    ========================================================================== */
 
 /* Base
@@ -500,21 +500,15 @@ a:hover .content-image {
   top: 0.27778em;
   right: 0.72222em;
   text-decoration: none;
-  color: #ccc;
+  color: rgba(255, 255, 255, 0.6);
   font-size: 1.38461em;
   font-weight: bold;
 }
-.rgba .close {
-  color: rgba(255, 255, 255, 0.6);
-}
 .close:hover {
-  color: #333333;
+  color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
   color: #fff;
   cursor: pointer;
-}
-.rgba .close:hover {
-  color: rgba(255, 255, 255, 0.8);
 }
 
 /* flash the alert */
@@ -1498,13 +1492,7 @@ body {
   -ms-text-overflow: ellipsis;
   -o-text-overflow: ellipsis;
   text-overflow: ellipsis;
-  background: no-repeat 0 46%;
-}
-.no-svg .txp-header h1 {
-  background-image: url("../img/textpattern-lrg.png");
-}
-.svg .txp-header h1 {
-  background-image: url("../img/textpattern-lrg.svg");
+  background: url("../img/textpattern-lrg.svg") no-repeat 0 46%;
   -webkit-background-size: 9.84615em 2em;
   -moz-background-size: 9.84615em 2em;
   -o-background-size: 9.84615em 2em;
@@ -1568,9 +1556,6 @@ body {
   display: block;
   float: left;
   border-right: 1px solid #f8c225;
-  background: #fcdc7f;
-}
-.rgba .dropdown {
   background: rgba(255, 255, 255, 0.2);
 }
 .dropdown:first-child {
@@ -1584,17 +1569,8 @@ body {
   color: black;
   text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.4);
 }
-.dropdown:hover a.dropdown-toggle {
-  background: #fcdc7f;
-}
-.rgba .dropdown:hover a.dropdown-toggle {
-  background: rgba(255, 255, 255, 0.2);
-}
-
+.dropdown:hover a.dropdown-toggle,
 .dropdown.active a.dropdown-toggle {
-  background: #fcdc7f;
-}
-.rgba .dropdown.active a.dropdown-toggle {
   background: rgba(255, 255, 255, 0.2);
 }
 
@@ -1638,13 +1614,7 @@ body {
   left: 1em;
   width: 1.23076em;
   height: 0.61538em;
-  background-repeat: no-repeat;
-}
-.no-svg .dropdown-menu:before {
-  background-image: url("../img/indicator.gif");
-}
-.svg .dropdown-menu:before {
-  background-image: url("../img/indicator.svg");
+  background: url("../img/indicator.svg") no-repeat;
   -webkit-background-size: 1.23076em 0.61538em;
   -moz-background-size: 1.23076em 0.61538em;
   -o-background-size: 1.23076em 0.61538em;
@@ -1855,13 +1825,7 @@ body#page-setup {
   text-indent: 110%;
   white-space: nowrap;
   overflow: hidden;
-  background-repeat: no-repeat;
-}
-.no-svg .welcome h1 {
-  background-image: url("../img/textpattern-xlrg.png");
-}
-.svg .welcome h1 {
-  background-image: url("../img/textpattern-xlrg.svg");
+  background: url("../img/textpattern-xlrg.svg") no-repeat;
   -webkit-background-size: 20.30769em 4.15384em;
   -moz-background-size: 20.30769em 4.15384em;
   -o-background-size: 20.30769em 4.15384em;
@@ -1938,41 +1902,26 @@ body#page-setup {
   width: 1.5em;
   height: 1.5em;
   background: #eeeeee no-repeat 50% 50%;
+  -webkit-background-size: 1.5em 1.5em;
+  -moz-background-size: 1.5em 1.5em;
+  -o-background-size: 1.5em 1.5em;
+  background-size: 1.5em 1.5em;
 }
 #view_modes a:hover,
 #view_modes li.active a {
   background-color: #fff6d3;
 }
 
-.no-svg #tab-text a {
-  background-image: url("../img/view-text.png");
-}
-
-.svg #tab-text a {
+#tab-text a {
   background-image: url("../img/view-text.svg");
 }
 
-.no-svg #tab-html a {
-  background-image: url("../img/view-html.png");
-}
-
-.svg #tab-html a {
+#tab-html a {
   background-image: url("../img/view-html.svg");
 }
 
-.no-svg #tab-preview a {
-  background-image: url("../img/view-preview.png");
-}
-
-.svg #tab-preview a {
+#tab-preview a {
   background-image: url("../img/view-preview.svg");
-}
-
-.svg #view_modes a {
-  -webkit-background-size: 1.5em 1.5em;
-  -moz-background-size: 1.5em 1.5em;
-  -o-background-size: 1.5em 1.5em;
-  background-size: 1.5em 1.5em;
 }
 
 .html .excerpt {
@@ -2129,11 +2078,6 @@ div.code {
   .txp-header h1 {
     max-width: 50%;
     padding-left: 2em;
-  }
-  .no-svg .txp-header h1 {
-    background-image: url("../img/textpattern-sml.png");
-  }
-  .svg .txp-header h1 {
     background-image: url("../img/textpattern-sml.svg");
     -webkit-background-size: 2em 2em;
     -moz-background-size: 2em 2em;

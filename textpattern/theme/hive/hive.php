@@ -84,6 +84,7 @@ class hive_theme extends theme
         $out[] = '<!--[if lt IE 9]>';
         $out[] = '<script src="vendors/keithclark/selectivizr/selectivizr.min.js"></script>';
         $out[] = '<link rel="stylesheet" href="vendors/jquery/ui/css/textpattern/jquery-ui-ie8.min.css">';
+        $out[] = '<link rel="stylesheet" href="'.$this->url.'css/ie8.min.css">';
         $out[] = '<![endif]-->'.n;
 
         return join(n, $out);
