@@ -218,7 +218,7 @@ function image_list($message = '')
                 ).
                 (
                     $show_authors ? column_head('author', 'author', 'image', true, $switch_dir, $crit, $search_method,
-                        (('author' == $sort) ? "$dir " : '').'txp-list-col-author') : ''
+                        (('author' == $sort) ? "$dir " : '').'txp-list-col-author name') : ''
                 )
             ).
             n.'</thead>'.
@@ -304,7 +304,7 @@ function image_list($message = '')
                 ).
                 (
                     $show_authors ? td(
-                        span(txpspecialchars($author), array('title' => get_author_name($author))), '', 'txp-list-col-author'
+                        span(txpspecialchars($author), array('title' => get_author_name($author))), '', 'txp-list-col-author name'
                     ) : ''
                 )
             );

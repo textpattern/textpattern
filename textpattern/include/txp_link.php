@@ -204,7 +204,7 @@ function link_list($message = '')
                 ).
                 (
                     $show_authors ? column_head('author', 'author', 'link', true, $switch_dir, $crit, $search_method,
-                        (('author' == $sort) ? "$dir " : '').'txp-list-col-author') : ''
+                        (('author' == $sort) ? "$dir " : '').'txp-list-col-author name') : ''
                 )
             ).
             n.'</thead>'.
@@ -256,7 +256,7 @@ function link_list($message = '')
                 ).
                 (
                     $show_authors ? td(
-                        span(txpspecialchars($link_author), array('title' => get_author_name($link_author))), '', 'txp-list-col-author'
+                        span(txpspecialchars($link_author), array('title' => get_author_name($link_author))), '', 'txp-list-col-author name'
                     ) : ''
                 )
             );

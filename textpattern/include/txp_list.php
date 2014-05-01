@@ -281,7 +281,7 @@ function list_list($message = '', $post = '')
                 ).
                 (
                     $show_authors ? column_head('author', 'author', 'list', true, $switch_dir, $crit, $search_method,
-                        (('author' == $sort) ? "$dir " : '').'txp-list-col-author') : ''
+                        (('author' == $sort) ? "$dir " : '').'txp-list-col-author name') : ''
                 ).
                 (
                     $use_comments == 1 ? column_head('comments', 'comments', 'list', true, $switch_dir, $crit, $search_method,
@@ -401,7 +401,7 @@ function list_list($message = '', $post = '')
                     href($Status, $view_url, join_atts(array('title' => gTxt('view')))), '', 'txp-list-col-status'
                 ).
                 (
-                    $show_authors ? td(span(txpspecialchars($RealName), array('title' => $AuthorID)), '', 'txp-list-col-author') : ''
+                    $show_authors ? td(span(txpspecialchars($RealName), array('title' => $AuthorID)), '', 'txp-list-col-author name') : ''
                 ).
                 (
                     $use_comments ? td($comments, '', "txp-list-col-comments articles_detail") : ''

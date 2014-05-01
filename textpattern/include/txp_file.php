@@ -291,7 +291,7 @@ function file_list($message = '')
                 ).
                 (
                     $show_authors ? column_head('author', 'author', 'file', true, $switch_dir, $crit, $search_method,
-                        (('author' == $sort) ? "$dir " : '').'txp-list-col-author') : ''
+                        (('author' == $sort) ? "$dir " : '').'txp-list-col-author name') : ''
                 )
             ).
             n.tag_end('thead').
@@ -407,7 +407,7 @@ function file_list($message = '')
                     $downloads, '', 'txp-list-col-downloads'
                 ).
                 (
-                    $show_authors ? td(span(txpspecialchars($realname), array('title' => $author)), '', 'txp-list-col-author') : ''
+                    $show_authors ? td(span(txpspecialchars($realname), array('title' => $author)), '', 'txp-list-col-author name') : ''
                 )
             );
         }
