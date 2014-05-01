@@ -245,7 +245,7 @@ function list_list($message = '', $post = '')
                 ).
                 column_head(
                     'ID', 'id', 'list', true, $switch_dir, $crit, $search_method,
-                        (('id' == $sort) ? "$dir " : '').'txp-list-col-id actions'
+                        (('id' == $sort) ? "$dir " : '').'txp-list-col-id'
                 ).
                 column_head(
                     'title', 'title', 'list', true, $switch_dir, $crit, $search_method,

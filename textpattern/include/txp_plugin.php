@@ -138,7 +138,7 @@ function plugin_list($message = '')
                         (('load_order' == $sort) ? "$dir " : '').'txp-list-col-load-order'
                 ).
                 hCell(
-                    gTxt('manage'), '',  ' scope="col" class="txp-list-col-manage actions"'
+                    gTxt('manage'), '',  ' scope="col" class="txp-list-col-manage"'
                 )
             ).
             n.'</thead>'.
