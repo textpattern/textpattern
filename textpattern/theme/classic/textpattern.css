@@ -1109,7 +1109,7 @@ td {
     width: 18px;
 }
 
-.txp-list td.id {
+.txp-list-col-id {
     white-space: nowrap;
 }
 
