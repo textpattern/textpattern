@@ -1105,7 +1105,7 @@ td {
     background: #f3f3f3;
 }
 
-.txp-list .multi-edit {
+.txp-list-col-multi-edit {
     width: 18px;
 }
 
@@ -1263,7 +1263,7 @@ body {
     margin-left: 0.75em;
 }
 
-div.multi-edit {
+.multi-edit {
     margin: 1em 0;
 }
 

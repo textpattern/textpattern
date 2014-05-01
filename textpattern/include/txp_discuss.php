@@ -276,21 +276,41 @@ function discuss_list($message = '')
     if ($rs) {
         echo n.'<div id="'.$event.'_container" class="txp-container">';
         echo n.'<form name="longform" id="discuss_form" class="multi_edit_form" method="post" action="index.php">'.
-
             n.'<div class="txp-listtables">'.
             startTable('', '', 'txp-list').
             n.'<thead>'.
             tr(
-                hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
-                column_head('ID', 'id', 'discuss', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id').
-                column_head('date', 'date', 'discuss', true, $switch_dir, $crit, $search_method, (('date' == $sort) ? "$dir " : '').'date posted created').
-                column_head('name', 'name', 'discuss', true, $switch_dir, $crit, $search_method, (('name' == $sort) ? "$dir " : '').'name').
-                column_head('message', 'message', 'discuss', true, $switch_dir, $crit, $search_method, (('message' == $sort) ? "$dir " : 'message')).
-                column_head('email', 'email', 'discuss', true, $switch_dir, $crit, $search_method, (('email' == $sort) ? "$dir " : '').'discuss_detail email').
-                column_head('website', 'website', 'discuss', true, $switch_dir, $crit, $search_method, (('website' == $sort) ? "$dir " : '').'discuss_detail website').
-                column_head('IP', 'ip', 'discuss', true, $switch_dir, $crit, $search_method, (('ip' == $sort) ? "$dir " : '').'discuss_detail ip').
-                column_head('status', 'status', 'discuss', true, $switch_dir, $crit, $search_method, (('status' == $sort) ? "$dir " : '').'status').
-                column_head('parent', 'parent', 'discuss', true, $switch_dir, $crit, $search_method, (('parent' == $sort) ? "$dir " : '').'parent')
+                hCell(
+                    fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.
+                    gTxt('toggle_all_selected').'" class="txp-list-col-multi-edit"'
+                ).
+                column_head(
+                    'ID', 'id', 'discuss', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id'
+                ).
+                column_head(
+                    'date', 'date', 'discuss', true, $switch_dir, $crit, $search_method, (('date' == $sort) ? "$dir " : '').'date posted created'
+                ).
+                column_head(
+                    'name', 'name', 'discuss', true, $switch_dir, $crit, $search_method, (('name' == $sort) ? "$dir " : '').'name'
+                ).
+                column_head(
+                    'message', 'message', 'discuss', true, $switch_dir, $crit, $search_method, (('message' == $sort) ? "$dir " : 'message')
+                ).
+                column_head(
+                    'email', 'email', 'discuss', true, $switch_dir, $crit, $search_method, (('email' == $sort) ? "$dir " : '').'discuss_detail email'
+                ).
+                column_head(
+                    'website', 'website', 'discuss', true, $switch_dir, $crit, $search_method, (('website' == $sort) ? "$dir " : '').'discuss_detail website'
+                ).
+                column_head(
+                    'IP', 'ip', 'discuss', true, $switch_dir, $crit, $search_method, (('ip' == $sort) ? "$dir " : '').'discuss_detail ip'
+                ).
+                column_head(
+                    'status', 'status', 'discuss', true, $switch_dir, $crit, $search_method, (('status' == $sort) ? "$dir " : '').'status'
+                ).
+                column_head(
+                    'parent', 'parent', 'discuss', true, $switch_dir, $crit, $search_method, (('parent' == $sort) ? "$dir " : '').'parent'
+                )
             ).
             n.'</thead>';
 
@@ -348,17 +368,38 @@ function discuss_list($message = '')
             }
 
             echo tr(
-                td(fInput('checkbox', 'selected[]', $discussid), '', 'multi-edit').
-                hCell(href($discussid, $edit_url, ' title="'.gTxt('edit').'"'), '', ' scope="row" class="id"').
-                td(gTime($uPosted), '', 'date posted created').
-                td(txpspecialchars(soft_wrap($name, 15)), '', 'name').
-                td(short_preview($dmessage), '', 'message').
-                td(txpspecialchars(soft_wrap($email, 15)), '', 'discuss_detail email').
-                td(txpspecialchars(soft_wrap($web, 15)), '', 'discuss_detail website').
-                td($ip, '', 'discuss_detail ip').
-                td($view, '', 'status').
-                td($parent, '', 'parent')
-            , ' class="'.$row_class.'"');
+                td(
+                    fInput('checkbox', 'selected[]', $discussid), '', 'txp-list-col-multi-edit'
+                ).
+                hCell(
+                    href($discussid, $edit_url, ' title="'.gTxt('edit').'"'), '', ' scope="row" class="id"'
+                ).
+                td(
+                    gTime($uPosted), '', 'date posted created'
+                ).
+                td(
+                    txpspecialchars(soft_wrap($name, 15)), '', 'name'
+                ).
+                td(
+                    short_preview($dmessage), '', 'message'
+                ).
+                td(
+                    txpspecialchars(soft_wrap($email, 15)), '', 'discuss_detail email'
+                ).
+                td(
+                    txpspecialchars(soft_wrap($web, 15)), '', 'discuss_detail website'
+                ).
+                td(
+                    $ip, '', 'discuss_detail ip'
+                ).
+                td(
+                    $view, '', 'status'
+                ).
+                td(
+                    $parent, '', 'parent'
+                )
+                , ' class="'.$row_class.'"'
+            );
         }
 
         if (empty($message)) {

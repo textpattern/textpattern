@@ -252,17 +252,40 @@ function file_list($message = '')
             n.tag_start('table', array('class' => 'txp-list')).
             n.tag_start('thead').
             tr(
-                hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
-                column_head('ID', 'id', 'file', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id').
-                column_head('file_name', 'filename', 'file', true, $switch_dir, $crit, $search_method, (('filename' == $sort) ? "$dir " : '').'name').
-                column_head('title', 'title', 'file', true, $switch_dir, $crit, $search_method, (('title' == $sort) ? "$dir " : '').'title').
-                column_head('description', 'description', 'file', true, $switch_dir, $crit, $search_method, (('description' == $sort) ? "$dir " : '').'files_detail description').
-                column_head('file_category', 'category', 'file', true, $switch_dir, $crit, $search_method, (('category' == $sort) ? "$dir " : '').'category').
-                hCell(gTxt('tags'), '', ' scope="col" class="files_detail tag-build"').
-                hCell(gTxt('status'), '', ' scope="col" class="status"').
-                hCell(gTxt('condition'), '', ' scope="col" class="condition"').
-                column_head('downloads', 'downloads', 'file', true, $switch_dir, $crit, $search_method, (('downloads' == $sort) ? "$dir " : '').'downloads').
-                ($show_authors ? column_head('author', 'author', 'file', true, $switch_dir, $crit, $search_method, (('author' == $sort) ? "$dir " : '').'author') : '')
+                hCell(
+                    fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.
+                    gTxt('toggle_all_selected').'" class="txp-list-col-multi-edit"'
+                ).
+                column_head(
+                    'ID', 'id', 'file', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id'
+                ).
+                column_head(
+                    'file_name', 'filename', 'file', true, $switch_dir, $crit, $search_method, (('filename' == $sort) ? "$dir " : '').'name'
+                ).
+                column_head(
+                    'title', 'title', 'file', true, $switch_dir, $crit, $search_method, (('title' == $sort) ? "$dir " : '').'title'
+                ).
+                column_head(
+                    'description', 'description', 'file', true, $switch_dir, $crit, $search_method, (('description' == $sort) ? "$dir " : '').'files_detail description'
+                ).
+                column_head(
+                    'file_category', 'category', 'file', true, $switch_dir, $crit, $search_method, (('category' == $sort) ? "$dir " : '').'category'
+                ).
+                hCell(gTxt(
+                    'tags'), '', ' scope="col" class="files_detail tag-build"'
+                ).
+                hCell(gTxt(
+                    'status'), '', ' scope="col" class="status"'
+                ).
+                hCell(gTxt(
+                    'condition'), '', ' scope="col" class="condition"'
+                ).
+                column_head(
+                    'downloads', 'downloads', 'file', true, $switch_dir, $crit, $search_method, (('downloads' == $sort) ? "$dir " : '').'downloads'
+                ).
+                (
+                    $show_authors ? column_head('author', 'author', 'file', true, $switch_dir, $crit, $search_method, (('author' == $sort) ? "$dir " : '').'author') : ''
+                )
             ).
             n.tag_end('thead').
             n.tag_start('tbody');
@@ -341,12 +364,24 @@ function file_list($message = '')
             }
 
             echo tr(
-                td($multi_edit, '', 'multi-edit').
-                hCell($id_column, '', array('scope' => 'row', 'class' => 'id')).
-                td($name, '', 'name').
-                td(txpspecialchars($title), '', 'title').
-                td(txpspecialchars($description), '', 'files_detail description').
-                td($category, '', 'category'.$vc).
+                td(
+                    $multi_edit, '', 'txp-list-col-multi-edit'
+                ).
+                hCell(
+                    $id_column, '', array('scope' => 'row', 'class' => 'id')
+                ).
+                td(
+                    $name, '', 'name'
+                ).
+                td(
+                    txpspecialchars($title), '', 'title'
+                ).
+                td(
+                    txpspecialchars($description), '', 'files_detail description'
+                ).
+                td(
+                    $category, '', 'category'.$vc
+                ).
                 td(
                     href('Textile', $tag_url + array('type' => 'textile'), ' target="_blank" onclick="popWin(this.href); return false;"').
                     sp.span('&#124;', array('role' => 'separator')).
@@ -355,10 +390,18 @@ function file_list($message = '')
                     sp.href('HTML', $tag_url + array('type' => 'html'), ' target="_blank" onclick="popWin(this.href); return false;"')
                 , '', 'files_detail tag-build').
 
-                td($status, '', 'status').
-                td($condition, '', 'condition').
-                td($downloads, '', 'downloads').
-                ($show_authors ? td(span(txpspecialchars($realname), array('title' => $author)), '', 'author') : '')
+                td(
+                    $status, '', 'status'
+                ).
+                td(
+                    $condition, '', 'condition'
+                ).
+                td(
+                    $downloads, '', 'downloads'
+                ).
+                (
+                    $show_authors ? td(span(txpspecialchars($realname), array('title' => $author)), '', 'author') : ''
+                )
             );
         }
 

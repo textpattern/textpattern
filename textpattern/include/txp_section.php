@@ -242,7 +242,6 @@ function sec_section_list($message = '')
                 'id'    => $event.'_container',
                 'class' => 'txp-container',
             )).
-
             n.tag_start('form', array(
                 'action' => 'index.php',
                 'id'     => 'section_form',
@@ -250,20 +249,38 @@ function sec_section_list($message = '')
                 'method' => 'post',
                 'name'   => 'longform',
             )).
-
             n.tag_start('div', array('class' => 'txp-listtables')).
             n.tag_start('table', array('class' => 'txp-list')).
             n.tag_start('thead').
             tr(
-                hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
-                column_head('name', 'name', 'section', true, $switch_dir, $crit, $search_method, (('name' == $sort) ? "$dir " : '').'name').
-                column_head('title', 'title', 'section', true, $switch_dir, $crit, $search_method, (('title' == $sort) ? "$dir " : '').'title').
-                column_head('page', 'page', 'section', true, $switch_dir, $crit, $search_method, (('page' == $sort) ? "$dir " : '').'page').
-                column_head('css', 'css', 'section', true, $switch_dir, $crit, $search_method, (('css' == $sort) ? "$dir " : '').'style').
-                column_head('on_front_page', 'on_frontpage', 'section', true, $switch_dir, $crit, $search_method, (('on_frontpage' == $sort) ? "$dir " : '').'section_detail frontpage').
-                column_head('syndicate', 'in_rss', 'section', true, $switch_dir, $crit, $search_method, (('in_rss' == $sort) ? "$dir " : '').'section_detail syndicate').
-                column_head('include_in_search', 'searchable', 'section', true, $switch_dir, $crit, $search_method, (('searchable' == $sort) ? "$dir " : '').'section_detail searchable').
-                column_head('article', 'article_count', 'section', true, $switch_dir, $crit, $search_method, (('article_count' == $sort) ? "$dir " : '').'section_detail article_count')
+                hCell(
+                    fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.
+                    gTxt('toggle_all_selected').'" class="txp-list-col-multi-edit"'
+                ).
+                column_head(
+                    'name', 'name', 'section', true, $switch_dir, $crit, $search_method, (('name' == $sort) ? "$dir " : '').'name'
+                ).
+                column_head(
+                    'title', 'title', 'section', true, $switch_dir, $crit, $search_method, (('title' == $sort) ? "$dir " : '').'title'
+                ).
+                column_head(
+                    'page', 'page', 'section', true, $switch_dir, $crit, $search_method, (('page' == $sort) ? "$dir " : '').'page'
+                ).
+                column_head(
+                    'css', 'css', 'section', true, $switch_dir, $crit, $search_method, (('css' == $sort) ? "$dir " : '').'style'
+                ).
+                column_head(
+                    'on_front_page', 'on_frontpage', 'section', true, $switch_dir, $crit, $search_method, (('on_frontpage' == $sort) ? "$dir " : '').'section_detail frontpage'
+                ).
+                column_head(
+                    'syndicate', 'in_rss', 'section', true, $switch_dir, $crit, $search_method, (('in_rss' == $sort) ? "$dir " : '').'section_detail syndicate'
+                ).
+                column_head(
+                    'include_in_search', 'searchable', 'section', true, $switch_dir, $crit, $search_method, (('searchable' == $sort) ? "$dir " : '').'section_detail searchable'
+                ).
+                column_head(
+                    'article', 'article_count', 'section', true, $switch_dir, $crit, $search_method, (('article_count' == $sort) ? "$dir " : '').'section_detail article_count'
+                )
             ).
             n.tag_end('thead').
             n.tag_start('tbody');
@@ -327,23 +344,45 @@ function sec_section_list($message = '')
             ), array('title' => gTxt('edit')));
 
             echo tr(
-                td(fInput('checkbox', 'selected[]', $sec_name), '', 'multi-edit').
+                td(
+                    fInput('checkbox', 'selected[]', $sec_name), '', 'txp-list-col-multi-edit'
+                ).
                 hCell(
-                    href(txpspecialchars($sec_name), $edit_url, array('title' => gTxt('edit'))).
+                    href(
+                        txpspecialchars($sec_name), $edit_url, array('title' => gTxt('edit'))
+                    ).
                     sp.span(
                         span('[', array('aria-hidden' => 'true')).
                         href(gTxt('view'), pagelinkurl(array('s' => $sec_name))).
                         span(']', array('aria-hidden' => 'true'))
-                    , array('class' => 'section_detail'))
-                , '', array('scope' => 'row', 'class' => 'name')).
-
-                td(txpspecialchars($sec_title), '', 'title').
-                td($sec_page, '', 'page').
-                td($sec_css, '', 'style').
-                td($sec_on_frontpage, '', 'section_detail frontpage').
-                td($sec_in_rss, '', 'section_detail syndicate').
-                td($sec_searchable, '', 'section_detail searchable').
-                td($articles, '', 'section_detail article_count'),
+                        , array('class' => 'section_detail')
+                    )
+                    , '', array(
+                        'scope' => 'row',
+                        'class' => 'name'
+                    )
+                ).
+                td(
+                    txpspecialchars($sec_title), '', 'title'
+                ).
+                td(
+                    $sec_page, '', 'page'
+                ).
+                td(
+                    $sec_css, '', 'style'
+                ).
+                td(
+                    $sec_on_frontpage, '', 'section_detail frontpage'
+                ).
+                td(
+                    $sec_in_rss, '', 'section_detail syndicate'
+                ).
+                td(
+                    $sec_searchable, '', 'section_detail searchable'
+                ).
+                td(
+                    $articles, '', 'section_detail article_count'
+                ),
                 array('id' => 'txp_section_'.$sec_name)
             );
         }

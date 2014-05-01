@@ -185,23 +185,38 @@ function image_list($message = '')
 
         echo n.'<div id="'.$event.'_container" class="txp-container">';
         echo n.'<form name="longform" id="images_form" class="multi_edit_form" method="post" action="index.php">'.
-
             n.'<div class="txp-listtables">'.
             startTable('', '', 'txp-list').
             n.'<thead>'.
             tr(
-                hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
-                column_head('ID', 'id', 'image', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id').
-                column_head('name', 'name', 'image', true, $switch_dir, $crit, $search_method, (('name' == $sort) ? "$dir " : '').'name').
-                column_head('date', 'date', 'image', true, $switch_dir, $crit, $search_method, (('date' == $sort) ? "$dir " : '').'images_detail date created').
-                column_head('thumbnail', 'thumbnail', 'image', true, $switch_dir, $crit, $search_method, (('thumbnail' == $sort) ? "$dir " : '').'thumbnail').
-                hCell(gTxt('tags'), '', ' scope="col" class="images_detail tag-build"').
-                column_head('image_category', 'category', 'image', true, $switch_dir, $crit, $search_method, (('category' == $sort) ? "$dir " : '').'category').
-                ($show_authors ? column_head('author', 'author', 'image', true, $switch_dir, $crit, $search_method, (('author' == $sort) ? "$dir " : '').'author') : '')
+                hCell(
+                    fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.
+                    gTxt('toggle_all_selected').'" class="txp-list-col-multi-edit"'
+                ).
+                column_head(
+                    'ID', 'id', 'image', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id'
+                ).
+                column_head(
+                    'name', 'name', 'image', true, $switch_dir, $crit, $search_method, (('name' == $sort) ? "$dir " : '').'name'
+                ).
+                column_head(
+                    'date', 'date', 'image', true, $switch_dir, $crit, $search_method, (('date' == $sort) ? "$dir " : '').'images_detail date created'
+                ).
+                column_head(
+                    'thumbnail', 'thumbnail', 'image', true, $switch_dir, $crit, $search_method, (('thumbnail' == $sort) ? "$dir " : '').'thumbnail'
+                ).
+                hCell(
+                    gTxt('tags'), '', ' scope="col" class="images_detail tag-build"'
+                ).
+                column_head(
+                    'image_category', 'category', 'image', true, $switch_dir, $crit, $search_method, (('category' == $sort) ? "$dir " : '').'category'
+                ).
+                (
+                    $show_authors ? column_head('author', 'author', 'image', true, $switch_dir, $crit, $search_method, (('author' == $sort) ? "$dir " : '').'author') : ''
+                )
             ).
-            n.'</thead>';
-
-        echo n.'<tbody>';
+            n.'</thead>'.
+            n.'<tbody>';
 
         $validator = new Validator();
 
@@ -254,9 +269,9 @@ function image_list($message = '')
             $can_edit = has_privs('image.edit') || ($author === $txp_user && has_privs('image.edit.own'));
 
             echo tr(
-                td($can_edit ? fInput('checkbox', 'selected[]', $id) : '&#160;'
-                , '', 'multi-edit').
-
+                td(
+                    $can_edit ? fInput('checkbox', 'selected[]', $id) : '&#160;', '', 'txp-list-col-multi-edit'
+                ).
                 hCell(
                     ($can_edit ? href($id, $edit_url, array('title' => gTxt('edit'))) : $id).
                     sp.span(
@@ -267,25 +282,25 @@ function image_list($message = '')
                 , '', ' scope="row" class="id"').
 
                 td(
-                    ($can_edit ? href($name, $edit_url, ' title="'.gTxt('edit').'"') : $name)
-                , '', 'name').
-
+                    ($can_edit ? href($name, $edit_url, ' title="'.gTxt('edit').'"') : $name), '', 'name'
+                ).
                 td(
-                    gTime($uDate)
-                , '', 'images_detail date created').
-
+                    gTime($uDate), '', 'images_detail date created'
+                ).
                 td(
-                    pluggable_ui('image_ui', 'thumbnail',
-                    ($can_edit ? href($thumbnail, $edit_url) : $thumbnail)
-                    , $a)
-                , '', 'thumbnail').
-
-                td($tagbuilder, '', 'images_detail tag-build').
-                td($category, '', 'category'.$vc).
-
-                ($show_authors ? td(
-                    span(txpspecialchars($author), array('title' => get_author_name($author)))
-                , '', 'author') : '')
+                    pluggable_ui('image_ui', 'thumbnail', ($can_edit ? href($thumbnail, $edit_url) : $thumbnail), $a), '', 'thumbnail'
+                ).
+                td(
+                    $tagbuilder, '', 'images_detail tag-build'
+                ).
+                td(
+                    $category, '', 'category'.$vc
+                ).
+                (
+                    $show_authors ? td(
+                        span(txpspecialchars($author), array('title' => get_author_name($author))), '', 'author'
+                    ) : ''
+                )
             );
         }
 

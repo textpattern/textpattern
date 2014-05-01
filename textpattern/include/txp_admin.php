@@ -399,35 +399,59 @@ function author_list($message = '')
         if ($rs) {
             echo n.'<div id="users_container" class="txp-container">';
             echo n.'<form action="index.php" id="users_form" class="multi_edit_form" method="post" name="longform">'.
-
-            n.'<div class="txp-listtables">'.
-            startTable('', '', 'txp-list').
-            n.'<thead>'.
-            tr(
-                (($use_multi_edit)
-                    ? hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="multi-edit"')
-                    : hCell('', '', ' scope="col" class="multi-edit"')
+                n.'<div class="txp-listtables">'.
+                startTable('', '', 'txp-list').
+                n.'<thead>'.
+                tr(
+                    (
+                        ($use_multi_edit)
+                        ? hCell(
+                            fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.
+                            gTxt('toggle_all_selected').'" class="txp-list-col-multi-edit"'
+                        )
+                        : hCell('', '', ' scope="col" class="txp-list-col-multi-edit"')
+                    ).
+                    column_head(
+                        'login_name', 'name', 'admin', true, $switch_dir, '', '', (('name' == $sort) ? "$dir " : '').'name login-name'
+                    ).
+                    column_head(
+                        'real_name', 'RealName', 'admin', true, $switch_dir, '', '', (('RealName' == $sort) ? "$dir " : '').'name real-name'
+                    ).
+                    column_head(
+                        'email', 'email', 'admin', true, $switch_dir, '', '', (('email' == $sort) ? "$dir " : '').'email'
+                    ).
+                    column_head(
+                        'privileges', 'privs', 'admin', true, $switch_dir, '', '', (('privs' == $sort) ? "$dir " : '').'privs'
+                    ).
+                    column_head(
+                        'last_login', 'last_login', 'admin', true, $switch_dir, '', '', (('last_login' == $sort) ? "$dir " : '').'date last-login modified'
+                    )
                 ).
-                column_head('login_name', 'name', 'admin', true, $switch_dir, '', '', (('name' == $sort) ? "$dir " : '').'name login-name').
-                column_head('real_name', 'RealName', 'admin', true, $switch_dir, '', '', (('RealName' == $sort) ? "$dir " : '').'name real-name').
-                column_head('email', 'email', 'admin', true, $switch_dir, '', '', (('email' == $sort) ? "$dir " : '').'email').
-                column_head('privileges', 'privs', 'admin', true, $switch_dir, '', '', (('privs' == $sort) ? "$dir " : '').'privs').
-                column_head('last_login', 'last_login', 'admin', true, $switch_dir, '', '', (('last_login' == $sort) ? "$dir " : '').'date last-login modified')
-            ).
-            n.'</thead>';
-
-            echo n.'<tbody>';
+                n.'</thead>'.
+                n.'<tbody>';
 
             while ($a = nextRow($rs)) {
                 extract(doSpecial($a));
 
                 echo tr(
-                    td(((has_privs('admin.edit') and $txp_user != $a['name']) ? fInput('checkbox', 'selected[]', $a['name'], 'checkbox') : ''), '', 'multi-edit').
-                    hCell(((has_privs('admin.edit')) ? eLink('admin', 'author_edit', 'user_id', $user_id, $name) : $name), '', ' scope="row" class="name login-name"').
-                    td($RealName, '', 'name real-name').
-                    td(href($email, 'mailto:'.$email), '', 'email').
-                    td(get_priv_level($privs), '', 'privs').
-                    td(($last_login ? safe_strftime('%b&#160;%Y', $last_login) : ''), '', 'date last-login modified')
+                    td(
+                        ((has_privs('admin.edit') and $txp_user != $a['name']) ? fInput('checkbox', 'selected[]', $a['name'], 'checkbox') : ''), '', 'txp-list-col-multi-edit'
+                    ).
+                    hCell(
+                        ((has_privs('admin.edit')) ? eLink('admin', 'author_edit', 'user_id', $user_id, $name) : $name), '', ' scope="row" class="name login-name"'
+                    ).
+                    td(
+                        $RealName, '', 'name real-name'
+                    ).
+                    td(
+                        href($email, 'mailto:'.$email), '', 'email'
+                    ).
+                    td(
+                        get_priv_level($privs), '', 'privs'
+                    ).
+                    td(
+                        ($last_login ? safe_strftime('%b&#160;%Y', $last_login) : ''), '', 'date last-login modified'
+                    )
                 );
             }
 

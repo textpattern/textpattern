@@ -235,23 +235,47 @@ function list_list($message = '', $post = '')
 
         echo n.'<div id="'.$event.'_container" class="txp-container">';
         echo n.'<form name="longform" id="articles_form" class="multi_edit_form" method="post" action="index.php">'.
-
             n.'<div class="txp-listtables">'.
             startTable('', '', 'txp-list').
             n.'<thead>'.
             tr(
-                hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
-                column_head('ID', 'id', 'list', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id actions').
-                column_head('title', 'title', 'list', true, $switch_dir, $crit, $search_method, (('title' == $sort) ? "$dir " : '').'title').
-                column_head('posted', 'posted', 'list', true, $switch_dir, $crit, $search_method, (('posted' == $sort) ? "$dir " : '').'date posted created').
-                column_head('article_modified', 'lastmod', 'list', true, $switch_dir, $crit, $search_method, (('lastmod' == $sort) ? "$dir " : '').'articles_detail date modified').
-                column_head('expires', 'expires', 'list', true, $switch_dir, $crit, $search_method, (('expires' == $sort) ? "$dir " : '').'articles_detail date expires').
-                column_head('section', 'section', 'list', true, $switch_dir, $crit, $search_method, (('section' == $sort) ? "$dir " : '').'section').
-                column_head('category1', 'category1', 'list', true, $switch_dir, $crit, $search_method, (('category1' == $sort) ? "$dir " : '').'articles_detail category category1').
-                column_head('category2', 'category2', 'list', true, $switch_dir, $crit, $search_method, (('category2' == $sort) ? "$dir " : '').'articles_detail category category2').
-                column_head('status', 'status', 'list', true, $switch_dir, $crit, $search_method, (('status' == $sort) ? "$dir " : '').'status').
-                ($show_authors ? column_head('author', 'author', 'list', true, $switch_dir, $crit, $search_method, (('author' == $sort) ? "$dir " : '').'author') : '').
-                ($use_comments == 1 ? column_head('comments', 'comments', 'list', true, $switch_dir, $crit, $search_method, (('comments' == $sort) ? "$dir " : '').'articles_detail comments') : '')
+                hCell(
+                    fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.
+                    gTxt('toggle_all_selected').'" class="txp-list-col-multi-edit"'
+                ).
+                column_head(
+                    'ID', 'id', 'list', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id actions'
+                ).
+                column_head(
+                    'title', 'title', 'list', true, $switch_dir, $crit, $search_method, (('title' == $sort) ? "$dir " : '').'title'
+                ).
+                column_head(
+                    'posted', 'posted', 'list', true, $switch_dir, $crit, $search_method, (('posted' == $sort) ? "$dir " : '').'date posted created'
+                ).
+                column_head(
+                    'article_modified', 'lastmod', 'list', true, $switch_dir, $crit, $search_method, (('lastmod' == $sort) ? "$dir " : '').'articles_detail date modified'
+                ).
+                column_head(
+                    'expires', 'expires', 'list', true, $switch_dir, $crit, $search_method, (('expires' == $sort) ? "$dir " : '').'articles_detail date expires'
+                ).
+                column_head(
+                    'section', 'section', 'list', true, $switch_dir, $crit, $search_method, (('section' == $sort) ? "$dir " : '').'section'
+                ).
+                column_head(
+                    'category1', 'category1', 'list', true, $switch_dir, $crit, $search_method, (('category1' == $sort) ? "$dir " : '').'articles_detail category category1'
+                ).
+                column_head(
+                    'category2', 'category2', 'list', true, $switch_dir, $crit, $search_method, (('category2' == $sort) ? "$dir " : '').'articles_detail category category2'
+                ).
+                column_head(
+                    'status', 'status', 'list', true, $switch_dir, $crit, $search_method, (('status' == $sort) ? "$dir " : '').'status'
+                ).
+                (
+                    $show_authors ? column_head('author', 'author', 'list', true, $switch_dir, $crit, $search_method, (('author' == $sort) ? "$dir " : '').'author') : ''
+                ).
+                (
+                    $use_comments == 1 ? column_head('comments', 'comments', 'list', true, $switch_dir, $crit, $search_method, (('comments' == $sort) ? "$dir " : '').'articles_detail comments') : ''
+                )
             ).
             n.'</thead>';
 
@@ -320,49 +344,57 @@ function list_list($message = '', $post = '')
                 tag($comments, 'span', array('class' => 'comments-manage'));
 
             echo tr(
-
-                td((
-                    (  ($a['Status'] >= STATUS_LIVE and has_privs('article.edit.published'))
-                    or ($a['Status'] >= STATUS_LIVE and $AuthorID === $txp_user and has_privs('article.edit.own.published'))
-                    or ($a['Status'] < STATUS_LIVE and has_privs('article.edit'))
-                    or ($a['Status'] < STATUS_LIVE and $AuthorID === $txp_user and has_privs('article.edit.own'))
-                    )
+                td(
+                    (
+                        (
+                            ($a['Status'] >= STATUS_LIVE and has_privs('article.edit.published'))
+                            or ($a['Status'] >= STATUS_LIVE and $AuthorID === $txp_user and has_privs('article.edit.own.published'))
+                            or ($a['Status'] < STATUS_LIVE and has_privs('article.edit'))
+                            or ($a['Status'] < STATUS_LIVE and $AuthorID === $txp_user and has_privs('article.edit.own'))
+                        )
                     ? fInput('checkbox', 'selected[]', $ID, 'checkbox')
                     : ''
-                ), '', 'multi-edit').
-
+                    ), '', 'txp-list-col-multi-edit'
+                ).
                 hCell(
                     eLink('article', 'edit', 'ID', $ID, $ID).
                     tag(
                         sp.tag('[', 'span', array('aria-hidden' => 'true')).
                         href(gTxt('view'), $view_url).
                         tag(']', 'span', array('aria-hidden' => 'true'))
-                    , 'span', array('class' => 'articles_detail'))
-                , '', ' scope="row" class="id"').
-
-                td($Title, '', 'title').
-
+                    , 'span', array('class' => 'articles_detail')
+                    ), '', ' scope="row" class="id"'
+                ).
+                td(
+                    $Title, '', 'title'
+                ).
                 td(
                     gTime($posted), '', ($posted < time() ? '' : 'unpublished ').'date posted created'
                 ).
-
                 td(
                     gTime($lastmod), '', "articles_detail date modified"
                 ).
-
                 td(
                     ($expires ? gTime($expires) : ''), '', 'articles_detail date expires'
                 ).
-
-                td(span(txpspecialchars($section_title), array('title' => $Section)), '', 'section'.$vs).
-
-                td($Category1, '', "articles_detail category category1".$vc[1]).
-                td($Category2, '', "articles_detail category category2".$vc[2]).
-                td(href($Status, $view_url, join_atts(array('title' => gTxt('view')))), '', 'status').
-
-                ($show_authors ? td(span(txpspecialchars($RealName), array('title' => $AuthorID)), '', 'author') : '').
-
-                ($use_comments ? td($comments, '', "articles_detail comments") : '')
+                td(
+                    span(txpspecialchars($section_title), array('title' => $Section)), '', 'section'.$vs
+                ).
+                td(
+                    $Category1, '', "articles_detail category category1".$vc[1]
+                ).
+                td(
+                    $Category2, '', "articles_detail category category2".$vc[2]
+                ).
+                td(
+                    href($Status, $view_url, join_atts(array('title' => gTxt('view')))), '', 'status'
+                ).
+                (
+                    $show_authors ? td(span(txpspecialchars($RealName), array('title' => $AuthorID)), '', 'author') : ''
+                ).
+                (
+                    $use_comments ? td($comments, '', "articles_detail comments") : ''
+                )
             );
         }
 

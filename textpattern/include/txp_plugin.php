@@ -102,24 +102,41 @@ function plugin_list($message = '')
     if ($rs and numRows($rs) > 0) {
         echo n.'<div id="'.$event.'_container" class="txp-container">';
         echo n.'<form action="index.php" id="plugin_form" class="multi_edit_form" method="post" name="longform">'.
-
-        n.'<div class="txp-listtables">'.
-        startTable('', '', 'txp-list').
-        n.'<thead>'.
-        tr(
-            hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="multi-edit"').
-            column_head('plugin', 'name', 'plugin', true, $switch_dir, '', '', (('name' == $sort) ? "$dir " : '').'name').
-            column_head('author', 'author', 'plugin', true, $switch_dir, '', '', (('author' == $sort) ? "$dir " : '').'author').
-            column_head('version', 'version', 'plugin', true, $switch_dir, '', '', (('version' == $sort) ? "$dir " : '').'version').
-            column_head('plugin_modified', 'modified', 'plugin', true, $switch_dir, '', '', (('modified' == $sort) ? "$dir " : '').'modified').
-            hCell(gTxt('description'), '', ' scope="col" class="description"').
-            column_head('active', 'status', 'plugin', true, $switch_dir, '', '', (('status' == $sort) ? "$dir " : '').'status').
-            column_head('order', 'load_order', 'plugin', true, $switch_dir, '', '', (('load_order' == $sort) ? "$dir " : '').'load-order').
-            hCell(gTxt('manage'), '',  ' scope="col" class="manage actions"')
-        ).
-        n.'</thead>';
-
-        echo n.'<tbody>';
+            n.'<div class="txp-listtables">'.
+            startTable('', '', 'txp-list').
+            n.'<thead>'.
+            tr(
+                hCell(
+                    fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.
+                    gTxt('toggle_all_selected').'" class="txp-list-col-multi-edit"'
+                ).
+                column_head(
+                    'plugin', 'name', 'plugin', true, $switch_dir, '', '', (('name' == $sort) ? "$dir " : '').'name'
+                ).
+                column_head(
+                    'author', 'author', 'plugin', true, $switch_dir, '', '', (('author' == $sort) ? "$dir " : '').'author'
+                ).
+                column_head(
+                    'version', 'version', 'plugin', true, $switch_dir, '', '', (('version' == $sort) ? "$dir " : '').'version'
+                ).
+                column_head(
+                    'plugin_modified', 'modified', 'plugin', true, $switch_dir, '', '', (('modified' == $sort) ? "$dir " : '').'modified'
+                ).
+                hCell(gTxt(
+                    'description'), '', ' scope="col" class="description"'
+                ).
+                column_head(
+                    'active', 'status', 'plugin', true, $switch_dir, '', '', (('status' == $sort) ? "$dir " : '').'status'
+                ).
+                column_head(
+                    'order', 'load_order', 'plugin', true, $switch_dir, '', '', (('load_order' == $sort) ? "$dir " : '').'load-order'
+                ).
+                hCell(
+                    gTxt('manage'), '',  ' scope="col" class="manage actions"'
+                )
+            ).
+            n.'</thead>'.
+            n.'<tbody>';
 
         while ($a = nextRow($rs)) {
             foreach ($a as $key => $value) {
@@ -172,26 +189,34 @@ function plugin_list($message = '')
 
             echo tr(
                 td(
-                    fInput('checkbox', 'selected[]', $name)
-                , '', 'multi-edit').
-
-                hCell($edit_url, '', ' scope="row" class="name"').
-
+                    fInput('checkbox', 'selected[]', $name), '', 'txp-list-col-multi-edit'
+                ).
+                hCell(
+                    $edit_url, '', ' scope="row" class="name"'
+                ).
                 td(
-                    href($author, $a['author_uri'], array('rel' => 'external'))
-                , '', 'author').
-
-                td($version, '', 'version').
-                td(($modified ? span(gTxt('yes'), array('class' => 'warning')) : ''), '', 'modified').
-                td($description, '', 'description').
-
+                    href($author, $a['author_uri'], array('rel' => 'external')), '', 'author'
+                ).
                 td(
-                    status_link($status, $name, yes_no($status))
-                , '', 'status').
-
-                td($load_order, '', 'load-order').
-                td($manage_items, '', 'manage')
-            , $status ? ' class="active"' : '');
+                    $version, '', 'version'
+                ).
+                td(
+                    ($modified ? span(gTxt('yes'), array('class' => 'warning')) : ''), '', 'modified'
+                ).
+                td(
+                    $description, '', 'description'
+                ).
+                td(
+                    status_link($status, $name, yes_no($status)), '', 'status'
+                ).
+                td(
+                    $load_order, '', 'load-order'
+                ).
+                td(
+                    $manage_items, '', 'manage'
+                ),
+                $status ? ' class="active"' : ''
+            );
 
             unset($name, $page, $deletelink);
         }
