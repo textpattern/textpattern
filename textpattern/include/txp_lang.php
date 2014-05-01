@@ -256,14 +256,21 @@ function list_languages($message='')
         startTable('', '', 'txp-list').
         n.'<thead>'.
         tr(
-            hCell(gTxt('language'), '', ' scope="col"').
-            hCell(gTxt('from_server').popHelp('install_lang_from_server'), '', ' scope="col"').
-            hCell(gTxt('from_file').popHelp('install_lang_from_file'), '', ' scope="col" class="languages_detail"').
-            hCell(gTxt('remove_lang').popHelp('remove_lang'), '', ' scope="col" class="languages_detail"')
+            hCell(
+                gTxt('language'), '', ' scope="col"'
+            ).
+            hCell(
+                gTxt('from_server').popHelp('install_lang_from_server'), '', ' scope="col"'
+            ).
+            hCell(
+                gTxt('from_file').popHelp('install_lang_from_file'), '', ' scope="col" class="languages_detail"'
+            ).
+            hCell(
+                gTxt('remove_lang').popHelp('remove_lang'), '', ' scope="col" class="languages_detail"'
+            )
         ).
         n.'</thead>'.
-
-        '<tbody>' .$list. '</tbody>'.
+        n.'<tbody>'.$list.'</tbody>'.
         endTable().
         n.'</div>'.
 
