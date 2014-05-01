@@ -285,31 +285,31 @@ function discuss_list($message = '')
                     gTxt('toggle_all_selected').'" class="txp-list-col-multi-edit"'
                 ).
                 column_head(
-                    'ID', 'id', 'discuss', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id'
+                    'ID', 'id', 'discuss', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'txp-list-col-id'
                 ).
                 column_head(
-                    'date', 'date', 'discuss', true, $switch_dir, $crit, $search_method, (('date' == $sort) ? "$dir " : '').'date posted created'
+                    'date', 'date', 'discuss', true, $switch_dir, $crit, $search_method, (('date' == $sort) ? "$dir " : '').'txp-list-col-date posted created'
                 ).
                 column_head(
-                    'name', 'name', 'discuss', true, $switch_dir, $crit, $search_method, (('name' == $sort) ? "$dir " : '').'name'
+                    'name', 'name', 'discuss', true, $switch_dir, $crit, $search_method, (('name' == $sort) ? "$dir " : '').'txp-list-col-name'
                 ).
                 column_head(
-                    'message', 'message', 'discuss', true, $switch_dir, $crit, $search_method, (('message' == $sort) ? "$dir " : 'message')
+                    'message', 'message', 'discuss', true, $switch_dir, $crit, $search_method, (('message' == $sort) ? "$dir " : 'txp-list-col-message')
                 ).
                 column_head(
-                    'email', 'email', 'discuss', true, $switch_dir, $crit, $search_method, (('email' == $sort) ? "$dir " : '').'discuss_detail email'
+                    'email', 'email', 'discuss', true, $switch_dir, $crit, $search_method, (('email' == $sort) ? "$dir " : '').'txp-list-col-email discuss_detail'
                 ).
                 column_head(
-                    'website', 'website', 'discuss', true, $switch_dir, $crit, $search_method, (('website' == $sort) ? "$dir " : '').'discuss_detail website'
+                    'website', 'website', 'discuss', true, $switch_dir, $crit, $search_method, (('website' == $sort) ? "$dir " : '').'txp-list-col-website discuss_detail'
                 ).
                 column_head(
-                    'IP', 'ip', 'discuss', true, $switch_dir, $crit, $search_method, (('ip' == $sort) ? "$dir " : '').'discuss_detail ip'
+                    'IP', 'ip', 'discuss', true, $switch_dir, $crit, $search_method, (('ip' == $sort) ? "$dir " : '').'txp-list-col-ip discuss_detail'
                 ).
                 column_head(
-                    'status', 'status', 'discuss', true, $switch_dir, $crit, $search_method, (('status' == $sort) ? "$dir " : '').'status'
+                    'status', 'status', 'discuss', true, $switch_dir, $crit, $search_method, (('status' == $sort) ? "$dir " : '').'txp-list-col-status'
                 ).
                 column_head(
-                    'parent', 'parent', 'discuss', true, $switch_dir, $crit, $search_method, (('parent' == $sort) ? "$dir " : '').'parent'
+                    'parent', 'parent', 'discuss', true, $switch_dir, $crit, $search_method, (('parent' == $sort) ? "$dir " : '').'txp-list-col-parent'
                 )
             ).
             n.'</thead>';
@@ -372,31 +372,31 @@ function discuss_list($message = '')
                     fInput('checkbox', 'selected[]', $discussid), '', 'txp-list-col-multi-edit'
                 ).
                 hCell(
-                    href($discussid, $edit_url, ' title="'.gTxt('edit').'"'), '', ' scope="row" class="id"'
+                    href($discussid, $edit_url, ' title="'.gTxt('edit').'"'), '', ' scope="row" class="txp-list-col-id"'
                 ).
                 td(
-                    gTime($uPosted), '', 'date posted created'
+                    gTime($uPosted), '', 'txp-list-col-date posted created'
                 ).
                 td(
-                    txpspecialchars(soft_wrap($name, 15)), '', 'name'
+                    txpspecialchars(soft_wrap($name, 15)), '', 'txp-list-col-name'
                 ).
                 td(
-                    short_preview($dmessage), '', 'message'
+                    short_preview($dmessage), '', 'txp-list-col-message'
                 ).
                 td(
-                    txpspecialchars(soft_wrap($email, 15)), '', 'discuss_detail email'
+                    txpspecialchars(soft_wrap($email, 15)), '', 'txp-list-col-email discuss_detail'
                 ).
                 td(
-                    txpspecialchars(soft_wrap($web, 15)), '', 'discuss_detail website'
+                    txpspecialchars(soft_wrap($web, 15)), '', 'txp-list-col-website discuss_detail'
                 ).
                 td(
-                    $ip, '', 'discuss_detail ip'
+                    $ip, '', 'txp-list-col-ip discuss_detail'
                 ).
                 td(
-                    $view, '', 'status'
+                    $view, '', 'txp-list-col-status'
                 ).
                 td(
-                    $parent, '', 'parent'
+                    $parent, '', 'txp-list-col-parent'
                 )
                 , ' class="'.$row_class.'"'
             );
