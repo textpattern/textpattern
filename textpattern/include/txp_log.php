@@ -188,29 +188,29 @@ function log_list($message = '')
             n.'<thead>'.
             tr(
                 hCell(
-                    fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.
-                    gTxt('toggle_all_selected').'" class="txp-list-col-multi-edit"'
+                    fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
+                        '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="txp-list-col-multi-edit"'
                 ).
                 column_head(
-                    'time', 'time', 'log', true, $switch_dir, $crit, $search_method, (('time' == $sort) ? "$dir " : '').'date time'
+                    'time', 'time', 'log', true, $switch_dir, $crit, $search_method, (('time' == $sort) ? "$dir " : '').'txp-list-col-time'
                 ).
                 column_head(
-                    'IP', 'ip', 'log', true, $switch_dir, $crit, $search_method, (('ip' == $sort) ? "$dir " : '').'log_detail ip'
+                    'IP', 'ip', 'log', true, $switch_dir, $crit, $search_method, (('ip' == $sort) ? "$dir " : '').'txp-list-col-ip log_detail'
                 ).
                 column_head(
-                    'host', 'host', 'log', true, $switch_dir, $crit, $search_method, (('host' == $sort) ? "$dir " : '').'host'
+                    'host', 'host', 'log', true, $switch_dir, $crit, $search_method, (('host' == $sort) ? "$dir " : '').'txp-list-col-host'
                 ).
                 column_head(
-                    'page', 'page', 'log', true, $switch_dir, $crit, $search_method, (('page' == $sort) ? "$dir " : '').'page'
+                    'page', 'page', 'log', true, $switch_dir, $crit, $search_method, (('page' == $sort) ? "$dir " : '').'txp-list-col-page'
                 ).
                 column_head(
-                    'referrer', 'refer', 'log', true, $switch_dir, $crit, $search_method, (('refer' == $sort) ? "$dir " : '').'refer'
+                    'referrer', 'refer', 'log', true, $switch_dir, $crit, $search_method, (('refer' == $sort) ? "$dir " : '').'txp-list-col-refer'
                 ).
                 column_head(
-                    'method', 'method', 'log', true, $switch_dir, $crit, $search_method, (('method' == $sort) ? "$dir " : '').'log_detail method'
+                    'method', 'method', 'log', true, $switch_dir, $crit, $search_method, (('method' == $sort) ? "$dir " : '').'txp-list-col-method log_detail'
                 ).
                 column_head(
-                    'status', 'status', 'log', true, $switch_dir, $crit, $search_method, (('status' == $sort) ? "$dir " : '').'log_detail status'
+                    'status', 'status', 'log', true, $switch_dir, $crit, $search_method, (('status' == $sort) ? "$dir " : '').'txp-list-col-status log_detail'
                 )
             ).
             n.'</thead>'.
@@ -239,25 +239,25 @@ function log_list($message = '')
                     fInput('checkbox', 'selected[]', $log_id), '', 'txp-list-col-multi-edit'
                 ).
                 hCell(
-                    gTime($log_uTime), '', ' scope="row" class="date time"'
+                    gTime($log_uTime), '', ' scope="row" class="txp-list-col-time"'
                 ).
                 td(
-                    txpspecialchars($log_ip), '', 'log_detail ip'
+                    txpspecialchars($log_ip), '', 'txp-list-col-ip log_detail'
                 ).
                 td(
-                    txpspecialchars($log_host), '', 'host'
+                    txpspecialchars($log_host), '', 'txp-list-col-host'
                 ).
                 td(
-                    $log_page, '', 'page'
+                    $log_page, '', 'txp-list-col-page'
                 ).
                 td(
-                    $log_refer, '', 'refer'
+                    $log_refer, '', 'txp-list-col-refer'
                 ).
                 td(
-                    txpspecialchars($log_method), '', 'log_detail method'
+                    txpspecialchars($log_method), '', 'txp-list-col-method log_detail'
                 ).
                 td(
-                    $log_status, '', 'log_detail status'
+                    $log_status, '', 'txp-list-col-status log_detail'
                 )
             );
         }
