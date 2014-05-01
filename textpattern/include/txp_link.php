@@ -175,29 +175,29 @@ function link_list($message = '')
             n.'<thead>'.
             tr(
                 hCell(
-                    fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.
-                    gTxt('toggle_all_selected').'" class="txp-list-col-multi-edit"'
+                    fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
+                        '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="txp-list-col-multi-edit"'
                 ).
                 column_head(
-                    'ID', 'id', 'link', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id'
+                    'ID', 'id', 'link', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'txp-list-col-id'
                 ).
                 column_head(
-                    'link_name', 'name', 'link', true, $switch_dir, $crit, $search_method, (('name' == $sort) ? "$dir " : '').'name'
+                    'link_name', 'name', 'link', true, $switch_dir, $crit, $search_method, (('name' == $sort) ? "$dir " : '').'txp-list-col-name'
                 ).
                 column_head(
-                    'description', 'description', 'link', true, $switch_dir, $crit, $search_method, (('description' == $sort) ? "$dir " : '').'links_detail description'
+                    'description', 'description', 'link', true, $switch_dir, $crit, $search_method, (('description' == $sort) ? "$dir " : '').'txp-list-col-description links_detail'
                 ).
                 column_head(
-                    'link_category', 'category', 'link', true, $switch_dir, $crit, $search_method, (('category' == $sort) ? "$dir " : '').'category'
+                    'link_category', 'category', 'link', true, $switch_dir, $crit, $search_method, (('category' == $sort) ? "$dir " : '').'txp-list-col-category'
                 ).
                 column_head(
-                    'url', 'url', 'link', true, $switch_dir, $crit, $search_method, (('url' == $sort) ? "$dir " : '').'url'
+                    'url', 'url', 'link', true, $switch_dir, $crit, $search_method, (('url' == $sort) ? "$dir " : '').'txp-list-col-url'
                 ).
                 column_head(
-                    'date', 'date', 'link', true, $switch_dir, $crit, $search_method, (('date' == $sort) ? "$dir " : '').'links_detail date created'
+                    'date', 'date', 'link', true, $switch_dir, $crit, $search_method, (('date' == $sort) ? "$dir " : '').'txp-list-col-date created links_detail'
                 ).
                 (
-                    $show_authors ? column_head('author', 'author', 'link', true, $switch_dir, $crit, $search_method, (('author' == $sort) ? "$dir " : '').'author') : ''
+                    $show_authors ? column_head('author', 'author', 'link', true, $switch_dir, $crit, $search_method, (('author' == $sort) ? "$dir " : '').'txp-list-col-author') : ''
                 )
             ).
             n.'</thead>'.
@@ -230,26 +230,26 @@ function link_list($message = '')
                     fInput('checkbox', 'selected[]', $link_id), '', 'txp-list-col-multi-edit'
                 ).
                 hCell(
-                    ($can_edit ? href($link_id, $edit_url, ' title="'.gTxt('edit').'"') : $link_id), '', ' scope="row" class="id"'
+                    ($can_edit ? href($link_id, $edit_url, ' title="'.gTxt('edit').'"') : $link_id), '', ' scope="row" class="txp-list-col-id"'
                 ).
                 td(
-                    ($can_edit ? href(txpspecialchars($link_linkname), $edit_url, ' title="'.gTxt('edit').'"') : txpspecialchars($link_linkname)), '', 'name'
+                    ($can_edit ? href(txpspecialchars($link_linkname), $edit_url, ' title="'.gTxt('edit').'"') : txpspecialchars($link_linkname)), '', 'txp-list-col-name'
                 ).
                 td(
-                    txpspecialchars($link_description), '', 'links_detail description'
+                    txpspecialchars($link_description), '', 'txp-list-col-description links_detail'
                 ).
                 td(
-                    span($link_category, array('title' => fetch_category_title($link_category, 'link'))), '', 'category'.$vc
+                    span($link_category, array('title' => fetch_category_title($link_category, 'link'))), '', 'txp-list-col-category'.$vc
                 ).
                 td(
-                    href($view_url, $view_url, ' rel="external" target="_blank"'), '', 'url'
+                    href($view_url, $view_url, ' rel="external" target="_blank"'), '', 'txp-list-col-url'
                 ).
                 td(
-                    gTime($link_uDate), '', 'links_detail date created'
+                    gTime($link_uDate), '', 'txp-list-col-date created links_detail'
                 ).
                 (
                     $show_authors ? td(
-                        span(txpspecialchars($link_author), array('title' => get_author_name($link_author))), '', 'author'
+                        span(txpspecialchars($link_author), array('title' => get_author_name($link_author))), '', 'txp-list-col-author'
                     ) : ''
                 )
             );
