@@ -192,25 +192,32 @@ function log_list($message = '')
                         '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="txp-list-col-multi-edit"'
                 ).
                 column_head(
-                    'time', 'time', 'log', true, $switch_dir, $crit, $search_method, (('time' == $sort) ? "$dir " : '').'txp-list-col-time'
+                    'time', 'time', 'log', true, $switch_dir, $crit, $search_method,
+                        (('time' == $sort) ? "$dir " : '').'txp-list-col-time'
                 ).
                 column_head(
-                    'IP', 'ip', 'log', true, $switch_dir, $crit, $search_method, (('ip' == $sort) ? "$dir " : '').'txp-list-col-ip log_detail'
+                    'IP', 'ip', 'log', true, $switch_dir, $crit, $search_method,
+                        (('ip' == $sort) ? "$dir " : '').'txp-list-col-ip log_detail'
                 ).
                 column_head(
-                    'host', 'host', 'log', true, $switch_dir, $crit, $search_method, (('host' == $sort) ? "$dir " : '').'txp-list-col-host'
+                    'host', 'host', 'log', true, $switch_dir, $crit, $search_method,
+                        (('host' == $sort) ? "$dir " : '').'txp-list-col-host'
                 ).
                 column_head(
-                    'page', 'page', 'log', true, $switch_dir, $crit, $search_method, (('page' == $sort) ? "$dir " : '').'txp-list-col-page'
+                    'page', 'page', 'log', true, $switch_dir, $crit, $search_method,
+                        (('page' == $sort) ? "$dir " : '').'txp-list-col-page'
                 ).
                 column_head(
-                    'referrer', 'refer', 'log', true, $switch_dir, $crit, $search_method, (('refer' == $sort) ? "$dir " : '').'txp-list-col-refer'
+                    'referrer', 'refer', 'log', true, $switch_dir, $crit, $search_method,
+                        (('refer' == $sort) ? "$dir " : '').'txp-list-col-refer'
                 ).
                 column_head(
-                    'method', 'method', 'log', true, $switch_dir, $crit, $search_method, (('method' == $sort) ? "$dir " : '').'txp-list-col-method log_detail'
+                    'method', 'method', 'log', true, $switch_dir, $crit, $search_method,
+                        (('method' == $sort) ? "$dir " : '').'txp-list-col-method log_detail'
                 ).
                 column_head(
-                    'status', 'status', 'log', true, $switch_dir, $crit, $search_method, (('status' == $sort) ? "$dir " : '').'txp-list-col-status log_detail'
+                    'status', 'status', 'log', true, $switch_dir, $crit, $search_method,
+                        (('status' == $sort) ? "$dir " : '').'txp-list-col-status log_detail'
                 )
             ).
             n.'</thead>'.

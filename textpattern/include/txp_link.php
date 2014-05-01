@@ -179,25 +179,32 @@ function link_list($message = '')
                         '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="txp-list-col-multi-edit"'
                 ).
                 column_head(
-                    'ID', 'id', 'link', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'txp-list-col-id'
+                    'ID', 'id', 'link', true, $switch_dir, $crit, $search_method,
+                        (('id' == $sort) ? "$dir " : '').'txp-list-col-id'
                 ).
                 column_head(
-                    'link_name', 'name', 'link', true, $switch_dir, $crit, $search_method, (('name' == $sort) ? "$dir " : '').'txp-list-col-name'
+                    'link_name', 'name', 'link', true, $switch_dir, $crit, $search_method,
+                        (('name' == $sort) ? "$dir " : '').'txp-list-col-name'
                 ).
                 column_head(
-                    'description', 'description', 'link', true, $switch_dir, $crit, $search_method, (('description' == $sort) ? "$dir " : '').'txp-list-col-description links_detail'
+                    'description', 'description', 'link', true, $switch_dir, $crit, $search_method,
+                        (('description' == $sort) ? "$dir " : '').'txp-list-col-description links_detail'
                 ).
                 column_head(
-                    'link_category', 'category', 'link', true, $switch_dir, $crit, $search_method, (('category' == $sort) ? "$dir " : '').'txp-list-col-category'
+                    'link_category', 'category', 'link', true, $switch_dir, $crit, $search_method,
+                        (('category' == $sort) ? "$dir " : '').'txp-list-col-category'
                 ).
                 column_head(
-                    'url', 'url', 'link', true, $switch_dir, $crit, $search_method, (('url' == $sort) ? "$dir " : '').'txp-list-col-url'
+                    'url', 'url', 'link', true, $switch_dir, $crit, $search_method,
+                        (('url' == $sort) ? "$dir " : '').'txp-list-col-url'
                 ).
                 column_head(
-                    'date', 'date', 'link', true, $switch_dir, $crit, $search_method, (('date' == $sort) ? "$dir " : '').'txp-list-col-date created links_detail'
+                    'date', 'date', 'link', true, $switch_dir, $crit, $search_method,
+                        (('date' == $sort) ? "$dir " : '').'txp-list-col-date created links_detail'
                 ).
                 (
-                    $show_authors ? column_head('author', 'author', 'link', true, $switch_dir, $crit, $search_method, (('author' == $sort) ? "$dir " : '').'txp-list-col-author') : ''
+                    $show_authors ? column_head('author', 'author', 'link', true, $switch_dir, $crit, $search_method,
+                        (('author' == $sort) ? "$dir " : '').'txp-list-col-author') : ''
                 )
             ).
             n.'</thead>'.

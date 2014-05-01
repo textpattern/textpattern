@@ -258,28 +258,36 @@ function sec_section_list($message = '')
                         '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="txp-list-col-multi-edit"'
                 ).
                 column_head(
-                    'name', 'name', 'section', true, $switch_dir, $crit, $search_method, (('name' == $sort) ? "$dir " : '').'txp-list-col-name'
+                    'name', 'name', 'section', true, $switch_dir, $crit, $search_method,
+                        (('name' == $sort) ? "$dir " : '').'txp-list-col-name'
                 ).
                 column_head(
-                    'title', 'title', 'section', true, $switch_dir, $crit, $search_method, (('title' == $sort) ? "$dir " : '').'txp-list-col-title'
+                    'title', 'title', 'section', true, $switch_dir, $crit, $search_method,
+                        (('title' == $sort) ? "$dir " : '').'txp-list-col-title'
                 ).
                 column_head(
-                    'page', 'page', 'section', true, $switch_dir, $crit, $search_method, (('page' == $sort) ? "$dir " : '').'txp-list-col-page'
+                    'page', 'page', 'section', true, $switch_dir, $crit, $search_method,
+                        (('page' == $sort) ? "$dir " : '').'txp-list-col-page'
                 ).
                 column_head(
-                    'css', 'css', 'section', true, $switch_dir, $crit, $search_method, (('css' == $sort) ? "$dir " : '').'txp-list-col-style'
+                    'css', 'css', 'section', true, $switch_dir, $crit, $search_method,
+                        (('css' == $sort) ? "$dir " : '').'txp-list-col-style'
                 ).
                 column_head(
-                    'on_front_page', 'on_frontpage', 'section', true, $switch_dir, $crit, $search_method, (('on_frontpage' == $sort) ? "$dir " : '').'txp-list-col-frontpage section_detail'
+                    'on_front_page', 'on_frontpage', 'section', true, $switch_dir, $crit, $search_method,
+                        (('on_frontpage' == $sort) ? "$dir " : '').'txp-list-col-frontpage section_detail'
                 ).
                 column_head(
-                    'syndicate', 'in_rss', 'section', true, $switch_dir, $crit, $search_method, (('in_rss' == $sort) ? "$dir " : '').'txp-list-col-syndicate section_detail'
+                    'syndicate', 'in_rss', 'section', true, $switch_dir, $crit, $search_method,
+                        (('in_rss' == $sort) ? "$dir " : '').'txp-list-col-syndicate section_detail'
                 ).
                 column_head(
-                    'include_in_search', 'searchable', 'section', true, $switch_dir, $crit, $search_method, (('searchable' == $sort) ? "$dir " : '').'txp-list-col-searchable section_detail'
+                    'include_in_search', 'searchable', 'section', true, $switch_dir, $crit, $search_method,
+                        (('searchable' == $sort) ? "$dir " : '').'txp-list-col-searchable section_detail'
                 ).
                 column_head(
-                    'article', 'article_count', 'section', true, $switch_dir, $crit, $search_method, (('article_count' == $sort) ? "$dir " : '').'txp-list-col-article_count section_detail'
+                    'article', 'article_count', 'section', true, $switch_dir, $crit, $search_method,
+                        (('article_count' == $sort) ? "$dir " : '').'txp-list-col-article_count section_detail'
                 )
             ).
             n.tag_end('thead').

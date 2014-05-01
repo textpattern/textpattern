@@ -412,19 +412,24 @@ function author_list($message = '')
                         : hCell('', '', ' scope="col" class="txp-list-col-multi-edit"')
                     ).
                     column_head(
-                        'login_name', 'name', 'admin', true, $switch_dir, '', '', (('name' == $sort) ? "$dir " : '').'txp-list-col-login-name name'
+                        'login_name', 'name', 'admin', true, $switch_dir, '', '',
+                            (('name' == $sort) ? "$dir " : '').'txp-list-col-login-name name'
                     ).
                     column_head(
-                        'real_name', 'RealName', 'admin', true, $switch_dir, '', '', (('RealName' == $sort) ? "$dir " : '').'txp-list-col-real-name name'
+                        'real_name', 'RealName', 'admin', true, $switch_dir, '', '',
+                            (('RealName' == $sort) ? "$dir " : '').'txp-list-col-real-name name'
                     ).
                     column_head(
-                        'email', 'email', 'admin', true, $switch_dir, '', '', (('email' == $sort) ? "$dir " : '').'txp-list-col-email'
+                        'email', 'email', 'admin', true, $switch_dir, '', '',
+                            (('email' == $sort) ? "$dir " : '').'txp-list-col-email'
                     ).
                     column_head(
-                        'privileges', 'privs', 'admin', true, $switch_dir, '', '', (('privs' == $sort) ? "$dir " : '').'txp-list-col-privs'
+                        'privileges', 'privs', 'admin', true, $switch_dir, '', '',
+                            (('privs' == $sort) ? "$dir " : '').'txp-list-col-privs'
                     ).
                     column_head(
-                        'last_login', 'last_login', 'admin', true, $switch_dir, '', '', (('last_login' == $sort) ? "$dir " : '').'txp-list-col-last-login date modified'
+                        'last_login', 'last_login', 'admin', true, $switch_dir, '', '',
+                            (('last_login' == $sort) ? "$dir " : '').'txp-list-col-last-login date modified'
                     )
                 ).
                 n.'</thead>'.

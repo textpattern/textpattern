@@ -257,19 +257,24 @@ function file_list($message = '')
                         '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="txp-list-col-multi-edit"'
                 ).
                 column_head(
-                    'ID', 'id', 'file', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'txp-list-col-id'
+                    'ID', 'id', 'file', true, $switch_dir, $crit, $search_method,
+                        (('id' == $sort) ? "$dir " : '').'txp-list-col-id'
                 ).
                 column_head(
-                    'file_name', 'filename', 'file', true, $switch_dir, $crit, $search_method, (('filename' == $sort) ? "$dir " : '').'txp-list-col-filename'
+                    'file_name', 'filename', 'file', true, $switch_dir, $crit, $search_method,
+                        (('filename' == $sort) ? "$dir " : '').'txp-list-col-filename'
                 ).
                 column_head(
-                    'title', 'title', 'file', true, $switch_dir, $crit, $search_method, (('title' == $sort) ? "$dir " : '').'txp-list-col-title'
+                    'title', 'title', 'file', true, $switch_dir, $crit, $search_method,
+                        (('title' == $sort) ? "$dir " : '').'txp-list-col-title'
                 ).
                 column_head(
-                    'description', 'description', 'file', true, $switch_dir, $crit, $search_method, (('description' == $sort) ? "$dir " : '').'txp-list-col-description files_detail'
+                    'description', 'description', 'file', true, $switch_dir, $crit, $search_method,
+                        (('description' == $sort) ? "$dir " : '').'txp-list-col-description files_detail'
                 ).
                 column_head(
-                    'file_category', 'category', 'file', true, $switch_dir, $crit, $search_method, (('category' == $sort) ? "$dir " : '').'txp-list-col-category'
+                    'file_category', 'category', 'file', true, $switch_dir, $crit, $search_method,
+                        (('category' == $sort) ? "$dir " : '').'txp-list-col-category'
                 ).
                 hCell(gTxt(
                     'tags'), '', ' scope="col" class="txp-list-col-tag-build files_detail"'
@@ -281,10 +286,12 @@ function file_list($message = '')
                     'condition'), '', ' scope="col" class="txp-list-col-condition"'
                 ).
                 column_head(
-                    'downloads', 'downloads', 'file', true, $switch_dir, $crit, $search_method, (('downloads' == $sort) ? "$dir " : '').'txp-list-col-downloads'
+                    'downloads', 'downloads', 'file', true, $switch_dir, $crit, $search_method,
+                        (('downloads' == $sort) ? "$dir " : '').'txp-list-col-downloads'
                 ).
                 (
-                    $show_authors ? column_head('author', 'author', 'file', true, $switch_dir, $crit, $search_method, (('author' == $sort) ? "$dir " : '').'txp-list-col-author') : ''
+                    $show_authors ? column_head('author', 'author', 'file', true, $switch_dir, $crit, $search_method,
+                        (('author' == $sort) ? "$dir " : '').'txp-list-col-author') : ''
                 )
             ).
             n.tag_end('thead').

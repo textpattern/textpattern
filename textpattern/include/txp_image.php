@@ -194,25 +194,31 @@ function image_list($message = '')
                         '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="txp-list-col-multi-edit"'
                 ).
                 column_head(
-                    'ID', 'id', 'image', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'txp-list-col-id'
+                    'ID', 'id', 'image', true, $switch_dir, $crit, $search_method,
+                        (('id' == $sort) ? "$dir " : '').'txp-list-col-id'
                 ).
                 column_head(
-                    'name', 'name', 'image', true, $switch_dir, $crit, $search_method, (('name' == $sort) ? "$dir " : '').'txp-list-col-name'
+                    'name', 'name', 'image', true, $switch_dir, $crit, $search_method,
+                        (('name' == $sort) ? "$dir " : '').'txp-list-col-name'
                 ).
                 column_head(
-                    'date', 'date', 'image', true, $switch_dir, $crit, $search_method, (('date' == $sort) ? "$dir " : '').'txp-list-col-date created images_detail'
+                    'date', 'date', 'image', true, $switch_dir, $crit, $search_method,
+                        (('date' == $sort) ? "$dir " : '').'txp-list-col-date created images_detail'
                 ).
                 column_head(
-                    'thumbnail', 'thumbnail', 'image', true, $switch_dir, $crit, $search_method, (('thumbnail' == $sort) ? "$dir " : '').'txp-list-col-thumbnail'
+                    'thumbnail', 'thumbnail', 'image', true, $switch_dir, $crit, $search_method,
+                        (('thumbnail' == $sort) ? "$dir " : '').'txp-list-col-thumbnail'
                 ).
                 hCell(
                     gTxt('tags'), '', ' scope="col" class="txp-list-col-tag-build images_detail"'
                 ).
                 column_head(
-                    'image_category', 'category', 'image', true, $switch_dir, $crit, $search_method, (('category' == $sort) ? "$dir " : '').'txp-list-col-category'
+                    'image_category', 'category', 'image', true, $switch_dir, $crit, $search_method,
+                        (('category' == $sort) ? "$dir " : '').'txp-list-col-category'
                 ).
                 (
-                    $show_authors ? column_head('author', 'author', 'image', true, $switch_dir, $crit, $search_method, (('author' == $sort) ? "$dir " : '').'txp-list-col-author') : ''
+                    $show_authors ? column_head('author', 'author', 'image', true, $switch_dir, $crit, $search_method,
+                        (('author' == $sort) ? "$dir " : '').'txp-list-col-author') : ''
                 )
             ).
             n.'</thead>'.

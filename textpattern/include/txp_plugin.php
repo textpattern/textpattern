@@ -111,25 +111,31 @@ function plugin_list($message = '')
                         '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="txp-list-col-multi-edit"'
                 ).
                 column_head(
-                    'plugin', 'name', 'plugin', true, $switch_dir, '', '', (('name' == $sort) ? "$dir " : '').'txp-list-col-name'
+                    'plugin', 'name', 'plugin', true, $switch_dir, '', '',
+                        (('name' == $sort) ? "$dir " : '').'txp-list-col-name'
                 ).
                 column_head(
-                    'author', 'author', 'plugin', true, $switch_dir, '', '', (('author' == $sort) ? "$dir " : '').'txp-list-col-author'
+                    'author', 'author', 'plugin', true, $switch_dir, '', '',
+                        (('author' == $sort) ? "$dir " : '').'txp-list-col-author'
                 ).
                 column_head(
-                    'version', 'version', 'plugin', true, $switch_dir, '', '', (('version' == $sort) ? "$dir " : '').'txp-list-col-version'
+                    'version', 'version', 'plugin', true, $switch_dir, '', '',
+                        (('version' == $sort) ? "$dir " : '').'txp-list-col-version'
                 ).
                 column_head(
-                    'plugin_modified', 'modified', 'plugin', true, $switch_dir, '', '', (('modified' == $sort) ? "$dir " : '').'txp-list-col-modified'
+                    'plugin_modified', 'modified', 'plugin', true, $switch_dir, '', '',
+                        (('modified' == $sort) ? "$dir " : '').'txp-list-col-modified'
                 ).
                 hCell(gTxt(
                     'description'), '', ' scope="col" class="txp-list-col-description"'
                 ).
                 column_head(
-                    'active', 'status', 'plugin', true, $switch_dir, '', '', (('status' == $sort) ? "$dir " : '').'txp-list-col-status'
+                    'active', 'status', 'plugin', true, $switch_dir, '', '',
+                        (('status' == $sort) ? "$dir " : '').'txp-list-col-status'
                 ).
                 column_head(
-                    'order', 'load_order', 'plugin', true, $switch_dir, '', '', (('load_order' == $sort) ? "$dir " : '').'txp-list-col-load-order'
+                    'order', 'load_order', 'plugin', true, $switch_dir, '', '',
+                        (('load_order' == $sort) ? "$dir " : '').'txp-list-col-load-order'
                 ).
                 hCell(
                     gTxt('manage'), '',  ' scope="col" class="txp-list-col-manage actions"'

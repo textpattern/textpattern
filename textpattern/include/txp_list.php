@@ -244,37 +244,48 @@ function list_list($message = '', $post = '')
                         '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="txp-list-col-multi-edit"'
                 ).
                 column_head(
-                    'ID', 'id', 'list', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'txp-list-col-id actions'
+                    'ID', 'id', 'list', true, $switch_dir, $crit, $search_method,
+                        (('id' == $sort) ? "$dir " : '').'txp-list-col-id actions'
                 ).
                 column_head(
-                    'title', 'title', 'list', true, $switch_dir, $crit, $search_method, (('title' == $sort) ? "$dir " : '').'txp-list-col-title'
+                    'title', 'title', 'list', true, $switch_dir, $crit, $search_method,
+                        (('title' == $sort) ? "$dir " : '').'txp-list-col-title'
                 ).
                 column_head(
-                    'posted', 'posted', 'list', true, $switch_dir, $crit, $search_method, (('posted' == $sort) ? "$dir " : '').'txp-list-col-posted date created'
+                    'posted', 'posted', 'list', true, $switch_dir, $crit, $search_method,
+                        (('posted' == $sort) ? "$dir " : '').'txp-list-col-posted date created'
                 ).
                 column_head(
-                    'article_modified', 'lastmod', 'list', true, $switch_dir, $crit, $search_method, (('lastmod' == $sort) ? "$dir " : '').'txp-list-col-lastmod date articles_detail'
+                    'article_modified', 'lastmod', 'list', true, $switch_dir, $crit, $search_method,
+                        (('lastmod' == $sort) ? "$dir " : '').'txp-list-col-lastmod date articles_detail'
                 ).
                 column_head(
-                    'expires', 'expires', 'list', true, $switch_dir, $crit, $search_method, (('expires' == $sort) ? "$dir " : '').'txp-list-col-expires date articles_detail'
+                    'expires', 'expires', 'list', true, $switch_dir, $crit, $search_method,
+                        (('expires' == $sort) ? "$dir " : '').'txp-list-col-expires date articles_detail'
                 ).
                 column_head(
-                    'section', 'section', 'list', true, $switch_dir, $crit, $search_method, (('section' == $sort) ? "$dir " : '').'txp-list-col-section'
+                    'section', 'section', 'list', true, $switch_dir, $crit, $search_method,
+                        (('section' == $sort) ? "$dir " : '').'txp-list-col-section'
                 ).
                 column_head(
-                    'category1', 'category1', 'list', true, $switch_dir, $crit, $search_method, (('category1' == $sort) ? "$dir " : '').'txp-list-col-category1 category articles_detail'
+                    'category1', 'category1', 'list', true, $switch_dir, $crit, $search_method,
+                        (('category1' == $sort) ? "$dir " : '').'txp-list-col-category1 category articles_detail'
                 ).
                 column_head(
-                    'category2', 'category2', 'list', true, $switch_dir, $crit, $search_method, (('category2' == $sort) ? "$dir " : '').'txp-list-col-category2 category articles_detail'
+                    'category2', 'category2', 'list', true, $switch_dir, $crit, $search_method,
+                        (('category2' == $sort) ? "$dir " : '').'txp-list-col-category2 category articles_detail'
                 ).
                 column_head(
-                    'status', 'status', 'list', true, $switch_dir, $crit, $search_method, (('status' == $sort) ? "$dir " : '').'txp-list-col-status'
+                    'status', 'status', 'list', true, $switch_dir, $crit, $search_method,
+                        (('status' == $sort) ? "$dir " : '').'txp-list-col-status'
                 ).
                 (
-                    $show_authors ? column_head('author', 'author', 'list', true, $switch_dir, $crit, $search_method, (('author' == $sort) ? "$dir " : '').'txp-list-col-author') : ''
+                    $show_authors ? column_head('author', 'author', 'list', true, $switch_dir, $crit, $search_method,
+                        (('author' == $sort) ? "$dir " : '').'txp-list-col-author') : ''
                 ).
                 (
-                    $use_comments == 1 ? column_head('comments', 'comments', 'list', true, $switch_dir, $crit, $search_method, (('comments' == $sort) ? "$dir " : '').'txp-list-col-comments articles_detail') : ''
+                    $use_comments == 1 ? column_head('comments', 'comments', 'list', true, $switch_dir, $crit, $search_method,
+                        (('comments' == $sort) ? "$dir " : '').'txp-list-col-comments articles_detail') : ''
                 )
             ).
             n.'</thead>';
