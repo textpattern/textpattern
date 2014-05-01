@@ -107,32 +107,32 @@ function plugin_list($message = '')
             n.'<thead>'.
             tr(
                 hCell(
-                    fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.
-                    gTxt('toggle_all_selected').'" class="txp-list-col-multi-edit"'
+                    fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
+                        '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="txp-list-col-multi-edit"'
                 ).
                 column_head(
-                    'plugin', 'name', 'plugin', true, $switch_dir, '', '', (('name' == $sort) ? "$dir " : '').'name'
+                    'plugin', 'name', 'plugin', true, $switch_dir, '', '', (('name' == $sort) ? "$dir " : '').'txp-list-col-name'
                 ).
                 column_head(
-                    'author', 'author', 'plugin', true, $switch_dir, '', '', (('author' == $sort) ? "$dir " : '').'author'
+                    'author', 'author', 'plugin', true, $switch_dir, '', '', (('author' == $sort) ? "$dir " : '').'txp-list-col-author'
                 ).
                 column_head(
-                    'version', 'version', 'plugin', true, $switch_dir, '', '', (('version' == $sort) ? "$dir " : '').'version'
+                    'version', 'version', 'plugin', true, $switch_dir, '', '', (('version' == $sort) ? "$dir " : '').'txp-list-col-version'
                 ).
                 column_head(
-                    'plugin_modified', 'modified', 'plugin', true, $switch_dir, '', '', (('modified' == $sort) ? "$dir " : '').'modified'
+                    'plugin_modified', 'modified', 'plugin', true, $switch_dir, '', '', (('modified' == $sort) ? "$dir " : '').'txp-list-col-modified'
                 ).
                 hCell(gTxt(
-                    'description'), '', ' scope="col" class="description"'
+                    'description'), '', ' scope="col" class="txp-list-col-description"'
                 ).
                 column_head(
-                    'active', 'status', 'plugin', true, $switch_dir, '', '', (('status' == $sort) ? "$dir " : '').'status'
+                    'active', 'status', 'plugin', true, $switch_dir, '', '', (('status' == $sort) ? "$dir " : '').'txp-list-col-status'
                 ).
                 column_head(
-                    'order', 'load_order', 'plugin', true, $switch_dir, '', '', (('load_order' == $sort) ? "$dir " : '').'load-order'
+                    'order', 'load_order', 'plugin', true, $switch_dir, '', '', (('load_order' == $sort) ? "$dir " : '').'txp-list-col-load-order'
                 ).
                 hCell(
-                    gTxt('manage'), '',  ' scope="col" class="manage actions"'
+                    gTxt('manage'), '',  ' scope="col" class="txp-list-col-manage actions"'
                 )
             ).
             n.'</thead>'.
@@ -192,28 +192,28 @@ function plugin_list($message = '')
                     fInput('checkbox', 'selected[]', $name), '', 'txp-list-col-multi-edit'
                 ).
                 hCell(
-                    $edit_url, '', ' scope="row" class="name"'
+                    $edit_url, '', ' scope="row" class="txp-list-col-name"'
                 ).
                 td(
-                    href($author, $a['author_uri'], array('rel' => 'external')), '', 'author'
+                    href($author, $a['author_uri'], array('rel' => 'external')), '', 'txp-list-col-author'
                 ).
                 td(
-                    $version, '', 'version'
+                    $version, '', 'txp-list-col-version'
                 ).
                 td(
-                    ($modified ? span(gTxt('yes'), array('class' => 'warning')) : ''), '', 'modified'
+                    ($modified ? span(gTxt('yes'), array('class' => 'warning')) : ''), '', 'txp-list-col-modified'
                 ).
                 td(
-                    $description, '', 'description'
+                    $description, '', 'txp-list-col-description'
                 ).
                 td(
-                    status_link($status, $name, yes_no($status)), '', 'status'
+                    status_link($status, $name, yes_no($status)), '', 'txp-list-col-status'
                 ).
                 td(
-                    $load_order, '', 'load-order'
+                    $load_order, '', 'txp-list-col-load-order'
                 ).
                 td(
-                    $manage_items, '', 'manage'
+                    $manage_items, '', 'txp-list-col-manage'
                 ),
                 $status ? ' class="active"' : ''
             );
