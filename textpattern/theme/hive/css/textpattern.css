@@ -1347,7 +1347,7 @@ td {
 .txp-list td {
   padding: 0.38461em 1em;
 }
-.txp-list .multi-edit {
+.txp-list-col-multi-edit {
   width: 18px;
 }
 .txp-list tbody tr {
@@ -1667,7 +1667,7 @@ body {
   margin-left: 0.75em;
 }
 
-div.multi-edit {
+.multi-edit {
   margin: 1em 0;
 }
 
