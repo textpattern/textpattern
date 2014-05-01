@@ -190,29 +190,29 @@ function image_list($message = '')
             n.'<thead>'.
             tr(
                 hCell(
-                    fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.
-                    gTxt('toggle_all_selected').'" class="txp-list-col-multi-edit"'
+                    fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
+                        '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="txp-list-col-multi-edit"'
                 ).
                 column_head(
-                    'ID', 'id', 'image', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id'
+                    'ID', 'id', 'image', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'txp-list-col-id'
                 ).
                 column_head(
-                    'name', 'name', 'image', true, $switch_dir, $crit, $search_method, (('name' == $sort) ? "$dir " : '').'name'
+                    'name', 'name', 'image', true, $switch_dir, $crit, $search_method, (('name' == $sort) ? "$dir " : '').'txp-list-col-name'
                 ).
                 column_head(
-                    'date', 'date', 'image', true, $switch_dir, $crit, $search_method, (('date' == $sort) ? "$dir " : '').'images_detail date created'
+                    'date', 'date', 'image', true, $switch_dir, $crit, $search_method, (('date' == $sort) ? "$dir " : '').'txp-list-col-date created images_detail'
                 ).
                 column_head(
-                    'thumbnail', 'thumbnail', 'image', true, $switch_dir, $crit, $search_method, (('thumbnail' == $sort) ? "$dir " : '').'thumbnail'
+                    'thumbnail', 'thumbnail', 'image', true, $switch_dir, $crit, $search_method, (('thumbnail' == $sort) ? "$dir " : '').'txp-list-col-thumbnail'
                 ).
                 hCell(
-                    gTxt('tags'), '', ' scope="col" class="images_detail tag-build"'
+                    gTxt('tags'), '', ' scope="col" class="txp-list-col-tag-build images_detail"'
                 ).
                 column_head(
-                    'image_category', 'category', 'image', true, $switch_dir, $crit, $search_method, (('category' == $sort) ? "$dir " : '').'category'
+                    'image_category', 'category', 'image', true, $switch_dir, $crit, $search_method, (('category' == $sort) ? "$dir " : '').'txp-list-col-category'
                 ).
                 (
-                    $show_authors ? column_head('author', 'author', 'image', true, $switch_dir, $crit, $search_method, (('author' == $sort) ? "$dir " : '').'author') : ''
+                    $show_authors ? column_head('author', 'author', 'image', true, $switch_dir, $crit, $search_method, (('author' == $sort) ? "$dir " : '').'txp-list-col-author') : ''
                 )
             ).
             n.'</thead>'.
@@ -279,26 +279,26 @@ function image_list($message = '')
                         href(gTxt('view'), imagesrcurl($id, $ext)).
                         span(']', array('aria-hidden' => 'true'))
                     , array('class' => 'images_detail'))
-                , '', ' scope="row" class="id"').
+                , '', ' scope="row" class="txp-list-col-id"').
 
                 td(
-                    ($can_edit ? href($name, $edit_url, ' title="'.gTxt('edit').'"') : $name), '', 'name'
+                    ($can_edit ? href($name, $edit_url, ' title="'.gTxt('edit').'"') : $name), '', 'txp-list-col-name'
                 ).
                 td(
-                    gTime($uDate), '', 'images_detail date created'
+                    gTime($uDate), '', 'txp-list-col-date created images_detail'
                 ).
                 td(
-                    pluggable_ui('image_ui', 'thumbnail', ($can_edit ? href($thumbnail, $edit_url) : $thumbnail), $a), '', 'thumbnail'
+                    pluggable_ui('image_ui', 'thumbnail', ($can_edit ? href($thumbnail, $edit_url) : $thumbnail), $a), '', 'txp-list-col-thumbnail'
                 ).
                 td(
-                    $tagbuilder, '', 'images_detail tag-build'
+                    $tagbuilder, '', 'txp-list-col-tag-build images_detail'
                 ).
                 td(
-                    $category, '', 'category'.$vc
+                    $category, '', 'txp-list-col-category'.$vc
                 ).
                 (
                     $show_authors ? td(
-                        span(txpspecialchars($author), array('title' => get_author_name($author))), '', 'author'
+                        span(txpspecialchars($author), array('title' => get_author_name($author))), '', 'txp-list-col-author'
                     ) : ''
                 )
             );
