@@ -253,38 +253,38 @@ function file_list($message = '')
             n.tag_start('thead').
             tr(
                 hCell(
-                    fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.
-                    gTxt('toggle_all_selected').'" class="txp-list-col-multi-edit"'
+                    fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
+                        '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="txp-list-col-multi-edit"'
                 ).
                 column_head(
-                    'ID', 'id', 'file', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id'
+                    'ID', 'id', 'file', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'txp-list-col-id'
                 ).
                 column_head(
-                    'file_name', 'filename', 'file', true, $switch_dir, $crit, $search_method, (('filename' == $sort) ? "$dir " : '').'name'
+                    'file_name', 'filename', 'file', true, $switch_dir, $crit, $search_method, (('filename' == $sort) ? "$dir " : '').'txp-list-col-filename'
                 ).
                 column_head(
-                    'title', 'title', 'file', true, $switch_dir, $crit, $search_method, (('title' == $sort) ? "$dir " : '').'title'
+                    'title', 'title', 'file', true, $switch_dir, $crit, $search_method, (('title' == $sort) ? "$dir " : '').'txp-list-col-title'
                 ).
                 column_head(
-                    'description', 'description', 'file', true, $switch_dir, $crit, $search_method, (('description' == $sort) ? "$dir " : '').'files_detail description'
+                    'description', 'description', 'file', true, $switch_dir, $crit, $search_method, (('description' == $sort) ? "$dir " : '').'txp-list-col-description files_detail'
                 ).
                 column_head(
-                    'file_category', 'category', 'file', true, $switch_dir, $crit, $search_method, (('category' == $sort) ? "$dir " : '').'category'
+                    'file_category', 'category', 'file', true, $switch_dir, $crit, $search_method, (('category' == $sort) ? "$dir " : '').'txp-list-col-category'
                 ).
                 hCell(gTxt(
-                    'tags'), '', ' scope="col" class="files_detail tag-build"'
+                    'tags'), '', ' scope="col" class="txp-list-col-tag-build files_detail"'
                 ).
                 hCell(gTxt(
-                    'status'), '', ' scope="col" class="status"'
+                    'status'), '', ' scope="col" class="txp-list-col-status"'
                 ).
                 hCell(gTxt(
-                    'condition'), '', ' scope="col" class="condition"'
+                    'condition'), '', ' scope="col" class="txp-list-col-condition"'
                 ).
                 column_head(
-                    'downloads', 'downloads', 'file', true, $switch_dir, $crit, $search_method, (('downloads' == $sort) ? "$dir " : '').'downloads'
+                    'downloads', 'downloads', 'file', true, $switch_dir, $crit, $search_method, (('downloads' == $sort) ? "$dir " : '').'txp-list-col-downloads'
                 ).
                 (
-                    $show_authors ? column_head('author', 'author', 'file', true, $switch_dir, $crit, $search_method, (('author' == $sort) ? "$dir " : '').'author') : ''
+                    $show_authors ? column_head('author', 'author', 'file', true, $switch_dir, $crit, $search_method, (('author' == $sort) ? "$dir " : '').'txp-list-col-author') : ''
                 )
             ).
             n.tag_end('thead').
@@ -368,19 +368,19 @@ function file_list($message = '')
                     $multi_edit, '', 'txp-list-col-multi-edit'
                 ).
                 hCell(
-                    $id_column, '', array('scope' => 'row', 'class' => 'id')
+                    $id_column, '', array('scope' => 'row', 'class' => 'txp-list-col-id')
                 ).
                 td(
-                    $name, '', 'name'
+                    $name, '', 'txp-list-col-name'
                 ).
                 td(
-                    txpspecialchars($title), '', 'title'
+                    txpspecialchars($title), '', 'txp-list-col-title'
                 ).
                 td(
-                    txpspecialchars($description), '', 'files_detail description'
+                    txpspecialchars($description), '', 'txp-list-col-description files_detail'
                 ).
                 td(
-                    $category, '', 'category'.$vc
+                    $category, '', 'txp-list-col-category'.$vc
                 ).
                 td(
                     href('Textile', $tag_url + array('type' => 'textile'), ' target="_blank" onclick="popWin(this.href); return false;"').
@@ -388,19 +388,19 @@ function file_list($message = '')
                     sp.href('Textpattern', $tag_url + array('type' => 'textpattern'), ' target="_blank" onclick="popWin(this.href); return false;"').
                     sp.span('&#124;', array('role' => 'separator')).
                     sp.href('HTML', $tag_url + array('type' => 'html'), ' target="_blank" onclick="popWin(this.href); return false;"')
-                , '', 'files_detail tag-build').
+                , '', 'txp-list-col-tag-build files_detail').
 
                 td(
-                    $status, '', 'status'
+                    $status, '', 'txp-list-col-status'
                 ).
                 td(
-                    $condition, '', 'condition'
+                    $condition, '', 'txp-list-col-condition'
                 ).
                 td(
-                    $downloads, '', 'downloads'
+                    $downloads, '', 'txp-list-col-downloads'
                 ).
                 (
-                    $show_authors ? td(span(txpspecialchars($realname), array('title' => $author)), '', 'author') : ''
+                    $show_authors ? td(span(txpspecialchars($realname), array('title' => $author)), '', 'txp-list-col-author') : ''
                 )
             );
         }
