@@ -406,25 +406,25 @@ function author_list($message = '')
                     (
                         ($use_multi_edit)
                         ? hCell(
-                            fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.
-                            gTxt('toggle_all_selected').'" class="txp-list-col-multi-edit"'
+                            fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
+                                '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="txp-list-col-multi-edit"'
                         )
                         : hCell('', '', ' scope="col" class="txp-list-col-multi-edit"')
                     ).
                     column_head(
-                        'login_name', 'name', 'admin', true, $switch_dir, '', '', (('name' == $sort) ? "$dir " : '').'name login-name'
+                        'login_name', 'name', 'admin', true, $switch_dir, '', '', (('name' == $sort) ? "$dir " : '').'txp-list-col-login-name name'
                     ).
                     column_head(
-                        'real_name', 'RealName', 'admin', true, $switch_dir, '', '', (('RealName' == $sort) ? "$dir " : '').'name real-name'
+                        'real_name', 'RealName', 'admin', true, $switch_dir, '', '', (('RealName' == $sort) ? "$dir " : '').'txp-list-col-real-name name'
                     ).
                     column_head(
-                        'email', 'email', 'admin', true, $switch_dir, '', '', (('email' == $sort) ? "$dir " : '').'email'
+                        'email', 'email', 'admin', true, $switch_dir, '', '', (('email' == $sort) ? "$dir " : '').'txp-list-col-email'
                     ).
                     column_head(
-                        'privileges', 'privs', 'admin', true, $switch_dir, '', '', (('privs' == $sort) ? "$dir " : '').'privs'
+                        'privileges', 'privs', 'admin', true, $switch_dir, '', '', (('privs' == $sort) ? "$dir " : '').'txp-list-col-privs'
                     ).
                     column_head(
-                        'last_login', 'last_login', 'admin', true, $switch_dir, '', '', (('last_login' == $sort) ? "$dir " : '').'date last-login modified'
+                        'last_login', 'last_login', 'admin', true, $switch_dir, '', '', (('last_login' == $sort) ? "$dir " : '').'txp-list-col-last-login date modified'
                     )
                 ).
                 n.'</thead>'.
@@ -438,19 +438,19 @@ function author_list($message = '')
                         ((has_privs('admin.edit') and $txp_user != $a['name']) ? fInput('checkbox', 'selected[]', $a['name'], 'checkbox') : ''), '', 'txp-list-col-multi-edit'
                     ).
                     hCell(
-                        ((has_privs('admin.edit')) ? eLink('admin', 'author_edit', 'user_id', $user_id, $name) : $name), '', ' scope="row" class="name login-name"'
+                        ((has_privs('admin.edit')) ? eLink('admin', 'author_edit', 'user_id', $user_id, $name) : $name), '', ' scope="row" class="txp-list-col-login-name name"'
                     ).
                     td(
-                        $RealName, '', 'name real-name'
+                        $RealName, '', 'txp-list-col-real-name name'
                     ).
                     td(
-                        href($email, 'mailto:'.$email), '', 'email'
+                        href($email, 'mailto:'.$email), '', 'txp-list-col-email'
                     ).
                     td(
-                        get_priv_level($privs), '', 'privs'
+                        get_priv_level($privs), '', 'txp-list-col-privs'
                     ).
                     td(
-                        ($last_login ? safe_strftime('%b&#160;%Y', $last_login) : ''), '', 'date last-login modified'
+                        ($last_login ? safe_strftime('%b&#160;%Y', $last_login) : ''), '', 'txp-list-col-last-login date modified'
                     )
                 );
             }
