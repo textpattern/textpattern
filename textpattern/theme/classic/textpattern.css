@@ -1105,10 +1105,12 @@ td {
     background: #f3f3f3;
 }
 
+.txp-list .multi-edit, /* deprecated, use `.txp-list-col-multi-edit` instead */
 .txp-list-col-multi-edit {
     width: 18px;
 }
 
+.txp-list .id, /* deprecated, use `.txp-list-col-id` instead */
 .txp-list-col-id {
     white-space: nowrap;
 }

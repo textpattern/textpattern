@@ -1347,6 +1347,7 @@ td {
 .txp-list td {
   padding: 0.38461em 1em;
 }
+.txp-list .multi-edit, /* deprecated, use `.txp-list-col-multi-edit` instead */
 .txp-list-col-multi-edit {
   width: 18px;
 }
@@ -1431,6 +1432,7 @@ td {
   border-top: 0;
   border-bottom: 0.30769em solid #333333;
 }
+.txp-list .id, /* deprecated, use `.txp-list-col-id` instead */
 .txp-list-col-id {
   white-space: nowrap;
 }
