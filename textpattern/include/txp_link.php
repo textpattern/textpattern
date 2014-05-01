@@ -200,7 +200,7 @@ function link_list($message = '')
                 ).
                 column_head(
                     'date', 'date', 'link', true, $switch_dir, $crit, $search_method,
-                        (('date' == $sort) ? "$dir " : '').'txp-list-col-date created links_detail'
+                        (('date' == $sort) ? "$dir " : '').'txp-list-col-created date links_detail'
                 ).
                 (
                     $show_authors ? column_head('author', 'author', 'link', true, $switch_dir, $crit, $search_method,
@@ -252,7 +252,7 @@ function link_list($message = '')
                     href($view_url, $view_url, ' rel="external" target="_blank"'), '', 'txp-list-col-url'
                 ).
                 td(
-                    gTime($link_uDate), '', 'txp-list-col-date created links_detail'
+                    gTime($link_uDate), '', 'txp-list-col-created date links_detail'
                 ).
                 (
                     $show_authors ? td(

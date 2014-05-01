@@ -203,7 +203,7 @@ function image_list($message = '')
                 ).
                 column_head(
                     'date', 'date', 'image', true, $switch_dir, $crit, $search_method,
-                        (('date' == $sort) ? "$dir " : '').'txp-list-col-date created images_detail'
+                        (('date' == $sort) ? "$dir " : '').'txp-list-col-created date images_detail'
                 ).
                 column_head(
                     'thumbnail', 'thumbnail', 'image', true, $switch_dir, $crit, $search_method,
@@ -291,7 +291,7 @@ function image_list($message = '')
                     ($can_edit ? href($name, $edit_url, ' title="'.gTxt('edit').'"') : $name), '', 'txp-list-col-name'
                 ).
                 td(
-                    gTime($uDate), '', 'txp-list-col-date created images_detail'
+                    gTime($uDate), '', 'txp-list-col-created date images_detail'
                 ).
                 td(
                     pluggable_ui('image_ui', 'thumbnail', ($can_edit ? href($thumbnail, $edit_url) : $thumbnail), $a), '', 'txp-list-col-thumbnail'

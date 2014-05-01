@@ -253,7 +253,7 @@ function list_list($message = '', $post = '')
                 ).
                 column_head(
                     'posted', 'posted', 'list', true, $switch_dir, $crit, $search_method,
-                        (('posted' == $sort) ? "$dir " : '').'txp-list-col-posted date created'
+                        (('posted' == $sort) ? "$dir " : '').'txp-list-col-created date'
                 ).
                 column_head(
                     'article_modified', 'lastmod', 'list', true, $switch_dir, $crit, $search_method,
@@ -269,11 +269,11 @@ function list_list($message = '', $post = '')
                 ).
                 column_head(
                     'category1', 'category1', 'list', true, $switch_dir, $crit, $search_method,
-                        (('category1' == $sort) ? "$dir " : '').'txp-list-col-category1 category articles_detail'
+                        (('category1' == $sort) ? "$dir " : '').'txp-list-col-category1 articles_detail'
                 ).
                 column_head(
                     'category2', 'category2', 'list', true, $switch_dir, $crit, $search_method,
-                        (('category2' == $sort) ? "$dir " : '').'txp-list-col-category2 category articles_detail'
+                        (('category2' == $sort) ? "$dir " : '').'txp-list-col-category2 articles_detail'
                 ).
                 column_head(
                     'status', 'status', 'list', true, $switch_dir, $crit, $search_method,
@@ -380,7 +380,7 @@ function list_list($message = '', $post = '')
                     $Title, '', 'txp-list-col-title'
                 ).
                 td(
-                    gTime($posted), '', ($posted < time() ? '' : 'unpublished ').'txp-list-col-posted date created'
+                    gTime($posted), '', ($posted < time() ? '' : 'unpublished ').'txp-list-col-created date'
                 ).
                 td(
                     gTime($lastmod), '', "txp-list-col-lastmod date articles_detail"
@@ -392,10 +392,10 @@ function list_list($message = '', $post = '')
                     span(txpspecialchars($section_title), array('title' => $Section)), '', 'txp-list-col-section'.$vs
                 ).
                 td(
-                    $Category1, '', "txp-list-col-category1 category articles_detail".$vc[1]
+                    $Category1, '', "txp-list-col-category1 articles_detail".$vc[1]
                 ).
                 td(
-                    $Category2, '', "txp-list-col-category2 category articles_detail".$vc[2]
+                    $Category2, '', "txp-list-col-category2 articles_detail".$vc[2]
                 ).
                 td(
                     href($Status, $view_url, join_atts(array('title' => gTxt('view')))), '', 'txp-list-col-status'

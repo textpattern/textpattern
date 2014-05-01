@@ -290,7 +290,7 @@ function discuss_list($message = '')
                 ).
                 column_head(
                     'date', 'date', 'discuss', true, $switch_dir, $crit, $search_method,
-                        (('date' == $sort) ? "$dir " : '').'txp-list-col-date posted created'
+                        (('date' == $sort) ? "$dir " : '').'txp-list-col-created date'
                 ).
                 column_head(
                     'name', 'name', 'discuss', true, $switch_dir, $crit, $search_method,
@@ -384,7 +384,7 @@ function discuss_list($message = '')
                     href($discussid, $edit_url, ' title="'.gTxt('edit').'"'), '', ' scope="row" class="txp-list-col-id"'
                 ).
                 td(
-                    gTime($uPosted), '', 'txp-list-col-date posted created'
+                    gTime($uPosted), '', 'txp-list-col-created date'
                 ).
                 td(
                     txpspecialchars(soft_wrap($name, 15)), '', 'txp-list-col-name'
@@ -617,26 +617,33 @@ function ipban_list($message = '')
 
     if ($rs and numRows($rs) > 0) {
         echo n.'<div id="'.$event.'_ban_container" class="txp-container">'.
+            n.'<div class="txp-listtables">'.
             startTable('', '', 'txp-list').
-            '<thead>'.
+            n.'<thead>'.
             tr(
-                hCell(gTxt('date_banned'), '', ' scope="col" class="date banned"').
-                hCell(gTxt('IP'), '', ' scope="col" class="ip"').
-                hCell(gTxt('name_used'), '', ' scope="col" class="name"').
-                hCell(gTxt('banned_for'), '', ' scope="col" class="id"')
+                hCell(
+                    gTxt('date_banned'), '', ' scope="col" class="txp-list-col-banned date"'
+                ).
+                hCell(
+                    gTxt('IP'), '', ' scope="col" class="txp-list-col-ip"'
+                ).
+                hCell(
+                    gTxt('name_used'), '', ' scope="col" class="txp-list-col-name"'
+                ).
+                hCell(
+                    gTxt('banned_for'), '', ' scope="col" class="txp-list-col-id"'
+                )
             ).
-            n.'</thead>';
-
-        echo n.'<tbody>';
+            n.'</thead>'.
+            n.'<tbody>';
 
         while ($a = nextRow($rs)) {
             extract($a);
 
             echo tr(
                 hCell(
-                    gTime($uBanned)
-                , '', ' scope="row" class="date banned"').
-
+                    gTime($uBanned), '', ' scope="row" class="txp-list-col-banned date"'
+                ).
                 td(
                     txpspecialchars($ip).
                     sp.span('[', array('aria-hidden' => 'true')).
@@ -650,22 +657,21 @@ function ipban_list($message = '')
                         ),
                         array('class' => 'action-ban')
                     ).
-                    span(']', array('aria-hidden' => 'true'))
-                , '', 'ip').
-
+                    span(']', array('aria-hidden' => 'true')), '', 'txp-list-col-ip'
+                ).
                 td(
-                    txpspecialchars($name_used)
-                , '', 'name').
-
+                    txpspecialchars($name_used), '', 'txp-list-col-name'
+                ).
                 td(
-                    href($banned_on_message, '?event=discuss'.a.'step=discuss_edit'.a.'discussid='.$banned_on_message)
-                , '', 'id')
+                    href($banned_on_message, '?event=discuss'.a.'step=discuss_edit'.a.'discussid='.$banned_on_message), '', 'txp-list-col-id'
+                )
             );
         }
 
         echo n.'</tbody>'.
-        endTable().
-        '</div>';
+            endTable().
+            n.'</div>'.
+            n.'</div>';
     } else {
         echo graf(gTxt('no_ips_banned'), ' class="indicator"');
     }
