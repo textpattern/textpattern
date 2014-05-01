@@ -371,7 +371,7 @@ function file_list($message = '')
                     $id_column, '', array('scope' => 'row', 'class' => 'txp-list-col-id')
                 ).
                 td(
-                    $name, '', 'txp-list-col-name'
+                    $name, '', 'txp-list-col-filename'
                 ).
                 td(
                     txpspecialchars($title), '', 'txp-list-col-title'
