@@ -240,41 +240,41 @@ function list_list($message = '', $post = '')
             n.'<thead>'.
             tr(
                 hCell(
-                    fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.
-                    gTxt('toggle_all_selected').'" class="txp-list-col-multi-edit"'
+                    fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
+                        '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="txp-list-col-multi-edit"'
                 ).
                 column_head(
-                    'ID', 'id', 'list', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'id actions'
+                    'ID', 'id', 'list', true, $switch_dir, $crit, $search_method, (('id' == $sort) ? "$dir " : '').'txp-list-col-id actions'
                 ).
                 column_head(
-                    'title', 'title', 'list', true, $switch_dir, $crit, $search_method, (('title' == $sort) ? "$dir " : '').'title'
+                    'title', 'title', 'list', true, $switch_dir, $crit, $search_method, (('title' == $sort) ? "$dir " : '').'txp-list-col-title'
                 ).
                 column_head(
-                    'posted', 'posted', 'list', true, $switch_dir, $crit, $search_method, (('posted' == $sort) ? "$dir " : '').'date posted created'
+                    'posted', 'posted', 'list', true, $switch_dir, $crit, $search_method, (('posted' == $sort) ? "$dir " : '').'txp-list-col-posted date created'
                 ).
                 column_head(
-                    'article_modified', 'lastmod', 'list', true, $switch_dir, $crit, $search_method, (('lastmod' == $sort) ? "$dir " : '').'articles_detail date modified'
+                    'article_modified', 'lastmod', 'list', true, $switch_dir, $crit, $search_method, (('lastmod' == $sort) ? "$dir " : '').'txp-list-col-lastmod date articles_detail'
                 ).
                 column_head(
-                    'expires', 'expires', 'list', true, $switch_dir, $crit, $search_method, (('expires' == $sort) ? "$dir " : '').'articles_detail date expires'
+                    'expires', 'expires', 'list', true, $switch_dir, $crit, $search_method, (('expires' == $sort) ? "$dir " : '').'txp-list-col-expires date articles_detail'
                 ).
                 column_head(
-                    'section', 'section', 'list', true, $switch_dir, $crit, $search_method, (('section' == $sort) ? "$dir " : '').'section'
+                    'section', 'section', 'list', true, $switch_dir, $crit, $search_method, (('section' == $sort) ? "$dir " : '').'txp-list-col-section'
                 ).
                 column_head(
-                    'category1', 'category1', 'list', true, $switch_dir, $crit, $search_method, (('category1' == $sort) ? "$dir " : '').'articles_detail category category1'
+                    'category1', 'category1', 'list', true, $switch_dir, $crit, $search_method, (('category1' == $sort) ? "$dir " : '').'txp-list-col-category1 category articles_detail'
                 ).
                 column_head(
-                    'category2', 'category2', 'list', true, $switch_dir, $crit, $search_method, (('category2' == $sort) ? "$dir " : '').'articles_detail category category2'
+                    'category2', 'category2', 'list', true, $switch_dir, $crit, $search_method, (('category2' == $sort) ? "$dir " : '').'txp-list-col-category2 category articles_detail'
                 ).
                 column_head(
-                    'status', 'status', 'list', true, $switch_dir, $crit, $search_method, (('status' == $sort) ? "$dir " : '').'status'
+                    'status', 'status', 'list', true, $switch_dir, $crit, $search_method, (('status' == $sort) ? "$dir " : '').'txp-list-col-status'
                 ).
                 (
-                    $show_authors ? column_head('author', 'author', 'list', true, $switch_dir, $crit, $search_method, (('author' == $sort) ? "$dir " : '').'author') : ''
+                    $show_authors ? column_head('author', 'author', 'list', true, $switch_dir, $crit, $search_method, (('author' == $sort) ? "$dir " : '').'txp-list-col-author') : ''
                 ).
                 (
-                    $use_comments == 1 ? column_head('comments', 'comments', 'list', true, $switch_dir, $crit, $search_method, (('comments' == $sort) ? "$dir " : '').'articles_detail comments') : ''
+                    $use_comments == 1 ? column_head('comments', 'comments', 'list', true, $switch_dir, $crit, $search_method, (('comments' == $sort) ? "$dir " : '').'txp-list-col-comments articles_detail') : ''
                 )
             ).
             n.'</thead>';
@@ -363,37 +363,37 @@ function list_list($message = '', $post = '')
                         href(gTxt('view'), $view_url).
                         tag(']', 'span', array('aria-hidden' => 'true'))
                     , 'span', array('class' => 'articles_detail')
-                    ), '', ' scope="row" class="id"'
+                    ), '', ' scope="row" class="txp-list-col-id"'
                 ).
                 td(
-                    $Title, '', 'title'
+                    $Title, '', 'txp-list-col-title'
                 ).
                 td(
-                    gTime($posted), '', ($posted < time() ? '' : 'unpublished ').'date posted created'
+                    gTime($posted), '', ($posted < time() ? '' : 'unpublished ').'txp-list-col-posted date created'
                 ).
                 td(
-                    gTime($lastmod), '', "articles_detail date modified"
+                    gTime($lastmod), '', "txp-list-col-lastmod date articles_detail"
                 ).
                 td(
-                    ($expires ? gTime($expires) : ''), '', 'articles_detail date expires'
+                    ($expires ? gTime($expires) : ''), '', 'txp-list-col-expires date articles_detail'
                 ).
                 td(
-                    span(txpspecialchars($section_title), array('title' => $Section)), '', 'section'.$vs
+                    span(txpspecialchars($section_title), array('title' => $Section)), '', 'txp-list-col-section'.$vs
                 ).
                 td(
-                    $Category1, '', "articles_detail category category1".$vc[1]
+                    $Category1, '', "txp-list-col-category1 category articles_detail".$vc[1]
                 ).
                 td(
-                    $Category2, '', "articles_detail category category2".$vc[2]
+                    $Category2, '', "txp-list-col-category2 category articles_detail".$vc[2]
                 ).
                 td(
-                    href($Status, $view_url, join_atts(array('title' => gTxt('view')))), '', 'status'
+                    href($Status, $view_url, join_atts(array('title' => gTxt('view')))), '', 'txp-list-col-status'
                 ).
                 (
-                    $show_authors ? td(span(txpspecialchars($RealName), array('title' => $AuthorID)), '', 'author') : ''
+                    $show_authors ? td(span(txpspecialchars($RealName), array('title' => $AuthorID)), '', 'txp-list-col-author') : ''
                 ).
                 (
-                    $use_comments ? td($comments, '', "articles_detail comments") : ''
+                    $use_comments ? td($comments, '', "txp-list-col-comments articles_detail") : ''
                 )
             );
         }
