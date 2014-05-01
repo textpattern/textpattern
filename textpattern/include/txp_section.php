@@ -254,32 +254,32 @@ function sec_section_list($message = '')
             n.tag_start('thead').
             tr(
                 hCell(
-                    fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' scope="col" title="'.
-                    gTxt('toggle_all_selected').'" class="txp-list-col-multi-edit"'
+                    fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
+                        '', ' scope="col" title="'.gTxt('toggle_all_selected').'" class="txp-list-col-multi-edit"'
                 ).
                 column_head(
-                    'name', 'name', 'section', true, $switch_dir, $crit, $search_method, (('name' == $sort) ? "$dir " : '').'name'
+                    'name', 'name', 'section', true, $switch_dir, $crit, $search_method, (('name' == $sort) ? "$dir " : '').'txp-list-col-name'
                 ).
                 column_head(
-                    'title', 'title', 'section', true, $switch_dir, $crit, $search_method, (('title' == $sort) ? "$dir " : '').'title'
+                    'title', 'title', 'section', true, $switch_dir, $crit, $search_method, (('title' == $sort) ? "$dir " : '').'txp-list-col-title'
                 ).
                 column_head(
-                    'page', 'page', 'section', true, $switch_dir, $crit, $search_method, (('page' == $sort) ? "$dir " : '').'page'
+                    'page', 'page', 'section', true, $switch_dir, $crit, $search_method, (('page' == $sort) ? "$dir " : '').'txp-list-col-page'
                 ).
                 column_head(
-                    'css', 'css', 'section', true, $switch_dir, $crit, $search_method, (('css' == $sort) ? "$dir " : '').'style'
+                    'css', 'css', 'section', true, $switch_dir, $crit, $search_method, (('css' == $sort) ? "$dir " : '').'txp-list-col-style'
                 ).
                 column_head(
-                    'on_front_page', 'on_frontpage', 'section', true, $switch_dir, $crit, $search_method, (('on_frontpage' == $sort) ? "$dir " : '').'section_detail frontpage'
+                    'on_front_page', 'on_frontpage', 'section', true, $switch_dir, $crit, $search_method, (('on_frontpage' == $sort) ? "$dir " : '').'txp-list-col-frontpage section_detail'
                 ).
                 column_head(
-                    'syndicate', 'in_rss', 'section', true, $switch_dir, $crit, $search_method, (('in_rss' == $sort) ? "$dir " : '').'section_detail syndicate'
+                    'syndicate', 'in_rss', 'section', true, $switch_dir, $crit, $search_method, (('in_rss' == $sort) ? "$dir " : '').'txp-list-col-syndicate section_detail'
                 ).
                 column_head(
-                    'include_in_search', 'searchable', 'section', true, $switch_dir, $crit, $search_method, (('searchable' == $sort) ? "$dir " : '').'section_detail searchable'
+                    'include_in_search', 'searchable', 'section', true, $switch_dir, $crit, $search_method, (('searchable' == $sort) ? "$dir " : '').'txp-list-col-searchable section_detail'
                 ).
                 column_head(
-                    'article', 'article_count', 'section', true, $switch_dir, $crit, $search_method, (('article_count' == $sort) ? "$dir " : '').'section_detail article_count'
+                    'article', 'article_count', 'section', true, $switch_dir, $crit, $search_method, (('article_count' == $sort) ? "$dir " : '').'txp-list-col-article_count section_detail'
                 )
             ).
             n.tag_end('thead').
@@ -359,29 +359,29 @@ function sec_section_list($message = '')
                     )
                     , '', array(
                         'scope' => 'row',
-                        'class' => 'name'
+                        'class' => 'txp-list-col-name'
                     )
                 ).
                 td(
-                    txpspecialchars($sec_title), '', 'title'
+                    txpspecialchars($sec_title), '', 'txp-list-col-title'
                 ).
                 td(
-                    $sec_page, '', 'page'
+                    $sec_page, '', 'txp-list-col-page'
                 ).
                 td(
-                    $sec_css, '', 'style'
+                    $sec_css, '', 'txp-list-col-style'
                 ).
                 td(
-                    $sec_on_frontpage, '', 'section_detail frontpage'
+                    $sec_on_frontpage, '', 'txp-list-col-frontpage section_detail'
                 ).
                 td(
-                    $sec_in_rss, '', 'section_detail syndicate'
+                    $sec_in_rss, '', 'txp-list-col-syndicate section_detail'
                 ).
                 td(
-                    $sec_searchable, '', 'section_detail searchable'
+                    $sec_searchable, '', 'txp-list-col-searchable section_detail'
                 ).
                 td(
-                    $articles, '', 'section_detail article_count'
+                    $articles, '', 'txp-list-col-article_count section_detail'
                 ),
                 array('id' => 'txp_section_'.$sec_name)
             );
