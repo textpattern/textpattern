@@ -429,7 +429,7 @@ function author_list($message = '')
                     ).
                     column_head(
                         'last_login', 'last_login', 'admin', true, $switch_dir, '', '',
-                            (('last_login' == $sort) ? "$dir " : '').'txp-list-col-last-login date modified'
+                            (('last_login' == $sort) ? "$dir " : '').'txp-list-col-last-login date'
                     )
                 ).
                 n.'</thead>'.
@@ -455,7 +455,7 @@ function author_list($message = '')
                         get_priv_level($privs), '', 'txp-list-col-privs'
                     ).
                     td(
-                        ($last_login ? safe_strftime('%b&#160;%Y', $last_login) : ''), '', 'txp-list-col-last-login date modified'
+                        ($last_login ? safe_strftime('%b&#160;%Y', $last_login) : ''), '', 'txp-list-col-last-login date'
                     )
                 );
             }
