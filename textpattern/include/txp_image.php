@@ -183,11 +183,21 @@ function image_list($message = '')
     if ($rs) {
         $show_authors = !has_single_author('txp_image');
 
-        echo n.'<div id="'.$event.'_container" class="txp-container">';
-        echo n.'<form name="longform" id="images_form" class="multi_edit_form" method="post" action="index.php">'.
-            n.'<div class="txp-listtables">'.
-            startTable('', '', 'txp-list').
-            n.'<thead>'.
+        echo
+            n.tag_start('div', array(
+                'id'    => $event.'_container',
+                'class' => 'txp-container',
+            )).
+            n.tag_start('form', array(
+                'action' => 'index.php',
+                'id'     => 'images_form',
+                'class'  => 'multi_edit_form',
+                'method' => 'post',
+                'name'   => 'longform',
+            )).
+            n.tag_start('div', array('class' => 'txp-listtables')).
+            n.tag_start('table', array('class' => 'txp-list')).
+            n.tag_start('thead').
             tr(
                 hCell(
                     fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
@@ -217,12 +227,14 @@ function image_list($message = '')
                         (('category' == $sort) ? "$dir " : '').'txp-list-col-category'
                 ).
                 (
-                    $show_authors ? column_head('author', 'author', 'image', true, $switch_dir, $crit, $search_method,
-                        (('author' == $sort) ? "$dir " : '').'txp-list-col-author name') : ''
+                    $show_authors
+                    ? column_head('author', 'author', 'image', true, $switch_dir, $crit, $search_method,
+                        (('author' == $sort) ? "$dir " : '').'txp-list-col-author name')
+                    : ''
                 )
             ).
-            n.'</thead>'.
-            n.'<tbody>';
+            n.tag_end('thead').
+            n.tag_start('tbody');
 
         $validator = new Validator();
 
@@ -303,28 +315,29 @@ function image_list($message = '')
                     $category, '', 'txp-list-col-category'.$vc
                 ).
                 (
-                    $show_authors ? td(
-                        span(txpspecialchars($author), array('title' => get_author_name($author))), '', 'txp-list-col-author name'
-                    ) : ''
+                    $show_authors
+                    ? td(span(txpspecialchars($author), array('title' => get_author_name($author))), '', 'txp-list-col-author name')
+                    : ''
                 )
             );
         }
 
-        echo n.'</tbody>'.
-            endTable().
-            n.'</div>'.
+        echo
+            n.tag_end('tbody').
+            n.tag_end('table').
+            n.tag_end('div').
             image_multiedit_form($page, $sort, $dir, $crit, $search_method).
             tInput().
-            n.'</form>'.
-            graf(
-                toggle_box('images_detail'),
-                ' class="detail-toggle"'
-            ).
-            n.'<div id="'.$event.'_navigation" class="txp-navigation">'.
+            n.tag_end('form').
+            graf(toggle_box('images_detail'), array('class' => 'detail-toggle')).
+            n.tag_start('div', array(
+                'id'    => $event.'_navigation',
+                'class' => 'txp-navigation',
+            )).
             pageby_form('image', $image_list_pageby).
             nav_form('image', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
-            n.'</div>'.
-            n.'</div>';
+            n.tag_end('div').
+            n.tag_end('div');
     }
 }
 

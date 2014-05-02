@@ -233,11 +233,21 @@ function list_list($message = '', $post = '')
     if ($rs) {
         $show_authors = !has_single_author('textpattern', 'AuthorID');
 
-        echo n.'<div id="'.$event.'_container" class="txp-container">';
-        echo n.'<form name="longform" id="articles_form" class="multi_edit_form" method="post" action="index.php">'.
-            n.'<div class="txp-listtables">'.
-            startTable('', '', 'txp-list').
-            n.'<thead>'.
+        echo
+            n.tag_start('div', array(
+                'id'    => $event.'_container',
+                'class' => 'txp-container',
+            )).
+            n.tag_start('form', array(
+                'action' => 'index.php',
+                'id'     => 'articles_form',
+                'class'  => 'multi_edit_form',
+                'method' => 'post',
+                'name'   => 'longform',
+            )).
+            n.tag_start('div', array('class' => 'txp-listtables')).
+            n.tag_start('table', array('class' => 'txp-list')).
+            n.tag_start('thead').
             tr(
                 hCell(
                     fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
@@ -280,19 +290,23 @@ function list_list($message = '', $post = '')
                         (('status' == $sort) ? "$dir " : '').'txp-list-col-status'
                 ).
                 (
-                    $show_authors ? column_head('author', 'author', 'list', true, $switch_dir, $crit, $search_method,
-                        (('author' == $sort) ? "$dir " : '').'txp-list-col-author name') : ''
+                    $show_authors
+                    ? column_head('author', 'author', 'list', true, $switch_dir, $crit, $search_method,
+                        (('author' == $sort) ? "$dir " : '').'txp-list-col-author name')
+                    : ''
                 ).
                 (
-                    $use_comments == 1 ? column_head('comments', 'comments', 'list', true, $switch_dir, $crit, $search_method,
-                        (('comments' == $sort) ? "$dir " : '').'txp-list-col-comments articles_detail') : ''
+                    $use_comments == 1
+                    ? column_head('comments', 'comments', 'list', true, $switch_dir, $crit, $search_method,
+                        (('comments' == $sort) ? "$dir " : '').'txp-list-col-comments articles_detail')
+                    : ''
                 )
             ).
-            n.'</thead>';
+            n.tag_end('thead');
 
         include_once txpath.'/publish/taghandlers.php';
 
-        echo n.'<tbody>';
+        echo n.tag_start('tbody');
 
         $validator = new Validator();
 
@@ -401,35 +415,34 @@ function list_list($message = '', $post = '')
                     href($Status, $view_url, join_atts(array('title' => gTxt('view')))), '', 'txp-list-col-status'
                 ).
                 (
-                    $show_authors ? td(span(txpspecialchars($RealName), array('title' => $AuthorID)), '', 'txp-list-col-author name') : ''
+                    $show_authors
+                    ? td(span(txpspecialchars($RealName), array('title' => $AuthorID)), '', 'txp-list-col-author name')
+                    : ''
                 ).
                 (
-                    $use_comments ? td($comments, '', "txp-list-col-comments articles_detail") : ''
+                    $use_comments
+                    ? td($comments, '', "txp-list-col-comments articles_detail")
+                    : ''
                 )
             );
         }
 
-        echo n.'</tbody>'.
-            endTable().
-            n.'</div>'.
+        echo
+            n.tag_end('tbody').
+            n.tag_end('table').
+            n.tag_end('div').
             list_multiedit_form($page, $sort, $dir, $crit, $search_method).
             tInput().
-            n.'</form>'.
-
-            graf(
-                toggle_box('articles_detail'),
-                array('class' => 'detail-toggle')
-            ).
-
-            n.tag(
-                pageby_form('list', $article_list_pageby).
-                nav_form('list', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).n,
-                'div', array(
+            n.tag_end('form').
+            graf(toggle_box('articles_detail'), array('class' => 'detail-toggle')).
+            n.tag_start('div', array(
+                'id'    => $event.'_navigation',
                 'class' => 'txp-navigation',
-                'id'    => $event.'_navigation'
             )).
-
-            n.'</div>';
+            pageby_form('list', $article_list_pageby).
+            nav_form('list', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
+            n.tag_end('div').
+            n.tag_end('div');
     }
 }
 

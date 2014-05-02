@@ -397,11 +397,21 @@ function author_list($message = '')
         );
 
         if ($rs) {
-            echo n.'<div id="users_container" class="txp-container">';
-            echo n.'<form action="index.php" id="users_form" class="multi_edit_form" method="post" name="longform">'.
-                n.'<div class="txp-listtables">'.
-                startTable('', '', 'txp-list').
-                n.'<thead>'.
+            echo
+                n.tag_start('div', array(
+                    'id'    => 'users_container',
+                    'class' => 'txp-container',
+                )).
+                n.tag_start('form', array(
+                    'action' => 'index.php',
+                    'id'     => 'users_form',
+                    'class'  => 'multi_edit_form',
+                    'method' => 'post',
+                    'name'   => 'longform',
+                )).
+                n.tag_start('div', array('class' => 'txp-listtables')).
+                n.tag_start('table', array('class' => 'txp-list')).
+                n.tag_start('thead').
                 tr(
                     (
                         ($use_multi_edit)
@@ -432,8 +442,8 @@ function author_list($message = '')
                             (('last_login' == $sort) ? "$dir " : '').'txp-list-col-last-login date'
                     )
                 ).
-                n.'</thead>'.
-                n.'<tbody>';
+                n.tag_end('thead').
+                n.tag_start('tbody');
 
             while ($a = nextRow($rs)) {
                 extract(doSpecial($a));
@@ -460,23 +470,28 @@ function author_list($message = '')
                 );
             }
 
-            echo n.'</tbody>'.
-                endTable().
-                n.'</div>'.
-                (($use_multi_edit) ? author_multiedit_form($page, $sort, $dir, $crit, $search_method) : '').
+            echo
+                n.tag_end('tbody').
+                n.tag_end('table').
+                n.tag_end('div').
+                (
+                    ($use_multi_edit)
+                    ? author_multiedit_form($page, $sort, $dir, $crit, $search_method)
+                    : ''
+                ).
                 tInput().
-                n.'</form>'.
-                tag(
-                    pageby_form('admin', $author_list_pageby).
-                    nav_form('admin', $page, $numPages, $sort, $dir, $crit, $search_method).n
-                , 'div', array(
+                n.tag_end('form').
+                n.tag_start('div', array(
                     'id'    => 'users_navigation',
-                    'class' => 'txp-navigation'
+                    'class' => 'txp-navigation',
                 )).
-                n.'</div>';
+                pageby_form('admin', $author_list_pageby).
+                nav_form('admin', $page, $numPages, $sort, $dir, $crit, $search_method).
+                n.tag_end('div').
+                n.tag_end('div');
         }
     } else {
-        echo n.'</div>';
+        echo n.tag_end('div');
     }
 }
 

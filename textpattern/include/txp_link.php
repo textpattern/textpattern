@@ -168,11 +168,21 @@ function link_list($message = '')
     if ($rs) {
         $show_authors = !has_single_author('txp_link');
 
-        echo n.'<div id="'.$event.'_container" class="txp-container">';
-        echo n.'<form action="index.php" id="links_form" class="multi_edit_form" method="post" name="longform">',
-            n.'<div class="txp-listtables">'.
-            startTable('', '', 'txp-list').
-            n.'<thead>'.
+        echo
+            n.tag_start('div', array(
+                'id'    => $event.'_container',
+                'class' => 'txp-container',
+            )).
+            n.tag_start('form', array(
+                'action' => 'index.php',
+                'id'     => 'links_form',
+                'class'  => 'multi_edit_form',
+                'method' => 'post',
+                'name'   => 'longform',
+            )).
+            n.tag_start('div', array('class' => 'txp-listtables')).
+            n.tag_start('table', array('class' => 'txp-list')).
+            n.tag_start('thead').
             tr(
                 hCell(
                     fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
@@ -203,12 +213,14 @@ function link_list($message = '')
                         (('date' == $sort) ? "$dir " : '').'txp-list-col-created date links_detail'
                 ).
                 (
-                    $show_authors ? column_head('author', 'author', 'link', true, $switch_dir, $crit, $search_method,
-                        (('author' == $sort) ? "$dir " : '').'txp-list-col-author name') : ''
+                    $show_authors
+                    ? column_head('author', 'author', 'link', true, $switch_dir, $crit, $search_method,
+                        (('author' == $sort) ? "$dir " : '').'txp-list-col-author name')
+                    : ''
                 )
             ).
-            n.'</thead>'.
-            n.'<tbody>';
+            n.tag_end('thead').
+            n.tag_start('tbody');
 
         $validator = new Validator();
 
@@ -255,28 +267,30 @@ function link_list($message = '')
                     gTime($link_uDate), '', 'txp-list-col-created date links_detail'
                 ).
                 (
-                    $show_authors ? td(
-                        span(txpspecialchars($link_author), array('title' => get_author_name($link_author))), '', 'txp-list-col-author name'
-                    ) : ''
+                    $show_authors
+                    ? td(span(txpspecialchars($link_author), array('title' => get_author_name($link_author))), '', 'txp-list-col-author name')
+                    : ''
                 )
             );
         }
 
-        echo n.'</tbody>'.
-            endTable().
-            '</div>'.
+        echo
+            n.tag_end('tbody').
+            n.tag_end('table').
+            n.tag_end('div').
             link_multiedit_form($page, $sort, $dir, $crit, $search_method).
             tInput().
-            n.'</form>'.
-            graf(
-                toggle_box('links_detail'),
-                ' class="detail-toggle"'
-            ).
-            n.'<div id="'.$event.'_navigation" class="txp-navigation">'.
+            n.tag_end('form').
+            graf(toggle_box('links_detail'), array('class' => 'detail-toggle')).
+
+            n.tag_start('div', array(
+                'id'    => $event.'_navigation',
+                'class' => 'txp-navigation',
+            )).
             pageby_form('link', $link_list_pageby).
             nav_form('link', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
-            n.'</div>'.
-            n.'</div>';
+            n.tag_end('div').
+            n.tag_end('div');
     }
 }
 

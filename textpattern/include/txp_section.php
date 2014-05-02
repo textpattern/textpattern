@@ -402,17 +402,13 @@ function sec_section_list($message = '')
             section_multiedit_form($page, $sort, $dir, $crit, $search_method).
             tInput().
             n.tag_end('form').
-
             graf(toggle_box('section_detail'), array('class' => 'detail-toggle')).
-
             n.tag_start('div', array(
                 'id'    => $event.'_navigation',
                 'class' => 'txp-navigation',
             )).
-
             pageby_form('section', $section_list_pageby).
             nav_form('section', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
-
             n.tag_end('div').
             n.tag_end('div');
     }

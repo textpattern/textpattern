@@ -240,13 +240,16 @@ function file_list($message = '')
         $show_authors = !has_single_author('txp_file');
 
         echo
-            n.tag_start('div', array('id' => $event.'_container', 'class' => 'txp-container')).
+            n.tag_start('div', array(
+                'id'    => $event.'_container',
+                'class' => 'txp-container',
+            )).
             n.tag_start('form', array(
-                'name'   => 'longform',
+                'action' => 'index.php',
                 'id'     => 'files_form',
                 'class'  => 'multi_edit_form',
                 'method' => 'post',
-                'action' => 'index.php',
+                'name'   => 'longform',
             )).
             n.tag_start('div', array('class' => 'txp-listtables')).
             n.tag_start('table', array('class' => 'txp-list')).
@@ -290,8 +293,10 @@ function file_list($message = '')
                         (('downloads' == $sort) ? "$dir " : '').'txp-list-col-downloads'
                 ).
                 (
-                    $show_authors ? column_head('author', 'author', 'file', true, $switch_dir, $crit, $search_method,
-                        (('author' == $sort) ? "$dir " : '').'txp-list-col-author name') : ''
+                    $show_authors
+                    ? column_head('author', 'author', 'file', true, $switch_dir, $crit, $search_method,
+                        (('author' == $sort) ? "$dir " : '').'txp-list-col-author name')
+                    : ''
                 )
             ).
             n.tag_end('thead').
@@ -407,7 +412,9 @@ function file_list($message = '')
                     $downloads, '', 'txp-list-col-downloads'
                 ).
                 (
-                    $show_authors ? td(span(txpspecialchars($realname), array('title' => $author)), '', 'txp-list-col-author name') : ''
+                    $show_authors
+                    ? td(span(txpspecialchars($realname), array('title' => $author)), '', 'txp-list-col-author name')
+                    : ''
                 )
             );
         }
@@ -420,7 +427,10 @@ function file_list($message = '')
             tInput().
             n.tag_end('form').
             graf(toggle_box('files_detail'), array('class' => 'detail-toggle')).
-            n.tag_start('div', array('id' => $event.'_navigation', 'class' => 'txp-navigation')).
+            n.tag_start('div', array(
+                'id'    => $event.'_navigation',
+                'class' => 'txp-navigation',
+            )).
             pageby_form('file', $file_list_pageby).
             nav_form('file', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
             n.tag_end('div').

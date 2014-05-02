@@ -245,16 +245,20 @@ function list_languages($message='')
     pagetop(gTxt('tab_languages'), $message);
 
     echo hed(gTxt('tab_languages'), 1, array('class' => 'txp-heading'));
-    echo n.'<div id="language_container" class="txp-container">';
+    echo
+        n.tag_start('div', array(
+            'id'    => 'language_container',
+            'class' => 'txp-container',
+        ));
 
     if (isset($msg) && $msg) {
         echo tag($msg, 'p', ' class="error lang-msg"');
     }
 
     echo $lang_form,
-        n.'<div class="txp-listtables">'.
-        startTable('', '', 'txp-list').
-        n.'<thead>'.
+        n.tag_start('div', array('class' => 'txp-listtables')).
+        n.tag_start('table', array('class' => 'txp-list')).
+        n.tag_start('thead').
         tr(
             hCell(
                 gTxt('language'), '', ' scope="col"'
@@ -269,15 +273,13 @@ function list_languages($message='')
                 gTxt('remove_lang').popHelp('remove_lang'), '', ' scope="col" class="languages_detail"'
             )
         ).
-        n.'</thead>'.
-        n.'<tbody>'.$list.'</tbody>'.
-        endTable().
-        n.'</div>'.
-
-        graf(
-            toggle_box('languages_detail'),
-            ' class="detail-toggle"'
-        ).
+        n.tag_end('thead').
+        n.tag_start('tbody').
+        $list.
+        n.tag_end('tbody').
+        n.tag_end('table').
+        n.tag_end('div').
+        graf(toggle_box('languages_detail'), array('class' => 'detail-toggle')).
 
         hed(gTxt('install_from_textpack'), 3).
         form(
@@ -290,9 +292,10 @@ function list_languages($message='')
                 eInput('lang').
                 sInput('get_textpack')
             )
-        , '', '', 'post', 'edit-form', '', 'text_uploader').
-
-        '</div>'; // End language_container
+            , '', '', 'post', 'edit-form', '', 'text_uploader'
+        ).
+        
+        n.tag_end('div');
 }
 
 /**

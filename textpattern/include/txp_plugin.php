@@ -100,11 +100,21 @@ function plugin_list($message = '')
     );
 
     if ($rs and numRows($rs) > 0) {
-        echo n.'<div id="'.$event.'_container" class="txp-container">';
-        echo n.'<form action="index.php" id="plugin_form" class="multi_edit_form" method="post" name="longform">'.
-            n.'<div class="txp-listtables">'.
-            startTable('', '', 'txp-list').
-            n.'<thead>'.
+        echo
+            n.tag_start('div', array(
+                'id'    => $event.'_container',
+                'class' => 'txp-container',
+            )).
+            n.tag_start('form', array(
+                'action' => 'index.php',
+                'id'     => 'plugin_form',
+                'class'  => 'multi_edit_form',
+                'method' => 'post',
+                'name'   => 'longform',
+            )).
+            n.tag_start('div', array('class' => 'txp-listtables')).
+            n.tag_start('table', array('class' => 'txp-list')).
+            n.tag_start('thead').
             tr(
                 hCell(
                     fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
@@ -141,8 +151,8 @@ function plugin_list($message = '')
                     gTxt('manage'), '',  ' scope="col" class="txp-list-col-manage"'
                 )
             ).
-            n.'</thead>'.
-            n.'<tbody>';
+            n.tag_end('thead').
+            n.tag_start('tbody');
 
         while ($a = nextRow($rs)) {
             foreach ($a as $key => $value) {
@@ -227,13 +237,14 @@ function plugin_list($message = '')
             unset($name, $page, $deletelink);
         }
 
-        echo n.'</tbody>'.
-            endTable().
-            n.'</div>'.
+        echo
+            n.tag_end('tbody').
+            n.tag_end('table').
+            n.tag_end('div').
             plugin_multiedit_form('', $sort, $dir, '', '').
             tInput().
-            n.'</form>'.
-            n.'</div>';
+            n.tag_end('form').
+            n.tag_end('div').
     }
 }
 

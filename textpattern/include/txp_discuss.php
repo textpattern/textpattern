@@ -274,11 +274,21 @@ function discuss_list($message = '')
     );
 
     if ($rs) {
-        echo n.'<div id="'.$event.'_container" class="txp-container">';
-        echo n.'<form name="longform" id="discuss_form" class="multi_edit_form" method="post" action="index.php">'.
-            n.'<div class="txp-listtables">'.
-            startTable('', '', 'txp-list').
-            n.'<thead>'.
+        echo
+            n.tag_start('div', array(
+                'id'    => $event.'_container',
+                'class' => 'txp-container',
+            )).
+            n.tag_start('form', array(
+                'action' => 'index.php',
+                'id'     => 'discuss_form',
+                'class'  => 'multi_edit_form',
+                'method' => 'post',
+                'name'   => 'longform',
+            )).
+            n.tag_start('div', array('class' => 'txp-listtables')).
+            n.tag_start('table', array('class' => 'txp-list')).
+            n.tag_start('thead').
             tr(
                 hCell(
                     fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
@@ -321,11 +331,11 @@ function discuss_list($message = '')
                         (('parent' == $sort) ? "$dir " : '').'txp-list-col-parent'
                 )
             ).
-            n.'</thead>';
+            n.tag_end('thead');
 
         include_once txpath.'/publish/taghandlers.php';
 
-        echo n.'<tbody>';
+        echo n.tag_start('tbody');
 
         while ($a = nextRow($rs)) {
             extract($a);
@@ -415,22 +425,23 @@ function discuss_list($message = '')
             echo n.tr(tda(gTxt('just_spam_results_found'), ' colspan="10"'));
         }
 
-        echo n.'</tbody>'.
-            endTable().
-            n.'</div>'.
+        echo
+            n.tag_end('tbody').
+            n.tag_end('table').
+            n.tag_end('div').
             discuss_multiedit_form($page, $sort, $dir, $crit, $search_method).
             tInput().
-            n.'</form>'.
-            graf(
-                toggle_box('discuss_detail'),
-                ' class="detail-toggle"'
-            ).
+            n.tag_end('form').
+            graf(toggle_box('discuss_detail'), array('class' => 'detail-toggle')).
             cookie_box('show_spam').
-            n.'<div id="'.$event.'_navigation" class="txp-navigation">'.
+            n.tag_start('div', array(
+                'id'    => $event.'_navigation',
+                'class' => 'txp-navigation',
+            )).
             pageby_form('discuss', $comment_list_pageby).
             nav_form('discuss', $page, $numPages, $sort, $dir, $crit, $search_method, $total, $limit).
-            n.'</div>'.
-            n.'</div>';
+            n.tag_end('div').
+            n.tag_end('div');
     }
 }
 
@@ -616,10 +627,14 @@ function ipban_list($message = '')
         "1 = 1 order by date_banned desc");
 
     if ($rs and numRows($rs) > 0) {
-        echo n.'<div id="'.$event.'_ban_container" class="txp-container">'.
-            n.'<div class="txp-listtables">'.
-            startTable('', '', 'txp-list').
-            n.'<thead>'.
+        echo
+            n.tag_start('div', array(
+                'id'    => $event.'_ban_container',
+                'class' => 'txp-container',
+            )).
+            n.tag_start('div', array('class' => 'txp-listtables')).
+            n.tag_start('table', array('class' => 'txp-list')).
+            n.tag_start('thead').
             tr(
                 hCell(
                     gTxt('date_banned'), '', ' scope="col" class="txp-list-col-banned date"'
@@ -634,8 +649,8 @@ function ipban_list($message = '')
                     gTxt('banned_for'), '', ' scope="col" class="txp-list-col-id"'
                 )
             ).
-            n.'</thead>'.
-            n.'<tbody>';
+            n.tag_end('thead').
+            n.tag_start('tbody');
 
         while ($a = nextRow($rs)) {
             extract($a);
@@ -668,10 +683,11 @@ function ipban_list($message = '')
             );
         }
 
-        echo n.'</tbody>'.
-            endTable().
-            n.'</div>'.
-            n.'</div>';
+        echo
+            n.tag_end('tbody').
+            n.tag_end('table').
+            n.tag_end('div').
+            n.tag_end('div');
     } else {
         echo graf(gTxt('no_ips_banned'), ' class="indicator"');
     }
