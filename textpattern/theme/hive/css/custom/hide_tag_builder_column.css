@@ -2,5 +2,5 @@
 #tagbuild_links {display:none !important;}
 #page-form .txp-layout-2-4, #page-page .txp-layout-2-4 {width:75%;}
 @media only screen and (max-width: 768px) {
-	#page-form .txp-layout-2-4, #page-page .txp-layout-2-4 {width:100%;}
+    #page-form .txp-layout-2-4, #page-page .txp-layout-2-4 {width:100%;}
 }

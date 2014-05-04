@@ -1722,12 +1722,12 @@ span.spinner {
   background-image: url("../img/spinner.gif");
 }
 @media print,
-	(-webkit-min-device-pixel-ratio: 2),
-	(min--moz-device-pixel-ratio: 2),
-	(-o-min-device-pixel-ratio: 2/1),
-	(min-device-pixel-ratio: 2),
-	(min-resolution: 192dpi),
-	(min-resolution: 2dppx) {
+    (-webkit-min-device-pixel-ratio: 2),
+    (min--moz-device-pixel-ratio: 2),
+    (-o-min-device-pixel-ratio: 2/1),
+    (min-device-pixel-ratio: 2),
+    (min-resolution: 192dpi),
+    (min-resolution: 2dppx) {
   span.spinner {
     background-image: url("../img/spinner@2x.gif") !important;
     -webkit-background-size: 13px 13px;
@@ -1766,11 +1766,11 @@ span.spinner {
 }
 
 .txp-login .txp-label {
-	width: 31%;
+    width: 31%;
 }
 
 .txp-login .txp-value {
-	width: 69%;
+    width: 69%;
 }
 
 .txp-value input,
