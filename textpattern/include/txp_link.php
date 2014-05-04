@@ -202,7 +202,7 @@ function link_list($message = '')
                 ).
                 column_head(
                     'link_category', 'category', 'link', true, $switch_dir, $crit, $search_method,
-                        (('category' == $sort) ? "$dir " : '').'txp-list-col-category'
+                        (('category' == $sort) ? "$dir " : '').'txp-list-col-category category'
                 ).
                 column_head(
                     'url', 'url', 'link', true, $switch_dir, $crit, $search_method,
@@ -258,7 +258,7 @@ function link_list($message = '')
                     txpspecialchars($link_description), '', 'txp-list-col-description links_detail'
                 ).
                 td(
-                    span($link_category, array('title' => fetch_category_title($link_category, 'link'))), '', 'txp-list-col-category'.$vc
+                    span($link_category, array('title' => fetch_category_title($link_category, 'link'))), '', 'txp-list-col-category category'.$vc
                 ).
                 td(
                     href($view_url, $view_url, ' rel="external" target="_blank"'), '', 'txp-list-col-url'

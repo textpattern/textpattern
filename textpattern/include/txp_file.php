@@ -277,7 +277,7 @@ function file_list($message = '')
                 ).
                 column_head(
                     'file_category', 'category', 'file', true, $switch_dir, $crit, $search_method,
-                        (('category' == $sort) ? "$dir " : '').'txp-list-col-category'
+                        (('category' == $sort) ? "$dir " : '').'txp-list-col-category category'
                 ).
                 hCell(gTxt(
                     'tags'), '', ' scope="col" class="txp-list-col-tag-build files_detail"'
@@ -392,7 +392,7 @@ function file_list($message = '')
                     txpspecialchars($description), '', 'txp-list-col-description files_detail'
                 ).
                 td(
-                    $category, '', 'txp-list-col-category'.$vc
+                    $category, '', 'txp-list-col-category category'.$vc
                 ).
                 td(
                     href('Textile', $tag_url + array('type' => 'textile'), ' target="_blank" onclick="popWin(this.href); return false;"').

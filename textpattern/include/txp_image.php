@@ -224,7 +224,7 @@ function image_list($message = '')
                 ).
                 column_head(
                     'image_category', 'category', 'image', true, $switch_dir, $crit, $search_method,
-                        (('category' == $sort) ? "$dir " : '').'txp-list-col-category'
+                        (('category' == $sort) ? "$dir " : '').'txp-list-col-category category'
                 ).
                 (
                     $show_authors
@@ -312,7 +312,7 @@ function image_list($message = '')
                     $tagbuilder, '', 'txp-list-col-tag-build images_detail'
                 ).
                 td(
-                    $category, '', 'txp-list-col-category'.$vc
+                    $category, '', 'txp-list-col-category category'.$vc
                 ).
                 (
                     $show_authors
