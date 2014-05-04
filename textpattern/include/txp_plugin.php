@@ -244,7 +244,7 @@ function plugin_list($message = '')
             plugin_multiedit_form('', $sort, $dir, '', '').
             tInput().
             n.tag_end('form').
-            n.tag_end('div').
+            n.tag_end('div');
     }
 }
 
