@@ -111,20 +111,21 @@ class Textpattern_Tag_BuilderTags
 
         if (method_exists($this, $method)) {
             $this->startblock = hed(
-                    gTxt('tag_'.$this->tagname).
-                    sp . href(
-                        'i',
-                        'http://www.textpattern.net/wiki/index.php?title='.$this->tagname,
-                        array(
-                            'rel'        => 'help',
-                            'target'     => '_blank',
-                            'class'      => 'pophelp',
-                            'role'       => 'button',
-                            'title'      => gTxt('help'),
-                            'aria-label' => gTxt('help'),
-                        )
+                gTxt('tag_'.$this->tagname).sp.
+                href(
+                    'i',
+                    'http://www.textpattern.net/wiki/index.php?title='.$this->tagname,
+                    array(
+                        'rel'        => 'help',
+                        'target'     => '_blank',
+                        'class'      => 'pophelp',
+                        'role'       => 'button',
+                        'title'      => gTxt('help'),
+                        'aria-label' => gTxt('help'),
                     )
-                , 2);
+                ),
+                2
+            );
 
             $this->endform = graf(
                     fInput('submit', '', gTxt('build'), 'publish')
@@ -196,10 +197,7 @@ class Textpattern_Tag_BuilderTags
 
     private function tbNoAtts()
     {
-        return $this->tagbuildForm(
-            $this->startblock
-        ).
-        $this->tdb($this->tb($this->tagname));
+        return $this->tagbuildForm($this->startblock).$this->tdb($this->tb($this->tagname));
     }
 
     /**
@@ -756,16 +754,16 @@ class Textpattern_Tag_BuilderTags
                 'category'      => $this->tbCategoryPop($category),
                 'time'          => $this->tbTimePop($time),
                 'month'         => fInput(
-                                    'text',
-                                    'month',
-                                    $month,
-                                    '',
-                                    '',
-                                    '',
-                                    7,
-                                    '',
-                                    'month'
-                                ). ' ('.gTxt('yyyy-mm').')',
+                    'text',
+                    'month',
+                    $month,
+                    '',
+                    '',
+                    '',
+                    7,
+                    '',
+                    'month'
+                ). ' ('.gTxt('yyyy-mm').')',
                 'keywords'      => '<textarea name="keywords" id="keywords">'.$keywords.'</textarea>',
                 'has_excerpt'   => $this->tbYesNoPop('excerpted', $excerpted),
                 'expired'       => $this->tbYesNoPop('expired', $expired),
