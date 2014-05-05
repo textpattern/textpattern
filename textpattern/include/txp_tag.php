@@ -73,7 +73,7 @@ class TagBuilderTags
     /**
      * HTML block for the header portion of the form tag.
      *
-     * @var startblock
+     * @var string
      */
 
     private static $startblock = null;
@@ -83,7 +83,7 @@ class TagBuilderTags
      *
      * Includes submit button and hidden form elements.
      *
-     * @var endform
+     * @var string
      */
 
     private static $endform = null;
@@ -91,7 +91,7 @@ class TagBuilderTags
     /**
      * The name of the tagbuilder tag that is currently being displayed.
      *
-     * @var tagname
+     * @var string
      */
 
     private static $tagname = null;
@@ -100,7 +100,7 @@ class TagBuilderTags
      * Returns a single tag handler instance.
      *
      * @param  string      $name The tag
-     * @return string|bool HTML | FALSE on error
+     * @return string|bool HTML or FALSE on error
      */
 
     public static function tag($name)
