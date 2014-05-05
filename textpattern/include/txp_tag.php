@@ -105,8 +105,7 @@ class Textpattern_Tag_BuilderTags
 
     public function renderTagHelp($name)
     {
-        $this->tagname = (string) gps('tag_name');
-
+        $this->tagname = (string) $name;
         $method = 'tag_'.$this->tagname;
 
         if (method_exists($this, $method)) {
