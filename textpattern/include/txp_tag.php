@@ -57,7 +57,7 @@ header('X-UA-Compatible: '.X_UA_COMPATIBLE);
 <?php echo $theme->html_head(); ?>
 </head>
 <body id="tag-event">
-<?php echo TagBuilderTags::tag(gps('tag_name')); ?>
+<?php echo Textpattern_Tag_BuilderTags::tag(gps('tag_name')); ?>
 </body>
 </html>
 <?php
@@ -68,7 +68,7 @@ header('X-UA-Compatible: '.X_UA_COMPATIBLE);
  * @package Admin\Tag
  */
 
-class TagBuilderTags
+class Textpattern_Tag_BuilderTags
 {
     /**
      * HTML block for the header portion of the form tag.
