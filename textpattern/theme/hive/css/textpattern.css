@@ -39,6 +39,7 @@ html {
 .txp-footer:after,
 .txp-navigation:after,
 .txp-edit p:after,
+.txp-tagbuilder p:after,
 .txp-login p:after,
 .edit-form p:after,
 .prefs-form p:after {
@@ -1449,7 +1450,6 @@ body {
   position: relative;
   margin: 0;
   padding: 5em 1.69% 0;
-  min-width: 71.3846153846154em; /* TO BE REMOVED */
   color: #333333;
   background: white;
 }
@@ -1469,7 +1469,6 @@ body {
   z-index: 1000;
   padding: 0 1.69%;
   height: 3em;
-  min-width: 71.3846153846154em;
   -webkit-box-shadow: 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
   -moz-box-shadow: 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
   box-shadow: 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
@@ -1738,15 +1737,15 @@ span.spinner {
 /* Edit and login panes
    ========================================================================== */
 .txp-edit,
+.txp-tagbuilder,
 .txp-login {
   margin: 0 auto 1em;
-  -moz-border-radius: 0.5em;
-  border-radius: 0.5em;
   padding: 1em 1em 1px 1em;
   background: #f7f7f7;
 }
 
-.txp-edit {
+.txp-edit,
+.txp-tagbuilder {
   max-width: 55em;
 }
 
@@ -1840,34 +1839,7 @@ body#page-setup {
 /* Tag builder page
    ========================================================================== */
 #tag-event {
-  padding: 2.5em 0.5em 1em;
-  overflow-y: scroll;
-}
-#tag-event h3 {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  padding: 0.5em 1em;
-  -webkit-box-shadow: 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
-  -moz-box-shadow: 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
-  box-shadow: 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
-  border-top: 1px solid #f8c225;
-  border-bottom: 1px solid #d9a307;
-  background-color: #ffda44;
-  background-image: -webkit-linear-gradient(#ffda44, #f8c225);
-  background-image: -moz-linear-gradient(#ffda44, #f8c225);
-  background-image: -o-linear-gradient(#ffda44, #f8c225);
-  background-image: linear-gradient(#ffda44, #f8c225);
-}
-#tag-event th,
-#tag-event td {
-  padding: 0.5em;
-  width: 50%;
-}
-#tag-event p {
-  margin: 0.5em;
+  padding-top: 1em;
 }
 
 /* Content -> Categories page

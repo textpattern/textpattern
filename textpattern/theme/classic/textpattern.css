@@ -53,6 +53,7 @@ button {
    ========================================================================== */
 .clearfix:after,
 .txp-edit p:after,
+.txp-tagbuilder p:after,
 .txp-login p:after,
 .edit-form p:after,
 .prefs-form p:after {
@@ -1351,6 +1352,7 @@ span.spinner {
    ========================================================================== */
 
 .txp-edit,
+.txp-tagbuilder,
 .txp-login {
     margin: 0 auto 1em;
     border: 1px solid #e5e5e5;
@@ -1359,6 +1361,10 @@ span.spinner {
 
 .txp-edit {
     width: 56em;
+}
+
+.txp-tagbuilder {
+    width: 28em;
 }
 
 .txp-login {
@@ -1422,19 +1428,8 @@ span.spinner {
    ========================================================================== */
 
 #tag-event {
-    border-top: 0.5em solid #ffcc33;
-    padding: 0 1em;
-    overflow-y: scroll; /* Prevent 'jumping' */
-}
-
-#tag-event th,
-#tag-event td {
-    padding: 0.3em;
-    width: 50%;
-}
-
-#tagbuilder-output {
-    margin: 2em 0.3em 0 0.3em;
+    margin: 0;
+    padding: 1em 1em 1px;
 }
 
 
