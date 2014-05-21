@@ -1,4 +1,4 @@
-Textpattern CMS 4.5.4
+Textpattern CMS 4.6.0
 
 Released under the GNU General Public License.
 See LICENSE.txt for terms and conditions.
@@ -7,6 +7,7 @@ Includes contributions licensed under the GNU Lesser General Public License.
 See LICENSE-LESSER.txt for terms and conditions.
 
 Includes contributions licensed under the New BSD License.
+See LICENSE-BSD-3.txt for terms and conditions.
 
 == Installation ==
 
@@ -17,7 +18,7 @@ Includes contributions licensed under the New BSD License.
   on Mac OS X systems. Make sure this file is transferred across correctly
   to your install destination. Most FTP clients or IDEs will have an option
   to show these hidden files. Otherwise, you can temporarily show hidden
-  files in the OS by using the terminal.app - follow these instructions:
+  files in the OS by using the Terminal.app - follow these instructions:
   http://textpattern.com/hidden-files-osx
 * Create or establish the existence of a working MySQL database,
   load /textpattern/setup/ (or /subpath/textpattern/setup/) in a
@@ -33,13 +34,13 @@ Includes contributions licensed under the New BSD License.
   with the corresponding files in this distribution. css.php and /rpc/
   might not yet exist in your current site.
 * It is recommended that you flush the cache of your browser, to ensure
-  old cached files are not being used in preference of any newer versions
+  old cached files are not being used in preference to any newer versions
   within the upgrade.
-* When you login to the admin-side, the relevant upgrade script is
+* When you log in to the admin-side, the relevant upgrade script is
   run automatically. Please take a look into diagnostics to find out
   whether there are any errors and whether the correct version number
   is displayed.
-  NOTE: Upgrades from versions below 4.2.0 will present this warning
+  NOTE: Upgrades from versions prior to 4.2.0 will present this warning
   upon your very first login to the admin-side:
     Warning: Unknown column 'user_name' in 'where clause' select name,
     val from txp_prefs where prefs_id=1 AND user_name='' in
