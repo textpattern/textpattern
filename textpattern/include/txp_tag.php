@@ -239,7 +239,7 @@ class Textpattern_Tag_BuilderTags
             'txp-tagbuilder-output',
             '',
             '',
-            $thing, 
+            $thing,
             'txp-tagbuilder-output',
             TEXTAREA_HEIGHT_SMALL,
             INPUT_LARGE
