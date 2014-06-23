@@ -704,6 +704,11 @@ function file_edit($message = '', $id = '')
 function file_db_add($filename, $category, $permissions, $description, $size, $title='')
 {
     global $txp_user;
+
+    if (trim($filename) === '') {
+        return false;
+    }
+
     $rs = safe_insert("txp_file",
         "filename = '$filename',
          title = '$title',
