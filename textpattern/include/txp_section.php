@@ -286,7 +286,7 @@ function sec_section_list($message = '')
                         (('searchable' == $sort) ? "$dir " : '').'txp-list-col-searchable section_detail'
                 ).
                 column_head(
-                    'article', 'article_count', 'section', true, $switch_dir, $crit, $search_method,
+                    'articles', 'article_count', 'section', true, $switch_dir, $crit, $search_method,
                         (('article_count' == $sort) ? "$dir " : '').'txp-list-col-article_count section_detail'
                 )
             ).
