@@ -1510,7 +1510,8 @@ span.spinner {
 /* Content -> Articles page
    ========================================================================== */
 
-.unpublished {
+.unpublished,
+.not-modified {
     color: #888888;
 }
 
@@ -1567,7 +1568,6 @@ tr.moderate {
 
 #page-lang .modified {
     font-style: italic;
-    color: #aaaaaa;
 }
 
 #textpack-install {

@@ -1911,7 +1911,8 @@ body#page-setup {
 
 /* Content -> Articles page
    ========================================================================== */
-.unpublished {
+.unpublished,
+.not-modified {
   color: #999999;
 }
 
@@ -1964,7 +1965,6 @@ body#page-setup {
 /* Admin -> Languages page
    ========================================================================== */
 #page-lang .txp-list .modified {
-  color: #999999;
   margin-left: 0.6em;
 }
 

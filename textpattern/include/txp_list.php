@@ -394,10 +394,10 @@ function list_list($message = '', $post = '')
                     $Title, '', 'txp-list-col-title'
                 ).
                 td(
-                    gTime($posted), '', ($posted < time() ? '' : 'unpublished ').'txp-list-col-created date'
+                    gTime($posted), '', 'txp-list-col-created date'.($posted < time() ? '' : ' unpublished')
                 ).
                 td(
-                    gTime($lastmod), '', "txp-list-col-lastmod date articles_detail"
+                    gTime($lastmod), '', 'txp-list-col-lastmod date articles_detail'.($posted === $lastmod ? ' not-modified' : '')
                 ).
                 td(
                     ($expires ? gTime($expires) : ''), '', 'txp-list-col-expires date articles_detail'
@@ -406,10 +406,10 @@ function list_list($message = '', $post = '')
                     span(txpspecialchars($section_title), array('title' => $Section)), '', 'txp-list-col-section'.$vs
                 ).
                 td(
-                    $Category1, '', "txp-list-col-category1 category articles_detail".$vc[1]
+                    $Category1, '', 'txp-list-col-category1 category articles_detail'.$vc[1]
                 ).
                 td(
-                    $Category2, '', "txp-list-col-category2 category articles_detail".$vc[2]
+                    $Category2, '', 'txp-list-col-category2 category articles_detail'.$vc[2]
                 ).
                 td(
                     href($Status, $view_url, join_atts(array('title' => gTxt('view')))), '', 'txp-list-col-status'
@@ -421,7 +421,7 @@ function list_list($message = '', $post = '')
                 ).
                 (
                     $use_comments
-                    ? td($comments, '', "txp-list-col-comments articles_detail")
+                    ? td($comments, '', 'txp-list-col-comments articles_detail')
                     : ''
                 )
             );
