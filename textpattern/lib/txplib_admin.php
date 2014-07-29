@@ -68,7 +68,7 @@ function send_password($RealName, $name, $email, $password)
 /**
  * Sends a new password to an existing user.
  *
- * If the $user is FALSE, the password is sent
+ * If the $name is FALSE, the password is sent
  * to the currently authenticated user.
  *
  * @param  string $password The new password
