@@ -586,7 +586,7 @@ function type_options($array)
  * @return string       HTML
  */
 
-function radio_list($name, $values, $current_val = '', $hilight_val = '', $atts = array('class' => 'status plain-list'))
+function radio_list($name, $values, $current_val = '', $hilight_val = '', $atts = array('class' => 'plain-list'))
 {
     foreach ($values as $value => $label) {
         $id = $name.'-'.$value;
